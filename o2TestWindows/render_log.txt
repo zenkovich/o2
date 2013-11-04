@@ -1,0 +1,3 @@
+Created texture 'grass'
+Created texture 'man_walk_frames'
+Created texture 'ui_test'

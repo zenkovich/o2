@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<fieldSize x = "10" y = "10" />
+<clusterSize_ x = "10" y = "10" />
+<clusterTexture file = "grass" />
+<clusters>
+	<clust_0_0 wayTime = "0.0" />
+	<clust_0_1 wayTime = "0.0" />
+	<clust_0_2 wayTime = "0.0" />
+	<clust_0_3 wayTime = "0.0" />
+	<clust_0_4 wayTime = "0.0" />
+	<clust_0_5 wayTime = "0.0" />
+</clusters>
+<walkMan>
+	<sprite>
+		<texture v = "man_walk_frames" />
+		<textureSrcRect left = "0" top = "0" right = "24" bottom = "32" />
+	</sprite>
+	<spriteOffset x = "-12" y = "-32" />
+	<framesDelay v = "0.1" />
+	<frames>
+		<frame left = "0" top = "1" right = "24" bottom = "32" />
+		<frame left = "24" top = "1" right = "48" bottom = "32" />
+		<frame left = "48" top = "1" right = "72" bottom = "32" />
+		<frame left = "0" top = "33" right = "24" bottom = "64" />
+		<frame left = "24" top = "33" right = "48" bottom = "64" />
+		<frame left = "48" top = "33" right = "72" bottom = "64" />
+		<frame left = "0" top = "65" right = "24" bottom = "96" />
+		<frame left = "24" top = "65" right = "48" bottom = "96" />
+		<frame left = "48" top = "65" right = "72" bottom = "96" />
+		<frame left = "0" top = "97" right = "24" bottom = "128" />
+		<frame left = "24" top = "97" right = "48" bottom = "128" />
+		<frame left = "48" top = "97" right = "72" bottom = "128" />
+	</frames>	
+	<animations>
+		<anim id = "walk_up" begin = "0" end = "3" />
+		<anim id = "walk_right" begin = "3" end = "6" />
+		<anim id = "walk_down" begin = "6" end = "9" />
+		<anim id = "walk_left" begin = "9" end = "12" />
+	</animations>
+</walkMan>
