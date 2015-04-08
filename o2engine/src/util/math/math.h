@@ -1,26 +1,28 @@
-#ifndef MATH_H
-#define MATH_H
+#pragma once
 
-#include "public.h"
+#include <float.h>
+#include <math.h>
+#include "util/public_namespace.h"
 
 OPEN_O2_NAMESPACE
-	
-#undef min
-#undef max
-#undef clamp
-	
+
+enum InterpolationType { IT_LINEAR = 0, IT_FORCIBLE, IT_EASY_IN, IT_EASY_OUT, IT_EASY_IN_OUT, IT_CURVE };
+
+/*************************/
 /* Basic Math functions. */
+/*************************/
+
 template<typename T>
-T sign(const T& value)
+T Sign(const T& value)
 {
-	if (value < 0) 
+	if (value < 0)
 		return (T)(-1);
 
 	return (T)1;
 }
-	
+
 template<typename T>
-T clamp(const T& value, const T& minv, const T& maxv)
+T Clamp(const T& value, const T& minv, const T& maxv)
 {
 	if (value < minv)
 		return minv;
@@ -30,8 +32,13 @@ T clamp(const T& value, const T& minv, const T& maxv)
 	return value;
 }
 
+float Clamp01(float value)
+{
+	return Clamp(value, 0.0f, 1.0f);
+}
+
 template<typename T>
-T min(const T& v1, const T& v2)
+T Min(const T& v1, const T& v2)
 {
 	if (v1 < v2)
 		return v1;
@@ -39,7 +46,7 @@ T min(const T& v1, const T& v2)
 }
 
 template<typename T>
-T max(const T& v1, const T& v2)
+T Max(const T& v1, const T& v2)
 {
 	if (v1 > v2)
 		return v1;
@@ -47,7 +54,7 @@ T max(const T& v1, const T& v2)
 }
 
 template<typename T>
-void tswap(T& v1, T& v2)
+void Swap(T& v1, T& v2)
 {
 	T tmp = v1;
 	v1 = v2;
@@ -55,38 +62,75 @@ void tswap(T& v1, T& v2)
 }
 
 template<typename T>
-T abs(const T& value)
+T Abs(const T& value)
 {
-	if (value < 0) 
+	if (value < 0)
 		return -value;
 
 	return value;
 }
 
 template<typename T>
-T random(const T& minValue = 0, const T& maxValue = 1)
+T Random(const T& minValue = 0, const T& maxValue = 1)
 {
-	return (T)((float)rand()/RAND_MAX*(float)(maxValue - minValue) + (float)minValue);
+	return (T)((float)rand() / RAND_MAX*(float)(maxValue - minValue) + (float)minValue);
 }
 
+template<typename T>
+T Lerp(const T& a, const T& b, float coef)
+{
+	return (b - a)*coef + a;
+}
+
+template<typename T>
+T InterpolateBezier(const T& a, const T& b, const T& c, const T&d, float coef)
+{
+	float m = 1 - coef;
+	float n = m*m;
+	float o = n*m;
+	float p = coef*coef;
+	float r = p*coef;
+
+	return a*o + b*3.0f*coef*n + c*3.0f*p*m + d*r;
+}
+
+inline bool Equals(float a, float b, float range = FLT_EPSILON)
+{
+	float x = a - b;
+	return x*x < range*range;
+}
+
+template<typename T>
+inline bool Equals(const T& a, const T& b)
+{
+	return a == b;
+}
+
+/*****************/
 /* Trigonometry. */
+/*****************/
+
 #define PI 3.1415926535897932384626433832795f
 
-template<typename T>
-T deg2rad(const T& value)
+inline float Deg2rad(const float& value)
 {
-	return value*( (T)(PI/180.0f) );
+	return value*(PI / 180.0f);
 }
 
-template<typename T>
-T rad2deg(const T& value)
+inline float Rad2deg(const float& value)
 {
-	return value*( (T)(180.0f/PI) );
+	return value*(180.0f / PI);
 }
 
-/* Matricies. */
-void orthoProjMatrix(float* mat, float left, float right, float bottom, float top, float nearz, float farz);
+inline float Sin(float r)
+{
+	return sinf(r);
+}
+
+/*************/
+/* Matrices. */
+/*************/
+
+void OrthoProjMatrix(float* mat, float left, float right, float bottom, float top, float nearz, float farz);
 
 CLOSE_O2_NAMESPACE
-
-#endif //MATH_H

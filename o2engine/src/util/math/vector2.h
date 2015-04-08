@@ -1,238 +1,421 @@
-#ifndef VECTOR2_H
-#define VECTOR2_H
+#pragma once
 
-#include "public.h"
+#include <math.h>
+#include "util/public_namespace.h"
 
 OPEN_O2_NAMESPACE
 
-#include <math.h>
+#define Vec2F Vec2<float>
+#define Vec2I Vec2<int>
 
 template<typename T>
-struct vec2
+struct Vec2
 {
 	T x, y;
 
-	inline vec2()
-	{
-		x = y = 0; 
-	}
+	inline Vec2();
+	inline Vec2(T vx, T vy);
 
-	inline vec2(T vx, T vy)
-	{
-		x = vx; y = vy;
-	}
+	template<typename RT>
+	inline operator Vec2<RT>();
 
-	inline vec2 operator+(const vec2& v) const
-	{ 
-		return vec2(x + v.x, y + v.y);
-	}
+	inline bool operator==(const Vec2& v) const;
+	inline bool operator!=(const Vec2& v) const;
 
-	inline vec2 operator+=(const vec2& v) 
-	{
-		*this = *this + v; 
-		return *this;
-	}
+	inline Vec2 operator+(const Vec2& v) const;
+	inline Vec2 operator+=(const Vec2& v);
 
-	inline vec2 operator-(const vec2& v) const
-	{
-		return vec2(x - v.x, y - v.y);
-	}
+	inline Vec2 operator-(const Vec2& v) const;
+	inline Vec2 operator-=(const Vec2& v);
 
-	inline vec2 operator-=(const vec2& v) 
-	{ 
-		*this = *this - v; return *this; 
-	}
+	inline Vec2 operator*(const Vec2& v) const;
+	inline Vec2 operator*=(const Vec2& v) const;
 
-	inline vec2 operator*(T v) const
-	{ 
-		return vec2(x*v, y*v); 
-	}
+	inline Vec2 operator*(T v) const;
+	inline Vec2 operator*=(T v);
 
-	inline vec2 operator*=(T v)
-	{ 
-		*this = (*this)*v; 
-		return *this;
-	}
+	inline Vec2 operator/(const Vec2& v) const;
+	inline Vec2 operator/=(const Vec2& v);
 
-	inline vec2 operator/(float v) const
-	{
-		return *this*(1.0f/v);
-	}
+	inline Vec2 operator/(T v) const;
+	inline Vec2 operator/=(T v);
 
-	inline vec2 operator/(const vec2& v) const
-	{
-		return vec2(x/v.x, y/v.y);
-	}
+	inline Vec2 operator^(T s) const;
+	inline T    operator^(const Vec2& v) const;
 
-	inline vec2 operator/=(T v) 
-	{ 
-		*this = *this/v; 
-		return *this; 
-	}
+	inline T&   operator[](int idx);
 
-	inline float operator*(const vec2& v) const
-	{ 
-		return (x*v.x + y*v.y);
-	}
+	inline Vec2 Scale(const Vec2& scaleVec) const;
+	inline Vec2 Scale(const Vec2& scaleVec, const Vec2& origin) const;
+	inline Vec2 InvScale(const Vec2& scale) const;
 
-	inline float operator*=(const vec2& v) const
-	{
-		return *this*v; 
-	}
+	inline T&   Get(int i);
+	inline void Set(T vx, T vy);
 
-	inline bool operator==(const vec2& v) const
-	{ 
-		if (abs(x - v.x) > (T)0.0001f || abs(y - v.y) > (T)0.0001f) return false; 		
-		return true; 
-	}
+	inline T Dot(const Vec2& v) const;
 
-	inline bool operator!=(const vec2& v) const
-	{ 
-		return !(v == *this);
-	}
+	inline T    Cross(const Vec2& v) const;
+	inline Vec2 Cross(float v) const;
 
-	inline vec2 operator^(T s) const
-	{
-		return vec2(s*y, -s*x); 
-	}
+	inline T Length() const;
+	inline T SqrLength() const;
 
-	inline float operator^(const vec2& v) const
-	{
-		return v.x*y - v.y*x; 
-	}
+	inline Vec2 Normalized() const;
+	inline void Normalize();
 
-	inline T& operator[](int idx) 
-	{ 
-		if (idx == 0)
-			return x; 
-		return y; 
-	}
+	inline Vec2 Rotate(float rad) const;
+	inline Vec2 Rotate(float cs, float sn) const;
+	inline void Rotate(float rad, const Vec2& origin);
 
-	inline vec2 scale(const vec2& v) const
-	{
-		return vec2(x*v.x, y*v.y);
-	}	
+	inline Vec2 Inverted(bool bx = true, bool by = true) const;
+	inline Vec2 InvertedX() const;
+	inline Vec2 InvertedY() const;
 
-	inline T& get(int i) 
-	{ 
-		if (i == 0) return x; 
-		if (i == 1) return y;
-		return x; 
-	}
+	inline float Angle(const Vec2& other) const;
+	inline Vec2 Project(const Vec2& other) const;
+	inline Vec2 ClampLength(T newLength) const;
 
-	inline void set(T vx, T vy)
-	{
-		x = vx; y = vy;
-	}
+	static inline Vec2<T> Rotated(float rad);
+	static inline Vec2<T> Up();
+	static inline Vec2<T> Down();
+	static inline Vec2<T> Left();
+	static inline Vec2<T> Right();
+	static inline Vec2<T> One();
 
-	inline T dot(const vec2& v) const
-	{
-		return *this*v;
-	}
-
-	inline T len() const
-	{
-		return sqrt((*this)*(*this));
-	}
-
-	inline vec2 normalize() const
-	{ 
-		T ln = len();
-		if (ln > 0) 
-			return *this/ln; 
-		else 
-			return vec2(0, 0); 
-	}
-
-	inline vec2 Rotate(float rad) const
-	{
-		float cs = cosf(rad), 
-			  sn = sinf(rad);
-
-		vec2 v( (T)(cs*x - sn*y), (T)(sn*x + cs*y) );
-
-		return v;
-	}
-
-	inline vec2 Rotate(float cs, float sn) const
-	{
-		vec2 v( (T)(cs*x - sn*y), (T)(sn*x + cs*y) );
-		v = v^(T)(1.0f);
-
-		return v;
-	}
-
-	inline void Rotate(float rad, const vec2& c) 
-	{
-		*this -= c;
-		Rotate(rad); 
-		*this += c;
-	}	
-
-	inline vec2 Inv(bool bx = true, bool by = true)  const
-	{
-		vec2 r = *this; 
-		if (bx) r.x = -r.x; 
-		if (by) r.y = -r.y;
-		return r; 
-	} 
-
-	inline vec2 InvX() const
-	{ 
-		vec2 r = *this;
-		r.x = -r.x; 
-		return r; 
-	}
-
-	inline vec2 InvY() const
-	{ 
-		vec2 r = *this;
-		r.y = -r.y;
-		return r; 
-	}
-
-	template<typename T2>
-	vec2<T2> castTo() const
-	{
-		return vec2<T2>((T2)x, (T2)y);
-	}
+	static inline T Length(const Vec2& a, const Vec2& b);
+	static inline T SqrLength(const Vec2& a, const Vec2& b);
+	static inline T Angle(const Vec2& a, const Vec2& b);
 };
 
+//implementation
+
 template<typename T>
-inline vec2<T> operator^(float s, const vec2<T>& a)
+Vec2<T>::Vec2():
+x(0), y(0)
+{}
+
+template<typename T>
+Vec2<T>::Vec2(T vx, T vy):
+x(vx), y(vy)
+{}
+
+template<typename T>
+template<typename RT>
+Vec2<T>::operator Vec2<RT>()
 {
-	return vec2<T>(-s*a.y, s*a.x);
+	return Vec2<RT>((RT)x, (RT)y);
 }
 
 template<typename T>
-inline float len(const vec2<T>& a, const vec2<T>& b)
-{ 
-	return (b - a).len();
-}
-
-template<typename T>
-inline vec2<T> proj(const vec2<T>& a, const vec2<T>& b)
+Vec2<T> Vec2<T>::operator+(const Vec2<T>& v) const
 {
-	vec2<T> n = b.normalize();
-
-	return n*(n*a);
+	return Vec2(x + v.x, y + v.y);
 }
 
 template<typename T>
-inline vec2<T> scale(const vec2<T>& a, const vec2<T>& b)
+Vec2<T> Vec2<T>::operator+=(const Vec2<T>& v)
 {
-	return vec2(a.x*b.x, a.y*b.y);
+	x += v.x; y += v.y;
+	return *this;
 }
 
 template<typename T>
-inline vec2<T> rotateVec(float rad, const vec2<T>& v)
-{ 
-	v.Rotate(rad); return v; 
+Vec2<T> Vec2<T>::operator-(const Vec2<T>& v) const
+{
+	return Vec2(x - v.x, y - v.y);
 }
 
-#define vec2f vec2<float>
-#define vec2i vec2<int>
+template<typename T>
+Vec2<T> Vec2<T>::operator-=(const Vec2<T>& v)
+{
+	x -= v.x; y -= v.y;
+	return *this;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::operator*(T v) const
+{
+	return Vec2(x*v, y*v);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::operator*=(T v)
+{
+	x *= v; y *= v;
+	return *this;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::operator/(T v) const
+{
+	float t = 1.0f/v;
+	return Vec2((T)x*t, (T)y*t);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::operator/(const Vec2<T>& v) const
+{
+	return Vec2(x/v.x, y/v.y);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::operator/=(const Vec2& v)
+{
+	x /= v.x; y /= v.y;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::operator/=(T v)
+{
+	*this = *this/v;
+	return *this;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::operator*(const Vec2<T>& v) const
+{
+	return Vec2(x*v.x, y*v.y);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::operator*=(const Vec2<T>& v) const
+{
+	x *= v.x; y *= v.y;
+	return *this;
+}
+
+template<typename T>
+bool Vec2<T>::operator==(const Vec2<T>& v) const
+{
+	return Abs(x - v.x) < FLT_EPSILON && Abs(y - v.y) < FLT_EPSILON;
+}
+
+template<typename T>
+bool Vec2<T>::operator!=(const Vec2<T>& v) const
+{
+	return Abs(x - v.x) > FLT_EPSILON || Abs(y - v.y) > FLT_EPSILON;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::operator^(T s) const
+{
+	return Vec2(s*y, -s*x);
+}
+
+template<typename T>
+T Vec2<T>::operator^(const Vec2<T>& v) const
+{
+	return v.x*y - v.y*x;
+}
+
+template<typename T>
+T& Vec2<T>::operator[](int idx)
+{
+	if (idx == 0)
+		return x;
+
+	return y;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Scale(const Vec2<T>& scaleVec) const
+{
+	return Vec2(x*scaleVec.x, y*scaleVec.y);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Scale(const Vec2<T>& scaleVec, const Vec2<T>& origin) const
+{
+	return (*this - origin).Scale(scaleVec) + origin;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::InvScale(const Vec2<T>& v) const
+{
+	return Vec2(x/v.x, y/v.y);
+}
+
+template<typename T>
+T& Vec2<T>::Get(int i)
+{
+	if (i == 0) return x;
+	return y;
+}
+
+template<typename T>
+void Vec2<T>::Set(T vx, T vy)
+{
+	x = vx; y = vy;
+}
+
+template<typename T>
+T Vec2<T>::Dot(const Vec2<T>& v) const
+{
+	return x*v.x + y*v.y;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Cross(float v) const
+{
+	return Vec2(v*y, -v*x);
+}
+
+template<typename T>
+T Vec2<T>::Cross(const Vec2& v) const
+{
+	return v.x*y - v.y*x;
+}
+
+template<typename T>
+T Vec2<T>::Length() const
+{
+	return sqrt(x*x + y*y);
+}
+
+template<typename T>
+T Vec2<T>::SqrLength() const
+{
+	return x*x + y*y;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Normalized() const
+{
+	T ln = Length();
+	if (ln > 0) return *this/ln;
+	return Vec2(0, 0);
+}
+
+template<typename T>
+void Vec2<T>::Normalize()
+{
+	*this = this->Normalized();
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Rotate(float rad) const
+{
+	float cs = cosf(rad),
+		sn = sinf(rad);
+
+	return Vec2((T)(sn*x + cs*y), (T)(cs*x - sn*y));
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Rotate(float cs, float sn) const
+{
+	return Vec2((T)(sn*x + cs*y), (T)(cs*x - sn*y));
+}
+
+template<typename T>
+void Vec2<T>::Rotate(float rad, const Vec2& c)
+{
+	*this -= c;
+	Rotate(rad);
+	*this += c;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Inverted(bool bx = true, bool by = true)  const
+{
+	Vec2 r = *this;
+	if (bx) r.x = -r.x;
+	if (by) r.y = -r.y;
+	return r;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::InvertedX() const
+{
+	Vec2 r = *this;
+	r.x = -r.x;
+	return r;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::InvertedY() const
+{
+	Vec2 r = *this;
+	r.y = -r.y;
+	return r;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::ClampLength(T newLength) const
+{
+	float sc = newLength/Length();
+	return Scale(sc);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Project(const Vec2& other) const
+{
+	Vec2<T> n = other.Normalized();
+	return n*(n.Dot(*this));
+}
+
+template<typename T>
+float Vec2<T>::Angle(const Vec2& other) const
+{
+	float rad = -atan2f(-y, x);
+	if (rad < 0)
+		return 6.283185307f + rad;
+
+	return rad;
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Rotated(float rad)
+{
+	return Vec2<T>(cosf(rad), sinf(rad));
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Up()
+{
+	return Vec2<T>(0, 1.0f);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Down()
+{
+	return Vec2<T>(0, -1.0f);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Left()
+{
+	return Vec2<T>(-1.0f, 0);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::Right()
+{
+	return Vec2<T>(1.0f, 0);
+}
+
+template<typename T>
+Vec2<T> Vec2<T>::One()
+{
+	return Vec2<T>(1.0f, 1.0f);
+}
+
+template<typename T>
+T Vec2<T>::Angle(const Vec2& a, const Vec2& b)
+{
+	return a.Angle(b);
+}
+
+template<typename T>
+T Vec2<T>::SqrLength(const Vec2& a, const Vec2& b)
+{
+	return (b - a).SqrLength();
+}
+
+template<typename T>
+T Vec2<T>::Length(const Vec2& a, const Vec2& b)
+{
+	return (b - a).Length();
+}
 
 CLOSE_O2_NAMESPACE
-
-#endif //VECTOR2_H

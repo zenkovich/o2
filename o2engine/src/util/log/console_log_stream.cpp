@@ -1,51 +1,50 @@
 #include "console_log_stream.h"
 
-#include <iostream>
-#include <io.h>
-#include <fcntl.h>
 #include <Windows.h>
+#include <fcntl.h>
+#include <io.h>
+#include <iostream>
 #include <wincon.h>
 
 OPEN_O2_NAMESPACE
 
-cConsoleLogStream::cConsoleLogStream(uint8 level):
-	cLogStream()
+ConsoleLogStream::ConsoleLogStream(uint8 level):
+LogStream()
 {
-	setLevel(level);
+	SetLevel(level);
 	if (level > 0)
-		initConsole();
+		InitConsole();
 }
 
-cConsoleLogStream::cConsoleLogStream( const std::string& id, uint8 level ):
-	cLogStream(id)
+ConsoleLogStream::ConsoleLogStream(const String& id, uint8 level):
+LogStream(id)
 {
-	setLevel(level);
+	SetLevel(level);
 	if (level > 0)
-		initConsole();
+		InitConsole();
 }
 
-cConsoleLogStream::~cConsoleLogStream()
+ConsoleLogStream::~ConsoleLogStream()
 {
 	FreeConsole();
 }
 
-void cConsoleLogStream::outStrEx( const std::string& str )
+void ConsoleLogStream::OutStrEx(const String& str)
 {
 	printf(str.c_str());
-	printf("\n");	
+	printf("\n");
 }
 
-void cConsoleLogStream::initConsole()
+void ConsoleLogStream::InitConsole()
 {
-	if ( AllocConsole() )
+	if (AllocConsole())
 	{
-		int hCrt = _open_osfhandle((long)
-		GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
+		int hCrt = _open_osfhandle((long)GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
 		*stdout = *(::_fdopen(hCrt, "w"));
 		::setvbuf(stdout, NULL, _IONBF, 0);
 		*stderr = *(::_fdopen(hCrt, "w"));
 		::setvbuf(stderr, NULL, _IONBF, 0);
-    }
+	}
 }
 
 CLOSE_O2_NAMESPACE

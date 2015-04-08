@@ -3,49 +3,48 @@
 #include "render_system.h"
 
 OPEN_O2_NAMESPACE
-	
-grTextureBaseInterface::grTextureBaseInterface(grRenderSystem* renderSystem):
-	mRenderSystem(renderSystem), mFormat(grTexFormat::DEFAULT), mUsage(grTexUsage::DEFAULT), mRefCount(0)
+
+ITexture::ITexture():
+mFormat(TextureFormat::Default), mUsage(TextureUsage::Default)
 {
 }
 
-grTextureBaseInterface::~grTextureBaseInterface()
+ITexture::~ITexture()
 {
 }
 
-int grTextureBaseInterface::getRefCount() const
-{
-	return mRefCount;
-}
-
-void grTextureBaseInterface::incRefCount()
-{
-	mRefCount++;
-}
-
-void grTextureBaseInterface::decrRefCount()
-{
-	mRefCount--;
-}
-
-const std::string& grTextureBaseInterface::getFileName() const
+const String& ITexture::GetFileName() const
 {
 	return mFileName;
 }
 
-grTexFormat::type grTextureBaseInterface::getFormat() const
+TextureFormat ITexture::GetFormat() const
 {
 	return mFormat;
 }
 
-grTexUsage::type grTextureBaseInterface::getUsage() const
+TextureUsage ITexture::GetUsage() const
 {
 	return mUsage;
 }
 
-vec2f grTextureBaseInterface::getSize() const
+Vec2F ITexture::GetSize() const
 {
 	return mSize;
+}
+
+void TextureBaseInterface::OnZeroRefCount()
+{
+	AppRender()->RemoveTexture((Texture*)this);
+}
+
+TextureBaseInterface::TextureBaseInterface():
+ITexture()
+{
+}
+
+TextureBaseInterface::~TextureBaseInterface()
+{
 }
 
 CLOSE_O2_NAMESPACE

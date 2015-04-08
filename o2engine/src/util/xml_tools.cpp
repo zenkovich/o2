@@ -1,53 +1,230 @@
 #include "xml_tools.h"
 
 #include "util/file_system/file.h"
+#include "util/smart_ptrs.h"
+#include "serialize_util.h"
 
 OPEN_O2_NAMESPACE
 
-bool cXmlTools::loadFromFile( const std::string& fileName, pugi::xml_document& xmlDoc )
+bool XmlTools::LoadFromFile(const String& fileName, pugi::xml_document& xmlDoc, bool isConfigFile /*= true*/)
 {
-	cInFile inFile(fileName, cFileType::FT_CONFIG);
+	InFile inFile(fileName, isConfigFile ? FileType::Config : FileType::File);
 
-	if (!inFile.isOpened())
+	if (!inFile.IsOpened())
 		return false;
 
-	uint32 dataSize = inFile.getDataSize();
-	char* buffer = mnew char[dataSize];
+	uint dataSize = inFile.GetDataSize();
+	autoArr(char) buffer = mnew char[dataSize];
 
-	inFile.readFullData(buffer);
+	inFile.ReadFullData(buffer);
 
 	pugi::xml_parse_result res = xmlDoc.load_buffer(buffer, dataSize);
-
-	safe_release_arr(buffer);
 
 	return res.status == pugi::status_ok;
 }
 
-pugi::xml_node cXmlTools::getNode( const pugi::xml_node& node, const std::string& path )
+bool XmlTools::LoadFromString(const String& data, pugi::xml_document& xmlDoc)
+{
+	pugi::xml_parse_result res = xmlDoc.load_buffer(data.c_str(), data.length());
+	return res.status == pugi::status_ok;
+}
+
+bool XmlTools::SaveToString(String& data, pugi::xml_document& xmlDoc)
+{
+	struct xmlWriter:public pugi::xml_writer
+	{
+		String* str;
+
+		void write(const void* data, size_t size)
+		{
+			*str += (char*)data;
+		}
+	};
+
+	xmlWriter writer;
+	writer.str = &data;
+	xmlDoc.save(writer);
+
+	return true;
+}
+
+bool XmlTools::SaveToFile(const String& fileName, pugi::xml_document& xmlDoc, bool isConfigFile /*= true*/)
+{
+	struct xmlWriter:public pugi::xml_writer
+	{
+		OutFile* file;
+
+		void write(const void* data, size_t size)
+		{
+			file->WriteData(data, size);
+		}
+	};
+
+	OutFile outFile(fileName, isConfigFile ? FileType::Config : FileType::File);
+
+	if (!outFile.IsOpened())
+		return false;
+
+	xmlWriter writer;
+	writer.file = &outFile;
+	xmlDoc.save(writer);
+
+	outFile.Close();
+
+	return true;
+}
+
+pugi::xml_node XmlTools::GetNode(const pugi::xml_node& node, const String& path)
 {
 	int slashPos = path.find('/');
-	std::string currNode = path.substr(0, slashPos);
-	
+	String currNode = path.substr(0, slashPos);
+
 	if (slashPos == path.npos)
 		return node.child(currNode.c_str());
 	else
-		return getNode(node.child(currNode.c_str()), path.substr(slashPos + 1));
+		return GetNode(node.child(currNode.c_str()), path.substr(slashPos + 1));
 }
 
-vec2i cXmlTools::node2veci( const pugi::xml_node& node )
+void XmlTools::ToXmlNode(int object, pugi::xml_node& node)
 {
-	return vec2i(node.attribute("x").as_int(), node.attribute("y").as_int());
+	node.append_attribute("v") = object;
 }
 
-vec2f cXmlTools::node2vecf( const pugi::xml_node& node )
+void XmlTools::ToXmlNode(unsigned int object, pugi::xml_node& node)
 {
-	return vec2f(node.attribute("x").as_float(), node.attribute("y").as_float());
+	node.append_attribute("v") = object;
 }
 
-fRect cXmlTools::node2rectf( const pugi::xml_node& node )
+void XmlTools::ToXmlNode(float object, pugi::xml_node& node)
 {
-	return fRect(node.attribute("left").as_float(), node.attribute("top").as_float(),
-		         node.attribute("right").as_float(), node.attribute("bottom").as_float());
+	node.append_attribute("v") = object;
+}
+
+void XmlTools::ToXmlNode(String& object, pugi::xml_node& node)
+{
+	node.append_attribute("v") = object.c_str();
+}
+
+void XmlTools::ToXmlNode(bool object, pugi::xml_node& node)
+{
+	node.append_attribute("v") = object;
+}
+
+void XmlTools::ToXmlNode(Vec2F& object, pugi::xml_node& node)
+{
+	node.append_attribute("x") = object.x;
+	node.append_attribute("y") = object.y;
+}
+
+void XmlTools::ToXmlNode(Vec2I& object, pugi::xml_node& node)
+{
+	node.append_attribute("x") = object.x;
+	node.append_attribute("y") = object.y;
+}
+
+void XmlTools::ToXmlNode(RectF& object, pugi::xml_node& node)
+{
+	node.append_attribute("left") = object.left;
+	node.append_attribute("top") = object.top;
+	node.append_attribute("right") = object.right;
+	node.append_attribute("down") = object.bottom;
+}
+
+void XmlTools::ToXmlNode(RectI& object, pugi::xml_node& node)
+{
+	node.append_attribute("left") = object.left;
+	node.append_attribute("top") = object.top;
+	node.append_attribute("right") = object.right;
+	node.append_attribute("down") = object.bottom;
+}
+
+void XmlTools::ToXmlNode(Color4& object, pugi::xml_node& node)
+{
+	node.append_attribute("r") = object.r;
+	node.append_attribute("g") = object.g;
+	node.append_attribute("b") = object.b;
+	node.append_attribute("a") = object.a;
+}
+
+void XmlTools::ToXmlNode(WideTime& object, pugi::xml_node& node)
+{
+	node.append_attribute("second") = object.mSecond;
+	node.append_attribute("minute") = object.mMinute;
+	node.append_attribute("hour")   = object.mHour;
+	node.append_attribute("day")    = object.mDay;
+	node.append_attribute("month")  = object.mMonth;
+	node.append_attribute("year")   = object.mYear;
+}
+
+void XmlTools::FromXmlNode(int& object, pugi::xml_node& node)
+{
+	object = node.attribute("v").as_int();
+}
+
+void XmlTools::FromXmlNode(unsigned int& object, pugi::xml_node& node)
+{
+	object = node.attribute("v").as_uint();
+}
+
+void XmlTools::FromXmlNode(float& object, pugi::xml_node& node)
+{
+	object = node.attribute("v").as_float();
+}
+
+void XmlTools::FromXmlNode(String& object, pugi::xml_node& node)
+{
+	object = node.attribute("v").value();
+}
+
+void XmlTools::FromXmlNode(bool& object, pugi::xml_node& node)
+{
+	object = node.attribute("v").as_bool();
+}
+
+void XmlTools::FromXmlNode(Vec2F& object, pugi::xml_node& node)
+{
+	object.x = node.attribute("x").as_float();
+	object.y = node.attribute("y").as_float();
+}
+
+void XmlTools::FromXmlNode(Vec2I& object, pugi::xml_node& node)
+{
+	object.x = node.attribute("x").as_int();
+	object.y = node.attribute("y").as_int();
+}
+
+void XmlTools::FromXmlNode(RectF& object, pugi::xml_node& node)
+{
+	object.left = node.attribute("left").as_float();
+	object.right = node.attribute("right").as_float();
+	object.top = node.attribute("top").as_float();
+	object.bottom = node.attribute("down").as_float();
+}
+
+void XmlTools::FromXmlNode(RectI& object, pugi::xml_node& node)
+{
+	object.left = node.attribute("left").as_int();
+	object.right = node.attribute("right").as_int();
+	object.top = node.attribute("top").as_int();
+	object.bottom = node.attribute("down").as_int();
+}
+
+void XmlTools::FromXmlNode(Color4& object, pugi::xml_node& node)
+{
+	object.r = node.attribute("r").as_int();
+	object.g = node.attribute("g").as_int();
+	object.b = node.attribute("b").as_int();
+	object.a = node.attribute("a").as_int();
+}
+
+void XmlTools::FromXmlNode(WideTime& object, pugi::xml_node& node)
+{
+	object.mSecond = node.attribute("second").as_int();
+	object.mMinute = node.attribute("minute").as_int();
+	object.mHour   = node.attribute("hour").as_int();
+	object.mDay    = node.attribute("day").as_int();
+	object.mMonth  = node.attribute("month").as_int();
+	object.mYear   = node.attribute("year").as_int();
 }
 
 CLOSE_O2_NAMESPACE

@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="o2::LogStream" Collapsed="true">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="o2::LogStream::LogSteamsVec" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Log\LogStream.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QAABEAABAAAEEQAAAAIADBAAAEACAAAAAAAIAAoAAgA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Log\LogStream.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="o2::Vec2&lt;T&gt;" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAMQAAEIBABAEAIgCQBAGAEAAAAACFDggAAAQII=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="o2::Vertex2" Collapsed="true">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAEAAARAAAAAAAAAAAAAAAAACAAAAgAQCAAQA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Math\Vertex2.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="o2::Rect&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAABIAA1BAgAAIIAUhAACAIAwAAAAAiEEAIgCA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Math\Rect.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="o2::Color4" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAHQAgAIAgBAkABKAUAABACAAAAoBYAlkBAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Math\Color.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="o2::UInt64" Collapsed="true">
+    <Position X="6" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\CommonTypes.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::UInt16" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\CommonTypes.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::UInt8" Collapsed="true">
+    <Position X="7.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\CommonTypes.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::Int64" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\CommonTypes.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::UInt" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\CommonTypes.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::ULong" Collapsed="true">
+    <Position X="9.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\CommonTypes.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::Vec2F" Collapsed="true">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::Vec2I" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::RectF" Collapsed="true">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Math\Rect.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::RectI" Collapsed="true">
+    <Position X="2.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\Users\TanyaAndrey\андрей\с++\new\svn\o2engine\Sources\Utils\Math\Rect.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

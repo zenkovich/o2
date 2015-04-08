@@ -1,19 +1,20 @@
-#ifndef ASSERT_H
-#define ASSERT_H
+#pragma once
 
-#include "public.h"
+#include "public_namespace.h"
 OPEN_O2_NAMESPACE
 
-/** Outing assert with description, if x is false. */
-#define assert(x, desc) \
-	if (!(x)) \
-	{ \
-		errorMessage(desc, __FILE__, __LINE__); \
-		_asm{ int 3 }; \
-	}
+#ifdef assert
+#undef assert
+#endif
 
-void errorMessage(const char* desc, const char* file, long line);
+/** Outing assert with description, if x is false. */
+#define o2assert(x, desc) \
+if (!(x)) \
+{ \
+	ErrorMessage(desc, __FILE__, __LINE__); \
+	_asm{ int 3 }; \
+}
+
+void ErrorMessage(const char* desc, const char* file, long line);
 
 CLOSE_O2_NAMESPACE
-
-#endif //ASSERT_H

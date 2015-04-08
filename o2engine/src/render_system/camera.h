@@ -1,45 +1,44 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include "public.h"
-#include "util/math/vector2.h"
-#include "util/math/basis.h"
 
 OPEN_O2_NAMESPACE
 
-/** Camera. Contains position, scale and rotations. Works as sprite. */
-class grCamera
+/** Camera. Contains pivot, position, scale and rotations. Works as sprite. */
+class Camera
 {
 public:
-	vec2f mPosition; /**< Position of left top corner camera. */
-	vec2f mScale;    /**< Scale of camera, from left top corner. */
-	float mRotation; /**< Rotation of camera, from left top corner. */
+	Vec2F mPivot;    /**< Relative pivot. (0...1). */
+	Vec2F mPosition; /**< Position of pivot camera. */
+	Vec2F mScale;    /**< Scale of camera, around pivot. */
+	float mRotation; /**< Rotation of camera, around pivot. */
 
 	/** ctor. */
-	grCamera(const vec2f& pos = vec2f(0, 0), const vec2f& scale = vec2f(1, 1), float rotation = 0)
+	Camera(const Vec2F& pos = Vec2F(), const Vec2F& scale = Vec2F(1, 1), float rotation = 0,
+		   const Vec2F& pivot = Vec2F())
 	{
+		mPivot = pivot;
 		mPosition = pos;
 		mScale = scale;
 		mRotation = rotation;
 	}
 
-	/** Sets the parametres of camera. */
-	void set(const vec2f& pos = vec2f(0, 0), const vec2f& scale = vec2f(1, 1), float rotation = 0)
+	/** Sets the parameters of camera. */
+	void Set(const Vec2F& pos = Vec2F(), const Vec2F& scale = Vec2F(1, 1), float rotation = 0,
+			 const Vec2F& pivot = Vec2F())
 	{
+		mPivot = pivot;
 		mPosition = pos;
 		mScale = scale;
 		mRotation = rotation;
 	}
 
-	/** Sets parametres from basis. Shear not supporting. */
-	void set(const basis& bas)
+	/** Sets parameters from basis. Shear not supporting. */
+	void Set(const Basis& bas)
 	{
+		mPivot = Vec2F();
 		mPosition = bas.offs;
-		mScale = bas.getScale();
-		mRotation = bas.getAngle();
+		mScale = bas.GetScale();
+		mRotation = bas.GetAngle();
 	}
 };
-
-CLOSE_O2_NAMESPACE
-
-#endif //CAMERA_H

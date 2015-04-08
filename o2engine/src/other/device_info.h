@@ -1,45 +1,44 @@
-#ifndef DEVICE_INFO_H
-#define DEVICE_INFO_H
+#pragma once
 
 #include "public.h"
 #include "util/singleton.h"
 
 OPEN_O2_NAMESPACE
 
-class cApplication;
+class Application;
 
-/** Device info. Containin different parametres about device, render etc. */
-class cDeviceInfo:public cSingleton<cDeviceInfo>
+/** Device info. Containing different parameters about device, render etc. */
+class DeviceInfo: public Singleton<DeviceInfo>
 {
 public:
-	enum DeviceParam { DP_RENDER_TARGET_AVAILABLE = 0,
-	                   DP_RENDER_MAX_TEXTURE_SIZE,   
-					   DP_DEVICE_ID,
+	enum DeviceParam {
+		DP_RENDER_TARGET_AVAILABLE = 0,
+		DP_RENDER_MAX_TEXTURE_SIZE,
+		DP_DEVICE_ID,
 
-					   DEVICE_PARAMETRES_COUNT };
+		DEVICE_PARAMETRES_COUNT
+	};
 
 	enum { nParamDataSize = 128 };
 
 protected:
-	char mDeviceParametres[DEVICE_PARAMETRES_COUNT][nParamDataSize]; /**< Parametres data. */
+	char mDeviceParametres[DEVICE_PARAMETRES_COUNT][nParamDataSize]; /**< Parameters data. */
 
 public:
 	/** ctor. */
-	cDeviceInfo();
+	DeviceInfo();
 
 	/** dtor. */
-	~cDeviceInfo();
+	~DeviceInfo();
 
-	/** Getting parametres from application systems. */
-	void initialize(cApplication* app);
+	/** Getting parameters from application systems. */
+	void Initialize(Application* app);
 
 	/** Returns parameter with specified type cast. */
 	template<typename T>
-	T getParameter(DeviceParam paramId);
+	T GetParameter(DeviceParam paramId);
 };
 
-#define deviceInfo() cDeviceInfo::instance()
+#define deviceInfo() DeviceInfo::InstancePtr()
 
 CLOSE_O2_NAMESPACE
-
-#endif //DEVICE_INFO_H

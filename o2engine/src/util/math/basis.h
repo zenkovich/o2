@@ -1,158 +1,280 @@
-#ifndef BASIS_H
-#define BASIS_H
+#pragma once
 
-#include "public.h"
+#include "util/public_namespace.h"
 #include "vector2.h"
 
 OPEN_O2_NAMESPACE
 
 /** Basis. Just as matrix 2x3. */
-struct basis
+struct Basis
 {
-	vec2f xv, yv, offs;
+	Vec2F xv, yv, offs;
 
-	inline basis()
-	{ 
-	}
+	inline Basis();
+	inline Basis(const Vec2F& offsvec, const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
+	inline Basis(const Vec2F& offsvec, float angle);
 
-	inline basis(const vec2f& offsvec, const vec2f& xvec = vec2f(1, 0), const vec2f& yvec = vec2f(0, 1))
-	{
-		xv = xvec; yv = yvec;
-		offs = offsvec;
-	}
+	inline bool operator==(const Basis& cbasis);
+	inline bool operator!=(const Basis& cbasis);
 
-	inline basis(const vec2f& offsvec, float angle)
-	{
-		offs = offsvec;
-		float cs = cosf(angle), sn = sinf(angle);
-		xv.set(cs, sn);
-		yv.set(-sn, cs);
-	}
+	inline Basis operator*(const Basis& cbasis);
+	inline Vec2F operator*(const Vec2F& vec) const;
 
-	inline void set(const vec2f& offsvec = vec2f(0, 0), const vec2f& xvec = vec2f(1, 0), const vec2f& yvec = vec2f(0, 1))
-	{
-		xv = xvec; yv = yvec;
-		offs = offsvec;
-	}
+	inline void Set(const Vec2F& offsvec = Vec2F(0, 0), const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
+	inline void Set(const Vec2F& offsvec, float angle);
 
-	inline void set(const vec2f& offsvec, float angle)
-	{
-		offs = offsvec;
-		float cs = cosf(angle), sn = sinf(angle);
-		xv.set(cs, sn);
-		yv.set(-sn, cs);
-	}
+	inline float GetAngle() const;
+	inline Vec2F GetScale() const;
+	inline float GetShift() const;
+	inline float GetShiftFast(const Vec2F& scale) const;
 
-	inline basis operator=(const basis& cbasis)
-	{
-		offs = cbasis.offs;
-		xv = cbasis.xv;
-		yv = cbasis.yv;
-		return *this;
-	}
+	inline void Decompose(Vec2F* offset, float* angle, Vec2F* scale, float* shift) const;
 
-	inline basis operator*(const basis& cbasis)
-	{ 
-		basis res;
-		res.xv.x = xv.x*cbasis.xv.x + xv.y*cbasis.yv.x;                       res.xv.y = xv.x*cbasis.xv.y + xv.y*cbasis.yv.y;
-		res.yv.x = yv.x*cbasis.xv.x + yv.y*cbasis.yv.x;                       res.yv.y = yv.x*cbasis.xv.y + yv.y*cbasis.yv.y;
-		res.offs.x = offs.x*cbasis.xv.x + offs.y*cbasis.yv.x + cbasis.offs.x; res.offs.y = offs.x*cbasis.xv.y + offs.y*cbasis.yv.y + cbasis.offs.y;
-		return res;
-	}
+	inline Basis Inverted() const;
+	inline void  Inverse();
 
-	inline vec2f operator*(const vec2f& vec) const
-	{
-		vec2f ret;
-		ret.x = xv.x*vec.x + xv.y*vec.y + offs.x;
-		ret.y = yv.x*vec.x + yv.y*vec.y + offs.y;
-		return ret;
-	}
+	inline void Translate(const Vec2F& voffs);
+	inline void Scale(const Vec2F& scalev);
+	inline void Rotate(float angle);
 
-	inline float getAngle() const
-	{
-		float angle = -atan2f( -xv.y, xv.x );
-		if (angle < 0)
-			return 6.283185307f + angle;
-		
-		return angle;
-	}
+	inline void  Transform(float& x, float& y) const;
+	inline Vec2F Transform(const Vec2F& vec) const;
 
-	inline vec2f getScale() const
-	{
-		return vec2f( xv.len(), yv.len() );
-	}
-
-	inline void decompose(vec2f* offset, float* angle, vec2f* scale)
-	{
-		*offset = offs;
-		*angle = getAngle();
-		*scale = getScale();
-	}
-
-	inline basis inverted() const
-	{
-		float invdet = 1.0f/(xv.x*yv.y - yv.x*xv.y);
-		basis old = *this, res;   
-
-		res.xv.x=     old.yv.y*invdet;
-		res.yv.x=    -old.yv.x*invdet;
-		res.offs.x=  (old.yv.x*old.offs.y - old.offs.x*old.yv.y)*invdet;
-				    
-		res.xv.y=    -old.xv.y*invdet;
-		res.yv.y=     old.xv.x*invdet;
-		res.offs.y= -(old.xv.x*old.offs.y - old.offs.x*old.xv.y)*invdet;
-		
-		return res;
-	}
-
-	inline void inverse()
-	{
-		*this = inverted();
-	}
-
-	inline void translate(const vec2f& voffs)
-	{
-		offs += voffs;
-	}
-
-	inline void scale(const vec2f& scalev)
-	{
-		xv *= scalev.x;
-		yv *= scalev.y;
-	}
-
-	inline void rotate(float angle)
-	{
-		float cs = cosf(angle), sn = sinf(angle);
-		
-		vec2f nxv( cs*xv.x - sn*xv.y, sn*xv.x + cs*xv.y );
-		vec2f nyv( cs*yv.x - sn*yv.y, sn*yv.x + cs*yv.y );
-
-		xv = nxv; yv = nyv;
-	}
-
-	inline static basis nullBasis()
-	{
-		return basis(vec2f(0, 0), vec2f(1, 0), vec2f(0, 1));
-	}
-
-	inline static basis scaledBasis(const vec2f& scale)
-	{
-		return basis(vec2f(0, 0), vec2f(scale.x, 0), vec2f(0, scale.y));
-	}
-
-	inline static basis translatedBasis(const vec2f& voffs)
-	{
-		return basis(voffs, vec2f(1, 0), vec2f(0, 1));
-	}
-
-	inline static basis rotatedBasis(float angle)
-	{
-		float cs = cosf(angle), sn = sinf(angle);
-		basis(vec2f(0, 0), vec2f(cs, sn), vec2f(-sn, cs));
-	}
+	inline static Basis Identity();
+	inline static Basis Scaled(const Vec2F& scale);
+	inline static Basis Translated(const Vec2F& voffs);
+	inline static Basis Rotated(float angle);
+	inline static Basis Build(const Vec2F& position, const Vec2F& scale, float angle, float shift);
 };
 
-CLOSE_O2_NAMESPACE
+struct BasisDef
+{
+	Vec2F mPosition;
+	Vec2F mScale;
+	float mAngle;
+	float mShift;
 
-#endif //MATRIX3_H
+	inline BasisDef(const Vec2F& position = Vec2F(), const Vec2F& scale = Vec2F(1, 1), float angle = 0, float shift = 0);
+	inline BasisDef(const Basis& bas);
+
+	inline operator Basis() const;
+
+	inline Basis Build() const;
+};
+
+inline BasisDef Basis2Def(const Basis& bas);
+inline Basis    Def2Basis(const BasisDef& def);
+
+//basis implementation
+
+Basis::Basis():
+xv(1, 0), yv(0, 1), offs()
+{
+}
+
+Basis::Basis(const Vec2F& offsvec, const Vec2F& xvec /*= vec2f(1, 0)*/, const Vec2F& yvec /*= vec2f(0, 1)*/):
+xv(xvec), yv(yvec), offs(offsvec)
+{
+}
+
+Basis::Basis(const Vec2F& offsvec, float angle)
+{
+	offs = offsvec;
+	float cs = cosf(angle), sn = sinf(angle);
+	xv.Set(cs, sn);
+	yv.Set(-sn, cs);
+}
+
+bool Basis::operator==(const Basis& cbasis)
+{
+	return xv == cbasis.xv && yv == cbasis.yv && offs == cbasis.offs;
+}
+
+bool Basis::operator!=(const Basis& cbasis)
+{
+	return xv != cbasis.xv || yv != cbasis.yv || offs != cbasis.offs;
+}
+
+Basis Basis::operator*(const Basis& cbasis)
+{
+	Basis res;
+	res.xv.x = xv.x*cbasis.xv.x + xv.y*cbasis.yv.x;                       res.xv.y = xv.x*cbasis.xv.y + xv.y*cbasis.yv.y;
+	res.yv.x = yv.x*cbasis.xv.x + yv.y*cbasis.yv.x;                       res.yv.y = yv.x*cbasis.xv.y + yv.y*cbasis.yv.y;
+	res.offs.x = offs.x*cbasis.xv.x + offs.y*cbasis.yv.x + cbasis.offs.x; res.offs.y = offs.x*cbasis.xv.y + offs.y*cbasis.yv.y + cbasis.offs.y;
+	return res;
+}
+
+Vec2F Basis::operator*(const Vec2F& vec) const
+{
+	Vec2F ret;
+	ret.x = xv.x*vec.x + yv.x*vec.y + offs.x;
+	ret.y = xv.y*vec.x + yv.y*vec.y + offs.y;
+	return ret;
+}
+
+void Basis::Set(const Vec2F& offsvec /*= vec2f(0, 0)*/, const Vec2F& xvec /*= vec2f(1, 0)*/, const Vec2F& yvec /*= vec2f(0, 1)*/)
+{
+	xv = xvec; yv = yvec;
+	offs = offsvec;
+}
+
+void Basis::Set(const Vec2F& offsvec, float angle)
+{
+	offs = offsvec;
+	float cs = cosf(angle), sn = sinf(angle);
+	xv.Set(cs, sn);
+	yv.Set(-sn, cs);
+}
+
+float Basis::GetAngle() const
+{
+	float angle = -atan2f(-xv.y, xv.x);
+	if (angle < 0)
+		return 6.283185307f + angle;
+
+	return angle;
+}
+
+Vec2F Basis::GetScale() const
+{
+	return Vec2F(xv.Length(), yv.Length());
+}
+
+float Basis::GetShift() const
+{
+	Vec2F scale = GetScale();
+	return GetShiftFast(scale);
+}
+
+float Basis::GetShiftFast(const Vec2F& scale) const
+{
+	return (xv/scale.x).Dot(yv/scale.y);
+}
+
+void Basis::Decompose(Vec2F* offset, float* angle, Vec2F* scale, float* shift) const
+{
+	*offset = offs;
+	*angle = GetAngle();
+	*scale = GetScale();
+	*shift = GetShiftFast(*scale);
+}
+
+Basis Basis::Inverted() const
+{
+	float invdet = 1.0f/(xv.x*yv.y - yv.x*xv.y);
+	Basis res;
+
+	res.xv.x=     yv.y*invdet;
+	res.yv.x=    -yv.x*invdet;
+	res.offs.x=  (yv.x*offs.y - offs.x*yv.y)*invdet;
+
+	res.xv.y=    -xv.y*invdet;
+	res.yv.y=     xv.x*invdet;
+	res.offs.y= -(xv.x*offs.y - offs.x*xv.y)*invdet;
+
+	return res;
+}
+
+void Basis::Inverse()
+{
+	*this = Inverted();
+}
+
+void Basis::Translate(const Vec2F& voffs)
+{
+	offs += voffs;
+}
+
+void Basis::Scale(const Vec2F& scalev)
+{
+	xv *= scalev.x;
+	yv *= scalev.y;
+}
+
+void Basis::Rotate(float angle)
+{
+	float cs = cosf(angle), sn = sinf(angle);
+
+	Vec2F nxv(cs*xv.x - sn*xv.y, sn*xv.x + cs*xv.y);
+	Vec2F nyv(cs*yv.x - sn*yv.y, sn*yv.x + cs*yv.y);
+
+	xv = nxv; yv = nyv;
+}
+
+void Basis::Transform(float& x, float& y) const
+{
+	float lx = x, ly = y;
+	x = xv.x*lx + yv.x*ly + offs.x;
+	y = xv.y*lx + yv.y*ly + offs.y;
+}
+
+Vec2F Basis::Transform(const Vec2F& vec) const
+{
+	return Vec2F(xv.x*vec.x + yv.x*vec.y + offs.x, xv.y*vec.x + yv.y*vec.y + offs.y);
+}
+
+Basis Basis::Identity()
+{
+	return Basis(Vec2F(0, 0), Vec2F(1, 0), Vec2F(0, 1));
+}
+
+Basis Basis::Scaled(const Vec2F& scale)
+{
+	return Basis(Vec2F(0, 0), Vec2F(scale.x, 0), Vec2F(0, scale.y));
+}
+
+Basis Basis::Translated(const Vec2F& voffs)
+{
+	return Basis(voffs, Vec2F(1, 0), Vec2F(0, 1));
+}
+
+Basis Basis::Rotated(float angle)
+{
+	float cs = cosf(angle), sn = sinf(angle);
+	Basis(Vec2F(0, 0), Vec2F(cs, sn), Vec2F(-sn, cs));
+}
+
+Basis Basis::Build(const Vec2F& position, const Vec2F& scale, float angle, float shift)
+{
+	float sn = sinf(angle), cs = cosf(angle);
+	Vec2F x(scale.x*cs, sn*scale.x), y(-sn*scale.y, cs*scale.y);
+	y += x*shift;
+	return Basis(position, x, y);
+}
+
+//basisDef implementation
+
+BasisDef::BasisDef(const Vec2F& position /*= vec2f()*/, const Vec2F& scale /*= vec2f(1, 1)*/, float angle /*= 0*/,
+				   float shift /*= 0*/):
+				   mPosition(position), mScale(scale), mAngle(angle), mShift(shift)
+{
+}
+
+BasisDef::BasisDef(const Basis& bas)
+{
+	bas.Decompose(&mPosition, &mAngle, &mScale, &mShift);
+}
+
+BasisDef::operator Basis() const
+{
+	return Build();
+}
+
+Basis BasisDef::Build() const
+{
+	return Basis::Build(mPosition, mScale, mAngle, mShift);
+}
+
+//other implementations
+
+BasisDef Basis2Def(const Basis& bas)
+{
+	return BasisDef(bas);
+}
+
+Basis Def2Basis(const BasisDef& def)
+{
+	return def.Build();
+}
+
+CLOSE_O2_NAMESPACE

@@ -1,87 +1,94 @@
-#ifndef APPLICATION_WIN_H
-#define APPLICATION_WIN_H
+#pragma once
 
 #include <Windows.h>
 
 #include "public.h"
-#include "../application_base_interface.h"
+#include "app/application_base_interface.h"
 
 OPEN_O2_NAMESPACE
 
-class cTimer;
+class Timer;
 
-/** Windows applacation. 
-  * Contains window handle, options, timer
-  */
-class cApplication:public cApplicationBaseInterface
+/** Windows application. Contains window handle, options. */
+class Application:public ApplicationBaseInterface
 {
 protected:
-	friend class grRenderSystem;
-	friend class cDeviceInfo;
+	friend class RenderSystem;
+	friend class DeviceInfo;
 
-	HWND         mHWnd;                /**< Window handle. */
-	unsigned int mWndStyle;            /**< Window styles data. */
-		         					   
-	bool         mWindowed;            /**< True if app in windowed mode, false if in fullscreen mode. */
-	bool         mWindowResizible;     /**< True, if window can be sized by user. */
-	vec2i        mWindowedSize;        /**< Size of window. */
-	vec2i        mWindowedPos;         /**< Position of window. */
-									   
-	bool         mAutoAjustByScreen;   /**< True, if app in windowed mode and window ajusting by available screen space. */
-	vec2f        mAutoAjustScale;      /**< Auto ajust scale. */
-									   
-	std::string  mWndCaption;          /**< Window caption. */
-									   
-	bool         mActive;              /**< True, if window is active. */
-									   
-	cTimer*      mTimer;               /**< Timer for detecting delta time for update. */
+	HWND   mHWnd;               /**< Window handle. */
+	uint   mWndStyle;           /**< Window styles data. */
 
-	static cApplication* mApplication; /**< Static ptr for wndProc func. */
+	bool   mWindowed;           /**< True if app in windowed mode, false if in fullscreen mode. */
+	bool   mWindowResizible;    /**< True, if window can be sized by user. */
+	Vec2I  mWindowedSize;       /**< Size of window. */
+	Vec2I  mWindowedPos;        /**< Position of window. */
+	String mWndCaption;         /**< Window caption. */
+	bool   mActive;             /**< True, if window is active. */
+
+	static Application* mApplication;   /**< Static ptr for wndProc func. */
 
 public:
-	cApplication();
-	~cApplication();
+	Application();
+	~Application();
 
 	/** Launching application cycle. */
-	void launch();
+	void Launch();
 
 	/** Called on updating. */
-	void onUpdate(float dt);
+	void OnUpdate(float dt);
 
-	/** Called on drawing. */ 
-	void onDraw();
+	/** Called on drawing. */
+	void OnDraw();
 
-	/** Sets option for application. */
-	void setOption(cApplicationOption::type option, ...);
+	/** Makes application windowed. On mobiles/tablets has no effect, just ignoring. */
+	void SetWindowed();
 
-	/** Getting option. */
-	void getOption(cApplicationOption::type option, ...);
+	/** Makes application fullscreen. On mobiles/tablets has no effect, just ignoring. */
+	void SetFullscreen();
 
-	/** Called on message processing. */
-	virtual void processMessage(cApplacationMessage::type message);
+	/** Return true, if application is fullscreen On mobiles/tables always true. */
+	bool IsFullScreen() const;
+
+	/** Sets application window as resizible. On mobiles/tablets has no effect, just ignoring. */
+	void SetResizible(bool resizible);
+
+	/** Returns true, if application is resizible. On mobiles/tablets always returns false. */
+	bool IsResizible() const;
+
+	/** Sets application window size. On mobiles/tablets has no effect, just ignoring. */
+	void SetWindowSize(const Vec2I& size);
+
+	/** Returns application window size. On mobiles/tablets returns content size. */
+	Vec2I GetWindowSize() const;
+
+	/** Sets application window position. On mobiles/tablets has no effect, just ignoring. */
+	void SetWindowPosition(const Vec2I& position);
+
+	/** Returns application window position. On mobiles/tablets return zero vector. */
+	Vec2I GetWindowPosition() const;
+
+	/** Sets application window caption. On mobiles/tablets has no effect, just ignoring. */
+	void SetWindowCaption(const String& caption);
+
+	/** Returns application window caption. On mobiles/tablets returns empty string. */
+	String GetWindowCaption() const;
+
+	/** Sets inside content size. */
+	void SetContentSize(const Vec2I& size);
+
+	/** Returns inside content size. */
+	Vec2I GetContentSize() const;
 
 protected:
 	/** Initializing window. */
-	void initializeWindow();
+	void InitializeWindow();
 
-	/** Sets window parametres as windowed mode */
-	void setWindowed();
-
-	/** Sets window parametres as fullscreen mode. */
-	void setFullscreen();
-
-	/** Sets window parametres as adjusting by screen mode. */
-	void autoAjustByScreenSpace();
-
-	/** Reset window by window parametres. */
-	void resetWnd();
+	/** Reset window by window parameters. */
+	void ResetWnd();
 
 	/** Window proc func. */
-	static LRESULT wndProc(HWND wnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-	void draw();
+	static LRESULT WndProc(HWND wnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //APPLICATION_WIN_H

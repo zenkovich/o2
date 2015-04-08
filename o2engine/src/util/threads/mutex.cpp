@@ -2,9 +2,9 @@
 
 OPEN_O2_NAMESPACE
 
-cMutex::cMutex( Type type /*= MT_DEFAULT*/ )
+Mutex::Mutex(Type type /*= MT_DEFAULT*/)
 {
-	if (type == MT_RECURSIVE)
+	if (type == Type::Recursive)
 	{
 		pthread_mutexattr_t attr;
 		pthread_mutexattr_init(&attr);
@@ -13,19 +13,19 @@ cMutex::cMutex( Type type /*= MT_DEFAULT*/ )
 		pthread_mutexattr_destroy(&attr);
 
 		mInitialized = res == 0;
-	} 
+	}
 	else
 	{
 		mInitialized = pthread_mutex_init(&mMutex, NULL) == 0;
 	}
 }
 
-cMutex::~cMutex()
-{	
+Mutex::~Mutex()
+{
 	pthread_mutex_destroy(&mMutex);
 }
 
-int cMutex::lock()
+int Mutex::Lock()
 {
 	if (!mInitialized)
 		return -1;
@@ -33,7 +33,7 @@ int cMutex::lock()
 	return pthread_mutex_lock(&mMutex);
 }
 
-int cMutex::tryLock()
+int Mutex::TryLock()
 {
 	if (!mInitialized)
 		return -1;
@@ -41,7 +41,7 @@ int cMutex::tryLock()
 	return pthread_mutex_trylock(&mMutex);
 }
 
-int cMutex::unlock()
+int Mutex::Unlock()
 {
 	if (!mInitialized)
 		return -1;

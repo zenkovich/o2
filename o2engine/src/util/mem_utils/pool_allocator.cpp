@@ -5,16 +5,15 @@
 
 OPEN_O2_NAMESPACE
 
-	//void mfree(void* ptr) { free(ptr); }
 
-cPoolAllocator::cPoolAllocator( uint32 chunksCount, uint16 chunkSize /*= 4*/, IAllocator* parentAllocator /*= NULL*/ ):
-	mParentAllocator(parentAllocator)
+PoolAllocator::PoolAllocator(uint chunksCount, uint16 chunkSize /*= 4*/, IAllocator* parentAllocator /*= NULL*/):
+mParentAllocator(parentAllocator)
 {
 	mMemorySize = chunksCount*chunkSize;
 	mChunkSize = chunkSize;
 	mChunksCount = chunksCount;
 
-	uint32 mutexSize = sizeof(cMutex);
+	uint mutexSize = sizeof(Mutex);
 
 	if (parentAllocator)
 	{
@@ -25,20 +24,20 @@ cPoolAllocator::cPoolAllocator( uint32 chunksCount, uint16 chunkSize /*= 4*/, IA
 		mMemory = (char*)malloc(mMemorySize + mutexSize);
 	}
 
-	for (uint32 i = 0; i < mChunksCount - 1; i++)
+	for (uint i = 0; i < mChunksCount - 1; i++)
 	{
-		*(uint32*)(mMemory + i*mChunkSize) = (uint32)(mMemory + (i + 1)*mChunkSize);
+		*(uint*)(mMemory + i*mChunkSize) = (uint)(mMemory + (i + 1)*mChunkSize);
 	}
-	*(uint32*)(mMemory + (mChunksCount - 1)*mChunkSize) = NULL;
+	*(uint*)(mMemory + (mChunksCount - 1)*mChunkSize) = NULL;
 
 	mHead = mMemory;
 
-	mMutex = new (mMemory + mMemorySize) cMutex;
+	mMutex = new (mMemory + mMemorySize) Mutex;
 }
 
-cPoolAllocator::~cPoolAllocator()
+PoolAllocator::~PoolAllocator()
 {
-	mMutex->~cMutex();
+	mMutex->~Mutex();
 
 	if (mParentAllocator)
 	{
@@ -50,37 +49,37 @@ cPoolAllocator::~cPoolAllocator()
 	}
 }
 
-void* cPoolAllocator::alloc( uint32 bytes )
-{	
-	mMutex->lock();
+void* PoolAllocator::Alloc(uint bytes)
+{
+	mMutex->Lock();
 
 	if (!mHead)
 		return NULL;
 
 	void* res = mHead;
-	mHead = (char*)(*(uint32*)mHead);
+	mHead = (char*)(*(uint*)mHead);
 
-	mMutex->unlock();
+	mMutex->Unlock();
 
 	return res;
 }
 
-void* cPoolAllocator::realloc( void* ptr, uint32 bytes )
+void* PoolAllocator::Realloc(void* ptr, uint bytes)
 {
 	return ptr;
 }
 
-void cPoolAllocator::free( void* ptr )
+void PoolAllocator::Free(void* ptr)
 {
-	mMutex->lock();
+	mMutex->Lock();
 
 	if (!ptr)
 		return;
-	
-	*(uint32*)(ptr) = (uint32)(mHead);
+
+	*(uint*)(ptr) = (uint)(mHead);
 	mHead = (char*)ptr;
 
-	mMutex->unlock();
+	mMutex->Unlock();
 }
 
 CLOSE_O2_NAMESPACE

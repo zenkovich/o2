@@ -1,40 +1,47 @@
-#ifndef THREAD_H
-#define THREAD_H
+#pragma once
 
 #include "public.h"
-
 #include "pthreads/pthread.h"
+#include "util/callback.h"
+#include "util/smart_ptrs.h"
 
 OPEN_O2_NAMESPACE
 
-class ICallback;
-
-class cThread
+/** Thread starter class. Uses POSIX. */
+class Thread
 {
 public:
-	enum ThreadPriority { TP_NORMAL = 0, TP_LOW, TP_HIGHT };
+	enum class Priority { Normal, Low, Hight };
 
 protected:
-	pthread_t  mThreadId;
-	ICallback* mThreadFunc;
-	bool       mStarted;
+	pthread_t  mThreadId;   /** Thread id. */
+	ICallback* mThreadFunc; /** Function starting in thread. */
+	bool       mStarted;    /** True, when started. */
 
-	cThread(const cThread& thread) {}
-	cThread& operator=(const cThread& thread) { return *this; }
+	/** copy ctor. */
+	Thread(const Thread& thread) {}
 
-	static void* threadFunc(void* arg);
+	/** copy operator. */
+	Thread& operator=(const Thread& thread) { return *this; }
+
+	/** Thread function. Here calls mThreadFunc. */
+	static void* ThreadFunc(void* arg);
 
 public:
-	cThread();
-	~cThread();
+	/** ctor. */
+	Thread();
 
-	int start(ICallback* threadCallback, ThreadPriority threadPriority = TP_NORMAL);
+	/** dtor. */
+	~Thread();
 
-	int join();
+	/** Starts function with priority. */
+	int Start(ICallback* threadCallback, Priority threadPriority = Priority::Normal);
 
-	int cancel();
+	/** Join. */
+	int Join();
+
+	/** Canceling thread. */
+	int Cancel();
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //THREAD_H

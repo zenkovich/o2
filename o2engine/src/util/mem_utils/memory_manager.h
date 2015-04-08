@@ -1,18 +1,16 @@
-#ifndef MEMORY_MANAGER_H
-#define MEMORY_MANAGER_H
+#pragma once
 
 #include <list>
-
 #include "public.h"
 
 OPEN_O2_NAMESPACE
 
 class IAllocator;
-class cMutex;
+class Mutex;
 
-/** Memory manager, singleton. 
- ** Containg information about allocations, usage of memory, basic allocator if specified. */
-class cMemoryManager
+/** Memory manager, singleton.
+ ** Contains information about allocations, usage of memory, basic allocator if specified. */
+class MemoryManager
 {
 	friend class IAllocator;
 
@@ -20,16 +18,16 @@ class cMemoryManager
 	struct AllocSign
 	{
 		void*        mPtr;        /**< Pointer of allocated memory. */
-		uint32       mSize;       /**< Size of allocated memory. */
+		uint         mSize;       /**< Size of allocated memory. */
 		char         mSource[64]; /**< Source file name. */
 		unsigned int mSourceLine; /**< Source line number. */
 		IAllocator*  mAllocator;  /**< Used allocator. NULL if memory allocated by system. */
 
 		/** ctor. */
-		AllocSign(void* memPtr, uint32 size, const char* source, unsigned int sourceLine, IAllocator* allocator);
+		AllocSign(void* memPtr, uint size, const char* source, unsigned int sourceLine, IAllocator* allocator);
 
 		/** copy ctor. */
-		AllocSign(const AllocSign& allocSign);		
+		AllocSign(const AllocSign& allocSign);
 
 		/** operator=. */
 		AllocSign& operator=(const AllocSign& allocSign);
@@ -37,25 +35,23 @@ class cMemoryManager
 	typedef std::list<AllocSign> AllocSignsList;
 
 	AllocSignsList* mAllocSigns;      /**< Allocations signatures. */
-	uint32          mUsedMemory;      /**< Size of used and signed memory. */
-	cMutex*         mAllocSignsMutex; /**< Mutex for signs. */
+	uint            mUsedMemory;      /**< Size of used and signed memory. */
+	Mutex*          mAllocSignsMutex; /**< Mutex for signs. */
 
-	static cMemoryManager mStaticObj;
+	static MemoryManager mStaticObj;
 
 public:
 	IAllocator* mBasicAllocator;
 
-	cMemoryManager();
-	~cMemoryManager();
+	MemoryManager();
+	~MemoryManager();
 
-	static cMemoryManager& instance() { return mStaticObj; }
+	static MemoryManager& Instance() { return mStaticObj; }
 
-	static void dump();
+	static void Dump();
 
-	static void registAlloc(void* memPtr, uint32 size, const char* source, unsigned int sourceLine, IAllocator* allocator);
-	static void unregistAlloc(void* memPtr);
+	static void RegistAllocation(void* memPtr, uint size, const char* source, unsigned int sourceLine, IAllocator* allocator);
+	static void UnregistAllocation(void* memPtr);
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //MEMORY_MANAGER_H

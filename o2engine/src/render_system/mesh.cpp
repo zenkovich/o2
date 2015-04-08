@@ -5,60 +5,53 @@
 
 OPEN_O2_NAMESPACE
 
-grMesh::grMesh( grRenderSystem* renderSystem, grTexture* texture /*= NULL*/, unsigned int vertexCount /*= 4*/, 
-                unsigned int polyCount /*= 2*/ ):
-	mRenderSystem(renderSystem), mTexture(NULL), mVerticies(NULL), mIndexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0),
-	mVertexCount(0), mPolyCount(0)
+Mesh::Mesh(TextureRef texture /*= grTexture()*/, uint vertexCount /*= 4*/, uint polyCount /*= 2*/):
+mVerticies(NULL), mIndexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), mVertexCount(0), mPolyCount(0)
 {
-	setTexture(texture);
-	resize(vertexCount, polyCount);
+	SetTexture(texture);
+	Resize(vertexCount, polyCount);
+	InitializeProperties();
 }
 
-grMesh::grMesh( const grMesh& mesh ):
-	mTexture(NULL), mVerticies(NULL), mIndexes(NULL), mMaxVertexCount(0), mMaxPolyCount(0)
+Mesh::Mesh(const Mesh& mesh):
+mVerticies(NULL), mIndexes(NULL), mMaxVertexCount(0), mMaxPolyCount(0)
 {
-	mRenderSystem = mesh.mRenderSystem;
-	setTexture(mesh.mTexture);
+	SetTexture(mesh.mTexture);
 
-	resize(mesh.mMaxVertexCount, mesh.mMaxPolyCount);
+	Resize(mesh.mMaxVertexCount, mesh.mMaxPolyCount);
 
 	mVertexCount = mesh.mVertexCount;
 	mPolyCount = mesh.mPolyCount;
 
-	memcpy(mVerticies, mesh.mVerticies, mesh.mVertexCount*sizeof(vertex2));
-	memcpy(mIndexes, mesh.mIndexes, mesh.mPolyCount*3*sizeof(unsigned short));
+	memcpy(mVerticies, mesh.mVerticies, mesh.mMaxVertexCount*sizeof(Vertex2));
+	memcpy(mIndexes, mesh.mIndexes, mesh.mMaxPolyCount*3*sizeof(uint16));
+
+	InitializeProperties();
 }
 
-grMesh::~grMesh()
+Mesh::~Mesh()
 {
-	setTexture(NULL);
-	safe_release_arr(mVerticies);
-	safe_release_arr(mIndexes);
+	SafeReleaseArr(mVerticies);
+	SafeReleaseArr(mIndexes);
 }
 
-void grMesh::setTexture( grTexture* texture )
+void Mesh::SetTexture(const TextureRef& texture)
 {
-	if (mTexture)
-		mTexture->decrRefCount();
-
 	mTexture = texture;
-
-	if (mTexture)
-		mTexture->incRefCount();
 }
 
-grTexture* grMesh::getTexture() const
+TextureRef Mesh::GetTexture() const
 {
 	return mTexture;
 }
 
-void grMesh::resize( unsigned int vertexCount, unsigned int polyCount )
+void Mesh::Resize(uint vertexCount, uint polyCount)
 {
-	safe_release_arr(mVerticies);
-	safe_release_arr(mIndexes);
+	SafeReleaseArr(mVerticies);
+	SafeReleaseArr(mIndexes);
 
-	mVerticies = new vertex2[vertexCount];
-	mIndexes = new unsigned short[polyCount*3];
+	mVerticies = mnew Vertex2[vertexCount];
+	mIndexes = mnew uint16[polyCount*3];
 
 	mMaxVertexCount = vertexCount;
 	mMaxPolyCount = polyCount;
@@ -67,19 +60,42 @@ void grMesh::resize( unsigned int vertexCount, unsigned int polyCount )
 	mPolyCount = 0;
 }
 
-void grMesh::draw()
+void Mesh::Draw()
 {
-	mRenderSystem->drawMesh(this);
+	AppRender()->DrawMesh(this);
 }
 
-unsigned int grMesh::getMaxVertexCount() const
+uint Mesh::GetMaxVertexCount() const
 {
 	return mMaxVertexCount;
 }
 
-unsigned int grMesh::getMaxPolyCount() const
+uint Mesh::GetMaxPolyCount() const
 {
 	return mMaxPolyCount;
+}
+
+void Mesh::SetMaxVertexCount(const uint& count)
+{
+	SafeReleaseArr(mVerticies);
+	mVerticies = mnew Vertex2[count];
+	mMaxVertexCount = count;
+	mVertexCount = 0;
+}
+
+void Mesh::SetMaxPolyCount(const uint& count)
+{
+	SafeReleaseArr(mIndexes);
+	mIndexes = mnew uint16[count*3];
+	mMaxPolyCount = count;
+	mPolyCount = 0;
+}
+
+void Mesh::InitializeProperties()
+{
+	REG_PROPERTY(Mesh, texture, SetTexture, GetTexture);
+	REG_PROPERTY(Mesh, maxVertexCount, SetMaxVertexCount, GetMaxVertexCount);
+	REG_PROPERTY(Mesh, maxPolyCount, SetMaxPolyCount, GetMaxPolyCount);
 }
 
 CLOSE_O2_NAMESPACE

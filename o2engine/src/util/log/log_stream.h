@@ -1,96 +1,79 @@
-#ifndef LOG_STREAM_H
-#define LOG_STREAM_H
+#pragma once
 
-#include <vector>
-#include <list>
+#include "util/public_namespace.h"
+#include "util/public_types.h"
 
-#include "public.h"
 OPEN_O2_NAMESPACE
 
-/** Basic log stream. Contains interfaces of outing data, binding values, parent and child streams. */
-class cLogStream
+/** Basic log stream. Contains interfaces of outing data, parent and child streams. */
+class LogStream
 {
 protected:
-	/** Type of bind value. */
-	enum BindValType { BV_INT = 0, BV_FLOAT, BV_BOOL, BV_CHAR_PTR, BV_STRING, BV_VEC2F };
+	typedef Vector<LogStream*> LogSteamsArr;
 
-	/** Binded value struct. Contains pointer to binded value, type, id. */
-	struct BindValue
-	{
-		void*       mValuePtr;    /**< Pointer to binded value. */
-		BindValType mType;        /**< Type of binded value. */
-		char        mBuffer[256]; /**< Buffer for formatted data by type. */
-		std::string mId;          /**< Id of binded value. Using as prefix .*/
+	LogStream*   mParentStream; /**< Parent stream. NULL if no parent. */
 
-		BindValue(void* valuePtr, BindValType type, const std::string& id):
-			mValuePtr(valuePtr), mType(type), mId(id) { mBuffer[0] = '\0'; }
-
-		/** Returns formatted string data by value type. */
-		const char* getStr();
-	};
-	typedef std::vector<BindValue> BindValVec;
-	typedef std::vector<cLogStream*> LogSteamsVec;
-
-	cLogStream*  mParentStream; /**< Parent stream. NULL if no parent. */
-
-	std::string  mId;           /**< Name of log stream. */
+	String       mId;           /**< Name of log stream. */
 	uint8        mLevel;        /**< Log level. */
 
-	LogSteamsVec mChildStreams; /**< Child streams. */
-	BindValVec   mBindedValues; /**< Binded values. */
+	LogSteamsArr mChildStreams; /**< Child streams. */
 
 public:
-	cLogStream();
-	cLogStream(const std::string& id);
-	virtual ~cLogStream();
+	LogStream();
+	LogStream(const String& id);
+	virtual ~LogStream();
 
-	/** Sets log level, for childs too. */
-	void setLevel(uint8 level);
+	/** Sets log level, for childes too. */
+	void SetLevel(uint8 level);
 
 	/** Returns log level. */
-	uint8 getLevel() const;
+	uint8 GetLevel() const;
 
 	/** Return name of stream. */
-	const std::string& getId() const;
+	const String& GetId() const;
 
 	/** Binding child stream. */
-	void bindStream(cLogStream* stream);
+	void BindStream(LogStream* stream);
 
 	/** Unbinding child stream. Function destroying stream object. */
-	void unbindStream(cLogStream* stream);
+	void UnbindStream(LogStream* stream, bool release = true);
 
 	/** Unbind and destroy all child streams. */
-	void unbindAllStreams();
+	void UnbindAllStreams();
 
 	/** Returns parent stream. Null if no parent. */
-	cLogStream* getParentStream() const;
-
-	/** Binding value. */
-	void bindValue(void* valuePtr, BindValType type, const std::string& id);
-
-	/** Unbind value. */
-	void unbindvalue(void* valuePtr);
-
-	/** Unbind all values. */
-	void unbindAllValues();
-
-	/** Out all binded values data. */
-	void checkBindedValues();
+	LogStream* GetParentStream() const;
 
 	/** Out with low level log. */
-	void out(const char* format, ...);
+	void Out(const char* format, ...);
 
 	/** Out with hight level log. */
-	void hout(const char* format, ...);
+	void HOut(const char* format, ...);
+
+	/** Out error message. */
+	void Error(const char* format, ...);
+
+	/** Out warning message. */
+	void Warning(const char* format, ...);
 
 protected:
 	/** Out string to stream. */
-	virtual void outStrEx(const std::string& str) {}
+	virtual void OutStrEx(const String& str) {}
 
-	/** Out string to current stream and parant stream. */
-	void outStr(const std::string& str);
+	/** Out error to stream. */
+	virtual void OutErrorEx(const String& srt) { OutStrEx("ERROR:" + srt); }
+
+	/** Out warning to stream. */
+	virtual void OutWarningEx(const String& srt) { OutStrEx("WARNING:" + srt); }
+
+	/** Out string to current stream and parent stream. */
+	void OutStr(const String& str);
+
+	/** Out error to current stream and parent stream. */
+	void OutError(const String& str);
+
+	/** Out warning to current stream and parent stream. */
+	void OutWarning(const String& str);
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //LOG_STREAM_H

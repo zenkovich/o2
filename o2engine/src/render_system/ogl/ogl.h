@@ -1,5 +1,4 @@
-#ifndef OGL_H
-#define OGL_H
+#pragma once
 
 // OpenGL inlude file.
 // Including files by platform
@@ -15,5 +14,3 @@
 #include "gl/wglext.h"
 
 #endif
-
-#endif //OGL_H

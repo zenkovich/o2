@@ -1,5 +1,4 @@
-#ifndef TIMER_H
-#define TIMER_H
+#pragma once
 
 #include "public.h"
 
@@ -8,26 +7,27 @@
 OPEN_O2_NAMESPACE
 
 /** Timer class, Containing elapsed time from last getElapsedTime() call and elapsed time from reset() call. */
-class cTimer
+class Timer
 {
 	LONGLONG      mLastElapsedTime;
 	LARGE_INTEGER mFrequency;
 	LARGE_INTEGER mStartTime;
 
 public:
-	cTimer();
-	~cTimer();
-	
+	/** ctor. */
+	Timer();
+
+	/** dtor. */
+	~Timer();
+
 	/** Resetting time. */
-	void  reset();
+	void  Reset();
 
 	/** Returns time in seconds from last reset() call. */
-	float getTime();
+	float GetTime();
 
 	/** return time in seconds from last reset() or getElapsedTime() call. */
-	float getElapsedTime();
+	float GetElapsedTime();
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //TIMER_H

@@ -2,34 +2,31 @@
 #ifdef RENDER_OGL
 
 #include "ogl_ext_win.h"
-
 #include "util/log/log_stream.h"
 #include "util/log.h"
 
 OPEN_O2_NAMESPACE
 
-/** Returns addres of function. */
-PROC getSafeWGLProcAddress(const char* id, cLogStream* log)
+/** Returns address of function. */
+PROC getSafeWGLProcAddress(const char* id, LogStream* log)
 {
 	PROC res = wglGetProcAddress(id);
 	if (!res)
-		log->out("ERROR: Failed to get func adress: '%s'", id);
+		log->Error("Failed to get func address: '%s'", id);
 
 	return res;
 }
 
-void getGLExtensions( cLogStream* log /*= NULL*/ )
+void getGLExtensions(LogStream* log /*= NULL*/)
 {
-	cLogStream* llog = log;
-	if (!llog)
-		llog = gLog;
-	
-	glGenFramebuffersEXT        = (PFNGLGENFRAMEBUFFERSEXTPROC) getSafeWGLProcAddress("glGenFramebuffersEXT", llog);
-	glBindFramebufferEXT        = (PFNGLBINDFRAMEBUFFEREXTPROC) getSafeWGLProcAddress("glBindFramebufferEXT", llog);
-	glFramebufferTexture        = (PFNGLFRAMEBUFFERTEXTUREPROC) getSafeWGLProcAddress("glFramebufferTexture", llog);
-	glDrawBuffers               = (PFNGLDRAWBUFFERSPROC) getSafeWGLProcAddress("glDrawBuffers", llog);
-	glDeleteBuffers             = (PFNGLDELETEBUFFERSPROC) getSafeWGLProcAddress("glDeleteBuffers", llog);
-	glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC) getSafeWGLProcAddress("glCheckFramebufferStatusEXT", llog);
+	LogStream* llog = log ? log:gLog;
+
+	glGenFramebuffersEXT        = (PFNGLGENFRAMEBUFFERSEXTPROC)getSafeWGLProcAddress("glGenFramebuffersEXT", llog);
+	glBindFramebufferEXT        = (PFNGLBINDFRAMEBUFFEREXTPROC)getSafeWGLProcAddress("glBindFramebufferEXT", llog);
+	glFramebufferTexture        = (PFNGLFRAMEBUFFERTEXTUREPROC)getSafeWGLProcAddress("glFramebufferTexture", llog);
+	glDrawBuffers               = (PFNGLDRAWBUFFERSPROC)getSafeWGLProcAddress("glDrawBuffers", llog);
+	glDeleteBuffers             = (PFNGLDELETEBUFFERSPROC)getSafeWGLProcAddress("glDeleteBuffers", llog);
+	glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC)getSafeWGLProcAddress("glCheckFramebufferStatusEXT", llog);
 }
 
 extern PFNGLGENFRAMEBUFFERSEXTPROC        glGenFramebuffersEXT        = NULL;

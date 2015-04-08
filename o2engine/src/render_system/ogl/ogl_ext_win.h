@@ -1,5 +1,4 @@
-#ifndef OGL_EXT_WIN_H
-#define OGL_EXT_WIN_H
+#pragma once
 
 // OpenGL extensions
 
@@ -8,10 +7,10 @@
 
 OPEN_O2_NAMESPACE
 
-class cLogStream;
+class LogStream;
 
 /** Getting openGL extensions. */
-void getGLExtensions(cLogStream* log = NULL);
+void getGLExtensions(LogStream* log = NULL);
 
 extern PFNGLGENFRAMEBUFFERSEXTPROC        glGenFramebuffersEXT;
 extern PFNGLBINDFRAMEBUFFEREXTPROC        glBindFramebufferEXT;
@@ -21,5 +20,3 @@ extern PFNGLDELETEBUFFERSPROC             glDeleteBuffers;
 extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT;
 
 CLOSE_O2_NAMESPACE
-
-#endif //OGL_EXT_WIN_H

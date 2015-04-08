@@ -1,86 +1,80 @@
-#ifndef FILE_H
-#define FILE_H
+#pragma once
 
 #include <fstream>
-
 #include "public.h"
+
 OPEN_O2_NAMESPACE
 
-struct cFileType
-{
-	enum value { FT_FILE = 0, FT_IMAGE, FT_CONFIG };
-};
+enum class FileType { File, Image, Config, Atlas };
 
 /** Input file. */
-class cInFile
+class InFile
 {
 	std::ifstream mIfstream; /**< Input stream. */
-	std::string   mFilename; /**< File name. */
+	String        mFilename; /**< File name. */
 	bool          mOpened;   /**< True, if file was opened. */
 
 public:
-	cInFile();
-	cInFile(const std::string& filename, cFileType::value type = cFileType::FT_FILE);
-	~cInFile();
+	InFile();
+	InFile(const String& filename, FileType type = FileType::File);
+	~InFile();
 
 	/** Opening file with specified extension. If type is cFileType::FT_FILE, file will opened wothout adding extension,
 	  * else file name will be combine with extension string from file system. */
-	bool open(const std::string& filename, cFileType::value type = cFileType::FT_FILE);
+	bool Open(const String& filename, FileType type = FileType::File);
 
 	/** Closing file. */
-	bool close();
-		               
+	bool Close();
+
 	/** Read full file data and return size of readed data. */
-	uint32 readFullData(void *dataPtr);
+	uint ReadFullData(void *dataPtr);
 
 	/** Read data in dataPtr. */
-	void readData(void *dataPtr, uint32 bytes);
-		               
+	void ReadData(void *dataPtr, uint bytes);
+
 	/** Sets caret position. */
-	void setCaretPos(uint32 pos);
+	void SetCaretPos(uint pos);
 
 	/** Return caret position. */
-	uint32 getCaretPos();
-		              
+	uint GetCaretPos();
+
 	/** Returns full data size. */
-	uint32 getDataSize();
-		               
+	uint GetDataSize();
+
 	/** Returns true, if file was opened. */
-	bool isOpened() const;
+	bool IsOpened() const;
 
 	/** Return file name. */
-	const std::string& getFilename() const;
+	const String& GetFilename() const;
 };
 
 /** Output file. */
-class cOutFile
+class OutFile
 {
 	std::ofstream mOfstream; /**< Output stream. */
-	std::string   mFilename; /**< File name. */
+	String        mFilename; /**< File name. */
 	bool          mOpened;   /**< True, if file was opened. */
 
 public:
-	cOutFile();
-	cOutFile(const std::string& filename, cFileType::value type = cFileType::FT_FILE);
-	~cOutFile();
+	OutFile();
+	OutFile(const String& filename, FileType type = FileType::File);
+	~OutFile();
 
 	/** Opening file with specified extension. If type is cFileType::FT_FILE, file will opened wothout adding extension,
 	  * else file name will be combine with first extension string from file system. */
-	bool open(const std::string& filename, cFileType::value type = cFileType::FT_FILE);
+	bool Open(const String& filename, FileType type = FileType::File);
 
 	/** Close file. */
-	bool close();
-		   
+	bool Close();
+
 	/** Write some data from dataPtr. */
-	void writeData(const void* dataPtr, uint32 bytes);
-		               
+	void WriteData(const void* dataPtr, uint bytes);
+
 	/** Returns true, if file was opened. */
-	bool isOpened() const;
+	bool IsOpened() const;
 
 	/** Returns file name. */
-	const std::string& getFilename() const;
+	const String& GetFilename() const;
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //FILE_H

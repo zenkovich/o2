@@ -5,26 +5,26 @@
 
 OPEN_O2_NAMESPACE
 
-cLinearAllocator::cLinearAllocator( uint32 size, IAllocator* parentAllocator /*= NULL*/ ):
-	mParentAllocator(parentAllocator), mMemorySize(size)
+LinearAllocator::LinearAllocator(uint size, IAllocator* parentAllocator /*= NULL*/):
+mParentAllocator(parentAllocator), mMemorySize(size)
 {
 	if (parentAllocator)
 	{
-		mMemory = (char*)ALLOC(parentAllocator, size + sizeof(cMutex));
+		mMemory = (char*)ALLOC(parentAllocator, size + sizeof(Mutex));
 	}
 	else
 	{
-		mMemory = (char*)malloc(size + sizeof(cMutex));
+		mMemory = (char*)malloc(size + sizeof(Mutex));
 	}
 
-	mMutex = new (mMemory + mMemorySize) cMutex;
+	mMutex = new (mMemory + mMemorySize) Mutex;
 
 	mUsedMemory = 0;
 }
 
-cLinearAllocator::~cLinearAllocator()
+LinearAllocator::~LinearAllocator()
 {
-	mMutex->~cMutex();
+	mMutex->~Mutex();
 
 	if (mParentAllocator)
 	{
@@ -32,13 +32,13 @@ cLinearAllocator::~cLinearAllocator()
 	}
 	else
 	{
-		free(mMemory);
+		Free(mMemory);
 	}
 }
 
-void* cLinearAllocator::alloc( uint32 bytes )
+void* LinearAllocator::Alloc(uint bytes)
 {
-	mMutex->lock();
+	mMutex->Lock();
 
 	void* res = NULL;
 
@@ -48,12 +48,12 @@ void* cLinearAllocator::alloc( uint32 bytes )
 		mUsedMemory +=  bytes;
 	}
 
-	mMutex->unlock();
+	mMutex->Unlock();
 
 	return NULL;
 }
 
-void cLinearAllocator::free( void* ptr )
+void LinearAllocator::Free(void* ptr)
 {
 }
 

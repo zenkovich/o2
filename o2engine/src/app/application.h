@@ -1,12 +1,15 @@
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#pragma once
 
-/* !!! More information about cApplication interface see in application_base_interface.h */
+/* !!! More information about Application interface see in application_base_interface.h */
 
 #include "engine_settings.h"
 
 #if defined(PLATFORM_WIN)
-	#include "win/application_win.h"
+#include "win/application_win.h"
 #endif
 
-#endif //APPLICATION_H
+OPEN_O2_NAMESPACE
+
+inline Application* App() { return dynamic_cast<Application*>(ApplicationBaseInterface::InstancePtr()); }
+
+CLOSE_O2_NAMESPACE

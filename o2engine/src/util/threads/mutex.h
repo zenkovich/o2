@@ -1,28 +1,33 @@
-#ifndef MUTEX_H
-#define MUTEX_H
+#pragma once
 
 #include "public.h"
-
 #include "pthreads/pthread.h"
 
 OPEN_O2_NAMESPACE
 
-class cMutex
+/** Mutex. Uses POSIX. */
+class Mutex
 {
-	pthread_mutex_t mMutex;
-	bool            mInitialized;
+	pthread_mutex_t mMutex;       /** Mutex identificator. */
+	bool            mInitialized; /** True, when initialized. */
 
 public:
-	enum Type { MT_DEFAULT = 0, MT_RECURSIVE };
+	enum class Type { Default = 0, Recursive };
 
-	cMutex(Type type = MT_DEFAULT);
-	~cMutex();
+	/** ctor. */
+	Mutex(Type type = Type::Default);
 
-	int lock();
-	int tryLock();
-	int unlock();
+	/** dtor. */
+	~Mutex();
+
+	/** Locking mutex. Returns 0 if success. */
+	int Lock();
+
+	/** Trying to lock mutex. Returns 0 if success. */
+	int TryLock();
+
+	/** Unlocking mutex. */
+	int Unlock();
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //MUTEX_H

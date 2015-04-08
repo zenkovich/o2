@@ -3,27 +3,27 @@
 
 #include "render_target_d3d9c.h"
 
-#include "../render_system.h"
-#include "../texture.h"
 #include "other/device_info.h"
+#include "renser_system/render_system.h"
+#include "renser_system/texture.h"
 #include "util/log/log_stream.h"
 
 OPEN_O2_NAMESPACE
 
-grRenderTarget::grRenderTarget( grRenderSystem* renderSystem, grTexture* texture ):
-	grRenderTargetBaseInterface(renderSystem, texture)
+RenderTarget::RenderTarget(Texture* texture):
+RenderTargetBaseInterface(texture)
 {
 	mReady = true;
 }
 
-grRenderTarget::grRenderTarget( grRenderSystem* renderSystem, const vec2f& size /*= vec2f(0, 0)*/, 
-	                            grTexFormat::type texFormat /*= grTexFormat::DEFAULT */ ):
-	grRenderTargetBaseInterface(renderSystem, size, texFormat)
+RenderTarget::RenderTarget(const Vec2F& size /*= vec2f()*/,
+						   TextureFormat::type texFormat /*= grTexFormat::DEFAULT */):
+						   RenderTargetBaseInterface(size, texFormat)
 {
 	mReady = true;
 }
 
-grRenderTarget::~grRenderTarget()
+RenderTarget::~RenderTarget()
 {
 }
 

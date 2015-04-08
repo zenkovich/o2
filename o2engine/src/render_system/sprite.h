@@ -1,36 +1,41 @@
-#ifndef SPRITE_H
-#define SPRITE_H
+#pragma once
 
 #include "public.h"
-#include "util/math/vector2.h"
-#include "util/math/rect.h"
+#include "texture.h"
+#include "util/graphics/rect_drawable.h"
 #include "util/math/color.h"
-#include "util/serialization/serialization.h"
+#include "util/math/rect.h"
+#include "util/math/vector2.h"
+#include "util/property.h"
 
 OPEN_O2_NAMESPACE
 
-class grMesh;
-class grRenderSystem;
-class grTexture;
-	
+class Mesh;
+class RenderSystem;
+
 /** Sprite, just a quad with texture. */
-class grSprite
+class Sprite: public IRectDrawable
 {
-	vec2f   mPosition;
-	vec2f   mSize;
-	vec2f   mScale;
-	float   mAngle;
-	vec2f   mRotationCenter;
-	fRect   mTextureSrcRect;
+	Vec2F   mScale;           /** Scale of sprite. Real sprite size is mSize*mScale. */
+	float   mAngle;           /** Rotation angle. */
+	RectF   mTextureSrcRect;  /** texture src rect. */
+	Color4  mVertexColors[4]; /** Vertex colors. */
 
-	grMesh* mMesh;
+	Mesh*   mMesh;                    /** Mesh. */
 
-	bool    mNeedUpdateMeshVerticies;
-	bool    mNeedUpdateMeshTexCoords;
+	bool    mNeedUpdateMeshVerticies; /** True, when mesh vertex positions needs to update. */
+	bool    mNeedUpdateMeshTexCoords; /** True, when mesh vertex tex coords needs to update. */
+	bool    mNeedUpdateMeshColors;    /** True, when mesh vertex colors needs to update. */
 
 public:
+	//properties
+	PROPERTY(Sprite, Vec2F)      scale;          /** Scale property. Uses set/getScale. */
+	PROPERTY(Sprite, float)      angle;          /** Angle property. Uses set/getAngle. */
+	PROPERTY(Sprite, RectF)      textureSrcRect; /** Texture src rect property. Uses set/getTextureSrcRect. */
+	PROPERTY(Sprite, TextureRef) texture;        /** Texture property. uses set/getTexture. */
+
 	/** ctor.
-	 *  @param texture        - texture ptr, use NULL if no texture 
+	 *  @param texture        - texture ptr, use NULL if no texture
 	 *  @param textureSrcRect - texture source rect, if left is < 0 - use all texture size
 	 *  @param position       - position of left top corner of sprite
 	 *  @param size           - size of sprite, in pixels. If x < 0 - size as texture source rect
@@ -38,86 +43,72 @@ public:
 	 *  @param angle          - rotation of sprite, in degrees
 	 *  @param rotationCenter - center of sprite rotation
 	 *  @param color          - color of the sprite. */
-	grSprite(grRenderSystem* render, grTexture* texture = NULL, const fRect& textureSrcRect = fRect(-1.0f, 0.0f, 0.0f, 0.0f), 
-		     const vec2f& position = vec2f(0.0f, 0.0f), const vec2f& size = vec2f(-1.0f, 0.0f), 
-			 const vec2f& scale = vec2f(1.0f, 1.0f), float angle = 0, const vec2f& rotationCenter = vec2f(0.0f, 0.0f),
-			 const color4& color = color4(1.0f, 1.0f, 1.0f, 1.0f));
-
-	//grSprite(grRenderSystem* render, cDataObject& dataObject);
-	
-	/** ctor. Loads sprite from config file. */
-	grSprite(grRenderSystem* render, pugi::xml_node& xmlNode);
+	Sprite(TextureRef texture = TextureRef(), const RectF& textureSrcRect = RectF(-1.0f, 0.0f, 0.0f, 0.0f),
+		   const Vec2F& position = Vec2F(), const Vec2F& size = Vec2F(-1.0f, 0.0f),
+		   const Vec2F& scale = Vec2F(1.0f, 1.0f), float angle = 0, const Vec2F& pivot = Vec2F(),
+		   const Color4& color = Color4::White());
 
 	/** copy ctor. */
-	grSprite(const grSprite& sprite);
+	Sprite(const Sprite& sprite);
 
 	/** dtor. */
-	~grSprite();
+	~Sprite();
+
+	Sprite& operator=(const Sprite& sprite);
 
 	/** Returns cloned sprite. */
-	grSprite* clone() const;
+	IRectDrawable* Clone() const;
 
 	/** Drawing that sprite. */
-	void draw();
-
-	/** Sets position of sprite. */
-	grSprite& setPosition(const vec2f& position);
-
-	/** Returns position of sprite. */
-	vec2f getPosition() const;
+	void Draw();
 
 	/** Sets scale of sprite. */
-	grSprite& setScale(const vec2f& scale);
+	void SetScale(const Vec2F& scale);
 
 	/** Returns scale of sprite. */
-	vec2f getScale() const;
+	Vec2F GetScale() const;
 
 	/** Sets angle of sprite. */
-	grSprite& setAngle(float angle);
+	void SetAngle(const float& angle);
 
 	/** Returns angle of sprite. */
-	float getAngle() const;
-
-	/** Sets rotation center of sprite. */
-	grSprite& setRotationCenter(const vec2f& center);
-
-	/** Returns rotation center of sprite. */
-	vec2f getRotationCenter() const;
+	float GetAngle() const;
 
 	/** Sets texture source rect of sprite. */
-	grSprite& setTextureSrcRect(const fRect& rect);
+	void SetTextureSrcRect(const RectF& rect);
 
 	/** Returns texture source rect of sprite. */
-	const fRect& getTextureSrcRect() const;
+	RectF GetTextureSrcRect() const;
 
 	/** Sets texture of sprite. */
-	grSprite& setTexture(grTexture* texture);
+	void SetTexture(const TextureRef& texture);
 
 	/** Returns texture of sprite. */
-	grTexture* getTexture() const;
+	TextureRef GetTexture() const;
 
-	/** Sets size of sprite. */
-	grSprite& setSize(const vec2f& size);
-
-	/** Returns size of sprite. */
-	vec2f getSize() const;
-
-	/** Sets the color of vertex sprite. If vertex id < 0 - setting color for all sprite. */
-	grSprite& setColor(const color4& color, int vertexId = -1);
+	/** Sets the color of vertex sprite. */
+	void SetVertexColor(const Color4& color, int vertexId);
 
 	/** Returns color of the sprite vertex. */
-	color4 getColor(int vertexId = 0);
-
-	SERIALIZE_METHOD_DECL();
+	Color4 GetVertexColor(int vertexId) const;
 
 protected:
+	void PositionChanged();
+	void SizeChanged();
+	void PivotChanged();
+	void ColorChanged();
+
+	/** Initializing properties. */
+	void InitializeProperties();
+
 	/** Updating mesh verticies positions. */
-	void updateMeshVerticies();
+	void UpdateMeshVerticies();
 
 	/** Updating mesh verticies texture coords. */
-	void updateMeshTexCoords();
+	void UpdateMeshTexCoords();
+
+	/** Updating mesh verticies colors. */
+	void UpdateMeshColors();
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //SPRITE_H

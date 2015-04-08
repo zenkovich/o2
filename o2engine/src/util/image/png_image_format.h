@@ -1,16 +1,13 @@
-#ifndef PNG_IMAGE_FORMAT_H
-#define PNG_IMAGE_FORMAT_H
+#pragma once
 
 #include "public.h"
 
 OPEN_O2_NAMESPACE
 
-class cImage;
-class cLogStream;
+class Bitmap;
+class LogStream;
 
-bool loadPngImage(const std::string& fileName, cImage* image, bool errors = true, cLogStream* plog = NULL);
-bool savePngImage(const std::string& fileName, const cImage* image, cLogStream* plog = NULL);
+bool LoadPngImage(const String& fileName, Bitmap* image, bool errors = true, LogStream* plog = NULL);
+bool SavePngImage(const String& fileName, const Bitmap* image, LogStream* plog = NULL);
 
 CLOSE_O2_NAMESPACE
-
-#endif //PNG_IMAGE_FORMAT_H

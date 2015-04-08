@@ -1,29 +1,24 @@
-#ifndef RENDER_TARGET_D3D9C_H
-#define RENDER_TARGET_D3D9C_H
+#pragma once
 
 #include "d3d9c.h"
-
-#include "../render_target_base_interface.h"
+#include "render_system/render_target_base_interface.h"
 
 OPEN_O2_NAMESPACE
 
 /** D3D9C render target. */
-class grRenderTarget:public grRenderTargetBaseInterface
+class RenderTarget:public RenderTargetBaseInterface
 {
-	friend class grRenderSystem;
+	friend class RenderSystem;
+
+	/** ctor. */
+	RenderTarget(Texture* texture);
 
 public:
 	/** ctor. */
-	grRenderTarget(grRenderSystem* renderSystem, grTexture* texture);
-	
-	/** ctor. */
-	grRenderTarget(grRenderSystem* renderSystem, const vec2f& size = vec2f(0, 0), 
-		           grTexFormat::type texFormat = grTexFormat::DEFAULT );
-	
+	RenderTarget(const Vec2F& size = Vec2F(), TextureFormat texFormat = TextureFormat::Default);
+
 	/** dtor. */
-	~grRenderTarget();
+	~RenderTarget();
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //RENDER_TARGET_D3D9C_H

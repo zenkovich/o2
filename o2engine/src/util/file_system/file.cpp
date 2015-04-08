@@ -1,30 +1,31 @@
 #include "file.h"
 
+#include "app/application_base_interface.h"
 #include "file_system.h"
 
 OPEN_O2_NAMESPACE
-	
-cInFile::cInFile():
-	mOpened(false)
+
+InFile::InFile():
+mOpened(false)
 {
 }
 
-cInFile::cInFile( const std::string& filename, cFileType::value type /*= cFileType::FT_FILE*/ ):
-	mOpened(false)
+InFile::InFile(const String& filename, FileType type /*= cFileType::FT_FILE*/):
+mOpened(false)
 {
-	open(filename, type);
+	Open(filename, type);
 }
 
-cInFile::~cInFile()
+InFile::~InFile()
 {
-	close();
+	Close();
 }
 
-bool cInFile::open( const std::string& filename, cFileType::value type /*= cFileType::FT_FILE*/ )
+bool InFile::Open(const String& filename, FileType type /*= cFileType::FT_FILE*/)
 {
-	close();
+	Close();
 
-	if (type == cFileType::FT_FILE)
+	if (type == FileType::File)
 	{
 		mIfstream.open(filename.c_str(), std::ios::binary);
 
@@ -37,10 +38,10 @@ bool cInFile::open( const std::string& filename, cFileType::value type /*= cFile
 	{
 		bool success = false;
 
-		const cFileSystem::ExtensionsVec extensions = getFileSystem().getExtensions(type);
-		for (cFileSystem::ExtensionsVec::const_iterator it = extensions.cbegin(); it != extensions.cend(); ++it)
+		const FileSystem::ExtensionsVec extensions = AppFileSystem()->GetExtensions(type);
+		for (FileSystem::ExtensionsVec::const_iterator it = extensions.cbegin(); it != extensions.cend(); ++it)
 		{
-			std::string resFilename = getFileSystem().getResourcePath() + filename + "." + (*it);
+			String resFilename = AppFileSystem()->GetResourcesPath() + filename + "." + (*it);
 
 			mIfstream.open(resFilename.c_str(), std::ios::binary);
 
@@ -60,7 +61,7 @@ bool cInFile::open( const std::string& filename, cFileType::value type /*= cFile
 	return true;
 }
 
-bool cInFile::close()
+bool InFile::Close()
 {
 	if (mOpened)
 		mIfstream.close();
@@ -68,11 +69,11 @@ bool cInFile::close()
 	return true;
 }
 
-uint32 cInFile::readFullData( void *dataPtr )
+uint InFile::ReadFullData(void *dataPtr)
 {
 	mIfstream.seekg(0, std::ios::beg);
 	mIfstream.seekg(0, std::ios::end);
-	uint32 length = (uint32)mIfstream.tellg();
+	uint length = (uint)mIfstream.tellg();
 	mIfstream.seekg(0, std::ios::beg);
 
 	mIfstream.read((char*)dataPtr, length);
@@ -80,70 +81,70 @@ uint32 cInFile::readFullData( void *dataPtr )
 	return length;
 }
 
-void cInFile::readData( void *dataPtr, uint32 bytes )
+void InFile::ReadData(void *dataPtr, uint bytes)
 {
 	mIfstream.read((char*)dataPtr, bytes);
 }
 
-void cInFile::setCaretPos( uint32 pos )
+void InFile::SetCaretPos(uint pos)
 {
 	mIfstream.seekg(pos, std::ios::beg);
 }
 
-uint32 cInFile::getCaretPos()
+uint InFile::GetCaretPos()
 {
-	return (uint32)mIfstream.tellg();
+	return (uint)mIfstream.tellg();
 }
 
-uint32 cInFile::getDataSize()
+uint InFile::GetDataSize()
 {
 	mIfstream.seekg(0, std::ios::beg);
 	mIfstream.seekg(0, std::ios::end);
 	return (long unsigned int)mIfstream.tellg();
 }
 
-const std::string& cInFile::getFilename() const
+const String& InFile::GetFilename() const
 {
 	return mFilename;
 }
 
-bool cInFile::isOpened() const
+bool InFile::IsOpened() const
 {
 	return mOpened;
 }
 
 //cOutFile
-cOutFile::cOutFile():
-	mOpened(false)
+OutFile::OutFile():
+mOpened(false)
 {
 
 }
 
-cOutFile::cOutFile( const std::string& filename, cFileType::value type /*= cFileType::FT_FILE*/ ):
-	mOpened(false)
+OutFile::OutFile(const String& filename, FileType type /*= cFileType::FT_FILE*/):
+mOpened(false)
 {
-	open(filename, type);
+	Open(filename, type);
 }
 
-cOutFile::~cOutFile()
+OutFile::~OutFile()
 {
-	close();
+	Close();
 }
 
-bool cOutFile::open( const std::string& filename, cFileType::value type /*= cFileType::FT_FILE*/ )
+bool OutFile::Open(const String& filename, FileType type /*= cFileType::FT_FILE*/)
 {
-	close();
+	Close();
 
-	std::string resFilename = filename;
-	if (type != cFileType::FT_FILE)
+	String resFilename = filename;
+	if (type != FileType::File)
 	{
-		std::string extensionStr;		
-		const cFileSystem::ExtensionsVec extensions = getFileSystem().getExtensions(type);
+		String extensionStr;
+		const FileSystem::ExtensionsVec extensions = AppFileSystem()->GetExtensions(type);
 
 		if (extensions.size() > 0)
 			extensionStr = extensions[0];
 
-		resFilename = getFileSystem().getResourcePath() + filename + "." + extensionStr;
+		resFilename = AppFileSystem()->GetResourcesPath() + filename + "." + extensionStr;
 	}
 
 	mOfstream.open(resFilename.c_str(), std::ios::binary);
@@ -151,14 +152,14 @@ bool cOutFile::open( const std::string& filename, cFileType::value type /*= cFil
 	if (!mOfstream.is_open())
 	{
 		return false;
-	}	
+	}
 
 	mOpened = true;
 	mFilename = filename;
 	return true;
 }
 
-bool cOutFile::close()
+bool OutFile::Close()
 {
 	if (mOpened)
 		mOfstream.close();
@@ -166,17 +167,17 @@ bool cOutFile::close()
 	return true;
 }
 
-void cOutFile::writeData( const void* dataPtr, uint32 bytes )
+void OutFile::WriteData(const void* dataPtr, uint bytes)
 {
 	mOfstream.write((const char*)dataPtr, bytes);
 }
 
-const std::string& cOutFile::getFilename() const
+const String& OutFile::GetFilename() const
 {
 	return mFilename;
 }
 
-bool cOutFile::isOpened() const
+bool OutFile::IsOpened() const
 {
 	return mOpened;
 }

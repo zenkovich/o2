@@ -6,49 +6,49 @@
 
 OPEN_O2_NAMESPACE
 
-DECLARE_SINGLETON(cDeviceInfo);
+DECLARE_SINGLETON(DeviceInfo);
 
-cDeviceInfo::cDeviceInfo()
+DeviceInfo::DeviceInfo()
 {
 }
 
-cDeviceInfo::~cDeviceInfo()
+DeviceInfo::~DeviceInfo()
 {
 }
 
 template<typename T>
-T cDeviceInfo::getParameter( DeviceParam paramId )
+T DeviceInfo::GetParameter(DeviceParam paramId)
 {
-	return (*(T*)mDeviceParametres[clamp<int>(paramId, 0, DEVICE_PARAMETRES_COUNT - 1)]);
+	return (*(T*)mDeviceParametres[Clamp<int>(paramId, 0, DEVICE_PARAMETRES_COUNT - 1)]);
 }
 
-void cDeviceInfo::initialize( cApplication* app )
+void DeviceInfo::Initialize(Application* app)
 {
 	const bool logInfo = true;
 
-//device id
-	if (isWinPlatform())
+	//device id
+	if (IsWinPlatform())
 		strcpy(mDeviceParametres[DP_DEVICE_ID], "PC WIN");
 
-//render target available
-	(*(bool*)&mDeviceParametres[DP_RENDER_TARGET_AVAILABLE]) = app->mRenderSystem->isRenderTargetAvailable();
+	//render target available
+	(*(bool*)&mDeviceParametres[DP_RENDER_TARGET_AVAILABLE]) = app->mRenderSystem->IsRenderTargetAvailable();
 
-//max texture size
-	(*(vec2i*)&mDeviceParametres[DP_RENDER_MAX_TEXTURE_SIZE]) = app->mRenderSystem->getMaxTextureSize();
+	//max texture size
+	(*(Vec2I*)&mDeviceParametres[DP_RENDER_MAX_TEXTURE_SIZE]) = app->mRenderSystem->GetMaxTextureSize();
 
-//output results
+	//output results
 	if (logInfo)
 	{
-		app->mLog->hout("=== DEVICE INFO ===");
-		
-		app->mLog->hout("Device id: '%s'", mDeviceParametres[DP_DEVICE_ID]);
+		app->mLog->HOut("=== DEVICE INFO ===");
 
-		app->mLog->hout("Render targets: %s", getParameter<bool>(DP_RENDER_TARGET_AVAILABLE) ? "available":"not supporting");
-		
-		vec2i maxTexSize = getParameter<vec2i>(DP_RENDER_MAX_TEXTURE_SIZE);
-		app->mLog->hout("Max texture size: %i x %i", maxTexSize.x, maxTexSize.y);
-		
-		app->mLog->hout("===================");
+		app->mLog->HOut("Device id: '%s'", mDeviceParametres[DP_DEVICE_ID]);
+
+		app->mLog->HOut("Render targets: %s", GetParameter<bool>(DP_RENDER_TARGET_AVAILABLE) ? "available":"not supporting");
+
+		Vec2I maxTexSize = GetParameter<Vec2I>(DP_RENDER_MAX_TEXTURE_SIZE);
+		app->mLog->HOut("Max texture size: %i x %i", maxTexSize.x, maxTexSize.y);
+
+		app->mLog->HOut("===================");
 	}
 }
 

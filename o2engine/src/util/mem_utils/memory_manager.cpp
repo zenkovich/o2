@@ -1,8 +1,8 @@
 #include "memory_manager.h"
 
 #include "linear_allocator.h"
-#include "std_allocator.h"
 #include "pool_allocator.h"
+#include "std_allocator.h"
 
 #include "util/log.h"
 #include "util/math/math.h"
@@ -10,69 +10,69 @@
 
 OPEN_O2_NAMESPACE
 
-cMemoryManager::AllocSign::AllocSign( void* memPtr, uint32 size, const char* source, unsigned int sourceLine, 
-                                      IAllocator* allocator ):
-	mPtr(memPtr), mSize(size), mSourceLine(sourceLine), mAllocator(allocator)
+MemoryManager::AllocSign::AllocSign(void* memPtr, uint size, const char* source, unsigned int sourceLine,
+IAllocator* allocator):
+mPtr(memPtr), mSize(size), mSourceLine(sourceLine), mAllocator(allocator)
 {
-	strcpy(mSource, source + max<int>(0, (strlen(source) - 65)));
+	strcpy(mSource, source + Max<int>(0, (strlen(source) - 65)));
 }
 
-cMemoryManager::AllocSign::AllocSign( const AllocSign& allocSign )
+MemoryManager::AllocSign::AllocSign(const AllocSign& allocSign)
 {
 	*this = allocSign;
 }
 
-cMemoryManager::AllocSign& cMemoryManager::AllocSign::operator=( const AllocSign& allocSign )
+MemoryManager::AllocSign& MemoryManager::AllocSign::operator=(const AllocSign& allocSign)
 {
 	memcpy(this, &allocSign, sizeof(allocSign));
 	return *this;
 }
 
 
-cMemoryManager::cMemoryManager()
+MemoryManager::MemoryManager()
 {
-	#ifdef BASIC_MEMORY_ALLOCATOR
-		BASIC_MEMORY_ALLOCATOR* allocator = (BASIC_MEMORY_ALLOCATOR*)malloc(sizeof(BASIC_MEMORY_ALLOCATOR));
-		allocator = new (allocator) BASIC_MEMORY_ALLOCATOR(BASIC_MEMORY_ALLOCATOR_PARAMS);
-		mBasicAllocator = allocator;
-	#else
-		mBasicAllocator = NULL;
-	#endif
-	
+#ifdef BASIC_MEMORY_ALLOCATOR
+	BASIC_MEMORY_ALLOCATOR* allocator = (BASIC_MEMORY_ALLOCATOR*)malloc(sizeof(BASIC_MEMORY_ALLOCATOR));
+	allocator = new (allocator)BASIC_MEMORY_ALLOCATOR(BASIC_MEMORY_ALLOCATOR_PARAMS);
+	mBasicAllocator = allocator;
+#else
+	mBasicAllocator = NULL;
+#endif
+
 	mAllocSigns = (AllocSignsList*)malloc(sizeof(AllocSignsList));
-	mAllocSigns = new (mAllocSigns) AllocSignsList;
+	mAllocSigns = new (mAllocSigns)AllocSignsList;
 	mUsedMemory = 0;
 
-	mAllocSignsMutex = (cMutex*)malloc(sizeof(cMutex));
-	mAllocSignsMutex = new (mAllocSignsMutex) cMutex;
+	mAllocSignsMutex = (Mutex*)malloc(sizeof(Mutex));
+	mAllocSignsMutex = new (mAllocSignsMutex)Mutex;
 }
 
-cMemoryManager::~cMemoryManager()
+MemoryManager::~MemoryManager()
 {
 	free(mAllocSigns);
 
-	#ifdef BASIC_MEMORY_ALLOCATOR
-		static_cast<BASIC_MEMORY_ALLOCATOR*>(mBasicAllocator)->~BASIC_MEMORY_ALLOCATOR();
-		free(mBasicAllocator);
-	#endif
+#ifdef BASIC_MEMORY_ALLOCATOR
+	static_cast<BASIC_MEMORY_ALLOCATOR*>(mBasicAllocator)->~BASIC_MEMORY_ALLOCATOR();
+	free(mBasicAllocator);
+#endif
 
-	mAllocSignsMutex->~cMutex();
+	mAllocSignsMutex->~Mutex();
 	free(mAllocSignsMutex);
 }
 
-void cMemoryManager::registAlloc( void* memPtr, uint32 size, const char* source, unsigned int sourceLine, IAllocator* allocator )
+void MemoryManager::RegistAllocation(void* memPtr, uint size, const char* source, unsigned int sourceLine, IAllocator* allocator)
 {
-	mStaticObj.mAllocSignsMutex->lock();
+	mStaticObj.mAllocSignsMutex->Lock();
 
 	mStaticObj.mAllocSigns->push_back(AllocSign(memPtr, size, source, sourceLine, allocator));
 	mStaticObj.mUsedMemory += size;
 
-	mStaticObj.mAllocSignsMutex->unlock();
+	mStaticObj.mAllocSignsMutex->Unlock();
 }
 
-void cMemoryManager::unregistAlloc( void* memPtr )
+void MemoryManager::UnregistAllocation(void* memPtr)
 {
-	if (mStaticObj.mAllocSignsMutex->tryLock() == 0)
+	if (mStaticObj.mAllocSignsMutex->TryLock() == 0)
 	{
 		for (AllocSignsList::iterator it = mStaticObj.mAllocSigns->begin(); it != mStaticObj.mAllocSigns->end(); ++it)
 		{
@@ -80,32 +80,32 @@ void cMemoryManager::unregistAlloc( void* memPtr )
 			{
 				mStaticObj.mUsedMemory -= it->mSize;
 				mStaticObj.mAllocSigns->erase(it);
-				mStaticObj.mAllocSignsMutex->unlock();
+				mStaticObj.mAllocSignsMutex->Unlock();
 				return;
 			}
 		}
 
-		mStaticObj.mAllocSignsMutex->unlock();
+		mStaticObj.mAllocSignsMutex->Unlock();
 	}
 }
 
-void cMemoryManager::dump()
+void MemoryManager::Dump()
 {
 	//mStaticObj.mAllocSignsMutex->lock();
 
-	hlog("=====Memory manager dump=====");
+	HightLog("=====Memory manager dump=====");
 	int i = 0;
 	for (AllocSignsList::iterator it = mStaticObj.mAllocSigns->begin(); it != mStaticObj.mAllocSigns->end(); ++it)
 	{
-		hlog("%i: %s: %s:%i %i bytes", i++, (it->mAllocator ? it->mAllocator->getName():"sys allocator"), it->mSource, 
-			                           it->mSourceLine, it->mSize);
+		HightLog("%i: %s: %s:%i %i bytes", i++, (it->mAllocator ? it->mAllocator->GetName():"sys allocator"), it->mSource,
+				 it->mSourceLine, it->mSize);
 	}
-	hlog("Total %i bytes (%.3f MB)", mStaticObj.mUsedMemory, (float)mStaticObj.mUsedMemory/1024.0f);
-	hlog("=============================");
+	HightLog("Total %i bytes (%.3f MB)", mStaticObj.mUsedMemory, (float)mStaticObj.mUsedMemory/1024.0f);
+	HightLog("=============================");
 
 	//mStaticObj.mAllocSignsMutex->unlock();
 }
 
-cMemoryManager cMemoryManager::mStaticObj;
+MemoryManager MemoryManager::mStaticObj;
 
 CLOSE_O2_NAMESPACE

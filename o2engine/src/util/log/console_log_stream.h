@@ -1,23 +1,19 @@
-#ifndef CONSOLE_LOG_STREAM_H
-#define CONSOLE_LOG_STREAM_H
+#pragma once
 
-#include "public.h"
 #include "log_stream.h"
 
 OPEN_O2_NAMESPACE
 
-class cConsoleLogStream:public cLogStream
+class ConsoleLogStream:public LogStream
 {
 public:
-	cConsoleLogStream(uint8 level);
-	cConsoleLogStream(const std::string& id, uint8 level);
-	~cConsoleLogStream();
+	ConsoleLogStream(uint8 level);
+	ConsoleLogStream(const String& id, uint8 level);
+	~ConsoleLogStream();
 
 protected:
-	void outStrEx(const std::string& str);
-	void initConsole();
+	void OutStrEx(const String& str);
+	void InitConsole();
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //CONSOLE_LOG_STREAM_H

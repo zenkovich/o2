@@ -1,57 +1,53 @@
 #include "public.h"
+
 #ifdef RENDER_OGL
 
-#include "render_target_ogl.h"
-
-#include "../render_system.h"
-#include "../texture.h"
 #include "ogl_debug.h"
 #include "ogl_ext_win.h"
 #include "other/device_info.h"
+#include "render_system/render_system.h"
+#include "render_system/texture.h"
+#include "render_target_ogl.h"
 #include "util/log/log_stream.h"
 
 OPEN_O2_NAMESPACE
 
-grRenderTarget::grRenderTarget( grRenderSystem* renderSystem, grTexture* texture ):
-	grRenderTargetBaseInterface(renderSystem, texture), mFrameBuffer(0)
+RenderTarget::RenderTarget(Texture* texture):
+RenderTargetBaseInterface(texture), mFrameBuffer(0)
 {
-	if (!mRenderSystem || !mRenderTexture)
-		return;
-
-	initializeBuffer();
+	if (mRenderTexture)
+		initializeBuffer();
 }
 
-grRenderTarget::grRenderTarget( grRenderSystem* renderSystem, const vec2f& size /*= vec2f(0, 0)*/, 
-	                            grTexFormat::type texFormat /*= grTexFormat::DEFAULT */ ):
-	grRenderTargetBaseInterface(renderSystem, size, texFormat), mFrameBuffer(0)
+RenderTarget::RenderTarget(const Vec2F& size /*= vec2f()*/,
+						   TextureFormat texFormat /*= grTexFormat::DEFAULT */):
+						   RenderTargetBaseInterface(size, texFormat), mFrameBuffer(0)
 {
-	if (!mRenderSystem || !mRenderTexture)
-		return;
-
-	initializeBuffer();
+	if (!mRenderTexture)
+		initializeBuffer();
 }
 
-grRenderTarget::~grRenderTarget()
+RenderTarget::~RenderTarget()
 {
 	glDeleteBuffers(1, &mFrameBuffer);
 }
 
-void grRenderTarget::initializeBuffer()
+void RenderTarget::initializeBuffer()
 {
 	glGenFramebuffersEXT(1, &mFrameBuffer);
 	glBindFramebufferEXT(GL_FRAMEBUFFER, mFrameBuffer);
 
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mRenderTexture->mHandle, 0);
- 
-	GLenum DrawBuffers[2] = {GL_COLOR_ATTACHMENT0};
+
+	GLenum DrawBuffers[2] ={GL_COLOR_ATTACHMENT0};
 	glDrawBuffers(1, DrawBuffers);
 
 	if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		GLenum glError = glGetError();
 
-		mRenderSystem->mLog->out("ERROR: Failed to create GL framebuffer object! GL Error %x %s", glError,
-			getGLErrorDesc(glError));
+		AppRender()->mLog->Error("Failed to create GL frame buffer object! GL Error %x %s", glError,
+								 getGLErrorDesc(glError));
 
 		mReady = false;
 

@@ -1,27 +1,25 @@
-#ifndef FILE_LOG_STREAM_H
-#define FILE_LOG_STREAM_H
+#pragma once
 
-#include "public.h"
 #include "log_stream.h"
 
 OPEN_O2_NAMESPACE
 
-class cOutFile;
+class OutFile;
 
-class cFileLogStream:public cLogStream
+class FileLogStream:public LogStream
 {
-	cOutFile* mOutFile;
+	OutFile* mOutFile;
 
 public:
-	cFileLogStream(uint8 level, const std::string& fileName);
-	cFileLogStream(const std::string& id, uint8 level, const std::string& fileName);
-	~cFileLogStream();
+	FileLogStream(uint8 level, const String& fileName);
+	FileLogStream(const String& id, uint8 level, const String& fileName);
+	~FileLogStream();
 
 protected:
-	void outStrEx(const std::string& str);
-	void openFile(const std::string& fileName);
+	void OutStrEx(const String& str);
+	void OutErrorEx(const String& srt);
+	void OutWarningEx(const String& srt);
+	void OpenFile(const String& fileName);
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //FILE_LOG_STREAM_H

@@ -1,56 +1,150 @@
 #include "application_base_interface.h"
 
+#include <time.h>
+#include "assets/assets.h"
+#include "config/project_config.h"
 #include "render_system/render_system.h"
+#include "ui/ui_controller.h"
 #include "util/file_system/file_system.h"
 #include "util/log.h"
 #include "util/log/console_log_stream.h"
 #include "util/log/file_log_stream.h"
+#include "util/scheduler.h"
+#include "util/time_utils.h"
+#include "util/timer.h"
 
 OPEN_O2_NAMESPACE
 
-cApplicationBaseInterface::cApplicationBaseInterface():
-	mLog(NULL), mRenderSystem(NULL), mFileSystem(NULL)
+DECLARE_SINGLETON(ApplicationBaseInterface);
+
+ApplicationBaseInterface::ApplicationBaseInterface():
+mLog(NULL), mRenderSystem(NULL), mFileSystem(NULL)
 {
-	initalizeSystems();
+	InitalizeSystems();
 }
 
-cApplicationBaseInterface::~cApplicationBaseInterface()
+ApplicationBaseInterface::~ApplicationBaseInterface()
 {
-	deinitializeSystems();
+	DeinitializeSystems();
 }
 
-void cApplicationBaseInterface::initalizeSystems()
+void ApplicationBaseInterface::InitalizeSystems()
 {
-//file system
-	mFileSystem = new cFileSystem;
+	srand(time(NULL));
 
-//log
-	cFileLogStream* fileLog = new cFileLogStream(BASIC_LOG_LEVEL, GLOBAL_LOG_FILENAME);
-	gLog = new cConsoleLogStream(BASIC_LOG_LEVEL);
-	fileLog->bindStream(gLog);
-	mLog = new cFileLogStream("App", 2, "app_log.txt");
-	gLog->bindStream(mLog);
+	//log
+	FileLogStream* fileLog = mnew FileLogStream(BASIC_LOG_LEVEL, GLOBAL_LOG_FILENAME);
+	gLog = mnew ConsoleLogStream(BASIC_LOG_LEVEL);
+	fileLog->BindStream(gLog);
+	mLog = mnew FileLogStream("App", 2, "app_log.txt");
+	gLog->BindStream(mLog);
 
-	mLog->out("All Systems initialized");
+	//file system
+	mFileSystem = mnew FileSystem();
+
+	//project config
+	mProjectConfig = mnew ProjectConfig();
+
+	//assets
+	mAssets = mnew Assets();
+
+	//input message
+	mInputMessage = mnew InputMessage();
+
+	//scheduler
+	mScheduler = mnew Scheduler();
+
+	//timer
+	mTimer = mnew Timer();
+	mTimer->Reset();
+
+	//timers
+	mTimeUtils = mnew TimeUtil();
+
+	//ui
+	mUIController = mnew UIController();
+
+	mLog->Out("All Systems initialized");
 }
 
-void cApplicationBaseInterface::deinitializeSystems()
+void ApplicationBaseInterface::DeinitializeSystems()
 {
-	safe_release(mFileSystem);
+	SafeRelease(mFileSystem);
+	SafeRelease(mScheduler);
+	SafeRelease(mTimeUtils);
+	SafeRelease(mUIController);
+	SafeRelease(mProjectConfig);
+	SafeRelease(mAssets);
 
-	mLog->out("All systems deinitialized");
+	mLog->Out("All systems deinitialized");
 
-	safe_release(gLog->getParentStream());
+	//safe_release(gLog->getParentStream());
 }
 
-cInputMessage* cApplicationBaseInterface::getInputMessage()
+void ApplicationBaseInterface::ProcessFrame()
 {
-	return &mInputMessage;
+	float dt = Clamp(mTimer->GetElapsedTime(), 0.001f, 0.05f);
+
+	mTimeUtils->Update(dt);
+
+	mScheduler->ProcessBeforeFrame(dt);
+
+	OnUpdate(dt);
+	mUIController->Update(dt);
+
+	mRenderSystem->BeginRender();
+	OnDraw();
+	mUIController->Draw();
+	mRenderSystem->EndRender();
+
+	mInputMessage->update(dt);
+
+	mScheduler->ProcessAfterFrame(dt);
 }
 
-grRenderSystem* cApplicationBaseInterface::getRenderSystem() const
+InputMessage* ApplicationBaseInterface::GetInputMessage()
+{
+	return mInputMessage;
+}
+
+RenderSystem* ApplicationBaseInterface::GetRenderSystem() const
 {
 	return mRenderSystem;
+}
+
+LogStream* ApplicationBaseInterface::GetLog() const
+{
+	return mLog;
+}
+
+ProjectConfig* ApplicationBaseInterface::GetProjectConfig() const
+{
+	return mProjectConfig;
+}
+
+FileSystem* ApplicationBaseInterface::GetFileSystem() const
+{
+	return mFileSystem;
+}
+
+Scheduler* ApplicationBaseInterface::GetScheduler() const
+{
+	return mScheduler;
+}
+
+TimeUtil* ApplicationBaseInterface::GetTimeUtils() const
+{
+	return mTimeUtils;
+}
+
+UIController* ApplicationBaseInterface::GetUIController() const
+{
+	return mUIController;
+}
+
+Assets* ApplicationBaseInterface::GetAssets() const
+{
+	return mAssets;
 }
 
 CLOSE_O2_NAMESPACE

@@ -1,157 +1,155 @@
-#ifndef RENDER_SYSTEM_OGL_H
-#define RENDER_SYSTEM_OGL_H
+#pragma once
 
 #include "render_system/render_system_base_interface.h"
 
 #include "ogl.h"
-
+#include "render_system/ogl/texture_ogl.h"
 #include "util/math/vector2.h"
 #include "util/math/vertex.h"
 
 OPEN_O2_NAMESPACE
 
 /** Render system, using OpenGL. */
-class grRenderSystem:public grRenderSystemBaseInterface
-{	
-	friend class cApplication;
-	friend class grSprite;
-	friend class grRenderTarget;
-	friend class cDeviceInfo;
-	
+class RenderSystem: public RenderSystemBaseInterface
+{
+	friend class Application;
+	friend class Sprite;
+	friend class RenderTarget;
+	friend class Font;
+	friend class DeviceInfo;
+
 	static const unsigned int mVertexBufferSize = 6000;  /** Maximum size of vertex buffer. */
 	static const unsigned int mIndexBufferSize = 6000*3; /** Maximum size of index buffer. */
 
-//gl context
+	//opengl context
 	HGLRC           mGLContext;              /**< OpenGL context. */
 	HDC             mHDC;                    /**< Win frame device context. */
 
 	bool            mRenderTargetsAvailable; /**< True, if render targets is available. */
-	vec2i           mMaxTextureSize;         /**< Max texture size. */
-										   
-//vertex & index buffers				   
+	Vec2I           mMaxTextureSize;         /**< Max texture size. */
+
+	//vertex & index buffers				   
 	unsigned char*  mVertexData;             /**< Vertex data buffer. */
 	unsigned short* mVertexIndexData;        /**< Index data buffer. */
 	GLenum          mCurrentPrimitiveType;   /**< TYpe of drawing primitives for next DIP. */
-										     
-//batching parametres					     
-	grTexture*      mLastDrawTexture;        /**< Stored texture ptr from last DIP. */
+
+	//batching parameters					     
+	Texture*   mLastDrawTexture;        /**< Stored texture ptr from last DIP. */
 	unsigned int    mLastDrawVertex;         /**< Last vertex idx for next DIP. */
-	unsigned int    mLastDrawIdx;            /**< Last vertex index for nex DIP. */
-	unsigned int    mTrianglesCount;         /**< Triatgles count for next DIP. */
+	unsigned int    mLastDrawIdx;            /**< Last vertex index for next DIP. */
+	unsigned int    mTrianglesCount;         /**< Triangles count for next DIP. */
 	unsigned int    mFrameTrianglesCount;    /**< Total triangles at current frame. */
 	unsigned int    mDIPCount;               /**< DrawIndexedPrimitives calls count. */
-										     
-//stencil
+
+	//stencil			 
 	bool            mStencilDrawing;         /**< True, if drawing in stencil buffer. */
 	bool            mStencilTest;            /**< True, if drawing with stencil test. */
 
-//scissor test
-	fRect           mScissorRect;            /**< Scissor rect, in screen space. */
+	//scissor test		 
+	RectF           mScissorRect;            /**< Scissor rect, in screen space. */
 	bool            mScissorTest;            /**< True, if scissor test enabled. */
-										
-//other
-	grRenderTarget* mCurrentRenderTarget;    /**< Current render target. NULL if rendering in back buffer. */
+
+	//other
+	RenderTarget*   mCurrentRenderTarget;    /**< Current render target. NULL if rendering in back buffer. */
 
 	bool            mReady;                  /**< True, if render system initialized. */
 
 public:
 	/* ctor. */
-	grRenderSystem(cApplication* application);
-	
-	/** dtor. */ 
-	~grRenderSystem();
-	
+	RenderSystem();
+
+	/** dtor. */
+	~RenderSystem();
+
 	/** Beginning rendering. */
-	bool beginRender();
-	
+	bool BeginRender();
+
 	/** Finishing rendering. */
-	bool endRender();
-	
+	bool EndRender();
+
 	/** Clearing current frame buffer with color. */
-	void clear(const color4& color = color4(0, 0, 0, 255));
-	
+	void Clear(const Color4& color = Color4::Black());
+
 	/** Beginning render to stencil buffer. */
-	void beginRenderToStencilBuffer();
-	
+	void BeginRenderToStencilBuffer();
+
 	/** Finishing rendering in stencil buffer. */
-	void endRenderToStencilBuffer();
-	
+	void EndRenderToStencilBuffer();
+
 	/** Enabling stencil test. */
-	void enableStencilTest();
-	
+	void EnableStencilTest();
+
 	/** Disabling stencil test. */
-	void disableStencilTest();
-	
+	void DisableStencilTest();
+
 	/** Returns true, if stencil test enabled. */
-	bool isStencilTestEnabled() const;
-	
+	bool IsStencilTestEnabled() const;
+
 	/** Clearing stencil buffer. */
-	void clearStencil();
-	
+	void ClearStencil();
+
 	/** Sets scissor rect. */
-	void setupScissorRect(const fRect& rect);
-	
+	void SetupScissorRect(const RectF& rect);
+
 	/** Returns scissor rect. */
-	const fRect& getScissorRect() const;
-	
+	const RectF& GetScissorRect() const;
+
 	/** Enabling scissor test. */
-	void enableScissorTest();
-	
+	void EnableScissorTest();
+
 	/** Disabling scissor test. */
-	void disableScissorTest();
-	
+	void DisableScissorTest();
+
 	/** Returns true, if scissor test enabled. */
-	bool isScissorTestEnabled() const;
-	
+	bool IsScissorTestEnabled() const;
+
 	/** Drawing mesh. */
-	bool drawMesh(grMesh* mesh);
-	
+	bool DrawMesh(Mesh* mesh);
+
 	/** Drawing lines. */
-	bool drawLines(vertex2* verticies, int count);
-	
+	bool DrawLines(Vertex2* verticies, int count);
+
 	/** Sets lines width. */
-	void setLinesWidth(float width);
-	
+	void SetLinesWidth(float width);
+
 	/** Binding render target. */
-	bool bindRenderTarget(grRenderTarget* renderTarget);
-	
+	bool BindRenderTarget(RenderTarget* renderTarget);
+
 	/** Unbinding render target. */
-	bool unbindRenderTarget();
-	
+	bool UnbindRenderTarget();
+
 	/** Returns current render target. Returns NULL if no render target. */
-	grRenderTarget* getCurrentRenderTarget() const;	
+	RenderTarget* GetCurrentRenderTarget() const;
 
 	/** Returns true, if render target is can be used with current device. */
-	bool isRenderTargetAvailable() const;
+	bool IsRenderTargetAvailable() const;
 
 	/** Returns maximum texture size. */
-	vec2i getMaxTextureSize() const;
+	Vec2I GetMaxTextureSize() const;
 
 protected:
 	/** Calls for update camera transformations. */
-	void updateCameraTransforms();
+	void UpdateCameraTransforms();
 
 	/** Initializing opengl renderer. */
-	void initializeGL();
+	void InitializeGL();
 
 	/** Destroying opengl renderer. */
-	void deinitializeGL();
+	void DeinitializeGL();
 
-	void drawPrimitives();
-	
+	void DrawPrimitives();
+
 	/** Calls when frame changed client size. */
-	void frameResized();
+	void FrameResized();
 
 	/** Set's viewport and projection matrix size. */
-	void setupMatrix(const vec2f& size);
+	void SetupMatrix(const Vec2F& size);
 
 	/** Returns true, if device supports specified extension. */
-	static bool isExtensionSupported(const char *extension);
+	static bool IsExtensionSupported(const char *extension);
 
-	/** Checking capatibles on this device. */
-	void checkCapatibles();
+	/** Checking compatibles on this device. */
+	void CheckCompatibles();
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //RENDER_SYSTEM_OGL_H

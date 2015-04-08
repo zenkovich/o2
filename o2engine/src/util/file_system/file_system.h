@@ -1,41 +1,63 @@
-#ifndef FILE_SYSTEM_H
-#define FILE_SYSTEM_H
+#pragma once
 
-#include <vector>
 #include <map>
-
-#include "public.h"
-#include "util/singleton.h"
 #include "file.h"
+#include "file_info.h"
+#include "public.h"
+#include "util/string.h"
 
 OPEN_O2_NAMESPACE
 	
 /** File system, singleton. Containing basic resource path, extension strings. */
-class cFileSystem:public cSingleton<cFileSystem>
+class FileSystem
 {
 public:
-	typedef std::vector<std::string> ExtensionsVec;
+	typedef Vector<String> ExtensionsVec;
+	typedef std::map<FileType, ExtensionsVec> ExtensionsMap;
 
 private:
-	std::string                               mResourcePath; /**< Basic application resources path. */
-	std::map<cFileType::value, ExtensionsVec> mExtensions;   /**< Extensions strings map. */
+	String        mResourcesPath; /**< Basic application resources path. */
+	ExtensionsMap mExtensions;   /**< Extensions strings map. */
 
 public:
-	cFileSystem();
-	~cFileSystem();
-
-	/** Sets resource path. */
-	void setResourcePath(const std::string& path);
+	FileSystem();
+	~FileSystem();
 
 	/** Returns resource path. */
-	const std::string& getResourcePath() const;
+	const String& GetResourcesPath() const;
 
 	/** Returns vector of extension strings for extension type. */
-	const ExtensionsVec& getExtensions(cFileType::value fileType) const;
+	const ExtensionsVec& GetExtensions(FileType fileType) const;
+
+	/** Returns full file path with extension by file type. */
+	String GetFilePathByExt(const String& path, FileType fileType) const;
+
+	/** Returns info of paths and files of specified path. */
+	PathInfo GetPathInfo(const String& path) const;
+
+	/** Returns file info. */
+	FileInfo GetFileInfo(const String& path) const;
+
+	/** Copying file. */
+	bool CopyFile(const String& source, const String& dest) const;
+
+	/** Deletion file. */
+	bool DeleteFile(const String& file) const;
+
+	/** Moving file. */
+	bool MoveFile(const String& source, const String& dest) const;
+
+	/** Creates folder. */
+	bool CreateDirectory(const String& path, bool recursive = true) const;
+
+	/** Removes directory. */
+	bool RemoveDirectory(const String& path, bool recursive = true) const;
+
+	/** Returns true if specified directory exist. */
+	bool IsDirectoryExist(const String& path) const;
+
+	/** Returns true if specified file exist. */
+	bool IsFileExist(const String& path) const;
 };
 
-#define getFileSystem() cFileSystem::instance()
-
 CLOSE_O2_NAMESPACE
-
-#endif //FILE_SYSTEM_H

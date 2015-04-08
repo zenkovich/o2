@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{db149db7-4b33-4aaf-be52-e9ba95c6ef3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Utils">
+      <UniqueIdentifier>{a546eba3-09d0-4007-971d-32ede2fe693d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Utils\Math">
+      <UniqueIdentifier>{c8834cc1-63a4-48e5-9f72-a51291907bfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Utils\Log">
+      <UniqueIdentifier>{8e2a0af6-48fc-4564-b4f2-fa1a97b19f50}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Sources\Utils\Math\Math.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Vector2.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Vertex2.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\CommonTypes.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Rect.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Color.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\EngineSettings.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Log\LogStream.h">
+      <Filter>Sources\Utils\Log</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp">
+      <Filter>Sources\Utils\Log</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,34 +1,25 @@
 #include "public.h"
+
 #ifdef RENDER_OGL
 
+#include "render_system/render_system.h"
 #include "texture_ogl.h"
-
-#include "util/image/image.h"
-#include "../render_system.h"
+#include "util/image/bitmap.h"
 
 OPEN_O2_NAMESPACE
 
-grTexture::grTexture( grRenderSystem* renderSystem, const vec2f& size, grTexFormat::type format /*= grTexFormat::DEFAULT*/, 
-                      grTexUsage::type usage /*= grTexUsage::DEFAULT*/ ):
-	grTextureBaseInterface(renderSystem), mHandle(0)
+Texture::Texture():
+TextureBaseInterface(), mHandle(0)
 {
-	create(renderSystem, size, format, usage);
 }
 
-grTexture::grTexture( grRenderSystem* renderSystem, const std::string& fileName ):
-	grTextureBaseInterface(renderSystem)
+Texture::~Texture()
 {
-	createFromFile(renderSystem, fileName);
-}
-
-grTexture::~grTexture()
-{	
 	glDeleteTextures(1, &mHandle);
 }
 
-void grTexture::create( grRenderSystem* renderSystem, const vec2f& size, 
-	                    grTexFormat::type format /*= grTexFormat::DEFAULT*/, 
-						grTexUsage::type usage /*= grTexUsage::DEFAULT*/ )
+void Texture::Create(const Vec2F& size, TextureFormat format /*= grTexFormat::DEFAULT*/,
+					 TextureUsage usage /*= grTexUsage::DEFAULT*/)
 {
 	mFormat = format;
 	mUsage = usage;
@@ -38,9 +29,9 @@ void grTexture::create( grRenderSystem* renderSystem, const vec2f& size,
 	glBindTexture(GL_TEXTURE_2D, mHandle);
 
 	GLint texFormat = GL_RGB;
-	if (format == grTexFormat::R8G8B8A8)
+	if (format == TextureFormat::R8G8B8A8)
 		texFormat = GL_RGBA;
-	else if (format == grTexFormat::R8G8B8)
+	else if (format == TextureFormat::R8G8B8)
 		texFormat = GL_RGB;
 
 	glTexImage2D(GL_TEXTURE_2D, 0, texFormat, (GLsizei)size.x, (GLsizei)size.y, 0, texFormat, GL_UNSIGNED_BYTE, NULL);
@@ -49,55 +40,49 @@ void grTexture::create( grRenderSystem* renderSystem, const vec2f& size,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	mReady = true;
 }
 
-void grTexture::createFromImage( grRenderSystem* renderSystem, cImage* image )
+void Texture::CreateFromBitmap(Bitmap* image)
 {
-	mRenderSystem = renderSystem;
+	Bitmap::Format imageFormat = image->GetFormat();
+	if (imageFormat == Bitmap::Format::Default)
+		mFormat = TextureFormat::Default;
+	else if (imageFormat == Bitmap::Format::R8G8B8A8)
+		mFormat = TextureFormat::R8G8B8A8;
 
-	cImage::Format imageFormat = image->getFormat();
-	if (imageFormat == cImage::FMT_NONE)
-		mFormat = grTexFormat::DEFAULT;
-	else if (imageFormat == cImage::FMT_R8G8B8A8)
-		mFormat = grTexFormat::R8G8B8A8;
-
-	mUsage = grTexUsage::DEFAULT;
-	mSize = image->getSize().castTo<float>();
-	mFileName = image->getFilename();
+	mUsage = TextureUsage::Default;
+	mSize = image->GetSize();
+	mFileName = image->GetFilename();
 
 	glGenTextures(1, &mHandle);
 	glBindTexture(GL_TEXTURE_2D, mHandle);
 
 	GLint texFormat = GL_RGB;
-	if (mFormat == grTexFormat::R8G8B8A8)
+	if (mFormat == TextureFormat::R8G8B8A8)
 		texFormat = GL_RGBA;
-	else if (mFormat == grTexFormat::R8G8B8)
+	else if (mFormat == TextureFormat::R8G8B8)
 		texFormat = GL_RGB;
 
-	glTexImage2D(GL_TEXTURE_2D, 0, texFormat, image->getSize().x, image->getSize().y, 0, texFormat, GL_UNSIGNED_BYTE, 
-		         image->getData());
+	glTexImage2D(GL_TEXTURE_2D, 0, texFormat, image->GetSize().x, image->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
+				 image->GetData());
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	mReady = true;
 }
 
-void grTexture::createFromFile( grRenderSystem* renderSystem, const std::string& fileName )
+void Texture::CreateFromFile(const String& fileName)
 {
-	cImage* image = new cImage;
-	if (image->load(fileName, cImage::IT_AUTO, renderSystem->mLog))
-		createFromImage(renderSystem, image);
+	Bitmap* image = mnew Bitmap;
+	if (image->Load(fileName, Bitmap::ImageType::Auto, AppRender()->mLog))
+		CreateFromBitmap(image);
+	SafeRelease(image);
 }
 
-void grTexture::createAsRenderTarget( grRenderSystem* renderSystem, const vec2f& size, 
-	                                  grTexFormat::type format /*= grTexFormat::DEFAULT*/ )
+void Texture::CreateAsRenderTarget(const Vec2F& size, TextureFormat format /*= grTexFormat::DEFAULT*/)
 {
-	create(renderSystem, size, format, grTexUsage::RENDER_TARGET);
+	Create(size, format, TextureUsage::RenderTarget);
 }
 
 CLOSE_O2_NAMESPACE

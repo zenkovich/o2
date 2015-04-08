@@ -1,283 +1,223 @@
 #include "sprite.h"
 
+#include "mesh.h"
 #include "render_system.h"
 #include "texture.h"
-#include "mesh.h"
 #include "util/xml_tools.h"
 
 OPEN_O2_NAMESPACE
 
-grSprite::grSprite( grRenderSystem* render, 
-	                grTexture*      texture        /*= NULL*/, 
-	                const fRect&    textureSrcRect /*= fRect(-1.0f, 0.0f, 0.0f, 0.0f)*/, 
-	                const vec2f&    position       /*= vec2f(0.0f, 0.0f)*/, 
-					const vec2f&    size           /*= vec2f(-1.0f, 0.0f)*/, 
-					const vec2f&    scale          /*= vec2f(1.0f, 1.0f)*/, 
-					float           angle          /*= 0*/, 
-					const vec2f&    rotationCenter /*= vec2f(0.0f, 0.0f)*/, 
-					const color4&   color          /*= color4(1.0f, 1.0f, 1.0f, 1.0f)*/ )
+Sprite::Sprite(TextureRef       texture        /*= NULL*/,
+const RectF&    textureSrcRect /*= fRect(-1.0f, 0.0f, 0.0f, 0.0f)*/,
+const Vec2F&    position       /*= vec2f()*/,
+const Vec2F&    size           /*= vec2f(-1.0f, 0.0f)*/,
+const Vec2F&    scale          /*= vec2f(1.0f, 1.0f)*/,
+float           angle          /*= 0*/,
+const Vec2F&    pivot          /*= vec2f()*/,
+const Color4&   color          /*= color4::white()*/):
+IRectDrawable(size, position, color, pivot)
 {
 	//create mesh
-	mMesh = new grMesh(render, texture, 4, 2);
+	mMesh = mnew Mesh(texture, 4, 2);
 
 	mMesh->mIndexes[0] = 0; mMesh->mIndexes[1] = 1; mMesh->mIndexes[2] = 2;
 	mMesh->mIndexes[3] = 0; mMesh->mIndexes[4] = 2; mMesh->mIndexes[5] = 3;
 
-	mMesh->mVerticies[0].z = 1.0f; mMesh->mVerticies[1].z = 1.0f; 
+	mMesh->mVerticies[0].z = 1.0f; mMesh->mVerticies[1].z = 1.0f;
 	mMesh->mVerticies[2].z = 1.0f; mMesh->mVerticies[3].z = 1.0f;
 
 	mMesh->mVertexCount = 4;
 	mMesh->mPolyCount = 2;
-	
+
 	if (textureSrcRect.left < 0)
-	{
-		vec2f textureSize(0.0f, 0.0f);
-
-		if (texture)
-			textureSize = texture->getSize();
-
-		mTextureSrcRect = fRect(vec2f(0.0f, 0.0f), textureSize);
-	}
-	else 
-	{
+		mTextureSrcRect = RectF(Vec2F(), texture.getSize());
+	else
 		mTextureSrcRect = textureSrcRect;
-	}
 
 	if (size.x < 0)
-	{
 		mSize = mTextureSrcRect.getSize();
-	}
 	else
-	{
 		mSize = size;
-	}
 
-	mPosition = position;
+	for (int i = 0; i < 4; i++)
+		mVertexColors[i] = Color4::White();
+
 	mScale = scale;
 	mAngle = angle;
-	mRotationCenter = rotationCenter;
-
-	setColor(color);
 
 	mNeedUpdateMeshVerticies = true;
 	mNeedUpdateMeshTexCoords = true;
+	mNeedUpdateMeshColors = true;
+
+	InitializeProperties();
 }
 
-grSprite::grSprite( const grSprite& sprite )
+Sprite::Sprite(const Sprite& sprite):
+IRectDrawable(sprite)
 {
 	//create mesh
-	mMesh = new grMesh(*sprite.mMesh);
+	mMesh = mnew Mesh(*sprite.mMesh);
 
+	mTextureSrcRect = sprite.mTextureSrcRect;
+	mScale = sprite.mScale;
+	mAngle = sprite.mAngle;
+
+	mNeedUpdateMeshVerticies = true;
+	mNeedUpdateMeshTexCoords = true;
+	mNeedUpdateMeshColors = true;
+
+	InitializeProperties();
+}
+
+Sprite::~Sprite()
+{
+	SafeRelease(mMesh);
+}
+
+IRectDrawable* Sprite::Clone() const
+{
+	return mnew Sprite(*this);
+}
+
+Sprite& Sprite::operator=(const Sprite& sprite)
+{
+	mMesh->SetTexture(sprite.GetTexture());
 	mTextureSrcRect = sprite.mTextureSrcRect;
 	mPosition = sprite.mPosition;
 	mSize = sprite.mSize;
 	mScale = sprite.mScale;
 	mAngle = sprite.mAngle;
-	mRotationCenter = sprite.mRotationCenter;
+	mPivot = sprite.mPivot;
 
 	mNeedUpdateMeshVerticies = true;
 	mNeedUpdateMeshTexCoords = true;
-}
+	mNeedUpdateMeshColors = true;
 
-/*grSprite::grSprite( grRender* render, cDataObject& dataObject )
-{
-	//create mesh
-	mMesh = new grRender2DObjectMesh(render, 4, 2);
-	mMesh->mPolygonsBuffer[0] = poly3(0, 1, 2);
-	mMesh->mPolygonsBuffer[1] = poly3(0, 2, 3);
-	mMesh->mVertexBuffer[0].z = 1.0f; mMesh->mVertexBuffer[1].z = 1.0f; 
-	mMesh->mVertexBuffer[2].z = 1.0f; mMesh->mVertexBuffer[3].z = 1.0f;
-
-	serialize_(dataObject, AT_INPUT);
-}*/
-
-grSprite::grSprite(grRenderSystem* render, pugi::xml_node& xmlNode)
-{
-	//create mesh
-	mMesh = new grMesh(render, NULL, 4, 2);
-
-	mMesh->mIndexes[0] = 0; mMesh->mIndexes[1] = 1; mMesh->mIndexes[2] = 2;
-	mMesh->mIndexes[3] = 0; mMesh->mIndexes[4] = 2; mMesh->mIndexes[5] = 3;
-
-	mMesh->mVerticies[0].z = 1.0f; mMesh->mVerticies[1].z = 1.0f; 
-	mMesh->mVerticies[2].z = 1.0f; mMesh->mVerticies[3].z = 1.0f;
-
-	mMesh->mVertexCount = 4;
-	mMesh->mPolyCount = 2;
-
-	serialize(xmlNode, cSerializeType::INPUT);
-
-	/*cDataObject* spriteDataObject = 
-		getDataObjectsManager().loadDataObject(file, cDataObjectsManager::DOT_XML)->getChild(path);
-
-	serialize_(*spriteDataObject, AT_INPUT);*/
-}
-
-grSprite::~grSprite()
-{
-	safe_release(mMesh);
-}
-
-grSprite& grSprite::setPosition( const vec2f& position )
-{
-	if (!(fabs(position.x - mPosition.x) > FLT_EPSILON || fabs(position.y - mPosition.y) > FLT_EPSILON))
-		return *this;
-
-	mPosition = position;
-	mNeedUpdateMeshVerticies = true;
 	return *this;
 }
 
-vec2f grSprite::getPosition() const
+void Sprite::SetScale(const Vec2F& scale)
 {
-	return mPosition;
-}
-
-grSprite& grSprite::setScale( const vec2f& scale )
-{
-	if (!(fabs(scale.x - mScale.x) > FLT_EPSILON || fabs(scale.y - mScale.y) > FLT_EPSILON))
-		return *this;
+	if (Equals(mScale, scale))
+		return;
 
 	mScale = scale;
 	mNeedUpdateMeshVerticies = true;
-	return *this;
 }
 
-vec2f grSprite::getScale() const
+Vec2F Sprite::GetScale() const
 {
 	return mScale;
 }
 
-grSprite& grSprite::setAngle( float angle )
+void Sprite::SetAngle(const float& angle)
 {
-	if (fabs(angle - mAngle) < FLT_EPSILON)
-		return *this;
+	if (Equals(angle, mAngle))
+		return;
 
 	mAngle = angle;
 	mNeedUpdateMeshVerticies = true;
-	return *this;
 }
 
-float grSprite::getAngle() const
+float Sprite::GetAngle() const
 {
 	return mAngle;
 }
 
-grSprite& grSprite::setRotationCenter( const vec2f& center )
+void Sprite::SetTextureSrcRect(const RectF& rect)
 {
-	if (!(fabs(center.x - mRotationCenter.x) > FLT_EPSILON || fabs(center.y - mRotationCenter.y) > FLT_EPSILON))
-		return *this;
+	if (Equals(mTextureSrcRect, rect))
+		return;
 
-	mRotationCenter = center;
-	mNeedUpdateMeshVerticies = true;
-	return *this;
-}
-
-vec2f grSprite::getRotationCenter() const
-{
-	return mRotationCenter;
-}
-
-grSprite& grSprite::setTextureSrcRect( const fRect& rect )
-{
 	mTextureSrcRect = rect;
 	mNeedUpdateMeshTexCoords = true;
-	return *this;
 }
 
-const fRect& grSprite::getTextureSrcRect() const
+RectF Sprite::GetTextureSrcRect() const
 {
 	return mTextureSrcRect;
 }
 
-grSprite* grSprite::clone() const
+void Sprite::SetTexture(const TextureRef& texture)
 {
-	return new grSprite(*this);
+	mMesh->SetTexture(texture);
 }
 
-grSprite& grSprite::setTexture( grTexture* texture )
+TextureRef Sprite::GetTexture() const
 {
-	mMesh->setTexture(texture);
-	return *this;
+	return mMesh->GetTexture();
 }
 
-grTexture* grSprite::getTexture() const
+void Sprite::SetVertexColor(const Color4& color, int vertexId)
 {
-	return mMesh->getTexture();
+	mVertexColors[Clamp(vertexId, 0, 3)] = color;
+	mNeedUpdateMeshColors = true;
 }
 
-grSprite& grSprite::setSize( const vec2f& size )
+Color4 Sprite::GetVertexColor(int vertexId) const
 {
-	if (!(fabs(size.x - mSize.x) > FLT_EPSILON || fabs(size.y - mSize.y) > FLT_EPSILON))
-		return *this;
+	return mVertexColors[Clamp(vertexId, 0, 3)];
+}
 
-	mSize = size;
+void Sprite::PositionChanged()
+{
 	mNeedUpdateMeshVerticies = true;
-	return *this;
 }
 
-vec2f grSprite::getSize() const
+void Sprite::SizeChanged()
 {
-	return mSize;
+	mNeedUpdateMeshVerticies = true;
 }
 
-grSprite& grSprite::setColor( const color4& color, int vertexId /*= -1*/ )
+void Sprite::PivotChanged()
 {
-	unsigned long ccolor = color.dword();
-
-	if (vertexId < 0)
-	{
-		for (unsigned int i = 0; i < 4; i++)
-			mMesh->mVerticies[i].color = ccolor;
-	}
-	else
-	{
-		mMesh->mVerticies[min(vertexId, 3)].color = ccolor;
-	}
-
-	return *this;
+	mNeedUpdateMeshVerticies = true;
 }
 
-color4 grSprite::getColor( int vertexId /*= 0*/ )
+void Sprite::ColorChanged()
 {
-	color4 res;
-	res.setDword(mMesh->mVerticies[max(min(vertexId, 4), 0)].color);
-	return res;
+	mNeedUpdateMeshColors = true;
 }
 
-void grSprite::draw()
+void Sprite::Draw()
 {
-	if (mNeedUpdateMeshVerticies) 
-		updateMeshVerticies();
+	if (!mEnabled)
+		return;
+
+	if (mNeedUpdateMeshVerticies)
+		UpdateMeshVerticies();
 	if (mNeedUpdateMeshTexCoords)
-		updateMeshTexCoords();
+		UpdateMeshTexCoords();
+	if (mNeedUpdateMeshColors)
+		UpdateMeshColors();
 
-	mMesh->draw();
+	mMesh->Draw();
 }
 
-void grSprite::updateMeshVerticies()
+void Sprite::UpdateMeshVerticies()
 {
 	mNeedUpdateMeshVerticies = false;
 
-	if (mAngle > FLT_EPSILON || mAngle < -FLT_EPSILON)
+	if (!Equals(mAngle, 0.0f))
 	{
-		float radAngle = deg2rad(mAngle);
+		float radAngle = Deg2rad(mAngle);
 
 		float sn = sinf(radAngle);
 		float cs = cosf(radAngle);
 
-		vec2f realSize = mSize.scale(mScale);
+		Vec2F realSize = mSize.scale(mScale);
 
-		vec2f xvec(cs,  sn);
-		vec2f yvec(-sn, cs);
+		Vec2F xvec(cs, sn);
+		Vec2F yvec(-sn, cs);
 
-		vec2f offs = mPosition;
+		Vec2F offs = mPosition;
+		Vec2F piv = mPivot.scale(mScale);
 
-		if (fabs(mRotationCenter.x) > FLT_EPSILON || fabs(mRotationCenter.y) > FLT_EPSILON)
-			offs = offs + xvec*(-mRotationCenter.x) - yvec*mRotationCenter.y;
+		if (!Equals(mPivot, Vec2F()))
+			offs = offs - xvec*piv.x - yvec*piv.y;
 
-		vec2f xsize = xvec*realSize.x;
-		vec2f ysize = yvec*realSize.y;
+		Vec2F xsize = xvec*realSize.x;
+		Vec2F ysize = yvec*realSize.y;
 
 		//vertex positions
 		mMesh->mVerticies[0].x = offs.x;                     mMesh->mVerticies[0].y = offs.y;
@@ -287,127 +227,47 @@ void grSprite::updateMeshVerticies()
 	}
 	else
 	{
-		vec2f realSize = mSize.scale(mScale);
+		Vec2F realSize = mSize.scale(mScale);
+		Vec2F pos = mPosition - mPivot.scale(mScale);
 
-		mMesh->mVerticies[0].x = mPosition.x;              mMesh->mVerticies[0].y = mPosition.y;
-		mMesh->mVerticies[1].x = mPosition.x + realSize.x; mMesh->mVerticies[1].y = mPosition.y;
-		mMesh->mVerticies[2].x = mPosition.x + realSize.x; mMesh->mVerticies[2].y = mPosition.y + realSize.y;
-		mMesh->mVerticies[3].x = mPosition.x;              mMesh->mVerticies[3].y = mPosition.y + realSize.y;
+		mMesh->mVerticies[0].x = pos.x;              mMesh->mVerticies[0].y = pos.y;
+		mMesh->mVerticies[1].x = pos.x + realSize.x; mMesh->mVerticies[1].y = pos.y;
+		mMesh->mVerticies[2].x = pos.x + realSize.x; mMesh->mVerticies[2].y = pos.y + realSize.y;
+		mMesh->mVerticies[3].x = pos.x;              mMesh->mVerticies[3].y = pos.y + realSize.y;
 	}
 }
 
-void grSprite::updateMeshTexCoords()
+void Sprite::UpdateMeshTexCoords()
 {
 	mNeedUpdateMeshTexCoords = false;
 
-	if (!mMesh->getTexture()) return;
+	Vec2F texSize = mMesh->GetTexture().getSize();
+	if (Equals(texSize, Vec2F()))
+		return;
 
-	vec2f texSize = mMesh->getTexture()->getSize();
-	vec2f invTexSize(1.0f/texSize.x, 1.0f/texSize.y);
+	Vec2F invTexSize(1.0f/texSize.x, 1.0f/texSize.y);
+	RectF tex = mTextureSrcRect*invTexSize;
 
-	mMesh->mVerticies[0].tu = mTextureSrcRect.left*invTexSize.x;
-	mMesh->mVerticies[0].tv = mTextureSrcRect.top*invTexSize.y;
-
-	mMesh->mVerticies[1].tu = mTextureSrcRect.right*invTexSize.x;
-	mMesh->mVerticies[1].tv = mTextureSrcRect.top*invTexSize.y;
-
-	mMesh->mVerticies[2].tu = mTextureSrcRect.right*invTexSize.x;
-	mMesh->mVerticies[2].tv = mTextureSrcRect.down*invTexSize.y;
-
-	mMesh->mVerticies[3].tu = mTextureSrcRect.left*invTexSize.x;
-	mMesh->mVerticies[3].tv = mTextureSrcRect.down*invTexSize.y;
+	mMesh->mVerticies[0].tu = tex.left;  mMesh->mVerticies[0].tv = tex.top;
+	mMesh->mVerticies[1].tu = tex.right; mMesh->mVerticies[1].tv = tex.top;
+	mMesh->mVerticies[2].tu = tex.right; mMesh->mVerticies[2].tv = tex.down;
+	mMesh->mVerticies[3].tu = tex.left;  mMesh->mVerticies[3].tv = tex.down;
 }
 
-SERIALIZE_METHOD_IMPL(grSprite)
+void Sprite::UpdateMeshColors()
 {
-	if (!SERIALIZE_ID(mPosition, "position"))
-		mPosition = vec2f(0, 0);
+	for (int i = 0; i < 4; i++)
+		mMesh->mVerticies[i].color = (mVertexColors[i]*mColor).AsULong();
 
-	if (!SERIALIZE_ID(mScale, "scale"))
-		mScale = vec2f(1, 1);
+	mNeedUpdateMeshColors = false;
+}
 
-	if (!SERIALIZE_ID(mAngle, "angle"))
-		mAngle = 0;
-
-	if (!SERIALIZE_ID(mRotationCenter, "rotationCenter"))
-		mRotationCenter = vec2f(0, 0);
-
-	if (type == cSerializeType::OUTPUT) 
-	{
-		if (mMesh->mTexture)
-		{
-			std::string texFilename = mMesh->mTexture->getFileName();
-			SERIALIZE_ID(texFilename, "texture");
-			SERIALIZE_ID(mTextureSrcRect, "textureSrcRect");
-		}
-	}
-	else
-	{
-		mMesh->setTexture(NULL);
-
-		std::string textureName;
-		if (SERIALIZE_ID(textureName, "texture"))
-		{
-			grTexture* texture = mMesh->mRenderSystem->createTexture(textureName);
-			mMesh->setTexture(texture);
-			texture->decrRefCount();
-
-			if (!SERIALIZE_ID(mTextureSrcRect, "textureSrcRect"))
-				mTextureSrcRect = fRect(vec2f(0, 0), texture->getSize());
-		}
-	}
-
-	if (!SERIALIZE_ID(mSize, "size"))
-		mSize = mTextureSrcRect.getSize();
-
-	if (type == cSerializeType::INPUT)
-	{
-		color4 vertColors[4];
-
-		if (!SERIALIZE_ARR_ID(vertColors, 4, "vertColors"))
-		{
-			color4 spriteColor;
-			if (SERIALIZE_ID(spriteColor, "color"))
-			{
-				setColor(spriteColor);
-			}
-			else 
-				setColor(color4(255, 255, 255, 255));
-		}
-		else
-		{
-			for (unsigned int i = 0; i < 4; i++)
-				mMesh->mVerticies[i].color = vertColors->dword();
-		}
-	}
-	else
-	{
-		color4 vertColors[4];
-
-		bool different = false;
-		for (unsigned int i = 0; i < 4; i++)
-		{
-			vertColors[i].setDword( mMesh->mVerticies[i].color );
-
-			if (i > 0)
-			{
-				if (abs(vertColors[i].r - vertColors[i - 1].r) > 1 ||
-					abs(vertColors[i].g - vertColors[i - 1].g) > 1 ||
-					abs(vertColors[i].b - vertColors[i - 1].b) > 1 ||
-					abs(vertColors[i].a - vertColors[i - 1].a) > 1)
-				{
-					different = true;
-				}
-			}
-		}
-
-		if (different)
-			SERIALIZE_ARR_ID(vertColors, 4, "vertColors");
-		else
-			SERIALIZE_ID(vertColors[0], "color");
-	}
-	
-	return true;
+void Sprite::InitializeProperties()
+{
+	REG_PROPERTY(Sprite, scale, SetScale, GetScale);
+	REG_PROPERTY(Sprite, angle, SetAngle, GetAngle);
+	REG_PROPERTY(Sprite, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);
+	REG_PROPERTY(Sprite, texture, SetTexture, GetTexture);
 }
 
 CLOSE_O2_NAMESPACE

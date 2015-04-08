@@ -4,27 +4,25 @@
 
 OPEN_O2_NAMESPACE
 
-cStdAllocator::cStdAllocator()
+StdAllocator::StdAllocator()
 {
-
 }
 
-cStdAllocator::~cStdAllocator()
+StdAllocator::~StdAllocator()
 {
-
 }
 
-void* cStdAllocator::alloc( uint32 bytes )
+void* StdAllocator::Alloc(uint bytes)
 {
 	return malloc(bytes);
 }
 
-void* cStdAllocator::realloc( void* ptr, uint32 bytes )
+void* StdAllocator::Realloc(void* ptr, uint bytes)
 {
 	return mrealloc(ptr, bytes);
 }
 
-void cStdAllocator::free( void* ptr )
+void StdAllocator::Free(void* ptr)
 {
 	mfree(ptr);
 }

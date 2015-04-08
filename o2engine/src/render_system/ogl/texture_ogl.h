@@ -1,54 +1,42 @@
-#ifndef TEXTURE_OGL_H
-#define TEXTURE_OGL_H
+#pragma once
 
-#include "../texture_base_interface.h"
+#include "render_system/texture_base_interface.h"
 #include "ogl.h"
 
 OPEN_O2_NAMESPACE
 
-class grTexture:public grTextureBaseInterface
+/** OpenGL texture definition. Contains OGL texture handle, derives from texture definition base interface. */
+class Texture:public TextureBaseInterface
 {
-	friend class grRenderSystem;
-	friend class grRenderTarget;
+	friend class RenderSystemBaseInterface;
+	friend class RenderSystem;
+	friend class RenderTarget;
 
 	GLuint mHandle; /**< Texture handle. */
 
-public:
+protected:
 	/** ctor. */
-	grTexture();
-
-	/** ctor 
-	 *  @size - size of texture
-	 *  @format - texture format
-	 *  @usage - texture usage. */
-	grTexture(grRenderSystem* renderSystem, const vec2f& size, grTexFormat::type format = grTexFormat::DEFAULT, 
-			  grTexUsage::type usage = grTexUsage::DEFAULT);
-
-	/** ctor. Creates texture from file. */
-	grTexture(grRenderSystem* renderSystem, const std::string& fileName);
+	Texture();
 
 	/** dtor. */
-	~grTexture();
+	~Texture();
 
-	/** Creates texture 
+	/** Creates texture
 	 *  @size - size of texture
 	 *  @format - texture format
 	 *  @usage - texture usage. */
-	void create(grRenderSystem* renderSystem, const vec2f& size, 
-	            grTexFormat::type format = grTexFormat::DEFAULT, 
-		  	    grTexUsage::type usage = grTexUsage::DEFAULT);
+	void Create(const Vec2F& size, TextureFormat format = TextureFormat::Default,
+				TextureUsage usage = TextureUsage::Default);
 
 	/** Creates texture from image. */
-	void createFromImage(grRenderSystem* renderSystem, cImage* image);
-		       
+	void CreateFromBitmap(Bitmap* image);
+
 	/** Creates texture from file. */
-	void createFromFile(grRenderSystem* renderSystem, const std::string& fileName);
-		       
-	/** Creates texture as render target. */
-	void createAsRenderTarget(grRenderSystem* renderSystem, const vec2f& size, 
-		                      grTexFormat::type format = grTexFormat::DEFAULT);
+	void CreateFromFile(const String& fileName);
+
+	/** Creates texture as render target.
+	 ** note: recommending to use grRenderTarget*/
+	void CreateAsRenderTarget(const Vec2F& size, TextureFormat format = TextureFormat::Default);
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //TEXTURE_OGL_H

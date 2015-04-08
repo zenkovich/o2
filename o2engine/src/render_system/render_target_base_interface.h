@@ -1,47 +1,42 @@
-#ifndef RENDER_TARGET_BASE_INTERFACE_H
-#define RENDER_TARGET_BASE_INTERFACE_H
+#pragma once
 
 #include "public.h"
 #include "texture_base_interface.h"
 #include "util/math/color.h"
 
 OPEN_O2_NAMESPACE
-	
-class grRenderSystem;
-class grTexture;
+
+class RenderSystem;
+class Texture;
 
 /** Render target base interface. */
-class grRenderTargetBaseInterface
+class RenderTargetBaseInterface
 {
 protected:
-	grRenderSystem* mRenderSystem;  /**< Render system ptr. */
-	grTexture*      mRenderTexture; /**< Render texture ptr, usage must be RENDER_TARGET. */
-	bool            mReady;         /**< True, if we can use that rander target. */
+	Texture* mRenderTexture; /**< Render texture ptr, usage must be RENDER_TARGET. */
+	bool     mReady;         /**< True, if we can use that render target. */
+
+	/** ctor. */
+	RenderTargetBaseInterface(Texture* texture);
 
 public:
 	/** ctor. */
-	grRenderTargetBaseInterface(grRenderSystem* renderSystem, grTexture* texture);
-
-	/** ctor. */
-	grRenderTargetBaseInterface(grRenderSystem* renderSystem, const vec2f& size = vec2f(0, 0), 
-		                        grTexFormat::type texFormat = grTexFormat::DEFAULT );
+	RenderTargetBaseInterface(const Vec2F& size = Vec2F(), TextureFormat texFormat = TextureFormat::Default);
 
 	/** dtor. */
-	virtual ~grRenderTargetBaseInterface();
+	virtual ~RenderTargetBaseInterface();
 
 	/** Binding this render target to render system. */
-	void bind();
+	void Bind();
 
 	/** Unbinding this render target to render system. */
-	void unbind();
+	void Unbind();
 
 	/** Returns using render texture ptr. */
-	grTexture* getTexture() const;
-	
+	TextureRef GetTexture() const;
+
 	/** Returns true, if render target ready to use. */
-	bool isReady() const;
+	bool IsReady() const;
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //RENDER_TARGET_BASE_INTERFACE_H

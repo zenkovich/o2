@@ -1,75 +1,113 @@
-#ifndef STRETCH_RECT_H
-#define STRETCH_RECT_H
+#pragma once
 
 #include "public.h"
-
-#include <vector>
-
-#include "util/math/color.h"
-#include "util/math/rect.h"
-#include "util/math/vector2.h"
-#include "util/serialization/serialization.h"
+#include "render_system/mesh.h"
+#include "render_system/texture.h"
+#include "util/graphics/rect_drawable.h"
+#include "util/property.h"
+#include "util/serialize_util.h"
 
 OPEN_O2_NAMESPACE
 
-class grMesh;
-class grTexture;
-class grRenderSystem;
+class RenderSystem;
 
-class cStretchRect:public cSerializableObj
+/** Stretching rect drawable. Contains some parts, what building using position and size of drawable. */
+class StretchRect: public IRectDrawable
 {
+	/** Drawable part. Contains texture source rect, each corners colors, texture wrapping and position params. */
 	struct Part
 	{
-		vec2f  mLTPosPercent;
-		vec2f  mLTPosPixel;
-		vec2f  mRBPosPercent;
-		vec2f  mRBPosPixel;
-		fRect  mTextureSrcRect;
-		color4 mVertexColors[4];
+		Vec2F  mLTPosPercent;    /** Left top corner relative position component. */
+		Vec2F  mLTPosPixel;      /** Left top corner pixel position component. */
+		Vec2F  mRBPosPercent;    /** Right down corner relative position component. */
+		Vec2F  mRBPosPixel;      /** Right down corner pixel position component. */
+		RectF  mTextureSrcRect;  /** Texture source rect. */
+		bool   mWrapTexture;     /** True, if texture will be repeat and keep source rect size. */
+		Color4 mVertexColors[4]; /** Corners colors. */
+		bool   mClampLeft;       /** True, if need clamp left side by rect. */
+		bool   mClampRight;      /** True, if need clamp right side by rect. */
+		bool   mClampTop;        /** True, if need clamp top side by rect. */
+		bool   mClampBottom;     /** True, if need clamp bottom side by rect. */
 
+		/** def ctor. */
 		Part();
-		Part(const vec2f& LTPercent, const vec2f& LTPixel, const vec2f& RBPercent, const vec2f& RBPixel, const fRect& texRect,
-			 const color4& vertex0Color = color4(255), const color4& vertex1Color = color4(255), 
-			 const color4& vertex2Color = color4(255), const color4& vertex3Color = color4(255));
-	};
-	typedef std::vector<Part> PartsVec;
 
-	grRenderSystem* mRenderSystem;
-	grMesh*         mMesh;
-	PartsVec        mParts;
-	fRect           mRect;
-	bool            mNeedUpdateMesh;
+		/** ctor. */
+		Part(const Vec2F& LTPercent, const Vec2F& LTPixel, const Vec2F& RBPercent, const Vec2F& RBPixel,
+			 const RectF& texRect, bool wrapTexture = false,
+			 const Color4& vertex0Color = Color4::White(), const Color4& vertex1Color = Color4::White(),
+			 const Color4& vertex2Color = Color4::White(), const Color4& vertex3Color = Color4::White());
+	};
+	typedef Array<Part> PartsArr;
+
+	Mesh*    mMesh;             /** Mesh. */
+	PartsArr mParts;            /** Parts array. */
+	Vec2F    mMinSize;          /** Minimal size, when part will bot be clamped. */
+	bool     mNeedUpdateMesh;   /** True, if need to update mesh verticies. */
+	bool     mNeedUpdateColors; /** True, if need update just verticies colors. */
 
 public:
-	cStretchRect(grRenderSystem* renderSystem, int parts = 0, grTexture* texture = NULL);
-	cStretchRect(const cStretchRect& stretchRect);
+	/** ctor. */
+	StretchRect(int parts = 0, const TextureRef& texture = TextureRef());
 
-	cStretchRect& operator=(const cStretchRect& stretchRect);
+	/** ctor, creating standard 9-slice stretching rect. */
+	StretchRect(const TextureRef& texture, int left, int top, int right, int bottom, const RectF& texRect = RectF(),
+				const Color4& color = Color4::White());
 
-	int addPart(const vec2f& LTPercent, const vec2f& LTPixel, const vec2f& RBPercent, const vec2f& RBPixel, const fRect& texRect,
-			    const color4& vertex0Color = color4(255), const color4& vertex1Color = color4(255), 
-			    const color4& vertex2Color = color4(255), const color4& vertex3Color = color4(255));
+	/** copy-ctor. */
+	StretchRect(const StretchRect& stretchRect);
 
-	void removePart(int idx);
+	/** copy operator. */
+	StretchRect& operator=(const StretchRect& stretchRect);
 
-	void setRect(const fRect& rect);
-	const fRect& getRect() const;
+	/** Returns a copy of drawable. */
+	IRectDrawable* Clone() const;
 
-	void setPosition(const vec2f& pos);
-	vec2f getPosition() const;
+	/** Adding a part. Automatically resizing mesh. */
+	int AddPart(const Vec2F& LTPercent, const Vec2F& LTPixel, const Vec2F& RBPercent, const Vec2F& RBPixel,
+				const RectF& texRect, bool wrapTexture = false,
+				const Color4& vertex0Color = Color4::White(), const Color4& vertex1Color = Color4::White(),
+				const Color4& vertex2Color = Color4::White(), const Color4& vertex3Color = Color4::White());
 
-	void setSize(const vec2f& size);
-	vec2f getSize() const;
+	/** Removes part. */
+	void RemovePart(int idx);
 
-	void draw();
+	/** Drawing. */
+	void Draw();
 
-	SERIALIZE_METHOD_DECL();
+	/** Drawing debug frames for each parts. */
+	void DrawDebug();
+
+	/** Sets the minimal size. */
+	void SetMinSize(const Vec2F& minSize);
+
+	/** Returns minimal size. */
+	Vec2F GetMinSize() const;
 
 protected:
-	void createMesh(grRenderSystem* renderSystem, int partsCount, grTexture* texture);
-	void updateMesh();
+	/** Calls when position changed. */
+	void PositionChanged();
+
+	/** Calls when size changed. */
+	void SizeChanged();
+
+	/** Calls when pivot changed. */
+	void PivotChanged();
+
+	/** Calls when color changed. */
+	void ColorChanged();
+
+	/** Creates mesh for some parts count. */
+	void CreateMesh(int partsCount, const TextureRef& texture);
+
+	/** Initialize mesh polygons for parts. */
+	void InitMeshPolygons(int startIdx = 0);
+
+	/** Updating mesh. */
+	void UpdateMesh();
+
+	/** Updating mesh colors. */
+	void UpdateColors();
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //STRETCH_RECT_H

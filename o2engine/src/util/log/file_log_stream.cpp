@@ -4,40 +4,50 @@
 
 OPEN_O2_NAMESPACE
 
-cFileLogStream::cFileLogStream( uint8 level, const std::string& fileName ):
-	cLogStream(), mOutFile(NULL)
+FileLogStream::FileLogStream(uint8 level, const String& fileName):
+LogStream(), mOutFile(NULL)
 {
-	setLevel(level);
+	SetLevel(level);
 
 	if (level > 0)
-		openFile(fileName);
+		OpenFile(fileName);
 }
 
-cFileLogStream::cFileLogStream( const std::string& id, uint8 level, const std::string& fileName ):
-	cLogStream(id), mOutFile(NULL)
+FileLogStream::FileLogStream(const String& id, uint8 level, const String& fileName):
+LogStream(id), mOutFile(NULL)
 {
-	setLevel(level);
+	SetLevel(level);
 
 	if (level > 0)
-		openFile(fileName);
+		OpenFile(fileName);
 }
 
-cFileLogStream::~cFileLogStream()
+FileLogStream::~FileLogStream()
 {
-	safe_release(mOutFile);
+	SafeRelease(mOutFile);
 }
 
-void cFileLogStream::outStrEx( const std::string& str )
+void FileLogStream::OutStrEx(const String& str)
 {
 	if (mOutFile)
-	{
-		mOutFile->writeData((void*)(str + '\n').c_str(), str.length() + 1);
-	}
+		mOutFile->WriteData((void*)(str + '\n').c_str(), str.length() + 1);
 }
 
-void cFileLogStream::openFile( const std::string& fileName )
+void FileLogStream::OpenFile(const String& fileName)
 {
-	mOutFile = new cOutFile(fileName);
+	mOutFile = mnew OutFile(fileName);
+}
+
+void FileLogStream::OutErrorEx(const String& srt)
+{
+	if (mOutFile)
+		mOutFile->WriteData((void*)("ERROR:" + srt + '\n').c_str(), srt.length() + 7);
+}
+
+void FileLogStream::OutWarningEx(const String& srt)
+{
+	if (mOutFile)
+		mOutFile->WriteData((void*)("WARNING:" + srt + '\n').c_str(), srt.length() + 9);
 }
 
 CLOSE_O2_NAMESPACE

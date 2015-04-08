@@ -1,67 +1,75 @@
-#ifndef MESH_H
-#define MESH_H
+#pragma once
 
 #include "public.h"
-
-#include "util/math/vertex.h"
-#include "util/math/vector2.h"
+#include "texture.h"
+#include "util/objects.h"
+#include "util/property.h"
 
 OPEN_O2_NAMESPACE
 
-class grTexture;
-class grRenderSystem;
+class RenderSystem;
 
 /** Triangles mesh. Containing verticies, indeces of polygons, texture. */
-class grMesh
+class Mesh: public virtual IDrawable
 {
-	friend class grRenderSystem;
-	friend class grSprite;
+	friend class RenderSystem;
+	friend class Sprite;
 
 public:
-	vertex2*        mVerticies;      /**< Vertex buffer. */
-	unsigned short* mIndexes;        /**< Index buffer. */
+	Vertex2*   mVerticies;      /**< Vertex buffer. */
+	uint16*    mIndexes;        /**< Index buffer. */
 
-	unsigned int    mVertexCount;    /**< Current verticies count. */
-	unsigned int    mPolyCount;      /**< Current polygons in mesh. */
+	uint       mVertexCount;    /**< Current verticies count. */
+	uint       mPolyCount;      /**< Current polygons in mesh. */
 
 protected:
-	grRenderSystem* mRenderSystem;   /**< Render system ptr. */
+	TextureRef mTexture;        /**< Texture. */
 
-	grTexture*      mTexture;        /**< Texture ptr. */
-
-	unsigned int    mMaxVertexCount; /**< Max size of vertex buffer. */
-	unsigned int    mMaxPolyCount;   /**< Max polygons count, mMaxPolyCount*3 - os index buffer max size. */
+	uint       mMaxVertexCount; /**< Max size of vertex buffer. */
+	uint       mMaxPolyCount;   /**< Max polygons count, mMaxPolyCount*3 - os index buffer max size. */
 
 public:
+	//properties
+	PROPERTY(Mesh, TextureRef) texture;        /** Texture property, uses set/getTexture. */
+	PROPERTY(Mesh, uint)       maxVertexCount; /** Max vertex count property, uses set/getMaxVertexCount. */
+	PROPERTY(Mesh, uint)       maxPolyCount;   /** Max polygons count property, uses set/getMaxPolyCount. */
+
 	/** ctor. */
-	grMesh(grRenderSystem* renderSystem, grTexture* texture = NULL, unsigned int vertexCount = 4, 
-		   unsigned int polyCount = 2);
+	Mesh(TextureRef texture = TextureRef(), uint vertexCount = 4, uint polyCount = 2);
 
 	/** copy ctor. */
-	grMesh(const grMesh& mesh);
+	Mesh(const Mesh& mesh);
 
 	/** dtor. */
-	~grMesh();
+	~Mesh();
 
-	/** Resising mesh buffers, losts data. */
-	void resize(unsigned int vertexCount, unsigned int polyCount);
+	/** Resizing mesh buffers, losts data. */
+	void Resize(uint vertexCount, uint polyCount);
 
 	/** Drawing mesh. */
-	void draw();
+	void Draw();
 
-	/** Sets texture, NULL - no texture. */
-	void setTexture(grTexture* texture);
+	/** Sets texture. */
+	void SetTexture(const TextureRef& texture);
 
 	/** Returns texture ptr. */
-	grTexture* getTexture() const;
+	TextureRef GetTexture() const;
+
+	/** Sets max vertex count buffer. */
+	void SetMaxVertexCount(const uint& count);
+
+	/** Sets max polygons count buffer. */
+	void SetMaxPolyCount(const uint& count);
 
 	/** Returns max vertex buffer size. */
-	unsigned int getMaxVertexCount() const;
+	uint GetMaxVertexCount() const;
 
 	/** Returns max polygons count. */
-	unsigned int getMaxPolyCount() const;
+	uint GetMaxPolyCount() const;
+
+protected:
+	/** Initializing properties. */
+	void InitializeProperties();
 };
 
 CLOSE_O2_NAMESPACE
-
-#endif //MESH_H

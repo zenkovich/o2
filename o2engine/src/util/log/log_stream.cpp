@@ -1,186 +1,174 @@
 #include "log_stream.h"
 
-#include <algorithm>
 #include <cstdarg>
+#include <algorithm>
+#include "util/mem_utils/alloc_operators.h"
 
 OPEN_O2_NAMESPACE
 
-const char* cLogStream::BindValue::getStr()
-{
-	switch (mType)
-	{
-	case BV_INT:
-		sprintf(mBuffer, "%.4i", *((int*)mValuePtr));
-		break;
-		
-	case BV_BOOL:
-		if ( *((bool*)mValuePtr) )
-			strcpy(mBuffer, "true");
-		else
-			strcpy(mBuffer, "false");
-		break;
-		
-	case BV_FLOAT:
-		sprintf(mBuffer, "%.4f", *((float*)mValuePtr));
-		break;
 
-	case BV_CHAR_PTR:
-		strncpy(mBuffer, (char*)mValuePtr, 255);
-		mBuffer[255] = '\0';
-		break;
-		
-	case BV_STRING:
-		strncpy(mBuffer, (*(std::string*)mValuePtr).c_str(), 255);
-		mBuffer[255] = '\0';
-		break;
-	};
-
-	return mBuffer;
-}
-
-cLogStream::cLogStream():
-	mParentStream(NULL), mLevel(2)
-{
-
-}
-
-cLogStream::cLogStream( const std::string& id ):
-	mParentStream(NULL), mId(id), mLevel(2)
+LogStream::LogStream():
+mParentStream(NULL), mLevel(2)
 {
 }
 
-cLogStream::~cLogStream()
+LogStream::LogStream(const String& id):
+mParentStream(NULL), mId(id), mLevel(2)
 {
-	unbindAllStreams();
-	unbindAllValues();
 }
 
-void cLogStream::setLevel( uint8 level )
+LogStream::~LogStream()
+{
+	if (mParentStream)
+		mParentStream->UnbindStream(this, false);
+	UnbindAllStreams();
+}
+
+void LogStream::SetLevel(uint8 level)
 {
 	mLevel = level;
 
-	for (LogSteamsVec::iterator it = mChildStreams.begin(); it != mChildStreams.end(); ++it)
-		(*it)->setLevel(level);
+	for (auto it : mChildStreams)
+		it->SetLevel(level);
 }
 
-uint8 cLogStream::getLevel() const
+uint8 LogStream::GetLevel() const
 {
 	return mLevel;
 }
 
-const std::string& cLogStream::getId() const
+const String& LogStream::GetId() const
 {
 	return mId;
 }
 
-void cLogStream::bindStream( cLogStream* stream )
+void LogStream::BindStream(LogStream* stream)
 {
 	stream->mParentStream = this;
 	stream->mLevel = mLevel;
 	mChildStreams.push_back(stream);
 }
 
-void cLogStream::unbindStream( cLogStream* stream )
+void LogStream::UnbindStream(LogStream* stream, bool release /*= true*/)
 {
-	LogSteamsVec::iterator fnd = std::find(mChildStreams.begin(), mChildStreams.end(), stream);
+	auto fnd = std::find(mChildStreams.begin(), mChildStreams.end(), stream);
 	if (fnd != mChildStreams.end())
 		mChildStreams.erase(fnd);
 
-	safe_release(stream);
+	if (release)
+		SafeRelease(stream);
 }
 
-void cLogStream::unbindAllStreams()
+void LogStream::UnbindAllStreams()
 {
-	for (LogSteamsVec::iterator it = mChildStreams.begin(); it != mChildStreams.end(); ++it)
-	{
-		safe_release(*it);
-	}
-
-	mChildStreams.clear();
+	//ReleaseArray(mChildStreams);
 }
 
-void cLogStream::bindValue( void* valuePtr, BindValType type, const std::string& id )
-{
-	mBindedValues.push_back(BindValue(valuePtr, type, id));
-}
-
-void cLogStream::unbindvalue( void* valuePtr )
-{
-	for (BindValVec::iterator it = mBindedValues.begin(); it != mBindedValues.end(); ++it)
-	{
-		if (valuePtr == it->mValuePtr)
-		{
-			mBindedValues.erase(it);
-			break;
-		}
-	}
-}
-
-void cLogStream::unbindAllValues()
-{
-	mBindedValues.clear();
-}
-
-void cLogStream::checkBindedValues()
-{
-	for (BindValVec::iterator it = mBindedValues.begin(); it != mBindedValues.end(); ++it)
-	{
-		outStrEx(it->getStr());
-	}
-
-	for (LogSteamsVec::iterator it = mChildStreams.begin(); it != mChildStreams.end(); ++it)
-	{
-		(*it)->checkBindedValues();
-	}
-}
-
-void cLogStream::out( const char* format, ... )
+void LogStream::Out(const char* format, ...)
 {
 	if (mLevel > 0)
 	{
 		va_list vlist;
 		va_start(vlist, format);
 
-		char buf[1024]; 
+		char buf[1024];
 		vsprintf(buf, format, vlist);
 
 		va_end(vlist);
 
-		outStr(buf);
+		OutStr(buf);
 	}
 }
 
-void cLogStream::hout( const char* format, ... )
+void LogStream::HOut(const char* format, ...)
 {
 	if (mLevel > 1)
 	{
 		va_list vlist;
 		va_start(vlist, format);
 
-		char buf[1024]; 
+		char buf[1024];
 		vsprintf(buf, format, vlist);
 
 		va_end(vlist);
 
-		outStr(buf);
+		OutStr(buf);
 	}
 }
 
-cLogStream* cLogStream::getParentStream() const
+void LogStream::Error(const char* format, ...)
+{
+	if (mLevel > 0)
+	{
+		va_list vlist;
+		va_start(vlist, format);
+
+		char buf[1024];
+		vsprintf(buf, format, vlist);
+
+		va_end(vlist);
+
+		OutError(buf);
+	}
+}
+
+void LogStream::Warning(const char* format, ...)
+{
+	if (mLevel > 0)
+	{
+		va_list vlist;
+		va_start(vlist, format);
+
+		char buf[1024];
+		vsprintf(buf, format, vlist);
+
+		va_end(vlist);
+
+		OutWarning(buf);
+	}
+}
+
+LogStream* LogStream::GetParentStream() const
 {
 	return mParentStream;
 }
 
-void cLogStream::outStr( const std::string& str )
+void LogStream::OutStr(const String& str)
 {
-	outStrEx(str);
+	OutStrEx(str);
 
 	if (mParentStream)
 	{
 		if (mId == "")
-			mParentStream->outStr(str);
-		else			
-			mParentStream->outStr(mId + ":" + str);
+			mParentStream->OutStr(str);
+		else
+			mParentStream->OutStr(mId + ":" + str);
+	}
+}
+
+void LogStream::OutError(const String& str)
+{
+	OutErrorEx(str);
+
+	if (mParentStream)
+	{
+		if (mId == "")
+			mParentStream->OutError(str);
+		else
+			mParentStream->OutError(mId + ":" + str);
+	}
+}
+
+void LogStream::OutWarning(const String& str)
+{
+	OutWarningEx(str);
+
+	if (mParentStream)
+	{
+		if (mId == "")
+			mParentStream->OutWarning(str);
+		else
+			mParentStream->OutWarning(mId + ":" + str);
 	}
 }
 

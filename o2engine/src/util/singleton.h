@@ -1,31 +1,29 @@
-#ifndef SINGLETON_H
-#define SINGLETON_H
+#pragma once
 
 #include "public.h"
+
 OPEN_O2_NAMESPACE
 
-template <typename T> class cSingleton
+template <typename CLASS> class Singleton
 {
 public:
-	cSingleton()                        { mInstance = static_cast<T*>(this); }
-	virtual ~cSingleton()               { mInstance = NULL; }
+	Singleton()                            { mInstance = static_cast<CLASS*>(this); }
+	virtual ~Singleton()                   { mInstance = NULL; }
 
-	static T&   instance()              { assert(mInstance, "Singleton not initialized"); return *mInstance; }
-			    
-	static T*   instancePtr()           { return mInstance; }
+	static CLASS& Instance()               { o2assert(mInstance, "Singleton not initialized"); return *mInstance; }
 
-	static void initializeSingleton()   { if (!mInstance) mInstance = new T; }
-	static void deinitializeSingleton() { safe_release(mInstance); }
+	static CLASS* InstancePtr()            { return mInstance; }
 
-	static bool isSingletonInitialzed() { return (mInstance != NULL); }
+	static void   InitializeSingleton()    { if (!mInstance) mnew CLASS; }
+	static void   DeinitializeSingleton()  { SafeRelease(mInstance); }
 
-protected:
-	static T* mInstance;
+	static bool   IsSingletonInitialzed()  { return (mInstance != NULL); }
+
+public:
+	static CLASS* mInstance;
 };
 
-#define DECLARE_SINGLETON(T) template<> T* cSingleton<T>::mInstance = NULL
-#define CREATE_SINGLETON(T) template<> T* cSingleton<T>::mInstance = new T
+#define DECLARE_SINGLETON(CLASS) template<> CLASS* Singleton<CLASS>::mInstance = NULL
+#define CREATE_SINGLETON(CLASS)  template<> CLASS* Singleton<CLASS>::mInstance = mnew CLASS()
 
 CLOSE_O2_NAMESPACE
-
-#endif //SINGLETON_H
