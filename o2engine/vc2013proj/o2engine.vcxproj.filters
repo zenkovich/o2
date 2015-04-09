@@ -39,9 +39,12 @@
     <ClInclude Include="..\Sources\Utils\Log\LogStream.h">
       <Filter>Sources\Utils\Log</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h">
+      <Filter>Sources\Utils\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h">
+      <Filter>Sources\Utils\Log</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -50,5 +53,14 @@
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp">
       <Filter>Sources\Utils\Log</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp">
+      <Filter>Sources\Utils\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp">
+      <Filter>Sources\Utils\Log</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

@@ -73,6 +73,9 @@ namespace o2
 		inline Rect GetIntersection(const Rect& other) const;
 
 		inline bool IsZero() const;
+
+	protected:
+		inline void Normalize();
 	};
 
 	typedef Rect<float> RectF;
@@ -87,15 +90,21 @@ namespace o2
 	}
 
 	template<typename T>
-	Rect<T>::Rect(const Vec2<T>& leftTop, const Vec2<T>& rightDown):
-		left(leftTop.x), top(leftTop.y), right(rightDown.x), bottom(rightDown.y)
+	Rect<T>::Rect(const Vec2<T>& leftTop, const Vec2<T>& rightDown)
 	{
+		left = Math::Min(leftTop.x, rightDown.x);
+		right = Math::Max(leftTop.x, rightDown.x);
+		top = Math::Max(leftTop.y, rightDown.y);
+		bottom = Math::Min(leftTop.y, rightDown.y);
 	}
 
 	template<typename T>
-	Rect<T>::Rect(float left, float top, float right, float bottom):
-		left(left), top(top), right(right), bottom(bottom)
+	Rect<T>::Rect(float left, float top, float right, float bottom)
 	{
+		this->left = Math::Min(left, right);
+		this->right = Math::Max(left, right);
+		this->top = Math::Max(top, bottom);
+		this->bottom = Math::Min(top, bottom);
 	}
 
 	template<typename T>
@@ -169,6 +178,7 @@ namespace o2
 	{
 		right = left + (right - left)*v.x;
 		bottom = top + (bottom - top)*v.y;
+		Normalize();
 		return *this;
 	}
 
@@ -183,6 +193,7 @@ namespace o2
 	{
 		right = left + (right - left)/v.x;
 		bottom = top + (bottom - top)/v.y;
+		Normalize();
 		return *this;
 	}
 
@@ -197,6 +208,7 @@ namespace o2
 	{
 		right = left + (right - left)*v;
 		bottom = top + (bottom - top)*v;
+		Normalize();
 		return *this;
 	}
 
@@ -213,33 +225,51 @@ namespace o2
 		float t = 1.0f/v;
 		right = left + (right - left)*t;
 		bottom = top + (bottom - top)*t;
+		Normalize();
 		return *this;
 	}
 
 	template<typename T>
 	void Rect<T>::Set(float vleft, float vtop, float vright, float vbottom)
 	{
-		left = vleft; top = vtop;
-		right = vright; bottom = vbottom;
+		left = Math::Min(vleft, vright);
+		right = Math::Max(vleft, vright);
+		top = Math::Max(vtop, vbottom);
+		bottom = Math::Min(vtop, vbottom);
 	}
 
 	template<typename T>
 	void Rect<T>::Set(const Vec2F& leftTop, const Vec2F& rightDown)
 	{
-		left = leftTop.x; top = leftTop.y;
-		right = rightDown.x; bottom = rightDown.y;
+		left = Math::Min(leftTop.x, rightDown.x);
+		right = Math::Max(leftTop.x, rightDown.x);
+		top = Math::Max(leftTop.y, rightDown.y);
+		bottom = Math::Min(leftTop.y, rightDown.y);
+	}
+
+	template<typename T>
+	void Rect<T>::Normalize()
+	{
+		T _left = left, _right = right, _top = top, _bottom - bottom;
+		left = Math::Min(_left, _right);
+		right = Math::Max(_left, _right);
+		top = Math::Max(_top, _bottom);
+		bottom = Math::Min(_top, _bottom);
 	}
 
 	template<typename T>
 	void Rect<T>::SetPosition(const Vec2<T>& position)
 	{
-		left = position.x; right = position.y;
+		T dx = position.x - left, dy = position.y - top;
+		left += dx; righ += dx;
+		top += dy; bottom += dy;
 	}
 
 	template<typename T>
 	void Rect<T>::SetSize(const Vec2<T>& size)
 	{
 		right = left + size.x; bottom = top + size.y;
+		Normalize();
 	}
 
 	template<typename T>
@@ -263,13 +293,13 @@ namespace o2
 	template<typename T>
 	T Rect<T>::Width() const
 	{
-		return Math::Abs(right - left);
+		return right - left;
 	}
 
 	template<typename T>
 	T Rect<T>::Height() const
 	{
-		return Math::Abs(bottom - top);
+		return top - bottom;
 	}
 
 	template<typename T>
@@ -302,7 +332,7 @@ namespace o2
 		return Rect(Math::Min(left, other.left),
 					Math::Max(top, other.top),
 					Math::Max(right, other.right),
-					Math::Min(bottom, other.down));
+					Math::Min(bottom, other.bottom));
 	}
 
 	template<typename T>
@@ -362,6 +392,7 @@ namespace o2
 	template<typename T>
 	bool Rect<T>::IsZero() const
 	{
-		return left < FLT_EPSILON && right < FLT_EPSILON && top < FLT_EPSILON && bottom < FLT_EPSILON;
+		return Math::Equals(left, 0.0f) && Math::Equals(right, 0.0f) &&
+			Math::Equals(top, 0.0f) && Math::Equals(bottom, 0.0f);
 	}
 }

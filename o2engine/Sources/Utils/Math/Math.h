@@ -12,7 +12,7 @@ namespace o2
 		/*************************/
 
 		template<typename T>
-		T Sign(const T& value)
+		inline T Sign(const T& value)
 		{
 			if (value < 0)
 				return (T)(-1);
@@ -21,7 +21,7 @@ namespace o2
 		}
 
 		template<typename T>
-		T Clamp(const T& value, const T& minv, const T& maxv)
+		inline T Clamp(const T& value, const T& minv, const T& maxv)
 		{
 			if (value < minv)
 				return minv;
@@ -31,13 +31,13 @@ namespace o2
 			return value;
 		}
 
-		float Clamp01(float value)
+		inline float Clamp01(float value)
 		{
 			return Clamp(value, 0.0f, 1.0f);
 		}
 
 		template<typename T>
-		T Min(const T& v1, const T& v2)
+		inline T Min(const T& v1, const T& v2)
 		{
 			if (v1 < v2)
 				return v1;
@@ -45,7 +45,7 @@ namespace o2
 		}
 
 		template<typename T>
-		T Max(const T& v1, const T& v2)
+		inline T Max(const T& v1, const T& v2)
 		{
 			if (v1 > v2)
 				return v1;
@@ -53,7 +53,7 @@ namespace o2
 		}
 
 		template<typename T>
-		void Swap(T& v1, T& v2)
+		inline void Swap(T& v1, T& v2)
 		{
 			T tmp = v1;
 			v1 = v2;
@@ -61,7 +61,7 @@ namespace o2
 		}
 
 		template<typename T>
-		T Abs(const T& value)
+		inline T Abs(const T& value)
 		{
 			if (value < 0)
 				return -value;
@@ -70,19 +70,19 @@ namespace o2
 		}
 
 		template<typename T>
-		T Random(const T& minValue = 0, const T& maxValue = 1)
+		inline T Random(const T& minValue = 0, const T& maxValue = 1)
 		{
 			return (T)((float)rand() / RAND_MAX*(float)(maxValue - minValue) + (float)minValue);
 		}
 
 		template<typename T>
-		T Lerp(const T& a, const T& b, float coef)
+		inline T Lerp(const T& a, const T& b, float coef)
 		{
 			return (b - a)*coef + a;
 		}
 
 		template<typename T>
-		T InterpolateBezier(const T& a, const T& b, const T& c, const T&d, float coef)
+		inline T InterpolateBezier(const T& a, const T& b, const T& c, const T&d, float coef)
 		{
 			float m = 1 - coef;
 			float n = m*m;
@@ -119,16 +119,19 @@ namespace o2
 		/* Trigonometry. */
 		/*****************/
 
-		float PI = 3.1415926535897932384626433832795f;
+		inline float PI()
+		{
+			return 3.1415926535897932384626433832795f;
+		}
 
 		inline float Deg2rad(const float& value)
 		{
-			return value*(PI / 180.0f);
+			return value*(PI() / 180.0f);
 		}
 
 		inline float Rad2deg(const float& value)
 		{
-			return value*(180.0f / PI);
+			return value*(180.0f / PI());
 		}
 
 		inline float Sin(float rad)

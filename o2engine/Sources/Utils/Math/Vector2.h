@@ -42,6 +42,7 @@ namespace o2
 
 		inline T&   operator[](int idx);
 
+		inline Vec2 Scale(T scale) const;
 		inline Vec2 Scale(const Vec2& scaleVec) const;
 		inline Vec2 Scale(const Vec2& scaleVec, const Vec2& origin) const;
 		inline Vec2 InvScale(const Vec2& scale) const;
@@ -59,6 +60,8 @@ namespace o2
 
 		inline Vec2 Normalized() const;
 		inline void Normalize();
+
+		inline Vec2 Perpendicular() const;
 
 		inline Vec2 Rotate(float rad) const;
 		inline Vec2 Rotate(float cs, float sn) const;
@@ -199,13 +202,13 @@ namespace o2
 	template<typename T>
 	Vec2<T> Vec2<T>::operator^(T s) const
 	{
-		return Vec2(s*y, -s*x);
+		return Vec2(-s*y, s*x);
 	}
 
 	template<typename T>
 	T Vec2<T>::operator^(const Vec2<T>& v) const
 	{
-		return v.x*y - v.y*x;
+		return x*v.y - y*v.x;
 	}
 
 	template<typename T>
@@ -215,6 +218,12 @@ namespace o2
 			return x;
 
 		return y;
+	}
+
+	template<typename T>
+	Vec2<T> Vec2<T>::Scale(T scale) const
+	{
+		return Vec2(x*scale, y*scale);
 	}
 
 	template<typename T>
@@ -257,13 +266,13 @@ namespace o2
 	template<typename T>
 	Vec2<T> Vec2<T>::Cross(float v) const
 	{
-		return Vec2(v*y, -v*x);
+		return Vec2(-v*y, v*x);
 	}
 
 	template<typename T>
 	T Vec2<T>::Cross(const Vec2& v) const
 	{
-		return v.x*y - v.y*x;
+		return x*v.y - y*v.x;
 	}
 
 	template<typename T>
@@ -293,18 +302,24 @@ namespace o2
 	}
 
 	template<typename T>
+	Vec2<T> Vec2<T>::Perpendicular() const
+	{
+		return Vec2(-y, x);
+	}
+
+	template<typename T>
 	Vec2<T> Vec2<T>::Rotate(float rad) const
 	{
 		float cs = Math::Cos(rad);
 		float sn = Math::Sin(rad);
 
-		return Vec2((T)(sn*x + cs*y), (T)(cs*x - sn*y));
+		return Vec2((T)(cs*x - sn*y), (T)(cs*y + sn*x));
 	}
 
 	template<typename T>
 	Vec2<T> Vec2<T>::Rotate(float cs, float sn) const
 	{
-		return Vec2((T)(sn*x + cs*y), (T)(cs*x - sn*y));
+		return Vec2((T)(cs*x - sn*y), (T)(cs*y + sn*x));
 	}
 
 	template<typename T>
@@ -357,9 +372,9 @@ namespace o2
 	template<typename T>
 	float Vec2<T>::Angle(const Vec2& other) const
 	{
-		float rad = -Math::Atan2F(-y, x);
+		float rad = Math::Atan2F(Cross(other) + FLT_EPSILON, Dot(other));
 		if (rad < 0)
-			return Math::PI*2.0f + rad;
+			return Math::PI()*2.0f + rad;
 
 		return rad;
 	}
