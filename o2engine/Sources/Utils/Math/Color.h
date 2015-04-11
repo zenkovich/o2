@@ -100,7 +100,7 @@ namespace o2
 
 	Color4 Color4::operator+(const Color4& v) const
 	{
-		return Color4(r + v.r, g + v.g, b + v.g, a + v.a);
+		return Color4(r + v.r, g + v.g, b + v.b, a + v.a);
 	}
 
 	Color4 Color4::operator+=(const Color4& v)
@@ -111,7 +111,7 @@ namespace o2
 
 	Color4 Color4::operator-(const Color4& v) const
 	{
-		return Color4(r - v.r, g - v.g, b - v.g, a - v.a);
+		return Color4(r - v.r, g - v.g, b - v.b, a - v.a);
 	}
 
 	Color4 Color4::operator-=(const Color4& v)
@@ -144,7 +144,7 @@ namespace o2
 
 	Color4 Color4::operator*(const Color4& v) const
 	{
-		return Color4(r*v.r/255, g*v.g/255, b*v.g/255, a*v.a/255);
+		return Color4(r*v.r/255, g*v.g/255, b*v.b/255, a*v.a/255);
 	}
 
 	Color4 Color4::operator/(const Color4& v) const

@@ -10,14 +10,14 @@
   <Class Name="o2::Rect&lt;T&gt;" Collapsed="true">
     <Position X="12.25" Y="11" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAABIAA1BAgAAIIAUhAACAIAwAAAAAiEEAIgCA=</HashCode>
+      <HashCode>AQAAAAAABIAA1BAgEAIIAUhAACAIAwAAAAAiEEAIgCA=</HashCode>
       <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Vec2&lt;T&gt;" Collapsed="true">
     <Position X="12" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAMQAAEIBABAEAIgCQBAGAEAAAAACFDggAAAQII=</HashCode>
+      <HashCode>AAAAAAMQAAEIBABAEAIgCQBAGAEAAAAECFDggAAAQII=</HashCode>
       <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -31,7 +31,7 @@
   <Class Name="o2::LogStream" Collapsed="true">
     <Position X="12.25" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAABEAABAAAEEQAAAAIADBAAAEACAAAAAAAIAAoAAgA=</HashCode>
+      <HashCode>QAAAEAABAAAGAQAAAAIADBAAAEACAAAAAAAMAAoAAgA=</HashCode>
       <FileName>C:\work\o2\o2engine\Sources\Utils\Log\LogStream.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -47,6 +47,20 @@
     <TypeIdentifier>
       <HashCode>AAAAIAABAAAAAAAAAAAAAAAAAAAAAAAAABAAABAAAAA=</HashCode>
       <FileName>C:\work\o2\o2engine\Sources\Utils\Log\FileLogStream.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::Debug" Collapsed="true">
+    <Position X="16.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAIAAAAAAAAIAAAAAAAACIIAhAAAAAAAAgAAAAAQA=</HashCode>
+      <FileName>C:\work\o2\o2engine\Sources\Utils\Debug.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::Singleton&lt;CLASS&gt;" Collapsed="true">
+    <Position X="17.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAIAAAAABAAAAAACAAAAAIAAAAAEAQAAAAAAAAAA=</HashCode>
+      <FileName>C:\work\o2\o2engine\Sources\Utils\Singleton.h</FileName>
     </TypeIdentifier>
   </Class>
   <Typedef Name="o2::UInt64" Collapsed="true">
@@ -117,6 +131,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="o2::String" Collapsed="true">
+    <Position X="17.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\work\o2\o2engine\Sources\Utils\String.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Font Name="Segoe UI" Size="9" />

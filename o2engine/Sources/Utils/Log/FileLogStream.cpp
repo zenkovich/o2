@@ -4,7 +4,7 @@
 
 namespace o2
 {
-	FileLogStream::FileLogStream(const std::string& fileName):
+	FileLogStream::FileLogStream(const String& fileName):
 		LogStream(), mFilename(fileName)
 	{
 		std::fstream ofs(mFilename.c_str(), std::ios::out);
@@ -12,7 +12,7 @@ namespace o2
 			ofs.close();
 	}
 
-	FileLogStream::FileLogStream(const std::string& id, const std::string& fileName):
+	FileLogStream::FileLogStream(const String& id, const String& fileName):
 		LogStream(id), mFilename(fileName)
 	{
 		std::fstream ofs(mFilename.c_str(), std::ios::out);
@@ -24,9 +24,9 @@ namespace o2
 	{
 	}
 
-	void FileLogStream::OutStrEx(const std::string& str)
+	void FileLogStream::OutStrEx(const String& str)
 	{
-		std::fstream ofs(mFilename.c_str(), std::ios::out);
+		std::fstream ofs(mFilename.c_str(), std::ios::app);
 		if (ofs)
 		{
 			ofs << str.c_str() << std::endl;

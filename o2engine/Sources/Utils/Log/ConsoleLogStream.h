@@ -4,15 +4,15 @@
 
 namespace o2
 {
-	class ConsoleLogStream:public LogStream
+	class ConsoleLogStream: public LogStream
 	{
 	public:
 		ConsoleLogStream();
-		ConsoleLogStream(const std::string& id);
+		ConsoleLogStream(const String& id);
 		~ConsoleLogStream();
 
 	protected:
-		void OutStrEx(const std::string& str);
+		void OutStrEx(const String& str);
 		void InitConsole();
 	};
 }

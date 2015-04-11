@@ -45,6 +45,18 @@
     <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h">
       <Filter>Sources\Utils\Log</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Debug.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Singleton.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Assert.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\String.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -58,6 +70,15 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp">
       <Filter>Sources\Utils\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Assert.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Debug.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\String.cpp">
+      <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

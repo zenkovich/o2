@@ -9,11 +9,11 @@ namespace o2
 		std::string mFilename;
 
 	public:
-		FileLogStream(const std::string& fileName);
-		FileLogStream(const std::string& id, const std::string& fileName);
+		FileLogStream(const String& fileName);
+		FileLogStream(const String& id, const String& fileName);
 		~FileLogStream();
 
 	protected:
-		void OutStrEx(const std::string& str);
+		void OutStrEx(const String& str);
 	};
 }

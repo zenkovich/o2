@@ -215,3 +215,6 @@ pip-log.txt
 .mr.developer.cfg
 /o2engine/vc2013proj/o2engine.sdf
 /o2engine/vc2013proj/Debug
+/o2engine/lib/o2engine.bsc
+/o2engine/lib/o2engine.lib
+/o2engine/tests/vs2013proj/log.txt

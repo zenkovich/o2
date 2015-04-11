@@ -103,5 +103,22 @@ void TestRect()
 
 void TestColor()
 {
+	Color4 a;
+	Color4 b(1.0f, 1.0f, 1.0f, 1.0f);
+	Color4 c(255, 0, 0, 0);
+	Color4 d(c);
+	Color4 f(0.1f, 0.2f, 0.3f, 0.4f);
 
+	CHECK(d == c, "Color4 operator== fail");
+	CHECK(d != f, "Color4 operator!= fail");
+	CHECK(Math::Equals<ULong>(c.ABGR(), 0x000000FF), "Color4 ABGR fail");
+	CHECK(Math::Equals<ULong>(c.ARGB(), 0x00FF0000), "Color4 ARGB fail");
+	CHECK(Math::Equals(f.RF(), 0.1f, 1.0f/255.0f), "Color4 RF fail");
+	CHECK(Math::Equals(f.GF(), 0.2f, 1.0f/255.0f), "Color4 GF fail");
+	CHECK(Math::Equals(f.BF(), 0.3f, 1.0f/255.0f), "Color4 BF fail");
+	CHECK(Math::Equals(f.AF(), 0.4f, 1.0f/255.0f), "Color4 AF fail");
+	CHECK(Math::Equals(Color4::Red() - Color4::Red(), Color4(0, 0, 0, 0)), "COlor4 operator- fail");
+	CHECK(Math::Equals((Color4::Red() + Color4::Blue() + Color4::Green()).Normalized(), Color4::White()), "COlor4 operator+ fail");
+
+	printf("Color4 Tested\n");
 }

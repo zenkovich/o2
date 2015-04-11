@@ -38,7 +38,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\..\lib\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)\..\lib\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -71,7 +76,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\EngineSettings.h" />
+    <ClInclude Include="..\Sources\Utils\Assert.h" />
     <ClInclude Include="..\Sources\Utils\CommonTypes.h" />
+    <ClInclude Include="..\Sources\Utils\Debug.h" />
     <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\LogStream.h" />
@@ -80,15 +87,20 @@
     <ClInclude Include="..\Sources\Utils\Math\Rect.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vector2.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vertex2.h" />
+    <ClInclude Include="..\Sources\Utils\Singleton.h" />
+    <ClInclude Include="..\Sources\Utils\String.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Sources\Utils\Assert.cpp" />
+    <ClCompile Include="..\Sources\Utils\Debug.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
+    <ClCompile Include="..\Sources\Utils\String.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
