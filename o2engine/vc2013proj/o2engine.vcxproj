@@ -78,7 +78,10 @@
     <ClInclude Include="..\Sources\EngineSettings.h" />
     <ClInclude Include="..\Sources\Utils\Assert.h" />
     <ClInclude Include="..\Sources\Utils\CommonTypes.h" />
+    <ClInclude Include="..\Sources\Utils\Containers\Array.h" />
+    <ClInclude Include="..\Sources\Utils\Containers\IArray.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
+    <ClInclude Include="..\Sources\Utils\Function.h" />
     <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\LogStream.h" />

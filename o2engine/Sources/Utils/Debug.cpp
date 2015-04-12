@@ -21,47 +21,47 @@ namespace o2
 		delete mLogStream->GetParentStream();
 	}
 
-	void Debug::Log(const String& out, ...)
+	void Debug::Log(const char* format, ...)
 	{
 		va_list vlist;
-		va_start(vlist, out);
+		va_start(vlist, format);
 
-		mInstance->mLogStream->OutStr(FormatStr(out, vlist));
+		mInstance->mLogStream->OutStr(FormatStr(format, vlist));
 
 		va_end(vlist);
 	}
 
-	void Debug::LogStr(const String& out)
+	void Debug::Log(const String& out)
 	{
 		mInstance->mLogStream->OutStr(out);
 	}
 
-	void Debug::LogWarning(const String& out, ...)
+	void Debug::LogWarning(const char* format, ...)
 	{
 		va_list vlist;
-		va_start(vlist, out);
+		va_start(vlist, format);
 
-		mInstance->mLogStream->WarningStr(FormatStr(out, vlist));
+		mInstance->mLogStream->WarningStr(FormatStr(format, vlist));
 
 		va_end(vlist);
 	}
 
-	void Debug::LogWarningStr(const String& out)
+	void Debug::LogWarning(const String& out)
 	{
 		mInstance->mLogStream->WarningStr(out);
 	}
 
-	void Debug::LogError(const String& out, ...)
+	void Debug::LogError(const char* format, ...)
 	{
 		va_list vlist;
-		va_start(vlist, out);
+		va_start(vlist, format);
 
-		mInstance->mLogStream->ErrorStr(FormatStr(out, vlist));
+		mInstance->mLogStream->ErrorStr(FormatStr(format, vlist));
 
 		va_end(vlist);
 	}
 
-	void Debug::LogErrorStr(const String& out)
+	void Debug::LogError(const String& out)
 	{
 		mInstance->mLogStream->ErrorStr(out);
 	}

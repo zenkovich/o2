@@ -13,6 +13,9 @@
     <Filter Include="Sources\Utils\Log">
       <UniqueIdentifier>{8e2a0af6-48fc-4564-b4f2-fa1a97b19f50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Utils\Containers">
+      <UniqueIdentifier>{d7a93fea-78cf-46e6-ba9f-132a5e9622ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -55,6 +58,15 @@
       <Filter>Sources\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\String.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Containers\IArray.h">
+      <Filter>Sources\Utils\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Containers\Array.h">
+      <Filter>Sources\Utils\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Function.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
   </ItemGroup>

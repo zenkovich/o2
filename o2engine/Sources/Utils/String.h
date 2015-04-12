@@ -7,6 +7,6 @@ namespace o2
 {
 	typedef std::string String;
 
-	String FormatStr(const String& format, ...);
-	String FormatStr(const String& format, va_list vlist);
+	String FormatStr(const char* format, ...);
+	String FormatStr(const char* format, va_list vlist);
 }

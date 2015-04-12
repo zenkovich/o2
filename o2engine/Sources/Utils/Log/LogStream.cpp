@@ -52,39 +52,39 @@ namespace o2
 		mChildStreams.clear();
 	}
 
-	void LogStream::Out(const String& format, ...)
+	void LogStream::Out(const char* format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
 
 		char buf[1024];
-		vsprintf(buf, format.c_str(), vlist);
+		vsprintf(buf, format, vlist);
 
 		va_end(vlist);
 
 		OutStr(buf);
 	}
 
-	void LogStream::Error(const String& format, ...)
+	void LogStream::Error(const char* format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
 
 		char buf[1024];
-		vsprintf(buf, format.c_str(), vlist);
+		vsprintf(buf, format, vlist);
 
 		va_end(vlist);
 
 		ErrorStr(buf);
 	}
 
-	void LogStream::Warning(const String& format, ...)
+	void LogStream::Warning(const char* format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
 
 		char buf[1024];
-		vsprintf(buf, format.c_str(), vlist);
+		vsprintf(buf, format, vlist);
 
 		va_end(vlist);
 
@@ -103,9 +103,9 @@ namespace o2
 		if (mParentStream)
 		{
 			if (mId == "")
-				mParentStream->Out(str);
+				mParentStream->Out(str.c_str());
 			else
-				mParentStream->Out(mId + ":" + str);
+				mParentStream->Out((mId + ":" + str).c_str());
 		}
 	}
 
@@ -116,9 +116,9 @@ namespace o2
 		if (mParentStream)
 		{
 			if (mId == "")
-				mParentStream->Error(str);
+				mParentStream->Error(str.c_str());
 			else
-				mParentStream->Error(mId + ":" + str);
+				mParentStream->Error((mId + ":" + str).c_str());
 		}
 	}
 
@@ -129,9 +129,9 @@ namespace o2
 		if (mParentStream)
 		{
 			if (mId == "")
-				mParentStream->Warning(str);
+				mParentStream->Warning(str.c_str());
 			else
-				mParentStream->Warning(mId + ":" + str);
+				mParentStream->Warning((mId + ":" + str).c_str());
 		}
 	}
 }

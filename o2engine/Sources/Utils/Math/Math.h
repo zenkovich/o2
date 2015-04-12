@@ -105,6 +105,18 @@ namespace o2
 			return a == b;
 		}
 
+		template<typename T>
+		inline bool Fewer(const T& a, const T& b)
+		{
+			return a < b;
+		}
+
+		template<typename T>
+		inline bool Greater(const T& a, const T& b)
+		{
+			return a > b;
+		}
+
 		inline float Sqrt(float value)
 		{
 			return sqrtf(value);

@@ -36,13 +36,13 @@ namespace o2
 		LogStream* GetParentStream() const;
 
 		/** Out with low level log. */
-		void Out(const String& format, ...);
+		void Out(const char* format, ...);
 
 		/** Out error message. */
-		void Error(const String& format, ...);
+		void Error(const char* format, ...);
 
 		/** Out warning message. */
-		void Warning(const String& format, ...);
+		void Warning(const char* format, ...);
 
 		/** Out string to current stream and parent stream. */
 		void OutStr(const String& str);
