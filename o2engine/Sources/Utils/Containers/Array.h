@@ -140,10 +140,7 @@ namespace o2
 		Array<_type> Where(const Function<bool(const _type&)> match) const;
 
 		template<typename _sel_type>
-		Array<_type> Select(const Function<_sel_type(const _type&)> selector) const; 
-
-		template<typename _sel_type>
-		Array<_type> Select(const Function<_sel_type(const _type&)> selector) const; 
+		Array<_sel_type> Select(const Function<_sel_type(const _type&)> selector) const;
 
 		Array<_type> Take(int count) const; 
 
@@ -817,27 +814,49 @@ namespace o2
 	template<typename _type>
 	Array<_type> Array<_type>::FindAll(const Function<bool(const _type&)> match) const
 	{
+		Array<_type> res;
+		for (auto x : *this)
+		{
+			if (match(x))
+				res.Add(x);
+		}
+		return res;
 	}
 
 	template<typename _type>
 	Array<_type> Array<_type>::Where(const Function<bool(const _type&)> match) const
 	{
+		Array<_type> res;
+		for (auto x : *this)
+		{
+			if (match(x))
+				res.Add(x);
+		}
+		return res;
 	}
 
 	template<typename _type>
 	template<typename _sel_type>
-	Array<_type> Array<_type>::Select(const Function<_sel_type(const _type&)> selector) const
+	Array<_sel_type> Array<_type>::Select(const Function<_sel_type(const _type&)> selector) const
 	{
-	}
-
-	template<typename _type>
-	template<typename _sel_type>
-	Array<_type> Array<_type>::Select(const Function<_sel_type(const _type&)> selector) const
-	{
+		Array<_sel_type> res;
+		for (auto x : *this)
+			res.Add(selector(x));
+		return res;
 	}
 
 	template<typename _type>
 	Array<_type> Array<_type>::Take(int count) const
 	{
+		Array<_type> res;
+		int i = 0;
+		for (auto x : *this)
+		{
+			res.Add(x);
+			i++;
+			if (i == count)
+				break;
+		}
+		return res;
 	}
 }

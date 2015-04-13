@@ -19,7 +19,7 @@ struct TestStruct
 	String c;
 
 	TestStruct(){}
-	TestStruct(const String& f):c(f), a(10) {}
+	TestStruct(const String& f) :c(f), a(10) {}
 
 	bool operator==(const TestStruct& other) const
 	{
@@ -34,7 +34,7 @@ struct TestStructArr
 	int FindMax() const
 	{
 		int res = 0;
-		for (auto n:arr)
+		for (auto n : arr)
 		{
 			if (n > res)
 				res = n;
@@ -46,7 +46,7 @@ struct TestStructArr
 	void print()
 	{
 		printf("==========\n");
-		for (auto n:arr)
+		for (auto n : arr)
 			printf("%i\n", n);
 	}
 
@@ -74,7 +74,7 @@ int main(char** lpCmdLine, int nCmdShow)
 	arrTest.Add(TestStruct("b"));
 	arrTest.Add(TestStruct("c"));
 	arrTest.Add(TestStruct("d"));
-	for (auto x:arrTest)
+	for (auto x : arrTest)
 	{
 		Debug::Log("%s", x.c.c_str());
 	}
@@ -83,7 +83,7 @@ int main(char** lpCmdLine, int nCmdShow)
 
 	FunctionsList<void(int)> tt([](int x){ printf("%i\n", x + 1); });
 	auto tt2 = tt + [](int x){ printf("%i\n", x + 2); };
-	auto lamb= [](int x){ printf("%i\n", x + 3); };
+	auto lamb = [](int x){ printf("%i\n", x + 3); };
 	tt2 += lamb;
 
 	tt2(10);
@@ -102,11 +102,29 @@ int main(char** lpCmdLine, int nCmdShow)
 	bbc.print();
 	printf("max is %i\n", bbc.FindMax());
 
-	bbc.arr.Sort([](const int& l, const int& r){ return l > r; });
-
 	bbc.print();
 
 	bbc.TemplTest<float>([](int x) { return (float)x; });
+
+
+	Debug::Log("=============");
+	Array<float> farr;
+	farr.Add(0.1f);
+	farr.Add(0.01f);
+	farr.Add(0.6f);
+	farr.Add(0.4f);
+	farr.Add(0.1f);
+	farr.Add(0.18f);
+	farr.Add(2.1f);
+	farr.Add(3.1f);
+
+	farr.ForEach([](float x){ Debug::Log("%f", x); });
+	Debug::Log("=============");
+	farr.RemoveAll([](float x){ return x > 0.5f; });
+	farr.SortBy<int>([](float x){ return (int)(x*100.0f); });
+	farr.Take(3).ForEach([](float x){ Debug::Log("%f", x); });
+
+	Debug::Log("Sum: %f", farr.Sum<float>([](float ff){ return ff; }));
 
 	printf("All tests completed!");
 	_getch();
