@@ -1,7 +1,6 @@
 #include "Utils/Log/LogStream.h"
 
 #include <cstdarg>
-#include <algorithm>
 
 namespace o2
 {
@@ -31,14 +30,12 @@ namespace o2
 	void LogStream::BindStream(LogStream* stream)
 	{
 		stream->mParentStream = this;
-		mChildStreams.push_back(stream);
+		mChildStreams.Add(stream);
 	}
 
 	void LogStream::UnbindStream(LogStream* stream, bool release /*= true*/)
 	{
-		auto fnd = std::find(mChildStreams.begin(), mChildStreams.end(), stream);
-		if (fnd != mChildStreams.end())
-			mChildStreams.erase(fnd);
+		mChildStreams.Remove(stream);
 
 		if (release)
 			delete stream;
@@ -49,7 +46,7 @@ namespace o2
 		for (auto stream : mChildStreams)
 			delete stream;
 
-		mChildStreams.clear();
+		mChildStreams.Clear();
 	}
 
 	void LogStream::Out(const char* format, ...)

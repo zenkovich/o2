@@ -2,9 +2,6 @@
 
 #include <iostream>
 #include <io.h>
-#include <fcntl.h>
-#include <Windows.h>
-#include <wincon.h>
 
 namespace o2
 {
@@ -22,7 +19,7 @@ namespace o2
 
 	ConsoleLogStream::~ConsoleLogStream()
 	{
-		FreeConsole();
+		//FreeConsole();
 	}
 
 	void ConsoleLogStream::OutStrEx(const String& str)
@@ -33,13 +30,13 @@ namespace o2
 
 	void ConsoleLogStream::InitConsole()
 	{
-		if (AllocConsole())
+		/*if (AllocConsole())
 		{
 			int hCrt = _open_osfhandle((long)GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
 			*stdout = *(::_fdopen(hCrt, "w"));
 			::setvbuf(stdout, NULL, _IONBF, 0);
 			*stderr = *(::_fdopen(hCrt, "w"));
 			::setvbuf(stderr, NULL, _IONBF, 0);
-		}
+		}*/
 	}
 }

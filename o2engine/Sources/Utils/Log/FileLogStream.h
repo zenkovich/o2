@@ -6,7 +6,7 @@ namespace o2
 {
 	class FileLogStream:public LogStream
 	{
-		std::string mFilename;
+		String mFilename;
 
 	public:
 		FileLogStream(const String& fileName);

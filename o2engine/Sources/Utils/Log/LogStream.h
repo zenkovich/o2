@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include "Utils/Containers/Array.h"
 #include "Utils/String.h"
 
 namespace o2
@@ -9,11 +9,11 @@ namespace o2
 	class LogStream
 	{
 	protected:
-		typedef std::vector<LogStream*> LogSteamsVec;
+		typedef Array<LogStream*> LogSteamsArr;
 
 		LogStream*   mParentStream; /**< Parent stream. NULL if no parent. */
 		String       mId;           /**< Name of log stream. */
-		LogSteamsVec mChildStreams; /**< Child streams. */
+		LogSteamsArr mChildStreams; /**< Child streams. */
 
 	public:
 		LogStream();

@@ -4,49 +4,49 @@
     <Position X="12.25" Y="9.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAGAAHQAgAIAgBAkABKAUAABACAAAAoBYAlkBAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Color.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Color.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Rect&lt;T&gt;" Collapsed="true">
     <Position X="12.25" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAAAAAABIAA1BAgEAIIAUhAACAIAwAAAAAiEEAIgCA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Vec2&lt;T&gt;" Collapsed="true">
     <Position X="12" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAMQAAEIBABAEAIgCQBAGAEAAAAECFDggAAAQII=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Vertex2" Collapsed="true">
     <Position X="14.5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAgAAAEAAARAAAAAAAAAAAAAAAAACAAAAgAQCAAQA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vertex2.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Vertex2.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::LogStream" Collapsed="true">
     <Position X="12.25" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAAEAABAAAGAQAAAAIADBAAAEACAAAAAAAMAAoAAgA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Log\LogStream.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Log\LogStream.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::ConsoleLogStream" Collapsed="true">
     <Position X="14.5" Y="8.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAABAAAAAAAAAAAgAAAAAAAAAAAAAAABAAgAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Log\ConsoleLogStream.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Log\ConsoleLogStream.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::FileLogStream" Collapsed="true">
     <Position X="14.5" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAIAABAAAAAAAAAAAAAAAAAAAAAAAAABAAABAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Log\FileLogStream.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Log\FileLogStream.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Debug" Collapsed="true">
@@ -89,81 +89,116 @@
       <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\Array.h</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="o2::Debug" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAIAAAAAAAAIAAAAAAAAAIIAgAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Debug.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::Singleton&lt;CLASS&gt;" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAIAAAAABAAAAAACAAAAAIAAAAAEAQAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Singleton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::FunctionsList&lt;T&gt;" Collapsed="true">
+    <Position X="19" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAABAAAAAEAAABQAAAAAAAAAAgAAgAABAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Function.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::Array&lt;_type&gt;" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAEACAAAADABIAAAQBQQSAAEIEABASAEiQIFwABg=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Containers\Array.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::IArray&lt;_type&gt;" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAJACEAEABACBQBAEBIQBEQBAAEIAACAaIACAIFwABQ=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Containers\IArray.h</FileName>
+    </TypeIdentifier>
+  </Class>
   <Typedef Name="o2::UInt64" Collapsed="true">
     <Position X="12" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::UInt16" Collapsed="true">
     <Position X="15.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::UInt8" Collapsed="true">
     <Position X="13.75" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::Int64" Collapsed="true">
     <Position X="12" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::UInt" Collapsed="true">
     <Position X="13.75" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::ULong" Collapsed="true">
     <Position X="15.5" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::RectF" Collapsed="true">
     <Position X="14.5" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::RectI" Collapsed="true">
     <Position X="14.5" Y="11.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::Vec2F" Collapsed="true">
     <Position X="14.5" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::Vec2I" Collapsed="true">
     <Position X="14.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::String" Collapsed="true">
     <Position X="17.25" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\String.h</FileName>
+      <FileName>d:\work\o2\o2engine\sources\utils\string.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Font Name="Segoe UI" Size="9" />
