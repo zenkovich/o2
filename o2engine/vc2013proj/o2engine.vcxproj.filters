@@ -69,6 +69,15 @@
     <ClInclude Include="..\Sources\Utils\Function.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Containers\Pair.h">
+      <Filter>Sources\Utils\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h">
+      <Filter>Sources\Utils\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Containers\Dictionary.h">
+      <Filter>Sources\Utils\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">

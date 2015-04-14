@@ -419,6 +419,8 @@ namespace o2
 
 	//implementation Array
 
+	//TODO check all functions
+
 	template<typename _type>
 	Array<_type>::Array(int capacity /*= 5*/)
 	{
@@ -474,7 +476,7 @@ namespace o2
 		for (int i = 0; i < arr.mCount; i++)
 		{
 			if (i < mCount)
-				mValues[i] = arr.mValues[i];
+				mValues[i] = arr.mValues[i]; //TODO: check desctuctors calling
 			else
 				new (mValues + i) _type(arr.mValues[i]);
 		}
@@ -504,8 +506,10 @@ namespace o2
 			return false;
 
 		for (int i = 0; i < mCount; i++)
-		if (mValues[i] != arr.mValues[i])
-			return false;
+		{
+			if (mValues[i] != arr.mValues[i])
+				return false;
+		}
 
 		return true;
 	}

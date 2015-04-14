@@ -79,7 +79,10 @@
     <ClInclude Include="..\Sources\Utils\Assert.h" />
     <ClInclude Include="..\Sources\Utils\CommonTypes.h" />
     <ClInclude Include="..\Sources\Utils\Containers\Array.h" />
+    <ClInclude Include="..\Sources\Utils\Containers\Dictionary.h" />
     <ClInclude Include="..\Sources\Utils\Containers\IArray.h" />
+    <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h" />
+    <ClInclude Include="..\Sources\Utils\Containers\Pair.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
     <ClInclude Include="..\Sources\Utils\Function.h" />
     <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h" />
