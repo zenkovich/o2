@@ -15,7 +15,7 @@ namespace o2
 		virtual void   Set(int idx, const _type& value) = 0;
 
 		virtual int Count() const = 0;
-		virtual int Count(const Function<bool(const _type&)> match);
+		virtual int Count(const TFunction<bool(const _type&)> match);
 
 		virtual void Resize(int newCount) = 0;
 
@@ -30,54 +30,54 @@ namespace o2
 		virtual bool RemoveAt(int idx) = 0;
 		virtual bool RemoveRange(int begin, int end) = 0;
 		virtual bool Remove(const _type& value) = 0;
-		virtual void RemoveAll(const Function<bool(const _type&)> match);
+		virtual void RemoveAll(const TFunction<bool(const _type&)> match);
 
 		virtual void Clear() = 0;
 
 		virtual bool Contains(const _type& value) const = 0;
-		virtual bool ContainsPred(const Function<bool(const _type&)> match) const;
+		virtual bool ContainsPred(const TFunction<bool(const _type&)> match) const;
 
 		virtual int   Find(const _type& value) const = 0;
-		virtual _type FindPred(const Function<bool(const _type&)> match);
-		virtual int   FindIdx(const Function<bool(const _type&)> match) const;
+		virtual _type FindPred(const TFunction<bool(const _type&)> match);
+		virtual int   FindIdx(const TFunction<bool(const _type&)> match) const;
 
-		virtual void Sort(const Function<bool(const _type&, const _type&)> pred = Math::Fewer) = 0;
+		virtual void Sort(const TFunction<bool(const _type&, const _type&)> pred = Math::Fewer) = 0;
 
 		template<typename _sort_type>
-		void SortBy(const Function<_sort_type(const _type&)> selector);
+		void SortBy(const TFunction<_sort_type(const _type&)> selector);
 
 		_type& operator[](int idx);
 
 		virtual _type& First();
-		virtual _type  First(const Function<bool(const _type&)> match);
-		virtual int    FirstIdx(const Function<bool(const _type&)> match);
+		virtual _type  First(const TFunction<bool(const _type&)> match);
+		virtual int    FirstIdx(const TFunction<bool(const _type&)> match);
 
 		virtual _type& Last();
-		virtual _type  Last(const Function<bool(const _type&)> match);
-		virtual int    LastIdx(const Function<bool(const _type&)> match);
+		virtual _type  Last(const TFunction<bool(const _type&)> match);
+		virtual int    LastIdx(const TFunction<bool(const _type&)> match);
 
 		virtual bool IsEmpty() const;
 
 		template<typename _sel_type>
-		_type Min(const Function<_sel_type(const _type&)> selector);
+		_type Min(const TFunction<_sel_type(const _type&)> selector);
 
 		template<typename _sel_type>
-		int MinIdx(const Function<_sel_type(const _type&)> selector);
+		int MinIdx(const TFunction<_sel_type(const _type&)> selector);
 
 		template<typename _sel_type>
-		_type Max(const Function<_sel_type(const _type&)> selector);
+		_type Max(const TFunction<_sel_type(const _type&)> selector);
 
 		template<typename _sel_type>
-		int MaxIdx(const Function<_sel_type(const _type&)> selector);
+		int MaxIdx(const TFunction<_sel_type(const _type&)> selector);
 
-		virtual bool All(const Function<bool(const _type&)> match);
+		virtual bool All(const TFunction<bool(const _type&)> match);
 
-		virtual bool Any(const Function<bool(const _type&)> match);
+		virtual bool Any(const TFunction<bool(const _type&)> match);
 
 		template<typename _sel_type>
-		_sel_type Sum(const Function<_sel_type(const _type&)> selector);
+		_sel_type Sum(const TFunction<_sel_type(const _type&)> selector);
 
-		virtual void ForEach(const Function<void(const _type&)> func);
+		virtual void ForEach(const TFunction<void(const _type&)> func);
 	};
 
 
@@ -106,7 +106,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	int IArray<_type>::Count(const Function<bool(const _type&)> match)
+	int IArray<_type>::Count(const TFunction<bool(const _type&)> match)
 	{
 		int res = 0;
 		int count = Count();
@@ -120,7 +120,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void IArray<_type>::RemoveAll(const Function<bool(const _type&)> match)
+	void IArray<_type>::RemoveAll(const TFunction<bool(const _type&)> match)
 	{
 		for (int i = 0; i < Count(); i++)
 		{
@@ -133,7 +133,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool IArray<_type>::ContainsPred(const Function<bool(const _type&)> match) const
+	bool IArray<_type>::ContainsPred(const TFunction<bool(const _type&)> match) const
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
@@ -146,7 +146,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type IArray<_type>::FindPred(const Function<bool(const _type&)> match)
+	_type IArray<_type>::FindPred(const TFunction<bool(const _type&)> match)
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
@@ -160,7 +160,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	int IArray<_type>::FindIdx(const Function<bool(const _type&)> match) const
+	int IArray<_type>::FindIdx(const TFunction<bool(const _type&)> match) const
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
@@ -174,13 +174,13 @@ namespace o2
 
 	template<typename _type>
 	template<typename _sort_type>
-	void IArray<_type>::SortBy(const Function<_sort_type(const _type&)> selector)
+	void IArray<_type>::SortBy(const TFunction<_sort_type(const _type&)> selector)
 	{
 		Sort([&](const _type& l, const _type& r){ return selector(l) < selector(r); });
 	}
 
 	template<typename _type>
-	_type IArray<_type>::First(const Function<bool(const _type&)> match)
+	_type IArray<_type>::First(const TFunction<bool(const _type&)> match)
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
@@ -194,7 +194,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	int IArray<_type>::FirstIdx(const Function<bool(const _type&)> match)
+	int IArray<_type>::FirstIdx(const TFunction<bool(const _type&)> match)
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
@@ -207,7 +207,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type IArray<_type>::Last(const Function<bool(const _type&)> match)
+	_type IArray<_type>::Last(const TFunction<bool(const _type&)> match)
 	{
 		int count = Count();
 		for (int i = count - 1; i >= 0; i--)
@@ -221,7 +221,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	int IArray<_type>::LastIdx(const Function<bool(const _type&)> match)
+	int IArray<_type>::LastIdx(const TFunction<bool(const _type&)> match)
 	{
 		int count = Count();
 		for (int i = count - 1; i >= 0; i++)
@@ -235,7 +235,7 @@ namespace o2
 
 	template<typename _type>
 	template<typename _sel_type>
-	_type IArray<_type>::Min(const Function<_sel_type(const _type&)> selector)
+	_type IArray<_type>::Min(const TFunction<_sel_type(const _type&)> selector)
 	{
 		int count = Count();
 		if (count == 0)
@@ -261,7 +261,7 @@ namespace o2
 
 	template<typename _type>
 	template<typename _sel_type>
-	int IArray<_type>::MinIdx(const Function<_sel_type(const _type&)> selector)
+	int IArray<_type>::MinIdx(const TFunction<_sel_type(const _type&)> selector)
 	{
 		int count = Count();
 		if (count == 0)
@@ -286,7 +286,7 @@ namespace o2
 
 	template<typename _type>
 	template<typename _sel_type>
-	_type IArray<_type>::Max(const Function<_sel_type(const _type&)> selector)
+	_type IArray<_type>::Max(const TFunction<_sel_type(const _type&)> selector)
 	{
 		int count = Count();
 		if (count == 0)
@@ -312,7 +312,7 @@ namespace o2
 
 	template<typename _type>
 	template<typename _sel_type>
-	int IArray<_type>::MaxIdx(const Function<_sel_type(const _type&)> selector)
+	int IArray<_type>::MaxIdx(const TFunction<_sel_type(const _type&)> selector)
 	{
 		int count = Count();
 		if (count == 0)
@@ -336,7 +336,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool IArray<_type>::All(const Function<bool(const _type&)> match)
+	bool IArray<_type>::All(const TFunction<bool(const _type&)> match)
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
@@ -349,7 +349,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool IArray<_type>::Any(const Function<bool(const _type&)> match)
+	bool IArray<_type>::Any(const TFunction<bool(const _type&)> match)
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
@@ -363,7 +363,7 @@ namespace o2
 
 	template<typename _type>
 	template<typename _sel_type>
-	_sel_type IArray<_type>::Sum(const Function<_sel_type(const _type&)> selector)
+	_sel_type IArray<_type>::Sum(const TFunction<_sel_type(const _type&)> selector)
 	{
 		int count = Count();
 		if (count == 0)
@@ -379,7 +379,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void IArray<_type>::ForEach(const Function<void(const _type&)> func)
+	void IArray<_type>::ForEach(const TFunction<void(const _type&)> func)
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)

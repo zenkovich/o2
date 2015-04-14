@@ -16,10 +16,15 @@ struct TestStruct
 {
 	int a;
 
-	TestStruct():a(10) {}
+	TestStruct(int _a = 10):a(_a) {}
 
-	void sum(int x) { printf("sum = %i\n", a + x); }
-	void mul(int x) { printf("mul = %i\n", a*x); }
+	bool operator==(const TestStruct& other) const
+	{
+		return a == other.a;
+	}
+
+	bool sum(int x) { printf("sum = %i\n", a + x); return a > x; }
+	int mul(int x) { printf("mul = %i\n", a*x); return a*x; }
 };
 
 void smFunc(int x)
@@ -32,58 +37,19 @@ int main(char** lpCmdLine, int nCmdShow)
 	TestMath();
 
 	TestStruct testStruct;
-	auto lambda = [](int x) { printf("lambda %i\n", x); };
-	TFunction<void(int)> func(smFunc);
-	func.Add(&TestStruct::mul, testStruct);
-	func.Add(&TestStruct::sum, testStruct);
-	func.Add(&lambda);
-	func(3);
+	TFunction<bool(int)> func(&TestStruct::sum, testStruct);
+	printf("func = %i\n", (int)func(15));
 
-	printf("==========\n");
-	TFunction<void(int)> func2(smFunc);
-	func2.Add(&TestStruct::mul, testStruct);
-	func2.Remove(smFunc);
-	func.Remove(func2);
-	func(3);
+	Array<TestStruct> arr;
+	arr.Add(TestStruct(1));
+	arr.Add(TestStruct(2));
+	arr.Add(TestStruct(4));
+	arr.Add(TestStruct(6));
+	arr.Add(TestStruct(10));
+	arr.Add(TestStruct(-31));
 
-	printf("==========\n");
-	func = TFunction<void(int)>(&TestStruct::mul, testStruct);
-	func(3);
-
-	printf("==========\n");
-	TFunction<void(int)> func3(func);
-	func3 += &lambda;
-	func3(3);
-
-	printf("==========\n");
-	func3 -= &lambda;
-	func3(3);
-
-	func3 = smFunc;
-
-	if (func3 == smFunc)
-		printf("Equals\n");
-
-	printf("==========\n");
-	TFunction<void(int)> func4(smFunc);
-	func4.Add(&TestStruct::mul, testStruct);
-	func4.Add(&TestStruct::sum, testStruct);
-	func4.Add(&lambda);
-	func4(3);
-
-	if (func4.Contains(smFunc))
-		printf("Contains smFunc\n");
-
-	if (func4.Contains(&TestStruct::mul, testStruct))
-		printf("Contains &TestStruct::mul, testStruct\n");
-
-	if (func4.Contains(&lambda))
-		printf("Contains lambda\n");
-
-	func4 -= smFunc;
-
-	if (func4.Contains(func3 + &lambda))
-		printf("Contains &lambda + smFunc\n");
+	arr.RemoveAll(&[](const TestStruct& str){ return str.a < 5; });
+	arr.ForEach(&[](const TestStruct& str){ printf("%i\n", str.a); });
 
 
 	printf("All tests completed!");

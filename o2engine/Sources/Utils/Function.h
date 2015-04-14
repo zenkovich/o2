@@ -19,7 +19,7 @@ namespace o2
 			enum class InvokerType { Static, Object };
 
 			virtual IFuncInvoker* Clone() const = 0;
-			virtual _res_type Invoke(_args ... args) = 0;
+			virtual _res_type Invoke(_args ... args) const = 0;
 			virtual InvokerType GetType() const = 0;
 			virtual bool Equals(IFuncInvoker* other) const = 0;
 		};
@@ -40,7 +40,7 @@ namespace o2
 				return new StaticFuncInvoker(mFunction);
 			}
 
-			_res_type Invoke(_args ... args)
+			_res_type Invoke(_args ... args) const
 			{
 				return (*mFunction)(args ...);
 			}
@@ -78,7 +78,7 @@ namespace o2
 				return new ObjectFuncInvoker(mFunction, mObject);
 			}
 
-			_res_type Invoke(_args ... args)
+			_res_type Invoke(_args ... args) const
 			{
 				return (mObject->*mFunction)(args ...);
 			}
@@ -259,13 +259,18 @@ namespace o2
 			return true;
 		}
 
-		_res_type operator()(_args ... args)
+		_res_type operator()(_args ... args) const
+		{
+			return Invoke(args ...);
+		}
+
+		_res_type Invoke(_args ... args) const
 		{
 			if (mInvokers.size() == 0)
 				return _res_type();
 
-			auto it = mInvokers.begin();
-			for (; it != mInvokers.end() - 1; ++it)
+			auto it = mInvokers.cbegin();
+			for (; it != mInvokers.cend() - 1; ++it)
 				(*it)->Invoke(args ...);
 
 			return (*it)->Invoke(args ...);

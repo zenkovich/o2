@@ -134,13 +134,13 @@ namespace o2
 
 		void Clear();
 
-		void Sort(const Function<bool(const _type&, const _type&)> pred = Math::Fewer);
+		void Sort(const TFunction<bool(const _type&, const _type&)> pred = Math::Fewer);
 
-		Array<_type> FindAll(const Function<bool(const _type&)> match) const;
-		Array<_type> Where(const Function<bool(const _type&)> match) const;
+		Array<_type> FindAll(const TFunction<bool(const _type&)> match) const;
+		Array<_type> Where(const TFunction<bool(const _type&)> match) const;
 
 		template<typename _sel_type>
-		Array<_sel_type> Select(const Function<_sel_type(const _type&)> selector) const;
+		Array<_sel_type> Select(const TFunction<_sel_type(const _type&)> selector) const;
 
 		Array<_type> Take(int count) const; 
 
@@ -159,7 +159,7 @@ namespace o2
 	protected:
 		int GetReservingSize(int size);
 
-		void QuickSort(const Function<bool(const _type&, const _type&)> pred, int left, int right);
+		void QuickSort(const TFunction<bool(const _type&, const _type&)> pred, int left, int right);
 	};
 
 	//implementation array::iterator
@@ -742,7 +742,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Array<_type>::Sort(const Function<bool(const _type&, const _type&)> pred /*= Math::Fewer*/)
+	void Array<_type>::Sort(const TFunction<bool(const _type&, const _type&)> pred /*= Math::Fewer*/)
 	{
 		QuickSort(pred, 0, mCount - 1);
 	}
@@ -754,7 +754,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Array<_type>::QuickSort(const Function<bool(const _type&, const _type&)> pred, int left, int right)
+	void Array<_type>::QuickSort(const TFunction<bool(const _type&, const _type&)> pred, int left, int right)
 	{
 		int i = left, j = right;
 		_type tmp;
@@ -812,7 +812,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Array<_type> Array<_type>::FindAll(const Function<bool(const _type&)> match) const
+	Array<_type> Array<_type>::FindAll(const TFunction<bool(const _type&)> match) const
 	{
 		Array<_type> res;
 		for (auto x : *this)
@@ -824,7 +824,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Array<_type> Array<_type>::Where(const Function<bool(const _type&)> match) const
+	Array<_type> Array<_type>::Where(const TFunction<bool(const _type&)> match) const
 	{
 		Array<_type> res;
 		for (auto x : *this)
@@ -837,7 +837,7 @@ namespace o2
 
 	template<typename _type>
 	template<typename _sel_type>
-	Array<_sel_type> Array<_type>::Select(const Function<_sel_type(const _type&)> selector) const
+	Array<_sel_type> Array<_type>::Select(const TFunction<_sel_type(const _type&)> selector) const
 	{
 		Array<_sel_type> res;
 		for (auto x : *this)
