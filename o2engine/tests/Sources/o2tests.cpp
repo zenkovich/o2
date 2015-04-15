@@ -11,6 +11,7 @@
 #include "Utils/Debug.h"
 #include "Utils/Containers/Array.h"
 #include "Utils/Function.h"
+#include "Utils/Containers/Dictionary.h"
 
 struct TestStruct
 {
@@ -35,22 +36,12 @@ void smFunc(int x)
 int main(char** lpCmdLine, int nCmdShow)
 {
 	TestMath();
-
-	TestStruct testStruct;
-	TFunction<bool(int)> func(&TestStruct::sum, testStruct);
-	printf("func = %i\n", (int)func(15));
-
-	Array<TestStruct> arr;
-	arr.Add(TestStruct(1));
-	arr.Add(TestStruct(2));
-	arr.Add(TestStruct(4));
-	arr.Add(TestStruct(6));
-	arr.Add(TestStruct(10));
-	arr.Add(TestStruct(-31));
-
-	arr.RemoveAll(&[](const TestStruct& str){ return str.a < 5; });
-	arr.ForEach(&[](const TestStruct& str){ printf("%i\n", str.a); });
-
+	
+	Dictionary<String, TestStruct> testDictionary;
+	testDictionary.Add("atata", TestStruct(1));
+	testDictionary.Add("atata2", TestStruct(2));
+	testDictionary.Add("atata3", TestStruct(3));
+	testDictionary.Add("atata4", TestStruct(4));
 
 	printf("All tests completed!");
 	_getch();

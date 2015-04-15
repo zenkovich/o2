@@ -7,7 +7,6 @@
 #define CONTAINERS_DEBUG true
 #endif 
 
-
 namespace o2
 {
 	template<typename _type>
@@ -136,13 +135,13 @@ namespace o2
 
 		void Sort(const TFunction<bool(const _type&, const _type&)> pred = Math::Fewer);
 
-		Array<_type> FindAll(const TFunction<bool(const _type&)> match) const;
-		Array<_type> Where(const TFunction<bool(const _type&)> match) const;
+		Array FindAll(const TFunction<bool(const _type&)> match) const;
+		Array Where(const TFunction<bool(const _type&)> match) const;
 
 		template<typename _sel_type>
 		Array<_sel_type> Select(const TFunction<_sel_type(const _type&)> selector) const;
 
-		Array<_type> Take(int count) const; 
+		Array Take(int count) const; 
 
 		Iterator Begin();
 		Iterator End();
@@ -471,15 +470,14 @@ namespace o2
 	Array<_type>& Array<_type>::operator=(const Array<_type>& arr)
 	{
 		Reserve(arr.mCapacity);
+
+		for (int i = 0; i < arr.mCount; i++)
+			mValues[i].~_type();
+
 		mCount = arr.mCount;
 
 		for (int i = 0; i < arr.mCount; i++)
-		{
-			if (i < mCount)
-				mValues[i] = arr.mValues[i]; //TODO: check desctuctors calling
-			else
-				new (mValues + i) _type(arr.mValues[i]);
-		}
+			new (mValues + i) _type(arr.mValues[i]);
 
 		return *this;
 	}
@@ -541,11 +539,15 @@ namespace o2
 		Reserve(GetReservingSize(newCount));
 
 		if (mCount < newCount)
-		for (int i = newCount; i < mCount; i++)
-			mValues[i].~_type();
+		{
+			for (int i = newCount; i < mCount; i++)
+				mValues[i].~_type();
+		}
 		else
-		for (int i = mCount; i < newCount; i++)
-			new (mValues + i) _type();
+		{
+			for (int i = mCount; i < newCount; i++)
+				new (mValues + i) _type();
+		}
 
 		mCount = newCount;
 	}
@@ -553,9 +555,6 @@ namespace o2
 	template<typename _type>
 	void Array<_type>::Reserve(int newCapacity)
 	{
-		if (CONTAINERS_DEBUG)
-			Assert(newCapacity > 0, "Can't reserve array to zero size");
-
 		if (newCapacity < mCapacity)
 			newCapacity = mCapacity;
 
@@ -742,6 +741,9 @@ namespace o2
 	template<typename _type>
 	void Array<_type>::Clear()
 	{
+		for (int i = 0; i < mCount; i++)
+			mValues[i].~_type();
+
 		mCount = 0;
 	}
 
