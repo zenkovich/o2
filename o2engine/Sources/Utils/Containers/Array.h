@@ -418,8 +418,6 @@ namespace o2
 
 	//implementation Array
 
-	//TODO check all functions
-
 	template<typename _type>
 	Array<_type>::Array(int capacity /*= 5*/)
 	{

@@ -12,7 +12,7 @@ namespace o2
 		class Iterator
 		{
 			const Dictionary&                      mDictionary;
-			typename Array<KeyValuePair>::Iterator mPairIt;
+			typename Array<TKeyValue>::Iterator mPairIt;
 
 		public:
 			Iterator(const Dictionary& dictionary, int index = 0);
@@ -46,7 +46,7 @@ namespace o2
 		class ConstIterator
 		{
 			const Dictionary&                      mDictionary;
-			typename Array<KeyValuePair>::Iterator mPairIt;
+			typename Array<TKeyValue>::Iterator mPairIt;
 
 		public:
 			ConstIterator(const Dictionary& dictionary, int index = 0);
@@ -78,7 +78,7 @@ namespace o2
 		};
 
 	protected:
-		Array<KeyValuePair> mPairs;
+		Array<TKeyValue> mPairs;
 
 	public:
 		Dictionary();
@@ -91,27 +91,27 @@ namespace o2
 		Dictionary& operator=(const Dictionary& other);
 
 		void Add(const _key_type& key, const _value_type& value);
-		void Add(const KeyValuePair& keyValue);
+		void Add(const TKeyValue& keyValue);
 
 		void Remove(const _key_type& key);
 		void Clear();
 
 		bool ContainsKey(const _key_type& key) const;
 		bool ContainsValue(const _value_type& value) const;
-		bool Contains(const KeyValuePair& keyValue) const;
+		bool Contains(const TKeyValue& keyValue) const;
 
-		KeyValuePair FindKey(const _key_type& key) const;
-		KeyValuePair FindValue(const _value_type& value) const;
+		TKeyValue FindKey(const _key_type& key) const;
+		TKeyValue FindValue(const _value_type& value) const;
 
 		void Set(const _key_type& key, const _value_type& value);
 
 		_value_type&  Get(const _key_type& key);
-		KeyValuePair& Get(int index) const;
+		TKeyValue& Get(int index) const;
 
 		int  Count() const;
 		bool IsEmpty() const;
 
-		void Sort(bool(*compareFunc)(KeyValuePair&, KeyValuePair&));
+		void Sort(bool(*compareFunc)(TKeyValue&, TKeyValue&));
 		void Sort();
 
 		Iterator Begin();
@@ -224,13 +224,13 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	_key_type& Dictionary<_key_type, _value_type>::Iterator::Key() const
 	{
-		return mPairIt->mFirst;
+		return mPairIt->mKey;
 	}
 
 	template<typename _key_type, typename _value_type>
 	_value_type& Dictionary<_key_type, _value_type>::Iterator::Value() const
 	{
-		return mPairIt->mSecond;
+		return mPairIt->mValue;
 	}
 
 
@@ -337,20 +337,20 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	const _key_type& Dictionary<_key_type, _value_type>::ConstIterator::Key() const
 	{
-		return mPairIt->mFirst;
+		return mPairIt->mKey;
 	}
 
 	template<typename _key_type, typename _value_type>
 	const _value_type& Dictionary<_key_type, _value_type>::ConstIterator::Value() const
 	{
-		return mPairIt->mSecond;
+		return mPairIt->mValue;
 	}
 
 	//implementation Dictionary
 	template<typename _key_type, typename _value_type>
 	Dictionary<_key_type, _value_type>::Dictionary()
 	{
-		mPairs = new Array<KeyValuePair>();
+		mPairs = new Array<TKeyValue>();
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -406,11 +406,11 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	void Dictionary<_key_type, _value_type>::Add(const _key_type& key, const _value_type& value)
 	{
-		mPairs.Add(KeyValuePair(key, value));
+		mPairs.Add(TKeyValue(key, value));
 	}
 
 	template<typename _key_type, typename _value_type>
-	void Dictionary<_key_type, _value_type>::Add(const KeyValuePair& keyValue)
+	void Dictionary<_key_type, _value_type>::Add(const TKeyValue& keyValue)
 	{
 		mPairs.Add(keyValue);
 	}
@@ -421,7 +421,7 @@ namespace o2
 		int idx = -1;
 		for (auto kv = mPairs.Begin(); kv != mPairs.End(); ++kv)
 		{
-			if (kv->mFirst == key)
+			if (kv->mKey == key)
 			{
 				idx = kv.Index();
 				break;
@@ -443,7 +443,7 @@ namespace o2
 	{
 		for (auto kv:mPairs)
 		{
-			if (kv.mFirst == key)
+			if (kv.mKey == key)
 				return true;
 		}
 
@@ -455,7 +455,7 @@ namespace o2
 	{
 		for (auto kv:mPairs)
 		{
-			if (kv.mSecond == value)
+			if (kv.mValue == value)
 				return true;
 		}
 
@@ -463,7 +463,7 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	bool Dictionary<_key_type, _value_type>::Contains(const KeyValuePair& keyValue) const
+	bool Dictionary<_key_type, _value_type>::Contains(const TKeyValue& keyValue) const
 	{
 		for (auto kv:mPairs)
 		{
@@ -475,27 +475,27 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::KeyValuePair Dictionary<_key_type, _value_type>::FindKey(const _key_type& key) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::FindKey(const _key_type& key) const
 	{
 		for (auto kv:mPairs)
 		{
-			if (kv.mFirst == key)
+			if (kv.mKey == key)
 				return kv;
 		}
 
-		return KeyValuePair();
+		return TKeyValue();
 	}
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::KeyValuePair Dictionary<_key_type, _value_type>::FindValue(const _value_type& value) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::FindValue(const _value_type& value) const
 	{
 		for (auto kv:mPairs)
 		{
-			if (kv.mSecond == value)
+			if (kv.mValue == value)
 				return kv;
 		}
 
-		return KeyValuePair();
+		return TKeyValue();
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -503,9 +503,9 @@ namespace o2
 	{
 		for (auto kv:mPairs)
 		{
-			if (kv.mFirst == key)
+			if (kv.mKey == key)
 			{
-				kv.mSecond = value;
+				kv.mValue = value;
 				break;
 			}
 		}
@@ -516,17 +516,17 @@ namespace o2
 	{
 		for (auto kv:mPairs)
 		{
-			if (kv.mFirst == key)
-				return kv.mSecond;
+			if (kv.mKey == key)
+				return kv.mValue;
 		}
 
 		Assert(false, "Failed to get value from dictionary: not found key");
 
-		return mPairs.Get(0).mSecond;
+		return mPairs.Get(0).mValue;
 	}
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::KeyValuePair& Dictionary<_key_type, _value_type>::Get(int index) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue& Dictionary<_key_type, _value_type>::Get(int index) const
 	{
 		return mPairs.Get(index);
 	}
@@ -544,7 +544,7 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	void Dictionary<_key_type, _value_type>::Sort(bool(*compareFunc)(KeyValuePair&, KeyValuePair&))
+	void Dictionary<_key_type, _value_type>::Sort(bool(*compareFunc)(TKeyValue&, TKeyValue&))
 	{
 		mPairs.Sort(compareFunc);
 	}

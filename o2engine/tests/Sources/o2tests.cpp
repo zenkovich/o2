@@ -12,6 +12,7 @@
 #include "Utils/Containers/Array.h"
 #include "Utils/Function.h"
 #include "Utils/Containers/Dictionary.h"
+#include "Utils/Math/Vector2.h"
 
 struct TestStruct
 {
@@ -36,6 +37,8 @@ void smFunc(int x)
 int main(char** lpCmdLine, int nCmdShow)
 {
 	TestMath();
+
+	Vec2F vv(5, 4);
 	
 	Dictionary<String, TestStruct> testDictionary;
 	testDictionary.Add("atata", TestStruct(1));

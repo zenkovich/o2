@@ -34,7 +34,7 @@ namespace o2
 	//implementation Vertex2
 
 	Vertex2::Vertex2():
-		Vec2<float>(), color(0), tu(0), tv(0)
+		Vec2<float>(), color(0), tu(0), tv(0), z(1)
 	{}
 
 	Vertex2::Vertex2(float vx, float vy):

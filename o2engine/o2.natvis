@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+<Type Name="o2::Vec2&lt;*&gt;">
+    <DisplayString>{{ { x } { y } }}</DisplayString>
+</Type>
+
+<Type Name="o2::Rect&lt;*&gt;">
+    <DisplayString>{{ ({ left } { top })-({ right } { bottom }) }}</DisplayString>
+    <Expand>		
+        <Item Name="[width]" ExcludeView="simple">right - left</Item>
+        <Item Name="[height]" ExcludeView="simple">top - bottom</Item>
+    </Expand>
+</Type>
+
+<Type Name="o2::Vertex2">
+    <DisplayString>{{ x: { x } y: { y } z: { z } u: { tu } v: { tv }}</DisplayString>
+</Type>
+
+<Type Name="o2::Color4">
+    <DisplayString>{{ { r } { g } { b } { a }}</DisplayString>
+</Type>
+
+<Type Name="o2::Array&lt;*&gt;">
+    <DisplayString>{{ size={ mCount } }}</DisplayString>
+    <Expand>
+        <Item Name="[size]" ExcludeView="simple">mCount</Item>
+        <Item Name="[capacity]" ExcludeView="simple">mCapacity</Item>
+        <ArrayItems>
+            <Size>mCount</Size>
+            <ValuePointer>mValues</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+<Type Name="o2::KeyValuePair&lt;*&gt;">
+    <DisplayString>{{ [{ mKey }] { mValue } }}</DisplayString>
+    <Expand>
+        <Item Name="[key]" ExcludeView="simple">mKey</Item>
+        <Item Name="[value]" ExcludeView="simple">mValue</Item>
+    </Expand>
+</Type>
+
+<Type Name="o2::Dictionary&lt;*&gt;">
+    <DisplayString>{{ size={ mPairs.mCount } }}</DisplayString>
+    <Expand>
+        <Item Name="[size]" ExcludeView="simple">mPairs.mCount</Item>
+        <Item Name="[capacity]" ExcludeView="simple">mPairs.mCapacity</Item>
+        <ArrayItems>
+            <Size>mPairs.mCount</Size>
+            <ValuePointer>mPairs.mValues</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+</AutoVisualizer>

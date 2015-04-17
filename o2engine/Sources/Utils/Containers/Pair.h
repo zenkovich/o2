@@ -2,17 +2,17 @@
 
 namespace o2
 {
-	template<typename _first_type, typename _second_type>
+	template<typename _key_type, typename _value_type>
 	class Pair
 	{
 	public:
-		_first_type  mFirst;
-		_second_type mSecond;
+		_key_type  mFirst;
+		_value_type mSecond;
 
 	public:
 		Pair() {}
 
-		Pair(const _first_type& first, const _second_type& second) :
+		Pair(const _key_type& first, const _value_type& second) :
 			mFirst(first), mSecond(second) {}
 
 		Pair(const Pair& otherPair) :
