@@ -1,18 +1,21 @@
 #include "Xml.h"
 
+#include "Utils/FileSystem/File.h"
+#include "Utils/SmartPointers.h"
+
 namespace o2
 {
 	namespace Xml
 	{
-		bool LoadFromFile(const String& fileName, pugi::xml_document& xmlDoc, bool isConfigFile /*= true*/)
+		bool LoadFromFile(const String& fileName, pugi::xml_document& xmlDoc)
 		{
-			InFile inFile(fileName, isConfigFile ? FileType::Config : FileType::File);
+			InFile inFile(fileName);
 
 			if (!inFile.IsOpened())
 				return false;
 
-			uint dataSize = inFile.GetDataSize();
-			autoArr(char) buffer = mnew char[dataSize];
+			UInt dataSize = inFile.GetDataSize();
+			AutoArr<char> buffer(new char[dataSize]);
 
 			inFile.ReadFullData(buffer);
 
@@ -58,7 +61,7 @@ namespace o2
 				}
 			};
 
-			OutFile outFile(fileName, isConfigFile ? FileType::Config : FileType::File);
+			OutFile outFile(fileName);
 
 			if (!outFile.IsOpened())
 				return false;

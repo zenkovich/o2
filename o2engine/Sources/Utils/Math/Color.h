@@ -51,8 +51,8 @@ namespace o2
 		inline void   Normalize();
 		inline Color4 Normalized() const;
 
-		ULong ARGB() const;
-		ULong ABGR() const;
+		inline ULong ARGB() const;
+		inline ULong ABGR() const;
 
 		inline void SetARGB(ULong color);
 		inline void SetABGR(ULong color);

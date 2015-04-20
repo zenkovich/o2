@@ -13,22 +13,22 @@ namespace o2
 		ULong color;
 		float tu, tv;
 
-		Vertex2();
-		Vertex2(float vx, float vy);
-		Vertex2(float vx, float vy, float vz);
-		Vertex2(float vx, float vy, float vz, ULong vcolor, float vtu, float vtv);
-		Vertex2(float vx, float vy, ULong vcolor, float vtu, float vtv);
-		Vertex2(const Vec2F& pos, ULong vcolor, float vtu, float vtv);
+		inline Vertex2();
+		inline Vertex2(float vx, float vy);
+		inline Vertex2(float vx, float vy, float vz);
+		inline Vertex2(float vx, float vy, float vz, ULong vcolor, float vtu, float vtv);
+		inline Vertex2(float vx, float vy, ULong vcolor, float vtu, float vtv);
+		inline Vertex2(const Vec2F& pos, ULong vcolor, float vtu, float vtv);
 
-		void Set(const Vec2F& pos, ULong ccolor, float u, float v);
-		void Set(float px, float py, ULong ccolor, float u, float v);
-		void Set(const Vec2F& pos, float cz, ULong ccolor, float u, float v);
+		inline void Set(const Vec2F& pos, ULong ccolor, float u, float v);
+		inline void Set(float px, float py, ULong ccolor, float u, float v);
+		inline void Set(const Vec2F& pos, float cz, ULong ccolor, float u, float v);
 
-		void SetUV(float u, float v);
-		void SetUV(const Vec2F& uv);
+		inline void SetUV(float u, float v);
+		inline void SetUV(const Vec2F& uv);
 
-		Vertex2 operator=(const Vec2F& vec);
-		operator Vec2F() const;
+		inline Vertex2 operator=(const Vec2F& vec);
+		inline operator Vec2F() const;
 	};
 
 	//implementation Vertex2

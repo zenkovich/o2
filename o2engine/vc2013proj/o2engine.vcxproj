@@ -97,7 +97,9 @@
     <ClInclude Include="..\Sources\Utils\Math\Rect.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vector2.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vertex2.h" />
+    <ClInclude Include="..\Sources\Utils\Serialization.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
+    <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
     <ClInclude Include="..\Sources\Utils\String.h" />
     <ClInclude Include="..\Sources\Utils\Time.h" />
     <ClInclude Include="..\Sources\Utils\Xml.h" />
@@ -114,6 +116,7 @@
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
+    <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
     <ClCompile Include="..\Sources\Utils\String.cpp" />
     <ClCompile Include="..\Sources\Utils\Xml.cpp" />
   </ItemGroup>

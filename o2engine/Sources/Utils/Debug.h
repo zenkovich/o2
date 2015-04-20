@@ -25,5 +25,7 @@ namespace o2
 		static void LogWarning(const String& out);
 		static void LogError(const char* format, ...);
 		static void LogError(const String& out);
+
+		static LogStream* GetLog();
 	};
 }

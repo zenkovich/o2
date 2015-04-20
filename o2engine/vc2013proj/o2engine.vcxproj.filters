@@ -102,6 +102,12 @@
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h">
       <Filter>Sources\Utils\FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\SmartPointers.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Serialization.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -133,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp">
       <Filter>Sources\Utils\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Serialization.cpp">
+      <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

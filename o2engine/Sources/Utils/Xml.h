@@ -7,6 +7,7 @@
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Color.h"
 #include "Utils/Time.h"
+#include "Utils/Containers/Array.h"
 
 namespace o2
 {
@@ -39,6 +40,7 @@ namespace o2
 
 		/** Saving data from object to xml node. */
 		void ToXmlNode(String&        object, pugi::xml_node& node);
+
 
 		/** Saving data from object to xml node. */
 		void ToXmlNode(bool           object, pugi::xml_node& node);
@@ -110,9 +112,7 @@ namespace o2
 			node.append_attribute("count") = count;
 			for (int i = 0; i < count; i++)
 			{
-				char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
-				pugi::xml_node elemNode = node.append_child(elemNodeName);
-
+				pugi::xml_node elemNode = node.append_child("element");
 				ToXmlNode(array[i], elemNode);
 			}
 		}
@@ -122,13 +122,59 @@ namespace o2
 		void FromXmlNode(T* array, int count, pugi::xml_node& node)
 		{
 			int srCount = node.attribute("count").as_int();
-			for (int i = 0; i < count && i < srCount; i++)
-			{
-				char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
-				pugi::xml_node elemNode = node.child(elemNodeName);
+			for (pugi::xml_node elemNode = node.child("element"); elemNode; elemNode = elemNode.next_sibling("element"))
+			{				
+				ToXmlNode(array[i], elemNode);
+			}
+		}
 
-				if (elemNode)
-					ToXmlNode(array[i], elemNode);
+		/** Saving data from object to xml node. */
+		template<typename T>
+		static void ToXmlNode(Array<T>& array, pugi::xml_node& node)
+		{
+			node.append_attribute("count") = count;
+			for (int i = 0; i < (int)array.size(); i++)
+			{
+				pugi::xml_node elemNode = node.append_child(("element"));
+				ToXmlNode(&(array[i]), elemNode);
+			}
+		}
+
+		/** Getting data to object from xml node. */
+		template<typename T>
+		static void FromXmlNode(Array<T>& array, pugi::xml_node& node)
+		{
+			int srCount = node.attribute("count").as_int();
+			for (pugi::xml_node elemNode = node.child("element"); elemNode; elemNode = elemNode.next_sibling("element"))
+			{
+				T elem;
+				ToXmlNode(&elem, elemNode);
+				array.Add(elem);
+			}
+		}
+
+		/** Saving data from object to xml node. */
+		template<typename T>
+		static void ToXmlNode(Array<T*>& array, pugi::xml_node& node)
+		{
+			node.append_attribute("count") = array.size();
+			for (int i = 0; i < (int)array.size(); i++)
+			{
+				pugi::xml_node elemNode = node.append_child("element");
+				ToXmlNode(array[i], elemNode);
+			}
+		}
+
+		/** Getting data to object from xml node. */
+		template<typename T>
+		static void FromXmlNode(Array<T*>& array, pugi::xml_node& node)
+		{
+			int srCount = node.attribute("count").as_int();
+			for (pugi::xml_node elemNode = node.child("element"); elemNode; elemNode = elemNode.next_sibling("element"))
+			{
+				T* elem = new T();
+				ToXmlNode(elem, elemNode);
+				array.Add(elem);
 			}
 		}
 	}

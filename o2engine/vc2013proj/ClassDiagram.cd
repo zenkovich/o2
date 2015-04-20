@@ -1,193 +1,886 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="o2::Color4" Collapsed="true">
-    <Position X="12.25" Y="9.75" Width="1.5" />
+    <Position X="14.25" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAGAAHQAgAIAgBAkABKAUAABACAAAAoBYAlkBAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Color.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Color.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Rect&lt;T&gt;" Collapsed="true">
-    <Position X="12.25" Y="11" Width="1.5" />
+    <Position X="14.25" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAAAAAABIAA1BAgEAIIAUhAACAIAwAAAAAiEEAIgCA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Vec2&lt;T&gt;" Collapsed="true">
-    <Position X="12" Y="4.25" Width="1.5" />
+    <Position X="14" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAMQAAEIBABAEAIgCQBAGAEAAAAECFDggAAAQII=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Vertex2" Collapsed="true">
-    <Position X="14.5" Y="5.75" Width="1.5" />
+    <Position X="16.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAgAAAEAAARAAAAAAAAAAAAAAAAACAAAAgAQCAAQA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vertex2.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Vertex2.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::LogStream" Collapsed="true">
-    <Position X="12.25" Y="7.25" Width="1.5" />
+    <Position X="14.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAAAEAABAAAGAQAAAAIADBAAAEACAAAAAAAMAAoAAgA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Log\LogStream.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Log\LogStream.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::ConsoleLogStream" Collapsed="true">
-    <Position X="14.5" Y="8.25" Width="1.5" />
+    <Position X="16.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAABAAAAAAAAAAAgAAAAAAAAAAAAAAABAAgAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Log\ConsoleLogStream.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Log\ConsoleLogStream.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::FileLogStream" Collapsed="true">
-    <Position X="14.5" Y="7.25" Width="1.5" />
+    <Position X="16.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAIAABAAAAAAAAAAAAAAAAAAAAAAAAABAAABAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Log\FileLogStream.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Log\FileLogStream.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Debug" Collapsed="true">
-    <Position X="16.25" Y="4.25" Width="1.5" />
+    <Position X="18.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAAIAAAAAAAAIAAAAAAAAAIIAgAAAAAAAAgAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Debug.h</FileName>
+      <HashCode>AgAAIAAAAAAAAIAAAAAAAIAIIAgAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Debug.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Singleton&lt;CLASS&gt;" Collapsed="true">
-    <Position X="17.25" Y="3" Width="1.5" />
+    <Position X="19.25" Y="1.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAACAIAAAAABAAAAAACAAAAAIAAAAAEAQAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Singleton.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Singleton.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::IArray&lt;_type&gt;" Collapsed="true">
-    <Position X="12.25" Y="13" Width="1.5" />
+    <Position X="14.25" Y="11.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAJACEAEABACBQDAEBIQBEQBAAEIAACAaIACAIFwABQ=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\IArray.h</FileName>
+      <HashCode>IAJACEAEABACBQBAEBIQJEQBAAEIAACAKIAKAIFwABQ=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Containers\IArray.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Array&lt;_type&gt;" Collapsed="true">
-    <Position X="14.5" Y="13" Width="1.5" />
+    <Position X="16.5" Y="11.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIBAEACAAAADABIAAAQBQQSAAEIEABASAEiQIFwABg=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\Array.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Containers\Array.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::TFunction&lt;_res_type(_args...)&gt;" Collapsed="true">
-    <Position X="19" Y="2.25" Width="1.5" />
+    <Position X="21" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAIAAAAEAAABQAAAIAAAAAAAAAhQABQAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Function.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Function.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Dictionary&lt;_key_type, _value_type&gt;" Collapsed="true">
-    <Position X="14.5" Y="15" Width="1.5" />
+    <Position X="16.5" Y="13.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAJACAACABAGBQBAEAIQBQQQAAEIFAKAIIEiAABQQBQ=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\Dictionary.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Containers\Dictionary.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::KeyValuePair&lt;_key_type, _value_type&gt;" Collapsed="true">
-    <Position X="12.25" Y="14" Width="1.5" />
+    <Position X="14.25" Y="12.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAgAAEIAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\IDictionary.h</FileName>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAQAAgAAEIAAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Containers\IDictionary.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::IDictionary&lt;_key_type, _value_type&gt;" Collapsed="true">
-    <Position X="12.25" Y="15" Width="1.5" />
+    <Position X="14.25" Y="13.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAJACAAAAAAGBQBAAAAABAQAAAEIAACAIAECAABQQBA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\IDictionary.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Containers\IDictionary.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Pair&lt;_key_type, _value_type&gt;" Collapsed="true">
-    <Position X="19" Y="3" Width="1.5" />
+    <Position X="21" Y="1.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAgAAAAAAAAAAQAAAAAABAAAAAAAAAAAEAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\Pair.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Containers\Pair.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Typedef Name="o2::UInt64" Collapsed="true">
-    <Position X="12" Y="3" Width="1.5" />
+  <Class Name="xml_buffered_writer" Collapsed="true">
+    <Position X="52.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAABAAAAAAAAAAAAAAAAAAAAAAIAAkQhgAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xpath_ast_node" Collapsed="true">
+    <Position X="59.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CBABAAAAFAAQAAUAgIAAAAAAAABAAQggBAAoABAAAAQ=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::AutoPtr&lt;_type&gt;" Collapsed="true">
+    <Position X="22.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQABEgAgAAgAAAAAAAAAAAAkgAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\SmartPointers.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::AutoArr&lt;_type&gt;" Collapsed="true">
+    <Position X="22.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQABEAAgAAgAAAAAAAAQAQAggAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\SmartPointers.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::InFile" Collapsed="true">
+    <Position X="14.25" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgBIAAACAACAAAAAQAAEAAAAAAAABCQwCE=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\FileSystem\File.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::OutFile" Collapsed="true">
+    <Position X="14.25" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAEAAAAAAEAAAAIgEAAAAAAAABCAQCA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\FileSystem\File.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="`anonymous-namespace'::xpath_allocator" Collapsed="true">
+    <Position X="57.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBQAAAAAAAAQAQAABAAAAAAAAAAACAAAAAAAAAAAAAI=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="`anonymous-namespace'::xpath_string" Collapsed="true">
+    <Position X="59.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAGAEAAASACAAAAAAAAAAUQAAAABAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="`anonymous-namespace'::xpath_node_set_raw" Collapsed="true">
+    <Position X="55.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAmAAAAAAQgAIEEAAASAAABAAAAAAEAAAQggAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="`anonymous-namespace'::xpath_lexer" Collapsed="true">
+    <Position X="50.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAQAAAABAQAAAAEgAAAAAIAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xml_node_iterator" Collapsed="true">
+    <Position X="54" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAQAEAAwAQAAAAAAAAAAAgAAAAAAg=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xml_attribute_iterator" Collapsed="true">
+    <Position X="50.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAQAEAAwAQAAAAAAAAAAAgAAAAAAg=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xml_tree_walker" Collapsed="true">
+    <Position X="55.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAIAAACAAAAAAAAAAAAAAAQAAAAABAAAAAgIAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xml_node" Collapsed="true">
+    <Position X="38.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gCQIgAACIBAUgiRIAgTqqQASIMEFCDBAAlAgGFAAIQA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xpath_node" Collapsed="true">
+    <Position X="52.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAABAAAAEAAABAAgAAAQAAAAAAABAAAAAgABAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xpath_node_set" Collapsed="true">
+    <Position X="54" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAEQAAQgAIEgAAASEAEBAAAAAAAgAAQAgAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xpath_query" Collapsed="true">
+    <Position X="57.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAACBAAACIAABAAQABAAAAAgAAIgAIA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xpath_variable_set" Collapsed="true">
+    <Position X="48.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAQAQAAAAAAAAAAACAAgAAACAAQ=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xml_writer" Collapsed="true">
+    <Position X="39.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xml_writer_file" Collapsed="true">
+    <Position X="40.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQAAAQAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xml_writer_stream" Collapsed="true">
+    <Position X="38.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAgAAQAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xml_attribute" Collapsed="true">
+    <Position X="48.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAARBCABAEALAAgRIgCEAAAAg=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xml_document" Collapsed="true">
+    <Position X="38.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAA0AoGAIAAAIAAAAEgIAAACAgAAAABgQAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xpath_variable" Collapsed="true">
+    <Position X="41.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAEAAAAAA0ABAQAAAAAAAAFAAAgAAAgAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="pugi::xpath_exception" Collapsed="true">
+    <Position X="48.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAABCBAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="std::allocator&lt;_Ty&gt;" Collapsed="true">
+    <Position X="48.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAQAEAAAAAAAAIAAAEAAAAIAAAAAAAAgAAABAAI=</HashCode>
+      <FileName>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory0</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="std::basic_istream&lt;_Elem, _Traits&gt;" Collapsed="true">
+    <Position X="54" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAQAAaAAAAhAACACQgEACAQAAAAAAQAgAAEQAIA=</HashCode>
+      <FileName>c:\program files (x86)\microsoft visual studio 12.0\vc\include\istream</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="std::basic_ostream&lt;_Elem, _Traits&gt;" Collapsed="true">
+    <Position X="55.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAACAEAAAAAAAAAACCACAABAAAAAEAAAQggAAAAAAA=</HashCode>
+      <FileName>c:\program files (x86)\microsoft visual studio 12.0\vc\include\ostream</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="std::basic_string&lt;_Elem, _Traits, _Alloc&gt;" Collapsed="true">
+    <Position X="42.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IUgEMJUCRDBkAABEg+MIBSASAAUAAgIAzQEwEgAUUgI=</HashCode>
+      <FileName>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xstring</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="axis_to_type&lt;N&gt;" Collapsed="true">
+    <Position X="48.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="xpath_parser" Collapsed="true">
+    <Position X="50.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAgEwkABAAIAAmQAAQAgyEAgAACAQAIAAACgAIpAI=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="xpath_query_impl" Collapsed="true">
+    <Position X="52.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAACAAgAEAAAAAAAAAAAABAAAAABAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="o2::WideTime" Collapsed="true">
+    <Position X="24.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAACABAAAAAQAEAAAAAAAAAEAAAAAAEAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Time.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::buffer_holder" Collapsed="true">
+    <Position X="52.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAIAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAQAAAAAAg=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xml_allocator" Collapsed="true">
+    <Position X="43.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAABAAQAQQCAAAAAIAEAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xml_memory_page" Collapsed="true">
+    <Position X="59.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAIAAAAAAAAAAAAAAAABQAAIBBAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xml_memory_string_header" Collapsed="true">
+    <Position X="48.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAACAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xml_document_struct" Collapsed="true">
+    <Position X="43.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::opt_false" Collapsed="true">
+    <Position X="57.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::opt_true" Collapsed="true">
+    <Position X="59.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::utf8_counter" Collapsed="true">
+    <Position X="48.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::utf8_writer" Collapsed="true">
+    <Position X="50.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAACAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::utf16_counter" Collapsed="true">
+    <Position X="54" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::utf16_writer" Collapsed="true">
+    <Position X="55.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAACAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::utf32_counter" Collapsed="true">
+    <Position X="57.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::utf32_writer" Collapsed="true">
+    <Position X="59.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAACAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::wchar_selector&lt;2&gt;" Collapsed="true">
+    <Position X="52.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::wchar_selector&lt;4&gt;" Collapsed="true">
+    <Position X="54" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::utf_decoder&lt;Traits, opt_swap&gt;" Collapsed="true">
+    <Position X="52.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAAEAAAAAAEAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::gap" Collapsed="true">
+    <Position X="48.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAACAAAAAAAAAIAAAAAAAAAAAAAAAAgIAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::strconv_pcdata_impl&lt;opt_eol, opt_escape&gt;" Collapsed="true">
+    <Position X="50.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::strconv_attribute_impl&lt;opt_escape&gt;" Collapsed="true">
+    <Position X="48.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAgAAAAAAgAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xml_parser" Collapsed="true">
+    <Position X="52.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAABAAAAAAAAACAgQAgAAAAAAAAIAAAAAAAAAIgI=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::equal_to" Collapsed="true">
+    <Position X="59.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::not_equal_to" Collapsed="true">
+    <Position X="55.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::less" Collapsed="true">
+    <Position X="50.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::less_equal" Collapsed="true">
+    <Position X="52.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_memory_block" Collapsed="true">
+    <Position X="59.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAIAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_allocator_capture" Collapsed="true">
+    <Position X="54" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAgAAACAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_stack" Collapsed="true">
+    <Position X="54" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_stack_data" Collapsed="true">
+    <Position X="55.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAABAAAAAAAAAAAAICAIAAAAAAABAI=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::document_order_comparator" Collapsed="true">
+    <Position X="55.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::duplicate_comparator" Collapsed="true">
+    <Position X="57.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::namespace_uri_predicate" Collapsed="true">
+    <Position X="54" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAIAAAAAAAAAAEAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_variable_boolean" Collapsed="true">
+    <Position X="38.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAEACAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_variable_number" Collapsed="true">
+    <Position X="40.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAEACAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_variable_string" Collapsed="true">
+    <Position X="43" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAEACAAAgAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_variable_node_set" Collapsed="true">
+    <Position X="45.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEACAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_context" Collapsed="true">
+    <Position X="55.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAIAAAAAAAAAAgEAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="`anonymous-namespace'::xpath_lexer_string" Collapsed="true">
+    <Position X="57.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAGAAAAAAAAAAAAAQAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="pugi::xml_attribute_struct" Collapsed="true">
+    <Position X="57.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAQAAAAAAAAAAAAAAgBAAAAEACAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="pugi::xml_node_struct" Collapsed="true">
+    <Position X="46.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAYAAAAAAABAAAAAIBAAAAAEACBAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="pugi::xml_parse_result" Collapsed="true">
+    <Position X="50.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAAAAAAAAAAAAEMAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="pugi::xpath_parse_result" Collapsed="true">
+    <Position X="48.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEIAEAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="std::bidirectional_iterator_tag" Collapsed="true">
+    <Position X="50.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="std::char_traits&lt;_Elem&gt;" Collapsed="true">
+    <Position X="54" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\program files (x86)\microsoft visual studio 12.0\vc\include\iosfwd</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="o2::UInt64" Collapsed="true">
+    <Position X="14" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::UInt16" Collapsed="true">
-    <Position X="15.5" Y="2.25" Width="1.5" />
+    <Position X="17.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::UInt8" Collapsed="true">
-    <Position X="13.75" Y="3" Width="1.5" />
+    <Position X="15.75" Y="1.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::Int64" Collapsed="true">
-    <Position X="12" Y="2.25" Width="1.5" />
+    <Position X="14" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::UInt" Collapsed="true">
-    <Position X="13.75" Y="2.25" Width="1.5" />
+    <Position X="15.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::ULong" Collapsed="true">
-    <Position X="15.5" Y="3" Width="1.5" />
+    <Position X="17.5" Y="1.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\CommonTypes.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::RectF" Collapsed="true">
-    <Position X="14.5" Y="11" Width="1.5" />
+    <Position X="16.5" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::RectI" Collapsed="true">
-    <Position X="14.5" Y="11.75" Width="1.5" />
+    <Position X="16.5" Y="10" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Rect.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::Vec2F" Collapsed="true">
-    <Position X="14.5" Y="5" Width="1.5" />
+    <Position X="16.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::Vec2I" Collapsed="true">
-    <Position X="14.5" Y="4.25" Width="1.5" />
+    <Position X="16.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="o2::String" Collapsed="true">
-    <Position X="17.25" Y="2.25" Width="1.5" />
+    <Position X="19.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>C:\work\o2\o2engine\Sources\Utils\String.h</FileName>
+      <FileName>D:\work\o2\o2engine\Sources\Utils\String.h</FileName>
     </TypeIdentifier>
   </Typedef>
+  <Typedef Name="uintptr_t" Collapsed="true">
+    <Position X="52.25" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>c:\program files (x86)\microsoft visual studio 12.0\vc\include\crtdefs.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="uint8_t" Collapsed="true">
+    <Position X="50.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="uint16_t" Collapsed="true">
+    <Position X="59.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="uint32_t" Collapsed="true">
+    <Position X="48.75" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="int32_t" Collapsed="true">
+    <Position X="54" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="`anonymous-namespace'::wchar_counter" Collapsed="true">
+    <Position X="54" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="`anonymous-namespace'::wchar_writer" Collapsed="true">
+    <Position X="55.75" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="`anonymous-namespace'::strconv_pcdata_t" Collapsed="true">
+    <Position X="57.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="`anonymous-namespace'::strconv_attribute_t" Collapsed="true">
+    <Position X="55.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="pugi::char_t" Collapsed="true">
+    <Position X="50.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="pugi::string_t" Collapsed="true">
+    <Position X="42.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="pugi::allocation_function" Collapsed="true">
+    <Position X="48.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="pugi::deallocation_function" Collapsed="true">
+    <Position X="52.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="ast_type_t" Collapsed="true">
+    <Position X="48.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>lQEgAMJQgkuCcSAAgRIIMBgAigAQAAQUgIAAgCBBAIQ=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="axis_t" Collapsed="true">
+    <Position X="50.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECgAQAAAAAAEAAAGAAAACQgAAAAAAAABkAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="nodetest_t" Collapsed="true">
+    <Position X="57.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAACAAAAAAAAAACAAAAgIAAAAAAgAQgAAAAAAAgA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="`anonymous-namespace'::chartype_t" Collapsed="true">
+    <Position X="52.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAARCAAAAAgBAAAAAAAAAAAAAAEAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="`anonymous-namespace'::chartypex_t" Collapsed="true">
+    <Position X="54" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAEAAAEIAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="`anonymous-namespace'::lexeme_t" Collapsed="true">
+    <Position X="55.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>MgAAAAACQQhAAABAANAAgAEAABABAEAAACIAAAEghQQ=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="pugi::xml_node_type" Collapsed="true">
+    <Position X="48.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQDAACAgAAAAAAAAAAAAAACAAAAAAAAAAAAAQAAACA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="pugi::xml_encoding" Collapsed="true">
+    <Position X="59.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAUAAEAiEAQAAAAAAAAAAABEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="pugi::xml_parse_status" Collapsed="true">
+    <Position X="50.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgggAAAAAAIABAAAAAAAAAAAEAAAIBgEAqAQQAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="pugi::xpath_value_type" Collapsed="true">
+    <Position X="52.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEBAAAIEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\work\o2\o2engine\Dependencies\PugiXml\pugixml.hpp</FileName>
+    </TypeIdentifier>
+  </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
