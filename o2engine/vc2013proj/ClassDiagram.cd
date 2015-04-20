@@ -66,24 +66,12 @@
   <Class Name="o2::IArray&lt;_type&gt;" Collapsed="true">
     <Position X="12.25" Y="13" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAJACEAEABACBQBAEBIQBEQBAAEIAACAaIACAIFwABQ=</HashCode>
+      <HashCode>IAJACEAEABACBQDAEBIQBEQBAAEIAACAaIACAIFwABQ=</HashCode>
       <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\IArray.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="o2::Array&lt;_type&gt;" Collapsed="true">
     <Position X="14.5" Y="13" Width="1.5" />
-    <NestedTypes>
-      <Class Name="o2::Array&lt;_type&gt;::Iterator" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>C:\work\o2\o2engine\Sources\Utils\Containers\Array.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="o2::Array&lt;_type&gt;::ConstIterator" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>C:\work\o2\o2engine\Sources\Utils\Containers\Array.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAIBAEACAAAADABIAAAQBQQSAAEIEABASAEiQIFwABg=</HashCode>
       <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\Array.h</FileName>
@@ -91,31 +79,37 @@
   </Class>
   <Class Name="o2::TFunction&lt;_res_type(_args...)&gt;" Collapsed="true">
     <Position X="19" Y="2.25" Width="1.5" />
-    <NestedTypes>
-      <Struct Name="o2::TFunction&lt;_res_type(_args...)&gt;::IFuncInvoker" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>C:\work\o2\o2engine\Sources\Utils\Function.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="o2::TFunction&lt;_res_type(_args...)&gt;::StaticFuncInvoker&lt;_func_type&gt;" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>C:\work\o2\o2engine\Sources\Utils\Function.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Struct Name="o2::TFunction&lt;_res_type(_args...)&gt;::ObjectFuncInvoker&lt;_func_type, _class_type&gt;" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>C:\work\o2\o2engine\Sources\Utils\Function.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
-      <Typedef Name="o2::TFunction&lt;_res_type(_args...)&gt;::InvokersVec" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>C:\work\o2\o2engine\Sources\Utils\Function.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Typedef>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAIAAAAAAAAAAAAAEAAABQAAAIAAAAAAAAAhQABQAAA=</HashCode>
+      <HashCode>AAIAAAAAAAAIAAAAEAAABQAAAIAAAAAAAAAhQABQAAA=</HashCode>
       <FileName>C:\work\o2\o2engine\Sources\Utils\Function.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::Dictionary&lt;_key_type, _value_type&gt;" Collapsed="true">
+    <Position X="14.5" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAJACAACABAGBQBAEAIQBQQQAAEIFAKAIIEiAABQQBQ=</HashCode>
+      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\Dictionary.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::KeyValuePair&lt;_key_type, _value_type&gt;" Collapsed="true">
+    <Position X="12.25" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAgAAEIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\IDictionary.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::IDictionary&lt;_key_type, _value_type&gt;" Collapsed="true">
+    <Position X="12.25" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAJACAAAAAAGBQBAAAAABAQAAAEIAACAIAECAABQQBA=</HashCode>
+      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\IDictionary.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="o2::Pair&lt;_key_type, _value_type&gt;" Collapsed="true">
+    <Position X="19" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAQAAAAAABAAAAAAAAAAAEAA=</HashCode>
+      <FileName>C:\work\o2\o2engine\Sources\Utils\Containers\Pair.h</FileName>
     </TypeIdentifier>
   </Class>
   <Typedef Name="o2::UInt64" Collapsed="true">

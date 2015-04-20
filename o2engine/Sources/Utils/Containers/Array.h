@@ -17,12 +17,12 @@ namespace o2
 		{
 			friend class Array<_type>;
 
-			_type*       mValuePtr;
-			const Array& mArray;
-
-			Iterator(const Array& arr, _type* valuePtr);
+			_type* mValuePtr;
+			Array* mArray;
 
 		public:
+			Iterator(Array* arr, _type* valuePtr);
+
 			int       Index() const;
 			_type&    Value();
 			bool      IsValid() const;
@@ -35,8 +35,8 @@ namespace o2
 			Iterator& operator--();
 			Iterator  operator--(int);
 
-			Iterator&  operator+=(int offs);
-			Iterator&  operator-=(int offs);
+			Iterator& operator+=(int offs);
+			Iterator& operator-=(int offs);
 
 			bool operator>(const Iterator& itr) const;
 			bool operator<(const Iterator& itr) const;
@@ -54,11 +54,11 @@ namespace o2
 			friend class Array<_type>;
 
 			_type*       mValuePtr;
-			const Array& mArray;
-
-			ConstIterator(const Array& arr, _type* valuePtr);
+			const Array* mArray;
 
 		public:
+			ConstIterator(const Array* arr, _type* valuePtr);
+
 			int          Index() const;
 			const _type& Value() const;
 			bool         IsValid() const;
@@ -98,8 +98,17 @@ namespace o2
 
 		Array& operator=(const Array& arr);
 
-		Array operator+(const Array& arr) const;
-		Array operator+=(const Array& arr);
+		Array  operator+(const Array& arr) const;
+		Array& operator+=(const Array& arr);
+
+		Array  operator+(const _type& value) const;
+		Array& operator+=(const _type& value);
+
+		Array  operator-(const Array& arr) const;
+		Array& operator-=(const Array& arr);
+
+		Array  operator-(const _type& value) const;
+		Array& operator-=(const _type& value);
 
 		bool operator==(const Array& arr);
 		bool operator!=(const Array& arr);
@@ -141,7 +150,7 @@ namespace o2
 		template<typename _sel_type>
 		Array<_sel_type> Select(const TFunction<_sel_type(const _type&)> selector) const;
 
-		Array Take(int count) const; 
+		Array Take(int count) const;
 
 		Iterator Begin();
 		Iterator End();
@@ -161,9 +170,10 @@ namespace o2
 		void QuickSort(const TFunction<bool(const _type&, const _type&)> pred, int left, int right);
 	};
 
-	//implementation array::iterator
+#pragma region Array::Iterator implementation
+
 	template<typename _type>
-	Array<_type>::Iterator::Iterator(const Array<_type>& arr, _type* valuePtr):
+	Array<_type>::Iterator::Iterator(Array<_type>* arr, _type* valuePtr):
 		mValuePtr(valuePtr), mArray(arr)
 	{
 	}
@@ -171,25 +181,25 @@ namespace o2
 	template<typename _type>
 	int Array<_type>::Iterator::Index() const
 	{
-		return mValuePtr - mArray.mValues;
+		return mValuePtr - mArray->mValues;
 	}
 
 	template<typename _type>
 	bool Array<_type>::Iterator::IsValid() const
 	{
-		return !(mValuePtr < mArray.mValues || mValuePtr >= mArray.mValues + mArray.mCount);
+		return !(mValuePtr < mArray->mValues || mValuePtr >= mArray->mValues + mArray->mCount);
 	}
 
 	template<typename _type>
 	typename Array<_type>::Iterator Array<_type>::Iterator::operator+(int offs) const
 	{
-		return iterator(mArray, mValuePtr + offs);
+		return Iterator(mArray, mValuePtr + offs);
 	}
 
 	template<typename _type>
 	typename Array<_type>::Iterator Array<_type>::Iterator::operator-(int offs) const
 	{
-		return iterator(mArray, mValuePtr - offs);
+		return Iterator(mArray, mValuePtr - offs);
 	}
 
 	template<typename _type>
@@ -282,16 +292,17 @@ namespace o2
 	_type& Array<_type>::Iterator::Value()
 	{
 		if (CONTAINERS_DEBUG)
-			Assert(mValuePtr >= mArray.mValues && mValuePtr <= mArray.mValues + mArray.mCount, "Array iterator is out of range");
+			Assert(mValuePtr >= mArray->mValues && mValuePtr <= mArray->mValues + mArray->mCount, "Array iterator is out of range");
 
 		return *mValuePtr;
 	}
 
+#pragma endregion Array::Iterator implementation
 
-	//implementation Array::ConstIterator
+#pragma region Array::ConstIterator implementation
 
 	template<typename _type>
-	Array<_type>::ConstIterator::ConstIterator(const Array<_type>& arr, _type* valuePtr):
+	Array<_type>::ConstIterator::ConstIterator(const Array<_type>* arr, _type* valuePtr):
 		mArray(arr), mValuePtr(valuePtr)
 	{
 	}
@@ -299,13 +310,13 @@ namespace o2
 	template<typename _type>
 	int Array<_type>::ConstIterator::Index() const
 	{
-		return mValuePtr - mArray.mValues;
+		return mValuePtr - mArray->mValues;
 	}
 
 	template<typename _type>
 	bool Array<_type>::ConstIterator::IsValid() const
 	{
-		return !(mValuePtr < mArray.mValues || mValuePtr >= mArray.mValues + mArray.mCount);
+		return !(mValuePtr < mArray->mValues || mValuePtr >= mArray->mValues + mArray->mCount);
 	}
 
 	template<typename _type>
@@ -410,13 +421,14 @@ namespace o2
 	const _type& Array<_type>::ConstIterator::Value() const
 	{
 		if (CONTAINERS_DEBUG)
-			Assert(mValuePtr >= mArray.mValues && mValuePtr <= mArray.mValues + mArray.mCount, "Array iterator is out of range");
+			Assert(mValuePtr >= mArray->mValues && mValuePtr <= mArray->mValues + mArray->mCount, "Array iterator is out of range");
 
 		return *mValuePtr;
 	}
 
+#pragma endregion Array::ConstIterator implementation
 
-	//implementation Array
+#pragma region Array implementation
 
 	template<typename _type>
 	Array<_type>::Array(int capacity /*= 5*/)
@@ -469,7 +481,7 @@ namespace o2
 	{
 		Reserve(arr.mCapacity);
 
-		for (int i = 0; i < arr.mCount; i++)
+		for (int i = 0; i < mCount; i++)
 			mValues[i].~_type();
 
 		mCount = arr.mCount;
@@ -489,9 +501,55 @@ namespace o2
 	}
 
 	template<typename _type>
-	Array<_type> Array<_type>::operator+=(const Array<_type>& arr)
+	Array<_type>& Array<_type>::operator+=(const Array<_type>& arr)
 	{
 		Add(arr);
+		return *this;
+	}
+
+	template<typename _type>
+	Array<_type> Array<_type>::operator+(const _type& value) const
+	{
+		Array<_type> res(*this);
+		res.Add(value);
+		return res;
+	}
+
+	template<typename _type>
+	Array<_type>& Array<_type>::operator+=(const _type& value)
+	{
+		Add(value);
+		return *this;
+	}
+
+
+	template<typename _type>
+	Array<_type> Array<_type>::operator-(const Array<_type>& arr) const
+	{
+		Array<_type> res(*this);
+		res.Remove(arr);
+		return res;
+	}
+
+	template<typename _type>
+	Array<_type>& Array<_type>::operator-=(const Array<_type>& arr)
+	{
+		Remove(arr);
+		return *this;
+	}
+
+	template<typename _type>
+	Array<_type> Array<_type>::operator-(const _type& value) const
+	{
+		Array<_type> res(*this);
+		res.Remove(value);
+		return res;
+	}
+
+	template<typename _type>
+	Array<_type>& Array<_type>::operator-=(const _type& value)
+	{
+		Remove(value);
 		return *this;
 	}
 
@@ -794,25 +852,25 @@ namespace o2
 	template<typename _type>
 	typename Array<_type>::Iterator Array<_type>::Begin()
 	{
-		return Iterator(*this, mValues);
+		return Iterator(this, mValues);
 	}
 
 	template<typename _type>
 	typename Array<_type>::Iterator Array<_type>::End()
 	{
-		return Iterator(*this, mValues + mCount);
+		return Iterator(this, mValues + mCount);
 	}
 
 	template<typename _type>
 	typename Array<_type>::ConstIterator Array<_type>::Begin() const
 	{
-		return ConstIterator(*this, mValues);
+		return ConstIterator(this, mValues);
 	}
 
 	template<typename _type>
 	typename Array<_type>::ConstIterator Array<_type>::End() const
 	{
-		return ConstIterator(*this, mValues + mCount);
+		return ConstIterator(this, mValues + mCount);
 	}
 
 	template<typename _type>
@@ -863,4 +921,7 @@ namespace o2
 		}
 		return res;
 	}
+
+#pragma endregion Array implementation
+
 }

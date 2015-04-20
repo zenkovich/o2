@@ -50,7 +50,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
-      <AdditionalIncludeDirectories>../Sources/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Dependencies/;../Sources/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -67,6 +67,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../Sources/;../Dependencies/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -75,6 +76,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Dependencies\PugiXml\pugiconfig.hpp" />
+    <ClInclude Include="..\Dependencies\PugiXml\pugixml.hpp" />
     <ClInclude Include="..\Sources\EngineSettings.h" />
     <ClInclude Include="..\Sources\Utils\Assert.h" />
     <ClInclude Include="..\Sources\Utils\CommonTypes.h" />
@@ -84,6 +87,7 @@
     <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h" />
     <ClInclude Include="..\Sources\Utils\Containers\Pair.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
+    <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\Function.h" />
     <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h" />
@@ -95,18 +99,23 @@
     <ClInclude Include="..\Sources\Utils\Math\Vertex2.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
     <ClInclude Include="..\Sources\Utils\String.h" />
+    <ClInclude Include="..\Sources\Utils\Time.h" />
+    <ClInclude Include="..\Sources\Utils\Xml.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Dependencies\PugiXml\pugixml.cpp" />
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />
     <ClCompile Include="..\Sources\Utils\Debug.cpp" />
+    <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
     <ClCompile Include="..\Sources\Utils\String.cpp" />
+    <ClCompile Include="..\Sources\Utils\Xml.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -11,11 +11,13 @@ namespace o2
 	public:
 		class Iterator
 		{
-			const Dictionary&                      mDictionary;
-			typename Array<TKeyValue>::Iterator mPairIt;
+			typedef typename Array<TKeyValue>::Iterator PairIterator;
+
+			Dictionary*  mDictionary;
+			PairIterator mPairIt;
 
 		public:
-			Iterator(const Dictionary& dictionary, int index = 0);
+			Iterator(Dictionary* dictionary, int index = 0);
 
 			int Index() const;
 
@@ -37,19 +39,23 @@ namespace o2
 			bool operator>=(const Iterator& itr) const;
 			bool operator<=(const Iterator& itr) const;
 
+			Iterator& operator*();
+
 			operator bool() const;
 
-			_key_type&   Key() const;
-			_value_type& Value() const;
+			_key_type&   Key();
+			_value_type& Value();
 		};
 
 		class ConstIterator
 		{
-			const Dictionary&                      mDictionary;
-			typename Array<TKeyValue>::Iterator mPairIt;
+			typedef typename Array<TKeyValue>::ConstIterator PairIterator;
+
+			const Dictionary* mDictionary;
+			PairIterator      mPairIt;
 
 		public:
-			ConstIterator(const Dictionary& dictionary, int index = 0);
+			ConstIterator(const Dictionary* dictionary, int index = 0);
 
 			int Index() const;
 
@@ -70,6 +76,8 @@ namespace o2
 
 			bool operator>=(const ConstIterator& itr) const;
 			bool operator<=(const ConstIterator& itr) const;
+
+			const ConstIterator& operator*();
 
 			operator bool() const;
 
@@ -94,38 +102,76 @@ namespace o2
 		void Add(const TKeyValue& keyValue);
 
 		void Remove(const _key_type& key);
+		void RemoveAll(const TFunction<bool(const TKeyValue&)> match);
 		void Clear();
 
 		bool ContainsKey(const _key_type& key) const;
 		bool ContainsValue(const _value_type& value) const;
 		bool Contains(const TKeyValue& keyValue) const;
+		bool ContainsPred(const TFunction<bool(const TKeyValue&)> match) const;
 
 		TKeyValue FindKey(const _key_type& key) const;
 		TKeyValue FindValue(const _value_type& value) const;
+		TKeyValue Find(const TFunction<bool(const TKeyValue&)> match) const;
+		TKeyValue FindLast(const TFunction<bool(const TKeyValue&)> match) const;
+
+		Dictionary FindAll(const TFunction<bool(const TKeyValue&)> match) const;
+		Dictionary Where(const TFunction<bool(const TKeyValue&)> match) const;
+
+		TKeyValue First(const TFunction<bool(const TKeyValue&)> match) const;
+		TKeyValue Last(const TFunction<bool(const TKeyValue&)> match) const;
 
 		void Set(const _key_type& key, const _value_type& value);
 
 		_value_type&  Get(const _key_type& key);
-		TKeyValue& Get(int index) const;
+		TKeyValue&    Get(int index) const;
 
-		int  Count() const;
+		int Count() const;
+		int Count(const TFunction<bool(const TKeyValue&)> match) const;
+
 		bool IsEmpty() const;
 
-		void Sort(bool(*compareFunc)(TKeyValue&, TKeyValue&));
-		void Sort();
+		void Sort(const TFunction<bool(const TKeyValue&, const TKeyValue&)> pred);
+		
+		void ForEach(const TFunction<void(TKeyValue&)> func);
+
+		template<typename _sel_type>
+		TKeyValue Min(const TFunction<_sel_type(const TKeyValue&)> selector) const;
+
+		template<typename _sel_type>
+		int MinIdx(const TFunction<_sel_type(const TKeyValue&)> selector) const;
+
+		template<typename _sel_type>
+		TKeyValue Max(const TFunction<_sel_type(const TKeyValue&)> selector) const;
+
+		template<typename _sel_type>
+		int MaxIdx(const TFunction<_sel_type(const TKeyValue&)> selector) const;
+
+		virtual bool All(const TFunction<bool(const TKeyValue&)> match) const;
+
+		virtual bool Any(const TFunction<bool(const TKeyValue&)> match) const;
+
+		template<typename _sel_type>
+		_sel_type Sum(const TFunction<_sel_type(const TKeyValue&)> selector) const;
 
 		Iterator Begin();
 		Iterator End();
 
 		ConstIterator Begin() const;
 		ConstIterator End() const;
+
+		Iterator begin() { return Begin(); }
+		Iterator end() { return End(); }
+
+		ConstIterator begin() const { return Begin(); }
+		ConstIterator end() const { return End(); }
 	};
 
-	//implementation dict::iterator
+#pragma region Dictionary::Iterator implementation
 
 	template<typename _key_type, typename _value_type>
-	Dictionary<_key_type, _value_type>::Iterator::Iterator(const Dictionary& dictionary, int index /*= 0*/) :
-		mDictionary(dictionary), mPairIt(dictionary.Begin() + index)
+	Dictionary<_key_type, _value_type>::Iterator::Iterator(Dictionary* dictionary, int index /*= 0*/) :
+		mDictionary(dictionary), mPairIt(mDictionary->mPairs.Begin() + index)
 	{
 	}
 
@@ -216,29 +262,36 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
+	typename Dictionary<_key_type, _value_type>::Iterator& Dictionary<_key_type, _value_type>::Iterator::operator*()
+	{
+		return *this;
+	}
+
+	template<typename _key_type, typename _value_type>
 	Dictionary<_key_type, _value_type>::Iterator::operator bool() const
 	{
 		return mPairIt.IsValid();
 	}
 
 	template<typename _key_type, typename _value_type>
-	_key_type& Dictionary<_key_type, _value_type>::Iterator::Key() const
+	_key_type& Dictionary<_key_type, _value_type>::Iterator::Key()
 	{
-		return mPairIt->mKey;
+		return mPairIt.Value().mKey;
 	}
 
 	template<typename _key_type, typename _value_type>
-	_value_type& Dictionary<_key_type, _value_type>::Iterator::Value() const
+	_value_type& Dictionary<_key_type, _value_type>::Iterator::Value()
 	{
-		return mPairIt->mValue;
+		return mPairIt.Value().mValue;
 	}
 
+#pragma endregion Dictionary::Iterator implementation
 
-	//implementation dict::ConstIterator
+#pragma region Dictionary::ConstIterator implementation
 
 	template<typename _key_type, typename _value_type>
-	Dictionary<_key_type, _value_type>::ConstIterator::ConstIterator(const Dictionary& dictionary, int index /*= 0*/) :
-		mDictionary(dictionary), mPairIt(dictionary.Begin() + index)
+	Dictionary<_key_type, _value_type>::ConstIterator::ConstIterator(const Dictionary* dictionary, int index /*= 0*/) :
+		mDictionary(dictionary), mPairIt(mDictionary->mPairs.Begin() + index)
 	{
 	}
 
@@ -251,13 +304,13 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	typename Dictionary<_key_type, _value_type>::ConstIterator Dictionary<_key_type, _value_type>::ConstIterator::operator+(int offs) const
 	{
-		return ConstIterator(mArray, Index() + offs);
+		return ConstIterator(mDictionary, Index() + offs);
 	}
 
 	template<typename _key_type, typename _value_type>
 	typename Dictionary<_key_type, _value_type>::ConstIterator Dictionary<_key_type, _value_type>::ConstIterator::operator-(int offs) const
 	{
-		return ConstIterator(mArray, Index() - offs);
+		return ConstIterator(mDictionary, Index() - offs);
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -329,6 +382,12 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
+	typename const Dictionary<_key_type, _value_type>::ConstIterator& Dictionary<_key_type, _value_type>::ConstIterator::operator*()
+	{
+		return *this;
+	}
+
+	template<typename _key_type, typename _value_type>
 	Dictionary<_key_type, _value_type>::ConstIterator::operator bool() const
 	{
 		return mPairIt.IsValid();
@@ -337,16 +396,19 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	const _key_type& Dictionary<_key_type, _value_type>::ConstIterator::Key() const
 	{
-		return mPairIt->mKey;
+		return mPairIt.Value().mKey;
 	}
 
 	template<typename _key_type, typename _value_type>
 	const _value_type& Dictionary<_key_type, _value_type>::ConstIterator::Value() const
 	{
-		return mPairIt->mValue;
+		return mPairIt.Value().mValue;
 	}
 
-	//implementation Dictionary
+#pragma endregion Dictionary::ConstIterator implementation
+	
+#pragma region Dictionary implementation
+
 	template<typename _key_type, typename _value_type>
 	Dictionary<_key_type, _value_type>::Dictionary()
 	{
@@ -368,7 +430,8 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	bool Dictionary<_key_type, _value_type>::operator==(const Dictionary& other) const
 	{
-		if (Count() != other.Count())
+		return mPairs == other.mPairs;
+		/*if (Count() != other.Count())
 			return false;
 
 		for (auto kv : mPairs)
@@ -385,7 +448,7 @@ namespace o2
 
 			if (!found)
 				return false;
-		}
+		}*/
 
 		return true;
 	}
@@ -544,15 +607,9 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	void Dictionary<_key_type, _value_type>::Sort(bool(*compareFunc)(TKeyValue&, TKeyValue&))
+	void Dictionary<_key_type, _value_type>::Sort(const TFunction<bool(const TKeyValue&, const TKeyValue&)> pred)
 	{
-		mPairs.Sort(compareFunc);
-	}
-
-	template<typename _key_type, typename _value_type>
-	void Dictionary<_key_type, _value_type>::Sort()
-	{
-		mPairs.Sort();
+		mPairs.Sort(pred);
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -578,4 +635,129 @@ namespace o2
 	{
 		return ConstIterator(this, Count());
 	}
+
+	template<typename _key_type, typename _value_type>
+	void Dictionary<_key_type, _value_type>::ForEach(const TFunction<void(TKeyValue&)> func)
+	{
+		for (auto kv:mPairs)
+			func(kv);
+	}
+
+	template<typename _key_type, typename _value_type>
+	int Dictionary<_key_type, _value_type>::Count(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		return mPairs.CountMatch(match);
+	}
+
+	template<typename _key_type, typename _value_type>
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Last(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		return mPairs.Last(match);
+	}
+
+	template<typename _key_type, typename _value_type>
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::First(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		return mPairs.First(match);
+	}
+
+	template<typename _key_type, typename _value_type>
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::FindLast(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		return mPairs.Last(match);
+	}
+
+	template<typename _key_type, typename _value_type>
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Find(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		return mPairs.FindMatch(match);
+	}
+
+	template<typename _key_type, typename _value_type>
+	bool Dictionary<_key_type, _value_type>::ContainsPred(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		return mPairs.ContainsPred(match);
+	}
+
+	template<typename _key_type, typename _value_type>
+	void Dictionary<_key_type, _value_type>::RemoveAll(const TFunction<bool(const TKeyValue&)> match)
+	{
+		return mPairs.RemoveAll(match);
+	}
+
+	template<typename _key_type, typename _value_type>
+	template<typename _sel_type>
+	_sel_type Dictionary<_key_type, _value_type>::Sum(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	{
+		return mPairs.Sum(selector);
+	}
+
+	template<typename _key_type, typename _value_type>
+	bool Dictionary<_key_type, _value_type>::Any(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		return mPairs.Any(match);
+	}
+
+	template<typename _key_type, typename _value_type>
+	bool Dictionary<_key_type, _value_type>::All(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		return mPairs.All(match);
+	}
+
+	template<typename _key_type, typename _value_type>
+	template<typename _sel_type>
+	int Dictionary<_key_type, _value_type>::MaxIdx(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	{
+		return mPairs.MaxIdx(selector);
+	}
+
+	template<typename _key_type, typename _value_type>
+	template<typename _sel_type>
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Max(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	{
+		return mPairs.Max(selector);
+	}
+
+	template<typename _key_type, typename _value_type>
+	template<typename _sel_type>
+	int Dictionary<_key_type, _value_type>::MinIdx(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	{
+		return mPairs.MinIdx(selector);
+	}
+
+	template<typename _key_type, typename _value_type>
+	template<typename _sel_type>
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Min(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	{
+		return mPairs.Min(selector);
+	}
+
+	template<typename _key_type, typename _value_type>
+	Dictionary<_key_type, _value_type> Dictionary<_key_type, _value_type>::Where(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		Dictionary res;
+		for (auto kv:mPairs)
+		{
+			if (match(kv))
+				res.Add(kv);
+		}
+
+		return res;
+	}
+
+	template<typename _key_type, typename _value_type>
+	Dictionary<_key_type, _value_type> Dictionary<_key_type, _value_type>::FindAll(const TFunction<bool(const TKeyValue&)> match) const
+	{
+		Dictionary res;
+		for (auto kv:mPairs)
+		{
+			if (match(kv))
+				res.Add(kv);
+		}
+
+		return res;
+	}
+
+#pragma endregion Dictionary implementation
+
 }

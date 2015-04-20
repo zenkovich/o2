@@ -16,6 +16,15 @@
     <Filter Include="Sources\Utils\Containers">
       <UniqueIdentifier>{d7a93fea-78cf-46e6-ba9f-132a5e9622ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{9a1fae77-ea4f-4b28-ab51-cb76852929fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\PugiXml">
+      <UniqueIdentifier>{2359e97b-8ffa-4db2-92d6-c84156dd3bae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Utils\FileSystem">
+      <UniqueIdentifier>{b0eb50e7-36a9-4293-817f-6656fd94b688}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -78,6 +87,21 @@
     <ClInclude Include="..\Sources\Utils\Containers\Dictionary.h">
       <Filter>Sources\Utils\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Dependencies\PugiXml\pugiconfig.hpp">
+      <Filter>Dependencies\PugiXml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\PugiXml\pugixml.hpp">
+      <Filter>Dependencies\PugiXml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Xml.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Time.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\FileSystem\File.h">
+      <Filter>Sources\Utils\FileSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -100,6 +124,15 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\String.cpp">
       <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\PugiXml\pugixml.cpp">
+      <Filter>Dependencies\PugiXml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Xml.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp">
+      <Filter>Sources\Utils\FileSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
