@@ -110,8 +110,8 @@ namespace o2
 		Array  operator-(const _type& value) const;
 		Array& operator-=(const _type& value);
 
-		bool operator==(const Array& arr);
-		bool operator!=(const Array& arr);
+		bool operator==(const Array& arr) const;
+		bool operator!=(const Array& arr) const;
 
 		IArray* Clone() const;
 
@@ -554,7 +554,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool Array<_type>::operator==(const Array<_type>& arr)
+	bool Array<_type>::operator==(const Array<_type>& arr) const
 	{
 		if (arr.mCount != mCount)
 			return false;
@@ -569,7 +569,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool Array<_type>::operator!=(const Array<_type>& arr)
+	bool Array<_type>::operator!=(const Array<_type>& arr) const
 	{
 		return !(*this == arr);
 	}

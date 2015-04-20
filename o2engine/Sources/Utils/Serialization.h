@@ -168,12 +168,12 @@ namespace o2
 			{
 				CreateNode(id);
 
-				mCurrentNode.append_attribute("count") = array.size();
-				for (int i = 0; i < (int)array.size(); i++)
+				mCurrentNode.append_attribute("count") = array.Count();
+				for (int i = 0; i < (int)array.Count(); i++)
 				{
 					char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
 					T* arrElem = &(array[i]);
-					Serialize(arrElem, elemNodeName, errors);
+					Serialize(*arrElem, elemNodeName, errors);
 				}
 
 				PopNode();
@@ -184,14 +184,14 @@ namespace o2
 				if (!GetNode(id, errors))
 					return false;
 
-				array.clear();
+				array.Clear();
 				int srCount = mCurrentNode.attribute("count").as_int();
 				for (int i = 0; i < srCount; i++)
 				{
 					char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
 					array.Add(T());
 					T* elemPtr = &array.Last();
-					Serialize(elemPtr, elemNodeName, errors);
+					Serialize(*elemPtr, elemNodeName, errors);
 				}
 
 				PopNode();
@@ -245,7 +245,7 @@ namespace o2
 		static Serializable* CreateSerializableSample(const String& type);
 	};
 
-#define FIRST_SERIALIZATION() std::map<string, Serializable*> gSerializeTypesContainer::mSamples
+#define FIRST_SERIALIZATION() Dictionary<String, Serializable*> gSerializeTypesContainer::mSamples
 
 	/** Implementation of serialize method. You must define class. */
 #define SERIALIZE_METHOD_IMPL(CLASS)                  \
@@ -258,16 +258,16 @@ namespace o2
 	bool CLASS::SerializeInh(Serializer* serializer)
 
 	/** Declaration of serialize methods. */
-#define SERIALIZBLE_METHODS(CLASS)                                       \
+#define SERIALIZE_METHODS(CLASS)                                         \
 	static gSerializeTypesInitializer<CLASS> RegType;                    \
-	virtual Serializable* CreateSample() const { return mnew CLASS(); }  \
+	virtual Serializable* CreateSample() const { return new CLASS(); }  \
 	virtual String GetTypeName() const { return #CLASS; }                \
 	bool CLASS::Serialize(Serializer* serializer)
 
 	/** Declaration of inherited serialize methods. */
-#define SERIALIZBLE_INHERITED_METHODS(CLASS, BASIC_CLASS)                \
+#define SERIALIZE_INHERITED_METHODS(CLASS, BASIC_CLASS)                  \
 	static gSerializeTypesInitializer<CLASS> RegType;                    \
-	virtual Serializable* CreateSample() const { return mnew CLASS(); }  \
+	virtual Serializable* CreateSample() const { return new CLASS(); }  \
 	virtual String GetTypeName() const { return #CLASS; }                \
 	virtual bool SerializeInh(Serializer* serializer);                   \
 	virtual bool Serialize(Serializer* serializer)                       \

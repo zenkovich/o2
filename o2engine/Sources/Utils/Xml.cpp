@@ -7,7 +7,7 @@ namespace o2
 {
 	namespace Xml
 	{
-		bool LoadFromFile(const String& fileName, pugi::xml_document& xmlDoc)
+		bool LoadFromFile(const String& fileName, Document& xmlDoc)
 		{
 			InFile inFile(fileName);
 
@@ -24,13 +24,13 @@ namespace o2
 			return res.status == pugi::status_ok;
 		}
 
-		bool LoadFromString(const String& data, pugi::xml_document& xmlDoc)
+		bool LoadFromString(const String& data, Document& xmlDoc)
 		{
 			pugi::xml_parse_result res = xmlDoc.load_buffer(data.c_str(), data.length());
 			return res.status == pugi::status_ok;
 		}
 
-		bool SaveToString(String& data, pugi::xml_document& xmlDoc)
+		bool SaveToString(String& data, Document& xmlDoc)
 		{
 			struct xmlWriter:public pugi::xml_writer
 			{
@@ -49,7 +49,7 @@ namespace o2
 			return true;
 		}
 
-		bool SaveToFile(const String& fileName, pugi::xml_document& xmlDoc, bool isConfigFile /*= true*/)
+		bool SaveToFile(const String& fileName, Document& xmlDoc)
 		{
 			struct xmlWriter:public pugi::xml_writer
 			{
@@ -75,7 +75,7 @@ namespace o2
 			return true;
 		}
 
-		pugi::xml_node GetNode(const pugi::xml_node& node, const String& path)
+		Node GetNode(const Node& node, const String& path)
 		{
 			int slashPos = path.find('/');
 			String currNode = path.substr(0, slashPos);
@@ -86,44 +86,44 @@ namespace o2
 				return GetNode(node.child(currNode.c_str()), path.substr(slashPos + 1));
 		}
 
-		void ToXmlNode(int object, pugi::xml_node& node)
+		void ToXmlNode(int object, Node& node)
 		{
 			node.append_attribute("v") = object;
 		}
 
-		void ToXmlNode(unsigned int object, pugi::xml_node& node)
+		void ToXmlNode(unsigned int object, Node& node)
 		{
 			node.append_attribute("v") = object;
 		}
 
-		void ToXmlNode(float object, pugi::xml_node& node)
+		void ToXmlNode(float object, Node& node)
 		{
 			node.append_attribute("v") = object;
 		}
 
-		void ToXmlNode(String& object, pugi::xml_node& node)
+		void ToXmlNode(String& object, Node& node)
 		{
 			node.append_attribute("v") = object.c_str();
 		}
 
-		void ToXmlNode(bool object, pugi::xml_node& node)
+		void ToXmlNode(bool object, Node& node)
 		{
 			node.append_attribute("v") = object;
 		}
 
-		void ToXmlNode(Vec2F& object, pugi::xml_node& node)
+		void ToXmlNode(Vec2F& object, Node& node)
 		{
 			node.append_attribute("x") = object.x;
 			node.append_attribute("y") = object.y;
 		}
 
-		void ToXmlNode(Vec2I& object, pugi::xml_node& node)
+		void ToXmlNode(Vec2I& object, Node& node)
 		{
 			node.append_attribute("x") = object.x;
 			node.append_attribute("y") = object.y;
 		}
 
-		void ToXmlNode(RectF& object, pugi::xml_node& node)
+		void ToXmlNode(RectF& object, Node& node)
 		{
 			node.append_attribute("left") = object.left;
 			node.append_attribute("top") = object.top;
@@ -131,7 +131,7 @@ namespace o2
 			node.append_attribute("bottom") = object.bottom;
 		}
 
-		void ToXmlNode(RectI& object, pugi::xml_node& node)
+		void ToXmlNode(RectI& object, Node& node)
 		{
 			node.append_attribute("left") = object.left;
 			node.append_attribute("top") = object.top;
@@ -139,7 +139,7 @@ namespace o2
 			node.append_attribute("bottom") = object.bottom;
 		}
 
-		void ToXmlNode(Color4& object, pugi::xml_node& node)
+		void ToXmlNode(Color4& object, Node& node)
 		{
 			node.append_attribute("r") = object.r;
 			node.append_attribute("g") = object.g;
@@ -147,7 +147,7 @@ namespace o2
 			node.append_attribute("a") = object.a;
 		}
 
-		void ToXmlNode(WideTime& object, pugi::xml_node& node)
+		void ToXmlNode(WideTime& object, Node& node)
 		{
 			node.append_attribute("second") = object.mSecond;
 			node.append_attribute("minute") = object.mMinute;
@@ -157,44 +157,44 @@ namespace o2
 			node.append_attribute("year")   = object.mYear;
 		}
 
-		void FromXmlNode(int& object, pugi::xml_node& node)
+		void FromXmlNode(int& object, Node& node)
 		{
 			object = node.attribute("v").as_int();
 		}
 
-		void FromXmlNode(unsigned int& object, pugi::xml_node& node)
+		void FromXmlNode(unsigned int& object, Node& node)
 		{
 			object = node.attribute("v").as_uint();
 		}
 
-		void FromXmlNode(float& object, pugi::xml_node& node)
+		void FromXmlNode(float& object, Node& node)
 		{
 			object = node.attribute("v").as_float();
 		}
 
-		void FromXmlNode(String& object, pugi::xml_node& node)
+		void FromXmlNode(String& object, Node& node)
 		{
 			object = node.attribute("v").value();
 		}
 
-		void FromXmlNode(bool& object, pugi::xml_node& node)
+		void FromXmlNode(bool& object, Node& node)
 		{
 			object = node.attribute("v").as_bool();
 		}
 
-		void FromXmlNode(Vec2F& object, pugi::xml_node& node)
+		void FromXmlNode(Vec2F& object, Node& node)
 		{
 			object.x = node.attribute("x").as_float();
 			object.y = node.attribute("y").as_float();
 		}
 
-		void FromXmlNode(Vec2I& object, pugi::xml_node& node)
+		void FromXmlNode(Vec2I& object, Node& node)
 		{
 			object.x = node.attribute("x").as_int();
 			object.y = node.attribute("y").as_int();
 		}
 
-		void FromXmlNode(RectF& object, pugi::xml_node& node)
+		void FromXmlNode(RectF& object, Node& node)
 		{
 			object.left = node.attribute("left").as_float();
 			object.right = node.attribute("right").as_float();
@@ -202,7 +202,7 @@ namespace o2
 			object.bottom = node.attribute("bottom").as_float();
 		}
 
-		void FromXmlNode(RectI& object, pugi::xml_node& node)
+		void FromXmlNode(RectI& object, Node& node)
 		{
 			object.left = node.attribute("left").as_int();
 			object.right = node.attribute("right").as_int();
@@ -210,7 +210,7 @@ namespace o2
 			object.bottom = node.attribute("bottom").as_int();
 		}
 
-		void FromXmlNode(Color4& object, pugi::xml_node& node)
+		void FromXmlNode(Color4& object, Node& node)
 		{
 			object.r = node.attribute("r").as_int();
 			object.g = node.attribute("g").as_int();
@@ -218,7 +218,7 @@ namespace o2
 			object.a = node.attribute("a").as_int();
 		}
 
-		void FromXmlNode(WideTime& object, pugi::xml_node& node)
+		void FromXmlNode(WideTime& object, Node& node)
 		{
 			object.mSecond = node.attribute("second").as_int();
 			object.mMinute = node.attribute("minute").as_int();

@@ -13,61 +13,59 @@
 #include "Utils/Function.h"
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Math/Vector2.h"
+#include "Utils/Xml.h"
+#include "Utils/Serialization.h"
 
-struct TestStruct
+FIRST_SERIALIZATION();
+
+struct TestSerialize: public Serializable
 {
 	int a;
+	float b;
+	Array<int> c;
 
-	TestStruct(int _a = 10):a(_a) {}
+	TestSerialize() {}
 
-	bool operator==(const TestStruct& other) const
+	TestSerialize(int a, float b, int c1, int c2, int c3):
+		a(a), b(b)
 	{
-		return a == other.a;
+		c.Add(c1); c.Add(c2); c.Add(c3);
 	}
 
-	bool sum(int x) { printf("sum = %i\n", a + x); return a > x; }
-	int mul(int x) { printf("mul = %i\n", a*x); return a*x; }
+	bool operator==(const TestSerialize& other) const
+	{
+		return a == other.a && b == other.b && c == other.c;
+	}
+
+	SERIALIZE_METHODS(TestSerialize);
 };
 
-void smFunc(int x)
+SERIALIZE_METHOD_IMPL(TestSerialize)
 {
-	printf("out %i\n", x);
+	SERIALIZE(a);
+	SERIALIZE(b);
+	SERIALIZE(c);
+
+	return true;
 }
 
-void printDictionary(Dictionary<String, TestStruct>& testDictionary)
+void srTest(Serializable& sr)
 {
-	testDictionary.ForEach(&[](KeyValuePair<String, TestStruct>& t) { Debug::Log("key: %s value:%i", t.Key().c_str(), t.Value().a); });
+	Debug::Log("%s", sr.GetTypeName().c_str());
 }
 
 int main(char** lpCmdLine, int nCmdShow)
 {
 	TestMath();
 
-	Vec2F vv(5, 4);
-	
-	Dictionary<String, TestStruct> testDictionary;
-	testDictionary.Add("atata", TestStruct(1));
-	testDictionary.Add("atata2", TestStruct(2));
-	testDictionary.Add("atata3", TestStruct(3));
-	testDictionary.Add("atata4", TestStruct(4));
-	testDictionary.Add(KeyValuePair<String, TestStruct>("atatss", TestStruct(5)));
-
-	for (auto kv:testDictionary)
-	{
-		Debug::Log("key: %s value:%i", kv.Key().c_str(), kv.Value().a);
-	}
-
-	if (testDictionary.Any(&[](const KeyValuePair<String, TestStruct>& t) { return t.mValue.a > 3; }))
-		Debug::Log("True");
-	else
-		Debug::Log("False");
-	
-	Debug::Log("x = %i", testDictionary.Count(&[](const KeyValuePair<String, TestStruct>& t) { return t.mValue.a > 3; }));
-
-	auto kvf = testDictionary.FindAll(&[](const KeyValuePair<String, TestStruct>& t) { return t.mValue.a > 3; });
-
-	TFunction<void(Dictionary<String, TestStruct>&)> fnc = &printDictionary;
-	fnc(kvf);
+	Xml::Document xmlDoc;
+	Array<TestSerialize> arr;
+	arr.Add(TestSerialize(1, 1.1f, 1, 2, 3));
+	arr.Add(TestSerialize(2, 2.1f, 2, 2, 3));
+	arr.Add(TestSerialize(3, 3.1f, 3, 2, 3));
+	//Xml::ToXmlNode(arr, xmlDoc.append_child("ch"));
+	auto f = TestSerialize(1, 1.1f, 1, 2, 3);
+	srTest(f);
 
 	printf("All tests completed!");
 	_getch();

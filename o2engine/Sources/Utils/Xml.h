@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PugiXml/pugixml.hpp"
+#include "Dependencies/PugiXml/pugixml.hpp"
 #include "Utils/String.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"
@@ -13,168 +13,205 @@ namespace o2
 {
 	namespace Xml
 	{
+		typedef pugi::xml_document Document;
+		typedef pugi::xml_node Node;
+		typedef pugi::xml_attribute Attribute;
+
 		/** Loads xml file. */
-		bool LoadFromFile(const String& fileName, pugi::xml_document& xmlDoc);
+		bool LoadFromFile(const String& fileName, Document& xmlDoc);
 
 		/** Loads xml from buffer. */
-		bool LoadFromString(const String& data, pugi::xml_document& xmlDoc);
+		bool LoadFromString(const String& data, Document& xmlDoc);
 
 		/** Loads xml file. */
-		bool SaveToFile(const String& fileName, pugi::xml_document& xmlDoc);
+		bool SaveToFile(const String& fileName, Document& xmlDoc);
 
 		/** Loads xml buffer. */
-		bool SaveToString(String& data, pugi::xml_document& xmlDoc);
+		bool SaveToString(String& data, Document& xmlDoc);
 
 		/** Returns node by path, Path format "node/node/node". */
-		pugi::xml_node GetNode(const pugi::xml_node& node, const String& path);
+		Node GetNode(const Node& node, const String& path);
 
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(int            object, pugi::xml_node& node);
+		void ToXmlNode(int            object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(unsigned int   object, pugi::xml_node& node);
+		void ToXmlNode(unsigned int   object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(float          object, pugi::xml_node& node);
+		void ToXmlNode(float          object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(String&        object, pugi::xml_node& node);
+		void ToXmlNode(String&        object, Node& node);
 
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(bool           object, pugi::xml_node& node);
+		void ToXmlNode(bool           object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(Vec2F&         object, pugi::xml_node& node);
+		void ToXmlNode(Vec2F&         object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(Vec2I&         object, pugi::xml_node& node);
+		void ToXmlNode(Vec2I&         object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(RectF&         object, pugi::xml_node& node);
+		void ToXmlNode(RectF&         object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(RectI&         object, pugi::xml_node& node);
+		void ToXmlNode(RectI&         object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(Color4&        object, pugi::xml_node& node);
+		void ToXmlNode(Color4&        object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(WideTime&      object, pugi::xml_node& node);
-
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(int&           object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(unsigned int&  object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(float&         object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(String&        object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(bool&          object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(Vec2F&         object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(Vec2I&         object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(RectF&         object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(RectI&         object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(Color4&        object, pugi::xml_node& node);
-
-		/** Getting data to object from xml node. */
-		void FromXmlNode(WideTime&      object, pugi::xml_node& node);
+		void ToXmlNode(WideTime&      object, Node& node);
 
 		/** Returns specific data from xml node. */
 		template<typename T>
-		T FromXmlNode(pugi::xml_node& node)
+		T FromXmlNode(Node& node)
 		{
 			T res; FromXmlNode(res, node);
 			return res;
 		}
 
+		/** Getting data to object from xml node. */
+		void FromXmlNode(int&           object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(unsigned int&  object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(float&         object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(String&        object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(bool&          object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(Vec2F&         object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(Vec2I&         object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(RectF&         object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(RectI&         object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(Color4&        object, Node& node);
+
+		/** Getting data to object from xml node. */
+		void FromXmlNode(WideTime&      object, Node& node);
+
+
 		/** Saving data from object to xml node. */
 		template<typename T>
-		void ToXmlNode(T* array, int count, pugi::xml_node& node)
+		static void ToXmlNode(T* array, int count, Node& node)
 		{
 			node.append_attribute("count") = count;
 			for (int i = 0; i < count; i++)
 			{
-				pugi::xml_node elemNode = node.append_child("element");
-				ToXmlNode(array[i], elemNode);
-			}
-		}
+				char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
+				Node elemNode = node.append_child(elemNodeName);
 
-		/** Getting data to object from xml node. */
-		template<typename T>
-		void FromXmlNode(T* array, int count, pugi::xml_node& node)
-		{
-			int srCount = node.attribute("count").as_int();
-			for (pugi::xml_node elemNode = node.child("element"); elemNode; elemNode = elemNode.next_sibling("element"))
-			{				
 				ToXmlNode(array[i], elemNode);
 			}
 		}
 
 		/** Saving data from object to xml node. */
 		template<typename T>
-		static void ToXmlNode(Array<T>& array, pugi::xml_node& node)
+		static void ToXmlNode(Array<T>& array, Node& node)
 		{
-			node.append_attribute("count") = count;
-			for (int i = 0; i < (int)array.size(); i++)
+			node.append_attribute("count") = array.Count();
+			for (int i = 0; i < (int)array.Count(); i++)
 			{
-				pugi::xml_node elemNode = node.append_child(("element"));
-				ToXmlNode(&(array[i]), elemNode);
-			}
-		}
+				char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
+				Node elemNode = node.append_child(elemNodeName);
 
-		/** Getting data to object from xml node. */
-		template<typename T>
-		static void FromXmlNode(Array<T>& array, pugi::xml_node& node)
-		{
-			int srCount = node.attribute("count").as_int();
-			for (pugi::xml_node elemNode = node.child("element"); elemNode; elemNode = elemNode.next_sibling("element"))
-			{
-				T elem;
-				ToXmlNode(&elem, elemNode);
-				array.Add(elem);
+				ToXmlNode(array[i], elemNode);
 			}
 		}
 
 		/** Saving data from object to xml node. */
 		template<typename T>
-		static void ToXmlNode(Array<T*>& array, pugi::xml_node& node)
+		static void ToXmlNode(Array<T*>& array, Node& node)
 		{
 			node.append_attribute("count") = array.size();
 			for (int i = 0; i < (int)array.size(); i++)
 			{
-				pugi::xml_node elemNode = node.append_child("element");
+				char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
+				Node elemNode = node.append_child(elemNodeName);
+
 				ToXmlNode(array[i], elemNode);
 			}
 		}
 
+
 		/** Getting data to object from xml node. */
 		template<typename T>
-		static void FromXmlNode(Array<T*>& array, pugi::xml_node& node)
+		static void FromXmlNode(T*& array, int& count, Node& node)
 		{
 			int srCount = node.attribute("count").as_int();
-			for (pugi::xml_node elemNode = node.child("element"); elemNode; elemNode = elemNode.next_sibling("element"))
+
+			array = new T[srCount];
+			count = srCount;
+
+			for (int i = 0; i < count && i < srCount; i++)
 			{
-				T* elem = new T();
-				ToXmlNode(elem, elemNode);
-				array.Add(elem);
+				char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
+				Node elemNode = node.child(elemNodeName);
+
+				if (elemNode)
+					FromXmlNode(array[i], elemNode);
+			}
+		}
+
+
+		/** Getting data to object from xml node. */
+		template<typename T>
+		static void FromXmlNode(Array<T>& array, Node& node)
+		{
+			array.Clear();
+			int srCount = node.attribute("count").as_int();
+			for (int i = 0; i < srCount; i++)
+			{
+				char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
+				Node elemNode = node.child(elemNodeName);
+
+				if (elemNode)
+				{
+					T elem = T();
+					FromXmlNode(elem, elemNode);
+					array.Add(elem);
+				}
+				else break;
+			}
+		}
+
+
+		/** Getting data to object from xml node. */
+		template<typename T>
+		static void FromXmlNode(Array<T*>& array, Node& node)
+		{
+			array.Clear();
+			int srCount = node.attribute("count").as_int();
+			for (int i = 0; i < srCount; i++)
+			{
+				char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
+				Node elemNode = node.child(elemNodeName);
+
+				if (elemNode)
+				{
+					T* elem = mnew T();
+					FromXmlNode(elem, elemNode);
+					array.Add(elem);
+				}
+				else break;
 			}
 		}
 	}
