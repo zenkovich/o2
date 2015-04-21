@@ -63,9 +63,13 @@ int main(char** lpCmdLine, int nCmdShow)
 	arr.Add(TestSerialize(1, 1.1f, 1, 2, 3));
 	arr.Add(TestSerialize(2, 2.1f, 2, 2, 3));
 	arr.Add(TestSerialize(3, 3.1f, 3, 2, 3));
-	//Xml::ToXmlNode(arr, xmlDoc.append_child("ch"));
+	Xml::SaveToFile("xmlTest.xml", xmlDoc);
+
 	auto f = TestSerialize(1, 1.1f, 1, 2, 3);
-	srTest(f);
+
+	Serializer sr(xmlDoc.append_child("ch"));
+	sr.Serialize(&f, "f");
+	sr.Save("serTest.xml");
 
 	printf("All tests completed!");
 	_getch();

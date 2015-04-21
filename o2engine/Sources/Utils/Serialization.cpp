@@ -18,7 +18,7 @@ namespace o2
 		Load(fileName);
 	}
 
-	Serializer::Serializer(pugi::xml_node& xmlNode, Type type /*= Type::Serialize*/)
+	Serializer::Serializer(Xml::Node& xmlNode, Type type /*= Type::Serialize*/)
 	{
 		mCurrentNode = mRootNode.append_copy(xmlNode);
 		mType = type;
@@ -68,7 +68,7 @@ namespace o2
 
 	bool Serializer::GetNode(const String& id, bool errors /*= false*/)
 	{
-		pugi::xml_node node = mCurrentNode.child(id.c_str());
+		Xml::Node node = mCurrentNode.child(id.c_str());
 		if (!node)
 		{
 			if (errors)
@@ -179,7 +179,7 @@ namespace o2
 
 	void gSerializeTypesContainer::RegType(Serializable* type)
 	{
-		mSamples[type->GetTypeName()] = type;
+		mSamples.Add(type->GetTypeName(), type);
 	}
 
 	Serializable* gSerializeTypesContainer::GetSample(const String& typeName)

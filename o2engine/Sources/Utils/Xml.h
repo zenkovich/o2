@@ -34,38 +34,37 @@ namespace o2
 
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(int            object, Node& node);
+		void ToXmlNode(int           object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(unsigned int   object, Node& node);
+		void ToXmlNode(UInt          object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(float          object, Node& node);
+		void ToXmlNode(float         object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(String&        object, Node& node);
-
-
-		/** Saving data from object to xml node. */
-		void ToXmlNode(bool           object, Node& node);
+		void ToXmlNode(String&       object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(Vec2F&         object, Node& node);
+		void ToXmlNode(bool          object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(Vec2I&         object, Node& node);
+		void ToXmlNode(Vec2F&        object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(RectF&         object, Node& node);
+		void ToXmlNode(Vec2I&        object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(RectI&         object, Node& node);
+		void ToXmlNode(RectF&        object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(Color4&        object, Node& node);
+		void ToXmlNode(RectI&        object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(WideTime&      object, Node& node);
+		void ToXmlNode(Color4&       object, Node& node);
+
+		/** Saving data from object to xml node. */
+		void ToXmlNode(WideTime&     object, Node& node);
 
 		/** Returns specific data from xml node. */
 		template<typename T>

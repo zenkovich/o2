@@ -56,10 +56,10 @@ namespace o2
 		enum class Type { Serialize, Deserialize };
 
 	private:
-		LogStream*         mLog;         /** Serialization log, where puts errors. */
-		pugi::xml_document mRootNode;    /** Root serialization xml document. */
-		pugi::xml_node     mCurrentNode; /** Current xml node. */
-		Type               mType;        /** Serialization type. */
+		LogStream*    mLog;         /** Serialization log, where puts errors. */
+		Xml::Document mRootNode;    /** Root serialization xml document. */
+		Xml::Node     mCurrentNode; /** Current xml node. */
+		Type          mType;        /** Serialization type. */
 
 	public:
 		/** ctor. */
@@ -69,7 +69,7 @@ namespace o2
 		Serializer(const String& fileName, Type type = Type::Serialize);
 
 		/** ctor. Getting xml node and setting type. */
-		Serializer(pugi::xml_node& xmlNode, Type type = Type::Serialize);
+		Serializer(Xml::Node& xmlNode, Type type = Type::Serialize);
 
 		/** dtor. */
 		~Serializer();
