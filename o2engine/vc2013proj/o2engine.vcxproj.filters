@@ -25,6 +25,9 @@
     <Filter Include="Sources\Utils\FileSystem">
       <UniqueIdentifier>{b0eb50e7-36a9-4293-817f-6656fd94b688}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Utils\Data">
+      <UniqueIdentifier>{38a919bc-762d-45c1-8b24-79832815f122}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -107,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Serialization.h">
       <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Data\ITreeData.h">
+      <Filter>Sources\Utils\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

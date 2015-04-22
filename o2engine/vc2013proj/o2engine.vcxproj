@@ -86,6 +86,7 @@
     <ClInclude Include="..\Sources\Utils\Containers\IArray.h" />
     <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h" />
     <ClInclude Include="..\Sources\Utils\Containers\Pair.h" />
+    <ClInclude Include="..\Sources\Utils\Data\ITreeData.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\Function.h" />
