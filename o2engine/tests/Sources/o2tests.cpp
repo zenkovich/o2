@@ -71,6 +71,10 @@ int main(char** lpCmdLine, int nCmdShow)
 	sr.Serialize(&f, "f");
 	sr.Save("serTest.xml");
 
+	char str[] = "1234567890";
+	wchar_t* wstr = new wchar_t[100];
+	int xx = mbstowcs(wstr, str, 100);
+
 	printf("All tests completed!");
 	_getch();
 
