@@ -31,7 +31,7 @@ namespace o2
 		va_end(vlist);
 	}
 
-	void Debug::Log(const String& out)
+	void Debug::Log(const TString& out)
 	{
 		mInstance->mLogStream->OutStr(out);
 	}
@@ -46,7 +46,7 @@ namespace o2
 		va_end(vlist);
 	}
 
-	void Debug::LogWarning(const String& out)
+	void Debug::LogWarning(const TString& out)
 	{
 		mInstance->mLogStream->WarningStr(out);
 	}
@@ -61,7 +61,7 @@ namespace o2
 		va_end(vlist);
 	}
 
-	void Debug::LogError(const String& out)
+	void Debug::LogError(const TString& out)
 	{
 		mInstance->mLogStream->ErrorStr(out);
 	}

@@ -9,7 +9,7 @@ namespace o2
 	{
 	}
 
-	LogStream::LogStream(const String& id):
+	LogStream::LogStream(const TString& id):
 		mParentStream(NULL), mId(id)
 	{
 	}
@@ -22,7 +22,7 @@ namespace o2
 		UnbindAllStreams();
 	}
 
-	const String& LogStream::GetId() const
+	const TString& LogStream::GetId() const
 	{
 		return mId;
 	}
@@ -93,7 +93,7 @@ namespace o2
 		return mParentStream;
 	}
 
-	void LogStream::OutStr(const String& str)
+	void LogStream::OutStr(const TString& str)
 	{
 		OutStrEx(str);
 
@@ -106,7 +106,7 @@ namespace o2
 		}
 	}
 
-	void LogStream::ErrorStr(const String& str)
+	void LogStream::ErrorStr(const TString& str)
 	{
 		OutErrorEx(str);
 
@@ -119,7 +119,7 @@ namespace o2
 		}
 	}
 
-	void LogStream::WarningStr(const String& str)
+	void LogStream::WarningStr(const TString& str)
 	{
 		OutWarningEx(str);
 

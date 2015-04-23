@@ -15,7 +15,7 @@ namespace o2
 
 		inline Rect();
 		inline Rect(const Vec2<T>& leftTop, const Vec2<T>& rightDown);
-		inline Rect(float left, float top, float right, float bottom);
+		inline Rect(T left, T top, T right, T bottom);
 
 		inline bool    operator==(const Rect<T>& rt) const;
 		inline bool    operator!=(const Rect<T>& rt) const;
@@ -99,7 +99,7 @@ namespace o2
 	}
 
 	template<typename T>
-	Rect<T>::Rect(float left, float top, float right, float bottom)
+	Rect<T>::Rect(T left, T top, T right, T bottom)
 	{
 		this->left = Math::Min(left, right);
 		this->right = Math::Max(left, right);

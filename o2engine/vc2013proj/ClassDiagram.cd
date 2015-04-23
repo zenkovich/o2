@@ -714,13 +714,6 @@
       <FileName>D:\work\o2\o2engine\Sources\Utils\Math\Vector2.h</FileName>
     </TypeIdentifier>
   </Typedef>
-  <Typedef Name="o2::String" Collapsed="true">
-    <Position X="19.25" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>D:\work\o2\o2engine\Sources\Utils\String.h</FileName>
-    </TypeIdentifier>
-  </Typedef>
   <Typedef Name="uintptr_t" Collapsed="true">
     <Position X="52.25" Y="14.25" Width="1.5" />
     <TypeIdentifier>

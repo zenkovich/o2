@@ -10,8 +10,6 @@
 
 namespace o2
 {
-	typedef std::string String;
-
 	class TString
 	{
 		wchar_t* mData;
@@ -57,31 +55,44 @@ namespace o2
 		wchar_t& operator[](int idx);
 
 		wchar_t* Data() const;
-		void Reserve(int size);
+
 		int Length() const;
-		void Clear();
 		bool IsEmpty() const;
+
+		void Clear();
+		void Reserve(int size);
+
 		void Append(const TString& other);
+		TString Appended(const TString& other) const;
+
 		void Insert(const TString& other, int position = 0);
-		void Erase(int begin, int end);
+		TString Inserted(const TString& other, int position = 0) const;
+
+		void Erase(int begin, int end = -1);
+		TString Erased(int begin, int end = -1) const;
+
 		void Replace(const TString& other, int begin, int end);
+		TString Replaced(const TString& other, int begin, int end) const;
+
 		int Find(const TString& other, int startIdx = 0) const;
 		int CountOf(const TString& other, int startIdx = 0) const;
 		int FindLast(const TString& other, int startIdx = -1) const;
+
 		bool EndsWith(const TString& other) const;
 		bool StartsWith(const TString& other) const;
+
 		TString SubStr(int begin, int end = -1) const;
+
 		Array<TString> Split(const TString& splitStr) const;
+
 		TString ToLowerCase() const;
 		TString ToUpperCase() const;
+
 		void Trim(const TString& trimSymbols = " ");
 		void TrimStart(const TString& trimSymbols = " ");
 		void TrimEnd(const TString& trimSymbols = " ");
 
-		static TString Format(const TString& format, ...);
-		static TString Format(const TString& format, va_list vlist);
+		static TString Format(TString format, ...);
+		static TString Format(TString format, va_list vlist);
 	};
-
-	String FormatStr(const char* format, ...);
-	String FormatStr(const char* format, va_list vlist);
 }

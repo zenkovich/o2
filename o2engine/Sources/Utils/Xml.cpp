@@ -7,7 +7,7 @@ namespace o2
 {
 	namespace Xml
 	{
-		bool LoadFromFile(const String& fileName, Document& xmlDoc)
+		bool LoadFromFile(const TString& fileName, Document& xmlDoc)
 		{
 			InFile inFile(fileName);
 
@@ -24,17 +24,17 @@ namespace o2
 			return res.status == pugi::status_ok;
 		}
 
-		bool LoadFromString(const String& data, Document& xmlDoc)
+		bool LoadFromString(const TString& data, Document& xmlDoc)
 		{
 			pugi::xml_parse_result res = xmlDoc.load_buffer(data.c_str(), data.length());
 			return res.status == pugi::status_ok;
 		}
 
-		bool SaveToString(String& data, Document& xmlDoc)
+		bool SaveToString(TString& data, Document& xmlDoc)
 		{
 			struct xmlWriter:public pugi::xml_writer
 			{
-				String* str;
+				TString* str;
 
 				void write(const void* data, size_t size)
 				{
@@ -49,7 +49,7 @@ namespace o2
 			return true;
 		}
 
-		bool SaveToFile(const String& fileName, Document& xmlDoc)
+		bool SaveToFile(const TString& fileName, Document& xmlDoc)
 		{
 			struct xmlWriter:public pugi::xml_writer
 			{
@@ -75,10 +75,10 @@ namespace o2
 			return true;
 		}
 
-		Node GetNode(const Node& node, const String& path)
+		Node GetNode(const Node& node, const TString& path)
 		{
 			int slashPos = path.find('/');
-			String currNode = path.substr(0, slashPos);
+			TString currNode = path.substr(0, slashPos);
 
 			if (slashPos == path.npos)
 				return node.child(currNode.c_str());
@@ -101,7 +101,7 @@ namespace o2
 			node.append_attribute("v") = object;
 		}
 
-		void ToXmlNode(String& object, Node& node)
+		void ToXmlNode(TString& object, Node& node)
 		{
 			node.append_attribute("v") = object.c_str();
 		}
@@ -172,7 +172,7 @@ namespace o2
 			object = node.attribute("v").as_float();
 		}
 
-		void FromXmlNode(String& object, Node& node)
+		void FromXmlNode(TString& object, Node& node)
 		{
 			object = node.attribute("v").value();
 		}

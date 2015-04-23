@@ -6,14 +6,14 @@ namespace o2
 {
 	class FileLogStream:public LogStream
 	{
-		String mFilename;
+		TString mFilename;
 
 	public:
-		FileLogStream(const String& fileName);
-		FileLogStream(const String& id, const String& fileName);
+		FileLogStream(const TString& fileName);
+		FileLogStream(const TString& id, const TString& fileName);
 		~FileLogStream();
 
 	protected:
-		void OutStrEx(const String& str);
+		void OutStrEx(const TString& str);
 	};
 }

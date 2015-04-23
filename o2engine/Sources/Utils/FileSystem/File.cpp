@@ -10,7 +10,7 @@ namespace o2
 	{
 	}
 
-	InFile::InFile(const String& filename):
+	InFile::InFile(const TString& filename):
 		mOpened(false)
 	{
 		Open(filename);
@@ -21,7 +21,7 @@ namespace o2
 		Close();
 	}
 
-	bool InFile::Open(const String& filename)
+	bool InFile::Open(const TString& filename)
 	{
 		Close();
 
@@ -80,7 +80,7 @@ namespace o2
 		return (long unsigned int)mIfstream.tellg();
 	}
 
-	const String& InFile::GetFilename() const
+	const TString& InFile::GetFilename() const
 	{
 		return mFilename;
 	}
@@ -99,7 +99,7 @@ namespace o2
 	{
 	}
 
-	OutFile::OutFile(const String& filename):
+	OutFile::OutFile(const TString& filename):
 		mOpened(false)
 	{
 		Open(filename);
@@ -110,7 +110,7 @@ namespace o2
 		Close();
 	}
 
-	bool OutFile::Open(const String& filename)
+	bool OutFile::Open(const TString& filename)
 	{
 		Close();
 
@@ -140,7 +140,7 @@ namespace o2
 		mOfstream.write((const char*)dataPtr, bytes);
 	}
 
-	const String& OutFile::GetFilename() const
+	const TString& OutFile::GetFilename() const
 	{
 		return mFilename;
 	}

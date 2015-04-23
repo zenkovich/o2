@@ -111,7 +111,7 @@
     <ClInclude Include="..\Sources\Utils\Serialization.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Data\ITreeData.h">
+    <ClInclude Include="..\Sources\Utils\Data\DataDoc.h">
       <Filter>Sources\Utils\Data</Filter>
     </ClInclude>
   </ItemGroup>
@@ -148,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Serialization.cpp">
       <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp">
+      <Filter>Sources\Utils\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

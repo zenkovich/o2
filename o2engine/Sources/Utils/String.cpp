@@ -2,79 +2,63 @@
 
 namespace o2
 {
-	char charBuf[4096];
-
-	o2::String FormatStr(const char* format, ...)
+	TString::TString() :
+		mData((wchar_t*)malloc(20 * sizeof(wchar_t))), mCapacity(20)
 	{
-		va_list vlist;
-		va_start(vlist, format);
-
-		vsprintf(charBuf, format, vlist);
-
-		va_end(vlist);
-
-		return (String)charBuf;
+		mData[0] = '\0';
 	}
 
-	o2::String FormatStr(const char* format, va_list vlist)
-	{
-		vsprintf(charBuf, format, vlist);
-		return (String)charBuf;
-	}
-
-
-	TString::TString():
-		mData((wchar_t*)malloc(20*sizeof(wchar_t))), mCapacity(20)
-	{
-	}
-
-	TString::TString(wchar_t* data):
+	TString::TString(wchar_t* data) :
 		mCapacity(0)
 	{
 		while (data[mCapacity] != '\0') mCapacity++;
+		mCapacity++;
+
 		mData = (wchar_t*)malloc(mCapacity*sizeof(wchar_t));
 		memcpy(mData, data, mCapacity*sizeof(wchar_t));
 	}
 
-	TString::TString(char* data):
+	TString::TString(char* data) :
 		mCapacity(0)
 	{
 		while (data[mCapacity] != '\0') mCapacity++;
+		mCapacity++;
+
 		mData = (wchar_t*)malloc(mCapacity*sizeof(wchar_t));
 		auto sz = mbstowcs((wchar_t*)mData, data, mCapacity);
 		mData[sz] = '\0';
 	}
 
-	TString::TString(const TString& other):
+	TString::TString(const TString& other) :
 		mCapacity(other.mCapacity), mData((wchar_t*)malloc(other.mCapacity*sizeof(wchar_t)))
 	{
 		memcpy(mData, other.mData, mCapacity*sizeof(wchar_t));
 	}
 
-	TString::TString(int value):
-		mCapacity(32), mData((wchar_t*)malloc(mCapacity*sizeof(wchar_t)))
+	TString::TString(int value) :
+		mCapacity(32), mData((wchar_t*)malloc(32 * sizeof(wchar_t)))
 	{
 		int len = 0;
 
 		bool neg = value < 0;
 		if (neg) value = -value;
 
-		while (value > 0)
+		do
 		{
 			mData[len++] = (value % 10) + '0';
 			value /= 10;
-		}
+		} while (value > 0);
 
 		if (neg) mData[len++] = '-';
 
-		for (int i = 0; i < len/2; i++)
+		for (int i = 0; i < len / 2; i++)
 			Math::Swap(mData[i], mData[len - 1 - i]);
 
 		mData[len++] = '\0';
 	}
 
-	TString::TString(UInt value):
-		mCapacity(32), mData((wchar_t*)malloc(mCapacity*sizeof(wchar_t)))
+	TString::TString(UInt value) :
+		mCapacity(32), mData((wchar_t*)malloc(32 * sizeof(wchar_t)))
 	{
 		int len = 0;
 
@@ -84,14 +68,14 @@ namespace o2
 			value /= 10;
 		}
 
-		for (int i = 0; i < len/2; i++)
+		for (int i = 0; i < len / 2; i++)
 			Math::Swap(mData[i], mData[len - 1 - i]);
 
 		mData[len++] = '\0';
 	}
 
-	TString::TString(float value):
-		mCapacity(64), mData((wchar_t*)malloc(mCapacity*sizeof(wchar_t)))
+	TString::TString(float value) :
+		mCapacity(64), mData((wchar_t*)malloc(64 * sizeof(wchar_t)))
 	{
 		if (isnan(value))
 		{
@@ -103,7 +87,7 @@ namespace o2
 		}
 		else if (value == 0.0f)
 		{
-			mData[0] = '0'; mData[1] = '\0'; 
+			mData[0] = '0'; mData[1] = '\0';
 		}
 		else
 		{
@@ -114,7 +98,7 @@ namespace o2
 			if (neg) value = -value;
 
 			// calculate magnitude
-			m = log10(value);
+			m = (int)log10(value);
 			int useExp = (m >= 14 || (neg && m >= 9) || m <= -9);
 
 			if (neg) *(c++) = '-';
@@ -123,8 +107,8 @@ namespace o2
 			if (useExp)
 			{
 				if (m < 0)
-					m -= 1.0;
-				value = value / pow(10.0, m);
+					m -= 1;
+				value = value / pow(10.0f, m);
 				m1 = m;
 				m = 0;
 			}
@@ -134,17 +118,17 @@ namespace o2
 			// convert the number
 			while (value > 0.00000001f || m >= 0)
 			{
-				double weight = pow(10.0, m);
+				float weight = pow(10.0f, m);
 				if (weight > 0 && !isinf(weight))
 				{
-					digit = floor(value / weight);
+					digit = (int)floor(value / weight);
 					value -= (digit * weight);
 					*(c++) = '0' + digit;
 				}
 				if (m == 0 && value > 0)
 					*(c++) = '.';
 				m--;
-			} 
+			}
 			if (useExp)
 			{
 				// convert the exponent
@@ -167,7 +151,7 @@ namespace o2
 					m++;
 				}
 				c -= m;
-				for (i = 0, j = m-1; i<j; i++, j--)
+				for (i = 0, j = m - 1; i < j; i++, j--)
 				{
 					// swap without temporary
 					c[i] ^= c[j];
@@ -180,56 +164,61 @@ namespace o2
 		}
 	}
 
-	TString::TString(const Vec2F& value):
-		mCapacity(256), mData((wchar_t*)malloc(mCapacity*sizeof(wchar_t)))
+	TString::TString(const Vec2F& value) :
+		mCapacity(256), mData((wchar_t*)malloc(256 * sizeof(wchar_t)))
 	{
-		*this += (TString)value.x;
-		*this += (TString)";";
-		*this += (TString)value.x;
+		mData[0] = '\0';
+		Append((TString)value.x);
+		Append((TString)";");
+		Append((TString)value.x);
 	}
 
-	TString::TString(const Vec2I& value):
-		mCapacity(256), mData((wchar_t*)malloc(mCapacity*sizeof(wchar_t)))
+	TString::TString(const Vec2I& value) :
+		mCapacity(256), mData((wchar_t*)malloc(256 * sizeof(wchar_t)))
 	{
-		*this += (TString)value.x;
-		*this += (TString)";";
-		*this += (TString)value.x;
+		mData[0] = '\0';
+		Append((TString)value.x);
+		Append((TString)";");
+		Append((TString)value.x);
 	}
 
-	TString::TString(const RectF& value):
-		mCapacity(512), mData((wchar_t*)malloc(mCapacity*sizeof(wchar_t)))
+	TString::TString(const RectF& value) :
+		mCapacity(512), mData((wchar_t*)malloc(512 * sizeof(wchar_t)))
 	{
-		*this += (TString)value.left;
-		*this += (TString)";";
-		*this += (TString)value.top;
-		*this += (TString)";";
-		*this += (TString)value.right;
-		*this += (TString)";";
-		*this += (TString)value.bottom;
+		mData[0] = '\0';
+		Append((TString)value.left);
+		Append((TString)";");
+		Append((TString)value.top);
+		Append((TString)";");
+		Append((TString)value.right);
+		Append((TString)";");
+		Append((TString)value.bottom);
 	}
 
-	TString::TString(const RectI& value):
-		mCapacity(512), mData((wchar_t*)malloc(mCapacity*sizeof(wchar_t)))
+	TString::TString(const RectI& value) :
+		mCapacity(512), mData((wchar_t*)malloc(512 * sizeof(wchar_t)))
 	{
-		*this += (TString)value.left;
-		*this += (TString)";";
-		*this += (TString)value.top;
-		*this += (TString)";";
-		*this += (TString)value.right;
-		*this += (TString)";";
-		*this += (TString)value.bottom;
+		mData[0] = '\0';
+		Append((TString)value.left);
+		Append((TString)";");
+		Append((TString)value.top);
+		Append((TString)";");
+		Append((TString)value.right);
+		Append((TString)";");
+		Append((TString)value.bottom);
 	}
 
-	TString::TString(const Color4& value):
-		mCapacity(512), mData((wchar_t*)malloc(mCapacity*sizeof(wchar_t)))
+	TString::TString(const Color4& value) :
+		mCapacity(512), mData((wchar_t*)malloc(512 * sizeof(wchar_t)))
 	{
-		*this += (TString)value.r;
-		*this += (TString)";";
-		*this += (TString)value.g;
-		*this += (TString)";";
-		*this += (TString)value.b;
-		*this += (TString)";";
-		*this += (TString)value.a;
+		mData[0] = '\0';
+		Append((TString)value.r);
+		Append((TString)";");
+		Append((TString)value.g);
+		Append((TString)";");
+		Append((TString)value.b);
+		Append((TString)";");
+		Append((TString)value.a);
 	}
 
 	TString::~TString()
@@ -276,12 +265,18 @@ namespace o2
 		for (int i = l - 1; i >= 0; i--)
 		{
 			auto c = mData[i];
-			if ((c >= '0' && c <= '9') || (i == 0 && c == '-'))
+			if (c >= '0' && c <= '9')
 			{
 				res += m*(c - '0');
-				m += 10;
+				m *= 10;
 			}
-			else return 0;
+			else
+			{
+				if (i == 0 && c == '-')
+					break;
+				else
+					return 0;
+			}
 		}
 
 		if (mData[0] == '-') res = -res;
@@ -315,8 +310,8 @@ namespace o2
 				if (inFraction)
 				{
 					/*See how are we converting a character to integer*/
-					fractionPart = fractionPart*10.0f + (*num - '0');
-					divisorForFraction *= 10.0f;
+					fractionPart = fractionPart * 10 + (*num - '0');
+					divisorForFraction *= 10;
 				}
 				else
 				{
@@ -326,17 +321,17 @@ namespace o2
 			else if (*num == '.')
 			{
 				if (inFraction)
-					return sign*(integerPart + fractionPart/divisorForFraction);
+					return sign*(integerPart + fractionPart / divisorForFraction);
 				else
 					inFraction = true;
 			}
 			else
 			{
-				return sign*(integerPart + fractionPart/divisorForFraction);
+				return sign*(integerPart + fractionPart / divisorForFraction);
 			}
 			++num;
 		}
-		return sign*(integerPart + fractionPart/divisorForFraction);
+		return sign*(integerPart + fractionPart / divisorForFraction);
 	}
 
 	TString::operator UInt() const
@@ -532,12 +527,14 @@ namespace o2
 		}
 	}
 
-	void TString::Erase(int begin, int end)
+	void TString::Erase(int begin, int end /*= -1*/)
 	{
-		if (end < begin)
+		int l = Length();
+		if (end < 0) end = l;
+
+		if (end < begin || begin == end)
 			return;
 
-		int l = Length();
 		int d = end - begin;
 		for (int i = begin; i < l - d + 1; i++)
 			mData[i] = mData[i + d];
@@ -555,14 +552,15 @@ namespace o2
 	int TString::Find(const TString& other, int startIdx /*= 0*/) const
 	{
 		int l1 = Length(), l2 = other.Length();
-		int lastFndStartIdx = startIdx;
+		int lastFndStartIdx = startIdx - 1;
 		int fndIdx = 0;
 		for (int i = startIdx; i < l1; i++)
 		{
 			if (mData[i] == other.mData[fndIdx])
 			{
-				if (fndIdx == l2 - 1)
-					return lastFndStartIdx;
+				fndIdx++;
+				if (fndIdx == l2)
+					return lastFndStartIdx + 1;
 			}
 			else
 			{
@@ -579,12 +577,13 @@ namespace o2
 		int res = 0;
 		int searchIdx = startIdx;
 		int l1 = Length(), l2 = other.Length();
-		do 
+		do
 		{
 			int srch = Find(other, searchIdx);
 			if (srch < 0)
 				break;
 
+			res++;
 			searchIdx = srch + l2;
 		} 
 		while (searchIdx < l1);
@@ -595,21 +594,24 @@ namespace o2
 	int TString::FindLast(const TString& other, int startIdx /*= -1*/) const
 	{
 		int l1 = Length(), l2 = other.Length();
-		int lastFndStartIdx = startIdx;
-		int fndIdx = 0;
-		for (int i = startIdx; i < l1; i++)
+
+		if (startIdx < 0) startIdx = l1 - 1;
+
+		int fndIdx = l2 - 1;
+		for (int i = startIdx; i >= 0; i--)
 		{
-			if (mData[i] != other.mData[fndIdx])
+			if (mData[i] == other.mData[fndIdx])
 			{
-				fndIdx = 0;
-				lastFndStartIdx = i;
+				fndIdx--;
+
+				if (fndIdx < 0)
+					return i;
 			}
+			else fndIdx = l2 - 1;
 		}
 
-		if (lastFndStartIdx == l1 - 1)
-			return -1;
-
-		return lastFndStartIdx;
+		return -1;
+		
 	}
 
 	bool TString::EndsWith(const TString& other) const
@@ -629,7 +631,7 @@ namespace o2
 		int l1 = Length(), l2 = other.Length();
 		for (int i = 0; i < l1 && i < l2; i++)
 		{
-			if (mData[l1 - 1 - i] == other.mData[l2 - 1 - i] && i == l2 - 1)
+			if (mData[i] == other.mData[i] && i == l2 - 1)
 				return true;
 		}
 
@@ -638,6 +640,9 @@ namespace o2
 
 	TString TString::SubStr(int begin, int end /*= -1*/) const
 	{
+		if (end < 0)
+			end = Length();
+
 		int b = Math::Min(begin, end);
 		int e = Math::Max(begin, end);
 		int d = e - b;
@@ -653,42 +658,221 @@ namespace o2
 	{
 		Array<TString> res;
 		int lastFnd = 0;
+		int i = 0;
+		int l1 = Length(), l2 = splitStr.Length();
+		while (i < l1)
+		{
+			int f = Find(splitStr, i);
+			if (f < 0)
+				break;
 
+			res.Add(SubStr(i, f));
+			i = f + l2;
+		}
+		res.Add(SubStr(i));
+
+		return res;
 	}
 
 	TString TString::ToLowerCase() const
 	{
-
+		return *this;
 	}
 
 	TString TString::ToUpperCase() const
 	{
-
+		return *this;
 	}
 
 	void TString::Trim(const TString& trimSymbols /*= " "*/)
 	{
-
+		TrimStart(trimSymbols);
+		TrimEnd(trimSymbols);
 	}
 
 	void TString::TrimStart(const TString& trimSymbols /*= " "*/)
 	{
+		int trimEnd = -1;
+		int l1 = Length(), l2 = trimSymbols.Length();
+		for (int i = 0; i < l1; i++)
+		{
+			bool breaking = true;
+			auto dataChar = mData[i];
+			for (int j = 0; j < l2; j++)
+			{
+				if (dataChar == trimSymbols.mData[j])
+				{
+					breaking = false;
+					break;
+				}
+			}
 
+			if (breaking)
+				break;
+			else
+				trimEnd = i;
+		}
+
+		Erase(0, trimEnd + 1);
 	}
 
 	void TString::TrimEnd(const TString& trimSymbols /*= " "*/)
 	{
+		int l1 = Length(), l2 = trimSymbols.Length();
+		int trimEnd = l1;
+		for (int i = l1 - 1; i >= 0; i--)
+		{
+			bool breaking = true;
+			auto dataChar = mData[i];
+			for (int j = 0; j < l2; j++)
+			{
+				if (dataChar == trimSymbols.mData[j])
+				{
+					breaking = false;
+					break;
+				}
+			}
 
+			if (breaking)
+				break;
+			else
+				trimEnd = i;
+		}
+
+		Erase(trimEnd, l1);
 	}
 
-	TString TString::Format(const TString& format, ...)
+	TString TString::Format(const TString format, ...)
 	{
+		va_list vlist;
+		va_start(vlist, format);
 
+		TString res = Format(format, vlist);
+
+		va_end(vlist);
+
+		return res;
 	}
 
-	TString TString::Format(const TString& format, va_list vlist)
+	TString TString::Format(const TString format, va_list vlist)
 	{
+		/*vsprintf(charBuf, format, vlist);
+		return (TString)charBuf;*/
 
+		int len = format.Length();
+
+		TString res;
+		res.Reserve(len * 2);
+
+		int resLen = 0;
+
+		auto appendStr = [&](const TString& str) 
+		{
+			int l = str.Length();
+			res.Reserve(resLen + l);
+			for (int i = 0; i < l; i++)
+				res.mData[resLen++] = str.mData[i];
+		};
+
+		for (int i = 0; i < len; i++)
+		{
+			if (format.mData[i] == '%')
+			{
+				bool success = true;
+
+				if (format.mData[i + 1] == 'i')
+				{
+					appendStr((TString)va_arg(vlist, int));
+				}
+				else if (format.mData[i + 1] == 'f')
+				{
+					appendStr((TString)(float)va_arg(vlist, double));
+				}
+				else if (format.mData[i + 1] == 'd')
+				{
+					appendStr((TString)(float)va_arg(vlist, double));
+				}
+				else if (format.mData[i + 1] == 's')
+				{
+					appendStr((TString)va_arg(vlist, char*));
+				}
+				else if (format.mData[i + 1] == 'v' && format.mData[i + 2] == 'i')
+				{
+					appendStr((TString)va_arg(vlist, Vec2I));
+					i++;
+				}
+				else if (format.mData[i + 1] == 'v' && format.mData[i + 2] == 'f')
+				{
+					appendStr((TString)va_arg(vlist, Vec2F));
+					i++;
+				}
+				else if (format.mData[i + 1] == 'r' && format.mData[i + 2] == 'i')
+				{
+					appendStr((TString)va_arg(vlist, RectI));
+					i++;
+				}
+				else if (format.mData[i + 1] == 'r' && format.mData[i + 2] == 'f')
+				{
+					appendStr((TString)va_arg(vlist, RectF));
+					i++;
+				}
+				else if (format.mData[i + 1] == 'c' && format.mData[i + 2] == 'l')
+				{
+					appendStr((TString)va_arg(vlist, Color4));
+					i++;
+				}
+				else if (format.mData[i + 1] == 't' && format.mData[i + 2] == 's')
+				{
+					appendStr(va_arg(vlist, TString));
+					i++;
+				}
+				else if (format.mData[i + 1] == 'c')
+				{
+					res.mData[resLen++] = va_arg(vlist, char);
+				}
+				else
+				{
+					res.mData[resLen++] = format.mData[i];
+					continue;
+				}
+
+				i++;
+				continue;
+			}
+
+			res.mData[resLen++] = format.mData[i];
+		}
+
+		res.mData[resLen] = '\0';
+		return res;
+	}
+
+	TString TString::Appended(const TString& other) const
+	{
+		TString res(*this);
+		res.Append(other);
+		return res;
+	}
+
+	TString TString::Inserted(const TString& other, int position /*= 0*/) const
+	{
+		TString res(*this);
+		res.Insert(other, position);
+		return res;
+	}
+
+	TString TString::Erased(int begin, int end /*= -1*/) const
+	{
+		TString res(*this);
+		res.Erase(begin, end);
+		return res;
+	}
+
+	TString TString::Replaced(const TString& other, int begin, int end) const
+	{
+		TString res(*this);
+		res.Replace(other, begin, end);
+		return res;
 	}
 
 }

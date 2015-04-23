@@ -21,7 +21,7 @@ namespace o2
 		/** Serialization function. */
 		virtual bool Serialize(Serializer* serializer) = 0;
 		virtual Serializable* CreateSample() const = 0;
-		virtual String GetTypeName() const = 0;
+		virtual TString GetTypeName() const = 0;
 
 	protected:
 		virtual void OnBeginSerialize() {}
@@ -30,12 +30,12 @@ namespace o2
 
 	struct gSerializeTypesContainer
 	{
-		typedef Dictionary<String, Serializable*> SamplesDict;
+		typedef Dictionary<TString, Serializable*> SamplesDict;
 
 		static SamplesDict mSamples;
 
 		static void          RegType(Serializable* type);
-		static Serializable* GetSample(const String& typeName);
+		static Serializable* GetSample(const TString& typeName);
 		static void          OutputRegisteredSamples();
 	};
 
@@ -66,7 +66,7 @@ namespace o2
 		Serializer(Type type = Type::Serialize);
 
 		/** ctor. Loading file and setting deserialize type. */
-		Serializer(const String& fileName, Type type = Type::Serialize);
+		Serializer(const TString& fileName, Type type = Type::Serialize);
 
 		/** ctor. Getting xml node and setting type. */
 		Serializer(Xml::Node& xmlNode, Type type = Type::Serialize);
@@ -78,68 +78,68 @@ namespace o2
 		Type GetType() const;
 
 		/** Loading file, sets type deserialization and returns a flag of successful execution. */
-		bool Load(const String& file);
+		bool Load(const TString& file);
 
 		/** Saving data to file. */
-		bool Save(const String& file);
+		bool Save(const TString& file);
 
 		/** Loads data from file and returns a flag of successful execution. */
-		bool LoadFromString(const String& data);
+		bool LoadFromString(const TString& data);
 
 		/** Saving data to string. */
-		String SaveToString();
+		TString SaveToString();
 
 		/** Sets log. If log not setted - using global log. */
 		void SetLog(LogStream* logStream);
 
 		/** Creates inherited node. */
-		void CreateNode(const String& id);
+		void CreateNode(const TString& id);
 
 		/** Trying to get inherited node. */
-		bool GetNode(const String& id, bool errors = false);
+		bool GetNode(const TString& id, bool errors = false);
 
 		/** Returns to parent node. */
 		void PopNode();
 
 		/** Serialize object. */
-		bool Serialize(Serializable* object, const String& id, bool errors = true);
+		bool Serialize(Serializable* object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(int& object, const String& id, bool errors = true);
+		bool Serialize(int& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(unsigned int& object, const String& id, bool errors = true);
+		bool Serialize(unsigned int& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(float& object, const String& id, bool errors = true);
+		bool Serialize(float& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(bool& object, const String& id, bool errors = true);
+		bool Serialize(bool& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(String& object, const String& id, bool errors = true);
+		bool Serialize(TString& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(Vec2F& object, const String& id, bool errors = true);
+		bool Serialize(Vec2F& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(RectF& object, const String& id, bool errors = true);
+		bool Serialize(RectF& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(Vec2I& object, const String& id, bool errors = true);
+		bool Serialize(Vec2I& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(RectI& object, const String& id, bool errors = true);
+		bool Serialize(RectI& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(Color4& object, const String& id, bool errors = true);
+		bool Serialize(Color4& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(WideTime& object, const String& id, bool errors = true);
+		bool Serialize(WideTime& object, const TString& id, bool errors = true);
 
 		/** Serialize object. */
 		template<typename T>
-		bool SerializeTemp(T& object, const String& id, bool errors = true)
+		bool SerializeTemp(T& object, const TString& id, bool errors = true)
 		{
 			if (mType == Type::Serialize)
 			{
@@ -162,7 +162,7 @@ namespace o2
 
 		/** Saving data from object to xml node. */
 		template<typename T>
-		bool Serialize(Array<T>& array, const String& id, bool errors = true)
+		bool Serialize(Array<T>& array, const TString& id, bool errors = true)
 		{
 			if (mType == Type::Serialize)
 			{
@@ -202,7 +202,7 @@ namespace o2
 
 		/** Saving data from object to xml node. */
 		template<typename T>
-		bool Serialize(Array<T*>& arr, const String& id, bool errors = true)
+		bool Serialize(Array<T*>& arr, const TString& id, bool errors = true)
 		{
 			if (mType == Type::Serialize)
 			{
@@ -229,7 +229,7 @@ namespace o2
 				for (int i = 0; i < srCount; i++)
 				{
 					char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
-					String type = mCurrentNode.child(elemNodeName).attribute("type").value();
+					TString type = mCurrentNode.child(elemNodeName).attribute("type").value();
 					T* elem = static_cast<T*>(CreateSerializableSample(type));
 					Serialize(elem, elemNodeName, errors);
 					arr.Add(elem);
@@ -242,7 +242,7 @@ namespace o2
 		}
 
 	private:
-		static Serializable* CreateSerializableSample(const String& type);
+		static Serializable* CreateSerializableSample(const TString& type);
 	};
 
 #define FIRST_SERIALIZATION() Dictionary<String, Serializable*> gSerializeTypesContainer::mSamples
