@@ -10,17 +10,17 @@ namespace o2
 	class InFile
 	{
 		std::ifstream mIfstream; /**< Input stream. */
-		TString        mFilename; /**< File name. */
+		String        mFilename; /**< File name. */
 		bool          mOpened;   /**< True, if file was opened. */
 
 	public:
 		InFile();
-		InFile(const TString& filename);
+		InFile(const String& filename);
 		~InFile();
 
 		/** Opening file with specified extension. If type is cFileType::FT_FILE, file will opened wothout adding extension,
 		* else file name will be combine with extension string from file system. */
-		bool Open(const TString& filename);
+		bool Open(const String& filename);
 
 		/** Closing file. */
 		bool Close();
@@ -44,24 +44,24 @@ namespace o2
 		bool IsOpened() const;
 
 		/** Return file name. */
-		const TString& GetFilename() const;
+		const String& GetFilename() const;
 	};
 
 	/** Output file. */
 	class OutFile
 	{
 		std::ofstream mOfstream; /**< Output stream. */
-		TString        mFilename; /**< File name. */
+		String        mFilename; /**< File name. */
 		bool          mOpened;   /**< True, if file was opened. */
 
 	public:
 		OutFile();
-		OutFile(const TString& filename);
+		OutFile(const String& filename);
 		~OutFile();
 
 		/** Opening file with specified extension. If type is cFileType::FT_FILE, file will opened wothout adding extension,
 		* else file name will be combine with first extension string from file system. */
-		bool Open(const TString& filename);
+		bool Open(const String& filename);
 
 		/** Close file. */
 		bool Close();
@@ -73,6 +73,6 @@ namespace o2
 		bool IsOpened() const;
 
 		/** Returns file name. */
-		const TString& GetFilename() const;
+		const String& GetFilename() const;
 	};
 }

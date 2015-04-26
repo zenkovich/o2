@@ -10,7 +10,7 @@ namespace o2
 	{
 	}
 
-	InFile::InFile(const TString& filename):
+	InFile::InFile(const String& filename):
 		mOpened(false)
 	{
 		Open(filename);
@@ -21,11 +21,11 @@ namespace o2
 		Close();
 	}
 
-	bool InFile::Open(const TString& filename)
+	bool InFile::Open(const String& filename)
 	{
 		Close();
 
-		mIfstream.open(filename.c_str(), std::ios::binary);
+		mIfstream.open(filename, std::ios::binary);
 
 		if (!mIfstream.is_open())
 		{
@@ -80,7 +80,7 @@ namespace o2
 		return (long unsigned int)mIfstream.tellg();
 	}
 
-	const TString& InFile::GetFilename() const
+	const String& InFile::GetFilename() const
 	{
 		return mFilename;
 	}
@@ -99,7 +99,7 @@ namespace o2
 	{
 	}
 
-	OutFile::OutFile(const TString& filename):
+	OutFile::OutFile(const String& filename):
 		mOpened(false)
 	{
 		Open(filename);
@@ -110,11 +110,11 @@ namespace o2
 		Close();
 	}
 
-	bool OutFile::Open(const TString& filename)
+	bool OutFile::Open(const String& filename)
 	{
 		Close();
 
-		mOfstream.open(filename.c_str(), std::ios::binary);
+		mOfstream.open(filename, std::ios::binary);
 
 		if (!mOfstream.is_open())
 		{
@@ -140,7 +140,7 @@ namespace o2
 		mOfstream.write((const char*)dataPtr, bytes);
 	}
 
-	const TString& OutFile::GetFilename() const
+	const String& OutFile::GetFilename() const
 	{
 		return mFilename;
 	}

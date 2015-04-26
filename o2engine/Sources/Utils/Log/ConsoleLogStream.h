@@ -8,11 +8,11 @@ namespace o2
 	{
 	public:
 		ConsoleLogStream();
-		ConsoleLogStream(const TString& id);
+		ConsoleLogStream(const String& id);
 		~ConsoleLogStream();
 
 	protected:
-		void OutStrEx(const TString& str);
+		void OutStrEx(const String& str);
 		void InitConsole();
 	};
 }

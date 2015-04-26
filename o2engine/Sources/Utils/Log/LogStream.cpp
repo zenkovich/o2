@@ -9,7 +9,7 @@ namespace o2
 	{
 	}
 
-	LogStream::LogStream(const TString& id):
+	LogStream::LogStream(const String& id):
 		mParentStream(NULL), mId(id)
 	{
 	}
@@ -22,7 +22,7 @@ namespace o2
 		UnbindAllStreams();
 	}
 
-	const TString& LogStream::GetId() const
+	const String& LogStream::GetId() const
 	{
 		return mId;
 	}
@@ -93,42 +93,42 @@ namespace o2
 		return mParentStream;
 	}
 
-	void LogStream::OutStr(const TString& str)
+	void LogStream::OutStr(const String& str)
 	{
 		OutStrEx(str);
 
 		if (mParentStream)
 		{
-			if (mId == "")
-				mParentStream->Out(str.c_str());
+			if (mId.IsEmpty())
+				mParentStream->Out(str);
 			else
-				mParentStream->Out((mId + ":" + str).c_str());
+				mParentStream->Out((mId + ":" + str));
 		}
 	}
 
-	void LogStream::ErrorStr(const TString& str)
+	void LogStream::ErrorStr(const String& str)
 	{
 		OutErrorEx(str);
 
 		if (mParentStream)
 		{
 			if (mId == "")
-				mParentStream->Error(str.c_str());
+				mParentStream->Error(str);
 			else
-				mParentStream->Error((mId + ":" + str).c_str());
+				mParentStream->Error((mId + ":" + str));
 		}
 	}
 
-	void LogStream::WarningStr(const TString& str)
+	void LogStream::WarningStr(const String& str)
 	{
 		OutWarningEx(str);
 
 		if (mParentStream)
 		{
 			if (mId == "")
-				mParentStream->Warning(str.c_str());
+				mParentStream->Warning(str);
 			else
-				mParentStream->Warning((mId + ":" + str).c_str());
+				mParentStream->Warning((mId + ":" + str));
 		}
 	}
 }

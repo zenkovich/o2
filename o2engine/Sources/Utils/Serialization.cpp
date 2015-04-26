@@ -11,7 +11,7 @@ namespace o2
 		mType = type;
 	}
 
-	Serializer::Serializer(const TString& fileName, Type type /*= Type::Serialize*/)
+	Serializer::Serializer(const String& fileName, Type type /*= Type::Serialize*/)
 	{
 		mCurrentNode = mRootNode;
 		mLog = Debug::GetLog();
@@ -28,7 +28,7 @@ namespace o2
 	{
 	}
 
-	bool Serializer::Load(const TString& file)
+	bool Serializer::Load(const String& file)
 	{
 		if (!Xml::LoadFromFile(file, mRootNode))
 			return false;
@@ -39,19 +39,19 @@ namespace o2
 		return true;
 	}
 
-	bool Serializer::Save(const TString& file)
+	bool Serializer::Save(const String& file)
 	{
 		return Xml::SaveToFile(file, mRootNode);
 	}
 
-	bool Serializer::LoadFromString(const TString& data)
+	bool Serializer::LoadFromString(const String& data)
 	{
 		return Xml::LoadFromString(data, mRootNode);
 	}
 
-	TString Serializer::SaveToString()
+	String Serializer::SaveToString()
 	{
-		TString data;
+		String data;
 		Xml::SaveToString(data, mRootNode);
 		return data;
 	}
@@ -61,18 +61,18 @@ namespace o2
 		mLog = logStream;
 	}
 
-	void Serializer::CreateNode(const TString& id)
+	void Serializer::CreateNode(const String& id)
 	{
-		mCurrentNode = mCurrentNode.append_child(id.c_str());
+		mCurrentNode = mCurrentNode.append_child(id);
 	}
 
-	bool Serializer::GetNode(const TString& id, bool errors /*= false*/)
+	bool Serializer::GetNode(const String& id, bool errors /*= false*/)
 	{
-		Xml::Node node = mCurrentNode.child(id.c_str());
+		Xml::Node node = mCurrentNode.child(id);
 		if (!node)
 		{
 			if (errors)
-				mLog->Error("Failed to get serialize node: %s", id.c_str());
+				mLog->Error("Failed to get serialize node: %s", id);
 
 			return false;
 		}
@@ -91,14 +91,14 @@ namespace o2
 		return mType;
 	}
 
-	bool Serializer::Serialize(Serializable* object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(Serializable* object, const String& id, bool errors /*= true*/)
 	{
 		if (mType == Type::Serialize)
 		{
 			CreateNode(id);
 			object->OnBeginSerialize();
 			object->onBeginSerializeEvent.Invoke();
-			mCurrentNode.append_attribute("type") = object->GetTypeName().c_str();
+			mCurrentNode.append_attribute("type") = object->GetTypeName();
 			object->Serialize(this);
 			PopNode();
 			return true;
@@ -117,62 +117,62 @@ namespace o2
 		return true;
 	}
 
-	bool Serializer::Serialize(int& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(int& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(unsigned int& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(unsigned int& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(float& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(float& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(bool& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(bool& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(TString& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(String& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(Vec2F& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(Vec2F& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(RectF& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(RectF& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(Vec2I& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(Vec2I& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(RectI& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(RectI& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(Color4& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(Color4& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(WideTime& object, const TString& id, bool errors /*= true*/)
+	bool Serializer::Serialize(WideTime& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	Serializable* Serializer::CreateSerializableSample(const TString& type)
+	Serializable* Serializer::CreateSerializableSample(const String& type)
 	{
 		return gSerializeTypesContainer::GetSample(type);
 	}
@@ -182,7 +182,7 @@ namespace o2
 		mSamples.Add(type->GetTypeName(), type);
 	}
 
-	Serializable* gSerializeTypesContainer::GetSample(const TString& typeName)
+	Serializable* gSerializeTypesContainer::GetSample(const String& typeName)
 	{
 		return mSamples[typeName]->CreateSample();
 	}
@@ -190,6 +190,6 @@ namespace o2
 	void gSerializeTypesContainer::OutputRegisteredSamples()
 	{
 		for (auto sam : mSamples)
-			Debug::Log("Sample: %s", sam.Key().c_str());
+			Debug::Log("Sample: %s", sam.Key());
 	}
 }

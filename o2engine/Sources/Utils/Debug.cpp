@@ -26,12 +26,12 @@ namespace o2
 		va_list vlist;
 		va_start(vlist, format);
 
-		mInstance->mLogStream->OutStr(FormatStr(format, vlist));
+		mInstance->mLogStream->OutStr(String::Format(format, vlist));
 
 		va_end(vlist);
 	}
 
-	void Debug::Log(const TString& out)
+	void Debug::Log(const String& out)
 	{
 		mInstance->mLogStream->OutStr(out);
 	}
@@ -41,12 +41,12 @@ namespace o2
 		va_list vlist;
 		va_start(vlist, format);
 
-		mInstance->mLogStream->WarningStr(FormatStr(format, vlist));
+		mInstance->mLogStream->WarningStr(String::Format(format, vlist));
 
 		va_end(vlist);
 	}
 
-	void Debug::LogWarning(const TString& out)
+	void Debug::LogWarning(const String& out)
 	{
 		mInstance->mLogStream->WarningStr(out);
 	}
@@ -56,12 +56,12 @@ namespace o2
 		va_list vlist;
 		va_start(vlist, format);
 
-		mInstance->mLogStream->ErrorStr(FormatStr(format, vlist));
+		mInstance->mLogStream->ErrorStr(String::Format(format, vlist));
 
 		va_end(vlist);
 	}
 
-	void Debug::LogError(const TString& out)
+	void Debug::LogError(const String& out)
 	{
 		mInstance->mLogStream->ErrorStr(out);
 	}

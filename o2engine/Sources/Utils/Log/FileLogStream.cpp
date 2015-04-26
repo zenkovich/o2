@@ -4,18 +4,18 @@
 
 namespace o2
 {
-	FileLogStream::FileLogStream(const TString& fileName):
+	FileLogStream::FileLogStream(const String& fileName):
 		LogStream(), mFilename(fileName)
 	{
-		std::fstream ofs(mFilename.c_str(), std::ios::out);
+		std::fstream ofs(mFilename, std::ios::out);
 		if (ofs) 
 			ofs.close();
 	}
 
-	FileLogStream::FileLogStream(const TString& id, const TString& fileName):
+	FileLogStream::FileLogStream(const String& id, const String& fileName):
 		LogStream(id), mFilename(fileName)
 	{
-		std::fstream ofs(mFilename.c_str(), std::ios::out);
+		std::fstream ofs(mFilename, std::ios::out);
 		if (ofs)
 			ofs.close();
 	}
@@ -24,12 +24,12 @@ namespace o2
 	{
 	}
 
-	void FileLogStream::OutStrEx(const TString& str)
+	void FileLogStream::OutStrEx(const String& str)
 	{
-		std::fstream ofs(mFilename.c_str(), std::ios::app);
+		std::fstream ofs(mFilename, std::ios::app);
 		if (ofs)
 		{
-			ofs << str.c_str() << std::endl;
+			ofs << str << std::endl;
 			ofs.close();
 		}
 	}

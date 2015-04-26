@@ -5,78 +5,333 @@
 namespace o2
 {
 
-	DataDoc::DataDoc(Format format /*= Format::Xml*/)
-	{
-		//create  Doc Provider by type
-	}
-
-	DataDoc::DataDoc(const TString& fileName, Format format /*= Format::Xml*/):
-		DataDoc(format)
-	{
-		LoadFromFile(fileName);
-	}
-
-	DataDoc::DataDoc(const DataDoc& other) :
-		mDocProvider(other.mDocProvider->Clone())
+	DataNode::DataNode():
+		mParent(nullptr)
 	{
 	}
 
-	DataDoc::~DataDoc()
+	DataNode::DataNode(const WString& name):
+		mName(name), mParent(nullptr)
 	{
-		delete mDocProvider;
 	}
 
-	DataDoc& DataDoc::operator=(const DataDoc& other)
+	DataNode::DataNode(const WString& name, char* value):
+		mName(name), mData(value), mParent(nullptr)
 	{
-		delete mDocProvider;
-		mDocProvider = other.mDocProvider->Clone();
+	}
+
+	DataNode::DataNode(const WString& name, int value):
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, float value):
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, UInt value):
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const WString& value):
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const Vec2F& value):
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const Vec2I& value):
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const RectF& value):
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const RectI& value):
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const Color4& value):
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::~DataNode()
+	{
+		if (mParent)
+			mParent->mChildNodes.Remove(this);
+	}
+
+	DataNode& DataNode::operator=(char* value)
+	{
+		mData = value;
 		return *this;
 	}
 
-	DataNode& DataDoc::operator[](const TString& nodePath) const
+	DataNode& DataNode::operator=(int value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(float value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(UInt value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const WString& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const Vec2F& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const Vec2I& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const RectF& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const RectI& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const Color4& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const DataNode& other)
+	{
+		mChildNodes = other.mChildNodes;
+		mData = other.mData;
+		mName = other.mName;
+		return *this;
+	}
+
+	DataNode::operator char*() const
+	{
+		return (String)mData;
+	}
+
+	DataNode::operator WString() const
+	{
+		return mData;
+	}
+
+	DataNode::operator int() const
+	{
+		return (int)mData;
+	}
+
+	DataNode::operator float() const
+	{
+		return (float)mData;
+	}
+
+	DataNode::operator UInt() const
+	{
+		return (UInt)mData;
+	}
+
+	DataNode::operator Vec2F() const
+	{
+		return (Vec2F)mData;
+	}
+
+	DataNode::operator Vec2I() const
+	{
+		return (Vec2I)mData;
+	}
+
+	DataNode::operator RectF() const
+	{
+		return (RectF)mData;
+	}
+
+	DataNode::operator RectI() const
+	{
+		return (RectI)mData;
+	}
+
+	DataNode::operator Color4() const
+	{
+		return (Color4)mData;
+	}
+
+	DataNode DataNode::operator[](const WString& nodePath) const
 	{
 		return GetNode(nodePath);
 	}
 
-	bool DataDoc::LoadFromFile(const TString& fileName)
+	bool DataNode::operator==(const DataNode& other) const
 	{
-		InFile file(fileName);
+		return mName == other.mName && mData == other.mData && mChildNodes == other.mChildNodes;
+	}
 
-		if (!file.IsOpened())
+	bool DataNode::operator!=(const DataNode& other) const
+	{
+		return mName != other.mName || mData != other.mData || mChildNodes != other.mChildNodes;
+	}
+
+	DataNode* DataNode::GetParent() const
+	{
+		return mParent;
+	}
+
+	DataNode* DataNode::GetNode(const WString& nodePath) const
+	{
+		int delPos = nodePath.Find("/");
+		WString pathPart = nodePath.SubStr(0, delPos);
+
+		if (pathPart == "..")
+		{
+			if (mParent)
+			{
+				if (delPos == -1)
+					return mParent;
+				else
+					return mParent->GetNode(nodePath.SubStr(delPos + 1));
+			}
+
+			return NULL;
+		}
+
+		for (auto child:mChildNodes)
+		{
+			if (child->mName == pathPart)
+			{
+				if (delPos == -1)
+					return child;
+				else
+					return child->GetNode(nodePath.SubStr(delPos + 1));
+			}
+		}
+
+		return nullptr;
+	}
+
+	DataNode* DataNode::AddNode(const WString& name)
+	{
+		DataNode* newNode = new DataNode(name);
+		newNode->mParent = this;
+		mChildNodes.Add(newNode);
+		return newNode;
+	}
+
+	bool DataNode::RemoveNode(const DataNode* node)
+	{
+		if (!mChildNodes.Contains(node))
 			return false;
 
-		UInt dataSize = file.GetDataSize();
-		TString data;
-		data.Reserve(dataSize + 1);
-		file.ReadFullData(data.Data());
+		mChildNodes.Remove(node);
+		delete node;
 
-		return mDocProvider->Load(data);
-	}
-
-	bool DataDoc::LoadFromData(const TString& data)
-	{
-		return mDocProvider->Load(data);
-	}
-
-	bool DataDoc::SaveToFile(const TString& fileName) const
-	{
-		OutFile file(fileName);
-		TString data = mDocProvider->Save();
-		file.WriteData(data.Data(), data.Length()*sizeof(wchar_t));
 		return true;
 	}
 
-	TString DataDoc::SaveAsString() const
+	bool DataNode::RemoveNode(const WString& name)
 	{
-		return mDocProvider->Save();
+		return true;
 	}
 
-	DataNode& DataDoc::GetNode(const TString& nodePath) const
+	WString DataNode::GetName() const
+	{
+		return WString();
+	}
+
+	void DataNode::SetName(const WString& name)
 	{
 
 	}
 
-	DataNode& DataDoc::AddNode(const TString& name)
+
+	DataDoc::DataDoc(Format format /*= Format::Xml*/)
+	{
+
+	}
+
+	DataDoc::DataDoc(const WString& fileName, Format format /*= Format::Xml*/)
+	{
+
+	}
+
+	DataDoc::DataDoc(const DataDoc& other)
+	{
+
+	}
+
+	DataDoc::~DataDoc()
+	{
+
+	}
+
+	DataDoc& DataDoc::operator=(const DataDoc& other)
+	{
+
+	}
+
+	DataNode DataDoc::operator[](const WString& nodePath) const
+	{
+
+	}
+
+	bool DataDoc::LoadFromFile(const WString& fileName)
+	{
+
+	}
+
+	bool DataDoc::LoadFromData(const WString& data)
+	{
+
+	}
+
+	bool DataDoc::SaveToFile(const WString& fileName) const
+	{
+
+	}
+
+	WString DataDoc::SaveAsWString() const
+	{
+
+	}
+
+	DataNode DataDoc::GetNode(const WString& nodePath) const
+	{
+
+	}
+
+	DataNode DataDoc::AddNode(const WString& name)
 	{
 
 	}
@@ -86,228 +341,7 @@ namespace o2
 
 	}
 
-	bool DataDoc::RemoveNode(const TString& name)
-	{
-
-	}
-
-
-	DataNode::DataNode()
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, char* value)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, int value)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, float value)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, UInt value)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, const TString& value)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, const Vec2F& value)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, const Vec2I& value)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, const RectF& value)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, const RectI& value)
-	{
-
-	}
-
-	DataNode::DataNode(const TString& name, const Color4& value)
-	{
-
-	}
-
-	DataNode::~DataNode()
-	{
-
-	}
-
-	DataNode& DataNode::operator=(char* value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(int value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(float value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(UInt value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(const TString& value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(const Vec2F& value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(const Vec2I& value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(const RectF& value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(const RectI& value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(const Color4& value)
-	{
-
-	}
-
-	DataNode& DataNode::operator=(const DataNode& other)
-	{
-
-	}
-
-	DataNode::operator char*() const
-	{
-
-	}
-
-	DataNode::operator TString() const
-	{
-
-	}
-
-	DataNode::operator int() const
-	{
-
-	}
-
-	DataNode::operator float() const
-	{
-
-	}
-
-	DataNode::operator UInt() const
-	{
-
-	}
-
-	DataNode::operator Vec2F() const
-	{
-
-	}
-
-	DataNode::operator Vec2I() const
-	{
-
-	}
-
-	DataNode::operator RectF() const
-	{
-
-	}
-
-	DataNode::operator RectI() const
-	{
-
-	}
-
-	DataNode::operator Color4() const
-	{
-
-	}
-
-	DataNode& DataNode::operator[](const TString& nodePath) const
-	{
-
-	}
-
-	bool DataNode::operator==(const DataNode& other) const
-	{
-
-	}
-
-	bool DataNode::operator!=(const DataNode& other) const
-	{
-
-	}
-
-	DataNode& DataNode::GetParent() const
-	{
-
-	}
-
-	DataNode& DataNode::GetNode(const TString& nodePath) const
-	{
-
-	}
-
-	DataNode& DataNode::AddNode(const TString& name)
-	{
-
-	}
-
-	bool DataNode::RemoveNode(const DataNode& node)
-	{
-
-	}
-
-	bool DataNode::RemoveNode(const TString& name)
-	{
-
-	}
-
-	TString DataNode::GetName() const
-	{
-
-	}
-
-	void DataNode::SetName(const TString& name)
+	bool DataDoc::RemoveNode(const WString& name)
 	{
 
 	}

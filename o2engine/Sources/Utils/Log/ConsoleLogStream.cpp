@@ -11,7 +11,7 @@ namespace o2
 		InitConsole();
 	}
 
-	ConsoleLogStream::ConsoleLogStream(const TString& id):
+	ConsoleLogStream::ConsoleLogStream(const String& id):
 		LogStream(id)
 	{
 		InitConsole();
@@ -22,9 +22,9 @@ namespace o2
 		//FreeConsole();
 	}
 
-	void ConsoleLogStream::OutStrEx(const TString& str)
+	void ConsoleLogStream::OutStrEx(const String& str)
 	{
-		printf(str.c_str());
+		printf(str);
 		printf("\n");
 	}
 

@@ -7,7 +7,7 @@ namespace o2
 {
 	namespace Xml
 	{
-		bool LoadFromFile(const TString& fileName, Document& xmlDoc)
+		bool LoadFromFile(const String& fileName, Document& xmlDoc)
 		{
 			InFile inFile(fileName);
 
@@ -24,17 +24,17 @@ namespace o2
 			return res.status == pugi::status_ok;
 		}
 
-		bool LoadFromString(const TString& data, Document& xmlDoc)
+		bool LoadFromString(const String& data, Document& xmlDoc)
 		{
-			pugi::xml_parse_result res = xmlDoc.load_buffer(data.c_str(), data.length());
+			pugi::xml_parse_result res = xmlDoc.load_buffer(data, data.Length());
 			return res.status == pugi::status_ok;
 		}
 
-		bool SaveToString(TString& data, Document& xmlDoc)
+		bool SaveToString(String& data, Document& xmlDoc)
 		{
 			struct xmlWriter:public pugi::xml_writer
 			{
-				TString* str;
+				String* str;
 
 				void write(const void* data, size_t size)
 				{
@@ -49,7 +49,7 @@ namespace o2
 			return true;
 		}
 
-		bool SaveToFile(const TString& fileName, Document& xmlDoc)
+		bool SaveToFile(const String& fileName, Document& xmlDoc)
 		{
 			struct xmlWriter:public pugi::xml_writer
 			{
@@ -75,15 +75,15 @@ namespace o2
 			return true;
 		}
 
-		Node GetNode(const Node& node, const TString& path)
+		Node GetNode(const Node& node, const String& path)
 		{
-			int slashPos = path.find('/');
-			TString currNode = path.substr(0, slashPos);
+			int slashPos = path.Find("/");
+			String currNode = path.SubStr(0, slashPos);
 
-			if (slashPos == path.npos)
-				return node.child(currNode.c_str());
+			if (slashPos == -1)
+				return node.child(currNode);
 			else
-				return GetNode(node.child(currNode.c_str()), path.substr(slashPos + 1));
+				return GetNode(node.child(currNode), path.SubStr(slashPos + 1));
 		}
 
 		void ToXmlNode(int object, Node& node)
@@ -101,9 +101,9 @@ namespace o2
 			node.append_attribute("v") = object;
 		}
 
-		void ToXmlNode(TString& object, Node& node)
+		void ToXmlNode(String& object, Node& node)
 		{
-			node.append_attribute("v") = object.c_str();
+			node.append_attribute("v") = object;
 		}
 
 		void ToXmlNode(bool object, Node& node)
@@ -172,7 +172,7 @@ namespace o2
 			object = node.attribute("v").as_float();
 		}
 
-		void FromXmlNode(TString& object, Node& node)
+		void FromXmlNode(String& object, Node& node)
 		{
 			object = node.attribute("v").value();
 		}

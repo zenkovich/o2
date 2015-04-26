@@ -20,11 +20,11 @@ namespace o2
 
 	public:
 		static void Log(const char* format, ...);
-		static void Log(const TString& out);
+		static void Log(const String& out);
 		static void LogWarning(const char* format, ...);
-		static void LogWarning(const TString& out);
+		static void LogWarning(const String& out);
 		static void LogError(const char* format, ...);
-		static void LogError(const TString& out);
+		static void LogError(const String& out);
 
 		static LogStream* GetLog();
 	};

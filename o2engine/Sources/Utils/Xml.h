@@ -18,19 +18,19 @@ namespace o2
 		typedef pugi::xml_attribute Attribute;
 
 		/** Loads xml file. */
-		bool LoadFromFile(const TString& fileName, Document& xmlDoc);
+		bool LoadFromFile(const String& fileName, Document& xmlDoc);
 
 		/** Loads xml from buffer. */
-		bool LoadFromString(const TString& data, Document& xmlDoc);
+		bool LoadFromString(const String& data, Document& xmlDoc);
 
 		/** Loads xml file. */
-		bool SaveToFile(const TString& fileName, Document& xmlDoc);
+		bool SaveToFile(const String& fileName, Document& xmlDoc);
 
 		/** Loads xml buffer. */
-		bool SaveToString(TString& data, Document& xmlDoc);
+		bool SaveToString(String& data, Document& xmlDoc);
 
 		/** Returns node by path, Path format "node/node/node". */
-		Node GetNode(const Node& node, const TString& path);
+		Node GetNode(const Node& node, const String& path);
 
 
 		/** Saving data from object to xml node. */
@@ -43,7 +43,7 @@ namespace o2
 		void ToXmlNode(float         object, Node& node);
 
 		/** Saving data from object to xml node. */
-		void ToXmlNode(TString&       object, Node& node);
+		void ToXmlNode(String&       object, Node& node);
 
 		/** Saving data from object to xml node. */
 		void ToXmlNode(bool          object, Node& node);
@@ -84,7 +84,7 @@ namespace o2
 		void FromXmlNode(float&         object, Node& node);
 
 		/** Getting data to object from xml node. */
-		void FromXmlNode(TString&        object, Node& node);
+		void FromXmlNode(String&        object, Node& node);
 
 		/** Getting data to object from xml node. */
 		void FromXmlNode(bool&          object, Node& node);

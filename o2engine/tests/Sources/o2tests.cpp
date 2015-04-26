@@ -51,7 +51,7 @@ SERIALIZE_METHOD_IMPL(TestSerialize)
 
 void srTest(Serializable& sr)
 {
-	Debug::Log("%s", sr.GetTypeName().c_str());
+	Debug::Log("%s", sr.GetTypeName());
 }
 
 int main(char** lpCmdLine, int nCmdShow)
@@ -71,18 +71,18 @@ int main(char** lpCmdLine, int nCmdShow)
 	sr.Serialize(&f, "f");
 	sr.Save("serTest.xml");
 
-	TString testStr("String test");
-	TString str = "fhasjdf123";
-	TString str2 = (TString)-1234567890;
-	TString str3 = (TString)-12.33f;
-	TString str7 = (TString)-12.0f;
-	TString str4 = (TString)Color4(255, 0, 128, 45);
-	TString str5 = (TString)RectI(255, 0, 128, 45);
-	TString str6 = (TString)RectF(255, 0, 128, 45);
-	TString str8 = (TString)Vec2F(255, 0);
-	TString str9 = (TString)Vec2I(255, 0);
+	String testStr("String test");
+	String str = "fhasjdf123";
+	String str2 = (String)-1234567890;
+	String str3 = (String)-12.33f;
+	String str7 = (String)-12.0f;
+	String str4 = (String)Color4(255, 0, 128, 45);
+	String str5 = (String)RectI(255, 0, 128, 45);
+	String str6 = (String)RectF(255, 0, 128, 45);
+	String str8 = (String)Vec2F(255, 0);
+	String str9 = (String)Vec2I(255, 0);
 
-	TString ss = "0123456789";
+	String ss = "0123456789";
 	auto xx = ss.SubStr(3, 6);
 
 	int strInt = (int)str2;
@@ -92,10 +92,10 @@ int main(char** lpCmdLine, int nCmdShow)
 	RectF strRectF = (RectF)str6;
 	Vec2F strVec2F = (Vec2F)str8;
 	Vec2I strVec2I = (Vec2I)str9;
-	RectF strRectF2 = (RectF)(TString)"  255;34 ;  55 ; 55 ";
+	RectF strRectF2 = (RectF)(String)"  255;34 ;  55 ; 55 ";
 
-	auto frmt = TString::Format("int %i; float %f; char %c; char* %s; TString %ts; Vec2I %vi; Vec2F %vf; RectI %ri; RectF %rf; Color %cl",
-		-1234567890, -33.66f, 'k', "cha cha cha", (TString)"T STRING", Vec2I(1, 2), Vec2F(3, 4), RectI(1, 2, 3, 4), RectF(5, 6, 7, 8), Color4(0, 128, 256, 44));
+	auto frmt = String::Format("int %i; float %f; char %c; char* %s; String %ts; Vec2I %vi; Vec2F %vf; RectI %ri; RectF %rf; Color %cl",
+		-1234567890, -33.66f, 'k', "cha cha cha", (String)"T STRING", Vec2I(1, 2), Vec2F(3, 4), RectI(1, 2, 3, 4), RectF(5, 6, 7, 8), Color4(0, 128, 256, 44));
 
 	printf("All tests completed!");
 	_getch();
