@@ -54,4 +54,40 @@
     </Expand>
 </Type>
 
+<Type Name="o2::TString&lt;*&gt;">
+    <DisplayString>{{ {mData,s} }}</DisplayString>
+    <Expand>
+        <Item Name="[capacity]">mCapacity</Item>
+        <ArrayItems>
+            <Size>mCapacity</Size>
+            <ValuePointer>mData</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+
+<Type Name="o2::DataDoc">
+    <DisplayString>{{ nodes={ mChildNodes.mCount } }}</DisplayString>
+    <Expand>
+        <Item Name="[count]" ExcludeView="simple">mChildNodes.mCount</Item>
+        <ArrayItems>
+            <Size>mChildNodes.mCount</Size>
+            <ValuePointer>mChildNodes.mValues</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
+<Type Name="o2::DataNode">
+    <DisplayString>{{ name={ mName } data={ mData } childs={mChildNodes.mCount} }}</DisplayString>
+    <Expand>
+        <Item Name="[name]" ExcludeView="simple">mName</Item>
+        <Item Name="[data]" ExcludeView="simple">mData</Item>
+        <Item Name="[childs]" ExcludeView="simple">mChildNodes.mCount</Item>
+        <ArrayItems>
+            <Size>mChildNodes.mCount</Size>
+            <ValuePointer>mChildNodes.mValues</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+
 </AutoVisualizer>
