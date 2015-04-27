@@ -28,6 +28,9 @@
     <Filter Include="Sources\Utils\Data">
       <UniqueIdentifier>{38a919bc-762d-45c1-8b24-79832815f122}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dependencies\Json">
+      <UniqueIdentifier>{49015e21-b73c-49ef-bccc-8e4c9584a79a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -114,6 +117,48 @@
     <ClInclude Include="..\Sources\Utils\Data\DataDoc.h">
       <Filter>Sources\Utils\Data</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h">
+      <Filter>Sources\Utils\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\Array.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\Convert.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\Escaper.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\Grammar.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\IndentCanceller.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\Indenter.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\JsonBox.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\JsonParsingError.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\JsonWritingError.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\Object.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\OutputFilter.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\SolidusEscaper.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Json\Value.h">
+      <Filter>Dependencies\Json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -151,6 +196,39 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp">
       <Filter>Sources\Utils\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp">
+      <Filter>Sources\Utils\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\Array.cpp">
+      <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\Convert.cpp">
+      <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\Escaper.cpp">
+      <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\IndentCanceller.cpp">
+      <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\Indenter.cpp">
+      <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\JsonParsingError.cpp">
+      <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\JsonWritingError.cpp">
+      <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\Object.cpp">
+      <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\SolidusEscaper.cpp">
+      <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Json\Value.cpp">
+      <Filter>Dependencies\Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

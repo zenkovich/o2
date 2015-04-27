@@ -1,0 +1,12 @@
+style=attach
+indent=tab=4
+indent-namespaces
+indent-col1-comments
+indent-cases
+min-conditional-indent=0
+max-instatement-indent=120
+break-blocks
+pad-oper
+pad-header
+align-pointer=name
+

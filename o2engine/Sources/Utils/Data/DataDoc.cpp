@@ -1,74 +1,96 @@
 #include "DataDoc.h"
 
 #include "Utils/FileSystem/File.h"
+#include "Utils/Data/XmlDataFormat.h"
 
 namespace o2
 {
 
-	DataNode::DataNode():
+	DataNode::DataNode() :
 		mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name):
+	DataNode::DataNode(const String& name) :
 		mName(name), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, char* value):
+	DataNode::DataNode(const String& name, char* value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, int value):
+	DataNode::DataNode(const String& name, int value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, float value):
+	DataNode::DataNode(const String& name, float value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, UInt value):
+	DataNode::DataNode(const String& name, UInt value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const WString& value):
+	DataNode::DataNode(const String& name, const String& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const Vec2F& value):
+	DataNode::DataNode(const String& name, const Vec2F& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const Vec2I& value):
+	DataNode::DataNode(const String& name, const Vec2I& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const RectF& value):
+	DataNode::DataNode(const String& name, const RectF& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const RectI& value):
+	DataNode::DataNode(const String& name, const RectI& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const Color4& value):
+	DataNode::DataNode(const String& name, const Color4& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
+	}
+
+	DataNode::DataNode(const DataNode& other)
+	{
+		for (auto child : other.mChildNodes)
+			mChildNodes.Add(new DataNode(*child));
 	}
 
 	DataNode::~DataNode()
 	{
-		if (mParent)
-			mParent->mChildNodes.Remove(this);
+		for (auto child : mChildNodes)
+			delete child;
+
+		mChildNodes.Clear();
+	}
+
+	DataNode& DataNode::operator=(const DataNode& other)
+	{
+		for (auto child : mChildNodes)
+			delete child;
+
+		mChildNodes.Clear();
+
+		for (auto child : other.mChildNodes)
+			mChildNodes.Add(new DataNode(*child));
+
+		return *this;
 	}
 
 	DataNode& DataNode::operator=(char* value)
@@ -79,72 +101,64 @@ namespace o2
 
 	DataNode& DataNode::operator=(int value)
 	{
-		mData = (WString)value;
+		mData = (String)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(float value)
 	{
-		mData = (WString)value;
+		mData = (String)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(UInt value)
 	{
-		mData = (WString)value;
+		mData = (String)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const WString& value)
+	DataNode& DataNode::operator=(const String& value)
 	{
-		mData = (WString)value;
+		mData = (String)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const Vec2F& value)
 	{
-		mData = (WString)value;
+		mData = (String)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const Vec2I& value)
 	{
-		mData = (WString)value;
+		mData = (String)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const RectF& value)
 	{
-		mData = (WString)value;
+		mData = (String)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const RectI& value)
 	{
-		mData = (WString)value;
+		mData = (String)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const Color4& value)
 	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::operator=(const DataNode& other)
-	{
-		mChildNodes = other.mChildNodes;
-		mData = other.mData;
-		mName = other.mName;
+		mData = (String)value;
 		return *this;
 	}
 
 	DataNode::operator char*() const
 	{
-		return (String)mData;
+		return mData;
 	}
 
-	DataNode::operator WString() const
+	DataNode::operator String() const
 	{
 		return mData;
 	}
@@ -189,7 +203,7 @@ namespace o2
 		return (Color4)mData;
 	}
 
-	DataNode DataNode::operator[](const WString& nodePath) const
+	DataNode* DataNode::operator[](const String& nodePath) const
 	{
 		return GetNode(nodePath);
 	}
@@ -209,10 +223,10 @@ namespace o2
 		return mParent;
 	}
 
-	DataNode* DataNode::GetNode(const WString& nodePath) const
+	DataNode* DataNode::GetNode(const String& nodePath) const
 	{
 		int delPos = nodePath.Find("/");
-		WString pathPart = nodePath.SubStr(0, delPos);
+		String pathPart = nodePath.SubStr(0, delPos);
 
 		if (pathPart == "..")
 		{
@@ -227,7 +241,7 @@ namespace o2
 			return NULL;
 		}
 
-		for (auto child:mChildNodes)
+		for (auto child : mChildNodes)
 		{
 			if (child->mName == pathPart)
 			{
@@ -241,7 +255,7 @@ namespace o2
 		return nullptr;
 	}
 
-	DataNode* DataNode::AddNode(const WString& name)
+	DataNode* DataNode::AddNode(const String& name)
 	{
 		DataNode* newNode = new DataNode(name);
 		newNode->mParent = this;
@@ -249,7 +263,14 @@ namespace o2
 		return newNode;
 	}
 
-	bool DataNode::RemoveNode(const DataNode* node)
+	DataNode* DataNode::AddNode(DataNode* const node)
+	{
+		mChildNodes.Add(node);
+		node->mParent = this;
+		return node;
+	}
+
+	bool DataNode::RemoveNode(DataNode* const node)
 	{
 		if (!mChildNodes.Contains(node))
 			return false;
@@ -260,90 +281,254 @@ namespace o2
 		return true;
 	}
 
-	bool DataNode::RemoveNode(const WString& name)
+	bool DataNode::RemoveNode(const String& name)
 	{
+		int idx = mChildNodes.FindIdx(&[&](DataNode* const x){ return x->mName == name; });
+		if (idx < 0)
+			return false;
+
+		DataNode* node = mChildNodes.Get(idx);
+		mChildNodes.RemoveAt(idx);
+		delete node;
+
 		return true;
 	}
 
-	WString DataNode::GetName() const
+	String DataNode::GetName() const
 	{
-		return WString();
+		return mName;
 	}
 
-	void DataNode::SetName(const WString& name)
+	void DataNode::SetName(const String& name)
 	{
+		mName = name;
+	}
 
+	const DataNode::DataNodesArr& DataNode::GetChildNodes() const
+	{
+		return mChildNodes;
+	}
+
+	DataNode::Iterator DataNode::Begin()
+	{
+		return mChildNodes.Begin();
+	}
+
+	DataNode::ConstIterator DataNode::Begin() const
+	{
+		return mChildNodes.Begin();
+	}
+
+	DataNode::Iterator DataNode::End()
+	{
+		return mChildNodes.End();
+	}
+
+	DataNode::ConstIterator DataNode::End() const
+	{
+		return mChildNodes.End();
+	}
+
+	DataNode::Iterator DataNode::begin()
+	{
+		return mChildNodes.Begin();
+	}
+
+	DataNode::ConstIterator DataNode::begin() const
+	{
+		return mChildNodes.Begin();
+	}
+
+	DataNode::Iterator DataNode::end()
+	{
+		return mChildNodes.End();
+	}
+
+	DataNode::ConstIterator DataNode::end() const
+	{
+		return mChildNodes.End();
 	}
 
 
-	DataDoc::DataDoc(Format format /*= Format::Xml*/)
+	DataDoc::DataDoc()
 	{
-
 	}
 
-	DataDoc::DataDoc(const WString& fileName, Format format /*= Format::Xml*/)
+	DataDoc::DataDoc(const String& fileName)
 	{
-
+		LoadFromFile(fileName);
 	}
 
 	DataDoc::DataDoc(const DataDoc& other)
 	{
-
+		for (auto node : other.mChildNodes)
+			mChildNodes.Add(new DataNode(*node));
 	}
 
 	DataDoc::~DataDoc()
 	{
+		for (auto node : mChildNodes)
+			delete node;
 
+		mChildNodes.Clear();
 	}
 
 	DataDoc& DataDoc::operator=(const DataDoc& other)
 	{
+		for (auto node : mChildNodes)
+			delete node;
 
+		mChildNodes.Clear();
+
+		for (auto node : other.mChildNodes)
+			mChildNodes.Add(new DataNode(*node));
+
+		return *this;
 	}
 
-	DataNode DataDoc::operator[](const WString& nodePath) const
+	DataNode* DataDoc::operator[](const String& nodePath) const
 	{
-
+		return GetNode(nodePath);
 	}
 
-	bool DataDoc::LoadFromFile(const WString& fileName)
+	bool DataDoc::LoadFromFile(const String& fileName)
 	{
+		InFile file(fileName);
 
+		if (!file.IsOpened())
+			return false;
+
+		String data;
+		data.Reserve(file.GetDataSize() + 1);
+		auto sz = file.ReadFullData(data.Data());
+		data[sz] = '\0';
+
+		return LoadFromData(data);
 	}
 
-	bool DataDoc::LoadFromData(const WString& data)
+	bool DataDoc::LoadFromData(const String& data)
 	{
-
+		return XmlDataFormat::LoadDataDoc(data, *this);
 	}
 
-	bool DataDoc::SaveToFile(const WString& fileName) const
+	bool DataDoc::SaveToFile(const String& fileName, Format format /*= Format::Xml*/) const
 	{
+		String data = SaveAsString(format);
 
+		OutFile file(fileName);
+		if (!file.IsOpened())
+			return false;
+
+		file.WriteData(data.Data(), data.Length());
+
+		return false;
 	}
 
-	WString DataDoc::SaveAsWString() const
+	String DataDoc::SaveAsString(Format format /*= Format::Xml*/) const
 	{
-
+		return XmlDataFormat::SaveDataDoc(*this);
 	}
 
-	DataNode DataDoc::GetNode(const WString& nodePath) const
+	DataNode* DataDoc::GetNode(const String& nodePath) const
 	{
+		int delPos = nodePath.Find("/");
+		String pathPart = nodePath.SubStr(0, delPos);
 
+		for (auto child : mChildNodes)
+		{
+			if (child->mName == pathPart)
+			{
+				if (delPos == -1)
+					return child;
+				else
+					return child->GetNode(nodePath.SubStr(delPos + 1));
+			}
+		}
+
+		return nullptr;
 	}
 
-	DataNode DataDoc::AddNode(const WString& name)
+	DataNode* DataDoc::AddNode(const String& name)
 	{
-
+		DataNode* newNode = new DataNode(name);
+		mChildNodes.Add(newNode);
+		return newNode;
 	}
 
-	bool DataDoc::RemoveNode(const DataNode& node)
+	DataNode* DataDoc::AddNode(DataNode* const node)
 	{
-
+		mChildNodes.Add(node);
+		node->mParent = nullptr;
+		return node;
 	}
 
-	bool DataDoc::RemoveNode(const WString& name)
+	bool DataDoc::RemoveNode(DataNode* const node)
 	{
+		if (!mChildNodes.Contains(node))
+			return false;
 
+		mChildNodes.Remove(node);
+		delete node;
+
+		return true;
+	}
+
+	bool DataDoc::RemoveNode(const String& name)
+	{
+		int idx = mChildNodes.FindIdx(&[&](DataNode* const x){ return x->mName == name; });
+		if (idx < 0)
+			return false;
+
+		DataNode* node = mChildNodes.Get(idx);
+		mChildNodes.RemoveAt(idx);
+		delete node;
+
+		return true;
+	}
+
+	const DataNode::DataNodesArr& DataDoc::GetChildNodes() const
+	{
+		return mChildNodes;
+	}
+
+	DataDoc::Iterator DataDoc::Begin()
+	{
+		return mChildNodes.Begin();
+	}
+
+	DataDoc::ConstIterator DataDoc::Begin() const
+	{
+		return mChildNodes.Begin();
+	}
+
+	DataDoc::Iterator DataDoc::End()
+	{
+		return mChildNodes.End();
+	}
+
+	DataDoc::ConstIterator DataDoc::End() const
+	{
+		return mChildNodes.End();
+	}
+
+	DataDoc::Iterator DataDoc::begin()
+	{
+		return mChildNodes.Begin();
+	}
+
+	DataDoc::ConstIterator DataDoc::begin() const
+	{
+		return mChildNodes.Begin();
+	}
+
+	DataDoc::Iterator DataDoc::end()
+	{
+		return mChildNodes.End();
+	}
+
+	DataDoc::ConstIterator DataDoc::end() const
+	{
+		return mChildNodes.End();
 	}
 
 }

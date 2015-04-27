@@ -71,6 +71,7 @@ namespace o2
 		T* Data() const;
 
 		int Length() const;
+		int Capacity() const;
 		bool IsEmpty() const;
 
 		void Clear();
@@ -170,9 +171,9 @@ namespace o2
 	template<typename T>
 	template<typename T2>
 	TString<T>::TString(const TString<T2>& other):
-		mCapacity(other.mCapacity), mData((T*)malloc(other.mCapacity*sizeof(T)))
+		mCapacity(other.Capacity()), mData((T*)malloc(other.Capacity()*sizeof(T)))
 	{
-		ConvertStringPtr(mData, other.mData, mCapacity);
+		ConvertStringPtr(mData, other.Data(), mCapacity);
 	}
 
 	template<typename T>
@@ -401,6 +402,7 @@ namespace o2
 		while (data[dataLength] != '\0') dataLength++;
 		Reserve(dataLength);
 		ConvertStringPtr(mData, data, dataLength);
+		mData[dataLength] = '\0';
 		return *this;
 	}
 
@@ -687,6 +689,13 @@ namespace o2
 
 		return 0;
 	}
+
+	template<typename T>
+	int TString<T>::Capacity() const
+	{
+		return mCapacity;
+	}
+
 
 	template<typename T>
 	void TString<T>::Clear()

@@ -76,6 +76,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Dependencies\Json\Array.h" />
+    <ClInclude Include="..\Dependencies\Json\Convert.h" />
+    <ClInclude Include="..\Dependencies\Json\Escaper.h" />
+    <ClInclude Include="..\Dependencies\Json\Grammar.h" />
+    <ClInclude Include="..\Dependencies\Json\IndentCanceller.h" />
+    <ClInclude Include="..\Dependencies\Json\Indenter.h" />
+    <ClInclude Include="..\Dependencies\Json\JsonBox.h" />
+    <ClInclude Include="..\Dependencies\Json\JsonParsingError.h" />
+    <ClInclude Include="..\Dependencies\Json\JsonWritingError.h" />
+    <ClInclude Include="..\Dependencies\Json\Object.h" />
+    <ClInclude Include="..\Dependencies\Json\OutputFilter.h" />
+    <ClInclude Include="..\Dependencies\Json\SolidusEscaper.h" />
+    <ClInclude Include="..\Dependencies\Json\Value.h" />
     <ClInclude Include="..\Dependencies\PugiXml\pugiconfig.hpp" />
     <ClInclude Include="..\Dependencies\PugiXml\pugixml.hpp" />
     <ClInclude Include="..\Sources\EngineSettings.h" />
@@ -87,6 +100,7 @@
     <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h" />
     <ClInclude Include="..\Sources\Utils\Containers\Pair.h" />
     <ClInclude Include="..\Sources\Utils\Data\DataDoc.h" />
+    <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\Function.h" />
@@ -109,9 +123,20 @@
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Dependencies\Json\Array.cpp" />
+    <ClCompile Include="..\Dependencies\Json\Convert.cpp" />
+    <ClCompile Include="..\Dependencies\Json\Escaper.cpp" />
+    <ClCompile Include="..\Dependencies\Json\IndentCanceller.cpp" />
+    <ClCompile Include="..\Dependencies\Json\Indenter.cpp" />
+    <ClCompile Include="..\Dependencies\Json\JsonParsingError.cpp" />
+    <ClCompile Include="..\Dependencies\Json\JsonWritingError.cpp" />
+    <ClCompile Include="..\Dependencies\Json\Object.cpp" />
+    <ClCompile Include="..\Dependencies\Json\SolidusEscaper.cpp" />
+    <ClCompile Include="..\Dependencies\Json\Value.cpp" />
     <ClCompile Include="..\Dependencies\PugiXml\pugixml.cpp" />
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp" />
+    <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp" />
     <ClCompile Include="..\Sources\Utils\Debug.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp" />
