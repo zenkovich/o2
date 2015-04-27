@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Dependencies\Gason\gason.h" />
     <ClInclude Include="..\Dependencies\Json\Array.h" />
     <ClInclude Include="..\Dependencies\Json\Convert.h" />
     <ClInclude Include="..\Dependencies\Json\Escaper.h" />
@@ -123,6 +124,7 @@
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Dependencies\Gason\gason.cpp" />
     <ClCompile Include="..\Dependencies\Json\Array.cpp" />
     <ClCompile Include="..\Dependencies\Json\Convert.cpp" />
     <ClCompile Include="..\Dependencies\Json\Escaper.cpp" />

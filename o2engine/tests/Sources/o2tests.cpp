@@ -17,9 +17,8 @@
 #include "Utils/Serialization.h"
 #include "Utils/Data/DataDoc.h"
 #include "Dependencies/Json/JsonBox.h"
-#include "Dependencies/Json2/json.hpp"
+#include "Dependencies/Gason/gason.h"
 
-using json = nlohmann::json;
 
 FIRST_SERIALIZATION();
 
@@ -63,29 +62,15 @@ int main(char** lpCmdLine, int nCmdShow)
 {
 	TestMath();
 
-	DataDoc doc;
-	auto nd1 = doc.AddNode("Boroda3");
-	*doc.AddNode("Boroda") = "Sosiska";
-	*doc.AddNode("Boroda2") = Vec2F(3, 4);
+	TestSerialize tt(1, 2, 3, 4, 5);
 
-	*(nd1->AddNode("ff0")) = 10;
-	*(nd1->AddNode("ff2")) = 11;
-	*(nd1->AddNode("ff3")) = 12;
-	*(nd1->AddNode("ff4")) = 13;
+	Serializer srl;
+	srl.Serialize(&tt, "tt");
+	srl.Save("testSerialize.xml");
 
-	doc.SaveToFile("testDoc.xml");
-
-
-	DataDoc doc2;
-	doc2.LoadFromFile("testDoc.xml");
-
-	std::string atat = "asdasd";
-
-	JsonBox::Value js;
-	js["atat"] = "vasd";
-	js.writeToFile("testJson.json");
-
-	json j;
+	JsonValue v;
+	JsonAllocator allc;
+	jsonParse
 
 	printf("All tests completed!");
 	_getch();

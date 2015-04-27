@@ -5,7 +5,8 @@
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Containers/Array.h"
 #include "Utils/Log/LogStream.h"
-#include "Utils/Xml.h"
+#include "Utils/Data/DataDoc.h"
+#include "Utils/Time.h"
 
 namespace o2
 {
@@ -56,10 +57,10 @@ namespace o2
 		enum class Type { Serialize, Deserialize };
 
 	private:
-		LogStream*    mLog;         /** Serialization log, where puts errors. */
-		Xml::Document mRootNode;    /** Root serialization xml document. */
-		Xml::Node     mCurrentNode; /** Current xml node. */
-		Type          mType;        /** Serialization type. */
+		LogStream* mLog;         /** Serialization log, where puts errors. */
+		DataDoc    mDataDoc;     /** Data document. */
+		DataNode*  mCurrentNode; /** Current data node. */
+		Type       mType;        /** Serialization type. */
 
 	public:
 		/** ctor. */
@@ -69,7 +70,7 @@ namespace o2
 		Serializer(const String& fileName, Type type = Type::Serialize);
 
 		/** ctor. Getting xml node and setting type. */
-		Serializer(Xml::Node& xmlNode, Type type = Type::Serialize);
+		Serializer(DataNode* dataNode, Type type = Type::Serialize);
 
 		/** dtor. */
 		~Serializer();
@@ -135,7 +136,7 @@ namespace o2
 		bool Serialize(Color4& object, const String& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(WideTime& object, const String& id, bool errors = true);
+		//bool Serialize(WideTime& object, const String& id, bool errors = true);
 
 		/** Serialize object. */
 		template<typename T>
@@ -144,7 +145,7 @@ namespace o2
 			if (mType == Type::Serialize)
 			{
 				CreateNode(id);
-				Xml::ToXmlNode(object, mCurrentNode);
+				*mCurrentNode = object;
 				PopNode();
 				return true;
 			}
@@ -153,7 +154,7 @@ namespace o2
 				if (!GetNode(id, errors))
 					return false;
 
-				Xml::FromXmlNode(object, mCurrentNode);
+				object = (T)(*mCurrentNode);
 				PopNode();
 			}
 
@@ -168,7 +169,7 @@ namespace o2
 			{
 				CreateNode(id);
 
-				mCurrentNode.append_attribute("count") = array.Count();
+				*mCurrentNode->AddNode("count") = array.Count();
 				for (int i = 0; i < (int)array.Count(); i++)
 				{
 					char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
@@ -185,7 +186,7 @@ namespace o2
 					return false;
 
 				array.Clear();
-				int srCount = mCurrentNode.attribute("count").as_int();
+				int srCount = (int)*mCurrentNode->GetNode("count");
 				for (int i = 0; i < srCount; i++)
 				{
 					char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
@@ -208,7 +209,7 @@ namespace o2
 			{
 				CreateNode(id);
 
-				mCurrentNode.append_attribute("count") = arr.Count();
+				*mCurrentNode.AddNode("count") = array.Count();
 				for (int i = 0; i < (int)arr.Count(); i++)
 				{
 					char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
@@ -225,11 +226,11 @@ namespace o2
 					return false;
 
 				arr.Clear();
-				int srCount = mCurrentNode.attribute("count").as_int();
+				int srCount = (int)*mCurrentNode->GetNode("count");
 				for (int i = 0; i < srCount; i++)
 				{
 					char elemNodeName[32]; sprintf(elemNodeName, "elem%i", i);
-					String type = mCurrentNode.child(elemNodeName).attribute("type").value();
+					String type = mCurrentNode->GetNode(elemNodeName)->GetNode("type");
 					T* elem = static_cast<T*>(CreateSerializableSample(type));
 					Serialize(elem, elemNodeName, errors);
 					arr.Add(elem);

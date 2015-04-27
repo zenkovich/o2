@@ -27,6 +27,7 @@ namespace o2
 
 		TString(const TString& other);
 
+		explicit TString(bool value);
 		explicit TString(int value);
 		explicit TString(UInt value);
 		explicit TString(float value);
@@ -48,6 +49,7 @@ namespace o2
 
 		operator T*() const;
 
+		explicit operator bool() const;
 		explicit operator int() const;
 		explicit operator float() const;
 		explicit operator UInt() const;
@@ -174,6 +176,16 @@ namespace o2
 		mCapacity(other.Capacity()), mData((T*)malloc(other.Capacity()*sizeof(T)))
 	{
 		ConvertStringPtr(mData, other.Data(), mCapacity);
+	}
+
+	template<typename T>
+	TString<T>::TString(bool value):
+		mCapacity(8), mData((T*)malloc(8 * sizeof(T)))
+	{
+		if (value)
+			ConvertStringPtr(mData, "true", 5);
+		else
+			ConvertStringPtr(mData, "false", 6);
 	}
 
 	template<typename T>
@@ -410,6 +422,12 @@ namespace o2
 	TString<T>::operator T*() const
 	{
 		return mData;
+	}
+
+	template<typename T>
+	TString<T>::operator bool() const
+	{
+		return *this == "true" || *this == "TRUE" || *this == "True";
 	}
 
 	template<typename T>

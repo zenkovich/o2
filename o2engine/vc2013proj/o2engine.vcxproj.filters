@@ -31,6 +31,9 @@
     <Filter Include="Dependencies\Json">
       <UniqueIdentifier>{49015e21-b73c-49ef-bccc-8e4c9584a79a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dependencies\Gason">
+      <UniqueIdentifier>{cb7803ec-f12c-4755-b820-68f2f3261b03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -159,6 +162,9 @@
     <ClInclude Include="..\Dependencies\Json\Value.h">
       <Filter>Dependencies\Json</Filter>
     </ClInclude>
+    <ClInclude Include="..\Dependencies\Gason\gason.h">
+      <Filter>Dependencies\Gason</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -229,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="..\Dependencies\Json\Value.cpp">
       <Filter>Dependencies\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Gason\gason.cpp">
+      <Filter>Dependencies\Gason</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

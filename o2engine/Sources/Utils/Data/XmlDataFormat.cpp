@@ -25,12 +25,12 @@ namespace o2
 		void XmlDataFormat::LoadDataNode(const pugi::xml_node& xmlNode, DataNode& dataNode)
 		{
 			dataNode.SetName(xmlNode.name());
-			dataNode = xmlNode.child_value();
+			dataNode = (char*)xmlNode.child_value();
 
 			for (pugi::xml_attribute_iterator it = xmlNode.attributes_begin(); it != xmlNode.attributes_end(); ++it)
 			{
 				DataNode* newNode = new DataNode(it->name());
-				*newNode = it->value();
+				*newNode = (char*)it->value();
 				dataNode.AddNode(newNode);
 			}
 
@@ -64,7 +64,10 @@ namespace o2
 			for (auto docNode:doc)
 			{
 				pugi::xml_node newNode = xmlDoc.append_child(docNode->GetName());
-				newNode.append_child(pugi::node_pcdata).set_value((char*)*docNode);
+
+				if (!docNode->Data().IsEmpty())
+					newNode.append_child(pugi::node_pcdata).set_value((char*)*docNode);
+
 				SaveDataNode(newNode, *docNode);
 			}
 
@@ -79,7 +82,7 @@ namespace o2
 		{
 			for (auto docNode : dataNode)
 			{
-				if (docNode->GetChildNodes().Count() == 0)
+				if (docNode->GetChildNodes().Count() == 0 && false)
 				{
 					pugi::xml_attribute newAttribute = xmlNode.append_attribute((pugi::char_t*)docNode->GetName().Data());
 					newAttribute.set_value((char*)*docNode);
@@ -87,7 +90,10 @@ namespace o2
 				else
 				{
 					pugi::xml_node newNode = xmlNode.append_child((pugi::char_t*)docNode->GetName().Data());
-					newNode.append_child(pugi::node_pcdata).set_value((char*)*docNode);
+
+					if (!docNode->Data().IsEmpty())
+						newNode.append_child(pugi::node_pcdata).set_value((char*)*docNode);
+
 					SaveDataNode(newNode, *docNode);
 				}
 			}

@@ -21,6 +21,12 @@ namespace o2
 	{
 	}
 
+	DataNode::DataNode(const String& name, bool value) :
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+
 	DataNode::DataNode(const String& name, int value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
@@ -153,6 +159,12 @@ namespace o2
 		return *this;
 	}
 
+	DataNode& DataNode::operator=(bool value)
+	{
+		mData = (String)value;
+		return *this;
+	}
+
 	DataNode::operator char*() const
 	{
 		return mData;
@@ -161,6 +173,11 @@ namespace o2
 	DataNode::operator String() const
 	{
 		return mData;
+	}
+
+	DataNode::operator bool() const
+	{
+		return (bool)mData;
 	}
 
 	DataNode::operator int() const
@@ -349,6 +366,11 @@ namespace o2
 		return mChildNodes.End();
 	}
 
+	String& DataNode::Data()
+	{
+		return mData;
+	}
+
 
 	DataDoc::DataDoc()
 	{
@@ -371,24 +393,6 @@ namespace o2
 			delete node;
 
 		mChildNodes.Clear();
-	}
-
-	DataDoc& DataDoc::operator=(const DataDoc& other)
-	{
-		for (auto node : mChildNodes)
-			delete node;
-
-		mChildNodes.Clear();
-
-		for (auto node : other.mChildNodes)
-			mChildNodes.Add(new DataNode(*node));
-
-		return *this;
-	}
-
-	DataNode* DataDoc::operator[](const String& nodePath) const
-	{
-		return GetNode(nodePath);
 	}
 
 	bool DataDoc::LoadFromFile(const String& fileName)
@@ -428,107 +432,4 @@ namespace o2
 	{
 		return XmlDataFormat::SaveDataDoc(*this);
 	}
-
-	DataNode* DataDoc::GetNode(const String& nodePath) const
-	{
-		int delPos = nodePath.Find("/");
-		String pathPart = nodePath.SubStr(0, delPos);
-
-		for (auto child : mChildNodes)
-		{
-			if (child->mName == pathPart)
-			{
-				if (delPos == -1)
-					return child;
-				else
-					return child->GetNode(nodePath.SubStr(delPos + 1));
-			}
-		}
-
-		return nullptr;
-	}
-
-	DataNode* DataDoc::AddNode(const String& name)
-	{
-		DataNode* newNode = new DataNode(name);
-		mChildNodes.Add(newNode);
-		return newNode;
-	}
-
-	DataNode* DataDoc::AddNode(DataNode* const node)
-	{
-		mChildNodes.Add(node);
-		node->mParent = nullptr;
-		return node;
-	}
-
-	bool DataDoc::RemoveNode(DataNode* const node)
-	{
-		if (!mChildNodes.Contains(node))
-			return false;
-
-		mChildNodes.Remove(node);
-		delete node;
-
-		return true;
-	}
-
-	bool DataDoc::RemoveNode(const String& name)
-	{
-		int idx = mChildNodes.FindIdx(&[&](DataNode* const x){ return x->mName == name; });
-		if (idx < 0)
-			return false;
-
-		DataNode* node = mChildNodes.Get(idx);
-		mChildNodes.RemoveAt(idx);
-		delete node;
-
-		return true;
-	}
-
-	const DataNode::DataNodesArr& DataDoc::GetChildNodes() const
-	{
-		return mChildNodes;
-	}
-
-	DataDoc::Iterator DataDoc::Begin()
-	{
-		return mChildNodes.Begin();
-	}
-
-	DataDoc::ConstIterator DataDoc::Begin() const
-	{
-		return mChildNodes.Begin();
-	}
-
-	DataDoc::Iterator DataDoc::End()
-	{
-		return mChildNodes.End();
-	}
-
-	DataDoc::ConstIterator DataDoc::End() const
-	{
-		return mChildNodes.End();
-	}
-
-	DataDoc::Iterator DataDoc::begin()
-	{
-		return mChildNodes.Begin();
-	}
-
-	DataDoc::ConstIterator DataDoc::begin() const
-	{
-		return mChildNodes.Begin();
-	}
-
-	DataDoc::Iterator DataDoc::end()
-	{
-		return mChildNodes.End();
-	}
-
-	DataDoc::ConstIterator DataDoc::end() const
-	{
-		return mChildNodes.End();
-	}
-
 }

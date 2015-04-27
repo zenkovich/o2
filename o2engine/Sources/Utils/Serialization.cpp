@@ -1,26 +1,27 @@
 #include "Serialization.h"
 
 #include "Utils/Debug.h"
+#include "Dependencies/PugiXml/pugixml.hpp"
 
 namespace o2
 {
 	Serializer::Serializer(Type type /*= Type::Serialize*/)
 	{
-		mCurrentNode = mRootNode;
+		mCurrentNode = &mDataDoc;
 		mLog = Debug::GetLog();
 		mType = type;
 	}
 
 	Serializer::Serializer(const String& fileName, Type type /*= Type::Serialize*/)
 	{
-		mCurrentNode = mRootNode;
+		mCurrentNode = &mDataDoc;
 		mLog = Debug::GetLog();
 		Load(fileName);
 	}
 
-	Serializer::Serializer(Xml::Node& xmlNode, Type type /*= Type::Serialize*/)
+	Serializer::Serializer(DataNode* dataNode, Type type /*= Type::Serialize*/)
 	{
-		mCurrentNode = mRootNode.append_copy(xmlNode);
+		mCurrentNode = mDataDoc.AddNode(new DataNode(*dataNode));
 		mType = type;
 	}
 
@@ -30,10 +31,10 @@ namespace o2
 
 	bool Serializer::Load(const String& file)
 	{
-		if (!Xml::LoadFromFile(file, mRootNode))
+		if (!mDataDoc.LoadFromFile(file))
 			return false;
 
-		mCurrentNode = mRootNode;
+		mCurrentNode = &mDataDoc;
 		mType = Type::Deserialize;
 
 		return true;
@@ -41,19 +42,17 @@ namespace o2
 
 	bool Serializer::Save(const String& file)
 	{
-		return Xml::SaveToFile(file, mRootNode);
+		return mDataDoc.SaveToFile(file);
 	}
 
 	bool Serializer::LoadFromString(const String& data)
 	{
-		return Xml::LoadFromString(data, mRootNode);
+		return mDataDoc.LoadFromData(data);
 	}
 
 	String Serializer::SaveToString()
 	{
-		String data;
-		Xml::SaveToString(data, mRootNode);
-		return data;
+		return mDataDoc.SaveAsString();
 	}
 
 	void Serializer::SetLog(LogStream* logStream)
@@ -63,12 +62,12 @@ namespace o2
 
 	void Serializer::CreateNode(const String& id)
 	{
-		mCurrentNode = mCurrentNode.append_child(id);
+		mCurrentNode = mCurrentNode->AddNode(id);
 	}
 
 	bool Serializer::GetNode(const String& id, bool errors /*= false*/)
 	{
-		Xml::Node node = mCurrentNode.child(id);
+		auto node = mCurrentNode->GetNode(id);
 		if (!node)
 		{
 			if (errors)
@@ -83,7 +82,7 @@ namespace o2
 
 	void Serializer::PopNode()
 	{
-		mCurrentNode = mCurrentNode.parent();
+		mCurrentNode = mCurrentNode->GetParent();
 	}
 
 	Serializer::Type Serializer::GetType() const
@@ -98,7 +97,7 @@ namespace o2
 			CreateNode(id);
 			object->OnBeginSerialize();
 			object->onBeginSerializeEvent.Invoke();
-			mCurrentNode.append_attribute("type") = object->GetTypeName();
+			*mCurrentNode->AddNode("type") = object->GetTypeName();
 			object->Serialize(this);
 			PopNode();
 			return true;
@@ -167,10 +166,10 @@ namespace o2
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(WideTime& object, const String& id, bool errors /*= true*/)
-	{
-		return SerializeTemp(object, id, errors);
-	}
+// 	bool Serializer::Serialize(WideTime& object, const String& id, bool errors /*= true*/)
+// 	{
+// 		return SerializeTemp(object, id, errors);
+// 	}
 
 	Serializable* Serializer::CreateSerializableSample(const String& type)
 	{
