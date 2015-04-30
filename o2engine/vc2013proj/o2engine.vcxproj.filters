@@ -102,9 +102,6 @@
     <ClInclude Include="..\Dependencies\PugiXml\pugixml.hpp">
       <Filter>Dependencies\PugiXml</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Xml.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Time.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
@@ -190,9 +187,6 @@
     </ClCompile>
     <ClCompile Include="..\Dependencies\PugiXml\pugixml.cpp">
       <Filter>Dependencies\PugiXml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Xml.cpp">
-      <Filter>Sources\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp">
       <Filter>Sources\Utils\FileSystem</Filter>

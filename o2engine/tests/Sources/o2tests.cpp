@@ -13,7 +13,6 @@
 #include "Utils/Function.h"
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Xml.h"
 #include "Utils/Serialization.h"
 #include "Utils/Data/DataDoc.h"
 #include "Dependencies/Json/JsonBox.h"
@@ -67,10 +66,6 @@ int main(char** lpCmdLine, int nCmdShow)
 	Serializer srl;
 	srl.Serialize(&tt, "tt");
 	srl.Save("testSerialize.xml");
-
-	JsonValue v;
-	JsonAllocator allc;
-	jsonParse
 
 	printf("All tests completed!");
 	_getch();

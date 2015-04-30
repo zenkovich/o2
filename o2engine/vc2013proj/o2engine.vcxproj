@@ -118,7 +118,6 @@
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
     <ClInclude Include="..\Sources\Utils\String.h" />
     <ClInclude Include="..\Sources\Utils\Time.h" />
-    <ClInclude Include="..\Sources\Utils\Xml.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -147,7 +146,6 @@
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
     <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
     <ClCompile Include="..\Sources\Utils\String.cpp" />
-    <ClCompile Include="..\Sources\Utils\Xml.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
