@@ -13,7 +13,6 @@
 #include "Utils/Function.h"
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Xml.h"
 #include "Utils/Serialization.h"
 #include "Utils/Data/DataDoc.h"
 #include "Dependencies/Json/JsonBox.h"
@@ -41,6 +40,11 @@ struct TestSerialize: public Serializable
 		return a == other.a && b == other.b && c == other.c;
 	}
 
+	void fnc(int x)
+	{
+		Debug::Log("::fnc %i", a + x);
+	}
+
 	SERIALIZE_METHODS(TestSerialize);
 };
 
@@ -58,6 +62,11 @@ void srTest(Serializable& sr)
 	Debug::Log("%s", sr.GetTypeName());
 }
 
+void tst(int x)
+{
+	Debug::Log("tst int:%i", x);
+}
+
 int main(char** lpCmdLine, int nCmdShow)
 {
 	TestMath();
@@ -68,9 +77,11 @@ int main(char** lpCmdLine, int nCmdShow)
 	srl.Serialize(&tt, "tt");
 	srl.Save("testSerialize.xml");
 
-	JsonValue v;
-	JsonAllocator allc;
-	jsonParse
+	FunctionPtr<void, int> fnc(&tst);
+	fnc(5);
+
+	ObjFunctionPtr<TestSerialize, void, int> fncc(&tt, &TestSerialize::fnc);
+	fncc();
 
 	printf("All tests completed!");
 	_getch();

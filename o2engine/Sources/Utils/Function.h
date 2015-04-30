@@ -8,6 +8,86 @@ namespace o2
 {
 #define Function std::function
 
+	template<typename _res_type, typename ... _args>
+	class IFunction
+	{
+	public:
+		virtual ~IFunction() {}
+		virtual IFunction* Clone() const = 0;
+
+		virtual _res_type Invoke(_args ... args) const = 0;
+
+		_res_type operator()(_args ... args) const
+		{
+			return Invoke(args ...);
+		}
+	};
+
+	template<typename _res_type, typename ... _args>
+	class FunctionPtr: public IFunction<_res_type, _args ...> 
+	{
+		_res_type (*mFunctionPtr)(_args ... args);
+
+	public:
+		FunctionPtr(_res_type (*functionPtr)(_args ... args)):
+			mFunctionPtr(functionPtr)
+		{}
+
+		FunctionPtr(const FunctionPtr& other):
+			mFunctionPtr(other.mFunctionPtr)
+		{}
+
+		FunctionPtr& operator=(const FunctionPtr& other)
+		{
+			mFunctionPtr = other.mFunctionPtr;
+			return *this;
+		}
+
+		IFunction* Clone() const
+		{
+			return new FunctionPtr(*this);
+		}
+
+		_res_type Invoke(_args ... args) const
+		{
+			return mFunctionPtr(args ...);
+		}
+	};
+
+	template<typename _class_type, typename _res_type, typename ... _args>
+	class ObjFunctionPtr//: public IFuncInvoker<_res_type, _args ...>
+	{
+		_res_type (_class_type::*mFunctionPtr)(_args ... args);
+		_class_type* mObject;
+
+	public:
+		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)):
+			mFunctionPtr(functionPtr), mObject(object)
+		{}
+
+		ObjFunctionPtr(const ObjFunctionPtr& other):
+			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
+		{}
+
+		ObjFunctionPtr& operator=(const ObjFunctionPtr& other)
+		{
+			mFunctionPtr = other.mFunctionPtr;
+			mObject = other.mObject;
+			return *this;
+		}
+
+/*		IFunction* Clone() const
+		{
+			return new ObjFunctionPtr(*this);
+		}*/
+
+		_res_type Invoke(_args ... args) const
+		{
+			return (mObject->*mFunctionPtr)(args ...);
+		}
+	};
+
+
 	template <typename UnusedType>
 	class TFunction;
 
