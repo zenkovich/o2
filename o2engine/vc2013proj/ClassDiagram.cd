@@ -77,13 +77,6 @@
       <FileName>D:\work\o2\o2engine\Sources\Utils\Containers\Array.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="o2::TFunction&lt;_res_type(_args...)&gt;" Collapsed="true">
-    <Position X="21" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAIAAAAAAAAIAAAAEAAABQAAAIAAAAAAAAAhQABQAAA=</HashCode>
-      <FileName>D:\work\o2\o2engine\Sources\Utils\Function.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="o2::Dictionary&lt;_key_type, _value_type&gt;" Collapsed="true">
     <Position X="16.5" Y="13.25" Width="1.5" />
     <TypeIdentifier>

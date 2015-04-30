@@ -11,63 +11,63 @@ namespace o2
 	{
 	}
 
-	DataNode::DataNode(const String& name) :
+	DataNode::DataNode(const WString& name) :
 		mName(name), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, char* value) :
+	DataNode::DataNode(const WString& name, char* value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, bool value) :
+	DataNode::DataNode(const WString& name, bool value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
 
-	DataNode::DataNode(const String& name, int value) :
+	DataNode::DataNode(const WString& name, int value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, float value) :
+	DataNode::DataNode(const WString& name, float value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, UInt value) :
+	DataNode::DataNode(const WString& name, UInt value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, const String& value) :
+	DataNode::DataNode(const WString& name, const WString& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, const Vec2F& value) :
+	DataNode::DataNode(const WString& name, const Vec2F& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, const Vec2I& value) :
+	DataNode::DataNode(const WString& name, const Vec2I& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, const RectF& value) :
+	DataNode::DataNode(const WString& name, const RectF& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, const RectI& value) :
+	DataNode::DataNode(const WString& name, const RectI& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const String& name, const Color4& value) :
+	DataNode::DataNode(const WString& name, const Color4& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
@@ -107,70 +107,70 @@ namespace o2
 
 	DataNode& DataNode::operator=(int value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(float value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(UInt value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const String& value)
+	DataNode& DataNode::operator=(const WString& value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const Vec2F& value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const Vec2I& value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const RectF& value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const RectI& value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(const Color4& value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
 	DataNode& DataNode::operator=(bool value)
 	{
-		mData = (String)value;
+		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode::operator char*() const
+	DataNode::operator wchar_t*() const
 	{
 		return mData;
 	}
 
-	DataNode::operator String() const
+	DataNode::operator WString() const
 	{
 		return mData;
 	}
@@ -220,7 +220,7 @@ namespace o2
 		return (Color4)mData;
 	}
 
-	DataNode* DataNode::operator[](const String& nodePath) const
+	DataNode* DataNode::operator[](const WString& nodePath) const
 	{
 		return GetNode(nodePath);
 	}
@@ -240,10 +240,10 @@ namespace o2
 		return mParent;
 	}
 
-	DataNode* DataNode::GetNode(const String& nodePath) const
+	DataNode* DataNode::GetNode(const WString& nodePath) const
 	{
 		int delPos = nodePath.Find("/");
-		String pathPart = nodePath.SubStr(0, delPos);
+		WString pathPart = nodePath.SubStr(0, delPos);
 
 		if (pathPart == "..")
 		{
@@ -272,7 +272,7 @@ namespace o2
 		return nullptr;
 	}
 
-	DataNode* DataNode::AddNode(const String& name)
+	DataNode* DataNode::AddNode(const WString& name)
 	{
 		DataNode* newNode = new DataNode(name);
 		newNode->mParent = this;
@@ -298,9 +298,9 @@ namespace o2
 		return true;
 	}
 
-	bool DataNode::RemoveNode(const String& name)
+	bool DataNode::RemoveNode(const WString& name)
 	{
-		int idx = mChildNodes.FindIdx(&[&](DataNode* const x){ return x->mName == name; });
+		int idx = mChildNodes.FindIdx([&](DataNode* const x){ return x->mName == name; });
 		if (idx < 0)
 			return false;
 
@@ -311,12 +311,12 @@ namespace o2
 		return true;
 	}
 
-	String DataNode::GetName() const
+	WString DataNode::GetName() const
 	{
 		return mName;
 	}
 
-	void DataNode::SetName(const String& name)
+	void DataNode::SetName(const WString& name)
 	{
 		mName = name;
 	}
@@ -366,7 +366,7 @@ namespace o2
 		return mChildNodes.End();
 	}
 
-	String& DataNode::Data()
+	WString& DataNode::Data()
 	{
 		return mData;
 	}
@@ -376,7 +376,7 @@ namespace o2
 	{
 	}
 
-	DataDoc::DataDoc(const String& fileName)
+	DataDoc::DataDoc(const WString& fileName)
 	{
 		LoadFromFile(fileName);
 	}
@@ -402,22 +402,22 @@ namespace o2
 		if (!file.IsOpened())
 			return false;
 
-		String data;
+		WString data;
 		data.Reserve(file.GetDataSize() + 1);
 		auto sz = file.ReadFullData(data.Data());
-		data[sz] = '\0';
+		data[sz/2] = '\0';
 
 		return LoadFromData(data);
 	}
 
-	bool DataDoc::LoadFromData(const String& data)
+	bool DataDoc::LoadFromData(const WString& data)
 	{
 		return XmlDataFormat::LoadDataDoc(data, *this);
 	}
 
 	bool DataDoc::SaveToFile(const String& fileName, Format format /*= Format::Xml*/) const
 	{
-		String data = SaveAsString(format);
+		WString data = SaveAsWString(format);
 
 		OutFile file(fileName);
 		if (!file.IsOpened())
@@ -428,7 +428,7 @@ namespace o2
 		return false;
 	}
 
-	String DataDoc::SaveAsString(Format format /*= Format::Xml*/) const
+	WString DataDoc::SaveAsWString(Format format /*= Format::Xml*/) const
 	{
 		return XmlDataFormat::SaveDataDoc(*this);
 	}

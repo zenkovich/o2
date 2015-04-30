@@ -102,24 +102,24 @@ namespace o2
 		void Add(const TKeyValue& keyValue);
 
 		void Remove(const _key_type& key);
-		void RemoveAll(const TFunction<bool(const TKeyValue&)> match);
+		void RemoveAll(const Function<bool(const TKeyValue&)>& match);
 		void Clear();
 
 		bool ContainsKey(const _key_type& key) const;
 		bool ContainsValue(const _value_type& value) const;
 		bool Contains(const TKeyValue& keyValue) const;
-		bool ContainsPred(const TFunction<bool(const TKeyValue&)> match) const;
+		bool ContainsPred(const Function<bool(const TKeyValue&)>& match) const;
 
 		TKeyValue FindKey(const _key_type& key) const;
 		TKeyValue FindValue(const _value_type& value) const;
-		TKeyValue Find(const TFunction<bool(const TKeyValue&)> match) const;
-		TKeyValue FindLast(const TFunction<bool(const TKeyValue&)> match) const;
+		TKeyValue Find(const Function<bool(const TKeyValue&)>& match) const;
+		TKeyValue FindLast(const Function<bool(const TKeyValue&)>& match) const;
 
-		Dictionary FindAll(const TFunction<bool(const TKeyValue&)> match) const;
-		Dictionary Where(const TFunction<bool(const TKeyValue&)> match) const;
+		Dictionary FindAll(const Function<bool(const TKeyValue&)>& match) const;
+		Dictionary Where(const Function<bool(const TKeyValue&)>& match) const;
 
-		TKeyValue First(const TFunction<bool(const TKeyValue&)> match) const;
-		TKeyValue Last(const TFunction<bool(const TKeyValue&)> match) const;
+		TKeyValue First(const Function<bool(const TKeyValue&)>& match) const;
+		TKeyValue Last(const Function<bool(const TKeyValue&)>& match) const;
 
 		void Set(const _key_type& key, const _value_type& value);
 
@@ -127,32 +127,32 @@ namespace o2
 		TKeyValue&    Get(int index) const;
 
 		int Count() const;
-		int Count(const TFunction<bool(const TKeyValue&)> match) const;
+		int Count(const Function<bool(const TKeyValue&)>& match) const;
 
 		bool IsEmpty() const;
 
-		void Sort(const TFunction<bool(const TKeyValue&, const TKeyValue&)> pred);
+		void Sort(const Function<bool(const TKeyValue&, const TKeyValue&)>& pred);
 		
-		void ForEach(const TFunction<void(TKeyValue&)> func);
+		void ForEach(const Function<void(TKeyValue&)>& func);
 
 		template<typename _sel_type>
-		TKeyValue Min(const TFunction<_sel_type(const TKeyValue&)> selector) const;
+		TKeyValue Min(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
 		template<typename _sel_type>
-		int MinIdx(const TFunction<_sel_type(const TKeyValue&)> selector) const;
+		int MinIdx(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
 		template<typename _sel_type>
-		TKeyValue Max(const TFunction<_sel_type(const TKeyValue&)> selector) const;
+		TKeyValue Max(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
 		template<typename _sel_type>
-		int MaxIdx(const TFunction<_sel_type(const TKeyValue&)> selector) const;
+		int MaxIdx(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
-		virtual bool All(const TFunction<bool(const TKeyValue&)> match) const;
+		virtual bool All(const Function<bool(const TKeyValue&)>& match) const;
 
-		virtual bool Any(const TFunction<bool(const TKeyValue&)> match) const;
+		virtual bool Any(const Function<bool(const TKeyValue&)>& match) const;
 
 		template<typename _sel_type>
-		_sel_type Sum(const TFunction<_sel_type(const TKeyValue&)> selector) const;
+		_sel_type Sum(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
 		Iterator Begin();
 		Iterator End();
@@ -607,7 +607,7 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	void Dictionary<_key_type, _value_type>::Sort(const TFunction<bool(const TKeyValue&, const TKeyValue&)> pred)
+	void Dictionary<_key_type, _value_type>::Sort(const Function<bool(const TKeyValue&, const TKeyValue&)>& pred)
 	{
 		mPairs.Sort(pred);
 	}
@@ -637,103 +637,103 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	void Dictionary<_key_type, _value_type>::ForEach(const TFunction<void(TKeyValue&)> func)
+	void Dictionary<_key_type, _value_type>::ForEach(const Function<void(TKeyValue&)>& func)
 	{
 		for (auto kv:mPairs)
 			func(kv);
 	}
 
 	template<typename _key_type, typename _value_type>
-	int Dictionary<_key_type, _value_type>::Count(const TFunction<bool(const TKeyValue&)> match) const
+	int Dictionary<_key_type, _value_type>::Count(const Function<bool(const TKeyValue&)>& match) const
 	{
 		return mPairs.CountMatch(match);
 	}
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Last(const TFunction<bool(const TKeyValue&)> match) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Last(const Function<bool(const TKeyValue&)>& match) const
 	{
 		return mPairs.Last(match);
 	}
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::First(const TFunction<bool(const TKeyValue&)> match) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::First(const Function<bool(const TKeyValue&)>& match) const
 	{
 		return mPairs.First(match);
 	}
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::FindLast(const TFunction<bool(const TKeyValue&)> match) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::FindLast(const Function<bool(const TKeyValue&)>& match) const
 	{
 		return mPairs.Last(match);
 	}
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Find(const TFunction<bool(const TKeyValue&)> match) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Find(const Function<bool(const TKeyValue&)>& match) const
 	{
 		return mPairs.FindMatch(match);
 	}
 
 	template<typename _key_type, typename _value_type>
-	bool Dictionary<_key_type, _value_type>::ContainsPred(const TFunction<bool(const TKeyValue&)> match) const
+	bool Dictionary<_key_type, _value_type>::ContainsPred(const Function<bool(const TKeyValue&)>& match) const
 	{
 		return mPairs.ContainsPred(match);
 	}
 
 	template<typename _key_type, typename _value_type>
-	void Dictionary<_key_type, _value_type>::RemoveAll(const TFunction<bool(const TKeyValue&)> match)
+	void Dictionary<_key_type, _value_type>::RemoveAll(const Function<bool(const TKeyValue&)>& match)
 	{
 		return mPairs.RemoveAll(match);
 	}
 
 	template<typename _key_type, typename _value_type>
 	template<typename _sel_type>
-	_sel_type Dictionary<_key_type, _value_type>::Sum(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	_sel_type Dictionary<_key_type, _value_type>::Sum(const Function<_sel_type(const TKeyValue&)>& selector) const
 	{
 		return mPairs.Sum(selector);
 	}
 
 	template<typename _key_type, typename _value_type>
-	bool Dictionary<_key_type, _value_type>::Any(const TFunction<bool(const TKeyValue&)> match) const
+	bool Dictionary<_key_type, _value_type>::Any(const Function<bool(const TKeyValue&)>& match) const
 	{
 		return mPairs.Any(match);
 	}
 
 	template<typename _key_type, typename _value_type>
-	bool Dictionary<_key_type, _value_type>::All(const TFunction<bool(const TKeyValue&)> match) const
+	bool Dictionary<_key_type, _value_type>::All(const Function<bool(const TKeyValue&)>& match) const
 	{
 		return mPairs.All(match);
 	}
 
 	template<typename _key_type, typename _value_type>
 	template<typename _sel_type>
-	int Dictionary<_key_type, _value_type>::MaxIdx(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	int Dictionary<_key_type, _value_type>::MaxIdx(const Function<_sel_type(const TKeyValue&)>& selector) const
 	{
 		return mPairs.MaxIdx(selector);
 	}
 
 	template<typename _key_type, typename _value_type>
 	template<typename _sel_type>
-	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Max(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Max(const Function<_sel_type(const TKeyValue&)>& selector) const
 	{
 		return mPairs.Max(selector);
 	}
 
 	template<typename _key_type, typename _value_type>
 	template<typename _sel_type>
-	int Dictionary<_key_type, _value_type>::MinIdx(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	int Dictionary<_key_type, _value_type>::MinIdx(const Function<_sel_type(const TKeyValue&)>& selector) const
 	{
 		return mPairs.MinIdx(selector);
 	}
 
 	template<typename _key_type, typename _value_type>
 	template<typename _sel_type>
-	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Min(const TFunction<_sel_type(const TKeyValue&)> selector) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue Dictionary<_key_type, _value_type>::Min(const Function<_sel_type(const TKeyValue&)>& selector) const
 	{
 		return mPairs.Min(selector);
 	}
 
 	template<typename _key_type, typename _value_type>
-	Dictionary<_key_type, _value_type> Dictionary<_key_type, _value_type>::Where(const TFunction<bool(const TKeyValue&)> match) const
+	Dictionary<_key_type, _value_type> Dictionary<_key_type, _value_type>::Where(const Function<bool(const TKeyValue&)>& match) const
 	{
 		Dictionary res;
 		for (auto kv:mPairs)
@@ -746,7 +746,7 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	Dictionary<_key_type, _value_type> Dictionary<_key_type, _value_type>::FindAll(const TFunction<bool(const TKeyValue&)> match) const
+	Dictionary<_key_type, _value_type> Dictionary<_key_type, _value_type>::FindAll(const Function<bool(const TKeyValue&)>& match) const
 	{
 		Dictionary res;
 		for (auto kv:mPairs)

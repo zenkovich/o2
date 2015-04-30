@@ -52,7 +52,7 @@ namespace o2
 
 	String Serializer::SaveToString()
 	{
-		return mDataDoc.SaveAsString();
+		return mDataDoc.SaveAsWString();
 	}
 
 	void Serializer::SetLog(LogStream* logStream)
@@ -97,7 +97,7 @@ namespace o2
 			CreateNode(id);
 			object->OnBeginSerialize();
 			object->onBeginSerializeEvent.Invoke();
-			*mCurrentNode->AddNode("type") = object->GetTypeName();
+			*mCurrentNode->AddNode("type") = (WString)object->GetTypeName();
 			object->Serialize(this);
 			PopNode();
 			return true;
@@ -136,7 +136,7 @@ namespace o2
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(String& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(WString& object, const String& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}

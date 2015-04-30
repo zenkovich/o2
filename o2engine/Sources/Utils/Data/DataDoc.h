@@ -15,26 +15,26 @@ namespace o2
 		typedef DataNode::DataNodesArr::ConstIterator ConstIterator;
 
 	protected:
-		String       mName;
-		String       mData;
+		WString       mName;
+		WString       mData;
 		DataNode*    mParent;
 		DataNodesArr mChildNodes;
 
 	public:
 		DataNode();
 		DataNode(const DataNode& other);
-		DataNode(const String& name);
-		DataNode(const String& name, char* value);
-		DataNode(const String& name, bool value);
-		DataNode(const String& name, int value);
-		DataNode(const String& name, float value);
-		DataNode(const String& name, UInt value);
-		DataNode(const String& name, const String& value);
-		DataNode(const String& name, const Vec2F& value);
-		DataNode(const String& name, const Vec2I& value);
-		DataNode(const String& name, const RectF& value);
-		DataNode(const String& name, const RectI& value);
-		DataNode(const String& name, const Color4& value);
+		DataNode(const WString& name);
+		DataNode(const WString& name, char* value);
+		DataNode(const WString& name, bool value);
+		DataNode(const WString& name, int value);
+		DataNode(const WString& name, float value);
+		DataNode(const WString& name, UInt value);
+		DataNode(const WString& name, const WString& value);
+		DataNode(const WString& name, const Vec2F& value);
+		DataNode(const WString& name, const Vec2I& value);
+		DataNode(const WString& name, const RectF& value);
+		DataNode(const WString& name, const RectI& value);
+		DataNode(const WString& name, const Color4& value);
 		~DataNode();
 
 		DataNode& operator=(const DataNode& other);
@@ -43,15 +43,15 @@ namespace o2
 		DataNode& operator=(bool value);
 		DataNode& operator=(float value);
 		DataNode& operator=(UInt value);
-		DataNode& operator=(const String& value);
+		DataNode& operator=(const WString& value);
 		DataNode& operator=(const Vec2F& value);
 		DataNode& operator=(const Vec2I& value);
 		DataNode& operator=(const RectF& value);
 		DataNode& operator=(const RectI& value);
 		DataNode& operator=(const Color4& value);
 
-		explicit operator char*() const;
-		explicit operator String() const;
+		explicit operator wchar_t*() const;
+		explicit operator WString() const;
 		explicit operator bool() const;
 		explicit operator int() const;
 		explicit operator float() const;
@@ -62,22 +62,22 @@ namespace o2
 		explicit operator RectI() const;
 		explicit operator Color4() const;
 
-		DataNode* operator[](const String& nodePath) const;
+		DataNode* operator[](const WString& nodePath) const;
 		bool operator==(const DataNode& other) const;
 		bool operator!=(const DataNode& other) const;
 
 		DataNode* GetParent() const;
 
-		DataNode* GetNode(const String& nodePath) const;
-		DataNode* AddNode(const String& name);
+		DataNode* GetNode(const WString& nodePath) const;
+		DataNode* AddNode(const WString& name);
 		DataNode* AddNode(DataNode* const node);
 		bool RemoveNode(DataNode* const node);
-		bool RemoveNode(const String& name);
+		bool RemoveNode(const WString& name);
 
-		String GetName() const;
-		void SetName(const String& name);
+		WString GetName() const;
+		void SetName(const WString& name);
 
-		String& Data();
+		WString& Data();
 
 		const DataNode::DataNodesArr& GetChildNodes() const;
 
@@ -101,14 +101,14 @@ namespace o2
 
 	public:
 		DataDoc();
-		DataDoc(const String& fileName);
+		DataDoc(const WString& fileName);
 		DataDoc(const DataDoc& other);
 		~DataDoc();
 
 		bool LoadFromFile(const String& fileName);
-		bool LoadFromData(const String& data);
+		bool LoadFromData(const WString& data);
 
 		bool SaveToFile(const String& fileName, Format format = Format::Xml) const;
-		String SaveAsString(Format format = Format::Xml) const;
+		WString SaveAsWString(Format format = Format::Xml) const;
 	};
 }

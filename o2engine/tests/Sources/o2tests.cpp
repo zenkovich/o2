@@ -42,7 +42,7 @@ struct TestSerialize: public Serializable
 
 	void fnc(int x)
 	{
-		Debug::Log("::fnc %i", a + x);
+		Debug::Log("object fnc %i", a + x);
 	}
 
 	SERIALIZE_METHODS(TestSerialize);
@@ -64,7 +64,7 @@ void srTest(Serializable& sr)
 
 void tst(int x)
 {
-	Debug::Log("tst int:%i", x);
+	Debug::Log("static int:%i", x);
 }
 
 int main(char** lpCmdLine, int nCmdShow)
@@ -77,11 +77,9 @@ int main(char** lpCmdLine, int nCmdShow)
 	srl.Serialize(&tt, "tt");
 	srl.Save("testSerialize.xml");
 
-	FunctionPtr<void, int> fnc(&tst);
-	fnc(5);
-
-	ObjFunctionPtr<TestSerialize, void, int> fncc(&tt, &TestSerialize::fnc);
-	fncc();
+	DataDoc doc;
+	*doc.AddNode("name") = "prived";
+	doc.SaveToFile("file.xml");
 
 	printf("All tests completed!");
 	_getch();

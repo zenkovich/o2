@@ -6,10 +6,13 @@
 
 namespace o2
 {
-#define Function std::function
+//#define Function std::function
+
+	template <typename UnusedType>
+	class IFunction;
 
 	template<typename _res_type, typename ... _args>
-	class IFunction
+	class IFunction <_res_type(_args ...)>
 	{
 	public:
 		virtual ~IFunction() {}
@@ -17,23 +20,28 @@ namespace o2
 
 		virtual _res_type Invoke(_args ... args) const = 0;
 
+		virtual bool Equals(IFunction* other) const = 0;
+
 		_res_type operator()(_args ... args) const
 		{
 			return Invoke(args ...);
 		}
 	};
 
+	template <typename UnusedType>
+	class FunctionPtr;
+
 	template<typename _res_type, typename ... _args>
-	class FunctionPtr: public IFunction<_res_type, _args ...> 
+	class FunctionPtr <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
-		_res_type (*mFunctionPtr)(_args ... args);
+		_res_type(*mFunctionPtr)(_args ... args);
 
 	public:
-		FunctionPtr(_res_type (*functionPtr)(_args ... args)):
+		FunctionPtr(_res_type(*functionPtr)(_args ... args)) :
 			mFunctionPtr(functionPtr)
 		{}
 
-		FunctionPtr(const FunctionPtr& other):
+		FunctionPtr(const FunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr)
 		{}
 
@@ -41,6 +49,16 @@ namespace o2
 		{
 			mFunctionPtr = other.mFunctionPtr;
 			return *this;
+		}
+
+		bool operator==(const FunctionPtr& other) const
+		{
+			return mFunctionPtr == other.mFunctionPtr;
+		}
+
+		bool operator!=(const FunctionPtr& other) const
+		{
+			return mFunctionPtr != other.mFunctionPtr;
 		}
 
 		IFunction* Clone() const
@@ -52,20 +70,29 @@ namespace o2
 		{
 			return mFunctionPtr(args ...);
 		}
+
+		bool Equals(IFunction* other) const
+		{
+			FunctionPtr* otherFuncPtr = dynamic_cast<FunctionPtr*>(other);
+			if (otherFuncPtr)
+				return *otherFuncPtr == *this;
+
+			return false;
+		}
 	};
 
 	template<typename _class_type, typename _res_type, typename ... _args>
-	class ObjFunctionPtr//: public IFuncInvoker<_res_type, _args ...>
+	class ObjFunctionPtr : public IFunction<_res_type(_args ...)>
 	{
-		_res_type (_class_type::*mFunctionPtr)(_args ... args);
+		_res_type(_class_type::*mFunctionPtr)(_args ... args);
 		_class_type* mObject;
 
 	public:
-		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)):
+		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)) :
 			mFunctionPtr(functionPtr), mObject(object)
 		{}
 
-		ObjFunctionPtr(const ObjFunctionPtr& other):
+		ObjFunctionPtr(const ObjFunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
 		{}
 
@@ -76,267 +103,287 @@ namespace o2
 			return *this;
 		}
 
-/*		IFunction* Clone() const
+		bool operator==(const ObjFunctionPtr& other) const
+		{
+			return mObject == other.mObject && mFunctionPtr == other.mFunctionPtr;
+		}
+
+		bool operator!=(const ObjFunctionPtr& other) const
+		{
+			return mObject != other.mObject || mFunctionPtr != other.mFunctionPtr;
+		}
+
+		IFunction* Clone() const
 		{
 			return new ObjFunctionPtr(*this);
-		}*/
+		}
 
 		_res_type Invoke(_args ... args) const
 		{
 			return (mObject->*mFunctionPtr)(args ...);
 		}
+		
+		bool Equals(IFunction* other) const
+		{
+			ObjFunctionPtr* otherFuncPtr = dynamic_cast<ObjFunctionPtr*>(other);
+			if (otherFuncPtr)
+				return *otherFuncPtr == *this;
+
+			return false;
+		}
 	};
 
-
 	template <typename UnusedType>
-	class TFunction;
+	class SharedLambda;
 
 	template<typename _res_type, typename ... _args>
-	class TFunction <_res_type(_args ...)>
+	class SharedLambda <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
-		struct IFuncInvoker
+		struct ILambdaInvoker
 		{
-			enum class InvokerType { Static, Object };
-
-			virtual IFuncInvoker* Clone() const = 0;
+			virtual ~ILambdaInvoker() {}
 			virtual _res_type Invoke(_args ... args) const = 0;
-			virtual InvokerType GetType() const = 0;
-			virtual bool Equals(IFuncInvoker* other) const = 0;
+			virtual void IncRef() = 0;
+			virtual void DecRef() = 0;
+			virtual int RefCount() const = 0;
 		};
-		typedef std::vector<IFuncInvoker*> InvokersVec;
 
-		template<typename _func_type>
-		struct StaticFuncInvoker: public IFuncInvoker
+		template<typename _lambda_type>
+		struct LambdaInvoker : ILambdaInvoker
 		{
-			_func_type* mFunction;
+			_lambda_type mLambda;
+			int          mReferences;
 
-			StaticFuncInvoker(_func_type* func):
-				mFunction(func)
-			{
-			}
-
-			IFuncInvoker* Clone() const
-			{
-				return new StaticFuncInvoker(mFunction);
-			}
+			LambdaInvoker(const _lambda_type& lambda) :
+				mLambda(lambda), mReferences(1)
+			{}
 
 			_res_type Invoke(_args ... args) const
 			{
-				return (*mFunction)(args ...);
+				return mLambda(args ...);
 			}
 
-			InvokerType GetType() const
+			void IncRef()
 			{
-				return IFuncInvoker::InvokerType::Static;
+				mReferences++;
 			}
 
-			bool Equals(IFuncInvoker* other) const
+			void DecRef()
 			{
-				if (other->GetType() != InvokerType::Static)
-					return false;
+				mReferences--;
+			}
 
-				StaticFuncInvoker* otherStatic = (StaticFuncInvoker*)other;
-				return mFunction == otherStatic->mFunction;
+			int RefCount() const
+			{
+				return mReferences;
 			}
 		};
 
-		template <typename _func_type, typename _class_type>
-		struct ObjectFuncInvoker: public IFuncInvoker
-		{
-			typedef _func_type _class_type::* ObjectFuncSignature;
-
-			ObjectFuncSignature mFunction;
-			_class_type*        mObject;
-
-			ObjectFuncInvoker(ObjectFuncSignature func, _class_type* object):
-				mFunction(func), mObject(object)
-			{
-			}
-
-			IFuncInvoker* Clone() const
-			{
-				return new ObjectFuncInvoker(mFunction, mObject);
-			}
-
-			_res_type Invoke(_args ... args) const
-			{
-				return (mObject->*mFunction)(args ...);
-			}
-
-			InvokerType GetType() const
-			{
-				return IFuncInvoker::InvokerType::Object;
-			}
-
-			bool Equals(IFuncInvoker* other) const
-			{
-				if (other->GetType() != InvokerType::Object)
-					return false;
-
-				ObjectFuncInvoker* otherObject = (ObjectFuncInvoker*)other;
-				return mFunction == otherObject->mFunction && mObject == otherObject->mObject;
-			}
-		};
-
-		InvokersVec mInvokers;
+		ILambdaInvoker* mInvokerPtr;
 
 	public:
-		TFunction()
+		template<typename _lambda_type>
+		SharedLambda(const _lambda_type& lambda) :
+			mInvokerPtr(new LambdaInvoker<_lambda_type>(lambda))
 		{
 		}
 
-		TFunction(const TFunction& other)
+		SharedLambda(const SharedLambda& other) :
+			mInvokerPtr(other.mInvokerPtr)
 		{
-			Add(other);
+			mInvokerPtr->IncRef();
+		}
+
+		~SharedLambda()
+		{
+			mInvokerPtr->DecRef();
+			if (mInvokerPtr->RefCount() == 0)
+				delete mInvokerPtr;
+		}
+
+		SharedLambda& operator=(const SharedLambda& other)
+		{
+			mInvokerPtr->DecRef();
+			if (mInvokerPtr->RefCount() == 0)
+				delete mInvokerPtr;
+
+			mInvokerPtr = other.mInvokerPtr;
+			mInvokerPtr->IncRef();
+
+			return *this;
+		}
+
+		IFunction* Clone() const
+		{
+			return new SharedLambda(*this);
+		}
+
+		_res_type Invoke(_args ... args) const
+		{
+			return mInvokerPtr->Invoke(args ...);
+		}
+
+		bool operator==(const SharedLambda& other) const
+		{
+			return mInvokerPtr == other.mInvokerPtr;
+		}
+
+		bool operator!=(const SharedLambda& other) const
+		{
+			return mInvokerPtr != other.mInvokerPtr;
+		}
+		bool Equals(IFunction* other) const
+		{
+			SharedLambda* otherFuncPtr = dynamic_cast<SharedLambda*>(other);
+			if (otherFuncPtr)
+				return *otherFuncPtr == *this;
+
+			return false;
+		}
+	};
+
+	template <typename UnusedType>
+	class Function;
+
+	template<typename _res_type, typename ... _args>
+	class Function <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	{
+		typedef std::vector<IFunction*> FunctionsVec;
+
+		FunctionsVec mFunctions;
+
+	public:
+		Function()
+		{
+		}
+
+		Function(const Function& other)
+		{
+			for (auto func : other.mFunctions)
+				mFunctions.push_back(func->Clone());
+		}
+
+		Function(const IFunction& func)
+		{
+			mFunctions.push_back(func.Clone());
 		}
 
 		template<typename _func_type>
-		TFunction(_func_type* func)
+		Function(const _func_type* func)
 		{
-			mInvokers.push_back(new StaticFuncInvoker<_func_type>(func));
+			mFunctions.push_back(new FunctionPtr<_res_type(_args ...)>(func));
 		}
 
-		template <typename _class_type>
-		TFunction(_res_type(_class_type::*func)(_args...), _class_type& object)
+		template<typename _lambda_type>
+		Function(const _lambda_type& lambda)
 		{
-			mInvokers.push_back(new ObjectFuncInvoker<_res_type(_args ...), _class_type>(func, &object));
+			mFunctions.push_back(new SharedLambda<_res_type(_args ...)>(lambda));
 		}
 
-		~TFunction()
+		template<typename _class_type>
+		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
+		{
+			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+		}
+
+		~Function()
 		{
 			Clear();
 		}
 
+		IFunction* Clone() const
+		{
+			return new Function(*this);
+		}
+
 		void Clear()
 		{
-			for (auto invoker:mInvokers)
-				delete invoker;
+			for (auto func : mFunctions)
+				delete func;
 
-			mInvokers.clear();
+			mFunctions.clear();
 		}
 
-		template<typename _func_type>
-		void Add(_func_type* func)
+// 		template<typename _func_type>
+// 		void Add(const void* func)
+// 		{
+// 			mFunctions.push_back(new FunctionPtr<_res_type(_args ...)>((_func_type*)func));
+// 		}
+
+// 		template<typename _lambda_type>
+// 		void Add(const _lambda_type* lambda)
+// 		{
+// 			mFunctions.push_back(new SharedLambda<_res_type(_args ...)>(*lambda));
+// 		}
+// 
+		template<typename _class_type>
+		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 		{
-			mInvokers.push_back(new StaticFuncInvoker<_func_type>(func));
+			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
-		template <typename _class_type>
-		void Add(_res_type(_class_type::*func)(_args...), _class_type& object)
+		void Add(const IFunction& func)
 		{
-			mInvokers.push_back(new ObjectFuncInvoker<_res_type(_args ...), _class_type>(func, &object));
+			mFunctions.push_back(func.Clone());
 		}
 
-		void Add(const TFunction& other)
+		void Add(const Function& funcs)
 		{
-			for (auto inv:other.mInvokers)
-				mInvokers.push_back(inv->Clone());
+			for (auto func : funcs.mFunctions)
+				mFunctions.push_back(func->Clone());
 		}
 
-		template<typename _func_type>
-		void Remove(_func_type* func)
+		void Remove(IFunction& func)
 		{
-			for (auto invokerIt = mInvokers.begin(); invokerIt != mInvokers.end(); ++invokerIt)
+			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); ++funcIt)
 			{
-				if ((*invokerIt)->GetType() == IFuncInvoker::InvokerType::Static)
+				if ((*funcIt)->Equals(&func))
 				{
-					StaticFuncInvoker<_func_type>* invStatic = (StaticFuncInvoker<_func_type>*)(*invokerIt);
-					if (func == invStatic->mFunction)
-					{
-						mInvokers.erase(invokerIt);
-						return;
-					}
+					delete *funcIt;
+					mFunctions.erase(funcIt);
+					break;
 				}
 			}
 		}
 
-		template <typename _class_type>
-		void Remove(_res_type(_class_type::*func)(_args...), _class_type& object)
+		void Remove(const Function& func)
 		{
-			for (auto invokerIt = mInvokers.begin(); invokerIt != mInvokers.end(); ++invokerIt)
-			{
-				if ((*invokerIt)->GetType() == IFuncInvoker::InvokerType::Object)
-				{
-					ObjectFuncInvoker<_res_type(_args ...), _class_type>* invObject =
-						(ObjectFuncInvoker<_res_type(_args ...), _class_type>*)(*invokerIt);
-
-					if (func == invObject->mFunction && &object == invObject->mObject)
-					{
-						mInvokers.erase(invokerIt);
-						return;
-					}
-				}
-			}
-		}
-
-		void Remove(const TFunction<_res_type(_args ...)>& other)
-		{
-			for (auto otherInvoker:other.mInvokers)
-			{
-				for (auto invokerIt = mInvokers.begin(); invokerIt != mInvokers.end(); ++invokerIt)
-				{
-					if ((*invokerIt)->Equals(otherInvoker))
-					{
-						mInvokers.erase(invokerIt);
-						break;
-					}
-				}
-			}
-		}
-
-		template<typename _func_type>
-		bool Contains(_func_type* func) const
-		{
-			for (auto invoker:mInvokers)
-			{
-				if (invoker->GetType() == IFuncInvoker::InvokerType::Static)
-				{
-					StaticFuncInvoker<_func_type>* invStatic = (StaticFuncInvoker<_func_type>*)invoker;
-					if (func == invStatic->mFunction)
-						return true;
-				}
-			}
-
-			return false;
-		}
-
-		template <typename _class_type>
-		bool Contains(_res_type(_class_type::*func)(_args...), _class_type& object) const
-		{
-			for (auto invoker:mInvokers)
-			{
-				if (invoker->GetType() == IFuncInvoker::InvokerType::Object)
-				{
-					ObjectFuncInvoker<_res_type(_args ...), _class_type>* invObject =
-						(ObjectFuncInvoker<_res_type(_args ...), _class_type>*)invoker;
-
-					if (func == invObject->mFunction && &object == invObject->mObject)
-						return true;
-				}
-			}
-
-			return false;
-		}
-
-		bool Contains(const TFunction& other) const
-		{
-			for (auto otherInvoker:other.mInvokers)
+			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); )
 			{
 				bool found = false;
-				for (auto invoker:mInvokers)
+				for (auto funcIt2 = func.mFunctions.begin(); funcIt2 != func.mFunctions.end(); ++funcIt2)
 				{
-					if (invoker->Equals(otherInvoker))
+					if ((*funcIt)->Equals(*funcIt2))
 					{
 						found = true;
 						break;
 					}
 				}
 
-				if (!found)
-					return false;
+				if (found)
+				{
+					delete *funcIt;
+					funcIt = mFunctions.erase(funcIt);
+				}
+				else ++funcIt;
+			}
+		}
+
+		template<typename _class_type>
+		void Remove(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
+		{
+			Remove(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+		}
+
+		bool Contains(const IFunction& func) const
+		{
+			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); ++funcIt)
+			{
+				if ((*funcIt)->Equals(&func))
+					return true;
 			}
 
-			return true;
+			return false;
 		}
 
 		_res_type operator()(_args ... args) const
@@ -346,39 +393,38 @@ namespace o2
 
 		_res_type Invoke(_args ... args) const
 		{
-			if (mInvokers.size() == 0)
+			if (mFunctions.size() == 0)
 				return _res_type();
 
-			auto it = mInvokers.cbegin();
-			for (; it != mInvokers.cend() - 1; ++it)
+			auto it = mFunctions.cbegin();
+			for (; it != mFunctions.cend() - 1; ++it)
 				(*it)->Invoke(args ...);
 
 			return (*it)->Invoke(args ...);
 		}
 
-		template<typename _func_type>
-		TFunction<_res_type(_args ...)>& operator=(_func_type* func)
+		Function<_res_type(_args ...)>& operator=(const IFunction& func)
 		{
 			Clear();
 			Add(func);
 			return *this;
 		}
 
-		TFunction<_res_type(_args ...)>& operator=(const TFunction& other)
+		Function<_res_type(_args ...)>& operator=(const Function& other)
 		{
 			Clear();
 			Add(other);
 			return *this;
-		}
+		}		
 
-		bool operator==(const TFunction& other) const
+		bool operator==(const Function& other) const
 		{
-			for (auto invoker:mInvokers)
+			for (auto func : mFunctions)
 			{
 				bool found = false;
-				for (auto otherInvoker:other.mInvokers)
+				for (auto otherFunc : other.mFunctions)
 				{
-					if (invoker->Equals(otherInvoker))
+					if (func->Equals(otherFunc))
 					{
 						found = true;
 						break;
@@ -392,86 +438,115 @@ namespace o2
 			return true;
 		}
 
-		bool operator!=(const TFunction& other) const
+		bool operator!=(const Function& other) const
 		{
 			return !(*this == other);
 		}
 
-		template<typename _func_type>
-		bool operator==(_func_type* func) const
+		bool operator==(const IFunction& func) const
 		{
 			if (mInvokers.size() != 1)
 				return false;
 
-			IFuncInvoker* invoker = mInvokers[0];
-			if (invoker->GetType() != IFuncInvoker::InvokerType::Static)
-				return false;
-
-			StaticFuncInvoker<_func_type>* invStatic = (StaticFuncInvoker<_func_type>*)invoker;
-			if (func != invStatic->mFunction)
-				return false;
-
-			return true;
+			return mFunctions[0]->Equals(&func);
 		}
 
-		template<typename _func_type>
-		bool operator!=(_func_type* func) const
+		bool operator!=(const IFunction& func) const
 		{
 			return !(*this == func);
 		}
 
-		template<typename _func_type>
-		TFunction<_res_type(_args ...)> operator+(_func_type* func)
+		operator bool() const
 		{
-			TFunction<_res_type(_args ...)> res(*this);
+			return mFunctions.size() > 0;
+		}
+
+		bool Equals(IFunction* other) const
+		{
+			Function* otherFuncPtr = dynamic_cast<Function*>(other);
+			if (otherFuncPtr)
+				return *otherFuncPtr == *this;
+
+			return false;
+		}
+
+		Function<_res_type(_args ...)> operator+(const IFunction& func) const
+		{
+			Function<_res_type(_args ...)> res(*this);
 			res.Add(func);
 			return res;
 		}
 
-		template<typename _func_type>
-		TFunction<_res_type(_args ...)>& operator+=(_func_type* func)
+		Function<_res_type(_args ...)>& operator+=(const IFunction& func)
 		{
 			Add(func);
 			return *this;
 		}
+		
+// 		template<typename _func_type>
+// 		Functions<_res_type(_args ...)> operator+(const _func_type* func)
+// 		{
+// 			Functions<_res_type(_args ...)> res(*this);
+// 			res.Add(func);
+// 			return res;
+// 		}
 
-		TFunction<_res_type(_args ...)> operator+(const TFunction& other)
+// 		template<typename _func_type>
+// 		Functions<_res_type(_args ...)>& operator+=(const _func_type* func)
+// 		{
+// 			Add(func);
+// 			return *this;
+// 		}
+
+		Function<_res_type(_args ...)> operator+(const Function& other) const
 		{
-			TFunction<_res_type(_args ...)> res(*this);
+			Function<_res_type(_args ...)> res(*this);
 			res.Add(other);
 			return res;
 		}
 
-		TFunction<_res_type(_args ...)> operator+=(const TFunction& other)
+		Function<_res_type(_args ...)>& operator+=(const Function& other)
 		{
 			Add(other);
 			return *this;
 		}
 
-
-		template<typename _func_type>
-		TFunction<_res_type(_args ...)> operator-(_func_type* func)
+		Function<_res_type(_args ...)> operator-(const IFunction& func) const
 		{
-			TFunction<_res_type(_args ...)> res(*this);
+			Function<_res_type(_args ...)> res(*this);
 			res.Remove(func);
 			return res;
 		}
 
-		template<typename _func_type>
-		TFunction<_res_type(_args ...)>& operator-=(_func_type* func)
+		Function<_res_type(_args ...)>& operator-=(IFunction& func)
 		{
 			Remove(func);
 			return *this;
 		}
 
-		TFunction<_res_type(_args ...)> operator-(const TFunction& other)
+// 		template<typename _func_type>
+// 		Functions<_res_type(_args ...)> operator-(const _func_type* func)
+// 		{
+// 			Functions<_res_type(_args ...)> res(*this);
+// 			res.Remove(func);
+// 			return res;
+// 		}
+// 
+// 		template<typename _func_type>
+// 		Functions<_res_type(_args ...)>& operator-=(const _func_type* func)
+// 		{
+// 			Remove(func);
+// 			return *this;
+// 		}
+
+		Function<_res_type(_args ...)> operator-(const Function& other) const
 		{
-			TFunction<_res_type(_args ...)> res(*this);
+			Function<_res_type(_args ...)> res(*this);
 			res.Remove(other);
 			return res;
 		}
 
-		TFunction<_res_type(_args ...)> operator-=(const TFunction& other)
+		Function<_res_type(_args ...)>& operator-=(const Function& other)
 		{
 			Remove(other);
 			return *this;

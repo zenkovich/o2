@@ -33,35 +33,35 @@ namespace o2
 		virtual void Add(const TKeyValue& keyValue) = 0;
 
 		virtual void Remove(const _key_type& key) = 0;
-		virtual void RemoveAll(const TFunction<bool(const TKeyValue&)> match) = 0;
+		virtual void RemoveAll(const Function<bool(const TKeyValue&)>& match) = 0;
 
 		virtual void Clear() = 0;
 
 		virtual bool ContainsKey(const _key_type& key) const = 0;
 		virtual bool ContainsValue(const _value_type& value) const = 0;
 		virtual bool Contains(const TKeyValue& keyValue) const = 0;
-		virtual bool ContainsPred(const TFunction<bool(const TKeyValue&)> match) const = 0;
+		virtual bool ContainsPred(const Function<bool(const TKeyValue&)>& match) const = 0;
 
 		virtual TKeyValue FindKey(const _key_type& key) const = 0;
 		virtual TKeyValue FindValue(const _value_type& value) const = 0;
-		virtual TKeyValue Find(const TFunction<bool(const TKeyValue&)> match) const = 0;
-		virtual TKeyValue FindLast(const TFunction<bool(const TKeyValue&)> match) const = 0;
+		virtual TKeyValue Find(const Function<bool(const TKeyValue&)>& match) const = 0;
+		virtual TKeyValue FindLast(const Function<bool(const TKeyValue&)>& match) const = 0;
 
-		virtual TKeyValue First(const TFunction<bool(const TKeyValue&)> match) const = 0;
-		virtual TKeyValue Last(const TFunction<bool(const TKeyValue&)> match) const = 0;
+		virtual TKeyValue First(const Function<bool(const TKeyValue&)>& match) const = 0;
+		virtual TKeyValue Last(const Function<bool(const TKeyValue&)>& match) const = 0;
 
 		virtual void Set(const _key_type& key, const _value_type& value) = 0;
 
 		virtual _value_type& Get(const _key_type& key) = 0;
 
 		virtual int Count() const = 0;
-		virtual int Count(const TFunction<bool(const TKeyValue&)> match) const = 0;
+		virtual int Count(const Function<bool(const TKeyValue&)>& match) const = 0;
 
 		virtual bool IsEmpty() const = 0;
 
 		_value_type& operator[](const _key_type& key);
 
-		virtual void ForEach(const TFunction<void(TKeyValue&)> func) = 0;
+		virtual void ForEach(const Function<void(TKeyValue&)>& func) = 0;
 	};
 
 #pragma region KeyValuePair Implementation

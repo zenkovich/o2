@@ -16,8 +16,8 @@ namespace o2
 		friend class Serializer;
 
 	public:
-		TFunction<void()> onBeginSerializeEvent; /** Calls when serialization begins. */
-		TFunction<void()> onDeserializedEvent;   /** Calls when serialization complete. */
+		Function<void()> onBeginSerializeEvent; /** Calls when serialization begins. */
+		Function<void()> onDeserializedEvent;   /** Calls when serialization complete. */
 
 		/** Serialization function. */
 		virtual bool Serialize(Serializer* serializer) = 0;
@@ -118,7 +118,7 @@ namespace o2
 		bool Serialize(bool& object, const String& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(String& object, const String& id, bool errors = true);
+		bool Serialize(WString& object, const String& id, bool errors = true);
 
 		/** Serialize object. */
 		bool Serialize(Vec2F& object, const String& id, bool errors = true);
