@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Utils/Containers/Array.h"
+
 namespace o2
 {
 	template<typename _type>
@@ -50,6 +52,175 @@ namespace o2
 	private:
 		AutoArr(const AutoArr& other);
 		AutoArr& operator=(const AutoArr* ptr);
+	};
+
+	template<typename _type>
+	class Ptr;
+
+	template<typename _type>
+	class PtrBase
+	{
+		friend class Ptr<_type>;
+		typedef Array<Ptr<_type>*> PointersArr;
+
+		PointersArr mPointers;
+	};
+
+	template<typename _type>
+	class Ptr
+	{
+		friend class PtrBase<_type>;
+
+		PtrBase<_type>* mObject;
+		bool            mIsHolder;
+
+	public:
+		Ptr(_type* object = nullptr):
+			mObject(object), mIsHolder(true)
+		{
+			if (mObject)
+			{
+				for (auto ptr:mObject->mPointers)
+				{
+					if (ptr->mIsHolder)
+					{
+						mIsHolder = false;
+						break;
+					}
+				}
+
+				mObject->mPointers.Add(this);
+			}
+		}
+
+		Ptr(const Ptr& other, bool asHolder = false):
+			mObject(other.mObject), mIsHolder(asHolder)
+		{
+			if (mObject)
+			{
+				if (asHolder)
+				{
+					for (auto ptr:mObject->mPointers)
+					{
+						if (ptr->mIsHolder)
+						{
+							ptr->mIsHolder = false;
+							break;
+						}
+					}
+				}
+
+				mObject->mPointers.Add(this);
+			}
+		}
+
+		~Ptr()
+		{
+			if (mObject)
+			{
+				if (mIsHolder)
+				{
+					for (auto ptr:mObject->mPointers)
+						ptr->mObject = nullptr;
+
+					delete mObject;
+				}
+				else
+				{
+					mObject->mPointers.Remove(this);
+				}
+			}
+		}
+
+		Ptr& operator=(const Ptr& other)
+		{
+			if (mObject)
+			{
+				if (mIsHolder)
+				{
+					for (auto ptr:mObject->mPointers)
+						ptr->mObject = nullptr;
+
+					delete mObject;
+				}
+				else
+				{
+					mObject->mPointers.Remove(this);
+				}
+			}
+
+			mObject = other.mObject;
+			mIsHolder = false;
+
+			if (mObject)
+				mObject->mPointers.Add(this);
+		}
+
+		bool operator==(const Ptr& other) const
+		{
+			return mObject == other.mObject;
+		}
+
+		bool operator!=(const Ptr& other) const
+		{
+			return mObject != other.mObject;
+		}
+
+		operator bool() const
+		{
+			return mObject != nullptr;
+		}
+
+		operator _type*()
+		{
+			return mObject;
+		}
+
+		operator _type* const() const
+		{
+			return mObject;
+		}
+
+		_type* operator->()
+		{
+			return mObject;
+		}
+
+		_type& operator*()
+		{
+			return *mObject;
+		}
+
+		bool IsValid() const
+		{
+			return mObject != nullptr;
+		}
+
+		_type* Get()
+		{
+			return mObject;
+		}
+
+		Ptr& SetAsHolder()
+		{
+			for (auto ptr:mObject->mPointers)
+			{
+				if (ptr->mIsHolder)
+				{
+					ptr->mIsHolder = false;
+					break;
+				}
+			}
+
+			mIsHolder = true;
+
+			return *this;
+		}
+
+		bool IsHolder() const
+		{
+			return mIsHolder;
+		}
 	};
 
 #pragma region AutoPtr implementation

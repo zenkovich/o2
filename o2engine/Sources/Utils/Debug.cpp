@@ -21,7 +21,7 @@ namespace o2
 		delete mLogStream->GetParentStream();
 	}
 
-	void Debug::Log(const char* format, ...)
+	void Debug::Log(WString format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
@@ -31,12 +31,12 @@ namespace o2
 		va_end(vlist);
 	}
 
-	void Debug::Log(const String& out)
+	void Debug::Log(const WString& out)
 	{
 		mInstance->mLogStream->OutStr(out);
 	}
 
-	void Debug::LogWarning(const char* format, ...)
+	void Debug::LogWarning(WString format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
@@ -46,12 +46,12 @@ namespace o2
 		va_end(vlist);
 	}
 
-	void Debug::LogWarning(const String& out)
+	void Debug::LogWarning(const WString& out)
 	{
 		mInstance->mLogStream->WarningStr(out);
 	}
 
-	void Debug::LogError(const char* format, ...)
+	void Debug::LogError(WString format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
@@ -61,7 +61,7 @@ namespace o2
 		va_end(vlist);
 	}
 
-	void Debug::LogError(const String& out)
+	void Debug::LogError(const WString& out)
 	{
 		mInstance->mLogStream->ErrorStr(out);
 	}

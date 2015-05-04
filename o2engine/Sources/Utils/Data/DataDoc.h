@@ -15,8 +15,8 @@ namespace o2
 		typedef DataNode::DataNodesArr::ConstIterator ConstIterator;
 
 	protected:
-		WString       mName;
-		WString       mData;
+		WString      mName;
+		WString      mData;
 		DataNode*    mParent;
 		DataNodesArr mChildNodes;
 
@@ -25,11 +25,13 @@ namespace o2
 		DataNode(const DataNode& other);
 		DataNode(const WString& name);
 		DataNode(const WString& name, char* value);
+		DataNode(const WString& name, wchar_t* value);
 		DataNode(const WString& name, bool value);
 		DataNode(const WString& name, int value);
 		DataNode(const WString& name, float value);
 		DataNode(const WString& name, UInt value);
 		DataNode(const WString& name, const WString& value);
+		DataNode(const WString& name, const String& value);
 		DataNode(const WString& name, const Vec2F& value);
 		DataNode(const WString& name, const Vec2I& value);
 		DataNode(const WString& name, const RectF& value);
@@ -39,11 +41,13 @@ namespace o2
 
 		DataNode& operator=(const DataNode& other);
 		DataNode& operator=(char* value);
+		DataNode& operator=(wchar_t* value);
 		DataNode& operator=(int value);
 		DataNode& operator=(bool value);
 		DataNode& operator=(float value);
 		DataNode& operator=(UInt value);
 		DataNode& operator=(const WString& value);
+		DataNode& operator=(const String& value);
 		DataNode& operator=(const Vec2F& value);
 		DataNode& operator=(const Vec2I& value);
 		DataNode& operator=(const RectF& value);
@@ -52,6 +56,7 @@ namespace o2
 
 		explicit operator wchar_t*() const;
 		explicit operator WString() const;
+		explicit operator String() const;
 		explicit operator bool() const;
 		explicit operator int() const;
 		explicit operator float() const;

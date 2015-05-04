@@ -51,7 +51,7 @@
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
       <AdditionalIncludeDirectories>../;../Sources/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PUGIXML_WCHAR_MODE</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -104,6 +104,8 @@
     <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
+    <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
+    <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />
     <ClInclude Include="..\Sources\Utils\Function.h" />
     <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h" />
@@ -113,14 +115,12 @@
     <ClInclude Include="..\Sources\Utils\Math\Rect.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vector2.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vertex2.h" />
+    <ClInclude Include="..\Sources\Utils\Property.h" />
     <ClInclude Include="..\Sources\Utils\Serialization.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
     <ClInclude Include="..\Sources\Utils\String.h" />
     <ClInclude Include="..\Sources\Utils\Time.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\Gason\gason.cpp" />
@@ -140,6 +140,8 @@
     <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp" />
     <ClCompile Include="..\Sources\Utils\Debug.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
+    <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp" />
+    <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp" />

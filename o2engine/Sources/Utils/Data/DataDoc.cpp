@@ -21,6 +21,12 @@ namespace o2
 	{
 	}
 
+	DataNode::DataNode(const WString& name, wchar_t* value) :
+		mName(name), mData(value), mParent(nullptr)
+	{
+
+	}
+
 	DataNode::DataNode(const WString& name, bool value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
@@ -43,6 +49,11 @@ namespace o2
 	}
 
 	DataNode::DataNode(const WString& name, const WString& value) :
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const String& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
@@ -105,6 +116,12 @@ namespace o2
 		return *this;
 	}
 
+	DataNode& DataNode::operator=(wchar_t* value)
+	{
+		mData = value;
+		return *this;
+	}
+
 	DataNode& DataNode::operator=(int value)
 	{
 		mData = (WString)value;
@@ -125,7 +142,13 @@ namespace o2
 
 	DataNode& DataNode::operator=(const WString& value)
 	{
-		mData = (WString)value;
+		mData = value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const String& value)
+	{
+		mData = value;
 		return *this;
 	}
 
@@ -171,6 +194,11 @@ namespace o2
 	}
 
 	DataNode::operator WString() const
+	{
+		return mData;
+	}
+
+	DataNode::operator String() const
 	{
 		return mData;
 	}
@@ -405,7 +433,7 @@ namespace o2
 		WString data;
 		data.Reserve(file.GetDataSize() + 1);
 		auto sz = file.ReadFullData(data.Data());
-		data[sz/2] = '\0';
+		data[sz/sizeof(wchar_t)] = '\0';
 
 		return LoadFromData(data);
 	}
@@ -423,7 +451,7 @@ namespace o2
 		if (!file.IsOpened())
 			return false;
 
-		file.WriteData(data.Data(), data.Length());
+		file.WriteData(data.Data(), data.Length()*sizeof(wchar_t));
 
 		return false;
 	}

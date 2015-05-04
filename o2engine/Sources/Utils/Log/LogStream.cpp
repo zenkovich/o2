@@ -9,7 +9,7 @@ namespace o2
 	{
 	}
 
-	LogStream::LogStream(const String& id):
+	LogStream::LogStream(const WString& id):
 		mParentStream(NULL), mId(id)
 	{
 	}
@@ -22,7 +22,7 @@ namespace o2
 		UnbindAllStreams();
 	}
 
-	const String& LogStream::GetId() const
+	const WString& LogStream::GetId() const
 	{
 		return mId;
 	}
@@ -49,43 +49,34 @@ namespace o2
 		mChildStreams.Clear();
 	}
 
-	void LogStream::Out(const char* format, ...)
+	void LogStream::Out(WString format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
 
-		char buf[1024];
-		vsprintf(buf, format, vlist);
+		OutStr(WString::Format(format, vlist));
 
 		va_end(vlist);
-
-		OutStr(buf);
 	}
 
-	void LogStream::Error(const char* format, ...)
+	void LogStream::Error(WString format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
 
-		char buf[1024];
-		vsprintf(buf, format, vlist);
+		ErrorStr(WString::Format(format, vlist));
 
 		va_end(vlist);
-
-		ErrorStr(buf);
 	}
 
-	void LogStream::Warning(const char* format, ...)
+	void LogStream::Warning(WString format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
 
-		char buf[1024];
-		vsprintf(buf, format, vlist);
+		WarningStr(WString::Format(format, vlist));
 
 		va_end(vlist);
-
-		WarningStr(buf);
 	}
 
 	LogStream* LogStream::GetParentStream() const
@@ -93,42 +84,42 @@ namespace o2
 		return mParentStream;
 	}
 
-	void LogStream::OutStr(const String& str)
+	void LogStream::OutStr(const WString& str)
 	{
 		OutStrEx(str);
 
 		if (mParentStream)
 		{
 			if (mId.IsEmpty())
-				mParentStream->Out(str);
+				mParentStream->OutStr(str);
 			else
-				mParentStream->Out((mId + ":" + str));
+				mParentStream->OutStr((mId + ":" + str));
 		}
 	}
 
-	void LogStream::ErrorStr(const String& str)
+	void LogStream::ErrorStr(const WString& str)
 	{
 		OutErrorEx(str);
 
 		if (mParentStream)
 		{
 			if (mId == "")
-				mParentStream->Error(str);
+				mParentStream->ErrorStr(str);
 			else
-				mParentStream->Error((mId + ":" + str));
+				mParentStream->ErrorStr((mId + ":" + str));
 		}
 	}
 
-	void LogStream::WarningStr(const String& str)
+	void LogStream::WarningStr(const WString& str)
 	{
 		OutWarningEx(str);
 
 		if (mParentStream)
 		{
 			if (mId == "")
-				mParentStream->Warning(str);
+				mParentStream->WarningStr(str);
 			else
-				mParentStream->Warning((mId + ":" + str));
+				mParentStream->WarningStr((mId + ":" + str));
 		}
 	}
 }

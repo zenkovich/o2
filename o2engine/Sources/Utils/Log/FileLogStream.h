@@ -10,10 +10,10 @@ namespace o2
 
 	public:
 		FileLogStream(const String& fileName);
-		FileLogStream(const String& id, const String& fileName);
+		FileLogStream(const WString& id, const String& fileName);
 		~FileLogStream();
 
 	protected:
-		void OutStrEx(const String& str);
+		void OutStrEx(const WString& str);
 	};
 }

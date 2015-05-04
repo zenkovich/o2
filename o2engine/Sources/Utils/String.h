@@ -136,10 +136,16 @@ namespace o2
 		memcpy(dst, src, size*sizeof(char));
 	}
 
-	template<typename T>
-	TString<T> operator+(const T* left, const TString<T>& right)
+	inline String operator+(const char* left, const String& right)
 	{
-		return (TString<T>)left + right;
+		String _left(left);
+		return _left + right;
+	}
+
+	inline WString operator+(const wchar_t* left, const WString& right)
+	{
+		WString _left(left);
+		return _left + right;
 	}
 
 	template<typename T>
@@ -393,8 +399,8 @@ namespace o2
 	template<typename T2>
 	TString<T>& TString<T>::operator=(const TString<T2>& other)
 	{
-		Reserve(other.mCapacity);
-		ConvertStringPtr(mData, other.mData, other.mCapacity);
+		Reserve(other.Capacity());
+		ConvertStringPtr(mData, other.Data(), other.Capacity());
 		return *this;
 	}
 

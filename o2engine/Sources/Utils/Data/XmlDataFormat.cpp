@@ -7,13 +7,16 @@ namespace o2
 		bool LoadDataDoc(const WString& data, DataDoc& doc)
 		{
 			pugi::xml_document xmlDoc;
-			auto res = xmlDoc.load_buffer(data.Data(), data.Length());
+			auto res = xmlDoc.load_buffer(data.Data(), data.Length()*sizeof(wchar_t));
 
 			if (res.status != pugi::status_ok)
 				return false;
 
 			for (pugi::xml_node_iterator it = xmlDoc.begin(); it != xmlDoc.end(); ++it)
 			{
+				if (it->type() != pugi::node_element)
+					continue;
+
 				DataNode* newNode = new DataNode();
 				LoadDataNode(*it, *newNode);
 				doc.AddNode(newNode);
@@ -25,17 +28,20 @@ namespace o2
 		void XmlDataFormat::LoadDataNode(const pugi::xml_node& xmlNode, DataNode& dataNode)
 		{
 			dataNode.SetName(xmlNode.name());
-			dataNode = (char*)xmlNode.child_value();
+			dataNode = (wchar_t*)xmlNode.child_value();
 
 			for (pugi::xml_attribute_iterator it = xmlNode.attributes_begin(); it != xmlNode.attributes_end(); ++it)
 			{
 				DataNode* newNode = new DataNode(it->name());
-				*newNode = (char*)it->value();
+				*newNode = (wchar_t*)it->value();
 				dataNode.AddNode(newNode);
 			}
 
 			for (auto node:xmlNode)
 			{
+				if (node.type() != pugi::node_element)
+					continue;
+
 				DataNode* newNode = new DataNode();
 				LoadDataNode(node, *newNode);
 				dataNode.AddNode(newNode);

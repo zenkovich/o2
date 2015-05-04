@@ -162,6 +162,15 @@
     <ClInclude Include="..\Dependencies\Gason\gason.h">
       <Filter>Dependencies\Gason</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Property.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h">
+      <Filter>Sources\Utils\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h">
+      <Filter>Sources\Utils\FileSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -233,8 +242,11 @@
     <ClCompile Include="..\Dependencies\Gason\gason.cpp">
       <Filter>Dependencies\Gason</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp">
+      <Filter>Sources\Utils\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp">
+      <Filter>Sources\Utils\FileSystem</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

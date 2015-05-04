@@ -19,12 +19,12 @@ namespace o2
 		Debug operator=(const Debug& other);
 
 	public:
-		static void Log(const char* format, ...);
-		static void Log(const String& out);
-		static void LogWarning(const char* format, ...);
-		static void LogWarning(const String& out);
-		static void LogError(const char* format, ...);
-		static void LogError(const String& out);
+		static void Log(WString format, ...);
+		static void Log(const WString& out);
+		static void LogWarning(WString format, ...);
+		static void LogWarning(const WString& out);
+		static void LogError(WString format, ...);
+		static void LogError(const WString& out);
 
 		static LogStream* GetLog();
 	};

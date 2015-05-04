@@ -12,16 +12,16 @@ namespace o2
 		typedef Array<LogStream*> LogSteamsArr;
 
 		LogStream*   mParentStream; /**< Parent stream. NULL if no parent. */
-		String       mId;           /**< Name of log stream. */
+		WString      mId;           /**< Name of log stream. */
 		LogSteamsArr mChildStreams; /**< Child streams. */
 
 	public:
 		LogStream();
-		LogStream(const String& id);
+		LogStream(const WString& id);
 		virtual ~LogStream();
 
 		/** Return name of stream. */
-		const String& GetId() const;
+		const WString& GetId() const;
 
 		/** Binding child stream. */
 		void BindStream(LogStream* stream);
@@ -36,31 +36,31 @@ namespace o2
 		LogStream* GetParentStream() const;
 
 		/** Out with low level log. */
-		void Out(const char* format, ...);
+		void Out(WString format, ...);
 
 		/** Out error message. */
-		void Error(const char* format, ...);
+		void Error(WString format, ...);
 
 		/** Out warning message. */
-		void Warning(const char* format, ...);
+		void Warning(WString format, ...);
 
 		/** Out string to current stream and parent stream. */
-		void OutStr(const String& str);
+		void OutStr(const WString& str);
 
 		/** Out error to current stream and parent stream. */
-		void ErrorStr(const String& str);
+		void ErrorStr(const WString& str);
 
 		/** Out warning to current stream and parent stream. */
-		void WarningStr(const String& str);
+		void WarningStr(const WString& str);
 
 	protected:
 		/** Out string to stream. */
-		virtual void OutStrEx(const String& str) {}
+		virtual void OutStrEx(const WString& str) {}
 
 		/** Out error to stream. */
-		virtual void OutErrorEx(const String& srt) { OutStrEx("ERROR:" + srt); }
+		virtual void OutErrorEx(const WString& str) { OutStrEx("ERROR:" + str); }
 
 		/** Out warning to stream. */
-		virtual void OutWarningEx(const String& srt) { OutStrEx("WARNING:" + srt); }
+		virtual void OutWarningEx(const WString& str) { OutStrEx("WARNING:" + str); }
 	};
 }

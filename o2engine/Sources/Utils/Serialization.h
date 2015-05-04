@@ -85,62 +85,65 @@ namespace o2
 		bool Save(const String& file);
 
 		/** Loads data from file and returns a flag of successful execution. */
-		bool LoadFromString(const String& data);
+		bool LoadFromString(const WString& data);
 
 		/** Saving data to string. */
-		String SaveToString();
+		WString SaveToString();
 
 		/** Sets log. If log not setted - using global log. */
 		void SetLog(LogStream* logStream);
 
 		/** Creates inherited node. */
-		void CreateNode(const String& id);
+		void CreateNode(const WString& id);
 
 		/** Trying to get inherited node. */
-		bool GetNode(const String& id, bool errors = false);
+		bool GetNode(const WString& id, bool errors = false);
 
 		/** Returns to parent node. */
 		void PopNode();
 
 		/** Serialize object. */
-		bool Serialize(Serializable* object, const String& id, bool errors = true);
+		bool Serialize(Serializable* object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(int& object, const String& id, bool errors = true);
+		bool Serialize(int& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(unsigned int& object, const String& id, bool errors = true);
+		bool Serialize(unsigned int& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(float& object, const String& id, bool errors = true);
+		bool Serialize(float& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(bool& object, const String& id, bool errors = true);
+		bool Serialize(bool& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(WString& object, const String& id, bool errors = true);
+		bool Serialize(WString& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(Vec2F& object, const String& id, bool errors = true);
+		bool Serialize(String& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(RectF& object, const String& id, bool errors = true);
+		bool Serialize(Vec2F& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(Vec2I& object, const String& id, bool errors = true);
+		bool Serialize(RectF& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(RectI& object, const String& id, bool errors = true);
+		bool Serialize(Vec2I& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
-		bool Serialize(Color4& object, const String& id, bool errors = true);
+		bool Serialize(RectI& object, const WString& id, bool errors = true);
+
+		/** Serialize object. */
+		bool Serialize(Color4& object, const WString& id, bool errors = true);
 
 		/** Serialize object. */
 		//bool Serialize(WideTime& object, const String& id, bool errors = true);
 
 		/** Serialize object. */
 		template<typename T>
-		bool SerializeTemp(T& object, const String& id, bool errors = true)
+		bool SerializeTemp(T& object, const WString& id, bool errors = true)
 		{
 			if (mType == Type::Serialize)
 			{
@@ -163,7 +166,7 @@ namespace o2
 
 		/** Saving data from object to xml node. */
 		template<typename T>
-		bool Serialize(Array<T>& array, const String& id, bool errors = true)
+		bool Serialize(Array<T>& array, const WString& id, bool errors = true)
 		{
 			if (mType == Type::Serialize)
 			{
@@ -203,7 +206,7 @@ namespace o2
 
 		/** Saving data from object to xml node. */
 		template<typename T>
-		bool Serialize(Array<T*>& arr, const String& id, bool errors = true)
+		bool Serialize(Array<T*>& arr, const WString& id, bool errors = true)
 		{
 			if (mType == Type::Serialize)
 			{

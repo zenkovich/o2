@@ -45,13 +45,13 @@ namespace o2
 		return mDataDoc.SaveToFile(file);
 	}
 
-	bool Serializer::LoadFromString(const String& data)
+	bool Serializer::LoadFromString(const WString& data)
 	{
 		return mDataDoc.LoadFromData(data);
 	}
 
-	String Serializer::SaveToString()
-	{
+	o2::WString Serializer::SaveToString()
+{
 		return mDataDoc.SaveAsWString();
 	}
 
@@ -60,12 +60,12 @@ namespace o2
 		mLog = logStream;
 	}
 
-	void Serializer::CreateNode(const String& id)
+	void Serializer::CreateNode(const WString& id)
 	{
 		mCurrentNode = mCurrentNode->AddNode(id);
 	}
 
-	bool Serializer::GetNode(const String& id, bool errors /*= false*/)
+	bool Serializer::GetNode(const WString& id, bool errors /*= false*/)
 	{
 		auto node = mCurrentNode->GetNode(id);
 		if (!node)
@@ -90,7 +90,7 @@ namespace o2
 		return mType;
 	}
 
-	bool Serializer::Serialize(Serializable* object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(Serializable* object, const WString& id, bool errors /*= true*/)
 	{
 		if (mType == Type::Serialize)
 		{
@@ -116,52 +116,57 @@ namespace o2
 		return true;
 	}
 
-	bool Serializer::Serialize(int& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(int& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(unsigned int& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(unsigned int& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(float& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(float& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(bool& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(bool& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(WString& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(WString& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(Vec2F& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(String& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(RectF& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(Vec2F& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(Vec2I& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(RectF& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(RectI& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(Vec2I& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
 
-	bool Serializer::Serialize(Color4& object, const String& id, bool errors /*= true*/)
+	bool Serializer::Serialize(RectI& object, const WString& id, bool errors /*= true*/)
+	{
+		return SerializeTemp(object, id, errors);
+	}
+
+	bool Serializer::Serialize(Color4& object, const WString& id, bool errors /*= true*/)
 	{
 		return SerializeTemp(object, id, errors);
 	}
