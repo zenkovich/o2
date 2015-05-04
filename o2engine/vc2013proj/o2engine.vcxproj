@@ -92,7 +92,12 @@
     <ClInclude Include="..\Dependencies\Json\Value.h" />
     <ClInclude Include="..\Dependencies\PugiXml\pugiconfig.hpp" />
     <ClInclude Include="..\Dependencies\PugiXml\pugixml.hpp" />
+    <ClInclude Include="..\Sources\Application\Application.h" />
+    <ClInclude Include="..\Sources\Application\IApplication.h" />
+    <ClInclude Include="..\Sources\Application\Input.h" />
+    <ClInclude Include="..\Sources\Application\Win\Application.h" />
     <ClInclude Include="..\Sources\EngineSettings.h" />
+    <ClInclude Include="..\Sources\O2.h" />
     <ClInclude Include="..\Sources\Utils\Assert.h" />
     <ClInclude Include="..\Sources\Utils\CommonTypes.h" />
     <ClInclude Include="..\Sources\Utils\Containers\Array.h" />
@@ -121,6 +126,7 @@
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
     <ClInclude Include="..\Sources\Utils\String.h" />
     <ClInclude Include="..\Sources\Utils\Time.h" />
+    <ClInclude Include="..\Sources\Utils\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\Gason\gason.cpp" />
@@ -135,6 +141,9 @@
     <ClCompile Include="..\Dependencies\Json\SolidusEscaper.cpp" />
     <ClCompile Include="..\Dependencies\Json\Value.cpp" />
     <ClCompile Include="..\Dependencies\PugiXml\pugixml.cpp" />
+    <ClCompile Include="..\Sources\Application\IApplication.cpp" />
+    <ClCompile Include="..\Sources\Application\Input.cpp" />
+    <ClCompile Include="..\Sources\Application\Win\Application.cpp" />
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp" />
@@ -148,6 +157,8 @@
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
     <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
     <ClCompile Include="..\Sources\Utils\String.cpp" />
+    <ClCompile Include="..\Sources\Utils\Time.cpp" />
+    <ClCompile Include="..\Sources\Utils\Timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

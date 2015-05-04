@@ -5,21 +5,7 @@
 #include <functional>
 #include <xfunctional>
 
-#include "Utils/Log/LogStream.h"
-#include "Utils/Log/FileLogStream.h"
-#include "Utils/Log/ConsoleLogStream.h"
-#include "Utils/Debug.h"
-#include "Utils/Containers/Array.h"
-#include "Utils/Function.h"
-#include "Utils/Containers/Dictionary.h"
-#include "Utils/Math/Vector2.h"
-#include "Utils/Serialization.h"
-#include "Utils/Data/DataDoc.h"
-#include "Utils/SmartPointers.h"
-#include "Utils/Property.h"
-#include "Dependencies/Json/JsonBox.h"
-#include "Dependencies/Gason/gason.h"
-
+#include "O2.h"
 
 FIRST_SERIALIZATION();
 
@@ -130,6 +116,10 @@ int main(char** lpCmdLine, int nCmdShow)
 	tt.dp = Vec2F(1, 3);
 
 	printf("All tests completed!");
+
+	Application app;
+	app.Launch();
+
 	_getch();
 
 	return 0;

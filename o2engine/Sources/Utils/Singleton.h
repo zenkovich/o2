@@ -9,7 +9,7 @@ namespace o2
 	{
 	public:
 		Singleton()                            { mInstance = static_cast<CLASS*>(this); }
-		virtual ~Singleton()                   { mInstance = NULL; }
+		virtual ~Singleton()                   { mInstance = nullptr; }
 
 		static CLASS& Instance()               { Assert(mInstance, "Singleton not initialized"); return *mInstance; }
 
@@ -18,7 +18,7 @@ namespace o2
 		static void   InitializeSingleton()    { if (!mInstance) new CLASS; }
 		static void   DeinitializeSingleton()  { delete mInstance; }
 
-		static bool   IsSingletonInitialzed()  { return (mInstance != NULL); }
+		static bool   IsSingletonInitialzed()  { return (mInstance != nullptr); }
 
 	public:
 		static CLASS* mInstance;

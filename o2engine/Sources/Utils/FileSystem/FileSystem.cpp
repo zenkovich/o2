@@ -13,23 +13,38 @@ namespace o2
 #undef CreateDirectory
 #undef RemoveDirectory
 
+	CREATE_SINGLETON(FileSystem);
 
 	FileSystem::FileSystem()
 	{
 		mLog = new LogStream("File System");
 		Debug::GetLog()->BindStream(mLog);
+
+		mExtensions.Add(FileType::Image, StringsArr());
+		mExtensions[FileType::Image].Add("png");
+		mExtensions[FileType::Image].Add("jpg");
+		mExtensions[FileType::Image].Add("dds");
+		mExtensions[FileType::Image].Add("pvr");
+
+		mExtensions.Add(FileType::Config, StringsArr());
+		mExtensions[FileType::Config].Add("xml");
+		mExtensions[FileType::Config].Add("txt");
+		mExtensions[FileType::Config].Add("cfg");
+
+		mExtensions.Add(FileType::Atlas, StringsArr());
+		mExtensions[FileType::Atlas].Add("atlas");
 	}
 
 	FileSystem::~FileSystem()
 	{
 	}
 
-	const String& FileSystem::GetResourcesPath() const
+	const String& FileSystem::GetResourcesPath()
 	{
-		return mResourcesPath;
+		return mInstance->mResourcesPath;
 	}
 
-	PathInfo FileSystem::GetPathInfo(const String& path) const
+	PathInfo FileSystem::GetPathInfo(const String& path)
 	{
 		PathInfo res;
 		res.mPath = path;
@@ -51,37 +66,37 @@ namespace o2
 			while (FindNextFile(h, &f));
 		}
 		else
-			mLog->Error("Failed getPathInfo: Error opening directory %s", path.Data());
+			mInstance->mLog->Error("Failed GetPathInfo: Error opening directory %s", path.Data());
 
 		FindClose(h);
 
 		return res;
 	}
 
-	bool FileSystem::CopyFile(const String& source, const String& dest) const
+	bool FileSystem::CopyFile(const String& source, const String& dest)
 	{
 		DeleteFile(dest);
-		CreateDirectory(ExtractPath(dest));
-		return CopyFileA(source.c_str(), dest.c_str(), TRUE) == TRUE;
+		CreateDirectory(ExtractPathStr(dest));
+		return CopyFileA(source.Data(), dest.Data(), TRUE) == TRUE;
 	}
 
-	bool FileSystem::DeleteFile(const String& file) const
+	bool FileSystem::DeleteFile(const String& file)
 	{
-		return DeleteFileA(file.c_str()) == TRUE;
+		return DeleteFileA(file.Data()) == TRUE;
 	}
 
-	bool FileSystem::MoveFile(const String& source, const String& dest) const
+	bool FileSystem::MoveFile(const String& source, const String& dest)
 	{
-		return MoveFileA(source.c_str(), dest.c_str()) == TRUE;
+		return MoveFileA(source.Data(), dest.Data()) == TRUE;
 	}
 
-	FileInfo FileSystem::GetFileInfo(const String& path) const
+	FileInfo FileSystem::GetFileInfo(const String& path)
 	{
 		FileInfo res;
 		res.mPath = "invalid_file";
 
 		FILETIME creationTime, lastAccessTime, lastWriteTime;
-		HANDLE hFile = CreateFileA(path.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		HANDLE hFile = CreateFileA(path.Data(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hFile == NULL)
 			return res;
 
@@ -106,14 +121,14 @@ namespace o2
 		res.mEditDate = WideTime(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth, stLocal.wYear);
 
 		res.mPath = path;
-		String extension = path.substr(path.rfind(".") + 1);
+		String extension = path.SubStr(path.FindLast(".") + 1);
 		res.mFileType = FileType::File;
 
-		FOREACH_CONST(ExtensionsMap, mExtensions, iext)
+		for (auto iext:mInstance->mExtensions)
 		{
-			if (FIND(iext->second, extension) != iext->second.end())
+			if (iext.Value().Contains(extension))
 			{
-				res.mFileType = iext->first;
+				res.mFileType = iext.Key();
 				break;
 			}
 		}
@@ -121,41 +136,40 @@ namespace o2
 		DWORD dwSizeHigh=0, dwSizeLow=0;
 		dwSizeLow = GetFileSize(hFile, &dwSizeHigh);
 		res.mSize = (dwSizeHigh * (MAXDWORD+1)) + dwSizeLow;
-		res.mCheckSumm = res.mSize;
 
 		CloseHandle(hFile);
 
 		return res;
 	}
 
-	bool FileSystem::CreateDirectory(const String& path, bool recursive /*= true*/) const
+	bool FileSystem::CreateDirectory(const String& path, bool recursive /*= true*/)
 	{
 		if (IsDirectoryExist(path))
 			return true;
 
 		if (!recursive)
-			return CreateDirectoryA(path.c_str(), NULL) == TRUE;
+			return CreateDirectoryA(path.Data(), NULL) == TRUE;
 
-		if (CreateDirectoryA(path.c_str(), NULL) == TRUE)
+		if (CreateDirectoryA(path.Data(), NULL) == TRUE)
 			return true;
 
-		String extrPath = ExtractPath(path);
+		String extrPath = ExtractPathStr(path);
 		if (extrPath == path)
 			return false;
 
 		return CreateDirectory(extrPath, true);
 	}
 
-	bool FileSystem::RemoveDirectory(const String& path, bool recursive /*= true*/) const
+	bool FileSystem::RemoveDirectory(const String& path, bool recursive /*= true*/)
 	{
 		if (!IsDirectoryExist(path))
 			return false;
 
 		if (!recursive)
-			return RemoveDirectoryA(path.c_str()) == TRUE;
+			return RemoveDirectoryA(path.Data()) == TRUE;
 
 		WIN32_FIND_DATA f;
-		HANDLE h = FindFirstFile((path + "/*").c_str(), &f);
+		HANDLE h = FindFirstFile((path + "/*").Data(), &f);
 		if (h != INVALID_HANDLE_VALUE)
 		{
 			do
@@ -173,12 +187,12 @@ namespace o2
 
 		FindClose(h);
 
-		return RemoveDirectoryA(path.c_str()) == TRUE;
+		return RemoveDirectoryA(path.Data()) == TRUE;
 	}
 
-	bool FileSystem::IsDirectoryExist(const String& path) const
+	bool FileSystem::IsDirectoryExist(const String& path)
 	{
-		DWORD tp = GetFileAttributes(path.c_str());
+		DWORD tp = GetFileAttributes(path.Data());
 
 		if (tp == INVALID_FILE_ATTRIBUTES)
 			return false;
@@ -189,9 +203,9 @@ namespace o2
 		return false;
 	}
 
-	bool FileSystem::IsFileExist(const String& path) const
+	bool FileSystem::IsFileExist(const String& path)
 	{
-		DWORD tp = GetFileAttributes(path.c_str());
+		DWORD tp = GetFileAttributes(path.Data());
 
 		if (tp == INVALID_FILE_ATTRIBUTES)
 			return false;
@@ -200,6 +214,11 @@ namespace o2
 			return false;
 
 		return true;
+	}
+
+	String FileSystem::ExtractPathStr(const String& path)
+	{
+		return path.SubStr(0, path.FindLast("/"));
 	}
 
 }

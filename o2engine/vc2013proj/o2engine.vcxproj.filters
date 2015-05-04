@@ -34,6 +34,12 @@
     <Filter Include="Dependencies\Gason">
       <UniqueIdentifier>{cb7803ec-f12c-4755-b820-68f2f3261b03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Application">
+      <UniqueIdentifier>{e04ee9d7-d751-42b7-8d51-c1b84b80d21b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Application\Win">
+      <UniqueIdentifier>{fe280498-f3bf-444b-bdba-f497095f65f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -171,6 +177,24 @@
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h">
       <Filter>Sources\Utils\FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Application\IApplication.h">
+      <Filter>Sources\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Application\Win\Application.h">
+      <Filter>Sources\Application\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Application\Input.h">
+      <Filter>Sources\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Timer.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\O2.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Application\Application.h">
+      <Filter>Sources\Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -247,6 +271,21 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp">
       <Filter>Sources\Utils\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Application\IApplication.cpp">
+      <Filter>Sources\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Application\Win\Application.cpp">
+      <Filter>Sources\Application\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Application\Input.cpp">
+      <Filter>Sources\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Timer.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Time.cpp">
+      <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
