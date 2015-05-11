@@ -54,106 +54,115 @@ namespace o2
 		AutoArr& operator=(const AutoArr* ptr);
 	};
 
-	template<typename _type>
-	class Ptr;
+	class IPtrBase;
 
-	template<typename _type>
-	class PtrBase
+	class IPtr
 	{
-		friend class Ptr<_type>;
-		typedef Array<Ptr<_type>*> PointersArr;
+	public:
+		friend class IPtrBase;
 
-		PointersArr mPointers;
+		IPtrBase* mOwner = nullptr;
+
+		virtual void SetInvalid() = 0;
 	};
 
-	template<typename _type>
-	class Ptr
+	class IPtrBase
 	{
-		friend class PtrBase<_type>;
+	public:
+		typedef Array<IPtr*> PointersArr;
 
-		PtrBase<_type>* mObject;
-		bool            mIsHolder;
+		PointersArr mPointers;
+
+		int id;
 
 	public:
-		Ptr(_type* object = nullptr):
-			mObject(object), mIsHolder(true)
+		bool IsNotFree(Array<IPtrBase*>& processed)
 		{
+			for (auto ptrIt = mPointers.Begin(); ptrIt != mPointers.End(); ++ptrIt)
+			{
+				if (!(*ptrIt)->mOwner)
+					return false;
+
+				if (processed.Contains((*ptrIt)->mOwner))
+					continue;
+
+				processed.Add((*ptrIt)->mOwner);
+
+				if (!(*ptrIt)->mOwner->IsNotFree(processed))
+					return false;
+			}
+
+			return true;
+		}
+
+		bool OnRemovePointer(IPtr* ptr) {
+			mPointers.Remove(ptr);
+
+			Array<IPtrBase*> processed;
+			processed.Add(this);
+			return IsNotFree(processed);
+			//return mPointers.Count() == 0; //FIXME
+		}
+	};
+	
+	template<typename _type>
+	class Ptr : public IPtr
+	{
+		friend class IPtrBase;
+
+		_type* mObject;
+
+		void SetInvalid()
+		{
+			mObject = nullptr;
+		}
+
+		void Release() {
 			if (mObject)
 			{
-				for (auto ptr:mObject->mPointers)
-				{
-					if (ptr->mIsHolder)
-					{
-						mIsHolder = false;
-						break;
-					}
+				if (mObject->OnRemovePointer(this)) {
+					printf("delete %x\n", mObject);
+					delete mObject;
 				}
-
-				mObject->mPointers.Add(this);
 			}
 		}
 
-		Ptr(const Ptr& other, bool asHolder = false):
-			mObject(other.mObject), mIsHolder(asHolder)
+	public:
+		Ptr(IPtrBase* owner):
+			mObject(nullptr)
+		{
+			mOwner = owner;
+		}
+
+		Ptr(_type* object = nullptr) :
+			mObject(object)
 		{
 			if (mObject)
-			{
-				if (asHolder)
-				{
-					for (auto ptr:mObject->mPointers)
-					{
-						if (ptr->mIsHolder)
-						{
-							ptr->mIsHolder = false;
-							break;
-						}
-					}
-				}
-
 				mObject->mPointers.Add(this);
-			}
+		}
+
+		Ptr(const Ptr& other) :
+			mObject(other.mObject)
+		{
+			if (mObject)
+				mObject->mPointers.Add(this);
 		}
 
 		~Ptr()
 		{
-			if (mObject)
-			{
-				if (mIsHolder)
-				{
-					for (auto ptr:mObject->mPointers)
-						ptr->mObject = nullptr;
-
-					delete mObject;
-				}
-				else
-				{
-					mObject->mPointers.Remove(this);
-				}
-			}
+			Release();
 		}
 
 		Ptr& operator=(const Ptr& other)
 		{
-			if (mObject)
-			{
-				if (mIsHolder)
-				{
-					for (auto ptr:mObject->mPointers)
-						ptr->mObject = nullptr;
-
-					delete mObject;
-				}
-				else
-				{
-					mObject->mPointers.Remove(this);
-				}
-			}
+			Release();
 
 			mObject = other.mObject;
-			mIsHolder = false;
 
 			if (mObject)
 				mObject->mPointers.Add(this);
+
+			return *this;
 		}
 
 		bool operator==(const Ptr& other) const
@@ -199,27 +208,6 @@ namespace o2
 		_type* Get()
 		{
 			return mObject;
-		}
-
-		Ptr& SetAsHolder()
-		{
-			for (auto ptr:mObject->mPointers)
-			{
-				if (ptr->mIsHolder)
-				{
-					ptr->mIsHolder = false;
-					break;
-				}
-			}
-
-			mIsHolder = true;
-
-			return *this;
-		}
-
-		bool IsHolder() const
-		{
-			return mIsHolder;
 		}
 	};
 

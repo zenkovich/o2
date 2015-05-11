@@ -9,7 +9,7 @@
 
 FIRST_SERIALIZATION();
 
-struct TestSerialize: public Serializable, public PtrBase<TestSerialize>
+struct TestSerialize: public Serializable, public IPtrBase
 {
 	int a;
 	float b;
@@ -90,9 +90,89 @@ void tst(int x)
 	Debug::Log("static int:%i", x);
 }
 
+struct a0;
+struct a1;
+struct a2;
+struct a3;
+struct a4;
+
+#define PTR(_TYPE, _NAME) Ptr<_TYPE> _NAME = Ptr<_TYPE>(this)
+
+struct a0 : public IPtrBase
+{
+	int __a0 = 0;
+
+	PTR(a1, _a1);
+	PTR(a3, _a3);
+	PTR(a4, _a4);
+};
+
+struct a1 : public IPtrBase
+{
+	int __a1 = 0;
+
+	PTR(a2, _a2);
+	PTR(a4, _a4);
+};
+
+struct a2 : public IPtrBase
+{
+	int __a2 = 0;
+
+	PTR(a1, _a1);
+	PTR(a3, _a3);
+	PTR(a4, _a4);
+};
+
+struct a3 : public IPtrBase
+{
+	int __a3 = 0;
+
+	PTR(a0, _a0);
+	PTR(a4, _a4);
+};
+
+struct a4 : public IPtrBase
+{
+	int __a4 = 0;
+	int asshole = 5;
+};
+
+void suppatest()
+{
+	Ptr<a0> _a0(new a0());
+	Ptr<a1> _a1(new a1());
+	Ptr<a2> _a2(new a2());
+	Ptr<a3> _a3(new a3());
+	Ptr<a4> _a4(new a4());
+
+	_a0->id = 0;
+	_a1->id = 1;
+	_a2->id = 2;
+	_a3->id = 3;
+	_a4->id = 4;
+
+	_a0->_a1 = _a1;
+	_a0->_a3 = _a3;
+	_a0->_a4 = _a4;
+
+	_a1->_a2 = _a2;
+	_a1->_a4 = _a4;
+
+	_a2->_a1 = _a1;
+	_a2->_a3 = _a3;
+	_a2->_a4 = _a4;
+
+	_a3->_a0 = _a0;
+	_a3->_a4 = _a4;
+
+};
+
 int main(char** lpCmdLine, int nCmdShow)
 {
 	TestMath();
+
+	suppatest();
 
 	TestSerialize tt(1, 2, 3, 4, 5);
 
@@ -109,7 +189,7 @@ int main(char** lpCmdLine, int nCmdShow)
 	DataDoc readDoc("file.xml");
 
 	Ptr<TestSerialize> ptest(new TestSerialize(1, 2, 3, 4, 5));
-	Ptr<TestSerialize> p2test(ptest, true);
+	Ptr<TestSerialize> p2test(ptest);
 
 	int f = tt.ap;
 	tt.ap = f;
