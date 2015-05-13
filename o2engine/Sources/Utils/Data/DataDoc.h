@@ -2,15 +2,16 @@
 
 #include "Utils/Containers/Array.h"
 #include "Utils/String.h"
+#include "Utils/SmartPointers.h"
 
 namespace o2
 {
-	class DataNode
+	class DataNode: public PtrBase<DataNode>
 	{
 		friend class DataDoc;
 
 	public:
-		typedef Array<DataNode*> DataNodesArr;
+		typedef Array<Ptr<DataNode>> DataNodesArr;
 		typedef DataNode::DataNodesArr::Iterator Iterator;
 		typedef DataNode::DataNodesArr::ConstIterator ConstIterator;
 
@@ -37,7 +38,7 @@ namespace o2
 		DataNode(const WString& name, const RectF& value);
 		DataNode(const WString& name, const RectI& value);
 		DataNode(const WString& name, const Color4& value);
-		~DataNode();
+		virtual ~DataNode();
 
 		DataNode& operator=(const DataNode& other);
 		DataNode& operator=(char* value);
@@ -67,16 +68,16 @@ namespace o2
 		explicit operator RectI() const;
 		explicit operator Color4() const;
 
-		DataNode* operator[](const WString& nodePath) const;
+		Ptr<DataNode> operator[](const WString& nodePath) const;
 		bool operator==(const DataNode& other) const;
 		bool operator!=(const DataNode& other) const;
 
-		DataNode* GetParent() const;
+		Ptr<DataNode> GetParent() const;
 
-		DataNode* GetNode(const WString& nodePath) const;
-		DataNode* AddNode(const WString& name);
-		DataNode* AddNode(DataNode* const node);
-		bool RemoveNode(DataNode* const node);
+		Ptr<DataNode> GetNode(const WString& nodePath) const;
+		Ptr<DataNode> AddNode(const WString& name);
+		Ptr<DataNode> AddNode(const Ptr<DataNode>& node);
+		bool RemoveNode(const Ptr<DataNode>& node);
 		bool RemoveNode(const WString& name);
 
 		WString GetName() const;
@@ -99,7 +100,7 @@ namespace o2
 		ConstIterator end() const;
 	};
 
-	class DataDoc: public DataNode
+	class DataDoc : public DataNode
 	{
 	public:
 		enum class Format { Xml, JSON, Binary };
@@ -107,8 +108,6 @@ namespace o2
 	public:
 		DataDoc();
 		DataDoc(const WString& fileName);
-		DataDoc(const DataDoc& other);
-		~DataDoc();
 
 		bool LoadFromFile(const String& fileName);
 		bool LoadFromData(const WString& data);

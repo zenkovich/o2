@@ -92,7 +92,7 @@ namespace o2
 	DataNode::~DataNode()
 	{
 		for (auto child : mChildNodes)
-			delete child;
+			child.Release();
 
 		mChildNodes.Clear();
 	}
@@ -248,7 +248,7 @@ namespace o2
 		return (Color4)mData;
 	}
 
-	DataNode* DataNode::operator[](const WString& nodePath) const
+	Ptr<DataNode> DataNode::operator[](const WString& nodePath) const
 	{
 		return GetNode(nodePath);
 	}
@@ -263,12 +263,12 @@ namespace o2
 		return mName != other.mName || mData != other.mData || mChildNodes != other.mChildNodes;
 	}
 
-	DataNode* DataNode::GetParent() const
+	Ptr<DataNode> DataNode::GetParent() const
 	{
 		return mParent;
 	}
 
-	DataNode* DataNode::GetNode(const WString& nodePath) const
+	Ptr<DataNode> DataNode::GetNode(const WString& nodePath) const
 	{
 		int delPos = nodePath.Find("/");
 		WString pathPart = nodePath.SubStr(0, delPos);
@@ -300,7 +300,7 @@ namespace o2
 		return nullptr;
 	}
 
-	DataNode* DataNode::AddNode(const WString& name)
+	Ptr<DataNode> DataNode::AddNode(const WString& name)
 	{
 		DataNode* newNode = new DataNode(name);
 		newNode->mParent = this;
@@ -308,14 +308,14 @@ namespace o2
 		return newNode;
 	}
 
-	DataNode* DataNode::AddNode(DataNode* const node)
+	Ptr<DataNode> DataNode::AddNode(const Ptr<DataNode>& node)
 	{
 		mChildNodes.Add(node);
 		node->mParent = this;
 		return node;
 	}
 
-	bool DataNode::RemoveNode(DataNode* const node)
+	bool DataNode::RemoveNode(const Ptr<DataNode>& node)
 	{
 		if (!mChildNodes.Contains(node))
 			return false;
@@ -328,11 +328,11 @@ namespace o2
 
 	bool DataNode::RemoveNode(const WString& name)
 	{
-		int idx = mChildNodes.FindIdx([&](DataNode* const x){ return x->mName == name; });
+		int idx = mChildNodes.FindIdx([&](const Ptr<DataNode>& x){ return x->mName == name; });
 		if (idx < 0)
 			return false;
 
-		DataNode* node = mChildNodes.Get(idx);
+		Ptr<DataNode> node = mChildNodes.Get(idx);
 		mChildNodes.RemoveAt(idx);
 		delete node;
 
@@ -407,20 +407,6 @@ namespace o2
 	DataDoc::DataDoc(const WString& fileName)
 	{
 		LoadFromFile(fileName);
-	}
-
-	DataDoc::DataDoc(const DataDoc& other)
-	{
-		for (auto node : other.mChildNodes)
-			mChildNodes.Add(new DataNode(*node));
-	}
-
-	DataDoc::~DataDoc()
-	{
-		for (auto node : mChildNodes)
-			delete node;
-
-		mChildNodes.Clear();
 	}
 
 	bool DataDoc::LoadFromFile(const String& fileName)

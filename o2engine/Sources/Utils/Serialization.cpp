@@ -21,7 +21,7 @@ namespace o2
 
 	Serializer::Serializer(DataNode* dataNode, Type type /*= Type::Serialize*/)
 	{
-		mCurrentNode = mDataDoc.AddNode(new DataNode(*dataNode));
+		mCurrentNode = mDataDoc.AddNode(Ptr<DataNode>(new DataNode(*dataNode)));
 		mType = type;
 	}
 

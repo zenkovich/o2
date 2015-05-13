@@ -54,161 +54,47 @@ namespace o2
 		AutoArr& operator=(const AutoArr* ptr);
 	};
 
-	class IPtrBase;
+	template<typename _type>
+	class Ptr;
 
-	class IPtr
+	template<typename _type>
+	class PtrBase
 	{
-	public:
-		friend class IPtrBase;
-
-		IPtrBase* mOwner = nullptr;
-
-		virtual void SetInvalid() = 0;
-	};
-
-	class IPtrBase
-	{
-	public:
-		typedef Array<IPtr*> PointersArr;
+		friend class Ptr<_type>;
+		typedef Array<Ptr<_type>*> PointersArr;
 
 		PointersArr mPointers;
-
-		int id;
-
-	public:
-		bool IsNotFree(Array<IPtrBase*>& processed)
-		{
-			for (auto ptrIt = mPointers.Begin(); ptrIt != mPointers.End(); ++ptrIt)
-			{
-				if (!(*ptrIt)->mOwner)
-					return false;
-
-				if (processed.Contains((*ptrIt)->mOwner))
-					continue;
-
-				processed.Add((*ptrIt)->mOwner);
-
-				if (!(*ptrIt)->mOwner->IsNotFree(processed))
-					return false;
-			}
-
-			return true;
-		}
-
-		bool OnRemovePointer(IPtr* ptr) {
-			mPointers.Remove(ptr);
-
-			Array<IPtrBase*> processed;
-			processed.Add(this);
-			return IsNotFree(processed);
-			//return mPointers.Count() == 0; //FIXME
-		}
 	};
-	
+
 	template<typename _type>
-	class Ptr : public IPtr
+	class Ptr
 	{
-		friend class IPtrBase;
+		friend class PtrBase<_type>;
 
 		_type* mObject;
 
-		void SetInvalid()
-		{
-			mObject = nullptr;
-		}
-
-		void Release() {
-			if (mObject)
-			{
-				if (mObject->OnRemovePointer(this)) {
-					printf("delete %x\n", mObject);
-					delete mObject;
-				}
-			}
-		}
-
 	public:
-		Ptr(IPtrBase* owner):
-			mObject(nullptr)
-		{
-			mOwner = owner;
-		}
+		Ptr(_type* object = nullptr);
+		Ptr(const Ptr& other);
+		~Ptr();
 
-		Ptr(_type* object = nullptr) :
-			mObject(object)
-		{
-			if (mObject)
-				mObject->mPointers.Add(this);
-		}
+		Ptr& operator=(const Ptr& other);
 
-		Ptr(const Ptr& other) :
-			mObject(other.mObject)
-		{
-			if (mObject)
-				mObject->mPointers.Add(this);
-		}
+		bool operator==(const Ptr& other) const;
+		bool operator!=(const Ptr& other) const;
 
-		~Ptr()
-		{
-			Release();
-		}
+		operator bool() const;
+		operator _type*();
+		operator _type* const() const;
 
-		Ptr& operator=(const Ptr& other)
-		{
-			Release();
+		_type* operator->() const;
+		_type& operator*();
 
-			mObject = other.mObject;
+		bool IsValid() const;
+		_type* Get();
 
-			if (mObject)
-				mObject->mPointers.Add(this);
-
-			return *this;
-		}
-
-		bool operator==(const Ptr& other) const
-		{
-			return mObject == other.mObject;
-		}
-
-		bool operator!=(const Ptr& other) const
-		{
-			return mObject != other.mObject;
-		}
-
-		operator bool() const
-		{
-			return mObject != nullptr;
-		}
-
-		operator _type*()
-		{
-			return mObject;
-		}
-
-		operator _type* const() const
-		{
-			return mObject;
-		}
-
-		_type* operator->()
-		{
-			return mObject;
-		}
-
-		_type& operator*()
-		{
-			return *mObject;
-		}
-
-		bool IsValid() const
-		{
-			return mObject != nullptr;
-		}
-
-		_type* Get()
-		{
-			return mObject;
-		}
+		void Release();
+		void ReleaseArr();
 	};
 
 #pragma region AutoPtr implementation
@@ -345,5 +231,123 @@ namespace o2
 	}
 
 #pragma endregion AutoArr implementation
+
+#pragma region Ptr implementation
+
+	template<typename _type>
+	Ptr<_type>::Ptr(_type* object = nullptr) :
+		mObject(object)
+	{
+		if (mObject)
+			mObject->mPointers.Add(this);
+	}
+
+	template<typename _type>
+	Ptr<_type>::Ptr(const Ptr& other) :
+		mObject(other.mObject)
+	{
+		if (mObject)
+			mObject->mPointers.Add(this);
+	}
+
+	template<typename _type>
+	Ptr<_type>::~Ptr()
+	{
+		mObject->mPointers.Remove(this);
+	}
+
+	template<typename _type>
+	Ptr<_type>& Ptr<_type>::operator=(const Ptr& other)
+	{
+		if (mObject)
+			mObject->mPointers.Remove(this);
+
+		mObject = other.mObject;
+
+		if (mObject)
+			mObject->mPointers.Add(this);
+
+		return *this;
+	}
+
+	template<typename _type>
+	bool Ptr<_type>::operator==(const Ptr& other) const
+	{
+		return mObject == other.mObject;
+	}
+
+	template<typename _type>
+	bool Ptr<_type>::operator!=(const Ptr& other) const
+	{
+		return mObject != other.mObject;
+	}
+
+	template<typename _type>
+	Ptr<_type>::operator bool() const
+	{
+		return mObject != nullptr;
+	}
+
+	template<typename _type>
+	Ptr<_type>::operator _type*()
+	{
+		return mObject;
+	}
+
+	template<typename _type>
+	Ptr<_type>::operator _type* const() const
+	{
+		return mObject;
+	}
+
+	template<typename _type>
+	_type* Ptr<_type>::operator->() const
+	{
+		return mObject;
+	}
+
+	template<typename _type>
+	_type& Ptr<_type>::operator*()
+	{
+		return *mObject;
+	}
+
+	template<typename _type>
+	bool Ptr<_type>::IsValid() const
+	{
+		return mObject != nullptr;
+	}
+
+	template<typename _type>
+	_type* Ptr<_type>::Get()
+	{
+		return mObject;
+	}
+
+	template<typename _type>
+	void Ptr<_type>::Release()
+	{
+		if (!mObject)
+			return;
+
+		for (auto ptr : mObject->mPointers)
+			ptr->mObject = nullptr;
+
+		delete mObject;
+	}
+
+	template<typename _type>
+	void Ptr<_type>::ReleaseArr()
+	{
+		if (!mObject)
+			return;
+
+		for (auto ptr : mObject->mPointers)
+			ptr.mObject = nullptr;
+
+		delete[] mObject;
+	}
+
+#pragma endregion Ptr implementation
 
 }
