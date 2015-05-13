@@ -40,6 +40,12 @@
     <Filter Include="Sources\Application\Win">
       <UniqueIdentifier>{fe280498-f3bf-444b-bdba-f497095f65f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Config">
+      <UniqueIdentifier>{6398fbf7-7ef0-442d-a6c6-762cb013015a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Assets">
+      <UniqueIdentifier>{3fb4096c-22db-47e4-8b84-0b7e7f51759c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -195,6 +201,21 @@
     <ClInclude Include="..\Sources\Application\Application.h">
       <Filter>Sources\Application</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Config\ProjectConfig.h">
+      <Filter>Sources\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Config\ProjectBuildConfig.h">
+      <Filter>Sources\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Config\AssetConfig.h">
+      <Filter>Sources\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\CustomRTTI.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Asset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -286,6 +307,18 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Time.cpp">
       <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Config\ProjectConfig.cpp">
+      <Filter>Sources\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Config\ProjectBuildConfig.cpp">
+      <Filter>Sources\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Config\AssetConfig.cpp">
+      <Filter>Sources\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Asset.cpp">
+      <Filter>Sources\Assets</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

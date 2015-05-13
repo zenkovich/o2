@@ -96,6 +96,10 @@
     <ClInclude Include="..\Sources\Application\IApplication.h" />
     <ClInclude Include="..\Sources\Application\Input.h" />
     <ClInclude Include="..\Sources\Application\Win\Application.h" />
+    <ClInclude Include="..\Sources\Assets\Asset.h" />
+    <ClInclude Include="..\Sources\Config\AssetConfig.h" />
+    <ClInclude Include="..\Sources\Config\ProjectBuildConfig.h" />
+    <ClInclude Include="..\Sources\Config\ProjectConfig.h" />
     <ClInclude Include="..\Sources\EngineSettings.h" />
     <ClInclude Include="..\Sources\O2.h" />
     <ClInclude Include="..\Sources\Utils\Assert.h" />
@@ -105,6 +109,7 @@
     <ClInclude Include="..\Sources\Utils\Containers\IArray.h" />
     <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h" />
     <ClInclude Include="..\Sources\Utils\Containers\Pair.h" />
+    <ClInclude Include="..\Sources\Utils\CustomRTTI.h" />
     <ClInclude Include="..\Sources\Utils\Data\DataDoc.h" />
     <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
@@ -144,6 +149,10 @@
     <ClCompile Include="..\Sources\Application\IApplication.cpp" />
     <ClCompile Include="..\Sources\Application\Input.cpp" />
     <ClCompile Include="..\Sources\Application\Win\Application.cpp" />
+    <ClCompile Include="..\Sources\Assets\Asset.cpp" />
+    <ClCompile Include="..\Sources\Config\AssetConfig.cpp" />
+    <ClCompile Include="..\Sources\Config\ProjectBuildConfig.cpp" />
+    <ClCompile Include="..\Sources\Config\ProjectConfig.cpp" />
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp" />
