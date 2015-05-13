@@ -2,120 +2,221 @@
 
 #include <stdio.h>
 #include <conio.h>
-#include <functional>
-#include <xfunctional>
-
 #include "O2.h"
 
 FIRST_SERIALIZATION();
 
-struct TestSerialize: public Serializable, public PtrBase<TestSerialize>
+class IPtr;
+class IObject;
+
+class ObjectsManager: public Singleton<ObjectsManager>
 {
-	int a;
-	float b;
-	Array<int> c;
-	Vec2F d;
+public:
+	typedef Array<IObject*> ObjectsArr;
 
-	Property<TestSerialize, int> ap;
-	Property<TestSerialize, Vec2F> dp;
+	ObjectsArr mObjects;
 
-	TestSerialize() 
+	static void OnObjectCreating(IObject* object)
 	{
-		InitProps();
+		mInstance->mObjects.Add(object);
 	}
 
-	TestSerialize(int a, float b, int c1, int c2, int c3):
-		a(a), b(b)
+	static void OnObjectRemoving(IObject* object)
 	{
-		c.Add(c1); c.Add(c2); c.Add(c3);
-
-		InitProps();
+		mInstance->mObjects.Remove(object);
 	}
 
-	bool operator==(const TestSerialize& other) const
-	{
-		return a == other.a && b == other.b && c == other.c;
-	}
-
-	void SetA(int v)
-	{
-		a = v;
-	}
-
-	int GetA() const
-	{
-		return a;
-	}
-
-	void SetD(const Vec2F& v)
-	{
-		d = v;
-	}
-
-	Vec2F GetD() const
-	{
-		return d;
-	}
-
-	void fnc(int x)
-	{
-		Debug::Log("object fnc %i", a + x);
-	}
-
-	void InitProps()
-	{
-		INITIALIZE_PROPERTY(TestSerialize, ap, SetA, GetA);
-		INITIALIZE_PROPERTY(TestSerialize, dp, SetD, GetD);
-	}
-
-	SERIALIZE_METHODS(TestSerialize);
+	static void OnPtrCreating(IPtr* ptr);
 };
 
-SERIALIZE_METHOD_IMPL(TestSerialize)
-{
-	SERIALIZE(a);
-	SERIALIZE(b);
-	SERIALIZE(c);
+CREATE_SINGLETON(ObjectsManager);
 
-	return true;
+class IObject
+{
+public:
+	typedef Array<IPtr*> PointersArr;
+
+	PointersArr mPointers;
+	PointersArr mChildPointers;
+	UInt        mSize;
+
+	IObject()
+	{
+		ObjectsManager::OnObjectCreating(this);
+	}
+
+	virtual ~IObject()
+	{
+		ObjectsManager::OnObjectRemoving(this);
+	}
+};
+
+void ObjectsManager::OnPtrCreating(IPtr* ptr)
+{
+	char* cptr = (char*)ptr;
+	for (auto obj : mInstance->mObjects)
+	{
+		char* beg = (char*)obj;
+		char* end = beg + obj->mSize;
+		if (cptr >= beg && cptr < end)
+		{
+			obj->mChildPointers.Add(ptr);
+			return;
+		}
+	}
 }
 
-void srTest(Serializable& sr)
+class IPtr
 {
-	Debug::Log("%s", sr.GetTypeName());
+protected:
+public:
+	IObject* mObject;
+
+	IPtr(IObject* object = nullptr):
+		mObject(object)
+	{
+		ObjectsManager::OnPtrCreating(this);
+
+		if (mObject)
+			mObject->mPointers.Add(this);
+	}
+
+	IPtr(const IPtr& other):
+		IPtr(other.mObject)
+	{}
+
+	virtual ~IPtr()
+	{
+		if (mObject)
+			mObject->mPointers.Remove(this);
+	}
+
+	IPtr& operator=(const IPtr& other)
+	{
+		if (mObject)
+			mObject->mPointers.Remove(this);
+
+		mObject = other.mObject;
+
+		if (mObject)
+			mObject->mPointers.Add(this);
+
+		return *this;
+	}
+
+	bool IsValid() const
+	{
+		return mObject != nullptr;
+	}
+
+	void Release()
+	{
+		if (mObject)
+		{
+			for (auto ptr : mObject->mPointers)
+				ptr->mObject = nullptr;
+
+			delete mObject;
+		}
+	}
+};
+
+template<typename _type>
+class XPtr: public IPtr
+{
+public:
+	// 	XPtr(_type* object = nullptr):
+	// 		IPtr(object)
+	// 	{}
+
+	XPtr():IPtr(nullptr) {}
+
+	XPtr(const XPtr& other):
+		IPtr(other)
+	{}
+
+	~XPtr()
+	{}
+
+	XPtr& operator=(const XPtr& other)
+	{
+		IPtr::operator=(other);
+		return *this;
+	}
+
+	bool operator==(const XPtr& other) const
+	{
+		return mObject == other.mObject;
+	}
+
+	bool operator!=(const XPtr& other) const
+	{
+		return mObject != other.mObject;
+	}
+
+	operator bool() const
+	{
+		return mObject != nullptr;
+	}
+
+	operator _type*()
+	{
+		return (_type*)mObject;
+	}
+
+	operator _type* const() const
+	{
+		return (_type*)mObject;
+	}
+
+	_type* operator->() const
+	{
+		return (_type*)mObject;
+	}
+
+	_type& operator*()
+	{
+		return *(_type*)mObject;
+	}
+
+	_type* Get()
+	{
+		return (_type*)mObject;
+	}
+};
+
+template<typename _type, typename ... _args>
+XPtr<_type> CreateObject(_args ... args)
+{
+	XPtr<_type> res;
+	_type* obj = new _type(args ...);
+	obj->mSize = sizeof(*obj);
+	res.mObject = obj;
+	res.mObject->mPointers.Add(&res);
+	return res;
 }
 
-void tst(int x)
+struct yy:public IObject
 {
-	Debug::Log("static int:%i", x);
-}
+	float x = 55.66f;
+};
+
+struct xx:public IObject
+{
+	int abc = 33;
+	String str = "prived";
+	XPtr<yy> yx;
+
+	xx() {}
+
+	xx(int aa):abc(aa) {}
+};
 
 int main(char** lpCmdLine, int nCmdShow)
 {
+	XPtr<xx> x = CreateObject<xx>(44);
+
 	TestMath();
-
-	TestSerialize tt(1, 2, 3, 4, 5);
-
-	Serializer srl;
-	srl.Serialize(&tt, "tt");
-	srl.Save("testSerialize.xml");
-
-	Debug::LogWarning("integer %f", 45.3f);
-
-// 	DataDoc doc;
-// 	*doc.AddNode("name") = L"prived";
-// 	doc.SaveToFile("file.xml");
-
-	DataDoc readDoc("file.xml");
-
-	Ptr<TestSerialize> ptest(new TestSerialize(1, 2, 3, 4, 5));
-	Ptr<TestSerialize> p2test(ptest);
-
-	int f = tt.ap;
-	tt.ap = f;
-	tt.dp = Vec2F(1, 3);
-
-	printf("All tests completed!");
 
 	Application app;
 	app.Launch();
