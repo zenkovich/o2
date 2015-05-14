@@ -2,11 +2,12 @@
 
 #include "Utils/Containers/Array.h"
 #include "Utils/String.h"
-#include "Utils/SmartPointers.h"
+#include "Utils/Memory/Ptr.h"
+#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
-	class DataNode: public PtrBase<DataNode>
+	class DataNode: public IObject
 	{
 		friend class DataDoc;
 

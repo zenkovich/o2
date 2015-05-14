@@ -2,6 +2,9 @@
 
 #include "EngineSettings.h"
 
+#include "Utils/Memory/MemoryManager.h"
+#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Math/Math.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"

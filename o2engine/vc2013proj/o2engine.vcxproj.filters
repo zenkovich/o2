@@ -40,6 +40,9 @@
     <Filter Include="Sources\Application\Win">
       <UniqueIdentifier>{fe280498-f3bf-444b-bdba-f497095f65f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Utils\Memory">
+      <UniqueIdentifier>{d912bc70-a3bf-4955-b081-b69c3eaedd11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -195,6 +198,21 @@
     <ClInclude Include="..\Sources\Application\Application.h">
       <Filter>Sources\Application</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\IObject.h">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\IPtr.h">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\Ptr.h">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\AllocOperators.h">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -286,6 +304,18 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Time.cpp">
       <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Memory\IObject.cpp">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Memory\IPtr.cpp">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Memory\AllocOperators.cpp">
+      <Filter>Sources\Utils\Memory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

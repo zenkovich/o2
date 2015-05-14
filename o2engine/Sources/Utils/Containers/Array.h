@@ -42,6 +42,14 @@ namespace o2
 			bool operator<(const Iterator& itr) const;
 			bool operator>=(const Iterator& itr) const;
 			bool operator<=(const Iterator& itr) const;
+			bool operator==(const Iterator& itr) const
+			{
+				return mValuePtr == itr.mValuePtr && mArray == itr.mArray;
+			}
+			bool operator!=(const Iterator& itr) const
+			{
+				return mValuePtr != itr.mValuePtr || mArray != itr.mArray;
+			}
 
 			operator bool() const;
 
@@ -78,6 +86,14 @@ namespace o2
 			bool operator<(const ConstIterator& itr) const;
 			bool operator>=(const ConstIterator& itr) const;
 			bool operator<=(const ConstIterator& itr) const;
+			bool operator==(const Iterator& itr) const
+			{
+				return mValuePtr == itr.mValuePtr && mArray == itr.mArray;
+			}
+			bool operator!=(const Iterator& itr) const
+			{
+				return mValuePtr != itr.mValuePtr || mArray != itr.mArray;
+			}
 
 			operator bool() const;
 
