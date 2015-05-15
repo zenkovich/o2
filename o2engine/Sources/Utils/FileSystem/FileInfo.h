@@ -2,7 +2,6 @@
 
 #include "Utils/CommonTypes.h"
 #include "Utils/Time.h"
-#include "Utils/Serialization.h"
 #include "Utils/FileSystem/File.h"
 
 namespace o2
@@ -40,7 +39,7 @@ namespace o2
 		void ProcessPathNamesClamping(int charCount);
 	};
 
-	class FileLocation: public Serializable
+	class FileLocation
 	{
 	public:
 		String mPath;
@@ -51,8 +50,6 @@ namespace o2
 
 		bool operator==(const FileLocation& other) const;
 		bool operator!=(const FileLocation& other) const;
-
-		SERIALIZE_METHODS(FileLocation);
 	};
 	typedef Array<FileLocation> FileLocationsArr;
 }

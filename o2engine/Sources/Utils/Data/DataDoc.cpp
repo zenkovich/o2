@@ -48,45 +48,21 @@ namespace o2
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const WString& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{
-	}
-
 	DataNode::DataNode(const WString& name, const String& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const Vec2F& value) :
+	DataNode::DataNode(const WString& name, const WString& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const Vec2I& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{
-	}
-
-	DataNode::DataNode(const WString& name, const RectF& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{
-	}
-
-	DataNode::DataNode(const WString& name, const RectI& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{
-	}
-
-	DataNode::DataNode(const WString& name, const Color4& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{
-	}
-
-	DataNode::DataNode(const DataNode& other)
+	DataNode::DataNode(const DataNode& other) :
+		mName(other.mName), mData(other.mData), mParent(nullptr)
 	{
 		for (auto child : other.mChildNodes)
-			mChildNodes.Add(new DataNode(*child));
+			mChildNodes.Add(mnew DataNode(*child));
 	}
 
 	DataNode::~DataNode()
@@ -105,7 +81,10 @@ namespace o2
 		mChildNodes.Clear();
 
 		for (auto child : other.mChildNodes)
-			mChildNodes.Add(new DataNode(*child));
+			mChildNodes.Add(mnew DataNode(*child));
+
+		mName = other.mName;
+		mData = other.mData;
 
 		return *this;
 	}
@@ -140,9 +119,10 @@ namespace o2
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const WString& value)
+
+	DataNode& DataNode::operator=(bool value)
 	{
-		mData = value;
+		mData = (WString)value;
 		return *this;
 	}
 
@@ -152,53 +132,13 @@ namespace o2
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const Vec2F& value)
+	DataNode& DataNode::operator=(const WString& value)
 	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::operator=(const Vec2I& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::operator=(const RectF& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::operator=(const RectI& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::operator=(const Color4& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::operator=(bool value)
-	{
-		mData = (WString)value;
+		mData = value;
 		return *this;
 	}
 
 	DataNode::operator wchar_t*() const
-	{
-		return mData;
-	}
-
-	DataNode::operator WString() const
-	{
-		return mData;
-	}
-
-	DataNode::operator String() const
 	{
 		return mData;
 	}
@@ -223,29 +163,14 @@ namespace o2
 		return (UInt)mData;
 	}
 
-	DataNode::operator Vec2F() const
+	DataNode::operator String() const
 	{
-		return (Vec2F)mData;
+		return mData;
 	}
 
-	DataNode::operator Vec2I() const
+	DataNode::operator WString() const
 	{
-		return (Vec2I)mData;
-	}
-
-	DataNode::operator RectF() const
-	{
-		return (RectF)mData;
-	}
-
-	DataNode::operator RectI() const
-	{
-		return (RectI)mData;
-	}
-
-	DataNode::operator Color4() const
-	{
-		return (Color4)mData;
+		return mData;
 	}
 
 	Ptr<DataNode> DataNode::operator[](const WString& nodePath) const
@@ -302,7 +227,7 @@ namespace o2
 
 	Ptr<DataNode> DataNode::AddNode(const WString& name)
 	{
-		DataNode* newNode = new DataNode(name);
+		DataNode* newNode = mnew DataNode(name);
 		newNode->mParent = this;
 		mChildNodes.Add(newNode);
 		return newNode;
@@ -409,6 +334,17 @@ namespace o2
 		LoadFromFile(fileName);
 	}
 
+	DataDoc::DataDoc(const DataNode& node) :
+		DataNode(node)
+	{
+	}
+
+	DataDoc& DataDoc::operator=(const DataNode& other)
+	{
+		DataNode::operator=(other);
+		return *this;
+	}
+
 	bool DataDoc::LoadFromFile(const String& fileName)
 	{
 		InFile file(fileName);
@@ -419,7 +355,7 @@ namespace o2
 		WString data;
 		data.Reserve(file.GetDataSize() + 1);
 		auto sz = file.ReadFullData(data.Data());
-		data[sz/sizeof(wchar_t)] = '\0';
+		data[sz / sizeof(wchar_t)] = '\0';
 
 		return LoadFromData(data);
 	}

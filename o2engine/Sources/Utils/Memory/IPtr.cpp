@@ -9,11 +9,13 @@ namespace o2
 	{
 		if (mObject)
 		{
+			IObject* obj = mObject;
+
 			for (auto ptr : mObject->mPointers)
-				if (ptr != this)
 					ptr->mObject = nullptr;
 
-			delete mObject;
+			MemoryManager::OnObjectRemoving(obj);
+			delete obj;
 		}
 	}
 

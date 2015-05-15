@@ -32,13 +32,8 @@ namespace o2
 		DataNode(const WString& name, int value);
 		DataNode(const WString& name, float value);
 		DataNode(const WString& name, UInt value);
-		DataNode(const WString& name, const WString& value);
 		DataNode(const WString& name, const String& value);
-		DataNode(const WString& name, const Vec2F& value);
-		DataNode(const WString& name, const Vec2I& value);
-		DataNode(const WString& name, const RectF& value);
-		DataNode(const WString& name, const RectI& value);
-		DataNode(const WString& name, const Color4& value);
+		DataNode(const WString& name, const WString& value);
 		virtual ~DataNode();
 
 		DataNode& operator=(const DataNode& other);
@@ -48,26 +43,16 @@ namespace o2
 		DataNode& operator=(bool value);
 		DataNode& operator=(float value);
 		DataNode& operator=(UInt value);
-		DataNode& operator=(const WString& value);
 		DataNode& operator=(const String& value);
-		DataNode& operator=(const Vec2F& value);
-		DataNode& operator=(const Vec2I& value);
-		DataNode& operator=(const RectF& value);
-		DataNode& operator=(const RectI& value);
-		DataNode& operator=(const Color4& value);
+		DataNode& operator=(const WString& value);
 
 		explicit operator wchar_t*() const;
-		explicit operator WString() const;
-		explicit operator String() const;
 		explicit operator bool() const;
 		explicit operator int() const;
 		explicit operator float() const;
 		explicit operator UInt() const;
-		explicit operator Vec2F() const;
-		explicit operator Vec2I() const;
-		explicit operator RectF() const;
-		explicit operator RectI() const;
-		explicit operator Color4() const;
+		explicit operator String() const;
+		explicit operator WString() const;
 
 		Ptr<DataNode> operator[](const WString& nodePath) const;
 		bool operator==(const DataNode& other) const;
@@ -108,7 +93,10 @@ namespace o2
 
 	public:
 		DataDoc();
+		DataDoc(const DataNode& node);
 		DataDoc(const WString& fileName);
+
+		DataDoc& operator=(const DataNode& other);
 
 		bool LoadFromFile(const String& fileName);
 		bool LoadFromData(const WString& data);

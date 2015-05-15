@@ -5,6 +5,7 @@
 #include "Utils/Memory/IPtr.h"
 #include "Utils/Memory/IObject.h"
 #include "Utils/Memory/AllocOperators.h"
+#include "Utils/Memory/ClassFieldInfo.h"
 #include "EngineSettings.h"
 
 namespace o2

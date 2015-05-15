@@ -7,19 +7,25 @@
 namespace o2
 {
 	class IPtr;
+	class XSerializer;
+	class IClassFieldInfo;
+	class DataNode;
 
 	class IObject
 	{
 		friend class MemoryManager;
 		friend class IPtr;
+		friend class ClassFieldRegistrator;
 		friend void* ::operator new(size_t size, bool managed, const char* location, int line);
 
 	public:
 		typedef Array<IPtr*> PointersArr;
+		typedef Array<IClassFieldInfo*> FieldsArr;
 
 	protected:
 		PointersArr mPointers;
 		PointersArr mChildPointers;
+		FieldsArr   mFields;
 		UInt        mSize;
 		bool        mMark;
 		bool        mManaged;
@@ -30,5 +36,9 @@ namespace o2
 		virtual ~IObject();
 
 		void Mark(bool mark);
+
+	public:
+		virtual IObject& operator=(DataNode& data);
+		virtual operator DataNode();
 	};
 }

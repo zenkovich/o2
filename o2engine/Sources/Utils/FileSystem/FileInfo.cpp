@@ -9,13 +9,6 @@ namespace o2
 	{
 	}
 
-	SERIALIZE_METHOD_IMPL(FileLocation)
-	{
-		SERIALIZE_ID(mPath, "path");
-		SERIALIZE_ID(mId, "id");
-		return true;
-	}
-
 	bool FileLocation::operator==(const FileLocation& other) const
 	{
 		if (mId != 0 && other.mId != 0)

@@ -120,9 +120,6 @@
     <ClInclude Include="..\Sources\Utils\SmartPointers.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Serialization.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Data\DataDoc.h">
       <Filter>Sources\Utils\Data</Filter>
     </ClInclude>
@@ -213,6 +210,9 @@
     <ClInclude Include="..\Sources\Utils\Memory\AllocOperators.h">
       <Filter>Sources\Utils\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\ClassFieldInfo.h">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -241,9 +241,6 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp">
       <Filter>Sources\Utils\FileSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Serialization.cpp">
-      <Filter>Sources\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp">
       <Filter>Sources\Utils\Data</Filter>
@@ -315,6 +312,9 @@
       <Filter>Sources\Utils\Memory</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Memory\AllocOperators.cpp">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Memory\ClassFieldInfo.cpp">
       <Filter>Sources\Utils\Memory</Filter>
     </ClCompile>
   </ItemGroup>

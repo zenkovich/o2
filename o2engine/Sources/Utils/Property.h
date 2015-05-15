@@ -20,28 +20,28 @@ namespace o2
 		{
 		}
 
-		void Initialize(_class_type* object, void (_class_type::*setter)(const _type&), _type(_class_type::*getter)() const)
+		Property(_class_type* object, void (_class_type::*setter)(const _type&), _type(_class_type::*getter)() const)
 		{
 			mObject = object;
 			mSetter = setter;
 			mGetter = getter;
 		}
 
-		void Initialize(_class_type* object, void (_class_type::*setter)(const _type&), _type(_class_type::*getter)())
+		Property(_class_type* object, void (_class_type::*setter)(const _type&), _type(_class_type::*getter)())
 		{
 			mObject = object;
 			mSetter = setter;
 			mGetterNonConst = getter;
 		}
 
-		void Initialize(_class_type* object, void (_class_type::*setter)(_type), _type(_class_type::*getter)() const)
+		Property(_class_type* object, void (_class_type::*setter)(_type), _type(_class_type::*getter)() const)
 		{
 			mObject = object;
 			mSetterNonConst = setter;
 			mGetter = getter;
 		}
 
-		void Initialize(_class_type* object, void (_class_type::*setter)(_type), _type(_class_type::*getter)())
+		Property(_class_type* object, void (_class_type::*setter)(_type), _type(_class_type::*getter)())
 		{
 			mObject = object;
 			mSetterNonConst = setter;
