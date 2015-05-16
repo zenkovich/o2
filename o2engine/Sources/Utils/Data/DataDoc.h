@@ -34,6 +34,10 @@ namespace o2
 		DataNode(const WString& name, UInt value);
 		DataNode(const WString& name, const String& value);
 		DataNode(const WString& name, const WString& value);
+
+		template<typename _type>
+		DataNode(const WString& name, const Ptr<_type>& value);
+
 		virtual ~DataNode();
 
 		DataNode& operator=(const DataNode& other);
@@ -46,15 +50,22 @@ namespace o2
 		DataNode& operator=(const String& value);
 		DataNode& operator=(const WString& value);
 
-		explicit operator wchar_t*() const;
-		explicit operator bool() const;
-		explicit operator int() const;
-		explicit operator float() const;
-		explicit operator UInt() const;
-		explicit operator String() const;
-		explicit operator WString() const;
+		template<typename _type>
+		DataNode& operator=(const Ptr<_type>& value);
+
+		operator wchar_t*() const;
+		operator bool() const;
+		operator int() const;
+		operator float() const;
+		operator UInt() const;
+		operator String() const;
+		operator WString() const;
+
+		template<typename _type>
+		operator Ptr<_type>() const;
 
 		Ptr<DataNode> operator[](const WString& nodePath) const;
+		Ptr<DataNode> operator[](const char* nodePath) const;
 		bool operator==(const DataNode& other) const;
 		bool operator!=(const DataNode& other) const;
 
@@ -104,4 +115,23 @@ namespace o2
 		bool SaveToFile(const String& fileName, Format format = Format::Xml) const;
 		WString SaveAsWString(Format format = Format::Xml) const;
 	};
+	
+	template<typename _type>
+	DataNode::DataNode(const WString& name, const Ptr<_type>& value):
+		mName(name), mParent(nullptr)
+	{
+
+	}
+
+	template<typename _type>
+	DataNode::operator Ptr<_type>() const
+	{
+		return Ptr<_type>();
+	}
+
+	template<typename _type>
+	DataNode& DataNode::operator=(const Ptr<_type>& value)
+	{
+		return *this;
+	}
 }

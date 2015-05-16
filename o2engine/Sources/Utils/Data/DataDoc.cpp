@@ -5,7 +5,6 @@
 
 namespace o2
 {
-
 	DataNode::DataNode() :
 		mParent(nullptr)
 	{
@@ -174,6 +173,11 @@ namespace o2
 	}
 
 	Ptr<DataNode> DataNode::operator[](const WString& nodePath) const
+	{
+		return GetNode(nodePath);
+	}
+
+	Ptr<DataNode> DataNode::operator[](const char* nodePath) const
 	{
 		return GetNode(nodePath);
 	}

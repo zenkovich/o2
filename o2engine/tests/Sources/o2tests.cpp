@@ -26,32 +26,38 @@ struct yy :public IObject
 	{
 		printf("Destroying yy\n");
 	}
+
+	SERIALIZABLE(yy)
+		FIELD(x)
+		FIELD(y);
 };
 
 #define XX(A, B) (String)(#A) + (String)(#B)
 
 struct xx :public IObject
 {
-	int abc = SERIALIZABLE(abc);
-	int def;
+	int abc = 33;
+	int def = 55;
+	yy vy;
 
-	//FieldsRegistrator _regi = FieldsRegistrator(this).Field(abc, "abc");
-	SERIALIZABLE_FIELDS
+	SERIALIZABLE(xx)
 		FIELD(abc)
-		FIELD(def);
+		FIELD(def)
+		FIELD(vy);
 
-	//int abc = ClassFieldRegistrator(this, "abc", &abc, 33);
-	//int SRLZ(abc);
-	// SERIALIZABLE(int, abc, 33);
-	//String SRLZ(str);
 	Ptr<yy> yx;
-
-	xx() {}
 
 	xx(int aa)
 	{
 		yx = gcnew yy();
 		def = 5;
+	}
+
+	DataNode Serialize()
+	{
+		printf("Serializing xx");
+
+		return IObject::Serialize();
 	}
 
 	~xx()
@@ -81,8 +87,17 @@ struct xx :public IObject
 void ttt2()
 {
 	Ptr<xx> x = mnew xx(44);
+	x->abc = 0;
+	x->def = 1;
+	x->vy.x = 2;
+	x->vy.y = 3;
 
-	DataDoc doc = (DataNode)*x;
+	DataDoc doc = *x;
+	*doc.AddNode("nd") = 55;
+	int nd = *doc["nd"];
+
+	Ptr<xx> y = mnew xx(44);
+	*y = doc;
 
 	x.Release();
 }

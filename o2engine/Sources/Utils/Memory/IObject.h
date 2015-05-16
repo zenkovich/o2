@@ -16,6 +16,7 @@ namespace o2
 		friend class MemoryManager;
 		friend class IPtr;
 		friend class ClassFieldRegistrator;
+		friend class SerializeHelper;
 		friend void* ::operator new(size_t size, bool managed, const char* location, int line);
 
 	public:
@@ -38,7 +39,7 @@ namespace o2
 		void Mark(bool mark);
 
 	public:
-		virtual IObject& operator=(DataNode& data);
-		virtual operator DataNode();
+		virtual DataNode Serialize();
+		virtual void     Deserialize(DataNode& node);
 	};
 }

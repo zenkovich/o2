@@ -15,4 +15,12 @@ namespace o2
 		mOwner(owner), mId(id), mPtr(ptr)
 	{
 	}
+
+	SerializeHelper::SerializeHelper(IObject* owner) :
+		mOwner(owner)
+	{
+		mObjectSamples.Add(typeid(*owner).name(), owner);
+	}
+
+	Dictionary<String, IObject*> SerializeHelper::mObjectSamples;
 }

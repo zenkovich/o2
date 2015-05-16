@@ -30,21 +30,19 @@ namespace o2
 			ptr->mObject->Mark(mark);
 	}
 
-	IObject& IObject::operator=(DataNode& data)
-	{
-		for (auto fld : mFields)
-			*fld = *data.GetNode(fld->Name());
-
-		return *this;
-	}
-
-	IObject::operator DataNode()
+	DataNode IObject::Serialize()
 	{
 		DataNode res;
 		for (auto fld : mFields)
-			*res.AddNode(fld->Name()) = *fld;
+			*res.AddNode(fld->Name()) = fld->Serialize();
 
 		return res;
+	}
+
+	void IObject::Deserialize(DataNode& node)
+	{
+		for (auto fld : mFields)
+			fld->Deserialize(*node.GetNode(fld->Name()));
 	}
 
 }

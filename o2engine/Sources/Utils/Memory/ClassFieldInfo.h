@@ -3,6 +3,7 @@
 #include "Utils/String.h"
 #include "Utils/Data/DataDoc.h"
 #include "Utils/Memory/IObject.h"
+#include "Utils/Containers/Dictionary.h"
 
 namespace o2
 {
@@ -17,14 +18,15 @@ namespace o2
 	public:
 		const String& Name() const;
 
-		virtual IClassFieldInfo& operator=(DataNode& data) = 0;
-		virtual operator DataNode() = 0;
+		virtual DataNode Serialize() = 0;
+		virtual void Deserialize(DataNode& node) = 0;
 	};
 
 	template<typename _type>
 	class ClassFieldInfo : public IClassFieldInfo
 	{
 		friend class ClassFieldRegistrator;
+		friend class SerializeHelper;
 
 	protected:
 		IObject* mOwner;
@@ -34,8 +36,8 @@ namespace o2
 		ClassFieldInfo(IObject* owner, _type* valuePtr, const String& name);
 
 	public:
-		ClassFieldInfo& operator=(DataNode& data);
-		operator DataNode();
+		DataNode Serialize();
+		void Deserialize(DataNode& node);
 	};
 
 	class ClassFieldRegistrator
@@ -51,8 +53,27 @@ namespace o2
 		operator _type();
 	};
 
+	class SerializeHelper
+	{
+		IObject* mOwner;
+		static Dictionary<String, IObject*> mObjectSamples;
+
+	public:
+		SerializeHelper(IObject* owner);
+
+		template<typename _type>
+		SerializeHelper& AddField(_type& field, const char* id);
+	};
+
 #define SRLZ(NAME) NAME = ClassFieldRegistrator(this, #NAME, &NAME)
-#define SERIALIZABLE(NAME) ClassFieldRegistrator(this, #NAME, &NAME)
+#define SERIALIZE(NAME) ClassFieldRegistrator(this, #NAME, &NAME)
+
+#define SERIALIZABLE(CLASS)                                               \
+	CLASS& operator=(DataNode& node) { Deserialize(node); return *this; } \
+	operator DataNode() { return Serialize(); }                           \
+	SerializeHelper _fregi = SerializeHelper(this)
+
+#define FIELD(NAME) .AddField(NAME, #NAME)
 
 	template<typename _type>
 	ClassFieldInfo<_type>::ClassFieldInfo(IObject* owner, _type* valuePtr, const String& name) :
@@ -61,7 +82,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	ClassFieldInfo<_type>::operator DataNode()
+	DataNode ClassFieldInfo<_type>::Serialize()
 	{
 		DataNode res;
 		res = *mValuePtr;
@@ -70,10 +91,9 @@ namespace o2
 	}
 
 	template<typename _type>
-	ClassFieldInfo<_type>& ClassFieldInfo<_type>::operator=(DataNode& data)
+	void ClassFieldInfo<_type>::Deserialize(DataNode& node)
 	{
-		*mValuePtr = (_type)data;
-		return *this;
+		*mValuePtr = node;
 	}
 
 	template<typename _type>
@@ -83,5 +103,13 @@ namespace o2
 		mOwner->mFields.Add(fld);
 
 		return *(_type*)mPtr;
+	}
+
+	template<typename _type>
+	SerializeHelper& SerializeHelper::AddField(_type& field, const char* id)
+	{
+		ClassFieldInfo<_type>* fld = new ClassFieldInfo<_type>(mOwner, &field, id);
+		mOwner->mFields.Add(fld);
+		return *this;
 	}
 }
