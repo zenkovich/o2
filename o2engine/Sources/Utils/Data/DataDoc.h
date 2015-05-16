@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils/Containers/Array.h"
+#include "Utils/Containers/Dictionary.h"
 #include "Utils/String.h"
 #include "Utils/Memory/Ptr.h"
 #include "Utils/Memory/IObject.h"
@@ -34,9 +35,20 @@ namespace o2
 		DataNode(const WString& name, UInt value);
 		DataNode(const WString& name, const String& value);
 		DataNode(const WString& name, const WString& value);
+		DataNode(const WString& name, const Vec2F& value);
+		DataNode(const WString& name, const Vec2I& value);
+		DataNode(const WString& name, const RectF& value);
+		DataNode(const WString& name, const RectI& value);
+		DataNode(const WString& name, const Color4& value);
 
 		template<typename _type>
 		DataNode(const WString& name, const Ptr<_type>& value);
+
+		template<typename _type>
+		DataNode(const WString& name, const Array<_type>& value);
+
+		template<typename _key, typename _value>
+		DataNode(const WString& name, const Dictionary<_key, _value>& value);
 
 		virtual ~DataNode();
 
@@ -49,9 +61,20 @@ namespace o2
 		DataNode& operator=(UInt value);
 		DataNode& operator=(const String& value);
 		DataNode& operator=(const WString& value);
+		DataNode& operator=(const Vec2F& value);
+		DataNode& operator=(const Vec2I& value);
+		DataNode& operator=(const RectF& value);
+		DataNode& operator=(const RectI& value);
+		DataNode& operator=(const Color4& value);
 
 		template<typename _type>
 		DataNode& operator=(const Ptr<_type>& value);
+
+		template<typename _type>
+		DataNode& operator=(const Array<_type>& value);
+
+		template<typename _key, typename _value>
+		DataNode& operator=(const Dictionary<_key, _value>& value);
 
 		operator wchar_t*() const;
 		operator bool() const;
@@ -60,14 +83,30 @@ namespace o2
 		operator UInt() const;
 		operator String() const;
 		operator WString() const;
+		operator Vec2F() const;
+		operator Vec2I() const;
+		operator RectF() const;
+		operator RectI() const;
+		operator Color4() const;
+		operator DataNode() { return *this; }
 
 		template<typename _type>
 		operator Ptr<_type>() const;
+
+		template<typename _type>
+		operator Array<_type>() const;
+
+		template<typename _key, typename _value>
+		operator Dictionary<_key, _value>() const;
 
 		Ptr<DataNode> operator[](const WString& nodePath) const;
 		Ptr<DataNode> operator[](const char* nodePath) const;
 		bool operator==(const DataNode& other) const;
 		bool operator!=(const DataNode& other) const;
+
+		DataNode* CreateSample() const;
+
+		void Clear();
 
 		Ptr<DataNode> GetParent() const;
 
@@ -120,18 +159,114 @@ namespace o2
 	DataNode::DataNode(const WString& name, const Ptr<_type>& value):
 		mName(name), mParent(nullptr)
 	{
-
+		*AddNode("type") = (String)(typeid(*value).name());
+		*AddNode("value") = *value;
 	}
 
 	template<typename _type>
 	DataNode::operator Ptr<_type>() const
 	{
-		return Ptr<_type>();
+		String type;
+		IObject* value = nullptr;
+
+		if (auto typeNode = GetNode("type"))
+			type = *typeNode;
+
+		if (auto valueNode = GetNode("value"))
+		{
+			value = SerializableTypesSamples::CreateSample(type);
+			*value = *valueNode;
+		}
+
+		return Ptr<_type>(value);
 	}
 
 	template<typename _type>
 	DataNode& DataNode::operator=(const Ptr<_type>& value)
 	{
+		*AddNode("type") = (String)(typeid(*value).name());
+		*AddNode("value") = *value;
+
 		return *this;
+	}
+
+
+	template<typename _key, typename _value>
+	DataNode::DataNode(const WString& name, const Dictionary<_key, _value>& value) :
+		mName(name), mParent(nullptr)
+	{
+		for (auto kv : value)
+		{
+			Ptr<DataNode> child = AddNode("Element");
+			*child->AddNode("Key") = kv.Key();
+			*child->AddNode("Value") = kv.Value();
+		}
+	}
+
+	template<typename _type>
+	DataNode::DataNode(const WString& name, const Array<_type>& value)
+	{
+		for (auto v : value)
+			*AddNode("Element") = v;
+	}
+
+	template<typename _key, typename _value>
+	DataNode& DataNode::operator=(const Dictionary<_key, _value>& value)
+	{
+		Clear();
+
+		for (auto kv : value)
+		{
+			Ptr<DataNode> child = AddNode("Element");
+			*child->AddNode("Key") = kv.Key();
+			*child->AddNode("Value") = kv.Value();
+		}
+
+		return *this;
+	}
+
+	template<typename _type>
+	DataNode& DataNode::operator=(const Array<_type>& value)
+	{
+		Clear();
+
+		for (auto v : value)
+			*AddNode("Element") = v;
+
+		return *this;
+	}
+
+	template<typename _key, typename _value>
+	DataNode::operator Dictionary<_key, _value>() const
+	{
+		Dictionary<_key, _value> res;
+
+		int count = mChildNodes.Count();
+		for (auto childNode : mChildNodes)
+		{
+			auto keyNode = childNode->GetNode("Key");
+			auto valueNode = childNode->GetNode("Value");
+
+			if (keyNode && valueNode)
+				res.Add((_key)*keyNode, (_value)*valueNode);
+		}
+
+		return res;
+	}
+
+	template<typename _type>
+	DataNode::operator Array<_type>() const
+	{
+		int count = mChildNodes.Count();
+
+		Array<_type> res(count + 2);
+		_type v = _type();
+		for (auto childNode : mChildNodes)
+		{
+			v = *childNode;
+			res.Add(v);
+		}
+
+		return res;
 	}
 }

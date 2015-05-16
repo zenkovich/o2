@@ -57,6 +57,31 @@ namespace o2
 	{
 	}
 
+	DataNode::DataNode(const WString& name, const Vec2F& value) :
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const Vec2I& value) :
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const RectF& value) :
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const RectI& value) :
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
+	DataNode::DataNode(const WString& name, const Color4& value) :
+		mName(name), mData(value), mParent(nullptr)
+	{
+	}
+
 	DataNode::DataNode(const DataNode& other) :
 		mName(other.mName), mData(other.mData), mParent(nullptr)
 	{
@@ -66,10 +91,7 @@ namespace o2
 
 	DataNode::~DataNode()
 	{
-		for (auto child : mChildNodes)
-			child.Release();
-
-		mChildNodes.Clear();
+		Clear();
 	}
 
 	DataNode& DataNode::operator=(const DataNode& other)
@@ -82,7 +104,7 @@ namespace o2
 		for (auto child : other.mChildNodes)
 			mChildNodes.Add(mnew DataNode(*child));
 
-		mName = other.mName;
+		//mName = other.mName;
 		mData = other.mData;
 
 		return *this;
@@ -137,6 +159,36 @@ namespace o2
 		return *this;
 	}
 
+	DataNode& DataNode::operator=(const Vec2F& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const Vec2I& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const RectF& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const RectI& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const Color4& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
 	DataNode::operator wchar_t*() const
 	{
 		return mData;
@@ -171,6 +223,32 @@ namespace o2
 	{
 		return mData;
 	}
+
+	DataNode::operator Vec2F() const
+	{
+		return (Vec2F)mData;
+	}
+
+	DataNode::operator Vec2I() const
+	{
+		return (Vec2I)mData;
+	}
+
+	DataNode::operator RectF() const
+	{
+		return (RectF)mData;
+	}
+
+	DataNode::operator RectI() const
+	{
+		return (RectI)mData;
+	}
+
+	DataNode::operator Color4() const
+	{
+		return (Color4)mData;
+	}
+
 
 	Ptr<DataNode> DataNode::operator[](const WString& nodePath) const
 	{
@@ -326,6 +404,21 @@ namespace o2
 	WString& DataNode::Data()
 	{
 		return mData;
+	}
+
+	DataNode* DataNode::CreateSample() const
+	{
+		return new DataNode();
+	}
+
+	void DataNode::Clear()
+	{
+		mData.Clear();
+
+		for (auto child : mChildNodes)
+			child.Release();
+
+		mChildNodes.Clear();
 	}
 
 

@@ -15,6 +15,7 @@
 #include "Utils/Containers/Dictionary.h"
 
 #include "Utils/Data/DataDoc.h"
+#include "Utils/Serialization.h"
 
 #include "Utils/Log/LogStream.h"
 #include "Utils/Log/FileLogStream.h"
@@ -37,3 +38,7 @@
 
 #include "Application/Input.h"
 #include "Application/Application.h"
+
+#define INITIALIZE_O2 \
+	template<> MemoryManager* Singleton<MemoryManager>::mInstance = new MemoryManager(); \
+	Dictionary<String, IObject*> SerializableTypesSamples::mObjectSamples

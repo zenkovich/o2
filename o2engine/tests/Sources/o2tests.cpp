@@ -4,7 +4,7 @@
 #include <conio.h>
 #include "O2.h"
 
-CREATE_SINGLETON(MemoryManager);
+INITIALIZE_O2;
 
 struct Tester
 {
@@ -22,9 +22,21 @@ struct yy :public IObject
 	float x = 55.66f;
 	int y = Tester(this, "idd", &y);
 
+	//yy() {}
+
+// 	yy(const yy& other) :
+// 		IObject()
+// 	{
+// 	}
+
 	~yy()
 	{
 		printf("Destroying yy\n");
+	}
+
+	bool operator==(const yy& other)
+	{
+		return Math::Equals(x, other.x) && y == other.y;
 	}
 
 	SERIALIZABLE(yy)
@@ -39,18 +51,26 @@ struct xx :public IObject
 	int abc = 33;
 	int def = 55;
 	yy vy;
+	Ptr<IObject> yx;
+	Array<yy> yarr;
 
 	SERIALIZABLE(xx)
 		FIELD(abc)
 		FIELD(def)
-		FIELD(vy);
+		FIELD(vy)
+		FIELD(yx)
+		FIELD(yarr);
 
-	Ptr<yy> yx;
 
-	xx(int aa)
+	xx(int aa = 0)
 	{
 		yx = gcnew yy();
 		def = 5;
+
+		yarr.Add(yy());
+		yarr.Add(yy());
+		yarr.Add(yy());
+		yarr.Add(yy());
 	}
 
 	DataNode Serialize()
@@ -84,8 +104,14 @@ struct xx :public IObject
 	}
 };
 
+SERIALIZABLE_REG(xx);
+SERIALIZABLE_REG(yy);
+
 void ttt2()
 {
+	yy tr;
+	yy xxs(tr);
+
 	Ptr<xx> x = mnew xx(44);
 	x->abc = 0;
 	x->def = 1;

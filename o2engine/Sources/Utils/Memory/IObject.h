@@ -34,12 +34,17 @@ namespace o2
 		int         mAllocSrcFileLine;
 
 		IObject();
+		IObject(const IObject& other);
 		virtual ~IObject();
 
 		void Mark(bool mark);
 
 	public:
+		virtual IObject* CreateSample() const = 0;
 		virtual DataNode Serialize();
-		virtual void     Deserialize(DataNode& node);
+		virtual void     Deserialize(const DataNode& node);
+
+		virtual operator DataNode() = 0;
+		virtual IObject& operator=(const DataNode& node) = 0;
 	};
 }

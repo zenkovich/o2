@@ -11,6 +11,10 @@ namespace o2
 		mAllocSrcFile(nullptr)
 	{}
 
+	IObject::IObject(const IObject& other) :
+		IObject()
+	{}
+
 	IObject::~IObject()
 	{
 		if (MEM_TRACE)
@@ -39,7 +43,7 @@ namespace o2
 		return res;
 	}
 
-	void IObject::Deserialize(DataNode& node)
+	void IObject::Deserialize(const DataNode& node)
 	{
 		for (auto fld : mFields)
 			fld->Deserialize(*node.GetNode(fld->Name()));

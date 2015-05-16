@@ -213,6 +213,9 @@
     <ClInclude Include="..\Sources\Utils\Memory\ClassFieldInfo.h">
       <Filter>Sources\Utils\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Serialization.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -316,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Memory\ClassFieldInfo.cpp">
       <Filter>Sources\Utils\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Serialization.cpp">
+      <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
