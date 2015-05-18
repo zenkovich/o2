@@ -195,9 +195,6 @@
     <ClInclude Include="..\Sources\Application\Application.h">
       <Filter>Sources\Application</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Memory\IObject.h">
-      <Filter>Sources\Utils\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Memory\IPtr.h">
       <Filter>Sources\Utils\Memory</Filter>
     </ClInclude>
@@ -215,6 +212,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Serialization.h">
       <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\IObject.h">
+      <Filter>Sources\Utils\Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -304,9 +304,6 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Time.cpp">
       <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Memory\IObject.cpp">
-      <Filter>Sources\Utils\Memory</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Memory\IPtr.cpp">
       <Filter>Sources\Utils\Memory</Filter>

@@ -1,28 +1,43 @@
 #include "MemoryManager.h"
 
-#include "Utils/Memory/IObject.h"
 #include "Utils/Memory/IPtr.h"
 
 namespace o2
 {
-
-	void MemoryManager::OnObjectCreating(IObject* object)
+	void MemoryManager::OnObjectCreating(IObject* objectPtr, UInt size, bool managed, const char* srcFile, int srcFileLine)
 	{
-		mInstance->mObjects.Add(object);
-		object->mMark = mInstance->mCurrentMark;
+
+		ObjectInfo* info = new ObjectInfo();
+		mInstance->mObjectsInfos.Add(info);
+		objectPtr->mObjectInfo = info;
+
+		info->mObjectPtr = objectPtr;
+		info->mSize = size;
+		info->mManaged = managed;
+
+#ifdef MEM_TRACE
+		strncpy(info->mAllocSrcFile, srcFile, 127);
+		info->mAllocSrcFileLine = srcFileLine;
+#else
+		info->mAllocSrcFile[0] = '\0';
+		info->mAllocSrcFileLine = 0;
+#endif
+
+		info->mMark = mInstance->mCurrentMark;
 	}
 
-	void MemoryManager::OnObjectRemoving(IObject* object)
+	void MemoryManager::OnObjectDestroying(IObject* object)
 	{
-		mInstance->mObjects.Remove(object);
+		mInstance->mObjectsInfos.Remove(object->mObjectInfo);
+		delete object->mObjectInfo;
 	}
 
 	void MemoryManager::OnPtrCreating(IPtr* ptr)
 	{
 		char* cptr = (char*)ptr;
-		for (auto obj : mInstance->mObjects)
+		for (auto obj : mInstance->mObjectsInfos)
 		{
-			char* beg = (char*)obj;
+			char* beg = (char*)obj->mObjectPtr;
 			char* end = beg + obj->mSize;
 			if (cptr >= beg && cptr < end)
 			{
@@ -35,7 +50,7 @@ namespace o2
 		ptr->mStatic = true;
 	}
 
-	void MemoryManager::OnPtrRemoving(IPtr* ptr)
+	void MemoryManager::OnPtrDestroying(IPtr* ptr)
 	{
 		mInstance->mPointers.Remove(ptr);
 	}
@@ -45,11 +60,11 @@ namespace o2
 		mInstance->mCurrentMark = !mInstance->mCurrentMark;
 
 		for (auto ptr : mInstance->mPointers)
-			ptr->mObject->Mark(mInstance->mCurrentMark);
+			ptr->mObject->mObjectInfo->Mark(mInstance->mCurrentMark);
 
-		ObjectsArr freeObjects;
+		ObjectsInfosArr freeObjects;
 
-		for (auto obj : mInstance->mObjects)
+		for (auto obj : mInstance->mObjectsInfos)
 		{
 			if (obj->mMark != mInstance->mCurrentMark)
 				freeObjects.Add(obj);
@@ -63,4 +78,13 @@ namespace o2
 				printf("Leaked object: %x %s:%i\n", obj, obj->mAllocSrcFile, obj->mAllocSrcFileLine);
 		}
 	}
+
+	void MemoryManager::ObjectInfo::Mark(bool mark)
+	{
+		mMark = mark;
+
+		for (auto ptr : mChildPointers)
+			ptr->mObject->mObjectInfo->Mark(mark);
+	}
+
 }

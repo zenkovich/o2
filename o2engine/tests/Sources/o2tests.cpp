@@ -20,14 +20,6 @@ struct Tester
 struct yy :public IObject
 {
 	float x = 55.66f;
-	int y = Tester(this, "idd", &y);
-
-	//yy() {}
-
-// 	yy(const yy& other) :
-// 		IObject()
-// 	{
-// 	}
 
 	~yy()
 	{
@@ -36,12 +28,12 @@ struct yy :public IObject
 
 	bool operator==(const yy& other)
 	{
-		return Math::Equals(x, other.x) && y == other.y;
+		return Math::Equals(x, other.x);
 	}
 
-	SERIALIZABLE(yy)
-		FIELD(x)
-		FIELD(y);
+	SERIALIZABLE_FIELDS(yy)
+		FIELD(x);
+	END_SERIALIZABLE_FIELDS;
 };
 
 #define XX(A, B) (String)(#A) + (String)(#B)
@@ -54,12 +46,13 @@ struct xx :public IObject
 	Ptr<IObject> yx;
 	Array<yy> yarr;
 
-	SERIALIZABLE(xx)
+	SERIALIZABLE_FIELDS(xx)
 		FIELD(abc)
 		FIELD(def)
 		FIELD(vy)
 		FIELD(yx)
 		FIELD(yarr);
+	END_SERIALIZABLE_FIELDS;
 
 
 	xx(int aa = 0)
@@ -109,20 +102,17 @@ SERIALIZABLE_REG(yy);
 
 void ttt2()
 {
-	yy tr;
-	yy xxs(tr);
-
 	Ptr<xx> x = mnew xx(44);
 	x->abc = 0;
 	x->def = 1;
 	x->vy.x = 2;
-	x->vy.y = 3;
 
 	DataDoc doc = *x;
-	*doc.AddNode("nd") = 55;
-	int nd = *doc["nd"];
+// 	*doc.AddNode("nd") = 55;
+// 	int nd = *doc["nd"];
 
 	Ptr<xx> y = mnew xx(44);
+	y->yarr.Clear();
 	*y = doc;
 
 	x.Release();

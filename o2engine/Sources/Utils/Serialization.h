@@ -3,67 +3,68 @@
 #include "Utils/Memory/IObject.h"
 #include "Utils/String.h"
 #include "Utils/Containers/Dictionary.h"
+#include "Utils/Data/DataDoc.h"
 
 namespace o2
 {
-	class ClassFieldRegistrator
+	class IClassFieldInfo;
+
+	class Serializable
 	{
-		IObject* mOwner;
-		String   mId;
-		void*    mPtr;
-
 	public:
-		ClassFieldRegistrator(IObject* owner, const char* id, void* ptr);
+		typedef Array<IClassFieldInfo*> FieldsArr;
 
-		template<typename _type>
-		operator _type();
-	};
+		virtual Serializable* CreateSample() const = 0;
+		virtual FieldsArr     GetFields();
+		virtual DataNode      Serialize();
+		virtual void          Deserialize(const DataNode& node);
 
-	class SerializeHelper
-	{
-		IObject* mOwner;
-
-	public:
-		SerializeHelper(IObject* owner);
-
-		template<typename _type>
-		SerializeHelper& AddField(_type& field, const char* id);
+		virtual operator DataNode() = 0;
+		virtual IObject& operator=(const DataNode& node) = 0;
 	};
 
 	class SerializableTypesSamples
 	{
-		static Dictionary<String, IObject*> mObjectSamples;
+		static Dictionary<String, Serializable*> mObjectSamples;
 
 	public:
 		template<typename _type>
 		struct Regist { Regist(); };
 
 	public:
-		static IObject* CreateSample(const String& type);
+		static Serializable* CreateSample(const String& type);
 	};
 
-#define SRLZ(NAME) NAME = ClassFieldRegistrator(this, #NAME, &NAME)
-#define SERIALIZE(NAME) ClassFieldRegistrator(this, #NAME, &NAME)
-
-#define SERIALIZABLE(CLASS)                                                     \
+#define SERIALIZABLE_FIELDS(CLASS)                                              \
 	static SerializableTypesSamples::Regist<CLASS> _srlzTypeReg;                \
 	CLASS* CreateSample() const { return mnew CLASS(); }                        \
 	CLASS& operator=(const DataNode& node) { Deserialize(node); return *this; } \
 	operator DataNode() { return Serialize(); }                                 \
-	SerializeHelper _srlzHelper = SerializeHelper(this)
+	FieldsArr GetFields()                                                       \  
+	{                                                                           \
+	FieldsArr res;                                                              \
 
-#define FIELD(NAME) .AddField(NAME, #NAME)
+#define BASE_CLASS_FIELDS(BASE_CLASS) res.Add(BASE_CLASS.GetFields());
+
+#define SERIALIZABLE_FIELDS_INHERITED(CLASS, BASE_CLASS)                        \
+	static SerializableTypesSamples::Regist<CLASS> _srlzTypeReg;                \
+	CLASS* CreateSample() const { return mnew CLASS(); }                        \
+	CLASS& operator=(const DataNode& node) { Deserialize(node); return *this; } \
+	operator DataNode() { return Serialize(); }                                 \
+	FieldsArr GetFields()                                                       \
+	{                                                                           \
+	FieldsArr res;                                                              \
+	res.Add(BASE_CLASS.GetFields());                                            \
+
+
+#define FIELD(NAME) res.Add(new ClassFieldInfo<decltype(NAME)>(this, NAME, #NAME));
+
+#define END_SERIALIZABLE_FIELDS \
+	return res;                 \
+	}                         
 
 #define SERIALIZABLE_REG(CLASS) SerializableTypesSamples::Regist<CLASS> CLASS::_srlzTypeReg; 
-
-	template<typename _type>
-	SerializeHelper& SerializeHelper::AddField(_type& field, const char* id)
-	{
-		ClassFieldInfo<_type>* fld = new ClassFieldInfo<_type>(mOwner, &field, id);
-		mOwner->mFields.Add(fld);
-		return *this;
-	}
-
+	
 	template<typename _type>
 	SerializableTypesSamples::Regist<_type>::Regist()
 	{

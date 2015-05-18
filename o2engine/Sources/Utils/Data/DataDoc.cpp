@@ -309,7 +309,7 @@ namespace o2
 
 	Ptr<DataNode> DataNode::AddNode(const WString& name)
 	{
-		DataNode* newNode = mnew DataNode(name);
+		Ptr<DataNode> newNode = mnew DataNode(name);
 		newNode->mParent = this;
 		mChildNodes.Add(newNode);
 		return newNode;

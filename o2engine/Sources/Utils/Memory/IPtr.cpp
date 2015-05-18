@@ -1,6 +1,5 @@
 #include "IPtr.h"
 
-#include "Utils/Memory/IObject.h"
 #include "Utils/Memory/MemoryManager.h"
 
 namespace o2
@@ -11,10 +10,10 @@ namespace o2
 		{
 			IObject* obj = mObject;
 
-			for (auto ptr : mObject->mPointers)
+			for (auto ptr : mObject->mObjectInfo->mPointers)
 					ptr->mObject = nullptr;
 
-			MemoryManager::OnObjectRemoving(obj);
+			MemoryManager::OnObjectDestroying(obj);
 			delete obj;
 		}
 	}
@@ -43,7 +42,7 @@ namespace o2
 			mObject->mPointers.Remove(this);
 
 		if (mStatic)
-			MemoryManager::OnPtrRemoving(this);
+			MemoryManager::OnPtrDestroying(this);
 	}
 
 	IPtr::IPtr(const IPtr& other) :

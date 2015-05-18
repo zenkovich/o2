@@ -3,34 +3,49 @@
 #include "Utils/Singleton.h"
 #include "Utils/Containers/Array.h"
 #include "Utils/Memory/IPtr.h"
-#include "Utils/Memory/IObject.h"
 #include "Utils/Memory/AllocOperators.h"
 #include "Utils/Memory/ClassFieldInfo.h"
 #include "EngineSettings.h"
 
 namespace o2
 {
+	typedef Array<IPtr*> PointersArr;
+	struct ObjectInfo
+	{
+		IObject*    mObjectPtr;
+		PointersArr mPointers;
+		PointersArr mChildPointers;
+		UInt        mSize;
+		bool        mMark;
+		bool        mManaged;
+		char        mAllocSrcFile[128];
+		int         mAllocSrcFileLine;
+
+		void Mark(bool mark);
+	};
+
 	class MemoryManager : public Singleton<MemoryManager>
 	{
 		friend class IPtr;
-		friend class IObject;
 		friend void* ::operator new(size_t size, bool managed, const char* location, int line);
 		friend void ::operator delete(void* obj, bool managed, const char* location, int line);
 
-	public:
 		typedef Array<IPtr*> PointersArr;
-		typedef Array<IObject*> ObjectsArr;
+
+	public:
+		typedef Array<ObjectInfo*> ObjectsInfosArr;
 
 	protected:
-		ObjectsArr  mObjects;
-		PointersArr mPointers;
-		bool        mCurrentMark;
+		ObjectsInfosArr mObjectsInfos;
+		PointersArr     mPointers;
+		bool            mCurrentMark;
 
-		static void OnObjectCreating(IObject* object);
-		static void OnObjectRemoving(IObject* object);
+	protected:
+		static void OnObjectCreating(IObject* objectPtr, UInt size, bool managed, const char* srcFile, int srcFileLine);
+		static void OnObjectDestroying(IObject* objectPtr);
 
 		static void OnPtrCreating(IPtr* ptr);
-		static void OnPtrRemoving(IPtr* ptr);
+		static void OnPtrDestroying(IPtr* ptr);
 
 	public:
 		static void CollectGarbage();

@@ -2,7 +2,6 @@
 
 #include "Utils/String.h"
 #include "Utils/Data/DataDoc.h"
-#include "Utils/Memory/IObject.h"
 #include "Utils/Containers/Dictionary.h"
 
 namespace o2
@@ -11,15 +10,16 @@ namespace o2
 	{
 	protected:
 		String mName;
+		void*  mOwner;
 
 	protected:
-		IClassFieldInfo(const String& name);
+		IClassFieldInfo(void* owner, const String& name);
 
 	public:
 		const String& Name() const;
 
 		virtual DataNode Serialize() = 0;
-		virtual void Deserialize(const DataNode& node) = 0;
+		virtual void     Deserialize(const DataNode& node) = 0;
 	};
 
 	template<typename _type>
@@ -29,21 +29,19 @@ namespace o2
 		friend class SerializeHelper;
 
 	protected:
-		IObject* mOwner;
-		_type*   mValuePtr;
-
-	protected:
-		ClassFieldInfo(IObject* owner, _type* valuePtr, const String& name);
+		_type& mValue;
 
 	public:
+		ClassFieldInfo(void* owner, _type& value, const String& name);
+
 		DataNode Serialize();
-		void Deserialize(const DataNode& node);
+		void     Deserialize(const DataNode& node);
 	};
 
 
 	template<typename _type>
-	ClassFieldInfo<_type>::ClassFieldInfo(IObject* owner, _type* valuePtr, const String& name) :
-		IClassFieldInfo(name), mOwner(owner), mValuePtr(valuePtr)
+	ClassFieldInfo<_type>::ClassFieldInfo(void* owner, _type& value, const String& name) :
+		IClassFieldInfo(owner, name), mValue(value)
 	{
 	}
 
@@ -51,7 +49,7 @@ namespace o2
 	DataNode ClassFieldInfo<_type>::Serialize()
 	{
 		DataNode res;
-		res = *mValuePtr;
+		res = mValue;
 		res.SetName(mName);
 		return res;
 	}
@@ -59,6 +57,6 @@ namespace o2
 	template<typename _type>
 	void ClassFieldInfo<_type>::Deserialize(const DataNode& node)
 	{
-		*mValuePtr = node;
+		mValue = node;
 	}
 }

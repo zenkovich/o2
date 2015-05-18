@@ -1,15 +1,29 @@
 #include "Serialization.h"
 
 namespace o2
-{
-	ClassFieldRegistrator::ClassFieldRegistrator(IObject* owner, const char* id, void* ptr) :
-		mOwner(owner), mId(id), mPtr(ptr)
-	{}
+{	
+	DataNode Serializable::Serialize()
+	{
+		DataNode res;
+		auto fields = GetFields();
+		for (auto fld : fields)
+			*res.AddNode(fld->Name()) = fld->Serialize();
 
-	SerializeHelper::SerializeHelper(IObject* owner) :
-		mOwner(owner)
-	{}
-		
+		return res;
+	}
+
+	void Serializable::Deserialize(const DataNode& node)
+	{
+		auto fields = GetFields();
+		for (auto fld : fields)
+			fld->Deserialize(*node.GetNode(fld->Name()));
+	}
+
+	Serializable::FieldsArr Serializable::GetFields()
+	{
+		return FieldsArr();
+	}
+
 	IObject* SerializableTypesSamples::CreateSample(const String& type)
 	{
 		Assert(mObjectSamples.ContainsKey(type), "Failed to create type sample");

@@ -163,7 +163,6 @@
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
     <ClCompile Include="..\Sources\Utils\Memory\AllocOperators.cpp" />
     <ClCompile Include="..\Sources\Utils\Memory\ClassFieldInfo.cpp" />
-    <ClCompile Include="..\Sources\Utils\Memory\IObject.cpp" />
     <ClCompile Include="..\Sources\Utils\Memory\IPtr.cpp" />
     <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp" />
     <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
