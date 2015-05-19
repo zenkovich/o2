@@ -7,12 +7,13 @@ namespace o2
 	class IPtr
 	{
 		friend class MemoryManager;
+		friend struct ObjectInfo;
 
 	protected:
 		IObject* mObject;
 		bool     mStatic;
 
-		IPtr(void* object = nullptr);
+		IPtr(IObject* object = nullptr);
 		IPtr(const IPtr& other);
 		virtual ~IPtr();
 

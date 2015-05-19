@@ -40,9 +40,10 @@ namespace o2
 	CLASS* CreateSample() const { return mnew CLASS(); }                        \
 	CLASS& operator=(const DataNode& node) { Deserialize(node); return *this; } \
 	operator DataNode() { return Serialize(); }                                 \
-	FieldsArr GetFields()                                                       \  
-	{                                                                           \
-	FieldsArr res;                                                              \
+	FieldsArr GetFields() { FieldsArr res;
+
+#define BULLSHIT \
+	}
 
 #define BASE_CLASS_FIELDS(BASE_CLASS) res.Add(BASE_CLASS.GetFields());
 
@@ -54,7 +55,7 @@ namespace o2
 	FieldsArr GetFields()                                                       \
 	{                                                                           \
 	FieldsArr res;                                                              \
-	res.Add(BASE_CLASS.GetFields());                                            \
+	res.Add(BASE_CLASS.GetFields());                                            
 
 
 #define FIELD(NAME) res.Add(new ClassFieldInfo<decltype(NAME)>(this, NAME, #NAME));

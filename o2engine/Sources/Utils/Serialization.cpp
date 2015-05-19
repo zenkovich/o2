@@ -1,5 +1,7 @@
 #include "Serialization.h"
 
+#include "Utils/Memory/ClassFieldInfo.h"
+
 namespace o2
 {	
 	DataNode Serializable::Serialize()
@@ -7,7 +9,9 @@ namespace o2
 		DataNode res;
 		auto fields = GetFields();
 		for (auto fld : fields)
+		{
 			*res.AddNode(fld->Name()) = fld->Serialize();
+		}
 
 		return res;
 	}
@@ -16,7 +20,9 @@ namespace o2
 	{
 		auto fields = GetFields();
 		for (auto fld : fields)
+		{
 			fld->Deserialize(*node.GetNode(fld->Name()));
+		}
 	}
 
 	Serializable::FieldsArr Serializable::GetFields()
@@ -24,7 +30,7 @@ namespace o2
 		return FieldsArr();
 	}
 
-	IObject* SerializableTypesSamples::CreateSample(const String& type)
+	Serializable* SerializableTypesSamples::CreateSample(const String& type)
 	{
 		Assert(mObjectSamples.ContainsKey(type), "Failed to create type sample");
 		return mObjectSamples.Get(type)->CreateSample();

@@ -167,7 +167,7 @@ namespace o2
 	DataNode::operator Ptr<_type>() const
 	{
 		String type;
-		IObject* value = nullptr;
+		Serializable* value = nullptr;
 
 		if (auto typeNode = GetNode("type"))
 			type = *typeNode;
@@ -178,7 +178,7 @@ namespace o2
 			*value = *valueNode;
 		}
 
-		return Ptr<_type>(value);
+		return Ptr<_type>((_type*)value);
 	}
 
 	template<typename _type>

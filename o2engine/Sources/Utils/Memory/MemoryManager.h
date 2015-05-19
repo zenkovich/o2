@@ -28,7 +28,7 @@ namespace o2
 	{
 		friend class IPtr;
 		friend void* ::operator new(size_t size, bool managed, const char* location, int line);
-		friend void ::operator delete(void* obj, bool managed, const char* location, int line);
+		friend void  ::operator delete(void* obj, bool managed, const char* location, int line);
 
 		typedef Array<IPtr*> PointersArr;
 

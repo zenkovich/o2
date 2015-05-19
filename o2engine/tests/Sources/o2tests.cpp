@@ -17,7 +17,7 @@ struct Tester
 	operator T() const { return T(); }
 };
 
-struct yy :public IObject
+struct yy :public IObject, public Serializable
 {
 	float x = 55.66f;
 
@@ -38,12 +38,12 @@ struct yy :public IObject
 
 #define XX(A, B) (String)(#A) + (String)(#B)
 
-struct xx :public IObject
+struct xx :public IObject, public Serializable
 {
 	int abc = 33;
 	int def = 55;
 	yy vy;
-	Ptr<IObject> yx;
+	Ptr<yy> yx;
 	Array<yy> yarr;
 
 	SERIALIZABLE_FIELDS(xx)
@@ -70,7 +70,7 @@ struct xx :public IObject
 	{
 		printf("Serializing xx");
 
-		return IObject::Serialize();
+		return Serializable::Serialize();
 	}
 
 	~xx()

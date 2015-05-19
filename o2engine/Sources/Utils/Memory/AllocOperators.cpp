@@ -5,8 +5,8 @@
 
 void* operator new(size_t size, bool managed, const char* location, int line)
 {
-	void* res = ::operator new(size);
-	o2::MemoryManager::OnObjectCreating((o2::IObject*)res, size, managed, location, line);
+	o2::IObject* res = (o2::IObject*)::operator new(size);
+	o2::MemoryManager::OnObjectCreating(res, size, managed, location, line);
 	return res;
 }
 

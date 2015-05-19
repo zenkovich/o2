@@ -2,6 +2,7 @@
 
 #include "Utils/FileSystem/File.h"
 #include "Utils/Data/XmlDataFormat.h"
+#include "Utils/Memory/AllocOperators.h"
 
 namespace o2
 {

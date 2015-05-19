@@ -2,11 +2,12 @@
 
 namespace o2
 {
-	class ObjectInfo;
+	struct ObjectInfo;
 
 	class IObject
 	{
 		friend class MemoryManager;
+		friend struct ObjectInfo;
 		friend class IPtr;
 
 	protected:

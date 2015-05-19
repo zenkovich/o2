@@ -26,12 +26,12 @@ namespace o2
 	IPtr& IPtr::operator=(const IPtr& other)
 	{
 		if (mObject)
-			mObject->mPointers.Remove(this);
+			mObject->mObjectInfo->mPointers.Remove(this);
 
 		mObject = other.mObject;
 
 		if (mObject)
-			mObject->mPointers.Add(this);
+			mObject->mObjectInfo->mPointers.Add(this);
 
 		return *this;
 	}
@@ -39,7 +39,7 @@ namespace o2
 	IPtr::~IPtr()
 	{
 		if (mObject)
-			mObject->mPointers.Remove(this);
+			mObject->mObjectInfo->mPointers.Remove(this);
 
 		if (mStatic)
 			MemoryManager::OnPtrDestroying(this);
@@ -48,7 +48,6 @@ namespace o2
 	IPtr::IPtr(const IPtr& other) :
 		IPtr(other.mObject)
 	{
-
 	}
 
 	IPtr::IPtr(IObject* object /*= nullptr*/) :
@@ -57,6 +56,6 @@ namespace o2
 		MemoryManager::OnPtrCreating(this);
 
 		if (mObject)
-			mObject->mPointers.Add(this);
+			mObject->mObjectInfo->mPointers.Add(this);
 	}
 }
