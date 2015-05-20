@@ -1,7 +1,7 @@
 #pragma once
 
 //Enabling memory leaks checking
-#define MEM_LEAKS_CHECK true
+//#define MEM_LEAKS_CHECK
 
 //Enabling memory tracing
-#define MEM_TRACE true
+#define MEM_TRACE

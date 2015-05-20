@@ -12,13 +12,25 @@ namespace o2
 		objectPtr->mObjectInfo = info;
 
 		info->mObjectPtr = objectPtr;
-		info->mSize = size;
-		info->mManaged = managed;
 
 #ifdef MEM_LEAKS_CHECK
 		info->mSize = size;
 		info->mManaged = managed;
+		info->mMark = mInstance->mCurrentMark;
 		mInstance->mObjectsInfos.Add(info);
+#else
+		if (managed)
+		{
+			info->mSize = size;
+			info->mManaged = managed;
+			info->mMark = mInstance->mCurrentMark;
+			mInstance->mObjectsInfos.Add(info);
+		}
+		else
+		{
+			info->mSize = 0;
+			info->mManaged = false;
+		}
 #endif
 
 #ifdef MEM_TRACE
@@ -28,8 +40,6 @@ namespace o2
 		info->mAllocSrcFile[0] = '\0';
 		info->mAllocSrcFileLine = 0;
 #endif
-
-		info->mMark = mInstance->mCurrentMark;
 
 #else
 		objectPtr->mObjectInfo = nullptr;
@@ -73,7 +83,10 @@ namespace o2
 		mInstance->mCurrentMark = !mInstance->mCurrentMark;
 
 		for (auto ptr : mInstance->mPointers)
-			ptr->mObject->mObjectInfo->Mark(mInstance->mCurrentMark);
+		{
+			if (ptr->mObject)
+				ptr->mObject->mObjectInfo->Mark(mInstance->mCurrentMark);
+		}
 
 		ObjectsInfosArr freeObjects;
 
