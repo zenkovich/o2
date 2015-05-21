@@ -17,7 +17,6 @@ namespace o2
 		PointersArr mChildPointers;
 		UInt        mSize;
 		bool        mMark;
-		bool        mManaged;
 		char        mAllocSrcFile[128];
 		int         mAllocSrcFileLine;
 
@@ -27,8 +26,8 @@ namespace o2
 	class MemoryManager : public Singleton<MemoryManager>
 	{
 		friend class IPtr;
-		friend void* ::operator new(size_t size, bool managed, const char* location, int line);
-		friend void  ::operator delete(void* obj, bool managed, const char* location, int line);
+		friend void* ::operator new(size_t size, const char* location, int line);
+		friend void  ::operator delete(void* obj, const char* location, int line);
 
 		typedef Array<IPtr*> PointersArr;
 
@@ -41,13 +40,13 @@ namespace o2
 		bool            mCurrentMark;
 
 	protected:
-		static void OnObjectCreating(IObject* objectPtr, UInt size, bool managed, const char* srcFile, int srcFileLine);
+		static void OnObjectCreating(IObject* objectPtr, UInt size, const char* srcFile, int srcFileLine);
 		static void OnObjectDestroying(IObject* objectPtr);
 
 		static void OnPtrCreating(IPtr* ptr);
 		static void OnPtrDestroying(IPtr* ptr);
 
 	public:
-		static void CollectGarbage();
+		static void CollectGarbage(bool checkLeaks = false);
 	};
 }

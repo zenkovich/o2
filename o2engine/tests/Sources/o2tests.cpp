@@ -21,8 +21,8 @@ struct B: public IObject
 void ttt()
 {
 	Ptr<A> pa = mnew A();
-	pa->ptr = gcnew B();
-	((B*)pa->ptr.Get())->ptr = gcnew A();
+	pa->ptr = mnew B();
+	((B*)pa->ptr.Get())->ptr = mnew A();
 
 	pa.Release();
 }

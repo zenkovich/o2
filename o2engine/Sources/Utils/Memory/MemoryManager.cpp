@@ -4,34 +4,15 @@
 
 namespace o2
 {
-	void MemoryManager::OnObjectCreating(IObject* objectPtr, UInt size, bool managed, const char* srcFile, int srcFileLine)
+	void MemoryManager::OnObjectCreating(IObject* objectPtr, UInt size, const char* srcFile, int srcFileLine)
 	{
-#if defined(MEM_TRACE) || defined(MEM_LEAKS_CHECK)
-
 		ObjectInfo* info = new ObjectInfo();
 		objectPtr->mObjectInfo = info;
 
 		info->mObjectPtr = objectPtr;
 
-#ifdef MEM_LEAKS_CHECK
 		info->mSize = size;
-		info->mManaged = managed;
 		info->mMark = mInstance->mCurrentMark;
-		mInstance->mObjectsInfos.Add(info);
-#else
-		if (managed)
-		{
-			info->mSize = size;
-			info->mManaged = managed;
-			info->mMark = mInstance->mCurrentMark;
-			mInstance->mObjectsInfos.Add(info);
-		}
-		else
-		{
-			info->mSize = 0;
-			info->mManaged = false;
-		}
-#endif
 
 #ifdef MEM_TRACE
 		strncpy(info->mAllocSrcFile, srcFile, 127);
@@ -41,9 +22,7 @@ namespace o2
 		info->mAllocSrcFileLine = 0;
 #endif
 
-#else
-		objectPtr->mObjectInfo = nullptr;
-#endif //defined(MEM_TRACE) || defined(MEM_LEAKS_CHECK)
+		mInstance->mObjectsInfos.Add(info);
 	}
 
 	void MemoryManager::OnObjectDestroying(IObject* object)
@@ -78,7 +57,7 @@ namespace o2
 		mInstance->mPointers.Remove(ptr);
 	}
 
-	void MemoryManager::CollectGarbage()
+	void MemoryManager::CollectGarbage(bool checkLeaks /*= false*/)
 	{
 		mInstance->mCurrentMark = !mInstance->mCurrentMark;
 
@@ -98,8 +77,10 @@ namespace o2
 
 		for (auto obj : freeObjects)
 		{
-			if (obj->mManaged)
+			if (!checkLeaks)
+			{
 				delete obj;
+			}
 			else
 				printf("Leaked object: %x %s:%i\n", obj, obj->mAllocSrcFile, obj->mAllocSrcFileLine);
 		}
