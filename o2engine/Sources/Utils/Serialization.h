@@ -42,8 +42,6 @@ namespace o2
 	operator DataNode() { return Serialize(); }                                 \
 	FieldsArr GetFields() { FieldsArr res;
 
-#define BULLSHIT \
-	}
 
 #define BASE_CLASS_FIELDS(BASE_CLASS) res.Add(BASE_CLASS.GetFields());
 

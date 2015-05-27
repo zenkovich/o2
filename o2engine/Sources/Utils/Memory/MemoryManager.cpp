@@ -14,13 +14,8 @@ namespace o2
 		info->mSize = size;
 		info->mMark = mInstance->mCurrentMark;
 
-#ifdef MEM_TRACE
 		strncpy(info->mAllocSrcFile, srcFile, 127);
 		info->mAllocSrcFileLine = srcFileLine;
-#else
-		info->mAllocSrcFile[0] = '\0';
-		info->mAllocSrcFileLine = 0;
-#endif
 
 		mInstance->mObjectsInfos.Add(info);
 	}
@@ -57,7 +52,7 @@ namespace o2
 		mInstance->mPointers.Remove(ptr);
 	}
 
-	void MemoryManager::CollectGarbage(bool checkLeaks /*= false*/)
+	void MemoryManager::CollectGarbage(bool releaseObject /*= false*/)
 	{
 		mInstance->mCurrentMark = !mInstance->mCurrentMark;
 
@@ -77,12 +72,10 @@ namespace o2
 
 		for (auto obj : freeObjects)
 		{
-			if (!checkLeaks)
-			{
+			printf("Leaked object: %x %s:%i\n", obj, obj->mAllocSrcFile, obj->mAllocSrcFileLine);
+
+			if (releaseObject)
 				delete obj;
-			}
-			else
-				printf("Leaked object: %x %s:%i\n", obj, obj->mAllocSrcFile, obj->mAllocSrcFileLine);
 		}
 	}
 

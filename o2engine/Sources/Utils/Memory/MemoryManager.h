@@ -47,6 +47,6 @@ namespace o2
 		static void OnPtrDestroying(IPtr* ptr);
 
 	public:
-		static void CollectGarbage(bool checkLeaks = false);
+		static void CollectGarbage(bool releaseObject = false);
 	};
 }
