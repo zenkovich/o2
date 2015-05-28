@@ -1,10 +1,10 @@
 #pragma once
 
+#include "Utils/CommonTypes.h"
 #include "Utils/Singleton.h"
 #include "Utils/Containers/Array.h"
 #include "Utils/Memory/IPtr.h"
 #include "Utils/Memory/AllocOperators.h"
-#include "Utils/Memory/ClassFieldInfo.h"
 #include "EngineSettings.h"
 
 namespace o2

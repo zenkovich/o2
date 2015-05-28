@@ -1,7 +1,5 @@
 #include "Serialization.h"
 
-#include "Utils/Memory/ClassFieldInfo.h"
-
 namespace o2
 {	
 	DataNode Serializable::Serialize()
@@ -34,5 +32,14 @@ namespace o2
 	{
 		Assert(mObjectSamples.ContainsKey(type), "Failed to create type sample");
 		return mObjectSamples.Get(type)->CreateSample();
+	}
+
+	IClassFieldInfo::IClassFieldInfo(void* owner, const String& name):
+		mName(name), mOwner(owner)
+	{}
+
+	const String& IClassFieldInfo::Name() const
+	{
+		return mName;
 	}
 }

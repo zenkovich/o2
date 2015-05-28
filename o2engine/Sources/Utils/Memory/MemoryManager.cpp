@@ -1,6 +1,7 @@
 #include "MemoryManager.h"
 
 #include "Utils/Memory/IPtr.h"
+#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
