@@ -1,12 +1,14 @@
 #pragma once
 
+#include "Utils/Memory/IObject.h"
+
 namespace o2
 {
 	template<typename _key_type, typename _value_type>
-	class Pair
+	class Pair: public IObject
 	{
 	public:
-		_key_type  mFirst;
+		_key_type   mFirst;
 		_value_type mSecond;
 
 	public:

@@ -7,22 +7,29 @@
 
 namespace o2
 {
+	/** Class field info interface. */
 	class IClassFieldInfo
 	{
 	protected:
-		String mName;
-		void*  mOwner;
+		String mName;  /** Name of field. */
+		void*  mOwner; /** Owner object pointer. */
 
 	protected:
+		/** ctor. */
 		IClassFieldInfo(void* owner, const String& name);
 
 	public:
+		/** Returns name of field. */
 		const String& Name() const;
 
+		/** Serializing field into data node. */
 		virtual DataNode Serialize() = 0;
+
+		/** Deserializing field from data node. */
 		virtual void     Deserialize(const DataNode& node) = 0;
 	};
 
+	/** Template field info. Contains reference to field. */
 	template<typename _type>
 	class ClassFieldInfo: public IClassFieldInfo
 	{
@@ -30,39 +37,56 @@ namespace o2
 		friend class SerializeHelper;
 
 	protected:
-		_type& mValue;
+		_type& mValue; /** Reference field. */
 
 	public:
+		/** ctor. */
 		ClassFieldInfo(void* owner, _type& value, const String& name);
 
+		/** Serializing field into data node. */
 		DataNode Serialize();
+
+		/** Deserializing field from data node. */
 		void     Deserialize(const DataNode& node);
 	};
 
-	class Serializable
+	/** Serializable object interface. */
+	class ISerializable
 	{
 	public:
-		typedef Array<IClassFieldInfo*> FieldsArr;
+		typedef Vector<IClassFieldInfo*> FieldsArr;
 
-		virtual Serializable* CreateSample() const = 0;
-		virtual FieldsArr     GetFields();
-		virtual DataNode      Serialize();
-		virtual void          Deserialize(const DataNode& node);
+		/** Returns empty sample of this object type. */
+		virtual ISerializable* CreateSample() const = 0;
 
+		/** Returns array with fields infos. */
+		virtual FieldsArr      GetFields();
+
+		/** Serializing object into data node. */
+		virtual DataNode       Serialize();
+
+		/** Deserializing object from data node. */
+		virtual void           Deserialize(const DataNode& node);
+
+		/** DataNode converting operator. */
 		virtual operator DataNode() = 0;
+
+		/** Assign operator from data node. */
 		virtual IObject& operator=(const DataNode& node) = 0;
 	};
 
+	/** Static serializable types container. */
 	class SerializableTypesSamples
 	{
-		static Dictionary<String, Serializable*> mObjectSamples;
+		static Dictionary<String, ISerializable*> mObjectSamples; /** Serializable objects samples dictionary. */
 
 	public:
 		template<typename _type>
 		struct Regist { Regist(); };
 
 	public:
-		static Serializable* CreateSample(const String& type);
+		/** Returns empty object type sample. */
+		static ISerializable* CreateSample(const String& type);
 	};
 
 #define SERIALIZABLE_FIELDS(CLASS)                                              \

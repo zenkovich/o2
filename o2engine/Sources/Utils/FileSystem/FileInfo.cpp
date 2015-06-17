@@ -70,5 +70,4 @@ namespace o2
 		for (auto path:mPaths)
 			path.ProcessPathNamesClamping(charCount);
 	}
-
 }

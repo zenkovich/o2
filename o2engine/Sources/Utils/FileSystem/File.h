@@ -1,27 +1,32 @@
 #pragma once
 
 #include <fstream>
-#include "Utils/String.h"
 #include "Utils/CommonTypes.h"
+#include "Utils/String.h"
 
 namespace o2
 {
 	enum class FileType { File, Image, Config, Atlas };
 
 	/** Input file. */
-	class InFile
+	class InFile: public IObject
 	{
 		std::ifstream mIfstream; /**< Input stream. */
 		String        mFilename; /**< File name. */
 		bool          mOpened;   /**< True, if file was opened. */
 
 	public:
+		/** ctor. */
 		InFile();
+
+		/** ctor. Opening file. */
 		InFile(const String& filename);
+
+		/** dtor.*/
 		~InFile();
 
 		/** Opening file with specified extension. If type is cFileType::FT_FILE, file will opened wothout adding extension,
-		* else file name will be combine with extension string from file system. */
+		 ** else file name will be combine with extension string from file system. */
 		bool Open(const String& filename);
 
 		/** Closing file. */
@@ -50,19 +55,24 @@ namespace o2
 	};
 
 	/** Output file. */
-	class OutFile
+	class OutFile: public IObject
 	{
 		std::ofstream mOfstream; /**< Output stream. */
 		String        mFilename; /**< File name. */
 		bool          mOpened;   /**< True, if file was opened. */
 
 	public:
+		/** ctor. */
 		OutFile();
+
+		/** ctor. Opens file. */
 		OutFile(const String& filename);
+
+		/** dtor. */
 		~OutFile();
 
 		/** Opening file with specified extension. If type is cFileType::FT_FILE, file will opened wothout adding extension,
-		* else file name will be combine with first extension string from file system. */
+		 ** else file name will be combine with first extension string from file system. */
 		bool Open(const String& filename);
 
 		/** Close file. */

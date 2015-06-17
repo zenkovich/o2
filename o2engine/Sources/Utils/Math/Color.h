@@ -2,10 +2,11 @@
 
 #include "Utils/CommonTypes.h"
 #include "Utils/Math/Math.h"
+#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
-	class Color4
+	class Color4: public IObject
 	{
 	public:
 		int r, g, b, a;

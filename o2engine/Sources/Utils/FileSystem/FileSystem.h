@@ -1,27 +1,32 @@
 #pragma once
 
+#include "Utils/Containers/Vector.h"
+#include "Utils/Containers/Dictionary.h"
+#include "Utils/FileSystem/FileInfo.h"
+#include "Utils/Memory/IObject.h"
+#include "Utils/Memory/Ptr.h"
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
-#include "Utils/FileSystem/FileInfo.h"
-#include "Utils/Containers/Array.h"
-#include "Utils/Containers/Dictionary.h"
 
 namespace o2
 {
 	class LogStream;
 
 	/** File system, singleton. Contains basic resource path. */
-	class FileSystem: Singleton<FileSystem>
+	class FileSystem: public Singleton<FileSystem>, public IObject
 	{
-		typedef Array<String> StringsArr;
+		typedef Vector<String> StringsArr;
 		typedef Dictionary<FileType, StringsArr> ExtnsionsDict;
 
-		LogStream*    mLog;
-		ExtnsionsDict mExtensions;
-		String        mResourcesPath; /**< Basic application resources path. */
+		Ptr<LogStream> mLog;
+		ExtnsionsDict  mExtensions;
+		String         mResourcesPath; /**< Basic application resources path. */
 
 	public:
+		/** ctor. */
 		FileSystem();
+
+		/** dtor. */
 		~FileSystem();
 
 		/** Returns resource path. */
@@ -54,6 +59,7 @@ namespace o2
 		/** Returns true if specified file exist. */
 		static bool IsFileExist(const String& path);
 
+		/** Returns path from string. */
 		static String ExtractPathStr(const String& path);
 	};
 }

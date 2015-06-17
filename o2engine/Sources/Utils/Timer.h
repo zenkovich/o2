@@ -1,11 +1,12 @@
 #pragma once
 
 #include <Windows.h>
+#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
 	/** Timer class, serves for measure the time. */
-	class Timer
+	class Timer: public IObject
 	{
 		LONGLONG      mLastElapsedTime;
 		LARGE_INTEGER mFrequency;

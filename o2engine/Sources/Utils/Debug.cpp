@@ -66,7 +66,7 @@ namespace o2
 		mInstance->mLogStream->ErrorStr(out);
 	}
 
-	LogStream* Debug::GetLog()
+	Ptr<LogStream> Debug::GetLog()
 	{
 		return mInstance->mLogStream;
 	}

@@ -1,13 +1,14 @@
 #pragma once
 
+#include "Utils/Delegates.h"
 #include "Utils/Math/Math.h"
-#include "Utils/Function.h"
+#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
 	/** Basic array interface. .*/
 	template<typename _type>
-	class IArray
+	class IArray: public IObject
 	{
 	public:
 		virtual IArray* Clone() const = 0;

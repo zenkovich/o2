@@ -1,39 +1,46 @@
 #pragma once
 
-#include "Utils/Containers/Array.h"
+#include "Utils/Containers/Vector.h"
+#include "Utils/Memory/IObject.h"
+#include "Utils/Memory/Ptr.h"
 #include "Utils/String.h"
 
 namespace o2
 {
 	/** Basic log stream. Contains interfaces of outing data, parent and child streams. */
-	class LogStream
+	class LogStream: public IObject
 	{
 	protected:
-		typedef Array<LogStream*> LogSteamsArr;
+		typedef Vector<Ptr<LogStream>> LogSteamsArr;
 
-		LogStream*   mParentStream; /**< Parent stream. NULL if no parent. */
-		WString      mId;           /**< Name of log stream. */
-		LogSteamsArr mChildStreams; /**< Child streams. */
+		Ptr<LogStream> mParentStream; /**< Parent stream. NULL if no parent. */
+		WString        mId;           /**< Name of log stream. */
+		LogSteamsArr   mChildStreams; /**< Child streams. */
 
 	public:
+		/** ctor. */
 		LogStream();
+
+		/** ctor with id. */
 		LogStream(const WString& id);
+
+		/** dtor. */
 		virtual ~LogStream();
 
 		/** Return name of stream. */
 		const WString& GetId() const;
 
 		/** Binding child stream. */
-		void BindStream(LogStream* stream);
+		void BindStream(const Ptr<LogStream>& stream);
 
 		/** Unbinding child stream. Function destroying stream object. */
-		void UnbindStream(LogStream* stream, bool release = true);
+		void UnbindStream(const Ptr<LogStream>& stream, bool release = true);
 
 		/** Unbind and destroy all child streams. */
 		void UnbindAllStreams();
 
 		/** Returns parent stream. Null if no parent. */
-		LogStream* GetParentStream() const;
+		Ptr<LogStream> GetParentStream() const;
 
 		/** Out with low level log. */
 		void Out(WString format, ...);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Containers/Array.h"
+#include "Utils/Containers/Vector.h"
 
 namespace o2
 {

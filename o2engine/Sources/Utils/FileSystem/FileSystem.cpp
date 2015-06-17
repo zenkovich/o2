@@ -220,5 +220,4 @@ namespace o2
 	{
 		return path.SubStr(0, path.FindLast("/"));
 	}
-
 }

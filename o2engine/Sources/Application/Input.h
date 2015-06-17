@@ -1,7 +1,8 @@
 #pragma once
 
+#include "Utils/Containers/Vector.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Containers/Array.h"
+#include "Utils/Memory/IObject.h"
 #include "Utils/Singleton.h"
 
 namespace o2
@@ -10,14 +11,14 @@ namespace o2
 	typedef int VKey;
 
 	/** Input message. Containing pressed, down, released keys, cursors positions. */
-	class Input: public Singleton<Input>
+	class Input: public IObject, public Singleton<Input>
 	{
 		friend class Application;
 		friend class IApplication;
 
 	public:
 		/** Cursor definition. */
-		struct Cursor
+		struct Cursor: public IObject
 		{
 			Vec2F mPosition;
 			Vec2F mDelta;
@@ -28,10 +29,10 @@ namespace o2
 			Cursor(const Vec2F& position = Vec2F(), int id = 0);
 			bool operator==(const Cursor& other);
 		};
-		typedef Array<Cursor> CursorsArr;
+		typedef Vector<Cursor> CursorsArr;
 
 		/** Key with pressed time. */
-		struct Key
+		struct Key: public IObject
 		{
 			VKey  mKey;
 			float mPressedTime;
@@ -41,7 +42,7 @@ namespace o2
 			bool operator==(const Key& other);
 		};
 
-		typedef Array<Key> KeysArr;
+		typedef Vector<Key> KeysArr;
 
 	protected:
 		KeysArr    mPressedKeys;

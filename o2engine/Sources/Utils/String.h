@@ -6,12 +6,13 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Color.h"
 #include "Utils/Math/Rect.h"
-#include "Utils/Containers/Array.h"
+#include "Utils/Containers/Vector.h"
+#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
 	template<typename T>
-	class TString
+	class TString: public IObject
 	{
 		T*  mData;
 		int mCapacity;
@@ -100,7 +101,7 @@ namespace o2
 
 		TString SubStr(int begin, int end = -1) const;
 
-		Array<TString> Split(const TString& splitStr) const;
+		Vector<TString> Split(const TString& splitStr) const;
 
 		TString ToLowerCase() const;
 		TString ToUpperCase() const;
@@ -891,9 +892,9 @@ namespace o2
 	}
 
 	template<typename T>
-	Array<TString<T>> TString<T>::Split(const TString& splitStr) const
+	Vector<TString<T>> TString<T>::Split(const TString& splitStr) const
 	{
-		Array<TString> res;
+		Vector<TString> res;
 		int lastFnd = 0;
 		int i = 0;
 		int l1 = Length(), l2 = splitStr.Length();

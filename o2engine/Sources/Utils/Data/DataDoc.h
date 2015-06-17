@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Utils/Containers/Array.h"
+#include "Utils/Containers/Vector.h"
 #include "Utils/Containers/Dictionary.h"
-#include "Utils/String.h"
-#include "Utils/Memory/Ptr.h"
 #include "Utils/Memory/IObject.h"
+#include "Utils/Memory/Ptr.h"
+#include "Utils/String.h"
 
 namespace o2
 {
@@ -13,15 +13,15 @@ namespace o2
 		friend class DataDoc;
 
 	public:
-		typedef Array<Ptr<DataNode>> DataNodesArr;
+		typedef Vector<Ptr<DataNode>> DataNodesArr;
 		typedef DataNode::DataNodesArr::Iterator Iterator;
 		typedef DataNode::DataNodesArr::ConstIterator ConstIterator;
 
 	protected:
-		WString      mName;
-		WString      mData;
-		DataNode*    mParent;
-		DataNodesArr mChildNodes;
+		WString       mName;
+		WString       mData;
+		Ptr<DataNode> mParent;
+		DataNodesArr  mChildNodes;
 
 	public:
 		DataNode();
@@ -45,7 +45,7 @@ namespace o2
 		DataNode(const WString& name, const Ptr<_type>& value);
 
 		template<typename _type>
-		DataNode(const WString& name, const Array<_type>& value);
+		DataNode(const WString& name, const Vector<_type>& value);
 
 		template<typename _key, typename _value>
 		DataNode(const WString& name, const Dictionary<_key, _value>& value);
@@ -71,7 +71,7 @@ namespace o2
 		DataNode& operator=(const Ptr<_type>& value);
 
 		template<typename _type>
-		DataNode& operator=(const Array<_type>& value);
+		DataNode& operator=(const Vector<_type>& value);
 
 		template<typename _key, typename _value>
 		DataNode& operator=(const Dictionary<_key, _value>& value);
@@ -94,7 +94,7 @@ namespace o2
 		operator Ptr<_type>() const;
 
 		template<typename _type>
-		operator Array<_type>() const;
+		operator Vector<_type>() const;
 
 		template<typename _key, typename _value>
 		operator Dictionary<_key, _value>() const;
@@ -159,20 +159,20 @@ namespace o2
 	DataNode::DataNode(const WString& name, const Ptr<_type>& value):
 		mName(name), mParent(nullptr)
 	{
-		*AddNode("type") = (String)(typeid(*value).name());
-		*AddNode("value") = *value;
+		*AddNode("Type") = (String)(typeid(*value).name());
+		*AddNode("Value") = *value;
 	}
 
 	template<typename _type>
 	DataNode::operator Ptr<_type>() const
 	{
 		String type;
-		Serializable* value = nullptr;
+		ISerializable* value = nullptr;
 
-		if (auto typeNode = GetNode("type"))
+		if (auto typeNode = GetNode("Type"))
 			type = *typeNode;
 
-		if (auto valueNode = GetNode("value"))
+		if (auto valueNode = GetNode("Value"))
 		{
 			value = SerializableTypesSamples::CreateSample(type);
 			*value = *valueNode;
@@ -184,8 +184,8 @@ namespace o2
 	template<typename _type>
 	DataNode& DataNode::operator=(const Ptr<_type>& value)
 	{
-		*AddNode("type") = (String)(typeid(*value).name());
-		*AddNode("value") = *value;
+		*AddNode("Type") = (String)(typeid(*value).name());
+		*AddNode("Value") = *value;
 
 		return *this;
 	}
@@ -204,7 +204,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	DataNode::DataNode(const WString& name, const Array<_type>& value)
+	DataNode::DataNode(const WString& name, const Vector<_type>& value)
 	{
 		for (auto v : value)
 			*AddNode("Element") = v;
@@ -226,7 +226,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	DataNode& DataNode::operator=(const Array<_type>& value)
+	DataNode& DataNode::operator=(const Vector<_type>& value)
 	{
 		Clear();
 
@@ -255,11 +255,11 @@ namespace o2
 	}
 
 	template<typename _type>
-	DataNode::operator Array<_type>() const
+	DataNode::operator Vector<_type>() const
 	{
 		int count = mChildNodes.Count();
 
-		Array<_type> res(count + 2);
+		Vector<_type> res(count + 2);
 		_type v = _type();
 		for (auto childNode : mChildNodes)
 		{

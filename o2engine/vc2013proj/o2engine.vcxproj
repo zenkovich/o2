@@ -100,7 +100,7 @@
     <ClInclude Include="..\Sources\O2.h" />
     <ClInclude Include="..\Sources\Utils\Assert.h" />
     <ClInclude Include="..\Sources\Utils\CommonTypes.h" />
-    <ClInclude Include="..\Sources\Utils\Containers\Array.h" />
+    <ClInclude Include="..\Sources\Utils\Containers\Vector.h" />
     <ClInclude Include="..\Sources\Utils\Containers\Dictionary.h" />
     <ClInclude Include="..\Sources\Utils\Containers\IArray.h" />
     <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h" />
@@ -111,7 +111,7 @@
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />
-    <ClInclude Include="..\Sources\Utils\Function.h" />
+    <ClInclude Include="..\Sources\Utils\Delegates.h" />
     <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\LogStream.h" />
@@ -164,7 +164,6 @@
     <ClCompile Include="..\Sources\Utils\Memory\IPtr.cpp" />
     <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp" />
     <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
-    <ClCompile Include="..\Sources\Utils\String.cpp" />
     <ClCompile Include="..\Sources\Utils\Time.cpp" />
     <ClCompile Include="..\Sources\Utils\Timer.cpp" />
   </ItemGroup>

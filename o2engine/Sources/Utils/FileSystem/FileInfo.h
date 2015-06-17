@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Utils/CommonTypes.h"
-#include "Utils/Time.h"
 #include "Utils/FileSystem/File.h"
+#include "Utils/Memory/IObject.h"
+#include "Utils/Time.h"
 
 namespace o2
 {
-	class FileInfo
+	class FileInfo: public IObject
 	{
 	public:
 		String   mPath;
@@ -19,11 +20,11 @@ namespace o2
 		bool operator==(const FileInfo& other) const;
 	};
 
-	class PathInfo
+	class PathInfo: public IObject
 	{
 	public:
-		typedef Array<FileInfo> FilesArr;
-		typedef Array<PathInfo> PathsArr;
+		typedef Vector<FileInfo> FilesArr;
+		typedef Vector<PathInfo> PathsArr;
 
 		String   mPath;
 		FilesArr mFiles;
@@ -39,7 +40,7 @@ namespace o2
 		void ProcessPathNamesClamping(int charCount);
 	};
 
-	class FileLocation
+	class FileLocation: public IObject
 	{
 	public:
 		String mPath;
@@ -51,5 +52,5 @@ namespace o2
 		bool operator==(const FileLocation& other) const;
 		bool operator!=(const FileLocation& other) const;
 	};
-	typedef Array<FileLocation> FileLocationsArr;
+	typedef Vector<FileLocation> FileLocationsArr;
 }

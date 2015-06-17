@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Utils/Math/Math.h"
+#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
 	template<typename T>
-	class Vec2
+	class Vec2: public IObject
 	{
 	public:
 		T x, y;

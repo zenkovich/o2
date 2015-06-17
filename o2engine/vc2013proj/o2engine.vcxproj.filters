@@ -90,12 +90,6 @@
     <ClInclude Include="..\Sources\Utils\Containers\IArray.h">
       <Filter>Sources\Utils\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Containers\Array.h">
-      <Filter>Sources\Utils\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Function.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Containers\Pair.h">
       <Filter>Sources\Utils\Containers</Filter>
     </ClInclude>
@@ -213,6 +207,12 @@
     <ClInclude Include="..\Sources\Utils\Memory\IObject.h">
       <Filter>Sources\Utils\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Delegates.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Containers\Vector.h">
+      <Filter>Sources\Utils\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -231,9 +231,6 @@
       <Filter>Sources\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Debug.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\String.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Dependencies\PugiXml\pugixml.cpp">

@@ -2,13 +2,14 @@
 
 #include <algorithm>
 #include <float.h>
-#include "Utils/Math/Vector2.h"
 #include "Utils/Math/Math.h"
+#include "Utils/Math/Vector2.h"
+#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
 	template<typename T>
-	class Rect
+	class Rect: public IObject
 	{
 	public:
 		T left, top, right, bottom;

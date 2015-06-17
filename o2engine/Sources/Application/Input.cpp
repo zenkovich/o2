@@ -352,5 +352,4 @@ namespace o2
 	Input::Key::Key(VKey key /*= 0*/):mKey(key), mPressedTime(0)
 	{
 	}
-
 }

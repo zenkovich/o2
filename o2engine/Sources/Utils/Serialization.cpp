@@ -2,7 +2,7 @@
 
 namespace o2
 {	
-	DataNode Serializable::Serialize()
+	DataNode ISerializable::Serialize()
 	{
 		DataNode res;
 		auto fields = GetFields();
@@ -14,7 +14,7 @@ namespace o2
 		return res;
 	}
 
-	void Serializable::Deserialize(const DataNode& node)
+	void ISerializable::Deserialize(const DataNode& node)
 	{
 		auto fields = GetFields();
 		for (auto fld : fields)
@@ -23,12 +23,12 @@ namespace o2
 		}
 	}
 
-	Serializable::FieldsArr Serializable::GetFields()
+	ISerializable::FieldsArr ISerializable::GetFields()
 	{
 		return FieldsArr();
 	}
 
-	Serializable* SerializableTypesSamples::CreateSample(const String& type)
+	ISerializable* SerializableTypesSamples::CreateSample(const String& type)
 	{
 		Assert(mObjectSamples.ContainsKey(type), "Failed to create type sample");
 		return mObjectSamples.Get(type)->CreateSample();

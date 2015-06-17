@@ -1,9 +1,8 @@
 #pragma once
 
 #include "dependencies/pugixml/pugixml.hpp"
-#include "Utils/String.h"
 #include "Utils/Data/DataDoc.h"
-
+#include "Utils/String.h"
 
 namespace o2
 {

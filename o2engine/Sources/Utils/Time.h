@@ -2,10 +2,11 @@
 
 #include "Utils/Singleton.h"
 #include "Utils/CommonTypes.h"
+#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
-	struct WideTime
+	struct WideTime: public IObject
 	{
 		int mYear;
 		int mMonth;
@@ -20,7 +21,7 @@ namespace o2
 		bool operator!=(const WideTime& wt) const;
 	};
 
-	class Time: public Singleton<Time>
+	class Time: public Singleton<Time>, public IObject
 	{
 		friend class IApplication;
 		friend class Application;

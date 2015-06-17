@@ -2,51 +2,62 @@
 
 #include "Utils/CommonTypes.h"
 #include "Utils/Singleton.h"
-#include "Utils/Containers/Array.h"
+#include "Utils/Containers/Vector.h"
 #include "Utils/Memory/IPtr.h"
 #include "Utils/Memory/AllocOperators.h"
 #include "EngineSettings.h"
 
 namespace o2
 {
-	typedef Array<IPtr*> PointersArr;
+	/** Object info. Contains pointer to object, child objects pointers and allocation source. */
 	struct ObjectInfo
 	{
-		IObject*    mObjectPtr;
-		PointersArr mPointers;
-		PointersArr mChildPointers;
-		UInt        mSize;
-		bool        mMark;
-		char        mAllocSrcFile[128];
-		int         mAllocSrcFileLine;
+		typedef Vector<IPtr*> PointersArr;
 
+		IObject*    mObjectPtr;         /** Object pointer. */
+		PointersArr mPointers;          /** Pointers to that object. */
+		PointersArr mChildPointers;     /** Child objects pointers array. */
+		UInt        mSize;              /** Size of object in bytes. */
+		bool        mMark;              /** Current mark. For Garbage Collector. */
+		char        mAllocSrcFile[128]; /** Allocation source faile name. */
+		int         mAllocSrcFileLine;  /** Number of line, where object was allocated in source file. */
+
+		/** Sets mark for this object and for his children. */
 		void Mark(bool mark);
 	};
 
+	/** Memory manager. Storing information about all allocated objects, looks for memory leaks and collecting garbage. */
 	class MemoryManager : public Singleton<MemoryManager>
 	{
 		friend class IPtr;
 		friend void* ::operator new(size_t size, const char* location, int line);
 		friend void  ::operator delete(void* obj, const char* location, int line);
 
-		typedef Array<IPtr*> PointersArr;
+		typedef Vector<IPtr*> PointersArr;
 
 	public:
-		typedef Array<ObjectInfo*> ObjectsInfosArr;
+		typedef Vector<ObjectInfo*> ObjectsInfosArr;
 
 	protected:
-		ObjectsInfosArr mObjectsInfos;
-		PointersArr     mPointers;
-		bool            mCurrentMark;
+		ObjectsInfosArr mObjectsInfos; /** All static objects infos. */
+		PointersArr     mPointers;     /** All pointers. */
+		bool            mCurrentMark;  /** Current Garbage collection mark. */
 
 	protected:
+		/** Calling when object created. */
 		static void OnObjectCreating(IObject* objectPtr, UInt size, const char* srcFile, int srcFileLine);
+
+		/** Calling when objects destroying. */
 		static void OnObjectDestroying(IObject* objectPtr);
 
+		/** Calling when pointer creating. */
 		static void OnPtrCreating(IPtr* ptr);
+
+		/** Calling when pointer destroying. */
 		static void OnPtrDestroying(IPtr* ptr);
 
 	public:
-		static void CollectGarbage(bool releaseObject = false);
+		/** Collects all unused objects and destroys them. */
+		static void CollectGarbage();
 	};
 }

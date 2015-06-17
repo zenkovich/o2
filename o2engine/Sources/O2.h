@@ -11,7 +11,7 @@
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Color.h"
 
-#include "Utils/Containers/Array.h"
+#include "Utils/Containers/Vector.h"
 #include "Utils/Containers/Dictionary.h"
 
 #include "Utils/Data/DataDoc.h"
@@ -28,7 +28,7 @@
 #include "Utils/Assert.h"
 #include "Utils/CommonTypes.h"
 #include "Utils/Debug.h"
-#include "Utils/Function.h"
+#include "Utils/Delegates.h"
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
 #include "Utils/SmartPointers.h"
@@ -41,4 +41,4 @@
 
 #define INITIALIZE_O2 \
 	template<> MemoryManager* Singleton<MemoryManager>::mInstance = new MemoryManager(); \
-	Dictionary<String, Serializable*> SerializableTypesSamples::mObjectSamples
+	Dictionary<String, ISerializable*> SerializableTypesSamples::mObjectSamples

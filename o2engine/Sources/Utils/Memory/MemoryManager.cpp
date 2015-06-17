@@ -53,7 +53,7 @@ namespace o2
 		mInstance->mPointers.Remove(ptr);
 	}
 
-	void MemoryManager::CollectGarbage(bool releaseObject /*= false*/)
+	void MemoryManager::CollectGarbage()
 	{
 		mInstance->mCurrentMark = !mInstance->mCurrentMark;
 
@@ -74,9 +74,7 @@ namespace o2
 		for (auto obj : freeObjects)
 		{
 			printf("Leaked object: %x %s:%i\n", obj, obj->mAllocSrcFile, obj->mAllocSrcFileLine);
-
-			if (releaseObject)
-				delete obj;
+			delete obj;
 		}
 	}
 
