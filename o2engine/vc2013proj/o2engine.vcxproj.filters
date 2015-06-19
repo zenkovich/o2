@@ -198,14 +198,8 @@
     <ClInclude Include="..\Sources\Utils\Memory\Ptr.h">
       <Filter>Sources\Utils\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Memory\AllocOperators.h">
-      <Filter>Sources\Utils\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Serialization.h">
       <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Memory\IObject.h">
-      <Filter>Sources\Utils\Memory</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Delegates.h">
       <Filter>Sources\Utils</Filter>
@@ -299,13 +293,7 @@
     <ClCompile Include="..\Sources\Utils\Time.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Memory\IPtr.cpp">
-      <Filter>Sources\Utils\Memory</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp">
-      <Filter>Sources\Utils\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Memory\AllocOperators.cpp">
       <Filter>Sources\Utils\Memory</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Serialization.cpp">

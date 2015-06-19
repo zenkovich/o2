@@ -7,6 +7,9 @@
 #include "Utils/Memory/AllocOperators.h"
 #include "EngineSettings.h"
 
+void* operator new(size_t size, const char* location, int line);
+void operator delete(void* obj, const char* location, int line);
+
 namespace o2
 {
 	/** Object info. Contains pointer to object, child objects pointers and allocation source. */
@@ -14,12 +17,12 @@ namespace o2
 	{
 		typedef Vector<IPtr*> PointersArr;
 
-		IObject*    mObjectPtr;         /** Object pointer. */
+		void*       mObjectPtr;         /** Object pointer. */
 		PointersArr mPointers;          /** Pointers to that object. */
 		PointersArr mChildPointers;     /** Child objects pointers array. */
 		UInt        mSize;              /** Size of object in bytes. */
 		bool        mMark;              /** Current mark. For Garbage Collector. */
-		char        mAllocSrcFile[128]; /** Allocation source faile name. */
+		char        mAllocSrcFile[128]; /** Allocation source file name. */
 		int         mAllocSrcFileLine;  /** Number of line, where object was allocated in source file. */
 
 		/** Sets mark for this object and for his children. */
@@ -45,10 +48,10 @@ namespace o2
 
 	protected:
 		/** Calling when object created. */
-		static void OnObjectCreating(IObject* objectPtr, UInt size, const char* srcFile, int srcFileLine);
+		static void OnObjectCreating(void* object, ObjectInfo* info, UInt size, const char* srcFile, int srcFileLine);
 
 		/** Calling when objects destroying. */
-		static void OnObjectDestroying(IObject* objectPtr);
+		static void OnObjectDestroying(void* object);
 
 		/** Calling when pointer creating. */
 		static void OnPtrCreating(IPtr* ptr);
@@ -56,8 +59,12 @@ namespace o2
 		/** Calling when pointer destroying. */
 		static void OnPtrDestroying(IPtr* ptr);
 
+		static ObjectInfo* GetObjectInfo(void* object);
+
 	public:
 		/** Collects all unused objects and destroys them. */
 		static void CollectGarbage();
 	};
 }
+
+#define mnew new(__FILE__, __LINE__)

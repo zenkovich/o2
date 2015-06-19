@@ -120,8 +120,6 @@
     <ClInclude Include="..\Sources\Utils\Math\Rect.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vector2.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vertex2.h" />
-    <ClInclude Include="..\Sources\Utils\Memory\AllocOperators.h" />
-    <ClInclude Include="..\Sources\Utils\Memory\IObject.h" />
     <ClInclude Include="..\Sources\Utils\Memory\IPtr.h" />
     <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h" />
     <ClInclude Include="..\Sources\Utils\Memory\Ptr.h" />
@@ -160,8 +158,6 @@
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
-    <ClCompile Include="..\Sources\Utils\Memory\AllocOperators.cpp" />
-    <ClCompile Include="..\Sources\Utils\Memory\IPtr.cpp" />
     <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp" />
     <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
     <ClCompile Include="..\Sources\Utils\Time.cpp" />
