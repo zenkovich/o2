@@ -2,7 +2,6 @@
 
 namespace o2
 {
-
 	/** C#-like property. Uses two functions: setter and getter, and works as simple field. */
 	template<typename _class_type, typename _type>
 	class Property

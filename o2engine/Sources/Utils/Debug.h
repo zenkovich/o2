@@ -1,7 +1,6 @@
 #pragma once
 
 #include "String.h"
-#include "Utils/Memory/IObject.h"
 #include "Utils/Memory/Ptr.h"
 #include "Utils/Singleton.h"
 
@@ -9,7 +8,7 @@ namespace o2
 {
 	class LogStream;
 
-	class Debug: public IObject, public Singleton<Debug>
+	class Debug : public Singleton<Debug>
 	{
 		friend class Singleton<Debug>;
 

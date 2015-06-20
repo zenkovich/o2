@@ -9,7 +9,7 @@ namespace o2
 	enum class FileType { File, Image, Config, Atlas };
 
 	/** Input file. */
-	class InFile: public IObject
+	class InFile
 	{
 		std::ifstream mIfstream; /**< Input stream. */
 		String        mFilename; /**< File name. */
@@ -55,7 +55,7 @@ namespace o2
 	};
 
 	/** Output file. */
-	class OutFile: public IObject
+	class OutFile
 	{
 		std::ofstream mOfstream; /**< Output stream. */
 		String        mFilename; /**< File name. */

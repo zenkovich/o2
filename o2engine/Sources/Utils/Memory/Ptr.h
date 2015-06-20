@@ -5,7 +5,7 @@
 namespace o2
 {
 	template<typename _type>
-	class Ptr : public IPtr
+	class Ptr : public ITemplPtr<_type>
 	{
 	public:
 		Ptr(_type* object = nullptr);
@@ -29,12 +29,12 @@ namespace o2
 
 	template<typename _type>
 	Ptr<_type>::Ptr(_type* object = nullptr) :
-		IPtr(object)
+		ITemplPtr(object)
 	{}
 
 	template<typename _type>
 	Ptr<_type>::Ptr(const Ptr& other) :
-		IPtr(other)
+		ITemplPtr(other)
 	{}
 
 	template<typename _type>
@@ -44,7 +44,7 @@ namespace o2
 	template<typename _type>
 	Ptr<_type>& Ptr<_type>::operator=(const Ptr& other)
 	{
-		IPtr::operator=(other);
+		ITemplPtr::operator=(other);
 		return *this;
 	}
 

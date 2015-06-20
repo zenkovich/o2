@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Utils/Memory/IObject.h"
-
 namespace o2
 {
 	template<typename _key_type, typename _value_type>

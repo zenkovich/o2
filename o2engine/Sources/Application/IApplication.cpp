@@ -30,7 +30,7 @@ namespace o2
 		srand((UInt)time(NULL));
 
 		//log
-		mLog = new LogStream("Application");
+		mLog = mnew LogStream("Application");
  		Debug::GetLog()->BindStream(mLog);
 // 
 // 		//project config
@@ -40,17 +40,17 @@ namespace o2
 // 		mAssets = mnew Assets();
 
 		//input message
-		mInput = new Input();
+		mInput = mnew Input();
 // 
 // 		//scheduler
 // 		mScheduler = mnew Scheduler();
 // 
 		//timer
-		mTimer = new Timer();
+		mTimer = mnew Timer();
 		mTimer->Reset();
 
 		//timers
-		mTime = new Time();
+		mTime = mnew Time();
 // 
 // 		//ui
 // 		mUIController = mnew UIController();

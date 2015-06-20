@@ -2,7 +2,6 @@
 
 #include "Utils/Delegates.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Memory/IObject.h"
 #include "Utils/Memory/Ptr.h"
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
@@ -15,7 +14,7 @@ namespace o2
 	class Timer;
 	class Input;
 
-	class IApplication: public IObject, public Singleton<IApplication>
+	class IApplication: public Singleton<IApplication>
 	{
 	protected:
 		Ptr<Input>      mInput;         /**< While application user input message. */

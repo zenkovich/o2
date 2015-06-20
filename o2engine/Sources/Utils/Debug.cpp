@@ -7,12 +7,10 @@
 
 namespace o2
 {
-	CREATE_SINGLETON(Debug);
-
 	Debug::Debug()
 	{
-		FileLogStream* fileLogStream = new FileLogStream("", "log.txt");
-		mLogStream = new ConsoleLogStream("");
+		FileLogStream* fileLogStream = mnew FileLogStream("", "log.txt");
+		mLogStream = mnew ConsoleLogStream("");
 		fileLogStream->BindStream(mLogStream);
 	}
 

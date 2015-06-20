@@ -6,16 +6,18 @@
 
 INITIALIZE_O2;
 
-struct A: public IObject
+struct B;
+
+struct A
 {
 	int a = 0;
-	Ptr<IObject> ptr;
+	Ptr<B> ptr;
 };
 
-struct B: public IObject
+struct B
 {
 	int b = 2;
-	Ptr<IObject> ptr;
+	Ptr<A> ptr;
 };
 
 void ttt()

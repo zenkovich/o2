@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Utils/Math/Math.h"
-#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
 	template<typename T>
-	class Vec2: public IObject
+	class Vec2
 	{
 	public:
 		T x, y;
@@ -90,8 +89,6 @@ namespace o2
 
 	typedef Vec2<float> Vec2F;
 	typedef Vec2<int>   Vec2I;
-
-	//implementation Vec2
 
 	template<typename T>
 	Vec2<T>::Vec2():

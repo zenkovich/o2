@@ -4,12 +4,11 @@
 #include <float.h>
 #include "Utils/Math/Math.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
 	template<typename T>
-	class Rect: public IObject
+	class Rect
 	{
 	public:
 		T left, top, right, bottom;
@@ -81,8 +80,6 @@ namespace o2
 
 	typedef Rect<float> RectF;
 	typedef Rect<int>   RectI;
-
-	//implementation Rect
 
 	template<typename T>
 	Rect<T>::Rect():

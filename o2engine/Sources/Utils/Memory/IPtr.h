@@ -1,29 +1,54 @@
 #pragma once
 
+#include "Utils/Memory/MemoryManager.h"
+
 namespace o2
 {
-	template<typename _type>
+	struct ObjectInfo;
+
 	class IPtr
 	{
 		friend class MemoryManager;
 		friend struct ObjectInfo;
 
+		template<typename _type>
+		friend class ITemplPtr;
+
 	protected:
-		_type*      mObject;     /** Pointer to object. */
 		ObjectInfo* mObjectInfo; /** Object info pointer. */
 		bool        mStatic;     /** True, if object is static, false if object is child of another object. */
 
+		IPtr(ObjectInfo* objectInfo, bool isStatic) :
+			mObjectInfo(objectInfo), mStatic(isStatic) {}
+
+		virtual ~IPtr() {}
+
+		virtual void ObjectReleased() = 0;
+	};
+
+	template<typename _type>
+	class ITemplPtr : public IPtr
+	{
+		friend class MemoryManager;
+		friend struct ObjectInfo;
+
+	protected:
+		_type* mObject; /** Pointer to object. */
+
 		/** ctor. */
-		IPtr(_type* object = nullptr);
+		ITemplPtr(_type* object = nullptr);
 
 		/** copy-ctor. */
-		IPtr(const IPtr& other);
+		ITemplPtr(const ITemplPtr& other);
 
 		/** virtual dtor. */
-		virtual ~IPtr();
+		~ITemplPtr();
 
 		/** Copy operator. */
-		IPtr& operator=(const IPtr& other);
+		ITemplPtr& operator=(const ITemplPtr& other);
+
+		/** Call when object is released. */
+		void ObjectReleased();
 
 	public:
 		/** Returns true, if mObject is valid. */
@@ -34,8 +59,8 @@ namespace o2
 	};
 
 	template<typename _type>
-	IPtr<_type>::IPtr(_type* object /*= nullptr*/) :
-		mObject(object), mStatic(false), mObjectInfo(nullptr)
+	ITemplPtr<_type>::ITemplPtr(_type* object /*= nullptr*/) :
+		mObject(object), IPtr(nullptr, false)
 	{
 		MemoryManager::OnPtrCreating(this);
 
@@ -47,13 +72,13 @@ namespace o2
 	}
 
 	template<typename _type>
-	IPtr<_type>::IPtr(const IPtr& other) :
-		IPtr(other.mObject)
+	ITemplPtr<_type>::ITemplPtr(const ITemplPtr& other) :
+		ITemplPtr(other.mObject)
 	{
 	}
 
 	template<typename _type>
-	IPtr<_type>::~IPtr()
+	ITemplPtr<_type>::~ITemplPtr()
 	{
 		if (mObject)
 			mObjectInfo->mPointers.Remove(this);
@@ -63,7 +88,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	IPtr<_type>& IPtr<_type>::operator=(const IPtr& other)
+	ITemplPtr<_type>& ITemplPtr<_type>::operator=(const ITemplPtr& other)
 	{
 		if (mObject)
 			mObjectInfo->mPointers.Remove(this);
@@ -72,7 +97,7 @@ namespace o2
 
 		if (mObject)
 		{
-			mObjectInfo = MemoryManager::GetObjectInfo(object);
+			mObjectInfo = MemoryManager::GetObjectInfo(mObject);
 			mObjectInfo->mPointers.Add(this);
 		}
 
@@ -80,20 +105,27 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool IPtr<_type>::IsValid() const
+	void ITemplPtr<_type>::ObjectReleased()
+	{
+		mObject = nullptr;
+		mObjectInfo = nullptr;
+	}
+
+	template<typename _type>
+	bool ITemplPtr<_type>::IsValid() const
 	{
 		return mObject != nullptr;
 	}
 
 	template<typename _type>
-	void IPtr<_type>::Release()
+	void ITemplPtr<_type>::Release()
 	{
 		if (mObject)
 		{
 			_type* obj = mObject;
 
-			for (auto ptr : mObject->mObjectInfo->mPointers)
-				ptr->mObject = nullptr;
+			for (auto ptr : mObjectInfo->mPointers)
+				ptr->ObjectReleased();
 
 			MemoryManager::OnObjectDestroying(obj);
 			delete obj;

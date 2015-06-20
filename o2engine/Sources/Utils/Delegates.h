@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <functional>
 #include <vector>
-#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
@@ -12,7 +11,7 @@ namespace o2
 
 	/** Basic delegate interface. */
 	template<typename _res_type, typename ... _args>
-	class IFunction <_res_type(_args ...)>: public IObject
+	class IFunction <_res_type(_args ...)>
 	{
 	public:
 		/** virtual dtor. */

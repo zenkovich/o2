@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Utils/Memory/IObject.h"
 #include "Utils/String.h"
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Data/DataDoc.h"
@@ -72,7 +71,7 @@ namespace o2
 		virtual operator DataNode() = 0;
 
 		/** Assign operator from data node. */
-		virtual IObject& operator=(const DataNode& node) = 0;
+		virtual ISerializable& operator=(const DataNode& node) = 0;
 	};
 
 	/** Static serializable types container. */

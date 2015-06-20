@@ -2,12 +2,11 @@
 
 #include "Utils/CommonTypes.h"
 #include "Utils/FileSystem/File.h"
-#include "Utils/Memory/IObject.h"
 #include "Utils/Time.h"
 
 namespace o2
 {
-	class FileInfo: public IObject
+	class FileInfo
 	{
 	public:
 		String   mPath;
@@ -20,7 +19,7 @@ namespace o2
 		bool operator==(const FileInfo& other) const;
 	};
 
-	class PathInfo: public IObject
+	class PathInfo
 	{
 	public:
 		typedef Vector<FileInfo> FilesArr;
@@ -40,7 +39,7 @@ namespace o2
 		void ProcessPathNamesClamping(int charCount);
 	};
 
-	class FileLocation: public IObject
+	class FileLocation
 	{
 	public:
 		String mPath;

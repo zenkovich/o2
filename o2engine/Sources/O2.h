@@ -41,4 +41,5 @@
 
 #define INITIALIZE_O2 \
 	template<> MemoryManager* Singleton<MemoryManager>::mInstance = new MemoryManager(); \
+	template<> Debug* Singleton<Debug>::mInstance = new Debug(); \
 	Dictionary<String, ISerializable*> SerializableTypesSamples::mObjectSamples

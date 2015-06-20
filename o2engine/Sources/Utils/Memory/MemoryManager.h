@@ -1,17 +1,17 @@
 #pragma once
 
+#include "EngineSettings.h"
 #include "Utils/CommonTypes.h"
 #include "Utils/Singleton.h"
 #include "Utils/Containers/Vector.h"
-#include "Utils/Memory/IPtr.h"
-#include "Utils/Memory/AllocOperators.h"
-#include "EngineSettings.h"
 
 void* operator new(size_t size, const char* location, int line);
 void operator delete(void* obj, const char* location, int line);
 
 namespace o2
 {
+	class IPtr;
+
 	/** Object info. Contains pointer to object, child objects pointers and allocation source. */
 	struct ObjectInfo
 	{
@@ -33,6 +33,10 @@ namespace o2
 	class MemoryManager : public Singleton<MemoryManager>
 	{
 		friend class IPtr;
+
+		template<typename _type>
+		friend class ITemplPtr;
+
 		friend void* ::operator new(size_t size, const char* location, int line);
 		friend void  ::operator delete(void* obj, const char* location, int line);
 
@@ -42,9 +46,9 @@ namespace o2
 		typedef Vector<ObjectInfo*> ObjectsInfosArr;
 
 	protected:
-		ObjectsInfosArr mObjectsInfos; /** All static objects infos. */
-		PointersArr     mPointers;     /** All pointers. */
-		bool            mCurrentMark;  /** Current Garbage collection mark. */
+		ObjectsInfosArr mObjectsInfos;  /** All static objects infos. */
+		PointersArr     mPointers;      /** All pointers. */
+		bool            mCurrentGCMark; /** Current Garbage collection mark. */
 
 	protected:
 		/** Calling when object created. */

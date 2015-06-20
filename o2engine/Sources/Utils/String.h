@@ -7,12 +7,11 @@
 #include "Utils/Math/Color.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Containers/Vector.h"
-#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
 	template<typename T>
-	class TString: public IObject
+	class TString
 	{
 		T*  mData;
 		int mCapacity;

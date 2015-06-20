@@ -4,8 +4,8 @@
 
 void* operator new(size_t size, const char* location, int line)
 {
-	void* allocMemory = ::operator new(size + sizeof(void*));
-	void* object = (char*)allocMemory + sizeof(void*);
+	void* allocMemory = ::operator new(size + sizeof(o2::ObjectInfo*));
+	void* object = (char*)allocMemory + sizeof(o2::ObjectInfo*);
 	o2::ObjectInfo* info = new o2::ObjectInfo();
 	allocMemory = info;
 	o2::MemoryManager::OnObjectCreating(object, info, size, location, line);
@@ -14,35 +14,27 @@ void* operator new(size_t size, const char* location, int line)
 
 void operator delete(void* obj, const char* location, int line)
 {
-	o2::MemoryManager::OnObjectDestroying((o2::IObject*)obj);
-	::operator delete(obj);
+	o2::MemoryManager::OnObjectDestroying(obj);
+	::operator delete(o2::MemoryManager::GetObjectInfo(obj));
+	::operator delete((char*)obj - sizeof(o2::ObjectInfo*));
 }
 
 namespace o2
 {
 	void MemoryManager::OnObjectCreating(void* object, ObjectInfo* info, UInt size, const char* srcFile, int srcFileLine)
 	{
-		ObjectInfo* info = new ObjectInfo();
-		objectPtr->mObjectInfo = info;
-
-		info->mObjectPtr = objectPtr;
-
+		info->mObjectPtr = object;
 		info->mSize = size;
-		info->mMark = mInstance->mCurrentMark;
-
-		strncpy(info->mAllocSrcFile, srcFile, 127);
+		info->mMark = mInstance->mCurrentGCMark;
 		info->mAllocSrcFileLine = srcFileLine;
+		strncpy(info->mAllocSrcFile, srcFile, 127);
 
 		mInstance->mObjectsInfos.Add(info);
 	}
 
 	void MemoryManager::OnObjectDestroying(void* object)
 	{
-		if (object->mObjectInfo)
-		{
-			mInstance->mObjectsInfos.Remove(object->mObjectInfo);
-			delete object->mObjectInfo;
-		}
+		mInstance->mObjectsInfos.Remove(GetObjectInfo(object));
 	}
 
 	void MemoryManager::OnPtrCreating(IPtr* ptr)
@@ -70,19 +62,18 @@ namespace o2
 
 	void MemoryManager::CollectGarbage()
 	{
-		mInstance->mCurrentMark = !mInstance->mCurrentMark;
+		mInstance->mCurrentGCMark = !mInstance->mCurrentGCMark;
 
 		for (auto ptr : mInstance->mPointers)
 		{
-			if (ptr->mObject)
-				ptr->mObject->mObjectInfo->Mark(mInstance->mCurrentMark);
+			ptr->mObjectInfo->Mark(mInstance->mCurrentGCMark);
 		}
 
 		ObjectsInfosArr freeObjects;
 
 		for (auto obj : mInstance->mObjectsInfos)
 		{
-			if (obj->mMark != mInstance->mCurrentMark)
+			if (obj->mMark != mInstance->mCurrentGCMark)
 				freeObjects.Add(obj);
 		}
 
@@ -95,7 +86,7 @@ namespace o2
 
 	ObjectInfo* MemoryManager::GetObjectInfo(void* object)
 	{
-		return (ObjectInfo*)((char*)object - sizeof(void*));
+		return (ObjectInfo*)((char*)object - sizeof(o2::ObjectInfo*));
 	}
 
 	void ObjectInfo::Mark(bool mark)
@@ -104,8 +95,8 @@ namespace o2
 
 		for (auto ptr : mChildPointers)
 		{
-			if (ptr->mObject->mObjectInfo->mMark != mark)
-				ptr->mObject->mObjectInfo->Mark(mark);
+			if (ptr->mObjectInfo->mMark != mark)
+				ptr->mObjectInfo->Mark(mark);
 		}
 	}
 }

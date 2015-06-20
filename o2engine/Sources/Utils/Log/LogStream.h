@@ -1,14 +1,13 @@
 #pragma once
 
 #include "Utils/Containers/Vector.h"
-#include "Utils/Memory/IObject.h"
 #include "Utils/Memory/Ptr.h"
 #include "Utils/String.h"
 
 namespace o2
 {
 	/** Basic log stream. Contains interfaces of outing data, parent and child streams. */
-	class LogStream: public IObject
+	class LogStream
 	{
 	protected:
 		typedef Vector<Ptr<LogStream>> LogSteamsArr;

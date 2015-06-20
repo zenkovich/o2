@@ -3,7 +3,6 @@
 #include "Utils/Containers/Vector.h"
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/FileSystem/FileInfo.h"
-#include "Utils/Memory/IObject.h"
 #include "Utils/Memory/Ptr.h"
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
@@ -13,7 +12,7 @@ namespace o2
 	class LogStream;
 
 	/** File system, singleton. Contains basic resource path. */
-	class FileSystem: public Singleton<FileSystem>, public IObject
+	class FileSystem: public Singleton<FileSystem>
 	{
 		typedef Vector<String> StringsArr;
 		typedef Dictionary<FileType, StringsArr> ExtnsionsDict;

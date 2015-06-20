@@ -2,7 +2,6 @@
 
 #include "Utils/Containers/Vector.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Memory/IObject.h"
 #include "Utils/Singleton.h"
 
 namespace o2
@@ -11,14 +10,14 @@ namespace o2
 	typedef int VKey;
 
 	/** Input message. Containing pressed, down, released keys, cursors positions. */
-	class Input: public IObject, public Singleton<Input>
+	class Input: public Singleton<Input>
 	{
 		friend class Application;
 		friend class IApplication;
 
 	public:
 		/** Cursor definition. */
-		struct Cursor: public IObject
+		struct Cursor
 		{
 			Vec2F mPosition;
 			Vec2F mDelta;
@@ -32,7 +31,7 @@ namespace o2
 		typedef Vector<Cursor> CursorsArr;
 
 		/** Key with pressed time. */
-		struct Key: public IObject
+		struct Key
 		{
 			VKey  mKey;
 			float mPressedTime;

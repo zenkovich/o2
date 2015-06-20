@@ -2,13 +2,12 @@
 
 #include "Utils/Delegates.h"
 #include "Utils/Math/Math.h"
-#include "Utils/Memory/IObject.h"
 
 namespace o2
 {
 	/** Basic array interface. .*/
 	template<typename _type>
-	class IArray: public IObject
+	class IArray
 	{
 	public:
 		virtual IArray* Clone() const = 0;

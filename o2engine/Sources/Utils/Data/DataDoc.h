@@ -2,13 +2,12 @@
 
 #include "Utils/Containers/Vector.h"
 #include "Utils/Containers/Dictionary.h"
-#include "Utils/Memory/IObject.h"
 #include "Utils/Memory/Ptr.h"
 #include "Utils/String.h"
 
 namespace o2
 {
-	class DataNode: public IObject
+	class DataNode
 	{
 		friend class DataDoc;
 
