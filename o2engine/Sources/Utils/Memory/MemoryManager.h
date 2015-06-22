@@ -2,7 +2,6 @@
 
 #include "EngineSettings.h"
 #include "Utils/CommonTypes.h"
-#include "Utils/Singleton.h"
 #include "Utils/Containers/Vector.h"
 
 void* operator new(size_t size, const char* location, int line);
@@ -30,7 +29,7 @@ namespace o2
 	};
 
 	/** Memory manager. Storing information about all allocated objects, looks for memory leaks and collecting garbage. */
-	class MemoryManager : public Singleton<MemoryManager>
+	class MemoryManager
 	{
 		friend class IPtr;
 
@@ -45,10 +44,12 @@ namespace o2
 	public:
 		typedef Vector<ObjectInfo*> ObjectsInfosArr;
 
+		static MemoryManager* mInstance;      /** Instance pointer. */
+
 	protected:
-		ObjectsInfosArr mObjectsInfos;  /** All static objects infos. */
-		PointersArr     mPointers;      /** All pointers. */
-		bool            mCurrentGCMark; /** Current Garbage collection mark. */
+		ObjectsInfosArr       mObjectsInfos;  /** All static objects infos. */
+		PointersArr           mPointers;      /** All pointers. */
+		bool                  mCurrentGCMark; /** Current Garbage collection mark. */
 
 	protected:
 		/** Calling when object created. */

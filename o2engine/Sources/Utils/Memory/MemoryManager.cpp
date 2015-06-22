@@ -7,7 +7,8 @@ void* operator new(size_t size, const char* location, int line)
 	void* allocMemory = ::operator new(size + sizeof(o2::ObjectInfo*));
 	void* object = (char*)allocMemory + sizeof(o2::ObjectInfo*);
 	o2::ObjectInfo* info = new o2::ObjectInfo();
-	allocMemory = info;
+	o2::ObjectInfo** ff = &((o2::ObjectInfo*)allocMemory);
+	*ff = info;
 	o2::MemoryManager::OnObjectCreating(object, info, size, location, line);
 	return object;
 }

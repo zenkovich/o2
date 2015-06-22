@@ -40,6 +40,6 @@
 #include "Application/Application.h"
 
 #define INITIALIZE_O2 \
-	template<> MemoryManager* Singleton<MemoryManager>::mInstance = new MemoryManager(); \
-	template<> Debug* Singleton<Debug>::mInstance = new Debug(); \
+	MemoryManager* MemoryManager::mInstance = new MemoryManager(); \
+	template<> Ptr<Debug> Singleton<Debug>::mInstance = mnew Debug(); \
 	Dictionary<String, ISerializable*> SerializableTypesSamples::mObjectSamples

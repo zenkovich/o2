@@ -9,7 +9,7 @@ namespace o2
 {
 	Debug::Debug()
 	{
-		FileLogStream* fileLogStream = mnew FileLogStream("", "log.txt");
+		Ptr<FileLogStream> fileLogStream = mnew FileLogStream("", "log.txt");
 		mLogStream = mnew ConsoleLogStream("");
 		fileLogStream->BindStream(mLogStream);
 	}
