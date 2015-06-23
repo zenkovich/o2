@@ -127,7 +127,6 @@ namespace o2
 			for (auto ptr : mObjectInfo->mPointers)
 				ptr->ObjectReleased();
 
-			MemoryManager::OnObjectDestroying(obj);
 			delete obj;
 		}
 	}

@@ -7,17 +7,18 @@ void* operator new(size_t size, const char* location, int line)
 	void* allocMemory = ::operator new(size + sizeof(o2::ObjectInfo*));
 	void* object = (char*)allocMemory + sizeof(o2::ObjectInfo*);
 	o2::ObjectInfo* info = new o2::ObjectInfo();
-	o2::ObjectInfo** ff = &((o2::ObjectInfo*)allocMemory);
-	*ff = info;
+	*(o2::ObjectInfo**)allocMemory = info;
 	o2::MemoryManager::OnObjectCreating(object, info, size, location, line);
 	return object;
 }
 
-void operator delete(void* obj, const char* location, int line)
+void operator delete(void* allocMemory, const char* location, int line)
 {
-	o2::MemoryManager::OnObjectDestroying(obj);
-	::operator delete(o2::MemoryManager::GetObjectInfo(obj));
-	::operator delete((char*)obj - sizeof(o2::ObjectInfo*));
+	void* object = (char*)allocMemory + sizeof(o2::ObjectInfo*);
+	o2::ObjectInfo* info = *(o2::ObjectInfo**)allocMemory;
+	o2::MemoryManager::OnObjectDestroying(object);
+	::operator delete(info);
+	::operator delete(allocMemory);
 }
 
 namespace o2
@@ -87,7 +88,7 @@ namespace o2
 
 	ObjectInfo* MemoryManager::GetObjectInfo(void* object)
 	{
-		return (ObjectInfo*)((char*)object - sizeof(o2::ObjectInfo*));
+		return *(ObjectInfo**)((char*)object - sizeof(o2::ObjectInfo*));
 	}
 
 	void ObjectInfo::Mark(bool mark)

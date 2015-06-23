@@ -5,7 +5,7 @@
 #include "Utils/Containers/Vector.h"
 
 void* operator new(size_t size, const char* location, int line);
-void operator delete(void* obj, const char* location, int line);
+void  operator delete(void* allocMemory, const char* location, int line);
 
 namespace o2
 {
@@ -37,7 +37,7 @@ namespace o2
 		friend class ITemplPtr;
 
 		friend void* ::operator new(size_t size, const char* location, int line);
-		friend void  ::operator delete(void* obj, const char* location, int line);
+		friend void  ::operator delete(void* allocMemory, const char* location, int line);
 
 		typedef Vector<IPtr*> PointersArr;
 
