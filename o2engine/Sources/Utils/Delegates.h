@@ -1,27 +1,32 @@
 #pragma once
 
+#include <algorithm>
 #include <functional>
 #include <vector>
-#include <algorithm>
 
 namespace o2
 {
-//#define Function std::function
-
 	template <typename UnusedType>
 	class IFunction;
 
+	/** Basic delegate interface. */
 	template<typename _res_type, typename ... _args>
 	class IFunction <_res_type(_args ...)>
 	{
 	public:
+		/** virtual dtor. */
 		virtual ~IFunction() {}
+
+		/** Returns cloned copy of this. */
 		virtual IFunction* Clone() const = 0;
 
+		/** Invokes function with arguments. */
 		virtual _res_type Invoke(_args ... args) const = 0;
 
+		/** Returns true if other functions is equal. */
 		virtual bool Equals(IFunction* other) const = 0;
 
+		/** Invokes function with arguments as functor. */
 		_res_type operator()(_args ... args) const
 		{
 			return Invoke(args ...);
@@ -31,46 +36,55 @@ namespace o2
 	template <typename UnusedType>
 	class FunctionPtr;
 
+	/** Static function delegate. */
 	template<typename _res_type, typename ... _args>
 	class FunctionPtr <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
-		_res_type(*mFunctionPtr)(_args ... args);
+		_res_type(*mFunctionPtr)(_args ... args); /** Pointer to static function. */
 
 	public:
+		/** ctor. */
 		FunctionPtr(_res_type(*functionPtr)(_args ... args)) :
 			mFunctionPtr(functionPtr)
 		{}
 
+		/** copy-ctor. */
 		FunctionPtr(const FunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr)
 		{}
 
+		/** copy-operator. */
 		FunctionPtr& operator=(const FunctionPtr& other)
 		{
 			mFunctionPtr = other.mFunctionPtr;
 			return *this;
 		}
 
+		/** Equal operator. */
 		bool operator==(const FunctionPtr& other) const
 		{
 			return mFunctionPtr == other.mFunctionPtr;
 		}
 
+		/** Not equal operator. */
 		bool operator!=(const FunctionPtr& other) const
 		{
 			return mFunctionPtr != other.mFunctionPtr;
 		}
 
+		/** Returns cloned copy of this. */
 		IFunction* Clone() const
 		{
 			return new FunctionPtr(*this);
 		}
 
+		/** Invokes function with arguments as functor. */
 		_res_type Invoke(_args ... args) const
 		{
 			return mFunctionPtr(args ...);
 		}
 
+		/** Returns true if functions is equal. */
 		bool Equals(IFunction* other) const
 		{
 			FunctionPtr* otherFuncPtr = dynamic_cast<FunctionPtr*>(other);
@@ -81,21 +95,25 @@ namespace o2
 		}
 	};
 
+	/** Object function delegate. */
 	template<typename _class_type, typename _res_type, typename ... _args>
 	class ObjFunctionPtr : public IFunction<_res_type(_args ...)>
 	{
-		_res_type(_class_type::*mFunctionPtr)(_args ... args);
-		_class_type* mObject;
+		_res_type(_class_type::*mFunctionPtr)(_args ... args); /** Pointer to function. */
+		_class_type* mObject;                                  /** Pointer to function's owner object. */
 
 	public:
+		/** ctor. */
 		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)) :
 			mFunctionPtr(functionPtr), mObject(object)
 		{}
 
+		/** copy-ctor. */
 		ObjFunctionPtr(const ObjFunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
 		{}
 
+		/** Copy-operator. */
 		ObjFunctionPtr& operator=(const ObjFunctionPtr& other)
 		{
 			mFunctionPtr = other.mFunctionPtr;
@@ -103,26 +121,31 @@ namespace o2
 			return *this;
 		}
 
+		/** Equals operator. */
 		bool operator==(const ObjFunctionPtr& other) const
 		{
 			return mObject == other.mObject && mFunctionPtr == other.mFunctionPtr;
 		}
 
+		/** Not equals operator. */
 		bool operator!=(const ObjFunctionPtr& other) const
 		{
 			return mObject != other.mObject || mFunctionPtr != other.mFunctionPtr;
 		}
 
+		/** Returns cloned copy of this. */
 		IFunction* Clone() const
 		{
 			return new ObjFunctionPtr(*this);
 		}
 
+		/** Invokes function with arguments as functor. */
 		_res_type Invoke(_args ... args) const
 		{
 			return (mObject->*mFunctionPtr)(args ...);
 		}
 		
+		/** Returns true if functions is equal. */
 		bool Equals(IFunction* other) const
 		{
 			ObjFunctionPtr* otherFuncPtr = dynamic_cast<ObjFunctionPtr*>(other);
@@ -136,9 +159,11 @@ namespace o2
 	template <typename UnusedType>
 	class SharedLambda;
 
+	/** Shared lambda delegate. */
 	template<typename _res_type, typename ... _args>
 	class SharedLambda <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
+		/** Lambda invoker interface. */
 		struct ILambdaInvoker
 		{
 			virtual ~ILambdaInvoker() {}
@@ -148,52 +173,61 @@ namespace o2
 			virtual int RefCount() const = 0;
 		};
 
+		/** Template lambda invoker. */
 		template<typename _lambda_type>
 		struct LambdaInvoker : ILambdaInvoker
 		{
-			_lambda_type mLambda;
-			int          mReferences;
+			_lambda_type mLambda;     /** Lambda object (anonymous functor). */
+			int          mReferences; /** References count to this. */
 
+			/** ctor. */
 			LambdaInvoker(const _lambda_type& lambda) :
 				mLambda(lambda), mReferences(1)
 			{}
 
+			/** Invokes lambda. */
 			_res_type Invoke(_args ... args) const
 			{
 				return mLambda(args ...);
 			}
 
+			/** Increases references count. */
 			void IncRef()
 			{
 				mReferences++;
 			}
 
+			/** Decreases references count. */
 			void DecRef()
 			{
 				mReferences--;
 			}
 
+			/** Returns count of references. */
 			int RefCount() const
 			{
 				return mReferences;
 			}
 		};
 
-		ILambdaInvoker* mInvokerPtr;
+		ILambdaInvoker* mInvokerPtr; /** Lambda invoker pinter. */
 
 	public:
+		/** ctor. */
 		template<typename _lambda_type>
 		SharedLambda(const _lambda_type& lambda) :
 			mInvokerPtr(new LambdaInvoker<_lambda_type>(lambda))
 		{
 		}
 
+		/** copy-ctor. */
 		SharedLambda(const SharedLambda& other) :
 			mInvokerPtr(other.mInvokerPtr)
 		{
 			mInvokerPtr->IncRef();
 		}
 
+		/** dtor. */
 		~SharedLambda()
 		{
 			mInvokerPtr->DecRef();
@@ -201,6 +235,7 @@ namespace o2
 				delete mInvokerPtr;
 		}
 
+		/** copy operator. */
 		SharedLambda& operator=(const SharedLambda& other)
 		{
 			mInvokerPtr->DecRef();
@@ -213,25 +248,31 @@ namespace o2
 			return *this;
 		}
 
+		/** Returns cloned copy of this. */
 		IFunction* Clone() const
 		{
 			return new SharedLambda(*this);
 		}
 
+		/** Invokes function with arguments as functor. */
 		_res_type Invoke(_args ... args) const
 		{
 			return mInvokerPtr->Invoke(args ...);
 		}
 
+		/** Equal operator. */
 		bool operator==(const SharedLambda& other) const
 		{
 			return mInvokerPtr == other.mInvokerPtr;
 		}
 
+		/** Not equal operator. */
 		bool operator!=(const SharedLambda& other) const
 		{
 			return mInvokerPtr != other.mInvokerPtr;
 		}
+
+		/** Returns true if functions is equals. */
 		bool Equals(IFunction* other) const
 		{
 			SharedLambda* otherFuncPtr = dynamic_cast<SharedLambda*>(other);
@@ -245,57 +286,67 @@ namespace o2
 	template <typename UnusedType>
 	class Function;
 
+	/** Combined delegate. Can contain many other functors. */
 	template<typename _res_type, typename ... _args>
 	class Function <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
 		typedef std::vector<IFunction*> FunctionsVec;
 
-		FunctionsVec mFunctions;
+		FunctionsVec mFunctions; /** Vector of functors. */
 
 	public:
+		/** ctor. */
 		Function()
 		{
 		}
 
+		/** copy-ctor. */
 		Function(const Function& other)
 		{
 			for (auto func : other.mFunctions)
 				mFunctions.push_back(func->Clone());
 		}
 
+		/** ctor from IFunction. */
 		Function(const IFunction& func)
 		{
 			mFunctions.push_back(func.Clone());
 		}
 
+		/** ctor from static function pointer. */
 		template<typename _func_type>
 		Function(const _func_type* func)
 		{
 			mFunctions.push_back(new FunctionPtr<_res_type(_args ...)>(func));
 		}
 
+		/** ctor from lambda. */
 		template<typename _lambda_type>
 		Function(const _lambda_type& lambda)
 		{
 			mFunctions.push_back(new SharedLambda<_res_type(_args ...)>(lambda));
 		}
 
+		/** ctor from object and his function. */
 		template<typename _class_type>
 		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 		{
 			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
+		/** dtor. */
 		~Function()
 		{
 			Clear();
 		}
 
+		/** Returns cloned copy of this. */
 		IFunction* Clone() const
 		{
 			return new Function(*this);
 		}
 
+		/** Removing all inside functions. */
 		void Clear()
 		{
 			for (auto func : mFunctions)
@@ -304,35 +355,27 @@ namespace o2
 			mFunctions.clear();
 		}
 
-// 		template<typename _func_type>
-// 		void Add(const void* func)
-// 		{
-// 			mFunctions.push_back(new FunctionPtr<_res_type(_args ...)>((_func_type*)func));
-// 		}
-
-// 		template<typename _lambda_type>
-// 		void Add(const _lambda_type* lambda)
-// 		{
-// 			mFunctions.push_back(new SharedLambda<_res_type(_args ...)>(*lambda));
-// 		}
-// 
+		/** Add delegate to inside list. */
 		template<typename _class_type>
 		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 		{
 			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
+		/** Add delegate to inside list. */
 		void Add(const IFunction& func)
 		{
 			mFunctions.push_back(func.Clone());
 		}
 
+		/** Add delegate to inside list. */
 		void Add(const Function& funcs)
 		{
 			for (auto func : funcs.mFunctions)
 				mFunctions.push_back(func->Clone());
 		}
 
+		/** Add delegate to inside list. */
 		void Remove(IFunction& func)
 		{
 			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); ++funcIt)
@@ -346,6 +389,7 @@ namespace o2
 			}
 		}
 
+		/** Remove delegate from list. */
 		void Remove(const Function& func)
 		{
 			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); )
@@ -369,12 +413,14 @@ namespace o2
 			}
 		}
 
+		/** Remove delegate from list. */
 		template<typename _class_type>
 		void Remove(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 		{
 			Remove(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
+		/** Returns true, if this contains the delegate. */
 		bool Contains(const IFunction& func) const
 		{
 			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); ++funcIt)
@@ -386,11 +432,13 @@ namespace o2
 			return false;
 		}
 
+		/** Invokes function with arguments as functor. */
 		_res_type operator()(_args ... args) const
 		{
 			return Invoke(args ...);
 		}
 
+		/** Invokes function with arguments. */
 		_res_type Invoke(_args ... args) const
 		{
 			if (mFunctions.size() == 0)
@@ -403,6 +451,7 @@ namespace o2
 			return (*it)->Invoke(args ...);
 		}
 
+		/** Copy operator. */
 		Function<_res_type(_args ...)>& operator=(const IFunction& func)
 		{
 			Clear();
@@ -410,6 +459,7 @@ namespace o2
 			return *this;
 		}
 
+		/** Copy operator. */
 		Function<_res_type(_args ...)>& operator=(const Function& other)
 		{
 			Clear();
@@ -417,6 +467,7 @@ namespace o2
 			return *this;
 		}		
 
+		/** Equal operator. */
 		bool operator==(const Function& other) const
 		{
 			for (auto func : mFunctions)
@@ -438,11 +489,13 @@ namespace o2
 			return true;
 		}
 
+		/** Not equal operator. */
 		bool operator!=(const Function& other) const
 		{
 			return !(*this == other);
 		}
 
+		/** Equal operator. */
 		bool operator==(const IFunction& func) const
 		{
 			if (mInvokers.size() != 1)
@@ -451,16 +504,19 @@ namespace o2
 			return mFunctions[0]->Equals(&func);
 		}
 
+		/** Not equal operator. */
 		bool operator!=(const IFunction& func) const
 		{
 			return !(*this == func);
 		}
 
+		/** Returns true, when delegates list isn't empty. */
 		operator bool() const
 		{
 			return mFunctions.size() > 0;
 		}
 
+		/** Returns true when functions is equal. */
 		bool Equals(IFunction* other) const
 		{
 			Function* otherFuncPtr = dynamic_cast<Function*>(other);
@@ -470,6 +526,7 @@ namespace o2
 			return false;
 		}
 
+		/** Add delegate to inside list. */
 		Function<_res_type(_args ...)> operator+(const IFunction& func) const
 		{
 			Function<_res_type(_args ...)> res(*this);
@@ -477,27 +534,14 @@ namespace o2
 			return res;
 		}
 
+		/** Add delegate to inside list. */
 		Function<_res_type(_args ...)>& operator+=(const IFunction& func)
 		{
 			Add(func);
 			return *this;
 		}
-		
-// 		template<typename _func_type>
-// 		Functions<_res_type(_args ...)> operator+(const _func_type* func)
-// 		{
-// 			Functions<_res_type(_args ...)> res(*this);
-// 			res.Add(func);
-// 			return res;
-// 		}
 
-// 		template<typename _func_type>
-// 		Functions<_res_type(_args ...)>& operator+=(const _func_type* func)
-// 		{
-// 			Add(func);
-// 			return *this;
-// 		}
-
+		/** Add delegate to inside list. */
 		Function<_res_type(_args ...)> operator+(const Function& other) const
 		{
 			Function<_res_type(_args ...)> res(*this);
@@ -505,12 +549,14 @@ namespace o2
 			return res;
 		}
 
+		/** Add delegate to inside list. */
 		Function<_res_type(_args ...)>& operator+=(const Function& other)
 		{
 			Add(other);
 			return *this;
 		}
 
+		/** Removes delegate from list. */
 		Function<_res_type(_args ...)> operator-(const IFunction& func) const
 		{
 			Function<_res_type(_args ...)> res(*this);
@@ -518,27 +564,14 @@ namespace o2
 			return res;
 		}
 
+		/** Removes delegate from list. */
 		Function<_res_type(_args ...)>& operator-=(IFunction& func)
 		{
 			Remove(func);
 			return *this;
 		}
 
-// 		template<typename _func_type>
-// 		Functions<_res_type(_args ...)> operator-(const _func_type* func)
-// 		{
-// 			Functions<_res_type(_args ...)> res(*this);
-// 			res.Remove(func);
-// 			return res;
-// 		}
-// 
-// 		template<typename _func_type>
-// 		Functions<_res_type(_args ...)>& operator-=(const _func_type* func)
-// 		{
-// 			Remove(func);
-// 			return *this;
-// 		}
-
+		/** Removes delegate from list. */
 		Function<_res_type(_args ...)> operator-(const Function& other) const
 		{
 			Function<_res_type(_args ...)> res(*this);
@@ -546,6 +579,7 @@ namespace o2
 			return res;
 		}
 
+		/** Removes delegate from list. */
 		Function<_res_type(_args ...)>& operator-=(const Function& other)
 		{
 			Remove(other);

@@ -1,7 +1,7 @@
 #include "Application.h"
 
-#include "Utils/Log/LogStream.h"
 #include "Application/Input.h"
+#include "Utils/Log/LogStream.h"
 
 namespace o2
 {
@@ -18,9 +18,9 @@ namespace o2
 
 	Application::~Application()
 	{
-		// 		SafeRelease(mUIController);
-		// 		SafeRelease(mRenderSystem);
-		// 		SafeRelease(mTimer);
+		//SafeRelease(mUIController);
+		//SafeRelease(mRenderSystem);
+		//SafeRelease(mTimer);
 	}
 
 	void Application::InitializeWindow()

@@ -10,18 +10,18 @@
 namespace o2
 {
 	template<typename _type>
-	class Array: public IArray<_type>
+	class Vector: public IArray<_type>
 	{
 	public:
 		class Iterator
 		{
-			friend class Array<_type>;
+			friend class Vector<_type>;
 
 			_type* mValuePtr;
-			Array* mArray;
+			Vector* mArray;
 
 		public:
-			Iterator(Array* arr, _type* valuePtr);
+			Iterator(Vector* arr, _type* valuePtr);
 
 			int       Index() const;
 			_type&    Value();
@@ -42,6 +42,8 @@ namespace o2
 			bool operator<(const Iterator& itr) const;
 			bool operator>=(const Iterator& itr) const;
 			bool operator<=(const Iterator& itr) const;
+			bool operator==(const Iterator& itr) const;
+			bool operator!=(const Iterator& itr) const;
 
 			operator bool() const;
 
@@ -51,13 +53,13 @@ namespace o2
 
 		class ConstIterator
 		{
-			friend class Array<_type>;
+			friend class Vector<_type>;
 
 			_type*       mValuePtr;
-			const Array* mArray;
+			const Vector* mArray;
 
 		public:
-			ConstIterator(const Array* arr, _type* valuePtr);
+			ConstIterator(const Vector* arr, _type* valuePtr);
 
 			int          Index() const;
 			const _type& Value() const;
@@ -78,6 +80,8 @@ namespace o2
 			bool operator<(const ConstIterator& itr) const;
 			bool operator>=(const ConstIterator& itr) const;
 			bool operator<=(const ConstIterator& itr) const;
+			bool operator==(const Iterator& itr) const;
+			bool operator!=(const Iterator& itr) const;
 
 			operator bool() const;
 
@@ -91,27 +95,27 @@ namespace o2
 		int     mCapacity;
 
 	public:
-		Array(int capacity = 5);
-		Array(const Array& arr);
-		Array(const IArray<_type>* arr);
-		virtual ~Array();
+		Vector(int capacity = 5);
+		Vector(const Vector& arr);
+		Vector(const IArray<_type>* arr);
+		virtual ~Vector();
 
-		Array& operator=(const Array& arr);
+		Vector& operator=(const Vector& arr);
 
-		Array  operator+(const Array& arr) const;
-		Array& operator+=(const Array& arr);
+		Vector  operator+(const Vector& arr) const;
+		Vector& operator+=(const Vector& arr);
 
-		Array  operator+(const _type& value) const;
-		Array& operator+=(const _type& value);
+		Vector  operator+(const _type& value) const;
+		Vector& operator+=(const _type& value);
 
-		Array  operator-(const Array& arr) const;
-		Array& operator-=(const Array& arr);
+		Vector  operator-(const Vector& arr) const;
+		Vector& operator-=(const Vector& arr);
 
-		Array  operator-(const _type& value) const;
-		Array& operator-=(const _type& value);
+		Vector  operator-(const _type& value) const;
+		Vector& operator-=(const _type& value);
 
-		bool operator==(const Array& arr) const;
-		bool operator!=(const Array& arr) const;
+		bool operator==(const Vector& arr) const;
+		bool operator!=(const Vector& arr) const;
 
 		IArray* Clone() const;
 
@@ -144,13 +148,13 @@ namespace o2
 
 		void Sort(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer);
 
-		Array FindAll(const Function<bool(const _type&)>& match) const;
-		Array Where(const Function<bool(const _type&)>& match) const;
+		Vector FindAll(const Function<bool(const _type&)>& match) const;
+		Vector Where(const Function<bool(const _type&)>& match) const;
 
 		template<typename _sel_type>
-		Array<_sel_type> Select(const Function<_sel_type(const _type&)>& selector) const;
+		Vector<_sel_type> Select(const Function<_sel_type(const _type&)>& selector) const;
 
-		Array Take(int count) const;
+		Vector Take(int count) const;
 
 		Iterator Begin();
 		Iterator End();
@@ -173,44 +177,44 @@ namespace o2
 #pragma region Array::Iterator implementation
 
 	template<typename _type>
-	Array<_type>::Iterator::Iterator(Array<_type>* arr, _type* valuePtr):
+	Vector<_type>::Iterator::Iterator(Vector<_type>* arr, _type* valuePtr):
 		mValuePtr(valuePtr), mArray(arr)
 	{
 	}
 
 	template<typename _type>
-	int Array<_type>::Iterator::Index() const
+	int Vector<_type>::Iterator::Index() const
 	{
 		return mValuePtr - mArray->mValues;
 	}
 
 	template<typename _type>
-	bool Array<_type>::Iterator::IsValid() const
+	bool Vector<_type>::Iterator::IsValid() const
 	{
 		return !(mValuePtr < mArray->mValues || mValuePtr >= mArray->mValues + mArray->mCount);
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator Array<_type>::Iterator::operator+(int offs) const
+	typename Vector<_type>::Iterator Vector<_type>::Iterator::operator+(int offs) const
 	{
 		return Iterator(mArray, mValuePtr + offs);
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator Array<_type>::Iterator::operator-(int offs) const
+	typename Vector<_type>::Iterator Vector<_type>::Iterator::operator-(int offs) const
 	{
 		return Iterator(mArray, mValuePtr - offs);
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator& Array<_type>::Iterator::operator++()
+	typename Vector<_type>::Iterator& Vector<_type>::Iterator::operator++()
 	{
 		mValuePtr++;
 		return *this;
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator Array<_type>::Iterator::operator++(int)
+	typename Vector<_type>::Iterator Vector<_type>::Iterator::operator++(int)
 	{
 		Iterator temp = *this;
 		mValuePtr++;
@@ -218,14 +222,14 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator& Array<_type>::Iterator::operator--()
+	typename Vector<_type>::Iterator& Vector<_type>::Iterator::operator--()
 	{
 		mValuePtr--;
 		return *this;
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator Array<_type>::Iterator::operator--(int)
+	typename Vector<_type>::Iterator Vector<_type>::Iterator::operator--(int)
 	{
 		Iterator temp = *this;
 		mValuePtr--;
@@ -233,63 +237,75 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator& Array<_type>::Iterator::operator+=(int offs)
+	typename Vector<_type>::Iterator& Vector<_type>::Iterator::operator+=(int offs)
 	{
 		mValuePtr += offs;
 		return *this;
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator& Array<_type>::Iterator::operator-=(int offs)
+	typename Vector<_type>::Iterator& Vector<_type>::Iterator::operator-=(int offs)
 	{
 		mValuePtr -= offs;
 		return *this;
 	}
 
 	template<typename _type>
-	bool Array<_type>::Iterator::operator>(const Iterator& itr) const
+	bool Vector<_type>::Iterator::operator>(const Iterator& itr) const
 	{
 		return mValuePtr > itr->mValuePtr;
 	}
 
 	template<typename _type>
-	bool Array<_type>::Iterator::operator<(const Iterator& itr) const
+	bool Vector<_type>::Iterator::operator<(const Iterator& itr) const
 	{
 		return mValuePtr < itr->mValuePtr;
 	}
 
 	template<typename _type>
-	bool Array<_type>::Iterator::operator>=(const Iterator& itr) const
+	bool Vector<_type>::Iterator::operator>=(const Iterator& itr) const
 	{
 		return mValuePtr >= itr->mValuePtr;
 	}
 
 	template<typename _type>
-	bool Array<_type>::Iterator::operator<=(const Iterator& itr) const
+	bool Vector<_type>::Iterator::operator<=(const Iterator& itr) const
 	{
 		return mValuePtr <= itr->mValuePtr;
 	}
 
 	template<typename _type>
-	Array<_type>::Iterator::operator bool() const
+	bool Vector<_type>::Iterator::operator==(const Iterator& itr) const
+	{
+		return mValuePtr == itr.mValuePtr && mArray == itr.mArray;
+	}
+
+	template<typename _type>
+	bool Vector<_type>::Iterator::operator!=(const Iterator& itr) const
+	{
+		return mValuePtr != itr.mValuePtr || mArray != itr.mArray;
+	}
+
+	template<typename _type>
+	Vector<_type>::Iterator::operator bool() const
 	{
 		return IsValid();
 	}
 
 	template<typename _type>
-	_type* Array<_type>::Iterator::operator->()
+	_type* Vector<_type>::Iterator::operator->()
 	{
 		return &Value();
 	}
 
 	template<typename _type>
-	_type& Array<_type>::Iterator::operator*()
+	_type& Vector<_type>::Iterator::operator*()
 	{
 		return Value();
 	}
 
 	template<typename _type>
-	_type& Array<_type>::Iterator::Value()
+	_type& Vector<_type>::Iterator::Value()
 	{
 		if (CONTAINERS_DEBUG)
 			Assert(mValuePtr >= mArray->mValues && mValuePtr <= mArray->mValues + mArray->mCount, "Array iterator is out of range");
@@ -302,44 +318,44 @@ namespace o2
 #pragma region Array::ConstIterator implementation
 
 	template<typename _type>
-	Array<_type>::ConstIterator::ConstIterator(const Array<_type>* arr, _type* valuePtr):
+	Vector<_type>::ConstIterator::ConstIterator(const Vector<_type>* arr, _type* valuePtr):
 		mArray(arr), mValuePtr(valuePtr)
 	{
 	}
 
 	template<typename _type>
-	int Array<_type>::ConstIterator::Index() const
+	int Vector<_type>::ConstIterator::Index() const
 	{
 		return mValuePtr - mArray->mValues;
 	}
 
 	template<typename _type>
-	bool Array<_type>::ConstIterator::IsValid() const
+	bool Vector<_type>::ConstIterator::IsValid() const
 	{
 		return !(mValuePtr < mArray->mValues || mValuePtr >= mArray->mValues + mArray->mCount);
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator Array<_type>::ConstIterator::operator+(int offs) const
+	typename Vector<_type>::ConstIterator Vector<_type>::ConstIterator::operator+(int offs) const
 	{
 		return ConstIterator(mArray, mValuePtr + offs);
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator Array<_type>::ConstIterator::operator-(int offs) const
+	typename Vector<_type>::ConstIterator Vector<_type>::ConstIterator::operator-(int offs) const
 	{
 		return ConstIterator(mArray, mValuePtr - offs);
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator& Array<_type>::ConstIterator::operator++()
+	typename Vector<_type>::ConstIterator& Vector<_type>::ConstIterator::operator++()
 	{
 		mValuePtr++;
 		return *this;
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator Array<_type>::ConstIterator::operator++(int)
+	typename Vector<_type>::ConstIterator Vector<_type>::ConstIterator::operator++(int)
 	{
 		ConstIterator temp = *this;
 		mValuePtr++;
@@ -347,14 +363,14 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator& Array<_type>::ConstIterator::operator--()
+	typename Vector<_type>::ConstIterator& Vector<_type>::ConstIterator::operator--()
 	{
 		mValuePtr--;
 		return *this;
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator Array<_type>::ConstIterator::operator--(int)
+	typename Vector<_type>::ConstIterator Vector<_type>::ConstIterator::operator--(int)
 	{
 		ConstIterator temp = *this;
 		mValuePtr--;
@@ -362,63 +378,75 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator& Array<_type>::ConstIterator::operator+=(int offs)
+	typename Vector<_type>::ConstIterator& Vector<_type>::ConstIterator::operator+=(int offs)
 	{
 		mValuePtr += offs;
 		return *this;
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator& Array<_type>::ConstIterator::operator-=(int offs)
+	typename Vector<_type>::ConstIterator& Vector<_type>::ConstIterator::operator-=(int offs)
 	{
 		mValuePtr -= offs;
 		return *this;
 	}
 
 	template<typename _type>
-	bool Array<_type>::ConstIterator::operator>(const ConstIterator& itr) const
+	bool Vector<_type>::ConstIterator::operator>(const ConstIterator& itr) const
 	{
 		return mValuePtr > itr->mValuePtr;
 	}
 
 	template<typename _type>
-	bool Array<_type>::ConstIterator::operator<(const ConstIterator& itr) const
+	bool Vector<_type>::ConstIterator::operator<(const ConstIterator& itr) const
 	{
 		return mValuePtr < itr->mValuePtr;
 	}
 
 	template<typename _type>
-	bool Array<_type>::ConstIterator::operator>=(const ConstIterator& itr) const
+	bool Vector<_type>::ConstIterator::operator>=(const ConstIterator& itr) const
 	{
 		return mValuePtr >= itr->mValuePtr;
 	}
 
 	template<typename _type>
-	bool Array<_type>::ConstIterator::operator<=(const ConstIterator& itr) const
+	bool Vector<_type>::ConstIterator::operator<=(const ConstIterator& itr) const
 	{
 		return mValuePtr <= itr->mValuePtr;
 	}
 
 	template<typename _type>
-	Array<_type>::ConstIterator::operator bool() const
+	bool Vector<_type>::ConstIterator::operator==(const Iterator& itr) const
+	{
+		return mValuePtr == itr.mValuePtr && mArray == itr.mArray;
+	}
+
+	template<typename _type>
+	bool Vector<_type>::ConstIterator::operator!=(const Iterator& itr) const
+	{
+		return mValuePtr != itr.mValuePtr || mArray != itr.mArray;
+	}
+
+	template<typename _type>
+	Vector<_type>::ConstIterator::operator bool() const
 	{
 		return IsValid();
 	}
 
 	template<typename _type>
-	const _type* const Array<_type>::ConstIterator::operator->()
+	const _type* const Vector<_type>::ConstIterator::operator->()
 	{
 		return &Value();
 	}
 
 	template<typename _type>
-	const _type& Array<_type>::ConstIterator::operator*()
+	const _type& Vector<_type>::ConstIterator::operator*()
 	{
 		return Value();
 	}
 
 	template<typename _type>
-	const _type& Array<_type>::ConstIterator::Value() const
+	const _type& Vector<_type>::ConstIterator::Value() const
 	{
 		if (CONTAINERS_DEBUG)
 			Assert(mValuePtr >= mArray->mValues && mValuePtr <= mArray->mValues + mArray->mCount, "Array iterator is out of range");
@@ -431,7 +459,7 @@ namespace o2
 #pragma region Array implementation
 
 	template<typename _type>
-	Array<_type>::Array(int capacity /*= 5*/)
+	Vector<_type>::Vector(int capacity /*= 5*/)
 	{
 		if (CONTAINERS_DEBUG)
 			Assert(capacity > 0, "Can't initialize array with empty capacity");
@@ -442,7 +470,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Array<_type>::Array(const Array& arr)
+	Vector<_type>::Vector(const Vector& arr)
 	{
 		mValues = (_type*)malloc(sizeof(_type)*arr.mCapacity);
 		mCapacity = arr.mCapacity;
@@ -453,7 +481,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Array<_type>::Array(const IArray<_type>* arr)
+	Vector<_type>::Vector(const IArray<_type>* arr)
 	{
 		mCount = arr->Count();
 		mCapacity = GetReservingSize(mCount);
@@ -464,20 +492,20 @@ namespace o2
 	}
 
 	template<typename _type>
-	Array<_type>::~Array()
+	Vector<_type>::~Vector()
 	{
 		Clear();
 		free(mValues);
 	}
 
 	template<typename _type>
-	IArray<_type>* Array<_type>::Clone() const
+	IArray<_type>* Vector<_type>::Clone() const
 	{
-		return new Array<_type>(this);
+		return new Vector<_type>(this);
 	}
 
 	template<typename _type>
-	Array<_type>& Array<_type>::operator=(const Array<_type>& arr)
+	Vector<_type>& Vector<_type>::operator=(const Vector<_type>& arr)
 	{
 		Reserve(arr.mCapacity);
 
@@ -493,30 +521,30 @@ namespace o2
 	}
 
 	template<typename _type>
-	Array<_type> Array<_type>::operator+(const Array<_type>& arr) const
+	Vector<_type> Vector<_type>::operator+(const Vector<_type>& arr) const
 	{
-		Array<_type> res(*this);
+		Vector<_type> res(*this);
 		res.Add(arr);
 		return res;
 	}
 
 	template<typename _type>
-	Array<_type>& Array<_type>::operator+=(const Array<_type>& arr)
+	Vector<_type>& Vector<_type>::operator+=(const Vector<_type>& arr)
 	{
 		Add(arr);
 		return *this;
 	}
 
 	template<typename _type>
-	Array<_type> Array<_type>::operator+(const _type& value) const
+	Vector<_type> Vector<_type>::operator+(const _type& value) const
 	{
-		Array<_type> res(*this);
+		Vector<_type> res(*this);
 		res.Add(value);
 		return res;
 	}
 
 	template<typename _type>
-	Array<_type>& Array<_type>::operator+=(const _type& value)
+	Vector<_type>& Vector<_type>::operator+=(const _type& value)
 	{
 		Add(value);
 		return *this;
@@ -524,37 +552,37 @@ namespace o2
 
 
 	template<typename _type>
-	Array<_type> Array<_type>::operator-(const Array<_type>& arr) const
+	Vector<_type> Vector<_type>::operator-(const Vector<_type>& arr) const
 	{
-		Array<_type> res(*this);
+		Vector<_type> res(*this);
 		res.Remove(arr);
 		return res;
 	}
 
 	template<typename _type>
-	Array<_type>& Array<_type>::operator-=(const Array<_type>& arr)
+	Vector<_type>& Vector<_type>::operator-=(const Vector<_type>& arr)
 	{
 		Remove(arr);
 		return *this;
 	}
 
 	template<typename _type>
-	Array<_type> Array<_type>::operator-(const _type& value) const
+	Vector<_type> Vector<_type>::operator-(const _type& value) const
 	{
-		Array<_type> res(*this);
+		Vector<_type> res(*this);
 		res.Remove(value);
 		return res;
 	}
 
 	template<typename _type>
-	Array<_type>& Array<_type>::operator-=(const _type& value)
+	Vector<_type>& Vector<_type>::operator-=(const _type& value)
 	{
 		Remove(value);
 		return *this;
 	}
 
 	template<typename _type>
-	bool Array<_type>::operator==(const Array<_type>& arr) const
+	bool Vector<_type>::operator==(const Vector<_type>& arr) const
 	{
 		if (arr.mCount != mCount)
 			return false;
@@ -569,25 +597,25 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool Array<_type>::operator!=(const Array<_type>& arr) const
+	bool Vector<_type>::operator!=(const Vector<_type>& arr) const
 	{
 		return !(*this == arr);
 	}
 
 	template<typename _type>
-	int Array<_type>::Count() const
+	int Vector<_type>::Count() const
 	{
 		return  mCount;
 	}
 
 	template<typename _type>
-	int Array<_type>::Capacity() const
+	int Vector<_type>::Capacity() const
 	{
 		return mCapacity;
 	}
 
 	template<typename _type>
-	void Array<_type>::Resize(int newCount)
+	void Vector<_type>::Resize(int newCount)
 	{
 		if (CONTAINERS_DEBUG)
 			Assert(newCount > 0, "Can't resize array to zero size");
@@ -609,7 +637,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Array<_type>::Reserve(int newCapacity)
+	void Vector<_type>::Reserve(int newCapacity)
 	{
 		if (newCapacity < mCapacity)
 			newCapacity = mCapacity;
@@ -623,7 +651,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type& Array<_type>::Get(int idx) const
+	_type& Vector<_type>::Get(int idx) const
 	{
 		if (CONTAINERS_DEBUG)
 			Assert(idx >= 0 || idx < mCount, "Can't get array element: index out of range");
@@ -632,7 +660,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Array<_type>::Set(int idx, const _type& value)
+	void Vector<_type>::Set(int idx, const _type& value)
 	{
 		if (CONTAINERS_DEBUG)
 			Assert(idx >= 0 || idx < mCount, "Can't set array element: index out of range");
@@ -641,7 +669,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type& Array<_type>::Add(const _type& value)
+	_type& Vector<_type>::Add(const _type& value)
 	{
 		if (mCount == mCapacity)
 			Reserve(GetReservingSize(mCount + 1));
@@ -653,7 +681,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Array<_type>::Add(const IArray<_type>& arr)
+	void Vector<_type>::Add(const IArray<_type>& arr)
 	{
 		int arrCount = arr.Count();
 		if (mCount + arrCount >= mCapacity)
@@ -666,7 +694,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type Array<_type>::PopBack()
+	_type Vector<_type>::PopBack()
 	{
 		if (CONTAINERS_DEBUG)
 			Assert(mCount > 0, "Can't pop value from array: no values");
@@ -678,7 +706,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type& Array<_type>::Insert(const _type& value, int position)
+	_type& Vector<_type>::Insert(const _type& value, int position)
 	{
 		if (CONTAINERS_DEBUG)
 			Assert(position >= 0 || position < mCount, "Can't insert element: index out of range");
@@ -701,7 +729,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Array<_type>::Insert(const IArray<_type>& arr, int position)
+	void Vector<_type>::Insert(const IArray<_type>& arr, int position)
 	{
 		int arrCount = arr.Count();
 		if (mCount + arrCount >= mCapacity)
@@ -722,7 +750,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	int Array<_type>::Find(const _type& value) const
+	int Vector<_type>::Find(const _type& value) const
 	{
 		for (int i = 0; i < mCount; i++)
 		if (mValues[i] == value)
@@ -732,7 +760,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool Array<_type>::Contains(const _type& value) const
+	bool Vector<_type>::Contains(const _type& value) const
 	{
 		for (int i = 0; i < mCount; i++)
 		if (mValues[i] == value)
@@ -742,7 +770,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool Array<_type>::RemoveAt(int idx)
+	bool Vector<_type>::RemoveAt(int idx)
 	{
 		if (idx < 0 || idx >= mCount)
 			return false;
@@ -758,7 +786,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool Array<_type>::RemoveRange(int begin, int end)
+	bool Vector<_type>::RemoveRange(int begin, int end)
 	{
 		if (begin < 0 || end < 0 || begin >= mCount || end >= mCount || begin > end)
 			return false;
@@ -777,7 +805,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool Array<_type>::Remove(const _type& value)
+	bool Vector<_type>::Remove(const _type& value)
 	{
 		int idx = Find(value);
 		if (idx < 0)
@@ -788,14 +816,14 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator Array<_type>::Remove(const Iterator& it)
+	typename Vector<_type>::Iterator Vector<_type>::Remove(const Iterator& it)
 	{
 		RemoveAt(it.Index());
 		return it;
 	}
 
 	template<typename _type>
-	void Array<_type>::Clear()
+	void Vector<_type>::Clear()
 	{
 		for (int i = 0; i < mCount; i++)
 			mValues[i].~_type();
@@ -804,19 +832,19 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Array<_type>::Sort(const Function<bool(const _type&, const _type&)>& pred /*= Math::Fewer*/)
+	void Vector<_type>::Sort(const Function<bool(const _type&, const _type&)>& pred /*= Math::Fewer*/)
 	{
 		QuickSort(pred, 0, mCount - 1);
 	}
 
 	template<typename _type>
-	int Array<_type>::GetReservingSize(int size)
+	int Vector<_type>::GetReservingSize(int size)
 	{
 		return (int)((float)size*1.5f);
 	}
 
 	template<typename _type>
-	void Array<_type>::QuickSort(const Function<bool(const _type&, const _type&)>& pred, int left, int right)
+	void Vector<_type>::QuickSort(const Function<bool(const _type&, const _type&)>& pred, int left, int right)
 	{
 		int i = left, j = right;
 		_type tmp;
@@ -850,33 +878,33 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator Array<_type>::Begin()
+	typename Vector<_type>::Iterator Vector<_type>::Begin()
 	{
 		return Iterator(this, mValues);
 	}
 
 	template<typename _type>
-	typename Array<_type>::Iterator Array<_type>::End()
+	typename Vector<_type>::Iterator Vector<_type>::End()
 	{
 		return Iterator(this, mValues + mCount);
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator Array<_type>::Begin() const
+	typename Vector<_type>::ConstIterator Vector<_type>::Begin() const
 	{
 		return ConstIterator(this, mValues);
 	}
 
 	template<typename _type>
-	typename Array<_type>::ConstIterator Array<_type>::End() const
+	typename Vector<_type>::ConstIterator Vector<_type>::End() const
 	{
 		return ConstIterator(this, mValues + mCount);
 	}
 
 	template<typename _type>
-	Array<_type> Array<_type>::FindAll(const Function<bool(const _type&)>& match) const
+	Vector<_type> Vector<_type>::FindAll(const Function<bool(const _type&)>& match) const
 	{
-		Array<_type> res;
+		Vector<_type> res;
 		for (auto x : *this)
 		{
 			if (match(x))
@@ -886,9 +914,9 @@ namespace o2
 	}
 
 	template<typename _type>
-	Array<_type> Array<_type>::Where(const Function<bool(const _type&)>& match) const
+	Vector<_type> Vector<_type>::Where(const Function<bool(const _type&)>& match) const
 	{
-		Array<_type> res;
+		Vector<_type> res;
 		for (auto x : *this)
 		{
 			if (match(x))
@@ -899,18 +927,18 @@ namespace o2
 
 	template<typename _type>
 	template<typename _sel_type>
-	Array<_sel_type> Array<_type>::Select(const Function<_sel_type(const _type&)>& selector) const
+	Vector<_sel_type> Vector<_type>::Select(const Function<_sel_type(const _type&)>& selector) const
 	{
-		Array<_sel_type> res;
+		Vector<_sel_type> res;
 		for (auto x : *this)
 			res.Add(selector(x));
 		return res;
 	}
 
 	template<typename _type>
-	Array<_type> Array<_type>::Take(int count) const
+	Vector<_type> Vector<_type>::Take(int count) const
 	{
-		Array<_type> res;
+		Vector<_type> res;
 		int i = 0;
 		for (auto x : *this)
 		{

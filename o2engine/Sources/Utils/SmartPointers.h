@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Containers/Array.h"
+#include "Utils/Containers/Vector.h"
 
 namespace o2
 {
@@ -52,49 +52,6 @@ namespace o2
 	private:
 		AutoArr(const AutoArr& other);
 		AutoArr& operator=(const AutoArr* ptr);
-	};
-
-	template<typename _type>
-	class Ptr;
-
-	template<typename _type>
-	class PtrBase
-	{
-		friend class Ptr<_type>;
-		typedef Array<Ptr<_type>*> PointersArr;
-
-		PointersArr mPointers;
-	};
-
-	template<typename _type>
-	class Ptr
-	{
-		friend class PtrBase<_type>;
-
-		_type* mObject;
-
-	public:
-		Ptr(_type* object = nullptr);
-		Ptr(const Ptr& other);
-		~Ptr();
-
-		Ptr& operator=(const Ptr& other);
-
-		bool operator==(const Ptr& other) const;
-		bool operator!=(const Ptr& other) const;
-
-		operator bool() const;
-		operator _type*();
-		operator _type* const() const;
-
-		_type* operator->() const;
-		_type& operator*();
-
-		bool IsValid() const;
-		_type* Get();
-
-		void Release();
-		void ReleaseArr();
 	};
 
 #pragma region AutoPtr implementation
@@ -231,123 +188,5 @@ namespace o2
 	}
 
 #pragma endregion AutoArr implementation
-
-#pragma region Ptr implementation
-
-	template<typename _type>
-	Ptr<_type>::Ptr(_type* object = nullptr) :
-		mObject(object)
-	{
-		if (mObject)
-			mObject->mPointers.Add(this);
-	}
-
-	template<typename _type>
-	Ptr<_type>::Ptr(const Ptr& other) :
-		mObject(other.mObject)
-	{
-		if (mObject)
-			mObject->mPointers.Add(this);
-	}
-
-	template<typename _type>
-	Ptr<_type>::~Ptr()
-	{
-		mObject->mPointers.Remove(this);
-	}
-
-	template<typename _type>
-	Ptr<_type>& Ptr<_type>::operator=(const Ptr& other)
-	{
-		if (mObject)
-			mObject->mPointers.Remove(this);
-
-		mObject = other.mObject;
-
-		if (mObject)
-			mObject->mPointers.Add(this);
-
-		return *this;
-	}
-
-	template<typename _type>
-	bool Ptr<_type>::operator==(const Ptr& other) const
-	{
-		return mObject == other.mObject;
-	}
-
-	template<typename _type>
-	bool Ptr<_type>::operator!=(const Ptr& other) const
-	{
-		return mObject != other.mObject;
-	}
-
-	template<typename _type>
-	Ptr<_type>::operator bool() const
-	{
-		return mObject != nullptr;
-	}
-
-	template<typename _type>
-	Ptr<_type>::operator _type*()
-	{
-		return mObject;
-	}
-
-	template<typename _type>
-	Ptr<_type>::operator _type* const() const
-	{
-		return mObject;
-	}
-
-	template<typename _type>
-	_type* Ptr<_type>::operator->() const
-	{
-		return mObject;
-	}
-
-	template<typename _type>
-	_type& Ptr<_type>::operator*()
-	{
-		return *mObject;
-	}
-
-	template<typename _type>
-	bool Ptr<_type>::IsValid() const
-	{
-		return mObject != nullptr;
-	}
-
-	template<typename _type>
-	_type* Ptr<_type>::Get()
-	{
-		return mObject;
-	}
-
-	template<typename _type>
-	void Ptr<_type>::Release()
-	{
-		if (!mObject)
-			return;
-
-		for (auto ptr : mObject->mPointers)
-			ptr->mObject = nullptr;
-
-		delete mObject;
-	}
-
-	template<typename _type>
-	void Ptr<_type>::ReleaseArr()
-	{
-		if (!mObject)
-			return;
-
-		for (auto ptr : mObject->mPointers)
-			ptr.mObject = nullptr;
-
-		delete[] mObject;
-	}
-
-#pragma endregion Ptr implementation
-
+	
 }

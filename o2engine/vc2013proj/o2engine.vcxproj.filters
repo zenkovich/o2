@@ -46,6 +46,9 @@
     <Filter Include="Sources\Assets">
       <UniqueIdentifier>{3fb4096c-22db-47e4-8b84-0b7e7f51759c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Utils\Memory">
+      <UniqueIdentifier>{d912bc70-a3bf-4955-b081-b69c3eaedd11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -93,12 +96,6 @@
     <ClInclude Include="..\Sources\Utils\Containers\IArray.h">
       <Filter>Sources\Utils\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Containers\Array.h">
-      <Filter>Sources\Utils\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Function.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Containers\Pair.h">
       <Filter>Sources\Utils\Containers</Filter>
     </ClInclude>
@@ -121,9 +118,6 @@
       <Filter>Sources\Utils\FileSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\SmartPointers.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Serialization.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Data\DataDoc.h">
@@ -201,6 +195,24 @@
     <ClInclude Include="..\Sources\Application\Application.h">
       <Filter>Sources\Application</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\IPtr.h">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Memory\Ptr.h">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Serialization.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Delegates.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Containers\Vector.h">
+      <Filter>Sources\Utils\Containers</Filter>
+    </ClInclude>
     <ClInclude Include="..\Sources\Config\ProjectConfig.h">
       <Filter>Sources\Config</Filter>
     </ClInclude>
@@ -236,17 +248,11 @@
     <ClCompile Include="..\Sources\Utils\Debug.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\String.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\Dependencies\PugiXml\pugixml.cpp">
       <Filter>Dependencies\PugiXml</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp">
       <Filter>Sources\Utils\FileSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Serialization.cpp">
-      <Filter>Sources\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp">
       <Filter>Sources\Utils\Data</Filter>
@@ -306,6 +312,12 @@
       <Filter>Sources\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Time.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp">
+      <Filter>Sources\Utils\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Serialization.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Config\ProjectConfig.cpp">

@@ -20,17 +20,14 @@ namespace o2
 		static Application* mApplication;   /**< Static ptr for wndProc func. */
 
 	public:
+		/** ctor. */
 		Application();
+
+		/** dtor. */
 		~Application();
 
 		/** Launching application cycle. */
 		void Launch();
-
-		/** Called on updating. */
-		void OnUpdate(float dt);
-
-		/** Called on drawing. */
-		void OnDraw();
 
 		/** Makes application windowed. On mobiles/tablets has no effect, just ignoring. */
 		void SetWindowed();
@@ -72,6 +69,12 @@ namespace o2
 		Vec2I GetContentSize() const;
 
 	protected:
+		/** Called on updating. */
+		void OnUpdate(float dt);
+
+		/** Called on drawing. */
+		void OnDraw();
+
 		/** Initializing window. */
 		void InitializeWindow();
 

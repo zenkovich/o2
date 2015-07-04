@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/Containers/IDictionary.h"
-#include "Utils/Containers/Array.h"
+#include "Utils/Containers/Vector.h"
 
 namespace o2
 {
@@ -11,7 +11,7 @@ namespace o2
 	public:
 		class Iterator
 		{
-			typedef typename Array<TKeyValue>::Iterator PairIterator;
+			typedef typename Vector<TKeyValue>::Iterator PairIterator;
 
 			Dictionary*  mDictionary;
 			PairIterator mPairIt;
@@ -49,7 +49,7 @@ namespace o2
 
 		class ConstIterator
 		{
-			typedef typename Array<TKeyValue>::ConstIterator PairIterator;
+			typedef typename Vector<TKeyValue>::ConstIterator PairIterator;
 
 			const Dictionary* mDictionary;
 			PairIterator      mPairIt;
@@ -86,7 +86,7 @@ namespace o2
 		};
 
 	protected:
-		Array<TKeyValue> mPairs;
+		Vector<TKeyValue> mPairs;
 
 	public:
 		Dictionary();
@@ -412,7 +412,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	Dictionary<_key_type, _value_type>::Dictionary()
 	{
-		mPairs = new Array<TKeyValue>();
+		mPairs = new Vector<TKeyValue>();
 	}
 
 	template<typename _key_type, typename _value_type>

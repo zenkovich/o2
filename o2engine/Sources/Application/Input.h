@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Utils/Containers/Vector.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Containers/Array.h"
 #include "Utils/Singleton.h"
 
 namespace o2
@@ -28,7 +28,7 @@ namespace o2
 			Cursor(const Vec2F& position = Vec2F(), int id = 0);
 			bool operator==(const Cursor& other);
 		};
-		typedef Array<Cursor> CursorsArr;
+		typedef Vector<Cursor> CursorsArr;
 
 		/** Key with pressed time. */
 		struct Key
@@ -41,7 +41,7 @@ namespace o2
 			bool operator==(const Key& other);
 		};
 
-		typedef Array<Key> KeysArr;
+		typedef Vector<Key> KeysArr;
 
 	protected:
 		KeysArr    mPressedKeys;

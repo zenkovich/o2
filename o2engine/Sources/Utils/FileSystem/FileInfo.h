@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Utils/CommonTypes.h"
-#include "Utils/Time.h"
-#include "Utils/Serialization.h"
 #include "Utils/FileSystem/File.h"
+#include "Utils/Time.h"
 
 namespace o2
 {
@@ -23,8 +22,8 @@ namespace o2
 	class PathInfo
 	{
 	public:
-		typedef Array<FileInfo> FilesArr;
-		typedef Array<PathInfo> PathsArr;
+		typedef Vector<FileInfo> FilesArr;
+		typedef Vector<PathInfo> PathsArr;
 
 		String   mPath;
 		FilesArr mFiles;
@@ -40,7 +39,7 @@ namespace o2
 		void ProcessPathNamesClamping(int charCount);
 	};
 
-	class FileLocation: public Serializable
+	class FileLocation
 	{
 	public:
 		String mPath;
@@ -51,8 +50,6 @@ namespace o2
 
 		bool operator==(const FileLocation& other) const;
 		bool operator!=(const FileLocation& other) const;
-
-		SERIALIZE_METHODS(FileLocation);
 	};
-	typedef Array<FileLocation> FileLocationsArr;
+	typedef Vector<FileLocation> FileLocationsArr;
 }

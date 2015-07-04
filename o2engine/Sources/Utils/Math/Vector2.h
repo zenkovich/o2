@@ -90,8 +90,6 @@ namespace o2
 	typedef Vec2<float> Vec2F;
 	typedef Vec2<int>   Vec2I;
 
-	//implementation Vec2
-
 	template<typename T>
 	Vec2<T>::Vec2():
 		x(0), y(0)

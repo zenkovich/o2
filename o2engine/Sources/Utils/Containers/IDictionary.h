@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Function.h"
+#include "Utils/Delegates.h"
 
 namespace o2
 {

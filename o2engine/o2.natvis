@@ -65,14 +65,11 @@
     </Expand>
 </Type>
 
-<Type Name="o2::TString&lt;wchar_t&gt;">
-    <DisplayString>{{ {mData,su} }}</DisplayString>
+<Type Name="o2::Ptr&lt;&gt;">
+    <AlternativeType Name="o2::IPtr&lt;&gt;" />
+    <DisplayString>{{ {mObject} }}</DisplayString>
     <Expand>
-        <Item Name="[capacity]">mCapacity</Item>
-        <ArrayItems>
-            <Size>mCapacity</Size>
-            <ValuePointer>mData</ValuePointer>
-        </ArrayItems>
+        <Item Name="[object]">mObject</Item>
     </Expand>
 </Type>
 

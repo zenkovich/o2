@@ -1,11 +1,10 @@
 #include "DataDoc.h"
 
-#include "Utils/FileSystem/File.h"
 #include "Utils/Data/XmlDataFormat.h"
+#include "Utils/FileSystem/File.h"
 
 namespace o2
 {
-
 	DataNode::DataNode() :
 		mParent(nullptr)
 	{
@@ -48,12 +47,12 @@ namespace o2
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const WString& value) :
+	DataNode::DataNode(const WString& name, const String& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
 
-	DataNode::DataNode(const WString& name, const String& value) :
+	DataNode::DataNode(const WString& name, const WString& value) :
 		mName(name), mData(value), mParent(nullptr)
 	{
 	}
@@ -83,18 +82,16 @@ namespace o2
 	{
 	}
 
-	DataNode::DataNode(const DataNode& other)
+	DataNode::DataNode(const DataNode& other) :
+		mName(other.mName), mData(other.mData), mParent(nullptr)
 	{
 		for (auto child : other.mChildNodes)
-			mChildNodes.Add(new DataNode(*child));
+			mChildNodes.Add(mnew DataNode(*child));
 	}
 
 	DataNode::~DataNode()
 	{
-		for (auto child : mChildNodes)
-			child.Release();
-
-		mChildNodes.Clear();
+		Clear();
 	}
 
 	DataNode& DataNode::operator=(const DataNode& other)
@@ -105,7 +102,10 @@ namespace o2
 		mChildNodes.Clear();
 
 		for (auto child : other.mChildNodes)
-			mChildNodes.Add(new DataNode(*child));
+			mChildNodes.Add(mnew DataNode(*child));
+
+		//mName = other.mName;
+		mData = other.mData;
 
 		return *this;
 	}
@@ -140,13 +140,20 @@ namespace o2
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const WString& value)
+
+	DataNode& DataNode::operator=(bool value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(const String& value)
 	{
 		mData = value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const String& value)
+	DataNode& DataNode::operator=(const WString& value)
 	{
 		mData = value;
 		return *this;
@@ -182,23 +189,7 @@ namespace o2
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(bool value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
 	DataNode::operator wchar_t*() const
-	{
-		return mData;
-	}
-
-	DataNode::operator WString() const
-	{
-		return mData;
-	}
-
-	DataNode::operator String() const
 	{
 		return mData;
 	}
@@ -221,6 +212,16 @@ namespace o2
 	DataNode::operator UInt() const
 	{
 		return (UInt)mData;
+	}
+
+	DataNode::operator String() const
+	{
+		return mData;
+	}
+
+	DataNode::operator WString() const
+	{
+		return mData;
 	}
 
 	DataNode::operator Vec2F() const
@@ -248,7 +249,13 @@ namespace o2
 		return (Color4)mData;
 	}
 
+
 	Ptr<DataNode> DataNode::operator[](const WString& nodePath) const
+	{
+		return GetNode(nodePath);
+	}
+
+	Ptr<DataNode> DataNode::operator[](const char* nodePath) const
 	{
 		return GetNode(nodePath);
 	}
@@ -302,7 +309,7 @@ namespace o2
 
 	Ptr<DataNode> DataNode::AddNode(const WString& name)
 	{
-		DataNode* newNode = new DataNode(name);
+		Ptr<DataNode> newNode = mnew DataNode(name);
 		newNode->mParent = this;
 		mChildNodes.Add(newNode);
 		return newNode;
@@ -399,6 +406,21 @@ namespace o2
 		return mData;
 	}
 
+	DataNode* DataNode::CreateSample() const
+	{
+		return new DataNode();
+	}
+
+	void DataNode::Clear()
+	{
+		mData.Clear();
+
+		for (auto child : mChildNodes)
+			child.Release();
+
+		mChildNodes.Clear();
+	}
+
 
 	DataDoc::DataDoc()
 	{
@@ -407,6 +429,17 @@ namespace o2
 	DataDoc::DataDoc(const WString& fileName)
 	{
 		LoadFromFile(fileName);
+	}
+
+	DataDoc::DataDoc(const DataNode& node) :
+		DataNode(node)
+	{
+	}
+
+	DataDoc& DataDoc::operator=(const DataNode& other)
+	{
+		DataNode::operator=(other);
+		return *this;
 	}
 
 	bool DataDoc::LoadFromFile(const String& fileName)
@@ -419,7 +452,7 @@ namespace o2
 		WString data;
 		data.Reserve(file.GetDataSize() + 1);
 		auto sz = file.ReadFullData(data.Data());
-		data[sz/sizeof(wchar_t)] = '\0';
+		data[sz / sizeof(wchar_t)] = '\0';
 
 		return LoadFromData(data);
 	}

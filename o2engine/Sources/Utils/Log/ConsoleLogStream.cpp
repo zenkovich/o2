@@ -25,7 +25,7 @@ namespace o2
 	void ConsoleLogStream::OutStrEx(const WString& str)
 	{
 		puts(((String)str).Data());
-		puts("\n");
+		//puts("\n");
 	}
 
 	void ConsoleLogStream::InitConsole()

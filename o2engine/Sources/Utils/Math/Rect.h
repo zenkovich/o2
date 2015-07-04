@@ -2,8 +2,8 @@
 
 #include <algorithm>
 #include <float.h>
-#include "Utils/Math/Vector2.h"
 #include "Utils/Math/Math.h"
+#include "Utils/Math/Vector2.h"
 
 namespace o2
 {
@@ -80,8 +80,6 @@ namespace o2
 
 	typedef Rect<float> RectF;
 	typedef Rect<int>   RectI;
-
-	//implementation Rect
 
 	template<typename T>
 	Rect<T>::Rect():

@@ -104,7 +104,7 @@
     <ClInclude Include="..\Sources\O2.h" />
     <ClInclude Include="..\Sources\Utils\Assert.h" />
     <ClInclude Include="..\Sources\Utils\CommonTypes.h" />
-    <ClInclude Include="..\Sources\Utils\Containers\Array.h" />
+    <ClInclude Include="..\Sources\Utils\Containers\Vector.h" />
     <ClInclude Include="..\Sources\Utils\Containers\Dictionary.h" />
     <ClInclude Include="..\Sources\Utils\Containers\IArray.h" />
     <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h" />
@@ -116,7 +116,7 @@
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />
-    <ClInclude Include="..\Sources\Utils\Function.h" />
+    <ClInclude Include="..\Sources\Utils\Delegates.h" />
     <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\LogStream.h" />
@@ -125,6 +125,9 @@
     <ClInclude Include="..\Sources\Utils\Math\Rect.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vector2.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vertex2.h" />
+    <ClInclude Include="..\Sources\Utils\Memory\IPtr.h" />
+    <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h" />
+    <ClInclude Include="..\Sources\Utils\Memory\Ptr.h" />
     <ClInclude Include="..\Sources\Utils\Property.h" />
     <ClInclude Include="..\Sources\Utils\Serialization.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
@@ -164,8 +167,8 @@
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
+    <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp" />
     <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
-    <ClCompile Include="..\Sources\Utils\String.cpp" />
     <ClCompile Include="..\Sources\Utils\Time.cpp" />
     <ClCompile Include="..\Sources\Utils\Timer.cpp" />
   </ItemGroup>
