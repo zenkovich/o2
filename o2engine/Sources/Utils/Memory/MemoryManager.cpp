@@ -1,10 +1,11 @@
 #include "MemoryManager.h"
 
 #include "Utils/Memory/IPtr.h"
+#include "Utils/Assert.h"
 
 void* operator new(size_t size, const char* location, int line)
 {
-	void* allocMemory = ::operator new(size + sizeof(o2::ObjectInfo*));
+	void* allocMemory = malloc(size + sizeof(o2::ObjectInfo*));
 	void* object = (char*)allocMemory + sizeof(o2::ObjectInfo*);
 	o2::ObjectInfo* info = new o2::ObjectInfo();
 	*(o2::ObjectInfo**)allocMemory = info;
@@ -12,13 +13,15 @@ void* operator new(size_t size, const char* location, int line)
 	return object;
 }
 
+void operator delete(void* allocMemory)
+{
+	o2::MemoryManager::OnObjectDestroying(allocMemory);
+}
+
 void operator delete(void* allocMemory, const char* location, int line)
 {
-	void* object = (char*)allocMemory + sizeof(o2::ObjectInfo*);
-	o2::ObjectInfo* info = *(o2::ObjectInfo**)allocMemory;
-	o2::MemoryManager::OnObjectDestroying(object);
-	::operator delete(info);
-	::operator delete(allocMemory);
+	o2::ErrorMessage("Used overrided delete operator!", "unknown", 0);
+	_asm{ int 3 };
 }
 
 namespace o2
@@ -36,7 +39,21 @@ namespace o2
 
 	void MemoryManager::OnObjectDestroying(void* object)
 	{
-		mInstance->mObjectsInfos.Remove(GetObjectInfo(object));
+		o2::ObjectInfo* info = GetObjectInfo(object);
+
+		for (auto it = mInstance->mObjectsInfos.Begin(); it != mInstance->mObjectsInfos.End(); ++it)
+		{
+			if (*it == info)
+			{
+				info->~ObjectInfo();
+				free(info);
+				mInstance->mObjectsInfos.Remove(it);
+				free((char*)object - sizeof(o2::ObjectInfo*));
+				return;
+			}
+		}
+
+		free(object);
 	}
 
 	void MemoryManager::OnPtrCreating(IPtr* ptr)
@@ -68,7 +85,8 @@ namespace o2
 
 		for (auto ptr : mInstance->mPointers)
 		{
-			ptr->mObjectInfo->Mark(mInstance->mCurrentGCMark);
+			if (ptr->mObjectInfo)
+				ptr->mObjectInfo->Mark(mInstance->mCurrentGCMark);
 		}
 
 		ObjectsInfosArr freeObjects;
@@ -97,7 +115,7 @@ namespace o2
 
 		for (auto ptr : mChildPointers)
 		{
-			if (ptr->mObjectInfo->mMark != mark)
+			if (ptr->mObjectInfo && ptr->mObjectInfo->mMark != mark)
 				ptr->mObjectInfo->Mark(mark);
 		}
 	}
