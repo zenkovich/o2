@@ -90,9 +90,9 @@ namespace o2
 		};
 
 	protected:
-		(_type*)mValues;
-		int     mCount;
-		int     mCapacity;
+		_type* mValues;
+		int      mCount;
+		int      mCapacity;
 
 	public:
 		Vector(int capacity = 5);
@@ -647,7 +647,23 @@ namespace o2
 
 		mCapacity = newCapacity;
 
-		mValues = (_type*)realloc(mValues, mCapacity*sizeof(_type));
+		_type* tmpValues = (_type*)malloc(mCount*sizeof(_type));
+		for (int i = 0; i < mCount; i++)
+		{
+			new (tmpValues + i) _type(mValues[i]);
+			mValues[i].~_type();
+		}
+
+		free(mValues);
+		mValues = (_type*)malloc(mCapacity*sizeof(_type));
+
+		for (int i = 0; i < mCount; i++)
+		{
+			new (mValues + i) _type(tmpValues[i]);
+			tmpValues[i].~_type();
+		}
+
+		free(tmpValues);
 	}
 
 	template<typename _type>

@@ -10,21 +10,21 @@ namespace o2
 	template <typename CLASS> class Singleton
 	{
 	public:
-		virtual ~Singleton()                   { mInstance = nullptr; }
-
-		static CLASS& Instance()               { Assert(mInstance, "Singleton not initialized"); return *mInstance; }
-
-		static Ptr<CLASS> InstancePtr()        { return mInstance; }
-
-		static void InitializeSingleton()      { if (!mInstance) new CLASS; }
-		static void DeinitializeSingleton()    { delete mInstance; }
-
-		static bool IsSingletonInitialzed()    { return (mInstance != nullptr); }
+		virtual ~Singleton()                { mInstance = nullptr; }
+										    
+		static CLASS& Instance()            { Assert(mInstance, "Singleton not initialized"); return *mInstance; }
+										    
+		static Ptr<CLASS> InstancePtr()     { return mInstance; }
+										    
+		static void InitializeSingleton()   { if (!mInstance) new CLASS; }
+		static void DeinitializeSingleton() { mInstance.Release(); }
+										    
+		static bool IsSingletonInitialzed() { return (mInstance != nullptr); }
 
 	public:
 		static Ptr<CLASS> mInstance;
 	};
 
-#	define DECLARE_SINGLETON(CLASS) template<> Ptr<CLASS> Singleton<CLASS>::mInstance = NULL
+#	define DECLARE_SINGLETON(CLASS) template<> Ptr<CLASS> Singleton<CLASS>::mInstance = nullptr
 #	define CREATE_SINGLETON(CLASS)  template<> Ptr<CLASS> Singleton<CLASS>::mInstance = mnew CLASS()
 }

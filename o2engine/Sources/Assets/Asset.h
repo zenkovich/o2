@@ -2,6 +2,7 @@
 
 #include "Utils/CustomRTTI.h"
 #include "Utils/FileSystem/FileInfo.h"
+#include "Utils/Serialization.h"
 
 namespace o2
 {
@@ -33,7 +34,7 @@ namespace o2
 		virtual void SaveData() = 0;
 	};
 
-	struct AssetInfo: public Serializable
+	struct AssetInfo: public ISerializable
 	{
 	public:
 		enum class Type { File, Image, Atlas, Folder };
@@ -48,7 +49,11 @@ namespace o2
 
 		bool operator==(const AssetInfo& other) const;
 
-		SERIALIZE_METHODS(AssetInfo);
+		SERIALIZABLE_FIELDS(AssetInfo)
+			FIELD(mLocation)
+			FIELD(mType)
+			FIELD(mWriteTime);
+		END_SERIALIZABLE_FIELDS;
 	};
-	typedef Array<AssetInfo> AssetsInfosArr;
+	typedef Vector<AssetInfo> AssetsInfosVec;
 }

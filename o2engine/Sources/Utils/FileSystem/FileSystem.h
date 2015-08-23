@@ -14,8 +14,8 @@ namespace o2
 	/** File system, singleton. Contains basic resource path. */
 	class FileSystem: public Singleton<FileSystem>
 	{
-		typedef Vector<String> StringsArr;
-		typedef Dictionary<FileType, StringsArr> ExtnsionsDict;
+		typedef Vector<String> StringsVec;
+		typedef Dictionary<FileType, StringsVec> ExtnsionsDict;
 
 		Ptr<LogStream> mLog;
 		ExtnsionsDict  mExtensions;
@@ -38,19 +38,19 @@ namespace o2
 		static FileInfo GetFileInfo(const String& path);
 
 		/** Copying file. */
-		static bool CopyFile(const String& source, const String& dest);
+		static bool CopyFile_(const String& source, const String& dest);
 
 		/** Deletion file. */
-		static bool DeleteFile(const String& file);
+		static bool DeleteFile_(const String& file);
 
 		/** Moving file. */
-		static bool MoveFile(const String& source, const String& dest);
+		static bool MoveFile_(const String& source, const String& dest);
 
 		/** Creates folder. */
-		static bool CreateDirectory(const String& path, bool recursive = true);
+		static bool CreateDirectory_(const String& path, bool recursive = true);
 
 		/** Removes directory. */
-		static bool RemoveDirectory(const String& path, bool recursive = true);
+		static bool RemoveDirectory_(const String& path, bool recursive = true);
 
 		/** Returns true if specified directory exist. */
 		static bool IsDirectoryExist(const String& path);

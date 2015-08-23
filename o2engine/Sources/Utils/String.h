@@ -334,7 +334,7 @@ namespace o2
 		mData[0] = '\0';
 		Append((TString)value.x);
 		Append((TString)";");
-		Append((TString)value.x);
+		Append((TString)value.y);
 	}
 
 	template<typename T>
@@ -344,7 +344,7 @@ namespace o2
 		mData[0] = '\0';
 		Append((TString)value.x);
 		Append((TString)";");
-		Append((TString)value.x);
+		Append((TString)value.y);
 	}
 
 	template<typename T>
@@ -694,6 +694,9 @@ namespace o2
 	template<typename T>
 	void TString<T>::Reserve(int size)
 	{
+		if (size < 5)
+			size = 5;
+
 		if (size <= mCapacity)
 			return;
 
@@ -1073,6 +1076,11 @@ namespace o2
 				else if (format.mData[i + 1] == 'c')
 				{
 					res.mData[resLen++] = va_arg(vlist, char);
+				}
+				else if (format.mData[i + 1] == 'b')
+				{
+					appendStr(va_arg(vlist, bool) ? "true":"false");
+					i++;
 				}
 				else
 				{

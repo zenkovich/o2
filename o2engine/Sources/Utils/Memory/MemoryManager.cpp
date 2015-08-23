@@ -1,7 +1,10 @@
 #include "MemoryManager.h"
 
+#include <fstream>
 #include "Utils/Memory/IPtr.h"
 #include "Utils/Assert.h"
+#include "Utils/Log/ConsoleLogStream.h"
+#include "Utils/Log/FileLogStream.h"
 
 void* operator new(size_t size, const char* location, int line)
 {
@@ -20,8 +23,8 @@ void operator delete(void* allocMemory)
 
 void operator delete(void* allocMemory, const char* location, int line)
 {
-	o2::ErrorMessage("Used overrided delete operator!", "unknown", 0);
-	_asm{ int 3 };
+	o2::ErrorMessage("Used overrided delete operator!", location, line);
+	_asm { int 3 };
 }
 
 namespace o2
@@ -39,16 +42,25 @@ namespace o2
 
 	void MemoryManager::OnObjectDestroying(void* object)
 	{
-		o2::ObjectInfo* info = GetObjectInfo(object);
+		ObjectInfo* info = GetObjectInfo(object);
 
 		for (auto it = mInstance->mObjectsInfos.Begin(); it != mInstance->mObjectsInfos.End(); ++it)
 		{
 			if (*it == info)
 			{
+				for (auto ptr : mInstance->mPointers)
+				{
+					if (ptr->ObjectPtr() == object)
+						ptr->ObjectReleased();
+				}
+
 				info->~ObjectInfo();
 				free(info);
+
 				mInstance->mObjectsInfos.Remove(it);
+
 				free((char*)object - sizeof(o2::ObjectInfo*));
+
 				return;
 			}
 		}
@@ -58,20 +70,7 @@ namespace o2
 
 	void MemoryManager::OnPtrCreating(IPtr* ptr)
 	{
-		char* cptr = (char*)ptr;
-		for (auto obj : mInstance->mObjectsInfos)
-		{
-			char* beg = (char*)obj->mObjectPtr;
-			char* end = beg + obj->mSize;
-			if (cptr >= beg && cptr < end)
-			{
-				obj->mChildPointers.Add(ptr);
-				return;
-			}
-		}
-
 		mInstance->mPointers.Add(ptr);
-		ptr->mStatic = true;
 	}
 
 	void MemoryManager::OnPtrDestroying(IPtr* ptr)
@@ -83,25 +82,87 @@ namespace o2
 	{
 		mInstance->mCurrentGCMark = !mInstance->mCurrentGCMark;
 
+		mInstance->RebuildMemoryTree();
+
 		for (auto ptr : mInstance->mPointers)
 		{
-			if (ptr->mObjectInfo)
+			if (ptr->mIsOnTop && ptr->mObjectInfo)
 				ptr->mObjectInfo->Mark(mInstance->mCurrentGCMark);
 		}
 
-		ObjectsInfosArr freeObjects;
+		ObjectsInfosVec freeObjects;
+		mInstance->FindFreeObjects(freeObjects);
+		mInstance->PrintObjectsInfos(freeObjects);
+		mInstance->FreeObjects(freeObjects);
+	}
+
+	void MemoryManager::ResetMemoryTree()
+	{
+		for (auto ptr : mInstance->mPointers)
+			ptr->mIsOnTop = true;
+
+		for (auto obj : mInstance->mObjectsInfos)
+			obj->mChildPointers.Clear();
+	}
+
+	void MemoryManager::RebuildMemoryTree()
+	{
+		ResetMemoryTree();
+
+		for (auto ptr : mInstance->mPointers)
+		{
+			char* cptr = (char*)ptr;
+			bool foundParent = false;
+			bool foundObjectInfo = false;
+
+			for (auto obj : mInstance->mObjectsInfos)
+			{
+				char* beg = (char*)obj->mObjectPtr;
+				char* end = beg + obj->mSize;
+
+				if (foundParent && cptr >= beg && cptr <= end)
+				{
+					ptr->mIsOnTop = false;
+					obj->mChildPointers.Add(ptr);
+					foundParent = true;
+				}
+
+				if (ptr->mObjectInfo == obj)
+					foundObjectInfo = true;
+
+				if (foundParent && foundObjectInfo)
+					break;
+			}
+
+			if (!foundObjectInfo)
+				ptr->mObjectInfo = nullptr;
+		}
+	}
+
+	void MemoryManager::FindFreeObjects(ObjectsInfosVec& result)
+	{
+		result.Clear();
 
 		for (auto obj : mInstance->mObjectsInfos)
 		{
 			if (obj->mMark != mInstance->mCurrentGCMark)
-				freeObjects.Add(obj);
+				result.Add(obj);
 		}
+	}
 
-		for (auto obj : freeObjects)
+	void MemoryManager::FreeObjects(const ObjectsInfosVec& objectsVec)
+	{
+		for (auto obj : objectsVec)
 		{
-			printf("Leaked object: %x %s:%i\n", obj, obj->mAllocSrcFile, obj->mAllocSrcFileLine);
 			delete obj;
+			mObjectsInfos.Remove(obj);
 		}
+	}
+
+	void MemoryManager::PrintObjectsInfos(const ObjectsInfosVec& objectsVec)
+	{
+		for (auto obj : objectsVec)
+			printf("Leaked object: %x %s:%i\n", (UInt)obj, obj->mAllocSrcFile, obj->mAllocSrcFileLine);
 	}
 
 	ObjectInfo* MemoryManager::GetObjectInfo(void* object)

@@ -57,8 +57,8 @@ namespace o2
 
 		SaveData();
 
-		if (rebuildAssetsImmediately)
-			AppAssets()->RebuildAssets();
+		/*if (rebuildAssetsImmediately)
+			AppAssets()->RebuildAssets();*/
 	}
 
 
@@ -70,19 +70,6 @@ namespace o2
 	AssetInfo::AssetInfo(const FileLocation& location, Type type, const WideTime& writeTime):
 		mLocation(location), mType(type), mWriteTime(writeTime)
 	{
-	}
-
-	SERIALIZE_METHOD_IMPL(AssetInfo)
-	{
-		SERIALIZE_ID(&mLocation, "location");
-
-		int type = (int)mType;
-		SERIALIZE_ID(type, "type");
-		mType = (Type)type;
-
-		SERIALIZE_ID(mWriteTime, "writeTime");
-
-		return true;
 	}
 
 	bool AssetInfo::operator==(const AssetInfo& other) const

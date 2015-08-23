@@ -13,6 +13,7 @@ namespace o2
 		~Ptr();
 
 		Ptr& operator=(const Ptr& other);
+		Ptr& operator=(_type* object);
 		bool operator==(const Ptr& other) const;
 		bool operator!=(const Ptr& other) const;
 
@@ -45,6 +46,13 @@ namespace o2
 	Ptr<_type>& Ptr<_type>::operator=(const Ptr& other)
 	{
 		ITemplPtr::operator=(other);
+		return *this;
+	}
+
+	template<typename _type>
+	Ptr<_type>& o2::Ptr<_type>::operator=(_type* object)
+	{
+		ITemplPtr::operator=(object);
 		return *this;
 	}
 

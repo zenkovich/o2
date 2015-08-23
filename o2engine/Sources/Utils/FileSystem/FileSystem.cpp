@@ -20,18 +20,18 @@ namespace o2
 		mLog = mnew LogStream("File System");
 		Debug::GetLog()->BindStream(mLog);
 
-		mExtensions.Add(FileType::Image, StringsArr());
+		mExtensions.Add(FileType::Image, StringsVec());
 		mExtensions[FileType::Image].Add("png");
 		mExtensions[FileType::Image].Add("jpg");
 		mExtensions[FileType::Image].Add("dds");
 		mExtensions[FileType::Image].Add("pvr");
 
-		mExtensions.Add(FileType::Config, StringsArr());
+		mExtensions.Add(FileType::Config, StringsVec());
 		mExtensions[FileType::Config].Add("xml");
 		mExtensions[FileType::Config].Add("txt");
 		mExtensions[FileType::Config].Add("cfg");
 
-		mExtensions.Add(FileType::Atlas, StringsArr());
+		mExtensions.Add(FileType::Atlas, StringsVec());
 		mExtensions[FileType::Atlas].Add("atlas");
 	}
 
@@ -73,19 +73,19 @@ namespace o2
 		return res;
 	}
 
-	bool FileSystem::CopyFile(const String& source, const String& dest)
+	bool FileSystem::CopyFile_(const String& source, const String& dest)
 	{
-		DeleteFile(dest);
-		CreateDirectory(ExtractPathStr(dest));
+		DeleteFile_(dest);
+		CreateDirectory_(ExtractPathStr(dest));
 		return CopyFileA(source.Data(), dest.Data(), TRUE) == TRUE;
 	}
 
-	bool FileSystem::DeleteFile(const String& file)
+	bool FileSystem::DeleteFile_(const String& file)
 	{
 		return DeleteFileA(file.Data()) == TRUE;
 	}
 
-	bool FileSystem::MoveFile(const String& source, const String& dest)
+	bool FileSystem::MoveFile_(const String& source, const String& dest)
 	{
 		return MoveFileA(source.Data(), dest.Data()) == TRUE;
 	}
@@ -142,7 +142,7 @@ namespace o2
 		return res;
 	}
 
-	bool FileSystem::CreateDirectory(const String& path, bool recursive /*= true*/)
+	bool FileSystem::CreateDirectory_(const String& path, bool recursive /*= true*/)
 	{
 		if (IsDirectoryExist(path))
 			return true;
@@ -157,10 +157,10 @@ namespace o2
 		if (extrPath == path)
 			return false;
 
-		return CreateDirectory(extrPath, true);
+		return CreateDirectory_(extrPath, true);
 	}
 
-	bool FileSystem::RemoveDirectory(const String& path, bool recursive /*= true*/)
+	bool FileSystem::RemoveDirectory_(const String& path, bool recursive /*= true*/)
 	{
 		if (!IsDirectoryExist(path))
 			return false;
@@ -178,9 +178,9 @@ namespace o2
 					continue;
 
 				if (f.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
-					RemoveDirectory(path + "/" + f.cFileName, true);
+					RemoveDirectory_(path + "/" + f.cFileName, true);
 				else
-					DeleteFile(path + "/" + f.cFileName);
+					DeleteFile_(path + "/" + f.cFileName);
 			}
 			while (FindNextFile(h, &f));
 		}

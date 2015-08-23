@@ -180,22 +180,22 @@ namespace o2
 		return mInstance->mMouseWheelDelta;
 	}
 
-	Input::CursorsArr const& Input::GetCursors()
+	Input::CursorsVec const& Input::GetCursors()
 	{
 		return mInstance->mCursors;
 	}
 
-	Input::KeysArr const& Input::GetPressedKeys()
+	Input::KeysVec const& Input::GetPressedKeys()
 	{
 		return mInstance->mPressedKeys;
 	}
 
-	Input::KeysArr const& Input::GetDownKeys()
+	Input::KeysVec const& Input::GetDownKeys()
 	{
 		return mInstance->mDownKeys;
 	}
 
-	Input::KeysArr const& Input::GetReleasedKeys()
+	Input::KeysVec const& Input::GetReleasedKeys()
 	{
 		return mInstance->mReleasedKeys;
 	}

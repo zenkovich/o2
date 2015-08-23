@@ -53,13 +53,13 @@ namespace o2
 	class ISerializable
 	{
 	public:
-		typedef Vector<IClassFieldInfo*> FieldsArr;
+		typedef Vector<Ptr<IClassFieldInfo>> FieldsVec;
 
 		/** Returns empty sample of this object type. */
 		virtual ISerializable* CreateSample() const = 0;
 
 		/** Returns array with fields infos. */
-		virtual FieldsArr      GetFields();
+		virtual FieldsVec      GetFields();
 
 		/** Serializing object into data node. */
 		virtual DataNode       Serialize();
@@ -93,7 +93,7 @@ namespace o2
 	CLASS* CreateSample() const { return mnew CLASS(); }                        \
 	CLASS& operator=(const DataNode& node) { Deserialize(node); return *this; } \
 	operator DataNode() { return Serialize(); }                                 \
-	FieldsArr GetFields() { FieldsArr res;
+	FieldsVec GetFields() { FieldsVec res;
 
 
 #define BASE_CLASS_FIELDS(BASE_CLASS) res.Add(BASE_CLASS.GetFields());
@@ -103,13 +103,13 @@ namespace o2
 	CLASS* CreateSample() const { return mnew CLASS(); }                        \
 	CLASS& operator=(const DataNode& node) { Deserialize(node); return *this; } \
 	operator DataNode() { return Serialize(); }                                 \
-	FieldsArr GetFields()                                                       \
+	FieldsVec GetFields()                                                       \
 	{                                                                           \
-	FieldsArr res;                                                              \
-	res.Add(BASE_CLASS.GetFields());                                            
+	FieldsVec res;                                                              \
+	res.Add(BASE_CLASS::GetFields());                                            
 
 
-#define FIELD(NAME) res.Add(new ClassFieldInfo<decltype(NAME)>(this, NAME, #NAME));
+#define FIELD(NAME) res.Add(mnew ClassFieldInfo<decltype(NAME)>(this, NAME, #NAME));
 
 #define END_SERIALIZABLE_FIELDS \
 	return res;                 \

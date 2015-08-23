@@ -1,13 +1,13 @@
 #pragma once
 
+#include "Utils/Containers/Vector.h"
 #include "Utils/CustomRTTI.h"
-#include "Utils/Serialization.h"
 #include "Utils/FileSystem/FileInfo.h"
-#include "Utils/Containers/Array.h"
+#include "Utils/Serialization.h"
 
 namespace o2
 {
-	class AssetConfig: public Serializable
+	class AssetConfig: public ISerializable
 	{
 	public:
 		DEFINE_TYPE(AssetConfig);
@@ -22,9 +22,12 @@ namespace o2
 
 		virtual AssetConfig* Clone() const;
 
-		SERIALIZE_METHODS(AssetConfig);
+		SERIALIZABLE_FIELDS(AssetConfig)
+			FIELD(mLocation)
+			FIELD(mIncludeBuild);
+		END_SERIALIZABLE_FIELDS;
 	};
-	typedef Array<AssetConfig*> AssetsConfigsArr;
+	typedef Vector<AssetConfig*> AssetsConfigsVec;
 
 
 	class ImageAssetConfig: public AssetConfig
@@ -41,7 +44,10 @@ namespace o2
 
 		virtual AssetConfig* Clone() const;
 
-		SERIALIZE_INHERITED_METHODS(ImageAssetConfig, AssetConfig);
+		SERIALIZABLE_FIELDS_INHERITED(ImageAssetConfig, AssetConfig)
+			FIELD(mScale)
+			FIELD(mAtlas);
+		END_SERIALIZABLE_FIELDS;
 	};
 
 
@@ -62,6 +68,11 @@ namespace o2
 
 		virtual AssetConfig* Clone() const;
 
-		SERIALIZE_INHERITED_METHODS(AtlasAssetConfig, AssetConfig);
+		SERIALIZABLE_FIELDS_INHERITED(AtlasAssetConfig, AssetConfig)
+			FIELD(mMaxSize)
+			FIELD(mAttachedToFolder)
+			FIELD(mAttachFolderLocation)
+			FIELD(mName);
+		END_SERIALIZABLE_FIELDS;
 	};
 }

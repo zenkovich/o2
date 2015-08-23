@@ -1204,13 +1204,14 @@ void StackWalker::OnSymInit(LPCSTR szSearchPath, DWORD symOptions, LPCSTR szUser
   OSVERSIONINFOEXA ver;
   ZeroMemory(&ver, sizeof(OSVERSIONINFOEXA));
   ver.dwOSVersionInfoSize = sizeof(ver);
-  if (GetVersionExA( (OSVERSIONINFOA*) &ver) != FALSE)
+  return;
+  /*if (GetVersionExA( (OSVERSIONINFOA*) &ver) != FALSE)
   {
     _snprintf_s(buffer, STACKWALK_MAX_NAMELEN, "OS-Version: %d.%d.%d (%s) 0x%x-0x%x\n", 
       ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber,
       ver.szCSDVersion, ver.wSuiteMask, ver.wProductType);
     OnOutput(buffer);
-  }
+  }*/
 #endif
 }
 

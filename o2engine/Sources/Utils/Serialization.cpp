@@ -9,6 +9,7 @@ namespace o2
 		for (auto fld : fields)
 		{
 			*res.AddNode(fld->Name()) = fld->Serialize();
+			fld.Release();
 		}
 
 		return res;
@@ -20,12 +21,13 @@ namespace o2
 		for (auto fld : fields)
 		{
 			fld->Deserialize(*node.GetNode(fld->Name()));
+			fld.Release();
 		}
 	}
 
-	ISerializable::FieldsArr ISerializable::GetFields()
+	ISerializable::FieldsVec ISerializable::GetFields()
 	{
-		return FieldsArr();
+		return FieldsVec();
 	}
 
 	ISerializable* SerializableTypesSamples::CreateSample(const String& type)

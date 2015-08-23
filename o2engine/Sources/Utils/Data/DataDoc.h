@@ -7,20 +7,22 @@
 
 namespace o2
 {
+	class ISerializable;
+
 	class DataNode
 	{
 		friend class DataDoc;
 
 	public:
-		typedef Vector<Ptr<DataNode>> DataNodesArr;
-		typedef DataNode::DataNodesArr::Iterator Iterator;
-		typedef DataNode::DataNodesArr::ConstIterator ConstIterator;
+		typedef Vector<Ptr<DataNode>> DataNodesVec;
+		typedef DataNode::DataNodesVec::Iterator Iterator;
+		typedef DataNode::DataNodesVec::ConstIterator ConstIterator;
 
 	protected:
 		WString       mName;
 		WString       mData;
 		Ptr<DataNode> mParent;
-		DataNodesArr  mChildNodes;
+		DataNodesVec  mChildNodes;
 
 	public:
 		DataNode();
@@ -39,6 +41,9 @@ namespace o2
 		DataNode(const WString& name, const RectF& value);
 		DataNode(const WString& name, const RectI& value);
 		DataNode(const WString& name, const Color4& value);
+		DataNode(const WString& name, ISerializable& value);
+
+		DataNode(int value);
 
 		template<typename _type>
 		DataNode(const WString& name, const Ptr<_type>& value);
@@ -75,6 +80,12 @@ namespace o2
 		template<typename _key, typename _value>
 		DataNode& operator=(const Dictionary<_key, _value>& value);
 
+		template<class _type, class = typename std::enable_if<std::is_enum<_type>::value>::type>
+		DataNode& operator=(_type value)
+		{
+			return operator=((int)value);
+		}
+
 		operator wchar_t*() const;
 		operator bool() const;
 		operator int() const;
@@ -87,7 +98,6 @@ namespace o2
 		operator RectF() const;
 		operator RectI() const;
 		operator Color4() const;
-		operator DataNode() { return *this; }
 
 		template<typename _type>
 		operator Ptr<_type>() const;
@@ -97,6 +107,12 @@ namespace o2
 
 		template<typename _key, typename _value>
 		operator Dictionary<_key, _value>() const;
+
+		template<class _type, class = typename std::enable_if<std::is_enum<_type>::value>::type>
+		operator _type() const
+		{
+			return (_type)((int)mData);
+		}
 
 		Ptr<DataNode> operator[](const WString& nodePath) const;
 		Ptr<DataNode> operator[](const char* nodePath) const;
@@ -112,7 +128,7 @@ namespace o2
 		Ptr<DataNode> GetNode(const WString& nodePath) const;
 		Ptr<DataNode> AddNode(const WString& name);
 		Ptr<DataNode> AddNode(const Ptr<DataNode>& node);
-		bool RemoveNode(const Ptr<DataNode>& node);
+		bool RemoveNode(Ptr<DataNode>& node);
 		bool RemoveNode(const WString& name);
 
 		WString GetName() const;
@@ -120,7 +136,7 @@ namespace o2
 
 		WString& Data();
 
-		const DataNode::DataNodesArr& GetChildNodes() const;
+		const DataNode::DataNodesVec& GetChildNodes() const;
 
 		Iterator Begin();
 		Iterator End();

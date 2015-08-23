@@ -10,11 +10,11 @@ namespace o2
 	class LogStream
 	{
 	protected:
-		typedef Vector<Ptr<LogStream>> LogSteamsArr;
+		typedef Vector<Ptr<LogStream>> LogSteamsVec;
 
 		Ptr<LogStream> mParentStream; /**< Parent stream. NULL if no parent. */
 		WString        mId;           /**< Name of log stream. */
-		LogSteamsArr   mChildStreams; /**< Child streams. */
+		LogSteamsVec   mChildStreams; /**< Child streams. */
 
 	public:
 		/** ctor. */
@@ -32,8 +32,11 @@ namespace o2
 		/** Binding child stream. */
 		void BindStream(const Ptr<LogStream>& stream);
 
-		/** Unbinding child stream. Function destroying stream object. */
-		void UnbindStream(const Ptr<LogStream>& stream, bool release = true);
+		/** Unbind child stream. */
+		void UnbindStream(const Ptr<LogStream>& stream);
+
+		/** Unbind and destroy child stream. */
+		void UnbindAndReleaseStream(Ptr<LogStream>& stream);
 
 		/** Unbind and destroy all child streams. */
 		void UnbindAllStreams();

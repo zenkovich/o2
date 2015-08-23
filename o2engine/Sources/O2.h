@@ -35,11 +35,14 @@
 #include "Utils/String.h"
 #include "Utils/Time.h"
 #include "Utils/Timer.h"
+#include "Utils/StackTrace.h"
 
 #include "Application/Input.h"
 #include "Application/Application.h"
 
 #define INITIALIZE_O2 \
-	MemoryManager* MemoryManager::mInstance = new MemoryManager(); \
-	template<> Ptr<Debug> Singleton<Debug>::mInstance = mnew Debug(); \
-	Dictionary<String, ISerializable*> SerializableTypesSamples::mObjectSamples
+o2StackWalker* o2StackWalker::mInstance = new o2StackWalker(); \
+MemoryManager* MemoryManager::mInstance = new MemoryManager(); \
+template<> Ptr<Debug> Singleton<Debug>::mInstance = mnew Debug(); \
+Dictionary<String, ISerializable*> SerializableTypesSamples::mObjectSamples; \
+TypeId TypeIdContainer::lastId = 0

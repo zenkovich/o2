@@ -9,9 +9,8 @@ namespace o2
 		IApplication(), mHWnd(0), mWndStyle(0), mWindowed(true), mWindowedSize(800, 600), mWindowedPos(0, 0),
 		mWindowResizible(true), mActive(false)
 	{
-		InitializeWindow();
-
 		mApplication = this;
+		InitializeWindow();
 
 		//mRenderSystem = mnew RenderSystem();
 	}
@@ -333,5 +332,5 @@ namespace o2
 		return Vec2I(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
 	}
 
-	Application* Application::mApplication = NULL;
+	Application* Application::mApplication = nullptr;
 }

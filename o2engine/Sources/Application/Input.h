@@ -28,7 +28,7 @@ namespace o2
 			Cursor(const Vec2F& position = Vec2F(), int id = 0);
 			bool operator==(const Cursor& other);
 		};
-		typedef Vector<Cursor> CursorsArr;
+		typedef Vector<Cursor> CursorsVec;
 
 		/** Key with pressed time. */
 		struct Key
@@ -41,15 +41,15 @@ namespace o2
 			bool operator==(const Key& other);
 		};
 
-		typedef Vector<Key> KeysArr;
+		typedef Vector<Key> KeysVec;
 
 	protected:
-		KeysArr    mPressedKeys;
-		KeysArr    mDownKeys;
-		KeysArr    mReleasedKeys;
+		KeysVec    mPressedKeys;
+		KeysVec    mDownKeys;
+		KeysVec    mReleasedKeys;
 
-		CursorsArr mCursors;         /**< Cursors. First - main cursor. */
-		CursorsArr mReleasedCursors; /**< Released cursors. First - main cursor. */
+		CursorsVec mCursors;         /**< Cursors. First - main cursor. */
+		CursorsVec mReleasedCursors; /**< Released cursors. First - main cursor. */
 		Vec2F      mMainCursorPos;   /**< Main cursor position. */
 		Vec2F      mMainCursorDelta; /**< Main cursor delta. */
 		float      mMouseWheelDelta; /**< Mouse wheel delta at current frame. */
@@ -119,16 +119,16 @@ namespace o2
 		static float GetMouseWheelDelta();
 
 		/** Returns cursors vector. */
-		static CursorsArr const& GetCursors();
+		static CursorsVec const& GetCursors();
 
 		/** Returns pressed keys. */
-		static KeysArr const& GetPressedKeys();
+		static KeysVec const& GetPressedKeys();
 
 		/** Returns pressed keys. */
-		static KeysArr const& GetDownKeys();
+		static KeysVec const& GetDownKeys();
 
 		/** Returns pressed keys. */
-		static KeysArr const& GetReleasedKeys();
+		static KeysVec const& GetReleasedKeys();
 
 	protected:
 		/** Call it when key pressed. */

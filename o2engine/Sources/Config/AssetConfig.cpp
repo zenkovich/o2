@@ -14,13 +14,6 @@ namespace o2
 	{
 	}
 
-	SERIALIZE_METHOD_IMPL(AssetConfig)
-	{
-		SERIALIZE_ID(&mLocation, "Location");
-		SERIALIZE_ID(mIncludeBuild, "IncludeBuild");
-		return true;
-	}
-
 	AssetConfig::~AssetConfig()
 	{
 	}
@@ -44,13 +37,6 @@ namespace o2
 	{
 	}
 
-	SERIALIZE_INHERITED_METHOD_IMPL(ImageAssetConfig)
-	{
-		SERIALIZE_ID(mScale, "Scale");
-		SERIALIZE_ID(mAtlas, "Atlas");
-		return true;
-	}
-
 	AssetConfig* ImageAssetConfig::Clone() const
 	{
 		return new ImageAssetConfig(*this);
@@ -68,16 +54,6 @@ namespace o2
 									   bool includeBuild /*= true*/):
 									   AssetConfig(location, includeBuild), mName(name), mMaxSize(maxSize), mAttachedToFolder(false)
 	{
-	}
-
-	SERIALIZE_INHERITED_METHOD_IMPL(AtlasAssetConfig)
-	{
-		SERIALIZE_ID(mName, "Name");
-		SERIALIZE_ID(mMaxSize, "MaxSize");
-		SERIALIZE_ID(mAttachedToFolder, "AttachedToFolder");
-		SERIALIZE_ID(&mAttachFolderLocation, "AttachoFolderLocation");
-
-		return true;
 	}
 
 	AssetConfig* AtlasAssetConfig::Clone() const

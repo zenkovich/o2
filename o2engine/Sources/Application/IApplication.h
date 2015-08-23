@@ -13,15 +13,17 @@ namespace o2
 	class Time;
 	class Timer;
 	class Input;
+	class ProjectConfig;
 
 	class IApplication: public Singleton<IApplication>
 	{
 	protected:
-		Ptr<Input>      mInput;         /**< While application user input message. */
-		Ptr<LogStream>  mLog;           /**< Log stream with id "app", using only for application messages. */
-		Ptr<FileSystem> mFileSystem;    /**< File system. */
-		Ptr<Time>       mTime;          /**< Time utilities. */
-		Ptr<Timer>      mTimer;         /**< Timer for detecting delta time for update. */
+		Ptr<Input>         mInput;         /**< While application user input message. */
+		Ptr<LogStream>     mLog;           /**< Log stream with id "app", using only for application messages. */
+		Ptr<FileSystem>    mFileSystem;    /**< File system. */
+		Ptr<Time>          mTime;          /**< Time utilities. */
+		Ptr<Timer>         mTimer;         /**< Timer for detecting delta time for update. */
+		Ptr<ProjectConfig> mProjectConfig; /**< Project config. */
 
 		//RenderSystem* mRenderSystem;  /**< Render system. */
 		//Scheduler*    mScheduler;     /**< Scheduler. */
@@ -46,7 +48,10 @@ namespace o2
 		Ptr<LogStream> GetLog() const;
 
 		/** Returns pointer to input message object. */
-		Ptr<Input> GetInput();
+		Ptr<Input> GetInput() const;
+
+		/** Returns pointer to project config. */
+		Ptr<ProjectConfig> GetProjectConfig() const;
 
 		/** Returns pointer to render system object. */
 		//Ptr<RenderSystem> GetRenderSystem() const;

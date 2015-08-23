@@ -16,7 +16,7 @@ namespace o2
 
 	Debug::~Debug()
 	{
-		delete mLogStream->GetParentStream();
+		mLogStream->GetParentStream().Release();
 	}
 
 	void Debug::Log(WString format, ...)

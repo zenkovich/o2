@@ -22,7 +22,7 @@
     <DisplayString>{{ { r } { g } { b } { a }}</DisplayString>
 </Type>
 
-<Type Name="o2::Array&lt;*&gt;">
+<Type Name="o2::Vector&lt;*&gt;">
     <DisplayString>{{ size={ mCount } }}</DisplayString>
     <Expand>
         <Item Name="[size]" ExcludeView="simple">mCount</Item>
@@ -53,7 +53,7 @@
         </ArrayItems>
     </Expand>
 </Type>
-
+  
 <Type Name="o2::TString&lt;char&gt;">
     <DisplayString>{{ {mData,s} }}</DisplayString>
     <Expand>
@@ -65,14 +65,35 @@
     </Expand>
 </Type>
 
-<Type Name="o2::Ptr&lt;&gt;">
-    <AlternativeType Name="o2::IPtr&lt;&gt;" />
+<Type Name="o2::TString&lt;wchar_t&gt;">
+    <DisplayString>{{ {mData,su} }}</DisplayString>
+    <Expand>
+        <Item Name="[capacity]">mCapacity</Item>
+        <ArrayItems>
+            <Size>mCapacity</Size>
+            <ValuePointer>mData</ValuePointer>
+        </ArrayItems>
+    </Expand>
+</Type>
+  
+<Type Name="o2::Ptr&lt;*&gt;">
+    <AlternativeType Name="o2::ITemplPtr&lt;*&gt;" />
     <DisplayString>{{ {mObject} }}</DisplayString>
     <Expand>
         <Item Name="[object]">mObject</Item>
+        <Item Name="[info]">mObjectInfo</Item>
     </Expand>
 </Type>
-
+  
+<Type Name="o2::ClassFieldInfo&lt;*&gt;">
+    <AlternativeType Name="o2::ITemplPtr&lt;*&gt;" />
+    <DisplayString>{{ name={ mName } value={ mValue } }}</DisplayString>
+    <Expand>
+        <Item Name="[name]">mName</Item>
+        <Item Name="[value]">mValue</Item>
+        <Item Name="[owner]">mOwner</Item>
+    </Expand>
+</Type>
 
 <Type Name="o2::DataDoc">
     <DisplayString>{{ nodes={ mChildNodes.mCount } }}</DisplayString>
@@ -90,6 +111,7 @@
     <Expand>
         <Item Name="[name]" ExcludeView="simple">mName</Item>
         <Item Name="[data]" ExcludeView="simple">mData</Item>
+        <Item Name="[parent]" ExcludeView="simple">mParent</Item>
         <Item Name="[childs]" ExcludeView="simple">mChildNodes.mCount</Item>
         <ArrayItems>
             <Size>mChildNodes.mCount</Size>

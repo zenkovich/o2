@@ -97,19 +97,19 @@ namespace o2
 
 	/** Object function delegate. */
 	template<typename _class_type, typename _res_type, typename ... _args>
-	class ObjFunctionPtr : public IFunction<_res_type(_args ...)>
+	class ObjFunctionPtr: public IFunction<_res_type(_args ...)>
 	{
 		_res_type(_class_type::*mFunctionPtr)(_args ... args); /** Pointer to function. */
 		_class_type* mObject;                                  /** Pointer to function's owner object. */
 
 	public:
 		/** ctor. */
-		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)) :
+		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)):
 			mFunctionPtr(functionPtr), mObject(object)
 		{}
 
 		/** copy-ctor. */
-		ObjFunctionPtr(const ObjFunctionPtr& other) :
+		ObjFunctionPtr(const ObjFunctionPtr& other):
 			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
 		{}
 
@@ -144,11 +144,73 @@ namespace o2
 		{
 			return (mObject->*mFunctionPtr)(args ...);
 		}
-		
+
 		/** Returns true if functions is equal. */
 		bool Equals(IFunction* other) const
 		{
 			ObjFunctionPtr* otherFuncPtr = dynamic_cast<ObjFunctionPtr*>(other);
+			if (otherFuncPtr)
+				return *otherFuncPtr == *this;
+
+			return false;
+		}
+	};
+
+
+	/** Object function delegate. */
+	template<typename _class_type, typename _res_type, typename ... _args>
+	class ObjConstFunctionPtr: public IFunction<_res_type(_args ...)>
+	{
+		_res_type(_class_type::*mFunctionPtr)(_args ... args) const; /** Pointer to const function. */
+		_class_type* mObject;                                        /** Pointer to function's owner object. */
+
+	public:
+		/** ctor. */
+		ObjConstFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const):
+			mFunctionPtr(functionPtr), mObject(object)
+		{}
+
+		/** copy-ctor. */
+		ObjConstFunctionPtr(const ObjConstFunctionPtr& other):
+			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
+		{}
+
+		/** Copy-operator. */
+		ObjConstFunctionPtr& operator=(const ObjConstFunctionPtr& other)
+		{
+			mFunctionPtr = other.mFunctionPtr;
+			mObject = other.mObject;
+			return *this;
+		}
+
+		/** Equals operator. */
+		bool operator==(const ObjConstFunctionPtr& other) const
+		{
+			return mObject == other.mObject && mFunctionPtr == other.mFunctionPtr;
+		}
+
+		/** Not equals operator. */
+		bool operator!=(const ObjConstFunctionPtr& other) const
+		{
+			return mObject != other.mObject || mFunctionPtr != other.mFunctionPtr;
+		}
+
+		/** Returns cloned copy of this. */
+		IFunction* Clone() const
+		{
+			return new ObjConstFunctionPtr(*this);
+		}
+
+		/** Invokes function with arguments as functor. */
+		_res_type Invoke(_args ... args) const
+		{
+			return (mObject->*mFunctionPtr)(args ...);
+		}
+
+		/** Returns true if functions is equal. */
+		bool Equals(IFunction* other) const
+		{
+			ObjConstFunctionPtr* otherFuncPtr = dynamic_cast<ObjConstFunctionPtr*>(other);
 			if (otherFuncPtr)
 				return *otherFuncPtr == *this;
 
@@ -334,6 +396,13 @@ namespace o2
 			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
+		/** ctor from object and his function. */
+		template<typename _class_type>
+		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const)
+		{
+			mFunctions.push_back(new ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+		}
+
 		/** dtor. */
 		~Function()
 		{
@@ -360,6 +429,13 @@ namespace o2
 		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 		{
 			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+		}
+
+		/** Add delegate to inside list. */
+		template<typename _class_type>
+		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const)
+		{
+			mFunctions.push_back(new ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
 		/** Add delegate to inside list. */
@@ -418,6 +494,13 @@ namespace o2
 		void Remove(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 		{
 			Remove(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+		}
+
+		/** Remove delegate from list. */
+		template<typename _class_type>
+		void Remove(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const)
+		{
+			Remove(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
 		/** Returns true, if this contains the delegate. */

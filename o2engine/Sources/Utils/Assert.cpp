@@ -10,6 +10,6 @@ namespace o2
 		char message[1024];
 		sprintf(message, "Error at\n%s : %i\nDescription:\n%s", file, line, desc);
 
-		MessageBox(NULL, message, "Error", MB_OK | MB_ICONERROR | MB_TASKMODAL);
+		MessageBox(nullptr, message, "Error", MB_OK | MB_ICONERROR | MB_TASKMODAL);
 	}
 }

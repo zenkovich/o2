@@ -5,19 +5,19 @@
 namespace o2
 {
 	LogStream::LogStream():
-		mParentStream(NULL)
+		mParentStream(nullptr)
 	{
 	}
 
 	LogStream::LogStream(const WString& id):
-		mParentStream(NULL), mId(id)
+		mParentStream(nullptr), mId(id)
 	{
 	}
 
 	LogStream::~LogStream()
 	{
 		if (mParentStream)
-			mParentStream->UnbindStream(this, false);
+			mParentStream->UnbindStream(this);
 
 		UnbindAllStreams();
 	}
@@ -33,18 +33,21 @@ namespace o2
 		mChildStreams.Add(stream);
 	}
 
-	void LogStream::UnbindStream(const Ptr<LogStream>& stream, bool release /*= true*/)
+	void LogStream::UnbindStream(const Ptr<LogStream>& stream)
 	{
 		mChildStreams.Remove(stream);
+	}
 
-		if (release)
-			delete stream;
+	void LogStream::UnbindAndReleaseStream(Ptr<LogStream>& stream)
+	{
+		mChildStreams.Remove(stream);
+		stream.Release();
 	}
 
 	void LogStream::UnbindAllStreams()
 	{
 		for (auto stream : mChildStreams)
-			delete stream;
+			stream.Release();
 
 		mChildStreams.Clear();
 	}

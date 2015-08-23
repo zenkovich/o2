@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,13 +18,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
@@ -92,13 +92,13 @@
     <ClInclude Include="..\Dependencies\Json\Value.h" />
     <ClInclude Include="..\Dependencies\PugiXml\pugiconfig.hpp" />
     <ClInclude Include="..\Dependencies\PugiXml\pugixml.hpp" />
+    <ClInclude Include="..\Dependencies\StackWalker\StackWalker.h" />
     <ClInclude Include="..\Sources\Application\Application.h" />
     <ClInclude Include="..\Sources\Application\IApplication.h" />
     <ClInclude Include="..\Sources\Application\Input.h" />
     <ClInclude Include="..\Sources\Application\Win\Application.h" />
     <ClInclude Include="..\Sources\Assets\Asset.h" />
     <ClInclude Include="..\Sources\Config\AssetConfig.h" />
-    <ClInclude Include="..\Sources\Config\ProjectBuildConfig.h" />
     <ClInclude Include="..\Sources\Config\ProjectConfig.h" />
     <ClInclude Include="..\Sources\EngineSettings.h" />
     <ClInclude Include="..\Sources\O2.h" />
@@ -132,6 +132,7 @@
     <ClInclude Include="..\Sources\Utils\Serialization.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
+    <ClInclude Include="..\Sources\Utils\StackTrace.h" />
     <ClInclude Include="..\Sources\Utils\String.h" />
     <ClInclude Include="..\Sources\Utils\Time.h" />
     <ClInclude Include="..\Sources\Utils\Timer.h" />
@@ -149,12 +150,12 @@
     <ClCompile Include="..\Dependencies\Json\SolidusEscaper.cpp" />
     <ClCompile Include="..\Dependencies\Json\Value.cpp" />
     <ClCompile Include="..\Dependencies\PugiXml\pugixml.cpp" />
+    <ClCompile Include="..\Dependencies\StackWalker\StackWalker.cpp" />
     <ClCompile Include="..\Sources\Application\IApplication.cpp" />
     <ClCompile Include="..\Sources\Application\Input.cpp" />
     <ClCompile Include="..\Sources\Application\Win\Application.cpp" />
     <ClCompile Include="..\Sources\Assets\Asset.cpp" />
     <ClCompile Include="..\Sources\Config\AssetConfig.cpp" />
-    <ClCompile Include="..\Sources\Config\ProjectBuildConfig.cpp" />
     <ClCompile Include="..\Sources\Config\ProjectConfig.cpp" />
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp" />
@@ -169,8 +170,14 @@
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
     <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp" />
     <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
+    <ClCompile Include="..\Sources\Utils\StackTrace.cpp" />
     <ClCompile Include="..\Sources\Utils\Time.cpp" />
     <ClCompile Include="..\Sources\Utils\Timer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\o2.natvis">
+      <SubType>Designer</SubType>
+    </Natvis>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

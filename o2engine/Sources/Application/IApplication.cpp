@@ -9,6 +9,7 @@
 #include "Utils/Log/LogStream.h"
 #include "Utils/Time.h"
 #include "Utils/Timer.h"
+#include "Config/ProjectConfig.h"
 
 namespace o2
 {
@@ -32,9 +33,9 @@ namespace o2
 		//log
 		mLog = mnew LogStream("Application");
  		Debug::GetLog()->BindStream(mLog);
-// 
-// 		//project config
-// 		mProjectConfig = mnew ProjectConfig();
+
+		//project config
+ 		mProjectConfig = mnew ProjectConfig();
 // 
 // 		//assets
 // 		mAssets = mnew Assets();
@@ -60,9 +61,10 @@ namespace o2
 
 	void IApplication::DeinitializeSystems()
 	{
-		delete mInput;
-		delete mTime;
-		delete mTimer;
+		mInput.Release();
+		mTime.Release();
+		mTimer.Release();
+		mProjectConfig.Release();
 
 		mLog->Out("Deinitialized");
 	}
@@ -93,9 +95,14 @@ namespace o2
 		return mLog;
 	}
 
-	Ptr<Input> IApplication::GetInput()
+	Ptr<Input> IApplication::GetInput() const
 	{
 		return mInput;
+	}
+
+	Ptr<ProjectConfig> IApplication::GetProjectConfig() const
+	{
+		return mProjectConfig;
 	}
 
 	Ptr<Time> IApplication::GetTime() const

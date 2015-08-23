@@ -2,6 +2,7 @@
 
 #include "Utils/Data/XmlDataFormat.h"
 #include "Utils/FileSystem/File.h"
+#include "Utils/Serialization.h"
 
 namespace o2
 {
@@ -86,7 +87,22 @@ namespace o2
 		mName(other.mName), mData(other.mData), mParent(nullptr)
 	{
 		for (auto child : other.mChildNodes)
-			mChildNodes.Add(mnew DataNode(*child));
+		{
+			Ptr<DataNode> newNode = mnew DataNode(*child);
+			newNode->mParent = this;
+			mChildNodes.Add(newNode);
+		}
+	}
+
+	DataNode::DataNode(const WString& name, ISerializable& value) :
+		mName(mName), mParent(nullptr)
+	{
+		*this = value.Serialize();
+	}
+
+	DataNode::DataNode(int value):
+		mData(value), mParent(nullptr)
+	{
 	}
 
 	DataNode::~DataNode()
@@ -97,7 +113,7 @@ namespace o2
 	DataNode& DataNode::operator=(const DataNode& other)
 	{
 		for (auto child : mChildNodes)
-			delete child;
+			child.Release();
 
 		mChildNodes.Clear();
 
@@ -290,7 +306,7 @@ namespace o2
 					return mParent->GetNode(nodePath.SubStr(delPos + 1));
 			}
 
-			return NULL;
+			return nullptr;
 		}
 
 		for (auto child : mChildNodes)
@@ -322,13 +338,13 @@ namespace o2
 		return node;
 	}
 
-	bool DataNode::RemoveNode(const Ptr<DataNode>& node)
+	bool DataNode::RemoveNode(Ptr<DataNode>& node)
 	{
 		if (!mChildNodes.Contains(node))
 			return false;
 
 		mChildNodes.Remove(node);
-		delete node;
+		node.Release();
 
 		return true;
 	}
@@ -341,7 +357,7 @@ namespace o2
 
 		Ptr<DataNode> node = mChildNodes.Get(idx);
 		mChildNodes.RemoveAt(idx);
-		delete node;
+		node.Release();
 
 		return true;
 	}
@@ -356,7 +372,7 @@ namespace o2
 		mName = name;
 	}
 
-	const DataNode::DataNodesArr& DataNode::GetChildNodes() const
+	const DataNode::DataNodesVec& DataNode::GetChildNodes() const
 	{
 		return mChildNodes;
 	}

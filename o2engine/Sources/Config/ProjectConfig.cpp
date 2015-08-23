@@ -2,58 +2,86 @@
 
 #include "EngineSettings.h"
 #include "Utils/Debug.h"
-#include "Config/ProjectBuildConfig.h"
 
 namespace o2
 {
 	DECLARE_SINGLETON(ProjectConfig);
 
 	ProjectConfig::ProjectConfig():
-		mBuildConfig(NULL), mAssetsUsesMetaIds(true)
+		mAssetsUsesMetaIds(true)
 	{
+		InitializeProperties();
+
 		String cfgFilePath = PROJECT_CONFIG_FILE_PATH;
 
-		Serializer serializer;
-		if (!serializer.Load(cfgFilePath))
+		DataDoc data;
+		if (!data.LoadFromFile(cfgFilePath))
 		{
 			Debug::LogError("Failed to load Project Config. Path: %s. Initializing default values.", cfgFilePath.Data());
 			InitializeDefault(cfgFilePath);
 			return;
 		}
-		else serializer.Serialize(this, "Config");
-
-		mBuildConfig = new ProjectBuildConfig(this);
+		else Deserialize(data);
 	}
 
 	ProjectConfig::~ProjectConfig()
 	{
-		delete mBuildConfig;
 	}
 
-	String ProjectConfig::GetProjectName() const
+	Property<String> ProjectConfig::ProjectName;
+
+	Property<ProjectConfig::Platform> ProjectConfig::CurrentPlatform;
+
+	String ProjectConfig::GetProjectName()
 	{
-		return mProjectName;
+		return mInstance->mProjectName;
 	}
 
-	ProjectBuildConfig* ProjectConfig::GetBuildConfig() const
+	void ProjectConfig::SetProjectName(const String& name)
 	{
-		return mBuildConfig;
+		mInstance->mProjectName = name;
+	}
+
+	ProjectConfig::Platform ProjectConfig::GetPlatform()
+	{
+		return mInstance->mPlatform;
+	}
+
+	void ProjectConfig::SetPlatform(Platform platform)
+	{
+		mInstance->mPlatform;
 	}
 
 	void ProjectConfig::InitializeDefault(const String& configFilePath)
 	{
 		mProjectName = "Unnamed";
-
-		Serializer serializer;
-		serializer.Serialize(this, "Config");
-		serializer.Save(configFilePath);
+		DataDoc data = Serialize();
+		data.SaveToFile(configFilePath);
 	}
 
-	SERIALIZE_METHOD_IMPL(ProjectConfig)
+	String ProjectConfig::GetProjectNameProp() const
 	{
-		SERIALIZE_ID(mProjectName, "ProjectName");
-		SERIALIZE_ID(mAssetsUsesMetaIds, "AssetsUsingMetaIds");
+		return mProjectName;
+	}
 
-		return true;
+	void ProjectConfig::SetProjectNameProp(const String& name)
+	{
+		mProjectName = name;
+	}
+
+	ProjectConfig::Platform ProjectConfig::GetPlatformProp()
+	{
+		return mPlatform;
+	}
+
+	void ProjectConfig::SetPlatformProp(Platform platform)
+	{
+		mPlatform = platform;
+	}
+
+	void ProjectConfig::InitializeProperties()
+	{
+		INITIALIZE_PROPERTY(ProjectConfig, ProjectName, SetProjectNameProp, GetProjectNameProp);
+		INITIALIZE_PROPERTY(ProjectConfig, CurrentPlatform, SetPlatformProp, GetPlatformProp);
 	}
 }

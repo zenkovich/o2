@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Utils/Singleton.h"
 #include "Utils/CommonTypes.h"
+#include "Utils/Serialization.h"
+#include "Utils/Singleton.h"
 
 namespace o2
 {
-	struct WideTime
+	struct WideTime: public ISerializable
 	{
 		int mYear;
 		int mMonth;
@@ -18,6 +19,15 @@ namespace o2
 
 		bool operator==(const WideTime& wt) const;
 		bool operator!=(const WideTime& wt) const;
+
+		SERIALIZABLE_FIELDS(WideTime)
+			FIELD(mYear)
+			FIELD(mMonth)
+			FIELD(mDay)
+			FIELD(mHour)
+			FIELD(mMinute)
+			FIELD(mSecond);
+		END_SERIALIZABLE_FIELDS;
 	};
 
 	class Time: public Singleton<Time>
@@ -39,13 +49,13 @@ namespace o2
 		/** ctor. */
 		Time();
 
-		/** dtor. */
-		~Time();
-
 		/** Update parameters. */
 		void Update(float dt);
 
 	public:
+		/** dtor. */
+		~Time();
+
 		/** Returns application working time, in seconds. */
 		static float GetApplicationTime();
 
