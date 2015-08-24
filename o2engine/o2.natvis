@@ -85,12 +85,12 @@
     </Expand>
 </Type>
   
-<Type Name="o2::ClassFieldInfo&lt;*&gt;">
+<Type Name="o2::FieldInfo&lt;*&gt;">
     <AlternativeType Name="o2::ITemplPtr&lt;*&gt;" />
-    <DisplayString>{{ name={ mName } value={ mValue } }}</DisplayString>
+    <DisplayString>{{ name={ mName } value={ mFieldRef } }}</DisplayString>
     <Expand>
         <Item Name="[name]">mName</Item>
-        <Item Name="[value]">mValue</Item>
+        <Item Name="[value]">mFieldRef</Item>
         <Item Name="[owner]">mOwner</Item>
     </Expand>
 </Type>

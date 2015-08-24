@@ -3,75 +3,36 @@
 #include "Utils/String.h"
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Data/DataDoc.h"
+#include "Utils/Reflection.h"
 
 namespace o2
 {
-	/** Class field info interface. */
-	class IClassFieldInfo
-	{
-	protected:
-		String mName;  /** Name of field. */
-		void*  mOwner; /** Owner object pointer. */
-
-	protected:
-		/** ctor. */
-		IClassFieldInfo(void* owner, const String& name);
-
-	public:
-		/** Returns name of field. */
-		const String& Name() const;
-
-		/** Serializing field into data node. */
-		virtual DataNode Serialize() = 0;
-
-		/** Deserializing field from data node. */
-		virtual void     Deserialize(const DataNode& node) = 0;
-	};
-
-	/** Template field info. Contains reference to field. */
-	template<typename _type>
-	class ClassFieldInfo: public IClassFieldInfo
-	{
-		friend class ClassFieldRegistrator;
-		friend class SerializeHelper;
-
-	protected:
-		_type& mValue; /** Reference field. */
-
-	public:
-		/** ctor. */
-		ClassFieldInfo(void* owner, _type& value, const String& name);
-
-		/** Serializing field into data node. */
-		DataNode Serialize();
-
-		/** Deserializing field from data node. */
-		void     Deserialize(const DataNode& node);
-	};
 
 	/** Serializable object interface. */
 	class ISerializable
 	{
 	public:
-		typedef Vector<Ptr<IClassFieldInfo>> FieldsVec;
-
 		/** Returns empty sample of this object type. */
 		virtual ISerializable* CreateSample() const = 0;
 
-		/** Returns array with fields infos. */
-		virtual FieldsVec      GetFields();
-
 		/** Serializing object into data node. */
-		virtual DataNode       Serialize();
+		virtual DataNode Serialize() = 0;
 
 		/** Deserializing object from data node. */
-		virtual void           Deserialize(const DataNode& node);
+		virtual void Deserialize(const DataNode& node) = 0;
 
 		/** DataNode converting operator. */
 		virtual operator DataNode() = 0;
 
 		/** Assign operator from data node. */
 		virtual ISerializable& operator=(const DataNode& node) = 0;
+
+	protected:
+		/**Beginning serialization callback. */
+		virtual void OnSerialize() {}
+
+		/** Completion deserialization callback. */
+		virtual void OnDeserialized() {}
 	};
 
 	/** Static serializable types container. */
@@ -88,35 +49,96 @@ namespace o2
 		static ISerializable* CreateSample(const String& type);
 	};
 
-#define SERIALIZABLE_FIELDS(CLASS)                                              \
+	/** Serialization fields processor. */
+	class SerializationFieldsProcessor
+	{
+	public:
+		/** Overridden field processor. */
+		template<typename _type>
+		class FieldProcessor: public IFieldProcessor<_type, SerializationFieldsProcessor>
+		{
+		public:
+			/** ctor. */
+			FieldProcessor(_type& field, const String& name, SerializationFieldsProcessor& owner);
+
+			/** Function indicating that field is serializable. */
+			FieldProcessor& Serializable();
+		};
+
+	private:
+		DataNode& mDataNode; /** Target data node reference. */
+
+	public:
+		/** ctor. */
+		SerializationFieldsProcessor(DataNode& dataNode);
+
+		/** Processing field function, returns FieldProcessor object, which that you can add indicating functions (aka attributes). */
+		template<typename _type>
+		FieldProcessor<_type> ProcessField(_type& field, const String& name);
+	};
+
+	/** Deserialization fields processor. */
+	class DeserializationFieldsProcessor
+	{
+	public:
+		/** Overridden field processor. */
+		template<typename _type>
+		class FieldProcessor: public IFieldProcessor<_type, DeserializationFieldsProcessor>
+		{
+		public:
+			/** ctor. */
+			FieldProcessor(_type& field, const String& name, DeserializationFieldsProcessor& owner);
+
+			/** Function indicating that field is serializable. */
+			FieldProcessor& Serializable();
+		};
+
+	private:
+		const DataNode& mDataNode; /** Source data node reference. */
+
+	public:
+		/** ctor. */
+		DeserializationFieldsProcessor(const DataNode& dataNode);
+		/** Processing field function, returns FieldProcessor object, which that you can add indicating functions (aka attributes). */
+		template<typename _type>
+		FieldProcessor<_type> ProcessField(_type& field, const String& name);
+	};
+
+/** Serialization helping macros. */
+#define SERIALIZABLE_IMPL(CLASS)                                                \
 	static SerializableTypesSamples::Regist<CLASS> _srlzTypeReg;                \
-	CLASS* CreateSample() const { return mnew CLASS(); }                        \
-	CLASS& operator=(const DataNode& node) { Deserialize(node); return *this; } \
-	operator DataNode() { return Serialize(); }                                 \
-	FieldsVec GetFields() { FieldsVec res;
-
-
-#define BASE_CLASS_FIELDS(BASE_CLASS) res.Add(BASE_CLASS.GetFields());
-
-#define SERIALIZABLE_FIELDS_INHERITED(CLASS, BASE_CLASS)                        \
-	static SerializableTypesSamples::Regist<CLASS> _srlzTypeReg;                \
-	CLASS* CreateSample() const { return mnew CLASS(); }                        \
-	CLASS& operator=(const DataNode& node) { Deserialize(node); return *this; } \
-	operator DataNode() { return Serialize(); }                                 \
-	FieldsVec GetFields()                                                       \
-	{                                                                           \
-	FieldsVec res;                                                              \
-	res.Add(BASE_CLASS::GetFields());                                            
-
-
-#define FIELD(NAME) res.Add(mnew ClassFieldInfo<decltype(NAME)>(this, NAME, #NAME));
-
-#define END_SERIALIZABLE_FIELDS \
-	return res;                 \
-	}                         
-
+	CLASS* CreateSample() const 												\
+	{																			\
+		return mnew CLASS();													\
+	}                        													\
+	DataNode Serialize()                                                        \
+	{                                                              				\
+		OnSerialize();															\
+		DataNode res;															\
+		SerializationFieldsProcessor processor(res);							\
+		ProcessFields(processor);												\
+		return res;																\
+	}																			\
+	void Deserialize(const DataNode& node)										\
+	{																			\
+		DeserializationFieldsProcessor processor(node);							\
+		ProcessFields(processor);												\
+		OnDeserialized();														\
+	}																			\
+	CLASS& operator=(const DataNode& node) 										\
+	{																			\
+		Deserialize(node); return *this; 										\
+	} 																			\
+	operator DataNode() 														\
+	{ 																			\
+		return Serialize(); 													\
+	}                                                                                             
+                
+/** Serializable type registration macros. */
 #define SERIALIZABLE_REG(CLASS) SerializableTypesSamples::Regist<CLASS> CLASS::_srlzTypeReg; 
 	
+#pragma region SerializableTypesSamples implementation
+
 	template<typename _type>
 	SerializableTypesSamples::Regist<_type>::Regist()
 	{
@@ -124,24 +146,49 @@ namespace o2
 		SerializableTypesSamples::mObjectSamples.Add(typeid(*object).name(), object);
 	}
 
+#pragma endregion SerializableTypesSamples implementation
+
+#pragma region SerializationFieldsProcessor implementation
+	
 	template<typename _type>
-	ClassFieldInfo<_type>::ClassFieldInfo(void* owner, _type& value, const String& name):
-		IClassFieldInfo(owner, name), mValue(value)
+	SerializationFieldsProcessor::FieldProcessor<_type> SerializationFieldsProcessor::ProcessField(_type& field, const String& name)
 	{
+		return FieldProcessor<_type>(field, name, *this);
 	}
 
 	template<typename _type>
-	DataNode ClassFieldInfo<_type>::Serialize()
+	SerializationFieldsProcessor::FieldProcessor<_type>& SerializationFieldsProcessor::FieldProcessor<_type>::Serializable()
 	{
-		DataNode res;
-		res = mValue;
-		res.SetName(mName);
-		return res;
+		*mOwner.mDataNode.AddNode(mName) = mFieldRef;
+		return *this;
 	}
 
 	template<typename _type>
-	void ClassFieldInfo<_type>::Deserialize(const DataNode& node)
+	SerializationFieldsProcessor::FieldProcessor<_type>::FieldProcessor(_type& field, const String& name, SerializationFieldsProcessor& owner):
+		IFieldProcessor(field, name, owner)
+	{}
+
+#pragma endregion SerializationFieldsProcessor implementation
+
+#pragma region DeserializationFieldsProcessor implementation
+	
+	template<typename _type>
+	DeserializationFieldsProcessor::FieldProcessor<_type> DeserializationFieldsProcessor::ProcessField(_type& field, const String& name)
 	{
-		mValue = node;
+		return FieldProcessor<_type>(field, name, *this);
 	}
+
+	template<typename _type>
+	DeserializationFieldsProcessor::FieldProcessor<_type>& DeserializationFieldsProcessor::FieldProcessor<_type>::Serializable()
+	{
+		mFieldRef = *mOwner.mDataNode.GetNode(mName);
+		return *this;
+	}
+
+	template<typename _type>
+	DeserializationFieldsProcessor::FieldProcessor<_type>::FieldProcessor(_type& field, const String& name, DeserializationFieldsProcessor& owner):
+		IFieldProcessor(field, name, owner)
+	{}
+	
+#pragma endregion DeserializationFieldsProcessor implementation
 }

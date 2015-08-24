@@ -20,14 +20,17 @@ namespace o2
 		bool operator==(const WideTime& wt) const;
 		bool operator!=(const WideTime& wt) const;
 
-		SERIALIZABLE_FIELDS(WideTime)
-			FIELD(mYear)
-			FIELD(mMonth)
-			FIELD(mDay)
-			FIELD(mHour)
-			FIELD(mMinute)
-			FIELD(mSecond);
-		END_SERIALIZABLE_FIELDS;
+		SERIALIZABLE_IMPL(WideTime);
+
+		FIELDS()
+		{
+			SERIALIZABLE_FIELD(mYear);
+			SERIALIZABLE_FIELD(mMonth);
+			SERIALIZABLE_FIELD(mDay);
+			SERIALIZABLE_FIELD(mHour);
+			SERIALIZABLE_FIELD(mMinute);
+			SERIALIZABLE_FIELD(mSecond);
+		}
 	};
 
 	class Time: public Singleton<Time>

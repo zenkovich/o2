@@ -52,10 +52,13 @@ namespace o2
 		bool operator==(const FileLocation& other) const;
 		bool operator!=(const FileLocation& other) const;
 
-		SERIALIZABLE_FIELDS(FileLocation)
-			FIELD(mPath)
-			FIELD(mId);
-		END_SERIALIZABLE_FIELDS;
+		SERIALIZABLE_IMPL(FileLocation);
+
+		FIELDS()
+		{
+			SERIALIZABLE_FIELD(mPath);
+			SERIALIZABLE_FIELD(mId);
+		}
 	};
 	typedef Vector<FileLocation> FileLocationsVec;
 }

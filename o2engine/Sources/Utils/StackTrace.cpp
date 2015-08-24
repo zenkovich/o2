@@ -6,4 +6,24 @@ namespace o2
 	{
 		return o2StackWalker::GetStackTrace();
 	}
+
+	o2StackWalker::o2StackWalker(DWORD dwProcessId, HANDLE hProcess):
+		StackWalker(dwProcessId, hProcess)
+	{}
+
+	o2StackWalker::o2StackWalker():
+		StackWalker()
+	{}
+
+	o2::String o2StackWalker::GetStackTrace()
+	{
+		mInstance->mRes = "";
+		mInstance->ShowCallstack();
+		return mInstance->mRes;
+	}
+
+	void o2StackWalker::OnOutput(LPCSTR szText)
+	{
+		mRes += szText;
+	}
 }

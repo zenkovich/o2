@@ -151,7 +151,7 @@ namespace o2
 		ConstIterator end() const;
 	};
 
-	class DataDoc : public DataNode
+	class DataDoc: public DataNode
 	{
 	public:
 		enum class Format { Xml, JSON, Binary };
@@ -169,7 +169,7 @@ namespace o2
 		bool SaveToFile(const String& fileName, Format format = Format::Xml) const;
 		WString SaveAsWString(Format format = Format::Xml) const;
 	};
-	
+
 	template<typename _type>
 	DataNode::DataNode(const WString& name, const Ptr<_type>& value):
 		mName(name), mParent(nullptr)
@@ -207,7 +207,7 @@ namespace o2
 
 
 	template<typename _key, typename _value>
-	DataNode::DataNode(const WString& name, const Dictionary<_key, _value>& value) :
+	DataNode::DataNode(const WString& name, const Dictionary<_key, _value>& value):
 		mName(name), mParent(nullptr)
 	{
 		for (auto kv : value)

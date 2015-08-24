@@ -8,6 +8,7 @@ namespace o2
 {
 	class LogStream;
 
+	/** Debugging stuff class. */
 	class Debug : public Singleton<Debug>
 	{
 		friend class Singleton<Debug>;

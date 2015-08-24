@@ -22,10 +22,17 @@ namespace o2
 
 		virtual AssetConfig* Clone() const;
 
-		SERIALIZABLE_FIELDS(AssetConfig)
+		SERIALIZABLE_IMPL(AssetConfig);
+
+		FIELDS()
+		{
+			FIELD(mLocation)     SERIALIZABLE;
+			FIELD(mIncludeBuild) SERIALIZABLE;
+		}
+		/*SERIALIZABLE_FIELDS(AssetConfig)
 			FIELD(mLocation)
 			FIELD(mIncludeBuild);
-		END_SERIALIZABLE_FIELDS;
+		END_SERIALIZABLE_FIELDS;*/
 	};
 	typedef Vector<AssetConfig*> AssetsConfigsVec;
 
@@ -44,10 +51,10 @@ namespace o2
 
 		virtual AssetConfig* Clone() const;
 
-		SERIALIZABLE_FIELDS_INHERITED(ImageAssetConfig, AssetConfig)
+		/*SERIALIZABLE_FIELDS_INHERITED(ImageAssetConfig, AssetConfig)
 			FIELD(mScale)
 			FIELD(mAtlas);
-		END_SERIALIZABLE_FIELDS;
+		END_SERIALIZABLE_FIELDS;*/
 	};
 
 
@@ -68,11 +75,11 @@ namespace o2
 
 		virtual AssetConfig* Clone() const;
 
-		SERIALIZABLE_FIELDS_INHERITED(AtlasAssetConfig, AssetConfig)
+		/*SERIALIZABLE_FIELDS_INHERITED(AtlasAssetConfig, AssetConfig)
 			FIELD(mMaxSize)
 			FIELD(mAttachedToFolder)
 			FIELD(mAttachFolderLocation)
 			FIELD(mName);
-		END_SERIALIZABLE_FIELDS;
+		END_SERIALIZABLE_FIELDS;*/
 	};
 }

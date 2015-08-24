@@ -77,6 +77,8 @@ namespace o2
 		return WideTime(tm.wSecond, tm.wMinute, tm.wHour, tm.wDay, tm.wMonth, tm.wYear);
 	}
 
+	SERIALIZABLE_REG(WideTime);
+
 	bool WideTime::operator!=(const WideTime& wt) const
 	{
 		return !(*this == wt);

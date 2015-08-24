@@ -8,90 +8,65 @@
 
 INITIALIZE_O2;
 
-struct A;
-struct B;
-struct C;
-
-struct A
+struct TestSerializable: ISerializable
 {
-	A()
+	float  mA = 1.0f;
+	int    mB = 2;
+	String mC = "hello kitty";
+	Vec2F  mD = Vec2F::Up();
+
+	SERIALIZABLE_IMPL(TestSerializable);
+
+	FIELDS()
 	{
-		INITIALIZE_PROPERTY(A, _vv, SetVector, GetVector);
-	}
-
-	A(int x): A()
-	{}
-
-	Ptr<B> pb;
-	Vec2F mVector;
-
-	Setter<Vec2F> _vector = Setter<Vec2F>(this, &A::SetVector);
-	Property<Vec2F> _vv;
-
-	void fun() const
-	{
-		Debug::Log("pb valid: %b", pb.IsValid());
-	}
-
-	void SetVector(Vec2F& vec)
-	{
-		Math::Swap(vec.x, vec.y);
-		mVector = vec;
-	}
-
-	Vec2F GetVector()
-	{
-		Math::Swap(mVector.x, mVector.y);
-		return mVector;
-	}
-
-	virtual void fun1(int a)
-	{
-		Debug::Log("A::fun1(%i)", a);
+		SERIALIZABLE_FIELD(mA);
+		SERIALIZABLE_FIELD(mB);
+		SERIALIZABLE_FIELD(mC);
+		SERIALIZABLE_FIELD(mD);
 	}
 };
 
-struct B
-{
-	B(float f) {}
-	B() {}
-	Ptr<C> pc;
+SERIALIZABLE_REG(TestSerializable);
 
-	virtual void fun1(int a, int b)
+struct InheritedTestSerializable: public TestSerializable
+{
+	int mE = 6;
+	Vector<Ptr<TestSerializable>> mVector;
+
+	SERIALIZABLE_IMPL(InheritedTestSerializable);
+
+	FIELDS()
 	{
-		Debug::Log("B::fun1(%i, %i)", a, b);
+		BASE_CLASS_FIELDS(TestSerializable);
+		SERIALIZABLE_FIELD(mE);
+		SERIALIZABLE_FIELD(mVector) ANIMATABLE(nullptr);
 	}
 };
-
-struct C: public A, public B
-{
-	using A::fun1;
-	using B::fun1;
-
-	Ptr<A> pa;
-};
+SERIALIZABLE_REG(InheritedTestSerializable);
 
 int main(char** lpCmdLine, int nCmdShow)
 {
-	WideTime t;
-	DataNode data = t;
-	DataNode res;
-	AssetInfo info;
-	Ptr<AssetInfo> infop = mnew AssetInfo();
-	DataNode xx = 5;
+	TestSerializable test;
+	DataNode node = test;
 
-	Ptr<A> pa = mnew A();
-	pa->pb = mnew B();
-	pa->pb->pc = mnew C();
-	pa->pb->pc->pa = pa;
+	TestSerializable it;
+	it.mA = -1.0f;
+	it = node;
 
-	Vec2F vec(3, 4);
-	pa->_vv = Vec2F(1, 2);
+	InheritedTestSerializable iit;
+	iit.mVector.Add(mnew TestSerializable());
+	iit.mVector.Add(mnew TestSerializable());
+	iit.mVector.Add(mnew TestSerializable());
+	node = iit;
 
-	Debug::Log("%vf", (Vec2F)pa->_vv);
+	InheritedTestSerializable iit2;
+	iit2.mE = 99;
+	iit2 = node;
 
-	pa.Release();
-	MemoryManager::CollectGarbage();
+	DataDoc doc = node;
+	doc.SaveToFile("test.xml");
+
+	auto fields = iit.GetFields();
 
 	TestMath();
 

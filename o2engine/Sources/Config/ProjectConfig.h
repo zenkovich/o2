@@ -38,11 +38,14 @@ namespace o2
 		static Platform GetPlatform();
 		static void SetPlatform(Platform platform);
 
-		SERIALIZABLE_FIELDS(ProjectConfig)
-			FIELD(mProjectName)
-			FIELD(mPlatform)
-			FIELD(mAssetsUsesMetaIds);
-		END_SERIALIZABLE_FIELDS;
+		SERIALIZABLE_IMPL(ProjectConfig);
+
+		FIELDS()
+		{
+			SERIALIZABLE_FIELD(mProjectName);
+			SERIALIZABLE_FIELD(mAssetsUsesMetaIds);
+			SERIALIZABLE_FIELD(mPlatform);
+		}
 
 	protected:
 		void InitializeDefault(const String& configFilePath);

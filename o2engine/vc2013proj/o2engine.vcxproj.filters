@@ -237,6 +237,9 @@
     <ClInclude Include="..\Sources\Utils\StackTrace.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Reflection.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -342,6 +345,9 @@
       <Filter>Dependencies\StackWalker</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\StackTrace.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Reflection.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>

@@ -49,11 +49,13 @@ namespace o2
 
 		bool operator==(const AssetInfo& other) const;
 
-		SERIALIZABLE_FIELDS(AssetInfo)
-			FIELD(mLocation)
-			FIELD(mType)
-			FIELD(mWriteTime);
-		END_SERIALIZABLE_FIELDS;
+		SERIALIZABLE_IMPL(AssetInfo);
+		FIELDS()
+		{
+			SERIALIZABLE_FIELD(mLocation);
+			SERIALIZABLE_FIELD(mType);
+			SERIALIZABLE_FIELD(mWriteTime);
+		}
 	};
 	typedef Vector<AssetInfo> AssetsInfosVec;
 }
