@@ -30,9 +30,7 @@ namespace o2
 		inline Vertex2 operator=(const Vec2F& vec);
 		inline operator Vec2F() const;
 	};
-
-	//implementation Vertex2
-
+	
 	Vertex2::Vertex2():
 		Vec2<float>(), color(0), tu(0), tv(0), z(1)
 	{}

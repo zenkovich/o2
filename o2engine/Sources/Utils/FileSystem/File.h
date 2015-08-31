@@ -8,83 +8,85 @@ namespace o2
 {
 	enum class FileType { File, Image, Config, Atlas };
 
-	/** Input file. */
+	// ----------
+	// Input file
+	// ----------
 	class InFile
 	{
-		std::ifstream mIfstream; /**< Input stream. */
-		String        mFilename; /**< File name. */
-		bool          mOpened;   /**< True, if file was opened. */
+		std::ifstream mIfstream; // Input stream
+		String        mFilename; // File name
+		bool          mOpened;   // True, if file was opened
 
 	public:
-		/** ctor. */
+		// Default constructor
 		InFile();
 
-		/** ctor. Opening file. */
+		// Constructor with opening file
 		InFile(const String& filename);
 
-		/** dtor.*/
+		// Destructor
 		~InFile();
 
-		/** Opening file with specified extension. If type is cFileType::FT_FILE, file will opened wothout adding extension,
-		 ** else file name will be combine with extension string from file system. */
+		// Opening file 
 		bool Open(const String& filename);
 
-		/** Closing file. */
+		// Closing file
 		bool Close();
 
-		/** Read full file data and return size of readed data. */
+		// Read full file data and return size of ridden data
 		UInt ReadFullData(void *dataPtr);
 
-		/** Read data in dataPtr. */
+		// Read data in dataPtr
 		void ReadData(void *dataPtr, UInt bytes);
 
-		/** Sets caret position. */
+		// Sets caret position
 		void SetCaretPos(UInt pos);
 
-		/** Return caret position. */
+		// Return caret position
 		UInt GetCaretPos();
 
-		/** Returns full data size. */
+		// Returns full data size
 		UInt GetDataSize();
 
-		/** Returns true, if file was opened. */
+		// Returns true, if file was opened
 		bool IsOpened() const;
 
-		/** Return file name. */
+		// Return file name
 		const String& GetFilename() const;
 	};
 
-	/** Output file. */
+	// -----------
+	// Output file
+	// -----------
 	class OutFile
 	{
-		std::ofstream mOfstream; /**< Output stream. */
-		String        mFilename; /**< File name. */
-		bool          mOpened;   /**< True, if file was opened. */
+		std::ofstream mOfstream; // Output stream
+		String        mFilename; // File name
+		bool          mOpened;   // True, if file was opened
 
 	public:
-		/** ctor. */
+		// Default constructor
 		OutFile();
 
-		/** ctor. Opens file. */
+		// Constructor with opening file
 		OutFile(const String& filename);
 
-		/** dtor. */
+		// Destcructor
 		~OutFile();
 
-		/** Opening file with specified extension. If type is cFileType::FT_FILE, file will opened wothout adding extension,
-		 ** else file name will be combine with first extension string from file system. */
+		// Opening file 
 		bool Open(const String& filename);
 
-		/** Close file. */
+		// Close file
 		bool Close();
 
-		/** Write some data from dataPtr. */
+		// Write some data from dataPtr
 		void WriteData(const void* dataPtr, UInt bytes);
 
-		/** Returns true, if file was opened. */
+		// Returns true, if file was opened
 		bool IsOpened() const;
 
-		/** Returns file name. */
+		// Returns file name
 		const String& GetFilename() const;
 	};
 }

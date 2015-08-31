@@ -8,43 +8,48 @@ namespace o2
 {
 	class LogStream;
 
-	/** Debugging stuff class. */
-	class Debug : public Singleton<Debug>
-	{
-		friend class Singleton<Debug>;
+// Debug stuff access macros
+#define Debug DebugStuff::Instance()
 
-		Ptr<LogStream> mLogStream; /** Main log stream. */
+	// ---------------
+	// Debugging stuff
+	// ---------------
+	class DebugStuff: public Singleton<DebugStuff>
+	{
+		friend class Singleton<DebugStuff>;
+
+		Ptr<LogStream> mLogStream; // Main log stream
 
 	private:
-		/** ctor. */
-		Debug();
+		// Default constructor
+		DebugStuff();
 
-		/** dtor. */
-		~Debug();
+		// Destructor
+		~DebugStuff();
 
-		/** Protect copying. */
-		Debug operator=(const Debug& other);
+		// Protect copying
+		DebugStuff operator=(const DebugStuff& other);
 
 	public:
-		/** Out message into main log with formatting. */
-		static void Log(WString format, ...);
+		// Out message into main log with formatting
+		void Log(WString format, ...);
 
-		/** Out message string into main log. */
-		static void Log(const WString& out);
+		// Out message string into main log
+		void LogStr(const WString& out);
 
-		/** Out warning message into main log with formatting. */
-		static void LogWarning(WString format, ...);
+		// Out warning message into main log with formatting
+		void LogWarning(WString format, ...);
 
-		/** Out warning message string into main log. */
-		static void LogWarning(const WString& out);
+		// Out warning message string into main log
+		void LogWarningStr(const WString& out);
 
-		/** Out error message into main log with formatting. */
-		static void LogError(WString format, ...);
+		// Out error message into main log with formatting
+		void LogError(WString format, ...);
 
-		/** Out error message string into main log. */
-		static void LogError(const WString& out);
+		// Out error message string into main log
+		void LogErrorStr(const WString& out);
 
-		/** Returns pointer to main log. */
-		static Ptr<LogStream> GetLog();
+		// Returns pointer to main log
+		Ptr<LogStream> GetLog();
 	};
 }

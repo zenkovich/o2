@@ -1,7 +1,7 @@
 #ifndef JB_JSON_BOX_H
 #define JB_JSON_BOX_H
 
-/**
+/*
  * @mainpage JsonBox
  * @section format_description What is JSON?
  * [JSON](http://json.org/) (JavaScript Object Notation) is a lightweight data-interchange format.

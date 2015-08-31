@@ -29,7 +29,7 @@ namespace o2
 		return res;
 	}
 
-	float Timer::GetElapsedTime()
+	float Timer::GetDeltaTime()
 	{
 		LARGE_INTEGER curTime;
 		QueryPerformanceCounter(&curTime);

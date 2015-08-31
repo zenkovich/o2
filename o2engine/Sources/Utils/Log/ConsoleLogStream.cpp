@@ -3,6 +3,8 @@
 #include <iostream>
 #include <io.h>
 
+// TODO: Can't include <wincon.h> - compiler throws many stupid errors from GDI
+
 namespace o2
 {
 	ConsoleLogStream::ConsoleLogStream():

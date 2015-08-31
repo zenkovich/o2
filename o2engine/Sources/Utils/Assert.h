@@ -2,7 +2,7 @@
 
 namespace o2
 {
-	/** Outing assert with description, if x is false. */
+// Outs assert with description, if x is false
 #define Assert(x, desc)                     \
 	if (!(x))                               \
 	{                                       \

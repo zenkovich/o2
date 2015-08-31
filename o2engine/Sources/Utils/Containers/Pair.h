@@ -2,8 +2,11 @@
 
 namespace o2
 {
+	// -------------
+	// Template pair
+	// -------------
 	template<typename _key_type, typename _value_type>
-	class Pair: public IObject
+	class Pair
 	{
 	public:
 		_key_type   mFirst;

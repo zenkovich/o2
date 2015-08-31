@@ -5,7 +5,7 @@
 
 OPEN_O2_NAMESPACE
 
-/** Stupid simple class. */
+/* Stupid simple class. */
 struct Dummy
 {
 	Dummy() {}
@@ -13,7 +13,7 @@ struct Dummy
 };
 
 
-/** Callback interface. */
+/* Callback interface. */
 class ICallback
 {
 public:
@@ -23,7 +23,7 @@ public:
 	virtual ICallback* Clone() const = 0;
 };
 
-/** Callback with return value interface. */
+/* Callback with return value interface. */
 template<typename RetType>
 class IRetCallback: public ICallback
 {
@@ -35,9 +35,9 @@ public:
 };
 
 
-/************************************************************************/
-/** Callback without parameters and with return value. */
-/************************************************************************/
+/***********************************************************************/
+/* Callback without parameters and with return value. */
+/***********************************************************************/
 template<typename RetType, typename ClassType = Dummy>
 class RetCallback:public IRetCallback<RetType>
 {
@@ -74,14 +74,14 @@ public:
 	}
 };
 
-/** Fast callback creation function. */
+/* Fast callback creation function. */
 template<typename RetType, typename ClassType>
 IRetCallback<RetType>* callback(ClassType* object, RetType(ClassType::*function)())
 {
 	return mnew RetCallback<RetType, ClassType>(object, function);
 }
 
-/** Fast callback creation function. */
+/* Fast callback creation function. */
 template<typename RetType>
 inline IRetCallback<RetType>* callback(RetType(*function)())
 {
@@ -89,9 +89,9 @@ inline IRetCallback<RetType>* callback(RetType(*function)())
 }
 
 
-/************************************************************************/
-/** Callbacks chain. */
-/************************************************************************/
+/***********************************************************************/
+/* Callbacks chain. */
+/***********************************************************************/
 class CallbackChain:public ICallback
 {
 public:
@@ -163,7 +163,7 @@ public:
 };
 
 
-/** Fast callback chain creation function. */
+/* Fast callback chain creation function. */
 inline ICallback* callbackChain(int count, ...)
 {
 	CallbackChain* res = mnew CallbackChain();
@@ -179,9 +179,9 @@ inline ICallback* callbackChain(int count, ...)
 }
 
 
-/************************************************************************/
-/** Callback without parametres. */
-/************************************************************************/
+/***********************************************************************/
+/* Callback without parametres. */
+/***********************************************************************/
 template<typename ClassType = Dummy>
 class Callback:public ICallback
 {
@@ -215,17 +215,17 @@ public:
 	}
 };
 
-/** Fast callback creation function. */
+/* Fast callback creation function. */
 template<typename ClassType>
 ICallback* callback(ClassType* object, void (ClassType::*function)()) { return mnew Callback<ClassType>(object, function); }
 
-/** Fast callback creation function. */
+/* Fast callback creation function. */
 inline ICallback* callback(void(*function)()) { return mnew Callback<Dummy>(function); }
 
 
-/************************************************************************/
-/** Callback with 1 parameter. */
-/************************************************************************/
+/***********************************************************************/
+/* Callback with 1 parameter. */
+/***********************************************************************/
 template<typename ArgT, typename ClassType = Dummy>
 class Callback1Param:public ICallback
 {
@@ -271,14 +271,14 @@ public:
 	}
 };
 
-/** Fast callback1 creation function. */
+/* Fast callback1 creation function. */
 template<typename ArgT, typename ClassType>
 ICallback* callback(ClassType* object, void (ClassType::*function)(ArgT), const ArgT& arg)
 {
 	return mnew Callback1Param<ArgT, ClassType>(object, function, arg);
 }
 
-/** Fast callback1 creation function. */
+/* Fast callback1 creation function. */
 template<typename ArgT>
 ICallback* callback(void(*function)(ArgT), const ArgT& arg)
 {
@@ -286,9 +286,9 @@ ICallback* callback(void(*function)(ArgT), const ArgT& arg)
 }
 
 
-/************************************************************************/
-/** Callback with 2 parameters. */
-/************************************************************************/
+/***********************************************************************/
+/* Callback with 2 parameters. */
+/***********************************************************************/
 template<typename ArgT, typename ArgT2, typename ClassType = Dummy>
 class Callback2Param:public ICallback
 {
@@ -339,14 +339,14 @@ public:
 	}
 };
 
-/** Fast callback2 creation function. */
+/* Fast callback2 creation function. */
 template<typename ArgT, typename ArgT2, typename ClassType>
 ICallback* callback(ClassType* object, void (ClassType::*function)(ArgT, ArgT2), const ArgT& arg, const ArgT2& arg2)
 {
 	return mnew Callback2Param<ClassType>(object, function, arg, arg2);
 }
 
-/** Fast callback2 creation function. */
+/* Fast callback2 creation function. */
 template<typename ArgT, typename ArgT2>
 ICallback* callback(void(*function)(ArgT, ArgT2), const ArgT& arg, const ArgT2& arg2)
 {

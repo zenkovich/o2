@@ -67,9 +67,7 @@ namespace o2
 		inline static Color4 Gray();
 		inline static Color4 SomeColor(int idx);
 	};
-
-	//implementation Color4
-
+	
 	Color4::Color4():
 		r(255), g(255), b(255), a(255)
 	{

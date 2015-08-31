@@ -49,11 +49,14 @@
     <Filter Include="Sources\Utils\Memory">
       <UniqueIdentifier>{d912bc70-a3bf-4955-b081-b69c3eaedd11}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\BuildSystem">
-      <UniqueIdentifier>{bb913a9a-3b67-4211-ab64-127a12cc195f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dependencies\StackWalker">
       <UniqueIdentifier>{6e845a54-5f2a-4efb-942f-0bcd34841994}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Assets\Builder">
+      <UniqueIdentifier>{f987ffcc-6495-43a3-8375-fb23c1f63e03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Utils\Reflection">
+      <UniqueIdentifier>{7f7460cb-cb5f-4623-a50d-bda7ff18f33b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +77,6 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Math\Color.h">
       <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\EngineSettings.h">
-      <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Log\LogStream.h">
       <Filter>Sources\Utils\Log</Filter>
@@ -186,9 +186,6 @@
     <ClInclude Include="..\Sources\Application\IApplication.h">
       <Filter>Sources\Application</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Application\Win\Application.h">
-      <Filter>Sources\Application\Win</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Application\Input.h">
       <Filter>Sources\Application</Filter>
     </ClInclude>
@@ -197,9 +194,6 @@
     </ClInclude>
     <ClInclude Include="..\Sources\O2.h">
       <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Application\Application.h">
-      <Filter>Sources\Application</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Memory\IPtr.h">
       <Filter>Sources\Utils\Memory</Filter>
@@ -222,9 +216,6 @@
     <ClInclude Include="..\Sources\Config\ProjectConfig.h">
       <Filter>Sources\Config</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Config\AssetConfig.h">
-      <Filter>Sources\Config</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\CustomRTTI.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
@@ -237,8 +228,36 @@
     <ClInclude Include="..\Sources\Utils\StackTrace.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection.h">
+    <ClInclude Include="..\Sources\Application\BaseApplication.h">
+      <Filter>Sources\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Application\Win\BaseApplication.h">
+      <Filter>Sources\Application\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Assets.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\EngineSettings.h" />
+    <ClInclude Include="..\Sources\Assets\Builder\AssetsBuilder.h">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\BinaryAsset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Reflection\FieldInfo.h">
+      <Filter>Sources\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Reflection\Type.h">
+      <Filter>Sources\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\IObject.h">
       <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Reflection\Attribute.h">
+      <Filter>Sources\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Reflection\Types.h">
+      <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -314,9 +333,6 @@
     <ClCompile Include="..\Sources\Application\IApplication.cpp">
       <Filter>Sources\Application</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Application\Win\Application.cpp">
-      <Filter>Sources\Application\Win</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Application\Input.cpp">
       <Filter>Sources\Application</Filter>
     </ClCompile>
@@ -335,9 +351,6 @@
     <ClCompile Include="..\Sources\Config\ProjectConfig.cpp">
       <Filter>Sources\Config</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Config\AssetConfig.cpp">
-      <Filter>Sources\Config</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Assets\Asset.cpp">
       <Filter>Sources\Assets</Filter>
     </ClCompile>
@@ -347,11 +360,29 @@
     <ClCompile Include="..\Sources\Utils\StackTrace.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Reflection.cpp">
-      <Filter>Sources\Utils</Filter>
+    <ClCompile Include="..\Sources\Application\Win\BaseApplication.cpp">
+      <Filter>Sources\Application\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Assets.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Builder\AssetsBuilder.cpp">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\BinaryAsset.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Reflection\FieldInfo.cpp">
+      <Filter>Sources\Utils\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp">
+      <Filter>Sources\Utils\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Reflection\Types.cpp">
+      <Filter>Sources\Utils\Reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="..\o2.natvis" />
+    <Natvis Include="o2.natvis" />
   </ItemGroup>
 </Project>

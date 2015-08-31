@@ -3,6 +3,8 @@
 #include "Utils/Containers/IDictionary.h"
 #include "Utils/Containers/Vector.h"
 
+// TODO: Need refactor, comment and fix warning
+
 namespace o2
 {
 	template<typename _key_type, typename _value_type>
@@ -577,8 +579,9 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	_value_type& Dictionary<_key_type, _value_type>::Get(const _key_type& key)
 	{
-		for (auto kv:mPairs)
+		for (auto it = mPairs.Begin(); it != mPairs.End(); ++it)
 		{
+			TKeyValue& kv = *it;
 			if (kv.mKey == key)
 				return kv.mValue;
 		}

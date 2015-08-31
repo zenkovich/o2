@@ -4,7 +4,9 @@
 
 namespace o2
 {
-	/** Timer class, serves for measure the time. */
+	// ------------------------------------
+	// Timer class, using for counting time
+	// ------------------------------------
 	class Timer
 	{
 		LONGLONG      mLastElapsedTime;
@@ -12,19 +14,19 @@ namespace o2
 		LARGE_INTEGER mStartTime;
 
 	public:
-		/** ctor. */
+		// Default constructor
 		Timer();
 
-		/** dtor. */
+		// Destructor
 		~Timer();
 
-		/** Resets time. */
+		// Resets time
 		void Reset();
 
-		/** Returns time in seconds from last Reset() call. */
+		// Returns time in seconds from last Reset() call
 		float GetTime();
 
-		/** Returns time in seconds from last Reset() or GetElapsedTime() call. */
-		float GetElapsedTime();
+		// Returns time in seconds from last Reset() or GetElapsedTime() call
+		float GetDeltaTime();
 	};
 }

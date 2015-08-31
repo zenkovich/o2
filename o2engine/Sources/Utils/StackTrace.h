@@ -5,27 +5,29 @@
 
 namespace o2
 {
-	/** o2 stack walker. */
+	// ---------------
+	// o2 stack walker
+	// ---------------
 	class o2StackWalker: public StackWalker
 	{
-		String                mRes;      /** Here puts result of stack trace. */
+		String mRes; // Here puts result of stack trace
 
 	public:
-		static o2StackWalker* mInstance; /** Static instance pointer. */
+		static o2StackWalker* mInstance; // Static instance pointer
 
-		/** ctor. */
+		// Default constructor
 		o2StackWalker();
 
-		/** ctor for process. */
+		// Constructor for process
 		o2StackWalker(DWORD dwProcessId, HANDLE hProcess);
 
-		/** Returns stack trace as text. */
+		// Returns stack trace as text
 		static String GetStackTrace();
 
 	protected:
 		void OnOutput(LPCSTR szText);
 	};
 
-	/** Returns stack trace as text. */
+	// Returns stack trace as text
 	String GetStackTrace();
 }

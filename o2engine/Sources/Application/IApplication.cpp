@@ -1,7 +1,9 @@
 #include "IApplication.h"
 
 #include <time.h>
-#include "Input.h"
+#include "Application/Input.h"
+#include "Assets/Assets.h"
+#include "Config/ProjectConfig.h"
 #include "Utils/Debug.h"
 #include "Utils/FileSystem/FileSystem.h"
 #include "Utils/Log/ConsoleLogStream.h"
@@ -9,7 +11,6 @@
 #include "Utils/Log/LogStream.h"
 #include "Utils/Time.h"
 #include "Utils/Timer.h"
-#include "Config/ProjectConfig.h"
 
 namespace o2
 {
@@ -18,6 +19,7 @@ namespace o2
 	IApplication::IApplication():
 		mLog(nullptr)
 	{
+		InitializeProperties();
 		InitalizeSystems();
 	}
 
@@ -32,16 +34,16 @@ namespace o2
 
 		//log
 		mLog = mnew LogStream("Application");
- 		Debug::GetLog()->BindStream(mLog);
+ 		Debug.GetLog()->BindStream(mLog);
 
 		//project config
- 		mProjectConfig = mnew ProjectConfig();
-// 
-// 		//assets
-// 		mAssets = mnew Assets();
+ 		mProjectConfig = mnew ProjectConfigStuff();
+
+		//assets
+		mAssets = mnew Assets();
 
 		//input message
-		mInput = mnew Input();
+		mInput = mnew InputStuff();
 // 
 // 		//scheduler
 // 		mScheduler = mnew Scheduler();
@@ -51,7 +53,7 @@ namespace o2
 		mTimer->Reset();
 
 		//timers
-		mTime = mnew Time();
+		mTime = mnew TimeStuff();
 // 
 // 		//ui
 // 		mUIController = mnew UIController();
@@ -65,15 +67,17 @@ namespace o2
 		mTime.Release();
 		mTimer.Release();
 		mProjectConfig.Release();
+		mAssets.Release();
 
 		mLog->Out("Deinitialized");
 	}
 
 	void IApplication::ProcessFrame()
 	{
-		float dt = Math::Clamp(mTimer->GetElapsedTime(), 0.001f, 0.05f);
+		float realdDt = mTimer->GetDeltaTime();
+		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
 
-		mTime->Update(dt);
+		mTime->Update(realdDt);
 
 		//mScheduler->ProcessBeforeFrame(dt);
 
@@ -92,22 +96,22 @@ namespace o2
 
 	Ptr<LogStream> IApplication::GetLog() const
 	{
-		return mLog;
+		return mInstance->mLog;
 	}
 
-	Ptr<Input> IApplication::GetInput() const
+	Ptr<InputStuff> IApplication::GetInput() const
 	{
-		return mInput;
+		return mInstance->mInput;
 	}
 
-	Ptr<ProjectConfig> IApplication::GetProjectConfig() const
+	Ptr<ProjectConfigStuff> IApplication::GetProjectConfig() const
 	{
-		return mProjectConfig;
+		return mInstance->mProjectConfig;
 	}
 
-	Ptr<Time> IApplication::GetTime() const
+	Ptr<TimeStuff> IApplication::GetTime() const
 	{
-		return mTime;
+		return mInstance->mTime;
 	}
 
 	void IApplication::OnMoved()
@@ -134,7 +138,7 @@ namespace o2
 	{
 	}
 
-	o2::Vec2I IApplication::GetContentSize() const
+	Vec2I IApplication::GetContentSize() const
 	{
 		return Vec2I();
 	}
@@ -143,7 +147,7 @@ namespace o2
 	{
 	}
 
-	o2::String IApplication::GetWindowCaption() const
+	String IApplication::GetWindowCaption() const
 	{
 		return "";
 	}
@@ -152,7 +156,7 @@ namespace o2
 	{
 	}
 
-	o2::Vec2I IApplication::GetWindowPosition() const
+	Vec2I IApplication::GetWindowPosition() const
 	{
 		return Vec2I();
 	}
@@ -161,7 +165,7 @@ namespace o2
 	{
 	}
 
-	o2::Vec2I IApplication::GetWindowSize() const
+	Vec2I IApplication::GetWindowSize() const
 	{
 		return GetContentSize();
 	}
@@ -184,11 +188,7 @@ namespace o2
 		return true;
 	}
 
-	void IApplication::SetFullscreen()
-	{
-	}
-
-	void IApplication::SetWindowed()
+	void IApplication::SetFullscreen(bool fullscreen /*= true*/)
 	{
 	}
 
@@ -202,5 +202,15 @@ namespace o2
 
 	void IApplication::Launch()
 	{
+	}	
+	
+	void IApplication::InitializeProperties()
+	{
+		INITIALIZE_PROPERTY(IApplication, Fullscreen, SetFullscreen, IsFullScreen);
+		INITIALIZE_PROPERTY(IApplication, Resizible, SetResizible, IsResizible);
+		INITIALIZE_PROPERTY(IApplication, WindowSize, SetWindowSize, GetWindowSize);
+		INITIALIZE_PROPERTY(IApplication, WindowContentSize, SetContentSize, GetContentSize);
+		INITIALIZE_PROPERTY(IApplication, WindowPosition, SetWindowPosition, GetWindowPosition);
+		INITIALIZE_PROPERTY(IApplication, WindowCaption, SetWindowCaption, GetWindowCaption);
 	}
 }

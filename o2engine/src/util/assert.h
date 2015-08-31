@@ -7,7 +7,7 @@ OPEN_O2_NAMESPACE
 #undef assert
 #endif
 
-/** Outing assert with description, if x is false. */
+/* Outing assert with description, if x is false. */
 #define o2assert(x, desc) \
 if (!(x)) \
 { \

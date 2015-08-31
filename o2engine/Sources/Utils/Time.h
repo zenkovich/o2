@@ -6,7 +6,12 @@
 
 namespace o2
 {
-	struct WideTime: public ISerializable
+	class TimeStuff;
+
+	// ----------
+	// Time stamp
+	// ----------
+	struct TimeStamp: public ISerializable
 	{
 		int mYear;
 		int mMonth;
@@ -15,72 +20,81 @@ namespace o2
 		int mMinute;
 		int mSecond;
 
-		WideTime(int seconds = 0, int minutes = 0, int hours = 0, int days = 0, int months = 0, int years = 0);
+		TimeStamp(int seconds = 0, int minutes = 0, int hours = 0, int days = 0, int months = 0, int years = 0);
 
-		bool operator==(const WideTime& wt) const;
-		bool operator!=(const WideTime& wt) const;
+		bool operator==(const TimeStamp& wt) const;
+		bool operator!=(const TimeStamp& wt) const;
 
-		SERIALIZABLE_IMPL(WideTime);
+		SERIALIZABLE_IMPL(TimeStamp);
 
-		FIELDS()
+		IOBJECT(TimeStamp)
 		{
-			SERIALIZABLE_FIELD(mYear);
-			SERIALIZABLE_FIELD(mMonth);
-			SERIALIZABLE_FIELD(mDay);
-			SERIALIZABLE_FIELD(mHour);
-			SERIALIZABLE_FIELD(mMinute);
-			SERIALIZABLE_FIELD(mSecond);
+			SRLZ_FIELD(mYear);
+			SRLZ_FIELD(mMonth);
+			SRLZ_FIELD(mDay);
+			SRLZ_FIELD(mHour);
+			SRLZ_FIELD(mMinute);
+			SRLZ_FIELD(mSecond);
 		}
 	};
 
-	class Time: public Singleton<Time>
+	// Time stuff access macros
+#define o2Time TimeStuff::Instance()
+
+	// Time stuff singleton pointer
+	static const TimeStuff* Time = nullptr;
+
+	// -------------
+	// Timing system
+	// -------------
+	class TimeStuff: public Singleton<TimeStuff>
 	{
 		friend class IApplication;
-		friend class Application;
+		friend class BaseApplication;
 
-		float  mApplicationTime;     /** Application working time, seconds. */
-		float  mLocalTime;           /** Local timer working, seconds. Controlling by user. */
-		UInt64 mCurrentFrame;        /** Current frame index. */
-		float  mDeltaTime;           /** Frame delta time. */
-		float  mFPS;                 /** Average frames per second. */
+		float  mApplicationTime;     // Application working time, seconds
+		float  mLocalTime;           // Local timer working, seconds. Controlling by user
+		UInt64 mCurrentFrame;        // Current frame index
+		float  mDeltaTime;           // Frame delta time
+		float  mFPS;                 // Average frames per second
 
-		float  mFPSSum;              /** Summary of fps. */
-		float  mFramesSum;           /** Frames summary. */
-		float  mLastFPSCheckingTime; /** Last average fps checking time. */
+		float  mFPSSum;              // Summary of fps
+		float  mFramesSum;           // Frames summary
+		float  mLastFPSCheckingTime; // Last average fps checking time
 
 	protected:
-		/** ctor. */
-		Time();
+		// Default constructor
+		TimeStuff();
 
-		/** Update parameters. */
+		// Update parameters
 		void Update(float dt);
 
 	public:
-		/** dtor. */
-		~Time();
+		// Destructor
+		~TimeStuff();
 
-		/** Returns application working time, in seconds. */
-		static float GetApplicationTime();
+		// Returns application working time, in seconds
+		float GetApplicationTime() const;
 
-		/** Returns local time, in seconds. */
-		static float GetLocalTime();
+		// Returns local time, in seconds
+		float GetLocalTime() const;
 
-		/** Resetting local time to zero. */
-		static void ResetLocalTime();
+		// Resetting local time to zero
+		void ResetLocalTime() const;
 
-		/** Resetting local time to value. */
-		static void SetLocalTime(float time);
+		// Resetting local time to value
+		void SetLocalTime(float time) const;
 
-		/** Returns current frame index. */
-		static int GetCurrentFrame();
+		// Returns current frame index
+		int GetCurrentFrame() const;
 
-		/** Returns frames delta time. */
-		static float GetDeltaTime();
+		// Returns frames delta time
+		float GetDeltaTime() const;
 
-		/** Returns average frames per second for 0.3 seconds. */
-		static float GetFPS();
+		// Returns average frames per second for 0.3 seconds
+		float GetFPS() const;
 
-		/** Return current system time. */
-		static WideTime CurrentTime();
+		// Return current system time
+		TimeStamp CurrentTime() const;
 	};
 }

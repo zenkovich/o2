@@ -2,21 +2,27 @@
 
 #include <Windows.h>
 
+#include "Utils/Reflection/Types.h"
+
 namespace o2
 {
-	DECLARE_SINGLETON(Time);
+	//TimeStuff& Time = TimeStuff::Instance();
 
-	Time::Time():
+	DECLARE_SINGLETON(TimeStuff);
+	IOBJECT_CPP(TimeStamp);
+
+	TimeStuff::TimeStuff():
 		mApplicationTime(0), mLocalTime(0), mCurrentFrame(0), mDeltaTime(0), mFPS(0), mFPSSum(0),
 		mFramesSum(0), mLastFPSCheckingTime(0)
 	{
+		Time = this;
 	}
 
-	Time::~Time()
+	TimeStuff::~TimeStuff()
 	{
 	}
 
-	void Time::Update(float dt)
+	void TimeStuff::Update(float dt)
 	{
 		mDeltaTime = dt;
 		mApplicationTime += dt;
@@ -34,64 +40,63 @@ namespace o2
 		}
 	}
 
-	float Time::GetApplicationTime()
+	float TimeStuff::GetApplicationTime() const
 	{
 		return mInstance->mApplicationTime;
 	}
 
-	float Time::GetLocalTime()
+	float TimeStuff::GetLocalTime() const
 	{
 		return mInstance->mLocalTime;
 	}
 
-	void Time::ResetLocalTime()
+	void TimeStuff::ResetLocalTime() const
 	{
 		mInstance->mLocalTime = 0;
 	}
 
-	void Time::SetLocalTime(float time)
+	void TimeStuff::SetLocalTime(float time) const
 	{
 		mInstance->mLocalTime = time;
 	}
 
-	int Time::GetCurrentFrame()
+	int TimeStuff::GetCurrentFrame() const
 	{
 		return (int)mInstance->mCurrentFrame;
 	}
 
-	float Time::GetDeltaTime()
+	float TimeStuff::GetDeltaTime() const
 	{
 		return mInstance->mDeltaTime;
 	}
 
-	float Time::GetFPS()
+	float TimeStuff::GetFPS() const
 	{
 		return mInstance->mFPS;
 	}
 
-	WideTime Time::CurrentTime()
+	TimeStamp TimeStuff::CurrentTime() const
 	{
 		SYSTEMTIME tm;
 		GetSystemTime(&tm);
 		
-		return WideTime(tm.wSecond, tm.wMinute, tm.wHour, tm.wDay, tm.wMonth, tm.wYear);
+		return TimeStamp(tm.wSecond, tm.wMinute, tm.wHour, tm.wDay, tm.wMonth, tm.wYear);
 	}
 
-	SERIALIZABLE_REG(WideTime);
-
-	bool WideTime::operator!=(const WideTime& wt) const
+	bool TimeStamp::operator!=(const TimeStamp& wt) const
 	{
 		return !(*this == wt);
 	}
 
-	bool WideTime::operator==(const WideTime& wt) const
+	bool TimeStamp::operator==(const TimeStamp& wt) const
 	{
 		return mSecond == wt.mSecond && mMinute == wt.mMinute && mHour == wt.mHour && mDay == wt.mDay && mMonth == wt.mMonth &&
 			mYear == wt.mYear;
 	}
 
-	WideTime::WideTime(int seconds /*= 0*/, int minutes /*= 0*/, int hours /*= 0*/, int days /*= 0*/, int months /*= 0*/, int years /*= 0*/):
+	TimeStamp::TimeStamp(int seconds /*= 0*/, int minutes /*= 0*/, int hours /*= 0*/, int days /*= 0*/, int months /*= 0*/, int years /*= 0*/):
 		mYear(years), mMonth(months), mDay(days), mHour(hours), mMinute(minutes), mSecond(seconds)
 	{
 	}
+
 }

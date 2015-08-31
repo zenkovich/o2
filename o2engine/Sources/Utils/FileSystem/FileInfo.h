@@ -7,58 +7,55 @@
 
 namespace o2
 {
+	// ---------
+	// File info
+	// ---------
 	class FileInfo
 	{
 	public:
 		String   mPath;
 		FileType mFileType;
-		WideTime mCreatedDate;
-		WideTime mAccessDate;
-		WideTime mEditDate;
+		TimeStamp mCreatedDate;
+		TimeStamp mAccessDate;
+		TimeStamp mEditDate;
 		UInt     mSize;
 
 		bool operator==(const FileInfo& other) const;
 	};
 
-	class PathInfo
+	// ---------
+	// Path info
+	// ---------
+	class FolderInfo
 	{
 	public:
-		typedef Vector<FileInfo> FilesArr;
-		typedef Vector<PathInfo> PathsArr;
+		typedef Vector<FileInfo> FilesVec;
+		typedef Vector<FolderInfo> PathsVec;
 
-		String   mPath;
-		FilesArr mFiles;
-		PathsArr mPaths;
+		String   mPath;  // Path of this 
+		FilesVec mFiles; // Files vector
+		PathsVec mFolders; // Paths vector
 
 	public:
-		bool operator==(const PathInfo& other) const;
+		// Equal operator
+		bool operator==(const FolderInfo& other) const;
 
+		// Returns true if this contains specified path or file
 		bool IsFileExist(const String& filePath);
+
+		// Cuts repeating path parts to short style
+		// Sample: 
+		// SomePath/SomePath2
+		// -SomePath/SomePath2/ff.x
+		// -SomePath/SomePath2/ffy.x
+		// Converting to:
+		// SomePath/SomePath2
+		// -ff.x
+		// -ffy.x
 		void ClampPathNames();
 
 	protected:
+		// Cut path recursive function
 		void ProcessPathNamesClamping(int charCount);
 	};
-
-	class FileLocation: public ISerializable
-	{
-	public:
-		String mPath;
-		UInt   mId;
-
-	public:
-		FileLocation(const String& path = "", UInt id = 0);
-
-		bool operator==(const FileLocation& other) const;
-		bool operator!=(const FileLocation& other) const;
-
-		SERIALIZABLE_IMPL(FileLocation);
-
-		FIELDS()
-		{
-			SERIALIZABLE_FIELD(mPath);
-			SERIALIZABLE_FIELD(mId);
-		}
-	};
-	typedef Vector<FileLocation> FileLocationsVec;
 }

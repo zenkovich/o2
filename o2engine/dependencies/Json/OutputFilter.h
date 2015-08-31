@@ -7,7 +7,7 @@
 #include <streambuf>
 
 namespace JsonBox {
-	/**
+	/*
 	 * Templated class used to filter output in an std::ostream. The custom
 	 * mechanic of the filtering is easily implemented in the given Inserter. An
 	 * output filter can be used to add indentation to an std::ostream, it can
@@ -17,7 +17,7 @@ namespace JsonBox {
 	template <typename Inserter>
 	class OutputFilter : public std::streambuf {
 	public:
-		/**
+		/*
 		 * Parameterized constructor.
 		 * @param newDestination Pointer to the streambuf destination.
 		 * @param newInserter Inserter to use to filter the output.
@@ -30,7 +30,7 @@ namespace JsonBox {
 			deleteWhenFinished(newDeleteWhenFinished) {
 		}
 
-		/**
+		/*
 		 * Parameterized constructor.
 		 * @param newDestination Pointer to the streambuf destination.
 		 * @param newDeleteWhenFinished Used to know if the instance will have
@@ -42,7 +42,7 @@ namespace JsonBox {
 			deleteWhenFinished(newDeleteWhenFinished) {
 		}
 
-		/**
+		/*
 		 * Destructor. Takes care of deleting the destination streambuf if
 		 * necessary.
 		 */
@@ -53,7 +53,7 @@ namespace JsonBox {
 			}
 		}
 
-		/**
+		/*
 		 * Actual function that calls the inserter to filter the output.
 		 * @return Unspecified value not equal to traits::eof() on success,
 		 * traits::eof() on failure.
@@ -73,14 +73,14 @@ namespace JsonBox {
 			return result ;
 		}
 
-		/**
+		/*
 		 * Since it's an output filter, we don't need to do anything here.
 		 */
 		virtual int_type underflow() {
 			return std::char_traits<char_type>::eof();
 		}
 
-		/**
+		/*
 		 * Gets the inserter's instance.
 		 * @return Reference to the inserter.
 		 */
@@ -88,7 +88,7 @@ namespace JsonBox {
 			return inserter;
 		}
 
-		/**
+		/*
 		 * Gets the destination streambuf.
 		 * @return Pointer to the destination streambuf.
 		 */
@@ -100,14 +100,14 @@ namespace JsonBox {
 		/// Pointer to the destination streambuf.
 		std::streambuf *destination;
 
-		/**
+		/*
 		 * Inserter to use to insert new characters in the destination
 		 * streambuf.
 		 * @see JsonBox::Filter<Inserter>::destination
 		 */
 		Inserter inserter;
 
-		/**
+		/*
 		 * Bool used to know if the filter must delete its destination filter or
 		 * not.
 		 * @see JsonBox::Filter<Inserter>::destination

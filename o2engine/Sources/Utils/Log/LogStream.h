@@ -6,70 +6,72 @@
 
 namespace o2
 {
-	/** Basic log stream. Contains interfaces of outing data, parent and child streams. */
+	// ---------------------------------------------------------------------------------
+	// Basic log stream. Contains interfaces of outing data, parent and children streams
+	// ---------------------------------------------------------------------------------
 	class LogStream
 	{
 	protected:
 		typedef Vector<Ptr<LogStream>> LogSteamsVec;
 
-		Ptr<LogStream> mParentStream; /**< Parent stream. NULL if no parent. */
-		WString        mId;           /**< Name of log stream. */
-		LogSteamsVec   mChildStreams; /**< Child streams. */
+		Ptr<LogStream> mParentStream; // Parent stream. NULL if no parent
+		WString        mId;           // Name of log stream
+		LogSteamsVec   mChildStreams; // Child streams
 
 	public:
-		/** ctor. */
+		// Default constructor
 		LogStream();
 
-		/** ctor with id. */
+		// Constructor with id
 		LogStream(const WString& id);
 
-		/** dtor. */
+		// Destructor
 		virtual ~LogStream();
 
-		/** Return name of stream. */
+		// Returns name of stream
 		const WString& GetId() const;
 
-		/** Binding child stream. */
+		// Binds child stream
 		void BindStream(const Ptr<LogStream>& stream);
 
-		/** Unbind child stream. */
+		// Unbinds child stream
 		void UnbindStream(const Ptr<LogStream>& stream);
 
-		/** Unbind and destroy child stream. */
+		// Unbinds and destroy child stream
 		void UnbindAndReleaseStream(Ptr<LogStream>& stream);
 
-		/** Unbind and destroy all child streams. */
+		// Unbinds and destroy all child streams
 		void UnbindAllStreams();
 
-		/** Returns parent stream. Null if no parent. */
+		// Returns parent stream. Null if no parent
 		Ptr<LogStream> GetParentStream() const;
 
-		/** Out with low level log. */
+		// Outs with low level log
 		void Out(WString format, ...);
 
-		/** Out error message. */
+		// Outs error message
 		void Error(WString format, ...);
 
-		/** Out warning message. */
+		// Outs warning message
 		void Warning(WString format, ...);
 
-		/** Out string to current stream and parent stream. */
+		// Outs string to current stream and parent stream
 		void OutStr(const WString& str);
 
-		/** Out error to current stream and parent stream. */
+		// Outs error to current stream and parent stream
 		void ErrorStr(const WString& str);
 
-		/** Out warning to current stream and parent stream. */
+		// Outs warning to current stream and parent stream
 		void WarningStr(const WString& str);
 
 	protected:
-		/** Out string to stream. */
+		// Outs string to stream
 		virtual void OutStrEx(const WString& str) {}
 
-		/** Out error to stream. */
-		virtual void OutErrorEx(const WString& str) { OutStrEx("ERROR:" + str); }
+		// Outs error to stream
+		virtual void OutErrorEx(const WString& str);
 
-		/** Out warning to stream. */
-		virtual void OutWarningEx(const WString& str) { OutStrEx("WARNING:" + str); }
+		// Outs warning to stream
+		virtual void OutWarningEx(const WString& str);
 	};
 }

@@ -1,10 +1,9 @@
 #include "MemoryManager.h"
 
-#include <fstream>
-#include "Utils/Memory/IPtr.h"
 #include "Utils/Assert.h"
 #include "Utils/Log/ConsoleLogStream.h"
 #include "Utils/Log/FileLogStream.h"
+#include "Utils/Memory/IPtr.h"
 
 void* operator new(size_t size, const char* location, int line)
 {

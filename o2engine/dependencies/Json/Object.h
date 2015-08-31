@@ -10,7 +10,7 @@
 namespace JsonBox {
 	 std::ostream &operator<<(std::ostream& output, const Object& o);
 
-	/**
+	/*
 	 * Represents a JSON object. It's a map with added methods. So the JSON
 	 * object type can be used the same way as a standard STL map of string and
 	 * Value, but can be more easily output in a stream.
@@ -125,7 +125,7 @@ namespace JsonBox {
 		container data;
 	};
 
-	/**
+	/*
 	 * Output operator overload for the JSON object. Outputs in standard JSON
 	 * format. Indents the output and escapes the minimum characters.
 	 * @param output Output stream in which to write the object's JSON.

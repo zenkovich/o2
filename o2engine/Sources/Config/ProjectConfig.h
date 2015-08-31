@@ -6,11 +6,14 @@
 #include "Utils/Memory/Ptr.h"
 #include "Utils/Property.h"
 
+
 namespace o2
 {
 	class ProjectBuildConfig;
 
-	class ProjectConfig: public ISerializable, public Singleton<ProjectConfig>
+#define o2ProjectConfig ProjectConfigStuff::Instance()
+
+	class ProjectConfigStuff: public ISerializable, public Singleton<ProjectConfigStuff>
 	{
 		friend class AssetBuildSystem;
 		friend class IApplication;
@@ -20,41 +23,31 @@ namespace o2
 
 	protected:
 		String   mProjectName;
-		bool     mAssetsUsesMetaIds;
 		Platform mPlatform;
 
-	protected:
-		ProjectConfig();
-
 	public:
-		~ProjectConfig();
+		ProjectConfigStuff();
+		~ProjectConfigStuff();
 
-		static Property<String>   ProjectName;
-		static Property<Platform> CurrentPlatform;
+		Property<String>   ProjectName;
+		Property<Platform> CurrentPlatform;
 
-		static String GetProjectName();
-		static void SetProjectName(const String& name);
+		String GetProjectName() const;
+		void SetProjectName(const String& name);
 
-		static Platform GetPlatform();
-		static void SetPlatform(Platform platform);
+		Platform GetPlatform() const;
+		void SetPlatform(Platform platform);
 
-		SERIALIZABLE_IMPL(ProjectConfig);
+		SERIALIZABLE_IMPL(ProjectConfigStuff);
 
-		FIELDS()
+		IOBJECT(ProjectConfigStuff)
 		{
-			SERIALIZABLE_FIELD(mProjectName);
-			SERIALIZABLE_FIELD(mAssetsUsesMetaIds);
-			SERIALIZABLE_FIELD(mPlatform);
+			SRLZ_FIELD(mProjectName);
+			SRLZ_FIELD(mPlatform);
 		}
 
 	protected:
 		void InitializeDefault(const String& configFilePath);
-
-		String GetProjectNameProp() const;
-		void SetProjectNameProp(const String& name);
-
-		Platform GetPlatformProp();
-		void SetPlatformProp(Platform platform);
 
 		void InitializeProperties();
 	};

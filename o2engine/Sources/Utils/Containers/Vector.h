@@ -9,6 +9,9 @@
 
 namespace o2
 {
+	// --------------------
+	// Dynamic linear array
+	// --------------------
 	template<typename _type>
 	class Vector: public IArray<_type>
 	{
@@ -17,37 +20,71 @@ namespace o2
 		{
 			friend class Vector<_type>;
 
-			_type* mValuePtr;
-			Vector* mArray;
+			_type*  mValuePtr; // Current value pointer
+			Vector* mArray;    // Owner array pointer
 
 		public:
+			// Constructor
 			Iterator(Vector* arr, _type* valuePtr);
 
-			int       Index() const;
-			_type&    Value();
-			bool      IsValid() const;
+			// Returns index of current element
+			int Index() const;
 
-			Iterator  operator+(int offs) const;
-			Iterator  operator-(int offs) const;
+			// Returns current value reference
+			_type& Value();
 
+			// Returns true if value is valid (in array range)
+			bool IsValid() const;
+
+			// Plus operator - moving element index right
+			Iterator operator+(int offs) const;
+
+			// Minus operator - moving element index left
+			Iterator operator-(int offs) const;
+
+			// Increment operator
 			Iterator& operator++();
-			Iterator  operator++(int);
-			Iterator& operator--();
-			Iterator  operator--(int);
 
+			// Post increment operator
+			Iterator operator++(int);
+
+			// Decrement operator
+			Iterator& operator--();
+
+			// Post decrement operator
+			Iterator operator--(int);
+
+			// Plus and assign operator
 			Iterator& operator+=(int offs);
+
+			// Minus and assign operator
 			Iterator& operator-=(int offs);
 
+			// Greater check operator
 			bool operator>(const Iterator& itr) const;
+
+			// Fewer check operator
 			bool operator<(const Iterator& itr) const;
+
+			// Greater or equal operator
 			bool operator>=(const Iterator& itr) const;
+
+			// Fewer or equal operator
 			bool operator<=(const Iterator& itr) const;
+
+			// Equal operator
 			bool operator==(const Iterator& itr) const;
+
+			// Not equal operator
 			bool operator!=(const Iterator& itr) const;
 
+			// Boolean cast operator. Return true if value is valid (in array range)
 			operator bool() const;
 
+			// Get pointer operator
 			_type* operator->();
+
+			// Get reference operator
 			_type& operator*();
 		};
 
@@ -55,122 +92,228 @@ namespace o2
 		{
 			friend class Vector<_type>;
 
-			_type*       mValuePtr;
-			const Vector* mArray;
+			_type*        mValuePtr; // Current value pointer
+			const Vector* mArray;	 // Owner array pointer
 
 		public:
+			// Constructor
 			ConstIterator(const Vector* arr, _type* valuePtr);
 
-			int          Index() const;
+			// Returns index of current element
+			int Index() const;
+
+			// Returns current value reference
 			const _type& Value() const;
-			bool         IsValid() const;
 
-			ConstIterator  operator+(int offs) const;
-			ConstIterator  operator-(int offs) const;
+			// Returns true if value is valid (in array range)
+			bool IsValid() const;
 
+			// Plus operator - moving element index right
+			ConstIterator operator+(int offs) const;
+
+			// Minus operator - moving element index left
+			ConstIterator operator-(int offs) const;
+
+			// Increment operator
 			ConstIterator& operator++();
-			ConstIterator  operator++(int);
+
+			// Post increment operator
+			ConstIterator operator++(int);
+
+			// Decrement operator
 			ConstIterator& operator--();
-			ConstIterator  operator--(int);
 
-			ConstIterator&  operator+=(int offs);
-			ConstIterator&  operator-=(int offs);
+			// Post decrement operator
+			ConstIterator operator--(int);
 
+			// Plus and assign operator
+			ConstIterator& operator+=(int offs);
+
+			// Minus and assign operator
+			ConstIterator& operator-=(int offs);
+
+			// Greater check operator
 			bool operator>(const ConstIterator& itr) const;
+
+			// Fewer check operator
 			bool operator<(const ConstIterator& itr) const;
+
+			// Greater or equal operator
 			bool operator>=(const ConstIterator& itr) const;
+
+			// Fewer or equal operator
 			bool operator<=(const ConstIterator& itr) const;
+
+			// Equal operator
 			bool operator==(const Iterator& itr) const;
+
+			// Not equal operator
 			bool operator!=(const Iterator& itr) const;
 
+			// Boolean cast operator. Return true if value is valid (in array range)
 			operator bool() const;
 
+			// Get constant pointer operator
 			const _type* const operator->();
-			const _type&       operator*();
+
+			// Get constant reference operator
+			const _type& operator*();
 		};
 
 	protected:
-		_type* mValues;
-		int      mCount;
-		int      mCapacity;
+		_type* mValues;   // Array elements
+		int    mCount;    // Count of elements
+		int    mCapacity; // Size of mValues
 
 	public:
+		// Constructor by initial capacity
 		Vector(int capacity = 5);
+
+		// Copy-constructor
 		Vector(const Vector& arr);
+
+		// Constructor from other array
 		Vector(const IArray<_type>* arr);
+
+		// Destructor
 		virtual ~Vector();
 
+		// Assign operator
 		Vector& operator=(const Vector& arr);
 
-		Vector  operator+(const Vector& arr) const;
+		// Plus operator - returns sum of this array and other elements
+		Vector operator+(const Vector& arr) const;
+
+		// Plus and assign operator - adding elements to this from other array
 		Vector& operator+=(const Vector& arr);
 
-		Vector  operator+(const _type& value) const;
+		// Plus operator - returns vector with this elements and one more
+		Vector operator+(const _type& value) const;
+
+		// Plus and assign operator - adds element to this
 		Vector& operator+=(const _type& value);
 
-		Vector  operator-(const Vector& arr) const;
+		// Minus operator - returns new vector, where removed elements
+		Vector operator-(const Vector& arr) const;
+
+		// Minus and assign operator - removes elements from array
 		Vector& operator-=(const Vector& arr);
 
-		Vector  operator-(const _type& value) const;
+		// Minus operator - returns new vector without specified element
+		Vector operator-(const _type& value) const;
+
+		// Minus and assign operator - removes element from array
 		Vector& operator-=(const _type& value);
 
+		// Equal operator
 		bool operator==(const Vector& arr) const;
+
+		// Not equal operator
 		bool operator!=(const Vector& arr) const;
 
+		// Returns a copy of this
 		IArray* Clone() const;
 
+		// Returns count of elements in vector
 		int Count() const;
+
+		// Returns capacity of vector
 		int Capacity() const;
 
+		// Changes count of elements in array. If new size less than array size elements will be removed
+		// Otherwise empty elements will be added at end
 		void Resize(int newCount);
+
+		// Changes capacity of vector. New capacity can't be less than current
 		void Reserve(int newCapacity);
 
+		// Returns value at index
 		_type& Get(int idx) const;
-		void   Set(int idx, const _type& value);
 
+		// Sets value at index
+		void Set(int idx, const _type& value);
+
+		// Adds new element
 		_type& Add(const _type& value);
-		void   Add(const IArray& arr);
 
+		// Adds elements from other array
+		void Add(const IArray& arr);
+
+		// Inserts new value at position
 		_type& Insert(const _type& value, int position);
-		void   Insert(const IArray& arr, int position);
 
-		int  Find(const _type& value) const;
+		// Inserts new values from other array at position
+		void Insert(const IArray& arr, int position);
+
+		// Returns index of equal element. Returns -1 when array haven't equal element
+		int Find(const _type& value) const;
+
+		// Returns true, if array contains the element
 		bool Contains(const _type& value) const;
 
+		// Removes element from back and returns him
 		_type PopBack();
 
+		// Removes element at position
 		bool RemoveAt(int idx);
+
+		// Removes elements in range
 		bool RemoveRange(int begin, int end);
+
+		// Removes equal array element
 		bool Remove(const _type& value);
+
+		// Removes element by iterator
 		Iterator Remove(const Iterator& it);
 
+		// Removes all elements
 		void Clear();
 
+		// Sorts elements in array by predicate
 		void Sort(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer);
 
+		// Return vector of elements which pass function
 		Vector FindAll(const Function<bool(const _type&)>& match) const;
+
+		// Return vector of elements which pass function
 		Vector Where(const Function<bool(const _type&)>& match) const;
 
+		// Return vector of function results of all elements
 		template<typename _sel_type>
 		Vector<_sel_type> Select(const Function<_sel_type(const _type&)>& selector) const;
 
+		// Returns first specified count elements
 		Vector Take(int count) const;
 
+		// Returns begin iterator
 		Iterator Begin();
+
+		// Returns end iterator
 		Iterator End();
 
+		// Returns constant begin iterator
 		ConstIterator Begin() const;
+
+		// Returns constant end iterator
 		ConstIterator End() const;
 
+		// Returns begin iterator (for range based "for")
 		Iterator begin() { return Begin(); }
+
+		// Returns end iterator (for range based "for")
 		Iterator end() { return End(); }
 
+		// Returns constant begin iterator (for range based "for")
 		ConstIterator begin() const { return Begin(); }
+
+		// Returns constant end iterator (for range based "for")
 		ConstIterator end() const { return End(); }
 
 	protected:
+		// Calculates new optimal capacity for specified size
 		int GetReservingSize(int size);
 
+		// Quick sort algorithm
 		void QuickSort(const Function<bool(const _type&, const _type&)>& pred, int left, int right);
 	};
 
@@ -185,7 +328,7 @@ namespace o2
 	template<typename _type>
 	int Vector<_type>::Iterator::Index() const
 	{
-		return mValuePtr - mArray->mValues;
+		return (int)(mValuePtr - mArray->mValues);
 	}
 
 	template<typename _type>
@@ -640,7 +783,7 @@ namespace o2
 	void Vector<_type>::Reserve(int newCapacity)
 	{
 		if (newCapacity < mCapacity)
-			newCapacity = mCapacity;
+			return;
 
 		if (newCapacity < 5)
 			newCapacity = 5;

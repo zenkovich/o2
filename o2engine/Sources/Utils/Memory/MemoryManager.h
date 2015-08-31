@@ -13,23 +13,31 @@ namespace o2
 	class IPtr;
 	class LogStream;
 
-	/** Object info. Contains pointer to object, child objects pointers and allocation source. */
+	// ---------------------------------------------
+	// Object information, using for memory managing
+	// ---------------------------------------------
 	struct ObjectInfo
 	{
 		typedef Vector<IPtr*> PointersVec;
 
-		void*       mObjectPtr;         /** Object pointer. */
-		UInt        mSize;              /** Size of object in bytes. */
-		bool        mMark;              /** Current mark. For Garbage Collector. */
-		PointersVec mChildPointers;     /** Child pointers, using for GC. */
-		PointersVec mPointers;          /** Object pointers, using for GC. */
-		char        mAllocSrcFile[128]; /** Allocation source file name. */
-		int         mAllocSrcFileLine;  /** Number of line, where object was allocated in source file. */
+		void*       mObjectPtr;         // Object pointer
+		UInt        mSize;              // Size of object in bytes
+		bool        mMark;              // Current mark. For Garbage Collector
+		PointersVec mChildPointers;     // Child pointers, using for GC
+		PointersVec mPointers;          // Object pointers, using for GC
+		char        mAllocSrcFile[128]; // Allocation source file name
+		int         mAllocSrcFileLine;  // Number of line, where object was allocated in source file
 
+		// Marks this object and all children
 		void Mark(bool mark);
 	};
 
-	/** Memory manager. Storing information about all allocated objects, looks for memory leaks and collecting garbage. */
+	// Memory manager access macros
+#define o2Memory (*MemoryManager::mInstance)
+
+	// ------------------------------------------------------------------
+	// Memory manager, using for collecting garbage, tracing memory leaks
+	// ------------------------------------------------------------------
 	class MemoryManager
 	{
 		friend class IPtr;
@@ -46,47 +54,47 @@ namespace o2
 		typedef Vector<ObjectInfo*> ObjectsInfosVec;
 
 	public:
-		static MemoryManager* mInstance; /** Instance pointer. */
+		static MemoryManager* mInstance; // Instance pointer
 
 	protected:
-		ObjectsInfosVec mObjectsInfos;   /** All static objects infos. */
-		PointersVec     mPointers;       /** All pointers. */
-		bool            mCurrentGCMark;  /** Current Garbage collection mark. */
+		ObjectsInfosVec mObjectsInfos;   // All static objects infos
+		PointersVec     mPointers;       // All pointers
+		bool            mCurrentGCMark;  // Current Garbage collection mark
 
 	protected:
-		/** Calling when object created. */
+		// Calling when object created
 		static void OnObjectCreating(void* object, ObjectInfo* info, UInt size, const char* srcFile, int srcFileLine);
 
-		/** Calling when objects destroying. */
+		// Calling when objects destroying
 		static void OnObjectDestroying(void* object);
 
-		/** Calling when pointer creating. */
+		// Calling when pointer creating
 		static void OnPtrCreating(IPtr* ptr);
 
-		/** Calling when pointer destroying. */
+		// Calling when pointer destroying
 		static void OnPtrDestroying(IPtr* ptr);
 
-		/** Returns object info. */
+		// Returns object info
 		static ObjectInfo* GetObjectInfo(void* object);
 
 	public:
-		/** Collects all unused objects and destroys them. */
+		// Collects all unused objects and destroys them
 		static void CollectGarbage();
 
 	private:
-		/** Resets memory tree for all pointers and objects. */
+		// Resets memory tree for all pointers and objects
 		void ResetMemoryTree();
 
-		/** Builds actual memory tree. */
+		// Builds actual memory tree
 		void RebuildMemoryTree();
 
-		/** Searching free object by memory tree. */
+		// Searching free object by memory tree
 		void FindFreeObjects(ObjectsInfosVec& result);
 
-		/** Frees objects. */
+		// Frees objects
 		void FreeObjects(const ObjectsInfosVec& objectsVec);
 
-		/** Prints objects infos. */
+		// Prints objects infos
 		void PrintObjectsInfos(const ObjectsInfosVec& objectsVec);
 	};
 }

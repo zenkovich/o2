@@ -1,8 +1,8 @@
 #pragma once
 
-/**********************************/
-/** Basic configuration section.  */
-/**********************************/
+/*********************************/
+/* Basic configuration section.  */
+/*********************************/
 
 /* Engine namespace. If not defined - no namespace. */
 #define ENGINE_NAMESPACE_NAME o2
@@ -26,9 +26,9 @@
 //#define BASIC_MEMORY_ALLOCATOR_PARAMS 
 
 
-/**********************************/
-/** Debug configuration section.  */
-/**********************************/
+/*********************************/
+/* Debug configuration section.  */
+/*********************************/
 
 /* Using render debug info. */
 #define RENDER_DEBUG
@@ -52,38 +52,38 @@
 #define CONTAINERS_DEBUG false
 
 
-/**********************************/
-/** Project configuration section. */
-/**********************************/
+/*********************************/
+/* Project configuration section. */
+/*********************************/
 
-/** Project config file path. Relative from executable. */
+/* Project config file path. Relative from executable. */
 #define PROJECT_CONFIG_FILE_PATH "../../../config"
 
-/** Build config file path. Relative from executable. */
+/* Build config file path. Relative from executable. */
 #define BUILD_CONFIG_FILE_PATH "../config"
 
 
-/**********************************/
-/** Assets configuration section. */
-/**********************************/
+/*********************************/
+/* Assets configuration section. */
+/*********************************/
 
-/** Building assets before launching app. */
+/* Building assets before launching app. */
 #define ASSETS_PREBUILDING_ENABLE true
 
-/** Enabling saving assets from code. */
+/* Enabling saving assets from code. */
 #define ASSETS_RUNTIME_EDITING_ENABLE true
 
-/** Assets path. Relative from executable. */
+/* Assets path. Relative from executable. */
 #define ASSETS_PATH "../../../assets/"
 
-/** Builded assets path. Relative from executable. */
+/* Builded assets path. Relative from executable. */
 #define ASSETS_BUILDED_PATH "../assets/"
 
-/** Assets configuration file path. */
+/* Assets configuration file path. */
 #define ASSETS_FOLDER_CONFIG_FILE_PATH "../assets_config"
 
-/** Assets info file path. Relative from executable. */
+/* Assets info file path. Relative from executable. */
 #define ASSETS_INFO_FILE_PATH "../assets_info"
 
-/** Assets builded info file path. */
+/* Assets builded info file path. */
 #define ASSETS_BUILDED_INFO_FILE_PATH "../tmp/assets_build_info"

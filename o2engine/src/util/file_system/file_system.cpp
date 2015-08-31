@@ -67,7 +67,7 @@ PathInfo FileSystem::GetPathInfo(const String& path) const
 			if (strcmp(f.cFileName, ".") == 0 || strcmp(f.cFileName, "..") == 0)
 				continue;
 
-			if (f.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
+			if (f.dwFileAttributes == FILE_ATTRIBUTE_DIREctorY)
 				res.mPaths.Add(GetPathInfo(path + "/" + f.cFileName));
 			else
 				res.mFiles.Add(GetFileInfo(path + "/" + f.cFileName));
@@ -187,7 +187,7 @@ bool FileSystem::RemoveDirectory(const String& path, bool recursive /*= true*/) 
 			if (strcmp(f.cFileName, ".") == 0 || strcmp(f.cFileName, "..") == 0)
 				continue;
 
-			if (f.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
+			if (f.dwFileAttributes == FILE_ATTRIBUTE_DIREctorY)
 				RemoveDirectory(path + "/" + f.cFileName, true);
 			else
 				DeleteFile(path + "/" + f.cFileName);
@@ -207,7 +207,7 @@ bool FileSystem::IsDirectoryExist(const String& path) const
 	if (tp == INVALID_FILE_ATTRIBUTES)
 		return false;
 
-	if (tp & FILE_ATTRIBUTE_DIRECTORY)
+	if (tp & FILE_ATTRIBUTE_DIREctorY)
 		return true;
 
 	return false;
@@ -220,7 +220,7 @@ bool FileSystem::IsFileExist(const String& path) const
 	if (tp == INVALID_FILE_ATTRIBUTES)
 		return false;
 
-	if (tp & FILE_ATTRIBUTE_DIRECTORY)
+	if (tp & FILE_ATTRIBUTE_DIREctorY)
 		return false;
 
 	return true;

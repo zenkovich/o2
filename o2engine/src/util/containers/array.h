@@ -11,7 +11,7 @@ template<typename _type>
 class Array: public IArray<_type>
 {
 public:
-	/** Array iterator. */
+	/* Array iterator. */
 	class Iterator
 	{
 		Array* mArray;
@@ -45,7 +45,7 @@ public:
 		_type& operator*();
 	};
 
-	/** Array const iterator. */
+	/* Array const iterator. */
 	class ConstIterator
 	{
 		const Array* const mArray;

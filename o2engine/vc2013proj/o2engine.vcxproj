@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED115911-D293-41D3-A9EC-AF7F2613A1CF}</ProjectGuid>
     <RootNamespace>o2engine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -39,10 +40,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)\..\lib\</OutDir>
+    <OutDir>$(SolutionDir)Tmp\Build\Engine\</OutDir>
+    <IntDir>$(SolutionDir)Tmp\Build\Engine\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)\..\lib\</OutDir>
+    <OutDir>$(SolutionDir)Tmp\Build\Engine\</OutDir>
+    <IntDir>$(SolutionDir)Tmp\Build\Engine\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -50,7 +53,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
-      <AdditionalIncludeDirectories>../;../Sources/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -59,6 +62,9 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <BuildLog>
+      <Path>$(SolutionDir)Tmp\Build\Engine\build.log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -67,13 +73,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../Sources/;../Dependencies/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)Tmp\Build\Engine\build.log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Dependencies\Gason\gason.h" />
@@ -93,12 +103,14 @@
     <ClInclude Include="..\Dependencies\PugiXml\pugiconfig.hpp" />
     <ClInclude Include="..\Dependencies\PugiXml\pugixml.hpp" />
     <ClInclude Include="..\Dependencies\StackWalker\StackWalker.h" />
-    <ClInclude Include="..\Sources\Application\Application.h" />
+    <ClInclude Include="..\Sources\Application\BaseApplication.h" />
     <ClInclude Include="..\Sources\Application\IApplication.h" />
     <ClInclude Include="..\Sources\Application\Input.h" />
-    <ClInclude Include="..\Sources\Application\Win\Application.h" />
+    <ClInclude Include="..\Sources\Application\Win\BaseApplication.h" />
     <ClInclude Include="..\Sources\Assets\Asset.h" />
-    <ClInclude Include="..\Sources\Config\AssetConfig.h" />
+    <ClInclude Include="..\Sources\Assets\Assets.h" />
+    <ClInclude Include="..\Sources\Assets\BinaryAsset.h" />
+    <ClInclude Include="..\Sources\Assets\Builder\AssetsBuilder.h" />
     <ClInclude Include="..\Sources\Config\ProjectConfig.h" />
     <ClInclude Include="..\Sources\EngineSettings.h" />
     <ClInclude Include="..\Sources\O2.h" />
@@ -117,6 +129,7 @@
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />
     <ClInclude Include="..\Sources\Utils\Delegates.h" />
+    <ClInclude Include="..\Sources\Utils\IObject.h" />
     <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\LogStream.h" />
@@ -129,7 +142,10 @@
     <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h" />
     <ClInclude Include="..\Sources\Utils\Memory\Ptr.h" />
     <ClInclude Include="..\Sources\Utils\Property.h" />
-    <ClInclude Include="..\Sources\Utils\Reflection.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\Attribute.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\FieldInfo.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\Type.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\Types.h" />
     <ClInclude Include="..\Sources\Utils\Serialization.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
@@ -154,9 +170,11 @@
     <ClCompile Include="..\Dependencies\StackWalker\StackWalker.cpp" />
     <ClCompile Include="..\Sources\Application\IApplication.cpp" />
     <ClCompile Include="..\Sources\Application\Input.cpp" />
-    <ClCompile Include="..\Sources\Application\Win\Application.cpp" />
+    <ClCompile Include="..\Sources\Application\Win\BaseApplication.cpp" />
     <ClCompile Include="..\Sources\Assets\Asset.cpp" />
-    <ClCompile Include="..\Sources\Config\AssetConfig.cpp" />
+    <ClCompile Include="..\Sources\Assets\Assets.cpp" />
+    <ClCompile Include="..\Sources\Assets\BinaryAsset.cpp" />
+    <ClCompile Include="..\Sources\Assets\Builder\AssetsBuilder.cpp" />
     <ClCompile Include="..\Sources\Config\ProjectConfig.cpp" />
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp" />
@@ -170,16 +188,16 @@
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
     <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp" />
-    <ClCompile Include="..\Sources\Utils\Reflection.cpp" />
+    <ClCompile Include="..\Sources\Utils\Reflection\FieldInfo.cpp" />
+    <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp" />
+    <ClCompile Include="..\Sources\Utils\Reflection\Types.cpp" />
     <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
     <ClCompile Include="..\Sources\Utils\StackTrace.cpp" />
     <ClCompile Include="..\Sources\Utils\Time.cpp" />
     <ClCompile Include="..\Sources\Utils\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="..\o2.natvis">
-      <SubType>Designer</SubType>
-    </Natvis>
+    <Natvis Include="o2.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

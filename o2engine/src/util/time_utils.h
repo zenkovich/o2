@@ -35,45 +35,45 @@ class TimeUtil
 	friend class ApplicationBaseInterface;
 	friend class Application;
 
-	float   mApplicationTime;     /** Application working time, seconds. */
-	float   mLocalTime;           /** Local timer working, seconds. Controlling by user. */
-	uint64  mCurrentFrame;        /** Current frame index. */
-	float   mDeltaTime;           /** Frame delta time. */
-	float   mFPS;                 /** Average frames per second. */
+	float   mApplicationTime;     /* Application working time, seconds. */
+	float   mLocalTime;           /* Local timer working, seconds. Controlling by user. */
+	uint64  mCurrentFrame;        /* Current frame index. */
+	float   mDeltaTime;           /* Frame delta time. */
+	float   mFPS;                 /* Average frames per second. */
 
-	float   mFPSSum;              /** Summary of fps. */
-	float   mFramesSum;           /** Frames summary. */
-	float   mLastFPSCheckingTime; /** Last average fps checking time. */
+	float   mFPSSum;              /* Summary of fps. */
+	float   mFramesSum;           /* Frames summary. */
+	float   mLastFPSCheckingTime; /* Last average fps checking time. */
 
 public:
-	/** ctor. */
+	/* ctor. */
 	TimeUtil();
 
-	/** dtor. */
+	/* dtor. */
 	~TimeUtil();
 
-	/** Update parameters. */
+	/* Update parameters. */
 	void Update(float dt);
 
-	/** Returns application working time, in seconds. */
+	/* Returns application working time, in seconds. */
 	float GetApplicationTime() const;
 
-	/** Returns local time, in seconds. */
+	/* Returns local time, in seconds. */
 	float GetLocalTime() const;
 
-	/** Resetting local time to zero. */
+	/* Resetting local time to zero. */
 	void ResetLocalTime();
 
-	/** Resetting local time to value. */
+	/* Resetting local time to value. */
 	void SetLocalTime(float time);
 
-	/** Returns current frame index. */
+	/* Returns current frame index. */
 	int GetCurrentFrame() const;
 
-	/** Returns frames delta time. */
+	/* Returns frames delta time. */
 	float GetDeltaTime() const;
 
-	/** Returns average frames per second for 0.3 seconds. */
+	/* Returns average frames per second for 0.3 seconds. */
 	float GetFPS() const;
 };
 

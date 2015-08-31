@@ -4,7 +4,7 @@ namespace o2
 {
 	namespace XmlDataFormat
 	{
-		bool LoadDataDoc(const WString& data, DataDoc& doc)
+		bool LoadDataDoc(const WString& data, DataNode& node)
 		{
 			pugi::xml_document xmlDoc;
 			auto res = xmlDoc.load_buffer(data.Data(), data.Length()*sizeof(wchar_t));
@@ -19,7 +19,7 @@ namespace o2
 
 				Ptr<DataNode> newNode = mnew DataNode();
 				LoadDataNode(*it, *newNode);
-				doc.AddNode(newNode);
+				node.AddNode(newNode);
 			}
 
 			return true;
@@ -48,7 +48,7 @@ namespace o2
 			}
 		}
 
-		String SaveDataDoc(const DataDoc& doc)
+		String SaveDataDoc(const DataNode& node)
 		{
 			struct xmlWriter :public pugi::xml_writer
 			{
@@ -67,7 +67,7 @@ namespace o2
 			String res;
 			pugi::xml_document xmlDoc;
 
-			for (auto docNode:doc)
+			for (auto docNode:node)
 			{
 				pugi::xml_node newNode = xmlDoc.append_child(docNode->GetName().Data());
 

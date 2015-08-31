@@ -6,7 +6,7 @@
 
 OPEN_O2_NAMESPACE
 
-/** Timer class, Containing elapsed time from last getElapsedTime() call and elapsed time from reset() call. */
+/* Timer class, Containing elapsed time from last getElapsedTime() call and elapsed time from reset() call. */
 class Timer
 {
 	LONGLONG      mLastElapsedTime;
@@ -14,19 +14,19 @@ class Timer
 	LARGE_INTEGER mStartTime;
 
 public:
-	/** ctor. */
+	/* ctor. */
 	Timer();
 
-	/** dtor. */
+	/* dtor. */
 	~Timer();
 
-	/** Resetting time. */
+	/* Resetting time. */
 	void  Reset();
 
-	/** Returns time in seconds from last reset() call. */
+	/* Returns time in seconds from last reset() call. */
 	float GetTime();
 
-	/** return time in seconds from last reset() or getElapsedTime() call. */
+	/* return time in seconds from last reset() or getElapsedTime() call. */
 	float GetElapsedTime();
 };
 

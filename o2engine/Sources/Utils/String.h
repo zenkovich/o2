@@ -10,111 +10,250 @@
 
 namespace o2
 {
+	// -------------------------
+	// Template character string
+	// -------------------------
 	template<typename T>
 	class TString
 	{
-		T*  mData;
-		int mCapacity;
+		T*  mData;     // Data array
+		int mCapacity; // Data array capacity
 
 	public:
+		// Default constructor
 		TString();
 
+		// Copy-constructor from string with another characters type
 		template<typename T2>
 		TString(const TString<T2>& other);
 
+		// Constructor from characters array
 		template<typename T2>
 		TString(T2* data);
 
+		// Copy-constructor
 		TString(const TString& other);
 
+		// Explicit constructor from boolean value
 		explicit TString(bool value);
+
+		// Explicit constructor from integer value
 		explicit TString(int value);
+
+		// Explicit constructor from unsigned integer value
 		explicit TString(UInt value);
+
+		// Explicit constructor from float value
 		explicit TString(float value);
+
+		// Explicit constructor from float vector value
 		explicit TString(const Vec2F& value);
+
+		// Explicit constructor from integer vactor value
 		explicit TString(const Vec2I& value);
+
+		// Explicit constructor from float rectangle value
 		explicit TString(const RectF& value);
+
+		// Explicit constructor from integer rectangle value
 		explicit TString(const RectI& value);
+
+		// Explicit constructor from color value
 		explicit TString(const Color4& value);
 
+		// Destructor
 		~TString();
 
+		// Copy-operator from string with another characters type
 		template<typename T2>
 		TString& operator=(const TString<T2>& other);
 
+		// Copy-operator
 		TString& operator=(const TString& other);
 
+		// Assign operator from characters array
 		template<typename T2>
 		TString& operator=(T2* data);
 
+		// Cast to characters array
 		operator T*() const;
 
+		// Cast operator to boolean
 		explicit operator bool() const;
+
+		// Cast operator to integer
 		explicit operator int() const;
+
+		// Cast operator to float
 		explicit operator float() const;
+
+		// Cast operator to unsigned integer
 		explicit operator UInt() const;
+
+		// Cast operator to float vector
 		explicit operator Vec2F() const;
+
+		// Cast operator to integer vector
 		explicit operator Vec2I() const;
+
+		// Cast operator to float rectangle
 		explicit operator RectF() const;
+
+		// Cast operator to integer rectangle
 		explicit operator RectI() const;
+
+		// Cast operator to color 
 		explicit operator Color4() const;
 
+		// Check equal operator to characters array
 		template<typename T2>
 		bool operator==(T2* data) const;
+
+		// Check not equal operator to characters array
+		template<typename T2>
+		bool operator!=(T2* data) const;
+
+		// Check equal operator
 		bool operator==(const TString& other) const;
+
+		// Check not equal operator
 		bool operator!=(const TString& other) const;
+
+		// Check greater operator
 		bool operator>(const TString& other) const;
 
+		// Plus operator - returns sum string
 		TString operator+(const TString& other) const;
+
+		// Plus and assign operator - adds string at the end
 		TString& operator+=(const TString& other);
 
+		// Symbol access operator
 		T& operator[](int idx);
 
+		// Return data
 		T* Data() const;
 
+		// Returns length of string
 		int Length() const;
+
+		// Returns capacity of array
 		int Capacity() const;
+
+		// Returns true if string is empty
 		bool IsEmpty() const;
 
+		// Clears string
 		void Clear();
+
+		// Reserving array. Can't be less than current capacity
 		void Reserve(int size);
 
+		// Appends string at the end
 		void Append(const TString& other);
+
+		// Returns sum string
 		TString Appended(const TString& other) const;
 
+		// Inserts string at position
 		void Insert(const TString& other, int position = 0);
+
+		// Returns string with inserted other string
 		TString Inserted(const TString& other, int position = 0) const;
 
+		// Removes symbols from begin to end
 		void Erase(int begin, int end = -1);
+
+		// Returns string with removed symbols from begin to end
 		TString Erased(int begin, int end = -1) const;
 
+		// Replace part of string to another string in range
 		void Replace(const TString& other, int begin, int end);
+
+		// Returns string with replace by another string in range
 		TString Replaced(const TString& other, int begin, int end) const;
 
+		// Return index of specified string. Returns -1 if can't find
 		int Find(const TString& other, int startIdx = 0) const;
+
+		// Returns count of string inside this
 		int CountOf(const TString& other, int startIdx = 0) const;
+
+		// Returns last index of specified string. Returns -1 if can't find
 		int FindLast(const TString& other, int startIdx = -1) const;
 
+		// Returns true if string ends with specified string
 		bool EndsWith(const TString& other) const;
+
+		// Returns true if string starts with specified string
 		bool StartsWith(const TString& other) const;
 
+		// Returns subtracted string
 		TString SubStr(int begin, int end = -1) const;
 
+		// Splits string by specified string and returns results in vector
 		Vector<TString> Split(const TString& splitStr) const;
 
+		// Converts string to lower case
 		TString ToLowerCase() const;
+
+		// Converts string to upper case
 		TString ToUpperCase() const;
 
+		// Removing specified symbols at start of string
 		void Trim(const TString& trimSymbols = " ");
+
+		// Removing specified symbols at start of string
 		void TrimStart(const TString& trimSymbols = " ");
+
+		// Removing specified symbols at end of string
 		void TrimEnd(const TString& trimSymbols = " ");
 
+		// Returns formatted string, like printf()
+		// Format sample: ("some text %i and more %s inserted things %vf", 4, "asd", Vec2F(3, 3))
+		// Supports type parameters:
+		// %i - int
+		// %f - float
+		// %d - double
+		// %s - char*
+		// %b - bool
+		// %c - char
+		// %vf - Vec2F
+		// %vi - Vec2I
+		// %rf - RectF
+		// %ri - RectI
+		// %cl - Color4
+		// %ts - TString
 		static TString Format(TString format, ...);
+
+		// Returns formatted string, like printf()
+		// Format sample: ("some text %i and more %s inserted things %vf", 4, "asd", Vec2F(3, 3))
+		// Supports type parameters:
+		// %i - int
+		// %f - float
+		// %d - double
+		// %s - char*
+		// %b - bool
+		// %c - char
+		// %vf - Vec2F
+		// %vi - Vec2I
+		// %rf - RectF
+		// %ri - RectI
+		// %cl - Color4
+		// %ts - TString
 		static TString Format(TString format, va_list vlist);
 	};
 
+	// ---------------------------
+	// String with wide characters
+	// ---------------------------
 	typedef TString<wchar_t> WString;
+
+	// ------------------------------
+	// String with regular characters
+	// ------------------------------
 	typedef TString<char> String;
+
 
 	inline void ConvertStringPtr(char* dst, const wchar_t* src, int size)
 	{
@@ -611,8 +750,8 @@ namespace o2
 	bool TString<T>::operator==(T2* data) const
 	{
 		int l2 = 0;
-		while (data[l2] != '\0') l2++;
-		l2++;
+		while (data[l2] != '\0') 
+			l2++;
 
 		int l1 = Length();
 		if (l1 != l2)
@@ -625,6 +764,13 @@ namespace o2
 		}
 
 		return true;
+	}
+
+	template<typename T>
+	template<typename T2>
+	bool TString<T>::operator!=(T2* data) const
+	{
+		return !(*this == data);
 	}
 
 	template<typename T>
@@ -1003,9 +1149,6 @@ namespace o2
 	template<typename T>
 	TString<T> TString<T>::Format(const TString format, va_list vlist)
 	{
-		/*vsprintf(charBuf, format, vlist);
-		return (TString)charBuf;*/
-
 		int len = format.Length();
 
 		TString res;
@@ -1041,7 +1184,12 @@ namespace o2
 				}
 				else if (format.mData[i + 1] == 's')
 				{
-					appendStr((TString)va_arg(vlist, char*));
+					appendStr((TString)va_arg(vlist, String));
+				}
+				else if (format.mData[i + 1] == 'u' && format.mData[i + 2] == 'i')
+				{
+					appendStr((TString)va_arg(vlist, UInt));
+					i++;
 				}
 				else if (format.mData[i + 1] == 'v' && format.mData[i + 2] == 'i')
 				{
@@ -1068,9 +1216,14 @@ namespace o2
 					appendStr((TString)va_arg(vlist, Color4));
 					i++;
 				}
-				else if (format.mData[i + 1] == 't' && format.mData[i + 2] == 's')
+				else if (format.mData[i + 1] == 's' && format.mData[i + 2] == 'c')
 				{
-					appendStr(va_arg(vlist, TString));
+					appendStr(va_arg(vlist, char*));
+					i++;
+				}
+				else if (format.mData[i + 1] == 's' && format.mData[i + 2] == 'w')
+				{
+					appendStr(va_arg(vlist, WString));
 					i++;
 				}
 				else if (format.mData[i + 1] == 'c')

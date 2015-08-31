@@ -4,18 +4,18 @@
 #include <streambuf>
 
 namespace JsonBox {
-	/**
+	/*
 	 * Adds a level of indentation to a streambuf.
 	 * @see JsonBox::OutputFilter
 	 */
 	class Indenter {
 	public:
-		/**
+		/*
 		 * Default constructor.
 		 */
 		Indenter();
 
-		/**
+		/*
 		 * Inserts a tab character at the start of each line.
 		 * @param destination Streambuf in which to insert the tab character.
 		 * @param character Character to insert in the streambuf.

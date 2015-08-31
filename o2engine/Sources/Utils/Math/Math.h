@@ -7,10 +7,6 @@ namespace o2
 {
 	namespace Math
 	{
-		/*************************/
-		/* Basic Math functions. */
-		/*************************/
-
 		template<typename T>
 		inline T Sign(const T& value)
 		{
@@ -127,10 +123,6 @@ namespace o2
 			return value*value;
 		}
 
-		/*****************/
-		/* Trigonometry. */
-		/*****************/
-
 		inline float PI()
 		{
 			return 3.1415926535897932384626433832795f;
@@ -160,10 +152,6 @@ namespace o2
 		{
 			return atan2f(x, y);
 		}
-
-		/*************/
-		/* Matrices. */
-		/*************/
 
 		void OrthoProjMatrix(float* mat, float left, float right, float bottom, float top, float nearz, float farz);
 	}

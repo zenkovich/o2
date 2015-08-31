@@ -266,15 +266,19 @@ namespace o2
 	}
 
 
-	Ptr<DataNode> DataNode::operator[](const WString& nodePath) const
+	Ptr<DataNode> DataNode::operator[](const WString& nodePath)
 	{
-		return GetNode(nodePath);
+		auto node = GetNode(nodePath);
+		if (!nodePath)
+			return AddNode(nodePath);
+
+		return node;
 	}
 
-	Ptr<DataNode> DataNode::operator[](const char* nodePath) const
-	{
-		return GetNode(nodePath);
-	}
+ 	Ptr<DataNode> DataNode::operator[](const char* nodePath)
+ 	{
+		return operator[]((WString)nodePath);
+ 	}
 
 	bool DataNode::operator==(const DataNode& other) const
 	{
@@ -325,9 +329,19 @@ namespace o2
 
 	Ptr<DataNode> DataNode::AddNode(const WString& name)
 	{
+		int delPos = name.Find("/");
+		if (delPos >= 0)
+		{
+			Ptr<DataNode> newNode = mnew DataNode(name.SubStr(0, delPos));
+			newNode->mParent = this;
+			mChildNodes.Add(newNode);
+			return newNode->AddNode(name.SubStr(delPos + 1));
+		}
+
 		Ptr<DataNode> newNode = mnew DataNode(name);
 		newNode->mParent = this;
 		mChildNodes.Add(newNode);
+
 		return newNode;
 	}
 
@@ -351,7 +365,7 @@ namespace o2
 
 	bool DataNode::RemoveNode(const WString& name)
 	{
-		int idx = mChildNodes.FindIdx([&](const Ptr<DataNode>& x){ return x->mName == name; });
+		int idx = mChildNodes.FindIdx([&](const Ptr<DataNode>& x) { return x->mName == name; });
 		if (idx < 0)
 			return false;
 
@@ -437,28 +451,7 @@ namespace o2
 		mChildNodes.Clear();
 	}
 
-
-	DataDoc::DataDoc()
-	{
-	}
-
-	DataDoc::DataDoc(const WString& fileName)
-	{
-		LoadFromFile(fileName);
-	}
-
-	DataDoc::DataDoc(const DataNode& node) :
-		DataNode(node)
-	{
-	}
-
-	DataDoc& DataDoc::operator=(const DataNode& other)
-	{
-		DataNode::operator=(other);
-		return *this;
-	}
-
-	bool DataDoc::LoadFromFile(const String& fileName)
+	bool DataNode::LoadFromFile(const String& fileName)
 	{
 		InFile file(fileName);
 
@@ -473,12 +466,12 @@ namespace o2
 		return LoadFromData(data);
 	}
 
-	bool DataDoc::LoadFromData(const WString& data)
+	bool DataNode::LoadFromData(const WString& data)
 	{
 		return XmlDataFormat::LoadDataDoc(data, *this);
 	}
 
-	bool DataDoc::SaveToFile(const String& fileName, Format format /*= Format::Xml*/) const
+	bool DataNode::SaveToFile(const String& fileName, Format format /*= Format::Xml*/) const
 	{
 		WString data = SaveAsWString(format);
 
@@ -491,7 +484,7 @@ namespace o2
 		return false;
 	}
 
-	WString DataDoc::SaveAsWString(Format format /*= Format::Xml*/) const
+	WString DataNode::SaveAsWString(Format format /*= Format::Xml*/) const
 	{
 		return XmlDataFormat::SaveDataDoc(*this);
 	}

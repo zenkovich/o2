@@ -5,83 +5,60 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(ProjectConfig);
+	DECLARE_SINGLETON(ProjectConfigStuff);
 
-	ProjectConfig::ProjectConfig():
-		mAssetsUsesMetaIds(true)
+	IOBJECT_CPP(ProjectConfigStuff);
+
+	ProjectConfigStuff::ProjectConfigStuff()
 	{
 		InitializeProperties();
 
-		String cfgFilePath = PROJECT_CONFIG_FILE_PATH;
+		String cfgFilePath = PROJECT_SETTINGS_FILE_PATH;
 
-		DataDoc data;
+		DataNode data;
 		if (!data.LoadFromFile(cfgFilePath))
 		{
-			Debug::LogError("Failed to load Project Config. Path: %s. Initializing default values.", cfgFilePath.Data());
+			Debug.LogError("Failed to load Project Config. Path: %s. Initializing default values.", cfgFilePath.Data());
 			InitializeDefault(cfgFilePath);
 			return;
 		}
 		else Deserialize(data);
 	}
 
-	ProjectConfig::~ProjectConfig()
+	ProjectConfigStuff::~ProjectConfigStuff()
 	{
 	}
 
-	Property<String> ProjectConfig::ProjectName;
-
-	Property<ProjectConfig::Platform> ProjectConfig::CurrentPlatform;
-
-	String ProjectConfig::GetProjectName()
+	String ProjectConfigStuff::GetProjectName() const
 	{
 		return mInstance->mProjectName;
 	}
 
-	void ProjectConfig::SetProjectName(const String& name)
+	void ProjectConfigStuff::SetProjectName(const String& name)
 	{
 		mInstance->mProjectName = name;
 	}
 
-	ProjectConfig::Platform ProjectConfig::GetPlatform()
+	ProjectConfigStuff::Platform ProjectConfigStuff::GetPlatform() const
 	{
 		return mInstance->mPlatform;
 	}
 
-	void ProjectConfig::SetPlatform(Platform platform)
+	void ProjectConfigStuff::SetPlatform(Platform platform)
 	{
 		mInstance->mPlatform;
 	}
 
-	void ProjectConfig::InitializeDefault(const String& configFilePath)
+	void ProjectConfigStuff::InitializeDefault(const String& configFilePath)
 	{
 		mProjectName = "Unnamed";
-		DataDoc data = Serialize();
+		DataNode data = Serialize();
 		data.SaveToFile(configFilePath);
 	}
 
-	String ProjectConfig::GetProjectNameProp() const
+	void ProjectConfigStuff::InitializeProperties()
 	{
-		return mProjectName;
-	}
-
-	void ProjectConfig::SetProjectNameProp(const String& name)
-	{
-		mProjectName = name;
-	}
-
-	ProjectConfig::Platform ProjectConfig::GetPlatformProp()
-	{
-		return mPlatform;
-	}
-
-	void ProjectConfig::SetPlatformProp(Platform platform)
-	{
-		mPlatform = platform;
-	}
-
-	void ProjectConfig::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(ProjectConfig, ProjectName, SetProjectNameProp, GetProjectNameProp);
-		INITIALIZE_PROPERTY(ProjectConfig, CurrentPlatform, SetPlatformProp, GetPlatformProp);
+		INITIALIZE_PROPERTY(ProjectConfigStuff, ProjectName, SetProjectName, GetProjectName);
+		INITIALIZE_PROPERTY(ProjectConfigStuff, CurrentPlatform, SetPlatform, GetPlatform);
 	}
 }

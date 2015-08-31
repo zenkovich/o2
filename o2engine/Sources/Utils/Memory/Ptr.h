@@ -4,27 +4,55 @@
 
 namespace o2
 {
+	// --------------------------------
+	// Smart pointer to template object
+	// --------------------------------
 	template<typename _type>
 	class Ptr : public ITemplPtr<_type>
 	{
 	public:
+		// Constructor
 		Ptr(_type* object = nullptr);
+
+		// Copy-constructor
 		Ptr(const Ptr& other);
+
+		// Destructor
 		~Ptr();
 
+		// Copy operator
 		Ptr& operator=(const Ptr& other);
+
+		// Assign operator
 		Ptr& operator=(_type* object);
+
+		// Check equal operator
 		bool operator==(const Ptr& other) const;
+
+		// Check not equal operator
 		bool operator!=(const Ptr& other) const;
 
+		// Boolean cast operator. Returns true when pointer is valid
 		operator bool() const;
+
+		// Object access operator
 		operator _type*();
+
+		// Object contains access operator
 		operator _type* const() const;
 
+		// Pointer access operator
 		_type* operator->() const;
+
+		// Reference access operator
 		_type& operator*();
 
+		// Returns object pointer
 		_type* Get();
+
+		// Static cost to another type
+		template<typename _other_type>
+		Ptr<_other_type> Cast() const;
 	};
 
 
@@ -102,5 +130,12 @@ namespace o2
 	_type* Ptr<_type>::Get()
 	{
 		return (_type*)mObject;
+	}
+
+	template<typename _type>
+	template<typename _other_type>
+	Ptr<_other_type> Ptr<_type>::Cast() const
+	{
+		return Ptr<_other_type>(static_cast<_other_type*>(mObject));
 	}
 }

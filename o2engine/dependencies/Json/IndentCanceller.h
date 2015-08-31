@@ -4,18 +4,18 @@
 #include <streambuf>
 
 namespace JsonBox {
-	/**
+	/*
 	 * Cancels indentations to a streambuf.
 	 * @see JsonBox::OutputFilter
 	 */
 	class IndentCanceller {
 	public:
-		/**
+		/*
 		 * Default constructor.
 		 */
 		IndentCanceller();
 
-		/**
+		/*
 		 * Inserts a tab character at the start of each line.
 		 * @param destination Streambuf in which to insert the tab character.
 		 * @param character Character to insert in the streambuf.

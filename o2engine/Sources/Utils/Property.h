@@ -4,20 +4,23 @@
 
 namespace o2
 {
-	/** Get function overriding class. */
+	// -----------------------------
+	// Get function overriding class
+	// -----------------------------
 	template<typename _type>
 	class Getter
 	{
 		IFunction<_type()>* mGetter;
+		_type               mTempValue;
 
 	public:
-		/** ctor. */
+		// Default constructor
 		Getter():
 			mGetter(nullptr)
 		{
 		}
 
-		/** ctor. */
+		// Constructor from constant object function
 		template<typename _class_type>
 		Getter(_class_type* object, _type(_class_type::*getter)() const):
 			Getter()
@@ -25,7 +28,7 @@ namespace o2
 			Initialize(object, getter);
 		}
 
-		/** ctor. */
+		// Constructor from object function
 		template<typename _class_type>
 		Getter(_class_type* object, _type(_class_type::*getter)()):
 			Getter()
@@ -33,60 +36,85 @@ namespace o2
 			Initialize(object, getter);
 		}
 
-		/** ctor. */
+		// Constructor from static function pointer
+		Getter(_type(*getter)()):
+			Getter()
+		{
+			Initialize(object, getter);
+		}
+
+		// Constructor from function
 		Getter(IFunction<_type()>* getter):
 			Getter()
 		{
 			mGetter = getter;
 		}
 
-		/** dtor.*/
+		// Destructor
 		virtual ~Getter()
 		{
 			delete mGetter;
 		}
 
-		/** Initialize. */
+		// Initialize from object function
 		template<typename _class_type>
 		void Initialize(_class_type* object, _type(_class_type::*getter)())
 		{
+			if (mGetter) delete mGetter;
 			mGetter = new ObjFunctionPtr<_class_type, _type>(object, getter);
 		}
 
-		/** Initialize. */
+		// Initialize from constant object function
 		template<typename _class_type>
 		void Initialize(_class_type* object, _type(_class_type::*getter)() const)
 		{
+			if (mGetter) delete mGetter;
 			mGetter = new ObjConstFunctionPtr<_class_type, _type>(object, getter);
 		}
 
-		/** Getting value operator. */
+		// Initialize by static getter function
+		void Initialize(_type(*getter)())
+		{
+			if (mGetter) delete mGetter;
+			mGetter = new FunctionPtr<_type()>(getter);
+		}
+
+		// Getting value operator
 		operator _type()
 		{
 			return Get();
 		}
 
-		/** Returns value from get function. */
+		// Pointer access operator
+		_type* operator->() const
+		{
+			mTempValue = Get();
+			return &mTempValue;
+		}
+
+		// Returns value from get function
 		_type Get() const
 		{
 			return (*mGetter)();
 		}
 	};
 
-	/** Set function overriding class. */
+	// -----------------------------
+	// Set function overriding class
+	// -----------------------------
 	template<typename _type>
 	class Setter
 	{
 		IFunction<void(const _type&)>* mSetter;
 
 	public:
-		/** ctor. */
+		// Default constructor
 		Setter():
 			mSetter(nullptr)
 		{
 		}
 
-		/** ctor. */
+		// Constructor from object function with constant reference parameter
 		template<typename _class_type>
 		Setter(_class_type* object, void(_class_type::*setter)(const _type&)):
 			Setter()
@@ -94,7 +122,7 @@ namespace o2
 			Initialize(object, setter);
 		}
 
-		/** ctor. */
+		// Constructor from object function with reference parameter
 		template<typename _class_type>
 		Setter(_class_type* object, void(_class_type::*setter)(_type&)):
 			Setter()
@@ -102,7 +130,7 @@ namespace o2
 			Initialize(object, setter);
 		}
 
-		/** ctor. */
+		// Constructor from object function with regular parameter
 		template<typename _class_type>
 		Setter(_class_type* object, void(_class_type::*setter)(_type)):
 			Setter()
@@ -110,47 +138,95 @@ namespace o2
 			Initialize(object, setter);
 		}
 
-		/** ctor. */
+		// Constructor from static function pointer with constant reference parameter
+		Setter(void(*setter)(const _type&)):
+			Setter()
+		{
+			Initialize(setter);
+		}
+
+		// Constructor from static function pointer with reference parameter
+		Setter(void(*setter)(_type&)):
+			Setter()
+		{
+			Initialize(setter);
+		}
+
+		// Constructor from static function pointer with regular parameter
+		Setter(void(*setter)(_type)):
+			Setter()
+		{
+			Initialize(setter);
+		}
+
+		// Constructor from function
 		Setter(IFunction<void(const _type&)>* setter):
 			mSetter(setter)
 		{
 		}
 
-		/** dtor.*/
+		// Destructor
 		virtual ~Setter()
 		{
 			delete mSetter;
 		}
 
-		/** Initialize. */
+		// Initialize from object function with constant reference parameter
 		template<typename _class_type>
 		void Initialize(_class_type* object, void(_class_type::*setter)(const _type&))
 		{
+			if (mSetter) delete mSetter;
 			mSetter = new ObjFunctionPtr<_class_type, void, const _type&>(object, setter);
 		}
 
-		/** Initialize. */
+		// Initialize from object function with reference parameter
 		template<typename _class_type>
 		void Initialize(_class_type* object, void(_class_type::*setter)(_type&))
 		{
+			if (mSetter) delete mSetter;
 			auto lambda = [=](const _type& value) { (object->*setter)(const_cast<_type&>(value)); };
 			mSetter = new SharedLambda<void(const _type&)>(lambda);
 		}
 
-		/** Initialize. */
+		// Initialize from object function with regular parameter
 		template<typename _class_type>
 		void Initialize(_class_type* object, void(_class_type::*setter)(_type))
 		{
+			if (mSetter) delete mSetter;
 			auto lambda = [=](const _type& value) { (object->*setter)(value); };
 			mSetter = new SharedLambda<void(const _type&)>(lambda);
 		}
 
+		// Initialize by static function with constant reference parameter
+		void Initialize(void(*setter)(const _type&))
+		{
+			if (mSetter) delete mSetter;
+			mSetter = new FunctionPtr<void(const _type&)>(setter);
+		}
+
+		// Initialize by static function with reference parameter
+		void Initialize(void(*setter)(_type&))
+		{
+			if (mSetter) delete mSetter;
+			auto lambda = [=](const _type& value) { setter(const_cast<_type&>(value)); };
+			mSetter = new SharedLambda<void(const _type&)>(lambda);
+		}
+
+		// Initialize by static function with regular parameter
+		void Initialize(void(*setter)(_type))
+		{
+			if (mSetter) delete mSetter;
+			auto lambda = [=](const _type& value) { setter(value); };
+			mSetter = new SharedLambda<void(const _type&)>(lambda);
+		}
+
+		// Invokes set function
 		void Set(const _type& value)
 		{
 			(*mSetter)(value);
 		}
 
-		/** Assign operator. */
+		// Assign operator
 		Setter& operator=(const _type& value)
 		{
 			Set(value);
@@ -158,7 +234,9 @@ namespace o2
 		}
 	};
 
-	/** C#-like property. Uses two functions: setter and getter, and works as simple field. */
+	// ----------------------------------------------------------------------------------
+	// C#-like property. Uses two functions: setter and getter, and works as simple field
+	// ----------------------------------------------------------------------------------
 	template<typename _type>
 	class Property: public Setter<_type>, public Getter<_type>
 	{
@@ -166,81 +244,101 @@ namespace o2
 		using Setter::Initialize;
 		using Getter::Initialize;
 
-		/** Getting value operator. */
+		// Getting value operator
 		operator _type()
 		{
 			return Get();
 		}
 
-		/** Assign operator. */
+		// Assign operator
 		Property& operator=(const _type& value)
 		{
 			Set(value);
 			return *this;
 		}
 
-		/** Assign operator. */
+		// Assign operator
 		Property& operator=(const Property& other)
 		{
 			Set(other.Get());
 			return *this;
 		}
 
-		/** Increment operator. */
+		// Increment operator
 		Property& operator+=(const _type& value)
 		{
 			Set(Get() + value);
 			return *this;
 		}
 
-		/** Increment operator. */
+		// Increment operator
 		_type operator+(const _type& value)
 		{
 			return Get() + value;
 		}
 
-		/** Decrement operator. */
+		// Decrement operator
 		Property& operator-=(const _type& value)
 		{
 			Set(Get() - value);
 			return *this;
 		}
 
-		/** Decrement operator. */
+		// Decrement operator
 		_type operator-(const _type& value)
 		{
 			return Get() - value;
 		}
 
-		/** Multiplication operator. */
+		// Multiplication operator
 		Property& operator*=(const _type& value)
 		{
 			Set(Get()*value);
 			return *this;
 		}
 
-		/** Multiplication operator. */
+		// Multiplication operator
 		_type operator*(const _type& value)
 		{
 			return Get()*value;
 		}
 
-		/** Divide operator. */
+		// Divide operator
 		Property& operator/=(const _type& value)
 		{
 			Set(Get()/value);
 			return *this;
 		}
 
-		/** Divide operator. */
+		// Divide operator
 		_type operator/(const _type& value)
 		{
 			return Get()/value;
 		}
 	};
 
-/** Initialize property helping macros. */
+	// Initialize property helping macros
 #define INITIALIZE_PROPERTY(_CLASS, _PROPERTY, _SET_FUNC, _GET_FUNC) \
-	_PROPERTY.Initialize(this, &_CLASS::_SET_FUNC); _PROPERTY.Initialize(this, &_CLASS::_GET_FUNC)
+_PROPERTY.Initialize(this, &_CLASS::_SET_FUNC); _PROPERTY.Initialize(this, &_CLASS::_GET_FUNC)
+
+// Initialize property macros by static functions
+#define INITIALIZE_STATIC_PROPERTY(_CLASS, _PROPERTY, _SET_FUNC, _GET_FUNC) \
+_PROPERTY.Initialize(&_CLASS::_SET_FUNC); _PROPERTY.Initialize(&_CLASS::_GET_FUNC)
+
+//Initialize setter macros 
+#define INITIALIZE_SETTER(_CLASS, _SETTER, _SET_FUNC) \
+_SETTER.Initialize(this, &_CLASS::_SET_FUNC)
+
+//Initialize setter macros by static function
+#define INITIALIZE_STATIC_SETTER(_CLASS, _SETTER, _SET_FUNC) \
+_SETTER.Initialize(&_CLASS::_SET_FUNC)
+
+//Initialize getter macros 
+#define INITIALIZE_GETTER(_CLASS, _GETTER, _GET_FUNC) \
+_GETTER.Initialize(this, &_CLASS::_GET_FUNC)
+
+//Initialize getter macros by static function
+#define INITIALIZE_STATIC_GETTER(_CLASS, _GETTER, _GET_FUNC) \
+_GETTER.Initialize(&_CLASS::_GET_FUNC)
 
 }

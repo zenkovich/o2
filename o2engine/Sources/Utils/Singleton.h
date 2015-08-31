@@ -6,25 +6,86 @@
 #include "Utils/Memory/Ptr.h"
 
 namespace o2
-{
-	template <typename CLASS> class Singleton
+{ 
+	// ----------------------------------
+	// Template class singleton interface
+	// ----------------------------------
+	template <typename _class_type> 
+	class Singleton
 	{
 	public:
-		virtual ~Singleton()                { mInstance = nullptr; }
-										    
-		static CLASS& Instance()            { Assert(mInstance, "Singleton not initialized"); return *mInstance; }
-										    
-		static Ptr<CLASS> InstancePtr()     { return mInstance; }
-										    
-		static void InitializeSingleton()   { if (!mInstance) new CLASS; }
-		static void DeinitializeSingleton() { mInstance.Release(); }
-										    
-		static bool IsSingletonInitialzed() { return (mInstance != nullptr); }
+		// Default constructor
+		Singleton();
+
+		// Destructor
+		virtual ~Singleton();
+					
+		// Return reference to instance
+		static _class_type& Instance();
+										
+		// Returns pointer to instance
+		static Ptr<_class_type> InstancePtr();
+										
+		// Initializes singleton
+		static void InitializeSingleton();
+
+		// Deinitializes singleton
+		static void DeinitializeSingleton();
+								
+		// Returns true if singleton was initialized
+		static bool IsSingletonInitialzed();
 
 	public:
-		static Ptr<CLASS> mInstance;
+		static Ptr<_class_type> mInstance;
 	};
 
-#	define DECLARE_SINGLETON(CLASS) template<> Ptr<CLASS> Singleton<CLASS>::mInstance = nullptr
-#	define CREATE_SINGLETON(CLASS)  template<> Ptr<CLASS> Singleton<CLASS>::mInstance = mnew CLASS()
+	// Declaring singleton macros
+#define DECLARE_SINGLETON(CLASS) template<> Ptr<CLASS> Singleton<CLASS>::mInstance = nullptr
+
+	// Declaring and initializing singleton macros
+#define CREATE_SINGLETON(CLASS)  template<> Ptr<CLASS> Singleton<CLASS>::mInstance = mnew CLASS()
+
+	template <typename _class_type>
+	Singleton<_class_type>::Singleton()
+	{
+		mInstance = (_class_type*)this;
+	}
+
+	template <typename _class_type>
+	Singleton<_class_type>::~Singleton()
+	{
+		mInstance = nullptr; 
+	}
+
+	template <typename _class_type>
+	_class_type& Singleton<_class_type>::Instance() 
+	{ 
+		Assert(mInstance, "Singleton not initialized");
+		return *mInstance; 
+	}
+
+	template <typename _class_type>
+	Ptr<_class_type> Singleton<_class_type>::InstancePtr()
+	{
+		return mInstance;
+	}
+
+	template <typename _class_type>
+	void Singleton<_class_type>::InitializeSingleton()
+	{ 
+		if (!mInstance) 
+			mnew _class_type; 
+	}
+
+	template <typename _class_type>
+	void Singleton<_class_type>::DeinitializeSingleton() 
+	{ 
+		mInstance.Release(); 
+	}
+
+	template <typename _class_type>
+	bool Singleton<_class_type>::IsSingletonInitialzed()
+	{ 
+		return mInstance != nullptr;
+	}
 }

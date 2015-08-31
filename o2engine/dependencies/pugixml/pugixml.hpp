@@ -1,4 +1,4 @@
-/**
+/*
  * pugixml parser - version 1.6
  * --------------------------------------------------------
  * Copyright (C) 2006-2015, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
@@ -1340,7 +1340,7 @@ namespace std
 #	include PUGIXML_SOURCE
 #endif
 
-/**
+/*
  * Copyright (c) 2006-2015 Arseny Kapoulkine
  *
  * Permission is hereby granted, free of charge, to any person

@@ -5,79 +5,135 @@
 
 namespace o2
 {
-	/** Basic array interface. .*/
+	// ---------------------
+	// Basic array interface
+	// ---------------------
 	template<typename _type>
 	class IArray
 	{
 	public:
+		// Returns a copy of this
 		virtual IArray* Clone() const = 0;
 
+		// Access operator
 		_type& operator[](int idx);
 
+		// Returns value at index
 		virtual _type& Get(int idx) const = 0;
-		virtual void   Set(int idx, const _type& value) = 0;
 
+		// Sets value at index
+		virtual void Set(int idx, const _type& value) = 0;
+
+		// Returns count of elements in array
 		virtual int Count() const = 0;
+
+		// Returns count of elements in array by lambda
 		virtual int CountMatch(const Function<bool(const _type&)>& match) const;
 
+		// Changes count of elements in array. If new size less than array size elements will be removed
+		// Otherwise empty elements will be added at end
 		virtual void Resize(int newCount) = 0;
 
+		// Adds new element
 		virtual _type& Add(const _type& value) = 0;
-		virtual void   Add(const IArray& arr) = 0;
 
+		// Adds elements from other array
+		virtual void Add(const IArray& arr) = 0;
+
+		// Inserts new value at position
 		virtual _type& Insert(const _type& value, int position) = 0;
-		virtual void   Insert(const IArray& arr, int position) = 0;
 
+		// Inserts new values from other array at position
+		virtual void Insert(const IArray& arr, int position) = 0;
+
+		// Removes element from back and returns him
 		virtual _type PopBack() = 0;
 
+		// Removes element at position
 		virtual bool RemoveAt(int idx) = 0;
+
+		// Removes elements in range
 		virtual bool RemoveRange(int begin, int end) = 0;
+
+		// Removes equal array element
 		virtual bool Remove(const _type& value) = 0;
+
+		// Removes all elements that pass function
 		virtual void RemoveAll(const Function<bool(const _type&)>& match);
 
+		// Removes all elements
 		virtual void Clear() = 0;
 
+		// Returns true, if array contains the element
 		virtual bool Contains(const _type& value) const = 0;
+
+		// Returns true, if array contains a element that pass function
 		virtual bool ContainsPred(const Function<bool(const _type&)>& match) const;
 
-		virtual int   Find(const _type& value) const = 0;
-		virtual _type FindMatch(const Function<bool(const _type&)>& match) const;
-		virtual int   FindIdx(const Function<bool(const _type&)>& match) const;
+		// Returns index of equal element. Returns -1 when array haven't equal element
+		virtual int Find(const _type& value) const = 0;
 
+		// Returns elements of array that pass function
+		virtual _type FindMatch(const Function<bool(const _type&)>& match) const;
+
+		// Returns index of element that pass function
+		virtual int FindIdx(const Function<bool(const _type&)>& match) const;
+
+		// Sorts elements in array by predicate
 		virtual void Sort(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer) = 0;
 
+		// Sorts elements in array by sorting value, that gets from function
 		template<typename _sort_type>
 		void SortBy(const Function<_sort_type(const _type&)>& selector);
 
+		// Returns first element
 		virtual _type& First();
-		virtual _type  First(const Function<bool(const _type&)>& match) const;
-		virtual int    FirstIdx(const Function<bool(const _type&)>& match) const;
 
+		// Returns first element that pass function
+		virtual _type First(const Function<bool(const _type&)>& match) const;
+
+		// Returns index of first element that pass function
+		virtual int FirstIdx(const Function<bool(const _type&)>& match) const;
+
+		// Returns last element
 		virtual _type& Last();
-		virtual _type  Last(const Function<bool(const _type&)>& match) const;
-		virtual int    LastIdx(const Function<bool(const _type&)>& match) const;
 
+		// Returns last element that pass function
+		virtual _type Last(const Function<bool(const _type&)>& match) const;
+
+		// Returns index of last element that pass function
+		virtual int LastIdx(const Function<bool(const _type&)>& match) const;
+
+		// Returns true if array is empty
 		virtual bool IsEmpty() const;
 
+		// Returns element by minimal result of function
 		template<typename _sel_type>
 		_type Min(const Function<_sel_type(const _type&)>& selector) const;
 
+		// Returns element index by minimal result of function
 		template<typename _sel_type>
 		int MinIdx(const Function<_sel_type(const _type&)>& selector) const;
 
+		// Returns element by maximal result of function
 		template<typename _sel_type>
 		_type Max(const Function<_sel_type(const _type&)>& selector) const;
 
+		// Returns element index by maximal result of function
 		template<typename _sel_type>
 		int MaxIdx(const Function<_sel_type(const _type&)>& selector) const;
 
+		// Returns all elements that pass function
 		virtual bool All(const Function<bool(const _type&)>& match) const;
 
+		// Returns true if any of elements pass function
 		virtual bool Any(const Function<bool(const _type&)>& match) const;
 
+		// Returns sum of function results for all elements
 		template<typename _sel_type>
 		_sel_type Sum(const Function<_sel_type(const _type&)>& selector) const;
 
+		// Invokes function for all elements in array
 		virtual void ForEach(const Function<void(_type&)>& func);
 	};
 

@@ -8,10 +8,10 @@ namespace o2
 {
 	namespace XmlDataFormat
 	{
-		bool LoadDataDoc(const WString& data, DataDoc& doc);
+		bool LoadDataDoc(const WString& data, DataNode& node);
 		void LoadDataNode(const pugi::xml_node& xmlNode, DataNode& dataNode);
 
-		String SaveDataDoc(const DataDoc& doc);
+		String SaveDataDoc(const DataNode& node);
 		void SaveDataNode(pugi::xml_node& xmlNode, const DataNode& dataNode);
 	}
 }

@@ -7,6 +7,9 @@ namespace o2
 {
 	struct ObjectInfo;
 
+	// -----------------------
+	// Basic pointer interface
+	// -----------------------
 	class IPtr
 	{
 		friend class MemoryManager;
@@ -16,17 +19,25 @@ namespace o2
 		friend class ITemplPtr;
 
 	protected:
-		ObjectInfo* mObjectInfo; /** Object info pointer. */
-		bool        mIsOnTop;    /** Using for GC. True when pointer haven't parent pointer. */
+		ObjectInfo* mObjectInfo; // Object info pointer
+		bool        mIsOnTop;    // Using for GC. True when pointer haven't parent pointer
 
+		// Default constructor
 		IPtr(): mObjectInfo(nullptr) {}
 
+		// Virtual destructor
 		virtual ~IPtr() {}
 
+		// Invoking when object was released
 		virtual void ObjectReleased() = 0;
+
+		// Returns pointer to object
 		virtual void* ObjectPtr() const = 0;
 	};
 
+	// --------------------------
+	// Template pointer interface
+	// --------------------------
 	template<typename _type>
 	class ITemplPtr : public IPtr
 	{
@@ -34,33 +45,34 @@ namespace o2
 		friend struct ObjectInfo;
 
 	protected:
-		_type* mObject; /** Pointer to object. */
+		_type* mObject; // Pointer to object
 
-		/** ctor. */
+		// Constructor
 		ITemplPtr(_type* object = nullptr);
 
-		/** copy-ctor. */
+		// Copy-constructor
 		ITemplPtr(const ITemplPtr& other);
 
-		/** virtual dtor. */
+		// Virtual destructor
 		~ITemplPtr();
 
-		/** Copy operator. */
+		// Copy operator
 		ITemplPtr& operator=(const ITemplPtr& other);
 
-		/** Assign operator. */
+		// Assign operator
 		ITemplPtr& operator=(_type* object);
 
-		/** Call when object is released. */
+		// Call when object was released
 		void ObjectReleased();
 
+		// Returns pointer to object
 		void* ObjectPtr() const;
 
 	public:
-		/** Returns true, if mObject is valid. */
+		// Returns true, if object is valid
 		bool IsValid() const;
 
-		/** Releases object. */
+		// Releases object
 		void Release();
 	};
 
