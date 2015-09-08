@@ -12,8 +12,7 @@ namespace o2
 	Type::~Type()
 	{
 		for (auto field : mFields)
-			for (auto attr : field.mAttributes)
-				delete attr;
+			delete field;
 	}
 
 	const String& Type::Name() const
@@ -31,18 +30,18 @@ namespace o2
 		return mBaseTypes;
 	}
 
-	const Vector<FieldInfo>& Type::Fields() const
+	const Vector<FieldInfo*>& Type::Fields() const
 	{
 		return mFields;
 	}
 
-	FieldInfo Type::Field(const String& name) const
+	const FieldInfo* Type::Field(const String& name) const
 	{
 		for (auto field : mFields)
-			if (field.Name() == name)
+			if (field->Name() == name)
 				return field;
 
-		return FieldInfo();
+		return nullptr;
 	}
 
 	Vector<Type*> Type::InheritedTypes() const
@@ -67,8 +66,8 @@ namespace o2
 
 	FieldInfo& Type::RegField(const String& name, UInt offset)
 	{
-		mFields.Add(FieldInfo(name, offset, false));
-		return mFields.Last();
+		mFields.Add(new FieldInfo(name, offset, false));
+		return *mFields.Last();
 	}
 
 	void Type::Initialize(Type& type, const String& name, UInt id, IObject* sample)
@@ -81,7 +80,9 @@ namespace o2
 	void Type::SetupBaseType(Type& type, Type* baseType)
 	{
 		type.mBaseTypes.Add(baseType);
-		type.mFields.Add(baseType->mFields);
+
+		for (auto field : baseType->mFields)
+			type.mFields.Add(new FieldInfo(*field));
 	}
 
 	bool Type::operator!=(const Type& other) const

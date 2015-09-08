@@ -218,3 +218,6 @@ pip-log.txt
 /o2engine/lib/o2engine.bsc
 /o2engine/lib/o2engine.lib
 /o2engine/tests/vs2013proj/log.txt
+/o2TestProject/Platforms/Windows/o2Test.sdf
+/o2TestProject/Platforms/Windows/Data
+/o2TestProject/Platforms/Windows/Tmp

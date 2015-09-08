@@ -12,6 +12,23 @@ namespace o2
 	{
 	}
 
+	FieldInfo::FieldInfo(const FieldInfo& other):
+		mName(other.mName), mOffset(other.mOffset), mIsProperty(other.mIsProperty)
+	{
+		for (auto attr : other.mAttributes)
+		{
+			IAttribute* newAttr = attr->Clone();
+			newAttr->mOwnerFieldInfo = this;
+			mAttributes.Add(newAttr);
+		}
+	}
+
+	FieldInfo::~FieldInfo()
+	{
+		for (auto attr : mAttributes)
+			delete attr;
+	}
+
 	bool FieldInfo::operator==(const FieldInfo& other) const
 	{
 		return mName == other.mName && mOffset == other.mOffset && mIsProperty == other.mIsProperty &&

@@ -26,6 +26,12 @@ namespace o2
 		// Constructor
 		FieldInfo(const String& name, UInt offset, bool isProperty);
 
+		// Copy-constructor
+		FieldInfo(const FieldInfo& other);
+
+		// Destructor
+		~FieldInfo();
+
 		// Equal operator
 		bool operator==(const FieldInfo& other) const;
 

@@ -27,7 +27,6 @@
 
 #include "Utils/Assert.h"
 #include "Utils/CommonTypes.h"
-#include "Utils/CustomRTTI.h"
 #include "Utils/Debug.h"
 #include "Utils/Delegates.h"
 #include "Utils/Property.h"
@@ -44,13 +43,17 @@
 #include "Application/Input.h"
 #include "Application/BaseApplication.h"
 
-#include "Assets/Assets.h"
 #include "Assets/Asset.h"
+#include "Assets/Assets.h"
+#include "Assets/AtlasAsset.h"
 #include "Assets/BinaryAsset.h"
+#include "Assets/FolderAsset.h"
+#include "Assets/ImageAsset.h"
 
 #define INITIALIZE_O2                                                              					  \
 o2::o2StackWalker* o2::o2StackWalker::mInstance = new o2StackWalker();								  \
 o2::MemoryManager* o2::MemoryManager::mInstance = new MemoryManager();								  \
 template<> o2::Ptr<o2::DebugStuff> o2::Singleton<o2::DebugStuff>::mInstance = mnew o2::DebugStuff();  \
-o2::TypeId o2::TypeIdContainer::lastId = 0;															  
+o2::Vector<o2::Type*> o2::Types::mTypes
+
 

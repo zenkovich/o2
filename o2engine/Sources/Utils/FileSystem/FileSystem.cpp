@@ -13,9 +13,9 @@ namespace o2
 #undef CreateDirectory
 #undef RemoveDirectory
 
-	CREATE_SINGLETON(FileSystemStuff);
+	CREATE_SINGLETON(FileSystem);
 
-	FileSystemStuff::FileSystemStuff()
+	FileSystem::FileSystem()
 	{
 		mLog = mnew LogStream("File System");
 		Debug.GetLog()->BindStream(mLog);
@@ -35,16 +35,16 @@ namespace o2
 		mExtensions[FileType::Atlas].Add("atlas");
 	}
 
-	FileSystemStuff::~FileSystemStuff()
+	FileSystem::~FileSystem()
 	{
 	}
 
-	const String& FileSystemStuff::GetResourcesPath() const
+	const String& FileSystem::GetResourcesPath() const
 	{
 		return mInstance->mResourcesPath;
 	}
 
-	FolderInfo FileSystemStuff::GetFolderInfo(const String& path) const
+	FolderInfo FileSystem::GetFolderInfo(const String& path) const
 	{
 		FolderInfo res;
 		res.mPath = path;
@@ -73,24 +73,29 @@ namespace o2
 		return res;
 	}
 
-	bool FileSystemStuff::CopyFile(const String& source, const String& dest) const
+	bool FileSystem::FileCopy(const String& source, const String& dest) const
 	{
-		RemoveFile(dest);
-		CreateDirectory(ExtractPathStr(dest));
+		FileDelete(dest);
+		FolderCreate(ExtractPathStr(dest));
 		return CopyFileA(source.Data(), dest.Data(), TRUE) == TRUE;
 	}
 
-	bool FileSystemStuff::RemoveFile(const String& file) const
+	bool FileSystem::FileDelete(const String& file) const
 	{
 		return DeleteFileA(file.Data()) == TRUE;
 	}
 
-	bool FileSystemStuff::MoveFile(const String& source, const String& dest) const
+	bool FileSystem::FileMove(const String& source, const String& dest) const
 	{
+		String destFolder = GetParentPath(dest);
+
+		if (!IsFolderExist(destFolder))
+			FolderCreate(destFolder);
+
 		return MoveFileA(source.Data(), dest.Data()) == TRUE;
 	}
 
-	FileInfo FileSystemStuff::GetFileInfo(const String& path) const
+	FileInfo FileSystem::GetFileInfo(const String& path) const
 	{
 		FileInfo res;
 		res.mPath = "invalid_file";
@@ -124,7 +129,7 @@ namespace o2
 		String extension = path.SubStr(path.FindLast(".") + 1);
 		res.mFileType = FileType::File;
 
-		for (auto iext:mInstance->mExtensions)
+		for (auto iext : mInstance->mExtensions)
 		{
 			if (iext.Value().Contains(extension))
 			{
@@ -142,9 +147,43 @@ namespace o2
 		return res;
 	}
 
-	bool FileSystemStuff::CreateDirectory(const String& path, bool recursive /*= true*/) const
+	bool FileSystem::SetFileEditDate(const String& path, const TimeStamp& time) const
 	{
-		if (IsDirectoryExist(path))
+		FILETIME lastWriteTime;
+		HANDLE hFile = CreateFileA(path.Data(), GENERIC_READ | FILE_WRITE_ATTRIBUTES, 
+								   FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+		if (hFile == NULL)
+			return false;
+
+		SYSTEMTIME stLocal, stUTC;
+
+		stLocal.wSecond = time.mSecond;
+		stLocal.wDayOfWeek = 0;
+		stLocal.wMilliseconds = 0;
+		stLocal.wMinute = time.mMinute;
+		stLocal.wHour = time.mHour;
+		stLocal.wDay = time.mDay;
+		stLocal.wMonth = time.mMonth;
+		stLocal.wYear = time.mYear;
+
+		TzSpecificLocalTimeToSystemTime(NULL, &stLocal, &stUTC);
+		SystemTimeToFileTime(&stUTC, &lastWriteTime);
+		if (!SetFileTime(hFile, NULL, NULL, &lastWriteTime))
+		{
+			auto error = GetLastError();
+			printf("err %i\n", error);
+			CloseHandle(hFile);
+			return false;
+		}
+
+		CloseHandle(hFile);
+
+		return true;
+	}
+
+	bool FileSystem::FolderCreate(const String& path, bool recursive /*= true*/) const
+	{
+		if (IsFolderExist(path))
 			return true;
 
 		if (!recursive)
@@ -157,12 +196,12 @@ namespace o2
 		if (extrPath == path)
 			return false;
 
-		return CreateDirectory(extrPath, true);
+		return FolderCreate(extrPath, true);
 	}
 
-	bool FileSystemStuff::RemoveDirectory(const String& path, bool recursive /*= true*/) const
+	bool FileSystem::FolderRemove(const String& path, bool recursive /*= true*/) const
 	{
-		if (!IsDirectoryExist(path))
+		if (!IsFolderExist(path))
 			return false;
 
 		if (!recursive)
@@ -178,9 +217,9 @@ namespace o2
 					continue;
 
 				if (f.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
-					RemoveDirectory(path + "/" + f.cFileName, true);
+					FolderRemove(path + "/" + f.cFileName, true);
 				else
-					RemoveFile(path + "/" + f.cFileName);
+					FileDelete(path + "/" + f.cFileName);
 			}
 			while (FindNextFile(h, &f));
 		}
@@ -190,7 +229,7 @@ namespace o2
 		return RemoveDirectoryA(path.Data()) == TRUE;
 	}
 
-	bool FileSystemStuff::IsDirectoryExist(const String& path) const
+	bool FileSystem::IsFolderExist(const String& path) const
 	{
 		DWORD tp = GetFileAttributes(path.Data());
 
@@ -203,7 +242,7 @@ namespace o2
 		return false;
 	}
 
-	bool FileSystemStuff::IsFileExist(const String& path) const
+	bool FileSystem::IsFileExist(const String& path) const
 	{
 		DWORD tp = GetFileAttributes(path.Data());
 
@@ -216,29 +255,44 @@ namespace o2
 		return true;
 	}
 
-	String FileSystemStuff::ExtractPathStr(const String& path) const
+	String FileSystem::ExtractPathStr(const String& path) const
 	{
 		return path.SubStr(0, path.FindLast("/"));
 	}
 
-	String FileSystemStuff::GetFileExtension(const String& filePath)
+	String FileSystem::GetFileExtension(const String& filePath)
 	{
-		return filePath.SubStr(filePath.FindLast("."));
+		return filePath.SubStr(filePath.FindLast(".")).TrimedStart(".");
 	}
 
-	String FileSystemStuff::GetFileNameWithoutExtension(const String& filePath)
+	String FileSystem::GetFileNameWithoutExtension(const String& filePath)
 	{
 		return filePath.SubStr(0, filePath.FindLast("."));
 	}
 
-	String FileSystemStuff::GetPathWithoutDirectories(const String& path)
+	String FileSystem::GetPathWithoutDirectories(const String& path)
 	{
 		return path.SubStr(Math::Max(path.FindLast("/"), path.FindLast("\\")));
 	}
 
-	String FileSystemStuff::GetParentPath(const String& path)
+	String FileSystem::GetParentPath(const String& path)
 	{
 		return path.SubStr(0, Math::Max(path.FindLast("/"), path.FindLast("\\")));
+	}
+
+	String FileSystem::ReadFile(const String& path)
+	{
+		InFile file(path);
+		if (!file.IsOpened())
+			return String();
+
+		return file.ReadFullData();
+	}
+
+	void FileSystem::WriteFile(const String& path, const String& data)
+	{
+		OutFile file(path);
+		file.WriteData(path.Data(), path.Length());
 	}
 
 }

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils/Containers/Vector.h"
 #include "Utils/Containers/Dictionary.h"
+#include "Utils/Containers/Vector.h"
 #include "Utils/FileSystem/FileInfo.h"
 #include "Utils/Memory/Ptr.h"
 #include "Utils/Singleton.h"
@@ -13,12 +13,12 @@ namespace o2
 	class LogStream;
 
 	// File system access macros
-#define o2FileSystem o2::FileSystemStuff::Instance()
+#define o2FileSystem o2::FileSystem::Instance()
 
 	// ---------------------------------------------------
 	// File system. Using for working with files and paths
 	// ---------------------------------------------------
-	class FileSystemStuff: public Singleton<FileSystemStuff>
+	class FileSystem: public Singleton<FileSystem>
 	{
 		typedef Vector<String> StringsVec;
 		typedef Dictionary<FileType, StringsVec> ExtnsionsDict;
@@ -29,10 +29,10 @@ namespace o2
 
 	public:
 		// Default constructor
-		FileSystemStuff();
+		FileSystem();
 
 		// Destructor
-		~FileSystemStuff();
+		~FileSystem();
 
 		// Returns resource path
 		const String& GetResourcesPath() const;
@@ -43,23 +43,26 @@ namespace o2
 		// Returns file info
 		FileInfo GetFileInfo(const String& path) const;
 
+		// Sets file edited date
+		bool SetFileEditDate(const String& path, const TimeStamp& time) const;
+
 		// Copying file
-		bool CopyFile(const String& source, const String& dest) const;
+		bool FileCopy(const String& source, const String& dest) const;
 
 		// Deletion file
-		bool RemoveFile(const String& file) const;
+		bool FileDelete(const String& file) const;
 
 		// Moving file
-		bool MoveFile(const String& source, const String& dest) const;
+		bool FileMove(const String& source, const String& dest) const;
 
 		// Creates folder
-		bool CreateDirectory(const String& path, bool recursive = true) const;
+		bool FolderCreate(const String& path, bool recursive = true) const;
 
 		// Removes directory
-		bool RemoveDirectory(const String& path, bool recursive = true) const;
+		bool FolderRemove(const String& path, bool recursive = true) const;
 
 		// Returns true if specified directory exist
-		bool IsDirectoryExist(const String& path) const;
+		bool IsFolderExist(const String& path) const;
 
 		// Returns true if specified file exist
 		bool IsFileExist(const String& path) const;
@@ -67,9 +70,22 @@ namespace o2
 		// Returns path from string
 		String ExtractPathStr(const String& path) const;
 
+		// Returns file extension
 		static String GetFileExtension(const String& filePath);
+
+		// Returns file name without extension
 		static String GetFileNameWithoutExtension(const String& filePath);
+
+		// Returns end path without parent directories
 		static String GetPathWithoutDirectories(const String& path);
+
+		// Returns parent path
 		static String GetParentPath(const String& path);
+
+		// Read file and returns result
+		static String ReadFile(const String& path);
+
+		// Writes file data
+		static void WriteFile(const String& path, const String& data);
 	};
 }

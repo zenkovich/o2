@@ -209,6 +209,15 @@ namespace o2
 		// Removing specified symbols at end of string
 		void TrimEnd(const TString& trimSymbols = " ");
 
+		// Removing specified symbols at start of string
+		TString Trimed(const TString& trimSymbols = " ");
+
+		// Removing specified symbols at start of string
+		TString TrimedStart(const TString& trimSymbols = " ");
+
+		// Removing specified symbols at end of string
+		TString TrimedEnd(const TString& trimSymbols = " ");
+
 		// Returns formatted string, like printf()
 		// Format sample: ("some text %i and more %s inserted things %vf", 4, "asd", Vec2F(3, 3))
 		// Supports type parameters:
@@ -557,7 +566,7 @@ namespace o2
 	{
 		int dataLength = 0;
 		while (data[dataLength] != '\0') dataLength++;
-		Reserve(dataLength);
+		Reserve(dataLength + 1);
 		ConvertStringPtr(mData, data, dataLength);
 		mData[dataLength] = '\0';
 		return *this;
@@ -666,7 +675,7 @@ namespace o2
 			if ((c >= '0' && c <= '9') || (i == 0 && c == '-'))
 			{
 				res += m*(c - '0');
-				m += 10;
+				m *= 10;
 			}
 			else return 0;
 		}
@@ -1134,6 +1143,30 @@ namespace o2
 	}
 
 	template<typename T>
+	TString<T> TString<T>::TrimedEnd(const TString& trimSymbols /*= " "*/)
+	{
+		TString res(*this);
+		res.TrimEnd(trimSymbols);
+		return res;
+	}
+
+	template<typename T>
+	TString<T> TString<T>::TrimedStart(const TString& trimSymbols /*= " "*/)
+	{
+		TString res(*this);
+		res.TrimStart(trimSymbols);
+		return res;
+	}
+
+	template<typename T>
+	TString<T> TString<T>::Trimed(const TString& trimSymbols /*= " "*/)
+	{
+		TString res(*this);
+		res.Trim(trimSymbols);
+		return res;
+	}
+
+	template<typename T>
 	TString<T> TString<T>::Format(const TString format, ...)
 	{
 		va_list vlist;
@@ -1159,13 +1192,16 @@ namespace o2
 		auto appendStr = [&](const TString& str)
 		{
 			int l = str.Length();
-			res.Reserve(resLen + l);
+			res.Reserve(resLen + l + 5);
 			for (int i = 0; i < l; i++)
 				res.mData[resLen++] = str.mData[i];
 		};
 
 		for (int i = 0; i < len; i++)
 		{
+			if (resLen >= res.Capacity())
+				res.Reserve(resLen*2);
+
 			if (format.mData[i] == '%')
 			{
 				bool success = true;

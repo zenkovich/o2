@@ -58,6 +58,16 @@ namespace o2
 		return length;
 	}
 
+	String InFile::ReadFullData()
+	{
+		UInt len = GetDataSize();
+		String res;
+		res.Reserve(len + 1);
+		ReadData(res.Data(), len);
+		res[len] = '\0';
+		return res;
+	}
+
 	void InFile::ReadData(void *dataPtr, UInt bytes)
 	{
 		mIfstream.read((char*)dataPtr, bytes);

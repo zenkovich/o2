@@ -6,34 +6,17 @@
 
 namespace o2
 {
-	REGIST_TYPE(Asset);
-
-	IOBJECT_INH_CPP(IMetaInfo, Asset);
+	IOBJECT_CPP(Asset);
+	IOBJECT_CPP(Asset::IMetaInfo);
 
 	Asset::Asset()
-	{}
-
-	Asset::Asset(const String& path):
-		mPath(path)
 	{
 		InitializeProperties();
-
-		mId = o2Assets.GetAssetId(path);
-	}
-
-	Asset::Asset(UInt id):
-		mId(id)
-	{
-		InitializeProperties();
-
-		mPath = o2Assets.GetAssetPath(id);
 	}
 
 	Asset::Asset(const Asset& asset)
 	{
 		InitializeProperties();
-
-		GenerateId();
 	}
 
 	Asset& Asset::operator=(const Asset& asset)
@@ -42,7 +25,14 @@ namespace o2
 	}
 
 	Asset::~Asset()
-	{}
+	{
+		mMeta.Release();
+	}
+
+	AssetInfo Asset::GetAssetInfo() const
+	{
+		return AssetInfo(mPath, GetAssetId(), GetTypeId());
+	}
 
 	String Asset::GetPath() const
 	{
@@ -54,9 +44,14 @@ namespace o2
 		o2Assets.MoveAsset(Ptr<Asset>(this), mPath);
 	}
 
-	UInt Asset::GetId() const
+	UInt Asset::GetAssetId() const
 	{
-		return mId;
+		return mMeta->mId;
+	}
+
+	UInt& Asset::IdRef()
+	{
+		return mMeta->mId;
 	}
 
 	Ptr<Asset::IMetaInfo> Asset::GetMeta() const
@@ -67,9 +62,9 @@ namespace o2
 	void Asset::Load(const String& path)
 	{
 		mPath = path;
-		mId = o2Assets.GetAssetId(path);
+		mMeta->mId = o2Assets.GetAssetId(path);
 
-		if (mId == 0)
+		if (mMeta->mId == 0)
 		{
 			GetAssetsLogStream()->Error("Failed to load asset by path (%s): asset isn't exist", mPath);
 			return;
@@ -87,7 +82,7 @@ namespace o2
 			return;
 		}
 
-		mId = id;
+		mMeta->mId = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		LoadMeta(GetMetaFullPath());
@@ -96,28 +91,47 @@ namespace o2
 
 	void Asset::Load()
 	{
-		if (mId == 0)
-			mId = o2Assets.GetAssetId(mPath);
+		if (mMeta->mId == 0)
+			mMeta->mId = o2Assets.GetAssetId(mPath);
 
-		if (mId == 0 || !o2Assets.IsAssetExist(mId))
+		if (mMeta->mId == 0 || !o2Assets.IsAssetExist(mMeta->mId))
 		{
-			GetAssetsLogStream()->Error("Failed to load asset (%s - %ui): isn't exist", mPath, mId);
+			GetAssetsLogStream()->Error("Failed to load asset (%s - %ui): isn't exist", mPath, mMeta->mId);
 			return;
 		}
 
 		LoadMeta(GetMetaFullPath());
-		LoadData(GetFullPath());
+		LoadData(GetDataFullPath());
+	}
+
+	void Asset::Load(const AssetInfo& info)
+	{
+		if (info.mType != type.ID())
+		{
+			GetAssetsLogStream()->Error("Failed to load asset by info (%s - %i): incorrect type (%i)",
+										info.mPath, info.mId, info.mType);
+			return;
+		}
+
+		mMeta->mId = info.mId;
+		mPath = info.mPath;
+
+		Load();
 	}
 
 	void Asset::Save(const String& path, bool rebuildAssetsImmediately /*= true*/)
 	{
 		if (path != mPath)
-			GenerateId();
+		{
+			IdRef() = Assets::GetRandomAssetId();
+			mPath = path;
+		}
 
 		UInt destPathAssetId = o2Assets.GetAssetId(path);
-		if (destPathAssetId != 0 && destPathAssetId != mId)
+		if (destPathAssetId != 0 && destPathAssetId != mMeta->mId)
 		{
-			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui) to %s: another asset exist in target path", mPath, mId, path);
+			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui) to %s: another asset exist in target path", 
+										mPath, mMeta->mId, path);
 			return;
 		}
 
@@ -131,9 +145,9 @@ namespace o2
 	void Asset::Save(bool rebuildAssetsImmediately /*= true*/)
 	{
 		UInt destPathAssetId = o2Assets.GetAssetId(mPath);
-		if (destPathAssetId != 0 && destPathAssetId != mId)
+		if (destPathAssetId != 0 && destPathAssetId != mMeta->mId)
 		{
-			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui): another asset exist in this path", mPath, mId);
+			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui): another asset exist in this path", mPath, mMeta->mId);
 			return;
 		}
 
@@ -144,14 +158,27 @@ namespace o2
 			o2Assets.RebuildAssets();
 	}
 
-	void Asset::GenerateId()
+	void Asset::Save(const AssetInfo& info, bool rebuildAssetsImmediately /*= true*/)
 	{
-		mId = Math::Random<UInt>(1, UINT_MAX);
+		mMeta->mId = info.mId;
+		mPath = info.mPath;
+
+		Save(rebuildAssetsImmediately);
+	}
+
+	const char* Asset::GetFileExtensions() const
+	{
+		return "";
 	}
 
 	String Asset::GetFullPath() const
 	{
 		return o2Assets.GetAssetsPath() + mPath;
+	}
+
+	String Asset::GetDataFullPath() const
+	{
+		return o2Assets.GetDataPath() + mPath;
 	}
 
 	String Asset::GetMetaFullPath() const
@@ -164,36 +191,50 @@ namespace o2
 		return o2Assets.mLog;
 	}
 
-	TypeId Asset::IMetaInfo::GetAssetType() const
+	Asset::IMetaInfo::IMetaInfo():
+		mId(Assets::GetRandomAssetId())
 	{
-		return Asset::GetStaticType();
+	}
+
+	Asset::IMetaInfo::~IMetaInfo()
+	{
+	}
+
+	Type::Id Asset::IMetaInfo::GetAssetType() const
+	{
+		return Asset::type.ID();
 	}
 
 	bool Asset::IMetaInfo::IsEqual(Ptr<IMetaInfo> other) const
 	{
-		return GetAssetType() == other->GetAssetType();
+		return GetAssetType() == other->GetAssetType() && mId == other->mId;
+	}
+
+	UInt Asset::IMetaInfo::ID() const
+	{
+		return mId;
 	}
 
 	void Asset::LoadMeta(const String& path)
+	{
+		DataNode metaData;
+		metaData.LoadFromFile(path);
+		mMeta.Release();
+		mMeta = metaData;
+	}
+
+	void Asset::SaveMeta(const String& path)
 	{
 		DataNode metaData;
 		metaData = mMeta;
 		metaData.SaveToFile(path);
 	}
 
-	void Asset::SaveMeta(const String& path)
-	{
-		DataNode metaData;
-		metaData.LoadFromFile(path);
-		mMeta = metaData;
-	}
-
 	void Asset::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(Asset, Path, SetPath, GetPath);
-		INITIALIZE_GETTER(Asset, Id, GetId);
+		INITIALIZE_GETTER(Asset, Id, GetAssetId);
 		INITIALIZE_GETTER(Asset, FullPath, GetFullPath);
-		INITIALIZE_GETTER(Asset, AssetType, GetType);
 		INITIALIZE_GETTER(Asset, Meta, GetMeta);
 	}
 }

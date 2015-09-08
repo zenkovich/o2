@@ -53,6 +53,8 @@ namespace o2
 	public:
 		void Serialize(void* object, DataNode& data) const;
 		void Deserialize(void* object, const DataNode& data) const;
+
+		IAttribute* Clone() const { return new SerializableAttribute(*this); }
 	};
 
 	// Registering field in type with serialization attribute
@@ -60,44 +62,47 @@ namespace o2
 	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample).AddAttribute<SerializableAttribute<decltype(NAME)>>()
 
 // Serialization implementation macros
-#define SERIALIZABLE_IMPL(CLASS)                                                          \
-	DataNode Serialize()                                                        		  \
-	{                                                              						  \
-		OnSerialize();																	  \
-		DataNode res;																	  \
-		for (auto field : type.Fields())												  \
-		{																				  \
-			ISerializableAttribute* srlzAttr = field.Attribute<ISerializableAttribute>(); \
-			if (srlzAttr)																  \
-				srlzAttr->Serialize(this, res);										      \
-		}																				  \
-																						  \
-		return res;																		  \
-	}																					  \
-	void Deserialize(const DataNode& node)												  \
-	{																					  \
-		for (auto field : type.Fields())												  \
-		{																				  \
-			ISerializableAttribute* srlzAttr = field.Attribute<ISerializableAttribute>(); \
-			if (srlzAttr)																  \
-				srlzAttr->Deserialize(this, node);										  \
-		}																				  \
-		OnDeserialized();																  \
-	}																					  \
-	CLASS& operator=(const DataNode& node) 												  \
-	{																					  \
-		Deserialize(node); return *this; 												  \
-	} 																					  \
-	operator DataNode() 																  \
-	{ 																					  \
-		return Serialize(); 															  \
+#define SERIALIZABLE_IMPL(CLASS)                                                           \
+	DataNode Serialize()                                                        		   \
+	{                                                              						   \
+		OnSerialize();																	   \
+		DataNode res;																	   \
+		for (auto field : type.Fields())												   \
+		{																				   \
+			ISerializableAttribute* srlzAttr = field->Attribute<ISerializableAttribute>(); \
+			if (srlzAttr)																   \
+				srlzAttr->Serialize(this, res);										       \
+		}																				   \
+																						   \
+		return res;																		   \
+	}																					   \
+	void Deserialize(const DataNode& node)												   \
+	{																					   \
+		for (auto field : type.Fields())												   \
+		{																				   \
+			ISerializableAttribute* srlzAttr = field->Attribute<ISerializableAttribute>(); \
+			if (srlzAttr)																   \
+				srlzAttr->Deserialize(this, node);										   \
+		}																				   \
+		OnDeserialized();																   \
+	}																					   \
+	CLASS& operator=(const DataNode& node) 												   \
+	{																					   \
+		Deserialize(node); return *this; 												   \
+	} 																					   \
+	operator DataNode() 																   \
+	{ 																					   \
+		return Serialize(); 															   \
 	}       
 
 
 	template<typename _type>
 	void SerializableAttribute<_type>::Deserialize(void* object, const DataNode& data) const
 	{
-		mOwnerFieldInfo->SetValue<_type>(object, (_type)(*data.GetNode(mOwnerFieldInfo->Name())));
+		_type value;
+		auto node = data.GetNode(mOwnerFieldInfo->Name());
+		if (node) value = *node;
+		mOwnerFieldInfo->SetValue<_type>(object, value);
 	}
 
 	template<typename _type>

@@ -1,26 +1,16 @@
 #include "BinaryAsset.h"
 
+#include "Assets/Assets.h"
 #include "Utils/Log/LogStream.h"
 
 namespace o2
 {
-	REGIST_TYPE(BinaryAsset);
+	IOBJECT_CPP(BinaryAsset);
+	IOBJECT_CPP(BinaryAsset::MetaInfo);
 
-	IOBJECT_INH_CPP(MetaInfo, BinaryAsset);
-
-	TypeId BinaryAsset::MetaInfo::GetAssetType() const
+	Type::Id BinaryAsset::MetaInfo::GetAssetType() const
 	{
-		return BinaryAsset::GetStaticType();
-	}
-
-	bool BinaryAsset::MetaInfo::IsEqual(Ptr<IMetaInfo> other) const
-	{
-		if (GetAssetType() != other->GetAssetType())
-			return false;
-
-		Ptr<MetaInfo> otherInfo = other.Cast<MetaInfo>();
-
-		return mSomeMetaParam == otherInfo->mSomeMetaParam;
+		return BinaryAsset::type.ID();
 	}
 
 	BinaryAsset::BinaryAsset():
@@ -31,18 +21,22 @@ namespace o2
 	}
 
 	BinaryAsset::BinaryAsset(const String& path):
-		Asset(path), mData(nullptr), mDataSize(0)
+		Asset(), mData(nullptr), mDataSize(0)
 	{
+		mPath = path;
 		mMeta = mnew MetaInfo();
+		IdRef() = o2Assets.GetAssetId(path);
 		InitializeProperties();
 
 		Load();
 	}
 
 	BinaryAsset::BinaryAsset(UInt id):
-		Asset(id), mData(nullptr), mDataSize(0)
+		Asset(), mData(nullptr), mDataSize(0)
 	{
 		mMeta = mnew MetaInfo();
+		IdRef() = id;
+		mPath = o2Assets.GetAssetPath(id);
 		InitializeProperties();
 
 		Load();
@@ -63,6 +57,7 @@ namespace o2
 			mData = nullptr;
 		}
 
+		mMeta = mnew MetaInfo();
 		InitializeProperties();
 	}
 
@@ -120,17 +115,14 @@ namespace o2
 		}
 	}
 
-	BinaryAsset::MetaInfo BinaryAsset::GetMeta() const
+	Ptr<BinaryAsset::MetaInfo> BinaryAsset::GetMeta() const
 	{
-		return *(mMeta.Cast<MetaInfo>());
+		return mMeta.Cast<MetaInfo>();
 	}
 
-	Vector<String> BinaryAsset::GetExtensions() const
+	const char* BinaryAsset::GetFileExtensions() const
 	{
-		Vector<String> res;
-		res.Add(".bin");
-		res.Add(".txx");
-		return res;
+		return "bin";
 	}
 
 	void BinaryAsset::LoadData(const String& path)

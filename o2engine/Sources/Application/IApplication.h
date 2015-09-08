@@ -10,10 +10,10 @@
 namespace o2
 {
 	class Assets;
-	class FileSystemStuff;
+	class FileSystem;
 	class InputStuff;
 	class LogStream;
-	class ProjectConfigStuff;
+	class ProjectConfig;
 	class TimeStuff;
 	class Timer;
 
@@ -50,7 +50,7 @@ namespace o2
 		virtual Ptr<InputStuff> GetInput() const;
 
 		// Returns pointer to project config
-		virtual Ptr<ProjectConfigStuff> GetProjectConfig() const;
+		virtual Ptr<ProjectConfig> GetProjectConfig() const;
 
 		// Returns pointer to time utils object
 		virtual Ptr<TimeStuff> GetTime() const;
@@ -96,10 +96,10 @@ namespace o2
 
 	protected:
 		Ptr<Assets>             mAssets;        // Assets
-		Ptr<FileSystemStuff>    mFileSystem;    // File system
+		Ptr<FileSystem>    mFileSystem;    // File system
 		Ptr<InputStuff>         mInput;         // While application user input message
 		Ptr<LogStream>          mLog;           // Log stream with id "app", using only for application messages
-		Ptr<ProjectConfigStuff> mProjectConfig; // Project config
+		Ptr<ProjectConfig> mProjectConfig; // Project config
 		Ptr<TimeStuff>          mTime;          // Time utilities
 		Ptr<Timer>              mTimer;         // Timer for detecting delta time for update
 

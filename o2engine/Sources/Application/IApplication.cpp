@@ -37,7 +37,7 @@ namespace o2
  		Debug.GetLog()->BindStream(mLog);
 
 		//project config
- 		mProjectConfig = mnew ProjectConfigStuff();
+ 		mProjectConfig = mnew ProjectConfig();
 
 		//assets
 		mAssets = mnew Assets();
@@ -104,7 +104,7 @@ namespace o2
 		return mInstance->mInput;
 	}
 
-	Ptr<ProjectConfigStuff> IApplication::GetProjectConfig() const
+	Ptr<ProjectConfig> IApplication::GetProjectConfig() const
 	{
 		return mInstance->mProjectConfig;
 	}

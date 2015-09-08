@@ -16,11 +16,11 @@ namespace o2
 		typedef UInt Id;
 
 	protected:
-		String            mName;      // Name of object type
-		Vector<FieldInfo> mFields;    // Fields information
-		Id                mId;        // Id of type
-		Vector<Type*>     mBaseTypes; // Base types ids
-		IObject*          mSample;    // Object sample
+		String             mName;      // Name of object type
+		Vector<FieldInfo*> mFields;    // Fields information
+		Id                 mId;        // Id of type
+		Vector<Type*>      mBaseTypes; // Base types ids
+		IObject*           mSample;    // Object sample
 
 	public:
 		// Default constructor
@@ -45,10 +45,10 @@ namespace o2
 		const Vector<Type*>& BaseTypes() const;
 
 		// Returns fields informations array
-		const Vector<FieldInfo>& Fields() const;
+		const Vector<FieldInfo*>& Fields() const;
 
 		// Returns field information by name
-		FieldInfo Field(const String& name) const;
+		const FieldInfo* Field(const String& name) const;
 
 		// Returns inherited types
 		Vector<Type*> InheritedTypes() const;

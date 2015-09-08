@@ -20,5 +20,8 @@ namespace o2
 
 		// Virtual destructor
 		virtual ~IAttribute() {}
+
+		// Returns copy of this
+		virtual IAttribute* Clone() const = 0;
 	};
 }

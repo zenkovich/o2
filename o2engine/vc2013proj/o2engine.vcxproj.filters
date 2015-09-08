@@ -58,6 +58,15 @@
     <Filter Include="Sources\Utils\Reflection">
       <UniqueIdentifier>{7f7460cb-cb5f-4623-a50d-bda7ff18f33b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Utils\ImageFormats">
+      <UniqueIdentifier>{103d0bd2-bc58-46d6-8743-e20ba0898eb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\LibPNG">
+      <UniqueIdentifier>{a450b33a-b815-4124-b903-b279d5599ad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Zlib">
+      <UniqueIdentifier>{afd4b593-6160-4807-8f76-d5aa8f83ae78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -216,9 +225,6 @@
     <ClInclude Include="..\Sources\Config\ProjectConfig.h">
       <Filter>Sources\Config</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\CustomRTTI.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Assets\Asset.h">
       <Filter>Sources\Assets</Filter>
     </ClInclude>
@@ -258,6 +264,102 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Reflection\Types.h">
       <Filter>Sources\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\FolderAsset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\AssetInfo.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\ImageAsset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\AtlasAsset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Bitmap.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\crc32.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\crypt.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\deflate.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\inffast.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\inffixed.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\inflate.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\inftrees.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\ioapi.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\trees.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\unzip.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\zconf.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\zconf.in.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\zip.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\zlib.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\Zlib\zutil.h">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\LibPNG\png.h">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\LibPNG\pngconf.h">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\ImageFormats\PngFormat.h">
+      <Filter>Sources\Utils\ImageFormats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Builder\IAssetConverter.h">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Builder\StdAssetConverter.h">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Builder\FolderAssetConverter.h">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Builder\ImageAssetConverter.h">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\Builder\AtlasAssetConverter.h">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\RectPacker.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Tree.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Containers\Pool.h">
+      <Filter>Sources\Utils\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\AssetsTree.h">
+      <Filter>Sources\Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -345,9 +447,6 @@
     <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp">
       <Filter>Sources\Utils\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Serialization.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Config\ProjectConfig.cpp">
       <Filter>Sources\Config</Filter>
     </ClCompile>
@@ -380,6 +479,144 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Reflection\Types.cpp">
       <Filter>Sources\Utils\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\AssetInfo.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\FolderAsset.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\ImageAsset.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Bitmap.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\AtlasAsset.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\adler32.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\compress.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\crc32.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\deflate.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\gzio.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\infback.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\inffast.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\inflate.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\inftrees.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\ioapi.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\trees.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\uncompr.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\unzip.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\zip.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\Zlib\zutil.c">
+      <Filter>Dependencies\Zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\png.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngerror.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pnggccrd.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngget.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngmem.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngpread.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngread.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngrio.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngrtran.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngrutil.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngset.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngtest.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngtrans.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngvcrd.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngwio.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngwrite.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngwtran.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Dependencies\LibPNG\pngwutil.c">
+      <Filter>Dependencies\LibPNG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\ImageFormats\PngFormat.cpp">
+      <Filter>Sources\Utils\ImageFormats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Builder\StdAssetConverter.cpp">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Builder\IAssetConverter.cpp">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Builder\FolderAssetConverter.cpp">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Builder\ImageAssetConverter.cpp">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\Builder\AtlasAssetConverter.cpp">
+      <Filter>Sources\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\RectPacker.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\AssetsTree.cpp">
+      <Filter>Sources\Assets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

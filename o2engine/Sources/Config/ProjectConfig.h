@@ -6,14 +6,17 @@
 #include "Utils/Memory/Ptr.h"
 #include "Utils/Property.h"
 
+// Project configuration access macros
+#define o2ProjectConfig o2::ProjectConfig::Instance()
 
 namespace o2
 {
 	class ProjectBuildConfig;
 
-#define o2ProjectConfig ProjectConfigStuff::Instance()
-
-	class ProjectConfigStuff: public ISerializable, public Singleton<ProjectConfigStuff>
+	// ---------------------
+	// Project configuration
+	// ---------------------
+	class ProjectConfig: public ISerializable, public Singleton<ProjectConfig>
 	{
 		friend class AssetBuildSystem;
 		friend class IApplication;
@@ -22,33 +25,44 @@ namespace o2
 		enum class Platform { Windows, MacOSX, iOS, Android };
 
 	protected:
-		String   mProjectName;
-		Platform mPlatform;
+		String   mProjectName; // Current project name
+		Platform mPlatform;    // Current project target platform
 
 	public:
-		ProjectConfigStuff();
-		~ProjectConfigStuff();
+		Property<String>   ProjectName;     // Project name property
+		Property<Platform> CurrentPlatform; // Project platform property
 
-		Property<String>   ProjectName;
-		Property<Platform> CurrentPlatform;
+		// Default constructor
+		ProjectConfig();
 
+		// Destructor
+		~ProjectConfig();
+
+		// Returns project name 
 		String GetProjectName() const;
+
+		// Sets project name
 		void SetProjectName(const String& name);
 
+		// Returns platform
 		Platform GetPlatform() const;
+
+		// Sets platform
 		void SetPlatform(Platform platform);
 
-		SERIALIZABLE_IMPL(ProjectConfigStuff);
+		SERIALIZABLE_IMPL(ProjectConfig);
 
-		IOBJECT(ProjectConfigStuff)
+		IOBJECT(ProjectConfig)
 		{
 			SRLZ_FIELD(mProjectName);
 			SRLZ_FIELD(mPlatform);
 		}
 
 	protected:
+		// Initializes config by default
 		void InitializeDefault(const String& configFilePath);
 
+		// Initializes properties
 		void InitializeProperties();
 	};
 }

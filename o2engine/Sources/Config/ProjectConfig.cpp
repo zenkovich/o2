@@ -5,11 +5,11 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(ProjectConfigStuff);
+	DECLARE_SINGLETON(ProjectConfig);
 
-	IOBJECT_CPP(ProjectConfigStuff);
+	IOBJECT_CPP(ProjectConfig);
 
-	ProjectConfigStuff::ProjectConfigStuff()
+	ProjectConfig::ProjectConfig()
 	{
 		InitializeProperties();
 
@@ -18,47 +18,46 @@ namespace o2
 		DataNode data;
 		if (!data.LoadFromFile(cfgFilePath))
 		{
-			Debug.LogError("Failed to load Project Config. Path: %s. Initializing default values.", cfgFilePath.Data());
+			Debug.LogError("Failed to load Project Config. Path: %s. Initializing default values.", cfgFilePath);
 			InitializeDefault(cfgFilePath);
 			return;
 		}
 		else Deserialize(data);
 	}
 
-	ProjectConfigStuff::~ProjectConfigStuff()
-	{
-	}
+	ProjectConfig::~ProjectConfig()
+	{}
 
-	String ProjectConfigStuff::GetProjectName() const
+	String ProjectConfig::GetProjectName() const
 	{
 		return mInstance->mProjectName;
 	}
 
-	void ProjectConfigStuff::SetProjectName(const String& name)
+	void ProjectConfig::SetProjectName(const String& name)
 	{
 		mInstance->mProjectName = name;
 	}
 
-	ProjectConfigStuff::Platform ProjectConfigStuff::GetPlatform() const
+	ProjectConfig::Platform ProjectConfig::GetPlatform() const
 	{
 		return mInstance->mPlatform;
 	}
 
-	void ProjectConfigStuff::SetPlatform(Platform platform)
+	void ProjectConfig::SetPlatform(Platform platform)
 	{
 		mInstance->mPlatform;
 	}
 
-	void ProjectConfigStuff::InitializeDefault(const String& configFilePath)
+	void ProjectConfig::InitializeDefault(const String& configFilePath)
 	{
 		mProjectName = "Unnamed";
 		DataNode data = Serialize();
 		data.SaveToFile(configFilePath);
 	}
 
-	void ProjectConfigStuff::InitializeProperties()
+	void ProjectConfig::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(ProjectConfigStuff, ProjectName, SetProjectName, GetProjectName);
-		INITIALIZE_PROPERTY(ProjectConfigStuff, CurrentPlatform, SetPlatform, GetPlatform);
+		INITIALIZE_PROPERTY(ProjectConfig, ProjectName, SetProjectName, GetProjectName);
+		INITIALIZE_PROPERTY(ProjectConfig, CurrentPlatform, SetPlatform, GetPlatform);
 	}
 }

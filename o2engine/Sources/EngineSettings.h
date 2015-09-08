@@ -3,10 +3,10 @@
 // TODO: Need create this configuration fully automatic and depending with project configuration
 
 // Project config file path. Relative from executable
-#define PROJECT_SETTINGS_FILE_PATH "../../ProjectSettings.xml"
+#define PROJECT_SETTINGS_FILE_PATH "../../../ProjectSettings.xml"
 
 // Enables stopping on log errors
-#define ENABLE_STOPPING_ON_LOG_ERRORS true
+#define ENABLE_STOPPING_ON_LOG_ERRORS false
 
 // ----------------------------
 // Assets configuration section
@@ -20,3 +20,7 @@
 
 // Data path with builded assets. Relative from executable
 #define DATA_PATH "../Data/"
+
+// Basic atlas path (from assets path)
+#define BASIC_ATLAS_PATH "BasicAtlas.atlas"
+

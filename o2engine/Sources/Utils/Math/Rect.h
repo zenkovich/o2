@@ -7,6 +7,8 @@
 
 namespace o2
 {
+	// TODO: Need refactor Rect to position&size
+
 	template<typename T>
 	class Rect
 	{
@@ -16,6 +18,9 @@ namespace o2
 		inline Rect();
 		inline Rect(const Vec2<T>& leftTop, const Vec2<T>& rightDown);
 		inline Rect(T left, T top, T right, T bottom);
+
+		template<typename RT>
+		inline operator Rect<RT>();
 
 		inline bool    operator==(const Rect<T>& rt) const;
 		inline bool    operator!=(const Rect<T>& rt) const;
@@ -103,6 +108,13 @@ namespace o2
 		this->right = Math::Max(left, right);
 		this->top = Math::Max(top, bottom);
 		this->bottom = Math::Min(top, bottom);
+	}
+
+	template<typename T>
+	template<typename RT>
+	Rect<T>::operator Rect<RT>()
+	{
+		return Rect<RT>((RT)left, (RT)top, (RT)right, (RT)bottom);
 	}
 
 	template<typename T>

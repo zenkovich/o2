@@ -3,169 +3,307 @@
 #include "Utils/Containers/IDictionary.h"
 #include "Utils/Containers/Vector.h"
 
-// TODO: Need refactor, comment and fix warning
-
 namespace o2
 {
+	// ----------
+	// Dictionary
+	// ----------
 	template<typename _key_type, typename _value_type>
 	class Dictionary : public IDictionary<_key_type, _value_type>
 	{
 	public:
+		// --------
+		// Iterator
+		// --------
 		class Iterator
 		{
 			typedef typename Vector<TKeyValue>::Iterator PairIterator;
 
-			Dictionary*  mDictionary;
-			PairIterator mPairIt;
+			Dictionary*  mDictionary; // Owner dictionary
+			PairIterator mPairIt;     // Pair iterator
 
 		public:
+			// Constructor
 			Iterator(Dictionary* dictionary, int index = 0);
 
+			// Returns index of current element
 			int Index() const;
 
+			// Plus operator - moving element index right
 			Iterator  operator+(int offs) const;
+
+			// Plus and assign operator
 			Iterator& operator+=(int offs);
 
+			// Minus operator - moving element index left
 			Iterator  operator-(int offs) const;
+
+			// Minus and assign operator
 			Iterator& operator-=(int offs);
 
+			// Increment operator
 			Iterator& operator++();    
+
+			// Post increment operator
 			Iterator  operator++(int); 
 
+			// Decrement operator
 			Iterator& operator--();    
+
+			// Post decrement operator
 			Iterator  operator--(int); 
 
+			// Greater check operator
 			bool operator>(const Iterator& itr) const;
+
+			// Fewer check operator
 			bool operator<(const Iterator& itr) const;
 
+			// Greater or equal operator
 			bool operator>=(const Iterator& itr) const;
+
+			// Fewer or equal operator
 			bool operator<=(const Iterator& itr) const;
 
-			Iterator& operator*();
+			// Equal operator
+			bool operator==(const Iterator& itr) const;
 
+			// Not equal operator
+			bool operator!=(const Iterator& itr) const;
+
+			// Boolean cast operator. Return true if value is valid (in array range)
 			operator bool() const;
 
+			// Key access
 			_key_type&   Key();
+
+			// Value access
 			_value_type& Value();
+
+			// Pointer access operator (for range-based-for)
+			Iterator& operator*();
 		};
 
+		// -----------------
+		// Constant iterator
+		// -----------------
 		class ConstIterator
 		{
 			typedef typename Vector<TKeyValue>::ConstIterator PairIterator;
 
-			const Dictionary* mDictionary;
-			PairIterator      mPairIt;
+			const Dictionary* mDictionary; // Owner dictionary
+			PairIterator      mPairIt;     // Pair iterator
 
 		public:
+			// Constructor
 			ConstIterator(const Dictionary* dictionary, int index = 0);
 
+			// Returns index of current element
 			int Index() const;
 
+			// Plus operator - moving element index right
 			ConstIterator  operator+(int offs) const;
+
+			// Plus and assign operator
 			ConstIterator& operator+=(int offs);
 
+			// Minus operator - moving element index left
 			ConstIterator  operator-(int offs) const;
+
+			// Minus and assign operator
 			ConstIterator& operator-=(int offs);
 
-			ConstIterator& operator++();    
+			// Increment operator
+			ConstIterator& operator++();   
+
+			// Post increment operator
 			ConstIterator  operator++(int); 
 
+			// Decrement operator
 			ConstIterator& operator--();    
+
+			// Post decrement operator
 			ConstIterator  operator--(int); 
 
+			// Greater check operator
 			bool operator>(const ConstIterator& itr) const;
+
+			// Fewer check operator
 			bool operator<(const ConstIterator& itr) const;
 
+			// Greater or equal operator
 			bool operator>=(const ConstIterator& itr) const;
+
+			// Fewer or equal operator
 			bool operator<=(const ConstIterator& itr) const;
 
-			const ConstIterator& operator*();
+			// Equal operator
+			bool operator==(const ConstIterator& itr) const;
 
+			// Not equal operator
+			bool operator!=(const ConstIterator& itr) const;
+
+			// Boolean cast operator. Return true if value is valid (in array range)
 			operator bool() const;
 
+			// Key access
 			const _key_type&   Key() const;
+
+			// Value access
 			const _value_type& Value() const;
+
+			// Pointer access operator (for range-based-for)
+			const ConstIterator& operator*();
 		};
 
 	protected:
-		Vector<TKeyValue> mPairs;
+		Vector<TKeyValue> mPairs; // Key-value pairs vector
 
 	public:
+		// Default constructor
 		Dictionary();
+
+		// Copy-constructor
 		Dictionary(const Dictionary& other);
+
+		// Destructor
 		~Dictionary();
 
+		// Check equals operator
 		bool operator==(const Dictionary& other) const;
+
+		// Check not equals operator
 		bool operator!=(const Dictionary& other) const;
 
+		// Copy-operator
 		Dictionary& operator=(const Dictionary& other);
 
+		// Adds element
 		void Add(const _key_type& key, const _value_type& value);
+
+		// Adds element
 		void Add(const TKeyValue& keyValue);
 
+		// Removes element by key
 		void Remove(const _key_type& key);
+
+		// Removes all which pass function
 		void RemoveAll(const Function<bool(const TKeyValue&)>& match);
+
+		// Removes all elements
 		void Clear();
 
+		// Returns true if contains element with specified key
 		bool ContainsKey(const _key_type& key) const;
+
+		// Returns true if contains element with specified value
 		bool ContainsValue(const _value_type& value) const;
+
+		// Returns true if contains same element
 		bool Contains(const TKeyValue& keyValue) const;
+
+		// Returns true if contains element which pass function
 		bool ContainsPred(const Function<bool(const TKeyValue&)>& match) const;
 
+		// Returns element by key
 		TKeyValue FindKey(const _key_type& key) const;
+
+		// Returns element by value
 		TKeyValue FindValue(const _value_type& value) const;
+
+		// Returns first element which pass function
 		TKeyValue Find(const Function<bool(const TKeyValue&)>& match) const;
+
+		// Returns last element which pass function
 		TKeyValue FindLast(const Function<bool(const TKeyValue&)>& match) const;
 
+		// Returns all elements which pass function
 		Dictionary FindAll(const Function<bool(const TKeyValue&)>& match) const;
+
+		// Returns all elements which pass function
 		Dictionary Where(const Function<bool(const TKeyValue&)>& match) const;
 
+		// Returns first element which pass function
 		TKeyValue First(const Function<bool(const TKeyValue&)>& match) const;
+
+		// Returns last element which pass function
 		TKeyValue Last(const Function<bool(const TKeyValue&)>& match) const;
 
+		// Sets value by key
 		void Set(const _key_type& key, const _value_type& value);
 
-		_value_type&  Get(const _key_type& key);
-		TKeyValue&    Get(int index) const;
+		// Returns value reference by key
+		_value_type& Get(const _key_type& key);
 
+		// Returns constant value reference by key
+		const _value_type& Get(const _key_type& key) const;
+
+		// Returns value reference by index
+		TKeyValue& Get(int index) const;
+
+		// Returns count of elements
 		int Count() const;
+
+		// Returns count of elements which pass function
 		int Count(const Function<bool(const TKeyValue&)>& match) const;
 
+		// Returns true when no elements
 		bool IsEmpty() const;
 
+		// Sorts element by predicate
 		void Sort(const Function<bool(const TKeyValue&, const TKeyValue&)>& pred);
 		
+		// Invokes function for all elements
 		void ForEach(const Function<void(TKeyValue&)>& func);
 
+		// Returns minimal element by selector returned values
 		template<typename _sel_type>
 		TKeyValue Min(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
+		// Returns minimal element index by selector returned values
 		template<typename _sel_type>
 		int MinIdx(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
+		// Returns maximal element by selector returned values
 		template<typename _sel_type>
 		TKeyValue Max(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
+		// Returns maximal element index by selector returned values
 		template<typename _sel_type>
 		int MaxIdx(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
+		// Returns true when all elements pass function
 		virtual bool All(const Function<bool(const TKeyValue&)>& match) const;
 
+		// Returns true when any of elements pass function
 		virtual bool Any(const Function<bool(const TKeyValue&)>& match) const;
 
+		// Returns sum of selector results for all elements
 		template<typename _sel_type>
 		_sel_type Sum(const Function<_sel_type(const TKeyValue&)>& selector) const;
 
+		// Returns begin iterator
 		Iterator Begin();
+
+		// Returns end iterator
 		Iterator End();
 
+		// Returns constant begin iterator
 		ConstIterator Begin() const;
+
+		// Returns constant end iterator
 		ConstIterator End() const;
 
+		// Returns begin iterator (for range-based-for)
 		Iterator begin() { return Begin(); }
+
+		// Returns end iterator (for range-based-for)
 		Iterator end() { return End(); }
 
+		// Returns constant begin iterator (for range-based-for)
 		ConstIterator begin() const { return Begin(); }
+
+		// Returns constant end iterator (for range-based-for)
 		ConstIterator end() const { return End(); }
 	};
 
@@ -242,31 +380,37 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	bool Dictionary<_key_type, _value_type>::Iterator::operator>(const Iterator& itr) const
 	{
-		return mPairIt > itr->mPairIt;
+		return mPairIt > itr.mPairIt;
 	}
 
 	template<typename _key_type, typename _value_type>
 	bool Dictionary<_key_type, _value_type>::Iterator::operator<(const Iterator& itr) const
 	{
-		return mPairIt < itr->mPairIt;
+		return mPairIt < itr.mPairIt;
 	}
 
 	template<typename _key_type, typename _value_type>
 	bool Dictionary<_key_type, _value_type>::Iterator::operator>=(const Iterator& itr) const
 	{
-		return mPairIt >= itr->mPairIt;
+		return mPairIt >= itr.mPairIt;
 	}
 
 	template<typename _key_type, typename _value_type>
 	bool Dictionary<_key_type, _value_type>::Iterator::operator<=(const Iterator& itr) const
 	{
-		return mPairIt <= itr->mPairIt;
+		return mPairIt <= itr.mPairIt;
 	}
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::Iterator& Dictionary<_key_type, _value_type>::Iterator::operator*()
+	bool Dictionary<_key_type, _value_type>::Iterator::operator!=(const Iterator& itr) const
 	{
-		return *this;
+		return mPairIt != itr.mPairIt;
+	}
+
+	template<typename _key_type, typename _value_type>
+	bool Dictionary<_key_type, _value_type>::Iterator::operator==(const Iterator& itr) const
+	{
+		return mPairIt == itr.mPairIt;
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -285,6 +429,12 @@ namespace o2
 	_value_type& Dictionary<_key_type, _value_type>::Iterator::Value()
 	{
 		return mPairIt.Value().mValue;
+	}
+
+	template<typename _key_type, typename _value_type>
+	typename Dictionary<_key_type, _value_type>::Iterator& Dictionary<_key_type, _value_type>::Iterator::operator*()
+	{
+		return *this;
 	}
 
 #pragma endregion Dictionary::Iterator implementation
@@ -384,9 +534,15 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	typename const Dictionary<_key_type, _value_type>::ConstIterator& Dictionary<_key_type, _value_type>::ConstIterator::operator*()
+	bool Dictionary<_key_type, _value_type>::ConstIterator::operator!=(const ConstIterator& itr) const
 	{
-		return *this;
+		return mPairIt != itr.mPairIt;
+	}
+
+	template<typename _key_type, typename _value_type>
+	bool Dictionary<_key_type, _value_type>::ConstIterator::operator==(const ConstIterator& itr) const
+	{
+		return mPairIt == itr.mPairIt;
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -405,6 +561,12 @@ namespace o2
 	const _value_type& Dictionary<_key_type, _value_type>::ConstIterator::Value() const
 	{
 		return mPairIt.Value().mValue;
+	}
+
+	template<typename _key_type, typename _value_type>
+	typename const Dictionary<_key_type, _value_type>::ConstIterator& Dictionary<_key_type, _value_type>::ConstIterator::operator*()
+	{
+		return *this;
 	}
 
 #pragma endregion Dictionary::ConstIterator implementation
@@ -590,6 +752,22 @@ namespace o2
 
 		return mPairs.Get(0).mValue;
 	}
+
+	template<typename _key_type, typename _value_type>
+	const _value_type& Dictionary<_key_type, _value_type>::Get(const _key_type& key) const
+	{
+		for (auto it = mPairs.Begin(); it != mPairs.End(); ++it)
+		{
+			const TKeyValue& kv = *it;
+			if (kv.mKey == key)
+				return kv.mValue;
+		}
+
+		Assert(false, "Failed to get value from dictionary: not found key");
+
+		return mPairs.Get(0).mValue;
+	}
+
 
 	template<typename _key_type, typename _value_type>
 	typename Dictionary<_key_type, _value_type>::TKeyValue& Dictionary<_key_type, _value_type>::Get(int index) const
