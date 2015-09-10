@@ -43,17 +43,17 @@ namespace o2
 		return DATA_PATH;
 	}
 
-	String Assets::GetAssetPath(UInt id) const
+	String Assets::GetAssetPath(AssetId id) const
 	{
 		return GetAssetInfo(id).mPath;
 	}
 
-	UInt Assets::GetAssetId(const String& path) const
+	AssetId Assets::GetAssetId(const String& path) const
 	{
 		return GetAssetInfo(path).mId;
 	}
 
-	AssetInfo Assets::GetAssetInfo(UInt id) const
+	AssetInfo Assets::GetAssetInfo(AssetId id) const
 	{
 		return mAssetsTree.FindAssetInfo(id);
 	}
@@ -63,9 +63,9 @@ namespace o2
 		return mAssetsTree.FindAssetInfo(path);
 	}
 
-	UInt Assets::GetRandomAssetId()
+	AssetId Assets::GetRandomAssetId()
 	{
-		return Math::Random<UInt>(1, UINT_MAX);
+		return Math::Random<AssetId>(1, UINT_MAX);
 	}
 
 	const Assets::TypesExtsDict Assets::GetAssetsExtensionsTypes() const
@@ -105,7 +105,7 @@ namespace o2
 		return GetAssetInfo(path).mId != 0;
 	}
 
-	bool Assets::IsAssetExist(UInt id) const
+	bool Assets::IsAssetExist(AssetId id) const
 	{
 		return GetAssetInfo(id).mId != 0;
 	}
@@ -133,7 +133,7 @@ namespace o2
 		return o2FileSystem.FileDelete(GetAssetsPath() + info.mPath);
 	}
 
-	bool Assets::RemoveAsset(UInt id, bool rebuildAssets /*= true*/)
+	bool Assets::RemoveAsset(AssetId id, bool rebuildAssets /*= true*/)
 	{
 		AssetInfo info = GetAssetInfo(id);
 
@@ -176,7 +176,7 @@ namespace o2
 		return o2FileSystem.FileMove(GetAssetsPath() + info.mPath, GetAssetsPath() + newPath);
 	}
 
-	bool Assets::MoveAsset(UInt id, const String& newPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAsset(AssetId id, const String& newPath, bool rebuildAssets /*= true*/)
 	{
 		AssetInfo info = GetAssetInfo(id);
 

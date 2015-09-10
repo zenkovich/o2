@@ -68,14 +68,14 @@ namespace o2
 		{
 			friend class AtlasAssetConverter;
 
-			UInt                    mId;          // Page number
-			Vec2I                   mSize;        // Size of page
-			UInt                    mTextureId;   // Texture id
-			Dictionary<UInt, RectI> mImagesRects; // Images source rectangles
+			AssetId                    mId;          // Page number
+			Vec2I                      mSize;        // Size of page
+			UInt                       mTextureId;   // Texture id
+			Dictionary<AssetId, RectI> mImagesRects; // Images source rectangles
 
 		public:
 			// Returns number
-			UInt ID() const;
+			AssetId ID() const;
 
 			// Returns size
 			Vec2I Size() const;
@@ -84,7 +84,7 @@ namespace o2
 			UInt TextureId() const;
 
 			// Returns images rectangles
-			const Dictionary<UInt, RectI>& ImagesRects() const;
+			const Dictionary<AssetId, RectI>& ImagesRects() const;
 
 			// Check equal operator
 			bool operator==(const Page& other) const;
@@ -112,7 +112,7 @@ namespace o2
 		AtlasAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		AtlasAsset(UInt id);
+		AtlasAsset(AssetId id);
 
 		// Copy-constructor
 		AtlasAsset(const AtlasAsset& asset);
@@ -139,7 +139,7 @@ namespace o2
 		bool ContainsImage(const AssetInfo& imageAssetInfo);
 
 		// Is contains image
-		bool ContainsImage(UInt id);
+		bool ContainsImage(AssetId id);
 
 		// Is contains image
 		bool ContainsImage(const String& path);

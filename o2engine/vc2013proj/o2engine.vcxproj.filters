@@ -67,6 +67,15 @@
     <Filter Include="Dependencies\Zlib">
       <UniqueIdentifier>{afd4b593-6160-4807-8f76-d5aa8f83ae78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Render">
+      <UniqueIdentifier>{1fcd9cdd-1bda-4ab3-b2f3-dc77ecda0aa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Render\Platform">
+      <UniqueIdentifier>{b55f5b73-624d-42d2-9aef-b13ea917dc4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\OpenGL">
+      <UniqueIdentifier>{df9a8045-0293-4063-859d-0bf5fd6da0eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -361,6 +370,75 @@
     <ClInclude Include="..\Sources\Assets\AssetsTree.h">
       <Filter>Sources\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Render\Mesh.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\IDrawable.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\IDynamic.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\Texture.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\Windows\TextureBase.h">
+      <Filter>Sources\Render\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\OpenGL\glext.h">
+      <Filter>Dependencies\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Dependencies\OpenGL\wglext.h">
+      <Filter>Dependencies\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\Windows\OpenGL.h">
+      <Filter>Sources\Render\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\RectDrawable.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Basis.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\Sprite.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Transform.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\Camera.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Ray.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\OBB.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\PolyLine.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Intersection.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\DrawPolyLine.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\NineSliceSprite.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\Font.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\Text.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\Render.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\Windows\RenderBase.h">
+      <Filter>Sources\Render\Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -617,6 +695,18 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Assets\AssetsTree.cpp">
       <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\Windows\Texture.cpp">
+      <Filter>Sources\Render\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\Windows\Render.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp">
+      <Filter>Sources\Render\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\Mesh.cpp">
+      <Filter>Sources\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

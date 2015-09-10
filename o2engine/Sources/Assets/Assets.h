@@ -45,13 +45,13 @@ namespace o2
 		String GetDataPath() const;
 
 		// Returns asset path by asset id
-		String GetAssetPath(UInt id) const;
+		String GetAssetPath(AssetId id) const;
 
 		// Returns asset id by path
-		UInt GetAssetId(const String& path) const;
+		AssetId GetAssetId(const String& path) const;
 
 		// Returns asset info by id
-		AssetInfo GetAssetInfo(UInt id) const;
+		AssetInfo GetAssetInfo(AssetId id) const;
 
 		// Returns asset info by path
 		AssetInfo GetAssetInfo(const String& path) const;
@@ -75,7 +75,7 @@ namespace o2
 
 		// Loads new asset by id
 		template<typename _asset_type>
-		Ptr<_asset_type> LoadAsset(UInt id);
+		Ptr<_asset_type> LoadAsset(AssetId id);
 
 		// Loads asset by info
 		Ptr<Asset> LoadAsset(const AssetInfo& info);
@@ -84,7 +84,7 @@ namespace o2
 		bool IsAssetExist(const String& path) const;
 
 		// Returns true if asset exist by id
-		bool IsAssetExist(UInt id) const;
+		bool IsAssetExist(AssetId id) const;
 
 		// Returns true if asset exist
 		bool IsAssetExist(const AssetInfo& info) const;
@@ -96,7 +96,7 @@ namespace o2
 		bool RemoveAsset(const String& path, bool rebuildAssets = true);
 
 		// Removes asset by id
-		bool RemoveAsset(UInt id, bool rebuildAssets = true);
+		bool RemoveAsset(AssetId id, bool rebuildAssets = true);
 
 		// Removes asset by info
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
@@ -108,7 +108,7 @@ namespace o2
 		bool MoveAsset(const String& path, const String& newPath, bool rebuildAssets = true);
 
 		// Moves asset by id to new path
-		bool MoveAsset(UInt id, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(AssetId id, const String& newPath, bool rebuildAssets = true);
 
 		// Moves asset to new path
 		bool MoveAsset(const AssetInfo& info, const String& newPath, bool rebuildAssets = true);
@@ -117,7 +117,7 @@ namespace o2
 		void RebuildAssets(bool forcible = false);
 		
 		// Returns random asset id
-		static UInt GetRandomAssetId();
+		static AssetId GetRandomAssetId();
 
 	protected:
 		AssetTree          mAssetsTree;    // Assets information tree
@@ -151,7 +151,7 @@ namespace o2
 	}
 
 	template<typename _asset_type>
-	Ptr<_asset_type> Assets::LoadAsset(UInt id)
+	Ptr<_asset_type> Assets::LoadAsset(AssetId id)
 	{
 		return mnew _asset_type(id);
 	}

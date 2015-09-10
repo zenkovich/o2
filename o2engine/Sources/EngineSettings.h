@@ -8,6 +8,9 @@
 // Enables stopping on log errors
 #define ENABLE_STOPPING_ON_LOG_ERRORS false
 
+// Enables render debugging
+#define RENDER_DEBUG true
+
 // ----------------------------
 // Assets configuration section
 // ----------------------------

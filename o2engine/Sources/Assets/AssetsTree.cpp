@@ -9,7 +9,7 @@ namespace o2
 	AssetTree::AssetNode::AssetNode()
 	{}
 
-	AssetTree::AssetNode::AssetNode(const String& path, UInt id, Type::Id type):
+	AssetTree::AssetNode::AssetNode(const String& path, AssetId id, Type::Id type):
 		AssetInfo(path, id, type)
 	{
 	}
@@ -42,7 +42,7 @@ namespace o2
 		return mAllAssets.FindMatch([&](Ptr<AssetNode> asset) { return asset->mPath == path; });
 	}
 
-	Ptr<AssetTree::AssetNode> AssetTree::FindAsset(UInt id) const
+	Ptr<AssetTree::AssetNode> AssetTree::FindAsset(AssetId id) const
 	{
 		return mAllAssets.FindMatch([&](Ptr<AssetNode> asset) { return asset->mId == id; });
 	}
@@ -56,7 +56,7 @@ namespace o2
 		return AssetInfo();
 	}
 
-	AssetInfo AssetTree::FindAssetInfo(UInt id) const
+	AssetInfo AssetTree::FindAssetInfo(AssetId id) const
 	{
 		auto asset = FindAsset(id);
 		if (asset)

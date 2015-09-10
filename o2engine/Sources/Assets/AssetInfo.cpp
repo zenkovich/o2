@@ -8,7 +8,7 @@ namespace o2
 		mId(0), mType(0)
 	{}
 
-	AssetInfo::AssetInfo(const String& path, UInt id, Type::Id type):
+	AssetInfo::AssetInfo(const String& path, AssetId id, Type::Id type):
 		mPath(path), mId(id), mType(type)
 	{}
 

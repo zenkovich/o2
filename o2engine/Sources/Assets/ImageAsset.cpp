@@ -34,7 +34,7 @@ namespace o2
 		Load();
 	}
 
-	ImageAsset::ImageAsset(UInt id):
+	ImageAsset::ImageAsset(AssetId id):
 		Asset(), mBitmap(nullptr), mAtlasPage(0)
 	{
 		mMeta = mnew MetaInfo();
@@ -88,12 +88,12 @@ namespace o2
 		mBitmap = bitmap;
 	}
 
-	UInt ImageAsset::GetAtlasId() const
+	AssetId ImageAsset::GetAtlasId() const
 	{
 		return mMeta.Cast<MetaInfo>()->mAtlasId;
 	}
 
-	void ImageAsset::SetAtlasId(UInt id)
+	void ImageAsset::SetAtlasId(AssetId id)
 	{
 		AssetInfo atlasInfp = o2Assets.GetAssetInfo(id);
 		if (atlasInfp.mType != AtlasAsset::type.ID())

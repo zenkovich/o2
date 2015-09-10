@@ -28,7 +28,7 @@ namespace o2
 			AssetNode();
 
 			// Constructor
-			AssetNode(const String& path, UInt id, Type::Id type);
+			AssetNode(const String& path, AssetId id, Type::Id type);
 		};
 		typedef Vector<Ptr<AssetNode>> AssetsVec;
 
@@ -52,13 +52,13 @@ namespace o2
 		Ptr<AssetNode> FindAsset(const String& path) const;
 
 		// Returns asset by id. (nullptr if not asset with id)
-		Ptr<AssetNode> FindAsset(UInt id) const;
+		Ptr<AssetNode> FindAsset(AssetId id) const;
 
 		// Returns asset info by path
 		AssetInfo FindAssetInfo(const String& path) const;
 
 		// Returns asset info by id
-		AssetInfo FindAssetInfo(UInt id) const;
+		AssetInfo FindAssetInfo(AssetId id) const;
 
 		// Adds asset node information into structure
 		Ptr<AssetNode> AddAsset(Ptr<AssetNode> asset);

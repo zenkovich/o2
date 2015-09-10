@@ -39,7 +39,7 @@ namespace o2
 		BinaryAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		BinaryAsset(UInt id);
+		BinaryAsset(AssetId id);
 
 		// Copy-constructor
 		BinaryAsset(const BinaryAsset& asset);

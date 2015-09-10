@@ -43,7 +43,7 @@ namespace o2
 		// ----------------
 		struct Image: public ISerializable
 		{
-			UInt      mId;   // Image asset id
+			AssetId   mId;   // Image asset id
 			TimeStamp mTime; // Image asset edited date
 
 		public:
@@ -51,7 +51,7 @@ namespace o2
 			Image() {}
 
 			// Constructor
-			Image(UInt id, const TimeStamp& time);
+			Image(AssetId id, const TimeStamp& time);
 
 			// Check equal operator
 			bool operator==(const Image& other) const;

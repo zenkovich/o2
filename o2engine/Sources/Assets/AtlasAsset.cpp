@@ -24,7 +24,7 @@ namespace o2
 		return mIOS == otherMeta->mIOS && mAndroid == otherMeta->mAndroid && mMacOS == otherMeta->mMacOS && mWindows == otherMeta->mWindows;
 	}
 
-	UInt AtlasAsset::Page::ID() const
+	AssetId AtlasAsset::Page::ID() const
 	{
 		return mId;
 	}
@@ -39,7 +39,7 @@ namespace o2
 		return mTextureId;
 	}
 
-	const Dictionary<UInt, RectI>& AtlasAsset::Page::ImagesRects() const
+	const Dictionary<AssetId, RectI>& AtlasAsset::Page::ImagesRects() const
 	{
 		return mImagesRects;
 	}
@@ -67,7 +67,7 @@ namespace o2
 		Load();
 	}
 
-	AtlasAsset::AtlasAsset(UInt id):
+	AtlasAsset::AtlasAsset(AssetId id):
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
@@ -127,7 +127,7 @@ namespace o2
 		return mImagesAssetsInfos.ContainsPred([&](const AssetInfo& info) { return info.mId == imageAssetInfo.mId; });
 	}
 
-	bool AtlasAsset::ContainsImage(UInt id)
+	bool AtlasAsset::ContainsImage(AssetId id)
 	{
 		return mImagesAssetsInfos.ContainsPred([&](const AssetInfo& info) { return info.mId == id; });
 	}

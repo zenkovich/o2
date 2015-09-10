@@ -38,7 +38,7 @@ namespace o2
 		FolderAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		FolderAsset(UInt id);
+		FolderAsset(AssetId id);
 
 		// Copy-constructor
 		FolderAsset(const FolderAsset& asset);

@@ -44,12 +44,12 @@ namespace o2
 		o2Assets.MoveAsset(Ptr<Asset>(this), mPath);
 	}
 
-	UInt Asset::GetAssetId() const
+	AssetId Asset::GetAssetId() const
 	{
 		return mMeta->mId;
 	}
 
-	UInt& Asset::IdRef()
+	AssetId& Asset::IdRef()
 	{
 		return mMeta->mId;
 	}
@@ -74,7 +74,7 @@ namespace o2
 		LoadData(GetFullPath());
 	}
 
-	void Asset::Load(UInt id)
+	void Asset::Load(AssetId id)
 	{
 		if (!o2Assets.IsAssetExist(id))
 		{
@@ -127,7 +127,7 @@ namespace o2
 			mPath = path;
 		}
 
-		UInt destPathAssetId = o2Assets.GetAssetId(path);
+		AssetId destPathAssetId = o2Assets.GetAssetId(path);
 		if (destPathAssetId != 0 && destPathAssetId != mMeta->mId)
 		{
 			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui) to %s: another asset exist in target path", 
@@ -144,7 +144,7 @@ namespace o2
 
 	void Asset::Save(bool rebuildAssetsImmediately /*= true*/)
 	{
-		UInt destPathAssetId = o2Assets.GetAssetId(mPath);
+		AssetId destPathAssetId = o2Assets.GetAssetId(mPath);
 		if (destPathAssetId != 0 && destPathAssetId != mMeta->mId)
 		{
 			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui): another asset exist in this path", mPath, mMeta->mId);
@@ -210,7 +210,7 @@ namespace o2
 		return GetAssetType() == other->GetAssetType() && mId == other->mId;
 	}
 
-	UInt Asset::IMetaInfo::ID() const
+	AssetId Asset::IMetaInfo::ID() const
 	{
 		return mId;
 	}

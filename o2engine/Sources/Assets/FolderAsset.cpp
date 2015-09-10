@@ -31,7 +31,7 @@ namespace o2
 		Load();
 	}
 
-	FolderAsset::FolderAsset(UInt id)
+	FolderAsset::FolderAsset(AssetId id)
 	{
 		mMeta = mnew MetaInfo();
 		IdRef() = id;

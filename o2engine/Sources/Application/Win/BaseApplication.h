@@ -10,6 +10,8 @@ namespace o2
 	// ---------------------------------- 
 	class BaseApplication: public IApplication
 	{
+		friend class Render;
+
 	public:
 		// Default constructor. */
 		BaseApplication();

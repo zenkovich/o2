@@ -84,7 +84,7 @@ namespace o2
 
 		Ptr<AssetTree::AssetNode> basicAtlasInfo;
 
-		Vector<UInt> availableAtlasesIds;
+		Vector<AssetId> availableAtlasesIds;
 		for (auto assetInfo : mAssetsBuilder->mBuildedAssetsTree.mAllAssets)
 		{
 			if (assetInfo->mType == atlasTypeId)
@@ -129,7 +129,7 @@ namespace o2
 
 		ImagesVec currentImages;
 		Type::Id imageTypeId = ImageAsset::type.ID();
-		UInt atlasId = atlasInfo->mMeta->ID();
+		AssetId atlasId = atlasInfo->mMeta->ID();
 		for (auto assetInfo : mAssetsBuilder->mBuildedAssetsTree.mAllAssets)
 		{
 			if (assetInfo->mType == imageTypeId)
@@ -284,7 +284,7 @@ namespace o2
 		o2FileSystem.SetFileEditDate(imageFullPath, imgDef.mAssetInfo->mTime);
 	}
 
-	AtlasAssetConverter::Image::Image(UInt id, const TimeStamp& time):
+	AtlasAssetConverter::Image::Image(AssetId id, const TimeStamp& time):
 		mId(id), mTime(time)
 	{}
 

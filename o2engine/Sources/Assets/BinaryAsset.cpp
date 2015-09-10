@@ -31,7 +31,7 @@ namespace o2
 		Load();
 	}
 
-	BinaryAsset::BinaryAsset(UInt id):
+	BinaryAsset::BinaryAsset(AssetId id):
 		Asset(), mData(nullptr), mDataSize(0)
 	{
 		mMeta = mnew MetaInfo();

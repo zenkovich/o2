@@ -7,6 +7,8 @@
 
 namespace o2
 {
+	typedef UInt AssetId;
+
 	// ---------------------
 	// Basic asset interface
 	// ---------------------
@@ -22,7 +24,7 @@ namespace o2
 		{
 			friend class Asset;
 
-			UInt mId; // Id of assets
+			AssetId mId; // Id of assets
 
 		public:
 			// Default constructor
@@ -38,7 +40,7 @@ namespace o2
 			virtual bool IsEqual(Ptr<IMetaInfo> other) const;
 
 			// Returns asset id
-			UInt ID() const;
+			AssetId ID() const;
 
 			SERIALIZABLE_IMPL(IMetaInfo);
 
@@ -51,7 +53,7 @@ namespace o2
 	public:
 		Property<String>       Path;     // Asset path property
 		Getter<String>         FullPath; // Full asset path getter (from binary path)
-		Getter<UInt>           Id;       // Asset id getter
+		Getter<AssetId>        Id;       // Asset id getter
 		Getter<Ptr<IMetaInfo>> Meta;     // Asset meta information pointer getter
 
 		// Default constructor
@@ -82,7 +84,7 @@ namespace o2
 		String GetDataFullPath() const;
 
 		// Returns id of asset
-		UInt GetAssetId() const;
+		AssetId GetAssetId() const;
 
 		// Returns meta information pointer
 		Ptr<IMetaInfo> GetMeta() const;
@@ -94,7 +96,7 @@ namespace o2
 		void Load(const String& path);
 
 		// Loads asset by id
-		void Load(UInt id);
+		void Load(AssetId id);
 
 		// Loads asset by info
 		void Load(const AssetInfo& info);
@@ -140,7 +142,7 @@ namespace o2
 		String GetMetaFullPath() const;
 
 		// Returns reference to id in meta
-		UInt& IdRef();
+		AssetId& IdRef();
 
 		// Returns assets log stream pointer
 		Ptr<LogStream> GetAssetsLogStream() const;
