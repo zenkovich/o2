@@ -22,8 +22,14 @@ namespace o2
 					  const Vec2F& scale = Vec2F(1.0f, 1.0f), const Color4& color = Color4::White(), 
 					  const Vec2F& pivot = Vec2F());
 
+		// Copy-constructor
+		IRectDrawable(const IRectDrawable& other);
+
 		// Virtual destructor
 		virtual ~IRectDrawable() {}
+
+		// Assign operator
+		IRectDrawable& operator=(const IRectDrawable& other);
 
 		// Returns a copy of drawable
 		virtual IRectDrawable* Clone() const = 0;

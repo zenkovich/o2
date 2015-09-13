@@ -4,8 +4,8 @@
 
 namespace o2
 {
-	Mesh::Mesh(Ptr<Texture> texture /*= nullptr*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/):
-		mVerticies(NULL), mIndexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), mVertexCount(0), mPolyCount(0)
+	Mesh::Mesh(TextureRef texture /*= TextureRef()*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/):
+		mVertices(NULL), mIndexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), mVertexCount(0), mPolyCount(0)
 	{
 		SetTexture(texture);
 		Resize(vertexCount, polyCount);
@@ -20,7 +20,7 @@ namespace o2
 		mVertexCount = mesh.mVertexCount;
 		mPolyCount = mesh.mPolyCount;
 
-		memcpy(mVerticies, mesh.mVerticies, mesh.mMaxVertexCount*sizeof(Vertex2));
+		memcpy(mVertices, mesh.mVertices, mesh.mMaxVertexCount*sizeof(Vertex2));
 		memcpy(mIndexes, mesh.mIndexes, mesh.mMaxPolyCount*3*sizeof(UInt16));
 
 		InitializeProperties();
@@ -28,16 +28,30 @@ namespace o2
 
 	Mesh::~Mesh()
 	{
-		delete[] mVerticies;
+		delete[] mVertices;
 		delete[] mIndexes;
+	}
+
+	Mesh& Mesh::operator=(const Mesh& other)
+	{
+		Resize(other.mMaxVertexCount, other.mMaxPolyCount);
+		mTexture = other.mTexture;
+
+		mVertexCount = other.mVertexCount;
+		mPolyCount = other.mPolyCount;
+
+		memcpy(mVertices, other.mVertices, other.mMaxVertexCount*sizeof(Vertex2));
+		memcpy(mIndexes, other.mIndexes, other.mMaxPolyCount*3*sizeof(UInt16));
+
+		return *this;
 	}
 
 	void Mesh::Resize(UInt vertexCount, UInt polyCount)
 	{
-		delete[] mVerticies;
-		delete[] mIndexes;
+		if (mVertices) delete[] mVertices;
+		if (mIndexes) delete[] mIndexes;
 
-		mVerticies = new Vertex2[vertexCount];
+		mVertices = new Vertex2[vertexCount];
 		mIndexes = new UInt16[polyCount*3];
 
 		mMaxVertexCount = vertexCount;
@@ -52,20 +66,20 @@ namespace o2
 		o2Render.DrawMesh(this);
 	}
 
-	void Mesh::SetTexture(Ptr<Texture> texture)
+	void Mesh::SetTexture(TextureRef texture)
 	{
 		mTexture = texture;
 	}
 
-	Ptr<Texture> Mesh::GetTexture() const
+	TextureRef Mesh::GetTexture() const
 	{
 		return mTexture;
 	}
 
 	void Mesh::SetMaxVertexCount(const UInt& count)
 	{
-		delete[] mVerticies;
-		mVerticies = new Vertex2[count];
+		delete[] mVertices;
+		mVertices = new Vertex2[count];
 		mMaxVertexCount = count;
 		mVertexCount = 0;
 	}

@@ -86,7 +86,7 @@ namespace o2
 		}
 
 		// Pointer access operator
-		_type* operator->() const
+		_type* operator->()
 		{
 			mTempValue = Get();
 			return &mTempValue;

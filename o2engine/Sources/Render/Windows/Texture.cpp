@@ -8,21 +8,30 @@ namespace o2
 {
 	Texture::Texture():
 		mReady(false)
-	{}
+	{
+		o2Render.mTextures.Add(this);
+		InitializeProperties();
+	}
 
 	Texture::Texture(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/)
 	{
 		Create(size, format, usage);
+		o2Render.mTextures.Add(this);
+		InitializeProperties();
 	}
 
 	Texture::Texture(const String& fileName)
 	{
 		Create(fileName);
+		o2Render.mTextures.Add(this);
+		InitializeProperties();
 	}
 
 	Texture::Texture(Ptr<Bitmap> bitmap)
 	{
 		Create(bitmap);
+		o2Render.mTextures.Add(this);
+		InitializeProperties();
 	}
 
 	Texture::~Texture()
@@ -34,6 +43,8 @@ namespace o2
 
 		if (mUsage == Usage::RenderTarget)
 			glDeleteBuffers(1, &mFrameBuffer);
+
+		o2Render.mTextures.Remove(this);
 	}
 
 	void Texture::Create(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/)

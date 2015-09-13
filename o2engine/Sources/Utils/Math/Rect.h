@@ -47,7 +47,7 @@ namespace o2
 		inline Rect<T> operator/=(float v);
 
 		inline void Set(float vleft, float vtop, float vright, float vbottom);
-		inline void Set(const Vec2F& leftTop, const Vec2F& rightDown);
+		inline void Set(const Vec2<T>& leftTop, const Vec2<T>& rightDown);
 
 		inline void SetPosition(const Vec2<T>& position);
 		inline void SetSize(const Vec2<T>& size);
@@ -249,7 +249,7 @@ namespace o2
 	}
 
 	template<typename T>
-	void Rect<T>::Set(const Vec2F& leftTop, const Vec2F& rightDown)
+	void Rect<T>::Set(const Vec2<T>& leftTop, const Vec2<T>& rightDown)
 	{
 		left = Math::Min(leftTop.x, rightDown.x);
 		right = Math::Max(leftTop.x, rightDown.x);

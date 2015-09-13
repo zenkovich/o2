@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/Asset.h"
+#include "Render/TextureRef.h"
 
 namespace o2
 {
@@ -70,7 +71,6 @@ namespace o2
 
 			AssetId                    mId;          // Page number
 			Vec2I                      mSize;        // Size of page
-			UInt                       mTextureId;   // Texture id
 			Dictionary<AssetId, RectI> mImagesRects; // Images source rectangles
 
 		public:
@@ -80,8 +80,11 @@ namespace o2
 			// Returns size
 			Vec2I Size() const;
 
-			// Returns texture id
-			UInt TextureId() const;
+			// Returns texture reference
+			TextureRef GetTextureRef() const;
+
+			// Returns texture file name
+			String GetTextureFileName() const;
 
 			// Returns images rectangles
 			const Dictionary<AssetId, RectI>& ImagesRects() const;
@@ -149,6 +152,18 @@ namespace o2
 
 		// Returns extensions string
 		const char* GetFileExtensions() const;
+
+		// Returns atlas page's texture file name
+		static String GetPageTextureFileName(AssetId atlasId, UInt pageIdx);
+
+		// Returns atlas page's texture file name
+		static String GetPageTextureFileName(const String& atlasPath, UInt pageIdx);
+
+		// Returns atlas page's texture reference
+		static TextureRef GetPageTextureRef(AssetId atlasId, UInt pageIdx);
+
+		// Returns atlas page's texture reference
+		static TextureRef GetPageTextureRef(const String& atlasPath, UInt pageIdx);
 
 		SERIALIZABLE_IMPL(AtlasAsset);
 

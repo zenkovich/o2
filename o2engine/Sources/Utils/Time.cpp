@@ -24,6 +24,9 @@ namespace o2
 
 	void TimeStuff::Update(float dt)
 	{
+		if (dt < FLT_EPSILON)
+			return;
+
 		mDeltaTime = dt;
 		mApplicationTime += dt;
 		mLocalTime += dt;

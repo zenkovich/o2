@@ -5,6 +5,8 @@
 #include "Utils/Bitmap.h"
 #include "Utils/Log/LogStream.h"
 
+#undef LoadBitmap
+
 namespace o2
 {
 	IOBJECT_CPP(ImageAsset);

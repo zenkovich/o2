@@ -34,11 +34,6 @@ namespace o2
 		return mSize;
 	}
 
-	UInt AtlasAsset::Page::TextureId() const
-	{
-		return mTextureId;
-	}
-
 	const Dictionary<AssetId, RectI>& AtlasAsset::Page::ImagesRects() const
 	{
 		return mImagesRects;
@@ -145,6 +140,26 @@ namespace o2
 	const char* AtlasAsset::GetFileExtensions() const
 	{
 		return "atlas";
+	}
+
+	String AtlasAsset::GetPageTextureFileName(AssetId atlasId, UInt pageIdx)
+	{
+		return GetPageTextureFileName(o2Assets.GetAssetPath(atlasId), pageIdx);
+	}
+
+	String AtlasAsset::GetPageTextureFileName(const String& atlasPath, UInt pageIdx)
+	{
+		return o2Assets.GetDataPath() + atlasPath + (String)pageIdx + ".png";
+	}
+
+	TextureRef AtlasAsset::GetPageTextureRef(AssetId atlasId, UInt pageIdx)
+	{
+		return TextureRef(GetPageTextureFileName(atlasId, pageIdx));
+	}
+
+	TextureRef AtlasAsset::GetPageTextureRef(const String& atlasPath, UInt pageIdx)
+	{
+		return TextureRef(GetPageTextureFileName(atlasPath, pageIdx));
 	}
 
 	void AtlasAsset::LoadData(const String& path)

@@ -4,6 +4,7 @@
 #include "Application/Input.h"
 #include "Assets/Assets.h"
 #include "Config/ProjectConfig.h"
+#include "Render/Render.h"
 #include "Utils/Debug.h"
 #include "Utils/FileSystem/FileSystem.h"
 #include "Utils/Log/ConsoleLogStream.h"
@@ -84,10 +85,10 @@ namespace o2
 		OnUpdate(dt);
 		//mUIController->Update(dt);
 
-		//mRenderSystem->BeginRender();
+		mRender->Begin();
 		OnDraw();
 		//mUIController->Draw();
-		//mRenderSystem->EndRender();
+		mRender->End();
 
 		mInput->update(dt);
 

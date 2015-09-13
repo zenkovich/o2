@@ -25,14 +25,20 @@ namespace o2
 		Property<Vec2F>  Left;         // Negative X Axis direction property
 		Property<Vec2F>  Up;           // Y Axis direction property
 		Property<Vec2F>  Down;         // Negative Y Axis direction property
-		Setter<Vec2F>    LookAt;       // Look at point setter
+		Setter<Vec2F>    LookAtPoint;  // Look at point setter
 
 									   // Constructor
 		Transform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
 				  const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F());
 
+		// Copy-constructor
+		Transform(const Transform& other);
+
 		// Virtual destructor
 		virtual ~Transform() {}
+
+		// Assign operator
+		Transform& operator=(const Transform& other);
 		
 		// Sets position
 		virtual void SetPosition(const Vec2F& position);
@@ -65,7 +71,7 @@ namespace o2
 		virtual Vec2F GetRelativePivot() const;
 
 		// Sets rect
-		virtual void GetRect(const RectF& rect);
+		virtual void SetRect(const RectF& rect);
 
 		// Returns rect
 		virtual RectF GetRect() const;
@@ -161,13 +167,13 @@ namespace o2
 		Vec2F World2LocalPoint(const Vec2F& worldPoint) const;
 
 		// Transforms point from local space into world
-		Vec2F Local2WorldPoint(const Vec2F& worldPoint) const;
+		Vec2F Local2WorldPoint(const Vec2F& localPoint) const;
 
 		// Transforms direction from world space into local
-		Vec2F World2LocalDir(const Vec2F& worldPoint) const;
+		Vec2F World2LocalDir(const Vec2F& worldDir) const;
 
 		// Transforms direction from local space into world
-		Vec2F Local2WorldDir(const Vec2F& worldPoint) const;
+		Vec2F Local2WorldDir(const Vec2F& localDir) const;
 
 	protected:
 		Vec2F  mPosition;  // Position
@@ -180,20 +186,11 @@ namespace o2
 		Basis  mTransform; // Final transform basis
 
 	protected:
-		// Calls when position was changed
-		virtual void PositionChanged() {}
-
-		// Calls when size was changed
-		virtual void SizeChanged() {}
-
-		// Calls when pivot was changed
-		virtual void PivotChanged() {}
-
-		// Calls when enabling changed
-		virtual void EnableChanged() {}
-
 		// Calls when basis changed
 		virtual void BasisChanged() {}
+
+		// Updates mTransform 
+		void UpdateTransform();
 
 		// Initializing properties
 		void InitializeProperties();

@@ -282,6 +282,11 @@ namespace o2
 		String imageFullPath = mAssetsBuilder->mBuildedAssetsPath + imgDef.mAssetInfo->mPath;
 		imgData.SaveToFile(imageFullPath);
 		o2FileSystem.SetFileEditDate(imageFullPath, imgDef.mAssetInfo->mTime);
+
+		DataNode metaData;
+		metaData = imgDef.mAssetInfo->mMeta;
+		metaData.SaveToFile(mAssetsBuilder->mBuildedAssetsPath + imgDef.mAssetInfo->mPath + ".meta");
+		metaData.SaveToFile(mAssetsBuilder->mSourceAssetsPath + imgDef.mAssetInfo->mPath + ".meta");
 	}
 
 	AtlasAssetConverter::Image::Image(AssetId id, const TimeStamp& time):

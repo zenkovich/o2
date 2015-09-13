@@ -7,8 +7,6 @@
 
 namespace o2
 {
-	typedef UInt AssetId;
-
 	// ---------------------
 	// Basic asset interface
 	// ---------------------

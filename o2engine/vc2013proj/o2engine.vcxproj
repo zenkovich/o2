@@ -154,6 +154,7 @@
     <ClInclude Include="..\Sources\Render\Sprite.h" />
     <ClInclude Include="..\Sources\Render\Text.h" />
     <ClInclude Include="..\Sources\Render\Texture.h" />
+    <ClInclude Include="..\Sources\Render\TextureRef.h" />
     <ClInclude Include="..\Sources\Render\Windows\OpenGL.h" />
     <ClInclude Include="..\Sources\Render\Windows\RenderBase.h" />
     <ClInclude Include="..\Sources\Render\Windows\TextureBase.h" />
@@ -274,6 +275,9 @@
     <ClCompile Include="..\Sources\Assets\ImageAsset.cpp" />
     <ClCompile Include="..\Sources\Config\ProjectConfig.cpp" />
     <ClCompile Include="..\Sources\Render\Mesh.cpp" />
+    <ClCompile Include="..\Sources\Render\RectDrawable.cpp" />
+    <ClCompile Include="..\Sources\Render\Sprite.cpp" />
+    <ClCompile Include="..\Sources\Render\TextureRef.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\Render.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\Texture.cpp" />
@@ -290,6 +294,7 @@
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
+    <ClCompile Include="..\Sources\Utils\Math\Transform.cpp" />
     <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp" />
     <ClCompile Include="..\Sources\Utils\RectPacker.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\FieldInfo.cpp" />

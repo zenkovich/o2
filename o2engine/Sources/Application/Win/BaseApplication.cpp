@@ -1,8 +1,9 @@
 #include "BaseApplication.h"
 
 #include "Application/Input.h"
-#include "Utils/Log/LogStream.h"
+#include "Render/Render.h"
 #include "Utils/Debug.h"
+#include "Utils/Log/LogStream.h"
 #include "Utils/Time.h"
 
 namespace o2
@@ -14,11 +15,13 @@ namespace o2
 		mApplication = this;
 		InitializeWindow();
 
+		mRender = mnew Render();
 		//mRenderSystem = mnew RenderSystem();
 	}
 
 	BaseApplication::~BaseApplication()
 	{
+		mRender.Release();
 		//SafeRelease(mUIController);
 		//SafeRelease(mRenderSystem);
 		//SafeRelease(mTimer);
@@ -180,7 +183,7 @@ namespace o2
 				//mApplication->mRenderSystem->FrameResized();
 				mApplication->onResizingEvent.Invoke();
 			}
-			mApplication->ProcessFrame();
+			//mApplication->ProcessFrame();
 
 			break;
 
@@ -191,7 +194,6 @@ namespace o2
 			if (pos.x < 10000 && pos.y < 10000 && pos != mApplication->mWindowedPos)
 			{
 				mApplication->mWindowedPos = pos;
-				//hlog("WND POS %i %i", pos.x, pos.y);
 				mApplication->OnMoved();
 				mApplication->onMovingEvent.Invoke();
 			}

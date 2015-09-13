@@ -13,7 +13,10 @@ namespace o2
 	Render::Render():
 		mReady(false), mStencilDrawing(false), mStencilTest(false), mScissorTest(false)
 	{
-		// TODO: initialize max buffers size
+		mVertexBufferSize = USHRT_MAX;
+		mIndexBufferSize = USHRT_MAX;
+
+		InitializeProperties();
 
 		// Create log stream
 		mLog = mnew LogStream("Render");
@@ -112,11 +115,11 @@ namespace o2
 
 		GL_CHECK_ERROR(mLog);
 
-		mLog->Out("GL_VENDOR: %s", glGetString(GL_VENDOR));
-		mLog->Out("GL_RENDERER: %s", glGetString(GL_RENDERER));
-		mLog->Out("GL_VERSION: %s", glGetString(GL_VERSION));
+		mLog->Out("GL_VENDOR: %s", (String)(char*)glGetString(GL_VENDOR));
+		mLog->Out("GL_RENDERER: %s", (String)(char*)glGetString(GL_RENDERER));
+		mLog->Out("GL_VERSION: %s", (String)(char*)glGetString(GL_VERSION));
 
-		mCurrentRenderTarget = nullptr;
+		mCurrentRenderTarget = TextureRef();
 		mReady = true;
 	}
 
@@ -127,7 +130,8 @@ namespace o2
 
 		if (mGLContext)
 		{
-			//RemoveAllTextures();
+// 			for (auto texture : mTextures)
+// 				texture.Release();
 
 			if (!wglMakeCurrent(NULL, NULL))
 			{
@@ -181,8 +185,6 @@ namespace o2
 		SetupViewMatrix(mResolution);
 
 		UpdateCameraTransforms();
-
-		Clear();
 	}
 
 	void Render::DrawPrimitives()
@@ -219,9 +221,11 @@ namespace o2
 		SwapBuffers(mHDC);
 
 		GL_CHECK_ERROR(mLog);
+
+		CheckTexturesUnloading();
 	}
 
-	void Render::Clear(const Color4& color /*= Color4::Black()*/)
+	void Render::Clear(const Color4& color /*= Color4::Blur()*/)
 	{
 		glClearColor(color.RF(), color.GF(), color.BF(), color.AF());
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -252,9 +256,9 @@ namespace o2
 		glMatrixMode(GL_MODELVIEW);
 		float modelMatrix[16] ={
 			1, 0, 0, 0,
-			0, 1, 0, 0,
+			0, -1, 0, 0,
 			0, 0, 1, 0,
-			0, 0, -1, 1};
+			mResolution.x*0.5f, mResolution.y*0.5f, -1, 1};
 
 		// 		float cs = cosf(-mCamera->mRotation), sn = sinf(-mCurrentCamera->mRotation);
 		// 		Vec2F scale(1.0f/mCurrentCamera->mScale.x, 1.0f/mCurrentCamera->mScale.y);
@@ -267,6 +271,17 @@ namespace o2
 		// 		modelMatrix[12] = cs*ofx - sn*ofy;     modelMatrix[13] = sn*ofx + cs*ofy;
 
 		glLoadMatrixf(modelMatrix);
+	}
+
+	void Render::CheckTexturesUnloading()
+	{
+		TexturesVec unloadTextures;
+		for (auto texture : mTextures)
+			if (texture->mRefs.Count() == 0)
+				unloadTextures.Add(texture);
+
+		for (auto texture : unloadTextures)
+			texture.Release();
 	}
 
 	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4 color /*= Color4::White()*/)
@@ -440,14 +455,14 @@ namespace o2
 			return false;
 
 		// Check difference
-		if (mLastDrawTexture != mesh->mTexture ||
+		if (mLastDrawTexture != mesh->mTexture.mTexture ||
 			mLastDrawVertex + mesh->mVertexCount >= mVertexBufferSize ||
 			mLastDrawIdx + mesh->mPolyCount*3 >= mIndexBufferSize ||
 			mCurrentPrimitiveType == GL_LINES)
 		{
 			DrawPrimitives();
 
-			mLastDrawTexture = mesh->mTexture;
+			mLastDrawTexture = mesh->mTexture.mTexture;
 			mCurrentPrimitiveType = GL_TRIANGLES;
 
 			if (mLastDrawTexture)
@@ -464,9 +479,9 @@ namespace o2
 		}
 
 		// Copy data
-		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], mesh->mVerticies, sizeof(Vertex2)*mesh->mVertexCount);
+		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], mesh->mVertices, sizeof(Vertex2)*mesh->mVertexCount);
 
-		for (unsigned int i = mLastDrawIdx, j = 0; j < mesh->mPolyCount*3; i++, j++)
+		for (UInt i = mLastDrawIdx, j = 0; j < mesh->mPolyCount*3; i++, j++)
 		{
 			mVertexIndexData[i] = mLastDrawVertex + mesh->mIndexes[j];
 		}
@@ -498,7 +513,7 @@ namespace o2
 		// Copy data
 		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], verticies, sizeof(Vertex2)*count*2);
 
-		for (unsigned int i = mLastDrawIdx, j = 0; j < (unsigned int)count*2; i++, j++)
+		for (UInt i = mLastDrawIdx, j = 0; j < (UInt)count*2; i++, j++)
 		{
 			mVertexIndexData[i] = mLastDrawVertex + j;
 		}
@@ -510,7 +525,7 @@ namespace o2
 		return true;
 	}
 
-	void Render::SetRenderTexture(Ptr<Texture> renderTarget)
+	void Render::SetRenderTexture(TextureRef renderTarget)
 	{
 		if (!renderTarget)
 		{
@@ -556,10 +571,10 @@ namespace o2
 
 		SetupViewMatrix(mResolution);
 
-		mCurrentRenderTarget = nullptr;
+		mCurrentRenderTarget = TextureRef();
 	}
 
-	Ptr<Texture> Render::GetRenderTexture() const
+	TextureRef Render::GetRenderTexture() const
 	{
 		return mCurrentRenderTarget;
 	}

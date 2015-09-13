@@ -10,14 +10,13 @@
 namespace o2
 {
 	class Bitmap;
+	class TextureRef;
 
 	// -------
 	// Texture
 	// -------
 	class Texture: public TextureBase
 	{
-		friend class Render;
-
 	public:
 		// Texture format
 		enum class Format { Default, R8G8B8A8, R8G8B8 };
@@ -71,13 +70,20 @@ namespace o2
 		bool IsReady() const;
 
 	protected:
-		Vec2I  mSize;     // Size of texture
-		Format mFormat;   // Texture format
-		Usage  mUsage;    // Texture usage
-		String mFileName; // Source file name
-		bool   mReady;    // Is texture ready to use
+		typedef Vector<TextureRef*> TextureRefsVec;
 
+		Vec2I          mSize;     // Size of texture
+		Format         mFormat;   // Texture format
+		Usage          mUsage;    // Texture usage
+		String         mFileName; // Source file name
+		bool           mReady;    // Is texture ready to use
+		TextureRefsVec mRefs;     // Texture references
+
+	protected:
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class Render;
+		friend class TextureRef;
 	};
 }

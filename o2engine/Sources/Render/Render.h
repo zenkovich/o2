@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Render/Camera.h"
+#include "Render/TextureRef.h"
 #include "Render/Windows/RenderBase.h"
 #include "Utils/Math/Vertex2.h"
 #include "Utils/Singleton.h"
@@ -18,12 +19,18 @@ namespace o2
 	class Render: public RenderBase, public Singleton<Render>
 	{
 	public:
-		Getter<Vec2I>          Resolution;             // Screen resolution getter
-		Property<Camera>       CurrentCamera;          // Current camera property
-		Property<RectI>        ScissorRect;            // Scissor rect property
-		Property<Ptr<Texture>> RenderTexture;          // Render target texture property
-		Getter<bool>           RenderTextureAvailable; // Render textures available getter
-		Getter<Vec2I>          MaxTextureSize;         // Maximal texture size getter
+		Getter<Vec2I>        Resolution;             // Screen resolution getter
+		Property<Camera>     CurrentCamera;          // Current camera property
+		Property<RectI>      ScissorRect;            // Scissor rect property
+		Property<TextureRef> RenderTexture;          // Render target texture property
+		Getter<bool>         RenderTextureAvailable; // Render textures available getter
+		Getter<Vec2I>        MaxTextureSize;         // Maximal texture size getter
+
+		// Default constructor
+		Render();
+
+		// Destructor
+		~Render();
 
 		// Beginning rendering
 		void Begin();
@@ -32,7 +39,7 @@ namespace o2
 		void End();
 
 		// Clearing current frame buffer with color
-		void Clear(const Color4& color = Color4::Black());
+		void Clear(const Color4& color = Color4::Blue());
 
 		// Returns resolution of rendering frame
 		Vec2I GetResolution() const;
@@ -95,13 +102,13 @@ namespace o2
 		bool DrawLines(Vertex2* verticies, int count);
 
 		// Binding render target
-		void SetRenderTexture(Ptr<Texture> renderTarget);
+		void SetRenderTexture(TextureRef renderTarget);
 
 		// Unbinding render target
 		void UnbindRenderTexture();
 
 		// Returns current render target. Returns NULL if no render target
-		Ptr<Texture> GetRenderTexture() const;
+		TextureRef GetRenderTexture() const;
 
 		// Returns true, if render target is can be used with current device
 		bool IsRenderTextureAvailable() const;
@@ -110,36 +117,34 @@ namespace o2
 		Vec2I GetMaxTextureSize() const;
 
 	protected:
+		typedef Vector<Ptr<Texture>> TexturesVec;
+
 		Ptr<LogStream> mLog;                    // Render log stream
+
+		TexturesVec    mTextures;               // Loaded textures
 
 		Camera         mCamera;                 // Camera transformation
 		Vec2I          mResolution;             // Current back buffer size
-					   					  
+
 		bool           mRenderTargetsAvailable; // True, if render targets is available
 		Vec2I          mMaxTextureSize;         // Max texture size
-					   					  
+
 		bool           mStencilDrawing;         // True, if drawing in stencil buffer
 		bool           mStencilTest;            // True, if drawing with stencil test
-					   					  
+
 		RectI          mScissorRect;            // Scissor rect, in screen space
 		bool           mScissorTest;            // True, if scissor test enabled
-					   					  
-		Ptr<Texture>   mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
-					   					  
+
+		TextureRef     mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
+
 		bool           mReady;                  // True, if render system initialized
 
 	protected:
-		// Default constructor
-		Render();
-
 		// Don't copy
 		Render(const Render& other);
 
 		// Don't copy
 		Render& operator=(const Render& other);
-
-		// Destructor
-		~Render();
 
 		// Send buffers to draw
 		void DrawPrimitives();
@@ -153,9 +158,13 @@ namespace o2
 		// Checks render compatibles
 		void CheckCompatibles();
 
+		// Check textures for unloading
+		void CheckTexturesUnloading();
+
 		// initializes properties
 		void InitializeProperties();
 
 		friend class Texture;
+		friend class TextureRef;
 	};
 }

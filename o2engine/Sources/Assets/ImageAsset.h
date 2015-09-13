@@ -130,7 +130,7 @@ namespace o2
 
 	protected:
 		Ptr<Bitmap> mBitmap;    // Image bitmap. Loading only when needs
-		AssetId     mAtlasPage; // Owner atlas page index
+		UInt        mAtlasPage; // Owner atlas page index
 		RectI       mAtlasRect; // Owner atlas rectangle
 
 	protected:

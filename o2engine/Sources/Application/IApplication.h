@@ -16,6 +16,7 @@ namespace o2
 	class ProjectConfig;
 	class TimeStuff;
 	class Timer;
+	class Render;
 
 	/*************************************/
 	/* Basic application class interface */
@@ -96,12 +97,13 @@ namespace o2
 
 	protected:
 		Ptr<Assets>             mAssets;        // Assets
-		Ptr<FileSystem>    mFileSystem;    // File system
+		Ptr<FileSystem>         mFileSystem;    // File system
 		Ptr<InputStuff>         mInput;         // While application user input message
 		Ptr<LogStream>          mLog;           // Log stream with id "app", using only for application messages
-		Ptr<ProjectConfig> mProjectConfig; // Project config
+		Ptr<ProjectConfig>      mProjectConfig; // Project config
 		Ptr<TimeStuff>          mTime;          // Time utilities
 		Ptr<Timer>              mTimer;         // Timer for detecting delta time for update
+		Ptr<Render>             mRender;        // Graphics render
 
 	protected:
 		// Called on updating

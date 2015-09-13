@@ -9,4 +9,6 @@ namespace o2
 
 	typedef unsigned int       UInt;
 	typedef unsigned long      ULong;
+
+	typedef unsigned int       AssetId;
 }

@@ -372,11 +372,12 @@ namespace o2
 	{
 		int len = 0;
 
-		while (value > 0)
+		do
 		{
 			mData[len++] = (value % 10) + '0';
 			value /= 10;
 		}
+		while (value > 0);
 
 		for (int i = 0; i < len / 2; i++)
 			Math::Swap(mData[i], mData[len - 1 - i]);

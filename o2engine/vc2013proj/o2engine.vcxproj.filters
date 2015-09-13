@@ -439,6 +439,9 @@
     <ClInclude Include="..\Sources\Render\Windows\RenderBase.h">
       <Filter>Sources\Render\Platform</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Render\TextureRef.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -699,13 +702,25 @@
     <ClCompile Include="..\Sources\Render\Windows\Texture.cpp">
       <Filter>Sources\Render\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Render\Windows\Render.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp">
       <Filter>Sources\Render\Platform</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Render\Mesh.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Math\Transform.cpp">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\RectDrawable.cpp">
+      <Filter>Sources\Render\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\Windows\Render.cpp">
+      <Filter>Sources\Render\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\Sprite.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\TextureRef.cpp">
       <Filter>Sources\Render</Filter>
     </ClCompile>
   </ItemGroup>
