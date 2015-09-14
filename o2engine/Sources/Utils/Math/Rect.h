@@ -79,6 +79,8 @@ namespace o2
 
 		inline bool IsZero() const;
 
+		inline static Rect Bound(Vec2<T>* points, int count);
+
 	protected:
 		inline void Normalize();
 	};
@@ -405,4 +407,20 @@ namespace o2
 		return Math::Equals(left, 0.0f) && Math::Equals(right, 0.0f) &&
 			Math::Equals(top, 0.0f) && Math::Equals(bottom, 0.0f);
 	}
+
+	template<typename T>
+	Rect<T> Rect<T>::Bound(Vec2<T>* points, int count)
+	{
+		Rect res(points[0], points[0]);
+		for (int i = 1; i < count; i++)
+		{
+			res.left = Math::Min(res.left, points[i].x);
+			res.right = Math::Max(res.right, points[i].x);
+			res.top = Math::Max(res.top, points[i].y);
+			res.bottom = Math::Min(res.bottom, points[i].y);
+		}
+
+		return res;
+	}
+
 }

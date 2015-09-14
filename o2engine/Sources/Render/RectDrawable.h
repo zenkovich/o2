@@ -20,7 +20,7 @@ namespace o2
 		// Constructor
 		IRectDrawable(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f, 
 					  const Vec2F& scale = Vec2F(1.0f, 1.0f), const Color4& color = Color4::White(), 
-					  const Vec2F& pivot = Vec2F());
+					  const Vec2F& pivot = Vec2F(0.5f, 0.5f));
 
 		// Copy-constructor
 		IRectDrawable(const IRectDrawable& other);

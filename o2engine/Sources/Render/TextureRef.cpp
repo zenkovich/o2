@@ -95,4 +95,9 @@ namespace o2
 		return mTexture == other.mTexture;
 	}
 
+	TextureRef NoTexture()
+	{
+		return TextureRef();
+	}
+
 }

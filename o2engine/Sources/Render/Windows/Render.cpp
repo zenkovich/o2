@@ -253,24 +253,32 @@ namespace o2
 	{
 		DrawPrimitives();
 
-		glMatrixMode(GL_MODELVIEW);
-		float modelMatrix[16] ={
-			1, 0, 0, 0,
-			0, -1, 0, 0,
-			0, 0, 1, 0,
-			mResolution.x*0.5f, mResolution.y*0.5f, -1, 1};
+		Vec2F resf = (Vec2F)mResolution;
 
-		// 		float cs = cosf(-mCamera->mRotation), sn = sinf(-mCurrentCamera->mRotation);
-		// 		Vec2F scale(1.0f/mCurrentCamera->mScale.x, 1.0f/mCurrentCamera->mScale.y);
-		// 		Vec2F pivotOffset = mCurrentCamera->mPivot.scale(mResolution).scale(mCurrentCamera->mScale).rotate(mCurrentCamera->mRotation);
-		// 		Vec2F offs = mCurrentCamera->mPosition - pivotOffset;
-		// 		float ofx = -offs.x*scale.x, ofy = -offs.y*scale.y;
-		// 
-		// 		modelMatrix[0] = cs*scale.x;  modelMatrix[1] = sn*scale.x;
-		// 		modelMatrix[4] = -sn*scale.y; modelMatrix[5] = cs*scale.y;
-		// 		modelMatrix[12] = cs*ofx - sn*ofy;     modelMatrix[13] = sn*ofx + cs*ofy;
+		glMatrixMode(GL_MODELVIEW);
+		float modelMatrix[16] =
+		{
+			1,           0,            0, 0,
+			0,          -1,            0, 0,
+			0,           0,            1, 0,
+			resf.x*0.5f, resf.y*0.5f, -1, 1
+		};
 
 		glLoadMatrixf(modelMatrix);
+
+		Basis defaultCameraBasis((Vec2F)mResolution*-0.5f, Vec2F::Right()*resf.x, Vec2F().Up()*resf.y);
+		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
+
+		float camTransfMatr[16] =
+		{
+			camTransf.xv.x,   camTransf.xv.y,   0, 0,
+			camTransf.yv.x,   camTransf.yv.y,   0, 0,
+			0,                0,                0, 0,
+			camTransf.offs.x, camTransf.offs.y, 0, 1
+		};
+
+		glMultMatrixf(camTransfMatr);
+
 	}
 
 	void Render::CheckTexturesUnloading()
@@ -284,14 +292,14 @@ namespace o2
 			texture.Release();
 	}
 
-	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4 color /*= Color4::White()*/)
+	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
 		Vertex2 v[] ={Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0)};
 		DrawLines(v, 1);
 	}
 
-	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4 color /*= Color4::White()*/)
+	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
 		Vertex2 v[] ={
@@ -303,7 +311,25 @@ namespace o2
 		DrawLines(v, 4);
 	}
 
-	void Render::DrawCross(const Vec2F& pos, float size /*= 5*/, const Color4 color /*= Color4::White()*/)
+	void Render::DrawRectFrame(const RectF& rect, const Color4& color /*= Color4::White()*/)
+	{
+		DrawRectFrame(rect.LeftBottom(), rect.RightTop(), color);
+	}
+
+	void Render::DrawBasis(const Basis& basis, const Color4& xcolor /*= Color4::Red()*/, 
+						   const Color4& ycolor /*= Color4::Blue()*/, const Color4& color /*= Color4::White()*/)
+	{
+		Vertex2 v[] =
+		{
+			Vertex2(basis.offs, xcolor.ABGR(), 0, 0), Vertex2(basis.offs + basis.xv, xcolor.ABGR(), 0, 0),
+			Vertex2(basis.offs, ycolor.ABGR(), 0, 0), Vertex2(basis.offs + basis.yv, ycolor.ABGR(), 0, 0),
+			Vertex2(basis.offs + basis.xv, color.ABGR(), 0, 0), Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0),
+			Vertex2(basis.offs + basis.yv, color.ABGR(), 0, 0), Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0)
+		};
+		DrawLines(v, 4);
+	}
+
+	void Render::DrawCross(const Vec2F& pos, float size /*= 5*/, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
 		Vertex2 v[] ={
@@ -312,7 +338,7 @@ namespace o2
 		DrawLines(v, 2);
 	}
 
-	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4 color /*= Color4::White()*/)
+	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/)
 	{
 		const int segCount = 20;
 		Vertex2 v[segCount*2];

@@ -51,16 +51,22 @@ namespace o2
 		Camera GetCamera() const;
 
 		// Draw single line with color
-		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4 color = Color4::White());
+		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White());
 
 		// Draw rect frame with color
-		void DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4 color = Color4::White());
+		void DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color = Color4::White());
+
+		// Draw rect frame with color
+		void DrawRectFrame(const RectF& rect, const Color4& color = Color4::White());
+
+		void DrawBasis(const Basis& basis, const Color4& xcolor = Color4::Red(), const Color4& ycolor = Color4::Blue(),
+					   const Color4& color = Color4::White());
 
 		// Draw cross with color
-		void DrawCross(const Vec2F& pos, float size = 5, const Color4 color = Color4::White());
+		void DrawCross(const Vec2F& pos, float size = 5, const Color4& color = Color4::White());
 
 		// Draw circle with color
-		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4 color = Color4::White());
+		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White());
 
 		// Beginning render to stencil buffer
 		void BeginRenderToStencilBuffer();
@@ -166,5 +172,6 @@ namespace o2
 
 		friend class Texture;
 		friend class TextureRef;
+		friend class BaseApplication;
 	};
 }

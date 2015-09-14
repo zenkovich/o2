@@ -11,7 +11,7 @@ namespace o2
 {
 	class Assets;
 	class FileSystem;
-	class InputStuff;
+	class Input;
 	class LogStream;
 	class ProjectConfig;
 	class TimeStuff;
@@ -48,7 +48,7 @@ namespace o2
 		virtual Ptr<LogStream> GetLog() const;
 
 		// Returns pointer to input message object
-		virtual Ptr<InputStuff> GetInput() const;
+		virtual Ptr<Input> GetInput() const;
 
 		// Returns pointer to project config
 		virtual Ptr<ProjectConfig> GetProjectConfig() const;
@@ -98,7 +98,7 @@ namespace o2
 	protected:
 		Ptr<Assets>             mAssets;        // Assets
 		Ptr<FileSystem>         mFileSystem;    // File system
-		Ptr<InputStuff>         mInput;         // While application user input message
+		Ptr<Input>         mInput;         // While application user input message
 		Ptr<LogStream>          mLog;           // Log stream with id "app", using only for application messages
 		Ptr<ProjectConfig>      mProjectConfig; // Project config
 		Ptr<TimeStuff>          mTime;          // Time utilities

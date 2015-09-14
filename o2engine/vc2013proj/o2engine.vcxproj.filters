@@ -723,6 +723,9 @@
     <ClCompile Include="..\Sources\Render\TextureRef.cpp">
       <Filter>Sources\Render</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Render\Camera.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="o2.natvis" />

@@ -10,12 +10,12 @@ namespace o2
 	typedef int KeyboardKey;
 
 // Input access macros
-#define Input InputStuff::Instance()
+#define o2Input Input::Instance()
 
 	// -------------------------------------------------------------------------
 	// Input message. Containing pressed, down, released keys, cursors positions
 	// -------------------------------------------------------------------------
-	class InputStuff: public Singleton<InputStuff>
+	class Input: public Singleton<Input>
 	{
 		friend class BaseApplication;
 		friend class IApplication;
@@ -71,7 +71,7 @@ namespace o2
 
 	public:
 		// Default constructor
-		InputStuff();
+		Input();
 
 		// Returns true if key was pressed at current frame
 		bool IsKeyPressed(KeyboardKey key) const;
@@ -177,6 +177,6 @@ namespace o2
 		void SetMouseWheelDelta(float delta);
 
 		// Call it after frame update
-		void update(float dt);
+		void Update(float dt);
 	};
 }

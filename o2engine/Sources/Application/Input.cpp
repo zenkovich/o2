@@ -4,16 +4,16 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(InputStuff);
+	DECLARE_SINGLETON(Input);
 
-	InputStuff::InputStuff():
+	Input::Input():
 		mMouseWheelDelta(0.0f)
 	{
 	}
 
-	bool InputStuff::IsKeyPressed(KeyboardKey key) const
+	bool Input::IsKeyPressed(KeyboardKey key) const
 	{
-		for (auto it : mInstance->mPressedKeys)
+		for (auto it : mPressedKeys)
 		{
 			if (it.mKey == key)
 				return true;
@@ -22,9 +22,9 @@ namespace o2
 		return false;
 	}
 
-	bool InputStuff::IsKeyDown(KeyboardKey key) const
+	bool Input::IsKeyDown(KeyboardKey key) const
 	{
-		for (auto it : mInstance->mDownKeys)
+		for (auto it : mDownKeys)
 		{
 			if (it.mKey == key)
 				return true;
@@ -33,9 +33,9 @@ namespace o2
 		return IsKeyPressed(key);
 	}
 
-	bool InputStuff::IsKeyReleased(KeyboardKey key) const
+	bool Input::IsKeyReleased(KeyboardKey key) const
 	{
-		for (auto it : mInstance->mReleasedKeys)
+		for (auto it : mReleasedKeys)
 		{
 			if (it.mKey == key)
 				return true;
@@ -44,7 +44,7 @@ namespace o2
 		return false;
 	}
 
-	bool InputStuff::IsKeyRepeating(KeyboardKey key, float delay /*= 0.1f*/, float beginDelay /*= 0.5f*/) const
+	bool Input::IsKeyRepeating(KeyboardKey key, float delay /*= 0.1f*/, float beginDelay /*= 0.5f*/) const
 	{
 		float time = GetKeyPressingTime(key) - beginDelay;
 		float repeatTime = Math::Max(floor(time/delay)*delay, 0.0f);
@@ -52,9 +52,9 @@ namespace o2
 		return time - o2Time.GetDeltaTime() < repeatTime && time > repeatTime;
 	}
 
-	float InputStuff::GetKeyPressingTime(KeyboardKey key) const
+	float Input::GetKeyPressingTime(KeyboardKey key) const
 	{
-		for (auto it : mInstance->mDownKeys)
+		for (auto it : mDownKeys)
 		{
 			if (it.mKey == key)
 				return it.mPressedTime;
@@ -63,23 +63,23 @@ namespace o2
 		return 0;
 	}
 
-	Vec2F InputStuff::GetCursorPos(int id /*= 0*/) const
+	Vec2F Input::GetCursorPos(int id /*= 0*/) const
 	{
-		for (auto it : mInstance->mCursors)
+		for (auto it : mCursors)
 		{
 			if (it.mId == id)
 				return it.mPosition;
 		}
 
 		if (id == 0)
-			return mInstance->mMainCursorPos;
+			return mMainCursorPos;
 
 		return Vec2F();
 	}
 
-	bool InputStuff::IsCursorPressed(int id /*= 0*/) const
+	bool Input::IsCursorPressed(int id /*= 0*/) const
 	{
-		for (auto it : mInstance->mCursors)
+		for (auto it : mCursors)
 		{
 			if (it.mId == id && it.mPressedTime < FLT_EPSILON)
 				return true;
@@ -88,9 +88,9 @@ namespace o2
 		return false;
 	}
 
-	bool InputStuff::IsCursorDown(int id /*= 0*/) const
+	bool Input::IsCursorDown(int id /*= 0*/) const
 	{
-		for (auto it : mInstance->mCursors)
+		for (auto it : mCursors)
 		{
 			if (it.mId == id)
 				return true;
@@ -99,9 +99,9 @@ namespace o2
 		return false;
 	}
 
-	bool InputStuff::IsCursorReleased(int id /*= 0*/) const
+	bool Input::IsCursorReleased(int id /*= 0*/) const
 	{
-		for (auto it : mInstance->mReleasedCursors)
+		for (auto it : mReleasedCursors)
 		{
 			if (it.mId == id)
 				return true;
@@ -110,9 +110,9 @@ namespace o2
 		return false;
 	}
 
-	float InputStuff::GetCursorPressingTime(int id /*= 0*/) const
+	float Input::GetCursorPressingTime(int id /*= 0*/) const
 	{
-		for (auto it : mInstance->mCursors)
+		for (auto it : mCursors)
 		{
 			if (it.mId == id)
 				return it.mPressedTime;
@@ -121,87 +121,89 @@ namespace o2
 		return 0;
 	}
 
-	Vec2F InputStuff::GetCursorDelta(int id /*= 0*/) const
+	Vec2F Input::GetCursorDelta(int id /*= 0*/) const
 	{
-		for (auto it : mInstance->mCursors)
+		for (auto it : mCursors)
 		{
 			if (it.mId == id)
+			{
 				return it.mDelta;
+			}
 		}
 
 		if (id == 0)
-			return mInstance->mMainCursorDelta;
+			return mMainCursorDelta;
 
 		return Vec2F();
 	}
 
-	bool InputStuff::IsAltCursorPressed() const
+	bool Input::IsAltCursorPressed() const
 	{
 		return IsKeyPressed((KeyboardKey)-1);
 	}
 
-	bool InputStuff::IsAltCursorDown() const
+	bool Input::IsAltCursorDown() const
 	{
 		return IsKeyDown((KeyboardKey)-1);
 	}
 
-	bool InputStuff::IsAltCursorReleased() const
+	bool Input::IsAltCursorReleased() const
 	{
 		return IsKeyReleased((KeyboardKey)-1);
 	}
 
-	float InputStuff::GetAltCursorPressedTime() const
+	float Input::GetAltCursorPressedTime() const
 	{
 		return GetKeyPressingTime((KeyboardKey)-1);
 	}
 
-	bool InputStuff::IsAlt2CursorPressed() const
+	bool Input::IsAlt2CursorPressed() const
 	{
 		return IsKeyPressed((KeyboardKey)-2);
 	}
 
-	bool InputStuff::IsAlt2CursorDown() const
+	bool Input::IsAlt2CursorDown() const
 	{
 		return IsKeyDown((KeyboardKey)-2);
 	}
 
-	bool InputStuff::IsAlt2CursorReleased() const
+	bool Input::IsAlt2CursorReleased() const
 	{
 		return IsKeyReleased((KeyboardKey)-2);
 	}
 
-	float InputStuff::GetAlt2CursorPressedTime() const
+	float Input::GetAlt2CursorPressedTime() const
 	{
 		return GetKeyPressingTime((KeyboardKey)-2);
 	}
 
-	float InputStuff::GetMouseWheelDelta() const
+	float Input::GetMouseWheelDelta() const
 	{
-		return mInstance->mMouseWheelDelta;
+		return mMouseWheelDelta;
 	}
 
-	InputStuff::CursorsVec const& InputStuff::GetCursors() const
+	Input::CursorsVec const& Input::GetCursors() const
 	{
-		return mInstance->mCursors;
+		return mCursors;
 	}
 
-	InputStuff::KeysVec const& InputStuff::GetPressedKeys() const
+	Input::KeysVec const& Input::GetPressedKeys() const
 	{
-		return mInstance->mPressedKeys;
+		return mPressedKeys;
 	}
 
-	InputStuff::KeysVec const& InputStuff::GetDownKeys() const
+	Input::KeysVec const& Input::GetDownKeys() const
 	{
-		return mInstance->mDownKeys;
+		return mDownKeys;
 	}
 
-	InputStuff::KeysVec const& InputStuff::GetReleasedKeys() const
+	Input::KeysVec const& Input::GetReleasedKeys() const
 	{
-		return mInstance->mReleasedKeys;
+		return mReleasedKeys;
 	}
 
 
-	void InputStuff::KeyPressed(KeyboardKey key)
+	void Input::KeyPressed(KeyboardKey key)
 	{
 		if (IsKeyDown(key))
 			return;
@@ -209,7 +211,7 @@ namespace o2
 		mPressedKeys.Add(key);
 	}
 
-	void InputStuff::KeyReleased(KeyboardKey key)
+	void Input::KeyReleased(KeyboardKey key)
 	{
 		for (auto it : mDownKeys)
 		{
@@ -222,7 +224,7 @@ namespace o2
 		mReleasedKeys.Add(key);
 	}
 
-	int InputStuff::CursorPressed(const Vec2F& pos)
+	int Input::CursorPressed(const Vec2F& pos)
 	{
 		//find free id
 		int id = 0;
@@ -249,7 +251,7 @@ namespace o2
 		return id;
 	}
 
-	void InputStuff::CursorReleased(int id /*= 0*/)
+	void Input::CursorReleased(int id /*= 0*/)
 	{
 		Cursor releasedCuros(Vec2F(), -100);
 		for (auto it : mCursors)
@@ -264,9 +266,9 @@ namespace o2
 		mReleasedCursors.Add(releasedCuros);
 	}
 
-	void InputStuff::SetCursorPos(const Vec2F& pos, int id /*= 0*/)
+	void Input::SetCursorPos(const Vec2F& pos, int id /*= 0*/)
 	{
-		for (auto it : mCursors)
+		for (Cursor& it : mCursors)
 		{
 			if (it.mId == id)
 			{
@@ -283,16 +285,16 @@ namespace o2
 		}
 	}
 
-	void InputStuff::update(float dt)
+	void Input::Update(float dt)
 	{
 		mDownKeys.Add(mPressedKeys);
 		mPressedKeys.Clear();
 		mReleasedKeys.Clear();
 
-		for (auto it : mDownKeys)
+		for (Key& it : mDownKeys)
 			it.mPressedTime += dt;
 
-		for (auto it : mCursors)
+		for (Cursor& it : mCursors)
 		{
 			it.mPressedTime += dt;
 			it.mDelta = Vec2F();
@@ -305,51 +307,51 @@ namespace o2
 		mMouseWheelDelta = 0;
 	}
 
-	void InputStuff::AltCursorPressed(const Vec2F& pos)
+	void Input::AltCursorPressed(const Vec2F& pos)
 	{
 		KeyPressed(-1);
 		SetCursorPos(pos);
 	}
 
-	void InputStuff::AltCursorReleased()
+	void Input::AltCursorReleased()
 	{
 		KeyReleased(-1);
 	}
 
-	void InputStuff::Alt2CursorPressed(const Vec2F& pos)
+	void Input::Alt2CursorPressed(const Vec2F& pos)
 	{
 		KeyPressed(-2);
 		SetCursorPos(pos);
 	}
 
-	void InputStuff::Alt2CursorReleased()
+	void Input::Alt2CursorReleased()
 	{
 		KeyReleased(-2);
 	}
 
-	void InputStuff::SetMouseWheelDelta(float delta)
+	void Input::SetMouseWheelDelta(float delta)
 	{
 		mMouseWheelDelta = delta;
 	}
 
 
-	bool InputStuff::Cursor::operator==(const Cursor& other)
+	bool Input::Cursor::operator==(const Cursor& other)
 	{
 		return Math::Equals(mPosition, other.mPosition) && Math::Equals(mDelta, other.mDelta) && mId == other.mId &&
 			Math::Equals(mPressedTime, other.mPressedTime);
 	}
 
-	InputStuff::Cursor::Cursor(const Vec2F& position /*= Vec2F()*/, int id /*= 0*/):mPosition(position), mDelta(), mId(id), mPressedTime(0)
+	Input::Cursor::Cursor(const Vec2F& position /*= Vec2F()*/, int id /*= 0*/):mPosition(position), mDelta(), mId(id), mPressedTime(0)
 	{
 	}
 
 
-	bool InputStuff::Key::operator==(const Key& other)
+	bool Input::Key::operator==(const Key& other)
 	{
 		return mKey == other.mKey && Math::Equals(other.mPressedTime, mPressedTime);
 	}
 
-	InputStuff::Key::Key(KeyboardKey key /*= 0*/):mKey(key), mPressedTime(0)
+	Input::Key::Key(KeyboardKey key /*= 0*/):mKey(key), mPressedTime(0)
 	{
 	}
 }

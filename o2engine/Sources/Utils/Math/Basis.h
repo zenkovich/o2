@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils/Math/Vector2.h"
+#include "Utils/Math/Rect.h"
 
 namespace o2
 {
@@ -40,6 +41,8 @@ namespace o2
 
 		inline void  Transform(float& x, float& y) const;
 		inline Vec2F Transform(const Vec2F& vec) const;
+
+		inline RectF AABB() const;
 
 		inline static Basis Identity();
 		inline static Basis Scaled(const Vec2F& scale);
@@ -148,7 +151,8 @@ namespace o2
 
 	float Basis::GetShiftFast(const Vec2F& scale) const
 	{
-		return (xv/scale.x).Dot(yv/scale.y);
+		float proj = yv.Dot(xv/scale.x);
+		return proj/scale.y;
 	}
 
 	void Basis::Decompose(Vec2F* offset, float* angle, Vec2F* scale, float* shift) const
@@ -213,6 +217,16 @@ namespace o2
 		return Vec2F(xv.x*vec.x + yv.x*vec.y + offs.x, xv.y*vec.x + yv.y*vec.y + offs.y);
 	}
 
+	RectF Basis::AABB() const
+	{
+		Vec2F points[4] =
+		{
+			offs, offs + xv, offs + yv, offs + xv + yv
+		};
+
+		return RectF::Bound(points, 4);
+	}
+
 	Basis Basis::Identity()
 	{
 		return Basis(Vec2F(0, 0), Vec2F(1, 0), Vec2F(0, 1));
@@ -231,14 +245,14 @@ namespace o2
 	Basis Basis::Rotated(float angle)
 	{
 		float cs = cosf(angle), sn = sinf(angle);
-		Basis(Vec2F(0, 0), Vec2F(cs, sn), Vec2F(-sn, cs));
+		return Basis(Vec2F(0, 0), Vec2F(cs, sn), Vec2F(-sn, cs));
 	}
 
 	Basis Basis::Build(const Vec2F& position, const Vec2F& scale, float angle, float shift)
 	{
-		float sn = sinf(angle), cs = cosf(angle);
+		float sn = sinf(angle), cs = cosf(angle), sshift = Math::Sqrt(1.0f - shift*shift);
 		Vec2F x(scale.x*cs, sn*scale.x), y(-sn*scale.y, cs*scale.y);
-		y += x*shift;
+		y = y.Rotate(sshift, -shift);
 		return Basis(position, x, y);
 	}
 

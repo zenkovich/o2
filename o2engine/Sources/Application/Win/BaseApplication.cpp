@@ -105,7 +105,11 @@ namespace o2
 		Vec2I size, pos;
 		GetCursorPos(&pt);
 		ScreenToClient(wnd, &pt);
-		Vec2F cursorPos = Vec2F((float)pt.x, (float)pt.y);
+		Vec2F cursorPos = Vec2F((float)pt.x, (float)-pt.y);
+
+		if (mApplication->mRender)
+			cursorPos -= Vec2F(mApplication->mRender->mResolution.x*0.5f, -mApplication->mRender->mResolution.y*0.5f);
+
 		float wheelDelta;
 
 		switch (uMsg)
@@ -155,8 +159,6 @@ namespace o2
 			case WM_ACTIVATE:
 			if ((HWND)lParam == mApplication->mHWnd || true)
 			{
-				//hlog("LOWORD(wParam) = %i %i %i", LOWORD(wParam), mApplication->mHWnd, lParam);
-
 				if (LOWORD(wParam) == WA_ACTIVE || LOWORD(wParam) == WA_CLICKACTIVE)
 				{
 					mApplication->mActive = true;
@@ -180,7 +182,7 @@ namespace o2
 			{
 				mApplication->mWindowedSize = size;
 				mApplication->OnResizing();
-				//mApplication->mRenderSystem->FrameResized();
+				mApplication->mRender->mResolution = size;
 				mApplication->onResizingEvent.Invoke();
 			}
 			//mApplication->ProcessFrame();

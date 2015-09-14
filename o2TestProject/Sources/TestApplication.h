@@ -20,4 +20,7 @@ protected:
 	Sprite     mSprite;
 	Sprite     mSprite2;
 	TextureRef mTexture;
+	Camera     mCamera;
+	Basis      mBasisTest;
+	Basis      mBasisTest2;
 };

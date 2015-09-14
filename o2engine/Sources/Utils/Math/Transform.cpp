@@ -5,7 +5,7 @@ namespace o2
 
 	Transform::Transform(const Vec2F& size /*= Vec2F()*/, const Vec2F& position /*= Vec2F()*/,
 						 float angle /*= 0.0f*/, const Vec2F& scale /*= Vec2F(1.0f, 1.0f)*/,
-						 const Vec2F& pivot /*= Vec2F()*/):
+						 const Vec2F& pivot /*= Vec2F(0.5f, 0.5f)*/):
 		mSize(size), mPosition(position), mAngle(angle), mScale(scale), mPivot(pivot), mShear(0)
 	{
 		UpdateTransform();
@@ -22,7 +22,7 @@ namespace o2
 	void Transform::UpdateTransform()
 	{
 		mTransform = Basis::Build(mPosition, mScale*mSize, mAngle, mShear);
-		mTransform.offs = mTransform.offs - mTransform.xv*(mPivot.x*mScale.x) - mTransform.yv*(mPivot.y*mScale.y);
+		mTransform.offs = mTransform.offs - mTransform.xv*mPivot.x - mTransform.yv*mPivot.y;
 
 		BasisChanged();
 	}
@@ -77,7 +77,7 @@ namespace o2
 
 	void Transform::SetWorldPivot(const Vec2F& pivot)
 	{
-		SetPivot(World2LocalPoint(pivot));
+		SetSizePivot(World2LocalPoint(pivot));
 	}
 
 	Vec2F Transform::GetWorldPivot() const
@@ -85,15 +85,15 @@ namespace o2
 		return Local2WorldPoint(mPivot);
 	}
 
-	void Transform::SetRelativePivot(const Vec2F& relPivot)
+	void Transform::SetSizePivot(const Vec2F& relPivot)
 	{
-		mPivot = relPivot*mSize;
+		mPivot = relPivot/mSize;
 		UpdateTransform();
 	}
 
-	Vec2F Transform::GetRelativePivot() const
+	Vec2F Transform::GetSizePivot() const
 	{
-		return mPivot/mSize;
+		return mPivot*mSize;
 	}
 
 	void Transform::SetRect(const RectF& rect)
@@ -105,7 +105,7 @@ namespace o2
 		Vec2F xv = x*mSize.x*mScale.x;
 		Vec2F yv = y*mSize.y*mScale.y;
 
-		mPosition = rect.LeftBottom() + xv*(mPivot.x*mScale.x) + yv*(mPivot.y*mScale.y);
+		mPosition = rect.LeftBottom() + xv*mPivot.x + yv*mPivot.y;
 		UpdateTransform();
 	}
 
@@ -157,7 +157,7 @@ namespace o2
 		mSize = scale/mScale;
 		mShear = shear;
 
-		mPosition = basis.offs + basis.xv*(mPivot.x*mScale.x) + basis.yv*(mPivot.y*mScale.y);
+		mPosition = basis.offs + basis.xv*mPivot.x + basis.yv*mPivot.y;
 		UpdateTransform();
 	}
 
@@ -169,21 +169,20 @@ namespace o2
 	void Transform::SetAxisAlignedRect(const RectF& rect)
 	{
 		RectF curRect = GetAxisAlignedRect();
-		Vec2F scaling = rect.Size()/curRect.Size();
-		Vec2F offs = rect.LeftBottom() - curRect.LeftBottom();
-		Basis ch = Basis::Scaled(scaling)*Basis::Translated(offs);
 
-		SetBasis(mTransform*ch);
+		Basis curRectBasis(curRect.LeftBottom(), Vec2F::Right()*curRect.Width(), Vec2F::Up()*curRect.Height());
+		Basis rectBasis(rect.LeftBottom(), Vec2F::Right()*rect.Width(), Vec2F::Up()*rect.Height());
+
+		SetBasis(mTransform*curRectBasis.Inverted()*rectBasis);
 	}
 
 	RectF Transform::GetAxisAlignedRect() const
 	{
-		return RectF(mTransform.offs, mTransform.offs + mTransform.xv + mTransform.yv);
+		return mTransform.AABB();
 	}
 
 	void Transform::SetLeftTop(const Vec2F& position)
 	{
-
 	}
 
 	Vec2F Transform::GetLeftTop() const
@@ -277,19 +276,19 @@ namespace o2
 		Vec2F nx = mTransform.xv, ny = mTransform.yv, offs = mTransform.offs, w = worldPoint;
 		float lx = (w.x*ny.y - offs.x*ny.y - w.y*ny.x + offs.y*ny.x)/(nx.x*ny.y - ny.x*nx.y);
 		float ly = (w.y - offs.y - nx.y*lx)/ny.y;
-		return Vec2F(lx, ly);
+		return Vec2F(lx, ly)*mSize;
 	}
 
 	Vec2F Transform::Local2WorldPoint(const Vec2F& localPoint) const
 	{
-		return mTransform*localPoint;
+		return mTransform*(localPoint/mSize);
 	}
 
 	Vec2F Transform::World2LocalDir(const Vec2F& worldDir) const
 	{
 		Vec2F nx = mTransform.xv.Normalized(), ny = mTransform.yv.Normalized(), wd = worldDir;
-		float ldx = (wd.x*nx.y - wd.y*nx.x)/(nx.y*ny.x - ny.y*nx.x);
-		float ldy = (wd.y - nx.y*ldx)/ny.y;
+		float ldy = (wd.x*nx.y - wd.y*nx.x)/(nx.y*ny.x - ny.y*nx.x);
+		float ldx = (wd.x - ny.x*ldy)/nx.x;
 		return Vec2F(ldx, ldy);
 	}
 
@@ -306,7 +305,7 @@ namespace o2
 		INITIALIZE_PROPERTY(Transform, Scale, SetScale, GetScale);
 		INITIALIZE_PROPERTY(Transform, Pivot, SetPivot, GetPivot);
 		INITIALIZE_PROPERTY(Transform, WorldPivot, SetWorldPivot, GetWorldPivot);
-		INITIALIZE_PROPERTY(Transform, RelPivot, SetRelativePivot, GetRelativePivot);
+		INITIALIZE_PROPERTY(Transform, SzPivot, SetSizePivot, GetSizePivot);
 		INITIALIZE_PROPERTY(Transform, Rect, SetRect, GetRect);
 		INITIALIZE_PROPERTY(Transform, Angle, SetAngle, GetAngle);
 		INITIALIZE_PROPERTY(Transform, Shear, SetShear, GetShear);

@@ -44,7 +44,7 @@ namespace o2
 		mAssets = mnew Assets();
 
 		//input message
-		mInput = mnew InputStuff();
+		mInput = mnew Input();
 // 
 // 		//scheduler
 // 		mScheduler = mnew Scheduler();
@@ -90,7 +90,7 @@ namespace o2
 		//mUIController->Draw();
 		mRender->End();
 
-		mInput->update(dt);
+		mInput->Update(dt);
 
 		//mScheduler->ProcessAfterFrame(dt);
 	}
@@ -100,7 +100,7 @@ namespace o2
 		return mInstance->mLog;
 	}
 
-	Ptr<InputStuff> IApplication::GetInput() const
+	Ptr<Input> IApplication::GetInput() const
 	{
 		return mInstance->mInput;
 	}

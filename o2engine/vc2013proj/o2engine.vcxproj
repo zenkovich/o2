@@ -274,6 +274,7 @@
     <ClCompile Include="..\Sources\Assets\FolderAsset.cpp" />
     <ClCompile Include="..\Sources\Assets\ImageAsset.cpp" />
     <ClCompile Include="..\Sources\Config\ProjectConfig.cpp" />
+    <ClCompile Include="..\Sources\Render\Camera.cpp" />
     <ClCompile Include="..\Sources\Render\Mesh.cpp" />
     <ClCompile Include="..\Sources\Render\RectDrawable.cpp" />
     <ClCompile Include="..\Sources\Render\Sprite.cpp" />

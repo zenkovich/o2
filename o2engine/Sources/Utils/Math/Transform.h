@@ -15,7 +15,7 @@ namespace o2
 		Property<Vec2F>  Scale;        // Scale property
 		Property<Vec2F>  Pivot;        // Pivot property, in local space
 		Property<Vec2F>  WorldPivot;   // Pivot property, in world space
-		Property<Vec2F>  RelPivot;     // Relative pivot property, in local scale, where (0, 0) - left down corner, (1, 1) - right top
+		Property<Vec2F>  SzPivot;      // Pivot in size space property
 		Property<RectF>  Rect;         // Rect property. Sets the position and size
 		Property<float>  Angle;        // Rotation angle in radians
 		Property<float>  Shear;        // Shear
@@ -29,7 +29,7 @@ namespace o2
 
 									   // Constructor
 		Transform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
-				  const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F());
+				  const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F(0.5f, 0.5f));
 
 		// Copy-constructor
 		Transform(const Transform& other);
@@ -52,10 +52,10 @@ namespace o2
 		// Return size
 		virtual Vec2F GetSize() const;
 
-		// Sets pivot, in local space
+		// Sets pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
 		virtual void SetPivot(const Vec2F& pivot);
 
-		// Return pivot, in local space
+		// Return pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
 		virtual Vec2F GetPivot() const;
 
 		// Sets pivot by world coordinates
@@ -64,11 +64,11 @@ namespace o2
 		// Returns pivot position in world coordinates
 		virtual Vec2F GetWorldPivot() const;
 
-		// Sets relative pivot, in local space, where (0, 0) - left down corner, (1, 1) - right top
-		virtual void SetRelativePivot(const Vec2F& relPivot);
+		// Sets size pivot, in local space, where (0, 0) - left down corner, (mSize.x, mSize.y) - right top
+		virtual void SetSizePivot(const Vec2F& relPivot);
 
-		// Returns relative pivot, in local space, where (0, 0) - left down corner, (1, 1) - right top
-		virtual Vec2F GetRelativePivot() const;
+		// Returns size pivot, in local space, where (0, 0) - left down corner, (mSize.x, mSize.y) - right top
+		virtual Vec2F GetSizePivot() const;
 
 		// Sets rect
 		virtual void SetRect(const RectF& rect);
@@ -179,7 +179,7 @@ namespace o2
 		Vec2F  mPosition;  // Position
 		Vec2F  mSize;      // Size
 		Vec2F  mScale;     // Scale, (1; 1) is default
-		Vec2F  mPivot;     // Pivot, in local space
+		Vec2F  mPivot;     // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner
 		float  mAngle;     // Rotation angle in radians
 		float  mShear;     // Shear
 

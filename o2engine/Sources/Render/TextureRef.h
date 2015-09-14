@@ -55,4 +55,7 @@ namespace o2
 
 		friend class Render;
 	};
+
+	// Returns reference to null texture
+	TextureRef NoTexture();
 }
