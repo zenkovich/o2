@@ -91,7 +91,7 @@ namespace o2
 			if (LoadPngImage(fileName, this, false))
 				return true;
 
-			Debug.LogError("Can't load image '%s': unknown format", fileName);
+			o2Debug.LogError("Can't load image '%s': unknown format", fileName);
 		}
 
 		mFilename = "";
@@ -106,7 +106,7 @@ namespace o2
 			return SavePngImage(fileName, this);
 		}
 
-		Debug.LogError("Can't save image to '%s': unknown format specified", fileName);
+		o2Debug.LogError("Can't save image to '%s': unknown format specified", fileName);
 
 		return false;
 	}
@@ -179,9 +179,9 @@ namespace o2
 
 	void Bitmap::InitializeProperties()
 	{
-		INITIALIZE_GETTER(Bitmap, Data, GetData);
-		INITIALIZE_GETTER(Bitmap, Size, GetSize);
-		INITIALIZE_GETTER(Bitmap, DataFormat, GetFormat);
+		INITIALIZE_GETTER(Bitmap, data, GetData);
+		INITIALIZE_GETTER(Bitmap, size, GetSize);
+		INITIALIZE_GETTER(Bitmap, format, GetFormat);
 	}
 
 }

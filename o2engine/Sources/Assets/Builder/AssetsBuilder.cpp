@@ -13,7 +13,7 @@ namespace o2
 	AssetsBuilder::AssetsBuilder()
 	{
 		mLog = mnew LogStream("Assets builder");
-		Debug.GetLog()->BindStream(mLog);
+		o2Debug.GetLog()->BindStream(mLog);
 
 		InitializeConverters();
 	}

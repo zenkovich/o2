@@ -66,8 +66,8 @@ namespace o2
 
 	void IRectDrawable::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(IRectDrawable, Color, SetColor, GetColor);
-		INITIALIZE_PROPERTY(IRectDrawable, Transparency, SetTransparency, GetTransparency);
-		INITIALIZE_PROPERTY(IRectDrawable, Enabled, SetEnabled, IsEnabled);
+		INITIALIZE_PROPERTY(IRectDrawable, color, SetColor, GetColor);
+		INITIALIZE_PROPERTY(IRectDrawable, transparency, SetTransparency, GetTransparency);
+		INITIALIZE_PROPERTY(IRectDrawable, enabled, SetEnabled, IsEnabled);
 	}
 }

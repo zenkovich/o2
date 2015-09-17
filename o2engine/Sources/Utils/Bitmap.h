@@ -16,9 +16,9 @@ namespace o2
 		enum class ImageType { Auto = 0, Png };
 
 	public:
-		Getter<UInt8*> Data;       // Data getter
-		Getter<Vec2I>  Size;       // Image size getter
-		Getter<Format> DataFormat; // Data format getter
+		Getter<UInt8*> data;       // Data getter
+		Getter<Vec2I>  size;       // Image size getter
+		Getter<Format> format; // Data format getter
 
 		// Default constructor
 		Bitmap();

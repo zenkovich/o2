@@ -12,13 +12,6 @@ namespace o2
 	// -----------------------
 	class FieldInfo
 	{
-		friend class Type;
-
-		String              mName;       // Name of field
-		UInt                mOffset;     // Offset of field in bytes from owner address
-		bool                mIsProperty; // Is it property or field
-		Vector<IAttribute*> mAttributes; // Attributes array
-
 	public:
 		// Default constructor
 		FieldInfo();
@@ -57,12 +50,20 @@ namespace o2
 		template<typename _attr_type>
 		_attr_type* Attribute() const;
 
-		// Returns true if exist attribute with cpecified type
+		// Returns true if exist attribute with specified type
 		template<typename _attr_type>
 		bool HaveAttribute() const;
 
 		// Returns attributes array
 		const Vector<IAttribute*>& Attributes() const;
+
+	protected:
+		String              mName;       // Name of field
+		UInt                mOffset;     // Offset of field in bytes from owner address
+		bool                mIsProperty; // Is it property or field
+		Vector<IAttribute*> mAttributes; // Attributes array
+
+		friend class Type;
 	};
 
 	template<typename _attr_type>

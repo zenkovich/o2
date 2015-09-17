@@ -23,14 +23,11 @@ namespace o2
 	// ----------------
 	class Assets: public Singleton<Assets>
 	{
-		friend class Asset;
-		friend class FolderAsset;
-
 	public:
 		typedef Dictionary<String, Type*> TypesExtsDict;
 
 	public:
-		Getter<String> AssetsPath; // Assets path getter
+		Getter<String> assetsPath; // Assets path getter
 
 		// Default constructor
 		Assets();
@@ -135,6 +132,9 @@ namespace o2
 
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class Asset;
+		friend class FolderAsset;
 	};
 
 

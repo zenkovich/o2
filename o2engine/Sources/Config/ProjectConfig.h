@@ -18,19 +18,12 @@ namespace o2
 	// ---------------------
 	class ProjectConfig: public ISerializable, public Singleton<ProjectConfig>
 	{
-		friend class AssetBuildSystem;
-		friend class IApplication;
-
 	public:
 		enum class Platform { Windows, MacOSX, iOS, Android };
 
-	protected:
-		String   mProjectName; // Current project name
-		Platform mPlatform;    // Current project target platform
-
 	public:
-		Property<String>   ProjectName;     // Project name property
-		Property<Platform> CurrentPlatform; // Project platform property
+		Property<String>   projectName;     // Project name property
+		Property<Platform> currentPlatform; // Project platform property
 
 		// Default constructor
 		ProjectConfig();
@@ -59,10 +52,17 @@ namespace o2
 		}
 
 	protected:
+		String   mProjectName; // Current project name
+		Platform mPlatform;    // Current project target platform
+
+	protected:
 		// Initializes config by default
 		void InitializeDefault(const String& configFilePath);
 
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class AssetBuildSystem;
+		friend class IApplication;
 	};
 }

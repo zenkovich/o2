@@ -7,19 +7,19 @@
 
 namespace o2
 {
-	DebugStuff::DebugStuff()
+	Debug::Debug()
 	{
 		Ptr<FileLogStream> fileLogStream = mnew FileLogStream("", "log.txt");
 		mLogStream = mnew ConsoleLogStream("");
 		fileLogStream->BindStream(mLogStream);
 	}
 
-	DebugStuff::~DebugStuff()
+	Debug::~Debug()
 	{
 		mLogStream->GetParentStream().Release();
 	}
 
-	void DebugStuff::Log(WString format, ...)
+	void Debug::Log(WString format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
@@ -29,12 +29,12 @@ namespace o2
 		va_end(vlist);
 	}
 
-	void DebugStuff::LogStr(const WString& out)
+	void Debug::LogStr(const WString& out)
 	{
 		mInstance->mLogStream->OutStr(out);
 	}
 
-	void DebugStuff::LogWarning(WString format, ...)
+	void Debug::LogWarning(WString format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
@@ -44,12 +44,12 @@ namespace o2
 		va_end(vlist);
 	}
 
-	void DebugStuff::LogWarningStr(const WString& out)
+	void Debug::LogWarningStr(const WString& out)
 	{
 		mInstance->mLogStream->WarningStr(out);
 	}
 
-	void DebugStuff::LogError(WString format, ...)
+	void Debug::LogError(WString format, ...)
 	{
 		va_list vlist;
 		va_start(vlist, format);
@@ -59,12 +59,12 @@ namespace o2
 		va_end(vlist);
 	}
 
-	void DebugStuff::LogErrorStr(const WString& out)
+	void Debug::LogErrorStr(const WString& out)
 	{
 		mInstance->mLogStream->ErrorStr(out);
 	}
 
-	Ptr<LogStream> DebugStuff::GetLog()
+	Ptr<LogStream> Debug::GetLog()
 	{
 		return mInstance->mLogStream;
 	}

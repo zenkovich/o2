@@ -104,8 +104,8 @@ namespace o2
 
 	void Mesh::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(Mesh, TexturePtr, SetTexture, GetTexture);
-		INITIALIZE_PROPERTY(Mesh, MaxVertexCount, SetMaxVertexCount, GetMaxVertexCount);
-		INITIALIZE_PROPERTY(Mesh, MaxPolyCount, SetMaxPolyCount, GetMaxPolyCount);
+		INITIALIZE_PROPERTY(Mesh, texture, SetTexture, GetTexture);
+		INITIALIZE_PROPERTY(Mesh, maxVertexCount, SetMaxVertexCount, GetMaxVertexCount);
+		INITIALIZE_PROPERTY(Mesh, maxPolyCount, SetMaxPolyCount, GetMaxPolyCount);
 	}
 }

@@ -10,18 +10,7 @@ namespace o2
 	// ------------------------------
 	class Types
 	{
-		static Vector<Type*> mTypes;           // All registered types
-		static UInt          mLastGivenTypeId; // Last given type index
-
 	public:
-		// ----------------
-		// Types registrator
-		// ----------------
-		struct Registrator
-		{
-			Registrator();
-		};
-
 		// Returns array of all registered types
 		static const Vector<Type*>& GetTypes();
 
@@ -37,6 +26,19 @@ namespace o2
 		// Initializes type
 		template<typename _type>
 		static void InitializeType(const String& name);
+
+	public:
+		// -----------------
+		// Types registrator
+		// -----------------
+		struct Registrator
+		{
+			Registrator();
+		};
+
+	protected:
+		static Vector<Type*> mTypes;           // All registered types
+		static UInt          mLastGivenTypeId; // Last given type index
 	};
 
 	template<typename _type>

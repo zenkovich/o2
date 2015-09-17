@@ -18,7 +18,7 @@ namespace o2
 		DataNode data;
 		if (!data.LoadFromFile(cfgFilePath))
 		{
-			Debug.LogError("Failed to load Project Config. Path: %s. Initializing default values.", cfgFilePath);
+			o2Debug.LogError("Failed to load Project Config. Path: %s. Initializing default values.", cfgFilePath);
 			InitializeDefault(cfgFilePath);
 			return;
 		}
@@ -57,7 +57,7 @@ namespace o2
 
 	void ProjectConfig::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(ProjectConfig, ProjectName, SetProjectName, GetProjectName);
-		INITIALIZE_PROPERTY(ProjectConfig, CurrentPlatform, SetPlatform, GetPlatform);
+		INITIALIZE_PROPERTY(ProjectConfig, projectName, SetProjectName, GetProjectName);
+		INITIALIZE_PROPERTY(ProjectConfig, currentPlatform, SetPlatform, GetPlatform);
 	}
 }

@@ -4,7 +4,6 @@
 
 namespace o2
 {
-
 	// ------------------------
 	// Tree structure interface
 	// ------------------------
@@ -13,11 +12,6 @@ namespace o2
 	{
 	public:
 		typedef Vector<Ptr<_type>> ChildsVec;
-
-	protected:
-		_type*    _this;    // Template this pointer
-		Ptr<_type> mParent; // Pointer to parent node
-		ChildsVec  mChilds; // Children nodes
 
 	public:
 		// Default constructor
@@ -46,6 +40,11 @@ namespace o2
 
 		// Returns constant child nodes
 		virtual const ChildsVec& GetChilds() const;
+
+	protected:
+		_type*    _this;    // Template this pointer
+		Ptr<_type> mParent; // Pointer to parent node
+		ChildsVec  mChilds; // Children nodes
 
 	protected:
 		// Calls when added new child

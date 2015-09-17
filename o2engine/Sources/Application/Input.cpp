@@ -6,9 +6,9 @@ namespace o2
 {
 	DECLARE_SINGLETON(Input);
 
-	Input::Input():
-		mMouseWheelDelta(0.0f)
+	Input::Input()
 	{
+		InitializeProperties();
 	}
 
 	bool Input::IsKeyPressed(KeyboardKey key) const
@@ -305,6 +305,46 @@ namespace o2
 		mReleasedCursors.Clear();
 
 		mMouseWheelDelta = 0;
+	}
+
+	bool Input::IsMainCursorPressed()
+	{
+		return IsCursorPressed();
+	}
+
+	bool Input::IsMainCursorDown()
+	{
+		return IsCursorDown();
+	}
+
+	bool Input::IsMainCursorReleased()
+	{
+		return IsCursorReleased();
+	}
+
+	Vec2F Input::GetMainCursorPos()
+	{
+		return GetCursorPos();
+	}
+
+	Vec2F Input::GetMainCursorDelta()
+	{
+		return GetCursorDelta();
+	}
+
+	void Input::InitializeProperties()
+	{
+		INITIALIZE_GETTER(Input, cursorPressed, IsMainCursorPressed);
+		INITIALIZE_GETTER(Input, cursorDown, IsMainCursorDown);
+		INITIALIZE_GETTER(Input, cursorReleased, IsMainCursorReleased);
+		INITIALIZE_GETTER(Input, altCursorPressed, IsAltCursorPressed);
+		INITIALIZE_GETTER(Input, altCursorDown, IsAltCursorDown);
+		INITIALIZE_GETTER(Input, altCursorReleased, IsAltCursorReleased);
+		INITIALIZE_GETTER(Input, alt2CursorPressed, IsAlt2CursorPressed);
+		INITIALIZE_GETTER(Input, alt2CursorDown, IsAlt2CursorDown);
+		INITIALIZE_GETTER(Input, alt2CursorReleased, IsAlt2CursorReleased);
+		INITIALIZE_GETTER(Input, cursorPos, GetMainCursorPos);
+		INITIALIZE_GETTER(Input, cursorDelta, GetMainCursorDelta);
 	}
 
 	void Input::AltCursorPressed(const Vec2F& pos)

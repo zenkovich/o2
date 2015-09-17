@@ -35,7 +35,7 @@ namespace o2
 		if (!pngImageFile.IsOpened())
 		{
 			if (errors) 
-				Debug.LogError("Can't load PNG file '%s'\n", fileName);
+				o2Debug.LogError("Can't load PNG file '%s'\n", fileName);
 			return false;
 		}
 
@@ -50,7 +50,7 @@ namespace o2
 		if (!is_png)
 		{
 			if (errors) 
-				Debug.LogError("Can't load PNG file '%s': not PNG\n", fileName);
+				o2Debug.LogError("Can't load PNG file '%s': not PNG\n", fileName);
 			return false;
 		}
 
@@ -59,7 +59,7 @@ namespace o2
 		if (!png_ptr)
 		{
 			if (errors) 
-				Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
 			return false;
 		}
 
@@ -70,7 +70,7 @@ namespace o2
 			png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
 
 			if (errors) 
-				Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
 			return false;
 		}
 
@@ -81,7 +81,7 @@ namespace o2
 			png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
 
 			if (errors) 
-				Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
 			return false;
 		}
 
@@ -91,7 +91,7 @@ namespace o2
 			png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 
 			if (errors) 
-				Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
 			return false;
 		}
 
@@ -128,7 +128,7 @@ namespace o2
 			png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 
 			if (errors) 
-				Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
 			return false;
 		}
 
@@ -142,7 +142,7 @@ namespace o2
 				delete[] image_data;
 
 			if (errors) 
-				Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
 			return false;
 		}
 
@@ -166,7 +166,7 @@ namespace o2
 		OutFile pngImageFile(fileName);
 		if (!pngImageFile.IsOpened())
 		{
-			Debug.LogError("Can't save PNG file '%s'\n", fileName);
+			o2Debug.LogError("Can't save PNG file '%s'\n", fileName);
 			return false;
 		}
 
@@ -178,20 +178,20 @@ namespace o2
 
 		if (!png_ptr)
 		{
-			Debug.LogError("Can't save PNG file '%s': png_create_write_struct failed\n", fileName);
+			o2Debug.LogError("Can't save PNG file '%s': png_create_write_struct failed\n", fileName);
 			return false;
 		}
 
 		info_ptr = png_create_info_struct(png_ptr);
 		if (!info_ptr)
 		{
-			Debug.LogError("Can't save PNG file '%s': png_create_info_struct failed\n", fileName);
+			o2Debug.LogError("Can't save PNG file '%s': png_create_info_struct failed\n", fileName);
 			return false;
 		}
 
 		if (setjmp(png_jmpbuf(png_ptr)))
 		{
-			Debug.LogError("Can't save PNG file '%s': Error during init_io\n", fileName);
+			o2Debug.LogError("Can't save PNG file '%s': Error during init_io\n", fileName);
 			return false;
 		}
 
@@ -202,7 +202,7 @@ namespace o2
 		/* write header */
 		if (setjmp(png_jmpbuf(png_ptr)))
 		{
-			Debug.LogError("Can't save PNG file '%s': Error during writing header\n", fileName);
+			o2Debug.LogError("Can't save PNG file '%s': Error during writing header\n", fileName);
 			return false;
 		}
 
@@ -218,7 +218,7 @@ namespace o2
 		/* write bytes */
 		if (setjmp(png_jmpbuf(png_ptr)))
 		{
-			Debug.LogError("Can't save PNG file '%s': Error during writing bytes\n", fileName);
+			o2Debug.LogError("Can't save PNG file '%s': Error during writing bytes\n", fileName);
 			return false;
 		}
 
@@ -236,7 +236,7 @@ namespace o2
 		/* end write */
 		if (setjmp(png_jmpbuf(png_ptr)))
 		{
-			Debug.LogError("Can't save PNG file '%s': Error during end of write\n", fileName);
+			o2Debug.LogError("Can't save PNG file '%s': Error during end of write\n", fileName);
 			return false;
 		}
 

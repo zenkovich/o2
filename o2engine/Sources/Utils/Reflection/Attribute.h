@@ -9,11 +9,6 @@ namespace o2
 	// ----------------------------------------
 	class IAttribute
 	{
-		friend class FieldInfo;
-
-	protected:
-		FieldInfo* mOwnerFieldInfo; // Pointer to owner field info object
-
 	public:
 		// Default constructor
 		IAttribute(): mOwnerFieldInfo(nullptr) {}
@@ -23,5 +18,10 @@ namespace o2
 
 		// Returns copy of this
 		virtual IAttribute* Clone() const = 0;
+
+	protected:
+		FieldInfo* mOwnerFieldInfo; // Pointer to owner field info object
+
+		friend class FieldInfo;
 	};
 }

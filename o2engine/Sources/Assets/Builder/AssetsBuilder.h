@@ -15,8 +15,6 @@ namespace o2
 	// -------------
 	class AssetsBuilder
 	{
-		friend class AtlasAssetConverter;
-
 	public:
 		// Default constructor
 		AssetsBuilder();
@@ -76,5 +74,7 @@ namespace o2
 
 		// Resets builder
 		void Reset();
+
+		friend class AtlasAssetConverter;
 	};
 }

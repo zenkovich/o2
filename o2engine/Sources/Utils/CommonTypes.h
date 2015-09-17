@@ -11,4 +11,6 @@ namespace o2
 	typedef unsigned long      ULong;
 
 	typedef unsigned int       AssetId;
+
+	typedef int                KeyboardKey;
 }

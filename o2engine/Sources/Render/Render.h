@@ -19,12 +19,12 @@ namespace o2
 	class Render: public RenderBase, public Singleton<Render>
 	{
 	public:
-		Getter<Vec2I>        Resolution;             // Screen resolution getter
-		Property<Camera>     CurrentCamera;          // Current camera property
-		Property<RectI>      ScissorRect;            // Scissor rect property
-		Property<TextureRef> RenderTexture;          // Render target texture property
-		Getter<bool>         RenderTextureAvailable; // Render textures available getter
-		Getter<Vec2I>        MaxTextureSize;         // Maximal texture size getter
+		Getter<Vec2I>        resolution;             // Screen resolution getter
+		Property<Camera>     camera;          // Current camera property
+		Property<RectI>      scissorRect;            // Scissor rect property
+		Property<TextureRef> renderTexture;          // Render target texture property
+		Getter<bool>         renderTextureAvailable; // Render textures available getter
+		Getter<Vec2I>        maxTextureSize;         // Maximal texture size getter
 
 		// Default constructor
 		Render();
@@ -59,6 +59,7 @@ namespace o2
 		// Draw rect frame with color
 		void DrawRectFrame(const RectF& rect, const Color4& color = Color4::White());
 
+		// Draw basis frame
 		void DrawBasis(const Basis& basis, const Color4& xcolor = Color4::Red(), const Color4& ycolor = Color4::Blue(),
 					   const Color4& color = Color4::White());
 
@@ -103,6 +104,9 @@ namespace o2
 
 		// Drawing mesh
 		bool DrawMesh(Ptr<Mesh> mesh);
+
+		// Drawing mesh wire
+		bool DrawMeshWire(Ptr<Mesh> mesh, const Color4& color = Color4::White());
 
 		// Drawing lines
 		bool DrawLines(Vertex2* verticies, int count);
@@ -173,5 +177,6 @@ namespace o2
 		friend class Texture;
 		friend class TextureRef;
 		friend class BaseApplication;
+		friend class Font;
 	};
 }

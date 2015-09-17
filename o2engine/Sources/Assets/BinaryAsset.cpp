@@ -145,9 +145,9 @@ namespace o2
 
 	void BinaryAsset::InitializeProperties()
 	{
-		INITIALIZE_GETTER(BinaryAsset, Data, GetData);
-		INITIALIZE_GETTER(BinaryAsset, DataSize, GetDataSize);
-		INITIALIZE_GETTER(BinaryAsset, Meta, GetMeta);
+		INITIALIZE_GETTER(BinaryAsset, data, GetData);
+		INITIALIZE_GETTER(BinaryAsset, dataSize, GetDataSize);
+		INITIALIZE_GETTER(BinaryAsset, meta, GetMeta);
 	}
 
 }

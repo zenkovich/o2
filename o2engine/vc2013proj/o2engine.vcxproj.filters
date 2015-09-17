@@ -442,6 +442,9 @@
     <ClInclude Include="..\Sources\Render\TextureRef.h">
       <Filter>Sources\Render</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\TimeStamp.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -724,6 +727,12 @@
       <Filter>Sources\Render</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Render\Camera.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\Font.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\Text.cpp">
       <Filter>Sources\Render</Filter>
     </ClCompile>
   </ItemGroup>

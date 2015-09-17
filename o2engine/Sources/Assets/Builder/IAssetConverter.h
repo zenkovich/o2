@@ -15,10 +15,6 @@ namespace o2
 	//---------------------------------------
 	class IAssetConverter: public IObject
 	{
-	protected:
-		// Assets builder pointer
-		Ptr<AssetsBuilder> mAssetsBuilder;
-
 	public:
 		// Virtual destructor
 		virtual ~IAssetConverter() {}
@@ -45,5 +41,9 @@ namespace o2
 		void SetAssetsBuilder(Ptr<AssetsBuilder> builder);
 
 		IOBJECT(IAssetConverter) {}
+
+	protected:
+		// Assets builder pointer
+		Ptr<AssetsBuilder> mAssetsBuilder;
 	};
 }

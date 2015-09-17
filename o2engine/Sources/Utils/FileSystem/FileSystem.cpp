@@ -18,7 +18,7 @@ namespace o2
 	FileSystem::FileSystem()
 	{
 		mLog = mnew LogStream("File System");
-		Debug.GetLog()->BindStream(mLog);
+		o2Debug.GetLog()->BindStream(mLog);
 
 		mExtensions.Add(FileType::Image, StringsVec());
 		mExtensions[FileType::Image].Add("png");

@@ -35,7 +35,7 @@ namespace o2
 
 		//log
 		mLog = mnew LogStream("Application");
- 		Debug.GetLog()->BindStream(mLog);
+ 		o2Debug.GetLog()->BindStream(mLog);
 
 		//project config
  		mProjectConfig = mnew ProjectConfig();
@@ -54,7 +54,7 @@ namespace o2
 		mTimer->Reset();
 
 		//timers
-		mTime = mnew TimeStuff();
+		mTime = mnew Time();
 // 
 // 		//ui
 // 		mUIController = mnew UIController();
@@ -110,34 +110,28 @@ namespace o2
 		return mInstance->mProjectConfig;
 	}
 
-	Ptr<TimeStuff> IApplication::GetTime() const
+	Ptr<Time> IApplication::GetTime() const
 	{
 		return mInstance->mTime;
 	}
 
 	void IApplication::OnMoved()
-	{
-	}
+	{}
 
 	void IApplication::OnResizing()
-	{
-	}
+	{}
 
 	void IApplication::OnClosing()
-	{
-	}
+	{}
 
 	void IApplication::OnStarted()
-	{
-	}
+	{}
 
 	void IApplication::OnDeactivated()
-	{
-	}
+	{}
 
 	void IApplication::OnActivated()
-	{
-	}
+	{}
 
 	Vec2I IApplication::GetContentSize() const
 	{
@@ -145,8 +139,7 @@ namespace o2
 	}
 
 	void IApplication::SetContentSize(const Vec2I& size)
-	{
-	}
+	{}
 
 	String IApplication::GetWindowCaption() const
 	{
@@ -154,8 +147,7 @@ namespace o2
 	}
 
 	void IApplication::SetWindowCaption(const String& caption)
-	{
-	}
+	{}
 
 	Vec2I IApplication::GetWindowPosition() const
 	{
@@ -163,8 +155,7 @@ namespace o2
 	}
 
 	void IApplication::SetWindowPosition(const Vec2I& position)
-	{
-	}
+	{}
 
 	Vec2I IApplication::GetWindowSize() const
 	{
@@ -190,28 +181,24 @@ namespace o2
 	}
 
 	void IApplication::SetFullscreen(bool fullscreen /*= true*/)
-	{
-	}
+	{}
 
 	void IApplication::OnDraw()
-	{
-	}
+	{}
 
 	void IApplication::OnUpdate(float dt)
-	{
-	}
+	{}
 
 	void IApplication::Launch()
-	{
-	}	
+	{}	
 	
 	void IApplication::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(IApplication, Fullscreen, SetFullscreen, IsFullScreen);
-		INITIALIZE_PROPERTY(IApplication, Resizible, SetResizible, IsResizible);
-		INITIALIZE_PROPERTY(IApplication, WindowSize, SetWindowSize, GetWindowSize);
-		INITIALIZE_PROPERTY(IApplication, WindowContentSize, SetContentSize, GetContentSize);
-		INITIALIZE_PROPERTY(IApplication, WindowPosition, SetWindowPosition, GetWindowPosition);
-		INITIALIZE_PROPERTY(IApplication, WindowCaption, SetWindowCaption, GetWindowCaption);
+		INITIALIZE_PROPERTY(IApplication, fullscreen, SetFullscreen, IsFullScreen);
+		INITIALIZE_PROPERTY(IApplication, resizible, SetResizible, IsResizible);
+		INITIALIZE_PROPERTY(IApplication, windowSize, SetWindowSize, GetWindowSize);
+		INITIALIZE_PROPERTY(IApplication, windowContentSize, SetContentSize, GetContentSize);
+		INITIALIZE_PROPERTY(IApplication, windowPosition, SetWindowPosition, GetWindowPosition);
+		INITIALIZE_PROPERTY(IApplication, windowCaption, SetWindowCaption, GetWindowCaption);
 	}
 }

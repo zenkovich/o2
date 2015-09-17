@@ -53,7 +53,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>true</BrowseInformation>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -73,8 +73,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;WIN32;_LIB;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -207,6 +207,7 @@
     <ClInclude Include="..\Sources\Utils\String.h" />
     <ClInclude Include="..\Sources\Utils\Time.h" />
     <ClInclude Include="..\Sources\Utils\Timer.h" />
+    <ClInclude Include="..\Sources\Utils\TimeStamp.h" />
     <ClInclude Include="..\Sources\Utils\Tree.h" />
   </ItemGroup>
   <ItemGroup>
@@ -275,9 +276,11 @@
     <ClCompile Include="..\Sources\Assets\ImageAsset.cpp" />
     <ClCompile Include="..\Sources\Config\ProjectConfig.cpp" />
     <ClCompile Include="..\Sources\Render\Camera.cpp" />
+    <ClCompile Include="..\Sources\Render\Font.cpp" />
     <ClCompile Include="..\Sources\Render\Mesh.cpp" />
     <ClCompile Include="..\Sources\Render\RectDrawable.cpp" />
     <ClCompile Include="..\Sources\Render\Sprite.cpp" />
+    <ClCompile Include="..\Sources\Render\Text.cpp" />
     <ClCompile Include="..\Sources\Render\TextureRef.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\Render.cpp" />

@@ -128,6 +128,12 @@ namespace o2
 		// Plus and assign operator - adds string at the end
 		TString& operator+=(const TString& other);
 
+		// Plus operator - returns sum string
+		TString operator+(T symbol) const;
+
+		// Plus and assign operator - adds string at the end
+		TString& operator+=(T symbol);
+
 		// Symbol access operator
 		T& operator[](int idx);
 
@@ -152,6 +158,9 @@ namespace o2
 		// Appends string at the end
 		void Append(const TString& other);
 
+		// Appends symbol at the end
+		void Append(T symbol);
+
 		// Returns sum string
 		TString Appended(const TString& other) const;
 
@@ -166,6 +175,9 @@ namespace o2
 
 		// Returns string with removed symbols from begin to end
 		TString Erased(int begin, int end = -1) const;
+
+		// Gets symbol from back, removes him and returns
+		T PopBack();
 
 		// Replace part of string to another string in range
 		void Replace(const TString& other, int begin, int end);
@@ -719,8 +731,8 @@ namespace o2
 
 		splitted[0].Trim();
 		splitted[1].Trim();
+		splitted[2].Trim();
 		splitted[3].Trim();
-		splitted[4].Trim();
 
 		return RectF((float)splitted[0], (float)splitted[1], (float)splitted[2], (float)splitted[3]);
 	}
@@ -734,8 +746,8 @@ namespace o2
 
 		splitted[0].Trim();
 		splitted[1].Trim();
+		splitted[2].Trim();
 		splitted[3].Trim();
-		splitted[4].Trim();
 
 		return RectI((int)splitted[0], (int)splitted[1], (int)splitted[2], (int)splitted[3]);
 	}
@@ -749,8 +761,8 @@ namespace o2
 
 		splitted[0].Trim();
 		splitted[1].Trim();
+		splitted[2].Trim();
 		splitted[3].Trim();
-		splitted[4].Trim();
 
 		return Color4((int)splitted[0], (int)splitted[1], (int)splitted[2], (int)splitted[3]);
 	}
@@ -835,6 +847,21 @@ namespace o2
 	}
 
 	template<typename T>
+	TString<T>& TString<T>::operator+=(T symbol)
+	{
+		Append(symbol);
+		return *this;
+	}
+
+	template<typename T>
+	TString<T> TString<T>::operator+(T symbol) const
+	{
+		TString res(*this);
+		res.Append(symbol);
+		return res;
+	}
+
+	template<typename T>
 	T& TString<T>::operator[](int idx)
 	{
 		idx = Math::Clamp(idx, 0, mCapacity - 1);
@@ -900,6 +927,15 @@ namespace o2
 		for (int i = 0; i < l2; i++)
 			mData[i + l1] = other.mData[i];
 		mData[l1 + l2] = '\0';
+	}
+
+	template<typename T>
+	void TString<T>::Append(T symbol)
+	{
+		int l = Length();
+		Reserve(l + 1);
+		mData[l] = symbol;
+		mData[l + 1] = '\0';
 	}
 
 	template<typename T>
@@ -1310,6 +1346,15 @@ namespace o2
 	{
 		TString res(*this);
 		res.Erase(begin, end);
+		return res;
+	}
+
+	template<typename T>
+	T TString<T>::PopBack()
+	{
+		int l = Length();
+		T res = mData[l];
+		mData[l] = '\0';
 		return res;
 	}
 

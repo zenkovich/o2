@@ -71,8 +71,8 @@ namespace o2
 
 	void FolderAsset::InitializeProperties()
 	{
-		INITIALIZE_GETTER(FolderAsset, Meta, GetMeta);
-		INITIALIZE_GETTER(FolderAsset, InsideAssets, GetContainingAssetsInfos);
+		INITIALIZE_GETTER(FolderAsset, meta, GetMeta);
+		INITIALIZE_GETTER(FolderAsset, insideAssets, GetContainingAssetsInfos);
 	}
 
 	FolderAsset& FolderAsset::operator=(const FolderAsset& asset)

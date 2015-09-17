@@ -20,7 +20,7 @@ namespace o2
 
 		// Create log stream
 		mLog = mnew LogStream("Render");
-		Debug.GetLog()->BindStream(mLog);
+		o2Debug.GetLog()->BindStream(mLog);
 
 		// Initialize OpenGL
 		mLog->Out("Initializing OpenGL render..");
@@ -519,6 +519,27 @@ namespace o2
 		return true;
 	}
 
+	bool Render::DrawMeshWire(Ptr<Mesh> mesh, const Color4& color /*= Color4::White()*/)
+	{
+		Vertex2* vertices = new Vertex2[mesh->mPolyCount*6];
+		auto dcolor = color.ABGR();
+
+		for (UInt i = 0; i < mesh->mPolyCount; i++)
+		{
+			vertices[i*6]     = mesh->mVertices[mesh->mIndexes[i*3]];
+			vertices[i*6 + 1] = mesh->mVertices[mesh->mIndexes[i*3 + 1]];
+			vertices[i*6 + 2] = mesh->mVertices[mesh->mIndexes[i*3 + 1]];
+			vertices[i*6 + 3] = mesh->mVertices[mesh->mIndexes[i*3 + 2]];
+			vertices[i*6 + 4] = mesh->mVertices[mesh->mIndexes[i*3 + 2]];
+			vertices[i*6 + 5] = mesh->mVertices[mesh->mIndexes[i*3]];
+		}
+
+		for (UInt i = 0; i < mesh->mPolyCount*6; i++)
+			vertices[i].color = dcolor;
+
+		return DrawLines(vertices, mesh->mPolyCount*3);
+	}
+
 	bool Render::DrawLines(Vertex2* verticies, int count)
 	{
 		if (!mReady)
@@ -617,12 +638,12 @@ namespace o2
 
 	void Render::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(Render, CurrentCamera, SetCamera, GetCamera);
-		INITIALIZE_PROPERTY(Render, ScissorRect, SetupScissorRect, GetScissorRect);
-		INITIALIZE_PROPERTY(Render, RenderTexture, SetRenderTexture, GetRenderTexture);
-		INITIALIZE_GETTER(Render, Resolution, GetResolution);
-		INITIALIZE_GETTER(Render, RenderTextureAvailable, IsRenderTextureAvailable);
-		INITIALIZE_GETTER(Render, MaxTextureSize, GetMaxTextureSize);
+		INITIALIZE_PROPERTY(Render, camera, SetCamera, GetCamera);
+		INITIALIZE_PROPERTY(Render, scissorRect, SetupScissorRect, GetScissorRect);
+		INITIALIZE_PROPERTY(Render, renderTexture, SetRenderTexture, GetRenderTexture);
+		INITIALIZE_GETTER(Render, resolution, GetResolution);
+		INITIALIZE_GETTER(Render, renderTextureAvailable, IsRenderTextureAvailable);
+		INITIALIZE_GETTER(Render, maxTextureSize, GetMaxTextureSize);
 	}
 
 	Render& Render::operator=(const Render& other)

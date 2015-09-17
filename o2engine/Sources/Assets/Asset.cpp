@@ -232,9 +232,9 @@ namespace o2
 
 	void Asset::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(Asset, Path, SetPath, GetPath);
-		INITIALIZE_GETTER(Asset, Id, GetAssetId);
-		INITIALIZE_GETTER(Asset, FullPath, GetFullPath);
-		INITIALIZE_GETTER(Asset, Meta, GetMeta);
+		INITIALIZE_PROPERTY(Asset, path, SetPath, GetPath);
+		INITIALIZE_GETTER(Asset, id, GetAssetId);
+		INITIALIZE_GETTER(Asset, fullPath, GetFullPath);
+		INITIALIZE_GETTER(Asset, meta, GetMeta);
 	}
 }

@@ -170,9 +170,9 @@ namespace o2
 
 	void Texture::InitializeProperties()
 	{
-		INITIALIZE_GETTER(Texture, Size, GetSize);
-		INITIALIZE_GETTER(Texture, TexFormat, GetFormat);
-		INITIALIZE_GETTER(Texture, TexUsage, GetUsage);
-		INITIALIZE_GETTER(Texture, FileName, GetFileName);
+		INITIALIZE_GETTER(Texture, size, GetSize);
+		INITIALIZE_GETTER(Texture, format, GetFormat);
+		INITIALIZE_GETTER(Texture, usage, GetUsage);
+		INITIALIZE_GETTER(Texture, fileName, GetFileName);
 	}
 }

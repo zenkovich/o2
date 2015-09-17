@@ -30,7 +30,7 @@ namespace o2
 		if (log)
 			mLog = log;
 		else
-			log = Debug.GetLog();
+			log = o2Debug.GetLog();
 
 		FolderInfo folderInfo = o2FileSystem.GetFolderInfo(path);
 		folderInfo.ClampPathNames();
@@ -116,7 +116,7 @@ namespace o2
 
 			if (extension != "meta")
 			{
-				String assetFullPath = ASSETS_PATH + fileInfo.mPath;
+				String assetFullPath = mPath + fileInfo.mPath;
 				String metaFullPath = assetFullPath + ".meta";
 
 				bool isExistMetaForAsset = o2FileSystem.IsFileExist(metaFullPath);
@@ -129,7 +129,7 @@ namespace o2
 
 		for (auto subFolder : folder.mFolders)
 		{
-			String folderFullPath = ASSETS_PATH + subFolder.mPath;
+			String folderFullPath = mPath + subFolder.mPath;
 			String metaFullPath = folderFullPath + ".meta";
 
 			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);

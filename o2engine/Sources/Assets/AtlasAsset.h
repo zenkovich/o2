@@ -12,6 +12,84 @@ namespace o2
 	// -----------
 	class AtlasAsset: public Asset
 	{
+	public: 
+		class MetaInfo;
+		class Page;
+
+		typedef Vector<Page> PagesVec;
+
+	public:
+		Getter<Ptr<MetaInfo>>           meta;        // Meta information getter
+		Getter<AssetInfosVec>           imagesInfos; // Containing images infos getter
+		Getter<Vector<Ptr<ImageAsset>>> images;      // Images assets getter
+		Getter<PagesVec>                pages;       // Pages getter
+
+		// Default constructor
+		AtlasAsset();
+
+		// Constructor by path - loads asset by path
+		AtlasAsset(const String& path);
+
+		// Constructor by id - loads asset by id
+		AtlasAsset(AssetId id);
+
+		// Copy-constructor
+		AtlasAsset(const AtlasAsset& asset);
+
+		// Destructor
+		~AtlasAsset();
+
+		// Check equals operator
+		AtlasAsset& operator=(const AtlasAsset& asset);
+
+		// Returns containing images infos array
+		AssetInfosVec GetImages() const;
+
+		// Returns containing images assets
+		Vector<Ptr<ImageAsset>> GetImagesAssets() const;
+
+		// Returns pages array
+		PagesVec GetPages() const;
+
+		// Is contains image
+		bool ContainsImage(Ptr<ImageAsset> image);
+
+		// Is contains image
+		bool ContainsImage(const AssetInfo& imageAssetInfo);
+
+		// Is contains image
+		bool ContainsImage(AssetId id);
+
+		// Is contains image
+		bool ContainsImage(const String& path);
+
+		// Returns meta information
+		Ptr<MetaInfo> GetMeta() const;
+
+		// Returns extensions string
+		const char* GetFileExtensions() const;
+
+		// Returns atlas page's texture file name
+		static String GetPageTextureFileName(AssetId atlasId, UInt pageIdx);
+
+		// Returns atlas page's texture file name
+		static String GetPageTextureFileName(const String& atlasPath, UInt pageIdx);
+
+		// Returns atlas page's texture reference
+		static TextureRef GetPageTextureRef(AssetId atlasId, UInt pageIdx);
+
+		// Returns atlas page's texture reference
+		static TextureRef GetPageTextureRef(const String& atlasPath, UInt pageIdx);
+
+		SERIALIZABLE_IMPL(AtlasAsset);
+
+		IOBJECT(AtlasAsset)
+		{
+			BASE_CLASS(Asset);
+			SRLZ_FIELD(mImagesAssetsInfos);
+			SRLZ_FIELD(mPages);
+		}
+
 	public:
 		// -----------------------------------
 		// Platform specified meta information
@@ -100,79 +178,6 @@ namespace o2
 				SRLZ_FIELD(mImagesRects);
 			}
 		};
-		typedef Vector<Page> PagesVec;
-
-	public:
-		Getter<Ptr<MetaInfo>>           Meta;        // Meta information getter
-		Getter<AssetInfosVec>           ImagesInfos; // Containing images infos getter
-		Getter<Vector<Ptr<ImageAsset>>> Images;      // Images assets getter
-		Getter<PagesVec>                Pages;       // Pages getter
-
-		// Default constructor
-		AtlasAsset();
-
-		// Constructor by path - loads asset by path
-		AtlasAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		AtlasAsset(AssetId id);
-
-		// Copy-constructor
-		AtlasAsset(const AtlasAsset& asset);
-
-		// Destructor
-		~AtlasAsset();
-
-		// Check equals operator
-		AtlasAsset& operator=(const AtlasAsset& asset);
-
-		// Returns containing images infos array
-		AssetInfosVec GetImages() const;
-
-		// Returns containing images assets
-		Vector<Ptr<ImageAsset>> GetImagesAssets() const;
-
-		// Returns pages array
-		PagesVec GetPages() const;
-
-		// Is contains image
-		bool ContainsImage(Ptr<ImageAsset> image);
-
-		// Is contains image
-		bool ContainsImage(const AssetInfo& imageAssetInfo);
-
-		// Is contains image
-		bool ContainsImage(AssetId id);
-
-		// Is contains image
-		bool ContainsImage(const String& path);
-
-		// Returns meta information
-		Ptr<MetaInfo> GetMeta() const;
-
-		// Returns extensions string
-		const char* GetFileExtensions() const;
-
-		// Returns atlas page's texture file name
-		static String GetPageTextureFileName(AssetId atlasId, UInt pageIdx);
-
-		// Returns atlas page's texture file name
-		static String GetPageTextureFileName(const String& atlasPath, UInt pageIdx);
-
-		// Returns atlas page's texture reference
-		static TextureRef GetPageTextureRef(AssetId atlasId, UInt pageIdx);
-
-		// Returns atlas page's texture reference
-		static TextureRef GetPageTextureRef(const String& atlasPath, UInt pageIdx);
-
-		SERIALIZABLE_IMPL(AtlasAsset);
-
-		IOBJECT(AtlasAsset)
-		{
-			BASE_CLASS(Asset);
-			SRLZ_FIELD(mImagesAssetsInfos);
-			SRLZ_FIELD(mPages);
-		}
 
 	protected:
 		AssetInfosVec mImagesAssetsInfos; // Loaded image infos 

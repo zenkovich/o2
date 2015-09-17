@@ -14,6 +14,6 @@ int main()
 	TestApplication app;
 	app.Launch();
 
-    return 0;
+	return 0;
 }
 

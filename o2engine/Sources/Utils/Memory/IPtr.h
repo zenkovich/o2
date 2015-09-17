@@ -12,12 +12,6 @@ namespace o2
 	// -----------------------
 	class IPtr
 	{
-		friend class MemoryManager;
-		friend struct ObjectInfo;
-
-		template<typename _type>
-		friend class ITemplPtr;
-
 	protected:
 		ObjectInfo* mObjectInfo; // Object info pointer
 		bool        mIsOnTop;    // Using for GC. True when pointer haven't parent pointer
@@ -33,6 +27,12 @@ namespace o2
 
 		// Returns pointer to object
 		virtual void* ObjectPtr() const = 0;
+
+		friend class MemoryManager;
+		friend struct ObjectInfo;
+
+		template<typename _type>
+		friend class ITemplPtr;
 	};
 
 	// --------------------------
@@ -41,9 +41,6 @@ namespace o2
 	template<typename _type>
 	class ITemplPtr : public IPtr
 	{
-		friend class MemoryManager;
-		friend struct ObjectInfo;
-
 	protected:
 		_type* mObject; // Pointer to object
 
@@ -74,6 +71,9 @@ namespace o2
 
 		// Releases object
 		void Release();
+
+		friend class MemoryManager;
+		friend struct ObjectInfo;
 	};
 
 	template<typename _type>

@@ -9,27 +9,22 @@
 
 namespace o2
 {
+	// -----------------------------------------------------------------
 	// Triangles mesh. Containing vertices, indexes of polygons, texture
+	// -----------------------------------------------------------------
 	class Mesh: public virtual IDrawable
 	{
 	public:
-		Vertex2*   mVertices;      // Vertex buffer
-		UInt16*    mIndexes;        // Index buffer
-
-		UInt       mVertexCount;    // Current vertices count
-		UInt       mPolyCount;      // Current polygons in mesh
-
-	protected:
-		TextureRef mTexture;        // Texture
-
-		UInt       mMaxVertexCount; // Max size of vertex buffer
-		UInt       mMaxPolyCount;   // Max polygons count, mMaxPolyCount*3 - is index buffer max size
+		Vertex2* mVertices;    // Vertex buffer
+		UInt16*  mIndexes;     // Index buffer
+				 			   
+		UInt     mVertexCount; // Current vertices count
+		UInt     mPolyCount;   // Current polygons in mesh
 
 	public:
-		//properties
-		Property<TextureRef> TexturePtr;     // Texture property
-		Property<UInt>       MaxVertexCount; // Max vertex count property
-		Property<UInt>       MaxPolyCount;   // Max polygons count property
+		Property<TextureRef> texture;        // Texture property
+		Property<UInt>       maxVertexCount; // Max vertex count property
+		Property<UInt>       maxPolyCount;   // Max polygons count property
 
 		// Constructor
 		Mesh(TextureRef texture = TextureRef(), UInt vertexCount = 4, UInt polyCount = 2);
@@ -66,6 +61,12 @@ namespace o2
 
 		// Returns max polygons count
 		UInt GetMaxPolyCount() const;
+
+	protected:
+		TextureRef mTexture;        // Texture
+
+		UInt       mMaxVertexCount; // Max size of vertex buffer
+		UInt       mMaxPolyCount;   // Max polygons count, mMaxPolyCount*3 - is index buffer max size
 
 	protected:
 		// Initializing properties

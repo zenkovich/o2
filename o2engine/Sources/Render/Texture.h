@@ -25,10 +25,10 @@ namespace o2
 		enum class Usage { Default, RenderTarget };
 
 	public:
-		Getter<Vec2I>  Size;      // Size of texture getter
-		Getter<Format> TexFormat; // texture format getter
-		Getter<Usage>  TexUsage;  // Texture usage getter
-		Getter<String> FileName;  // Texture file name getter
+		Getter<Vec2I>  size;     // Size of texture getter
+		Getter<Format> format;   // texture format getter
+		Getter<Usage>  usage;    // Texture usage getter
+		Getter<String> fileName; // Texture file name getter
 
 		// Default constructor
 		Texture();

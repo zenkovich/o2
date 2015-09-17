@@ -9,10 +9,6 @@ namespace o2
 	// ------------------------------------
 	class Timer
 	{
-		LONGLONG      mLastElapsedTime;
-		LARGE_INTEGER mFrequency;
-		LARGE_INTEGER mStartTime;
-
 	public:
 		// Default constructor
 		Timer();
@@ -28,5 +24,10 @@ namespace o2
 
 		// Returns time in seconds from last Reset() or GetElapsedTime() call
 		float GetDeltaTime();
+
+	protected:
+		LONGLONG      mLastElapsedTime;
+		LARGE_INTEGER mFrequency;
+		LARGE_INTEGER mStartTime;
 	};
 }

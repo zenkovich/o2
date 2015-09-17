@@ -9,28 +9,13 @@ namespace o2
 	// -------------------
 	class BinaryAsset: public Asset
 	{
-	public:
-		// ----------------
-		// Meta information
-		// ----------------
-		class MetaInfo: public IMetaInfo
-		{
-		public:
-			// Returns asset type id
-			Type::Id GetAssetType() const;
-
-			SERIALIZABLE_IMPL(MetaInfo);
-
-			IOBJECT(MetaInfo)
-			{
-				BASE_CLASS(IMetaInfo);
-			}
-		};
+	public: 
+		class MetaInfo;
 
 	public:
-		Getter<char*>         Data;     // Data getter
-		Getter<UInt>          DataSize; // Data size getter
-		Getter<Ptr<MetaInfo>> Meta;     // Meta information getter
+		Getter<char*>         data;     // Data getter
+		Getter<UInt>          dataSize; // Data size getter
+		Getter<Ptr<MetaInfo>> meta;     // Meta information getter
 
 		// Default constructor
 		BinaryAsset();
@@ -71,6 +56,24 @@ namespace o2
 			FIELD(mDataSize);
 			FIELD(mData);
 		}
+
+	public:
+		// ----------------
+		// Meta information
+		// ----------------
+		class MetaInfo: public IMetaInfo
+		{
+		public:
+			// Returns asset type id
+			Type::Id GetAssetType() const;
+
+			SERIALIZABLE_IMPL(MetaInfo);
+
+			IOBJECT(MetaInfo)
+			{
+				BASE_CLASS(IMetaInfo);
+			}
+		};
 
 	protected:
 		char* mData;     // Asset data

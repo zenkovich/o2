@@ -13,9 +13,9 @@ namespace o2
 	class IRectDrawable: public Transform, public virtual IDrawable
 	{
 	public:
-		Property<Color4> Color;        // Color property
-		Property<float>  Transparency; // Transparency property, changing alpha in color
-		Property<bool>   Enabled;      // Enable property
+		Property<Color4> color;        // Color property
+		Property<float>  transparency; // Transparency property, changing alpha in color
+		Property<bool>   enabled;      // Enable property
 
 		// Constructor
 		IRectDrawable(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f, 

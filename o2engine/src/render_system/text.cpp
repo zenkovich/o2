@@ -7,14 +7,14 @@
 OPEN_O2_NAMESPACE
 
 Text::Text(Font* font):
-mFont(font), mCharactersDistCoef(1), mLinesDistCoef(1.5f), mVerAlign(Font::VA_TOP), mHorAlign(Font::HA_LEFT),
-mNeedUpdateMesh(true), mWordWrap(false), IRectDrawable()
+	mFont(font), mCharactersDistCoef(1), mLinesDistCoef(1.5f), mVerAlign(Font::VA_TOP), mHorAlign(Font::HA_LEFT),
+	mNeedUpdateMesh(true), mWordWrap(false), IRectDrawable()
 {
 	InitializeProperties();
 }
 
 Text::Text(const Text& text):
-IRectDrawable(text)
+	IRectDrawable(text)
 {
 	mText = text.mText;
 	mFont = text.mFont;

@@ -4,6 +4,9 @@
 #include "Utils/CommonTypes.h"
 #include "Utils/Containers/Vector.h"
 
+// Memory manager access macros
+#define o2Memory (*MemoryManager::mInstance)
+
 void* operator new(size_t size, const char* location, int line);
 void  operator delete(void* allocMemory);
 void  operator delete(void* allocMemory, const char* location, int line);
@@ -32,27 +35,21 @@ namespace o2
 		void Mark(bool mark);
 	};
 
-	// Memory manager access macros
-#define o2Memory (*MemoryManager::mInstance)
 
 	// ------------------------------------------------------------------
 	// Memory manager, using for collecting garbage, tracing memory leaks
 	// ------------------------------------------------------------------
 	class MemoryManager
 	{
-		friend class IPtr;
-
-		template<typename _type>
-		friend class ITemplPtr;
-
-		friend void* ::operator new(size_t size, const char* location, int line);
-		friend void  ::operator delete(void* allocMemory);
-
 		typedef Vector<IPtr*>       PointersVec;
 		typedef Vector<ObjectInfo*> ObjectsInfosVec;
 
 	public:
 		static MemoryManager* mInstance; // Instance pointer
+
+	public:
+		// Collects all unused objects and destroys them
+		static void CollectGarbage();
 
 	protected:
 		ObjectsInfosVec mObjectsInfos;  // All static objects infos
@@ -75,10 +72,6 @@ namespace o2
 		// Returns object info
 		static ObjectInfo* GetObjectInfo(void* object);
 
-	public:
-		// Collects all unused objects and destroys them
-		static void CollectGarbage();
-
 	private:
 		// Resets memory tree for all pointers and objects
 		void ResetMemoryTree();
@@ -94,6 +87,14 @@ namespace o2
 
 		// Prints objects infos
 		void PrintObjectsInfos(const ObjectsInfosVec& objectsVec);
+
+		friend class IPtr;
+
+		template<typename _type>
+		friend class ITemplPtr;
+
+		friend void* ::operator new(size_t size, const char* location, int line);
+		friend void  ::operator delete(void* allocMemory);
 	};
 }
 

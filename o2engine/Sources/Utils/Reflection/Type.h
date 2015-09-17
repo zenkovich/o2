@@ -15,13 +15,6 @@ namespace o2
 	public:
 		typedef UInt Id;
 
-	protected:
-		String             mName;      // Name of object type
-		Vector<FieldInfo*> mFields;    // Fields information
-		Id                 mId;        // Id of type
-		Vector<Type*>      mBaseTypes; // Base types ids
-		IObject*           mSample;    // Object sample
-
 	public:
 		// Default constructor
 		Type();
@@ -64,5 +57,12 @@ namespace o2
 
 		// Adds basic type
 		static void SetupBaseType(Type& type, Type* baseType);
+
+	protected:
+		String             mName;      // Name of object type
+		Vector<FieldInfo*> mFields;    // Fields information
+		Id                 mId;        // Id of type
+		Vector<Type*>      mBaseTypes; // Base types ids
+		IObject*           mSample;    // Object sample
 	};
 }

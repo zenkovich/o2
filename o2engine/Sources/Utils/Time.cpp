@@ -8,21 +8,20 @@ namespace o2
 {
 	//TimeStuff& Time = TimeStuff::Instance();
 
-	DECLARE_SINGLETON(TimeStuff);
+	DECLARE_SINGLETON(Time);
 	IOBJECT_CPP(TimeStamp);
 
-	TimeStuff::TimeStuff():
+	Time::Time():
 		mApplicationTime(0), mLocalTime(0), mCurrentFrame(0), mDeltaTime(0), mFPS(0), mFPSSum(0),
 		mFramesSum(0), mLastFPSCheckingTime(0)
 	{
-		Time = this;
 	}
 
-	TimeStuff::~TimeStuff()
+	Time::~Time()
 	{
 	}
 
-	void TimeStuff::Update(float dt)
+	void Time::Update(float dt)
 	{
 		if (dt < FLT_EPSILON)
 			return;
@@ -43,42 +42,42 @@ namespace o2
 		}
 	}
 
-	float TimeStuff::GetApplicationTime() const
+	float Time::GetApplicationTime() const
 	{
 		return mInstance->mApplicationTime;
 	}
 
-	float TimeStuff::GetLocalTime() const
+	float Time::GetLocalTime() const
 	{
 		return mInstance->mLocalTime;
 	}
 
-	void TimeStuff::ResetLocalTime() const
+	void Time::ResetLocalTime() const
 	{
 		mInstance->mLocalTime = 0;
 	}
 
-	void TimeStuff::SetLocalTime(float time) const
+	void Time::SetLocalTime(float time) const
 	{
 		mInstance->mLocalTime = time;
 	}
 
-	int TimeStuff::GetCurrentFrame() const
+	int Time::GetCurrentFrame() const
 	{
 		return (int)mInstance->mCurrentFrame;
 	}
 
-	float TimeStuff::GetDeltaTime() const
+	float Time::GetDeltaTime() const
 	{
 		return mInstance->mDeltaTime;
 	}
 
-	float TimeStuff::GetFPS() const
+	float Time::GetFPS() const
 	{
 		return mInstance->mFPS;
 	}
 
-	TimeStamp TimeStuff::CurrentTime() const
+	TimeStamp Time::CurrentTime() const
 	{
 		SYSTEMTIME tm;
 		GetSystemTime(&tm);

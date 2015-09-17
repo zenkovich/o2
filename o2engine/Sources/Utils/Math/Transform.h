@@ -10,22 +10,22 @@ namespace o2
 	class Transform
 	{
 	public:
-		Property<Vec2F>  Position;     // Position property
-		Property<Vec2F>  Size;         // Size property
-		Property<Vec2F>  Scale;        // Scale property
-		Property<Vec2F>  Pivot;        // Pivot property, in local space
-		Property<Vec2F>  WorldPivot;   // Pivot property, in world space
-		Property<Vec2F>  SzPivot;      // Pivot in size space property
-		Property<RectF>  Rect;         // Rect property. Sets the position and size
-		Property<float>  Angle;        // Rotation angle in radians
-		Property<float>  Shear;        // Shear
-		Property<Basis>  ResBasis;     // Transformation basis
+		Property<Vec2F>  position;     // Position property
+		Property<Vec2F>  size;         // Size property
+		Property<Vec2F>  scale;        // Scale property
+		Property<Vec2F>  pivot;        // Pivot property, in local space
+		Property<Vec2F>  worldPivot;   // Pivot property, in world space
+		Property<Vec2F>  szPivot;      // Pivot in size space property
+		Property<RectF>  rect;         // Rect property. Sets the position and size
+		Property<float>  angle;        // Rotation angle in radians
+		Property<float>  shear;        // Shear
+		Property<Basis>  resBasis;     // Transformation basis
 		Property<RectF>  AABB;         // Axis aligned rectangle
-		Property<Vec2F>  Right;        // X Axis direction property
-		Property<Vec2F>  Left;         // Negative X Axis direction property
-		Property<Vec2F>  Up;           // Y Axis direction property
-		Property<Vec2F>  Down;         // Negative Y Axis direction property
-		Setter<Vec2F>    LookAtPoint;  // Look at point setter
+		Property<Vec2F>  right;        // X Axis direction property
+		Property<Vec2F>  left;         // Negative X Axis direction property
+		Property<Vec2F>  up;           // Y Axis direction property
+		Property<Vec2F>  down;         // Negative Y Axis direction property
+		Setter<Vec2F>    lookAtPoint;  // Look at point setter
 
 									   // Constructor
 		Transform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,

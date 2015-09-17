@@ -16,7 +16,7 @@ namespace o2
 		InitializeProperties();
 
 		mLog = mnew LogStream("Assets");
-		Debug.GetLog()->BindStream(mLog);
+		o2Debug.GetLog()->BindStream(mLog);
 
 		mAssetsBuilder = mnew AssetsBuilder();
 
@@ -239,6 +239,6 @@ namespace o2
 
 	void Assets::InitializeProperties()
 	{
-		INITIALIZE_GETTER(Assets, AssetsPath, GetAssetsPath);
+		INITIALIZE_GETTER(Assets, assetsPath, GetAssetsPath);
 	}
 }

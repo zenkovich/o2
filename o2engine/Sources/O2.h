@@ -26,9 +26,11 @@
 #include "Utils/FileSystem/FileSystem.h"
 
 #include "Utils/Assert.h"
+#include "Utils/Bitmap.h"
 #include "Utils/CommonTypes.h"
 #include "Utils/Debug.h"
 #include "Utils/Delegates.h"
+#include "Utils/IObject.h"
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
 #include "Utils/SmartPointers.h"
@@ -36,7 +38,6 @@
 #include "Utils/String.h"
 #include "Utils/Time.h"
 #include "Utils/Timer.h"
-#include "Utils/IObject.h"
 
 #include "Utils/Reflection/Types.h"
 
@@ -56,11 +57,13 @@
 #include "Render/Sprite.h"
 #include "Render/TextureRef.h"
 #include "Render/Texture.h"
+#include "Render/Font.h"
+#include "Render/Text.h"
 
 #define INITIALIZE_O2                                                              					  \
 o2::o2StackWalker* o2::o2StackWalker::mInstance = new o2StackWalker();								  \
 o2::MemoryManager* o2::MemoryManager::mInstance = new MemoryManager();								  \
-template<> o2::Ptr<o2::DebugStuff> o2::Singleton<o2::DebugStuff>::mInstance = mnew o2::DebugStuff();  \
+template<> o2::Ptr<o2::Debug> o2::Singleton<o2::Debug>::mInstance = mnew o2::Debug();  \
 o2::Vector<o2::Type*> o2::Types::mTypes
 
 

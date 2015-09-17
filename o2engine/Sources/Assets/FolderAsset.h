@@ -10,26 +10,11 @@ namespace o2
 	class FolderAsset: public Asset
 	{
 	public:
-		// ----------------
-		// Meta information
-		// ----------------
-		class MetaInfo: public IMetaInfo
-		{
-		public:
-			// Returns asset type id
-			Type::Id GetAssetType() const;
-
-			SERIALIZABLE_IMPL(MetaInfo);
-
-			IOBJECT(MetaInfo)
-			{
-				BASE_CLASS(IMetaInfo);
-			}
-		};
+		class MetaInfo;
 
 	public:
-		Getter<Ptr<MetaInfo>> Meta;         // Meta information getter
-		Getter<AssetInfosVec> InsideAssets; // Inside assets infos getter
+		Getter<Ptr<MetaInfo>> meta;         // Meta information getter
+		Getter<AssetInfosVec> insideAssets; // Inside assets infos getter
 
 		// Default constructor
 		FolderAsset();
@@ -60,6 +45,24 @@ namespace o2
 			BASE_CLASS(Asset);
 			FIELD(mContainingAssetsInfos);
 		}
+
+	public:
+		// ----------------
+		// Meta information
+		// ----------------
+		class MetaInfo: public IMetaInfo
+		{
+		public:
+			// Returns asset type id
+			Type::Id GetAssetType() const;
+
+			SERIALIZABLE_IMPL(MetaInfo);
+
+			IOBJECT(MetaInfo)
+			{
+				BASE_CLASS(IMetaInfo);
+			}
+		};
 
 	protected:
 		AssetInfosVec mContainingAssetsInfos; // Inside assets infos

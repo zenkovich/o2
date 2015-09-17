@@ -177,10 +177,10 @@ namespace o2
 
 	void AtlasAsset::InitializeProperties()
 	{
-		INITIALIZE_GETTER(AtlasAsset, Meta, GetMeta);
-		INITIALIZE_GETTER(AtlasAsset, ImagesInfos, GetImages);
-		INITIALIZE_GETTER(AtlasAsset, Images, GetImagesAssets);
-		INITIALIZE_GETTER(AtlasAsset, Pages, GetPages);
+		INITIALIZE_GETTER(AtlasAsset, meta, GetMeta);
+		INITIALIZE_GETTER(AtlasAsset, imagesInfos, GetImages);
+		INITIALIZE_GETTER(AtlasAsset, images, GetImagesAssets);
+		INITIALIZE_GETTER(AtlasAsset, pages, GetPages);
 	}
 
 	bool AtlasAsset::PlatformMeta::operator==(const PlatformMeta& other) const

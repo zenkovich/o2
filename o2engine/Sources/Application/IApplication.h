@@ -14,7 +14,7 @@ namespace o2
 	class Input;
 	class LogStream;
 	class ProjectConfig;
-	class TimeStuff;
+	class Time;
 	class Timer;
 	class Render;
 
@@ -31,12 +31,12 @@ namespace o2
 		Function<void()> onResizingEvent;    // On resized app window callbacks. Ignoring on mobiles/tables
 		Function<void()> onMovingEvent;      // On moving app window callbacks. Ignoring on mobiles/tables
 
-		Property<bool>   Fullscreen;         // Fullscreen/window changing property
-		Property<bool>   Resizible;          // Resizible window property
-		Property<Vec2I>  WindowSize;         // Window frame size property
-		Property<Vec2I>  WindowContentSize;  // Window content frame size property
-		Property<Vec2I>  WindowPosition;     // Window position on screen property
-		Property<String> WindowCaption;      // Window caption property
+		Property<bool>   fullscreen;         // Full screen/window changing property
+		Property<bool>   resizible;          // Resizible window property
+		Property<Vec2I>  windowSize;         // Window frame size property
+		Property<Vec2I>  windowContentSize;  // Window content frame size property
+		Property<Vec2I>  windowPosition;     // Window position on screen property
+		Property<String> windowCaption;      // Window caption property
 
 		// ctor
 		IApplication();
@@ -54,7 +54,7 @@ namespace o2
 		virtual Ptr<ProjectConfig> GetProjectConfig() const;
 
 		// Returns pointer to time utils object
-		virtual Ptr<TimeStuff> GetTime() const;
+		virtual Ptr<Time> GetTime() const;
 
 		// Launching application cycle
 		virtual void Launch();
@@ -96,14 +96,14 @@ namespace o2
 		virtual Vec2I GetContentSize() const;
 
 	protected:
-		Ptr<Assets>             mAssets;        // Assets
-		Ptr<FileSystem>         mFileSystem;    // File system
+		Ptr<Assets>        mAssets;        // Assets
+		Ptr<FileSystem>    mFileSystem;    // File system
 		Ptr<Input>         mInput;         // While application user input message
-		Ptr<LogStream>          mLog;           // Log stream with id "app", using only for application messages
-		Ptr<ProjectConfig>      mProjectConfig; // Project config
-		Ptr<TimeStuff>          mTime;          // Time utilities
-		Ptr<Timer>              mTimer;         // Timer for detecting delta time for update
-		Ptr<Render>             mRender;        // Graphics render
+		Ptr<LogStream>     mLog;           // Log stream with id "app", using only for application messages
+		Ptr<ProjectConfig> mProjectConfig; // Project config
+		Ptr<Time>     mTime;          // Time utilities
+		Ptr<Timer>         mTimer;         // Timer for detecting delta time for update
+		Ptr<Render>        mRender;        // Graphics render
 
 	protected:
 		// Called on updating

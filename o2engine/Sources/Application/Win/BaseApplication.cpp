@@ -239,7 +239,7 @@ namespace o2
 
 	void BaseApplication::OnUpdate(float dt)
 	{
-		Debug.Log("Time: %f", Time->GetLocalTime());
+		o2Debug.Log("Time: %f", o2Time.GetLocalTime());
 	}
 
 	void BaseApplication::OnDraw()
@@ -333,16 +333,6 @@ namespace o2
 		GetClientRect(mHWnd, &clientRect);
 		return Vec2I(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
 	}
-
-// 	void Application::InitializeProperties()
-// 	{
-// 		INITIALIZE_STATIC_PROPERTY(IApplication, Fullscreen, SetFullscreen, IsFullScreen);
-// 		INITIALIZE_STATIC_PROPERTY(IApplication, Resizible, SetResizible, IsResizible);
-// 		INITIALIZE_STATIC_PROPERTY(IApplication, WindowSize, SetWindowSize, GetWindowSize);
-// 		INITIALIZE_STATIC_PROPERTY(IApplication, WindowContentSize, SetContentSize, GetContentSize);
-// 		INITIALIZE_STATIC_PROPERTY(IApplication, WindowPosition, SetWindowPosition, GetWindowPosition);
-// 		INITIALIZE_STATIC_PROPERTY(IApplication, WindowCaption, SetWindowCaption, GetWindowCaption);
-// 	}
 
 	BaseApplication* BaseApplication::mApplication = nullptr;
 }

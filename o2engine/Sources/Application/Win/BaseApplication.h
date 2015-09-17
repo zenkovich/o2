@@ -10,8 +10,6 @@ namespace o2
 	// ---------------------------------- 
 	class BaseApplication: public IApplication
 	{
-		friend class Render;
-
 	public:
 		// Default constructor. */
 		BaseApplication();
@@ -90,5 +88,7 @@ namespace o2
 
 		// Window proc function
 		static LRESULT WndProc(HWND wnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+		friend class Render;
 	};
 }

@@ -44,6 +44,9 @@ namespace o2
 
 	void Transform::SetPosition(const Vec2F& position)
 	{
+		if (mPosition == position)
+			return;
+
 		mPosition = position;
 		UpdateTransform();
 	}
@@ -55,6 +58,9 @@ namespace o2
 
 	void Transform::SetSize(const Vec2F& size)
 	{
+		if (mSize == size)
+			return;
+
 		mSize = size;
 		UpdateTransform();
 	}
@@ -66,6 +72,9 @@ namespace o2
 
 	void Transform::SetPivot(const Vec2F& pivot)
 	{
+		if (mPivot == pivot)
+			return;
+
 		mPivot = pivot;
 		UpdateTransform();
 	}
@@ -87,8 +96,7 @@ namespace o2
 
 	void Transform::SetSizePivot(const Vec2F& relPivot)
 	{
-		mPivot = relPivot/mSize;
-		UpdateTransform();
+		SetPivot(relPivot/mSize);
 	}
 
 	Vec2F Transform::GetSizePivot() const
@@ -106,6 +114,7 @@ namespace o2
 		Vec2F yv = y*mSize.y*mScale.y;
 
 		mPosition = rect.LeftBottom() + xv*mPivot.x + yv*mPivot.y;
+
 		UpdateTransform();
 	}
 
@@ -116,6 +125,9 @@ namespace o2
 
 	void Transform::SetScale(const Vec2F& scale)
 	{
+		if (mScale == scale)
+			return;
+
 		mScale = scale;
 		UpdateTransform();
 	}
@@ -127,6 +139,9 @@ namespace o2
 
 	void Transform::SetAngle(float rad)
 	{
+		if (Math::Equals(mAngle, rad))
+			return;
+
 		mAngle = rad;
 		UpdateTransform();
 	}
@@ -138,6 +153,9 @@ namespace o2
 
 	void Transform::SetShear(float shear)
 	{
+		if (Math::Equals(mShear, shear))
+			return;
+
 		mShear = shear;
 		UpdateTransform();
 	}
@@ -300,21 +318,21 @@ namespace o2
 
 	void Transform::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(Transform, Position, SetPosition, GetPosition);
-		INITIALIZE_PROPERTY(Transform, Size, SetSize, GetSize);
-		INITIALIZE_PROPERTY(Transform, Scale, SetScale, GetScale);
-		INITIALIZE_PROPERTY(Transform, Pivot, SetPivot, GetPivot);
-		INITIALIZE_PROPERTY(Transform, WorldPivot, SetWorldPivot, GetWorldPivot);
-		INITIALIZE_PROPERTY(Transform, SzPivot, SetSizePivot, GetSizePivot);
-		INITIALIZE_PROPERTY(Transform, Rect, SetRect, GetRect);
-		INITIALIZE_PROPERTY(Transform, Angle, SetAngle, GetAngle);
-		INITIALIZE_PROPERTY(Transform, Shear, SetShear, GetShear);
-		INITIALIZE_PROPERTY(Transform, ResBasis, SetBasis, GetBasis);
+		INITIALIZE_PROPERTY(Transform, position, SetPosition, GetPosition);
+		INITIALIZE_PROPERTY(Transform, size, SetSize, GetSize);
+		INITIALIZE_PROPERTY(Transform, scale, SetScale, GetScale);
+		INITIALIZE_PROPERTY(Transform, pivot, SetPivot, GetPivot);
+		INITIALIZE_PROPERTY(Transform, worldPivot, SetWorldPivot, GetWorldPivot);
+		INITIALIZE_PROPERTY(Transform, szPivot, SetSizePivot, GetSizePivot);
+		INITIALIZE_PROPERTY(Transform, rect, SetRect, GetRect);
+		INITIALIZE_PROPERTY(Transform, angle, SetAngle, GetAngle);
+		INITIALIZE_PROPERTY(Transform, shear, SetShear, GetShear);
+		INITIALIZE_PROPERTY(Transform, resBasis, SetBasis, GetBasis);
 		INITIALIZE_PROPERTY(Transform, AABB, SetAxisAlignedRect, GetAxisAlignedRect);
-		INITIALIZE_PROPERTY(Transform, Right, SetRight, GetRight);
-		INITIALIZE_PROPERTY(Transform, Left, SetLeft, GetLeft);
-		INITIALIZE_PROPERTY(Transform, Up, SetUp, GetUp);
-		INITIALIZE_PROPERTY(Transform, Down, SetDown, GetDown);
-		INITIALIZE_SETTER(Transform, LookAtPoint, LookAt);
+		INITIALIZE_PROPERTY(Transform, right, SetRight, GetRight);
+		INITIALIZE_PROPERTY(Transform, left, SetLeft, GetLeft);
+		INITIALIZE_PROPERTY(Transform, up, SetUp, GetUp);
+		INITIALIZE_PROPERTY(Transform, down, SetDown, GetDown);
+		INITIALIZE_SETTER(Transform, lookAtPoint, LookAt);
 	}
 }

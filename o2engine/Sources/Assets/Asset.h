@@ -12,47 +12,14 @@ namespace o2
 	// ---------------------
 	class Asset: public ISerializable
 	{
-		friend class AssetsBuilder;
+	public:
+		class IMetaInfo;
 
 	public:
-		// --------------------------------------
-		// Basic asset meta information interface
-		// --------------------------------------
-		class IMetaInfo: public ISerializable
-		{
-			friend class Asset;
-
-			AssetId mId; // Id of assets
-
-		public:
-			// Default constructor
-			IMetaInfo();
-
-			// Virtual destructor
-			virtual ~IMetaInfo();
-
-			// Returns asset type id
-			virtual Type::Id GetAssetType() const;
-
-			// Returns true if other meta is equal to this
-			virtual bool IsEqual(Ptr<IMetaInfo> other) const;
-
-			// Returns asset id
-			AssetId ID() const;
-
-			SERIALIZABLE_IMPL(IMetaInfo);
-
-			IOBJECT(IMetaInfo)
-			{
-				SRLZ_FIELD(mId);
-			}
-		};
-
-	public:
-		Property<String>       Path;     // Asset path property
-		Getter<String>         FullPath; // Full asset path getter (from binary path)
-		Getter<AssetId>        Id;       // Asset id getter
-		Getter<Ptr<IMetaInfo>> Meta;     // Asset meta information pointer getter
+		Property<String>       path;     // Asset path property
+		Getter<String>         fullPath; // Full asset path getter (from binary path)
+		Getter<AssetId>        id;       // Asset id getter
+		Getter<Ptr<IMetaInfo>> meta;     // Asset meta information pointer getter
 
 		// Default constructor
 		Asset();
@@ -119,6 +86,40 @@ namespace o2
 			FIELD(mMeta);
 		}
 
+	public:
+		// --------------------------------------
+		// Basic asset meta information interface
+		// --------------------------------------
+		class IMetaInfo: public ISerializable
+		{
+			friend class Asset;
+
+			AssetId mId; // Id of assets
+
+		public:
+			// Default constructor
+			IMetaInfo();
+
+			// Virtual destructor
+			virtual ~IMetaInfo();
+
+			// Returns asset type id
+			virtual Type::Id GetAssetType() const;
+
+			// Returns true if other meta is equal to this
+			virtual bool IsEqual(Ptr<IMetaInfo> other) const;
+
+			// Returns asset id
+			AssetId ID() const;
+
+			SERIALIZABLE_IMPL(IMetaInfo);
+
+			IOBJECT(IMetaInfo)
+			{
+				SRLZ_FIELD(mId);
+			}
+		};
+
 	protected:
 		String         mPath; // Asset path
 		Ptr<IMetaInfo> mMeta; // Asset meta information
@@ -147,5 +148,7 @@ namespace o2
 
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class AssetsBuilder;
 	};
 }

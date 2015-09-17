@@ -5,7 +5,7 @@
 #include "Utils/Bitmap.h"
 #include "Utils/Log/LogStream.h"
 
-#undef LoadBitmap
+//#undef LoadBitmap
 
 namespace o2
 {
@@ -127,6 +127,11 @@ namespace o2
 		return mAtlasRect;
 	}
 
+	TextureRef ImageAsset::GetAtlasTextureRef() const
+	{
+		return AtlasAsset::GetPageTextureRef(GetAtlasId(), GetAtlasPage());
+	}
+
 	Ptr<ImageAsset::MetaInfo> ImageAsset::GetMeta() const
 	{
 		return mMeta.Cast<MetaInfo>();
@@ -158,12 +163,12 @@ namespace o2
 
 	void ImageAsset::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(ImageAsset, Data, SetBitmap, GetBitmap);
-		INITIALIZE_PROPERTY(ImageAsset, AtlasId, SetAtlasId, GetAtlasId);
-		INITIALIZE_PROPERTY(ImageAsset, Atlas, SetAtlas, GetAtlas);
-		INITIALIZE_GETTER(ImageAsset, AtlasPage, GetAtlasPage);
-		INITIALIZE_GETTER(ImageAsset, AtlasRect, GetAtlasRect);
-		INITIALIZE_GETTER(ImageAsset, Meta, GetMeta);
+		INITIALIZE_PROPERTY(ImageAsset, bitmap, SetBitmap, GetBitmap);
+		INITIALIZE_PROPERTY(ImageAsset, atlasId, SetAtlasId, GetAtlasId);
+		INITIALIZE_PROPERTY(ImageAsset, atlas, SetAtlas, GetAtlas);
+		INITIALIZE_GETTER(ImageAsset, atlasPage, GetAtlasPage);
+		INITIALIZE_GETTER(ImageAsset, atlasRect, GetAtlasRect);
+		INITIALIZE_GETTER(ImageAsset, meta, GetMeta);
 	}
 
 }

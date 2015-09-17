@@ -1,75 +1,41 @@
 #pragma once
 
+#include "Utils/CommonTypes.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/Math/Vector2.h"
+#include "Utils/Property.h"
 #include "Utils/Singleton.h"
-
-namespace o2
-{
-	// Keyboard key
-	typedef int KeyboardKey;
 
 // Input access macros
 #define o2Input Input::Instance()
 
+namespace o2
+{
 	// -------------------------------------------------------------------------
 	// Input message. Containing pressed, down, released keys, cursors positions
 	// -------------------------------------------------------------------------
 	class Input: public Singleton<Input>
 	{
-		friend class BaseApplication;
-		friend class IApplication;
-
 	public:
-		// -----------------
-		// Cursor definition
-		// -----------------
-		struct Cursor
-		{
-			Vec2F mPosition;    // Current cursor position, in pixels, from left top corner 
-			Vec2F mDelta;       // Cursor moving delta between frames
-			int   mId;          // Cursor id
-			float mPressedTime; // Time until key is pressed in seconds
+		struct Cursor;
+		struct Key;
 
-		public:
-			// Constructor
-			Cursor(const Vec2F& position = Vec2F(), int id = 0);
-
-			// Equals operator
-			bool operator==(const Cursor& other);
-		};
 		typedef Vector<Cursor> CursorsVec;
-
-		// ---------------------
-		// Key with pressed time
-		// ---------------------
-		struct Key
-		{
-			KeyboardKey mKey;         // Key id
-			float       mPressedTime; // Key pressing time
-
-		public:
-			// Constructor
-			Key(KeyboardKey key = 0);
-
-			// Equals operator
-			bool operator==(const Key& other);
-		};
-
 		typedef Vector<Key> KeysVec;
 
-	protected:
-		KeysVec    mPressedKeys;     // Pressed keys at current frame
-		KeysVec    mDownKeys;        // Held down at current frame keys
-		KeysVec    mReleasedKeys;    // Released at current frame keys
-
-		CursorsVec mCursors;         // Cursors. First - main cursor
-		CursorsVec mReleasedCursors; // Released cursors. First - main cursor
-		Vec2F      mMainCursorPos;   // Main cursor position
-		Vec2F      mMainCursorDelta; // Main cursor delta
-		float      mMouseWheelDelta; // Mouse wheel delta at current frame
-
 	public:
+		Getter<bool>  cursorPressed;      // Is cursor pressed at current frame getter
+		Getter<bool>  cursorDown;         // Is cursor down at current frame getter
+		Getter<bool>  cursorReleased;     // Is cursor released at current frame getter
+		Getter<bool>  altCursorPressed;   // Is alt cursor pressed at current frame getter (right mouse button)
+		Getter<bool>  altCursorDown;      // Is alt cursor down at current frame getter (right mouse button)
+		Getter<bool>  altCursorReleased;  // Is alt cursor released at current frame getter (right mouse button)
+		Getter<bool>  alt2CursorPressed;  // Is alt2 cursor pressed at current frame getter (middle mouse button)
+		Getter<bool>  alt2CursorDown;	  // Is alt2 cursor down at current frame getter (middle mouse button)
+		Getter<bool>  alt2CursorReleased; // Is alt2 cursor released at current frame getter (middle mouse button)
+		Getter<Vec2F> cursorPos;          // Cursor position getter
+		Getter<Vec2F> cursorDelta;        // Cursor position delta getter
+
 		// Default constructor
 		Input();
 
@@ -145,6 +111,52 @@ namespace o2
 		// Returns pressed keys
 		KeysVec const& GetReleasedKeys() const;
 
+	public:
+		// -----------------
+		// Cursor definition
+		// -----------------
+		struct Cursor
+		{
+			Vec2F mPosition;    // Current cursor position, in pixels, from left top corner 
+			Vec2F mDelta;       // Cursor moving delta between frames
+			int   mId;          // Cursor id
+			float mPressedTime; // Time until key is pressed in seconds
+
+		public:
+			// Constructor
+			Cursor(const Vec2F& position = Vec2F(), int id = 0);
+
+			// Equals operator
+			bool operator==(const Cursor& other);
+		};
+
+		// ---------------------
+		// Key with pressed time
+		// ---------------------
+		struct Key
+		{
+			KeyboardKey mKey;         // Key id
+			float       mPressedTime; // Key pressing time
+
+		public:
+			// Constructor
+			Key(KeyboardKey key = 0);
+
+			// Equals operator
+			bool operator==(const Key& other);
+		};
+
+	protected:
+		KeysVec    mPressedKeys;         // Pressed keys at current frame
+		KeysVec    mDownKeys;            // Held down at current frame keys
+		KeysVec    mReleasedKeys;        // Released at current frame keys
+
+		CursorsVec mCursors;             // Cursors. First - main cursor
+		CursorsVec mReleasedCursors;     // Released cursors. First - main cursor
+		Vec2F      mMainCursorPos;       // Main cursor position
+		Vec2F      mMainCursorDelta;     // Main cursor delta
+		float      mMouseWheelDelta = 0; // Mouse wheel delta at current frame
+
 	protected:
 		// Call it when key pressed
 		void KeyPressed(KeyboardKey key);
@@ -178,5 +190,26 @@ namespace o2
 
 		// Call it after frame update
 		void Update(float dt);
+
+		// Returns true, when cursor pressed at current frame
+		bool IsMainCursorPressed();
+
+		// Returns true, when cursor down at current frame
+		bool IsMainCursorDown();
+
+		// Returns true, when cursor released at current frame
+		bool IsMainCursorReleased();
+
+		// Returns main cursor position
+		Vec2F GetMainCursorPos();
+
+		// Returns main cursor delta
+		Vec2F GetMainCursorDelta();
+
+		// Initializes properties
+		void InitializeProperties();
+
+		friend class BaseApplication;
+		friend class IApplication;
 	};
 }
