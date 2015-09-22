@@ -5,88 +5,6 @@
 
 void TestApplication::OnStarted()
 {
-	FT_Library library;
-	FT_Error error = FT_Init_FreeType(&library);
-	if (error)
-	{
-		printf("FT Error: %i", error);
-	}
-
-	FT_Face face;
-	error = FT_New_Face(library, "C:\\Windows\\Fonts\\Arial.ttf", 0, &face);
-	if (error == FT_Err_Unknown_File_Format)
-	{
-		printf("FT unknown format");
-	}
-	else if (error)
-	{
-		printf("FT error %i", error);
-	}
-
-	error = FT_Set_Char_Size(
-		face,    /* handle to face object           */
-		0,       /* char_width in 1/64th of points  */
-		640*64,   /* char_height in 1/64th of points */
-		300,     /* horizontal device resolution    */
-		300);   /* vertical device resolution      */
-
-	if (error)
-	{
-		printf("FT error %i", error);
-	}
-
-	error = FT_Set_Pixel_Sizes(
-		face,   /* handle to face object */
-		0,      /* pixel_width           */
-		66);   /* pixel_height          */
-
-	if (error)
-	{
-		printf("FT error %i", error);
-	}
-
-	auto glyph_index = FT_Get_Char_Index(face, '4');
-
-	error = FT_Load_Glyph(
-		face,          /* handle to face object */
-		glyph_index,   /* glyph index           */
-		FT_LOAD_DEFAULT);  /* load flags, see below */
-
-	if (error)
-	{
-		printf("FT error %i", error);
-	}
-
-	error = FT_Render_Glyph(face->glyph,   /* glyph slot  */
-							FT_RENDER_MODE_NORMAL); /* render mode */
-
-	if (error)
-	{
-		printf("FT error %i", error);
-	}
-
-	Bitmap bt(Bitmap::Format::R8G8B8A8, Vec2F(100, 100));
-	int ps = 4;
-	for (int i = 0; i < face->glyph->bitmap.width; i++)
-	{
-		for (int j = 0; j < face->glyph->bitmap_top; j++)
-		{
-			Color4 c(255, 255, 255, face->glyph->bitmap.buffer[j*face->glyph->bitmap.width + i]);
-			auto dc = c.ABGR();
-			memcpy(&bt.GetData()[((100-j-30)*bt.GetSize().x + i + 30)*ps], &dc, ps);
-		}
-	}
-
-	bt.Save("glyph.png", Bitmap::ImageType::Png);
-
-	mSprite3.LoadFromBitmap(&bt);
-
-	FolderAsset folder("Images");
-
-	ImageAsset image("Images/beam3.png");
-
-	AtlasAsset atlas("BasicAtlas.atlas");
-
 	mTexture = TextureRef(o2Render.GetResolution(), Texture::Format::R8G8B8A8, Texture::Usage::RenderTarget);
 
 	mSprite2.texture = mTexture;
@@ -98,13 +16,22 @@ void TestApplication::OnStarted()
 
 	mBasisTest = Basis::Build(Vec2F(), Vec2F(100, 100), 0.0f, Math::Cos(Math::Deg2rad(45.0f)));
 
-	mFont.CreateFromBMFont(o2Assets.GetDataPath() + "myriad.xml");
-	mText = mnew Text(&mFont);
+	mFont.Load(o2Assets.GetDataPath() + "myriad.xml");
+	mVFont.Load("C:\\Windows\\Fonts\\Arial.ttf");
+	mVFont.AddEffect(mnew FontGradientEffect());
+	mVFont.AddEffect(mnew FontStrokeEffect());
+	mVFont.AddEffect(mnew FontShadowEffect());
+
+	mText = mnew Text(&mVFont);
 	mText->ctext = "Heello' I'm text\nmulti line";
 
 	mSprite.LoadFromImage("ui_skin/hint_bk.png");
 	mSprite.mode = Sprite::Mode::Sliced;
 	mSprite.sliceBorder = RectI(20, 20, 20, 20);
+
+	Bitmap b(o2Assets.GetAssetsPath() + "ui_skin/hint_bk.png");
+	b.Outline(5, Color4::Red());
+	b.Save("blur.png", Bitmap::ImageType::Png);
 }
 
 void TestApplication::OnUpdate(float dt)
@@ -112,7 +39,10 @@ void TestApplication::OnUpdate(float dt)
 	o2Application.windowCaption = String::Format("FPS %f", o2Time.GetFPS());
 
 	if (o2Input.IsKeyPressed('Z'))
+	{
 		mSprite.mode = Sprite::Mode::Default;
+		mText->ctext += "ghghghg";
+	}
 
 	if (o2Input.IsKeyPressed('X'))
 		mSprite.mode = Sprite::Mode::Sliced;
@@ -138,7 +68,6 @@ void TestApplication::OnUpdate(float dt)
 	if (o2Input.IsKeyDown('K'))
 	{
 		mSprite.fill += o2Input.cursorDelta->x/100.0f;
-		o2Debug.Log("FILL %f", (float)mSprite.fill);
 	}
 
 	Ptr<IRectDrawable> cd = &mSprite;
@@ -179,6 +108,8 @@ void TestApplication::OnUpdate(float dt)
 
 void TestApplication::OnDraw()
 {
+	//mText->ctext = (String)o2Time.GetCurrentFrame();
+
 	o2Render.Clear(Color4::Gray());
 	mSprite.Draw();
 	o2Render.DrawLine(Vec2F(), Vec2F((float)o2Render.resolution->x, 0.0f), Color4::Red());
@@ -187,7 +118,6 @@ void TestApplication::OnDraw()
 	o2Render.camera = mCamera;
 	o2Render.renderTexture = mTexture;
 	o2Render.Clear(Color4::Gray());
-	mSprite.Draw();
 	mSprite3.Draw();
 	mText->Draw();
 	o2Render.DrawLine(Vec2F(), Vec2F((float)o2Render.resolution->x, 0.0f), Color4::Red());
@@ -197,6 +127,7 @@ void TestApplication::OnDraw()
 	//o2Render.CurrentCamera = Camera::Default();
 	mSprite2.Draw();
 	mSprite3.Draw();
+	mSprite.Draw();
 
 	o2Render.DrawBasis(mCamera.GetBasis());
 	mText->Draw();

@@ -349,13 +349,13 @@ namespace o2
 		if (count == 0)
 			return _type();
 
-		_type& res = Get(0);
-		_sel_type minSel = selector(res);
+		_type* res = &Get(0);
+		_sel_type minSel = selector(*res);
 
 		for (int i = 1; i < count; i++)
 		{
-			_type& itVal = Get(i);
-			_sel_type itSel = selector(itVal);
+			_type* itVal = &Get(i);
+			_sel_type itSel = selector(*itVal);
 
 			if (itSel > minSel)
 			{
@@ -364,7 +364,7 @@ namespace o2
 			}
 		}
 
-		return res;
+		return *res;
 	}
 
 	template<typename _type>

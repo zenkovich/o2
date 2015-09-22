@@ -51,14 +51,17 @@
 #include "Assets/FolderAsset.h"
 #include "Assets/ImageAsset.h"
 
-#include "Render/Render.h"
+#include "Render/BitmapFont.h"
 #include "Render/Camera.h"
-#include "Render/Mesh.h"
-#include "Render/Sprite.h"
-#include "Render/TextureRef.h"
-#include "Render/Texture.h"
 #include "Render/Font.h"
+#include "Render/Mesh.h"
+#include "Render/Render.h"
+#include "Render/Sprite.h"
 #include "Render/Text.h"
+#include "Render/Texture.h"
+#include "Render/TextureRef.h"
+#include "Render/VectorFont.h"
+#include "Render/VectorFontEffects.h"
 
 #define INITIALIZE_O2                                                              					  \
 o2::o2StackWalker* o2::o2StackWalker::mInstance = new o2StackWalker();								  \

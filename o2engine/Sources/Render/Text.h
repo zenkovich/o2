@@ -21,18 +21,20 @@ namespace o2
 		enum class HorAlign { Left, Middle, Right, Both };
 		
 	public:
-		Property<Ptr<Font>> font;               // Font pointer property
-		Property<WString>   text;               // Text property, wstring
-		Property<String>    ctext;              // Text property, string
-		Property<VerAlign>  verAlign;           // vertical align property
-		Property<HorAlign>  horAlign;           // Horizontal align property
-		Property<bool>      wordWrap;           // Words wrapping flag property
-		Property<float>     charactersHeight;   // Characters height property, pixels
-		Property<float>     charactersDistCoef; // Characters distance coef, 1 is standard
-		Property<float>     linesDistCoef;      // Lines distance coef, 1 is standard
+		Property<Ptr<Font>> font;            // Font pointer property
+		Property<WString>   text;            // Text property, wstring
+		Property<String>    ctext;           // Text property, string
+		Property<VerAlign>  verAlign;        // vertical align property
+		Property<HorAlign>  horAlign;        // Horizontal align property
+		Property<bool>      wordWrap;        // Words wrapping flag property
+		Property<float>     symbolsDistCoef; // Characters distance coef, 1 is standard
+		Property<float>     linesDistance;   // Lines distance coef, 1 is standard
+
+		// Default constructor
+		Text();
 
 		// Constructor
-		Text(Font* font);
+		Text(Ptr<Font> font);
 
 		// Copy-constructor
 		Text(const Text& text);
@@ -64,41 +66,35 @@ namespace o2
 		// Returns text as string
 		String GetCText() const;
 
-		// Sets characters height in pixels
-		void SetCharactersHeight(const float& height);
-
-		// Returns characters height in pixels
-		float GetCharactersHeight() const;
-
 		// Sets horizontal align
-		void SetHorAlign(const HorAlign& align);
+		void SetHorAlign(HorAlign align);
 
 		// Returns horizontal align
 		HorAlign GetHorAlign() const;
 
 		// Sets vertical align
-		void SetVerAlign(const VerAlign& align);
+		void SetVerAlign(VerAlign align);
 
 		// returns vertical align
 		VerAlign GetVerAlign() const;
 
 		// Sets word wrapping
-		void SetWordWrap(const bool& flag);
+		void SetWordWrap(bool flag);
 
 		// Returns word wrapping
 		bool GetWordWrap() const;
 
 		// Sets characters distance coefficient
-		void SetCharactersDistCoef(const float& coef = 1);
+		void SetSymbolsDistCoef(float coef = 1);
 
 		// Returns characters distance coef
-		float GetCharactersDistCoef() const;
+		float GetSymbolsDistCoef() const;
 
 		// Sets lines distance coefficient
-		void SetLinesDistCoef(const float& coef = 1);
+		void SetLinesDistance(float distance);
 
 		// Returns lines distance coefficient
-		float GetLinesDistCoef() const;
+		float GetLinesDistance() const;
 
 		// Returns symbol set structure pointer
 		SymbolsSet& GetSymbolsSet();
@@ -165,22 +161,22 @@ namespace o2
 			typedef Vector<LineDef> LineDefsVec;
 
 		public:
-			Ptr<Font>   mFont;               // Font
-			WString     mText;               // Text string
-			Vec2F       mPosition;           // Position, in pixels
-			Vec2F       mAreaSize;           // Area size, in pixels
-			Vec2F       mRealSize;           // Real text size
-			HorAlign    mHorAlign;           // Horizontal align
-			VerAlign    mVerAlign;           // Vertical align
-			bool        mWordWrap;           // True, when words wrapping
-			float       mCharactersDistCoef; // Characters distance coefficient, 1 is standard
-			float       mLinesDistCoef;      // Lines distance coefficient, 1 is standard
-			LineDefsVec mLineDefs;           // Lines definitions
+			Ptr<Font>   mFont;            // Font
+			WString     mText;            // Text string
+			Vec2F       mPosition;        // Position, in pixels
+			Vec2F       mAreaSize;        // Area size, in pixels
+			Vec2F       mRealSize;        // Real text size
+			HorAlign    mHorAlign;        // Horizontal align
+			VerAlign    mVerAlign;        // Vertical align
+			bool        mWordWrap;        // True, when words wrapping
+			float       mSymbolsDistCoef; // Characters distance coefficient, 1 is standard
+			float       mLinesDistance;   // Lines distance coefficient, 1 is standard
+			LineDefsVec mLineDefs;        // Lines definitions
 
 		public:
 			// Calculating characters layout by parameters
 			void Initialize(Ptr<Font> font, const WString& text, const Vec2F& position, const Vec2F& areaSize, HorAlign horAlign,
-							VerAlign verAlign, bool wordWrap, float charsDistCoef, float linesDistCoef);
+							VerAlign verAlign, bool wordWrap, float charsDistCoef, float linesDistance);
 		};
 
 	protected:
@@ -188,18 +184,18 @@ namespace o2
 
 		const UInt mMeshMaxPolyCount = 4096;
 
-		WString    mText;               // Wide char string, containing rendering text
-		Ptr<Font>  mFont;               // Using font
-		float      mCharactersDistCoef; // Characters distance coef, 1 is standard
-		float      mLinesDistCoef;      // Lines distance coef, 1 is standard
-		VerAlign   mVerAlign;           // Vertical align
-		HorAlign   mHorAlign;           // Horizontal align
-		bool       mWordWrap;           // True, when words wrapping
+		WString    mText;            // Wide char string, containing rendering text
+		Ptr<Font>  mFont;            // Using font
+		float      mSymbolsDistCoef; // Characters distance coef, 1 is standard
+		float      mLinesDistance;   // Lines distance coef, 1 is standard
+		VerAlign   mVerAlign;        // Vertical align
+		HorAlign   mHorAlign;        // Horizontal align
+		bool       mWordWrap;        // True, when words wrapping
 
-		MeshesVec  mMeshes;             // Meshes vector
-		Basis      mLastTransform;      // Last mesh update transformation
+		MeshesVec  mMeshes;          // Meshes vector
+		Basis      mLastTransform;   // Last mesh update transformation
 
-		SymbolsSet mSymbolsSet;         // Symbols set definition
+		SymbolsSet mSymbolsSet;      // Symbols set definition
 
 	protected:
 		// Initializing properties
@@ -214,6 +210,7 @@ namespace o2
 		// Preparing meshes for characters count
 		void PrepareMesh(int charactersCount);
 
+		// Calculates and returns text basis
 		Basis CalculateTextBasis() const;
 
 		// Calls when basis was changed

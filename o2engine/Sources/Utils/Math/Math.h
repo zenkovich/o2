@@ -7,6 +7,26 @@ namespace o2
 {
 	namespace Math
 	{
+		inline float Floor(float value)
+		{
+			return floorf(value);
+		}
+
+		inline float Ceil(float value)
+		{
+			return ceilf(value);
+		}
+
+		inline int FloorToInt(float value)
+		{
+			return (int)floorf(value);
+		}
+
+		inline int CeilToInt(float value)
+		{
+			return (int)ceilf(value);
+		}
+
 		template<typename T>
 		inline T Sign(const T& value)
 		{
@@ -118,7 +138,8 @@ namespace o2
 			return sqrtf(value);
 		}
 
-		inline float Sqr(float value)
+		template<typename T>
+		inline T Sqr(T value)
 		{
 			return value*value;
 		}

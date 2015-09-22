@@ -424,9 +424,6 @@
     <ClInclude Include="..\Sources\Render\DrawPolyLine.h">
       <Filter>Sources\Render</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Render\NineSliceSprite.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Render\Font.h">
       <Filter>Sources\Render</Filter>
     </ClInclude>
@@ -444,6 +441,15 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\TimeStamp.h">
       <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\BitmapFont.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\VectorFont.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\VectorFontEffects.h">
+      <Filter>Sources\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -733,6 +739,15 @@
       <Filter>Sources\Render</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Render\Text.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\BitmapFont.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\VectorFont.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\VectorFontEffects.cpp">
       <Filter>Sources\Render</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,7 +8,9 @@
 
 namespace o2
 {
+	// ------------------------------------------------------
 	// Image. Containing formatted pixel data, size, filename
+	// ------------------------------------------------------
 	class Bitmap
 	{
 	public:
@@ -69,10 +71,26 @@ namespace o2
 		const String& GetFilename() const;
 
 		// Copy image to position
-		void CopyImage(Ptr<Bitmap> img, const Vec2I& position = Vec2I());
+		void CopyImage(Ptr<Bitmap> img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
+
+		// Blends images by alpha
+		void BlendImage(Ptr<Bitmap> img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
+
+		// Sets images pixels colors
+		void Colorise(const Color4& color);
+
+		// Sets image pixels by gradient
+		void GradientByAlpha(const Color4& color1, const Color4& color4, float angle = 0, float size = 0, 
+							 Vec2F origin = Vec2F());
 
 		// Fill image with color
 		void Fill(const Color4& color);
+
+		// Apply blur effect
+		void Blur(float radius);
+
+		// Apply outline effect
+		void Outline(float radius, const Color4& color, int threshold = 100);
 
 	protected:
 		Format mFormat;   // Image format

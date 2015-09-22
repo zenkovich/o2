@@ -119,8 +119,27 @@ namespace o2
 		mLog->Out("GL_RENDERER: %s", (String)(char*)glGetString(GL_RENDERER));
 		mLog->Out("GL_VERSION: %s", (String)(char*)glGetString(GL_VERSION));
 
+		HDC dc = GetDC(0);
+		mDPI.x = GetDeviceCaps(dc, LOGPIXELSX);
+		mDPI.y = GetDeviceCaps(dc, LOGPIXELSY);
+		ReleaseDC(0, dc);
+
+		InitializeFreeType();
+
 		mCurrentRenderTarget = TextureRef();
 		mReady = true;
+	}
+
+	void Render::InitializeFreeType()
+	{
+		FT_Error error = FT_Init_FreeType(&mFreeTypeLib);
+		if (error)
+			mLog->Out("Failed to initialize FreeType: %i", error);
+	}
+
+	void Render::DeinitializeFreeType()
+	{
+		FT_Done_FreeType(mFreeTypeLib);
 	}
 
 	Render::~Render()
@@ -145,6 +164,8 @@ namespace o2
 
 			mGLContext = NULL;
 		}
+
+		DeinitializeFreeType();
 
 		mReady = false;
 	}
@@ -236,6 +257,11 @@ namespace o2
 	Vec2I Render::GetResolution() const
 	{
 		return mResolution;
+	}
+
+	Vec2I Render::GetDPI() const
+	{
+		return mDPI;
 	}
 
 	void Render::SetCamera(const Camera& camera)
@@ -537,7 +563,10 @@ namespace o2
 		for (UInt i = 0; i < mesh->mPolyCount*6; i++)
 			vertices[i].color = dcolor;
 
-		return DrawLines(vertices, mesh->mPolyCount*3);
+		bool res = DrawLines(vertices, mesh->mPolyCount*3);
+		delete[] vertices;
+
+		return res;
 	}
 
 	bool Render::DrawLines(Vertex2* verticies, int count)

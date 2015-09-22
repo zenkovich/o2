@@ -334,5 +334,11 @@ namespace o2
 		return Vec2I(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top);
 	}
 
+	Vec2I BaseApplication::GetScreenResolution() const
+	{
+		int hor = GetSystemMetrics(SM_CXSCREEN), ver = GetSystemMetrics(SM_CYSCREEN);
+		return Vec2I(hor, ver);
+	}
+
 	BaseApplication* BaseApplication::mApplication = nullptr;
 }

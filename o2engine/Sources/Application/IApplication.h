@@ -3,9 +3,9 @@
 #include "Utils/Delegates.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Memory/Ptr.h"
+#include "Utils/Property.h"
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
-#include "Utils/Property.h"
 
 namespace o2
 {
@@ -14,13 +14,13 @@ namespace o2
 	class Input;
 	class LogStream;
 	class ProjectConfig;
+	class Render;
 	class Time;
 	class Timer;
-	class Render;
 
-	/*************************************/
-	/* Basic application class interface */
-	/*************************************/
+	// ---------------------------------
+	// Basic application class interface
+	// ---------------------------------
 	class IApplication: public Singleton<IApplication>
 	{
 	public:
@@ -38,7 +38,7 @@ namespace o2
 		Property<Vec2I>  windowPosition;     // Window position on screen property
 		Property<String> windowCaption;      // Window caption property
 
-		// ctor
+		// Default constructor
 		IApplication();
 
 		// Destructor 
@@ -95,15 +95,18 @@ namespace o2
 		// Returns inside content size
 		virtual Vec2I GetContentSize() const;
 
+		// Returns device screen resolution
+		virtual Vec2I GetScreenResolution() const;
+
 	protected:
 		Ptr<Assets>        mAssets;        // Assets
 		Ptr<FileSystem>    mFileSystem;    // File system
 		Ptr<Input>         mInput;         // While application user input message
 		Ptr<LogStream>     mLog;           // Log stream with id "app", using only for application messages
 		Ptr<ProjectConfig> mProjectConfig; // Project config
-		Ptr<Time>     mTime;          // Time utilities
-		Ptr<Timer>         mTimer;         // Timer for detecting delta time for update
 		Ptr<Render>        mRender;        // Graphics render
+		Ptr<Time>          mTime;          // Time utilities
+		Ptr<Timer>         mTimer;         // Timer for detecting delta time for update
 
 	protected:
 		// Called on updating

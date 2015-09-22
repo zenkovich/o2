@@ -1,5 +1,8 @@
 #pragma once
 
+#include "ft2build.h"
+#include FT_FREETYPE_H
+
 #include "Render/TextureRef.h"
 #include "Utils/CommonTypes.h"
 #include "Utils/Containers/Vector.h"
@@ -17,6 +20,9 @@ namespace o2
 	// -----------------------------------------------------------
 	class Font
 	{
+	protected:
+		struct Character;
+
 	public:
 		// Default constructor
 		Font();
@@ -25,25 +31,18 @@ namespace o2
 		Font(const Font& font);
 
 		// Destructor
-		~Font();
-
-		// Create font from config file
-		void Create(const String& fontFile);
-
-		// Create font from BMFont config file
-		void CreateFromBMFont(const String& fontFile);
-
-		// Returns line height
-		float GetLineHeight() const;
+		virtual ~Font();
 
 		// Returns base height
-		float GetBase() const;
+		float GetHeight() const;
 
-		// Returns symbol advance
-		float GetSymbolAdvance(UInt16 id);
+		// Returns character constant reference by id
+		virtual const Character& GetCharacter(UInt16 id);
+
+		// Checks characters for pre loading
+		virtual void CheckCharacters(const WString& needChararacters);
 
 	protected:
-		enum { nMaxSymbolId = 0xffff };
 
 		// --------------------
 		// Character definition
@@ -54,21 +53,18 @@ namespace o2
 			Vec2F  mSize;    // Size of source rect
 			Vec2F  mOffset;  // Symbol offset
 			float  mAdvance; // Symbol advance
-			UInt16 mCharId;  // Character id
+			UInt16 mId;      // Character id
 
 			bool operator==(const Character& other) const;
 		};
+		typedef Vector<Character> CharactersVec;
 
 	protected:
-		String     mName;            // Font name
-		Character* mCharacters;      // Characters array
-		int        mCharactersCount; // Characters count in array
-		bool       mAllSymbolReturn; // True, when all symbols is new line symbols
-		float      mLineHeight;      // Line height, in pixels
-		float      mBase;            // Base, in pixels
-		UInt16*    mCharacterIds;    // Characters ids array
-		TextureRef mTexture;         // Texture
-		RectI      mTextureSrcRect;  // Texture source rectangle
+		CharactersVec mCharacters;      // Characters array
+		float         mBaseHeight;      // Base height, in pixels
+		TextureRef    mTexture;         // Texture
+		RectI         mTextureSrcRect;  // Texture source rectangle
+		bool          mReady;           // True when font is ready to use
 
 		friend class Text;
 	};

@@ -79,7 +79,7 @@ namespace o2
 			// Check equals operator
 			bool operator==(const QuadNode& other);
 		};
-		typedef Vector<QuadNode> NodesVec;
+		typedef Vector<Ptr<QuadNode>> NodesVec;
 
 		Pool<Rect> mRectsPool; // Rectangles pool
 		RectsVec   mRects;     // Rectangles
@@ -91,7 +91,10 @@ namespace o2
 		bool InsertRect(Rect& rt);
 
 		// Tries to insert rectangle in specified node
-		bool TryInsertRect(Rect& rt, QuadNode& node);
+		bool TryInsertRect(Rect& rt, Ptr<QuadNode> node);
+
+		// Tries to insert rectangle in specified node
+		bool TryInsertRectInChilds(Rect& rt, Ptr<QuadNode> node);
 
 		// Creates new page
 		void CreateNewPage();

@@ -14,6 +14,8 @@ namespace o2
 		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
+		for (int i = 0; i < 4; i++)
+			mCornersColors[0] = Color4::White();
 
 		UpdateMesh();
 		InitializeProperties();
@@ -23,6 +25,8 @@ namespace o2
 		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
+		for (int i = 0; i < 4; i++)
+			mCornersColors[0] = Color4::White();
 
 		LoadFromImage(image);
 		InitializeProperties();
@@ -32,6 +36,8 @@ namespace o2
 		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
+		for (int i = 0; i < 4; i++)
+			mCornersColors[0] = Color4::White();
 
 		LoadFromImage(imagePath);
 		InitializeProperties();
@@ -41,6 +47,8 @@ namespace o2
 		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
+		for (int i = 0; i < 4; i++)
+			mCornersColors[0] = Color4::White();
 
 		LoadFromImage(imageId);
 		InitializeProperties();
@@ -51,6 +59,8 @@ namespace o2
 		mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
+		for (int i = 0; i < 4; i++)
+			mCornersColors[0] = Color4::White();
 
 		UpdateMesh();
 		InitializeProperties();
@@ -60,6 +70,8 @@ namespace o2
 		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
+		for (int i = 0; i < 4; i++)
+			mCornersColors[0] = Color4::White();
 
 		LoadMonoColor(color);
 		InitializeProperties();
@@ -69,6 +81,8 @@ namespace o2
 		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
+		for (int i = 0; i < 4; i++)
+			mCornersColors[0] = Color4::White();
 
 		LoadFromBitmap(bitmap);
 		InitializeProperties();
@@ -461,15 +475,15 @@ namespace o2
 		mMesh->mVertices[6]  = Vertex2(o + r2 + t2, rcc[1], u2, v2);
 		mMesh->mVertices[7]  = Vertex2(o + r3 + t2, rcc[1], u3, v2);
 
-		mMesh->mVertices[8]  = Vertex2(o      + t1, rcc[4], u0, v1);
-		mMesh->mVertices[9]  = Vertex2(o + r1 + t1, rcc[4], u1, v1);
-		mMesh->mVertices[10] = Vertex2(o + r2 + t1, rcc[3], u2, v1);
-		mMesh->mVertices[11] = Vertex2(o + r3 + t1, rcc[3], u3, v1);
+		mMesh->mVertices[8]  = Vertex2(o      + t1, rcc[3], u0, v1);
+		mMesh->mVertices[9]  = Vertex2(o + r1 + t1, rcc[3], u1, v1);
+		mMesh->mVertices[10] = Vertex2(o + r2 + t1, rcc[2], u2, v1);
+		mMesh->mVertices[11] = Vertex2(o + r3 + t1, rcc[2], u3, v1);
 
-		mMesh->mVertices[12] = Vertex2(o + Vec2F(), rcc[4], u0, v0);
-		mMesh->mVertices[13] = Vertex2(o      + r1, rcc[4], u1, v0);
-		mMesh->mVertices[14] = Vertex2(o      + r2, rcc[3], u2, v0);
-		mMesh->mVertices[15] = Vertex2(o      + r3, rcc[3], u3, v0);
+		mMesh->mVertices[12] = Vertex2(o + Vec2F(), rcc[3], u0, v0);
+		mMesh->mVertices[13] = Vertex2(o      + r1, rcc[3], u1, v0);
+		mMesh->mVertices[14] = Vertex2(o      + r2, rcc[2], u2, v0);
+		mMesh->mVertices[15] = Vertex2(o      + r3, rcc[2], u3, v0);
 
 		memcpy(mMesh->mIndexes, indexes, sizeof(UInt16)*18*3);
 
@@ -756,7 +770,142 @@ namespace o2
 
 	void Sprite::BuildFill360CCWMesh()
 	{
+		float coef = Math::Clamp01(mFill);
+		float angle = 360.0f*coef;
 
+		Vec2F invTexSize(1.0f, 1.0f);
+		if (mMesh->mTexture)
+			invTexSize.Set(1.0f/mMesh->mTexture->GetSize().x, 1.0f/mMesh->mTexture->GetSize().y);
+
+		ULong cornerResColr[4];
+		for (int i = 0; i < 4; i++)
+			cornerResColr[i] = (mColor*mCornersColors[i]).ABGR();
+
+		float uLeft = mTextureSrcRect.left*invTexSize.x;
+		float uRight = mTextureSrcRect.right*invTexSize.x;
+
+		float vUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
+		float vDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
+
+		Vec2F zeroPos   = mTransform.offs + mTransform.xv*0.5f + mTransform.yv;
+		Vec2F centerPos = mTransform.offs + mTransform.xv*0.5f + mTransform.yv*0.5f;
+
+		ULong centerResColr = (mColor*((mCornersColors[0] + mCornersColors[1] + mCornersColors[2] + mCornersColors[3])*0.25f)).ABGR();
+		ULong zeroResColor = (mColor*((mCornersColors[0] + mCornersColors[1])*0.5f)).ABGR();
+		float uZero = (uLeft + uRight)*0.5f;
+		float uCenter = uZero;
+		float vCenter = (vUp + vDown)*0.5f;
+
+		Vec2F dir = Vec2F::Rotated(Math::Deg2rad(angle + 90.0f));
+		if (angle < 45.0f)
+		{
+			float dirCoef = 0.5f + dir.x/dir.y*0.5f;
+			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef + mTransform.yv;
+			ULong dirColor = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[1], dirCoef)).ABGR();
+			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
+
+			mMesh->mVertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->mVertices[1] = Vertex2(dirPoint, dirColor, uDir, vUp);
+			mMesh->mVertices[2] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+
+			static UInt16 indexes[] ={1, 0, 2};
+			memcpy(mMesh->mIndexes, indexes, sizeof(UInt16)*3);
+
+			mMesh->mVertexCount = 3;
+			mMesh->mPolyCount = 1;
+		}
+		else if (angle < 135.0f)
+		{
+			float dirCoef = 0.5f - dir.y/dir.x*0.5f;
+			Vec2F dirPoint = mTransform.offs + mTransform.yv*dirCoef;
+			ULong dirColor = (mColor*Math::Lerp(mCornersColors[2], mCornersColors[1], dirCoef)).ABGR();
+			float vDir = Math::Lerp(vDown, vUp, dirCoef);
+
+			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
+
+			mMesh->mVertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->mVertices[1] = Vertex2(cornerPos0, cornerResColr[0], uLeft, vUp);
+			mMesh->mVertices[2] = Vertex2(dirPoint, dirColor, uLeft, vDir);
+			mMesh->mVertices[3] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+
+			static UInt16 indexes[] ={1, 0, 3, 2, 1, 3};
+			memcpy(mMesh->mIndexes, indexes, sizeof(UInt16)*3*2);
+
+			mMesh->mVertexCount = 4;
+			mMesh->mPolyCount = 2;
+		}
+		else if (angle < 225.0f)
+		{
+			float dirCoef = 0.5f - dir.x/dir.y*0.5f;
+			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef;
+			ULong dirColor = (mColor*Math::Lerp(mCornersColors[3], mCornersColors[2], dirCoef)).ABGR();
+			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
+
+			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
+			Vec2F cornerPos3 = mTransform.offs;
+
+			mMesh->mVertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->mVertices[1] = Vertex2(cornerPos0, cornerResColr[0], uLeft, vUp);
+			mMesh->mVertices[2] = Vertex2(cornerPos3, cornerResColr[3], uLeft, vDown);
+			mMesh->mVertices[3] = Vertex2(dirPoint, dirColor, uDir, vDown);
+			mMesh->mVertices[4] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+
+			static UInt16 indexes[] ={1, 0, 4, 2, 1, 4, 3, 2, 4};
+			memcpy(mMesh->mIndexes, indexes, sizeof(UInt16)*3*3);
+
+			mMesh->mVertexCount = 5;
+			mMesh->mPolyCount = 3;
+		}
+		else if (angle < 315.0f)
+		{
+			float dirCoef = 0.5f + dir.y/dir.x*0.5f;
+			Vec2F dirPoint = mTransform.offs + mTransform.yv*dirCoef + mTransform.xv;
+			ULong dirColor = (mColor*Math::Lerp(mCornersColors[3], mCornersColors[0], dirCoef)).ABGR();
+			float vDir = Math::Lerp(vDown, vUp, dirCoef);
+
+			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
+			Vec2F cornerPos3 = mTransform.offs;
+			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
+
+			mMesh->mVertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->mVertices[1] = Vertex2(cornerPos0, cornerResColr[0], uLeft, vUp);
+			mMesh->mVertices[2] = Vertex2(cornerPos3, cornerResColr[3], uLeft, vDown);
+			mMesh->mVertices[3] = Vertex2(cornerPos2, cornerResColr[2], uRight, vDown);
+			mMesh->mVertices[4] = Vertex2(dirPoint, dirColor, uRight, vDir);
+			mMesh->mVertices[5] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+
+			static UInt16 indexes[] ={1, 0, 5, 2, 1, 5, 3, 2, 5, 4, 3, 5};
+			memcpy(mMesh->mIndexes, indexes, sizeof(UInt16)*3*4);
+
+			mMesh->mVertexCount = 6;
+			mMesh->mPolyCount = 4;
+		}
+		else
+		{
+			float dirCoef = 0.5f + dir.x/dir.y*0.5f;
+			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef + mTransform.yv;
+			ULong dirColor = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[1], dirCoef)).ABGR();
+			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
+
+			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
+			Vec2F cornerPos3 = mTransform.offs;
+			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
+			Vec2F cornerPos1 = mTransform.offs + mTransform.yv + mTransform.xv;
+
+			mMesh->mVertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->mVertices[1] = Vertex2(cornerPos0, cornerResColr[0], uLeft, vUp);
+			mMesh->mVertices[2] = Vertex2(cornerPos3, cornerResColr[3], uLeft, vDown);
+			mMesh->mVertices[3] = Vertex2(cornerPos2, cornerResColr[2], uRight, vDown);
+			mMesh->mVertices[4] = Vertex2(cornerPos1, cornerResColr[1], uRight, vUp);
+			mMesh->mVertices[5] = Vertex2(dirPoint, dirColor, uDir, vUp);
+			mMesh->mVertices[6] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+
+			static UInt16 indexes[] ={1, 0, 6, 2, 1, 6, 3, 2, 6, 4, 3, 6, 5, 4, 6};
+			memcpy(mMesh->mIndexes, indexes, sizeof(UInt16)*3*5);
+
+			mMesh->mVertexCount = 7;
+			mMesh->mPolyCount = 5;
+		}
 	}
 
 	void Sprite::InitializeProperties()

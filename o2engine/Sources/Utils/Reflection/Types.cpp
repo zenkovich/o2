@@ -12,6 +12,8 @@
 #include "Assets/FolderAsset.h"
 #include "Assets/ImageAsset.h"
 #include "Config/ProjectConfig.h"
+#include "Render/VectorFont.h"
+#include "Render/VectorFontEffects.h"
 
 namespace o2
 {
@@ -73,6 +75,11 @@ namespace o2
 		INIT_TYPE(ImageAssetConverter);
 		INIT_TYPE(AtlasAssetConverter);
 		INIT_TYPE(AtlasAssetConverter::Image);
+		INIT_TYPE(VectorFont::Effect);
+		INIT_TYPE(FontColorEffect);
+		INIT_TYPE(FontGradientEffect);
+		INIT_TYPE(FontStrokeEffect);
+		INIT_TYPE(FontShadowEffect);
 	}
 
 }

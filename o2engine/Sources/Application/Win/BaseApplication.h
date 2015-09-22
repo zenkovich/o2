@@ -59,6 +59,9 @@ namespace o2
 		// Returns inside content size
 		Vec2I GetContentSize() const;
 
+		// Returns device screen resolution
+		Vec2I GetScreenResolution() const;
+
 	protected:
 		HWND   mHWnd;            // Window handle
 		UInt   mWndStyle;        // Window styles data

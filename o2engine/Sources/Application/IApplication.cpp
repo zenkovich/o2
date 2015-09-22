@@ -138,6 +138,11 @@ namespace o2
 		return Vec2I();
 	}
 
+	Vec2I IApplication::GetScreenResolution() const
+	{
+		return GetContentSize();
+	}
+
 	void IApplication::SetContentSize(const Vec2I& size)
 	{}
 

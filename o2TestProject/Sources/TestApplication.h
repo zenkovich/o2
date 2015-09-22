@@ -24,6 +24,7 @@ protected:
 	Camera     mCamera;
 	Basis      mBasisTest;
 	Basis      mBasisTest2;
-	Font       mFont;
+	BitmapFont mFont;
+	VectorFont mVFont;
 	Ptr<Text>  mText;
 };

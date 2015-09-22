@@ -1,5 +1,8 @@
 #pragma once
 
+#include "ft2build.h"
+#include FT_FREETYPE_H
+
 #include "Render/Camera.h"
 #include "Render/TextureRef.h"
 #include "Render/Windows/RenderBase.h"
@@ -43,6 +46,9 @@ namespace o2
 
 		// Returns resolution of rendering frame
 		Vec2I GetResolution() const;
+
+		// Returns device's screen dpi
+		Vec2I GetDPI() const;
 
 		// Binding camera. NULL - standard camera
 		void SetCamera(const Camera& camera);
@@ -135,6 +141,7 @@ namespace o2
 
 		Camera         mCamera;                 // Camera transformation
 		Vec2I          mResolution;             // Current back buffer size
+		Vec2I          mDPI;                    // Current device screen DPI
 
 		bool           mRenderTargetsAvailable; // True, if render targets is available
 		Vec2I          mMaxTextureSize;         // Max texture size
@@ -147,6 +154,8 @@ namespace o2
 
 		TextureRef     mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
 
+		FT_Library     mFreeTypeLib;            // FreeType library, for rendering fonts
+
 		bool           mReady;                  // True, if render system initialized
 
 	protected:
@@ -155,6 +164,12 @@ namespace o2
 
 		// Don't copy
 		Render& operator=(const Render& other);
+
+		// Initializes free type library
+		void InitializeFreeType();
+
+		// Deinitializes free type livrary
+		void DeinitializeFreeType();
 
 		// Send buffers to draw
 		void DrawPrimitives();
@@ -178,5 +193,7 @@ namespace o2
 		friend class TextureRef;
 		friend class BaseApplication;
 		friend class Font;
+		friend class BitmapFont;
+		friend class VectorFont;
 	};
 }
