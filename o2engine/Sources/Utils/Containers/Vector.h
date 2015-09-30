@@ -214,6 +214,8 @@ namespace o2
 		// Returns a copy of this
 		IArray* Clone() const;
 
+		_type* Data() const;
+
 		// Returns count of elements in vector
 		int Count() const;
 
@@ -642,6 +644,12 @@ namespace o2
 	}
 
 	template<typename _type>
+	_type* o2::Vector<_type>::Data() const
+	{
+		return mValues;
+	}
+
+	template<typename _type>
 	IArray<_type>* Vector<_type>::Clone() const
 	{
 		return new Vector<_type>(this);
@@ -993,6 +1001,9 @@ namespace o2
 	template<typename _type>
 	void Vector<_type>::Sort(const Function<bool(const _type&, const _type&)>& pred /*= Math::Fewer*/)
 	{
+		if (mCount < 1)
+			return;
+
 		QuickSort(pred, 0, mCount - 1);
 	}
 

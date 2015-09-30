@@ -4,6 +4,7 @@
 #include "Application/Input.h"
 #include "Assets/Assets.h"
 #include "Config/ProjectConfig.h"
+#include "Events/EventSystem.h"
 #include "Render/Render.h"
 #include "Utils/Debug.h"
 #include "Utils/FileSystem/FileSystem.h"
@@ -33,30 +34,24 @@ namespace o2
 	{
 		srand((UInt)time(NULL));
 
-		//log
 		mLog = mnew LogStream("Application");
  		o2Debug.GetLog()->BindStream(mLog);
 
-		//project config
  		mProjectConfig = mnew ProjectConfig();
 
-		//assets
 		mAssets = mnew Assets();
 
-		//input message
 		mInput = mnew Input();
 // 
-// 		//scheduler
 // 		mScheduler = mnew Scheduler();
 // 
-		//timer
 		mTimer = mnew Timer();
 		mTimer->Reset();
 
-		//timers
 		mTime = mnew Time();
+
+		mEventSystem = mnew EventSystem();
 // 
-// 		//ui
 // 		mUIController = mnew UIController();
 
 		mLog->Out("Initialized");
@@ -69,6 +64,7 @@ namespace o2
 		mTimer.Release();
 		mProjectConfig.Release();
 		mAssets.Release();
+		mEventSystem.Release();
 
 		mLog->Out("Deinitialized");
 	}
@@ -83,6 +79,7 @@ namespace o2
 		//mScheduler->ProcessBeforeFrame(dt);
 
 		OnUpdate(dt);
+		mEventSystem->Update(dt);
 		//mUIController->Update(dt);
 
 		mRender->Begin();

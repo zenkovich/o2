@@ -19,7 +19,7 @@ namespace o2
 	// ---------------------------------------------
 	// Object information, using for memory managing
 	// ---------------------------------------------
-	struct ObjectInfo
+	struct AllocObjectInfo
 	{
 		typedef Vector<IPtr*> PointersVec;
 
@@ -42,7 +42,7 @@ namespace o2
 	class MemoryManager
 	{
 		typedef Vector<IPtr*>       PointersVec;
-		typedef Vector<ObjectInfo*> ObjectsInfosVec;
+		typedef Vector<AllocObjectInfo*> ObjectsInfosVec;
 
 	public:
 		static MemoryManager* mInstance; // Instance pointer
@@ -58,7 +58,7 @@ namespace o2
 
 	protected:
 		// Calling when object created
-		static void OnObjectCreating(void* object, ObjectInfo* info, UInt size, const char* srcFile, int srcFileLine);
+		static void OnObjectCreating(void* object, AllocObjectInfo* info, UInt size, const char* srcFile, int srcFileLine);
 
 		// Calling when objects destroying
 		static void OnObjectDestroying(void* object);
@@ -70,7 +70,7 @@ namespace o2
 		static void OnPtrDestroying(IPtr* ptr);
 
 		// Returns object info
-		static ObjectInfo* GetObjectInfo(void* object);
+		static AllocObjectInfo* GetObjectInfo(void* object);
 
 	private:
 		// Resets memory tree for all pointers and objects

@@ -2,6 +2,7 @@
 
 #include "Utils/String.h"
 #include "Utils/Reflection/FieldInfo.h"
+#include "Utils/Memory/Ptr.h"
 
 namespace o2
 {
@@ -14,6 +15,13 @@ namespace o2
 	{
 	public:
 		typedef UInt Id;
+
+		static Type unknown;
+
+		struct Dummy
+		{
+			static Type type;
+		};
 
 	public:
 		// Default constructor
@@ -50,7 +58,32 @@ namespace o2
 		const IObject* Sample() const;
 
 		// Registers field in type
-		FieldInfo& RegField(const String& name, UInt offset);
+		template<typename _type>
+		FieldInfo& RegField(const String& name, UInt offset, Ptr<_type>& value);
+
+		// Registers field in type
+		template<typename _type>
+		FieldInfo& RegField(const String& name, UInt offset, _type& value);
+
+		template<typename _type>
+		_type* GetFieldPtr(void* object, const String& path) const 
+		{
+			int delPos = path.Find("/");
+			WString pathPart = path.SubStr(0, delPos);
+
+			for (auto field : mFields)
+			{
+				if (field->mName == pathPart)
+				{
+					if (delPos == -1)
+						return field->GetValuePtr<_type>(object);
+					else
+						return field->mType->GetFieldPtr<_type>(field->GetValuePtr<_type>(object), path.SubStr(delPos + 1));
+				}
+			}
+
+			return nullptr;
+		}
 
 		// Initializes type parameters
 		static void Initialize(Type& type, const String& name, UInt id, IObject* sample);
@@ -65,4 +98,23 @@ namespace o2
 		Vector<Type*>      mBaseTypes; // Base types ids
 		IObject*           mSample;    // Object sample
 	};
+
+
+	// Registers field in type
+	template<typename _type>
+	FieldInfo& Type::RegField(const String& name, UInt offset, Ptr<_type>& value)
+	{
+		Type* type = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		mFields.Add(new FieldInfo(name, offset, false, true, type));
+		return *mFields.Last();
+	}
+
+	// Registers field in type
+	template<typename _type>
+	FieldInfo& Type::RegField(const String& name, UInt offset, _type& value)
+	{
+		Type* type = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		mFields.Add(new FieldInfo(name, offset, false, false, type));
+		return *mFields.Last();
+	}
 }

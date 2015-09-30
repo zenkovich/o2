@@ -1,6 +1,7 @@
 #include "Input.h"
 
 #include "Utils/Time.h"
+#include "Config/ProjectConfig.h"
 
 namespace o2
 {
@@ -8,14 +9,20 @@ namespace o2
 
 	Input::Input()
 	{
+		if (PLATFORM == ProjectConfig::Platform::Windows)
+		{
+			mCursors.Add(Cursor());
+			mCursors.Last().mPressed = false;
+		}
+
 		InitializeProperties();
 	}
 
 	bool Input::IsKeyPressed(KeyboardKey key) const
 	{
-		for (auto it : mPressedKeys)
+		for (auto ikey : mPressedKeys)
 		{
-			if (it.mKey == key)
+			if (ikey.mKey == key)
 				return true;
 		}
 
@@ -24,9 +31,9 @@ namespace o2
 
 	bool Input::IsKeyDown(KeyboardKey key) const
 	{
-		for (auto it : mDownKeys)
+		for (auto ikey : mDownKeys)
 		{
-			if (it.mKey == key)
+			if (ikey.mKey == key)
 				return true;
 		}
 
@@ -35,9 +42,9 @@ namespace o2
 
 	bool Input::IsKeyReleased(KeyboardKey key) const
 	{
-		for (auto it : mReleasedKeys)
+		for (auto ikey : mReleasedKeys)
 		{
-			if (it.mKey == key)
+			if (ikey.mKey == key)
 				return true;
 		}
 
@@ -54,21 +61,21 @@ namespace o2
 
 	float Input::GetKeyPressingTime(KeyboardKey key) const
 	{
-		for (auto it : mDownKeys)
+		for (auto ikey : mDownKeys)
 		{
-			if (it.mKey == key)
-				return it.mPressedTime;
+			if (ikey.mKey == key)
+				return ikey.mPressedTime;
 		}
 
 		return 0;
 	}
 
-	Vec2F Input::GetCursorPos(int id /*= 0*/) const
+	Vec2F Input::GetCursorPos(CursorId id /*= 0*/) const
 	{
-		for (auto it : mCursors)
+		for (auto cursor : mCursors)
 		{
-			if (it.mId == id)
-				return it.mPosition;
+			if (cursor.mId == id)
+				return cursor.mPosition;
 		}
 
 		if (id == 0)
@@ -77,57 +84,57 @@ namespace o2
 		return Vec2F();
 	}
 
-	bool Input::IsCursorPressed(int id /*= 0*/) const
+	bool Input::IsCursorPressed(CursorId id /*= 0*/) const
 	{
-		for (auto it : mCursors)
+		for (auto cursor : mCursors)
 		{
-			if (it.mId == id && it.mPressedTime < FLT_EPSILON)
+			if (cursor.mId == id && cursor.mPressedTime < FLT_EPSILON && cursor.mPressed)
 				return true;
 		}
 
 		return false;
 	}
 
-	bool Input::IsCursorDown(int id /*= 0*/) const
+	bool Input::IsCursorDown(CursorId id /*= 0*/) const
 	{
-		for (auto it : mCursors)
+		for (auto cursor : mCursors)
 		{
-			if (it.mId == id)
+			if (cursor.mId == id && cursor.mPressed)
 				return true;
 		}
 
 		return false;
 	}
 
-	bool Input::IsCursorReleased(int id /*= 0*/) const
+	bool Input::IsCursorReleased(CursorId id /*= 0*/) const
 	{
-		for (auto it : mReleasedCursors)
+		for (auto cursor : mReleasedCursors)
 		{
-			if (it.mId == id)
+			if (cursor.mId == id)
 				return true;
 		}
 
 		return false;
 	}
 
-	float Input::GetCursorPressingTime(int id /*= 0*/) const
+	float Input::GetCursorPressingTime(CursorId id /*= 0*/) const
 	{
-		for (auto it : mCursors)
+		for (auto cursor : mCursors)
 		{
-			if (it.mId == id)
-				return it.mPressedTime;
+			if (cursor.mId == id)
+				return cursor.mPressedTime;
 		}
 
 		return 0;
 	}
 
-	Vec2F Input::GetCursorDelta(int id /*= 0*/) const
+	Vec2F Input::GetCursorDelta(CursorId id /*= 0*/) const
 	{
-		for (auto it : mCursors)
+		for (auto cursor : mCursors)
 		{
-			if (it.mId == id)
+			if (cursor.mId == id)
 			{
-				return it.mDelta;
+				return cursor.mDelta;
 			}
 		}
 
@@ -137,42 +144,42 @@ namespace o2
 		return Vec2F();
 	}
 
-	bool Input::IsAltCursorPressed() const
+	bool Input::IsRightMousePressed() const
 	{
 		return IsKeyPressed((KeyboardKey)-1);
 	}
 
-	bool Input::IsAltCursorDown() const
+	bool Input::IsRightMouseDown() const
 	{
 		return IsKeyDown((KeyboardKey)-1);
 	}
 
-	bool Input::IsAltCursorReleased() const
+	bool Input::IsRightMouseReleased() const
 	{
 		return IsKeyReleased((KeyboardKey)-1);
 	}
 
-	float Input::GetAltCursorPressedTime() const
+	float Input::GetRightMousePressedTime() const
 	{
 		return GetKeyPressingTime((KeyboardKey)-1);
 	}
 
-	bool Input::IsAlt2CursorPressed() const
+	bool Input::IsMiddleMousePressed() const
 	{
 		return IsKeyPressed((KeyboardKey)-2);
 	}
 
-	bool Input::IsAlt2CursorDown() const
+	bool Input::IsMiddleMouseDown() const
 	{
 		return IsKeyDown((KeyboardKey)-2);
 	}
 
-	bool Input::IsAlt2CursorReleased() const
+	bool Input::IsMiddleMouseReleased() const
 	{
 		return IsKeyReleased((KeyboardKey)-2);
 	}
 
-	float Input::GetAlt2CursorPressedTime() const
+	float Input::GetMiddleMousePressedTime() const
 	{
 		return GetKeyPressingTime((KeyboardKey)-2);
 	}
@@ -182,9 +189,23 @@ namespace o2
 		return mMouseWheelDelta;
 	}
 
-	Input::CursorsVec const& Input::GetCursors() const
+	Ptr<Input::Cursor> Input::GetCursor(CursorId id)
+	{
+		for (auto& cursor : mCursors)
+			if (cursor.mId == id)
+				return &cursor;
+
+		return nullptr;
+	}
+
+	const Input::CursorsVec& Input::GetCursors() const
 	{
 		return mCursors;
+	}
+
+	const Input::CursorsVec& Input::GetReleasedCursors() const
+	{
+		return mReleasedCursors;
 	}
 
 	Input::KeysVec const& Input::GetPressedKeys() const
@@ -213,11 +234,11 @@ namespace o2
 
 	void Input::KeyReleased(KeyboardKey key)
 	{
-		for (auto it : mDownKeys)
+		for (auto ikey : mDownKeys)
 		{
-			if (it.mKey == key)
+			if (ikey.mKey == key)
 			{
-				mDownKeys.Remove(it);
+				mDownKeys.Remove(ikey);
 				break;
 			}
 		}
@@ -233,9 +254,9 @@ namespace o2
 			bool success = true;
 			for (auto it : mCursors)
 			{
-				if (it.mId == id)
+				if (it.mId == id && it.mPressed)
 				{
-					success =false;
+					success = false;
 					break;
 				}
 			}
@@ -246,34 +267,46 @@ namespace o2
 				id++;
 		}
 
-		mCursors.Add(Cursor(pos, id));
+		if (id == 0 && o2Config.GetPlatform() == ProjectConfig::Platform::Windows)
+		{
+			mCursors[0].mPosition = pos;
+			mCursors[0].mPressed = true;
+			mCursors[0].mPressedTime = 0.0f;
+		}
+		else mCursors.Add(Cursor(pos, id));
 
 		return id;
 	}
 
-	void Input::CursorReleased(int id /*= 0*/)
+	void Input::CursorReleased(CursorId id /*= 0*/)
 	{
 		Cursor releasedCuros(Vec2F(), -100);
-		for (auto it : mCursors)
+		for (auto& cursor : mCursors)
 		{
-			if (it.mId == id)
+			if (cursor.mId == id)
 			{
-				releasedCuros = it;
-				mCursors.Remove(it);
+				releasedCuros = cursor;
+
+				if (id == 0 && o2Config.GetPlatform() == ProjectConfig::Platform::Windows)
+					cursor.mPressed = false;
+				else
+					mCursors.Remove(cursor);
+
 				break;
 			}
 		}
+
 		mReleasedCursors.Add(releasedCuros);
 	}
 
-	void Input::SetCursorPos(const Vec2F& pos, int id /*= 0*/)
+	void Input::SetCursorPos(const Vec2F& pos, CursorId id /*= 0*/)
 	{
-		for (Cursor& it : mCursors)
+		for (Cursor& cursor : mCursors)
 		{
-			if (it.mId == id)
+			if (cursor.mId == id)
 			{
-				it.mDelta = pos - it.mPosition;
-				it.mPosition = pos;
+				cursor.mDelta = pos - cursor.mPosition;
+				cursor.mPosition = pos;
 				break;
 			}
 		}
@@ -291,13 +324,13 @@ namespace o2
 		mPressedKeys.Clear();
 		mReleasedKeys.Clear();
 
-		for (Key& it : mDownKeys)
-			it.mPressedTime += dt;
+		for (Key& ikey : mDownKeys)
+			ikey.mPressedTime += dt;
 
-		for (Cursor& it : mCursors)
+		for (Cursor& cursor : mCursors)
 		{
-			it.mPressedTime += dt;
-			it.mDelta = Vec2F();
+			cursor.mPressedTime += dt;
+			cursor.mDelta = Vec2F();
 		}
 
 		mMainCursorDelta = Vec2F();
@@ -337,12 +370,12 @@ namespace o2
 		INITIALIZE_GETTER(Input, cursorPressed, IsMainCursorPressed);
 		INITIALIZE_GETTER(Input, cursorDown, IsMainCursorDown);
 		INITIALIZE_GETTER(Input, cursorReleased, IsMainCursorReleased);
-		INITIALIZE_GETTER(Input, altCursorPressed, IsAltCursorPressed);
-		INITIALIZE_GETTER(Input, altCursorDown, IsAltCursorDown);
-		INITIALIZE_GETTER(Input, altCursorReleased, IsAltCursorReleased);
-		INITIALIZE_GETTER(Input, alt2CursorPressed, IsAlt2CursorPressed);
-		INITIALIZE_GETTER(Input, alt2CursorDown, IsAlt2CursorDown);
-		INITIALIZE_GETTER(Input, alt2CursorReleased, IsAlt2CursorReleased);
+		INITIALIZE_GETTER(Input, altCursorPressed, IsRightMousePressed);
+		INITIALIZE_GETTER(Input, altCursorDown, IsRightMouseDown);
+		INITIALIZE_GETTER(Input, altCursorReleased, IsRightMouseReleased);
+		INITIALIZE_GETTER(Input, alt2CursorPressed, IsMiddleMousePressed);
+		INITIALIZE_GETTER(Input, alt2CursorDown, IsMiddleMouseDown);
+		INITIALIZE_GETTER(Input, alt2CursorReleased, IsMiddleMouseReleased);
 		INITIALIZE_GETTER(Input, cursorPos, GetMainCursorPos);
 		INITIALIZE_GETTER(Input, cursorDelta, GetMainCursorDelta);
 	}
@@ -381,9 +414,9 @@ namespace o2
 			Math::Equals(mPressedTime, other.mPressedTime);
 	}
 
-	Input::Cursor::Cursor(const Vec2F& position /*= Vec2F()*/, int id /*= 0*/):mPosition(position), mDelta(), mId(id), mPressedTime(0)
-	{
-	}
+	Input::Cursor::Cursor(const Vec2F& position /*= Vec2F()*/, CursorId id /*= 0*/):
+		mPosition(position), mDelta(), mId(id), mPressedTime(0), mPressed(true)
+	{}
 
 
 	bool Input::Key::operator==(const Key& other)
@@ -392,6 +425,5 @@ namespace o2
 	}
 
 	Input::Key::Key(KeyboardKey key /*= 0*/):mKey(key), mPressedTime(0)
-	{
-	}
+	{}
 }

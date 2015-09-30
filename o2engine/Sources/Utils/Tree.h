@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils/Containers/Vector.h"
+#include "Utils/Memory/Ptr.h"
 
 namespace o2
 {

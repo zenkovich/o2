@@ -317,6 +317,87 @@ namespace o2
 		}
 	};
 
+	// -----------------------
+	// Array accessor operator
+	// -----------------------
+	template<typename _res_type, typename _key_type>
+	class Accessor
+	{
+		IFunction<_res_type(_key_type)>* mAccessFunc;
+
+	public:
+		// Default constructor
+		Accessor():
+			mAccessFunc(nullptr)
+		{
+		}
+
+		// Constructor from constant object function
+		template<typename _class_type>
+		Accessor(_class_type* object, _res_type(_class_type::*getter)(_key_type) const):
+			Accessor()
+		{
+			Initialize(object, getter);
+		}
+
+		// Constructor from object function
+		template<typename _class_type>
+		Accessor(_class_type* object, _res_type(_class_type::*getter)(_key_type)):
+			Accessor()
+		{
+			Initialize(object, getter);
+		}
+
+		// Constructor from static function pointer
+		Accessor(_res_type(*getter)(_key_type)):
+			Accessor()
+		{
+			Initialize(object, getter);
+		}
+
+		// Constructor from function
+		Accessor(IFunction<_res_type(_key_type)>* getter):
+			Accessor()
+		{
+			mAccessFunc = getter;
+		}
+
+		// Destructor
+		virtual ~Accessor()
+		{
+			delete mAccessFunc;
+		}
+
+		// Initialize from object function
+		template<typename _class_type>
+		void Initialize(_class_type* object, _res_type(_class_type::*getter)(_key_type))
+		{
+			if (mAccessFunc) delete mAccessFunc;
+			mAccessFunc = new ObjFunctionPtr<_class_type, _res_type, _key_type>(object, getter);
+		}
+
+		// Initialize from constant object function
+		template<typename _class_type>
+		void Initialize(_class_type* object, _res_type(_class_type::*getter)(_key_type) const)
+		{
+			if (mAccessFunc) delete mAccessFunc;
+			mAccessFunc = new ObjConstFunctionPtr<_class_type, _res_type, _key_type>(object, getter);
+		}
+
+		// Initialize by static getter function
+		void Initialize(_res_type(*getter)(_key_type))
+		{
+			if (mAccessFunc) delete mAccessFunc;
+			mAccessFunc = new FunctionPtr<_res_type(_key_type)>(getter);
+		}
+
+		// Access operator
+		_res_type operator[](_key_type key)
+		{
+			return mAccessFunc(key);
+		}
+	};
+
 	// Initialize property helping macros
 #define INITIALIZE_PROPERTY(_CLASS, _PROPERTY, _SET_FUNC, _GET_FUNC) \
 _PROPERTY.Initialize(this, &_CLASS::_SET_FUNC); _PROPERTY.Initialize(this, &_CLASS::_GET_FUNC)
@@ -340,5 +421,9 @@ _GETTER.Initialize(this, &_CLASS::_GET_FUNC)
 //Initialize getter macros by static function
 #define INITIALIZE_STATIC_GETTER(_CLASS, _GETTER, _GET_FUNC) \
 _GETTER.Initialize(&_CLASS::_GET_FUNC)
+
+	// Initialize accessor macros 
+#define INITIALIZE_ACCESSOR(_CLASS, _ACCESSOR, _FUNC) \
+_ACCESSOR.Initialize(this, &_CLASS::_FUNC)
 
 }

@@ -6,5 +6,9 @@ namespace o2
 	{
 	public:
 		virtual void Draw() = 0;
+		float GetDrawingDepth() const { return mDrawingDepth; }
+
+	protected:
+		float mDrawingDepth = 0;
 	};
 }

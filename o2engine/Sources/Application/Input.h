@@ -55,52 +55,58 @@ namespace o2
 		float GetKeyPressingTime(KeyboardKey key) const;
 
 		// Returns position of cursor
-		Vec2F GetCursorPos(int id = 0) const;
+		Vec2F GetCursorPos(CursorId id = 0) const;
 
 		// Returns true, when cursor pressed at current frame
-		bool IsCursorPressed(int id = 0) const;
+		bool IsCursorPressed(CursorId id = 0) const;
 
 		// Returns true, when cursor is down
-		bool IsCursorDown(int id = 0) const;
+		bool IsCursorDown(CursorId id = 0) const;
 
 		// Returns true, when cursor released at current frame
-		bool IsCursorReleased(int id = 0) const;
+		bool IsCursorReleased(CursorId id = 0) const;
 
 		// Returns cursor pressed time. 0 if cursor not pressed
-		float GetCursorPressingTime(int id = 0) const;
+		float GetCursorPressingTime(CursorId id = 0) const;
 
 		// Returns cursor delta
-		Vec2F GetCursorDelta(int id = 0) const;
+		Vec2F GetCursorDelta(CursorId id = 0) const;
 
-		// Returns true, when alt cursor pressed (right mouse button)
-		bool IsAltCursorPressed() const;
+		// Returns true, when right mouse button pressed (right mouse button)
+		bool IsRightMousePressed() const;
 
-		// Returns true, when alt cursor down (right mouse button)
-		bool IsAltCursorDown() const;
+		// Returns true, when right mouse button down (right mouse button)
+		bool IsRightMouseDown() const;
 
-		// Returns true, when alt cursor released (right mouse button)
-		bool IsAltCursorReleased() const;
+		// Returns true, when right mouse button released (right mouse button)
+		bool IsRightMouseReleased() const;
 
-		// Returns alt cursor pressed time (right mouse button). 0 if cursor not pressed
-		float GetAltCursorPressedTime() const;
+		// Returns right mouse button pressed time (right mouse button). 0 if cursor not pressed
+		float GetRightMousePressedTime() const;
 
-		// Returns true, when alt 2 cursor pressed (medium mouse button)
-		bool IsAlt2CursorPressed() const;
+		// Returns true, when middle mouse button pressed (medium mouse button)
+		bool IsMiddleMousePressed() const;
 
-		// Returns true, when alt 2 cursor down (medium mouse button)
-		bool IsAlt2CursorDown() const;
+		// Returns true, when middle mouse button down (medium mouse button)
+		bool IsMiddleMouseDown() const;
 
-		// Returns true, when alt 2 cursor released (medium mouse button)
-		bool IsAlt2CursorReleased() const;
+		// Returns true, when middle mouse button released (medium mouse button)
+		bool IsMiddleMouseReleased() const;
 
-		// Returns alt 2 cursor pressed time (medium mouse button). 0 if cursor not pressed
-		float GetAlt2CursorPressedTime() const;
+		// Returns middle mouse button pressed time (medium mouse button). 0 if cursor not pressed
+		float GetMiddleMousePressedTime() const;
 
 		// Returns mouse wheel delta at frame
 		float GetMouseWheelDelta() const;
 
+		// Returns cursor by id. Returns nullptr if no cursor with specified id
+		Ptr<Cursor> GetCursor(CursorId id);
+
 		// Returns cursors vector
-		CursorsVec const& GetCursors() const;
+		const CursorsVec& GetCursors() const;
+
+		// Returns released cursors vector
+		const CursorsVec& GetReleasedCursors() const;
 
 		// Returns pressed keys
 		KeysVec const& GetPressedKeys() const;
@@ -117,14 +123,15 @@ namespace o2
 		// -----------------
 		struct Cursor
 		{
-			Vec2F mPosition;    // Current cursor position, in pixels, from left top corner 
-			Vec2F mDelta;       // Cursor moving delta between frames
-			int   mId;          // Cursor id
-			float mPressedTime; // Time until key is pressed in seconds
+			Vec2F    mPosition;    // Current cursor position, in pixels, from left top corner 
+			Vec2F    mDelta;       // Cursor moving delta between frames
+			CursorId mId;          // Cursor id
+			float    mPressedTime; // Time until key is pressed in seconds
+			bool     mPressed;     // True when cursor is pressed down
 
 		public:
 			// Constructor
-			Cursor(const Vec2F& position = Vec2F(), int id = 0);
+			Cursor(const Vec2F& position = Vec2F(), CursorId id = 0);
 
 			// Equals operator
 			bool operator==(const Cursor& other);
@@ -168,10 +175,10 @@ namespace o2
 		int CursorPressed(const Vec2F& pos);
 
 		// Call it when cursor changed position. Id - index of cursor*/
-		void SetCursorPos(const Vec2F& pos, int id = 0);
+		void SetCursorPos(const Vec2F& pos, CursorId id = 0);
 
 		// Call it when cursor released
-		void CursorReleased(int id = 0);
+		void CursorReleased(CursorId id = 0);
 
 		// Call it when alt cursor pressed (right mouse button)
 		void AltCursorPressed(const Vec2F& pos);

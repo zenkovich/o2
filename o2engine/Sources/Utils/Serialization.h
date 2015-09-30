@@ -59,7 +59,9 @@ namespace o2
 
 	// Registering field in type with serialization attribute
 #define SRLZ_FIELD(NAME) \
-	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample).AddAttribute<SerializableAttribute<decltype(NAME)>>()
+	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, Type::unknown).AddAttribute<SerializableAttribute<decltype(NAME)>>()
+
+#define SERIALIZABLE(TYPE) .AddAttribute<SerializableAttribute<TYPE>>()
 
 // Serialization implementation macros
 #define SERIALIZABLE_IMPL(CLASS)                                                           \

@@ -7,10 +7,10 @@
 
 void* operator new(size_t size, const char* location, int line)
 {
-	void* allocMemory = malloc(size + sizeof(o2::ObjectInfo*));
-	void* object = (char*)allocMemory + sizeof(o2::ObjectInfo*);
-	o2::ObjectInfo* info = new o2::ObjectInfo();
-	*(o2::ObjectInfo**)allocMemory = info;
+	void* allocMemory = malloc(size + sizeof(o2::AllocObjectInfo*));
+	void* object = (char*)allocMemory + sizeof(o2::AllocObjectInfo*);
+	o2::AllocObjectInfo* info = new o2::AllocObjectInfo();
+	*(o2::AllocObjectInfo**)allocMemory = info;
 	o2::MemoryManager::OnObjectCreating(object, info, size, location, line);
 	return object;
 }
@@ -28,7 +28,8 @@ void operator delete(void* allocMemory, const char* location, int line)
 
 namespace o2
 {
-	void MemoryManager::OnObjectCreating(void* object, ObjectInfo* info, UInt size, const char* srcFile, int srcFileLine)
+	void MemoryManager::OnObjectCreating(void* object, AllocObjectInfo* info, UInt size, const char* srcFile, 
+										 int srcFileLine)
 	{
 		info->mObjectPtr = object;
 		info->mSize = size;
@@ -41,7 +42,7 @@ namespace o2
 
 	void MemoryManager::OnObjectDestroying(void* object)
 	{
-		ObjectInfo* info = GetObjectInfo(object);
+		AllocObjectInfo* info = GetObjectInfo(object);
 
 		for (auto it = mInstance->mObjectsInfos.Begin(); it != mInstance->mObjectsInfos.End(); ++it)
 		{
@@ -53,12 +54,12 @@ namespace o2
 						ptr->ObjectReleased();
 				}
 
-				info->~ObjectInfo();
+				info->~AllocObjectInfo();
 				free(info);
 
 				mInstance->mObjectsInfos.Remove(it);
 
-				free((char*)object - sizeof(o2::ObjectInfo*));
+				free((char*)object - sizeof(o2::AllocObjectInfo*));
 
 				return;
 			}
@@ -108,11 +109,17 @@ namespace o2
 	{
 		ResetMemoryTree();
 
+		int stackValue = 5;
+		char* stackEndPtr = (char*)&stackValue;
+
 		for (auto ptr : mInstance->mPointers)
 		{
 			char* cptr = (char*)ptr;
 			bool foundParent = false;
 			bool foundObjectInfo = false;
+
+			if (cptr > stackEndPtr)
+				ptr->mIsOnTop = false;
 
 			for (auto obj : mInstance->mObjectsInfos)
 			{
@@ -164,12 +171,12 @@ namespace o2
 			printf("Leaked object: %x %s:%i\n", (UInt)obj, obj->mAllocSrcFile, obj->mAllocSrcFileLine);
 	}
 
-	ObjectInfo* MemoryManager::GetObjectInfo(void* object)
+	AllocObjectInfo* MemoryManager::GetObjectInfo(void* object)
 	{
-		return *(ObjectInfo**)((char*)object - sizeof(o2::ObjectInfo*));
+		return *(AllocObjectInfo**)((char*)object - sizeof(o2::AllocObjectInfo*));
 	}
 
-	void ObjectInfo::Mark(bool mark)
+	void AllocObjectInfo::Mark(bool mark)
 	{
 		mMark = mark;
 

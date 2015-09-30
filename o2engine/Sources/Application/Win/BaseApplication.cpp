@@ -1,6 +1,7 @@
 #include "BaseApplication.h"
 
 #include "Application/Input.h"
+#include "Events/EventSystem.h"
 #include "Render/Render.h"
 #include "Utils/Debug.h"
 #include "Utils/Log/LogStream.h"
@@ -74,6 +75,7 @@ namespace o2
 
 		OnStarted();
 		onStartedEvent.Invoke();
+		o2Events.OnApplicationStarted();
 
 		MSG msg;
 		memset(&msg, 0, sizeof(msg));
@@ -93,6 +95,7 @@ namespace o2
 			}
 		}
 
+		o2Events.OnApplicationClosing();
 		OnClosing();
 		onClosingEvent.Invoke();
 	}
@@ -164,12 +167,14 @@ namespace o2
 					mApplication->mActive = true;
 					mApplication->OnActivated();
 					mApplication->onActivatedEvent.Invoke();
+					o2Events.OnApplicationActivated();
 				}
 				else
 				{
 					mApplication->mActive = false;
 					mApplication->OnDeactivated();
 					mApplication->onDeactivatedEvent.Invoke();
+					o2Events.OnApplicationDeactivated();
 				}
 			}
 			break;
@@ -184,6 +189,7 @@ namespace o2
 				mApplication->OnResizing();
 				mApplication->mRender->mResolution = size;
 				mApplication->onResizingEvent.Invoke();
+				o2Events.OnApplicationSized();
 			}
 			//mApplication->ProcessFrame();
 

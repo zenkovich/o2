@@ -42,7 +42,7 @@ namespace o2
 		void End();
 
 		// Clearing current frame buffer with color
-		void Clear(const Color4& color = Color4::Blue());
+		void Clear(const Color4& color = Color4::Gray());
 
 		// Returns resolution of rendering frame
 		Vec2I GetResolution() const;
@@ -58,6 +58,9 @@ namespace o2
 
 		// Draw single line with color
 		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White());
+
+		// Draw single line with color
+		void DrawLine(const Vector<Vec2F>& points, const Color4& color = Color4::White());
 
 		// Draw rect frame with color
 		void DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color = Color4::White());
@@ -153,6 +156,8 @@ namespace o2
 		bool           mScissorTest;            // True, if scissor test enabled
 
 		TextureRef     mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
+
+		float          mDrawingDepth;           // Current drawing depth, increments after each drawing drawables
 
 		FT_Library     mFreeTypeLib;            // FreeType library, for rendering fonts
 

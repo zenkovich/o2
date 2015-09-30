@@ -7,6 +7,8 @@
 
 namespace o2
 {
+	class Type;
+
 	// -----------------------
 	// Class field information
 	// -----------------------
@@ -17,13 +19,15 @@ namespace o2
 		FieldInfo();
 
 		// Constructor
-		FieldInfo(const String& name, UInt offset, bool isProperty);
+		FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Type* type);
 
 		// Copy-constructor
 		FieldInfo(const FieldInfo& other);
 
 		// Destructor
 		~FieldInfo();
+
+		FieldInfo& operator=(const FieldInfo& other);
 
 		// Equal operator
 		bool operator==(const FieldInfo& other) const;
@@ -41,6 +45,10 @@ namespace o2
 		// Returns value of field in specified object
 		template<typename _type>
 		_type GetValue(void* object) const;
+
+		// Returns value pointer of field in specified object
+		template<typename _type>
+		_type* GetValuePtr(void* object) const;
 
 		// Sets value of field in specified object
 		template<typename _type>
@@ -61,6 +69,8 @@ namespace o2
 		String              mName;       // Name of field
 		UInt                mOffset;     // Offset of field in bytes from owner address
 		bool                mIsProperty; // Is it property or field
+		bool                mIsPtr;      // Is property Ptr<>
+		Type*               mType;       // Field type
 		Vector<IAttribute*> mAttributes; // Attributes array
 
 		friend class Type;
@@ -92,19 +102,34 @@ namespace o2
 	}
 
 	template<typename _type>
-	void o2::FieldInfo::SetValue(void* object, _type value) const
+	void FieldInfo::SetValue(void* object, _type value) const
 	{
-		*(_type*)((char*)object + mOffset) = value;
+		if (mIsPtr)
+			**(Ptr<_type>*)((char*)object + mOffset) = value;
+		else
+			*(_type*)((char*)object + mOffset) = value;
 	}
 
 	template<typename _type>
-	_type o2::FieldInfo::GetValue(void* object) const
+	_type FieldInfo::GetValue(void* object) const
 	{
-		return *(_type*)((char*)object + mOffset);
+		if (mIsPtr)
+			return **(Ptr<_type>*)((char*)object + mOffset);
+		else
+			return *(_type*)((char*)object + mOffset);
+	}
+
+	template<typename _type>
+	_type* FieldInfo::GetValuePtr(void* object) const
+	{
+		if (mIsPtr)
+			return *(Ptr<_type>*)((char*)object + mOffset);
+		else
+			return (_type*)((char*)object + mOffset);
 	}
 
 	template<typename _attr_type, typename ... _args>
-	FieldInfo& o2::FieldInfo::AddAttribute(_args ... args)
+	FieldInfo& FieldInfo::AddAttribute(_args ... args)
 	{
 		_attr_type* attribute = new _attr_type(args ...);
 		attribute->mOwnerFieldInfo = this;

@@ -1,6 +1,7 @@
 #include "Type.h"
 
 #include "Utils/Reflection/Types.h"
+#include "Utils/IObject.h"
 
 namespace o2
 {
@@ -64,12 +65,6 @@ namespace o2
 		return mSample;
 	}
 
-	FieldInfo& Type::RegField(const String& name, UInt offset)
-	{
-		mFields.Add(new FieldInfo(name, offset, false));
-		return *mFields.Last();
-	}
-
 	void Type::Initialize(Type& type, const String& name, UInt id, IObject* sample)
 	{
 		type.mName = name;
@@ -85,6 +80,8 @@ namespace o2
 			type.mFields.Add(new FieldInfo(*field));
 	}
 
+	Type Type::unknown;
+
 	bool Type::operator!=(const Type& other) const
 	{
 		return other.mId != mId;
@@ -94,4 +91,7 @@ namespace o2
 	{
 		return other.mId == mId;
 	}
+
+	Type Type::Dummy::type;
+
 }

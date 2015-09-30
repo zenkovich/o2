@@ -2,10 +2,10 @@
 
 #include "Assets/Asset.h"
 #include "Render/TextureRef.h"
+#include "Utils/Bitmap.h"
 
 namespace o2
 {
-	class Bitmap;
 	class AtlasAsset;
 
 	// -----------

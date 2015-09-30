@@ -17,6 +17,16 @@ namespace o2
 			return ceilf(value);
 		}
 
+		inline float Round(float value)
+		{
+			return roundf(value);
+		}
+
+		inline float Pow(float value, float s)
+		{
+			return powf(value, s);
+		}
+
 		inline int FloorToInt(float value)
 		{
 			return (int)floorf(value);
@@ -97,18 +107,6 @@ namespace o2
 			return (b - a)*coef + a;
 		}
 
-		template<typename T>
-		inline T InterpolateBezier(const T& a, const T& b, const T& c, const T&d, float coef)
-		{
-			float m = 1 - coef;
-			float n = m*m;
-			float o = n*m;
-			float p = coef*coef;
-			float r = p*coef;
-
-			return a*o + b*3.0f*coef*n + c*3.0f*p*m + d*r;
-		}
-
 		inline bool Equals(float a, float b, float range = FLT_EPSILON)
 		{
 			float x = a - b;
@@ -167,6 +165,16 @@ namespace o2
 		inline float Cos(float rad)
 		{
 			return cosf(rad);
+		}
+
+		inline float ASin(float value)
+		{
+			return asinf(value);
+		}
+
+		inline float ACos(float value)
+		{
+			return acosf(value);
 		}
 
 		inline float Atan2F(float x, float y)

@@ -1,13 +1,16 @@
 #pragma once
 
+#include "Animation/Animation.h"
+#include "Utils/IObject.h"
 #include "Utils/Math/Basis.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Property.h"
+#include "Utils/Serialization.h"
 
 namespace o2
 {
-	class Transform
+	class Transform: public ISerializable
 	{
 	public:
 		Property<Vec2F>  position;     // Position property
@@ -174,6 +177,16 @@ namespace o2
 
 		// Transforms direction from local space into world
 		Vec2F Local2WorldDir(const Vec2F& localDir) const;
+
+		// Returns true when point inside this
+		bool IsPointInside(const Vec2F& point) const;
+
+		SERIALIZABLE_IMPL(Transform);
+
+		IOBJECT(Transform)
+		{
+			FIELD(mPosition) SERIALIZABLE(Vec2F) ANIMATABLE(Vec2F);
+		}
 
 	protected:
 		Vec2F  mPosition;  // Position

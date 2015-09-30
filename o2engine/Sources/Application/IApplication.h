@@ -10,6 +10,7 @@
 namespace o2
 {
 	class Assets;
+	class EventSystem;
 	class FileSystem;
 	class Input;
 	class LogStream;
@@ -100,6 +101,7 @@ namespace o2
 
 	protected:
 		Ptr<Assets>        mAssets;        // Assets
+		Ptr<EventSystem>   mEventSystem;   // Events processing system
 		Ptr<FileSystem>    mFileSystem;    // File system
 		Ptr<Input>         mInput;         // While application user input message
 		Ptr<LogStream>     mLog;           // Log stream with id "app", using only for application messages

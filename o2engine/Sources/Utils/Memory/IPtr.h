@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	struct ObjectInfo;
+	struct AllocObjectInfo;
 
 	// -----------------------
 	// Basic pointer interface
@@ -13,11 +13,12 @@ namespace o2
 	class IPtr
 	{
 	protected:
-		ObjectInfo* mObjectInfo; // Object info pointer
-		bool        mIsOnTop;    // Using for GC. True when pointer haven't parent pointer
+		AllocObjectInfo* mObjectInfo; // Object info pointer
+		bool        mIsOnTop;    // Using for GC. True when pointer is on top of memory hierarchy
 
+	protected:
 		// Default constructor
-		IPtr(): mObjectInfo(nullptr) {}
+		IPtr(): mObjectInfo(nullptr), mIsOnTop(false) {}
 
 		// Virtual destructor
 		virtual ~IPtr() {}
@@ -29,7 +30,7 @@ namespace o2
 		virtual void* ObjectPtr() const = 0;
 
 		friend class MemoryManager;
-		friend struct ObjectInfo;
+		friend struct AllocObjectInfo;
 
 		template<typename _type>
 		friend class ITemplPtr;
@@ -44,6 +45,7 @@ namespace o2
 	protected:
 		_type* mObject; // Pointer to object
 
+	protected:
 		// Constructor
 		ITemplPtr(_type* object = nullptr);
 
@@ -73,7 +75,7 @@ namespace o2
 		void Release();
 
 		friend class MemoryManager;
-		friend struct ObjectInfo;
+		friend struct AllocObjectInfo;
 	};
 
 	template<typename _type>
@@ -143,8 +145,9 @@ namespace o2
 	void ITemplPtr<_type>::Release()
 	{
 		if (mObject)
+		{
 			delete mObject;
-
-		ObjectReleased();
+			ObjectReleased();
+		}
 	}
 }

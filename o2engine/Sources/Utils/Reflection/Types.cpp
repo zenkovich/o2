@@ -19,6 +19,8 @@ namespace o2
 {
 	UInt Types::mLastGivenTypeId = 0;
 
+	Type UnknownObject::type;
+
 	const Vector<Type*>& Types::GetTypes()
 	{
 		return mTypes;

@@ -202,6 +202,8 @@ namespace o2
 		mDIPCount             = 0;
 		mCurrentPrimitiveType = GL_TRIANGLES;
 
+		mDrawingDepth = 0.0f;
+
 		// Reset view matrices
 		SetupViewMatrix(mResolution);
 
@@ -323,6 +325,20 @@ namespace o2
 		ULong dcolor = color.ABGR();
 		Vertex2 v[] ={Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0)};
 		DrawLines(v, 1);
+	}
+
+	void Render::DrawLine(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/)
+	{
+		ULong dcolor = color.ABGR();
+		int segCount = points.Count() - 1;
+		Vertex2* v = new Vertex2[segCount*2];
+		for (int i = 0; i < segCount; i++)
+		{
+			v[i*2] = Vertex2(points[i], dcolor, 0, 0);
+			v[i*2 + 1] = Vertex2(points[i + 1], dcolor, 0, 0);
+		}
+		DrawLines(v, segCount);
+		delete[] v;
 	}
 
 	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/)
@@ -505,6 +521,9 @@ namespace o2
 	{
 		if (!mReady)
 			return false;
+
+		mDrawingDepth += 1.0f;
+		mesh->mDrawingDepth = mDrawingDepth;
 
 		// Check difference
 		if (mLastDrawTexture != mesh->mTexture.mTexture ||

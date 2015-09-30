@@ -2,6 +2,7 @@
 
 namespace o2
 {
+	IOBJECT_CPP(Transform);
 
 	Transform::Transform(const Vec2F& size /*= Vec2F()*/, const Vec2F& position /*= Vec2F()*/,
 						 float angle /*= 0.0f*/, const Vec2F& scale /*= Vec2F(1.0f, 1.0f)*/,
@@ -304,7 +305,7 @@ namespace o2
 
 	Vec2F Transform::World2LocalDir(const Vec2F& worldDir) const
 	{
-		Vec2F nx = mTransform.xv.Normalized(), ny = mTransform.yv.Normalized(), wd = worldDir;
+		Vec2F nx = mTransform.xv/(mSize.x*mScale.x), ny = mTransform.yv/(mSize.y*mScale.y), wd = worldDir;
 		float ldy = (wd.x*nx.y - wd.y*nx.x)/(nx.y*ny.x - ny.y*nx.x);
 		float ldx = (wd.x - ny.x*ldy)/nx.x;
 		return Vec2F(ldx, ldy);
@@ -312,8 +313,20 @@ namespace o2
 
 	Vec2F Transform::Local2WorldDir(const Vec2F& localDir) const
 	{
-		Vec2F nx = mTransform.xv.Normalized(), ny = mTransform.yv.Normalized();
+		Vec2F nx = mTransform.xv/(mSize.x*mScale.x), ny = mTransform.yv/(mSize.y*mScale.y);
 		return nx*localDir.x + ny*localDir.y;
+	}
+
+	bool Transform::IsPointInside(const Vec2F& point) const
+	{
+		Vec2F rs = mScale*mSize;
+		Vec2F nx = mTransform.xv/rs.x, ny = mTransform.yv/rs.y;
+		Vec2F lp = point - mTransform.offs;
+
+		float dx = lp.Dot(nx);
+		float dy = lp.Dot(ny);
+
+		return dx >= 0.0f && dx <= rs.x && dy >= 0.0f && dy < rs.y;
 	}
 
 	void Transform::InitializeProperties()

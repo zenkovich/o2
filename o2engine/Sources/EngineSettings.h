@@ -2,6 +2,9 @@
 
 // TODO: Need create this configuration fully automatic and depending with project configuration
 
+// Current working platform
+#define PLATFORM ProjectConfig::Platform::Windows
+
 // Project config file path. Relative from executable
 #define PROJECT_SETTINGS_FILE_PATH "../../../ProjectSettings.xml"
 

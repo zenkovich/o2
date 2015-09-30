@@ -9,7 +9,8 @@ namespace o2
 
 	IOBJECT_CPP(ProjectConfig);
 
-	ProjectConfig::ProjectConfig()
+	ProjectConfig::ProjectConfig():
+		mPlatform(PLATFORM)
 	{
 		InitializeProperties();
 

@@ -13,4 +13,5 @@ namespace o2
 	typedef unsigned int       AssetId;
 
 	typedef int                KeyboardKey;
+	typedef int                CursorId;
 }

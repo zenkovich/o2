@@ -12,7 +12,8 @@ namespace o2
 		InitializeProperties();
 	}
 
-	Mesh::Mesh(const Mesh& mesh)
+	Mesh::Mesh(const Mesh& mesh):
+		mVertices(NULL), mIndexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), mVertexCount(0), mPolyCount(0)
 	{
 		SetTexture(mesh.mTexture);
 		Resize(mesh.mMaxVertexCount, mesh.mMaxPolyCount);

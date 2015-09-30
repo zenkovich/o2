@@ -7,7 +7,7 @@
 #include "Utils/Property.h"
 
 // Project configuration access macros
-#define o2ProjectConfig o2::ProjectConfig::Instance()
+#define o2Config o2::ProjectConfig::Instance()
 
 namespace o2
 {
@@ -48,7 +48,7 @@ namespace o2
 		IOBJECT(ProjectConfig)
 		{
 			SRLZ_FIELD(mProjectName);
-			SRLZ_FIELD(mPlatform);
+			FIELD(mPlatform);
 		}
 
 	protected:

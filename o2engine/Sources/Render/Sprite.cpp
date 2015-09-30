@@ -90,7 +90,7 @@ namespace o2
 
 	Sprite::Sprite(const Sprite& other):
 		mImageAssetId(other.mImageAssetId), mTextureSrcRect(other.mTextureSrcRect),
-		IRectDrawable(other), mMesh(other.mMesh), mMode(other.mMode), mFill(other.mFill), mSlices(other.mSlices),
+		IRectDrawable(other), mMesh(mnew Mesh(*other.mMesh)), mMode(other.mMode), mFill(other.mFill), mSlices(other.mSlices),
 		mMeshBuildFunc(other.mMeshBuildFunc)
 	{
 		for (int i = 0; i < 4; i++)
@@ -106,7 +106,7 @@ namespace o2
 
 	Sprite& Sprite::operator=(const Sprite& other)
 	{
-		mMesh = other.mMesh;
+		mMesh = mnew Mesh(*other.mMesh);
 		mTextureSrcRect = other.mTextureSrcRect;
 		mImageAssetId = other.mImageAssetId;
 		mMode = other.mMode;
@@ -129,7 +129,8 @@ namespace o2
 			return;
 
 		mMesh->Draw();
- 		o2Render.DrawMeshWire(mMesh, Color4(255, 255, 255, 100));
+		mDrawingDepth = mMesh->mDrawingDepth;
+// 		o2Render.DrawMeshWire(mMesh, Color4(255, 255, 255, 100));
 // 		o2Render.DrawBasis(mTransform);
 	}
 

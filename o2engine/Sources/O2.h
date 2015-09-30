@@ -5,11 +5,14 @@
 #include "Utils/Memory/MemoryManager.h"
 #include "Utils/Memory/Ptr.h"
 
+#include "Utils/Math/Color.h"
+#include "Utils/Math/Layout.h"
 #include "Utils/Math/Math.h"
+#include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"
-#include "Utils/Math/Rect.h"
-#include "Utils/Math/Color.h"
+#include "Utils/Math/Interpolation.h"
+#include "Utils/Math/Curve.h"
 
 #include "Utils/Containers/Vector.h"
 #include "Utils/Containers/Dictionary.h"
@@ -41,6 +44,8 @@
 
 #include "Utils/Reflection/Types.h"
 
+#include "Utils/Editor/DragHandle.h"
+
 #include "Application/Input.h"
 #include "Application/BaseApplication.h"
 
@@ -63,9 +68,20 @@
 #include "Render/VectorFont.h"
 #include "Render/VectorFontEffects.h"
 
-#define INITIALIZE_O2                                                              					  \
-o2::o2StackWalker* o2::o2StackWalker::mInstance = new o2StackWalker();								  \
-o2::MemoryManager* o2::MemoryManager::mInstance = new MemoryManager();								  \
+#include "Events/EventSystem.h"
+#include "Events/ApplicationEventsListener.h"
+#include "Events/CursorEventsListener.h"
+#include "Events/DragEventsListener.h"
+#include "Events/KeyboardEventsListener.h"
+
+#include "Animation/Animation.h"
+#include "Animation/AnimatedValue.h"
+#include "Animation/AnimatedVec2.h"
+#include "Animation/Tween.h"
+
+#define INITIALIZE_O2                                                              	   \
+o2::o2StackWalker* o2::o2StackWalker::mInstance = new o2StackWalker();				   \
+o2::MemoryManager* o2::MemoryManager::mInstance = new MemoryManager();				   \
 template<> o2::Ptr<o2::Debug> o2::Singleton<o2::Debug>::mInstance = mnew o2::Debug();  \
 o2::Vector<o2::Type*> o2::Types::mTypes
 

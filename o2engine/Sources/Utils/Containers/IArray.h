@@ -18,6 +18,9 @@ namespace o2
 		// Access operator
 		_type& operator[](int idx);
 
+		// Access operator
+		const _type& operator[](int idx) const;
+
 		// Returns value at index
 		virtual _type& Get(int idx) const = 0;
 
@@ -98,6 +101,9 @@ namespace o2
 		// Returns last element
 		virtual _type& Last();
 
+		// Returns constant last element
+		virtual const _type& Last() const;
+
 		// Returns last element that pass function
 		virtual _type Last(const Function<bool(const _type&)>& match) const;
 
@@ -151,7 +157,19 @@ namespace o2
 	}
 
 	template<typename _type>
+	const _type& IArray<_type>::Last() const
+	{
+		return Get(Count() - 1);
+	}
+
+	template<typename _type>
 	_type& IArray<_type>::operator[](int idx)
+	{
+		return Get(idx);
+	}
+
+	template<typename _type>
+	const _type& IArray<_type>::operator[](int idx) const
 	{
 		return Get(idx);
 	}
