@@ -3,10 +3,12 @@
 #include "EngineSettings.h"
 #include "Utils/CommonTypes.h"
 #include "Utils/Containers/Vector.h"
+#include "Utils/String.h"
 
 // Memory manager access macros
-#define o2Memory (*MemoryManager::mInstance)
+#define o2Memory (*MemoryManager::instance)
 
+void* operator new(size_t size);
 void* operator new(size_t size, const char* location, int line);
 void  operator delete(void* allocMemory);
 void  operator delete(void* allocMemory, const char* location, int line);
@@ -45,7 +47,7 @@ namespace o2
 		typedef Vector<AllocObjectInfo*> ObjectsInfosVec;
 
 	public:
-		static MemoryManager* mInstance; // Instance pointer
+		static MemoryManager* instance; // Instance pointer
 
 	public:
 		// Collects all unused objects and destroys them
@@ -58,7 +60,7 @@ namespace o2
 
 	protected:
 		// Calling when object created
-		static void OnObjectCreating(void* object, AllocObjectInfo* info, UInt size, const char* srcFile, int srcFileLine);
+		static void OnObjectCreating(void* object, UInt size, const char* srcFile, int srcFileLine);
 
 		// Calling when objects destroying
 		static void OnObjectDestroying(void* object);

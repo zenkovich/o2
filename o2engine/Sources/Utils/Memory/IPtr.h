@@ -12,9 +12,16 @@ namespace o2
 	// -----------------------
 	class IPtr
 	{
+	public: 
+		// Returns object allocation info pointer
+		AllocObjectInfo* GetAllocObjectInfo() const
+		{
+			return mObjectInfo;
+		}
+
 	protected:
 		AllocObjectInfo* mObjectInfo; // Object info pointer
-		bool        mIsOnTop;    // Using for GC. True when pointer is on top of memory hierarchy
+		bool             mIsOnTop;    // Using for GC. True when pointer is on top of memory hierarchy
 
 	protected:
 		// Default constructor

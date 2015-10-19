@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Utils/String.h"
-#include "Utils/Reflection/FieldInfo.h"
 #include "Utils/Memory/Ptr.h"
+#include "Utils/Property.h"
+#include "Utils/Reflection/FieldInfo.h"
+#include "Utils/String.h"
 
 namespace o2
 {
@@ -65,25 +66,20 @@ namespace o2
 		template<typename _type>
 		FieldInfo& RegField(const String& name, UInt offset, _type& value);
 
+		// Registers field in type
 		template<typename _type>
-		_type* GetFieldPtr(void* object, const String& path) const 
-		{
-			int delPos = path.Find("/");
-			WString pathPart = path.SubStr(0, delPos);
+		FieldInfo& RegField(const String& name, UInt offset, Property<_type>& value);
 
-			for (auto field : mFields)
-			{
-				if (field->mName == pathPart)
-				{
-					if (delPos == -1)
-						return field->GetValuePtr<_type>(object);
-					else
-						return field->mType->GetFieldPtr<_type>(field->GetValuePtr<_type>(object), path.SubStr(delPos + 1));
-				}
-			}
+		// Registers field in type
+		template<typename _type>
+		FieldInfo& RegField(const String& name, UInt offset, Accessor<Ptr<_type>, const String&>& value);
 
-			return nullptr;
-		}
+		template<typename _type>
+		_type* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+
+		String GetFieldPath(void* sourceObject, void *targetObject) const;
+
+		FieldInfo* FindFieldInfo(void* sourceObject, void *targetObject, String &res) const;
 
 		// Initializes type parameters
 		static void Initialize(Type& type, const String& name, UInt id, IObject* sample);
@@ -96,11 +92,15 @@ namespace o2
 		Vector<FieldInfo*> mFields;    // Fields information
 		Id                 mId;        // Id of type
 		Vector<Type*>      mBaseTypes; // Base types ids
-		IObject*           mSample;    // Object sample
+		Ptr<IObject>       mSample;    // Object sample
+
+		friend class FieldInfo;
+
+		template<typename _type>
+		friend class AccessorFieldInfo;
 	};
 
 
-	// Registers field in type
 	template<typename _type>
 	FieldInfo& Type::RegField(const String& name, UInt offset, Ptr<_type>& value)
 	{
@@ -109,12 +109,57 @@ namespace o2
 		return *mFields.Last();
 	}
 
-	// Registers field in type
 	template<typename _type>
 	FieldInfo& Type::RegField(const String& name, UInt offset, _type& value)
 	{
 		Type* type = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
 		mFields.Add(new FieldInfo(name, offset, false, false, type));
 		return *mFields.Last();
+	}
+
+	template<typename _type>
+	FieldInfo& Type::RegField(const String& name, UInt offset, Property<_type>& value)
+	{
+		Type* type = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		mFields.Add(new FieldInfo(name, offset, true, false, type));
+		return *mFields.Last();
+	}
+
+	template<typename _type>
+	FieldInfo& Type::RegField(const String& name, UInt offset, Accessor<Ptr<_type>, const String&>& value)
+	{
+		Type* type = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		mFields.Add(new AccessorFieldInfo<_type>(name, offset, type));
+		return *mFields.Last();
+	}
+
+	template<typename _type>
+	_type* Type::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	{
+		int delPos = path.Find("/");
+		WString pathPart = path.SubStr(0, delPos);
+
+		for (auto field : mFields)
+		{
+			if (field->mName == pathPart)
+			{
+				if (delPos == -1)
+				{
+					fieldInfo = field;
+					return field->GetValuePtr<_type>(object);
+				}
+				else
+				{
+					char* val = field->GetValuePtr<char>(object);
+
+					if (!val)
+						return nullptr;
+
+					return (_type*)(field->SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo));
+				}
+			}
+		}
+
+		return nullptr;
 	}
 }

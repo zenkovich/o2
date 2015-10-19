@@ -1,7 +1,12 @@
 #include "Widget.h"
 
+#include "Render/Sprite.h"
+#include "Render/Text.h"
+
 namespace o2
 {
+	IOBJECT_CPP(Widget);
+
 	Widget::Widget():
 		mParent(nullptr)
 	{
@@ -14,7 +19,7 @@ namespace o2
 		InitializeProperties();
 
 		for (auto layer : other.mLayers)
-			mLayers.Add(mnew Layer(*layer));
+			mLayers.Add(mnew WidgetLayer(*layer));
 
 		for (auto child : other.mChilds)
 		{
@@ -64,7 +69,7 @@ namespace o2
 		mSize = other.mSize;
 
 		for (auto layer : other.mLayers)
-			mLayers.Add(mnew Layer(*layer));
+			mLayers.Add(mnew WidgetLayer(*layer));
 
 		for (auto child : other.mChilds)
 		{
@@ -79,11 +84,6 @@ namespace o2
 		UpdateLayoutRecursive();
 
 		return *this;
-	}
-
-	Ptr<Widget> Widget::Clone() const
-	{
-		return mnew Widget(*this);
 	}
 
 	void Widget::Update(float dt)
@@ -102,7 +102,7 @@ namespace o2
 
 	void Widget::Draw()
 	{
-		for (auto layer : mLayers)
+		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
 		for (auto child : mChilds)
@@ -250,15 +250,96 @@ namespace o2
 		return mSize;
 	}
 
-	Ptr<Layer> Widget::AddLayer(Ptr<Layer> layer)
+	Ptr<WidgetLayer> Widget::AddLayer(Ptr<WidgetLayer> layer)
 	{
 		mLayers.Add(layer);
 		layer->mOwnerWidget = this;
 		UpdateLayersDrawingSequence();
+		OnLayerAdded(layer);
 		return layer;
 	}
 
-	Ptr<Layer> Widget::GetLayer(const String& path) const
+	Ptr<WidgetLayer> Widget::AddLayer(const String& name, Ptr<IRectDrawable> drawable, 
+									  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	{
+		Ptr<WidgetLayer> layer = mnew WidgetLayer();
+		layer->depth = depth;
+		layer->id = name;
+		layer->drawable = drawable;
+		layer->layout = layout;
+
+		AddLayer(layer);
+
+		return layer;
+	}
+
+	Ptr<WidgetLayer> Widget::AddSpriteLayer(const String& name, const String& fileName, 
+											const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	{
+		return AddLayer(name, mnew Sprite(fileName), layout, depth);
+	}
+
+	Ptr<WidgetLayer> Widget::AddSpriteLayer(const String& name, AssetId assetId, 
+											const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	{
+		return AddLayer(name, mnew Sprite(assetId), layout, depth);
+	}
+
+	Ptr<WidgetLayer> Widget::AddSpriteLayer(const String& name, Ptr<ImageAsset> asset, 
+											const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	{
+		return AddLayer(name, mnew Sprite(asset), layout, depth);
+	}
+
+	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, const String& fontFileName, 
+										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
+										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/, 
+										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	{
+		Ptr<Text> textDrawable = mnew Text(fontFileName);
+		textDrawable->SetHorAlign(horAlign);
+		textDrawable->SetVerAlign(verAlign);
+		textDrawable->SetCText(text);
+		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
+	}
+
+	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, AssetId fontAssetId, 
+										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
+										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/, 
+										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	{
+		Ptr<Text> textDrawable = mnew Text(fontAssetId);
+		textDrawable->SetHorAlign(horAlign);
+		textDrawable->SetVerAlign(verAlign);
+		textDrawable->SetCText(text);
+		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
+	}
+
+	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, Ptr<VectorFontAsset> fontAsset, 
+										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
+										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/,
+										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	{
+		Ptr<Text> textDrawable = mnew Text(fontAsset);
+		textDrawable->SetHorAlign(horAlign);
+		textDrawable->SetVerAlign(verAlign);
+		textDrawable->SetCText(text);
+		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
+	}
+
+	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, Ptr<BitmapFontAsset> fontAsset, 
+										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
+										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/, 
+										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	{
+		Ptr<Text> textDrawable = mnew Text(fontAsset);
+		textDrawable->SetHorAlign(horAlign);
+		textDrawable->SetVerAlign(verAlign);
+		textDrawable->SetCText(text);
+		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
+	}
+
+	Ptr<WidgetLayer> Widget::GetLayer(const String& path) const
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -277,7 +358,7 @@ namespace o2
 		return nullptr;
 	}
 
-	bool Widget::RemoveLayer(Ptr<Layer> layer)
+	bool Widget::RemoveLayer(Ptr<WidgetLayer> layer)
 	{
 		bool res = mLayers.Remove(layer);
 		layer.Release();
@@ -315,6 +396,64 @@ namespace o2
 		return mLayers;
 	}
 
+	Ptr<WidgetState> Widget::AddState(const String& name)
+	{
+		Ptr<WidgetState> newState = mnew WidgetState();
+		newState->name = name;
+		newState->animation.SetTarget(this);
+		mStates.Add(newState);
+		return newState;
+	}
+
+	Ptr<WidgetState> Widget::AddState(const String& name, const Animation& animation)
+	{
+		Ptr<WidgetState> newState = mnew WidgetState();
+		newState->name = name;
+		newState->animation = animation;
+		newState->animation.SetTarget(this);
+		newState->animation.relTime = 0.0f;
+		mStates.Add(newState);
+		return newState;
+	}
+
+	Ptr<WidgetState> Widget::AddState(Ptr<WidgetState> state)
+	{
+		mStates.Add(state);
+		return state;
+	}
+
+	bool Widget::RemoveState(const String& name)
+	{
+		int idx = mStates.FindIdx([&](const Ptr<WidgetState>& state) { return state->name == name; });
+		if (idx < 0)
+			return false;
+
+		mStates[idx].Release();
+		mStates.RemoveAt(idx);
+
+		return true;
+	}
+
+	bool Widget::RemoveState(Ptr<WidgetState> state)
+	{
+		int idx = mStates.Find(state);
+		if (idx < 0)
+			return false;
+
+		mStates[idx].Release();
+		mStates.RemoveAt(idx);
+
+		return true;
+	}
+
+	void Widget::RemoveAllStates()
+	{
+		for (auto state : mStates)
+			state.Release();
+
+		mStates.Clear();
+	}
+
 	void Widget::SetState(const String& name, bool state)
 	{
 		auto stateObj = GetStateObject(name);
@@ -333,7 +472,7 @@ namespace o2
 		return false;
 	}
 
-	Ptr<State> Widget::GetStateObject(const String& name) const
+	Ptr<WidgetState> Widget::GetStateObject(const String& name) const
 	{
 		return mStates.FindMatch([&](auto state) { return state->name == name; });
 	}
@@ -363,9 +502,12 @@ namespace o2
 	{
 		mDrawingLayers.Clear();
 		for (auto layer : mLayers)
+		{
+			mDrawingLayers.Add(layer);
 			mDrawingLayers.Add(layer->GetAllChilds());
+		}
 
-		mDrawingLayers.Sort([](auto a, auto b) { return a->mDepth > b->mDepth; });
+		mDrawingLayers.Sort([](auto a, auto b) { return a->mDepth < b->mDepth; });
 	}
 
 	Widget::WidgetsVec Widget::GetChildsNonConst()
@@ -383,6 +525,18 @@ namespace o2
 		return mStates;
 	}
 
+	Dictionary<String, Ptr<WidgetLayer>> Widget::GetAllLayers()
+	{
+		Dictionary<String, Ptr<WidgetLayer>> res;
+		for (auto layer : mLayers)
+			res.Add(layer->id, layer);
+
+		return res;
+	}
+
+	void Widget::OnLayerAdded(Ptr<WidgetLayer> layer)
+	{}
+
 	void Widget::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(Widget, parent, SetParent, GetParent);
@@ -395,5 +549,7 @@ namespace o2
 		INITIALIZE_ACCESSOR(Widget, child, GetChild);
 		INITIALIZE_ACCESSOR(Widget, layer, GetLayer);
 		INITIALIZE_ACCESSOR(Widget, state, GetStateObject);
+
+		layer.SetAllAccessFunc(this, &Widget::GetAllLayers);
 	}
 }

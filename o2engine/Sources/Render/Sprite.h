@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Assets/Asset.h"
+#include "Render/Mesh.h"
 #include "Render/RectDrawable.h"
 #include "Render/TextureRef.h"
 #include "Utils/Memory/Ptr.h"
 
 namespace o2
 {
-	class Mesh;
 	class ImageAsset;
 	class Bitmap;
 
@@ -64,9 +64,6 @@ namespace o2
 
 		// Assign operator
 		Sprite& operator=(const Sprite& other);
-
-		// Returns cloned copy
-		Sprite* Clone() const;
 
 		// Draws sprite 
 		void Draw();
@@ -161,6 +158,35 @@ namespace o2
 		// Sets size with equal aspect as texture source rectangle by nearest value
 		void NormalizeAspect();
 
+		SERIALIZABLE_IMPL(Sprite);
+
+		IOBJECT(Sprite)
+		{
+			BASE_CLASS(IRectDrawable);
+
+			FIELD(texture);
+			FIELD(textureSrcRect);
+			FIELD(imageAssetId);
+			FIELD(imageAssetPath);
+			FIELD(imageAsset);
+			FIELD(bitmap);
+			FIELD(leftTopColor);
+			FIELD(rightTopColor);
+			FIELD(leftBottomColor);
+			FIELD(rightBottomColor);
+			FIELD(mode);
+			FIELD(fill);
+			FIELD(sliceBorder);
+
+			FIELD(mTextureSrcRect);
+			FIELD(mImageAssetId);
+			FIELD(mMesh);
+
+			SRLZ_FIELD(mMode);
+			SRLZ_FIELD(mSlices);
+			SRLZ_FIELD(mFill);
+		}
+
 	protected:
 		RectI     mTextureSrcRect;   // Texture source rectangle
 		Color4    mCornersColors[4]; // Corners colors
@@ -205,6 +231,12 @@ namespace o2
 
 		// Builds mesh for fill 360 counter clock wise mode
 		void BuildFill360CCWMesh();
+
+		// Calling when serializing
+		void OnSerialize(DataNode& node);
+
+		// Calling when deserializing
+		void OnDeserialized(const DataNode& node);
 
 		// Initializes properties
 		void InitializeProperties();

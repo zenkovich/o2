@@ -4,6 +4,9 @@
 
 namespace o2
 {
+	IOBJECT_CPP(Curve);
+	IOBJECT_CPP(Curve::Key);
+
 	Curve::Curve()
 	{
 		InitializeProperties();
@@ -65,10 +68,10 @@ namespace o2
 		int segBeg = 0;
 		int segEnd = 1;
 
-		for (int i = 0; i < Key::mApproxValuesCount - 1; i++)
+		for (int i = 1; i < Key::mApproxValuesCount; i++)
 		{
-			segBeg = i;
-			segEnd = i + 1;
+			segBeg = i - 1;
+			segEnd = i;
 
 			if (endKey.mApproxValues[i].x > position)
 				break;
@@ -167,6 +170,7 @@ namespace o2
 	void Curve::RemoveAllKeys()
 	{
 		mKeys.Clear();
+		onKeysChanged();
 	}
 
 	bool Curve::ContainsKey(float position)
@@ -309,6 +313,11 @@ namespace o2
 		return mKeys;
 	}
 
+	void Curve::OnDeserialized(const DataNode& node)
+	{
+		UpdateApproximation();
+	}
+
 	void Curve::InitializeProperties()
 	{
 		INITIALIZE_ACCESSOR(Curve, value, Evaluate);
@@ -332,6 +341,21 @@ namespace o2
 		rightCoef(other.rightCoef), rightCoefPosition(other.rightCoefPosition)
 	{
 		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount*sizeof(Vec2F));
+	}
+
+	Curve::Key::Key(float value):
+		value(value), position(0), leftCoef(0), leftCoefPosition(0), rightCoef(0), rightCoefPosition(0)
+	{}
+
+	Curve::Key::operator float() const
+	{
+		return value;
+	}
+
+	Curve::Key& Curve::Key::operator=(float value)
+	{
+		this->value = value;
+		return *this;
 	}
 
 	Curve::Key& Curve::Key::operator=(const Key& other)

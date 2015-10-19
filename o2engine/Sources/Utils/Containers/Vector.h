@@ -955,8 +955,8 @@ namespace o2
 	template<typename _type>
 	bool Vector<_type>::RemoveRange(int begin, int end)
 	{
-		if (begin < 0 || end < 0 || begin >= mCount || end >= mCount || begin > end)
-			return false;
+		begin = Math::Clamp(begin, 0, mCount);
+		end = Math::Clamp(end, begin, end);
 
 		int diff = end - begin;
 

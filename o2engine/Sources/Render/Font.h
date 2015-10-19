@@ -14,6 +14,7 @@ namespace o2
 {
 	class Mesh;
 	class Render;
+	class FontRef;
 
 	// -----------------------------------------------------------
 	// Font. Containing array of symbol glyphs, symbol index table
@@ -36,14 +37,19 @@ namespace o2
 		// Returns base height
 		float GetHeight() const;
 
+		// Returns line height in pixels
+		float GetLineHeight() const;
+
 		// Returns character constant reference by id
 		virtual const Character& GetCharacter(UInt16 id);
 
 		// Checks characters for pre loading
 		virtual void CheckCharacters(const WString& needChararacters);
 
-	protected:
+		// Returns font file name
+		virtual String GetFileName() const;
 
+	protected:
 		// --------------------
 		// Character definition
 		// --------------------
@@ -51,7 +57,7 @@ namespace o2
 		{
 			RectF  mTexSrc;  // texture source rect
 			Vec2F  mSize;    // Size of source rect
-			Vec2F  mOffset;  // Symbol offset
+			Vec2F  mOrigin;  // Symbol origin point
 			float  mAdvance; // Symbol advance
 			UInt16 mId;      // Character id
 
@@ -59,13 +65,19 @@ namespace o2
 		};
 		typedef Vector<Character> CharactersVec;
 
+		typedef Vector<FontRef*> FontRefsVec;
+
 	protected:
+		FontRefsVec   mRefs;            // Array of reference to this font
 		CharactersVec mCharacters;      // Characters array
 		float         mBaseHeight;      // Base height, in pixels
+		float         mLineHeight;      // Line height in pixels
 		TextureRef    mTexture;         // Texture
 		RectI         mTextureSrcRect;  // Texture source rectangle
 		bool          mReady;           // True when font is ready to use
 
 		friend class Text;
+		friend class FontRef;
+		friend class Render;
 	};
 }

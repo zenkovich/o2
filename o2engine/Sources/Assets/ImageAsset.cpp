@@ -13,11 +13,6 @@ namespace o2
 	IOBJECT_CPP(ImageAsset::MetaInfo);
 	IOBJECT_CPP(ImageAsset::PlatformMeta);
 
-	Type::Id ImageAsset::MetaInfo::GetAssetType() const
-	{
-		return ImageAsset::type.ID();
-	}
-
 	ImageAsset::ImageAsset():
 		Asset(), mBitmap(nullptr), mAtlasPage(0)
 	{
@@ -171,4 +166,24 @@ namespace o2
 		INITIALIZE_GETTER(ImageAsset, meta, GetMeta);
 	}
 
+	bool ImageAsset::PlatformMeta::operator==(const PlatformMeta& other) const
+	{
+		return mMaxSize == other.mMaxSize && mFormat == other.mFormat && mScale == other.mScale;
+	}
+
+	Type::Id ImageAsset::MetaInfo::GetAssetType() const
+	{
+		return ImageAsset::type.ID();
+	}
+
+	bool ImageAsset::MetaInfo::IsEqual(Ptr<IMetaInfo> other) const
+	{
+		if (!IMetaInfo::IsEqual(other))
+			return false;
+
+		Ptr<MetaInfo> otherMeta = other.Cast<MetaInfo>();
+		return mAtlasId == otherMeta->mAtlasId && mIOS == otherMeta->mIOS && mWindows == otherMeta->mWindows &&
+			mAndroid == otherMeta->mAndroid && mMacOS == otherMeta->mMacOS && mSliceBorder == otherMeta->mSliceBorder &&
+			mDefaultMode == otherMeta->mDefaultMode;
+	}
 }

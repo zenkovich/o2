@@ -17,9 +17,9 @@ namespace o2
 
 	o2::String o2StackWalker::GetStackTrace()
 	{
-		mInstance->mRes = "";
-		mInstance->ShowCallstack();
-		return mInstance->mRes;
+		instance->mRes = "";
+		instance->ShowCallstack();
+		return instance->mRes;
 	}
 
 	void o2StackWalker::OnOutput(LPCSTR szText)

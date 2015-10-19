@@ -177,7 +177,7 @@ namespace o2
 					continue;
 				}
 
-				GetAssetConverter((*bldAssetInfoIt)->mType)->RemoveAsset((*bldAssetInfoIt)->mPath);
+				GetAssetConverter((*bldAssetInfoIt)->mType)->RemoveAsset(**bldAssetInfoIt);
 
 				mLog->OutStr("Removed asset: " + (*bldAssetInfoIt)->mPath);
 
@@ -214,10 +214,12 @@ namespace o2
 							if (srcAssetInfo->mTime != buildedAssetInfo->mTime ||
 								!srcAssetInfo->mMeta->IsEqual(buildedAssetInfo->mMeta))
 							{
-								GetAssetConverter(srcAssetInfo->mType)->ConvertAsset(srcAssetInfo->mPath);
+								GetAssetConverter(srcAssetInfo->mType)->ConvertAsset(*srcAssetInfo);
 								buildedAssetInfo->mTime = srcAssetInfo->mTime;
 								buildedAssetInfo->mMeta.Release();
 								buildedAssetInfo->mMeta = static_cast<Asset::IMetaInfo*>(srcAssetInfo->mMeta->Clone());
+
+								mModifiedAssets.Add(buildedAssetInfo);
 
 								mLog->Out("Modified asset: %s", srcAssetInfo->mPath);
 							}
@@ -227,7 +229,7 @@ namespace o2
 							if (srcAssetInfo->mTime != buildedAssetInfo->mTime ||
 								!srcAssetInfo->mMeta->IsEqual(buildedAssetInfo->mMeta))
 							{
-								GetAssetConverter(buildedAssetInfo->mType)->RemoveAsset(buildedAssetInfo->mPath);
+								GetAssetConverter(buildedAssetInfo->mType)->RemoveAsset(*buildedAssetInfo);
 
 								mBuildedAssetsTree.RemoveAsset(buildedAssetInfo, false);
 
@@ -237,14 +239,16 @@ namespace o2
 								buildedAssetInfo->mMeta = static_cast<Asset::IMetaInfo*>(srcAssetInfo->mMeta->Clone());
 								buildedAssetInfo->mId = buildedAssetInfo->mMeta->ID();
 
-								GetAssetConverter(srcAssetInfo->mType)->ConvertAsset(srcAssetInfo->mPath);
+								GetAssetConverter(srcAssetInfo->mType)->ConvertAsset(*srcAssetInfo);
 								mLog->Out("Modified and moved to %s asset: %s", srcAssetInfo->mPath, buildedAssetInfo->mPath);
+
+								mModifiedAssets.Add(buildedAssetInfo);
 
 								mBuildedAssetsTree.AddAsset(buildedAssetInfo);
 							}
 							else
 							{
-								GetAssetConverter(srcAssetInfo->mType)->MoveAsset(buildedAssetInfo->mPath, srcAssetInfo->mPath);
+								GetAssetConverter(srcAssetInfo->mType)->MoveAsset(*buildedAssetInfo, *srcAssetInfo);
 								mLog->Out("Moved asset: %s to %s", buildedAssetInfo->mPath, srcAssetInfo->mPath);
 
 								mBuildedAssetsTree.RemoveAsset(buildedAssetInfo, false);
@@ -294,7 +298,7 @@ namespace o2
 				if (!isNew)
 					continue;
 
-				GetAssetConverter((*srcAssetInfoIt)->mType)->ConvertAsset((*srcAssetInfoIt)->mPath);
+				GetAssetConverter((*srcAssetInfoIt)->mType)->ConvertAsset(**srcAssetInfoIt);
 
 				mLog->Out("New asset: %s", (*srcAssetInfoIt)->mPath);
 
@@ -340,6 +344,7 @@ namespace o2
 
 	void AssetsBuilder::Reset()
 	{
+		mModifiedAssets.Clear();
 		mSourceAssetsTree.Clear();
 		mBuildedAssetsTree.Clear();
 

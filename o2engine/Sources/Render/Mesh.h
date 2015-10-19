@@ -15,17 +15,17 @@ namespace o2
 	class Mesh: public virtual IDrawable
 	{
 	public:
-		Vertex2* mVertices;    // Vertex buffer
-		UInt16*  mIndexes;     // Index buffer
-				 			   
-		UInt     mVertexCount; // Current vertices count
-		UInt     mPolyCount;   // Current polygons in mesh
+		Vertex2*             vertices;       // Vertex buffer
+		UInt16*              indexes;        // Index buffer
+										     
+		UInt                 vertexCount;    // Current vertices count
+		UInt                 polyCount;      // Current polygons in mesh
 
-	public:
 		Property<TextureRef> texture;        // Texture property
 		Property<UInt>       maxVertexCount; // Max vertex count property
 		Property<UInt>       maxPolyCount;   // Max polygons count property
 
+	public:
 		// Constructor
 		Mesh(TextureRef texture = TextureRef(), UInt vertexCount = 4, UInt polyCount = 2);
 

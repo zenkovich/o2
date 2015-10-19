@@ -31,7 +31,7 @@ namespace o2
 
 	// IObject header definition
 #define IOBJECT(CLASS)  							     \
-	IObject* Clone() const { return mnew CLASS(*this); } \
+	CLASS* Clone() const { return mnew CLASS(*this); }   \
 	static Type type;								     \
 	const Type& GetType() const { return type; };	     \
 	Type::Id GetTypeId() const { return type.ID(); };    \
@@ -42,6 +42,10 @@ namespace o2
 
 	// Field registration in type macros
 #define FIELD(NAME) \
+	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME)
+
+	// Field registration in type macros
+#define PROPERTY(NAME) \
 	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME)
 
 	// Base class specialization macros

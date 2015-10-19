@@ -65,6 +65,50 @@ namespace o2
 		return mSample;
 	}
 
+	String Type::GetFieldPath(void* sourceObject, void *targetObject) const
+	{
+		if (sourceObject == targetObject)
+			return "";
+
+		String res;
+
+		for (auto field : mFields)
+		{
+			char* fieldObject = field->GetValuePtr<char>(sourceObject);
+
+			if (fieldObject == targetObject)
+				return field->mName;
+
+			if (field->SearchFieldPath(fieldObject, targetObject, field->mName, res))
+				return res;
+		}
+
+		return res;
+	}
+
+	FieldInfo* Type::FindFieldInfo(void* sourceObject, void *targetObject, String &res) const
+	{
+		for (auto field : mFields)
+		{
+			char* fieldObject = field->GetValuePtr<char>(sourceObject);
+
+			if (fieldObject == targetObject)
+			{
+				res = field->mName;
+				return field;
+			}
+
+			if (!fieldObject)
+				continue;
+
+			FieldInfo* childField = field->SearchFieldPath(fieldObject, targetObject, field->mName, res);
+			if (childField)
+				return childField;
+		}
+
+		return nullptr;
+	}
+
 	void Type::Initialize(Type& type, const String& name, UInt id, IObject* sample)
 	{
 		type.mName = name;

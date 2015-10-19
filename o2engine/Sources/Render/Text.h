@@ -1,13 +1,16 @@
 #pragma once
 
-#include "Render/Font.h"
+#include "Render/FontRef.h"
 #include "Render/RectDrawable.h"
 #include "Utils/String.h"
 
 namespace o2
 {
+	class Asset;
+	class BitmapFontAsset;
 	class Mesh;
 	class Render;
+	class VectorFontAsset;
 
 	// ------------------------------------------------------------------------------------------
 	// Text renderer class. Using font, basis and many style parameters. Caching text into meshes
@@ -21,20 +24,32 @@ namespace o2
 		enum class HorAlign { Left, Middle, Right, Both };
 		
 	public:
-		Property<Ptr<Font>> font;            // Font pointer property
-		Property<WString>   text;            // Text property, wstring
-		Property<String>    ctext;           // Text property, string
-		Property<VerAlign>  verAlign;        // vertical align property
-		Property<HorAlign>  horAlign;        // Horizontal align property
-		Property<bool>      wordWrap;        // Words wrapping flag property
-		Property<float>     symbolsDistCoef; // Characters distance coef, 1 is standard
-		Property<float>     linesDistance;   // Lines distance coef, 1 is standard
+		Property<FontRef>   font;                // Font pointer property
+		Property<WString>   text;                // Text property, wstring
+		Property<String>    ctext;               // Text property, string
+		Property<VerAlign>  verAlign;            // vertical align property
+		Property<HorAlign>  horAlign;            // Horizontal align property
+		Property<bool>      wordWrap;            // Words wrapping flag property
+		Property<float>     symbolsDistanceCoef; // Characters distance coef, 1 is standard
+		Property<float>     linesDistanceCoef;   // Lines distance coef, 1 is standard
 
 		// Default constructor
 		Text();
 
 		// Constructor
-		Text(Ptr<Font> font);
+		Text(FontRef font);
+
+		// Constructor
+		Text(const String& fontFileName);
+
+		// Constructor
+		Text(AssetId fontAssetId);
+
+		// Constructor
+		Text(Ptr<BitmapFontAsset> fontAsset);
+
+		// Constructor
+		Text(Ptr<VectorFontAsset> fontAsset);
 
 		// Copy-constructor
 		Text(const Text& text);
@@ -42,17 +57,35 @@ namespace o2
 		// Destructor
 		~Text();
 
-		// Returns copy of drawable
-		Text* Clone() const;
+		// Assign operator
+		Text& operator=(const Text& other);
 
 		// Draw text
 		void Draw();
 
 		// Sets using font
-		void SetFont(Ptr<Font> font);
+		void SetFont(FontRef font);
 
 		// Returns using font
-		Ptr<Font> GetFont() const;
+		FontRef GetFont() const;
+
+		// Sets bitmap font asset 
+		void SetFontAsset(Ptr<BitmapFontAsset> asset);
+
+		// Sets vector font asset
+		void SetFontAsset(Ptr<VectorFontAsset> asset);
+
+		// Sets font asset id (loads asset by this id)
+		void SetFontAsset(AssetId assetId);
+
+		// Sets font asset (loads asset by file name)
+		void SetFontAsset(const String& fileName);
+
+		// Returns asset by font asset id
+		Ptr<Asset> GetFontAsset() const;
+
+		// Returns font asset id
+		AssetId GetFontAssetId() const;
 
 		// Sets text
 		void SetText(const WString& text);
@@ -85,16 +118,16 @@ namespace o2
 		bool GetWordWrap() const;
 
 		// Sets characters distance coefficient
-		void SetSymbolsDistCoef(float coef = 1);
+		void SetSymbolsDistanceCoef(float coef = 1);
 
 		// Returns characters distance coef
-		float GetSymbolsDistCoef() const;
+		float GetSymbolsDistanceCoef() const;
 
 		// Sets lines distance coefficient
-		void SetLinesDistance(float distance);
+		void SetLinesDistanceCoef(float coef = 1);
 
 		// Returns lines distance coefficient
-		float GetLinesDistance() const;
+		float GetLinesDistanceCoef() const;
 
 		// Returns symbol set structure pointer
 		SymbolsSet& GetSymbolsSet();
@@ -107,6 +140,33 @@ namespace o2
 								 const Vec2F& areaSize = Vec2F(), 
 								 HorAlign horAlign = HorAlign::Left, VerAlign verAlign = VerAlign::Top, 
 								 bool wordWrap = true, float charsDistCoef = 1.0f, float linesDistCoef = 1.0f);
+
+		SERIALIZABLE_IMPL(Text);
+
+		IOBJECT(Text)
+		{
+			BASE_CLASS(IRectDrawable);
+			FIELD(font);
+			FIELD(text);
+			FIELD(ctext);
+			FIELD(verAlign);
+			FIELD(horAlign);
+			FIELD(wordWrap);
+			FIELD(symbolsDistanceCoef);
+			FIELD(linesDistanceCoef);
+			FIELD(mFont);
+			FIELD(mMeshes);
+			FIELD(mLastTransform);
+			FIELD(mSymbolsSet);
+
+			SRLZ_FIELD(mFontAssetId);
+			SRLZ_FIELD(mText);
+			SRLZ_FIELD(mVerAlign);
+			SRLZ_FIELD(mHorAlign);
+			SRLZ_FIELD(mWordWrap);
+			SRLZ_FIELD(mSymbolsDistCoef);
+			SRLZ_FIELD(mLinesDistanceCoef);
+		}
 
 	public:
 		// ----------------
@@ -122,7 +182,7 @@ namespace o2
 				RectF  mFrame;   // Frame of symbol layout
 				RectF  mTexSrc;  // Texture source rect
 				UInt16 mCharId;  // Character id
-				Vec2F  mOffset;  // Character offset
+				Vec2F  mOrigin;  // Character offset
 				float  mAdvance; // Character advance
 
 			public:
@@ -131,7 +191,7 @@ namespace o2
 
 				// Constructor
 				SymbolDef(const Vec2F& position, const Vec2F& size, const RectF& texSrc, UInt16 charId,
-						  const Vec2F& offs, float advance);
+						  const Vec2F& origin, float advance);
 
 				// Equals operator
 				bool operator==(const SymbolDef& other) const;
@@ -161,7 +221,7 @@ namespace o2
 			typedef Vector<LineDef> LineDefsVec;
 
 		public:
-			Ptr<Font>   mFont;            // Font
+			FontRef     mFont;            // Font
 			WString     mText;            // Text string
 			Vec2F       mPosition;        // Position, in pixels
 			Vec2F       mAreaSize;        // Area size, in pixels
@@ -170,13 +230,13 @@ namespace o2
 			VerAlign    mVerAlign;        // Vertical align
 			bool        mWordWrap;        // True, when words wrapping
 			float       mSymbolsDistCoef; // Characters distance coefficient, 1 is standard
-			float       mLinesDistance;   // Lines distance coefficient, 1 is standard
+			float       mLinesDistCoef;   // Lines distance coefficient, 1 is standard
 			LineDefsVec mLineDefs;        // Lines definitions
 
 		public:
 			// Calculating characters layout by parameters
-			void Initialize(Ptr<Font> font, const WString& text, const Vec2F& position, const Vec2F& areaSize, HorAlign horAlign,
-							VerAlign verAlign, bool wordWrap, float charsDistCoef, float linesDistance);
+			void Initialize(FontRef font, const WString& text, const Vec2F& position, const Vec2F& areaSize, HorAlign horAlign,
+							VerAlign verAlign, bool wordWrap, float charsDistCoef, float linesDistCoef);
 		};
 
 	protected:
@@ -185,9 +245,10 @@ namespace o2
 		const UInt mMeshMaxPolyCount = 4096;
 
 		WString    mText;            // Wide char string, containing rendering text
-		Ptr<Font>  mFont;            // Using font
+		AssetId    mFontAssetId;     // Font asset id
+		FontRef    mFont;            // Using font
 		float      mSymbolsDistCoef; // Characters distance coef, 1 is standard
-		float      mLinesDistance;   // Lines distance coef, 1 is standard
+		float      mLinesDistanceCoef;   // Lines distance coef, 1 is standard
 		VerAlign   mVerAlign;        // Vertical align
 		HorAlign   mHorAlign;        // Horizontal align
 		bool       mWordWrap;        // True, when words wrapping
@@ -198,9 +259,6 @@ namespace o2
 		SymbolsSet mSymbolsSet;      // Symbols set definition
 
 	protected:
-		// Initializing properties
-		void InitializeProperties();
-
 		// Updating meshes
 		void UpdateMesh();
 
@@ -213,7 +271,16 @@ namespace o2
 		// Calculates and returns text basis
 		Basis CalculateTextBasis() const;
 
+		// Calls when color was changed
+		void ColorChanged();
+
 		// Calls when basis was changed
 		void BasisChanged();
+
+		// Calling when deserializing
+		void OnDeserialized(const DataNode& node);
+
+		// Initializing properties
+		void InitializeProperties();
 	};
 }

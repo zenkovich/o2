@@ -2,6 +2,7 @@
 
 namespace o2
 {
+	IOBJECT_CPP(Layout);
 
 	Layout::Layout():
 		anchorMin(0, 0), anchorMax(1.0f, 1.0f), offsetMin(), offsetMax()
@@ -16,13 +17,18 @@ namespace o2
 		Vec2F srcSize = source.Size();
 		return RectF(source.left + srcSize.x*anchorMin.x + offsetMin.x,
 					 source.bottom + srcSize.y*anchorMin.y + offsetMin.y,
-					 source.right + srcSize.x*anchorMax.x + offsetMax.x,
-					 source.top + srcSize.y*anchorMax.x + offsetMax.y);
+					 source.left + srcSize.x*anchorMax.x + offsetMax.x,
+					 source.bottom + srcSize.y*anchorMax.x + offsetMax.y);
 	}
 
 	Layout Layout::Both(const RectF& border)
 	{
-		return Layout(Vec2F(), Vec2F::One(), border.LeftBottom(), border.RightTop());
+		return Layout(Vec2F(), Vec2F::One(), border.LeftBottom(), border.RightTop()*-1.0f);
+	}
+
+	Layout Layout::Both(float left, float top, float right, float bottom)
+	{
+		return Layout(Vec2F(), Vec2F::One(), Vec2F(left, bottom), Vec2F(-right, -top));
 	}
 
 	Layout Layout::Straight(const RectF& rect)
@@ -30,4 +36,8 @@ namespace o2
 		return Layout(Vec2F(), Vec2F(), rect.LeftBottom(), rect.RightTop());
 	}
 
+	Layout Layout::Straight(float left, float top, float right, float bottom)
+	{
+		return Layout(Vec2F(), Vec2F(), Vec2F(left, bottom), Vec2F(right, top));
+	}
 }

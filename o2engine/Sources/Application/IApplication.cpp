@@ -75,6 +75,7 @@ namespace o2
 		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
 
 		mTime->Update(realdDt);
+		o2Debug.Update(dt);
 
 		//mScheduler->ProcessBeforeFrame(dt);
 
@@ -84,6 +85,7 @@ namespace o2
 
 		mRender->Begin();
 		OnDraw();
+		o2Debug.Draw();
 		//mUIController->Draw();
 		mRender->End();
 

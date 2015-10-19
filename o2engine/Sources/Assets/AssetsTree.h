@@ -29,6 +29,9 @@ namespace o2
 
 			// Constructor
 			AssetNode(const String& path, AssetId id, Type::Id type);
+
+			// Destructor
+			~AssetNode();
 		};
 		typedef Vector<Ptr<AssetNode>> AssetsVec;
 

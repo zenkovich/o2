@@ -205,6 +205,12 @@ namespace o2
 		return *this;
 	}
 
+	DataNode& DataNode::operator=(ISerializable& other)
+	{
+		*this = other.Serialize();
+		return *this;
+	}
+
 	DataNode::operator wchar_t*() const
 	{
 		return mData;

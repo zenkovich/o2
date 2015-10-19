@@ -4,6 +4,8 @@
 
 namespace o2
 {
+	IOBJECT_CPP(IAnimation);
+
 	IAnimation::IAnimation():
 		mTime(0), mDuration(0), mBeginTime(0), mEndTime(0), mDirection(1.0f), mSpeed(1.0f), mLoop(Loop::None),
 		mPlaying(false), mInDurationTime(0)
@@ -46,6 +48,19 @@ namespace o2
 
 		float lastInDurationTime = mInDurationTime;
 
+		UpdateTime();
+
+		float eventCheckBeg = Math::Min(lastInDurationTime, mInDurationTime);
+		float eventCheckEnd = Math::Max(lastInDurationTime, mInDurationTime);
+		for (auto& kv : mTimeEvents)
+		{
+			if (kv.Key() > eventCheckBeg && kv.Key() <= eventCheckEnd)
+				kv.Value().Invoke();
+		}
+	}
+
+	void IAnimation::UpdateTime()
+	{
 		if (mLoop == Loop::None)
 		{
 			if (mTime > mEndTime)
@@ -61,6 +76,7 @@ namespace o2
 			else if (mTime < mBeginTime)
 			{
 				mTime = mBeginTime;
+				mInDurationTime = mTime;
 				mPlaying = false;
 				Evaluate();
 
@@ -103,14 +119,6 @@ namespace o2
 		}
 
 		onUpdate(mTime);
-
-		float eventCheckBeg = Math::Min(lastInDurationTime, mInDurationTime);
-		float eventCheckEnd = Math::Max(lastInDurationTime, mInDurationTime);
-		for (auto& kv : mTimeEvents)
-		{
-			if (kv.Key() > eventCheckBeg && kv.Key() <= eventCheckEnd)
-				kv.Value().Invoke();
-		}
 	}
 
 	void IAnimation::Play()
@@ -207,7 +215,7 @@ namespace o2
 	void IAnimation::SetTime(float time)
 	{
 		mTime = time;
-		Evaluate();
+		UpdateTime();
 	}
 
 	float IAnimation::GetTime() const
@@ -217,7 +225,7 @@ namespace o2
 
 	float IAnimation::GetDuration() const
 	{
-		return mDuration;
+		return mEndTime - mBeginTime;
 	}
 
 	void IAnimation::SetRelTime(float relTime)
@@ -277,7 +285,7 @@ namespace o2
 		mLoop = loop;
 	}
 
-	IAnimation::Loop IAnimation::GetLoop() const
+	Loop IAnimation::GetLoop() const
 	{
 		return mLoop;
 	}
@@ -313,7 +321,8 @@ namespace o2
 		INITIALIZE_PROPERTY(IAnimation, time, SetTime, GetTime);
 		INITIALIZE_PROPERTY(IAnimation, relTime, SetRelTime, GetRelTime);
 		INITIALIZE_PROPERTY(IAnimation, beginBound, SetBeginBound, GetBeginBound);
-		INITIALIZE_PROPERTY(IAnimation, endBount, SetEndBound, GetEndBound);
+		INITIALIZE_PROPERTY(IAnimation, endBound, SetEndBound, GetEndBound);
 		INITIALIZE_PROPERTY(IAnimation, loop, SetLoop, GetLoop);
+		INITIALIZE_GETTER(IAnimation, duration, GetDuration);
 	}
 }

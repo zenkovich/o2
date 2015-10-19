@@ -2,6 +2,7 @@
 
 #include "Utils/Containers/Vector.h"
 #include "Utils/Reflection/Type.h"
+#include "Utils/Memory/Ptr.h"
 
 namespace o2
 {
@@ -11,14 +12,17 @@ namespace o2
 	class Types
 	{
 	public:
+		static Ptr<Types> instance;
+
+	public:
 		// Returns array of all registered types
-		static const Vector<Type*>& GetTypes();
+		static const Vector<Ptr<Type>>& GetTypes();
 
 		// Returns a copy of type sample
 		static IObject* CreateTypeSample(const String& typeName);
 
 		// Returns type by type id
-		static Type* GetType(Type::Id id);
+		static Ptr<Type> GetType(Type::Id id);
 
 		// Initializes all engine types
 		static void InitializeTypes();
@@ -27,27 +31,18 @@ namespace o2
 		template<typename _type>
 		static void InitializeType(const String& name);
 
-	public:
-		// -----------------
-		// Types registrator
-		// -----------------
-		struct Registrator
-		{
-			Registrator();
-		};
-
 	protected:
-		static Vector<Type*> mTypes;           // All registered types
-		static UInt          mLastGivenTypeId; // Last given type index
+		Vector<Ptr<Type>> mTypes;           // All registered types
+		UInt              mLastGivenTypeId; // Last given type index
 	};
 
 	template<typename _type>
 	void Types::InitializeType(const String& name)
 	{
-		_type* sample = new _type();
+		Ptr<_type> sample = mnew _type();
 		_type::InitializeType(sample);
-		Type::Initialize(_type::type, name, mLastGivenTypeId++, sample);
-		Types::mTypes.Add(&_type::type);
+		Type::Initialize(_type::type, name, instance->mLastGivenTypeId++, sample);
+		instance->mTypes.Add(&_type::type);
 	}
 
 #define INIT_TYPE(TYPE) InitializeType<TYPE>(#TYPE)

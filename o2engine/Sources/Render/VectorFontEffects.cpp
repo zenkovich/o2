@@ -24,6 +24,16 @@ namespace o2
 		return Vec2F::One()*radius;
 	}
 
+	bool FontStrokeEffect::IsEqual(Ptr<VectorFont::Effect> other) const
+	{
+		if (!VectorFont::Effect::IsEqual(other))
+			return false;
+
+		Ptr<FontStrokeEffect> otherEff = other.Cast<FontStrokeEffect>();
+		return Math::Equals(radius, otherEff->radius) && alphaThreshold == otherEff->alphaThreshold &&
+			color == otherEff->color;
+	}
+
 	FontGradientEffect::FontGradientEffect(const Color4& color1 /*= Color4(200, 200, 200, 255)*/, 
 										   const Color4& color2 /*= Color4(255, 255, 255, 255)*/, 
 										   float angle /*= 0*/, float length /*= 0*/, Vec2F origin /*= Vec2F()*/):
@@ -40,6 +50,16 @@ namespace o2
 		return Vec2I();
 	}
 
+	bool FontGradientEffect::IsEqual(Ptr<VectorFont::Effect> other) const
+	{
+		if (!VectorFont::Effect::IsEqual(other))
+			return false;
+
+		Ptr<FontGradientEffect> otherEff = other.Cast<FontGradientEffect>();
+		return Math::Equals(angle, otherEff->angle) && Math::Equals(length, otherEff->length) &&
+			color1 == otherEff->color1 && color2 == otherEff->color2 && origin == otherEff->origin;
+	}
+
 	FontColorEffect::FontColorEffect(const Color4& color /*= Color4::White()*/):
 		color(color)
 	{}
@@ -52,6 +72,15 @@ namespace o2
 	Vec2I FontColorEffect::GetSizeExtend() const
 	{
 		return Vec2I();
+	}
+
+	bool FontColorEffect::IsEqual(Ptr<VectorFont::Effect> other) const
+	{
+		if (!VectorFont::Effect::IsEqual(other))
+			return false;
+
+		Ptr<FontColorEffect> otherEff = other.Cast<FontColorEffect>();
+		return color == otherEff->color;
 	}
 
 	FontShadowEffect::FontShadowEffect(float blurRadius /*= 2.0f*/, const Vec2I offset /*= Vec2I(2, 2)*/, 
@@ -72,4 +101,13 @@ namespace o2
 		return offset + (Vec2I)(Vec2F::One()*blurRadius);
 	}
 
+	bool FontShadowEffect::IsEqual(Ptr<VectorFont::Effect> other) const
+	{
+		if (!VectorFont::Effect::IsEqual(other))
+			return false;
+
+		Ptr<FontShadowEffect> otherEff = other.Cast<FontShadowEffect>();
+		return Math::Equals(blurRadius, otherEff->blurRadius) && offset == otherEff->offset && 
+			color == otherEff->color;
+	}
 }

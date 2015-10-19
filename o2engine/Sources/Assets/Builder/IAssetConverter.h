@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Assets/AssetsTree.h"
 #include "Utils/IObject.h"
 #include "Utils/Memory/MemoryManager.h"
 #include "Utils/Memory/Ptr.h"
@@ -23,13 +24,13 @@ namespace o2
 		virtual Vector<Type::Id> GetProcessingAssetsTypes() const;
 
 		// Converts asset by path
-		virtual void ConvertAsset(const String& path);
+		virtual void ConvertAsset(const AssetTree::AssetNode& node);
 
 		// Removes asset by path
-		virtual void RemoveAsset(const String& path);
+		virtual void RemoveAsset(const AssetTree::AssetNode& node);
 
 		// Moves asset to new path
-		virtual void MoveAsset(const String& pathFrom, const String& pathTo);
+		virtual void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
 		// Post processing
 		virtual void AssetsPostProcess();

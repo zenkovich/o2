@@ -14,13 +14,13 @@ namespace o2
 		Vector<Type::Id> GetProcessingAssetsTypes() const;
 
 		// Converts folder by path
-		void ConvertAsset(const String& path);
+		void ConvertAsset(const AssetTree::AssetNode& node);
 
 		// Removes folder by path
-		void RemoveAsset(const String& path);
+		void RemoveAsset(const AssetTree::AssetNode& node);
 
 		// Moves folder to new path
-		void MoveAsset(const String& pathFrom, const String& pathTo);
+		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
 		// Post processing folders
 		void AssetsPostProcess();

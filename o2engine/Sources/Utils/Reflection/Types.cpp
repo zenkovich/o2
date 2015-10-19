@@ -2,8 +2,14 @@
 
 #include "Utils/IObject.h"
 
+#include "Animation/AnimatedFloat.h"
+#include "Animation/AnimatedValue.h"
+#include "Animation/AnimatedVector.h"
+#include "Animation/Animation.h"
+#include "Animation/IAnimation.h"
 #include "Assets/AtlasAsset.h"
 #include "Assets/BinaryAsset.h"
+#include "Assets/BitmapFontAsset.h"
 #include "Assets/Builder/AtlasAssetConverter.h"
 #include "Assets/Builder/FolderAssetConverter.h"
 #include "Assets/Builder/IAssetConverter.h"
@@ -11,24 +17,32 @@
 #include "Assets/Builder/StdAssetConverter.h"
 #include "Assets/FolderAsset.h"
 #include "Assets/ImageAsset.h"
+#include "Assets/VectorFontAsset.h"
 #include "Config/ProjectConfig.h"
+#include "Render/RectDrawable.h"
+#include "Render/Sprite.h"
+#include "Render/Text.h"
 #include "Render/VectorFont.h"
 #include "Render/VectorFontEffects.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetState.h"
+#include "UI/Widget.h"
+#include "Utils/Math/Curve.h"
+#include "Utils/Math/Layout.h"
+#include "Utils/Math/Transform.h"
 
 namespace o2
 {
-	UInt Types::mLastGivenTypeId = 0;
-
 	Type UnknownObject::type;
 
-	const Vector<Type*>& Types::GetTypes()
+	const Vector<Ptr<Type>>& Types::GetTypes()
 	{
-		return mTypes;
+		return instance->mTypes;
 	}
 
 	IObject* Types::CreateTypeSample(const String& typeName)
 	{
-		for (auto type : mTypes)
+		for (auto type : instance->mTypes)
 		{
 			if (type->Name() == typeName)
 				return type->Sample()->Clone();
@@ -37,9 +51,9 @@ namespace o2
 		return nullptr;
 	}
 
-	Type* Types::GetType(Type::Id id)
+	Ptr<Type> Types::GetType(Type::Id id)
 	{
-		for (auto type : mTypes)
+		for (auto type : instance->mTypes)
 		{
 			if (type->ID() == id)
 				return type;
@@ -47,11 +61,6 @@ namespace o2
 
 		return nullptr;
 	}	
-	
-	Types::Registrator::Registrator()
-	{
-		Types::InitializeTypes();
-	}
 
 	void Types::InitializeTypes()
 	{
@@ -82,6 +91,30 @@ namespace o2
 		INIT_TYPE(FontGradientEffect);
 		INIT_TYPE(FontStrokeEffect);
 		INIT_TYPE(FontShadowEffect);
+		INIT_TYPE(Transform);
+		INIT_TYPE(IAnimation);
+		INIT_TYPE(IAnimatedValue);
+		INIT_TYPE(AnimatedValue<float>);
+		INIT_TYPE(AnimatedValue<Vec2F>);
+		INIT_TYPE(AnimatedValue<Vec2F>::Key);
+		INIT_TYPE(AnimatedValue<Color4>);
+		INIT_TYPE(AnimatedValue<Color4>::Key);
+		INIT_TYPE(AnimatedValue<RectF>);
+		INIT_TYPE(AnimatedValue<RectF>::Key);
+		INIT_TYPE(Curve);
+		INIT_TYPE(Curve::Key);
+		INIT_TYPE(Animation);
+		INIT_TYPE(Animation::AnimatedValueDef);
+		INIT_TYPE(IRectDrawable);
+		INIT_TYPE(Sprite);
+		INIT_TYPE(Layout);
+		INIT_TYPE(BitmapFontAsset);
+		INIT_TYPE(BitmapFontAsset::MetaInfo);
+		INIT_TYPE(VectorFontAsset);
+		INIT_TYPE(VectorFontAsset::MetaInfo);
+		INIT_TYPE(Text);
+		INIT_TYPE(WidgetLayer);
+		INIT_TYPE(WidgetState);
+		INIT_TYPE(Widget);
 	}
-
 }

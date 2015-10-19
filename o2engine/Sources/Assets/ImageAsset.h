@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/Asset.h"
+#include "Render/Sprite.h"
 #include "Render/TextureRef.h"
 #include "Utils/Bitmap.h"
 
@@ -96,6 +97,8 @@ namespace o2
 			Vec2F  mScale;   // Image scale ((1; 1) - is default)
 			String mFormat;  // Image format
 
+			bool operator==(const PlatformMeta& other) const;
+
 			SERIALIZABLE_IMPL(PlatformMeta);
 			IOBJECT(PlatformMeta)
 			{
@@ -111,15 +114,20 @@ namespace o2
 		class MetaInfo: public IMetaInfo
 		{
 		public:
-			AssetId      mAtlasId; // Atlas owner id
-			PlatformMeta mIOS;     // IOS specified meta
-			PlatformMeta mAndroid; // Android specified meta
-			PlatformMeta mMacOS;   // MacOS specified meta
-			PlatformMeta mWindows; // Windows specified meta
+			AssetId      mAtlasId;     // Atlas owner id
+			PlatformMeta mIOS;         // IOS specified meta
+			PlatformMeta mAndroid;     // Android specified meta
+			PlatformMeta mMacOS;       // MacOS specified meta
+			PlatformMeta mWindows;     // Windows specified meta
+			RectI        mSliceBorder; // Default slice border
+			Sprite::Mode mDefaultMode; // Default sprite mode
 
 		public:
 			// Returns asset type id
 			Type::Id GetAssetType() const;
+
+			// Returns true if other meta is equal to this
+			bool IsEqual(Ptr<IMetaInfo> other) const;
 
 			SERIALIZABLE_IMPL(MetaInfo);
 
@@ -131,6 +139,8 @@ namespace o2
 				SRLZ_FIELD(mAndroid);
 				SRLZ_FIELD(mMacOS);
 				SRLZ_FIELD(mWindows);
+				SRLZ_FIELD(mSliceBorder);
+				SRLZ_FIELD(mDefaultMode);
 			}
 		};
 

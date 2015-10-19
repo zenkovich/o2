@@ -31,9 +31,6 @@ namespace o2
 		// Assign operator
 		IRectDrawable& operator=(const IRectDrawable& other);
 
-		// Returns a copy of drawable
-		virtual IRectDrawable* Clone() const = 0;
-
 		// Drawing
 		virtual void Draw() {}
 
@@ -55,9 +52,23 @@ namespace o2
 		// Returns enabled
 		virtual bool IsEnabled() const;
 
+		SERIALIZABLE_IMPL(IRectDrawable);
+
+		IOBJECT(IRectDrawable)
+		{
+			BASE_CLASS(Transform);
+
+			SRLZ_FIELD(mColor);
+			SRLZ_FIELD(mEnabled);
+
+			FIELD(color);
+			FIELD(transparency);
+			FIELD(enabled);
+		}
+
 	protected:
-		Color4 mColor;     // Color
-		bool   mEnabled;   // True, when drawable enabled and needs to draw
+		Color4 mColor;   // Color
+		bool   mEnabled; // True, when drawable enabled and needs to draw
 
 	protected:
 		// Calls when color was changed

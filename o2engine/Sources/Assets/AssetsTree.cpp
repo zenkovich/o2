@@ -14,6 +14,11 @@ namespace o2
 	{
 	}
 
+	AssetTree::AssetNode::~AssetNode()
+	{
+		mMeta.Release();
+	}
+
 	AssetTree::AssetTree()
 	{}
 

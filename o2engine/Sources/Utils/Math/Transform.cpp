@@ -20,6 +20,11 @@ namespace o2
 		InitializeProperties();
 	}
 
+	void Transform::OnDeserialized(const DataNode& node)
+	{
+		UpdateTransform();
+	}
+
 	void Transform::UpdateTransform()
 	{
 		mTransform = Basis::Build(mPosition, mScale*mSize, mAngle, mShear);
@@ -38,6 +43,7 @@ namespace o2
 		mShear	   = other.mShear;
 		mTransform = other.mTransform;
 
+		UpdateTransform();
 		BasisChanged();
 
 		return *this;

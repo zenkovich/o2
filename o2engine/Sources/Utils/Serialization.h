@@ -28,10 +28,10 @@ namespace o2
 
 	protected:
 		// Beginning serialization callback
-		virtual void OnSerialize() {}
+		virtual void OnSerialize(DataNode& node) {}
 
 		// Completion deserialization callback
-		virtual void OnDeserialized() {}
+		virtual void OnDeserialized(const DataNode& node) {}
 	};
 
 	// --------------------------------------
@@ -59,7 +59,7 @@ namespace o2
 
 	// Registering field in type with serialization attribute
 #define SRLZ_FIELD(NAME) \
-	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, Type::unknown).AddAttribute<SerializableAttribute<decltype(NAME)>>()
+	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME).AddAttribute<SerializableAttribute<decltype(NAME)>>()
 
 #define SERIALIZABLE(TYPE) .AddAttribute<SerializableAttribute<TYPE>>()
 
@@ -67,8 +67,8 @@ namespace o2
 #define SERIALIZABLE_IMPL(CLASS)                                                           \
 	DataNode Serialize()                                                        		   \
 	{                                                              						   \
-		OnSerialize();																	   \
 		DataNode res;																	   \
+		OnSerialize(res);																   \
 		for (auto field : type.Fields())												   \
 		{																				   \
 			ISerializableAttribute* srlzAttr = field->Attribute<ISerializableAttribute>(); \
@@ -86,7 +86,7 @@ namespace o2
 			if (srlzAttr)																   \
 				srlzAttr->Deserialize(this, node);										   \
 		}																				   \
-		OnDeserialized();																   \
+		OnDeserialized(node);   														   \
 	}																					   \
 	CLASS& operator=(const DataNode& node) 												   \
 	{																					   \
@@ -101,7 +101,7 @@ namespace o2
 	template<typename _type>
 	void SerializableAttribute<_type>::Deserialize(void* object, const DataNode& data) const
 	{
-		_type value;
+		_type value = _type();
 		auto node = data.GetNode(mOwnerFieldInfo->Name());
 		if (node) value = *node;
 		mOwnerFieldInfo->SetValue<_type>(object, value);

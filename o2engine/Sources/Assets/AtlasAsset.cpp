@@ -21,7 +21,8 @@ namespace o2
 			return false;
 
 		Ptr<MetaInfo> otherMeta = other.Cast<MetaInfo>();
-		return mIOS == otherMeta->mIOS && mAndroid == otherMeta->mAndroid && mMacOS == otherMeta->mMacOS && mWindows == otherMeta->mWindows;
+		return mIOS == otherMeta->mIOS && mAndroid == otherMeta->mAndroid && mMacOS == otherMeta->mMacOS && 
+			mWindows == otherMeta->mWindows && Math::Equals(mBorder, otherMeta->mBorder);
 	}
 
 	AssetId AtlasAsset::Page::ID() const

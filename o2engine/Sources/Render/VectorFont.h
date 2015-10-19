@@ -20,11 +20,20 @@ namespace o2
 	class VectorFont: public Font
 	{
 	public:
+		// ---------------------
+		// Font effect interface
+		// ---------------------
 		class Effect: public ISerializable
 		{
 		public:
+			// Processes glyph bitmap
 			virtual void Process(Ptr<Bitmap> bitmap) {};
+
+			// Returns needs extending size for glyph bitmap
 			virtual Vec2I GetSizeExtend() const { return Vec2I(); };
+
+			// Check effect equals
+			virtual bool IsEqual(Ptr<Effect> other) const { return GetTypeId() == other->GetTypeId(); }
 
 			IOBJECT(Effect) {}
 			SERIALIZABLE_IMPL(Effect);
@@ -120,6 +129,6 @@ namespace o2
 	template<typename _eff_type, typename ... _args>
 	Ptr<_eff_type> VectorFont::AddEffect(_args ... args)
 	{
-		return AddEffect(mnew _eff_type(args ...));
+		return AddEffect(mnew _eff_type(args ...)).Cast<_eff_type>();
 	}
 }

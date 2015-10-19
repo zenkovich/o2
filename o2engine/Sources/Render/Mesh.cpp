@@ -5,7 +5,7 @@
 namespace o2
 {
 	Mesh::Mesh(TextureRef texture /*= TextureRef()*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/):
-		mVertices(NULL), mIndexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), mVertexCount(0), mPolyCount(0)
+		vertices(NULL), indexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), vertexCount(0), polyCount(0)
 	{
 		SetTexture(texture);
 		Resize(vertexCount, polyCount);
@@ -13,24 +13,24 @@ namespace o2
 	}
 
 	Mesh::Mesh(const Mesh& mesh):
-		mVertices(NULL), mIndexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), mVertexCount(0), mPolyCount(0)
+		vertices(NULL), indexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), vertexCount(0), polyCount(0)
 	{
 		SetTexture(mesh.mTexture);
 		Resize(mesh.mMaxVertexCount, mesh.mMaxPolyCount);
 
-		mVertexCount = mesh.mVertexCount;
-		mPolyCount = mesh.mPolyCount;
+		vertexCount = mesh.vertexCount;
+		polyCount = mesh.polyCount;
 
-		memcpy(mVertices, mesh.mVertices, mesh.mMaxVertexCount*sizeof(Vertex2));
-		memcpy(mIndexes, mesh.mIndexes, mesh.mMaxPolyCount*3*sizeof(UInt16));
+		memcpy(vertices, mesh.vertices, mesh.mMaxVertexCount*sizeof(Vertex2));
+		memcpy(indexes, mesh.indexes, mesh.mMaxPolyCount*3*sizeof(UInt16));
 
 		InitializeProperties();
 	}
 
 	Mesh::~Mesh()
 	{
-		delete[] mVertices;
-		delete[] mIndexes;
+		delete[] vertices;
+		delete[] indexes;
 	}
 
 	Mesh& Mesh::operator=(const Mesh& other)
@@ -38,28 +38,28 @@ namespace o2
 		Resize(other.mMaxVertexCount, other.mMaxPolyCount);
 		mTexture = other.mTexture;
 
-		mVertexCount = other.mVertexCount;
-		mPolyCount = other.mPolyCount;
+		vertexCount = other.vertexCount;
+		polyCount = other.polyCount;
 
-		memcpy(mVertices, other.mVertices, other.mMaxVertexCount*sizeof(Vertex2));
-		memcpy(mIndexes, other.mIndexes, other.mMaxPolyCount*3*sizeof(UInt16));
+		memcpy(vertices, other.vertices, other.mMaxVertexCount*sizeof(Vertex2));
+		memcpy(indexes, other.indexes, other.mMaxPolyCount*3*sizeof(UInt16));
 
 		return *this;
 	}
 
 	void Mesh::Resize(UInt vertexCount, UInt polyCount)
 	{
-		if (mVertices) delete[] mVertices;
-		if (mIndexes) delete[] mIndexes;
+		if (vertices) delete[] vertices;
+		if (indexes) delete[] indexes;
 
-		mVertices = new Vertex2[vertexCount];
-		mIndexes = new UInt16[polyCount*3];
+		vertices = new Vertex2[vertexCount];
+		indexes = new UInt16[polyCount*3];
 
 		mMaxVertexCount = vertexCount;
 		mMaxPolyCount = polyCount;
 
-		mVertexCount = 0;
-		mPolyCount = 0;
+		vertexCount = 0;
+		polyCount = 0;
 	}
 
 	void Mesh::Draw()
@@ -79,18 +79,18 @@ namespace o2
 
 	void Mesh::SetMaxVertexCount(const UInt& count)
 	{
-		delete[] mVertices;
-		mVertices = new Vertex2[count];
+		delete[] vertices;
+		vertices = new Vertex2[count];
 		mMaxVertexCount = count;
-		mVertexCount = 0;
+		vertexCount = 0;
 	}
 
 	void Mesh::SetMaxPolyCount(const UInt& count)
 	{
-		delete[] mIndexes;
-		mIndexes = new UInt16[count*3];
+		delete[] indexes;
+		indexes = new UInt16[count*3];
 		mMaxPolyCount = count;
-		mPolyCount = 0;
+		polyCount = 0;
 	}
 
 	UInt Mesh::GetMaxVertexCount() const

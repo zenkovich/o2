@@ -1,31 +1,38 @@
 #pragma once
 
-#include "UI/Layer.h"
-#include "UI/State.h"
+#include "Render/Text.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetState.h"
 #include "Utils/Containers/Vector.h"
+#include "Utils/Math/Layout.h"
 #include "Utils/Math/Layout.h"
 #include "Utils/Memory/Ptr.h"
 #include "Utils/Property.h"
+#include "Utils/Serialization.h"
 #include "Utils/Tree.h"
 
 namespace o2
 {
-	class Widget
+	class ImageAsset;
+	class VectorFontAsset;
+	class BitmapFontAsset;
+
+	class Widget: public ISerializable
 	{
 	public:
 		typedef Vector<Ptr<Widget>> WidgetsVec;
 
 	public:
-		Property<Ptr<Widget>>                parent;
-		Property<Vec2I>                      position;
-		Property<Vec2I>                      absPosition;
-		Property<Vec2I>                      size;
-		Getter<WidgetsVec>                   childs;
-		Getter<LayersVec>                    layers;
-		Getter<StatesVec>                    states;
-		Accessor<Ptr<Widget>, const String&> child;
-		Accessor<Ptr<Layer>, const String&>  layer;
-		Accessor<Ptr<State>, const String&>  state;
+		Property<Ptr<Widget>>                      parent;
+		Property<Vec2I>                            position;
+		Property<Vec2I>                            absPosition;
+		Property<Vec2I>                            size;
+		Getter<WidgetsVec>                         childs;
+		Getter<LayersVec>                          layers;
+		Getter<StatesVec>                          states;
+		Accessor<Ptr<Widget>, const String&>       child;
+		Accessor<Ptr<WidgetLayer>, const String&>  layer;
+		Accessor<Ptr<WidgetState>, const String&>  state;
 
 
 		Widget();
@@ -35,8 +42,6 @@ namespace o2
 		virtual ~Widget();
 
 		Widget& operator=(const Widget& other);
-
-		virtual Ptr<Widget> Clone() const;
 
 
 		virtual void Update(float dt);
@@ -74,11 +79,43 @@ namespace o2
 		virtual Vec2I GetSize() const;
 
 
-		Ptr<Layer> AddLayer(Ptr<Layer> layer);
+		Ptr<WidgetLayer> AddLayer(Ptr<WidgetLayer> layer);
 
-		Ptr<Layer> GetLayer(const String& path) const;
+		Ptr<WidgetLayer> AddLayer(const String& name, Ptr<IRectDrawable> drawable,
+								  const Layout& layout = Layout::Both(), float depth = 0.0f);
 
-		bool RemoveLayer(Ptr<Layer> layer);
+		Ptr<WidgetLayer> AddSpriteLayer(const String& name, const String& fileName,
+										const Layout& layout = Layout::Both(), float depth = 0.0f);
+
+		Ptr<WidgetLayer> AddSpriteLayer(const String& name, AssetId assetId,
+										const Layout& layout = Layout::Both(), float depth = 0.0f);
+
+		Ptr<WidgetLayer> AddSpriteLayer(const String& name, Ptr<ImageAsset> asset,
+										const Layout& layout = Layout::Both(), float depth = 0.0f);
+
+		Ptr<WidgetLayer> AddTextLayer(const String& name, const String& text, const String& fontFileName,
+									  Text::HorAlign horAlign = Text::HorAlign::Middle,
+									  Text::VerAlign verAlign = Text::VerAlign::Middle,
+									  const Layout& layout = Layout::Both(), float depth = 0.0f);
+
+		Ptr<WidgetLayer> AddTextLayer(const String& name, const String& text, AssetId fontAssetId,
+									  Text::HorAlign horAlign = Text::HorAlign::Middle,
+									  Text::VerAlign verAlign = Text::VerAlign::Middle,
+									  const Layout& layout = Layout::Both(), float depth = 0.0f);
+
+		Ptr<WidgetLayer> AddTextLayer(const String& name, const String& text, Ptr<VectorFontAsset> fontAsset,
+									  Text::HorAlign horAlign = Text::HorAlign::Middle,
+									  Text::VerAlign verAlign = Text::VerAlign::Middle,
+									  const Layout& layout = Layout::Both(), float depth = 0.0f);
+
+		Ptr<WidgetLayer> AddTextLayer(const String& name, const String& text, Ptr<BitmapFontAsset> fontAsset,
+									  Text::HorAlign horAlign = Text::HorAlign::Middle,
+									  Text::VerAlign verAlign = Text::VerAlign::Middle,
+									  const Layout& layout = Layout::Both(), float depth = 0.0f);
+
+		Ptr<WidgetLayer> GetLayer(const String& path) const;
+
+		bool RemoveLayer(Ptr<WidgetLayer> layer);
 
 		bool RemoveLayer(const String& path);
 
@@ -86,14 +123,52 @@ namespace o2
 
 		const LayersVec& GetLayers() const;
 
+		Ptr<WidgetState> AddState(const String& name);
+
+		Ptr<WidgetState> AddState(const String& name, const Animation& animation);
+
+		Ptr<WidgetState> AddState(Ptr<WidgetState> state);
+
+		bool RemoveState(const String& name);
+
+		bool RemoveState(Ptr<WidgetState> state);
+
+		void RemoveAllStates();
 
 		void SetState(const String& name, bool state);
 
 		bool GetState(const String& name) const;
 
-		Ptr<State> GetStateObject(const String& name) const;
+		Ptr<WidgetState> GetStateObject(const String& name) const;
 
 		const StatesVec& GetStates() const;
+
+		SERIALIZABLE_IMPL(Widget);
+
+		IOBJECT(Widget)
+		{
+			FIELD(parent);
+			FIELD(position);
+			FIELD(absPosition);
+			FIELD(size);
+			FIELD(childs);
+			FIELD(layers);
+			FIELD(states);
+			FIELD(child);
+			FIELD(layer);
+			FIELD(state);
+
+			SRLZ_FIELD(mName);
+			SRLZ_FIELD(mPosition);
+			SRLZ_FIELD(mSize);
+			SRLZ_FIELD(mLayers);
+			SRLZ_FIELD(mStates);
+			SRLZ_FIELD(mChilds);
+
+			FIELD(mDrawingLayers);
+			FIELD(mParent);
+			FIELD(mAbsolutePosition);
+		}
 
 	protected:
 		String      mName;
@@ -119,8 +194,12 @@ namespace o2
 		LayersVec GetlayersNonConst();
 		StatesVec GetStatesNonConst();
 
+		Dictionary<String, Ptr<WidgetLayer>> GetAllLayers();
+
+		virtual void OnLayerAdded(Ptr<WidgetLayer> layer);
+
 		void InitializeProperties();
 
-		friend class Layer;
+		friend class WidgetLayer;
 	};
 }

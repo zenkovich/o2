@@ -185,7 +185,29 @@ namespace o2
 
 		IOBJECT(Transform)
 		{
-			FIELD(mPosition) SERIALIZABLE(Vec2F) ANIMATABLE(Vec2F);
+			SRLZ_FIELD(mPosition);
+			SRLZ_FIELD(mSize);
+			SRLZ_FIELD(mScale);
+			SRLZ_FIELD(mPivot);
+			SRLZ_FIELD(mAngle);
+			SRLZ_FIELD(mShear);
+
+			FIELD(position);
+			FIELD(angle);
+			FIELD(size);
+			FIELD(scale);
+			FIELD(pivot);
+			FIELD(worldPivot);
+			FIELD(szPivot);
+			FIELD(rect);
+			FIELD(shear);
+			FIELD(resBasis);
+			FIELD(AABB);
+			FIELD(right);
+			FIELD(left);
+			FIELD(up);
+			FIELD(down);
+			FIELD(lookAtPoint);
 		}
 
 	protected:
@@ -201,6 +223,9 @@ namespace o2
 	protected:
 		// Calls when basis changed
 		virtual void BasisChanged() {}
+
+		// Calls when object was deserialized
+		void OnDeserialized(const DataNode& node);
 
 		// Updates mTransform 
 		void UpdateTransform();

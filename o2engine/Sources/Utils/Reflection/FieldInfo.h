@@ -73,11 +73,77 @@ namespace o2
 		Type*               mType;       // Field type
 		Vector<IAttribute*> mAttributes; // Attributes array
 
+	protected:
+		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res);
+		virtual void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
+
 		friend class Type;
+
+		template<typename _type>
+		friend class AccessorFieldInfo;
+	};
+
+	template<typename _type>
+	class AccessorFieldInfo: public FieldInfo
+	{
+	public:
+		// Default constructor
+		AccessorFieldInfo():FieldInfo() {}
+
+		// Constructor
+		AccessorFieldInfo(const String& name, UInt offset, Type* type):FieldInfo(name, offset, false, false, type) {}
+
+	protected:
+		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res)
+		{
+			if (!mType)
+				return false;
+
+			Accessor<Ptr<_type>, const String&>* accessor = ((Accessor<Ptr<_type>, const String&>*)obj);
+
+			auto allFromAccessor = accessor->GetAll();
+
+			for (auto kv : allFromAccessor)
+			{
+				for (auto field : mType->mFields)
+				{
+					char* fieldObj = field->GetValuePtr<char>(kv.Value());
+					String newPath = path + "/" + kv.Key() + "/" + field->mName;
+					if (fieldObj == target)
+					{
+						res = newPath;
+						return field;
+					}
+
+					FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res);
+					if (childField)
+						return childField;
+				}
+			}
+
+			return nullptr;
+		}
+
+		void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo)
+		{
+			int delPos = path.Find("/");
+			String pathPart = path.SubStr(0, delPos);
+
+			Accessor<Ptr<_type>, const String&>* accessor = ((Accessor<Ptr<_type>, const String&>*)obj);
+			auto allFromAccessor = accessor->GetAll();
+
+			for (auto kv : allFromAccessor)
+			{
+				if (kv.Key() == pathPart)
+					return mType->GetFieldPtr<char>(kv.Value(), path.SubStr(delPos + 1), fieldInfo);
+			}
+
+			return nullptr;
+		}
 	};
 
 	template<typename _attr_type>
-	bool o2::FieldInfo::HaveAttribute() const
+	bool FieldInfo::HaveAttribute() const
 	{
 		for (auto attr : mAttributes)
 		{
@@ -89,7 +155,7 @@ namespace o2
 	}
 
 	template<typename _attr_type>
-	_attr_type* o2::FieldInfo::Attribute() const
+	_attr_type* FieldInfo::Attribute() const
 	{
 		for (auto attr : mAttributes)
 		{
@@ -104,28 +170,21 @@ namespace o2
 	template<typename _type>
 	void FieldInfo::SetValue(void* object, _type value) const
 	{
-		if (mIsPtr)
-			**(Ptr<_type>*)((char*)object + mOffset) = value;
-		else
-			*(_type*)((char*)object + mOffset) = value;
+		*(_type*)((char*)object + mOffset) = value;
 	}
 
 	template<typename _type>
 	_type FieldInfo::GetValue(void* object) const
 	{
-		if (mIsPtr)
-			return **(Ptr<_type>*)((char*)object + mOffset);
-		else
-			return *(_type*)((char*)object + mOffset);
+		return *(_type*)((char*)object + mOffset);
 	}
 
 	template<typename _type>
 	_type* FieldInfo::GetValuePtr(void* object) const
 	{
-		if (mIsPtr)
-			return *(Ptr<_type>*)((char*)object + mOffset);
-		else
-			return (_type*)((char*)object + mOffset);
+		if (mIsPtr) return *(Ptr<_type>*)((char*)object + mOffset);
+		
+		return (_type*)((char*)object + mOffset);
 	}
 
 	template<typename _attr_type, typename ... _args>

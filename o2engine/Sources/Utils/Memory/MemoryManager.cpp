@@ -5,103 +5,102 @@
 #include "Utils/Log/FileLogStream.h"
 #include "Utils/Memory/IPtr.h"
 
+void* operator new(size_t size)
+{
+	return malloc(size);
+}
+
 void* operator new(size_t size, const char* location, int line)
 {
-	void* allocMemory = malloc(size + sizeof(o2::AllocObjectInfo*));
-	void* object = (char*)allocMemory + sizeof(o2::AllocObjectInfo*);
-	o2::AllocObjectInfo* info = new o2::AllocObjectInfo();
-	*(o2::AllocObjectInfo**)allocMemory = info;
-	o2::MemoryManager::OnObjectCreating(object, info, size, location, line);
+	void* object = malloc(size);
+	o2::MemoryManager::OnObjectCreating(object, size, location, line);
 	return object;
 }
 
 void operator delete(void* allocMemory)
 {
 	o2::MemoryManager::OnObjectDestroying(allocMemory);
+	free(allocMemory);
 }
 
 void operator delete(void* allocMemory, const char* location, int line)
 {
-	o2::ErrorMessage("Used overrided delete operator!", location, line);
-	_asm { int 3 };
+	free(allocMemory);
 }
 
 namespace o2
 {
-	void MemoryManager::OnObjectCreating(void* object, AllocObjectInfo* info, UInt size, const char* srcFile, 
+	void MemoryManager::OnObjectCreating(void* object, UInt size, const char* srcFile,
 										 int srcFileLine)
 	{
+		AllocObjectInfo* info = new AllocObjectInfo();
+
 		info->mObjectPtr = object;
 		info->mSize = size;
-		info->mMark = mInstance->mCurrentGCMark;
+		info->mMark = instance->mCurrentGCMark;
 		info->mAllocSrcFileLine = srcFileLine;
 		strncpy(info->mAllocSrcFile, srcFile, 127);
 
-		mInstance->mObjectsInfos.Add(info);
+		instance->mObjectsInfos.Add(info);
 	}
 
 	void MemoryManager::OnObjectDestroying(void* object)
 	{
-		AllocObjectInfo* info = GetObjectInfo(object);
-
-		for (auto it = mInstance->mObjectsInfos.Begin(); it != mInstance->mObjectsInfos.End(); ++it)
+		int i = 0;
+		for (auto info : instance->mObjectsInfos)
 		{
-			if (*it == info)
+			if (info->mObjectPtr == object)
 			{
-				for (auto ptr : mInstance->mPointers)
+				for (auto ptr : instance->mPointers)
 				{
 					if (ptr->ObjectPtr() == object)
 						ptr->ObjectReleased();
 				}
 
-				info->~AllocObjectInfo();
-				free(info);
-
-				mInstance->mObjectsInfos.Remove(it);
-
-				free((char*)object - sizeof(o2::AllocObjectInfo*));
+				delete info;
+				instance->mObjectsInfos.RemoveAt(i);
 
 				return;
 			}
-		}
 
-		free(object);
+			i++;
+		}
 	}
 
 	void MemoryManager::OnPtrCreating(IPtr* ptr)
 	{
-		mInstance->mPointers.Add(ptr);
+		instance->mPointers.Add(ptr);
 	}
 
 	void MemoryManager::OnPtrDestroying(IPtr* ptr)
 	{
-		mInstance->mPointers.Remove(ptr);
+		instance->mPointers.Remove(ptr);
 	}
 
 	void MemoryManager::CollectGarbage()
 	{
-		mInstance->mCurrentGCMark = !mInstance->mCurrentGCMark;
+		instance->mCurrentGCMark = !instance->mCurrentGCMark;
 
-		mInstance->RebuildMemoryTree();
+		instance->RebuildMemoryTree();
 
-		for (auto ptr : mInstance->mPointers)
+		for (auto ptr : instance->mPointers)
 		{
 			if (ptr->mIsOnTop && ptr->mObjectInfo)
-				ptr->mObjectInfo->Mark(mInstance->mCurrentGCMark);
+				ptr->mObjectInfo->Mark(instance->mCurrentGCMark);
 		}
 
 		ObjectsInfosVec freeObjects;
-		mInstance->FindFreeObjects(freeObjects);
-		mInstance->PrintObjectsInfos(freeObjects);
-		mInstance->FreeObjects(freeObjects);
+		instance->FindFreeObjects(freeObjects);
+		instance->PrintObjectsInfos(freeObjects);
+		instance->FreeObjects(freeObjects);
 	}
 
 	void MemoryManager::ResetMemoryTree()
 	{
-		for (auto ptr : mInstance->mPointers)
+		for (auto ptr : instance->mPointers)
 			ptr->mIsOnTop = true;
 
-		for (auto obj : mInstance->mObjectsInfos)
+		for (auto obj : instance->mObjectsInfos)
 			obj->mChildPointers.Clear();
 	}
 
@@ -112,21 +111,21 @@ namespace o2
 		int stackValue = 5;
 		char* stackEndPtr = (char*)&stackValue;
 
-		for (auto ptr : mInstance->mPointers)
+		for (auto ptr : instance->mPointers)
 		{
 			char* cptr = (char*)ptr;
 			bool foundParent = false;
 			bool foundObjectInfo = false;
 
-			if (cptr > stackEndPtr)
+			if (cptr < stackEndPtr)
 				ptr->mIsOnTop = false;
 
-			for (auto obj : mInstance->mObjectsInfos)
+			for (auto obj : instance->mObjectsInfos)
 			{
 				char* beg = (char*)obj->mObjectPtr;
 				char* end = beg + obj->mSize;
 
-				if (foundParent && cptr >= beg && cptr <= end)
+				if (!foundParent && cptr >= beg && cptr <= end)
 				{
 					ptr->mIsOnTop = false;
 					obj->mChildPointers.Add(ptr);
@@ -149,9 +148,9 @@ namespace o2
 	{
 		result.Clear();
 
-		for (auto obj : mInstance->mObjectsInfos)
+		for (auto obj : instance->mObjectsInfos)
 		{
-			if (obj->mMark != mInstance->mCurrentGCMark)
+			if (obj->mMark != instance->mCurrentGCMark)
 				result.Add(obj);
 		}
 	}
@@ -173,7 +172,11 @@ namespace o2
 
 	AllocObjectInfo* MemoryManager::GetObjectInfo(void* object)
 	{
-		return *(AllocObjectInfo**)((char*)object - sizeof(o2::AllocObjectInfo*));
+		for (auto info : instance->mObjectsInfos)
+			if (info->mObjectPtr == object)
+				return info;
+
+		return nullptr;
 	}
 
 	void AllocObjectInfo::Mark(bool mark)

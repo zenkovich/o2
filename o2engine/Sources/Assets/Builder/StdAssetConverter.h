@@ -14,13 +14,13 @@ namespace o2
 		Vector<Type::Id> GetProcessingAssetsTypes() const;
 
 		// Copies asset
-		void ConvertAsset(const String& path);
+		void ConvertAsset(const AssetTree::AssetNode& node);
 
 		// Removes asset
-		void RemoveAsset(const String& path);
+		void RemoveAsset(const AssetTree::AssetNode& node);
 
 		// Moves asset to new path
-		void MoveAsset(const String& pathFrom, const String& pathTo);
+		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
 		IOBJECT(StdAssetConverter)
 		{

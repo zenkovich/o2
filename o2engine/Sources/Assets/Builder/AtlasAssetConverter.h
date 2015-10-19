@@ -18,13 +18,13 @@ namespace o2
 		Vector<Type::Id> GetProcessingAssetsTypes() const;
 
 		// Converts atlas by path
-		void ConvertAsset(const String& path);
+		void ConvertAsset(const AssetTree::AssetNode& node);
 
 		// Removes atlas by path
-		void RemoveAsset(const String& path);
+		void RemoveAsset(const AssetTree::AssetNode& node);
 
 		// Moves atlas
-		void MoveAsset(const String& pathFrom, const String& pathTo);
+		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
 		// Post processing atlases. Here checking atlases for rebuild
 		void AssetsPostProcess();

@@ -74,4 +74,31 @@ namespace o2
 		return mAttributes;
 	}
 
+	FieldInfo* FieldInfo::SearchFieldPath(void* obj, void* target, const String& path, String& res)
+	{
+		if (!mType)
+			return false;
+
+		for (auto field : mType->mFields)
+		{
+			char* fieldObj = field->GetValuePtr<char>(obj);
+			if (fieldObj == target)
+			{
+				res = path + "/" + field->mName;
+				return field;
+			}
+
+			FieldInfo* childField = field->SearchFieldPath(fieldObj, target, path + "/" + field->mName, res);
+			if (childField)
+				return childField;
+		}
+
+		return nullptr;
+	}
+
+	void* FieldInfo::SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo)
+	{
+		return mType->GetFieldPtr<char>(obj, path, fieldInfo);
+	}
+
 }

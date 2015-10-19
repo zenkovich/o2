@@ -50,6 +50,8 @@ namespace o2
 		// Returns true if texture isn't null
 		operator bool() const;
 
+		static TextureRef Null();
+
 	protected:
 		Ptr<Texture> mTexture;
 

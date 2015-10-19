@@ -1,11 +1,18 @@
 #include "Utils/Math/Math.h"
 
 #include "Utils/Math/Vector2.h"
+#include "Utils/Math/Rect.h"
 
 namespace o2
 {
 	namespace Math
 	{
+		RectF Lerp(const RectF& a, const RectF& b, float coef)
+		{
+			return RectF(Lerp(a.left, b.left, coef), Lerp(a.top, b.top, coef),
+						 Lerp(a.right, b.right, coef), Lerp(a.bottom, b.bottom, coef));
+		}
+
 		void OrthoProjMatrix(float* mat, float left, float right, float bottom, float top, float nearz, float farz)
 		{
 			float tx = -(right + left)/(right - left);

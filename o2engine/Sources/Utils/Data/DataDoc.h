@@ -102,6 +102,9 @@ namespace o2
 		// Assign operator to other node
 		DataNode& operator=(const DataNode& other);
 
+		// Assign operator to other node
+		DataNode& operator=(ISerializable& other);
+
 		// Assign operator string value
 		DataNode& operator=(char* value);
 

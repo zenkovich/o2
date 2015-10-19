@@ -15,6 +15,7 @@
 namespace o2
 {
 	class Mesh;
+	class Font;
 
 	// ------------------
 	// 2D Graphics render
@@ -137,10 +138,12 @@ namespace o2
 
 	protected:
 		typedef Vector<Ptr<Texture>> TexturesVec;
+		typedef Vector<Ptr<Font>> FontsVec;
 
 		Ptr<LogStream> mLog;                    // Render log stream
 
 		TexturesVec    mTextures;               // Loaded textures
+		FontsVec       mFonts;                  // Loaded fonts
 
 		Camera         mCamera;                 // Camera transformation
 		Vec2I          mResolution;             // Current back buffer size
@@ -191,6 +194,9 @@ namespace o2
 		// Check textures for unloading
 		void CheckTexturesUnloading();
 
+		// Checks font for unloading
+		void CheckFontsUnloading();
+
 		// initializes properties
 		void InitializeProperties();
 
@@ -200,5 +206,7 @@ namespace o2
 		friend class Font;
 		friend class BitmapFont;
 		friend class VectorFont;
+		friend class BitmapFontAsset;
+		friend class VectorFontAsset;
 	};
 }

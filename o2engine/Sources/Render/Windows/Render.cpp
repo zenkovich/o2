@@ -1,6 +1,7 @@
 #include "Render/Render.h"
 
 #include "Application/BaseApplication.h"
+#include "Render/Font.h"
 #include "Render/Mesh.h"
 #include "Render/Texture.h"
 #include "Utils/Debug.h"
@@ -246,6 +247,7 @@ namespace o2
 		GL_CHECK_ERROR(mLog);
 
 		CheckTexturesUnloading();
+		CheckFontsUnloading();
 	}
 
 	void Render::Clear(const Color4& color /*= Color4::Blur()*/)
@@ -316,8 +318,17 @@ namespace o2
 			if (texture->mRefs.Count() == 0)
 				unloadTextures.Add(texture);
 
-		for (auto texture : unloadTextures)
-			texture.Release();
+		unloadTextures.ForEach([](auto texture) { texture.Release(); });
+	}
+
+	void Render::CheckFontsUnloading()
+	{
+		FontsVec unloadFonts;
+		for (auto font : mFonts)
+			if (font->mRefs.Count() == 0)
+				unloadFonts.Add(font);
+
+		unloadFonts.ForEach([](auto fnt) { fnt.Release(); });
 	}
 
 	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/)
@@ -527,8 +538,8 @@ namespace o2
 
 		// Check difference
 		if (mLastDrawTexture != mesh->mTexture.mTexture ||
-			mLastDrawVertex + mesh->mVertexCount >= mVertexBufferSize ||
-			mLastDrawIdx + mesh->mPolyCount*3 >= mIndexBufferSize ||
+			mLastDrawVertex + mesh->vertexCount >= mVertexBufferSize ||
+			mLastDrawIdx + mesh->polyCount*3 >= mIndexBufferSize ||
 			mCurrentPrimitiveType == GL_LINES)
 		{
 			DrawPrimitives();
@@ -550,39 +561,39 @@ namespace o2
 		}
 
 		// Copy data
-		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], mesh->mVertices, sizeof(Vertex2)*mesh->mVertexCount);
+		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], mesh->vertices, sizeof(Vertex2)*mesh->vertexCount);
 
-		for (UInt i = mLastDrawIdx, j = 0; j < mesh->mPolyCount*3; i++, j++)
+		for (UInt i = mLastDrawIdx, j = 0; j < mesh->polyCount*3; i++, j++)
 		{
-			mVertexIndexData[i] = mLastDrawVertex + mesh->mIndexes[j];
+			mVertexIndexData[i] = mLastDrawVertex + mesh->indexes[j];
 		}
 
-		mTrianglesCount += mesh->mPolyCount;
-		mLastDrawVertex += mesh->mVertexCount;
-		mLastDrawIdx += mesh->mPolyCount*3;
+		mTrianglesCount += mesh->polyCount;
+		mLastDrawVertex += mesh->vertexCount;
+		mLastDrawIdx += mesh->polyCount*3;
 
 		return true;
 	}
 
 	bool Render::DrawMeshWire(Ptr<Mesh> mesh, const Color4& color /*= Color4::White()*/)
 	{
-		Vertex2* vertices = new Vertex2[mesh->mPolyCount*6];
+		Vertex2* vertices = new Vertex2[mesh->polyCount*6];
 		auto dcolor = color.ABGR();
 
-		for (UInt i = 0; i < mesh->mPolyCount; i++)
+		for (UInt i = 0; i < mesh->polyCount; i++)
 		{
-			vertices[i*6]     = mesh->mVertices[mesh->mIndexes[i*3]];
-			vertices[i*6 + 1] = mesh->mVertices[mesh->mIndexes[i*3 + 1]];
-			vertices[i*6 + 2] = mesh->mVertices[mesh->mIndexes[i*3 + 1]];
-			vertices[i*6 + 3] = mesh->mVertices[mesh->mIndexes[i*3 + 2]];
-			vertices[i*6 + 4] = mesh->mVertices[mesh->mIndexes[i*3 + 2]];
-			vertices[i*6 + 5] = mesh->mVertices[mesh->mIndexes[i*3]];
+			vertices[i*6]     = mesh->vertices[mesh->indexes[i*3]];
+			vertices[i*6 + 1] = mesh->vertices[mesh->indexes[i*3 + 1]];
+			vertices[i*6 + 2] = mesh->vertices[mesh->indexes[i*3 + 1]];
+			vertices[i*6 + 3] = mesh->vertices[mesh->indexes[i*3 + 2]];
+			vertices[i*6 + 4] = mesh->vertices[mesh->indexes[i*3 + 2]];
+			vertices[i*6 + 5] = mesh->vertices[mesh->indexes[i*3]];
 		}
 
-		for (UInt i = 0; i < mesh->mPolyCount*6; i++)
+		for (UInt i = 0; i < mesh->polyCount*6; i++)
 			vertices[i].color = dcolor;
 
-		bool res = DrawLines(vertices, mesh->mPolyCount*3);
+		bool res = DrawLines(vertices, mesh->polyCount*3);
 		delete[] vertices;
 
 		return res;

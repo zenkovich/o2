@@ -13,7 +13,7 @@ namespace o2
 		String mRes; // Here puts result of stack trace
 
 	public:
-		static o2StackWalker* mInstance; // Static instance pointer
+		static o2StackWalker* instance; // Static instance pointer
 
 		// Default constructor
 		o2StackWalker();

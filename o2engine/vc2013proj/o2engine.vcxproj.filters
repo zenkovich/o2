@@ -499,20 +499,38 @@
     <ClInclude Include="..\Sources\Animation\Animation.h">
       <Filter>Sources\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Layer.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\State.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Animation\AnimatedValue.h">
       <Filter>Sources\Animation</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Animation\Tween.h">
       <Filter>Sources\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Animation\AnimatedVec2.h">
+    <ClInclude Include="..\Sources\Animation\AnimatedVector.h">
       <Filter>Sources\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Animation\AnimatedFloat.h">
+      <Filter>Sources\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\BitmapFontAsset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Render\FontRef.h">
+      <Filter>Sources\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\VectorFontAsset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\WidgetState.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\WidgetLayer.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\Button.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\Label.h">
+      <Filter>Sources\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -783,9 +801,6 @@
     <ClCompile Include="..\Sources\Utils\Math\Transform.cpp">
       <Filter>Sources\Utils\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Render\RectDrawable.cpp">
-      <Filter>Sources\Render\Platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Render\Windows\Render.cpp">
       <Filter>Sources\Render\Platform</Filter>
     </ClCompile>
@@ -843,17 +858,41 @@
     <ClCompile Include="..\Sources\Utils\Math\Curve.cpp">
       <Filter>Sources\Utils\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\Layer.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\State.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Animation\AnimatedValue.cpp">
       <Filter>Sources\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Animation\AnimatedVec2.cpp">
+    <ClCompile Include="..\Sources\Animation\Animation.cpp">
       <Filter>Sources\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Animation\AnimatedVector.cpp">
+      <Filter>Sources\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Animation\AnimatedFloat.cpp">
+      <Filter>Sources\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\RectDrawable.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\BitmapFontAsset.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\FontRef.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\VectorFontAsset.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\WidgetState.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\WidgetLayer.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\Button.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\Label.cpp">
+      <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

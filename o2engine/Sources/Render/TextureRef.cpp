@@ -85,6 +85,11 @@ namespace o2
 		return mTexture.IsValid();
 	}
 
+	TextureRef TextureRef::Null()
+	{
+		return TextureRef();
+	}
+
 	bool TextureRef::operator!=(const TextureRef& other) const
 	{
 		return mTexture != other.mTexture;

@@ -4,57 +4,86 @@
 
 namespace o2
 {
+	// ------------------
+	// Tweening animation
+	// ------------------
 	template<typename _type>
 	class Tween: public IAnimation
 	{
 	public:
-		_type                    leftValue;
-		_type                    rightValue;
-		Curve                    transitionCurve;
+		_type                    leftValue;       // Left tween value
+		_type                    rightValue;      // Right tween value
+		Curve                    transitionCurve; // Transition curve from left to right
 
-		Property<float>          duration;
-		Property<bool>           state;
-		Getter<_type>            value;
-		Setter<_type*>           bindValuePtr;
-		Setter<Function<void()>> bindValueEvent;
-		Setter<Setter<_type>*>   bindProperty;
+		Property<float>          duration;        // Tween duration property
+		Property<bool>           state;           // State property
+		Getter<_type>            value;           // Current value
+		Setter<_type*>           bindValuePtr;    // Bind value setter
+		Setter<Function<void()>> bindValueEvent;  // Bind value event setter
+		Setter<Setter<_type>*>   bindProperty;    // Bind property setter
 
+		// Default constructor
 		Tween();
+
+		// Constructor
 		Tween(const _type& left, const _type& right, float duration, const Curve& curve);
+
+		// Copy-constructor
 		Tween(const Tween& other);
 
+		// Assign operator
 		Tween& operator=(const Tween& other);
 
+		// Returns current value
 		_type GetValue();
 
+		// Binds value by pointer
 		void BindValue(_type* value);
 
+		// Binds value by pointer and sets change event
 		void BindValue(_type* value, const Function<void()>& changeEvent);
 
+		// Sets binded value change callback
 		void SetBindValueChangeEvent(const Function<void()>& changeEvent);
 
+		// Binds property by pointer
 		void BindProperty(Setter<_type>* setter);
 
+		// Sets tween duration
 		void SetDuration(float duration);
+
+		// Returns tween duration
 		float GetDuration();
 
+		// Sets tween state and starts playing
 		void SetState(bool state);
+
+		// Returns current tween state
 		bool GetState();
 
+		// Creates tween from left to right in duration with ease in
 		static Tween EaseIn(const _type& left, const _type& right, float duration);
+
+		// Creates tween from left to right in duration with ease ou
 		static Tween EaseOut(const _type& left, const _type& right, float duration);
+
+		// Creates tween from left to right in duration with ease in-out
 		static Tween EaseInOut(const _type& left, const _type& right, float duration);
+
+		// Creates tween from left to right in duration with linear transition
 		static Tween Linear(const _type& left, const _type& right, float duration);
 
 	protected:
-		_type            mValue;
-		_type*           mBindValue;
-		Function<void()> mBindValueChangeEvent;
-		Setter<_type>*   mBindProperty;
+		_type            mValue;                // Current tween value
+		_type*           mBindValue;            // Binded value pointer, nullptr when no binded value
+		Function<void()> mBindValueChangeEvent; // Binded value change event
+		Setter<_type>*   mBindProperty;         // Binded property pointer, nullptr when no binded property
 
 	protected:
+		// Updates value and bindings
 		void Evaluate();
 
+		// Initializes properties
 		void InitializeProperties();
 	};
 

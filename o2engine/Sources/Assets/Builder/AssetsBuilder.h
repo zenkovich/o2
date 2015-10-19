@@ -30,13 +30,15 @@ namespace o2
 
 		Ptr<LogStream>    mLog;                 // Asset builder log stream
 
-		String            mSourceAssetsPath;    // Source assets path
-		AssetTree         mSourceAssetsTree;    // Source assets tree
-		String            mBuildedAssetsPath;   // Builded assets path
-		AssetTree         mBuildedAssetsTree;   // Builded assets tree
+		String               mSourceAssetsPath;    // Source assets path
+		AssetTree            mSourceAssetsTree;    // Source assets tree
+		String               mBuildedAssetsPath;   // Builded assets path
+		AssetTree            mBuildedAssetsTree;   // Builded assets tree
 
-		ConvertersDict    mAssetConverters;     // Assets converters by type
-		StdAssetConverter mStdAssetConverter;   // Standard assets converter
+		AssetTree::AssetsVec mModifiedAssets;      // Modified assets infos
+
+		ConvertersDict       mAssetConverters;     // Assets converters by type
+		StdAssetConverter    mStdAssetConverter;   // Standard assets converter
 
 	protected:
 		// Initializes converters

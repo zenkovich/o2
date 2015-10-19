@@ -17,15 +17,12 @@ namespace o2
 		InitializeWindow();
 
 		mRender = mnew Render();
-		//mRenderSystem = mnew RenderSystem();
+		o2Debug.InitializeFont();
 	}
 
 	BaseApplication::~BaseApplication()
 	{
-		mRender.Release();
-		//SafeRelease(mUIController);
-		//SafeRelease(mRenderSystem);
-		//SafeRelease(mTimer);
+		//mRender.Release();
 	}
 
 	void BaseApplication::InitializeWindow()

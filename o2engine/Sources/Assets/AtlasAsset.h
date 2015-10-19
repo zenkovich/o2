@@ -121,6 +121,7 @@ namespace o2
 			PlatformMeta mAndroid; // Android specified meta
 			PlatformMeta mMacOS;   // MacOS specified meta
 			PlatformMeta mWindows; // Windows specified meta
+			int          mBorder;  // Images pack border
 
 		public:
 			// Returns asset type id
@@ -137,6 +138,7 @@ namespace o2
 				SRLZ_FIELD(mAndroid);
 				SRLZ_FIELD(mMacOS);
 				SRLZ_FIELD(mWindows);
+				SRLZ_FIELD(mBorder);
 			}
 		};
 

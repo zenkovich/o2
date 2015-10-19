@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Utils/Containers/Dictionary.h"
 #include "Utils/Delegates.h"
+#include "Utils/String.h"
 
 namespace o2
 {
@@ -323,12 +325,17 @@ namespace o2
 	template<typename _res_type, typename _key_type>
 	class Accessor
 	{
+	public:
+		typedef Dictionary<String, _res_type> AllRes;
+
+	protected:
 		IFunction<_res_type(_key_type)>* mAccessFunc;
+		IFunction<AllRes()>*             mAllAccessFunc;
 
 	public:
 		// Default constructor
 		Accessor():
-			mAccessFunc(nullptr)
+			mAccessFunc(nullptr), mAllAccessFunc(nullptr)
 		{
 		}
 
@@ -365,7 +372,11 @@ namespace o2
 		// Destructor
 		virtual ~Accessor()
 		{
-			delete mAccessFunc;
+			if (mAccessFunc)
+				delete mAccessFunc;
+
+			if (mAllAccessFunc)
+				delete mAllAccessFunc;
 		}
 
 		// Initialize from object function
@@ -394,7 +405,23 @@ namespace o2
 		// Access operator
 		_res_type operator[](_key_type key)
 		{
-			return mAccessFunc(key);
+			return mAccessFunc->Invoke(key);
+		}
+
+		// Initialize from object function
+		template<typename _class_type>
+		void SetAllAccessFunc(_class_type* object, AllRes(_class_type::*getter)())
+		{
+			if (mAllAccessFunc) delete mAllAccessFunc;
+			mAllAccessFunc = new ObjFunctionPtr<_class_type, AllRes>(object, getter);
+		}
+
+		Dictionary<String, _res_type> GetAll()
+		{
+			if (mAllAccessFunc)
+				return mAllAccessFunc->Invoke();
+
+			return Dictionary<String, _res_type>();
 		}
 	};
 

@@ -5,6 +5,11 @@
 
 namespace o2
 {
+	template<typename T>
+	class Rect;
+
+	typedef Rect<float> RectF;
+
 	namespace Math
 	{
 		inline float Floor(float value)
@@ -106,6 +111,8 @@ namespace o2
 		{
 			return (b - a)*coef + a;
 		}
+
+		RectF Lerp(const RectF& a, const RectF& b, float coef);
 
 		inline bool Equals(float a, float b, float range = FLT_EPSILON)
 		{

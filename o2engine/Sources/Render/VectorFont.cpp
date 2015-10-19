@@ -63,8 +63,6 @@ namespace o2
 		mSize = 0;
 		SetSize(lastSize);
 
-		mBaseHeight = 15;
-
 		return true;
 	}
 
@@ -74,9 +72,15 @@ namespace o2
 			return;
 
 		mSize = size;
-		Vec2F resolution = o2Application.GetScreenResolution();
 		Vec2I dpi = o2Render.GetDPI();
 		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, mSize*64, dpi.x, dpi.y);
+
+		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
+		mBaseHeight = mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
+		mLineHeight = mBaseHeight*2.0f;
+
+// 		mBaseHeight = mFreeTypeFace->ascender/64.0f;
+// 		mLineHeight = (mFreeTypeFace->ascender - mFreeTypeFace->descender)/64.0f + 5.0f;
 
 		Reset();
 	}
@@ -190,6 +194,7 @@ namespace o2
 		}
 
 		border += Vec2I(2, 2);
+		//border = Vec2F();
 
 		for (auto ch : newCharacters)
 		{
@@ -218,25 +223,13 @@ namespace o2
 			for (auto effect : mEffects)
 				effect->Process(newBitmap);
 
-// 			Ptr<Bitmap> blur = mnew Bitmap(*newBitmap);
-// 
-// 			newBitmap->Outline(0.5, Color4::Black());
-// 			//newBitmap->Blur(1);
-// 			//newBitmap->Colorise(Color4::Green());
-// 			newBitmap->GradientByAlpha(Color4(200, 200, 200, 255), Color4(255, 255, 255, 255));
-// 
-// 			blur->Colorise(Color4::Black());
-// 			blur->Blur(3);
-// 			newBitmap->BlendImage(blur, Vec2I(1, 1));
-// 			blur.Release();
-
 			newCharDef.mPackRect = mRectsPacker.AddRect(glyphSize + border*2);
 			newCharDef.mBitmap = newBitmap;
 			newCharDef.mCharacter.mId = ch;
 			newCharDef.mCharacter.mSize = newBitmapSize;
 			newCharDef.mCharacter.mAdvance = glyph->advance.x/64.0f;
-			newCharDef.mCharacter.mOffset.x = glyph->metrics.horiBearingX/64.0f + border.x;
-			newCharDef.mCharacter.mOffset.y = (glyph->metrics.horiBearingY - glyph->metrics.height)/64.0f + border.y;
+			newCharDef.mCharacter.mOrigin.x = -glyph->metrics.horiBearingX/64.0f + border.x;
+			newCharDef.mCharacter.mOrigin.y = (glyph->metrics.height - glyph->metrics.horiBearingY)/64.0f + border.y;
 
 			charDefs.Add(newCharDef);
 		}
@@ -280,7 +273,6 @@ namespace o2
 			def.mCharacter.mTexSrc.right = def.mPackRect->mRect.right*invTexSize.x;
 			def.mCharacter.mTexSrc.top = def.mPackRect->mRect.bottom*invTexSize.y;
 			def.mCharacter.mTexSrc.bottom = def.mPackRect->mRect.top*invTexSize.y;
-			//def.mCharacter.mTexSrc = RectF(0, 0, 1, 1);
 
 			mCharacters.Add(def.mCharacter);
 

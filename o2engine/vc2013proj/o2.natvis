@@ -7,8 +7,12 @@
 </Type>
 
 <Type Name="o2::Rect&lt;*&gt;">
-    <DisplayString>{{ ({ left } { top })-({ right } { bottom }) }}</DisplayString>
+    <DisplayString>{{ (L { left } B { bottom })-(R { right } T { top }) }}</DisplayString>
     <Expand>		
+        <Item Name="[left]" ExcludeView="simple">left</Item>
+        <Item Name="[bottom]" ExcludeView="simple">bottom</Item>
+        <Item Name="[right]" ExcludeView="simple">right</Item>
+        <Item Name="[top]" ExcludeView="simple">top</Item>
         <Item Name="[width]" ExcludeView="simple">right - left</Item>
         <Item Name="[height]" ExcludeView="simple">top - bottom</Item>
     </Expand>

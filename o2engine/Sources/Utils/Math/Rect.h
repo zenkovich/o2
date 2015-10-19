@@ -122,8 +122,8 @@ namespace o2
 	template<typename T>
 	bool Rect<T>::operator==(const Rect<T>& rt) const
 	{
-		return Math::Abs(left - rt.left) < (T)FLT_EPSILON || Math::Abs(top - rt.top) < (T)FLT_EPSILON ||
-			Math::Abs(right - rt.right) < (T)FLT_EPSILON || Math::Abs(bottom - rt.bottom) < (T)FLT_EPSILON;
+		return Math::Abs(left - rt.left) <= (T)FLT_EPSILON && Math::Abs(top - rt.top) <= (T)FLT_EPSILON &&
+			Math::Abs(right - rt.right) <= (T)FLT_EPSILON && Math::Abs(bottom - rt.bottom) <= (T)FLT_EPSILON;
 	}
 
 	template<typename T>

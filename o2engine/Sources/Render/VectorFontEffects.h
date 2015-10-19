@@ -23,10 +23,15 @@ namespace o2
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const;
 
+		// Check effects equals
+		bool IsEqual(Ptr<VectorFont::Effect> other) const;
+
 		IOBJECT(FontStrokeEffect)
 		{
 			BASE_CLASS(Effect);
 			SRLZ_FIELD(radius);
+			SRLZ_FIELD(alphaThreshold);
+			SRLZ_FIELD(color);
 		}
 
 		SERIALIZABLE_IMPL(FontStrokeEffect);
@@ -55,6 +60,9 @@ namespace o2
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const;
 
+		// Check effects equals
+		bool IsEqual(Ptr<VectorFont::Effect> other) const;
+
 		IOBJECT(FontGradientEffect)
 		{
 			BASE_CLASS(Effect);
@@ -82,6 +90,9 @@ namespace o2
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const;
 
+		// Check effects equals
+		bool IsEqual(Ptr<VectorFont::Effect> other) const;
+
 		IOBJECT(FontColorEffect)
 		{
 			BASE_CLASS(Effect);
@@ -107,6 +118,9 @@ namespace o2
 
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const;
+
+		// Check effects equals
+		bool IsEqual(Ptr<VectorFont::Effect> other) const;
 
 		IOBJECT(FontShadowEffect)
 		{

@@ -278,12 +278,16 @@ namespace o2
 
 	inline void ConvertStringPtr(char* dst, const wchar_t* src, int size)
 	{
-		wcstombs(dst, src, size);
+		auto sz = wcstombs(dst, src, size);
+		if (sz == size)
+			dst[sz - 1] = '\0';
 	}
 
 	inline void ConvertStringPtr(wchar_t* dst, const char* src, int size)
 	{
-		mbstowcs(dst, src, size);
+		auto sz = mbstowcs(dst, src, size);
+		if (sz == size)
+			dst[sz - 1] = '\0';
 	}
 
 	inline void ConvertStringPtr(wchar_t* dst, const wchar_t* src, int size)
@@ -327,12 +331,14 @@ namespace o2
 	TString<T>::TString(T2* data):
 		mCapacity(0)
 	{
-		while (data[mCapacity] != '\0') mCapacity++;
-		mCapacity++;
+		const UInt maxLength = 1000;
+		UInt length = 0;
+		while (data[length] != '\0' && length < maxLength) length++;
+		mCapacity = length + 5;
 
 		mData = (T*)malloc(mCapacity*sizeof(T));
 		ConvertStringPtr(mData, data, mCapacity);
-		mData[mCapacity - 1] = '\0';
+		mData[length] = '\0';
 	}
 
 
@@ -579,7 +585,7 @@ namespace o2
 	{
 		int dataLength = 0;
 		while (data[dataLength] != '\0') dataLength++;
-		Reserve(dataLength + 1);
+		Reserve(dataLength + 5);
 		ConvertStringPtr(mData, data, dataLength);
 		mData[dataLength] = '\0';
 		return *this;
@@ -772,8 +778,7 @@ namespace o2
 	bool TString<T>::operator==(T2* data) const
 	{
 		int l2 = 0;
-		while (data[l2] != '\0') 
-			l2++;
+		while (data[l2] != '\0') l2++;
 
 		int l1 = Length();
 		if (l1 != l2)
@@ -933,7 +938,7 @@ namespace o2
 	void TString<T>::Append(T symbol)
 	{
 		int l = Length();
-		Reserve(l + 1);
+		Reserve(l + 2);
 		mData[l] = symbol;
 		mData[l + 1] = '\0';
 	}

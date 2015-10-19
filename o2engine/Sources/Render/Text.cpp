@@ -1,23 +1,27 @@
 #include "Text.h"
 
+#include "Assets/Assets.h"
+#include "Assets/BitmapFontAsset.h"
+#include "Assets/VectorFontAsset.h"
 #include "Render/Mesh.h"
 #include "Render/Render.h"
+#include "Utils/Debug.h"
 
 namespace o2
 {
+	IOBJECT_CPP(Text);
+
 	Text::Text():
-		mFont(nullptr), mSymbolsDistCoef(1), mLinesDistance(0), mVerAlign(VerAlign::Top),
+		mFont(nullptr), mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
 		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable()
 	{
 		InitializeProperties();
 	}
 
-	Text::Text(Ptr<Font> font):
-		mFont(font), mSymbolsDistCoef(1), mLinesDistance(0), mVerAlign(VerAlign::Top),
+	Text::Text(FontRef font):
+		mFont(font), mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
 		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable()
 	{
-		if (mFont)
-			mLinesDistance = Math::Floor(mFont->GetHeight()*1.5f);
 		InitializeProperties();
 	}
 
@@ -27,12 +31,36 @@ namespace o2
 		mText = text.mText;
 		mFont = text.mFont;
 		mSymbolsDistCoef = text.mSymbolsDistCoef;
-		mLinesDistance = text.mLinesDistance;
+		mLinesDistanceCoef = text.mLinesDistanceCoef;
 		mVerAlign = text.mVerAlign;
 		mHorAlign = text.mHorAlign;
 		mWordWrap = text.mWordWrap;
 
 		InitializeProperties();
+	}
+
+	Text::Text(Ptr<BitmapFontAsset> fontAsset):
+		Text(fontAsset->GetFont())
+	{
+		mFontAssetId = fontAsset->GetAssetId();
+	}
+
+	Text::Text(Ptr<VectorFontAsset> fontAsset):
+		Text(fontAsset->GetFont())
+	{
+		mFontAssetId = fontAsset->GetAssetId();
+	}
+
+	Text::Text(const String& fontFileName):
+		Text(o2Assets.GetAssetId(fontFileName))
+	{}
+
+	Text::Text(AssetId fontAssetId):
+		mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
+		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable()
+	{
+		InitializeProperties();
+		SetFontAsset(fontAssetId);
 	}
 
 	Text::~Text()
@@ -41,9 +69,22 @@ namespace o2
 			mesh.Release();
 	}
 
-	Text* Text::Clone() const
+	Text& Text::operator=(const Text& other)
 	{
-		return mnew Text(*this);
+		IRectDrawable::operator=(other);
+
+		mText = other.mText;
+		mFontAssetId = other.mFontAssetId;
+		mFont = other.mFont;
+		mSymbolsDistCoef = other.mSymbolsDistCoef;
+		mLinesDistanceCoef = other.mLinesDistanceCoef;
+		mVerAlign = other.mVerAlign;
+		mHorAlign = other.mHorAlign;
+		mWordWrap = other.mWordWrap;
+
+		UpdateMesh();
+
+		return *this;
 	}
 
 	void Text::Draw()
@@ -54,22 +95,96 @@ namespace o2
 		for (auto mesh : mMeshes)
 		{
 			mesh->Draw();
-			//o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 50));
+			o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 150));
 		}
 	}
 
-	void Text::SetFont(Ptr<Font> font)
+	void Text::SetFont(FontRef font)
 	{
 		if (font == mFont)
 			return;
 
 		mFont = font;
+
 		UpdateMesh();
 	}
 
-	Ptr<Font> Text::GetFont() const
+	FontRef Text::GetFont() const
 	{
 		return mFont;
+	}
+
+	void Text::SetFontAsset(Ptr<BitmapFontAsset> asset)
+	{
+		mFont = asset->GetFont();
+		mFontAssetId = asset->GetAssetId();
+	}
+
+	void Text::SetFontAsset(Ptr<VectorFontAsset> asset)
+	{
+		mFont = asset->GetFont();
+		mFontAssetId = asset->GetAssetId();
+	}
+
+	void Text::SetFontAsset(AssetId assetId)
+	{
+		if (!o2Assets.IsAssetExist(assetId))
+		{
+			o2Debug.LogError("Can't load font asset: %i - isn't exist", assetId);
+			return;
+		}
+
+		mFontAssetId = assetId;
+		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
+		if (fontAssetInfo.GetType() == BitmapFontAsset::type)
+		{
+			auto asset = BitmapFontAsset(mFontAssetId);
+			mFont = asset.GetFont();
+		}
+		else
+		{
+			auto asset = VectorFontAsset(mFontAssetId);
+			mFont = asset.GetFont();
+		}
+
+		UpdateMesh();
+	}
+
+	void Text::SetFontAsset(const String& fileName)
+	{
+		if (!o2Assets.IsAssetExist(fileName))
+		{
+			o2Debug.LogError("Can't load font asset: %s - isn't exist", fileName);
+			return;
+		}
+		
+		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(fileName);
+		mFontAssetId = fontAssetInfo.mId;
+
+		if (fontAssetInfo.GetType() == BitmapFontAsset::type)
+		{
+			auto asset = BitmapFontAsset(mFontAssetId);
+			mFont = asset.GetFont();
+		}
+		else
+		{
+			auto asset = VectorFontAsset(mFontAssetId);
+			mFont = asset.GetFont();
+		}
+	}
+
+	Ptr<Asset> Text::GetFontAsset() const
+	{
+		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
+		if (fontAssetInfo.GetType() == BitmapFontAsset::type)
+			return mnew BitmapFontAsset(mFontAssetId);
+		
+		return mnew VectorFontAsset(mFontAssetId);
+	}
+
+	AssetId Text::GetFontAssetId() const
+	{
+		return mFontAssetId;
 	}
 
 	void Text::SetText(const WString& text)
@@ -142,7 +257,7 @@ namespace o2
 		return mWordWrap;
 	}
 
-	void Text::SetSymbolsDistCoef(float coef)
+	void Text::SetSymbolsDistanceCoef(float coef)
 	{
 		if (coef == mSymbolsDistCoef)
 			return;
@@ -151,23 +266,23 @@ namespace o2
 		UpdateMesh();
 	}
 
-	float Text::GetSymbolsDistCoef() const
+	float Text::GetSymbolsDistanceCoef() const
 	{
 		return mSymbolsDistCoef;
 	}
 
-	void Text::SetLinesDistance(float distance)
+	void Text::SetLinesDistanceCoef(float coef /*= 1*/)
 	{
-		if (distance == mLinesDistance)
+		if (Math::Equals(coef, mLinesDistanceCoef))
 			return;
 
-		mLinesDistance = distance;
+		mLinesDistanceCoef = coef;
 		UpdateMesh();
 	}
 
-	float Text::GetLinesDistance() const
+	float Text::GetLinesDistanceCoef() const
 	{
-		return mLinesDistance;
+		return mLinesDistanceCoef;
 	}
 
 	Text::SymbolsSet& Text::GetSymbolsSet()
@@ -197,8 +312,8 @@ namespace o2
 		INITIALIZE_PROPERTY(Text, verAlign, SetVerAlign, GetVerAlign);
 		INITIALIZE_PROPERTY(Text, horAlign, SetHorAlign, GetHorAlign);
 		INITIALIZE_PROPERTY(Text, wordWrap, SetWordWrap, GetWordWrap);
-		INITIALIZE_PROPERTY(Text, symbolsDistCoef, SetSymbolsDistCoef, GetSymbolsDistCoef);
-		INITIALIZE_PROPERTY(Text, linesDistance, SetLinesDistance, GetLinesDistance);
+		INITIALIZE_PROPERTY(Text, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef);
+		INITIALIZE_PROPERTY(Text, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);
 	}
 
 	void Text::UpdateMesh()
@@ -207,8 +322,8 @@ namespace o2
 		{
 			for (auto mesh : mMeshes)
 			{
-				mesh->mVertexCount = 0;
-				mesh->mPolyCount = 0;
+				mesh->vertexCount = 0;
+				mesh->polyCount = 0;
 			}
 
 			return;
@@ -222,15 +337,15 @@ namespace o2
 
 		for (auto mesh : mMeshes)
 		{
-			mesh->mVertexCount = 0;
-			mesh->mPolyCount = 0;
+			mesh->vertexCount = 0;
+			mesh->polyCount = 0;
 		}
 
 		int currentMeshIdx = 0;
 		Ptr<Mesh> currentMesh = mMeshes[0];
 
 		mSymbolsSet.Initialize(font, mText, mTransform.offs, mSize, mHorAlign, mVerAlign, mWordWrap, mSymbolsDistCoef,
-							   mLinesDistance);
+							   mLinesDistanceCoef);
 
 		Basis transf = CalculateTextBasis();
 		mLastTransform = transf;
@@ -239,7 +354,7 @@ namespace o2
 		{
 			for (auto& symb : line.mSymbols)
 			{
-				if (currentMesh->mPolyCount + 2 >= currentMesh->GetMaxPolyCount())
+				if (currentMesh->polyCount + 2 >= currentMesh->GetMaxPolyCount())
 					currentMesh = mMeshes[currentMeshIdx++];
 
 				unsigned long color = mColor.ABGR();
@@ -251,20 +366,20 @@ namespace o2
 					transf.Transform(symb.mFrame.LeftBottom() - mSymbolsSet.mPosition)
 				};
 				
-				currentMesh->mVertices[currentMesh->mVertexCount++] = Vertex2(points[0], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.top);
-				currentMesh->mVertices[currentMesh->mVertexCount++] = Vertex2(points[1], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.top);
-				currentMesh->mVertices[currentMesh->mVertexCount++] = Vertex2(points[2], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.bottom);
-				currentMesh->mVertices[currentMesh->mVertexCount++] = Vertex2(points[3], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.bottom);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[0], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.top);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[1], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.top);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[2], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.bottom);
+				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[3], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.bottom);
 
-				currentMesh->mIndexes[currentMesh->mPolyCount*3] = currentMesh->mVertexCount - 4;
-				currentMesh->mIndexes[currentMesh->mPolyCount*3 + 1] = currentMesh->mVertexCount - 3;
-				currentMesh->mIndexes[currentMesh->mPolyCount*3 + 2] = currentMesh->mVertexCount - 2;
-				currentMesh->mPolyCount++;
+				currentMesh->indexes[currentMesh->polyCount*3] = currentMesh->vertexCount - 4;
+				currentMesh->indexes[currentMesh->polyCount*3 + 1] = currentMesh->vertexCount - 3;
+				currentMesh->indexes[currentMesh->polyCount*3 + 2] = currentMesh->vertexCount - 2;
+				currentMesh->polyCount++;
 
-				currentMesh->mIndexes[currentMesh->mPolyCount*3] = currentMesh->mVertexCount - 4;
-				currentMesh->mIndexes[currentMesh->mPolyCount*3 + 1] = currentMesh->mVertexCount - 2;
-				currentMesh->mIndexes[currentMesh->mPolyCount*3 + 2] = currentMesh->mVertexCount - 1;
-				currentMesh->mPolyCount++;
+				currentMesh->indexes[currentMesh->polyCount*3] = currentMesh->vertexCount - 4;
+				currentMesh->indexes[currentMesh->polyCount*3 + 1] = currentMesh->vertexCount - 2;
+				currentMesh->indexes[currentMesh->polyCount*3 + 2] = currentMesh->vertexCount - 1;
+				currentMesh->polyCount++;
 			}
 		}
 
@@ -310,6 +425,16 @@ namespace o2
 		return transf;
 	}
 
+	void Text::ColorChanged()
+	{
+		ULong dcolor = mColor.ABGR();
+		for (auto mesh : mMeshes)
+		{
+			for (int i = 0; i < (int)mesh->vertexCount; i++)
+				mesh->vertices[i].color = dcolor;
+		}
+	}
+
 	void Text::BasisChanged()
 	{
 		if (mSymbolsSet.mAreaSize != mSize || true)
@@ -322,21 +447,26 @@ namespace o2
 		}
 	}
 
+	void Text::OnDeserialized(const DataNode& node)
+	{
+		SetFontAsset(mFontAssetId);
+	}
+
 	void Text::TransformMesh(const Basis& bas)
 	{
 		for (auto& mesh : mMeshes)
 		{
-			for (unsigned int i = 0; i < mesh->mVertexCount; i++)
+			for (unsigned int i = 0; i < mesh->vertexCount; i++)
 			{
-				Vertex2* vx = &mesh->mVertices[i];
+				Vertex2* vx = &mesh->vertices[i];
 				bas.Transform(vx->x, vx->y);
 			}
 		}
 	}
 
-	void Text::SymbolsSet::Initialize(Ptr<Font> font, const WString& text, const Vec2F& position, const Vec2F& areaSize,
+	void Text::SymbolsSet::Initialize(FontRef font, const WString& text, const Vec2F& position, const Vec2F& areaSize,
 									  HorAlign horAlign, VerAlign verAlign, bool wordWrap, float charsDistCoef,
-									  float linesDistance)
+									  float linesDistCoef)
 	{
 		mFont = font;
 		mText = text;
@@ -347,7 +477,7 @@ namespace o2
 		mVerAlign = verAlign;
 		mWordWrap = wordWrap;
 		mSymbolsDistCoef = charsDistCoef;
-		mLinesDistance = linesDistance;
+		mLinesDistCoef = linesDistCoef;
 
 		mLineDefs.Clear();
 		int textLen = mText.Length();
@@ -357,21 +487,27 @@ namespace o2
 
 		mFont->CheckCharacters(text);
 
+		float linesDist = mFont->GetLineHeight()*mLinesDistCoef;
+		float fontHeight = mFont->GetHeight();
+
 		mLineDefs.Add(LineDef());
 		LineDef* curLine = &mLineDefs.Last();
-		curLine->mSize.y = mLinesDistance;
+		curLine->mSize.y = fontHeight;
 
-		Vec2F fullSize(0, mFont->GetHeight());
+		Vec2F fullSize(0, fontHeight);
 		bool checkAreaBounds = mWordWrap && mAreaSize.x > FLT_EPSILON;
 		int wrapCharIdx = -1;
 		for (int i = 0; i < textLen; i++)
 		{
 			const Font::Character& ch = mFont->GetCharacter(mText[i]);
-			Vec2F chSize = ch.mSize;
-			Vec2F chPos = Vec2F(curLine->mSize.x, 0) + ch.mOffset;
+			Vec2F chSize = ch.mSize; 
+			Vec2F chPos = Vec2F(curLine->mSize.x - ch.mOrigin.x, -ch.mOrigin.y);
 
-			curLine->mSymbols.Add(SymbolDef(chPos, chSize, ch.mTexSrc, ch.mId, ch.mOffset, ch.mAdvance));
-			curLine->mSize.x += ch.mAdvance*mSymbolsDistCoef;
+			curLine->mSymbols.Add(SymbolDef(chPos, chSize, ch.mTexSrc, ch.mId, ch.mOrigin, ch.mAdvance));
+
+			if (mText[i] != '\n')
+				curLine->mSize.x += ch.mAdvance*mSymbolsDistCoef;
+
 			curLine->mString += mText[i];
 
 			bool outOfBounds = checkAreaBounds ? curLine->mSize.x > mAreaSize.x:false;
@@ -408,10 +544,10 @@ namespace o2
 
 				mLineDefs.Add(LineDef());
 				curLine = &mLineDefs.Last();
-				curLine->mSize.y = mLinesDistance;
+				curLine->mSize.y = linesDist;
 				curLine->mLineBegSymbol = i + 1;
 				fullSize.x = Math::Max(fullSize.x, curLine->mSize.x);
-				fullSize.y += mLinesDistance;
+				fullSize.y += linesDist;
 			}
 			else if (mText[i] == ' '/* || mFont->mAllSymbolReturn*/)
 			{
@@ -422,21 +558,24 @@ namespace o2
 
 		fullSize.x = Math::Max(fullSize.x, curLine->mSize.x);
 
-		float lineHeight = mLinesDistance;
-		float yOffset = mAreaSize.y + (mLinesDistance - mFont->GetHeight());
+		float lineHeight = linesDist;
+		float yOffset = mAreaSize.y - mLineDefs[0].mSize.y;
 
 		if (mVerAlign == VerAlign::Both)
-			lineHeight = (mAreaSize.y - lineHeight + mFont->GetHeight())/(float)(mLineDefs.Count() - 1);
+			lineHeight = Math::Max(fontHeight, (mAreaSize.y - fontHeight)/(float)(mLineDefs.Count() - 1));
 		else if (mVerAlign == VerAlign::Bottom)
-			yOffset = fullSize.y;
+			yOffset = fullSize.y - mLineDefs[0].mSize.y;
 		else if (mVerAlign == VerAlign::Middle)
 			yOffset -= mAreaSize.y*0.5f - fullSize.y*0.5f;
 
 		yOffset += mPosition.y;
+// 
+// 		o2Debug.DrawRect(RectF(Vec2F(), fullSize), Color4::Red());
 
 		for (LineDefsVec::Iterator it = mLineDefs.begin(); it != mLineDefs.end(); ++it)
 		{
 			LineDef* line = &(*it);
+
 			float xOffset = 0;
 			float additiveSpaceOffs = 0;
 
@@ -445,13 +584,18 @@ namespace o2
 			else if (mHorAlign == HorAlign::Right)
 				xOffset = mAreaSize.x - line->mSize.x;
 			else if (mHorAlign == HorAlign::Both)
-				additiveSpaceOffs = (mAreaSize.x - line->mSize.x)/(float)line->mSpacesCount;
+				additiveSpaceOffs = Math::Max(0.0f, (mAreaSize.x - line->mSize.x)/(float)line->mSpacesCount);
 
 			xOffset += mPosition.x;
 
 			Vec2F locOrigin((float)(int)xOffset, (float)(int)yOffset);
 			line->mPosition = locOrigin;
 			yOffset -= lineHeight;
+
+// 
+// 			o2Debug.DrawRect(RectF(locOrigin, locOrigin + line->mSize), Color4::Red());
+// 			o2Debug.DrawRect(RectF(locOrigin, locOrigin + Vec2F(10, linesDist)), Color4::Blue());
+
 			for (SymbolDefsVec::Iterator jt = line->mSymbols.begin(); jt != line->mSymbols.end(); ++jt)
 			{
 				if (jt->mCharId == ' ')
@@ -469,8 +613,8 @@ namespace o2
 	{}
 
 	Text::SymbolsSet::SymbolDef::SymbolDef(const Vec2F& position, const Vec2F& size, const RectF& texSrc,
-										   UInt16 charId, const Vec2F& offs, float advance):
-		mFrame(position, position + size), mTexSrc(texSrc), mCharId(charId), mOffset(offs), mAdvance(advance)
+										   UInt16 charId, const Vec2F& origin, float advance):
+		mFrame(position, position + size), mTexSrc(texSrc), mCharId(charId), mOrigin(origin), mAdvance(advance)
 	{}
 
 	bool Text::SymbolsSet::SymbolDef::operator==(const SymbolDef& other) const
