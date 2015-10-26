@@ -106,11 +106,8 @@ namespace o2
 		Ptr<Text> mTextLayer; // Text layer drawable. Getting from layer "text"
 
 	protected:
-		// Need to search mtextLayer in "text" layer
-		void SearchTextLayer(); 
-
-		// Calls when added a new layer
-		void OnLayerAdded(Ptr<WidgetLayer> layer);
+		// Returns "text" layer or creates them
+		Ptr<Text> FindTextLayerText();
 
 		// Initializes properties
 		void InitializeProperties();

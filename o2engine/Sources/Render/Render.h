@@ -51,6 +51,9 @@ namespace o2
 		// Returns device's screen dpi
 		Vec2I GetDPI() const;
 
+		// Returns draw calls count at last frame
+		int GetDrawCallsCount();
+
 		// Binding camera. NULL - standard camera
 		void SetCamera(const Camera& camera);
 

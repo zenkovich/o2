@@ -101,9 +101,12 @@ namespace o2
 		res.mPath = "invalid_file";
 
 		FILETIME creationTime, lastAccessTime, lastWriteTime;
-		HANDLE hFile = CreateFileA(path.Data(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-		if (hFile == NULL)
+		HANDLE hFile = CreateFileA(path.Data(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+		if (hFile == NULL || hFile == INVALID_HANDLE_VALUE)
+		{
+			auto err = GetLastError();
 			return res;
+		}
 
 		if (!GetFileTime(hFile, &creationTime, &lastAccessTime, &lastWriteTime))
 		{

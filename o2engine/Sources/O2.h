@@ -83,6 +83,10 @@
 #include "Animation/Tween.h"
 
 #include "UI/Button.h"
+#include "UI/HorizontalLayout.h"
+#include "UI/Label.h"
+#include "UI/UIManager.h"
+#include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetState.h"

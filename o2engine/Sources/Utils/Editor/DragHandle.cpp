@@ -84,17 +84,19 @@ namespace o2
 
 	float DragHandle::Depth()
 	{
-		return regularSprite->GetDrawingDepth();
+		return regularSprite ? regularSprite->GetDrawingDepth():0.0f;
 	}
 
 	void DragHandle::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		pressedSprite->enabled = true;
+		if (pressedSprite)
+			pressedSprite->enabled = true;
 	}
 
 	void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		pressedSprite->enabled = false;
+		if (pressedSprite)
+			pressedSprite->enabled = false;
 	}
 
 	void DragHandle::OnCursorStayDown(const Input::Cursor& cursor)
@@ -108,12 +110,14 @@ namespace o2
 
 	void DragHandle::OnCursorEnter(const Input::Cursor& cursor)
 	{
-		hoverSprite->enabled = true;
+		if (hoverSprite)
+			hoverSprite->enabled = true;
 	}
 
 	void DragHandle::OnCursorExit(const Input::Cursor& cursor)
 	{
-		hoverSprite->enabled = false;
+		if (hoverSprite)
+			hoverSprite->enabled = false;
 	}
 
 	void DragHandle::SetPosition(const Vec2F& position)

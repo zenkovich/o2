@@ -18,6 +18,7 @@ namespace o2
 	class Render;
 	class Time;
 	class Timer;
+	class UIManager;
 
 	// ---------------------------------
 	// Basic application class interface
@@ -109,6 +110,7 @@ namespace o2
 		Ptr<Render>        mRender;        // Graphics render
 		Ptr<Time>          mTime;          // Time utilities
 		Ptr<Timer>         mTimer;         // Timer for detecting delta time for update
+		Ptr<UIManager>     mUIManager;     // UI manager
 
 	protected:
 		// Called on updating

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "O2.h"
+#include "ITestScreen.h"
 
 using namespace o2;
 
@@ -16,13 +17,14 @@ protected:
 	// Called on drawing
 	void OnDraw();
 
-protected:
-	Button mWidget;
-	Sprite mBackground;
-	Sprite mFakeWindow;
-	DragHandle mHandleMin;
-	DragHandle mHandleMax;
-	Text mText;
+public:
+	// Turns on test screen with id
+	void GoToScreen(const String& id);
 
-	void OnHandleMoved(const Vec2F& pos);
+protected:
+	TestScreensVec   mTestScreens;
+	Ptr<ITestScreen> mCurrentScreen;
+	Ptr<ITestScreen> mNextCurrentScreen;
+
+	void CheckArialFontEffects();
 };

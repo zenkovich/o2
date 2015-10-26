@@ -268,6 +268,11 @@ namespace o2
 		return mDPI;
 	}
 
+	int Render::GetDrawCallsCount()
+	{
+		return mDIPCount;
+	}
+
 	void Render::SetCamera(const Camera& camera)
 	{
 		mCamera = camera;

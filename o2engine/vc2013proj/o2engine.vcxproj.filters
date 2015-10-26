@@ -532,6 +532,18 @@
     <ClInclude Include="..\Sources\UI\Label.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\UI\UIManager.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\WidgetLayout.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\HorizontalLayout.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\VerticalLayout.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -892,6 +904,18 @@
       <Filter>Sources\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\UI\Label.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\UIManager.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\WidgetLayout.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\HorizontalLayout.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\VerticalLayout.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>

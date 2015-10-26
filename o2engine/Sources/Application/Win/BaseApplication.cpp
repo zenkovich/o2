@@ -3,6 +3,7 @@
 #include "Application/Input.h"
 #include "Events/EventSystem.h"
 #include "Render/Render.h"
+#include "UI/UIManager.h"
 #include "Utils/Debug.h"
 #include "Utils/Log/LogStream.h"
 #include "Utils/Time.h"
@@ -18,6 +19,7 @@ namespace o2
 
 		mRender = mnew Render();
 		o2Debug.InitializeFont();
+		o2UI.UpdateRootSize();
 	}
 
 	BaseApplication::~BaseApplication()

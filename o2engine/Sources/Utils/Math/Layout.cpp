@@ -26,7 +26,7 @@ namespace o2
 		return Layout(Vec2F(), Vec2F::One(), border.LeftBottom(), border.RightTop()*-1.0f);
 	}
 
-	Layout Layout::Both(float left, float top, float right, float bottom)
+	Layout Layout::Both(float left, float bottom, float right, float top)
 	{
 		return Layout(Vec2F(), Vec2F::One(), Vec2F(left, bottom), Vec2F(-right, -top));
 	}
@@ -36,7 +36,7 @@ namespace o2
 		return Layout(Vec2F(), Vec2F(), rect.LeftBottom(), rect.RightTop());
 	}
 
-	Layout Layout::Straight(float left, float top, float right, float bottom)
+	Layout Layout::Straight(float left, float bottom, float right, float top)
 	{
 		return Layout(Vec2F(), Vec2F(), Vec2F(left, bottom), Vec2F(right, top));
 	}

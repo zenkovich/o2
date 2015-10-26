@@ -115,6 +115,31 @@ namespace o2
 		KeybEventsListenersVec                          mKeyboardListeners;           // Keyboard events listeners
 		AppEventsListenersVec                           mApplicationListeners;        // Application events listeners
 
+	protected:
+		// Registering cursor events listener
+		static void RegCursorListener(CursorEventsListener* listener);
+
+		// Unregistering cursor events listener
+		static void UnregCursorListener(CursorEventsListener* listener);
+
+		// Registering drag events listener
+		static void RegDragListener(DragEventsListener* listener);
+
+		// Unregistering drag events listener
+		static void UnregDragListener(DragEventsListener* listener);
+
+		// Registering keyboard events listener
+		static void RegKeyboardListener(KeyboardEventsListener* listener);
+
+		// Unregistering keyboard events listener
+		static void UnregKeyboardListener(KeyboardEventsListener* listener);
+
+		// Registering application events listener
+		static void RegApplicationListener(ApplicationEventsListener* listener);
+
+		// Unregistering application events listener
+		static void UnregApplicationListener(ApplicationEventsListener* listener);
+
 		friend class CursorEventsListener;
 		friend class KeyboardEventsListener;
 		friend class DragEventsListener;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils/Containers/IArray.h"
 #include "Utils/Assert.h"
+#include "Utils/Containers/IArray.h"
 
 #ifndef CONTAINERS_DEBUG
 #define CONTAINERS_DEBUG true

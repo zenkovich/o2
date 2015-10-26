@@ -946,6 +946,10 @@ namespace o2
 			mImageAssetId = *imageAssedIdNode;
 			LoadFromImage(mImageAssetId);
 		}
+
+		Mode mode = mMode;
+		mMode = (Mode)((int)mode + 1);
+		SetMode(mode);
 	}
 
 	void Sprite::InitializeProperties()

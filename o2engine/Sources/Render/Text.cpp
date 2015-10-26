@@ -95,7 +95,7 @@ namespace o2
 		for (auto mesh : mMeshes)
 		{
 			mesh->Draw();
-			o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 150));
+			//o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 150));
 		}
 	}
 
@@ -437,7 +437,7 @@ namespace o2
 
 	void Text::BasisChanged()
 	{
-		if (mSymbolsSet.mAreaSize != mSize || true)
+		if (mSymbolsSet.mAreaSize != mSize)
 			UpdateMesh();
 		else
 		{

@@ -1,5 +1,6 @@
 #include "Widget.h"
 
+#include "Render/Render.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
 
@@ -10,16 +11,22 @@ namespace o2
 	Widget::Widget():
 		mParent(nullptr)
 	{
+		layout.mOwner = this;
 		InitializeProperties();
 	}
 
 	Widget::Widget(const Widget& other):
-		mName(other.mName), mPosition(other.mPosition), mSize(other.mSize), mParent(nullptr)
+		mName(other.mName), layout(other.layout), mParent(nullptr)
 	{
+		layout.mOwner = this;
 		InitializeProperties();
 
 		for (auto layer : other.mLayers)
-			mLayers.Add(mnew WidgetLayer(*layer));
+		{
+			auto newLayer = mnew WidgetLayer(*layer);
+			newLayer->mOwnerWidget = this;
+			mLayers.Add(newLayer);
+		}
 
 		for (auto child : other.mChilds)
 		{
@@ -29,7 +36,13 @@ namespace o2
 		}
 
 		for (auto state : other.mStates)
-			mStates.Add(state->Clone());
+		{
+			auto newState = state->Clone();
+			newState->animation.SetTarget(this);
+			mStates.Add(newState);
+		}
+
+		UpdateLayersDrawingSequence();
 	}
 
 	Widget::~Widget()
@@ -65,8 +78,7 @@ namespace o2
 		}
 
 		mName = other.mName;
-		mPosition = other.mPosition;
-		mSize = other.mSize;
+		layout = other.layout;
 
 		for (auto layer : other.mLayers)
 			mLayers.Add(mnew WidgetLayer(*layer));
@@ -88,8 +100,6 @@ namespace o2
 
 	void Widget::Update(float dt)
 	{
-		UpdateLayout();
-
 		for (auto layer : mLayers)
 			layer->Update(dt);
 
@@ -107,6 +117,25 @@ namespace o2
 
 		for (auto child : mChilds)
 			child->Draw();
+
+		static int colr = 0;
+		static int lastFrame = 0;
+
+		if (lastFrame != o2Time.GetCurrentFrame())
+			colr = 0;
+		lastFrame = o2Time.GetCurrentFrame();
+
+		o2Render.DrawRectFrame(layout.mAbsoluteRect, Color4::SomeColor(colr++));
+	}
+
+	void Widget::SetName(const String& name)
+	{
+		mName = name;
+	}
+
+	String Widget::GetName() const
+	{
+		return mName;
 	}
 
 	Ptr<Widget> Widget::GetParent() const
@@ -120,12 +149,18 @@ namespace o2
 			return;
 
 		if (mParent)
+		{
 			mParent->RemoveChild(this, false);
+			mParent->layout.Recalculate();
+		}
 
 		mParent = parent;
 
 		if (mParent)
+		{
 			mParent->mChilds.Add(this);
+			mParent->layout.Recalculate();
+		}
 	}
 
 	Ptr<Widget> Widget::AddChild(Ptr<Widget> widget)
@@ -139,6 +174,8 @@ namespace o2
 		mChilds.Add(widget);
 		widget->mParent = this;
 
+		layout.Recalculate();
+
 		return widget;
 	}
 
@@ -148,7 +185,10 @@ namespace o2
 		if (!child)
 			return false;
 
-		return child->mParent->RemoveChild(child);
+		bool res = child->mParent->RemoveChild(child);
+		child->mParent->layout.Recalculate();
+
+		return res;
 	}
 
 	bool Widget::RemoveChild(Ptr<Widget> widget, bool release /*= true*/)
@@ -158,6 +198,7 @@ namespace o2
 
 		widget->mParent = nullptr;
 		mChilds.Remove(widget);
+		layout.Recalculate();
 
 		if (release)
 			widget.Release();
@@ -206,48 +247,12 @@ namespace o2
 		}
 
 		mChilds.Clear();
+		layout.Recalculate();
 	}
 
 	const Widget::WidgetsVec& Widget::GetChilds() const
 	{
 		return mChilds;
-	}
-
-	void Widget::SetPosition(const Vec2I& position)
-	{
-		mPosition = position;
-		UpdateLayoutRecursive();
-	}
-
-	Vec2I Widget::GetPosition() const
-	{
-		return mPosition;
-	}
-
-	void Widget::SetAbsolutePosition(const Vec2I& position)
-	{
-		if (mParent)
-			mPosition = position - mParent->mAbsolutePosition;
-		else
-			mPosition = position;
-
-		UpdateLayoutRecursive();
-	}
-
-	Vec2I Widget::GetAbsolutePosition() const
-	{
-		return mAbsolutePosition;
-	}
-
-	void Widget::SetSize(const Vec2I& size)
-	{
-		mSize = size;
-		UpdateLayoutRecursive();
-	}
-
-	Vec2I Widget::GetSize() const
-	{
-		return mSize;
 	}
 
 	Ptr<WidgetLayer> Widget::AddLayer(Ptr<WidgetLayer> layer)
@@ -262,9 +267,12 @@ namespace o2
 	Ptr<WidgetLayer> Widget::AddLayer(const String& name, Ptr<IRectDrawable> drawable, 
 									  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
+		if (Math::Equals(depth, 0.0f))
+			depth = (float)mLayers.Count();
+
 		Ptr<WidgetLayer> layer = mnew WidgetLayer();
 		layer->depth = depth;
-		layer->id = name;
+		layer->name = name;
 		layer->drawable = drawable;
 		layer->layout = layout;
 
@@ -346,7 +354,7 @@ namespace o2
 
 		for (auto layer : mLayers)
 		{
-			if (layer->id == pathPart)
+			if (layer->name == pathPart)
 			{
 				if (delPos == -1)
 					return layer;
@@ -482,20 +490,19 @@ namespace o2
 		return mStates;
 	}
 
-	void Widget::UpdateLayout()
-	{
-		if (mParent)
-			mAbsolutePosition = mParent->mAbsolutePosition + mPosition;
-		else
-			mAbsolutePosition = mPosition;
-	}
-
 	void Widget::UpdateLayoutRecursive()
 	{
-		UpdateLayout();
-
 		for (auto child : mChilds)
-			child->UpdateLayoutRecursive();
+			child->layout.Recalculate();
+	}
+
+	void Widget::OnLayoutUpdated()
+	{}
+
+	void Widget::UpdateLayersLayouts()
+	{
+		for (auto layer : mLayers)
+			layer->UpdateLayout();
 	}
 
 	void Widget::UpdateLayersDrawingSequence()
@@ -515,7 +522,7 @@ namespace o2
 		return mChilds;
 	}
 
-	LayersVec Widget::GetlayersNonConst()
+	LayersVec Widget::GetLayersNonConst()
 	{
 		return mLayers;
 	}
@@ -529,7 +536,7 @@ namespace o2
 	{
 		Dictionary<String, Ptr<WidgetLayer>> res;
 		for (auto layer : mLayers)
-			res.Add(layer->id, layer);
+			res.Add(layer->name, layer);
 
 		return res;
 	}
@@ -537,14 +544,23 @@ namespace o2
 	void Widget::OnLayerAdded(Ptr<WidgetLayer> layer)
 	{}
 
+	void Widget::OnDeserialized(const DataNode& node)
+	{
+		for (auto layer : mLayers)
+			layer->mOwnerWidget = this;
+
+		for (auto state : mStates)
+			state->animation.SetTarget(this);
+
+		UpdateLayersDrawingSequence();
+	}
+
 	void Widget::InitializeProperties()
 	{
+		INITIALIZE_PROPERTY(Widget, name, SetName, GetName);
 		INITIALIZE_PROPERTY(Widget, parent, SetParent, GetParent);
-		INITIALIZE_PROPERTY(Widget, position, SetPosition, GetPosition);
-		INITIALIZE_PROPERTY(Widget, absPosition, SetAbsolutePosition, GetAbsolutePosition);
-		INITIALIZE_PROPERTY(Widget, size, SetSize, GetSize);
 		INITIALIZE_GETTER(Widget, childs, GetChildsNonConst);
-		INITIALIZE_GETTER(Widget, layers, GetlayersNonConst);
+		INITIALIZE_GETTER(Widget, layers, GetLayersNonConst);
 		INITIALIZE_GETTER(Widget, states, GetStatesNonConst);
 		INITIALIZE_ACCESSOR(Widget, child, GetChild);
 		INITIALIZE_ACCESSOR(Widget, layer, GetLayer);

@@ -14,6 +14,9 @@ namespace o2
 		// Default constructor
 		CursorEventsListener();
 
+		// Copy-constructor
+		CursorEventsListener(const CursorEventsListener& other);
+
 		// Virtual destructor
 		virtual ~CursorEventsListener();
 

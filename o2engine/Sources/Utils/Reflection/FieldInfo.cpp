@@ -16,7 +16,7 @@ namespace o2
 
 	FieldInfo::FieldInfo(const FieldInfo& other):
 		mName(other.mName), mOffset(other.mOffset), mIsProperty(other.mIsProperty), mType(other.mType),
-		mIsPtr(mIsPtr)
+		mIsPtr(other.mIsPtr)
 	{
 		for (auto attr : other.mAttributes)
 		{
@@ -57,6 +57,11 @@ namespace o2
 	{
 		return mName == other.mName && mOffset == other.mOffset && mIsProperty == other.mIsProperty &&
 			mAttributes == other.mAttributes;
+	}
+
+	FieldInfo* FieldInfo::Clone() const
+	{
+		return mnew FieldInfo(*this);
 	}
 
 	const String& FieldInfo::Name() const

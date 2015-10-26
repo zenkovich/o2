@@ -19,11 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Sources\MainTestScreen.cpp" />
     <ClCompile Include="..\..\Sources\TestApplication.cpp" />
+    <ClCompile Include="..\..\Sources\TextTestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\UITestScreen.cpp" />
     <ClCompile Include="..\..\Sources\Windows\o2Test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Sources\ITestScreen.h" />
+    <ClInclude Include="..\..\Sources\MainTestScreen.h" />
     <ClInclude Include="..\..\Sources\TestApplication.h" />
+    <ClInclude Include="..\..\Sources\TextTestScreen.h" />
+    <ClInclude Include="..\..\Sources\UITestScreen.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F0C3F9F6-349D-4D58-9175-0AE646039318}</ProjectGuid>
@@ -77,7 +84,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Tmp\Build\$(Configuration) $(Platform)\</IntDir>
   </PropertyGroup>
@@ -106,16 +113,17 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(O2ENGINE);$(O2ENGINE)Sources\;$(SolutionDir)..\..\Sources\;$(O2ENGINE)Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <AdditionalDependencies>$(SolutionDir)Tmp\Build\Engine\o2engine.lib;opengl32.lib;$(SolutionDir)Tmp\Build\Engine\FreeType\freetype26.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AssemblyDebug>true</AssemblyDebug>
+      <AssemblyDebug>false</AssemblyDebug>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>

@@ -7,12 +7,18 @@ namespace o2
 	CursorEventsListener::CursorEventsListener():
 		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0)
 	{
-		o2Events.mCursorListeners.Add(this);
+		EventSystem::RegCursorListener(this);
+	}
+
+	CursorEventsListener::CursorEventsListener(const CursorEventsListener& other):
+		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0)
+	{
+		EventSystem::RegCursorListener(this);
 	}
 
 	CursorEventsListener::~CursorEventsListener()
 	{
-		o2Events.mCursorListeners.Remove(this);
+		EventSystem::UnregCursorListener(this);
 	}
 
 	bool CursorEventsListener::IsUnderPoint(const Vec2F& point)

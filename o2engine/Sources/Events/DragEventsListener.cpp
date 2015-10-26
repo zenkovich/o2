@@ -7,12 +7,12 @@ namespace o2
 	DragEventsListener::DragEventsListener():
 		mIsDragging(false), mDragDistanceThreshold(2.0f), CursorEventsListener()
 	{
-		o2Events.mDragListeners.Add(this);
+		EventSystem::RegDragListener(this);
 	}
 
 	DragEventsListener::~DragEventsListener()
 	{
-		o2Events.mDragListeners.Remove(this);
+		EventSystem::UnregDragListener(this);
 	}
 
 	void DragEventsListener::OnCursorPressed(const Input::Cursor& cursor)

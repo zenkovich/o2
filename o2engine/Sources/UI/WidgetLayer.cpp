@@ -7,14 +7,17 @@ namespace o2
 	IOBJECT_CPP(WidgetLayer);
 
 	WidgetLayer::WidgetLayer():
-		mDepth(0.0f), id((String)Math::Random<UInt>(0, UINT_MAX))
+		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX))
 	{
 		InitializeProperties();
 	}
 
 	WidgetLayer::WidgetLayer(const WidgetLayer& other):
-		mDepth(other.mDepth), id(other.id), drawable(other.drawable->Clone())
+		mDepth(other.mDepth), name(other.name), layout(other.layout)
 	{
+		if (other.drawable)
+			drawable = other.drawable->Clone();
+
 		InitializeProperties();
 	}
 
@@ -28,7 +31,7 @@ namespace o2
 		drawable.Release();
 			
 		mDepth = other.mDepth;
-		id = other.id;
+		name = other.name;
 		drawable = other.drawable->Clone();
 		if (mOwnerWidget)
 			mOwnerWidget->UpdateLayersDrawingSequence();
@@ -43,13 +46,6 @@ namespace o2
 
 	void WidgetLayer::Update(float dt)
 	{
-		if (mParent)
-			mAbsolutePosition = layout.Calculate(mParent->mAbsolutePosition);
-		else
-			mAbsolutePosition = layout.Calculate(RectF(mOwnerWidget->mAbsolutePosition, 
-													   mOwnerWidget->mAbsolutePosition + mOwnerWidget->mSize));
-
-		drawable->SetRect(mAbsolutePosition);
 	}
 
 	Ptr<WidgetLayer> WidgetLayer::GetChild(const String& path)
@@ -72,7 +68,7 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			if (child->id == pathPart)
+			if (child->name == pathPart)
 			{
 				if (delPos == -1)
 					return child;
@@ -111,8 +107,19 @@ namespace o2
 	void WidgetLayer::OnChildAdded(Ptr<WidgetLayer> child)
 	{
 		child->mOwnerWidget = mOwnerWidget;
+
 		if (mOwnerWidget)
 			mOwnerWidget->UpdateLayersDrawingSequence();
+	}
+
+	void WidgetLayer::UpdateLayout()
+	{
+		if (mParent)
+			mAbsolutePosition = layout.Calculate(mParent->mAbsolutePosition);
+		else
+			mAbsolutePosition = layout.Calculate(mOwnerWidget->layout.mAbsoluteRect);
+
+		drawable->SetRect(mAbsolutePosition);
 	}
 
 	void WidgetLayer::InitializeProperties()

@@ -86,6 +86,6 @@ namespace o2
 	template <typename _class_type>
 	bool Singleton<_class_type>::IsSingletonInitialzed()
 	{ 
-		return mInstance != nullptr;
+		return mInstance.IsValid();
 	}
 }

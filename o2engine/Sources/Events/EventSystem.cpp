@@ -294,4 +294,65 @@ namespace o2
 			listener->OnKeyReleased(key);
 	}
 
+	void EventSystem::RegCursorListener(CursorEventsListener* listener)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		mInstance->mCursorListeners.Add(listener);
+	}
+
+	void EventSystem::UnregCursorListener(CursorEventsListener* listener)
+	{
+		mInstance->mCursorListeners.Remove(listener);
+		mInstance->mPressedListeners.RemoveAll([&](auto x) { return x.Value() == listener; });
+
+		if (mInstance->mRightButtonPressedListener == listener)
+			mInstance->mRightButtonPressedListener = nullptr;
+
+		if (mInstance->mMiddleButtonPressedListener == listener)
+			mInstance->mMiddleButtonPressedListener = nullptr;
+
+		mInstance->mUnderCursorListeners.RemoveAll([&](auto x) { return x.Value() == listener; });
+		mInstance->mLastUnderCursorListeners.RemoveAll([&](auto x) { return x.Value() == listener; });
+	}
+
+	void EventSystem::RegDragListener(DragEventsListener* listener)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		mInstance->mDragListeners.Add(listener);
+	}
+
+	void EventSystem::UnregDragListener(DragEventsListener* listener)
+	{
+		mInstance->mDragListeners.Remove(listener);
+	}
+
+	void EventSystem::RegKeyboardListener(KeyboardEventsListener* listener)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		mInstance->mKeyboardListeners.Add(listener);
+	}
+
+	void EventSystem::UnregKeyboardListener(KeyboardEventsListener* listener)
+	{
+		mInstance->mKeyboardListeners.Remove(listener);
+	}
+
+	void EventSystem::RegApplicationListener(ApplicationEventsListener* listener)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		mInstance->mApplicationListeners.Add(listener);
+	}
+
+	void EventSystem::UnregApplicationListener(ApplicationEventsListener* listener)
+	{
+		mInstance->mApplicationListeners.Remove(listener);
+	}
 }

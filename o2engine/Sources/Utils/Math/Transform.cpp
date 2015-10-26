@@ -113,8 +113,15 @@ namespace o2
 
 	void Transform::SetRect(const RectF& rect)
 	{
-		Vec2F x = mTransform.xv/(mSize.x*mScale.x);
-		Vec2F y = mTransform.yv/(mSize.y*mScale.y);
+		Vec2F x = mTransform.xv/Math::Max(0.0001f, mSize.x*mScale.x);
+		Vec2F y = mTransform.yv/Math::Max(0.0001f, mSize.y*mScale.y);
+
+		if (x == Vec2F() || y == Vec2F())
+		{
+			auto identityBasis = Basis::Build(Vec2F(), Vec2F::One(), mAngle, mShear);
+			x = identityBasis.xv;
+			y = identityBasis.yv;
+		}
 
 		mSize = rect.Size()/mScale;
 		Vec2F xv = x*mSize.x*mScale.x;

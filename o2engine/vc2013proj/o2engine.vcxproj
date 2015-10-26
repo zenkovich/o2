@@ -52,9 +52,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -65,6 +68,9 @@
     <BuildLog>
       <Path>$(SolutionDir)Tmp\Build\Engine\build.log</Path>
     </BuildLog>
+    <Lib>
+      <Verbose>true</Verbose>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -178,8 +184,12 @@
     <ClInclude Include="..\Sources\Render\Windows\RenderBase.h" />
     <ClInclude Include="..\Sources\Render\Windows\TextureBase.h" />
     <ClInclude Include="..\Sources\UI\Button.h" />
+    <ClInclude Include="..\Sources\UI\HorizontalLayout.h" />
     <ClInclude Include="..\Sources\UI\Label.h" />
+    <ClInclude Include="..\Sources\UI\UIManager.h" />
+    <ClInclude Include="..\Sources\UI\VerticalLayout.h" />
     <ClInclude Include="..\Sources\UI\WidgetLayer.h" />
+    <ClInclude Include="..\Sources\UI\WidgetLayout.h" />
     <ClInclude Include="..\Sources\UI\WidgetState.h" />
     <ClInclude Include="..\Sources\UI\Widget.h" />
     <ClInclude Include="..\Sources\Utils\Assert.h" />
@@ -330,8 +340,12 @@
     <ClCompile Include="..\Sources\Render\Windows\Render.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\Texture.cpp" />
     <ClCompile Include="..\Sources\UI\Button.cpp" />
+    <ClCompile Include="..\Sources\UI\HorizontalLayout.cpp" />
     <ClCompile Include="..\Sources\UI\Label.cpp" />
+    <ClCompile Include="..\Sources\UI\UIManager.cpp" />
+    <ClCompile Include="..\Sources\UI\VerticalLayout.cpp" />
     <ClCompile Include="..\Sources\UI\WidgetLayer.cpp" />
+    <ClCompile Include="..\Sources\UI\WidgetLayout.cpp" />
     <ClCompile Include="..\Sources\UI\WidgetState.cpp" />
     <ClCompile Include="..\Sources\UI\Widget.cpp" />
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />

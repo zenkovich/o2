@@ -3,8 +3,15 @@
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\o2Test.cpp" />
     <ClCompile Include="..\..\Sources\TestApplication.cpp" />
+    <ClCompile Include="..\..\Sources\TextTestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\UITestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\MainTestScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\TestApplication.h" />
+    <ClInclude Include="..\..\Sources\ITestScreen.h" />
+    <ClInclude Include="..\..\Sources\TextTestScreen.h" />
+    <ClInclude Include="..\..\Sources\UITestScreen.h" />
+    <ClInclude Include="..\..\Sources\MainTestScreen.h" />
   </ItemGroup>
 </Project>

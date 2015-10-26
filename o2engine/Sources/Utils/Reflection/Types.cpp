@@ -24,9 +24,14 @@
 #include "Render/Text.h"
 #include "Render/VectorFont.h"
 #include "Render/VectorFontEffects.h"
-#include "UI/WidgetLayer.h"
-#include "UI/WidgetState.h"
+#include "UI/Button.h"
+#include "UI/HorizontalLayout.h"
+#include "UI/Label.h"
+#include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 #include "Utils/Math/Curve.h"
 #include "Utils/Math/Layout.h"
 #include "Utils/Math/Transform.h"
@@ -114,7 +119,12 @@ namespace o2
 		INIT_TYPE(VectorFontAsset::MetaInfo);
 		INIT_TYPE(Text);
 		INIT_TYPE(WidgetLayer);
+		INIT_TYPE(WidgetLayout);
 		INIT_TYPE(WidgetState);
 		INIT_TYPE(Widget);
+		INIT_TYPE(Button);
+		INIT_TYPE(Label);
+		INIT_TYPE(HorizontalLayout);
+		INIT_TYPE(VerticalLayout);
 	}
 }

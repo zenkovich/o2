@@ -29,6 +29,9 @@ namespace o2
 		// Check equal operator
 		bool operator==(const Ptr& other) const;
 
+		// Check equal operator
+		bool operator==(_type* other) const;
+
 		// Check not equal operator
 		bool operator!=(const Ptr& other) const;
 
@@ -40,6 +43,9 @@ namespace o2
 
 		// Object contains access operator
 		operator _type* const() const;
+
+		template<typename _other_type>
+		operator Ptr<_other_type>() const;
 
 		// Pointer access operator
 		_type* operator->() const;
@@ -54,7 +60,6 @@ namespace o2
 		template<typename _other_type>
 		Ptr<_other_type> Cast() const;
 	};
-
 
 	template<typename _type>
 	Ptr<_type>::Ptr(_type* object = nullptr) :
@@ -91,6 +96,12 @@ namespace o2
 	}
 
 	template<typename _type>
+	bool Ptr<_type>::operator==(_type* other) const
+	{
+		return mObject == other;
+	}
+
+	template<typename _type>
 	bool Ptr<_type>::operator!=(const Ptr& other) const
 	{
 		return mObject != other.mObject;
@@ -112,6 +123,13 @@ namespace o2
 	Ptr<_type>::operator _type* const() const
 	{
 		return (_type*)mObject;
+	}
+
+	template<typename _type>
+	template<typename _other_type> 
+	Ptr<_type>::operator Ptr<_other_type>() const
+	{
+		return Cast<_other_type>();
 	}
 
 	template<typename _type>

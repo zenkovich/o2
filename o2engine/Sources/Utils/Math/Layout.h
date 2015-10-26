@@ -20,9 +20,9 @@ namespace o2
 		RectF Calculate(const RectF& source);
 
 		static Layout Both(const RectF& border = RectF());
-		static Layout Both(float left, float top, float right, float bottom);
+		static Layout Both(float left, float bottom, float right, float top);
 		static Layout Straight(const RectF& rect);
-		static Layout Straight(float left, float top, float right, float bottom);
+		static Layout Straight(float left, float bottom, float right, float top);
 
 		SERIALIZABLE_IMPL(Layout);
 

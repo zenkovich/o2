@@ -6,6 +6,7 @@
 #include "Config/ProjectConfig.h"
 #include "Events/EventSystem.h"
 #include "Render/Render.h"
+#include "UI/UIManager.h"
 #include "Utils/Debug.h"
 #include "Utils/FileSystem/FileSystem.h"
 #include "Utils/Log/ConsoleLogStream.h"
@@ -51,8 +52,8 @@ namespace o2
 		mTime = mnew Time();
 
 		mEventSystem = mnew EventSystem();
-// 
-// 		mUIController = mnew UIController();
+
+		mUIManager = mnew UIManager();
 
 		mLog->Out("Initialized");
 	}
@@ -65,6 +66,7 @@ namespace o2
 		mProjectConfig.Release();
 		mAssets.Release();
 		mEventSystem.Release();
+		mUIManager.Release();
 
 		mLog->Out("Deinitialized");
 	}
@@ -79,14 +81,14 @@ namespace o2
 
 		//mScheduler->ProcessBeforeFrame(dt);
 
-		OnUpdate(dt);
 		mEventSystem->Update(dt);
-		//mUIController->Update(dt);
+		OnUpdate(dt);
+		mUIManager->Update(dt);
 
 		mRender->Begin();
 		OnDraw();
 		o2Debug.Draw();
-		//mUIController->Draw();
+		mUIManager->Draw();
 		mRender->End();
 
 		mInput->Update(dt);

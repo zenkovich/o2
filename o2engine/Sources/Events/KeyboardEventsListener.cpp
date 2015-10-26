@@ -6,12 +6,12 @@ namespace o2
 {
 	KeyboardEventsListener::KeyboardEventsListener()
 	{
-		o2Events.mKeyboardListeners.Add(this);
+		EventSystem::RegKeyboardListener(this);
 	}
 
 	KeyboardEventsListener::~KeyboardEventsListener()
 	{
-		o2Events.mKeyboardListeners.Remove(this);
+		EventSystem::UnregKeyboardListener(this);
 	}
 
 	void KeyboardEventsListener::OnKeyPressed(const Input::Key& key)

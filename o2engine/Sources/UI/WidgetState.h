@@ -9,25 +9,39 @@ namespace o2
 {
 	class Widget;
 
+	// -----------------------------------------------------------------------
+	// Widget state. Could be true or false, and animates widget by this state
+	// -----------------------------------------------------------------------
 	class WidgetState: public ISerializable
 	{
 	public:
-		String    name;
-		Animation animation;
-		float     offStateAnimationSpeed;
+		String    name;                   // State name
+		Animation animation;              // Widget animation
+		float     offStateAnimationSpeed; // False state transition animation speed
 
+		// Default constructor
 		WidgetState();
+
+		// Copy-constructor
 		WidgetState(const WidgetState& state);
-		virtual ~WidgetState();
 
-		WidgetState& operator=(const WidgetState& state);
+		// Destructor
+		~WidgetState();
 
+		// Boolean cast operator
 		operator bool();
+
+		// Assign from boolean operator
 		WidgetState& operator=(bool state);
 
-		virtual void SetState(bool state);
-		virtual bool GetState() const;
-		virtual void Update(float dt);
+		// Sets current state
+		void SetState(bool state);
+
+		// Returns current state
+		bool GetState() const;
+
+		// Updates animation
+		void Update(float dt);
 
 		SERIALIZABLE_IMPL(WidgetState);
 
@@ -40,8 +54,8 @@ namespace o2
 		}
 
 	protected:
-		bool        mState;
-		Ptr<Widget> mOwner;
+		bool        mState; // Current state
+		Ptr<Widget> mOwner; // Owner widget pointer
 	};
 	typedef Vector<Ptr<WidgetState>>  StatesVec;
 }

@@ -27,10 +27,14 @@ namespace o2
 		// Destructor
 		~FieldInfo();
 
+		// Copy-operator
 		FieldInfo& operator=(const FieldInfo& other);
 
 		// Equal operator
 		bool operator==(const FieldInfo& other) const;
+
+		// Returns cloned copy
+		virtual FieldInfo* Clone() const;
 
 		// Adds attribute by type and parameters
 		template<typename _attr_type, typename ... _args>
@@ -74,7 +78,10 @@ namespace o2
 		Vector<IAttribute*> mAttributes; // Attributes array
 
 	protected:
+		// Searches field recursively by pointer
 		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res);
+
+		// Searches field recursively by path
 		virtual void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
 
 		friend class Type;
@@ -83,6 +90,9 @@ namespace o2
 		friend class AccessorFieldInfo;
 	};
 
+	// -------------------
+	// Accessor field info
+	// -------------------
 	template<typename _type>
 	class AccessorFieldInfo: public FieldInfo
 	{
@@ -93,53 +103,15 @@ namespace o2
 		// Constructor
 		AccessorFieldInfo(const String& name, UInt offset, Type* type):FieldInfo(name, offset, false, false, type) {}
 
+		// Returns cloned copy
+		virtual FieldInfo* Clone() const;
+
 	protected:
-		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res)
-		{
-			if (!mType)
-				return false;
+		// Searches field recursively by pointer
+		FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res);
 
-			Accessor<Ptr<_type>, const String&>* accessor = ((Accessor<Ptr<_type>, const String&>*)obj);
-
-			auto allFromAccessor = accessor->GetAll();
-
-			for (auto kv : allFromAccessor)
-			{
-				for (auto field : mType->mFields)
-				{
-					char* fieldObj = field->GetValuePtr<char>(kv.Value());
-					String newPath = path + "/" + kv.Key() + "/" + field->mName;
-					if (fieldObj == target)
-					{
-						res = newPath;
-						return field;
-					}
-
-					FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res);
-					if (childField)
-						return childField;
-				}
-			}
-
-			return nullptr;
-		}
-
-		void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo)
-		{
-			int delPos = path.Find("/");
-			String pathPart = path.SubStr(0, delPos);
-
-			Accessor<Ptr<_type>, const String&>* accessor = ((Accessor<Ptr<_type>, const String&>*)obj);
-			auto allFromAccessor = accessor->GetAll();
-
-			for (auto kv : allFromAccessor)
-			{
-				if (kv.Key() == pathPart)
-					return mType->GetFieldPtr<char>(kv.Value(), path.SubStr(delPos + 1), fieldInfo);
-			}
-
-			return nullptr;
-		}
+		// Searches field recursively by path
+		void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
 	};
 
 	template<typename _attr_type>
@@ -194,6 +166,62 @@ namespace o2
 		attribute->mOwnerFieldInfo = this;
 		mAttributes.Add(attribute);
 		return *this;
+	}
+
+
+	template<typename _type>
+	FieldInfo* AccessorFieldInfo<_type>::Clone() const
+	{
+		return mnew AccessorFieldInfo<_type>(*this);
+	}
+
+	template<typename _type>
+	FieldInfo* AccessorFieldInfo<_type>::SearchFieldPath(void* obj, void* target, const String& path, String& res)
+	{
+		if (!mType)
+			return false;
+
+		Accessor<Ptr<_type>, const String&>* accessor = ((Accessor<Ptr<_type>, const String&>*)obj);
+
+		auto allFromAccessor = accessor->GetAll();
+
+		for (auto kv : allFromAccessor)
+		{
+			for (auto field : mType->mFields)
+			{
+				char* fieldObj = field->GetValuePtr<char>(kv.Value());
+				String newPath = path + "/" + kv.Key() + "/" + field->mName;
+				if (fieldObj == target)
+				{
+					res = newPath;
+					return field;
+				}
+
+				FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res);
+				if (childField)
+					return childField;
+			}
+		}
+
+		return nullptr;
+	}
+
+	template<typename _type>
+	void* AccessorFieldInfo<_type>::SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo)
+	{
+		int delPos = path.Find("/");
+		String pathPart = path.SubStr(0, delPos);
+
+		Accessor<Ptr<_type>, const String&>* accessor = ((Accessor<Ptr<_type>, const String&>*)obj);
+		auto allFromAccessor = accessor->GetAll();
+
+		for (auto kv : allFromAccessor)
+		{
+			if (kv.Key() == pathPart)
+				return mType->GetFieldPtr<char>(kv.Value(), path.SubStr(delPos + 1), fieldInfo);
+		}
+
+		return nullptr;
 	}
 
 }

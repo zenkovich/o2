@@ -121,7 +121,7 @@ namespace o2
 		type.mBaseTypes.Add(baseType);
 
 		for (auto field : baseType->mFields)
-			type.mFields.Add(new FieldInfo(*field));
+			type.mFields.Add(field->Clone());
 	}
 
 	Type Type::unknown;
@@ -137,5 +137,4 @@ namespace o2
 	}
 
 	Type Type::Dummy::type;
-
 }

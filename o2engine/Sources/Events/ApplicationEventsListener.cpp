@@ -6,12 +6,12 @@ namespace o2
 {
 	ApplicationEventsListener::ApplicationEventsListener()
 	{
-		o2Events.mApplicationListeners.Add(this);
+		EventSystem::RegApplicationListener(this);
 	}
 
 	ApplicationEventsListener::~ApplicationEventsListener()
 	{
-		o2Events.mApplicationListeners.Remove(this);
+		EventSystem::UnregApplicationListener(this);
 	}
 
 	void ApplicationEventsListener::OnApplicationStarted()

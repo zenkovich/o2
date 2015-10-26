@@ -2,6 +2,7 @@
 
 namespace o2
 {
+	IOBJECT_CPP(Label);
 
 	Label::Label()
 	{
@@ -11,54 +12,48 @@ namespace o2
 	Label::Label(const Label& other):
 		Widget(other)
 	{
-		SearchTextLayer();
 		InitializeProperties();
 	}
 
 	Label& Label::operator=(const Label& other)
 	{
 		Widget::operator=(other);
-		SearchTextLayer();
 
 		return *this;
 	}
 
 	void Label::SetFont(FontRef font)
 	{
-		if (mTextLayer)
-			mTextLayer->SetFont(font);
+		FindTextLayerText()->SetFont(font);
 	}
 
 	FontRef Label::GetFont() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetFont();
+		auto text = GetLayerDrawable<Text>("caption");
+		if (text)
+			return text->GetFont();
 
 		return FontRef();
 	}
 
 	void Label::SetFontAsset(Ptr<BitmapFontAsset> asset)
 	{
-		if (mTextLayer)
-			mTextLayer->SetFontAsset(asset);
+		FindTextLayerText()->SetFontAsset(asset);
 	}
 
 	void Label::SetFontAsset(Ptr<VectorFontAsset> asset)
 	{
-		if (mTextLayer)
-			mTextLayer->SetFontAsset(asset);
+		FindTextLayerText()->SetFontAsset(asset);
 	}
 
 	void Label::SetFontAsset(AssetId assetId)
 	{
-		if (mTextLayer)
-			mTextLayer->SetFontAsset(assetId);
+		FindTextLayerText()->SetFontAsset(assetId);
 	}
 
 	void Label::SetFontAsset(const String& fileName)
 	{
-		if (mTextLayer)
-			mTextLayer->SetFontAsset(fileName);
+		FindTextLayerText()->SetFontAsset(fileName);
 	}
 
 	Ptr<Asset> Label::GetFontAsset() const
@@ -71,124 +66,121 @@ namespace o2
 
 	AssetId Label::GetFontAssetId() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetFontAssetId();
+		auto text = GetLayerDrawable<Text>("caption");
+		if (text)
+			return text->GetFontAssetId();
 
 		return 0;
 	}
 
 	void Label::SetText(const WString& text)
 	{
-		if (mTextLayer)
-			mTextLayer->SetText(text);
+		FindTextLayerText()->SetText(text);
 	}
 
 	WString Label::GetText() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetText();
+		auto text = GetLayerDrawable<Text>("caption");
+		if (text)
+			return text->GetText();
 
 		return WString();
 	}
 
 	void Label::SetCText(const String& text)
 	{
-		if (mTextLayer)
-			mTextLayer->SetCText(text);
+		FindTextLayerText()->SetCText(text);
 	}
 
 	String Label::GetCText() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetCText();
+		auto text = GetLayerDrawable<Text>("caption");
+		if (text)
+			return text->GetCText();
 
 		return WString();
 	}
 
 	void Label::SetHorAlign(Text::HorAlign align)
 	{
-		if (mTextLayer)
-			mTextLayer->SetHorAlign(align);
+		FindTextLayerText()->SetHorAlign(align);
 	}
 
 	Text::HorAlign Label::GetHorAlign() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetHorAlign();
+		auto text = GetLayerDrawable<Text>("caption");
+		if (text)
+			return text->GetHorAlign();
 
 		return Text::HorAlign::Left;
 	}
 
 	void Label::SetVerAlign(Text::VerAlign align)
 	{
-		if (mTextLayer)
-			mTextLayer->SetVerAlign(align);
+		FindTextLayerText()->SetVerAlign(align);
 	}
 
 	Text::VerAlign Label::GetVerAlign() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetVerAlign();
+		auto text = GetLayerDrawable<Text>("caption");
+		if (text)
+			return text->GetVerAlign();
 
 		return Text::VerAlign::Top;
 	}
 
 	void Label::SetWordWrap(bool flag)
 	{
-		if (mTextLayer)
-			mTextLayer->SetWordWrap(flag);
+		FindTextLayerText()->SetWordWrap(flag);
 	}
 
 	bool Label::GetWordWrap() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetWordWrap();
+		auto text = GetLayerDrawable<Text>("caption");
+		if (text)
+			return text->GetWordWrap();
 
 		return false;
 	}
 
 	void Label::SetSymbolsDistanceCoef(float coef /*= 1*/)
 	{
-		if (mTextLayer)
-			mTextLayer->SetSymbolsDistanceCoef(coef);
+		FindTextLayerText()->SetSymbolsDistanceCoef(coef);
 	}
 
 	float Label::GetSymbolsDistanceCoef() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetSymbolsDistanceCoef();
+		auto text = GetLayerDrawable<Text>("caption");
+		if (text)
+			return text->GetSymbolsDistanceCoef();
 
 		return 1.0f;
 	}
 
 	void Label::SetLinesDistanceCoef(float coef /*= 1*/)
 	{
-		if (mTextLayer)
-			mTextLayer->SetLinesDistanceCoef(coef);
+		FindTextLayerText()->SetLinesDistanceCoef(coef);
 	}
 
 	float Label::GetLinesDistanceCoef() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetLinesDistanceCoef();
+		auto text = GetLayerDrawable<Text>("caption");
+		if (text)
+			return text->GetLinesDistanceCoef();
 
 		return 1.0f;
 	}
 
-	void Label::SearchTextLayer()
+	Ptr<Text> Label::FindTextLayerText()
 	{
-		if (mTextLayer)
-			return;
+		auto captionText = GetLayerDrawable<Text>("text");
+		if (!captionText)
+		{
+			auto layer = AddTextLayer("text", "", "arial.ttf");
+			return layer->drawable.Cast<Text>();
+		}
 
-		auto textLayer = GetLayer("text");
-		if (textLayer)
-			mTextLayer = textLayer->drawable.Cast<Text>();
-	}
-
-	void Label::OnLayerAdded(Ptr<WidgetLayer> layer)
-	{
-		if (layer->id == "text" && layer->drawable->GetTypeId() == Text::type.ID())
-			mTextLayer = layer->drawable.Cast<Text>();
+		return captionText;
 	}
 
 	void Label::InitializeProperties()
