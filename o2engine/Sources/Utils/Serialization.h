@@ -54,12 +54,12 @@ namespace o2
 		void Serialize(void* object, DataNode& data) const;
 		void Deserialize(void* object, const DataNode& data) const;
 
-		IAttribute* Clone() const { return new SerializableAttribute(*this); }
+		IAttribute* Clone() const { return mnew SerializableAttribute(*this); }
 	};
 
 	// Registering field in type with serialization attribute
 #define SRLZ_FIELD(NAME) \
-	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME).AddAttribute<SerializableAttribute<decltype(NAME)>>()
+	type->RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME).AddAttribute<SerializableAttribute<decltype(NAME)>>()
 
 #define SERIALIZABLE(TYPE) .AddAttribute<SerializableAttribute<TYPE>>()
 
@@ -69,7 +69,7 @@ namespace o2
 	{                                                              						   \
 		DataNode res;																	   \
 		OnSerialize(res);																   \
-		for (auto field : type.Fields())												   \
+		for (auto field : type->Fields())												   \
 		{																				   \
 			ISerializableAttribute* srlzAttr = field->Attribute<ISerializableAttribute>(); \
 			if (srlzAttr)																   \
@@ -80,7 +80,7 @@ namespace o2
 	}																					   \
 	void Deserialize(const DataNode& node)												   \
 	{																					   \
-		for (auto field : type.Fields())												   \
+		for (auto field : type->Fields())												   \
 		{																				   \
 			ISerializableAttribute* srlzAttr = field->Attribute<ISerializableAttribute>(); \
 			if (srlzAttr)																   \

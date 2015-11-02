@@ -36,22 +36,22 @@ namespace o2
 
 	Ptr<Widget> UIManager::AddWidget()
 	{
-		auto res = mnew Widget();
+		Ptr<Widget> res = mnew Widget();
 		AddWidget(res);
 		return res;
 	}
 
 	Ptr<Button> UIManager::AddButton(const String& caption, const String& style /*= "standard"*/)
 	{
-		auto btn = CreateButton(caption, style);
-		AddWidget(btn);
+		Ptr<Button> btn = CreateButton(caption, style);
+		AddWidget(btn.Cast<Widget>());
 		return btn;
 	}
 
 	Ptr<Label> UIManager::AddLabel(const String& text, const String& style /*= "standard"*/)
 	{
-		auto lbl = CreateLabel(text, style);
-		AddWidget(lbl);
+		Ptr<Label> lbl = CreateLabel(text, style);
+		AddWidget(lbl.Cast<Widget>());
 		return lbl;
 	}
 

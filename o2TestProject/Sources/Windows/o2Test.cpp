@@ -2,6 +2,9 @@
 
 INITIALIZE_O2;
 
+//o2::Debug::SetupAsRootObject();
+//o2::Types::instance.mIsOnTop = IPtr::TreePosition::Root;
+
 // TODO: check this shit
 // String ab = "asdasd";
 // String str = String::Format("String %s", ab);
@@ -23,14 +26,26 @@ struct B
 
 int main()
 {
+	o2::Debug::SetupAsRootObject();
+	o2::Types::instance.SetupAsRoot();
+	o2::FileSystem::SetupAsRootObject();
+
 	Ptr<B> pb = mnew B();
-	for (int i = 0; i < 5; i++)
+	pb.SetupAsRoot();
+	for (int i = 0; i < 10; i++)
 		pb->av.Add(mnew A());
+
+	pb.Release();
 
 	Types::InitializeTypes();
 
-	TestApplication app;
-	app.Launch();
+	o2Memory.CollectGarbage();
+
+	Ptr<TestApplication> app = mnew TestApplication();
+	app.SetupAsRoot();
+	app->Launch();
+
+	app.Release();
 
 	o2Memory.CollectGarbage();
 

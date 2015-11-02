@@ -17,8 +17,8 @@ namespace o2
 
 	void EventSystem::Update(float dt)
 	{
-		mCursorListeners.Sort([](Ptr<CursorEventsListener> a, Ptr<CursorEventsListener> b) { return a->Depth() > b->Depth(); });
-		mDragListeners.Sort([](Ptr<DragEventsListener> a, Ptr<DragEventsListener> b) { return a->Depth() > b->Depth(); });
+		mCursorListeners.Sort([](const Ptr<CursorEventsListener>& a, const Ptr<CursorEventsListener>& b) { return a->Depth() > b->Depth(); });
+		mDragListeners.Sort([](const Ptr<DragEventsListener>& a, const Ptr<DragEventsListener>& b) { return a->Depth() > b->Depth(); });
 
 		mLastUnderCursorListeners = mUnderCursorListeners;
 		mUnderCursorListeners.Clear();

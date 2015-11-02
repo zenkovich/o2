@@ -39,10 +39,15 @@ namespace o2
 	template<typename _type>
 	void Types::InitializeType(const String& name)
 	{
+		_type::type = mnew Type();
+		_type::type.SetupAsRoot();
+
 		Ptr<_type> sample = mnew _type();
+
 		_type::InitializeType(sample);
-		Type::Initialize(_type::type, name, instance->mLastGivenTypeId++, sample);
-		instance->mTypes.Add(&_type::type);
+		Type::Initialize(*_type::type, name, instance->mLastGivenTypeId++, sample);
+
+		instance->mTypes.Add(_type::type);
 	}
 
 #define INIT_TYPE(TYPE) InitializeType<TYPE>(#TYPE)

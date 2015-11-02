@@ -49,7 +49,7 @@ namespace o2
 
 	int RectsPacker::GetPagesCount() const
 	{
-		return mRects.Max<int>([&](Ptr<Rect> rt) { return rt->mPage; })->mPage + 1;
+		return mRects.Max<int>([&](const Ptr<Rect>& rt) { return rt->mPage; })->mPage + 1;
 	}
 
 	bool RectsPacker::Pack()
@@ -59,7 +59,7 @@ namespace o2
 
 		mQuadNodes.Clear();
 
-		mRects.ForEach([](Ptr<Rect> rt) { rt->mPage = -1; rt->mRect = RectI(); });
+		mRects.ForEach([](const Ptr<Rect>& rt) { rt->mPage = -1; rt->mRect = RectI(); });
 		mRects.Sort([](auto a, auto b) { return a->mSize.y > b->mSize.y; });
 
 		for (auto rt : mRects)

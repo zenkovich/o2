@@ -69,7 +69,7 @@ namespace o2
 		void ProcessMissingMetasCreation(FolderInfo& folder);
 		
 		// Generates meta information file for asset
-		void GenerateMeta(const Type* assetType, const String& metaFullPath);
+		void GenerateMeta(Ptr<Type> assetType, const String& metaFullPath);
 
 		// Returns assets converter by asset type
 		Ptr<IAssetConverter> GetAssetConverter(Type::Id assetTypeId);

@@ -38,8 +38,6 @@
 
 namespace o2
 {
-	Type UnknownObject::type;
-
 	const Vector<Ptr<Type>>& Types::GetTypes()
 	{
 		return instance->mTypes;
@@ -69,6 +67,9 @@ namespace o2
 
 	void Types::InitializeTypes()
 	{
+		Type::Dummy::type = mnew Type();
+		Type::Dummy::type.SetupAsRoot();
+
 		INIT_TYPE(ProjectConfig);
 		INIT_TYPE(AssetInfo);
 		INIT_TYPE(Asset);

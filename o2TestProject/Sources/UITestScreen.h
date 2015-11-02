@@ -20,7 +20,7 @@ protected:
 	Sprite      mFakeWindow;
 	Ptr<Button> mButton;
 	Ptr<HorizontalLayout> mHorLayout;
-	Ptr<VerticalLayout>   mVerLayout;
+	Ptr<HorizontalLayout>   mHorLayout2;
 
 protected:
 	void CreateNewBtn();

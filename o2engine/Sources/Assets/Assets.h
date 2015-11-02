@@ -57,10 +57,10 @@ namespace o2
 		const TypesExtsDict GetAssetsExtensionsTypes() const;
 
 		// Returns standard asset type
-		const Type* GetStdAssetType() const;
+		Ptr<Type> GetStdAssetType() const;
 
 		// Returns asset type for extension
-		const Type* GetAssetTypeByExtension(const String& extension) const;
+		Ptr<Type> GetAssetTypeByExtension(const String& extension) const;
 
 		// Creates new asset
 		template<typename _asset_type>
@@ -121,7 +121,7 @@ namespace o2
 		Ptr<LogStream>     mLog;           // Log stream
 		Ptr<AssetsBuilder> mAssetsBuilder; // Assets builder
 		TypesExtsDict      mAssetsTypes;   // Assets types and extensions dictionary
-		Type*              mStdAssetType;  // Standard asset type
+		Ptr<Type>          mStdAssetType;  // Standard asset type
 
 	protected:
 		// Loads asset infos

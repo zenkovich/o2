@@ -26,12 +26,12 @@ namespace o2
 		return mId;
 	}
 
-	const Vector<Type*>& Type::BaseTypes() const
+	const Type::TypesVec& Type::BaseTypes() const
 	{
 		return mBaseTypes;
 	}
 
-	const Vector<FieldInfo*>& Type::Fields() const
+	const Type::FieldInfosVec& Type::Fields() const
 	{
 		return mFields;
 	}
@@ -45,9 +45,9 @@ namespace o2
 		return nullptr;
 	}
 
-	Vector<Type*> Type::InheritedTypes() const
+	Type::TypesVec Type::InheritedTypes() const
 	{
-		Vector<Type*> res;
+		TypesVec res;
 		for (auto type : Types::GetTypes())
 		{
 			auto baseTypes = type->BaseTypes();
@@ -124,8 +124,6 @@ namespace o2
 			type.mFields.Add(field->Clone());
 	}
 
-	Type Type::unknown;
-
 	bool Type::operator!=(const Type& other) const
 	{
 		return other.mId != mId;
@@ -136,5 +134,5 @@ namespace o2
 		return other.mId == mId;
 	}
 
-	Type Type::Dummy::type;
+	Ptr<Type> Type::Dummy::type;
 }

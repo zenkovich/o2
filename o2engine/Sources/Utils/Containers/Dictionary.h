@@ -576,13 +576,13 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	Dictionary<_key_type, _value_type>::Dictionary()
 	{
-		mPairs = new Vector<TKeyValue>();
+		mPairs = Vector<TKeyValue>();
 	}
 
 	template<typename _key_type, typename _value_type>
 	Dictionary<_key_type, _value_type>::Dictionary(const Dictionary<_key_type, _value_type>& other)
 	{
-		mPairs = other.mPairs.Clone();
+		mPairs = other.mPairs;
 	}
 
 	template<typename _key_type, typename _value_type>

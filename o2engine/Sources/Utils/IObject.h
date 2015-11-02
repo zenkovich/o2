@@ -23,33 +23,23 @@ namespace o2
 		virtual Type::Id GetTypeId() const = 0;
 	};
 
-	class UnknownObject
-	{
-	public:
-		static Type type;
-	};
-
 	// IObject header definition
 #define IOBJECT(CLASS)  							     \
 	CLASS* Clone() const { return mnew CLASS(*this); }   \
-	static Type type;								     \
-	const Type& GetType() const { return type; };	     \
-	Type::Id GetTypeId() const { return type.ID(); };    \
+	static Ptr<Type> type;								     \
+	const Type& GetType() const { return *type; };	     \
+	Type::Id GetTypeId() const { return type->ID(); };    \
 	static void InitializeType(CLASS* sample)   
 
 	// IObject source file implementation
-#define IOBJECT_CPP(CLASS) Type CLASS::type;
+#define IOBJECT_CPP(CLASS) Ptr<Type> CLASS::type;
 
 	// Field registration in type macros
 #define FIELD(NAME) \
-	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME)
-
-	// Field registration in type macros
-#define PROPERTY(NAME) \
-	type.RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME)
+	type->RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME)
 
 	// Base class specialization macros
 #define BASE_CLASS(CLASS) \
-Type::SetupBaseType(type, &CLASS::type)
+Type::SetupBaseType(*type, CLASS::type)
 
 }

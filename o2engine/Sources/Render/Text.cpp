@@ -136,7 +136,7 @@ namespace o2
 
 		mFontAssetId = assetId;
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
-		if (fontAssetInfo.GetType() == BitmapFontAsset::type)
+		if (fontAssetInfo.GetTypeId() == BitmapFontAsset::type->ID())
 		{
 			auto asset = BitmapFontAsset(mFontAssetId);
 			mFont = asset.GetFont();
@@ -161,7 +161,7 @@ namespace o2
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(fileName);
 		mFontAssetId = fontAssetInfo.mId;
 
-		if (fontAssetInfo.GetType() == BitmapFontAsset::type)
+		if (fontAssetInfo.GetTypeId() == BitmapFontAsset::type->ID())
 		{
 			auto asset = BitmapFontAsset(mFontAssetId);
 			mFont = asset.GetFont();
@@ -176,7 +176,7 @@ namespace o2
 	Ptr<Asset> Text::GetFontAsset() const
 	{
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
-		if (fontAssetInfo.GetType() == BitmapFontAsset::type)
+		if (fontAssetInfo.GetTypeId() == BitmapFontAsset::type->ID())
 			return mnew BitmapFontAsset(mFontAssetId);
 		
 		return mnew VectorFontAsset(mFontAssetId);
@@ -295,7 +295,7 @@ namespace o2
 		return mSymbolsSet.mRealSize;
 	}
 
-	Vec2F Text::GetTextSize(const WString& text, Ptr<Font> font, const Vec2F& areaSize /*= Vec2F()*/, 
+	Vec2F Text::GetTextSize(const WString& text, Ptr<Font> font, const Vec2F& areaSize /*= Vec2F()*/,
 							HorAlign horAlign /*= HorAlign::Left*/, VerAlign verAlign /*= VerAlign::Top*/,
 							bool wordWrap /*= true*/, float charsDistCoef /*= 1.0f*/, float linesDistCoef /*= 1.0f*/)
 	{

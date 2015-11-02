@@ -31,7 +31,7 @@ namespace o2
 		Ptr<_type> Take();
 
 		// Frees object and puts into cached
-		void Free(Ptr<_type> obj);
+		void Free(const Ptr<_type>& obj);
 
 		// Creates cached object
 		void CreateObjects(int count);
@@ -76,7 +76,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Pool<_type>::Free(Ptr<_type> obj)
+	void Pool<_type>::Free(const Ptr<_type>& obj)
 	{
 		mObjects.Add(obj);
 	}

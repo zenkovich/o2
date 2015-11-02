@@ -263,7 +263,7 @@ namespace o2
 		position(position), text(text), textDrawable(textDrawable), ownTextDrawable(false), IDbgDrawable(color, -1.0f)
 	{}
 
-	Debug::DbgText::DbgText(const Vec2F& position, const String& text, Ptr<VectorFont> font, const Color4& color, 
+	Debug::DbgText::DbgText(const Vec2F& position, const String& text, Ptr<VectorFont> font, const Color4& color,
 							float delay /*= -1.0f*/):
 		position(position), text(text), ownTextDrawable(true), IDbgDrawable(color, delay)
 	{

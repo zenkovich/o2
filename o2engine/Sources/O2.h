@@ -91,10 +91,11 @@
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetState.h"
 
-#define INITIALIZE_O2                                                              	  \
-o2::o2StackWalker* o2::o2StackWalker::instance = new o2StackWalker();				  \
-o2::MemoryManager* o2::MemoryManager::instance = new MemoryManager();				  \
-template<> o2::Ptr<o2::Debug> o2::Singleton<o2::Debug>::mInstance = mnew o2::Debug(); \
+#define INITIALIZE_O2                                                              	                 \
+o2::o2StackWalker* o2::o2StackWalker::instance = new o2StackWalker();				                 \
+o2::MemoryManager* o2::MemoryManager::instance = new MemoryManager();				                 \
+template<> o2::Ptr<o2::Debug> o2::Singleton<o2::Debug>::mInstance = mnew o2::Debug();                \
+template<> o2::Ptr<o2::FileSystem> o2::Singleton<o2::FileSystem>::mInstance = mnew o2::FileSystem(); \
 o2::Ptr<o2::Types> o2::Types::instance = mnew Types()
 
 

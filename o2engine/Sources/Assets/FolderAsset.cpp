@@ -9,7 +9,7 @@ namespace o2
 
 	Type::Id FolderAsset::MetaInfo::GetAssetType() const
 	{
-		return FolderAsset::type.ID();
+		return FolderAsset::type->ID();
 	}
 
 	FolderAsset::FolderAsset():
@@ -66,7 +66,7 @@ namespace o2
 		auto folderAssetInfo = o2Assets.mAssetsTree.FindAsset(mPath);
 		if (folderAssetInfo)
 			mContainingAssetsInfos = folderAssetInfo->GetChilds().Select<AssetInfo>(
-				[&](Ptr<AssetTree::AssetNode> asset) { return (AssetInfo)(*asset); });
+				[&](const Ptr<AssetTree::AssetNode>& asset) { return (AssetInfo)(*asset); });
 	}
 
 	void FolderAsset::InitializeProperties()

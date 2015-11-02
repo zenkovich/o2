@@ -241,6 +241,12 @@ namespace o2
 		// Calls when layer added and updates drawing sequence
 		virtual void OnLayerAdded(Ptr<WidgetLayer> layer);
 
+		// Calls when child widget was added
+		virtual void OnChildAdded(Ptr<Widget> child);
+
+		// Calls when child widget was removed
+		virtual void OnChildRemoved(Ptr<Widget> child);
+
 		// Calls when deserialized
 		void OnDeserialized(const DataNode& node);
 
@@ -255,7 +261,7 @@ namespace o2
 	Ptr<_type> Widget::GetLayerDrawable(const String& path) const
 	{
 		auto layer = GetLayer(path);
-		if (layer && layer->drawable->GetTypeId() == _type::type.ID())
+		if (layer && layer->drawable->GetTypeId() == _type::type->ID())
 			return layer->drawable.Cast<_type>();
 
 		return nullptr;

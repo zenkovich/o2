@@ -15,7 +15,7 @@ namespace o2
 	Vector<Type::Id> AtlasAssetConverter::GetProcessingAssetsTypes() const
 	{
 		Vector<Type::Id> res;
-		res.Add(AtlasAsset::type.ID());
+		res.Add(AtlasAsset::type->ID());
 		return res;
 	}
 
@@ -79,8 +79,8 @@ namespace o2
 
 	void AtlasAssetConverter::CheckBasicAtlas()
 	{
-		Type::Id imageTypeId = ImageAsset::type.ID();
-		Type::Id atlasTypeId = AtlasAsset::type.ID();
+		Type::Id imageTypeId = ImageAsset::type->ID();
+		Type::Id atlasTypeId = AtlasAsset::type->ID();
 
 		Ptr<AssetTree::AssetNode> basicAtlasInfo;
 
@@ -110,7 +110,7 @@ namespace o2
 
 	void AtlasAssetConverter::CheckRebuildingAtlases()
 	{
-		Type::Id atlasAssetTypeId = AtlasAsset::type.ID();
+		Type::Id atlasAssetTypeId = AtlasAsset::type->ID();
 
 		for (auto info : mAssetsBuilder->mBuildedAssetsTree.mAllAssets)
 		{
@@ -128,7 +128,7 @@ namespace o2
 		lastImages = *atlasData["AllImages"];
 
 		ImagesVec currentImages;
-		Type::Id imageTypeId = ImageAsset::type.ID();
+		Type::Id imageTypeId = ImageAsset::type->ID();
 		AssetId atlasId = atlasInfo->mMeta->ID();
 		for (auto assetInfo : mAssetsBuilder->mBuildedAssetsTree.mAllAssets)
 		{
@@ -260,7 +260,7 @@ namespace o2
 			imgDef.mPackRect->mRect.top -= imagesBorder;
 			imgDef.mPackRect->mRect.bottom += imagesBorder;
 
-			atlasImagesInfos.Add(AssetInfo(imgDef.mAssetInfo->mPath, imgDef.mAssetInfo->mMeta->ID(), ImageAsset::type.ID()));
+			atlasImagesInfos.Add(AssetInfo(imgDef.mAssetInfo->mPath, imgDef.mAssetInfo->mMeta->ID(), ImageAsset::type->ID()));
 
 			resAtlasBitmaps[imgDef.mPackRect->mPage]->CopyImage(imgDef.mBitmap, 
 																imgDef.mPackRect->mRect.LeftBottom());

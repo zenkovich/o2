@@ -18,7 +18,7 @@ namespace o2
 
 	TextureRef::TextureRef(const String& fileName)
 	{
-		mTexture = o2Render.mTextures.FindMatch([&](Ptr<Texture> tex) { return tex->GetFileName() == fileName; });
+		mTexture = o2Render.mTextures.FindMatch([&](const Ptr<Texture>& tex) { return tex->GetFileName() == fileName; });
 
 		if (!mTexture)
 			mTexture = mnew Texture(fileName);

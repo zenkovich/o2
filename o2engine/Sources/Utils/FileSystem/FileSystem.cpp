@@ -12,9 +12,7 @@ namespace o2
 #undef MoveFile
 #undef CreateDirectory
 #undef RemoveDirectory
-
-	CREATE_SINGLETON(FileSystem);
-
+	
 	FileSystem::FileSystem()
 	{
 		mLog = mnew LogStream("File System");

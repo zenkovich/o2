@@ -118,12 +118,12 @@ namespace o2
 	{
 		if (parent)
 		{
-			parent->AddChild(_this);
+			parent->AddChild(Ptr<_type>(_this));
 		}
 		else
 		{
 			if (mParent)
-				mParent->RemoveChild(_this, false);
+				mParent->RemoveChild(Ptr<_type>(_this), false);
 
 			mParent = nullptr;
 		}

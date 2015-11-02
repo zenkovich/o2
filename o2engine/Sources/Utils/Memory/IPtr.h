@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Utils/Memory/MemoryManager.h"
-#include "Utils/String.h"
 
 namespace o2
 {
@@ -12,23 +11,53 @@ namespace o2
 	// -----------------------
 	class IPtr
 	{
-	public: 
+	public:
+		enum class TreePosition { Unknown, Root, Child };
+
 		// Returns object allocation info pointer
 		AllocObjectInfo* GetAllocObjectInfo() const
 		{
 			return mObjectInfo;
 		}
 
+		// Sets pointer position as root in memory tree
+		void SetupAsRoot()
+		{
+			mMemTreePosition = TreePosition::Root;
+		}
+
 	protected:
-		AllocObjectInfo* mObjectInfo; // Object info pointer
-		bool             mIsOnTop;    // Using for GC. True when pointer is on top of memory hierarchy
+		AllocObjectInfo* mObjectInfo;      // Object info pointer
+		TreePosition     mMemTreePosition; // Using for GC. True when pointer is on top of memory hierarchy
+		int              mIdx;
 
 	protected:
 		// Default constructor
-		IPtr(): mObjectInfo(nullptr), mIsOnTop(false) {}
+		IPtr(): 
+			mObjectInfo(nullptr), mMemTreePosition(TreePosition::Unknown) 
+		{}
+
+		// Copy-constructor
+		IPtr(const IPtr& other):
+			mObjectInfo(other.mObjectInfo), mMemTreePosition(TreePosition::Unknown) 
+		{}
 
 		// Virtual destructor
-		virtual ~IPtr() {}
+		virtual ~IPtr() 
+		{}
+
+		// Assign operator
+		IPtr& operator=(const IPtr& other)
+		{
+			mObjectInfo = other.mObjectInfo;
+			return *this;
+		}
+
+		// Returns position in memory tree
+		TreePosition GetMemoryTreePosition() const
+		{
+			return mMemTreePosition;
+		}
 
 		// Invoking when object was released
 		virtual void ObjectReleased() = 0;
@@ -49,6 +78,13 @@ namespace o2
 	template<typename _type>
 	class ITemplPtr : public IPtr
 	{
+	public:
+		// Returns true, if object is valid
+		bool IsValid() const;
+
+		// Releases object
+		void Release();
+
 	protected:
 		_type* mObject; // Pointer to object
 
@@ -60,7 +96,7 @@ namespace o2
 		ITemplPtr(const ITemplPtr& other);
 
 		// Virtual destructor
-		~ITemplPtr();
+		virtual ~ITemplPtr();
 
 		// Copy operator
 		ITemplPtr& operator=(const ITemplPtr& other);
@@ -74,13 +110,6 @@ namespace o2
 		// Returns pointer to object
 		void* ObjectPtr() const;
 
-	public:
-		// Returns true, if object is valid
-		bool IsValid() const;
-
-		// Releases object
-		void Release();
-
 		friend class MemoryManager;
 		friend struct AllocObjectInfo;
 	};
@@ -90,15 +119,13 @@ namespace o2
 		mObject(object)
 	{
 		MemoryManager::OnPtrCreating(this);
-
-		if (mObject)
-			mObjectInfo = MemoryManager::GetObjectInfo(object);
 	}
 
 	template<typename _type>
 	ITemplPtr<_type>::ITemplPtr(const ITemplPtr& other) :
-		ITemplPtr(other.mObject)
+		mObject(other.mObject)
 	{
+		MemoryManager::OnPtrCreating(this);
 	}
 
 	template<typename _type>
@@ -111,20 +138,16 @@ namespace o2
 	ITemplPtr<_type>& ITemplPtr<_type>::operator=(const ITemplPtr& other)
 	{
 		mObject = other.mObject;
-
-		if (mObject)
-			mObjectInfo = MemoryManager::GetObjectInfo(mObject);
+		mObjectInfo = other.mObjectInfo;
 
 		return *this;
 	}
 
 	template<typename _type>
-	ITemplPtr<_type>& o2::ITemplPtr<_type>::operator=(_type* object)
+	ITemplPtr<_type>& ITemplPtr<_type>::operator=(_type* object)
 	{
 		mObject = object;
-
-		if (mObject)
-			mObjectInfo = MemoryManager::GetObjectInfo(mObject);
+		mObjectInfo = nullptr;
 
 		return *this;
 	}

@@ -31,8 +31,8 @@ void MainTestScreen::Load()
 	uiTest->layout.offsetBottom = -70.0f;
 	uiTest->onClick += [&]() { mApplication->GoToScreen("UITestScreen"); };
 
-	root->AddChild(textTest);
-	root->AddChild(uiTest);
+	root->AddChild(textTest.Cast<Widget>());
+	root->AddChild(uiTest.Cast<Widget>());
 }
 
 void MainTestScreen::Unload()
@@ -42,6 +42,7 @@ void MainTestScreen::Unload()
 
 void MainTestScreen::Update(float dt)
 {
+	mApplication->GoToScreen("UITestScreen");
 }
 
 void MainTestScreen::Draw()

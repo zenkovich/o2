@@ -442,6 +442,17 @@ namespace o2
 
 	void WidgetLayout::Recalculate()
 	{
+		if (mDrivenByParent)
+		{
+			if (mOwner->mParent)
+				mOwner->mParent->layout.UpdateRect();
+		}
+		else
+			UpdateRect();
+	}
+
+	void WidgetLayout::UpdateRect()
+	{
 		RectF lastAbsRect = mAbsoluteRect;
 
 		Vec2F parentSize, parentPos;
@@ -472,7 +483,7 @@ namespace o2
 		mOwner->OnLayoutUpdated();
 
 		for (auto child : mOwner->mChilds)
-			child->layout.Recalculate();
+			child->layout.UpdateRect();
 	}
 
 	void WidgetLayout::InitializeProperties()

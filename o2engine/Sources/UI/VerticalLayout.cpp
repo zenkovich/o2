@@ -136,6 +136,16 @@ namespace o2
 		RearrangeChilds();
 	}
 
+	void VerticalLayout::OnChildAdded(Ptr<Widget> child)
+	{
+		child->layout.mDrivenByParent = true;
+	}
+
+	void VerticalLayout::OnChildRemoved(Ptr<Widget> child)
+	{
+		child->layout.mDrivenByParent = false;
+	}
+
 	void VerticalLayout::RearrangeChilds()
 	{
 		UpdateLayoutParametres();
@@ -188,7 +198,7 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 0.5f);
-				child->layout.Recalculate();
+				child->layout.UpdateRect();
 			}
 		}
 		else
@@ -207,7 +217,7 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 0.5f);
-				child->layout.Recalculate();
+				child->layout.UpdateRect();
 			}
 		}
 	}
@@ -229,7 +239,7 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 0.0f);
-				child->layout.Recalculate();
+				child->layout.UpdateRect();
 			}
 		}
 		else
@@ -246,7 +256,7 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 0.0f);
-				child->layout.Recalculate();
+				child->layout.UpdateRect();
 			}
 		}
 	}
@@ -268,7 +278,7 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 1.0f);
-				child->layout.Recalculate();
+				child->layout.UpdateRect();
 			}
 		}
 		else
@@ -285,7 +295,7 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 1.0f);
-				child->layout.Recalculate();
+				child->layout.UpdateRect();
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 
 #include "Utils/Assert.h"
 #include "Utils/Containers/IArray.h"
+#include "Utils/Memory/Ptr.h"
 
 #ifndef CONTAINERS_DEBUG
 #define CONTAINERS_DEBUG true
@@ -161,9 +162,9 @@ namespace o2
 		};
 
 	protected:
-		_type* mValues;   // Array elements
-		int    mCount;    // Count of elements
-		int    mCapacity; // Size of mValues
+		Ptr<_type> mValues;   // Array elements
+		int        mCount;    // Count of elements
+		int        mCapacity; // Size of mValues
 
 	public:
 		// Constructor by initial capacity
@@ -214,6 +215,7 @@ namespace o2
 		// Returns a copy of this
 		IArray* Clone() const;
 
+		// Returns data pointer
 		_type* Data() const;
 
 		// Returns count of elements in vector
@@ -324,8 +326,7 @@ namespace o2
 	template<typename _type>
 	Vector<_type>::Iterator::Iterator(Vector<_type>* arr, _type* valuePtr):
 		mValuePtr(valuePtr), mArray(arr)
-	{
-	}
+	{}
 
 	template<typename _type>
 	int Vector<_type>::Iterator::Index() const
@@ -422,13 +423,13 @@ namespace o2
 	template<typename _type>
 	bool Vector<_type>::Iterator::operator==(const Iterator& itr) const
 	{
-		return mValuePtr == itr.mValuePtr && mArray == itr.mArray;
+		return mValuePtr == itr.mValuePtr;
 	}
 
 	template<typename _type>
 	bool Vector<_type>::Iterator::operator!=(const Iterator& itr) const
 	{
-		return mValuePtr != itr.mValuePtr || mArray != itr.mArray;
+		return mValuePtr != itr.mValuePtr;
 	}
 
 	template<typename _type>
@@ -465,8 +466,7 @@ namespace o2
 	template<typename _type>
 	Vector<_type>::ConstIterator::ConstIterator(const Vector<_type>* arr, _type* valuePtr):
 		mArray(arr), mValuePtr(valuePtr)
-	{
-	}
+	{}
 
 	template<typename _type>
 	int Vector<_type>::ConstIterator::Index() const
@@ -563,13 +563,13 @@ namespace o2
 	template<typename _type>
 	bool Vector<_type>::ConstIterator::operator==(const ConstIterator& itr) const
 	{
-		return mValuePtr == itr.mValuePtr && mArray == itr.mArray;
+		return mValuePtr == itr.mValuePtr;
 	}
 
 	template<typename _type>
 	bool Vector<_type>::ConstIterator::operator!=(const ConstIterator& itr) const
 	{
-		return mValuePtr != itr.mValuePtr || mArray != itr.mArray;
+		return mValuePtr != itr.mValuePtr;
 	}
 
 	template<typename _type>
@@ -606,10 +606,10 @@ namespace o2
 	template<typename _type>
 	Vector<_type>::Vector(int capacity /*= 5*/)
 	{
-		if (CONTAINERS_DEBUG)
-			Assert(capacity > 0, "Can't initialize array with empty capacity");
+		if (capacity < 5)
+			capacity = 5;
 
-		mValues = (_type*)malloc(sizeof(_type)*capacity);
+		mValues = (_type*)mmalloc(sizeof(_type)*capacity);
 		mCapacity = capacity;
 		mCount = 0;
 	}
@@ -617,7 +617,7 @@ namespace o2
 	template<typename _type>
 	Vector<_type>::Vector(const Vector& arr)
 	{
-		mValues = (_type*)malloc(sizeof(_type)*arr.mCapacity);
+		mValues = (_type*)mmalloc(sizeof(_type)*arr.mCapacity);
 		mCapacity = arr.mCapacity;
 		mCount = arr.mCount;
 
@@ -630,7 +630,7 @@ namespace o2
 	{
 		mCount = arr->Count();
 		mCapacity = GetReservingSize(mCount);
-		mValues = (_type*)malloc(sizeof(_type)*mCapacity);
+		mValues = (_type*)mmalloc(sizeof(_type)*mCapacity);
 
 		for (int i = 0; i < mCount; i++)
 			new (mValues + i) _type(arr->Get(i));
@@ -640,11 +640,11 @@ namespace o2
 	Vector<_type>::~Vector()
 	{
 		Clear();
-		free(mValues);
+		mfree(mValues);
 	}
 
 	template<typename _type>
-	_type* o2::Vector<_type>::Data() const
+	_type* Vector<_type>::Data() const
 	{
 		return mValues;
 	}
@@ -652,18 +652,20 @@ namespace o2
 	template<typename _type>
 	IArray<_type>* Vector<_type>::Clone() const
 	{
-		return new Vector<_type>(this);
+		return mnew Vector<_type>(this);
 	}
 
 	template<typename _type>
 	Vector<_type>& Vector<_type>::operator=(const Vector<_type>& arr)
 	{
-		Reserve(arr.mCapacity);
-
 		for (int i = 0; i < mCount; i++)
 			mValues[i].~_type();
 
+		mCapacity = arr.mCapacity;
 		mCount = arr.mCount;
+
+		mfree(mValues);
+		mValues = (_type*)mmalloc(sizeof(_type)*arr.mCapacity);
 
 		for (int i = 0; i < arr.mCount; i++)
 			new (mValues + i) _type(arr.mValues[i]);
@@ -756,7 +758,7 @@ namespace o2
 	template<typename _type>
 	int Vector<_type>::Count() const
 	{
-		return  mCount;
+		return mCount;
 	}
 
 	template<typename _type>
@@ -768,8 +770,8 @@ namespace o2
 	template<typename _type>
 	void Vector<_type>::Resize(int newCount)
 	{
-		if (CONTAINERS_DEBUG)
-			Assert(newCount > 0, "Can't resize array to zero size");
+		if (newCount < 0)
+			newCount = 0;
 
 		Reserve(GetReservingSize(newCount));
 
@@ -798,15 +800,15 @@ namespace o2
 
 		mCapacity = newCapacity;
 
-		_type* tmpValues = (_type*)malloc(mCount*sizeof(_type));
+		Ptr<_type> tmpValues = (_type*)mmalloc(mCount*sizeof(_type));
 		for (int i = 0; i < mCount; i++)
 		{
 			new (tmpValues + i) _type(mValues[i]);
 			mValues[i].~_type();
 		}
 
-		free(mValues);
-		mValues = (_type*)malloc(mCapacity*sizeof(_type));
+		mfree(mValues);
+		mValues = (_type*)mmalloc(mCapacity*sizeof(_type));
 
 		for (int i = 0; i < mCount; i++)
 		{
@@ -814,7 +816,7 @@ namespace o2
 			tmpValues[i].~_type();
 		}
 
-		free(tmpValues);
+		mfree(tmpValues);
 	}
 
 	template<typename _type>
@@ -942,12 +944,11 @@ namespace o2
 		if (idx < 0 || idx >= mCount)
 			return false;
 
-		mValues[idx].~_type();
-
 		for (int i = idx; i < mCount - 1; i++)
 			mValues[i] = mValues[i + 1];
 
 		mCount--;
+		mValues[mCount].~_type();
 
 		return true;
 	}
@@ -960,11 +961,11 @@ namespace o2
 
 		int diff = end - begin;
 
-		for (int i = begin; i < end; i++)
-			mValues[i].~_type();
-
 		for (int i = begin; i < mCount - diff; i++)
 			mValues[i] = mValues[i + diff];
+
+		for (int i = mCount - diff; i < mCount; i++)
+			mValues[i].~_type();
 
 		mCount -= diff;
 

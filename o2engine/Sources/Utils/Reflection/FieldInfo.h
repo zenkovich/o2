@@ -15,11 +15,14 @@ namespace o2
 	class FieldInfo
 	{
 	public:
+		typedef Vector<Ptr<IAttribute>> AttributesVec;
+
+	public:
 		// Default constructor
 		FieldInfo();
 
 		// Constructor
-		FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Type* type);
+		FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Ptr<Type> type);
 
 		// Copy-constructor
 		FieldInfo(const FieldInfo& other);
@@ -67,15 +70,15 @@ namespace o2
 		bool HaveAttribute() const;
 
 		// Returns attributes array
-		const Vector<IAttribute*>& Attributes() const;
+		const AttributesVec& Attributes() const;
 
 	protected:
-		String              mName;       // Name of field
-		UInt                mOffset;     // Offset of field in bytes from owner address
-		bool                mIsProperty; // Is it property or field
-		bool                mIsPtr;      // Is property Ptr<>
-		Type*               mType;       // Field type
-		Vector<IAttribute*> mAttributes; // Attributes array
+		String        mName;       // Name of field
+		UInt          mOffset;     // Offset of field in bytes from owner address
+		bool          mIsProperty; // Is it property or field
+		bool          mIsPtr;      // Is property Ptr<>
+		Ptr<Type>     mType;       // Field type
+		AttributesVec mAttributes; // Attributes array
 
 	protected:
 		// Searches field recursively by pointer
@@ -101,7 +104,8 @@ namespace o2
 		AccessorFieldInfo():FieldInfo() {}
 
 		// Constructor
-		AccessorFieldInfo(const String& name, UInt offset, Type* type):FieldInfo(name, offset, false, false, type) {}
+		AccessorFieldInfo(const String& name, UInt offset, Ptr<Type> type):
+			FieldInfo(name, offset, false, false, type) {}
 
 		// Returns cloned copy
 		virtual FieldInfo* Clone() const;
@@ -131,7 +135,7 @@ namespace o2
 	{
 		for (auto attr : mAttributes)
 		{
-			_attr_type* res = dynamic_cast<_attr_type*>(attr);
+			_attr_type* res = dynamic_cast<_attr_type*>(attr.Get());
 			if (res)
 				return res;
 		}
@@ -162,7 +166,7 @@ namespace o2
 	template<typename _attr_type, typename ... _args>
 	FieldInfo& FieldInfo::AddAttribute(_args ... args)
 	{
-		_attr_type* attribute = new _attr_type(args ...);
+		_attr_type* attribute = mnew _attr_type(args ...);
 		attribute->mOwnerFieldInfo = this;
 		mAttributes.Add(attribute);
 		return *this;

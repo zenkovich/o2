@@ -107,6 +107,12 @@ namespace o2
 		// Calling when layout was updates and calls RearrangeChilds
 		void OnLayoutUpdated();
 
+		// Calls when child widget was added
+		void OnChildAdded(Ptr<Widget> child);
+
+		// Calls when child widget was removed
+		void OnChildRemoved(Ptr<Widget> child);
+
 		// Invokes reque function for childs arranging
 		void RearrangeChilds();
 

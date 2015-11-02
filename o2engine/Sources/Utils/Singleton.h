@@ -35,6 +35,9 @@ namespace o2
 		// Returns true if singleton was initialized
 		static bool IsSingletonInitialzed();
 
+		// Sets instance as root pointer object
+		static void SetupAsRootObject();
+
 	public:
 		static Ptr<_class_type> mInstance;
 	};
@@ -87,5 +90,11 @@ namespace o2
 	bool Singleton<_class_type>::IsSingletonInitialzed()
 	{ 
 		return mInstance.IsValid();
+	}
+
+	template <typename _class_type>
+	void Singleton<_class_type>::SetupAsRootObject()
+	{
+		mInstance.SetupAsRoot();
 	}
 }

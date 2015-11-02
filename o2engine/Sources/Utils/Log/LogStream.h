@@ -32,13 +32,13 @@ namespace o2
 		const WString& GetId() const;
 
 		// Binds child stream
-		void BindStream(const Ptr<LogStream>& stream);
+		void BindStream(Ptr<LogStream> stream);
 
 		// Unbinds child stream
-		void UnbindStream(const Ptr<LogStream>& stream);
+		void UnbindStream(Ptr<LogStream> stream);
 
 		// Unbinds and destroy child stream
-		void UnbindAndReleaseStream(Ptr<LogStream>& stream);
+		void UnbindAndReleaseStream(Ptr<LogStream> stream);
 
 		// Unbinds and destroy all child streams
 		void UnbindAllStreams();

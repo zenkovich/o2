@@ -17,7 +17,7 @@ namespace o2
 	// ---------------------
 	// Widget drawable layer
 	// ---------------------
-	class WidgetLayer: public ITreeNode<WidgetLayer>, public ISerializable
+	class WidgetLayer: public ISerializable, public ITreeNode<WidgetLayer>
 	{
 	public:
 		Layout             layout;   // Drawable layout

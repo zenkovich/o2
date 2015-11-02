@@ -33,7 +33,7 @@
         <Item Name="[capacity]" ExcludeView="simple">mCapacity</Item>
         <ArrayItems>
             <Size>mCount</Size>
-            <ValuePointer>mValues</ValuePointer>
+            <ValuePointer>mValues.mObject</ValuePointer>
         </ArrayItems>
     </Expand>
 </Type>
@@ -53,7 +53,7 @@
         <Item Name="[capacity]" ExcludeView="simple">mPairs.mCapacity</Item>
         <ArrayItems>
             <Size>mPairs.mCount</Size>
-            <ValuePointer>mPairs.mValues</ValuePointer>
+            <ValuePointer>mPairs.mValues.mObject</ValuePointer>
         </ArrayItems>
     </Expand>
 </Type>
@@ -86,6 +86,7 @@
     <Expand>
         <Item Name="[object]">mObject</Item>
         <Item Name="[info]">mObjectInfo</Item>
+        <Item Name="[pos]">mMemTreePosition</Item>
     </Expand>
 </Type>
   

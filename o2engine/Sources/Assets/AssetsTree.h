@@ -49,7 +49,7 @@ namespace o2
 		~AssetTree();
 
 		// Builds tree for folder
-		void BuildTree(const String& path, Ptr<LogStream> log = nullptr);
+		void BuildTree(const String& path);
 
 		// Returns asset by path. (nullptr if not asset with path)
 		Ptr<AssetNode> FindAsset(const String& path) const;

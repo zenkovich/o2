@@ -56,19 +56,19 @@ void UITestScreen::Load()
 	h1->AddChild(o2UI.CreateLabel("Label text\nMulti line"));
 	mHorLayout->AddChild(h1);
 
-	mVerLayout = mnew VerticalLayout();
-	mVerLayout->AddChild(o2UI.CreateButton("Skotobaza"));
-	mVerLayout->AddChild(o2UI.CreateButton("Bonanza"));
+	mHorLayout2 = mnew HorizontalLayout();
+	mHorLayout2->AddChild(o2UI.CreateButton("Skotobaza"));
+	mHorLayout2->AddChild(o2UI.CreateButton("Bonanza"));
 	auto btn = o2UI.CreateButton("Add new button");
 	btn->onClick += [&]() { CreateNewBtn(); };
-	mVerLayout->AddChild(btn);
-	mVerLayout->spacing = 5;
-	mHorLayout->AddChild(mVerLayout);
+	mHorLayout2->AddChild(btn);
+	mHorLayout2->spacing = 5;
+	mHorLayout->AddChild(mHorLayout2);
 
 	mHorLayout->border = RectF(5, 5, 5, 5);
 	mHorLayout->spacing = 5.0f;
 	
-	o2UI.AddWidget(mHorLayout);
+	o2UI.AddWidget(Ptr<Widget>(mHorLayout));
 }
 
 void UITestScreen::Unload()
@@ -85,37 +85,37 @@ void UITestScreen::Update(float dt)
 		mApplication->GoToScreen("MainTestScreen");
 
 	if (o2Input.IsKeyPressed('Q'))
-		mVerLayout->expandHeight = !mVerLayout->expandHeight;
+		mHorLayout2->expandHeight = !mHorLayout2->expandHeight;
 
 	if (o2Input.IsKeyPressed('W'))
-		mVerLayout->expandWidth = !mVerLayout->expandWidth;
+		mHorLayout2->expandWidth = !mHorLayout2->expandWidth;
 
 	if (o2Input.IsKeyPressed(VK_NUMPAD1))
-		mVerLayout->baseCorner = VerticalLayout::BaseCorner::LeftBottom;
+		mHorLayout2->baseCorner = HorizontalLayout::BaseCorner::LeftBottom;
 
 	if (o2Input.IsKeyPressed(VK_NUMPAD2))
-		mVerLayout->baseCorner = VerticalLayout::BaseCorner::Bottom;
+		mHorLayout2->baseCorner = HorizontalLayout::BaseCorner::Bottom;
 
 	if (o2Input.IsKeyPressed(VK_NUMPAD3))
-		mVerLayout->baseCorner = VerticalLayout::BaseCorner::RightBottom;
+		mHorLayout2->baseCorner = HorizontalLayout::BaseCorner::RightBottom;
 
 	if (o2Input.IsKeyPressed(VK_NUMPAD4))
-		mVerLayout->baseCorner = VerticalLayout::BaseCorner::Left;
+		mHorLayout2->baseCorner = HorizontalLayout::BaseCorner::Left;
 
 	if (o2Input.IsKeyPressed(VK_NUMPAD5))
-		mVerLayout->baseCorner = VerticalLayout::BaseCorner::Center;
+		mHorLayout2->baseCorner = HorizontalLayout::BaseCorner::Center;
 
 	if (o2Input.IsKeyPressed(VK_NUMPAD6))
-		mVerLayout->baseCorner = VerticalLayout::BaseCorner::Right;
+		mHorLayout2->baseCorner = HorizontalLayout::BaseCorner::Right;
 
 	if (o2Input.IsKeyPressed(VK_NUMPAD7))
-		mVerLayout->baseCorner = VerticalLayout::BaseCorner::LeftTop;
+		mHorLayout2->baseCorner = HorizontalLayout::BaseCorner::LeftTop;
 
 	if (o2Input.IsKeyPressed(VK_NUMPAD8))
-		mVerLayout->baseCorner = VerticalLayout::BaseCorner::Top;
+		mHorLayout2->baseCorner = HorizontalLayout::BaseCorner::Top;
 
 	if (o2Input.IsKeyPressed(VK_NUMPAD9))
-		mVerLayout->baseCorner = VerticalLayout::BaseCorner::RightTop;
+		mHorLayout2->baseCorner = HorizontalLayout::BaseCorner::RightTop;
 }
 
 void UITestScreen::Draw()
@@ -134,8 +134,8 @@ void UITestScreen::CreateNewBtn()
 	auto btn = o2UI.CreateButton("Btn");
 	btn->layout.size = Vec2F(Math::Random(20, 40), Math::Random(20, 40));
 	//btn->layout.size = mButton->layout.size;
-	mVerLayout->AddChild(btn);
+	mHorLayout->AddChild(btn);
 
 	//mVerLayout->border = RectF(5, 5, 5, 5);
-	mVerLayout->spacing = 5.0f;
+	mHorLayout2->spacing = 5.0f;
 }

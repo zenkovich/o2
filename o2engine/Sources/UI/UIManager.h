@@ -122,7 +122,7 @@ namespace o2
 		Ptr<_type> sample;
 		for (auto styleWidget : mStyleSamples)
 		{
-			if (_type::type.ID() == styleWidget->GetTypeId())
+			if (_type::type->ID() == styleWidget->GetTypeId())
 			{
 				if (style == styleWidget->GetName())
 				{
@@ -142,7 +142,7 @@ namespace o2
 		}
 		else
 		{
-			mLog->Warning("Can't find style %s for %s", style, _type::type.Name());
+			mLog->Warning("Can't find style %s for %s", style, _type::type->Name());
 			res = mnew _type();
 		}
 

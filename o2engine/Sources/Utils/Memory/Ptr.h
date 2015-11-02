@@ -35,6 +35,12 @@ namespace o2
 		// Check not equal operator
 		bool operator!=(const Ptr& other) const;
 
+		// Plus offset operator
+		_type* operator+(int offset) const;
+
+		// Plus offset operator
+		_type* operator-(int offset) const;
+
 		// Boolean cast operator. Returns true when pointer is valid
 		operator bool() const;
 
@@ -44,6 +50,7 @@ namespace o2
 		// Object contains access operator
 		operator _type* const() const;
 
+		// Cast operator to pointer with another type
 		template<typename _other_type>
 		operator Ptr<_other_type>() const;
 
@@ -55,6 +62,9 @@ namespace o2
 
 		// Returns object pointer
 		_type* Get();
+
+		// Returns constant object pointer
+		const _type* Get() const;
 
 		// Static cost to another type
 		template<typename _other_type>
@@ -108,6 +118,18 @@ namespace o2
 	}
 
 	template<typename _type>
+	_type* Ptr<_type>::operator-(int offset) const
+	{
+		return mObject - offset;
+	}
+
+	template<typename _type>
+	_type* Ptr<_type>::operator+(int offset) const
+	{
+		return mObject + offset;
+	}
+
+	template<typename _type>
 	Ptr<_type>::operator bool() const
 	{
 		return mObject != nullptr;
@@ -146,6 +168,12 @@ namespace o2
 
 	template<typename _type>
 	_type* Ptr<_type>::Get()
+	{
+		return (_type*)mObject;
+	}
+
+	template<typename _type>
+	const _type* Ptr<_type>::Get() const
 	{
 		return (_type*)mObject;
 	}

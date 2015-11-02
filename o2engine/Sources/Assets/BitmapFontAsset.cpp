@@ -12,7 +12,7 @@ namespace o2
 
 	Type::Id BitmapFontAsset::MetaInfo::GetAssetType() const
 	{
-		return BitmapFontAsset::type.ID();
+		return BitmapFontAsset::type->ID();
 	}
 
 	BitmapFontAsset::BitmapFontAsset():

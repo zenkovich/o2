@@ -218,20 +218,22 @@ namespace o2
 
 	protected:
 		Ptr<Widget> mOwner;
-		Vec2F       mPivot        = Vec2F(0.5f, 0.5f);
-		Vec2F       mAnchorMin    = Vec2F(0.5f, 0.5f);
-		Vec2F       mAnchorMax    = Vec2F(0.5f, 0.5f);
-		Vec2F       mOffsetMin    = Vec2F(0.0f, 0.0f);
-		Vec2F       mOffsetMax    = Vec2F(0.0f, 0.0f);
-		Vec2F       mMinSize      = Vec2F(0.0f, 0.0f);
-		Vec2F       mMaxSize      = Vec2F(FLT_MAX, FLT_MAX);
-		RectF       mAbsoluteRect = RectF();
-		RectF       mLocalRect    = RectF();
-		Vec2F       mWeight       = Vec2F(1.0f, 1.0f);
-		bool        mFitByChilds  = false;
+		Vec2F       mPivot          = Vec2F(0.5f, 0.5f);
+		Vec2F       mAnchorMin      = Vec2F(0.5f, 0.5f);
+		Vec2F       mAnchorMax      = Vec2F(0.5f, 0.5f);
+		Vec2F       mOffsetMin      = Vec2F(0.0f, 0.0f);
+		Vec2F       mOffsetMax      = Vec2F(0.0f, 0.0f);
+		Vec2F       mMinSize        = Vec2F(0.0f, 0.0f);
+		Vec2F       mMaxSize        = Vec2F(FLT_MAX, FLT_MAX);
+		RectF       mAbsoluteRect   = RectF();
+		RectF       mLocalRect      = RectF();
+		Vec2F       mWeight         = Vec2F(1.0f, 1.0f);
+		bool        mFitByChilds    = false;
+		bool        mDrivenByParent = false;
 
 	protected:
 		void Recalculate();
+		void UpdateRect();
 		void InitializeProperties();
 
 		friend class Widget;

@@ -63,13 +63,13 @@ void TestApplication::GoToScreen(const String& id)
 void TestApplication::CheckArialFontEffects()
 {
 	VectorFontAsset arialFont("arial.ttf");
-	if (!arialFont.GetEffects().ContainsPred([](auto eff) { return eff->GetTypeId() == FontGradientEffect::type.ID(); }))
+	if (!arialFont.GetEffects().ContainsPred([](auto eff) { return eff->GetTypeId() == FontGradientEffect::type->ID(); }))
 		arialFont.AddEffect<FontGradientEffect>();
 
-	if (!arialFont.GetEffects().ContainsPred([](auto eff) { return eff->GetTypeId() == FontColorEffect::type.ID(); }))
+	if (!arialFont.GetEffects().ContainsPred([](auto eff) { return eff->GetTypeId() == FontColorEffect::type->ID(); }))
 		arialFont.AddEffect<FontColorEffect>(Color4(100, 100, 100, 255));
 
-	if (!arialFont.GetEffects().ContainsPred([](auto eff) { return eff->GetTypeId() == FontShadowEffect::type.ID(); }))
+	if (!arialFont.GetEffects().ContainsPred([](auto eff) { return eff->GetTypeId() == FontShadowEffect::type->ID(); }))
 		arialFont.AddEffect<FontShadowEffect>(2.0f, Vec2F(), Color4(50, 50, 100, 100));
 
 	arialFont.Save();

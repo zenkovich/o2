@@ -16,12 +16,12 @@ namespace o2
 	{
 	public:
 		typedef UInt Id;
-
-		static Type unknown;
+		typedef Vector<Ptr<FieldInfo>> FieldInfosVec;
+		typedef Vector<Ptr<Type>> TypesVec;
 
 		struct Dummy
 		{
-			static Type type;
+			static Ptr<Type> type;
 		};
 
 	public:
@@ -44,23 +44,23 @@ namespace o2
 		Id ID() const;
 
 		// Returns vector of base types
-		const Vector<Type*>& BaseTypes() const;
+		const TypesVec& BaseTypes() const;
 
 		// Returns fields informations array
-		const Vector<FieldInfo*>& Fields() const;
+		const FieldInfosVec& Fields() const;
 
 		// Returns field information by name
 		const FieldInfo* Field(const String& name) const;
 
 		// Returns inherited types
-		Vector<Type*> InheritedTypes() const;
+		TypesVec InheritedTypes() const;
 
 		// Returns sample pointer
 		const IObject* Sample() const;
 
 		// Registers field in type
 		template<typename _type>
-		FieldInfo& RegField(const String& name, UInt offset, Ptr<_type>& value);
+		FieldInfo& RegField(const String& name, UInt offset, Ptr<_type> value);
 
 		// Registers field in type
 		template<typename _type>
@@ -88,11 +88,11 @@ namespace o2
 		static void SetupBaseType(Type& type, Type* baseType);
 
 	protected:
-		String             mName;      // Name of object type
-		Vector<FieldInfo*> mFields;    // Fields information
-		Id                 mId;        // Id of type
-		Vector<Type*>      mBaseTypes; // Base types ids
-		Ptr<IObject>       mSample;    // Object sample
+		String        mName;      // Name of object type
+		FieldInfosVec mFields;    // Fields information
+		Id            mId;        // Id of type
+		TypesVec      mBaseTypes; // Base types ids
+		Ptr<IObject>  mSample;    // Object sample
 
 		friend class FieldInfo;
 
@@ -102,34 +102,34 @@ namespace o2
 
 
 	template<typename _type>
-	FieldInfo& Type::RegField(const String& name, UInt offset, Ptr<_type>& value)
+	FieldInfo& Type::RegField(const String& name, UInt offset, Ptr<_type> value)
 	{
-		Type* type = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
-		mFields.Add(new FieldInfo(name, offset, false, true, type));
+		Ptr<Type> type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		mFields.Add(mnew FieldInfo(name, offset, false, true, type));
 		return *mFields.Last();
 	}
 
 	template<typename _type>
 	FieldInfo& Type::RegField(const String& name, UInt offset, _type& value)
 	{
-		Type* type = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
-		mFields.Add(new FieldInfo(name, offset, false, false, type));
+		Ptr<Type> type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		mFields.Add(mnew FieldInfo(name, offset, false, false, type));
 		return *mFields.Last();
 	}
 
 	template<typename _type>
 	FieldInfo& Type::RegField(const String& name, UInt offset, Property<_type>& value)
 	{
-		Type* type = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
-		mFields.Add(new FieldInfo(name, offset, true, false, type));
+		Ptr<Type> type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		mFields.Add(mnew FieldInfo(name, offset, true, false, type));
 		return *mFields.Last();
 	}
 
 	template<typename _type>
 	FieldInfo& Type::RegField(const String& name, UInt offset, Accessor<Ptr<_type>, const String&>& value)
 	{
-		Type* type = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
-		mFields.Add(new AccessorFieldInfo<_type>(name, offset, type));
+		Ptr<Type> type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		mFields.Add(mnew AccessorFieldInfo<_type>(name, offset, type));
 		return *mFields.Last();
 	}
 

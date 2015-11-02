@@ -27,29 +27,25 @@ namespace o2
 		Clear();
 	}
 
-	void AssetTree::BuildTree(const String& path, Ptr<LogStream> log /*= nullptr*/)
+	void AssetTree::BuildTree(const String& path)
 	{
 		Clear();
 
 		mPath = path;
-		if (log)
-			mLog = log;
-		else
-			log = o2Debug.GetLog();
 
 		FolderInfo folderInfo = o2FileSystem.GetFolderInfo(path);
 		folderInfo.ClampPathNames();
-		LoadFolder(folderInfo, nullptr);
+		LoadFolder(folderInfo, Ptr<AssetNode>(nullptr));
 	}
 
 	Ptr<AssetTree::AssetNode> AssetTree::FindAsset(const String& path) const
 	{
-		return mAllAssets.FindMatch([&](Ptr<AssetNode> asset) { return asset->mPath == path; });
+		return mAllAssets.FindMatch([&](const Ptr<AssetNode>& asset) { return asset->mPath == path; });
 	}
 
 	Ptr<AssetTree::AssetNode> AssetTree::FindAsset(AssetId id) const
 	{
-		return mAllAssets.FindMatch([&](Ptr<AssetNode> asset) { return asset->mId == id; });
+		return mAllAssets.FindMatch([&](const Ptr<AssetNode>& asset) { return asset->mId == id; });
 	}
 
 	AssetInfo AssetTree::FindAssetInfo(const String& path) const

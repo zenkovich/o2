@@ -73,12 +73,12 @@ namespace o2
 		return mAssetsTypes;
 	}
 
-	const Type* Assets::GetStdAssetType() const
+	Ptr<Type> Assets::GetStdAssetType() const
 	{
 		return mStdAssetType;
 	}
 
-	const Type* Assets::GetAssetTypeByExtension(const String& extension) const
+	Ptr<Type> Assets::GetAssetTypeByExtension(const String& extension) const
 	{
 		if (mAssetsTypes.ContainsKey(extension))
 			return mAssetsTypes[extension];
@@ -209,14 +209,14 @@ namespace o2
 
 	void Assets::LoadAssetsTree()
 	{
-		mAssetsTree.BuildTree(ASSETS_PATH, mLog);
+		mAssetsTree.BuildTree(ASSETS_PATH);
 	}
 
 	void Assets::LoadAssetTypes()
 	{
-		mStdAssetType = &BinaryAsset::type;
+		mStdAssetType = BinaryAsset::type;
 
-		auto assetTypes = Asset::type.InheritedTypes();
+		auto assetTypes = Asset::type->InheritedTypes();
 
 		for (auto type : assetTypes)
 		{

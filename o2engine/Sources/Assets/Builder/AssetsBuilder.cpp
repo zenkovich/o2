@@ -44,8 +44,8 @@ namespace o2
 
 		CreateMissingMetas();
 
-		mSourceAssetsTree.BuildTree(assetsPath, mLog);
-		mBuildedAssetsTree.BuildTree(dataAssetsPath, mLog);
+		mSourceAssetsTree.BuildTree(assetsPath);
+		mBuildedAssetsTree.BuildTree(dataAssetsPath);
 
 		ProcessModifiedAssets();
 		ProcessRemovedAssets();
@@ -61,7 +61,7 @@ namespace o2
 
 	void AssetsBuilder::InitializeConverters()
 	{
-		auto converterTypes = IAssetConverter::type.InheritedTypes();
+		auto converterTypes = IAssetConverter::type->InheritedTypes();
 		for (auto converterType : converterTypes)
 		{
 			Ptr<IAssetConverter> converter = static_cast<IAssetConverter*>(converterType->Sample()->Clone());
@@ -135,7 +135,7 @@ namespace o2
 			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 			if (!isExistMetaForFolder)
 			{
-				auto assetType = &FolderAsset::type;
+				auto assetType = FolderAsset::type;
 				GenerateMeta(assetType, metaFullPath);
 			}
 
@@ -145,7 +145,7 @@ namespace o2
 
 	void AssetsBuilder::ProcessRemovedAssets()
 	{
-		Type::Id folderTypeId = FolderAsset::type.ID();
+		Type::Id folderTypeId = FolderAsset::type->ID();
 
 		// in first pass skipping folders (only files), in second - files
 		for (int pass = 0; pass < 2; pass++)
@@ -193,7 +193,7 @@ namespace o2
 
 	void AssetsBuilder::ProcessModifiedAssets()
 	{
-		Type::Id folderTypeId = FolderAsset::type.ID();
+		Type::Id folderTypeId = FolderAsset::type->ID();
 
 		// in first pass skipping files (only folders), in second - folders
 		for (int pass = 0; pass < 2; pass++)
@@ -271,7 +271,7 @@ namespace o2
 
 	void AssetsBuilder::ProcessNewAssets()
 	{
-		Type::Id folderTypeId = FolderAsset::type.ID();
+		Type::Id folderTypeId = FolderAsset::type->ID();
 
 		// in first pass skipping files (only folders), in second - folders
 		for (int pass = 0; pass < 2; pass++)
@@ -322,7 +322,7 @@ namespace o2
 		mStdAssetConverter.AssetsPostProcess();
 	}
 
-	void AssetsBuilder::GenerateMeta(const Type* assetType, const String& metaFullPath)
+	void AssetsBuilder::GenerateMeta(Ptr<Type> assetType, const String& metaFullPath)
 	{
 		auto assetTypeSample = static_cast<const Asset*>(assetType->Sample());
 		auto assetTypeSampleMeta = assetTypeSample->GetMeta();

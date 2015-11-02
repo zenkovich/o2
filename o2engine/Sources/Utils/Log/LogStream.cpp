@@ -27,18 +27,18 @@ namespace o2
 		return mId;
 	}
 
-	void LogStream::BindStream(const Ptr<LogStream>& stream)
+	void LogStream::BindStream(Ptr<LogStream> stream)
 	{
 		stream->mParentStream = this;
 		mChildStreams.Add(stream);
 	}
 
-	void LogStream::UnbindStream(const Ptr<LogStream>& stream)
+	void LogStream::UnbindStream(Ptr<LogStream> stream)
 	{
 		mChildStreams.Remove(stream);
 	}
 
-	void LogStream::UnbindAndReleaseStream(Ptr<LogStream>& stream)
+	void LogStream::UnbindAndReleaseStream(Ptr<LogStream> stream)
 	{
 		mChildStreams.Remove(stream);
 		stream.Release();

@@ -60,13 +60,13 @@ namespace o2
 
 	void IApplication::DeinitializeSystems()
 	{
+		mUIManager.Release();
 		mInput.Release();
 		mTime.Release();
 		mTimer.Release();
 		mProjectConfig.Release();
 		mAssets.Release();
 		mEventSystem.Release();
-		mUIManager.Release();
 
 		mLog->Out("Deinitialized");
 	}

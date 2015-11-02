@@ -48,7 +48,7 @@ namespace o2
 	Widget::~Widget()
 	{
 		if (mParent)
-			mParent->RemoveChild(this, false);
+			mParent->RemoveChild(Ptr<Widget>(this), false);
 
 		for (auto layer : mLayers)
 			layer.Release();
@@ -150,7 +150,7 @@ namespace o2
 
 		if (mParent)
 		{
-			mParent->RemoveChild(this, false);
+			mParent->RemoveChild(Ptr<Widget>(this), false);
 			mParent->layout.Recalculate();
 		}
 
@@ -176,6 +176,8 @@ namespace o2
 
 		layout.Recalculate();
 
+		OnChildAdded(widget);
+
 		return widget;
 	}
 
@@ -199,6 +201,8 @@ namespace o2
 		widget->mParent = nullptr;
 		mChilds.Remove(widget);
 		layout.Recalculate();
+
+		OnChildRemoved(widget);
 
 		if (release)
 			widget.Release();
@@ -243,6 +247,7 @@ namespace o2
 		for (auto child : mChilds)
 		{
 			child->mParent = nullptr;
+			OnChildRemoved(child);
 			child.Release();
 		}
 
@@ -264,7 +269,7 @@ namespace o2
 		return layer;
 	}
 
-	Ptr<WidgetLayer> Widget::AddLayer(const String& name, Ptr<IRectDrawable> drawable, 
+	Ptr<WidgetLayer> Widget::AddLayer(const String& name, Ptr<IRectDrawable> drawable,
 									  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		if (Math::Equals(depth, 0.0f))
@@ -293,7 +298,7 @@ namespace o2
 		return AddLayer(name, mnew Sprite(assetId), layout, depth);
 	}
 
-	Ptr<WidgetLayer> Widget::AddSpriteLayer(const String& name, Ptr<ImageAsset> asset, 
+	Ptr<WidgetLayer> Widget::AddSpriteLayer(const String& name, Ptr<ImageAsset> asset,
 											const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		return AddLayer(name, mnew Sprite(asset), layout, depth);
@@ -323,7 +328,7 @@ namespace o2
 		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
 	}
 
-	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, Ptr<VectorFontAsset> fontAsset, 
+	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, Ptr<VectorFontAsset> fontAsset,
 										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
 										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/,
 										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
@@ -335,7 +340,7 @@ namespace o2
 		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
 	}
 
-	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, Ptr<BitmapFontAsset> fontAsset, 
+	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, Ptr<BitmapFontAsset> fontAsset,
 										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
 										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/, 
 										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
@@ -542,6 +547,12 @@ namespace o2
 	}
 
 	void Widget::OnLayerAdded(Ptr<WidgetLayer> layer)
+	{}
+
+	void Widget::OnChildAdded(Ptr<Widget> child)
+	{}
+
+	void Widget::OnChildRemoved(Ptr<Widget> child)
 	{}
 
 	void Widget::OnDeserialized(const DataNode& node)
