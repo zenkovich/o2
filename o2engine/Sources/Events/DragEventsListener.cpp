@@ -36,6 +36,11 @@ namespace o2
 		mIsDragging = false;
 	}
 
+	void DragEventsListener::OnCursorPressBreak(const Input::Cursor& cursor)
+	{
+		mIsDragging = false;
+	}
+
 	void DragEventsListener::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		if (!mIsPressed)

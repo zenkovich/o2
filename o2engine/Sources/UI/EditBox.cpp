@@ -1,0 +1,1406 @@
+#include "EditBox.h"
+
+#include "Render/Mesh.h"
+#include "Render/Render.h"
+#include "Render/Sprite.h"
+#include "Render/Text.h"
+#include "UI/HorizontalScrollBar.h"
+#include "UI/VerticalScrollBar.h"
+#include "Utils/Clipboard.h"
+#include "Utils/Debug.h"
+#include "Utils/Time.h"
+
+namespace o2
+{
+	IOBJECT_CPP(UIEditBox);
+
+	UIEditBox::UIEditBox():
+		UIWidget(), mOwnHorScrollBar(false), mOwnVerScrollBar(false), mClipArea(Layout::Both()), mSelectionBegin(0),
+		mSelectionEnd(0), mMultiLine(true), mWordWrap(false), mMaxLineChars(0), mMaxLinesCount(0),
+		mSelectionColor(0.1f, 0.2f, 0.6f, 0.3f), mTextLayout(Layout::Both()), mCaretBlinkDelay(1), mCaretBlinkTime(0),
+		mLastClickTime(-10.0f)
+	{
+		mSelectionMesh = mnew Mesh();
+		mTextDrawable = mnew Text();
+		mCaretDrawable = mnew Sprite();
+		InitializeProperties();
+	}
+
+	UIEditBox::UIEditBox(const UIEditBox& other):
+		UIWidget(other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
+		mClipArea(other.mClipArea), mMultiLine(other.mMultiLine),
+		mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars), mMaxLinesCount(other.mMaxLinesCount),
+		mSelectionBegin(0), mSelectionEnd(0), mText(other.mText), mAvailableSymbols(other.mAvailableSymbols),
+		mSelectionColor(other.mSelectionColor), mTextLayout(other.mTextLayout), mCaretBlinkDelay(other.mCaretBlinkDelay),
+		mCaretBlinkTime(0), mLastClickTime(-10.0f)
+	{
+		if (mOwnHorScrollBar)
+		{
+			mHorScrollBar = other.mHorScrollBar->Clone();
+			mHorScrollBar->mParent = this;
+			mHorScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
+		}
+		else  mHorScrollBar = nullptr;
+
+		if (mOwnVerScrollBar)
+		{
+			mVerScrollBar = other.mVerScrollBar->Clone();
+			mVerScrollBar->mParent = this;
+			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
+		}
+		else mVerScrollBar = nullptr;
+
+		mSelectionMesh = mnew Mesh();
+		mTextDrawable = other.mTextDrawable->Clone();
+		mCaretDrawable = other.mCaretDrawable->Clone();
+
+		mTextDrawable->SetText(mText);
+
+		UpdateScrollParams();
+		UpdateLayout();
+
+		InitializeProperties();
+	}
+
+	UIEditBox::~UIEditBox()
+	{
+		if (mHorScrollBar)
+		{
+			if (mOwnHorScrollBar)
+				mHorScrollBar.Release();
+			else
+				mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
+		}
+
+		if (mVerScrollBar)
+		{
+			if (mOwnVerScrollBar)
+				mVerScrollBar.Release();
+			else
+				mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
+		}
+
+		mSelectionMesh.Release();
+		mTextDrawable.Release();
+		mCaretDrawable.Release();
+	}
+
+	UIEditBox& UIEditBox::operator=(const UIEditBox& other)
+	{
+		UIWidget::operator=(other);
+
+		if (mHorScrollBar)
+		{
+			if (mOwnHorScrollBar)
+				mHorScrollBar.Release();
+			else
+				mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
+		}
+
+		if (mVerScrollBar)
+		{
+			if (mOwnVerScrollBar)
+				mVerScrollBar.Release();
+			else
+				mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
+		}
+
+		mTextDrawable.Release();
+		mCaretDrawable.Release();
+
+		mText = other.mText;
+		mAvailableSymbols = other.mAvailableSymbols;
+		mSelectionBegin = 0;
+		mSelectionEnd = 0;
+		mCaretBlinkTime = 0;
+		mLastClickTime = -10.0f;
+		mClipArea = other.mClipArea;
+		mScrollPos = other.mScrollPos;
+		mOwnHorScrollBar = other.mOwnHorScrollBar;
+		mOwnVerScrollBar = other.mOwnVerScrollBar;
+		mMultiLine = other.mMultiLine;
+		mWordWrap = other.mWordWrap;
+		mMaxLineChars = other.mMaxLineChars;
+		mMaxLinesCount = other.mMaxLinesCount;
+		mSelectionColor = other.mSelectionColor;
+		mTextLayout = other.mTextLayout;
+		mCaretBlinkDelay = other.mCaretBlinkDelay;
+		mTextDrawable = other.mTextDrawable->Clone();
+		mCaretDrawable = other.mCaretDrawable->Clone();
+
+		mTextDrawable->SetText(mText);
+
+		if (mOwnHorScrollBar)
+		{
+			mHorScrollBar = other.mHorScrollBar->Clone();
+			mHorScrollBar->mParent = this;
+			mHorScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
+		}
+		else mHorScrollBar = nullptr;
+
+		if (mOwnVerScrollBar)
+		{
+			mVerScrollBar = other.mVerScrollBar->Clone();
+			mVerScrollBar->mParent = this;
+			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
+		}
+		else mVerScrollBar = nullptr;
+
+		UpdateLayout();
+
+		return *this;
+	}
+
+	void UIEditBox::Draw()
+	{
+		if (!mVisible)
+			return;
+
+		for (auto layer : mDrawingLayers)
+			layer->Draw();
+
+		mDrawDepth = o2Render.GetDrawingDepth();
+
+		o2Render.SetupScissorRect(mAbsoluteClipArea);
+		o2Render.EnableScissorTest();
+
+		mTextDrawable->Draw();
+		mSelectionMesh->Draw();
+		mCaretDrawable->Draw();
+
+		for (auto child : mChilds)
+			child->Draw();
+
+		o2Render.DisableScissorTest();
+
+		for (auto layer : mTopDrawingLayers)
+			layer->Draw();
+
+		if (mOwnHorScrollBar)
+			mHorScrollBar->Draw();
+
+		if (mOwnVerScrollBar)
+			mVerScrollBar->Draw();
+	}
+
+	void UIEditBox::Update(float dt)
+	{
+		UIWidget::Update(dt);
+
+		if (mOwnHorScrollBar)
+			mHorScrollBar->Update(dt);
+
+		if (mOwnVerScrollBar)
+			mVerScrollBar->Update(dt);
+
+		UpdateCaretBlinking(dt);
+	}
+
+	void UIEditBox::SetText(const WString& text)
+	{
+		mText = GetFilteredText(text);
+		mTextDrawable->SetText(mText);
+		UpdateScrollParams();
+		UpdateSelectionAndCaret();
+	}
+
+	WString UIEditBox::GetText() const
+	{
+		return mText;
+	}
+
+	void UIEditBox::SetCaretPosition(int caretPosition)
+	{
+		mSelectionBegin = mSelectionEnd = caretPosition;
+		UpdateSelectionAndCaret();
+	}
+
+	int UIEditBox::GetCaretPosition()
+	{
+		return mSelectionEnd;
+	}
+
+	void UIEditBox::Select(int begin, int end)
+	{
+		mSelectionBegin = begin;
+		mSelectionEnd = end;
+		UpdateSelectionAndCaret();
+	}
+
+	void UIEditBox::SetSelectionBegin(int position)
+	{
+		mSelectionBegin = position;
+		UpdateSelectionAndCaret();
+	}
+
+	int UIEditBox::GetSelectionBegin() const
+	{
+		return mSelectionBegin;
+	}
+
+	void UIEditBox::SetSelectionEnd(int position)
+	{
+		mSelectionEnd = position;
+		UpdateSelectionAndCaret();
+	}
+
+	int UIEditBox::GetSelectionEnd() const
+	{
+		return mSelectionEnd;
+	}
+
+	void UIEditBox::Deselect()
+	{
+		mSelectionBegin = mSelectionEnd;
+		UpdateSelectionAndCaret();
+	}
+
+	void UIEditBox::SelectAll()
+	{
+		mSelectionBegin = 0;
+		mSelectionEnd = mText.Length();
+
+		UpdateSelectionAndCaret();
+		CheckScrollingToCaret();
+	}
+
+	void UIEditBox::SetScroll(const Vec2F& scroll)
+	{
+		Vec2F newScrollPos(Math::Clamp(scroll.x, mScrollRange.left, mScrollRange.right),
+						   Math::Clamp(scroll.y, mScrollRange.bottom, mScrollRange.top));
+
+		if (mHorScrollBar)
+			mHorScrollBar->SetValueForcible(newScrollPos.x);
+
+		if (mVerScrollBar)
+			mVerScrollBar->SetValueForcible(newScrollPos.y);
+
+		if (!mVerScrollBar || !mHorScrollBar)
+			UpdateLayout();
+	}
+
+	Vec2F UIEditBox::GetScroll() const
+	{
+		return mScrollPos;
+	}
+
+	RectF UIEditBox::GetScrollRange() const
+	{
+		return mScrollRange;
+	}
+
+	void UIEditBox::ResetScroll()
+	{
+		SetScroll(mScrollArea.LeftBottom());
+	}
+
+	void UIEditBox::SetClipArea(const Layout& layout)
+	{
+		mClipArea = layout;
+		UpdateLayout();
+	}
+
+	Layout UIEditBox::GetClipArea() const
+	{
+		return mClipArea;
+	}
+
+	void UIEditBox::SetTextLayout(const Layout& layout)
+	{
+		mTextLayout = layout;
+		UpdateLayout();
+	}
+
+	Layout UIEditBox::GetTextLayout() const
+	{
+		return mTextLayout;
+	}
+
+	void UIEditBox::SetHorizontalScroll(float scroll)
+	{
+		SetScroll(Vec2F(scroll, mScrollPos.y));
+	}
+
+	float UIEditBox::GetHorizontalScroll() const
+	{
+		return mScrollPos.x;
+	}
+
+	void UIEditBox::SetVerticalScroll(float scroll)
+	{
+		SetScroll(Vec2F(mScrollPos.x, scroll));
+	}
+
+	float UIEditBox::GetVerticalScroll() const
+	{
+		return mScrollPos.y;
+	}
+
+	void UIEditBox::SetHorizontalScrollBar(Ptr<UIHorizontalScrollBar> scrollbar, bool owner /*= true*/)
+	{
+		if (mHorScrollBar)
+		{
+			if (mOwnHorScrollBar) mHorScrollBar.Release();
+			else                  mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
+		}
+
+		mHorScrollBar = scrollbar;
+		mOwnHorScrollBar = owner;
+
+		if (mHorScrollBar)
+		{
+			mHorScrollBar->mParent = this;
+			mHorScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
+		}
+
+		UpdateLayout();
+	}
+
+	Ptr<UIHorizontalScrollBar> UIEditBox::GetHorizontalScrollbar() const
+	{
+		return mHorScrollBar;
+	}
+
+	void UIEditBox::SetVerticalScrollBar(Ptr<UIVerticalScrollBar> scrollbar, bool owner /*= true*/)
+	{
+		if (mVerScrollBar)
+		{
+			if (mOwnVerScrollBar) mVerScrollBar.Release();
+			else                  mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
+		}
+
+		mVerScrollBar = scrollbar;
+		mOwnVerScrollBar = owner;
+
+		if (mVerScrollBar)
+		{
+			mVerScrollBar->mParent = this;
+			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
+		}
+
+		UpdateLayout();
+	}
+
+	Ptr<UIVerticalScrollBar> UIEditBox::GetVerticalScrollbar() const
+	{
+		return mVerScrollBar;
+	}
+
+	Ptr<Text> UIEditBox::GetTextDrawable()
+	{
+		return mTextDrawable;
+	}
+
+	Ptr<Sprite> UIEditBox::GetCaretDrawable()
+	{
+		return mCaretDrawable;
+	}
+
+	void UIEditBox::SetSelectionColor(const Color4& color)
+	{
+		mSelectionColor = color;
+		UpdateSelectionAndCaret();
+	}
+
+	Color4 UIEditBox::GetSelectionColor() const
+	{
+		return mSelectionColor;
+	}
+
+	void UIEditBox::SetFilterInteger()
+	{
+		SetAvailableSymbols("1234567890");
+	}
+
+	void UIEditBox::SetFilterFloat()
+	{
+		SetAvailableSymbols("1234567890.,");
+	}
+
+	void UIEditBox::SetFilterNames()
+	{
+		SetAvailableSymbols("1234567890qwertyuioplkjhgfdsazxcvbnm_ QWERTYUIOPLKJHGFDSAZXCVBNM.,");
+	}
+
+	void UIEditBox::SetAvailableSymbols(const WString& availableSymbols)
+	{
+		mAvailableSymbols = availableSymbols;
+
+		if (mAvailableSymbols.Length() > 0)
+		{
+			mText = GetFilteredText(mText);
+			mTextDrawable->SetText(mText);
+
+			UpdateLayout();
+		}
+	}
+
+	WString UIEditBox::GetAvailableSymbols() const
+	{
+		return mAvailableSymbols;
+	}
+
+	void UIEditBox::SetMaxSizes(int maxLineCharactersCount, int maxLinesCount)
+	{
+		mMaxLineChars = maxLineCharactersCount;
+		mMaxLinesCount = maxLinesCount;
+
+		CheckCharactersAndLinesBounds();
+	}
+
+	void UIEditBox::CheckCharactersAndLinesBounds()
+	{
+		int lines = 0;
+		int lineChars = 0;
+		WString filteredText(mText.Capacity() + 1);
+		int fi = 0;
+		for (int i = 0; i < mText.Length(); i++)
+		{
+			if (mText[i] == '\n')
+			{
+				lines++;
+				lineChars = 0;
+				if (lines == mMaxLinesCount && mMaxLinesCount > 0)
+					break;
+			}
+
+			lineChars++;
+
+			if (lineChars < mMaxLineChars || mMaxLineChars == 0 || mText[i] == '\n')
+				filteredText[fi++] = mText[i];
+		}
+
+		filteredText[fi] = '\0';
+
+		mText = filteredText;
+		mTextDrawable->SetText(filteredText);
+
+		UpdateLayout();
+	}
+
+	void UIEditBox::SetMaxLineCharactersCount(int count)
+	{
+		mMaxLineChars = count;
+		CheckCharactersAndLinesBounds();
+	}
+
+	int UIEditBox::GetMaxLineCharactersCount() const
+	{
+		return mMaxLineChars;
+	}
+
+	void UIEditBox::SetMaxLinesCount(int count)
+	{
+		mMaxLinesCount = count;
+		CheckCharactersAndLinesBounds();
+	}
+
+	int UIEditBox::GetMaxLinesCount() const
+	{
+		return mMaxLinesCount;
+	}
+
+	void UIEditBox::SetMultiLine(bool multiline)
+	{
+		mMultiLine = multiline;
+
+		if (!mMultiLine)
+		{
+			WString filteredText(mText.Capacity() + 1);
+			int fi = 0;
+			for (int i = 0; i < mText.Length(); i++)
+			{
+				if (mText[i] != '\n')
+					filteredText[fi++] = mText[i];
+			}
+
+			filteredText[fi] = '\0';
+
+			mText = filteredText;
+			mTextDrawable->SetText(filteredText);
+
+			UpdateLayout();
+		}
+
+	}
+
+	bool UIEditBox::IsMultiLine() const
+	{
+		return mMultiLine;
+	}
+
+	void UIEditBox::SetWordWrap(bool wordWrap)
+	{
+		mWordWrap = wordWrap;
+		mTextDrawable->SetWordWrap(mWordWrap);
+	}
+
+	bool UIEditBox::IsWordWrap() const
+	{
+		return mWordWrap;
+	}
+
+	void UIEditBox::SetCaretBlinkingDelay(float delay)
+	{
+		mCaretBlinkDelay = delay;
+	}
+
+	float UIEditBox::GetCaretBlinkingDelay() const
+	{
+		return mCaretBlinkDelay;
+	}
+
+	bool UIEditBox::IsUnderPoint(const Vec2F& point)
+	{
+		return layout.mAbsoluteRect.IsInside(point);
+	}
+
+	float UIEditBox::Depth()
+	{
+		return mDrawDepth;
+	}
+
+	void UIEditBox::OnCursorPressed(const Input::Cursor& cursor)
+	{
+		auto pressedState = state["pressed"];
+		if (pressedState)
+			*pressedState = true;
+
+		if (o2Time.GetApplicationTime() - mLastClickTime < 0.3f || o2Input.IsKeyDown(VK_CONTROL))
+		{
+			mSelectionBegin = mSelectionEnd = GetTextCaretPosition(cursor.mPosition);
+			JumpSelection(false, false);
+			JumpSelection(true, true);
+
+			mSelWordBegin = Math::Min(mSelectionBegin, mSelectionEnd);
+			mSelWordEnd = Math::Max(mSelectionBegin, mSelectionEnd);
+
+			mSelectingByWords = true;
+		}
+		else
+		{
+			mSelectionBegin = mSelectionEnd = GetTextCaretPosition(cursor.mPosition);
+			mSelectingByWords = false;
+
+			UpdateSelectionAndCaret();
+			CheckScrollingToCaret();
+		}
+
+		mLastClickTime = o2Time.GetApplicationTime();
+		mCaretBlinkTime = 0.0f;
+		mLastCursorPos = cursor.mPosition;
+	}
+
+	void UIEditBox::OnCursorReleased(const Input::Cursor& cursor)
+	{
+		auto pressedState = state["pressed"];
+		if (pressedState)
+			*pressedState = false;
+	}
+
+	void UIEditBox::OnCursorPressBreak(const Input::Cursor& cursor)
+	{
+		auto pressedState = state["pressed"];
+		if (pressedState)
+			*pressedState = false;
+	}
+
+	void UIEditBox::OnCursorStillDown(const Input::Cursor& cursor)
+	{
+		if ((cursor.mPosition - mLastCursorPos).Length() < 3.0f)
+			return;
+
+		if (mSelectingByWords)
+		{
+			int curIdx = GetTextCaretPosition(cursor.mPosition);
+
+			if (curIdx > mSelWordEnd)
+			{
+				mSelectionBegin = mSelWordBegin;
+				mSelectionEnd = curIdx;
+				JumpSelection(true, true);
+			}
+			else if (curIdx < mSelWordBegin)
+			{
+				mSelectionBegin = mSelWordEnd;
+				mSelectionEnd = curIdx;
+				JumpSelection(false, true);
+			}
+			else
+			{
+				mSelectionBegin = mSelWordBegin;
+				mSelectionEnd = mSelWordEnd;
+
+				UpdateSelectionAndCaret();
+				CheckScrollingToCaret();
+			}
+		}
+		else
+		{
+			mSelectionEnd = GetTextCaretPosition(cursor.mPosition);
+			UpdateSelectionAndCaret();
+			CheckScrollingToCaret();
+		}
+
+		mCaretBlinkTime = 0;
+		mLastCursorPos = cursor.mPosition;
+	}
+
+	void UIEditBox::OnCursorEnter(const Input::Cursor& cursor)
+	{
+		auto selectState = state["select"];
+		if (selectState)
+			*selectState = true;
+	}
+
+	void UIEditBox::OnCursorExit(const Input::Cursor& cursor)
+	{
+		auto selectState = state["select"];
+		if (selectState)
+			*selectState = false;
+	}
+
+	void UIEditBox::OnCursorRightMousePressed(const Input::Cursor& cursor)
+	{
+
+	}
+
+	void UIEditBox::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
+	{
+
+	}
+
+	void UIEditBox::OnCursorRightMouseReleased(const Input::Cursor& cursor)
+	{
+
+	}
+
+	void UIEditBox::OnScrolled(float scroll)
+	{
+		if (mVerScrollBar && mVerScrollBar->visible)
+			mVerScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+		else if (mHorScrollBar && mHorScrollBar->visible)
+			mHorScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+	}
+
+	void UIEditBox::OnKeyPressed(const Input::Key& key)
+	{
+		CheckCharacterTyping(key.mKey);
+		CheckCaretMoving(key.mKey);
+		CheckCharactersErasing(key.mKey);
+		CheckClipboard(key.mKey);
+	}
+
+	void UIEditBox::OnKeyReleased(const Input::Key& key)
+	{}
+
+	void UIEditBox::OnKeyStayDown(const Input::Key& key)
+	{
+		if (!o2Input.IsKeyRepeating(key.mKey))
+			return;
+
+		CheckCharacterTyping(key.mKey);
+		CheckCaretMoving(key.mKey);
+		CheckCharactersErasing(key.mKey);
+		CheckClipboard(key.mKey);
+	}
+
+	WString UIEditBox::GetFilteredText(const WString& text)
+	{
+		if (mAvailableSymbols.Length() == 0)
+			return text;
+
+		WString filteredText(text.Capacity() + 1);
+		for (int i = 0; i < text.Length(); i++)
+		{
+			bool pass = false;
+			for (int j = 0; j < mAvailableSymbols.Length(); j++)
+			{
+				if (mAvailableSymbols[j] == text[i])
+				{
+					pass = true;
+					break;
+				}
+			}
+
+			if (pass)
+				filteredText += text[i];
+		}
+
+		filteredText += '\0';
+
+		return filteredText;
+	}
+
+	void UIEditBox::UpdateScrollParams()
+	{
+		if (mTextDrawable->GetFont())
+			mTextDrawable->GetFont()->CheckCharacters(" ");
+
+		mAbsoluteTextArea = mTextLayout.Calculate(layout.mAbsoluteRect);
+		RectF localViewArea(0.0f, 0.0f, mAbsoluteTextArea.Width(), mAbsoluteTextArea.Height());
+
+		mScrollArea = RectF(0.0f, 0.0f, localViewArea.Width(), localViewArea.Height());
+
+		for (auto child : mChilds)
+		{
+			mScrollArea.left   = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
+			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout.mLocalRect.bottom);
+			mScrollArea.right  = Math::Max(mScrollArea.right, child->layout.mLocalRect.right);
+			mScrollArea.top    = Math::Max(mScrollArea.top, child->layout.mLocalRect.top);
+		}
+
+		RectF localTextLayout = localViewArea;
+		Vec2F textRealSize = mTextDrawable->GetRealSize();
+		RectF textArea(localTextLayout.left, localTextLayout.top - textRealSize.y,
+					   localTextLayout.left + textRealSize.x, localTextLayout.top);
+		mScrollArea.left   = Math::Min(mScrollArea.left, textArea.left);
+		mScrollArea.bottom = Math::Min(mScrollArea.bottom, textArea.bottom);
+		mScrollArea.right  = Math::Max(mScrollArea.right, textArea.right);
+		mScrollArea.top    = Math::Max(mScrollArea.top, textArea.top);
+
+		mScrollRange = RectF(mScrollArea.left - localViewArea.left,
+							 localViewArea.Height() - mScrollArea.top + localViewArea.bottom,
+							 -(localViewArea.Width() - mScrollArea.right + localViewArea.left),
+							 -mScrollArea.bottom + localViewArea.bottom);
+
+		if (mHorScrollBar)
+		{
+			if (Math::Equals(mScrollRange.left, mScrollRange.right))
+				mHorScrollBar->Hide();
+			else
+			{
+				mHorScrollBar->Show();
+				mHorScrollBar->SetValueRange(mScrollRange.left, mScrollRange.right);
+				mHorScrollBar->SetScrollHandleSize(localViewArea.Width());
+			}
+		}
+
+		if (mVerScrollBar)
+		{
+			if (Math::Equals(mScrollRange.bottom, mScrollRange.top))
+				mVerScrollBar->Hide();
+			else
+			{
+				mVerScrollBar->Show();
+				mVerScrollBar->SetValueRange(mScrollRange.bottom, mScrollRange.top);
+				mVerScrollBar->SetScrollHandleSize(localViewArea.Height());
+			}
+		}
+	}
+
+	void UIEditBox::UpdateLayout(bool forcible /*= false*/)
+	{
+		if (layout.mDrivenByParent && !forcible)
+		{
+			if (mParent)
+				mParent->UpdateLayout();
+
+			return;
+		}
+
+		RecalculateAbsRect();
+		UpdateLayersLayouts();
+
+		mAbsoluteTextArea = mTextLayout.Calculate(layout.mAbsoluteRect);
+		mAbsoluteClipArea = mClipArea.Calculate(layout.mAbsoluteRect);
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+
+		mTextDrawable->SetRect(mAbsoluteTextArea + roundedScrollPos);
+
+		mChildsAbsRect = mAbsoluteTextArea + roundedScrollPos;
+
+		for (auto child : mChilds)
+			child->UpdateLayout();
+
+		UpdateScrollParams();
+
+		RectF _mChildsAbsRect = mChildsAbsRect;
+		mChildsAbsRect = layout.mAbsoluteRect;
+
+		if (mOwnHorScrollBar)
+			mHorScrollBar->UpdateLayout();
+
+		if (mOwnVerScrollBar)
+			mVerScrollBar->UpdateLayout();
+
+		mChildsAbsRect = _mChildsAbsRect;
+
+		UpdateSelectionAndCaret();
+	}
+
+	void UIEditBox::OnHorScrollChanged(float value)
+	{
+		Vec2F delta(Math::Clamp(value, mScrollRange.left, mScrollRange.right) - mScrollPos.x, 0.0f);
+		mScrollPos += delta;
+		UpdateLayout();
+	}
+
+	void UIEditBox::OnVerScrollChanged(float value)
+	{
+		Vec2F delta(0.0f, Math::Clamp(value, mScrollRange.bottom, mScrollRange.top) - mScrollPos.y);
+		mScrollPos += delta;
+		UpdateLayout();
+	}
+
+	void UIEditBox::OnSerialize(DataNode& node)
+	{
+		if (mOwnHorScrollBar)
+			*node.AddNode("mHorScrollBar") = mHorScrollBar;
+
+		if (mOwnVerScrollBar)
+			*node.AddNode("mVerScrollBar") = mVerScrollBar;
+	}
+
+	void UIEditBox::OnDeserialized(const DataNode& node)
+	{
+		if (mHorScrollBar)
+		{
+			if (mOwnHorScrollBar) mHorScrollBar.Release();
+			else                  mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
+		}
+
+		if (mVerScrollBar)
+		{
+			if (mOwnVerScrollBar) mVerScrollBar.Release();
+			else                  mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
+		}
+
+		auto horScrollNode = node.GetNode("mHorScrollBar");
+		mOwnHorScrollBar = horScrollNode.IsValid();
+		if (mOwnHorScrollBar)
+		{
+			mHorScrollBar = *horScrollNode;
+			mHorScrollBar->mParent = this;
+			mHorScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
+		}
+		else mHorScrollBar = nullptr;
+
+		auto varScrollNode = node.GetNode("mHorScrollBar");
+		mOwnVerScrollBar = varScrollNode.IsValid();
+		if (mOwnVerScrollBar)
+		{
+			mVerScrollBar = *varScrollNode;
+			mVerScrollBar->mParent = this;
+			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
+		}
+		else mVerScrollBar = nullptr;
+	}
+
+	void UIEditBox::UpdateSelectionAndCaret()
+	{
+		Vec2F caretPosition = GetTextCaretPosition(mSelectionEnd);
+		mCaretDrawable->SetPosition(caretPosition);
+
+		mSelectionMesh->vertexCount = 0;
+		mSelectionMesh->polyCount = 0;
+
+		if (mSelectionBegin == mSelectionEnd)
+			return;
+
+		int beg = Math::Min(mSelectionBegin, mSelectionEnd);
+		int end = Math::Max(mSelectionBegin, mSelectionEnd);
+		float caretDown = -mCaretDrawable->GetSize().y*mCaretDrawable->GetPivot().y;
+		float caretUp = caretDown + mCaretDrawable->GetSize().y;
+
+		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
+		auto font = mTextDrawable->GetFont();
+		float spaceAdvance = font->GetCharacter(' ').mAdvance;
+
+		for (auto line : symbolsSet.mLines)
+		{
+			if (beg > line.mLineBegSymbol + line.mSymbols.Count() || end < line.mLineBegSymbol)
+				continue;
+
+			if (line.mSymbols.Count() == 0)
+			{
+				Vec2F lb = line.mPosition + Vec2F(0, caretDown);
+				Vec2F rt = lb + Vec2F(spaceAdvance, caretUp);
+				AddSelectionRect(RectF(lb, rt));
+				continue;
+			}
+
+			int begSymbol = Math::Max(beg - line.mLineBegSymbol, 0);
+			int endSymbol = end - line.mLineBegSymbol;
+			float endOffs = 0, begOffs = 0;
+			int lineSymbolsCount = line.mSymbols.Count();
+
+			if (begSymbol >= lineSymbolsCount)
+			{
+				begOffs = line.mSymbols.Last().mAdvance;
+				begSymbol = line.mSymbols.Count() - 1;
+			}
+
+			if (endSymbol >= lineSymbolsCount)
+			{
+				endOffs = line.mSymbols.Last().mAdvance;
+				if (line.mEndedNewLine && endSymbol > lineSymbolsCount)
+					endOffs += spaceAdvance;
+
+				endSymbol = lineSymbolsCount - 1;
+			}
+
+			Vec2F lb(line.mSymbols[begSymbol].mFrame.left + line.mSymbols[begSymbol].mOrigin.x + begOffs,
+					 line.mPosition.y + caretDown);
+			Vec2F rt(line.mSymbols[endSymbol].mFrame.left + line.mSymbols[endSymbol].mOrigin.x + endOffs,
+					 line.mPosition.y + caretUp);
+
+			AddSelectionRect(RectF(lb, rt));
+		}
+	}
+
+	Vec2F UIEditBox::GetTextCaretPosition(int position)
+	{
+		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
+		for (auto line : symbolsSet.mLines)
+		{
+			if (position >= line.mLineBegSymbol && position <= line.mLineBegSymbol + line.mSymbols.Count())
+			{
+				int off = position - line.mLineBegSymbol;
+
+				if (off < line.mSymbols.Count())
+				{
+					auto symb = line.mSymbols[off];
+					return symb.mFrame.LeftBottom() + symb.mOrigin;
+				}
+				else
+				{
+					if (line.mSymbols.Count() == 0)
+						return line.mPosition;
+
+					auto symb = line.mSymbols.Last();
+					return symb.mFrame.LeftBottom() + symb.mOrigin + Vec2F(symb.mAdvance, 0);
+				}
+			}
+		}
+
+		if (mTextDrawable->GetFont())
+			return mAbsoluteTextArea.LeftTop() - Vec2F(0, mTextDrawable->GetFont()->GetHeight());
+
+		return Vec2F();
+	}
+
+	int UIEditBox::GetTextCaretPosition(const Vec2F& point)
+	{
+		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
+		auto font = mTextDrawable->GetFont();
+		float lineHeight = font->GetLineHeight();
+		float lineOffCoef = 0.25f;
+
+		bool checkUp, checkDown, checkLeft, checkRight;
+		int lineIdx = 0;
+		for (auto line : symbolsSet.mLines)
+		{
+			checkUp = lineIdx > 0;
+			checkDown = lineIdx < (int)symbolsSet.mLines.Count() - 1;
+
+			float lineTop = (line.mSize.y*(1.0f - lineOffCoef) + lineHeight)*0.5f + line.mPosition.y;
+			float lineBottom = -line.mSize.y*lineOffCoef + line.mPosition.y;
+
+			if (line.mSymbols.Count() == 0 && point.y > lineBottom && point.y < lineTop)
+				return line.mLineBegSymbol;
+
+
+			int idx = 0;
+			for (auto symb : line.mSymbols)
+			{
+				checkLeft = idx > 0;
+				checkRight = idx < (int)line.mSymbols.Count() - 1;
+
+				RectF sf(symb.mFrame.left, lineTop, symb.mFrame.right, lineBottom);
+
+				bool ls = checkLeft ? sf.left < point.x:true;
+				bool rs = checkRight ? sf.right > point.x:true;
+				bool ts = checkUp ? sf.top > point.y:true;
+				bool bs = checkDown ? sf.bottom < point.y:true;
+
+				if (ls && rs && ts && bs)
+				{
+					if (point.x >(symb.mFrame.left + symb.mFrame.right)*0.5f)
+						return line.mLineBegSymbol + idx + 1;
+					else
+						return line.mLineBegSymbol + idx;
+				}
+
+				idx++;
+			}
+
+			lineIdx++;
+		}
+
+		return 0;
+	}
+
+	void UIEditBox::UpdateCaretBlinking(float dt)
+	{
+		mCaretBlinkTime += dt;
+
+		mCaretDrawable->SetTransparency(Math::Clamp01(1.0f - (mCaretBlinkTime - mCaretBlinkDelay*0.3f)/(mCaretBlinkDelay*0.3f)));
+
+		if (mCaretBlinkTime > mCaretBlinkDelay)
+			mCaretBlinkTime -= mCaretBlinkDelay;
+	}
+
+	void UIEditBox::AddSelectionRect(const RectF& rect)
+	{
+		if (mSelectionMesh->GetMaxPolyCount() < mSelectionMesh->polyCount + 6)
+		{
+			int newPolyCount = mSelectionMesh->polyCount + 6;
+			mSelectionMesh->Resize(newPolyCount*2, newPolyCount);
+		}
+
+		unsigned long color = mSelectionColor.ABGR();
+
+		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.LeftBottom(), color, 0.0f, 0.0f);
+		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.LeftTop(), color, 0.0f, 0.0f);
+		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.RightTop(), color, 0.0f, 0.0f);
+		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.RightBottom(), color, 0.0f, 0.0f);
+
+		mSelectionMesh->indexes[mSelectionMesh->polyCount*3] = mSelectionMesh->vertexCount - 4;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount*3 + 1] = mSelectionMesh->vertexCount - 3;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount*3 + 2] = mSelectionMesh->vertexCount - 2;
+		mSelectionMesh->polyCount++;
+
+		mSelectionMesh->indexes[mSelectionMesh->polyCount*3] = mSelectionMesh->vertexCount - 4;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount*3 + 1] = mSelectionMesh->vertexCount - 2;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount*3 + 2] = mSelectionMesh->vertexCount - 1;
+		mSelectionMesh->polyCount++;
+	}
+
+	void UIEditBox::CheckScrollingToCaret()
+	{
+		auto font = mTextDrawable->GetFont();
+		if (!font)
+			return;
+
+		Vec2F caretPos = mCaretDrawable->GetPosition();
+		RectF clipRect = mAbsoluteTextArea;
+
+		float rightOffs = Math::Max(caretPos.x - clipRect.right + 5.0f, 0.0f);
+		float leftOffs = Math::Max(clipRect.left - caretPos.x + 5.0f, 0.0f);
+
+		float downOffs = Math::Max(caretPos.y - clipRect.top + 5.0f + font->GetLineHeight(), 0.0f);
+		float topOffs = Math::Max(clipRect.bottom - caretPos.y + 5.0f, 0.0f);
+
+		float horOffs = rightOffs - leftOffs;
+
+		if (!Math::Equals(horOffs, 0.0f))
+		{
+			if (mHorScrollBar)
+				mHorScrollBar->SetValue(mScrollPos.x + horOffs);
+			else
+				mScrollPos.x = Math::Clamp(mScrollPos.x + horOffs, mScrollRange.left, mScrollRange.right);
+		}
+
+		if (mMultiLine)
+		{
+			float verOffs = topOffs - downOffs;
+
+			if (!Math::Equals(verOffs, 0.0f))
+			{
+				if (mVerScrollBar)
+					mVerScrollBar->SetValue(mScrollPos.y + verOffs);
+				else
+					mScrollPos.y = Math::Clamp(mScrollPos.y + verOffs, mScrollRange.bottom, mScrollRange.top);
+			}
+		}
+	}
+
+	void UIEditBox::JumpSelection(bool forward, bool selecting)
+	{
+		static char jumpSymbols[] = " \n()-=_+\\|/**&^%$#@!~,.?";
+		int jumpSymbolsCount = strlen(jumpSymbols);
+
+		int jumpIdx = mSelectionEnd + 1;
+
+		if (forward)
+		{
+			bool stop = false;
+			for (int i = mSelectionEnd; i < mText.Length() && !stop; i++)
+			{
+				jumpIdx = i;
+				for (int j = 0; j < jumpSymbolsCount; j++)
+				{
+					if (mText[i] == jumpSymbols[j])
+					{
+						stop = true;
+						break;
+					}
+				}
+			}
+
+			if (!stop) jumpIdx++;
+		}
+		else
+		{
+			bool stop = false;
+			for (int i = Math::Min(mSelectionEnd - 1, mText.Length() - 1); i >= 0 && !stop; i--)
+			{
+				jumpIdx = i;
+				for (int j = 0; j < jumpSymbolsCount; j++)
+				{
+					if (mText[i] == jumpSymbols[j])
+					{
+						jumpIdx++;
+						stop = true;
+						break;
+					}
+				}
+			}
+
+			if (!stop) jumpIdx--;
+		}
+
+		if (jumpIdx == mSelectionEnd)
+		{
+			if (forward)
+				jumpIdx++;
+			else
+				jumpIdx--;
+		}
+
+		mSelectionEnd = Math::Clamp(jumpIdx, 0, mText.Length());
+		if (!selecting)
+			mSelectionBegin = mSelectionEnd;
+
+		mCaretBlinkTime = 0;
+
+		UpdateSelectionAndCaret();
+		CheckScrollingToCaret();
+	}
+
+	UInt16 GetUnicodeFromVirtualCode(KeyboardKey code)
+	{
+		HKL layout = GetKeyboardLayout(0);
+
+		BYTE allKeys[256];
+		GetKeyboardState(allKeys);
+
+		UInt16 unicode;
+		ToUnicodeEx(code, 0, allKeys, reinterpret_cast<wchar_t*>(&unicode), 1, 0, layout);
+		return unicode;
+	}
+
+	void UIEditBox::CheckCharacterTyping(KeyboardKey key)
+	{
+		if (mLastClickTime < 0)
+			return;
+
+		if (o2Input.IsKeyDown(VK_CONTROL))
+			return;
+
+		char16_t unicode = (char16_t)GetUnicodeFromVirtualCode(key);
+
+		if (unicode != 0 && unicode != 8)
+		{
+			if (unicode == 13)
+				unicode = 10;
+
+			if (unicode == 10 && !mMultiLine)
+				return;
+
+			if (mAvailableSymbols.Length() > 0)
+			{
+				bool found = false;
+				for (int i = 0; i < mAvailableSymbols.Length(); i++)
+				{
+					if (mAvailableSymbols[i] == unicode)
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+					return;
+			}
+
+			if (mSelectionBegin != mSelectionEnd)
+			{
+				mText.Erase(Math::Min(mSelectionBegin, mSelectionEnd), Math::Max(mSelectionBegin, mSelectionEnd));
+				mSelectionEnd = Math::Min(mSelectionBegin, mSelectionEnd);
+				mSelectionBegin = mSelectionEnd;
+			}
+
+			mText.Insert(unicode, mSelectionEnd);
+			mSelectionBegin = mSelectionEnd = mSelectionEnd + 1;
+			mTextDrawable->SetText(mText);
+
+			mCaretBlinkTime = 0;
+
+			UpdateLayout();
+			CheckScrollingToCaret();
+		}
+	}
+
+	void UIEditBox::CheckCharactersErasing(KeyboardKey key)
+	{
+		if (key == VK_BACK)
+		{
+			if (mSelectionEnd == mSelectionBegin)
+			{
+				if (mSelectionEnd > 0)
+					mText.Erase(mSelectionEnd - 1, mSelectionEnd);
+			}
+			else
+			{
+				mText.Erase(Math::Min(mSelectionBegin, mSelectionEnd), Math::Max(mSelectionEnd, mSelectionBegin));
+			}
+
+			mTextDrawable->SetText(mText);
+			UpdateLayout();
+
+			if (mSelectionEnd == mSelectionBegin)
+				MoveCaret(mSelectionEnd -1, false);
+			else
+				MoveCaret(Math::Min(mSelectionEnd, mSelectionBegin), false);
+		}
+
+		if (key == VK_DELETE)
+		{
+			if (mSelectionEnd < mText.Length() + 1)
+			{
+				if (mSelectionEnd == mSelectionBegin)
+					mText.Erase(mSelectionEnd, mSelectionBegin + 1);
+				else
+					mText.Erase(Math::Min(mSelectionBegin, mSelectionEnd), Math::Max(mSelectionEnd, mSelectionBegin));
+
+				mTextDrawable->SetText(mText);
+				UpdateLayout();
+
+				MoveCaret(Math::Min(mSelectionEnd, mSelectionBegin), false);
+			}
+		}
+	}
+
+	void UIEditBox::CheckCaretMoving(KeyboardKey key)
+	{
+		bool selecting = o2Input.IsKeyDown(VK_SHIFT);
+		bool control = o2Input.IsKeyDown(VK_CONTROL);
+
+		if (key == VK_LEFT)
+		{
+			if (control) JumpSelection(false, selecting);
+			else MoveCaret(mSelectionEnd - 1, selecting);
+		}
+
+		if (key == VK_RIGHT)
+		{
+			if (control)
+				JumpSelection(true, selecting);
+			else
+				MoveCaret(mSelectionEnd + 1, selecting);
+		}
+
+		if (key == 'A' && control)
+			SelectAll();
+
+		if (key == VK_UP)
+			MoveCaret(GetTextCaretPosition(GetTextCaretPosition(mSelectionEnd) +
+										   Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeight()*1.5f)), selecting);
+
+		if (key == VK_DOWN)
+			MoveCaret(GetTextCaretPosition(GetTextCaretPosition(mSelectionEnd) -
+										   Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeight()*0.5f)), selecting);
+
+		if (key == VK_END)
+		{
+			int endLineSymbol = mSelectionEnd;
+			for (int i = mSelectionEnd; i < mText.Length(); i++)
+			{
+				endLineSymbol = i + 1;
+				if (mText[i] == '\n')
+				{
+					endLineSymbol--;
+					break;
+				}
+			}
+
+			MoveCaret(endLineSymbol, selecting);
+		}
+
+		if (key == VK_HOME)
+		{
+			int endLineSymbol = mSelectionEnd;
+			for (int i = mSelectionEnd -1; i >= 0; i--)
+			{
+				endLineSymbol = i;
+				if (mText[i] == '\n')
+				{
+					endLineSymbol++;
+					break;
+				}
+			}
+
+			MoveCaret(endLineSymbol, selecting);
+		}
+	}
+
+	void UIEditBox::CheckClipboard(KeyboardKey key)
+	{
+		if (!o2Input.IsKeyDown(VK_CONTROL))
+			return;
+
+		if (key == 'C')
+			Clipboard::SetText(mText.SubStr(Math::Min(mSelectionBegin, mSelectionEnd),
+											Math::Max(mSelectionBegin, mSelectionEnd)));
+
+		if (key == 'X')
+		{
+			Clipboard::SetText(mText.SubStr(Math::Min(mSelectionBegin, mSelectionEnd),
+											Math::Max(mSelectionBegin, mSelectionEnd)));
+
+			if (mSelectionBegin != mSelectionEnd)
+			{
+				mText.Erase(Math::Min(mSelectionBegin, mSelectionEnd), Math::Max(mSelectionBegin, mSelectionEnd));
+				mSelectionBegin = mSelectionEnd = Math::Min(mSelectionBegin, mSelectionEnd);
+			}
+
+			mTextDrawable->SetText(mText);
+			UpdateLayout();
+			CheckScrollingToCaret();
+		}
+
+		if (key == 'V')
+		{
+			WString clipboard = Clipboard::GetText();
+
+			if (mSelectionBegin != mSelectionEnd)
+				mText.Erase(Math::Min(mSelectionBegin, mSelectionEnd), Math::Max(mSelectionBegin, mSelectionEnd));
+
+			mSelectionEnd = Math::Min(mSelectionBegin, mSelectionEnd);
+			mSelectionBegin = mSelectionEnd;
+
+			mText.Insert(clipboard, mSelectionEnd);
+
+			mSelectionBegin = mSelectionEnd = mSelectionEnd + clipboard.Length();
+
+			mTextDrawable->SetText(mText);
+			UpdateLayout();
+			CheckScrollingToCaret();
+		}
+	}
+
+	void UIEditBox::MoveCaret(int newPosition, bool selecting)
+	{
+		mSelectionEnd = Math::Clamp(newPosition, 0, mText.Length());
+		if (!selecting)
+			mSelectionBegin = mSelectionEnd;
+
+		UpdateSelectionAndCaret();
+		CheckScrollingToCaret();
+		mCaretBlinkTime = 0;
+	}
+
+	void UIEditBox::InitializeProperties()
+	{
+		INITIALIZE_PROPERTY(UIEditBox, text, SetText, GetText);
+		INITIALIZE_PROPERTY(UIEditBox, caret, SetCaretPosition, GetCaretPosition);
+		INITIALIZE_PROPERTY(UIEditBox, scroll, SetScroll, GetScroll);
+		INITIALIZE_PROPERTY(UIEditBox, horScroll, SetHorizontalScroll, GetHorizontalScroll);
+		INITIALIZE_PROPERTY(UIEditBox, verScroll, SetVerticalScroll, GetVerticalScroll);
+		INITIALIZE_PROPERTY(UIEditBox, selectionBegin, SetSelectionBegin, GetSelectionBegin);
+		INITIALIZE_PROPERTY(UIEditBox, selectionEnd, SetSelectionEnd, GetSelectionEnd);
+	}
+
+}

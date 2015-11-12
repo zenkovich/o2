@@ -2,196 +2,139 @@
 
 namespace o2
 {
-	IOBJECT_CPP(Label);
+	IOBJECT_CPP(UILabel);
 
-	Label::Label()
+	UILabel::UILabel()
 	{
 		InitializeProperties();
 	}
 
-	Label::Label(const Label& other):
-		Widget(other)
+	UILabel::UILabel(const UILabel& other):
+		UIWidget(other)
 	{
+		mTextLayer = GetLayerDrawable<Text>("text");
 		InitializeProperties();
 	}
 
-	Label& Label::operator=(const Label& other)
+	UILabel& UILabel::operator=(const UILabel& other)
 	{
-		Widget::operator=(other);
-
+		UIWidget::operator=(other);
+		mTextLayer = GetLayerDrawable<Text>("text");
 		return *this;
 	}
 
-	void Label::SetFont(FontRef font)
+	void UILabel::SetFont(FontRef font)
 	{
-		FindTextLayerText()->SetFont(font);
+		if (mTextLayer)
+			mTextLayer->SetFont(font);
 	}
 
-	FontRef Label::GetFont() const
+	FontRef UILabel::GetFont() const
 	{
-		auto text = GetLayerDrawable<Text>("caption");
-		if (text)
-			return text->GetFont();
+		if (mTextLayer)
+			return mTextLayer->GetFont();
 
 		return FontRef();
 	}
 
-	void Label::SetFontAsset(Ptr<BitmapFontAsset> asset)
-	{
-		FindTextLayerText()->SetFontAsset(asset);
-	}
-
-	void Label::SetFontAsset(Ptr<VectorFontAsset> asset)
-	{
-		FindTextLayerText()->SetFontAsset(asset);
-	}
-
-	void Label::SetFontAsset(AssetId assetId)
-	{
-		FindTextLayerText()->SetFontAsset(assetId);
-	}
-
-	void Label::SetFontAsset(const String& fileName)
-	{
-		FindTextLayerText()->SetFontAsset(fileName);
-	}
-
-	Ptr<Asset> Label::GetFontAsset() const
+	void UILabel::SetText(const WString& text)
 	{
 		if (mTextLayer)
-			return mTextLayer->GetFontAsset();
-
-		return nullptr;
+			mTextLayer->SetText(text);
 	}
 
-	AssetId Label::GetFontAssetId() const
+	WString UILabel::GetText() const
 	{
-		auto text = GetLayerDrawable<Text>("caption");
-		if (text)
-			return text->GetFontAssetId();
-
-		return 0;
-	}
-
-	void Label::SetText(const WString& text)
-	{
-		FindTextLayerText()->SetText(text);
-	}
-
-	WString Label::GetText() const
-	{
-		auto text = GetLayerDrawable<Text>("caption");
-		if (text)
-			return text->GetText();
+		if (mTextLayer)
+			return mTextLayer->GetText();
 
 		return WString();
 	}
 
-	void Label::SetCText(const String& text)
+	void UILabel::SetHorAlign(Text::HorAlign align)
 	{
-		FindTextLayerText()->SetCText(text);
+		if (mTextLayer)
+			mTextLayer->SetHorAlign(align);
 	}
 
-	String Label::GetCText() const
+	Text::HorAlign UILabel::GetHorAlign() const
 	{
-		auto text = GetLayerDrawable<Text>("caption");
-		if (text)
-			return text->GetCText();
-
-		return WString();
-	}
-
-	void Label::SetHorAlign(Text::HorAlign align)
-	{
-		FindTextLayerText()->SetHorAlign(align);
-	}
-
-	Text::HorAlign Label::GetHorAlign() const
-	{
-		auto text = GetLayerDrawable<Text>("caption");
-		if (text)
-			return text->GetHorAlign();
+		if (mTextLayer)
+			return mTextLayer->GetHorAlign();
 
 		return Text::HorAlign::Left;
 	}
 
-	void Label::SetVerAlign(Text::VerAlign align)
+	void UILabel::SetVerAlign(Text::VerAlign align)
 	{
-		FindTextLayerText()->SetVerAlign(align);
+		if (mTextLayer)
+			mTextLayer->SetVerAlign(align);
 	}
 
-	Text::VerAlign Label::GetVerAlign() const
+	Text::VerAlign UILabel::GetVerAlign() const
 	{
-		auto text = GetLayerDrawable<Text>("caption");
-		if (text)
-			return text->GetVerAlign();
+		if (mTextLayer)
+			return mTextLayer->GetVerAlign();
 
 		return Text::VerAlign::Top;
 	}
 
-	void Label::SetWordWrap(bool flag)
+	void UILabel::SetWordWrap(bool flag)
 	{
-		FindTextLayerText()->SetWordWrap(flag);
+		if (mTextLayer)
+			mTextLayer->SetWordWrap(flag);
 	}
 
-	bool Label::GetWordWrap() const
+	bool UILabel::GetWordWrap() const
 	{
-		auto text = GetLayerDrawable<Text>("caption");
-		if (text)
-			return text->GetWordWrap();
+		if (mTextLayer)
+			return mTextLayer->GetWordWrap();
 
 		return false;
 	}
 
-	void Label::SetSymbolsDistanceCoef(float coef /*= 1*/)
+	void UILabel::SetSymbolsDistanceCoef(float coef /*= 1*/)
 	{
-		FindTextLayerText()->SetSymbolsDistanceCoef(coef);
+		if (mTextLayer)
+			mTextLayer->SetSymbolsDistanceCoef(coef);
 	}
 
-	float Label::GetSymbolsDistanceCoef() const
+	float UILabel::GetSymbolsDistanceCoef() const
 	{
-		auto text = GetLayerDrawable<Text>("caption");
-		if (text)
-			return text->GetSymbolsDistanceCoef();
+		if (mTextLayer)
+			return mTextLayer->GetSymbolsDistanceCoef();
 
 		return 1.0f;
 	}
 
-	void Label::SetLinesDistanceCoef(float coef /*= 1*/)
+	void UILabel::SetLinesDistanceCoef(float coef /*= 1*/)
 	{
-		FindTextLayerText()->SetLinesDistanceCoef(coef);
+		if (mTextLayer)
+			mTextLayer->SetLinesDistanceCoef(coef);
 	}
 
-	float Label::GetLinesDistanceCoef() const
+	float UILabel::GetLinesDistanceCoef() const
 	{
-		auto text = GetLayerDrawable<Text>("caption");
-		if (text)
-			return text->GetLinesDistanceCoef();
+		if (mTextLayer)
+			return mTextLayer->GetLinesDistanceCoef();
 
 		return 1.0f;
 	}
 
-	Ptr<Text> Label::FindTextLayerText()
+	void UILabel::OnLayerAdded(Ptr<UIWidgetLayer> layer)
 	{
-		auto captionText = GetLayerDrawable<Text>("text");
-		if (!captionText)
-		{
-			auto layer = AddTextLayer("text", "", "arial.ttf");
-			return layer->drawable.Cast<Text>();
-		}
-
-		return captionText;
+		if (layer->name == "text" && layer->drawable && layer->drawable->GetTypeId() == Text::type->ID())
+			mTextLayer = layer->drawable.Cast<Text>();
 	}
 
-	void Label::InitializeProperties()
+	void UILabel::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(Label, font, SetFont, GetFont);
-		INITIALIZE_PROPERTY(Label, text, SetText, GetText);
-		INITIALIZE_PROPERTY(Label, ctext, SetCText, GetCText);
-		INITIALIZE_PROPERTY(Label, verAlign, SetVerAlign, GetVerAlign);
-		INITIALIZE_PROPERTY(Label, horAlign, SetHorAlign, GetHorAlign);
-		INITIALIZE_PROPERTY(Label, wordWrap, SetWordWrap, GetWordWrap);
-		INITIALIZE_PROPERTY(Label, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef);
-		INITIALIZE_PROPERTY(Label, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);
+		INITIALIZE_PROPERTY(UILabel, font, SetFont, GetFont);
+		INITIALIZE_PROPERTY(UILabel, text, SetText, GetText);
+		INITIALIZE_PROPERTY(UILabel, verAlign, SetVerAlign, GetVerAlign);
+		INITIALIZE_PROPERTY(UILabel, horAlign, SetHorAlign, GetHorAlign);
+		INITIALIZE_PROPERTY(UILabel, wordWrap, SetWordWrap, GetWordWrap);
+		INITIALIZE_PROPERTY(UILabel, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef);
+		INITIALIZE_PROPERTY(UILabel, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);
 	}
 }

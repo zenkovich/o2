@@ -4,51 +4,83 @@
 
 namespace o2
 {
-	IOBJECT_CPP(WidgetLayer);
+	IOBJECT_CPP(UIWidgetLayer);
 
-	WidgetLayer::WidgetLayer():
-		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX))
+	UIWidgetLayer::UIWidgetLayer():
+		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)), mTransparency(1.0f), mResTransparency(1.0f),
+		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F())
 	{
 		InitializeProperties();
 	}
 
-	WidgetLayer::WidgetLayer(const WidgetLayer& other):
-		mDepth(other.mDepth), name(other.name), layout(other.layout)
+	UIWidgetLayer::UIWidgetLayer(const UIWidgetLayer& other):
+		mDepth(other.mDepth), name(other.name), layout(other.layout), mTransparency(other.mTransparency), 
+		mResTransparency(1.0f), interactableLayout(other.interactableLayout)
 	{
 		if (other.drawable)
 			drawable = other.drawable->Clone();
 
+		for (auto child : other.mChilds)
+			AddChild(child->Clone());
+
 		InitializeProperties();
 	}
 
-	WidgetLayer::~WidgetLayer()
+	UIWidgetLayer::~UIWidgetLayer()
 	{
 		drawable.Release();
 	}
 
-	WidgetLayer& WidgetLayer::operator=(const WidgetLayer& other)
+	UIWidgetLayer& UIWidgetLayer::operator=(const UIWidgetLayer& other)
 	{
 		drawable.Release();
-			
+		for (auto child : mChilds)
+			child.Release();
+
+		mChilds.Clear();
+
 		mDepth = other.mDepth;
 		name = other.name;
-		drawable = other.drawable->Clone();
+
+		if (other.drawable)
+			drawable = other.drawable->Clone();
+
+		for (auto child : other.mChilds)
+			AddChild(child->Clone());
+
+		SetTransparency(other.mTransparency);
+
 		if (mOwnerWidget)
 			mOwnerWidget->UpdateLayersDrawingSequence();
 
 		return *this;
 	}
 
-	void WidgetLayer::Draw()
+	void UIWidgetLayer::Draw()
 	{
 		drawable->Draw();
 	}
 
-	void WidgetLayer::Update(float dt)
+	void UIWidgetLayer::Update(float dt)
 	{
 	}
 
-	Ptr<WidgetLayer> WidgetLayer::GetChild(const String& path)
+	Ptr<UIWidgetLayer> UIWidgetLayer::AddChildLayer(const String& name, Ptr<IRectDrawable> drawable,
+													const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	{
+		if (Math::Equals(depth, 0.0f))
+			depth = (float)mOwnerWidget->mDrawingLayers.Count();
+
+		Ptr<UIWidgetLayer> layer = mnew UIWidgetLayer();
+		layer->depth = depth;
+		layer->name = name;
+		layer->drawable = drawable;
+		layer->layout = layout;
+
+		return AddChild(layer);
+	}
+
+	Ptr<UIWidgetLayer> UIWidgetLayer::GetChild(const String& path)
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -80,51 +112,112 @@ namespace o2
 		return nullptr;
 	}
 
-	LayersVec WidgetLayer::GetAllChilds() const
+	LayersVec UIWidgetLayer::GetAllChilds() const
 	{
 		LayersVec res = mChilds;
 		for (auto child : mChilds)
 		{
-			res.Add(child);
 			res.Add(child->GetAllChilds());
 		}
 
 		return res;
 	}
 
-	void WidgetLayer::SetDepth(float depth)
+	void UIWidgetLayer::SetDepth(float depth)
 	{
 		mDepth = depth;
 		if (mOwnerWidget)
 			mOwnerWidget->UpdateLayersDrawingSequence();
 	}
 
-	float WidgetLayer::GetDepth() const
+	float UIWidgetLayer::GetDepth() const
 	{
 		return mDepth;
 	}
 
-	void WidgetLayer::OnChildAdded(Ptr<WidgetLayer> child)
+	void UIWidgetLayer::SetTransparency(float transparency)
 	{
-		child->mOwnerWidget = mOwnerWidget;
-
-		if (mOwnerWidget)
-			mOwnerWidget->UpdateLayersDrawingSequence();
+		mTransparency = transparency;
+		UpdateResTransparency();
 	}
 
-	void WidgetLayer::UpdateLayout()
+	float UIWidgetLayer::GetTransparency()
+	{
+		return mTransparency;
+	}
+
+	bool UIWidgetLayer::IsUnderPoint(const Vec2F& point)
+	{
+		return mInteractableArea.IsInside(point);
+	}
+
+	void UIWidgetLayer::SetOwnerWidget(Ptr<UIWidget> owner)
+	{
+		mOwnerWidget = owner;
+
+		for (auto child : mChilds)
+			child->SetOwnerWidget(owner);
+
+		UpdateResTransparency();
+	}
+
+	void UIWidgetLayer::OnChildAdded(Ptr<UIWidgetLayer> child)
+	{
+		child->SetOwnerWidget(mOwnerWidget);
+
+		if (mOwnerWidget)
+		{
+			mOwnerWidget->OnLayerAdded(child);
+			mOwnerWidget->UpdateLayersDrawingSequence();
+		}
+	}
+
+	void UIWidgetLayer::UpdateLayout()
 	{
 		if (mParent)
 			mAbsolutePosition = layout.Calculate(mParent->mAbsolutePosition);
 		else
 			mAbsolutePosition = layout.Calculate(mOwnerWidget->layout.mAbsoluteRect);
 
-		drawable->SetRect(mAbsolutePosition);
+		mInteractableArea = interactableLayout.Calculate(mAbsolutePosition);
+
+		if(drawable)
+			drawable->SetRect(mAbsolutePosition);
+
+		for (auto child : mChilds)
+			child->UpdateLayout();
 	}
 
-	void WidgetLayer::InitializeProperties()
+	void UIWidgetLayer::UpdateResTransparency()
 	{
-		INITIALIZE_PROPERTY(WidgetLayer, depth, SetDepth, GetDepth);
+		if (mParent)
+			mResTransparency = transparency*mParent->mResTransparency;
+		else
+			mResTransparency = transparency*mOwnerWidget->mResTransparency;
+
+		if (drawable)
+			drawable->SetTransparency(mResTransparency);
+
+		for (auto child : mChilds)
+			child->UpdateResTransparency();
+	}
+
+	Dictionary<String, Ptr<UIWidgetLayer>> UIWidgetLayer::GetAllChildLayers()
+	{
+		Dictionary<String, Ptr<UIWidgetLayer>> res;
+		for (auto layer : mChilds)
+			res.Add(layer->name, layer);
+
+		return res;
+	}
+
+	void UIWidgetLayer::InitializeProperties()
+	{
+		INITIALIZE_PROPERTY(UIWidgetLayer, depth, SetDepth, GetDepth);
+		INITIALIZE_PROPERTY(UIWidgetLayer, transparency, SetTransparency, GetTransparency);
+		INITIALIZE_ACCESSOR(UIWidgetLayer, child, GetChild);
+
+		child.SetAllAccessFunc(this, &UIWidgetLayer::GetAllChildLayers);
 	}
 
 }

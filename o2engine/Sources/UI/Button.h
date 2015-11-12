@@ -6,28 +6,26 @@
 namespace o2
 {
 	class Sprite;
+	class Text;
 
 	// -----------------------
 	// Button clickable widget
 	// -----------------------
-	class Button: public Widget, public CursorEventsListener
+	class UIButton: public UIWidget, public CursorEventsListener
 	{
 	public:
-		Property<WString>       caption;     // Caption property. Searches text layer with name "caption" or creates them if he's not exist
-		Property<String>        captionc;    // Caption property. Searches text layer with name "caption" or creates them if he's not exist
-		Setter<Ptr<ImageAsset>> icon;        // Icon image asset setter. Searches sprite layer with name "icon". Creates him if can't find
-		Setter<String>          iconPath;    // Icon image path setter. Searches sprite layer with name "icon". Creates him if can't find
-		Setter<AssetId>         iconImageId; // Icon image id setter. Searches sprite layer with name "icon". Creates him if can't find
-		Function<void()>        onClick;     // Click event
+		Property<WString>     caption; // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+		Property<Ptr<Sprite>> icon;    // Icon image asset setter. Searches sprite layer with name "icon". Creates him if can't find
+		Function<void()>      onClick; // Click event
 
 		// Default constructor
-		Button();
+		UIButton();
 
 		// Copy-constructor
-		Button(const Button& other);
+		UIButton(const UIButton& other);
 
 		// Assign operator
-		Button& operator=(const Button& other);
+		UIButton& operator=(const UIButton& other);
 
 		// Sets caption of button. Searches text layer with name "caption". If can't find this layer, creates them
 		void SetCaption(const WString& text);
@@ -35,20 +33,11 @@ namespace o2
 		// Returns caption text from text layer "caption". Returns no data if layer isn't exist
 		WString GetCaption() const;
 
-		// Sets caption of button. Searches text layer with name "caption". If can't find this layer, creates them
-		void SetCCaption(const String& text);
+		// Sets icon sprite. Searches sprite layer "icon". Creates a new icon if isn't exist
+		void SetIcon(Ptr<Sprite> sprite);
 
-		// Returns caption text from text layer "caption". Returns no data if layer isn't exist
-		String GetCCaption() const;
-
-		// Sets icon asset. Searches sprite layer "icon". Creates a new icon if isn't exist
-		void SetIcon(Ptr<ImageAsset> asset);
-
-		// Sets icon asset path. Searches sprite layer "icon". Creates a new icon if isn't exist
-		void SetIcon(const String& imagePath);
-
-		// Sets icon asset id. Searches sprite layer "icon". Creates a new icon if isn't exist
-		void SetIcon(AssetId imageAssetId);
+		// Returns icon sprite
+		Ptr<Sprite> GetIcon() const;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
@@ -63,25 +52,31 @@ namespace o2
 		// Calls onClicked if cursor is still above this
 		void OnCursorReleased(const Input::Cursor& cursor);
 
+		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		void OnCursorPressBreak(const Input::Cursor& cursor);
+
 		// Calls when cursor enters this object. Sets state "select" to true
 		void OnCursorEnter(const Input::Cursor& cursor);
 
 		// Calls when cursor exits this object. Sets state "select" to false
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		SERIALIZABLE_IMPL(Button);
+		SERIALIZABLE_IMPL(UIButton);
 
-		IOBJECT(Button)
+		IOBJECT(UIButton)
 		{
-			BASE_CLASS(Widget);
+			BASE_CLASS(UIWidget);
+
+			FIELD(caption);
+			FIELD(icon);
 		}
 
 	protected:
-		// Returns "caption" layer or creates them
-		Ptr<Text> FindCaptionLayerText();
+		Ptr<Text>   mCaptionText; // Caption layer text
+		Ptr<Sprite> mIconSprite;  // Icon layer sprite
 
-		// Returns "icon" layer or creates them
-		Ptr<Sprite> FindIconLayerSprite();
+		// Calls when layer added and updates drawing sequence
+		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
 
 		// Initializes properties
 		void InitializeProperties();

@@ -14,6 +14,9 @@
 // Enables render debugging
 #define RENDER_DEBUG true
 
+// Enables debug ui rectangles drawing
+#define UI_DEBUG false
+
 // ----------------------------
 // Assets configuration section
 // ----------------------------

@@ -205,6 +205,8 @@ namespace o2
 
 		mDrawingDepth = 0.0f;
 
+		mScissorInfos.Clear();
+
 		// Reset view matrices
 		SetupViewMatrix(mResolution);
 
@@ -490,7 +492,8 @@ namespace o2
 		if (rect == mScissorRect)
 			return;
 
-		glScissor((int)rect.left, mResolution.y - (int)rect.bottom, (int)rect.Width(), (int)rect.Height());
+		glScissor((int)(rect.left + mResolution.x*0.5f), (int)(rect.bottom + mResolution.y*0.5f), 
+				  (int)rect.Width(), (int)rect.Height());
 
 		mScissorRect = rect;
 	}
@@ -511,6 +514,8 @@ namespace o2
 
 		GL_CHECK_ERROR(mLog);
 
+		mScissorInfos.Add(ScissorInfo(mScissorRect, mDrawingDepth));
+
 		mScissorTest = true;
 	}
 
@@ -524,6 +529,8 @@ namespace o2
 		glDisable(GL_SCISSOR_TEST);
 
 		GL_CHECK_ERROR(mLog);
+
+		mScissorInfos.Last().mEndDepth = mDrawingDepth;
 
 		mScissorTest = false;
 	}
@@ -700,6 +707,16 @@ namespace o2
 		return mMaxTextureSize;
 	}
 
+	float Render::GetDrawingDepth()
+	{
+		return mDrawingDepth;
+	}
+
+	const Render::ScissorInfosVec& Render::GetScissorInfos() const
+	{
+		return mScissorInfos;
+	}
+
 	void Render::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(Render, camera, SetCamera, GetCamera);
@@ -714,4 +731,19 @@ namespace o2
 	{
 		return *this;
 	}
+
+	Render::ScissorInfo::ScissorInfo():
+		mBeginDepth(0), mEndDepth(0)
+	{}
+
+	Render::ScissorInfo::ScissorInfo(const RectF& rect, float beginDepth):
+		mScissorRect(rect), mBeginDepth(beginDepth), mEndDepth(beginDepth)
+	{}
+
+	bool Render::ScissorInfo::operator==(const ScissorInfo& other)
+	{
+		return Math::Equals(mBeginDepth, other.mBeginDepth) && Math::Equals(mEndDepth, other.mEndDepth) &&
+			mScissorRect == other.mScissorRect;
+	}
+
 }

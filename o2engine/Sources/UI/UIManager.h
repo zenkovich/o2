@@ -8,10 +8,18 @@
 
 namespace o2
 {
-	class Widget;
-	class Button;
-	class Label;
+	class UIWidget;
+	class UIButton;
+	class UILabel;
 	class LogStream;
+	class UIHorizontalLayout;
+	class UIVerticalLayout;
+	class UIHorizontalProgress;
+	class UIVerticalProgress;
+	class UIHorizontalScrollBar;
+	class UIVerticalScrollBar;
+	class UIScrollArea;
+	class UIEditBox;
 
 	// ------------------------------------------------
 	// UI manager, contains all root widgets and styles
@@ -19,66 +27,118 @@ namespace o2
 	class UIManager: public Singleton<UIManager>
 	{
 	public:
-		typedef Vector<Ptr<Widget>> WidgetsVec;
+		typedef Vector<Ptr<UIWidget>> WidgetsVec;
 
 	public:
-		Accessor<Ptr<Widget>, const String&> widget; // Root widget accessor
+		Accessor<Ptr<UIWidget>, const String&> widget; // Root widget accessor
+		
+// Loads widgets style
+		void LoadStyle(const String& path);
+
+		// Saves style
+		void SaveStyle(const String& path);
+
+		// Clears style widgets
+		void ClearStyle();
+
+		// Adds widget style
+		void AddWidgetStyle(Ptr<UIWidget> widget, const String& style);
+
+		// Returns widget style by name
+		template<typename _type>
+		Ptr<_type> GetWidgetStyle(const String& style);
 
 		// Adds widget as root
-		Ptr<Widget> AddWidget();
+		Ptr<UIWidget> AddWidget();
 
 		// Adds widget as root
-		Ptr<Widget> AddWidget(Ptr<Widget> widget);
+		Ptr<UIWidget> AddWidget(Ptr<UIWidget> widget);
 
 		// Adds widget from style
 		template<typename _type>
 		Ptr<_type> AddWidget(const String& style = "standard");
 
 		// Adds button from style
-		Ptr<Button> AddButton(const String& caption, const String& style = "standard");
+		Ptr<UIButton> AddButton(const WString& caption, const String& style = "standard");
 
 		// Adds label from style
-		Ptr<Label> AddLabel(const String& text, const String& style = "standard");
+		Ptr<UILabel> AddLabel(const WString& text, const String& style = "standard");
 
-		// Removes widget by path
-		bool RemoveWidget(const String& path);
+		// Adds horizontal layout
+		Ptr<UIHorizontalLayout> AddHorLayout();
 
-		// Removes widget
-		bool RemoveWidget(Ptr<Widget> widget, bool release = true);
+		// Adds vertical layout
+		Ptr<UIVerticalLayout> AddVerLayout();
 
-		// Returns widget by path
-		Ptr<Widget> GetWidget(const String& path);
+		// Adds horizontal progress bar
+		Ptr<UIHorizontalProgress> AddHorProgress(const String& style = "standard");
 
-		// Removes all widgets
-		void RemoveAllWidgets();
+		// Adds vertical progress bar
+		Ptr<UIVerticalProgress> AddVerProgress(const String& style = "standard");
 
-		// Returns all widgets
-		const WidgetsVec& GetAllWidgets() const;
+		// Adds horizontal scroll bar
+		Ptr<UIHorizontalScrollBar> AddHorScrollBar(const String& style = "standard");
 
-		// Loads widgets style
-		void LoadStyle(const String& path);
+		// Adds vertical scroll bar
+		Ptr<UIVerticalScrollBar> AddVerScrollBar(const String& style = "standard");
 
-		// Saves style
-		void SaveStyle(const String& path);
+		// Adds scroll area
+		Ptr<UIScrollArea> AddScrollArea(const String& style = "standard");
 
-		// Adds widget style
-		void AddStyle(Ptr<Widget> widget, const String& style);
-
-		// Returns widget style by name
-		Ptr<Widget> GetWidgetStyle(const String& style);
+		// Adds edit box
+		Ptr<UIEditBox> AddEditBox(const String& style = "standard");
 
 		// Creates widget by style
 		template<typename _type>
 		Ptr<_type> CreateWidget(const String& style = "standard");
 
 		// Creates button by style
-		Ptr<Button> CreateButton(const String& caption, const String& style = "standard");
+		Ptr<UIButton> CreateButton(const WString& caption, const String& style = "standard");
 
 		// Creates label by style
-		Ptr<Label> CreateLabel(const String& text, const String& style = "standard");
+		Ptr<UILabel> CreateLabel(const WString& text, const String& style = "standard");
+
+		// Creates horizontal layout
+		Ptr<UIHorizontalLayout> CreateHorLayout();
+
+		// Creates vertical layout
+		Ptr<UIVerticalLayout> CreateVerLayout();
+
+		// Creates horizontal progress bar by style
+		Ptr<UIHorizontalProgress> CreateHorProgress(const String& style = "standard");
+
+		// CreatesCreates vertical progress bar by style
+		Ptr<UIVerticalProgress> CreateVerProgress(const String& style = "standard");
+
+		// Creates horizontal scroll bar by style
+		Ptr<UIHorizontalScrollBar> CreateHorScrollBar(const String& style = "standard");
+
+		// Creates vertical scroll bar by style
+		Ptr<UIVerticalScrollBar> CreateVerScrollBar(const String& style = "standard");
+
+		// Creates scroll area
+		Ptr<UIScrollArea> CreateScrollArea(const String& style = "standard");
+
+		// Creates edit box
+		Ptr<UIEditBox> CreateEditBox(const String& style = "standard");
+
+		// Removes widget by path
+		bool RemoveWidget(const String& path);
+
+		// Removes widget
+		bool RemoveWidget(Ptr<UIWidget> widget, bool release = true);
+
+		// Removes all widgets
+		void RemoveAllWidgets();
+
+		// Returns widget by path
+		Ptr<UIWidget> GetWidget(const String& path);
+
+		// Returns all widgets
+		const WidgetsVec& GetAllWidgets() const;
 
 	protected:
-		Ptr<Widget>    mScreenWidget; // Root screen widget
+		Ptr<UIWidget>  mScreenWidget; // Root screen widget
 		WidgetsVec     mStyleSamples; // Style widgets
 		Ptr<LogStream> mLog;          // UI Log stream
 
@@ -112,12 +172,12 @@ namespace o2
 	Ptr<_type> UIManager::AddWidget(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<_type>(style);
-		mScreenWidget->AddChild(res.Cast<Widget>());
+		mScreenWidget->AddChild(res.Cast<UIWidget>());
 		return res;
 	}
 
 	template<typename _type>
-	Ptr<_type> UIManager::CreateWidget(const String& style /*= "standard"*/)
+	Ptr<_type> UIManager::GetWidgetStyle(const String& style /*= "standard"*/)
 	{
 		Ptr<_type> sample;
 		for (auto styleWidget : mStyleSamples)
@@ -134,6 +194,13 @@ namespace o2
 			}
 		}
 
+		return sample;
+	}
+
+	template<typename _type>
+	Ptr<_type> UIManager::CreateWidget(const String& style /*= "standard"*/)
+	{
+		Ptr<_type> sample = GetWidgetStyle<_type>(style);
 		Ptr<_type> res;
 
 		if (sample)

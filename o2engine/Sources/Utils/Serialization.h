@@ -101,10 +101,13 @@ namespace o2
 	template<typename _type>
 	void SerializableAttribute<_type>::Deserialize(void* object, const DataNode& data) const
 	{
-		_type value = _type();
 		auto node = data.GetNode(mOwnerFieldInfo->Name());
-		if (node) value = *node;
-		mOwnerFieldInfo->SetValue<_type>(object, value);
+		if (node)
+		{
+			_type* valPtr = mOwnerFieldInfo->GetValuePtrStrong<_type>(object);
+			*valPtr = *node;
+			//mOwnerFieldInfo->SetValue<_type>(object, (_type)(*node));
+		}
 	}
 
 	template<typename _type>

@@ -23,6 +23,20 @@ namespace o2
 	class Render: public RenderBase, public Singleton<Render>
 	{
 	public:
+		struct ScissorInfo
+		{
+			float mBeginDepth;
+			float mEndDepth;
+			RectF mScissorRect;
+
+			ScissorInfo();
+			ScissorInfo(const RectF& rect, float beginDepth);
+
+			bool operator==(const ScissorInfo& other);
+		};
+		typedef Vector<ScissorInfo> ScissorInfosVec;
+
+	public:
 		Getter<Vec2I>        resolution;             // Screen resolution getter
 		Property<Camera>     camera;          // Current camera property
 		Property<RectI>      scissorRect;            // Scissor rect property
@@ -139,35 +153,42 @@ namespace o2
 		// Returns maximum texture size
 		Vec2I GetMaxTextureSize() const;
 
+		// Returns last draw depth of mesh
+		float GetDrawingDepth();
+
+		// Returns scissor infos at current frame
+		const ScissorInfosVec& GetScissorInfos() const;
+
 	protected:
 		typedef Vector<Ptr<Texture>> TexturesVec;
 		typedef Vector<Ptr<Font>> FontsVec;
 
-		Ptr<LogStream> mLog;                    // Render log stream
+		Ptr<LogStream>  mLog;                    // Render log stream
+					    
+		TexturesVec     mTextures;               // Loaded textures
+		FontsVec        mFonts;                  // Loaded fonts
+					    
+		Camera          mCamera;                 // Camera transformation
+		Vec2I           mResolution;             // Current back buffer size
+		Vec2I           mDPI;                    // Current device screen DPI
+					    
+		bool            mRenderTargetsAvailable; // True, if render targets is available
+		Vec2I           mMaxTextureSize;         // Max texture size
+					    
+		bool            mStencilDrawing;         // True, if drawing in stencil buffer
+		bool            mStencilTest;            // True, if drawing with stencil test
+					    
+		RectI           mScissorRect;            // Scissor rect, in screen space
+		bool            mScissorTest;            // True, if scissor test enabled
+		ScissorInfosVec mScissorInfos;           // Scissor clipping depth infos vector
 
-		TexturesVec    mTextures;               // Loaded textures
-		FontsVec       mFonts;                  // Loaded fonts
-
-		Camera         mCamera;                 // Camera transformation
-		Vec2I          mResolution;             // Current back buffer size
-		Vec2I          mDPI;                    // Current device screen DPI
-
-		bool           mRenderTargetsAvailable; // True, if render targets is available
-		Vec2I          mMaxTextureSize;         // Max texture size
-
-		bool           mStencilDrawing;         // True, if drawing in stencil buffer
-		bool           mStencilTest;            // True, if drawing with stencil test
-
-		RectI          mScissorRect;            // Scissor rect, in screen space
-		bool           mScissorTest;            // True, if scissor test enabled
-
-		TextureRef     mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
-
-		float          mDrawingDepth;           // Current drawing depth, increments after each drawing drawables
-
-		FT_Library     mFreeTypeLib;            // FreeType library, for rendering fonts
-
-		bool           mReady;                  // True, if render system initialized
+		TextureRef      mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
+					    
+		float           mDrawingDepth;           // Current drawing depth, increments after each drawing drawables
+					    
+		FT_Library      mFreeTypeLib;            // FreeType library, for rendering fonts
+					    
+		bool            mReady;                  // True, if render system initialized
 
 	protected:
 		// Don't copy

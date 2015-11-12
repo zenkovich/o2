@@ -8,12 +8,11 @@ namespace o2
 	// -----------------
 	// Text label widget
 	// -----------------
-	class Label: public Widget
+	class UILabel: public UIWidget
 	{
 	public:
 		Property<FontRef>        font;                // Font pointer property
 		Property<WString>        text;                // Text property, wstring
-		Property<String>         ctext;               // Text property, string
 		Property<Text::VerAlign> verAlign;            // vertical align property
 		Property<Text::HorAlign> horAlign;            // Horizontal align property
 		Property<bool>           wordWrap;            // Words wrapping flag property
@@ -21,13 +20,13 @@ namespace o2
 		Property<float>          linesDistanceCoef;   // Lines distance coef, 1 is standard
 
 		// Default constructor
-		Label();
+		UILabel();
 
 		// Copy-constructor
-		Label(const Label& other);
+		UILabel(const UILabel& other);
 
 		// Assign operator
-		Label& operator=(const Label& other);
+		UILabel& operator=(const UILabel& other);
 
 		// Sets using font
 		void SetFont(FontRef font);
@@ -35,35 +34,11 @@ namespace o2
 		// Returns using font
 		FontRef GetFont() const;
 
-		// Sets bitmap font asset 
-		void SetFontAsset(Ptr<BitmapFontAsset> asset);
-
-		// Sets vector font asset
-		void SetFontAsset(Ptr<VectorFontAsset> asset);
-
-		// Sets font asset id (loads asset by this id)
-		void SetFontAsset(AssetId assetId);
-
-		// Sets font asset (loads asset by file name)
-		void SetFontAsset(const String& fileName);
-
-		// Returns asset by font asset id
-		Ptr<Asset> GetFontAsset() const;
-
-		// Returns font asset id
-		AssetId GetFontAssetId() const;
-
 		// Sets text
 		void SetText(const WString& text);
 
 		// Returns text
 		WString GetText() const;
-
-		// Sets text
-		void SetCText(const String& text);
-
-		// Returns text as string
-		String GetCText() const;
 
 		// Sets horizontal align
 		void SetHorAlign(Text::HorAlign align);
@@ -95,19 +70,19 @@ namespace o2
 		// Returns lines distance coefficient
 		float GetLinesDistanceCoef() const;
 
-		SERIALIZABLE_IMPL(Label);
+		SERIALIZABLE_IMPL(UILabel);
 
-		IOBJECT(Label)
+		IOBJECT(UILabel)
 		{
-			BASE_CLASS(Widget);
+			BASE_CLASS(UIWidget);
 		}
 
 	protected:
 		Ptr<Text> mTextLayer; // Text layer drawable. Getting from layer "text"
 
 	protected:
-		// Returns "text" layer or creates them
-		Ptr<Text> FindTextLayerText();
+		// Calls when layer added and updates drawing sequence
+		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
 
 		// Initializes properties
 		void InitializeProperties();

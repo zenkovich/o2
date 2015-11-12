@@ -334,8 +334,11 @@ namespace o2
 	template<typename _type>
 	DataNode& DataNode::operator=(const Ptr<_type>& value)
 	{
-		*AddNode("Type") = value->GetType().Name();
-		*AddNode("Value") = *value;
+		if (value)
+		{
+			*AddNode("Type") = value->GetType().Name();
+			*AddNode("Value") = *value;
+		}
 
 		return *this;
 	}

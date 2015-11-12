@@ -7,35 +7,42 @@
 
 namespace o2
 {
-	class Widget;
+	class UIWidget;
 
 	// -----------------------------------------------------------------------
-	// Widget state. Could be true or false, and animates widget by this state
+	// UIWidget state. Could be true or false, and animates widget by this state
 	// -----------------------------------------------------------------------
-	class WidgetState: public ISerializable
+	class UIWidgetState: public ISerializable
 	{
 	public:
-		String    name;                   // State name
-		Animation animation;              // Widget animation
-		float     offStateAnimationSpeed; // False state transition animation speed
+		String           name;                   // State name
+		Animation        animation;              // UIWidget animation
+		float            offStateAnimationSpeed; // False state transition animation speed
+		Function<void()> onStateFullyTrue;		 // This event calls when state is completely true (at the end of animation)
+		Function<void()> onStateFullyFalse;		 // This event calls when state is completely false (at the end of animation)
+		Function<void()> onStateBecomesTrue;	 // This event calls when state becomes to true
+		Function<void()> onStateBecomesFalse;	 // This event calls when state becomes to true
 
 		// Default constructor
-		WidgetState();
+		UIWidgetState();
 
 		// Copy-constructor
-		WidgetState(const WidgetState& state);
+		UIWidgetState(const UIWidgetState& state);
 
 		// Destructor
-		~WidgetState();
+		~UIWidgetState();
 
 		// Boolean cast operator
 		operator bool();
 
 		// Assign from boolean operator
-		WidgetState& operator=(bool state);
+		UIWidgetState& operator=(bool state);
 
 		// Sets current state
 		void SetState(bool state);
+
+		// Sets state immediately
+		void SetStateForcible(bool state);
 
 		// Returns current state
 		bool GetState() const;
@@ -43,9 +50,9 @@ namespace o2
 		// Updates animation
 		void Update(float dt);
 
-		SERIALIZABLE_IMPL(WidgetState);
+		SERIALIZABLE_IMPL(UIWidgetState);
 
-		IOBJECT(WidgetState)
+		IOBJECT(UIWidgetState)
 		{
 			SRLZ_FIELD(name);
 			SRLZ_FIELD(mState);
@@ -54,8 +61,8 @@ namespace o2
 		}
 
 	protected:
-		bool        mState; // Current state
-		Ptr<Widget> mOwner; // Owner widget pointer
+		bool          mState; // Current state
+		Ptr<UIWidget> mOwner; // Owner widget pointer
 	};
-	typedef Vector<Ptr<WidgetState>>  StatesVec;
+	typedef Vector<Ptr<UIWidgetState>>  StatesVec;
 }

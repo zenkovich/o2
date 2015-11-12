@@ -1,5 +1,6 @@
 #include "Animation.h"
 
+#include "Utils/Debug.h"
 #include "Utils/IObject.h"
 
 namespace o2
@@ -43,13 +44,18 @@ namespace o2
 				IObject* targetObj = dynamic_cast<IObject*>(mTarget);
 				if (targetObj)
 				{
-					FieldInfo* fieldInfo;
+					FieldInfo* fieldInfo = nullptr;
 					def.mTargetPtr = targetObj->GetType().GetFieldPtr<char>(mTarget, def.mTargetPath, fieldInfo);
 
-					if (fieldInfo->IsProperty())
-						def.mAnimatedValue->SetTargetPropertyVoid(def.mTargetPtr);
+					if (!fieldInfo)
+						o2Debug.LogWarning("Can't find object %s for animating", def.mTargetPath);
 					else
-						def.mAnimatedValue->SetTargetVoid(def.mTargetPtr);
+					{
+						if (fieldInfo->IsProperty())
+							def.mAnimatedValue->SetTargetPropertyVoid(def.mTargetPtr);
+						else
+							def.mAnimatedValue->SetTargetVoid(def.mTargetPtr);
+					}
 				}
 			}
 
@@ -69,13 +75,18 @@ namespace o2
 		{
 			for (auto val : mAnimatedValues)
 			{
-				FieldInfo* fieldInfo;
+				FieldInfo* fieldInfo = nullptr;
 				val.mTargetPtr = mTarget->GetType().GetFieldPtr<char>(mTarget, val.mTargetPath, fieldInfo);
 
-				if (fieldInfo->IsProperty())
-					val.mAnimatedValue->SetTargetPropertyVoid(val.mTargetPtr);
+				if (!fieldInfo)
+					o2Debug.LogWarning("Can't find object %s for animating", val.mTargetPath);
 				else
-					val.mAnimatedValue->SetTargetVoid(val.mTargetPtr);
+				{
+					if (fieldInfo->IsProperty())
+						val.mAnimatedValue->SetTargetPropertyVoid(val.mTargetPtr);
+					else
+						val.mAnimatedValue->SetTargetVoid(val.mTargetPtr);
+				}
 			}
 		}
 		else

@@ -31,6 +31,9 @@ namespace o2
 		// Returns drag event listener under cursor
 		Ptr<DragEventsListener> GetListenerUnderCursor(CursorId cursorId) const;
 
+		// Breaks cursor event. All pressed listeners will be unpressed with specific event OnPressBreak
+		void BreakCursorEvent();
+
 	protected:
 		// Default constructor
 		EventSystem();
@@ -103,6 +106,9 @@ namespace o2
 
 		// Processes key released event
 		void ProcessKeyReleased(const Input::Key& key);
+
+		// Returns true if listener was clipped by scissors in render
+		bool IsListenerClipped(float depth, const Vec2F& cursorPos) const;
 
 	protected:
 		CursEventsListenersVec                          mCursorListeners;             // All cursor listeners

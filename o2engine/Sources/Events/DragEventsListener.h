@@ -22,6 +22,9 @@ namespace o2
 		// Calls when cursor released (only when cursor pressed this at previous time)
 		virtual void OnCursorReleased(const Input::Cursor& cursor);
 
+		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		virtual void OnCursorPressBreak(const Input::Cursor& cursor);
+
 		// Calls when cursor moved on this (or moved outside when this was pressed)
 		virtual void OnCursorMoved(const Input::Cursor& cursor);
 

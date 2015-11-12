@@ -13,20 +13,23 @@ namespace o2
 
 	Text::Text():
 		mFont(nullptr), mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
-		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable()
+		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mUpdatingMesh(false)
 	{
 		InitializeProperties();
 	}
 
 	Text::Text(FontRef font):
 		mFont(font), mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
-		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable()
+		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mUpdatingMesh(false)
 	{
+		if (mFont)
+			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+
 		InitializeProperties();
 	}
 
 	Text::Text(const Text& text):
-		IRectDrawable(text)
+		IRectDrawable(text), mUpdatingMesh(false)
 	{
 		mText = text.mText;
 		mFont = text.mFont;
@@ -35,6 +38,9 @@ namespace o2
 		mVerAlign = text.mVerAlign;
 		mHorAlign = text.mHorAlign;
 		mWordWrap = text.mWordWrap;
+
+		if (mFont)
+			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 
 		InitializeProperties();
 	}
@@ -67,11 +73,17 @@ namespace o2
 	{
 		for (auto mesh : mMeshes)
 			mesh.Release();
+
+		if (mFont)
+			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 	}
 
 	Text& Text::operator=(const Text& other)
 	{
 		IRectDrawable::operator=(other);
+
+		if (mFont)
+			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 
 		mText = other.mText;
 		mFontAssetId = other.mFontAssetId;
@@ -81,6 +93,9 @@ namespace o2
 		mVerAlign = other.mVerAlign;
 		mHorAlign = other.mHorAlign;
 		mWordWrap = other.mWordWrap;
+
+		if (mFont)
+			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 
 		UpdateMesh();
 
@@ -95,6 +110,7 @@ namespace o2
 		for (auto mesh : mMeshes)
 		{
 			mesh->Draw();
+			mDrawingDepth = mesh->GetDrawingDepth();
 			//o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 150));
 		}
 	}
@@ -104,7 +120,13 @@ namespace o2
 		if (font == mFont)
 			return;
 
+		if (mFont)
+			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+
 		mFont = font;
+
+		if (mFont)
+			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 
 		UpdateMesh();
 	}
@@ -116,14 +138,26 @@ namespace o2
 
 	void Text::SetFontAsset(Ptr<BitmapFontAsset> asset)
 	{
+		if (mFont)
+			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+
 		mFont = asset->GetFont();
 		mFontAssetId = asset->GetAssetId();
+
+		if (mFont)
+			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 	}
 
 	void Text::SetFontAsset(Ptr<VectorFontAsset> asset)
 	{
+		if (mFont)
+			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+
 		mFont = asset->GetFont();
 		mFontAssetId = asset->GetAssetId();
+
+		if (mFont)
+			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 	}
 
 	void Text::SetFontAsset(AssetId assetId)
@@ -133,6 +167,9 @@ namespace o2
 			o2Debug.LogError("Can't load font asset: %i - isn't exist", assetId);
 			return;
 		}
+
+		if (mFont)
+			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 
 		mFontAssetId = assetId;
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
@@ -147,6 +184,9 @@ namespace o2
 			mFont = asset.GetFont();
 		}
 
+		if (mFont)
+			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+
 		UpdateMesh();
 	}
 
@@ -157,6 +197,9 @@ namespace o2
 			o2Debug.LogError("Can't load font asset: %s - isn't exist", fileName);
 			return;
 		}
+
+		if (mFont)
+			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 		
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(fileName);
 		mFontAssetId = fontAssetInfo.mId;
@@ -171,6 +214,9 @@ namespace o2
 			auto asset = VectorFontAsset(mFontAssetId);
 			mFont = asset.GetFont();
 		}
+
+		if (mFont)
+			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 	}
 
 	Ptr<Asset> Text::GetFontAsset() const
@@ -295,6 +341,11 @@ namespace o2
 		return mSymbolsSet.mRealSize;
 	}
 
+	RectF Text::GetRealRect()
+	{
+		return RectF(mTransform.offs, mTransform.offs + mSymbolsSet.mRealSize);
+	}
+
 	Vec2F Text::GetTextSize(const WString& text, Ptr<Font> font, const Vec2F& areaSize /*= Vec2F()*/,
 							HorAlign horAlign /*= HorAlign::Left*/, VerAlign verAlign /*= VerAlign::Top*/,
 							bool wordWrap /*= true*/, float charsDistCoef /*= 1.0f*/, float linesDistCoef /*= 1.0f*/)
@@ -318,6 +369,11 @@ namespace o2
 
 	void Text::UpdateMesh()
 	{
+		if (mUpdatingMesh)
+			return;
+
+		mUpdatingMesh = true;
+
 		if (!mFont)
 		{
 			for (auto mesh : mMeshes)
@@ -326,12 +382,17 @@ namespace o2
 				mesh->polyCount = 0;
 			}
 
+			mUpdatingMesh = false;
+
 			return;
 		}
 
 		int textLen = mText.Length();
 		if (mMeshes.Count() == 0 && textLen == 0)
+		{
+			mUpdatingMesh = false;
 			return;
+		}
 
 		PrepareMesh(textLen);
 
@@ -350,7 +411,7 @@ namespace o2
 		Basis transf = CalculateTextBasis();
 		mLastTransform = transf;
 
-		for (auto& line : mSymbolsSet.mLineDefs)
+		for (auto& line : mSymbolsSet.mLines)
 		{
 			for (auto& symb : line.mSymbols)
 			{
@@ -384,6 +445,8 @@ namespace o2
 		}
 
 		currentMesh->SetTexture(mFont->mTexture);
+
+		mUpdatingMesh = false;
 	}
 
 	void Text::PrepareMesh(int charactersCount)
@@ -462,6 +525,8 @@ namespace o2
 				bas.Transform(vx->x, vx->y);
 			}
 		}
+
+		mSymbolsSet.Move(bas.offs);
 	}
 
 	void Text::SymbolsSet::Initialize(FontRef font, const WString& text, const Vec2F& position, const Vec2F& areaSize,
@@ -479,7 +544,7 @@ namespace o2
 		mSymbolsDistCoef = charsDistCoef;
 		mLinesDistCoef = linesDistCoef;
 
-		mLineDefs.Clear();
+		mLines.Clear();
 		int textLen = mText.Length();
 
 		if (textLen == 0)
@@ -490,8 +555,8 @@ namespace o2
 		float linesDist = mFont->GetLineHeight()*mLinesDistCoef;
 		float fontHeight = mFont->GetHeight();
 
-		mLineDefs.Add(LineDef());
-		LineDef* curLine = &mLineDefs.Last();
+		mLines.Add(Line());
+		Line* curLine = &mLines.Last();
 		curLine->mSize.y = fontHeight;
 
 		Vec2F fullSize(0, fontHeight);
@@ -503,7 +568,7 @@ namespace o2
 			Vec2F chSize = ch.mSize; 
 			Vec2F chPos = Vec2F(curLine->mSize.x - ch.mOrigin.x, -ch.mOrigin.y);
 
-			curLine->mSymbols.Add(SymbolDef(chPos, chSize, ch.mTexSrc, ch.mId, ch.mOrigin, ch.mAdvance));
+			curLine->mSymbols.Add(Symbol(chPos, chSize, ch.mTexSrc, ch.mId, ch.mOrigin, ch.mAdvance));
 
 			if (mText[i] != '\n')
 				curLine->mSize.x += ch.mAdvance*mSymbolsDistCoef;
@@ -542,12 +607,13 @@ namespace o2
 					curLine->mEndedNewLine = true;
 				}
 
-				mLineDefs.Add(LineDef());
-				curLine = &mLineDefs.Last();
-				curLine->mSize.y = linesDist;
-				curLine->mLineBegSymbol = i + 1;
 				fullSize.x = Math::Max(fullSize.x, curLine->mSize.x);
 				fullSize.y += linesDist;
+
+				mLines.Add(Line());
+				curLine = &mLines.Last();
+				curLine->mSize.y = linesDist;
+				curLine->mLineBegSymbol = i + 1;
 			}
 			else if (mText[i] == ' '/* || mFont->mAllSymbolReturn*/)
 			{
@@ -559,22 +625,22 @@ namespace o2
 		fullSize.x = Math::Max(fullSize.x, curLine->mSize.x);
 
 		float lineHeight = linesDist;
-		float yOffset = mAreaSize.y - mLineDefs[0].mSize.y;
+		float yOffset = mAreaSize.y - mLines[0].mSize.y;
 
 		if (mVerAlign == VerAlign::Both)
-			lineHeight = Math::Max(fontHeight, (mAreaSize.y - fontHeight)/(float)(mLineDefs.Count() - 1));
+			lineHeight = Math::Max(fontHeight, (mAreaSize.y - fontHeight)/(float)(mLines.Count() - 1));
 		else if (mVerAlign == VerAlign::Bottom)
-			yOffset = fullSize.y - mLineDefs[0].mSize.y;
+			yOffset = fullSize.y - mLines[0].mSize.y;
 		else if (mVerAlign == VerAlign::Middle)
 			yOffset -= mAreaSize.y*0.5f - fullSize.y*0.5f;
 
 		yOffset += mPosition.y;
-// 
+ 
 // 		o2Debug.DrawRect(RectF(Vec2F(), fullSize), Color4::Red());
 
-		for (LineDefsVec::Iterator it = mLineDefs.begin(); it != mLineDefs.end(); ++it)
+		for (LineDefsVec::Iterator it = mLines.begin(); it != mLines.end(); ++it)
 		{
-			LineDef* line = &(*it);
+			Line* line = &(*it);
 
 			float xOffset = 0;
 			float additiveSpaceOffs = 0;
@@ -592,7 +658,6 @@ namespace o2
 			line->mPosition = locOrigin;
 			yOffset -= lineHeight;
 
-// 
 // 			o2Debug.DrawRect(RectF(locOrigin, locOrigin + line->mSize), Color4::Red());
 // 			o2Debug.DrawRect(RectF(locOrigin, locOrigin + Vec2F(10, linesDist)), Color4::Blue());
 
@@ -603,30 +668,40 @@ namespace o2
 
 				jt->mFrame = jt->mFrame + locOrigin;
 			}
+		}
 
-			mRealSize.x = Math::Max(mRealSize.x, line->mSize.x);
-			mRealSize.y = Math::Max(mRealSize.y, line->mSize.y + line->mPosition.y - mPosition.y);
+		mRealSize = fullSize;
+	}
+
+	void Text::SymbolsSet::Move(const Vec2F& offs)
+	{
+		for (auto& line : mLines)
+		{
+			for (auto& sm : line.mSymbols)
+				sm.mFrame += offs;
+
+			line.mPosition += offs;
 		}
 	}
 
-	Text::SymbolsSet::SymbolDef::SymbolDef()
+	Text::SymbolsSet::Symbol::Symbol()
 	{}
 
-	Text::SymbolsSet::SymbolDef::SymbolDef(const Vec2F& position, const Vec2F& size, const RectF& texSrc,
+	Text::SymbolsSet::Symbol::Symbol(const Vec2F& position, const Vec2F& size, const RectF& texSrc,
 										   UInt16 charId, const Vec2F& origin, float advance):
 		mFrame(position, position + size), mTexSrc(texSrc), mCharId(charId), mOrigin(origin), mAdvance(advance)
 	{}
 
-	bool Text::SymbolsSet::SymbolDef::operator==(const SymbolDef& other) const
+	bool Text::SymbolsSet::Symbol::operator==(const Symbol& other) const
 	{
 		return mCharId == other.mCharId && mFrame == other.mFrame;
 	}
 
-	Text::SymbolsSet::LineDef::LineDef():
+	Text::SymbolsSet::Line::Line():
 		mLineBegSymbol(0), mSpacesCount(0), mEndedNewLine(false)
 	{}
 
-	bool Text::SymbolsSet::LineDef::operator==(const LineDef& other) const
+	bool Text::SymbolsSet::Line::operator==(const Line& other) const
 	{
 		return false;
 	}

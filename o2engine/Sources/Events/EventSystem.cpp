@@ -4,6 +4,7 @@
 #include "Events/CursorEventsListener.h"
 #include "Events/DragEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
+#include "Render/Render.h"
 
 namespace o2
 {
@@ -28,6 +29,7 @@ namespace o2
 
 		ProcessCursorEnter();
 		ProcessCursorExit();
+		ProcessScrolling();
 
 		for (const Input::Cursor& cursor : o2Input.GetCursors())
 		{
@@ -108,7 +110,7 @@ namespace o2
 	{
 		for (auto listener : mCursorListeners)
 		{
-			if (!listener->IsUnderPoint(cursor.mPosition))
+			if (IsListenerClipped(listener->Depth(), cursor.mPosition) || !listener->IsUnderPoint(cursor.mPosition))
 				continue;
 
 			auto drag = dynamic_cast<DragEventsListener*>(listener.Get());
@@ -125,6 +127,9 @@ namespace o2
 	{
 		for (auto underCursor : mUnderCursorListeners)
 		{
+			if (!underCursor.Value()->mInteractable)
+				continue;
+
 			if (!(mLastUnderCursorListeners.ContainsKey(underCursor.Key()) &&
 				  mLastUnderCursorListeners[underCursor.Key()] == underCursor.Value()))
 			{
@@ -147,12 +152,14 @@ namespace o2
 
 	Ptr<DragEventsListener> EventSystem::GetListenerUnderCursor(CursorId cursorId) const
 	{
+		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
+
 		for (auto listener : mDragListeners)
 		{
 			if (listener->IsDragging())
 				continue;
 
-			if (!listener->IsUnderPoint(o2Input.GetCursorPos(cursorId)))
+			if (IsListenerClipped(listener->Depth(), cursorPos) || !listener->IsUnderPoint(cursorPos))
 				continue;
 
 			return listener;
@@ -163,12 +170,26 @@ namespace o2
 		return nullptr;
 	}
 
+	void EventSystem::BreakCursorEvent()
+	{
+		for (auto kv : mPressedListeners)
+		{
+			kv.Value()->OnCursorPressBreak(*o2Input.GetCursor(kv.Key()));
+			kv.Value()->mIsPressed = false;
+		}
+
+		mPressedListeners.Clear();
+	}
+
 	void EventSystem::ProcessCursorPressed(const Input::Cursor& cursor)
 	{
 		if (!mUnderCursorListeners.ContainsKey(cursor.mId))
 			return;
 
 		auto listener = mUnderCursorListeners[cursor.mId];
+
+		if (!listener->mInteractable)
+			return;
 
 		mPressedListeners.Add(cursor.mId, listener);
 
@@ -179,7 +200,7 @@ namespace o2
 	void EventSystem::ProcessCursorDown(const Input::Cursor& cursor)
 	{
 		if (mPressedListeners.ContainsKey(cursor.mId))
-			mPressedListeners[cursor.mId]->OnCursorStayDown(cursor);
+			mPressedListeners[cursor.mId]->OnCursorStillDown(cursor);
 
 		if (cursor.mDelta.Length() > FLT_EPSILON)
 		{
@@ -271,8 +292,8 @@ namespace o2
 		float scroll = o2Input.GetMouseWheelDelta();
 		if (!Math::Equals(scroll, 0.0f))
 		{
-			for (auto listener : mCursorListeners)
-				listener->OnScrolled(scroll);
+			for (auto kv : mUnderCursorListeners)
+				kv.Value()->OnScrolled(scroll);
 		}
 	}
 
@@ -292,6 +313,21 @@ namespace o2
 	{
 		for (auto listener : mKeyboardListeners)
 			listener->OnKeyReleased(key);
+	}
+
+	bool EventSystem::IsListenerClipped(float depth, const Vec2F& cursorPos) const
+	{
+		bool clipped = false;
+		for (auto scissorInfo : o2Render.GetScissorInfos())
+		{
+			if (depth > scissorInfo.mBeginDepth && depth <= scissorInfo.mEndDepth &&
+				!scissorInfo.mScissorRect.IsInside(cursorPos))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	void EventSystem::RegCursorListener(CursorEventsListener* listener)

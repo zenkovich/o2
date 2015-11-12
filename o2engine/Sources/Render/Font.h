@@ -6,6 +6,7 @@
 #include "Render/TextureRef.h"
 #include "Utils/CommonTypes.h"
 #include "Utils/Containers/Vector.h"
+#include "Utils/Delegates.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/String.h"
@@ -25,6 +26,8 @@ namespace o2
 		struct Character;
 
 	public:
+		Function<void()> onCharactersRebuild;
+
 		// Default constructor
 		Font();
 
@@ -68,13 +71,13 @@ namespace o2
 		typedef Vector<FontRef*> FontRefsVec;
 
 	protected:
-		FontRefsVec   mRefs;            // Array of reference to this font
-		CharactersVec mCharacters;      // Characters array
-		float         mBaseHeight;      // Base height, in pixels
-		float         mLineHeight;      // Line height in pixels
-		TextureRef    mTexture;         // Texture
-		RectI         mTextureSrcRect;  // Texture source rectangle
-		bool          mReady;           // True when font is ready to use
+		FontRefsVec   mRefs;           // Array of reference to this font
+		CharactersVec mCharacters;     // Characters array
+		float         mBaseHeight;     // Base height, in pixels
+		float         mLineHeight;     // Line height in pixels
+		TextureRef    mTexture;        // Texture
+		RectI         mTextureSrcRect; // Texture source rectangle
+		bool          mReady;          // True when font is ready to use
 
 		friend class Text;
 		friend class FontRef;

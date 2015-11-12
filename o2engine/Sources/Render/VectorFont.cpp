@@ -146,6 +146,8 @@ namespace o2
 		ExtractCharacterDefsFromTexture(charactersDefs);
 		RenderNewCharacters(charactersDefs, newCharacters);
 		PackCharactersDefs(charactersDefs);
+
+		onCharactersRebuild();
 	}
 
 	void VectorFont::ExtractCharacterDefsFromTexture(CharDefsVec& charDefs)

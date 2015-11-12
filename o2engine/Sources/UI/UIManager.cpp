@@ -4,7 +4,15 @@
 #include "Assets/Assets.h"
 #include "Render/Render.h"
 #include "UI/Button.h"
+#include "UI/EditBox.h"
+#include "UI/HorizontalLayout.h"
+#include "UI/HorizontalProgress.h"
+#include "UI/HorizontalScrollBar.h"
 #include "UI/Label.h"
+#include "UI/ScrollArea.h"
+#include "UI/VerticalLayout.h"
+#include "UI/VerticalProgress.h"
+#include "UI/VerticalScrollBar.h"
 #include "UI/Widget.h"
 #include "Utils/Debug.h"
 #include "Utils/Log/LogStream.h"
@@ -15,7 +23,7 @@ namespace o2
 
 	UIManager::UIManager()
 	{
-		mScreenWidget = mnew Widget();
+		mScreenWidget = mnew UIWidget();
 		mLog = mnew LogStream("UI");
 		o2Debug.GetLog()->BindStream(mLog);
 
@@ -27,32 +35,89 @@ namespace o2
 	UIManager::~UIManager()
 	{
 		mScreenWidget.Release();
+		ClearStyle();
 	}
 
-	Ptr<Widget> UIManager::AddWidget(Ptr<Widget> widget)
+	Ptr<UIWidget> UIManager::AddWidget(Ptr<UIWidget> widget)
 	{
 		return mScreenWidget->AddChild(widget);
 	}
 
-	Ptr<Widget> UIManager::AddWidget()
+	Ptr<UIWidget> UIManager::AddWidget()
 	{
-		Ptr<Widget> res = mnew Widget();
+		Ptr<UIWidget> res = mnew UIWidget();
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<Button> UIManager::AddButton(const String& caption, const String& style /*= "standard"*/)
+	Ptr<UIButton> UIManager::AddButton(const WString& caption, const String& style /*= "standard"*/)
 	{
-		Ptr<Button> btn = CreateButton(caption, style);
-		AddWidget(btn.Cast<Widget>());
-		return btn;
+		Ptr<UIButton> res = CreateButton(caption, style);
+		AddWidget(res);
+		return res;
 	}
 
-	Ptr<Label> UIManager::AddLabel(const String& text, const String& style /*= "standard"*/)
+	Ptr<UILabel> UIManager::AddLabel(const WString& text, const String& style /*= "standard"*/)
 	{
-		Ptr<Label> lbl = CreateLabel(text, style);
-		AddWidget(lbl.Cast<Widget>());
-		return lbl;
+		Ptr<UILabel> res = CreateLabel(text, style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIHorizontalLayout> UIManager::AddHorLayout()
+	{
+		Ptr<UIHorizontalLayout> res = mnew UIHorizontalLayout();
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIVerticalLayout> UIManager::AddVerLayout()
+	{
+		Ptr<UIVerticalLayout> res = mnew UIVerticalLayout();
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIHorizontalProgress> UIManager::AddHorProgress(const String& style /*= "standard"*/)
+	{
+		Ptr<UIHorizontalProgress> res = CreateHorProgress(style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIVerticalProgress> UIManager::AddVerProgress(const String& style /*= "standard"*/)
+	{
+		Ptr<UIVerticalProgress> res = CreateVerProgress(style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIHorizontalScrollBar> UIManager::AddHorScrollBar(const String& style /*= "standard"*/)
+	{
+		Ptr<UIHorizontalScrollBar> res = CreateHorScrollBar(style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIVerticalScrollBar> UIManager::AddVerScrollBar(const String& style /*= "standard"*/)
+	{
+		Ptr<UIVerticalScrollBar> res = CreateVerScrollBar(style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIScrollArea> UIManager::AddScrollArea(const String& style /*= "standard"*/)
+	{
+		Ptr<UIScrollArea> res = CreateScrollArea(style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIEditBox> UIManager::AddEditBox(const String& style /*= "standard"*/)
+	{
+		Ptr<UIEditBox> res = CreateEditBox(style);
+		AddWidget(res);
+		return res;
 	}
 
 	bool UIManager::RemoveWidget(const String& path)
@@ -60,12 +125,12 @@ namespace o2
 		return mScreenWidget->RemoveChild(path);
 	}
 
-	bool UIManager::RemoveWidget(Ptr<Widget> widget, bool release /*= true*/)
+	bool UIManager::RemoveWidget(Ptr<UIWidget> widget, bool release /*= true*/)
 	{
 		return mScreenWidget->RemoveChild(widget, release);
 	}
 
-	Ptr<Widget> UIManager::GetWidget(const String& path)
+	Ptr<UIWidget> UIManager::GetWidget(const String& path)
 	{
 		return mScreenWidget->GetChild(path);
 	}
@@ -100,33 +165,72 @@ namespace o2
 		o2Assets.RebuildAssets();
 	}
 
-	void UIManager::AddStyle(Ptr<Widget> widget, const String& style)
+	void UIManager::ClearStyle()
+	{
+ 		for (auto sample : mStyleSamples)
+ 			sample.Release();
+
+		mStyleSamples.Clear();
+	}
+
+	void UIManager::AddWidgetStyle(Ptr<UIWidget> widget, const String& style)
 	{
 		widget->SetName(style);
 		mStyleSamples.Add(widget);
 	}
 
-	Ptr<Widget> UIManager::GetWidgetStyle(const String& style)
+	Ptr<UIButton> UIManager::CreateButton(const WString& caption, const String& style /*= "standard"*/)
 	{
-		for (auto styleWidget : mStyleSamples)
-			if (styleWidget->GetName() == style)
-				return styleWidget;
-
-		return nullptr;
-	}
-
-	Ptr<Button> UIManager::CreateButton(const String& caption, const String& style /*= "standard"*/)
-	{
-		auto btn = CreateWidget<Button>(style);
-		btn->captionc = caption;
+		auto btn = CreateWidget<UIButton>(style);
+		btn->caption = caption;
 		return btn;
 	}
 
-	Ptr<Label> UIManager::CreateLabel(const String& text, const String& style /*= "standard"*/)
+	Ptr<UILabel> UIManager::CreateLabel(const WString& text, const String& style /*= "standard"*/)
 	{
-		auto lbl = CreateWidget<Label>(style);
+		auto lbl = CreateWidget<UILabel>(style);
 		lbl->text = text;
 		return lbl;
+	}
+
+	Ptr<UIHorizontalLayout> UIManager::CreateHorLayout()
+	{
+		return mnew UIHorizontalLayout();
+	}
+
+	Ptr<UIVerticalLayout> UIManager::CreateVerLayout()
+	{
+		return mnew UIVerticalLayout();
+	}
+
+	Ptr<UIHorizontalProgress> UIManager::CreateHorProgress(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UIHorizontalProgress>(style);
+	}
+
+	Ptr<UIVerticalProgress> UIManager::CreateVerProgress(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UIVerticalProgress>(style);
+	}
+
+	Ptr<UIHorizontalScrollBar> UIManager::CreateHorScrollBar(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UIHorizontalScrollBar>(style);
+	}
+
+	Ptr<UIVerticalScrollBar> UIManager::CreateVerScrollBar(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UIVerticalScrollBar>(style);
+	}
+
+	Ptr<UIScrollArea> UIManager::CreateScrollArea(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UIScrollArea>(style);
+	}
+
+	Ptr<UIEditBox> UIManager::CreateEditBox(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UIEditBox>(style);
 	}
 
 	void UIManager::Update(float dt)

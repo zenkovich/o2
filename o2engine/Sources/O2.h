@@ -83,10 +83,17 @@
 #include "Animation/Tween.h"
 
 #include "UI/Button.h"
+#include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
+#include "UI/HorizontalProgress.h"
+#include "UI/HorizontalScrollBar.h"
 #include "UI/Label.h"
+#include "UI/ScrollArea.h"
+#include "UI/Toggle.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
+#include "UI/VerticalProgress.h"
+#include "UI/VerticalScrollBar.h"
 #include "UI/Widget.h"
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetState.h"
@@ -97,5 +104,11 @@ o2::MemoryManager* o2::MemoryManager::instance = new MemoryManager();				       
 template<> o2::Ptr<o2::Debug> o2::Singleton<o2::Debug>::mInstance = mnew o2::Debug();                \
 template<> o2::Ptr<o2::FileSystem> o2::Singleton<o2::FileSystem>::mInstance = mnew o2::FileSystem(); \
 o2::Ptr<o2::Types> o2::Types::instance = mnew Types()
+
+#define MAIN_O2 					 \
+o2::Debug::SetupAsRootObject();		 \
+o2::Types::instance.SetupAsRoot();	 \
+o2::FileSystem::SetupAsRootObject(); \
+o2::Types::InitializeTypes()
 
 

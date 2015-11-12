@@ -16,6 +16,7 @@ namespace o2
 		// Virtual destructor
 		virtual ~KeyboardEventsListener();
 
+	protected:
 		// Calls when key was pressed
 		virtual void OnKeyPressed(const Input::Key& key);
 

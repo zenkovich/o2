@@ -9,33 +9,36 @@
 
 namespace o2
 {
-	class Widget;
+	class UIWidget;
 
-	class WidgetLayer;
-	typedef Vector<Ptr<WidgetLayer>>  LayersVec;
+	class UIWidgetLayer;
+	typedef Vector<Ptr<UIWidgetLayer>>  LayersVec;
 
 	// ---------------------
 	// Widget drawable layer
 	// ---------------------
-	class WidgetLayer: public ISerializable, public ITreeNode<WidgetLayer>
+	class UIWidgetLayer: public ISerializable, public ITreeNode<UIWidgetLayer>
 	{
 	public:
-		Layout             layout;   // Drawable layout
-		String             name;     // Name of layer
-		Property<float>    depth;    // Drawing depth (higher depths will draw later)
-		Ptr<IRectDrawable> drawable; // Drawable
+		Layout                                      layout;             // Drawable layout
+		Layout                                      interactableLayout; // Interactable area layout
+		String                                      name;               // Name of layer
+		Property<float>                             depth;              // Drawing depth (higher depths will draw later)
+		Property<float>                             transparency;       // Drawable transparency property
+		Ptr<IRectDrawable>                          drawable;           // Drawable
+		Accessor<Ptr<UIWidgetLayer>, const String&> child;              // Child layer accessor
 
 		// Default constructor
-		WidgetLayer();
+		UIWidgetLayer();
 
 		// Copy-constructor
-		WidgetLayer(const WidgetLayer& other);
+		UIWidgetLayer(const UIWidgetLayer& other);
 
 		// Destructor
-		~WidgetLayer();
+		~UIWidgetLayer();
 
 		// Copy-operator
-		WidgetLayer& operator=(const WidgetLayer& other);
+		UIWidgetLayer& operator=(const UIWidgetLayer& other);
 
 		// Draws drawable
 		void Draw();
@@ -43,8 +46,11 @@ namespace o2
 		// Updates drawable and layout
 		void Update(float dt);
 
+		// Adds child layer
+		Ptr<UIWidgetLayer> AddChildLayer(const String& name, Ptr<IRectDrawable> drawable, const Layout& layout = Layout::Both(), float depth = 0.0f);
+
 		// Returns child layer by path ()
-		Ptr<WidgetLayer> GetChild(const String& path);
+		Ptr<UIWidgetLayer> GetChild(const String& path);
 
 		// Returns all child layers
 		LayersVec GetAllChilds() const;
@@ -55,33 +61,60 @@ namespace o2
 		// Returns depth
 		float GetDepth() const;
 
-		SERIALIZABLE_IMPL(WidgetLayer);
+		// Sets transparency and updates this and children result transparencies
+		void SetTransparency(float transparency);
 
-		IOBJECT(WidgetLayer)
+		// Returns transparency
+		float GetTransparency();
+
+		// Returns true if layer is under point
+		bool IsUnderPoint(const Vec2F& point);
+
+		SERIALIZABLE_IMPL(UIWidgetLayer);
+
+		IOBJECT(UIWidgetLayer)
 		{
 			SRLZ_FIELD(layout);
 			SRLZ_FIELD(name);
 			SRLZ_FIELD(mDepth);
 			SRLZ_FIELD(drawable);
+			SRLZ_FIELD(mTransparency);
+			SRLZ_FIELD(mChilds);
 
 			FIELD(mAbsolutePosition);
+			FIELD(depth);
+			FIELD(transparency);
+			FIELD(child);
 			//FIELD(mOwnerWidget);
 		}
 
 	protected:
-		float       mDepth;            // Depth of drawable
-		RectF       mAbsolutePosition; // Result absolute drawable position
-		Ptr<Widget> mOwnerWidget;      // Owner widget pointer
+		float         mTransparency;     // Layer transparency
+		float         mResTransparency;  // Result drawable transparency, depends on parent transparency
+		float         mDepth;            // Depth of drawable
+		RectF         mAbsolutePosition; // Result absolute drawable position
+		RectF         mInteractableArea; // Interactable area, depends on interactableLayout
+		Ptr<UIWidget> mOwnerWidget;      // Owner widget pointer
+
+	protected:
+		// Sets owner widget for this and children
+		void SetOwnerWidget(Ptr<UIWidget> owner);
 
 		// Calls when added new child layer, sets his owner same as this owner and calls UpdateLayersDrawingSequence in owner
-		void OnChildAdded(Ptr<WidgetLayer> child);
+		void OnChildAdded(Ptr<UIWidgetLayer> child);
 
 		// Updates drawable rect, calling when widget's layout was changed
 		void UpdateLayout();
 
+		// Calls when transparency was changed and updates children transparencies
+		void UpdateResTransparency();
+
+		// Returns dictionary with all child layers
+		Dictionary<String, Ptr<UIWidgetLayer>> GetAllChildLayers();
+
 		// Initializes properties
 		void InitializeProperties();
 
-		friend class Widget;
+		friend class UIWidget;
 	};
 }

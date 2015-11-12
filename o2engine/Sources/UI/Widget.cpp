@@ -6,26 +6,28 @@
 
 namespace o2
 {
-	IOBJECT_CPP(Widget);
+	IOBJECT_CPP(UIWidget);
 
-	Widget::Widget():
-		mParent(nullptr)
+	UIWidget::UIWidget():
+		mParent(nullptr), mTransparency(1.0f), mResTransparency(1.0f), mVisible(true)
 	{
 		layout.mOwner = this;
 		InitializeProperties();
 	}
 
-	Widget::Widget(const Widget& other):
-		mName(other.mName), layout(other.layout), mParent(nullptr)
+	UIWidget::UIWidget(const UIWidget& other):
+		mName(other.mName), layout(other.layout), mParent(nullptr), mTransparency(other.mTransparency), 
+		mVisible(other.mVisible)
 	{
 		layout.mOwner = this;
 		InitializeProperties();
 
 		for (auto layer : other.mLayers)
 		{
-			auto newLayer = mnew WidgetLayer(*layer);
-			newLayer->mOwnerWidget = this;
+			auto newLayer = mnew UIWidgetLayer(*layer);
+			newLayer->SetOwnerWidget(this);
 			mLayers.Add(newLayer);
+			OnLayerAdded(newLayer);
 		}
 
 		for (auto child : other.mChilds)
@@ -43,12 +45,13 @@ namespace o2
 		}
 
 		UpdateLayersDrawingSequence();
+		UpdateTransparency();
 	}
 
-	Widget::~Widget()
+	UIWidget::~UIWidget()
 	{
 		if (mParent)
-			mParent->RemoveChild(Ptr<Widget>(this), false);
+			mParent->RemoveChild(Ptr<UIWidget>(this), false);
 
 		for (auto layer : mLayers)
 			layer.Release();
@@ -63,7 +66,7 @@ namespace o2
 		}
 	}
 
-	Widget& Widget::operator=(const Widget& other)
+	UIWidget& UIWidget::operator=(const UIWidget& other)
 	{
 		for (auto layer : mLayers)
 			layer.Release();
@@ -79,9 +82,15 @@ namespace o2
 
 		mName = other.mName;
 		layout = other.layout;
+		mTransparency = other.mTransparency;
 
 		for (auto layer : other.mLayers)
-			mLayers.Add(mnew WidgetLayer(*layer));
+		{
+			auto newLayer = mnew UIWidgetLayer(*layer);
+			newLayer->mOwnerWidget = this;
+			mLayers.Add(newLayer);
+			OnLayerAdded(newLayer);
+		}
 
 		for (auto child : other.mChilds)
 		{
@@ -93,13 +102,17 @@ namespace o2
 		for (auto state : other.mStates)
 			mStates.Add(state->Clone());
 
-		UpdateLayoutRecursive();
+		UpdateLayout();
+		UpdateTransparency();
 
 		return *this;
 	}
 
-	void Widget::Update(float dt)
+	void UIWidget::Update(float dt)
 	{
+		if (!mVisible)
+			return;
+
 		for (auto layer : mLayers)
 			layer->Update(dt);
 
@@ -110,48 +123,57 @@ namespace o2
 			child->Update(dt);
 	}
 
-	void Widget::Draw()
+	void UIWidget::Draw()
 	{
+		if (!mVisible)
+			return;
+
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
 		for (auto child : mChilds)
 			child->Draw();
 
-		static int colr = 0;
-		static int lastFrame = 0;
+		for (auto layer : mTopDrawingLayers)
+			layer->Draw();
 
-		if (lastFrame != o2Time.GetCurrentFrame())
-			colr = 0;
-		lastFrame = o2Time.GetCurrentFrame();
+		if (UI_DEBUG)
+		{
+			static int colr = 0;
+			static int lastFrame = 0;
 
-		o2Render.DrawRectFrame(layout.mAbsoluteRect, Color4::SomeColor(colr++));
+			if (lastFrame != o2Time.GetCurrentFrame())
+				colr = 0;
+			lastFrame = o2Time.GetCurrentFrame();
+
+			o2Render.DrawRectFrame(layout.mAbsoluteRect, Color4::SomeColor(colr++));
+		}
 	}
 
-	void Widget::SetName(const String& name)
+	void UIWidget::SetName(const String& name)
 	{
 		mName = name;
 	}
 
-	String Widget::GetName() const
+	String UIWidget::GetName() const
 	{
 		return mName;
 	}
 
-	Ptr<Widget> Widget::GetParent() const
+	Ptr<UIWidget> UIWidget::GetParent() const
 	{
 		return mParent;
 	}
 
-	void Widget::SetParent(Ptr<Widget> parent)
+	void UIWidget::SetParent(Ptr<UIWidget> parent)
 	{
 		if (parent->mChilds.Contains(this))
 			return;
 
 		if (mParent)
 		{
-			mParent->RemoveChild(Ptr<Widget>(this), false);
-			mParent->layout.Recalculate();
+			mParent->RemoveChild(Ptr<UIWidget>(this), false);
+			mParent->UpdateLayout();
 		}
 
 		mParent = parent;
@@ -159,11 +181,13 @@ namespace o2
 		if (mParent)
 		{
 			mParent->mChilds.Add(this);
-			mParent->layout.Recalculate();
+			mParent->UpdateLayout();
 		}
+
+		UpdateTransparency();
 	}
 
-	Ptr<Widget> Widget::AddChild(Ptr<Widget> widget)
+	Ptr<UIWidget> UIWidget::AddChild(Ptr<UIWidget> widget)
 	{
 		if (mChilds.Contains(widget))
 			return widget;
@@ -174,43 +198,47 @@ namespace o2
 		mChilds.Add(widget);
 		widget->mParent = this;
 
-		layout.Recalculate();
+		UpdateLayout();
+		UpdateTransparency();
 
 		OnChildAdded(widget);
 
 		return widget;
 	}
 
-	bool Widget::RemoveChild(const String& path)
+	bool UIWidget::RemoveChild(const String& path)
 	{
 		auto child = GetChild(path);
 		if (!child)
 			return false;
 
 		bool res = child->mParent->RemoveChild(child);
-		child->mParent->layout.Recalculate();
+		child->mParent->UpdateLayout();
+		child->UpdateTransparency();
 
 		return res;
 	}
 
-	bool Widget::RemoveChild(Ptr<Widget> widget, bool release /*= true*/)
+	bool UIWidget::RemoveChild(Ptr<UIWidget> widget, bool release /*= true*/)
 	{
 		if (!mChilds.Contains(widget))
 			return false;
 
 		widget->mParent = nullptr;
 		mChilds.Remove(widget);
-		layout.Recalculate();
+		UpdateLayout();
 
 		OnChildRemoved(widget);
 
 		if (release)
 			widget.Release();
+		else
+			widget->UpdateTransparency();
 
 		return true;
 	}
 
-	Ptr<Widget> Widget::GetChild(const String& path)
+	Ptr<UIWidget> UIWidget::GetChild(const String& path)
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -242,7 +270,7 @@ namespace o2
 		return nullptr;
 	}
 
-	void Widget::RemoveAllChilds()
+	void UIWidget::RemoveAllChilds()
 	{
 		for (auto child : mChilds)
 		{
@@ -252,30 +280,30 @@ namespace o2
 		}
 
 		mChilds.Clear();
-		layout.Recalculate();
+		UpdateLayout();
 	}
 
-	const Widget::WidgetsVec& Widget::GetChilds() const
+	const UIWidget::WidgetsVec& UIWidget::GetChilds() const
 	{
 		return mChilds;
 	}
 
-	Ptr<WidgetLayer> Widget::AddLayer(Ptr<WidgetLayer> layer)
+	Ptr<UIWidgetLayer> UIWidget::AddLayer(Ptr<UIWidgetLayer> layer)
 	{
 		mLayers.Add(layer);
-		layer->mOwnerWidget = this;
+		layer->SetOwnerWidget(this);
 		UpdateLayersDrawingSequence();
 		OnLayerAdded(layer);
 		return layer;
 	}
 
-	Ptr<WidgetLayer> Widget::AddLayer(const String& name, Ptr<IRectDrawable> drawable,
-									  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+	Ptr<UIWidgetLayer> UIWidget::AddLayer(const String& name, Ptr<IRectDrawable> drawable,
+										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		if (Math::Equals(depth, 0.0f))
-			depth = (float)mLayers.Count();
+			depth = (float)mDrawingLayers.Count();
 
-		Ptr<WidgetLayer> layer = mnew WidgetLayer();
+		Ptr<UIWidgetLayer> layer = mnew UIWidgetLayer();
 		layer->depth = depth;
 		layer->name = name;
 		layer->drawable = drawable;
@@ -286,73 +314,7 @@ namespace o2
 		return layer;
 	}
 
-	Ptr<WidgetLayer> Widget::AddSpriteLayer(const String& name, const String& fileName, 
-											const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
-	{
-		return AddLayer(name, mnew Sprite(fileName), layout, depth);
-	}
-
-	Ptr<WidgetLayer> Widget::AddSpriteLayer(const String& name, AssetId assetId, 
-											const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
-	{
-		return AddLayer(name, mnew Sprite(assetId), layout, depth);
-	}
-
-	Ptr<WidgetLayer> Widget::AddSpriteLayer(const String& name, Ptr<ImageAsset> asset,
-											const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
-	{
-		return AddLayer(name, mnew Sprite(asset), layout, depth);
-	}
-
-	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, const String& fontFileName, 
-										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
-										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/, 
-										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
-	{
-		Ptr<Text> textDrawable = mnew Text(fontFileName);
-		textDrawable->SetHorAlign(horAlign);
-		textDrawable->SetVerAlign(verAlign);
-		textDrawable->SetCText(text);
-		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
-	}
-
-	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, AssetId fontAssetId, 
-										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
-										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/, 
-										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
-	{
-		Ptr<Text> textDrawable = mnew Text(fontAssetId);
-		textDrawable->SetHorAlign(horAlign);
-		textDrawable->SetVerAlign(verAlign);
-		textDrawable->SetCText(text);
-		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
-	}
-
-	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, Ptr<VectorFontAsset> fontAsset,
-										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
-										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/,
-										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
-	{
-		Ptr<Text> textDrawable = mnew Text(fontAsset);
-		textDrawable->SetHorAlign(horAlign);
-		textDrawable->SetVerAlign(verAlign);
-		textDrawable->SetCText(text);
-		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
-	}
-
-	Ptr<WidgetLayer> Widget::AddTextLayer(const String& name, const String& text, Ptr<BitmapFontAsset> fontAsset,
-										  Text::HorAlign horAlign /*= Text::HorAlign::Middle*/, 
-										  Text::VerAlign verAlign /*= Text::VerAlign::Middle*/, 
-										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
-	{
-		Ptr<Text> textDrawable = mnew Text(fontAsset);
-		textDrawable->SetHorAlign(horAlign);
-		textDrawable->SetVerAlign(verAlign);
-		textDrawable->SetCText(text);
-		return AddLayer(name, textDrawable.Cast<IRectDrawable>(), layout, depth);
-	}
-
-	Ptr<WidgetLayer> Widget::GetLayer(const String& path) const
+	Ptr<UIWidgetLayer> UIWidget::GetLayer(const String& path) const
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -371,7 +333,7 @@ namespace o2
 		return nullptr;
 	}
 
-	bool Widget::RemoveLayer(Ptr<WidgetLayer> layer)
+	bool UIWidget::RemoveLayer(Ptr<UIWidgetLayer> layer)
 	{
 		bool res = mLayers.Remove(layer);
 		layer.Release();
@@ -379,7 +341,7 @@ namespace o2
 		return res;
 	}
 
-	bool Widget::RemoveLayer(const String& path)
+	bool UIWidget::RemoveLayer(const String& path)
 	{
 		auto layer = GetLayer(path);
 
@@ -394,7 +356,7 @@ namespace o2
 		return res;
 	}
 
-	void Widget::RemoveAllLayers()
+	void UIWidget::RemoveAllLayers()
 	{
 		for (auto layer : mLayers)
 			layer.Release();
@@ -404,42 +366,52 @@ namespace o2
 		mLayers.Clear();
 	}
 
-	const LayersVec& Widget::GetLayers() const
+	const LayersVec& UIWidget::GetLayers() const
 	{
 		return mLayers;
 	}
 
-	Ptr<WidgetState> Widget::AddState(const String& name)
+	Ptr<UIWidgetState> UIWidget::AddState(const String& name)
 	{
-		Ptr<WidgetState> newState = mnew WidgetState();
+		Ptr<UIWidgetState> newState = mnew UIWidgetState();
 		newState->name = name;
 		newState->animation.SetTarget(this);
-		mStates.Add(newState);
-		return newState;
+		return AddState(newState);
 	}
 
-	Ptr<WidgetState> Widget::AddState(const String& name, const Animation& animation)
+	Ptr<UIWidgetState> UIWidget::AddState(const String& name, const Animation& animation)
 	{
-		Ptr<WidgetState> newState = mnew WidgetState();
+		Ptr<UIWidgetState> newState = mnew UIWidgetState();
 		newState->name = name;
 		newState->animation = animation;
 		newState->animation.SetTarget(this);
 		newState->animation.relTime = 0.0f;
-		mStates.Add(newState);
-		return newState;
+		return AddState(newState);
 	}
 
-	Ptr<WidgetState> Widget::AddState(Ptr<WidgetState> state)
+	Ptr<UIWidgetState> UIWidget::AddState(Ptr<UIWidgetState> state)
 	{
 		mStates.Add(state);
+
+		if (state->name == "visible")
+		{
+			mVisibleState = state;
+			mVisibleState->SetStateForcible(mVisible);
+			mVisibleState->onStateBecomesTrue += [&]() { mVisible = true; };
+			mVisibleState->onStateFullyFalse += [&]() { mVisible = false; };
+		}
+
 		return state;
 	}
 
-	bool Widget::RemoveState(const String& name)
+	bool UIWidget::RemoveState(const String& name)
 	{
-		int idx = mStates.FindIdx([&](const Ptr<WidgetState>& state) { return state->name == name; });
+		int idx = mStates.FindIdx([&](const Ptr<UIWidgetState>& state) { return state->name == name; });
 		if (idx < 0)
 			return false;
+
+		if (mStates[idx] == mVisibleState)
+			mVisibleState = nullptr;
 
 		mStates[idx].Release();
 		mStates.RemoveAt(idx);
@@ -447,27 +419,32 @@ namespace o2
 		return true;
 	}
 
-	bool Widget::RemoveState(Ptr<WidgetState> state)
+	bool UIWidget::RemoveState(Ptr<UIWidgetState> state)
 	{
 		int idx = mStates.Find(state);
 		if (idx < 0)
 			return false;
 
+		if (state == mVisibleState)
+			mVisibleState = nullptr;
+
 		mStates[idx].Release();
 		mStates.RemoveAt(idx);
 
 		return true;
 	}
 
-	void Widget::RemoveAllStates()
+	void UIWidget::RemoveAllStates()
 	{
 		for (auto state : mStates)
 			state.Release();
 
+		mVisibleState = nullptr;
+
 		mStates.Clear();
 	}
 
-	void Widget::SetState(const String& name, bool state)
+	void UIWidget::SetState(const String& name, bool state)
 	{
 		auto stateObj = GetStateObject(name);
 
@@ -475,7 +452,7 @@ namespace o2
 			stateObj->SetState(state);
 	}
 
-	bool Widget::GetState(const String& name) const
+	bool UIWidget::GetState(const String& name) const
 	{
 		auto state = GetStateObject(name);
 
@@ -485,77 +462,204 @@ namespace o2
 		return false;
 	}
 
-	Ptr<WidgetState> Widget::GetStateObject(const String& name) const
+	Ptr<UIWidgetState> UIWidget::GetStateObject(const String& name) const
 	{
 		return mStates.FindMatch([&](auto state) { return state->name == name; });
 	}
 
-	const StatesVec& Widget::GetStates() const
+	const StatesVec& UIWidget::GetStates() const
 	{
 		return mStates;
 	}
 
-	void Widget::UpdateLayoutRecursive()
+	void UIWidget::SetTransparency(float transparency)
 	{
-		for (auto child : mChilds)
-			child->layout.Recalculate();
+		mTransparency = transparency;
+		UpdateTransparency();
 	}
 
-	void Widget::OnLayoutUpdated()
-	{}
+	float UIWidget::GetTransparency() const
+	{
+		return mTransparency;
+	}
 
-	void Widget::UpdateLayersLayouts()
+	float UIWidget::GetResTransparency() const
+	{
+		return mResTransparency;
+	}
+
+	void UIWidget::SetVisible(bool visible)
+	{
+		if (mVisibleState)
+			*mVisibleState = visible;
+		else
+			mVisible = visible;
+	}
+
+	void UIWidget::Show()
+	{
+		SetVisible(true);
+	}
+
+	void UIWidget::Hide()
+	{
+		SetVisible(false);
+	}
+
+	bool UIWidget::IsVisible() const
+	{
+		return mVisible;
+	}
+
+	void UIWidget::UpdateLayout(bool forcible /*= false*/)
+	{
+		if (layout.mDrivenByParent && !forcible)
+		{
+			if (mParent)
+				mParent->UpdateLayout();
+
+			return;
+		}
+
+		RecalculateAbsRect();
+		UpdateLayersLayouts();
+
+		mChildsAbsRect = layout.mAbsoluteRect;
+
+		for (auto child : mChilds)
+			child->UpdateLayout();
+	}
+
+	void UIWidget::UpdateTransparency()
+	{
+		if (mParent)
+			mResTransparency = mTransparency*mParent->mResTransparency;
+		else
+			mResTransparency = mTransparency;
+
+		for (auto layer : mLayers)
+			layer->UpdateResTransparency();
+
+		for (auto child : mChilds)
+			child->UpdateTransparency();
+	}
+
+	void UIWidget::RecalculateAbsRect()
+	{
+		Vec2F parentSize, parentPos;
+		if (mParent)
+		{
+			parentSize = mParent->mChildsAbsRect.Size();
+			parentPos = mParent->mChildsAbsRect.LeftBottom();
+		}
+
+		layout.mLocalRect.left   = parentSize.x*layout.mAnchorMin.x + layout.mOffsetMin.x;
+		layout.mLocalRect.right  = parentSize.x*layout.mAnchorMax.x + layout.mOffsetMax.x;
+		layout.mLocalRect.bottom = parentSize.y*layout.mAnchorMin.y + layout.mOffsetMin.y;
+		layout.mLocalRect.top    = parentSize.y*layout.mAnchorMax.y + layout.mOffsetMax.y;
+
+		Vec2F resSize = layout.mLocalRect.Size();
+		Vec2F clampSize(Math::Clamp(resSize.x, layout.mMinSize.x, layout.mMaxSize.x),
+						Math::Clamp(resSize.y, layout.mMinSize.y, layout.mMaxSize.y));
+		Vec2F szDelta = clampSize - resSize;
+
+		layout.mLocalRect.left   -= szDelta.x*layout.mPivot.x;
+		layout.mLocalRect.right  += szDelta.x*(1.0f - layout.mPivot.x);
+		layout.mLocalRect.bottom -= szDelta.y*layout.mPivot.y;
+		layout.mLocalRect.top    += szDelta.y*(1.0f - layout.mPivot.y);
+
+		layout.mAbsoluteRect = layout.mLocalRect + parentPos;
+	}
+
+	void UIWidget::UpdateLayersLayouts()
 	{
 		for (auto layer : mLayers)
 			layer->UpdateLayout();
 	}
 
-	void Widget::UpdateLayersDrawingSequence()
+	void UIWidget::UpdateLayersDrawingSequence()
 	{
 		mDrawingLayers.Clear();
+		mTopDrawingLayers.Clear();
+
 		for (auto layer : mLayers)
 		{
-			mDrawingLayers.Add(layer);
-			mDrawingLayers.Add(layer->GetAllChilds());
+			if (layer->drawable)
+			{
+				if (layer->mDepth < 1000.0f)
+					mDrawingLayers.Add(layer);
+				else
+					mTopDrawingLayers.Add(layer);
+			}
+
+			auto childLayers = layer->GetAllChilds();
+			for (auto childLayer : childLayers)
+			{
+				if (childLayer->drawable)
+				{
+					if (childLayer->mDepth < 1000.0f)
+						mDrawingLayers.Add(childLayer);
+					else
+						mTopDrawingLayers.Add(childLayer);
+				}
+			}
 		}
 
 		mDrawingLayers.Sort([](auto a, auto b) { return a->mDepth < b->mDepth; });
+		mTopDrawingLayers.Sort([](auto a, auto b) { return a->mDepth < b->mDepth; });
 	}
 
-	Widget::WidgetsVec Widget::GetChildsNonConst()
+	float UIWidget::GetMaxDrawingDepth()
+	{
+		if (mDrawingLayers.Count() > 0)
+			return mDrawingLayers.Last()->drawable->GetDrawingDepth();
+
+		return 0.0f;
+	}
+
+	UIWidget::WidgetsVec UIWidget::GetChildsNonConst()
 	{
 		return mChilds;
 	}
 
-	LayersVec Widget::GetLayersNonConst()
+	LayersVec UIWidget::GetLayersNonConst()
 	{
 		return mLayers;
 	}
 
-	StatesVec Widget::GetStatesNonConst()
+	StatesVec UIWidget::GetStatesNonConst()
 	{
 		return mStates;
 	}
 
-	Dictionary<String, Ptr<WidgetLayer>> Widget::GetAllLayers()
+	Dictionary<String, Ptr<UIWidgetLayer>> UIWidget::GetAllLayers()
 	{
-		Dictionary<String, Ptr<WidgetLayer>> res;
+		Dictionary<String, Ptr<UIWidgetLayer>> res;
 		for (auto layer : mLayers)
 			res.Add(layer->name, layer);
 
 		return res;
 	}
 
-	void Widget::OnLayerAdded(Ptr<WidgetLayer> layer)
+	Dictionary<String, Ptr<UIWidget>> UIWidget::GetAllChilds()
+	{
+		Dictionary<String, Ptr<UIWidget>> res;
+		for (auto child : mChilds)
+			res.Add(child->GetName(), child);
+
+		return res;
+	}
+
+	void UIWidget::OnLayerAdded(Ptr<UIWidgetLayer> layer)
 	{}
 
-	void Widget::OnChildAdded(Ptr<Widget> child)
+	void UIWidget::OnChildAdded(Ptr<UIWidget> child)
 	{}
 
-	void Widget::OnChildRemoved(Ptr<Widget> child)
+	void UIWidget::OnChildRemoved(Ptr<UIWidget> child)
 	{}
 
-	void Widget::OnDeserialized(const DataNode& node)
+	void UIWidget::OnDeserialized(const DataNode& node)
 	{
 		for (auto layer : mLayers)
 			layer->mOwnerWidget = this;
@@ -566,17 +670,21 @@ namespace o2
 		UpdateLayersDrawingSequence();
 	}
 
-	void Widget::InitializeProperties()
+	void UIWidget::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(Widget, name, SetName, GetName);
-		INITIALIZE_PROPERTY(Widget, parent, SetParent, GetParent);
-		INITIALIZE_GETTER(Widget, childs, GetChildsNonConst);
-		INITIALIZE_GETTER(Widget, layers, GetLayersNonConst);
-		INITIALIZE_GETTER(Widget, states, GetStatesNonConst);
-		INITIALIZE_ACCESSOR(Widget, child, GetChild);
-		INITIALIZE_ACCESSOR(Widget, layer, GetLayer);
-		INITIALIZE_ACCESSOR(Widget, state, GetStateObject);
+		INITIALIZE_PROPERTY(UIWidget, name, SetName, GetName);
+		INITIALIZE_PROPERTY(UIWidget, parent, SetParent, GetParent);
+		INITIALIZE_PROPERTY(UIWidget, transparency, SetTransparency, GetTransparency);
+		INITIALIZE_GETTER(UIWidget, resTransparency, GetResTransparency);
+		INITIALIZE_PROPERTY(UIWidget, visible, SetVisible, IsVisible);
+		INITIALIZE_GETTER(UIWidget, childs, GetChildsNonConst);
+		INITIALIZE_GETTER(UIWidget, layers, GetLayersNonConst);
+		INITIALIZE_GETTER(UIWidget, states, GetStatesNonConst);
+		INITIALIZE_ACCESSOR(UIWidget, child, GetChild);
+		INITIALIZE_ACCESSOR(UIWidget, layer, GetLayer);
+		INITIALIZE_ACCESSOR(UIWidget, state, GetStateObject);
 
-		layer.SetAllAccessFunc(this, &Widget::GetAllLayers);
+		layer.SetAllAccessFunc(this, &UIWidget::GetAllLayers);
+		child.SetAllAccessFunc(this, &UIWidget::GetAllChilds);
 	}
 }

@@ -99,7 +99,7 @@ namespace o2
 			pressedSprite->enabled = false;
 	}
 
-	void DragHandle::OnCursorStayDown(const Input::Cursor& cursor)
+	void DragHandle::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		if (mIsPressed && cursor.mDelta != Vec2F())
 		{

@@ -26,25 +26,11 @@ struct B
 
 int main()
 {
-	o2::Debug::SetupAsRootObject();
-	o2::Types::instance.SetupAsRoot();
-	o2::FileSystem::SetupAsRootObject();
-
-	Ptr<B> pb = mnew B();
-	pb.SetupAsRoot();
-	for (int i = 0; i < 10; i++)
-		pb->av.Add(mnew A());
-
-	pb.Release();
-
-	Types::InitializeTypes();
-
-	o2Memory.CollectGarbage();
+	MAIN_O2;
 
 	Ptr<TestApplication> app = mnew TestApplication();
 	app.SetupAsRoot();
 	app->Launch();
-
 	app.Release();
 
 	o2Memory.CollectGarbage();

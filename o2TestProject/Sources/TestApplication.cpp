@@ -27,8 +27,9 @@ void TestApplication::OnUpdate(float dt)
 
 	if (o2Input.IsKeyPressed('Z'))
 	{
-		o2Debug.Log("Collect garbage");
+		o2Debug.Log("Collect garbage...");
 		o2Memory.CollectGarbage();
+		o2Debug.Log("Collect garbage done!");
 	}
 
 	if (mCurrentScreen)

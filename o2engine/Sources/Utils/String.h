@@ -167,6 +167,9 @@ namespace o2
 		// Inserts string at position
 		void Insert(const TString& other, int position = 0);
 
+		// Inserts character at position
+		void Insert(T character, int position = 0);
+
 		// Returns string with inserted other string
 		TString Inserted(const TString& other, int position = 0) const;
 
@@ -948,11 +951,25 @@ namespace o2
 	{
 		int l1 = Length(), l2 = other.Length();
 		Reserve(l1 + l2 + 10);
+		for (int i = l1; i >= position; i--)
+			mData[i + l2] = mData[i];
+
 		for (int i = 0; i < l2; i++)
-		{
-			mData[i + l2 + position] = mData[i + position];
 			mData[i + position] = other.mData[i];
-		}
+
+		mData[l1 + l2] = '\0';
+	}
+
+	template<typename T>
+	void TString<T>::Insert(T character, int position /*= 0*/)
+	{
+		int len = Length();
+		Reserve(len + 10);
+		for (int i = len; i > position; i--)
+			mData[i] = mData[i - 1];
+
+		mData[position] = character;
+		mData[len + 1] = '\0';
 	}
 
 	template<typename T>
@@ -1234,7 +1251,7 @@ namespace o2
 		auto appendStr = [&](const TString& str)
 		{
 			int l = str.Length();
-			res.Reserve(resLen + l + 5);
+			res.Reserve(resLen + l + 15);
 			for (int i = 0; i < l; i++)
 				res.mData[resLen++] = str.mData[i];
 		};

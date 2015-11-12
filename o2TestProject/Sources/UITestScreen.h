@@ -16,13 +16,26 @@ public:
 	String GetId() const;
 
 protected:
-	Sprite      mBackground;
-	Sprite      mFakeWindow;
-	Ptr<Button> mButton;
-	Ptr<HorizontalLayout> mHorLayout;
-	Ptr<HorizontalLayout>   mHorLayout2;
+	Sprite                     mBackground;
+	Sprite                     mFakeWindow;
+	Ptr<UIButton>              mButton;
+	Ptr<UIHorizontalLayout>    mHorLayout;
+	Ptr<UIHorizontalLayout>    mHorLayout2;
+	Ptr<UIHorizontalProgress>  mBar;
+	Ptr<UIHorizontalScrollBar> mScroll;
 
 protected:
 	void CreateNewBtn();
+
+	void CheckStyle();
+	bool CheckButtonStyle();
+	bool CheckHorProgressBarStyle();
+	bool CheckVerProgressBarStyle();
+	bool CheckHorScrollBarStyle();
+	bool CheckVerScrollBarStyle();
+	bool CheckCheckboxStyle();
+	bool CheckScrollArea();
+	bool CheckLabel();
+	bool CheckEditBox();
 };
 

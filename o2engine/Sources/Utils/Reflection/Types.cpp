@@ -25,9 +25,16 @@
 #include "Render/VectorFont.h"
 #include "Render/VectorFontEffects.h"
 #include "UI/Button.h"
+#include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
+#include "UI/HorizontalProgress.h"
+#include "UI/HorizontalScrollBar.h"
 #include "UI/Label.h"
+#include "UI/ScrollArea.h"
+#include "UI/Toggle.h"
 #include "UI/VerticalLayout.h"
+#include "UI/VerticalProgress.h"
+#include "UI/VerticalScrollBar.h"
 #include "UI/Widget.h"
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
@@ -119,13 +126,20 @@ namespace o2
 		INIT_TYPE(VectorFontAsset);
 		INIT_TYPE(VectorFontAsset::MetaInfo);
 		INIT_TYPE(Text);
-		INIT_TYPE(WidgetLayer);
-		INIT_TYPE(WidgetLayout);
-		INIT_TYPE(WidgetState);
-		INIT_TYPE(Widget);
-		INIT_TYPE(Button);
-		INIT_TYPE(Label);
-		INIT_TYPE(HorizontalLayout);
-		INIT_TYPE(VerticalLayout);
+		INIT_TYPE(UIWidgetLayer);
+		INIT_TYPE(UIWidgetLayout);
+		INIT_TYPE(UIWidgetState);
+		INIT_TYPE(UIWidget);
+		INIT_TYPE(UIButton);
+		INIT_TYPE(UILabel);
+		INIT_TYPE(UIHorizontalLayout);
+		INIT_TYPE(UIVerticalLayout);
+		INIT_TYPE(UIHorizontalProgress);
+		INIT_TYPE(UIVerticalProgress);
+		INIT_TYPE(UIHorizontalScrollBar);
+		INIT_TYPE(UIVerticalScrollBar);
+		INIT_TYPE(UIToggle);
+		INIT_TYPE(UIScrollArea);
+		INIT_TYPE(UIEditBox);
 	}
 }

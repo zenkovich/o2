@@ -135,6 +135,9 @@ namespace o2
 		// Returns real text size
 		Vec2F GetRealSize();
 
+		// Returns real text rectangle
+		RectF GetRealRect();
+
 		// Returns text size
 		static Vec2F GetTextSize(const WString& text, Ptr<Font> font,
 								 const Vec2F& areaSize = Vec2F(), 
@@ -177,7 +180,7 @@ namespace o2
 			// ----------------------------------
 			// Simple symbol definition structure
 			// ----------------------------------
-			struct SymbolDef
+			struct Symbol
 			{
 				RectF  mFrame;   // Frame of symbol layout
 				RectF  mTexSrc;  // Texture source rect
@@ -187,21 +190,21 @@ namespace o2
 
 			public:
 				// Default constructor
-				SymbolDef();
+				Symbol();
 
 				// Constructor
-				SymbolDef(const Vec2F& position, const Vec2F& size, const RectF& texSrc, UInt16 charId,
+				Symbol(const Vec2F& position, const Vec2F& size, const RectF& texSrc, UInt16 charId,
 						  const Vec2F& origin, float advance);
 
 				// Equals operator
-				bool operator==(const SymbolDef& other) const;
+				bool operator==(const Symbol& other) const;
 			};
-			typedef Vector<SymbolDef> SymbolDefsVec;
+			typedef Vector<Symbol> SymbolDefsVec;
 
 			// -------------------------
 			// Line definition structure
 			// -------------------------
-			struct LineDef
+			struct Line
 			{
 				SymbolDefsVec mSymbols;       // Symbols in line
 				WString       mString;        // Line string
@@ -213,12 +216,12 @@ namespace o2
 
 			public:
 				// Default constructor
-				LineDef();
+				Line();
 
 				// Equals operator
-				bool operator==(const LineDef& other) const;
+				bool operator==(const Line& other) const;
 			};
-			typedef Vector<LineDef> LineDefsVec;
+			typedef Vector<Line> LineDefsVec;
 
 		public:
 			FontRef     mFont;            // Font
@@ -231,12 +234,15 @@ namespace o2
 			bool        mWordWrap;        // True, when words wrapping
 			float       mSymbolsDistCoef; // Characters distance coefficient, 1 is standard
 			float       mLinesDistCoef;   // Lines distance coefficient, 1 is standard
-			LineDefsVec mLineDefs;        // Lines definitions
+			LineDefsVec mLines;           // Lines definitions
 
 		public:
 			// Calculating characters layout by parameters
-			void Initialize(FontRef font, const WString& text, const Vec2F& position, const Vec2F& areaSize, HorAlign horAlign,
-							VerAlign verAlign, bool wordWrap, float charsDistCoef, float linesDistCoef);
+			void Initialize(FontRef font, const WString& text, const Vec2F& position, const Vec2F& areaSize, 
+							HorAlign horAlign, VerAlign verAlign, bool wordWrap, float charsDistCoef, float linesDistCoef);
+
+			// Moves symbols 
+			void Move(const Vec2F& offs);
 		};
 
 	protected:
@@ -244,19 +250,21 @@ namespace o2
 
 		const UInt mMeshMaxPolyCount = 4096;
 
-		WString    mText;            // Wide char string, containing rendering text
-		AssetId    mFontAssetId;     // Font asset id
-		FontRef    mFont;            // Using font
-		float      mSymbolsDistCoef; // Characters distance coef, 1 is standard
-		float      mLinesDistanceCoef;   // Lines distance coef, 1 is standard
-		VerAlign   mVerAlign;        // Vertical align
-		HorAlign   mHorAlign;        // Horizontal align
-		bool       mWordWrap;        // True, when words wrapping
-
-		MeshesVec  mMeshes;          // Meshes vector
-		Basis      mLastTransform;   // Last mesh update transformation
-
-		SymbolsSet mSymbolsSet;      // Symbols set definition
+		WString    mText;              // Wide char string, containing rendering text
+		AssetId    mFontAssetId;       // Font asset id
+		FontRef    mFont;              // Using font
+		float      mSymbolsDistCoef;   // Characters distance coef, 1 is standard
+		float      mLinesDistanceCoef; // Lines distance coef, 1 is standard
+		VerAlign   mVerAlign;          // Vertical align
+		HorAlign   mHorAlign;          // Horizontal align
+		bool       mWordWrap;          // True, when words wrapping
+									   
+		MeshesVec  mMeshes;            // Meshes vector
+		Basis      mLastTransform;     // Last mesh update transformation
+									   
+		SymbolsSet mSymbolsSet;        // Symbols set definition
+									   
+		bool       mUpdatingMesh;      // True, when mesh is already updating
 
 	protected:
 		// Updating meshes

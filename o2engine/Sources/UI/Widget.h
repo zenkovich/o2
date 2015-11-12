@@ -6,7 +6,6 @@
 #include "UI/WidgetState.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/Math/Layout.h"
-#include "Utils/Math/Layout.h"
 #include "Utils/Memory/Ptr.h"
 #include "Utils/Property.h"
 #include "Utils/Serialization.h"
@@ -22,33 +21,36 @@ namespace o2
 	// Basic UI Widget. Its a simple and basic element of UI, 
 	// everything other UI's are based on this
 	// ------------------------------------------------------
-	class Widget: public ISerializable
+	class UIWidget: public ISerializable
 	{
 	public:
-		typedef Vector<Ptr<Widget>> WidgetsVec;
+		typedef Vector<Ptr<UIWidget>> WidgetsVec;
 
 	public:
-		Property<String>                          name;
-		Property<Ptr<Widget>>                     parent;
-		Getter<WidgetsVec>                        childs;
-		Getter<LayersVec>                         layers;
-		Getter<StatesVec>                         states;
-		Accessor<Ptr<Widget>, const String&>      child;
-		Accessor<Ptr<WidgetLayer>, const String&> layer;
-		Accessor<Ptr<WidgetState>, const String&> state;
-		WidgetLayout                              layout;
+		Property<String>                            name;
+		Property<Ptr<UIWidget>>                     parent;
+		Getter<WidgetsVec>                          childs;
+		Getter<LayersVec>                           layers;
+		Getter<StatesVec>                           states;
+		Property<float>                             transparency;
+		Getter<float>                               resTransparency;
+		Property<bool>                              visible;
+		Accessor<Ptr<UIWidget>, const String&>      child;
+		Accessor<Ptr<UIWidgetLayer>, const String&> layer;
+		Accessor<Ptr<UIWidgetState>, const String&> state;
+		UIWidgetLayout                              layout;
 
 		// Default constructor
-		Widget();
+		UIWidget();
 
 		// Copy-constructor
-		Widget(const Widget& other);
+		UIWidget(const UIWidget& other);
 
 		// Virtual destructor
-		virtual ~Widget();
+		virtual ~UIWidget();
 
 		// Copy-operator
-		Widget& operator=(const Widget& other);
+		UIWidget& operator=(const UIWidget& other);
 
 		// Updates drawables, states and widget
 		virtual void Update(float dt);
@@ -63,22 +65,22 @@ namespace o2
 		virtual String GetName() const;
 
 		// Returns parent widget
-		virtual Ptr<Widget> GetParent() const;
+		virtual Ptr<UIWidget> GetParent() const;
 
 		// Sets widget parent
-		virtual void SetParent(Ptr<Widget> parent);
+		virtual void SetParent(Ptr<UIWidget> parent);
 
 		// Adds child widget
-		virtual Ptr<Widget> AddChild(Ptr<Widget> widget);
+		virtual Ptr<UIWidget> AddChild(Ptr<UIWidget> widget);
 
 		// Removes child by path
 		virtual bool RemoveChild(const String& path);
 
 		// Removes child widget
-		virtual bool RemoveChild(Ptr<Widget> widget, bool release = true);
+		virtual bool RemoveChild(Ptr<UIWidget> widget, bool release = true);
 
 		// Returns child by path. Returns nullptr if isn't exist
-		virtual Ptr<Widget> GetChild(const String& path);
+		virtual Ptr<UIWidget> GetChild(const String& path);
 
 		// Removes all child widgets
 		virtual void RemoveAllChilds();
@@ -87,57 +89,21 @@ namespace o2
 		virtual const WidgetsVec& GetChilds() const;
 
 		// Adds layer
-		Ptr<WidgetLayer> AddLayer(Ptr<WidgetLayer> layer);
+		Ptr<UIWidgetLayer> AddLayer(Ptr<UIWidgetLayer> layer);
 
 		// Adds layer
-		Ptr<WidgetLayer> AddLayer(const String& name, Ptr<IRectDrawable> drawable,
-								  const Layout& layout = Layout::Both(), float depth = 0.0f);
-
-		// Adds sprite layer
-		Ptr<WidgetLayer> AddSpriteLayer(const String& name, const String& fileName,
-										const Layout& layout = Layout::Both(), float depth = 0.0f);
-
-		// Adds sprite layer
-		Ptr<WidgetLayer> AddSpriteLayer(const String& name, AssetId assetId,
-										const Layout& layout = Layout::Both(), float depth = 0.0f);
-
-		// Adds sprite layer
-		Ptr<WidgetLayer> AddSpriteLayer(const String& name, Ptr<ImageAsset> asset,
-										const Layout& layout = Layout::Both(), float depth = 0.0f);
-
-		// Adds text layer
-		Ptr<WidgetLayer> AddTextLayer(const String& name, const String& text, const String& fontFileName,
-									  Text::HorAlign horAlign = Text::HorAlign::Middle,
-									  Text::VerAlign verAlign = Text::VerAlign::Middle,
-									  const Layout& layout = Layout::Both(), float depth = 0.0f);
-
-		// Adds text layer
-		Ptr<WidgetLayer> AddTextLayer(const String& name, const String& text, AssetId fontAssetId,
-									  Text::HorAlign horAlign = Text::HorAlign::Middle,
-									  Text::VerAlign verAlign = Text::VerAlign::Middle,
-									  const Layout& layout = Layout::Both(), float depth = 0.0f);
-
-		// Adds text layer
-		Ptr<WidgetLayer> AddTextLayer(const String& name, const String& text, Ptr<VectorFontAsset> fontAsset,
-									  Text::HorAlign horAlign = Text::HorAlign::Middle,
-									  Text::VerAlign verAlign = Text::VerAlign::Middle,
-									  const Layout& layout = Layout::Both(), float depth = 0.0f);
-
-		// Adds text layer
-		Ptr<WidgetLayer> AddTextLayer(const String& name, const String& text, Ptr<BitmapFontAsset> fontAsset,
-									  Text::HorAlign horAlign = Text::HorAlign::Middle,
-									  Text::VerAlign verAlign = Text::VerAlign::Middle,
-									  const Layout& layout = Layout::Both(), float depth = 0.0f);
+		Ptr<UIWidgetLayer> AddLayer(const String& name, Ptr<IRectDrawable> drawable,
+									const Layout& layout = Layout::Both(), float depth = 0.0f);
 
 		// Returns layer by path. Returns null if layer isn't exist
-		Ptr<WidgetLayer> GetLayer(const String& path) const;
+		Ptr<UIWidgetLayer> GetLayer(const String& path) const;
 
 		// Returns layer by path. Returns null if layer isn't exist or layer drawable has different type
 		template<typename _type>
 		Ptr<_type> GetLayerDrawable(const String& path) const;
 
 		// Removes layer
-		bool RemoveLayer(Ptr<WidgetLayer> layer);
+		bool RemoveLayer(Ptr<UIWidgetLayer> layer);
 
 		// Removes layer
 		bool RemoveLayer(const String& path);
@@ -149,19 +115,19 @@ namespace o2
 		const LayersVec& GetLayers() const;
 
 		// Adds new state with name
-		Ptr<WidgetState> AddState(const String& name);
+		Ptr<UIWidgetState> AddState(const String& name);
 
 		// Adds new state with name and animation
-		Ptr<WidgetState> AddState(const String& name, const Animation& animation);
+		Ptr<UIWidgetState> AddState(const String& name, const Animation& animation);
 
 		// Adds state
-		Ptr<WidgetState> AddState(Ptr<WidgetState> state);
+		Ptr<UIWidgetState> AddState(Ptr<UIWidgetState> state);
 
 		// Removes state by name
 		bool RemoveState(const String& name);
 
 		// Removes state
-		bool RemoveState(Ptr<WidgetState> state);
+		bool RemoveState(Ptr<UIWidgetState> state);
 
 		// Removes all states
 		void RemoveAllStates();
@@ -173,14 +139,35 @@ namespace o2
 		bool GetState(const String& name) const;
 
 		// Returns state object by name
-		Ptr<WidgetState> GetStateObject(const String& name) const;
+		Ptr<UIWidgetState> GetStateObject(const String& name) const;
 
 		// Returns all states
 		const StatesVec& GetStates() const;
 
-		SERIALIZABLE_IMPL(Widget);
+		// Sets widget's transparency
+		void SetTransparency(float transparency);
 
-		IOBJECT(Widget)
+		// Returns widget's transparency
+		float GetTransparency() const;
+
+		// Returns widget's result transparency (depends on parent's result transparency)
+		float GetResTransparency() const;
+
+		// Sets visibility
+		void SetVisible(bool visible);
+
+		// Sets visibility to true
+		void Show();
+
+		// Sets visibility to false
+		void Hide();
+
+		// Returns visibility
+		bool IsVisible() const;
+
+		SERIALIZABLE_IMPL(UIWidget);
+
+		IOBJECT(UIWidget)
 		{
 			FIELD(name);
 			FIELD(parent);
@@ -191,40 +178,56 @@ namespace o2
 			FIELD(child);
 			FIELD(layer);
 			FIELD(state);
+			FIELD(transparency);
+			FIELD(visible);
 
 			SRLZ_FIELD(mName);
 			SRLZ_FIELD(layout);
 			SRLZ_FIELD(mLayers);
 			SRLZ_FIELD(mStates);
 			SRLZ_FIELD(mChilds);
+			SRLZ_FIELD(mTransparency);
 
 			FIELD(mDrawingLayers);
 			FIELD(mParent);
 		}
 
 	protected:
-		String      mName;          // Name
-								    
-		LayersVec   mLayers;        // Layers array
-		StatesVec   mStates;        // States array
-								    
-		Ptr<Widget> mParent;        // Parent widget
-		WidgetsVec  mChilds;        // Children widgets
+		String             mName;             // Name
 
-		LayersVec   mDrawingLayers; // Layers ordered by depth
+		LayersVec          mLayers;           // Layers array
+		StatesVec          mStates;           // States array
+
+		Ptr<UIWidget>      mParent;           // Parent widget
+		WidgetsVec         mChilds;           // Children widgets
+		RectF              mChildsAbsRect;    // Absolute rectangle for children arranging
+
+		float              mTransparency;	  // Widget transparency
+		float              mResTransparency;  // Widget result transparency, depends on parent's result transparency
+		LayersVec          mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000)
+		LayersVec          mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000)
+
+		Ptr<UIWidgetState> mVisibleState;     // Widget visibility state
+		bool               mVisible;          // Visibility of widget. Uses state 'visible'
 
 	protected:
-		// Updates children layouts
-		void UpdateLayoutRecursive();
+		// Updates layout
+		virtual void UpdateLayout(bool forcible = false);
 
-		// Calls when layout was updated
-		virtual void OnLayoutUpdated();
+		// Updates transparency for this and children widgets
+		void UpdateTransparency();
+
+		// Recalculates absolute and local rectangles
+		void RecalculateAbsRect();
 
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts();
 
 		// Updates layers drawing sequence
 		void UpdateLayersDrawingSequence();
+
+		// Returns depth of last drawn layer
+		float GetMaxDrawingDepth();
 
 		// Returns children widgets (for property)
 		WidgetsVec GetChildsNonConst();
@@ -236,16 +239,19 @@ namespace o2
 		StatesVec GetStatesNonConst();
 
 		// Returns dictionary of all layers by names
-		Dictionary<String, Ptr<WidgetLayer>> GetAllLayers();
+		Dictionary<String, Ptr<UIWidgetLayer>> GetAllLayers();
+
+		// Returns dictionary of all children by names
+		Dictionary<String, Ptr<UIWidget>> GetAllChilds();
 
 		// Calls when layer added and updates drawing sequence
-		virtual void OnLayerAdded(Ptr<WidgetLayer> layer);
+		virtual void OnLayerAdded(Ptr<UIWidgetLayer> layer);
 
 		// Calls when child widget was added
-		virtual void OnChildAdded(Ptr<Widget> child);
+		virtual void OnChildAdded(Ptr<UIWidget> child);
 
 		// Calls when child widget was removed
-		virtual void OnChildRemoved(Ptr<Widget> child);
+		virtual void OnChildRemoved(Ptr<UIWidget> child);
 
 		// Calls when deserialized
 		void OnDeserialized(const DataNode& node);
@@ -253,12 +259,20 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
-		friend class WidgetLayer;
-		friend class WidgetLayout;
+		friend class UIEditBox;
+		friend class UIHorizontalLayout;
+		friend class UIHorizontalProgress;
+		friend class UIHorizontalScrollBar;
+		friend class UIScrollArea;
+		friend class UIVerticalLayout;
+		friend class UIVerticalProgress;
+		friend class UIVerticalScrollBar;
+		friend class UIWidgetLayer;
+		friend class UIWidgetLayout;
 	};
 
 	template<typename _type>
-	Ptr<_type> Widget::GetLayerDrawable(const String& path) const
+	Ptr<_type> UIWidget::GetLayerDrawable(const String& path) const
 	{
 		auto layer = GetLayer(path);
 		if (layer && layer->drawable->GetTypeId() == _type::type->ID())
@@ -266,5 +280,4 @@ namespace o2
 
 		return nullptr;
 	}
-
 }

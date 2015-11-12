@@ -7,33 +7,31 @@ namespace o2
 	// ----------------------
 	// Vertical layout widget
 	// ----------------------
-	class VerticalLayout: public Widget
+	class UIVerticalLayout: public UIWidget
 	{
 	public:
-		enum class BaseCorner { Left, Right, Top, Bottom, Center, LeftBottom, LeftTop, RightBottom, RightTop };
-
-	public:
-		Property<BaseCorner> baseCorner;   // Base corder property
-		Property<float>      spacing;      // Space between widgets property
-		Property<RectF>      border;       // Border property
-		Property<float>      borderLeft;   // Left border property
-		Property<float>      borderRight;  // Right border property
-		Property<float>      borderTop;    // Top border property
-		Property<float>      borderBottom; // Bottom border property
-		Property<bool>       expandWidth;  // Expand children by width property
-		Property<bool>       expandHeight; // Expand children by height property
+		Property<BaseCorner> baseCorner;    // Base corder property
+		Property<float>      spacing;       // Space between widgets property
+		Property<RectF>      border;        // Border property
+		Property<float>      borderLeft;    // Left border property
+		Property<float>      borderRight;   // Right border property
+		Property<float>      borderTop;     // Top border property
+		Property<float>      borderBottom;  // Bottom border property
+		Property<bool>       expandWidth;   // Expand children by width property
+		Property<bool>       expandHeight;  // Expand children by height property
+		Property<bool>       fitByChildren; // Fitting size by children property
 
 		// Default constructor
-		VerticalLayout();
+		UIVerticalLayout();
 
 		// Copy-constructor
-		VerticalLayout(const VerticalLayout& other);
+		UIVerticalLayout(const UIVerticalLayout& other);
 
 		// Destructor
-		~VerticalLayout();
+		~UIVerticalLayout();
 
 		// Copy operator
-		VerticalLayout& operator=(const VerticalLayout& other);
+		UIVerticalLayout& operator=(const UIVerticalLayout& other);
 
 		// Sets base corner
 		void SetBaseCorner(BaseCorner baseCorner);
@@ -89,29 +87,36 @@ namespace o2
 		// Returns height expand
 		bool IsHeightExpand() const;
 
-		SERIALIZABLE_IMPL(VerticalLayout);
+		// Sets fitting size by children
+		void SetFitByChildren(bool fit);
 
-		IOBJECT(VerticalLayout)
+		// Returns fitting by children
+		bool IsFittingByChildren() const;
+
+		SERIALIZABLE_IMPL(UIVerticalLayout);
+
+		IOBJECT(UIVerticalLayout)
 		{
-			BASE_CLASS(Widget);
+			BASE_CLASS(UIWidget);
 		}
 
 	protected:
-		BaseCorner mBaseCorner;   // Base corner of widgets arranging
-		float      mSpacing;      // Space between widgets
-		RectF      mBorder;       // Border
-		bool       mExpandWidth;  // Expanding by width
-		bool       mExpandHeight; // Expanding by height
+		BaseCorner mBaseCorner;    // Base corner of widgets arranging
+		float      mSpacing;       // Space between widgets
+		RectF      mBorder;        // Border
+		bool       mExpandWidth;   // Expanding by width
+		bool       mExpandHeight;  // Expanding by height
+		bool       mFitByChildren; // Fitting by children
 
 	protected:
-		// Calling when layout was updates and calls RearrangeChilds
-		void OnLayoutUpdated();
+		// Updates layout
+		void UpdateLayout(bool forcible = false);
 
 		// Calls when child widget was added
-		void OnChildAdded(Ptr<Widget> child);
+		void OnChildAdded(Ptr<UIWidget> child);
 
 		// Calls when child widget was removed
-		void OnChildRemoved(Ptr<Widget> child);
+		void OnChildRemoved(Ptr<UIWidget> child);
 
 		// Invokes reque function for childs arranging
 		void RearrangeChilds();
@@ -125,11 +130,14 @@ namespace o2
 		// Arranging child from center by bottom, middle and top
 		void ArrangeFromCenter();
 
+		// Expands size by children
+		void ExpandSizeByChilds();
+
 		// Calculates children widths by weights and minimal sizes
 		Vector<float> CalculateExpandedHeights();
 
 		// Aligns widget by height with base corner
-		void AlignWidgetByWidth(Ptr<Widget> child, float heightAnchor);
+		void AlignWidgetByWidth(Ptr<UIWidget> child, float heightAnchor);
 
 		// Updates layout's weight and minimal size
 		void UpdateLayoutParametres();

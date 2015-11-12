@@ -2,151 +2,183 @@
 
 namespace o2
 {
-	IOBJECT_CPP(HorizontalLayout);
+	IOBJECT_CPP(UIHorizontalLayout);
 
-	HorizontalLayout::HorizontalLayout():
-		mBaseCorner(BaseCorner::Left), mSpacing(0), mExpandWidth(true), mExpandHeight(true), Widget()
+	UIHorizontalLayout::UIHorizontalLayout():
+		mBaseCorner(BaseCorner::Left), mSpacing(0), mExpandWidth(true), mExpandHeight(true), UIWidget(), 
+		mFitByChildren(false)
 	{
 		InitializeProperties();
+		UpdateLayout();
 	}
 
-	HorizontalLayout::HorizontalLayout(const HorizontalLayout& other):
+	UIHorizontalLayout::UIHorizontalLayout(const UIHorizontalLayout& other):
 		mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
-		mExpandHeight(other.mExpandHeight), Widget(other)
+		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren)
 	{
 		InitializeProperties();
+		UpdateLayout();
 	}
 
-	HorizontalLayout::~HorizontalLayout()
+	UIHorizontalLayout::~UIHorizontalLayout()
 	{}
 
-	HorizontalLayout& HorizontalLayout::operator=(const HorizontalLayout& other)
+	UIHorizontalLayout& UIHorizontalLayout::operator=(const UIHorizontalLayout& other)
 	{
 		mBaseCorner = other.mBaseCorner;
 		mSpacing = other.mSpacing;
 		mBorder = other.mBorder;
 		mExpandWidth = other.mExpandWidth;
 		mExpandHeight = other.mExpandHeight;
-		Widget::operator=(other);
+		UIWidget::operator=(other);
+
+		UpdateLayout();
 
 		return *this;
 	}
 
-	void HorizontalLayout::SetBaseCorner(BaseCorner baseCorner)
+	void UIHorizontalLayout::SetBaseCorner(BaseCorner baseCorner)
 	{
 		mBaseCorner = baseCorner;
 		RearrangeChilds();
 	}
 
-	HorizontalLayout::BaseCorner HorizontalLayout::GetBaseCorner() const
+	BaseCorner UIHorizontalLayout::GetBaseCorner() const
 	{
 		return mBaseCorner;
 	}
 
-	void HorizontalLayout::SetSpacing(float spacing)
+	void UIHorizontalLayout::SetSpacing(float spacing)
 	{
 		mSpacing = spacing;
 		RearrangeChilds();
 	}
 
-	float HorizontalLayout::GetSpacing() const
+	float UIHorizontalLayout::GetSpacing() const
 	{
 		return mSpacing;
 	}
 
-	void HorizontalLayout::SetBorder(const RectF& border)
+	void UIHorizontalLayout::SetBorder(const RectF& border)
 	{
 		mBorder = border;
 		RearrangeChilds();
 	}
 
-	RectF HorizontalLayout::GetBorder() const
+	RectF UIHorizontalLayout::GetBorder() const
 	{
 		return mBorder;
 	}
 
-	void HorizontalLayout::SetBorderLeft(float value)
+	void UIHorizontalLayout::SetBorderLeft(float value)
 	{
 		mBorder.left = value;
 		RearrangeChilds();
 	}
 
-	float HorizontalLayout::GetBorderLeft() const
+	float UIHorizontalLayout::GetBorderLeft() const
 	{
 		return mBorder.left;
 	}
 
-	void HorizontalLayout::SetBorderRight(float value)
+	void UIHorizontalLayout::SetBorderRight(float value)
 	{
 		mBorder.right = value;
 		RearrangeChilds();
 	}
 
-	float HorizontalLayout::GetBorderRight() const
+	float UIHorizontalLayout::GetBorderRight() const
 	{
 		return mBorder.right;
 	}
 
-	void HorizontalLayout::SetBorderTop(float value)
+	void UIHorizontalLayout::SetBorderTop(float value)
 	{
 		mBorder.top = value;
 		RearrangeChilds();
 	}
 
-	float HorizontalLayout::GetBorderTop() const
+	float UIHorizontalLayout::GetBorderTop() const
 	{
 		return mBorder.top;
 	}
 
-	void HorizontalLayout::SetBorderBottom(float value)
+	void UIHorizontalLayout::SetBorderBottom(float value)
 	{
 		mBorder.bottom = value;
 		RearrangeChilds();
 	}
 
-	float HorizontalLayout::GetBorderBottom() const
+	float UIHorizontalLayout::GetBorderBottom() const
 	{
 		return mBorder.bottom;
 	}
 
-	void HorizontalLayout::SetWidthExpand(bool expand)
+	void UIHorizontalLayout::SetWidthExpand(bool expand)
 	{
 		mExpandWidth = expand;
 		RearrangeChilds();
 	}
 
-	bool HorizontalLayout::IsWidthExpand() const
+	bool UIHorizontalLayout::IsWidthExpand() const
 	{
 		return mExpandWidth;
 	}
 
-	void HorizontalLayout::SetHeightExpand(bool expand)
+	void UIHorizontalLayout::SetHeightExpand(bool expand)
 	{
 		mExpandHeight = expand;
 		RearrangeChilds();
 	}
 
-	bool HorizontalLayout::IsHeightExpand() const
+	bool UIHorizontalLayout::IsHeightExpand() const
 	{
 		return mExpandHeight;
 	}
 
-	void HorizontalLayout::OnLayoutUpdated()
+	void UIHorizontalLayout::SetFitByChildren(bool fit)
 	{
+		mFitByChildren = fit;
 		RearrangeChilds();
 	}
 
-	void HorizontalLayout::OnChildAdded(Ptr<Widget> child)
+	bool UIHorizontalLayout::IsFittingByChildren() const
+	{
+		return mFitByChildren;
+	}
+
+	void UIHorizontalLayout::UpdateLayout(bool forcible /*= false*/)
+	{
+		if (layout.mDrivenByParent && !forcible)
+		{
+			if (mParent)
+				mParent->UpdateLayout();
+
+			return;
+		}
+
+		RecalculateAbsRect();
+		UpdateLayersLayouts();
+
+		mChildsAbsRect = layout.mAbsoluteRect;
+
+		RearrangeChilds();
+
+		if (mFitByChildren)
+			ExpandSizeByChilds();
+	}
+
+	void UIHorizontalLayout::OnChildAdded(Ptr<UIWidget> child)
 	{
 		child->layout.mDrivenByParent = true;
 	}
 
-	void HorizontalLayout::OnChildRemoved(Ptr<Widget> child)
+	void UIHorizontalLayout::OnChildRemoved(Ptr<UIWidget> child)
 	{
 		child->layout.mDrivenByParent = false;
 	}
 
-	void HorizontalLayout::RearrangeChilds()
+	void UIHorizontalLayout::RearrangeChilds()
 	{
 		UpdateLayoutParametres();
 
@@ -173,17 +205,17 @@ namespace o2
 
 	}	
 	
-	void HorizontalLayout::UpdateLayoutParametres()
+	void UIHorizontalLayout::UpdateLayoutParametres()
 	{
-		layout.mWeight.x = mChilds.Sum<float>([&](const Ptr<Widget>& child) { return child->layout.GetWidthWeight(); });
-		layout.mMinSize.x = mChilds.Sum<float>([&](const Ptr<Widget>& child) { return child->layout.GetMinimalWidth(); });
+		layout.mWeight.x = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetWidthWeight(); });
+		layout.mMinSize.x = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetMinimalWidth(); });
 	}
 
-	void HorizontalLayout::ArrangeFromCenter()
+	void UIHorizontalLayout::ArrangeFromCenter()
 	{
 		if (mExpandWidth)
 		{
-			float availableWidth = layout.mAbsoluteRect.Width() - mBorder.left - mBorder.right;
+			float availableWidth = mChildsAbsRect.Width() - mBorder.left - mBorder.right;
 			float totalWidth = availableWidth;
 			float position = -totalWidth*0.5f;
 			auto widths = CalculateExpandedWidths();
@@ -198,12 +230,12 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.5f);
-				child->layout.UpdateRect();
+				child->UpdateLayout(true);
 			}
 		}
 		else
 		{
-			float totalWidth = mChilds.Sum<float>([&](const Ptr<Widget>& child) { return child->layout.GetWidth(); });
+			float totalWidth = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetWidth(); });
 			totalWidth += (mChilds.Count() - 1)*mSpacing;
 			float position = -totalWidth*0.5f;
 			for (auto child : mChilds)
@@ -217,12 +249,57 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.5f);
-				child->layout.UpdateRect();
+				child->UpdateLayout(true);
 			}
 		}
 	}
 
-	void HorizontalLayout::ArrangeFromLeftToRight()
+	void UIHorizontalLayout::ExpandSizeByChilds()
+	{
+		const static Vec2F relativePivots[] ={
+			Vec2F(0.0f, 0.5f), // Left
+			Vec2F(1.0f, 0.5f), // Right
+			Vec2F(0.5f, 1.0f), // Top
+			Vec2F(0.5f, 0.0f), // Bottom
+			Vec2F(0.5f, 0.5f), // Center
+			Vec2F(0.0f, 0.0f), // LeftBottom
+			Vec2F(0.0f, 1.0f), // LeftTop
+			Vec2F(1.0f, 0.0f), // RightBottom
+			Vec2F(1.0f, 1.0f)  // RightTop
+		};
+
+		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
+
+		RectF childrenRect;
+		if (mChilds.Count() > 0)
+			childrenRect = mChilds[0]->layout.mLocalRect;
+
+		for (auto child : mChilds)
+		{
+			childrenRect.left = Math::Min(childrenRect.left, child->layout.mLocalRect.left);
+			childrenRect.right = Math::Max(childrenRect.right, child->layout.mLocalRect.right);
+			childrenRect.bottom = Math::Min(childrenRect.bottom, child->layout.mLocalRect.bottom);
+			childrenRect.top = Math::Max(childrenRect.top, child->layout.mLocalRect.top);
+		}
+
+		Vec2F szDelta = childrenRect.Size() - mChildsAbsRect.Size();
+
+		if (mExpandWidth)
+			szDelta.x = 0;
+
+		if (mExpandHeight)
+			szDelta.y = 0;
+
+		if (szDelta != Vec2F())
+		{
+			layout.mOffsetMax += szDelta*(Vec2F::One() - relativePivot);
+			layout.mOffsetMin -= szDelta*relativePivot;
+
+			UpdateLayout();
+		}
+	}
+
+	void UIHorizontalLayout::ArrangeFromLeftToRight()
 	{
 		if (mExpandWidth)
 		{
@@ -239,7 +316,7 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.0f);
-				child->layout.UpdateRect();
+				child->UpdateLayout(true);
 			}
 		}
 		else
@@ -256,12 +333,12 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.0f);
-				child->layout.UpdateRect();
+				child->UpdateLayout(true);
 			}
 		}
 	}
 
-	void HorizontalLayout::ArrangeFromRightToLeft()
+	void UIHorizontalLayout::ArrangeFromRightToLeft()
 	{
 		if (mExpandWidth)
 		{
@@ -278,7 +355,7 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 1.0f);
-				child->layout.UpdateRect();
+				child->UpdateLayout(true);
 			}
 		}
 		else
@@ -295,12 +372,12 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 1.0f);
-				child->layout.UpdateRect();
+				child->UpdateLayout(true);
 			}
 		}
 	}
 
-	void HorizontalLayout::AlignWidgetByHeight(Ptr<Widget> child, float widthAnchor)
+	void UIHorizontalLayout::AlignWidgetByHeight(Ptr<UIWidget> child, float widthAnchor)
 	{
 		if (mExpandHeight)
 		{
@@ -336,12 +413,12 @@ namespace o2
 		}
 	}
 
-Vector<float> HorizontalLayout::CalculateExpandedWidths()
+Vector<float> UIHorizontalLayout::CalculateExpandedWidths()
 	{
 		int ichildCount = mChilds.Count();
 		float childCount = (float)ichildCount;
-		float availableWidth = layout.mAbsoluteRect.Width() - mBorder.left - mBorder.right;
-		float minWidthSum = mChilds.Sum<float>([&](const Ptr<Widget>& child) { return child->layout.GetMinimalWidth(); });
+		float availableWidth = mChildsAbsRect.Width() - mBorder.left - mBorder.right;
+		float minWidthSum = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetMinimalWidth(); });
 		float expandValue = Math::Max(availableWidth - minWidthSum - (childCount - 1.0f)*mSpacing, 0.0f);
 
 		Vector<float> widths(ichildCount + 1);
@@ -404,16 +481,17 @@ Vector<float> HorizontalLayout::CalculateExpandedWidths()
 		return widths;
 	}
 
-	void HorizontalLayout::InitializeProperties()
+	void UIHorizontalLayout::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(HorizontalLayout, baseCorner, SetBaseCorner, GetBaseCorner);
-		INITIALIZE_PROPERTY(HorizontalLayout, spacing, SetSpacing, GetSpacing);
-		INITIALIZE_PROPERTY(HorizontalLayout, border, SetBorder, GetBorder);
-		INITIALIZE_PROPERTY(HorizontalLayout, borderLeft, SetBorderLeft, GetBorderLeft);
-		INITIALIZE_PROPERTY(HorizontalLayout, borderRight, SetBorderRight, GetBorderRight);
-		INITIALIZE_PROPERTY(HorizontalLayout, borderTop, SetBorderTop, GetBorderTop);
-		INITIALIZE_PROPERTY(HorizontalLayout, borderBottom, SetBorderBottom, GetBorderBottom);
-		INITIALIZE_PROPERTY(HorizontalLayout, expandWidth, SetWidthExpand, IsWidthExpand);
-		INITIALIZE_PROPERTY(HorizontalLayout, expandHeight, SetHeightExpand, IsHeightExpand);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, baseCorner, SetBaseCorner, GetBaseCorner);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, spacing, SetSpacing, GetSpacing);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, border, SetBorder, GetBorder);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, borderLeft, SetBorderLeft, GetBorderLeft);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, borderRight, SetBorderRight, GetBorderRight);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, borderTop, SetBorderTop, GetBorderTop);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, borderBottom, SetBorderBottom, GetBorderBottom);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, expandWidth, SetWidthExpand, IsWidthExpand);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, expandHeight, SetHeightExpand, IsHeightExpand);
+		INITIALIZE_PROPERTY(UIHorizontalLayout, fitByChildren, SetFitByChildren, IsFittingByChildren);
 	}
 }

@@ -8,12 +8,14 @@ namespace o2
 		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0)
 	{
 		EventSystem::RegCursorListener(this);
+		INITIALIZE_PROPERTY(CursorEventsListener, interactable, SetInteractable, IsInteractable);
 	}
 
 	CursorEventsListener::CursorEventsListener(const CursorEventsListener& other):
 		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0)
 	{
 		EventSystem::RegCursorListener(this);
+		INITIALIZE_PROPERTY(CursorEventsListener, interactable, SetInteractable, IsInteractable);
 	}
 
 	CursorEventsListener::~CursorEventsListener()
@@ -31,13 +33,34 @@ namespace o2
 		return 0.0f;
 	}
 
+	void CursorEventsListener::SetInteractable(bool interactable)
+	{
+		if (mInteractable == interactable)
+			return;
+
+		mInteractable = interactable;
+
+		if (mInteractable)
+			OnBecomeInteractable();
+		else
+			OnBecomeNotInteractable();
+	}
+
+	bool CursorEventsListener::IsInteractable() const
+	{
+		return mInteractable;
+	}
+
 	void CursorEventsListener::OnCursorPressed(const Input::Cursor& cursor)
 	{}
 
 	void CursorEventsListener::OnCursorReleased(const Input::Cursor& cursor)
 	{}
 
-	void CursorEventsListener::OnCursorStayDown(const Input::Cursor& cursor)
+	void CursorEventsListener::OnCursorPressBreak(const Input::Cursor& cursor)
+	{}
+
+	void CursorEventsListener::OnCursorStillDown(const Input::Cursor& cursor)
 	{}
 
 	void CursorEventsListener::OnCursorMoved(const Input::Cursor& cursor)

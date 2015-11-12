@@ -5,90 +5,77 @@
 
 namespace o2
 {
-	IOBJECT_CPP(Button);
+	IOBJECT_CPP(UIButton);
 
-	Button::Button():
-		Widget()
+	UIButton::UIButton():
+		UIWidget()
 	{
 		InitializeProperties();
 	}
 
-	Button::Button(const Button& other):
-		Widget(other)
+	UIButton::UIButton(const UIButton& other):
+		UIWidget(other)
 	{
+		mCaptionText = GetLayerDrawable<Text>("caption");
+		mIconSprite = GetLayerDrawable<Sprite>("icon");
+
 		InitializeProperties();
 	}
 
-	Button& Button::operator=(const Button& other)
+	UIButton& UIButton::operator=(const UIButton& other)
 	{
-		Widget::operator=(other);
+		UIWidget::operator=(other);
+		mCaptionText = GetLayerDrawable<Text>("caption");
+		mIconSprite = GetLayerDrawable<Sprite>("icon");
 		return *this;
 	}
 
-	void Button::SetCaption(const WString& text)
+	void UIButton::SetCaption(const WString& text)
 	{
-		FindCaptionLayerText()->SetText(text);
+		if (mCaptionText)
+			mCaptionText->SetText(text);
 	}
 
-	WString Button::GetCaption() const
+	WString UIButton::GetCaption() const
 	{
-		auto captionText = GetLayerDrawable<Text>("caption");
-		if (captionText)
-			return captionText->GetText();
+		if (mCaptionText)
+			return mCaptionText->GetText();
 
 		return WString();
 	}
 
-	void Button::SetCCaption(const String& text)
+	void UIButton::SetIcon(Ptr<Sprite> sprite)
 	{
-		FindCaptionLayerText()->SetCText(text);
+		if (mIconSprite)
+			mIconSprite = sprite;
 	}
 
-	String Button::GetCCaption() const
+	Ptr<Sprite> UIButton::GetIcon() const
 	{
-		auto captionText = GetLayerDrawable<Text>("caption");
-		if (captionText)
-			return captionText->GetCText();
+		if (mIconSprite)
+			return mIconSprite;
 
-		return String();
+		return nullptr;
 	}
 
-	void Button::SetIcon(Ptr<ImageAsset> asset)
-	{
-		FindIconLayerSprite()->LoadFromImage(asset);
-	}
-
-	void Button::SetIcon(const String& imagePath)
-	{
-		FindIconLayerSprite()->LoadFromImage(imagePath);
-	}
-
-	void Button::SetIcon(AssetId imageAssetId)
-	{
-		FindIconLayerSprite()->LoadFromImage(imageAssetId);
-	}
-
-	bool Button::IsUnderPoint(const Vec2F& point)
+	bool UIButton::IsUnderPoint(const Vec2F& point)
 	{
 		return layout.GetAbsoluteRect().IsInside(point);
 	}
 
-	float Button::Depth()
+	float UIButton::Depth()
 	{
-		if (mDrawingLayers.Count() > 0)
-			return mDrawingLayers.Last()->drawable->GetDrawingDepth();
-
-		return 0.0f;
+		return GetMaxDrawingDepth();
 	}
 
-	void Button::OnCursorPressed(const Input::Cursor& cursor)
+	void UIButton::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = true;
 	}
 
-	void Button::OnCursorReleased(const Input::Cursor& cursor)
+	void UIButton::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -98,50 +85,39 @@ namespace o2
 			onClick();
 	}
 
-	void Button::OnCursorEnter(const Input::Cursor& cursor)
+	void UIButton::OnCursorPressBreak(const Input::Cursor& cursor)
+	{
+		auto pressedState = state["pressed"];
+		if (pressedState)
+			*pressedState = false;
+	}
+
+	void UIButton::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		auto selectState = state["select"];
 		if (selectState)
 			*selectState = true;
 	}
 
-	void Button::OnCursorExit(const Input::Cursor& cursor)
+	void UIButton::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto selectState = state["select"];
 		if (selectState)
 			*selectState = false;
 	}
 
-	Ptr<Text> Button::FindCaptionLayerText()
+	void UIButton::OnLayerAdded(Ptr<UIWidgetLayer> layer)
 	{
-		auto captionText = GetLayerDrawable<Text>("caption");
-		if (!captionText)
-		{
-			auto layer = AddTextLayer("caption", "", "arial.ttf");
-			return layer->drawable.Cast<Text>();
-		}
+		if (layer->name == "caption" && layer->drawable && layer->drawable->GetTypeId() == Text::type->ID())
+			mCaptionText = layer->drawable.Cast<Text>();
 
-		return captionText;
+		if (layer->name == "icon" && layer->drawable && layer->drawable->GetTypeId() == Sprite::type->ID())
+			mIconSprite = layer->drawable.Cast<Sprite>();
 	}
 
-	Ptr<Sprite> Button::FindIconLayerSprite()
+	void UIButton::InitializeProperties()
 	{
-		auto iconSprite = GetLayerDrawable<Sprite>("icon");
-		if (!iconSprite)
-		{
-			auto layer = AddSpriteLayer("icon", 0);
-			return layer->drawable.Cast<Sprite>();
-		}
-
-		return iconSprite;
-	}
-
-	void Button::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(Button, caption, SetCaption, GetCaption);
-		INITIALIZE_PROPERTY(Button, captionc, SetCCaption, GetCCaption);
-		INITIALIZE_SETTER(Button, icon, SetIcon);
-		INITIALIZE_SETTER(Button, iconPath, SetIcon);
-		INITIALIZE_SETTER(Button, iconImageId, SetIcon);
+		INITIALIZE_PROPERTY(UIButton, caption, SetCaption, GetCaption);
+		INITIALIZE_PROPERTY(UIButton, icon, SetIcon, GetIcon);
 	}
 }

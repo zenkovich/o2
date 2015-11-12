@@ -8,12 +8,12 @@
 
 namespace o2
 {
-	class Widget;
+	class UIWidget;
 
 	// -------------
 	// Widget layout
 	// -------------
-	class WidgetLayout: public ISerializable
+	class UIWidgetLayout: public ISerializable
 	{
 	public:
 		Property<Vec2F> pivot;
@@ -28,7 +28,6 @@ namespace o2
 		Property<float> absTop;
 		Property<float> pivotX;
 		Property<float> pivotY;
-		Property<bool>  fitByChildren;
 		Property<Vec2F> anchorMin;
 		Property<Vec2F> anchorMax;
 		Property<Vec2F> offsetMin;
@@ -51,11 +50,11 @@ namespace o2
 		Property<float> widthWeight;
 		Property<float> heigthWeight;
 
-		WidgetLayout();
+		UIWidgetLayout();
 
-		WidgetLayout(const WidgetLayout& other);
+		UIWidgetLayout(const UIWidgetLayout& other);
 
-		WidgetLayout& operator=(const WidgetLayout& other);
+		UIWidgetLayout& operator=(const UIWidgetLayout& other);
 
 		void SetPosition(const Vec2F& position);
 		Vec2F GetPosition();
@@ -153,9 +152,6 @@ namespace o2
 		void SetMaximalHeight(float value);
 		float GetMaximalHeight() const;
 
-		void SetFittingByChildren(bool fit);
-		bool IsFittingByChildren() const;
-
 		void SetWeight(const Vec2F& weight);
 		Vec2F GetWeight() const;
 
@@ -165,9 +161,9 @@ namespace o2
 		void SetHeightWeight(float heigthWeigth);
 		float GetHeightWeight();
 
-		SERIALIZABLE_IMPL(WidgetLayout);
+		SERIALIZABLE_IMPL(UIWidgetLayout);
 
-		IOBJECT(WidgetLayout)
+		IOBJECT(UIWidgetLayout)
 		{
 			FIELD(pivot);
 			FIELD(position);
@@ -181,7 +177,6 @@ namespace o2
 			FIELD(absTop);
 			FIELD(pivotX);
 			FIELD(pivotY);
-			FIELD(fitByChildren);
 			FIELD(anchorMin);
 			FIELD(anchorMax);
 			FIELD(offsetMin);
@@ -211,34 +206,36 @@ namespace o2
 			SRLZ_FIELD(mOffsetMin);
 			SRLZ_FIELD(mOffsetMax);
 			SRLZ_FIELD(mWeight);
-			SRLZ_FIELD(mFitByChilds);
 
 			FIELD(mAbsoluteRect);
 		}
 
 	protected:
-		Ptr<Widget> mOwner;
-		Vec2F       mPivot          = Vec2F(0.5f, 0.5f);
-		Vec2F       mAnchorMin      = Vec2F(0.5f, 0.5f);
-		Vec2F       mAnchorMax      = Vec2F(0.5f, 0.5f);
-		Vec2F       mOffsetMin      = Vec2F(0.0f, 0.0f);
-		Vec2F       mOffsetMax      = Vec2F(0.0f, 0.0f);
-		Vec2F       mMinSize        = Vec2F(0.0f, 0.0f);
-		Vec2F       mMaxSize        = Vec2F(FLT_MAX, FLT_MAX);
-		RectF       mAbsoluteRect   = RectF();
-		RectF       mLocalRect      = RectF();
-		Vec2F       mWeight         = Vec2F(1.0f, 1.0f);
-		bool        mFitByChilds    = false;
-		bool        mDrivenByParent = false;
+		Ptr<UIWidget> mOwner;
+		Vec2F         mPivot          = Vec2F(0.5f, 0.5f);
+		Vec2F         mAnchorMin      = Vec2F(0.5f, 0.5f);
+		Vec2F         mAnchorMax      = Vec2F(0.5f, 0.5f);
+		Vec2F         mOffsetMin      = Vec2F(0.0f, 0.0f);
+		Vec2F         mOffsetMax      = Vec2F(0.0f, 0.0f);
+		Vec2F         mMinSize        = Vec2F(0.0f, 0.0f);
+		Vec2F         mMaxSize        = Vec2F(FLT_MAX, FLT_MAX);
+		RectF         mAbsoluteRect   = RectF();
+		RectF         mLocalRect      = RectF();
+		Vec2F         mWeight         = Vec2F(1.0f, 1.0f);
+		bool          mDrivenByParent = false;
 
 	protected:
-		void Recalculate();
-		void UpdateRect();
 		void InitializeProperties();
 
-		friend class Widget;
-		friend class WidgetLayer;
-		friend class HorizontalLayout;
-		friend class VerticalLayout;
+		friend class UIEditBox;
+		friend class UIHorizontalLayout;
+		friend class UIHorizontalProgress;
+		friend class UIHorizontalScrollBar;
+		friend class UIScrollArea;
+		friend class UIVerticalLayout;
+		friend class UIVerticalProgress;
+		friend class UIVerticalScrollBar;
+		friend class UIWidget;
+		friend class UIWidgetLayer;
 	};
 }

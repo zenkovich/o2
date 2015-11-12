@@ -18,7 +18,7 @@ namespace o2
 		return RectF(source.left + srcSize.x*anchorMin.x + offsetMin.x,
 					 source.bottom + srcSize.y*anchorMin.y + offsetMin.y,
 					 source.left + srcSize.x*anchorMax.x + offsetMax.x,
-					 source.bottom + srcSize.y*anchorMax.x + offsetMax.y);
+					 source.bottom + srcSize.y*anchorMax.y + offsetMax.y);
 	}
 
 	Layout Layout::Both(const RectF& border)

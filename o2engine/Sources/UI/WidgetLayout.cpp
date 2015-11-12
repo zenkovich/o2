@@ -4,523 +4,469 @@
 
 namespace o2
 {
-	IOBJECT_CPP(WidgetLayout);
+	IOBJECT_CPP(UIWidgetLayout);
 
-	WidgetLayout::WidgetLayout()
+	UIWidgetLayout::UIWidgetLayout()
 	{
 		InitializeProperties();
 	}
 
-	WidgetLayout::WidgetLayout(const WidgetLayout& other):
+	UIWidgetLayout::UIWidgetLayout(const UIWidgetLayout& other):
 		mPivot(other.mPivot), mAnchorMin(other.mAnchorMin), mAnchorMax(other.mAnchorMax),
-		mOffsetMin(other.mOffsetMin), mOffsetMax(other.mOffsetMax), mFitByChilds(other.mFitByChilds)
+		mOffsetMin(other.mOffsetMin), mOffsetMax(other.mOffsetMax)
 	{
 		InitializeProperties();
 	}
 
-	WidgetLayout& WidgetLayout::operator=(const WidgetLayout& other)
+	UIWidgetLayout& UIWidgetLayout::operator=(const UIWidgetLayout& other)
 	{
 		mPivot = other.mPivot;
 		mAnchorMin = other.mAnchorMin;
 		mAnchorMax = other.mAnchorMax;
 		mOffsetMin = other.mOffsetMin;
 		mOffsetMax = other.mOffsetMax;
-		mFitByChilds = other.mFitByChilds;
 
-		Recalculate();
+		mOwner->UpdateLayout();
 
 		return *this;
 	}
 
-	void WidgetLayout::SetPosition(const Vec2F& position)
+	void UIWidgetLayout::SetPosition(const Vec2F& position)
 	{
 		Vec2F delta = position - GetPosition();
 		mOffsetMin += delta;
 		mOffsetMax += delta;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetPosition()
+	Vec2F UIWidgetLayout::GetPosition()
 	{
-		return mLocalRect.LeftBottom() + mLocalRect.Size()*mPivot;
+		Vec2F parentPivot;
+
+		if (mOwner->mParent)
+			parentPivot = mOwner->mParent->layout.mLocalRect.Size()*mOwner->mParent->layout.mPivot;
+
+		return mLocalRect.LeftBottom() + mLocalRect.Size()*mPivot - parentPivot;
 	}
 
-	void WidgetLayout::SetSize(const Vec2F& size)
+	void UIWidgetLayout::SetSize(const Vec2F& size)
 	{
 		Vec2F szDelta = size - GetSize();
 		mOffsetMax += szDelta*(Vec2F::One() - mPivot);
 		mOffsetMin -= szDelta*mPivot;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetSize() const
+	Vec2F UIWidgetLayout::GetSize() const
 	{
 		return mAbsoluteRect.Size();
 	}
 
-	void WidgetLayout::SetWidth(float width)
+	void UIWidgetLayout::SetWidth(float width)
 	{
 		float delta = width - GetWidth();
 		mOffsetMax.x += delta*(1.0f - mPivot.x);
 		mOffsetMin.x -= delta*mPivot.x;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetWidth() const
+	float UIWidgetLayout::GetWidth() const
 	{
 		return mAbsoluteRect.Width();
 	}
 
-	void WidgetLayout::SetHeight(float height)
+	void UIWidgetLayout::SetHeight(float height)
 	{
 		float delta = height - GetHeight();
 		mOffsetMax.y += delta*(1.0f - mPivot.y);
 		mOffsetMin.y -= delta*mPivot.y;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetHeight() const
+	float UIWidgetLayout::GetHeight() const
 	{
 		return mAbsoluteRect.Height();
 	}
 
-	void WidgetLayout::SetRect(const RectF& rect)
+	void UIWidgetLayout::SetRect(const RectF& rect)
 	{
 		mOffsetMin += rect.LeftBottom() - mLocalRect.LeftBottom();
 		mOffsetMax += rect.RightTop() - mLocalRect.RightTop();
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	RectF WidgetLayout::GetRect() const
+	RectF UIWidgetLayout::GetRect() const
 	{
 		return mLocalRect;
 	}
 
-	void WidgetLayout::SetAbsoluteLeft(float value)
+	void UIWidgetLayout::SetAbsoluteLeft(float value)
 	{
 		mOffsetMin.x += value - mAbsoluteRect.left;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetAbsoluteLeft() const
+	float UIWidgetLayout::GetAbsoluteLeft() const
 	{
 		return mAbsoluteRect.left;
 	}
 
-	void WidgetLayout::SetAbsoluteRight(float value)
+	void UIWidgetLayout::SetAbsoluteRight(float value)
 	{
 		mOffsetMax.x += value - mAbsoluteRect.right;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetAbsoluteRight() const
+	float UIWidgetLayout::GetAbsoluteRight() const
 	{
 		return mAbsoluteRect.right;
 	}
 
-	void WidgetLayout::SetAbsoluteBottom(float value)
+	void UIWidgetLayout::SetAbsoluteBottom(float value)
 	{
 		mOffsetMin.y += value - mAbsoluteRect.bottom;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetAbsoluteBottom() const
+	float UIWidgetLayout::GetAbsoluteBottom() const
 	{
 		return mAbsoluteRect.bottom;
 	}
 
-	void WidgetLayout::SetAbsoluteTop(float value)
+	void UIWidgetLayout::SetAbsoluteTop(float value)
 	{
 		mOffsetMax.y += value - mAbsoluteRect.top;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetAbsoluteTop() const
+	float UIWidgetLayout::GetAbsoluteTop() const
 	{
 		return mAbsoluteRect.top;
 	}
 
-	void WidgetLayout::SetAbsolutePosition(const Vec2F& absPosition)
+	void UIWidgetLayout::SetAbsolutePosition(const Vec2F& absPosition)
 	{
 		Vec2F delta = position - GetAbsolutePosition();
 		mOffsetMin += delta;
 		mOffsetMax += delta;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetAbsolutePosition() const
+	Vec2F UIWidgetLayout::GetAbsolutePosition() const
 	{
 		return mAbsoluteRect.LeftBottom() + mAbsoluteRect.Size()*mPivot;
 	}
 
-	void WidgetLayout::SetAbsoluteRect(const RectF& rect)
+	void UIWidgetLayout::SetAbsoluteRect(const RectF& rect)
 	{
 		mOffsetMin += rect.LeftBottom() - mAbsoluteRect.LeftBottom();
 		mOffsetMax += rect.RightTop() - mAbsoluteRect.RightTop();
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	RectF WidgetLayout::GetAbsoluteRect() const
+	RectF UIWidgetLayout::GetAbsoluteRect() const
 	{
 		return mAbsoluteRect;
 	}
 
-	void WidgetLayout::SetPivot(const Vec2F& pivot)
+	void UIWidgetLayout::SetPivot(const Vec2F& pivot)
 	{
 		mPivot = pivot;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetPivot() const
+	Vec2F UIWidgetLayout::GetPivot() const
 	{
 		return mPivot;
 	}
 
-	void WidgetLayout::SetPivotX(float x)
+	void UIWidgetLayout::SetPivotX(float x)
 	{
 		mPivot.x = x;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetPivotX() const
+	float UIWidgetLayout::GetPivotX() const
 	{
 		return mPivot.x;
 	}
 
-	void WidgetLayout::SetPivotY(float y)
+	void UIWidgetLayout::SetPivotY(float y)
 	{
 		mPivot.y = y;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetPivotY() const
+	float UIWidgetLayout::GetPivotY() const
 	{
 		return mPivot.y;
 	}
 
-	void WidgetLayout::SetAnchorMin(const Vec2F& min)
+	void UIWidgetLayout::SetAnchorMin(const Vec2F& min)
 	{
 		mAnchorMin = min;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetAnchorMin() const
+	Vec2F UIWidgetLayout::GetAnchorMin() const
 	{
 		return mAnchorMin;
 	}
 
-	void WidgetLayout::SetAnchorMax(const Vec2F& max)
+	void UIWidgetLayout::SetAnchorMax(const Vec2F& max)
 	{
 		mAnchorMax = max;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetAnchorMax() const
+	Vec2F UIWidgetLayout::GetAnchorMax() const
 	{
 		return mAnchorMax;
 	}
 
-	void WidgetLayout::SetAnchorLeft(float value)
+	void UIWidgetLayout::SetAnchorLeft(float value)
 	{
 		mAnchorMin.x = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetAnchorLeft() const
+	float UIWidgetLayout::GetAnchorLeft() const
 	{
 		return mAnchorMin.x;
 	}
 
-	void WidgetLayout::SetAnchorRight(float value)
+	void UIWidgetLayout::SetAnchorRight(float value)
 	{
 		mAnchorMax.x = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetAnchorRight() const
+	float UIWidgetLayout::GetAnchorRight() const
 	{
 		return mAnchorMax.x;
 	}
 
-	void WidgetLayout::SetAnchorBottom(float value)
+	void UIWidgetLayout::SetAnchorBottom(float value)
 	{
 		mAnchorMin.y = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetAnchorBottom() const
+	float UIWidgetLayout::GetAnchorBottom() const
 	{
 		return mAnchorMin.y;
 	}
 
-	void WidgetLayout::SetAnchorTop(float value)
+	void UIWidgetLayout::SetAnchorTop(float value)
 	{
 		mAnchorMax.y = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetAnchorTop() const
+	float UIWidgetLayout::GetAnchorTop() const
 	{
 		return mAnchorMax.y;
 	}
 
-	void WidgetLayout::SetOffsetMin(const Vec2F& min)
+	void UIWidgetLayout::SetOffsetMin(const Vec2F& min)
 	{
 		mOffsetMin = min;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetOffsetMin() const
+	Vec2F UIWidgetLayout::GetOffsetMin() const
 	{
 		return mOffsetMin;
 	}
 
-	void WidgetLayout::SetOffsetMax(const Vec2F& max)
+	void UIWidgetLayout::SetOffsetMax(const Vec2F& max)
 	{
 		mOffsetMax = max;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetOffsetMax() const
+	Vec2F UIWidgetLayout::GetOffsetMax() const
 	{
 		return mOffsetMax;
 	}
 
-	void WidgetLayout::SetOffsetLeft(float value)
+	void UIWidgetLayout::SetOffsetLeft(float value)
 	{
 		mOffsetMin.x = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetOffsetLeft() const
+	float UIWidgetLayout::GetOffsetLeft() const
 	{
 		return mOffsetMin.x;
 	}
 
-	void WidgetLayout::SetOffsetRight(float value)
+	void UIWidgetLayout::SetOffsetRight(float value)
 	{
 		mOffsetMax.x = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetOffsetRight() const
+	float UIWidgetLayout::GetOffsetRight() const
 	{
 		return mOffsetMax.x;
 	}
 
-	void WidgetLayout::SetOffsetBottom(float value)
+	void UIWidgetLayout::SetOffsetBottom(float value)
 	{
 		mOffsetMin.y = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetOffsetBottom() const
+	float UIWidgetLayout::GetOffsetBottom() const
 	{
 		return mOffsetMin.y;
 	}
 
-	void WidgetLayout::SetOffsetTop(float value)
+	void UIWidgetLayout::SetOffsetTop(float value)
 	{
 		mOffsetMax.y = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetOffsetTop() const
+	float UIWidgetLayout::GetOffsetTop() const
 	{
 		return mOffsetMax.y;
 	}
 
-	void WidgetLayout::SetMinimalSize(const Vec2F& minSize)
+	void UIWidgetLayout::SetMinimalSize(const Vec2F& minSize)
 	{
 		mMinSize = minSize;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetMinimalSize() const
+	Vec2F UIWidgetLayout::GetMinimalSize() const
 	{
 		return mMinSize;
 	}
 
-	void WidgetLayout::SetMinimalWidth(float value)
+	void UIWidgetLayout::SetMinimalWidth(float value)
 	{
 		mMinSize.x = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetMinimalWidth() const
+	float UIWidgetLayout::GetMinimalWidth() const
 	{
 		return mMinSize.x;
 	}
 
-	void WidgetLayout::SetMinimalHeight(float value)
+	void UIWidgetLayout::SetMinimalHeight(float value)
 	{
 		mMinSize.y = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetMinimalHeight() const
+	float UIWidgetLayout::GetMinimalHeight() const
 	{
 		return mMinSize.y;
 	}
 
-	void WidgetLayout::SetMaximalSize(const Vec2F& maxSize)
+	void UIWidgetLayout::SetMaximalSize(const Vec2F& maxSize)
 	{
 		mMaxSize = maxSize;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetMaximalSize() const
+	Vec2F UIWidgetLayout::GetMaximalSize() const
 	{
 		return mMaxSize;
 	}
 
-	void WidgetLayout::SetMaximalWidth(float value)
+	void UIWidgetLayout::SetMaximalWidth(float value)
 	{
 		mMaxSize.x = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetMaximalWidth() const
+	float UIWidgetLayout::GetMaximalWidth() const
 	{
 		return mMaxSize.x;
 	}
 
-	void WidgetLayout::SetMaximalHeight(float value)
+	void UIWidgetLayout::SetMaximalHeight(float value)
 	{
 		mMaxSize.y = value;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetMaximalHeight() const
+	float UIWidgetLayout::GetMaximalHeight() const
 	{
 		return mMaxSize.y;
 	}
 
-	void WidgetLayout::SetFittingByChildren(bool fit)
-	{
-		mFitByChilds = fit;
-		Recalculate();
-	}
-
-	bool WidgetLayout::IsFittingByChildren() const
-	{
-		return mFitByChilds;
-	}
-
-	void WidgetLayout::SetWeight(const Vec2F& weight)
+	void UIWidgetLayout::SetWeight(const Vec2F& weight)
 	{
 		mWeight = weight;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	Vec2F WidgetLayout::GetWeight() const
+	Vec2F UIWidgetLayout::GetWeight() const
 	{
 		return mWeight;
 	}
 
-	void WidgetLayout::SetWidthWeight(float widthWeigth)
+	void UIWidgetLayout::SetWidthWeight(float widthWeigth)
 	{
 		mWeight.x = widthWeigth;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetWidthWeight()
+	float UIWidgetLayout::GetWidthWeight()
 	{
 		return mWeight.x;
 	}
 
-	void WidgetLayout::SetHeightWeight(float heigthWeigth)
+	void UIWidgetLayout::SetHeightWeight(float heigthWeigth)
 	{
 		mWeight.y = heigthWeigth;
-		Recalculate();
+		mOwner->UpdateLayout();
 	}
 
-	float WidgetLayout::GetHeightWeight()
+	float UIWidgetLayout::GetHeightWeight()
 	{
 		return mWeight.y;
 	}
 
-	void WidgetLayout::Recalculate()
+	void UIWidgetLayout::InitializeProperties()
 	{
-		if (mDrivenByParent)
-		{
-			if (mOwner->mParent)
-				mOwner->mParent->layout.UpdateRect();
-		}
-		else
-			UpdateRect();
-	}
-
-	void WidgetLayout::UpdateRect()
-	{
-		RectF lastAbsRect = mAbsoluteRect;
-
-		Vec2F parentSize, parentPos;
-		if (mOwner->mParent)
-		{
-			parentSize = mOwner->mParent->layout.mAbsoluteRect.Size();
-			parentPos = mOwner->mParent->layout.mAbsoluteRect.LeftBottom();
-		}
-
-		mLocalRect.left   = parentSize.x*mAnchorMin.x + mOffsetMin.x;
-		mLocalRect.right  = parentSize.x*mAnchorMax.x + mOffsetMax.x;
-		mLocalRect.bottom = parentSize.y*mAnchorMin.y + mOffsetMin.y;
-		mLocalRect.top    = parentSize.y*mAnchorMax.y + mOffsetMax.y;
-
-		Vec2F resSize = mLocalRect.Size();
-		Vec2F clampSize(Math::Clamp(resSize.x, mMinSize.x, mMaxSize.x),
-						Math::Clamp(resSize.y, mMinSize.y, mMaxSize.y));
-		Vec2F szDelta = clampSize - resSize;
-
-		mLocalRect.left   -= szDelta.x*mPivot.x;
-		mLocalRect.right  += szDelta.x*(1.0f - mPivot.x);
-		mLocalRect.bottom -= szDelta.y*mPivot.y;
-		mLocalRect.top    += szDelta.y*(1.0f - mPivot.y);
-
-		mAbsoluteRect = mLocalRect + parentPos;
-
-		mOwner->UpdateLayersLayouts();
-		mOwner->OnLayoutUpdated();
-
-		for (auto child : mOwner->mChilds)
-			child->layout.UpdateRect();
-	}
-
-	void WidgetLayout::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(WidgetLayout, pivot, SetPivot, GetPivot);
-		INITIALIZE_PROPERTY(WidgetLayout, position, SetPosition, GetPosition);
-		INITIALIZE_PROPERTY(WidgetLayout, size, SetSize, GetSize);
-		INITIALIZE_PROPERTY(WidgetLayout, width, SetWidth, GetWidth);
-		INITIALIZE_PROPERTY(WidgetLayout, height, SetHeight, GetHeight);
-		INITIALIZE_PROPERTY(WidgetLayout, absPosition, SetAbsolutePosition, GetAbsolutePosition);
-		INITIALIZE_PROPERTY(WidgetLayout, absLeft, SetAbsoluteLeft, GetAbsoluteLeft);
-		INITIALIZE_PROPERTY(WidgetLayout, absRight, SetAbsoluteRight, GetAbsoluteRight);
-		INITIALIZE_PROPERTY(WidgetLayout, absBottom, SetAbsoluteBottom, GetAbsoluteBottom);
-		INITIALIZE_PROPERTY(WidgetLayout, absTop, SetAbsoluteTop, GetAbsoluteTop);
-		INITIALIZE_PROPERTY(WidgetLayout, pivotX, SetPivotX, GetPivotX);
-		INITIALIZE_PROPERTY(WidgetLayout, pivotY, SetPivotY, GetPivotY);
-		INITIALIZE_PROPERTY(WidgetLayout, fitByChildren, SetFittingByChildren, IsFittingByChildren);
-		INITIALIZE_PROPERTY(WidgetLayout, anchorMin, SetAnchorMin, GetAnchorMin);
-		INITIALIZE_PROPERTY(WidgetLayout, anchorMax, SetAnchorMax, GetAnchorMax);
-		INITIALIZE_PROPERTY(WidgetLayout, offsetMin, SetOffsetMin, GetOffsetMin);
-		INITIALIZE_PROPERTY(WidgetLayout, offsetMax, SetOffsetMax, GetOffsetMax);
-		INITIALIZE_PROPERTY(WidgetLayout, anchorLeft, SetAnchorLeft, GetAnchorLeft);
-		INITIALIZE_PROPERTY(WidgetLayout, anchorRight, SetAnchorRight, GetAnchorRight);
-		INITIALIZE_PROPERTY(WidgetLayout, anchorBottom, SetAnchorBottom, GetAnchorBottom);
-		INITIALIZE_PROPERTY(WidgetLayout, anchorTop, SetAnchorTop, GetAnchorTop);
-		INITIALIZE_PROPERTY(WidgetLayout, offsetLeft, SetOffsetLeft, GetOffsetLeft);
-		INITIALIZE_PROPERTY(WidgetLayout, offsetRight, SetOffsetRight, GetOffsetRight);
-		INITIALIZE_PROPERTY(WidgetLayout, offsetBottom, SetOffsetBottom, GetOffsetBottom);
-		INITIALIZE_PROPERTY(WidgetLayout, offsetTop, SetOffsetTop, GetOffsetTop);
-		INITIALIZE_PROPERTY(WidgetLayout, minSize, SetMinimalSize, GetMinimalSize);
-		INITIALIZE_PROPERTY(WidgetLayout, minWidth, SetMinimalWidth, GetMinimalWidth);
-		INITIALIZE_PROPERTY(WidgetLayout, minHeight, SetMinimalHeight, GetMinimalHeight);
-		INITIALIZE_PROPERTY(WidgetLayout, maxSize, SetMaximalSize, GetMaximalSize);
-		INITIALIZE_PROPERTY(WidgetLayout, maxWidth, SetMaximalWidth, GetMaximalWidth);
-		INITIALIZE_PROPERTY(WidgetLayout, maxHeight, SetMaximalHeight, GetMaximalHeight);
-		INITIALIZE_PROPERTY(WidgetLayout, weight, SetWeight, GetWeight);
-		INITIALIZE_PROPERTY(WidgetLayout, widthWeight, SetWidthWeight, GetWidthWeight);
-		INITIALIZE_PROPERTY(WidgetLayout, heigthWeight, SetHeightWeight, GetHeightWeight);
+		INITIALIZE_PROPERTY(UIWidgetLayout, pivot, SetPivot, GetPivot);
+		INITIALIZE_PROPERTY(UIWidgetLayout, position, SetPosition, GetPosition);
+		INITIALIZE_PROPERTY(UIWidgetLayout, size, SetSize, GetSize);
+		INITIALIZE_PROPERTY(UIWidgetLayout, width, SetWidth, GetWidth);
+		INITIALIZE_PROPERTY(UIWidgetLayout, height, SetHeight, GetHeight);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absPosition, SetAbsolutePosition, GetAbsolutePosition);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absLeft, SetAbsoluteLeft, GetAbsoluteLeft);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absRight, SetAbsoluteRight, GetAbsoluteRight);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absBottom, SetAbsoluteBottom, GetAbsoluteBottom);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absTop, SetAbsoluteTop, GetAbsoluteTop);
+		INITIALIZE_PROPERTY(UIWidgetLayout, pivotX, SetPivotX, GetPivotX);
+		INITIALIZE_PROPERTY(UIWidgetLayout, pivotY, SetPivotY, GetPivotY);
+		INITIALIZE_PROPERTY(UIWidgetLayout, anchorMin, SetAnchorMin, GetAnchorMin);
+		INITIALIZE_PROPERTY(UIWidgetLayout, anchorMax, SetAnchorMax, GetAnchorMax);
+		INITIALIZE_PROPERTY(UIWidgetLayout, offsetMin, SetOffsetMin, GetOffsetMin);
+		INITIALIZE_PROPERTY(UIWidgetLayout, offsetMax, SetOffsetMax, GetOffsetMax);
+		INITIALIZE_PROPERTY(UIWidgetLayout, anchorLeft, SetAnchorLeft, GetAnchorLeft);
+		INITIALIZE_PROPERTY(UIWidgetLayout, anchorRight, SetAnchorRight, GetAnchorRight);
+		INITIALIZE_PROPERTY(UIWidgetLayout, anchorBottom, SetAnchorBottom, GetAnchorBottom);
+		INITIALIZE_PROPERTY(UIWidgetLayout, anchorTop, SetAnchorTop, GetAnchorTop);
+		INITIALIZE_PROPERTY(UIWidgetLayout, offsetLeft, SetOffsetLeft, GetOffsetLeft);
+		INITIALIZE_PROPERTY(UIWidgetLayout, offsetRight, SetOffsetRight, GetOffsetRight);
+		INITIALIZE_PROPERTY(UIWidgetLayout, offsetBottom, SetOffsetBottom, GetOffsetBottom);
+		INITIALIZE_PROPERTY(UIWidgetLayout, offsetTop, SetOffsetTop, GetOffsetTop);
+		INITIALIZE_PROPERTY(UIWidgetLayout, minSize, SetMinimalSize, GetMinimalSize);
+		INITIALIZE_PROPERTY(UIWidgetLayout, minWidth, SetMinimalWidth, GetMinimalWidth);
+		INITIALIZE_PROPERTY(UIWidgetLayout, minHeight, SetMinimalHeight, GetMinimalHeight);
+		INITIALIZE_PROPERTY(UIWidgetLayout, maxSize, SetMaximalSize, GetMaximalSize);
+		INITIALIZE_PROPERTY(UIWidgetLayout, maxWidth, SetMaximalWidth, GetMaximalWidth);
+		INITIALIZE_PROPERTY(UIWidgetLayout, maxHeight, SetMaximalHeight, GetMaximalHeight);
+		INITIALIZE_PROPERTY(UIWidgetLayout, weight, SetWeight, GetWeight);
+		INITIALIZE_PROPERTY(UIWidgetLayout, widthWeight, SetWidthWeight, GetWidthWeight);
+		INITIALIZE_PROPERTY(UIWidgetLayout, heigthWeight, SetHeightWeight, GetHeightWeight);
 	}
 }

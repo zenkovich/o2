@@ -31,7 +31,7 @@ namespace o2
 
 		void OnCursorPressed(const Input::Cursor& cursor);
 		void OnCursorReleased(const Input::Cursor& cursor);
-		void OnCursorStayDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor);
 		void OnCursorEnter(const Input::Cursor& cursor);
 		void OnCursorExit(const Input::Cursor& cursor);
 

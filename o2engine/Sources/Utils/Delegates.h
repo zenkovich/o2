@@ -413,6 +413,13 @@ namespace o2
 
 		// Constructor from object and his function
 		template<typename _class_type>
+		Function(const ObjFunctionPtr<_class_type, _res_type, _args ...>& func)
+		{
+			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(func));
+		}
+
+		// Constructor from object and his function
+		template<typename _class_type>
 		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const)
 		{
 			mFunctions.push_back(new ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));

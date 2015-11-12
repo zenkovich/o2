@@ -141,8 +141,8 @@ namespace o2
 		{
 			size_t diff = (char*)info - (char*)inst->mAllocObjsInfos;
 			size_t off = diff%sizeof(AllocObjectInfo);
-			if (off == 0)
-			{
+//  			if (off == 0)
+//  			{
 				if (info->mObjectPtr == object)
 				{
 					int idx = diff/sizeof(AllocObjectInfo);
@@ -151,15 +151,15 @@ namespace o2
 
 					free((char*)object - AllocObjInfoSize);
 
-					for (IPtr** ptr = inst->mPointers; ptr < inst->mPointers + inst->mPointersCount; ptr++)
-					{
-						if (*ptr && (*ptr)->ObjectPtr() == object)
-							(*ptr)->ObjectReleased();
-					}
+//  					for (IPtr** ptr = inst->mPointers; ptr < inst->mPointers + inst->mPointersCount; ptr++)
+//  					{
+//  						if (*ptr && (*ptr)->ObjectPtr() == object)
+//  							(*ptr)->ObjectReleased();
+//  					}
 
 					return;
 				}
-			}
+			//}
 		}
 
 		free(object);

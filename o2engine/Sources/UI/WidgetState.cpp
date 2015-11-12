@@ -4,13 +4,13 @@
 
 namespace o2
 {
-	IOBJECT_CPP(WidgetState);
+	IOBJECT_CPP(UIWidgetState);
 
-	WidgetState::WidgetState():
+	UIWidgetState::UIWidgetState():
 		mState(false), offStateAnimationSpeed(1)
 	{}
 
-	WidgetState::WidgetState(const WidgetState& state):
+	UIWidgetState::UIWidgetState(const UIWidgetState& state):
 		name(state.name), animation(state.animation), mState(state.mState), mOwner(state.mOwner),
 		offStateAnimationSpeed(state.offStateAnimationSpeed)
 	{
@@ -18,15 +18,15 @@ namespace o2
 		animation.relTime = mState ? 1.0f:0.0f;
 	}
 
-	WidgetState::~WidgetState()
+	UIWidgetState::~UIWidgetState()
 	{}
 
-	WidgetState::operator bool()
+	UIWidgetState::operator bool()
 	{
 		return GetState();
 	}
 
-	void WidgetState::SetState(bool state)
+	void UIWidgetState::SetState(bool state)
 	{
 		mState = state;
 
@@ -34,26 +34,55 @@ namespace o2
 		{
 			animation.speed = 1.0f;
 			animation.PlayForward();
+
+			onStateBecomesTrue();
 		}
 		else
 		{
 			animation.speed = offStateAnimationSpeed;
 			animation.PlayBack();
+
+			onStateBecomesFalse();
 		}
 
 	}
 
-	bool WidgetState::GetState() const
+	void UIWidgetState::SetStateForcible(bool state)
+	{
+		mState = state;
+
+		if (mState)
+		{
+			animation.GoToEnd();
+			onStateFullyTrue();
+		}
+		else
+		{
+			animation.GoToBegin();
+			onStateFullyFalse();
+		}
+	}
+
+	bool UIWidgetState::GetState() const
 	{
 		return mState;
 	}
 
-	void WidgetState::Update(float dt)
+	void UIWidgetState::Update(float dt)
 	{
-		animation.Update(dt);
+		if (animation.IsPlaying())
+		{
+			animation.Update(dt);
+
+			if (!animation.IsPlaying())
+			{
+				if (mState) onStateFullyTrue();
+				else onStateFullyFalse();
+			}
+		}
 	}
 
-	WidgetState& WidgetState::operator=(bool state)
+	UIWidgetState& UIWidgetState::operator=(bool state)
 	{
 		SetState(state);
 		return *this;

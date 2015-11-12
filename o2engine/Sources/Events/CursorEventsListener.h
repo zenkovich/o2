@@ -11,6 +11,8 @@ namespace o2
 	class CursorEventsListener
 	{
 	public:
+		Property<bool> interactable; // Interactable flag property
+
 		// Default constructor
 		CursorEventsListener();
 
@@ -26,14 +28,27 @@ namespace o2
 		// Returns depth (event system will catch listener with highest depth)
 		virtual float Depth();
 
+		// Sets interactable flag
+		void SetInteractable(bool interactable);
+
+		// Returns interactable flag
+		bool IsInteractable() const;
+
+		// Returns true if this was pressed by some cursor
+		bool IsPressed() const;
+
+	protected:
 		// Calls when cursor pressed on this
 		virtual void OnCursorPressed(const Input::Cursor& cursor);
 
 		// Calls when cursor released (only when cursor pressed this at previous time)
 		virtual void OnCursorReleased(const Input::Cursor& cursor);
 
+		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		virtual void OnCursorPressBreak(const Input::Cursor& cursor);
+
 		// Calls when cursor stay down during frame
-		virtual void OnCursorStayDown(const Input::Cursor& cursor);
+		virtual void OnCursorStillDown(const Input::Cursor& cursor);
 
 		// Calls when cursor moved on this (or moved outside when this was pressed)
 		virtual void OnCursorMoved(const Input::Cursor& cursor);
@@ -64,14 +79,19 @@ namespace o2
 
 		// Calls when scrolling
 		virtual void OnScrolled(float scroll);
-
-		// Returns true if this was pressed by some cursor
-		bool IsPressed() const;
 		
 	protected:
+		bool mInteractable;         // True when listener is interactable
 		bool mIsPressed;            // True when was pressed by cursor
 		bool mIsRightMousePressed;  // True when was pressed by right mouse button
 		bool mIsMiddleMousePressed; // True when was pressed by middle mouse button
+
+	protected:
+		// Calls when listener becomes interactable
+		virtual void OnBecomeInteractable() {}
+
+		// Calls when listener stops interacting
+		virtual void OnBecomeNotInteractable() {}
 
 		friend class EventSystem;
 	};
