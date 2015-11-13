@@ -4,22 +4,29 @@
 #include "Render/Render.h"
 #include "UI/HorizontalScrollBar.h"
 #include "UI/VerticalScrollBar.h"
+#include "Utils/Debug.h"
+#include "Utils/Time.h"
 
 namespace o2
 {
 	IOBJECT_CPP(UIScrollArea);
 
 	UIScrollArea::UIScrollArea():
-		UIWidget(), mOwnHorScrollBar(false), mOwnVerScrollBar(false), clipArea(Layout::Both()), mUnderCursor(false),
-		mPressedCursor(false), mScrollSpeedDamp(7.0f), mSpeedUpdTime(0), viewArea(Layout::Both())
+		UIWidget(), mOwnHorScrollBar(false), mOwnVerScrollBar(false), mClipAreaLayout(Layout::Both()), mUnderCursor(false),
+		mPressedCursor(false), mScrollSpeedDamp(7.0f), mSpeedUpdTime(0), mViewAreaLayoutOffBars(Layout::Both()),
+		mLastHorScrollChangeTime(-10), mLastVerScrollChangeTime(-10), mEnableScrollsHiding(false), 
+		mViewAreaLayoutHBar(Layout::Both()), mViewAreaLayoutHVBar(Layout::Both()), mViewAreaLayoutVBar(Layout::Both())
 	{
 		InitializeProperties();
 	}
 
 	UIScrollArea::UIScrollArea(const UIScrollArea& other):
 		UIWidget(other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
-		clipArea(other.clipArea), mScrollPos(other.mScrollPos), mUnderCursor(false), mPressedCursor(false),
-		mScrollSpeedDamp(other.mScrollSpeedDamp), mSpeedUpdTime(0), viewArea(other.viewArea)
+		mClipAreaLayout(other.mClipAreaLayout), mScrollPos(other.mScrollPos), mUnderCursor(false), mPressedCursor(false),
+		mScrollSpeedDamp(other.mScrollSpeedDamp), mSpeedUpdTime(0), mViewAreaLayoutOffBars(other.mViewAreaLayoutOffBars),
+		mLastHorScrollChangeTime(-10), mLastVerScrollChangeTime(-10), mEnableScrollsHiding(other.mEnableScrollsHiding),
+		mViewAreaLayoutHBar(other.mViewAreaLayoutHBar), mViewAreaLayoutHVBar(other.mViewAreaLayoutHVBar),
+		mViewAreaLayoutVBar(other.mViewAreaLayoutVBar)
 	{
 		if (mOwnHorScrollBar)
 		{
@@ -82,12 +89,16 @@ namespace o2
 				mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnVerScrollChanged);
 		}
 
-		clipArea = other.clipArea;
-		viewArea = other.viewArea;
+		mClipAreaLayout = other.mClipAreaLayout;
+		mViewAreaLayoutOffBars = other.mViewAreaLayoutOffBars;
+		mViewAreaLayoutVBar = other.mViewAreaLayoutVBar;
+		mViewAreaLayoutHBar = other.mViewAreaLayoutHBar;
+		mViewAreaLayoutHVBar = other.mViewAreaLayoutHVBar;
 		mScrollPos = other.mScrollPos;
 		mOwnHorScrollBar = other.mOwnHorScrollBar;
 		mOwnVerScrollBar = other.mOwnVerScrollBar;
 		mScrollSpeedDamp = other.mScrollSpeedDamp;
+		mEnableScrollsHiding = other.mEnableScrollsHiding;
 
 		if (mOwnHorScrollBar)
 		{
@@ -161,6 +172,18 @@ namespace o2
 				mScrollSpeed.y -= Math::Sign(mScrollSpeed.y)*
 				Math::Min(Math::Abs(mScrollSpeed.y), Math::Max(Math::Abs(mScrollSpeed.y)*dt*mScrollSpeedDamp, 0.05f));
 		}
+
+		if (mEnableScrollsHiding)
+		{
+			const float barsHideDelay = 1;
+			float curTime = o2Time.GetApplicationTime();
+
+			if (curTime - mLastHorScrollChangeTime > barsHideDelay && mHorScrollBar->IsVisible())
+				mHorScrollBar->Hide();
+
+			if (curTime - mLastVerScrollChangeTime > barsHideDelay && mVerScrollBar->IsVisible())
+				mVerScrollBar->Hide();
+		}
 	}
 
 	void UIScrollArea::SetScroll(const Vec2F& scroll)
@@ -169,13 +192,22 @@ namespace o2
 						   Math::Clamp(scroll.y, mScrollRange.bottom, mScrollRange.top));
 
 		if (mHorScrollBar)
-			mHorScrollBar->SetValueForcible(mHorScrollBar->GetMinValue() + mHorScrollBar->GetMaxValue() - newScrollPos.x);
+			mHorScrollBar->SetValueForcible(newScrollPos.x);
+		else
+			mScrollPos.x = newScrollPos.x;
 
 		if (mVerScrollBar)
 			mVerScrollBar->SetValueForcible(newScrollPos.y);
+		else
+			mScrollPos.y = newScrollPos.y;
 
 		if (!mVerScrollBar || !mHorScrollBar)
+		{
 			UpdateLayout();
+		}
+
+		onScrolled(newScrollPos);
+		OnScrolled();
 	}
 
 	Vec2F UIScrollArea::GetScroll() const
@@ -275,15 +307,102 @@ namespace o2
 		return mEnableScrollsHiding;
 	}
 
+	void UIScrollArea::SetClippingLayout(const Layout& clipLayout)
+	{
+		mClipAreaLayout = clipLayout;
+		UpdateLayout();
+	}
+
+	Layout UIScrollArea::GetClippingLayout() const
+	{
+		return mClipAreaLayout;
+	}
+
+	void UIScrollArea::SetViewLayout(const Layout& viewLayout)
+	{
+		mViewAreaLayoutOffBars = viewLayout;
+		mViewAreaLayoutHBar = viewLayout;
+		mViewAreaLayoutVBar = viewLayout;
+		mViewAreaLayoutHVBar = viewLayout;
+
+		UpdateLayout();
+	}
+
+	void UIScrollArea::SetViewLayout(const Layout& viewLayoutOffBars, const Layout& viewLayoutHBars, 
+									 const Layout& viewLayoutVBars, const Layout& viewLayoutHVBars)
+	{
+		mViewAreaLayoutOffBars = viewLayoutOffBars;
+		mViewAreaLayoutHBar = viewLayoutHBars;
+		mViewAreaLayoutVBar = viewLayoutVBars;
+		mViewAreaLayoutHVBar = viewLayoutHVBars;
+
+		UpdateLayout();
+	}
+
+	Layout UIScrollArea::GetViewLayout() const
+	{
+		return mViewAreaLayoutOffBars;
+	}
+
+	Layout UIScrollArea::GetViewLayoutOffBars() const
+	{
+		return mViewAreaLayoutOffBars;
+	}
+
+	Layout UIScrollArea::GetViewLayoutHBar() const
+	{
+		return mViewAreaLayoutHBar;
+	}
+
+	Layout UIScrollArea::GetViewLayoutVBar() const
+	{
+		return mViewAreaLayoutVBar;
+	}
+
+	Layout UIScrollArea::GetViewLayoutHVBar() const
+	{
+		return mViewAreaLayoutHVBar;
+	}
+
+	void UIScrollArea::OnChildAdded(Ptr<UIWidget> child)
+	{
+		child->layout.mDrivenByParent = true;
+	}
+
+	void UIScrollArea::OnChildRemoved(Ptr<UIWidget> child)
+	{
+		child->layout.mDrivenByParent = false;
+	}
+
 	void UIScrollArea::UpdateControls(float dt)
 	{
 		auto cursor = o2Input.GetCursor(0);
 		bool underCursorAtFrame = layout.mAbsoluteRect.IsInside(cursor->mPosition);
 		bool underClippingArea = mAbsoluteClipArea.IsInside(cursor->mPosition);
-		bool underScrollbars = ((mHorScrollBar && mOwnHorScrollBar) ? mHorScrollBar->IsUnderPoint(cursor->mPosition):false) ||
+		bool underScrollbars = 
+			((mHorScrollBar && mOwnHorScrollBar) ? mHorScrollBar->IsUnderPoint(cursor->mPosition):false) ||
 			((mVerScrollBar && mOwnVerScrollBar) ? mVerScrollBar->IsUnderPoint(cursor->mPosition):false);
 
 		bool lastPressedCursor = mPressedCursor;
+
+		if (mEnableScrollsHiding)
+		{
+			if (mHorScrollBar->IsUnderPoint(cursor->mPosition))
+			{
+				mLastHorScrollChangeTime = o2Time.GetApplicationTime();
+
+				if (!mHorScrollBar->IsVisible())
+					mHorScrollBar->Show();
+			}
+
+			if (mVerScrollBar->IsUnderPoint(cursor->mPosition))
+			{
+				mLastVerScrollChangeTime = o2Time.GetApplicationTime();
+
+				if (!mVerScrollBar->IsVisible())
+					mVerScrollBar->Show();
+			}
+		}
 
 		if (!mUnderCursor && underCursorAtFrame)
 		{
@@ -320,43 +439,48 @@ namespace o2
 				*selectState = false;
 		}
 
-		if (!Math::Equals(o2Input.GetMouseWheelDelta(), 0.0f) && underClippingArea)
+		if (!Math::Equals(o2Input.GetMouseWheelDelta(), 0.0f) && underClippingArea && !underScrollbars)
 		{
 			mScrollSpeed = Vec2F();
 
-			if (mVerScrollBar && mVerScrollBar->visible)
+			if (mVerScrollBar && !Math::Equals(mScrollRange.top, mScrollRange.bottom))
 				mVerScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
-			else if (mHorScrollBar && mHorScrollBar->visible)
+			else if (mHorScrollBar && !Math::Equals(mScrollRange.left, mScrollRange.right))
 				mHorScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
 		}
 
 		if (lastPressedCursor && mPressedCursor)
 		{
-			Vec2F delta = cursor->mPosition - mPressedCursorPos;
-
-			if (delta != Vec2F())
+			if (!Math::Equals(mScrollRange.left, mScrollRange.right) || !Math::Equals(mScrollRange.top, mScrollRange.bottom))
 			{
-				o2Events.BreakCursorEvent();
 
-				Vec2F newScroll = mPressedScroll + delta;
-				Vec2F scrollDelta = newScroll - mScrollPos;
+				Vec2F delta = cursor->mPosition - mPressedCursorPos;
+				delta.x = -delta.x;
 
-				if (scrollDelta.Length() > FLT_EPSILON)
+				if (delta != Vec2F())
 				{
-					mScrollSpeed = scrollDelta/dt;
-					mSpeedUpdTime = 0.0f;
-				}
-				else
-				{
-					mSpeedUpdTime += dt;
-					if (mSpeedUpdTime > 0.1f)
+					o2Events.BreakCursorEvent();
+
+					Vec2F newScroll = mPressedScroll + delta;
+					Vec2F scrollDelta = newScroll - mScrollPos;
+
+					if (scrollDelta.Length() > 7.0f)
 					{
-						mScrollSpeed = Vec2F();
+						mScrollSpeed = scrollDelta/dt;
 						mSpeedUpdTime = 0.0f;
 					}
-				}
+					else
+					{
+						mSpeedUpdTime += dt;
+						if (mSpeedUpdTime > 0.2f)
+						{
+							mScrollSpeed = Vec2F();
+							mSpeedUpdTime = 0.0f;
+						}
+					}
 
-				SetScroll(mPressedScroll + delta);
+					SetScroll(mPressedScroll + delta);
+				}
 			}
 		}
 	}
@@ -374,14 +498,14 @@ namespace o2
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
-		mAbsoluteViewArea = viewArea.Calculate(layout.mAbsoluteRect);
-		mAbsoluteClipArea = clipArea.Calculate(layout.mAbsoluteRect);
-		Vec2F roundedScrollPos(Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		mAbsoluteViewArea = mActualViewLayout.Calculate(layout.mAbsoluteRect);
+		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout.mAbsoluteRect);
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 
 		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
 
 		for (auto child : mChilds)
-			child->UpdateLayout();
+			child->UpdateLayout(true);
 
 		UpdateScrollParams();
 
@@ -399,7 +523,7 @@ namespace o2
 
 	void UIScrollArea::UpdateScrollParams()
 	{
-		mAbsoluteViewArea = viewArea.Calculate(layout.mAbsoluteRect);
+		mAbsoluteViewArea = mActualViewLayout.Calculate(layout.mAbsoluteRect);
 		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
 		mScrollArea = RectF(0.0f, 0.0f, localViewArea.Width(), localViewArea.Height());
@@ -412,9 +536,9 @@ namespace o2
 			mScrollArea.top    = Math::Max(mScrollArea.top, child->layout.mLocalRect.top);
 		}
 
-		mScrollRange = RectF(localViewArea.Width() - mScrollArea.right + localViewArea.left,
+		mScrollRange = RectF(mScrollArea.left - localViewArea.left,
 							 localViewArea.Height() - mScrollArea.top + localViewArea.bottom,
-							 -mScrollArea.left + localViewArea.left,
+							 -(localViewArea.Width() - mScrollArea.right + localViewArea.left),
 							 -mScrollArea.bottom + localViewArea.bottom);
 
 		if (mHorScrollBar)
@@ -440,21 +564,52 @@ namespace o2
 				mVerScrollBar->SetScrollHandleSize(localViewArea.Height());
 			}
 		}
+
+		bool enabledHorBar = !Math::Equals(mScrollRange.left, mScrollRange.right);
+		bool enabledVerBar = !Math::Equals(mScrollRange.top, mScrollRange.bottom);
+
+		Layout lastActialLayout = mActualViewLayout;
+
+		mActualViewLayout = mViewAreaLayoutOffBars;
+		if (enabledHorBar && !enabledVerBar)
+			mActualViewLayout = mViewAreaLayoutHBar;
+		else if (!enabledHorBar && enabledVerBar)
+			mActualViewLayout = mViewAreaLayoutVBar;
+		else if (enabledHorBar && enabledVerBar)
+			mActualViewLayout = mViewAreaLayoutHVBar;
+
+		if (mActualViewLayout != lastActialLayout)
+			UpdateScrollParams();
 	}
 
 	void UIScrollArea::OnHorScrollChanged(float value)
 	{
-		value = mScrollRange.left + mScrollRange.right - mScrollRange.left - (value - mScrollRange.left);
+		if (!mHorScrollBar->IsVisible())
+			mHorScrollBar->Show();
+
+		mLastHorScrollChangeTime = o2Time.GetApplicationTime();
+
 		Vec2F delta(Math::Clamp(value, mScrollRange.left, mScrollRange.right) - mScrollPos.x, 0.0f);
 		mScrollPos += delta;
 		UpdateLayout();
+
+		onScrolled(mScrollPos);
+		OnScrolled();
 	}
 
 	void UIScrollArea::OnVerScrollChanged(float value)
 	{
+		if (!mVerScrollBar->IsVisible())
+			mVerScrollBar->Show();
+
+		mLastVerScrollChangeTime = o2Time.GetApplicationTime();
+
 		Vec2F delta(0.0f, Math::Clamp(value, mScrollRange.bottom, mScrollRange.top) - mScrollPos.y);
 		mScrollPos += delta;
 		UpdateLayout();
+
+		onScrolled(mScrollPos);
+		OnScrolled();
 	}
 
 	void UIScrollArea::OnSerialize(DataNode& node)
@@ -500,6 +655,9 @@ namespace o2
 		}
 		else mVerScrollBar = nullptr;
 	}
+
+	void UIScrollArea::OnScrolled()
+	{}
 
 	void UIScrollArea::InitializeProperties()
 	{

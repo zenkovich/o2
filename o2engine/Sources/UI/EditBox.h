@@ -2,13 +2,13 @@
 
 #include "Events/CursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
+#include "Render/Mesh.h"
+#include "Render/Sprite.h"
+#include "Render/Text.h"
 #include "UI/Widget.h"
 
 namespace o2
 {
-	class Text;
-	class Mesh;
-	class Sprite;
 
 	// --------------------
 	// Text edit box widget
@@ -202,40 +202,82 @@ namespace o2
 			FIELD(verScroll);
 			FIELD(selectionBegin);
 			FIELD(selectionEnd);
+
+			SRLZ_FIELD(mTextDrawable);
+			SRLZ_FIELD(mCaretDrawable);
+			SRLZ_FIELD(mCaretBlinkDelay);
+			SRLZ_FIELD(mOwnHorScrollBar);
+			SRLZ_FIELD(mOwnVerScrollBar);
+			SRLZ_FIELD(mTextLayout);
+			SRLZ_FIELD(mClipArea);
+			SRLZ_FIELD(mText);
+			SRLZ_FIELD(mAvailableSymbols);
+			SRLZ_FIELD(mSelectionColor);
+			SRLZ_FIELD(mMultiLine);
+			SRLZ_FIELD(mWordWrap);
+			SRLZ_FIELD(mMaxLineChars);
+			SRLZ_FIELD(mMaxLinesCount);
+
+			FIELD(mSelectionMesh);
+			FIELD(mCaretBlinkTime);
+			FIELD(mHorScrollBar);
+			FIELD(mVerScrollBar);
+			FIELD(mAbsoluteClipArea);
+			FIELD(mAbsoluteTextArea);
+			FIELD(mScrollPos);
+			FIELD(mScrollArea);
+			FIELD(mScrollRange);
+			FIELD(mDrawDepth);
+			FIELD(mSelectionBegin);
+			FIELD(mSelectionEnd);
+			FIELD(mLastClickTime);
+			FIELD(mLastCursorPos);
+			FIELD(mSelectingByWords);
+			FIELD(mSelWordBegin);
+			FIELD(mSelWordEnd);
 		}
 
 	protected:
+		WString                    mText;             // Current text
+		WString                    mAvailableSymbols; // Available symbols
+
 		Ptr<Text>                  mTextDrawable;     // Text drawable
 		Ptr<Mesh>                  mSelectionMesh;    // Selection mesh
 		Ptr<Sprite>                mCaretDrawable;    // Caret drawable
+
 		float                      mCaretBlinkDelay;  // Caret blinking delay
 		float                      mCaretBlinkTime;   // Caret blinking timer
+
+		int                        mSelectionBegin;	  // Selection begin index
+		int                        mSelectionEnd;	  // Selection end index
+		Color4                     mSelectionColor;   // Text selection color
+		bool                       mSelectingByWords; // Selection works by solid words
+		int                        mSelWordBegin;     // Selection by words begin index
+		int                        mSelWordEnd;       // Selection by words end index
+
 		Ptr<UIHorizontalScrollBar> mHorScrollBar;     // horizontal scroll bar
 		Ptr<UIVerticalScrollBar>   mVerScrollBar;     // Vertical scroll bar
 		bool                       mOwnHorScrollBar;  // True, if this widget is owner of mHorScrollBar
 		bool                       mOwnVerScrollBar;  // True, if this widget is owner of mVerScrollBar
+
 		Layout                     mTextLayout;       // Text drawable layout
 		Layout                     mClipArea;         // Clipping area layout
 		RectF                      mAbsoluteClipArea; // Clipping area
 		RectF                      mAbsoluteTextArea; // Text drawable area
-		Vec2F                      mScrollPos;        // Scroll position
-		RectF                      mScrollArea;       // Maximum scroll area size
-		RectF                      mScrollRange;      // Scroll range by width and height
-		float                      mDrawDepth;        // Drawing depth at current frame
-		WString                    mText;             // Current text
-		WString                    mAvailableSymbols; // Available symbols
-		int                        mSelectionBegin;	  // Selection begin index
-		int                        mSelectionEnd;	  // Selection end index
-		Color4                     mSelectionColor;   // Text selection color
+
 		bool                       mMultiLine;		  // True if text is multiline
 		bool                       mWordWrap;		  // True if text words wrapping
 		int                        mMaxLineChars;	  // Count of maximum characters in line
 		int                        mMaxLinesCount;	  // Count of maximum lines count
+
+		Vec2F                      mScrollPos;        // Scroll position
+		RectF                      mScrollArea;       // Maximum scroll area size
+		RectF                      mScrollRange;      // Scroll range by width and height
+
+		float                      mDrawDepth;        // Drawing depth at current frame
+
 		float                      mLastClickTime;    // Time of last clicking
 		Vec2F                      mLastCursorPos;    // Last pressed cursor position
-		bool                       mSelectingByWords; // Selection works by solid words
-		int                        mSelWordBegin;     // Selection by words begin index
-		int                        mSelWordEnd;       // Selection by words end index
 
 	protected:
 		// Calls when cursor pressed on this

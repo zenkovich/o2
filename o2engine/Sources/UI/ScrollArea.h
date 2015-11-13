@@ -1,24 +1,23 @@
 #pragma once
 
-#include "UI/Widget.h"
 #include "Events/CursorEventsListener.h"
+#include "UI/HorizontalScrollBar.h"
+#include "UI/VerticalScrollBar.h"
+#include "UI/Widget.h"
 
 namespace o2
 {
-	class UIHorizontalScrollBar;
-	class UIVerticalScrollBar;
-
 	// -----------------------------------------------------
 	// Scrolling area with scrollbars and clipping rectangle
 	// -----------------------------------------------------
-	class UIScrollArea: public UIWidget
+	class UIScrollArea: public UIWidget, public CursorEventsListener
 	{
 	public:
-		Property<Vec2F> scroll;    // Scroll position property
-		Property<float> horScroll; // Horizontal scroll position property
-		Property<float> verScroll; // Vertical scroll position property
-		Layout          clipArea;  // Clipping area layout (relative to this widget layout)
-		Layout          viewArea;  // Children view area layout
+		Property<Vec2F>              scroll;     // Scroll position property
+		Property<float>              horScroll;  // Horizontal scroll position property
+		Property<float>              verScroll;  // Vertical scroll position property
+
+		Function<void(const Vec2F&)> onScrolled; // Scrolling event. Scroll position is parameter
 
 		// Default constructor
 		UIScrollArea();
@@ -80,6 +79,34 @@ namespace o2
 		// Returns is scroll bars hiding
 		bool IsScrollsHiding();
 
+		// Sets clipping layout
+		void SetClippingLayout(const Layout& clipLayout);
+
+		// Returns clipping layout
+		Layout GetClippingLayout() const;
+
+		// Sets view layout
+		void SetViewLayout(const Layout& viewLayout);
+
+		// Sets view layouts
+		void SetViewLayout(const Layout& viewLayoutOffBars, const Layout& viewLayoutHBars, const Layout& viewLayoutVBars,
+						   const Layout& viewLayoutHVBars);
+
+		// Returns view layout
+		Layout GetViewLayout() const;
+
+		// Returns view layout with disabled bars
+		Layout GetViewLayoutOffBars() const;
+
+		// Returns view layout with enabled only horizontal bar
+		Layout GetViewLayoutHBar() const;
+
+		// Returns view layout with enabled only vertical bar
+		Layout GetViewLayoutVBar() const;
+
+		// Returns view layout with enabled bars
+		Layout GetViewLayoutHVBar() const;
+
 		SERIALIZABLE_IMPL(UIScrollArea);
 
 		IOBJECT(UIScrollArea)
@@ -94,31 +121,52 @@ namespace o2
 			FIELD(mOwnHorScrollBar);
 			FIELD(mOwnVerScrollBar);
 
-			SRLZ_FIELD(clipArea);
+			SRLZ_FIELD(mClipAreaLayout);
 			SRLZ_FIELD(mScrollPos);
 		}
 
 	protected:
-		Ptr<UIHorizontalScrollBar> mHorScrollBar;        // horizontal scroll bar
-		Ptr<UIVerticalScrollBar>   mVerScrollBar;        // Vertical scroll bar
-		bool                       mOwnHorScrollBar;     // True, if this widget is owner of mHorScrollBar
-		bool                       mOwnVerScrollBar;     // True, if this widget is owner of mVerScrollBar
-		RectF                      mAbsoluteClipArea;    // Clipping area
-		RectF                      mAbsoluteViewArea;    // View area
-		Vec2F                      mScrollPos;           // Scroll position
-		Vec2F                      mScrollSpeed;         // Scrolling speed
-		float                      mScrollSpeedDamp;     // Scroll speed damping
-		RectF                      mScrollArea;          // Maximum scroll area size
-		RectF                      mScrollRange;         // Scroll range by width and height
-		float                      mDrawDepth;           // Drawing depth at current frame
-		bool                       mUnderCursor;         // True, when widget is under cursor
-		bool                       mPressedCursor;       // True, when widget was pressed by cursor
-		Vec2F                      mPressedScroll;       // Scroll position when cursor was pressed
-		Vec2F                      mPressedCursorPos;    // Cursor position, when was pressed
-		float                      mSpeedUpdTime;        // Elapsed time from last scroll speed updating
-		bool                       mEnableScrollsHiding; // Enables scroll hiding when they are stopped
+		Ptr<UIHorizontalScrollBar> mHorScrollBar;            // horizontal scroll bar
+		Ptr<UIVerticalScrollBar>   mVerScrollBar;            // Vertical scroll bar
+		bool                       mOwnHorScrollBar;         // True, if this widget is owner of mHorScrollBar
+		bool                       mOwnVerScrollBar;         // True, if this widget is owner of mVerScrollBar
+
+		Layout                     mViewAreaLayoutOffBars;   // Children view area layout with disabled bars
+		Layout                     mViewAreaLayoutHBar;      // Children view area layout with enabled only horizontal bar
+		Layout                     mViewAreaLayoutVBar;      // Children view area layout with enabled only vertical bar
+		Layout                     mViewAreaLayoutHVBar;     // Children view area layout with enabled bars
+		Layout                     mActualViewLayout;        // Actual view layout depending on bars enabling
+		RectF                      mAbsoluteViewArea;        // View area
+
+		Layout                     mClipAreaLayout;          // Clipping area layout (relative to this widget layout)
+		RectF                      mAbsoluteClipArea;        // Clipping area
+														     
+		Vec2F                      mScrollPos;               // Scroll position
+		Vec2F                      mScrollSpeed;             // Scrolling speed
+		float                      mScrollSpeedDamp;         // Scroll speed damping
+		RectF                      mScrollArea;              // Maximum scroll area size
+		RectF                      mScrollRange;             // Scroll range by width and height
+														     
+		float                      mDrawDepth;               // Drawing depth at current frame
+														     
+		bool                       mUnderCursor;             // True, when widget is under cursor
+		bool                       mPressedCursor;           // True, when widget was pressed by cursor
+		Vec2F                      mPressedScroll;           // Scroll position when cursor was pressed
+		Vec2F                      mPressedCursorPos;        // Cursor position, when was pressed
+														     
+		float                      mSpeedUpdTime;            // Elapsed time from last scroll speed updating
+														     
+		bool                       mEnableScrollsHiding;     // Enables scroll hiding when they are stopped
+		float                      mLastHorScrollChangeTime; // Last time when horizontal scroll bar was changed
+		float                      mLastVerScrollChangeTime; // Last time when horizontal scroll bar was changed
 
 	protected:
+		// Calls when child widget was added
+		void OnChildAdded(Ptr<UIWidget> child);
+
+		// Calls when child widget was removed
+		void OnChildRemoved(Ptr<UIWidget> child);
+
 		// Updates mouse control
 		void UpdateControls(float dt);
 
@@ -140,7 +188,12 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node);
 
+		//Calls when widget was scrolled
+		virtual void OnScrolled();
+
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class UICustomDropDown;
 	};
 }

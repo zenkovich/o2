@@ -226,7 +226,7 @@ namespace o2
 
 	void Input::KeyPressed(KeyboardKey key)
 	{
-		if (IsKeyDown(key))
+		if (IsKeyDown(key) || IsKeyPressed(key))
 			return;
 
 		mPressedKeys.Add(key);
@@ -242,6 +242,7 @@ namespace o2
 				break;
 			}
 		}
+
 		mReleasedKeys.Add(key);
 	}
 

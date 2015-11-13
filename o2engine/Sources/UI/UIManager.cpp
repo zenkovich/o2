@@ -9,7 +9,9 @@
 #include "UI/HorizontalProgress.h"
 #include "UI/HorizontalScrollBar.h"
 #include "UI/Label.h"
+#include "UI/CustomList.h"
 #include "UI/ScrollArea.h"
+#include "UI/List.h"
 #include "UI/VerticalLayout.h"
 #include "UI/VerticalProgress.h"
 #include "UI/VerticalScrollBar.h"
@@ -116,6 +118,20 @@ namespace o2
 	Ptr<UIEditBox> UIManager::AddEditBox(const String& style /*= "standard"*/)
 	{
 		Ptr<UIEditBox> res = CreateEditBox(style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UICustomList> UIManager::AddCustomList(const String& style /*= "standard"*/)
+	{
+		Ptr<UICustomList> res = CreateCustomList(style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIList> UIManager::AddList(const String& style /*= "standard"*/)
+	{
+		Ptr<UIList> res = CreateList(style);
 		AddWidget(res);
 		return res;
 	}
@@ -231,6 +247,16 @@ namespace o2
 	Ptr<UIEditBox> UIManager::CreateEditBox(const String& style /*= "standard"*/)
 	{
 		return CreateWidget<UIEditBox>(style);
+	}
+
+	Ptr<UICustomList> UIManager::CreateCustomList(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UICustomList>(style);
+	}
+
+	Ptr<UIList> UIManager::CreateList(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UIList>(style);
 	}
 
 	void UIManager::Update(float dt)

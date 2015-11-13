@@ -19,6 +19,9 @@ namespace o2
 
 		RectF Calculate(const RectF& source);
 
+		bool operator==(const Layout& other) const;
+		bool operator!=(const Layout& other) const;
+
 		static Layout Both(const RectF& border = RectF());
 		static Layout Both(float left, float bottom, float right, float top);
 		static Layout Straight(const RectF& rect);

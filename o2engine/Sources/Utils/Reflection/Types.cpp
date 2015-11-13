@@ -25,11 +25,14 @@
 #include "Render/VectorFont.h"
 #include "Render/VectorFontEffects.h"
 #include "UI/Button.h"
+#include "UI/CustomDropDown.h"
+#include "UI/CustomList.h"
 #include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/HorizontalProgress.h"
 #include "UI/HorizontalScrollBar.h"
 #include "UI/Label.h"
+#include "UI/List.h"
 #include "UI/ScrollArea.h"
 #include "UI/Toggle.h"
 #include "UI/VerticalLayout.h"
@@ -141,5 +144,8 @@ namespace o2
 		INIT_TYPE(UIToggle);
 		INIT_TYPE(UIScrollArea);
 		INIT_TYPE(UIEditBox);
+		INIT_TYPE(UICustomList);
+		INIT_TYPE(UIList);
+		INIT_TYPE(UICustomDropDown);
 	}
 }

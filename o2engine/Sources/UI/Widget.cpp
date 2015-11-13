@@ -39,9 +39,9 @@ namespace o2
 
 		for (auto state : other.mStates)
 		{
-			auto newState = state->Clone();
+			Ptr<UIWidgetState> newState = state->Clone();
 			newState->animation.SetTarget(this);
-			mStates.Add(newState);
+			AddState(newState);
 		}
 
 		UpdateLayersDrawingSequence();
@@ -79,6 +79,8 @@ namespace o2
 			child->mParent = nullptr;
 			child.Release();
 		}
+		mChilds.Clear();
+		mVisibleState = nullptr;
 
 		mName = other.mName;
 		layout = other.layout;
@@ -100,7 +102,11 @@ namespace o2
 		}
 
 		for (auto state : other.mStates)
-			mStates.Add(state->Clone());
+		{
+			Ptr<UIWidgetState> newState = state->Clone();
+			newState->animation.SetTarget(this);
+			AddState(newState);
+		}
 
 		UpdateLayout();
 		UpdateTransparency();
@@ -196,6 +202,25 @@ namespace o2
 			widget->mParent->RemoveChild(widget);
 
 		mChilds.Add(widget);
+		widget->mParent = this;
+
+		UpdateLayout();
+		UpdateTransparency();
+
+		OnChildAdded(widget);
+
+		return widget;
+	}
+
+	Ptr<UIWidget> UIWidget::AddChild(Ptr<UIWidget> widget, int index)
+	{
+		if (mChilds.Contains(widget))
+			return widget;
+
+		if (widget->mParent)
+			widget->mParent->RemoveChild(widget);
+
+		mChilds.Insert(widget, index);
 		widget->mParent = this;
 
 		UpdateLayout();

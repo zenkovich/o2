@@ -20,6 +20,8 @@ namespace o2
 	class UIVerticalScrollBar;
 	class UIScrollArea;
 	class UIEditBox;
+	class UICustomList;
+	class UIList;
 
 	// ------------------------------------------------
 	// UI manager, contains all root widgets and styles
@@ -32,7 +34,7 @@ namespace o2
 	public:
 		Accessor<Ptr<UIWidget>, const String&> widget; // Root widget accessor
 		
-// Loads widgets style
+        // Loads widgets style
 		void LoadStyle(const String& path);
 
 		// Saves style
@@ -88,6 +90,12 @@ namespace o2
 		// Adds edit box
 		Ptr<UIEditBox> AddEditBox(const String& style = "standard");
 
+		// Adds list view
+		Ptr<UICustomList> AddCustomList(const String& style = "standard");
+
+		// Adds text list
+		Ptr<UIList> AddList(const String& style = "standard");
+
 		// Creates widget by style
 		template<typename _type>
 		Ptr<_type> CreateWidget(const String& style = "standard");
@@ -121,6 +129,12 @@ namespace o2
 
 		// Creates edit box
 		Ptr<UIEditBox> CreateEditBox(const String& style = "standard");
+
+		// Creates list view
+		Ptr<UICustomList> CreateCustomList(const String& style = "standard");
+
+		// Creates text list
+		Ptr<UIList> CreateList(const String& style = "standard");
 
 		// Removes widget by path
 		bool RemoveWidget(const String& path);

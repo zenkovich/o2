@@ -21,6 +21,18 @@ namespace o2
 					 source.bottom + srcSize.y*anchorMax.y + offsetMax.y);
 	}
 
+	bool Layout::operator==(const Layout& other) const
+	{
+		return anchorMin == other.anchorMin && anchorMax == other.anchorMax &&
+			offsetMin == other.offsetMin && offsetMax == other.offsetMax;
+	}
+
+	bool Layout::operator!=(const Layout& other) const
+	{
+		return anchorMin != other.anchorMin || anchorMax != other.anchorMax ||
+			offsetMin != other.offsetMin || offsetMax != other.offsetMax;
+	}
+
 	Layout Layout::Both(const RectF& border)
 	{
 		return Layout(Vec2F(), Vec2F::One(), border.LeftBottom(), border.RightTop()*-1.0f);

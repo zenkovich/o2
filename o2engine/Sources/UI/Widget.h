@@ -73,6 +73,9 @@ namespace o2
 		// Adds child widget
 		virtual Ptr<UIWidget> AddChild(Ptr<UIWidget> widget);
 
+		// Adds child widget at index
+		virtual Ptr<UIWidget> AddChild(Ptr<UIWidget> widget, int index);
+
 		// Removes child by path
 		virtual bool RemoveChild(const String& path);
 
@@ -81,6 +84,10 @@ namespace o2
 
 		// Returns child by path. Returns nullptr if isn't exist
 		virtual Ptr<UIWidget> GetChild(const String& path);
+
+		// Searches child with specified type
+		template<typename _type>
+		Ptr<_type> FindChild();
 
 		// Removes all child widgets
 		virtual void RemoveAllChilds();
@@ -189,7 +196,7 @@ namespace o2
 			SRLZ_FIELD(mTransparency);
 
 			FIELD(mDrawingLayers);
-			FIELD(mParent);
+			//FIELD(mParent);
 		}
 
 	protected:
@@ -259,10 +266,13 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
+		friend class UICustomDropDown;
+		friend class UICustomList;
 		friend class UIEditBox;
 		friend class UIHorizontalLayout;
 		friend class UIHorizontalProgress;
 		friend class UIHorizontalScrollBar;
+		friend class UIList;
 		friend class UIScrollArea;
 		friend class UIVerticalLayout;
 		friend class UIVerticalProgress;
@@ -270,6 +280,16 @@ namespace o2
 		friend class UIWidgetLayer;
 		friend class UIWidgetLayout;
 	};
+
+	template<typename _type>
+	Ptr<_type> UIWidget::FindChild()
+	{
+		for (auto child : mChilds)
+			if (child->GetTypeId() == _type::type->ID())
+				return child;
+
+		return nullptr;
+	}
 
 	template<typename _type>
 	Ptr<_type> UIWidget::GetLayerDrawable(const String& path) const
