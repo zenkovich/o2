@@ -13,6 +13,7 @@ namespace o2
 		UIWidget(other)
 	{
 		mTextLayer = GetLayerDrawable<Text>("text");
+		RetargetStatesAnimations();
 		InitializeProperties();
 	}
 
@@ -20,6 +21,7 @@ namespace o2
 	{
 		UIWidget::operator=(other);
 		mTextLayer = GetLayerDrawable<Text>("text");
+		RetargetStatesAnimations();
 		return *this;
 	}
 

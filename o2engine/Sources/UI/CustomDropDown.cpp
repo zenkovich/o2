@@ -1,58 +1,59 @@
 #include "CustomDropDown.h"
 
+#include "Render/Render.h"
+
 namespace o2
 {
 	IOBJECT_CPP(UICustomDropDown);
 
 	UICustomDropDown::UICustomDropDown():
-		UIWidget()
+		UIWidget(), mClipLayout(Layout::Both()), mMaxListItems(10)
 	{
 		mList = mnew UICustomList();
 		mList->mParent = this;
-
-		mDownButton = mnew UIButton();
-		mDownButton->mParent = this;
+		mList->onSelectedItem += [&](auto x) { OnItemSelected(); };
 
 		InitializeProperties();
 	}
 
 	UICustomDropDown::UICustomDropDown(const UICustomDropDown& other):
-		UIWidget(other)
+		UIWidget(other), mClipLayout(other.mClipLayout), mMaxListItems(other.mMaxListItems)
 	{
 		mList = other.mList->Clone();
 		mList->mParent = this;
+		mList->Hide(true);
+		mList->onSelectedItem += [&](auto x) { OnItemSelected(); };
 
-		mDownButton = other.mDownButton->Clone();
-		mDownButton->mParent = this;
-
+		RetargetStatesAnimations();
 		InitializeProperties();
 	}
 
 	UICustomDropDown::~UICustomDropDown()
 	{
 		mList.Release();
-		mDownButton.Release();
 	}
 
 	UICustomDropDown& UICustomDropDown::operator=(const UICustomDropDown& other)
 	{
 		mList.Release();
-		mDownButton.Release();
+
+		UIWidget::operator=(other);
 
 		mList = other.mList->Clone();
 		mList->mParent = this;
+		mList->Hide(true);
+		mList->onSelectedItem += [&](auto x) { OnItemSelected(); };
 
-		mDownButton = other.mDownButton->Clone();
-		mDownButton->mParent = this;
+		mClipLayout = other.mClipLayout;
+		mMaxListItems = other.mMaxListItems;
 
+		RetargetStatesAnimations();
 		return *this;
 	}
 
 	void UICustomDropDown::Update(float dt)
 	{
 		UIWidget::Update(dt);
-
-		mDownButton->Update(dt);
 		mList->Update(dt);
 	}
 
@@ -60,17 +61,49 @@ namespace o2
 	{
 		UIWidget::Draw();
 
-		mDownButton->Draw();
 		mList->Draw();
 
 		Ptr<UIWidget> selectedItem = mList->GetSelectedItem();
 		if (selectedItem)
 		{
-			UIWidgetLayout lastLayout = selectedItem->layout;
-			selectedItem->layout.SetAbsoluteRect(layout.mAbsoluteRect);
-			selectedItem->Draw();
-			selectedItem->layout = lastLayout;
+			o2Render.SetupScissorRect(mAbsoluteClip);
+			o2Render.EnableScissorTest();
+
+			selectedItem->ForceDraw(mAbsoluteClip, mResTransparency);
+
+			o2Render.DisableScissorTest();
 		}
+	}
+
+	void UICustomDropDown::Expand()
+	{
+		float itemHeight = mList->GetItemSample()->layout.height;
+		int itemsVisible = Math::Min(mMaxListItems, mList->GetItemsCount());
+		RectF listViewArea = mList->mAbsoluteViewArea;
+		RectF listAbsRect = mList->layout.mAbsoluteRect;
+		RectF border(listViewArea.left - listAbsRect.left, listViewArea.bottom - listAbsRect.bottom,
+					 listAbsRect.right - listViewArea.right, listAbsRect.top - listViewArea.top);
+		mList->layout.height = itemHeight*(float)itemsVisible + border.bottom + border.top;
+
+		auto openedState = state["opened"];
+		if (openedState)
+			*openedState = true;
+
+		mList->SetVisible(true);
+	}
+
+	void UICustomDropDown::Collapse()
+	{
+		auto openedState = state["opened"];
+		if (openedState)
+			*openedState = false;
+
+		mList->SetVisible(false);
+	}
+
+	bool UICustomDropDown::IsExpanded() const
+	{
+		return mList->IsVisible();
 	}
 
 	void UICustomDropDown::SetItemSample(Ptr<UIWidget> sample)
@@ -168,14 +201,73 @@ namespace o2
 		return mList;
 	}
 
-	Ptr<UIButton> UICustomDropDown::GetDownButton() const
+	void UICustomDropDown::SetMaxListSizeInItems(int itemsCount)
 	{
-		return mDownButton;
+		mMaxListItems = itemsCount;
 	}
 
-	void UICustomDropDown::SetListSizeInItems(int itemsCount)
+	void UICustomDropDown::SetClippingLayout(const Layout& layout)
 	{
-		mList->layout.height = mList->GetItemSample()->layout.height*(float)itemsCount;
+		mClipLayout = layout;
+		UpdateLayout();
+	}
+
+	Layout UICustomDropDown::GetClippingLayout()
+	{
+		return mClipLayout;
+	}
+
+	bool UICustomDropDown::IsUnderPoint(const Vec2F& point)
+	{
+		return layout.GetAbsoluteRect().IsInside(point);
+	}
+
+	float UICustomDropDown::Depth()
+	{
+		return GetMaxDrawingDepth();
+	}
+
+	void UICustomDropDown::OnCursorPressed(const Input::Cursor& cursor)
+	{
+		auto pressedState = state["pressed"];
+		if (pressedState)
+			*pressedState = true;
+	}
+
+	void UICustomDropDown::OnCursorReleased(const Input::Cursor& cursor)
+	{
+		auto pressedState = state["pressed"];
+		if (pressedState)
+			*pressedState = false;
+
+		if (IsUnderPoint(cursor.mPosition))
+		{
+			if (IsExpanded())
+				Collapse();
+			else
+				Expand();
+		}
+	}
+
+	void UICustomDropDown::OnCursorPressBreak(const Input::Cursor& cursor)
+	{
+		auto pressedState = state["pressed"];
+		if (pressedState)
+			*pressedState = false;
+	}
+
+	void UICustomDropDown::OnCursorEnter(const Input::Cursor& cursor)
+	{
+		auto selectState = state["select"];
+		if (selectState)
+			*selectState = true;
+	}
+
+	void UICustomDropDown::OnCursorExit(const Input::Cursor& cursor)
+	{
+		auto selectState = state["select"];
+		if (selectState)
+			*selectState = false;
 	}
 
 	void UICustomDropDown::UpdateLayout(bool forcible /*= false*/)
@@ -192,13 +284,29 @@ namespace o2
 		UpdateLayersLayouts();
 
 		mChildsAbsRect = layout.mAbsoluteRect;
+		mAbsoluteClip = mClipLayout.Calculate(layout.mAbsoluteRect);
 
 		for (auto child : mChilds)
 			child->UpdateLayout();
 
-		mDownButton->UpdateLayout();
 		mList->UpdateLayout();
 	}
+
+	void UICustomDropDown::OnItemSelected()
+	{
+		auto pressedState = state["pressed"];
+		if (pressedState)
+			*pressedState = false;
+
+		Collapse();
+		onSelectedPos(mList->GetSelectedItemPosition());
+		onSelectedItem(mList->GetSelectedItem());
+
+		OnSelectionChanged();
+	}
+
+	void UICustomDropDown::OnSelectionChanged()
+	{}
 
 	void UICustomDropDown::InitializeProperties()
 	{

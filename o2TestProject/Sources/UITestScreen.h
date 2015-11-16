@@ -34,5 +34,6 @@ protected:
 	bool CheckCustomList();
 	bool CheckList();
 	bool CheckCustomDropDown();
+	bool CheckDropDown();
 };
 

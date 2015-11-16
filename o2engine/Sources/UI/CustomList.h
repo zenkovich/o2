@@ -184,6 +184,9 @@ namespace o2
 		// Calls when object was deserialized and trying to reattach states animations target
 		void OnDeserialized(const DataNode& node);
 
+		// Updates transparency for this and children widgets
+		void UpdateTransparency();
+
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
 
@@ -196,7 +199,12 @@ namespace o2
 		// Calls when selected item index was changed
 		virtual void OnSelectionChanged();
 
+		// Calls when visible was changed
+		void OnVisibleChanged();
+
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class UIDropDown;
 	};
 }

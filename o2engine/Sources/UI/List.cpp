@@ -19,6 +19,7 @@ namespace o2
 	UIList::UIList(const UIList& other):
 		UICustomList(other)
 	{
+		RetargetStatesAnimations();
 		InitializeProperties();
 	}
 
@@ -28,6 +29,7 @@ namespace o2
 	UIList& UIList::operator=(const UIList& other)
 	{
 		UICustomList::operator=(other);
+		RetargetStatesAnimations();
 		return *this;
 	}
 

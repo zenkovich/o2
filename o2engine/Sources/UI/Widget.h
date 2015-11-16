@@ -163,11 +163,14 @@ namespace o2
 		// Sets visibility
 		void SetVisible(bool visible);
 
+		// Sets visibility
+		void SetVisibleForcible(bool visible);
+
 		// Sets visibility to true
-		void Show();
+		void Show(bool forcible = false);
 
 		// Sets visibility to false
-		void Hide();
+		void Hide(bool forcible = false);
 
 		// Returns visibility
 		bool IsVisible() const;
@@ -222,7 +225,10 @@ namespace o2
 		virtual void UpdateLayout(bool forcible = false);
 
 		// Updates transparency for this and children widgets
-		void UpdateTransparency();
+		virtual void UpdateTransparency();
+
+		// Sets target for all states animations
+		void RetargetStatesAnimations();
 
 		// Recalculates absolute and local rectangles
 		void RecalculateAbsRect();
@@ -263,11 +269,18 @@ namespace o2
 		// Calls when deserialized
 		void OnDeserialized(const DataNode& node);
 
+		// Forcible drawing in area
+		void ForceDraw(const RectF& area, float transparency);
+
+		// Calls when visible was changed
+		virtual void OnVisibleChanged();
+
 		// Initializes properties
 		void InitializeProperties();
 
 		friend class UICustomDropDown;
 		friend class UICustomList;
+		friend class UIDropDown;
 		friend class UIEditBox;
 		friend class UIHorizontalLayout;
 		friend class UIHorizontalProgress;

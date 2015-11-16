@@ -45,6 +45,21 @@ namespace o2
 		// Returns depth (event system will catch listener with highest depth)
 		float Depth();
 
+		SERIALIZABLE_IMPL(UIButton);
+
+		IOBJECT(UIButton)
+		{
+			BASE_CLASS(UIWidget);
+
+			FIELD(caption);
+			FIELD(icon);
+		}
+
+	protected:
+		Ptr<Text>   mCaptionText; // Caption layer text
+		Ptr<Sprite> mIconSprite;  // Icon layer sprite
+
+	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true
 		void OnCursorPressed(const Input::Cursor& cursor);
 
@@ -60,20 +75,6 @@ namespace o2
 
 		// Calls when cursor exits this object. Sets state "select" to false
 		void OnCursorExit(const Input::Cursor& cursor);
-
-		SERIALIZABLE_IMPL(UIButton);
-
-		IOBJECT(UIButton)
-		{
-			BASE_CLASS(UIWidget);
-
-			FIELD(caption);
-			FIELD(icon);
-		}
-
-	protected:
-		Ptr<Text>   mCaptionText; // Caption layer text
-		Ptr<Sprite> mIconSprite;  // Icon layer sprite
 
 		// Calls when layer added and updates drawing sequence
 		void OnLayerAdded(Ptr<UIWidgetLayer> layer);

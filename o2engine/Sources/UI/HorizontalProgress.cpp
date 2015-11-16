@@ -17,6 +17,8 @@ namespace o2
 		mBarLayer = GetLayer("bar");
 		mBackLayer = GetLayer("back");
 
+		RetargetStatesAnimations();
+
 		InitializeProperties();
 	}
 
@@ -32,6 +34,7 @@ namespace o2
 		mOrientation = other.mOrientation;
 		mScrollSense = other.mScrollSense;
 
+		RetargetStatesAnimations();
 		UpdateLayout();
 
 		return *this;

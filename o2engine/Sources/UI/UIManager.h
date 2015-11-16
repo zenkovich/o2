@@ -8,20 +8,22 @@
 
 namespace o2
 {
-	class UIWidget;
-	class UIButton;
-	class UILabel;
 	class LogStream;
-	class UIHorizontalLayout;
-	class UIVerticalLayout;
-	class UIHorizontalProgress;
-	class UIVerticalProgress;
-	class UIHorizontalScrollBar;
-	class UIVerticalScrollBar;
-	class UIScrollArea;
-	class UIEditBox;
+	class UIButton;
+	class UICustomDropDown;
 	class UICustomList;
+	class UIDropDown;
+	class UIEditBox;
+	class UIHorizontalLayout;
+	class UIHorizontalProgress;
+	class UIHorizontalScrollBar;
+	class UILabel;
 	class UIList;
+	class UIScrollArea;
+	class UIVerticalLayout;
+	class UIVerticalProgress;
+	class UIVerticalScrollBar;
+	class UIWidget;
 
 	// ------------------------------------------------
 	// UI manager, contains all root widgets and styles
@@ -90,11 +92,17 @@ namespace o2
 		// Adds edit box
 		Ptr<UIEditBox> AddEditBox(const String& style = "standard");
 
-		// Adds list view
+		// Adds custom list
 		Ptr<UICustomList> AddCustomList(const String& style = "standard");
 
 		// Adds text list
 		Ptr<UIList> AddList(const String& style = "standard");
+
+		// Adds custom dropdown
+		Ptr<UICustomDropDown> AddCustomDropdown(const String& style = "standard");
+
+		// Adds text dropdown
+		Ptr<UIDropDown> AddDropdown(const String& style = "standard");
 
 		// Creates widget by style
 		template<typename _type>
@@ -135,6 +143,12 @@ namespace o2
 
 		// Creates text list
 		Ptr<UIList> CreateList(const String& style = "standard");
+
+		// Creates custom dropdown
+		Ptr<UICustomDropDown> CreateCustomDropdown(const String& style = "standard");
+
+		// Creates text dropdown
+		Ptr<UIDropDown> CreateDropdown(const String& style = "standard");
 
 		// Removes widget by path
 		bool RemoveWidget(const String& path);

@@ -40,7 +40,6 @@ namespace o2
 		for (auto state : other.mStates)
 		{
 			Ptr<UIWidgetState> newState = state->Clone();
-			newState->animation.SetTarget(this);
 			AddState(newState);
 		}
 
@@ -104,7 +103,6 @@ namespace o2
 		for (auto state : other.mStates)
 		{
 			Ptr<UIWidgetState> newState = state->Clone();
-			newState->animation.SetTarget(this);
 			AddState(newState);
 		}
 
@@ -521,14 +519,28 @@ namespace o2
 			mVisible = visible;
 	}
 
-	void UIWidget::Show()
+	void UIWidget::SetVisibleForcible(bool visible)
 	{
-		SetVisible(true);
+		if (mVisibleState)
+			mVisibleState->SetStateForcible(visible);
+
+		mVisible = visible;
 	}
 
-	void UIWidget::Hide()
+	void UIWidget::Show(bool forcible /*= false*/)
 	{
-		SetVisible(false);
+		if (forcible)
+			SetVisibleForcible(true);
+		else
+			SetVisible(true);
+	}
+
+	void UIWidget::Hide(bool forcible /*= false*/)
+	{
+		if (forcible)
+			SetVisibleForcible(false);
+		else
+			SetVisible(false);
 	}
 
 	bool UIWidget::IsVisible() const
@@ -567,6 +579,12 @@ namespace o2
 
 		for (auto child : mChilds)
 			child->UpdateTransparency();
+	}
+
+	void UIWidget::RetargetStatesAnimations()
+	{
+		for (auto state : mStates)
+			state->animation.SetTarget(this);
 	}
 
 	void UIWidget::RecalculateAbsRect()
@@ -694,6 +712,35 @@ namespace o2
 
 		UpdateLayersDrawingSequence();
 	}
+
+	void UIWidget::ForceDraw(const RectF& area, float transparency)
+	{
+		Vec2F oldLayoutOffsetMin = layout.mOffsetMin;
+		Vec2F oldLayoutOffsetMax = layout.mOffsetMax;
+		float oldTransparency = mTransparency;
+		auto oldParent = mParent;
+
+		layout.mOffsetMin = area.LeftBottom();
+		layout.mOffsetMax = area.RightTop();
+		mTransparency = transparency;
+		mParent = nullptr;
+
+		UpdateLayout(true);
+		UpdateTransparency();
+
+		Draw();
+
+		layout.mOffsetMin = oldLayoutOffsetMin;
+		layout.mOffsetMax = oldLayoutOffsetMax;
+		mTransparency = oldTransparency;
+		mParent = oldParent;
+
+		UpdateLayout(true);
+		UpdateTransparency();
+	}
+
+	void UIWidget::OnVisibleChanged()
+	{}
 
 	void UIWidget::InitializeProperties()
 	{

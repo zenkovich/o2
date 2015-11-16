@@ -21,6 +21,7 @@ namespace o2
 		mHandleLayer = GetLayer("handle");
 		mBackLayer = GetLayer("back");
 
+		RetargetStatesAnimations();
 		InitializeProperties();
 	}
 
@@ -39,6 +40,7 @@ namespace o2
 		mSmoothValue = mValue;
 		mHandlePressed = false;
 
+		RetargetStatesAnimations();
 		UpdateLayout();
 
 		return *this;

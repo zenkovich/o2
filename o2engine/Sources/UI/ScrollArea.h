@@ -88,24 +88,8 @@ namespace o2
 		// Sets view layout
 		void SetViewLayout(const Layout& viewLayout);
 
-		// Sets view layouts
-		void SetViewLayout(const Layout& viewLayoutOffBars, const Layout& viewLayoutHBars, const Layout& viewLayoutVBars,
-						   const Layout& viewLayoutHVBars);
-
 		// Returns view layout
 		Layout GetViewLayout() const;
-
-		// Returns view layout with disabled bars
-		Layout GetViewLayoutOffBars() const;
-
-		// Returns view layout with enabled only horizontal bar
-		Layout GetViewLayoutHBar() const;
-
-		// Returns view layout with enabled only vertical bar
-		Layout GetViewLayoutVBar() const;
-
-		// Returns view layout with enabled bars
-		Layout GetViewLayoutHVBar() const;
 
 		SERIALIZABLE_IMPL(UIScrollArea);
 
@@ -123,6 +107,7 @@ namespace o2
 
 			SRLZ_FIELD(mClipAreaLayout);
 			SRLZ_FIELD(mScrollPos);
+			SRLZ_FIELD(mViewAreaLayout);
 		}
 
 	protected:
@@ -131,11 +116,7 @@ namespace o2
 		bool                       mOwnHorScrollBar;         // True, if this widget is owner of mHorScrollBar
 		bool                       mOwnVerScrollBar;         // True, if this widget is owner of mVerScrollBar
 
-		Layout                     mViewAreaLayoutOffBars;   // Children view area layout with disabled bars
-		Layout                     mViewAreaLayoutHBar;      // Children view area layout with enabled only horizontal bar
-		Layout                     mViewAreaLayoutVBar;      // Children view area layout with enabled only vertical bar
-		Layout                     mViewAreaLayoutHVBar;     // Children view area layout with enabled bars
-		Layout                     mActualViewLayout;        // Actual view layout depending on bars enabling
+		Layout                     mViewAreaLayout;          // Children view area layout with disabled bars
 		RectF                      mAbsoluteViewArea;        // View area
 
 		Layout                     mClipAreaLayout;          // Clipping area layout (relative to this widget layout)
@@ -146,6 +127,8 @@ namespace o2
 		float                      mScrollSpeedDamp;         // Scroll speed damping
 		RectF                      mScrollArea;              // Maximum scroll area size
 		RectF                      mScrollRange;             // Scroll range by width and height
+		bool                       mEnableHorScroll;         // Is horizontal scroll enabled (range > 0)
+		bool                       mEnableVerScroll;         // Is vertical scroll enabled (range > 0)
 														     
 		float                      mDrawDepth;               // Drawing depth at current frame
 														     

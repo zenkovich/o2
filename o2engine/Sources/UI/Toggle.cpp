@@ -18,8 +18,9 @@ namespace o2
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = GetLayer("back");
-		SetValue(other.mValue);
 
+		RetargetStatesAnimations();
+		SetValue(other.mValue);
 		InitializeProperties();
 	}
 
@@ -29,6 +30,7 @@ namespace o2
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = GetLayer("back");
 		SetValue(other.mValue);
+		RetargetStatesAnimations();
 		return *this;
 	}
 

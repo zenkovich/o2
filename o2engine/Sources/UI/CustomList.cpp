@@ -38,12 +38,11 @@ namespace o2
 	{
 		mVerLayout = FindChild<UIVerticalLayout>();
 		mItemSample = other.mItemSample->Clone();
+		mItemSample->UpdateLayout(true);
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
 		mHoverDrawable = other.mHoverDrawable->Clone();
 
-		for (auto state : mStates)
-			state->animation.SetTarget(this);
-
+		RetargetStatesAnimations();
 		UpdateLayout();
 
 		InitializeProperties();
@@ -66,14 +65,13 @@ namespace o2
 
 		mVerLayout = FindChild<UIVerticalLayout>();
 		mItemSample = other.mItemSample->Clone();
+		mItemSample->UpdateLayout(true);
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mHoverDrawable = other.mSelectionDrawable->Clone();
+		mHoverDrawable = other.mHoverDrawable->Clone();
 		mSelectionLayout = other.mSelectionLayout;
 		mHoverLayout = other.mHoverLayout;
 
-		for (auto state : mStates)
-			state->animation.SetTarget(this);
-
+		RetargetStatesAnimations();
 		UpdateLayout();
 
 		return *this;
@@ -339,8 +337,6 @@ namespace o2
 
 		mLastSelectCheckCursor = cursor.mPosition;
 
-		int lastSelected = mSelectedItem;
-
 		int itemIdx = -1;
 		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
 
@@ -352,6 +348,13 @@ namespace o2
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
+
+		int itemIdx = -1;
+		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		
+		onSelectedItem(itemUnderCursor);
+		onSelectedPos(itemIdx);
+		OnSelectionChanged();
 	}
 
 	void UICustomList::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -405,8 +408,25 @@ namespace o2
 
 	void UICustomList::OnDeserialized(const DataNode& node)
 	{
-		for (auto state : mStates)
-			state->animation.SetTarget(this);
+		UIScrollArea::OnDeserialized(node);
+		RetargetStatesAnimations();
+	}
+
+	void UICustomList::UpdateTransparency()
+	{
+		UIWidget::UpdateTransparency();
+
+		if (mHorScrollBar)
+			mHorScrollBar->UpdateTransparency();
+
+		if (mVerScrollBar)
+			mVerScrollBar->UpdateTransparency();
+
+		if (mSelectionDrawable)
+			mSelectionDrawable->transparency = mResTransparency;
+
+		if (mHoverDrawable)
+			mHoverDrawable->transparency = mResTransparency;
 	}
 
 	void UICustomList::UpdateHover(const Vec2F& point)
@@ -436,8 +456,6 @@ namespace o2
 
 	void UICustomList::UpdateSelection(int position, Ptr<UIWidget> item)
 	{
-		int lastSelected = mSelectedItem;
-
 		mSelectedItem = position;
 
 		if (position < 0)
@@ -460,14 +478,6 @@ namespace o2
 
 			UpdateHover(o2Input.cursorPos);
 		}
-
-		if (lastSelected != mSelectedItem)
-		{
-			lastSelected = mSelectedItem;
-			onSelectedPos(mSelectedItem);
-			onSelectedItem(GetItem(mSelectedItem));
-			OnSelectionChanged();
-		}
 	}
 
 	void UICustomList::OnScrolled()
@@ -484,6 +494,11 @@ namespace o2
 
 	void UICustomList::OnSelectionChanged()
 	{}
+
+	void UICustomList::OnVisibleChanged()
+	{
+		SetInteractable(mVisible);
+	}
 
 	void UICustomList::InitializeProperties()
 	{

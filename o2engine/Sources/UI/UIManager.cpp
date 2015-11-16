@@ -4,14 +4,16 @@
 #include "Assets/Assets.h"
 #include "Render/Render.h"
 #include "UI/Button.h"
+#include "UI/CustomDropDown.h"
+#include "UI/CustomList.h"
+#include "UI/DropDown.h"
 #include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/HorizontalProgress.h"
 #include "UI/HorizontalScrollBar.h"
 #include "UI/Label.h"
-#include "UI/CustomList.h"
-#include "UI/ScrollArea.h"
 #include "UI/List.h"
+#include "UI/ScrollArea.h"
 #include "UI/VerticalLayout.h"
 #include "UI/VerticalProgress.h"
 #include "UI/VerticalScrollBar.h"
@@ -132,6 +134,20 @@ namespace o2
 	Ptr<UIList> UIManager::AddList(const String& style /*= "standard"*/)
 	{
 		Ptr<UIList> res = CreateList(style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UICustomDropDown> UIManager::AddCustomDropdown(const String& style /*= "standard"*/)
+	{
+		Ptr<UICustomDropDown> res = CreateCustomDropdown(style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIDropDown> UIManager::AddDropdown(const String& style /*= "standard"*/)
+	{
+		Ptr<UIDropDown> res = CreateDropdown(style);
 		AddWidget(res);
 		return res;
 	}
@@ -257,6 +273,16 @@ namespace o2
 	Ptr<UIList> UIManager::CreateList(const String& style /*= "standard"*/)
 	{
 		return CreateWidget<UIList>(style);
+	}
+
+	Ptr<UICustomDropDown> UIManager::CreateCustomDropdown(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UICustomDropDown>(style);
+	}
+
+	Ptr<UIDropDown> UIManager::CreateDropdown(const String& style /*= "standard"*/)
+	{
+		return CreateWidget<UIDropDown>(style);
 	}
 
 	void UIManager::Update(float dt)

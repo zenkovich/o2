@@ -188,13 +188,13 @@ namespace o2
 	template<typename T>
 	bool Vec2<T>::operator==(const Vec2<T>& v) const
 	{
-		return Math::Abs(x - v.x) < FLT_EPSILON && Math::Abs(y - v.y) < FLT_EPSILON;
+		return Math::Abs(x - v.x) < 0.001f && Math::Abs(y - v.y) < 0.001f;
 	}
 
 	template<typename T>
 	bool Vec2<T>::operator!=(const Vec2<T>& v) const
 	{
-		return Math::Abs(x - v.x) > FLT_EPSILON || Math::Abs(y - v.y) > FLT_EPSILON;
+		return Math::Abs(x - v.x) > 0.001f || Math::Abs(y - v.y) > 0.001f;
 	}
 
 	template<typename T>

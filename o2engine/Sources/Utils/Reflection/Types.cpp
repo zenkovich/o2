@@ -27,6 +27,7 @@
 #include "UI/Button.h"
 #include "UI/CustomDropDown.h"
 #include "UI/CustomList.h"
+#include "UI/DropDown.h"
 #include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/HorizontalProgress.h"
@@ -147,5 +148,6 @@ namespace o2
 		INIT_TYPE(UICustomList);
 		INIT_TYPE(UIList);
 		INIT_TYPE(UICustomDropDown);
+		INIT_TYPE(UIDropDown);
 	}
 }

@@ -56,6 +56,7 @@ namespace o2
 
 		mTextDrawable->SetText(mText);
 
+		RetargetStatesAnimations();
 		UpdateScrollParams();
 		UpdateLayout();
 
@@ -146,6 +147,7 @@ namespace o2
 		}
 		else mVerScrollBar = nullptr;
 
+		RetargetStatesAnimations();
 		UpdateLayout();
 
 		return *this;

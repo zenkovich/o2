@@ -577,6 +577,9 @@
     <ClInclude Include="..\Sources\UI\CustomDropDown.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\UI\DropDown.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -982,6 +985,9 @@
       <Filter>Sources\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\UI\CustomDropDown.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\DropDown.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>

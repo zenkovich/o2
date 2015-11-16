@@ -16,8 +16,9 @@ namespace o2
 		mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
 		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren)
 	{
-		InitializeProperties();
+		RetargetStatesAnimations();
 		UpdateLayout();
+		InitializeProperties();
 	}
 
 	UIHorizontalLayout::~UIHorizontalLayout()
@@ -32,6 +33,7 @@ namespace o2
 		mExpandHeight = other.mExpandHeight;
 		UIWidget::operator=(other);
 
+		RetargetStatesAnimations();
 		UpdateLayout();
 
 		return *this;

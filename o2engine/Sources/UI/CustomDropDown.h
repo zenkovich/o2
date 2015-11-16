@@ -1,14 +1,14 @@
 #pragma once
 
+#include "Events/CursorEventsListener.h"
 #include "UI/CustomList.h"
-#include "UI/Button.h"
 
 namespace o2
 {
 	// ---------------------------------
 	// Custom items drop down ui element
 	// ---------------------------------
-	class UICustomDropDown: public UIWidget 
+	class UICustomDropDown: public UIWidget, public CursorEventsListener
 	{
 	public:
 		Property<Ptr<UIWidget>>       selectedItem;    // Selected item widget property
@@ -36,6 +36,15 @@ namespace o2
 
 		// Draws widget
 		void Draw();
+
+		// Expand list
+		void Expand();
+
+		// Collapse list
+		void Collapse();
+
+		// Returns is list expanded
+		bool IsExpanded() const;
 
 		// Sets item sample widget. WARNING: Removing all old items!
 		void SetItemSample(Ptr<UIWidget> sample);
@@ -94,11 +103,20 @@ namespace o2
 		// Returns list view 
 		Ptr<UICustomList> GetListView() const;
 
-		// Returns down button
-		Ptr<UIButton> GetDownButton() const;
-
 		// Sets list view size by items size
-		void SetListSizeInItems(int itemsCount);
+		void SetMaxListSizeInItems(int itemsCount);
+
+		// Sets clipping layout
+		void SetClippingLayout(const Layout& layout);
+
+		// Returns clipping layout
+		Layout GetClippingLayout();
+
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point);
+
+		// Returns depth (event system will catch listener with highest depth)
+		float Depth();
 
 		SERIALIZABLE_IMPL(UICustomDropDown);
 
@@ -112,16 +130,39 @@ namespace o2
 			FIELD(itemsCount);
 
 			SRLZ_FIELD(mList);
-			SRLZ_FIELD(mDownButton);
 		}
 
 	protected:
-		Ptr<UICustomList> mList;       // List view
-		Ptr<UIButton>     mDownButton; // Down button
+		Ptr<UICustomList> mList;         // List view
+		Layout            mClipLayout;   // Clipping layout
+		RectF             mAbsoluteClip; // Absolute clipping rectangle
+		int               mMaxListItems; // Maximum visible items in list
 
 	protected:
+		// Calls when cursor pressed on this. Sets state "pressed" to true
+		void OnCursorPressed(const Input::Cursor& cursor);
+
+		// Calls when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
+		// Calls onClicked if cursor is still above this
+		void OnCursorReleased(const Input::Cursor& cursor);
+
+		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		void OnCursorPressBreak(const Input::Cursor& cursor);
+
+		// Calls when cursor enters this object. Sets state "select" to true
+		void OnCursorEnter(const Input::Cursor& cursor);
+
+		// Calls when cursor exits this object. Sets state "select" to false
+		void OnCursorExit(const Input::Cursor& cursor);
+
 		// Updates layout
 		void UpdateLayout(bool forcible = false);
+
+		// Calls when item was selected in list
+		void OnItemSelected();
+
+		// Calls when selection was changed
+		virtual void OnSelectionChanged();
 
 		// Initializes properties
 		void InitializeProperties();

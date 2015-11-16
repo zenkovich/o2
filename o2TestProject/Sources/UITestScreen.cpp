@@ -22,31 +22,48 @@ void UITestScreen::Load()
 	mFakeWindow.LoadFromImage("ui/UI_window_frame_regular.png");
 	mFakeWindow.size = Vec2F(550, 550);
 
- 	auto list = o2UI.CreateWidget<UICustomList>();
- 	auto item = o2UI.CreateLabel("empty");
- 	item->layout.size = Vec2F(20, 20);
- 	list->SetItemSample(item);
- 	for (int i = 0; i < 10; i++)
- 		list->AddItem().Cast<UILabel>()->text = String::Format("Item #%i", i + 1);
-	o2UI.AddWidget(list);
-	list->layout.size = Vec2F(150, 60);
- 	
-// 	auto area = o2UI.AddScrollArea();
-// 	area->layout.size = Vec2F(300, 300);
-// 
-// 	auto layout = o2UI.CreateVerLayout();
-// 	layout->spacing = 5;
-// 	layout->expandHeight = false;
-// 	layout->expandWidth = false;
-// 	layout->fitByChildren = true;
-// 	area->AddChild(layout);
-// 
-// 	for (int i = 0; i < 20; i++)
-// 	{
-// 		auto btn = o2UI.CreateButton("Button!");
-// 		btn->layout.size = Vec2F(500, 50);
-// 		layout->AddChild(btn);
-// 	}
+	// 	auto list = o2UI.CreateCustomList();
+	// 	auto item = o2UI.CreateLabel("empty");
+	// 	item->layout.size = Vec2F(20, 20);
+	// 	list->SetItemSample(item);
+	// 	for (int i = 0; i < 10; i++)
+	// 		list->AddItem().Cast<UILabel>()->text = String::Format("Item #%i", i + 1);
+	// 	o2UI.AddWidget(list);
+	// 	list->layout.size = Vec2F(150, 150);
+
+	auto dropdown = o2UI.CreateDropdown();
+	dropdown->SetMaxListSizeInItems(5);
+	for (int i = 0; i < 10; i++)
+		dropdown->AddItem(String::Format("Item #%i", i + 1));
+	o2UI.AddWidget(dropdown);
+	dropdown->layout.size = Vec2F(150, 22);
+
+
+	//  	auto list = o2UI.CreateWidget<UICustomList>();
+	//  	auto item = o2UI.CreateLabel("empty");
+	//  	item->layout.size = Vec2F(20, 20);
+	//  	list->SetItemSample(item);
+	//  	for (int i = 0; i < 10; i++)
+	//  		list->AddItem().Cast<UILabel>()->text = String::Format("Item #%i", i + 1);
+	// 	o2UI.AddWidget(list);
+	// 	list->layout.size = Vec2F(150, 60);
+
+	//  	auto area = o2UI.AddScrollArea();
+	//  	area->layout.size = Vec2F(300, 300);
+	//  
+	//  	auto layout = o2UI.CreateVerLayout();
+	//  	layout->spacing = 5;
+	//  	layout->expandHeight = false;
+	//  	layout->expandWidth = false;
+	//  	layout->fitByChildren = true;
+	//  	area->AddChild(layout);
+	//  
+	//  	for (int i = 0; i < 20; i++)
+	//  	{
+	//  		auto btn = o2UI.CreateButton("Button!");
+	//  		btn->layout.size = Vec2F(500, 50);
+	//  		layout->AddChild(btn);
+	//  	}
 }
 
 void UITestScreen::CheckStyle()
@@ -66,9 +83,10 @@ void UITestScreen::CheckStyle()
 	auto listview = CheckCustomList();
 	auto textlist = CheckList();
 	auto cdropdown = CheckCustomDropDown();
+	auto dropdown = CheckDropDown();
 
 	if (!btn || !hprogress || !vprogress || !hscroll || !vscroll || !chkbox || !scrollArea || !label || !editbox ||
-		!listview || !textlist || !cdropdown || !scrollArea2)
+		!listview || !textlist || !cdropdown || !scrollArea2 || !dropdown)
 		o2UI.SaveStyle("ui_style.xml");
 }
 
@@ -393,8 +411,7 @@ bool UITestScreen::CheckScrollAreaStraightBars()
 
 	Ptr<UIScrollArea> sample = mnew UIScrollArea();
 	sample->SetClippingLayout(Layout::Both(1, 2, 1, 1));
-	sample->SetViewLayout(Layout::Both(5, 5, 5, 5), Layout::Both(5, 15, 5, 5), 
-						  Layout::Both(5, 5, 15, 5), Layout::Both(5, 15, 15, 5));
+	sample->SetViewLayout(Layout::Both(5, 5, 5, 5));
 
 	sample->SetEnableScrollsHiding(false);
 	sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::Both(-9, -9, -9, -9));
@@ -412,6 +429,24 @@ bool UITestScreen::CheckScrollAreaStraightBars()
 	verScrollBar->layout.offsetMin = Vec2F(-15, 15);
 	verScrollBar->layout.offsetMax = Vec2F(0, -5);
 	sample->SetVerticalScrollBar(verScrollBar);
+
+	Animation enableHorScrollAnim;
+	enableHorScrollAnim.SetTarget(sample);
+	*enableHorScrollAnim.AddAnimationValue<float>(&sample->GetVerticalScrollbar()->layout.offsetBottom) =
+		AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
+	*enableHorScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMin") =
+		AnimatedValue<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
+
+	auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
+
+	Animation enableVerScrollAnim;
+	enableVerScrollAnim.SetTarget(sample);
+	*enableVerScrollAnim.AddAnimationValue<float>(&sample->GetHorizontalScrollbar()->layout.offsetRight) =
+		AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
+	*enableVerScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMax") =
+		AnimatedValue<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
+
+	auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
 
 	Animation visibleStateAnim;
 	visibleStateAnim.SetTarget(sample);
@@ -449,6 +484,20 @@ bool UITestScreen::CheckScrollArea()
 	verScrollBar->layout.offsetMin = Vec2F(-15, 15);
 	verScrollBar->layout.offsetMax = Vec2F(0, -5);
 	sample->SetVerticalScrollBar(verScrollBar);
+
+	Animation enableHorScrollAnim;
+	enableHorScrollAnim.SetTarget(sample);
+	*enableHorScrollAnim.AddAnimationValue<float>(&sample->GetVerticalScrollbar()->layout.offsetBottom) =
+		AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
+
+	auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
+
+	Animation enableVerScrollAnim;
+	enableVerScrollAnim.SetTarget(sample);
+	*enableVerScrollAnim.AddAnimationValue<float>(&sample->GetHorizontalScrollbar()->layout.offsetRight) =
+		AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
+
+	auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
 
 	Animation visibleStateAnim;
 	visibleStateAnim.SetTarget(sample);
@@ -556,10 +605,10 @@ bool UITestScreen::CheckCustomList()
 	sample->SetEnableScrollsHiding(true);
 	sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::Both(-9, -9, -9, -9));
 
- 	Ptr<Sprite> selection = mnew Sprite("ui/UI_ListBox_selection_regular.png");
+	Ptr<Sprite> selection = mnew Sprite("ui/UI_ListBox_selection_regular.png");
 	*sample->GetSelectionDrawable() = *selection;
 	sample->SetSelectionDrawableLayout(Layout::Both(-10, -16, -10, -16));
- 
+
 	Ptr<Sprite> hover = mnew Sprite("ui/UI_ListBox_selection_hover.png");
 	*sample->GetHoverDrawable() = *hover;
 	sample->SetHoverDrawableLayout(Layout::Both(-10, -16, -10, -16));
@@ -577,6 +626,20 @@ bool UITestScreen::CheckCustomList()
 	verScrollBar->layout.offsetMin = Vec2F(-15, 15);
 	verScrollBar->layout.offsetMax = Vec2F(0, -5);
 	sample->SetVerticalScrollBar(verScrollBar);
+
+	Animation enableHorScrollAnim;
+	enableHorScrollAnim.SetTarget(sample);
+	*enableHorScrollAnim.AddAnimationValue<float>(&sample->GetVerticalScrollbar()->layout.offsetBottom) =
+		AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
+
+	auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
+
+	Animation enableVerScrollAnim;
+	enableVerScrollAnim.SetTarget(sample);
+	*enableVerScrollAnim.AddAnimationValue<float>(&sample->GetHorizontalScrollbar()->layout.offsetRight) =
+		AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
+
+	auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
 
 	Animation hoverStateAnim;
 	hoverStateAnim.SetTarget(sample);
@@ -681,25 +744,25 @@ bool UITestScreen::CheckCustomDropDown()
 	Ptr<UICustomDropDown> sample = mnew UICustomDropDown();
 	auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::Both(-9, -9, -9, -9));
 	auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::Both(-9, -9, -9, -9));
+	auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::Both(-9, -9, -9, -9));
+	auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"), 
+									   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
+
+	sample->SetClippingLayout(Layout::Both(4, 2, 20, 2));
 
 	Ptr<UIWidget> itemSample = mnew UIWidget();
 	itemSample->layout.size = Vec2F(20, 20);
 	sample->SetItemSample(itemSample);
-	
-	auto button = sample->GetDownButton();
-	*button = *o2UI.GetWidgetStyle<UIButton>("standard");
-	button->layout.anchorMin = Vec2F(1, 0);
-	button->layout.anchorMax = Vec2F(1, 1);
-	button->layout.offsetMin = Vec2F(-20, 0);
-	button->layout.offsetMax = Vec2F(0, 0);
 
 	auto list = sample->GetListView();
 	*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+	list->layer["back"]->drawable.Release();
+	list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
 	list->layout.pivot = Vec2F(0.5f, 1.0f);
 	list->layout.anchorMin = Vec2F(0, 0);
 	list->layout.anchorMax = Vec2F(1, 0);
-	list->layout.offsetMin = Vec2F(0, -60);
-	list->layout.offsetMax = Vec2F(0, 0);
+	list->layout.offsetMin = Vec2F(-1, -60);
+	list->layout.offsetMax = Vec2F(0, 3);
 
 	Animation selectedStateAnim;
 	selectedStateAnim.SetTarget(sample);
@@ -707,6 +770,84 @@ bool UITestScreen::CheckCustomDropDown()
 
 	auto selectedState = sample->AddState("select", selectedStateAnim);
 	selectedState->offStateAnimationSpeed = 0.5;
+
+	Animation pressedStateAnim;
+	pressedStateAnim.SetTarget(sample);
+	*pressedStateAnim.AddAnimationValue<float>(&pressedLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.05f);
+
+	auto pressedState = sample->AddState("pressed", pressedStateAnim);
+	pressedState->offStateAnimationSpeed = 0.5f;
+
+	Animation openAnimStateAnim;
+	openAnimStateAnim.SetTarget(sample);
+	*openAnimStateAnim.AddAnimationValue<Vec2F>(&arrowLayer->drawable->scale) = 
+		AnimatedValue<Vec2F>::EaseInOut(Vec2F(1, 1), Vec2F(1, -1), 0.2f);
+
+	auto openedState = sample->AddState("opened", openAnimStateAnim);
+	//openedState->offStateAnimationSpeed = 2.0f;
+
+	Animation visibleStateAnim;
+	visibleStateAnim.SetTarget(sample);
+	*visibleStateAnim.AddAnimationValue<float>(&sample->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+
+	auto visibleState = sample->AddState("visible", visibleStateAnim);
+	visibleState->offStateAnimationSpeed = 0.5;
+
+	o2UI.AddWidgetStyle(sample, "standard");
+
+	return false;
+}
+
+bool UITestScreen::CheckDropDown()
+{
+	if (o2UI.GetWidgetStyle<UIDropDown>("standard"))
+		return true;
+
+	Ptr<UIDropDown> sample = mnew UIDropDown();
+	auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::Both(-9, -9, -9, -9));
+	auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::Both(-9, -9, -9, -9));
+	auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::Both(-9, -9, -9, -9));
+	auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
+									   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
+
+	sample->SetClippingLayout(Layout::Both(4, 2, 20, 2));
+
+	auto list = sample->GetListView();
+	*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+	list->layer["back"]->drawable.Release();
+	list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
+	list->layout.pivot = Vec2F(0.5f, 1.0f);
+	list->layout.anchorMin = Vec2F(0, 0);
+	list->layout.anchorMax = Vec2F(1, 0);
+	list->layout.offsetMin = Vec2F(-1, -60);
+	list->layout.offsetMax = Vec2F(0, 3);
+
+	Ptr<UILabel> itemSample = o2UI.CreateLabel("empty");
+	itemSample->layout.size = Vec2F(20, 20);
+	itemSample->horAlign = Text::HorAlign::Left;
+	sample->SetItemSample(itemSample);
+
+	Animation selectedStateAnim;
+	selectedStateAnim.SetTarget(sample);
+	*selectedStateAnim.AddAnimationValue<float>(&selectLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+
+	auto selectedState = sample->AddState("select", selectedStateAnim);
+	selectedState->offStateAnimationSpeed = 0.5;
+
+	Animation pressedStateAnim;
+	pressedStateAnim.SetTarget(sample);
+	*pressedStateAnim.AddAnimationValue<float>(&pressedLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.05f);
+
+	auto pressedState = sample->AddState("pressed", pressedStateAnim);
+	pressedState->offStateAnimationSpeed = 0.5f;
+
+	Animation openAnimStateAnim;
+	openAnimStateAnim.SetTarget(sample);
+	*openAnimStateAnim.AddAnimationValue<Vec2F>(&arrowLayer->drawable->scale) =
+		AnimatedValue<Vec2F>::EaseInOut(Vec2F(1, 1), Vec2F(1, -1), 0.2f);
+
+	auto openedState = sample->AddState("opened", openAnimStateAnim);
+	//openedState->offStateAnimationSpeed = 2.0f;
 
 	Animation visibleStateAnim;
 	visibleStateAnim.SetTarget(sample);
@@ -727,6 +868,9 @@ void UITestScreen::Unload()
 
 void UITestScreen::Update(float dt)
 {
+	if (o2Input.IsKeyPressed('D'))
+		o2Debug.Log("debug");
+
 	if (o2Input.IsKeyPressed(VK_ESCAPE))
 		mApplication->GoToScreen("MainTestScreen");
 }

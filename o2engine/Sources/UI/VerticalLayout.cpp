@@ -16,8 +16,9 @@ namespace o2
 		mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
 		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren)
 	{
-		InitializeProperties();
+		RetargetStatesAnimations();
 		UpdateLayout();
+		InitializeProperties();
 	}
 
 	UIVerticalLayout::~UIVerticalLayout()
@@ -33,6 +34,7 @@ namespace o2
 		mFitByChildren = other.mFitByChildren;
 		UIWidget::operator=(other);
 
+		RetargetStatesAnimations();
 		UpdateLayout();
 
 		return *this;

@@ -19,6 +19,7 @@ namespace o2
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
 
+		RetargetStatesAnimations();
 		InitializeProperties();
 	}
 
@@ -27,6 +28,7 @@ namespace o2
 		UIWidget::operator=(other);
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
+		RetargetStatesAnimations();
 		return *this;
 	}
 
