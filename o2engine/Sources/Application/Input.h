@@ -162,6 +162,7 @@ namespace o2
 		CursorsVec mReleasedCursors;     // Released cursors. First - main cursor
 		Vec2F      mMainCursorPos;       // Main cursor position
 		Vec2F      mMainCursorDelta;     // Main cursor delta
+
 		float      mMouseWheelDelta = 0; // Mouse wheel delta at current frame
 
 	protected:
