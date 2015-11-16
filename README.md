@@ -1,2 +1,2 @@
 # o2
-Nice technology for making 2D games and applications!
+Nice tech for making 2D games and applications!
