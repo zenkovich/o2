@@ -207,6 +207,6 @@ namespace o2
 
 		friend class Singleton<Debug>;
 		friend class BaseApplication;
-		friend class IApplication;
+		friend class Application;
 	};
 }

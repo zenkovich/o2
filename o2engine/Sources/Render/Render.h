@@ -226,11 +226,11 @@ namespace o2
 
 		friend class Texture;
 		friend class TextureRef;
-		friend class BaseApplication;
 		friend class Font;
 		friend class BitmapFont;
 		friend class VectorFont;
 		friend class BitmapFontAsset;
 		friend class VectorFontAsset;
+		friend class WndProcFunc;
 	};
 }

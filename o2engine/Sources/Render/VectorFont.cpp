@@ -2,7 +2,7 @@
 
 #include "Render/Windows/OpenGL.h"
 
-#include "Application/BaseApplication.h"
+#include "Application/Application.h"
 #include "Render/Render.h"
 #include "Utils/Bitmap.h"
 #include "Utils/Debug.h"

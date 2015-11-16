@@ -44,7 +44,7 @@ namespace o2
 		TimeStamp CurrentTime() const;
 
 	public:
-		friend class IApplication;
+		friend class Application;
 		friend class BaseApplication;
 
 		float  mApplicationTime;     // Application working time, seconds

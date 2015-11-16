@@ -48,11 +48,9 @@ namespace o2
 		template<typename _type>
 		Ptr<AnimatedValue<_type>> AddAnimationValue(_type* target);
 
-
 		// Adds animation value by target(animating target must be setted)
 		template<typename _type>
 		Ptr<AnimatedValue<_type>> AddAnimationValue(Setter<_type>* target);
-
 
 		// Adds animation value by target(animating target must be setted)
 		template<typename _type>

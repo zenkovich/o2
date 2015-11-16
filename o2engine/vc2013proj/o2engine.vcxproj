@@ -14,6 +14,7 @@
     <ProjectGuid>{ED115911-D293-41D3-A9EC-AF7F2613A1CF}</ProjectGuid>
     <RootNamespace>o2engine</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>o2Engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -40,12 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)Tmp\Build\Engine\</OutDir>
-    <IntDir>$(SolutionDir)Tmp\Build\Engine\</IntDir>
+    <OutDir>$(SolutionDir)Tmp\</OutDir>
+    <IntDir>$(SolutionDir)Tmp\$(Configuration)\Engine\</IntDir>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)Tmp\Build\Engine\</OutDir>
-    <IntDir>$(SolutionDir)Tmp\Build\Engine\</IntDir>
+    <OutDir>$(SolutionDir)Tmp\</OutDir>
+    <IntDir>$(SolutionDir)Tmp\$(Configuration)\Engine\</IntDir>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -53,7 +56,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>false</BrowseInformation>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -66,10 +69,11 @@
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <BuildLog>
-      <Path>$(SolutionDir)Tmp\Build\Engine\build.log</Path>
+      <Path>$(SolutionDir)Tmp\$(Configuration)\Engine\build.log</Path>
     </BuildLog>
     <Lib>
       <Verbose>true</Verbose>
+      <AdditionalDependencies>$(ProjectDir)..\Dependencies\Dependencies_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,7 +83,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;WIN32;_LIB;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <OmitFramePointers>true</OmitFramePointers>
@@ -91,59 +95,23 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <BuildLog>
-      <Path>$(SolutionDir)Tmp\Build\Engine\build.log</Path>
+      <Path>$(SolutionDir)Tmp\$(Configuration)\Engine\build.log</Path>
     </BuildLog>
     <Lib>
       <Verbose>true</Verbose>
+      <AdditionalDependencies>$(ProjectDir)..\Dependencies\Dependencies_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Dependencies\Gason\gason.h" />
-    <ClInclude Include="..\Dependencies\Json\Array.h" />
-    <ClInclude Include="..\Dependencies\Json\Convert.h" />
-    <ClInclude Include="..\Dependencies\Json\Escaper.h" />
-    <ClInclude Include="..\Dependencies\Json\Grammar.h" />
-    <ClInclude Include="..\Dependencies\Json\IndentCanceller.h" />
-    <ClInclude Include="..\Dependencies\Json\Indenter.h" />
-    <ClInclude Include="..\Dependencies\Json\JsonBox.h" />
-    <ClInclude Include="..\Dependencies\Json\JsonParsingError.h" />
-    <ClInclude Include="..\Dependencies\Json\JsonWritingError.h" />
-    <ClInclude Include="..\Dependencies\Json\Object.h" />
-    <ClInclude Include="..\Dependencies\Json\OutputFilter.h" />
-    <ClInclude Include="..\Dependencies\Json\SolidusEscaper.h" />
-    <ClInclude Include="..\Dependencies\Json\Value.h" />
-    <ClInclude Include="..\Dependencies\LibPNG\png.h" />
-    <ClInclude Include="..\Dependencies\LibPNG\pngconf.h" />
-    <ClInclude Include="..\Dependencies\OpenGL\glext.h" />
-    <ClInclude Include="..\Dependencies\OpenGL\wglext.h" />
-    <ClInclude Include="..\Dependencies\PugiXml\pugiconfig.hpp" />
-    <ClInclude Include="..\Dependencies\PugiXml\pugixml.hpp" />
-    <ClInclude Include="..\Dependencies\StackWalker\StackWalker.h" />
-    <ClInclude Include="..\Dependencies\Zlib\crc32.h" />
-    <ClInclude Include="..\Dependencies\Zlib\crypt.h" />
-    <ClInclude Include="..\Dependencies\Zlib\deflate.h" />
-    <ClInclude Include="..\Dependencies\Zlib\inffast.h" />
-    <ClInclude Include="..\Dependencies\Zlib\inffixed.h" />
-    <ClInclude Include="..\Dependencies\Zlib\inflate.h" />
-    <ClInclude Include="..\Dependencies\Zlib\inftrees.h" />
-    <ClInclude Include="..\Dependencies\Zlib\ioapi.h" />
-    <ClInclude Include="..\Dependencies\Zlib\trees.h" />
-    <ClInclude Include="..\Dependencies\Zlib\unzip.h" />
-    <ClInclude Include="..\Dependencies\Zlib\zconf.h" />
-    <ClInclude Include="..\Dependencies\Zlib\zconf.in.h" />
-    <ClInclude Include="..\Dependencies\Zlib\zip.h" />
-    <ClInclude Include="..\Dependencies\Zlib\zlib.h" />
-    <ClInclude Include="..\Dependencies\Zlib\zutil.h" />
     <ClInclude Include="..\Sources\Animation\AnimatedFloat.h" />
     <ClInclude Include="..\Sources\Animation\AnimatedVector.h" />
     <ClInclude Include="..\Sources\Animation\Animation.h" />
     <ClInclude Include="..\Sources\Animation\IAnimation.h" />
     <ClInclude Include="..\Sources\Animation\AnimatedValue.h" />
     <ClInclude Include="..\Sources\Animation\Tween.h" />
-    <ClInclude Include="..\Sources\Application\BaseApplication.h" />
-    <ClInclude Include="..\Sources\Application\IApplication.h" />
+    <ClInclude Include="..\Sources\Application\Application.h" />
     <ClInclude Include="..\Sources\Application\Input.h" />
-    <ClInclude Include="..\Sources\Application\Win\BaseApplication.h" />
+    <ClInclude Include="..\Sources\Application\Windows\ApplicationBase.h" />
     <ClInclude Include="..\Sources\Assets\Asset.h" />
     <ClInclude Include="..\Sources\Assets\AssetInfo.h" />
     <ClInclude Include="..\Sources\Assets\Assets.h" />
@@ -264,60 +232,13 @@
     <ClInclude Include="..\Sources\Utils\Tree.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Dependencies\Gason\gason.cpp" />
-    <ClCompile Include="..\Dependencies\Json\Array.cpp" />
-    <ClCompile Include="..\Dependencies\Json\Convert.cpp" />
-    <ClCompile Include="..\Dependencies\Json\Escaper.cpp" />
-    <ClCompile Include="..\Dependencies\Json\IndentCanceller.cpp" />
-    <ClCompile Include="..\Dependencies\Json\Indenter.cpp" />
-    <ClCompile Include="..\Dependencies\Json\JsonParsingError.cpp" />
-    <ClCompile Include="..\Dependencies\Json\JsonWritingError.cpp" />
-    <ClCompile Include="..\Dependencies\Json\Object.cpp" />
-    <ClCompile Include="..\Dependencies\Json\SolidusEscaper.cpp" />
-    <ClCompile Include="..\Dependencies\Json\Value.cpp" />
-    <ClCompile Include="..\Dependencies\LibPNG\png.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngerror.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pnggccrd.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngget.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngmem.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngpread.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngread.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngrio.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngrtran.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngrutil.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngset.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngtest.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngtrans.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngvcrd.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngwio.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngwrite.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngwtran.c" />
-    <ClCompile Include="..\Dependencies\LibPNG\pngwutil.c" />
-    <ClCompile Include="..\Dependencies\PugiXml\pugixml.cpp" />
-    <ClCompile Include="..\Dependencies\StackWalker\StackWalker.cpp" />
-    <ClCompile Include="..\Dependencies\Zlib\adler32.c" />
-    <ClCompile Include="..\Dependencies\Zlib\compress.c" />
-    <ClCompile Include="..\Dependencies\Zlib\crc32.c" />
-    <ClCompile Include="..\Dependencies\Zlib\deflate.c" />
-    <ClCompile Include="..\Dependencies\Zlib\gzio.c" />
-    <ClCompile Include="..\Dependencies\Zlib\infback.c" />
-    <ClCompile Include="..\Dependencies\Zlib\inffast.c" />
-    <ClCompile Include="..\Dependencies\Zlib\inflate.c" />
-    <ClCompile Include="..\Dependencies\Zlib\inftrees.c" />
-    <ClCompile Include="..\Dependencies\Zlib\ioapi.c" />
-    <ClCompile Include="..\Dependencies\Zlib\trees.c" />
-    <ClCompile Include="..\Dependencies\Zlib\uncompr.c" />
-    <ClCompile Include="..\Dependencies\Zlib\unzip.c" />
-    <ClCompile Include="..\Dependencies\Zlib\zip.c" />
-    <ClCompile Include="..\Dependencies\Zlib\zutil.c" />
     <ClCompile Include="..\Sources\Animation\AnimatedFloat.cpp" />
     <ClCompile Include="..\Sources\Animation\AnimatedVector.cpp" />
     <ClCompile Include="..\Sources\Animation\Animation.cpp" />
     <ClCompile Include="..\Sources\Animation\IAnimation.cpp" />
     <ClCompile Include="..\Sources\Animation\AnimatedValue.cpp" />
-    <ClCompile Include="..\Sources\Application\IApplication.cpp" />
     <ClCompile Include="..\Sources\Application\Input.cpp" />
-    <ClCompile Include="..\Sources\Application\Win\BaseApplication.cpp" />
+    <ClCompile Include="..\Sources\Application\Windows\Application.cpp" />
     <ClCompile Include="..\Sources\Assets\Asset.cpp" />
     <ClCompile Include="..\Sources\Assets\AssetInfo.cpp" />
     <ClCompile Include="..\Sources\Assets\Assets.cpp" />

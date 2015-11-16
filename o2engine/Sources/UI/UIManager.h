@@ -189,7 +189,7 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
-		friend class IApplication;
+		friend class Application;
 		friend class BaseApplication;
 
 		template<typename _type>

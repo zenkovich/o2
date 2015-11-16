@@ -63,6 +63,6 @@ namespace o2
 		void InitializeProperties();
 
 		friend class AssetBuildSystem;
-		friend class IApplication;
+		friend class Application;
 	};
 }

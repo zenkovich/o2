@@ -216,7 +216,7 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
-		friend class BaseApplication;
-		friend class IApplication;
+		friend class Application;
+		friend class WndProcFunc;
 	};
 }

@@ -5,7 +5,7 @@
 
 using namespace o2;
 
-class TestApplication: public BaseApplication
+class TestApplication: public Application
 {
 protected:
 	// Calls when application is starting

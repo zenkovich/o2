@@ -146,12 +146,12 @@ namespace o2
 		// Unregistering application events listener
 		static void UnregApplicationListener(ApplicationEventsListener* listener);
 
-		friend class CursorEventsListener;
-		friend class KeyboardEventsListener;
-		friend class DragEventsListener;
+		friend class Application;
 		friend class ApplicationEventsListener;
-		friend class IApplication;
+		friend class CursorEventsListener;
+		friend class DragEventsListener;
 		friend class ITemplPtr<EventSystem>;
-		friend class BaseApplication;
+		friend class KeyboardEventsListener;
+		friend class WndProcFunc;
 	};
 }

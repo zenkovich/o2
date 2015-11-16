@@ -46,7 +46,7 @@
 
 #include "Utils/Editor/DragHandle.h"
 
-#include "Application/BaseApplication.h"
+#include "Application/Application.h"
 #include "Application/Input.h"
 
 #include "Assets/Asset.h"
