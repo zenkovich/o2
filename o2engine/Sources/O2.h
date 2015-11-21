@@ -101,6 +101,7 @@
 #include "UI/Widget.h"
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetState.h"
+#include "UI/Window.h"
 
 #define INITIALIZE_O2                                                              	                 \
 o2::o2StackWalker* o2::o2StackWalker::instance = new o2StackWalker();				                 \

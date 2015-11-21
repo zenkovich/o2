@@ -333,14 +333,15 @@ namespace o2
 		if (object == nullptr)
 			return nullptr;
 
-		AllocObjectInfo* info = *(AllocObjectInfo**)((char*)object - AllocObjInfoSize);
+		size_t infop = (size_t)object - AllocObjInfoSize;
 
-		if (info >= inst->mAllocObjsInfos && info < inst->mAllocObjsInfos + inst->mAllocObjsCount)
+		if (infop >= (size_t)inst->mAllocObjsInfos && infop < (size_t)(inst->mAllocObjsInfos + inst->mAllocObjsCount))
 		{
-			size_t diff = (char*)info - (char*)inst->mAllocObjsInfos;
+			size_t diff = infop - (size_t)inst->mAllocObjsInfos;
 			size_t off = diff%AllocObjInfoSize;
 			if (off == 0)
 			{
+				AllocObjectInfo* info = *(AllocObjectInfo**)infop;
 				if (info->mObjectPtr == object)
 					return info;
 			}

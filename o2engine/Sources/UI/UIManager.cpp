@@ -14,6 +14,7 @@
 #include "UI/Label.h"
 #include "UI/List.h"
 #include "UI/ScrollArea.h"
+#include "UI/Toggle.h"
 #include "UI/VerticalLayout.h"
 #include "UI/VerticalProgress.h"
 #include "UI/VerticalScrollBar.h"
@@ -152,6 +153,13 @@ namespace o2
 		return res;
 	}
 
+	Ptr<UIToggle> UIManager::AddToggle(const WString& caption, const String& style /*= "standard"*/)
+	{
+		Ptr<UIToggle> res = CreateToggle(caption, style);
+		AddWidget(res);
+		return res;
+	}
+
 	bool UIManager::RemoveWidget(const String& path)
 	{
 		return mScreenWidget->RemoveChild(path);
@@ -285,6 +293,13 @@ namespace o2
 		return CreateWidget<UIDropDown>(style);
 	}
 
+	Ptr<UIToggle> UIManager::CreateToggle(const WString& caption, const String& style /*= "standard"*/)
+	{
+		auto toggle = CreateWidget<UIToggle>(style);
+		toggle->caption = caption;
+		return toggle;
+	}
+
 	void UIManager::Update(float dt)
 	{
 		mScreenWidget->Update(dt);
@@ -293,11 +308,21 @@ namespace o2
 	void UIManager::Draw()
 	{
 		mScreenWidget->Draw();
+
+		for (auto widget : mTopWidgets)
+			widget->Draw();
+
+		mTopWidgets.Clear();
 	}
 
 	void UIManager::UpdateRootSize()
 	{
 		mScreenWidget->layout.size = o2Render.GetResolution();
+	}
+
+	void UIManager::RegTopWidget(Ptr<UIWidget> widget)
+	{
+		mTopWidgets.Add(widget);
 	}
 
 	void UIManager::InitializeProperties()

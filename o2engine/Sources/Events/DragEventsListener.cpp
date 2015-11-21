@@ -25,7 +25,7 @@ namespace o2
 	{
 		if (mIsDragging)
 		{
-			auto underCursorListener = o2Events.GetListenerUnderCursor(cursor.mId);
+			auto underCursorListener = o2Events.GetDragListenerUnderCursor(cursor.mId);
 			if (underCursorListener)
 			{
 				underCursorListener->OnDropped(this);

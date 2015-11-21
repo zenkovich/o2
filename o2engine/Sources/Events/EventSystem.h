@@ -29,7 +29,10 @@ namespace o2
 
 	public:
 		// Returns drag event listener under cursor
-		Ptr<DragEventsListener> GetListenerUnderCursor(CursorId cursorId) const;
+		Ptr<DragEventsListener> GetDragListenerUnderCursor(CursorId cursorId) const;
+
+		// Returns drag event listener under cursor
+		Ptr<CursorEventsListener> GetCursorListenerUnderCursor(CursorId cursorId) const;
 
 		// Breaks cursor event. All pressed listeners will be unpressed with specific event OnPressBreak
 		void BreakCursorEvent();

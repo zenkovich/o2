@@ -23,22 +23,40 @@ namespace o2
 	class Render: public RenderBase, public Singleton<Render>
 	{
 	public:
+		// ---------------------
+		// Scissor clipping info
+		// ---------------------
 		struct ScissorInfo
 		{
-			float mBeginDepth;
-			float mEndDepth;
-			RectF mScissorRect;
+			float mBeginDepth;  // Drawing depth on enabling clipping
+			float mEndDepth;    // Drawing depth on disabling clipping
+			RectI mScissorRect; // Scissor clipping rectangle
 
 			ScissorInfo();
-			ScissorInfo(const RectF& rect, float beginDepth);
+			ScissorInfo(const RectI& rect, float beginDepth);
 
 			bool operator==(const ScissorInfo& other);
 		};
 		typedef Vector<ScissorInfo> ScissorInfosVec;
 
+		// --------------------------------
+		// Scissor clipping stack info item
+		// --------------------------------
+		struct ScissorStackItem
+		{
+			RectI mScrissorRect;       // Clipping scissor rectangle
+			RectI mSummaryScissorRect; // Real clipping rectangle: summary of top clipping rectangles
+
+			ScissorStackItem();
+			ScissorStackItem(const RectI& rect, const RectI& summaryRect);
+
+			bool operator==(const ScissorStackItem& other);
+		};
+		typedef Vector<ScissorStackItem> StackScissorVec;
+
 	public:
 		Getter<Vec2I>        resolution;             // Screen resolution getter
-		Property<Camera>     camera;          // Current camera property
+		Property<Camera>     camera;                 // Current camera property
 		Property<RectI>      scissorRect;            // Scissor rect property
 		Property<TextureRef> renderTexture;          // Render target texture property
 		Getter<bool>         renderTextureAvailable; // Render textures available getter
@@ -114,17 +132,17 @@ namespace o2
 		// Clearing stencil buffer
 		void ClearStencil();
 
-		// Sets scissor rect
-		void SetupScissorRect(const RectI& rect);
-
 		// Returns scissor rect
 		RectI GetScissorRect() const;
 
+		// Returns scissors stack
+		const StackScissorVec& GetScissorsStack() const;
+
 		// Enabling scissor test
-		void EnableScissorTest();
+		void EnableScissorTest(const RectI& rect);
 
 		// Disabling scissor test
-		void DisableScissorTest();
+		void DisableScissorTest(bool forcible = false);
 
 		// Returns true, if scissor test enabled
 		bool IsScissorTestEnabled() const;
@@ -178,9 +196,9 @@ namespace o2
 		bool            mStencilDrawing;         // True, if drawing in stencil buffer
 		bool            mStencilTest;            // True, if drawing with stencil test
 					    
-		RectI           mScissorRect;            // Scissor rect, in screen space
-		bool            mScissorTest;            // True, if scissor test enabled
 		ScissorInfosVec mScissorInfos;           // Scissor clipping depth infos vector
+		StackScissorVec mStackScissors;          // Stack of scissors clippings
+		bool            mClippingEverything;     // Is everything clipped
 
 		TextureRef      mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
 					    

@@ -61,6 +61,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -85,7 +86,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;WIN32;_LIB;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
     </ClCompile>
@@ -174,6 +175,7 @@
     <ClInclude Include="..\Sources\UI\WidgetLayout.h" />
     <ClInclude Include="..\Sources\UI\WidgetState.h" />
     <ClInclude Include="..\Sources\UI\Widget.h" />
+    <ClInclude Include="..\Sources\UI\Window.h" />
     <ClInclude Include="..\Sources\Utils\Assert.h" />
     <ClInclude Include="..\Sources\Utils\Bitmap.h" />
     <ClInclude Include="..\Sources\Utils\Clipboard.h" />
@@ -188,6 +190,7 @@
     <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
     <ClInclude Include="..\Sources\Utils\Editor\DragHandle.h" />
+    <ClInclude Include="..\Sources\Utils\Editor\FunctionalDragHandle.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />
@@ -295,6 +298,7 @@
     <ClCompile Include="..\Sources\UI\WidgetLayout.cpp" />
     <ClCompile Include="..\Sources\UI\WidgetState.cpp" />
     <ClCompile Include="..\Sources\UI\Widget.cpp" />
+    <ClCompile Include="..\Sources\UI\Window.cpp" />
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />
     <ClCompile Include="..\Sources\Utils\Bitmap.cpp" />
     <ClCompile Include="..\Sources\Utils\Clipboard.cpp" />
@@ -302,6 +306,7 @@
     <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp" />
     <ClCompile Include="..\Sources\Utils\Debug.cpp" />
     <ClCompile Include="..\Sources\Utils\Editor\DragHandle.cpp" />
+    <ClCompile Include="..\Sources\Utils\Editor\FunctionalDragHandle.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp" />

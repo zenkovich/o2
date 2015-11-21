@@ -77,26 +77,8 @@ namespace o2
 		// Returns depth (event system will catch listener with highest depth)
 		float Depth();
 
-		// Calls when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
-
-		// Calls when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
-
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
-
-		// Calls when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorStillDown(const Input::Cursor& cursor);
-
-		// Calls when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor);
-
-		// Calls when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor);
-
-		// Calls when scrolling
-		void OnScrolled(float scroll);
+		// Returns is listener scrollable
+		bool IsScrollable() const;
 
 		SERIALIZABLE_IMPL(UIVerticalProgress);
 
@@ -126,6 +108,9 @@ namespace o2
 		Ptr<UIWidgetLayer> mBackLayer;   // background layer
 
 	protected:
+		// Updates layout
+		void UpdateLayout(bool forcible = false);
+
 		// Updates bar, back and handle layers layout by value
 		void UpdateProgressLayersLayouts();
 
@@ -134,6 +119,27 @@ namespace o2
 
 		// Gets value from cursor position, depends on orientation
 		void GetValueFromCursor(const Input::Cursor &cursor);
+
+		// Calls when cursor pressed on this
+		void OnCursorPressed(const Input::Cursor& cursor);
+
+		// Calls when cursor released (only when cursor pressed this at previous time)
+		void OnCursorReleased(const Input::Cursor& cursor);
+
+		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		void OnCursorPressBreak(const Input::Cursor& cursor);
+
+		// Calls when cursor moved on this (or moved outside when this was pressed)
+		void OnCursorStillDown(const Input::Cursor& cursor);
+
+		// Calls when cursor enters this object
+		void OnCursorEnter(const Input::Cursor& cursor);
+
+		// Calls when cursor exits this object
+		void OnCursorExit(const Input::Cursor& cursor);
+
+		// Calls when scrolling
+		void OnScrolled(float scroll);
 
 		// Initializes properties
 		void InitializeProperties();

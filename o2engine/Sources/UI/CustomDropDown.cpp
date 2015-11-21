@@ -1,6 +1,7 @@
 #include "CustomDropDown.h"
 
 #include "Render/Render.h"
+#include "UIManager.h"
 
 namespace o2
 {
@@ -61,18 +62,18 @@ namespace o2
 	{
 		UIWidget::Draw();
 
-		mList->Draw();
+		o2UI.RegTopWidget(mList);
 
 		Ptr<UIWidget> selectedItem = mList->GetSelectedItem();
 		if (selectedItem)
 		{
-			o2Render.SetupScissorRect(mAbsoluteClip);
-			o2Render.EnableScissorTest();
-
+			o2Render.EnableScissorTest(mAbsoluteClip);
 			selectedItem->ForceDraw(mAbsoluteClip, mResTransparency);
-
 			o2Render.DisableScissorTest();
 		}
+
+		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
+			DrawDebugFrame();
 	}
 
 	void UICustomDropDown::Expand()

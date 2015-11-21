@@ -16,24 +16,30 @@ public:
 	String GetId() const;
 
 protected:
-	Sprite                     mBackground;
-	Sprite                     mFakeWindow;
+	Sprite mBackground;
+	Sprite mSpr1;
+	Sprite mSpr2;
+	Sprite mSpr3;
+	Sprite mSpr4;
 
 protected:
-	void CheckStyle();
-	bool CheckButtonStyle();
-	bool CheckHorProgressBarStyle();
-	bool CheckVerProgressBarStyle();
-	bool CheckHorScrollBarStyle();
-	bool CheckVerScrollBarStyle();
-	bool CheckCheckboxStyle();
-	bool CheckScrollArea();
-	bool CheckScrollAreaStraightBars();
-	bool CheckLabel();
-	bool CheckEditBox();
-	bool CheckCustomList();
-	bool CheckList();
-	bool CheckCustomDropDown();
-	bool CheckDropDown();
+	void RebuildStyle();
+	void RebuildButtonStyle();
+	void RebuildCloseButtonStyle();
+	void RebuildArrowButtonStyle();
+	void RebuildHorProgressBarStyle();
+	void RebuildVerProgressBarStyle();
+	void RebuildHorScrollBarStyle();
+	void RebuildVerScrollBarStyle();
+	void RebuildCheckboxStyle();
+	void RebuildScrollAreaStyle();
+	void RebuildScrollAreaStraightBarsStyle();
+	void RebuildLabelStyle();
+	void RebuildEditBoxStyle();
+	void RebuildCustomListStyle();
+	void RebuildListStyle();
+	void RebuildCustomDropDownStyle();
+	void RebuildDropDownStyle();
+	void RebuildWindowStyle();
 };
 

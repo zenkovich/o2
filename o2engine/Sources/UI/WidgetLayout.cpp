@@ -13,19 +13,15 @@ namespace o2
 
 	UIWidgetLayout::UIWidgetLayout(const UIWidgetLayout& other):
 		mPivot(other.mPivot), mAnchorMin(other.mAnchorMin), mAnchorMax(other.mAnchorMax),
-		mOffsetMin(other.mOffsetMin), mOffsetMax(other.mOffsetMax)
+		mOffsetMin(other.mOffsetMin), mOffsetMax(other.mOffsetMax), mMinSize(other.mMinSize), mMaxSize(other.mMaxSize),
+		mWeight(other.mWeight)
 	{
 		InitializeProperties();
 	}
 
 	UIWidgetLayout& UIWidgetLayout::operator=(const UIWidgetLayout& other)
 	{
-		mPivot = other.mPivot;
-		mAnchorMin = other.mAnchorMin;
-		mAnchorMax = other.mAnchorMax;
-		mOffsetMin = other.mOffsetMin;
-		mOffsetMax = other.mOffsetMax;
-
+		CopyFrom(other);
 		mOwner->UpdateLayout();
 
 		return *this;
@@ -155,6 +151,54 @@ namespace o2
 	Vec2F UIWidgetLayout::GetAbsolutePosition() const
 	{
 		return mAbsoluteRect.LeftBottom() + mAbsoluteRect.Size()*mPivot;
+	}
+
+	void UIWidgetLayout::SetAbsoluteLeftTop(const Vec2F& absPosition)
+	{
+		mOffsetMin.x += absPosition.x - mAbsoluteRect.left;
+		mOffsetMax.y += absPosition.y - mAbsoluteRect.top;
+		mOwner->UpdateLayout();
+	}
+
+	Vec2F UIWidgetLayout::GetAbsoluteLeftTop() const
+	{
+		return mAbsoluteRect.LeftTop();
+	}
+
+	void UIWidgetLayout::SetAbsoluteLeftBottom(const Vec2F& absPosition)
+	{
+		mOffsetMin.x += absPosition.x - mAbsoluteRect.left;
+		mOffsetMin.y += absPosition.y - mAbsoluteRect.bottom;
+		mOwner->UpdateLayout();
+	}
+
+	Vec2F UIWidgetLayout::GetAbsoluteLeftBottom() const
+	{
+		return mAbsoluteRect.LeftBottom();
+	}
+
+	void UIWidgetLayout::SetAbsoluteRightTop(const Vec2F& absPosition)
+	{
+		mOffsetMax.x += absPosition.x - mAbsoluteRect.right;
+		mOffsetMax.y += absPosition.y - mAbsoluteRect.top;
+		mOwner->UpdateLayout();
+	}
+
+	Vec2F UIWidgetLayout::GetAbsoluteRightTop() const
+	{
+		return mAbsoluteRect.RightTop();
+	}
+
+	void UIWidgetLayout::SetAbsoluteRightBottom(const Vec2F& absPosition)
+	{
+		mOffsetMax.x += absPosition.x - mAbsoluteRect.right;
+		mOffsetMin.y += absPosition.y - mAbsoluteRect.bottom;
+		mOwner->UpdateLayout();
+	}
+
+	Vec2F UIWidgetLayout::GetAbsoluteRightBottom() const
+	{
+		return mAbsoluteRect.RightBottom();
 	}
 
 	void UIWidgetLayout::SetAbsoluteRect(const RectF& rect)
@@ -433,6 +477,28 @@ namespace o2
 		return mWeight.y;
 	}
 
+	UIWidgetLayout UIWidgetLayout::Both(float borderLeft, float borderBottom, float borderRight, float borderTop)
+	{
+		UIWidgetLayout res;
+		res.mAnchorMin = Vec2F(0, 0);
+		res.mAnchorMax = Vec2F(1, 1);
+		res.mOffsetMin = Vec2F(borderLeft, borderBottom);
+		res.mOffsetMax = Vec2F(-borderRight, -borderTop);
+		return res;
+	}
+
+	void UIWidgetLayout::CopyFrom(const UIWidgetLayout& other)
+	{
+		mPivot = other.mPivot;
+		mAnchorMin = other.mAnchorMin;
+		mAnchorMax = other.mAnchorMax;
+		mOffsetMin = other.mOffsetMin;
+		mOffsetMax = other.mOffsetMax;
+		mMinSize = other.mMinSize;
+		mMaxSize = other.mMaxSize;
+		mWeight = other.mWeight;
+	}
+
 	void UIWidgetLayout::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(UIWidgetLayout, pivot, SetPivot, GetPivot);
@@ -441,6 +507,11 @@ namespace o2
 		INITIALIZE_PROPERTY(UIWidgetLayout, width, SetWidth, GetWidth);
 		INITIALIZE_PROPERTY(UIWidgetLayout, height, SetHeight, GetHeight);
 		INITIALIZE_PROPERTY(UIWidgetLayout, absPosition, SetAbsolutePosition, GetAbsolutePosition);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absRect, SetAbsoluteRect, GetAbsoluteRect);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absLeftTop, SetAbsoluteLeftTop, GetAbsoluteLeftTop);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absLeftBottom, SetAbsoluteLeftBottom, GetAbsoluteLeftBottom);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absRightBottom, SetAbsoluteRightBottom, GetAbsoluteRightBottom);
+		INITIALIZE_PROPERTY(UIWidgetLayout, absRightTop, SetAbsoluteRightTop, GetAbsoluteRightTop);
 		INITIALIZE_PROPERTY(UIWidgetLayout, absLeft, SetAbsoluteLeft, GetAbsoluteLeft);
 		INITIALIZE_PROPERTY(UIWidgetLayout, absRight, SetAbsoluteRight, GetAbsoluteRight);
 		INITIALIZE_PROPERTY(UIWidgetLayout, absBottom, SetAbsoluteBottom, GetAbsoluteBottom);

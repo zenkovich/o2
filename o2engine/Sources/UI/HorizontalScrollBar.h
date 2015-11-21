@@ -73,35 +73,17 @@ namespace o2
 		// Returns scroll handle size
 		float GetScrollhandleSize() const;
 
+		// Sets scroll handle minimum size in pixels
+		void SetMinimalScrollhandleSize(float pixelSize);
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
 
 		// Returns depth (event system will catch listener with highest depth)
 		float Depth();
 
-		// Calls when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
-
-		// Calls when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
-
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
-
-		// Calls when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorStillDown(const Input::Cursor& cursor);
-
-		// Calls when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor);
-
-		// Calls when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor);
-
-		// Calls when scrolling
-		void OnScrolled(float scroll);
-
-		// Sets scroll handle minimum size in pixels
-		void SetMinimalScrollhandleSize(float pixelSize);
+		// Returns is listener scrollable
+		bool IsScrollable() const;
 
 		SERIALIZABLE_IMPL(UIHorizontalScrollBar);
 
@@ -135,6 +117,9 @@ namespace o2
 		Ptr<UIWidgetLayer> mBackLayer;             // Background layer
 
 	protected:
+		// Updates layout
+		void UpdateLayout(bool forcible = false);
+
 		// Updates bar, back and handle layers layout by value
 		void UpdateProgressLayersLayouts();
 
@@ -147,7 +132,32 @@ namespace o2
 		// Gets value from cursor position, depends on orientation
 		float GetValueFromCursor(const Input::Cursor &cursor);
 
+		// Calls when cursor pressed on this
+		void OnCursorPressed(const Input::Cursor& cursor);
+
+		// Calls when cursor released (only when cursor pressed this at previous time)
+		void OnCursorReleased(const Input::Cursor& cursor);
+
+		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		void OnCursorPressBreak(const Input::Cursor& cursor);
+
+		// Calls when cursor moved on this (or moved outside when this was pressed)
+		void OnCursorStillDown(const Input::Cursor& cursor);
+
+		// Calls when cursor enters this object
+		void OnCursorEnter(const Input::Cursor& cursor);
+
+		// Calls when cursor exits this object
+		void OnCursorExit(const Input::Cursor& cursor);
+
+		// Calls when scrolling
+		void OnScrolled(float scroll);
+
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class UICustomList;
+		friend class UIEditBox;
+		friend class UIScrollArea;
 	};
 }

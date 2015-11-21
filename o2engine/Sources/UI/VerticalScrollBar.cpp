@@ -164,6 +164,11 @@ namespace o2
 		return GetMaxDrawingDepth();
 	}
 
+	bool UIVerticalScrollBar::IsScrollable() const
+	{
+		return !Math::Equals(mMinValue, mMaxValue);
+	}
+
 	void UIVerticalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
 
@@ -257,6 +262,26 @@ namespace o2
 	{
 		mScrollhandleMinPxSize = pixelSize;
 		UpdateProgressLayersLayouts();
+	}
+
+	void UIVerticalScrollBar::UpdateLayout(bool forcible /*= false*/)
+	{
+		if (layout.mDrivenByParent && !forcible)
+		{
+			if (mParent)
+				mParent->UpdateLayout();
+
+			return;
+		}
+
+		RecalculateAbsRect();
+		UpdateProgressLayersLayouts();
+		UpdateLayersLayouts();
+
+		mChildsAbsRect = layout.mAbsoluteRect;
+
+		for (auto child : mChilds)
+			child->UpdateLayout();
 	}
 
 	void UIVerticalScrollBar::UpdateProgressLayersLayouts()

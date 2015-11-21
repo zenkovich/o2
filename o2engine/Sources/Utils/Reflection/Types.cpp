@@ -43,6 +43,7 @@
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
+#include "UI/Window.h"
 #include "Utils/Math/Curve.h"
 #include "Utils/Math/Layout.h"
 #include "Utils/Math/Transform.h"
@@ -149,5 +150,6 @@ namespace o2
 		INIT_TYPE(UIList);
 		INIT_TYPE(UICustomDropDown);
 		INIT_TYPE(UIDropDown);
+		INIT_TYPE(UIWindow);
 	}
 }

@@ -221,6 +221,9 @@ namespace o2
 		bool               mVisible;          // Visibility of widget. Uses state 'visible'
 
 	protected:
+		// Draws debug frame by mAbsoluteRect
+		void DrawDebugFrame();
+
 		// Updates layout
 		virtual void UpdateLayout(bool forcible = false);
 
@@ -292,6 +295,7 @@ namespace o2
 		friend class UIVerticalScrollBar;
 		friend class UIWidgetLayer;
 		friend class UIWidgetLayout;
+		friend class UIWindow;
 	};
 
 	template<typename _type>

@@ -19,11 +19,28 @@
 </Type>
 
 <Type Name="o2::Vertex2">
-    <DisplayString>{{ x: { x } y: { y } z: { z } u: { tu } v: { tv }}</DisplayString>
+    <DisplayString>{{ x: { x } y: { y } z: { z } c: { color } u: { tu } v: { tv }}</DisplayString>
 </Type>
 
 <Type Name="o2::Color4">
     <DisplayString>{{ { r } { g } { b } { a }}</DisplayString>
+</Type>  
+
+<Type Name="o2::Mesh">
+    <DisplayString>{{ vertx = { vertexCount }/{ mMaxVertexCount } poly = { polyCount }/{ mMaxPolyCount } tex = { mTexture.mTexture } }}</DisplayString>
+    <Expand>
+        <Item Name="[texture]" ExcludeView="simple">mTexture.mTexture</Item>
+        <Item Name="[verticies]" ExcludeView="simple">vertexCount</Item>
+        <Item Name="[polygons]" ExcludeView="simple">polyCount</Item>
+        <ArrayItems>
+            <Size>vertexCount</Size>
+            <ValuePointer>vertices</ValuePointer>
+        </ArrayItems>
+        <ArrayItems>
+            <Size>polyCount*3</Size>
+            <ValuePointer>indexes</ValuePointer>
+        </ArrayItems>
+    </Expand>
 </Type>
 
 <Type Name="o2::Vector&lt;*&gt;">

@@ -169,6 +169,11 @@ namespace o2
 		return GetMaxDrawingDepth();
 	}
 
+	bool UIHorizontalScrollBar::IsScrollable() const
+	{
+		return !Math::Equals(mMinValue, mMaxValue);
+	}
+
 	void UIHorizontalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
 
@@ -262,6 +267,26 @@ namespace o2
 	{
 		mScrollhandleMinPxSize = pixelSize;
 		UpdateProgressLayersLayouts();
+	}
+
+	void UIHorizontalScrollBar::UpdateLayout(bool forcible /*= false*/)
+	{
+		if (layout.mDrivenByParent && !forcible)
+		{
+			if (mParent)
+				mParent->UpdateLayout();
+
+			return;
+		}
+
+		RecalculateAbsRect();
+		UpdateProgressLayersLayouts();
+		UpdateLayersLayouts();
+
+		mChildsAbsRect = layout.mAbsoluteRect;
+
+		for (auto child : mChilds)
+			child->UpdateLayout();
 	}
 
 	void UIHorizontalScrollBar::UpdateProgressLayersLayouts()

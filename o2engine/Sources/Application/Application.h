@@ -24,9 +24,9 @@ namespace o2
 	class Timer;
 	class UIManager;
 
-	// ---------------------------------
-	// Basic application class interface
-	// ---------------------------------
+	// -----------
+	// Application
+	// -----------
 	class Application: public Singleton<Application>, public ApplicationBase
 	{
 	public:

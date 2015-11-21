@@ -5,7 +5,7 @@ namespace o2
 	IOBJECT_CPP(UIVerticalLayout);
 
 	UIVerticalLayout::UIVerticalLayout():
-		mBaseCorner(BaseCorner::Left), mSpacing(0), mExpandWidth(true), mExpandHeight(true), UIWidget(), 
+		mBaseCorner(BaseCorner::Top), mSpacing(0), mExpandWidth(true), mExpandHeight(true), UIWidget(), 
 		mFitByChildren(false)
 	{
 		InitializeProperties();
@@ -212,6 +212,7 @@ namespace o2
 	{
 		layout.mWeight.y = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetHeightWeight(); });
 		layout.mMinSize.y = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetMinimalHeight(); });
+		layout.mMinSize.y += mBorder.bottom + mBorder.top;
 	}
 
 	void UIVerticalLayout::ArrangeFromCenter()
@@ -243,7 +244,9 @@ namespace o2
 			float position = -totalHeight*0.5f;
 			for (auto child : mChilds)
 			{
-				Vec2F childSize = child->layout.GetOffsetMax() - child->layout.GetOffsetMin();
+				Vec2F childSize(Math::Max(child->layout.mMinSize.x, child->layout.mOffsetMax.x - child->layout.mOffsetMin.x),
+								Math::Max(child->layout.mMinSize.y, child->layout.mOffsetMax.y - child->layout.mOffsetMin.y));
+
 
 				child->layout.mOffsetMin.y = position;
 				position += Math::Abs(childSize.y);
@@ -254,51 +257,6 @@ namespace o2
 				AlignWidgetByWidth(child, 0.5f);
 				child->UpdateLayout(true);
 			}
-		}
-	}
-
-	void UIVerticalLayout::ExpandSizeByChilds()
-	{
-		const static Vec2F relativePivots[] ={
-			Vec2F(0.0f, 0.5f), // Left
-			Vec2F(1.0f, 0.5f), // Right
-			Vec2F(0.5f, 1.0f), // Top
-			Vec2F(0.5f, 0.0f), // Bottom
-			Vec2F(0.5f, 0.5f), // Center
-			Vec2F(0.0f, 0.0f), // LeftBottom
-			Vec2F(0.0f, 1.0f), // LeftTop
-			Vec2F(1.0f, 0.0f), // RightBottom
-			Vec2F(1.0f, 1.0f)  // RightTop
-		};
-
-		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
-
-		RectF childrenRect;
-		if (mChilds.Count() > 0)
-			childrenRect = mChilds[0]->layout.mLocalRect;
-
-		for (auto child : mChilds)
-		{
-			childrenRect.left = Math::Min(childrenRect.left, child->layout.mLocalRect.left);
-			childrenRect.right = Math::Max(childrenRect.right, child->layout.mLocalRect.right);
-			childrenRect.bottom = Math::Min(childrenRect.bottom, child->layout.mLocalRect.bottom);
-			childrenRect.top = Math::Max(childrenRect.top, child->layout.mLocalRect.top);
-		}
-
-		Vec2F szDelta = childrenRect.Size() - mChildsAbsRect.Size();
-
-		if (mExpandWidth)
-			szDelta.x = 0;
-
-		if (mExpandHeight)
-			szDelta.y = 0;
-
-		if (szDelta != Vec2F())
-		{
-			layout.mOffsetMax += szDelta*(Vec2F::One() - relativePivot);
-			layout.mOffsetMin -= szDelta*relativePivot;
-
-			UpdateLayout();
 		}
 	}
 
@@ -327,7 +285,9 @@ namespace o2
 			float position = mBorder.bottom;
 			for (auto child : mChilds)
 			{
-				Vec2F childSize = child->layout.GetOffsetMax() - child->layout.GetOffsetMin();
+				Vec2F childSize(Math::Max(child->layout.mMinSize.x, child->layout.mOffsetMax.x - child->layout.mOffsetMin.x),
+								Math::Max(child->layout.mMinSize.y, child->layout.mOffsetMax.y - child->layout.mOffsetMin.y));
+
 
 				child->layout.mOffsetMin.y = position;
 				position += Math::Abs(childSize.y);
@@ -366,7 +326,8 @@ namespace o2
 			float position = mBorder.top;
 			for (auto child : mChilds)
 			{
-				Vec2F childSize = child->layout.GetOffsetMax() - child->layout.GetOffsetMin();
+				Vec2F childSize(Math::Max(child->layout.mMinSize.x, child->layout.mOffsetMax.x - child->layout.mOffsetMin.x),
+								Math::Max(child->layout.mMinSize.y, child->layout.mOffsetMax.y - child->layout.mOffsetMin.y));
 
 				child->layout.mOffsetMax.y = -position;
 				position += Math::Abs(childSize.y);
@@ -413,6 +374,51 @@ namespace o2
 				child->layout.mOffsetMin.x = -mBorder.right - width;
 				child->layout.mOffsetMax.x = -mBorder.right;
 			}
+		}
+	}
+
+	void UIVerticalLayout::ExpandSizeByChilds()
+	{
+		const static Vec2F relativePivots[] ={
+			Vec2F(0.0f, 0.5f), // Left
+			Vec2F(1.0f, 0.5f), // Right
+			Vec2F(0.5f, 1.0f), // Top
+			Vec2F(0.5f, 0.0f), // Bottom
+			Vec2F(0.5f, 0.5f), // Center
+			Vec2F(0.0f, 0.0f), // LeftBottom
+			Vec2F(0.0f, 1.0f), // LeftTop
+			Vec2F(1.0f, 0.0f), // RightBottom
+			Vec2F(1.0f, 1.0f)  // RightTop
+		};
+
+		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
+
+		RectF childrenRect;
+		if (mChilds.Count() > 0)
+			childrenRect = mChilds[0]->layout.mLocalRect;
+
+		for (auto child : mChilds)
+		{
+			childrenRect.left = Math::Min(childrenRect.left, child->layout.mLocalRect.left);
+			childrenRect.right = Math::Max(childrenRect.right, child->layout.mLocalRect.right);
+			childrenRect.bottom = Math::Min(childrenRect.bottom, child->layout.mLocalRect.bottom);
+			childrenRect.top = Math::Max(childrenRect.top, child->layout.mLocalRect.top);
+		}
+
+		Vec2F szDelta = (childrenRect.Size() + mBorder.LeftBottom() + mBorder.RightTop()) - mChildsAbsRect.Size();
+
+		if (mExpandWidth)
+			szDelta.x = 0;
+
+		if (mExpandHeight)
+			szDelta.y = 0;
+
+		if (szDelta != Vec2F())
+		{
+			layout.mOffsetMax += szDelta*(Vec2F::One() - relativePivot);
+			layout.mOffsetMin -= szDelta*relativePivot;
+
+			UpdateLayout();
 		}
 	}
 

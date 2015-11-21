@@ -445,6 +445,12 @@
     <ClInclude Include="..\Sources\Application\Windows\ApplicationBase.h">
       <Filter>Sources\Application\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\UI\Window.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Editor\FunctionalDragHandle.h">
+      <Filter>Sources\Utils\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -713,6 +719,12 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Application\Windows\Application.cpp">
       <Filter>Sources\Application\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\Window.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Editor\FunctionalDragHandle.cpp">
+      <Filter>Sources\Utils\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

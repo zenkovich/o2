@@ -496,6 +496,102 @@ namespace o2
 
 		mTransform.xv = lastTransformXv;
 		mSize.x = lastSizeX;
+
+		/*
+		 *Vec2F lastTransformXv = mTransform.xv;
+		float lastSizeX = mSize.x;
+
+		mTransform.xv *= mFill;
+		mSize.x *= mFill;
+
+		Vec2F texSize(1.0f, 1.0f);
+		if (mMesh->mTexture)
+			texSize = mMesh->mTexture->GetSize();
+
+		ULong rcc[4];
+		for (int i = 0; i < 4; i++)
+			rcc[i] = (mColor*mCornersColors[i]).ABGR();
+
+		static UInt16 indexes[] ={
+			0, 1, 5,    0, 5, 4,    1, 2, 6,    1, 6, 5,    2, 3, 7,    2, 7, 6,
+			4, 5, 9,    4, 9, 8,    5, 6, 10,   5, 10, 9,   6, 7, 11,   6, 11, 10,
+			8, 9, 13,   8, 13, 12,  9, 10, 14,  9, 14, 13,  10, 11, 15, 10, 15, 14
+		};
+
+		Vec2F texSrcSize = mTextureSrcRect.Size();
+		Vec2F sz = mSize*mScale;
+
+		float u0 = mTextureSrcRect.left/texSize.x;
+		float u3 = mTextureSrcRect.right/texSize.x;
+		float u1 = Math::Lerp(u0, u3, mSlices.left/texSrcSize.x);
+		float u2 = Math::Lerp(u0, u3, (texSrcSize.x - mSlices.right)/texSrcSize.x);
+
+		float v0 = 1.0f - mTextureSrcRect.top/texSize.y;
+		float v3 = 1.0f - mTextureSrcRect.bottom/texSize.y;
+		float v1 = Math::Lerp(v0, v3, mSlices.top/texSrcSize.y);
+		float v2 = Math::Lerp(v0, v3, (texSrcSize.y - mSlices.bottom)/texSrcSize.y);
+
+		Vec2F xv = mTransform.xv/sz.x;
+		Vec2F yv = mTransform.yv/sz.y;
+
+		Vec2F o = mTransform.offs;
+
+		Vec2F r1 = xv*(float)mSlices.left;
+		Vec2F r2 = xv*(sz.x - (float)mSlices.right);
+		Vec2F r3 = mTransform.xv;
+
+		Vec2F t1 = yv*(float)mSlices.bottom;
+		Vec2F t2 = yv*(sz.y - (float)mSlices.top);
+		Vec2F t3 = mTransform.yv;
+
+		if (mSlices.left + mSlices.right > sz.x)
+		{
+			float d = (mSlices.left + mSlices.right - sz.x)*0.5f;
+			r1 -= xv*d;
+			r2 += xv*d;
+
+			u1 = Math::Lerp(u0, u3, (mSlices.left - d)/texSrcSize.x);
+			u2 = Math::Lerp(u0, u3, (texSrcSize.x - mSlices.right + d)/texSrcSize.x);
+		}
+
+		if (mSlices.top + mSlices.bottom > sz.y)
+		{
+			float d = (mSlices.top + mSlices.bottom - sz.y)*0.5f;
+			t1 -= yv*d;
+			t2 += yv*d;
+
+			v1 = Math::Lerp(v0, v3, (mSlices.bottom - d)/texSrcSize.y);
+			v2 = Math::Lerp(v0, v3, (texSrcSize.y - mSlices.top + d)/texSrcSize.y);
+		}
+
+		mMesh->vertices[0]  = Vertex2(o      + t3, rcc[0], u0, v3);
+		mMesh->vertices[1]  = Vertex2(o + r1 + t3, rcc[0], u1, v3);
+		mMesh->vertices[2]  = Vertex2(o + r2 + t3, rcc[1], u2, v3);
+		mMesh->vertices[3]  = Vertex2(o + r3 + t3, rcc[1], u3, v3);
+
+		mMesh->vertices[4]  = Vertex2(o      + t2, rcc[0], u0, v2);
+		mMesh->vertices[5]  = Vertex2(o + r1 + t2, rcc[0], u1, v2);
+		mMesh->vertices[6]  = Vertex2(o + r2 + t2, rcc[1], u2, v2);
+		mMesh->vertices[7]  = Vertex2(o + r3 + t2, rcc[1], u3, v2);
+
+		mMesh->vertices[8]  = Vertex2(o      + t1, rcc[3], u0, v1);
+		mMesh->vertices[9]  = Vertex2(o + r1 + t1, rcc[3], u1, v1);
+		mMesh->vertices[10] = Vertex2(o + r2 + t1, rcc[2], u2, v1);
+		mMesh->vertices[11] = Vertex2(o + r3 + t1, rcc[2], u3, v1);
+
+		mMesh->vertices[12] = Vertex2(o + Vec2F(), rcc[3], u0, v0);
+		mMesh->vertices[13] = Vertex2(o      + r1, rcc[3], u1, v0);
+		mMesh->vertices[14] = Vertex2(o      + r2, rcc[2], u2, v0);
+		mMesh->vertices[15] = Vertex2(o      + r3, rcc[2], u3, v0);
+
+		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*18*3);
+
+		mMesh->vertexCount = 16;
+		mMesh->polyCount = 18;
+
+		mTransform.xv = lastTransformXv;
+		mSize.x = lastSizeX;
+		 */
 	}
 
 	void Sprite::BuildFillLeftToRightMesh()

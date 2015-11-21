@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
 #include "UI/HorizontalScrollBar.h"
 #include "UI/VerticalScrollBar.h"
 #include "UI/Widget.h"
@@ -10,7 +9,7 @@ namespace o2
 	// -----------------------------------------------------
 	// Scrolling area with scrollbars and clipping rectangle
 	// -----------------------------------------------------
-	class UIScrollArea: public UIWidget, public CursorEventsListener
+	class UIScrollArea: public UIWidget
 	{
 	public:
 		Property<Vec2F>              scroll;     // Scroll position property
@@ -151,7 +150,10 @@ namespace o2
 		void OnChildRemoved(Ptr<UIWidget> child);
 
 		// Updates mouse control
-		void UpdateControls(float dt);
+		virtual void UpdateControls(float dt);
+
+		// Check scroll bars showing
+		void CheckScrollBarsVisibility();
 
 		// Updates layout
 		void UpdateLayout(bool forcible = false);

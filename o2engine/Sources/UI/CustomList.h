@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Events/CursorEventsListener.h"
 #include "Render/Sprite.h"
 #include "ScrollArea.h"
 #include "UI/VerticalLayout.h"
@@ -9,7 +10,7 @@ namespace o2
 	// -------------------------------
 	// List view widget with selection
 	// -------------------------------
-	class UICustomList: public UIScrollArea
+	class UICustomList: public UIScrollArea, public CursorEventsListener
 	{
 	public:
 		Property<Ptr<UIWidget>>       selectedItem;    // Selected item widget property
@@ -116,6 +117,9 @@ namespace o2
 		// Returns depth (event system will catch listener with highest depth)
 		float Depth();
 
+		// Returns is listener scrollable
+		bool IsScrollable() const;
+
 		SERIALIZABLE_IMPL(UICustomList);
 
 		IOBJECT(UICustomList)
@@ -160,6 +164,12 @@ namespace o2
 		Vec2F                 mLastSelectCheckCursor; // Last cursor position on selection check
 
 	protected:
+		// Updates mouse control
+		void UpdateControls(float dt);
+
+		// Updates layout
+		void UpdateLayout(bool forcible = false);
+
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
@@ -178,6 +188,9 @@ namespace o2
 		// Calls when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 
+		// Calls when scrolling
+		void OnScrolled(float scroll);
+
 		// Returns item widget under point and stores index in idxPtr, if not null
 		Ptr<UIWidget> GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
@@ -193,9 +206,6 @@ namespace o2
 		// Updates selection
 		void UpdateSelection(int position, Ptr<UIWidget> item);
 
-		// Calls when scrolled - updates selection and hover drawables
-		void OnScrolled();
-
 		// Calls when selected item index was changed
 		virtual void OnSelectionChanged();
 
@@ -206,5 +216,6 @@ namespace o2
 		void InitializeProperties();
 
 		friend class UIDropDown;
+		friend class UICustomDropDown;
 	};
 }

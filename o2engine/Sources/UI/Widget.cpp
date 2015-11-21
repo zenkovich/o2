@@ -1,5 +1,6 @@
 #include "Widget.h"
 
+#include "Application/Input.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
@@ -82,7 +83,7 @@ namespace o2
 		mVisibleState = nullptr;
 
 		mName = other.mName;
-		layout = other.layout;
+		layout.CopyFrom(other.layout);
 		mTransparency = other.mTransparency;
 
 		for (auto layer : other.mLayers)
@@ -141,17 +142,20 @@ namespace o2
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
 
-		if (UI_DEBUG)
-		{
-			static int colr = 0;
-			static int lastFrame = 0;
+		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
+			DrawDebugFrame();
+	}
 
-			if (lastFrame != o2Time.GetCurrentFrame())
-				colr = 0;
-			lastFrame = o2Time.GetCurrentFrame();
+	void UIWidget::DrawDebugFrame()
+	{
+		static int colr = 0;
+		static int lastFrame = 0;
 
-			o2Render.DrawRectFrame(layout.mAbsoluteRect, Color4::SomeColor(colr++));
-		}
+		if (lastFrame != o2Time.GetCurrentFrame())
+			colr = 0;
+		lastFrame = o2Time.GetCurrentFrame();
+
+		o2Render.DrawRectFrame(layout.mAbsoluteRect, Color4::SomeColor(colr++));
 	}
 
 	void UIWidget::SetName(const String& name)
@@ -610,6 +614,11 @@ namespace o2
 		layout.mLocalRect.right  += szDelta.x*(1.0f - layout.mPivot.x);
 		layout.mLocalRect.bottom -= szDelta.y*layout.mPivot.y;
 		layout.mLocalRect.top    += szDelta.y*(1.0f - layout.mPivot.y);
+
+		layout.mLocalRect.left = Math::Round(layout.mLocalRect.left);
+		layout.mLocalRect.right = Math::Round(layout.mLocalRect.right);
+		layout.mLocalRect.bottom = Math::Round(layout.mLocalRect.bottom);
+		layout.mLocalRect.top = Math::Round(layout.mLocalRect.top);
 
 		layout.mAbsoluteRect = layout.mLocalRect + parentPos;
 	}

@@ -7,6 +7,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\EditorApplication.h" />
+    <ClInclude Include="..\..\Sources\WindowsManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">

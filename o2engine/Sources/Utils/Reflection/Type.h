@@ -74,11 +74,14 @@ namespace o2
 		template<typename _type>
 		FieldInfo& RegField(const String& name, UInt offset, Accessor<Ptr<_type>, const String&>& value);
 
+		// Returns filed pointer by path
 		template<typename _type>
 		_type* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
 
+		// Returns field path by pointer from source object
 		String GetFieldPath(void* sourceObject, void *targetObject) const;
 
+		// Returns field info by pointer from source object
 		FieldInfo* FindFieldInfo(void* sourceObject, void *targetObject, String &res) const;
 
 		// Initializes type parameters

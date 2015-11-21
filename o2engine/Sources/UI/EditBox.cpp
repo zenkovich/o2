@@ -15,9 +15,8 @@ namespace o2
 	IOBJECT_CPP(UIEditBox);
 
 	UIEditBox::UIEditBox():
-		UIWidget(), mOwnHorScrollBar(false), mOwnVerScrollBar(false), mClipArea(Layout::Both()), mSelectionBegin(0),
-		mSelectionEnd(0), mMultiLine(true), mWordWrap(false), mMaxLineChars(0), mMaxLinesCount(0),
-		mSelectionColor(0.1f, 0.2f, 0.6f, 0.3f), mTextLayout(Layout::Both()), mCaretBlinkDelay(1), mCaretBlinkTime(0),
+		UIScrollArea(), mSelectionBegin(0), mSelectionEnd(0), mMultiLine(true), mWordWrap(false), mMaxLineChars(0), 
+		mMaxLinesCount(0), mSelectionColor(0.1f, 0.2f, 0.6f, 0.3f), mCaretBlinkDelay(1), mCaretBlinkTime(0), 
 		mLastClickTime(-10.0f)
 	{
 		mSelectionMesh = mnew Mesh();
@@ -27,29 +26,11 @@ namespace o2
 	}
 
 	UIEditBox::UIEditBox(const UIEditBox& other):
-		UIWidget(other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
-		mClipArea(other.mClipArea), mMultiLine(other.mMultiLine),
-		mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars), mMaxLinesCount(other.mMaxLinesCount),
-		mSelectionBegin(0), mSelectionEnd(0), mText(other.mText), mAvailableSymbols(other.mAvailableSymbols),
-		mSelectionColor(other.mSelectionColor), mTextLayout(other.mTextLayout), mCaretBlinkDelay(other.mCaretBlinkDelay),
-		mCaretBlinkTime(0), mLastClickTime(-10.0f)
+		UIScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
+		mMaxLinesCount(other.mMaxLinesCount), mSelectionBegin(0), mSelectionEnd(0), mText(other.mText), 
+		mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor), 
+		mCaretBlinkDelay(other.mCaretBlinkDelay), mCaretBlinkTime(0), mLastClickTime(-10.0f)
 	{
-		if (mOwnHorScrollBar)
-		{
-			mHorScrollBar = other.mHorScrollBar->Clone();
-			mHorScrollBar->mParent = this;
-			mHorScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
-		}
-		else  mHorScrollBar = nullptr;
-
-		if (mOwnVerScrollBar)
-		{
-			mVerScrollBar = other.mVerScrollBar->Clone();
-			mVerScrollBar->mParent = this;
-			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
-		}
-		else mVerScrollBar = nullptr;
-
 		mSelectionMesh = mnew Mesh();
 		mTextDrawable = other.mTextDrawable->Clone();
 		mCaretDrawable = other.mCaretDrawable->Clone();
@@ -57,7 +38,6 @@ namespace o2
 		mTextDrawable->SetText(mText);
 
 		RetargetStatesAnimations();
-		UpdateScrollParams();
 		UpdateLayout();
 
 		InitializeProperties();
@@ -65,22 +45,6 @@ namespace o2
 
 	UIEditBox::~UIEditBox()
 	{
-		if (mHorScrollBar)
-		{
-			if (mOwnHorScrollBar)
-				mHorScrollBar.Release();
-			else
-				mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
-		}
-
-		if (mVerScrollBar)
-		{
-			if (mOwnVerScrollBar)
-				mVerScrollBar.Release();
-			else
-				mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
-		}
-
 		mSelectionMesh.Release();
 		mTextDrawable.Release();
 		mCaretDrawable.Release();
@@ -88,23 +52,7 @@ namespace o2
 
 	UIEditBox& UIEditBox::operator=(const UIEditBox& other)
 	{
-		UIWidget::operator=(other);
-
-		if (mHorScrollBar)
-		{
-			if (mOwnHorScrollBar)
-				mHorScrollBar.Release();
-			else
-				mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
-		}
-
-		if (mVerScrollBar)
-		{
-			if (mOwnVerScrollBar)
-				mVerScrollBar.Release();
-			else
-				mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
-		}
+		UIScrollArea::operator=(other);
 
 		mTextDrawable.Release();
 		mCaretDrawable.Release();
@@ -115,37 +63,16 @@ namespace o2
 		mSelectionEnd = 0;
 		mCaretBlinkTime = 0;
 		mLastClickTime = -10.0f;
-		mClipArea = other.mClipArea;
-		mScrollPos = other.mScrollPos;
-		mOwnHorScrollBar = other.mOwnHorScrollBar;
-		mOwnVerScrollBar = other.mOwnVerScrollBar;
 		mMultiLine = other.mMultiLine;
 		mWordWrap = other.mWordWrap;
 		mMaxLineChars = other.mMaxLineChars;
 		mMaxLinesCount = other.mMaxLinesCount;
 		mSelectionColor = other.mSelectionColor;
-		mTextLayout = other.mTextLayout;
 		mCaretBlinkDelay = other.mCaretBlinkDelay;
 		mTextDrawable = other.mTextDrawable->Clone();
 		mCaretDrawable = other.mCaretDrawable->Clone();
 
 		mTextDrawable->SetText(mText);
-
-		if (mOwnHorScrollBar)
-		{
-			mHorScrollBar = other.mHorScrollBar->Clone();
-			mHorScrollBar->mParent = this;
-			mHorScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
-		}
-		else mHorScrollBar = nullptr;
-
-		if (mOwnVerScrollBar)
-		{
-			mVerScrollBar = other.mVerScrollBar->Clone();
-			mVerScrollBar->mParent = this;
-			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
-		}
-		else mVerScrollBar = nullptr;
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -163,8 +90,7 @@ namespace o2
 
 		mDrawDepth = o2Render.GetDrawingDepth();
 
-		o2Render.SetupScissorRect(mAbsoluteClipArea);
-		o2Render.EnableScissorTest();
+		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
 		mTextDrawable->Draw();
 		mSelectionMesh->Draw();
@@ -183,18 +109,14 @@ namespace o2
 
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
+
+		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
+			DrawDebugFrame();
 	}
 
 	void UIEditBox::Update(float dt)
 	{
-		UIWidget::Update(dt);
-
-		if (mOwnHorScrollBar)
-			mHorScrollBar->Update(dt);
-
-		if (mOwnVerScrollBar)
-			mVerScrollBar->Update(dt);
-
+		UIScrollArea::Update(dt);
 		UpdateCaretBlinking(dt);
 	}
 
@@ -264,128 +186,6 @@ namespace o2
 
 		UpdateSelectionAndCaret();
 		CheckScrollingToCaret();
-	}
-
-	void UIEditBox::SetScroll(const Vec2F& scroll)
-	{
-		Vec2F newScrollPos(Math::Clamp(scroll.x, mScrollRange.left, mScrollRange.right),
-						   Math::Clamp(scroll.y, mScrollRange.bottom, mScrollRange.top));
-
-		if (mHorScrollBar)
-			mHorScrollBar->SetValueForcible(newScrollPos.x);
-
-		if (mVerScrollBar)
-			mVerScrollBar->SetValueForcible(newScrollPos.y);
-
-		if (!mVerScrollBar || !mHorScrollBar)
-			UpdateLayout();
-	}
-
-	Vec2F UIEditBox::GetScroll() const
-	{
-		return mScrollPos;
-	}
-
-	RectF UIEditBox::GetScrollRange() const
-	{
-		return mScrollRange;
-	}
-
-	void UIEditBox::ResetScroll()
-	{
-		SetScroll(mScrollArea.LeftBottom());
-	}
-
-	void UIEditBox::SetClipArea(const Layout& layout)
-	{
-		mClipArea = layout;
-		UpdateLayout();
-	}
-
-	Layout UIEditBox::GetClipArea() const
-	{
-		return mClipArea;
-	}
-
-	void UIEditBox::SetTextLayout(const Layout& layout)
-	{
-		mTextLayout = layout;
-		UpdateLayout();
-	}
-
-	Layout UIEditBox::GetTextLayout() const
-	{
-		return mTextLayout;
-	}
-
-	void UIEditBox::SetHorizontalScroll(float scroll)
-	{
-		SetScroll(Vec2F(scroll, mScrollPos.y));
-	}
-
-	float UIEditBox::GetHorizontalScroll() const
-	{
-		return mScrollPos.x;
-	}
-
-	void UIEditBox::SetVerticalScroll(float scroll)
-	{
-		SetScroll(Vec2F(mScrollPos.x, scroll));
-	}
-
-	float UIEditBox::GetVerticalScroll() const
-	{
-		return mScrollPos.y;
-	}
-
-	void UIEditBox::SetHorizontalScrollBar(Ptr<UIHorizontalScrollBar> scrollbar, bool owner /*= true*/)
-	{
-		if (mHorScrollBar)
-		{
-			if (mOwnHorScrollBar) mHorScrollBar.Release();
-			else                  mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
-		}
-
-		mHorScrollBar = scrollbar;
-		mOwnHorScrollBar = owner;
-
-		if (mHorScrollBar)
-		{
-			mHorScrollBar->mParent = this;
-			mHorScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
-		}
-
-		UpdateLayout();
-	}
-
-	Ptr<UIHorizontalScrollBar> UIEditBox::GetHorizontalScrollbar() const
-	{
-		return mHorScrollBar;
-	}
-
-	void UIEditBox::SetVerticalScrollBar(Ptr<UIVerticalScrollBar> scrollbar, bool owner /*= true*/)
-	{
-		if (mVerScrollBar)
-		{
-			if (mOwnVerScrollBar) mVerScrollBar.Release();
-			else                  mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
-		}
-
-		mVerScrollBar = scrollbar;
-		mOwnVerScrollBar = owner;
-
-		if (mVerScrollBar)
-		{
-			mVerScrollBar->mParent = this;
-			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
-		}
-
-		UpdateLayout();
-	}
-
-	Ptr<UIVerticalScrollBar> UIEditBox::GetVerticalScrollbar() const
-	{
-		return mVerScrollBar;
 	}
 
 	Ptr<Text> UIEditBox::GetTextDrawable()
@@ -562,6 +362,14 @@ namespace o2
 		return mDrawDepth;
 	}
 
+	bool UIEditBox::IsScrollable() const
+	{
+		return mEnableHorScroll || mEnableVerScroll;
+	}
+
+	void UIEditBox::UpdateControls(float dt)
+	{}
+
 	void UIEditBox::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
@@ -679,10 +487,10 @@ namespace o2
 
 	void UIEditBox::OnScrolled(float scroll)
 	{
-		if (mVerScrollBar && mVerScrollBar->visible)
-			mVerScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
-		else if (mHorScrollBar && mHorScrollBar->visible)
-			mHorScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+		if (mVerScrollBar && mEnableVerScroll)
+			mVerScrollBar->OnScrolled(scroll);
+		else if (mHorScrollBar && mEnableVerScroll)
+			mHorScrollBar->OnScrolled(scroll);
 	}
 
 	void UIEditBox::OnKeyPressed(const Input::Key& key)
@@ -739,8 +547,8 @@ namespace o2
 		if (mTextDrawable->GetFont())
 			mTextDrawable->GetFont()->CheckCharacters(" ");
 
-		mAbsoluteTextArea = mTextLayout.Calculate(layout.mAbsoluteRect);
-		RectF localViewArea(0.0f, 0.0f, mAbsoluteTextArea.Width(), mAbsoluteTextArea.Height());
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
+		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
 		mScrollArea = RectF(0.0f, 0.0f, localViewArea.Width(), localViewArea.Height());
 
@@ -756,6 +564,7 @@ namespace o2
 		Vec2F textRealSize = mTextDrawable->GetRealSize();
 		RectF textArea(localTextLayout.left, localTextLayout.top - textRealSize.y,
 					   localTextLayout.left + textRealSize.x, localTextLayout.top);
+
 		mScrollArea.left   = Math::Min(mScrollArea.left, textArea.left);
 		mScrollArea.bottom = Math::Min(mScrollArea.bottom, textArea.bottom);
 		mScrollArea.right  = Math::Max(mScrollArea.right, textArea.right);
@@ -768,11 +577,32 @@ namespace o2
 
 		if (mHorScrollBar)
 		{
-			if (Math::Equals(mScrollRange.left, mScrollRange.right))
-				mHorScrollBar->Hide();
+			if (Math::Equals(mScrollRange.left, mScrollRange.right, 1.0f))
+			{
+				if (mEnableHorScroll)
+				{
+					auto enableHorBarState = state["enableHorBar"];
+					if (enableHorBarState)
+						*enableHorBarState = false;
+
+					mHorScrollBar->Hide();
+				}
+
+				mEnableHorScroll = false;
+			}
 			else
 			{
-				mHorScrollBar->Show();
+				if (!mEnableHorScroll)
+				{
+					auto enableHorBarState = state["enableHorBar"];
+					if (enableHorBarState)
+						*enableHorBarState = true;
+
+					mHorScrollBar->Show();
+				}
+
+				mEnableHorScroll = true;
+
 				mHorScrollBar->SetValueRange(mScrollRange.left, mScrollRange.right);
 				mHorScrollBar->SetScrollHandleSize(localViewArea.Width());
 			}
@@ -780,11 +610,32 @@ namespace o2
 
 		if (mVerScrollBar)
 		{
-			if (Math::Equals(mScrollRange.bottom, mScrollRange.top))
-				mVerScrollBar->Hide();
+			if (Math::Equals(mScrollRange.bottom, mScrollRange.top, 1.0f))
+			{
+				if (mEnableVerScroll)
+				{
+					auto enableVerBarState = state["enableVerBar"];
+					if (enableVerBarState)
+						*enableVerBarState = false;
+
+					mVerScrollBar->Hide();
+				}
+
+				mEnableVerScroll = false;
+			}
 			else
 			{
-				mVerScrollBar->Show();
+				if (!mEnableVerScroll)
+				{
+					auto enableVerBarState = state["enableVerBar"];
+					if (enableVerBarState)
+						*enableVerBarState = true;
+
+					mVerScrollBar->Show();
+				}
+
+				mEnableVerScroll = true;
+
 				mVerScrollBar->SetValueRange(mScrollRange.bottom, mScrollRange.top);
 				mVerScrollBar->SetScrollHandleSize(localViewArea.Height());
 			}
@@ -804,13 +655,13 @@ namespace o2
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
-		mAbsoluteTextArea = mTextLayout.Calculate(layout.mAbsoluteRect);
-		mAbsoluteClipArea = mClipArea.Calculate(layout.mAbsoluteRect);
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
+		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout.mAbsoluteRect);
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 
-		mTextDrawable->SetRect(mAbsoluteTextArea + roundedScrollPos);
+		mTextDrawable->SetRect(mAbsoluteViewArea + roundedScrollPos);
 
-		mChildsAbsRect = mAbsoluteTextArea + roundedScrollPos;
+		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
 
 		for (auto child : mChilds)
 			child->UpdateLayout();
@@ -821,72 +672,14 @@ namespace o2
 		mChildsAbsRect = layout.mAbsoluteRect;
 
 		if (mOwnHorScrollBar)
-			mHorScrollBar->UpdateLayout();
+			mHorScrollBar->UpdateLayout(true);
 
 		if (mOwnVerScrollBar)
-			mVerScrollBar->UpdateLayout();
+			mVerScrollBar->UpdateLayout(true);
 
 		mChildsAbsRect = _mChildsAbsRect;
 
 		UpdateSelectionAndCaret();
-	}
-
-	void UIEditBox::OnHorScrollChanged(float value)
-	{
-		Vec2F delta(Math::Clamp(value, mScrollRange.left, mScrollRange.right) - mScrollPos.x, 0.0f);
-		mScrollPos += delta;
-		UpdateLayout();
-	}
-
-	void UIEditBox::OnVerScrollChanged(float value)
-	{
-		Vec2F delta(0.0f, Math::Clamp(value, mScrollRange.bottom, mScrollRange.top) - mScrollPos.y);
-		mScrollPos += delta;
-		UpdateLayout();
-	}
-
-	void UIEditBox::OnSerialize(DataNode& node)
-	{
-		if (mOwnHorScrollBar)
-			*node.AddNode("mHorScrollBar") = mHorScrollBar;
-
-		if (mOwnVerScrollBar)
-			*node.AddNode("mVerScrollBar") = mVerScrollBar;
-	}
-
-	void UIEditBox::OnDeserialized(const DataNode& node)
-	{
-		if (mHorScrollBar)
-		{
-			if (mOwnHorScrollBar) mHorScrollBar.Release();
-			else                  mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
-		}
-
-		if (mVerScrollBar)
-		{
-			if (mOwnVerScrollBar) mVerScrollBar.Release();
-			else                  mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
-		}
-
-		auto horScrollNode = node.GetNode("mHorScrollBar");
-		mOwnHorScrollBar = horScrollNode.IsValid();
-		if (mOwnHorScrollBar)
-		{
-			mHorScrollBar = *horScrollNode;
-			mHorScrollBar->mParent = this;
-			mHorScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnHorScrollChanged);
-		}
-		else mHorScrollBar = nullptr;
-
-		auto varScrollNode = node.GetNode("mHorScrollBar");
-		mOwnVerScrollBar = varScrollNode.IsValid();
-		if (mOwnVerScrollBar)
-		{
-			mVerScrollBar = *varScrollNode;
-			mVerScrollBar->mParent = this;
-			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIEditBox::OnVerScrollChanged);
-		}
-		else mVerScrollBar = nullptr;
 	}
 
 	void UIEditBox::UpdateSelectionAndCaret()
@@ -977,7 +770,7 @@ namespace o2
 		}
 
 		if (mTextDrawable->GetFont())
-			return mAbsoluteTextArea.LeftTop() - Vec2F(0, mTextDrawable->GetFont()->GetHeight());
+			return mAbsoluteViewArea.LeftTop() - Vec2F(0, mTextDrawable->GetFont()->GetHeight());
 
 		return Vec2F();
 	}
@@ -1076,13 +869,13 @@ namespace o2
 			return;
 
 		Vec2F caretPos = mCaretDrawable->GetPosition();
-		RectF clipRect = mAbsoluteTextArea;
+		RectF clipRect = mAbsoluteViewArea;
 
 		float rightOffs = Math::Max(caretPos.x - clipRect.right + 5.0f, 0.0f);
 		float leftOffs = Math::Max(clipRect.left - caretPos.x + 5.0f, 0.0f);
 
-		float downOffs = Math::Max(caretPos.y - clipRect.top + 5.0f + font->GetLineHeight(), 0.0f);
-		float topOffs = Math::Max(clipRect.bottom - caretPos.y + 5.0f, 0.0f);
+		float downOffs = Math::Max(caretPos.y - clipRect.top + font->GetHeight(), 0.0f);
+		float topOffs = Math::Max(clipRect.bottom - caretPos.y, 0.0f);
 
 		float horOffs = rightOffs - leftOffs;
 
@@ -1398,9 +1191,6 @@ namespace o2
 	{
 		INITIALIZE_PROPERTY(UIEditBox, text, SetText, GetText);
 		INITIALIZE_PROPERTY(UIEditBox, caret, SetCaretPosition, GetCaretPosition);
-		INITIALIZE_PROPERTY(UIEditBox, scroll, SetScroll, GetScroll);
-		INITIALIZE_PROPERTY(UIEditBox, horScroll, SetHorizontalScroll, GetHorizontalScroll);
-		INITIALIZE_PROPERTY(UIEditBox, verScroll, SetVerticalScroll, GetVerticalScroll);
 		INITIALIZE_PROPERTY(UIEditBox, selectionBegin, SetSelectionBegin, GetSelectionBegin);
 		INITIALIZE_PROPERTY(UIEditBox, selectionEnd, SetSelectionEnd, GetSelectionEnd);
 	}

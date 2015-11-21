@@ -14,7 +14,11 @@ namespace o2
 	UICustomList::UICustomList():
 		UIScrollArea(), mSelectedItem(-1), mHoverLayout(Layout::Both()), mSelectionLayout(Layout::Both())
 	{
-		mVerLayout = AddChild(mnew UIVerticalLayout());
+		mItemSample = mnew UIWidget();
+		mSelectionDrawable = mnew Sprite();
+		mHoverDrawable = mnew Sprite();
+
+		mVerLayout = mnew UIVerticalLayout();
 		mVerLayout->baseCorner = BaseCorner::LeftTop;
 		mVerLayout->name = "layout";
 		mVerLayout->expandHeight = false;
@@ -25,10 +29,7 @@ namespace o2
 		mVerLayout->layout.offsetMax = Vec2F();
 		mVerLayout->fitByChildren = true;
 
-		mItemSample = mnew UIWidget();
-
-		mSelectionDrawable = mnew Sprite();
-		mHoverDrawable = mnew Sprite();
+		AddChild(mVerLayout);
 
 		InitializeProperties();
 	}
@@ -60,16 +61,19 @@ namespace o2
 		mItemSample.Release();
 		mSelectionDrawable.Release();
 		mHoverDrawable.Release();
+		mVerLayout = nullptr;
+
+		mSelectionDrawable = other.mSelectionDrawable->Clone();
+		mHoverDrawable = other.mHoverDrawable->Clone();
+
+		mSelectionLayout = other.mSelectionLayout;
+		mHoverLayout = other.mHoverLayout;
 
 		UIScrollArea::operator=(other);
 
 		mVerLayout = FindChild<UIVerticalLayout>();
 		mItemSample = other.mItemSample->Clone();
 		mItemSample->UpdateLayout(true);
-		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mHoverDrawable = other.mHoverDrawable->Clone();
-		mSelectionLayout = other.mSelectionLayout;
-		mHoverLayout = other.mHoverLayout;
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -104,8 +108,7 @@ namespace o2
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
- 		o2Render.SetupScissorRect(mAbsoluteClipArea);
- 		o2Render.EnableScissorTest();
+ 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
 		for (auto child : mChilds)
 			child->Draw();
@@ -123,6 +126,9 @@ namespace o2
 
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
+
+		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
+			DrawDebugFrame();
 	}
 
 	void UICustomList::SetItemSample(Ptr<UIWidget> sample)
@@ -322,6 +328,30 @@ namespace o2
 		return mDrawDepth;
 	}
 
+	bool UICustomList::IsScrollable() const
+	{
+		return mEnableHorScroll || mEnableVerScroll;
+	}
+
+	void UICustomList::UpdateControls(float dt)
+	{}
+
+	void UICustomList::UpdateLayout(bool forcible /*= false*/)
+	{
+		UIScrollArea::UpdateLayout(forcible);
+
+		if (Input::IsSingletonInitialzed())
+			UpdateHover(o2Input.cursorPos);
+
+		UpdateSelection(mSelectedItem, GetItem(mSelectedItem));
+
+		mCurrentHoverRect = mTargetHoverRect;
+		mCurrentSelectionRect = mTargetSelectionRect;
+
+		mSelectionDrawable->SetRect(mCurrentSelectionRect);
+		mHoverDrawable->SetRect(mCurrentHoverRect);
+	}
+
 	void UICustomList::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
@@ -386,6 +416,9 @@ namespace o2
 
 	Ptr<UIWidget> UICustomList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
 	{
+		if (!mVerLayout)
+			return nullptr;
+
 		int idx = 0;
 		for (auto child : mVerLayout->mChilds)
 		{
@@ -438,7 +471,10 @@ namespace o2
 		{
 			auto hoverState = state["hover"];
 			if (hoverState)
+			{
+				mHoverDrawable->SetEnabled(true);
 				*hoverState = false;
+			}
 			else
 				mHoverDrawable->SetEnabled(false);
 		}
@@ -448,7 +484,10 @@ namespace o2
 
 			auto hoverState = state["hover"];
 			if (hoverState)
+			{
+				mHoverDrawable->SetEnabled(true);
 				*hoverState = itemIdx != mSelectedItem;
+			}
 			else
 				mHoverDrawable->SetEnabled(itemIdx != mSelectedItem);
 		}
@@ -462,9 +501,15 @@ namespace o2
 		{
 			auto selectedState = state["selected"];
 			if (selectedState)
+			{
+				mSelectionDrawable->SetEnabled(true);
 				*selectedState = false;
+			}
 			else
-				mSelectionDrawable->SetEnabled(false);
+			{
+				if (mSelectionDrawable)
+					mSelectionDrawable->SetEnabled(false);
+			}
 		}
 		else
 		{
@@ -472,24 +517,26 @@ namespace o2
 
 			auto selectedState = state["selected"];
 			if (selectedState)
-				*selectedState = true;
-			else
+			{
 				mSelectionDrawable->SetEnabled(true);
+				*selectedState = true;
+			}
+			else
+			{
+				if (mSelectionDrawable)
+					mSelectionDrawable->SetEnabled(false);
+			}
 
 			UpdateHover(o2Input.cursorPos);
 		}
 	}
 
-	void UICustomList::OnScrolled()
+	void UICustomList::OnScrolled(float scroll)
 	{
-		UpdateHover(o2Input.cursorPos);
-		UpdateSelection(mSelectedItem, GetItem(mSelectedItem));
-
-		mCurrentHoverRect = mTargetHoverRect;
-		mCurrentSelectionRect = mTargetSelectionRect;
-
-		mSelectionDrawable->SetRect(mCurrentSelectionRect);
-		mHoverDrawable->SetRect(mCurrentHoverRect);
+		if (mVerScrollBar && mEnableVerScroll)
+			mVerScrollBar->OnScrolled(scroll);
+		else if (mHorScrollBar && mEnableVerScroll)
+			mHorScrollBar->OnScrolled(scroll);
 	}
 
 	void UICustomList::OnSelectionChanged()

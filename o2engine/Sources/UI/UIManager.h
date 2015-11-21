@@ -20,6 +20,7 @@ namespace o2
 	class UILabel;
 	class UIList;
 	class UIScrollArea;
+	class UIToggle;
 	class UIVerticalLayout;
 	class UIVerticalProgress;
 	class UIVerticalScrollBar;
@@ -104,6 +105,9 @@ namespace o2
 		// Adds text dropdown
 		Ptr<UIDropDown> AddDropdown(const String& style = "standard");
 
+		// Adds toggle
+		Ptr<UIToggle> AddToggle(const WString& caption, const String& style = "standard");
+
 		// Creates widget by style
 		template<typename _type>
 		Ptr<_type> CreateWidget(const String& style = "standard");
@@ -150,6 +154,9 @@ namespace o2
 		// Creates text dropdown
 		Ptr<UIDropDown> CreateDropdown(const String& style = "standard");
 
+		// Creates toggle
+		Ptr<UIToggle> CreateToggle(const WString& caption, const String& style = "standard");
+
 		// Removes widget by path
 		bool RemoveWidget(const String& path);
 
@@ -166,9 +173,11 @@ namespace o2
 		const WidgetsVec& GetAllWidgets() const;
 
 	protected:
-		Ptr<UIWidget>  mScreenWidget; // Root screen widget
-		WidgetsVec     mStyleSamples; // Style widgets
 		Ptr<LogStream> mLog;          // UI Log stream
+		Ptr<UIWidget>  mScreenWidget; // Root screen widget
+		WidgetsVec     mTopWidgets;   // Top widgets, drawing after mScreenWidget 
+
+		WidgetsVec     mStyleSamples; // Style widgets
 
 	protected:
 		// Default constructor
@@ -186,11 +195,15 @@ namespace o2
 		// Updates root widget size
 		void UpdateRootSize();
 
+		// Registering top drawing widget
+		void RegTopWidget(Ptr<UIWidget> widget);
+
 		// Initializes properties
 		void InitializeProperties();
 
 		friend class Application;
 		friend class BaseApplication;
+		friend class UICustomDropDown;
 
 		template<typename _type>
 		friend class ITemplPtr;

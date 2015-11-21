@@ -28,6 +28,9 @@ namespace o2
 		// Returns depth (event system will catch listener with highest depth)
 		virtual float Depth();
 
+		// Returns is listener scrollable
+		virtual bool IsScrollable() const;
+
 		// Sets interactable flag
 		void SetInteractable(bool interactable);
 

@@ -562,7 +562,7 @@ namespace o2
 	template<typename T>
 	TString<T>::~TString()
 	{
-		free(mData);
+		//free(mData);
 	}
 
 	template<typename T>

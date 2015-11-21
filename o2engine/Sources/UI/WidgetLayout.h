@@ -22,6 +22,11 @@ namespace o2
 		Property<float> width;
 		Property<float> height;
 		Property<Vec2F> absPosition;
+		Property<Vec2F> absLeftTop;
+		Property<Vec2F> absLeftBottom;
+		Property<Vec2F> absRightTop;
+		Property<Vec2F> absRightBottom;
+		Property<RectF> absRect;
 		Property<float> absLeft;
 		Property<float> absRight;
 		Property<float> absBottom;
@@ -85,6 +90,18 @@ namespace o2
 
 		void SetAbsolutePosition(const Vec2F& absPosition);
 		Vec2F GetAbsolutePosition() const;
+
+		void SetAbsoluteLeftTop(const Vec2F& absPosition);
+		Vec2F GetAbsoluteLeftTop() const;
+
+		void SetAbsoluteLeftBottom(const Vec2F& absPosition);
+		Vec2F GetAbsoluteLeftBottom() const;
+
+		void SetAbsoluteRightTop(const Vec2F& absPosition);
+		Vec2F GetAbsoluteRightTop() const;
+
+		void SetAbsoluteRightBottom(const Vec2F& absPosition);
+		Vec2F GetAbsoluteRightBottom() const;
 
 		void SetAbsoluteRect(const RectF& rect);
 		RectF GetAbsoluteRect() const;
@@ -161,6 +178,8 @@ namespace o2
 		void SetHeightWeight(float heigthWeigth);
 		float GetHeightWeight();
 
+		static UIWidgetLayout Both(float borderLeft = 0, float borderBottom = 0, float borderRight = 0, float borderTop = 0);
+
 		SERIALIZABLE_IMPL(UIWidgetLayout);
 
 		IOBJECT(UIWidgetLayout)
@@ -213,10 +232,10 @@ namespace o2
 	protected:
 		Ptr<UIWidget> mOwner;
 		Vec2F         mPivot          = Vec2F(0.5f, 0.5f);
-		Vec2F         mAnchorMin      = Vec2F(0.0f, 0.0f);
-		Vec2F         mAnchorMax      = Vec2F(1.0f, 1.0f);
-		Vec2F         mOffsetMin      = Vec2F(0.0f, 0.0f);
-		Vec2F         mOffsetMax      = Vec2F(0.0f, 0.0f);
+		Vec2F         mAnchorMin      = Vec2F(0.5f, 0.5f);
+		Vec2F         mAnchorMax      = Vec2F(0.5f, 0.5f);
+		Vec2F         mOffsetMin      = Vec2F(-10.0f, -10.0f);
+		Vec2F         mOffsetMax      = Vec2F(10.0f, 10.0f);
 		Vec2F         mMinSize        = Vec2F(0.0f, 0.0f);
 		Vec2F         mMaxSize        = Vec2F(FLT_MAX, FLT_MAX);
 		RectF         mAbsoluteRect   = RectF();
@@ -225,6 +244,7 @@ namespace o2
 		bool          mDrivenByParent = false;
 
 	protected:
+		void CopyFrom(const UIWidgetLayout& other);
 		void InitializeProperties();
 
 		friend class UICustomDropDown;
@@ -239,5 +259,6 @@ namespace o2
 		friend class UIVerticalScrollBar;
 		friend class UIWidget;
 		friend class UIWidgetLayer;
+		friend class UIWindow;
 	};
 }

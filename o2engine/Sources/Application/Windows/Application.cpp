@@ -232,7 +232,8 @@ namespace o2
 		Vec2F cursorPos = Vec2F((float)pt.x, (float)-pt.y);
 
 		if (app->mRender)
-			cursorPos -= Vec2F(app->mRender->mResolution.x*0.5f, -app->mRender->mResolution.y*0.5f);
+			cursorPos -= Vec2F(Math::Round(app->mRender->mResolution.x*0.5f), 
+							   Math::Round(-app->mRender->mResolution.y*0.5f));
 
 		float wheelDelta;
 

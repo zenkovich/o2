@@ -46,7 +46,6 @@ namespace o2
 		else mVerScrollBar = nullptr;
 
 		RetargetStatesAnimations();
-		UpdateScrollParams();
 		UpdateLayout();
 
 		InitializeProperties();
@@ -132,8 +131,7 @@ namespace o2
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
-		o2Render.SetupScissorRect(mAbsoluteClipArea);
-		o2Render.EnableScissorTest();
+		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
 		for (auto child : mChilds)
 			child->Draw();
@@ -148,6 +146,9 @@ namespace o2
 
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
+
+		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
+			DrawDebugFrame();
 	}
 
 	void UIScrollArea::Update(float dt)
@@ -161,6 +162,7 @@ namespace o2
 			mVerScrollBar->Update(dt);
 
 		UpdateControls(dt);
+		CheckScrollBarsVisibility();
 
 		if (!mPressedCursor && mScrollSpeed != Vec2F())
 		{
@@ -366,37 +368,6 @@ namespace o2
 
 		bool lastPressedCursor = mPressedCursor;
 
-		if (mEnableScrollsHiding)
-		{
-			if (mHorScrollBar->IsUnderPoint(cursor->mPosition) && mEnableHorScroll)
-			{
-				mLastHorScrollChangeTime = o2Time.GetApplicationTime();
-
-				if (!mHorScrollBar->IsVisible())
-				{
-					auto enableHorBarState = state["enableHorBar"];
-					if (enableHorBarState)
-						*enableHorBarState = true;
-
-					mHorScrollBar->Show();
-				}
-			}
-
-			if (mVerScrollBar->IsUnderPoint(cursor->mPosition) && mEnableVerScroll)
-			{
-				mLastVerScrollChangeTime = o2Time.GetApplicationTime();
-
-				if (!mVerScrollBar->IsVisible())
-				{
-					auto enableVerBarState = state["enableVerBar"];
-					if (enableVerBarState)
-						*enableVerBarState = true;
-
-					mVerScrollBar->Show();
-				}
-			}
-		}
-
 		if (!mUnderCursor && underCursorAtFrame)
 		{
 			mUnderCursor = true;
@@ -432,13 +403,15 @@ namespace o2
 				*selectState = false;
 		}
 
-		if (!Math::Equals(o2Input.GetMouseWheelDelta(), 0.0f) && underClippingArea && !underScrollbars)
+		auto listenerunderCursor = o2Events.GetCursorListenerUnderCursor(0);
+		if (!Math::Equals(o2Input.GetMouseWheelDelta(), 0.0f) && underClippingArea && !underScrollbars &&
+			(listenerunderCursor == nullptr || !listenerunderCursor->IsScrollable()))
 		{
 			mScrollSpeed = Vec2F();
 
-			if (mVerScrollBar && !Math::Equals(mScrollRange.top, mScrollRange.bottom))
+			if (mVerScrollBar && mEnableVerScroll)
 				mVerScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
-			else if (mHorScrollBar && !Math::Equals(mScrollRange.left, mScrollRange.right))
+			else if (mHorScrollBar && mEnableHorScroll)
 				mHorScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
 		}
 
@@ -472,6 +445,42 @@ namespace o2
 					}
 
 					SetScroll(mPressedScroll + delta);
+				}
+			}
+		}
+	}
+
+	void UIScrollArea::CheckScrollBarsVisibility()
+	{
+		auto cursor = o2Input.GetCursor(0);
+
+		if (mEnableScrollsHiding)
+		{
+			if (mHorScrollBar->IsUnderPoint(cursor->mPosition) && mEnableHorScroll)
+			{
+				mLastHorScrollChangeTime = o2Time.GetApplicationTime();
+
+				if (!mHorScrollBar->IsVisible())
+				{
+					auto enableHorBarState = state["enableHorBar"];
+					if (enableHorBarState)
+						*enableHorBarState = true;
+
+					mHorScrollBar->Show();
+				}
+			}
+
+			if (mVerScrollBar->IsUnderPoint(cursor->mPosition) && mEnableVerScroll)
+			{
+				mLastVerScrollChangeTime = o2Time.GetApplicationTime();
+
+				if (!mVerScrollBar->IsVisible())
+				{
+					auto enableVerBarState = state["enableVerBar"];
+					if (enableVerBarState)
+						*enableVerBarState = true;
+
+					mVerScrollBar->Show();
 				}
 			}
 		}

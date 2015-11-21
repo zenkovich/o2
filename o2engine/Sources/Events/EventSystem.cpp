@@ -5,6 +5,7 @@
 #include "Events/DragEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "Render/Render.h"
+#include "Utils/Debug.h"
 
 namespace o2
 {
@@ -150,7 +151,7 @@ namespace o2
 		}
 	}
 
-	Ptr<DragEventsListener> EventSystem::GetListenerUnderCursor(CursorId cursorId) const
+	Ptr<DragEventsListener> EventSystem::GetDragListenerUnderCursor(CursorId cursorId) const
 	{
 		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
 
@@ -166,6 +167,14 @@ namespace o2
 
 			break;
 		}
+
+		return nullptr;
+	}
+
+	Ptr<CursorEventsListener> EventSystem::GetCursorListenerUnderCursor(CursorId cursorId) const
+	{
+		if (mUnderCursorListeners.ContainsKey(cursorId))
+			return mUnderCursorListeners[cursorId];
 
 		return nullptr;
 	}

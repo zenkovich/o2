@@ -12,7 +12,7 @@ namespace o2
 	DECLARE_SINGLETON(Render);
 
 	Render::Render():
-		mReady(false), mStencilDrawing(false), mStencilTest(false), mScissorTest(false)
+		mReady(false), mStencilDrawing(false), mStencilTest(false), mClippingEverything(false)
 	{
 		mVertexBufferSize = USHRT_MAX;
 		mIndexBufferSize = USHRT_MAX;
@@ -150,8 +150,8 @@ namespace o2
 
 		if (mGLContext)
 		{
-// 			for (auto texture : mTextures)
-// 				texture.Release();
+			// 			for (auto texture : mTextures)
+			// 				texture.Release();
 
 			if (!wglMakeCurrent(NULL, NULL))
 			{
@@ -206,6 +206,9 @@ namespace o2
 		mDrawingDepth = 0.0f;
 
 		mScissorInfos.Clear();
+		mStackScissors.Clear();
+
+		mClippingEverything = false;
 
 		// Reset view matrices
 		SetupViewMatrix(mResolution);
@@ -298,7 +301,7 @@ namespace o2
 			1,           0,            0, 0,
 			0,          -1,            0, 0,
 			0,           0,            1, 0,
-			resf.x*0.5f, resf.y*0.5f, -1, 1
+			Math::Round(resf.x*0.5f), Math::Round(resf.y*0.5f), -1, 1
 		};
 
 		glLoadMatrixf(modelMatrix);
@@ -376,7 +379,7 @@ namespace o2
 		DrawRectFrame(rect.LeftBottom(), rect.RightTop(), color);
 	}
 
-	void Render::DrawBasis(const Basis& basis, const Color4& xcolor /*= Color4::Red()*/, 
+	void Render::DrawBasis(const Basis& basis, const Color4& xcolor /*= Color4::Red()*/,
 						   const Color4& ycolor /*= Color4::Blue()*/, const Color4& color /*= Color4::White()*/)
 	{
 		Vertex2 v[] =
@@ -487,57 +490,91 @@ namespace o2
 		GL_CHECK_ERROR(mLog);
 	}
 
-	void Render::SetupScissorRect(const RectI& rect)
-	{
-		if (rect == mScissorRect)
-			return;
-
-		glScissor((int)(rect.left + mResolution.x*0.5f), (int)(rect.bottom + mResolution.y*0.5f), 
-				  (int)rect.Width(), (int)rect.Height());
-
-		mScissorRect = rect;
-	}
-
 	RectI Render::GetScissorRect() const
 	{
-		return mScissorRect;
+		if (mStackScissors.IsEmpty())
+			return RectI();
+
+		return (RectI)(mStackScissors.Last().mScrissorRect);
 	}
 
-	void Render::EnableScissorTest()
+	const Render::StackScissorVec& Render::GetScissorsStack() const
 	{
-		if (mScissorTest)
+		return mStackScissors;
+	}
+
+	void Render::EnableScissorTest(const RectI& rect)
+	{
+		DrawPrimitives();
+
+		RectI summaryScissorRect = rect;
+		if (!mStackScissors.IsEmpty())
+		{
+			RectI lastSummaryClipRect = mStackScissors.Last().mSummaryScissorRect;
+			mClippingEverything = !summaryScissorRect.IsIntersects(lastSummaryClipRect);
+			summaryScissorRect = summaryScissorRect.GetIntersection(lastSummaryClipRect);
+			mScissorInfos.Last().mEndDepth = mDrawingDepth;
+		}
+		else
+		{
+			glEnable(GL_SCISSOR_TEST);
+			GL_CHECK_ERROR(mLog);
+		}
+
+		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
+		mStackScissors.Add(ScissorStackItem(rect, summaryScissorRect));
+
+		glScissor((int)(summaryScissorRect.left + mResolution.x*0.5f), (int)(summaryScissorRect.bottom + mResolution.y*0.5f),
+				  (int)summaryScissorRect.Width(), (int)summaryScissorRect.Height());
+	}
+
+	void Render::DisableScissorTest(bool forcible /*= false*/)
+	{
+		if (mStackScissors.IsEmpty())
+		{
+			mLog->WarningStr("Can't disable scissor test - no scissor were enabled!");
 			return;
+		}
 
 		DrawPrimitives();
 
-		glEnable(GL_SCISSOR_TEST);
+		if (forcible)
+		{
+			glDisable(GL_SCISSOR_TEST);
+			GL_CHECK_ERROR(mLog);
+			mStackScissors.Clear();
 
-		GL_CHECK_ERROR(mLog);
+			mScissorInfos.Last().mEndDepth = mDrawingDepth;
+		}
+		else
+		{
+			if (mStackScissors.Count() == 1)
+			{
+				glDisable(GL_SCISSOR_TEST);
+				GL_CHECK_ERROR(mLog);
+				mStackScissors.PopBack();
 
-		mScissorInfos.Add(ScissorInfo(mScissorRect, mDrawingDepth));
+				mScissorInfos.Last().mEndDepth = mDrawingDepth;
+				mClippingEverything = false;
+			}
+			else
+			{
+				mStackScissors.PopBack();
+				RectI lastClipRect = mStackScissors.Last().mSummaryScissorRect;
+				glScissor((int)(lastClipRect.left + mResolution.x*0.5f), (int)(lastClipRect.bottom + mResolution.y*0.5f),
+						  (int)lastClipRect.Width(), (int)lastClipRect.Height());
 
-		mScissorTest = true;
-	}
+				mScissorInfos.Last().mEndDepth = mDrawingDepth;
+				mScissorInfos.Add(ScissorInfo(lastClipRect, mDrawingDepth));
 
-	void Render::DisableScissorTest()
-	{
-		if (!mScissorTest)
-			return;
-
-		DrawPrimitives();
-
-		glDisable(GL_SCISSOR_TEST);
-
-		GL_CHECK_ERROR(mLog);
-
-		mScissorInfos.Last().mEndDepth = mDrawingDepth;
-
-		mScissorTest = false;
+				mClippingEverything = lastClipRect == RectI();
+			}
+		}
 	}
 
 	bool Render::IsScissorTestEnabled() const
 	{
-		return mScissorTest;
+		return !mStackScissors.IsEmpty();
 	}
 
 	bool Render::DrawMesh(Ptr<Mesh> mesh)
@@ -547,6 +584,9 @@ namespace o2
 
 		mDrawingDepth += 1.0f;
 		mesh->mDrawingDepth = mDrawingDepth;
+
+		if (mClippingEverything)
+			return true;
 
 		// Check difference
 		if (mLastDrawTexture != mesh->mTexture.mTexture ||
@@ -720,7 +760,7 @@ namespace o2
 	void Render::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(Render, camera, SetCamera, GetCamera);
-		INITIALIZE_PROPERTY(Render, scissorRect, SetupScissorRect, GetScissorRect);
+		INITIALIZE_PROPERTY(Render, scissorRect, EnableScissorTest, GetScissorRect);
 		INITIALIZE_PROPERTY(Render, renderTexture, SetRenderTexture, GetRenderTexture);
 		INITIALIZE_GETTER(Render, resolution, GetResolution);
 		INITIALIZE_GETTER(Render, renderTextureAvailable, IsRenderTextureAvailable);
@@ -736,7 +776,7 @@ namespace o2
 		mBeginDepth(0), mEndDepth(0)
 	{}
 
-	Render::ScissorInfo::ScissorInfo(const RectF& rect, float beginDepth):
+	Render::ScissorInfo::ScissorInfo(const RectI& rect, float beginDepth):
 		mScissorRect(rect), mBeginDepth(beginDepth), mEndDepth(beginDepth)
 	{}
 
@@ -744,6 +784,18 @@ namespace o2
 	{
 		return Math::Equals(mBeginDepth, other.mBeginDepth) && Math::Equals(mEndDepth, other.mEndDepth) &&
 			mScissorRect == other.mScissorRect;
+	}
+
+	Render::ScissorStackItem::ScissorStackItem()
+	{}
+
+	Render::ScissorStackItem::ScissorStackItem(const RectI& rect, const RectI& summaryRect):
+		mScrissorRect(rect), mSummaryScissorRect(summaryRect)
+	{}
+
+	bool Render::ScissorStackItem::operator==(const ScissorStackItem& other)
+	{
+		return mScrissorRect == other.mScrissorRect;
 	}
 
 }

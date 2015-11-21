@@ -33,6 +33,11 @@ namespace o2
 		return 0.0f;
 	}
 
+	bool CursorEventsListener::IsScrollable() const
+	{
+		return false;
+	}
+
 	void CursorEventsListener::SetInteractable(bool interactable)
 	{
 		if (mInteractable == interactable)

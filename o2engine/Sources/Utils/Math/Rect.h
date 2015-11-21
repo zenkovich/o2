@@ -72,7 +72,8 @@ namespace o2
 		inline Rect Scale(const Vec2<T>& scale, const Vec2<T>& origin) const;
 		inline Rect Scale(float scale) const;
 
-		inline bool IsInside(const Vec2<T>& p) const;
+		template<typename T2>
+		inline bool IsInside(const Vec2<T2>& p) const;
 		inline bool IsIntersects(const Rect& other) const;
 
 		inline Rect GetIntersection(const Rect& other) const;
@@ -378,9 +379,10 @@ namespace o2
 	}
 
 	template<typename T>
-	bool Rect<T>::IsInside(const Vec2<T>& p) const
+	template<typename T2>
+	bool Rect<T>::IsInside(const Vec2<T2>& p) const
 	{
-		return p.x > left && p.x < right &&	p.y < top && p.y > bottom;
+		return (T)p.x > left && (T)p.x < right && (T)p.y < top && (T)p.y > bottom;
 	}
 
 	template<typename T>
@@ -392,6 +394,9 @@ namespace o2
 	template<typename T>
 	Rect<T> Rect<T>::GetIntersection(const Rect& other) const
 	{
+		if (!IsIntersects(other))
+			return Rect(0, 0, 0, 0);
+
 		T xAxies[] ={left, right, other.left, other.right};
 		T yAxies[] ={top, bottom, other.top, other.bottom};
 

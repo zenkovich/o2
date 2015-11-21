@@ -152,6 +152,11 @@ namespace o2
 		return GetMaxDrawingDepth();
 	}
 
+	bool UIVerticalProgress::IsScrollable() const
+	{
+		return true;
+	}
+
 	void UIVerticalProgress::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
@@ -208,6 +213,26 @@ namespace o2
 	void UIVerticalProgress::OnScrolled(float scroll)
 	{
 		SetValue(mValue + scroll*mScrollSense);
+	}
+
+	void UIVerticalProgress::UpdateLayout(bool forcible /*= false*/)
+	{
+		if (layout.mDrivenByParent && !forcible)
+		{
+			if (mParent)
+				mParent->UpdateLayout();
+
+			return;
+		}
+
+		RecalculateAbsRect();
+		UpdateProgressLayersLayouts();
+		UpdateLayersLayouts();
+
+		mChildsAbsRect = layout.mAbsoluteRect;
+
+		for (auto child : mChilds)
+			child->UpdateLayout();
 	}
 
 	void UIVerticalProgress::UpdateProgressLayersLayouts()
