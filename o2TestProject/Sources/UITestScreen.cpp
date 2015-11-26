@@ -17,7 +17,8 @@ void UITestScreen::Load()
 	RebuildStyle();
 
 	mBackground.LoadFromImage("ui/UI_Background.png");
-	mBackground.size = (Vec2I)o2Render.resolution;
+	mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30);
+	o2Application.onResizingEvent += [&]() { mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30); };
 
 	auto window = o2UI.CreateWidget<UIWindow>();
 	o2UI.AddWidget(window);

@@ -26,7 +26,7 @@ namespace o2
 	};
 
 	Application::Application():
-		mLog(nullptr)
+		mLog(nullptr), mReady(false)
 	{
 		InitializeProperties();
 		InitalizeSystems();
@@ -41,18 +41,18 @@ namespace o2
 		mWndStyle = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
 
 		WNDCLASSEX wndClass;
-		wndClass.cbSize         = sizeof(WNDCLASSEX);
-		wndClass.style			= mWndStyle;
-		wndClass.lpfnWndProc	= (WNDPROC)WndProcFunc::WndProc;
-		wndClass.cbClsExtra		= 0;
-		wndClass.cbWndExtra		= 0;
-		wndClass.hInstance		= NULL;
-		wndClass.hIcon			= LoadIcon(NULL, IDI_APPLICATION);
-		wndClass.hCursor		= LoadCursor(NULL, IDC_ARROW);
-		wndClass.hbrBackground	= (HBRUSH)GetStockObject(GRAY_BRUSH);
-		wndClass.lpszMenuName	= NULL;
-		wndClass.lpszClassName	= "o2App";
-		wndClass.hIconSm        = LoadIcon(NULL, IDI_APPLICATION);
+		wndClass.cbSize = sizeof(WNDCLASSEX);
+		wndClass.style = mWndStyle;
+		wndClass.lpfnWndProc = (WNDPROC)WndProcFunc::WndProc;
+		wndClass.cbClsExtra = 0;
+		wndClass.cbWndExtra = 0;
+		wndClass.hInstance = NULL;
+		wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+		wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+		wndClass.hbrBackground = (HBRUSH)GetStockObject(GRAY_BRUSH);
+		wndClass.lpszMenuName = NULL;
+		wndClass.lpszClassName = "o2App";
+		wndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
 		if (!RegisterClassEx(&wndClass))
 		{
@@ -73,8 +73,12 @@ namespace o2
 		mLog->Out("Window initialized!");
 
 		mRender = mnew Render();
+
 		o2Debug.InitializeFont();
+		o2UI.TryLoadStyle();
 		o2UI.UpdateRootSize();
+
+		mReady = true;
 	}
 
 	Application::~Application()
@@ -82,7 +86,7 @@ namespace o2
 		mRender.Release();
 		DeinitializeSystems();
 	}
-	
+
 	void Application::InitalizeSystems()
 	{
 		srand((UInt)time(NULL));
@@ -95,9 +99,9 @@ namespace o2
 		mAssets = mnew Assets();
 
 		mInput = mnew Input();
-// 
-// 		mScheduler = mnew Scheduler();
-// 
+		// 
+		// 		mScheduler = mnew Scheduler();
+		// 
 		mTimer = mnew Timer();
 		mTimer->Reset();
 
@@ -125,6 +129,9 @@ namespace o2
 
 	void Application::ProcessFrame()
 	{
+		if (!mReady)
+			return;
+
 		float realdDt = mTimer->GetDeltaTime();
 		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
 
@@ -232,7 +239,7 @@ namespace o2
 		Vec2F cursorPos = Vec2F((float)pt.x, (float)-pt.y);
 
 		if (app->mRender)
-			cursorPos -= Vec2F(Math::Round(app->mRender->mResolution.x*0.5f), 
+			cursorPos -= Vec2F(Math::Round(app->mRender->mResolution.x*0.5f),
 							   Math::Round(-app->mRender->mResolution.y*0.5f));
 
 		float wheelDelta;
@@ -281,23 +288,21 @@ namespace o2
 			app->mInput->SetMouseWheelDelta(wheelDelta);
 			break;
 
-			case WM_ACTIVATE:
-			if ((HWND)lParam == app->mHWnd || true)
+			case WM_ACTIVATEAPP:
+			case WM_ENABLE:
+			if (wParam == TRUE)
 			{
-				if (LOWORD(wParam) == WA_ACTIVE || LOWORD(wParam) == WA_CLICKACTIVE)
-				{
-					app->mActive = true;
-					app->OnActivated();
-					app->onActivatedEvent.Invoke();
-					o2Events.OnApplicationActivated();
-				}
-				else
-				{
-					app->mActive = false;
-					app->OnDeactivated();
-					app->onDeactivatedEvent.Invoke();
-					o2Events.OnApplicationDeactivated();
-				}
+				app->mActive = true;
+				app->OnActivated();
+				app->onActivatedEvent.Invoke();
+				o2Events.OnApplicationActivated();
+			}
+			else
+			{
+				app->mActive = false;
+				app->OnDeactivated();
+				app->onDeactivatedEvent.Invoke();
+				o2Events.OnApplicationDeactivated();
 			}
 			break;
 
@@ -308,12 +313,12 @@ namespace o2
 			if (size.x > 0 && size.y > 0 && size != app->mWindowedSize)
 			{
 				app->mWindowedSize = size;
-				app->OnResizing();
-				app->mRender->mResolution = size;
+				app->mRender->OnFrameResized();
 				app->onResizingEvent.Invoke();
+				app->OnResizing();
 				o2Events.OnApplicationSized();
 			}
-			//mApplication->ProcessFrame();
+			app->ProcessFrame();
 
 			break;
 
@@ -383,7 +388,7 @@ namespace o2
 		else
 			mWndStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_VISIBLE | WS_MINIMIZEBOX;
 
-		mLog->Out("set resizible: %s ", (mWindowResizible ? "true":"false"));
+		mLog->Out("set resizible: %s ", (mWindowResizible ? "true" : "false"));
 
 		SetWindowLong(mHWnd, GWL_STYLE, mWndStyle);
 	}
@@ -458,6 +463,21 @@ namespace o2
 	{
 		int hor = GetSystemMetrics(SM_CXSCREEN), ver = GetSystemMetrics(SM_CYSCREEN);
 		return Vec2I(hor, ver);
+	}
+
+	bool Application::IsReady()
+	{
+		return IsSingletonInitialzed() && Application::Instance().mReady;
+	}
+
+	void Application::SetCursor(CursorType type)
+	{
+		LPSTR cursorsIds[] = { IDC_APPSTARTING, IDC_ARROW, IDC_CROSS, IDC_HAND, IDC_HELP, IDC_IBEAM, IDC_ICON, IDC_NO,
+			IDC_SIZEALL, IDC_SIZENESW, IDC_SIZENS, IDC_SIZENWSE, IDC_SIZEWE, IDC_UPARROW, IDC_WAIT };
+
+		mCurrentCursor = LoadCursor(NULL, cursorsIds[(int)type]);
+		::SetCursor(mCurrentCursor);
+		SetClassLong(mHWnd, GCL_HCURSOR, (DWORD)mCurrentCursor);
 	}
 
 	void Application::InitializeProperties()

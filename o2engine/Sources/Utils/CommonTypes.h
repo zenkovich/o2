@@ -16,4 +16,12 @@ namespace o2
 	typedef int                CursorId;
 
 	enum class BaseCorner { Left, Right, Top, Bottom, Center, LeftBottom, LeftTop, RightBottom, RightTop };
+
+	enum class CursorType
+	{
+		AppStarting, Arrow, Cross, Hand, Help, IBeam, Icon, No, SizeAll, SizeNeSw, SizeNS, SizeNwSe,
+		SizeWE, UpArrow, Wait
+	};
+
+	enum class Side { Left, Bottom, Right, Top, None };
 }

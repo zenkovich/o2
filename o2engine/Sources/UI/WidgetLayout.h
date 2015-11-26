@@ -225,6 +225,8 @@ namespace o2
 			SRLZ_FIELD(mOffsetMin);
 			SRLZ_FIELD(mOffsetMax);
 			SRLZ_FIELD(mWeight);
+			SRLZ_FIELD(mMinSize);
+			SRLZ_FIELD(mMaxSize);
 
 			FIELD(mAbsoluteRect);
 		}
@@ -237,7 +239,7 @@ namespace o2
 		Vec2F         mOffsetMin      = Vec2F(-10.0f, -10.0f);
 		Vec2F         mOffsetMax      = Vec2F(10.0f, 10.0f);
 		Vec2F         mMinSize        = Vec2F(0.0f, 0.0f);
-		Vec2F         mMaxSize        = Vec2F(FLT_MAX, FLT_MAX);
+		Vec2F         mMaxSize        = Vec2F(10000, 10000);
 		RectF         mAbsoluteRect   = RectF();
 		RectF         mLocalRect      = RectF();
 		Vec2F         mWeight         = Vec2F(1.0f, 1.0f);

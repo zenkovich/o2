@@ -1,5 +1,6 @@
 #include "Window.h"
 
+#include "Application/Application.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
@@ -87,6 +88,7 @@ namespace o2
 		mRightBottomDragAreaLayout = other.mRightBottomDragAreaLayout;
 
 		RetargetStatesAnimations();
+		BindHandlesInteractableToVisibility();
 		UpdateLayout();
 
 		return *this;
@@ -109,16 +111,16 @@ namespace o2
 		for (auto elem : mWindowElements)
 			elem->Draw();
 
-// 		int clr = 0;
-// 		o2Render.DrawRectFrame(mHeadDragAreaRect, Color4::SomeColor(clr++));
-// 		o2Render.DrawRectFrame(mTopDragAreaRect, Color4::SomeColor(clr++));
-// 		o2Render.DrawRectFrame(mBottomDragAreaRect, Color4::SomeColor(clr++));
-// 		o2Render.DrawRectFrame(mLeftDragAreaRect, Color4::SomeColor(clr++));
-// 		o2Render.DrawRectFrame(mRightDragAreaRect, Color4::SomeColor(clr++));
-// 		o2Render.DrawRectFrame(mLeftTopDragAreaRect, Color4::SomeColor(clr++));
-// 		o2Render.DrawRectFrame(mRightTopDragAreaRect, Color4::SomeColor(clr++));
-// 		o2Render.DrawRectFrame(mLeftBottomDragAreaRect, Color4::SomeColor(clr++));
-// 		o2Render.DrawRectFrame(mRightBottomDragAreaRect, Color4::SomeColor(clr++));
+//  		int clr = 0;
+//  		o2Render.DrawRectFrame(mHeadDragAreaRect, Color4::SomeColor(clr++));
+//  		o2Render.DrawRectFrame(mTopDragAreaRect, Color4::SomeColor(clr++));
+//  		o2Render.DrawRectFrame(mBottomDragAreaRect, Color4::SomeColor(clr++));
+//  		o2Render.DrawRectFrame(mLeftDragAreaRect, Color4::SomeColor(clr++));
+//  		o2Render.DrawRectFrame(mRightDragAreaRect, Color4::SomeColor(clr++));
+//  		o2Render.DrawRectFrame(mLeftTopDragAreaRect, Color4::SomeColor(clr++));
+//  		o2Render.DrawRectFrame(mRightTopDragAreaRect, Color4::SomeColor(clr++));
+//  		o2Render.DrawRectFrame(mLeftBottomDragAreaRect, Color4::SomeColor(clr++));
+//  		o2Render.DrawRectFrame(mRightBottomDragAreaRect, Color4::SomeColor(clr++));
 	}
 
 	Ptr<UIWidget> UIWindow::AddWindowElement(Ptr<UIWidget> widget)
@@ -239,34 +241,66 @@ namespace o2
 		mTopDragHandle.getDepth = [&]() { return mDrawingDepth; };
 		mTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mTopDragAreaRect.IsInside(point); };
 		mTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absTop += cursor.mDelta.y; };
+		mTopDragHandle.cursorType = CursorType::SizeNS;
 
 		mBottomDragHandle.getDepth = [&]() { return mDrawingDepth; };
 		mBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mBottomDragAreaRect.IsInside(point); };
 		mBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absBottom += cursor.mDelta.y; };
+		mBottomDragHandle.cursorType = CursorType::SizeNS;
 
 		mLeftDragHandle.getDepth = [&]() { return mDrawingDepth; };
 		mLeftDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftDragAreaRect.IsInside(point); };
 		mLeftDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeft += cursor.mDelta.x; };
+		mLeftDragHandle.cursorType = CursorType::SizeWE;
 
 		mRightDragHandle.getDepth = [&]() { return mDrawingDepth; };
 		mRightDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightDragAreaRect.IsInside(point); };
 		mRightDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRight += cursor.mDelta.x; };
+		mRightDragHandle.cursorType = CursorType::SizeWE;
 
 		mLeftTopDragHandle.getDepth = [&]() { return mDrawingDepth; };
 		mLeftTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftTopDragAreaRect.IsInside(point); };
 		mLeftTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeftTop += cursor.mDelta; };
+		mLeftTopDragHandle.cursorType = CursorType::SizeNwSe;
 
 		mLeftBottomDragHandle.getDepth = [&]() { return mDrawingDepth; };
 		mLeftBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftBottomDragAreaRect.IsInside(point); };
 		mLeftBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeftBottom += cursor.mDelta; };
+		mLeftBottomDragHandle.cursorType = CursorType::SizeNeSw;
 
 		mRightTopDragHandle.getDepth = [&]() { return mDrawingDepth; };
 		mRightTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightTopDragAreaRect.IsInside(point); };
 		mRightTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRightTop += cursor.mDelta; };
+		mRightTopDragHandle.cursorType = CursorType::SizeNeSw;
 
 		mRightBottomDragHandle.getDepth = [&]() { return mDrawingDepth; };
 		mRightBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightBottomDragAreaRect.IsInside(point); };
 		mRightBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRightBottom += cursor.mDelta; };
+		mRightBottomDragHandle.cursorType = CursorType::SizeNwSe;
+
+		BindHandlesInteractableToVisibility();
+	}
+
+	void UIWindow::SetHandlesInteractable(bool interactable)
+	{
+		mHeadDragHandle.interactable = interactable;
+		mTopDragHandle.interactable = interactable;
+		mBottomDragHandle.interactable = interactable;
+		mLeftDragHandle.interactable = interactable;
+		mRightDragHandle.interactable = interactable;
+		mLeftTopDragHandle.interactable = interactable;
+		mRightTopDragHandle.interactable = interactable;
+		mLeftBottomDragHandle.interactable = interactable;
+		mRightBottomDragHandle.interactable = interactable;
+	}
+
+	void UIWindow::BindHandlesInteractableToVisibility()
+	{
+		if (mVisibleState)
+		{
+			mVisibleState->onStateBecomesTrue += [&]() { SetHandlesInteractable(true); };
+			mVisibleState->onStateFullyFalse += [&]() { SetHandlesInteractable(false); };
+		}
 	}
 
 	void UIWindow::InitializeProperties()

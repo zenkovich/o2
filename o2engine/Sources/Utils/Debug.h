@@ -46,7 +46,7 @@ namespace o2
 		void DrawLine(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay);
 
 		// Draws debug line from begin to end with color at one frame
-		void DrawLine(const Vec2F& begin, const Vec2F& end, const Color4& color);
+		void DrawLine(const Vec2F& begin, const Vec2F& end, const Color4& color = Color4::White());
 
 		// Draws white debug line from begin to end with disappearing delay
 		void DrawLine(const Vec2F& begin, const Vec2F& end, float delay);
@@ -55,7 +55,7 @@ namespace o2
 		void DrawRay(const Vec2F& begin, const Vec2F& dir, const Color4& color, float delay);
 
 		// Draws debug ray from begin to dir with color at one frame
-		void DrawRay(const Vec2F& begin, const Vec2F& dir, const Color4& color);
+		void DrawRay(const Vec2F& begin, const Vec2F& dir, const Color4& color = Color4::White());
 
 		// Draws white debug ray from begin to dir with disappearing delay
 		void DrawRay(const Vec2F& begin, const Vec2F& dir, float delay);
@@ -64,7 +64,7 @@ namespace o2
 		void DrawCircle(const Vec2F& origin, float radius, const Color4& color, float delay);
 
 		// Draws debug circle at origin with radius and color
-		void DrawCircle(const Vec2F& origin, float radius, const Color4& color);
+		void DrawCircle(const Vec2F& origin, float radius, const Color4& color = Color4::White());
 
 		// Draws white debug circle at origin with radius and disappearing delay
 		void DrawCircle(const Vec2F& origin, float radius, float delay);
@@ -73,7 +73,7 @@ namespace o2
 		void DrawRect(const RectF& rect, const Color4& color, float delay);
 
 		// Draws debug rectangle with color
-		void DrawRect(const RectF& rect, const Color4& color);
+		void DrawRect(const RectF& rect, const Color4& color = Color4::White());
 
 		// Draws white debug rectangle with disappearing delay
 		void DrawRect(const RectF& rect, float delay);
@@ -82,7 +82,7 @@ namespace o2
 		void DrawLine(const Vector<Vec2F>& points, const Color4& color, float delay);
 
 		// Draws debug line with points with color
-		void DrawLine(const Vector<Vec2F>& points, const Color4& color);
+		void DrawLine(const Vector<Vec2F>& points, const Color4& color = Color4::White());
 
 		// Draws white debug line with points with disappearing delay
 		void DrawLine(const Vector<Vec2F>& points, float delay);
@@ -91,7 +91,7 @@ namespace o2
 		void DrawText(const Vec2F& position, const String& text, const Color4& color, float delay);
 
 		// Draws debug text with color
-		void DrawText(const Vec2F& position, const String& text, const Color4& color);
+		void DrawText(const Vec2F& position, const String& text, const Color4& color = Color4::White());
 
 		// Draws white debug text with disappearing delay
 		void DrawText(const Vec2F& position, const String& text, float delay);

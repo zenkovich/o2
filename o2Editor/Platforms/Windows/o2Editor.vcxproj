@@ -19,11 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Sources\ApplicationConfig.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
+    <ClCompile Include="..\..\Sources\EditorApplication.cpp" />
+    <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
     <ClCompile Include="..\..\Sources\Windows\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Sources\ApplicationConfig.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h" />
     <ClInclude Include="..\..\Sources\EditorApplication.h" />
-    <ClInclude Include="..\..\Sources\WindowsManager.h" />
+    <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F0C3F9F6-349D-4D58-9175-0AE646039318}</ProjectGuid>
@@ -80,6 +94,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_dbg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -105,7 +120,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(O2ENGINE);$(O2ENGINE)Sources\;$(SolutionDir)..\..\Sources\;$(O2ENGINE)Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\work\o2\o2Engine\;C:\work\o2\o2Engine\Sources\;..\..\Sources\;C:\work\o2\o2Engine\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
@@ -152,7 +167,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(O2ENGINE);$(O2ENGINE)Sources\;$(SolutionDir)..\..\Sources\;$(O2ENGINE)Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\work\o2\o2Engine\;C:\work\o2\o2Engine\Sources\;..\..\Sources\;C:\work\o2\o2Engine\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
     </ClCompile>

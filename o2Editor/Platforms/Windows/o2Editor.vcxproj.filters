@@ -4,14 +4,57 @@
     <Filter Include="Windows">
       <UniqueIdentifier>{b5667d71-abbd-409c-a1de-138aac66724c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2e96a617-0374-4416-930c-bc3a189d63e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\WindowsSystem">
+      <UniqueIdentifier>{3bdea115-be79-46ee-9a2e-cf3ac711f1a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneWindow">
+      <UniqueIdentifier>{8c4230b7-fd52-4da3-8213-c90d15ade342}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\EditorApplication.h" />
-    <ClInclude Include="..\..\Sources\WindowsManager.h" />
+    <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h">
+      <Filter>Core\WindowsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h">
+      <Filter>Core\WindowsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\ApplicationConfig.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h">
+      <Filter>Core\WindowsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h">
+      <Filter>SceneWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h">
+      <Filter>Core\WindowsSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
       <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
+    <ClCompile Include="..\..\Sources\EditorApplication.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp">
+      <Filter>Core\WindowsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp">
+      <Filter>Core\WindowsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\ApplicationConfig.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp">
+      <Filter>Core\WindowsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp">
+      <Filter>SceneWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp">
+      <Filter>Core\WindowsSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

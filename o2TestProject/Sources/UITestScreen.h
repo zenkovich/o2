@@ -17,10 +17,6 @@ public:
 
 protected:
 	Sprite mBackground;
-	Sprite mSpr1;
-	Sprite mSpr2;
-	Sprite mSpr3;
-	Sprite mSpr4;
 
 protected:
 	void RebuildStyle();

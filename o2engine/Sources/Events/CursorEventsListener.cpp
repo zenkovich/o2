@@ -5,14 +5,14 @@
 namespace o2
 {
 	CursorEventsListener::CursorEventsListener():
-		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0)
+		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0), mInteractable(true)
 	{
 		EventSystem::RegCursorListener(this);
 		INITIALIZE_PROPERTY(CursorEventsListener, interactable, SetInteractable, IsInteractable);
 	}
 
 	CursorEventsListener::CursorEventsListener(const CursorEventsListener& other):
-		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0)
+		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0), mInteractable(other.mInteractable)
 	{
 		EventSystem::RegCursorListener(this);
 		INITIALIZE_PROPERTY(CursorEventsListener, interactable, SetInteractable, IsInteractable);

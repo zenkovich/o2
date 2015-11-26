@@ -71,6 +71,15 @@ namespace o2
 			FIELD(icon);
 
 			SRLZ_FIELD(mWindowElements);
+			SRLZ_FIELD(mHeadDragAreaLayout);
+			SRLZ_FIELD(mTopDragAreaLayout);
+			SRLZ_FIELD(mBottomDragAreaLayout);
+			SRLZ_FIELD(mLeftDragAreaLayout);
+			SRLZ_FIELD(mRightDragAreaLayout);
+			SRLZ_FIELD(mLeftTopDragAreaLayout);
+			SRLZ_FIELD(mRightTopDragAreaLayout);
+			SRLZ_FIELD(mLeftBottomDragAreaLayout);
+			SRLZ_FIELD(mRightBottomDragAreaLayout);
 		}
 
 	protected:
@@ -127,6 +136,12 @@ namespace o2
 
 		// Initializes handles
 		void InitializeHandles();
+
+		// Sets drag handles interactable. Using when changing visibility
+		void SetHandlesInteractable(bool interactable);
+
+		// Binds all drag handles interactable parameter to window visibility
+		void BindHandlesInteractableToVisibility();
 
 		// Initializes properties
 		void InitializeProperties();

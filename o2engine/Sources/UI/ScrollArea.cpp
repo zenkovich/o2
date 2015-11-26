@@ -662,6 +662,8 @@ namespace o2
 
 	void UIScrollArea::OnDeserialized(const DataNode& node)
 	{
+		UIWidget::OnDeserialized(node);
+
 		if (mHorScrollBar)
 		{
 			if (mOwnHorScrollBar) mHorScrollBar.Release();

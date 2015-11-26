@@ -28,7 +28,7 @@ namespace o2
 	protected:
 		typedef Dictionary<Type::Id, Ptr<IAssetConverter>> ConvertersDict;
 
-		Ptr<LogStream>    mLog;                 // Asset builder log stream
+		Ptr<LogStream>       mLog;                 // Asset builder log stream
 
 		String               mSourceAssetsPath;    // Source assets path
 		AssetTree            mSourceAssetsTree;    // Source assets tree

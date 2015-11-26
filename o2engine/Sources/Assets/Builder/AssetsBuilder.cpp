@@ -61,10 +61,10 @@ namespace o2
 
 	void AssetsBuilder::InitializeConverters()
 	{
-		auto converterTypes = IAssetConverter::type->InheritedTypes();
+		auto converterTypes = IAssetConverter::type->DerivedTypes();
 		for (auto converterType : converterTypes)
 		{
-			Ptr<IAssetConverter> converter = static_cast<IAssetConverter*>(converterType->Sample()->Clone());
+			Ptr<IAssetConverter> converter = converterType->CreateSample();
 			converter->SetAssetsBuilder(this);
 			auto availableAssetTypes = converter->GetProcessingAssetsTypes();
 			for (auto tp : availableAssetTypes)

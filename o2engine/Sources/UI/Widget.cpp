@@ -14,6 +14,7 @@ namespace o2
 	{
 		layout.mOwner = this;
 		InitializeProperties();
+		UpdateLayout();
 	}
 
 	UIWidget::UIWidget(const UIWidget& other):
@@ -46,6 +47,7 @@ namespace o2
 
 		UpdateLayersDrawingSequence();
 		UpdateTransparency();
+		UpdateLayout();
 	}
 
 	UIWidget::~UIWidget()
@@ -153,6 +155,7 @@ namespace o2
 
 		if (lastFrame != o2Time.GetCurrentFrame())
 			colr = 0;
+
 		lastFrame = o2Time.GetCurrentFrame();
 
 		o2Render.DrawRectFrame(layout.mAbsoluteRect, Color4::SomeColor(colr++));
@@ -201,7 +204,7 @@ namespace o2
 			return widget;
 
 		if (widget->mParent)
-			widget->mParent->RemoveChild(widget);
+			widget->mParent->RemoveChild(widget, false);
 
 		mChilds.Add(widget);
 		widget->mParent = this;
@@ -220,7 +223,7 @@ namespace o2
 			return widget;
 
 		if (widget->mParent)
-			widget->mParent->RemoveChild(widget);
+			widget->mParent->RemoveChild(widget, false);
 
 		mChilds.Insert(widget, index);
 		widget->mParent = this;
@@ -615,10 +618,10 @@ namespace o2
 		layout.mLocalRect.bottom -= szDelta.y*layout.mPivot.y;
 		layout.mLocalRect.top    += szDelta.y*(1.0f - layout.mPivot.y);
 
-		layout.mLocalRect.left = Math::Round(layout.mLocalRect.left);
-		layout.mLocalRect.right = Math::Round(layout.mLocalRect.right);
-		layout.mLocalRect.bottom = Math::Round(layout.mLocalRect.bottom);
-		layout.mLocalRect.top = Math::Round(layout.mLocalRect.top);
+		layout.mLocalRect.left = Math::Floor(layout.mLocalRect.left);
+		layout.mLocalRect.right = Math::Floor(layout.mLocalRect.right);
+		layout.mLocalRect.bottom = Math::Floor(layout.mLocalRect.bottom);
+		layout.mLocalRect.top = Math::Floor(layout.mLocalRect.top);
 
 		layout.mAbsoluteRect = layout.mLocalRect + parentPos;
 	}

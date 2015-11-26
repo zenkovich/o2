@@ -45,7 +45,7 @@ namespace o2
 		return nullptr;
 	}
 
-	Type::TypesVec Type::InheritedTypes() const
+	Type::TypesVec Type::DerivedTypes() const
 	{
 		TypesVec res;
 		for (auto type : Types::GetTypes())
@@ -63,6 +63,11 @@ namespace o2
 	const IObject* Type::Sample() const
 	{
 		return mSample;
+	}
+
+	Ptr<IObject> Type::CreateSample() const
+	{
+		return mSample->Clone();
 	}
 
 	String Type::GetFieldPath(void* sourceObject, void *targetObject) const

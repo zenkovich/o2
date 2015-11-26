@@ -16,21 +16,21 @@ void TestApplication::OnStarted()
 	mTestScreens.Add(mnew UITestScreen(this));
 	mTestScreens.Add(mnew MainTestScreen(this));
 
-	GoToScreen("MainTestScreen");
-	//GoToScreen("UITestScreen");
+	//GoToScreen("MainTestScreen");
+	GoToScreen("UITestScreen");
 }
 
 void TestApplication::OnUpdate(float dt)
 {
-	o2Application.windowCaption = String::Format("FPS: %f dt: %f (%vi) DC: %i", o2Time.GetFPS(), o2Time.GetDeltaTime(),
+	o2Application.windowCaption = String::Format("FPS: %i dt: %f (%vi) DC: %i", (int)o2Time.GetFPS(), o2Time.GetDeltaTime(),
 												 (Vec2I)o2Input.GetCursorPos(), o2Render.GetDrawCallsCount());
 
-	if (o2Input.IsKeyPressed('Z'))
+	/*if (o2Input.IsKeyPressed('Z'))
 	{
 		o2Debug.Log("Collect garbage...");
 		o2Memory.CollectGarbage();
 		o2Debug.Log("Collect garbage done!");
-	}
+	}*/
 
 	if (mCurrentScreen)
 		mCurrentScreen->Update(dt);

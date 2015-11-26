@@ -104,6 +104,12 @@ namespace o2
 		// Returns device screen resolution
 		virtual Vec2I GetScreenResolution() const;
 
+		// Sets cursor type
+		virtual void SetCursor(CursorType type);
+
+		// Returns is application ready to use
+		static bool IsReady();
+
 	protected:
 		Ptr<Assets>        mAssets;        // Assets
 		Ptr<EventSystem>   mEventSystem;   // Events processing system
@@ -115,30 +121,31 @@ namespace o2
 		Ptr<Time>          mTime;          // Time utilities
 		Ptr<Timer>         mTimer;         // Timer for detecting delta time for update
 		Ptr<UIManager>     mUIManager;     // UI manager
+		bool               mReady;         // Is all systems is ready
 
 	protected:
-		// Called on updating
+		// Calling on updating
 		virtual void OnUpdate(float dt);
 
-		// Called on drawing
+		// Calling on drawing
 		virtual void OnDraw();
 
-		// Calls when application activated
+		// Calling when application activated
 		virtual void OnActivated();
 
-		// Calls when application deactivated
+		// Calling when application deactivated
 		virtual void OnDeactivated();
 
-		// Calls when application is starting
+		// Calling when application is starting
 		virtual void OnStarted();
 
-		// Calls when application is closing
+		// Calling when application is closing
 		virtual void OnClosing();
 
-		// Calls when application window resized. Ignoring on mobiles/tablets
+		// Calling when application window resized. Ignoring on mobiles/tablets
 		virtual void OnResizing();
 
-		// Calls when application window moved. Ignoring on mobiles/tablets
+		// Calling when application window moved. Ignoring on mobiles/tablets
 		virtual void OnMoved();
 
 		// Initializing all systems and log. Call it when creating applications

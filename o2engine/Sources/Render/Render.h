@@ -215,6 +215,9 @@ namespace o2
 		// Don't copy
 		Render& operator=(const Render& other);
 
+		// Calls when target frame or window was resized
+		void OnFrameResized();
+
 		// Initializes free type library
 		void InitializeFreeType();
 

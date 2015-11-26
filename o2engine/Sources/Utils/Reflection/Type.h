@@ -53,10 +53,13 @@ namespace o2
 		const FieldInfo* Field(const String& name) const;
 
 		// Returns inherited types
-		TypesVec InheritedTypes() const;
+		TypesVec DerivedTypes() const;
 
 		// Returns sample pointer
 		const IObject* Sample() const;
+
+		// Creates sample copy and returns him
+		Ptr<IObject> CreateSample() const;
 
 		// Registers field in type
 		template<typename _type>

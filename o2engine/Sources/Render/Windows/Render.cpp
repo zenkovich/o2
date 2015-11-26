@@ -131,6 +131,11 @@ namespace o2
 		mReady = true;
 	}
 
+	void Render::OnFrameResized()
+	{
+		mResolution = o2Application.GetContentSize();
+	}
+
 	void Render::InitializeFreeType()
 	{
 		FT_Error error = FT_Init_FreeType(&mFreeTypeLib);

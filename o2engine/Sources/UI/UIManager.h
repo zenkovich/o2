@@ -53,6 +53,10 @@ namespace o2
 		template<typename _type>
 		Ptr<_type> GetWidgetStyle(const String& style);
 
+		// Removes widget style
+		template<typename _type>
+		void RemoveWidgetStyle(const String& style);
+
 		// Adds widget as root
 		Ptr<UIWidget> AddWidget();
 
@@ -172,6 +176,9 @@ namespace o2
 		// Returns all widgets
 		const WidgetsVec& GetAllWidgets() const;
 
+		// Returns main screen widget
+		Ptr<UIWidget> GetScreenWidget() const;
+
 	protected:
 		Ptr<LogStream> mLog;          // UI Log stream
 		Ptr<UIWidget>  mScreenWidget; // Root screen widget
@@ -197,6 +204,9 @@ namespace o2
 
 		// Registering top drawing widget
 		void RegTopWidget(Ptr<UIWidget> widget);
+
+		// Tries to load style "ui_style.xml"
+		void TryLoadStyle();
 
 		// Initializes properties
 		void InitializeProperties();
@@ -236,6 +246,17 @@ namespace o2
 		}
 
 		return sample;
+	}
+
+	template<typename _type>
+	void UIManager::RemoveWidgetStyle(const String& style)
+	{
+		Ptr<_type> widgetStyle = GetWidgetStyle<_type>(style);
+		if (widgetStyle)
+		{
+			mStyleSamples.Remove(widgetStyle);
+			widgetStyle.Release();
+		}
 	}
 
 	template<typename _type>

@@ -26,13 +26,13 @@ namespace o2
 	// IObject header definition
 #define IOBJECT(CLASS)  							     \
 	CLASS* Clone() const { return mnew CLASS(*this); }   \
-	static Ptr<Type> type;								     \
+	static Type* type;								     \
 	const Type& GetType() const { return *type; };	     \
-	Type::Id GetTypeId() const { return type->ID(); };    \
+	Type::Id GetTypeId() const { return type->ID(); };   \
 	static void InitializeType(CLASS* sample)   
 
 	// IObject source file implementation
-#define IOBJECT_CPP(CLASS) Ptr<Type> CLASS::type;
+#define IOBJECT_CPP(CLASS) Type* CLASS::type;
 
 	// Field registration in type macros
 #define FIELD(NAME) \

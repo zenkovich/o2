@@ -95,7 +95,7 @@ namespace o2
 			return nullptr;
 		}
 
-		Ptr<Asset> res = static_cast<Asset*>(assetType->Sample()->Clone());
+		Ptr<Asset> res = assetType->CreateSample();
 		res->Load(info);
 		return res;
 	}
@@ -209,14 +209,14 @@ namespace o2
 
 	void Assets::LoadAssetsTree()
 	{
-		mAssetsTree.BuildTree(ASSETS_PATH);
+		mAssetsTree.BuildTree(DATA_PATH);
 	}
 
 	void Assets::LoadAssetTypes()
 	{
 		mStdAssetType = BinaryAsset::type;
 
-		auto assetTypes = Asset::type->InheritedTypes();
+		auto assetTypes = Asset::type->DerivedTypes();
 
 		for (auto type : assetTypes)
 		{

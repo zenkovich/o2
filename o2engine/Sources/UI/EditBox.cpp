@@ -1,5 +1,6 @@
 #include "EditBox.h"
 
+#include "Application/Application.h"
 #include "Render/Mesh.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
@@ -406,6 +407,9 @@ namespace o2
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
+
+		if (!IsUnderPoint(cursor.mPosition))
+			o2Application.SetCursor(CursorType::Arrow);
 	}
 
 	void UIEditBox::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -413,6 +417,9 @@ namespace o2
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
+
+		if (!IsUnderPoint(cursor.mPosition))
+			o2Application.SetCursor(CursorType::Arrow);
 	}
 
 	void UIEditBox::OnCursorStillDown(const Input::Cursor& cursor)
@@ -461,6 +468,9 @@ namespace o2
 		auto selectState = state["select"];
 		if (selectState)
 			*selectState = true;
+
+		if (!cursor.mPressed)
+			o2Application.SetCursor(CursorType::IBeam);
 	}
 
 	void UIEditBox::OnCursorExit(const Input::Cursor& cursor)
@@ -468,6 +478,9 @@ namespace o2
 		auto selectState = state["select"];
 		if (selectState)
 			*selectState = false;
+
+		if (!IsPressed() && !cursor.mPressed)
+			o2Application.SetCursor(CursorType::Arrow);
 	}
 
 	void UIEditBox::OnCursorRightMousePressed(const Input::Cursor& cursor)

@@ -40,7 +40,6 @@ namespace o2
 	void Types::InitializeType(const String& name)
 	{
 		_type::type = mnew Type();
-		_type::type.SetupAsRoot();
 
 		Ptr<_type> sample = mnew _type();
 
@@ -50,5 +49,5 @@ namespace o2
 		instance->mTypes.Add(_type::type);
 	}
 
-#define INIT_TYPE(TYPE) InitializeType<TYPE>(#TYPE)
+#define INIT_TYPE(TYPE) Types::InitializeType<TYPE>(#TYPE)
 }

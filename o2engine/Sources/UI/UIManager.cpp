@@ -185,6 +185,11 @@ namespace o2
 		return mScreenWidget->GetChilds();
 	}
 
+	Ptr<UIWidget> UIManager::GetScreenWidget() const
+	{
+		return mScreenWidget;
+	}
+
 	void UIManager::LoadStyle(const String& path)
 	{
 		DataNode styleData;
@@ -323,6 +328,12 @@ namespace o2
 	void UIManager::RegTopWidget(Ptr<UIWidget> widget)
 	{
 		mTopWidgets.Add(widget);
+	}
+
+	void UIManager::TryLoadStyle()
+	{
+		if (o2Assets.IsAssetExist("ui_style.xml"))
+			LoadStyle("ui_style.xml");
 	}
 
 	void UIManager::InitializeProperties()

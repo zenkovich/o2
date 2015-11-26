@@ -28,8 +28,8 @@ namespace o2
 		for (const Input::Cursor& cursor : o2Input.GetCursors())
 			ProcessCursorTracing(cursor);
 
-		ProcessCursorEnter();
 		ProcessCursorExit();
+		ProcessCursorEnter();
 		ProcessScrolling();
 
 		for (const Input::Cursor& cursor : o2Input.GetCursors())
@@ -111,7 +111,8 @@ namespace o2
 	{
 		for (auto listener : mCursorListeners)
 		{
-			if (IsListenerClipped(listener->Depth(), cursor.mPosition) || !listener->IsUnderPoint(cursor.mPosition))
+			if (!listener->mInteractable || IsListenerClipped(listener->Depth(), cursor.mPosition) || 
+				!listener->IsUnderPoint(cursor.mPosition))
 				continue;
 
 			auto drag = dynamic_cast<DragEventsListener*>(listener.Get());
@@ -160,7 +161,8 @@ namespace o2
 			if (listener->IsDragging())
 				continue;
 
-			if (IsListenerClipped(listener->Depth(), cursorPos) || !listener->IsUnderPoint(cursorPos))
+			if (!listener->mInteractable || IsListenerClipped(listener->Depth(), cursorPos) || 
+				!listener->IsUnderPoint(cursorPos))
 				continue;
 
 			return listener;
@@ -177,6 +179,22 @@ namespace o2
 			return mUnderCursorListeners[cursorId];
 
 		return nullptr;
+	}
+
+	EventSystem::CursEventsListenersVec EventSystem::GetAllCursorListenersUnderCursor(CursorId cursorId) const
+	{
+		CursEventsListenersVec res;
+		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
+		for (auto listener : mCursorListeners)
+		{
+			if (!listener->mInteractable || IsListenerClipped(listener->Depth(), cursorPos) || 
+				!listener->IsUnderPoint(cursorPos))
+				continue;
+
+			res.Add(listener);
+		}
+
+		return res;
 	}
 
 	void EventSystem::BreakCursorEvent()

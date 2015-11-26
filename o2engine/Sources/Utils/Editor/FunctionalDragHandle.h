@@ -17,6 +17,10 @@ namespace o2
 		Function<void()>                     onCursorReleased; // Event when handle was released
 		Function<void()>                     onCursorEnter;	   // Event when cursor was entered to handle
 		Function<void()>                     onCursorExit;	   // Event when cursor was exited to handle
+		CursorType                           cursorType;       // Cursor type when hovering and dragging
+
+		// Default constructor
+		FunctionalDragHandle();
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
