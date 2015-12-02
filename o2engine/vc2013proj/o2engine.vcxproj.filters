@@ -451,6 +451,21 @@
     <ClInclude Include="..\Sources\Utils\Editor\FunctionalDragHandle.h">
       <Filter>Sources\Utils\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\TaskManager.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Task.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Animation\Animatable.h">
+      <Filter>Sources\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Animation\AnimationMask.h">
+      <Filter>Sources\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Animation\AnimationState.h">
+      <Filter>Sources\Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -725,6 +740,21 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Editor\FunctionalDragHandle.cpp">
       <Filter>Sources\Utils\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Task.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\TaskManager.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Animation\Animatable.cpp">
+      <Filter>Sources\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Animation\AnimationMask.cpp">
+      <Filter>Sources\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Animation\AnimationState.cpp">
+      <Filter>Sources\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -228,6 +228,11 @@ namespace o2
 		return GetMaxDrawingDepth();
 	}
 
+	bool UICustomDropDown::IsInteractable() const
+	{
+		return mResVisible && CursorEventsListener::IsInteractable();
+	}
+
 	void UICustomDropDown::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];

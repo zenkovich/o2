@@ -158,6 +158,11 @@ namespace o2
 		return true;
 	}
 
+	bool UIHorizontalProgress::IsInteractable() const
+	{
+		return mResVisible && CursorEventsListener::IsInteractable();
+	}
+
 	void UIHorizontalProgress::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];

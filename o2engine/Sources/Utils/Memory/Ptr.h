@@ -35,6 +35,9 @@ namespace o2
 		// Check not equal operator
 		bool operator!=(const Ptr& other) const;
 
+		// Check not equal operator
+		bool operator!=(_type* other) const;
+
 		// Plus offset operator
 		_type* operator+(int offset) const;
 
@@ -115,6 +118,12 @@ namespace o2
 	bool Ptr<_type>::operator!=(const Ptr& other) const
 	{
 		return mObject != other.mObject;
+	}
+
+	template<typename _type>
+	bool Ptr<_type>::operator!=(_type* other) const
+	{
+		return mObject != other;
 	}
 
 	template<typename _type>

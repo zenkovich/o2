@@ -30,8 +30,12 @@ public:
 	// Returns depth (event system will catch listener with highest depth)
 	float Depth();
 
-	// Sets resizible side and configures drag handle
-	void SetResizibleSide(Side side);
+	// Sets resizible side and configures drag handle when draggable is true
+	void SetResizibleDir(TwoDirection dir, float border,
+						 Ptr<UIDockWindowPlace> neighborMin, Ptr<UIDockWindowPlace> neighborMax);
+
+	// Returns resizible side
+	TwoDirection GetResizibleDir() const;
 
 	SERIALIZABLE_IMPL(UIDockWindowPlace);
 	IOBJECT(UIDockWindowPlace)
@@ -40,18 +44,29 @@ public:
 	}
 
 protected:
-	Side                 mDragSide;         // Draggable side
-	FunctionalDragHandle mDragHandle; 		// Separator drag handle
-	Layout               mDragHandleLayout;	// Separator drag handle layout
-	RectF                mDragHandleArea;	// Separator drag handle area calculated from mDragHandleLayout
-	float                mDragHandleDepth;  // Drag handle drawing depth
+	TwoDirection           mResizibleDir;       // Resizible dragable side
+
+	Ptr<UIDockWindowPlace> mNeighborMin; // Resizing neighbor, using when dragging this side
+	FunctionalDragHandle   mDragHandleMin;       // Separator drag handle
+	Layout                 mDragHandleLayoutMin; // Separator drag handle layout
+	RectF                  mDragHandleAreaMin;	 // Separator drag handle area calculated from mDragHandleLayout
+
+	Ptr<UIDockWindowPlace> mNeighborMax; // Resizing neighbor, using when dragging this side
+	FunctionalDragHandle   mDragHandleMax;       // Separator drag handle
+	Layout                 mDragHandleLayoutMax; // Separator drag handle layout
+	RectF                  mDragHandleAreaMax;	 // Separator drag handle area calculated from mDragHandleLayout
+
+	float                  mDragHandleDepth;     // Drag handle drawing depth
 
 protected:
 	// Updates layout
 	void UpdateLayout(bool forcible = false);
 
 	// Calls when cursor drag handle was moved
-	void OnDragHandleMoved(const Vec2F& delta);
+	void OnDragHandleMinMoved(const Vec2F& delta);
+
+	// Calls when cursor drag handle was moved
+	void OnDragHandleMaxMoved(const Vec2F& delta);
 
 	// Checks interactable. If childs more than 0 this will be not interactable
 	void CheckInteractable();

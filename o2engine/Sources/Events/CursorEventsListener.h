@@ -35,7 +35,7 @@ namespace o2
 		void SetInteractable(bool interactable);
 
 		// Returns interactable flag
-		bool IsInteractable() const;
+		virtual bool IsInteractable() const;
 
 		// Returns true if this was pressed by some cursor
 		bool IsPressed() const;

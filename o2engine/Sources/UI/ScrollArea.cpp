@@ -125,7 +125,7 @@ namespace o2
 
 	void UIScrollArea::Draw()
 	{
-		if (!mVisible)
+		if (mFullyDisabled)
 			return;
 
 		for (auto layer : mDrawingLayers)

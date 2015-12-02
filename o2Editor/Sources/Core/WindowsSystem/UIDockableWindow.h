@@ -3,6 +3,8 @@
 #include "O2.h"
 using namespace o2;
 
+class UIDockWindowPlace;
+
 // -----------------------------
 // Dockable editor window widget
 // -----------------------------
@@ -27,9 +29,6 @@ public:
 	// Draws widget
 	void Draw();
 
-	// Sets window docked
-	void SetDocked(bool docked);
-
 	// Returns is window docked
 	bool IsDocked() const;
 
@@ -47,7 +46,7 @@ public:
 
 protected:
 	const float          mDockSizeCoef = 0.2f;
-	const float          mDockBorder = 3.0f;
+	const float          mDockBorder = 2.0f;
 
 	bool                 mDocked;                 // Is window is docked
 	Ptr<Sprite>          mDockingFrameSample;     // Docking frame sample
@@ -72,4 +71,19 @@ protected:
 
 	// Calls when window going to move
 	void OnMoveBegin();
+
+	// Searches dock place under cursor and returns parameters of them
+	bool TraceDock(Ptr<UIDockWindowPlace>& targetDock, Side& dockPosition, RectF& dockZoneRect);
+
+	// Places this into target dock as non line arranged
+	void PlaceNonLineDock(Ptr<UIDockWindowPlace> targetDock, Side dockPosition);
+
+	// Places this into target dock as line arranged
+	void PlaceLineDock(Ptr<UIDockWindowPlace> targetDock, Side dockPosition, RectF dockZoneRect);
+
+	// Undocks this window, using when window moved out from dock
+	void Undock();
+
+	// Sets window docked
+	void SetDocked(bool docked);
 };

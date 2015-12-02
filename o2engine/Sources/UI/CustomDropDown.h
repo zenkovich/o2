@@ -118,6 +118,9 @@ namespace o2
 		// Returns depth (event system will catch listener with highest depth)
 		float Depth();
 
+		// Returns interactable flag
+		bool IsInteractable() const;
+
 		SERIALIZABLE_IMPL(UICustomDropDown);
 
 		IOBJECT(UICustomDropDown)

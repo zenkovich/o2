@@ -2,6 +2,7 @@
 
 #include "Utils/IObject.h"
 
+#include "Animation/Animatable.h"
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedValue.h"
 #include "Animation/AnimatedVector.h"
@@ -151,5 +152,6 @@ namespace o2
 		INIT_TYPE(UICustomDropDown);
 		INIT_TYPE(UIDropDown);
 		INIT_TYPE(UIWindow);
+		INIT_TYPE(Animatable);
 	}
 }

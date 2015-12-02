@@ -4,13 +4,15 @@
 #include "Render/Render.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
+#include "UI/UIManager.h"
 
 namespace o2
 {
 	IOBJECT_CPP(UIWidget);
 
 	UIWidget::UIWidget():
-		mParent(nullptr), mTransparency(1.0f), mResTransparency(1.0f), mVisible(true)
+		mParent(nullptr), mTransparency(1.0f), mResTransparency(1.0f), mVisible(true), mIsSelected(false), mResVisible(true),
+		mFullyDisabled(false)
 	{
 		layout.mOwner = this;
 		InitializeProperties();
@@ -18,8 +20,8 @@ namespace o2
 	}
 
 	UIWidget::UIWidget(const UIWidget& other):
-		mName(other.mName), layout(other.layout), mParent(nullptr), mTransparency(other.mTransparency), 
-		mVisible(other.mVisible)
+		mName(other.mName), layout(other.layout), mParent(nullptr), mTransparency(other.mTransparency),
+		mVisible(other.mVisible), mIsSelected(false), mResVisible(other.mVisible), mFullyDisabled(!other.mVisible)
 	{
 		layout.mOwner = this;
 		InitializeProperties();
@@ -48,6 +50,7 @@ namespace o2
 		UpdateLayersDrawingSequence();
 		UpdateTransparency();
 		UpdateLayout();
+		UpdateVisibility();
 	}
 
 	UIWidget::~UIWidget()
@@ -83,6 +86,7 @@ namespace o2
 		}
 		mChilds.Clear();
 		mVisibleState = nullptr;
+		mSelectedState = nullptr;
 
 		mName = other.mName;
 		layout.CopyFrom(other.layout);
@@ -111,13 +115,14 @@ namespace o2
 
 		UpdateLayout();
 		UpdateTransparency();
+		UpdateVisibility();
 
 		return *this;
 	}
 
 	void UIWidget::Update(float dt)
 	{
-		if (!mVisible)
+		if (mFullyDisabled)
 			return;
 
 		for (auto layer : mLayers)
@@ -132,7 +137,7 @@ namespace o2
 
 	void UIWidget::Draw()
 	{
-		if (!mVisible)
+		if (mFullyDisabled)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -160,6 +165,12 @@ namespace o2
 
 		o2Render.DrawRectFrame(layout.mAbsoluteRect, Color4::SomeColor(colr++));
 	}
+
+	void UIWidget::OnSelected()
+	{}
+
+	void UIWidget::OnDeselected()
+	{}
 
 	void UIWidget::SetName(const String& name)
 	{
@@ -196,6 +207,7 @@ namespace o2
 		}
 
 		UpdateTransparency();
+		UpdateVisibility();
 	}
 
 	Ptr<UIWidget> UIWidget::AddChild(Ptr<UIWidget> widget)
@@ -211,6 +223,7 @@ namespace o2
 
 		UpdateLayout();
 		UpdateTransparency();
+		UpdateVisibility();
 
 		OnChildAdded(widget);
 
@@ -230,6 +243,7 @@ namespace o2
 
 		UpdateLayout();
 		UpdateTransparency();
+		UpdateVisibility();
 
 		OnChildAdded(widget);
 
@@ -245,6 +259,7 @@ namespace o2
 		bool res = child->mParent->RemoveChild(child);
 		child->mParent->UpdateLayout();
 		child->UpdateTransparency();
+		child->UpdateVisibility();
 
 		return res;
 	}
@@ -263,7 +278,10 @@ namespace o2
 		if (release)
 			widget.Release();
 		else
+		{
 			widget->UpdateTransparency();
+			widget->UpdateVisibility();
+		}
 
 		return true;
 	}
@@ -381,7 +399,7 @@ namespace o2
 		if (layer->GetParent())
 			return layer->GetParent()->RemoveChild(layer);
 
-		bool res =  mLayers.Remove(layer);
+		bool res = mLayers.Remove(layer);
 		UpdateLayersDrawingSequence();
 		return res;
 	}
@@ -427,8 +445,14 @@ namespace o2
 		{
 			mVisibleState = state;
 			mVisibleState->SetStateForcible(mVisible);
-			mVisibleState->onStateBecomesTrue += [&]() { mVisible = true; };
-			mVisibleState->onStateFullyFalse += [&]() { mVisible = false; };
+			mVisibleState->onStateBecomesTrue += [&]() { mFullyDisabled = false; };
+			mVisibleState->onStateFullyFalse += [&]() { mFullyDisabled = true; };
+		}
+
+		if (state->name == "selected")
+		{
+			mSelectedState = state;
+			mSelectedState->SetStateForcible(mIsSelected);
 		}
 
 		return state;
@@ -442,6 +466,9 @@ namespace o2
 
 		if (mStates[idx] == mVisibleState)
 			mVisibleState = nullptr;
+
+		if (mStates[idx] == mSelectedState)
+			mSelectedState = nullptr;
 
 		mStates[idx].Release();
 		mStates.RemoveAt(idx);
@@ -470,6 +497,7 @@ namespace o2
 			state.Release();
 
 		mVisibleState = nullptr;
+		mSelectedState = nullptr;
 
 		mStates.Clear();
 	}
@@ -520,10 +548,8 @@ namespace o2
 
 	void UIWidget::SetVisible(bool visible)
 	{
-		if (mVisibleState)
-			*mVisibleState = visible;
-		else
-			mVisible = visible;
+		mVisible = visible;
+		UpdateVisibility();
 	}
 
 	void UIWidget::SetVisibleForcible(bool visible)
@@ -553,6 +579,26 @@ namespace o2
 	bool UIWidget::IsVisible() const
 	{
 		return mVisible;
+	}
+
+	void UIWidget::Select()
+	{
+		o2UI.SelectWidget(this);
+	}
+
+	void UIWidget::Deselect()
+	{
+		o2UI.SelectWidget(nullptr);
+	}
+
+	bool UIWidget::IsSelected() const
+	{
+		return mIsSelected;
+	}
+
+	bool UIWidget::IsSelectable() const
+	{
+		return false;
 	}
 
 	void UIWidget::UpdateLayout(bool forcible /*= false*/)
@@ -588,6 +634,30 @@ namespace o2
 			child->UpdateTransparency();
 	}
 
+	void UIWidget::UpdateVisibility()
+	{
+		if (mParent)
+			mResVisible = mVisible && mParent->mResVisible;
+		else
+			mResVisible = mVisible;
+
+		if (mVisibleState)
+			mVisibleState->SetState(mResVisible);
+		else
+			mFullyDisabled = !mResVisible;
+
+		OnVisibleChanged();
+
+		for (auto child : mChilds)
+			child->UpdateVisibility();
+	}
+
+	void UIWidget::OnChildSelected(Ptr<UIWidget> child)
+	{
+		if (mParent)
+			mParent->OnChildSelected(child);
+	}
+
 	void UIWidget::RetargetStatesAnimations()
 	{
 		for (auto state : mStates)
@@ -603,20 +673,20 @@ namespace o2
 			parentPos = mParent->mChildsAbsRect.LeftBottom();
 		}
 
-		layout.mLocalRect.left   = parentSize.x*layout.mAnchorMin.x + layout.mOffsetMin.x;
-		layout.mLocalRect.right  = parentSize.x*layout.mAnchorMax.x + layout.mOffsetMax.x;
+		layout.mLocalRect.left = parentSize.x*layout.mAnchorMin.x + layout.mOffsetMin.x;
+		layout.mLocalRect.right = parentSize.x*layout.mAnchorMax.x + layout.mOffsetMax.x;
 		layout.mLocalRect.bottom = parentSize.y*layout.mAnchorMin.y + layout.mOffsetMin.y;
-		layout.mLocalRect.top    = parentSize.y*layout.mAnchorMax.y + layout.mOffsetMax.y;
+		layout.mLocalRect.top = parentSize.y*layout.mAnchorMax.y + layout.mOffsetMax.y;
 
 		Vec2F resSize = layout.mLocalRect.Size();
 		Vec2F clampSize(Math::Clamp(resSize.x, layout.mMinSize.x, layout.mMaxSize.x),
 						Math::Clamp(resSize.y, layout.mMinSize.y, layout.mMaxSize.y));
 		Vec2F szDelta = clampSize - resSize;
 
-		layout.mLocalRect.left   -= szDelta.x*layout.mPivot.x;
-		layout.mLocalRect.right  += szDelta.x*(1.0f - layout.mPivot.x);
+		layout.mLocalRect.left -= szDelta.x*layout.mPivot.x;
+		layout.mLocalRect.right += szDelta.x*(1.0f - layout.mPivot.x);
 		layout.mLocalRect.bottom -= szDelta.y*layout.mPivot.y;
-		layout.mLocalRect.top    += szDelta.y*(1.0f - layout.mPivot.y);
+		layout.mLocalRect.top += szDelta.y*(1.0f - layout.mPivot.y);
 
 		layout.mLocalRect.left = Math::Floor(layout.mLocalRect.left);
 		layout.mLocalRect.right = Math::Floor(layout.mLocalRect.right);

@@ -41,9 +41,6 @@ protected:
 	// Draws windows
 	void Draw();
 
-	// Initializes dockable window style
-	void InitializeDockableWndStyle();
-
 	friend class EditorApplication;
 	friend class ITemplPtr<WindowsManager>;
 };

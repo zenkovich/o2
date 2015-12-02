@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Events/CursorEventsListener.h"
 #include "UI/ScrollArea.h"
 #include "Utils/Editor/FunctionalDragHandle.h"
 
@@ -11,7 +12,7 @@ namespace o2
 	// ----------------------------------------------------
 	// Window with caption, icon, options and close buttons
 	// ----------------------------------------------------
-	class UIWindow: public UIScrollArea
+	class UIWindow: public UIScrollArea, public CursorEventsListener
 	{
 	public:
 		Property<WString>     caption; // Window caption property
@@ -60,6 +61,15 @@ namespace o2
 		void SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout&bottom, const Layout&left,
 								const Layout& right, const Layout& leftTop, const Layout& rightTop, const Layout& leftBottom,
 								const Layout& rightBottom);
+
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point);
+
+		// Returns depth (event system will catch listener with highest depth)
+		float Depth();
+
+		// Returns is this widget can be selected
+		bool IsSelectable() const;
 
 		SERIALIZABLE_IMPL(UIWindow);
 
@@ -142,6 +152,15 @@ namespace o2
 
 		// Binds all drag handles interactable parameter to window visibility
 		void BindHandlesInteractableToVisibility();
+
+		// Calls when widget was selected
+		void OnSelected();
+
+		// Calls when child widget was selected
+		void OnChildSelected(Ptr<UIWidget> child);
+
+		// Calls when cursor pressed on this
+		void OnCursorPressed(const Input::Cursor& cursor);
 
 		// Initializes properties
 		void InitializeProperties();

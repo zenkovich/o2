@@ -8,6 +8,21 @@ using namespace o2;
 class WindowsManager;
 class ApplicationConfig;
 
+class Test: public Animatable
+{
+public:
+	Sprite sp1;
+	Sprite sp2;
+
+	IOBJECT(Test)
+	{
+		BASE_CLASS(Animatable);
+
+		FIELD(sp1);
+		FIELD(sp2);
+	}
+};
+
 // ------------------
 // Editor application
 // ------------------
@@ -25,6 +40,8 @@ protected:
 	Ptr<Sprite>            mBackSign;       // Background o2 signature
 	Ptr<WindowsManager>    mWindowsManager; // Windows manager
 	Ptr<ApplicationConfig> mConfig;         // Application configuration
+
+	Test test;
 
 protected:
 	// Calling on updating

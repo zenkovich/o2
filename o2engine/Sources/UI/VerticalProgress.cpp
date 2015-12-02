@@ -157,6 +157,11 @@ namespace o2
 		return true;
 	}
 
+	bool UIVerticalProgress::IsInteractable() const
+	{
+		return mResVisible && CursorEventsListener::IsInteractable();
+	}
+
 	void UIVerticalProgress::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];

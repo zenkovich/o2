@@ -16,10 +16,11 @@ namespace o2
 	class UIEditBox: public UIScrollArea, public CursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		Property<WString> text;			  // Text property
-		Property<int>     caret;		  // Caret position property
-		Property<int>     selectionBegin; // Selection begin index property
-		Property<int>     selectionEnd;	  // Selection end index property
+		Property<WString>              text;			  // Text property
+		Property<int>                  caret;		      // Caret position property
+		Property<int>                  selectionBegin;    // Selection begin index property
+		Property<int>                  selectionEnd;	  // Selection end index property
+		Function<void(const WString&)> onChanged;         // Text changed event
 
 		// Default constructor
 		UIEditBox();
@@ -141,6 +142,12 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
+		// Returns is this widget can be selected
+		bool IsSelectable() const;
+
+		// Returns interactable flag
+		bool IsInteractable() const;
+
 		SERIALIZABLE_IMPL(UIEditBox);
 
 		IOBJECT(UIEditBox)
@@ -254,6 +261,9 @@ namespace o2
 
 		// Updates layout
 		void UpdateLayout(bool forcible = false);
+
+		// Updates transparency for this and children widgets
+		void UpdateTransparency();
 
 		// Checks text for maximal characters in line and lines count
 		void CheckCharactersAndLinesBounds();

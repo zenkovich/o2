@@ -20,6 +20,7 @@ namespace o2
 	class LogStream;
 	class ProjectConfig;
 	class Render;
+	class TaskManager;
 	class Time;
 	class Timer;
 	class UIManager;
@@ -118,6 +119,7 @@ namespace o2
 		Ptr<LogStream>     mLog;           // Log stream with id "app", using only for application messages
 		Ptr<ProjectConfig> mProjectConfig; // Project config
 		Ptr<Render>        mRender;        // Graphics render
+		Ptr<TaskManager>   mTaskManager;   // Tasks manager
 		Ptr<Time>          mTime;          // Time utilities
 		Ptr<Timer>         mTimer;         // Timer for detecting delta time for update
 		Ptr<UIManager>     mUIManager;     // UI manager

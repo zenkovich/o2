@@ -239,11 +239,19 @@ namespace o2
 			if (ikey.mKey == key)
 			{
 				mDownKeys.Remove(ikey);
-				break;
+				mReleasedKeys.Add(key);
+				return;
 			}
 		}
 
-		mReleasedKeys.Add(key);
+		for (auto ikey : mPressedKeys)
+		{
+			if (ikey.mKey == key)
+			{
+				mPressedKeys.Remove(ikey);
+				return;
+			}
+		}
 	}
 
 	int Input::CursorPressed(const Vec2F& pos)

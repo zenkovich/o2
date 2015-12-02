@@ -221,6 +221,9 @@ namespace o2
 		// Sets target property pointer
 		void SetTargetPropertyVoid(void* target);
 
+		// Registering this in animatable value agent
+		void RegInAnimatable(AnimationState* state, const String& path);
+
 		// Initializes properties
 		void InitializeProperties();
 	};

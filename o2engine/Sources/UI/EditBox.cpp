@@ -6,6 +6,7 @@
 #include "Render/Sprite.h"
 #include "Render/Text.h"
 #include "UI/HorizontalScrollBar.h"
+#include "UI/UIManager.h"
 #include "UI/VerticalScrollBar.h"
 #include "Utils/Clipboard.h"
 #include "Utils/Debug.h"
@@ -78,12 +79,14 @@ namespace o2
 		RetargetStatesAnimations();
 		UpdateLayout();
 
+		onChanged(mText);
+
 		return *this;
 	}
 
 	void UIEditBox::Draw()
 	{
-		if (!mVisible)
+		if (mFullyDisabled)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -95,7 +98,9 @@ namespace o2
 
 		mTextDrawable->Draw();
 		mSelectionMesh->Draw();
-		mCaretDrawable->Draw();
+
+		if(mIsSelected)
+			mCaretDrawable->Draw();
 
 		for (auto child : mChilds)
 			child->Draw();
@@ -127,6 +132,7 @@ namespace o2
 		mTextDrawable->SetText(mText);
 		UpdateScrollParams();
 		UpdateSelectionAndCaret();
+		onChanged(mText);
 	}
 
 	WString UIEditBox::GetText() const
@@ -236,6 +242,8 @@ namespace o2
 
 			UpdateLayout();
 		}
+
+		onChanged(mText);
 	}
 
 	WString UIEditBox::GetAvailableSymbols() const
@@ -277,6 +285,7 @@ namespace o2
 
 		mText = filteredText;
 		mTextDrawable->SetText(filteredText);
+		onChanged(mText);
 
 		UpdateLayout();
 	}
@@ -325,6 +334,7 @@ namespace o2
 			UpdateLayout();
 		}
 
+		onChanged(mText);
 	}
 
 	bool UIEditBox::IsMultiLine() const
@@ -368,11 +378,23 @@ namespace o2
 		return mEnableHorScroll || mEnableVerScroll;
 	}
 
+	bool UIEditBox::IsSelectable() const
+	{
+		return true;
+	}
+
+	bool UIEditBox::IsInteractable() const
+	{
+		return mResVisible && CursorEventsListener::IsInteractable();
+	}
+
 	void UIEditBox::UpdateControls(float dt)
 	{}
 
 	void UIEditBox::OnCursorPressed(const Input::Cursor& cursor)
 	{
+		o2UI.SelectWidget(this);
+
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = true;
@@ -508,6 +530,9 @@ namespace o2
 
 	void UIEditBox::OnKeyPressed(const Input::Key& key)
 	{
+		if (!mIsSelected)
+			return;
+
 		CheckCharacterTyping(key.mKey);
 		CheckCaretMoving(key.mKey);
 		CheckCharactersErasing(key.mKey);
@@ -519,6 +544,9 @@ namespace o2
 
 	void UIEditBox::OnKeyStayDown(const Input::Key& key)
 	{
+		if (!mIsSelected)
+			return;
+
 		if (!o2Input.IsKeyRepeating(key.mKey))
 			return;
 
@@ -695,6 +723,12 @@ namespace o2
 		UpdateSelectionAndCaret();
 	}
 
+	void UIEditBox::UpdateTransparency()
+	{
+		UIWidget::UpdateTransparency();
+		mTextDrawable->transparency = mResTransparency;
+	}
+
 	void UIEditBox::UpdateSelectionAndCaret()
 	{
 		Vec2F caretPosition = GetTextCaretPosition(mSelectionEnd);
@@ -843,7 +877,8 @@ namespace o2
 	{
 		mCaretBlinkTime += dt;
 
-		mCaretDrawable->SetTransparency(Math::Clamp01(1.0f - (mCaretBlinkTime - mCaretBlinkDelay*0.3f)/(mCaretBlinkDelay*0.3f)));
+		float blinkAlpha = Math::Clamp01(1.0f - (mCaretBlinkTime - mCaretBlinkDelay*0.3f) / (mCaretBlinkDelay*0.3f));
+		mCaretDrawable->SetTransparency(blinkAlpha*mResTransparency);
 
 		if (mCaretBlinkTime > mCaretBlinkDelay)
 			mCaretBlinkTime -= mCaretBlinkDelay;
@@ -991,9 +1026,6 @@ namespace o2
 
 	void UIEditBox::CheckCharacterTyping(KeyboardKey key)
 	{
-		if (mLastClickTime < 0)
-			return;
-
 		if (o2Input.IsKeyDown(VK_CONTROL))
 			return;
 
@@ -1005,6 +1037,9 @@ namespace o2
 				unicode = 10;
 
 			if (unicode == 10 && !mMultiLine)
+				return;
+
+			if (unicode == 9)
 				return;
 
 			if (mAvailableSymbols.Length() > 0)
@@ -1038,6 +1073,8 @@ namespace o2
 
 			UpdateLayout();
 			CheckScrollingToCaret();
+
+			onChanged(mText);
 		}
 	}
 
@@ -1056,6 +1093,7 @@ namespace o2
 			}
 
 			mTextDrawable->SetText(mText);
+			onChanged(mText);
 			UpdateLayout();
 
 			if (mSelectionEnd == mSelectionBegin)
@@ -1074,6 +1112,7 @@ namespace o2
 					mText.Erase(Math::Min(mSelectionBegin, mSelectionEnd), Math::Max(mSelectionEnd, mSelectionBegin));
 
 				mTextDrawable->SetText(mText);
+				onChanged(mText);
 				UpdateLayout();
 
 				MoveCaret(Math::Min(mSelectionEnd, mSelectionBegin), false);
@@ -1165,6 +1204,7 @@ namespace o2
 			}
 
 			mTextDrawable->SetText(mText);
+			onChanged(mText);
 			UpdateLayout();
 			CheckScrollingToCaret();
 		}
@@ -1184,6 +1224,7 @@ namespace o2
 			mSelectionBegin = mSelectionEnd = mSelectionEnd + clipboard.Length();
 
 			mTextDrawable->SetText(mText);
+			onChanged(mText);
 			UpdateLayout();
 			CheckScrollingToCaret();
 		}

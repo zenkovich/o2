@@ -169,6 +169,11 @@ namespace o2
 		return !Math::Equals(mMinValue, mMaxValue);
 	}
 
+	bool UIVerticalScrollBar::IsInteractable() const
+	{
+		return mResVisible && CursorEventsListener::IsInteractable();
+	}
+
 	void UIVerticalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
 

@@ -33,4 +33,6 @@ public:
 
 protected:
 	Ptr<UIDockableWindow> mWindow;
+
+	friend class WindowsManager;
 };

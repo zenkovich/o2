@@ -1,5 +1,6 @@
 #include "Animation.h"
 
+#include "Animation/Animatable.h"
 #include "Utils/Debug.h"
 #include "Utils/IObject.h"
 
@@ -9,18 +10,20 @@ namespace o2
 	IOBJECT_CPP(Animation::AnimatedValueDef);
 
 	Animation::Animation():
-		mTarget(nullptr)
+		mTarget(nullptr), mAnimationState(nullptr)
 	{
 	}
 
 	Animation::Animation(const Animation& other):
-		mTarget(other.mTarget), IAnimation(other)
+		mTarget(other.mTarget), IAnimation(other), mAnimationState(nullptr)
 	{
 		for (auto val : other.mAnimatedValues)
 		{
 			AnimatedValueDef def(val);
 			def.mAnimatedValue = val.mAnimatedValue->Clone();
 			mAnimatedValues.Add(def);
+
+			OnAnimatedValueAdded(def);
 		}
 	}
 
@@ -60,6 +63,8 @@ namespace o2
 			}
 
 			mAnimatedValues.Add(def);
+
+			OnAnimatedValueAdded(def);
 		}
 
 		RecalculateDuration();
@@ -147,6 +152,12 @@ namespace o2
 
 		RecalculateDuration();
 		mEndTime = mDuration;
+	}
+
+	void Animation::OnAnimatedValueAdded(AnimatedValueDef& valueDef)
+	{
+		if (mAnimationState)
+			valueDef.mAnimatedValue->RegInAnimatable(mAnimationState, valueDef.mTargetPath);
 	}
 
 	bool Animation::AnimatedValueDef::operator==(const AnimatedValueDef& other) const

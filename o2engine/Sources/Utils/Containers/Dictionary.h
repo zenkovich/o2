@@ -239,7 +239,7 @@ namespace o2
 		const _value_type& Get(const _key_type& key) const;
 
 		// Returns value reference by index
-		TKeyValue& Get(int index) const;
+		TKeyValue& GetIdx(int index) const;
 
 		// Returns count of elements
 		int Count() const;
@@ -770,7 +770,7 @@ namespace o2
 
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::TKeyValue& Dictionary<_key_type, _value_type>::Get(int index) const
+	typename Dictionary<_key_type, _value_type>::TKeyValue& Dictionary<_key_type, _value_type>::GetIdx(int index) const
 	{
 		return mPairs.Get(index);
 	}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Events/CursorEventsListener.h"
+#include "Events/KeyboardEventsListener.h"
 #include "UI/Widget.h"
 
 namespace o2
@@ -8,7 +9,7 @@ namespace o2
 	class Text;
 	class Sprite;
 
-	class UIToggle: public UIWidget, public CursorEventsListener
+	class UIToggle: public UIWidget, public CursorEventsListener, public KeyboardEventsListener
 	{
 	public:
 		Property<WString>     caption;  // Caption property. Searches text layer with name "caption" or creates them if he's not exist
@@ -43,6 +44,28 @@ namespace o2
 		// Returns depth (event system will catch listener with highest depth)
 		float Depth();
 
+		// Returns is this widget can be selected
+		bool IsSelectable() const;
+
+		// Returns interactable flag
+		bool IsInteractable() const;
+
+		SERIALIZABLE_IMPL(UIToggle);
+
+		IOBJECT(UIToggle)
+		{
+			BASE_CLASS(UIWidget);
+
+			FIELD(caption);
+			//SRLZ_FIELD(value);
+		}
+
+	protected:
+		bool               mValue;       // Current value
+		Ptr<Text>          mCaptionText; // Caption layer text
+		Ptr<UIWidgetLayer> mBackLayer;   // Background layer
+
+	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true
 		void OnCursorPressed(const Input::Cursor& cursor);
 
@@ -59,20 +82,11 @@ namespace o2
 		// Calls when cursor exits this object. Sets state "select" to false
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		SERIALIZABLE_IMPL(UIToggle);
+		// Calls when key was pressed
+		void OnKeyPressed(const Input::Key& key);
 
-		IOBJECT(UIToggle)
-		{
-			BASE_CLASS(UIWidget);
-
-			FIELD(caption);
-			//SRLZ_FIELD(value);
-		}
-
-	protected:
-		bool               mValue;       // Current value
-		Ptr<Text>          mCaptionText; // Caption layer text
-		Ptr<UIWidgetLayer> mBackLayer;   // Background layer
+		// Calls when key was released
+		void OnKeyReleased(const Input::Key& key);
 
 		// Calls when layer added and updates drawing sequence
 		void OnLayerAdded(Ptr<UIWidgetLayer> layer);

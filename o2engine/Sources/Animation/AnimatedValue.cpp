@@ -1,5 +1,7 @@
 #include "AnimatedValue.h"
 
+#include "Animation/Animatable.h"
+
 namespace o2
 {
 	IOBJECT_CPP(IAnimatedValue);

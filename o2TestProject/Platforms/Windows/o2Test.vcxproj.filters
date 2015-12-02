@@ -6,6 +6,7 @@
     <ClCompile Include="..\..\Sources\TextTestScreen.cpp" />
     <ClCompile Include="..\..\Sources\UITestScreen.cpp" />
     <ClCompile Include="..\..\Sources\MainTestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\UIStyleBuilding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\TestApplication.h" />
@@ -13,5 +14,6 @@
     <ClInclude Include="..\..\Sources\TextTestScreen.h" />
     <ClInclude Include="..\..\Sources\UITestScreen.h" />
     <ClInclude Include="..\..\Sources\MainTestScreen.h" />
+    <ClInclude Include="..\..\Sources\UIStyleBuilding.h" />
   </ItemGroup>
 </Project>

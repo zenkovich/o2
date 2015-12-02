@@ -37,7 +37,7 @@ void EditorApplication::OnResizing()
 void EditorApplication::OnUpdate(float dt)
 {
 	mWindowsManager->Update(dt);
-	o2Application.windowCaption = String::Format("o2 Editor FPS: %i", (int)o2Time.GetFPS());
+	o2Application.windowCaption = String::Format("o2 Editor. FPS: %i (%vi)", (int)o2Time.GetFPS(), (Vec2I)o2Input.GetCursorPos());
 }
 
 void EditorApplication::OnDraw()

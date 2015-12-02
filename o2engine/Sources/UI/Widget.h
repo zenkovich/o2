@@ -175,6 +175,18 @@ namespace o2
 		// Returns visibility
 		bool IsVisible() const;
 
+		// Selects this widget
+		void Select();
+
+		// Deselects this widget
+		void Deselect();
+
+		// Returns is this widget selected
+		bool IsSelected() const;
+
+		// Returns is this widget can be selected
+		virtual bool IsSelectable() const;
+
 		SERIALIZABLE_IMPL(UIWidget);
 
 		IOBJECT(UIWidget)
@@ -217,18 +229,35 @@ namespace o2
 		LayersVec          mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000)
 		LayersVec          mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000)
 
+		Ptr<UIWidgetState> mSelectedState;    // Selected widget state
+		bool               mIsSelected;       // Is widget selected
+
 		Ptr<UIWidgetState> mVisibleState;     // Widget visibility state
 		bool               mVisible;          // Visibility of widget. Uses state 'visible'
+		bool               mResVisible;       // Result visibility of widget. Depends on this visibility and parent result visibility
+		bool               mFullyDisabled;    // True, if widget is not visible and visible state is fully false
 
 	protected:
 		// Draws debug frame by mAbsoluteRect
 		void DrawDebugFrame();
+
+		// Calls when widget was selected
+		virtual void OnSelected();
+
+		// Calls when widget was deselected
+		virtual void OnDeselected();
 
 		// Updates layout
 		virtual void UpdateLayout(bool forcible = false);
 
 		// Updates transparency for this and children widgets
 		virtual void UpdateTransparency();
+
+		// Updates result visibility
+		virtual void UpdateVisibility();
+
+		// Calls when child widget was selected
+		virtual void OnChildSelected(Ptr<UIWidget> child);
 
 		// Sets target for all states animations
 		void RetargetStatesAnimations();
@@ -289,6 +318,7 @@ namespace o2
 		friend class UIHorizontalProgress;
 		friend class UIHorizontalScrollBar;
 		friend class UIList;
+		friend class UIManager;
 		friend class UIScrollArea;
 		friend class UIVerticalLayout;
 		friend class UIVerticalProgress;

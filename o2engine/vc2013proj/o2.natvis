@@ -9,12 +9,12 @@
   <Type Name="o2::Rect&lt;*&gt;">
     <DisplayString>{{ (L { left } B { bottom })-(R { right } T { top }) }}</DisplayString>
     <Expand>
-      <Item Name="[left]" ExcludeView="simple">left</Item>
-      <Item Name="[bottom]" ExcludeView="simple">bottom</Item>
-      <Item Name="[right]" ExcludeView="simple">right</Item>
-      <Item Name="[top]" ExcludeView="simple">top</Item>
-      <Item Name="[width]" ExcludeView="simple">right - left</Item>
-      <Item Name="[height]" ExcludeView="simple">top - bottom</Item>
+      <Item Name="left" ExcludeView="simple">left</Item>
+      <Item Name="bottom" ExcludeView="simple">bottom</Item>
+      <Item Name="right" ExcludeView="simple">right</Item>
+      <Item Name="top" ExcludeView="simple">top</Item>
+      <Item Name="width" ExcludeView="simple">right - left</Item>
+      <Item Name="height" ExcludeView="simple">top - bottom</Item>
     </Expand>
   </Type>
 
@@ -29,9 +29,9 @@
   <Type Name="o2::Mesh">
     <DisplayString>{{ vertx = { vertexCount }/{ mMaxVertexCount } poly = { polyCount }/{ mMaxPolyCount } tex = { mTexture.mTexture } }}</DisplayString>
     <Expand>
-      <Item Name="[texture]" ExcludeView="simple">mTexture.mTexture</Item>
-      <Item Name="[verticies]" ExcludeView="simple">vertexCount</Item>
-      <Item Name="[polygons]" ExcludeView="simple">polyCount</Item>
+      <Item Name="texture" ExcludeView="simple">mTexture.mTexture</Item>
+      <Item Name="verticies" ExcludeView="simple">vertexCount</Item>
+      <Item Name="polygons" ExcludeView="simple">polyCount</Item>
       <ArrayItems>
         <Size>vertexCount</Size>
         <ValuePointer>vertices</ValuePointer>
@@ -46,8 +46,8 @@
   <Type Name="o2::Vector&lt;*&gt;">
     <DisplayString>{{ size={ mCount } }}</DisplayString>
     <Expand>
-      <Item Name="[size]" ExcludeView="simple">mCount</Item>
-      <Item Name="[capacity]" ExcludeView="simple">mCapacity</Item>
+      <Item Name="size" ExcludeView="simple">mCount</Item>
+      <Item Name="capacity" ExcludeView="simple">mCapacity</Item>
       <ArrayItems>
         <Size>mCount</Size>
         <ValuePointer>mValues.mObject</ValuePointer>
@@ -56,18 +56,18 @@
   </Type>
 
   <Type Name="o2::KeyValuePair&lt;*&gt;">
-    <DisplayString>{{ [{ mKey }] { mValue } }}</DisplayString>
+    <DisplayString>{{ { mKey } { mValue } }}</DisplayString>
     <Expand>
-      <Item Name="[key]" ExcludeView="simple">mKey</Item>
-      <Item Name="[value]" ExcludeView="simple">mValue</Item>
+      <Item Name="key" ExcludeView="simple">mKey</Item>
+      <Item Name="value" ExcludeView="simple">mValue</Item>
     </Expand>
   </Type>
 
   <Type Name="o2::Dictionary&lt;*&gt;">
     <DisplayString>{{ size={ mPairs.mCount } }}</DisplayString>
     <Expand>
-      <Item Name="[size]" ExcludeView="simple">mPairs.mCount</Item>
-      <Item Name="[capacity]" ExcludeView="simple">mPairs.mCapacity</Item>
+      <Item Name="size" ExcludeView="simple">mPairs.mCount</Item>
+      <Item Name="capacity" ExcludeView="simple">mPairs.mCapacity</Item>
       <ArrayItems>
         <Size>mPairs.mCount</Size>
         <ValuePointer>mPairs.mValues.mObject</ValuePointer>
@@ -78,7 +78,7 @@
   <Type Name="o2::TString&lt;char&gt;">
     <DisplayString>{{ {mData,s} }}</DisplayString>
     <Expand>
-      <Item Name="[capacity]">mCapacity</Item>
+      <Item Name="capacity">mCapacity</Item>
       <ArrayItems>
         <Size>mCapacity</Size>
         <ValuePointer>mData</ValuePointer>
@@ -89,7 +89,7 @@
   <Type Name="o2::TString&lt;wchar_t&gt;">
     <DisplayString>{{ {mData,su} }}</DisplayString>
     <Expand>
-      <Item Name="[capacity]">mCapacity</Item>
+      <Item Name="capacity">mCapacity</Item>
       <ArrayItems>
         <Size>mCapacity</Size>
         <ValuePointer>mData</ValuePointer>
@@ -101,25 +101,25 @@
     <AlternativeType Name="o2::ITemplPtr&lt;*&gt;" />
     <DisplayString>{{ {mObject} }}</DisplayString>
     <Expand>
-      <Item Name="[object]">mObject</Item>
-      <Item Name="[info]">mObjectInfo</Item>
-      <Item Name="[pos]">mMemTreePosition</Item>
+      <Item Name="object">mObject</Item>
+      <Item Name="info">mObjectInfo</Item>
+      <Item Name="pos">mMemTreePosition</Item>
     </Expand>
   </Type>
 
   <Type Name="o2::FieldInfo&lt;*&gt;">
     <DisplayString>{{ name={ mName } value={ mFieldRef } }}</DisplayString>
     <Expand>
-      <Item Name="[name]">mName</Item>
-      <Item Name="[value]">mFieldRef</Item>
-      <Item Name="[owner]">mOwner</Item>
+      <Item Name="name">mName</Item>
+      <Item Name="value">mFieldRef</Item>
+      <Item Name="owner">mOwner</Item>
     </Expand>
   </Type>
 
   <Type Name="o2::DataDoc">
     <DisplayString>{{ nodes={ mChildNodes.mCount } }}</DisplayString>
     <Expand>
-      <Item Name="[count]" ExcludeView="simple">mChildNodes.mCount</Item>
+      <Item Name="count" ExcludeView="simple">mChildNodes.mCount</Item>
       <ArrayItems>
         <Size>mChildNodes.mCount</Size>
         <ValuePointer>mChildNodes.mValues.mObject</ValuePointer>
@@ -130,10 +130,10 @@
   <Type Name="o2::DataNode">
     <DisplayString>{{ name={ mName } data={ mData } childs={mChildNodes.mCount} }}</DisplayString>
     <Expand>
-      <Item Name="[name]" ExcludeView="simple">mName</Item>
-      <Item Name="[data]" ExcludeView="simple">mData</Item>
-      <Item Name="[parent]" ExcludeView="simple">mParent</Item>
-      <Item Name="[childs]" ExcludeView="simple">mChildNodes.mCount</Item>
+      <Item Name="name" ExcludeView="simple">mName</Item>
+      <Item Name="data" ExcludeView="simple">mData</Item>
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
+      <Item Name="childs" ExcludeView="simple">mChildNodes.mCount</Item>
       <ArrayItems>
         <Size>mChildNodes.mCount</Size>
         <ValuePointer>mChildNodes.mValues.mObject</ValuePointer>
@@ -144,24 +144,14 @@
   <Type Name="o2::UIWidget">
     <DisplayString>name={ mName } rect=({ (int)layout.mAbsoluteRect.left }, { (int)layout.mAbsoluteRect.bottom }, { (int)layout.mAbsoluteRect.right }, { (int)layout.mAbsoluteRect.top })</DisplayString>
     <Expand>
-      <Item Name="[name]" ExcludeView="simple">mName</Item>
-      <Item Name="[alpha]" ExcludeView="simple">mTransparency</Item>
-      <Item Name="[visible]" ExcludeView="simple">mVisible</Item>
-      <Item Name="[parent]" ExcludeView="simple">mParent</Item>
+      <Item Name="name" ExcludeView="simple">mName</Item>
+      <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
+      <Item Name="visible" ExcludeView="simple">mVisible</Item>
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
       <Synthetic Name="layout">
         <DisplayString>({ (int)layout.mAbsoluteRect.left }, { (int)layout.mAbsoluteRect.bottom }, { (int)layout.mAbsoluteRect.right }, { (int)layout.mAbsoluteRect.top })</DisplayString>
         <Expand>
           <ExpandedItem>layout</ExpandedItem>
-        </Expand>
-      </Synthetic>
-
-      <Synthetic Name="childs">
-        <DisplayString>count={mChilds.mCount}</DisplayString>
-        <Expand>
-          <ArrayItems>
-            <Size>mChilds.mCount</Size>
-            <ValuePointer>mChilds.mValues.mObject</ValuePointer>
-          </ArrayItems>
         </Expand>
       </Synthetic>
 
@@ -194,23 +184,29 @@
           </ArrayItems>
         </Expand>
       </Synthetic>
+
+      <ArrayItems>
+        <Size>mChilds.mCount</Size>
+        <ValuePointer>mChilds.mValues.mObject</ValuePointer>
+      </ArrayItems>
+
     </Expand>
   </Type>
 
   <Type Name="o2::UIWidgetLayout">
     <DisplayString>({ (int)mAbsoluteRect.left }, { (int)mAbsoluteRect.bottom }, { (int)mAbsoluteRect.right }, { (int)mAbsoluteRect.top })</DisplayString>
     <Expand>
-      <Item Name="[pivot]" ExcludeView="simple">mPivot</Item>
-      <Item Name="[anchor min]" ExcludeView="simple">mAnchorMin</Item>
-      <Item Name="[anchor max]" ExcludeView="simple">mAnchorMax</Item>
-      <Item Name="[offset min]" ExcludeView="simple">mOffsetMin</Item>
-      <Item Name="[offset max]" ExcludeView="simple">mOffsetMax</Item>
-      <Item Name="[min size]" ExcludeView="simple">mMinSize</Item>
-      <Item Name="[max size]" ExcludeView="simple">mMaxSize</Item>
-      <Item Name="[weight]" ExcludeView="simple">mWeight</Item>
-      <Item Name="[driven by parent]" ExcludeView="simple">mDrivenByParent</Item>
-      <Item Name="[abs rect]" ExcludeView="simple">mAbsoluteRect</Item>
-      <Item Name="[local rect]" ExcludeView="simple">mLocalRect</Item>
+      <Item Name="pivot" ExcludeView="simple">mPivot</Item>
+      <Item Name="anchor min" ExcludeView="simple">mAnchorMin</Item>
+      <Item Name="anchor max" ExcludeView="simple">mAnchorMax</Item>
+      <Item Name="offset min" ExcludeView="simple">mOffsetMin</Item>
+      <Item Name="offset max" ExcludeView="simple">mOffsetMax</Item>
+      <Item Name="min size" ExcludeView="simple">mMinSize</Item>
+      <Item Name="max size" ExcludeView="simple">mMaxSize</Item>
+      <Item Name="weight" ExcludeView="simple">mWeight</Item>
+      <Item Name="driven by parent" ExcludeView="simple">mDrivenByParent</Item>
+      <Item Name="abs rect" ExcludeView="simple">mAbsoluteRect</Item>
+      <Item Name="local rect" ExcludeView="simple">mLocalRect</Item>
     </Expand>
   </Type>
 

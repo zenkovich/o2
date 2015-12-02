@@ -96,6 +96,10 @@ namespace o2
 		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White());
 
 		// Draw single line with color
+		void DrawArrow(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White(), 
+					   const Vec2F& arrowSize = Vec2F(10, 10));
+
+		// Draw single line with color
 		void DrawLine(const Vector<Vec2F>& points, const Color4& color = Color4::White());
 
 		// Draw rect frame with color
@@ -113,6 +117,14 @@ namespace o2
 
 		// Draw circle with color
 		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White());
+
+		// Draws bezier curve with color
+		void DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
+							 const Color4& color = Color4::White());
+
+		// Draws bezier curve with color
+		void DrawBezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
+								  const Color4& color = Color4::White(), const Vec2F& arrowSize = Vec2F(10, 10));
 
 		// Beginning render to stencil buffer
 		void BeginRenderToStencilBuffer();
@@ -182,30 +194,30 @@ namespace o2
 		typedef Vector<Ptr<Font>> FontsVec;
 
 		Ptr<LogStream>  mLog;                    // Render log stream
-					    
+
 		TexturesVec     mTextures;               // Loaded textures
 		FontsVec        mFonts;                  // Loaded fonts
-					    
+
 		Camera          mCamera;                 // Camera transformation
 		Vec2I           mResolution;             // Current back buffer size
 		Vec2I           mDPI;                    // Current device screen DPI
-					    
+
 		bool            mRenderTargetsAvailable; // True, if render targets is available
 		Vec2I           mMaxTextureSize;         // Max texture size
-					    
+
 		bool            mStencilDrawing;         // True, if drawing in stencil buffer
 		bool            mStencilTest;            // True, if drawing with stencil test
-					    
+
 		ScissorInfosVec mScissorInfos;           // Scissor clipping depth infos vector
 		StackScissorVec mStackScissors;          // Stack of scissors clippings
 		bool            mClippingEverything;     // Is everything clipped
 
 		TextureRef      mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
-					    
+
 		float           mDrawingDepth;           // Current drawing depth, increments after each drawing drawables
-					    
+
 		FT_Library      mFreeTypeLib;            // FreeType library, for rendering fonts
-					    
+
 		bool            mReady;                  // True, if render system initialized
 
 	protected:

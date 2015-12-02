@@ -17,25 +17,5 @@ public:
 
 protected:
 	Sprite mBackground;
-
-protected:
-	void RebuildStyle();
-	void RebuildButtonStyle();
-	void RebuildCloseButtonStyle();
-	void RebuildArrowButtonStyle();
-	void RebuildHorProgressBarStyle();
-	void RebuildVerProgressBarStyle();
-	void RebuildHorScrollBarStyle();
-	void RebuildVerScrollBarStyle();
-	void RebuildCheckboxStyle();
-	void RebuildScrollAreaStyle();
-	void RebuildScrollAreaStraightBarsStyle();
-	void RebuildLabelStyle();
-	void RebuildEditBoxStyle();
-	void RebuildCustomListStyle();
-	void RebuildListStyle();
-	void RebuildCustomDropDownStyle();
-	void RebuildDropDownStyle();
-	void RebuildWindowStyle();
 };
 

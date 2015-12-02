@@ -85,6 +85,9 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
+		// Returns interactable flag
+		bool IsInteractable() const;
+
 		SERIALIZABLE_IMPL(UIVerticalScrollBar);
 
 		IOBJECT(UIVerticalScrollBar)

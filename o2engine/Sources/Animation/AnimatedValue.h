@@ -7,6 +7,8 @@
 
 namespace o2
 {
+	class AnimationState;
+
 	// ------------------------
 	// Animated value interface
 	// ------------------------
@@ -35,10 +37,14 @@ namespace o2
 		// Sets target property by void pointer
 		virtual void SetTargetPropertyVoid(void* target) {}
 
+		// Registering this in animatable value agent
+		virtual void RegInAnimatable(AnimationState* state, const String& path) {}
+
 		// Force setting time (using in Animation): works same as update, but by hard setting time
 		void ForceSetTime(float time, float duration);
 
 		friend class Animation;
+		friend class Animatable;
 	};
 
 	// -----------------------
@@ -250,6 +256,9 @@ namespace o2
 
 		// Sets target property pointer
 		void SetTargetPropertyVoid(void* target);
+
+		// Registering this in animatable value agent
+		void RegInAnimatable(AnimationState* state, const String& path);
 
 		// Initializes properties
 		void InitializeProperties();
@@ -621,6 +630,12 @@ namespace o2
 	void AnimatedValue<_type>::SetTargetPropertyVoid(void* target)
 	{
 		SetTargetProperty((Setter<_type>*)target);
+	}
+
+	template<typename _type>
+	void AnimatedValue<_type>::RegInAnimatable(AnimationState* state, const String& path)
+	{
+		state->mOwner->RegAnimatedValue<_type>(this, path, state);
 	}
 
 	template<typename _type>

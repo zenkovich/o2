@@ -102,7 +102,7 @@ namespace o2
 
 	void UICustomList::Draw()
 	{
-		if (!mVisible)
+		if (mFullyDisabled)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -333,6 +333,11 @@ namespace o2
 		return mEnableHorScroll || mEnableVerScroll;
 	}
 
+	bool UICustomList::IsInteractable() const
+	{
+		return mResVisible && CursorEventsListener::IsInteractable();
+	}
+
 	void UICustomList::UpdateControls(float dt)
 	{}
 
@@ -544,7 +549,7 @@ namespace o2
 
 	void UICustomList::OnVisibleChanged()
 	{
-		SetInteractable(mVisible);
+		SetInteractable(mResVisible);
 	}
 
 	void UICustomList::InitializeProperties()

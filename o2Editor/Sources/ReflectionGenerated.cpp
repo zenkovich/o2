@@ -9,12 +9,15 @@ using namespace o2;
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "SceneWindow/SceneWindow.h"
 
+#include "EditorApplication.h"
+
 
 IOBJECT_CPP(ApplicationConfig);
 IOBJECT_CPP(UIDockWindowPlace);
 IOBJECT_CPP(IEditorWindow);
 IOBJECT_CPP(SceneWindow);
 IOBJECT_CPP(UIDockableWindow);
+IOBJECT_CPP(Test);
 
 void ReflectionRegistTypes()
 {
@@ -23,4 +26,5 @@ void ReflectionRegistTypes()
 	INIT_TYPE(ApplicationConfig);
 	INIT_TYPE(SceneWindow);
 	INIT_TYPE(UIDockWindowPlace);
+	INIT_TYPE(Test);
 }

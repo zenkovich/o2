@@ -174,6 +174,11 @@ namespace o2
 		return !Math::Equals(mMinValue, mMaxValue);
 	}
 
+	bool UIHorizontalScrollBar::IsInteractable() const
+	{
+		return mResVisible && CursorEventsListener::IsInteractable();
+	}
+
 	void UIHorizontalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
 

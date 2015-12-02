@@ -24,4 +24,6 @@ namespace o2
 	};
 
 	enum class Side { Left, Bottom, Right, Top, None };
+
+	enum class TwoDirection { Horizontal, Vertical };
 }

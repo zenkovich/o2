@@ -2,6 +2,7 @@
 
 #include "Render/Sprite.h"
 #include "Render/Text.h"
+#include "UI/UIManager.h"
 
 namespace o2
 {
@@ -70,11 +71,23 @@ namespace o2
 		return GetMaxDrawingDepth();
 	}
 
+	bool UIButton::IsSelectable() const
+	{
+		return true;
+	}
+
+	bool UIButton::IsInteractable() const
+	{
+		return mResVisible && CursorEventsListener::IsInteractable();
+	}
+
 	void UIButton::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = true;
+
+		o2UI.SelectWidget(this);
 	}
 
 	void UIButton::OnCursorReleased(const Input::Cursor& cursor)
@@ -106,6 +119,28 @@ namespace o2
 		auto selectState = state["select"];
 		if (selectState)
 			*selectState = false;
+	}
+
+	void UIButton::OnKeyPressed(const Input::Key& key)
+	{
+		if (mIsSelected && (key.mKey == VK_SPACE || key.mKey == VK_RETURN))
+		{
+			auto pressedState = state["pressed"];
+			if (pressedState)
+				*pressedState = true;
+		}
+	}
+
+	void UIButton::OnKeyReleased(const Input::Key& key)
+	{
+		if (mIsSelected && (key.mKey == VK_SPACE || key.mKey == VK_RETURN))
+		{
+			auto pressedState = state["pressed"];
+			if (pressedState)
+				*pressedState = false;
+
+			onClick();
+		}
 	}
 
 	void UIButton::OnLayerAdded(Ptr<UIWidgetLayer> layer)

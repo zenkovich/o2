@@ -39,6 +39,8 @@
 #include "Utils/SmartPointers.h"
 #include "Utils/StackTrace.h"
 #include "Utils/String.h"
+#include "Utils/Task.h"
+#include "Utils/TaskManager.h"
 #include "Utils/Time.h"
 #include "Utils/Timer.h"
 
@@ -76,6 +78,7 @@
 #include "Events/EventSystem.h"
 #include "Events/KeyboardEventsListener.h"
 
+#include "Animation/Animatable.h"
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedValue.h"
 #include "Animation/AnimatedVector.h"

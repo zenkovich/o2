@@ -111,7 +111,7 @@ namespace o2
 	{
 		for (auto listener : mCursorListeners)
 		{
-			if (!listener->mInteractable || IsListenerClipped(listener->Depth(), cursor.mPosition) || 
+			if (!listener->IsInteractable() || IsListenerClipped(listener->Depth(), cursor.mPosition) || 
 				!listener->IsUnderPoint(cursor.mPosition))
 				continue;
 
@@ -129,7 +129,7 @@ namespace o2
 	{
 		for (auto underCursor : mUnderCursorListeners)
 		{
-			if (!underCursor.Value()->mInteractable)
+			if (!underCursor.Value()->IsInteractable())
 				continue;
 
 			if (!(mLastUnderCursorListeners.ContainsKey(underCursor.Key()) &&
@@ -161,7 +161,7 @@ namespace o2
 			if (listener->IsDragging())
 				continue;
 
-			if (!listener->mInteractable || IsListenerClipped(listener->Depth(), cursorPos) || 
+			if (!listener->IsInteractable() || IsListenerClipped(listener->Depth(), cursorPos) || 
 				!listener->IsUnderPoint(cursorPos))
 				continue;
 
@@ -187,7 +187,7 @@ namespace o2
 		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
 		for (auto listener : mCursorListeners)
 		{
-			if (!listener->mInteractable || IsListenerClipped(listener->Depth(), cursorPos) || 
+			if (!listener->IsInteractable() || IsListenerClipped(listener->Depth(), cursorPos) || 
 				!listener->IsUnderPoint(cursorPos))
 				continue;
 
@@ -215,7 +215,7 @@ namespace o2
 
 		auto listener = mUnderCursorListeners[cursor.mId];
 
-		if (!listener->mInteractable)
+		if (!listener->IsInteractable())
 			return;
 
 		mPressedListeners.Add(cursor.mId, listener);
@@ -344,6 +344,9 @@ namespace o2
 
 	bool EventSystem::IsListenerClipped(float depth, const Vec2F& cursorPos) const
 	{
+		if (depth < 0)
+			return true;
+
 		bool clipped = false;
 		for (auto scissorInfo : o2Render.GetScissorInfos())
 		{

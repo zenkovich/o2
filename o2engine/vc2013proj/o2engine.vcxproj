@@ -108,9 +108,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Sources\Animation\Animatable.h" />
     <ClInclude Include="..\Sources\Animation\AnimatedFloat.h" />
     <ClInclude Include="..\Sources\Animation\AnimatedVector.h" />
     <ClInclude Include="..\Sources\Animation\Animation.h" />
+    <ClInclude Include="..\Sources\Animation\AnimationMask.h" />
+    <ClInclude Include="..\Sources\Animation\AnimationState.h" />
     <ClInclude Include="..\Sources\Animation\IAnimation.h" />
     <ClInclude Include="..\Sources\Animation\AnimatedValue.h" />
     <ClInclude Include="..\Sources\Animation\Tween.h" />
@@ -233,15 +236,20 @@
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
     <ClInclude Include="..\Sources\Utils\StackTrace.h" />
     <ClInclude Include="..\Sources\Utils\String.h" />
+    <ClInclude Include="..\Sources\Utils\Task.h" />
+    <ClInclude Include="..\Sources\Utils\TaskManager.h" />
     <ClInclude Include="..\Sources\Utils\Time.h" />
     <ClInclude Include="..\Sources\Utils\Timer.h" />
     <ClInclude Include="..\Sources\Utils\TimeStamp.h" />
     <ClInclude Include="..\Sources\Utils\Tree.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Sources\Animation\Animatable.cpp" />
     <ClCompile Include="..\Sources\Animation\AnimatedFloat.cpp" />
     <ClCompile Include="..\Sources\Animation\AnimatedVector.cpp" />
     <ClCompile Include="..\Sources\Animation\Animation.cpp" />
+    <ClCompile Include="..\Sources\Animation\AnimationMask.cpp" />
+    <ClCompile Include="..\Sources\Animation\AnimationState.cpp" />
     <ClCompile Include="..\Sources\Animation\IAnimation.cpp" />
     <ClCompile Include="..\Sources\Animation\AnimatedValue.cpp" />
     <ClCompile Include="..\Sources\Application\Input.cpp" />
@@ -328,6 +336,8 @@
     <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Types.cpp" />
     <ClCompile Include="..\Sources\Utils\StackTrace.cpp" />
+    <ClCompile Include="..\Sources\Utils\Task.cpp" />
+    <ClCompile Include="..\Sources\Utils\TaskManager.cpp" />
     <ClCompile Include="..\Sources\Utils\Time.cpp" />
     <ClCompile Include="..\Sources\Utils\Timer.cpp" />
   </ItemGroup>

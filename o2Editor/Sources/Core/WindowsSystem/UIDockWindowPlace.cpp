@@ -1,7 +1,8 @@
 #include "UIDockWindowPlace.h"
 
 UIDockWindowPlace::UIDockWindowPlace():
-	UIWidget(), mDragHandleLayout(Vec2F(), Vec2F(), Vec2F(), Vec2F()), mDragSide(Side::None)
+	UIWidget(), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()), 
+	mDragHandleLayoutMax(Vec2F(), Vec2F(), Vec2F(), Vec2F())
 {
 	InitializeDragHandle();
 	RetargetStatesAnimations();
@@ -13,7 +14,6 @@ UIDockWindowPlace::UIDockWindowPlace(const UIDockWindowPlace& other):
 {
 	InitializeDragHandle();
 	RetargetStatesAnimations();
-	SetResizibleSide(other.mDragSide);
 	UpdateLayout();
 }
 
@@ -23,7 +23,7 @@ UIDockWindowPlace::~UIDockWindowPlace()
 UIDockWindowPlace& UIDockWindowPlace::operator=(const UIDockWindowPlace& other)
 {
 	UIWidget::operator=(other);
-	mDragHandleLayout = other.mDragHandleLayout;
+	mDragHandleLayoutMin = other.mDragHandleLayoutMin;
 	return *this;
 }
 
@@ -32,7 +32,29 @@ void UIDockWindowPlace::Draw()
 	UIWidget::Draw();
 	mDragHandleDepth = o2Render.GetDrawingDepth();
 	if (o2Input.IsKeyDown(VK_F1))
-		o2Render.DrawRectFrame(mDragHandleArea);
+	{
+		if (mDragHandleMin.IsInteractable())
+			o2Render.DrawRectFrame(mDragHandleAreaMin, Color4::Blue());
+
+		if (mDragHandleMax.IsInteractable())
+			o2Render.DrawRectFrame(mDragHandleAreaMax, Color4::Red());
+
+		if (mNeighborMin)
+		{
+			Vec2F c1 = layout.GetAbsoluteRect().Center();
+			Vec2F c2 = mNeighborMin->layout.GetAbsoluteRect().Center();
+			Vec2F n = (c2 - c1).Normalized().Perpendicular()*30.0f;
+			o2Render.DrawBezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Blue());
+		}
+
+		if (mNeighborMax)
+		{
+			Vec2F c1 = layout.GetAbsoluteRect().Center();
+			Vec2F c2 = mNeighborMax->layout.GetAbsoluteRect().Center();
+			Vec2F n = (c2 - c1).Normalized().Perpendicular()*30.0f;
+			o2Render.DrawBezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Red());
+		}
+	}
 }
 
 bool UIDockWindowPlace::IsUnderPoint(const Vec2F& point)
@@ -45,72 +67,92 @@ float UIDockWindowPlace::Depth()
 	return 0;
 }
 
-void UIDockWindowPlace::SetResizibleSide(Side side)
+void UIDockWindowPlace::SetResizibleDir(TwoDirection dir, float border,
+										Ptr<UIDockWindowPlace> neighborMin, Ptr<UIDockWindowPlace> neighborMax)
 {
-	mDragSide = side;
+	mResizibleDir = dir;
+	float border2 = border*2.0f;
 
-	switch (side)
+	mDragHandleMin.interactable = neighborMin != nullptr;
+	mNeighborMin = neighborMin;
+
+	mNeighborMax = neighborMax;
+	mDragHandleMax.interactable = neighborMax != nullptr;
+
+	if (dir == TwoDirection::Horizontal)
 	{
-		case Side::Left:
-		mDragHandleLayout = Layout(Vec2F(0, 0), Vec2F(0, 1), Vec2F(-5, 0), Vec2F(0, 0));
-		mDragHandle.cursorType = CursorType::SizeWE;
-		break;
+		mDragHandleLayoutMin = Layout(Vec2F(0, 0), Vec2F(0, 1), Vec2F(-border2, 0), Vec2F(0, 0));
+		mDragHandleLayoutMax = Layout(Vec2F(1, 0), Vec2F(1, 1), Vec2F(border2, 0), Vec2F(0, 0));
+		mDragHandleMin.cursorType = CursorType::SizeWE;
+		mDragHandleMax.cursorType = CursorType::SizeWE;
 
-		case Side::Right:
-		mDragHandleLayout = Layout(Vec2F(1, 0), Vec2F(1, 1), Vec2F(0, 0), Vec2F(5, 0));
-		mDragHandle.cursorType = CursorType::SizeWE;
-		break;
+		if (neighborMin != nullptr)
+			layout.offsetLeft = border;
 
-		case Side::Bottom:
-		mDragHandleLayout = Layout(Vec2F(0, 0), Vec2F(1, 0), Vec2F(0, -5), Vec2F(0, 0));
-		mDragHandle.cursorType = CursorType::SizeNS;
-		break;
+		if (neighborMax != nullptr)
+			layout.offsetRight = -border;
+	}
+	else
+	{
+		mDragHandleLayoutMin = Layout(Vec2F(0, 0), Vec2F(1, 0), Vec2F(0, -border2), Vec2F(0, 0));
+		mDragHandleLayoutMax = Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(0, 0), Vec2F(0, border2));
+		mDragHandleMin.cursorType = CursorType::SizeNS;
+		mDragHandleMax.cursorType = CursorType::SizeNS;
 
-		case Side::Top:
-		mDragHandleLayout = Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(0, 0), Vec2F(0, 5));
-		mDragHandle.cursorType = CursorType::SizeNS;
-		break;
+		if (neighborMin != nullptr)
+			layout.offsetBottom = border;
+
+		if (neighborMax != nullptr)
+			layout.offsetTop = -border;
 	}
 
-	mDragHandle.interactable = side != Side::None;
-	mDragHandleArea = mDragHandleLayout.Calculate(layout.GetAbsoluteRect());
+	mDragHandleAreaMin = mDragHandleLayoutMin.Calculate(layout.GetAbsoluteRect());
+	mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout.GetAbsoluteRect());
+}
+
+TwoDirection UIDockWindowPlace::GetResizibleDir() const
+{
+	return mResizibleDir;
 }
 
 void UIDockWindowPlace::UpdateLayout(bool forcible /*= false*/)
 {
 	UIWidget::UpdateLayout(forcible);
-	mDragHandleArea = mDragHandleLayout.Calculate(layout.GetAbsoluteRect());
+	mDragHandleAreaMin = mDragHandleLayoutMin.Calculate(layout.GetAbsoluteRect());
+	mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout.GetAbsoluteRect());
 }
 
-void UIDockWindowPlace::OnDragHandleMoved(const Vec2F& delta)
+void UIDockWindowPlace::OnDragHandleMinMoved(const Vec2F& delta)
 {
-	Ptr<UIWidget> _this = this;
-	Ptr<UIWidget> neighbor = mParent->GetChilds().FindMatch([&](auto x) { return x != _this; });
-	if (!neighbor)
-	{
-		o2Debug.LogError("Failed to size dock");
-		return;
-	}
-
-	if (mDragSide == Side::Left)
+	if (mResizibleDir == TwoDirection::Horizontal)
 	{
 		float anchorDelta = delta.x / mParent->layout.width;
 		layout.anchorLeft += anchorDelta;
-		neighbor->layout.anchorRight += anchorDelta;
-	}
 
-	if (mDragSide == Side::Right)
+		mNeighborMin->layout.anchorRight += anchorDelta;
+	}
+	else
+	{
+		float anchorDelta = delta.y / mParent->layout.height;
+		layout.anchorBottom += anchorDelta;
+		mNeighborMin->layout.anchorTop += anchorDelta;
+	}
+}
+
+void UIDockWindowPlace::OnDragHandleMaxMoved(const Vec2F& delta)
+{
+	if (mResizibleDir == TwoDirection::Horizontal)
 	{
 		float anchorDelta = delta.x / mParent->layout.width;
 		layout.anchorRight += anchorDelta;
-		neighbor->layout.anchorLeft += anchorDelta;
-	}
 
-	if (mDragSide == Side::Top)
+		mNeighborMax->layout.anchorLeft += anchorDelta;
+	}
+	else
 	{
 		float anchorDelta = delta.y / mParent->layout.height;
 		layout.anchorTop += anchorDelta;
-		neighbor->layout.anchorBottom += anchorDelta;
+		mNeighborMax->layout.anchorBottom += anchorDelta;
 	}
 }
 
@@ -127,7 +169,11 @@ void UIDockWindowPlace::CheckInteractable()
 
 void UIDockWindowPlace::InitializeDragHandle()
 {
-	mDragHandle.getDepth = [&]() { return mDragHandleDepth; };
-	mDragHandle.isUnderPoint = [&](const Vec2F& point) { return mDragHandleArea.IsInside(point); };
-	mDragHandle.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMoved(cursor.mDelta); };
+	mDragHandleMin.getDepth = [&]() { return mDragHandleDepth; };
+	mDragHandleMin.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMin.IsInside(point); };
+	mDragHandleMin.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.mDelta); };
+
+	mDragHandleMax.getDepth = [&]() { return mDragHandleDepth; };
+	mDragHandleMax.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMax.IsInside(point); };
+	mDragHandleMax.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.mDelta); };
 }

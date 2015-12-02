@@ -10,6 +10,8 @@
 namespace o2
 {
 	class IObject;
+	class Animatable;
+	class AnimationState;
 
 	// -----------------------------------------------------------
 	// Animation. Can animate anything object derived from IObject
@@ -33,7 +35,7 @@ namespace o2
 		// Bind all animation values to target's child fields (if it possible)
 		void SetTarget(IObject* target);
 
-		// Removes alnd clears all animated values
+		// Removes and clears all animated values
 		void Clear();
 
 		// Returns animated value by path (some like "path/abc/cde")
@@ -139,9 +141,10 @@ namespace o2
 		typedef Vector<AnimatedValueDef> AnimatedValuesVec;
 
 	protected:
-		AnimatedValuesVec mAnimatedValues; // Animated value
-		IObject*          mTarget;         // Target object
-
+		AnimatedValuesVec mAnimatedValues;   // Animated value
+		IObject*          mTarget;           // Target object
+		AnimationState*   mAnimationState;   // Animation state owner
+		 
 	protected:
 		// Evaluates all animated values by time
 		void Evaluate();
@@ -159,6 +162,11 @@ namespace o2
 
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node);
+
+		// Calls when animated value was added. Need to register value agent in animatable target
+		void OnAnimatedValueAdded(AnimatedValueDef& valueDef);
+
+		friend class Animatable;
 	};
 
 	template<typename _type>
@@ -321,6 +329,8 @@ namespace o2
 			def.mTargetPtr = target;
 			mAnimatedValues.Add(def);
 
+			OnAnimatedValueAdded(def);
+
 			return def.mAnimatedValue.Cast<AnimatedValue<_type>>();
 		}
 
@@ -354,6 +364,8 @@ namespace o2
 		def.mTargetPath = path;
 		mAnimatedValues.Add(def);
 
+		OnAnimatedValueAdded(def);
+
 		return def.mAnimatedValue.Cast<AnimatedValue<_type>>();
 	}
 
@@ -384,6 +396,8 @@ namespace o2
 			def.mTargetPath = path;
 			def.mTargetPtr = target;
 			mAnimatedValues.Add(def);
+
+			OnAnimatedValueAdded(def);
 
 			return def.mAnimatedValue.Cast<AnimatedValue<_type>>();
 		}

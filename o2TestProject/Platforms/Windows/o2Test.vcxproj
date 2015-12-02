@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\Sources\MainTestScreen.cpp" />
     <ClCompile Include="..\..\Sources\TestApplication.cpp" />
     <ClCompile Include="..\..\Sources\TextTestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\UIStyleBuilding.cpp" />
     <ClCompile Include="..\..\Sources\UITestScreen.cpp" />
     <ClCompile Include="..\..\Sources\Windows\o2Test.cpp" />
   </ItemGroup>
@@ -30,6 +31,7 @@
     <ClInclude Include="..\..\Sources\MainTestScreen.h" />
     <ClInclude Include="..\..\Sources\TestApplication.h" />
     <ClInclude Include="..\..\Sources\TextTestScreen.h" />
+    <ClInclude Include="..\..\Sources\UIStyleBuilding.h" />
     <ClInclude Include="..\..\Sources\UITestScreen.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

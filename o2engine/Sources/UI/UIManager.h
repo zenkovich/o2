@@ -179,12 +179,22 @@ namespace o2
 		// Returns main screen widget
 		Ptr<UIWidget> GetScreenWidget() const;
 
-	protected:
-		Ptr<LogStream> mLog;          // UI Log stream
-		Ptr<UIWidget>  mScreenWidget; // Root screen widget
-		WidgetsVec     mTopWidgets;   // Top widgets, drawing after mScreenWidget 
+		// Sets widget as selected
+		void SelectWidget(Ptr<UIWidget> widget);
 
-		WidgetsVec     mStyleSamples; // Style widgets
+		// Returns current selected widget
+		Ptr<UIWidget> GetSelectedWidget() const;
+
+		// Selects next widget 
+		void SelectNextWidget();
+
+	protected:
+		Ptr<LogStream> mLog;            // UI Log stream
+		Ptr<UIWidget>  mScreenWidget;   // Root screen widget
+		Ptr<UIWidget>  mSelectedWidget; // Current selected widget
+		WidgetsVec     mTopWidgets;     // Top widgets, drawing after mScreenWidget 
+
+		WidgetsVec     mStyleSamples;   // Style widgets
 
 	protected:
 		// Default constructor
@@ -207,6 +217,9 @@ namespace o2
 
 		// Tries to load style "ui_style.xml"
 		void TryLoadStyle();
+
+		// Recursively searches selectable widget
+		Ptr<UIWidget> SearchSelectableWidget(Ptr<UIWidget> widget, bool& foundCurrentSelected);
 
 		// Initializes properties
 		void InitializeProperties();

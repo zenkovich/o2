@@ -11,6 +11,7 @@
 #include "Utils/Log/ConsoleLogStream.h"
 #include "Utils/Log/FileLogStream.h"
 #include "Utils/Log/LogStream.h"
+#include "Utils/TaskManager.h"
 #include "Utils/Time.h"
 #include "Utils/Timer.h"
 #include <time.h>
@@ -99,9 +100,7 @@ namespace o2
 		mAssets = mnew Assets();
 
 		mInput = mnew Input();
-		// 
-		// 		mScheduler = mnew Scheduler();
-		// 
+		mTaskManager = mnew TaskManager();
 		mTimer = mnew Timer();
 		mTimer->Reset();
 
@@ -123,6 +122,7 @@ namespace o2
 		mProjectConfig.Release();
 		mAssets.Release();
 		mEventSystem.Release();
+		mTaskManager.Release();
 
 		mLog->Out("Deinitialized");
 	}
@@ -138,7 +138,7 @@ namespace o2
 		mTime->Update(realdDt);
 		o2Debug.Update(dt);
 
-		//mScheduler->ProcessBeforeFrame(dt);
+		mTaskManager->Update(dt);
 
 		mEventSystem->Update(dt);
 		OnUpdate(dt);
@@ -151,8 +151,6 @@ namespace o2
 		mRender->End();
 
 		mInput->Update(dt);
-
-		//mScheduler->ProcessAfterFrame(dt);
 	}
 
 	Ptr<LogStream> Application::GetLog() const

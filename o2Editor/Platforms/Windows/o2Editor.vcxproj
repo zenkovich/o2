@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\ApplicationConfig.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UIStyleBuilding.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp" />
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\ApplicationConfig.h" />
+    <ClInclude Include="..\..\Sources\Core\UIStyleBuilding.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h" />

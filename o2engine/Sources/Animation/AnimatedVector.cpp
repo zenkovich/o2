@@ -1,7 +1,8 @@
 #include "AnimatedVector.h"
 
-#include "Utils/Math/Interpolation.h"
+#include "Animation/Animatable.h"
 #include "Utils/Debug.h"
+#include "Utils/Math/Interpolation.h"
 
 namespace o2
 {
@@ -429,6 +430,11 @@ namespace o2
 	AnimatedValue<Vec2F> AnimatedValue<Vec2F>::Linear(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)
 	{
 		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, 1.0f);
+	}
+
+	void AnimatedValue<Vec2F>::RegInAnimatable(AnimationState* state, const String& path)
+	{
+		state->mOwner->RegAnimatedValue<Vec2F>(this, path, state);
 	}
 
 	void AnimatedValue<Vec2F>::InitializeProperties()

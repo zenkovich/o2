@@ -6,6 +6,7 @@
 #include "Render/Texture.h"
 #include "Utils/Debug.h"
 #include "Utils/Log/LogStream.h"
+#include "Utils/Math/Interpolation.h"
 
 namespace o2
 {
@@ -367,6 +368,20 @@ namespace o2
 		delete[] v;
 	}
 
+	void Render::DrawArrow(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/, 
+						   const Vec2F& arrowSize /*= Vec2F(10, 10)*/)
+	{
+		ULong dcolor = color.ABGR();
+		Vec2F dir = (b - a).Normalized();
+		Vec2F ndir = dir.Perpendicular();
+
+		Vertex2 v[] = { 
+			Vertex2(a, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
+			Vertex2(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
+			Vertex2(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0) };
+		DrawLines(v, 3);
+	}
+
 	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
@@ -421,6 +436,60 @@ namespace o2
 		}
 
 		DrawLines(v, segCount);
+	}
+
+	void Render::DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
+								 const Color4& color /*= Color4::White()*/)
+	{
+		const int segCount = 20;
+		Vertex2 v[segCount * 2];
+		ULong dcolor = color.ABGR();
+
+		Vec2F lastp = p1;
+		for (int i = 0; i < segCount; i++)
+		{
+			float coef = (float)(i + 1)/(float)segCount;
+			Vec2F p = Bezier(p1, p2, p3, p4, coef);
+
+			v[i * 2] = Vertex2(lastp, dcolor, 0, 0);
+			v[i * 2 + 1] = Vertex2(p, dcolor, 0, 0);
+
+			lastp = p;
+		}
+
+		DrawLines(v, segCount);
+	}
+
+	void Render::DrawBezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4, 
+									  const Color4& color /*= Color4::White()*/, const Vec2F& arrowSize /*= Vec2F(10, 10)*/)
+	{
+		const int segCount = 20;
+		Vertex2 v[segCount * 2 + 4];
+		ULong dcolor = color.ABGR();
+
+		Vec2F lastp = p1;
+		Vec2F dir;
+		for (int i = 0; i < segCount; i++)
+		{
+			float coef = (float)(i + 1) / (float)segCount;
+			Vec2F p = Bezier(p1, p2, p3, p4, coef);
+
+			v[i * 2] = Vertex2(lastp, dcolor, 0, 0);
+			v[i * 2 + 1] = Vertex2(p, dcolor, 0, 0);
+
+			dir = p - lastp;
+			lastp = p;
+		}
+
+		dir.Normalize();
+		Vec2F ndir = dir.Perpendicular();
+
+		v[segCount * 2 + 0] = Vertex2(p4, dcolor, 0, 0);
+		v[segCount * 2 + 1] = Vertex2(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0);
+		v[segCount * 2 + 2] = Vertex2(p4, dcolor, 0, 0);
+		v[segCount * 2 + 3] = Vertex2(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0);
+
+		DrawLines(v, segCount + 2);
 	}
 
 	void Render::BeginRenderToStencilBuffer()
