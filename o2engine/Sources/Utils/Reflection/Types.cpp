@@ -25,6 +25,8 @@
 #include "Render/Text.h"
 #include "Render/VectorFont.h"
 #include "Render/VectorFontEffects.h"
+#include "Scene/Actor.h"
+#include "Scene/Component.h"
 #include "UI/Button.h"
 #include "UI/CustomDropDown.h"
 #include "UI/CustomList.h"
@@ -153,5 +155,9 @@ namespace o2
 		INIT_TYPE(UIDropDown);
 		INIT_TYPE(UIWindow);
 		INIT_TYPE(Animatable);
+		INIT_TYPE(AnimationState);
+		INIT_TYPE(AnimationMask);
+		INIT_TYPE(Component);
+		INIT_TYPE(Actor);
 	}
 }

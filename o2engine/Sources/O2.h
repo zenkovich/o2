@@ -83,6 +83,8 @@
 #include "Animation/AnimatedValue.h"
 #include "Animation/AnimatedVector.h"
 #include "Animation/Animation.h"
+#include "Animation/AnimationMask.h"
+#include "Animation/AnimationState.h"
 #include "Animation/Tween.h"
 
 #include "UI/Button.h"
@@ -105,6 +107,11 @@
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetState.h"
 #include "UI/Window.h"
+
+#include "Scene/Actor.h"
+#include "Scene/ActorTransform.h"
+#include "Scene/Component.h"
+#include "Scene/Scene.h"
 
 #define INITIALIZE_O2                                                              	                 \
 o2::o2StackWalker* o2::o2StackWalker::instance = new o2StackWalker();				                 \

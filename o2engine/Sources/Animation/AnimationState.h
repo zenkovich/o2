@@ -3,6 +3,7 @@
 #include "Animation/Animation.h"
 #include "Animation/AnimationMask.h"
 #include "Utils/Containers/Vector.h"
+#include "Utils/Serialization.h"
 
 namespace o2
 {
@@ -11,7 +12,7 @@ namespace o2
 	// ---------------
 	// Animation state
 	// ---------------
-	class AnimationState
+	class AnimationState: public ISerializable
 	{
 	public:
 		String        name;       // State name
@@ -25,6 +26,17 @@ namespace o2
 
 		// Constructor with name
 		AnimationState(const String& name);
+
+		SERIALIZABLE_IMPL(AnimationState);
+
+		IOBJECT(AnimationState)
+		{
+			SRLZ_FIELD(name);
+			SRLZ_FIELD(animation);
+			SRLZ_FIELD(mask);
+			SRLZ_FIELD(weight);
+			FIELD(workWeight);
+		}
 
 	protected:
 		Ptr<Animatable> mOwner; // Animatable owner

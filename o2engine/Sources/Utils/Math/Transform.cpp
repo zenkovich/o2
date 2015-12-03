@@ -51,9 +51,6 @@ namespace o2
 
 	void Transform::SetPosition(const Vec2F& position)
 	{
-		if (mPosition == position)
-			return;
-
 		mPosition = position;
 		UpdateTransform();
 	}
@@ -65,9 +62,6 @@ namespace o2
 
 	void Transform::SetSize(const Vec2F& size)
 	{
-		if (mSize == size)
-			return;
-
 		mSize = size;
 		UpdateTransform();
 	}
@@ -79,9 +73,6 @@ namespace o2
 
 	void Transform::SetPivot(const Vec2F& pivot)
 	{
-		if (mPivot == pivot)
-			return;
-
 		mPivot = pivot;
 		UpdateTransform();
 	}
@@ -139,9 +130,6 @@ namespace o2
 
 	void Transform::SetScale(const Vec2F& scale)
 	{
-		if (mScale == scale)
-			return;
-
 		mScale = scale;
 		UpdateTransform();
 	}
@@ -153,9 +141,6 @@ namespace o2
 
 	void Transform::SetAngle(float rad)
 	{
-		if (Math::Equals(mAngle, rad))
-			return;
-
 		mAngle = rad;
 		UpdateTransform();
 	}
@@ -167,9 +152,6 @@ namespace o2
 
 	void Transform::SetShear(float shear)
 	{
-		if (Math::Equals(mShear, shear))
-			return;
-
 		mShear = shear;
 		UpdateTransform();
 	}
@@ -353,7 +335,7 @@ namespace o2
 		INITIALIZE_PROPERTY(Transform, rect, SetRect, GetRect);
 		INITIALIZE_PROPERTY(Transform, angle, SetAngle, GetAngle);
 		INITIALIZE_PROPERTY(Transform, shear, SetShear, GetShear);
-		INITIALIZE_PROPERTY(Transform, resBasis, SetBasis, GetBasis);
+		INITIALIZE_PROPERTY(Transform, basis, SetBasis, GetBasis);
 		INITIALIZE_PROPERTY(Transform, AABB, SetAxisAlignedRect, GetAxisAlignedRect);
 		INITIALIZE_PROPERTY(Transform, right, SetRight, GetRight);
 		INITIALIZE_PROPERTY(Transform, left, SetLeft, GetLeft);

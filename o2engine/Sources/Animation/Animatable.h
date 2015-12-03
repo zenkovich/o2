@@ -9,7 +9,7 @@ namespace o2
 	// ---------------------------
 	// Animatable object interface
 	// ---------------------------
-	class Animatable: public IObject
+	class Animatable: public ISerializable
 	{
 	public:
 		// Default constructor
@@ -79,9 +79,11 @@ namespace o2
 		// Stops all states
 		void StopAll();
 
+		SERIALIZABLE_IMPL(Animatable);
+
 		IOBJECT(Animatable)
 		{
-			FIELD(mStates);
+			SRLZ_FIELD(mStates);
 			FIELD(mValues);
 		}
 
@@ -135,7 +137,7 @@ namespace o2
 		};
 
 		// ----------------------
-		// Blend state parametres
+		// Blend state parameters
 		// ----------------------
 		struct BlendState
 		{
@@ -151,13 +153,13 @@ namespace o2
 	protected:
 		AnimationStatesVec mStates; // Animation states array
 		ValueAgentsVec     mValues; // Assigning value agents
-		BlendState         mBlend;  // Current blend parametres
+		BlendState         mBlend;  // Current blend parameters
 
 	protected:
 		// Removes animated value from agent by path
 		void UnregAnimatedValue(Ptr<IAnimatedValue> value, const String& path);
 
-		// Registrates value by path and state
+		// Registers value by path and state
 		template<typename _type>
 		void RegAnimatedValue(Ptr<AnimatedValue<_type>> value, const String& path, Ptr<AnimationState> state);
 

@@ -16,10 +16,10 @@ namespace o2
 		inline Basis(const Vec2F& offsvec, const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
 		inline Basis(const Vec2F& offsvec, float angle);
 
-		inline bool operator==(const Basis& cbasis);
-		inline bool operator!=(const Basis& cbasis);
+		inline bool operator==(const Basis& cbasis) const;
+		inline bool operator!=(const Basis& cbasis) const;
 
-		inline Basis operator*(const Basis& cbasis);
+		inline Basis operator*(const Basis& cbasis) const;
 		inline Vec2F operator*(const Vec2F& vec) const;
 
 		inline void Set(const Vec2F& offsvec = Vec2F(0, 0), const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
@@ -70,6 +70,11 @@ namespace o2
 	inline BasisDef Basis2Def(const Basis& bas);
 	inline Basis    Def2Basis(const BasisDef& def);
 
+	inline Vec2F operator*(const Vec2F& vec, const Basis& basis)
+	{
+		return basis.Transform(vec);
+	}
+
 	Basis::Basis():
 		xv(1, 0), yv(0, 1), offs()
 	{
@@ -88,17 +93,17 @@ namespace o2
 		yv.Set(-sn, cs);
 	}
 
-	bool Basis::operator==(const Basis& cbasis)
+	bool Basis::operator==(const Basis& cbasis) const
 	{
 		return xv == cbasis.xv && yv == cbasis.yv && offs == cbasis.offs;
 	}
 
-	bool Basis::operator!=(const Basis& cbasis)
+	bool Basis::operator!=(const Basis& cbasis) const
 	{
 		return xv != cbasis.xv || yv != cbasis.yv || offs != cbasis.offs;
 	}
 
-	Basis Basis::operator*(const Basis& cbasis)
+	Basis Basis::operator*(const Basis& cbasis) const
 	{
 		Basis res;
 		res.xv.x = xv.x*cbasis.xv.x + xv.y*cbasis.yv.x;                       res.xv.y = xv.x*cbasis.xv.y + xv.y*cbasis.yv.y;

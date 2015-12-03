@@ -19,11 +19,15 @@ namespace o2
 		Property<Vec2F>  pivot;        // Pivot property, in local space
 		Property<Vec2F>  worldPivot;   // Pivot property, in world space
 		Property<Vec2F>  szPivot;      // Pivot in size space property
-		Property<RectF>  rect;         // Rect property. Sets the position and size
+		Property<RectF>  rect;         // Rectangle property. Sets the position and size
 		Property<float>  angle;        // Rotation angle in radians
 		Property<float>  shear;        // Shear
-		Property<Basis>  resBasis;     // Transformation basis
+		Property<Basis>  basis;        // Transformation basis
 		Property<RectF>  AABB;         // Axis aligned rectangle
+		Property<Vec2F>  leftTop;      // Left top corner property
+		Property<Vec2F>  leftBottom;   // Left bottom corner property
+		Property<Vec2F>  rightTop;     // Left top corner property
+		Property<Vec2F>  rightBottom;  // Left top corner property
 		Property<Vec2F>  right;        // X Axis direction property
 		Property<Vec2F>  left;         // Negative X Axis direction property
 		Property<Vec2F>  up;           // Y Axis direction property
@@ -167,19 +171,19 @@ namespace o2
 		virtual void LookAt(const Vec2F& worldPoint);
 
 		// Transforms point from world space into local
-		Vec2F World2LocalPoint(const Vec2F& worldPoint) const;
+		virtual Vec2F World2LocalPoint(const Vec2F& worldPoint) const;
 
 		// Transforms point from local space into world
-		Vec2F Local2WorldPoint(const Vec2F& localPoint) const;
+		virtual Vec2F Local2WorldPoint(const Vec2F& localPoint) const;
 
 		// Transforms direction from world space into local
-		Vec2F World2LocalDir(const Vec2F& worldDir) const;
+		virtual Vec2F World2LocalDir(const Vec2F& worldDir) const;
 
 		// Transforms direction from local space into world
-		Vec2F Local2WorldDir(const Vec2F& localDir) const;
+		virtual Vec2F Local2WorldDir(const Vec2F& localDir) const;
 
 		// Returns true when point inside this
-		bool IsPointInside(const Vec2F& point) const;
+		virtual bool IsPointInside(const Vec2F& point) const;
 
 		SERIALIZABLE_IMPL(Transform);
 
@@ -201,7 +205,7 @@ namespace o2
 			FIELD(szPivot);
 			FIELD(rect);
 			FIELD(shear);
-			FIELD(resBasis);
+			FIELD(basis);
 			FIELD(AABB);
 			FIELD(right);
 			FIELD(left);
@@ -228,7 +232,7 @@ namespace o2
 		void OnDeserialized(const DataNode& node);
 
 		// Updates mTransform 
-		void UpdateTransform();
+		virtual void UpdateTransform();
 
 		// Initializing properties
 		void InitializeProperties();

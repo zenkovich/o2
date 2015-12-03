@@ -2,6 +2,8 @@
 
 namespace o2
 {
+	IOBJECT_CPP(AnimationMask);
+
 	float AnimationMask::GetNodeWeight(const String& node) const
 	{
 		if (weights.ContainsKey(node))

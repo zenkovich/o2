@@ -64,6 +64,9 @@
     <Filter Include="Sources\Application\Windows">
       <UniqueIdentifier>{fe280498-f3bf-444b-bdba-f497095f65f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Scene">
+      <UniqueIdentifier>{18b5eb74-4a51-4898-b088-20747a13f003}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -466,6 +469,18 @@
     <ClInclude Include="..\Sources\Animation\AnimationState.h">
       <Filter>Sources\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Scene\Scene.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Scene\Actor.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Scene\Component.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Scene\ActorTransform.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -755,6 +770,18 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Animation\AnimationState.cpp">
       <Filter>Sources\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Scene\Scene.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Scene\ActorTransform.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Scene\Actor.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Scene\Component.cpp">
+      <Filter>Sources\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
