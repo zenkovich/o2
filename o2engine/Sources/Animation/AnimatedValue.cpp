@@ -4,11 +4,8 @@
 
 namespace o2
 {
-	IOBJECT_CPP(IAnimatedValue);
-
-	IOBJECT_CPP(AnimatedValue<Color4>);
-	IOBJECT_CPP(AnimatedValue<Color4>::Key);
-
-	IOBJECT_CPP(AnimatedValue<RectF>);
-	IOBJECT_CPP(AnimatedValue<RectF>::Key);
+	void AnimatedValue<RectF>::RegInAnimatable(AnimationState* state, const String& path)
+	{
+		state->mOwner->RegAnimatedValue<RectF>(this, path, state);
+	}
 }

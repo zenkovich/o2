@@ -25,5 +25,13 @@ namespace o2
 
 	enum class Side { Left, Bottom, Right, Top, None };
 
+	enum class Corner { LeftTop, RightTop, RightBottom, LeftBottom };
+
 	enum class TwoDirection { Horizontal, Vertical };
+
+	enum class SpriteMode { Default, Sliced, FillLeftToRight, FillRightToLeft, FillUpToDown, FillDownToUp, 
+		Fill360CW, Fill360CCW };
+
+	enum class VerAlign { Top, Middle, Bottom, Both };
+	enum class HorAlign { Left, Middle, Right, Both };
 }

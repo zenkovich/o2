@@ -5,6 +5,7 @@
 #include "Config/ProjectConfig.h"
 #include "Events/EventSystem.h"
 #include "Render/Render.h"
+#include "Scene/Scene.h"
 #include "UI/UIManager.h"
 #include "Utils/Debug.h"
 #include "Utils/FileSystem/FileSystem.h"
@@ -101,6 +102,7 @@ namespace o2
 
 		mInput = mnew Input();
 		mTaskManager = mnew TaskManager();
+
 		mTimer = mnew Timer();
 		mTimer->Reset();
 
@@ -110,11 +112,14 @@ namespace o2
 
 		mUIManager = mnew UIManager();
 
+		mScene = mnew Scene();
+
 		mLog->Out("Initialized");
 	}
 
 	void Application::DeinitializeSystems()
 	{
+		mScene->Clear();
 		mUIManager.Release();
 		mInput.Release();
 		mTime.Release();
@@ -141,11 +146,16 @@ namespace o2
 		mTaskManager->Update(dt);
 
 		mEventSystem->Update(dt);
+
+		mScene->Update(dt);
+
 		OnUpdate(dt);
+
 		mUIManager->Update(dt);
 
 		mRender->Begin();
 		OnDraw();
+		mScene->Draw();
 		o2Debug.Draw();
 		mUIManager->Draw();
 		mRender->End();

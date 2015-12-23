@@ -80,33 +80,15 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
-		// Returns interactable flag
-		bool IsInteractable() const;
-
-		SERIALIZABLE_IMPL(UIVerticalProgress);
-
-		IOBJECT(UIVerticalProgress)
-		{
-			BASE_CLASS(UIWidget);
-			SRLZ_FIELD(mValue);
-			SRLZ_FIELD(mMinValue);
-			SRLZ_FIELD(mMaxValue);
-			SRLZ_FIELD(mScrollSense);
-			SRLZ_FIELD(mOrientation);
-
-			FIELD(value);
-			FIELD(minValue);
-			FIELD(maxValue);
-			FIELD(scrollSense);
-		}
+		SERIALIZABLE(UIVerticalProgress);
 
 	protected:
-		float              mValue;       // Current value
+		float              mValue;       // Current value @SERIALIZABLE
 		float              mSmoothValue; // Current smoothed value
-		float              mMinValue;    // Minimal value
-		float              mMaxValue;    // Maximal value
-		float              mScrollSense; // Scroll sense coefficient
-		Orientation        mOrientation; // Bar orientation
+		float              mMinValue;    // Minimal value @SERIALIZABLE
+		float              mMaxValue;    // Maximal value @SERIALIZABLE
+		float              mScrollSense; // Scroll sense coefficient @SERIALIZABLE
+		Orientation        mOrientation; // Bar orientation @SERIALIZABLE
 		Ptr<UIWidgetLayer> mBarLayer;    // Bar layer
 		Ptr<UIWidgetLayer> mBackLayer;   // background layer
 
@@ -143,6 +125,12 @@ namespace o2
 
 		// Calls when scrolling
 		void OnScrolled(float scroll);
+
+		// Calls when deserialized
+		void OnDeserialized(const DataNode& node);
+
+		// Calls when visible was changed
+		void OnVisibleChanged();
 
 		// Initializes properties
 		void InitializeProperties();

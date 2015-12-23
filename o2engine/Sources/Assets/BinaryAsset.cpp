@@ -5,9 +5,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(BinaryAsset);
-	IOBJECT_CPP(BinaryAsset::MetaInfo);
-
 	Type::Id BinaryAsset::MetaInfo::GetAssetType() const
 	{
 		return BinaryAsset::type->ID();

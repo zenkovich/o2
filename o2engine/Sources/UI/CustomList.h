@@ -120,41 +120,15 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
-		// Returns interactable flag
-		bool IsInteractable() const;
-
-		SERIALIZABLE_IMPL(UICustomList);
-
-		IOBJECT(UICustomList)
-		{
-			BASE_CLASS(UIScrollArea);
-
-			FIELD(selectedItem);
-			FIELD(selectedItemPos);
-			FIELD(item);
-			FIELD(itemsCount);
-
-			SRLZ_FIELD(mItemSample);
-			SRLZ_FIELD(mSelectionDrawable);
-			SRLZ_FIELD(mHoverDrawable);
-			SRLZ_FIELD(mSelectionLayout);
-			SRLZ_FIELD(mHoverLayout);
-
-			FIELD(mVerLayout);
-			FIELD(mSelectedItem);
-			FIELD(mCurrentSelectionRect);
-			FIELD(mTargetSelectionRect);
-			FIELD(mCurrentHoverRect);
-			FIELD(mTargetHoverRect);
-		}
+		SERIALIZABLE(UICustomList);
 
 	protected:
 		Ptr<UIVerticalLayout> mVerLayout;             // Child vertical layout
-		Ptr<UIWidget>         mItemSample;            // Item sample widget
-		Ptr<Sprite>           mSelectionDrawable;     // Selection sprite
-		Ptr<Sprite>           mHoverDrawable;         // Item hover drawable
-		Layout                mSelectionLayout;       // Selection layout, result selection area depends on selected item
-		Layout                mHoverLayout;           // Hover layout, result selection area depends on selected item
+		Ptr<UIWidget>         mItemSample;            // Item sample widget @SERIALIZABLE
+		Ptr<Sprite>           mSelectionDrawable;     // Selection sprite @SERIALIZABLE
+		Ptr<Sprite>           mHoverDrawable;         // Item hover drawable @SERIALIZABLE
+		Layout                mSelectionLayout;       // Selection layout, result selection area depends on selected item @SERIALIZABLE
+		Layout                mHoverLayout;           // Hover layout, result selection area depends on selected item @SERIALIZABLE
 
 		int                   mSelectedItem;          // Position of current selected item (-1 if no item isn't selected)
 

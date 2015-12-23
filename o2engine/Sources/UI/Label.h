@@ -11,13 +11,18 @@ namespace o2
 	class UILabel: public UIWidget
 	{
 	public:
-		Property<FontRef>        font;                // Font pointer property
-		Property<WString>        text;                // Text property, wstring
-		Property<Text::VerAlign> verAlign;            // vertical align property
-		Property<Text::HorAlign> horAlign;            // Horizontal align property
-		Property<bool>           wordWrap;            // Words wrapping flag property
-		Property<float>          symbolsDistanceCoef; // Characters distance coef, 1 is standard
-		Property<float>          linesDistanceCoef;   // Lines distance coef, 1 is standard
+		enum class HorOverflow { Cut, Dots, Expand, Wrap, None };
+		enum class VerOverflow { Cut, None, Expand };
+
+	public:
+		Property<FontRef>     font;                // Font pointer property
+		Property<WString>     text;                // Text property, wstring
+		Property<VerAlign>    verAlign;            // vertical align property
+		Property<HorAlign>    horAlign;            // Horizontal align property
+		Property<HorOverflow> horOverflow;		   // Horizontal text overflow logic property
+		Property<VerOverflow> verOverflow;		   // Vertical text overflow logic property
+		Property<float>       symbolsDistanceCoef; // Characters distance coef, 1 is standard
+		Property<float>       linesDistanceCoef;   // Lines distance coef, 1 is standard
 
 		// Default constructor
 		UILabel();
@@ -27,6 +32,9 @@ namespace o2
 
 		// Assign operator
 		UILabel& operator=(const UILabel& other);
+
+		// Draws widget
+		void Draw();
 
 		// Sets using font
 		void SetFont(FontRef font);
@@ -41,22 +49,28 @@ namespace o2
 		WString GetText() const;
 
 		// Sets horizontal align
-		void SetHorAlign(Text::HorAlign align);
+		void SetHorAlign(HorAlign align);
 
 		// Returns horizontal align
-		Text::HorAlign GetHorAlign() const;
+		HorAlign GetHorAlign() const;
 
 		// Sets vertical align
-		void SetVerAlign(Text::VerAlign align);
+		void SetVerAlign(VerAlign align);
 
 		// returns vertical align
-		Text::VerAlign GetVerAlign() const;
+		VerAlign GetVerAlign() const;
 
-		// Sets word wrapping
-		void SetWordWrap(bool flag);
+		// Sets horizontal overflow logic
+		void SetHorOverflow(HorOverflow overflow);
 
-		// Returns word wrapping
-		bool GetWordWrap() const;
+		// Returns horizontal overflow logic
+		HorOverflow GetHorOverflow();
+
+		// Sets vertical overflow logic
+		void SetVerOverflow(VerOverflow overflow);
+
+		// Returns vertical overflow logic
+		VerOverflow GetVerOverflow();
 
 		// Sets characters distance coefficient
 		void SetSymbolsDistanceCoef(float coef = 1);
@@ -70,17 +84,17 @@ namespace o2
 		// Returns lines distance coefficient
 		float GetLinesDistanceCoef() const;
 
-		SERIALIZABLE_IMPL(UILabel);
-
-		IOBJECT(UILabel)
-		{
-			BASE_CLASS(UIWidget);
-		}
+		SERIALIZABLE(UILabel);
 
 	protected:
-		Ptr<Text> mTextLayer; // Text layer drawable. Getting from layer "text"
+		Ptr<Text>   mTextLayer;   // Text layer drawable. Getting from layer "text"
+		HorOverflow mHorOverflow; // Text horizontal overflow logic
+		VerOverflow mVerOverflow; // Text vertical overflow logic
 
 	protected:
+		// Updates layout
+		void UpdateLayout(bool forcible = false);
+
 		// Calls when layer added and updates drawing sequence
 		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
 

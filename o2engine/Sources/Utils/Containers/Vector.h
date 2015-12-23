@@ -170,6 +170,9 @@ namespace o2
 		// Constructor by initial capacity
 		Vector(int capacity = 5);
 
+		// Constructor from initializer list
+		Vector(std::initializer_list<_type> init);
+
 		// Copy-constructor
 		Vector(const Vector& arr);
 
@@ -613,6 +616,15 @@ namespace o2
 		mCapacity = capacity;
 		mCount = 0;
 	}
+
+	template<typename _type>
+	Vector<_type>::Vector(std::initializer_list<_type> init):
+		Vector(init.size() + 5)
+	{
+		for (auto elem : init)
+			Add(elem);
+	}
+
 
 	template<typename _type>
 	Vector<_type>::Vector(const Vector& arr)

@@ -1,6 +1,6 @@
 #include "Type.h"
 
-#include "Utils/Reflection/Types.h"
+#include "Utils/Reflection/Reflection.h"
 #include "Utils/IObject.h"
 
 namespace o2
@@ -48,7 +48,7 @@ namespace o2
 	Type::TypesVec Type::DerivedTypes() const
 	{
 		TypesVec res;
-		for (auto type : Types::GetTypes())
+		for (auto type : Reflection::GetTypes())
 		{
 			auto baseTypes = type->BaseTypes();
 			for (auto btype : baseTypes)
@@ -70,7 +70,7 @@ namespace o2
 		return mSample->Clone();
 	}
 
-	String Type::GetFieldPath(void* sourceObject, void *targetObject) const
+	String Type::GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const
 	{
 		if (sourceObject == targetObject)
 			return "";
@@ -81,52 +81,36 @@ namespace o2
 		{
 			char* fieldObject = field->GetValuePtr<char>(sourceObject);
 
-			if (fieldObject == targetObject)
-				return field->mName;
+			if (fieldObject == nullptr)
+				continue;
 
-			if (field->SearchFieldPath(fieldObject, targetObject, field->mName, res))
+			if (fieldObject == targetObject)
+			{
+				fieldInfo = field;
+				return field->mName;
+			}
+
+			Vector<void*> passedObjects;
+			passedObjects.Add(sourceObject);
+			passedObjects.Add(fieldObject);
+
+			FieldInfo* info = field->SearchFieldPath(fieldObject, targetObject, field->mName, res, passedObjects);
+			if (info)
+			{
+				fieldInfo = info;
 				return res;
+			}
 		}
 
 		return res;
 	}
 
-	FieldInfo* Type::FindFieldInfo(void* sourceObject, void *targetObject, String &res) const
+	void Type::AddBaseType(Type* baseType)
 	{
-		for (auto field : mFields)
-		{
-			char* fieldObject = field->GetValuePtr<char>(sourceObject);
-
-			if (fieldObject == targetObject)
-			{
-				res = field->mName;
-				return field;
-			}
-
-			if (!fieldObject)
-				continue;
-
-			FieldInfo* childField = field->SearchFieldPath(fieldObject, targetObject, field->mName, res);
-			if (childField)
-				return childField;
-		}
-
-		return nullptr;
-	}
-
-	void Type::Initialize(Type& type, const String& name, UInt id, IObject* sample)
-	{
-		type.mName = name;
-		type.mId = id;
-		type.mSample = sample;
-	}
-
-	void Type::SetupBaseType(Type& type, Type* baseType)
-	{
-		type.mBaseTypes.Add(baseType);
+		mBaseTypes.Add(baseType);
 
 		for (auto field : baseType->mFields)
-			type.mFields.Add(field->Clone());
+			mFields.Add(field->Clone());
 	}
 
 	bool Type::operator!=(const Type& other) const

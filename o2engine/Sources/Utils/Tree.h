@@ -45,7 +45,7 @@ namespace o2
 	protected:
 		_type*    _this;    // Template this pointer
 		Ptr<_type> mParent; // Pointer to parent node
-		ChildsVec  mChilds; // Children nodes
+		ChildsVec  mChilds; // Children nodes @SERIALIZABLE
 
 	protected:
 		// Calls when added new child

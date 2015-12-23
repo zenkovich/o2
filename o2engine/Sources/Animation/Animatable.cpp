@@ -1,9 +1,9 @@
 #include "Animatable.h"
 
+#include "Animation/AnimatedValue.h"
+
 namespace o2
 {
-	IOBJECT_CPP(Animatable);
-
 	Animatable::Animatable()
 	{}
 
@@ -50,7 +50,7 @@ namespace o2
 	{
 		mStates.Add(state);
 
-		state->animation.SetTarget(this);
+		//state->animation.SetTarget(this);
 		state->animation.mAnimationState = state;
 		state->mOwner = this;
 
@@ -231,5 +231,4 @@ namespace o2
 
 		mBlendOnState->workWeight = 1.0f - cf;
 	}
-
 }

@@ -26,10 +26,13 @@ namespace o2
 		Accessor<Ptr<Actor>, const String&>     child;              // Children accessor
 		Getter<ComponentsVec>                   components;         // Components array getter
 		Accessor<Ptr<Component>, const String&> component;          // Component accessor by type name
-		ActorTransform                          transform;          // Transformation
+		ActorTransform                          transform;          // Transformation @SERIALIZABLE
 
 		// Default constructor
 		Actor();
+
+		// Constructor with components
+		Actor(ComponentsVec components);
 
 		// Copy-constructor
 		Actor(const Actor& other);
@@ -123,36 +126,16 @@ namespace o2
 		// Returns all components
 		ComponentsVec GetComponents() const;
 
-		SERIALIZABLE_IMPL(Actor);
-
-		IOBJECT(Actor)
-		{
-			BASE_CLASS(Animatable);
-
-			FIELD(name);
-			FIELD(enabled);
-			FIELD(enabledInHierarchy);
-			FIELD(childs);
-			FIELD(child);
-			FIELD(components);
-
-			SRLZ_FIELD(transform);
-			SRLZ_FIELD(mName);
-			SRLZ_FIELD(mChilds);
-			SRLZ_FIELD(mCompontents);
-			SRLZ_FIELD(mEnabled);
-
-			FIELD(mResEnabled);
-		}
+		SERIALIZABLE(Actor);
 
 	protected:
-		String         mName;        // Name of actor
+		String         mName;        // Name of actor @SERIALIZABLE
 
 		Ptr<Actor>     mParent;      // Parent actor
-		ActorsVec      mChilds;      // Children actors
-		ComponentsVec  mCompontents; // Components vector
+		ActorsVec      mChilds;      // Children actors @SERIALIZABLE
+		ComponentsVec  mCompontents; // Components vector @SERIALIZABLE
 					   
-		bool           mEnabled;     // Is actor enabled
+		bool           mEnabled;     // Is actor enabled @SERIALIZABLE
 		bool           mResEnabled;  // Is actor enabled in hierarchy
 
 	protected:
@@ -176,6 +159,7 @@ namespace o2
 
 		friend class ActorTransform;
 		friend class Component;
+		friend class Scene;
 	};
 
 	template<typename _type>
@@ -212,7 +196,7 @@ namespace o2
 	{
 		for (auto comp : mCompontents)
 		{
-			if (comp->GetTypeId() == _type::type->ID())
+			if (comp->GetType() == *_type::type)
 				return comp;
 		}
 
@@ -225,7 +209,7 @@ namespace o2
 		Vector<Ptr<_type>> res;
 		for (auto comp : mCompontents)
 		{
-			if (comp->GetTypeId() == _type::type->ID())
+			if (comp->GetType() == *_type::type)
 				res.Add(comp);
 		}
 

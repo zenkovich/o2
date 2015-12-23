@@ -2,13 +2,13 @@
 
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
+#include "Utils/Log/LogStream.h"
 
 // User interfaces manager access macros
 #define o2UI UIManager::Instance()
 
 namespace o2
 {
-	class LogStream;
 	class UIButton;
 	class UICustomDropDown;
 	class UICustomList;
@@ -25,6 +25,9 @@ namespace o2
 	class UIVerticalProgress;
 	class UIVerticalScrollBar;
 	class UIWidget;
+	class UIWindow;
+
+#undef CreateWindow
 
 	// ------------------------------------------------
 	// UI manager, contains all root widgets and styles
@@ -69,6 +72,13 @@ namespace o2
 
 		// Adds button from style
 		Ptr<UIButton> AddButton(const WString& caption, const String& style = "standard");
+
+		// Adds button from style
+		Ptr<UIButton> AddButton(const WString& caption, const Function<void()>& onClick = Function<void()>(), 
+								const String& style = "standard");
+
+		// Adds window from style
+		Ptr<UIWindow> AddWindow(const WString& caption, const String& style = "standard");
 
 		// Adds label from style
 		Ptr<UILabel> AddLabel(const WString& text, const String& style = "standard");
@@ -117,7 +127,11 @@ namespace o2
 		Ptr<_type> CreateWidget(const String& style = "standard");
 
 		// Creates button by style
-		Ptr<UIButton> CreateButton(const WString& caption, const String& style = "standard");
+		Ptr<UIButton> CreateButton(const WString& caption, const Function<void()>& onClick = Function<void()>(), 
+								   const String& style = "standard");
+
+		// Creates button by style
+		Ptr<UIWindow> CreateWindow(const WString& caption, const String& style = "standard");
 
 		// Creates label by style
 		Ptr<UILabel> CreateLabel(const WString& text, const String& style = "standard");
@@ -246,7 +260,7 @@ namespace o2
 		Ptr<_type> sample;
 		for (auto styleWidget : mStyleSamples)
 		{
-			if (_type::type->ID() == styleWidget->GetTypeId())
+			if (*_type::type == styleWidget->GetType())
 			{
 				if (style == styleWidget->GetName())
 				{
@@ -287,6 +301,8 @@ namespace o2
 			mLog->Warning("Can't find style %s for %s", style, _type::type->Name());
 			res = mnew _type();
 		}
+
+		res->SetVisibleForcible(true);
 
 		return res;
 	}

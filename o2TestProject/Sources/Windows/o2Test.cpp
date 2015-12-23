@@ -1,4 +1,9 @@
 #include "TestApplication.h"
+#include "ReflectionGenerated.h"
+
+#include "O2.h"
+using namespace o2;
+
 
 INITIALIZE_O2;
 
@@ -10,19 +15,6 @@ INITIALIZE_O2;
 // String str = String::Format("String %s", ab);
 // Cant take string as first parameter. Works when string not first parameter
 // 
-
-struct A
-{
-	int x = 5;
-};
-
-struct B
-{
-	int f = 9;
-
-	Vector<Ptr<A>> av;
-	Ptr<A> ap = mnew A();
-};
 
 int main()
 {

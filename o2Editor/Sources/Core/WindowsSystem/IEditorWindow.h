@@ -1,9 +1,9 @@
 #pragma once
 
-#include "O2.h"
-using namespace o2;
+#include "UIDockableWindow.h"
+#include "Utils/Serialization.h"
 
-#include "Core/WindowsSystem/UIDockableWindow.h"
+using namespace o2;
 
 class IEditorWindow: public ISerializable
 {
@@ -24,12 +24,7 @@ public:
 	void Show();
 	void Hide();
 
-	SERIALIZABLE_IMPL(IEditorWindow);
-
-	IOBJECT(IEditorWindow)
-	{
-		FIELD(mWindow);
-	}
+	SERIALIZABLE(IEditorWindow);
 
 protected:
 	Ptr<UIDockableWindow> mWindow;

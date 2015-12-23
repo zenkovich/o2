@@ -4,6 +4,7 @@
 #include "Assets/Assets.h"
 #include "Render/Render.h"
 #include "UI/Button.h"
+#include "UI/ContextMenu.h"
 #include "UI/CustomDropDown.h"
 #include "UI/CustomList.h"
 #include "UI/DropDown.h"
@@ -19,8 +20,11 @@
 #include "UI/VerticalProgress.h"
 #include "UI/VerticalScrollBar.h"
 #include "UI/Widget.h"
+#include "UI/Window.h"
 #include "Utils/Debug.h"
 #include "Utils/Log/LogStream.h"
+
+#undef CreateWindow
 
 namespace o2
 {
@@ -32,7 +36,7 @@ namespace o2
 		mLog = mnew LogStream("UI");
 		o2Debug.GetLog()->BindStream(mLog);
 
-		o2Application.onResizingEvent += ObjFunctionPtr<UIManager, void>(this, &UIManager::UpdateRootSize);
+		o2Application.onResizingEvent += Function<void()>(this, &UIManager::UpdateRootSize);
 
 		InitializeProperties();
 	}
@@ -55,9 +59,17 @@ namespace o2
 		return res;
 	}
 
-	Ptr<UIButton> UIManager::AddButton(const WString& caption, const String& style /*= "standard"*/)
+	Ptr<UIButton> UIManager::AddButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/, 
+									   const String& style /*= "standard"*/)
 	{
-		Ptr<UIButton> res = CreateButton(caption, style);
+		Ptr<UIButton> res = CreateButton(caption, onClick, style);
+		AddWidget(res);
+		return res;
+	}
+
+	Ptr<UIWindow> UIManager::AddWindow(const WString& caption, const String& style /*= "standard"*/)
+	{
+		Ptr<UIWindow> res = CreateWindow(caption, style);
 		AddWidget(res);
 		return res;
 	}
@@ -240,6 +252,9 @@ namespace o2
 			st.Release();
 
 		mStyleSamples = styleData;
+
+		for (auto styleSample : mStyleSamples)
+			styleSample->Hide(true);
 	}
 
 	void UIManager::SaveStyle(const String& path)
@@ -261,15 +276,26 @@ namespace o2
 
 	void UIManager::AddWidgetStyle(Ptr<UIWidget> widget, const String& style)
 	{
+		widget->Hide(true);
 		widget->SetName(style);
 		mStyleSamples.Add(widget);
 	}
 
-	Ptr<UIButton> UIManager::CreateButton(const WString& caption, const String& style /*= "standard"*/)
+	Ptr<UIButton> UIManager::CreateButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/, 
+										  const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIButton>(style);
 		res->caption = caption;
 		res->name = "button";
+		res->onClick = onClick;
+		return res;
+	}
+
+	Ptr<UIWindow> UIManager::CreateWindow(const WString& caption, const String& style /*= "standard"*/)
+	{
+		auto res = CreateWidget<UIWindow>(style);
+		res->caption = caption;
+		res->name = "window";
 		return res;
 	}
 
@@ -278,6 +304,7 @@ namespace o2
 		auto res = CreateWidget<UILabel>(style);
 		res->text = text;
 		res->name = "label";
+		res->horOverflow = UILabel::HorOverflow::Dots;
 		return res;
 	}
 
@@ -389,6 +416,9 @@ namespace o2
 			widget->Draw();
 
 		mTopWidgets.Clear();
+
+		if (UIContextMenu::mVisibleContextMenu)
+			UIContextMenu::mVisibleContextMenu->SpecialDraw();
 	}
 
 	void UIManager::UpdateRootSize()

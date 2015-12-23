@@ -85,34 +85,15 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
-		// Returns interactable flag
-		bool IsInteractable() const;
-
-		SERIALIZABLE_IMPL(UIHorizontalScrollBar);
-
-		IOBJECT(UIHorizontalScrollBar)
-		{
-			BASE_CLASS(UIWidget);
-			SRLZ_FIELD(mValue);
-			SRLZ_FIELD(mMinValue);
-			SRLZ_FIELD(mMaxValue);
-			SRLZ_FIELD(mScrollSense);
-			SRLZ_FIELD(mScrollHandleSize);
-
-			FIELD(value);
-			FIELD(minValue);
-			FIELD(maxValue);
-			FIELD(scrollSense);
-			FIELD(scrollSize);
-		}
+		SERIALIZABLE(UIHorizontalScrollBar);
 
 	protected:
-		float              mValue;                 // Current value
+		float              mValue;                 // Current value @SERIALIZABLE
 		float              mSmoothValue;           // Smooth value
-		float              mMinValue;              // Minimum value
-		float              mMaxValue;              // Maximum value
-		float              mScrollSense;           // Scroll sense coefficient
-		float              mScrollHandleSize;      // Scroll handle size (in value range)
+		float              mMinValue;              // Minimum value @SERIALIZABLE
+		float              mMaxValue;              // Maximum value @SERIALIZABLE
+		float              mScrollSense;           // Scroll sense coefficient @SERIALIZABLE
+		float              mScrollHandleSize;      // Scroll handle size (in value range) @SERIALIZABLE
 		float              mScrollhandleMinPxSize; // Minimal scroll size in pixels
 		float              mPressHandleOffset;     // Value offset when handle was pressed
 		bool               mHandlePressed;         // True, when handle was pressed
@@ -156,11 +137,18 @@ namespace o2
 		// Calls when scrolling
 		void OnScrolled(float scroll);
 
+		// Calls when deserialized
+		void OnDeserialized(const DataNode& node);
+
+		// Calls when visible was changed
+		void OnVisibleChanged();
+
 		// Initializes properties
 		void InitializeProperties();
 
 		friend class UICustomList;
 		friend class UIEditBox;
 		friend class UIScrollArea;
+		friend class UIContextMenu;
 	};
 }

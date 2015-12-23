@@ -12,10 +12,10 @@ namespace o2
 	class UIToggle: public UIWidget, public CursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		Property<WString>     caption;  // Caption property. Searches text layer with name "caption" or creates them if he's not exist
-		Property<bool>        value;    // Current state value property
-		Function<void()>      onClick;  // Click event
-		Function<void(bool)>  onToggle; // Toggle event
+		Property<WString>    caption;  // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+		Property<bool>       value;    // Current state value property
+		Function<void()>     onClick;  // Click event
+		Function<void(bool)> onToggle; // Toggle event
 
 		// Default constructor
 		UIToggle();
@@ -47,18 +47,7 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsSelectable() const;
 
-		// Returns interactable flag
-		bool IsInteractable() const;
-
-		SERIALIZABLE_IMPL(UIToggle);
-
-		IOBJECT(UIToggle)
-		{
-			BASE_CLASS(UIWidget);
-
-			FIELD(caption);
-			//SRLZ_FIELD(value);
-		}
+		SERIALIZABLE(UIToggle);
 
 	protected:
 		bool               mValue;       // Current value
@@ -90,6 +79,9 @@ namespace o2
 
 		// Calls when layer added and updates drawing sequence
 		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
+
+		// Calls when visible was changed
+		void OnVisibleChanged();
 
 		// Initializes properties
 		void InitializeProperties();

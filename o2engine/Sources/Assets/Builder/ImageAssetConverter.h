@@ -22,9 +22,6 @@ namespace o2
 		// Moves image to new path
 		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
-		IOBJECT(ImageAssetConverter)
-		{
-			BASE_CLASS(IAssetConverter);
-		}
+		IOBJECT(ImageAssetConverter);
 	};
 }

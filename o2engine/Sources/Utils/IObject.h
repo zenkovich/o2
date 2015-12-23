@@ -18,9 +18,6 @@ namespace o2
 
 		// Returns type
 		virtual const Type& GetType() const = 0;
-
-		// Returns type id
-		virtual Type::Id GetTypeId() const = 0;
 	};
 
 	// IObject header definition
@@ -28,18 +25,10 @@ namespace o2
 	CLASS* Clone() const { return mnew CLASS(*this); }   \
 	static Type* type;								     \
 	const Type& GetType() const { return *type; };	     \
-	Type::Id GetTypeId() const { return type->ID(); };   \
 	static void InitializeType(CLASS* sample)   
-
-	// IObject source file implementation
-#define IOBJECT_CPP(CLASS) Type* CLASS::type;
 
 	// Field registration in type macros
 #define FIELD(NAME) \
 	type->RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME)
-
-	// Base class specialization macros
-#define BASE_CLASS(CLASS) \
-Type::SetupBaseType(*type, CLASS::type)
 
 }

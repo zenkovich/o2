@@ -1,12 +1,17 @@
 #pragma once
 
-#include "O2.h"
+#include "Events/CursorEventsListener.h"
+#include "UI/Widget.h"
+#include "Utils/Editor/FunctionalDragHandle.h"
+#include "Utils/Math/Layout.h"
+#include "Utils/Math/Rect.h"
+
 using namespace o2;
 
 // ------------------------------------
 // Dockable windows place for attaching
 // ------------------------------------
-class UIDockWindowPlace: public UIWidget, public CursorEventsListener
+class UIDockWindowPlace: public o2::UIWidget, public CursorEventsListener
 {
 public:
 	// Default constructor
@@ -37,11 +42,7 @@ public:
 	// Returns resizible side
 	TwoDirection GetResizibleDir() const;
 
-	SERIALIZABLE_IMPL(UIDockWindowPlace);
-	IOBJECT(UIDockWindowPlace)
-	{
-		BASE_CLASS(UIWidget);
-	}
+	SERIALIZABLE(UIDockWindowPlace);
 
 protected:
 	TwoDirection           mResizibleDir;       // Resizible dragable side

@@ -1,7 +1,11 @@
 #include "UIDockableWindow.h"
 
+#include "Animation/AnimatedFloat.h"
+#include "Animation/AnimatedVector.h"
 #include "Core/WindowsSystem/UIDockWindowPlace.h"
 #include "Events/CursorEventsListener.h"
+#include "Events/EventSystem.h"
+#include "UI/UIManager.h"
 
 UIDockableWindow::UIDockableWindow():
 	UIWindow(), mDocked(false)
@@ -152,7 +156,7 @@ void UIDockableWindow::OnMoveCompleted()
 
 	bool allOnLine = targetDock->mParent && targetDock->mParent->GetChilds().All([&](auto x) {
 
-		if (x->GetTypeId() != UIDockWindowPlace::type->ID())
+		if (x->GetType() != *UIDockWindowPlace::type)
 			return false;
 
 		Ptr<UIDockWindowPlace> dock = x.Cast<UIDockWindowPlace>();

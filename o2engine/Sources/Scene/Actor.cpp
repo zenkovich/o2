@@ -1,20 +1,26 @@
 #include "Actor.h"
 
+#include "Scene/Scene.h"
 #include "Utils/Math/Basis.h"
 
 namespace o2
 {
-	IOBJECT_CPP(Actor);
-
 	Actor::Actor():
 		mName("unnamed"), mEnabled(true), mResEnabled(true), Animatable()
 	{
+		transform.SetOwner(this);
 		InitializeProperties();
+
+		if (Scene::IsSingletonInitialzed())
+			o2Scene.mActors.Add(this);
 	}
 
 	Actor::Actor(const Actor& other):
-		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), Animatable(other)
+		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), Animatable(other), 
+		transform(other.transform)
 	{
+		transform.SetOwner(this);
+
 		for (auto child : other.mChilds)
 			AddChild(child->Clone());
 
@@ -25,12 +31,23 @@ namespace o2
 		transform.UpdateTransform();
 
 		InitializeProperties();
+
+		o2Scene.mActors.Add(this);
+	}
+
+	Actor::Actor(ComponentsVec components):
+		Actor()
+	{
+		for (auto comp : components)
+			AddComponent(comp);
 	}
 
 	Actor::~Actor()
 	{
 		if (mParent)
 			mParent->RemoveChild(Ptr<Actor>(this), false);
+		else
+			o2Scene.mActors.Remove(this);
 
 		RemoveAllChilds();
 		RemoveAllComponents();
@@ -45,6 +62,7 @@ namespace o2
 
 		mName = other.mName;
 		mEnabled = other.mEnabled;
+		transform = other.transform;
 
 		for (auto child : other.mChilds)
 			AddChild(child->Clone());
@@ -229,8 +247,7 @@ namespace o2
 		if (GetComponent(component->GetType().Name()) != nullptr)
 			return nullptr;
 
-		mCompontents.Add(component);
-		component->mOwner = this;
+		component->SetOwnerActor(this);
 		return component;
 	}
 

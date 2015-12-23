@@ -4,8 +4,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIWidgetLayout);
-
 	UIWidgetLayout::UIWidgetLayout()
 	{
 		InitializeProperties();

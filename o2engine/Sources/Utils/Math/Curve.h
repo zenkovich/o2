@@ -97,12 +97,7 @@ namespace o2
 		// Returns linear curve
 		static Curve Linear();
 
-		SERIALIZABLE_IMPL(Curve);
-
-		IOBJECT(Curve)
-		{
-			SRLZ_FIELD(mKeys);
-		}
+		SERIALIZABLE(Curve);
 
 	public:
 		// ---------
@@ -111,12 +106,12 @@ namespace o2
 		class Key: public ISerializable
 		{
 		public:
-			float value;             // Value
-			float position;          // Position
-			float leftCoef;          // Left bezier coefficient
-			float leftCoefPosition;  // Left bezier coefficient position (0...1)
-			float rightCoef;		 // Right bezier coefficient
-			float rightCoefPosition; // Right bezier coefficient position (0...1)
+			float value;             // Value @SERIALIZABLE
+			float position;          // Position @SERIALIZABLE
+			float leftCoef;          // Left bezier coefficient @SERIALIZABLE
+			float leftCoefPosition;  // Left bezier coefficient position (0...1) @SERIALIZABLE
+			float rightCoef;		 // Right bezier coefficient @SERIALIZABLE
+			float rightCoefPosition; // Right bezier coefficient position (0...1) @SERIALIZABLE
 
 		public:
 			//Default constructor
@@ -144,17 +139,7 @@ namespace o2
 			// Check equals operator
 			bool operator==(const Key& other) const;
 
-			SERIALIZABLE_IMPL(Key);
-
-			IOBJECT(Key)
-			{
-				SRLZ_FIELD(value);
-				SRLZ_FIELD(position);
-				SRLZ_FIELD(leftCoef);
-				SRLZ_FIELD(leftCoefPosition);
-				SRLZ_FIELD(rightCoef);
-				SRLZ_FIELD(rightCoefPosition);
-			}
+			SERIALIZABLE(Key);
 
 		public:
 			static const int mApproxValuesCount = 20; // Approximation values count
@@ -164,9 +149,9 @@ namespace o2
 		};
 
 	protected:
-		KeysVec mKeys; // Curve keys
+		KeysVec mKeys; // Curve keys @SERIALIZABLE
 
-		// Udates approximation
+		// Updates approximation
 		void UpdateApproximation();
 
 		// Returns keys (for property)

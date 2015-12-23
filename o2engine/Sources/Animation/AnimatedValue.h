@@ -20,12 +20,7 @@ namespace o2
 		// Sets target changing delegate
 		virtual void SetTargetDelegate(const Function<void()>& changeEvent) {}
 
-		SERIALIZABLE_IMPL(IAnimatedValue);
-
-		IOBJECT(IAnimatedValue)
-		{
-			BASE_CLASS(IAnimation);
-		}
+		SERIALIZABLE(IAnimatedValue);
 
 	protected:
 		// Sets target by void pointer
@@ -51,7 +46,7 @@ namespace o2
 	// Template animated value
 	// -----------------------
 	template<typename _type>
-	class AnimatedValue: public IAnimatedValue
+	class AnimatedValue: public IAnimatedValue // @SPECIALIZE RectF Color4
 	{
 	public:
 		class Key;
@@ -157,27 +152,21 @@ namespace o2
 		// Returns tweening animation from begin to end in duration with linear transition
 		static AnimatedValue<_type> Linear(const _type& begin, const _type& end, float duration = 1.0f);
 
-		SERIALIZABLE_IMPL(AnimatedValue<_type>);
-
-		IOBJECT(AnimatedValue<_type>)
-		{
-			BASE_CLASS(IAnimatedValue);
-			SRLZ_FIELD(mKeys);
-		}
+		SERIALIZABLE(AnimatedValue<_type>);
 
 	public:
 		// -------------
 		// Animation key
 		// -------------
-		class Key: public ISerializable
+		class Key: public ISerializable 
 		{
 		public:
-			float position;         // Position on time line, in seconds
-			_type value;            // Value
-			float curvePrevCoef;    // Transition curve coefficient for previous animation segment
-			float curvePrevCoefPos; // Transition curve coefficient position for previous animation segment (must be in 0...1)
-			float curveNextCoef;    // Transition curve coefficient for next animation segment
-			float curveNextCoefPos; // Transition curve coefficient position for next animation segment (must be in 0...1)
+			float position;         // Position on time line, in seconds @SERIALIZABLE
+			_type value;            // Value @SERIALIZABLE
+			float curvePrevCoef;    // Transition curve coefficient for previous animation segment @SERIALIZABLE
+			float curvePrevCoefPos; // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
+			float curveNextCoef;    // Transition curve coefficient for next animation segment @SERIALIZABLE
+			float curveNextCoefPos; // Transition curve coefficient position for next animation segment (must be in 0...1)@SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -208,17 +197,7 @@ namespace o2
 			// Equals operator
 			bool operator==(const Key& other) const;
 
-			SERIALIZABLE_IMPL(Key);
-
-			IOBJECT(Key)
-			{
-				SRLZ_FIELD(position);
-				SRLZ_FIELD(value);
-				SRLZ_FIELD(curvePrevCoef);
-				SRLZ_FIELD(curvePrevCoefPos);
-				SRLZ_FIELD(curveNextCoef);
-				SRLZ_FIELD(curveNextCoefPos);
-			}
+			SERIALIZABLE(Key);
 
 		public:
 			static const int mApproxValuesCount = 20;     // Transition curve approximation values count
@@ -226,7 +205,7 @@ namespace o2
 		};
 
 	protected:
-		KeysVec          mKeys;           // Animation keys
+		KeysVec          mKeys;           // Animation keys @SERIALIZABLE
 		_type            mValue;          // Current animation value
 		_type*           mTarget;         // Animation target value pointer
 		Function<void()> mTargetDelegate; // Animation target value change event
@@ -273,8 +252,8 @@ namespace o2
 
 	template<typename _type>
 	AnimatedValue<_type>::AnimatedValue(const AnimatedValue<_type>& other):
-		mKeys(other.mKeys), mValue(other.mValue), mTarget(other.mTarget), mTargetDelegate(other.mTargetDelegate),
-		mTargetProperty(other.mTargetProperty), IAnimatedValue(other)
+		mKeys(other.mKeys), mValue(other.mValue), mTarget(nullptr), mTargetDelegate(), mTargetProperty(nullptr), 
+		IAnimatedValue(other)
 	{
 		InitializeProperties();
 	}
@@ -630,12 +609,6 @@ namespace o2
 	void AnimatedValue<_type>::SetTargetPropertyVoid(void* target)
 	{
 		SetTargetProperty((Setter<_type>*)target);
-	}
-
-	template<typename _type>
-	void AnimatedValue<_type>::RegInAnimatable(AnimationState* state, const String& path)
-	{
-		state->mOwner->RegAnimatedValue<_type>(this, path, state);
 	}
 
 	template<typename _type>

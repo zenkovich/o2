@@ -9,28 +9,18 @@ namespace o2
 	// ----------
 	struct TimeStamp: public ISerializable
 	{
-		int mYear;
-		int mMonth;
-		int mDay;
-		int mHour;
-		int mMinute;
-		int mSecond;
+		int mYear;	 //  @SERIALIZABLE
+		int mMonth;	 //  @SERIALIZABLE
+		int mDay;	 //  @SERIALIZABLE
+		int mHour;	 //  @SERIALIZABLE
+		int mMinute; //  @SERIALIZABLE
+		int mSecond; //  @SERIALIZABLE
 
 		TimeStamp(int seconds = 0, int minutes = 0, int hours = 0, int days = 0, int months = 0, int years = 0);
 
 		bool operator==(const TimeStamp& wt) const;
 		bool operator!=(const TimeStamp& wt) const;
 
-		SERIALIZABLE_IMPL(TimeStamp);
-
-		IOBJECT(TimeStamp)
-		{
-			SRLZ_FIELD(mYear);
-			SRLZ_FIELD(mMonth);
-			SRLZ_FIELD(mDay);
-			SRLZ_FIELD(mHour);
-			SRLZ_FIELD(mMinute);
-			SRLZ_FIELD(mSecond);
-		}
+		SERIALIZABLE(TimeStamp);
 	};
 }

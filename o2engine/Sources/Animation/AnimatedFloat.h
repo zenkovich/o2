@@ -15,7 +15,7 @@ namespace o2
 		typedef Vector<Key> KeysVec;
 
 	public:
-		Curve                    curve;          // Animation curve
+		Curve                    curve;          // Animation curve @SERIALIZABLE
 		Getter<float>            value;			 // Current value getter
 		Setter<float*>           target;		 // Bind target setter
 		Setter<Function<void()>> targetDelegate; // Bind target change event setter
@@ -114,13 +114,7 @@ namespace o2
 		// Returns tweening animation from begin to end in duration with linear transition
 		static AnimatedValue<float> Linear(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
 
-		SERIALIZABLE_IMPL(AnimatedValue<float>);
-
-		IOBJECT(AnimatedValue<float>)
-		{
-			BASE_CLASS(IAnimatedValue);
-			SRLZ_FIELD(curve);
-		}
+		SERIALIZABLE(AnimatedValue<float>);
 
 	protected:
 		float            mValue;		  // Current animation value

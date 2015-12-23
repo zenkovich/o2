@@ -1,10 +1,12 @@
 #include "Label.h"
 
+#include "Render/Render.h"
+#include "Application/Input.h"
+
 namespace o2
 {
-	IOBJECT_CPP(UILabel);
-
-	UILabel::UILabel()
+	UILabel::UILabel():
+		mHorOverflow(HorOverflow::None), mVerOverflow(VerOverflow::None)
 	{
 		InitializeProperties();
 	}
@@ -15,6 +17,8 @@ namespace o2
 		mTextLayer = GetLayerDrawable<Text>("text");
 		RetargetStatesAnimations();
 		InitializeProperties();
+
+		UpdateLayout();
 	}
 
 	UILabel& UILabel::operator=(const UILabel& other)
@@ -22,13 +26,60 @@ namespace o2
 		UIWidget::operator=(other);
 		mTextLayer = GetLayerDrawable<Text>("text");
 		RetargetStatesAnimations();
+		UpdateLayout();
 		return *this;
+	}
+
+	void UILabel::Draw()
+	{
+		if (mFullyDisabled)
+			return;
+
+		bool enabledClipping = false;
+		if (mHorOverflow == HorOverflow::Cut || mVerOverflow == VerOverflow::Cut)
+		{
+			enabledClipping = true;
+
+			Vec2I halfRes =  (Vec2F)o2Render.GetResolution()*0.5f;
+			RectI cutRect(-halfRes.x, halfRes.y, halfRes.x, -halfRes.y);
+
+			if (mHorOverflow == HorOverflow::Cut)
+			{
+				cutRect.left = (int)layout.absLeft;
+				cutRect.right = (int)layout.absRight;
+			}
+
+			if (mVerOverflow == VerOverflow::Cut)
+			{
+				cutRect.top = (int)layout.absTop;
+				cutRect.bottom = (int)layout.absBottom;
+			}
+
+			o2Render.EnableScissorTest(cutRect);
+		}
+
+		for (auto layer : mDrawingLayers)
+			layer->Draw();
+
+		if (enabledClipping)
+			o2Render.DisableScissorTest();
+
+		for (auto child : mChilds)
+			child->Draw();
+
+		for (auto layer : mTopDrawingLayers)
+			layer->Draw();
+
+		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
+			DrawDebugFrame();
 	}
 
 	void UILabel::SetFont(FontRef font)
 	{
 		if (mTextLayer)
 			mTextLayer->SetFont(font);
+
+		UpdateLayout();
 	}
 
 	FontRef UILabel::GetFont() const
@@ -43,6 +94,8 @@ namespace o2
 	{
 		if (mTextLayer)
 			mTextLayer->SetText(text);
+
+		UpdateLayout();
 	}
 
 	WString UILabel::GetText() const
@@ -53,52 +106,73 @@ namespace o2
 		return WString();
 	}
 
-	void UILabel::SetHorAlign(Text::HorAlign align)
+	void UILabel::SetHorAlign(HorAlign align)
 	{
 		if (mTextLayer)
 			mTextLayer->SetHorAlign(align);
+
+		UpdateLayout();
 	}
 
-	Text::HorAlign UILabel::GetHorAlign() const
+	HorAlign UILabel::GetHorAlign() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetHorAlign();
 
-		return Text::HorAlign::Left;
+		return HorAlign::Left;
 	}
 
-	void UILabel::SetVerAlign(Text::VerAlign align)
+	void UILabel::SetVerAlign(VerAlign align)
 	{
 		if (mTextLayer)
 			mTextLayer->SetVerAlign(align);
+
+		UpdateLayout();
 	}
 
-	Text::VerAlign UILabel::GetVerAlign() const
+	VerAlign UILabel::GetVerAlign() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetVerAlign();
 
-		return Text::VerAlign::Top;
+		return VerAlign::Top;
 	}
 
-	void UILabel::SetWordWrap(bool flag)
+	void UILabel::SetHorOverflow(HorOverflow overflow)
 	{
+		mHorOverflow = overflow;
+
 		if (mTextLayer)
-			mTextLayer->SetWordWrap(flag);
+		{
+			mTextLayer->wordWrap = mHorOverflow == HorOverflow::Wrap;
+			mTextLayer->dotsEngings = mHorOverflow == HorOverflow::Dots;
+		}
+
+		UpdateLayout();
 	}
 
-	bool UILabel::GetWordWrap() const
+	UILabel::HorOverflow UILabel::GetHorOverflow()
 	{
-		if (mTextLayer)
-			return mTextLayer->GetWordWrap();
+		return mHorOverflow;
+	}
 
-		return false;
+	void UILabel::SetVerOverflow(VerOverflow overflow)
+	{
+		mVerOverflow = overflow;
+		UpdateLayout();
+	}
+
+	UILabel::VerOverflow UILabel::GetVerOverflow()
+	{
+		return mVerOverflow;
 	}
 
 	void UILabel::SetSymbolsDistanceCoef(float coef /*= 1*/)
 	{
 		if (mTextLayer)
 			mTextLayer->SetSymbolsDistanceCoef(coef);
+
+		UpdateLayout();
 	}
 
 	float UILabel::GetSymbolsDistanceCoef() const
@@ -113,6 +187,8 @@ namespace o2
 	{
 		if (mTextLayer)
 			mTextLayer->SetLinesDistanceCoef(coef);
+
+		UpdateLayout();
 	}
 
 	float UILabel::GetLinesDistanceCoef() const
@@ -123,9 +199,83 @@ namespace o2
 		return 1.0f;
 	}
 
+	void UILabel::UpdateLayout(bool forcible /*= false*/)
+	{
+		if (layout.mDrivenByParent && !forcible)
+		{
+			if (mParent)
+				mParent->UpdateLayout();
+
+			return;
+		}
+
+		if (mTextLayer)
+		{
+			if (mHorOverflow == HorOverflow::Expand)
+			{
+				RecalculateAbsRect();
+
+				float realSize = mTextLayer->GetRealSize().x;
+				float thisSize = layout.width;
+				float sizeDelta = realSize - thisSize;
+
+				switch (mTextLayer->GetHorAlign())
+				{
+					case HorAlign::Left: 
+					layout.mOffsetMax.x += sizeDelta;
+					break;
+
+					case HorAlign::Middle:
+					case HorAlign::Both:
+					layout.mOffsetMax.x += sizeDelta*0.5f; 
+					layout.mOffsetMin.x -= sizeDelta*0.5f;
+					break;
+
+					case HorAlign::Right:
+					layout.mOffsetMin.x -= sizeDelta;
+					break;
+				}
+			}
+
+			if (mVerOverflow == VerOverflow::Expand)
+			{
+				RecalculateAbsRect();
+
+				float realSize = mTextLayer->GetRealSize().y;
+				float thisSize = layout.height;
+				float sizeDelta = realSize - thisSize;
+
+				switch (mTextLayer->GetVerAlign())
+				{
+					case VerAlign::Top:
+					layout.mOffsetMin.y -= sizeDelta;
+					break;
+
+					case VerAlign::Middle:
+					case VerAlign::Both:
+					layout.mOffsetMax.y += sizeDelta*0.5f;
+					layout.mOffsetMin.y -= sizeDelta*0.5f;
+					break;
+
+					case VerAlign::Bottom:
+					layout.mOffsetMax.y += sizeDelta;
+					break;
+				}
+			}
+		}
+
+		RecalculateAbsRect();
+		UpdateLayersLayouts();
+
+		mChildsAbsRect = layout.mAbsoluteRect;
+
+		for (auto child : mChilds)
+			child->UpdateLayout();
+	}
+
 	void UILabel::OnLayerAdded(Ptr<UIWidgetLayer> layer)
 	{
-		if (layer->name == "text" && layer->drawable && layer->drawable->GetTypeId() == Text::type->ID())
+		if (layer->name == "text" && layer->drawable && layer->drawable->GetType() == *Text::type)
 			mTextLayer = layer->drawable.Cast<Text>();
 	}
 
@@ -135,7 +285,8 @@ namespace o2
 		INITIALIZE_PROPERTY(UILabel, text, SetText, GetText);
 		INITIALIZE_PROPERTY(UILabel, verAlign, SetVerAlign, GetVerAlign);
 		INITIALIZE_PROPERTY(UILabel, horAlign, SetHorAlign, GetHorAlign);
-		INITIALIZE_PROPERTY(UILabel, wordWrap, SetWordWrap, GetWordWrap);
+		INITIALIZE_PROPERTY(UILabel, verOverflow, SetVerOverflow, GetVerOverflow);
+		INITIALIZE_PROPERTY(UILabel, horOverflow, SetHorOverflow, GetHorOverflow);
 		INITIALIZE_PROPERTY(UILabel, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef);
 		INITIALIZE_PROPERTY(UILabel, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);
 	}

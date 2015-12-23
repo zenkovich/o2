@@ -1,6 +1,9 @@
 #pragma once
 
-#include "O2.h"
+#include "Utils/Math/Vector2.h"
+#include "Utils/Serialization.h"
+#include "Utils/Singleton.h"
+
 using namespace o2;
 
 // -------------------------
@@ -15,17 +18,10 @@ public:
 	// Destructor. Saves application configuration
 	~ApplicationConfig();
 
-	SERIALIZABLE_IMPL(ApplicationConfig);
-
-	IOBJECT(ApplicationConfig)
-	{
-		SRLZ_FIELD(mWindowSize);
-		SRLZ_FIELD(mWindowPosition);
-		SRLZ_FIELD(mFullScreen);
-	}
+	SERIALIZABLE(ApplicationConfig);
 
 protected:
-	Vec2I mWindowSize;     // Application window size
-	Vec2I mWindowPosition; // Application window position
-	bool  mFullScreen;     // Is application window is fullscreen
+	Vec2I mWindowSize;     // Application window size @SERIALIZABLE
+	Vec2I mWindowPosition; // Application window position @SERIALIZABLE
+	bool  mFullScreen;     // Is application window is fullscreen @SERIALIZABLE
 };

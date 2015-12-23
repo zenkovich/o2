@@ -11,10 +11,5 @@ public:
 
 	~SceneWindow();
 
-	SERIALIZABLE_IMPL(SceneWindow);
-
-	IOBJECT(SceneWindow)
-	{
-		BASE_CLASS(IEditorWindow);
-	}
+	SERIALIZABLE(SceneWindow);
 };

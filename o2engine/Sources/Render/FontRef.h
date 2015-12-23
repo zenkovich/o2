@@ -34,6 +34,15 @@ namespace o2
 		// Constant font pointer operator
 		const Font* operator->() const;
 
+		// Reference access operator
+		Font& operator*();
+
+		// Returns object pointer
+		Font* Get();
+
+		// Returns constant object pointer
+		const Font* Get() const;
+
 		// Check equal operator
 		bool operator==(const FontRef& other) const;
 

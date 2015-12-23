@@ -562,7 +562,7 @@ namespace o2
 	template<typename T>
 	TString<T>::~TString()
 	{
-		//free(mData);
+		free(mData);
 	}
 
 	template<typename T>
@@ -1277,10 +1277,6 @@ namespace o2
 				{
 					appendStr((TString)(float)va_arg(vlist, double));
 				}
-				else if (format.mData[i + 1] == 's')
-				{
-					appendStr((TString)va_arg(vlist, String));
-				}
 				else if (format.mData[i + 1] == 'u' && format.mData[i + 2] == 'i')
 				{
 					appendStr((TString)va_arg(vlist, UInt));
@@ -1320,6 +1316,10 @@ namespace o2
 				{
 					appendStr(va_arg(vlist, WString));
 					i++;
+				}
+				else if (format.mData[i + 1] == 's')
+				{
+					appendStr((TString)va_arg(vlist, String));
 				}
 				else if (format.mData[i + 1] == 'c')
 				{

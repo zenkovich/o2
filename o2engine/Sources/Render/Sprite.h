@@ -17,10 +17,6 @@ namespace o2
 	class Sprite: public IRectDrawable
 	{
 	public:
-		enum class Corner { LeftTop, RightTop, RightBottom, LeftBottom };
-		enum class Mode { Default, Sliced, FillLeftToRight, FillRightToLeft, FillUpToDown, FillDownToUp, Fill360CW, Fill360CCW };
-
-	public:
 		Property<TextureRef>    texture;          // Texture property
 		Property<RectI>         textureSrcRect;   // Texture source rectangle property
 		Property<AssetId>       imageAssetId;     // Image asset id property
@@ -31,7 +27,7 @@ namespace o2
 		Property<Color4>        rightTopColor;	  // Color of right top corner property
 		Property<Color4>        leftBottomColor;  // Color of left bottom corner property
 		Property<Color4>        rightBottomColor; // Color of right bottom corner property
-		Property<Mode>          mode;             // Sprite drawing mode property
+		Property<SpriteMode>    mode;             // Sprite drawing mode property
 		Property<float>         fill;             // Sprite fill property
 		Property<RectI>         sliceBorder;      // Slice border property
 
@@ -117,10 +113,10 @@ namespace o2
 		float GetFill() const;
 
 		// Sets sprite drawing mode
-		void SetMode(Mode mode);
+		void SetMode(SpriteMode mode);
 
 		// Returns sprite drawing mode
-		Mode GetMode() const;
+		SpriteMode GetMode() const;
 
 		// Sets sprite slice border
 		void SetSliceBorder(const RectI& border);
@@ -158,43 +154,16 @@ namespace o2
 		// Sets size with equal aspect as texture source rectangle by nearest value
 		void NormalizeAspect();
 
-		SERIALIZABLE_IMPL(Sprite);
-
-		IOBJECT(Sprite)
-		{
-			BASE_CLASS(IRectDrawable);
-
-			FIELD(texture);
-			FIELD(textureSrcRect);
-			FIELD(imageAssetId);
-			FIELD(imageAssetPath);
-			FIELD(imageAsset);
-			FIELD(bitmap);
-			FIELD(leftTopColor);
-			FIELD(rightTopColor);
-			FIELD(leftBottomColor);
-			FIELD(rightBottomColor);
-			FIELD(mode);
-			FIELD(fill);
-			FIELD(sliceBorder);
-
-			FIELD(mTextureSrcRect);
-			FIELD(mImageAssetId);
-			FIELD(mMesh);
-
-			SRLZ_FIELD(mMode);
-			SRLZ_FIELD(mSlices);
-			SRLZ_FIELD(mFill);
-		}
+		SERIALIZABLE(Sprite);
 
 	protected:
-		RectI     mTextureSrcRect;   // Texture source rectangle
-		Color4    mCornersColors[4]; // Corners colors
-		AssetId   mImageAssetId;     // Image asset id (0 by default)
-		Mode      mMode;             // Drawing mode
-		RectI     mSlices;           // Slice borders
-		float     mFill;             // Sprite fillness
-		Ptr<Mesh> mMesh;             // Drawing mesh
+		RectI      mTextureSrcRect;   // Texture source rectangle
+		Color4     mCornersColors[4]; // Corners colors
+		AssetId    mImageAssetId;     // Image asset id (0 by default)
+		SpriteMode mMode;             // Drawing mode @SERIALIZABLE
+		RectI      mSlices;           // Slice borders @SERIALIZABLE
+		float      mFill;             // Sprite fillness @SERIALIZABLE
+		Ptr<Mesh>  mMesh;             // Drawing mesh
 
 		void(Sprite::*mMeshBuildFunc)(); // Mesh building function pointer (by mode)
 

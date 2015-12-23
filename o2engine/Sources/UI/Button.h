@@ -49,18 +49,7 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsSelectable() const;
 
-		// Returns interactable flag
-		bool IsInteractable() const;
-
-		SERIALIZABLE_IMPL(UIButton);
-
-		IOBJECT(UIButton)
-		{
-			BASE_CLASS(UIWidget);
-
-			FIELD(caption);
-			FIELD(icon);
-		}
+		SERIALIZABLE(UIButton);
 
 	protected:
 		Ptr<Text>   mCaptionText; // Caption layer text
@@ -91,6 +80,9 @@ namespace o2
 
 		// Calls when layer added and updates drawing sequence
 		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
+
+		// Calls when visible was changed
+		void OnVisibleChanged();
 
 		// Initializes properties
 		void InitializeProperties();

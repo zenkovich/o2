@@ -93,12 +93,7 @@ namespace o2
 		// Returns fitting by children
 		bool IsFittingByChildren() const;
 
-		SERIALIZABLE_IMPL(UIVerticalLayout);
-
-		IOBJECT(UIVerticalLayout)
-		{
-			BASE_CLASS(UIWidget);
-		}
+		SERIALIZABLE(UIVerticalLayout);
 
 	protected:
 		BaseCorner mBaseCorner;    // Base corner of widgets arranging

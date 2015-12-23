@@ -4,8 +4,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIWidgetLayer);
-
 	UIWidgetLayer::UIWidgetLayer():
 		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)), mTransparency(1.0f), mResTransparency(1.0f),
 		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F())
@@ -63,6 +61,72 @@ namespace o2
 
 	void UIWidgetLayer::Update(float dt)
 	{
+	} 
+	
+	Ptr<UIWidgetLayer> UIWidgetLayer::AddChild(Ptr<UIWidgetLayer> node)
+	{
+		if (node->GetParent())
+			node->GetParent()->RemoveChild(node, false);
+
+		node->mParent = this;
+
+		mChilds.Add(node);
+
+		OnChildAdded(node);
+
+		return node;
+	}
+	
+	bool UIWidgetLayer::RemoveChild(Ptr<UIWidgetLayer> node, bool release /*= true*/)
+	{
+		node->mParent = nullptr;
+
+		if (!mChilds.Remove(node))
+			return false;
+
+		if (release && node)
+			node.Release();
+
+		return true;
+	}
+	
+	void UIWidgetLayer::RemoveAllChilds()
+	{
+		for (auto child : mChilds)
+			if (child)
+				child.Release();
+
+		mChilds.Clear();
+	}
+	
+	void UIWidgetLayer::SetParent(Ptr<UIWidgetLayer> parent)
+	{
+		if (parent)
+		{
+			parent->AddChild(Ptr<UIWidgetLayer>(this));
+		}
+		else
+		{
+			if (mParent)
+				mParent->RemoveChild(Ptr<UIWidgetLayer>(this), false);
+
+			mParent = nullptr;
+		}
+	}
+	
+	Ptr<UIWidgetLayer> UIWidgetLayer::GetParent() const
+	{
+		return mParent;
+	}
+	
+	UIWidgetLayer::ChildsVec& UIWidgetLayer::GetChilds()
+	{
+		return mChilds;
+	}
+	
+	const UIWidgetLayer::ChildsVec& o2::UIWidgetLayer::GetChilds() const
+	{
+		return mChilds;
 	}
 
 	Ptr<UIWidgetLayer> UIWidgetLayer::AddChildLayer(const String& name, Ptr<IRectDrawable> drawable,

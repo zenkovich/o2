@@ -7,8 +7,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(StdAssetConverter);
-
 	Vector<Type::Id> StdAssetConverter::GetProcessingAssetsTypes() const
 	{
 		Vector<Type::Id> res;

@@ -58,6 +58,21 @@ namespace o2
 		return mFont;
 	}
 
+	Font& FontRef::operator*()
+	{
+		return *mFont;
+	}
+
+	Font* FontRef::Get()
+	{
+		return mFont;
+	}
+
+	const Font* FontRef::Get() const
+	{
+		return mFont;
+	}
+
 	bool FontRef::IsValid() const
 	{
 		return mFont;

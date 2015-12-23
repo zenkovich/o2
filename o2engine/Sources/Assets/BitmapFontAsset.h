@@ -46,11 +46,7 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const;
 
-		IOBJECT(BitmapFontAsset)
-		{
-			BASE_CLASS(Asset);
-			FIELD(mFont);
-		}
+		SERIALIZABLE(BitmapFontAsset);
 
 	public:
 		// ----------------
@@ -62,12 +58,7 @@ namespace o2
 			// Returns asset type id
 			Type::Id GetAssetType() const;
 
-			SERIALIZABLE_IMPL(MetaInfo);
-
-			IOBJECT(MetaInfo)
-			{
-				BASE_CLASS(IMetaInfo);
-			}
+			SERIALIZABLE(MetaInfo);
 		};
 
 	protected:

@@ -22,7 +22,7 @@ namespace o2
 		Getter<Ptr<MetaInfo>> meta; // Meta information getter
 		Getter<FontRef>       font; // Font getter
 
-									// Default constructor
+        // Default constructor
 		VectorFontAsset();
 
 		// Constructor by path - loads asset by path
@@ -65,11 +65,7 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const;
 
-		IOBJECT(VectorFontAsset)
-		{
-			BASE_CLASS(Asset);
-			FIELD(mFont);
-		}
+		IOBJECT(VectorFontAsset);
 
 	public:
 		// ----------------
@@ -87,16 +83,10 @@ namespace o2
 			// Returns true if other meta is equal to this
 			bool IsEqual(Ptr<IMetaInfo> other) const;
 
-			SERIALIZABLE_IMPL(MetaInfo);
-
-			IOBJECT(MetaInfo)
-			{
-				BASE_CLASS(IMetaInfo);
-				SRLZ_FIELD(mEffects);
-			}
+			SERIALIZABLE(MetaInfo);
 
 		protected:
-			EffectsVec mEffects; // Font effects array
+			EffectsVec mEffects; // Font effects array @SERIALIZABLE
 
 			friend class VectorFontAsset;
 		};

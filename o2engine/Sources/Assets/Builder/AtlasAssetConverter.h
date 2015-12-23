@@ -32,10 +32,7 @@ namespace o2
 		// Resets converter
 		void Reset();
 
-		IOBJECT(AtlasAssetConverter)
-		{
-			BASE_CLASS(IAssetConverter);
-		}
+		IOBJECT(AtlasAssetConverter);
 
 	public:
 		// ----------------
@@ -43,8 +40,8 @@ namespace o2
 		// ----------------
 		struct Image: public ISerializable
 		{
-			AssetId   mId;   // Image asset id
-			TimeStamp mTime; // Image asset edited date
+			AssetId   mId;   // Image asset id @SERIALIZABLE
+			TimeStamp mTime; // Image asset edited date @SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -56,12 +53,7 @@ namespace o2
 			// Check equal operator
 			bool operator==(const Image& other) const;
 
-			SERIALIZABLE_IMPL(Image);
-			IOBJECT(Image)
-			{
-				SRLZ_FIELD(mId);
-				SRLZ_FIELD(mTime);
-			}
+			SERIALIZABLE(Image);
 		};
 		typedef Vector<Image> ImagesVec;
 

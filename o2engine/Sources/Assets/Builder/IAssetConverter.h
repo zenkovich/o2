@@ -41,7 +41,7 @@ namespace o2
 		// Sets owner assets builder
 		void SetAssetsBuilder(Ptr<AssetsBuilder> builder);
 
-		IOBJECT(IAssetConverter) {}
+		IOBJECT(IAssetConverter);
 
 	protected:
 		// Assets builder pointer

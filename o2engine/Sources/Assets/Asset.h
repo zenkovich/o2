@@ -78,13 +78,7 @@ namespace o2
 		// Returns extensions string (something like "ext1 ext2 ent asf")
 		virtual const char* GetFileExtensions() const;
 
-		SERIALIZABLE_IMPL(Asset);
-
-		IOBJECT(Asset) 
-		{
-			FIELD(mPath);
-			FIELD(mMeta);
-		}
+		SERIALIZABLE(Asset);
 
 	public:
 		// --------------------------------------
@@ -94,7 +88,7 @@ namespace o2
 		{
 			friend class Asset;
 
-			AssetId mId; // Id of assets
+			AssetId mId; // Id of assets @SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -112,12 +106,7 @@ namespace o2
 			// Returns asset id
 			AssetId ID() const;
 
-			SERIALIZABLE_IMPL(IMetaInfo);
-
-			IOBJECT(IMetaInfo)
-			{
-				SRLZ_FIELD(mId);
-			}
+			SERIALIZABLE(IMetaInfo);
 		};
 
 	protected:

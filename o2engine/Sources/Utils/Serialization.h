@@ -3,7 +3,7 @@
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Data/DataDoc.h"
 #include "Utils/IObject.h"
-#include "Utils/Reflection/Types.h"
+#include "Utils/Reflection/Reflection.h"
 #include "Utils/String.h"
 
 namespace o2
@@ -15,16 +15,18 @@ namespace o2
 	{
 	public:
 		// Serializing object into data node
-		virtual DataNode Serialize() = 0;
+		virtual DataNode Serialize() { return DataNode(); };
 
 		// Deserializing object from data node
-		virtual void Deserialize(const DataNode& node) = 0;
+		virtual void Deserialize(const DataNode& node) {};
 
 		// DataNode converting operator
-		virtual operator DataNode() = 0;
+		virtual operator DataNode() { return Serialize(); };
 
 		// Assign operator from data node
-		virtual ISerializable& operator=(const DataNode& node) = 0;
+		virtual ISerializable& operator=(const DataNode& node) { return *this; };
+
+		IOBJECT(ISerializable);
 
 	protected:
 		// Beginning serialization callback
@@ -57,14 +59,11 @@ namespace o2
 		IAttribute* Clone() const { return mnew SerializableAttribute(*this); }
 	};
 
-	// Registering field in type with serialization attribute
-#define SRLZ_FIELD(NAME) \
-	type->RegField(#NAME, (char*)(&sample->NAME) - (char*)sample, sample->NAME).AddAttribute<SerializableAttribute<decltype(NAME)>>()
-
-#define SERIALIZABLE(TYPE) .AddAttribute<SerializableAttribute<TYPE>>()
-
 // Serialization implementation macros
-#define SERIALIZABLE_IMPL(CLASS)                                                           \
+#define SERIALIZABLE(CLASS)                                                                \
+    CLASS* Clone() const { return mnew CLASS(*this); }                                     \
+	static Type* type;								                                       \
+	const Type& GetType() const { return *type; };	                                       \
 	DataNode Serialize()                                                        		   \
 	{                                                              						   \
 		DataNode res;																	   \
@@ -95,8 +94,8 @@ namespace o2
 	operator DataNode() 																   \
 	{ 																					   \
 		return Serialize(); 															   \
-	}       
-
+	}                                                                                      \
+	static void InitializeType(CLASS* sample)   
 
 	template<typename _type>
 	void SerializableAttribute<_type>::Deserialize(void* object, const DataNode& data) const
@@ -106,7 +105,6 @@ namespace o2
 		{
 			_type* valPtr = mOwnerFieldInfo->GetValuePtrStrong<_type>(object);
 			*valPtr = *node;
-			//mOwnerFieldInfo->SetValue<_type>(object, (_type)(*node));
 		}
 	}
 

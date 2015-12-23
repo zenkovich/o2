@@ -5,8 +5,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UICustomDropDown);
-
 	UICustomDropDown::UICustomDropDown():
 		UIWidget(), mClipLayout(Layout::Both()), mMaxListItems(10)
 	{
@@ -228,11 +226,6 @@ namespace o2
 		return GetMaxDrawingDepth();
 	}
 
-	bool UICustomDropDown::IsInteractable() const
-	{
-		return mResVisible && CursorEventsListener::IsInteractable();
-	}
-
 	void UICustomDropDown::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
@@ -274,6 +267,11 @@ namespace o2
 		auto selectState = state["select"];
 		if (selectState)
 			*selectState = false;
+	}
+
+	void UICustomDropDown::OnVisibleChanged()
+	{
+		interactable = mResVisible;
 	}
 
 	void UICustomDropDown::UpdateLayout(bool forcible /*= false*/)

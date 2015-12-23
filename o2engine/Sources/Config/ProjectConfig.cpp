@@ -7,8 +7,6 @@ namespace o2
 {
 	DECLARE_SINGLETON(ProjectConfig);
 
-	IOBJECT_CPP(ProjectConfig);
-
 	ProjectConfig::ProjectConfig():
 		mPlatform(PLATFORM)
 	{

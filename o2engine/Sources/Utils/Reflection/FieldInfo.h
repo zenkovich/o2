@@ -86,7 +86,8 @@ namespace o2
 
 	protected:
 		// Searches field recursively by pointer
-		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res);
+		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+										   Vector<void*>& passedObjects);
 
 		// Searches field recursively by path
 		virtual void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
@@ -116,7 +117,8 @@ namespace o2
 
 	protected:
 		// Searches field recursively by pointer
-		FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res);
+		FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
+								   Vector<void*>& passedObjects);
 
 		// Searches field recursively by path
 		void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
@@ -190,7 +192,8 @@ namespace o2
 	}
 
 	template<typename _type>
-	FieldInfo* AccessorFieldInfo<_type>::SearchFieldPath(void* obj, void* target, const String& path, String& res)
+	FieldInfo* AccessorFieldInfo<_type>::SearchFieldPath(void* obj, void* target, const String& path, String& res,
+														 Vector<void*>& passedObjects)
 	{
 		if (!mType)
 			return false;
@@ -204,6 +207,15 @@ namespace o2
 			for (auto field : mType->mFields)
 			{
 				char* fieldObj = field->GetValuePtr<char>(kv.Value());
+
+				if (fieldObj == nullptr)
+					continue;
+
+				if (passedObjects.Contains(fieldObj))
+					continue;
+
+				passedObjects.Add(fieldObj);
+
 				String newPath = path + "/" + kv.Key() + "/" + field->mName;
 				if (fieldObj == target)
 				{
@@ -211,7 +223,7 @@ namespace o2
 					return field;
 				}
 
-				FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res);
+				FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res, passedObjects);
 				if (childField)
 					return childField;
 			}

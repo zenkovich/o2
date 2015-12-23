@@ -54,12 +54,7 @@ namespace o2
 		// Selects item text
 		void SelectItemText(const WString& text);
 
-		SERIALIZABLE_IMPL(UIDropDown);
-
-		IOBJECT(UIDropDown)
-		{
-			BASE_CLASS(UICustomDropDown);
-		}
+		SERIALIZABLE(UIDropDown);
 
 	protected:
 		// Calls when selected item index was changed

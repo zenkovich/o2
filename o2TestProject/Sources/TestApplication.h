@@ -2,6 +2,7 @@
 
 #include "O2.h"
 #include "ITestScreen.h"
+#include "Application/Application.h"
 
 using namespace o2;
 

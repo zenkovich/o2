@@ -1,4 +1,5 @@
 #include "UIDockWindowPlace.h"
+#include "Render\Render.h"
 
 UIDockWindowPlace::UIDockWindowPlace():
 	UIWidget(), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()), 
@@ -158,11 +159,11 @@ void UIDockWindowPlace::OnDragHandleMaxMoved(const Vec2F& delta)
 
 void UIDockWindowPlace::CheckInteractable()
 {
-	interactable = mChilds.CountMatch([](auto x) { return x->GetTypeId() == UIDockWindowPlace::type->ID(); }) == 0;
+	interactable = mChilds.CountMatch([](auto x) { return x->GetType() == *UIDockWindowPlace::type; }) == 0;
 
 	for (auto child : mChilds)
 	{
-		if (child->GetTypeId() == UIDockWindowPlace::type->ID())
+		if (child->GetType() == *UIDockWindowPlace::type)
 			child.Cast<UIDockWindowPlace>()->CheckInteractable();
 	}
 }

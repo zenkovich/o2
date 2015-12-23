@@ -1,6 +1,26 @@
 #include "UIStyleBuilding.h"
 
-#include "O2.h"
+#include "Animation/AnimatedFloat.h"
+#include "Animation/AnimatedVector.h"
+#include "Render/Sprite.h"
+#include "Render/Text.h"
+#include "UI/Button.h"
+#include "UI/ContextMenu.h"
+#include "UI/CustomDropDown.h"
+#include "UI/CustomList.h"
+#include "UI/DropDown.h"
+#include "UI/EditBox.h"
+#include "UI/HorizontalProgress.h"
+#include "UI/HorizontalScrollBar.h"
+#include "UI/Label.h"
+#include "UI/List.h"
+#include "UI/ScrollArea.h"
+#include "UI/Toggle.h"
+#include "UI/UIManager.h"
+#include "UI/VerticalProgress.h"
+#include "UI/VerticalScrollBar.h"
+#include "UI/Window.h"
+
 using namespace o2;
 
 void RebuildButtonStyle()
@@ -22,8 +42,9 @@ void RebuildButtonStyle()
 
 	Ptr<Text> captionText = mnew Text("arial.ttf");
 	captionText->text = "Button";
-	captionText->horAlign = Text::HorAlign::Middle;
-	captionText->verAlign = Text::VerAlign::Middle;
+	captionText->horAlign = HorAlign::Middle;
+	captionText->verAlign = VerAlign::Middle;
+	captionText->dotsEngings = true;
 	sample->AddLayer("caption", captionText);
 
 	Animation selectStateAnim;
@@ -40,12 +61,12 @@ void RebuildButtonStyle()
 	auto pressedState = sample->AddState("pressed", pressedStateAnim);
 	pressedState->offStateAnimationSpeed = 0.5f;
 
-	Animation selectedStateAnim;
-	selectedStateAnim.SetTarget(sample);
-	*selectedStateAnim.AddAnimationValue<float>(&focusLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.1f);
+	Animation focusStateAnim;
+	focusStateAnim.SetTarget(sample);
+	*focusStateAnim.AddAnimationValue<float>(&focusLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.05f);
 
-	auto selectedState = sample->AddState("selected", selectedStateAnim);
-	selectedState->offStateAnimationSpeed = 0.25f;
+	auto focusState = sample->AddState("selected", focusStateAnim);
+	focusState->offStateAnimationSpeed = 0.5f;
 
 	Animation visibleStateAnim;
 	visibleStateAnim.SetTarget(sample);
@@ -331,24 +352,25 @@ void RebuildCheckboxStyle()
 	Ptr<UIToggle> sample = mnew UIToggle();
 	sample->layout.minSize = Vec2F(20, 20);
 	auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Check_bk.png"),
-									  Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 11)));
+									  Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
 	auto selectLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
-										Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 11)));
+										Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
 	auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI_Check_bk_pressed.png"),
-										 Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 11)));
+										 Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
+
+	auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI_Check_bk_focus.png"),
+										 Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
 	auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"),
 									   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
 
-	auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI_Check_bk_focus.png"),
-									   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -10), Vec2F(21, 11)));
-
 	Ptr<Text> captionText = mnew Text("arial.ttf");
 	captionText->text = "Checkbox";
-	captionText->horAlign = Text::HorAlign::Left;
-	captionText->verAlign = Text::VerAlign::Middle;
+	captionText->horAlign = HorAlign::Left;
+	captionText->verAlign = VerAlign::Middle;
+	captionText->dotsEngings = true;
 	sample->AddLayer("caption", captionText, Layout(Vec2F(0, 0), Vec2F(1, 1), Vec2F(20, 0), Vec2F(0, 0)));
 
 	Animation selectStateAnim;
@@ -370,12 +392,12 @@ void RebuildCheckboxStyle()
 	*valueStateAnim.AddAnimationValue<float>(&checkLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.1f);
 	sample->AddState("value", valueStateAnim);
 
-	Animation selectedStateAnim;
-	selectedStateAnim.SetTarget(sample);
-	*selectedStateAnim.AddAnimationValue<float>(&focusLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.1f);
+	Animation focusStateAnim;
+	focusStateAnim.SetTarget(sample);
+	*focusStateAnim.AddAnimationValue<float>(&focusLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.05f);
 
-	auto selectedState = sample->AddState("selected", selectedStateAnim);
-	selectedState->offStateAnimationSpeed = 0.25f;
+	auto focusState = sample->AddState("selected", focusStateAnim);
+	focusState->offStateAnimationSpeed = 0.5f;
 
 	Animation visibleStateAnim;
 	visibleStateAnim.SetTarget(sample);
@@ -489,10 +511,13 @@ void RebuildLabelStyle()
 {
 	Ptr<UILabel> sample = mnew UILabel();
 	sample->layout.minSize = Vec2F(20, 20);
+	sample->horOverflow = UILabel::HorOverflow::Dots;
+	sample->verOverflow = UILabel::VerOverflow::None;
+
 	Ptr<Text> captionText = mnew Text("arial.ttf");
 	captionText->text = "Checkbox";
-	captionText->horAlign = Text::HorAlign::Middle;
-	captionText->verAlign = Text::VerAlign::Middle;
+	captionText->horAlign = HorAlign::Middle;
+	captionText->verAlign = VerAlign::Middle;
 	sample->AddLayer("text", captionText);
 
 	Animation visibleStateAnim;
@@ -515,7 +540,7 @@ void RebuildEditBoxStyle()
 	sample->layout.minSize = Vec2F(30, 40);
 
 	auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::Both(-9, -9, -9, -9));
-	//auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::Both(-9, -9, -9, -9));
+	auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::Both(-9, -9, -9, -9));
 	auto focusLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::Both(-9, -9, -9, -9));
 
 	Ptr<UIHorizontalScrollBar> horScrollBar = o2UI.CreateHorScrollBar();
@@ -550,13 +575,6 @@ void RebuildEditBoxStyle()
 
 	auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
 
-	Animation selectedStateAnim;
-	selectedStateAnim.SetTarget(sample);
-	*selectedStateAnim.AddAnimationValue<float>(&focusLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.1f);
-
-	auto selectedState = sample->AddState("selected", selectedStateAnim);
-	selectedState->offStateAnimationSpeed = 0.25f;
-
 	Animation visibleStateAnim;
 	visibleStateAnim.SetTarget(sample);
 	*visibleStateAnim.AddAnimationValue<float>(&sample->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
@@ -564,10 +582,17 @@ void RebuildEditBoxStyle()
 	auto visibleState = sample->AddState("visible", visibleStateAnim);
 	visibleState->offStateAnimationSpeed = 0.5;
 
+	Animation focusStateAnim;
+	focusStateAnim.SetTarget(sample);
+	*focusStateAnim.AddAnimationValue<float>(&focusLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.05f);
+
+	auto focusState = sample->AddState("selected", focusStateAnim);
+	focusState->offStateAnimationSpeed = 0.5f;
+
 	Ptr<Text> textDrawable = sample->GetTextDrawable();
-	textDrawable->verAlign = Text::VerAlign::Top;
-	textDrawable->horAlign = Text::HorAlign::Left;
-	textDrawable->font = FontRef("arial.ttf");
+	textDrawable->verAlign = VerAlign::Top;
+	textDrawable->horAlign = HorAlign::Left;
+	textDrawable->SetFontAsset("arial.ttf");
 
 	Ptr<Sprite> caretDrawable = sample->GetCaretDrawable();
 	*caretDrawable = Sprite();
@@ -668,8 +693,8 @@ void RebuildListStyle()
 
 	Ptr<UILabel> itemSample = o2UI.CreateLabel("empty");
 	itemSample->layout.size = Vec2F(20, 0);
-	itemSample->horAlign = Text::HorAlign::Left;
-	itemSample->verAlign = Text::VerAlign::Middle;
+	itemSample->horAlign = HorAlign::Left;
+	itemSample->verAlign = VerAlign::Middle;
 	sample->SetItemSample(itemSample);
 
 	Ptr<UIHorizontalScrollBar> horScrollBar = o2UI.CreateHorScrollBar();
@@ -807,7 +832,7 @@ void RebuildDropDownStyle()
 	list->layout.offsetMax = Vec2F(0, 3);
 
 	Ptr<UILabel> itemSample = o2UI.CreateLabel("empty");
-	itemSample->horAlign = Text::HorAlign::Left;
+	itemSample->horAlign = HorAlign::Left;
 	sample->SetItemSample(itemSample);
 
 	Animation selectedStateAnim;
@@ -856,8 +881,9 @@ void RebuildWindowStyle()
 
 	Ptr<Text> captionText = mnew Text("arial.ttf");
 	captionText->text = "Window";
-	captionText->horAlign = Text::HorAlign::Left;
-	captionText->verAlign = Text::VerAlign::Middle;
+	captionText->horAlign = HorAlign::Left;
+	captionText->verAlign = VerAlign::Middle;
+	captionText->dotsEngings = true;
 	auto textLayer = sample->AddLayer("caption", captionText,
 									  Layout(Vec2F(0.0f, 1.0f), Vec2F(1.0f, 1.0f), Vec2F(19, -13), Vec2F(-28, 3)));
 
@@ -924,6 +950,84 @@ void RebuildWindowStyle()
 							   Layout(Vec2F(1, 1), Vec2F(1, 1), Vec2F(-5, -5), Vec2F(5, 5)),      // right top
 							   Layout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(-5, -5), Vec2F(5, 5)),      // left bottom 
 							   Layout(Vec2F(1, 0), Vec2F(1, 0), Vec2F(-5, -5), Vec2F(5, 5)));     // right bottom
+	
+	o2UI.AddWidgetStyle(sample, "standard");
+}
+
+void RebuildContextMenuStyle()
+{
+	Ptr<UIContextMenu> sample = mnew UIContextMenu();
+
+	sample->SetClippingLayout(Layout::Both(1, 2, 1, 1));
+	sample->SetViewLayout(Layout::Both(5, 5, 5, 5));
+	sample->SetEnableScrollsHiding(true);
+
+	sample->AddLayer("back", mnew Sprite("ui/UI_Context_menu.png"), Layout::Both(-19, -19, -20, -20));
+
+	Ptr<Sprite> selection = mnew Sprite("ui/UI_ListBox_selection_regular.png");
+	*sample->GetSelectionDrawable() = *selection;
+	sample->SetSelectionDrawableLayout(Layout::Both(-10, -16, -10, -16));
+
+	Ptr<UIWidget> itemSample = sample->GetItemSample();
+
+	Ptr<UIWidgetLayer> captionLayer = itemSample->GetLayer("caption");
+	Ptr<Text> captionLayerText = mnew Text("arial.ttf");
+	captionLayer->drawable = captionLayerText;
+	captionLayerText->horAlign = HorAlign::Left;
+	captionLayerText->verAlign = VerAlign::Middle;
+
+	Ptr<UIWidgetLayer> shortcutLayer = itemSample->GetLayer("shortcut");
+	Ptr<Text> shortcutLayerText = mnew Text("arial.ttf");
+	shortcutLayer->drawable = shortcutLayerText;
+	shortcutLayerText->horAlign = HorAlign::Right;
+	shortcutLayerText->verAlign = VerAlign::Middle;
+
+	Ptr<UIWidgetLayer> subIconLayer = itemSample->GetLayer("subIcon");
+	subIconLayer->drawable = mnew Sprite("ui/UI_Right_icn.png");
+	subIconLayer->layout = Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-15, 10), Vec2F(5, -10));
+
+	Ptr<UIHorizontalScrollBar> horScrollBar = o2UI.CreateHorScrollBar();
+	horScrollBar->layout.anchorMin = Vec2F(0, 0);
+	horScrollBar->layout.anchorMax = Vec2F(1, 0);
+	horScrollBar->layout.offsetMin = Vec2F(5, 0);
+	horScrollBar->layout.offsetMax = Vec2F(-15, 15);
+	sample->SetHorizontalScrollBar(horScrollBar);
+
+	Ptr<UIVerticalScrollBar> verScrollBar = o2UI.CreateVerScrollBar();
+	verScrollBar->layout.anchorMin = Vec2F(1, 0);
+	verScrollBar->layout.anchorMax = Vec2F(1, 1);
+	verScrollBar->layout.offsetMin = Vec2F(-15, 15);
+	verScrollBar->layout.offsetMax = Vec2F(0, -5);
+	sample->SetVerticalScrollBar(verScrollBar);
+
+	Animation enableHorScrollAnim;
+	enableHorScrollAnim.SetTarget(sample);
+	*enableHorScrollAnim.AddAnimationValue<float>(&sample->GetVerticalScrollbar()->layout.offsetBottom) =
+		AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
+
+	auto enableHorScrollState = sample->AddState("enableHorBar", enableHorScrollAnim);
+
+	Animation enableVerScrollAnim;
+	enableVerScrollAnim.SetTarget(sample);
+	*enableVerScrollAnim.AddAnimationValue<float>(&sample->GetHorizontalScrollbar()->layout.offsetRight) =
+		AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
+
+	auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
+
+	Animation hoverStateAnim;
+	hoverStateAnim.SetTarget(sample);
+	*hoverStateAnim.AddAnimationValue<float>(&sample->GetSelectionDrawable()->transparency) =
+		AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+
+	auto hoverState = sample->AddState("hover", hoverStateAnim);
+	hoverState->offStateAnimationSpeed = 0.5f;
+
+	Animation visibleStateAnim;
+	visibleStateAnim.SetTarget(sample);
+	*visibleStateAnim.AddAnimationValue<float>(&sample->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+
+	auto visibleState = sample->AddState("visible", visibleStateAnim);
+	visibleState->offStateAnimationSpeed = 2.0f;
 
 	o2UI.AddWidgetStyle(sample, "standard");
 }
@@ -949,6 +1053,7 @@ void RebuildUIStyle()
 	RebuildCustomDropDownStyle();
 	RebuildDropDownStyle();
 	RebuildWindowStyle();
+	RebuildContextMenuStyle();
 
 	o2UI.SaveStyle("ui_style.xml");
 }

@@ -4,6 +4,7 @@
 #include "Core/WindowsSystem/IEditorWindow.h"
 #include "Core/WindowsSystem/UIDockWindowPlace.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
+#include "Render/Render.h"
 #include "UI/UIManager.h"
 
 WindowsManager::WindowsManager()
@@ -61,7 +62,7 @@ void ProcHierarchy(String& hierarchy, Ptr<UIWidget> widget, int level)
 
 	hierarchy += widget->GetName();
 
-	if (widget->GetTypeId() == UIDockWindowPlace::type->ID())
+	if (widget->GetType() == *UIDockWindowPlace::type)
 	{
 		hierarchy += ": ";
 		hierarchy += (String)(bool)widget.Cast<UIDockWindowPlace>()->interactable;

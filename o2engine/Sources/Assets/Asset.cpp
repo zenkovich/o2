@@ -6,9 +6,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(Asset);
-	IOBJECT_CPP(Asset::IMetaInfo);
-
 	Asset::Asset()
 	{
 		InitializeProperties();
@@ -31,7 +28,7 @@ namespace o2
 
 	AssetInfo Asset::GetAssetInfo() const
 	{
-		return AssetInfo(mPath, GetAssetId(), GetTypeId());
+		return AssetInfo(mPath, GetAssetId(), GetType().ID());
 	}
 
 	String Asset::GetPath() const

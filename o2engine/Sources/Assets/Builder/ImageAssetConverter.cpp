@@ -6,8 +6,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(ImageAssetConverter);
-
 	Vector<Type::Id> ImageAssetConverter::GetProcessingAssetsTypes() const
 	{
 		Vector<Type::Id> res;

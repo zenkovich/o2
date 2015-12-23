@@ -1,5 +1,9 @@
 #include "IEditorWindow.h"
 
+#include "Core/WindowsSystem/UIDockableWindow.h"
+#include "Application/Application.h"
+#include "UI/UIManager.h"
+
 IEditorWindow::IEditorWindow()
 {
 	if (Application::IsReady())
@@ -15,10 +19,6 @@ IEditorWindow::IEditorWindow(const IEditorWindow& other)
 	{
 		mWindow = o2UI.CreateWidget<UIDockableWindow>();
 		mWindow->layout.size = Vec2F(200, 200);
-		auto editBox = o2UI.CreateEditBox();
-		editBox->layout = UIWidgetLayout::Both();
-		mWindow->AddChild(editBox);
-		editBox->onChanged = [&](const WString& text) { mWindow->caption = text; mWindow->name = text; };
 		o2UI.AddWidget(mWindow);
 	}
 }

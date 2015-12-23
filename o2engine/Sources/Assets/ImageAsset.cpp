@@ -9,10 +9,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(ImageAsset);
-	IOBJECT_CPP(ImageAsset::MetaInfo);
-	IOBJECT_CPP(ImageAsset::PlatformMeta);
-
 	ImageAsset::ImageAsset():
 		Asset(), mBitmap(nullptr), mAtlasPage(0)
 	{

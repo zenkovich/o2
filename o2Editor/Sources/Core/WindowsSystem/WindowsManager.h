@@ -1,6 +1,8 @@
 #pragma once
 
-#include "O2.h"
+#include "Utils/Containers/Vector.h"
+#include "Utils/Singleton.h"
+
 using namespace o2;
 
 class IEditorWindow;

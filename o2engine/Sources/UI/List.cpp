@@ -5,12 +5,11 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIList);
-
 	UIList::UIList():
 		UICustomList()
 	{
 		Ptr<UILabel> itemSample = mnew UILabel();
+		itemSample->horOverflow = UILabel::HorOverflow::Dots;
 		SetItemSample(itemSample);
 
 		InitializeProperties();

@@ -111,8 +111,7 @@ namespace o2
 	{
 		for (auto listener : mCursorListeners)
 		{
-			if (!listener->IsInteractable() || IsListenerClipped(listener->Depth(), cursor.mPosition) || 
-				!listener->IsUnderPoint(cursor.mPosition))
+			if (IsListenerClipped(listener->Depth(), cursor.mPosition) || !listener->IsUnderPoint(cursor.mPosition))
 				continue;
 
 			auto drag = dynamic_cast<DragEventsListener*>(listener.Get());
@@ -129,9 +128,6 @@ namespace o2
 	{
 		for (auto underCursor : mUnderCursorListeners)
 		{
-			if (!underCursor.Value()->IsInteractable())
-				continue;
-
 			if (!(mLastUnderCursorListeners.ContainsKey(underCursor.Key()) &&
 				  mLastUnderCursorListeners[underCursor.Key()] == underCursor.Value()))
 			{
@@ -161,8 +157,7 @@ namespace o2
 			if (listener->IsDragging())
 				continue;
 
-			if (!listener->IsInteractable() || IsListenerClipped(listener->Depth(), cursorPos) || 
-				!listener->IsUnderPoint(cursorPos))
+			if (IsListenerClipped(listener->Depth(), cursorPos) || !listener->IsUnderPoint(cursorPos))
 				continue;
 
 			return listener;
@@ -187,8 +182,7 @@ namespace o2
 		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
 		for (auto listener : mCursorListeners)
 		{
-			if (!listener->IsInteractable() || IsListenerClipped(listener->Depth(), cursorPos) || 
-				!listener->IsUnderPoint(cursorPos))
+			if (IsListenerClipped(listener->Depth(), cursorPos) || !listener->IsUnderPoint(cursorPos))
 				continue;
 
 			res.Add(listener);
@@ -215,9 +209,6 @@ namespace o2
 
 		auto listener = mUnderCursorListeners[cursor.mId];
 
-		if (!listener->IsInteractable())
-			return;
-
 		mPressedListeners.Add(cursor.mId, listener);
 
 		listener->OnCursorPressed(cursor);
@@ -240,8 +231,8 @@ namespace o2
 	{
 		if (mPressedListeners.ContainsKey(cursor.mId))
 		{
-			mPressedListeners[cursor.mId]->OnCursorReleased(cursor);
 			mPressedListeners[cursor.mId]->mIsPressed = false;
+			mPressedListeners[cursor.mId]->OnCursorReleased(cursor);
 			mPressedListeners.Remove(cursor.mId);
 		}
 	}

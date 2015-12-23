@@ -31,9 +31,6 @@ namespace o2
 		// Updates component
 		virtual void Update(float dt);
 
-		// Draws component
-		virtual void Draw();
-
 		// Sets component enable
 		virtual void SetEnabled(bool active);
 
@@ -68,16 +65,11 @@ namespace o2
 		template<typename _type>
 		Vector<Ptr<_type>> GetComponentsInChildren() const;
 
-		SERIALIZABLE_IMPL(Component);
-
-		IOBJECT(Component)
-		{
-			SRLZ_FIELD(mEnabled);
-		}
+		SERIALIZABLE(Component);
 
 	protected:
 		Ptr<Actor> mOwner;      // Owner actor
-		bool       mEnabled;    // Is component enabled
+		bool       mEnabled;    // Is component enabled @SERIALIZABLE
 		bool       mResEnabled; // Is component enabled in hierarchy
 
 	protected:
@@ -86,6 +78,9 @@ namespace o2
 
 		// Calls when actor's transform was changed
 		virtual void OnTransformChanged() {}
+
+		// Sets owner actor
+		virtual void SetOwnerActor(Ptr<Actor> actor);
 
 		// Initializes properties
 		void InitializeProperties();

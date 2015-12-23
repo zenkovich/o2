@@ -61,6 +61,17 @@ namespace o2
 		// Creates sample copy and returns him
 		Ptr<IObject> CreateSample() const;
 
+		// Returns filed pointer by path
+		template<typename _type>
+		_type* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+
+		// Returns field path by pointer from source object
+		String GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const;
+
+
+		// Adds basic type
+		void AddBaseType(Type* baseType);
+
 		// Registers field in type
 		template<typename _type>
 		FieldInfo& RegField(const String& name, UInt offset, Ptr<_type> value);
@@ -77,22 +88,6 @@ namespace o2
 		template<typename _type>
 		FieldInfo& RegField(const String& name, UInt offset, Accessor<Ptr<_type>, const String&>& value);
 
-		// Returns filed pointer by path
-		template<typename _type>
-		_type* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
-
-		// Returns field path by pointer from source object
-		String GetFieldPath(void* sourceObject, void *targetObject) const;
-
-		// Returns field info by pointer from source object
-		FieldInfo* FindFieldInfo(void* sourceObject, void *targetObject, String &res) const;
-
-		// Initializes type parameters
-		static void Initialize(Type& type, const String& name, UInt id, IObject* sample);
-
-		// Adds basic type
-		static void SetupBaseType(Type& type, Type* baseType);
-
 	protected:
 		String        mName;      // Name of object type
 		FieldInfosVec mFields;    // Fields information
@@ -101,6 +96,7 @@ namespace o2
 		Ptr<IObject>  mSample;    // Object sample
 
 		friend class FieldInfo;
+		friend class Reflection;
 
 		template<typename _type>
 		friend class AccessorFieldInfo;

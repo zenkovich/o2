@@ -32,6 +32,8 @@ namespace o2
 
 			// Destructor
 			~AssetNode();
+
+			SERIALIZABLE(AssetNode);
 		};
 		typedef Vector<Ptr<AssetNode>> AssetsVec;
 

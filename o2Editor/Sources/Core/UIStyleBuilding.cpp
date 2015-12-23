@@ -1,10 +1,27 @@
 #include "UIStyleBuilding.h"
 
-#include "O2.h"
+#include "Animation/AnimatedFloat.h"
+#include "Animation/AnimatedVector.h"
+#include "Render/Sprite.h"
+#include "Render/Text.h"
+#include "UI/Button.h"
+#include "UI/CustomDropDown.h"
+#include "UI/CustomList.h"
+#include "UI/DropDown.h"
+#include "UI/EditBox.h"
+#include "UI/HorizontalProgress.h"
+#include "UI/HorizontalScrollBar.h"
+#include "UI/Label.h"
+#include "UI/List.h"
+#include "UI/ScrollArea.h"
+#include "UI/Toggle.h"
+#include "UI/UIManager.h"
+#include "UI/VerticalProgress.h"
+#include "UI/VerticalScrollBar.h"
+#include "UI/Window.h"
+#include "WindowsSystem/UIDockableWindow.h"
+
 using namespace o2;
-
-#include "WindowsSystem\UIDockableWindow.h"
-
 
 void RebuildButtonStyle()
 {
@@ -25,8 +42,8 @@ void RebuildButtonStyle()
 
 	Ptr<Text> captionText = mnew Text("arial.ttf");
 	captionText->text = "Button";
-	captionText->horAlign = Text::HorAlign::Middle;
-	captionText->verAlign = Text::VerAlign::Middle;
+	captionText->horAlign = HorAlign::Middle;
+	captionText->verAlign = VerAlign::Middle;
 	sample->AddLayer("caption", captionText);
 
 	Animation selectStateAnim;
@@ -340,8 +357,8 @@ void RebuildCheckboxStyle()
 
 	Ptr<Text> captionText = mnew Text("arial.ttf");
 	captionText->text = "Checkbox";
-	captionText->horAlign = Text::HorAlign::Left;
-	captionText->verAlign = Text::VerAlign::Middle;
+	captionText->horAlign = HorAlign::Left;
+	captionText->verAlign = VerAlign::Middle;
 	sample->AddLayer("caption", captionText, Layout(Vec2F(0, 0), Vec2F(1, 1), Vec2F(20, 0), Vec2F(0, 0)));
 
 	Animation selectStateAnim;
@@ -477,8 +494,8 @@ void RebuildLabelStyle()
 	sample->layout.minSize = Vec2F(20, 20);
 	Ptr<Text> captionText = mnew Text("arial.ttf");
 	captionText->text = "Checkbox";
-	captionText->horAlign = Text::HorAlign::Middle;
-	captionText->verAlign = Text::VerAlign::Middle;
+	captionText->horAlign = HorAlign::Middle;
+	captionText->verAlign = VerAlign::Middle;
 	sample->AddLayer("text", captionText);
 
 	Animation visibleStateAnim;
@@ -544,8 +561,8 @@ void RebuildEditBoxStyle()
 	visibleState->offStateAnimationSpeed = 0.5;
 
 	Ptr<Text> textDrawable = sample->GetTextDrawable();
-	textDrawable->verAlign = Text::VerAlign::Top;
-	textDrawable->horAlign = Text::HorAlign::Left;
+	textDrawable->verAlign = VerAlign::Top;
+	textDrawable->horAlign = HorAlign::Left;
 	textDrawable->font = FontRef("arial.ttf");
 
 	Ptr<Sprite> caretDrawable = sample->GetCaretDrawable();
@@ -647,8 +664,8 @@ void RebuildListStyle()
 
 	Ptr<UILabel> itemSample = o2UI.CreateLabel("empty");
 	itemSample->layout.size = Vec2F(20, 0);
-	itemSample->horAlign = Text::HorAlign::Left;
-	itemSample->verAlign = Text::VerAlign::Middle;
+	itemSample->horAlign = HorAlign::Left;
+	itemSample->verAlign = VerAlign::Middle;
 	sample->SetItemSample(itemSample);
 
 	Ptr<UIHorizontalScrollBar> horScrollBar = o2UI.CreateHorScrollBar();
@@ -786,7 +803,7 @@ void RebuildDropDownStyle()
 	list->layout.offsetMax = Vec2F(0, 3);
 
 	Ptr<UILabel> itemSample = o2UI.CreateLabel("empty");
-	itemSample->horAlign = Text::HorAlign::Left;
+	itemSample->horAlign = HorAlign::Left;
 	sample->SetItemSample(itemSample);
 
 	Animation selectedStateAnim;
@@ -835,8 +852,8 @@ void RebuildWindowStyle()
 
 	Ptr<Text> captionText = mnew Text("arial.ttf");
 	captionText->text = "Window";
-	captionText->horAlign = Text::HorAlign::Left;
-	captionText->verAlign = Text::VerAlign::Middle;
+	captionText->horAlign = HorAlign::Left;
+	captionText->verAlign = VerAlign::Middle;
 	auto textLayer = sample->AddLayer("caption", captionText,
 									  Layout(Vec2F(0.0f, 1.0f), Vec2F(1.0f, 1.0f), Vec2F(19, -13), Vec2F(-28, 3)));
 
@@ -926,8 +943,8 @@ void RebuildDockableWndStyle()
 
 	Ptr<Text> captionText = mnew Text("arial.ttf");
 	captionText->text = "Window";
-	captionText->horAlign = Text::HorAlign::Left;
-	captionText->verAlign = Text::VerAlign::Middle;
+	captionText->horAlign = HorAlign::Left;
+	captionText->verAlign = VerAlign::Middle;
 	auto textLayer = sample->AddLayer("caption", captionText,
 									  Layout(Vec2F(0.0f, 1.0f), Vec2F(1.0f, 1.0f), Vec2F(19, -15), Vec2F(-28, 1)));
 

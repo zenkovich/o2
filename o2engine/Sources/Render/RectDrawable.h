@@ -52,23 +52,11 @@ namespace o2
 		// Returns enabled
 		virtual bool IsEnabled() const;
 
-		SERIALIZABLE_IMPL(IRectDrawable);
-
-		IOBJECT(IRectDrawable)
-		{
-			BASE_CLASS(Transform);
-
-			SRLZ_FIELD(mColor);
-			SRLZ_FIELD(mEnabled);
-
-			FIELD(color);
-			FIELD(transparency);
-			FIELD(enabled);
-		}
+		SERIALIZABLE(IRectDrawable);
 
 	protected:
-		Color4 mColor;   // Color
-		bool   mEnabled; // True, when drawable enabled and needs to draw
+		Color4 mColor;   // Color @SERIALIZABLE
+		bool   mEnabled; // True, when drawable enabled and needs to draw @SERIALIZABLE
 
 	protected:
 		// Calls when color was changed

@@ -2,8 +2,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIVerticalLayout);
-
 	UIVerticalLayout::UIVerticalLayout():
 		mBaseCorner(BaseCorner::Top), mSpacing(0), mExpandWidth(true), mExpandHeight(true), UIWidget(), 
 		mFitByChildren(false)

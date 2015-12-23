@@ -6,8 +6,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIButton);
-
 	UIButton::UIButton():
 		UIWidget()
 	{
@@ -76,11 +74,6 @@ namespace o2
 		return true;
 	}
 
-	bool UIButton::IsInteractable() const
-	{
-		return mResVisible && CursorEventsListener::IsInteractable();
-	}
-
 	void UIButton::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
@@ -145,11 +138,16 @@ namespace o2
 
 	void UIButton::OnLayerAdded(Ptr<UIWidgetLayer> layer)
 	{
-		if (layer->name == "caption" && layer->drawable && layer->drawable->GetTypeId() == Text::type->ID())
+		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == *Text::type)
 			mCaptionText = layer->drawable.Cast<Text>();
 
-		if (layer->name == "icon" && layer->drawable && layer->drawable->GetTypeId() == Sprite::type->ID())
+		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == *Sprite::type)
 			mIconSprite = layer->drawable.Cast<Sprite>();
+	}
+
+	void UIButton::OnVisibleChanged()
+	{
+		interactable = mResVisible;
 	}
 
 	void UIButton::InitializeProperties()

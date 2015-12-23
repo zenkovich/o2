@@ -2,8 +2,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIHorizontalProgress);
-
 	UIHorizontalProgress::UIHorizontalProgress():
 		mValue(0), mMinValue(0), mMaxValue(1), mOrientation(Orientation::Right), mScrollSense(1.0f)
 	{
@@ -33,6 +31,9 @@ namespace o2
 		mMaxValue = other.mMaxValue;
 		mOrientation = other.mOrientation;
 		mScrollSense = other.mScrollSense;
+
+		mBarLayer = GetLayer("bar");
+		mBackLayer = GetLayer("back");
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -158,11 +159,6 @@ namespace o2
 		return true;
 	}
 
-	bool UIHorizontalProgress::IsInteractable() const
-	{
-		return mResVisible && CursorEventsListener::IsInteractable();
-	}
-
 	void UIHorizontalProgress::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
@@ -218,6 +214,19 @@ namespace o2
 	void UIHorizontalProgress::OnScrolled(float scroll)
 	{
 		SetValue(mValue + scroll*mScrollSense);
+	}
+
+	void UIHorizontalProgress::OnDeserialized(const DataNode& node)
+	{
+		mBarLayer = GetLayer("bar");
+		mBackLayer = GetLayer("back");
+
+		UIWidget::OnDeserialized(node);
+	}
+
+	void UIHorizontalProgress::OnVisibleChanged()
+	{
+		interactable = mResVisible;
 	}
 
 	void UIHorizontalProgress::UpdateLayout(bool forcible /*= false*/)

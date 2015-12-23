@@ -1,7 +1,22 @@
 #include "UITestScreen.h"
 
+#include "Assets/ImageAsset.h"
 #include "Render/Render.h"
 #include "TestApplication.h"
+#include "UI/Button.h"
+#include "UI/ContextMenu.h"
+#include "UI/DropDown.h"
+#include "UI/EditBox.h"
+#include "UI/HorizontalLayout.h"
+#include "UI/HorizontalProgress.h"
+#include "UI/Label.h"
+#include "UI/List.h"
+#include "UI/Toggle.h"
+#include "UI/UIManager.h"
+#include "UI/VerticalLayout.h"
+#include "UI/VerticalProgress.h"
+#include "UI/WidgetLayout.h"
+#include "UI/Window.h"
 #include "UIStyleBuilding.h"
 
 UITestScreen::UITestScreen(Ptr<TestApplication> application):
@@ -11,6 +26,8 @@ UITestScreen::UITestScreen(Ptr<TestApplication> application):
 UITestScreen::~UITestScreen()
 {}
 
+#undef CreateWindow
+
 void UITestScreen::Load()
 {
 	RebuildUIStyle();
@@ -19,9 +36,10 @@ void UITestScreen::Load()
 	mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30);
 	o2Application.onResizingEvent += [&]() { mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30); };
 
-	auto window = o2UI.CreateWidget<UIWindow>();
+	auto window = o2UI.CreateWindow("UI elements samples");
 	o2UI.AddWidget(window);
 	window->layout.size = Vec2F(300, 300);
+	window->name = "UI elements window";
 
 	auto verLayout = o2UI.CreateVerLayout();
 	verLayout->baseCorner = BaseCorner::Top;
@@ -35,9 +53,35 @@ void UITestScreen::Load()
 	//button
 	auto buttonContainer = o2UI.CreateVerLayout();
 	buttonContainer->layout.height = 50;
+	auto button = o2UI.CreateButton("Click me!");
 	buttonContainer->AddChild(o2UI.CreateLabel("Button"));
-	buttonContainer->AddChild(o2UI.CreateButton("Click me!"));
+	buttonContainer->AddChild(button);
 	verLayout->AddChild(buttonContainer);
+
+	auto buttonContext = o2UI.CreateWidget<UIContextMenu>();
+	for (int i = 0; i < 15; i++)
+	{
+		WString itemName = WString::Format("Item #%i", i + 1);
+		buttonContext->AddItem(UIContextMenu::Item(itemName, [=]() { o2Debug.Log("Pressed %sw", itemName); }));
+	}
+
+	buttonContext->AddItem(
+		UIContextMenu::Item("Icon item", []() { o2Debug.Log("Pressed icon"); }, "",
+							mnew ImageAsset("ui/UI_search_regular.png")));
+
+	UIContextMenu::Item itm("Sub items", {
+		UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }),
+		UIContextMenu::Item("Sub 2",{ UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }),
+							UIContextMenu::Item("Sub 2", []() { o2Debug.Log("Pressed sub 2"); }),
+							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); }) }),
+							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); })
+	});
+
+	buttonContext->AddItem(itm);
+	buttonContext->AddItem(itm);
+
+	button->AddChild(buttonContext);
+	button->onClick = [=]() { buttonContext->Show(o2Input.GetCursorPos()); };
 
 	//check box
 	auto checkBoxContainer = o2UI.CreateVerLayout();
@@ -94,6 +138,7 @@ void UITestScreen::Load()
 	listContainer->AddChild(o2UI.CreateLabel("List"));
 
 	auto list = o2UI.CreateList();
+	list->name = "test list";
 	list->layout.height = 100;
 	for (int i = 0; i < 10; i++)
 		list->AddItem(String::Format("List item #%i", i + 1));
@@ -113,28 +158,96 @@ void UITestScreen::Load()
 
 	dropdownContainer->AddChild(dropdown);
 	verLayout->AddChild(dropdownContainer);
-}
 
-void UITestScreen::Unload()
-{
-	o2UI.RemoveAllWidgets();
-}
+	auto labelTestWindow = o2UI.CreateWindow("Label test");
+	auto testLabel = o2UI.CreateLabel("Label text multi line Label text multi line\nLabel text multi line\nLabel text multi lineLabel text multi line\nLabel text multi line");
+	labelTestWindow->AddChild(testLabel);
+	testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0);
 
-void UITestScreen::Update(float dt)
-{
-	if (o2Input.IsKeyPressed('D'))
-		o2Debug.Log("debug");
+	auto labelTestEdit = o2UI.CreateEditBox();
+	labelTestEdit->layout = UIWidgetLayout::Both(0, 100, 0, 0);
+	labelTestEdit->layout.anchorTop = 0;
+	labelTestEdit->layout.offsetTop = 195;
+	labelTestWindow->AddChild(labelTestEdit);
+	labelTestEdit->onChanged += [=](const WString& text) { testLabel->text = text; };
 
-	if (o2Input.IsKeyPressed(VK_ESCAPE))
-		mApplication->GoToScreen("MainTestScreen");
-}
+	auto testButtonslayout = o2UI.CreateVerLayout();
+	auto alignHorTestButtonsLayout = o2UI.CreateHorLayout();
+	auto alignVerTestButtonsLayout = o2UI.CreateHorLayout();
+	auto overflowHorTestButtonsLayout = o2UI.CreateHorLayout();
+	auto overflowVerTestButtonsLayout = o2UI.CreateHorLayout();
 
-void UITestScreen::Draw()
-{
-	mBackground.Draw();
-}
+	testButtonslayout->layout = UIWidgetLayout::Both();
+	testButtonslayout->layout.anchorTop = 0;
+	testButtonslayout->layout.offsetTop = 95;
+	testButtonslayout->AddChild(alignHorTestButtonsLayout);
+	testButtonslayout->AddChild(alignVerTestButtonsLayout);
+	testButtonslayout->AddChild(overflowHorTestButtonsLayout);
+	testButtonslayout->AddChild(overflowVerTestButtonsLayout);
 
-String UITestScreen::GetId() const
-{
-	return "UITestScreen";
-}
+	testButtonslayout->spacing = 5;
+
+	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("|<-", [=]() { testLabel->horAlign = HorAlign::Left; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("->|<-", [=]() { testLabel->horAlign = HorAlign::Middle; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+
+	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("->|", [=]() {
+		testLabel->horAlign = HorAlign::Right;
+		testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0);
+	}));
+
+	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("---", [=]() { testLabel->horAlign = HorAlign::Both; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	alignHorTestButtonsLayout->spacing = 5;
+
+	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("/\\", [=]() {
+		testLabel->verAlign = VerAlign::Top;
+		testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0);
+	}));
+
+	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("---", [=]() { testLabel->verAlign = VerAlign::Middle; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("\\/", [=]() { testLabel->verAlign = VerAlign::Bottom; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("-\n-\n-", [=]() { testLabel->verAlign = VerAlign::Both; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	alignVerTestButtonsLayout->spacing = 5;
+
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("None", [=]() { testLabel->horOverflow = UILabel::HorOverflow::None; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Cut", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Cut; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Dots", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Dots; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Expand", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Expand; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Wrap", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Wrap; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->spacing = 5;
+
+	overflowVerTestButtonsLayout->AddChild(o2UI.CreateButton("None", [=]() { testLabel->verOverflow = UILabel::VerOverflow::None; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	overflowVerTestButtonsLayout->AddChild(o2UI.CreateButton("Cut", [=]() { testLabel->verOverflow = UILabel::VerOverflow::Cut; testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0); }));
+	overflowVerTestButtonsLayout->AddChild(o2UI.CreateButton("Expand", [=]() {
+		testLabel->verOverflow = UILabel::VerOverflow::Expand;
+		testLabel->layout = UIWidgetLayout::Both(0, 200, 0, 0);
+	}));
+	overflowVerTestButtonsLayout->spacing = 5;
+
+	labelTestWindow->AddChild(testButtonslayout);
+	o2UI.AddWidget(labelTestWindow);
+	labelTestWindow->layout.size = Vec2F(300, 300);
+	}
+
+							void UITestScreen::Unload()
+	{
+		o2UI.RemoveAllWidgets();
+	}
+
+	void UITestScreen::Update(float dt)
+	{
+		if (o2Input.IsKeyPressed('D'))
+			o2Debug.Log("debug");
+
+		if (o2Input.IsKeyPressed(VK_ESCAPE))
+			mApplication->GoToScreen("MainTestScreen");
+	}
+
+	void UITestScreen::Draw()
+	{
+		mBackground.Draw();
+	}
+
+	String UITestScreen::GetId() const
+	{
+		return "UITestScreen";
+	}

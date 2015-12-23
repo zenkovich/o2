@@ -2,14 +2,13 @@
 
 #include <Windows.h>
 
-#include "Utils/Reflection/Types.h"
+#include "Utils/Reflection/Reflection.h"
 
 namespace o2
 {
 	//TimeStuff& Time = TimeStuff::Instance();
 
 	DECLARE_SINGLETON(Time);
-	IOBJECT_CPP(TimeStamp);
 
 	Time::Time():
 		mApplicationTime(0), mLocalTime(0), mCurrentFrame(0), mDeltaTime(0), mFPS(0), mFPSSum(0),

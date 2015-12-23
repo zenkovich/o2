@@ -9,8 +9,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UICustomList);
-
 	UICustomList::UICustomList():
 		UIScrollArea(), mSelectedItem(-1), mHoverLayout(Layout::Both()), mSelectionLayout(Layout::Both())
 	{
@@ -325,17 +323,12 @@ namespace o2
 
 	float UICustomList::Depth()
 	{
-		return mDrawDepth;
+		return GetMaxDrawingDepth();
 	}
 
 	bool UICustomList::IsScrollable() const
 	{
 		return mEnableHorScroll || mEnableVerScroll;
-	}
-
-	bool UICustomList::IsInteractable() const
-	{
-		return mResVisible && CursorEventsListener::IsInteractable();
 	}
 
 	void UICustomList::UpdateControls(float dt)

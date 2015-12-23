@@ -4,9 +4,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(FolderAsset);
-	IOBJECT_CPP(FolderAsset::MetaInfo);
-
 	Type::Id FolderAsset::MetaInfo::GetAssetType() const
 	{
 		return FolderAsset::type->ID();

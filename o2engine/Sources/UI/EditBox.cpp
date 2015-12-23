@@ -14,8 +14,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIEditBox);
-
 	UIEditBox::UIEditBox():
 		UIScrollArea(), mSelectionBegin(0), mSelectionEnd(0), mMultiLine(true), mWordWrap(false), mMaxLineChars(0), 
 		mMaxLinesCount(0), mSelectionColor(0.1f, 0.2f, 0.6f, 0.3f), mCaretBlinkDelay(1), mCaretBlinkTime(0), 
@@ -383,13 +381,13 @@ namespace o2
 		return true;
 	}
 
-	bool UIEditBox::IsInteractable() const
-	{
-		return mResVisible && CursorEventsListener::IsInteractable();
-	}
-
 	void UIEditBox::UpdateControls(float dt)
 	{}
+
+	void UIEditBox::OnVisibleChanged()
+	{
+		interactable = mResVisible;
+	}
 
 	void UIEditBox::OnCursorPressed(const Input::Cursor& cursor)
 	{

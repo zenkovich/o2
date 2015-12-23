@@ -4,13 +4,11 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIDropDown);
-
-
 	UIDropDown::UIDropDown():
 		UICustomDropDown()
 	{
 		Ptr<UILabel> itemSample = mnew UILabel();
+		itemSample->horOverflow = UILabel::HorOverflow::Dots;
 		SetItemSample(itemSample);
 
 		InitializeProperties();

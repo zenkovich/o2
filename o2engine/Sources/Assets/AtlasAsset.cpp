@@ -5,11 +5,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(AtlasAsset);
-	IOBJECT_CPP(AtlasAsset::MetaInfo);
-	IOBJECT_CPP(AtlasAsset::PlatformMeta);
-	IOBJECT_CPP(AtlasAsset::Page);
-
 	Type::Id AtlasAsset::MetaInfo::GetAssetType() const
 	{
 		return AtlasAsset::type->ID();

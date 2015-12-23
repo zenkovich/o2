@@ -28,10 +28,7 @@ namespace o2
 		// Resets converter
 		void Reset();
 
-		IOBJECT(FolderAssetConverter)
-		{
-			BASE_CLASS(IAssetConverter);
-		}
+		IOBJECT(FolderAssetConverter);
 
 	protected:
 		Vector<String> mRemovedFolders; // Removes folders

@@ -118,25 +118,10 @@ namespace o2
 		// Returns depth (event system will catch listener with highest depth)
 		float Depth();
 
-		// Returns interactable flag
-		bool IsInteractable() const;
-
-		SERIALIZABLE_IMPL(UICustomDropDown);
-
-		IOBJECT(UICustomDropDown)
-		{
-			BASE_CLASS(UIWidget);
-
-			FIELD(selectedItem);
-			FIELD(selectedItemPos);
-			FIELD(item);
-			FIELD(itemsCount);
-
-			SRLZ_FIELD(mList);
-		}
+		SERIALIZABLE(UICustomDropDown);
 
 	protected:
-		Ptr<UICustomList> mList;         // List view
+		Ptr<UICustomList> mList;         // List view @SERIALIZABLE
 		Layout            mClipLayout;   // Clipping layout
 		RectF             mAbsoluteClip; // Absolute clipping rectangle
 		int               mMaxListItems; // Maximum visible items in list
@@ -157,6 +142,9 @@ namespace o2
 
 		// Calls when cursor exits this object. Sets state "select" to false
 		void OnCursorExit(const Input::Cursor& cursor);
+
+		// Calls when visible was changed
+		void OnVisibleChanged();
 
 		// Updates layout
 		void UpdateLayout(bool forcible = false);

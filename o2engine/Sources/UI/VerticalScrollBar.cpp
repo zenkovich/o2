@@ -4,8 +4,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIVerticalScrollBar);
-
 	UIVerticalScrollBar::UIVerticalScrollBar():
 		mValue(0), mMinValue(0), mMaxValue(1), mScrollSense(1.0f), mScrollHandleSize(0.2f), mHandlePressed(false),
 		mScrollhandleMinPxSize(5), mSmoothValue(mValue)
@@ -39,6 +37,9 @@ namespace o2
 		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
 		mSmoothValue = mValue;
 		mHandlePressed = false;
+
+		mHandleLayer = GetLayer("handle");
+		mBackLayer = GetLayer("back");
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -169,11 +170,6 @@ namespace o2
 		return !Math::Equals(mMinValue, mMaxValue);
 	}
 
-	bool UIVerticalScrollBar::IsInteractable() const
-	{
-		return mResVisible && CursorEventsListener::IsInteractable();
-	}
-
 	void UIVerticalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
 
@@ -261,6 +257,19 @@ namespace o2
 	void UIVerticalScrollBar::OnScrolled(float scroll)
 	{
 		SetValue(mValue - scroll*mScrollSense);
+	}
+
+	void UIVerticalScrollBar::OnDeserialized(const DataNode& node)
+	{
+		mHandleLayer = GetLayer("handle");
+		mBackLayer = GetLayer("back");
+
+		UIWidget::OnDeserialized(node);
+	}
+
+	void UIVerticalScrollBar::OnVisibleChanged()
+	{
+		interactable = mResVisible;
 	}
 
 	void UIVerticalScrollBar::SetMinimalScrollhandleSize(float pixelSize)

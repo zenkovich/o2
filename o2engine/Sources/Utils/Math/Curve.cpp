@@ -4,9 +4,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(Curve);
-	IOBJECT_CPP(Curve::Key);
-
 	Curve::Curve()
 	{
 		InitializeProperties();

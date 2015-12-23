@@ -9,8 +9,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIScrollArea);
-
 	UIScrollArea::UIScrollArea():
 		UIWidget(), mOwnHorScrollBar(false), mOwnVerScrollBar(false), mClipAreaLayout(Layout::Both()), mUnderCursor(false),
 		mPressedCursor(false), mScrollSpeedDamp(7.0f), mSpeedUpdTime(0), mViewAreaLayout(Layout::Both()),
@@ -187,7 +185,7 @@ namespace o2
 				auto enableHorBarState = state["enableHorBar"];
 				if (enableHorBarState)
 					*enableHorBarState = false;
-				
+
 				mHorScrollBar->Hide();
 			}
 
@@ -196,7 +194,7 @@ namespace o2
 				auto enableVerBarState = state["enableVerBar"];
 				if (enableVerBarState)
 					*enableVerBarState = false;
-				
+
 				mVerScrollBar->Hide();
 			}
 		}
@@ -363,8 +361,8 @@ namespace o2
 		bool underCursorAtFrame = layout.mAbsoluteRect.IsInside(cursor->mPosition);
 		bool underClippingArea = mAbsoluteClipArea.IsInside(cursor->mPosition);
 		bool underScrollbars =
-			((mHorScrollBar && mOwnHorScrollBar) ? mHorScrollBar->IsUnderPoint(cursor->mPosition):false) ||
-			((mVerScrollBar && mOwnVerScrollBar) ? mVerScrollBar->IsUnderPoint(cursor->mPosition):false);
+			((mHorScrollBar && mOwnHorScrollBar) ? mHorScrollBar->IsUnderPoint(cursor->mPosition) : false) ||
+			((mVerScrollBar && mOwnVerScrollBar) ? mVerScrollBar->IsUnderPoint(cursor->mPosition) : false);
 
 		bool lastPressedCursor = mPressedCursor;
 
@@ -403,16 +401,32 @@ namespace o2
 				*selectState = false;
 		}
 
-		auto listenerunderCursor = o2Events.GetCursorListenerUnderCursor(0);
-		if (!Math::Equals(o2Input.GetMouseWheelDelta(), 0.0f) && underClippingArea && !underScrollbars &&
-			(listenerunderCursor == nullptr || !listenerunderCursor->IsScrollable()))
-		{
-			mScrollSpeed = Vec2F();
 
-			if (mVerScrollBar && mEnableVerScroll)
-				mVerScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
-			else if (mHorScrollBar && mEnableHorScroll)
-				mHorScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+		if (!Math::Equals(o2Input.GetMouseWheelDelta(), 0.0f) && underClippingArea && !underScrollbars)
+		{
+			Ptr<CursorEventsListener> listenerunderCursor;
+			for (auto x : o2Events.GetAllCursorListenersUnderCursor(0))
+			{
+				auto scrollArea = dynamic_cast<UIScrollArea*>(x.Get());
+				if (scrollArea)
+				{
+					if (scrollArea != this)
+						listenerunderCursor = x;
+
+					break;
+
+				}
+			}
+
+			if (listenerunderCursor == nullptr || !listenerunderCursor->IsScrollable())
+			{
+				mScrollSpeed = Vec2F();
+
+				if (mVerScrollBar && mEnableVerScroll)
+					mVerScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+				else if (mHorScrollBar && mEnableHorScroll)
+					mHorScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+			}
 		}
 
 		if (lastPressedCursor && mPressedCursor && false)
@@ -431,7 +445,7 @@ namespace o2
 
 					if (scrollDelta.Length() > 7.0f)
 					{
-						mScrollSpeed = scrollDelta/dt;
+						mScrollSpeed = scrollDelta / dt;
 						mSpeedUpdTime = 0.0f;
 					}
 					else
@@ -531,10 +545,10 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			mScrollArea.left   = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
+			mScrollArea.left = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
 			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout.mLocalRect.bottom);
-			mScrollArea.right  = Math::Max(mScrollArea.right, child->layout.mLocalRect.right);
-			mScrollArea.top    = Math::Max(mScrollArea.top, child->layout.mLocalRect.top);
+			mScrollArea.right = Math::Max(mScrollArea.right, child->layout.mLocalRect.right);
+			mScrollArea.top = Math::Max(mScrollArea.top, child->layout.mLocalRect.top);
 		}
 
 		mScrollRange = RectF(mScrollArea.left - localViewArea.left,
@@ -662,8 +676,6 @@ namespace o2
 
 	void UIScrollArea::OnDeserialized(const DataNode& node)
 	{
-		UIWidget::OnDeserialized(node);
-
 		if (mHorScrollBar)
 		{
 			if (mOwnHorScrollBar) mHorScrollBar.Release();
@@ -695,6 +707,8 @@ namespace o2
 			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIScrollArea::OnVerScrollChanged);
 		}
 		else mVerScrollBar = nullptr;
+
+		UIWidget::OnDeserialized(node);
 	}
 
 	void UIScrollArea::OnScrolled()

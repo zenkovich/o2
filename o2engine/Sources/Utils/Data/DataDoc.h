@@ -323,7 +323,7 @@ namespace o2
 
 			if (auto valueNode = GetNode("Value"))
 			{
-				value = static_cast<ISerializable*>(Types::CreateTypeSample(type));
+				value = static_cast<ISerializable*>(Reflection::CreateTypeSample(type));
 				*value = *valueNode;
 			}
 		}

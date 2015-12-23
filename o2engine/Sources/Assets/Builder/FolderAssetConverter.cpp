@@ -7,8 +7,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(FolderAssetConverter);
-
 	Vector<Type::Id> FolderAssetConverter::GetProcessingAssetsTypes() const
 	{
 		Vector<Type::Id> res;

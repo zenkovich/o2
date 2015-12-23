@@ -8,12 +8,12 @@ namespace o2
 	// -----------------
 	// Asset information
 	// -----------------
-	struct AssetInfo: public ISerializable
+	struct AssetInfo: public virtual ISerializable
 	{
 	public:
-		Type::Id mType; // Type of asset
-		String   mPath; // Path of asset
-		AssetId  mId;   // Id of asset
+		Type::Id mType; // Type of asset @SERIALIZABLE
+		String   mPath; // Path of asset @SERIALIZABLE
+		AssetId  mId;   // Id of asset @SERIALIZABLE
 
 	public:
 		// Default constructor
@@ -25,14 +25,7 @@ namespace o2
 		// Check equal operator
 		bool operator==(const AssetInfo& other) const;
 
-		SERIALIZABLE_IMPL(AssetInfo);
-
-		IOBJECT(AssetInfo)
-		{
-			SRLZ_FIELD(mType);
-			SRLZ_FIELD(mPath);
-			SRLZ_FIELD(mId);
-		}
+		SERIALIZABLE(AssetInfo);
 	};
 	typedef Vector<AssetInfo> AssetInfosVec;
 }

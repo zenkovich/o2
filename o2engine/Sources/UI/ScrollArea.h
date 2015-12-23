@@ -90,24 +90,7 @@ namespace o2
 		// Returns view layout
 		Layout GetViewLayout() const;
 
-		SERIALIZABLE_IMPL(UIScrollArea);
-
-		IOBJECT(UIScrollArea)
-		{
-			BASE_CLASS(UIWidget);
-
-			FIELD(scroll);
-			FIELD(horScroll);
-			FIELD(verScroll);
-			FIELD(mHorScrollBar);
-			FIELD(mVerScrollBar);
-			FIELD(mOwnHorScrollBar);
-			FIELD(mOwnVerScrollBar);
-
-			SRLZ_FIELD(mClipAreaLayout);
-			SRLZ_FIELD(mScrollPos);
-			SRLZ_FIELD(mViewAreaLayout);
-		}
+		SERIALIZABLE(UIScrollArea);
 
 	protected:
 		Ptr<UIHorizontalScrollBar> mHorScrollBar;            // horizontal scroll bar
@@ -115,13 +98,13 @@ namespace o2
 		bool                       mOwnHorScrollBar;         // True, if this widget is owner of mHorScrollBar
 		bool                       mOwnVerScrollBar;         // True, if this widget is owner of mVerScrollBar
 
-		Layout                     mViewAreaLayout;          // Children view area layout with disabled bars
+		Layout                     mViewAreaLayout;          // Children view area layout with disabled bars @SERIALIZABLE
 		RectF                      mAbsoluteViewArea;        // View area
 
-		Layout                     mClipAreaLayout;          // Clipping area layout (relative to this widget layout)
+		Layout                     mClipAreaLayout;          // Clipping area layout (relative to this widget layout) @SERIALIZABLE
 		RectF                      mAbsoluteClipArea;        // Clipping area
 														     
-		Vec2F                      mScrollPos;               // Scroll position
+		Vec2F                      mScrollPos;               // Scroll position @SERIALIZABLE
 		Vec2F                      mScrollSpeed;             // Scrolling speed
 		float                      mScrollSpeedDamp;         // Scroll speed damping
 		RectF                      mScrollArea;              // Maximum scroll area size

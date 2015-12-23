@@ -23,7 +23,7 @@ namespace o2
 		LARGE_INTEGER curTime;
 		QueryPerformanceCounter(&curTime);
 
-		float res = (float)(curTime.QuadPart - (float)mStartTime.QuadPart)/(float)mFrequency.QuadPart;
+		float res = (float)((double)(curTime.QuadPart - (double)mStartTime.QuadPart)/(double)mFrequency.QuadPart);
 		mLastElapsedTime = curTime.QuadPart;
 
 		return res;
@@ -34,7 +34,7 @@ namespace o2
 		LARGE_INTEGER curTime;
 		QueryPerformanceCounter(&curTime);
 
-		float res = (float)(curTime.QuadPart - (float)mLastElapsedTime)/(float)mFrequency.QuadPart;
+		float res = (float)((double)(curTime.QuadPart - (double)mLastElapsedTime)/(double)mFrequency.QuadPart);
 		mLastElapsedTime = curTime.QuadPart;
 
 		return res;

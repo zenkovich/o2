@@ -88,7 +88,7 @@ namespace o2
 
 	Ptr<Asset> Assets::LoadAsset(const AssetInfo& info)
 	{
-		Type* assetType = Types::GetType(info.mType);
+		Type* assetType = Reflection::GetType(info.mType);
 		if (!assetType)
 		{
 			mLog->Error("Failed to load asset by info: incorrect type (%i)", info.mType);

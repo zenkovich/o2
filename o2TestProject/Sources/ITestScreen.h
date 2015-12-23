@@ -6,6 +6,12 @@ using namespace o2;
 
 class TestApplication;
 
+class Test: public IObject
+{
+public:
+	IOBJECT(Test);
+};
+
 class ITestScreen
 {
 public:

@@ -12,16 +12,11 @@ namespace o2
 	class AnimationMask: public ISerializable
 	{
 	public:
-		Dictionary<String, float> weights; // Masked nodes weights
+		Dictionary<String, float> weights; // Masked nodes weights @SERIALIZABLE
 
 		// Returns node masked weight. 1.0f is default
 		float GetNodeWeight(const String& node) const;
 
-		SERIALIZABLE_IMPL(AnimationMask);
-
-		IOBJECT(AnimationMask)
-		{
-			SRLZ_FIELD(weights);
-		}
+		SERIALIZABLE(AnimationMask);
 	};
 }

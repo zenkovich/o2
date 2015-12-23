@@ -6,8 +6,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIToggle);
-
 	UIToggle::UIToggle():
 		mValue(false)
 	{
@@ -84,11 +82,6 @@ namespace o2
 		return true;
 	}
 
-	bool UIToggle::IsInteractable() const
-	{
-		return mResVisible && CursorEventsListener::IsInteractable();
-	}
-
 	void UIToggle::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
@@ -157,11 +150,16 @@ namespace o2
 
 	void UIToggle::OnLayerAdded(Ptr<UIWidgetLayer> layer)
 	{
-		if (layer->name == "caption" && layer->drawable && layer->drawable->GetTypeId() == Text::type->ID())
+		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == *Text::type)
 			mCaptionText = layer->drawable.Cast<Text>();
 
 		if (layer->name == "back")
 			mBackLayer = layer;
+	}
+
+	void UIToggle::OnVisibleChanged()
+	{
+		interactable = mResVisible;
 	}
 
 	void UIToggle::InitializeProperties()

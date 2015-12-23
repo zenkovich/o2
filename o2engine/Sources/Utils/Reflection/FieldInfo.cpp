@@ -79,21 +79,31 @@ namespace o2
 		return mAttributes;
 	}
 
-	FieldInfo* FieldInfo::SearchFieldPath(void* obj, void* target, const String& path, String& res)
+	FieldInfo* FieldInfo::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+										  Vector<void*>& passedObjects)
 	{
 		if (!mType)
-			return false;
+			return nullptr;
 
 		for (auto field : mType->mFields)
 		{
 			char* fieldObj = field->GetValuePtr<char>(obj);
+
+			if (fieldObj == nullptr)
+				continue;
+
+			if (passedObjects.Contains(fieldObj))
+				continue;
+
+			passedObjects.Add(fieldObj);
+
 			if (fieldObj == target)
 			{
 				res = path + "/" + field->mName;
 				return field;
 			}
 
-			FieldInfo* childField = field->SearchFieldPath(fieldObj, target, path + "/" + field->mName, res);
+			FieldInfo* childField = field->SearchFieldPath(fieldObj, target, path + "/" + field->mName, res, passedObjects);
 			if (childField)
 				return childField;
 		}
@@ -103,6 +113,9 @@ namespace o2
 
 	void* FieldInfo::SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo)
 	{
+		if (!mType)
+			return nullptr;
+
 		return mType->GetFieldPtr<char>(obj, path, fieldInfo);
 	}
 

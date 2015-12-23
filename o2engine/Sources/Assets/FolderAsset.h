@@ -40,11 +40,7 @@ namespace o2
 		// Returns meta information
 		Ptr<MetaInfo> GetMeta() const;
 
-		IOBJECT(FolderAsset)
-		{
-			BASE_CLASS(Asset);
-			FIELD(mContainingAssetsInfos);
-		}
+		SERIALIZABLE(FolderAsset);
 
 	public:
 		// ----------------
@@ -56,12 +52,7 @@ namespace o2
 			// Returns asset type id
 			Type::Id GetAssetType() const;
 
-			SERIALIZABLE_IMPL(MetaInfo);
-
-			IOBJECT(MetaInfo)
-			{
-				BASE_CLASS(IMetaInfo);
-			}
+			SERIALIZABLE(MetaInfo);
 		};
 
 	protected:

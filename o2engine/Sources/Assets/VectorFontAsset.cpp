@@ -7,9 +7,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(VectorFontAsset);
-	IOBJECT_CPP(VectorFontAsset::MetaInfo);
-
 	VectorFontAsset::MetaInfo::~MetaInfo()
 	{
 		for (auto eff : mEffects)

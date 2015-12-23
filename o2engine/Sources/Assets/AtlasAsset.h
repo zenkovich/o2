@@ -81,14 +81,7 @@ namespace o2
 		// Returns atlas page's texture reference
 		static TextureRef GetPageTextureRef(const String& atlasPath, UInt pageIdx);
 
-		SERIALIZABLE_IMPL(AtlasAsset);
-
-		IOBJECT(AtlasAsset)
-		{
-			BASE_CLASS(Asset);
-			SRLZ_FIELD(mImagesAssetsInfos);
-			SRLZ_FIELD(mPages);
-		}
+		SERIALIZABLE(AtlasAsset);
 
 	public:
 		// -----------------------------------
@@ -96,17 +89,12 @@ namespace o2
 		// -----------------------------------
 		struct PlatformMeta: public ISerializable
 		{
-			Vec2I  mMaxSize = Vec2I(2048, 2048); // Maximal atlas size
-			String mFormat;                      // Atlas format
+			Vec2I  mMaxSize = Vec2I(2048, 2048); // Maximal atlas size @SERIALIZABLE
+			String mFormat;                      // Atlas format @SERIALIZABLE
 
 			bool operator==(const PlatformMeta& other) const;
 
-			SERIALIZABLE_IMPL(PlatformMeta);
-			IOBJECT(PlatformMeta)
-			{
-				SRLZ_FIELD(mMaxSize);
-				SRLZ_FIELD(mFormat);
-			}
+			SERIALIZABLE(PlatformMeta);
 		};
 
 		// ----------------
@@ -117,11 +105,11 @@ namespace o2
 		public:
 
 		public:
-			PlatformMeta mIOS;     // IOS specified meta
-			PlatformMeta mAndroid; // Android specified meta
-			PlatformMeta mMacOS;   // MacOS specified meta
-			PlatformMeta mWindows; // Windows specified meta
-			int          mBorder;  // Images pack border
+			PlatformMeta mIOS;     // IOS specified meta @SERIALIZABLE
+			PlatformMeta mAndroid; // Android specified meta @SERIALIZABLE
+			PlatformMeta mMacOS;   // MacOS specified meta @SERIALIZABLE
+			PlatformMeta mWindows; // Windows specified meta @SERIALIZABLE
+			int          mBorder;  // Images pack border @SERIALIZABLE
 
 		public:
 			// Returns asset type id
@@ -130,16 +118,7 @@ namespace o2
 			// Returns true if other meta is equal to this
 			bool IsEqual(Ptr<IMetaInfo> other) const;
 
-			SERIALIZABLE_IMPL(MetaInfo);
-			IOBJECT(MetaInfo)
-			{
-				BASE_CLASS(IMetaInfo);
-				SRLZ_FIELD(mIOS);
-				SRLZ_FIELD(mAndroid);
-				SRLZ_FIELD(mMacOS);
-				SRLZ_FIELD(mWindows);
-				SRLZ_FIELD(mBorder);
-			}
+			SERIALIZABLE(MetaInfo);
 		};
 
 		// ----------
@@ -149,9 +128,9 @@ namespace o2
 		{
 			friend class AtlasAssetConverter;
 
-			AssetId                    mId;          // Page number
-			Vec2I                      mSize;        // Size of page
-			Dictionary<AssetId, RectI> mImagesRects; // Images source rectangles
+			AssetId                    mId;          // Page number @SERIALIZABLE
+			Vec2I                      mSize;        // Size of page @SERIALIZABLE
+			Dictionary<AssetId, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
 
 		public:
 			// Returns number
@@ -172,18 +151,12 @@ namespace o2
 			// Check equal operator
 			bool operator==(const Page& other) const;
 
-			SERIALIZABLE_IMPL(Page);
-			IOBJECT(Page)
-			{
-				SRLZ_FIELD(mId);
-				SRLZ_FIELD(mSize);
-				SRLZ_FIELD(mImagesRects);
-			}
+			SERIALIZABLE(Page);
 		};
 
 	protected:
-		AssetInfosVec mImagesAssetsInfos; // Loaded image infos 
-		PagesVec      mPages;             // Pages
+		AssetInfosVec mImagesAssetsInfos; // Loaded image infos  @SERIALIZABLE
+		PagesVec      mPages;             // Pages @SERIALIZABLE
 
 	protected:
 		// Loads data

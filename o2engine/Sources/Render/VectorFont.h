@@ -33,10 +33,9 @@ namespace o2
 			virtual Vec2I GetSizeExtend() const { return Vec2I(); };
 
 			// Check effect equals
-			virtual bool IsEqual(Ptr<Effect> other) const { return GetTypeId() == other->GetTypeId(); }
+			virtual bool IsEqual(Ptr<Effect> other) const { return GetType() == other->GetType(); }
 
-			IOBJECT(Effect) {}
-			SERIALIZABLE_IMPL(Effect);
+			SERIALIZABLE(Effect);
 		};
 
 	public:

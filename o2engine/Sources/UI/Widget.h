@@ -38,7 +38,7 @@ namespace o2
 		Accessor<Ptr<UIWidget>, const String&>      child;
 		Accessor<Ptr<UIWidgetLayer>, const String&> layer;
 		Accessor<Ptr<UIWidgetState>, const String&> state;
-		UIWidgetLayout                              layout;
+		UIWidgetLayout                              layout; // @SERIALIZABLE
 
 		// Default constructor
 		UIWidget();
@@ -187,44 +187,19 @@ namespace o2
 		// Returns is this widget can be selected
 		virtual bool IsSelectable() const;
 
-		SERIALIZABLE_IMPL(UIWidget);
-
-		IOBJECT(UIWidget)
-		{
-			FIELD(name);
-			FIELD(parent);
-			FIELD(layout);
-			FIELD(childs);
-			FIELD(layers);
-			FIELD(states);
-			FIELD(child);
-			FIELD(layer);
-			FIELD(state);
-			FIELD(transparency);
-			FIELD(visible);
-
-			SRLZ_FIELD(mName);
-			SRLZ_FIELD(layout);
-			SRLZ_FIELD(mLayers);
-			SRLZ_FIELD(mStates);
-			SRLZ_FIELD(mChilds);
-			SRLZ_FIELD(mTransparency);
-
-			FIELD(mDrawingLayers);
-			//FIELD(mParent);
-		}
+		SERIALIZABLE(UIWidget);
 
 	protected:
-		String             mName;             // Name
+		String             mName;             // Name @SERIALIZABLE
 
-		LayersVec          mLayers;           // Layers array
-		StatesVec          mStates;           // States array
+		LayersVec          mLayers;           // Layers array @SERIALIZABLE
+		StatesVec          mStates;           // States array @SERIALIZABLE
 
 		Ptr<UIWidget>      mParent;           // Parent widget
-		WidgetsVec         mChilds;           // Children widgets
+		WidgetsVec         mChilds;           // Children widgets @SERIALIZABLE
 		RectF              mChildsAbsRect;    // Absolute rectangle for children arranging
 
-		float              mTransparency;	  // Widget transparency
+		float              mTransparency;	  // Widget transparency @SERIALIZABLE
 		float              mResTransparency;  // Widget result transparency, depends on parent's result transparency
 		LayersVec          mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000)
 		LayersVec          mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000)
@@ -292,6 +267,9 @@ namespace o2
 		// Calls when layer added and updates drawing sequence
 		virtual void OnLayerAdded(Ptr<UIWidgetLayer> layer);
 
+		// Calls when widget state was added
+		virtual void OnStateAdded(Ptr<UIWidgetState> state);
+
 		// Calls when child widget was added
 		virtual void OnChildAdded(Ptr<UIWidget> child);
 
@@ -310,6 +288,7 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
+		friend class UIContextMenu;
 		friend class UICustomDropDown;
 		friend class UICustomList;
 		friend class UIDropDown;
@@ -317,6 +296,7 @@ namespace o2
 		friend class UIHorizontalLayout;
 		friend class UIHorizontalProgress;
 		friend class UIHorizontalScrollBar;
+		friend class UILabel;
 		friend class UIList;
 		friend class UIManager;
 		friend class UIScrollArea;
@@ -332,7 +312,7 @@ namespace o2
 	Ptr<_type> UIWidget::FindChild()
 	{
 		for (auto child : mChilds)
-			if (child->GetTypeId() == _type::type->ID())
+			if (child->GetType() == *_type::type)
 				return child;
 
 		return nullptr;
@@ -342,7 +322,7 @@ namespace o2
 	Ptr<_type> UIWidget::GetLayerDrawable(const String& path) const
 	{
 		auto layer = GetLayer(path);
-		if (layer && layer->drawable->GetTypeId() == _type::type->ID())
+		if (layer && layer->drawable && layer->drawable->GetType() == *_type::type)
 			return layer->drawable.Cast<_type>();
 
 		return nullptr;

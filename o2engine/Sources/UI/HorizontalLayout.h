@@ -93,12 +93,7 @@ namespace o2
 		// Returns fitting by children
 		bool IsFittingByChildren() const;
 
-		SERIALIZABLE_IMPL(UIHorizontalLayout);
-
-		IOBJECT(UIHorizontalLayout)
-		{
-			BASE_CLASS(UIWidget);
-		}
+		SERIALIZABLE(UIHorizontalLayout);
 
 	protected:
 		BaseCorner mBaseCorner;    // Base corner of widgets arranging

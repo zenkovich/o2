@@ -1,9 +1,11 @@
 #pragma once
 
-#include "O2.h"
-using namespace o2;
-
+#include "Animation/Animatable.h"
+#include "Application/Application.h"
 #include "ApplicationConfig.h"
+#include "Render/Sprite.h"
+
+using namespace o2;
 
 class WindowsManager;
 class ApplicationConfig;
@@ -14,13 +16,7 @@ public:
 	Sprite sp1;
 	Sprite sp2;
 
-	IOBJECT(Test)
-	{
-		BASE_CLASS(Animatable);
-
-		FIELD(sp1);
-		FIELD(sp2);
-	}
+	SERIALIZABLE(Test);
 };
 
 // ------------------

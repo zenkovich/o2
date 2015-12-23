@@ -22,9 +22,6 @@ namespace o2
 		// Moves asset to new path
 		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
-		IOBJECT(StdAssetConverter)
-		{
-			BASE_CLASS(IAssetConverter);
-		}
+		IOBJECT(StdAssetConverter);
 	};
 }

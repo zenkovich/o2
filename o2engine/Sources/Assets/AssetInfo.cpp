@@ -2,8 +2,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(AssetInfo);
-
 	AssetInfo::AssetInfo():
 		mId(0), mType(0)
 	{}

@@ -2,8 +2,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(Layout);
-
 	Layout::Layout():
 		anchorMin(0, 0), anchorMax(1.0f, 1.0f), offsetMin(), offsetMax()
 	{}

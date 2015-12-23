@@ -4,9 +4,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(Component);
-
-
 	Component::Component():
 		mEnabled(true), mResEnabled(true)
 	{
@@ -33,9 +30,6 @@ namespace o2
 	}
 
 	void Component::Update(float dt)
-	{}
-
-	void Component::Draw()
 	{}
 
 	void Component::SetEnabled(bool active)
@@ -78,6 +72,20 @@ namespace o2
 			mResEnabled = mEnabled && mOwner->mResEnabled;
 		else
 			mResEnabled = mEnabled;
+	}
+
+	void Component::SetOwnerActor(Ptr<Actor> actor)
+	{
+		if (mOwner)
+			mOwner->mCompontents.Remove(this);
+
+		mOwner = actor;
+
+		if (mOwner)
+		{
+			mOwner->mCompontents.Add(this);
+			OnTransformChanged();
+		}
 	}
 
 	void Component::InitializeProperties()

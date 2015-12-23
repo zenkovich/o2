@@ -43,6 +43,9 @@ namespace o2
 		if (mInteractable == interactable)
 			return;
 
+		if (interactable) EventSystem::RegCursorListener(this);
+		else              EventSystem::UnregCursorListener(this);
+
 		mInteractable = interactable;
 
 		if (mInteractable)

@@ -1,6 +1,7 @@
 #include "TextTestScreen.h"
 
 #include "TestApplication.h"
+#include "Render\Render.h"
 
 TextTestScreen::TextTestScreen(Ptr<TestApplication> application):
 	ITestScreen(application)
@@ -45,28 +46,28 @@ void TextTestScreen::Unload()
 void TextTestScreen::Update(float dt)
 {
 	if (o2Input.IsKeyPressed('Q'))
-		mText.horAlign = Text::HorAlign::Left;
+		mText.horAlign = HorAlign::Left;
 
 	if (o2Input.IsKeyPressed('W'))
-		mText.horAlign = Text::HorAlign::Middle;
+		mText.horAlign = HorAlign::Middle;
 
 	if (o2Input.IsKeyPressed('E'))
-		mText.horAlign = Text::HorAlign::Right;
+		mText.horAlign = HorAlign::Right;
 
 	if (o2Input.IsKeyPressed('R'))
-		mText.horAlign = Text::HorAlign::Both;
+		mText.horAlign = HorAlign::Both;
 
 	if (o2Input.IsKeyPressed('A'))
-		mText.verAlign = Text::VerAlign::Top;
+		mText.verAlign = VerAlign::Top;
 
 	if (o2Input.IsKeyPressed('S'))
-		mText.verAlign = Text::VerAlign::Middle;
+		mText.verAlign = VerAlign::Middle;
 
 	if (o2Input.IsKeyPressed('D'))
-		mText.verAlign = Text::VerAlign::Bottom;
+		mText.verAlign = VerAlign::Bottom;
 
 	if (o2Input.IsKeyPressed('F'))
-		mText.verAlign = Text::VerAlign::Both;
+		mText.verAlign = VerAlign::Both;
 
 	if (o2Input.IsKeyPressed('G'))
 		mText.wordWrap = !mText.wordWrap;

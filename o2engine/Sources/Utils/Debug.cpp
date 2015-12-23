@@ -276,7 +276,7 @@ namespace o2
 	void Debug::DbgText::Draw()
 	{
 		textDrawable->SetPosition(position);
-		textDrawable->SetCText(text);
+		textDrawable->SetText(text);
 		textDrawable->SetColor(color);
 		textDrawable->Draw();
 	}

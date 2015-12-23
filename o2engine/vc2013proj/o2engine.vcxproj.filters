@@ -67,6 +67,9 @@
     <Filter Include="Sources\Scene">
       <UniqueIdentifier>{18b5eb74-4a51-4898-b088-20747a13f003}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Scene\Components">
+      <UniqueIdentifier>{80e5f1ef-54da-4c4a-bb48-95e4befcf7df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Utils\Math\Math.h">
@@ -200,9 +203,6 @@
       <Filter>Sources\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Reflection\Attribute.h">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection\Types.h">
       <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Assets\FolderAsset.h">
@@ -364,9 +364,6 @@
     <ClInclude Include="..\Sources\Animation\AnimatedValue.h">
       <Filter>Sources\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Animation\Tween.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Animation\AnimatedVector.h">
       <Filter>Sources\Animation</Filter>
     </ClInclude>
@@ -481,6 +478,21 @@
     <ClInclude Include="..\Sources\Scene\ActorTransform.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Scene\DrawableComponent.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Animation\TweenValue.h">
+      <Filter>Sources\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Scene\Components\ImageComponent.h">
+      <Filter>Sources\Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h">
+      <Filter>Sources\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\ContextMenu.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -550,9 +562,6 @@
       <Filter>Sources\Utils\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Reflection\Types.cpp">
       <Filter>Sources\Utils\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Assets\AssetInfo.cpp">
@@ -782,6 +791,18 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Scene\Component.cpp">
       <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Scene\DrawableComponent.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Scene\Components\ImageComponent.cpp">
+      <Filter>Sources\Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Reflection\Reflection.cpp">
+      <Filter>Sources\Utils\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\ContextMenu.cpp">
+      <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

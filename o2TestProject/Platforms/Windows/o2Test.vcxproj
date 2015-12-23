@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\MainTestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
     <ClCompile Include="..\..\Sources\TestApplication.cpp" />
     <ClCompile Include="..\..\Sources\TextTestScreen.cpp" />
     <ClCompile Include="..\..\Sources\UIStyleBuilding.cpp" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Sources\ITestScreen.h" />
     <ClInclude Include="..\..\Sources\MainTestScreen.h" />
+    <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
     <ClInclude Include="..\..\Sources\TestApplication.h" />
     <ClInclude Include="..\..\Sources\TextTestScreen.h" />
     <ClInclude Include="..\..\Sources\UIStyleBuilding.h" />
@@ -121,7 +123,7 @@
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +137,12 @@
     <BuildLog>
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
+    <PreBuildEvent>
+      <Command>C:\work\o2\o2CodeTool\o2CodeTool\bin\Release\o2CodeTool.exe $(ProjectDir)..\..\Sources\ReflectionGenerated C:\work\o2\o2Engine\Sources $(ProjectDir)..\..\Sources\</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Generating reflection</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -166,7 +174,7 @@
       <AdditionalIncludeDirectories>C:\work\o2\o2Engine\;C:\work\o2\o2Engine\Sources\;$(SolutionDir)..\..\Sources\;C:\work\o2\o2Engine\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
@@ -183,6 +191,12 @@
     <BuildLog>
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
+    <PreBuildEvent>
+      <Command>C:\work\o2\o2CodeTool\o2CodeTool\bin\Release\o2CodeTool.exe $(ProjectDir)..\..\Sources\ReflectionGenerated C:\work\o2\o2Engine\Sources $(ProjectDir)..\..\Sources\</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Generating reflection</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

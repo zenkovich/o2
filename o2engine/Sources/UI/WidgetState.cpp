@@ -4,8 +4,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIWidgetState);
-
 	UIWidgetState::UIWidgetState():
 		mState(false), offStateAnimationSpeed(1)
 	{}

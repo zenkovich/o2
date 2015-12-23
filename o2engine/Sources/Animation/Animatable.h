@@ -79,13 +79,7 @@ namespace o2
 		// Stops all states
 		void StopAll();
 
-		SERIALIZABLE_IMPL(Animatable);
-
-		IOBJECT(Animatable)
-		{
-			SRLZ_FIELD(mStates);
-			FIELD(mValues);
-		}
+		SERIALIZABLE(Animatable);
 
 	protected:
 		// -------------------------------
@@ -144,14 +138,14 @@ namespace o2
 			AnimationStatesVec  mBlendOffStates; // Turning off states
 			Ptr<AnimationState> mBlendOnState;   // Turning on state
 			float               duration;        // Blending duration
-			float               time;            // Current blending remaining time
+			float               time = -1.0f;    // Current blending remaining time
 
 			// Updates work weight by time
 			void Update(float dt);
 		};
 
 	protected:
-		AnimationStatesVec mStates; // Animation states array
+		AnimationStatesVec mStates; // Animation states array @SERIALIZABLE
 		ValueAgentsVec     mValues; // Assigning value agents
 		BlendState         mBlend;  // Current blend parameters
 
@@ -249,12 +243,12 @@ namespace o2
 	template<typename _type>
 	void Animatable::ValueAgent<_type>::AssignSetter(_type& value)
 	{
-		*(_type*)targetPtr = value;
+		*(Setter<_type>*)targetPtr = value;
 	}
 
 	template<typename _type>
 	void Animatable::ValueAgent<_type>::AssignField(_type& value)
 	{
-		*(Setter<_type>*)targetPtr = value;
+		*(_type*)targetPtr = value;
 	}
 }

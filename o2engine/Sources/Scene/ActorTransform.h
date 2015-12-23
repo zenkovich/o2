@@ -136,18 +136,7 @@ namespace o2
 		// Returns true when point inside this
 		bool IsPointInside(const Vec2F& point) const;
 
-		SERIALIZABLE_IMPL(ActorTransform);
-
-		IOBJECT(ActorTransform)
-		{
-			BASE_CLASS(Transform);
-
-			FIELD(worldPosition);
-			FIELD(worldRect);
-			FIELD(worldAngle);
-			FIELD(worldBasis);
-			FIELD(worldAABB);
-		}
+		SERIALIZABLE(ActorTransform);
 
 	protected:
 		Basis      mWorldTransform;          // Result world basis

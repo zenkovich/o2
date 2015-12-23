@@ -18,5 +18,7 @@ namespace o2
 
 		// Returns default camera
 		static Camera Default();
+
+		SERIALIZABLE(Camera);
 	};
 }

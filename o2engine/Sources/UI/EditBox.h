@@ -9,7 +9,6 @@
 
 namespace o2
 {
-
 	// --------------------
 	// Text edit box widget
 	// --------------------
@@ -145,65 +144,30 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsSelectable() const;
 
-		// Returns interactable flag
-		bool IsInteractable() const;
-
-		SERIALIZABLE_IMPL(UIEditBox);
-
-		IOBJECT(UIEditBox)
-		{
-			BASE_CLASS(UIScrollArea);
-
-			FIELD(text);
-			FIELD(caret);
-			FIELD(selectionBegin);
-			FIELD(selectionEnd);
-
-			SRLZ_FIELD(mTextDrawable);
-			SRLZ_FIELD(mCaretDrawable);
-			SRLZ_FIELD(mCaretBlinkDelay);
-			SRLZ_FIELD(mText);
-			SRLZ_FIELD(mAvailableSymbols);
-			SRLZ_FIELD(mSelectionColor);
-			SRLZ_FIELD(mMultiLine);
-			SRLZ_FIELD(mWordWrap);
-			SRLZ_FIELD(mMaxLineChars);
-			SRLZ_FIELD(mMaxLinesCount);
-
-			FIELD(mSelectionMesh);
-			FIELD(mCaretBlinkTime);
-			FIELD(mDrawDepth);
-			FIELD(mSelectionBegin);
-			FIELD(mSelectionEnd);
-			FIELD(mLastClickTime);
-			FIELD(mLastCursorPos);
-			FIELD(mSelectingByWords);
-			FIELD(mSelWordBegin);
-			FIELD(mSelWordEnd);
-		}
+		SERIALIZABLE(UIEditBox);
 
 	protected:
-		WString                    mText;             // Current text
-		WString                    mAvailableSymbols; // Available symbols
+		WString                    mText;             // Current text @SERIALIZABLE
+		WString                    mAvailableSymbols; // Available symbols @SERIALIZABLE
 
-		Ptr<Text>                  mTextDrawable;     // Text drawable
+		Ptr<Text>                  mTextDrawable;     // Text drawable @SERIALIZABLE
 		Ptr<Mesh>                  mSelectionMesh;    // Selection mesh
-		Ptr<Sprite>                mCaretDrawable;    // Caret drawable
+		Ptr<Sprite>                mCaretDrawable;    // Caret drawable @SERIALIZABLE
 
-		float                      mCaretBlinkDelay;  // Caret blinking delay
+		float                      mCaretBlinkDelay;  // Caret blinking delay @SERIALIZABLE
 		float                      mCaretBlinkTime;   // Caret blinking timer
 
 		int                        mSelectionBegin;	  // Selection begin index
 		int                        mSelectionEnd;	  // Selection end index
-		Color4                     mSelectionColor;   // Text selection color
+		Color4                     mSelectionColor;   // Text selection color @SERIALIZABLE
 		bool                       mSelectingByWords; // Selection works by solid words
 		int                        mSelWordBegin;     // Selection by words begin index
 		int                        mSelWordEnd;       // Selection by words end index
 
-		bool                       mMultiLine;		  // True if text is multiline
-		bool                       mWordWrap;		  // True if text words wrapping
-		int                        mMaxLineChars;	  // Count of maximum characters in line
-		int                        mMaxLinesCount;	  // Count of maximum lines count
+		bool                       mMultiLine;		  // True if text is multiline @SERIALIZABLE
+		bool                       mWordWrap;		  // True if text words wrapping @SERIALIZABLE
+		int                        mMaxLineChars;	  // Count of maximum characters in line @SERIALIZABLE
+		int                        mMaxLinesCount;	  // Count of maximum lines count @SERIALIZABLE
 
 		float                      mDrawDepth;        // Drawing depth at current frame
 
@@ -213,6 +177,9 @@ namespace o2
 	protected:
 		// Updates mouse control
 		void UpdateControls(float dt);
+
+		// Calls when visible was changed
+		void OnVisibleChanged();
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);

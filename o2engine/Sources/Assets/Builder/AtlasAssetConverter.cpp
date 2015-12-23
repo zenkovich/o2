@@ -9,9 +9,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(AtlasAssetConverter);
-	IOBJECT_CPP(AtlasAssetConverter::Image);
-
 	Vector<Type::Id> AtlasAssetConverter::GetProcessingAssetsTypes() const
 	{
 		Vector<Type::Id> res;

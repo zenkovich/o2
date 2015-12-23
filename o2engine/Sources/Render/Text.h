@@ -19,9 +19,6 @@ namespace o2
 	{
 	public:
 		struct SymbolsSet;
-
-		enum class VerAlign { Top, Middle, Bottom, Both };
-		enum class HorAlign { Left, Middle, Right, Both };
 		
 	public:
 		Property<FontRef>   font;                // Font pointer property
@@ -30,6 +27,7 @@ namespace o2
 		Property<VerAlign>  verAlign;            // vertical align property
 		Property<HorAlign>  horAlign;            // Horizontal align property
 		Property<bool>      wordWrap;            // Words wrapping flag property
+		Property<bool>      dotsEngings;         // Dots engings when overflow property
 		Property<float>     symbolsDistanceCoef; // Characters distance coef, 1 is standard
 		Property<float>     linesDistanceCoef;   // Lines distance coef, 1 is standard
 
@@ -93,12 +91,6 @@ namespace o2
 		// Returns text
 		WString GetText() const;
 
-		// Sets text
-		void SetCText(const String& text);
-
-		// Returns text as string
-		String GetCText() const;
-
 		// Sets horizontal align
 		void SetHorAlign(HorAlign align);
 
@@ -116,6 +108,12 @@ namespace o2
 
 		// Returns word wrapping
 		bool GetWordWrap() const;
+
+		// Sets dots endings
+		void SetDotsEngings(bool flag);
+
+		// Returns dots endings
+		bool IsDotsEngings() const;
 
 		// Sets characters distance coefficient
 		void SetSymbolsDistanceCoef(float coef = 1);
@@ -142,34 +140,10 @@ namespace o2
 		static Vec2F GetTextSize(const WString& text, Ptr<Font> font,
 								 const Vec2F& areaSize = Vec2F(), 
 								 HorAlign horAlign = HorAlign::Left, VerAlign verAlign = VerAlign::Top, 
-								 bool wordWrap = true, float charsDistCoef = 1.0f, float linesDistCoef = 1.0f);
+								 bool wordWrap = true, bool dotsEngings = false, float charsDistCoef = 1.0f, 
+								 float linesDistCoef = 1.0f);
 
-		SERIALIZABLE_IMPL(Text);
-
-		IOBJECT(Text)
-		{
-			BASE_CLASS(IRectDrawable);
-			FIELD(font);
-			FIELD(text);
-			FIELD(ctext);
-			FIELD(verAlign);
-			FIELD(horAlign);
-			FIELD(wordWrap);
-			FIELD(symbolsDistanceCoef);
-			FIELD(linesDistanceCoef);
-			FIELD(mFont);
-			FIELD(mMeshes);
-			FIELD(mLastTransform);
-			FIELD(mSymbolsSet);
-
-			SRLZ_FIELD(mFontAssetId);
-			SRLZ_FIELD(mText);
-			SRLZ_FIELD(mVerAlign);
-			SRLZ_FIELD(mHorAlign);
-			SRLZ_FIELD(mWordWrap);
-			SRLZ_FIELD(mSymbolsDistCoef);
-			SRLZ_FIELD(mLinesDistanceCoef);
-		}
+		SERIALIZABLE(Text);
 
 	public:
 		// ----------------
@@ -232,6 +206,7 @@ namespace o2
 			HorAlign    mHorAlign;        // Horizontal align
 			VerAlign    mVerAlign;        // Vertical align
 			bool        mWordWrap;        // True, when words wrapping
+			bool        mDotsEndings;     // Dots ending when overflow
 			float       mSymbolsDistCoef; // Characters distance coefficient, 1 is standard
 			float       mLinesDistCoef;   // Lines distance coefficient, 1 is standard
 			LineDefsVec mLines;           // Lines definitions
@@ -239,7 +214,7 @@ namespace o2
 		public:
 			// Calculating characters layout by parameters
 			void Initialize(FontRef font, const WString& text, const Vec2F& position, const Vec2F& areaSize, 
-							HorAlign horAlign, VerAlign verAlign, bool wordWrap, float charsDistCoef, float linesDistCoef);
+							HorAlign horAlign, VerAlign verAlign, bool wordWrap, bool dotsEngings, float charsDistCoef, float linesDistCoef);
 
 			// Moves symbols 
 			void Move(const Vec2F& offs);
@@ -250,14 +225,15 @@ namespace o2
 
 		const UInt mMeshMaxPolyCount = 4096;
 
-		WString    mText;              // Wide char string, containing rendering text
-		AssetId    mFontAssetId;       // Font asset id
+		WString    mText;              // Wide char string, containing rendering text @SERIALIZABLE
+		AssetId    mFontAssetId;       // Font asset id @SERIALIZABLE
 		FontRef    mFont;              // Using font
-		float      mSymbolsDistCoef;   // Characters distance coef, 1 is standard
-		float      mLinesDistanceCoef; // Lines distance coef, 1 is standard
-		VerAlign   mVerAlign;          // Vertical align
-		HorAlign   mHorAlign;          // Horizontal align
-		bool       mWordWrap;          // True, when words wrapping
+		float      mSymbolsDistCoef;   // Characters distance coef, 1 is standard @SERIALIZABLE
+		float      mLinesDistanceCoef; // Lines distance coef, 1 is standard @SERIALIZABLE
+		VerAlign   mVerAlign;          // Vertical align @SERIALIZABLE
+		HorAlign   mHorAlign;          // Horizontal align @SERIALIZABLE
+		bool       mWordWrap;          // True, when words wrapping @SERIALIZABLE
+		bool       mDotsEndings;       // If true, text will end on '...' @SERIALIZABLE
 									   
 		MeshesVec  mMeshes;            // Meshes vector
 		Basis      mLastTransform;     // Last mesh update transformation

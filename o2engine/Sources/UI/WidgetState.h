@@ -15,9 +15,9 @@ namespace o2
 	class UIWidgetState: public ISerializable
 	{
 	public:
-		String           name;                   // State name
-		Animation        animation;              // UIWidget animation
-		float            offStateAnimationSpeed; // False state transition animation speed
+		String           name;                   // State name @SERIALIZABLE
+		Animation        animation;              // UIWidget animation @SERIALIZABLE
+		float            offStateAnimationSpeed; // False state transition animation speed @SERIALIZABLE
 		Function<void()> onStateFullyTrue;		 // This event calls when state is completely true (at the end of animation)
 		Function<void()> onStateFullyFalse;		 // This event calls when state is completely false (at the end of animation)
 		Function<void()> onStateBecomesTrue;	 // This event calls when state becomes to true
@@ -50,18 +50,10 @@ namespace o2
 		// Updates animation
 		void Update(float dt);
 
-		SERIALIZABLE_IMPL(UIWidgetState);
-
-		IOBJECT(UIWidgetState)
-		{
-			SRLZ_FIELD(name);
-			SRLZ_FIELD(mState);
-			SRLZ_FIELD(animation);
-			SRLZ_FIELD(offStateAnimationSpeed);
-		}
+		SERIALIZABLE(UIWidgetState);
 
 	protected:
-		bool          mState; // Current state
+		bool          mState; // Current state @SERIALIZABLE
 		Ptr<UIWidget> mOwner; // Owner widget pointer
 	};
 	typedef Vector<Ptr<UIWidgetState>>  StatesVec;

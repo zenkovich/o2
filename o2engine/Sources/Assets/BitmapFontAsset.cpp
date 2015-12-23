@@ -7,9 +7,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(BitmapFontAsset);
-	IOBJECT_CPP(BitmapFontAsset::MetaInfo);
-
 	Type::Id BitmapFontAsset::MetaInfo::GetAssetType() const
 	{
 		return BitmapFontAsset::type->ID();

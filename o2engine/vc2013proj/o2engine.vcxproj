@@ -60,8 +60,8 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <MinimalRebuild>false</MinimalRebuild>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>true</MinimalRebuild>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -76,6 +76,14 @@
       <Verbose>true</Verbose>
       <AdditionalDependencies>$(ProjectDir)..\Dependencies\Dependencies_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>
+      </Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -106,6 +114,14 @@
       <AdditionalDependencies>$(ProjectDir)..\Dependencies\Dependencies_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>
+      </Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Animation\Animatable.h" />
@@ -116,7 +132,7 @@
     <ClInclude Include="..\Sources\Animation\AnimationState.h" />
     <ClInclude Include="..\Sources\Animation\IAnimation.h" />
     <ClInclude Include="..\Sources\Animation\AnimatedValue.h" />
-    <ClInclude Include="..\Sources\Animation\Tween.h" />
+    <ClInclude Include="..\Sources\Animation\TweenValue.h" />
     <ClInclude Include="..\Sources\Application\Application.h" />
     <ClInclude Include="..\Sources\Application\Input.h" />
     <ClInclude Include="..\Sources\Application\Windows\ApplicationBase.h" />
@@ -165,8 +181,11 @@
     <ClInclude Include="..\Sources\Scene\Actor.h" />
     <ClInclude Include="..\Sources\Scene\ActorTransform.h" />
     <ClInclude Include="..\Sources\Scene\Component.h" />
+    <ClInclude Include="..\Sources\Scene\Components\ImageComponent.h" />
+    <ClInclude Include="..\Sources\Scene\DrawableComponent.h" />
     <ClInclude Include="..\Sources\Scene\Scene.h" />
     <ClInclude Include="..\Sources\UI\Button.h" />
+    <ClInclude Include="..\Sources\UI\ContextMenu.h" />
     <ClInclude Include="..\Sources\UI\CustomDropDown.h" />
     <ClInclude Include="..\Sources\UI\DropDown.h" />
     <ClInclude Include="..\Sources\UI\EditBox.h" />
@@ -234,7 +253,7 @@
     <ClInclude Include="..\Sources\Utils\Reflection\Attribute.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\FieldInfo.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Type.h" />
-    <ClInclude Include="..\Sources\Utils\Reflection\Types.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h" />
     <ClInclude Include="..\Sources\Utils\Serialization.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
@@ -297,8 +316,11 @@
     <ClCompile Include="..\Sources\Scene\Actor.cpp" />
     <ClCompile Include="..\Sources\Scene\ActorTransform.cpp" />
     <ClCompile Include="..\Sources\Scene\Component.cpp" />
+    <ClCompile Include="..\Sources\Scene\Components\ImageComponent.cpp" />
+    <ClCompile Include="..\Sources\Scene\DrawableComponent.cpp" />
     <ClCompile Include="..\Sources\Scene\Scene.cpp" />
     <ClCompile Include="..\Sources\UI\Button.cpp" />
+    <ClCompile Include="..\Sources\UI\ContextMenu.cpp" />
     <ClCompile Include="..\Sources\UI\CustomDropDown.cpp" />
     <ClCompile Include="..\Sources\UI\DropDown.cpp" />
     <ClCompile Include="..\Sources\UI\EditBox.cpp" />
@@ -342,7 +364,7 @@
     <ClCompile Include="..\Sources\Utils\RectPacker.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\FieldInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp" />
-    <ClCompile Include="..\Sources\Utils\Reflection\Types.cpp" />
+    <ClCompile Include="..\Sources\Utils\Reflection\Reflection.cpp" />
     <ClCompile Include="..\Sources\Utils\StackTrace.cpp" />
     <ClCompile Include="..\Sources\Utils\Task.cpp" />
     <ClCompile Include="..\Sources\Utils\TaskManager.cpp" />

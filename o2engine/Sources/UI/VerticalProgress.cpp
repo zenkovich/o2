@@ -2,8 +2,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIVerticalProgress);
-
 	UIVerticalProgress::UIVerticalProgress():
 		mValue(0), mMinValue(0), mMaxValue(1), mOrientation(Orientation::Down), mScrollSense(1.0f)
 	{
@@ -32,6 +30,9 @@ namespace o2
 		mMaxValue = other.mMaxValue;
 		mOrientation = other.mOrientation;
 		mScrollSense = other.mScrollSense;
+
+		mBarLayer = GetLayer("bar");
+		mBackLayer = GetLayer("back");
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -157,11 +158,6 @@ namespace o2
 		return true;
 	}
 
-	bool UIVerticalProgress::IsInteractable() const
-	{
-		return mResVisible && CursorEventsListener::IsInteractable();
-	}
-
 	void UIVerticalProgress::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
@@ -218,6 +214,19 @@ namespace o2
 	void UIVerticalProgress::OnScrolled(float scroll)
 	{
 		SetValue(mValue + scroll*mScrollSense);
+	}
+
+	void UIVerticalProgress::OnDeserialized(const DataNode& node)
+	{
+		mBarLayer = GetLayer("bar");
+		mBackLayer = GetLayer("back");
+
+		UIWidget::OnDeserialized(node);
+	}
+
+	void UIVerticalProgress::OnVisibleChanged()
+	{
+		interactable = mResVisible;
 	}
 
 	void UIVerticalProgress::UpdateLayout(bool forcible /*= false*/)

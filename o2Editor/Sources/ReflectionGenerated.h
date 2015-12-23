@@ -1,3 +1,4 @@
-#pragma once
+#pragma once 
 
-void ReflectionRegistTypes();
+// Registers all types
+void RegReflectionTypes();

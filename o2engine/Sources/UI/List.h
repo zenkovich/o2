@@ -54,12 +54,7 @@ namespace o2
 		// Selects item text
 		void SelectItemText(const WString& text);
 
-		SERIALIZABLE_IMPL(UIList);
-
-		IOBJECT(UIList)
-		{
-			BASE_CLASS(UICustomList);
-		}
+		SERIALIZABLE(UIList);
 
 	protected:
 		// Calls when selected item index was changed

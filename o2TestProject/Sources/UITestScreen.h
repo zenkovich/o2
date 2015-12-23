@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ITestScreen.h"
+#include "Render\Sprite.h"
 
 class UITestScreen: public ITestScreen
 {

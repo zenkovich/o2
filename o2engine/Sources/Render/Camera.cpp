@@ -8,7 +8,7 @@ namespace o2
 				   float angle /*= 0.0f*/):
 		Transform(size, position, angle)
 	{
-		if (size == Vec2F())
+		if (size == Vec2F() && Render::IsSingletonInitialzed())
 			SetSize(o2Render.GetResolution());
 	}
 

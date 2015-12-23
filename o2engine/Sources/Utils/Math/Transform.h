@@ -185,42 +185,15 @@ namespace o2
 		// Returns true when point inside this
 		virtual bool IsPointInside(const Vec2F& point) const;
 
-		SERIALIZABLE_IMPL(Transform);
-
-		IOBJECT(Transform)
-		{
-			SRLZ_FIELD(mPosition);
-			SRLZ_FIELD(mSize);
-			SRLZ_FIELD(mScale);
-			SRLZ_FIELD(mPivot);
-			SRLZ_FIELD(mAngle);
-			SRLZ_FIELD(mShear);
-
-			FIELD(position);
-			FIELD(angle);
-			FIELD(size);
-			FIELD(scale);
-			FIELD(pivot);
-			FIELD(worldPivot);
-			FIELD(szPivot);
-			FIELD(rect);
-			FIELD(shear);
-			FIELD(basis);
-			FIELD(AABB);
-			FIELD(right);
-			FIELD(left);
-			FIELD(up);
-			FIELD(down);
-			FIELD(lookAtPoint);
-		}
+		SERIALIZABLE(Transform);
 
 	protected:
-		Vec2F  mPosition;  // Position
-		Vec2F  mSize;      // Size
-		Vec2F  mScale;     // Scale, (1; 1) is default
-		Vec2F  mPivot;     // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner
-		float  mAngle;     // Rotation angle in radians
-		float  mShear;     // Shear
+		Vec2F  mPosition;  // Position @SERIALIZABLE
+		Vec2F  mSize;      // Size @SERIALIZABLE
+		Vec2F  mScale;     // Scale, (1; 1) is default @SERIALIZABLE
+		Vec2F  mPivot;     // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
+		float  mAngle;     // Rotation angle in radians @SERIALIZABLE
+		float  mShear;     // Shear @SERIALIZABLE
 
 		Basis  mTransform; // Final transform basis
 

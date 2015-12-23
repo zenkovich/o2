@@ -15,10 +15,10 @@ namespace o2
 	class AnimationState: public ISerializable
 	{
 	public:
-		String        name;       // State name
-		Animation     animation;  // Animation
-		AnimationMask mask;       // Animation mask
-		float         weight;     // State weight
+		String        name;       // State name @SERIALIZABLE
+		Animation     animation;  // Animation @SERIALIZABLE
+		AnimationMask mask;       // Animation mask @SERIALIZABLE
+		float         weight;     // State weight @SERIALIZABLE
 		float         workWeight; // State working weight, using for blendings
 
 		// Default constructor
@@ -27,16 +27,7 @@ namespace o2
 		// Constructor with name
 		AnimationState(const String& name);
 
-		SERIALIZABLE_IMPL(AnimationState);
-
-		IOBJECT(AnimationState)
-		{
-			SRLZ_FIELD(name);
-			SRLZ_FIELD(animation);
-			SRLZ_FIELD(mask);
-			SRLZ_FIELD(weight);
-			FIELD(workWeight);
-		}
+		SERIALIZABLE(AnimationState);
 
 	protected:
 		Ptr<Animatable> mOwner; // Animatable owner

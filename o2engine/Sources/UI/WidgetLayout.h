@@ -180,81 +180,34 @@ namespace o2
 
 		static UIWidgetLayout Both(float borderLeft = 0, float borderBottom = 0, float borderRight = 0, float borderTop = 0);
 
-		SERIALIZABLE_IMPL(UIWidgetLayout);
-
-		IOBJECT(UIWidgetLayout)
-		{
-			FIELD(pivot);
-			FIELD(position);
-			FIELD(size);
-			FIELD(width);
-			FIELD(height);
-			FIELD(absPosition);
-			FIELD(absLeft);
-			FIELD(absRight);
-			FIELD(absBottom);
-			FIELD(absTop);
-			FIELD(pivotX);
-			FIELD(pivotY);
-			FIELD(anchorMin);
-			FIELD(anchorMax);
-			FIELD(offsetMin);
-			FIELD(offsetMax);
-			FIELD(anchorLeft);
-			FIELD(anchorRight);
-			FIELD(anchorBottom);
-			FIELD(anchorTop);
-			FIELD(offsetLeft);
-			FIELD(offsetRight);
-			FIELD(offsetBottom);
-			FIELD(offsetTop);
-			FIELD(minSize);
-			FIELD(minWidth);
-			FIELD(minHeight);
-			FIELD(maxSize);
-			FIELD(maxWidth);
-			FIELD(maxHeight);
-			FIELD(weight);
-			FIELD(widthWeight);
-			FIELD(heigthWeight);
-
-			//FIELD(mOwner);
-			SRLZ_FIELD(mPivot);
-			SRLZ_FIELD(mAnchorMin);
-			SRLZ_FIELD(mAnchorMax);
-			SRLZ_FIELD(mOffsetMin);
-			SRLZ_FIELD(mOffsetMax);
-			SRLZ_FIELD(mWeight);
-			SRLZ_FIELD(mMinSize);
-			SRLZ_FIELD(mMaxSize);
-
-			FIELD(mAbsoluteRect);
-		}
+		SERIALIZABLE(UIWidgetLayout);
 
 	protected:
-		Ptr<UIWidget> mOwner;
-		Vec2F         mPivot          = Vec2F(0.5f, 0.5f);
-		Vec2F         mAnchorMin      = Vec2F(0.5f, 0.5f);
-		Vec2F         mAnchorMax      = Vec2F(0.5f, 0.5f);
-		Vec2F         mOffsetMin      = Vec2F(-10.0f, -10.0f);
-		Vec2F         mOffsetMax      = Vec2F(10.0f, 10.0f);
-		Vec2F         mMinSize        = Vec2F(0.0f, 0.0f);
-		Vec2F         mMaxSize        = Vec2F(10000, 10000);
-		RectF         mAbsoluteRect   = RectF();
-		RectF         mLocalRect      = RectF();
-		Vec2F         mWeight         = Vec2F(1.0f, 1.0f);
+		Ptr<UIWidget> mOwner;								
+		Vec2F         mPivot          = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
+		Vec2F         mAnchorMin      = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
+		Vec2F         mAnchorMax      = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
+		Vec2F         mOffsetMin      = Vec2F(-10.0f, -10.0f); // @SERIALIZABLE
+		Vec2F         mOffsetMax      = Vec2F(10.0f, 10.0f);   // @SERIALIZABLE
+		Vec2F         mMinSize        = Vec2F(0.0f, 0.0f);	   // @SERIALIZABLE
+		Vec2F         mMaxSize        = Vec2F(10000, 10000);   // @SERIALIZABLE
+		RectF         mAbsoluteRect   = RectF();			 
+		RectF         mLocalRect      = RectF();			  
+		Vec2F         mWeight         = Vec2F(1.0f, 1.0f);	   // @SERIALIZABLE
 		bool          mDrivenByParent = false;
 
 	protected:
 		void CopyFrom(const UIWidgetLayout& other);
 		void InitializeProperties();
 
+		friend class UIContextMenu;
 		friend class UICustomDropDown;
 		friend class UICustomList;
 		friend class UIEditBox;
 		friend class UIHorizontalLayout;
 		friend class UIHorizontalProgress;
 		friend class UIHorizontalScrollBar;
+		friend class UILabel;
 		friend class UIScrollArea;
 		friend class UIVerticalLayout;
 		friend class UIVerticalProgress;

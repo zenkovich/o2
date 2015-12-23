@@ -2,8 +2,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIHorizontalLayout);
-
 	UIHorizontalLayout::UIHorizontalLayout():
 		mBaseCorner(BaseCorner::Left), mSpacing(0), mExpandWidth(true), mExpandHeight(true), UIWidget(),
 		mFitByChildren(false)

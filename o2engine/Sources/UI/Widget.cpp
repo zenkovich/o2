@@ -8,8 +8,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIWidget);
-
 	UIWidget::UIWidget():
 		mParent(nullptr), mTransparency(1.0f), mResTransparency(1.0f), mVisible(true), mIsSelected(false), mResVisible(true),
 		mFullyDisabled(false)
@@ -455,6 +453,8 @@ namespace o2
 			mSelectedState->SetStateForcible(mIsSelected);
 		}
 
+		OnStateAdded(state);
+
 		return state;
 	}
 
@@ -558,6 +558,7 @@ namespace o2
 			mVisibleState->SetStateForcible(visible);
 
 		mVisible = visible;
+		mFullyDisabled = !visible;
 	}
 
 	void UIWidget::Show(bool forcible /*= false*/)
@@ -661,7 +662,7 @@ namespace o2
 	void UIWidget::RetargetStatesAnimations()
 	{
 		for (auto state : mStates)
-			state->animation.SetTarget(this);
+			state->animation.SetTarget(this, false);
 	}
 
 	void UIWidget::RecalculateAbsRect()
@@ -776,6 +777,9 @@ namespace o2
 	}
 
 	void UIWidget::OnLayerAdded(Ptr<UIWidgetLayer> layer)
+	{}
+
+	void UIWidget::OnStateAdded(Ptr<UIWidgetState> state)
 	{}
 
 	void UIWidget::OnChildAdded(Ptr<UIWidget> child)

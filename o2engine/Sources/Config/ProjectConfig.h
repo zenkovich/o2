@@ -43,16 +43,10 @@ namespace o2
 		// Sets platform
 		void SetPlatform(Platform platform);
 
-		SERIALIZABLE_IMPL(ProjectConfig);
-
-		IOBJECT(ProjectConfig)
-		{
-			SRLZ_FIELD(mProjectName);
-			FIELD(mPlatform);
-		}
+		SERIALIZABLE(ProjectConfig);
 
 	protected:
-		String   mProjectName; // Current project name
+		String   mProjectName; // Current project name @SERIALIZABLE
 		Platform mPlatform;    // Current project target platform
 
 	protected:

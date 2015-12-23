@@ -4,11 +4,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(FontStrokeEffect);
-	IOBJECT_CPP(FontShadowEffect);
-	IOBJECT_CPP(FontGradientEffect);
-	IOBJECT_CPP(FontColorEffect);
-
 	FontStrokeEffect::FontStrokeEffect(float radius /*= 1.0f*/, const Color4& color /*= Color4::Black()*/,
 									   int alphaThreshold /*= 100*/):
 		radius(radius), color(color), alphaThreshold(alphaThreshold)

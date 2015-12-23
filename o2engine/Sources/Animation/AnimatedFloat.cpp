@@ -1,11 +1,10 @@
 #include "AnimatedFloat.h"
 
 #include "Animation/Animatable.h"
+#include "Animation/AnimationState.h"
 
 namespace o2
 {
-	IOBJECT_CPP(AnimatedValue<float>);
-
 	AnimatedValue<float>::AnimatedValue():
 		mTarget(nullptr), mTargetProperty(nullptr)
 	{
@@ -14,9 +13,8 @@ namespace o2
 	}
 
 	AnimatedValue<float>::AnimatedValue(const AnimatedValue<float>& other):
-		mTarget(other.mTarget), mTargetProperty(other.mTargetProperty),
-		mTargetDelegate(other.mTargetDelegate), curve(other.curve),
-		mValue(other.mValue), IAnimatedValue(other)
+		mTarget(nullptr), mTargetProperty(nullptr), mTargetDelegate(), curve(other.curve), mValue(other.mValue),
+		IAnimatedValue(other)
 	{
 		curve.onKeysChanged.Add(this, &AnimatedValue<float>::OnCurveChanged);
 		InitializeProperties();
@@ -268,6 +266,10 @@ namespace o2
 		}
 	}
 
+	void AnimatedValue<float>::RegInAnimatable(AnimationState* state, const String& path)
+	{
+		state->mOwner->RegAnimatedValue<float>(this, path, state);
+	}
 
 	AnimatedValue<float> AnimatedValue<float>::Parametric(float begin, float end, float duration,
 														  float beginCoef, float beginCoefPosition,
@@ -298,11 +300,6 @@ namespace o2
 	AnimatedValue<float> AnimatedValue<float>::Linear(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/)
 	{
 		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, 1.0f);
-	}
-
-	void AnimatedValue<float>::RegInAnimatable(AnimationState* state, const String& path)
-	{
-		state->mOwner->RegAnimatedValue<float>(this, path, state);
 	}
 
 	void AnimatedValue<float>::InitializeProperties()

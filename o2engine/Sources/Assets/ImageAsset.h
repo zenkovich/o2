@@ -76,16 +76,7 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const;
 
-		SERIALIZABLE_IMPL(ImageAsset);
-
-		IOBJECT(ImageAsset)
-		{
-			BASE_CLASS(Asset);
-			FIELD(mBitmap);
-			SRLZ_FIELD(mAtlasPage);
-			SRLZ_FIELD(mAtlasRect);
-		}
-
+		SERIALIZABLE(ImageAsset);
 
 	public:
 		// -----------------------
@@ -93,19 +84,13 @@ namespace o2
 		// -----------------------
 		struct PlatformMeta: public ISerializable
 		{
-			Vec2I  mMaxSize; // Maximum image size
-			Vec2F  mScale;   // Image scale ((1; 1) - is default)
-			String mFormat;  // Image format
+			Vec2I  mMaxSize; // Maximum image size @SERIALIZABLE
+			Vec2F  mScale;   // Image scale ((1; 1) - is default) @SERIALIZABLE
+			String mFormat;  // Image format @SERIALIZABLE
 
 			bool operator==(const PlatformMeta& other) const;
 
-			SERIALIZABLE_IMPL(PlatformMeta);
-			IOBJECT(PlatformMeta)
-			{
-				SRLZ_FIELD(mMaxSize);
-				SRLZ_FIELD(mScale);
-				SRLZ_FIELD(mFormat);
-			}
+			SERIALIZABLE(PlatformMeta);
 		};
 
 		// ----------------
@@ -114,13 +99,13 @@ namespace o2
 		class MetaInfo: public IMetaInfo
 		{
 		public:
-			AssetId      mAtlasId;     // Atlas owner id
-			PlatformMeta mIOS;         // IOS specified meta
-			PlatformMeta mAndroid;     // Android specified meta
-			PlatformMeta mMacOS;       // MacOS specified meta
-			PlatformMeta mWindows;     // Windows specified meta
-			RectI        mSliceBorder; // Default slice border
-			Sprite::Mode mDefaultMode; // Default sprite mode
+			AssetId      mAtlasId;     // Atlas owner id @SERIALIZABLE
+			PlatformMeta mIOS;         // IOS specified meta @SERIALIZABLE
+			PlatformMeta mAndroid;     // Android specified meta @SERIALIZABLE
+			PlatformMeta mMacOS;       // MacOS specified meta @SERIALIZABLE
+			PlatformMeta mWindows;     // Windows specified meta @SERIALIZABLE
+			RectI        mSliceBorder; // Default slice border @SERIALIZABLE
+			SpriteMode   mDefaultMode; // Default sprite mode @SERIALIZABLE
 
 		public:
 			// Returns asset type id
@@ -129,25 +114,13 @@ namespace o2
 			// Returns true if other meta is equal to this
 			bool IsEqual(Ptr<IMetaInfo> other) const;
 
-			SERIALIZABLE_IMPL(MetaInfo);
-
-			IOBJECT(MetaInfo)
-			{
-				BASE_CLASS(IMetaInfo);
-				SRLZ_FIELD(mAtlasId);
-				SRLZ_FIELD(mIOS);
-				SRLZ_FIELD(mAndroid);
-				SRLZ_FIELD(mMacOS);
-				SRLZ_FIELD(mWindows);
-				SRLZ_FIELD(mSliceBorder);
-				SRLZ_FIELD(mDefaultMode);
-			}
+			SERIALIZABLE(MetaInfo);
 		};
 
 	protected:
 		Ptr<Bitmap> mBitmap;    // Image bitmap. Loading only when needs
-		UInt        mAtlasPage; // Owner atlas page index
-		RectI       mAtlasRect; // Owner atlas rectangle
+		UInt        mAtlasPage; // Owner atlas page index @SERIALIZABLE
+		RectI       mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
 
 	protected:
 		// Loads data

@@ -1,14 +1,12 @@
 #include "AnimatedVector.h"
 
 #include "Animation/Animatable.h"
+#include "Animation/AnimationState.h"
 #include "Utils/Debug.h"
 #include "Utils/Math/Interpolation.h"
 
 namespace o2
 {
-	IOBJECT_CPP(AnimatedValue<Vec2F>);
-	IOBJECT_CPP(AnimatedValue<Vec2F>::Key);
-
 	AnimatedValue<Vec2F>::AnimatedValue():
 		mTarget(nullptr), mTargetProperty(nullptr)
 	{
@@ -16,8 +14,8 @@ namespace o2
 	}
 
 	AnimatedValue<Vec2F>::AnimatedValue(const AnimatedValue<Vec2F>& other):
-		mKeys(other.mKeys), mValue(other.mValue), mTarget(other.mTarget), mTargetDelegate(other.mTargetDelegate),
-		mTargetProperty(other.mTargetProperty), IAnimatedValue(other)
+		mKeys(other.mKeys), mValue(other.mValue), mTarget(nullptr), mTargetDelegate(), mTargetProperty(nullptr), 
+		IAnimatedValue(other)
 	{
 		InitializeProperties();
 	}
@@ -402,6 +400,11 @@ namespace o2
 		SetTargetProperty((Setter<Vec2F>*)target);
 	}
 
+	void AnimatedValue<Vec2F>::RegInAnimatable(AnimationState* state, const String& path)
+	{
+		state->mOwner->RegAnimatedValue<Vec2F>(this, path, state);
+	}
+
 	AnimatedValue<Vec2F> AnimatedValue<Vec2F>::Parametric(const Vec2F& begin, const Vec2F& end, float duration,
 														  float beginCoef, float beginCoefPosition,
 														  float endCoef, float endCoefPosition)
@@ -430,11 +433,6 @@ namespace o2
 	AnimatedValue<Vec2F> AnimatedValue<Vec2F>::Linear(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)
 	{
 		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, 1.0f);
-	}
-
-	void AnimatedValue<Vec2F>::RegInAnimatable(AnimationState* state, const String& path)
-	{
-		state->mOwner->RegAnimatedValue<Vec2F>(this, path, state);
 	}
 
 	void AnimatedValue<Vec2F>::InitializeProperties()

@@ -149,42 +149,19 @@ namespace o2
 		// Removes all events
 		virtual void RemoveAllTimeEvents();
 
-		SERIALIZABLE_IMPL(IAnimation);
-
-		IOBJECT(IAnimation)
-		{
-			FIELD(playing);
-			FIELD(reversed);
-			FIELD(speed);
-			FIELD(time);
-			FIELD(relTime);
-			FIELD(beginBound);
-			FIELD(endBound);
-			FIELD(loop);
-			FIELD(duration);
-			FIELD(mTime);
-			FIELD(mInDurationTime);
-			FIELD(mDuration) SERIALIZABLE(float);
-			FIELD(mBeginTime);
-			FIELD(mEndTime);
-			FIELD(mDirection);
-			FIELD(mSpeed);
-			FIELD(mLoop) SERIALIZABLE(float);
-			FIELD(mPlaying);
-			FIELD(mTimeEvents);
-		}
+		SERIALIZABLE(IAnimation);
 
 	protected:
 		typedef Dictionary<float, Function<void()>> EventsDict;
 
 		float      mTime;           // Current animation time, can be out of bounds
 		float      mInDurationTime; // In duration time
-		float      mDuration;       // Animation duration
+		float      mDuration;       // Animation duration @SERIALIZABLE
 		float      mBeginTime;      // Begin time
 		float      mEndTime;        // End time
 		float      mDirection;      // Animation direction: 1 - forward, -1 - reversed
 		float      mSpeed;          // Animation speed, 1 is default
-		Loop       mLoop;           // Loop type
+		Loop       mLoop;           // Loop type @SERIALIZABLE
 		bool       mPlaying;        // True if animation playing
 		EventsDict mTimeEvents;     // Animation time events
 
@@ -192,7 +169,7 @@ namespace o2
 		// Updates mTime and mInDurationTime
 		void UpdateTime();
 
-		// Calls for updating animted object, efter updating time
+		// Calls for updating animated object, after updating time
 		virtual void Evaluate();
 
 		// Initializes properties

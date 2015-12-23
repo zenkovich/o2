@@ -10,8 +10,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(UIWindow);
-
 	UIWindow::UIWindow():
 		UIScrollArea(), mDrawingDepth(-1)
 	{
@@ -37,7 +35,7 @@ namespace o2
 		}
 
 		Ptr<UIButton> closeBtn = mWindowElements.FindMatch(
-			[](const Ptr<UIWidget>& x) { return x->GetName() == "closeButton" && x->GetTypeId() == UIButton::type->ID(); });
+			[](const Ptr<UIWidget>& x) { return x->GetName() == "closeButton" && x->GetType() == *UIButton::type; });
 
 		if (closeBtn)
 			closeBtn->onClick += [&]() { Hide(); };
@@ -73,7 +71,7 @@ namespace o2
 		}
 		
 		Ptr<UIButton> closeBtn = mWindowElements.FindMatch(
-			[](const Ptr<UIWidget>& x) { return x->GetName() == "closeButton" && x->GetTypeId() == UIButton::type->ID(); });
+			[](const Ptr<UIWidget>& x) { return x->GetName() == "closeButton" && x->GetType() == *UIButton::type; });
 
 		if (closeBtn)
 			closeBtn->onClick += [&]() { Hide(); };
@@ -241,10 +239,10 @@ namespace o2
 
 	void UIWindow::OnLayerAdded(Ptr<UIWidgetLayer> layer)
 	{
-		if (layer->name == "icon" && layer->drawable && layer->drawable->GetTypeId() == Sprite::type->ID())
+		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == *Sprite::type)
 			mIconDrawable = layer->drawable.Cast<Sprite>();
 
-		if (layer->name == "caption" && layer->drawable && layer->drawable->GetTypeId() == Text::type->ID())
+		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == *Text::type)
 			mCaptionDrawable = layer->drawable.Cast<Text>();
 	}
 
@@ -345,6 +343,16 @@ namespace o2
 	void UIWindow::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.SelectWidget(this);
+	}
+
+	void UIWindow::OnStateAdded(Ptr<UIWidgetState> state)
+	{
+		BindHandlesInteractableToVisibility();
+	}
+
+	void UIWindow::OnVisibleChanged()
+	{
+		interactable = mResVisible;
 	}
 
 	void UIWindow::InitializeProperties()

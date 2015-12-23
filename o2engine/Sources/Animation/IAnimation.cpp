@@ -4,8 +4,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(IAnimation);
-
 	IAnimation::IAnimation():
 		mTime(0), mDuration(0), mBeginTime(0), mEndTime(0), mDirection(1.0f), mSpeed(1.0f), mLoop(Loop::None),
 		mPlaying(false), mInDurationTime(0)

@@ -9,10 +9,8 @@
 
 namespace o2
 {
-	IOBJECT_CPP(Sprite);
-
 	Sprite::Sprite():
-		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -23,7 +21,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(Ptr<ImageAsset> image):
-		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -34,7 +32,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(const String& imagePath):
-		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -45,7 +43,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(AssetId imageId):
-		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -56,7 +54,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(TextureRef texture, const RectI& srcRect):
-		mTextureSrcRect(srcRect), mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), 
+		mTextureSrcRect(srcRect), mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
 		mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -68,7 +66,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(const Color4& color):
-		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -79,7 +77,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(Ptr<Bitmap> bitmap):
-		mImageAssetId(0), mMode(Mode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -214,7 +212,7 @@ namespace o2
 		return mFill;
 	}
 
-	void Sprite::SetMode(Mode mode)
+	void Sprite::SetMode(SpriteMode mode)
 	{
 		if (mode == mMode)
 			return;
@@ -223,21 +221,21 @@ namespace o2
 
 		switch (mode)
 		{
-			case Mode::Default:         mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
-			case Mode::Sliced:          mMeshBuildFunc = &Sprite::BuildSlicedMesh; break;
-			case Mode::FillLeftToRight: mMeshBuildFunc = &Sprite::BuildFillLeftToRightMesh; break;
-			case Mode::FillRightToLeft: mMeshBuildFunc = &Sprite::BuildFillRightToLeftMesh; break;
-			case Mode::FillUpToDown:    mMeshBuildFunc = &Sprite::BuildFillUpToDownMesh; break;
-			case Mode::FillDownToUp:    mMeshBuildFunc = &Sprite::BuildFillDownToUpMesh; break;
-			case Mode::Fill360CW:       mMeshBuildFunc = &Sprite::BuildFill360CWMesh; break;
-			case Mode::Fill360CCW:      mMeshBuildFunc = &Sprite::BuildFill360CCWMesh; break;
-			default:                    mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
+			case SpriteMode::Default:         mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
+			case SpriteMode::Sliced:          mMeshBuildFunc = &Sprite::BuildSlicedMesh; break;
+			case SpriteMode::FillLeftToRight: mMeshBuildFunc = &Sprite::BuildFillLeftToRightMesh; break;
+			case SpriteMode::FillRightToLeft: mMeshBuildFunc = &Sprite::BuildFillRightToLeftMesh; break;
+			case SpriteMode::FillUpToDown:    mMeshBuildFunc = &Sprite::BuildFillUpToDownMesh; break;
+			case SpriteMode::FillDownToUp:    mMeshBuildFunc = &Sprite::BuildFillDownToUpMesh; break;
+			case SpriteMode::Fill360CW:       mMeshBuildFunc = &Sprite::BuildFill360CWMesh; break;
+			case SpriteMode::Fill360CCW:      mMeshBuildFunc = &Sprite::BuildFill360CCWMesh; break;
+			default:                          mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
 		}
 
 		UpdateMesh();
 	}
 
-	Sprite::Mode Sprite::GetMode() const
+	SpriteMode Sprite::GetMode() const
 	{
 		return mMode;
 	}
@@ -1043,8 +1041,8 @@ namespace o2
 			LoadFromImage(mImageAssetId);
 		}
 
-		Mode mode = mMode;
-		mMode = (Mode)((int)mode + 1);
+		SpriteMode mode = mMode;
+		mMode = (SpriteMode)((int)mode + 1);
 		SetMode(mode);
 	}
 

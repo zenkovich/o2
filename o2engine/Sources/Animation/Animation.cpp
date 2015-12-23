@@ -1,17 +1,16 @@
 #include "Animation.h"
 
 #include "Animation/Animatable.h"
+#include "Animation/AnimatedValue.h"
 #include "Utils/Debug.h"
 #include "Utils/IObject.h"
 
 namespace o2
 {
-	IOBJECT_CPP(Animation);
-	IOBJECT_CPP(Animation::AnimatedValueDef);
-
-	Animation::Animation():
+	Animation::Animation(IObject* target /*= nullptr*/):
 		mTarget(nullptr), mAnimationState(nullptr)
 	{
+		SetTarget(target);
 	}
 
 	Animation::Animation(const Animation& other):
@@ -35,6 +34,8 @@ namespace o2
 	Animation& Animation::operator=(const Animation& other)
 	{
 		Clear();
+
+		IAnimation::operator=(other);
 
 		for (auto val : other.mAnimatedValues)
 		{
@@ -72,7 +73,7 @@ namespace o2
 		return *this;
 	}
 
-	void Animation::SetTarget(IObject* target)
+	void Animation::SetTarget(IObject* target, bool errors /*= true*/)
 	{
 		mTarget = target;
 
@@ -84,7 +85,10 @@ namespace o2
 				val.mTargetPtr = mTarget->GetType().GetFieldPtr<char>(mTarget, val.mTargetPath, fieldInfo);
 
 				if (!fieldInfo)
-					o2Debug.LogWarning("Can't find object %s for animating", val.mTargetPath);
+				{
+					if (errors)
+						o2Debug.LogWarning("Can't find object %s for animating", val.mTargetPath);
+				}
 				else
 				{
 					if (fieldInfo->IsProperty())
@@ -130,7 +134,7 @@ namespace o2
 	void Animation::Evaluate()
 	{
 		for (auto val : mAnimatedValues)
-			val.mAnimatedValue->ForceSetTime(mTime, mDuration);
+			val.mAnimatedValue->ForceSetTime(mInDurationTime, mDuration);
 	}
 
 	void Animation::RecalculateDuration()

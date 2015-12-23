@@ -1,6 +1,7 @@
 #pragma once
 
-#include "O2.h"
+#include "UI/Window.h"
+
 using namespace o2;
 
 class UIDockWindowPlace;
@@ -35,21 +36,14 @@ public:
 	// Return pointer to docking sample sprite
 	Ptr<Sprite> GetDockingFrameSample() const;
 
-	SERIALIZABLE_IMPL(UIDockableWindow);
-
-	IOBJECT(UIDockableWindow)
-	{
-		BASE_CLASS(UIWindow);
-
-		SRLZ_FIELD(mDockingFrameSample);
-	}
+	SERIALIZABLE(UIDockableWindow);
 
 protected:
 	const float          mDockSizeCoef = 0.2f;
 	const float          mDockBorder = 2.0f;
 
 	bool                 mDocked;                 // Is window is docked
-	Ptr<Sprite>          mDockingFrameSample;     // Docking frame sample
+	Ptr<Sprite>          mDockingFrameSample;     // Docking frame sample @SERIALIZABLE
 	Animation            mDockingFrameAppearance; // Docking frame appearance tween
 	RectF                mDockingFrameCurrent;    // Docking sample current frame
 	RectF                mDockingFrameTarget;     // Docking sample target  frame

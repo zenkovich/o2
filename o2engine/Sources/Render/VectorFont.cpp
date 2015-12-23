@@ -11,8 +11,6 @@
 
 namespace o2
 {
-	IOBJECT_CPP(VectorFont::Effect);
-
 	VectorFont::VectorFont():
 		Font(), mFreeTypeFace(nullptr), mSize(11)
 	{
