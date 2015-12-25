@@ -197,6 +197,7 @@
     <ClInclude Include="..\Sources\UI\ScrollArea.h" />
     <ClInclude Include="..\Sources\UI\List.h" />
     <ClInclude Include="..\Sources\UI\Toggle.h" />
+    <ClInclude Include="..\Sources\UI\Tree.h" />
     <ClInclude Include="..\Sources\UI\UIManager.h" />
     <ClInclude Include="..\Sources\UI\VerticalLayout.h" />
     <ClInclude Include="..\Sources\UI\VerticalProgress.h" />
@@ -332,6 +333,7 @@
     <ClCompile Include="..\Sources\UI\ScrollArea.cpp" />
     <ClCompile Include="..\Sources\UI\List.cpp" />
     <ClCompile Include="..\Sources\UI\Toggle.cpp" />
+    <ClCompile Include="..\Sources\UI\Tree.cpp" />
     <ClCompile Include="..\Sources\UI\UIManager.cpp" />
     <ClCompile Include="..\Sources\UI\VerticalLayout.cpp" />
     <ClCompile Include="..\Sources\UI\VerticalProgress.cpp" />

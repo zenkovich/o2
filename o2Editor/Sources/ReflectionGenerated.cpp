@@ -42,6 +42,7 @@
 #include "C:\work\o2\o2Engine\Sources\Scene\DrawableComponent.h"
 #include "C:\work\o2\o2Engine\Sources\Scene\Components\ImageComponent.h"
 #include "C:\work\o2\o2Engine\Sources\UI\Button.h"
+#include "C:\work\o2\o2Engine\Sources\UI\ContextMenu.h"
 #include "C:\work\o2\o2Engine\Sources\UI\CustomDropDown.h"
 #include "C:\work\o2\o2Engine\Sources\UI\CustomList.h"
 #include "C:\work\o2\o2Engine\Sources\UI\DropDown.h"
@@ -53,6 +54,7 @@
 #include "C:\work\o2\o2Engine\Sources\UI\List.h"
 #include "C:\work\o2\o2Engine\Sources\UI\ScrollArea.h"
 #include "C:\work\o2\o2Engine\Sources\UI\Toggle.h"
+#include "C:\work\o2\o2Engine\Sources\UI\Tree.h"
 #include "C:\work\o2\o2Engine\Sources\UI\VerticalLayout.h"
 #include "C:\work\o2\o2Engine\Sources\UI\VerticalProgress.h"
 #include "C:\work\o2\o2Engine\Sources\UI\VerticalScrollBar.h"
@@ -112,6 +114,7 @@ o2::Type* o2::Component::type;
 o2::Type* o2::DrawableComponent::type;
 o2::Type* o2::ImageComponent::type;
 o2::Type* o2::UIButton::type;
+o2::Type* o2::UIContextMenu::type;
 o2::Type* o2::UICustomDropDown::type;
 o2::Type* o2::UICustomList::type;
 o2::Type* o2::UIDropDown::type;
@@ -123,6 +126,8 @@ o2::Type* o2::UILabel::type;
 o2::Type* o2::UIList::type;
 o2::Type* o2::UIScrollArea::type;
 o2::Type* o2::UIToggle::type;
+o2::Type* o2::UITreeNode::type;
+o2::Type* o2::UITree::type;
 o2::Type* o2::UIVerticalLayout::type;
 o2::Type* o2::UIVerticalProgress::type;
 o2::Type* o2::UIVerticalScrollBar::type;
@@ -151,6 +156,7 @@ o2::Type* o2::ImageAsset::MetaInfo::type;
 o2::Type* o2::VectorFontAsset::MetaInfo::type;
 o2::Type* o2::AtlasAssetConverter::Image::type;
 o2::Type* o2::VectorFont::Effect::type;
+o2::Type* o2::UIContextMenu::Item::type;
 o2::Type* o2::Curve::Key::type;
 o2::Type* o2::AnimatedValue<RectF>::type;
 o2::Type* o2::AnimatedValue<RectF>::Key::type;
@@ -443,6 +449,7 @@ void o2::Text::InitializeType(o2::Text* sample)
 	FIELD(verAlign);
 	FIELD(horAlign);
 	FIELD(wordWrap);
+	FIELD(dotsEngings);
 	FIELD(symbolsDistanceCoef);
 	FIELD(linesDistanceCoef);
 	FIELD(mMeshMaxPolyCount);
@@ -454,6 +461,7 @@ void o2::Text::InitializeType(o2::Text* sample)
 	FIELD(mVerAlign).AddAttribute<SerializableAttribute<decltype(mVerAlign)>>();
 	FIELD(mHorAlign).AddAttribute<SerializableAttribute<decltype(mHorAlign)>>();
 	FIELD(mWordWrap).AddAttribute<SerializableAttribute<decltype(mWordWrap)>>();
+	FIELD(mDotsEndings).AddAttribute<SerializableAttribute<decltype(mDotsEndings)>>();
 	FIELD(mMeshes);
 	FIELD(mLastTransform);
 	FIELD(mSymbolsSet);
@@ -563,6 +571,24 @@ void o2::UIButton::InitializeType(o2::UIButton* sample)
 	FIELD(onClick);
 	FIELD(mCaptionText);
 	FIELD(mIconSprite);
+}
+
+void o2::UIContextMenu::InitializeType(o2::UIContextMenu* sample)
+{
+	FIELD(mOpenSubMenuDelay);
+	FIELD(mParentContextMenu);
+	FIELD(mChildContextMenu);
+	FIELD(mLayout);
+	FIELD(mClickFunctions);
+	FIELD(mItemSample).AddAttribute<SerializableAttribute<decltype(mItemSample)>>();
+	FIELD(mSelectionDrawable).AddAttribute<SerializableAttribute<decltype(mSelectionDrawable)>>();
+	FIELD(mSelectionLayout).AddAttribute<SerializableAttribute<decltype(mSelectionLayout)>>();
+	FIELD(mCurrentSelectionRect);
+	FIELD(mTargetSelectionRect);
+	FIELD(mLastSelectCheckCursor);
+	FIELD(mSelectedItem);
+	FIELD(mPressedItem);
+	FIELD(mSelectSubContextTime);
 }
 
 void o2::UICustomDropDown::InitializeType(o2::UICustomDropDown* sample)
@@ -703,10 +729,13 @@ void o2::UILabel::InitializeType(o2::UILabel* sample)
 	FIELD(text);
 	FIELD(verAlign);
 	FIELD(horAlign);
-	FIELD(wordWrap);
+	FIELD(horOverflow);
+	FIELD(verOverflow);
 	FIELD(symbolsDistanceCoef);
 	FIELD(linesDistanceCoef);
 	FIELD(mTextLayer);
+	FIELD(mHorOverflow);
+	FIELD(mVerOverflow);
 }
 
 void o2::UIList::InitializeType(o2::UIList* sample)
@@ -747,6 +776,29 @@ void o2::UIToggle::InitializeType(o2::UIToggle* sample)
 	FIELD(mValue);
 	FIELD(mCaptionText);
 	FIELD(mBackLayer);
+}
+
+void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
+{
+	FIELD(mExpandedState);
+	FIELD(mExpandCoef);
+	FIELD(mObject);
+	FIELD(mTree);
+	FIELD(mChildsOffset).AddAttribute<SerializableAttribute<decltype(mChildsOffset)>>();
+}
+
+void o2::UITree::InitializeType(o2::UITree* sample)
+{
+	FIELD(mGetChildsFunc);
+	FIELD(mSetupNodeFunc);
+	FIELD(mLayout);
+	FIELD(mNodeSample).AddAttribute<SerializableAttribute<decltype(mNodeSample)>>();
+	FIELD(mSelectionDrawable).AddAttribute<SerializableAttribute<decltype(mSelectionDrawable)>>();
+	FIELD(mSelectionLayout).AddAttribute<SerializableAttribute<decltype(mSelectionLayout)>>();
+	FIELD(mCurrentSelectionRect);
+	FIELD(mTargetSelectionRect);
+	FIELD(mLastSelectCheckCursor);
+	FIELD(mSelectedItem);
 }
 
 void o2::UIVerticalLayout::InitializeType(o2::UIVerticalLayout* sample)
@@ -854,6 +906,8 @@ void o2::UIWidgetLayer::InitializeType(o2::UIWidgetLayer* sample)
 	FIELD(mAbsolutePosition);
 	FIELD(mInteractableArea);
 	FIELD(mOwnerWidget);
+	FIELD(mParent);
+	FIELD(mChilds).AddAttribute<SerializableAttribute<decltype(mChilds)>>();
 }
 
 void o2::UIWidgetLayout::InitializeType(o2::UIWidgetLayout* sample)
@@ -1033,7 +1087,6 @@ void o2::AnimatedValue<Vec2F>::Key::InitializeType(o2::AnimatedValue<Vec2F>::Key
 	FIELD(curvePrevCoefPos).AddAttribute<SerializableAttribute<decltype(curvePrevCoefPos)>>();
 	FIELD(curveNextCoef).AddAttribute<SerializableAttribute<decltype(curveNextCoef)>>();
 	FIELD(curveNextCoefPos).AddAttribute<SerializableAttribute<decltype(curveNextCoefPos)>>();
-	FIELD(mApproxValuesCount);
 	FIELD(mApproxValues);
 	FIELD(mCurveApproxValues);
 	FIELD(mApproxLengths);
@@ -1125,6 +1178,15 @@ void o2::VectorFont::Effect::InitializeType(o2::VectorFont::Effect* sample)
 {
 }
 
+void o2::UIContextMenu::Item::InitializeType(o2::UIContextMenu::Item* sample)
+{
+	FIELD(text).AddAttribute<SerializableAttribute<decltype(text)>>();
+	FIELD(shortcut).AddAttribute<SerializableAttribute<decltype(shortcut)>>();
+	FIELD(icon).AddAttribute<SerializableAttribute<decltype(icon)>>();
+	FIELD(subItems).AddAttribute<SerializableAttribute<decltype(subItems)>>();
+	FIELD(onClick);
+}
+
 void o2::Curve::Key::InitializeType(o2::Curve::Key* sample)
 {
 	FIELD(value).AddAttribute<SerializableAttribute<decltype(value)>>();
@@ -1133,7 +1195,6 @@ void o2::Curve::Key::InitializeType(o2::Curve::Key* sample)
 	FIELD(leftCoefPosition).AddAttribute<SerializableAttribute<decltype(leftCoefPosition)>>();
 	FIELD(rightCoef).AddAttribute<SerializableAttribute<decltype(rightCoef)>>();
 	FIELD(rightCoefPosition).AddAttribute<SerializableAttribute<decltype(rightCoefPosition)>>();
-	FIELD(mApproxValuesCount);
 	FIELD(mApproxValues);
 }
 
@@ -1160,7 +1221,6 @@ void o2::AnimatedValue<RectF>::Key::InitializeType(o2::AnimatedValue<RectF>::Key
 	FIELD(curvePrevCoefPos).AddAttribute<SerializableAttribute<decltype(curvePrevCoefPos)>>();
 	FIELD(curveNextCoef).AddAttribute<SerializableAttribute<decltype(curveNextCoef)>>();
 	FIELD(curveNextCoefPos).AddAttribute<SerializableAttribute<decltype(curveNextCoefPos)>>();
-	FIELD(mApproxValuesCount);
 	FIELD(mCurveApproxValues);
 }
 
@@ -1211,6 +1271,7 @@ void RegReflectionTypes()
 	o2::DrawableComponent::type = mnew Type();
 	o2::ImageComponent::type = mnew Type();
 	o2::UIButton::type = mnew Type();
+	o2::UIContextMenu::type = mnew Type();
 	o2::UICustomDropDown::type = mnew Type();
 	o2::UICustomList::type = mnew Type();
 	o2::UIDropDown::type = mnew Type();
@@ -1222,6 +1283,8 @@ void RegReflectionTypes()
 	o2::UIList::type = mnew Type();
 	o2::UIScrollArea::type = mnew Type();
 	o2::UIToggle::type = mnew Type();
+	o2::UITreeNode::type = mnew Type();
+	o2::UITree::type = mnew Type();
 	o2::UIVerticalLayout::type = mnew Type();
 	o2::UIVerticalProgress::type = mnew Type();
 	o2::UIVerticalScrollBar::type = mnew Type();
@@ -1250,6 +1313,7 @@ void RegReflectionTypes()
 	o2::VectorFontAsset::MetaInfo::type = mnew Type();
 	o2::AtlasAssetConverter::Image::type = mnew Type();
 	o2::VectorFont::Effect::type = mnew Type();
+	o2::UIContextMenu::Item::type = mnew Type();
 	o2::Curve::Key::type = mnew Type();
 	o2::AnimatedValue<RectF>::type = mnew Type();
 	o2::AnimatedValue<RectF>::Key::type = mnew Type();
@@ -1297,6 +1361,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::DrawableComponent>("o2::DrawableComponent");
 	o2::Reflection::InitializeType<o2::ImageComponent>("o2::ImageComponent");
 	o2::Reflection::InitializeType<o2::UIButton>("o2::UIButton");
+	o2::Reflection::InitializeType<o2::UIContextMenu>("o2::UIContextMenu");
 	o2::Reflection::InitializeType<o2::UICustomDropDown>("o2::UICustomDropDown");
 	o2::Reflection::InitializeType<o2::UICustomList>("o2::UICustomList");
 	o2::Reflection::InitializeType<o2::UIDropDown>("o2::UIDropDown");
@@ -1308,6 +1373,8 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::UIList>("o2::UIList");
 	o2::Reflection::InitializeType<o2::UIScrollArea>("o2::UIScrollArea");
 	o2::Reflection::InitializeType<o2::UIToggle>("o2::UIToggle");
+	o2::Reflection::InitializeType<o2::UITreeNode>("o2::UITreeNode");
+	o2::Reflection::InitializeType<o2::UITree>("o2::UITree");
 	o2::Reflection::InitializeType<o2::UIVerticalLayout>("o2::UIVerticalLayout");
 	o2::Reflection::InitializeType<o2::UIVerticalProgress>("o2::UIVerticalProgress");
 	o2::Reflection::InitializeType<o2::UIVerticalScrollBar>("o2::UIVerticalScrollBar");
@@ -1336,6 +1403,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::VectorFontAsset::MetaInfo>("o2::VectorFontAsset::MetaInfo");
 	o2::Reflection::InitializeType<o2::AtlasAssetConverter::Image>("o2::AtlasAssetConverter::Image");
 	o2::Reflection::InitializeType<o2::VectorFont::Effect>("o2::VectorFont::Effect");
+	o2::Reflection::InitializeType<o2::UIContextMenu::Item>("o2::UIContextMenu::Item");
 	o2::Reflection::InitializeType<o2::Curve::Key>("o2::Curve::Key");
 	o2::Reflection::InitializeType<o2::AnimatedValue<RectF>>("o2::AnimatedValue<RectF>");
 	o2::Reflection::InitializeType<o2::AnimatedValue<RectF>::Key>("o2::AnimatedValue<RectF>::Key");
@@ -1387,6 +1455,7 @@ void RegReflectionTypes()
 	o2::DrawableComponent::type->AddBaseType(o2::Component::type);
 	o2::ImageComponent::type->AddBaseType(o2::DrawableComponent::type);
 	o2::UIButton::type->AddBaseType(o2::UIWidget::type);
+	o2::UIContextMenu::type->AddBaseType(o2::UIScrollArea::type);
 	o2::UICustomDropDown::type->AddBaseType(o2::UIWidget::type);
 	o2::UICustomList::type->AddBaseType(o2::UIScrollArea::type);
 	o2::UIDropDown::type->AddBaseType(o2::UICustomDropDown::type);
@@ -1397,6 +1466,8 @@ void RegReflectionTypes()
 	o2::UILabel::type->AddBaseType(o2::UIWidget::type);
 	o2::UIList::type->AddBaseType(o2::UICustomList::type);
 	o2::UIToggle::type->AddBaseType(o2::UIWidget::type);
+	o2::UITreeNode::type->AddBaseType(o2::UIWidget::type);
+	o2::UITree::type->AddBaseType(o2::UIScrollArea::type);
 	o2::UIVerticalLayout::type->AddBaseType(o2::UIWidget::type);
 	o2::UIVerticalProgress::type->AddBaseType(o2::UIWidget::type);
 	o2::UIVerticalScrollBar::type->AddBaseType(o2::UIWidget::type);
@@ -1420,6 +1491,7 @@ void RegReflectionTypes()
 	o2::ImageAsset::MetaInfo::type->AddBaseType(o2::Asset::IMetaInfo::type);
 	o2::VectorFontAsset::MetaInfo::type->AddBaseType(o2::Asset::IMetaInfo::type);
 	o2::AtlasAssetConverter::Image::type->AddBaseType(o2::ISerializable::type);
+	o2::UIContextMenu::Item::type->AddBaseType(o2::ISerializable::type);
 	o2::Curve::Key::type->AddBaseType(o2::ISerializable::type);
 	o2::AnimatedValue<RectF>::type->AddBaseType(o2::IAnimatedValue::type);
 	o2::AnimatedValue<RectF>::Key::type->AddBaseType(o2::ISerializable::type);

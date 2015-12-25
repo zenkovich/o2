@@ -131,7 +131,7 @@ namespace o2
 
 		Ptr<UIVerticalLayout> mLayout;                 // Items layout
 		Vector<ClickFunc>     mClickFunctions;         // Items click functions
-		Ptr<UIWidget>         mItemSample;             // Item sample
+		Ptr<UIWidget>         mItemSample;             // Item sample @SERIALIZABLE
 		Ptr<Sprite>           mSelectionDrawable;      // Selection sprite @SERIALIZABLE
 		Layout                mSelectionLayout;        // Selection layout, result selection area depends on selected item @SERIALIZABLE
 

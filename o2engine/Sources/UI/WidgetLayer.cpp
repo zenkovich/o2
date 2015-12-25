@@ -245,8 +245,10 @@ namespace o2
 
 		mInteractableArea = interactableLayout.Calculate(mAbsolutePosition);
 
-		if(drawable)
+		if (drawable)
+		{
 			drawable->SetRect(mAbsolutePosition);
+		}
 
 		for (auto child : mChilds)
 			child->UpdateLayout();

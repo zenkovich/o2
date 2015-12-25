@@ -15,6 +15,8 @@ namespace o2
 	typedef int                KeyboardKey;
 	typedef int                CursorId;
 
+	typedef char               UnknownType;
+
 	enum class BaseCorner { Left, Right, Top, Bottom, Center, LeftBottom, LeftTop, RightBottom, RightTop };
 
 	enum class CursorType

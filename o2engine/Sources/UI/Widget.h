@@ -300,6 +300,8 @@ namespace o2
 		friend class UIList;
 		friend class UIManager;
 		friend class UIScrollArea;
+		friend class UITree;
+		friend class UITreeNode;
 		friend class UIVerticalLayout;
 		friend class UIVerticalProgress;
 		friend class UIVerticalScrollBar;

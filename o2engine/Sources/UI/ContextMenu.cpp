@@ -78,7 +78,7 @@ namespace o2
 
 	UIContextMenu& UIContextMenu::operator=(const UIContextMenu& other)
 	{
-		UIWidget::operator=(other);
+		UIScrollArea::operator=(other);
 
 		mItemSample.Release();
 		mSelectionDrawable.Release();
@@ -528,6 +528,7 @@ namespace o2
 	Ptr<UIWidget> UIContextMenu::CreateItem(const Item& item)
 	{
 		Ptr<UIWidget> newItem = mItemSample->Clone();
+		newItem->name = (WString)"Context Item " + item.text;
 
 		if (auto iconLayer = newItem->GetLayer("icon"))
 		{

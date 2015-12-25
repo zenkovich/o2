@@ -303,6 +303,7 @@ namespace o2
 		}
 
 		res->SetVisibleForcible(true);
+		res->name = _type::type->Name();
 
 		return res;
 	}

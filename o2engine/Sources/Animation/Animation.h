@@ -122,29 +122,29 @@ namespace o2
 		// Works like css-bezier curves
 		template<typename _type, typename _val_type>
 		static Animation Parametric(IObject* target, _val_type animatingValue,
-									const Vec2F& begin, const Vec2F& end, float duration,
+									const _type& begin, const _type& end, float duration,
 									float beginCoef, float beginCoefPosition,
 									float endCoef, float endCoefPosition);
 
 		// Returns tweening animation from begin to end in duration with ease in
 		template<typename _type, typename _val_type>
 		static Animation EaseIn(IObject* target, _val_type animatingValue,
-								const Vec2F& begin, const Vec2F& end, float duration = 1.0f);
+								const _type& begin, const _type& end, float duration = 1.0f);
 
 		// Returns tweening animation from begin to end in duration with ease out
 		template<typename _type, typename _val_type>
 		static Animation EaseOut(IObject* target, _val_type animatingValue,
-								 const Vec2F& begin, const Vec2F& end, float duration = 1.0f);
+								 const _type& begin, const _type& end, float duration = 1.0f);
 
 		// Returns tweening animation from begin to end in duration with ease in-out
 		template<typename _type, typename _val_type>
 		static Animation EaseInOut(IObject* target, _val_type animatingValue,
-								   const Vec2F& begin, const Vec2F& end, float duration = 1.0f);
+								   const _type& begin, const _type& end, float duration = 1.0f);
 
 		// Returns tweening animation from begin to end in duration with linear transition
 		template<typename _type, typename _val_type>
 		static Animation Linear(IObject* target, _val_type animatingValue,
-								const Vec2F& begin, const Vec2F& end, float duration = 1.0f);
+								const _type& begin, const _type& end, float duration = 1.0f);
 
 		SERIALIZABLE(Animation);
 
@@ -232,7 +232,7 @@ namespace o2
 
 	template<typename _type, typename _val_type>
 	Animation Animation::Parametric(IObject* target, _val_type animatingValue,
-									const Vec2F& begin, const Vec2F& end, float duration,
+									const _type& begin, const _type& end, float duration,
 									float beginCoef, float beginCoefPosition, float endCoef, float endCoefPosition)
 	{
 		Animation res(target);
@@ -244,7 +244,7 @@ namespace o2
 
 	template<typename _type, typename _val_type>
 	Animation Animation::EaseIn(IObject* target, _val_type animatingValue,
-								const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)
+								const _type& begin, const _type& end, float duration /*= 1.0f*/)
 	{
 		Animation res(target);
 		*res.AddAnimationValue<_type>(animatingValuePath) = AnimatedValue<_type>::EaseIn(begin, end, duration);
@@ -253,7 +253,7 @@ namespace o2
 
 	template<typename _type, typename _val_type>
 	Animation Animation::EaseOut(IObject* target, _val_type animatingValue,
-								 const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)
+								 const _type& begin, const _type& end, float duration /*= 1.0f*/)
 	{
 		Animation res(target);
 		*res.AddAnimationValue<_type>(animatingValue) = AnimatedValue<_type>::EaseOut(begin, end, duration);
@@ -262,7 +262,7 @@ namespace o2
 
 	template<typename _type, typename _val_type>
 	Animation Animation::EaseInOut(IObject* target, _val_type animatingValue,
-								   const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)
+								   const _type& begin, const _type& end, float duration /*= 1.0f*/)
 	{
 		Animation res(target);
 		*res.AddAnimationValue<_type>(animatingValue) = AnimatedValue<_type>::EaseInOut(begin, end, duration);
@@ -271,7 +271,7 @@ namespace o2
 
 	template<typename _type, typename _val_type>
 	Animation Animation::Linear(IObject* target, _val_type animatingValue,
-								const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)
+								const _type& begin, const _type& end, float duration /*= 1.0f*/)
 	{
 		Animation res(target);
 		*res.AddAnimationValue<_type>(animatingValue) = AnimatedValue<_type>::Linear(begin, end, duration);
@@ -379,8 +379,8 @@ namespace o2
 	{
 		if (mTarget)
 		{
-			String path;
-			FieldInfo* fieldInfo = mTarget->GetType().FindFieldInfo(mTarget, target, path);
+			FieldInfo* fieldInfo = nullptr;
+			String path = mTarget->GetType().GetFieldPath(mTarget, target, fieldInfo);
 
 			if (!fieldInfo)
 			{

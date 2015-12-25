@@ -12,12 +12,14 @@
 #include "UI/Label.h"
 #include "UI/List.h"
 #include "UI/Toggle.h"
+#include "UI/Tree.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/VerticalProgress.h"
 #include "UI/WidgetLayout.h"
 #include "UI/Window.h"
 #include "UIStyleBuilding.h"
+#include "Utils/CommonTypes.h"
 
 UITestScreen::UITestScreen(Ptr<TestApplication> application):
 	ITestScreen(application)
@@ -159,6 +161,7 @@ void UITestScreen::Load()
 	dropdownContainer->AddChild(dropdown);
 	verLayout->AddChild(dropdownContainer);
 
+	// label test window
 	auto labelTestWindow = o2UI.CreateWindow("Label test");
 	auto testLabel = o2UI.CreateLabel("Label text multi line Label text multi line\nLabel text multi line\nLabel text multi lineLabel text multi line\nLabel text multi line");
 	labelTestWindow->AddChild(testLabel);
@@ -226,28 +229,53 @@ void UITestScreen::Load()
 	labelTestWindow->AddChild(testButtonslayout);
 	o2UI.AddWidget(labelTestWindow);
 	labelTestWindow->layout.size = Vec2F(300, 300);
-	}
 
-							void UITestScreen::Unload()
-	{
-		o2UI.RemoveAllWidgets();
-	}
+	auto treeWnd = o2UI.AddWindow("Tree");
+	treeWnd->layout.size = Vec2F(300, 300);
 
-	void UITestScreen::Update(float dt)
-	{
-		if (o2Input.IsKeyPressed('D'))
-			o2Debug.Log("debug");
+	auto tree = o2UI.CreateWidget<UITree>();
+	treeWnd->AddChild(tree);
+	tree->layout = UIWidgetLayout::Both();
 
-		if (o2Input.IsKeyPressed(VK_ESCAPE))
-			mApplication->GoToScreen("MainTestScreen");
-	}
+	Function<Vector<Ptr<UnknownType>>(Ptr<UnknownType>)> getChildsFunc = [=](Ptr<UnknownType> parent) {
+		Vector<Ptr<UnknownType>> res;
 
-	void UITestScreen::Draw()
-	{
-		mBackground.Draw();
-	}
+		Ptr<UIWidget> parentWidget = parent ? (UIWidget*)(void*)parent.Get() : window;
+		for (auto child : parentWidget->GetChilds())
+			res.Add((UnknownType*)(void*)child.Get());
 
-	String UITestScreen::GetId() const
-	{
-		return "UITestScreen";
-	}
+		return res;
+	};
+
+	Function<void(Ptr<UITreeNode>, Ptr<UnknownType>)> setupNodeFunc = [](Ptr<UITreeNode> node, Ptr<UnknownType> object) {
+		Ptr<UIWidget> widget = (UIWidget*)(void*)object.Get();
+		node->GetLayerDrawable<Text>("name")->text = widget->GetName() + ":" + widget->GetType().Name();
+	};
+
+	tree->SetSourceFunctions(getChildsFunc, setupNodeFunc);
+	tree->RebuildTree();
+}
+
+void UITestScreen::Unload()
+{
+	o2UI.RemoveAllWidgets();
+}
+
+void UITestScreen::Update(float dt)
+{
+	if (o2Input.IsKeyPressed('D'))
+		o2Debug.Log("debug");
+
+	if (o2Input.IsKeyPressed(VK_ESCAPE))
+		mApplication->GoToScreen("MainTestScreen");
+}
+
+void UITestScreen::Draw()
+{
+	mBackground.Draw();
+}
+
+String UITestScreen::GetId() const
+{
+	return "UITestScreen";
+}

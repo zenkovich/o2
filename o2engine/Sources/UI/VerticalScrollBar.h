@@ -146,10 +146,11 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
+		friend class UIContextMenu;
 		friend class UICustomList;
 		friend class UIEditBox;
 		friend class UIScrollArea;
-		friend class UIContextMenu;
+		friend class UITree;
 	};
 }
 

@@ -49,6 +49,7 @@
 #include "C:\work\o2\o2Engine\Sources\UI\List.h"
 #include "C:\work\o2\o2Engine\Sources\UI\ScrollArea.h"
 #include "C:\work\o2\o2Engine\Sources\UI\Toggle.h"
+#include "C:\work\o2\o2Engine\Sources\UI\Tree.h"
 #include "C:\work\o2\o2Engine\Sources\UI\VerticalLayout.h"
 #include "C:\work\o2\o2Engine\Sources\UI\VerticalProgress.h"
 #include "C:\work\o2\o2Engine\Sources\UI\VerticalScrollBar.h"
@@ -115,6 +116,8 @@ o2::Type* o2::UILabel::type;
 o2::Type* o2::UIList::type;
 o2::Type* o2::UIScrollArea::type;
 o2::Type* o2::UIToggle::type;
+o2::Type* o2::UITreeNode::type;
+o2::Type* o2::UITree::type;
 o2::Type* o2::UIVerticalLayout::type;
 o2::Type* o2::UIVerticalProgress::type;
 o2::Type* o2::UIVerticalScrollBar::type;
@@ -521,7 +524,7 @@ void o2::UIContextMenu::InitializeType(o2::UIContextMenu* sample)
 	FIELD(mChildContextMenu);
 	FIELD(mLayout);
 	FIELD(mClickFunctions);
-	FIELD(mItemSample);
+	FIELD(mItemSample).AddAttribute<SerializableAttribute<decltype(mItemSample)>>();
 	FIELD(mSelectionDrawable).AddAttribute<SerializableAttribute<decltype(mSelectionDrawable)>>();
 	FIELD(mSelectionLayout).AddAttribute<SerializableAttribute<decltype(mSelectionLayout)>>();
 	FIELD(mCurrentSelectionRect);
@@ -717,6 +720,29 @@ void o2::UIToggle::InitializeType(o2::UIToggle* sample)
 	FIELD(mValue);
 	FIELD(mCaptionText);
 	FIELD(mBackLayer);
+}
+
+void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
+{
+	FIELD(mExpandedState);
+	FIELD(mExpandCoef);
+	FIELD(mObject);
+	FIELD(mTree);
+	FIELD(mChildsOffset).AddAttribute<SerializableAttribute<decltype(mChildsOffset)>>();
+}
+
+void o2::UITree::InitializeType(o2::UITree* sample)
+{
+	FIELD(mGetChildsFunc);
+	FIELD(mSetupNodeFunc);
+	FIELD(mLayout);
+	FIELD(mNodeSample).AddAttribute<SerializableAttribute<decltype(mNodeSample)>>();
+	FIELD(mSelectionDrawable).AddAttribute<SerializableAttribute<decltype(mSelectionDrawable)>>();
+	FIELD(mSelectionLayout).AddAttribute<SerializableAttribute<decltype(mSelectionLayout)>>();
+	FIELD(mCurrentSelectionRect);
+	FIELD(mTargetSelectionRect);
+	FIELD(mLastSelectCheckCursor);
+	FIELD(mSelectedItem);
 }
 
 void o2::UIVerticalLayout::InitializeType(o2::UIVerticalLayout* sample)
@@ -1196,6 +1222,8 @@ void RegReflectionTypes()
 	o2::UIList::type = mnew Type();
 	o2::UIScrollArea::type = mnew Type();
 	o2::UIToggle::type = mnew Type();
+	o2::UITreeNode::type = mnew Type();
+	o2::UITree::type = mnew Type();
 	o2::UIVerticalLayout::type = mnew Type();
 	o2::UIVerticalProgress::type = mnew Type();
 	o2::UIVerticalScrollBar::type = mnew Type();
@@ -1279,6 +1307,8 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::UIList>("o2::UIList");
 	o2::Reflection::InitializeType<o2::UIScrollArea>("o2::UIScrollArea");
 	o2::Reflection::InitializeType<o2::UIToggle>("o2::UIToggle");
+	o2::Reflection::InitializeType<o2::UITreeNode>("o2::UITreeNode");
+	o2::Reflection::InitializeType<o2::UITree>("o2::UITree");
 	o2::Reflection::InitializeType<o2::UIVerticalLayout>("o2::UIVerticalLayout");
 	o2::Reflection::InitializeType<o2::UIVerticalProgress>("o2::UIVerticalProgress");
 	o2::Reflection::InitializeType<o2::UIVerticalScrollBar>("o2::UIVerticalScrollBar");
@@ -1363,6 +1393,8 @@ void RegReflectionTypes()
 	o2::UILabel::type->AddBaseType(o2::UIWidget::type);
 	o2::UIList::type->AddBaseType(o2::UICustomList::type);
 	o2::UIToggle::type->AddBaseType(o2::UIWidget::type);
+	o2::UITreeNode::type->AddBaseType(o2::UIWidget::type);
+	o2::UITree::type->AddBaseType(o2::UIScrollArea::type);
 	o2::UIVerticalLayout::type->AddBaseType(o2::UIWidget::type);
 	o2::UIVerticalProgress::type->AddBaseType(o2::UIWidget::type);
 	o2::UIVerticalScrollBar::type->AddBaseType(o2::UIWidget::type);
