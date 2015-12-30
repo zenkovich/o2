@@ -100,7 +100,7 @@ namespace o2
 
 		// Adds layer
 		Ptr<UIWidgetLayer> AddLayer(const String& name, Ptr<IRectDrawable> drawable,
-									const Layout& layout = Layout::Both(), float depth = 0.0f);
+									const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
 		// Returns layer by path. Returns null if layer isn't exist
 		Ptr<UIWidgetLayer> GetLayer(const String& path) const;
@@ -299,6 +299,7 @@ namespace o2
 		friend class UILabel;
 		friend class UIList;
 		friend class UIManager;
+		friend class UIMenuPanel;
 		friend class UIScrollArea;
 		friend class UITree;
 		friend class UITreeNode;

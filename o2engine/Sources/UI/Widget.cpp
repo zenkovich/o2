@@ -637,17 +637,22 @@ namespace o2
 
 	void UIWidget::UpdateVisibility()
 	{
+		bool lastResVisible = mResVisible;
+
 		if (mParent)
 			mResVisible = mVisible && mParent->mResVisible;
 		else
 			mResVisible = mVisible;
 
-		if (mVisibleState)
-			mVisibleState->SetState(mResVisible);
-		else
-			mFullyDisabled = !mResVisible;
+		if (mResVisible != lastResVisible)
+		{
+			if (mVisibleState)
+				mVisibleState->SetState(mResVisible);
+			else
+				mFullyDisabled = !mResVisible;
 
-		OnVisibleChanged();
+			OnVisibleChanged();
+		}
 
 		for (auto child : mChilds)
 			child->UpdateVisibility();

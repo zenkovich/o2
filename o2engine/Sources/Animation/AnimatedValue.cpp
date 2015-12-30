@@ -8,4 +8,9 @@ namespace o2
 	{
 		state->mOwner->RegAnimatedValue<RectF>(this, path, state);
 	}
+
+	void AnimatedValue<bool>::RegInAnimatable(AnimationState* state, const String& path)
+	{
+		state->mOwner->RegAnimatedValue<bool>(this, path, state);
+	}
 }

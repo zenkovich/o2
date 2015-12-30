@@ -17,6 +17,21 @@ namespace o2
 		InitializeProperties();
 	}
 
+	UIWidgetLayout::UIWidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax, 
+								   const Vec2F& offsetMin, const Vec2F& offsetMax):
+		mAnchorMin(anchorMin), mAnchorMax(anchorMax), mOffsetMin(offsetMin), mOffsetMax(offsetMax)
+	{
+		InitializeProperties();
+	}
+
+	UIWidgetLayout::UIWidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
+								   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom):
+		mAnchorMin(anchorLeft, anchorBottom), mAnchorMax(anchorRight, anchorTop), 
+		mOffsetMin(offsetLeft, offsetBottom), mOffsetMax(offsetRight, offsetTop)
+	{
+		InitializeProperties();
+	}
+
 	UIWidgetLayout& UIWidgetLayout::operator=(const UIWidgetLayout& other)
 	{
 		CopyFrom(other);
@@ -475,13 +490,143 @@ namespace o2
 		return mWeight.y;
 	}
 
-	UIWidgetLayout UIWidgetLayout::Both(float borderLeft, float borderBottom, float borderRight, float borderTop)
+	UIWidgetLayout UIWidgetLayout::BothStretch(float borderLeft, float borderBottom, float borderRight, float borderTop)
 	{
 		UIWidgetLayout res;
 		res.mAnchorMin = Vec2F(0, 0);
 		res.mAnchorMax = Vec2F(1, 1);
 		res.mOffsetMin = Vec2F(borderLeft, borderBottom);
 		res.mOffsetMax = Vec2F(-borderRight, -borderTop);
+		return res;
+	}
+
+	UIWidgetLayout UIWidgetLayout::Based(BaseCorner corner, const Vec2F& size, const Vec2F& offset)
+	{
+		UIWidgetLayout res;
+		switch (corner)
+		{
+			case BaseCorner::Left:
+			res.mAnchorMin = Vec2F(0.0f, 0.5f);
+			res.mAnchorMax = Vec2F(0.0f, 0.5f);
+			res.mOffsetMin = Vec2F(0.0f, -size.y*0.5f) + offset;
+			res.mOffsetMax = Vec2F(size.x, size.y*0.5f) + offset;
+			break;
+			case BaseCorner::Right:
+			res.mAnchorMin = Vec2F(1.0f, 0.5f);
+			res.mAnchorMax = Vec2F(1.0f, 0.5f);
+			res.mOffsetMin = Vec2F(-size.x, -size.y*0.5f) + offset;
+			res.mOffsetMax = Vec2F(0.0f, size.y*0.5f) + offset;
+			break;
+			case BaseCorner::Top:
+			res.mAnchorMin = Vec2F(0.5f, 1.0f);
+			res.mAnchorMax = Vec2F(0.5f, 1.0f);
+			res.mOffsetMin = Vec2F(-size.x*0.5f, -size.y) + offset;
+			res.mOffsetMax = Vec2F(size.x*0.5f, 0.0f) + offset;
+			break;
+			case BaseCorner::Bottom:
+			res.mAnchorMin = Vec2F(0.5f, 0.0f);
+			res.mAnchorMax = Vec2F(0.5f, 0.0f);
+			res.mOffsetMin = Vec2F(-size.x*0.5f, 0.0f) + offset;
+			res.mOffsetMax = Vec2F(size.x*0.5f, size.y) + offset;
+			break;
+			case BaseCorner::Center:
+			res.mAnchorMin = Vec2F(0.5f, 0.5f);
+			res.mAnchorMax = Vec2F(0.5f, 0.5f);
+			res.mOffsetMin = Vec2F(-size.x*0.5f, -size.y*0.5f) + offset;
+			res.mOffsetMax = Vec2F(size.x*0.5f, size.y*0.5f) + offset;
+			break;
+			case BaseCorner::LeftBottom:
+			res.mAnchorMin = Vec2F(0.0f, 0.0f);
+			res.mAnchorMax = Vec2F(0.0f, 0.0f);
+			res.mOffsetMin = Vec2F(0.0f, 0.0f) + offset;
+			res.mOffsetMax = Vec2F(size.x, size.y) + offset;
+			break;
+			case BaseCorner::LeftTop:
+			res.mAnchorMin = Vec2F(0.0f, 1.0f);
+			res.mAnchorMax = Vec2F(0.0f, 1.0f);
+			res.mOffsetMin = Vec2F(0.0f, -size.y) + offset;
+			res.mOffsetMax = Vec2F(size.x, 0.0f) + offset;
+			break;
+			case BaseCorner::RightBottom:
+			res.mAnchorMin = Vec2F(1.0f, 0.0f);
+			res.mAnchorMax = Vec2F(1.0f, 0.0f);
+			res.mOffsetMin = Vec2F(-size.x, 0.0f) + offset;
+			res.mOffsetMax = Vec2F(0.0f, size.y) + offset;
+			break;
+			case BaseCorner::RightTop:
+			res.mAnchorMin = Vec2F(1.0f, 1.0f);
+			res.mAnchorMax = Vec2F(1.0f, 1.0f);
+			res.mOffsetMin = Vec2F(-size.x, -size.y) + offset;
+			res.mOffsetMax = Vec2F(0.0f, 0.0f) + offset;
+			break;
+		}
+
+		return res;
+	}
+
+	UIWidgetLayout UIWidgetLayout::VerStretch(HorAlign align, float top, float bottom, float width, float offsX)
+	{
+		UIWidgetLayout res;
+		res.mAnchorMin.y = 0.0f;
+		res.mAnchorMax.y = 1.0f;
+		res.mOffsetMin.y = bottom;
+		res.mOffsetMax.y = -top;
+
+		switch (align)
+		{
+			case HorAlign::Left:
+			res.mAnchorMin.x = 0.0f;
+			res.mAnchorMax.x = 0.0f;
+			res.mOffsetMin.x = offsX;
+			res.mOffsetMax.x = offsX + width;
+			break;
+			case HorAlign::Middle:
+			res.mAnchorMin.x = 0.5f;
+			res.mAnchorMax.x = 0.5f;
+			res.mOffsetMin.x = offsX - width*0.5f;
+			res.mOffsetMax.x = offsX + width*0.5f;
+			break;
+			case HorAlign::Right:
+			res.mAnchorMin.x = 1.0f;
+			res.mAnchorMax.x = 1.0f;
+			res.mOffsetMin.x = -offsX - width; 
+			res.mOffsetMax.x = -offsX;
+			break;
+		}
+
+		return res;
+	}
+
+	UIWidgetLayout UIWidgetLayout::HorStretch(VerAlign align, float left, float right, float height, float offsY)
+	{
+		UIWidgetLayout res;
+		res.mAnchorMin.x = 0.0f;
+		res.mAnchorMax.x = 1.0f;
+		res.mOffsetMin.x = left;
+		res.mOffsetMax.x = -right;
+
+		switch (align)
+		{
+			case VerAlign::Top:
+			res.mAnchorMin.y = 1.0f;
+			res.mAnchorMax.y = 1.0f;
+			res.mOffsetMin.y = -offsY - height;
+			res.mOffsetMax.y = -offsY;
+			break;
+			case VerAlign::Middle:
+			res.mAnchorMin.y = 0.5f;
+			res.mAnchorMax.y = 0.5f;
+			res.mOffsetMin.y = offsY - height*0.5f;
+			res.mOffsetMax.y = offsY + height*0.5f;
+			break;
+			case VerAlign::Bottom:
+			res.mAnchorMin.y = 0.0f;
+			res.mAnchorMax.y = 0.0f;
+			res.mOffsetMin.y = offsY;
+			res.mOffsetMax.y = offsY + height;
+			break;
+		}
+
 		return res;
 	}
 

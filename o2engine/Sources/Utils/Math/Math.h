@@ -114,6 +114,8 @@ namespace o2
 
 		RectF Lerp(const RectF& a, const RectF& b, float coef);
 
+		bool Lerp(const bool& a, const bool& b, float coef);
+
 		inline bool Equals(float a, float b, float range = FLT_EPSILON)
 		{
 			float x = a - b;

@@ -1,16 +1,17 @@
 #include "WindowsManager.h"
 
-#include "Core/UIStyleBuilding.h"
+#include "Core/UIStyle/EditorUIStyle.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
 #include "Core/WindowsSystem/UIDockWindowPlace.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Render/Render.h"
+#include "UI/MenuPanel.h"
 #include "UI/UIManager.h"
 
 WindowsManager::WindowsManager()
 {
 	if (mNeedRebuildWndStyle)
-		RebuildUIStyle();
+		UIStyle::RebuildEditorUIStyle();
 
 	InitializeDock();
 	InitializeWindows();
@@ -42,7 +43,7 @@ void WindowsManager::InitializeDock()
 {
 	auto mainDockPlace = mnew UIDockWindowPlace();
 	mainDockPlace->name = "main dock";
-	mainDockPlace->layout = UIWidgetLayout::Both();
+	mainDockPlace->layout = UIWidgetLayout::BothStretch(0, 0, 0, 48);
 	mainDockPlace->SetResizibleDir(TwoDirection::Horizontal, 0, nullptr, nullptr);
 	o2UI.AddWidget(mainDockPlace);
 }

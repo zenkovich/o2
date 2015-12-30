@@ -19,25 +19,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Sources\ApplicationConfig.cpp" />
-    <ClCompile Include="..\..\Sources\Core\UIStyleBuilding.cpp" />
+    <ClCompile Include="..\..\Sources\Core\ApplicationConfig.cpp" />
+    <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp" />
+    <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UIStyle\BasicUIStyle.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
-    <ClCompile Include="..\..\Sources\EditorApplication.cpp" />
     <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
     <ClCompile Include="..\..\Sources\Windows\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Sources\ApplicationConfig.h" />
-    <ClInclude Include="..\..\Sources\Core\UIStyleBuilding.h" />
+    <ClInclude Include="..\..\Sources\Core\ApplicationConfig.h" />
+    <ClInclude Include="..\..\Sources\Core\EditorApplication.h" />
+    <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
+    <ClInclude Include="..\..\Sources\Core\UIStyle\BasicUIStyle.h" />
+    <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h" />
-    <ClInclude Include="..\..\Sources\EditorApplication.h" />
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
   </ItemGroup>

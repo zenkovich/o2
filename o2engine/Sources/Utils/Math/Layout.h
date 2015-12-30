@@ -22,10 +22,11 @@ namespace o2
 		bool operator==(const Layout& other) const;
 		bool operator!=(const Layout& other) const;
 
-		static Layout Both(const RectF& border = RectF());
-		static Layout Both(float left, float bottom, float right, float top);
-		static Layout Straight(const RectF& rect);
-		static Layout Straight(float left, float bottom, float right, float top);
+		static Layout BothStretch(const RectF& border);
+		static Layout BothStretch(float borderLeft = 0, float borderBottom = 0, float borderRight = 0, float borderTop = 0);
+		static Layout Based(BaseCorner corner, const Vec2F& size, const Vec2F& offset = Vec2F());
+		static Layout HorStretch(VerAlign align, float left, float right, float height, float offsY = 0.0f);
+		static Layout VerStretch(HorAlign align, float top, float bottom, float width, float offsX = 0.0f);
 
 		SERIALIZABLE(Layout);
 	};

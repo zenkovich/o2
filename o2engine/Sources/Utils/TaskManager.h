@@ -38,6 +38,9 @@ namespace o2
 		// Calls function after delay
 		void Call(const Function<void()> func, float delay);
 
+		// Updates tasks and checking for done
+		void Update(float dt);
+
 	protected:
 		TasksVec mTasks;      // All tasks array
 		int      mLastTaskId; // Last given task id
@@ -48,9 +51,6 @@ namespace o2
 
 		// Destructor. Destroys all tasks
 		~TaskManager();
-
-		// Updates tasks and checking for done
-		void Update(float dt);
 
 		friend class ITemplPtr<TaskManager>;
 		friend class Task;

@@ -2,6 +2,7 @@
 
 #include "Events/CursorEventsListener.h"
 #include "UI/ScrollArea.h"
+#include "Utils/Delegates.h"
 
 namespace o2
 {
@@ -75,6 +76,9 @@ namespace o2
 		// Add item
 		Ptr<UIWidget> AddItem(const Item& item);
 
+		// Adds item by path ("node/sub node/target")
+		Ptr<UIWidget> AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>());
+
 		// Inserts item at position
 		Ptr<UIWidget> InsertItem(const Item& item, int position);
 
@@ -92,6 +96,9 @@ namespace o2
 
 		// Removes item at position
 		void RemoveItem(int position);
+
+		// Removes item by path
+		void RemoveItem(const WString& path);
 
 		// Removes all items
 		void RemoveAllItems();
@@ -193,5 +200,6 @@ namespace o2
 		void HideWithChild();
 
 		friend class UIManager;
+		friend class UIMenuPanel;
 	};
 }

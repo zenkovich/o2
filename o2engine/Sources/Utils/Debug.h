@@ -96,6 +96,12 @@ namespace o2
 		// Draws white debug text with disappearing delay
 		void DrawText(const Vec2F& position, const String& text, float delay);
 
+		// Updates lines delay
+		void Update(float dt);
+
+		// Draws debug lines
+		void Draw();
+
 	protected:
 		// ------------------------------------------------------
 		// Debug drawable interface: color and disappearing delay
@@ -198,12 +204,6 @@ namespace o2
 
 		// Initializes font and text
 		void InitializeFont();
-
-		// Updates lines delay
-		void Update(float dt);
-
-		// Draws debug lines
-		void Draw();
 
 		friend class Singleton<Debug>;
 		friend class BaseApplication;

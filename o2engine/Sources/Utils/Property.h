@@ -317,6 +317,18 @@ namespace o2
 		{
 			return Get()/value;
 		}
+
+		// Check equals operator
+		bool operator==(const _type& other) const
+		{
+			return Get() == other;
+		}
+
+		// Check not equals operator
+		bool operator!=(const _type& other) const
+		{
+			return Get() != other;
+		}
 	};
 
 	// -----------------------

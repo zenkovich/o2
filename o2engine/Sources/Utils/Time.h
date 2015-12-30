@@ -43,6 +43,9 @@ namespace o2
 		// Return current system time
 		TimeStamp CurrentTime() const;
 
+		// Update parameters
+		void Update(float dt);
+
 	public:
 		friend class Application;
 		friend class BaseApplication;
@@ -60,8 +63,5 @@ namespace o2
 	protected:
 		// Default constructor
 		Time();
-
-		// Update parameters
-		void Update(float dt);
 	};
 }

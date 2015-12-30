@@ -7,6 +7,13 @@ using namespace o2;
 
 class IEditorWindow;
 
+namespace o2
+{
+	class UIMenuPanel;
+}
+
+#define o2WindowsManager WindowsManager::Instance()
+
 // ----------------------
 // Editor windows manager
 // ----------------------

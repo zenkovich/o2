@@ -8,14 +8,42 @@ namespace o2
 {
 	class Text;
 	class Sprite;
+	class UIToggle;
+
+	// ------------
+	// Toggle group
+	// ------------
+	class UIToggleGroup
+	{
+	public:
+		typedef Vector<Ptr<UIToggle>> TogglesVec;
+
+	public:
+		UIToggleGroup();
+		~UIToggleGroup();
+
+		void AddToggle(Ptr<UIToggle> toggle);
+		void RemoveToggle(Ptr<UIToggle> toggle);
+
+		const TogglesVec& GetToggles() const;
+
+	protected:
+		TogglesVec    mToggles; 
+		Ptr<UIToggle> mOwner;
+
+		void OnToggled(Ptr<UIToggle> toggle);
+
+		friend class UIToggle;
+	};
 
 	class UIToggle: public UIWidget, public CursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		Property<WString>    caption;  // Caption property. Searches text layer with name "caption" or creates them if he's not exist
-		Property<bool>       value;    // Current state value property
-		Function<void()>     onClick;  // Click event
-		Function<void(bool)> onToggle; // Toggle event
+		Property<WString>            caption;     // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+		Property<bool>               value;       // Current state value property
+		Property<Ptr<UIToggleGroup>> toggleGroup; // Toggle group property
+		Function<void()>             onClick;     // Click event
+		Function<void(bool)>         onToggle;    // Toggle event
 
 		// Default constructor
 		UIToggle();
@@ -25,6 +53,9 @@ namespace o2
 
 		// Assign operator
 		UIToggle& operator=(const UIToggle& other);
+
+		// Destructor
+		~UIToggle();
 
 		// Sets caption of button. Searches text layer with name "caption". If can't find this layer, creates them
 		void SetCaption(const WString& text);
@@ -47,12 +78,19 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsSelectable() const;
 
+		// Sets toggle group
+		void SetToggleGroup(Ptr<UIToggleGroup> toggleGroup);
+
+		// Returns toggle group
+		Ptr<UIToggleGroup> GetToggleGroup() const;
+
 		SERIALIZABLE(UIToggle);
 
 	protected:
 		bool               mValue;       // Current value
 		Ptr<Text>          mCaptionText; // Caption layer text
 		Ptr<UIWidgetLayer> mBackLayer;   // Background layer
+		Ptr<UIToggleGroup> mToggleGroup; // Toggle group
 
 	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true
@@ -85,5 +123,7 @@ namespace o2
 
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class UIToggleGroup;
 	};
 }

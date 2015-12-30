@@ -40,7 +40,7 @@ public:
 
 protected:
 	const float          mDockSizeCoef = 0.2f;
-	const float          mDockBorder = 2.0f;
+	const float          mDockBorder = 1.5f;
 
 	bool                 mDocked;                 // Is window is docked
 	Ptr<Sprite>          mDockingFrameSample;     // Docking frame sample @SERIALIZABLE

@@ -202,6 +202,12 @@ namespace o2
 		// Selects next widget 
 		void SelectNextWidget();
 
+		// Updates widgets
+		void Update(float dt);
+
+		// Draws widgets
+		void Draw();
+
 	protected:
 		Ptr<LogStream> mLog;            // UI Log stream
 		Ptr<UIWidget>  mScreenWidget;   // Root screen widget
@@ -216,12 +222,6 @@ namespace o2
 
 		// Destructor
 		~UIManager();
-
-		// Updates widgets
-		void Update(float dt);
-
-		// Draws widgets
-		void Draw();
 
 		// Updates root widget size
 		void UpdateRootSize();
@@ -303,7 +303,6 @@ namespace o2
 		}
 
 		res->SetVisibleForcible(true);
-		res->name = _type::type->Name();
 
 		return res;
 	}

@@ -1,21 +1,19 @@
-#include "EditorApplication.h"
+#include "Core/EditorApplication.h"
+#include "Core/ToolsPanel.h"
+#include "O2.h"
 #include "ReflectionGenerated.h"
 
-#include "O2.h"
 using namespace o2;
-
-#include "Animation/AnimatedValue.h"
 
 INITIALIZE_O2;
 
 DECLARE_SINGLETON(WindowsManager);
 DECLARE_SINGLETON(ApplicationConfig);
+DECLARE_SINGLETON(ToolsPanel);
 
 int main()
 {
 	MAIN_O2;
-
-	AnimatedValue<RectF> rr;
 	
 	Ptr<EditorApplication> app = mnew EditorApplication();
 	app.SetupAsRoot();

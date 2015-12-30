@@ -388,7 +388,7 @@ namespace o2
 	template<typename _type>
 	void AnimatedValue<_type>::AddKey(float position, const _type& value, float smooth /*= 1.0f*/)
 	{
-		AddKey(Key(position, value, 0.0f, 0.0f, 1.0f, 1.0f), smooth);
+		AddSmoothKey(Key(position, value, 0.0f, 0.0f, 1.0f, 1.0f), smooth);
 	}
 
 	template<typename _type>
@@ -617,8 +617,8 @@ namespace o2
 															float endCoef, float endCoefPosition)
 	{
 		AnimatedValue<_type> res;
-		res.AddKey(0.0f, begin, 0.0f, 0.0f, beginCoef, beginCoefPosition);
-		res.AddKey(duration, end, endCoef, endCoefPosition, 0.0f, 0.0f);
+		res.AddKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef), beginCoefPosition);
+		res.AddKey(duration, end, Math::Lerp(begin, end, endCoef), endCoefPosition, 0.0f, 0.0f);
 		return res;
 	}
 

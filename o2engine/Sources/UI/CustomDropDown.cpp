@@ -6,7 +6,7 @@
 namespace o2
 {
 	UICustomDropDown::UICustomDropDown():
-		UIWidget(), mClipLayout(Layout::Both()), mMaxListItems(10)
+		UIWidget(), mClipLayout(Layout::BothStretch()), mMaxListItems(10)
 	{
 		mList = mnew UICustomList();
 		mList->mParent = this;
@@ -54,6 +54,12 @@ namespace o2
 	{
 		UIWidget::Update(dt);
 		mList->Update(dt);
+
+		if ((o2Input.IsCursorPressed() || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
+			!mList->layout.mAbsoluteRect.IsInside(o2Input.GetCursorPos()))
+		{
+			Collapse();
+		}
 	}
 
 	void UICustomDropDown::Draw()

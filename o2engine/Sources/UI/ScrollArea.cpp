@@ -10,8 +10,8 @@
 namespace o2
 {
 	UIScrollArea::UIScrollArea():
-		UIWidget(), mOwnHorScrollBar(false), mOwnVerScrollBar(false), mClipAreaLayout(Layout::Both()), mUnderCursor(false),
-		mPressedCursor(false), mScrollSpeedDamp(7.0f), mSpeedUpdTime(0), mViewAreaLayout(Layout::Both()),
+		UIWidget(), mOwnHorScrollBar(false), mOwnVerScrollBar(false), mClipAreaLayout(Layout::BothStretch()), mUnderCursor(false),
+		mPressedCursor(false), mScrollSpeedDamp(7.0f), mSpeedUpdTime(0), mViewAreaLayout(Layout::BothStretch()),
 		mLastHorScrollChangeTime(-10), mLastVerScrollChangeTime(-10), mEnableScrollsHiding(false),
 		mEnableHorScroll(true), mEnableVerScroll(true)
 	{

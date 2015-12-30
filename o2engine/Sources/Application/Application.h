@@ -159,7 +159,7 @@ namespace o2
 		void DeinitializeSystems();
 
 		// Processing frame update, drawing and input messages
-		void ProcessFrame();
+		virtual void ProcessFrame();
 
 		// Initializes properties
 		void InitializeProperties();

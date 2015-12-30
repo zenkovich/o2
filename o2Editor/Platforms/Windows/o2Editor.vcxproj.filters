@@ -13,9 +13,11 @@
     <Filter Include="SceneWindow">
       <UniqueIdentifier>{8c4230b7-fd52-4da3-8213-c90d15ade342}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\UIStyle">
+      <UniqueIdentifier>{31238126-83ae-4282-b0d1-a25f32c63911}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Sources\EditorApplication.h" />
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h">
       <Filter>Core\WindowsSystem</Filter>
@@ -23,7 +25,6 @@
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h">
       <Filter>Core\WindowsSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\ApplicationConfig.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h">
       <Filter>Core\WindowsSystem</Filter>
     </ClInclude>
@@ -33,8 +34,20 @@
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h">
       <Filter>Core\WindowsSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\UIStyleBuilding.h">
+    <ClInclude Include="..\..\Sources\Core\ToolsPanel.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\ApplicationConfig.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\EditorApplication.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UIStyle\BasicUIStyle.h">
+      <Filter>Core\UIStyle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h">
+      <Filter>Core\UIStyle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -42,14 +55,12 @@
       <Filter>Windows</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
-    <ClCompile Include="..\..\Sources\EditorApplication.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp">
       <Filter>Core\WindowsSystem</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp">
       <Filter>Core\WindowsSystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\ApplicationConfig.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp">
       <Filter>Core\WindowsSystem</Filter>
     </ClCompile>
@@ -59,8 +70,20 @@
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp">
       <Filter>Core\WindowsSystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\UIStyleBuilding.cpp">
+    <ClCompile Include="..\..\Sources\Core\ApplicationConfig.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UIStyle\BasicUIStyle.cpp">
+      <Filter>Core\UIStyle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp">
+      <Filter>Core\UIStyle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -316,7 +316,7 @@ namespace o2
 		}
 
 		if (mBackLayer)
-			mBackLayer->layout = Layout::Both();
+			mBackLayer->layout = Layout::BothStretch();
 
 		UpdateLayersLayouts();
 	}

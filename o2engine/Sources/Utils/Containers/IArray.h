@@ -429,7 +429,7 @@ namespace o2
 		int count = Count();
 		for (int i = 0; i < count; i++)
 		{
-			if (!match(Get(i)))
+			if (match(Get(i)))
 				return true;
 		}
 

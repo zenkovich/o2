@@ -49,7 +49,7 @@ namespace o2
 		mLayout->expandWidth = true;
 		mLayout->baseCorner = BaseCorner::LeftTop;
 		mLayout->fitByChildren = true;
-		mLayout->layout = UIWidgetLayout::Both();
+		mLayout->layout = UIWidgetLayout::BothStretch();
 	}
 
 	UIContextMenu::UIContextMenu(Vector<Item> items):
@@ -86,6 +86,7 @@ namespace o2
 		mItemSample = other.mItemSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
 		mSelectionLayout = other.mSelectionLayout;
+		mLayout = FindChild<UIVerticalLayout>();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -163,7 +164,7 @@ namespace o2
 
 	Ptr<UIWidget> UIContextMenu::AddItem(const Item& item)
 	{
-		Ptr<UIButton> newItem = CreateItem(item);
+		Ptr<UIWidget> newItem = CreateItem(item);
 		mLayout->AddChild(newItem);
 
 		if (item.subItems.Count() > 0)
@@ -177,9 +178,56 @@ namespace o2
 		return newItem;
 	}
 
+	Ptr<UIWidget> UIContextMenu::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/)
+	{
+		Ptr<UIContextMenu> targetContext = this;
+		WString targetPath = path;
+
+		while (true)
+		{
+			int slashPos = targetPath.Find("/");
+			if (slashPos < 0)
+				break;
+
+			WString subMenu = targetPath.SubStr(0, slashPos);
+
+			Ptr<UIWidget> subChild = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
+				if (auto text = x->GetLayerDrawable<Text>("caption"))
+					return text->text == subMenu;
+
+				return false;
+			});
+
+			if (!subChild)
+				subChild = AddItem(subMenu);
+
+			Ptr<UIContextMenu> subContext = subChild->FindChild<UIContextMenu>();
+			if (!subContext)
+			{
+				subContext = Clone();
+				subContext->RemoveAllItems();
+
+				subChild->AddChild(subContext);
+				int idx = targetContext->mLayout->mChilds.Find(subChild);
+
+				mClickFunctions.Insert([=]() {
+					subContext->Show(this, subChild->layout.absRightTop);
+				}, idx);
+
+				if (auto subIconLayer = subChild->GetLayer("subIcon"))
+					subIconLayer->transparency = 1.0f;
+			}
+
+			targetContext = subContext;
+			targetPath = targetPath.SubStr(slashPos + 1);
+		}
+
+		return targetContext->AddItem(Item(targetPath, clickFunc));
+	}
+
 	Ptr<UIWidget> UIContextMenu::InsertItem(const Item& item, int position)
 	{
-		Ptr<UIButton> newItem = CreateItem(item);
+		Ptr<UIWidget> newItem = CreateItem(item);
 		mLayout->AddChild(newItem, position);
 
 		if (item.subItems.Count() > 0)
@@ -363,6 +411,59 @@ namespace o2
 	{
 		if (position > 0 && position < mLayout->GetChilds().Count())
 			mLayout->RemoveChild(mLayout->GetChilds()[position]);
+	}
+
+	void UIContextMenu::RemoveItem(const WString& path)
+	{
+		Ptr<UIContextMenu> targetContext = this;
+		WString targetPath = path;
+
+		while (true)
+		{
+			int slashPos = targetPath.Find("/");
+			if (slashPos < 0)
+				break;
+
+			WString subMenu = targetPath.SubStr(0, slashPos);
+
+			Ptr<UIWidget> subChild = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
+				if (auto text = x->GetLayerDrawable<Text>("caption"))
+					return text->text == subMenu;
+
+				return false;
+			});
+
+			if (!subChild)
+			{
+				o2Debug.LogError("Failed to remove context item %s", path);
+				return;
+			}
+
+			Ptr<UIContextMenu> subContext = subChild->FindChild<UIContextMenu>();
+			if (!subContext)
+			{
+				o2Debug.LogError("Failed to remove context item %s", path);
+				return;
+			}
+
+			targetContext = subContext;
+			targetPath = targetPath.SubStr(slashPos + 1);
+		}
+
+		Ptr<UIWidget> removingItem = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
+			if (auto text = x->GetLayerDrawable<Text>("caption"))
+				return text->text == targetPath;
+
+			return false;
+		});
+
+		if (!removingItem)
+		{
+			o2Debug.LogError("Failed to remove context item %s", path);
+			return;
+		}
+
+		targetContext->mLayout->RemoveChild(removingItem);
 	}
 
 	void UIContextMenu::RemoveAllItems()

@@ -10,7 +10,7 @@
 namespace o2
 {
 	UICustomList::UICustomList():
-		UIScrollArea(), mSelectedItem(-1), mHoverLayout(Layout::Both()), mSelectionLayout(Layout::Both())
+		UIScrollArea(), mSelectedItem(-1), mHoverLayout(Layout::BothStretch()), mSelectionLayout(Layout::BothStretch())
 	{
 		mItemSample = mnew UIWidget();
 		mSelectionDrawable = mnew Sprite();

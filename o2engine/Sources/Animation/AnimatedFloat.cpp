@@ -276,8 +276,8 @@ namespace o2
 														  float endCoef, float endCoefPosition)
 	{
 		AnimatedValue<float> res;
-		res.curve.AddKey(0.0f, begin, 0.0f, 0.0f, beginCoef*begin, beginCoefPosition);
-		res.curve.AddKey(duration, end, endCoef*end, endCoefPosition, 0.0f, 0.0f);
+		res.curve.AddKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef), beginCoefPosition);
+		res.curve.AddKey(duration, end, Math::Lerp(begin, end, endCoef), endCoefPosition, 0.0f, 0.0f);
 		return res;
 	}
 

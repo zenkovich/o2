@@ -40,15 +40,15 @@ namespace o2
 		// Breaks cursor event. All pressed listeners will be unpressed with specific event OnPressBreak
 		void BreakCursorEvent();
 
+		// Updates and processes events
+		void Update(float dt);
+
 	protected:
 		// Default constructor
 		EventSystem();
 
 		// Destructor
 		~EventSystem();
-
-		// Updates and processes events
-		void Update(float dt);
 
 		// Calls when application was started
 		void OnApplicationStarted();

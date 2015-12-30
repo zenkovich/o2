@@ -3,8 +3,7 @@
 #include "Utils/Reflection/Reflection.h"
 
 // Includes
-#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\ApplicationConfig.h"
-#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\EditorApplication.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\ApplicationConfig.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\IEditorWindow.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\UIDockableWindow.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h"
@@ -52,6 +51,7 @@
 #include "C:\work\o2\o2Engine\Sources\UI\HorizontalScrollBar.h"
 #include "C:\work\o2\o2Engine\Sources\UI\Label.h"
 #include "C:\work\o2\o2Engine\Sources\UI\List.h"
+#include "C:\work\o2\o2Engine\Sources\UI\MenuPanel.h"
 #include "C:\work\o2\o2Engine\Sources\UI\ScrollArea.h"
 #include "C:\work\o2\o2Engine\Sources\UI\Toggle.h"
 #include "C:\work\o2\o2Engine\Sources\UI\Tree.h"
@@ -73,7 +73,6 @@
 
 // Types declarations
 o2::Type* ::ApplicationConfig::type;
-o2::Type* ::Test::type;
 o2::Type* ::IEditorWindow::type;
 o2::Type* ::UIDockableWindow::type;
 o2::Type* ::UIDockWindowPlace::type;
@@ -124,6 +123,7 @@ o2::Type* o2::UIHorizontalProgress::type;
 o2::Type* o2::UIHorizontalScrollBar::type;
 o2::Type* o2::UILabel::type;
 o2::Type* o2::UIList::type;
+o2::Type* o2::UIMenuPanel::type;
 o2::Type* o2::UIScrollArea::type;
 o2::Type* o2::UIToggle::type;
 o2::Type* o2::UITreeNode::type;
@@ -157,9 +157,12 @@ o2::Type* o2::VectorFontAsset::MetaInfo::type;
 o2::Type* o2::AtlasAssetConverter::Image::type;
 o2::Type* o2::VectorFont::Effect::type;
 o2::Type* o2::UIContextMenu::Item::type;
+o2::Type* o2::UIMenuPanel::Item::type;
 o2::Type* o2::Curve::Key::type;
 o2::Type* o2::AnimatedValue<RectF>::type;
 o2::Type* o2::AnimatedValue<RectF>::Key::type;
+o2::Type* o2::AnimatedValue<bool>::type;
+o2::Type* o2::AnimatedValue<bool>::Key::type;
 
 // Types initializations
 void ::ApplicationConfig::InitializeType(::ApplicationConfig* sample)
@@ -167,12 +170,6 @@ void ::ApplicationConfig::InitializeType(::ApplicationConfig* sample)
 	FIELD(mWindowSize).AddAttribute<SerializableAttribute<decltype(mWindowSize)>>();
 	FIELD(mWindowPosition).AddAttribute<SerializableAttribute<decltype(mWindowPosition)>>();
 	FIELD(mFullScreen).AddAttribute<SerializableAttribute<decltype(mFullScreen)>>();
-}
-
-void ::Test::InitializeType(::Test* sample)
-{
-	FIELD(sp1);
-	FIELD(sp2);
 }
 
 void ::IEditorWindow::InitializeType(::IEditorWindow* sample)
@@ -731,11 +728,13 @@ void o2::UILabel::InitializeType(o2::UILabel* sample)
 	FIELD(horAlign);
 	FIELD(horOverflow);
 	FIELD(verOverflow);
+	FIELD(expandBorder);
 	FIELD(symbolsDistanceCoef);
 	FIELD(linesDistanceCoef);
 	FIELD(mTextLayer);
 	FIELD(mHorOverflow);
 	FIELD(mVerOverflow);
+	FIELD(mExpandBorder);
 }
 
 void o2::UIList::InitializeType(o2::UIList* sample)
@@ -743,6 +742,21 @@ void o2::UIList::InitializeType(o2::UIList* sample)
 	FIELD(value);
 	FIELD(textItem);
 	FIELD(onSelectedText);
+}
+
+void o2::UIMenuPanel::InitializeType(o2::UIMenuPanel* sample)
+{
+	FIELD(mLayout);
+	FIELD(mItemSample).AddAttribute<SerializableAttribute<decltype(mItemSample)>>();
+	FIELD(mClickFunctions);
+	FIELD(mSelectionDrawable).AddAttribute<SerializableAttribute<decltype(mSelectionDrawable)>>();
+	FIELD(mSelectionLayout).AddAttribute<SerializableAttribute<decltype(mSelectionLayout)>>();
+	FIELD(mCurrentSelectionRect);
+	FIELD(mTargetSelectionRect);
+	FIELD(mLastSelectCheckCursor);
+	FIELD(mSelectedItem);
+	FIELD(mSelectSubContextTime);
+	FIELD(mOpenedContext);
 }
 
 void o2::UIScrollArea::InitializeType(o2::UIScrollArea* sample)
@@ -771,11 +785,13 @@ void o2::UIToggle::InitializeType(o2::UIToggle* sample)
 {
 	FIELD(caption);
 	FIELD(value);
+	FIELD(toggleGroup);
 	FIELD(onClick);
 	FIELD(onToggle);
 	FIELD(mValue);
 	FIELD(mCaptionText);
 	FIELD(mBackLayer);
+	FIELD(mToggleGroup);
 }
 
 void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
@@ -1187,6 +1203,13 @@ void o2::UIContextMenu::Item::InitializeType(o2::UIContextMenu::Item* sample)
 	FIELD(onClick);
 }
 
+void o2::UIMenuPanel::Item::InitializeType(o2::UIMenuPanel::Item* sample)
+{
+	FIELD(text).AddAttribute<SerializableAttribute<decltype(text)>>();
+	FIELD(subItems).AddAttribute<SerializableAttribute<decltype(subItems)>>();
+	FIELD(onClick);
+}
+
 void o2::Curve::Key::InitializeType(o2::Curve::Key* sample)
 {
 	FIELD(value).AddAttribute<SerializableAttribute<decltype(value)>>();
@@ -1224,13 +1247,38 @@ void o2::AnimatedValue<RectF>::Key::InitializeType(o2::AnimatedValue<RectF>::Key
 	FIELD(mCurveApproxValues);
 }
 
+void o2::AnimatedValue<bool>::InitializeType(o2::AnimatedValue<bool>* sample)
+{
+	FIELD(value);
+	FIELD(target);
+	FIELD(targetDelegate);
+	FIELD(targetProperty);
+	FIELD(key);
+	FIELD(keys);
+	FIELD(mKeys).AddAttribute<SerializableAttribute<decltype(mKeys)>>();
+	FIELD(mValue);
+	FIELD(mTarget);
+	FIELD(mTargetDelegate);
+	FIELD(mTargetProperty);
+}
+
+void o2::AnimatedValue<bool>::Key::InitializeType(o2::AnimatedValue<bool>::Key* sample)
+{
+	FIELD(position).AddAttribute<SerializableAttribute<decltype(position)>>();
+	FIELD(value).AddAttribute<SerializableAttribute<decltype(value)>>();
+	FIELD(curvePrevCoef).AddAttribute<SerializableAttribute<decltype(curvePrevCoef)>>();
+	FIELD(curvePrevCoefPos).AddAttribute<SerializableAttribute<decltype(curvePrevCoefPos)>>();
+	FIELD(curveNextCoef).AddAttribute<SerializableAttribute<decltype(curveNextCoef)>>();
+	FIELD(curveNextCoefPos).AddAttribute<SerializableAttribute<decltype(curveNextCoefPos)>>();
+	FIELD(mCurveApproxValues);
+}
+
 
 // Registering all types
 void RegReflectionTypes()
 {
 	// Create types
 	::ApplicationConfig::type = mnew Type();
-	::Test::type = mnew Type();
 	::IEditorWindow::type = mnew Type();
 	::UIDockableWindow::type = mnew Type();
 	::UIDockWindowPlace::type = mnew Type();
@@ -1281,6 +1329,7 @@ void RegReflectionTypes()
 	o2::UIHorizontalScrollBar::type = mnew Type();
 	o2::UILabel::type = mnew Type();
 	o2::UIList::type = mnew Type();
+	o2::UIMenuPanel::type = mnew Type();
 	o2::UIScrollArea::type = mnew Type();
 	o2::UIToggle::type = mnew Type();
 	o2::UITreeNode::type = mnew Type();
@@ -1314,13 +1363,15 @@ void RegReflectionTypes()
 	o2::AtlasAssetConverter::Image::type = mnew Type();
 	o2::VectorFont::Effect::type = mnew Type();
 	o2::UIContextMenu::Item::type = mnew Type();
+	o2::UIMenuPanel::Item::type = mnew Type();
 	o2::Curve::Key::type = mnew Type();
 	o2::AnimatedValue<RectF>::type = mnew Type();
 	o2::AnimatedValue<RectF>::Key::type = mnew Type();
+	o2::AnimatedValue<bool>::type = mnew Type();
+	o2::AnimatedValue<bool>::Key::type = mnew Type();
 
 	// Initialize types
 	o2::Reflection::InitializeType<::ApplicationConfig>("::ApplicationConfig");
-	o2::Reflection::InitializeType<::Test>("::Test");
 	o2::Reflection::InitializeType<::IEditorWindow>("::IEditorWindow");
 	o2::Reflection::InitializeType<::UIDockableWindow>("::UIDockableWindow");
 	o2::Reflection::InitializeType<::UIDockWindowPlace>("::UIDockWindowPlace");
@@ -1371,6 +1422,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::UIHorizontalScrollBar>("o2::UIHorizontalScrollBar");
 	o2::Reflection::InitializeType<o2::UILabel>("o2::UILabel");
 	o2::Reflection::InitializeType<o2::UIList>("o2::UIList");
+	o2::Reflection::InitializeType<o2::UIMenuPanel>("o2::UIMenuPanel");
 	o2::Reflection::InitializeType<o2::UIScrollArea>("o2::UIScrollArea");
 	o2::Reflection::InitializeType<o2::UIToggle>("o2::UIToggle");
 	o2::Reflection::InitializeType<o2::UITreeNode>("o2::UITreeNode");
@@ -1404,14 +1456,15 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::AtlasAssetConverter::Image>("o2::AtlasAssetConverter::Image");
 	o2::Reflection::InitializeType<o2::VectorFont::Effect>("o2::VectorFont::Effect");
 	o2::Reflection::InitializeType<o2::UIContextMenu::Item>("o2::UIContextMenu::Item");
+	o2::Reflection::InitializeType<o2::UIMenuPanel::Item>("o2::UIMenuPanel::Item");
 	o2::Reflection::InitializeType<o2::Curve::Key>("o2::Curve::Key");
 	o2::Reflection::InitializeType<o2::AnimatedValue<RectF>>("o2::AnimatedValue<RectF>");
 	o2::Reflection::InitializeType<o2::AnimatedValue<RectF>::Key>("o2::AnimatedValue<RectF>::Key");
+	o2::Reflection::InitializeType<o2::AnimatedValue<bool>>("o2::AnimatedValue<bool>");
+	o2::Reflection::InitializeType<o2::AnimatedValue<bool>::Key>("o2::AnimatedValue<bool>::Key");
 
 	// Resolve inheritance
 	::ApplicationConfig::type->AddBaseType(o2::ISerializable::type);
-	o2::Animatable::type->AddBaseType(o2::ISerializable::type);
-	::Test::type->AddBaseType(o2::Animatable::type);
 	::IEditorWindow::type->AddBaseType(o2::ISerializable::type);
 	o2::UIWidget::type->AddBaseType(o2::ISerializable::type);
 	o2::UIScrollArea::type->AddBaseType(o2::UIWidget::type);
@@ -1419,6 +1472,7 @@ void RegReflectionTypes()
 	::UIDockableWindow::type->AddBaseType(o2::UIWindow::type);
 	::UIDockWindowPlace::type->AddBaseType(o2::UIWidget::type);
 	::SceneWindow::type->AddBaseType(::IEditorWindow::type);
+	o2::Animatable::type->AddBaseType(o2::ISerializable::type);
 	o2::IAnimation::type->AddBaseType(o2::ISerializable::type);
 	o2::IAnimatedValue::type->AddBaseType(o2::IAnimation::type);
 	o2::AnimatedValue<float>::type->AddBaseType(o2::IAnimatedValue::type);
@@ -1465,6 +1519,7 @@ void RegReflectionTypes()
 	o2::UIHorizontalScrollBar::type->AddBaseType(o2::UIWidget::type);
 	o2::UILabel::type->AddBaseType(o2::UIWidget::type);
 	o2::UIList::type->AddBaseType(o2::UICustomList::type);
+	o2::UIMenuPanel::type->AddBaseType(o2::UIWidget::type);
 	o2::UIToggle::type->AddBaseType(o2::UIWidget::type);
 	o2::UITreeNode::type->AddBaseType(o2::UIWidget::type);
 	o2::UITree::type->AddBaseType(o2::UIScrollArea::type);
@@ -1492,8 +1547,11 @@ void RegReflectionTypes()
 	o2::VectorFontAsset::MetaInfo::type->AddBaseType(o2::Asset::IMetaInfo::type);
 	o2::AtlasAssetConverter::Image::type->AddBaseType(o2::ISerializable::type);
 	o2::UIContextMenu::Item::type->AddBaseType(o2::ISerializable::type);
+	o2::UIMenuPanel::Item::type->AddBaseType(o2::ISerializable::type);
 	o2::Curve::Key::type->AddBaseType(o2::ISerializable::type);
 	o2::AnimatedValue<RectF>::type->AddBaseType(o2::IAnimatedValue::type);
 	o2::AnimatedValue<RectF>::Key::type->AddBaseType(o2::ISerializable::type);
+	o2::AnimatedValue<bool>::type->AddBaseType(o2::IAnimatedValue::type);
+	o2::AnimatedValue<bool>::Key::type->AddBaseType(o2::ISerializable::type);
 
 }

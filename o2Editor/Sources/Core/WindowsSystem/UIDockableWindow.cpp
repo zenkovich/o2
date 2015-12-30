@@ -235,11 +235,11 @@ void UIDockableWindow::PlaceNonLineDock(Ptr<UIDockWindowPlace> targetDock, Side 
 
 	Ptr<UIDockWindowPlace> windowDock = mnew UIDockWindowPlace();
 	windowDock->name = "window";
-	windowDock->layout = UIWidgetLayout::Both();
+	windowDock->layout = UIWidgetLayout::BothStretch();
 
 	Ptr<UIDockWindowPlace> windowNeighborDock = mnew UIDockWindowPlace();
 	windowNeighborDock->name = "empty";
-	windowNeighborDock->layout = UIWidgetLayout::Both();
+	windowNeighborDock->layout = UIWidgetLayout::BothStretch();
 
 	for (auto child : targetDock->GetChilds())
 		windowNeighborDock->AddChild(child);
@@ -277,7 +277,7 @@ void UIDockableWindow::PlaceNonLineDock(Ptr<UIDockWindowPlace> targetDock, Side 
 	}
 
 	windowDock->AddChild(this);
-	layout = UIWidgetLayout::Both();
+	layout = UIWidgetLayout::BothStretch();
 	SetDocked(true);
 
 	mDockingFrameAppearance.PlayBack();
@@ -291,7 +291,7 @@ void UIDockableWindow::PlaceLineDock(Ptr<UIDockWindowPlace> targetDock, Side doc
 
 	Ptr<UIDockWindowPlace> windowDock = mnew UIDockWindowPlace();
 	windowDock->name = "window";
-	windowDock->layout = UIWidgetLayout::Both();
+	windowDock->layout = UIWidgetLayout::BothStretch();
 
 	Ptr<UIDockWindowPlace> windowNeighborDock = targetDock;
 	targetDock->mParent->AddChild(windowDock);
@@ -367,7 +367,7 @@ void UIDockableWindow::PlaceLineDock(Ptr<UIDockWindowPlace> targetDock, Side doc
 	}
 
 	windowDock->AddChild(this);
-	layout = UIWidgetLayout::Both();
+	layout = UIWidgetLayout::BothStretch();
 	SetDocked(true);
 
 	mDockingFrameAppearance.PlayBack();

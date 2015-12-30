@@ -21,6 +21,7 @@ namespace o2
 		Property<HorAlign>    horAlign;            // Horizontal align property
 		Property<HorOverflow> horOverflow;		   // Horizontal text overflow logic property
 		Property<VerOverflow> verOverflow;		   // Vertical text overflow logic property
+		Property<Vec2F>       expandBorder;        // Overflow expanding border size property
 		Property<float>       symbolsDistanceCoef; // Characters distance coef, 1 is standard
 		Property<float>       linesDistanceCoef;   // Lines distance coef, 1 is standard
 
@@ -84,12 +85,19 @@ namespace o2
 		// Returns lines distance coefficient
 		float GetLinesDistanceCoef() const;
 
+		// Sets overflow expanding border
+		void SetExpandBorder(const Vec2F& border);
+
+		// Returns expanding overflow border
+		Vec2F GetExpandBorder() const;
+
 		SERIALIZABLE(UILabel);
 
 	protected:
-		Ptr<Text>   mTextLayer;   // Text layer drawable. Getting from layer "text"
-		HorOverflow mHorOverflow; // Text horizontal overflow logic
-		VerOverflow mVerOverflow; // Text vertical overflow logic
+		Ptr<Text>   mTextLayer;    // Text layer drawable. Getting from layer "text"
+		HorOverflow mHorOverflow;  // Text horizontal overflow logic
+		VerOverflow mVerOverflow;  // Text vertical overflow logic
+		Vec2F       mExpandBorder; // Expand overflow border size
 
 	protected:
 		// Updates layout

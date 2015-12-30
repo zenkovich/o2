@@ -117,6 +117,9 @@ namespace o2
 		// Returns pressed keys
 		KeysVec const& GetReleasedKeys() const;
 
+		// Call it after frame update
+		void Update(float dt);
+
 	public:
 		// -----------------
 		// Cursor definition
@@ -195,9 +198,6 @@ namespace o2
 
 		// Call when changed mouse wheel delta
 		void SetMouseWheelDelta(float delta);
-
-		// Call it after frame update
-		void Update(float dt);
 
 		// Returns true, when cursor pressed at current frame
 		bool IsMainCursorPressed();

@@ -57,6 +57,11 @@ namespace o2
 
 		UIWidgetLayout();
 
+		UIWidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax, const Vec2F& offsetMin, const Vec2F& offsetMax);
+
+		UIWidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
+					   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom);
+
 		UIWidgetLayout(const UIWidgetLayout& other);
 
 		UIWidgetLayout& operator=(const UIWidgetLayout& other);
@@ -178,7 +183,13 @@ namespace o2
 		void SetHeightWeight(float heigthWeigth);
 		float GetHeightWeight();
 
-		static UIWidgetLayout Both(float borderLeft = 0, float borderBottom = 0, float borderRight = 0, float borderTop = 0);
+		static UIWidgetLayout BothStretch(float borderLeft = 0, float borderBottom = 0, float borderRight = 0, float borderTop = 0);
+
+		static UIWidgetLayout Based(BaseCorner corner, const Vec2F& size, const Vec2F& offset = Vec2F());
+
+		static UIWidgetLayout HorStretch(VerAlign align, float left, float right, float height, float offsY = 0.0f);
+
+		static UIWidgetLayout VerStretch(HorAlign align, float top, float bottom, float width, float offsX = 0.0f);
 
 		SERIALIZABLE(UIWidgetLayout);
 
@@ -208,6 +219,7 @@ namespace o2
 		friend class UIHorizontalProgress;
 		friend class UIHorizontalScrollBar;
 		friend class UILabel;
+		friend class UIMenuPanel;
 		friend class UIScrollArea;
 		friend class UITree;
 		friend class UITreeNode;

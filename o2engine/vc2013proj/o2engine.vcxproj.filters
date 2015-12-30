@@ -496,6 +496,9 @@
     <ClInclude Include="..\Sources\UI\Tree.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\UI\MenuPanel.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -808,6 +811,9 @@
       <Filter>Sources\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\UI\Tree.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\MenuPanel.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>

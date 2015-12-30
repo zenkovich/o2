@@ -13,6 +13,11 @@ namespace o2
 						 Lerp(a.right, b.right, coef), Lerp(a.bottom, b.bottom, coef));
 		}
 
+		bool Lerp(const bool& a, const bool& b, float coef)
+		{
+			return coef > 0.5f ? b : a;
+		}
+
 		void OrthoProjMatrix(float* mat, float left, float right, float bottom, float top, float nearz, float farz)
 		{
 			float tx = -(right + left)/(right - left);

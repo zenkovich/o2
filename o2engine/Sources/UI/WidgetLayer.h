@@ -71,7 +71,7 @@ namespace o2
 		const ChildsVec& GetChilds() const;
 
 		// Adds child layer
-		Ptr<UIWidgetLayer> AddChildLayer(const String& name, Ptr<IRectDrawable> drawable, const Layout& layout = Layout::Both(), float depth = 0.0f);
+		Ptr<UIWidgetLayer> AddChildLayer(const String& name, Ptr<IRectDrawable> drawable, const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
 		// Returns child layer by path ()
 		Ptr<UIWidgetLayer> GetChild(const String& path);

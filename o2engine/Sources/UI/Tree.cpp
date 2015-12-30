@@ -292,7 +292,7 @@ namespace o2
 		mLayout->expandWidth = true;
 		mLayout->baseCorner = BaseCorner::LeftTop;
 		mLayout->fitByChildren = true;
-		mLayout->layout = UIWidgetLayout::Both();
+		mLayout->layout = UIWidgetLayout::BothStretch();
 	}
 
 	UITree::UITree(const UITree& other):

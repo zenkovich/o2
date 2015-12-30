@@ -12,7 +12,8 @@ namespace o2
 	}
 
 	UILabel::UILabel(const UILabel& other):
-		UIWidget(other)
+		UIWidget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow),
+		mExpandBorder(other.mExpandBorder)
 	{
 		mTextLayer = GetLayerDrawable<Text>("text");
 		RetargetStatesAnimations();
@@ -25,6 +26,9 @@ namespace o2
 	{
 		UIWidget::operator=(other);
 		mTextLayer = GetLayerDrawable<Text>("text");
+		mHorOverflow = other.mHorOverflow;
+		mVerOverflow = other.mVerOverflow;
+		mExpandBorder = other.mExpandBorder;
 		RetargetStatesAnimations();
 		UpdateLayout();
 		return *this;
@@ -199,6 +203,17 @@ namespace o2
 		return 1.0f;
 	}
 
+	void UILabel::SetExpandBorder(const Vec2F& border)
+	{
+		mExpandBorder = border;
+		UpdateLayout();
+	}
+
+	Vec2F UILabel::GetExpandBorder() const
+	{
+		return mExpandBorder;
+	}
+
 	void UILabel::UpdateLayout(bool forcible /*= false*/)
 	{
 		if (layout.mDrivenByParent && !forcible)
@@ -215,7 +230,7 @@ namespace o2
 			{
 				RecalculateAbsRect();
 
-				float realSize = mTextLayer->GetRealSize().x;
+				float realSize = mTextLayer->GetRealSize().x + mExpandBorder.x*2.0f;
 				float thisSize = layout.width;
 				float sizeDelta = realSize - thisSize;
 
@@ -241,7 +256,7 @@ namespace o2
 			{
 				RecalculateAbsRect();
 
-				float realSize = mTextLayer->GetRealSize().y;
+				float realSize = mTextLayer->GetRealSize().y + mExpandBorder.y*2.0f;
 				float thisSize = layout.height;
 				float sizeDelta = realSize - thisSize;
 
@@ -287,6 +302,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UILabel, horAlign, SetHorAlign, GetHorAlign);
 		INITIALIZE_PROPERTY(UILabel, verOverflow, SetVerOverflow, GetVerOverflow);
 		INITIALIZE_PROPERTY(UILabel, horOverflow, SetHorOverflow, GetHorOverflow);
+		INITIALIZE_PROPERTY(UILabel, expandBorder, SetExpandBorder, GetExpandBorder);
 		INITIALIZE_PROPERTY(UILabel, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef);
 		INITIALIZE_PROPERTY(UILabel, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);
 	}
