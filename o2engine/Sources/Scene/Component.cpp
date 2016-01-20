@@ -5,13 +5,13 @@
 namespace o2
 {
 	Component::Component():
-		mEnabled(true), mResEnabled(true)
+		mEnabled(true), mResEnabled(true), mOwner(nullptr)
 	{
 		InitializeProperties();
 	}
 
 	Component::Component(const Component& other):
-		mEnabled(other.mEnabled), mResEnabled(other.mEnabled)
+		mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mOwner(nullptr)
 	{
 		InitializeProperties();
 	}
@@ -61,7 +61,7 @@ namespace o2
 		return mResEnabled;
 	}
 
-	Ptr<Actor> Component::GetOwnerActor() const
+	Actor* Component::GetOwnerActor() const
 	{
 		return mOwner;
 	}
@@ -74,7 +74,7 @@ namespace o2
 			mResEnabled = mEnabled;
 	}
 
-	void Component::SetOwnerActor(Ptr<Actor> actor)
+	void Component::SetOwnerActor(Actor* actor)
 	{
 		if (mOwner)
 			mOwner->mCompontents.Remove(this);

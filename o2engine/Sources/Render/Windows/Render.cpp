@@ -157,7 +157,7 @@ namespace o2
 		if (mGLContext)
 		{
 			// 			for (auto texture : mTextures)
-			// 				texture.Release();
+			// 				delete texture;
 
 			if (!wglMakeCurrent(NULL, NULL))
 			{
@@ -334,7 +334,7 @@ namespace o2
 			if (texture->mRefs.Count() == 0)
 				unloadTextures.Add(texture);
 
-		unloadTextures.ForEach([](auto texture) { texture.Release(); });
+		unloadTextures.ForEach([](auto texture) { delete texture; });
 	}
 
 	void Render::CheckFontsUnloading()
@@ -344,7 +344,7 @@ namespace o2
 			if (font->mRefs.Count() == 0)
 				unloadFonts.Add(font);
 
-		unloadFonts.ForEach([](auto fnt) { fnt.Release(); });
+		unloadFonts.ForEach([](auto fnt) { delete fnt; });
 	}
 
 	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/)
@@ -651,7 +651,7 @@ namespace o2
 		return !mStackScissors.IsEmpty();
 	}
 
-	bool Render::DrawMesh(Ptr<Mesh> mesh)
+	bool Render::DrawMesh(Mesh* mesh)
 	{
 		if (!mReady)
 			return false;
@@ -701,7 +701,7 @@ namespace o2
 		return true;
 	}
 
-	bool Render::DrawMeshWire(Ptr<Mesh> mesh, const Color4& color /*= Color4::White()*/)
+	bool Render::DrawMeshWire(Mesh* mesh, const Color4& color /*= Color4::White()*/)
 	{
 		Vertex2* vertices = new Vertex2[mesh->polyCount*6];
 		auto dcolor = color.ABGR();

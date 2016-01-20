@@ -31,41 +31,41 @@ namespace UIStyle
 {
 	void RebuildDockableWndStyle()
 	{
-		Ptr<UIDockableWindow> sample = mnew UIDockableWindow();
+		UIDockableWindow* sample = mnew UIDockableWindow();
 
 		sample->layout.minSize = Vec2F(100, 50);
 
 		*sample->GetDockingFrameSample() = Sprite("ui/UI_Window_place.png");
 
 		auto regularBackLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_window_frame_regular.png"),
-												 Layout::BothStretch(-12, -12, -12, -12));
+												 Layout::BothStretch(-13, -13, -13, -11));
 
 		auto dockedBackLayer = sample->AddLayer("dockedBack", mnew Sprite("ui/UI_window_frame_docked.png"),
-												Layout::BothStretch(-12, -12, -12, -12));
+												Layout::BothStretch(-13, -13, -13, -11));
 
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_o2_sign.png"),
-										  Layout(Vec2F(0.0f, 1.0f), Vec2F(0.0f, 1.0f), Vec2F(3, -16), Vec2F(17, -1)));
+										  Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, -1)));
 
-		Ptr<Text> captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("arial.ttf");
 		captionText->text = "Window";
 		captionText->horAlign = HorAlign::Left;
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
 		auto textLayer = sample->AddLayer("caption", captionText,
-										  Layout(Vec2F(0.0f, 1.0f), Vec2F(1.0f, 1.0f), Vec2F(19, -15), Vec2F(-28, 1)));
+										  Layout::HorStretch(VerAlign::Top, 20, 35, 20, -2));
 
-		sample->SetClippingLayout(Layout::BothStretch(0, 1, -1, 15));
+		sample->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 17));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
 		sample->SetEnableScrollsHiding(true);
 
-		Ptr<UIHorizontalScrollBar> horScrollBar = o2UI.CreateHorScrollBar();
+		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout.anchorMin = Vec2F(0, 0);
 		horScrollBar->layout.anchorMax = Vec2F(1, 0);
 		horScrollBar->layout.offsetMin = Vec2F(5, 0);
 		horScrollBar->layout.offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		Ptr<UIVerticalScrollBar> verScrollBar = o2UI.CreateVerScrollBar();
+		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout.anchorMin = Vec2F(1, 0);
 		verScrollBar->layout.anchorMax = Vec2F(1, 1);
 		verScrollBar->layout.offsetMin = Vec2F(-15, 15);
@@ -86,22 +86,16 @@ namespace UIStyle
 															  -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+			->offStateAnimationSpeed = 2.0f;
 
-		Ptr<UIButton> closeBtn = o2UI.CreateWidget<UIButton>("close");
+		UIButton* closeBtn = o2UI.CreateWidget<UIButton>("close");
 		closeBtn->name = "closeButton";
-		closeBtn->layout.anchorMin = Vec2F(1, 1);
-		closeBtn->layout.anchorMax = Vec2F(1, 1);
-		closeBtn->layout.offsetMin = Vec2F(-21, -17);
-		closeBtn->layout.offsetMax = Vec2F(-1, 1);
+		closeBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 2));
 		sample->AddWindowElement(closeBtn);
 
-		Ptr<UIButton> optionsBtn = o2UI.CreateWidget<UIButton>("arrow");
+		UIButton* optionsBtn = o2UI.CreateWidget<UIButton>("arrow");
 		optionsBtn->name = "optionsButton";
-		optionsBtn->layout.anchorMin = Vec2F(1, 1);
-		optionsBtn->layout.anchorMax = Vec2F(1, 1);
-		optionsBtn->layout.offsetMin = Vec2F(-36, -17);
-		optionsBtn->layout.offsetMax = Vec2F(-18, 1);
+		optionsBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-16, 2));
 		sample->AddWindowElement(optionsBtn);
 
 		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head
@@ -119,7 +113,7 @@ namespace UIStyle
 
 	void RebuildPlayStopButtonStyle()
 	{
-		Ptr<UIToggle> sample = mnew UIToggle();
+		UIToggle* sample = mnew UIToggle();
 		auto playRootIconLayer = sample->AddLayer("playRootIcon", nullptr);
 		auto stopRootIconLayer = sample->AddLayer("stopRootIcon", nullptr);
 
@@ -164,7 +158,7 @@ namespace UIStyle
 
 	void RebuildPauseButtonStyle()
 	{
-		Ptr<UIToggle> sample = mnew UIToggle();
+		UIToggle* sample = mnew UIToggle();
 		auto pauseIconRootLayer = sample->AddLayer("regular", nullptr);
 		auto pauseIconLayer = pauseIconRootLayer->AddChildLayer("icon", mnew Sprite("ui/UI_pause_btn_regular.png"),
 																Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
@@ -193,7 +187,7 @@ namespace UIStyle
 
 	void RebuildStepButtonStyle()
 	{
-		Ptr<UIButton> sample = mnew UIButton();
+		UIButton* sample = mnew UIButton();
 		sample->name = "step button";
 		auto stepIconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_step_btn_regular.png"),
 											  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
@@ -218,40 +212,9 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "step");
 	}
 
-	void RebuildBacklessDropdown()
-	{
-		Ptr<UIDropDown> sample = mnew UIDropDown();
-		sample->layout.minSize = Vec2F(20, 20);
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
-										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, -1)));
-
-		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
-
-		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
-		list->layer["back"]->drawable.Release();
-		list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
-		list->layout.pivot = Vec2F(0.5f, 1.0f);
-		list->layout.anchorMin = Vec2F(0, 0);
-		list->layout.anchorMax = Vec2F(1, 0);
-		list->layout.offsetMin = Vec2F(0, -60);
-		list->layout.offsetMax = Vec2F(0, 0);
-
-		Ptr<UILabel> itemSample = o2UI.CreateLabel("empty");
-		itemSample->horAlign = HorAlign::Left;
-		sample->SetItemSample(itemSample);
-
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
-
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		o2UI.AddWidgetStyle(sample, "backless");
-	}
-
 	void RebuildRoundDropDown()
 	{
-		Ptr<UIDropDown> sample = mnew UIDropDown();
+		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_panel_subpanel_bk.png"),
 										  Layout::BothStretch(-7, -5, -5, -5));
@@ -269,16 +232,20 @@ namespace UIStyle
 
 		auto list = sample->GetListView();
 		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
-		list->layer["back"]->drawable.Release();
-		list->layer["back"]->drawable = mnew Sprite("ui/UI_Context_menu.png");
-		list->layer["back"]->layout = Layout::BothStretch(-19, -19, -20, -20);
+
+		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
+		list->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
+
+		list->RemoveLayer("back");
+		list->AddLayer("back", mnew Sprite("ui/UI_Context_menu.png"), Layout::BothStretch(-21, -19, -19, -19));
+
 		list->layout.pivot = Vec2F(0.5f, 1.0f);
 		list->layout.anchorMin = Vec2F(0, 0);
 		list->layout.anchorMax = Vec2F(1, 0);
-		list->layout.offsetMin = Vec2F(5, -60);
-		list->layout.offsetMax = Vec2F(-5, 0);
+		list->layout.offsetMin = Vec2F(0, -60);
+		list->layout.offsetMax = Vec2F(0, 0);
 
-		Ptr<UILabel> itemSample = o2UI.CreateLabel("empty");
+		UILabel* itemSample = o2UI.CreateLabel("empty");
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
@@ -298,7 +265,7 @@ namespace UIStyle
 
 	void RebuildArrowToggle()
 	{
-		Ptr<UIToggle> sample = mnew UIToggle();
+		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_select_tool.png"),
@@ -322,7 +289,7 @@ namespace UIStyle
 
 	void RebuildBrushToggle()
 	{
-		Ptr<UIToggle> sample = mnew UIToggle();
+		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_brush_tool.png"),
@@ -346,7 +313,7 @@ namespace UIStyle
 
 	void RebuildMoveToggle()
 	{
-		Ptr<UIToggle> sample = mnew UIToggle();
+		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_move_tool.png"),
@@ -370,7 +337,7 @@ namespace UIStyle
 
 	void RebuildRotateToggle()
 	{
-		Ptr<UIToggle> sample = mnew UIToggle();
+		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_rotate_tool.png"),
@@ -394,7 +361,7 @@ namespace UIStyle
 
 	void RebuildScaleToggle()
 	{
-		Ptr<UIToggle> sample = mnew UIToggle();
+		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_scale_tool.png"),
@@ -418,14 +385,14 @@ namespace UIStyle
 
 	void RebuildFrameToggle()
 	{
-		Ptr<UIToggle> sample = mnew UIToggle();
+		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_frame_tool.png"),
-													  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_frame_tool_pressed.png"),
-															 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
@@ -438,6 +405,256 @@ namespace UIStyle
 		sample->AddState("value", Animation::EaseInOut(sample, &rootLayer->transparency, 0.3f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "frame");
+	}
+
+	void RebuildSearchButton()
+	{
+		UIButton* sample = mnew UIButton();
+		sample->layout.minSize = Vec2F(5, 5);
+
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_search_regular.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_search_select.png"),
+											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_search_pressed.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "search");
+	}
+
+	void RebuildListTreeToggle()
+	{
+		UIToggle* sample = mnew UIToggle();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto listLayer = sample->AddLayer("listIcon", mnew Sprite("ui/UI_list_icon.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		auto treeLayer = sample->AddLayer("treeIcon", mnew Sprite("ui/UI_tree_icon.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation valueBtnAnim = Animation::EaseInOut(sample, &treeLayer->transparency, 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue(&listLayer->transparency) =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueBtnAnim);
+
+		o2UI.AddWidgetStyle(sample, "list-tree");
+	}
+
+	void RebuildActorsTreeNodeEnableToggle()
+	{
+		UIToggle* sample = mnew UIToggle();
+
+		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
+
+		auto back = halfHideLayer->AddChildLayer("back", mnew Sprite("ui/UI_off_dot.png"),
+												 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		auto dot = halfHideLayer->AddChildLayer("dot", mnew Sprite("ui/UI_on_dot.png"),
+												Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+
+		Animation valueAnim = Animation::EaseInOut(sample, &dot->transparency, 0.0f, 1.0f, 0.1f);
+		*valueAnim.AddAnimationValue(&back->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.1f);
+		sample->AddState("value", valueAnim);
+
+		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
+
+		o2UI.AddWidgetStyle(sample, "actorNodeEnable");
+	}
+
+	void RebuildActorsTreeLockToggle()
+	{
+		UIToggle* sample = mnew UIToggle();
+
+		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
+
+		auto locked = halfHideLayer->AddChildLayer("locked", mnew Sprite("ui/UI_lock_icon.png"),
+												   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		auto unlocked = halfHideLayer->AddChildLayer("unlocked", mnew Sprite("ui/UI_unlock_icon.png"),
+													 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+
+		Animation valueStateAnim = Animation::EaseInOut(sample, &locked->transparency, 0.0f, 1.0f, 0.1f);
+		*valueStateAnim.AddAnimationValue(&unlocked->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.1f);
+		sample->AddState("locked", valueStateAnim);
+
+		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
+
+		o2UI.AddWidgetStyle(sample, "actorNodeLock");
+	}
+
+	void RebuildActorsTreeLinkBtn()
+	{
+		UIButton* sample = mnew UIButton();
+
+		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
+		auto selectLayer = halfHideLayer->AddChildLayer("select", nullptr);
+		auto pressedLayer = selectLayer->AddChildLayer("pressed", nullptr);
+		auto back = pressedLayer->AddChildLayer("back", mnew Sprite("ui/UI_link_icon.png"),
+												Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f));
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.8f, 1.0f, 0.1f));
+
+		o2UI.AddWidgetStyle(sample, "actorNodeLink");
+	}
+
+	void RebuildActorsTree()
+	{
+		UITree* sample = mnew UITree();
+		sample->layout.minSize = Vec2F(20, 20);
+		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+		sample->SetEnableScrollsHiding(true);
+
+		*sample->GetHoverDrawable() = Sprite("ui/UI_ListBox_selection_hover.png");
+		*sample->GetSelectionDrawable() = Sprite("ui/UI_ListBox_selection_regular.png");
+		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
+
+		UITreeNode* itemSample = sample->GetNodeSample();
+
+		itemSample->SetChildrenOffset(10);
+
+		Text* captionLayerText = mnew Text("arial.ttf");
+		captionLayerText->horAlign = HorAlign::Left;
+		captionLayerText->verAlign = VerAlign::Middle;
+		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
+
+		auto nameLayer = itemSample->layer["name"];
+		nameLayer->layout = Layout::BothStretch(10, 0, 55, 0);
+		((Text*)nameLayer->drawable)->dotsEngings = true;
+
+		auto actorNodeEnableToggle = o2UI.CreateWidget<UIToggle>("actorNodeEnable");
+		actorNodeEnableToggle->name = "enableToggle";
+		actorNodeEnableToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-5, 0));
+		itemSample->AddChild(actorNodeEnableToggle);
+
+		auto actorNodeLockToggle = o2UI.CreateWidget<UIToggle>("actorNodeLock");
+		actorNodeLockToggle->name = "lockToggle";
+		actorNodeLockToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-20, 0));
+		itemSample->AddChild(actorNodeLockToggle);
+
+		auto actorNodeLinkButton = o2UI.CreateWidget<UIButton>("actorNodeLink");
+		actorNodeLinkButton->name = "linkBtn";
+		actorNodeLinkButton->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-35, 0));
+		itemSample->AddChild(actorNodeLinkButton);
+
+		auto actorNodeEditBox = o2UI.CreateWidget<UIEditBox>("backless");
+		actorNodeEditBox->name = "nameEditBox";
+		actorNodeEditBox->layout = UIWidgetLayout::BothStretch(10, 0, 55, 0);
+		itemSample->AddChild(actorNodeEditBox);
+
+		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, &nameLayer->transparency, 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->visible) = AnimatedValue<bool>::Linear(false, true, 0.15f);
+		itemSample->AddState("edit", itemEditStateAnim);
+
+		UIButton* itemSampleExpandBtn = mnew UIButton();
+		itemSampleExpandBtn->layout.minSize = Vec2F(5, 5);
+		itemSampleExpandBtn->name = "expandBtn";
+
+		auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
+														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto selectLayer = itemSampleExpandBtn->AddLayer("select", mnew Sprite("ui/UI_Right_icn_select.png"),
+														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
+														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+
+		itemSampleExpandBtn->AddState("select", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, &itemSampleExpandBtn->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		itemSampleExpandBtn->layout.anchorMin = Vec2F(0, 1);
+		itemSampleExpandBtn->layout.anchorMax = Vec2F(0, 1);
+		itemSampleExpandBtn->layout.offsetMin = Vec2F(0, -20);
+		itemSampleExpandBtn->layout.offsetMax = Vec2F(10, 0);
+
+		itemSample->AddChild(itemSampleExpandBtn);
+
+		Animation expandedStateAnim = Animation::EaseInOut(itemSample, "mExpandCoef", 0.0f, 1.0f, 0.2f);
+		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		horScrollBar->layout.anchorMin = Vec2F(0, 0);
+		horScrollBar->layout.anchorMax = Vec2F(1, 0);
+		horScrollBar->layout.offsetMin = Vec2F(5, 0);
+		horScrollBar->layout.offsetMax = Vec2F(-15, 15);
+		sample->SetHorizontalScrollBar(horScrollBar);
+
+		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		verScrollBar->layout.anchorMin = Vec2F(1, 0);
+		verScrollBar->layout.anchorMax = Vec2F(1, 1);
+		verScrollBar->layout.offsetMin = Vec2F(-15, 15);
+		verScrollBar->layout.offsetMax = Vec2F(0, -5);
+		sample->SetVerticalScrollBar(verScrollBar);
+
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetRight,
+															  5.0f, 15.0f, 0.2f));
+
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
+															  -5.0f, -15.0f, 0.2f));
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5;
+
+		o2UI.AddWidgetStyle(sample, "actors");
 	}
 
 	void RebuildEditorUIStyle()
@@ -476,6 +693,13 @@ namespace UIStyle
 		RebuildRotateToggle();
 		RebuildScaleToggle();
 		RebuildFrameToggle();
+		RebuildSearchButton();
+		RebuildListTreeToggle();
+		RebuildBacklessEditbox();
+		RebuildActorsTreeNodeEnableToggle();
+		RebuildActorsTreeLockToggle();
+		RebuildActorsTreeLinkBtn();
+		RebuildActorsTree();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

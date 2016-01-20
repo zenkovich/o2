@@ -23,7 +23,7 @@ EditorApplication::EditorApplication()
 EditorApplication::~EditorApplication()
 {}
 
-Ptr<UIMenuPanel> EditorApplication::GetMenuPanel() const
+UIMenuPanel* EditorApplication::GetMenuPanel() const
 {
 	return mMenuPanel;
 }
@@ -38,10 +38,6 @@ void EditorApplication::OnStarted()
 	mBackground = mnew Sprite("ui/UI_Background.png");
 	mBackSign = mnew Sprite("ui/UI_o2_sign.png");
 
-	auto actor = mnew Actor({ mnew ImageComponent("ui/UI_o2_sign.png") });	
-	actor->Play(Animation::EaseInOut<Vec2F>(actor, &actor->transform.position, Vec2F(), Vec2F(200, 200), 2.0f))
-		->animation.loop = Loop::PingPong;
-
 	mMenuPanel = o2UI.CreateWidget<UIMenuPanel>();
 	o2UI.AddWidget(mMenuPanel);
 
@@ -54,14 +50,17 @@ void EditorApplication::OnStarted()
 	mMenuPanel->AddItem("File/Open", []() { o2Debug.Log("Open file"); });
 	mMenuPanel->AddItem("File/Save", []() { o2Debug.Log("Open file"); });
 	mMenuPanel->AddItem("File/Save as", []() { o2Debug.Log("Open file"); });
+	mMenuPanel->AddItem("File/---", []() { o2Debug.Log("Open file"); });
 	mMenuPanel->AddItem("File/Exit", []() { o2Debug.Log("Open file"); });
 
 	mMenuPanel->AddItem("Edit/Undo", []() { o2Debug.Log("Edit copy"); });
 	mMenuPanel->AddItem("Edit/Redo", []() { o2Debug.Log("Edit copy"); });
+	mMenuPanel->AddItem("Edit/---", []() { o2Debug.Log("Edit copy"); });
 	mMenuPanel->AddItem("Edit/Copy", []() { o2Debug.Log("Edit copy"); });
 	mMenuPanel->AddItem("Edit/Cut", []() { o2Debug.Log("Edit copy"); });
 	mMenuPanel->AddItem("Edit/Paste", []() { o2Debug.Log("Edit copy"); });
 	mMenuPanel->AddItem("Edit/Delete", []() { o2Debug.Log("Edit copy"); });
+	mMenuPanel->AddItem("Edit/---", []() { o2Debug.Log("Edit copy"); });
 	mMenuPanel->AddItem("Edit/Transform/Move", []() { o2Debug.Log("Edit transform move"); });
 	mMenuPanel->AddItem("Edit/Transform/Rotate", []() { o2Debug.Log("Edit transform move"); });
 	mMenuPanel->AddItem("Edit/Transform/Scale", []() { o2Debug.Log("Edit transform move"); });
@@ -82,10 +81,10 @@ void EditorApplication::OnStarted()
 
 void EditorApplication::OnClosing()
 {
-	mWindowsManager.Release();
-	mBackground.Release();
-	mConfig.Release();
-	mToolsPanel.Release();
+	delete mWindowsManager;
+	delete mBackground;
+	delete mConfig;
+	delete mToolsPanel;
 }
 
 void EditorApplication::OnResizing()
@@ -114,8 +113,8 @@ void EditorApplication::ProcessFrame()
 	mRender->Begin();
 
 	OnDraw();
-	o2Debug.Draw();
 	mUIManager->Draw();
+	o2Debug.Draw();
 
 	mRender->End();
 
@@ -125,8 +124,11 @@ void EditorApplication::ProcessFrame()
 void EditorApplication::OnUpdate(float dt)
 {
 	mWindowsManager->Update(dt);
-	o2Application.windowCaption = String::Format("o2 Editor. FPS: %i (%vi)", (int)o2Time.GetFPS(), 
-												 (Vec2I)o2Input.GetCursorPos());
+	o2Application.windowCaption = String::Format("o2 Editor. FPS: %i DC: %i (%vi)", (int)o2Time.GetFPS(),
+												 o2Render.GetDrawCallsCount(), (Vec2I)o2Input.GetCursorPos());
+
+	if (o2Input.IsKeyPressed('K'))
+		MemoryManager::instance->DumpInfo();
 }
 
 void EditorApplication::OnDraw()

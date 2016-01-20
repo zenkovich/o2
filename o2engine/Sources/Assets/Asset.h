@@ -16,10 +16,10 @@ namespace o2
 		class IMetaInfo;
 
 	public:
-		Property<String>       path;     // Asset path property
-		Getter<String>         fullPath; // Full asset path getter (from binary path)
-		Getter<AssetId>        id;       // Asset id getter
-		Getter<Ptr<IMetaInfo>> meta;     // Asset meta information pointer getter
+		Property<String>   path;     // Asset path property
+		Getter<String>     fullPath; // Full asset path getter (from binary path)
+		Getter<AssetId>    id;       // Asset id getter
+		Getter<IMetaInfo*> meta;     // Asset meta information pointer getter
 
 		// Default constructor
 		Asset();
@@ -52,7 +52,7 @@ namespace o2
 		AssetId GetAssetId() const;
 
 		// Returns meta information pointer
-		Ptr<IMetaInfo> GetMeta() const;
+		IMetaInfo* GetMeta() const;
 
 		// Loads asset
 		void Load();
@@ -101,7 +101,7 @@ namespace o2
 			virtual Type::Id GetAssetType() const;
 
 			// Returns true if other meta is equal to this
-			virtual bool IsEqual(Ptr<IMetaInfo> other) const;
+			virtual bool IsEqual(IMetaInfo* other) const;
 
 			// Returns asset id
 			AssetId ID() const;
@@ -110,8 +110,8 @@ namespace o2
 		};
 
 	protected:
-		String         mPath; // Asset path
-		Ptr<IMetaInfo> mMeta; // Asset meta information
+		String     mPath; // Asset path
+		IMetaInfo* mMeta; // Asset meta information
 
 	protected:
 		// Loads asset data
@@ -133,7 +133,7 @@ namespace o2
 		AssetId& IdRef();
 
 		// Returns assets log stream pointer
-		Ptr<LogStream> GetAssetsLogStream() const;
+		LogStream* GetAssetsLogStream() const;
 
 		// Initializes properties
 		void InitializeProperties();

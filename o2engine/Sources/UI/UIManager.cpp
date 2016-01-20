@@ -30,7 +30,8 @@ namespace o2
 {
 	DECLARE_SINGLETON(UIManager);
 
-	UIManager::UIManager()
+	UIManager::UIManager():
+		mSelectedWidget(nullptr)
 	{
 		mScreenWidget = mnew UIWidget();
 		mLog = mnew LogStream("UI");
@@ -43,131 +44,131 @@ namespace o2
 
 	UIManager::~UIManager()
 	{
-		mScreenWidget.Release();
+		delete mScreenWidget;
 		ClearStyle();
 	}
 
-	Ptr<UIWidget> UIManager::AddWidget(Ptr<UIWidget> widget)
+	UIWidget* UIManager::AddWidget(UIWidget* widget)
 	{
 		return mScreenWidget->AddChild(widget);
 	}
 
-	Ptr<UIWidget> UIManager::AddWidget()
+	UIWidget* UIManager::AddWidget()
 	{
-		Ptr<UIWidget> res = mnew UIWidget();
+		UIWidget* res = mnew UIWidget();
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIButton> UIManager::AddButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/, 
-									   const String& style /*= "standard"*/)
+	UIButton* UIManager::AddButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/,
+								   const String& style /*= "standard"*/)
 	{
-		Ptr<UIButton> res = CreateButton(caption, onClick, style);
+		UIButton* res = CreateButton(caption, onClick, style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIWindow> UIManager::AddWindow(const WString& caption, const String& style /*= "standard"*/)
+	UIWindow* UIManager::AddWindow(const WString& caption, const String& style /*= "standard"*/)
 	{
-		Ptr<UIWindow> res = CreateWindow(caption, style);
+		UIWindow* res = CreateWindow(caption, style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UILabel> UIManager::AddLabel(const WString& text, const String& style /*= "standard"*/)
+	UILabel* UIManager::AddLabel(const WString& text, const String& style /*= "standard"*/)
 	{
-		Ptr<UILabel> res = CreateLabel(text, style);
+		UILabel* res = CreateLabel(text, style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIHorizontalLayout> UIManager::AddHorLayout()
+	UIHorizontalLayout* UIManager::AddHorLayout()
 	{
-		Ptr<UIHorizontalLayout> res = mnew UIHorizontalLayout();
+		UIHorizontalLayout* res = mnew UIHorizontalLayout();
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIVerticalLayout> UIManager::AddVerLayout()
+	UIVerticalLayout* UIManager::AddVerLayout()
 	{
-		Ptr<UIVerticalLayout> res = mnew UIVerticalLayout();
+		UIVerticalLayout* res = mnew UIVerticalLayout();
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIHorizontalProgress> UIManager::AddHorProgress(const String& style /*= "standard"*/)
+	UIHorizontalProgress* UIManager::AddHorProgress(const String& style /*= "standard"*/)
 	{
-		Ptr<UIHorizontalProgress> res = CreateHorProgress(style);
+		UIHorizontalProgress* res = CreateHorProgress(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIVerticalProgress> UIManager::AddVerProgress(const String& style /*= "standard"*/)
+	UIVerticalProgress* UIManager::AddVerProgress(const String& style /*= "standard"*/)
 	{
-		Ptr<UIVerticalProgress> res = CreateVerProgress(style);
+		UIVerticalProgress* res = CreateVerProgress(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIHorizontalScrollBar> UIManager::AddHorScrollBar(const String& style /*= "standard"*/)
+	UIHorizontalScrollBar* UIManager::AddHorScrollBar(const String& style /*= "standard"*/)
 	{
-		Ptr<UIHorizontalScrollBar> res = CreateHorScrollBar(style);
+		UIHorizontalScrollBar* res = CreateHorScrollBar(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIVerticalScrollBar> UIManager::AddVerScrollBar(const String& style /*= "standard"*/)
+	UIVerticalScrollBar* UIManager::AddVerScrollBar(const String& style /*= "standard"*/)
 	{
-		Ptr<UIVerticalScrollBar> res = CreateVerScrollBar(style);
+		UIVerticalScrollBar* res = CreateVerScrollBar(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIScrollArea> UIManager::AddScrollArea(const String& style /*= "standard"*/)
+	UIScrollArea* UIManager::AddScrollArea(const String& style /*= "standard"*/)
 	{
-		Ptr<UIScrollArea> res = CreateScrollArea(style);
+		UIScrollArea* res = CreateScrollArea(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIEditBox> UIManager::AddEditBox(const String& style /*= "standard"*/)
+	UIEditBox* UIManager::AddEditBox(const String& style /*= "standard"*/)
 	{
-		Ptr<UIEditBox> res = CreateEditBox(style);
+		UIEditBox* res = CreateEditBox(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UICustomList> UIManager::AddCustomList(const String& style /*= "standard"*/)
+	UICustomList* UIManager::AddCustomList(const String& style /*= "standard"*/)
 	{
-		Ptr<UICustomList> res = CreateCustomList(style);
+		UICustomList* res = CreateCustomList(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIList> UIManager::AddList(const String& style /*= "standard"*/)
+	UIList* UIManager::AddList(const String& style /*= "standard"*/)
 	{
-		Ptr<UIList> res = CreateList(style);
+		UIList* res = CreateList(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UICustomDropDown> UIManager::AddCustomDropdown(const String& style /*= "standard"*/)
+	UICustomDropDown* UIManager::AddCustomDropdown(const String& style /*= "standard"*/)
 	{
-		Ptr<UICustomDropDown> res = CreateCustomDropdown(style);
+		UICustomDropDown* res = CreateCustomDropdown(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIDropDown> UIManager::AddDropdown(const String& style /*= "standard"*/)
+	UIDropDown* UIManager::AddDropdown(const String& style /*= "standard"*/)
 	{
-		Ptr<UIDropDown> res = CreateDropdown(style);
+		UIDropDown* res = CreateDropdown(style);
 		AddWidget(res);
 		return res;
 	}
 
-	Ptr<UIToggle> UIManager::AddToggle(const WString& caption, const String& style /*= "standard"*/)
+	UIToggle* UIManager::AddToggle(const WString& caption, const String& style /*= "standard"*/)
 	{
-		Ptr<UIToggle> res = CreateToggle(caption, style);
+		UIToggle* res = CreateToggle(caption, style);
 		AddWidget(res);
 		return res;
 	}
@@ -177,12 +178,12 @@ namespace o2
 		return mScreenWidget->RemoveChild(path);
 	}
 
-	bool UIManager::RemoveWidget(Ptr<UIWidget> widget, bool release /*= true*/)
+	bool UIManager::RemoveWidget(UIWidget* widget, bool release /*= true*/)
 	{
 		return mScreenWidget->RemoveChild(widget, release);
 	}
 
-	Ptr<UIWidget> UIManager::GetWidget(const String& path)
+	UIWidget* UIManager::GetWidget(const String& path)
 	{
 		return mScreenWidget->GetChild(path);
 	}
@@ -197,12 +198,12 @@ namespace o2
 		return mScreenWidget->GetChilds();
 	}
 
-	Ptr<UIWidget> UIManager::GetScreenWidget() const
+	UIWidget* UIManager::GetScreenWidget() const
 	{
 		return mScreenWidget;
 	}
 
-	void UIManager::SelectWidget(Ptr<UIWidget> widget)
+	void UIManager::SelectWidget(UIWidget* widget)
 	{
 		if (widget == mSelectedWidget || (widget && !widget->IsSelectable()))
 			return;
@@ -232,7 +233,7 @@ namespace o2
 		}
 	}
 
-	Ptr<UIWidget> UIManager::GetSelectedWidget() const
+	UIWidget* UIManager::GetSelectedWidget() const
 	{
 		return mSelectedWidget;
 	}
@@ -249,7 +250,7 @@ namespace o2
 		styleData.LoadFromFile(o2Assets.GetDataPath() + path);
 
 		for (auto st : mStyleSamples)
-			st.Release();
+			delete st;
 
 		mStyleSamples = styleData;
 
@@ -269,20 +270,20 @@ namespace o2
 	void UIManager::ClearStyle()
 	{
 		for (auto sample : mStyleSamples)
-			sample.Release();
+			delete sample;
 
 		mStyleSamples.Clear();
 	}
 
-	void UIManager::AddWidgetStyle(Ptr<UIWidget> widget, const String& style)
+	void UIManager::AddWidgetStyle(UIWidget* widget, const String& style)
 	{
 		widget->Hide(true);
 		widget->SetName(style);
 		mStyleSamples.Add(widget);
 	}
 
-	Ptr<UIButton> UIManager::CreateButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/, 
-										  const String& style /*= "standard"*/)
+	UIButton* UIManager::CreateButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/,
+									  const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIButton>(style);
 		res->caption = caption;
@@ -291,7 +292,7 @@ namespace o2
 		return res;
 	}
 
-	Ptr<UIWindow> UIManager::CreateWindow(const WString& caption, const String& style /*= "standard"*/)
+	UIWindow* UIManager::CreateWindow(const WString& caption, const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIWindow>(style);
 		res->caption = caption;
@@ -299,7 +300,7 @@ namespace o2
 		return res;
 	}
 
-	Ptr<UILabel> UIManager::CreateLabel(const WString& text, const String& style /*= "standard"*/)
+	UILabel* UIManager::CreateLabel(const WString& text, const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UILabel>(style);
 		res->text = text;
@@ -308,91 +309,91 @@ namespace o2
 		return res;
 	}
 
-	Ptr<UIHorizontalLayout> UIManager::CreateHorLayout()
+	UIHorizontalLayout* UIManager::CreateHorLayout()
 	{
 		auto res = mnew UIHorizontalLayout();
 		res->name = "hor layout";
 		return res;
 	}
 
-	Ptr<UIVerticalLayout> UIManager::CreateVerLayout()
+	UIVerticalLayout* UIManager::CreateVerLayout()
 	{
 		auto res = mnew UIVerticalLayout();
 		res->name = "ver layout";
 		return res;
 	}
 
-	Ptr<UIHorizontalProgress> UIManager::CreateHorProgress(const String& style /*= "standard"*/)
+	UIHorizontalProgress* UIManager::CreateHorProgress(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIHorizontalProgress>(style);
 		res->name = "hor progress";
 		return res;
 	}
 
-	Ptr<UIVerticalProgress> UIManager::CreateVerProgress(const String& style /*= "standard"*/)
+	UIVerticalProgress* UIManager::CreateVerProgress(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIVerticalProgress>(style);
 		res->name = "ver progress";
 		return res;
 	}
 
-	Ptr<UIHorizontalScrollBar> UIManager::CreateHorScrollBar(const String& style /*= "standard"*/)
+	UIHorizontalScrollBar* UIManager::CreateHorScrollBar(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIHorizontalScrollBar>(style);
 		res->name = "hot scroll bar";
 		return res;
 	}
 
-	Ptr<UIVerticalScrollBar> UIManager::CreateVerScrollBar(const String& style /*= "standard"*/)
+	UIVerticalScrollBar* UIManager::CreateVerScrollBar(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIVerticalScrollBar>(style);
 		res->name = "ver scroll bar";
 		return res;
 	}
 
-	Ptr<UIScrollArea> UIManager::CreateScrollArea(const String& style /*= "standard"*/)
+	UIScrollArea* UIManager::CreateScrollArea(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIScrollArea>(style);
 		res->name = "scroll area";
 		return res;
 	}
 
-	Ptr<UIEditBox> UIManager::CreateEditBox(const String& style /*= "standard"*/)
+	UIEditBox* UIManager::CreateEditBox(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIEditBox>(style);
 		res->name = "edit box";
 		return res;
 	}
 
-	Ptr<UICustomList> UIManager::CreateCustomList(const String& style /*= "standard"*/)
+	UICustomList* UIManager::CreateCustomList(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UICustomList>(style);
 		res->name = "custom list";
 		return res;
 	}
 
-	Ptr<UIList> UIManager::CreateList(const String& style /*= "standard"*/)
+	UIList* UIManager::CreateList(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIList>(style);
 		res->name = "list";
 		return res;
 	}
 
-	Ptr<UICustomDropDown> UIManager::CreateCustomDropdown(const String& style /*= "standard"*/)
+	UICustomDropDown* UIManager::CreateCustomDropdown(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UICustomDropDown>(style);
 		res->name = "custom dropdown";
 		return res;
 	}
 
-	Ptr<UIDropDown> UIManager::CreateDropdown(const String& style /*= "standard"*/)
+	UIDropDown* UIManager::CreateDropdown(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIDropDown>(style);
 		res->name = "dropdown";
 		return res;
 	}
 
-	Ptr<UIToggle> UIManager::CreateToggle(const WString& caption, const String& style /*= "standard"*/)
+	UIToggle* UIManager::CreateToggle(const WString& caption, const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIToggle>(style);
 		res->caption = caption;
@@ -426,7 +427,7 @@ namespace o2
 		mScreenWidget->layout.size = o2Render.GetResolution();
 	}
 
-	void UIManager::RegTopWidget(Ptr<UIWidget> widget)
+	void UIManager::RegTopWidget(UIWidget* widget)
 	{
 		mTopWidgets.Add(widget);
 	}
@@ -437,7 +438,7 @@ namespace o2
 			LoadStyle("ui_style.xml");
 	}
 
-	Ptr<UIWidget> UIManager::SearchSelectableWidget(Ptr<UIWidget> widget, bool& foundCurrentSelected)
+	UIWidget* UIManager::SearchSelectableWidget(UIWidget* widget, bool& foundCurrentSelected)
 	{
 		for (auto child : widget->mChilds)
 		{

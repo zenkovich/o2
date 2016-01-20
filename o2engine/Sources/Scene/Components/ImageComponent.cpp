@@ -10,7 +10,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	ImageComponent::ImageComponent(Ptr<ImageAsset> image):
+	ImageComponent::ImageComponent(ImageAsset* image):
 		DrawableComponent(), mSprite(image)
 	{
 		InitializeProperties();
@@ -40,7 +40,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	ImageComponent::ImageComponent(Ptr<Bitmap> bitmap):
+	ImageComponent::ImageComponent(Bitmap* bitmap):
 		DrawableComponent(), mSprite(bitmap)
 	{
 		InitializeProperties();
@@ -174,7 +174,7 @@ namespace o2
 		return mSprite.GetSliceBorder();
 	}
 
-	void ImageComponent::LoadFromImage(Ptr<ImageAsset> image)
+	void ImageComponent::LoadFromImage(ImageAsset* image)
 	{
 		mSprite.LoadFromImage(image);
 	}
@@ -194,7 +194,7 @@ namespace o2
 		mSprite.LoadMonoColor(color);
 	}
 
-	void ImageComponent::LoadFromBitmap(Ptr<Bitmap> bitmap)
+	void ImageComponent::LoadFromBitmap(Bitmap* bitmap)
 	{
 		mSprite.LoadFromBitmap(bitmap);
 	}
@@ -229,7 +229,7 @@ namespace o2
 		mSprite.SetBasis(mOwner->transform.GetWorldBasis());
 	}
 
-	void ImageComponent::SetOwnerActor(Ptr<Actor> actor)
+	void ImageComponent::SetOwnerActor(Actor* actor)
 	{
 		if (actor)
 			actor->transform.SetSize(mSprite.GetSize());

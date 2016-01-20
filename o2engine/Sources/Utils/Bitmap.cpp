@@ -6,20 +6,20 @@
 namespace o2
 {
 	Bitmap::Bitmap():
-		mFormat(Format::Default), mData(NULL)
+		mFormat(Format::Default), mData(nullptr)
 	{
 		InitializeProperties();
 	}
 
 	Bitmap::Bitmap(Format format, const Vec2I& size):
-		mFormat(format), mSize(size), mData(NULL)
+		mFormat(format), mSize(size), mData(nullptr)
 	{
 		InitializeProperties();
 		Create(format, size);
 	}
 
 	Bitmap::Bitmap(const String& fileName, ImageType type /*= IT_AUTO*/):
-		mFormat(Format::Default), mData(NULL)
+		mFormat(Format::Default), mData(nullptr)
 	{
 		InitializeProperties();
 		Load(fileName, type);
@@ -29,7 +29,7 @@ namespace o2
 	{
 		InitializeProperties();
 
-		short bpp[] ={0, 4};
+		short bpp[] = { 0, 4 };
 
 		mFormat = other.mFormat;
 		mSize = other.mSize;
@@ -50,7 +50,7 @@ namespace o2
 		if (mData)
 			delete[] mData;
 
-		short bpp[] ={0, 4};
+		short bpp[] = { 0, 4 };
 
 		mFormat = other.mFormat;
 		mSize = other.mSize;
@@ -62,7 +62,7 @@ namespace o2
 		return *this;
 	}
 
-	Ptr<Bitmap> Bitmap::Clone() const
+	Bitmap* Bitmap::Clone() const
 	{
 		return new Bitmap(*this);
 	}
@@ -72,7 +72,7 @@ namespace o2
 		if (mData)
 			delete[] mData;
 
-		short bpp[] ={0, 4};
+		short bpp[] = { 0, 4 };
 
 		mFormat = format;
 		mSize = size;
@@ -113,9 +113,9 @@ namespace o2
 
 	void Bitmap::Clear(const Color4& color)
 	{
-		short bpp[] ={0, 4};
+		short bpp[] = { 0, 4 };
 
-		memset(mData, color.ARGB(), bpp[(int)mFormat]*mSize.x*mSize.y);
+		memset(mData, color.ARGB(), bpp[(int)mFormat] * mSize.x*mSize.y);
 	}
 
 	unsigned char* Bitmap::GetData()
@@ -143,7 +143,7 @@ namespace o2
 		return mFilename;
 	}
 
-	void Bitmap::CopyImage(Ptr<Bitmap> img, const Vec2I& position /*= Vec2I()*/, const RectI& imgSrc /*= RectI()*/)
+	void Bitmap::CopyImage(Bitmap* img, const Vec2I& position /*= Vec2I()*/, const RectI& imgSrc /*= RectI()*/)
 	{
 		if (mFormat != img->mFormat)
 			return;
@@ -153,7 +153,7 @@ namespace o2
 		if (imgSrcRect.Width() == 0)
 			imgSrcRect.Set(Vec2I(), img->GetSize());
 
-		int bpp[] ={0, 4};
+		int bpp[] = { 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 		int pixelSize = curbpp;
 
@@ -175,7 +175,7 @@ namespace o2
 		}
 	}
 
-	void Bitmap::BlendImage(Ptr<Bitmap> img, const Vec2I& position /*= Vec2I()*/, const RectI& imgSrc /*= RectI()*/)
+	void Bitmap::BlendImage(Bitmap* img, const Vec2I& position /*= Vec2I()*/, const RectI& imgSrc /*= RectI()*/)
 	{
 		if (mFormat != img->mFormat)
 			return;
@@ -185,7 +185,7 @@ namespace o2
 		if (imgSrcRect.Width() == 0)
 			imgSrcRect.Set(Vec2I(), img->GetSize());
 
-		int bpp[] ={0, 4};
+		int bpp[] = { 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 		int pixelSize = curbpp;
 
@@ -216,7 +216,7 @@ namespace o2
 
 	void Bitmap::Colorise(const Color4& color)
 	{
-		int bpp[] ={0, 4};
+		int bpp[] = { 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 
 		for (int x = 0; x < mSize.x*mSize.y; x++)
@@ -228,17 +228,17 @@ namespace o2
 		}
 	}
 
-	void Bitmap::GradientByAlpha(const Color4& color1, const Color4& color4, float angle /*= 0*/, float size /*= 0*/, 
+	void Bitmap::GradientByAlpha(const Color4& color1, const Color4& color4, float angle /*= 0*/, float size /*= 0*/,
 								 Vec2F origin /*= Vec2F()*/)
 	{
-		int bpp[] ={0, 4};
+		int bpp[] = { 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 
 		Vec2F dir = Vec2F::Rotated(Math::Deg2rad(angle + 90.0f));
 		if (Math::Equals(size, 0))
 			size = ((Vec2F)mSize).Dot(dir);
 
-		float invSize = 1.0f/size;
+		float invSize = 1.0f / size;
 
 		Vec2F pxorigin = origin*(Vec2F)mSize;
 
@@ -262,7 +262,7 @@ namespace o2
 	void Bitmap::Fill(const Color4& color)
 	{
 		unsigned long colrDw = color.ARGB();
-		int bpp[] ={0, 4};
+		int bpp[] = { 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 
 		for (int x = 0; x < mSize.x*mSize.y; x++)
@@ -272,7 +272,7 @@ namespace o2
 	void Bitmap::Blur(float radius)
 	{
 		int mapSize = Math::CeilToInt(radius);
-		int fullmapSize = mapSize*2 + 1;
+		int fullmapSize = mapSize * 2 + 1;
 
 		float** weightMap = new float*[fullmapSize];
 		for (int i = 0; i < fullmapSize; i++)
@@ -283,11 +283,11 @@ namespace o2
 			{
 				float x = (float)(i - mapSize), y = (float)(j - mapSize);
 				float dst = Math::Sqrt(x*x + y*y);
-				weightMap[i][j] = Math::Clamp01(1.0f - dst/radius);
+				weightMap[i][j] = Math::Clamp01(1.0f - dst / radius);
 			}
 		}
 
-		int bpp[] ={0, 4};
+		int bpp[] = { 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 		UInt8* srcData = new UInt8[mSize.x*mSize.y*curbpp];
 		memcpy(srcData, mData, mSize.x*mSize.y*curbpp);
@@ -332,11 +332,11 @@ namespace o2
 	void Bitmap::Outline(float radius, const Color4& color, int threshold /*= 100*/)
 	{
 		int mapSize = Math::CeilToInt(radius);
-		int fullmapSize = mapSize*2 + 1;
+		int fullmapSize = mapSize * 2 + 1;
 		int alphaThreshold = threshold;
 		int radiusSquare = Math::Sqr(Math::FloorToInt(radius));
 
-		int bpp[] ={0, 4};
+		int bpp[] = { 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 
 		UInt8* srcData = new UInt8[mSize.x*mSize.y*curbpp];
@@ -369,8 +369,8 @@ namespace o2
 							int dst = fx*fx + fy*fy;
 							sqrDist += dst;
 							count++;
-// 							if (dst < sqrDist) 
-// 								sqrDist = dst;
+							// 							if (dst < sqrDist) 
+							// 								sqrDist = dst;
 						}
 					}
 				}
@@ -382,7 +382,7 @@ namespace o2
 					Color4 newColor = pc.BlendByAlpha(color);
 					ULong unewColor = newColor.ABGR();
 					memcpy(&mData[offs], &unewColor, curbpp);
-					
+
 				}
 				else
 				{

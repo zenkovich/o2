@@ -94,7 +94,7 @@ namespace o2
 		SERIALIZABLE(UILabel);
 
 	protected:
-		Ptr<Text>   mTextLayer;    // Text layer drawable. Getting from layer "text"
+		Text*       mTextLayer;    // Text layer drawable. Getting from layer "text"
 		HorOverflow mHorOverflow;  // Text horizontal overflow logic
 		VerOverflow mVerOverflow;  // Text vertical overflow logic
 		Vec2F       mExpandBorder; // Expand overflow border size
@@ -104,7 +104,7 @@ namespace o2
 		void UpdateLayout(bool forcible = false);
 
 		// Calls when layer added and updates drawing sequence
-		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
+		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Initializes properties
 		void InitializeProperties();

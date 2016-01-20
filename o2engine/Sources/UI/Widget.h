@@ -6,7 +6,7 @@
 #include "UI/WidgetState.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/Math/Layout.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Property.h"
 #include "Utils/Serialization.h"
 #include "Utils/Tree.h"
@@ -24,21 +24,21 @@ namespace o2
 	class UIWidget: public ISerializable
 	{
 	public:
-		typedef Vector<Ptr<UIWidget>> WidgetsVec;
+		typedef Vector<UIWidget*> WidgetsVec;
 
 	public:
-		Property<String>                            name;
-		Property<Ptr<UIWidget>>                     parent;
-		Getter<WidgetsVec>                          childs;
-		Getter<LayersVec>                           layers;
-		Getter<StatesVec>                           states;
-		Property<float>                             transparency;
-		Getter<float>                               resTransparency;
-		Property<bool>                              visible;
-		Accessor<Ptr<UIWidget>, const String&>      child;
-		Accessor<Ptr<UIWidgetLayer>, const String&> layer;
-		Accessor<Ptr<UIWidgetState>, const String&> state;
-		UIWidgetLayout                              layout; // @SERIALIZABLE
+		Property<String>                        name;
+		Property<UIWidget*>                     parent;
+		Getter<WidgetsVec>                      childs;
+		Getter<LayersVec>                       layers;
+		Getter<StatesVec>                       states;
+		Property<float>                         transparency;
+		Getter<float>                           resTransparency;
+		Property<bool>                          visible;
+		Accessor<UIWidget*, const String&>      child;
+		Accessor<UIWidgetLayer*, const String&> layer;
+		Accessor<UIWidgetState*, const String&> state;
+		UIWidgetLayout                          layout; // @SERIALIZABLE
 
 		// Default constructor
 		UIWidget();
@@ -65,29 +65,33 @@ namespace o2
 		virtual String GetName() const;
 
 		// Returns parent widget
-		virtual Ptr<UIWidget> GetParent() const;
+		virtual UIWidget* GetParent() const;
 
 		// Sets widget parent
-		virtual void SetParent(Ptr<UIWidget> parent);
+		virtual void SetParent(UIWidget* parent);
 
 		// Adds child widget
-		virtual Ptr<UIWidget> AddChild(Ptr<UIWidget> widget);
+		virtual UIWidget* AddChild(UIWidget* widget);
 
 		// Adds child widget at index
-		virtual Ptr<UIWidget> AddChild(Ptr<UIWidget> widget, int index);
+		virtual UIWidget* AddChild(UIWidget* widget, int index);
 
 		// Removes child by path
 		virtual bool RemoveChild(const String& path);
 
 		// Removes child widget
-		virtual bool RemoveChild(Ptr<UIWidget> widget, bool release = true);
+		virtual bool RemoveChild(UIWidget* widget, bool release = true);
 
 		// Returns child by path. Returns nullptr if isn't exist
-		virtual Ptr<UIWidget> GetChild(const String& path);
+		virtual UIWidget* GetChild(const String& path);
 
 		// Searches child with specified type
 		template<typename _type>
-		Ptr<_type> FindChild();
+		_type* FindChild();
+
+		// Searches layer with drawable with specified type
+		template<typename _type>
+		_type* FindLayer();
 
 		// Removes all child widgets
 		virtual void RemoveAllChilds();
@@ -96,21 +100,21 @@ namespace o2
 		virtual const WidgetsVec& GetChilds() const;
 
 		// Adds layer
-		Ptr<UIWidgetLayer> AddLayer(Ptr<UIWidgetLayer> layer);
+		UIWidgetLayer* AddLayer(UIWidgetLayer* layer);
 
 		// Adds layer
-		Ptr<UIWidgetLayer> AddLayer(const String& name, Ptr<IRectDrawable> drawable,
-									const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
+		UIWidgetLayer* AddLayer(const String& name, IRectDrawable* drawable,
+								const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
 		// Returns layer by path. Returns null if layer isn't exist
-		Ptr<UIWidgetLayer> GetLayer(const String& path) const;
+		UIWidgetLayer* GetLayer(const String& path) const;
 
 		// Returns layer by path. Returns null if layer isn't exist or layer drawable has different type
 		template<typename _type>
-		Ptr<_type> GetLayerDrawable(const String& path) const;
+		_type* GetLayerDrawable(const String& path) const;
 
 		// Removes layer
-		bool RemoveLayer(Ptr<UIWidgetLayer> layer);
+		bool RemoveLayer(UIWidgetLayer* layer);
 
 		// Removes layer
 		bool RemoveLayer(const String& path);
@@ -122,19 +126,19 @@ namespace o2
 		const LayersVec& GetLayers() const;
 
 		// Adds new state with name
-		Ptr<UIWidgetState> AddState(const String& name);
+		UIWidgetState* AddState(const String& name);
 
 		// Adds new state with name and animation
-		Ptr<UIWidgetState> AddState(const String& name, const Animation& animation);
+		UIWidgetState* AddState(const String& name, const Animation& animation);
 
 		// Adds state
-		Ptr<UIWidgetState> AddState(Ptr<UIWidgetState> state);
+		UIWidgetState* AddState(UIWidgetState* state);
 
 		// Removes state by name
 		bool RemoveState(const String& name);
 
 		// Removes state
-		bool RemoveState(Ptr<UIWidgetState> state);
+		bool RemoveState(UIWidgetState* state);
 
 		// Removes all states
 		void RemoveAllStates();
@@ -146,7 +150,7 @@ namespace o2
 		bool GetState(const String& name) const;
 
 		// Returns state object by name
-		Ptr<UIWidgetState> GetStateObject(const String& name) const;
+		UIWidgetState* GetStateObject(const String& name) const;
 
 		// Returns all states
 		const StatesVec& GetStates() const;
@@ -190,27 +194,27 @@ namespace o2
 		SERIALIZABLE(UIWidget);
 
 	protected:
-		String             mName;             // Name @SERIALIZABLE
-
-		LayersVec          mLayers;           // Layers array @SERIALIZABLE
-		StatesVec          mStates;           // States array @SERIALIZABLE
-
-		Ptr<UIWidget>      mParent;           // Parent widget
-		WidgetsVec         mChilds;           // Children widgets @SERIALIZABLE
-		RectF              mChildsAbsRect;    // Absolute rectangle for children arranging
-
-		float              mTransparency;	  // Widget transparency @SERIALIZABLE
-		float              mResTransparency;  // Widget result transparency, depends on parent's result transparency
-		LayersVec          mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000)
-		LayersVec          mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000)
-
-		Ptr<UIWidgetState> mSelectedState;    // Selected widget state
-		bool               mIsSelected;       // Is widget selected
-
-		Ptr<UIWidgetState> mVisibleState;     // Widget visibility state
-		bool               mVisible;          // Visibility of widget. Uses state 'visible'
-		bool               mResVisible;       // Result visibility of widget. Depends on this visibility and parent result visibility
-		bool               mFullyDisabled;    // True, if widget is not visible and visible state is fully false
+		String         mName;             // Name @SERIALIZABLE
+					   
+		LayersVec      mLayers;           // Layers array @SERIALIZABLE
+		StatesVec      mStates;           // States array @SERIALIZABLE
+					   
+		UIWidget*      mParent;           // Parent widget
+		WidgetsVec     mChilds;           // Children widgets @SERIALIZABLE
+		RectF          mChildsAbsRect;    // Absolute rectangle for children arranging
+					   
+		float          mTransparency;	  // Widget transparency @SERIALIZABLE
+		float          mResTransparency;  // Widget result transparency, depends on parent's result transparency
+		LayersVec      mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000)
+		LayersVec      mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000)
+					   
+		UIWidgetState* mSelectedState;    // Selected widget state
+		bool           mIsSelected;       // Is widget selected
+					   
+		UIWidgetState* mVisibleState;     // Widget visibility state
+		bool           mVisible;          // Visibility of widget. Uses state 'visible'
+		bool           mResVisible;       // Result visibility of widget. Depends on this visibility and parent result visibility
+		bool           mFullyDisabled;    // True, if widget is not visible and visible state is fully false
 
 	protected:
 		// Draws debug frame by mAbsoluteRect
@@ -232,7 +236,7 @@ namespace o2
 		virtual void UpdateVisibility();
 
 		// Calls when child widget was selected
-		virtual void OnChildSelected(Ptr<UIWidget> child);
+		virtual void OnChildSelected(UIWidget* child);
 
 		// Sets target for all states animations
 		void RetargetStatesAnimations();
@@ -259,22 +263,22 @@ namespace o2
 		StatesVec GetStatesNonConst();
 
 		// Returns dictionary of all layers by names
-		Dictionary<String, Ptr<UIWidgetLayer>> GetAllLayers();
+		Dictionary<String, UIWidgetLayer*> GetAllLayers();
 
 		// Returns dictionary of all children by names
-		Dictionary<String, Ptr<UIWidget>> GetAllChilds();
+		Dictionary<String, UIWidget*> GetAllChilds();
 
 		// Calls when layer added and updates drawing sequence
-		virtual void OnLayerAdded(Ptr<UIWidgetLayer> layer);
+		virtual void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Calls when widget state was added
-		virtual void OnStateAdded(Ptr<UIWidgetState> state);
+		virtual void OnStateAdded(UIWidgetState* state);
 
 		// Calls when child widget was added
-		virtual void OnChildAdded(Ptr<UIWidget> child);
+		virtual void OnChildAdded(UIWidget* child);
 
 		// Calls when child widget was removed
-		virtual void OnChildRemoved(Ptr<UIWidget> child);
+		virtual void OnChildRemoved(UIWidget* child);
 
 		// Calls when deserialized
 		void OnDeserialized(const DataNode& node);
@@ -312,21 +316,40 @@ namespace o2
 	};
 
 	template<typename _type>
-	Ptr<_type> UIWidget::FindChild()
+	_type* UIWidget::FindChild()
 	{
 		for (auto child : mChilds)
 			if (child->GetType() == *_type::type)
-				return child;
+				return (_type*)child;
 
 		return nullptr;
 	}
 
 	template<typename _type>
-	Ptr<_type> UIWidget::GetLayerDrawable(const String& path) const
+	_type* UIWidget::FindLayer()
+	{
+		for (auto layer : mLayers)
+		{
+			if (layer->drawable && layer->drawable->GetType() == *_type::type)
+				return (_type*)layer->drawable;
+		}
+
+		for (auto layer : mLayers)
+		{
+			auto res = layer->FindLayer<_type>();
+			if (res)
+				return res;
+		}
+
+		return nullptr;
+	}
+
+	template<typename _type>
+	_type* UIWidget::GetLayerDrawable(const String& path) const
 	{
 		auto layer = GetLayer(path);
 		if (layer && layer->drawable && layer->drawable->GetType() == *_type::type)
-			return layer->drawable.Cast<_type>();
+			return (_type*)layer->drawable;
 
 		return nullptr;
 	}

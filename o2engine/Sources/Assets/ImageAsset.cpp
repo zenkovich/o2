@@ -56,7 +56,7 @@ namespace o2
 	ImageAsset::~ImageAsset()
 	{
 		if (mBitmap)
-			mBitmap.Release();
+			delete mBitmap;
 	}
 
 	ImageAsset& ImageAsset::operator=(ImageAsset& asset)
@@ -65,7 +65,7 @@ namespace o2
 		return *this;
 	}
 
-	Ptr<Bitmap> ImageAsset::GetBitmap()
+	Bitmap* ImageAsset::GetBitmap()
 	{
 		if (!mBitmap)
 			LoadBitmap();
@@ -73,17 +73,17 @@ namespace o2
 		return mBitmap;
 	}
 
-	void ImageAsset::SetBitmap(Ptr<Bitmap> bitmap)
+	void ImageAsset::SetBitmap(Bitmap* bitmap)
 	{
 		if (mBitmap)
-			mBitmap.Release();
+			delete mBitmap;
 
 		mBitmap = bitmap;
 	}
 
 	AssetId ImageAsset::GetAtlasId() const
 	{
-		return mMeta.Cast<MetaInfo>()->mAtlasId;
+		return ((MetaInfo*)mMeta)->mAtlasId;
 	}
 
 	void ImageAsset::SetAtlasId(AssetId id)
@@ -95,17 +95,17 @@ namespace o2
 			return;
 		}
 
-		mMeta.Cast<MetaInfo>()->mAtlasId = id;
+		((MetaInfo*)mMeta)->mAtlasId = id;
 	}
 
-	Ptr<AtlasAsset> ImageAsset::GetAtlas() const
+	AtlasAsset* ImageAsset::GetAtlas() const
 	{
-		return mnew AtlasAsset(mMeta.Cast<MetaInfo>()->mAtlasId);
+		return mnew AtlasAsset(((MetaInfo*)mMeta)->mAtlasId);
 	}
 
-	void ImageAsset::SetAtlas(Ptr<AtlasAsset> atlas)
+	void ImageAsset::SetAtlas(AtlasAsset* atlas)
 	{
-		mMeta.Cast<MetaInfo>()->mAtlasId = atlas->GetAssetId();
+		((MetaInfo*)mMeta)->mAtlasId = atlas->GetAssetId();
 	}
 
 	UInt ImageAsset::GetAtlasPage() const
@@ -123,9 +123,9 @@ namespace o2
 		return AtlasAsset::GetPageTextureRef(GetAtlasId(), GetAtlasPage());
 	}
 
-	Ptr<ImageAsset::MetaInfo> ImageAsset::GetMeta() const
+	ImageAsset::MetaInfo* ImageAsset::GetMeta() const
 	{
-		return mMeta.Cast<MetaInfo>();
+		return ((MetaInfo*)mMeta);
 	}
 
 	const char* ImageAsset::GetFileExtensions() const
@@ -148,7 +148,7 @@ namespace o2
 
 	void ImageAsset::LoadBitmap()
 	{
-		String assetFullPath = GetFullPath();		
+		String assetFullPath = GetFullPath();
 		mBitmap->Load(assetFullPath);
 	}
 
@@ -172,12 +172,12 @@ namespace o2
 		return ImageAsset::type->ID();
 	}
 
-	bool ImageAsset::MetaInfo::IsEqual(Ptr<IMetaInfo> other) const
+	bool ImageAsset::MetaInfo::IsEqual(IMetaInfo* other) const
 	{
 		if (!IMetaInfo::IsEqual(other))
 			return false;
 
-		Ptr<MetaInfo> otherMeta = other.Cast<MetaInfo>();
+		MetaInfo* otherMeta = (MetaInfo*)other;
 		return mAtlasId == otherMeta->mAtlasId && mIOS == otherMeta->mIOS && mWindows == otherMeta->mWindows &&
 			mAndroid == otherMeta->mAndroid && mMacOS == otherMeta->mMacOS && mSliceBorder == otherMeta->mSliceBorder &&
 			mDefaultMode == otherMeta->mDefaultMode;

@@ -13,7 +13,7 @@ namespace o2
 		UIWidget(), mOwnHorScrollBar(false), mOwnVerScrollBar(false), mClipAreaLayout(Layout::BothStretch()), mUnderCursor(false),
 		mPressedCursor(false), mScrollSpeedDamp(7.0f), mSpeedUpdTime(0), mViewAreaLayout(Layout::BothStretch()),
 		mLastHorScrollChangeTime(-10), mLastVerScrollChangeTime(-10), mEnableScrollsHiding(false),
-		mEnableHorScroll(true), mEnableVerScroll(true)
+		mEnableHorScroll(true), mEnableVerScroll(true), mHorScrollBar(nullptr), mVerScrollBar(nullptr)
 	{
 		InitializeProperties();
 	}
@@ -54,7 +54,7 @@ namespace o2
 		if (mHorScrollBar)
 		{
 			if (mOwnHorScrollBar)
-				mHorScrollBar.Release();
+				delete mHorScrollBar;
 			else
 				mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnHorScrollChanged);
 		}
@@ -62,7 +62,7 @@ namespace o2
 		if (mVerScrollBar)
 		{
 			if (mOwnVerScrollBar)
-				mVerScrollBar.Release();
+				delete mVerScrollBar;
 			else
 				mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnVerScrollChanged);
 		}
@@ -75,7 +75,7 @@ namespace o2
 		if (mHorScrollBar)
 		{
 			if (mOwnHorScrollBar)
-				mHorScrollBar.Release();
+				delete mHorScrollBar;
 			else
 				mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnHorScrollChanged);
 		}
@@ -83,7 +83,7 @@ namespace o2
 		if (mVerScrollBar)
 		{
 			if (mOwnVerScrollBar)
-				mVerScrollBar.Release();
+				delete mVerScrollBar;
 			else
 				mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnVerScrollChanged);
 		}
@@ -151,6 +151,9 @@ namespace o2
 
 	void UIScrollArea::Update(float dt)
 	{
+		if (mFullyDisabled)
+			return;
+
 		UIWidget::Update(dt);
 
 		if (mOwnHorScrollBar)
@@ -259,11 +262,11 @@ namespace o2
 		return mScrollPos.y;
 	}
 
-	void UIScrollArea::SetHorizontalScrollBar(Ptr<UIHorizontalScrollBar> scrollbar, bool owner /*= true*/)
+	void UIScrollArea::SetHorizontalScrollBar(UIHorizontalScrollBar* scrollbar, bool owner /*= true*/)
 	{
 		if (mHorScrollBar)
 		{
-			if (mOwnHorScrollBar) mHorScrollBar.Release();
+			if (mOwnHorScrollBar) delete mHorScrollBar;
 			else                  mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnHorScrollChanged);
 		}
 
@@ -281,16 +284,16 @@ namespace o2
 		UpdateLayout();
 	}
 
-	Ptr<UIHorizontalScrollBar> UIScrollArea::GetHorizontalScrollbar() const
+	UIHorizontalScrollBar* UIScrollArea::GetHorizontalScrollbar() const
 	{
 		return mHorScrollBar;
 	}
 
-	void UIScrollArea::SetVerticalScrollBar(Ptr<UIVerticalScrollBar> scrollbar, bool owner /*= true*/)
+	void UIScrollArea::SetVerticalScrollBar(UIVerticalScrollBar* scrollbar, bool owner /*= true*/)
 	{
 		if (mVerScrollBar)
 		{
-			if (mOwnVerScrollBar) mVerScrollBar.Release();
+			if (mOwnVerScrollBar) delete mVerScrollBar;
 			else                  mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnVerScrollChanged);
 		}
 
@@ -308,7 +311,7 @@ namespace o2
 		UpdateLayout();
 	}
 
-	Ptr<UIVerticalScrollBar> UIScrollArea::GetVerticalScrollbar() const
+	UIVerticalScrollBar* UIScrollArea::GetVerticalScrollbar() const
 	{
 		return mVerScrollBar;
 	}
@@ -345,12 +348,12 @@ namespace o2
 		return mViewAreaLayout;
 	}
 
-	void UIScrollArea::OnChildAdded(Ptr<UIWidget> child)
+	void UIScrollArea::OnChildAdded(UIWidget* child)
 	{
 		child->layout.mDrivenByParent = true;
 	}
 
-	void UIScrollArea::OnChildRemoved(Ptr<UIWidget> child)
+	void UIScrollArea::OnChildRemoved(UIWidget* child)
 	{
 		child->layout.mDrivenByParent = false;
 	}
@@ -404,10 +407,10 @@ namespace o2
 
 		if (!Math::Equals(o2Input.GetMouseWheelDelta(), 0.0f) && underClippingArea && !underScrollbars)
 		{
-			Ptr<CursorEventsListener> listenerunderCursor;
+			CursorEventsListener* listenerunderCursor = nullptr;
 			for (auto x : o2Events.GetAllCursorListenersUnderCursor(0))
 			{
-				auto scrollArea = dynamic_cast<UIScrollArea*>(x.Get());
+				auto scrollArea = dynamic_cast<UIScrollArea*>(x);
 				if (scrollArea)
 				{
 					if (scrollArea != this)
@@ -536,6 +539,17 @@ namespace o2
 		mChildsAbsRect = _mChildsAbsRect;
 	}
 
+	void UIScrollArea::UpdateTransparency()
+	{
+		UIWidget::UpdateTransparency();
+
+		if (mHorScrollBar)
+			mHorScrollBar->UpdateTransparency();
+
+		if (mVerScrollBar)
+			mVerScrollBar->UpdateTransparency();
+	}
+
 	void UIScrollArea::UpdateScrollParams()
 	{
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
@@ -545,6 +559,9 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
+			if (child->mFullyDisabled)
+				continue;
+
 			mScrollArea.left = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
 			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout.mLocalRect.bottom);
 			mScrollArea.right = Math::Max(mScrollArea.right, child->layout.mLocalRect.right);
@@ -678,18 +695,18 @@ namespace o2
 	{
 		if (mHorScrollBar)
 		{
-			if (mOwnHorScrollBar) mHorScrollBar.Release();
+			if (mOwnHorScrollBar) delete mHorScrollBar;
 			else                  mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnHorScrollChanged);
 		}
 
 		if (mVerScrollBar)
 		{
-			if (mOwnVerScrollBar) mVerScrollBar.Release();
+			if (mOwnVerScrollBar) delete mVerScrollBar;
 			else                  mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnVerScrollChanged);
 		}
 
 		auto horScrollNode = node.GetNode("mHorScrollBar");
-		mOwnHorScrollBar = horScrollNode.IsValid();
+		mOwnHorScrollBar = horScrollNode != nullptr;
 		if (mOwnHorScrollBar)
 		{
 			mHorScrollBar = *horScrollNode;
@@ -699,7 +716,7 @@ namespace o2
 		else mHorScrollBar = nullptr;
 
 		auto varScrollNode = node.GetNode("mHorScrollBar");
-		mOwnVerScrollBar = varScrollNode.IsValid();
+		mOwnVerScrollBar = varScrollNode != nullptr;
 		if (mOwnVerScrollBar)
 		{
 			mVerScrollBar = *varScrollNode;

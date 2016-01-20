@@ -19,10 +19,10 @@ namespace o2
 		typedef Vector<Page> PagesVec;
 
 	public:
-		Getter<Ptr<MetaInfo>>           meta;        // Meta information getter
-		Getter<AssetInfosVec>           imagesInfos; // Containing images infos getter
-		Getter<Vector<Ptr<ImageAsset>>> images;      // Images assets getter
-		Getter<PagesVec>                pages;       // Pages getter
+		Getter<MetaInfo*>           meta;        // Meta information getter
+		Getter<AssetInfosVec>       imagesInfos; // Containing images infos getter
+		Getter<Vector<ImageAsset*>> images;      // Images assets getter
+		Getter<PagesVec>            pages;       // Pages getter
 
 		// Default constructor
 		AtlasAsset();
@@ -46,13 +46,13 @@ namespace o2
 		AssetInfosVec GetImages() const;
 
 		// Returns containing images assets
-		Vector<Ptr<ImageAsset>> GetImagesAssets() const;
+		Vector<ImageAsset*> GetImagesAssets() const;
 
 		// Returns pages array
 		PagesVec GetPages() const;
 
 		// Is contains image
-		bool ContainsImage(Ptr<ImageAsset> image);
+		bool ContainsImage(ImageAsset* image);
 
 		// Is contains image
 		bool ContainsImage(const AssetInfo& imageAssetInfo);
@@ -64,7 +64,7 @@ namespace o2
 		bool ContainsImage(const String& path);
 
 		// Returns meta information
-		Ptr<MetaInfo> GetMeta() const;
+		MetaInfo* GetMeta() const;
 
 		// Returns extensions string
 		const char* GetFileExtensions() const;
@@ -116,7 +116,7 @@ namespace o2
 			Type::Id GetAssetType() const;
 
 			// Returns true if other meta is equal to this
-			bool IsEqual(Ptr<IMetaInfo> other) const;
+			bool IsEqual(IMetaInfo* other) const;
 
 			SERIALIZABLE(MetaInfo);
 		};

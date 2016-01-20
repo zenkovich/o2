@@ -3,7 +3,7 @@
 #include "Render/Windows/TextureBase.h"
 
 #include "Utils/Math/Vector2.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Property.h"
 #include "Utils/String.h"
 
@@ -40,7 +40,7 @@ namespace o2
 		Texture(const String& fileName);
 
 		// Constructor from bitmap
-		Texture(Ptr<Bitmap> bitmap);
+		Texture(Bitmap* bitmap);
 
 		// Destructor
 		~Texture();
@@ -52,7 +52,7 @@ namespace o2
 		void Create(const String& fileName);
 
 		// Creates texture from bitmap
-		void Create(Ptr<Bitmap> bitmap);
+		void Create(Bitmap* bitmap);
 
 		// Returns size of texture
 		Vec2I GetSize() const;

@@ -142,7 +142,7 @@ namespace o2
 			SERIALIZABLE(Key);
 
 		public:
-			static const int mApproxValuesCount = 20; // Approximation values count
+			static const int mApproxValuesCount = 10; // Approximation values count
 			Vec2F mApproxValues[mApproxValuesCount];  // Approximation values (x - position, y - value)
 
 			friend class Curve;

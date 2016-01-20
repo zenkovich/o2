@@ -17,7 +17,7 @@ namespace o2
 	class TaskManager: public Singleton<TaskManager>
 	{
 	public:
-		typedef Vector<Ptr<Task>> TasksVec;
+		typedef Vector<Task*> TasksVec;
 
 	public:
 		// Stops task with specified id
@@ -27,7 +27,7 @@ namespace o2
 		void StopAllTasks();
 
 		// Returns task
-		Ptr<Task> FindTask(int id);
+		Task* FindTask(int id);
 
 		// Runs new functional task
 		void Run(const Function<void(float)>& update, const Function<bool()> isDone);
@@ -52,7 +52,6 @@ namespace o2
 		// Destructor. Destroys all tasks
 		~TaskManager();
 
-		friend class ITemplPtr<TaskManager>;
 		friend class Task;
 		friend class Application;
 	};

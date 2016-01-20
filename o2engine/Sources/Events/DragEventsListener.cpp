@@ -67,10 +67,10 @@ namespace o2
 	void DragEventsListener::OnDragged(const Input::Cursor& cursor)
 	{}
 
-	void DragEventsListener::OnDragEnd(const Input::Cursor& cursor, Ptr<DragEventsListener> underDragListener)
+	void DragEventsListener::OnDragEnd(const Input::Cursor& cursor, DragEventsListener* underDragListener)
 	{}
 
-	void DragEventsListener::OnDropped(Ptr<DragEventsListener> dropped)
+	void DragEventsListener::OnDropped(DragEventsListener* dropped)
 	{}
 
 	bool DragEventsListener::IsDragging() const

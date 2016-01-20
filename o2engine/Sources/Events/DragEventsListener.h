@@ -35,10 +35,10 @@ namespace o2
 		virtual void OnDragged(const Input::Cursor& cursor);
 
 		// Calls when dragging completed
-		virtual void OnDragEnd(const Input::Cursor& cursor, Ptr<DragEventsListener> underDragListener);
+		virtual void OnDragEnd(const Input::Cursor& cursor, DragEventsListener* underDragListener);
 
 		// Calls when some other DragEventListener was dragged to this
-		virtual void OnDropped(Ptr<DragEventsListener> dropped);
+		virtual void OnDropped(DragEventsListener* dropped);
 
 		// Returns true if it's dragging
 		bool IsDragging() const;

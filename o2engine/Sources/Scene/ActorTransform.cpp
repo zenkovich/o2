@@ -7,13 +7,13 @@ namespace o2
 	ActorTransform::ActorTransform(const Vec2F& size /*= Vec2F()*/, const Vec2F& position /*= Vec2F()*/,
 								   float angle /*= 0.0f*/, const Vec2F& scale /*= Vec2F(1.0f, 1.0f)*/,
 								   const Vec2F& pivot /*= Vec2F(0.5f, 0.5f)*/):
-		Transform(size, position, angle, scale, pivot)
+		Transform(size, position, angle, scale, pivot), mOwner(nullptr)
 	{
 		InitializeProperties();
 	}
 
 	ActorTransform::ActorTransform(const ActorTransform& other):
-		Transform(other)
+		Transform(other), mOwner(nullptr)
 	{
 		InitializeProperties();
 	}
@@ -31,7 +31,7 @@ namespace o2
 		return *this;
 	}
 
-	Ptr<Actor> ActorTransform::GetOwnerActor() const
+	Actor* ActorTransform::GetOwnerActor() const
 	{
 		return mOwner;
 	}
@@ -228,7 +228,7 @@ namespace o2
 		return dx >= 0.0f && dx <= rs.x && dy >= 0.0f && dy < rs.y;
 	}
 
-	void ActorTransform::SetOwner(Ptr<Actor> actor)
+	void ActorTransform::SetOwner(Actor* actor)
 	{
 		mOwner = actor;
 		UpdateTransform();

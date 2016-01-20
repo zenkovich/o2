@@ -189,7 +189,7 @@ namespace o2
 		return mMouseWheelDelta;
 	}
 
-	Ptr<Input::Cursor> Input::GetCursor(CursorId id)
+	Input::Cursor* Input::GetCursor(CursorId id)
 	{
 		for (auto& cursor : mCursors)
 			if (cursor.mId == id)

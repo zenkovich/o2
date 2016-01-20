@@ -8,6 +8,32 @@ namespace o2
 {
 	class Sprite;
 	class Text;
+	class UIButton;
+
+	// -----------------------------
+	// Buttons one cursor down group
+	// -----------------------------
+	class UIButtonGroup
+	{
+	public:
+		typedef Vector<UIButton*> ButtonsVec;
+
+	public:
+		UIButtonGroup();
+		~UIButtonGroup();
+
+		void AddButton(UIButton* toggle);
+		void RemoveButton(UIButton* toggle);
+
+		const ButtonsVec& GetButtons() const;
+
+	protected:
+		ButtonsVec mButtons;
+		UIButton*  mOwner;
+		bool       mPressed;
+
+		friend class UIButton;
+	};
 
 	// -----------------------
 	// Button clickable widget
@@ -15,9 +41,10 @@ namespace o2
 	class UIButton: public UIWidget, public CursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		Property<WString>     caption; // Caption property. Searches text layer with name "caption" or creates them if he's not exist
-		Property<Ptr<Sprite>> icon;    // Icon image asset setter. Searches sprite layer with name "icon". Creates him if can't find
-		Function<void()>      onClick; // Click event
+		Property<WString>        caption;      // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+		Property<Sprite*>        icon;         // Icon image asset setter. Searches sprite layer with name "icon". Creates him if can't find
+		Property<UIButtonGroup*> buttonsGroup; // Buttons group property
+		Function<void()>         onClick;      // Click event
 
 		// Default constructor
 		UIButton();
@@ -35,10 +62,16 @@ namespace o2
 		WString GetCaption() const;
 
 		// Sets icon sprite. Searches sprite layer "icon". Creates a new icon if isn't exist
-		void SetIcon(Ptr<Sprite> sprite);
+		void SetIcon(Sprite* sprite);
 
 		// Returns icon sprite
-		Ptr<Sprite> GetIcon() const;
+		Sprite* GetIcon() const;
+
+		// Sets button group
+		void SetButtonGroup(UIButtonGroup* group);
+
+		// Return button group
+		UIButtonGroup* GetButtonGroup() const;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
@@ -52,8 +85,9 @@ namespace o2
 		SERIALIZABLE(UIButton);
 
 	protected:
-		Ptr<Text>   mCaptionText; // Caption layer text
-		Ptr<Sprite> mIconSprite;  // Icon layer sprite
+		Text*          mCaptionText; // Caption layer text
+		Sprite*        mIconSprite;  // Icon layer sprite
+		UIButtonGroup* mButtonGroup; // Button group
 
 	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true
@@ -79,12 +113,14 @@ namespace o2
 		void OnKeyReleased(const Input::Key& key);
 
 		// Calls when layer added and updates drawing sequence
-		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
+		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Calls when visible was changed
 		void OnVisibleChanged();
 
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class UIButtonGroup;
 	};
 }

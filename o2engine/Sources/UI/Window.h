@@ -15,8 +15,8 @@ namespace o2
 	class UIWindow: public UIScrollArea, public CursorEventsListener
 	{
 	public:
-		Property<WString>     caption; // Window caption property
-		Property<Ptr<Sprite>> icon;    // Window icon sprite property
+		Property<WString> caption; // Window caption property
+		Property<Sprite*> icon;    // Window icon sprite property
 
 		// Default constructor
 		UIWindow();
@@ -37,19 +37,19 @@ namespace o2
 		void Draw();
 
 		// Adds window element widget
-		Ptr<UIWidget> AddWindowElement(Ptr<UIWidget> widget);
+		UIWidget* AddWindowElement(UIWidget* widget);
 
 		// Removes window element widget
-		void RemoveWindowElement(Ptr<UIWidget> widget);
+		void RemoveWindowElement(UIWidget* widget);
 
 		// Removes all window elements widgets
 		void RemoveAllWindowElements();
 
 		// Sets icon sprite
-		void SetIcon(Ptr<Sprite> icon);
+		void SetIcon(Sprite* icon);
 
 		// Returns icon sprite
-		Ptr<Sprite> GetIcon() const;
+		Sprite* GetIcon() const;
 
 		// Sets caption text
 		void SetCaption(const WString& caption);
@@ -74,8 +74,8 @@ namespace o2
 		SERIALIZABLE(UIWindow);
 
 	protected:
-		Ptr<Sprite>          mIconDrawable;              // Icon drawable from layer "icon"
-		Ptr<Text>            mCaptionDrawable;           // text caption from layer "caption"
+		Sprite*              mIconDrawable;              // Icon drawable from layer "icon"
+		Text*                mCaptionDrawable;           // text caption from layer "caption"
 		WidgetsVec           mWindowElements;            // Windows elements widgets @SERIALIZABLE
 		float                mDrawingDepth;              // Window's drawing depth
 
@@ -123,7 +123,7 @@ namespace o2
 		void UpdateTransparency();
 
 		// Calls when layer added and updates drawing sequence
-		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
+		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Initializes handles
 		void InitializeHandles();
@@ -138,13 +138,13 @@ namespace o2
 		void OnSelected();
 
 		// Calls when child widget was selected
-		void OnChildSelected(Ptr<UIWidget> child);
+		void OnChildSelected(UIWidget* child);
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
 		// Calls when widget state was added
-		void OnStateAdded(Ptr<UIWidgetState> state);
+		void OnStateAdded(UIWidgetState* state);
 
 		// Calls when visible was changed
 		void OnVisibleChanged();

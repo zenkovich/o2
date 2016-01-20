@@ -33,7 +33,7 @@ UIDockableWindow::UIDockableWindow(const UIDockableWindow& other):
 
 UIDockableWindow::~UIDockableWindow()
 {
-	mDockingFrameSample.Release();
+	delete mDockingFrameSample;
 }
 
 UIDockableWindow& UIDockableWindow::operator=(const UIDockableWindow& other)
@@ -90,7 +90,7 @@ bool UIDockableWindow::IsDocked() const
 	return mDocked;
 }
 
-Ptr<Sprite> UIDockableWindow::GetDockingFrameSample() const
+Sprite* UIDockableWindow::GetDockingFrameSample() const
 {
 	return mDockingFrameSample;
 }
@@ -126,7 +126,7 @@ void UIDockableWindow::OnMoved(const Input::Cursor& cursor)
 
 	layout.position += cursor.mDelta;
 
-	Ptr<UIDockWindowPlace> targetDock;
+	UIDockWindowPlace* targetDock;
 	Side dockPosition = Side::None;
 	RectF dockZoneRect;
 
@@ -147,7 +147,7 @@ void UIDockableWindow::OnMoved(const Input::Cursor& cursor)
 
 void UIDockableWindow::OnMoveCompleted()
 {
-	Ptr<UIDockWindowPlace> targetDock;
+	UIDockWindowPlace* targetDock = nullptr;
 	Side dockPosition = Side::None;
 	RectF dockZoneRect;
 
@@ -159,7 +159,7 @@ void UIDockableWindow::OnMoveCompleted()
 		if (x->GetType() != *UIDockWindowPlace::type)
 			return false;
 
-		Ptr<UIDockWindowPlace> dock = x.Cast<UIDockWindowPlace>();
+		UIDockWindowPlace* dock = (UIDockWindowPlace*)x;
 		TwoDirection rd = dock->GetResizibleDir();
 
 		if (dockPosition == Side::Left || dockPosition == Side::Right)
@@ -182,17 +182,17 @@ void UIDockableWindow::OnMoveBegin()
 		mDragOffset = (Vec2F)o2Input.cursorPos - layout.absLeftTop;
 }
 
-bool UIDockableWindow::TraceDock(Ptr<UIDockWindowPlace>& targetDock, Side& dockPosition, RectF& dockZoneRect)
+bool UIDockableWindow::TraceDock(UIDockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect)
 {
 	Vec2F cursorPos = o2Input.cursorPos;
 	auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
-	auto dockPlaceListener = listenersUnderCursor.FindMatch([](const Ptr<CursorEventsListener>& x) {
-		return dynamic_cast<const UIDockWindowPlace*>(x.Get()) != nullptr;
+	auto dockPlaceListener = listenersUnderCursor.FindMatch([](CursorEventsListener* x) {
+		return dynamic_cast<UIDockWindowPlace*>(x) != nullptr;
 	});
 
 	if (dockPlaceListener)
 	{
-		auto dockPlace = dynamic_cast<UIDockWindowPlace*>(dockPlaceListener.Get());
+		auto dockPlace = dynamic_cast<UIDockWindowPlace*>(dockPlaceListener);
 
 		RectF dockPlaceRect = dockPlace->layout.GetAbsoluteRect();
 
@@ -228,16 +228,16 @@ bool UIDockableWindow::TraceDock(Ptr<UIDockWindowPlace>& targetDock, Side& dockP
 	return dockPlaceListener != nullptr;
 }
 
-void UIDockableWindow::PlaceNonLineDock(Ptr<UIDockWindowPlace> targetDock, Side dockPosition)
+void UIDockableWindow::PlaceNonLineDock(UIDockWindowPlace* targetDock, Side dockPosition)
 {
 	mNonDockSize = layout.size;
 	RectF dockPlaceRect = targetDock->layout.GetAbsoluteRect();
 
-	Ptr<UIDockWindowPlace> windowDock = mnew UIDockWindowPlace();
+	UIDockWindowPlace* windowDock = mnew UIDockWindowPlace();
 	windowDock->name = "window";
 	windowDock->layout = UIWidgetLayout::BothStretch();
 
-	Ptr<UIDockWindowPlace> windowNeighborDock = mnew UIDockWindowPlace();
+	UIDockWindowPlace* windowNeighborDock = mnew UIDockWindowPlace();
 	windowNeighborDock->name = "empty";
 	windowNeighborDock->layout = UIWidgetLayout::BothStretch();
 
@@ -284,16 +284,16 @@ void UIDockableWindow::PlaceNonLineDock(Ptr<UIDockWindowPlace> targetDock, Side 
 	mDockingFrameTarget = layout.GetAbsoluteRect();
 }
 
-void UIDockableWindow::PlaceLineDock(Ptr<UIDockWindowPlace> targetDock, Side dockPosition, RectF dockZoneRect)
+void UIDockableWindow::PlaceLineDock(UIDockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect)
 {
 	mNonDockSize = layout.size;
 	RectF dockPlaceRect = targetDock->layout.GetAbsoluteRect();
 
-	Ptr<UIDockWindowPlace> windowDock = mnew UIDockWindowPlace();
+	UIDockWindowPlace* windowDock = mnew UIDockWindowPlace();
 	windowDock->name = "window";
 	windowDock->layout = UIWidgetLayout::BothStretch();
 
-	Ptr<UIDockWindowPlace> windowNeighborDock = targetDock;
+	UIDockWindowPlace* windowNeighborDock = targetDock;
 	targetDock->mParent->AddChild(windowDock);
 
 	if (dockPosition == Side::Bottom)
@@ -379,10 +379,10 @@ void UIDockableWindow::Undock()
 	if (!IsDocked())
 		return;
 
-	auto topDock = mParent->GetParent().Cast<UIDockWindowPlace>();
-	auto parent = mParent.Cast<UIDockWindowPlace>();
+	auto topDock = (UIDockWindowPlace*)mParent->GetParent();
+	auto parent = (UIDockWindowPlace*)mParent;
 	auto parentNeighbors = topDock->GetChilds().FindAll([&](auto x) { return x != parent; })
-		.Select<Ptr<UIDockWindowPlace>>([](auto x) { return x.Cast<UIDockWindowPlace>(); });
+		.Select<UIDockWindowPlace*>([](auto x) { return (UIDockWindowPlace*)x; });
 
 	o2UI.AddWidget(this);
 

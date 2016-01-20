@@ -2,7 +2,6 @@
 
 #include "Utils/Delegates.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Memory/Ptr.h"
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
@@ -53,16 +52,16 @@ namespace o2
 		virtual ~Application();
 
 		// Returns pointer to log object
-		virtual Ptr<LogStream> GetLog() const;
+		virtual LogStream* GetLog() const;
 
 		// Returns pointer to input message object
-		virtual Ptr<Input> GetInput() const;
+		virtual Input* GetInput() const;
 
 		// Returns pointer to project config
-		virtual Ptr<ProjectConfig> GetProjectConfig() const;
+		virtual ProjectConfig* GetProjectConfig() const;
 
 		// Returns pointer to time utilities object
-		virtual Ptr<Time> GetTime() const;
+		virtual Time* GetTime() const;
 
 		// Launching application cycle
 		virtual void Launch();
@@ -113,19 +112,19 @@ namespace o2
 		static bool IsReady();
 
 	protected:
-		Ptr<Assets>        mAssets;        // Assets
-		Ptr<EventSystem>   mEventSystem;   // Events processing system
-		Ptr<FileSystem>    mFileSystem;    // File system
-		Ptr<Input>         mInput;         // While application user input message
-		Ptr<LogStream>     mLog;           // Log stream with id "app", using only for application messages
-		Ptr<ProjectConfig> mProjectConfig; // Project config
-		Ptr<Render>        mRender;        // Graphics render
-		Ptr<Scene>         mScene;         // Scene
-		Ptr<TaskManager>   mTaskManager;   // Tasks manager
-		Ptr<Time>          mTime;          // Time utilities
-		Ptr<Timer>         mTimer;         // Timer for detecting delta time for update
-		Ptr<UIManager>     mUIManager;     // UI manager
-		bool               mReady;         // Is all systems is ready
+		Assets*        mAssets;        // Assets
+		EventSystem*   mEventSystem;   // Events processing system
+		FileSystem*    mFileSystem;    // File system
+		Input*         mInput;         // While application user input message
+		LogStream*     mLog;           // Log stream with id "app", using only for application messages
+		ProjectConfig* mProjectConfig; // Project config
+		Render*        mRender;        // Graphics render
+		Scene*         mScene;         // Scene
+		TaskManager*   mTaskManager;   // Tasks manager
+		Time*          mTime;          // Time utilities
+		Timer*         mTimer;         // Timer for detecting delta time for update
+		UIManager*     mUIManager;     // UI manager
+		bool           mReady;         // Is all systems is ready
 
 	protected:
 		// Calling on updating

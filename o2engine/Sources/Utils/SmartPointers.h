@@ -99,7 +99,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type* AutoPtr<_type>::operator->()
+	_type* AutoPtr<_type>::operator-*()
 	{
 		return mObjPtr;
 	}

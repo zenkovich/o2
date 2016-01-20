@@ -4,12 +4,13 @@
 
 namespace o2
 {
-	DragHandle::DragHandle()
+	DragHandle::DragHandle():
+		regularSprite(nullptr), hoverSprite(nullptr), pressedSprite(nullptr)
 	{
 		InitializeProperties();
 	}
 
-	DragHandle::DragHandle(Ptr<Sprite> regular, Ptr<Sprite> hover /*= nullptr*/, Ptr<Sprite> pressed /*= nullptr*/):
+	DragHandle::DragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/):
 		regularSprite(regular), hoverSprite(hover), pressedSprite(pressed)
 	{
 		InitializeProperties();
@@ -35,9 +36,9 @@ namespace o2
 
 	DragHandle::~DragHandle()
 	{
-		regularSprite.Release();
-		hoverSprite.Release();
-		pressedSprite.Release();
+		delete regularSprite;
+		delete hoverSprite;
+		delete pressedSprite;
 	}
 
 	void DragHandle::Draw()
@@ -54,9 +55,9 @@ namespace o2
 
 	DragHandle& DragHandle::operator=(const DragHandle& other)
 	{
-		regularSprite.Release();
-		hoverSprite.Release();
-		pressedSprite.Release();
+		delete regularSprite;
+		delete hoverSprite;
+		delete pressedSprite;
 
 		if (other.regularSprite)
 			regularSprite = other.regularSprite->Clone();

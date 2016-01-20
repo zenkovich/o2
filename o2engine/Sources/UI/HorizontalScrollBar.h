@@ -88,17 +88,17 @@ namespace o2
 		SERIALIZABLE(UIHorizontalScrollBar);
 
 	protected:
-		float              mValue;                 // Current value @SERIALIZABLE
-		float              mSmoothValue;           // Smooth value
-		float              mMinValue;              // Minimum value @SERIALIZABLE
-		float              mMaxValue;              // Maximum value @SERIALIZABLE
-		float              mScrollSense;           // Scroll sense coefficient @SERIALIZABLE
-		float              mScrollHandleSize;      // Scroll handle size (in value range) @SERIALIZABLE
-		float              mScrollhandleMinPxSize; // Minimal scroll size in pixels
-		float              mPressHandleOffset;     // Value offset when handle was pressed
-		bool               mHandlePressed;         // True, when handle was pressed
-		Ptr<UIWidgetLayer> mHandleLayer;           // Handle layer
-		Ptr<UIWidgetLayer> mBackLayer;             // Background layer
+		float          mValue;                 // Current value @SERIALIZABLE
+		float          mSmoothValue;           // Smooth value
+		float          mMinValue;              // Minimum value @SERIALIZABLE
+		float          mMaxValue;              // Maximum value @SERIALIZABLE
+		float          mScrollSense;           // Scroll sense coefficient @SERIALIZABLE
+		float          mScrollHandleSize;      // Scroll handle size (in value range) @SERIALIZABLE
+		float          mScrollhandleMinPxSize; // Minimal scroll size in pixels
+		float          mPressHandleOffset;     // Value offset when handle was pressed
+		bool           mHandlePressed;         // True, when handle was pressed
+		UIWidgetLayer* mHandleLayer;           // Handle layer
+		UIWidgetLayer* mBackLayer;             // Background layer
 
 	protected:
 		// Updates layout
@@ -111,7 +111,7 @@ namespace o2
 		void OnLayoutUpdated();
 
 		// Calls when new layer was added. Here searching bar, back and handle layers
-		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
+		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Gets value from cursor position, depends on orientation
 		float GetValueFromCursor(const Input::Cursor &cursor);

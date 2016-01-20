@@ -64,6 +64,7 @@ namespace o2
     CLASS* Clone() const { return mnew CLASS(*this); }                                     \
 	static Type* type;								                                       \
 	const Type& GetType() const { return *type; };	                                       \
+	friend struct o2::Type::TypeCreator<CLASS>;                                            \
 	DataNode Serialize()                                                        		   \
 	{                                                              						   \
 		DataNode res;																	   \

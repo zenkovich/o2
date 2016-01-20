@@ -14,16 +14,16 @@ namespace o2
 		Clear();
 	}
 
-	Ptr<RectsPacker::Rect> RectsPacker::AddRect(const Vec2F& size)
+	RectsPacker::Rect* RectsPacker::AddRect(const Vec2F& size)
 	{
-		Ptr<Rect> newRect = mRectsPool.Take();
+		Rect* newRect = mRectsPool.Take();
 		newRect->mSize = size;
 		newRect->mRect = RectF();
 		mRects.Add(newRect);
 		return newRect;
 	}
 
-	void RectsPacker::RemoveRect(Ptr<Rect> remRect)
+	void RectsPacker::RemoveRect(Rect* remRect)
 	{
 		mRects.Remove(remRect);
 		mRectsPool.Free(remRect);
@@ -49,17 +49,17 @@ namespace o2
 
 	int RectsPacker::GetPagesCount() const
 	{
-		return mRects.Max<int>([&](const Ptr<Rect>& rt) { return rt->mPage; })->mPage + 1;
+		return mRects.Max<int>([&](Rect* rt) { return rt->mPage; })->mPage + 1;
 	}
 
 	bool RectsPacker::Pack()
 	{
 		for (auto node : mQuadNodes)
-			node.Release();
+			delete node;
 
 		mQuadNodes.Clear();
 
-		mRects.ForEach([](const Ptr<Rect>& rt) { rt->mPage = -1; rt->mRect = RectI(); });
+		mRects.ForEach([](Rect* rt) { rt->mPage = -1; rt->mRect = RectI(); });
 		mRects.Sort([](auto a, auto b) { return a->mSize.y > b->mSize.y; });
 
 		for (auto rt : mRects)
@@ -110,7 +110,7 @@ namespace o2
 		return false;
 	}
 
-	bool RectsPacker::TryInsertRect(Rect& rt, Ptr<QuadNode> node)
+	bool RectsPacker::TryInsertRect(Rect& rt, QuadNode* node)
 	{
 		if (node->mFree && node->mRect.Width() >= rt.mSize.x &&
 			node->mRect.Height() >= rt.mSize.y)
@@ -133,7 +133,7 @@ namespace o2
 	}
 
 
-	bool RectsPacker::TryInsertRectInChilds(Rect& rt, Ptr<QuadNode> node)
+	bool RectsPacker::TryInsertRectInChilds(Rect& rt, QuadNode* node)
 	{
 		for (auto childNode : node->GetChilds())
 		{
@@ -154,7 +154,7 @@ namespace o2
 		mPage(page), mRect(rect), mFree(true)
 	{}
 
-	void RectsPacker::QuadNode::OnChildAdded(Ptr<QuadNode> child)
+	void RectsPacker::QuadNode::OnChildAdded(QuadNode* child)
 	{
 		child->mPage = mPage;
 	}

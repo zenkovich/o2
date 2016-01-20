@@ -15,22 +15,22 @@ namespace o2
 {
 	Debug::Debug()
 	{
-		Ptr<FileLogStream> fileLogStream = mnew FileLogStream("", "log.txt");
+		FileLogStream* fileLogStream = mnew FileLogStream("", "log.txt");
 		mLogStream = mnew ConsoleLogStream("");
 		fileLogStream->BindStream(mLogStream);
 	}
 
 	Debug::~Debug()
 	{
-		mLogStream->GetParentStream().Release();
-		mFont.Release();
-		mText.Release();
+		delete mLogStream->GetParentStream();
+		delete mFont;
+		delete mText;
 	}
 
 	void Debug::InitializeFont()
 	{
 		mFont = mnew VectorFont("C:\\Windows\\Fonts\\Arial.ttf");
-		mText = mnew Text(FontRef(mFont.Cast<Font>()));
+		mText = mnew Text(FontRef(mFont));
 	}
 
 	void Debug::Update(float dt)
@@ -49,7 +49,7 @@ namespace o2
 				freeDrawables.Add(drw);
 		}
 
-		freeDrawables.ForEach([&](auto drw) { mDbgDrawables.Remove(drw); });
+		freeDrawables.ForEach([&](auto drw) { mDbgDrawables.Remove(drw); delete drw; });
 	}
 
 	void Debug::Log(WString format, ...)
@@ -97,7 +97,7 @@ namespace o2
 		mInstance->mLogStream->ErrorStr(out);
 	}
 
-	Ptr<LogStream> Debug::GetLog()
+	LogStream* Debug::GetLog()
 	{
 		return mInstance->mLogStream;
 	}
@@ -256,28 +256,31 @@ namespace o2
 		textDrawable(nullptr)
 	{}
 
-	Debug::DbgText::DbgText(const Vec2F& position, const String& text, Ptr<Text> textDrawable, const Color4& color):
+	Debug::DbgText::DbgText(const Vec2F& position, const String& text, Text* textDrawable, const Color4& color):
 		position(position), text(text), textDrawable(textDrawable), ownTextDrawable(false), IDbgDrawable(color, -1.0f)
 	{}
 
-	Debug::DbgText::DbgText(const Vec2F& position, const String& text, Ptr<VectorFont> font, const Color4& color,
+	Debug::DbgText::DbgText(const Vec2F& position, const String& text, VectorFont* font, const Color4& color,
 							float delay /*= -1.0f*/):
 		position(position), text(text), ownTextDrawable(true), IDbgDrawable(color, delay)
 	{
-		textDrawable = mnew Text(FontRef(font.Cast<Font>()));
+		textDrawable = mnew Text(FontRef(font));
 	}
 
 	Debug::DbgText::~DbgText()
 	{
 		if (ownTextDrawable)
-			textDrawable.Release();
+			delete textDrawable;
 	}
 
 	void Debug::DbgText::Draw()
 	{
-		textDrawable->SetPosition(position);
-		textDrawable->SetText(text);
-		textDrawable->SetColor(color);
-		textDrawable->Draw();
+		if (textDrawable)
+		{
+			textDrawable->SetPosition(position);
+			textDrawable->SetText(text);
+			textDrawable->SetColor(color);
+			textDrawable->Draw();
+		}
 	}
 }

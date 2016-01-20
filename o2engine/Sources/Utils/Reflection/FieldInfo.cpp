@@ -9,7 +9,7 @@ namespace o2
 	{
 	}
 
-	FieldInfo::FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Ptr<Type> type):
+	FieldInfo::FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Type* type):
 		mName(name), mOffset(offset), mIsProperty(isProperty), mType(type), mIsPtr(isPtr)
 	{
 	}

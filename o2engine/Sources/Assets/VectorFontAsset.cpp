@@ -10,7 +10,7 @@ namespace o2
 	VectorFontAsset::MetaInfo::~MetaInfo()
 	{
 		for (auto eff : mEffects)
-			eff.Release();
+			delete eff;
 	}
 
 	Type::Id VectorFontAsset::MetaInfo::GetAssetType() const
@@ -18,12 +18,12 @@ namespace o2
 		return VectorFontAsset::type->ID();
 	}
 
-	bool VectorFontAsset::MetaInfo::IsEqual(Ptr<IMetaInfo> other) const
+	bool VectorFontAsset::MetaInfo::IsEqual(IMetaInfo* other) const
 	{
 		if (!IMetaInfo::IsEqual(other))
 			return false;
 
-		Ptr<MetaInfo> otherMeta = other.Cast<MetaInfo>();
+		MetaInfo* otherMeta = (MetaInfo*)other;
 		for (auto eff : mEffects)
 		{
 			bool found = false;
@@ -92,26 +92,26 @@ namespace o2
 		return GetMeta()->mEffects;
 	}
 
-	void VectorFontAsset::AddEffect(Ptr<VectorFont::Effect> effect)
+	void VectorFontAsset::AddEffect(VectorFont::Effect* effect)
 	{
 		GetMeta()->mEffects.Add(effect);
-		mFont.mFont.Cast<VectorFont>()->AddEffect(effect);
+		((VectorFont*)mFont.mFont)->AddEffect(effect);
 	}
 
-	void VectorFontAsset::RemoveEffect(Ptr<VectorFont::Effect> effect)
+	void VectorFontAsset::RemoveEffect(VectorFont::Effect* effect)
 	{
 		GetMeta()->mEffects.Remove(effect);
-		mFont.mFont.Cast<VectorFont>()->RemoveEffect(effect);
+		((VectorFont*)mFont.mFont)->RemoveEffect(effect);
 	}
 
 	void VectorFontAsset::RemoveAllEffects()
 	{
 		for (auto eff : GetMeta()->mEffects)
-			eff.Release();
+			delete eff;
 
 		GetMeta()->mEffects.Clear();
 
-		mFont.mFont.Cast<VectorFont>()->RemoveAllEffects();
+		((VectorFont*)mFont.mFont)->RemoveAllEffects();
 	}
 
 	const char* VectorFontAsset::GetFileExtensions() const
@@ -119,9 +119,9 @@ namespace o2
 		return "ttf";
 	}
 
-	Ptr<VectorFontAsset::MetaInfo> VectorFontAsset::GetMeta() const
+	VectorFontAsset::MetaInfo* VectorFontAsset::GetMeta() const
 	{
-		return mMeta.Cast<MetaInfo>();
+		return (MetaInfo*)mMeta;
 	}
 
 	void VectorFontAsset::LoadData(const String& path)
@@ -130,9 +130,9 @@ namespace o2
 
 		if (!mFont)
 		{
-			mFont = Ptr<Font>(mnew VectorFont(path));
+			mFont = mnew VectorFont(path);
 
-			Ptr<VectorFont> vectorFont = mFont.mFont.Cast<VectorFont>();
+			VectorFont* vectorFont = (VectorFont*)mFont.mFont;
 			for (auto eff : GetMeta()->mEffects)
 				vectorFont->AddEffect(eff->Clone());
 		}

@@ -4,7 +4,7 @@
 #include "Utils/Containers/Vector.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Tree.h"
 
 namespace o2
@@ -29,7 +29,7 @@ namespace o2
 			Rect(const Vec2F& size = Vec2F());
 		};
 
-		typedef Vector<Ptr<Rect>> RectsVec;
+		typedef Vector<Rect*> RectsVec;
 
 	public:
 		// Constructor
@@ -39,10 +39,10 @@ namespace o2
 		~RectsPacker();
 
 		// Adds rectangle with size
-		Ptr<Rect> AddRect(const Vec2F&  size);
+		Rect* AddRect(const Vec2F&  size);
 
 		// Removes rectangle
-		void RemoveRect(Ptr<Rect> remRect);
+		void RemoveRect(Rect* remRect);
 
 		// Removes all rectangles and quads
 		void Clear();
@@ -74,12 +74,12 @@ namespace o2
 			QuadNode(int page = 0, const RectF& rect = RectF());
 
 			//Calls when child quad was added
-			void OnChildAdded(Ptr<QuadNode> child);
+			void OnChildAdded(QuadNode* child);
 
 			// Check equals operator
 			bool operator==(const QuadNode& other);
 		};
-		typedef Vector<Ptr<QuadNode>> NodesVec;
+		typedef Vector<QuadNode*> NodesVec;
 
 		Pool<Rect> mRectsPool; // Rectangles pool
 		RectsVec   mRects;     // Rectangles
@@ -91,10 +91,10 @@ namespace o2
 		bool InsertRect(Rect& rt);
 
 		// Tries to insert rectangle in specified node
-		bool TryInsertRect(Rect& rt, Ptr<QuadNode> node);
+		bool TryInsertRect(Rect& rt, QuadNode* node);
 
 		// Tries to insert rectangle in specified node
-		bool TryInsertRectInChilds(Rect& rt, Ptr<QuadNode> node);
+		bool TryInsertRectInChilds(Rect& rt, QuadNode* node);
 
 		// Creates new page
 		void CreateNewPage();

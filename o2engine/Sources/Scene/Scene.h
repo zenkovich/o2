@@ -18,20 +18,26 @@ namespace o2
 	class Scene: public Singleton<Scene>
 	{
 	public:
-		typedef Vector<Ptr<Actor>> ActorsVec;
-		typedef Vector<Ptr<DrawableComponent>> DrawCompsVec;
+		typedef Vector<Actor*> ActorsVec;
+		typedef Vector<DrawableComponent*> DrawCompsVec;
 
 	public:
+		// Returns all actors
+		const ActorsVec& GetAllActors() const;
+
+		// Returns all actors
+		ActorsVec& GetAllActors();
+
 		// Returns actor by path (ex "some node/other/target")
-		Ptr<Actor> FindActor(const String& path);
+		Actor* FindActor(const String& path);
 
 		// Returns component with type in scene
 		template<typename _type>
-		Ptr<_type> FindActorComponent();
+		_type* FindActorComponent();
 
 		// Returns all components with type in scene
 		template<typename _type>
-		Vector<Ptr<_type>> FindAllActorsComponents();
+		Vector<_type>* FindAllActorsComponents();
 
 		// Removes all actors
 		void Clear();
@@ -43,8 +49,8 @@ namespace o2
 		void Save(const String& path);
 
 	protected:
-		ActorsVec     mActors;             // Scene root actors
-		DrawCompsVec  mDrawableComponents; // Drawable components
+		ActorsVec    mActors;             // Scene root actors
+		DrawCompsVec mDrawableComponents; // Drawable components
 
 	protected:
 		// Default constructor
@@ -60,24 +66,23 @@ namespace o2
 		void Draw();
 
 		// Registers drawable component
-		void RegDrawableComponent(Ptr<DrawableComponent> component);
+		void RegDrawableComponent(DrawableComponent* component);
 
 		// Unregisters drawable component
-		void UnregDrawableComponent(Ptr<DrawableComponent> component);
+		void UnregDrawableComponent(DrawableComponent* component);
 
 		// Calls when drawable component depth was changed and sorts all drawable component
-		void ComponentDepthChanged(Ptr<DrawableComponent> component);
+		void ComponentDepthChanged(DrawableComponent* component);
 
 		friend class Actor;
 		friend class Application;
 		friend class DrawableComponent;
-		friend class ITemplPtr<Scene>;
 	};
 
 	template<typename _type>
-	Vector<Ptr<_type>> Scene::FindAllActorsComponents()
+	Vector<_type>* Scene::FindAllActorsComponents()
 	{
-		Vector<Ptr<_type>> res;
+		Vector<_type>* res;
 		for (auto actor : mActors)
 			res.Add(actor->GetComponentsInChildren<_type>());
 
@@ -85,11 +90,11 @@ namespace o2
 	}
 
 	template<typename _type>
-	Ptr<_type> Scene::FindActorComponent()
+	_type* Scene::FindActorComponent()
 	{
 		for (auto actor : mActors)
 		{
-			Ptr<_type> res = actor->GetComponentInChildren<_type>();
+			_type> res = actor->GetComponentInChildren<_type*();
 			if (res)
 				return res;
 		}

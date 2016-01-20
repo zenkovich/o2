@@ -20,7 +20,7 @@ WindowsManager::WindowsManager()
 WindowsManager::~WindowsManager()
 {
 	for (auto wnd : mEditorWindows)
-		wnd.Release();
+		delete wnd;
 }
 
 void WindowsManager::InitializeWindows()
@@ -29,13 +29,8 @@ void WindowsManager::InitializeWindows()
 
 	for (auto type : windowTypes)
 	{
-		for (int i = 0; i < 5; i++)
-		{
-			Ptr<IEditorWindow> newWindow = type->CreateSample();
-			newWindow->mWindow->caption = String::Format("window %i", i + 1);
-			newWindow->mWindow->name = String::Format("window %i", i + 1);
-			mEditorWindows.Add(newWindow);
-		}
+		IEditorWindow* newWindow = (IEditorWindow*)type->CreateSample();
+		mEditorWindows.Add(newWindow);
 	}
 }
 
@@ -54,7 +49,7 @@ void WindowsManager::Update(float dt)
 		wnd->Update(dt);
 }
 
-void ProcHierarchy(String& hierarchy, Ptr<UIWidget> widget, int level)
+void ProcHierarchy(String& hierarchy, UIWidget* widget, int level)
 {
 	String sideNames[] = { "Hor", "Ver" };
 
@@ -66,9 +61,9 @@ void ProcHierarchy(String& hierarchy, Ptr<UIWidget> widget, int level)
 	if (widget->GetType() == *UIDockWindowPlace::type)
 	{
 		hierarchy += ": ";
-		hierarchy += (String)(bool)widget.Cast<UIDockWindowPlace>()->interactable;
+		hierarchy += (String)(bool)((UIDockWindowPlace*)widget)->interactable;
 		hierarchy += " ";
-		hierarchy += sideNames[(int)widget.Cast<UIDockWindowPlace>()->GetResizibleDir()];
+		hierarchy += sideNames[(int)((UIDockWindowPlace*)widget)->GetResizibleDir()];
 		RectF rt = widget->layout.GetAbsoluteRect();
 		hierarchy += (String)rt.left + " " + (String)rt.bottom + " " + (String)rt.right + " " + (String)rt.top;
 	}
@@ -92,7 +87,7 @@ void WindowsManager::Draw()
 	o2Debug.DrawText((Vec2F)(o2Render.GetResolution().InvertedX())*0.5f, hierarchy);
 }
 
-void WindowsManager::AddWindow(Ptr<IEditorWindow> window)
+void WindowsManager::AddWindow(IEditorWindow* window)
 {
 	mEditorWindows.Add(window);
 }

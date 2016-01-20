@@ -120,7 +120,7 @@ void ToolsPanel::InitializeToolsPanel()
 	mEditToolsPanel->AddChild(mScaleToolToggle);
 	mEditToolsPanel->AddChild(mFrameToolToggle);
 
-	mArrowToolToggle->toggleGroup = mnew UIToggleGroup();
+	mArrowToolToggle->toggleGroup = mnew UIToggleGroup(UIToggleGroup::Type::OnlySingleTrue);
 	mBrushToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
 	mMoveToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
 	mRotateToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;

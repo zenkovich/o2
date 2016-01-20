@@ -5,11 +5,10 @@
 class SceneWindow: public IEditorWindow
 {
 public:
+	IOBJECT(SceneWindow);
+
+protected:
 	SceneWindow();
-
-	SceneWindow(const SceneWindow& other);
-
 	~SceneWindow();
-
-	SERIALIZABLE(SceneWindow);
+	SceneWindow(const SceneWindow& other);
 };

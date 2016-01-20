@@ -6,7 +6,7 @@
 namespace o2
 {
 	UILabel::UILabel():
-		mHorOverflow(HorOverflow::None), mVerOverflow(VerOverflow::None)
+		mHorOverflow(HorOverflow::None), mVerOverflow(VerOverflow::None), mTextLayer(nullptr)
 	{
 		InitializeProperties();
 	}
@@ -288,10 +288,10 @@ namespace o2
 			child->UpdateLayout();
 	}
 
-	void UILabel::OnLayerAdded(Ptr<UIWidgetLayer> layer)
+	void UILabel::OnLayerAdded(UIWidgetLayer* layer)
 	{
 		if (layer->name == "text" && layer->drawable && layer->drawable->GetType() == *Text::type)
-			mTextLayer = layer->drawable.Cast<Text>();
+			mTextLayer = (Text*)layer->drawable;
 	}
 
 	void UILabel::InitializeProperties()

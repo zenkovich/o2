@@ -3,7 +3,7 @@
 #include "Application/Input.h"
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Containers/Vector.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Singleton.h"
 
 // Events system accessor macros
@@ -22,17 +22,17 @@ namespace o2
 	class EventSystem: public Singleton<EventSystem>
 	{
 	public:
-		typedef Vector<Ptr<CursorEventsListener>>      CursEventsListenersVec;
-		typedef Vector<Ptr<DragEventsListener>>        DragEventsListenersVec;
-		typedef Vector<Ptr<KeyboardEventsListener>>    KeybEventsListenersVec;
-		typedef Vector<Ptr<ApplicationEventsListener>> AppEventsListenersVec;
+		typedef Vector<CursorEventsListener*>      CursEventsListenersVec;
+		typedef Vector<DragEventsListener*>        DragEventsListenersVec;
+		typedef Vector<KeyboardEventsListener*>    KeybEventsListenersVec;
+		typedef Vector<ApplicationEventsListener*> AppEventsListenersVec;
 
 	public:
 		// Returns drag event listener under cursor
-		Ptr<DragEventsListener> GetDragListenerUnderCursor(CursorId cursorId) const;
+		DragEventsListener* GetDragListenerUnderCursor(CursorId cursorId) const;
 
 		// Returns drag event listener under cursor
-		Ptr<CursorEventsListener> GetCursorListenerUnderCursor(CursorId cursorId) const;
+		CursorEventsListener* GetCursorListenerUnderCursor(CursorId cursorId) const;
 
 		// Returns all cursor listeners under cursor arranged by depth
 		CursEventsListenersVec GetAllCursorListenersUnderCursor(CursorId cursorId) const;
@@ -117,15 +117,15 @@ namespace o2
 		bool IsListenerClipped(float depth, const Vec2F& cursorPos) const;
 
 	protected:
-		CursEventsListenersVec                          mCursorListeners;             // All cursor listeners
-		Dictionary<CursorId, Ptr<CursorEventsListener>> mPressedListeners;            // Pressed listeners for all pressed cursors
-		Ptr<CursorEventsListener>                       mRightButtonPressedListener;  // Right mouse button pressed listener
-		Ptr<CursorEventsListener>                       mMiddleButtonPressedListener; // Middle mouse button pressed listener
-		Dictionary<CursorId, Ptr<CursorEventsListener>> mUnderCursorListeners;        // Under cursor listeners for each cursor
-		Dictionary<CursorId, Ptr<CursorEventsListener>> mLastUnderCursorListeners;    // Under cursor listeners for each cursor on last frame
-		DragEventsListenersVec                          mDragListeners;               // Drag events listeners
-		KeybEventsListenersVec                          mKeyboardListeners;           // Keyboard events listeners
-		AppEventsListenersVec                           mApplicationListeners;        // Application events listeners
+		CursEventsListenersVec                      mCursorListeners;             // All cursor listeners
+		Dictionary<CursorId, CursorEventsListener*> mPressedListeners;            // Pressed listeners for all pressed cursors
+		CursorEventsListener*                       mRightButtonPressedListener;  // Right mouse button pressed listener
+		CursorEventsListener*                       mMiddleButtonPressedListener; // Middle mouse button pressed listener
+		Dictionary<CursorId, CursorEventsListener*> mUnderCursorListeners;        // Under cursor listeners for each cursor
+		Dictionary<CursorId, CursorEventsListener*> mLastUnderCursorListeners;    // Under cursor listeners for each cursor on last frame
+		DragEventsListenersVec                      mDragListeners;               // Drag events listeners
+		KeybEventsListenersVec                      mKeyboardListeners;           // Keyboard events listeners
+		AppEventsListenersVec                       mApplicationListeners;        // Application events listeners
 
 	protected:
 		// Registering cursor events listener
@@ -156,7 +156,6 @@ namespace o2
 		friend class ApplicationEventsListener;
 		friend class CursorEventsListener;
 		friend class DragEventsListener;
-		friend class ITemplPtr<EventSystem>;
 		friend class KeyboardEventsListener;
 		friend class WndProcFunc;
 	};

@@ -15,12 +15,10 @@ int main()
 {
 	MAIN_O2;
 	
-	Ptr<EditorApplication> app = mnew EditorApplication();
-	app.SetupAsRoot();
+	EditorApplication* app = mnew EditorApplication();
 	app->Launch();
-	app.Release();
-
-	o2Memory.CollectGarbage();
+	delete app;
+	delete MemoryManager::instance;
 
 	return 0;
 }

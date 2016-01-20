@@ -49,16 +49,16 @@ namespace o2
 
 	UICustomList::~UICustomList()
 	{
-		mItemSample.Release();
-		mSelectionDrawable.Release();
-		mHoverDrawable.Release();
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mHoverDrawable;
 	}
 
 	UICustomList& UICustomList::operator=(const UICustomList& other)
 	{
-		mItemSample.Release();
-		mSelectionDrawable.Release();
-		mHoverDrawable.Release();
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mHoverDrawable;
 		mVerLayout = nullptr;
 
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
@@ -81,6 +81,9 @@ namespace o2
 
 	void UICustomList::Update(float dt)
 	{
+		if (mFullyDisabled)
+			return;
+
 		UIScrollArea::Update(dt);
 
 		const float rectLerpCoef = 20.0f;
@@ -129,32 +132,32 @@ namespace o2
 			DrawDebugFrame();
 	}
 
-	void UICustomList::SetItemSample(Ptr<UIWidget> sample)
+	void UICustomList::SetItemSample(UIWidget* sample)
 	{
 		RemoveAllItems();
 
-		mItemSample.Release();
+		delete mItemSample;
 		mItemSample = sample;
 
 		UpdateLayout();
 	}
 
-	Ptr<UIWidget> UICustomList::GetItemSample() const
+	UIWidget* UICustomList::GetItemSample() const
 	{
 		return mItemSample;
 	}
 
-	Ptr<UIVerticalLayout> UICustomList::GetLayout() const
+	UIVerticalLayout* UICustomList::GetLayout() const
 	{
 		return mVerLayout;
 	}
 
-	Ptr<UIWidget> UICustomList::AddItem()
+	UIWidget* UICustomList::AddItem()
 	{
 		return mVerLayout->AddChild(mItemSample->Clone());
 	}
 
-	Ptr<UIWidget> UICustomList::AddItem(int position)
+	UIWidget* UICustomList::AddItem(int position)
 	{
 		position = Math::Max(0, position);
 
@@ -164,7 +167,7 @@ namespace o2
 		return mVerLayout->AddChild(mItemSample->Clone(), position);
 	}
 
-	void UICustomList::RemoveItem(Ptr<UIWidget> item)
+	void UICustomList::RemoveItem(UIWidget* item)
 	{
 		mVerLayout->RemoveChild(item);
 	}
@@ -189,18 +192,18 @@ namespace o2
 			return;
 		}
 
-		Ptr<UIWidget> item = mVerLayout->GetChilds().Get(position);
+		UIWidget* item = mVerLayout->GetChilds().Get(position);
 		mVerLayout->RemoveChild(item, false);
 		mVerLayout->AddChild(item, newPosition);
 	}
 
-	void UICustomList::MoveItem(Ptr<UIWidget> item, int newPosition)
+	void UICustomList::MoveItem(UIWidget* item, int newPosition)
 	{
 		mVerLayout->RemoveChild(item, false);
 		mVerLayout->AddChild(item, newPosition);
 	}
 
-	int UICustomList::GetItemPosition(Ptr<UIWidget> item)
+	int UICustomList::GetItemPosition(UIWidget* item)
 	{
 		int i = 0;
 		for (auto child : mVerLayout->GetChilds())
@@ -214,7 +217,7 @@ namespace o2
 		return -1;
 	}
 
-	Ptr<UIWidget> UICustomList::GetItem(int position) const
+	UIWidget* UICustomList::GetItem(int position) const
 	{
 		if (position < 0 || position >= mVerLayout->GetChilds().Count())
 			return nullptr;
@@ -227,7 +230,7 @@ namespace o2
 		mVerLayout->RemoveAllChilds();
 	}
 
-	void UICustomList::SortItems(const Function<bool(const Ptr<UIWidget>&, const Ptr<UIWidget>&)>& sortFunc)
+	void UICustomList::SortItems(const Function<bool(UIWidget*, UIWidget*)>& sortFunc)
 	{
 		mVerLayout->mChilds.Sort(sortFunc);
 	}
@@ -237,7 +240,7 @@ namespace o2
 		return mVerLayout->GetChilds().Count();
 	}
 
-	void UICustomList::SelectItem(Ptr<UIWidget> item)
+	void UICustomList::SelectItem(UIWidget* item)
 	{
 		int lastSelected = mSelectedItem;
 
@@ -273,7 +276,7 @@ namespace o2
 		}
 	}
 
-	Ptr<UIWidget> UICustomList::GetSelectedItem() const
+	UIWidget* UICustomList::GetSelectedItem() const
 	{
 		if (mSelectedItem < 0)
 			return nullptr;
@@ -286,12 +289,12 @@ namespace o2
 		return mSelectedItem;
 	}
 
-	Ptr<Sprite> UICustomList::GetSelectionDrawable() const
+	Sprite* UICustomList::GetSelectionDrawable() const
 	{
 		return mSelectionDrawable;
 	}
 
-	Ptr<Sprite> UICustomList::GetHoverDrawable() const
+	Sprite* UICustomList::GetHoverDrawable() const
 	{
 		return mHoverDrawable;
 	}
@@ -366,7 +369,7 @@ namespace o2
 		mLastSelectCheckCursor = cursor.mPosition;
 
 		int itemIdx = -1;
-		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
 
 		UpdateSelection(itemIdx, itemUnderCursor);
 	}
@@ -378,7 +381,7 @@ namespace o2
 			*pressedState = false;
 
 		int itemIdx = -1;
-		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
 		
 		onSelectedItem(itemUnderCursor);
 		onSelectedPos(itemIdx);
@@ -412,7 +415,7 @@ namespace o2
 		UpdateHover(cursor.mPosition);
 	}
 
-	Ptr<UIWidget> UICustomList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+	UIWidget* UICustomList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
 	{
 		if (!mVerLayout)
 			return nullptr;
@@ -463,7 +466,7 @@ namespace o2
 	void UICustomList::UpdateHover(const Vec2F& point)
 	{
 		int itemIdx = -1;
-		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
 
 		if (itemIdx < 0)
 		{
@@ -491,7 +494,7 @@ namespace o2
 		}
 	}
 
-	void UICustomList::UpdateSelection(int position, Ptr<UIWidget> item)
+	void UICustomList::UpdateSelection(int position, UIWidget* item)
 	{
 		mSelectedItem = position;
 

@@ -29,16 +29,16 @@ public:
 	~EditorApplication();
 
 	// Returns menu panel
-	Ptr<UIMenuPanel> GetMenuPanel() const;
+	UIMenuPanel* GetMenuPanel() const;
 
 protected:
-	Ptr<Sprite>            mBackground;     // Background sprite
-	Ptr<Sprite>            mBackSign;       // Background o2 signature
-	Ptr<WindowsManager>    mWindowsManager; // Windows manager
-	Ptr<ApplicationConfig> mConfig;         // Application configuration
-	Ptr<ToolsPanel>        mToolsPanel;     // Tools panel
+	Sprite*            mBackground;     // Background sprite
+	Sprite*            mBackSign;       // Background o2 signature
+	WindowsManager*    mWindowsManager; // Windows manager
+	ApplicationConfig* mConfig;         // Application configuration
+	ToolsPanel*        mToolsPanel;     // Tools panel
 
-	Ptr<UIMenuPanel>       mMenuPanel;      // Menu panel
+	UIMenuPanel*       mMenuPanel;      // Menu panel
 
 protected:
 	// Calling on updating

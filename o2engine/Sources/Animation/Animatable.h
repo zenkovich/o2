@@ -5,7 +5,7 @@
 #include "Utils/Debug.h"
 
 namespace o2
-{	
+{
 	// ---------------------------
 	// Animatable object interface
 	// ---------------------------
@@ -28,17 +28,17 @@ namespace o2
 		virtual void Update(float dt);
 
 		// Adds new animation state and returns him
-		Ptr<AnimationState> AddState(Ptr<AnimationState> state);
+		AnimationState* AddState(AnimationState* state);
 
 		// Adds new animation state and returns him
-		Ptr<AnimationState> AddState(const String& name, const Animation& animation,
-									 const AnimationMask& mask, float weight);
+		AnimationState* AddState(const String& name, const Animation& animation,
+								 const AnimationMask& mask, float weight);
 
 		// Adds new animation state and returns him
-		Ptr<AnimationState> AddState(const String& name);
+		AnimationState* AddState(const String& name);
 
 		// Removes animation state
-		void RemoveState(Ptr<AnimationState> state);
+		void RemoveState(AnimationState* state);
 
 		// Removes animation state by name
 		void RemoveState(const String& name);
@@ -47,31 +47,31 @@ namespace o2
 		void RemoveAllStates();
 
 		// Returns state with specified name. Returns nullptr if can't find state with specified name
-		Ptr<AnimationState> GetState(const String& name);
+		AnimationState* GetState(const String& name);
 
 		// Returns all states array
 		const AnimationStatesVec& GetStates() const;
 
 		// Creates new state and plays him
-		Ptr<AnimationState> Play(const Animation& animation, const String& name);
+		AnimationState* Play(const Animation& animation, const String& name);
 
 		// Creates new state and plays him
-		Ptr<AnimationState> Play(const Animation& animation);
+		AnimationState* Play(const Animation& animation);
 
 		// Searches animation state with name and plays him
-		Ptr<AnimationState> Play(const String& name);
+		AnimationState* Play(const String& name);
 
 		// Creates new state, and blends animation with duration
-		Ptr<AnimationState> BlendTo(const Animation& animation, const String& name, float duration = 1.0f);
+		AnimationState* BlendTo(const Animation& animation, const String& name, float duration = 1.0f);
 
 		// Creates new state, and blends animation with duration
-		Ptr<AnimationState> BlendTo(const Animation& animation, float duration = 1.0f);
+		AnimationState* BlendTo(const Animation& animation, float duration = 1.0f);
 
 		// Creates new state, and blends animation with duration
-		Ptr<AnimationState> BlendTo(const String& name, float duration = 1.0f);
+		AnimationState* BlendTo(const String& name, float duration = 1.0f);
 
 		// Plays state and blends animation with duration
-		Ptr<AnimationState> BlendTo(Ptr<AnimationState> state, float duration = 1.0f);
+		AnimationState* BlendTo(AnimationState* state, float duration = 1.0f);
 
 		// Stops animation with name
 		void Stop(const String& animationName);
@@ -94,12 +94,12 @@ namespace o2
 			virtual void Update() = 0;
 
 			// Removes animated value from agent
-			virtual void RemoveValue(Ptr<IAnimatedValue> value) = 0;
+			virtual void RemoveValue(IAnimatedValue* value) = 0;
 
 			// Returns is agent hasn't no values
 			virtual bool IsEmpty() const = 0;
 		};
-		typedef Vector<Ptr<IValueAgent>> ValueAgentsVec;
+		typedef Vector<IValueAgent*> ValueAgentsVec;
 
 		// ------------------------------
 		// Template value assigning agent
@@ -107,18 +107,18 @@ namespace o2
 		template<typename _type>
 		struct ValueAgent: public IValueAgent
 		{
-			typedef Dictionary<Ptr<AnimationState>, Ptr<AnimatedValue<_type>>> AnimatedValuesDict;
+			typedef Dictionary<AnimationState*, AnimatedValue<_type>*> AnimatedValuesDict;
 
 			AnimatedValuesDict animValues; // Animated values associated with animation states
 			void*              targetPtr;  // Target value pointer (field or setter)
 
 			void(ValueAgent<_type>::*assignFunc)(_type&); // Current assign function
 
-		    // Updates value and blend
+			// Updates value and blend
 			void Update();
 
 			// Removes animated value from agent
-			void RemoveValue(Ptr<IAnimatedValue> value);
+			void RemoveValue(IAnimatedValue* value);
 
 			// Returns is agent hasn't no values
 			bool IsEmpty() const;
@@ -135,10 +135,10 @@ namespace o2
 		// ----------------------
 		struct BlendState
 		{
-			AnimationStatesVec  mBlendOffStates; // Turning off states
-			Ptr<AnimationState> mBlendOnState;   // Turning on state
-			float               duration;        // Blending duration
-			float               time = -1.0f;    // Current blending remaining time
+			AnimationStatesVec  mBlendOffStates;           // Turning off states
+			AnimationState*     mBlendOnState = nullptr;   // Turning on state
+			float               duration;                  // Blending duration
+			float               time = -1.0f;              // Current blending remaining time
 
 			// Updates work weight by time
 			void Update(float dt);
@@ -151,11 +151,11 @@ namespace o2
 
 	protected:
 		// Removes animated value from agent by path
-		void UnregAnimatedValue(Ptr<IAnimatedValue> value, const String& path);
+		void UnregAnimatedValue(IAnimatedValue* value, const String& path);
 
 		// Registers value by path and state
 		template<typename _type>
-		void RegAnimatedValue(Ptr<AnimatedValue<_type>> value, const String& path, Ptr<AnimationState> state);
+		void RegAnimatedValue(AnimatedValue< _type >* value, const String& path, AnimationState* state);
 
 		friend class Animation;
 		friend class IAnimatedValue;
@@ -165,13 +165,13 @@ namespace o2
 	};
 
 	template<typename _type>
-	void Animatable::RegAnimatedValue(Ptr<AnimatedValue<_type>> value, const String& path, Ptr<AnimationState> state)
+	void Animatable::RegAnimatedValue(AnimatedValue< _type >* value, const String& path, AnimationState* state)
 	{
 		for (auto val : mValues)
 		{
 			if (val->path == path)
 			{
-				Ptr<ValueAgent<_type>> agent = dynamic_cast<ValueAgent<_type>*>(val.Get());
+				ValueAgent< _type>* agent = dynamic_cast<ValueAgent<_type>*>(val);
 
 				if (!agent)
 				{
@@ -184,7 +184,7 @@ namespace o2
 			}
 		}
 
-		Ptr<ValueAgent<_type>> newAgent = mnew ValueAgent<_type>();
+		ValueAgent<_type>* newAgent = mnew ValueAgent <_type>();
 		mValues.Add(newAgent);
 		newAgent->path = path;
 		newAgent->animValues.Add(state, value);
@@ -213,7 +213,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Animatable::ValueAgent<_type>::RemoveValue(Ptr<IAnimatedValue> value)
+	void Animatable::ValueAgent<_type>::RemoveValue(IAnimatedValue* value)
 	{
 		animValues.RemoveAll([&](auto x) { return x.Value() == value; });
 	}
@@ -221,16 +221,16 @@ namespace o2
 	template<typename _type>
 	void Animatable::ValueAgent<_type>::Update()
 	{
-		Ptr<AnimationState> firstValueState = animValues.GetIdx(0).Key();
-		Ptr<AnimatedValue<_type>> firstValue = animValues.GetIdx(0).Value();
+		AnimationState* firstValueState = animValues.GetIdx(0).Key();
+		AnimatedValue<_type>* firstValue = animValues.GetIdx(0).Value();
 
 		float weightsSum = firstValueState->weight*firstValueState->workWeight*firstValueState->mask.GetNodeWeight(path);
 		_type valueSum = firstValue->GetValue();
 
 		for (int i = 1; i < animValues.Count(); i++)
 		{
-			Ptr<AnimationState> valueState = animValues.GetIdx(i).Key();
-			Ptr<AnimatedValue<_type>> value = animValues.GetIdx(i).Value();
+			AnimationState* valueState = animValues.GetIdx(i).Key();
+			AnimatedValue<_type>* value = animValues.GetIdx(i).Value();
 
 			weightsSum += valueState->weight*valueState->workWeight*valueState->mask.GetNodeWeight(path);
 			valueSum += value->GetValue();

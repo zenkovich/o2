@@ -12,9 +12,9 @@ namespace o2
 	class Component: public ISerializable
 	{
 	public:
-		Getter<Ptr<Actor>> actor;              // Owner actor getter
-		Property<bool>     enabled;            // Enabling property
-		Getter<bool>       enabledInHierarchy; // Is enabled in hierarchy property
+		Getter<Actor*> actor;              // Owner actor getter
+		Property<bool> enabled;            // Enabling property
+		Getter<bool>   enabledInHierarchy; // Is enabled in hierarchy property
 
 		// Default constructor
 		Component();
@@ -47,30 +47,30 @@ namespace o2
 		bool IsEnabledInHierarchy() const;
 
 		// Returns owner actor
-		Ptr<Actor> GetOwnerActor() const;
+		Actor* GetOwnerActor() const;
 
 		// Returns component with type
 		template<typename _type>
-		Ptr<_type> GetComponent() const;
+		_type* GetComponent() const;
 
 		// Returns component with type in children
 		template<typename _type>
-		Ptr<_type> GetComponentInChildren() const;
+		_type* GetComponentInChildren() const;
 
 		// Returns components with type
 		template<typename _type>
-		Vector<Ptr<_type>> GetComponents() const;
+		Vector<_type>* GetComponents() const;
 
 		// Returns components with type in children
 		template<typename _type>
-		Vector<Ptr<_type>> GetComponentsInChildren() const;
+		Vector<_type>* GetComponentsInChildren() const;
 
 		SERIALIZABLE(Component);
 
 	protected:
-		Ptr<Actor> mOwner;      // Owner actor
-		bool       mEnabled;    // Is component enabled @SERIALIZABLE
-		bool       mResEnabled; // Is component enabled in hierarchy
+		Actor* mOwner;      // Owner actor
+		bool   mEnabled;    // Is component enabled @SERIALIZABLE
+		bool   mResEnabled; // Is component enabled in hierarchy
 
 	protected:
 		// Updates component enable
@@ -80,7 +80,7 @@ namespace o2
 		virtual void OnTransformChanged() {}
 
 		// Sets owner actor
-		virtual void SetOwnerActor(Ptr<Actor> actor);
+		virtual void SetOwnerActor(Actor* actor);
 
 		// Initializes properties
 		void InitializeProperties();
@@ -89,25 +89,25 @@ namespace o2
 	};
 
 	template<typename _type>
-	Vector<Ptr<_type>> Component::GetComponentsInChildren() const
+	Vector<_type>* Component::GetComponentsInChildren() const
 	{
 		if (mOwner)
 			return mOwner->GetComponentsInChildren();
 
-		return Vector<Ptr<_type>>();
+		return Vector<_type>*();
 	}
 
 	template<typename _type>
-	Vector<Ptr<_type>> Component::GetComponents() const
+	Vector<_type>* Component::GetComponents() const
 	{
 		if (mOwner)
 			return mOwner->GetComponents();
 
-		return Vector<Ptr<_type>>();
+		return Vector<_type>*();
 	}
 
 	template<typename _type>
-	Ptr<_type> Component::GetComponentInChildren() const
+	_type* Component::GetComponentInChildren() const
 	{
 		if (mOwner)
 			return mOwner->GetComponentInChildren();
@@ -116,7 +116,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Ptr<_type> Component::GetComponent() const
+	_type* Component::GetComponent() const
 	{
 		if (mOwner)
 			return mOwner->GetComponent();

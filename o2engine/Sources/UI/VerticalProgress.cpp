@@ -3,7 +3,8 @@
 namespace o2
 {
 	UIVerticalProgress::UIVerticalProgress():
-		mValue(0), mMinValue(0), mMaxValue(1), mOrientation(Orientation::Down), mScrollSense(1.0f)
+		mValue(0), mMinValue(0), mMaxValue(1), mOrientation(Orientation::Down), mScrollSense(1.0f), mBarLayer(nullptr),
+		mBackLayer(nullptr)
 	{
 		InitializeProperties();
 	}
@@ -274,7 +275,7 @@ namespace o2
 		UpdateLayersLayouts();
 	}
 
-	void UIVerticalProgress::OnLayerAdded(Ptr<UIWidgetLayer> layer)
+	void UIVerticalProgress::OnLayerAdded(UIWidgetLayer* layer)
 	{
 		if (layer->name == "back")
 			mBackLayer = layer;

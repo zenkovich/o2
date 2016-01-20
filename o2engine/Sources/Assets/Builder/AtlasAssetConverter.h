@@ -62,9 +62,9 @@ namespace o2
 		// ------------------------
 		struct ImagePackDef
 		{
-			Ptr<Bitmap>               mBitmap;    // Image bitmap pointer
-			Ptr<RectsPacker::Rect>    mPackRect;  // Image pack rectangle pointer
-			Ptr<AssetTree::AssetNode> mAssetInfo; // Asset information
+			Bitmap*               mBitmap = nullptr;    // Image bitmap pointer
+			RectsPacker::Rect*    mPackRect = nullptr;  // Image pack rectangle pointer
+			AssetTree::AssetNode* mAssetInfo = nullptr; // Asset information
 
 			// Check equal operator
 			bool operator==(const ImagePackDef& other) const;
@@ -79,13 +79,13 @@ namespace o2
 		void CheckRebuildingAtlases();
 
 		// Checks atlas for rebuilding
-		void CheckAtlasRebuilding(Ptr<AssetTree::AssetNode> atlasInfo);
+		void CheckAtlasRebuilding(AssetTree::AssetNode* atlasInfo);
 
 		// Returns true if atlas needs to rebuild
 		bool IsAtlasNeedRebuild(ImagesVec& currentImages, ImagesVec& lastImages);
 
 		// Rebuilds atlas
-		void RebuildAtlas(Ptr<AssetTree::AssetNode> atlasInfo, ImagesVec& images);
+		void RebuildAtlas(AssetTree::AssetNode* atlasInfo, ImagesVec& images);
 
 		// Saves image asset data
 		void SaveImageAsset(ImagePackDef& imgDef);

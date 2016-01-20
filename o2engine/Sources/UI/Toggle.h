@@ -16,22 +16,26 @@ namespace o2
 	class UIToggleGroup
 	{
 	public:
-		typedef Vector<Ptr<UIToggle>> TogglesVec;
+		typedef Vector<UIToggle*> TogglesVec;
+		enum class Type { OnlySingleTrue, VerOneClick, HorOneClick };
 
 	public:
-		UIToggleGroup();
+		UIToggleGroup(Type type);
 		~UIToggleGroup();
 
-		void AddToggle(Ptr<UIToggle> toggle);
-		void RemoveToggle(Ptr<UIToggle> toggle);
+		void AddToggle(UIToggle* toggle);
+		void RemoveToggle(UIToggle* toggle);
 
 		const TogglesVec& GetToggles() const;
 
 	protected:
-		TogglesVec    mToggles; 
-		Ptr<UIToggle> mOwner;
+		bool       mPressed;
+		bool       mPressedValue;
+		TogglesVec mToggles; 
+		UIToggle*  mOwner;
+		Type       mType;
 
-		void OnToggled(Ptr<UIToggle> toggle);
+		void OnToggled(UIToggle* toggle);
 
 		friend class UIToggle;
 	};
@@ -39,11 +43,12 @@ namespace o2
 	class UIToggle: public UIWidget, public CursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		Property<WString>            caption;     // Caption property. Searches text layer with name "caption" or creates them if he's not exist
-		Property<bool>               value;       // Current state value property
-		Property<Ptr<UIToggleGroup>> toggleGroup; // Toggle group property
-		Function<void()>             onClick;     // Click event
-		Function<void(bool)>         onToggle;    // Toggle event
+		Property<WString>        caption;        // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+		Property<bool>           value;          // Current state value property
+		Property<UIToggleGroup*> toggleGroup;    // Toggle group property
+		Function<void()>         onClick;        // Click event
+		Function<void(bool)>     onToggle;       // Toggle event
+		Function<void(bool)>     onToggleByUser; // Toggle by user event 
 
 		// Default constructor
 		UIToggle();
@@ -56,6 +61,9 @@ namespace o2
 
 		// Destructor
 		~UIToggle();
+
+		// Updates drawables, states and widget
+		void Update(float dt);
 
 		// Sets caption of button. Searches text layer with name "caption". If can't find this layer, creates them
 		void SetCaption(const WString& text);
@@ -79,18 +87,18 @@ namespace o2
 		bool IsSelectable() const;
 
 		// Sets toggle group
-		void SetToggleGroup(Ptr<UIToggleGroup> toggleGroup);
+		void SetToggleGroup(UIToggleGroup* toggleGroup);
 
 		// Returns toggle group
-		Ptr<UIToggleGroup> GetToggleGroup() const;
+		UIToggleGroup* GetToggleGroup() const;
 
 		SERIALIZABLE(UIToggle);
 
 	protected:
-		bool               mValue;       // Current value
-		Ptr<Text>          mCaptionText; // Caption layer text
-		Ptr<UIWidgetLayer> mBackLayer;   // Background layer
-		Ptr<UIToggleGroup> mToggleGroup; // Toggle group
+		bool           mValue;       // Current value
+		Text*          mCaptionText; // Caption layer text
+		UIWidgetLayer* mBackLayer;   // Background layer
+		UIToggleGroup* mToggleGroup; // Toggle group
 
 	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true
@@ -116,7 +124,7 @@ namespace o2
 		void OnKeyReleased(const Input::Key& key);
 
 		// Calls when layer added and updates drawing sequence
-		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
+		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Calls when visible was changed
 		void OnVisibleChanged();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Animation/Animation.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Serialization.h"
 #include "Utils/String.h"
 
@@ -53,8 +53,8 @@ namespace o2
 		SERIALIZABLE(UIWidgetState);
 
 	protected:
-		bool          mState; // Current state @SERIALIZABLE
-		Ptr<UIWidget> mOwner; // Owner widget pointer
+		bool      mState; // Current state @SERIALIZABLE
+		UIWidget* mOwner; // Owner widget pointer
 	};
-	typedef Vector<Ptr<UIWidgetState>>  StatesVec;
+	typedef Vector<UIWidgetState*>  StatesVec;
 }

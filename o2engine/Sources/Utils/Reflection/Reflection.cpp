@@ -5,19 +5,19 @@
 namespace o2
 {
 
-	Reflection::Reflection()
+	Reflection::Reflection():
+		mLastGivenTypeId(0)
 	{
 		Type::Dummy::type = mnew Type();
-		Type::Dummy::type.SetupAsRoot();
 	}
 
 	Reflection::~Reflection()
 	{
 		for (auto type : mTypes)
-			type.Release();
+			delete type;
 	}
 
-	const Vector<Ptr<Type>>& Reflection::GetTypes()
+	const Vector<Type*>& Reflection::GetTypes()
 	{
 		return instance->mTypes;
 	}
@@ -27,13 +27,13 @@ namespace o2
 		for (auto type : instance->mTypes)
 		{
 			if (type->Name() == typeName)
-				return type->Sample()->Clone();
+				return type->CreateSample();
 		}
 
 		return nullptr;
 	}
 
-	Ptr<Type> Reflection::GetType(Type::Id id)
+	Type* Reflection::GetType(Type::Id id)
 	{
 		for (auto type : instance->mTypes)
 		{
@@ -42,5 +42,7 @@ namespace o2
 		}
 
 		return nullptr;
-	}	
+	}
+
+	Type* IObject::type = new Type();
 }

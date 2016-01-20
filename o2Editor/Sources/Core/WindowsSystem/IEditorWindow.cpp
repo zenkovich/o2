@@ -8,24 +8,22 @@ IEditorWindow::IEditorWindow()
 {
 	if (Application::IsReady())
 	{
-		mWindow = o2UI.CreateWidget<UIWindow>();
-		o2UI.AddWidget(mWindow);
-	}
-}
-
-IEditorWindow::IEditorWindow(const IEditorWindow& other)
-{
-	if (Application::IsReady())
-	{
 		mWindow = o2UI.CreateWidget<UIDockableWindow>();
 		mWindow->layout.size = Vec2F(200, 200);
 		o2UI.AddWidget(mWindow);
 	}
 }
 
+IEditorWindow::IEditorWindow(const IEditorWindow& other):
+	mWindow(other.mWindow->Clone())
+{
+	if (mWindow)
+		o2UI.AddWidget(mWindow);
+}
+
 IEditorWindow::~IEditorWindow()
 {
-	mWindow.Release();
+	delete mWindow;
 }
 
 void IEditorWindow::Show()

@@ -64,7 +64,7 @@ namespace o2
 		auto converterTypes = IAssetConverter::type->DerivedTypes();
 		for (auto converterType : converterTypes)
 		{
-			Ptr<IAssetConverter> converter = converterType->CreateSample();
+			IAssetConverter* converter = (IAssetConverter*)converterType->CreateSample();
 			converter->SetAssetsBuilder(this);
 			auto availableAssetTypes = converter->GetProcessingAssetsTypes();
 			for (auto tp : availableAssetTypes)
@@ -216,7 +216,7 @@ namespace o2
 							{
 								GetAssetConverter(srcAssetInfo->mType)->ConvertAsset(*srcAssetInfo);
 								buildedAssetInfo->mTime = srcAssetInfo->mTime;
-								buildedAssetInfo->mMeta.Release();
+								delete buildedAssetInfo->mMeta;
 								buildedAssetInfo->mMeta = static_cast<Asset::IMetaInfo*>(srcAssetInfo->mMeta->Clone());
 
 								mModifiedAssets.Add(buildedAssetInfo);
@@ -235,7 +235,7 @@ namespace o2
 
 								buildedAssetInfo->mPath = srcAssetInfo->mPath;
 								buildedAssetInfo->mTime = srcAssetInfo->mTime;
-								buildedAssetInfo->mMeta.Release();
+								delete buildedAssetInfo->mMeta;
 								buildedAssetInfo->mMeta = static_cast<Asset::IMetaInfo*>(srcAssetInfo->mMeta->Clone());
 								buildedAssetInfo->mId = buildedAssetInfo->mMeta->ID();
 
@@ -255,7 +255,7 @@ namespace o2
 
 								buildedAssetInfo->mPath = srcAssetInfo->mPath;
 								buildedAssetInfo->mTime = srcAssetInfo->mTime;
-								buildedAssetInfo->mMeta.Release();
+								delete buildedAssetInfo->mMeta;
 								buildedAssetInfo->mMeta = static_cast<Asset::IMetaInfo*>(srcAssetInfo->mMeta->Clone());
 
 								mBuildedAssetsTree.AddAsset(buildedAssetInfo);
@@ -302,7 +302,7 @@ namespace o2
 
 				mLog->Out("New asset: %s", (*srcAssetInfoIt)->mPath);
 
-				Ptr<AssetTree::AssetNode> newBuildedAsset = mnew AssetTree::AssetNode();
+				AssetTree::AssetNode* newBuildedAsset = mnew AssetTree::AssetNode();
 				newBuildedAsset->mPath = (*srcAssetInfoIt)->mPath;
 				newBuildedAsset->mType = (*srcAssetInfoIt)->mType;
 				newBuildedAsset->mTime = (*srcAssetInfoIt)->mTime;
@@ -322,9 +322,9 @@ namespace o2
 		mStdAssetConverter.AssetsPostProcess();
 	}
 
-	void AssetsBuilder::GenerateMeta(Ptr<Type> assetType, const String& metaFullPath)
+	void AssetsBuilder::GenerateMeta(Type* assetType, const String& metaFullPath)
 	{
-		auto assetTypeSample = static_cast<const Asset*>(assetType->Sample());
+		auto assetTypeSample = (Asset*)assetType->CreateSample();
 		auto assetTypeSampleMeta = assetTypeSample->GetMeta();
 
 		DataNode metaData;
@@ -332,9 +332,11 @@ namespace o2
 		*metaData["Value/mId"] = Assets::GetRandomAssetId();
 
 		metaData.SaveToFile(metaFullPath);
+
+		delete assetTypeSample;
 	}
 
-	Ptr<IAssetConverter> AssetsBuilder::GetAssetConverter(Type::Id assetTypeId)
+	IAssetConverter* AssetsBuilder::GetAssetConverter(Type::Id assetTypeId)
 	{
 		if (mAssetConverters.ContainsKey(assetTypeId))
 			return mAssetConverters[assetTypeId];

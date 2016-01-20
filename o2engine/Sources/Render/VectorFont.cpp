@@ -43,7 +43,7 @@ namespace o2
 			FT_Done_Face(mFreeTypeFace);
 
 		for (auto effect : mEffects)
-			effect.Release();
+			delete effect;
 	}
 
 	bool VectorFont::Load(const String& fileName)
@@ -111,22 +111,22 @@ namespace o2
 			UpdateCharacters(needToRenderChars);
 	}
 
-	Ptr<VectorFont::Effect> VectorFont::AddEffect(Ptr<Effect> effect)
+	VectorFont::Effect* VectorFont::AddEffect(Effect* effect)
 	{
 		mEffects.Add(effect);
 		return effect;
 	}
 
-	void VectorFont::RemoveEffect(Ptr<Effect> effect)
+	void VectorFont::RemoveEffect(Effect* effect)
 	{
 		mEffects.Remove(effect);
-		effect.Release();
+		delete effect;
 	}
 
 	void VectorFont::RemoveAllEffects()
 	{
 		for (auto effect : mEffects)
-			effect.Release();
+			delete effect;
 
 		mEffects.Clear();
 	}
@@ -164,7 +164,7 @@ namespace o2
 		{
 			CharDef charDef;
 
-			Ptr<Bitmap> charBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, ch.mSize);
+			Bitmap* charBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, ch.mSize);
 
 			RectI srcRect;
 			Vec2F texSize = texBitmap.GetSize();
@@ -205,7 +205,7 @@ namespace o2
 
 			Vec2I glyphSize(glyph->bitmap.width, glyph->bitmap.rows);
 
-			Ptr<Bitmap> newBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, glyphSize + border*2);
+			Bitmap* newBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, glyphSize + border*2);
 			newBitmap->Fill(Color4(255, 255, 255, 0));
 			UInt8* newBitmapData = newBitmap->GetData();
 			Vec2I newBitmapSize = newBitmap->GetSize();
@@ -276,7 +276,7 @@ namespace o2
 
 			mCharacters.Add(def.mCharacter);
 
-			def.mBitmap.Release();
+			delete def.mBitmap;
 		}
 
 		glBindTexture(GL_TEXTURE_2D, mTexture->mHandle);

@@ -14,19 +14,23 @@ namespace o2
 	class Actor: public Animatable
 	{
 	public:
-		typedef Vector<Ptr<Actor>> ActorsVec;
-		typedef Vector<Ptr<Component>> ComponentsVec;
+		typedef Vector<Actor*> ActorsVec;
+		typedef Vector<Component*> ComponentsVec;
 
 	public:
-		Property<String>                        name;               // Actor name property
-		Property<bool>                          enabled;            // Is actor enabled property
-		Getter<bool>                            enabledInHierarchy; // Is actor enabled in hierarchy getter
-		Property<Ptr<Actor>>                    parent;             // Parent actor property
-		Getter<ActorsVec>                       childs;             // Children array getter
-		Accessor<Ptr<Actor>, const String&>     child;              // Children accessor
-		Getter<ComponentsVec>                   components;         // Components array getter
-		Accessor<Ptr<Component>, const String&> component;          // Component accessor by type name
-		ActorTransform                          transform;          // Transformation @SERIALIZABLE
+		Property<String>                    name;               // Actor name property
+		Property<bool>                      enabled;            // Is actor enabled property
+		Getter<bool>                        enabledInHierarchy; // Is actor enabled in hierarchy getter
+		Property<bool>                      locked;             // Is actor locked property
+		Getter<bool>                        lockedInHierarchy;  // Is actor locked in hierarchy getter
+		Property<Actor*>                    parent;             // Parent actor property
+		Getter<ActorsVec>                   childs;             // Children array getter
+		Accessor<Actor*, const String&>     child;              // Children accessor
+		Getter<ComponentsVec>               components;         // Components array getter
+		Accessor<Component*, const String&> component;          // Component accessor by type name
+		ActorTransform                      transform;          // Transformation @SERIALIZABLE
+		Function<void(bool)>                onEnableChanged;    // Enable changing event
+		Function<void(bool)>                onLockChanged;      // Locking changing event
 
 		// Default constructor
 		Actor();
@@ -55,6 +59,9 @@ namespace o2
 		// Returns name
 		String GetName() const;
 
+		// Excludes from scene and will not be update and draw automatically from scene
+		void ExcludeFromScene();
+
 		// Sets actor enabling
 		void SetEnabled(bool active);
 
@@ -70,58 +77,79 @@ namespace o2
 		// Returns is actor enabled in hierarchy
 		bool IsEnabledInHierarchy() const;
 
+		// Sets locking
+		void SetLocked(bool locked);
+
+		// Locks actor
+		void Lock();
+
+		// Unlocks actor
+		void Unlock();
+
+		// Returns is actor locked
+		bool IsLocked() const;
+
+		// Returns is actor locked in hierarchy
+		bool IsLockedInHierarchy() const;
+
+		// Sets index position in parent or scene
+		void SetPositionIndexInParent(int index);
+
 		// Sets parent
-		void SetParent(Ptr<Actor> actor, bool worldPositionStays = true);
+		void SetParent(Actor* actor, bool worldPositionStays = true);
 
 		// Returns parent
-		Ptr<Actor> GetParent() const;
+		Actor* GetParent() const;
 
 		// Add child actor
-		Ptr<Actor> AddChild(Ptr<Actor> actor);
+		Actor* AddChild(Actor* actor);
+
+		// Add child actor
+		Actor* AddChild(Actor* actor, int index);
 
 		// Returns child actor by path (ex "root/some node/other node/target node")
-		Ptr<Actor> GetChild(const String& path) const;
+		Actor* GetChild(const String& path) const;
 
 		// Returns children array
 		ActorsVec GetChilds() const;
 
 		// Removes child and destroys him if needed
-		void RemoveChild(Ptr<Actor> actor, bool release = true);
+		void RemoveChild(Actor* actor, bool release = true);
 
 		// Removes and destroys all childs
 		void RemoveAllChilds();
 
 		// And new component
 		template<typename _type>
-		Ptr<_type> AddComponent();
+		_type* AddComponent();
 
 		// Adds new component
-		Ptr<Component> AddComponent(Ptr<Component> component);
+		Component* AddComponent(Component* component);
 
 		// Removes component
-		void RemoveComponent(Ptr<Component> component, bool release = true);
+		void RemoveComponent(Component* component, bool release = true);
 
 		// Removes all components
 		void RemoveAllComponents();
 
 		// Returns component with type name
-		Ptr<Component> GetComponent(const String& typeName);
+		Component* GetComponent(const String& typeName);
 
 		// Returns component with type
 		template<typename _type>
-		Ptr<_type> GetComponent() const;
+		_type* GetComponent() const;
 
 		// Returns component with type in this and children
 		template<typename _type>
-		Ptr<_type> GetComponentInChildren() const;
+		_type* GetComponentInChildren() const;
 
 		// Return all components by type
 		template<typename _type>
-		Vector<Ptr<_type>> GetComponents() const;
+		Vector<_type>* GetComponents() const;
 
 		// Returns all components by type in this and children
 		template<typename _type>
-		Vector<Ptr<_type>> GetComponentsInChildren() const;
+		Vector<_type>* GetComponentsInChildren() const;
 
 		// Returns all components
 		ComponentsVec GetComponents() const;
@@ -131,28 +159,37 @@ namespace o2
 	protected:
 		String         mName;        // Name of actor @SERIALIZABLE
 
-		Ptr<Actor>     mParent;      // Parent actor
+		Actor*         mParent;      // Parent actor
 		ActorsVec      mChilds;      // Children actors @SERIALIZABLE
 		ComponentsVec  mCompontents; // Components vector @SERIALIZABLE
 					   
 		bool           mEnabled;     // Is actor enabled @SERIALIZABLE
 		bool           mResEnabled;  // Is actor enabled in hierarchy
 
+		bool           mLocked;      // Is actor locked @SERIALIZABLE
+		bool           mResLocked;   // Is actor locked in hierarchy
+
 	protected:
 		// Calls when transformation was changed
 		void OnTransformChanged();
 
 		// Sets parent
-		void SetParentProp(Ptr<Actor> actor);
+		void SetParentProp(Actor* actor);
 
 		// Updates enabling
 		void UpdateEnabled();
 
+		// Updates locking
+		void UpdateLocking();
+
+		// Completion deserialization callback
+		void OnDeserialized(const DataNode& node);
+
 		// Returns dictionary of all children by names
-		Dictionary<String, Ptr<Actor>> GetAllChilds();
+		Dictionary<String, Actor*> GetAllChilds();
 
 		// Returns dictionary of all components by type names
-		Dictionary<String, Ptr<Component>> GetAllComponents();
+		Dictionary<String, Component*> GetAllComponents();
 
 		// Initializes properties
 		void InitializeProperties();
@@ -163,9 +200,9 @@ namespace o2
 	};
 
 	template<typename _type>
-	Vector<Ptr<_type>> Actor::GetComponentsInChildren() const
+	Vector<_type>* Actor::GetComponentsInChildren() const
 	{
-		Vector<Ptr<_type>> res = GetComponents<_type>();
+		Vector<_type>> res = GetComponents<_type*();
 
 		for (auto child : mChilds)
 			res.Add(child->GetComponentsInChildren<_type>());
@@ -174,9 +211,9 @@ namespace o2
 	}
 
 	template<typename _type>
-	Ptr<_type> Actor::GetComponentInChildren() const
+	_type* Actor::GetComponentInChildren() const
 	{
-		Ptr<_type> res = GetComponent<_type>();
+		_type> res = GetComponent<_type*();
 
 		if (res)
 			return res;
@@ -192,7 +229,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Ptr<_type> Actor::GetComponent() const
+	_type* Actor::GetComponent() const
 	{
 		for (auto comp : mCompontents)
 		{
@@ -204,9 +241,9 @@ namespace o2
 	}
 
 	template<typename _type>
-	Vector<Ptr<_type>> Actor::GetComponents() const
+	Vector<_type>* Actor::GetComponents() const
 	{
-		Vector<Ptr<_type>> res;
+		Vector<_type>* res;
 		for (auto comp : mCompontents)
 		{
 			if (comp->GetType() == *_type::type)
@@ -217,12 +254,12 @@ namespace o2
 	}
 
 	template<typename _type>
-	Ptr<_type> Actor::AddComponent()
+	_type* Actor::AddComponent()
 	{
 		if (GetComponent<_type>() != nullptr)
 			return nullptr;
 
-		Ptr<_type> newComponent = mnew _type();
+		_type* newComponent = mnew _type();
 		AddComponent(newComponent);
 		return newComponent;
 	}

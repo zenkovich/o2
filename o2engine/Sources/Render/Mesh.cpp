@@ -5,7 +5,7 @@
 namespace o2
 {
 	Mesh::Mesh(TextureRef texture /*= TextureRef()*/, UInt vertexCount /*= 4*/, UInt polyCount /*= 2*/):
-		vertices(NULL), indexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), vertexCount(0), polyCount(0)
+		vertices(nullptr), indexes(nullptr), mMaxPolyCount(0), mMaxVertexCount(0), vertexCount(0), polyCount(0)
 	{
 		SetTexture(texture);
 		Resize(vertexCount, polyCount);
@@ -13,7 +13,7 @@ namespace o2
 	}
 
 	Mesh::Mesh(const Mesh& mesh):
-		vertices(NULL), indexes(NULL), mMaxPolyCount(0), mMaxVertexCount(0), vertexCount(0), polyCount(0)
+		vertices(nullptr), indexes(nullptr), mMaxPolyCount(0), mMaxVertexCount(0), vertexCount(0), polyCount(0)
 	{
 		SetTexture(mesh.mTexture);
 		Resize(mesh.mMaxVertexCount, mesh.mMaxPolyCount);

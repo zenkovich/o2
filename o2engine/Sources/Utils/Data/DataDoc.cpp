@@ -2,99 +2,84 @@
 
 #include "Utils/Data/XmlDataFormat.h"
 #include "Utils/FileSystem/File.h"
+#include "Utils/Memory/MemoryManager.h"
 #include "Utils/Serialization.h"
 
 namespace o2
 {
-	DataNode::DataNode() :
+	DataNode::DataNode():
 		mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name) :
 		mName(name), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, char* value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, wchar_t* value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, bool value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 
 	DataNode::DataNode(const WString& name, int value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, float value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, UInt value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, const String& value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, const WString& value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, const Vec2F& value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, const Vec2I& value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, const RectF& value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, const RectI& value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const WString& name, const Color4& value) :
 		mName(name), mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::DataNode(const DataNode& other) :
 		mName(other.mName), mData(other.mData), mParent(nullptr)
 	{
 		for (auto child : other.mChildNodes)
 		{
-			Ptr<DataNode> newNode = mnew DataNode(*child);
+			DataNode* newNode = mnew DataNode(*child);
 			newNode->mParent = this;
 			mChildNodes.Add(newNode);
 		}
 	}
 
-	DataNode::DataNode(const WString& name, ISerializable& value) :
+	DataNode::DataNode(const WString& name, ISerializable& value):
 		mName(mName), mParent(nullptr)
 	{
 		*this = value.Serialize();
@@ -102,8 +87,7 @@ namespace o2
 
 	DataNode::DataNode(int value):
 		mData(value), mParent(nullptr)
-	{
-	}
+	{}
 
 	DataNode::~DataNode()
 	{
@@ -113,7 +97,7 @@ namespace o2
 	DataNode& DataNode::operator=(const DataNode& other)
 	{
 		for (auto child : mChildNodes)
-			child.Release();
+			delete child;
 
 		mChildNodes.Clear();
 
@@ -272,7 +256,7 @@ namespace o2
 	}
 
 
-	Ptr<DataNode> DataNode::operator[](const WString& nodePath)
+	DataNode* DataNode::operator[](const WString& nodePath)
 	{
 		auto node = GetNode(nodePath);
 		if (!node)
@@ -281,10 +265,10 @@ namespace o2
 		return node;
 	}
 
- 	Ptr<DataNode> DataNode::operator[](const char* nodePath)
- 	{
+	DataNode* DataNode::operator[](const char* nodePath)
+	{
 		return operator[]((WString)nodePath);
- 	}
+	}
 
 	bool DataNode::operator==(const DataNode& other) const
 	{
@@ -296,12 +280,12 @@ namespace o2
 		return mName != other.mName || mData != other.mData || mChildNodes != other.mChildNodes;
 	}
 
-	Ptr<DataNode> DataNode::GetParent() const
+	DataNode* DataNode::GetParent() const
 	{
 		return mParent;
 	}
 
-	Ptr<DataNode> DataNode::GetNode(const WString& nodePath) const
+	DataNode* DataNode::GetNode(const WString& nodePath) const
 	{
 		int delPos = nodePath.Find("/");
 		WString pathPart = nodePath.SubStr(0, delPos);
@@ -333,14 +317,14 @@ namespace o2
 		return nullptr;
 	}
 
-	Ptr<DataNode> DataNode::AddNode(const WString& name)
+	DataNode* DataNode::AddNode(const WString& name)
 	{
 		int delPos = name.Find("/");
 		if (delPos >= 0)
 		{
 			WString namePart = name.SubStr(0, delPos);
 
-			Ptr<DataNode> node = GetNode(namePart);
+			DataNode* node = GetNode(namePart);
 			if (!node)
 			{
 				node = mnew DataNode(namePart);
@@ -351,40 +335,40 @@ namespace o2
 			return node->AddNode(name.SubStr(delPos + 1));
 		}
 
-		Ptr<DataNode> newNode = mnew DataNode(name);
+		DataNode* newNode = mnew DataNode(name);
 		newNode->mParent = this;
 		mChildNodes.Add(newNode);
 
 		return newNode;
 	}
 
-	Ptr<DataNode> DataNode::AddNode(const Ptr<DataNode>& node)
+	DataNode* DataNode::AddNode(DataNode* node)
 	{
 		mChildNodes.Add(node);
 		node->mParent = this;
 		return node;
 	}
 
-	bool DataNode::RemoveNode(Ptr<DataNode>& node)
+	bool DataNode::RemoveNode(DataNode* node)
 	{
 		if (!mChildNodes.Contains(node))
 			return false;
 
 		mChildNodes.Remove(node);
-		node.Release();
+		delete node;
 
 		return true;
 	}
 
 	bool DataNode::RemoveNode(const WString& name)
 	{
-		int idx = mChildNodes.FindIdx([&](const Ptr<DataNode>& x) { return x->mName == name; });
+		int idx = mChildNodes.FindIdx([&](DataNode* x) { return x->mName == name; });
 		if (idx < 0)
 			return false;
 
-		Ptr<DataNode> node = mChildNodes.Get(idx);
+		DataNode* node = mChildNodes.Get(idx);
 		mChildNodes.RemoveAt(idx);
-		node.Release();
+		delete node;
 
 		return true;
 	}
@@ -449,17 +433,12 @@ namespace o2
 		return mData;
 	}
 
-	DataNode* DataNode::CreateSample() const
-	{
-		return new DataNode();
-	}
-
 	void DataNode::Clear()
 	{
 		mData.Clear();
 
 		for (auto child : mChildNodes)
-			child.Release();
+			delete child;
 
 		mChildNodes.Clear();
 	}

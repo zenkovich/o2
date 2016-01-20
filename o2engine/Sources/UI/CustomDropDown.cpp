@@ -6,7 +6,7 @@
 namespace o2
 {
 	UICustomDropDown::UICustomDropDown():
-		UIWidget(), mClipLayout(Layout::BothStretch()), mMaxListItems(10)
+		UIWidget(), mClipLayout(Layout::BothStretch()), mMaxListItems(10), mList(nullptr)
 	{
 		mList = mnew UICustomList();
 		mList->mParent = this;
@@ -29,12 +29,12 @@ namespace o2
 
 	UICustomDropDown::~UICustomDropDown()
 	{
-		mList.Release();
+		delete mList;
 	}
 
 	UICustomDropDown& UICustomDropDown::operator=(const UICustomDropDown& other)
 	{
-		mList.Release();
+		delete mList;
 
 		UIWidget::operator=(other);
 
@@ -52,6 +52,9 @@ namespace o2
 
 	void UICustomDropDown::Update(float dt)
 	{
+		if (mFullyDisabled)
+			return;
+
 		UIWidget::Update(dt);
 		mList->Update(dt);
 
@@ -64,11 +67,14 @@ namespace o2
 
 	void UICustomDropDown::Draw()
 	{
+		if (mFullyDisabled)
+			return;
+
 		UIWidget::Draw();
 
 		o2UI.RegTopWidget(mList);
 
-		Ptr<UIWidget> selectedItem = mList->GetSelectedItem();
+		UIWidget* selectedItem = mList->GetSelectedItem();
 		if (selectedItem)
 		{
 			o2Render.EnableScissorTest(mAbsoluteClip);
@@ -95,6 +101,7 @@ namespace o2
 			*openedState = true;
 
 		mList->SetVisible(true);
+		UpdateLayout();
 	}
 
 	void UICustomDropDown::Collapse()
@@ -111,32 +118,32 @@ namespace o2
 		return mList->IsVisible();
 	}
 
-	void UICustomDropDown::SetItemSample(Ptr<UIWidget> sample)
+	void UICustomDropDown::SetItemSample(UIWidget* sample)
 	{
 		mList->SetItemSample(sample);
 	}
 
-	Ptr<UIWidget> UICustomDropDown::GetItemSample() const
+	UIWidget* UICustomDropDown::GetItemSample() const
 	{
 		return mList->GetItemSample();
 	}
 
-	Ptr<UIVerticalLayout> UICustomDropDown::GetLayout() const
+	UIVerticalLayout* UICustomDropDown::GetLayout() const
 	{
 		return mList->GetLayout();
 	}
 
-	Ptr<UIWidget> UICustomDropDown::AddItem()
+	UIWidget* UICustomDropDown::AddItem()
 	{
 		return mList->AddItem();
 	}
 
-	Ptr<UIWidget> UICustomDropDown::AddItem(int position)
+	UIWidget* UICustomDropDown::AddItem(int position)
 	{
 		return mList->AddItem(position);
 	}
 
-	void UICustomDropDown::RemoveItem(Ptr<UIWidget> item)
+	void UICustomDropDown::RemoveItem(UIWidget* item)
 	{
 		mList->RemoveItem(item);
 	}
@@ -151,17 +158,17 @@ namespace o2
 		mList->MoveItem(position, newPosition);
 	}
 
-	void UICustomDropDown::MoveItem(Ptr<UIWidget> item, int newPosition)
+	void UICustomDropDown::MoveItem(UIWidget* item, int newPosition)
 	{
 		mList->MoveItem(item, newPosition);
 	}
 
-	int UICustomDropDown::GetItemPosition(Ptr<UIWidget> item)
+	int UICustomDropDown::GetItemPosition(UIWidget* item)
 	{
 		return mList->GetItemPosition(item);
 	}
 
-	Ptr<UIWidget> UICustomDropDown::GetItem(int position) const
+	UIWidget* UICustomDropDown::GetItem(int position) const
 	{
 		return mList->GetItem(position);
 	}
@@ -171,7 +178,7 @@ namespace o2
 		mList->RemoveAllItems();
 	}
 
-	void UICustomDropDown::SortItems(const Function<bool(const Ptr<UIWidget>&, const Ptr<UIWidget>&)>& sortFunc)
+	void UICustomDropDown::SortItems(const Function<bool(UIWidget*, UIWidget*)>& sortFunc)
 	{
 		mList->SortItems(sortFunc);
 	}
@@ -181,7 +188,7 @@ namespace o2
 		return mList->GetItemsCount();
 	}
 
-	void UICustomDropDown::SelectItem(Ptr<UIWidget> item)
+	void UICustomDropDown::SelectItem(UIWidget* item)
 	{
 		mList->SelectItem(item);
 	}
@@ -191,7 +198,7 @@ namespace o2
 		mList->SelectItemAt(position);
 	}
 
-	Ptr<UIWidget> UICustomDropDown::GetSelectedItem() const
+	UIWidget* UICustomDropDown::GetSelectedItem() const
 	{
 		return mList->GetSelectedItem();
 	}
@@ -201,7 +208,7 @@ namespace o2
 		return mList->GetSelectedItemPosition();
 	}
 
-	Ptr<UICustomList> UICustomDropDown::GetListView() const
+	UICustomList* UICustomDropDown::GetListView() const
 	{
 		return mList;
 	}

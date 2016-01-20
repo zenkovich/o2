@@ -13,9 +13,9 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Getter<char*>         data;     // Data getter
-		Getter<UInt>          dataSize; // Data size getter
-		Getter<Ptr<MetaInfo>> meta;     // Meta information getter
+		Getter<char*>     data;     // Data getter
+		Getter<UInt>      dataSize; // Data size getter
+		Getter<MetaInfo*> meta;     // Meta information getter
 
 		// Default constructor
 		BinaryAsset();
@@ -45,7 +45,7 @@ namespace o2
 		void SetData(char* data, UInt size);
 
 		// Returns meta information
-		Ptr<MetaInfo> GetMeta() const;
+		MetaInfo* GetMeta() const;
 
 		// Returns extensions string
 		const char* GetFileExtensions() const;

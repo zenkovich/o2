@@ -13,25 +13,25 @@ namespace o2
 	class ImageComponent: public DrawableComponent
 	{
 	public:
-		Property<TextureRef>    texture;          // Texture property
-		Property<RectI>         textureSrcRect;   // Texture source rectangle property
-		Property<AssetId>       imageAssetId;     // Image asset id property
-		Setter<String>          imageAssetPath;   // Sets image asset from path
-		Setter<Ptr<ImageAsset>> imageAsset;       // Sets image asset
-		Setter<Ptr<Bitmap>>     bitmap;           // Sets image from bitmap
-		Property<Color4>        leftTopColor;	  // Color of left top corner property
-		Property<Color4>        rightTopColor;	  // Color of right top corner property
-		Property<Color4>        leftBottomColor;  // Color of left bottom corner property
-		Property<Color4>        rightBottomColor; // Color of right bottom corner property
-		Property<SpriteMode>    mode;             // Sprite drawing mode property
-		Property<float>         fill;             // Sprite fill property
-		Property<RectI>         sliceBorder;      // Slice border property
+		Property<TextureRef> texture;          // Texture property
+		Property<RectI>      textureSrcRect;   // Texture source rectangle property
+		Property<AssetId>    imageAssetId;     // Image asset id property
+		Setter<String>       imageAssetPath;   // Sets image asset from path
+		Setter<ImageAsset*>  imageAsset;       // Sets image asset
+		Setter<Bitmap*>      bitmap;           // Sets image from bitmap
+		Property<Color4>     leftTopColor;	  // Color of left top corner property
+		Property<Color4>     rightTopColor;	  // Color of right top corner property
+		Property<Color4>     leftBottomColor;  // Color of left bottom corner property
+		Property<Color4>     rightBottomColor; // Color of right bottom corner property
+		Property<SpriteMode> mode;             // Sprite drawing mode property
+		Property<float>      fill;             // Sprite fill property
+		Property<RectI>      sliceBorder;      // Slice border property
 
 		// Default constructor
 		ImageComponent();
 
 		// Constructor from image asset
-		ImageComponent(Ptr<ImageAsset> image);
+		ImageComponent(ImageAsset* image);
 
 		// Constructor from image asset by path
 		ImageComponent(const String& imagePath);
@@ -46,7 +46,7 @@ namespace o2
 		ImageComponent(const Color4& color);
 
 		// Constructor from bitmap
-		ImageComponent(Ptr<Bitmap> bitmap);
+		ImageComponent(Bitmap* bitmap);
 
 		// Constructor from sprite
 		ImageComponent(const Sprite& sprite);
@@ -124,7 +124,7 @@ namespace o2
 		RectI GetSliceBorder() const;
 
 		// Loads sprite from image asset
-		void LoadFromImage(Ptr<ImageAsset> image);
+		void LoadFromImage(ImageAsset* image);
 
 		// Loads sprite from image asset by path
 		void LoadFromImage(const String& imagePath);
@@ -136,7 +136,7 @@ namespace o2
 		void LoadMonoColor(const Color4& color);
 
 		// Loads sprite from bitmap
-		void LoadFromBitmap(Ptr<Bitmap> bitmap);
+		void LoadFromBitmap(Bitmap* bitmap);
 
 		// Returns image asset id (returns 0 when asset id is unknown)
 		AssetId GetImageId() const;
@@ -163,7 +163,7 @@ namespace o2
 		void OnTransformChanged();
 
 		// Sets owner actor
-		void SetOwnerActor(Ptr<Actor> actor);
+		void SetOwnerActor(Actor* actor);
 
 		// Initializes properties
 		void InitializeProperties();

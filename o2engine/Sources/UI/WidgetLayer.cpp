@@ -6,14 +6,16 @@ namespace o2
 {
 	UIWidgetLayer::UIWidgetLayer():
 		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)), mTransparency(1.0f), mResTransparency(1.0f),
-		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F())
+		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mOwnerWidget(nullptr), mParent(nullptr),
+		drawable(nullptr)
 	{
 		InitializeProperties();
 	}
 
 	UIWidgetLayer::UIWidgetLayer(const UIWidgetLayer& other):
 		mDepth(other.mDepth), name(other.name), layout(other.layout), mTransparency(other.mTransparency), 
-		mResTransparency(1.0f), interactableLayout(other.interactableLayout)
+		mResTransparency(1.0f), interactableLayout(other.interactableLayout), mParent(nullptr), mOwnerWidget(nullptr),
+		drawable(nullptr)
 	{
 		if (other.drawable)
 			drawable = other.drawable->Clone();
@@ -26,14 +28,14 @@ namespace o2
 
 	UIWidgetLayer::~UIWidgetLayer()
 	{
-		drawable.Release();
+		delete drawable;
 	}
 
 	UIWidgetLayer& UIWidgetLayer::operator=(const UIWidgetLayer& other)
 	{
-		drawable.Release();
+		delete drawable;
 		for (auto child : mChilds)
-			child.Release();
+			delete child;
 
 		mChilds.Clear();
 
@@ -63,7 +65,7 @@ namespace o2
 	{
 	} 
 	
-	Ptr<UIWidgetLayer> UIWidgetLayer::AddChild(Ptr<UIWidgetLayer> node)
+	UIWidgetLayer* UIWidgetLayer::AddChild(UIWidgetLayer* node)
 	{
 		if (node->GetParent())
 			node->GetParent()->RemoveChild(node, false);
@@ -77,7 +79,7 @@ namespace o2
 		return node;
 	}
 	
-	bool UIWidgetLayer::RemoveChild(Ptr<UIWidgetLayer> node, bool release /*= true*/)
+	bool UIWidgetLayer::RemoveChild(UIWidgetLayer* node, bool release /*= true*/)
 	{
 		node->mParent = nullptr;
 
@@ -85,7 +87,7 @@ namespace o2
 			return false;
 
 		if (release && node)
-			node.Release();
+			delete node;
 
 		return true;
 	}
@@ -94,27 +96,27 @@ namespace o2
 	{
 		for (auto child : mChilds)
 			if (child)
-				child.Release();
+				delete child;
 
 		mChilds.Clear();
 	}
 	
-	void UIWidgetLayer::SetParent(Ptr<UIWidgetLayer> parent)
+	void UIWidgetLayer::SetParent(UIWidgetLayer* parent)
 	{
 		if (parent)
 		{
-			parent->AddChild(Ptr<UIWidgetLayer>(this));
+			parent->AddChild(this);
 		}
 		else
 		{
 			if (mParent)
-				mParent->RemoveChild(Ptr<UIWidgetLayer>(this), false);
+				mParent->RemoveChild(this, false);
 
 			mParent = nullptr;
 		}
 	}
 	
-	Ptr<UIWidgetLayer> UIWidgetLayer::GetParent() const
+	UIWidgetLayer* UIWidgetLayer::GetParent() const
 	{
 		return mParent;
 	}
@@ -129,13 +131,13 @@ namespace o2
 		return mChilds;
 	}
 
-	Ptr<UIWidgetLayer> UIWidgetLayer::AddChildLayer(const String& name, Ptr<IRectDrawable> drawable,
+	UIWidgetLayer* UIWidgetLayer::AddChildLayer(const String& name, IRectDrawable* drawable,
 													const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		if (Math::Equals(depth, 0.0f))
 			depth = (float)mOwnerWidget->mDrawingLayers.Count();
 
-		Ptr<UIWidgetLayer> layer = mnew UIWidgetLayer();
+		UIWidgetLayer* layer = mnew UIWidgetLayer();
 		layer->depth = depth;
 		layer->name = name;
 		layer->drawable = drawable;
@@ -144,7 +146,7 @@ namespace o2
 		return AddChild(layer);
 	}
 
-	Ptr<UIWidgetLayer> UIWidgetLayer::GetChild(const String& path)
+	UIWidgetLayer* UIWidgetLayer::GetChild(const String& path)
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -215,7 +217,7 @@ namespace o2
 		return mInteractableArea.IsInside(point);
 	}
 
-	void UIWidgetLayer::SetOwnerWidget(Ptr<UIWidget> owner)
+	void UIWidgetLayer::SetOwnerWidget(UIWidget* owner)
 	{
 		mOwnerWidget = owner;
 
@@ -225,7 +227,7 @@ namespace o2
 		UpdateResTransparency();
 	}
 
-	void UIWidgetLayer::OnChildAdded(Ptr<UIWidgetLayer> child)
+	void UIWidgetLayer::OnChildAdded(UIWidgetLayer* child)
 	{
 		child->SetOwnerWidget(mOwnerWidget);
 
@@ -268,9 +270,9 @@ namespace o2
 			child->UpdateResTransparency();
 	}
 
-	Dictionary<String, Ptr<UIWidgetLayer>> UIWidgetLayer::GetAllChildLayers()
+	Dictionary<String, UIWidgetLayer*> UIWidgetLayer::GetAllChildLayers()
 	{
-		Dictionary<String, Ptr<UIWidgetLayer>> res;
+		Dictionary<String, UIWidgetLayer*> res;
 		for (auto layer : mChilds)
 			res.Add(layer->name, layer);
 

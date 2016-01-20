@@ -112,9 +112,9 @@ namespace o2
 		}
 	}
 
-	Ptr<BinaryAsset::MetaInfo> BinaryAsset::GetMeta() const
+	BinaryAsset::MetaInfo* BinaryAsset::GetMeta() const
 	{
-		return mMeta.Cast<MetaInfo>();
+		return (MetaInfo*)mMeta;
 	}
 
 	const char* BinaryAsset::GetFileExtensions() const

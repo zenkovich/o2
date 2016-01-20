@@ -83,14 +83,14 @@ namespace o2
 		SERIALIZABLE(UIVerticalProgress);
 
 	protected:
-		float              mValue;       // Current value @SERIALIZABLE
-		float              mSmoothValue; // Current smoothed value
-		float              mMinValue;    // Minimal value @SERIALIZABLE
-		float              mMaxValue;    // Maximal value @SERIALIZABLE
-		float              mScrollSense; // Scroll sense coefficient @SERIALIZABLE
-		Orientation        mOrientation; // Bar orientation @SERIALIZABLE
-		Ptr<UIWidgetLayer> mBarLayer;    // Bar layer
-		Ptr<UIWidgetLayer> mBackLayer;   // background layer
+		float          mValue;       // Current value @SERIALIZABLE
+		float          mSmoothValue; // Current smoothed value
+		float          mMinValue;    // Minimal value @SERIALIZABLE
+		float          mMaxValue;    // Maximal value @SERIALIZABLE
+		float          mScrollSense; // Scroll sense coefficient @SERIALIZABLE
+		Orientation    mOrientation; // Bar orientation @SERIALIZABLE
+		UIWidgetLayer* mBarLayer;    // Bar layer
+		UIWidgetLayer* mBackLayer;   // background layer
 
 	protected:
 		// Updates layout
@@ -100,7 +100,7 @@ namespace o2
 		void UpdateProgressLayersLayouts();
 
 		// Calls when new layer was added. Here searching bar, back and handle layers
-		void OnLayerAdded(Ptr<UIWidgetLayer> layer);
+		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Gets value from cursor position, depends on orientation
 		void GetValueFromCursor(const Input::Cursor &cursor);

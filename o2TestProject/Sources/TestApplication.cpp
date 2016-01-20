@@ -22,7 +22,8 @@ void TestApplication::OnStarted()
 	mTestScreens.Add(mnew MainTestScreen(this));
 
 	//GoToScreen("MainTestScreen");
-	GoToScreen("UITestScreen");
+	//GoToScreen("UITestScreen");
+	GoToScreen("TextTestScreen");
 }
 
 void TestApplication::OnUpdate(float dt)

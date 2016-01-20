@@ -6,7 +6,8 @@
 
 namespace o2
 {
-	Asset::Asset()
+	Asset::Asset():
+		mMeta(nullptr)
 	{
 		InitializeProperties();
 	}
@@ -23,7 +24,7 @@ namespace o2
 
 	Asset::~Asset()
 	{
-		mMeta.Release();
+		delete mMeta;
 	}
 
 	AssetInfo Asset::GetAssetInfo() const
@@ -38,7 +39,7 @@ namespace o2
 
 	void Asset::SetPath(const String& path)
 	{
-		o2Assets.MoveAsset(Ptr<Asset>(this), mPath);
+		o2Assets.MoveAsset(this, mPath);
 	}
 
 	AssetId Asset::GetAssetId() const
@@ -51,7 +52,7 @@ namespace o2
 		return mMeta->mId;
 	}
 
-	Ptr<Asset::IMetaInfo> Asset::GetMeta() const
+	Asset::IMetaInfo* Asset::GetMeta() const
 	{
 		return mMeta;
 	}
@@ -183,7 +184,7 @@ namespace o2
 		return GetFullPath() + ".meta";
 	}
 
-	Ptr<LogStream> Asset::GetAssetsLogStream() const
+	LogStream* Asset::GetAssetsLogStream() const
 	{
 		return o2Assets.mLog;
 	}
@@ -202,21 +203,21 @@ namespace o2
 		return Asset::type->ID();
 	}
 
-	bool Asset::IMetaInfo::IsEqual(Ptr<IMetaInfo> other) const
+	bool Asset::IMetaInfo::IsEqual(IMetaInfo* other) const
 	{
 		return GetAssetType() == other->GetAssetType() && mId == other->mId;
 	}
 
 	AssetId Asset::IMetaInfo::ID() const
 	{
-		return mId;
+ 		return mId;
 	}
 
 	void Asset::LoadMeta(const String& path)
 	{
 		DataNode metaData;
 		metaData.LoadFromFile(path);
-		mMeta.Release();
+		delete mMeta;
 		mMeta = metaData;
 	}
 

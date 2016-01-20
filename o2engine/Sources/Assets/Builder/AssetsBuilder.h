@@ -26,9 +26,9 @@ namespace o2
 		void BuildAssets(const String& assetsPath, const String& dataAssetsPath, bool forcible = false);
 
 	protected:
-		typedef Dictionary<Type::Id, Ptr<IAssetConverter>> ConvertersDict;
+		typedef Dictionary<Type::Id, IAssetConverter*> ConvertersDict;
 
-		Ptr<LogStream>       mLog;                 // Asset builder log stream
+		LogStream*           mLog;                 // Asset builder log stream
 
 		String               mSourceAssetsPath;    // Source assets path
 		AssetTree            mSourceAssetsTree;    // Source assets tree
@@ -62,17 +62,17 @@ namespace o2
 		// Searches new assets
 		void ProcessNewAssets();
 
-		// Launches converters postprocess
+		// Launches converters post process
 		void ConvertersPostProcess();
 		
 		// Processes folder for missing metas
 		void ProcessMissingMetasCreation(FolderInfo& folder);
 		
 		// Generates meta information file for asset
-		void GenerateMeta(Ptr<Type> assetType, const String& metaFullPath);
+		void GenerateMeta(Type* assetType, const String& metaFullPath);
 
 		// Returns assets converter by asset type
-		Ptr<IAssetConverter> GetAssetConverter(Type::Id assetTypeId);
+		IAssetConverter* GetAssetConverter(Type::Id assetTypeId);
 
 		// Resets builder
 		void Reset();

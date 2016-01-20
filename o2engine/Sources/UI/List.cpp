@@ -8,7 +8,7 @@ namespace o2
 	UIList::UIList():
 		UICustomList()
 	{
-		Ptr<UILabel> itemSample = mnew UILabel();
+		UILabel* itemSample = mnew UILabel();
 		itemSample->horOverflow = UILabel::HorOverflow::Dots;
 		SetItemSample(itemSample);
 
@@ -34,14 +34,14 @@ namespace o2
 
 	int UIList::AddItem(const WString& text)
 	{
-		auto item = UICustomList::AddItem().Cast<UILabel>();
+		auto item = (UILabel*)UICustomList::AddItem();
 		item->text = text;
 		return GetItemsCount() - 1;
 	}
 
 	int UIList::AddItem(const WString& text, int position)
 	{
-		auto item = UICustomList::AddItem(position).Cast<UILabel>();
+		auto item = (UILabel*)UICustomList::AddItem(position);
 		item->text = text;
 		return position;
 	}
@@ -64,7 +64,7 @@ namespace o2
 		int i = 0;
 		for (auto child : mVerLayout->mChilds)
 		{
-			if (child.Cast<UILabel>()->GetText() == text)
+			if (((UILabel*)child)->GetText() == text)
 				return i;
 
 			i++;
@@ -75,7 +75,7 @@ namespace o2
 
 	WString UIList::GetItemText(int position)
 	{
-		auto item = GetItem(position).Cast<UILabel>();
+		auto item = (UILabel*)GetItem(position);
 		if (item)
 			return item->GetText();
 
@@ -86,14 +86,14 @@ namespace o2
 	{
 		Vector<WString> res;
 		for (auto child : mVerLayout->mChilds)
-			res.Add(child.Cast<UILabel>()->GetText());
+			res.Add(((UILabel*)child)->GetText());
 
 		return res;
 	}
 
 	WString UIList::GetSelectedItemText()
 	{
-		auto selectedItem = GetSelectedItem().Cast<UILabel>();
+		auto selectedItem = (UILabel*)GetSelectedItem();
 		if (selectedItem)
 			return selectedItem->GetText();
 

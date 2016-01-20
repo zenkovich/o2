@@ -20,9 +20,9 @@ void TextTestScreen::Load()
 	mFakeWindow.LoadFromImage("ui/UI_window_frame_regular.png");
 	mFakeWindow.size = Vec2F(400, 400);
 
-	//mText.font = FontRef("arial.ttf");
-	mText.font = FontRef("myriad.xml");
-	mText.ctext = "Hello, I'm text\nmulti line\nand many symbols\nha h a h ah\n1 2 3 4 5 6 7 8 9 0";
+	mText.font = FontRef("arial.ttf");
+	//mText.font = FontRef("myriad.xml");
+	mText.text = "Hello, I'm text\nmulti line\nand many symbols\nha h a h ah\n1 2 3 4 5 6 7 8 9 0";
 	//mText.ctext = "abcdefghklmnopqrstuvxyz12345";
 
 	mHandleMin.regularSprite = mnew Sprite("ui/UI_Radio_bk.png");

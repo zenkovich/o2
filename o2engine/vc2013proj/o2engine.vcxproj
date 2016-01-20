@@ -247,9 +247,7 @@
     <ClInclude Include="..\Sources\Utils\Math\Transform.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vector2.h" />
     <ClInclude Include="..\Sources\Utils\Math\Vertex2.h" />
-    <ClInclude Include="..\Sources\Utils\Memory\IPtr.h" />
     <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h" />
-    <ClInclude Include="..\Sources\Utils\Memory\Ptr.h" />
     <ClInclude Include="..\Sources\Utils\Property.h" />
     <ClInclude Include="..\Sources\Utils\RectPacker.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Attribute.h" />
@@ -257,6 +255,7 @@
     <ClInclude Include="..\Sources\Utils\Reflection\Type.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h" />
     <ClInclude Include="..\Sources\Utils\Serialization.h" />
+    <ClInclude Include="..\Sources\Utils\ShortcutKeys.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
     <ClInclude Include="..\Sources\Utils\StackTrace.h" />
@@ -369,6 +368,7 @@
     <ClCompile Include="..\Sources\Utils\Reflection\FieldInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Reflection.cpp" />
+    <ClCompile Include="..\Sources\Utils\ShortcutKeys.cpp" />
     <ClCompile Include="..\Sources\Utils\StackTrace.cpp" />
     <ClCompile Include="..\Sources\Utils\Task.cpp" />
     <ClCompile Include="..\Sources\Utils\TaskManager.cpp" />

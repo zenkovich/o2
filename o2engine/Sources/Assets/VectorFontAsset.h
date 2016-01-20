@@ -16,11 +16,11 @@ namespace o2
 	public:
 		class MetaInfo;
 
-		typedef Vector<Ptr<VectorFont::Effect>> EffectsVec;
+		typedef Vector<VectorFont::Effect*> EffectsVec;
 
 	public:
-		Getter<Ptr<MetaInfo>> meta; // Meta information getter
-		Getter<FontRef>       font; // Font getter
+		Getter<MetaInfo*> meta; // Meta information getter
+		Getter<FontRef>   font; // Font getter
 
         // Default constructor
 		VectorFontAsset();
@@ -41,7 +41,7 @@ namespace o2
 		VectorFontAsset& operator=(const VectorFontAsset& asset);
 
 		// Returns meta information
-		Ptr<MetaInfo> GetMeta() const;
+		MetaInfo* GetMeta() const;
 
 		// Returns font pointer
 		FontRef GetFont() const;
@@ -50,14 +50,14 @@ namespace o2
 		const EffectsVec& GetEffects() const;
 
 		// Adds effect to font
-		void AddEffect(Ptr<VectorFont::Effect> effect);
+		void AddEffect(VectorFont::Effect* effect);
 
 		// Adds effect to font
 		template<typename _type, typename ... _args>
 		void AddEffect(_args ... args);
 
 		// Removes effect from font
-		void RemoveEffect(Ptr<VectorFont::Effect> effect);
+		void RemoveEffect(VectorFont::Effect* effect);
 
 		// Removes all effects
 		void RemoveAllEffects();
@@ -81,7 +81,7 @@ namespace o2
 			Type::Id GetAssetType() const;
 
 			// Returns true if other meta is equal to this
-			bool IsEqual(Ptr<IMetaInfo> other) const;
+			bool IsEqual(IMetaInfo* other) const;
 
 			SERIALIZABLE(MetaInfo);
 

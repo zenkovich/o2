@@ -19,23 +19,23 @@ class ToolsPanel: public Singleton<ToolsPanel>
 public:
 
 protected:
-	Ptr<UIWidget>           mPanelRoot;
+	UIWidget*           mPanelRoot;
 				            
-	Ptr<UIWidget>           mPlayPanel;
-	Ptr<UIToggle>           mPlayToggle;
-	Ptr<UIToggle>           mPauseToggle;
-	Ptr<UIButton>           mStepButton;
-	Ptr<UIDropDown>         mDevicesList;
+	UIWidget*           mPlayPanel;
+	UIToggle*           mPlayToggle;
+	UIToggle*           mPauseToggle;
+	UIButton*           mStepButton;
+	UIDropDown*         mDevicesList;
 
-	Ptr<UIHorizontalLayout> mEditToolsPanel;
-	Ptr<UIToggle>           mArrowToolToggle;
-	Ptr<UIToggle>           mBrushToolToggle;
-	Ptr<UIToggle>           mMoveToolToggle;
-	Ptr<UIToggle>           mRotateToolToggle;
-	Ptr<UIToggle>           mScaleToolToggle;
-	Ptr<UIToggle>           mFrameToolToggle;
+	UIHorizontalLayout* mEditToolsPanel;
+	UIToggle*           mArrowToolToggle;
+	UIToggle*           mBrushToolToggle;
+	UIToggle*           mMoveToolToggle;
+	UIToggle*           mRotateToolToggle;
+	UIToggle*           mScaleToolToggle;
+	UIToggle*           mFrameToolToggle;
 				    
-	Ptr<UIDropDown> mLayoutSchemesList;
+	UIDropDown*         mLayoutSchemesList;
 
 protected:
 	ToolsPanel();
@@ -46,5 +46,4 @@ protected:
 	void InitializeToolsPanel();
 
 	friend class EditorApplication;
-	friend class ITemplPtr<ToolsPanel>;
 };

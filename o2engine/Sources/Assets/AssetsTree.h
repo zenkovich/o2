@@ -20,8 +20,8 @@ namespace o2
 		// ----------------------
 		struct AssetNode: public ITreeNode<AssetNode>, public AssetInfo
 		{ 
-			Ptr<Asset::IMetaInfo> mMeta; // Asset meta
-			TimeStamp             mTime; // Asset edited time
+			Asset::IMetaInfo* mMeta; // Asset meta
+			TimeStamp         mTime; // Asset edited time
 
 		public:
 			// Default constructor
@@ -35,13 +35,13 @@ namespace o2
 
 			SERIALIZABLE(AssetNode);
 		};
-		typedef Vector<Ptr<AssetNode>> AssetsVec;
+		typedef Vector<AssetNode*> AssetsVec;
 
 	public:
-		String         mPath;       // Assets information root path
-		Ptr<LogStream> mLog;        // Log stream
-		AssetsVec      mRootAssets; // Root path assets
-		AssetsVec      mAllAssets;  // All assets
+		String     mPath;       // Assets information root path
+		LogStream* mLog;        // Log stream
+		AssetsVec  mRootAssets; // Root path assets
+		AssetsVec  mAllAssets;  // All assets
 
 	public:
 		// Default constructor
@@ -54,10 +54,10 @@ namespace o2
 		void BuildTree(const String& path);
 
 		// Returns asset by path. (nullptr if not asset with path)
-		Ptr<AssetNode> FindAsset(const String& path) const;
+		AssetNode* FindAsset(const String& path) const;
 
 		// Returns asset by id. (nullptr if not asset with id)
-		Ptr<AssetNode> FindAsset(AssetId id) const;
+		AssetNode* FindAsset(AssetId id) const;
 
 		// Returns asset info by path
 		AssetInfo FindAssetInfo(const String& path) const;
@@ -66,19 +66,19 @@ namespace o2
 		AssetInfo FindAssetInfo(AssetId id) const;
 
 		// Adds asset node information into structure
-		Ptr<AssetNode> AddAsset(Ptr<AssetNode> asset);
+		AssetNode* AddAsset(AssetNode* asset);
 
 		// Removes asset node information from structure
-		void RemoveAsset(Ptr<AssetNode> asset, bool release = true);
+		void RemoveAsset(AssetNode* asset, bool release = true);
 
 		// Clears all information
 		void Clear();
 
 	protected:
 		// Loads assets nodes from folder
-		void LoadFolder(FolderInfo& folder, Ptr<AssetNode> parentAsset);
+		void LoadFolder(FolderInfo& folder, AssetNode* parentAsset);
 
 		// Loads and returns asset by path
-		Ptr<AssetNode> LoadAsset(const String& path, Ptr<AssetNode> parent, const TimeStamp& time);
+		AssetNode* LoadAsset(const String& path, AssetNode* parent, const TimeStamp& time);
 	};
 }

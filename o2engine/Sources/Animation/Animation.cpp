@@ -111,7 +111,7 @@ namespace o2
 	void Animation::Clear()
 	{
 		for (auto val : mAnimatedValues)
-			val.mAnimatedValue.Release();
+			delete val.mAnimatedValue;
 
 		mAnimatedValues.Clear();
 	}
@@ -122,7 +122,7 @@ namespace o2
 		{
 			if (val.mTargetPath == path)
 			{
-				val.mAnimatedValue.Release();
+				delete val.mAnimatedValue;
 				mAnimatedValues.Remove(val);
 				return true;
 			}

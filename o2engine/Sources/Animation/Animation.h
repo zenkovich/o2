@@ -3,7 +3,7 @@
 //#include "Animation/AnimatedValue.h"
 #include "Animation/IAnimation.h"
 #include "Utils/Debug.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Property.h"
 #include "Utils/Reflection/Attribute.h"
 #include "Utils/String.h"
@@ -46,27 +46,27 @@ namespace o2
 
 		// Returns animated value by path (some like "path/abc/cde")
 		template<typename _type>
-		Ptr<AnimatedValue<_type>> GetAnimationValue(const String& path);
+		AnimatedValue<_type>* GetAnimationValue(const String& path);
 
 		// Returns animation value for target (animating target must be setted)
 		template<typename _type>
-		Ptr<AnimatedValue<_type>> GetAnimationValue(_type* target);
+		AnimatedValue<_type>* GetAnimationValue(_type* target);
 
 		// Adds animation value by target(animating target must be setted)
 		template<typename _type>
-		Ptr<AnimatedValue<_type>> AddAnimationValue(_type* target);
+		AnimatedValue<_type>* AddAnimationValue(_type* target);
 
 		// Adds animation value by target(animating target must be setted)
 		template<typename _type>
-		Ptr<AnimatedValue<_type>> AddAnimationValue(Setter<_type>* target);
+		AnimatedValue<_type>* AddAnimationValue(Setter<_type>* target);
 
 		// Adds animation value by target(animating target must be setted)
 		template<typename _type>
-		Ptr<AnimatedValue<_type>> AddAnimationValue(Property<_type>* target);
+		AnimatedValue<_type>* AddAnimationValue(Property<_type>* target);
 
 		// Adds animation value with specified path
 		template<typename _type>
-		Ptr<AnimatedValue<_type>> AddAnimationValue(const String& path);
+		AnimatedValue<_type>* AddAnimationValue(const String& path);
 
 		// Removes animated value for target
 		template<typename _type>
@@ -154,9 +154,9 @@ namespace o2
 		// -----------------------------------
 		struct AnimatedValueDef: public ISerializable
 		{
-			String              mTargetPath;    // Target path @SERIALIZABLE
-			void*               mTargetPtr;     // Target pointer
-			Ptr<IAnimatedValue> mAnimatedValue; // Animated value @SERIALIZABLE
+			String          mTargetPath;              // Target path @SERIALIZABLE
+			void*           mTargetPtr = nullptr;     // Target pointer
+			IAnimatedValue* mAnimatedValue = nullptr; // Animated value @SERIALIZABLE
 
 			// Check equals operator
 			bool operator==(const AnimatedValueDef& other) const;
@@ -176,11 +176,11 @@ namespace o2
 
 		// Returns animated value by path
 		template<typename _type>
-		Ptr<AnimatedValue<_type>> FindValue(const String& path);
+		AnimatedValue<_type>* FindValue(const String& path);
 
 		// Returns animated value by target
 		template<typename _type>
-		Ptr<AnimatedValue<_type>> FindValue(_type* target);
+		AnimatedValue<_type>* FindValue(_type* target);
 
 		// Recalculates maximum duration by animated values
 		void RecalculateDuration();
@@ -195,21 +195,21 @@ namespace o2
 	};
 
 	template<typename _type>
-	Ptr<AnimatedValue<_type>> Animation::FindValue(_type* target)
+	AnimatedValue<_type>* Animation::FindValue(_type* target)
 	{
 		for (auto val : mAnimatedValues)
 			if (val.mTargetPtr == target)
-				return val.mAnimatedValue.Cast<AnimatedValue<_type>>();
+				return (AnimatedValue<_type>*)val.mAnimatedValue;
 
 		return nullptr;
 	}
 
 	template<typename _type>
-	Ptr<AnimatedValue<_type>> Animation::FindValue(const String& path)
+	AnimatedValue<_type>* Animation::FindValue(const String& path)
 	{
 		for (auto val : mAnimatedValues)
 			if (val.mTargetPath == path)
-				return val.mAnimatedValue.Cast<AnimatedValue<_type>>();
+				return (AnimatedValue<_type>*)val.mAnimatedValue;
 
 		return nullptr;
 	}
@@ -217,7 +217,7 @@ namespace o2
 	template<typename _type>
 	void Animation::RemoveAllKeys(_type* target)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(target);
+		AnimatedValue<_type>> animVal = FindValue<_type*(target);
 		if (animVal)
 			animVal->RemoveAllKeys();
 	}
@@ -225,7 +225,7 @@ namespace o2
 	template<typename _type>
 	void Animation::RemoveAllKeys(const String& targetPath)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(targetPath);
+		AnimatedValue<_type>> animVal = FindValue<_type*(targetPath);
 		if (animVal)
 			animVal->RemoveAllKeys();
 	}
@@ -281,7 +281,7 @@ namespace o2
 	template<typename _type>
 	bool Animation::Removekey(_type* target, float position)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(target);
+		AnimatedValue<_type>> animVal = FindValue<_type*(target);
 		if (animVal)
 			return animVal->RemoveKey(position);
 
@@ -291,7 +291,7 @@ namespace o2
 	template<typename _type>
 	bool Animation::Removekey(const String& targetPath, float position)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(targetPath);
+		AnimatedValue<_type>> animVal = FindValue<_type*(targetPath);
 		if (animVal)
 			return animVal->RemoveKey(position);
 
@@ -301,7 +301,7 @@ namespace o2
 	template<typename _type>
 	typename AnimatedValue<_type>::KeysVec Animation::GetKeys(_type* target)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(target);
+		AnimatedValue<_type>> animVal = FindValue<_type*(target);
 		if (animVal)
 			return animVal->GetKeys();
 
@@ -311,7 +311,7 @@ namespace o2
 	template<typename _type>
 	typename AnimatedValue<_type>::KeysVec Animation::GetKeys(const String& path)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(path);
+		AnimatedValue<_type>> animVal = FindValue<_type*(path);
 		if (animVal)
 			return animVal->GetKeys();
 
@@ -321,7 +321,7 @@ namespace o2
 	template<typename _type>
 	void Animation::SetKeys(_type* target, typename const AnimatedValue<_type>::KeysVec& key)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(target);
+		AnimatedValue<_type>> animVal = FindValue<_type*(target);
 		if (!animVal)
 			animVal = AddAnimationValue(target);
 
@@ -331,7 +331,7 @@ namespace o2
 	template<typename _type>
 	void Animation::SetKeys(const String& targetPath, typename const AnimatedValue<_type>::KeysVec& key)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(targetPath);
+		AnimatedValue<_type>> animVal = FindValue<_type*(targetPath);
 		if (!animVal)
 			animVal = AddAnimationValue(targetPath);
 
@@ -341,7 +341,7 @@ namespace o2
 	template<typename _type>
 	void Animation::AddKey(_type* target, float position, typename const AnimatedValue<_type>::Key& key)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(target);
+		AnimatedValue<_type>> animVal = FindValue<_type*(target);
 		if (!animVal)
 			animVal = AddAnimationValue(target);
 
@@ -351,7 +351,7 @@ namespace o2
 	template<typename _type>
 	void Animation::AddKey(const String& targetPath, float position, typename const AnimatedValue<_type>::Key& key)
 	{
-		Ptr<AnimatedValue<_type>> animVal = FindValue<_type>(targetPath);
+		AnimatedValue<_type>> animVal = FindValue<_type*(targetPath);
 		if (!animVal)
 			animVal = AddAnimationValue<_type>(targetPath);
 
@@ -365,7 +365,7 @@ namespace o2
 		{
 			if (val.mTargetPtr == target)
 			{
-				val.mAnimatedValue.Release();
+				delete val.mAnimatedValue;
 				mAnimatedValues.Remove(val);
 				return true;
 			}
@@ -375,7 +375,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Ptr<AnimatedValue<_type>> Animation::AddAnimationValue(_type* target)
+	AnimatedValue<_type>* Animation::AddAnimationValue(_type* target)
 	{
 		if (mTarget)
 		{
@@ -404,14 +404,14 @@ namespace o2
 
 			OnAnimatedValueAdded(def);
 
-			return def.mAnimatedValue.Cast<AnimatedValue<_type>>();
+			return (AnimatedValue<_type>*)def.mAnimatedValue;
 		}
 
 		return nullptr;
 	}
 
 	template<typename _type>
-	Ptr<AnimatedValue<_type>> Animation::AddAnimationValue(const String& path)
+	AnimatedValue<_type>* Animation::AddAnimationValue(const String& path)
 	{
 		AnimatedValueDef def;
 		def.mAnimatedValue = mnew AnimatedValue<_type>();
@@ -439,15 +439,15 @@ namespace o2
 
 		OnAnimatedValueAdded(def);
 
-		return def.mAnimatedValue.Cast<AnimatedValue<_type>>();
+		return (AnimatedValue<_type>*)def.mAnimatedValue;
 	}
 
 	template<typename _type>
-	Ptr<AnimatedValue<_type>> Animation::AddAnimationValue(Setter<_type>* target)
+	AnimatedValue<_type>* Animation::AddAnimationValue(Setter<_type>* target)
 	{
 		if (mTarget)
 		{
-			FieldInfo* fieldInfo;
+			FieldInfo* fieldInfo = nullptr;
 			String path = mTarget->GetType().GetFieldPath(mTarget, target, fieldInfo);
 
 			if (!fieldInfo)
@@ -472,20 +472,20 @@ namespace o2
 
 			OnAnimatedValueAdded(def);
 
-			return def.mAnimatedValue.Cast<AnimatedValue<_type>>();
+			return (AnimatedValue<_type>*)def.mAnimatedValue;
 		}
 
 		return nullptr;
 	}
 
 	template<typename _type>
-	Ptr<AnimatedValue<_type>> Animation::AddAnimationValue(Property<_type>* target)
+	AnimatedValue<_type>* Animation::AddAnimationValue(Property<_type>* target)
 	{
 		return AddAnimationValue(static_cast<Setter<_type>*>(target));
 	}
 
 	template<typename _type>
-	Ptr<AnimatedValue<_type>> Animation::GetAnimationValue(_type* target)
+	AnimatedValue<_type>* Animation::GetAnimationValue(_type* target)
 	{
 		for (auto& val : mAnimatedValues)
 		{
@@ -497,7 +497,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Ptr<AnimatedValue<_type>> Animation::GetAnimationValue(const String& path)
+	AnimatedValue<_type>* Animation::GetAnimationValue(const String& path)
 	{
 		for (auto& val : mAnimatedValues)
 		{

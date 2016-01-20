@@ -6,12 +6,16 @@
 #include "Events/KeyboardEventsListener.h"
 #include "Render/Render.h"
 #include "Utils/Debug.h"
+#include "UI/Widget.h"
 
 namespace o2
 {
+#undef DrawText
+
 	DECLARE_SINGLETON(EventSystem);
 
-	EventSystem::EventSystem()
+	EventSystem::EventSystem():
+		mRightButtonPressedListener(nullptr), mMiddleButtonPressedListener(nullptr)
 	{}
 
 	EventSystem::~EventSystem()
@@ -19,8 +23,8 @@ namespace o2
 
 	void EventSystem::Update(float dt)
 	{
-		mCursorListeners.Sort([](const Ptr<CursorEventsListener>& a, const Ptr<CursorEventsListener>& b) { return a->Depth() > b->Depth(); });
-		mDragListeners.Sort([](const Ptr<DragEventsListener>& a, const Ptr<DragEventsListener>& b) { return a->Depth() > b->Depth(); });
+		mCursorListeners.Sort([](CursorEventsListener* a, CursorEventsListener* b) { return a->Depth() > b->Depth(); });
+		mDragListeners.Sort([](DragEventsListener* a, DragEventsListener* b) { return a->Depth() > b->Depth(); });
 
 		mLastUnderCursorListeners = mUnderCursorListeners;
 		mUnderCursorListeners.Clear();
@@ -75,6 +79,26 @@ namespace o2
 			else
 				ProcessKeyReleased(key);
 		}
+
+		if (o2Input.IsKeyDown(VK_F1))
+		{
+			int line = 0;
+			for (auto kv : mUnderCursorListeners)
+			{
+				auto obj = kv.Value();
+				String name = "unknown";
+
+				if (auto widget = dynamic_cast<UIWidget*>(obj))
+				{
+					name = widget->name;
+					o2Debug.DrawRect(widget->layout.GetAbsoluteRect(), Color4::Red());
+				}
+
+				o2Debug.DrawText(Vec2F(-o2Render.GetResolution().x*0.5f, o2Render.GetResolution().y*0.5f - (float)line), name);
+
+				line += 20;
+			}
+		}
 	}
 
 	void EventSystem::OnApplicationStarted()
@@ -114,7 +138,7 @@ namespace o2
 			if (IsListenerClipped(listener->Depth(), cursor.mPosition) || !listener->IsUnderPoint(cursor.mPosition))
 				continue;
 
-			auto drag = dynamic_cast<DragEventsListener*>(listener.Get());
+			auto drag = dynamic_cast<DragEventsListener*>(listener);
 			if (drag && drag->IsDragging())
 				continue;
 
@@ -148,7 +172,7 @@ namespace o2
 		}
 	}
 
-	Ptr<DragEventsListener> EventSystem::GetDragListenerUnderCursor(CursorId cursorId) const
+	DragEventsListener* EventSystem::GetDragListenerUnderCursor(CursorId cursorId) const
 	{
 		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
 
@@ -168,7 +192,7 @@ namespace o2
 		return nullptr;
 	}
 
-	Ptr<CursorEventsListener> EventSystem::GetCursorListenerUnderCursor(CursorId cursorId) const
+	CursorEventsListener* EventSystem::GetCursorListenerUnderCursor(CursorId cursorId) const
 	{
 		if (mUnderCursorListeners.ContainsKey(cursorId))
 			return mUnderCursorListeners[cursorId];

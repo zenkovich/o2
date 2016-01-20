@@ -100,7 +100,7 @@ namespace o2
 		float GetMouseWheelDelta() const;
 
 		// Returns cursor by id. Returns nullptr if no cursor with specified id
-		Ptr<Cursor> GetCursor(CursorId id);
+		Cursor* GetCursor(CursorId id);
 
 		// Returns cursors vector
 		const CursorsVec& GetCursors() const;

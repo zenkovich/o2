@@ -13,7 +13,7 @@ namespace o2
 		mFont(nullptr)
 	{}
 
-	FontRef::FontRef(Ptr<Font> font):
+	FontRef::FontRef(Font* font):
 		mFont(font)
 	{
 		if (mFont)
@@ -75,12 +75,12 @@ namespace o2
 
 	bool FontRef::IsValid() const
 	{
-		return mFont;
+		return mFont != nullptr;
 	}
 
 	FontRef::operator bool() const
 	{
-		return mFont;
+		return mFont != nullptr;
 	}
 
 	bool FontRef::operator!=(const FontRef& other) const

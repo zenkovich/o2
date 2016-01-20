@@ -3,7 +3,7 @@
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/FileSystem/FileInfo.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
 
@@ -23,7 +23,7 @@ namespace o2
 		typedef Vector<String> StringsVec;
 		typedef Dictionary<FileType, StringsVec> ExtnsionsDict;
 
-		Ptr<LogStream> mLog;           // File system log stream
+		LogStream*     mLog;           // File system log stream
 		ExtnsionsDict  mExtensions;    // Extensions arrays dictionary
 		String         mResourcesPath; // Basic application resources path
 

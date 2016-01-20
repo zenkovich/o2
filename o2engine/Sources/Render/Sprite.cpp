@@ -20,7 +20,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	Sprite::Sprite(Ptr<ImageAsset> image):
+	Sprite::Sprite(ImageAsset* image):
 		mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -76,7 +76,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	Sprite::Sprite(Ptr<Bitmap> bitmap):
+	Sprite::Sprite(Bitmap* bitmap):
 		mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -100,7 +100,7 @@ namespace o2
 
 	Sprite::~Sprite()
 	{
-		mMesh.Release();
+		delete mMesh;
 	}
 
 	Sprite& Sprite::operator=(const Sprite& other)
@@ -254,7 +254,7 @@ namespace o2
 		return mSlices;
 	}
 
-	void Sprite::LoadFromImage(Ptr<ImageAsset> image)
+	void Sprite::LoadFromImage(ImageAsset* image)
 	{
 		if (image)
 		{
@@ -310,7 +310,7 @@ namespace o2
 		UpdateMesh();
 	}
 
-	void Sprite::LoadFromBitmap(Ptr<Bitmap> bitmap)
+	void Sprite::LoadFromBitmap(Bitmap* bitmap)
 	{
 		if (bitmap)
 		{

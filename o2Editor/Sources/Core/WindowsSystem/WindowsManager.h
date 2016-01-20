@@ -20,11 +20,11 @@ namespace o2
 class WindowsManager: public Singleton<WindowsManager>
 {
 public:
-	typedef Vector<Ptr<IEditorWindow>> EditorWindowsVec;
+	typedef Vector<IEditorWindow*> EditorWindowsVec;
 
 public:
 	// Adds new window
-	void AddWindow(Ptr<IEditorWindow> window);
+	void AddWindow(IEditorWindow* window);
 
 protected:
 	const bool mNeedRebuildWndStyle = true; // Is need to rebuild dockable windows style
@@ -51,5 +51,4 @@ protected:
 	void Draw();
 
 	friend class EditorApplication;
-	friend class ITemplPtr<WindowsManager>;
 };

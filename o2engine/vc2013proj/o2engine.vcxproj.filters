@@ -156,13 +156,7 @@
     <ClInclude Include="..\Sources\O2.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Memory\IPtr.h">
-      <Filter>Sources\Utils\Memory</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h">
-      <Filter>Sources\Utils\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Memory\Ptr.h">
       <Filter>Sources\Utils\Memory</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Serialization.h">
@@ -499,6 +493,9 @@
     <ClInclude Include="..\Sources\UI\MenuPanel.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\ShortcutKeys.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -815,6 +812,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\UI\MenuPanel.cpp">
       <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\ShortcutKeys.cpp">
+      <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

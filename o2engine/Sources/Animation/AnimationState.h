@@ -30,7 +30,7 @@ namespace o2
 		SERIALIZABLE(AnimationState);
 
 	protected:
-		Ptr<Animatable> mOwner; // Animatable owner
+		Animatable* mOwner; // Animatable owner
 
 		friend class Animatable;
 		friend class ANimation;
@@ -38,5 +38,5 @@ namespace o2
 		template<typename _type>
 		friend class AnimatedValue;
 	};
-	typedef Vector<Ptr<AnimationState>> AnimationStatesVec;
+	typedef Vector<AnimationState*> AnimationStatesVec;
 }

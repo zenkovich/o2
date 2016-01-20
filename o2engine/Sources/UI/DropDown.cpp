@@ -7,7 +7,7 @@ namespace o2
 	UIDropDown::UIDropDown():
 		UICustomDropDown()
 	{
-		Ptr<UILabel> itemSample = mnew UILabel();
+		UILabel* itemSample = mnew UILabel();
 		itemSample->horOverflow = UILabel::HorOverflow::Dots;
 		SetItemSample(itemSample);
 
@@ -33,14 +33,14 @@ namespace o2
 
 	int UIDropDown::AddItem(const WString& text)
 	{
-		auto item = UICustomDropDown::AddItem().Cast<UILabel>();
+		auto item = (UILabel*)UICustomDropDown::AddItem();
 		item->text = text;
 		return GetItemsCount() - 1;
 	}
 
 	int UIDropDown::AddItem(const WString& text, int position)
 	{
-		auto item = UICustomDropDown::AddItem(position).Cast<UILabel>();
+		auto item = (UILabel*)UICustomDropDown::AddItem(position);
 		item->text = text;
 		return position;
 	}
@@ -63,7 +63,7 @@ namespace o2
 		int i = 0;
 		for (auto child : mList->mVerLayout->mChilds)
 		{
-			if (child.Cast<UILabel>()->GetText() == text)
+			if (((UILabel*)child)->GetText() == text)
 				return i;
 
 			i++;
@@ -74,7 +74,7 @@ namespace o2
 
 	WString UIDropDown::GetItemText(int position)
 	{
-		auto item = GetItem(position).Cast<UILabel>();
+		auto item = (UILabel*)GetItem(position);
 		if (item)
 			return item->GetText();
 
@@ -85,14 +85,14 @@ namespace o2
 	{
 		Vector<WString> res;
 		for (auto child : mList->mVerLayout->mChilds)
-			res.Add(child.Cast<UILabel>()->GetText());
+			res.Add(((UILabel*)child)->GetText());
 
 		return res;
 	}
 
 	WString UIDropDown::GetSelectedItemText()
 	{
-		auto selectedItem = GetSelectedItem().Cast<UILabel>();
+		auto selectedItem = (UILabel*)GetSelectedItem();
 		if (selectedItem)
 			return selectedItem->GetText();
 

@@ -4,7 +4,6 @@
 #include "Assets/AssetsTree.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/FileSystem/FileInfo.h"
-#include "Utils/Memory/Ptr.h"
 #include "Utils/Property.h"
 #include "Utils/Serialization.h"
 #include "Utils/Singleton.h"
@@ -57,25 +56,25 @@ namespace o2
 		const TypesExtsDict GetAssetsExtensionsTypes() const;
 
 		// Returns standard asset type
-		Ptr<Type> GetStdAssetType() const;
+		Type* GetStdAssetType() const;
 
 		// Returns asset type for extension
-		Ptr<Type> GetAssetTypeByExtension(const String& extension) const;
+		Type* GetAssetTypeByExtension(const String& extension) const;
 
 		// Creates new asset
 		template<typename _asset_type>
-		Ptr<_asset_type> CreateAsset();
+		_asset_type* CreateAsset();
 
 		// Loads new asset by path
 		template<typename _asset_type>
-		Ptr<_asset_type> LoadAsset(const String& path);
+		_asset_type* LoadAsset(const String& path);
 
 		// Loads new asset by id
 		template<typename _asset_type>
-		Ptr<_asset_type> LoadAsset(AssetId id);
+		_asset_type* LoadAsset(AssetId id);
 
 		// Loads asset by info
-		Ptr<Asset> LoadAsset(const AssetInfo& info);
+		Asset* LoadAsset(const AssetInfo& info);
 
 		// Returns true if asset exist by path
 		bool IsAssetExist(const String& path) const;
@@ -87,7 +86,7 @@ namespace o2
 		bool IsAssetExist(const AssetInfo& info) const;
 
 		// Removes asset
-		bool RemoveAsset(Ptr<Asset> asset, bool rebuildAssets = true);
+		bool RemoveAsset(Asset* asset, bool rebuildAssets = true);
 
 		// Removes asset by path
 		bool RemoveAsset(const String& path, bool rebuildAssets = true);
@@ -99,7 +98,7 @@ namespace o2
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
 
 		// Moves asset to new path
-		bool MoveAsset(Ptr<Asset> asset, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(Asset* asset, const String& newPath, bool rebuildAssets = true);
 
 		// Moves asset by path to new path
 		bool MoveAsset(const String& path, const String& newPath, bool rebuildAssets = true);
@@ -117,11 +116,11 @@ namespace o2
 		static AssetId GetRandomAssetId();
 
 	protected:
-		AssetTree          mAssetsTree;    // Assets information tree
-		Ptr<LogStream>     mLog;           // Log stream
-		Ptr<AssetsBuilder> mAssetsBuilder; // Assets builder
-		TypesExtsDict      mAssetsTypes;   // Assets types and extensions dictionary
-		Ptr<Type>          mStdAssetType;  // Standard asset type
+		AssetTree      mAssetsTree;    // Assets information tree
+		LogStream*     mLog;           // Log stream
+		AssetsBuilder* mAssetsBuilder; // Assets builder
+		TypesExtsDict  mAssetsTypes;   // Assets types and extensions dictionary
+		Type*          mStdAssetType;  // Standard asset type
 
 	protected:
 		// Loads asset infos
@@ -139,19 +138,19 @@ namespace o2
 
 
 	template<typename _asset_type>
-	Ptr<_asset_type> Assets::CreateAsset()
+	_asset_type* Assets::CreateAsset()
 	{
 		return mnew _asset_type();
 	}
 
 	template<typename _asset_type>
-	Ptr<_asset_type> Assets::LoadAsset(const String& path)
+	_asset_type* Assets::LoadAsset(const String& path)
 	{
 		return mnew _asset_type(path);
 	}
 
 	template<typename _asset_type>
-	Ptr<_asset_type> Assets::LoadAsset(AssetId id)
+	_asset_type* Assets::LoadAsset(AssetId id)
 	{
 		return mnew _asset_type(id);
 	}

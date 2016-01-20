@@ -3,7 +3,7 @@
 #include "Utils/IObject.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Serialization.h"
 
 namespace o2
@@ -194,18 +194,18 @@ namespace o2
 		SERIALIZABLE(UIWidgetLayout);
 
 	protected:
-		Ptr<UIWidget> mOwner;								
-		Vec2F         mPivot          = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
-		Vec2F         mAnchorMin      = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
-		Vec2F         mAnchorMax      = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
-		Vec2F         mOffsetMin      = Vec2F(-10.0f, -10.0f); // @SERIALIZABLE
-		Vec2F         mOffsetMax      = Vec2F(10.0f, 10.0f);   // @SERIALIZABLE
-		Vec2F         mMinSize        = Vec2F(0.0f, 0.0f);	   // @SERIALIZABLE
-		Vec2F         mMaxSize        = Vec2F(10000, 10000);   // @SERIALIZABLE
-		RectF         mAbsoluteRect   = RectF();			 
-		RectF         mLocalRect      = RectF();			  
-		Vec2F         mWeight         = Vec2F(1.0f, 1.0f);	   // @SERIALIZABLE
-		bool          mDrivenByParent = false;
+		UIWidget* mOwner;								
+		Vec2F     mPivot          = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
+		Vec2F     mAnchorMin      = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
+		Vec2F     mAnchorMax      = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
+		Vec2F     mOffsetMin      = Vec2F(-10.0f, -10.0f); // @SERIALIZABLE
+		Vec2F     mOffsetMax      = Vec2F(10.0f, 10.0f);   // @SERIALIZABLE
+		Vec2F     mMinSize        = Vec2F(0.0f, 0.0f);	   // @SERIALIZABLE
+		Vec2F     mMaxSize        = Vec2F(10000, 10000);   // @SERIALIZABLE
+		RectF     mAbsoluteRect   = RectF();			 
+		RectF     mLocalRect      = RectF();			  
+		Vec2F     mWeight         = Vec2F(1.0f, 1.0f);	   // @SERIALIZABLE
+		bool      mDrivenByParent = false;
 
 	protected:
 		void CopyFrom(const UIWidgetLayout& other);
@@ -221,6 +221,7 @@ namespace o2
 		friend class UILabel;
 		friend class UIMenuPanel;
 		friend class UIScrollArea;
+		friend class UIToggle;
 		friend class UITree;
 		friend class UITreeNode;
 		friend class UIVerticalLayout;

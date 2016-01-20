@@ -69,7 +69,7 @@ float UIDockWindowPlace::Depth()
 }
 
 void UIDockWindowPlace::SetResizibleDir(TwoDirection dir, float border,
-										Ptr<UIDockWindowPlace> neighborMin, Ptr<UIDockWindowPlace> neighborMax)
+										UIDockWindowPlace* neighborMin, UIDockWindowPlace* neighborMax)
 {
 	mResizibleDir = dir;
 	float border2 = border*2.0f;
@@ -164,7 +164,7 @@ void UIDockWindowPlace::CheckInteractable()
 	for (auto child : mChilds)
 	{
 		if (child->GetType() == *UIDockWindowPlace::type)
-			child.Cast<UIDockWindowPlace>()->CheckInteractable();
+			((UIDockWindowPlace*)child)->CheckInteractable();
 	}
 }
 

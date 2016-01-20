@@ -13,13 +13,13 @@ namespace o2
 	class UICustomList: public UIScrollArea, public CursorEventsListener
 	{
 	public:
-		Property<Ptr<UIWidget>>       selectedItem;    // Selected item widget property
-		Property<int>                 selectedItemPos; // Selected item position property
-		Accessor<Ptr<UIWidget>, int>  item;            // Items by position accessor
-		Getter<int>                   itemsCount;      // All items count getter
-
-		Function<void(int)>           onSelectedPos;   // Select item position event
-		Function<void(Ptr<UIWidget>)> onSelectedItem;  // Select item event
+		Property<UIWidget*>       selectedItem;    // Selected item widget property
+		Property<int>             selectedItemPos; // Selected item position property
+		Accessor<UIWidget*, int>  item;            // Items by position accessor
+		Getter<int>               itemsCount;      // All items count getter
+								  
+		Function<void(int)>       onSelectedPos;   // Select item position event
+		Function<void(UIWidget*)> onSelectedItem;  // Select item event
 
 		// Default constructor
 		UICustomList();
@@ -40,22 +40,22 @@ namespace o2
 		void Draw();
 
 		// Sets item sample widget. WARNING: Removing all old items!
-		void SetItemSample(Ptr<UIWidget> sample);
+		void SetItemSample(UIWidget* sample);
 
 		// Returns item sample widget
-		Ptr<UIWidget> GetItemSample() const;
+		UIWidget* GetItemSample() const;
 
 		// Returns layout of items
-		Ptr<UIVerticalLayout> GetLayout() const;
+		UIVerticalLayout* GetLayout() const;
 
 		// Adds new item and returns it
-		Ptr<UIWidget> AddItem();
+		UIWidget* AddItem();
 
 		// Adds new item at position and returns it
-		Ptr<UIWidget> AddItem(int position);
+		UIWidget* AddItem(int position);
 
 		// Removes item
-		void RemoveItem(Ptr<UIWidget> item);
+		void RemoveItem(UIWidget* item);
 
 		// Removes item in position
 		void RemoveItem(int position);
@@ -64,40 +64,40 @@ namespace o2
 		void MoveItem(int position, int newPosition);
 
 		// Moves item to new position
-		void MoveItem(Ptr<UIWidget> item, int newPosition);
+		void MoveItem(UIWidget* item, int newPosition);
 
 		// Returns item position
-		int GetItemPosition(Ptr<UIWidget> item);
+		int GetItemPosition(UIWidget* item);
 
 		// Returns item by position
-		Ptr<UIWidget> GetItem(int position) const;
+		UIWidget* GetItem(int position) const;
 
 		// Removes all items
 		void RemoveAllItems();
 
 		// Sorts items
-		void SortItems(const Function<bool(const Ptr<UIWidget>&, const Ptr<UIWidget>&)>& sortFunc);
+		void SortItems(const Function<bool(UIWidget*, UIWidget*)>& sortFunc);
 
 		// Returns items count
 		int GetItemsCount() const;
 
 		// Selects item
-		void SelectItem(Ptr<UIWidget> item);
+		void SelectItem(UIWidget* item);
 
 		// Selects item at position
 		void SelectItemAt(int position);
 
 		// Returns selected item
-		Ptr<UIWidget> GetSelectedItem() const;
+		UIWidget* GetSelectedItem() const;
 
 		// Returns selected item position
 		int GetSelectedItemPosition() const;
 
 		// Returns selection drawable
-		Ptr<Sprite> GetSelectionDrawable() const;
+		Sprite* GetSelectionDrawable() const;
 
 		// Returns hover drawable
-		Ptr<Sprite> GetHoverDrawable() const;
+		Sprite* GetHoverDrawable() const;
 
 		// Sets selection drawable layout (result rectangle will be calculated by item widget absolute rectangle)
 		void SetSelectionDrawableLayout(const Layout& layout);
@@ -123,22 +123,22 @@ namespace o2
 		SERIALIZABLE(UICustomList);
 
 	protected:
-		Ptr<UIVerticalLayout> mVerLayout;             // Child vertical layout
-		Ptr<UIWidget>         mItemSample;            // Item sample widget @SERIALIZABLE
-		Ptr<Sprite>           mSelectionDrawable;     // Selection sprite @SERIALIZABLE
-		Ptr<Sprite>           mHoverDrawable;         // Item hover drawable @SERIALIZABLE
-		Layout                mSelectionLayout;       // Selection layout, result selection area depends on selected item @SERIALIZABLE
-		Layout                mHoverLayout;           // Hover layout, result selection area depends on selected item @SERIALIZABLE
-
-		int                   mSelectedItem;          // Position of current selected item (-1 if no item isn't selected)
-
-		RectF                 mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
-		RectF                 mTargetSelectionRect;   // Target selection rectangle (over selected item)
-		RectF                 mCurrentHoverRect;      // Current hover rectangle (for smoothing)
-		RectF                 mTargetHoverRect;       // Target hover rectangle (over selected item)
-
-		Vec2F                 mLastHoverCheckCursor;  // Last cursor position on hover check
-		Vec2F                 mLastSelectCheckCursor; // Last cursor position on selection check
+		UIVerticalLayout* mVerLayout;             // Child vertical layout
+		UIWidget*         mItemSample;            // Item sample widget @SERIALIZABLE
+		Sprite*           mSelectionDrawable;     // Selection sprite @SERIALIZABLE
+		Sprite*           mHoverDrawable;         // Item hover drawable @SERIALIZABLE
+		Layout            mSelectionLayout;       // Selection layout, result selection area depends on selected item @SERIALIZABLE
+		Layout            mHoverLayout;           // Hover layout, result selection area depends on selected item @SERIALIZABLE
+						  
+		int               mSelectedItem;          // Position of current selected item (-1 if no item isn't selected)
+						  
+		RectF             mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
+		RectF             mTargetSelectionRect;   // Target selection rectangle (over selected item)
+		RectF             mCurrentHoverRect;      // Current hover rectangle (for smoothing)
+		RectF             mTargetHoverRect;       // Target hover rectangle (over selected item)
+						  
+		Vec2F             mLastHoverCheckCursor;  // Last cursor position on hover check
+		Vec2F             mLastSelectCheckCursor; // Last cursor position on selection check
 
 	protected:
 		// Updates mouse control
@@ -169,7 +169,7 @@ namespace o2
 		void OnScrolled(float scroll);
 
 		// Returns item widget under point and stores index in idxPtr, if not null
-		Ptr<UIWidget> GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+		UIWidget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
 		// Calls when object was deserialized and trying to reattach states animations target
 		void OnDeserialized(const DataNode& node);
@@ -181,7 +181,7 @@ namespace o2
 		void UpdateHover(const Vec2F& point);
 
 		// Updates selection
-		void UpdateSelection(int position, Ptr<UIWidget> item);
+		void UpdateSelection(int position, UIWidget* item);
 
 		// Calls when selected item index was changed
 		virtual void OnSelectionChanged();

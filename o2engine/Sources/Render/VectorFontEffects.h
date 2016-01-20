@@ -18,13 +18,13 @@ namespace o2
 		FontStrokeEffect(float radius = 1.0f, const Color4& color = Color4(0, 0, 0, 150), int alphaThreshold = 100);
 
 		// Process bitmap with glyph
-		void Process(Ptr<Bitmap> bitmap);
+		void Process(Bitmap* bitmap);
 
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const;
 
 		// Check effects equals
-		bool IsEqual(Ptr<VectorFont::Effect> other) const;
+		bool IsEqual(VectorFont::Effect* other) const;
 
 		SERIALIZABLE(FontStrokeEffect);
 	};
@@ -47,13 +47,13 @@ namespace o2
 						   float angle = 0, float length = 0, Vec2F origin = Vec2F());
 
 		// Process bitmap with glyph
-		void Process(Ptr<Bitmap> bitmap);
+		void Process(Bitmap* bitmap);
 
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const;
 
 		// Check effects equals
-		bool IsEqual(Ptr<VectorFont::Effect> other) const;
+		bool IsEqual(VectorFont::Effect* other) const;
 
 		SERIALIZABLE(FontGradientEffect);
 	};
@@ -67,13 +67,13 @@ namespace o2
 		FontColorEffect(const Color4& color = Color4::White());
 
 		// Process bitmap with glyph
-		void Process(Ptr<Bitmap> bitmap);
+		void Process(Bitmap* bitmap);
 
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const;
 
 		// Check effects equals
-		bool IsEqual(Ptr<VectorFont::Effect> other) const;
+		bool IsEqual(VectorFont::Effect* other) const;
 
 		SERIALIZABLE(FontColorEffect);
 	};
@@ -90,13 +90,13 @@ namespace o2
 						 const Color4& color = Color4(0, 0, 0, 100));
 
 		// Process bitmap with glyph
-		void Process(Ptr<Bitmap> bitmap);
+		void Process(Bitmap* bitmap);
 
 		// Returns bitmap extending size
 		Vec2I GetSizeExtend() const;
 
 		// Check effects equals
-		bool IsEqual(Ptr<VectorFont::Effect> other) const;
+		bool IsEqual(VectorFont::Effect* other) const;
 
 		SERIALIZABLE(FontShadowEffect);
 	};

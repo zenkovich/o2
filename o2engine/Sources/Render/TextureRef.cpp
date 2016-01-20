@@ -18,7 +18,7 @@ namespace o2
 
 	TextureRef::TextureRef(const String& fileName)
 	{
-		mTexture = o2Render.mTextures.FindMatch([&](const Ptr<Texture>& tex) { return tex->GetFileName() == fileName; });
+		mTexture = o2Render.mTextures.FindMatch([&](Texture* tex) { return tex->GetFileName() == fileName; });
 
 		if (!mTexture)
 			mTexture = mnew Texture(fileName);
@@ -26,7 +26,7 @@ namespace o2
 		mTexture->mRefs.Add(this);
 	}
 
-	TextureRef::TextureRef(Ptr<Bitmap> bitmap)
+	TextureRef::TextureRef(Bitmap* bitmap)
 	{
 		mTexture = mnew Texture(bitmap);
 		mTexture->mRefs.Add(this);
@@ -39,7 +39,7 @@ namespace o2
 			mTexture->mRefs.Add(this);
 	}
 
-	TextureRef::TextureRef(Ptr<Texture> texture):
+	TextureRef::TextureRef(Texture* texture):
 		mTexture(texture)
 	{
 		if (mTexture)
@@ -77,12 +77,12 @@ namespace o2
 
 	bool TextureRef::IsValid() const
 	{
-		return mTexture.IsValid();
+		return mTexture != nullptr;
 	}
 
 	TextureRef::operator bool() const
 	{
-		return mTexture.IsValid();
+		return mTexture != nullptr;
 	}
 
 	TextureRef TextureRef::Null()

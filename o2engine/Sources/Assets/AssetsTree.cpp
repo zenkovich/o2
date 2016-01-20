@@ -6,20 +6,21 @@
 
 namespace o2
 {
-	AssetTree::AssetNode::AssetNode()
+	AssetTree::AssetNode::AssetNode():
+		mMeta(nullptr)
 	{}
 
-	AssetTree::AssetNode::AssetNode(const String& path, AssetId id, Type::Id type):
+	AssetTree::AssetNode::AssetNode(const String& path, AssetId id, Type::Id type) :
 		AssetInfo(path, id, type)
-	{
-	}
+	{}
 
 	AssetTree::AssetNode::~AssetNode()
 	{
-		mMeta.Release();
+		delete mMeta;
 	}
 
-	AssetTree::AssetTree()
+	AssetTree::AssetTree():
+		mLog(nullptr)
 	{}
 
 	AssetTree::~AssetTree()
@@ -35,17 +36,17 @@ namespace o2
 
 		FolderInfo folderInfo = o2FileSystem.GetFolderInfo(path);
 		folderInfo.ClampPathNames();
-		LoadFolder(folderInfo, Ptr<AssetNode>(nullptr));
+		LoadFolder(folderInfo, nullptr);
 	}
 
-	Ptr<AssetTree::AssetNode> AssetTree::FindAsset(const String& path) const
+	AssetTree::AssetNode* AssetTree::FindAsset(const String& path) const
 	{
-		return mAllAssets.FindMatch([&](const Ptr<AssetNode>& asset) { return asset->mPath == path; });
+		return mAllAssets.FindMatch([&](const AssetNode* asset) { return asset->mPath == path; });
 	}
 
-	Ptr<AssetTree::AssetNode> AssetTree::FindAsset(AssetId id) const
+	AssetTree::AssetNode* AssetTree::FindAsset(AssetId id) const
 	{
-		return mAllAssets.FindMatch([&](const Ptr<AssetNode>& asset) { return asset->mId == id; });
+		return mAllAssets.FindMatch([&](const AssetNode* asset) { return asset->mId == id; });
 	}
 
 	AssetInfo AssetTree::FindAssetInfo(const String& path) const
@@ -66,7 +67,7 @@ namespace o2
 		return AssetInfo();
 	}
 
-	Ptr<AssetTree::AssetNode> AssetTree::AddAsset(Ptr<AssetNode> asset)
+	AssetTree::AssetNode* AssetTree::AddAsset(AssetNode* asset)
 	{
 		int delPos = asset->mPath.FindLast("/");
 		if (delPos < 0)
@@ -76,10 +77,12 @@ namespace o2
 		else
 		{
 			String parentPath = asset->mPath.SubStr(0, delPos);
-			Ptr<AssetNode> parent = mAllAssets.FindMatch([&](auto info) { return info->mPath == parentPath; });
+			AssetNode* parent = mAllAssets.FindMatch([&](auto info) { return info->mPath == parentPath; });
 
 			if (!parent)
-				mLog->Out("Failed to add builded asset info: %s", asset->mPath);
+			{
+				if (mLog) mLog->Out("Failed to add builded asset info: %s", asset->mPath);
+			}
 			else
 			{
 				parent->AddChild(asset);
@@ -92,7 +95,7 @@ namespace o2
 		return asset;
 	}
 
-	void AssetTree::RemoveAsset(Ptr<AssetNode> asset, bool release /*= true*/)
+	void AssetTree::RemoveAsset(AssetNode* asset, bool release /*= true*/)
 	{
 		mAllAssets.Remove(asset);
 
@@ -103,13 +106,13 @@ namespace o2
 	void AssetTree::Clear()
 	{
 		for (auto asset : mRootAssets)
-			asset.Release();
+			delete asset;
 
 		mAllAssets.Clear();
 		mRootAssets.Clear();
 	}
 
-	void AssetTree::LoadFolder(FolderInfo& folder, Ptr<AssetNode> parentAsset)
+	void AssetTree::LoadFolder(FolderInfo& folder, AssetNode* parentAsset)
 	{
 		for (auto fileInfo : folder.mFiles)
 		{
@@ -146,19 +149,19 @@ namespace o2
 		}
 	}
 
-	Ptr<AssetTree::AssetNode> AssetTree::LoadAsset(const String& path, Ptr<AssetNode> parent, const TimeStamp& time)
+	AssetTree::AssetNode* AssetTree::LoadAsset(const String& path, AssetNode* parent, const TimeStamp& time)
 	{
 		DataNode metaData;
 		metaData.LoadFromFile(mPath + path + ".meta");
-		Ptr<o2::Asset::IMetaInfo> meta;
+		o2::Asset::IMetaInfo* meta;
 		meta = metaData;
 
-		Ptr<AssetNode> asset = mnew AssetNode();
+		AssetNode* asset = mnew AssetNode();
 
 		asset->mMeta = meta;
 		asset->mPath = path;
 		asset->mTime = time;
-		asset->mId   = meta->ID();
+		asset->mId = meta->ID();
 		asset->mType = meta->GetAssetType();
 
 		asset->SetParent(parent);

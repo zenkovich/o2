@@ -8,8 +8,7 @@ namespace o2
 	DECLARE_SINGLETON(Scene);
 
 	Scene::Scene()
-	{
-	}
+	{}
 
 	Scene::~Scene()
 	{
@@ -30,8 +29,18 @@ namespace o2
 		for (auto comp : mDrawableComponents)
 			comp->Draw();
 	}
-	
-	Ptr<Actor> Scene::FindActor(const String& path)
+
+	const Scene::ActorsVec& Scene::GetAllActors() const
+	{
+		return mActors;
+	}
+
+	Scene::ActorsVec& Scene::GetAllActors()
+	{
+		return mActors;
+	}
+
+	Actor* Scene::FindActor(const String& path)
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -54,7 +63,7 @@ namespace o2
 	{
 		auto allActors = mActors;
 		for (auto actor : allActors)
-			actor.Release();
+			delete actor;
 	}
 
 	void Scene::Load(const String& path, bool append /*= false*/)
@@ -74,7 +83,7 @@ namespace o2
 		data.SaveToFile(path);
 	}
 
-	void Scene::RegDrawableComponent(Ptr<DrawableComponent> component)
+	void Scene::RegDrawableComponent(DrawableComponent* component)
 	{
 		const int binSearchRangeSizeStop = 5;
 		int rangeMin = 0, rangeMax = mDrawableComponents.Count();
@@ -86,7 +95,7 @@ namespace o2
 		{
 			int center = (rangeMin + rangeMax) >> 1;
 
-			float centerValue = mDrawableComponents[center];
+			float centerValue = mDrawableComponents[center]->mDrawingDepth;
 
 			if (targetDepth < centerValue)
 				rangeMax = center;
@@ -110,12 +119,12 @@ namespace o2
 		mDrawableComponents.Insert(component, position);
 	}
 
-	void Scene::UnregDrawableComponent(Ptr<DrawableComponent> component)
+	void Scene::UnregDrawableComponent(DrawableComponent* component)
 	{
 		mDrawableComponents.Remove(component);
 	}
 
-	void Scene::ComponentDepthChanged(Ptr<DrawableComponent> component)
+	void Scene::ComponentDepthChanged(DrawableComponent* component)
 	{
 		UnregDrawableComponent(component);
 		RegDrawableComponent(component);

@@ -15,14 +15,14 @@ namespace o2
 	class FieldInfo
 	{
 	public:
-		typedef Vector<Ptr<IAttribute>> AttributesVec;
+		typedef Vector<IAttribute*> AttributesVec;
 
 	public:
 		// Default constructor
 		FieldInfo();
 
 		// Constructor
-		FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Ptr<Type> type);
+		FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Type* type);
 
 		// Copy-constructor
 		FieldInfo(const FieldInfo& other);
@@ -81,7 +81,7 @@ namespace o2
 		UInt          mOffset;     // Offset of field in bytes from owner address
 		bool          mIsProperty; // Is it property or field
 		bool          mIsPtr;      // Is property Ptr<>
-		Ptr<Type>     mType;       // Field type
+		Type*         mType;       // Field type
 		AttributesVec mAttributes; // Attributes array
 
 	protected:
@@ -109,7 +109,7 @@ namespace o2
 		AccessorFieldInfo():FieldInfo() {}
 
 		// Constructor
-		AccessorFieldInfo(const String& name, UInt offset, Ptr<Type> type):
+		AccessorFieldInfo(const String& name, UInt offset, Type* type):
 			FieldInfo(name, offset, false, false, type) {}
 
 		// Returns cloned copy
@@ -141,7 +141,7 @@ namespace o2
 	{
 		for (auto attr : mAttributes)
 		{
-			_attr_type* res = dynamic_cast<_attr_type*>(attr.Get());
+			_attr_type* res = dynamic_cast<_attr_type*>(attr);
 			if (res)
 				return res;
 		}
@@ -170,7 +170,7 @@ namespace o2
 	template<typename _type>
 	_type* FieldInfo::GetValuePtr(void* object) const
 	{
-		if (mIsPtr) return *(Ptr<_type>*)((char*)object + mOffset);
+		if (mIsPtr) return *(_type**)((char*)object + mOffset);
 
 		return (_type*)((char*)object + mOffset);
 	}
@@ -198,7 +198,7 @@ namespace o2
 		if (!mType)
 			return false;
 
-		Accessor<Ptr<_type>, const String&>* accessor = ((Accessor<Ptr<_type>, const String&>*)obj);
+		Accessor<_type*, const String&>* accessor = ((Accessor<_type*, const String&>*)obj);
 
 		auto allFromAccessor = accessor->GetAll();
 
@@ -238,7 +238,7 @@ namespace o2
 		int delPos = path.Find("/");
 		String pathPart = path.SubStr(0, delPos);
 
-		Accessor<Ptr<_type>, const String&>* accessor = ((Accessor<Ptr<_type>, const String&>*)obj);
+		Accessor<_type*, const String&>* accessor = ((Accessor<_type*, const String&>*)obj);
 		auto allFromAccessor = accessor->GetAll();
 
 		for (auto kv : allFromAccessor)

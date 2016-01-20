@@ -12,7 +12,7 @@ namespace o2
 		{
 			if (task->mId == id)
 			{
-				task.Release();
+				delete task;
 				return;
 			}
 		}
@@ -22,10 +22,10 @@ namespace o2
 	{
 		auto tasks = mTasks;
 		for (auto task : tasks)
-			task.Release();
+			delete task;
 	}
 
-	Ptr<Task> TaskManager::FindTask(int id)
+	Task* TaskManager::FindTask(int id)
 	{
 		return mTasks.FindMatch([&](auto x) { return x->mId == id; });
 	}
@@ -69,7 +69,6 @@ namespace o2
 		}
 
 		for (auto doneTask : doneTasks)
-			doneTask.Release();
+			delete doneTask;
 	}
-
 }

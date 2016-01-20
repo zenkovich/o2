@@ -7,13 +7,13 @@
 namespace o2
 {
 	UIButton::UIButton():
-		UIWidget()
+		UIWidget(), mIconSprite(nullptr), mCaptionText(nullptr), mButtonGroup(nullptr)
 	{
 		InitializeProperties();
 	}
 
 	UIButton::UIButton(const UIButton& other):
-		UIWidget(other)
+		UIWidget(other), mButtonGroup(nullptr)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
@@ -45,18 +45,52 @@ namespace o2
 		return WString();
 	}
 
-	void UIButton::SetIcon(Ptr<Sprite> sprite)
+	void UIButton::SetIcon(Sprite* sprite)
 	{
 		if (mIconSprite)
 			mIconSprite = sprite;
 	}
 
-	Ptr<Sprite> UIButton::GetIcon() const
+	Sprite* UIButton::GetIcon() const
 	{
 		if (mIconSprite)
 			return mIconSprite;
 
 		return nullptr;
+	}
+
+	void UIButton::SetButtonGroup(UIButtonGroup* group)
+	{
+		if (mButtonGroup)
+		{
+			if (mButtonGroup->mOwner == this)
+			{
+				if (mButtonGroup->mButtons.Count() == 1)
+				{
+					mButtonGroup->mButtons.Clear();
+					delete mButtonGroup;
+				}
+				else
+				{
+					mButtonGroup->mButtons.Remove(this);
+					mButtonGroup->mOwner = mButtonGroup->mButtons[0];
+				}
+			}
+			else mButtonGroup->mButtons.Remove(this);
+		}
+
+		mButtonGroup = group;
+		mButtonGroup->mButtons.Add(this);
+
+		if (!mButtonGroup->mOwner)
+		{
+			mButtonGroup->mOwner = this;
+		}
+	}
+
+	UIButtonGroup* UIButton::GetButtonGroup() const
+	{
+		return mButtonGroup;
 	}
 
 	bool UIButton::IsUnderPoint(const Vec2F& point)
@@ -81,6 +115,12 @@ namespace o2
 			*pressedState = true;
 
 		o2UI.SelectWidget(this);
+
+		if (mButtonGroup)
+		{
+			mButtonGroup->mPressed = true;
+			onClick();
+		}
 	}
 
 	void UIButton::OnCursorReleased(const Input::Cursor& cursor)
@@ -89,8 +129,11 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (IsUnderPoint(cursor.mPosition))
+		if (IsUnderPoint(cursor.mPosition) && !mButtonGroup)
 			onClick();
+
+		if (mButtonGroup && mButtonGroup->mPressed)
+			mButtonGroup->mPressed = false;
 	}
 
 	void UIButton::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -98,6 +141,9 @@ namespace o2
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
+
+		if (mButtonGroup && mButtonGroup->mPressed)
+			mButtonGroup->mPressed = false;
 	}
 
 	void UIButton::OnCursorEnter(const Input::Cursor& cursor)
@@ -105,6 +151,9 @@ namespace o2
 		auto selectState = state["select"];
 		if (selectState)
 			*selectState = true;
+
+		if (mButtonGroup && mButtonGroup->mPressed)
+			onClick();
 	}
 
 	void UIButton::OnCursorExit(const Input::Cursor& cursor)
@@ -136,13 +185,13 @@ namespace o2
 		}
 	}
 
-	void UIButton::OnLayerAdded(Ptr<UIWidgetLayer> layer)
+	void UIButton::OnLayerAdded(UIWidgetLayer* layer)
 	{
 		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == *Text::type)
-			mCaptionText = layer->drawable.Cast<Text>();
+			mCaptionText = (Text*)layer->drawable;
 
 		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == *Sprite::type)
-			mIconSprite = layer->drawable.Cast<Sprite>();
+			mIconSprite = (Sprite*)layer->drawable;
 	}
 
 	void UIButton::OnVisibleChanged()
@@ -154,5 +203,33 @@ namespace o2
 	{
 		INITIALIZE_PROPERTY(UIButton, caption, SetCaption, GetCaption);
 		INITIALIZE_PROPERTY(UIButton, icon, SetIcon, GetIcon);
+		INITIALIZE_PROPERTY(UIButton, buttonsGroup, SetButtonGroup, GetButtonGroup);
+	}
+
+	UIButtonGroup::UIButtonGroup():
+		mPressed(false), mOwner(nullptr)
+	{}
+
+	UIButtonGroup::~UIButtonGroup()
+	{
+		for (auto btn : mButtons)
+			btn->mButtonGroup = nullptr;
+	}
+
+	void UIButtonGroup::AddButton(UIButton* toggle)
+	{
+		mButtons.Add(toggle);
+		toggle->mButtonGroup = this;
+	}
+
+	void UIButtonGroup::RemoveButton(UIButton* toggle)
+	{
+		mButtons.Remove(toggle);
+		toggle->mButtonGroup = nullptr;
+	}
+
+	const UIButtonGroup::ButtonsVec& UIButtonGroup::GetButtons() const
+	{
+		return mButtons;
 	}
 }

@@ -30,7 +30,7 @@ namespace o2
 
 	Assets::~Assets()
 	{
-		mAssetsBuilder.Release();
+		delete mAssetsBuilder;
 	}
 
 	String Assets::GetAssetsPath() const
@@ -73,12 +73,12 @@ namespace o2
 		return mAssetsTypes;
 	}
 
-	Ptr<Type> Assets::GetStdAssetType() const
+	Type* Assets::GetStdAssetType() const
 	{
 		return mStdAssetType;
 	}
 
-	Ptr<Type> Assets::GetAssetTypeByExtension(const String& extension) const
+	Type* Assets::GetAssetTypeByExtension(const String& extension) const
 	{
 		if (mAssetsTypes.ContainsKey(extension))
 			return mAssetsTypes[extension];
@@ -86,7 +86,7 @@ namespace o2
 		return mStdAssetType;
 	}
 
-	Ptr<Asset> Assets::LoadAsset(const AssetInfo& info)
+	Asset* Assets::LoadAsset(const AssetInfo& info)
 	{
 		Type* assetType = Reflection::GetType(info.mType);
 		if (!assetType)
@@ -95,7 +95,7 @@ namespace o2
 			return nullptr;
 		}
 
-		Ptr<Asset> res = assetType->CreateSample();
+		Asset* res = (Asset*)assetType->CreateSample();
 		res->Load(info);
 		return res;
 	}
@@ -115,7 +115,7 @@ namespace o2
 		return GetAssetInfo(info.mId).mId == 0;
 	}
 
-	bool Assets::RemoveAsset(Ptr<Asset> asset, bool rebuildAssets /*= true*/)
+	bool Assets::RemoveAsset(Asset* asset, bool rebuildAssets /*= true*/)
 	{
 		return RemoveAsset(asset->GetAssetId());
 	}
@@ -151,7 +151,7 @@ namespace o2
 		return RemoveAsset(info.mId, rebuildAssets);
 	}
 
-	bool Assets::MoveAsset(Ptr<Asset> asset, const String& newPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAsset(Asset* asset, const String& newPath, bool rebuildAssets /*= true*/)
 	{
 		return MoveAsset(asset->GetAssetId(), newPath);
 	}
@@ -220,8 +220,11 @@ namespace o2
 
 		for (auto type : assetTypes)
 		{
-			String extensions = static_cast<const Asset*>(type->Sample())->GetFileExtensions();
+			auto sample = (Asset*)type->CreateSample();
+			String extensions = sample->GetFileExtensions();
 			auto extensionsVec = extensions.Split(" ");
+
+			delete sample;
 
 			for (auto ext : extensionsVec)
 			{

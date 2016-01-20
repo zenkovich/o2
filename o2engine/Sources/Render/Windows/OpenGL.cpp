@@ -3,7 +3,7 @@
 #include "Utils/Log/LogStream.h"
 
 // Returns address of function
-PROC GetSafeWGLProcAddress(const char* id, o2::Ptr<o2::LogStream> log)
+PROC GetSafeWGLProcAddress(const char* id, o2::LogStream* log)
 {
 	PROC res = wglGetProcAddress(id);
 	if (!res)
@@ -12,7 +12,7 @@ PROC GetSafeWGLProcAddress(const char* id, o2::Ptr<o2::LogStream> log)
 	return res;
 }
 
-void GetGLExtensions(o2::Ptr<o2::LogStream> log /*= nullptr*/)
+void GetGLExtensions(o2::LogStream* log /*= nullptr*/)
 {
 	glGenFramebuffersEXT        = (PFNGLGENFRAMEBUFFERSEXTPROC)GetSafeWGLProcAddress("glGenFramebuffersEXT", log);
 	glBindFramebufferEXT        = (PFNGLBINDFRAMEBUFFEREXTPROC)GetSafeWGLProcAddress("glBindFramebufferEXT", log);
@@ -76,7 +76,7 @@ const char* GetGLErrorDesc(GLenum errorId)
 	return "UNKNOWN";
 }
 
-void glCheckError(o2::Ptr<o2::LogStream> log, const char* filename /*= nullptr*/, unsigned int line /*= 0*/)
+void glCheckError(o2::LogStream* log, const char* filename /*= nullptr*/, unsigned int line /*= 0*/)
 {
 	GLenum errId = glGetError();
 	if (errId != GL_NO_ERROR)

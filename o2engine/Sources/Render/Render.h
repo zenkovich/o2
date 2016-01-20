@@ -160,10 +160,10 @@ namespace o2
 		bool IsScissorTestEnabled() const;
 
 		// Drawing mesh
-		bool DrawMesh(Ptr<Mesh> mesh);
+		bool DrawMesh(Mesh* mesh);
 
 		// Drawing mesh wire
-		bool DrawMeshWire(Ptr<Mesh> mesh, const Color4& color = Color4::White());
+		bool DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
 
 		// Drawing lines
 		bool DrawLines(Vertex2* verticies, int count);
@@ -190,10 +190,10 @@ namespace o2
 		const ScissorInfosVec& GetScissorInfos() const;
 
 	protected:
-		typedef Vector<Ptr<Texture>> TexturesVec;
-		typedef Vector<Ptr<Font>> FontsVec;
+		typedef Vector<Texture*> TexturesVec;
+		typedef Vector<Font*> FontsVec;
 
-		Ptr<LogStream>  mLog;                    // Render log stream
+		LogStream*      mLog;                    // Render log stream
 
 		TexturesVec     mTextures;               // Loaded textures
 		FontsVec        mFonts;                  // Loaded fonts

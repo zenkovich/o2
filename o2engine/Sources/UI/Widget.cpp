@@ -10,7 +10,7 @@ namespace o2
 {
 	UIWidget::UIWidget():
 		mParent(nullptr), mTransparency(1.0f), mResTransparency(1.0f), mVisible(true), mIsSelected(false), mResVisible(true),
-		mFullyDisabled(false)
+		mFullyDisabled(false), mVisibleState(nullptr), mSelectedState(nullptr)
 	{
 		layout.mOwner = this;
 		InitializeProperties();
@@ -19,7 +19,8 @@ namespace o2
 
 	UIWidget::UIWidget(const UIWidget& other):
 		mName(other.mName), layout(other.layout), mParent(nullptr), mTransparency(other.mTransparency),
-		mVisible(other.mVisible), mIsSelected(false), mResVisible(other.mVisible), mFullyDisabled(!other.mVisible)
+		mVisible(other.mVisible), mIsSelected(false), mResVisible(other.mVisible), mFullyDisabled(!other.mVisible),
+		mVisibleState(nullptr), mSelectedState(nullptr)
 	{
 		layout.mOwner = this;
 		InitializeProperties();
@@ -41,7 +42,7 @@ namespace o2
 
 		for (auto state : other.mStates)
 		{
-			Ptr<UIWidgetState> newState = state->Clone();
+			UIWidgetState* newState = state->Clone();
 			AddState(newState);
 		}
 
@@ -54,33 +55,33 @@ namespace o2
 	UIWidget::~UIWidget()
 	{
 		if (mParent)
-			mParent->RemoveChild(Ptr<UIWidget>(this), false);
+			mParent->RemoveChild(this, false);
 
 		for (auto layer : mLayers)
-			layer.Release();
+			delete layer;
 
 		for (auto state : mStates)
-			state.Release();
+			delete state;
 
 		for (auto child : mChilds)
 		{
 			child->mParent = nullptr;
-			child.Release();
+			delete child;
 		}
 	}
 
 	UIWidget& UIWidget::operator=(const UIWidget& other)
 	{
 		for (auto layer : mLayers)
-			layer.Release();
+			delete layer;
 
 		for (auto state : mStates)
-			state.Release();
+			delete state;
 
 		for (auto child : mChilds)
 		{
 			child->mParent = nullptr;
-			child.Release();
+			delete child;
 		}
 		mChilds.Clear();
 		mVisibleState = nullptr;
@@ -107,7 +108,7 @@ namespace o2
 
 		for (auto state : other.mStates)
 		{
-			Ptr<UIWidgetState> newState = state->Clone();
+			UIWidgetState* newState = state->Clone();
 			AddState(newState);
 		}
 
@@ -180,19 +181,19 @@ namespace o2
 		return mName;
 	}
 
-	Ptr<UIWidget> UIWidget::GetParent() const
+	UIWidget* UIWidget::GetParent() const
 	{
 		return mParent;
 	}
 
-	void UIWidget::SetParent(Ptr<UIWidget> parent)
+	void UIWidget::SetParent(UIWidget* parent)
 	{
 		if (parent->mChilds.Contains(this))
 			return;
 
 		if (mParent)
 		{
-			mParent->RemoveChild(Ptr<UIWidget>(this), false);
+			mParent->RemoveChild(this, false);
 			mParent->UpdateLayout();
 		}
 
@@ -208,7 +209,7 @@ namespace o2
 		UpdateVisibility();
 	}
 
-	Ptr<UIWidget> UIWidget::AddChild(Ptr<UIWidget> widget)
+	UIWidget* UIWidget::AddChild(UIWidget* widget)
 	{
 		if (mChilds.Contains(widget))
 			return widget;
@@ -228,7 +229,7 @@ namespace o2
 		return widget;
 	}
 
-	Ptr<UIWidget> UIWidget::AddChild(Ptr<UIWidget> widget, int index)
+	UIWidget* UIWidget::AddChild(UIWidget* widget, int index)
 	{
 		if (mChilds.Contains(widget))
 			return widget;
@@ -262,7 +263,7 @@ namespace o2
 		return res;
 	}
 
-	bool UIWidget::RemoveChild(Ptr<UIWidget> widget, bool release /*= true*/)
+	bool UIWidget::RemoveChild(UIWidget* widget, bool release /*= true*/)
 	{
 		if (!mChilds.Contains(widget))
 			return false;
@@ -274,7 +275,7 @@ namespace o2
 		OnChildRemoved(widget);
 
 		if (release)
-			widget.Release();
+			delete widget;
 		else
 		{
 			widget->UpdateTransparency();
@@ -284,7 +285,7 @@ namespace o2
 		return true;
 	}
 
-	Ptr<UIWidget> UIWidget::GetChild(const String& path)
+	UIWidget* UIWidget::GetChild(const String& path)
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -322,7 +323,7 @@ namespace o2
 		{
 			child->mParent = nullptr;
 			OnChildRemoved(child);
-			child.Release();
+			delete child;
 		}
 
 		mChilds.Clear();
@@ -334,7 +335,7 @@ namespace o2
 		return mChilds;
 	}
 
-	Ptr<UIWidgetLayer> UIWidget::AddLayer(Ptr<UIWidgetLayer> layer)
+	UIWidgetLayer* UIWidget::AddLayer(UIWidgetLayer* layer)
 	{
 		mLayers.Add(layer);
 		layer->SetOwnerWidget(this);
@@ -343,13 +344,13 @@ namespace o2
 		return layer;
 	}
 
-	Ptr<UIWidgetLayer> UIWidget::AddLayer(const String& name, Ptr<IRectDrawable> drawable,
+	UIWidgetLayer* UIWidget::AddLayer(const String& name, IRectDrawable* drawable,
 										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		if (Math::Equals(depth, 0.0f))
 			depth = (float)mDrawingLayers.Count();
 
-		Ptr<UIWidgetLayer> layer = mnew UIWidgetLayer();
+		UIWidgetLayer* layer = mnew UIWidgetLayer();
 		layer->depth = depth;
 		layer->name = name;
 		layer->drawable = drawable;
@@ -360,7 +361,7 @@ namespace o2
 		return layer;
 	}
 
-	Ptr<UIWidgetLayer> UIWidget::GetLayer(const String& path) const
+	UIWidgetLayer* UIWidget::GetLayer(const String& path) const
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -379,10 +380,10 @@ namespace o2
 		return nullptr;
 	}
 
-	bool UIWidget::RemoveLayer(Ptr<UIWidgetLayer> layer)
+	bool UIWidget::RemoveLayer(UIWidgetLayer* layer)
 	{
 		bool res = mLayers.Remove(layer);
-		layer.Release();
+		delete layer;
 		UpdateLayersDrawingSequence();
 		return res;
 	}
@@ -405,7 +406,7 @@ namespace o2
 	void UIWidget::RemoveAllLayers()
 	{
 		for (auto layer : mLayers)
-			layer.Release();
+			delete layer;
 
 		mDrawingLayers.Clear();
 
@@ -417,17 +418,17 @@ namespace o2
 		return mLayers;
 	}
 
-	Ptr<UIWidgetState> UIWidget::AddState(const String& name)
+	UIWidgetState* UIWidget::AddState(const String& name)
 	{
-		Ptr<UIWidgetState> newState = mnew UIWidgetState();
+		UIWidgetState* newState = mnew UIWidgetState();
 		newState->name = name;
 		newState->animation.SetTarget(this);
 		return AddState(newState);
 	}
 
-	Ptr<UIWidgetState> UIWidget::AddState(const String& name, const Animation& animation)
+	UIWidgetState* UIWidget::AddState(const String& name, const Animation& animation)
 	{
-		Ptr<UIWidgetState> newState = mnew UIWidgetState();
+		UIWidgetState* newState = mnew UIWidgetState();
 		newState->name = name;
 		newState->animation = animation;
 		newState->animation.SetTarget(this);
@@ -435,7 +436,7 @@ namespace o2
 		return AddState(newState);
 	}
 
-	Ptr<UIWidgetState> UIWidget::AddState(Ptr<UIWidgetState> state)
+	UIWidgetState* UIWidget::AddState(UIWidgetState* state)
 	{
 		mStates.Add(state);
 
@@ -443,8 +444,14 @@ namespace o2
 		{
 			mVisibleState = state;
 			mVisibleState->SetStateForcible(mVisible);
-			mVisibleState->onStateBecomesTrue += [&]() { mFullyDisabled = false; };
-			mVisibleState->onStateFullyFalse += [&]() { mFullyDisabled = true; };
+
+			mVisibleState->onStateBecomesTrue += [&]() { 
+				mFullyDisabled = false;
+			};
+
+			mVisibleState->onStateFullyFalse += [&]() {
+				mFullyDisabled = true;
+			};
 		}
 
 		if (state->name == "selected")
@@ -460,7 +467,7 @@ namespace o2
 
 	bool UIWidget::RemoveState(const String& name)
 	{
-		int idx = mStates.FindIdx([&](const Ptr<UIWidgetState>& state) { return state->name == name; });
+		int idx = mStates.FindIdx([&](UIWidgetState* state) { return state->name == name; });
 		if (idx < 0)
 			return false;
 
@@ -470,13 +477,13 @@ namespace o2
 		if (mStates[idx] == mSelectedState)
 			mSelectedState = nullptr;
 
-		mStates[idx].Release();
+		delete mStates[idx];
 		mStates.RemoveAt(idx);
 
 		return true;
 	}
 
-	bool UIWidget::RemoveState(Ptr<UIWidgetState> state)
+	bool UIWidget::RemoveState(UIWidgetState* state)
 	{
 		int idx = mStates.Find(state);
 		if (idx < 0)
@@ -485,7 +492,7 @@ namespace o2
 		if (state == mVisibleState)
 			mVisibleState = nullptr;
 
-		mStates[idx].Release();
+		delete mStates[idx];
 		mStates.RemoveAt(idx);
 
 		return true;
@@ -494,7 +501,7 @@ namespace o2
 	void UIWidget::RemoveAllStates()
 	{
 		for (auto state : mStates)
-			state.Release();
+			delete state;
 
 		mVisibleState = nullptr;
 		mSelectedState = nullptr;
@@ -520,7 +527,7 @@ namespace o2
 		return false;
 	}
 
-	Ptr<UIWidgetState> UIWidget::GetStateObject(const String& name) const
+	UIWidgetState* UIWidget::GetStateObject(const String& name) const
 	{
 		return mStates.FindMatch([&](auto state) { return state->name == name; });
 	}
@@ -559,6 +566,7 @@ namespace o2
 
 		mVisible = visible;
 		mFullyDisabled = !visible;
+		UpdateVisibility();
 	}
 
 	void UIWidget::Show(bool forcible /*= false*/)
@@ -618,7 +626,7 @@ namespace o2
 		mChildsAbsRect = layout.mAbsoluteRect;
 
 		for (auto child : mChilds)
-			child->UpdateLayout();
+			child->UpdateLayout(forcible);
 	}
 
 	void UIWidget::UpdateTransparency()
@@ -658,7 +666,7 @@ namespace o2
 			child->UpdateVisibility();
 	}
 
-	void UIWidget::OnChildSelected(Ptr<UIWidget> child)
+	void UIWidget::OnChildSelected(UIWidget* child)
 	{
 		if (mParent)
 			mParent->OnChildSelected(child);
@@ -689,10 +697,13 @@ namespace o2
 						Math::Clamp(resSize.y, layout.mMinSize.y, layout.mMaxSize.y));
 		Vec2F szDelta = clampSize - resSize;
 
-		layout.mLocalRect.left -= szDelta.x*layout.mPivot.x;
-		layout.mLocalRect.right += szDelta.x*(1.0f - layout.mPivot.x);
-		layout.mLocalRect.bottom -= szDelta.y*layout.mPivot.y;
-		layout.mLocalRect.top += szDelta.y*(1.0f - layout.mPivot.y);
+		if (szDelta != Vec2F())
+		{
+			layout.mLocalRect.left -= szDelta.x*layout.mPivot.x;
+			layout.mLocalRect.right += szDelta.x*(1.0f - layout.mPivot.x);
+			layout.mLocalRect.bottom -= szDelta.y*layout.mPivot.y;
+			layout.mLocalRect.top += szDelta.y*(1.0f - layout.mPivot.y);
+		}
 
 		layout.mLocalRect.left = Math::Floor(layout.mLocalRect.left);
 		layout.mLocalRect.right = Math::Floor(layout.mLocalRect.right);
@@ -763,34 +774,34 @@ namespace o2
 		return mStates;
 	}
 
-	Dictionary<String, Ptr<UIWidgetLayer>> UIWidget::GetAllLayers()
+	Dictionary<String, UIWidgetLayer*> UIWidget::GetAllLayers()
 	{
-		Dictionary<String, Ptr<UIWidgetLayer>> res;
+		Dictionary<String, UIWidgetLayer*> res;
 		for (auto layer : mLayers)
 			res.Add(layer->name, layer);
 
 		return res;
 	}
 
-	Dictionary<String, Ptr<UIWidget>> UIWidget::GetAllChilds()
+	Dictionary<String, UIWidget*> UIWidget::GetAllChilds()
 	{
-		Dictionary<String, Ptr<UIWidget>> res;
+		Dictionary<String, UIWidget*> res;
 		for (auto child : mChilds)
 			res.Add(child->GetName(), child);
 
 		return res;
 	}
 
-	void UIWidget::OnLayerAdded(Ptr<UIWidgetLayer> layer)
+	void UIWidget::OnLayerAdded(UIWidgetLayer* layer)
 	{}
 
-	void UIWidget::OnStateAdded(Ptr<UIWidgetState> state)
+	void UIWidget::OnStateAdded(UIWidgetState* state)
 	{}
 
-	void UIWidget::OnChildAdded(Ptr<UIWidget> child)
+	void UIWidget::OnChildAdded(UIWidget* child)
 	{}
 
-	void UIWidget::OnChildRemoved(Ptr<UIWidget> child)
+	void UIWidget::OnChildRemoved(UIWidget* child)
 	{}
 
 	void UIWidget::OnDeserialized(const DataNode& node)
@@ -816,7 +827,7 @@ namespace o2
 		mTransparency = transparency;
 		mParent = nullptr;
 
-		UpdateLayout(true);
+		UIWidget::UpdateLayout(true);
 		UpdateTransparency();
 
 		Draw();

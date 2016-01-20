@@ -34,7 +34,7 @@ public:
 	bool IsDocked() const;
 
 	// Return pointer to docking sample sprite
-	Ptr<Sprite> GetDockingFrameSample() const;
+	Sprite* GetDockingFrameSample() const;
 
 	SERIALIZABLE(UIDockableWindow);
 
@@ -43,7 +43,7 @@ protected:
 	const float          mDockBorder = 1.5f;
 
 	bool                 mDocked;                 // Is window is docked
-	Ptr<Sprite>          mDockingFrameSample;     // Docking frame sample @SERIALIZABLE
+	Sprite*          mDockingFrameSample;     // Docking frame sample @SERIALIZABLE
 	Animation            mDockingFrameAppearance; // Docking frame appearance tween
 	RectF                mDockingFrameCurrent;    // Docking sample current frame
 	RectF                mDockingFrameTarget;     // Docking sample target  frame
@@ -67,13 +67,13 @@ protected:
 	void OnMoveBegin();
 
 	// Searches dock place under cursor and returns parameters of them
-	bool TraceDock(Ptr<UIDockWindowPlace>& targetDock, Side& dockPosition, RectF& dockZoneRect);
+	bool TraceDock(UIDockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect);
 
 	// Places this into target dock as non line arranged
-	void PlaceNonLineDock(Ptr<UIDockWindowPlace> targetDock, Side dockPosition);
+	void PlaceNonLineDock(UIDockWindowPlace* targetDock, Side dockPosition);
 
 	// Places this into target dock as line arranged
-	void PlaceLineDock(Ptr<UIDockWindowPlace> targetDock, Side dockPosition, RectF dockZoneRect);
+	void PlaceLineDock(UIDockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect);
 
 	// Undocks this window, using when window moved out from dock
 	void Undock();

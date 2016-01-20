@@ -164,7 +164,7 @@ namespace o2
 			SERIALIZABLE(Key);
 
 		public:
-			static const int mApproxValuesCount = 20;     // Transition curve approximation values count
+			static const int mApproxValuesCount = 10;     // Transition curve approximation values count
 			Vec2F mApproxValues[mApproxValuesCount];      // Approximation values
 			Vec2F mCurveApproxValues[mApproxValuesCount]; // Transition curve approximation values
 			float mApproxLengths[mApproxValuesCount];     // Approximation segments lengths

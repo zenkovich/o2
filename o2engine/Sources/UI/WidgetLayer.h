@@ -2,7 +2,7 @@
 
 #include "Render/RectDrawable.h"
 #include "Utils/Math/Layout.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Serialization.h"
 #include "Utils/String.h"
 #include "Utils/Tree.h"
@@ -12,7 +12,7 @@ namespace o2
 	class UIWidget;
 
 	class UIWidgetLayer;
-	typedef Vector<Ptr<UIWidgetLayer>>  LayersVec;
+	typedef Vector<UIWidgetLayer*>  LayersVec;
 
 	// ---------------------
 	// Widget drawable layer
@@ -20,16 +20,16 @@ namespace o2
 	class UIWidgetLayer: public ISerializable
 	{
 	public:
-		typedef Vector<Ptr<UIWidgetLayer>> ChildsVec;
+		typedef Vector<UIWidgetLayer*> ChildsVec;
 
 	public:
-		Layout                                      layout;             // Drawable layout @SERIALIZABLE
-		Layout                                      interactableLayout; // Interactable area layout
-		String                                      name;               // Name of layer @SERIALIZABLE
-		Property<float>                             depth;              // Drawing depth (higher depths will draw later)
-		Property<float>                             transparency;       // Drawable transparency property
-		Ptr<IRectDrawable>                          drawable;           // Drawable @SERIALIZABLE
-		Accessor<Ptr<UIWidgetLayer>, const String&> child;              // Child layer accessor
+		Layout                                  layout;             // Drawable layout @SERIALIZABLE
+		Layout                                  interactableLayout; // Interactable area layout
+		String                                  name;               // Name of layer @SERIALIZABLE
+		Property<float>                         depth;              // Drawing depth (higher depths will draw later)
+		Property<float>                         transparency;       // Drawable transparency property
+		IRectDrawable*                          drawable;           // Drawable @SERIALIZABLE
+		Accessor<UIWidgetLayer*, const String&> child;              // Child layer accessor
 
 		// Default constructor
 		UIWidgetLayer();
@@ -50,19 +50,19 @@ namespace o2
 		void Update(float dt);
 
 		// Adds new child layer and returns him
-		Ptr<UIWidgetLayer> AddChild(Ptr<UIWidgetLayer> node);
+		UIWidgetLayer* AddChild(UIWidgetLayer* node);
 
 		// Remove child layer and releases him if needs
-		bool RemoveChild(Ptr<UIWidgetLayer> node, bool release = true);
+		bool RemoveChild(UIWidgetLayer* node, bool release = true);
 
 		// Removes and releases all children nodes
 		void RemoveAllChilds();
 
 		// Sets parent layer
-		void SetParent(Ptr<UIWidgetLayer> parent);
+		void SetParent(UIWidgetLayer* parent);
 
 		// Returns parent layer
-		Ptr<UIWidgetLayer> GetParent() const;
+		UIWidgetLayer* GetParent() const;
 
 		// Return child layers
 		ChildsVec& GetChilds();
@@ -71,10 +71,11 @@ namespace o2
 		const ChildsVec& GetChilds() const;
 
 		// Adds child layer
-		Ptr<UIWidgetLayer> AddChildLayer(const String& name, Ptr<IRectDrawable> drawable, const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
+		UIWidgetLayer* AddChildLayer(const String& name, IRectDrawable* drawable, const Layout& layout = Layout::BothStretch(),
+									 float depth = 0.0f);
 
 		// Returns child layer by path ()
-		Ptr<UIWidgetLayer> GetChild(const String& path);
+		UIWidgetLayer* GetChild(const String& path);
 
 		// Returns all child layers
 		LayersVec GetAllChilds() const;
@@ -94,24 +95,28 @@ namespace o2
 		// Returns true if layer is under point
 		bool IsUnderPoint(const Vec2F& point);
 
+		// Returns child layer with type
+		template<typename _type>
+		_type* FindLayer() const;
+
 		SERIALIZABLE(UIWidgetLayer);
 
 	protected:
-		float              mTransparency;     // Layer transparency @SERIALIZABLE
-		float              mResTransparency;  // Result drawable transparency, depends on parent transparency
-		float              mDepth;            // Depth of drawable @SERIALIZABLE
-		RectF              mAbsolutePosition; // Result absolute drawable position
-		RectF              mInteractableArea; // Interactable area, depends on interactableLayout
-		Ptr<UIWidget>      mOwnerWidget;      // Owner widget pointer
-		Ptr<UIWidgetLayer> mParent;           // Pointer to parent layer
-		ChildsVec          mChilds;           // Children layers @SERIALIZABLE
+		float          mTransparency;     // Layer transparency @SERIALIZABLE
+		float          mResTransparency;  // Result drawable transparency, depends on parent transparency
+		float          mDepth;            // Depth of drawable @SERIALIZABLE
+		RectF          mAbsolutePosition; // Result absolute drawable position
+		RectF          mInteractableArea; // Interactable area, depends on interactableLayout
+		UIWidget*      mOwnerWidget;      // Owner widget pointer
+		UIWidgetLayer* mParent;           // Pointer to parent layer
+		ChildsVec      mChilds;           // Children layers @SERIALIZABLE
 
 	protected:
 		// Sets owner widget for this and children
-		void SetOwnerWidget(Ptr<UIWidget> owner);
+		void SetOwnerWidget(UIWidget* owner);
 
 		// Calls when added new child layer, sets his owner same as this owner and calls UpdateLayersDrawingSequence in owner
-		void OnChildAdded(Ptr<UIWidgetLayer> child);
+		void OnChildAdded(UIWidgetLayer* child);
 
 		// Updates drawable rect, calling when widget's layout was changed
 		void UpdateLayout();
@@ -120,11 +125,28 @@ namespace o2
 		void UpdateResTransparency();
 
 		// Returns dictionary with all child layers
-		Dictionary<String, Ptr<UIWidgetLayer>> GetAllChildLayers();
+		Dictionary<String, UIWidgetLayer*> GetAllChildLayers();
 
 		// Initializes properties
 		void InitializeProperties();
 
 		friend class UIWidget;
 	};
+
+	template<typename _type>
+	_type* UIWidgetLayer::FindLayer() const
+	{
+		for (auto child : mChilds)
+			if (child->drawable && child->drawable->GetType() == *_type::type)
+				return (_type*)(child->drawable);
+
+		for (auto child : mChilds)
+		{
+			auto res = child->FindLayer<_type>();
+			if (res)
+				return res;
+		}
+
+		return nullptr;
+	}
 }

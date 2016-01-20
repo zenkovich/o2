@@ -2,7 +2,7 @@
 
 #include "Utils/CommonTypes.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Property.h"
 #include "Utils/String.h"
 
@@ -41,7 +41,7 @@ namespace o2
 		Bitmap& operator=(const Bitmap& other);
 
 		// Returns copy of this
-		Ptr<Bitmap> Clone() const;
+		Bitmap* Clone() const;
 
 		// Creates image with specified format
 		void Create(Format format, const Vec2I& size);
@@ -71,10 +71,10 @@ namespace o2
 		const String& GetFilename() const;
 
 		// Copy image to position
-		void CopyImage(Ptr<Bitmap> img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
+		void CopyImage(Bitmap* img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
 
 		// Blends images by alpha
-		void BlendImage(Ptr<Bitmap> img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
+		void BlendImage(Bitmap* img, const Vec2I& position = Vec2I(), const RectI& imgSrc = RectI());
 
 		// Sets images pixels colors
 		void Colorise(const Color4& color);

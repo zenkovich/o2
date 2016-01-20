@@ -23,4 +23,6 @@ namespace UIStyle
 	void RebuildTreeStyle();
 	void RebuildMenuPanelStyle();
 	void RebuildBasicUIStyle();
+	void RebuildBacklessDropdown();
+	void RebuildBacklessEditbox();
 }

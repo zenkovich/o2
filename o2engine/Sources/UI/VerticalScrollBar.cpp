@@ -6,7 +6,7 @@ namespace o2
 {
 	UIVerticalScrollBar::UIVerticalScrollBar():
 		mValue(0), mMinValue(0), mMaxValue(1), mScrollSense(1.0f), mScrollHandleSize(0.2f), mHandlePressed(false),
-		mScrollhandleMinPxSize(5), mSmoothValue(mValue)
+		mScrollhandleMinPxSize(5), mSmoothValue(mValue), mHandleLayer(nullptr), mBackLayer(nullptr)
 	{
 		InitializeProperties();
 	}
@@ -326,7 +326,7 @@ namespace o2
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIVerticalScrollBar::OnLayerAdded(Ptr<UIWidgetLayer> layer)
+	void UIVerticalScrollBar::OnLayerAdded(UIWidgetLayer* layer)
 	{
 		if (layer->name == "back")
 			mBackLayer = layer;

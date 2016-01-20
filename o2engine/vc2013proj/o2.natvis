@@ -50,7 +50,7 @@
       <Item Name="capacity" ExcludeView="simple">mCapacity</Item>
       <ArrayItems>
         <Size>mCount</Size>
-        <ValuePointer>mValues.mObject</ValuePointer>
+        <ValuePointer>mValues</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
@@ -70,7 +70,7 @@
       <Item Name="capacity" ExcludeView="simple">mPairs.mCapacity</Item>
       <ArrayItems>
         <Size>mPairs.mCount</Size>
-        <ValuePointer>mPairs.mValues.mObject</ValuePointer>
+        <ValuePointer>mPairs.mValues</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
@@ -122,7 +122,7 @@
       <Item Name="count" ExcludeView="simple">mChildNodes.mCount</Item>
       <ArrayItems>
         <Size>mChildNodes.mCount</Size>
-        <ValuePointer>mChildNodes.mValues.mObject</ValuePointer>
+        <ValuePointer>mChildNodes.mValues</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
@@ -136,7 +136,7 @@
       <Item Name="childs" ExcludeView="simple">mChildNodes.mCount</Item>
       <ArrayItems>
         <Size>mChildNodes.mCount</Size>
-        <ValuePointer>mChildNodes.mValues.mObject</ValuePointer>
+        <ValuePointer>mChildNodes.mValues</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
@@ -160,7 +160,7 @@
         <Expand>
           <ArrayItems>
             <Size>mLayers.mCount</Size>
-            <ValuePointer>mLayers.mValues.mObject</ValuePointer>
+            <ValuePointer>mLayers.mValues</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
@@ -170,7 +170,7 @@
         <Expand>
           <ArrayItems>
             <Size>mStates.mCount</Size>
-            <ValuePointer>mStates.mValues.mObject</ValuePointer>
+            <ValuePointer>mStates.mValues</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
@@ -180,14 +180,14 @@
         <Expand>
           <ArrayItems>
             <Size>mDrawingLayers.mCount</Size>
-            <ValuePointer>mDrawingLayers.mValues.mObject</ValuePointer>
+            <ValuePointer>mDrawingLayers.mValues</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
 
       <ArrayItems>
         <Size>mChilds.mCount</Size>
-        <ValuePointer>mChilds.mValues.mObject</ValuePointer>
+        <ValuePointer>mChilds.mValues</ValuePointer>
       </ArrayItems>
 
     </Expand>

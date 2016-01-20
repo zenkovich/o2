@@ -14,7 +14,7 @@ namespace o2
 		FontRef();
 
 		// Constructor
-		FontRef(Ptr<Font> font);
+		FontRef(Font* font);
 
 		// Constructor
 		FontRef(const String& fileName);
@@ -56,7 +56,7 @@ namespace o2
 		operator bool() const;
 
 	protected:
-		Ptr<Font> mFont; // Font pointer
+		Font* mFont; // Font pointer
 
 		friend class Render;
 		friend class VectorFontAsset;

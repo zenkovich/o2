@@ -22,7 +22,7 @@ namespace o2
 	void IAssetConverter::Reset()
 	{}
 
-	void IAssetConverter::SetAssetsBuilder(Ptr<AssetsBuilder> builder)
+	void IAssetConverter::SetAssetsBuilder(AssetsBuilder* builder)
 	{
 		mAssetsBuilder = builder;
 	}

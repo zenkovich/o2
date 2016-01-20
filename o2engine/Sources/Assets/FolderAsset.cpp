@@ -53,9 +53,9 @@ namespace o2
 		return mContainingAssetsInfos;
 	}
 
-	Ptr<FolderAsset::MetaInfo> FolderAsset::GetMeta() const
+	FolderAsset::MetaInfo* FolderAsset::GetMeta() const
 	{
-		return mMeta.Cast<MetaInfo>();
+		return (MetaInfo*)mMeta;
 	}
 
 	void FolderAsset::LoadData(const String& path)
@@ -63,7 +63,7 @@ namespace o2
 		auto folderAssetInfo = o2Assets.mAssetsTree.FindAsset(mPath);
 		if (folderAssetInfo)
 			mContainingAssetsInfos = folderAssetInfo->GetChilds().Select<AssetInfo>(
-				[&](const Ptr<AssetTree::AssetNode>& asset) { return (AssetInfo)(*asset); });
+				[&](AssetTree::AssetNode* asset) { return (AssetInfo)(*asset); });
 	}
 
 	void FolderAsset::InitializeProperties()

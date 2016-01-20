@@ -15,8 +15,8 @@
 namespace o2
 {
 	UIEditBox::UIEditBox():
-		UIScrollArea(), mSelectionBegin(0), mSelectionEnd(0), mMultiLine(true), mWordWrap(false), mMaxLineChars(0), 
-		mMaxLinesCount(0), mSelectionColor(0.1f, 0.2f, 0.6f, 0.3f), mCaretBlinkDelay(1), mCaretBlinkTime(0), 
+		UIScrollArea(), mSelectionBegin(0), mSelectionEnd(0), mMultiLine(true), mWordWrap(false), mMaxLineChars(0),
+		mMaxLinesCount(0), mSelectionColor(0.1f, 0.2f, 0.6f, 0.3f), mCaretBlinkDelay(1), mCaretBlinkTime(0),
 		mLastClickTime(-10.0f)
 	{
 		mSelectionMesh = mnew Mesh();
@@ -27,8 +27,8 @@ namespace o2
 
 	UIEditBox::UIEditBox(const UIEditBox& other):
 		UIScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
-		mMaxLinesCount(other.mMaxLinesCount), mSelectionBegin(0), mSelectionEnd(0), mText(other.mText), 
-		mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor), 
+		mMaxLinesCount(other.mMaxLinesCount), mSelectionBegin(0), mSelectionEnd(0), mText(other.mText), mLastText(other.mText),
+		mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
 		mCaretBlinkDelay(other.mCaretBlinkDelay), mCaretBlinkTime(0), mLastClickTime(-10.0f)
 	{
 		mSelectionMesh = mnew Mesh();
@@ -45,19 +45,20 @@ namespace o2
 
 	UIEditBox::~UIEditBox()
 	{
-		mSelectionMesh.Release();
-		mTextDrawable.Release();
-		mCaretDrawable.Release();
+		delete mSelectionMesh;
+		delete mTextDrawable;
+		delete mCaretDrawable;
 	}
 
 	UIEditBox& UIEditBox::operator=(const UIEditBox& other)
 	{
 		UIScrollArea::operator=(other);
 
-		mTextDrawable.Release();
-		mCaretDrawable.Release();
+		delete mTextDrawable;
+		delete mCaretDrawable;
 
 		mText = other.mText;
+		mLastText = mText;
 		mAvailableSymbols = other.mAvailableSymbols;
 		mSelectionBegin = 0;
 		mSelectionEnd = 0;
@@ -97,7 +98,7 @@ namespace o2
 		mTextDrawable->Draw();
 		mSelectionMesh->Draw();
 
-		if(mIsSelected)
+		if (mIsSelected)
 			mCaretDrawable->Draw();
 
 		for (auto child : mChilds)
@@ -120,8 +121,14 @@ namespace o2
 
 	void UIEditBox::Update(float dt)
 	{
+		if (mFullyDisabled)
+			return;
+
 		UIScrollArea::Update(dt);
 		UpdateCaretBlinking(dt);
+
+		if (mIsSelected && o2Input.IsCursorReleased() && !IsUnderPoint(o2Input.GetCursorPos()))
+			UIWidget::Deselect();
 	}
 
 	void UIEditBox::SetText(const WString& text)
@@ -131,6 +138,8 @@ namespace o2
 		UpdateScrollParams();
 		UpdateSelectionAndCaret();
 		onChanged(mText);
+
+		mLastText = mText;
 	}
 
 	WString UIEditBox::GetText() const
@@ -193,12 +202,12 @@ namespace o2
 		CheckScrollingToCaret();
 	}
 
-	Ptr<Text> UIEditBox::GetTextDrawable()
+	Text* UIEditBox::GetTextDrawable()
 	{
 		return mTextDrawable;
 	}
 
-	Ptr<Sprite> UIEditBox::GetCaretDrawable()
+	Sprite* UIEditBox::GetCaretDrawable()
 	{
 		return mCaretDrawable;
 	}
@@ -327,6 +336,7 @@ namespace o2
 			filteredText[fi] = '\0';
 
 			mText = filteredText;
+			mLastText = mText;
 			mTextDrawable->SetText(filteredText);
 
 			UpdateLayout();
@@ -389,6 +399,12 @@ namespace o2
 		interactable = mResVisible;
 	}
 
+	void UIEditBox::OnDeselected()
+	{
+		mLastText = mText;
+		onChangeCompleted(mText);
+	}
+
 	void UIEditBox::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.SelectWidget(this);
@@ -429,7 +445,10 @@ namespace o2
 			*pressedState = false;
 
 		if (!IsUnderPoint(cursor.mPosition))
+		{
 			o2Application.SetCursor(CursorType::Arrow);
+			UIWidget::Deselect();
+		}
 	}
 
 	void UIEditBox::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -538,7 +557,27 @@ namespace o2
 	}
 
 	void UIEditBox::OnKeyReleased(const Input::Key& key)
-	{}
+	{
+		if (mIsSelected)
+		{
+			if (key.mKey == VK_ESCAPE)
+			{
+				if (!mMultiLine)
+					SetText(mLastText);
+
+				UIWidget::Deselect();
+			}
+
+			if (!mMultiLine)
+			{
+				if (key.mKey == VK_RETURN)
+				{
+					mLastText = mText;
+					UIWidget::Deselect();
+				}
+			}
+		}
+	}
 
 	void UIEditBox::OnKeyStayDown(const Input::Key& key)
 	{
@@ -593,10 +632,10 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			mScrollArea.left   = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
+			mScrollArea.left = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
 			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout.mLocalRect.bottom);
-			mScrollArea.right  = Math::Max(mScrollArea.right, child->layout.mLocalRect.right);
-			mScrollArea.top    = Math::Max(mScrollArea.top, child->layout.mLocalRect.top);
+			mScrollArea.right = Math::Max(mScrollArea.right, child->layout.mLocalRect.right);
+			mScrollArea.top = Math::Max(mScrollArea.top, child->layout.mLocalRect.top);
 		}
 
 		RectF localTextLayout = localViewArea;
@@ -604,10 +643,10 @@ namespace o2
 		RectF textArea(localTextLayout.left, localTextLayout.top - textRealSize.y,
 					   localTextLayout.left + textRealSize.x, localTextLayout.top);
 
-		mScrollArea.left   = Math::Min(mScrollArea.left, textArea.left);
+		mScrollArea.left = Math::Min(mScrollArea.left, textArea.left);
 		mScrollArea.bottom = Math::Min(mScrollArea.bottom, textArea.bottom);
-		mScrollArea.right  = Math::Max(mScrollArea.right, textArea.right);
-		mScrollArea.top    = Math::Max(mScrollArea.top, textArea.top);
+		mScrollArea.right = Math::Max(mScrollArea.right, textArea.right);
+		mScrollArea.top = Math::Max(mScrollArea.top, textArea.top);
 
 		mScrollRange = RectF(mScrollArea.left - localViewArea.left,
 							 localViewArea.Height() - mScrollArea.top + localViewArea.bottom,
@@ -725,6 +764,12 @@ namespace o2
 	{
 		UIWidget::UpdateTransparency();
 		mTextDrawable->transparency = mResTransparency;
+
+		Color4 sc = mSelectionColor;
+		sc.a = (int)(((float)sc.a)*mResTransparency);
+		ULong selectionClr = sc.ABGR();
+		for (UInt i = 0; i < mSelectionMesh->vertexCount; i++)
+			mSelectionMesh->vertices[i].color = selectionClr;
 	}
 
 	void UIEditBox::UpdateSelectionAndCaret()
@@ -791,6 +836,13 @@ namespace o2
 
 	Vec2F UIEditBox::GetTextCaretPosition(int position)
 	{
+		bool fakeSymbols = false;
+		if (mText.Length() == 0)
+		{
+			fakeSymbols = true;
+			mTextDrawable->SetText("A");
+		}
+
 		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
 		for (auto line : symbolsSet.mLines)
 		{
@@ -801,7 +853,10 @@ namespace o2
 				if (off < line.mSymbols.Count())
 				{
 					auto symb = line.mSymbols[off];
-					return symb.mFrame.LeftBottom() + symb.mOrigin;
+					auto res = symb.mFrame.LeftBottom() + symb.mOrigin;
+					if (fakeSymbols)
+						mTextDrawable->SetText("");
+					return res;
 				}
 				else
 				{
@@ -809,13 +864,21 @@ namespace o2
 						return line.mPosition;
 
 					auto symb = line.mSymbols.Last();
-					return symb.mFrame.LeftBottom() + symb.mOrigin + Vec2F(symb.mAdvance, 0);
+					auto res = symb.mFrame.LeftBottom() + symb.mOrigin + Vec2F(symb.mAdvance, 0);
+					if (fakeSymbols)
+						mTextDrawable->SetText("");
+					return res;
 				}
 			}
 		}
 
-		if (mTextDrawable->GetFont())
+		if (auto fnt = mTextDrawable->GetFont())
+		{
+			if (fakeSymbols)
+				mTextDrawable->SetText("");
+
 			return mAbsoluteViewArea.LeftTop() - Vec2F(0, mTextDrawable->GetFont()->GetHeight());
+		}
 
 		return Vec2F();
 	}
@@ -849,14 +912,14 @@ namespace o2
 
 				RectF sf(symb.mFrame.left, lineTop, symb.mFrame.right, lineBottom);
 
-				bool ls = checkLeft ? sf.left < point.x:true;
-				bool rs = checkRight ? sf.right > point.x:true;
+				bool ls = checkLeft ? sf.left < point.x : true;
+				bool rs = checkRight ? sf.right > point.x : true;
 				bool ts = checkUp ? sf.top > point.y:true;
-				bool bs = checkDown ? sf.bottom < point.y:true;
+				bool bs = checkDown ? sf.bottom < point.y : true;
 
 				if (ls && rs && ts && bs)
 				{
-					if (point.x >(symb.mFrame.left + symb.mFrame.right)*0.5f)
+					if (point.x > (symb.mFrame.left + symb.mFrame.right)*0.5f)
 						return line.mLineBegSymbol + idx + 1;
 					else
 						return line.mLineBegSymbol + idx;
@@ -887,7 +950,7 @@ namespace o2
 		if (mSelectionMesh->GetMaxPolyCount() < mSelectionMesh->polyCount + 6)
 		{
 			int newPolyCount = mSelectionMesh->polyCount + 6;
-			mSelectionMesh->Resize(newPolyCount*2, newPolyCount);
+			mSelectionMesh->Resize(newPolyCount * 2, newPolyCount);
 		}
 
 		unsigned long color = mSelectionColor.ABGR();
@@ -897,14 +960,14 @@ namespace o2
 		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.RightTop(), color, 0.0f, 0.0f);
 		mSelectionMesh->vertices[mSelectionMesh->vertexCount++] = Vertex2(rect.RightBottom(), color, 0.0f, 0.0f);
 
-		mSelectionMesh->indexes[mSelectionMesh->polyCount*3] = mSelectionMesh->vertexCount - 4;
-		mSelectionMesh->indexes[mSelectionMesh->polyCount*3 + 1] = mSelectionMesh->vertexCount - 3;
-		mSelectionMesh->indexes[mSelectionMesh->polyCount*3 + 2] = mSelectionMesh->vertexCount - 2;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount * 3] = mSelectionMesh->vertexCount - 4;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount * 3 + 1] = mSelectionMesh->vertexCount - 3;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount * 3 + 2] = mSelectionMesh->vertexCount - 2;
 		mSelectionMesh->polyCount++;
 
-		mSelectionMesh->indexes[mSelectionMesh->polyCount*3] = mSelectionMesh->vertexCount - 4;
-		mSelectionMesh->indexes[mSelectionMesh->polyCount*3 + 1] = mSelectionMesh->vertexCount - 2;
-		mSelectionMesh->indexes[mSelectionMesh->polyCount*3 + 2] = mSelectionMesh->vertexCount - 1;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount * 3] = mSelectionMesh->vertexCount - 4;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount * 3 + 1] = mSelectionMesh->vertexCount - 2;
+		mSelectionMesh->indexes[mSelectionMesh->polyCount * 3 + 2] = mSelectionMesh->vertexCount - 1;
 		mSelectionMesh->polyCount++;
 	}
 
@@ -930,7 +993,10 @@ namespace o2
 			if (mHorScrollBar)
 				mHorScrollBar->SetValue(mScrollPos.x + horOffs);
 			else
+			{
 				mScrollPos.x = Math::Clamp(mScrollPos.x + horOffs, mScrollRange.left, mScrollRange.right);
+				UpdateLayout();
+			}
 		}
 
 		if (mMultiLine)
@@ -942,7 +1008,10 @@ namespace o2
 				if (mVerScrollBar)
 					mVerScrollBar->SetValue(mScrollPos.y + verOffs);
 				else
+				{
 					mScrollPos.y = Math::Clamp(mScrollPos.y + verOffs, mScrollRange.bottom, mScrollRange.top);
+					UpdateLayout();
+				}
 			}
 		}
 	}
@@ -1027,6 +1096,12 @@ namespace o2
 		if (o2Input.IsKeyDown(VK_CONTROL))
 			return;
 
+		if (key == VK_ESCAPE)
+			return;
+
+		if (!mMultiLine && key == VK_RETURN)
+			return;
+
 		char16_t unicode = (char16_t)GetUnicodeFromVirtualCode(key);
 
 		if (unicode != 0 && unicode != 8)
@@ -1095,7 +1170,7 @@ namespace o2
 			UpdateLayout();
 
 			if (mSelectionEnd == mSelectionBegin)
-				MoveCaret(mSelectionEnd -1, false);
+				MoveCaret(mSelectionEnd - 1, false);
 			else
 				MoveCaret(Math::Min(mSelectionEnd, mSelectionBegin), false);
 		}
@@ -1167,7 +1242,7 @@ namespace o2
 		if (key == VK_HOME)
 		{
 			int endLineSymbol = mSelectionEnd;
-			for (int i = mSelectionEnd -1; i >= 0; i--)
+			for (int i = mSelectionEnd - 1; i >= 0; i--)
 			{
 				endLineSymbol = i;
 				if (mText[i] == '\n')
@@ -1246,5 +1321,4 @@ namespace o2
 		INITIALIZE_PROPERTY(UIEditBox, selectionBegin, SetSelectionBegin, GetSelectionBegin);
 		INITIALIZE_PROPERTY(UIEditBox, selectionEnd, SetSelectionEnd, GetSelectionEnd);
 	}
-
 }

@@ -12,12 +12,12 @@ namespace o2
 	class ActorTransform: public Transform
 	{
 	public:
-		Getter<Ptr<Actor>> actor;         // Owner actor getter
-		Property<Vec2F>    worldPosition; // World position property
-		Property<RectF>    worldRect;     // World rectangle property. Sets the position and size
-		Property<float>    worldAngle;    // World rotation angle in radians
-		Property<Basis>    worldBasis;    // World transformation basis
-		Property<RectF>    worldAABB;     // World axis aligned rectangle
+		Getter<Actor*>  actor;         // Owner actor getter
+		Property<Vec2F> worldPosition; // World position property
+		Property<RectF> worldRect;     // World rectangle property. Sets the position and size
+		Property<float> worldAngle;    // World rotation angle in radians
+		Property<Basis> worldBasis;    // World transformation basis
+		Property<RectF> worldAABB;     // World axis aligned rectangle
 
 		ActorTransform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
 					   const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F(0.5f, 0.5f));
@@ -32,7 +32,7 @@ namespace o2
 		ActorTransform& operator=(const Transform& other);
 
 		// Returns owner actor
-		Ptr<Actor> GetOwnerActor() const;
+		Actor* GetOwnerActor() const;
 
 		// Sets world position
 		void SetWorldPosition(const Vec2F& position);
@@ -139,15 +139,15 @@ namespace o2
 		SERIALIZABLE(ActorTransform);
 
 	protected:
-		Basis      mWorldTransform;          // Result world basis
-		Basis      mParentInvertedTransform; // Parent world transform inverted
-		Basis      mParentTransform;         // Parent world transform
-		bool       mIsParentInvTransformActual; // Is mParentInvertedTransform is actual
-		Ptr<Actor> mOwner;                   // Owner actor
+		Basis  mWorldTransform;          // Result world basis
+		Basis  mParentInvertedTransform; // Parent world transform inverted
+		Basis  mParentTransform;         // Parent world transform
+		bool   mIsParentInvTransformActual; // Is mParentInvertedTransform is actual
+		Actor* mOwner;                   // Owner actor
 
 	protected:
 		// Sets owner and updates transform
-		void SetOwner(Ptr<Actor> actor);
+		void SetOwner(Actor* actor);
 
 		// Updates mTransform 
 		void UpdateTransform();

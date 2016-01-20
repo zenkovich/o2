@@ -2,7 +2,7 @@
 
 #include "Utils/Assert.h"
 #include "Utils/Containers/IArray.h"
-#include "Utils/Memory/Ptr.h"
+#include "Utils/Memory/MemoryManager.h"
 
 #ifndef CONTAINERS_DEBUG
 #define CONTAINERS_DEBUG true
@@ -162,9 +162,9 @@ namespace o2
 		};
 
 	protected:
-		Ptr<_type> mValues;   // Array elements
-		int        mCount;    // Count of elements
-		int        mCapacity; // Size of mValues
+		_type* mValues;   // Array elements
+		int    mCount;    // Count of elements
+		int    mCapacity; // Size of mValues
 
 	public:
 		// Constructor by initial capacity
@@ -812,7 +812,7 @@ namespace o2
 
 		mCapacity = newCapacity;
 
-		Ptr<_type> tmpValues = (_type*)mmalloc(mCount*sizeof(_type));
+		_type* tmpValues = (_type*)mmalloc(mCount*sizeof(_type));
 		for (int i = 0; i < mCount; i++)
 		{
 			new (tmpValues + i) _type(mValues[i]);

@@ -5,7 +5,7 @@
 #include <GL/glu.h>
 #include "Dependencies/OpenGL/glext.h"
 #include "Dependencies/OpenGL/wglext.h"
-#include "Utils/Memory/Ptr.h"
+
 
 namespace o2
 {
@@ -13,7 +13,7 @@ namespace o2
 }
 
 // Getting openGL extensions
-void GetGLExtensions(o2::Ptr<o2::LogStream> log = nullptr);
+void GetGLExtensions(o2::LogStream* log = nullptr);
 
 // Returns opengl error description by id
 const char* GetGLErrorDesc(GLenum errorId);
@@ -22,7 +22,7 @@ const char* GetGLErrorDesc(GLenum errorId);
 bool IsGLExtensionSupported(const char *extension);
 
 // Checks OpenGL error
-void glCheckError(o2::Ptr<o2::LogStream> log, const char* filename = nullptr, unsigned int line = 0);
+void glCheckError(o2::LogStream* log, const char* filename = nullptr, unsigned int line = 0);
 
 #if RENDER_DEBUG
 #	define GL_CHECK_ERROR(log) glCheckError(log, __FILE__, __LINE__);

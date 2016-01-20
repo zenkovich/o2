@@ -4,7 +4,8 @@
 
 namespace o2
 {
-	UIWidgetLayout::UIWidgetLayout()
+	UIWidgetLayout::UIWidgetLayout():
+		mOwner(nullptr)
 	{
 		InitializeProperties();
 	}
@@ -12,7 +13,7 @@ namespace o2
 	UIWidgetLayout::UIWidgetLayout(const UIWidgetLayout& other):
 		mPivot(other.mPivot), mAnchorMin(other.mAnchorMin), mAnchorMax(other.mAnchorMax),
 		mOffsetMin(other.mOffsetMin), mOffsetMax(other.mOffsetMax), mMinSize(other.mMinSize), mMaxSize(other.mMaxSize),
-		mWeight(other.mWeight)
+		mWeight(other.mWeight), mOwner(nullptr)
 	{
 		InitializeProperties();
 	}

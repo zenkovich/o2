@@ -11,14 +11,14 @@ namespace o2
 	class DragHandle: public CursorEventsListener
 	{
 	public:
-		Ptr<Sprite>                  regularSprite;
-		Ptr<Sprite>                  hoverSprite;
-		Ptr<Sprite>                  pressedSprite;
+		Sprite*                      regularSprite;
+		Sprite*                      hoverSprite;
+		Sprite*                      pressedSprite;
 		Function<void(const Vec2F&)> onChangedPos;
 		Property<Vec2F>              position;
 
 		DragHandle();
-		DragHandle(Ptr<Sprite> regular, Ptr<Sprite> hover = nullptr, Ptr<Sprite> pressed = nullptr);
+		DragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr);
 		DragHandle(const DragHandle& other);
 		~DragHandle();
 

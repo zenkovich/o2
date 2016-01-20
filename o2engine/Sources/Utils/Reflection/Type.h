@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Property.h"
 #include "Utils/Reflection/FieldInfo.h"
 #include "Utils/String.h"
@@ -16,12 +16,23 @@ namespace o2
 	{
 	public:
 		typedef UInt Id;
-		typedef Vector<Ptr<FieldInfo>> FieldInfosVec;
-		typedef Vector<Ptr<Type>> TypesVec;
+		typedef Vector<FieldInfo*> FieldInfosVec;
+		typedef Vector<Type*> TypesVec;
 
 		struct Dummy
 		{
-			static Ptr<Type> type;
+			static Type* type;
+		};
+
+		struct ITypeCreator
+		{
+			virtual IObject* Create() const = 0;
+		};
+
+		template<typename _type>
+		struct TypeCreator: public ITypeCreator
+		{
+			IObject* Create() const { return mnew _type(); }
 		};
 
 	public:
@@ -55,11 +66,8 @@ namespace o2
 		// Returns inherited types
 		TypesVec DerivedTypes() const;
 
-		// Returns sample pointer
-		const IObject* Sample() const;
-
 		// Creates sample copy and returns him
-		Ptr<IObject> CreateSample() const;
+		IObject* CreateSample() const;
 
 		// Returns filed pointer by path
 		template<typename _type>
@@ -74,7 +82,7 @@ namespace o2
 
 		// Registers field in type
 		template<typename _type>
-		FieldInfo& RegField(const String& name, UInt offset, Ptr<_type> value);
+		FieldInfo& RegField(const String& name, UInt offset, _type*& value);
 
 		// Registers field in type
 		template<typename _type>
@@ -86,14 +94,14 @@ namespace o2
 
 		// Registers field in type
 		template<typename _type>
-		FieldInfo& RegField(const String& name, UInt offset, Accessor<Ptr<_type>, const String&>& value);
+		FieldInfo& RegField(const String& name, UInt offset, Accessor<_type*, const String&>& value);
 
 	protected:
-		String        mName;      // Name of object type
-		FieldInfosVec mFields;    // Fields information
-		Id            mId;        // Id of type
-		TypesVec      mBaseTypes; // Base types ids
-		Ptr<IObject>  mSample;    // Object sample
+		String        mName;        // Name of object type
+		FieldInfosVec mFields;      // Fields information
+		Id            mId;          // Id of type
+		TypesVec      mBaseTypes;   // Base types ids
+		ITypeCreator* mTypeCreator; // Type creator
 
 		friend class FieldInfo;
 		friend class Reflection;
@@ -104,9 +112,9 @@ namespace o2
 
 
 	template<typename _type>
-	FieldInfo& Type::RegField(const String& name, UInt offset, Ptr<_type> value)
+	FieldInfo& Type::RegField(const String& name, UInt offset, _type*& value)
 	{
-		Ptr<Type> type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		Type* type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
 		mFields.Add(mnew FieldInfo(name, offset, false, true, type));
 		return *mFields.Last();
 	}
@@ -114,7 +122,7 @@ namespace o2
 	template<typename _type>
 	FieldInfo& Type::RegField(const String& name, UInt offset, _type& value)
 	{
-		Ptr<Type> type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		Type* type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
 		mFields.Add(mnew FieldInfo(name, offset, false, false, type));
 		return *mFields.Last();
 	}
@@ -122,15 +130,15 @@ namespace o2
 	template<typename _type>
 	FieldInfo& Type::RegField(const String& name, UInt offset, Property<_type>& value)
 	{
-		Ptr<Type> type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		Type* type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
 		mFields.Add(mnew FieldInfo(name, offset, true, false, type));
 		return *mFields.Last();
 	}
 
 	template<typename _type>
-	FieldInfo& Type::RegField(const String& name, UInt offset, Accessor<Ptr<_type>, const String&>& value)
+	FieldInfo& Type::RegField(const String& name, UInt offset, Accessor<_type*, const String&>& value)
 	{
-		Ptr<Type> type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
+		Type* type = std::conditional<std::is_base_of<IObject, _type>::value, _type, Dummy>::type::type;
 		mFields.Add(mnew AccessorFieldInfo<_type>(name, offset, type));
 		return *mFields.Last();
 	}

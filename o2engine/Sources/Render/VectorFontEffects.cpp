@@ -9,7 +9,7 @@ namespace o2
 		radius(radius), color(color), alphaThreshold(alphaThreshold)
 	{}
 
-	void FontStrokeEffect::Process(Ptr<Bitmap> bitmap)
+	void FontStrokeEffect::Process(Bitmap* bitmap)
 	{
 		bitmap->Outline(radius, color, alphaThreshold);
 	}
@@ -19,12 +19,12 @@ namespace o2
 		return Vec2F::One()*radius;
 	}
 
-	bool FontStrokeEffect::IsEqual(Ptr<VectorFont::Effect> other) const
+	bool FontStrokeEffect::IsEqual(VectorFont::Effect* other) const
 	{
 		if (!VectorFont::Effect::IsEqual(other))
 			return false;
 
-		Ptr<FontStrokeEffect> otherEff = other.Cast<FontStrokeEffect>();
+		FontStrokeEffect* otherEff = (FontStrokeEffect*)other;
 		return Math::Equals(radius, otherEff->radius) && alphaThreshold == otherEff->alphaThreshold &&
 			color == otherEff->color;
 	}
@@ -35,7 +35,7 @@ namespace o2
 		color1(color1), color2(color2), angle(angle), length(length), origin(origin)
 	{}
 
-	void FontGradientEffect::Process(Ptr<Bitmap> bitmap)
+	void FontGradientEffect::Process(Bitmap* bitmap)
 	{
 		bitmap->GradientByAlpha(color1, color2, angle, length, origin);
 	}
@@ -45,12 +45,12 @@ namespace o2
 		return Vec2I();
 	}
 
-	bool FontGradientEffect::IsEqual(Ptr<VectorFont::Effect> other) const
+	bool FontGradientEffect::IsEqual(VectorFont::Effect* other) const
 	{
 		if (!VectorFont::Effect::IsEqual(other))
 			return false;
 
-		Ptr<FontGradientEffect> otherEff = other.Cast<FontGradientEffect>();
+		FontGradientEffect* otherEff = (FontGradientEffect*)other;
 		return Math::Equals(angle, otherEff->angle) && Math::Equals(length, otherEff->length) &&
 			color1 == otherEff->color1 && color2 == otherEff->color2 && origin == otherEff->origin;
 	}
@@ -59,7 +59,7 @@ namespace o2
 		color(color)
 	{}
 
-	void FontColorEffect::Process(Ptr<Bitmap> bitmap)
+	void FontColorEffect::Process(Bitmap* bitmap)
 	{
 		bitmap->Colorise(color);
 	}
@@ -69,12 +69,12 @@ namespace o2
 		return Vec2I();
 	}
 
-	bool FontColorEffect::IsEqual(Ptr<VectorFont::Effect> other) const
+	bool FontColorEffect::IsEqual(VectorFont::Effect* other) const
 	{
 		if (!VectorFont::Effect::IsEqual(other))
 			return false;
 
-		Ptr<FontColorEffect> otherEff = other.Cast<FontColorEffect>();
+		FontColorEffect* otherEff = (FontColorEffect*)other;
 		return color == otherEff->color;
 	}
 
@@ -83,7 +83,7 @@ namespace o2
 		blurRadius(blurRadius), offset(offset), color(color)
 	{}
 
-	void FontShadowEffect::Process(Ptr<Bitmap> bitmap)
+	void FontShadowEffect::Process(Bitmap* bitmap)
 	{
 		Bitmap shadow(*bitmap);
 		shadow.Colorise(color);
@@ -96,12 +96,12 @@ namespace o2
 		return offset + (Vec2I)(Vec2F::One()*blurRadius);
 	}
 
-	bool FontShadowEffect::IsEqual(Ptr<VectorFont::Effect> other) const
+	bool FontShadowEffect::IsEqual(VectorFont::Effect* other) const
 	{
 		if (!VectorFont::Effect::IsEqual(other))
 			return false;
 
-		Ptr<FontShadowEffect> otherEff = other.Cast<FontShadowEffect>();
+		FontShadowEffect* otherEff = (FontShadowEffect*)other;
 		return Math::Equals(blurRadius, otherEff->blurRadius) && offset == otherEff->offset && 
 			color == otherEff->color;
 	}

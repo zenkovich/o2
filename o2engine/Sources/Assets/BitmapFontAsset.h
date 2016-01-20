@@ -16,8 +16,8 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Getter<Ptr<MetaInfo>> meta; // Meta information getter
-		Getter<FontRef>       font; // Font getter
+		Getter<MetaInfo*> meta; // Meta information getter
+		Getter<FontRef>   font; // Font getter
 
 		// Default constructor
 		BitmapFontAsset();
@@ -38,7 +38,7 @@ namespace o2
 		BitmapFontAsset& operator=(const BitmapFontAsset& asset);
 
 		// Returns meta information
-		Ptr<MetaInfo> GetMeta() const;
+		MetaInfo* GetMeta() const;
 
 		// Returns font pointer
 		FontRef GetFont() const;

@@ -27,13 +27,13 @@ namespace o2
 		{
 		public:
 			// Processes glyph bitmap
-			virtual void Process(Ptr<Bitmap> bitmap) {};
+			virtual void Process(Bitmap* bitmap) {};
 
 			// Returns needs extending size for glyph bitmap
 			virtual Vec2I GetSizeExtend() const { return Vec2I(); };
 
 			// Check effect equals
-			virtual bool IsEqual(Ptr<Effect> other) const { return GetType() == other->GetType(); }
+			virtual bool IsEqual(Effect* other) const { return GetType() == other->GetType(); }
 
 			SERIALIZABLE(Effect);
 		};
@@ -69,14 +69,14 @@ namespace o2
 		void CheckCharacters(const WString& needChararacters);
 
 		// Adds effect
-		Ptr<Effect> AddEffect(Ptr<Effect> effect);
+		Effect* AddEffect(Effect* effect);
 
 		// Adds effect
 		template<typename _eff_type, typename ... _args>
-		Ptr<_eff_type> AddEffect(_args ... args);
+		_eff_type* AddEffect(_args ... args);
 
 		// Removes effect
-		void RemoveEffect(Ptr<Effect> effect);
+		void RemoveEffect(Effect* effect);
 
 		// Removes all effects
 		void RemoveAllEffects();
@@ -90,14 +90,14 @@ namespace o2
 		// ------------------------------
 		struct CharDef
 		{
-			Ptr<RectsPacker::Rect> mPackRect;  // Pack rect
-			Character              mCharacter; // Character
-			Ptr<Bitmap>            mBitmap;    // Bitmap
+			RectsPacker::Rect* mPackRect;  // Pack rect
+			Character          mCharacter; // Character
+			Bitmap*            mBitmap;    // Bitmap
 
 			bool operator==(const CharDef& other) const { return false; }
 		};
 		typedef Vector<CharDef> CharDefsVec;
-		typedef Vector<Ptr<Effect>> EffectsVec;
+		typedef Vector<Effect*> EffectsVec;
 
 	protected:
 
@@ -126,8 +126,8 @@ namespace o2
 	};
 
 	template<typename _eff_type, typename ... _args>
-	Ptr<_eff_type> VectorFont::AddEffect(_args ... args)
+	_eff_type* VectorFont::AddEffect(_args ... args)
 	{
-		return AddEffect(mnew _eff_type(args ...)).Cast<_eff_type>();
+		return (_eff_type*)AddEffect(mnew _eff_type(args ...));
 	}
 }

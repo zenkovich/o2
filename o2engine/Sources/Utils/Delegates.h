@@ -394,7 +394,7 @@ namespace o2
 		template<typename _func_type>
 		Function(const _func_type* func)
 		{
-			mFunctions.push_back(new FunctionPtr<_res_type(_args ...)>(func));
+			mFunctions.push_back(new Function_res_type(_args ...)*(func));
 		}
 
 		// Constructor from lambda

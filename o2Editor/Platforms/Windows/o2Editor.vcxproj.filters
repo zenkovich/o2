@@ -16,6 +16,21 @@
     <Filter Include="Core\UIStyle">
       <UniqueIdentifier>{31238126-83ae-4282-b0d1-a25f32c63911}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TreeWindow">
+      <UniqueIdentifier>{472bc6b5-ca24-409e-8c03-0981ea96eb44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AssetsWindow">
+      <UniqueIdentifier>{afdde25e-aa82-4fda-8dfb-f1ce955e82dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PropertiesWindow">
+      <UniqueIdentifier>{21664aea-330a-41c9-b934-f76873222d38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LogWindow">
+      <UniqueIdentifier>{9edc9bf5-4d63-447d-a8c0-f6853990c288}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AnimationWindow">
+      <UniqueIdentifier>{3afe83f3-6480-491e-961f-38965ef8646e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
@@ -48,6 +63,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h">
       <Filter>Core\UIStyle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h">
+      <Filter>TreeWindow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +102,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp">
       <Filter>Core\UIStyle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp">
+      <Filter>TreeWindow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

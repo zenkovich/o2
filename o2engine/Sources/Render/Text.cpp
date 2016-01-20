@@ -47,13 +47,13 @@ namespace o2
 		InitializeProperties();
 	}
 
-	Text::Text(Ptr<BitmapFontAsset> fontAsset):
+	Text::Text(BitmapFontAsset* fontAsset):
 		Text(fontAsset->GetFont())
 	{
 		mFontAssetId = fontAsset->GetAssetId();
 	}
 
-	Text::Text(Ptr<VectorFontAsset> fontAsset):
+	Text::Text(VectorFontAsset* fontAsset):
 		Text(fontAsset->GetFont())
 	{
 		mFontAssetId = fontAsset->GetAssetId();
@@ -74,7 +74,7 @@ namespace o2
 	Text::~Text()
 	{
 		for (auto mesh : mMeshes)
-			mesh.Release();
+			delete mesh;
 
 		if (mFont)
 			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
@@ -136,7 +136,7 @@ namespace o2
 		return mFont;
 	}
 
-	void Text::SetFontAsset(Ptr<BitmapFontAsset> asset)
+	void Text::SetFontAsset(BitmapFontAsset* asset)
 	{
 		if (mFont)
 			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
@@ -148,7 +148,7 @@ namespace o2
 			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 	}
 
-	void Text::SetFontAsset(Ptr<VectorFontAsset> asset)
+	void Text::SetFontAsset(VectorFontAsset* asset)
 	{
 		if (mFont)
 			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
@@ -219,7 +219,7 @@ namespace o2
 			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 	}
 
-	Ptr<Asset> Text::GetFontAsset() const
+	Asset* Text::GetFontAsset() const
 	{
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
 		if (fontAssetInfo.GetType() == *BitmapFontAsset::type)
@@ -325,7 +325,7 @@ namespace o2
 		return RectF(mTransform.offs, mTransform.offs + mSymbolsSet.mRealSize);
 	}
 
-	Vec2F Text::GetTextSize(const WString& text, Ptr<Font> font, const Vec2F& areaSize /*= Vec2F()*/,
+	Vec2F Text::GetTextSize(const WString& text, Font* font, const Vec2F& areaSize /*= Vec2F()*/,
 							HorAlign horAlign /*= HorAlign::Left*/, VerAlign verAlign /*= VerAlign::Top*/,
 							bool wordWrap /*= true*/, bool dotsEngings /*= false*/, float charsDistCoef /*= 1.0f*/, 
 							float linesDistCoef /*= 1.0f*/)
@@ -384,7 +384,7 @@ namespace o2
 		}
 
 		int currentMeshIdx = 0;
-		Ptr<Mesh> currentMesh = mMeshes[0];
+		Mesh* currentMesh = mMeshes[0];
 
 		mSymbolsSet.Initialize(font, mText, mTransform.offs, mSize, mHorAlign, mVerAlign, mWordWrap, mDotsEndings, 
 							   mSymbolsDistCoef, mLinesDistanceCoef);
@@ -432,14 +432,14 @@ namespace o2
 
 	void Text::PrepareMesh(int charactersCount)
 	{
-		int needPolygons = charactersCount*2;
+		int needPolygons = charactersCount*2 + 5; // 5 for dots endings
 		for (auto mesh : mMeshes)
 			needPolygons -= mesh->GetMaxPolyCount();
 
 		if (needPolygons <= 0)
 			return;
 
-		if (needPolygons < 100 && mMeshes.Count() > 0 &&
+		if (mMeshes.Count() > 0 &&
 			needPolygons + mMeshes.Last()->GetMaxPolyCount() < mMeshMaxPolyCount)
 		{
 			mMeshes.Last()->Resize(mMeshes.Last()->GetMaxVertexCount() + (UInt)needPolygons*2,
@@ -447,8 +447,12 @@ namespace o2
 			return;
 		}
 
-		for (int i = 0; i < charactersCount/needPolygons + 1; i++)
-			mMeshes.Add(mnew Mesh(mFont->mTexture, mMeshMaxPolyCount*2, mMeshMaxPolyCount));
+		while (needPolygons > 0)
+		{
+			int polyCount = Math::Min<int>(needPolygons, mMeshMaxPolyCount);
+			needPolygons -= polyCount;
+			mMeshes.Add(mnew Mesh(mFont->mTexture, polyCount * 2, polyCount));
+		}
 	}
 
 	Basis Text::CalculateTextBasis() const
@@ -457,7 +461,6 @@ namespace o2
 		if (mSize == Vec2F())
 		{
 			transf = Basis::Build(mPosition, mScale, mAngle, mShear);
-			transf.offs = transf.offs - transf.xv*mPivot.x - transf.yv*mPivot.y;
 		}
 		else
 		{

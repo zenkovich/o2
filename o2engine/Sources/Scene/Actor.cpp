@@ -6,7 +6,8 @@
 namespace o2
 {
 	Actor::Actor():
-		mName("unnamed"), mEnabled(true), mResEnabled(true), Animatable()
+		mName("unnamed"), mEnabled(true), mResEnabled(true), mLocked(false), mResLocked(false), Animatable(), 
+		mParent(nullptr)
 	{
 		transform.SetOwner(this);
 		InitializeProperties();
@@ -16,8 +17,9 @@ namespace o2
 	}
 
 	Actor::Actor(const Actor& other):
-		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), Animatable(other), 
-		transform(other.transform)
+		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mLocked(other.mLocked), 
+		mResLocked(other.mResLocked), Animatable(other), 
+		transform(other.transform), mParent(nullptr)
 	{
 		transform.SetOwner(this);
 
@@ -45,7 +47,7 @@ namespace o2
 	Actor::~Actor()
 	{
 		if (mParent)
-			mParent->RemoveChild(Ptr<Actor>(this), false);
+			mParent->RemoveChild(this, false);
 		else
 			o2Scene.mActors.Remove(this);
 
@@ -103,6 +105,14 @@ namespace o2
 		return mName;
 	}
 
+	void Actor::ExcludeFromScene()
+	{
+		if (mParent)
+			SetParent(nullptr);
+
+		o2Scene.mActors.Remove(this);
+	}
+
 	void Actor::SetEnabled(bool active)
 	{
 		if (mEnabled == active)
@@ -110,6 +120,8 @@ namespace o2
 
 		mEnabled = active;
 		UpdateEnabled();
+
+		onEnableChanged(mEnabled);
 	}
 
 	void Actor::Enable()
@@ -132,20 +144,66 @@ namespace o2
 		return mResEnabled;
 	}
 
-	void Actor::SetParent(Ptr<Actor> actor, bool worldPositionStays /*= true*/)
+	void Actor::SetLocked(bool locked)
 	{
-		if (actor->mChilds.Contains(this))
+		mLocked = locked;
+		UpdateLocking();
+
+		onLockChanged(mLocked);
+	}
+
+	void Actor::Lock()
+	{
+		SetLocked(true);
+	}
+
+	void Actor::Unlock()
+	{
+		SetLocked(false);
+	}
+
+	bool Actor::IsLocked() const
+	{
+		return mLocked;
+	}
+
+	bool Actor::IsLockedInHierarchy() const
+	{
+		return mResLocked;
+	}
+
+	void Actor::SetPositionIndexInParent(int index)
+	{
+		if (mParent)
+		{
+			mParent->mChilds.Remove(this);
+			mParent->mChilds.Insert(this, index);
+		}
+		else
+		{
+			o2Scene.mActors.Remove(this);
+			o2Scene.mActors.Insert(this, index);
+		}
+	}
+
+	void Actor::SetParent(Actor* actor, bool worldPositionStays /*= true*/)
+	{
+		if ((actor && actor->mChilds.Contains(this)) || actor == this)
 			return;
 
 		Basis lastParentBasis = transform.GetWorldBasis();
 
 		if (mParent)
-			mParent->RemoveChild(Ptr<Actor>(this), false);
+			mParent->RemoveChild(this, false);
+		else
+			o2Scene.mActors.Remove(this);
 
 		mParent = actor;
 
 		if (mParent)
 			mParent->mChilds.Add(this);
+		else
+			o2Scene.mActors.Add(this);
 
 		if (worldPositionStays)
 			transform.SetWorldBasis(lastParentBasis);
@@ -155,18 +213,20 @@ namespace o2
 		UpdateEnabled();
 	}
 
-	Ptr<Actor> Actor::GetParent() const
+	Actor* Actor::GetParent() const
 	{
 		return mParent;
 	}
 
-	Ptr<Actor> Actor::AddChild(Ptr<Actor> actor)
+	Actor* Actor::AddChild(Actor* actor)
 	{
-		if (mChilds.Contains(actor))
+		if (mChilds.Contains(actor) || actor == this)
 			return actor;
 
 		if (actor->mParent)
 			actor->mParent->RemoveChild(actor, false);
+		else
+			o2Scene.mActors.Remove(actor);
 
 		mChilds.Add(actor);
 		actor->mParent = this;
@@ -177,7 +237,26 @@ namespace o2
 		return actor;
 	}
 
-	Ptr<Actor> Actor::GetChild(const String& path) const
+	Actor* Actor::AddChild(Actor* actor, int index)
+	{
+		if (mChilds.Contains(actor) || actor == this)
+			return actor;
+
+		if (actor->mParent)
+			actor->mParent->RemoveChild(actor, false);
+		else
+			o2Scene.mActors.Remove(actor);
+
+		mChilds.Insert(actor, index);
+		actor->mParent = this;
+
+		actor->transform.UpdateTransform();
+		actor->UpdateEnabled();
+
+		return actor;
+	}
+
+	Actor* Actor::GetChild(const String& path) const
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -214,7 +293,7 @@ namespace o2
 		return mChilds;
 	}
 
-	void Actor::RemoveChild(Ptr<Actor> actor, bool release /*= true*/)
+	void Actor::RemoveChild(Actor* actor, bool release /*= true*/)
 	{
 		if (!mChilds.Contains(actor))
 			return;
@@ -223,7 +302,7 @@ namespace o2
 		mChilds.Remove(actor);
 
 		if (release)
-			actor.Release();
+			delete actor;
 		else
 		{
 			actor->transform.UpdateTransform();
@@ -236,13 +315,13 @@ namespace o2
 		for (auto child : mChilds)
 		{
 			child->mParent = nullptr;
-			child.Release();
+			delete child;
 		}
 
 		mChilds.Clear();
 	}
 
-	Ptr<Component> Actor::AddComponent(Ptr<Component> component)
+	Component* Actor::AddComponent(Component* component)
 	{
 		if (GetComponent(component->GetType().Name()) != nullptr)
 			return nullptr;
@@ -251,13 +330,13 @@ namespace o2
 		return component;
 	}
 
-	void Actor::RemoveComponent(Ptr<Component> component, bool release /*= true*/)
+	void Actor::RemoveComponent(Component* component, bool release /*= true*/)
 	{
 		mCompontents.Remove(component);
 		component->mOwner = nullptr;
 
 		if (release)
-			component.Release();
+			delete component;
 	}
 
 	void Actor::RemoveAllComponents()
@@ -265,13 +344,13 @@ namespace o2
 		for (auto comp : mCompontents)
 		{
 			comp->mOwner = nullptr;
-			comp.Release();
+			delete comp;
 		}
 
 		mCompontents.Clear();
 	}
 
-	Ptr<Component> Actor::GetComponent(const String& typeName)
+	Component* Actor::GetComponent(const String& typeName)
 	{
 		for (auto comp : mCompontents)
 			if (comp->GetType().Name() == typeName)
@@ -294,7 +373,7 @@ namespace o2
 			child->transform.UpdateTransform();
 	}
 
-	void Actor::SetParentProp(Ptr<Actor> actor)
+	void Actor::SetParentProp(Actor* actor)
 	{
 		SetParent(actor, false);
 	}
@@ -313,18 +392,38 @@ namespace o2
 			child->UpdateEnabled();
 	}
 
-	Dictionary<String, Ptr<Actor>> Actor::GetAllChilds()
+	void Actor::UpdateLocking()
 	{
-		Dictionary<String, Ptr<Actor>> res;
+		if (mParent)
+			mResLocked = mLocked || mParent->mResLocked;
+		else
+			mResLocked = mLocked;
+
+		for (auto child : mChilds)
+			child->UpdateLocking();
+	}
+
+	void Actor::OnDeserialized(const DataNode& node)
+	{
+		for (auto child : mChilds)
+		{
+			o2Scene.mActors.Remove(child);
+			child->mParent = this;
+		}
+	}
+
+	Dictionary<String, Actor*> Actor::GetAllChilds()
+	{
+		Dictionary<String, Actor*> res;
 		for (auto child : mChilds)
 			res.Add(child->GetName(), child);
 
 		return res;
 	}
 
-	Dictionary<String, Ptr<Component>> Actor::GetAllComponents()
+	Dictionary<String, Component*> Actor::GetAllComponents()
 	{
-		Dictionary<String, Ptr<Component>> res;
+		Dictionary<String, Component*> res;
 		for (auto child : mCompontents)
 			res.Add(child->GetType().Name(), child);
 
@@ -336,6 +435,8 @@ namespace o2
 		INITIALIZE_PROPERTY(Actor, name, SetName, GetName);
 		INITIALIZE_PROPERTY(Actor, enabled, SetEnabled, IsEnabled);
 		INITIALIZE_GETTER(Actor, enabledInHierarchy, IsEnabledInHierarchy);
+		INITIALIZE_PROPERTY(Actor, locked, SetLocked, IsLocked);
+		INITIALIZE_GETTER(Actor, lockedInHierarchy, IsLockedInHierarchy);
 		INITIALIZE_PROPERTY(Actor, parent, SetParentProp, GetParent);
 		INITIALIZE_GETTER(Actor, childs, GetChilds);
 		INITIALIZE_ACCESSOR(Actor, child, GetChild);

@@ -108,10 +108,10 @@ namespace o2
 		void UpdateLayout(bool forcible = false);
 
 		// Calls when child widget was added
-		void OnChildAdded(Ptr<UIWidget> child);
+		void OnChildAdded(UIWidget* child);
 
 		// Calls when child widget was removed
-		void OnChildRemoved(Ptr<UIWidget> child);
+		void OnChildRemoved(UIWidget* child);
 
 		// Invokes reque function for childs arranging
 		void RearrangeChilds();
@@ -132,7 +132,7 @@ namespace o2
 		Vector<float> CalculateExpandedWidths();
 
 		// Aligns widget by height with base corner
-		void AlignWidgetByHeight(Ptr<UIWidget> child, float widthAnchor);
+		void AlignWidgetByHeight(UIWidget* child, float widthAnchor);
 
 		// Updates layout's weight and minimal size
 		void UpdateLayoutParametres();

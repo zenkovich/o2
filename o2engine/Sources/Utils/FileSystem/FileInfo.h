@@ -13,12 +13,12 @@ namespace o2
 	class FileInfo
 	{
 	public:
-		String   mPath;
-		FileType mFileType;
+		String    mPath;
+		FileType  mFileType;
 		TimeStamp mCreatedDate;
 		TimeStamp mAccessDate;
 		TimeStamp mEditDate;
-		UInt     mSize;
+		UInt      mSize;
 
 		bool operator==(const FileInfo& other) const;
 	};

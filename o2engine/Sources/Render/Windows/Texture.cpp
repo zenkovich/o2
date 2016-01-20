@@ -27,7 +27,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	Texture::Texture(Ptr<Bitmap> bitmap)
+	Texture::Texture(Bitmap* bitmap)
 	{
 		Create(bitmap);
 		o2Render.mTextures.Add(this);
@@ -100,17 +100,17 @@ namespace o2
 
 	void Texture::Create(const String& fileName)
 	{
-		Ptr<Bitmap> image = mnew Bitmap();
+		Bitmap* image = mnew Bitmap();
 		if (image->Load(fileName, Bitmap::ImageType::Auto))
 		{
 			mFileName = fileName;
 			Create(image);
 		}
 
-		image.Release();
+		delete image;
 	}
 
-	void Texture::Create(Ptr<Bitmap> bitmap)
+	void Texture::Create(Bitmap* bitmap)
 	{
 		Bitmap::Format imageFormat = bitmap->GetFormat();
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Utils/Containers/Vector.h"
-#include "Utils/Memory/Ptr.h"
 
 namespace o2
 {
@@ -11,8 +10,8 @@ namespace o2
 	template<typename _type>
 	class Pool
 	{
-		Vector<Ptr<_type>> mObjects;   // Cached objects
-		int                mChunkSize; // Cache resize size
+		Vector<_type*> mObjects;   // Cached objects
+		int            mChunkSize; // Cache resize size
 
 	public:
 		// Constructor
@@ -28,10 +27,10 @@ namespace o2
 		int  GetChunkSize() const;
 
 		// Takes object from cached and returns him
-		Ptr<_type> Take();
+		_type* Take();
 
 		// Frees object and puts into cached
-		void Free(const Ptr<_type>& obj);
+		void Free(_type* obj);
 
 		// Creates cached object
 		void CreateObjects(int count);
@@ -49,7 +48,7 @@ namespace o2
 	Pool<_type>::~Pool()
 	{
 		for (int i = 0; i < mObjects.Count(); i++)
-			mObjects[i].Release();
+			delete mObjects[i];
 
 		mObjects.Clear();
 	}
@@ -67,7 +66,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Ptr<_type> Pool<_type>::Take()
+	_type* Pool<_type>::Take()
 	{
 		if (mObjects.Count() == 0)
 			CreateObjects(mChunkSize);
@@ -76,7 +75,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Pool<_type>::Free(const Ptr<_type>& obj)
+	void Pool<_type>::Free(_type* obj)
 	{
 		mObjects.Add(obj);
 	}

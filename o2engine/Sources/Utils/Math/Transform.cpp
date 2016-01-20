@@ -102,11 +102,8 @@ namespace o2
 
 	void Transform::SetRect(const RectF& rect)
 	{
-		mSize = rect.Size()/mScale;
-		Vec2F xv = Vec2F(mSize.x*mScale.x, 0.0f);
-		Vec2F yv = Vec2F(0.0f, mSize.y*mScale.y);
-
-		mPosition = rect.LeftBottom() + xv*mPivot.x + yv*mPivot.y;
+		mSize = rect.Size();
+		mPosition = rect.LeftBottom() + Vec2F(mSize.x*mScale.x, mSize.y*mScale.y)*mPivot;
 
 		UpdateTransform();
 	}

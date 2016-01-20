@@ -8,6 +8,7 @@
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\UIDockableWindow.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneWindow.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\TreeWindow\TreeWindow.h"
 #include "C:\work\o2\o2Engine\Sources\Animation\Animatable.h"
 #include "C:\work\o2\o2Engine\Sources\Animation\AnimatedFloat.h"
 #include "C:\work\o2\o2Engine\Sources\Animation\AnimatedValue.h"
@@ -64,6 +65,7 @@
 #include "C:\work\o2\o2Engine\Sources\UI\WidgetState.h"
 #include "C:\work\o2\o2Engine\Sources\UI\Window.h"
 #include "C:\work\o2\o2Engine\Sources\Utils\Serialization.h"
+#include "C:\work\o2\o2Engine\Sources\Utils\ShortcutKeys.h"
 #include "C:\work\o2\o2Engine\Sources\Utils\TimeStamp.h"
 #include "C:\work\o2\o2Engine\Sources\Utils\Math\Curve.h"
 #include "C:\work\o2\o2Engine\Sources\Utils\Math\Layout.h"
@@ -77,6 +79,7 @@ o2::Type* ::IEditorWindow::type;
 o2::Type* ::UIDockableWindow::type;
 o2::Type* ::UIDockWindowPlace::type;
 o2::Type* ::SceneWindow::type;
+o2::Type* ::TreeWindow::type;
 o2::Type* o2::Animatable::type;
 o2::Type* o2::AnimatedValue<float>::type;
 o2::Type* o2::IAnimatedValue::type;
@@ -137,6 +140,7 @@ o2::Type* o2::UIWidgetLayout::type;
 o2::Type* o2::UIWidgetState::type;
 o2::Type* o2::UIWindow::type;
 o2::Type* o2::ISerializable::type;
+o2::Type* o2::ShortcutKeys::type;
 o2::Type* o2::TimeStamp::type;
 o2::Type* o2::Curve::type;
 o2::Type* o2::Layout::type;
@@ -207,6 +211,18 @@ void ::UIDockWindowPlace::InitializeType(::UIDockWindowPlace* sample)
 
 void ::SceneWindow::InitializeType(::SceneWindow* sample)
 {
+}
+
+void ::TreeWindow::InitializeType(::TreeWindow* sample)
+{
+	FIELD(mListTreeToggle);
+	FIELD(mSearchEditBox);
+	FIELD(mActorsTree);
+	FIELD(mEnableActorsTogglesGroup);
+	FIELD(mLockActorsTogglesGroup);
+	FIELD(mTreeContextMenu);
+	FIELD(mInSearch);
+	FIELD(mSearchActors);
 }
 
 void o2::Animatable::InitializeType(o2::Animatable* sample)
@@ -442,7 +458,6 @@ void o2::Text::InitializeType(o2::Text* sample)
 {
 	FIELD(font);
 	FIELD(text);
-	FIELD(ctext);
 	FIELD(verAlign);
 	FIELD(horAlign);
 	FIELD(wordWrap);
@@ -498,18 +513,24 @@ void o2::Actor::InitializeType(o2::Actor* sample)
 	FIELD(name);
 	FIELD(enabled);
 	FIELD(enabledInHierarchy);
+	FIELD(locked);
+	FIELD(lockedInHierarchy);
 	FIELD(parent);
 	FIELD(childs);
 	FIELD(child);
 	FIELD(components);
 	FIELD(component);
 	FIELD(transform).AddAttribute<SerializableAttribute<decltype(transform)>>();
+	FIELD(onEnableChanged);
+	FIELD(onLockChanged);
 	FIELD(mName).AddAttribute<SerializableAttribute<decltype(mName)>>();
 	FIELD(mParent);
 	FIELD(mChilds).AddAttribute<SerializableAttribute<decltype(mChilds)>>();
 	FIELD(mCompontents).AddAttribute<SerializableAttribute<decltype(mCompontents)>>();
 	FIELD(mEnabled).AddAttribute<SerializableAttribute<decltype(mEnabled)>>();
 	FIELD(mResEnabled);
+	FIELD(mLocked).AddAttribute<SerializableAttribute<decltype(mLocked)>>();
+	FIELD(mResLocked);
 }
 
 void o2::ActorTransform::InitializeType(o2::ActorTransform* sample)
@@ -565,9 +586,11 @@ void o2::UIButton::InitializeType(o2::UIButton* sample)
 {
 	FIELD(caption);
 	FIELD(icon);
+	FIELD(buttonsGroup);
 	FIELD(onClick);
 	FIELD(mCaptionText);
 	FIELD(mIconSprite);
+	FIELD(mButtonGroup);
 }
 
 void o2::UIContextMenu::InitializeType(o2::UIContextMenu* sample)
@@ -578,6 +601,7 @@ void o2::UIContextMenu::InitializeType(o2::UIContextMenu* sample)
 	FIELD(mLayout);
 	FIELD(mClickFunctions);
 	FIELD(mItemSample).AddAttribute<SerializableAttribute<decltype(mItemSample)>>();
+	FIELD(mSeparatorSample).AddAttribute<SerializableAttribute<decltype(mSeparatorSample)>>();
 	FIELD(mSelectionDrawable).AddAttribute<SerializableAttribute<decltype(mSelectionDrawable)>>();
 	FIELD(mSelectionLayout).AddAttribute<SerializableAttribute<decltype(mSelectionLayout)>>();
 	FIELD(mCurrentSelectionRect);
@@ -639,6 +663,8 @@ void o2::UIEditBox::InitializeType(o2::UIEditBox* sample)
 	FIELD(selectionBegin);
 	FIELD(selectionEnd);
 	FIELD(onChanged);
+	FIELD(onChangeCompleted);
+	FIELD(mLastText);
 	FIELD(mText).AddAttribute<SerializableAttribute<decltype(mText)>>();
 	FIELD(mAvailableSymbols).AddAttribute<SerializableAttribute<decltype(mAvailableSymbols)>>();
 	FIELD(mTextDrawable).AddAttribute<SerializableAttribute<decltype(mTextDrawable)>>();
@@ -788,6 +814,7 @@ void o2::UIToggle::InitializeType(o2::UIToggle* sample)
 	FIELD(toggleGroup);
 	FIELD(onClick);
 	FIELD(onToggle);
+	FIELD(onToggleByUser);
 	FIELD(mValue);
 	FIELD(mCaptionText);
 	FIELD(mBackLayer);
@@ -801,20 +828,47 @@ void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
 	FIELD(mObject);
 	FIELD(mTree);
 	FIELD(mChildsOffset).AddAttribute<SerializableAttribute<decltype(mChildsOffset)>>();
+	FIELD(mInsertSizeCoef);
+	FIELD(mDragSizeCoef);
 }
 
 void o2::UITree::InitializeType(o2::UITree* sample)
 {
-	FIELD(mGetChildsFunc);
-	FIELD(mSetupNodeFunc);
-	FIELD(mLayout);
+	FIELD(onDraggedObjects);
+	FIELD(getParentFunc);
+	FIELD(getChildsFunc);
+	FIELD(setupNodeFunc);
+	FIELD(onItemDblClick);
+	FIELD(onItemRBClick);
+	FIELD(mNodesPoolResizeCount);
+	FIELD(mSelectionSpritesPoolResizeCount);
+	FIELD(mAllNodes);
 	FIELD(mNodeSample).AddAttribute<SerializableAttribute<decltype(mNodeSample)>>();
-	FIELD(mSelectionDrawable).AddAttribute<SerializableAttribute<decltype(mSelectionDrawable)>>();
-	FIELD(mSelectionLayout).AddAttribute<SerializableAttribute<decltype(mSelectionLayout)>>();
-	FIELD(mCurrentSelectionRect);
-	FIELD(mTargetSelectionRect);
-	FIELD(mLastSelectCheckCursor);
-	FIELD(mSelectedItem);
+	FIELD(mHoverDrawable).AddAttribute<SerializableAttribute<decltype(mHoverDrawable)>>();
+	FIELD(mSelectedDrawable);
+	FIELD(mHoverLayout).AddAttribute<SerializableAttribute<decltype(mHoverLayout)>>();
+	FIELD(mCurrentHoverRect);
+	FIELD(mTargetHoverRect);
+	FIELD(mLastHoverCheckCursor);
+	FIELD(mPressedPoint);
+	FIELD(mHoveredItem);
+	FIELD(mSelectedItems);
+	FIELD(mWaitSelectionsUpdate);
+	FIELD(mNodesPool);
+	FIELD(mSelectionSpritesPool);
+	FIELD(mExpandedObjects);
+	FIELD(mDraggingNodes);
+	FIELD(mDragNode);
+	FIELD(mDragNodeBack);
+	FIELD(mDragOffset);
+	FIELD(mPressedNode);
+	FIELD(mInsertNodeCandidate);
+	FIELD(mUnderCursorItem);
+	FIELD(mExpandNodeCandidate);
+	FIELD(mExpandInsertTime);
+	FIELD(mPressedTime);
+	FIELD(mDrawDepth);
+	FIELD(mNeedUpdateLayout);
 }
 
 void o2::UIVerticalLayout::InitializeType(o2::UIVerticalLayout* sample)
@@ -1032,6 +1086,14 @@ void o2::UIWindow::InitializeType(o2::UIWindow* sample)
 
 void o2::ISerializable::InitializeType(o2::ISerializable* sample)
 {
+}
+
+void o2::ShortcutKeys::InitializeType(o2::ShortcutKeys* sample)
+{
+	FIELD(control).AddAttribute<SerializableAttribute<decltype(control)>>();
+	FIELD(shift).AddAttribute<SerializableAttribute<decltype(shift)>>();
+	FIELD(alt).AddAttribute<SerializableAttribute<decltype(alt)>>();
+	FIELD(key).AddAttribute<SerializableAttribute<decltype(key)>>();
 }
 
 void o2::TimeStamp::InitializeType(o2::TimeStamp* sample)
@@ -1283,6 +1345,7 @@ void RegReflectionTypes()
 	::UIDockableWindow::type = mnew Type();
 	::UIDockWindowPlace::type = mnew Type();
 	::SceneWindow::type = mnew Type();
+	::TreeWindow::type = mnew Type();
 	o2::Animatable::type = mnew Type();
 	o2::AnimatedValue<float>::type = mnew Type();
 	o2::IAnimatedValue::type = mnew Type();
@@ -1343,6 +1406,7 @@ void RegReflectionTypes()
 	o2::UIWidgetState::type = mnew Type();
 	o2::UIWindow::type = mnew Type();
 	o2::ISerializable::type = mnew Type();
+	o2::ShortcutKeys::type = mnew Type();
 	o2::TimeStamp::type = mnew Type();
 	o2::Curve::type = mnew Type();
 	o2::Layout::type = mnew Type();
@@ -1376,6 +1440,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<::UIDockableWindow>("::UIDockableWindow");
 	o2::Reflection::InitializeType<::UIDockWindowPlace>("::UIDockWindowPlace");
 	o2::Reflection::InitializeType<::SceneWindow>("::SceneWindow");
+	o2::Reflection::InitializeType<::TreeWindow>("::TreeWindow");
 	o2::Reflection::InitializeType<o2::Animatable>("o2::Animatable");
 	o2::Reflection::InitializeType<o2::AnimatedValue<float>>("o2::AnimatedValue<float>");
 	o2::Reflection::InitializeType<o2::IAnimatedValue>("o2::IAnimatedValue");
@@ -1436,6 +1501,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::UIWidgetState>("o2::UIWidgetState");
 	o2::Reflection::InitializeType<o2::UIWindow>("o2::UIWindow");
 	o2::Reflection::InitializeType<o2::ISerializable>("o2::ISerializable");
+	o2::Reflection::InitializeType<o2::ShortcutKeys>("o2::ShortcutKeys");
 	o2::Reflection::InitializeType<o2::TimeStamp>("o2::TimeStamp");
 	o2::Reflection::InitializeType<o2::Curve>("o2::Curve");
 	o2::Reflection::InitializeType<o2::Layout>("o2::Layout");
@@ -1465,13 +1531,13 @@ void RegReflectionTypes()
 
 	// Resolve inheritance
 	::ApplicationConfig::type->AddBaseType(o2::ISerializable::type);
-	::IEditorWindow::type->AddBaseType(o2::ISerializable::type);
 	o2::UIWidget::type->AddBaseType(o2::ISerializable::type);
 	o2::UIScrollArea::type->AddBaseType(o2::UIWidget::type);
 	o2::UIWindow::type->AddBaseType(o2::UIScrollArea::type);
 	::UIDockableWindow::type->AddBaseType(o2::UIWindow::type);
 	::UIDockWindowPlace::type->AddBaseType(o2::UIWidget::type);
 	::SceneWindow::type->AddBaseType(::IEditorWindow::type);
+	::TreeWindow::type->AddBaseType(::IEditorWindow::type);
 	o2::Animatable::type->AddBaseType(o2::ISerializable::type);
 	o2::IAnimation::type->AddBaseType(o2::ISerializable::type);
 	o2::IAnimatedValue::type->AddBaseType(o2::IAnimation::type);
@@ -1529,6 +1595,7 @@ void RegReflectionTypes()
 	o2::UIWidgetLayer::type->AddBaseType(o2::ISerializable::type);
 	o2::UIWidgetLayout::type->AddBaseType(o2::ISerializable::type);
 	o2::UIWidgetState::type->AddBaseType(o2::ISerializable::type);
+	o2::ShortcutKeys::type->AddBaseType(o2::ISerializable::type);
 	o2::TimeStamp::type->AddBaseType(o2::ISerializable::type);
 	o2::Curve::type->AddBaseType(o2::ISerializable::type);
 	o2::Layout::type->AddBaseType(o2::ISerializable::type);

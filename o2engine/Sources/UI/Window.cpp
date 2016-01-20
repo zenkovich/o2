@@ -11,7 +11,7 @@
 namespace o2
 {
 	UIWindow::UIWindow():
-		UIScrollArea(), mDrawingDepth(-1)
+		UIScrollArea(), mDrawingDepth(-1), mIconDrawable(nullptr), mCaptionDrawable(nullptr)
 	{
 		InitializeHandles();
 		InitializeProperties();
@@ -34,8 +34,8 @@ namespace o2
 			mWindowElements.Add(newElem);
 		}
 
-		Ptr<UIButton> closeBtn = mWindowElements.FindMatch(
-			[](const Ptr<UIWidget>& x) { return x->GetName() == "closeButton" && x->GetType() == *UIButton::type; });
+		UIButton* closeBtn = (UIButton*)mWindowElements.FindMatch(
+			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == *UIButton::type; });
 
 		if (closeBtn)
 			closeBtn->onClick += [&]() { Hide(); };
@@ -50,13 +50,13 @@ namespace o2
 	UIWindow::~UIWindow()
 	{
 		for (auto elem : mWindowElements)
-			elem.Release();
+			delete elem;
 	}
 
 	UIWindow& UIWindow::operator=(const UIWindow& other)
 	{
 		for (auto elem : mWindowElements)
-			elem.Release();
+			delete elem;
 
 		UIScrollArea::operator=(other);
 
@@ -70,8 +70,8 @@ namespace o2
 			mWindowElements.Add(newElem);
 		}
 		
-		Ptr<UIButton> closeBtn = mWindowElements.FindMatch(
-			[](const Ptr<UIWidget>& x) { return x->GetName() == "closeButton" && x->GetType() == *UIButton::type; });
+		UIButton* closeBtn = (UIButton*)mWindowElements.FindMatch(
+			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == *UIButton::type; });
 
 		if (closeBtn)
 			closeBtn->onClick += [&]() { Hide(); };
@@ -95,6 +95,9 @@ namespace o2
 
 	void UIWindow::Update(float dt)
 	{
+		if (mFullyDisabled)
+			return;
+
 		UIScrollArea::Update(dt);
 
 		for (auto elem : mWindowElements)
@@ -103,6 +106,9 @@ namespace o2
 
 	void UIWindow::Draw()
 	{
+		if (mFullyDisabled)
+			return;
+
 		UIScrollArea::Draw();
 
 		mDrawingDepth = o2Render.GetDrawingDepth() + 1.0f;
@@ -122,7 +128,7 @@ namespace o2
 //  		o2Render.DrawRectFrame(mRightBottomDragAreaRect, Color4::SomeColor(clr++));
 	}
 
-	Ptr<UIWidget> UIWindow::AddWindowElement(Ptr<UIWidget> widget)
+	UIWidget* UIWindow::AddWindowElement(UIWidget* widget)
 	{
 		widget->mParent = this;
 		mWindowElements.Add(widget);
@@ -131,31 +137,31 @@ namespace o2
 		return widget;
 	}
 
-	void UIWindow::RemoveWindowElement(Ptr<UIWidget> widget)
+	void UIWindow::RemoveWindowElement(UIWidget* widget)
 	{
 		mWindowElements.Remove(widget);
-		widget.Release();
+		delete widget;
 		UpdateLayout();
 	}
 
 	void UIWindow::RemoveAllWindowElements()
 	{
 		for (auto elem : mWindowElements)
-			elem.Release();
+			delete elem;
 
 		UpdateLayout();
 	}
 
-	void UIWindow::SetIcon(Ptr<Sprite> icon)
+	void UIWindow::SetIcon(Sprite* icon)
 	{
 		if (mIconDrawable)
 		{
-			mIconDrawable.Release();
+			delete mIconDrawable;
 			mIconDrawable = icon;
 		}
 	}
 
-	Ptr<Sprite> UIWindow::GetIcon() const
+	Sprite* UIWindow::GetIcon() const
 	{
 		return mIconDrawable;
 	}
@@ -237,13 +243,13 @@ namespace o2
 			elem->UpdateTransparency();
 	}
 
-	void UIWindow::OnLayerAdded(Ptr<UIWidgetLayer> layer)
+	void UIWindow::OnLayerAdded(UIWidgetLayer* layer)
 	{
 		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == *Sprite::type)
-			mIconDrawable = layer->drawable.Cast<Sprite>();
+			mIconDrawable = (Sprite*)layer->drawable;
 
 		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == *Text::type)
-			mCaptionDrawable = layer->drawable.Cast<Text>();
+			mCaptionDrawable = (Text*)layer->drawable;
 	}
 
 	void UIWindow::InitializeHandles()
@@ -335,7 +341,7 @@ namespace o2
 		}
 	}
 
-	void UIWindow::OnChildSelected(Ptr<UIWidget> child)
+	void UIWindow::OnChildSelected(UIWidget* child)
 	{
 		OnSelected();
 	}
@@ -345,7 +351,7 @@ namespace o2
 		o2UI.SelectWidget(this);
 	}
 
-	void UIWindow::OnStateAdded(Ptr<UIWidgetState> state)
+	void UIWindow::OnStateAdded(UIWidgetState* state)
 	{
 		BindHandlesInteractableToVisibility();
 	}

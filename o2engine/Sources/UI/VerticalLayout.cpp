@@ -169,12 +169,12 @@ namespace o2
 			ExpandSizeByChilds();
 	}
 
-	void UIVerticalLayout::OnChildAdded(Ptr<UIWidget> child)
+	void UIVerticalLayout::OnChildAdded(UIWidget* child)
 	{
 		child->layout.mDrivenByParent = true;
 	}
 
-	void UIVerticalLayout::OnChildRemoved(Ptr<UIWidget> child)
+	void UIVerticalLayout::OnChildRemoved(UIWidget* child)
 	{
 		child->layout.mDrivenByParent = false;
 	}
@@ -208,8 +208,8 @@ namespace o2
 
 	void UIVerticalLayout::UpdateLayoutParametres()
 	{
-		layout.mWeight.y = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetHeightWeight(); });
-		layout.mMinSize.y = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetMinimalHeight(); });
+		layout.mWeight.y = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetHeightWeight(); });
+		layout.mMinSize.y = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalHeight(); });
 		layout.mMinSize.y += mBorder.bottom + mBorder.top;
 	}
 
@@ -237,7 +237,7 @@ namespace o2
 		}
 		else
 		{
-			float totalHeight = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetHeight(); });
+			float totalHeight = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetHeight(); });
 			totalHeight += (mChilds.Count() - 1)*mSpacing;
 			float position = -totalHeight*0.5f;
 			for (auto child : mChilds)
@@ -339,7 +339,7 @@ namespace o2
 		}
 	}
 
-	void UIVerticalLayout::AlignWidgetByWidth(Ptr<UIWidget> child, float heightAnchor)
+	void UIVerticalLayout::AlignWidgetByWidth(UIWidget* child, float heightAnchor)
 	{
 		if (mExpandWidth)
 		{
@@ -425,7 +425,7 @@ namespace o2
 		int ichildCount = mChilds.Count();
 		float childCount = (float)ichildCount;
 		float availableHeight = mChildsAbsRect.Height() - mBorder.bottom - mBorder.top;
-		float minHeightSum = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetMinimalHeight(); });
+		float minHeightSum = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalHeight(); });
 		float expandValue = Math::Max(availableHeight - minHeightSum - (childCount - 1.0f)*mSpacing, 0.0f);
 
 		Vector<float> heights(ichildCount + 1);

@@ -449,7 +449,8 @@ namespace o2
 			if (m < 1.0) m = 0;
 
 			// convert the number
-			while (value > 0.00000001f || m >= 0)
+			int it = 0;
+			while ((value > 0.00001f || m >= 0) && it < 100)
 			{
 				float weight = pow(10.0f, m);
 				if (weight > 0 && !isinf(weight))
@@ -461,6 +462,8 @@ namespace o2
 				if (m == 0 && value > 0)
 					*(c++) = '.';
 				m--;
+
+				it++;
 			}
 			if (useExp)
 			{

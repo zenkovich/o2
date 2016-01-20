@@ -14,31 +14,43 @@ namespace o2
 		return text == other.text && shortcut == other.shortcut && icon == other.icon;
 	}
 
-	UIContextMenu::Item::Item()
+	UIContextMenu::Item::Item():
+		icon(nullptr)
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, const Function<void()> onClick, const WString& shortcut /*= ""*/,
-							  Ptr<ImageAsset> icon /*= nullptr*/):
+	UIContextMenu::Item::Item(const WString& text, const Function<void()> onClick, ImageAsset* icon /*= nullptr*/,
+							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/):
 		text(text), onClick(onClick), shortcut(shortcut), icon(icon)
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, Vector<Item> subItems, Ptr<ImageAsset> icon /*= nullptr*/) :
+	UIContextMenu::Item::Item(const WString& text, Vector<Item> subItems, ImageAsset* icon /*= nullptr*/) :
 		text(text), subItems(subItems), icon(icon)
 	{}
 
 	UIContextMenu::Item::~Item()
 	{
-		icon.Release();
+		delete icon;
+	}
+
+	UIContextMenu::Item UIContextMenu::Item::Separator()
+	{
+		return Item("---", Function<void()>());
 	}
 
 	UIContextMenu::UIContextMenu():
-		UIScrollArea(), mSelectedItem(-1), mPressedItem(-1), mSelectSubContextTime(-1)
+		UIScrollArea(), mSelectedItem(-1), mPressedItem(-1), mSelectSubContextTime(-1), mParentContextMenu(nullptr),
+		mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr), mSelectionDrawable(nullptr),
+		mSeparatorSample(nullptr)
 	{
 		mItemSample = mnew UIWidget();
 		mItemSample->AddLayer("icon", nullptr, Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(10, 0), Vec2F(10, 0)));
 		mItemSample->AddLayer("subIcon", nullptr, Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-10, 0), Vec2F(-10, 0)));
 		mItemSample->AddLayer("caption", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
 		mItemSample->AddLayer("shortcut", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
+
+		mSeparatorSample = mnew UIWidget();
+		mSeparatorSample->layout.minHeight = 3.0f;
+		mSeparatorSample->layout.height = 3.0f;
 
 		mSelectionDrawable = mnew Sprite();
 
@@ -59,9 +71,11 @@ namespace o2
 	}
 
 	UIContextMenu::UIContextMenu(const UIContextMenu& other):
-		UIScrollArea(other), mSelectedItem(-1), mPressedItem(-1), mSelectSubContextTime(-1)
+		UIScrollArea(other), mSelectedItem(-1), mPressedItem(-1), mSelectSubContextTime(-1), mParentContextMenu(nullptr),
+		mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr), mSelectionDrawable(nullptr)
 	{
 		mItemSample = other.mItemSample->Clone();
+		mSeparatorSample = other.mSeparatorSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
 		mSelectionLayout = other.mSelectionLayout;
 		mLayout = FindChild<UIVerticalLayout>();
@@ -72,18 +86,21 @@ namespace o2
 
 	UIContextMenu::~UIContextMenu()
 	{
-		mItemSample.Release();
-		mSelectionDrawable.Release();
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mSeparatorSample;
 	}
 
 	UIContextMenu& UIContextMenu::operator=(const UIContextMenu& other)
 	{
 		UIScrollArea::operator=(other);
 
-		mItemSample.Release();
-		mSelectionDrawable.Release();
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mSeparatorSample;
 
 		mItemSample = other.mItemSample->Clone();
+		mSeparatorSample = other.mSeparatorSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
 		mSelectionLayout = other.mSelectionLayout;
 		mLayout = FindChild<UIVerticalLayout>();
@@ -96,6 +113,9 @@ namespace o2
 
 	void UIContextMenu::Update(float dt)
 	{
+		if (mFullyDisabled)
+			return;
+
 		UIScrollArea::Update(dt);
 
 		const float rectLerpCoef = 20.0f;
@@ -105,10 +125,10 @@ namespace o2
 			mSelectionDrawable->SetRect(mCurrentSelectionRect);
 		}
 
-		if ((o2Input.IsCursorPressed() || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
+		if (!mChildContextMenu && (o2Input.IsCursorPressed() || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
 			!layout.mAbsoluteRect.IsInside(o2Input.GetCursorPos()))
 		{
-			HideWithChild();
+			HideWithParent();
 		}
 
 		if (mSelectSubContextTime >= 0.0f)
@@ -129,7 +149,7 @@ namespace o2
 	void UIContextMenu::Draw()
 	{}
 
-	void UIContextMenu::Show(Ptr<UIContextMenu> parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
+	void UIContextMenu::Show(UIContextMenu* parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
 	{
 		if (parent)
 		{
@@ -162,9 +182,9 @@ namespace o2
 		Show(nullptr, position);
 	}
 
-	Ptr<UIWidget> UIContextMenu::AddItem(const Item& item)
+	UIWidget* UIContextMenu::AddItem(const Item& item)
 	{
-		Ptr<UIWidget> newItem = CreateItem(item);
+		UIWidget* newItem = CreateItem(item);
 		mLayout->AddChild(newItem);
 
 		if (item.subItems.Count() > 0)
@@ -178,9 +198,9 @@ namespace o2
 		return newItem;
 	}
 
-	Ptr<UIWidget> UIContextMenu::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/)
+	UIWidget* UIContextMenu::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/)
 	{
-		Ptr<UIContextMenu> targetContext = this;
+		UIContextMenu* targetContext = this;
 		WString targetPath = path;
 
 		while (true)
@@ -191,7 +211,7 @@ namespace o2
 
 			WString subMenu = targetPath.SubStr(0, slashPos);
 
-			Ptr<UIWidget> subChild = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
+			UIWidget* subChild = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("caption"))
 					return text->text == subMenu;
 
@@ -201,7 +221,7 @@ namespace o2
 			if (!subChild)
 				subChild = AddItem(subMenu);
 
-			Ptr<UIContextMenu> subContext = subChild->FindChild<UIContextMenu>();
+			UIContextMenu* subContext = subChild->FindChild<UIContextMenu>();
 			if (!subContext)
 			{
 				subContext = Clone();
@@ -225,9 +245,9 @@ namespace o2
 		return targetContext->AddItem(Item(targetPath, clickFunc));
 	}
 
-	Ptr<UIWidget> UIContextMenu::InsertItem(const Item& item, int position)
+	UIWidget* UIContextMenu::InsertItem(const Item& item, int position)
 	{
-		Ptr<UIWidget> newItem = CreateItem(item);
+		UIWidget* newItem = CreateItem(item);
 		mLayout->AddChild(newItem, position);
 
 		if (item.subItems.Count() > 0)
@@ -267,7 +287,7 @@ namespace o2
 		interactable = mResVisible;
 	}
 
-	Ptr<UIWidget> UIContextMenu::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+	UIWidget* UIContextMenu::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
 	{
 		if (!mLayout)
 			return nullptr;
@@ -295,7 +315,7 @@ namespace o2
 	void UIContextMenu::UpdateHover(const Vec2F& point)
 	{
 		int itemIdx = -1;
-		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
 
 		if (itemIdx < 0)
 		{
@@ -334,19 +354,17 @@ namespace o2
 	void UIContextMenu::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		int itemIdx = -1;
-		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
 		mPressedItem = itemIdx;
 	}
 
 	void UIContextMenu::OnCursorStillDown(const Input::Cursor& cursor)
-	{
-
-	}
+	{}
 
 	void UIContextMenu::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		int itemIdx = -1;
-		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
 
 		if (itemIdx >= 0)
 			mClickFunctions[itemIdx]();
@@ -415,7 +433,7 @@ namespace o2
 
 	void UIContextMenu::RemoveItem(const WString& path)
 	{
-		Ptr<UIContextMenu> targetContext = this;
+		UIContextMenu* targetContext = this;
 		WString targetPath = path;
 
 		while (true)
@@ -426,7 +444,7 @@ namespace o2
 
 			WString subMenu = targetPath.SubStr(0, slashPos);
 
-			Ptr<UIWidget> subChild = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
+			UIWidget* subChild = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("caption"))
 					return text->text == subMenu;
 
@@ -439,7 +457,7 @@ namespace o2
 				return;
 			}
 
-			Ptr<UIContextMenu> subContext = subChild->FindChild<UIContextMenu>();
+			UIContextMenu* subContext = subChild->FindChild<UIContextMenu>();
 			if (!subContext)
 			{
 				o2Debug.LogError("Failed to remove context item %s", path);
@@ -450,7 +468,7 @@ namespace o2
 			targetPath = targetPath.SubStr(slashPos + 1);
 		}
 
-		Ptr<UIWidget> removingItem = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
+		UIWidget* removingItem = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
 			if (auto text = x->GetLayerDrawable<Text>("caption"))
 				return text->text == targetPath;
 
@@ -471,17 +489,22 @@ namespace o2
 		mLayout->RemoveAllChilds();
 	}
 
-	Ptr<UIVerticalLayout> UIContextMenu::GetItemsLayout() const
+	UIVerticalLayout* UIContextMenu::GetItemsLayout() const
 	{
 		return mLayout;
 	}
 
-	Ptr<UIWidget> UIContextMenu::GetItemSample() const
+	UIWidget* UIContextMenu::GetItemSample() const
 	{
 		return mItemSample;
 	}
 
-	Ptr<Sprite> UIContextMenu::GetSelectionDrawable() const
+	UIWidget* UIContextMenu::GetSeparatorSample() const
+	{
+		return mSeparatorSample;
+	}
+
+	Sprite* UIContextMenu::GetSelectionDrawable() const
 	{
 		return mSelectionDrawable;
 	}
@@ -511,7 +534,7 @@ namespace o2
 		return true;
 	}
 
-	Ptr<UIContextMenu> UIContextMenu::mVisibleContextMenu = nullptr;
+	UIContextMenu* UIContextMenu::mVisibleContextMenu = nullptr;
 
 	void UIContextMenu::UpdateLayout(bool forcible /*= false*/)
 	{
@@ -556,7 +579,7 @@ namespace o2
 			if (!childCaption)
 				continue;
 
-			size.x = Math::Max(size.x, childCaption->GetRealSize().x + 45.0f);
+			size.x = Math::Max(size.x, childCaption->GetRealSize().x + 39.0f);
 			size.y += child->layout.height;
 		}
 
@@ -626,9 +649,18 @@ namespace o2
 			mChildContextMenu->SpecialDraw();
 	}
 
-	Ptr<UIWidget> UIContextMenu::CreateItem(const Item& item)
+	UIWidget* UIContextMenu::CreateItem(const Item& item)
 	{
-		Ptr<UIWidget> newItem = mItemSample->Clone();
+
+		if (item.text == "---") // is separator
+		{
+			UIWidget* newItem = mSeparatorSample->Clone();
+			newItem->name = "Separator";
+
+			return newItem;
+		}
+
+		UIWidget* newItem = mItemSample->Clone();
 		newItem->name = (WString)"Context Item " + item.text;
 
 		if (auto iconLayer = newItem->GetLayer("icon"))
@@ -661,14 +693,14 @@ namespace o2
 			textLayer->text = item.text;
 
 		if (auto shortcutLayer = newItem->GetLayerDrawable<Text>("shortcut"))
-			shortcutLayer->text = item.shortcut;
+			shortcutLayer->text = item.shortcut.AsString();
 
 		if (auto subIconLayer = newItem->GetLayer("subIcon"))
 			subIconLayer->transparency = item.subItems.Count() > 0 ? 1.0f : 0.0f;
 
 		if (item.subItems.Count() > 0)
 		{
-			Ptr<UIContextMenu> subMenu = mnew UIContextMenu(*this);
+			UIContextMenu* subMenu = mnew UIContextMenu(*this);
 			subMenu->RemoveAllItems();
 			subMenu->AddItems(item.subItems);
 
@@ -683,19 +715,26 @@ namespace o2
 		Item res;
 		auto item = mLayout->mChilds[idx];
 
-		if (auto iconLayer = item->GetLayerDrawable<Sprite>("icon"))
-			res.icon = mnew ImageAsset(iconLayer->imageAssetId);
+		if (item->name == "Separator")
+		{
+			res.text = "---";
+		}
+		else
+		{
+			if (auto iconLayer = item->GetLayerDrawable<Sprite>("icon"))
+				res.icon = mnew ImageAsset(iconLayer->imageAssetId);
 
-		if (auto textLayer = item->GetLayerDrawable<Text>("caption"))
-			res.text = textLayer->text;
+			if (auto textLayer = item->GetLayerDrawable<Text>("caption"))
+				res.text = textLayer->text;
 
-		if (auto shortcutLayer = item->GetLayerDrawable<Text>("shortcut"))
-			res.shortcut = shortcutLayer->text;
+			/*if (auto shortcutLayer = item->GetLayerDrawable<Text>("shortcut"))
+				res.shortcut = shortcutLayer->text;*/
 
-		if (auto subMenu = item->FindChild<UIContextMenu>())
-			res.subItems = subMenu->GetItems();
+			if (auto subMenu = item->FindChild<UIContextMenu>())
+				res.subItems = subMenu->GetItems();
 
-		res.onClick = mClickFunctions[idx];
+			res.onClick = mClickFunctions[idx];
+		}
 
 		return res;
 	}

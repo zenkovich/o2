@@ -1,7 +1,7 @@
 #pragma once
 
 #include "String.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Singleton.h"
 
 #undef DrawText
@@ -40,7 +40,7 @@ namespace o2
 		void LogErrorStr(const WString& out);
 
 		// Returns pointer to main log
-		Ptr<LogStream> GetLog();
+		LogStream* GetLog();
 
 		// Draws debug line from begin to end with color and disappearing delay
 		void DrawLine(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay);
@@ -117,7 +117,7 @@ namespace o2
 
 			virtual void Draw() = 0;
 		};
-		typedef Vector<Ptr<IDbgDrawable>> DbgDrawablesVec;
+		typedef Vector<IDbgDrawable*> DbgDrawablesVec;
 
 		// --------------------------------------------
 		// Debug line with color and disappearing delay
@@ -174,23 +174,23 @@ namespace o2
 		// --------------------------------------------
 		struct DbgText: public IDbgDrawable
 		{
-			Vec2F     position;
-			String    text;
-			Ptr<Text> textDrawable;
-			bool      ownTextDrawable;
+			Vec2F  position;
+			String text;
+			Text*  textDrawable;
+			bool   ownTextDrawable;
 
 			DbgText();
-			DbgText(const Vec2F& position, const String& text, Ptr<Text> textDrawable, const Color4& color);
-			DbgText(const Vec2F& position, const String& text, Ptr<VectorFont> font, const Color4& color, float delay = -1.0f);
+			DbgText(const Vec2F& position, const String& text, Text* textDrawable, const Color4& color);
+			DbgText(const Vec2F& position, const String& text, VectorFont* font, const Color4& color, float delay = -1.0f);
 			~DbgText();
 			void Draw();
 		};
 
 	protected:
-		Ptr<LogStream>  mLogStream;    // Main log stream
+		LogStream*      mLogStream;    // Main log stream
 		DbgDrawablesVec mDbgDrawables; // Debug lines array
-		Ptr<VectorFont> mFont;		   // Font for debug captions
-		Ptr<Text>       mText;		   // Text for one frame debug captions
+		VectorFont*     mFont;		   // Font for debug captions
+		Text*           mText;		   // Text for one frame debug captions
 
 	private:
 		// Default constructor

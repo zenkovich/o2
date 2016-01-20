@@ -233,7 +233,7 @@ class CppLexParser
 			string spec = ReadWord(src.data, ref caret).Trim(' ', '\n', '\t', '\r');
 			if (spec.Length > 0 && spec[0] == '<' && spec[spec.Length - 1] == '>')
 			{
-				string sspec = spec.Substring(1, spec.Length - 2);
+				string sspec = spec.Substring(1, spec.Length - 2).Trim(' ', '\n', '\t', '\r');
 				if (!specializations.Contains(sspec) && !cls.templates.Contains(sspec))
 					specializations.Add(sspec);
 			}

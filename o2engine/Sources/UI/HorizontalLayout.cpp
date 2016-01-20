@@ -168,12 +168,12 @@ namespace o2
 			ExpandSizeByChilds();
 	}
 
-	void UIHorizontalLayout::OnChildAdded(Ptr<UIWidget> child)
+	void UIHorizontalLayout::OnChildAdded(UIWidget* child)
 	{
 		child->layout.mDrivenByParent = true;
 	}
 
-	void UIHorizontalLayout::OnChildRemoved(Ptr<UIWidget> child)
+	void UIHorizontalLayout::OnChildRemoved(UIWidget* child)
 	{
 		child->layout.mDrivenByParent = false;
 	}
@@ -207,8 +207,8 @@ namespace o2
 
 	void UIHorizontalLayout::UpdateLayoutParametres()
 	{
-		layout.mWeight.x = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetWidthWeight(); });
-		layout.mMinSize.x = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetMinimalWidth(); });
+		layout.mWeight.x = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetWidthWeight(); });
+		layout.mMinSize.x = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalWidth(); });
 		layout.mMinSize.x += mBorder.left + mBorder.right;
 	}
 
@@ -236,7 +236,7 @@ namespace o2
 		}
 		else
 		{
-			float totalWidth = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetWidth(); });
+			float totalWidth = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetWidth(); });
 			totalWidth += (mChilds.Count() - 1)*mSpacing;
 			float position = -totalWidth*0.5f;
 			for (auto child : mChilds)
@@ -339,7 +339,7 @@ namespace o2
 		}
 	}
 
-	void UIHorizontalLayout::AlignWidgetByHeight(Ptr<UIWidget> child, float widthAnchor)
+	void UIHorizontalLayout::AlignWidgetByHeight(UIWidget* child, float widthAnchor)
 	{
 		if (mExpandHeight)
 		{
@@ -425,7 +425,7 @@ namespace o2
 		int ichildCount = mChilds.Count();
 		float childCount = (float)ichildCount;
 		float availableWidth = mChildsAbsRect.Width() - mBorder.left - mBorder.right;
-		float minWidthSum = mChilds.Sum<float>([&](const Ptr<UIWidget>& child) { return child->layout.GetMinimalWidth(); });
+		float minWidthSum = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalWidth(); });
 		float expandValue = Math::Max(availableWidth - minWidthSum - (childCount - 1.0f)*mSpacing, 0.0f);
 
 		Vector<float> widths(ichildCount + 1);

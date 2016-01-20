@@ -2,7 +2,6 @@
 
 #include "Utils/Containers/Vector.h"
 #include "Utils/Containers/Dictionary.h"
-#include "Utils/Memory/Ptr.h"
 #include "Utils/String.h"
 
 namespace o2
@@ -19,15 +18,15 @@ namespace o2
 	public:
 		enum class Format { Xml, JSON, Binary };
 
-		typedef Vector<Ptr<DataNode>> DataNodesVec;
-		typedef DataNode::DataNodesVec::Iterator Iterator;
-		typedef DataNode::DataNodesVec::ConstIterator ConstIterator;
+		typedef Vector<DataNode*> DataNodesVec;
+		typedef DataNodesVec::Iterator Iterator;
+		typedef DataNodesVec::ConstIterator ConstIterator;
 
 	protected:
-		WString       mName;       // Name of node
-		WString       mData;       // Node data
-		Ptr<DataNode> mParent;     // Node parent. Nullptr if no parent
-		DataNodesVec  mChildNodes; // Children nodes
+		WString      mName;       // Name of node
+		WString      mData;       // Node data
+		DataNode*    mParent;     // Node parent. Nullptr if no parent
+		DataNodesVec mChildNodes; // Children nodes
 
 	public:
 		// Default constructor
@@ -86,7 +85,7 @@ namespace o2
 
 		// Constructor with name and pointer value
 		template<typename _type>
-		DataNode(const WString& name, const Ptr<_type>& value);
+		DataNode(const WString& name, _type* value);
 
 		// Constructor with name and vector value
 		template<typename _type>
@@ -146,7 +145,7 @@ namespace o2
 
 		// Assign operator to pointer value
 		template<typename _type>
-		DataNode& operator=(const Ptr<_type>& value);
+		DataNode& operator=(_type* value);
 
 		// Assign operator to vector value
 		template<typename _type>
@@ -201,7 +200,7 @@ namespace o2
 
 		// Cast operator to pointer
 		template<typename _type>
-		operator Ptr<_type>() const;
+		operator _type*() const;
 
 		// Cast operator to vector
 		template<typename _type>
@@ -219,10 +218,10 @@ namespace o2
 		}
 
 		// [] assign operator. nodePath sample: "node/node/abc/cde"
-		Ptr<DataNode> operator[](const WString& nodePath);
+		DataNode* operator[](const WString& nodePath);
 
 		// [] assign operator. nodePath sample: "node/node/abc/cde"
-		Ptr<DataNode> operator[](const char* nodePath);
+		DataNode* operator[](const char* nodePath);
 
 		// Equals operator
 		bool operator==(const DataNode& other) const;
@@ -230,26 +229,23 @@ namespace o2
 		// Not equals operator
 		bool operator!=(const DataNode& other) const;
 
-		// DataNode sample creation function
-		DataNode* CreateSample() const;
-
 		// Removes all children
 		void Clear();
 
 		// Return parent node
-		Ptr<DataNode> GetParent() const;
+		DataNode* GetParent() const;
 
 		// Return node by path. nodePath sample: "node/node/abc/cde"
-		Ptr<DataNode> GetNode(const WString& nodePath) const;
+		DataNode* GetNode(const WString& nodePath) const;
 
 		// Add new node with name
-		Ptr<DataNode> AddNode(const WString& name);
+		DataNode* AddNode(const WString& name);
 
 		// Add node
-		Ptr<DataNode> AddNode(const Ptr<DataNode>& node);
+		DataNode* AddNode(DataNode* node);
 
 		// Removes node
-		bool RemoveNode(Ptr<DataNode>& node);
+		bool RemoveNode(DataNode* node);
 
 		// Removes node by name
 		bool RemoveNode(const WString& name);
@@ -304,7 +300,7 @@ namespace o2
 	};
 
 	template<typename _type>
-	DataNode::DataNode(const WString& name, const Ptr<_type>& value):
+	DataNode::DataNode(const WString& name, _type* value):
 		mName(name), mParent(nullptr)
 	{
 		*AddNode("Type") = value->GetType().Name();
@@ -312,7 +308,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	DataNode::operator Ptr<_type>() const
+	DataNode::operator _type*() const
 	{
 		String type;
 		ISerializable* value = nullptr;
@@ -328,11 +324,11 @@ namespace o2
 			}
 		}
 
-		return Ptr<_type>((_type*)value);
+		return (_type*)value;
 	}
 
 	template<typename _type>
-	DataNode& DataNode::operator=(const Ptr<_type>& value)
+	DataNode& DataNode::operator=(_type* value)
 	{
 		if (value)
 		{
@@ -350,7 +346,7 @@ namespace o2
 	{
 		for (auto kv : value)
 		{
-			Ptr<DataNode> child = AddNode("Element");
+			DataNode* child = AddNode("Element");
 			*child->AddNode("Key") = kv.Key();
 			*child->AddNode("Value") = kv.Value();
 		}
@@ -370,7 +366,7 @@ namespace o2
 
 		for (auto kv : value)
 		{
-			Ptr<DataNode> child = AddNode("Element");
+			DataNode* child = AddNode("Element");
 			*child->AddNode("Key") = kv.Key();
 			*child->AddNode("Value") = kv.Value();
 		}

@@ -61,9 +61,9 @@ namespace o2
 		return "fnt";
 	}
 
-	Ptr<BitmapFontAsset::MetaInfo> BitmapFontAsset::GetMeta() const
+	BitmapFontAsset::MetaInfo* BitmapFontAsset::GetMeta() const
 	{
-		return mMeta.Cast<MetaInfo>();
+		return (MetaInfo*)mMeta;
 	}
 
 	void BitmapFontAsset::LoadData(const String& path)
@@ -71,7 +71,7 @@ namespace o2
 		mFont = o2Render.mFonts.FindMatch([&](auto fnt) { return fnt->GetFileName() == path; });
 
 		if (!mFont)
-			mFont = Ptr<Font>(mnew BitmapFont(path));
+			mFont = mnew BitmapFont(path);
 	}
 
 	void BitmapFontAsset::InitializeProperties()

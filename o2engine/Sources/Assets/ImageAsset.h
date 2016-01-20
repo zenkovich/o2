@@ -18,12 +18,12 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Property<Ptr<Bitmap>>     bitmap;    // Bitmap data property
-		Property<AssetId>         atlasId;   // Atlas owner id property
-		Property<Ptr<AtlasAsset>> atlas;     // Atlas owner asset property
-		Getter<UInt>              atlasPage; // Atlas page index getter
-		Getter<RectI>             atlasRect; // Atlas source image rectangle getter
-		Getter<Ptr<MetaInfo>>     meta;      // Meta information getter
+		Property<Bitmap*>     bitmap;    // Bitmap data property
+		Property<AssetId>     atlasId;   // Atlas owner id property
+		Property<AtlasAsset*> atlas;     // Atlas owner asset property
+		Getter<UInt>          atlasPage; // Atlas page index getter
+		Getter<RectI>         atlasRect; // Atlas source image rectangle getter
+		Getter<MetaInfo*>     meta;      // Meta information getter
 
 		// Default constructor
 		ImageAsset();
@@ -44,10 +44,10 @@ namespace o2
 		ImageAsset& operator=(ImageAsset& asset);
 
 		// Returns bitmap data
-		Ptr<Bitmap> GetBitmap();
+		Bitmap* GetBitmap();
 
 		// Sets bitmap data
-		void SetBitmap(Ptr<Bitmap> bitmap);
+		void SetBitmap(Bitmap* bitmap);
 
 		// Returns atlas id
 		AssetId GetAtlasId() const;
@@ -56,10 +56,10 @@ namespace o2
 		void SetAtlasId(AssetId id);
 
 		// Returns atlas asset
-		Ptr<AtlasAsset> GetAtlas() const;
+		AtlasAsset* GetAtlas() const;
 
 		// Sets atlas
-		void SetAtlas(Ptr<AtlasAsset> atlas);
+		void SetAtlas(AtlasAsset* atlas);
 
 		// Returns atlas page
 		UInt GetAtlasPage() const;
@@ -71,7 +71,7 @@ namespace o2
 		TextureRef GetAtlasTextureRef() const;
 
 		// Returns meta information
-		Ptr<MetaInfo> GetMeta() const;
+		MetaInfo* GetMeta() const;
 
 		// Returns extensions string
 		const char* GetFileExtensions() const;
@@ -112,15 +112,15 @@ namespace o2
 			Type::Id GetAssetType() const;
 
 			// Returns true if other meta is equal to this
-			bool IsEqual(Ptr<IMetaInfo> other) const;
+			bool IsEqual(IMetaInfo* other) const;
 
 			SERIALIZABLE(MetaInfo);
 		};
 
 	protected:
-		Ptr<Bitmap> mBitmap;    // Image bitmap. Loading only when needs
-		UInt        mAtlasPage; // Owner atlas page index @SERIALIZABLE
-		RectI       mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
+		Bitmap* mBitmap;    // Image bitmap. Loading only when needs
+		UInt    mAtlasPage; // Owner atlas page index @SERIALIZABLE
+		RectI   mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
 
 	protected:
 		// Loads data

@@ -6,7 +6,6 @@ namespace UIStyle
 	void RebuildPlayStopButtonStyle();
 	void RebuildPauseButtonStyle();
 	void RebuildStepButtonStyle();
-	void RebuildBacklessDropdown();
 	void RebuildRoundDropDown();
 	void RebuildArrowToggle();
 	void RebuildBrushToggle();
@@ -14,6 +13,12 @@ namespace UIStyle
 	void RebuildRotateToggle();
 	void RebuildScaleToggle();
 	void RebuildFrameToggle();
+	void RebuildSearchButton();
+	void RebuildListTreeToggle();
+	void RebuildActorsTreeNodeEnableToggle();
+	void RebuildActorsTreeLockToggle();
+	void RebuildActorsTreeLinkBtn();
+	void RebuildActorsTree();
 
 	void RebuildEditorUIStyle();
 }

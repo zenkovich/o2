@@ -4,7 +4,7 @@
 #include "Render/TextureRef.h"
 #include "Utils/CommonTypes.h"
 #include "Utils/Math/Vertex2.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Property.h"
 
 namespace o2

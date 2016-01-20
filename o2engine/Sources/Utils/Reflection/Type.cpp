@@ -7,8 +7,7 @@ namespace o2
 {
 	Type::Type():
 		mId(0)
-	{
-	}
+	{}
 
 	Type::~Type()
 	{
@@ -60,14 +59,9 @@ namespace o2
 		return res;
 	}
 
-	const IObject* Type::Sample() const
+	IObject* Type::CreateSample() const
 	{
-		return mSample;
-	}
-
-	Ptr<IObject> Type::CreateSample() const
-	{
-		return mSample->Clone();
+		return mTypeCreator->Create();
 	}
 
 	String Type::GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const
@@ -110,7 +104,7 @@ namespace o2
 		mBaseTypes.Add(baseType);
 
 		for (auto field : baseType->mFields)
-			mFields.Add(field->Clone());
+			mFields.Insert(field->Clone(), 0);
 	}
 
 	bool Type::operator!=(const Type& other) const
@@ -123,5 +117,5 @@ namespace o2
 		return other.mId == mId;
 	}
 
-	Ptr<Type> Type::Dummy::type;
+	Type* Type::Dummy::type;
 }

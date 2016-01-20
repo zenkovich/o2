@@ -47,7 +47,6 @@ namespace o2CodeTool
 			Console.Write(indent + "}\n");
         }
 
-
 		static void Main(string[] args)
 		{
 			bool debug = false;
@@ -105,6 +104,8 @@ namespace o2CodeTool
 
 			CppReflectionGenerator reflGenerator = new CppReflectionGenerator();
 			reflGenerator.Generate(output, "", data);
+
+			Console.Write("Complete!");
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace o2
 {
 
 	UIMenuPanel::UIMenuPanel():
-		UIWidget(), mSelectedItem(-1), mSelectSubContextTime(-1)
+		UIWidget(), mSelectedItem(-1), mSelectSubContextTime(-1), mOpenedContext(nullptr)
 	{
 		mItemSample = mnew UIWidget();
 		mItemSample->AddLayer("text", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
@@ -26,7 +26,7 @@ namespace o2
 	}
 
 	UIMenuPanel::UIMenuPanel(const UIMenuPanel& other):
-		UIWidget(other), mSelectedItem(-1), mSelectSubContextTime(-1)
+		UIWidget(other), mSelectedItem(-1), mSelectSubContextTime(-1), mOpenedContext(nullptr)
 	{
 		mItemSample = other.mItemSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
@@ -39,16 +39,16 @@ namespace o2
 
 	UIMenuPanel::~UIMenuPanel()
 	{
-		mItemSample.Release();
-		mSelectionDrawable.Release();
+		delete mItemSample;
+		delete mSelectionDrawable;
 	}
 
 	UIMenuPanel& UIMenuPanel::operator=(const UIMenuPanel& other)
 	{
 		UIWidget::operator=(other);
 
-		mItemSample.Release();
-		mSelectionDrawable.Release();
+		delete mItemSample;
+		delete mSelectionDrawable;
 
 		mItemSample = other.mItemSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
@@ -63,6 +63,9 @@ namespace o2
 
 	void UIMenuPanel::Update(float dt)
 	{
+		if (mFullyDisabled)
+			return;
+
 		UIWidget::Update(dt);
 
 		const float rectLerpCoef = 20.0f;
@@ -115,16 +118,16 @@ namespace o2
 			DrawDebugFrame();
 	}
 
-	Ptr<UIWidget> UIMenuPanel::AddItem(const Item& item)
+	UIWidget* UIMenuPanel::AddItem(const Item& item)
 	{
-		Ptr<UIWidget> newItem = CreateItem(item);
+		UIWidget* newItem = CreateItem(item);
 		mLayout->AddChild(newItem);
 		mClickFunctions.Add(item.onClick);
 
 		return newItem;
 	}
 
-	Ptr<UIWidget> UIMenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/)
+	UIWidget* UIMenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/)
 	{
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
@@ -132,7 +135,7 @@ namespace o2
 
 		WString subMenu = path.SubStr(0, slashPos);
 
-		Ptr<UIWidget> subChild = mLayout->mChilds.FindMatch([&](auto x) {
+		UIWidget* subChild = mLayout->mChilds.FindMatch([&](auto x) {
 			if (auto text = x->GetLayerDrawable<Text>("text"))
 				return text->text == subMenu;
 
@@ -142,7 +145,7 @@ namespace o2
 		if (!subChild)
 			subChild = AddItem(subMenu);
 
-		Ptr<UIContextMenu> subContext = subChild->FindChild<UIContextMenu>();
+		UIContextMenu* subContext = subChild->FindChild<UIContextMenu>();
 		if (!subContext)
 		{
 			subContext = o2UI.CreateWidget<UIContextMenu>();
@@ -152,9 +155,9 @@ namespace o2
 		return subContext->AddItem(path.SubStr(slashPos + 1), clickFunc);
 	}
 
-	Ptr<UIWidget> UIMenuPanel::InsertItem(const Item& item, int position)
+	UIWidget* UIMenuPanel::InsertItem(const Item& item, int position)
 	{
-		Ptr<UIWidget> newItem = CreateItem(item);
+		UIWidget* newItem = CreateItem(item);
 		mLayout->AddChild(newItem, position);
 
 		if (item.subItems.Count() > 0)
@@ -209,7 +212,7 @@ namespace o2
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
 		{
-			Ptr<UIWidget> removingItem = mLayout->mChilds.FindMatch([&](auto x) {
+			UIWidget* removingItem = mLayout->mChilds.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("text"))
 					return text->text == path;
 
@@ -229,7 +232,7 @@ namespace o2
 
 		WString subMenu = path.SubStr(0, slashPos);
 
-		Ptr<UIWidget> subChild = mLayout->mChilds.FindMatch([&](auto x) {
+		UIWidget* subChild = mLayout->mChilds.FindMatch([&](auto x) {
 			if (auto text = x->GetLayerDrawable<Text>("text"))
 				return text->text == subMenu;
 
@@ -242,7 +245,7 @@ namespace o2
 			return;
 		}
 
-		Ptr<UIContextMenu> subContext = subChild->FindChild<UIContextMenu>();
+		UIContextMenu* subContext = subChild->FindChild<UIContextMenu>();
 		if (!subContext)
 		{
 			o2Debug.LogError("Failed to remove menu item %s", path);
@@ -257,23 +260,23 @@ namespace o2
 		mLayout->RemoveAllChilds();
 	}
 
-	Ptr<UIHorizontalLayout> UIMenuPanel::GetItemsLayout() const
+	UIHorizontalLayout* UIMenuPanel::GetItemsLayout() const
 	{
 		return mLayout;
 	}
 
-	Ptr<UIWidget> UIMenuPanel::GetItemSample() const
+	UIWidget* UIMenuPanel::GetItemSample() const
 	{
 		return mItemSample;
 	}
 
-	void UIMenuPanel::SetItemSample(Ptr<UIWidget> sample)
+	void UIMenuPanel::SetItemSample(UIWidget* sample)
 	{
-		mItemSample.Release();
+		delete mItemSample;
 		mItemSample = sample;
 	}
 
-	Ptr<Sprite> UIMenuPanel::GetSelectionDrawable() const
+	Sprite* UIMenuPanel::GetSelectionDrawable() const
 	{
 		return mSelectionDrawable;
 	}
@@ -298,9 +301,9 @@ namespace o2
 		return GetMaxDrawingDepth();
 	}
 
-	Ptr<UIWidget> UIMenuPanel::CreateItem(const Item& item)
+	UIWidget* UIMenuPanel::CreateItem(const Item& item)
 	{
-		Ptr<UIWidget> newItem = mItemSample->Clone();
+		UIWidget* newItem = mItemSample->Clone();
 		newItem->name = (WString)"Menu Item " + item.text;
 
 		if (auto textLayer = newItem->GetLayerDrawable<Text>("text"))
@@ -308,7 +311,7 @@ namespace o2
 
 		if (item.subItems.Count() > 0)
 		{
-			Ptr<UIContextMenu> subMenu = o2UI.CreateWidget<UIContextMenu>();
+			UIContextMenu* subMenu = o2UI.CreateWidget<UIContextMenu>();
 			subMenu->AddItems(item.subItems);
 			newItem->AddChild(subMenu);
 		}
@@ -337,7 +340,7 @@ namespace o2
 		interactable = mResVisible;
 	}
 
-	Ptr<UIWidget> UIMenuPanel::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+	UIWidget* UIMenuPanel::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
 	{
 		if (!mLayout)
 			return nullptr;
@@ -365,7 +368,7 @@ namespace o2
 	void UIMenuPanel::UpdateHover(const Vec2F& point)
 	{
 		int itemIdx = -1;
-		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
 
 		if (itemIdx < 0)
 		{
@@ -410,7 +413,7 @@ namespace o2
 	void UIMenuPanel::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		int itemIdx = -1;
-		Ptr<UIWidget> itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
 
 		if (itemIdx >= 0)
 		{

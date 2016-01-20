@@ -3,7 +3,7 @@
 #include "Render/Windows/OpenGL.h"
 #include "Utils/CommonTypes.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Memory/Ptr.h"
+
 
 namespace o2
 {
@@ -21,7 +21,7 @@ namespace o2
 		UInt         mIndexBufferSize = 6000*3; // Maximum size of index buffer
 		GLenum       mCurrentPrimitiveType;     // Type of drawing primitives for next DIP
 				     
-		Ptr<Texture> mLastDrawTexture;          // Stored texture ptr from last DIP
+		Texture* mLastDrawTexture;          // Stored texture ptr from last DIP
 		UInt         mLastDrawVertex;           // Last vertex idx for next DIP
 		UInt         mLastDrawIdx;              // Last vertex index for next DIP
 		UInt         mTrianglesCount;           // Triangles count for next DIP

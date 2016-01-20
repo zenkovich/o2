@@ -21,15 +21,14 @@ namespace o2
 		struct SymbolsSet;
 		
 	public:
-		Property<FontRef>   font;                // Font pointer property
-		Property<WString>   text;                // Text property, wstring
-		Property<String>    ctext;               // Text property, string
-		Property<VerAlign>  verAlign;            // vertical align property
-		Property<HorAlign>  horAlign;            // Horizontal align property
-		Property<bool>      wordWrap;            // Words wrapping flag property
-		Property<bool>      dotsEngings;         // Dots engings when overflow property
-		Property<float>     symbolsDistanceCoef; // Characters distance coef, 1 is standard
-		Property<float>     linesDistanceCoef;   // Lines distance coef, 1 is standard
+		Property<FontRef>  font;                // Font pointer property
+		Property<WString>  text;                // Text property, wstring
+		Property<VerAlign> verAlign;            // vertical align property
+		Property<HorAlign> horAlign;            // Horizontal align property
+		Property<bool>     wordWrap;            // Words wrapping flag property
+		Property<bool>     dotsEngings;         // Dots engings when overflow property
+		Property<float>    symbolsDistanceCoef; // Characters distance coef, 1 is standard
+		Property<float>    linesDistanceCoef;   // Lines distance coef, 1 is standard
 
 		// Default constructor
 		Text();
@@ -44,10 +43,10 @@ namespace o2
 		Text(AssetId fontAssetId);
 
 		// Constructor
-		Text(Ptr<BitmapFontAsset> fontAsset);
+		Text(BitmapFontAsset* fontAsset);
 
 		// Constructor
-		Text(Ptr<VectorFontAsset> fontAsset);
+		Text(VectorFontAsset* fontAsset);
 
 		// Copy-constructor
 		Text(const Text& text);
@@ -68,10 +67,10 @@ namespace o2
 		FontRef GetFont() const;
 
 		// Sets bitmap font asset 
-		void SetFontAsset(Ptr<BitmapFontAsset> asset);
+		void SetFontAsset(BitmapFontAsset* asset);
 
 		// Sets vector font asset
-		void SetFontAsset(Ptr<VectorFontAsset> asset);
+		void SetFontAsset(VectorFontAsset* asset);
 
 		// Sets font asset id (loads asset by this id)
 		void SetFontAsset(AssetId assetId);
@@ -80,7 +79,7 @@ namespace o2
 		void SetFontAsset(const String& fileName);
 
 		// Returns asset by font asset id
-		Ptr<Asset> GetFontAsset() const;
+		Asset* GetFontAsset() const;
 
 		// Returns font asset id
 		AssetId GetFontAssetId() const;
@@ -137,7 +136,7 @@ namespace o2
 		RectF GetRealRect();
 
 		// Returns text size
-		static Vec2F GetTextSize(const WString& text, Ptr<Font> font,
+		static Vec2F GetTextSize(const WString& text, Font* font,
 								 const Vec2F& areaSize = Vec2F(), 
 								 HorAlign horAlign = HorAlign::Left, VerAlign verAlign = VerAlign::Top, 
 								 bool wordWrap = true, bool dotsEngings = false, float charsDistCoef = 1.0f, 
@@ -221,7 +220,7 @@ namespace o2
 		};
 
 	protected:
-		typedef Vector<Ptr<Mesh>> MeshesVec;
+		typedef Vector<Mesh*> MeshesVec;
 
 		const UInt mMeshMaxPolyCount = 4096;
 

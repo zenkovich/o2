@@ -37,7 +37,7 @@ public:
 
 	// Sets resizible side and configures drag handle when draggable is true
 	void SetResizibleDir(TwoDirection dir, float border,
-						 Ptr<UIDockWindowPlace> neighborMin, Ptr<UIDockWindowPlace> neighborMax);
+						 UIDockWindowPlace* neighborMin, UIDockWindowPlace* neighborMax);
 
 	// Returns resizible side
 	TwoDirection GetResizibleDir() const;
@@ -47,12 +47,12 @@ public:
 protected:
 	TwoDirection           mResizibleDir;       // Resizible dragable side
 
-	Ptr<UIDockWindowPlace> mNeighborMin; // Resizing neighbor, using when dragging this side
+	UIDockWindowPlace* mNeighborMin; // Resizing neighbor, using when dragging this side
 	FunctionalDragHandle   mDragHandleMin;       // Separator drag handle
 	Layout                 mDragHandleLayoutMin; // Separator drag handle layout
 	RectF                  mDragHandleAreaMin;	 // Separator drag handle area calculated from mDragHandleLayout
 
-	Ptr<UIDockWindowPlace> mNeighborMax; // Resizing neighbor, using when dragging this side
+	UIDockWindowPlace* mNeighborMax; // Resizing neighbor, using when dragging this side
 	FunctionalDragHandle   mDragHandleMax;       // Separator drag handle
 	Layout                 mDragHandleLayoutMax; // Separator drag handle layout
 	RectF                  mDragHandleAreaMax;	 // Separator drag handle area calculated from mDragHandleLayout

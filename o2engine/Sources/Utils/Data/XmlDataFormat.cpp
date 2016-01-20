@@ -17,7 +17,7 @@ namespace o2
 				if (it->type() != pugi::node_element)
 					continue;
 
-				Ptr<DataNode> newNode = mnew DataNode();
+				DataNode* newNode = mnew DataNode();
 				LoadDataNode(*it, *newNode);
 				node.AddNode(newNode);
 			}
@@ -32,7 +32,7 @@ namespace o2
 
 			for (pugi::xml_attribute_iterator it = xmlNode.attributes_begin(); it != xmlNode.attributes_end(); ++it)
 			{
-				Ptr<DataNode> newNode = mnew DataNode(it->name());
+				DataNode* newNode = mnew DataNode(it->name());
 				*newNode = (wchar_t*)it->value();
 				dataNode.AddNode(newNode);
 			}
@@ -42,7 +42,7 @@ namespace o2
 				if (node.type() != pugi::node_element)
 					continue;
 
-				Ptr<DataNode> newNode = mnew DataNode();
+				DataNode* newNode = mnew DataNode();
 				LoadDataNode(node, *newNode);
 				dataNode.AddNode(newNode);
 			}

@@ -10,12 +10,12 @@ namespace o2
 		return AtlasAsset::type->ID();
 	}
 
-	bool AtlasAsset::MetaInfo::IsEqual(Ptr<IMetaInfo> other) const
+	bool AtlasAsset::MetaInfo::IsEqual(IMetaInfo* other) const
 	{
 		if (!IMetaInfo::IsEqual(other))
 			return false;
 
-		Ptr<MetaInfo> otherMeta = other.Cast<MetaInfo>();
+		MetaInfo* otherMeta = (MetaInfo*)other;
 		return mIOS == otherMeta->mIOS && mAndroid == otherMeta->mAndroid && mMacOS == otherMeta->mMacOS && 
 			mWindows == otherMeta->mWindows && Math::Equals(mBorder, otherMeta->mBorder);
 	}
@@ -93,9 +93,9 @@ namespace o2
 		return mImagesAssetsInfos;
 	}
 
-	Vector<Ptr<ImageAsset>> AtlasAsset::GetImagesAssets() const
+	Vector<ImageAsset*> AtlasAsset::GetImagesAssets() const
 	{
-		Vector<Ptr<ImageAsset>> res;
+		Vector<ImageAsset*> res;
 		for (auto inf : mImagesAssetsInfos)
 			res.Add(mnew ImageAsset(inf.mId));
 
@@ -108,7 +108,7 @@ namespace o2
 	}
 
 
-	bool AtlasAsset::ContainsImage(Ptr<ImageAsset> image)
+	bool AtlasAsset::ContainsImage(ImageAsset* image)
 	{
 		return mImagesAssetsInfos.ContainsPred([&](const AssetInfo& info) { return info.mId == image->GetAssetId(); });
 	}
@@ -128,9 +128,9 @@ namespace o2
 		return ContainsImage(o2Assets.GetAssetId(path));
 	}
 
-	Ptr<AtlasAsset::MetaInfo> AtlasAsset::GetMeta() const
+	AtlasAsset::MetaInfo* AtlasAsset::GetMeta() const
 	{
-		return mMeta.Cast<MetaInfo>();
+		return (MetaInfo*)mMeta;
 	}
 
 	const char* AtlasAsset::GetFileExtensions() const

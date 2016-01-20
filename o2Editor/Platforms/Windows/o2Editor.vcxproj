@@ -30,6 +30,7 @@
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
     <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
+    <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp" />
     <ClCompile Include="..\..\Sources\Windows\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +45,7 @@
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h" />
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
+    <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F0C3F9F6-349D-4D58-9175-0AE646039318}</ProjectGuid>

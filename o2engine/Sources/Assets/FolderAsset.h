@@ -13,7 +13,7 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Getter<Ptr<MetaInfo>> meta;         // Meta information getter
+		Getter<MetaInfo*>     meta;         // Meta information getter
 		Getter<AssetInfosVec> insideAssets; // Inside assets infos getter
 
 		// Default constructor
@@ -38,7 +38,7 @@ namespace o2
 		AssetInfosVec GetContainingAssetsInfos() const;
 
 		// Returns meta information
-		Ptr<MetaInfo> GetMeta() const;
+		MetaInfo* GetMeta() const;
 
 		SERIALIZABLE(FolderAsset);
 

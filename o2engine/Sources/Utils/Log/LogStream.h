@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/Containers/Vector.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/String.h"
 
 namespace o2
@@ -12,11 +12,11 @@ namespace o2
 	class LogStream
 	{
 	protected:
-		typedef Vector<Ptr<LogStream>> LogSteamsVec;
+		typedef Vector<LogStream*> LogSteamsVec;
 
-		Ptr<LogStream> mParentStream; // Parent stream. NULL if no parent
-		WString        mId;           // Name of log stream
-		LogSteamsVec   mChildStreams; // Child streams
+		LogStream*   mParentStream; // Parent stream. NULL if no parent
+		WString      mId;           // Name of log stream
+		LogSteamsVec mChildStreams; // Child streams
 
 	public:
 		// Default constructor
@@ -32,19 +32,19 @@ namespace o2
 		const WString& GetId() const;
 
 		// Binds child stream
-		void BindStream(Ptr<LogStream> stream);
+		void BindStream(LogStream* stream);
 
 		// Unbinds child stream
-		void UnbindStream(Ptr<LogStream> stream);
+		void UnbindStream(LogStream* stream);
 
 		// Unbinds and destroy child stream
-		void UnbindAndReleaseStream(Ptr<LogStream> stream);
+		void UnbindAndReleaseStream(LogStream* stream);
 
 		// Unbinds and destroy all child streams
 		void UnbindAllStreams();
 
 		// Returns parent stream. Null if no parent
-		Ptr<LogStream> GetParentStream() const;
+		LogStream* GetParentStream() const;
 
 		// Outs with low level log
 		void Out(WString format, ...);

@@ -26,7 +26,7 @@ namespace o2
 		inline Vec2 operator-=(const Vec2& v);
 
 		inline Vec2 operator*(const Vec2& v) const;
-		inline Vec2 operator*=(const Vec2& v) const;
+		inline Vec2 operator*=(const Vec2& v);
 
 		inline Vec2 operator*(T v) const;
 		inline Vec2 operator*=(T v);
@@ -179,7 +179,7 @@ namespace o2
 	}
 
 	template<typename T>
-	Vec2<T> Vec2<T>::operator*=(const Vec2<T>& v) const
+	Vec2<T> Vec2<T>::operator*=(const Vec2<T>& v)
 	{
 		x *= v.x; y *= v.y;
 		return *this;

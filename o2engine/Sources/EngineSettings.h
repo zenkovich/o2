@@ -1,6 +1,6 @@
 #pragma once
 
-// TODO: Need create this configuration fully automatic and depending with project configuration
+// TODO: Need to make this configuration fully automatic and depending with project configuration
 
 // Current working platform
 #define PLATFORM ProjectConfig::Platform::Windows
@@ -16,6 +16,9 @@
 
 // Enables debug ui rectangles drawing
 #define UI_DEBUG false
+
+// Enables memory managing
+#define ENALBE_MEMORY_MANAGE false
 
 // ----------------------------
 // Assets configuration section

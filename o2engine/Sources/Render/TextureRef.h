@@ -11,7 +11,7 @@ namespace o2
 		TextureRef();
 
 		// Constructor
-		TextureRef(Ptr<Texture> texture);
+		TextureRef(Texture* texture);
 
 		// Constructor
 		TextureRef(const Vec2I& size, Texture::Format format = Texture::Format::Default, 
@@ -21,7 +21,7 @@ namespace o2
 		TextureRef(const String& fileName);
 
 		// Constructor from bitmap
-		TextureRef(Ptr<Bitmap> bitmap);
+		TextureRef(Bitmap* bitmap);
 
 		// Copy-constructor
 		TextureRef(const TextureRef& other);
@@ -53,7 +53,7 @@ namespace o2
 		static TextureRef Null();
 
 	protected:
-		Ptr<Texture> mTexture;
+		Texture* mTexture;
 
 		friend class Render;
 	};

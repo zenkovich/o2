@@ -3,7 +3,7 @@
 #include "Assets/AssetsTree.h"
 #include "Utils/IObject.h"
 #include "Utils/Memory/MemoryManager.h"
-#include "Utils/Memory/Ptr.h"
+
 #include "Utils/Reflection/Type.h"
 
 namespace o2
@@ -39,12 +39,12 @@ namespace o2
 		virtual void Reset();
 
 		// Sets owner assets builder
-		void SetAssetsBuilder(Ptr<AssetsBuilder> builder);
+		void SetAssetsBuilder(AssetsBuilder* builder);
 
 		IOBJECT(IAssetConverter);
 
 	protected:
 		// Assets builder pointer
-		Ptr<AssetsBuilder> mAssetsBuilder;
+		AssetsBuilder* mAssetsBuilder = nullptr;
 	};
 }

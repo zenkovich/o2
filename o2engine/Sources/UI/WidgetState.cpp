@@ -5,7 +5,7 @@
 namespace o2
 {
 	UIWidgetState::UIWidgetState():
-		mState(false), offStateAnimationSpeed(1)
+		mState(false), offStateAnimationSpeed(1), mOwner(nullptr)
 	{}
 
 	UIWidgetState::UIWidgetState(const UIWidgetState& state):
@@ -52,11 +52,13 @@ namespace o2
 		if (mState)
 		{
 			animation.GoToEnd();
+			onStateBecomesTrue();
 			onStateFullyTrue();
 		}
 		else
 		{
 			animation.GoToBegin();
+			onStateBecomesFalse();
 			onStateFullyFalse();
 		}
 	}

@@ -11,7 +11,7 @@ namespace o2
 	{
 		for (auto state : other.mStates)
 		{
-			Ptr<AnimationState> newState = mnew AnimationState(*state);
+			AnimationState* newState = mnew AnimationState(*state);
 			AddState(newState);
 		}
 	}
@@ -27,7 +27,7 @@ namespace o2
 
 		for (auto state : other.mStates)
 		{
-			Ptr<AnimationState> newState = mnew AnimationState(*state);
+			AnimationState* newState = mnew AnimationState(*state);
 			AddState(newState);
 		}
 
@@ -46,7 +46,7 @@ namespace o2
 			mBlend.Update(dt);
 	}
 
-	Ptr<AnimationState> Animatable::AddState(Ptr<AnimationState> state)
+	AnimationState* Animatable::AddState(AnimationState* state)
 	{
 		mStates.Add(state);
 
@@ -60,29 +60,29 @@ namespace o2
 		return state;
 	}
 
-	Ptr<AnimationState> Animatable::AddState(const String& name, const Animation& animation, const AnimationMask& mask,
+	AnimationState* Animatable::AddState(const String& name, const Animation& animation, const AnimationMask& mask,
 											 float weight)
 	{
-		Ptr<AnimationState> res = mnew AnimationState(name);
+		AnimationState* res = mnew AnimationState(name);
 		res->animation = animation;
 		res->mask = mask;
 		res->weight = weight;
 		return AddState(res);
 	}
 
-	Ptr<AnimationState> Animatable::AddState(const String& name)
+	AnimationState* Animatable::AddState(const String& name)
 	{
-		Ptr<AnimationState> res = mnew AnimationState(name);
+		AnimationState* res = mnew AnimationState(name);
 		return AddState(res);
 	}
 
-	void Animatable::RemoveState(Ptr<AnimationState> state)
+	void Animatable::RemoveState(AnimationState* state)
 	{
 		for (auto& val : state->animation.mAnimatedValues)
 			UnregAnimatedValue(val.mAnimatedValue, val.mTargetPath);
 
 		mStates.Remove(state);
-		state.Release();
+		delete state;
 	}
 
 	void Animatable::RemoveState(const String& name)
@@ -93,17 +93,17 @@ namespace o2
 	void Animatable::RemoveAllStates()
 	{
 		for (auto state : mStates)
-			state.Release();
+			delete state;
 
 		mStates.Clear();
 
 		for (auto val : mValues)
-			val.Release();
+			delete val;
 
 		mValues.Clear();
 	}
 
-	Ptr<AnimationState> Animatable::GetState(const String& name)
+	AnimationState* Animatable::GetState(const String& name)
 	{
 		for (auto state : mStates)
 			if (state->name == name)
@@ -117,23 +117,23 @@ namespace o2
 		return mStates;
 	}
 
-	Ptr<AnimationState> Animatable::Play(const Animation& animation, const String& name)
+	AnimationState* Animatable::Play(const Animation& animation, const String& name)
 	{
-		Ptr<AnimationState> state = AddState(name, animation, AnimationMask(), 1.0f);
+		AnimationState* state = AddState(name, animation, AnimationMask(), 1.0f);
 		state->animation.Play();
 		return state;
 	}
 
-	Ptr<AnimationState> Animatable::Play(const Animation& animation)
+	AnimationState* Animatable::Play(const Animation& animation)
 	{
-		Ptr<AnimationState> state = AddState("unknown", animation, AnimationMask(), 1.0f);
+		AnimationState* state = AddState("unknown", animation, AnimationMask(), 1.0f);
 		state->animation.Play();
 		return state;
 	}
 
-	Ptr<AnimationState> Animatable::Play(const String& name)
+	AnimationState* Animatable::Play(const String& name)
 	{
-		Ptr<AnimationState> state = GetState(name);
+		AnimationState* state = GetState(name);
 		if (!state)
 		{
 			o2Debug.LogWarning("Can't play animation: %s", name);
@@ -143,21 +143,21 @@ namespace o2
 		return state;
 	}
 
-	Ptr<AnimationState> Animatable::BlendTo(const Animation& animation, const String& name, float duration /*= 1.0f*/)
+	AnimationState* Animatable::BlendTo(const Animation& animation, const String& name, float duration /*= 1.0f*/)
 	{
-		Ptr<AnimationState> state = AddState(name, animation, AnimationMask(), 1.0f);
+		AnimationState* state = AddState(name, animation, AnimationMask(), 1.0f);
 		return BlendTo(state, duration);
 	}
 
-	Ptr<AnimationState> Animatable::BlendTo(const Animation& animation, float duration /*= 1.0f*/)
+	AnimationState* Animatable::BlendTo(const Animation& animation, float duration /*= 1.0f*/)
 	{
-		Ptr<AnimationState> state = AddState("unknown", animation, AnimationMask(), 1.0f);
+		AnimationState* state = AddState("unknown", animation, AnimationMask(), 1.0f);
 		return BlendTo(state, duration);
 	}
 
-	Ptr<AnimationState> Animatable::BlendTo(const String& name, float duration /*= 1.0f*/)
+	AnimationState* Animatable::BlendTo(const String& name, float duration /*= 1.0f*/)
 	{
-		Ptr<AnimationState> state = GetState(name);
+		AnimationState* state = GetState(name);
 		if (!state)
 		{
 			o2Debug.LogWarning("Can't blend animation: %s", name);
@@ -166,7 +166,7 @@ namespace o2
 		return BlendTo(state, duration);
 	}
 
-	Ptr<AnimationState> Animatable::BlendTo(Ptr<AnimationState> state, float duration /*= 1.0f*/)
+	AnimationState* Animatable::BlendTo(AnimationState* state, float duration /*= 1.0f*/)
 	{
 		mBlend.mBlendOffStates.Clear();
 
@@ -185,7 +185,7 @@ namespace o2
 
 	void Animatable::Stop(const String& animationName)
 	{
-		Ptr<AnimationState> state = GetState(animationName);
+		AnimationState* state = GetState(animationName);
 		if (!state)
 		{
 			o2Debug.LogWarning("Can't stop animation: %s", animationName);
@@ -202,7 +202,7 @@ namespace o2
 		mBlend.time = -1;
 	}
 
-	void Animatable::UnregAnimatedValue(Ptr<IAnimatedValue> value, const String& path)
+	void Animatable::UnregAnimatedValue(IAnimatedValue* value, const String& path)
 	{
 		for (auto val : mValues)
 		{
@@ -213,7 +213,7 @@ namespace o2
 				if (val->IsEmpty())
 				{
 					mValues.Remove(val);
-					val.Release();
+					delete val;
 				}
 
 				return;

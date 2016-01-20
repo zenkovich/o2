@@ -28,7 +28,9 @@ namespace o2
 	};
 
 	Application::Application():
-		mLog(nullptr), mReady(false)
+		mLog(nullptr), mReady(false), mAssets(nullptr), mEventSystem(nullptr), mFileSystem(nullptr), mInput(nullptr),
+		mProjectConfig(nullptr), mRender(nullptr), mScene(nullptr), mTaskManager(nullptr), mTime(nullptr), mTimer(nullptr),
+		mUIManager(nullptr)
 	{
 		InitializeProperties();
 		InitalizeSystems();
@@ -85,7 +87,7 @@ namespace o2
 
 	Application::~Application()
 	{
-		mRender.Release();
+		delete mRender;
 		DeinitializeSystems();
 	}
 
@@ -120,14 +122,14 @@ namespace o2
 	void Application::DeinitializeSystems()
 	{
 		mScene->Clear();
-		mUIManager.Release();
-		mInput.Release();
-		mTime.Release();
-		mTimer.Release();
-		mProjectConfig.Release();
-		mAssets.Release();
-		mEventSystem.Release();
-		mTaskManager.Release();
+		delete mUIManager;
+		delete mInput;
+		delete mTime;
+		delete mTimer;
+		delete mProjectConfig;
+		delete mAssets;
+		delete mEventSystem;
+		delete mTaskManager;
 
 		mLog->Out("Deinitialized");
 	}
@@ -163,22 +165,22 @@ namespace o2
 		mInput->Update(dt);
 	}
 
-	Ptr<LogStream> Application::GetLog() const
+	LogStream* Application::GetLog() const
 	{
 		return mInstance->mLog;
 	}
 
-	Ptr<Input> Application::GetInput() const
+	Input* Application::GetInput() const
 	{
 		return mInstance->mInput;
 	}
 
-	Ptr<ProjectConfig> Application::GetProjectConfig() const
+	ProjectConfig* Application::GetProjectConfig() const
 	{
 		return mInstance->mProjectConfig;
 	}
 
-	Ptr<Time> Application::GetTime() const
+	Time* Application::GetTime() const
 	{
 		return mInstance->mTime;
 	}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/Containers/Vector.h"
-#include "Utils/Memory/Ptr.h"
+
 
 namespace o2
 {
@@ -12,7 +12,7 @@ namespace o2
 	class ITreeNode
 	{
 	public:
-		typedef Vector<Ptr<_type>> ChildsVec;
+		typedef Vector<_type*> ChildsVec;
 
 	public:
 		// Default constructor
@@ -22,19 +22,19 @@ namespace o2
 		virtual ~ITreeNode();
 
 		// Adds new child node and returns him
-		virtual Ptr<_type> AddChild(Ptr<_type> node);
+		virtual _type* AddChild(_type* node);
 
 		// Remove child node and releases him if needs
-		virtual bool RemoveChild(Ptr<_type> node, bool release = true);
+		virtual bool RemoveChild(_type* node, bool release = true);
 
 		// Removes and releases all children nodes
 		virtual void RemoveAllChilds();
 
 		// Sets parent node
-		virtual void SetParent(Ptr<_type> parent);
+		virtual void SetParent(_type* parent);
 
 		// Returns parent node
-		virtual Ptr<_type> GetParent() const;
+		virtual _type* GetParent() const;
 
 		// Return child nodes
 		virtual ChildsVec& GetChilds();
@@ -44,15 +44,15 @@ namespace o2
 
 	protected:
 		_type*    _this;    // Template this pointer
-		Ptr<_type> mParent; // Pointer to parent node
-		ChildsVec  mChilds; // Children nodes @SERIALIZABLE
+		_type*    mParent; // Pointer to parent node
+		ChildsVec mChilds; // Children nodes @SERIALIZABLE
 
 	protected:
 		// Calls when added new child
-		virtual void OnChildAdded(Ptr<_type> child) {}
+		virtual void OnChildAdded(_type* child) {}
 
 		// Calls when child was removed
-		virtual void OnChildRemoved(Ptr<_type> child) {}
+		virtual void OnChildRemoved(_type* child) {}
 	};
 
 
@@ -70,7 +70,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	Ptr<_type> ITreeNode<_type>::AddChild(Ptr<_type> node)
+	_type* ITreeNode<_type>::AddChild(_type* node)
 	{
 		if (node->GetParent())
 			node->GetParent()->RemoveChild(node, false);
@@ -85,7 +85,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool ITreeNode<_type>::RemoveChild(Ptr<_type> node, bool release /*= true*/)
+	bool ITreeNode<_type>::RemoveChild(_type* node, bool release /*= true*/)
 	{
 		node->mParent = nullptr;
 
@@ -95,7 +95,7 @@ namespace o2
 		OnChildRemoved(node);
 
 		if (release && node)
-			node.Release();
+			delete node;
 
 		return true;
 	}
@@ -108,29 +108,29 @@ namespace o2
 
 		for (auto child : mChilds)
 			if (child)
-				child.Release();
+				delete child;
 
 		mChilds.Clear();
 	}
 
 	template<typename _type>
-	void ITreeNode<_type>::SetParent(Ptr<_type> parent)
+	void ITreeNode<_type>::SetParent(_type* parent)
 	{
 		if (parent)
 		{
-			parent->AddChild(Ptr<_type>(_this));
+			parent->AddChild(_this);
 		}
 		else
 		{
 			if (mParent)
-				mParent->RemoveChild(Ptr<_type>(_this), false);
+				mParent->RemoveChild(_this, false);
 
 			mParent = nullptr;
 		}
 	}
 
 	template<typename _type>
-	Ptr<_type> ITreeNode<_type>::GetParent() const
+	_type* ITreeNode<_type>::GetParent() const
 	{
 		return mParent;
 	}

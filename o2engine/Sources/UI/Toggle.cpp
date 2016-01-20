@@ -7,13 +7,13 @@
 namespace o2
 {
 	UIToggle::UIToggle():
-		mValue(false)
+		mValue(false), mToggleGroup(nullptr), mCaptionText(nullptr), mBackLayer(nullptr)
 	{
 		InitializeProperties();
 	}
 
 	UIToggle::UIToggle(const UIToggle& other):
-		UIWidget(other)
+		UIWidget(other), mToggleGroup(nullptr)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = GetLayer("back");
@@ -36,7 +36,33 @@ namespace o2
 	UIToggle::~UIToggle()
 	{
 		if (mToggleGroup && mToggleGroup->mOwner == this)
-			mToggleGroup.Release();
+			delete mToggleGroup;
+	}
+
+	void UIToggle::Update(float dt)
+	{
+		if (mFullyDisabled)
+			return;
+
+		UIWidget::Update(dt);
+
+		if (mToggleGroup && mToggleGroup->mPressed && mToggleGroup->mPressedValue != mValue &&
+			(mToggleGroup->mType == UIToggleGroup::Type::VerOneClick || mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
+		{
+			float cursory = o2Input.GetCursorPos().y;
+			bool underPoint = false;
+
+			if (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick)
+				underPoint = cursory > layout.mAbsoluteRect.bottom && cursory < layout.mAbsoluteRect.top;
+			else
+				underPoint = cursory > layout.mAbsoluteRect.bottom && cursory < layout.mAbsoluteRect.top;
+		
+			if (underPoint)
+			{
+				SetValue(!mValue);
+				onClick();
+			}
+		}
 	}
 
 	void UIToggle::SetCaption(const WString& text)
@@ -93,7 +119,7 @@ namespace o2
 		return true;
 	}
 
-	void UIToggle::SetToggleGroup(Ptr<UIToggleGroup> toggleGroup)
+	void UIToggle::SetToggleGroup(UIToggleGroup* toggleGroup)
 	{
 		if (mToggleGroup)
 		{
@@ -102,7 +128,7 @@ namespace o2
 				if (mToggleGroup->mToggles.Count() == 1)
 				{
 					mToggleGroup->mToggles.Clear();
-					mToggleGroup.Release();
+					delete mToggleGroup;
 				}
 				else
 				{
@@ -119,11 +145,13 @@ namespace o2
 		if (!mToggleGroup->mOwner)
 		{
 			mToggleGroup->mOwner = this;
-			SetValue(true);
+
+			if (mToggleGroup->mType == UIToggleGroup::Type::OnlySingleTrue)
+				SetValue(true);
 		}
 	}
 
-	Ptr<UIToggleGroup> UIToggle::GetToggleGroup() const
+	UIToggleGroup* UIToggle::GetToggleGroup() const
 	{
 		return mToggleGroup;
 	}
@@ -135,6 +163,15 @@ namespace o2
 			*pressedState = true;
 
 		o2UI.SelectWidget(this);
+
+		if (mToggleGroup)
+		{
+			SetValue(!mValue);
+			onClick();
+
+			mToggleGroup->mPressed = true;
+			mToggleGroup->mPressedValue = mValue;
+		}
 	}
 
 	void UIToggle::OnCursorReleased(const Input::Cursor& cursor)
@@ -143,10 +180,19 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (IsUnderPoint(cursor.mPosition))
+		if (IsUnderPoint(cursor.mPosition) && 
+			!(mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick || 
+							   mToggleGroup->mType == UIToggleGroup::Type::HorOneClick) && 
+			  mToggleGroup->mPressed))
 		{
 			SetValue(!mValue);
 			onClick();
+		}
+
+		if (mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick ||
+							 mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
+		{
+			mToggleGroup->mPressed = false;
 		}
 	}
 
@@ -155,6 +201,12 @@ namespace o2
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
+
+		if (mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick ||
+							 mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
+		{
+			mToggleGroup->mPressed = false;
+		}
 	}
 
 	void UIToggle::OnCursorEnter(const Input::Cursor& cursor)
@@ -191,13 +243,14 @@ namespace o2
 
 			SetValue(!mValue);
 			onClick();
+			onToggleByUser(mValue);
 		}
 	}
 
-	void UIToggle::OnLayerAdded(Ptr<UIWidgetLayer> layer)
+	void UIToggle::OnLayerAdded(UIWidgetLayer* layer)
 	{
 		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == *Text::type)
-			mCaptionText = layer->drawable.Cast<Text>();
+			mCaptionText = (Text*)layer->drawable;
 
 		if (layer->name == "back")
 			mBackLayer = layer;
@@ -215,7 +268,8 @@ namespace o2
 		INITIALIZE_PROPERTY(UIToggle, toggleGroup, SetToggleGroup, GetToggleGroup);
 	}
 
-	UIToggleGroup::UIToggleGroup()
+	UIToggleGroup::UIToggleGroup(Type type):
+		mType(type), mPressed(false)
 	{}
 
 	UIToggleGroup::~UIToggleGroup()
@@ -224,14 +278,14 @@ namespace o2
 			toggle->mToggleGroup = nullptr;
 	}
 
-	void UIToggleGroup::AddToggle(Ptr<UIToggle> toggle)
+	void UIToggleGroup::AddToggle(UIToggle* toggle)
 	{
 		mToggles.Add(toggle);
 		toggle->mToggleGroup = this;
 		toggle->SetValue(true);
 	}
 
-	void UIToggleGroup::RemoveToggle(Ptr<UIToggle> toggle)
+	void UIToggleGroup::RemoveToggle(UIToggle* toggle)
 	{
 		mToggles.Remove(toggle);
 		toggle->mToggleGroup = nullptr;
@@ -242,23 +296,25 @@ namespace o2
 		return mToggles;
 	}
 
-	void UIToggleGroup::OnToggled(Ptr<UIToggle> toggle)
+	void UIToggleGroup::OnToggled(UIToggle* toggle)
 	{
-		if (toggle->GetValue())
+		if (mType == Type::OnlySingleTrue)
 		{
-			for (auto ctoggle : mToggles)
+			if (toggle->GetValue())
 			{
-				if (ctoggle == toggle)
-					continue;
+				for (auto ctoggle : mToggles)
+				{
+					if (ctoggle == toggle)
+						continue;
 
-				ctoggle->SetValue(false);
+					ctoggle->SetValue(false);
+				}
+			}
+			else
+			{
+				if (!mToggles.Any([&](auto x) { return x->GetValue(); }))
+					toggle->SetValue(true);
 			}
 		}
-		else
-		{
-			if (!mToggles.Any([&](auto x) { return x->GetValue(); }))
-				toggle->SetValue(true);
-		}
 	}
-
 }
