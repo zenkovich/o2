@@ -127,7 +127,8 @@ namespace o2
 		return newItem;
 	}
 
-	UIWidget* UIMenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/)
+	UIWidget* UIMenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
+								   ImageAsset* icon /*= nullptr*/, const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
@@ -152,7 +153,7 @@ namespace o2
 			subChild->AddChild(subContext);
 		}
 
-		return subContext->AddItem(path.SubStr(slashPos + 1), clickFunc);
+		return subContext->AddItem(path.SubStr(slashPos + 1), clickFunc, icon, shortcut);
 	}
 
 	UIWidget* UIMenuPanel::InsertItem(const Item& item, int position)

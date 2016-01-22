@@ -742,6 +742,7 @@ namespace UIStyle
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 		sample->SetEnableScrollsHiding(true);
+		sample->SetMinFitSize(50);
 
 		sample->AddLayer("back", mnew Sprite("ui/UI_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
 
@@ -764,11 +765,11 @@ namespace UIStyle
 
 		UIWidgetLayer* shortcutLayer = itemSample->GetLayer("shortcut");
 		Text* shortcutLayerText = mnew Text("arial.ttf");
-		shortcutLayer->layout = Layout::BothStretch(20, 1, 0, -1);
+		shortcutLayer->layout = Layout::BothStretch(20, 1, 10, -1);
 		shortcutLayer->drawable = shortcutLayerText;
 		shortcutLayerText->horAlign = HorAlign::Right;
 		shortcutLayerText->verAlign = VerAlign::Middle;
-
+		shortcutLayer->transparency = 0.7f;
 		UIWidgetLayer* subIconLayer = itemSample->GetLayer("subIcon");
 		subIconLayer->drawable = mnew Sprite("ui/UI_Right_icn.png");
 		subIconLayer->layout = Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-15, 10), Vec2F(5, -10));

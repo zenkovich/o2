@@ -3,7 +3,7 @@
 
 UIDockWindowPlace::UIDockWindowPlace():
 	UIWidget(), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()), 
-	mDragHandleLayoutMax(Vec2F(), Vec2F(), Vec2F(), Vec2F())
+	mDragHandleLayoutMax(Vec2F(), Vec2F(), Vec2F(), Vec2F()), mNeighborMax(nullptr), mNeighborMin(nullptr)
 {
 	InitializeDragHandle();
 	RetargetStatesAnimations();
@@ -11,7 +11,7 @@ UIDockWindowPlace::UIDockWindowPlace():
 }
 
 UIDockWindowPlace::UIDockWindowPlace(const UIDockWindowPlace& other):
-	UIWidget(other)
+	UIWidget(other), mNeighborMax(nullptr), mNeighborMin(nullptr)
 {
 	InitializeDragHandle();
 	RetargetStatesAnimations();

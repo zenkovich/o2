@@ -9,7 +9,7 @@ namespace o2
 		Transform(size, position, angle)
 	{
 		if (size == Vec2F() && Render::IsSingletonInitialzed())
-			SetSize(o2Render.GetResolution());
+			SetSize(o2Render.GetCurrentResolution());
 	}
 
 	Camera Camera::Default()

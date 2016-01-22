@@ -3,6 +3,7 @@
 #include "Events/CursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "UI/Widget.h"
+#include "Utils/ShortcutKeys.h"
 
 namespace o2
 {
@@ -45,6 +46,7 @@ namespace o2
 		Property<Sprite*>        icon;         // Icon image asset setter. Searches sprite layer with name "icon". Creates him if can't find
 		Property<UIButtonGroup*> buttonsGroup; // Buttons group property
 		Function<void()>         onClick;      // Click event
+		ShortcutKeys             shortcut;     // Shortcut keys
 
 		// Default constructor
 		UIButton();

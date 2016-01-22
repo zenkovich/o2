@@ -52,9 +52,6 @@
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\ApplicationConfig.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\EditorApplication.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -66,6 +63,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h">
       <Filter>TreeWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.h">
+      <Filter>Core\WindowsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\MenuPanel.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneEditWidget.h">
+      <Filter>SceneWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\EditorConfig.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -88,9 +97,6 @@
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp">
       <Filter>Core\WindowsSystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\ApplicationConfig.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -105,6 +111,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp">
       <Filter>TreeWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.cpp">
+      <Filter>Core\WindowsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\MenuPanel.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneEditWidget.cpp">
+      <Filter>SceneWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\EditorConfig.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -30,7 +30,7 @@ namespace o2
 		mResolution = o2Application.GetContentSize();
 
 		GLuint pixelFormat;
-		static	PIXELFORMATDESCRIPTOR pfd= // pfd Tells Windows How We Want Things To Be
+		static	PIXELFORMATDESCRIPTOR pfd = // pfd Tells Windows How We Want Things To Be
 		{
 			sizeof(PIXELFORMATDESCRIPTOR), // Size Of This Pixel Format Descriptor
 			1,							   // Version Number
@@ -106,8 +106,8 @@ namespace o2
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnableClientState(GL_VERTEX_ARRAY);
 
-		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex2), mVertexData + sizeof(float)*3);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex2), mVertexData + sizeof(float)*3 + sizeof(unsigned long));
+		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex2), mVertexData + sizeof(float) * 3);
+		glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex2), mVertexData + sizeof(float) * 3 + sizeof(unsigned long));
 		glVertexPointer(3, GL_FLOAT, sizeof(Vertex2), mVertexData + 0);
 
 		glEnable(GL_BLEND);
@@ -180,8 +180,8 @@ namespace o2
 	void Render::CheckCompatibles()
 	{
 		//check render targets available
-		char* extensions[] ={"GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
-			"GL_EXT_packed_depth_stencil"};
+		char* extensions[] = { "GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
+			"GL_EXT_packed_depth_stencil" };
 
 		mRenderTargetsAvailable = true;
 		for (int i = 0; i < 4; i++)
@@ -201,12 +201,12 @@ namespace o2
 			return;
 
 		// Reset batching params
-		mLastDrawTexture      = NULL;
-		mLastDrawVertex       = 0;
-		mLastDrawIdx          = 0;
-		mTrianglesCount       = 0;
-		mFrameTrianglesCount  = 0;
-		mDIPCount             = 0;
+		mLastDrawTexture = NULL;
+		mLastDrawVertex = 0;
+		mLastDrawIdx = 0;
+		mTrianglesCount = 0;
+		mFrameTrianglesCount = 0;
+		mDIPCount = 0;
 		mCurrentPrimitiveType = GL_TRIANGLES;
 
 		mDrawingDepth = 0.0f;
@@ -239,12 +239,14 @@ namespace o2
 
 	void Render::SetupViewMatrix(const Vec2I& viewSize)
 	{
+		mCurrentResolution = viewSize;
 		float projMat[16];
 		Math::OrthoProjMatrix(projMat, 0.0f, (float)viewSize.x, (float)viewSize.y, 0.0f, 0.0f, 10.0f);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glViewport(0, 0, viewSize.x, viewSize.y);
 		glLoadMatrixf(projMat);
+		UpdateCameraTransforms();
 	}
 
 	void Render::End()
@@ -274,6 +276,11 @@ namespace o2
 		return mResolution;
 	}
 
+	Vec2I Render::GetCurrentResolution() const
+	{
+		return mCurrentResolution;
+	}
+
 	Vec2I Render::GetDPI() const
 	{
 		return mDPI;
@@ -299,7 +306,7 @@ namespace o2
 	{
 		DrawPrimitives();
 
-		Vec2F resf = (Vec2F)mResolution;
+		Vec2F resf = (Vec2F)mCurrentResolution;
 
 		glMatrixMode(GL_MODELVIEW);
 		float modelMatrix[16] =
@@ -312,7 +319,7 @@ namespace o2
 
 		glLoadMatrixf(modelMatrix);
 
-		Basis defaultCameraBasis((Vec2F)mResolution*-0.5f, Vec2F::Right()*resf.x, Vec2F().Up()*resf.y);
+		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F::Right()*resf.x, Vec2F().Up()*resf.y);
 		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
 
 		float camTransfMatr[16] =
@@ -350,7 +357,7 @@ namespace o2
 	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] ={Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0)};
+		Vertex2 v[] = { Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0) };
 		DrawLines(v, 1);
 	}
 
@@ -358,24 +365,24 @@ namespace o2
 	{
 		ULong dcolor = color.ABGR();
 		int segCount = points.Count() - 1;
-		Vertex2* v = new Vertex2[segCount*2];
+		Vertex2* v = new Vertex2[segCount * 2];
 		for (int i = 0; i < segCount; i++)
 		{
-			v[i*2] = Vertex2(points[i], dcolor, 0, 0);
-			v[i*2 + 1] = Vertex2(points[i + 1], dcolor, 0, 0);
+			v[i * 2] = Vertex2(points[i], dcolor, 0, 0);
+			v[i * 2 + 1] = Vertex2(points[i + 1], dcolor, 0, 0);
 		}
 		DrawLines(v, segCount);
 		delete[] v;
 	}
 
-	void Render::DrawArrow(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/, 
+	void Render::DrawArrow(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/,
 						   const Vec2F& arrowSize /*= Vec2F(10, 10)*/)
 	{
 		ULong dcolor = color.ABGR();
 		Vec2F dir = (b - a).Normalized();
 		Vec2F ndir = dir.Perpendicular();
 
-		Vertex2 v[] = { 
+		Vertex2 v[] = {
 			Vertex2(a, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
 			Vertex2(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
 			Vertex2(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0) };
@@ -385,7 +392,7 @@ namespace o2
 	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] ={
+		Vertex2 v[] = {
 			Vertex2(minp.x, minp.y, dcolor, 0, 0), Vertex2(maxp.x, minp.y, dcolor, 0, 0),
 			Vertex2(maxp.x, minp.y, dcolor, 0, 0), Vertex2(maxp.x, maxp.y, dcolor, 0, 0),
 			Vertex2(maxp.x, maxp.y, dcolor, 0, 0), Vertex2(minp.x, maxp.y, dcolor, 0, 0),
@@ -415,24 +422,24 @@ namespace o2
 	void Render::DrawCross(const Vec2F& pos, float size /*= 5*/, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] ={
+		Vertex2 v[] = {
 			Vertex2(pos.x - size, pos.y, dcolor, 0, 0), Vertex2(pos.x + size, pos.y, dcolor, 0, 0),
-			Vertex2(pos.x, pos.y - size, dcolor, 0, 0), Vertex2(pos.x, pos.y + size, dcolor, 0, 0)};
+			Vertex2(pos.x, pos.y - size, dcolor, 0, 0), Vertex2(pos.x, pos.y + size, dcolor, 0, 0) };
 		DrawLines(v, 2);
 	}
 
 	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/)
 	{
 		const int segCount = 20;
-		Vertex2 v[segCount*2];
+		Vertex2 v[segCount * 2];
 		ULong dcolor = color.ABGR();
 
-		float angleSeg = 2.0f*Math::PI()/(float)(segCount - 1);
+		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
 		for (int i = 0; i < segCount; i++)
 		{
 			float a = (float)i*angleSeg;
-			v[i*2]     = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
-			v[i*2 + 1] = Vertex2(Vec2F::Rotated(a + angleSeg)*radius + pos, dcolor, 0, 0);
+			v[i * 2] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+			v[i * 2 + 1] = Vertex2(Vec2F::Rotated(a + angleSeg)*radius + pos, dcolor, 0, 0);
 		}
 
 		DrawLines(v, segCount);
@@ -448,7 +455,7 @@ namespace o2
 		Vec2F lastp = p1;
 		for (int i = 0; i < segCount; i++)
 		{
-			float coef = (float)(i + 1)/(float)segCount;
+			float coef = (float)(i + 1) / (float)segCount;
 			Vec2F p = Bezier(p1, p2, p3, p4, coef);
 
 			v[i * 2] = Vertex2(lastp, dcolor, 0, 0);
@@ -460,7 +467,7 @@ namespace o2
 		DrawLines(v, segCount);
 	}
 
-	void Render::DrawBezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4, 
+	void Render::DrawBezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
 									  const Color4& color /*= Color4::White()*/, const Vec2F& arrowSize /*= Vec2F(10, 10)*/)
 	{
 		const int segCount = 20;
@@ -598,8 +605,10 @@ namespace o2
 		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
 		mStackScissors.Add(ScissorStackItem(rect, summaryScissorRect));
 
-		glScissor((int)(summaryScissorRect.left + mResolution.x*0.5f), (int)(summaryScissorRect.bottom + mResolution.y*0.5f),
-				  (int)summaryScissorRect.Width(), (int)summaryScissorRect.Height());
+		glScissor((int)(summaryScissorRect.left + mCurrentResolution.x*0.5f), 
+				  (int)(summaryScissorRect.bottom + mCurrentResolution.y*0.5f),
+				  (int)summaryScissorRect.Width(), 
+				  (int)summaryScissorRect.Height());
 	}
 
 	void Render::DisableScissorTest(bool forcible /*= false*/)
@@ -616,7 +625,9 @@ namespace o2
 		{
 			glDisable(GL_SCISSOR_TEST);
 			GL_CHECK_ERROR(mLog);
-			mStackScissors.Clear();
+
+			while (!mStackScissors.IsEmpty() && !mStackScissors.Last().mRenderTarget)
+				mStackScissors.PopBack();
 
 			mScissorInfos.Last().mEndDepth = mDrawingDepth;
 		}
@@ -635,8 +646,10 @@ namespace o2
 			{
 				mStackScissors.PopBack();
 				RectI lastClipRect = mStackScissors.Last().mSummaryScissorRect;
-				glScissor((int)(lastClipRect.left + mResolution.x*0.5f), (int)(lastClipRect.bottom + mResolution.y*0.5f),
-						  (int)lastClipRect.Width(), (int)lastClipRect.Height());
+				glScissor((int)(lastClipRect.left + mCurrentResolution.x*0.5f),
+						  (int)(lastClipRect.bottom + mCurrentResolution.y*0.5f),
+						  (int)lastClipRect.Width(), 
+						  (int)lastClipRect.Height());
 
 				mScissorInfos.Last().mEndDepth = mDrawingDepth;
 				mScissorInfos.Add(ScissorInfo(lastClipRect, mDrawingDepth));
@@ -665,7 +678,7 @@ namespace o2
 		// Check difference
 		if (mLastDrawTexture != mesh->mTexture.mTexture ||
 			mLastDrawVertex + mesh->vertexCount >= mVertexBufferSize ||
-			mLastDrawIdx + mesh->polyCount*3 >= mIndexBufferSize ||
+			mLastDrawIdx + mesh->polyCount * 3 >= mIndexBufferSize ||
 			mCurrentPrimitiveType == GL_LINES)
 		{
 			DrawPrimitives();
@@ -689,37 +702,37 @@ namespace o2
 		// Copy data
 		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], mesh->vertices, sizeof(Vertex2)*mesh->vertexCount);
 
-		for (UInt i = mLastDrawIdx, j = 0; j < mesh->polyCount*3; i++, j++)
+		for (UInt i = mLastDrawIdx, j = 0; j < mesh->polyCount * 3; i++, j++)
 		{
 			mVertexIndexData[i] = mLastDrawVertex + mesh->indexes[j];
 		}
 
 		mTrianglesCount += mesh->polyCount;
 		mLastDrawVertex += mesh->vertexCount;
-		mLastDrawIdx += mesh->polyCount*3;
+		mLastDrawIdx += mesh->polyCount * 3;
 
 		return true;
 	}
 
 	bool Render::DrawMeshWire(Mesh* mesh, const Color4& color /*= Color4::White()*/)
 	{
-		Vertex2* vertices = new Vertex2[mesh->polyCount*6];
+		Vertex2* vertices = new Vertex2[mesh->polyCount * 6];
 		auto dcolor = color.ABGR();
 
 		for (UInt i = 0; i < mesh->polyCount; i++)
 		{
-			vertices[i*6]     = mesh->vertices[mesh->indexes[i*3]];
-			vertices[i*6 + 1] = mesh->vertices[mesh->indexes[i*3 + 1]];
-			vertices[i*6 + 2] = mesh->vertices[mesh->indexes[i*3 + 1]];
-			vertices[i*6 + 3] = mesh->vertices[mesh->indexes[i*3 + 2]];
-			vertices[i*6 + 4] = mesh->vertices[mesh->indexes[i*3 + 2]];
-			vertices[i*6 + 5] = mesh->vertices[mesh->indexes[i*3]];
+			vertices[i * 6] = mesh->vertices[mesh->indexes[i * 3]];
+			vertices[i * 6 + 1] = mesh->vertices[mesh->indexes[i * 3 + 1]];
+			vertices[i * 6 + 2] = mesh->vertices[mesh->indexes[i * 3 + 1]];
+			vertices[i * 6 + 3] = mesh->vertices[mesh->indexes[i * 3 + 2]];
+			vertices[i * 6 + 4] = mesh->vertices[mesh->indexes[i * 3 + 2]];
+			vertices[i * 6 + 5] = mesh->vertices[mesh->indexes[i * 3]];
 		}
 
-		for (UInt i = 0; i < mesh->polyCount*6; i++)
+		for (UInt i = 0; i < mesh->polyCount * 6; i++)
 			vertices[i].color = dcolor;
 
-		bool res = DrawLines(vertices, mesh->polyCount*3);
+		bool res = DrawLines(vertices, mesh->polyCount * 3);
 		delete[] vertices;
 
 		return res;
@@ -732,8 +745,8 @@ namespace o2
 
 		// Check difference
 		if (mCurrentPrimitiveType == GL_TRIANGLES ||
-			mLastDrawVertex + count*2 >= mVertexBufferSize ||
-			mLastDrawIdx + count*2 >= mIndexBufferSize)
+			mLastDrawVertex + count * 2 >= mVertexBufferSize ||
+			mLastDrawIdx + count * 2 >= mIndexBufferSize)
 		{
 			DrawPrimitives();
 
@@ -743,16 +756,16 @@ namespace o2
 		}
 
 		// Copy data
-		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], verticies, sizeof(Vertex2)*count*2);
+		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], verticies, sizeof(Vertex2)*count * 2);
 
-		for (UInt i = mLastDrawIdx, j = 0; j < (UInt)count*2; i++, j++)
+		for (UInt i = mLastDrawIdx, j = 0; j < (UInt)count * 2; i++, j++)
 		{
 			mVertexIndexData[i] = mLastDrawVertex + j;
 		}
 
 		mTrianglesCount += count;
-		mLastDrawVertex += count*2;
-		mLastDrawIdx += count*2;
+		mLastDrawVertex += count * 2;
+		mLastDrawIdx += count * 2;
 
 		return true;
 	}
@@ -781,8 +794,16 @@ namespace o2
 
 		DrawPrimitives();
 
-		glBindFramebufferEXT(GL_FRAMEBUFFER, renderTarget->mFrameBuffer);
+		if (!mStackScissors.IsEmpty())
+		{
+			mScissorInfos.Last().mEndDepth = mDrawingDepth;
+			glDisable(GL_SCISSOR_TEST);
+			GL_CHECK_ERROR(mLog);
+		}
 
+		mStackScissors.Add(ScissorStackItem(RectI(), RectI(), true));
+
+		glBindFramebufferEXT(GL_FRAMEBUFFER, renderTarget->mFrameBuffer);
 		GL_CHECK_ERROR(mLog);
 
 		SetupViewMatrix(renderTarget->GetSize());
@@ -798,12 +819,26 @@ namespace o2
 		DrawPrimitives();
 
 		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
-
 		GL_CHECK_ERROR(mLog);
 
 		SetupViewMatrix(mResolution);
 
 		mCurrentRenderTarget = TextureRef();
+
+		DisableScissorTest(true);
+		mStackScissors.PopBack();
+		if (!mStackScissors.IsEmpty())
+		{
+			glEnable(GL_SCISSOR_TEST);
+			GL_CHECK_ERROR(mLog);
+
+			auto clipRect = mStackScissors.Last().mSummaryScissorRect;
+
+			glScissor((int)(clipRect.left + mCurrentResolution.x*0.5f), 
+					  (int)(clipRect.bottom + mCurrentResolution.y*0.5f),
+					  (int)clipRect.Width(), 
+					  (int)clipRect.Height());
+		}
 	}
 
 	TextureRef Render::GetRenderTexture() const
@@ -850,7 +885,7 @@ namespace o2
 		mBeginDepth(0), mEndDepth(0)
 	{}
 
-	Render::ScissorInfo::ScissorInfo(const RectI& rect, float beginDepth):
+	Render::ScissorInfo::ScissorInfo(const RectI& rect, float beginDepth) :
 		mScissorRect(rect), mBeginDepth(beginDepth), mEndDepth(beginDepth)
 	{}
 
@@ -863,8 +898,8 @@ namespace o2
 	Render::ScissorStackItem::ScissorStackItem()
 	{}
 
-	Render::ScissorStackItem::ScissorStackItem(const RectI& rect, const RectI& summaryRect):
-		mScrissorRect(rect), mSummaryScissorRect(summaryRect)
+	Render::ScissorStackItem::ScissorStackItem(const RectI& rect, const RectI& summaryRect, bool renderTarget /*= false*/):
+		mScrissorRect(rect), mSummaryScissorRect(summaryRect), mRenderTarget(renderTarget)
 	{}
 
 	bool Render::ScissorStackItem::operator==(const ScissorStackItem& other)

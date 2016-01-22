@@ -171,6 +171,9 @@ namespace o2
 			if (pressedState)
 				*pressedState = true;
 		}
+
+		if (shortcut.IsPressed())
+			onClick();
 	}
 
 	void UIButton::OnKeyReleased(const Input::Key& key)

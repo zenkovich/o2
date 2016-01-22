@@ -11,8 +11,40 @@ namespace o2
 		mPlatform(PLATFORM)
 	{
 		InitializeProperties();
+		SetProjectPath(PROJECT_PATH);
+	}
 
-		String cfgFilePath = PROJECT_SETTINGS_FILE_PATH;
+	ProjectConfig::~ProjectConfig()
+	{}
+
+	String ProjectConfig::GetProjectName() const
+	{
+		return mProjectName;
+	}
+
+	void ProjectConfig::SetProjectName(const String& name)
+	{
+		mProjectName = name;
+	}
+
+	ProjectConfig::Platform ProjectConfig::GetPlatform() const
+	{
+		return mPlatform;
+	}
+
+	void ProjectConfig::SetPlatform(Platform platform)
+	{
+		mPlatform;
+	}
+
+	String ProjectConfig::GetProjectPath() const
+	{
+		return mProjectPath;
+	}
+
+	void ProjectConfig::SetProjectPath(const String& path)
+	{
+		String cfgFilePath = path + PROJECT_SETTINGS_FILE_LOCAL_PATH;
 
 		DataNode data;
 		if (!data.LoadFromFile(cfgFilePath))
@@ -22,29 +54,8 @@ namespace o2
 			return;
 		}
 		else Deserialize(data);
-	}
 
-	ProjectConfig::~ProjectConfig()
-	{}
-
-	String ProjectConfig::GetProjectName() const
-	{
-		return mInstance->mProjectName;
-	}
-
-	void ProjectConfig::SetProjectName(const String& name)
-	{
-		mInstance->mProjectName = name;
-	}
-
-	ProjectConfig::Platform ProjectConfig::GetPlatform() const
-	{
-		return mInstance->mPlatform;
-	}
-
-	void ProjectConfig::SetPlatform(Platform platform)
-	{
-		mInstance->mPlatform;
+		mProjectPath = path;
 	}
 
 	void ProjectConfig::InitializeDefault(const String& configFilePath)
@@ -58,5 +69,6 @@ namespace o2
 	{
 		INITIALIZE_PROPERTY(ProjectConfig, projectName, SetProjectName, GetProjectName);
 		INITIALIZE_PROPERTY(ProjectConfig, currentPlatform, SetPlatform, GetPlatform);
+		INITIALIZE_GETTER(ProjectConfig, projectPath, GetProjectPath);
 	}
 }

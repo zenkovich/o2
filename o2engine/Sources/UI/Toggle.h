@@ -3,6 +3,7 @@
 #include "Events/CursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "UI/Widget.h"
+#include "Utils/ShortcutKeys.h"
 
 namespace o2
 {
@@ -49,6 +50,7 @@ namespace o2
 		Function<void()>         onClick;        // Click event
 		Function<void(bool)>     onToggle;       // Toggle event
 		Function<void(bool)>     onToggleByUser; // Toggle by user event 
+		ShortcutKeys             shortcut;       // Shortcut keys
 
 		// Default constructor
 		UIToggle();

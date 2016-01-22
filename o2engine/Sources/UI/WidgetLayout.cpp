@@ -36,9 +36,17 @@ namespace o2
 	UIWidgetLayout& UIWidgetLayout::operator=(const UIWidgetLayout& other)
 	{
 		CopyFrom(other);
-		mOwner->UpdateLayout();
+
+		if (mOwner)
+			mOwner->UpdateLayout();
 
 		return *this;
+	}
+
+	bool UIWidgetLayout::operator==(const UIWidgetLayout& other) const
+	{
+		return mAnchorMin == other.mAnchorMin && mAnchorMax == other.mAnchorMax && mOffsetMin == other.mOffsetMin &&
+			mOffsetMax == other.mOffsetMax;
 	}
 
 	void UIWidgetLayout::SetPosition(const Vec2F& position)

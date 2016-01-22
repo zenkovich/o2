@@ -3,10 +3,12 @@
 #include "Utils/Reflection/Reflection.h"
 
 // Includes
-#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\ApplicationConfig.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\EditorConfig.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\IEditorWindow.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\UIDockableWindow.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\WindowsLayout.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneEditWidget.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneWindow.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\TreeWindow\TreeWindow.h"
 #include "C:\work\o2\o2Engine\Sources\Animation\Animatable.h"
@@ -74,10 +76,12 @@
 #include "C:\work\o2\o2Engine\Sources\Render\VectorFont.h"
 
 // Types declarations
-o2::Type* ::ApplicationConfig::type;
+o2::Type* ::EditorConfig::type;
 o2::Type* ::IEditorWindow::type;
 o2::Type* ::UIDockableWindow::type;
 o2::Type* ::UIDockWindowPlace::type;
+o2::Type* ::WindowsLayout::type;
+o2::Type* ::SceneEditWidget::type;
 o2::Type* ::SceneWindow::type;
 o2::Type* ::TreeWindow::type;
 o2::Type* o2::Animatable::type;
@@ -116,6 +120,7 @@ o2::Type* o2::Component::type;
 o2::Type* o2::DrawableComponent::type;
 o2::Type* o2::ImageComponent::type;
 o2::Type* o2::UIButton::type;
+o2::Type* o2::UIContextMenuItem::type;
 o2::Type* o2::UIContextMenu::type;
 o2::Type* o2::UICustomDropDown::type;
 o2::Type* o2::UICustomList::type;
@@ -163,17 +168,21 @@ o2::Type* o2::VectorFont::Effect::type;
 o2::Type* o2::UIContextMenu::Item::type;
 o2::Type* o2::UIMenuPanel::Item::type;
 o2::Type* o2::Curve::Key::type;
+o2::Type* ::EditorConfig::GlobalConfig::type;
+o2::Type* ::EditorConfig::ProjectConfig::type;
+o2::Type* ::WindowsLayout::WindowDockPlace::type;
 o2::Type* o2::AnimatedValue<RectF>::type;
 o2::Type* o2::AnimatedValue<RectF>::Key::type;
 o2::Type* o2::AnimatedValue<bool>::type;
 o2::Type* o2::AnimatedValue<bool>::Key::type;
 
 // Types initializations
-void ::ApplicationConfig::InitializeType(::ApplicationConfig* sample)
+void ::EditorConfig::InitializeType(::EditorConfig* sample)
 {
-	FIELD(mWindowSize).AddAttribute<SerializableAttribute<decltype(mWindowSize)>>();
-	FIELD(mWindowPosition).AddAttribute<SerializableAttribute<decltype(mWindowPosition)>>();
-	FIELD(mFullScreen).AddAttribute<SerializableAttribute<decltype(mFullScreen)>>();
+	FIELD(mConfigPath);
+	FIELD(mGlobalConfigPath);
+	FIELD(mProjectConfig);
+	FIELD(mGlobalConfig);
 }
 
 void ::IEditorWindow::InitializeType(::IEditorWindow* sample)
@@ -209,8 +218,26 @@ void ::UIDockWindowPlace::InitializeType(::UIDockWindowPlace* sample)
 	FIELD(mDragHandleDepth);
 }
 
+void ::WindowsLayout::InitializeType(::WindowsLayout* sample)
+{
+	FIELD(mainDock).AddAttribute<SerializableAttribute<decltype(mainDock)>>();
+	FIELD(windows).AddAttribute<SerializableAttribute<decltype(windows)>>();
+}
+
+void ::SceneEditWidget::InitializeType(::SceneEditWidget* sample)
+{
+	FIELD(mViewCamera);
+	FIELD(mViewCameraTargetScale);
+	FIELD(mRenderTarget);
+	FIELD(mRenderTargetSprite);
+	FIELD(mNeedRedraw);
+	FIELD(mDrawDepth);
+	FIELD(test);
+}
+
 void ::SceneWindow::InitializeType(::SceneWindow* sample)
 {
+	FIELD(mEditWidget);
 }
 
 void ::TreeWindow::InitializeType(::TreeWindow* sample)
@@ -412,8 +439,10 @@ void o2::ProjectConfig::InitializeType(o2::ProjectConfig* sample)
 {
 	FIELD(projectName);
 	FIELD(currentPlatform);
+	FIELD(projectPath);
 	FIELD(mProjectName).AddAttribute<SerializableAttribute<decltype(mProjectName)>>();
 	FIELD(mPlatform);
+	FIELD(mProjectPath);
 }
 
 void o2::Camera::InitializeType(o2::Camera* sample)
@@ -588,18 +617,26 @@ void o2::UIButton::InitializeType(o2::UIButton* sample)
 	FIELD(icon);
 	FIELD(buttonsGroup);
 	FIELD(onClick);
+	FIELD(shortcut);
 	FIELD(mCaptionText);
 	FIELD(mIconSprite);
 	FIELD(mButtonGroup);
 }
 
+void o2::UIContextMenuItem::InitializeType(o2::UIContextMenuItem* sample)
+{
+	FIELD(onClick);
+	FIELD(shortcut);
+	FIELD(mSubMenu);
+}
+
 void o2::UIContextMenu::InitializeType(o2::UIContextMenu* sample)
 {
 	FIELD(mOpenSubMenuDelay);
+	FIELD(mFitSizeMin).AddAttribute<SerializableAttribute<decltype(mFitSizeMin)>>();
 	FIELD(mParentContextMenu);
 	FIELD(mChildContextMenu);
 	FIELD(mLayout);
-	FIELD(mClickFunctions);
 	FIELD(mItemSample).AddAttribute<SerializableAttribute<decltype(mItemSample)>>();
 	FIELD(mSeparatorSample).AddAttribute<SerializableAttribute<decltype(mSeparatorSample)>>();
 	FIELD(mSelectionDrawable).AddAttribute<SerializableAttribute<decltype(mSelectionDrawable)>>();
@@ -608,7 +645,6 @@ void o2::UIContextMenu::InitializeType(o2::UIContextMenu* sample)
 	FIELD(mTargetSelectionRect);
 	FIELD(mLastSelectCheckCursor);
 	FIELD(mSelectedItem);
-	FIELD(mPressedItem);
 	FIELD(mSelectSubContextTime);
 }
 
@@ -815,6 +851,7 @@ void o2::UIToggle::InitializeType(o2::UIToggle* sample)
 	FIELD(onClick);
 	FIELD(onToggle);
 	FIELD(onToggleByUser);
+	FIELD(shortcut);
 	FIELD(mValue);
 	FIELD(mCaptionText);
 	FIELD(mBackLayer);
@@ -1283,6 +1320,28 @@ void o2::Curve::Key::InitializeType(o2::Curve::Key* sample)
 	FIELD(mApproxValues);
 }
 
+void ::EditorConfig::GlobalConfig::InitializeType(::EditorConfig::GlobalConfig* sample)
+{
+	FIELD(mLastOpenedProjectpath).AddAttribute<SerializableAttribute<decltype(mLastOpenedProjectpath)>>();
+	FIELD(mDefaultLayout).AddAttribute<SerializableAttribute<decltype(mDefaultLayout)>>();
+	FIELD(mAvailableLayouts).AddAttribute<SerializableAttribute<decltype(mAvailableLayouts)>>();
+}
+
+void ::EditorConfig::ProjectConfig::InitializeType(::EditorConfig::ProjectConfig* sample)
+{
+	FIELD(mWindowSize).AddAttribute<SerializableAttribute<decltype(mWindowSize)>>();
+	FIELD(mWindowPosition).AddAttribute<SerializableAttribute<decltype(mWindowPosition)>>();
+	FIELD(mMaximized).AddAttribute<SerializableAttribute<decltype(mMaximized)>>();
+	FIELD(mLayout).AddAttribute<SerializableAttribute<decltype(mLayout)>>();
+}
+
+void ::WindowsLayout::WindowDockPlace::InitializeType(::WindowsLayout::WindowDockPlace* sample)
+{
+	FIELD(anchors).AddAttribute<SerializableAttribute<decltype(anchors)>>();
+	FIELD(windows).AddAttribute<SerializableAttribute<decltype(windows)>>();
+	FIELD(childs).AddAttribute<SerializableAttribute<decltype(childs)>>();
+}
+
 void o2::AnimatedValue<RectF>::InitializeType(o2::AnimatedValue<RectF>* sample)
 {
 	FIELD(value);
@@ -1340,10 +1399,12 @@ void o2::AnimatedValue<bool>::Key::InitializeType(o2::AnimatedValue<bool>::Key* 
 void RegReflectionTypes()
 {
 	// Create types
-	::ApplicationConfig::type = mnew Type();
+	::EditorConfig::type = mnew Type();
 	::IEditorWindow::type = mnew Type();
 	::UIDockableWindow::type = mnew Type();
 	::UIDockWindowPlace::type = mnew Type();
+	::WindowsLayout::type = mnew Type();
+	::SceneEditWidget::type = mnew Type();
 	::SceneWindow::type = mnew Type();
 	::TreeWindow::type = mnew Type();
 	o2::Animatable::type = mnew Type();
@@ -1382,6 +1443,7 @@ void RegReflectionTypes()
 	o2::DrawableComponent::type = mnew Type();
 	o2::ImageComponent::type = mnew Type();
 	o2::UIButton::type = mnew Type();
+	o2::UIContextMenuItem::type = mnew Type();
 	o2::UIContextMenu::type = mnew Type();
 	o2::UICustomDropDown::type = mnew Type();
 	o2::UICustomList::type = mnew Type();
@@ -1429,16 +1491,21 @@ void RegReflectionTypes()
 	o2::UIContextMenu::Item::type = mnew Type();
 	o2::UIMenuPanel::Item::type = mnew Type();
 	o2::Curve::Key::type = mnew Type();
+	::EditorConfig::GlobalConfig::type = mnew Type();
+	::EditorConfig::ProjectConfig::type = mnew Type();
+	::WindowsLayout::WindowDockPlace::type = mnew Type();
 	o2::AnimatedValue<RectF>::type = mnew Type();
 	o2::AnimatedValue<RectF>::Key::type = mnew Type();
 	o2::AnimatedValue<bool>::type = mnew Type();
 	o2::AnimatedValue<bool>::Key::type = mnew Type();
 
 	// Initialize types
-	o2::Reflection::InitializeType<::ApplicationConfig>("::ApplicationConfig");
+	o2::Reflection::InitializeType<::EditorConfig>("::EditorConfig");
 	o2::Reflection::InitializeType<::IEditorWindow>("::IEditorWindow");
 	o2::Reflection::InitializeType<::UIDockableWindow>("::UIDockableWindow");
 	o2::Reflection::InitializeType<::UIDockWindowPlace>("::UIDockWindowPlace");
+	o2::Reflection::InitializeType<::WindowsLayout>("::WindowsLayout");
+	o2::Reflection::InitializeType<::SceneEditWidget>("::SceneEditWidget");
 	o2::Reflection::InitializeType<::SceneWindow>("::SceneWindow");
 	o2::Reflection::InitializeType<::TreeWindow>("::TreeWindow");
 	o2::Reflection::InitializeType<o2::Animatable>("o2::Animatable");
@@ -1477,6 +1544,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::DrawableComponent>("o2::DrawableComponent");
 	o2::Reflection::InitializeType<o2::ImageComponent>("o2::ImageComponent");
 	o2::Reflection::InitializeType<o2::UIButton>("o2::UIButton");
+	o2::Reflection::InitializeType<o2::UIContextMenuItem>("o2::UIContextMenuItem");
 	o2::Reflection::InitializeType<o2::UIContextMenu>("o2::UIContextMenu");
 	o2::Reflection::InitializeType<o2::UICustomDropDown>("o2::UICustomDropDown");
 	o2::Reflection::InitializeType<o2::UICustomList>("o2::UICustomList");
@@ -1524,18 +1592,23 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::UIContextMenu::Item>("o2::UIContextMenu::Item");
 	o2::Reflection::InitializeType<o2::UIMenuPanel::Item>("o2::UIMenuPanel::Item");
 	o2::Reflection::InitializeType<o2::Curve::Key>("o2::Curve::Key");
+	o2::Reflection::InitializeType<::EditorConfig::GlobalConfig>("::EditorConfig::GlobalConfig");
+	o2::Reflection::InitializeType<::EditorConfig::ProjectConfig>("::EditorConfig::ProjectConfig");
+	o2::Reflection::InitializeType<::WindowsLayout::WindowDockPlace>("::WindowsLayout::WindowDockPlace");
 	o2::Reflection::InitializeType<o2::AnimatedValue<RectF>>("o2::AnimatedValue<RectF>");
 	o2::Reflection::InitializeType<o2::AnimatedValue<RectF>::Key>("o2::AnimatedValue<RectF>::Key");
 	o2::Reflection::InitializeType<o2::AnimatedValue<bool>>("o2::AnimatedValue<bool>");
 	o2::Reflection::InitializeType<o2::AnimatedValue<bool>::Key>("o2::AnimatedValue<bool>::Key");
 
 	// Resolve inheritance
-	::ApplicationConfig::type->AddBaseType(o2::ISerializable::type);
+	::EditorConfig::type->AddBaseType(o2::ISerializable::type);
 	o2::UIWidget::type->AddBaseType(o2::ISerializable::type);
 	o2::UIScrollArea::type->AddBaseType(o2::UIWidget::type);
 	o2::UIWindow::type->AddBaseType(o2::UIScrollArea::type);
 	::UIDockableWindow::type->AddBaseType(o2::UIWindow::type);
 	::UIDockWindowPlace::type->AddBaseType(o2::UIWidget::type);
+	::WindowsLayout::type->AddBaseType(o2::ISerializable::type);
+	::SceneEditWidget::type->AddBaseType(o2::UIWidget::type);
 	::SceneWindow::type->AddBaseType(::IEditorWindow::type);
 	::TreeWindow::type->AddBaseType(::IEditorWindow::type);
 	o2::Animatable::type->AddBaseType(o2::ISerializable::type);
@@ -1575,6 +1648,7 @@ void RegReflectionTypes()
 	o2::DrawableComponent::type->AddBaseType(o2::Component::type);
 	o2::ImageComponent::type->AddBaseType(o2::DrawableComponent::type);
 	o2::UIButton::type->AddBaseType(o2::UIWidget::type);
+	o2::UIContextMenuItem::type->AddBaseType(o2::UIWidget::type);
 	o2::UIContextMenu::type->AddBaseType(o2::UIScrollArea::type);
 	o2::UICustomDropDown::type->AddBaseType(o2::UIWidget::type);
 	o2::UICustomList::type->AddBaseType(o2::UIScrollArea::type);
@@ -1616,6 +1690,9 @@ void RegReflectionTypes()
 	o2::UIContextMenu::Item::type->AddBaseType(o2::ISerializable::type);
 	o2::UIMenuPanel::Item::type->AddBaseType(o2::ISerializable::type);
 	o2::Curve::Key::type->AddBaseType(o2::ISerializable::type);
+	::EditorConfig::GlobalConfig::type->AddBaseType(o2::ISerializable::type);
+	::EditorConfig::ProjectConfig::type->AddBaseType(o2::ISerializable::type);
+	::WindowsLayout::WindowDockPlace::type->AddBaseType(o2::ISerializable::type);
 	o2::AnimatedValue<RectF>::type->AddBaseType(o2::IAnimatedValue::type);
 	o2::AnimatedValue<RectF>::Key::type->AddBaseType(o2::ISerializable::type);
 	o2::AnimatedValue<bool>::type->AddBaseType(o2::IAnimatedValue::type);

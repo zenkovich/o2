@@ -153,7 +153,7 @@ namespace o2
 
 		// Assign operator to dictionary value
 		template<typename _key, typename _value>
-		DataNode& operator=(const Dictionary<_key, _value>& value);
+		DataNode& operator=(Dictionary<_key, _value>& value);
 
 		// Assign operator to enum class value
 		template<class _type, class = typename std::enable_if<std::is_enum<_type>::value>::type>
@@ -360,7 +360,7 @@ namespace o2
 	}
 
 	template<typename _key, typename _value>
-	DataNode& DataNode::operator=(const Dictionary<_key, _value>& value)
+	DataNode& DataNode::operator=(Dictionary<_key, _value>& value)
 	{
 		Clear();
 
@@ -391,13 +391,19 @@ namespace o2
 		Dictionary<_key, _value> res;
 
 		int count = mChildNodes.Count();
+		_value v = _value();
+		_key k = _key();
 		for (auto childNode : mChildNodes)
 		{
 			auto keyNode = childNode->GetNode("Key");
 			auto valueNode = childNode->GetNode("Value");
 
 			if (keyNode && valueNode)
-				res.Add((_key)*keyNode, (_value)*valueNode);
+			{
+				k = *keyNode;
+				v = *valueNode;
+				res.Add(k, v);
+			}
 		}
 
 		return res;

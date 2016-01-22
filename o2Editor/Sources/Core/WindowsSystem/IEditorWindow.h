@@ -46,4 +46,5 @@ protected:
 	UIDockableWindow* mWindow; // Dockable UI window 
 
 	friend class WindowsManager;
+	friend class WindowsLayout;
 };

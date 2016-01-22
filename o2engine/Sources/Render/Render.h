@@ -28,9 +28,9 @@ namespace o2
 		// ---------------------
 		struct ScissorInfo
 		{
-			float mBeginDepth;  // Drawing depth on enabling clipping
-			float mEndDepth;    // Drawing depth on disabling clipping
-			RectI mScissorRect; // Scissor clipping rectangle
+			float mBeginDepth;   // Drawing depth on enabling clipping
+			float mEndDepth;     // Drawing depth on disabling clipping
+			RectI mScissorRect;  // Scissor clipping rectangle
 
 			ScissorInfo();
 			ScissorInfo(const RectI& rect, float beginDepth);
@@ -46,9 +46,10 @@ namespace o2
 		{
 			RectI mScrissorRect;       // Clipping scissor rectangle
 			RectI mSummaryScissorRect; // Real clipping rectangle: summary of top clipping rectangles
+			bool  mRenderTarget;       // Is render target turned on this step
 
 			ScissorStackItem();
-			ScissorStackItem(const RectI& rect, const RectI& summaryRect);
+			ScissorStackItem(const RectI& rect, const RectI& summaryRect, bool renderTarget = false);
 
 			bool operator==(const ScissorStackItem& other);
 		};
@@ -79,6 +80,9 @@ namespace o2
 
 		// Returns resolution of rendering frame
 		Vec2I GetResolution() const;
+
+		// Returns current buffer resolution
+		Vec2I GetCurrentResolution() const;
 
 		// Returns device's screen dpi
 		Vec2I GetDPI() const;
@@ -199,7 +203,8 @@ namespace o2
 		FontsVec        mFonts;                  // Loaded fonts
 
 		Camera          mCamera;                 // Camera transformation
-		Vec2I           mResolution;             // Current back buffer size
+		Vec2I           mResolution;             // Primary back buffer size
+		Vec2I           mCurrentResolution;      // Current back buffer size
 		Vec2I           mDPI;                    // Current device screen DPI
 
 		bool            mRenderTargetsAvailable; // True, if render targets is available
@@ -233,7 +238,7 @@ namespace o2
 		// Initializes free type library
 		void InitializeFreeType();
 
-		// Deinitializes free type livrary
+		// Deinitializes free type library
 		void DeinitializeFreeType();
 
 		// Send buffers to draw

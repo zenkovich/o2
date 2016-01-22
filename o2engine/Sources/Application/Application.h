@@ -66,11 +66,20 @@ namespace o2
 		// Launching application cycle
 		virtual void Launch();
 
+		// Shutting down application
+		virtual void Shutdown();
+
 		// Makes application fullscreen. On mobiles/tablets has no effect, just ignoring
 		virtual void SetFullscreen(bool fullscreen = true);
 
 		// Return true, if application is fullscreen On mobiles/tables always true
 		virtual bool IsFullScreen() const;
+
+		// Maximize application frame. Available only on PC
+		virtual void Maximize();
+
+		// Returns is frame maximized. Available only on PC
+		virtual bool IsMaximized() const;
 
 		// Sets application window as resizible. On mobiles/tablets has no effect, just ignoring
 		virtual void SetResizible(bool resizible);

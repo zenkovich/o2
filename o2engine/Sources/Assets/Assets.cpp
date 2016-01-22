@@ -3,6 +3,7 @@
 #include "Assets/Asset.h"
 #include "Assets/BinaryAsset.h"
 #include "Assets/Builder/AssetsBuilder.h"
+#include "Config/ProjectConfig.h"
 #include "Utils/Debug.h"
 #include "Utils/FileSystem/FileSystem.h"
 #include "Utils/Log/LogStream.h"
@@ -14,6 +15,9 @@ namespace o2
 	Assets::Assets()
 	{
 		InitializeProperties();
+
+		mAssetsFolderPath = ASSETS_PATH;
+		mDataFolderPath = DATA_PATH;
 
 		mLog = mnew LogStream("Assets");
 		o2Debug.GetLog()->BindStream(mLog);
@@ -35,12 +39,12 @@ namespace o2
 
 	String Assets::GetAssetsPath() const
 	{
-		return ASSETS_PATH;
+		return o2Config.GetProjectPath() + mAssetsFolderPath;
 	}
 
 	String Assets::GetDataPath() const
 	{
-		return DATA_PATH;
+		return mDataFolderPath;
 	}
 
 	String Assets::GetAssetPath(AssetId id) const

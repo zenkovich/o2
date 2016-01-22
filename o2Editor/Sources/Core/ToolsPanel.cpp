@@ -2,6 +2,7 @@
 
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
+#include "Core/WindowsSystem/WindowsManager.h"
 #include "UI/Button.h"
 #include "UI/DropDown.h"
 #include "UI/HorizontalLayout.h"
@@ -9,6 +10,21 @@
 #include "UI/UIManager.h"
 #include "UI/Widget.h"
 
+
+UIWidget* ToolsPanel::GetPanelWidget() const
+{
+	return mPanelRoot;
+}
+
+UIWidget* ToolsPanel::GetPlayPanel() const
+{
+	return mPlayPanel;
+}
+
+UIHorizontalLayout* ToolsPanel::GetToolsPanel() const
+{
+	return mEditToolsPanel;
+}
 
 ToolsPanel::ToolsPanel()
 {
@@ -44,10 +60,12 @@ void ToolsPanel::InitializePlayPanel()
 
 	mPauseToggle = o2UI.CreateWidget<UIToggle>("pause");
 	mPauseToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(22, 1));
+	mPauseToggle->shortcut = ShortcutKeys(VK_F11);
 	mPlayPanel->AddChild(mPauseToggle);
 
 	mStepButton = o2UI.CreateWidget<UIButton>("step");
 	mStepButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(39, 1));
+	mStepButton->shortcut = ShortcutKeys(VK_F10);
 	mPlayPanel->AddChild(mStepButton);
 
 	mDevicesList = o2UI.CreateDropdown("backless");
@@ -87,11 +105,9 @@ void ToolsPanel::InitializeLayoutSchemesPanel()
 {
 	mLayoutSchemesList = o2UI.CreateDropdown("round");
 	mLayoutSchemesList->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 3, 2, 150, 10);
-
-	mLayoutSchemesList->AddItems({ "Standard", "Wide", "User defined" });
-	mLayoutSchemesList->selectedItemPos = 0;
-
-	mPanelRoot->AddChild(mLayoutSchemesList);
+	mPanelRoot->AddChild(mLayoutSchemesList); 
+	UpdateWndLayoutSchemas();
+	mLayoutSchemesList->onSelectedText = Function<void(const WString&)>(this, &ToolsPanel::OnSchemeSelected);
 }
 
 void ToolsPanel::InitializeToolsPanel()
@@ -125,8 +141,55 @@ void ToolsPanel::InitializeToolsPanel()
 	mMoveToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
 	mRotateToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
 	mScaleToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
-	mBrushToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
 	mFrameToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
 
+	mArrowToolToggle->shortcut = ShortcutKeys('Q');
+	mBrushToolToggle->shortcut = ShortcutKeys('W');
+	mMoveToolToggle->shortcut = ShortcutKeys('E');
+	mRotateToolToggle->shortcut = ShortcutKeys('R');
+	mScaleToolToggle->shortcut = ShortcutKeys('T');
+	mFrameToolToggle->shortcut = ShortcutKeys('Y');
+
 	mArrowToolToggle->SetValue(true);
+}
+
+void ToolsPanel::UpdateWndLayoutSchemas()
+{
+	mLayoutSchemesList->RemoveAllItems();
+
+	auto currentLayout = o2EditorWindows.GetWindowsLayout();
+	String currentLayoutName = mDefaultSchemeName;
+	for (auto availableLayoutKV : o2EditorWindows.mAvailableLayouts)
+	{
+		mLayoutSchemesList->AddItem(availableLayoutKV.Key());
+
+		if (currentLayout == availableLayoutKV.Value())
+			currentLayoutName = availableLayoutKV.Key();
+	}
+
+	mLayoutSchemesList->AddItem(mDefaultSchemeName);
+	mLayoutSchemesList->AddItem(mSaveAsSchemeName);
+
+	mLayoutSchemesList->SelectItemText(currentLayoutName);
+}
+
+void ToolsPanel::OnSchemeSelected(const WString& name)
+{
+	if (name == mSaveAsSchemeName)
+	{
+		String newName = String::Format("Scheme #%i", o2EditorWindows.mAvailableLayouts.Count() + 1);
+		o2EditorWindows.mAvailableLayouts.Add(newName, o2EditorWindows.GetWindowsLayout());
+
+		UpdateWndLayoutSchemas();
+	}
+
+	if (name == mDefaultSchemeName)
+	{
+		o2EditorWindows.SetDefaultWindowsLayout();
+	}
+
+	if (o2EditorWindows.mAvailableLayouts.ContainsKey(name))
+	{
+		o2EditorWindows.SetWindowsLayout(name);
+	}
 }

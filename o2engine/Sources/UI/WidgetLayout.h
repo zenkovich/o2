@@ -66,6 +66,8 @@ namespace o2
 
 		UIWidgetLayout& operator=(const UIWidgetLayout& other);
 
+		bool operator==(const UIWidgetLayout& other) const;
+
 		void SetPosition(const Vec2F& position);
 		Vec2F GetPosition();
 

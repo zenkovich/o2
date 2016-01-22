@@ -2,14 +2,15 @@
 
 #include "Animation/Animatable.h"
 #include "Application/Application.h"
-#include "ApplicationConfig.h"
+#include "EditorConfig.h"
 #include "Render/Sprite.h"
 
 using namespace o2;
 
 class WindowsManager;
-class ApplicationConfig;
+class EditorConfig;
 class ToolsPanel;
+class MenuPanel;
 
 namespace o2
 {
@@ -28,17 +29,14 @@ public:
 	// Destructor
 	~EditorApplication();
 
-	// Returns menu panel
-	UIMenuPanel* GetMenuPanel() const;
-
 protected:
 	Sprite*            mBackground;     // Background sprite
 	Sprite*            mBackSign;       // Background o2 signature
-	WindowsManager*    mWindowsManager; // Windows manager
-	ApplicationConfig* mConfig;         // Application configuration
-	ToolsPanel*        mToolsPanel;     // Tools panel
 
-	UIMenuPanel*       mMenuPanel;      // Menu panel
+	WindowsManager*    mWindowsManager; // Windows manager
+	EditorConfig* mConfig;         // Application configuration
+	ToolsPanel*        mToolsPanel;     // Tools panel
+	MenuPanel*         mMenuPanel;      // Menu panel
 
 protected:
 	// Calling on updating
@@ -56,11 +54,17 @@ protected:
 	// Calling when application is starting
 	void OnStarted();
 
+	// Initializes menu
+	void InitializeMenu();
+
 	// Calling when application is closing
 	void OnClosing();
 
 	// Calling when application window resized. Ignoring on mobiles/tablets
 	void OnResizing();
+
+	// Calling when application window moved. Ignoring on mobiles/tablets
+	void OnMoved();
 
 	// Processing frame update, drawing and input messages without scene
 	void ProcessFrame();

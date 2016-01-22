@@ -24,6 +24,7 @@ namespace o2
 	public:
 		Property<String>   projectName;     // Project name property
 		Property<Platform> currentPlatform; // Project platform property
+		Getter<String>     projectPath;     // Project path location
 
 		// Default constructor
 		ProjectConfig();
@@ -43,11 +44,18 @@ namespace o2
 		// Sets platform
 		void SetPlatform(Platform platform);
 
+		// Returns project path
+		String GetProjectPath() const;
+
+		// Sets new project path. Loads config from new path and will o2 works with new path
+		void SetProjectPath(const String& path);
+
 		SERIALIZABLE(ProjectConfig);
 
 	protected:
 		String   mProjectName; // Current project name @SERIALIZABLE
 		Platform mPlatform;    // Current project target platform
+		String   mProjectPath; // Current project location path
 
 	protected:
 		// Initializes config by default

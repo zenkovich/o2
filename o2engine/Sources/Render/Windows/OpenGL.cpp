@@ -19,6 +19,7 @@ void GetGLExtensions(o2::LogStream* log /*= nullptr*/)
 	glFramebufferTexture        = (PFNGLFRAMEBUFFERTEXTUREPROC)GetSafeWGLProcAddress("glFramebufferTexture", log);
 	glDrawBuffers               = (PFNGLDRAWBUFFERSPROC)GetSafeWGLProcAddress("glDrawBuffers", log);
 	glDeleteBuffers             = (PFNGLDELETEBUFFERSPROC)GetSafeWGLProcAddress("glDeleteBuffers", log);
+	glDeleteFramebuffersEXT     = (PFNGLDELETEFRAMEBUFFERSPROC)GetSafeWGLProcAddress("glDeleteFramebuffersEXT", log);
 	glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC)GetSafeWGLProcAddress("glCheckFramebufferStatusEXT", log);
 
 }
@@ -91,4 +92,5 @@ extern PFNGLBINDFRAMEBUFFEREXTPROC        glBindFramebufferEXT        = NULL;
 extern PFNGLFRAMEBUFFERTEXTUREPROC        glFramebufferTexture        = NULL;
 extern PFNGLDRAWBUFFERSPROC               glDrawBuffers               = NULL;
 extern PFNGLDELETEBUFFERSPROC             glDeleteBuffers             = NULL;
+extern PFNGLDELETEFRAMEBUFFERSPROC        glDeleteFramebuffersEXT     = NULL;
 extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT = NULL;

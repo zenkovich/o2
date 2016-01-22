@@ -1,5 +1,6 @@
 #include "WindowsManager.h"
 
+#include "Core/EditorConfig.h"
 #include "Core/UIStyle/EditorUIStyle.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
 #include "Core/WindowsSystem/UIDockWindowPlace.h"
@@ -36,11 +37,11 @@ void WindowsManager::InitializeWindows()
 
 void WindowsManager::InitializeDock()
 {
-	auto mainDockPlace = mnew UIDockWindowPlace();
-	mainDockPlace->name = "main dock";
-	mainDockPlace->layout = UIWidgetLayout::BothStretch(0, 0, 0, 48);
-	mainDockPlace->SetResizibleDir(TwoDirection::Horizontal, 0, nullptr, nullptr);
-	o2UI.AddWidget(mainDockPlace);
+	mMainDockPlace = mnew UIDockWindowPlace();
+	mMainDockPlace->name = "main dock";
+	mMainDockPlace->layout = UIWidgetLayout::BothStretch(0, 0, 0, 48);
+	mMainDockPlace->SetResizibleDir(TwoDirection::Horizontal, 0, nullptr, nullptr);
+	o2UI.AddWidget(mMainDockPlace);
 }
 
 void WindowsManager::Update(float dt)
@@ -90,5 +91,51 @@ void WindowsManager::Draw()
 void WindowsManager::AddWindow(IEditorWindow* window)
 {
 	mEditorWindows.Add(window);
+}
+
+WindowsLayout WindowsManager::GetWindowsLayout()
+{
+	WindowsLayout res; 
+
+	res.mainDock.RetrieveLayout(o2EditorWindows.mMainDockPlace);
+
+	for (auto widget : o2UI.GetAllWidgets())
+	{
+		if (widget->GetType() == *UIDockableWindow::type)
+			res.windows.Add(widget->name, widget->layout);
+	}
+
+	return res;
+}
+
+void WindowsManager::SetWindowsLayout(WindowsLayout layout)
+{
+	for (auto wnd : layout.windows)
+	{
+		UIDockableWindow* dockWnd = (UIDockableWindow*)o2EditorWindows.mEditorWindows.FindMatch([&](IEditorWindow* x) { 
+			return x->mWindow->GetName() == wnd.Key(); 
+		})->mWindow;
+
+		if (dockWnd)
+			dockWnd->layout = wnd.Value();
+	}
+
+	layout.RestoreDock(&layout.mainDock, o2EditorWindows.mMainDockPlace);
+}
+
+void WindowsManager::SetWindowsLayout(const String& name)
+{
+	if (mAvailableLayouts.ContainsKey(name))
+		SetWindowsLayout(mAvailableLayouts[name]);
+}
+
+void WindowsManager::SetDefaultWindowsLayout()
+{
+	SetWindowsLayout(o2EditorConfig.mGlobalConfig.mDefaultLayout);
+}
+
+void WindowsManager::SaveCurrentWindowsLayout(const String& name)
+{
+	mAvailableLayouts[name] = GetWindowsLayout();
 }
 

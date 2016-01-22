@@ -19,6 +19,8 @@ namespace UIStyle
 	void RebuildActorsTreeLockToggle();
 	void RebuildActorsTreeLinkBtn();
 	void RebuildActorsTree();
+	void RebuildLayersPanelDropdown();
+	void RebuildGizmosPanelDropdown();
 
 	void RebuildEditorUIStyle();
 }

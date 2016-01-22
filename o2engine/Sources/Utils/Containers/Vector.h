@@ -754,7 +754,7 @@ namespace o2
 
 		for (int i = 0; i < mCount; i++)
 		{
-			if (mValues[i] != arr.mValues[i])
+			if (!(mValues[i] == arr.mValues[i]))
 				return false;
 		}
 

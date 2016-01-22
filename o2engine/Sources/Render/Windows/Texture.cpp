@@ -39,10 +39,10 @@ namespace o2
 		if (!mReady)
 			return;
 
-		glDeleteTextures(1, &mHandle);
-
 		if (mUsage == Usage::RenderTarget)
-			glDeleteBuffers(1, &mFrameBuffer);
+			glDeleteFramebuffersEXT(1, &mFrameBuffer);
+
+		glDeleteTextures(1, &mHandle);
 
 		o2Render.mTextures.Remove(this);
 	}
@@ -83,7 +83,7 @@ namespace o2
 			{
 				GLenum glError = glGetError();
 
-				o2Render.mLog->Error("Failed to create GL frame buffer object! GL Error %x %s", glError,
+				o2Render.mLog->Error("Failed to create GL frame buffer object! GL Error %i %cs", glError,
 									 GetGLErrorDesc(glError));
 
 				mReady = false;

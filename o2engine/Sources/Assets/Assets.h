@@ -116,11 +116,13 @@ namespace o2
 		static AssetId GetRandomAssetId();
 
 	protected:
-		AssetTree      mAssetsTree;    // Assets information tree
-		LogStream*     mLog;           // Log stream
-		AssetsBuilder* mAssetsBuilder; // Assets builder
-		TypesExtsDict  mAssetsTypes;   // Assets types and extensions dictionary
-		Type*          mStdAssetType;  // Standard asset type
+		String         mAssetsFolderPath; // Project assets path
+		String         mDataFolderPath;   // Project data (builded assets) path
+		AssetTree      mAssetsTree;       // Assets information tree
+		LogStream*     mLog;              // Log stream
+		AssetsBuilder* mAssetsBuilder;    // Assets builder
+		TypesExtsDict  mAssetsTypes;      // Assets types and extensions dictionary
+		Type*          mStdAssetType;     // Standard asset type
 
 	protected:
 		// Loads asset infos

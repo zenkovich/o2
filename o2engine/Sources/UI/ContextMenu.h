@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Events/CursorEventsListener.h"
+#include "Events/KeyboardEventsListener.h"
 #include "UI/ScrollArea.h"
 #include "Utils/Delegates.h"
 #include "Utils/ShortcutKeys.h"
@@ -11,10 +12,46 @@ namespace o2
 	class UIButton;
 	class UIVerticalLayout;
 
+	// -----------------
+	// Context menu item
+	// -----------------
+	class UIContextMenuItem: public UIWidget
+	{
+	public:
+		Function<void()> onClick;  // Click function
+		ShortcutKeys     shortcut; // Shortuct keys
+
+		// Default constructor
+		UIContextMenuItem();
+
+		// Copy-constructor
+		UIContextMenuItem(const UIContextMenuItem& other);
+
+		// Destructor
+		~UIContextMenuItem();
+
+		// Copy-operator
+		UIContextMenuItem& operator=(const UIContextMenuItem& other);
+
+		// Returns sub context menu
+		UIContextMenu* GetSubMenu() const;
+
+		SERIALIZABLE(UIContextMenuItem);
+
+	protected:
+		UIContextMenu* mSubMenu; // Context sub menu
+
+	protected:
+		// Calls when child widget was added
+		void OnChildAdded(UIWidget* child);
+
+		friend class UIContextMenu;
+	};
+
 	// -----------------------
 	// Context menu ui element
 	// -----------------------
-	class UIContextMenu: public UIScrollArea, public CursorEventsListener
+	class UIContextMenu: public UIScrollArea, public CursorEventsListener, public KeyboardEventsListener
 	{
 	public:
 		typedef Function<void()> ClickFunc;
@@ -80,7 +117,8 @@ namespace o2
 		UIWidget* AddItem(const Item& item);
 
 		// Adds item by path ("node/sub node/target")
-		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>());
+		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(), 
+						  ImageAsset* icon = nullptr, const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Inserts item at position
 		UIWidget* InsertItem(const Item& item, int position);
@@ -110,7 +148,7 @@ namespace o2
 		UIVerticalLayout* GetItemsLayout() const;
 
 		// Returns item sample
-		UIWidget* GetItemSample() const;
+		UIContextMenuItem* GetItemSample() const;
 
 		// Returns items separator sample
 		UIWidget* GetSeparatorSample() const;
@@ -123,6 +161,9 @@ namespace o2
 
 		// Returns selection drawable layout
 		Layout GetSelectionDrawableLayout() const;
+
+		// Sets minimal fitting size
+		void SetMinFitSize(float size);
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
@@ -139,23 +180,23 @@ namespace o2
 		static UIContextMenu* mVisibleContextMenu; // Current visible context menu
 		const float mOpenSubMenuDelay = 0.8f;
 
-		UIContextMenu*    mParentContextMenu;	   // Parent visible context menu
-		UIContextMenu*    mChildContextMenu;	   // Child visible context menu
-						  
-		UIVerticalLayout* mLayout;                 // Items layout
-		Vector<ClickFunc> mClickFunctions;         // Items click functions
-		UIWidget*         mItemSample;             // Item sample @SERIALIZABLE
-		UIWidget*         mSeparatorSample;        // Items separator sample @SERIALIZABLE
-		Sprite*           mSelectionDrawable;      // Selection sprite @SERIALIZABLE
-		Layout            mSelectionLayout;        // Selection layout, result selection area depends on selected item @SERIALIZABLE
-						  
-		RectF             mCurrentSelectionRect;   // Current selection rectangle (for smoothing)
-		RectF             mTargetSelectionRect;    // Target selection rectangle (over selected item)
-		Vec2F             mLastSelectCheckCursor;  // Last cursor position on selection check
-						  
-		int               mSelectedItem;           // Index of selected item
-		int               mPressedItem;            // Index of pressed item
-		float             mSelectSubContextTime;   // Time to appearing selected sub context
+		float              mFitSizeMin = 40.0f;     // Minimal fitting size @SERIALIZABLE
+						   
+		UIContextMenu*     mParentContextMenu;	   // Parent visible context menu
+		UIContextMenu*     mChildContextMenu;	   // Child visible context menu
+						   
+		UIVerticalLayout*  mLayout;                 // Items layout
+		UIContextMenuItem* mItemSample;             // Item sample @SERIALIZABLE
+		UIWidget*          mSeparatorSample;        // Items separator sample @SERIALIZABLE
+		Sprite*            mSelectionDrawable;      // Selection sprite @SERIALIZABLE
+		Layout             mSelectionLayout;        // Selection layout, result selection area depends on selected item @SERIALIZABLE
+						   
+		RectF              mCurrentSelectionRect;   // Current selection rectangle (for smoothing)
+		RectF              mTargetSelectionRect;    // Target selection rectangle (over selected item)
+		Vec2F              mLastSelectCheckCursor;  // Last cursor position on selection check
+						   
+		UIContextMenuItem* mSelectedItem;           // Index of selected item
+		float              mSelectSubContextTime;   // Time to appearing selected sub context
 
 	protected:
 		// Updates layout
@@ -171,7 +212,7 @@ namespace o2
 		void SpecialDraw();
 
 		// Creates item widget
-		UIWidget* CreateItem(const Item& item);
+		UIContextMenuItem* CreateItem(const Item& item);
 
 		// Returns item info
 		Item GetItemDef(int idx) const;
@@ -180,7 +221,7 @@ namespace o2
 		void OnVisibleChanged();
 
 		// Returns item widget under point and stores index in idxPtr, if not null
-		UIWidget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+		UIContextMenuItem* GetItemUnderPoint(const Vec2F& point);
 
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
@@ -199,6 +240,9 @@ namespace o2
 
 		// Calls when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor);
+
+		// Calls when key was released
+		void OnKeyPressed(const Input::Key& key);
 
 		// Hides context with his parent
 		void HideWithParent();

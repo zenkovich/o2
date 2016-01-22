@@ -61,7 +61,8 @@ namespace o2
 		UIWidget* AddItem(const Item& item);
 
 		// Adds item by path ("node/sub node/target")
-		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>());
+		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(), 
+						  ImageAsset* icon = nullptr, const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Inserts item at position
 		UIWidget* InsertItem(const Item& item, int position);

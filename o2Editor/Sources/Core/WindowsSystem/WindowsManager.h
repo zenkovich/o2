@@ -1,18 +1,21 @@
 #pragma once
 
+#include "Core/WindowsSystem/WindowsLayout.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/Singleton.h"
 
 using namespace o2;
 
 class IEditorWindow;
+class UIDockWindowPlace;
 
 namespace o2
 {
 	class UIMenuPanel;
 }
 
-#define o2WindowsManager WindowsManager::Instance()
+// Editor windows accessor macros
+#define o2EditorWindows WindowsManager::Instance()
 
 // ----------------------
 // Editor windows manager
@@ -21,15 +24,37 @@ class WindowsManager: public Singleton<WindowsManager>
 {
 public:
 	typedef Vector<IEditorWindow*> EditorWindowsVec;
+	typedef Dictionary<String, WindowsLayout> WndLayoutsDict;
 
 public:
 	// Adds new window
 	void AddWindow(IEditorWindow* window);
 
+	// Returns window by type
+	template<typename _type>
+	_type* GetWindow() const;
+
+	// Returns current windows layout
+	WindowsLayout GetWindowsLayout();
+
+	// Sets windows layout
+	void SetWindowsLayout(WindowsLayout layout);
+
+	// Sets windows layout by name
+	void SetWindowsLayout(const String& name);
+
+	// Sets default windows layout
+	void SetDefaultWindowsLayout();
+
+	// Saves current windows layout with name
+	void SaveCurrentWindowsLayout(const String& name);
+
 protected:
 	const bool mNeedRebuildWndStyle = true; // Is need to rebuild dockable windows style
 
-	EditorWindowsVec mEditorWindows; // Editors windows list
+	EditorWindowsVec   mEditorWindows;    // Editors windows list
+	UIDockWindowPlace* mMainDockPlace;    // Main windows dock place
+	WndLayoutsDict     mAvailableLayouts; // Available layouts
 
 protected:
 	// Default constructor
@@ -50,5 +75,20 @@ protected:
 	// Draws windows
 	void Draw();
 
+	friend class EditorConfig;
 	friend class EditorApplication;
+	friend class ToolsPanel;
+	friend class WindowsLayout;
 };
+
+template<typename _type>
+_type* WindowsManager::GetWindow() const
+{
+	for (auto wnd : mEditorWindows)
+	{
+		if (wnd->GetType() == *_type::type)
+			return (_type*)wnd;
+	}
+
+	return nullptr;
+}

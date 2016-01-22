@@ -8,7 +8,7 @@ using namespace o2;
 INITIALIZE_O2;
 
 DECLARE_SINGLETON(WindowsManager);
-DECLARE_SINGLETON(ApplicationConfig);
+DECLARE_SINGLETON(EditorConfig);
 DECLARE_SINGLETON(ToolsPanel);
 
 int main()

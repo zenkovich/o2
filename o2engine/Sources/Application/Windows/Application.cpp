@@ -236,6 +236,11 @@ namespace o2
 		onClosingEvent.Invoke();
 	}
 
+	void Application::Shutdown()
+	{
+		DestroyWindow(mHWnd);
+	}
+
 	LRESULT WndProcFunc::WndProc(HWND wnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		auto app = Application::InstancePtr();
@@ -384,6 +389,18 @@ namespace o2
 	bool Application::IsFullScreen() const
 	{
 		return !mWindowed;
+	}
+
+	void Application::Maximize()
+	{
+		ShowWindow(mHWnd, SW_MAXIMIZE);
+	}
+
+	bool Application::IsMaximized() const
+	{
+		WINDOWPLACEMENT pl;
+		GetWindowPlacement(mHWnd, &pl);
+		return pl.showCmd == SW_MAXIMIZE;
 	}
 
 	void Application::SetResizible(bool resizible)

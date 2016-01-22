@@ -231,6 +231,13 @@ namespace o2
 			if (pressedState)
 				*pressedState = true;
 		}
+
+		if (shortcut.IsPressed())
+		{
+			SetValue(!mValue);
+			onClick();
+			onToggleByUser(mValue);
+		}
 	}
 
 	void UIToggle::OnKeyReleased(const Input::Key& key)
@@ -245,6 +252,7 @@ namespace o2
 			onClick();
 			onToggleByUser(mValue);
 		}
+
 	}
 
 	void UIToggle::OnLayerAdded(UIWidgetLayer* layer)
