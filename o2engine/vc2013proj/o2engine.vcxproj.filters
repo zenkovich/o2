@@ -496,6 +496,9 @@
     <ClInclude Include="..\Sources\Utils\ShortcutKeys.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\UI\LongList.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -815,6 +818,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\ShortcutKeys.cpp">
       <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\LongList.cpp">
+      <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -858,6 +858,7 @@ namespace o2
 
 	float Render::GetDrawingDepth()
 	{
+		mDrawingDepth += 1.0f;
 		return mDrawingDepth;
 	}
 

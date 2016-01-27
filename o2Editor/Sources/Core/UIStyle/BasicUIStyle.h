@@ -15,6 +15,7 @@ namespace UIStyle
 	void RebuildLabelStyle();
 	void RebuildEditBoxStyle();
 	void RebuildCustomListStyle();
+	void RebuildLongListStyle();
 	void RebuildListStyle();
 	void RebuildCustomDropDownStyle();
 	void RebuildDropDownStyle();

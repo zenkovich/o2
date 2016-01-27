@@ -144,6 +144,9 @@ namespace o2
 		// Updates transparency for this and children widgets
 		void UpdateTransparency();
 
+		// Calculates scroll area
+		virtual void CalculateScrollArea();
+
 		// Updates scroll parameters: clip area, scroll size
 		virtual void UpdateScrollParams();
 

@@ -3,6 +3,7 @@
 #include "Application/Application.h"
 #include "Core/EditorConfig.h"
 #include "Core/WindowsSystem/WindowsManager.h"
+#include "SceneWindow/SceneWindow.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/MenuPanel.h"
 #include "UI/UIManager.h"
@@ -179,7 +180,9 @@ void MenuPanel::OnShowTreePressed()
 
 void MenuPanel::OnShowScenePressed()
 {
-
+	auto sceneWindow = o2EditorWindows.GetWindow<SceneWindow>();
+	if (sceneWindow)
+		sceneWindow->Show();
 }
 
 void MenuPanel::OnShowAssetsPressed()

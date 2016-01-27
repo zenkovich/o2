@@ -209,12 +209,12 @@ namespace o2
 						   Math::Clamp(scroll.y, mScrollRange.bottom, mScrollRange.top));
 
 		if (mHorScrollBar)
-			mHorScrollBar->SetValueForcible(newScrollPos.x);
+			mHorScrollBar->SetValue(newScrollPos.x);
 		else
 			mScrollPos.x = newScrollPos.x;
 
 		if (mVerScrollBar)
-			mVerScrollBar->SetValueForcible(newScrollPos.y);
+			mVerScrollBar->SetValue(newScrollPos.y);
 		else
 			mScrollPos.y = newScrollPos.y;
 
@@ -550,12 +550,9 @@ namespace o2
 			mVerScrollBar->UpdateTransparency();
 	}
 
-	void UIScrollArea::UpdateScrollParams()
+	void UIScrollArea::CalculateScrollArea()
 	{
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
-		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
-
-		mScrollArea = RectF(0.0f, 0.0f, localViewArea.Width(), localViewArea.Height());
+		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
 		for (auto child : mChilds)
 		{
@@ -567,6 +564,14 @@ namespace o2
 			mScrollArea.right = Math::Max(mScrollArea.right, child->layout.mLocalRect.right);
 			mScrollArea.top = Math::Max(mScrollArea.top, child->layout.mLocalRect.top);
 		}
+	}
+
+	void UIScrollArea::UpdateScrollParams()
+	{
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
+		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
+
+		CalculateScrollArea();
 
 		mScrollRange = RectF(mScrollArea.left - localViewArea.left,
 							 localViewArea.Height() - mScrollArea.top + localViewArea.bottom,

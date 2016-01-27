@@ -657,9 +657,9 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "actors");
 	}
 
-	void RebuildLayersPanelDropdown()
+	void RebuildPanelDownButton()
 	{
-		UICustomDropDown* sample = mnew UICustomDropDown();
+		UIButton* sample = mnew UIButton();
 
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
 										  Layout::BothStretch(-4, -4, -5, -5));
@@ -670,89 +670,202 @@ namespace UIStyle
 		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
 											 Layout::BothStretch(-4, -4, -5, -5));
 
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
 										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0)));
 
-		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
+		Text* captionText = mnew Text("arial.ttf");
+		captionText->text = "Button";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("caption", captionText, Layout::BothStretch(0, 0, 15, 0));
 
-		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
-		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-
-		delete list->layer["back"]->drawable;
-		list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
-
-		list->layout.pivot = Vec2F(0.5f, 1.0f);
-		list->layout.anchorMin = Vec2F(0, 0);
-		list->layout.anchorMax = Vec2F(1, 0);
-		list->layout.offsetMin = Vec2F(-1, -60);
-		list->layout.offsetMax = Vec2F(0, 3);
-
-		UILabel* itemSample = o2UI.CreateLabel("empty");
-		itemSample->horAlign = HorAlign::Left;
-		sample->SetItemSample(itemSample);
-
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		o2UI.AddWidgetStyle(sample, "panel layers");
+		o2UI.AddWidgetStyle(sample, "panel down");
 	}
 
-	void RebuildGizmosPanelDropdown()
+	void RebuildTrashDownPanelButton()
 	{
-		UICustomDropDown* sample = mnew UICustomDropDown();
+		auto sample = mnew UIButton();
 
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
-										  Layout::BothStretch(-4, -4, -5, -5));
+										  Layout::BothStretch(-4, -5, -5, -5));
 
 		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
-											Layout::BothStretch(-4, -4, -5, -5));
+											Layout::BothStretch(-4, -5, -5, -5));
 
 		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
-											 Layout::BothStretch(-4, -4, -5, -5));
+											 Layout::BothStretch(-4, -5, -5, -5));
 
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
-										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0)));
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
 
-		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
+		auto trashIconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI2_small_trash_icon.png"),
+											   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
-		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
-		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 
-		delete list->layer["back"]->drawable;
-		list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
-
-		list->layout.pivot = Vec2F(0.5f, 1.0f);
-		list->layout.anchorMin = Vec2F(0, 0);
-		list->layout.anchorMax = Vec2F(1, 0);
-		list->layout.offsetMin = Vec2F(-1, -60);
-		list->layout.offsetMax = Vec2F(0, 3);
-
-		UILabel* itemSample = o2UI.CreateLabel("empty");
-		itemSample->horAlign = HorAlign::Left;
-		sample->SetItemSample(itemSample);
-
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
-
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		o2UI.AddWidgetStyle(sample, "panel gizmos");
+		o2UI.AddWidgetStyle(sample, "down panel trash");
+	}
+
+	void RebuildMessagesDownPanelToggle()
+	{
+		UIToggle* sample = mnew UIToggle();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+										  Layout::BothStretch(-4, -5, -5, -5));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+											Layout::BothStretch(-4, -5, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -5, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto offLayer = sample->AddLayer("off", mnew Sprite("ui/UI2_log_info_inactive_icon.png"),
+										 Layout::Based(BaseCorner::Left, Vec2F(30, 30), Vec2F(-4, -2)));
+
+		auto onLayer = sample->AddLayer("on", mnew Sprite("ui/UI2_log_info_icon.png"),
+										Layout::Based(BaseCorner::Left, Vec2F(30, 30), Vec2F(-4, -2)));
+
+		Text* captionText = mnew Text("arial.ttf");
+		captionText->text = "999";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
+
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation valueBtnAnim = Animation::EaseInOut(sample, &offLayer->transparency, 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue(&onLayer->transparency) =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueBtnAnim);
+
+		o2UI.AddWidgetStyle(sample, "log messages");
+	}
+
+	void RebuildWarningsDownPanelToggle()
+	{
+		UIToggle* sample = mnew UIToggle();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+										  Layout::BothStretch(-4, -5, -5, -5));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+											Layout::BothStretch(-4, -5, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -5, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto offLayer = sample->AddLayer("off", mnew Sprite("ui/UI2_log_warnings_inactive_icon.png"),
+										 Layout::Based(BaseCorner::Left, Vec2F(30, 30), Vec2F(-4, -2)));
+
+		auto onLayer = sample->AddLayer("on", mnew Sprite("ui/UI2_log_warnings_icon.png"),
+										Layout::Based(BaseCorner::Left, Vec2F(30, 30), Vec2F(-4, -2)));
+
+		Text* captionText = mnew Text("arial.ttf");
+		captionText->text = "999";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
+
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation valueBtnAnim = Animation::EaseInOut(sample, &offLayer->transparency, 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue(&onLayer->transparency) =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueBtnAnim);
+
+		o2UI.AddWidgetStyle(sample, "log warnings");
+	}
+
+	void RebuildErrorsDownPanelToggle()
+	{
+		UIToggle* sample = mnew UIToggle();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+										  Layout::BothStretch(-4, -5, -5, -5));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+											Layout::BothStretch(-4, -5, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -5, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto offLayer = sample->AddLayer("off", mnew Sprite("ui/UI2_log_errors_inactive_icon.png"),
+										 Layout::Based(BaseCorner::Left, Vec2F(30, 30), Vec2F(-4, -2)));
+
+		auto onLayer = sample->AddLayer("on", mnew Sprite("ui/UI2_log_errors_icon.png"),
+										Layout::Based(BaseCorner::Left, Vec2F(30, 30), Vec2F(-4, -2)));
+
+		Text* captionText = mnew Text("arial.ttf");
+		captionText->text = "999";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
+
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation valueBtnAnim = Animation::EaseInOut(sample, &offLayer->transparency, 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue(&onLayer->transparency) =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueBtnAnim);
+
+		o2UI.AddWidgetStyle(sample, "log errors");
 	}
 
 	void RebuildEditorUIStyle()
@@ -798,8 +911,12 @@ namespace UIStyle
 		RebuildActorsTreeLockToggle();
 		RebuildActorsTreeLinkBtn();
 		RebuildActorsTree();
-		RebuildLayersPanelDropdown();
-		RebuildGizmosPanelDropdown();
+		RebuildPanelDownButton();
+		RebuildTrashDownPanelButton();
+		RebuildMessagesDownPanelToggle();
+		RebuildWarningsDownPanelToggle();
+		RebuildErrorsDownPanelToggle();
+		RebuildLongListStyle();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

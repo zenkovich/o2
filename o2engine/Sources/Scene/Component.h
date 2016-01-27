@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Scene/Scene.h"
 #include "Utils/Serialization.h"
 
 namespace o2
@@ -73,6 +74,9 @@ namespace o2
 		bool   mResEnabled; // Is component enabled in hierarchy
 
 	protected:
+		// Calls when actor changed layer
+		virtual void OnLayerChanged(Scene::Layer* oldLayer, Scene::Layer* newLayer) {}
+
 		// Updates component enable
 		virtual void UpdateEnabled();
 

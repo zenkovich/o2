@@ -44,7 +44,8 @@ namespace o2
 
 	void LogStream::UnbindAllStreams()
 	{
-		for (auto stream : mChildStreams)
+		auto streams = mChildStreams;
+		for (auto stream : streams)
 			delete stream;
 
 		mChildStreams.Clear();

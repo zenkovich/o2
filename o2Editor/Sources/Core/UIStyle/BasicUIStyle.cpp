@@ -15,6 +15,7 @@
 #include "UI/HorizontalScrollBar.h"
 #include "UI/Label.h"
 #include "UI/List.h"
+#include "UI/LongList.h"
 #include "UI/MenuPanel.h"
 #include "UI/ScrollArea.h"
 #include "UI/Toggle.h"
@@ -481,6 +482,54 @@ namespace UIStyle
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
 		sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+
+		Sprite* selection = mnew Sprite("ui/UI_ListBox_selection_regular.png");
+		*sample->GetSelectionDrawable() = *selection;
+		sample->SetSelectionDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
+
+		Sprite* hover = mnew Sprite("ui/UI_ListBox_selection_hover.png");
+		*sample->GetHoverDrawable() = *hover;
+		sample->SetHoverDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
+
+		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		horScrollBar->layout.anchorMin = Vec2F(0, 0);
+		horScrollBar->layout.anchorMax = Vec2F(1, 0);
+		horScrollBar->layout.offsetMin = Vec2F(5, 0);
+		horScrollBar->layout.offsetMax = Vec2F(-15, 15);
+		sample->SetHorizontalScrollBar(horScrollBar);
+
+		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		verScrollBar->layout.anchorMin = Vec2F(1, 0);
+		verScrollBar->layout.anchorMax = Vec2F(1, 1);
+		verScrollBar->layout.offsetMin = Vec2F(-15, 15);
+		verScrollBar->layout.offsetMax = Vec2F(0, -5);
+		sample->SetVerticalScrollBar(verScrollBar);
+
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
+															  5.0f, 15.0f, 0.2f));
+
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetBottom,
+															  -5.0f, -15.0f, 0.2f));
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("selected", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "standard");
+	}
+
+	void RebuildLongListStyle()
+	{
+		UILongList* sample = mnew UILongList();
+		sample->layout.minSize = Vec2F(20, 20);
+		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+		sample->SetEnableScrollsHiding(true);
 
 		Sprite* selection = mnew Sprite("ui/UI_ListBox_selection_regular.png");
 		*sample->GetSelectionDrawable() = *selection;
@@ -1003,6 +1052,7 @@ namespace UIStyle
 		RebuildMenuPanelStyle();
 		RebuildBacklessDropdown();
 		RebuildBacklessEditbox();
+		RebuildLongListStyle();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

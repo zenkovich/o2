@@ -113,21 +113,25 @@ void TreeWindow::InitializeWindow()
 
 	mWindow->AddChild(mTreeContextMenu);
 
-	for (int i = 0; i < 30; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		Actor* actor = mnew Actor();
 		actor->name = String::Format("Actor #%i", i + 1);
+		actor->transform.size = Vec2F(1, 1);
+		actor->layer = o2Scene.AddLayer(String::Format("Layer #%i", i + 1));
 
-		for (int j = 0; j < 30; j++)
+		for (int j = 0; j < 2; j++)
 		{
 			Actor* childActor = mnew Actor();
 			childActor->name = String::Format("Child actor #%i", j + 1);
 			actor->AddChild(childActor);
+			childActor->transform.size = Vec2F(1, 1);
 
-			for (int k = 0; k < 5; k++)
+			for (int k = 0; k < 2; k++)
 			{
-				Actor* childActor2 = mnew Actor();
+				Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png") });
 				childActor2->name = String::Format("Sub Child actor #%i", k + 1);
+				childActor2->transform.position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
 				childActor->AddChild(childActor2);
 			}
 		}

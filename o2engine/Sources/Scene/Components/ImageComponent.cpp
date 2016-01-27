@@ -234,7 +234,7 @@ namespace o2
 		if (actor)
 			actor->transform.SetSize(mSprite.GetSize());
 
-		Component::SetOwnerActor(actor);
+		DrawableComponent::SetOwnerActor(actor);
 	}
 
 	void ImageComponent::InitializeProperties()

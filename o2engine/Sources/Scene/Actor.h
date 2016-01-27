@@ -3,6 +3,7 @@
 #include "Animation/Animatable.h"
 #include "Scene/ActorTransform.h"
 #include "Scene/Component.h"
+#include "Scene/Scene.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/String.h"
 
@@ -16,6 +17,7 @@ namespace o2
 	public:
 		typedef Vector<Actor*> ActorsVec;
 		typedef Vector<Component*> ComponentsVec;
+		typedef Vector<String> StringsVec;
 
 	public:
 		Property<String>                    name;               // Actor name property
@@ -24,10 +26,13 @@ namespace o2
 		Property<bool>                      locked;             // Is actor locked property
 		Getter<bool>                        lockedInHierarchy;  // Is actor locked in hierarchy getter
 		Property<Actor*>                    parent;             // Parent actor property
+		Property<Scene::Layer*>             layer;              // Layer property
+		Property<String>                    layerName;          // Layer name property
 		Getter<ActorsVec>                   childs;             // Children array getter
 		Accessor<Actor*, const String&>     child;              // Children accessor
 		Getter<ComponentsVec>               components;         // Components array getter
 		Accessor<Component*, const String&> component;          // Component accessor by type name
+		Accessor<bool, const String&>       tag;                // Tag existing accessor
 		ActorTransform                      transform;          // Transformation @SERIALIZABLE
 		Function<void(bool)>                onEnableChanged;    // Enable changing event
 		Function<void(bool)>                onLockChanged;      // Locking changing event
@@ -154,6 +159,33 @@ namespace o2
 		// Returns all components
 		ComponentsVec GetComponents() const;
 
+		// Sets layer
+		void SetLayer(Scene::Layer* layer);
+
+		// Sets layer by name
+		void SetLayerName(const String& layerName);
+
+		// Returns layer
+		Scene::Layer* GetLayer() const;
+
+		// Returns layer name
+		String GetLayerName() const;
+
+		// Adds tag
+		void AddTag(const String& tag);
+
+		// Removes tag
+		void RemoveTag(const String& tag);
+
+		// Returns is actor have tag
+		bool IsHaveTag(const String& tag) const;
+
+		// Removes all tags
+		void ClearTags();
+
+		// Returns tags array
+		const StringsVec& GetTags() const;
+
 		SERIALIZABLE(Actor);
 
 	protected:
@@ -162,6 +194,8 @@ namespace o2
 		Actor*         mParent;      // Parent actor
 		ActorsVec      mChilds;      // Children actors @SERIALIZABLE
 		ComponentsVec  mCompontents; // Components vector @SERIALIZABLE
+		Scene::Layer*  mLayer;       // Scene layer
+		StringsVec     mTags;        // Tags
 					   
 		bool           mEnabled;     // Is actor enabled @SERIALIZABLE
 		bool           mResEnabled;  // Is actor enabled in hierarchy
@@ -182,6 +216,9 @@ namespace o2
 		// Updates locking
 		void UpdateLocking();
 
+		// Beginning serialization callback
+		void OnSerialize(DataNode& node);
+
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node);
 
@@ -197,6 +234,7 @@ namespace o2
 		friend class ActorTransform;
 		friend class Component;
 		friend class Scene;
+		friend class DrawableComponent;
 	};
 
 	template<typename _type>

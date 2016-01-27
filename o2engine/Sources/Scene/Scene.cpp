@@ -8,11 +8,16 @@ namespace o2
 	DECLARE_SINGLETON(Scene);
 
 	Scene::Scene()
-	{}
+	{
+		mDefaultLayer = AddLayer("Default");
+	}
 
 	Scene::~Scene()
 	{
 		Clear();
+
+		for (auto layer : mLayers)
+			delete layer;
 	}
 
 	void Scene::Update(float dt)
@@ -30,6 +35,54 @@ namespace o2
 			comp->Draw();
 	}
 
+	Scene::Layer* Scene::GetLayer(const String& name) const
+	{
+		return mLayers.FindMatch([&](auto x) { return x->name == name; });
+	}
+
+	Scene::Layer* Scene::GetDefaultLayer() const
+	{
+		return mDefaultLayer;
+	}
+
+	Scene::Layer* Scene::AddLayer(const String& name)
+	{
+		if (GetLayer(name))
+			return AddLayer(name + "_");
+
+		Layer* newLayer = mnew Layer();
+		newLayer->name = name;
+		mLayers.Add(newLayer);
+		return newLayer;
+	}
+
+	void Scene::RemoveLayer(Layer* layer, bool removeActors /*= true*/)
+	{
+		if (layer == mDefaultLayer)
+			return;
+
+		if (removeActors)
+		{
+			auto actors = layer->actors;
+			for (auto actor : actors)
+				delete actor;
+		}
+
+		mLayers.Remove(layer);
+
+		delete layer;
+	}
+
+	void Scene::RemoveLayer(const String& name, bool removeActors /*= true*/)
+	{
+		RemoveLayer(GetLayer(name), removeActors);
+	}
+
+	Scene::LayersVec& Scene::GetLayers()
+	{
+		return mLayers;
+	}
+
 	const Scene::ActorsVec& Scene::GetAllActors() const
 	{
 		return mActors;
@@ -38,6 +91,11 @@ namespace o2
 	Scene::ActorsVec& Scene::GetAllActors()
 	{
 		return mActors;
+	}
+
+	const Scene::DrawCompsVec& Scene::GetDrawableComponents() const
+	{
+		return mDrawableComponents;
 	}
 
 	Actor* Scene::FindActor(const String& path)
@@ -129,5 +187,4 @@ namespace o2
 		UnregDrawableComponent(component);
 		RegDrawableComponent(component);
 	}
-
 }

@@ -1,6 +1,7 @@
 #include "SceneWindow.h"
 
 #include "SceneWindow/SceneEditWidget.h"
+#include "UI/Button.h"
 #include "UI/CustomDropDown.h"
 #include "UI/UIManager.h"
 
@@ -29,10 +30,10 @@ void SceneWindow::InitializeWindow()
 		iconLayer->layout = Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-2, 2));
 	}
 
-	mWindow->SetViewLayout(Layout::BothStretch(0, 0, 0, 18));
+	mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
 
 	mEditWidget = mnew SceneEditWidget();
-	mEditWidget->layout = UIWidgetLayout::BothStretch(0, 1, 1, 20);
+	mEditWidget->layout = UIWidgetLayout::BothStretch(0, 0, 0, 19);
 	mWindow->AddChild(mEditWidget);
 
 	UIWidget* upPanel = mnew UIWidget();
@@ -41,11 +42,13 @@ void SceneWindow::InitializeWindow()
 	upPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
 	mWindow->AddChild(upPanel);
 
-	auto layersDropdown = o2UI.CreateWidget<UICustomDropDown>("panel layers");
-	layersDropdown->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 1);
-	upPanel->AddChild(layersDropdown);
+	auto layersButton = o2UI.CreateWidget<UIButton>("panel down");
+	layersButton->caption = "Layers";
+	layersButton->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 0);
+	upPanel->AddChild(layersButton);
 
-	auto gizmosDropdown = o2UI.CreateWidget<UICustomDropDown>("panel gizmos");
-	gizmosDropdown->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 100);
-	upPanel->AddChild(gizmosDropdown);
+	auto gizmosButton = o2UI.CreateWidget<UIButton>("panel down");
+	gizmosButton->caption = "Gizmos";
+	gizmosButton->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 100);
+	upPanel->AddChild(gizmosButton);
 }

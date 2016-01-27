@@ -194,6 +194,7 @@
     <ClInclude Include="..\Sources\UI\Label.h" />
     <ClInclude Include="..\Sources\UI\HorizontalProgress.h" />
     <ClInclude Include="..\Sources\UI\CustomList.h" />
+    <ClInclude Include="..\Sources\UI\LongList.h" />
     <ClInclude Include="..\Sources\UI\MenuPanel.h" />
     <ClInclude Include="..\Sources\UI\ScrollArea.h" />
     <ClInclude Include="..\Sources\UI\List.h" />
@@ -330,6 +331,7 @@
     <ClCompile Include="..\Sources\UI\Label.cpp" />
     <ClCompile Include="..\Sources\UI\HorizontalProgress.cpp" />
     <ClCompile Include="..\Sources\UI\CustomList.cpp" />
+    <ClCompile Include="..\Sources\UI\LongList.cpp" />
     <ClCompile Include="..\Sources\UI\MenuPanel.cpp" />
     <ClCompile Include="..\Sources\UI\ScrollArea.cpp" />
     <ClCompile Include="..\Sources\UI\List.cpp" />

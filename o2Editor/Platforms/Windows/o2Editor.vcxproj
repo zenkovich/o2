@@ -30,6 +30,7 @@
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
+    <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp" />
     <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneEditWidget.cpp" />
@@ -48,6 +49,7 @@
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h" />
+    <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h" />
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditWidget.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />

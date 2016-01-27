@@ -302,6 +302,7 @@ namespace o2
 		friend class UIHorizontalScrollBar;
 		friend class UILabel;
 		friend class UIList;
+		friend class UILongList;
 		friend class UIManager;
 		friend class UIMenuPanel;
 		friend class UIScrollArea;

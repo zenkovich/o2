@@ -39,6 +39,15 @@ namespace o2
 		float mDrawingDepth; // Drawing depth. Components with higher depth will be drawn later
 
 	protected:
+		// Calls when actor changed layer
+		void OnLayerChanged(Scene::Layer* oldLayer, Scene::Layer* newLayer);
+
+		// Updates component enable
+		void UpdateEnabled();
+
+		// Sets owner actor
+		void SetOwnerActor(Actor* actor);
+
 		// Initializes property
 		void InitializeProperties();
 

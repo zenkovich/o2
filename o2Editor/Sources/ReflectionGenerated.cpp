@@ -8,6 +8,7 @@
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\UIDockableWindow.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\WindowsLayout.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\LogWindow\LogWindow.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneEditWidget.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneWindow.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\TreeWindow\TreeWindow.h"
@@ -54,6 +55,7 @@
 #include "C:\work\o2\o2Engine\Sources\UI\HorizontalScrollBar.h"
 #include "C:\work\o2\o2Engine\Sources\UI\Label.h"
 #include "C:\work\o2\o2Engine\Sources\UI\List.h"
+#include "C:\work\o2\o2Engine\Sources\UI\LongList.h"
 #include "C:\work\o2\o2Engine\Sources\UI\MenuPanel.h"
 #include "C:\work\o2\o2Engine\Sources\UI\ScrollArea.h"
 #include "C:\work\o2\o2Engine\Sources\UI\Toggle.h"
@@ -74,6 +76,7 @@
 #include "C:\work\o2\o2Engine\Sources\Utils\Math\Transform.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\AssetsTree.h"
 #include "C:\work\o2\o2Engine\Sources\Render\VectorFont.h"
+#include "C:\work\o2\o2Engine\Sources\Scene\Scene.h"
 
 // Types declarations
 o2::Type* ::EditorConfig::type;
@@ -81,6 +84,7 @@ o2::Type* ::IEditorWindow::type;
 o2::Type* ::UIDockableWindow::type;
 o2::Type* ::UIDockWindowPlace::type;
 o2::Type* ::WindowsLayout::type;
+o2::Type* ::LogWindow::type;
 o2::Type* ::SceneEditWidget::type;
 o2::Type* ::SceneWindow::type;
 o2::Type* ::TreeWindow::type;
@@ -131,6 +135,7 @@ o2::Type* o2::UIHorizontalProgress::type;
 o2::Type* o2::UIHorizontalScrollBar::type;
 o2::Type* o2::UILabel::type;
 o2::Type* o2::UIList::type;
+o2::Type* o2::UILongList::type;
 o2::Type* o2::UIMenuPanel::type;
 o2::Type* o2::UIScrollArea::type;
 o2::Type* o2::UIToggle::type;
@@ -165,6 +170,7 @@ o2::Type* o2::ImageAsset::MetaInfo::type;
 o2::Type* o2::VectorFontAsset::MetaInfo::type;
 o2::Type* o2::AtlasAssetConverter::Image::type;
 o2::Type* o2::VectorFont::Effect::type;
+o2::Type* o2::Scene::Layer::type;
 o2::Type* o2::UIContextMenu::Item::type;
 o2::Type* o2::UIMenuPanel::Item::type;
 o2::Type* o2::Curve::Key::type;
@@ -224,20 +230,48 @@ void ::WindowsLayout::InitializeType(::WindowsLayout* sample)
 	FIELD(windows).AddAttribute<SerializableAttribute<decltype(windows)>>();
 }
 
+void ::LogWindow::InitializeType(::LogWindow* sample)
+{
+	FIELD(mList);
+	FIELD(mLastMessageView);
+	FIELD(mMessagesCountLabel);
+	FIELD(mWarningsCountLabel);
+	FIELD(mErrorsCountLabel);
+	FIELD(mAllMessages);
+	FIELD(mVisibleMessages);
+	FIELD(mRegularMessagesEnabled);
+	FIELD(mWarningMessagesEnabled);
+	FIELD(mErrorMessagesEnabled);
+	FIELD(mRegularMessagesCount);
+	FIELD(mWarningMessagesCount);
+	FIELD(mErrorMessagesCount);
+}
+
 void ::SceneEditWidget::InitializeType(::SceneEditWidget* sample)
 {
 	FIELD(mViewCamera);
 	FIELD(mViewCameraTargetScale);
+	FIELD(mViewCameraScaleSence);
+	FIELD(mViewCameraScaleElasticyCoef);
+	FIELD(mViewCameraTargetPos);
+	FIELD(mViewCameraVelocity);
+	FIELD(mViewCameraPosElasticyCoef);
+	FIELD(mViewCameraVelocityDampingCoef);
+	FIELD(mViewCameraMinScale);
+	FIELD(mViewCameraMaxScale);
+	FIELD(mBackColor);
+	FIELD(mGridColor);
 	FIELD(mRenderTarget);
 	FIELD(mRenderTargetSprite);
 	FIELD(mNeedRedraw);
 	FIELD(mDrawDepth);
-	FIELD(test);
 }
 
 void ::SceneWindow::InitializeType(::SceneWindow* sample)
 {
 	FIELD(mEditWidget);
+	FIELD(mLayersView);
+	FIELD(mGizomsView);
 }
 
 void ::TreeWindow::InitializeType(::TreeWindow* sample)
@@ -545,10 +579,13 @@ void o2::Actor::InitializeType(o2::Actor* sample)
 	FIELD(locked);
 	FIELD(lockedInHierarchy);
 	FIELD(parent);
+	FIELD(layer);
+	FIELD(layerName);
 	FIELD(childs);
 	FIELD(child);
 	FIELD(components);
 	FIELD(component);
+	FIELD(tag);
 	FIELD(transform).AddAttribute<SerializableAttribute<decltype(transform)>>();
 	FIELD(onEnableChanged);
 	FIELD(onLockChanged);
@@ -556,6 +593,8 @@ void o2::Actor::InitializeType(o2::Actor* sample)
 	FIELD(mParent);
 	FIELD(mChilds).AddAttribute<SerializableAttribute<decltype(mChilds)>>();
 	FIELD(mCompontents).AddAttribute<SerializableAttribute<decltype(mCompontents)>>();
+	FIELD(mLayer);
+	FIELD(mTags);
 	FIELD(mEnabled).AddAttribute<SerializableAttribute<decltype(mEnabled)>>();
 	FIELD(mResEnabled);
 	FIELD(mLocked).AddAttribute<SerializableAttribute<decltype(mLocked)>>();
@@ -804,6 +843,31 @@ void o2::UIList::InitializeType(o2::UIList* sample)
 	FIELD(value);
 	FIELD(textItem);
 	FIELD(onSelectedText);
+}
+
+void o2::UILongList::InitializeType(o2::UILongList* sample)
+{
+	FIELD(selectedItemPos);
+	FIELD(onSelected);
+	FIELD(getItemsCountFunc);
+	FIELD(getItemsRangeFunc);
+	FIELD(setupItemFunc);
+	FIELD(mItemSample).AddAttribute<SerializableAttribute<decltype(mItemSample)>>();
+	FIELD(mSelectionDrawable).AddAttribute<SerializableAttribute<decltype(mSelectionDrawable)>>();
+	FIELD(mHoverDrawable).AddAttribute<SerializableAttribute<decltype(mHoverDrawable)>>();
+	FIELD(mSelectionLayout).AddAttribute<SerializableAttribute<decltype(mSelectionLayout)>>();
+	FIELD(mHoverLayout).AddAttribute<SerializableAttribute<decltype(mHoverLayout)>>();
+	FIELD(mMinVisibleItemIdx);
+	FIELD(mMaxVisibleItemIdx);
+	FIELD(mSelectedItem);
+	FIELD(mCurrentSelectionRect);
+	FIELD(mTargetSelectionRect);
+	FIELD(mCurrentHoverRect);
+	FIELD(mTargetHoverRect);
+	FIELD(mLastHoverCheckCursor);
+	FIELD(mLastSelectCheckCursor);
+	FIELD(mItemsPool);
+	FIELD(mDrawDepth);
 }
 
 void o2::UIMenuPanel::InitializeType(o2::UIMenuPanel* sample)
@@ -1293,6 +1357,15 @@ void o2::VectorFont::Effect::InitializeType(o2::VectorFont::Effect* sample)
 {
 }
 
+void o2::Scene::Layer::InitializeType(o2::Scene::Layer* sample)
+{
+	FIELD(name).AddAttribute<SerializableAttribute<decltype(name)>>();
+	FIELD(actors);
+	FIELD(enabledActors);
+	FIELD(drawables);
+	FIELD(enabledDrawables);
+}
+
 void o2::UIContextMenu::Item::InitializeType(o2::UIContextMenu::Item* sample)
 {
 	FIELD(text).AddAttribute<SerializableAttribute<decltype(text)>>();
@@ -1404,6 +1477,7 @@ void RegReflectionTypes()
 	::UIDockableWindow::type = mnew Type();
 	::UIDockWindowPlace::type = mnew Type();
 	::WindowsLayout::type = mnew Type();
+	::LogWindow::type = mnew Type();
 	::SceneEditWidget::type = mnew Type();
 	::SceneWindow::type = mnew Type();
 	::TreeWindow::type = mnew Type();
@@ -1454,6 +1528,7 @@ void RegReflectionTypes()
 	o2::UIHorizontalScrollBar::type = mnew Type();
 	o2::UILabel::type = mnew Type();
 	o2::UIList::type = mnew Type();
+	o2::UILongList::type = mnew Type();
 	o2::UIMenuPanel::type = mnew Type();
 	o2::UIScrollArea::type = mnew Type();
 	o2::UIToggle::type = mnew Type();
@@ -1488,6 +1563,7 @@ void RegReflectionTypes()
 	o2::VectorFontAsset::MetaInfo::type = mnew Type();
 	o2::AtlasAssetConverter::Image::type = mnew Type();
 	o2::VectorFont::Effect::type = mnew Type();
+	o2::Scene::Layer::type = mnew Type();
 	o2::UIContextMenu::Item::type = mnew Type();
 	o2::UIMenuPanel::Item::type = mnew Type();
 	o2::Curve::Key::type = mnew Type();
@@ -1505,6 +1581,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<::UIDockableWindow>("::UIDockableWindow");
 	o2::Reflection::InitializeType<::UIDockWindowPlace>("::UIDockWindowPlace");
 	o2::Reflection::InitializeType<::WindowsLayout>("::WindowsLayout");
+	o2::Reflection::InitializeType<::LogWindow>("::LogWindow");
 	o2::Reflection::InitializeType<::SceneEditWidget>("::SceneEditWidget");
 	o2::Reflection::InitializeType<::SceneWindow>("::SceneWindow");
 	o2::Reflection::InitializeType<::TreeWindow>("::TreeWindow");
@@ -1555,6 +1632,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::UIHorizontalScrollBar>("o2::UIHorizontalScrollBar");
 	o2::Reflection::InitializeType<o2::UILabel>("o2::UILabel");
 	o2::Reflection::InitializeType<o2::UIList>("o2::UIList");
+	o2::Reflection::InitializeType<o2::UILongList>("o2::UILongList");
 	o2::Reflection::InitializeType<o2::UIMenuPanel>("o2::UIMenuPanel");
 	o2::Reflection::InitializeType<o2::UIScrollArea>("o2::UIScrollArea");
 	o2::Reflection::InitializeType<o2::UIToggle>("o2::UIToggle");
@@ -1589,6 +1667,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::VectorFontAsset::MetaInfo>("o2::VectorFontAsset::MetaInfo");
 	o2::Reflection::InitializeType<o2::AtlasAssetConverter::Image>("o2::AtlasAssetConverter::Image");
 	o2::Reflection::InitializeType<o2::VectorFont::Effect>("o2::VectorFont::Effect");
+	o2::Reflection::InitializeType<o2::Scene::Layer>("o2::Scene::Layer");
 	o2::Reflection::InitializeType<o2::UIContextMenu::Item>("o2::UIContextMenu::Item");
 	o2::Reflection::InitializeType<o2::UIMenuPanel::Item>("o2::UIMenuPanel::Item");
 	o2::Reflection::InitializeType<o2::Curve::Key>("o2::Curve::Key");
@@ -1608,6 +1687,7 @@ void RegReflectionTypes()
 	::UIDockableWindow::type->AddBaseType(o2::UIWindow::type);
 	::UIDockWindowPlace::type->AddBaseType(o2::UIWidget::type);
 	::WindowsLayout::type->AddBaseType(o2::ISerializable::type);
+	::LogWindow::type->AddBaseType(::IEditorWindow::type);
 	::SceneEditWidget::type->AddBaseType(o2::UIWidget::type);
 	::SceneWindow::type->AddBaseType(::IEditorWindow::type);
 	::TreeWindow::type->AddBaseType(::IEditorWindow::type);
@@ -1659,6 +1739,7 @@ void RegReflectionTypes()
 	o2::UIHorizontalScrollBar::type->AddBaseType(o2::UIWidget::type);
 	o2::UILabel::type->AddBaseType(o2::UIWidget::type);
 	o2::UIList::type->AddBaseType(o2::UICustomList::type);
+	o2::UILongList::type->AddBaseType(o2::UIScrollArea::type);
 	o2::UIMenuPanel::type->AddBaseType(o2::UIWidget::type);
 	o2::UIToggle::type->AddBaseType(o2::UIWidget::type);
 	o2::UITreeNode::type->AddBaseType(o2::UIWidget::type);
@@ -1687,6 +1768,7 @@ void RegReflectionTypes()
 	o2::ImageAsset::MetaInfo::type->AddBaseType(o2::Asset::IMetaInfo::type);
 	o2::VectorFontAsset::MetaInfo::type->AddBaseType(o2::Asset::IMetaInfo::type);
 	o2::AtlasAssetConverter::Image::type->AddBaseType(o2::ISerializable::type);
+	o2::Scene::Layer::type->AddBaseType(o2::ISerializable::type);
 	o2::UIContextMenu::Item::type->AddBaseType(o2::ISerializable::type);
 	o2::UIMenuPanel::Item::type->AddBaseType(o2::ISerializable::type);
 	o2::Curve::Key::type->AddBaseType(o2::ISerializable::type);

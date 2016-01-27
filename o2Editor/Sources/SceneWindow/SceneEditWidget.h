@@ -40,13 +40,22 @@ public:
 protected:
 	Camera     mViewCamera;
 	float      mViewCameraTargetScale = 1.0f;
+	float      mViewCameraScaleSence = 0.1f/120.0f;
+	float      mViewCameraScaleElasticyCoef = 30.0f;
+	Vec2F      mViewCameraTargetPos;
+	Vec2F      mViewCameraVelocity;
+	float      mViewCameraPosElasticyCoef = 40.0f;
+	float      mViewCameraVelocityDampingCoef = 10.0f;
+	float      mViewCameraMinScale = 0.001f;
+	float      mViewCameraMaxScale = 10000.0f;
+
+	Color4     mBackColor = Color4(170, 170, 170, 255);
+	Color4     mGridColor = Color4(190, 190, 190, 255);
 
 	TextureRef mRenderTarget;
 	Sprite*    mRenderTargetSprite;
 	bool       mNeedRedraw;
 	float      mDrawDepth;
-
-	Sprite* test;
 
 protected:
 	// Updates layout
@@ -58,5 +67,11 @@ protected:
 	// Calls when cursor stay down during frame
 	void OnCursorStillDown(const Input::Cursor& cursor);
 
+	// Updates camera
+	void UpdateCamera(float dt);
+
 	void RedrawScene();
+
+	void DrawGrid();
+
 };

@@ -19,8 +19,11 @@ namespace UIStyle
 	void RebuildActorsTreeLockToggle();
 	void RebuildActorsTreeLinkBtn();
 	void RebuildActorsTree();
-	void RebuildLayersPanelDropdown();
-	void RebuildGizmosPanelDropdown();
+	void RebuildPanelDownButton();
+	void RebuildTrashDownPanelButton();
+	void RebuildMessagesDownPanelToggle();
+	void RebuildWarningsDownPanelToggle();
+	void RebuildErrorsDownPanelToggle();
 
 	void RebuildEditorUIStyle();
 }

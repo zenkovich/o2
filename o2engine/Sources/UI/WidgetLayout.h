@@ -221,6 +221,7 @@ namespace o2
 		friend class UIHorizontalProgress;
 		friend class UIHorizontalScrollBar;
 		friend class UILabel;
+		friend class UILongList;
 		friend class UIMenuPanel;
 		friend class UIScrollArea;
 		friend class UIToggle;

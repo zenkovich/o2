@@ -149,6 +149,7 @@ namespace o2
 		friend class UIContextMenu;
 		friend class UICustomList;
 		friend class UIEditBox;
+		friend class UILongList;
 		friend class UIScrollArea;
 		friend class UITree;
 	};

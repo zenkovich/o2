@@ -76,6 +76,9 @@
     <ClInclude Include="..\..\Sources\Core\EditorConfig.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h">
+      <Filter>LogWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
@@ -123,6 +126,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\EditorConfig.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp">
+      <Filter>LogWindow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

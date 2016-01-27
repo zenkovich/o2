@@ -4,6 +4,11 @@
 
 class SceneEditWidget;
 
+namespace o2
+{
+	class UIWidget;
+}
+
 class SceneWindow: public IEditorWindow
 {
 public:
@@ -11,6 +16,8 @@ public:
 
 protected:
 	SceneEditWidget* mEditWidget;
+	UIWidget*        mLayersView;
+	UIWidget*        mGizomsView;
 
 protected:
 	SceneWindow();
@@ -18,4 +25,5 @@ protected:
 	~SceneWindow();
 
 	void InitializeWindow();
+	void InitializelayersView();
 };

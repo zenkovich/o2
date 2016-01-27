@@ -6,20 +6,25 @@
 namespace o2
 {
 	Actor::Actor():
-		mName("unnamed"), mEnabled(true), mResEnabled(true), mLocked(false), mResLocked(false), Animatable(), 
-		mParent(nullptr)
+		mName("unnamed"), mEnabled(true), mResEnabled(true), mLocked(false), mResLocked(false), Animatable(),
+		mParent(nullptr), mLayer(nullptr)
 	{
 		transform.SetOwner(this);
 		InitializeProperties();
 
 		if (Scene::IsSingletonInitialzed())
+		{
 			o2Scene.mActors.Add(this);
+			mLayer = o2Scene.GetDefaultLayer();
+			mLayer->actors.Add(this);
+			mLayer->enabledActors.Add(this);
+		}
 	}
 
 	Actor::Actor(const Actor& other):
-		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mLocked(other.mLocked), 
-		mResLocked(other.mResLocked), Animatable(other), 
-		transform(other.transform), mParent(nullptr)
+		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mLocked(other.mLocked),
+		mResLocked(other.mResLocked), Animatable(other), transform(other.transform), mParent(nullptr),
+		mLayer(other.mLayer)
 	{
 		transform.SetOwner(this);
 
@@ -35,6 +40,12 @@ namespace o2
 		InitializeProperties();
 
 		o2Scene.mActors.Add(this);
+
+		if (!mLayer)
+			mLayer = o2Scene.GetDefaultLayer();
+
+		mLayer->actors.Add(this);
+		mLayer->enabledActors.Add(this);
 	}
 
 	Actor::Actor(ComponentsVec components):
@@ -53,6 +64,10 @@ namespace o2
 
 		RemoveAllChilds();
 		RemoveAllComponents();
+
+		mLayer->actors.Remove(this);
+		if (mResEnabled)
+			mLayer->enabledActors.Remove(this);
 	}
 
 	Actor& Actor::operator=(const Actor& other)
@@ -74,6 +89,8 @@ namespace o2
 
 		UpdateEnabled();
 		transform.UpdateTransform();
+
+		SetLayer(other.mLayer);
 
 		return *this;
 	}
@@ -364,6 +381,68 @@ namespace o2
 		return mCompontents;
 	}
 
+	void Actor::SetLayer(Scene::Layer* layer)
+	{
+		Scene::Layer* lastLayer = mLayer;
+		if (layer == nullptr)
+			layer = o2Scene.GetDefaultLayer();
+
+		mLayer = layer;
+
+		lastLayer->actors.Remove(this);
+		layer->actors.Add(this);
+
+		if (mResEnabled)
+		{
+			lastLayer->enabledActors.Remove(this);
+			layer->enabledActors.Add(this);
+		}
+
+		for (auto comp : mCompontents)
+			comp->OnLayerChanged(lastLayer, layer);
+	}
+
+	void Actor::SetLayerName(const String& layerName)
+	{
+		SetLayer(o2Scene.GetLayer(layerName));
+	}
+
+	Scene::Layer* Actor::GetLayer() const
+	{
+		return mLayer;
+	}
+
+	String Actor::GetLayerName() const
+	{
+		return mLayer->name;
+	}
+
+	void Actor::AddTag(const String& tag)
+	{
+		if (!mTags.Contains(tag))
+			mTags.Add(tag);
+	}
+
+	void Actor::RemoveTag(const String& tag)
+	{
+		mTags.Remove(tag);
+	}
+
+	bool Actor::IsHaveTag(const String& tag) const
+	{
+		return mTags.Contains(tag);
+	}
+
+	void Actor::ClearTags()
+	{
+		mTags.Clear();
+	}
+
+	const Actor::StringsVec& Actor::GetTags() const
+	{
+		return mTags;
+	}
+
 	void Actor::OnTransformChanged()
 	{
 		for (auto comp : mCompontents)
@@ -380,10 +459,20 @@ namespace o2
 
 	void Actor::UpdateEnabled()
 	{
+		bool lastResEnabled = mResEnabled;
+
 		if (mParent)
 			mResEnabled = mEnabled && mParent->mResEnabled;
 		else
 			mResEnabled = mEnabled;
+
+		if (lastResEnabled != mResEnabled)
+		{
+			if (mResEnabled)
+				mLayer->enabledActors.Add(this);
+			else
+				mLayer->enabledActors.Remove(this);
+		}
 
 		for (auto comp : mCompontents)
 			comp->UpdateEnabled();
@@ -403,6 +492,11 @@ namespace o2
 			child->UpdateLocking();
 	}
 
+	void Actor::OnSerialize(DataNode& node)
+	{
+		*node["mLayerName"] = mLayer->name;
+	}
+
 	void Actor::OnDeserialized(const DataNode& node)
 	{
 		for (auto child : mChilds)
@@ -410,6 +504,9 @@ namespace o2
 			o2Scene.mActors.Remove(child);
 			child->mParent = this;
 		}
+
+		String layerName = (String)(*node.GetNode("mLayerName"));
+		SetLayerName(layerName);
 	}
 
 	Dictionary<String, Actor*> Actor::GetAllChilds()
@@ -442,6 +539,9 @@ namespace o2
 		INITIALIZE_ACCESSOR(Actor, child, GetChild);
 		INITIALIZE_GETTER(Actor, components, GetComponents);
 		INITIALIZE_ACCESSOR(Actor, component, GetComponent);
+		INITIALIZE_PROPERTY(Actor, layer, SetLayer, GetLayer);
+		INITIALIZE_PROPERTY(Actor, layerName, SetLayerName, GetLayerName);
+		INITIALIZE_ACCESSOR(Actor, tag, IsHaveTag);
 
 		child.SetAllAccessFunc(this, &Actor::GetAllChilds);
 		component.SetAllAccessFunc(this, &Actor::GetAllComponents);
