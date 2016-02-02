@@ -13,7 +13,8 @@ namespace o2
 
 	Transform::Transform(const Transform& other):
 		mSize(other.mSize), mPosition(other.mPosition), mAngle(other.mAngle), mScale(other.mScale),
-		mPivot(other.mPivot), mShear(other.mShear), mTransform(other.mTransform)
+		mPivot(other.mPivot), mShear(other.mShear), mTransform(other.mTransform), 
+		mNonSizedTransform(other.mNonSizedTransform)
 	{
 		InitializeProperties();
 	}
@@ -25,21 +26,24 @@ namespace o2
 
 	void Transform::UpdateTransform()
 	{
-		mTransform = Basis::Build(mPosition, mScale*mSize, mAngle, mShear);
+		mNonSizedTransform = Basis::Build(mPosition, mScale, mAngle, mShear);
+		mTransform.Set(mNonSizedTransform.offs, mNonSizedTransform.xv * mSize.x, mNonSizedTransform.yv * mSize.y);
 		mTransform.offs = mTransform.offs - mTransform.xv*mPivot.x - mTransform.yv*mPivot.y;
+		mNonSizedTransform.offs = mTransform.offs;
 
 		BasisChanged();
 	}
 
 	Transform& Transform::operator=(const Transform& other)
 	{
-		mPosition  = other.mPosition;
-		mSize	   = other.mSize;
-		mScale	   = other.mScale;
-		mPivot	   = other.mPivot;
-		mAngle	   = other.mAngle;
-		mShear	   = other.mShear;
-		mTransform = other.mTransform;
+		mPosition          = other.mPosition;
+		mSize	           = other.mSize;
+		mScale	           = other.mScale;
+		mPivot	           = other.mPivot;
+		mAngle	           = other.mAngle;
+		mShear	           = other.mShear;
+		mTransform         = other.mTransform;
+		mNonSizedTransform = other.mNonSizedTransform;
 
 		UpdateTransform();
 		BasisChanged();
@@ -165,6 +169,25 @@ namespace o2
 		return mTransform;
 	}
 
+	void Transform::SetNonSizedBasis(const Basis& basis)
+	{
+		Vec2F offset, scale;
+		float angle, shear;
+		basis.Decompose(&offset, &angle, &scale, &shear);
+
+		mAngle = angle;
+		mScale = scale;
+		mShear = shear;
+
+		mPosition = basis.offs + basis.xv*mPivot.x*mSize.x + basis.yv*mPivot.y*mSize.y;
+		UpdateTransform();
+	}
+
+	Basis Transform::GetNonSizedBasis() const
+	{
+		return mNonSizedTransform;
+	}
+
 	void Transform::SetAxisAlignedRect(const RectF& rect)
 	{
 		RectF curRect = GetAxisAlignedRect();
@@ -234,7 +257,7 @@ namespace o2
 
 	Vec2F Transform::GetRight() const
 	{
-		return mTransform.xv/(mSize.x*mScale.x);
+		return mNonSizedTransform.xv/(mSize.x*mScale.x);
 	}
 
 	void Transform::SetLeft(const Vec2F& dir)
@@ -244,16 +267,18 @@ namespace o2
 
 	Vec2F Transform::GetLeft() const
 	{
-		return mTransform.xv/(-(mSize.x*mScale.x));
+		return mNonSizedTransform.xv/(-(mSize.x*mScale.x));
 	}
 
 	void Transform::SetUp(const Vec2F& dir)
 	{
+		Basis transf = Basis::Rotated(GetUp().SignedAngle(dir));
+		SetBasis(mTransform*transf);
 	}
 
 	Vec2F Transform::GetUp() const
 	{
-		return mTransform.yv/(mSize.y*mScale.y);
+		return mNonSizedTransform.yv/(mSize.y*mScale.y);
 	}
 
 	void Transform::SetDown(const Vec2F& dir)
@@ -262,7 +287,7 @@ namespace o2
 
 	Vec2F Transform::GetDown() const
 	{
-		return mTransform.yv/(-(mSize.y*mScale.y));
+		return mNonSizedTransform.yv/(-(mSize.y*mScale.y));
 	}
 
 	void Transform::LookAt(const Vec2F& worldPoint)
@@ -321,6 +346,7 @@ namespace o2
 		INITIALIZE_PROPERTY(Transform, angle, SetAngle, GetAngle);
 		INITIALIZE_PROPERTY(Transform, shear, SetShear, GetShear);
 		INITIALIZE_PROPERTY(Transform, basis, SetBasis, GetBasis);
+		INITIALIZE_PROPERTY(Transform, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis);
 		INITIALIZE_PROPERTY(Transform, AABB, SetAxisAlignedRect, GetAxisAlignedRect);
 		INITIALIZE_PROPERTY(Transform, right, SetRight, GetRight);
 		INITIALIZE_PROPERTY(Transform, left, SetLeft, GetLeft);

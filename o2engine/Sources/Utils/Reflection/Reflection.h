@@ -3,7 +3,6 @@
 #include "Utils/Containers/Vector.h"
 #include "Utils/Reflection/Type.h"
 
-
 namespace o2
 {
 	// ------------------------------
@@ -45,10 +44,10 @@ namespace o2
 		_type* sample = nullptr;
 
 		_type::InitializeType(sample);
-		_type::type->mName = name;
-		_type::type->mId = instance->mLastGivenTypeId++;
-		_type::type->mTypeCreator = mnew Type::TypeCreator<_type>();
+		_type::type.mName = name;
+		_type::type.mId = instance->mLastGivenTypeId++;
+		_type::type.mTypeCreator = new Type::TypeCreator<_type>();
 
-		instance->mTypes.Add(_type::type);
+		instance->mTypes.Add(&_type::type);
 	}
 }

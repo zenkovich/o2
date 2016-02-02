@@ -81,6 +81,17 @@ namespace o2
 		return mWorldTransform;
 	}
 
+	void ActorTransform::SetWorldNonSizedBasis(const Basis& basis)
+	{
+		CheckParentInvTransform();
+		SetNonSizedBasis(basis*mParentInvertedTransform);
+	}
+
+	Basis ActorTransform::GetWorldNonSizedBasis() const
+	{
+		return mWorldNonSizedTransform;
+	}
+
 	void ActorTransform::SetWorldAxisAlignedRect(const RectF& rect)
 	{
 		CheckParentInvTransform();
@@ -151,7 +162,7 @@ namespace o2
 
 	Vec2F ActorTransform::GetRight() const
 	{
-		return Vec2F();
+		return mWorldNonSizedTransform.xv;
 	}
 
 	void ActorTransform::SetLeft(const Vec2F& dir)
@@ -161,7 +172,7 @@ namespace o2
 
 	Vec2F ActorTransform::GetLeft() const
 	{
-		return Vec2F();
+		return mWorldNonSizedTransform.xv.Inverted();
 	}
 
 	void ActorTransform::SetUp(const Vec2F& dir)
@@ -171,7 +182,7 @@ namespace o2
 
 	Vec2F ActorTransform::GetUp() const
 	{
-		return Vec2F();
+		return mWorldNonSizedTransform.yv;
 	}
 
 	void ActorTransform::SetDown(const Vec2F& dir)
@@ -181,7 +192,7 @@ namespace o2
 
 	Vec2F ActorTransform::GetDown() const
 	{
-		return Vec2F();
+		return mWorldNonSizedTransform.yv.Inverted();
 	}
 
 	void ActorTransform::LookAt(const Vec2F& worldPoint)
@@ -240,10 +251,15 @@ namespace o2
 
 		if (mOwner && mOwner->mParent)
 		{
-			mParentTransform = mOwner->mParent->transform.mWorldTransform;
-			mWorldTransform = mParentTransform*mTransform;
+			mParentTransform = mOwner->mParent->transform.mWorldNonSizedTransform;
+			mWorldTransform = mTransform*mParentTransform;
+			mWorldNonSizedTransform = mNonSizedTransform*mParentTransform;
 		}
-		else mWorldTransform = mTransform;
+		else
+		{
+			mWorldNonSizedTransform = mNonSizedTransform;
+			mWorldTransform = mTransform;
+		}
 
 		mIsParentInvTransformActual = false;
 
@@ -259,7 +275,7 @@ namespace o2
 		mIsParentInvTransformActual = true;
 
 		if (mOwner && mOwner->mParent)
-			mParentInvertedTransform = mOwner->mParent->transform.mWorldTransform.Inverted();
+			mParentInvertedTransform = mOwner->mParent->transform.mWorldNonSizedTransform.Inverted();
 		else
 			mParentInvertedTransform = Basis::Identity();
 	}
@@ -271,6 +287,7 @@ namespace o2
 		INITIALIZE_PROPERTY(ActorTransform, worldRect, SetWorldRect, GetWorldRect);
 		INITIALIZE_PROPERTY(ActorTransform, worldAngle, SetWorldAngle, GetWorldAngle);
 		INITIALIZE_PROPERTY(ActorTransform, worldBasis, SetWorldBasis, GetWorldBasis);
+		INITIALIZE_PROPERTY(ActorTransform, worldNonSizedBasis, SetWorldNonSizedBasis, GetWorldNonSizedBasis);
 		INITIALIZE_PROPERTY(ActorTransform, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect);
 	}
 

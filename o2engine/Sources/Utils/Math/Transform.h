@@ -13,26 +13,27 @@ namespace o2
 	class Transform: public ISerializable
 	{
 	public:
-		Property<Vec2F>  position;     // Position property
-		Property<Vec2F>  size;         // Size property
-		Property<Vec2F>  scale;        // Scale property
-		Property<Vec2F>  pivot;        // Pivot property, in local space
-		Property<Vec2F>  worldPivot;   // Pivot property, in world space
-		Property<Vec2F>  szPivot;      // Pivot in size space property
-		Property<RectF>  rect;         // Rectangle property. Sets the position and size
-		Property<float>  angle;        // Rotation angle in radians
-		Property<float>  shear;        // Shear
-		Property<Basis>  basis;        // Transformation basis
-		Property<RectF>  AABB;         // Axis aligned rectangle
-		Property<Vec2F>  leftTop;      // Left top corner property
-		Property<Vec2F>  leftBottom;   // Left bottom corner property
-		Property<Vec2F>  rightTop;     // Left top corner property
-		Property<Vec2F>  rightBottom;  // Left top corner property
-		Property<Vec2F>  right;        // X Axis direction property
-		Property<Vec2F>  left;         // Negative X Axis direction property
-		Property<Vec2F>  up;           // Y Axis direction property
-		Property<Vec2F>  down;         // Negative Y Axis direction property
-		Setter<Vec2F>    lookAtPoint;  // Look at point setter
+		Property<Vec2F>  position;      // Position property
+		Property<Vec2F>  size;          // Size property
+		Property<Vec2F>  scale;         // Scale property
+		Property<Vec2F>  pivot;         // Pivot property, in local space
+		Property<Vec2F>  worldPivot;    // Pivot property, in world space
+		Property<Vec2F>  szPivot;       // Pivot in size space property
+		Property<RectF>  rect;          // Rectangle property. Sets the position and size
+		Property<float>  angle;         // Rotation angle in radians
+		Property<float>  shear;         // Shear property
+		Property<Basis>  basis;         // Transformation basis property
+		Property<Basis>  nonSizedBasis; // Non sizes transformation basis property
+		Property<RectF>  AABB;          // Axis aligned rectangle
+		Property<Vec2F>  leftTop;       // Left top corner property
+		Property<Vec2F>  leftBottom;    // Left bottom corner property
+		Property<Vec2F>  rightTop;      // Left top corner property
+		Property<Vec2F>  rightBottom;   // Left top corner property
+		Property<Vec2F>  right;         // X Axis direction property
+		Property<Vec2F>  left;          // Negative X Axis direction property
+		Property<Vec2F>  up;            // Y Axis direction property
+		Property<Vec2F>  down;          // Negative Y Axis direction property
+		Setter<Vec2F>    lookAtPoint;   // Look at point setter
 
 									   // Constructor
 		Transform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
@@ -106,6 +107,12 @@ namespace o2
 
 		// Returns basis
 		virtual Basis GetBasis() const;
+
+		// Sets basis without size
+		virtual void SetNonSizedBasis(const Basis& basis);
+
+		// Returns basis without size
+		virtual Basis GetNonSizedBasis() const;
 
 		// Sets axis aligned rectangle transformation
 		virtual void SetAxisAlignedRect(const RectF& rect);
@@ -188,14 +195,15 @@ namespace o2
 		SERIALIZABLE(Transform);
 
 	protected:
-		Vec2F  mPosition;  // Position @SERIALIZABLE
-		Vec2F  mSize;      // Size @SERIALIZABLE
-		Vec2F  mScale;     // Scale, (1; 1) is default @SERIALIZABLE
-		Vec2F  mPivot;     // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
-		float  mAngle;     // Rotation angle in radians @SERIALIZABLE
-		float  mShear;     // Shear @SERIALIZABLE
-
-		Basis  mTransform; // Final transform basis
+		Vec2F  mPosition;          // Position @SERIALIZABLE
+		Vec2F  mSize;              // Size @SERIALIZABLE
+		Vec2F  mScale;             // Scale, (1; 1) is default @SERIALIZABLE
+		Vec2F  mPivot;             // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
+		float  mAngle;             // Rotation angle in radians @SERIALIZABLE
+		float  mShear;             // Shear @SERIALIZABLE
+						           
+		Basis  mTransform;         // Final transform basis
+		Basis  mNonSizedTransform; // Final transform basis without size
 
 	protected:
 		// Calls when basis changed

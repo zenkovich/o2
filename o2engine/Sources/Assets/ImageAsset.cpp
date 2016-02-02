@@ -89,7 +89,7 @@ namespace o2
 	void ImageAsset::SetAtlasId(AssetId id)
 	{
 		AssetInfo atlasInfp = o2Assets.GetAssetInfo(id);
-		if (atlasInfp.mType != AtlasAsset::type->ID())
+		if (atlasInfp.mType != AtlasAsset::type.ID())
 		{
 			GetAssetsLogStream()->Error("Can' setup image atlas id (%i): wrong id", id);
 			return;
@@ -169,7 +169,7 @@ namespace o2
 
 	Type::Id ImageAsset::MetaInfo::GetAssetType() const
 	{
-		return ImageAsset::type->ID();
+		return ImageAsset::type.ID();
 	}
 
 	bool ImageAsset::MetaInfo::IsEqual(IMetaInfo* other) const

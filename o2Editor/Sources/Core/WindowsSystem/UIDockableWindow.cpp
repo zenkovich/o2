@@ -156,7 +156,7 @@ void UIDockableWindow::OnMoveCompleted()
 
 	bool allOnLine = targetDock->mParent && targetDock->mParent->GetChilds().All([&](auto x) {
 
-		if (x->GetType() != *UIDockWindowPlace::type)
+		if (x->GetType() != UIDockWindowPlace::type)
 			return false;
 
 		UIDockWindowPlace* dock = (UIDockWindowPlace*)x;

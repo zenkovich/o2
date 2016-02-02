@@ -120,7 +120,7 @@ namespace o2
 		void DrawCross(const Vec2F& pos, float size = 5, const Color4& color = Color4::White());
 
 		// Draw circle with color
-		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White());
+		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White(), int segCount = 20);
 
 		// Draws bezier curve with color
 		void DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,

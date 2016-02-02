@@ -7,7 +7,7 @@ namespace o2
 {
 	Type::Id AtlasAsset::MetaInfo::GetAssetType() const
 	{
-		return AtlasAsset::type->ID();
+		return AtlasAsset::type.ID();
 	}
 
 	bool AtlasAsset::MetaInfo::IsEqual(IMetaInfo* other) const
@@ -16,11 +16,11 @@ namespace o2
 			return false;
 
 		MetaInfo* otherMeta = (MetaInfo*)other;
-		return mIOS == otherMeta->mIOS && mAndroid == otherMeta->mAndroid && mMacOS == otherMeta->mMacOS && 
+		return mIOS == otherMeta->mIOS && mAndroid == otherMeta->mAndroid && mMacOS == otherMeta->mMacOS &&
 			mWindows == otherMeta->mWindows && Math::Equals(mBorder, otherMeta->mBorder);
 	}
 
-	AssetId AtlasAsset::Page::ID() const
+	UInt AtlasAsset::Page::ID() const
 	{
 		return mId;
 	}
@@ -28,6 +28,16 @@ namespace o2
 	Vec2I AtlasAsset::Page::Size() const
 	{
 		return mSize;
+	}
+
+	TextureRef AtlasAsset::Page::GetTextureRef() const
+	{
+		return AtlasAsset::GetPageTextureRef(mOwner->GetAssetId(), mId);
+	}
+
+	String AtlasAsset::Page::GetTextureFileName() const
+	{
+		return AtlasAsset::GetPageTextureFileName(mOwner->GetAssetId(), mId);
 	}
 
 	const Dictionary<AssetId, RectI>& AtlasAsset::Page::ImagesRects() const
@@ -74,14 +84,15 @@ namespace o2
 	{
 		mImagesAssetsInfos = asset.mImagesAssetsInfos;
 		mPages = asset.mPages;
+		for (auto& page : mPages)
+			page.mOwner = this;
 
 		mMeta = mnew MetaInfo();
 		InitializeProperties();
 	}
 
 	AtlasAsset::~AtlasAsset()
-	{
-	}
+	{}
 
 	AtlasAsset& AtlasAsset::operator=(const AtlasAsset& asset)
 	{
@@ -106,7 +117,6 @@ namespace o2
 	{
 		return mPages;
 	}
-
 
 	bool AtlasAsset::ContainsImage(ImageAsset* image)
 	{
@@ -163,6 +173,9 @@ namespace o2
 		DataNode data;
 		data.LoadFromFile(path);
 		Deserialize(data);
+
+		for (auto& page : mPages)
+			page.mOwner = this;
 	}
 
 	void AtlasAsset::SaveData(const String& path)

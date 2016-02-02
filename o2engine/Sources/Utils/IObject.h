@@ -20,19 +20,15 @@ namespace o2
 		// Returns type
 		virtual const Type& GetType() const = 0;
 
-		static Type* type;
+		static Type type;
 	};
 
 	// IObject header definition
 #define IOBJECT(CLASS)  							   \
 	CLASS* Clone() const { return mnew CLASS(*this); } \
-	static Type* type;								   \
-	const Type& GetType() const { return *type; };	   \
+	static Type type;								   \
+	const Type& GetType() const { return type; };	   \
 	friend struct o2::Type::TypeCreator<CLASS>;        \
 	static void InitializeType(CLASS* sample)   
-
-	// Field registration in type macros
-#define FIELD(NAME) \
-	type->RegField(#NAME, (size_t)(char*)(&sample->NAME) - (size_t)(char*)sample, sample->NAME)
 
 }

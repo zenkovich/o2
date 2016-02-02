@@ -37,6 +37,10 @@ namespace o2
 		Function<void(bool)>                onEnableChanged;    // Enable changing event
 		Function<void(bool)>                onLockChanged;      // Locking changing event
 
+#if IS_EDITOR
+		Function<void()>                    onChanged;          // Calls when something in actor was changed
+#endif
+
 		// Default constructor
 		Actor();
 
@@ -228,6 +232,11 @@ namespace o2
 		// Returns dictionary of all components by type names
 		Dictionary<String, Component*> GetAllComponents();
 
+#if IS_EDITOR
+		// Calls when something in actor was changed
+		void OnChanged();
+#endif
+
 		// Initializes properties
 		void InitializeProperties();
 
@@ -301,5 +310,14 @@ namespace o2
 		AddComponent(newComponent);
 		return newComponent;
 	}
+
+
+#if IS_EDITOR
+#define ACTOR_CHANGED(ACTOR) (ACTOR)->OnChanged()
+#define COMPONENT_CHANGED(COMPONENT) if ((COMPONENT)->mOwner) (COMPONENT)->mOwner->OnChanged();
+#else
+#define ACTOR_CHANGED(ACTOR)
+#define COMPONENT_CHANGED(COMPONENT)
+#endif
 
 }

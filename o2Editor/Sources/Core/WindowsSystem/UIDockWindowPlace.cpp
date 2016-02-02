@@ -159,11 +159,11 @@ void UIDockWindowPlace::OnDragHandleMaxMoved(const Vec2F& delta)
 
 void UIDockWindowPlace::CheckInteractable()
 {
-	interactable = mChilds.CountMatch([](auto x) { return x->GetType() == *UIDockWindowPlace::type; }) == 0;
+	interactable = mChilds.CountMatch([](auto x) { return x->GetType() == UIDockWindowPlace::type; }) == 0;
 
 	for (auto child : mChilds)
 	{
-		if (child->GetType() == *UIDockWindowPlace::type)
+		if (child->GetType() == UIDockWindowPlace::type)
 			((UIDockWindowPlace*)child)->CheckInteractable();
 	}
 }

@@ -90,7 +90,7 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			if (child->GetType() == *UITreeNode::type)
+			if (child->GetType() == UITreeNode::type)
 			{
 				if (visibleChilds)
 					child->Draw();
@@ -156,7 +156,7 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			UITreeNode* childNode = (UITreeNode*)child;
@@ -170,7 +170,7 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			UITreeNode* childNode = (UITreeNode*)child;
@@ -182,7 +182,7 @@ namespace o2
 	{
 		for (auto child : mChilds)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			UITreeNode* childNode = (UITreeNode*)child;
@@ -223,7 +223,7 @@ namespace o2
 		Vector<UITreeNode*> thisNodes;
 		for (auto child : mChilds)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			UITreeNode* childNode = (UITreeNode*)child;
@@ -269,12 +269,12 @@ namespace o2
 
 		// rearrange nodes by objects arranging
 		auto childs = mChilds;
-		mChilds.RemoveAll([](auto x) { return x->GetType() == *UITreeNode::type; });
+		mChilds.RemoveAll([](auto x) { return x->GetType() == UITreeNode::type; });
 
 		for (auto obj : objects)
 		{
 			auto node = childs.FindMatch([&](auto x) {
-				return x->GetType() == *UITreeNode::type && ((UITreeNode*)x)->mObject == obj;
+				return x->GetType() == UITreeNode::type && ((UITreeNode*)x)->mObject == obj;
 			});
 
 			mChilds.Add(node);
@@ -288,7 +288,7 @@ namespace o2
 		auto childs = mChilds;
 		for (auto child : childs)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			UITreeNode* childNode = (UITreeNode*)child;
@@ -340,7 +340,7 @@ namespace o2
 		float childPos = height;
 		for (auto child : mChilds)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			auto node = (UITreeNode*)child;
@@ -367,7 +367,7 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			bool isTreeNode = child->GetType() == *UITreeNode::type;
+			bool isTreeNode = child->GetType() == UITreeNode::type;
 			if (isTreeNode)
 			{
 				mChildsAbsRect.top += insertOffs;
@@ -390,7 +390,7 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			res += ((UITreeNode*)child)->GetCurrentHeight();
@@ -566,7 +566,7 @@ namespace o2
 		Vector<UITreeNode*> thisNodes;
 		for (auto child : mChilds)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			UITreeNode* childNode = (UITreeNode*)child;
@@ -615,7 +615,7 @@ namespace o2
 		for (auto obj : objects)
 		{
 			auto node = childs.FindMatch([&](auto x) {
-				return x->GetType() == *UITreeNode::type && ((UITreeNode*)x)->mObject == obj;
+				return x->GetType() == UITreeNode::type && ((UITreeNode*)x)->mObject == obj;
 			});
 			mChilds.Add(node);
 		}
@@ -689,6 +689,7 @@ namespace o2
 			mSelectedItems.Add(selectionNode);
 		}
 
+		OnItemsSelected();
 		UpdateLayout();
 	}
 
@@ -700,6 +701,7 @@ namespace o2
 		selectionNode.node = GetNode(object);
 
 		mSelectedItems.Add(selectionNode);
+		OnItemsSelected();
 
 		UpdateLayout();
 	}
@@ -713,6 +715,7 @@ namespace o2
 
 		FreeSelectionSprite(mSelectedItems[idx].selectionSprite);
 		mSelectedItems.RemoveAt(idx);
+		OnItemsSelected();
 
 		UpdateLayout();
 	}
@@ -723,6 +726,7 @@ namespace o2
 			FreeSelectionSprite(sel.selectionSprite);
 
 		mSelectedItems.Clear();
+		OnItemsSelected();
 	}
 
 	UITreeNode* UITree::GetNodeSample() const
@@ -821,7 +825,7 @@ namespace o2
 		float childPos = 0;
 		for (auto child : mChilds)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			auto node = (UITreeNode*)child;
@@ -970,7 +974,7 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			if (child->GetType() != *UITreeNode::type)
+			if (child->GetType() != UITreeNode::type)
 				continue;
 
 			UITreeNode* childNode = (UITreeNode*)child;
@@ -1024,6 +1028,7 @@ namespace o2
 			selectionNode.node = GetNode(mPressedNode->mObject);
 
 			mSelectedItems.Add(selectionNode);
+			OnItemsSelected();
 
 			UpdateLayout();
 		}
@@ -1120,7 +1125,7 @@ namespace o2
 		{
 			if (mInsertNodeCandidate)
 			{
-				if (mInsertNodeCandidate->mParent && mInsertNodeCandidate->mParent->GetType() == *UITreeNode::type)
+				if (mInsertNodeCandidate->mParent && mInsertNodeCandidate->mParent->GetType() == UITreeNode::type)
 					targetParent = ((UITreeNode*)mInsertNodeCandidate->mParent)->mObject;
 
 				targetPrevObject = mInsertNodeCandidate->mObject;
@@ -1233,6 +1238,7 @@ namespace o2
 				selectionNode.node = GetNode(nodeUnderCursor->mObject);
 
 				mSelectedItems.Add(selectionNode);
+				OnItemsSelected();
 
 				UpdateLayout();
 			}
@@ -1240,6 +1246,7 @@ namespace o2
 			{
 				FreeSelectionSprite(mSelectedItems[selIdx].selectionSprite);
 				mSelectedItems.RemoveAt(selIdx);
+				OnItemsSelected();
 			}
 		}
 	}
@@ -1269,6 +1276,7 @@ namespace o2
 							selectionNode.node = GetNode(node->mObject);
 
 							mSelectedItems.Add(selectionNode);
+							OnItemsSelected();
 						}
 					}
 				}
@@ -1361,9 +1369,13 @@ namespace o2
 		mWaitSelectionsUpdate = false;
 	}
 
+	void UITree::OnItemsSelected()
+	{
+		onItemsSelectionChanged(mSelectedItems.Select<UnknownType*>([](auto x) { return x.object; }));
+	}
+
 	bool UITree::SelectedNode::operator==(const SelectedNode& other) const
 	{
 		return object == other.object;
 	}
-
 }

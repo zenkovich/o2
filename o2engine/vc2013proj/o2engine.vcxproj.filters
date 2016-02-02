@@ -55,9 +55,6 @@
     <Filter Include="Sources\Events">
       <UniqueIdentifier>{84e8e3c5-bcd5-4185-9730-c6686429a4f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Utils\Editor">
-      <UniqueIdentifier>{dbc25a3b-d51b-4155-9cf1-428da6068700}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Animation">
       <UniqueIdentifier>{13a6d5c4-63c3-4e9e-b9e0-6e1dac5103fc}</UniqueIdentifier>
     </Filter>
@@ -340,9 +337,6 @@
     <ClInclude Include="..\Sources\Events\ApplicationEventsListener.h">
       <Filter>Sources\Events</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Editor\DragHandle.h">
-      <Filter>Sources\Utils\Editor</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Animation\IAnimation.h">
       <Filter>Sources\Animation</Filter>
     </ClInclude>
@@ -442,9 +436,6 @@
     <ClInclude Include="..\Sources\UI\Window.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Editor\FunctionalDragHandle.h">
-      <Filter>Sources\Utils\Editor</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\TaskManager.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
@@ -498,6 +489,15 @@
     </ClInclude>
     <ClInclude Include="..\Sources\UI\LongList.h">
       <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\DragHandle.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\FunctionalDragHandle.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h">
+      <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -666,9 +666,6 @@
     <ClCompile Include="..\Sources\Events\ApplicationEventsListener.cpp">
       <Filter>Sources\Events</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Editor\DragHandle.cpp">
-      <Filter>Sources\Utils\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Animation\IAnimation.cpp">
       <Filter>Sources\Animation</Filter>
     </ClCompile>
@@ -768,9 +765,6 @@
     <ClCompile Include="..\Sources\UI\Window.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Editor\FunctionalDragHandle.cpp">
-      <Filter>Sources\Utils\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Utils\Task.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
@@ -821,6 +815,15 @@
     </ClCompile>
     <ClCompile Include="..\Sources\UI\LongList.cpp">
       <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\DragHandle.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\FunctionalDragHandle.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Reflection\FunctionInfo.cpp">
+      <Filter>Sources\Utils\Reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

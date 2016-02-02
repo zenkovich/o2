@@ -92,6 +92,8 @@ namespace o2
 
 		SetLayer(other.mLayer);
 
+		ACTOR_CHANGED(this);
+
 		return *this;
 	}
 
@@ -115,6 +117,7 @@ namespace o2
 	void Actor::SetName(const String& name)
 	{
 		mName = name;
+		ACTOR_CHANGED(this);
 	}
 
 	String Actor::GetName() const
@@ -139,6 +142,8 @@ namespace o2
 		UpdateEnabled();
 
 		onEnableChanged(mEnabled);
+
+		ACTOR_CHANGED(this);
 	}
 
 	void Actor::Enable()
@@ -167,6 +172,8 @@ namespace o2
 		UpdateLocking();
 
 		onLockChanged(mLocked);
+
+		ACTOR_CHANGED(this);
 	}
 
 	void Actor::Lock()
@@ -201,6 +208,7 @@ namespace o2
 			o2Scene.mActors.Remove(this);
 			o2Scene.mActors.Insert(this, index);
 		}
+		ACTOR_CHANGED(this);
 	}
 
 	void Actor::SetParent(Actor* actor, bool worldPositionStays /*= true*/)
@@ -211,23 +219,27 @@ namespace o2
 		Basis lastParentBasis = transform.GetWorldBasis();
 
 		if (mParent)
+		{
+			ACTOR_CHANGED(mParent);
 			mParent->RemoveChild(this, false);
-		else
-			o2Scene.mActors.Remove(this);
+		}
+		else o2Scene.mActors.Remove(this);
 
 		mParent = actor;
 
 		if (mParent)
+		{
 			mParent->mChilds.Add(this);
-		else
-			o2Scene.mActors.Add(this);
+			ACTOR_CHANGED(mParent);
+		}
+		else o2Scene.mActors.Add(this);
 
-		if (worldPositionStays)
-			transform.SetWorldBasis(lastParentBasis);
-		else
-			transform.UpdateTransform();
+		if (worldPositionStays) transform.SetWorldBasis(lastParentBasis);
+		else transform.UpdateTransform();
 
 		UpdateEnabled();
+
+		ACTOR_CHANGED(this);
 	}
 
 	Actor* Actor::GetParent() const
@@ -241,7 +253,10 @@ namespace o2
 			return actor;
 
 		if (actor->mParent)
+		{
 			actor->mParent->RemoveChild(actor, false);
+			ACTOR_CHANGED(actor->mParent);
+		}
 		else
 			o2Scene.mActors.Remove(actor);
 
@@ -250,6 +265,9 @@ namespace o2
 
 		actor->transform.UpdateTransform();
 		actor->UpdateEnabled();
+
+		ACTOR_CHANGED(this);
+		ACTOR_CHANGED(actor);
 
 		return actor;
 	}
@@ -260,7 +278,10 @@ namespace o2
 			return actor;
 
 		if (actor->mParent)
+		{
 			actor->mParent->RemoveChild(actor, false);
+			ACTOR_CHANGED(actor->mParent);
+		}
 		else
 			o2Scene.mActors.Remove(actor);
 
@@ -269,6 +290,9 @@ namespace o2
 
 		actor->transform.UpdateTransform();
 		actor->UpdateEnabled();
+
+		ACTOR_CHANGED(this);
+		ACTOR_CHANGED(actor);
 
 		return actor;
 	}
@@ -324,7 +348,10 @@ namespace o2
 		{
 			actor->transform.UpdateTransform();
 			actor->UpdateEnabled();
+			ACTOR_CHANGED(actor);
 		}
+
+		ACTOR_CHANGED(this);
 	}
 
 	void Actor::RemoveAllChilds()
@@ -336,6 +363,7 @@ namespace o2
 		}
 
 		mChilds.Clear();
+		ACTOR_CHANGED(this);
 	}
 
 	Component* Actor::AddComponent(Component* component)
@@ -344,6 +372,7 @@ namespace o2
 			return nullptr;
 
 		component->SetOwnerActor(this);
+		ACTOR_CHANGED(this);
 		return component;
 	}
 
@@ -351,6 +380,8 @@ namespace o2
 	{
 		mCompontents.Remove(component);
 		component->mOwner = nullptr;
+
+		ACTOR_CHANGED(this);
 
 		if (release)
 			delete component;
@@ -365,6 +396,7 @@ namespace o2
 		}
 
 		mCompontents.Clear();
+		ACTOR_CHANGED(this);
 	}
 
 	Component* Actor::GetComponent(const String& typeName)
@@ -400,6 +432,8 @@ namespace o2
 
 		for (auto comp : mCompontents)
 			comp->OnLayerChanged(lastLayer, layer);
+
+		ACTOR_CHANGED(this);
 	}
 
 	void Actor::SetLayerName(const String& layerName)
@@ -421,11 +455,14 @@ namespace o2
 	{
 		if (!mTags.Contains(tag))
 			mTags.Add(tag);
+
+		ACTOR_CHANGED(this);
 	}
 
 	void Actor::RemoveTag(const String& tag)
 	{
 		mTags.Remove(tag);
+		ACTOR_CHANGED(this);
 	}
 
 	bool Actor::IsHaveTag(const String& tag) const
@@ -436,6 +473,7 @@ namespace o2
 	void Actor::ClearTags()
 	{
 		mTags.Clear();
+		ACTOR_CHANGED(this);
 	}
 
 	const Actor::StringsVec& Actor::GetTags() const
@@ -450,6 +488,8 @@ namespace o2
 
 		for (auto child : mChilds)
 			child->transform.UpdateTransform();
+
+		ACTOR_CHANGED(this);
 	}
 
 	void Actor::SetParentProp(Actor* actor)
@@ -472,6 +512,8 @@ namespace o2
 				mLayer->enabledActors.Add(this);
 			else
 				mLayer->enabledActors.Remove(this);
+
+			ACTOR_CHANGED(this);
 		}
 
 		for (auto comp : mCompontents)
@@ -483,10 +525,17 @@ namespace o2
 
 	void Actor::UpdateLocking()
 	{
+		bool lastResLocked = mResLocked;
+
 		if (mParent)
 			mResLocked = mLocked || mParent->mResLocked;
 		else
 			mResLocked = mLocked;
+
+		if (lastResLocked != mResLocked)
+		{
+			ACTOR_CHANGED(this);
+		}
 
 		for (auto child : mChilds)
 			child->UpdateLocking();
@@ -527,6 +576,14 @@ namespace o2
 		return res;
 	}
 
+#if IS_EDITOR
+	void Actor::OnChanged()
+	{
+		onChanged();
+		o2Scene.OnActorChanged(this);
+	}
+#endif
+
 	void Actor::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(Actor, name, SetName, GetName);
@@ -546,4 +603,5 @@ namespace o2
 		child.SetAllAccessFunc(this, &Actor::GetAllChilds);
 		component.SetAllAccessFunc(this, &Actor::GetAllComponents);
 	}
+
 }

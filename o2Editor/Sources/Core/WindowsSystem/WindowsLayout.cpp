@@ -9,19 +9,19 @@
 
 void WindowsLayout::WindowDockPlace::RetrieveLayout(UIWidget* widget)
 {
-	if (widget->GetType() == *UIDockWindowPlace::type)
+	if (widget->GetType() == UIDockWindowPlace::type)
 	{
 		anchors.Set(widget->layout.GetAnchorLeft(), widget->layout.GetAnchorTop(),
 					widget->layout.GetAnchorRight(), widget->layout.GetAnchorBottom());
 
 		for (auto child : widget->GetChilds())
 		{
-			if (child->GetType() == *UIDockWindowPlace::type)
+			if (child->GetType() == UIDockWindowPlace::type)
 			{
 				childs.Add(WindowDockPlace());
 				childs[childs.Count() - 1].RetrieveLayout(child);
 			}
-			else if (child->GetType() == *UIDockableWindow::type)
+			else if (child->GetType() == UIDockableWindow::type)
 			{
 				windows.Add(child->name);
 			}

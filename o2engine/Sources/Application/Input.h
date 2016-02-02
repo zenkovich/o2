@@ -153,7 +153,10 @@ namespace o2
 			Key(KeyboardKey key = 0);
 
 			// Equals operator
-			bool operator==(const Key& other);
+			bool operator==(const Key& other) const;
+
+			// Equals operator
+			bool operator==(KeyboardKey key) const;
 		};
 
 	protected:

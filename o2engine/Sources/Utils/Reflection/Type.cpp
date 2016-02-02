@@ -35,11 +35,25 @@ namespace o2
 		return mFields;
 	}
 
+	const Type::FunctionsInfosVec& Type::Functions() const
+	{
+		return mFunctions;
+	}
+
 	const FieldInfo* Type::Field(const String& name) const
 	{
 		for (auto field : mFields)
 			if (field->Name() == name)
 				return field;
+
+		return nullptr;
+	}
+
+	const FunctionInfo* Type::GetFunction(const String& name) const
+	{
+		for (auto func : mFunctions)
+			if (func->mName == name)
+				return func;
 
 		return nullptr;
 	}
@@ -99,12 +113,12 @@ namespace o2
 		return res;
 	}
 
-	void Type::AddBaseType(Type* baseType)
+	void TypeInitializer::AddBaseType(Type* type, Type* baseType)
 	{
-		mBaseTypes.Add(baseType);
+		type->mBaseTypes.Add(baseType);
 
 		for (auto field : baseType->mFields)
-			mFields.Insert(field->Clone(), 0);
+			type->mFields.Insert(field->Clone(), 0);
 	}
 
 	bool Type::operator!=(const Type& other) const
@@ -117,5 +131,5 @@ namespace o2
 		return other.mId == mId;
 	}
 
-	Type* Type::Dummy::type;
+	Type Type::Dummy::type;
 }

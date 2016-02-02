@@ -23,6 +23,9 @@
 // Enables memory managing
 #define ENALBE_MEMORY_MANAGE false
 
+// Describes that engine running as editor
+#define IS_EDITOR true
+
 // ----------------------------
 // Assets configuration section
 // ----------------------------

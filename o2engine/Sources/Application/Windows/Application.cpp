@@ -130,8 +130,6 @@ namespace o2
 		delete mAssets;
 		delete mEventSystem;
 		delete mTaskManager;
-
-		mLog->Out("Deinitialized");
 	}
 
 	void Application::ProcessFrame()
@@ -505,6 +503,11 @@ namespace o2
 		mCurrentCursor = LoadCursor(NULL, cursorsIds[(int)type]);
 		::SetCursor(mCurrentCursor);
 		SetClassLong(mHWnd, GCL_HCURSOR, (DWORD)mCurrentCursor);
+	}
+
+	bool Application::IsEditor() const
+	{
+		return IS_EDITOR;
 	}
 
 	void Application::InitializeProperties()

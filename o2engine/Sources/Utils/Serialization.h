@@ -62,14 +62,14 @@ namespace o2
 // Serialization implementation macros
 #define SERIALIZABLE(CLASS)                                                                \
     CLASS* Clone() const { return mnew CLASS(*this); }                                     \
-	static Type* type;								                                       \
-	const Type& GetType() const { return *type; };	                                       \
+	static Type type;								                                       \
+	const Type& GetType() const { return type; };	                                       \
 	friend struct o2::Type::TypeCreator<CLASS>;                                            \
 	DataNode Serialize()                                                        		   \
 	{                                                              						   \
 		DataNode res;																	   \
 		OnSerialize(res);																   \
-		for (auto field : type->Fields())												   \
+		for (auto field : type.Fields())												   \
 		{																				   \
 			ISerializableAttribute* srlzAttr = field->Attribute<ISerializableAttribute>(); \
 			if (srlzAttr)																   \
@@ -80,7 +80,7 @@ namespace o2
 	}																					   \
 	void Deserialize(const DataNode& node)												   \
 	{																					   \
-		for (auto field : type->Fields())												   \
+		for (auto field : type.Fields())												   \
 		{																				   \
 			ISerializableAttribute* srlzAttr = field->Attribute<ISerializableAttribute>(); \
 			if (srlzAttr)																   \

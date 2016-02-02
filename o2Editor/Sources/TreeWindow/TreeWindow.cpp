@@ -12,6 +12,37 @@
 #include "UI/UIManager.h"
 #include "Utils/Clipboard.h"
 
+DECLARE_SINGLETON(TreeWindow);
+
+UITree* TreeWindow::GetActorsTree() const
+{
+	return mActorsTree;
+}
+
+void TreeWindow::ExpandActorsTreeNode(Actor* targetActor)
+{
+	if (auto node = mActorsTree->GetNode((UnknownType*)(void*)targetActor))
+		return;
+
+	Vector<Actor*> parentsStack;
+	Actor* treeVisibleNodeActor = targetActor;
+	while (!mActorsTree->GetNode((UnknownType*)(void*)treeVisibleNodeActor))
+	{
+		treeVisibleNodeActor = treeVisibleNodeActor->GetParent();
+
+		if (!treeVisibleNodeActor)
+			return;
+
+		parentsStack.Add(treeVisibleNodeActor);
+	}
+
+	for (int i = parentsStack.Count() - 1; i >= 0; i--)
+	{
+		auto node = mActorsTree->GetNode((UnknownType*)(void*)parentsStack[i]);
+		node->Expand();
+	}
+}
+
 TreeWindow::TreeWindow()
 {
 	InitializeWindow();
@@ -117,7 +148,6 @@ void TreeWindow::InitializeWindow()
 	{
 		Actor* actor = mnew Actor();
 		actor->name = String::Format("Actor #%i", i + 1);
-		actor->transform.size = Vec2F(1, 1);
 		actor->layer = o2Scene.AddLayer(String::Format("Layer #%i", i + 1));
 
 		for (int j = 0; j < 2; j++)
@@ -125,9 +155,8 @@ void TreeWindow::InitializeWindow()
 			Actor* childActor = mnew Actor();
 			childActor->name = String::Format("Child actor #%i", j + 1);
 			actor->AddChild(childActor);
-			childActor->transform.size = Vec2F(1, 1);
 
-			for (int k = 0; k < 2; k++)
+			for (int k = 0; k < 20; k++)
 			{
 				Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png") });
 				childActor2->name = String::Format("Sub Child actor #%i", k + 1);

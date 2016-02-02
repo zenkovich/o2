@@ -218,9 +218,9 @@ namespace o2
 
 	void Assets::LoadAssetTypes()
 	{
-		mStdAssetType = BinaryAsset::type;
+		mStdAssetType = &BinaryAsset::type;
 
-		auto assetTypes = Asset::type->DerivedTypes();
+		auto assetTypes = Asset::type.DerivedTypes();
 
 		for (auto type : assetTypes)
 		{

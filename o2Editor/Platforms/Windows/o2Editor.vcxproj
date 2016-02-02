@@ -23,6 +23,10 @@
     <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp" />
     <ClCompile Include="..\..\Sources\Core\MenuPanel.cpp" />
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\MoveTool.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\RotateTool.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\ScaleTool.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\SelectionTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\UIStyle\BasicUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />
@@ -32,6 +36,8 @@
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
     <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp" />
     <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneDragHandle.cpp" />
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneEditWidget.cpp" />
     <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp" />
@@ -42,6 +48,11 @@
     <ClInclude Include="..\..\Sources\Core\EditorApplication.h" />
     <ClInclude Include="..\..\Sources\Core\MenuPanel.h" />
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\IEditorTool.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\MoveTool.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\RotateTool.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\ScaleTool.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\SelectionTool.h" />
     <ClInclude Include="..\..\Sources\Core\UIStyle\BasicUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h" />
@@ -51,6 +62,8 @@
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h" />
     <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h" />
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneDragHandle.h" />
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditWidget.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h" />
@@ -111,6 +124,7 @@
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_dbg</TargetName>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -122,6 +136,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

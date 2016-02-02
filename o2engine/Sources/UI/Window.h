@@ -3,7 +3,7 @@
 #include "Events/CursorEventsListener.h"
 #include "Render/Sprite.h"
 #include "UI/ScrollArea.h"
-#include "Utils/Editor/FunctionalDragHandle.h"
+#include "Utils/FunctionalDragHandle.h"
 
 namespace o2
 {
@@ -58,7 +58,7 @@ namespace o2
 		WString GetCaption() const;
 
 		// Sets drag handle areas layouts
-		void SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout&bottom, const Layout&left,
+		void SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout& bottom, const Layout& left,
 								const Layout& right, const Layout& leftTop, const Layout& rightTop, const Layout& leftBottom,
 								const Layout& rightBottom);
 

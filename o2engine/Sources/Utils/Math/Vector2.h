@@ -72,6 +72,7 @@ namespace o2
 		inline Vec2 InvertedY() const;
 
 		inline float Angle(const Vec2& other) const;
+		inline float SignedAngle(const Vec2& other) const;
 		inline Vec2 Project(const Vec2& other) const;
 		inline Vec2 ClampLength(T newLength) const;
 
@@ -85,6 +86,7 @@ namespace o2
 		static inline T Length(const Vec2& a, const Vec2& b);
 		static inline T SqrLength(const Vec2& a, const Vec2& b);
 		static inline T Angle(const Vec2& a, const Vec2& b);
+		static inline T SignedAngle(const Vec2& a, const Vec2& b);
 	};
 
 	typedef Vec2<float> Vec2F;
@@ -378,6 +380,12 @@ namespace o2
 	}
 
 	template<typename T>
+	float Vec2<T>::SignedAngle(const Vec2& other) const
+	{
+		return Math::Atan2F(Cross(other) + FLT_EPSILON, Dot(other));;
+	}
+
+	template<typename T>
 	Vec2<T> Vec2<T>::Rotated(float rad)
 	{
 		return Vec2<T>(Math::Cos(rad), Math::Sin(rad));
@@ -417,6 +425,12 @@ namespace o2
 	T Vec2<T>::Angle(const Vec2& a, const Vec2& b)
 	{
 		return a.Angle(b);
+	}
+
+	template<typename T>
+	T Vec2<T>::SignedAngle(const Vec2& a, const Vec2& b)
+	{
+		return a.SignedAngle(b);
 	}
 
 	template<typename T>

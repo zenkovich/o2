@@ -20,6 +20,7 @@ class CppLexParser
 		globalKeyParsers.Add("#pragma", ParsePragma);
 		globalKeyParsers.Add("#include", ParseInclude);
 		globalKeyParsers.Add("#define", ParseDefine);
+		globalKeyParsers.Add("#if", ParseIfMacro);
 		globalKeyParsers.Add("//", ParseSingleLineComment);
 		globalKeyParsers.Add("class", ParseClass);
 		globalKeyParsers.Add("struct", ParseStruct);
@@ -40,6 +41,7 @@ class CppLexParser
 		classBodyKeyParsers.Add("typedef", ParseTypedef);
 		classBodyKeyParsers.Add("friend", ParseFriend);
 		classBodyKeyParsers.Add("enum", ParseEnum);
+		classBodyKeyParsers.Add("#if", ParseIfMacro);
 	}
 
 	public void Parse(SourceFile source)
@@ -123,6 +125,8 @@ class CppLexParser
 				cls.isTemplate = true;
 		}
 
+		Console.Write("Starting specializing templates... " + DateTime.Now + "\n");
+
 		SpecializeTemplates(srcMap);
 
 		foreach (var cls in srcMap.allClasses)
@@ -148,7 +152,7 @@ class CppLexParser
 			string oldName = newClass.shortName;
 			newClass.shortName = tpd.name;
 			RenameClass(newClass, newClass.name, section.name + "::" + newClass.shortName);
-            section.classes.Add(newClass);
+			section.classes.Add(newClass);
 			section.childSections.Add(newClass);
 		}
 
@@ -182,8 +186,10 @@ class CppLexParser
 			foreach (var src in srcMap.headers)
 				SearchSpecializations(specializations, src, cls);
 
-			foreach (var src in srcMap.sources)
-				SearchSpecializations(specializations, src, cls);
+			/*foreach (var src in srcMap.sources)
+				SearchSpecializations(specializations, src, cls);*/
+
+			//Console.Write("Found " + specializations.Count() + " specializations for " + cls.name + "\n");
 
 			foreach (var spec in specializations)
 			{
@@ -207,6 +213,34 @@ class CppLexParser
 		{
 			pos += tempClassName.Length;
 			cls.name = cls.name.Insert(pos, "<" + specialize + ">");
+		}
+
+		string[] templates = new string[0];
+		if (cls.templates != null)
+			templates = cls.templates.Split(',');
+
+		for (int i = 0; i < templates.Count(); i++)
+		{
+			int x = templates[i].IndexOf("typename");
+			if (x >= 0)
+				templates[i] = templates[i].Remove(x, "typename".Length).Trim(' ');
+		}
+
+		for (int i = 0; i < cls.functions.Count(); i++)
+		{
+			var func = cls.functions[i];
+
+			if (func.returnType.definition != null)
+			{
+				foreach (var templ in templates)
+					func.returnType.definition = func.returnType.definition.Replace(templ, specialize);
+			}
+
+			foreach (var param in func.parameters)
+			{
+				foreach (var templ in templates)
+					param.type.definition = param.type.definition.Replace(templ, specialize);
+			}
 		}
 
 		var fnd = allClasses.Find(x => x.name == cls.name);
@@ -350,6 +384,9 @@ class CppLexParser
 			string word = ReadWord(braces, ref tmpCaret);
 
 			isFunction = GetNextSymbol(braces, tmpCaret, " \n\r\t") != ':';
+
+			if (!isFunction && braces.StartsWith("std"))
+				isFunction = true;
 		}
 		else
 		{
@@ -444,7 +481,12 @@ class CppLexParser
 			data = data
 		};
 
-		isNextLexTemplate = false;
+		if (isNextLexTemplate)
+		{
+			res.isTemplate = true;
+			res.templates = templatesBuffer;
+			isNextLexTemplate = false;
+		}
 
 		res.returnType = new LexVariableType();
 
@@ -475,36 +517,45 @@ class CppLexParser
 		if (typeWord == "explicit")
 			typeWord = ReadWord(data, ref caret, " \n\r(){}[]");
 
-		if (GetNextSymbol(data, caret, " \n\r\t") == '(')
+		if (typeWord == "operator")
 		{
-			res.name = typeWord;
+			string nextWord = ReadWord(data, ref caret, " \n\r(){}[]");
+			res.name = typeWord + nextWord;
 			res.returnType.name = "void";
 		}
 		else
 		{
-			string typeDefinition = typeWord;
-
-			if (typeWord == "const")
+			if (GetNextSymbol(data, caret, " \n\r\t") == '(')
 			{
-				typeWord = ReadWord(data, ref caret, " \n\r(){}[]");
-				res.returnType.isContstant = true;
-
-				typeDefinition += " " + typeWord;
+				res.name = typeWord;
+				res.returnType.name = "void";
 			}
+			else
+			{
+				string typeDefinition = typeWord;
 
-			if (typeWord.Last() == '&')
-				res.returnType.type = LexVariableType.Type.Reference;
+				if (typeWord == "const")
+				{
+					typeWord = ReadWord(data, ref caret, " \n\r(){}[]");
+					res.returnType.isContstant = true;
 
-			if (typeWord.Last() == '*')
-				res.returnType.type = LexVariableType.Type.Pointer;
+					typeDefinition += " " + typeWord;
+				}
 
-			res.returnType.name = typeWord;
-			res.returnType.definition = typeDefinition;
+				if (typeWord.Last() == '&')
+					res.returnType.type = LexVariableType.Type.Reference;
 
-			res.name = ReadWord(data, ref caret, " \n\r(){}[]");
+				if (typeWord.Last() == '*')
+					res.returnType.type = LexVariableType.Type.Pointer;
 
-			if (res.name == "operator")
-				res.name += " " + ReadWord(data, ref caret, " \n\r(){}");
+				res.returnType.name = typeWord;
+				res.returnType.definition = typeDefinition;
+
+				res.name = ReadWord(data, ref caret, " \n\r(){}[]");
+
+				if (res.name == "operator")
+					res.name += " " + ReadWord(data, ref caret, " \n\r(){}");
+			}
 		}
 
 		string paramsStr = ReadBraces(data, ref caret).Trim(' ', '\n', '\r', '\t');
@@ -842,6 +893,29 @@ class CppLexParser
 			content = next,
 			source = source
 		});
+	}
+
+	void ParseIfMacro(LexSection section, ref int caret, ref ProtectLevel protectionLevel)
+	{
+		int begin = caret;
+		caret += "#if".Length;
+
+		string skipSymbols = " \r\n\t";
+		string endWord = "#endif";
+
+		int dataLen = section.data.Length;
+		for (; caret < dataLen; caret++)
+		{
+			if (skipSymbols.Contains(section.data[caret]))
+				continue;
+
+			string sub = section.data.Substring(caret, Math.Min(endWord.Length, dataLen - caret));
+			if (sub == endWord)
+			{
+				caret = Math.Min(dataLen, caret + endWord.Length);
+				return;
+			}
+		}
 	}
 
 	void ParseInclude(LexSection section, ref int caret, ref ProtectLevel protectionLevel)

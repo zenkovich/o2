@@ -104,7 +104,7 @@ namespace o2
 
 	void Asset::Load(const AssetInfo& info)
 	{
-		if (info.mType != type->ID())
+		if (info.mType != type.ID())
 		{
 			GetAssetsLogStream()->Error("Failed to load asset by info (%s - %i): incorrect type (%i)",
 										info.mPath, info.mId, info.mType);
@@ -200,7 +200,7 @@ namespace o2
 
 	Type::Id Asset::IMetaInfo::GetAssetType() const
 	{
-		return Asset::type->ID();
+		return Asset::type.ID();
 	}
 
 	bool Asset::IMetaInfo::IsEqual(IMetaInfo* other) const

@@ -8,21 +8,19 @@ namespace o2
 	DrawableComponent::DrawableComponent():
 		Component(), mDrawingDepth(0)
 	{
-		if (Scene::IsSingletonInitialzed())
-			o2Scene.RegDrawableComponent(this);
 		InitializeProperties();
 	}
 
 	DrawableComponent::DrawableComponent(const DrawableComponent& other):
 		Component(other), mDrawingDepth(other.mDrawingDepth)
 	{
-		o2Scene.RegDrawableComponent(this);
 		InitializeProperties();
 	}
 
 	DrawableComponent::~DrawableComponent()
 	{
-		o2Scene.UnregDrawableComponent(this);
+		if (mOwner)
+			mOwner->mLayer->UnregDrawableComponent(this);
 	}
 
 	DrawableComponent& DrawableComponent::operator=(const DrawableComponent& other)
@@ -30,7 +28,9 @@ namespace o2
 		Component::operator=(other);
 
 		mDrawingDepth = other.mDrawingDepth;
-		o2Scene.ComponentDepthChanged(this);
+
+		if (mOwner)
+			mOwner->mLayer->ComponentDepthChanged(this);
 
 		return *this;
 	}
@@ -41,7 +41,11 @@ namespace o2
 	void DrawableComponent::SetDrawingDepth(float depth)
 	{
 		mDrawingDepth = depth;
-		o2Scene.ComponentDepthChanged(this);
+
+		if (mOwner)
+			mOwner->mLayer->ComponentDepthChanged(this);
+
+		COMPONENT_CHANGED(this);
 	}
 
 	float DrawableComponent::GetDrawingDepth() const
@@ -51,14 +55,8 @@ namespace o2
 
 	void DrawableComponent::OnLayerChanged(Scene::Layer* oldLayer, Scene::Layer* newLayer)
 	{
-		oldLayer->drawables.Remove(this);
-		newLayer->drawables.Add(this);
-
-		if (mResEnabled)
-		{
-			oldLayer->enabledDrawables.Remove(this);
-			newLayer->enabledDrawables.Add(this);
-		}
+		oldLayer->UnregDrawableComponent(this);
+		newLayer->RegDrawableComponent(this);
 	}
 
 	void DrawableComponent::UpdateEnabled()
@@ -73,9 +71,9 @@ namespace o2
 		if (lastResEnabled != mResEnabled && mOwner)
 		{
 			if (mResEnabled)
-				mOwner->mLayer->enabledDrawables.Add(this);
+				mOwner->mLayer->ComponentEnabled(this);
 			else
-				mOwner->mLayer->enabledDrawables.Remove(this);
+				mOwner->mLayer->ComponentDisabled(this);
 		}
 	}
 
@@ -84,10 +82,7 @@ namespace o2
 		if (mOwner)
 		{
 			mOwner->mCompontents.Remove(this);
-
-			mOwner->mLayer->drawables.Remove(this);
-			if (mResEnabled)
-				mOwner->mLayer->enabledDrawables.Remove(this);
+			mOwner->mLayer->UnregDrawableComponent(this);
 		}
 
 		mOwner = actor;
@@ -95,11 +90,9 @@ namespace o2
 		if (mOwner)
 		{
 			mOwner->mCompontents.Add(this);
-			OnTransformChanged();
+			mOwner->mLayer->RegDrawableComponent(this);
 
-			mOwner->mLayer->drawables.Add(this);
-			if (mResEnabled)
-				mOwner->mLayer->enabledDrawables.Add(this);
+			OnTransformChanged();
 		}
 	}
 

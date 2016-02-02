@@ -109,6 +109,7 @@ namespace o2
 		Function<void(UITreeNode*, UnknownType*)>                     setupNodeFunc;
 		Function<void(UITreeNode*)>                                   onItemDblClick;
 		Function<void(UITreeNode*)>                                   onItemRBClick;
+		Function<void(UnknownObjectsVec)>                             onItemsSelectionChanged;
 
 		// Default constructor
 		UITree();
@@ -275,10 +276,13 @@ namespace o2
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
 
 		// Selects single node under cursor
-		void SelectSingleNode(const Input::Cursor &cursor);
+		void SelectSingleNode(const Input::Cursor& cursor);
 
 		// Selects multiple nodes from cursor to lower selected node
-		void SelectMultipleNodes(const Input::Cursor &cursor);
+		void SelectMultipleNodes(const Input::Cursor& cursor);
+
+		// Calls when items selected
+		void OnItemsSelected();
 
 		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
@@ -290,7 +294,7 @@ namespace o2
 		UITreeNode* GetItemUnderPoint(const Vec2F& point);
 
 		// Updates nodes dragging
-		void UpdateDragging(const Input::Cursor &cursor);
+		void UpdateDragging(const Input::Cursor& cursor);
 
 		// Updates hover target rect and visibility
 		void UpdateHover(UITreeNode* itemUnderCursor);

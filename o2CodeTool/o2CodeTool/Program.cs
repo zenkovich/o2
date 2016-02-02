@@ -49,6 +49,9 @@ namespace o2CodeTool
 
 		static void Main(string[] args)
 		{
+			DateTime beginTime = DateTime.Now;
+			Console.Write("Starting ... " + beginTime + "\n");
+
 			bool debug = false;
 
 			SrcMap data = new SrcMap();
@@ -79,6 +82,8 @@ namespace o2CodeTool
 
 			parser.Parse(data);
 
+			Console.Write("Parsing done\n");
+
 			if (debug)
 			{
 				foreach (var cls in data.allClasses)
@@ -105,7 +110,7 @@ namespace o2CodeTool
 			CppReflectionGenerator reflGenerator = new CppReflectionGenerator();
 			reflGenerator.Generate(output, "", data);
 
-			Console.Write("Complete!");
+			Console.Write("Complete! " + (DateTime.Now - beginTime).ToString());
 		}
 	}
 }

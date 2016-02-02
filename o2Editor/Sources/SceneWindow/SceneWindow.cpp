@@ -1,5 +1,6 @@
 #include "SceneWindow.h"
 
+#include "SceneWindow/SceneEditScreen.h"
 #include "SceneWindow/SceneEditWidget.h"
 #include "UI/Button.h"
 #include "UI/CustomDropDown.h"
@@ -51,4 +52,14 @@ void SceneWindow::InitializeWindow()
 	gizmosButton->caption = "Gizmos";
 	gizmosButton->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 100);
 	upPanel->AddChild(gizmosButton);
+}
+
+void SceneWindow::InitializeLayersView()
+{
+
+}
+
+void SceneWindow::PostInitializeWindow()
+{
+	o2EditorSceneScreen.BindActorsTree();
 }

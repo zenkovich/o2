@@ -126,15 +126,14 @@ namespace o2
 		// ----------
 		class Page: public ISerializable
 		{
-			friend class AtlasAssetConverter;
-
-			AssetId                    mId;          // Page number @SERIALIZABLE
+			UInt                       mId;          // Page number @SERIALIZABLE
 			Vec2I                      mSize;        // Size of page @SERIALIZABLE
 			Dictionary<AssetId, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
+			AtlasAsset*                mOwner;       // Owner atlas
 
 		public:
 			// Returns number
-			AssetId ID() const;
+			UInt ID() const;
 
 			// Returns size
 			Vec2I Size() const;
@@ -152,6 +151,9 @@ namespace o2
 			bool operator==(const Page& other) const;
 
 			SERIALIZABLE(Page);
+
+			friend class AtlasAssetConverter;
+			friend class AtlasAsset;
 		};
 
 	protected:

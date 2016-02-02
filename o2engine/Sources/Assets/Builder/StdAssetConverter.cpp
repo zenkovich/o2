@@ -10,7 +10,7 @@ namespace o2
 	Vector<Type::Id> StdAssetConverter::GetProcessingAssetsTypes() const
 	{
 		Vector<Type::Id> res;
-		res.Add(BinaryAsset::type->ID());
+		res.Add(BinaryAsset::type.ID());
 		return res;
 	}
 

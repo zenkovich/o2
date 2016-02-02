@@ -45,6 +45,10 @@ public:
 protected:
 	UIDockableWindow* mWindow; // Dockable UI window 
 
+protected:
+	// Calls after that all windows was created
+	virtual void PostInitializeWindow() {}
+
 	friend class WindowsManager;
 	friend class WindowsLayout;
 };

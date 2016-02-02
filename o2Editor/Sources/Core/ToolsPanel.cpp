@@ -2,7 +2,12 @@
 
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
+#include "Core/Tools/MoveTool.h"
+#include "Core/Tools/RotateTool.h"
+#include "Core/Tools/ScaleTool.h"
+#include "Core/Tools/SelectionTool.h"
 #include "Core/WindowsSystem/WindowsManager.h"
+#include "SceneWindow/SceneEditScreen.h"
 #include "UI/Button.h"
 #include "UI/DropDown.h"
 #include "UI/HorizontalLayout.h"
@@ -149,6 +154,13 @@ void ToolsPanel::InitializeToolsPanel()
 	mRotateToolToggle->shortcut = ShortcutKeys('R');
 	mScaleToolToggle->shortcut = ShortcutKeys('T');
 	mFrameToolToggle->shortcut = ShortcutKeys('Y');
+
+	mArrowToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorSelectionTool>(); };
+	mBrushToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorSelectionTool>(); };
+	mMoveToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorMoveTool>(); };
+	mRotateToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorRotateTool>(); };
+	mScaleToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorScaleTool>(); };
+	mFrameToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorSelectionTool>(); };
 
 	mArrowToolToggle->SetValue(true);
 }

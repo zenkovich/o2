@@ -13,4 +13,9 @@ namespace o2
 	{
 		state->mOwner->RegAnimatedValue<bool>(this, path, state);
 	}
+
+	void AnimatedValue<Color4>::RegInAnimatable(AnimationState* state, const String& path)
+	{
+		state->mOwner->RegAnimatedValue<Color4>(this, path, state);
+	}
 }

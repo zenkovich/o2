@@ -2,7 +2,7 @@
 
 #include "Events/CursorEventsListener.h"
 #include "UI/Widget.h"
-#include "Utils/Editor/FunctionalDragHandle.h"
+#include "Utils/FunctionalDragHandle.h"
 #include "Utils/Math/Layout.h"
 #include "Utils/Math/Rect.h"
 

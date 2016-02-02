@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -43,7 +44,6 @@ public class CppReflectionGenerator
 			"// Types initializations\n" + GetTypesInitializationsData() + "\n" +
 			"// Registering all types\n" + 
 			"void RegReflectionTypes()\n{\n" + 
-			"\t// Create types\n" + GetTypesCreationData() + "\n" + 
 			"\t// Initialize types\n" + GetTypeInitializationData() + "\n" +
 			"\t// Resolve inheritance\n" + GetBaseTypesResolvingData() + "\n}";
 
@@ -62,6 +62,8 @@ public class CppReflectionGenerator
 		string res = "";
 		includes.ForEach(x => res += "#include \"" + CutPath(x) + "\"\n");
 
+		Console.Write("CPP Generation: Includes done " + DateTime.Now + "\n");
+
 		return res;
 	}
 
@@ -69,7 +71,9 @@ public class CppReflectionGenerator
 	{
 		string res = "";
 
-		reflectableClasses.ForEach(x => res += "o2::Type* " + x.name + "::type;\n");
+		reflectableClasses.ForEach(x => res += "o2::Type " + x.name.TrimStart(':') + "::type;\n");
+
+		Console.Write("CPP Generation: Types declaration done " + DateTime.Now + "\n");
 
 		return res;
 
@@ -77,6 +81,8 @@ public class CppReflectionGenerator
 
 	string GetTypesInitializationsData()
 	{
+		string[] nonReflectingFunctions = { "IOBJECT", "SERIALIZABLE" };
+
 		string res = "";
 		foreach (var cls in reflectableClasses)
 		{
@@ -86,8 +92,9 @@ public class CppReflectionGenerator
 			{
 				if (fld.isStatic)
 					continue;
-
-				res += "\tFIELD(" + fld.name + ")";
+				
+				res += "\tTypeInitializer::RegField(&type, \"" + fld.name + "\", (size_t)(char*)(&sample->" + fld.name + 
+					") - (size_t)(char*)sample, sample->" + fld.name + ")";
 
 				if (fld.comment != null && fld.comment.comment.Contains("@SERIALIZABLE"))
 					res += ".AddAttribute<SerializableAttribute<decltype(" + fld.name + ")>>()";
@@ -95,16 +102,44 @@ public class CppReflectionGenerator
 				res += ";\n";
             }
 
+			string dstr = ("~" + cls.shortName);
+
+			bool isFirstFunc = true;
+			foreach (var fnc in cls.functions)
+			{
+				if (fnc.isStatic || fnc.isTemplate || nonReflectingFunctions.Contains(fnc.name) ||
+					cls.shortName.StartsWith(fnc.name) || fnc.name.StartsWith("operator") ||
+					cls.shortName.StartsWith(fnc.name) || dstr.StartsWith(fnc.name))
+				{
+					continue;
+				}
+
+				if (isFirstFunc)
+				{
+					res += "\tauto funcInfo = TypeInitializer::RegFunction<" + cls.name + ", " + fnc.returnType.definition;
+					isFirstFunc = false;
+				}
+				else res += "\tfuncInfo = TypeInitializer::RegFunction<" + cls.name + ", " + fnc.returnType.definition;
+
+				foreach (var param in fnc.parameters)
+					res += ", " + param.type.definition;
+
+				res += ">(&type, \"" + fnc.name + "\", &" + cls.name + "::" + fnc.name + ");\n";
+
+				//TypeInitializer::RegFuncParam<float>(funcInfo, "dt", false, false, false);
+				foreach (var param in fnc.parameters)
+				{
+					res += "\tTypeInitializer::RegFuncParam<" + param.type.definition + ">(funcInfo, \"" + param.name +
+						"\");\n";
+				}
+
+				//res += "\n";
+            }
+
 			res += "}\n\n";
-        }
-		return res;
-	}
+		}
 
-	string GetTypesCreationData()
-	{
-		string res = "";
-
-		reflectableClasses.ForEach(x => res += "\t" + x.name + "::type = mnew Type();\n");
+		Console.Write("CPP Generation: Types initializations functions done " + DateTime.Now + "\n");
 
 		return res;
 	}
@@ -115,6 +150,8 @@ public class CppReflectionGenerator
 
 		reflectableClasses.ForEach(x => res += "\to2::Reflection::InitializeType<" + x.name + ">(\"" + x.name + "\");\n");
 
+		Console.Write("CPP Generation: Types initializations done " + DateTime.Now + "\n");
+
 		return res;
 	}
 
@@ -124,6 +161,8 @@ public class CppReflectionGenerator
 
 		List<LexClass> processed = new List<LexClass>();
 		reflectableClasses.ForEach(x => res += GetBaseClassSetting(x, processed));
+
+		Console.Write("CPP Generation: Base classes resolving done " + DateTime.Now + "\n");
 
 		return res;
 	}
@@ -146,7 +185,7 @@ public class CppReflectionGenerator
 				continue;
 
 			res += GetBaseClassSetting(cls.lexClass, processed);
-			res += "\t" + lexClass.name + "::type->AddBaseType(" + cls.lexClass.name + "::type);\n";
+			res += "\tTypeInitializer::AddBaseType(&" + lexClass.name + "::type, &" + cls.lexClass.name + "::type);\n";
 		}
 
 		return res;

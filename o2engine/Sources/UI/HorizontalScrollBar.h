@@ -114,7 +114,7 @@ namespace o2
 		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Gets value from cursor position, depends on orientation
-		float GetValueFromCursor(const Input::Cursor &cursor);
+		float GetValueFromCursor(const Input::Cursor& cursor);
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);

@@ -6,7 +6,7 @@ namespace o2
 {
 	Type::Id FolderAsset::MetaInfo::GetAssetType() const
 	{
-		return FolderAsset::type->ID();
+		return FolderAsset::type.ID();
 	}
 
 	FolderAsset::FolderAsset():

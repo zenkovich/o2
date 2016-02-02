@@ -31,6 +31,9 @@
     <Filter Include="AnimationWindow">
       <UniqueIdentifier>{3afe83f3-6480-491e-961f-38965ef8646e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Tools">
+      <UniqueIdentifier>{af93b477-5985-4215-a40c-9a0d3b2ebe8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
@@ -78,6 +81,27 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h">
       <Filter>LogWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneDragHandle.h">
+      <Filter>SceneWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Tools\IEditorTool.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Tools\MoveTool.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h">
+      <Filter>SceneWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Tools\SelectionTool.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Tools\RotateTool.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Tools\ScaleTool.h">
+      <Filter>Core\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +153,24 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp">
       <Filter>LogWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneDragHandle.cpp">
+      <Filter>SceneWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Tools\MoveTool.cpp">
+      <Filter>Core\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp">
+      <Filter>SceneWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Tools\SelectionTool.cpp">
+      <Filter>Core\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Tools\RotateTool.cpp">
+      <Filter>Core\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Tools\ScaleTool.cpp">
+      <Filter>Core\Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -12,12 +12,13 @@ namespace o2
 	class ActorTransform: public Transform
 	{
 	public:
-		Getter<Actor*>  actor;         // Owner actor getter
-		Property<Vec2F> worldPosition; // World position property
-		Property<RectF> worldRect;     // World rectangle property. Sets the position and size
-		Property<float> worldAngle;    // World rotation angle in radians
-		Property<Basis> worldBasis;    // World transformation basis
-		Property<RectF> worldAABB;     // World axis aligned rectangle
+		Getter<Actor*>  actor;              // Owner actor getter
+		Property<Vec2F> worldPosition;      // World position property
+		Property<RectF> worldRect;          // World rectangle property. Sets the position and size
+		Property<float> worldAngle;         // World rotation angle in radians
+		Property<Basis> worldBasis;         // World transformation basis
+		Property<Basis> worldNonSizedBasis; // World transformation basis without size
+		Property<RectF> worldAABB;          // World axis aligned rectangle
 
 		ActorTransform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
 					   const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F(0.5f, 0.5f));
@@ -57,6 +58,12 @@ namespace o2
 
 		// Returns world basis
 		Basis GetWorldBasis() const;
+
+		// Sets world basis without size
+		void SetWorldNonSizedBasis(const Basis& basis);
+
+		// Returns world basis without size
+		Basis GetWorldNonSizedBasis() const;
 
 		// Sets world axis aligned rectangle transformation
 		void SetWorldAxisAlignedRect(const RectF& rect);
@@ -139,11 +146,12 @@ namespace o2
 		SERIALIZABLE(ActorTransform);
 
 	protected:
-		Basis  mWorldTransform;          // Result world basis
-		Basis  mParentInvertedTransform; // Parent world transform inverted
-		Basis  mParentTransform;         // Parent world transform
+		Basis  mWorldNonSizedTransform;     // World transform without size
+		Basis  mWorldTransform;             // Result world basis
+		Basis  mParentInvertedTransform;    // Parent world transform inverted
+		Basis  mParentTransform;            // Parent world transform
 		bool   mIsParentInvTransformActual; // Is mParentInvertedTransform is actual
-		Actor* mOwner;                   // Owner actor
+		Actor* mOwner;                      // Owner actor
 
 	protected:
 		// Sets owner and updates transform

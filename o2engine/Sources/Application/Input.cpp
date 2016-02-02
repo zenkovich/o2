@@ -428,11 +428,17 @@ namespace o2
 	{}
 
 
-	bool Input::Key::operator==(const Key& other)
+	bool Input::Key::operator==(const Key& other) const
 	{
 		return mKey == other.mKey && Math::Equals(other.mPressedTime, mPressedTime);
 	}
 
 	Input::Key::Key(KeyboardKey key /*= 0*/):mKey(key), mPressedTime(0)
 	{}
+
+	bool Input::Key::operator==(KeyboardKey key) const
+	{
+		return mKey == key;
+	}
+
 }

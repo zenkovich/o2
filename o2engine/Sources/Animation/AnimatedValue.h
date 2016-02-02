@@ -45,6 +45,7 @@ namespace o2
 	// -----------------------
 	// Template animated value
 	// -----------------------
+	// Specializations: AnimatedValue<RectF>, AnimatedValue<Color4>, AnimatedValue<bool>
 	template<typename _type>
 	class AnimatedValue: public IAnimatedValue // @SPECIALIZE RectF Color4
 	{

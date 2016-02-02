@@ -3,6 +3,7 @@
 #include "Application/Application.h"
 #include "Core/EditorConfig.h"
 #include "Core/WindowsSystem/WindowsManager.h"
+#include "LogWindow/LogWindow.h"
 #include "SceneWindow/SceneWindow.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/MenuPanel.h"
@@ -202,7 +203,9 @@ void MenuPanel::OnShowAnimationPressed()
 
 void MenuPanel::OnShowLogPressed()
 {
-
+	auto sceneWindow = o2EditorWindows.GetWindow<LogWindow>();
+	if (sceneWindow)
+		sceneWindow->Show();
 }
 
 void MenuPanel::OnResetLayoutPressed()

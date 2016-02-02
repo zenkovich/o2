@@ -25,5 +25,8 @@ protected:
 	~SceneWindow();
 
 	void InitializeWindow();
-	void InitializelayersView();
+	void InitializeLayersView();
+
+	// Calls after that all windows was created
+	void PostInitializeWindow();
 };

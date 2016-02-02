@@ -34,11 +34,33 @@ namespace o2
 			DrawCompsVec drawables;        // Drawable components in layer
 			DrawCompsVec enabledDrawables; // Enabled drawable components in layer
 
+            // Registers drawable component
+			void RegDrawableComponent(DrawableComponent* component);
+
+			// Unregisters drawable component
+			void UnregDrawableComponent(DrawableComponent* component);
+
+			// Calls when drawable component depth was changed and sorts all drawable component
+			void ComponentDepthChanged(DrawableComponent* component);
+
+			// Calls when component was enabled
+			void ComponentEnabled(DrawableComponent* component);
+
+			// Calls when component was enabled
+			void ComponentDisabled(DrawableComponent* component);
+
 			SERIALIZABLE(Layer);
 		};
 		typedef Vector<Layer*> LayersVec;
 
 	public:
+#if IS_EDITOR
+		Function<void(ActorsVec)> onChanged; // Calls when some actor (or actors) was changed
+
+		void OnActorChanged(Actor* actor);   // Calls when actor was changed
+		void CheckChangedActors();           // Checks is any actors was changed and calls OnChanged() if changed
+#endif
+
 		// Returns layer by name
 		Layer* GetLayer(const String& name) const;
 
@@ -63,9 +85,6 @@ namespace o2
 		// Returns all actors
 		ActorsVec& GetAllActors();
 
-		// Returns all drawable components array
-		const DrawCompsVec& GetDrawableComponents() const;
-
 		// Returns actor by path (ex "some node/other/target")
 		Actor* FindActor(const String& path);
 
@@ -87,10 +106,13 @@ namespace o2
 		void Save(const String& path);
 
 	protected:
-		ActorsVec    mActors;             // Scene root actors					    					   
-		DrawCompsVec mDrawableComponents; // Drawable components
-		LayersVec    mLayers;             // Scene layers
-		Layer*       mDefaultLayer;       // Default scene layer
+		ActorsVec mActors;       // Scene root actors		
+		LayersVec mLayers;       // Scene layers
+		Layer*    mDefaultLayer; // Default scene layer
+				  
+#if IS_EDITOR	  
+		ActorsVec mChangedActors; // Changed actors array
+#endif
 
 	protected:
 		// Default constructor
@@ -104,15 +126,6 @@ namespace o2
 
 		// Draws scene drawable components
 		void Draw();
-
-		// Registers drawable component
-		void RegDrawableComponent(DrawableComponent* component);
-
-		// Unregisters drawable component
-		void UnregDrawableComponent(DrawableComponent* component);
-
-		// Calls when drawable component depth was changed and sorts all drawable component
-		void ComponentDepthChanged(DrawableComponent* component);
 
 		friend class Actor;
 		friend class Application;

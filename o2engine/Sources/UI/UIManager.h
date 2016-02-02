@@ -261,7 +261,7 @@ namespace o2
 		_type* sample = nullptr;
 		for (auto styleWidget : mStyleSamples)
 		{
-			if (*_type::type == styleWidget->GetType())
+			if (_type::type == styleWidget->GetType())
 			{
 				if (style == styleWidget->GetName())
 				{
@@ -299,7 +299,7 @@ namespace o2
 		}
 		else
 		{
-			mLog->Warning("Can't find style %s for %s", style, _type::type->Name());
+			mLog->Warning("Can't find style %s for %s", style, _type::type.Name());
 			res = mnew _type();
 		}
 

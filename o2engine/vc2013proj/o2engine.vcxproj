@@ -222,12 +222,12 @@
     <ClInclude Include="..\Sources\Utils\Data\DataDoc.h" />
     <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
-    <ClInclude Include="..\Sources\Utils\Editor\DragHandle.h" />
-    <ClInclude Include="..\Sources\Utils\Editor\FunctionalDragHandle.h" />
+    <ClInclude Include="..\Sources\Utils\DragHandle.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />
     <ClInclude Include="..\Sources\Utils\Delegates.h" />
+    <ClInclude Include="..\Sources\Utils\FunctionalDragHandle.h" />
     <ClInclude Include="..\Sources\Utils\IDynamic.h" />
     <ClInclude Include="..\Sources\Utils\ImageFormats\PngFormat.h" />
     <ClInclude Include="..\Sources\Utils\IObject.h" />
@@ -253,6 +253,7 @@
     <ClInclude Include="..\Sources\Utils\RectPacker.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Attribute.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\FieldInfo.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Type.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h" />
     <ClInclude Include="..\Sources\Utils\Serialization.h" />
@@ -352,11 +353,11 @@
     <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp" />
     <ClCompile Include="..\Sources\Utils\Debug.cpp" />
-    <ClCompile Include="..\Sources\Utils\Editor\DragHandle.cpp" />
-    <ClCompile Include="..\Sources\Utils\Editor\FunctionalDragHandle.cpp" />
+    <ClCompile Include="..\Sources\Utils\DragHandle.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp" />
+    <ClCompile Include="..\Sources\Utils\FunctionalDragHandle.cpp" />
     <ClCompile Include="..\Sources\Utils\ImageFormats\PngFormat.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />
@@ -368,6 +369,7 @@
     <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp" />
     <ClCompile Include="..\Sources\Utils\RectPacker.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\FieldInfo.cpp" />
+    <ClCompile Include="..\Sources\Utils\Reflection\FunctionInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Reflection.cpp" />
     <ClCompile Include="..\Sources\Utils\ShortcutKeys.cpp" />

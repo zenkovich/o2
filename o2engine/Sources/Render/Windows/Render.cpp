@@ -428,10 +428,10 @@ namespace o2
 		DrawLines(v, 2);
 	}
 
-	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/)
+	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/,
+							int segCount /*= 20*/)
 	{
-		const int segCount = 20;
-		Vertex2 v[segCount * 2];
+		Vertex2* v = new Vertex2[segCount * 2];
 		ULong dcolor = color.ABGR();
 
 		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
@@ -443,6 +443,7 @@ namespace o2
 		}
 
 		DrawLines(v, segCount);
+		delete[] v;
 	}
 
 	void Render::DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,

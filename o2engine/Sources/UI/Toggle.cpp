@@ -257,7 +257,7 @@ namespace o2
 
 	void UIToggle::OnLayerAdded(UIWidgetLayer* layer)
 	{
-		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == *Text::type)
+		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == Text::type)
 			mCaptionText = (Text*)layer->drawable;
 
 		if (layer->name == "back")

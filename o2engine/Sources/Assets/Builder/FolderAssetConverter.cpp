@@ -10,7 +10,7 @@ namespace o2
 	Vector<Type::Id> FolderAssetConverter::GetProcessingAssetsTypes() const
 	{
 		Vector<Type::Id> res;
-		res.Add(FolderAsset::type->ID());
+		res.Add(FolderAsset::type.ID());
 		return res;
 	}
 

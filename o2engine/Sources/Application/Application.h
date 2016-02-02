@@ -117,6 +117,9 @@ namespace o2
 		// Sets cursor type
 		virtual void SetCursor(CursorType type);
 
+		// Is application run in editor
+		virtual bool IsEditor() const;
+
 		// Returns is application ready to use
 		static bool IsReady();
 

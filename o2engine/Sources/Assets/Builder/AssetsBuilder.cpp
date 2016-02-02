@@ -61,7 +61,7 @@ namespace o2
 
 	void AssetsBuilder::InitializeConverters()
 	{
-		auto converterTypes = IAssetConverter::type->DerivedTypes();
+		auto converterTypes = IAssetConverter::type.DerivedTypes();
 		for (auto converterType : converterTypes)
 		{
 			IAssetConverter* converter = (IAssetConverter*)converterType->CreateSample();
@@ -136,7 +136,7 @@ namespace o2
 			if (!isExistMetaForFolder)
 			{
 				auto assetType = FolderAsset::type;
-				GenerateMeta(assetType, metaFullPath);
+				GenerateMeta(&assetType, metaFullPath);
 			}
 
 			ProcessMissingMetasCreation(subFolder);
@@ -145,7 +145,7 @@ namespace o2
 
 	void AssetsBuilder::ProcessRemovedAssets()
 	{
-		Type::Id folderTypeId = FolderAsset::type->ID();
+		Type::Id folderTypeId = FolderAsset::type.ID();
 
 		// in first pass skipping folders (only files), in second - files
 		for (int pass = 0; pass < 2; pass++)
@@ -193,7 +193,7 @@ namespace o2
 
 	void AssetsBuilder::ProcessModifiedAssets()
 	{
-		Type::Id folderTypeId = FolderAsset::type->ID();
+		Type::Id folderTypeId = FolderAsset::type.ID();
 
 		// in first pass skipping files (only folders), in second - folders
 		for (int pass = 0; pass < 2; pass++)
@@ -271,7 +271,7 @@ namespace o2
 
 	void AssetsBuilder::ProcessNewAssets()
 	{
-		Type::Id folderTypeId = FolderAsset::type->ID();
+		Type::Id folderTypeId = FolderAsset::type.ID();
 
 		// in first pass skipping files (only folders), in second - folders
 		for (int pass = 0; pass < 2; pass++)

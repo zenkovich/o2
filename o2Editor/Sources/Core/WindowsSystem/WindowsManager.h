@@ -86,7 +86,7 @@ _type* WindowsManager::GetWindow() const
 {
 	for (auto wnd : mEditorWindows)
 	{
-		if (wnd->GetType() == *_type::type)
+		if (wnd->GetType() == _type::type)
 			return (_type*)wnd;
 	}
 

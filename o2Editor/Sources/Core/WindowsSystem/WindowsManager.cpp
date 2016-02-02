@@ -26,13 +26,16 @@ WindowsManager::~WindowsManager()
 
 void WindowsManager::InitializeWindows()
 {
-	auto windowTypes = IEditorWindow::type->DerivedTypes();
+	auto windowTypes = IEditorWindow::type.DerivedTypes();
 
 	for (auto type : windowTypes)
 	{
 		IEditorWindow* newWindow = (IEditorWindow*)type->CreateSample();
 		mEditorWindows.Add(newWindow);
 	}
+
+	for (auto wnd : mEditorWindows)
+		wnd->PostInitializeWindow();
 }
 
 void WindowsManager::InitializeDock()
@@ -59,7 +62,7 @@ void ProcHierarchy(String& hierarchy, UIWidget* widget, int level)
 
 	hierarchy += widget->GetName();
 
-	if (widget->GetType() == *UIDockWindowPlace::type)
+	if (widget->GetType() == UIDockWindowPlace::type)
 	{
 		hierarchy += ": ";
 		hierarchy += (String)(bool)((UIDockWindowPlace*)widget)->interactable;
@@ -101,7 +104,7 @@ WindowsLayout WindowsManager::GetWindowsLayout()
 
 	for (auto widget : o2UI.GetAllWidgets())
 	{
-		if (widget->GetType() == *UIDockableWindow::type)
+		if (widget->GetType() == UIDockableWindow::type)
 			res.windows.Add(widget->name, widget->layout);
 	}
 

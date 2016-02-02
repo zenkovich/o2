@@ -7,9 +7,7 @@ namespace o2
 
 	Reflection::Reflection():
 		mLastGivenTypeId(0)
-	{
-		Type::Dummy::type = mnew Type();
-	}
+	{}
 
 	Reflection::~Reflection()
 	{
@@ -44,5 +42,5 @@ namespace o2
 		return nullptr;
 	}
 
-	Type* IObject::type = new Type();
+	Type IObject::type;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/WindowsSystem/IEditorWindow.h"
+#include "Utils/Singleton.h"
 
 namespace o2
 {
@@ -15,13 +16,22 @@ namespace o2
 
 using namespace o2;
 
+// Editor actors tree access macros
+#define o2EditorTree TreeWindow::Instance()
+
 // ------------------
 // Actors tree window
 // ------------------
-class TreeWindow: public IEditorWindow
+class TreeWindow: public IEditorWindow, public Singleton<TreeWindow>
 {
 public:
 	IOBJECT(TreeWindow);
+
+	// Returns actors tree widget
+	UITree* GetActorsTree() const;
+
+	// Expands all parent actor's nodes in actors tree
+	void ExpandActorsTreeNode(Actor* targetActor);
 
 protected:
 	UIToggle*      mListTreeToggle;			  // TOggle between list and tree views
@@ -89,4 +99,6 @@ protected:
 	void OnContextCollapseAllPressed();
 	void OnContextLockPressed();
 	void OnContextEnablePressed();
+
+	friend class SceneEditWidget;
 };

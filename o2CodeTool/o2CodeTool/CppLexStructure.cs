@@ -37,6 +37,11 @@ public class LexVariableType : ILexem
 	public string name;
 	public bool   isContstant;
 	public Type   type = Type.Regular;
+
+	public LexVariableType Clone()
+	{
+		return MemberwiseClone() as LexVariableType;
+	}
 }
 
 public class LexVariable : ILexem
@@ -50,6 +55,13 @@ public class LexVariable : ILexem
 
 	[XmlIgnore]
 	public LexSection      ownSection = null;
+
+	public LexVariable Clone()
+	{
+		LexVariable copy = MemberwiseClone() as LexVariable;
+		copy.type = type.Clone();
+		return copy;
+	}
 }
 
 public class LexFunction : ILexem
@@ -62,10 +74,24 @@ public class LexFunction : ILexem
 	public bool              isContstant;
 	public bool              isVirtual;
 	public bool              isStatic;
+	public bool              isTemplate;
 	public LexComment        comment;
+	public string            templates;
 
 	[XmlIgnore]
 	public LexSection        ownSection = null;
+
+	public LexFunction Clone()
+	{
+		LexFunction copy = MemberwiseClone() as LexFunction;
+		copy.returnType = returnType.Clone();
+
+		copy.parameters = new List<LexVariable>();
+		foreach (var param in parameters)
+			copy.parameters.Add(param.Clone());
+
+		return copy;
+	}
 }
 
 public class LexTypedef : ILexem
@@ -244,14 +270,30 @@ public class LexClass : LexSection
 	{
 		LexClass copy = MemberwiseClone() as LexClass;
 
+		copy.functions = new List<LexFunction>();
+		foreach (var fnc in functions)
+		{
+			var cloned = fnc.Clone();
+			cloned.ownSection = copy;
+			copy.functions.Add(cloned);
+		}
+
+		copy.variables = new List<LexVariable>();
+		foreach (var vr in variables)
+		{
+			var cloned = vr.Clone();
+			vr.ownSection = copy;
+			copy.variables.Add(vr);
+		}
+
 		copy.classes = new List<LexClass>();
 		copy.childSections = new List<LexSection>();
 		foreach (var cls in classes)
 		{
 			var cloned = cls.Clone();
-            copy.classes.Add(cloned);
+			copy.classes.Add(cloned);
 			copy.childSections.Add(cloned);
-			cloned.parentLexSection = cls;
+			cloned.parentLexSection = copy;
 		}
 
 		return copy;
