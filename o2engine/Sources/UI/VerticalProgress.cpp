@@ -3,15 +3,15 @@
 namespace o2
 {
 	UIVerticalProgress::UIVerticalProgress():
-		mValue(0), mMinValue(0), mMaxValue(1), mOrientation(Orientation::Down), mScrollSense(1.0f), mBarLayer(nullptr),
-		mBackLayer(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this),mValue(0), mMinValue(0), mMaxValue(1), mOrientation(Orientation::Down),
+		mScrollSense(1.0f), mBarLayer(nullptr), mBackLayer(nullptr)
 	{
 		InitializeProperties();
 	}
 
 	UIVerticalProgress::UIVerticalProgress(const UIVerticalProgress& other):
-		UIWidget(other), mValue(other.mValue), mMinValue(other.mMinValue), mMaxValue(other.mMaxValue),
-		mOrientation(other.mOrientation), mScrollSense(other.mScrollSense)
+		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue), 
+		mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense)
 	{
 		mBarLayer = GetLayer("bar");
 		mBackLayer = GetLayer("back");
@@ -142,16 +142,9 @@ namespace o2
 	bool UIVerticalProgress::IsUnderPoint(const Vec2F& point)
 	{
 		if (mBackLayer)
-		{
-			return mBackLayer->IsUnderPoint(point);
-		}
+			return mDrawingScissorRect.IsInside(point) && mBackLayer->IsUnderPoint(point);
 
 		return false;
-	}
-
-	float UIVerticalProgress::Depth()
-	{
-		return GetMaxDrawingDepth();
 	}
 
 	bool UIVerticalProgress::IsScrollable() const

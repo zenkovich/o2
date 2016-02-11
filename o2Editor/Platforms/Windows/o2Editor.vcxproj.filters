@@ -34,6 +34,9 @@
     <Filter Include="Core\Tools">
       <UniqueIdentifier>{af93b477-5985-4215-a40c-9a0d3b2ebe8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Actions">
+      <UniqueIdentifier>{2a06879b-5004-43e2-b076-cb1131abd7a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
@@ -103,6 +106,39 @@
     <ClInclude Include="..\..\Sources\Core\Tools\ScaleTool.h">
       <Filter>Core\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Tools\FrameTool.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Selection.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\IAction.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\ActorsTransform.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\DeleteActors.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\EnableAction.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\LockAction.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\CreateActors.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\ReparentActors.h">
+      <Filter>Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\AssetsWindow\AssetsWindow.h">
+      <Filter>AssetsWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\AssetsWindow\UIAssetIcon.h">
+      <Filter>AssetsWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
@@ -171,6 +207,36 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Tools\ScaleTool.cpp">
       <Filter>Core\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Tools\FrameTool.cpp">
+      <Filter>Core\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Selection.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\ActorsTransform.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\DeleteActors.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\EnableAction.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\LockAction.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\CreateActors.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\ReparentActors.cpp">
+      <Filter>Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\AssetsWindow\AssetsWindow.cpp">
+      <Filter>AssetsWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\AssetsWindow\UIAssetIcon.cpp">
+      <Filter>AssetsWindow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

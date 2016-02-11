@@ -51,6 +51,8 @@ namespace o2
 
 		if (pressedSprite)
 			pressedSprite->Draw();
+
+		CursorEventsListener::OnDrawn();
 	}
 
 	DragHandle& DragHandle::operator=(const DragHandle& other)
@@ -78,14 +80,9 @@ namespace o2
 	bool DragHandle::IsUnderPoint(const Vec2F& point)
 	{
 		if (regularSprite)
-			return regularSprite->IsPointInside(point);
+			return mDrawingScissorRect.IsInside(point) && regularSprite->IsPointInside(point);
 
 		return false;
-	}
-
-	float DragHandle::Depth()
-	{
-		return regularSprite ? regularSprite->GetDrawingDepth():0.0f;
 	}
 
 	void DragHandle::OnCursorPressed(const Input::Cursor& cursor)
@@ -95,6 +92,12 @@ namespace o2
 	}
 
 	void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
+	{
+		if (pressedSprite)
+			pressedSprite->enabled = false;
+	}
+
+	void DragHandle::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		if (pressedSprite)
 			pressedSprite->enabled = false;

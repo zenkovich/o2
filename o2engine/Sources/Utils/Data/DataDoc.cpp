@@ -126,6 +126,12 @@ namespace o2
 	{
 		mData = (WString)value;
 		return *this;
+	}	
+	
+	DataNode& DataNode::operator=(UInt64 value)
+	{
+		mData = (WString)value;
+		return *this;
 	}
 
 	DataNode& DataNode::operator=(float value)
@@ -218,6 +224,11 @@ namespace o2
 	DataNode::operator UInt() const
 	{
 		return (UInt)mData;
+	}
+
+	DataNode::operator UInt64() const
+	{
+		return (UInt64)mData;
 	}
 
 	DataNode::operator String() const

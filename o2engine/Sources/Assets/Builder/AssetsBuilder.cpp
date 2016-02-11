@@ -135,8 +135,8 @@ namespace o2
 			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 			if (!isExistMetaForFolder)
 			{
-				auto assetType = FolderAsset::type;
-				GenerateMeta(&assetType, metaFullPath);
+				auto assetType = &FolderAsset::type;
+				GenerateMeta(assetType, metaFullPath);
 			}
 
 			ProcessMissingMetasCreation(subFolder);

@@ -44,6 +44,8 @@ namespace o2
 
 		inline RectF AABB() const;
 
+		inline bool IsPointInside(const Vec2F& point) const;
+
 		inline static Basis Identity();
 		inline static Basis Scaled(const Vec2F& scale);
 		inline static Basis Translated(const Vec2F& voffs);
@@ -230,6 +232,18 @@ namespace o2
 		};
 
 		return RectF::Bound(points, 4);
+	}
+
+	bool Basis::IsPointInside(const Vec2F& point) const
+	{
+		Vec2F rs(xv.Length(), yv.Length());
+		Vec2F nx = xv / rs.x, ny = yv / rs.y;
+		Vec2F lp = point - offs;
+
+		float dx = lp.Dot(nx);
+		float dy = lp.Dot(ny);
+
+		return dx >= 0.0f && dx <= rs.x && dy >= 0.0f && dy < rs.y;
 	}
 
 	Basis Basis::Identity()

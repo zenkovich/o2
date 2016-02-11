@@ -21,7 +21,7 @@ namespace o2
 	// Basic UI Widget. Its a simple and basic element of UI, 
 	// everything other UI's are based on this
 	// ------------------------------------------------------
-	class UIWidget: public ISerializable
+	class UIWidget: public ISerializable, public IDrawable
 	{
 	public:
 		typedef Vector<UIWidget*> WidgetsVec;
@@ -72,6 +72,9 @@ namespace o2
 
 		// Adds child widget
 		virtual UIWidget* AddChild(UIWidget* widget);
+
+		// Adds child widgets
+		virtual void AddChilds(const WidgetsVec& widgets);
 
 		// Adds child widget at index
 		virtual UIWidget* AddChild(UIWidget* widget, int index);
@@ -191,6 +194,9 @@ namespace o2
 		// Returns is this widget can be selected
 		virtual bool IsSelectable() const;
 
+		// Returns true if point is under drawable
+		bool IsUnderPoint(const Vec2F& point);
+
 		SERIALIZABLE(UIWidget);
 
 	protected:
@@ -250,9 +256,6 @@ namespace o2
 		// Updates layers drawing sequence
 		void UpdateLayersDrawingSequence();
 
-		// Returns depth of last drawn layer
-		float GetMaxDrawingDepth();
-
 		// Returns children widgets (for property)
 		WidgetsVec GetChildsNonConst();
 
@@ -297,6 +300,7 @@ namespace o2
 		friend class UICustomList;
 		friend class UIDropDown;
 		friend class UIEditBox;
+		friend class UIGridLayout;
 		friend class UIHorizontalLayout;
 		friend class UIHorizontalProgress;
 		friend class UIHorizontalScrollBar;

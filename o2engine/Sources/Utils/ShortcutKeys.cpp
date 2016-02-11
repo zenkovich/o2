@@ -16,17 +16,17 @@ namespace o2
 	bool ShortcutKeys::IsPressed() const
 	{
 		return o2Input.IsKeyPressed(key) &&
-			(shift ? o2Input.IsKeyDown(VK_SHIFT) : true) &&
-			(control ? o2Input.IsKeyDown(VK_CONTROL) : true) &&
-			(alt ? o2Input.IsKeyDown(VK_MENU) : true);
+			(shift ? o2Input.IsKeyDown(VK_SHIFT) : !o2Input.IsKeyDown(VK_SHIFT)) &&
+			(control ? o2Input.IsKeyDown(VK_CONTROL) : !o2Input.IsKeyDown(VK_CONTROL)) &&
+			(alt ? o2Input.IsKeyDown(VK_MENU) : !o2Input.IsKeyDown(VK_MENU));
 	}
 
 	bool ShortcutKeys::IsDown() const
 	{
 		return o2Input.IsKeyDown(key) &&
-			(shift ? o2Input.IsKeyDown(VK_SHIFT) : true) &&
-			(control ? o2Input.IsKeyDown(VK_CONTROL) : true) &&
-			(alt ? o2Input.IsKeyDown(VK_MENU) : true);
+			(shift ? o2Input.IsKeyDown(VK_SHIFT) : !o2Input.IsKeyDown(VK_SHIFT)) &&
+			(control ? o2Input.IsKeyDown(VK_CONTROL) : !o2Input.IsKeyDown(VK_CONTROL)) &&
+			(alt ? o2Input.IsKeyDown(VK_MENU) : !o2Input.IsKeyDown(VK_MENU));
 	}
 
 	String ShortcutKeys::AsString() const

@@ -2,6 +2,7 @@
 
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
+#include "AssetsWindow/UIAssetIcon.h"
 #include "Core/UIStyle/BasicUIStyle.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Render/Sprite.h"
@@ -46,7 +47,7 @@ namespace UIStyle
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_o2_sign.png"),
 										  Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, -1)));
 
-		Text* captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Window";
 		captionText->horAlign = HorAlign::Left;
 		captionText->verAlign = VerAlign::Middle;
@@ -555,7 +556,7 @@ namespace UIStyle
 
 		itemSample->SetChildrenOffset(10);
 
-		Text* captionLayerText = mnew Text("arial.ttf");
+		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
 		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
@@ -642,7 +643,7 @@ namespace UIStyle
 		verScrollBar->layout.offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetRight,
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
 															  5.0f, 15.0f, 0.2f));
 
 		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
@@ -676,7 +677,7 @@ namespace UIStyle
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
 										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0)));
 
-		Text* captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Button";
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
@@ -751,7 +752,7 @@ namespace UIStyle
 		auto onLayer = sample->AddLayer("on", mnew Sprite("ui/UI2_log_info_icon.png"),
 										Layout::Based(BaseCorner::Left, Vec2F(30, 30), Vec2F(-4, -2)));
 
-		Text* captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "999";
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
@@ -797,7 +798,7 @@ namespace UIStyle
 		auto onLayer = sample->AddLayer("on", mnew Sprite("ui/UI2_log_warnings_icon.png"),
 										Layout::Based(BaseCorner::Left, Vec2F(30, 30), Vec2F(-4, -2)));
 
-		Text* captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "999";
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
@@ -843,7 +844,7 @@ namespace UIStyle
 		auto onLayer = sample->AddLayer("on", mnew Sprite("ui/UI2_log_errors_icon.png"),
 										Layout::Based(BaseCorner::Left, Vec2F(30, 30), Vec2F(-4, -2)));
 
-		Text* captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "999";
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
@@ -866,6 +867,296 @@ namespace UIStyle
 		sample->AddState("value", valueBtnAnim);
 
 		o2UI.AddWidgetStyle(sample, "log errors");
+	}
+
+	void RebuildFilterMenuButton()
+	{
+		UIButton* sample = mnew UIButton();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI2_filter_icon.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(1, 0)));
+
+
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "menu filter");
+	}
+
+	void RebuildTreeMenuButton()
+	{
+		UIButton* sample = mnew UIButton();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+										  Layout::BothStretch(-4, -5, -5, -5));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+											Layout::BothStretch(-4, -5, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -5, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_tree_icon.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "menu tree");
+	}
+
+	void RebuildFoldersTree()
+	{
+		UITree* sample = mnew UITree();
+		sample->layout.minSize = Vec2F(20, 20);
+		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+		sample->SetEnableScrollsHiding(true);
+
+		*sample->GetHoverDrawable() = Sprite("ui/UI_ListBox_selection_hover.png");
+		*sample->GetSelectionDrawable() = Sprite("ui/UI_ListBox_selection_regular.png");
+		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
+
+		UITreeNode* itemSample = sample->GetNodeSample();
+
+		itemSample->SetChildrenOffset(10);
+
+		Text* captionLayerText = mnew Text("stdFont.ttf");
+		captionLayerText->horAlign = HorAlign::Left;
+		captionLayerText->verAlign = VerAlign::Middle;
+		captionLayerText->dotsEngings = true;
+		itemSample->AddLayer("name", captionLayerText, Layout::BothStretch(30, 0, 0, 0));
+
+		itemSample->AddLayer("folderIcon", mnew Sprite("ui/UI2_folder_icon.png"),
+							 Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(10, 0)));
+
+		auto actorNodeEditBox = o2UI.CreateWidget<UIEditBox>("backless");
+		actorNodeEditBox->name = "nameEditBox";
+		actorNodeEditBox->layout = UIWidgetLayout::BothStretch(30, 0, 0, 0);
+		itemSample->AddChild(actorNodeEditBox);
+
+		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, &itemSample->layer["name"]->transparency, 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->visible) = AnimatedValue<bool>::Linear(false, true, 0.15f);
+		itemSample->AddState("edit", itemEditStateAnim);
+
+		UIButton* itemSampleExpandBtn = mnew UIButton();
+		itemSampleExpandBtn->layout.minSize = Vec2F(5, 5);
+		itemSampleExpandBtn->name = "expandBtn";
+
+		auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
+														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto selectLayer = itemSampleExpandBtn->AddLayer("select", mnew Sprite("ui/UI_Right_icn_select.png"),
+														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
+														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+
+		itemSampleExpandBtn->AddState("select", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, &itemSampleExpandBtn->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		itemSampleExpandBtn->layout.anchorMin = Vec2F(0, 1);
+		itemSampleExpandBtn->layout.anchorMax = Vec2F(0, 1);
+		itemSampleExpandBtn->layout.offsetMin = Vec2F(0, -20);
+		itemSampleExpandBtn->layout.offsetMax = Vec2F(10, 0);
+
+		itemSample->AddChild(itemSampleExpandBtn);
+
+		Animation expandedStateAnim = Animation::EaseInOut(itemSample, "mExpandCoef", 0.0f, 1.0f, 0.2f);
+		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		horScrollBar->layout.anchorMin = Vec2F(0, 0);
+		horScrollBar->layout.anchorMax = Vec2F(1, 0);
+		horScrollBar->layout.offsetMin = Vec2F(5, 0);
+		horScrollBar->layout.offsetMax = Vec2F(-15, 15);
+		sample->SetHorizontalScrollBar(horScrollBar);
+
+		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		verScrollBar->layout.anchorMin = Vec2F(1, 0);
+		verScrollBar->layout.anchorMax = Vec2F(1, 1);
+		verScrollBar->layout.offsetMin = Vec2F(-15, 15);
+		verScrollBar->layout.offsetMax = Vec2F(0, -5);
+		sample->SetVerticalScrollBar(verScrollBar);
+
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
+															  5.0f, 15.0f, 0.2f));
+
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
+															  -5.0f, -15.0f, 0.2f));
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5;
+
+		o2UI.AddWidgetStyle(sample, "folders");
+	}
+
+	void RebuildRegularAssetIcon()
+	{
+		UIAssetIcon* sample = mnew UIAssetIcon();
+
+		sample->AddLayer("icon", mnew Sprite("ui/UI2_big_file_icon.png"),
+						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "file name";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+
+		o2UI.AddWidgetStyle(sample, "standard");
+	}
+
+	void RebuildFolderAssetIcon()
+	{
+		UIAssetIcon* sample = mnew UIAssetIcon();
+
+		sample->AddLayer("icon", mnew Sprite("ui/UI2_big_folder_icon.png"),
+						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "file name";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+
+		o2UI.AddWidgetStyle(sample, "folder");
+	}
+
+	void RebuildPrefabAssetIcon()
+	{
+		UIAssetIcon* sample = mnew UIAssetIcon();
+
+		sample->AddLayer("icon", mnew Sprite("ui/UI2_actor_icon.png"),
+						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "file name";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+
+		o2UI.AddWidgetStyle(sample, "prefab");
+	}
+
+	void RebuildPrefabPreviewAssetIcon()
+	{
+		UIAssetIcon* sample = mnew UIAssetIcon();
+
+		sample->AddLayer("icon", mnew Sprite("ui/UI2_image_asset_back.png"),
+						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
+
+		sample->AddLayer("preview", mnew Sprite(),
+						 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 20)));
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "file name";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+
+		o2UI.AddWidgetStyle(sample, "prefab preview");
+	}
+
+	void RebuildImagePreviewAssetIcon()
+	{
+		UIAssetIcon* sample = mnew UIAssetIcon();
+
+		sample->AddLayer("icon", mnew Sprite("ui/UI2_image_asset_back.png"),
+						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
+
+		sample->AddLayer("preview", mnew Sprite(),
+						 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 20)));
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "file name";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+
+		o2UI.AddWidgetStyle(sample, "image preview");
+	}
+
+	void RebuildTextAssetIcon()
+	{
+		UIAssetIcon* sample = mnew UIAssetIcon();
+
+		sample->AddLayer("icon", mnew Sprite("ui/UI2_big_text_file_icon.png"),
+						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "file name";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+
+		o2UI.AddWidgetStyle(sample, "text");
+	}
+
+	void RebuildAnimationAssetIcon()
+	{
+		UIAssetIcon* sample = mnew UIAssetIcon();
+
+		sample->AddLayer("icon", mnew Sprite("ui/UI2_anim_file_icon.png"),
+						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "file name";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+
+		o2UI.AddWidgetStyle(sample, "animation");
 	}
 
 	void RebuildEditorUIStyle()
@@ -917,6 +1208,17 @@ namespace UIStyle
 		RebuildWarningsDownPanelToggle();
 		RebuildErrorsDownPanelToggle();
 		RebuildLongListStyle();
+		RebuildFilterMenuButton();
+		RebuildTreeMenuButton();
+		RebuildFoldersTree();
+		RebuildBacklessScrollarea();
+		RebuildRegularAssetIcon();
+		RebuildFolderAssetIcon();
+		RebuildPrefabAssetIcon();
+		RebuildPrefabPreviewAssetIcon();
+		RebuildImagePreviewAssetIcon();
+		RebuildTextAssetIcon();
+		RebuildAnimationAssetIcon();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

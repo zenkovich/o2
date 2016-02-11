@@ -1,14 +1,30 @@
 #pragma once
 
+#include "Utils/Delegates.h"
+#include "Utils/Math/Rect.h"
+#include "Utils/Math/Vector2.h"
+
 namespace o2
 {
+	// -------------------------------
+	// Basic drawable object interface
+	// -------------------------------
 	class IDrawable
 	{
 	public:
-		virtual void Draw() = 0;
-		float GetDrawingDepth() const { return mDrawingDepth; }
+		Function<void()> onDraw; // Draw event
+
+		// Draws drawable
+		virtual void Draw();
+
+		// Returns true if point is under drawable
+		virtual bool IsUnderPoint(const Vec2F& point);
 
 	protected:
-		float mDrawingDepth = 0;
+		RectF mDrawingScissorRect; // Scissor rectangle at last drawing
+
+	protected:
+		// Calls when drawable was drawn
+		virtual void OnDrawn();
 	};
 }

@@ -54,6 +54,9 @@ namespace o2
 		typedef Vector<Layer*> LayersVec;
 
 	public:
+		Function<void(Actor*)> onActorCreated;
+		Function<void(Actor*)> onActorDeleting;
+
 #if IS_EDITOR
 		Function<void(ActorsVec)> onChanged; // Calls when some actor (or actors) was changed
 
@@ -79,11 +82,20 @@ namespace o2
 		// Returns layers array
 		LayersVec& GetLayers();
 
+		// Returns root actors
+		const ActorsVec& GetRootActors() const;
+
+		// Returns root actors
+		ActorsVec& GetRootActors();
+
 		// Returns all actors
 		const ActorsVec& GetAllActors() const;
 
 		// Returns all actors
 		ActorsVec& GetAllActors();
+
+		// Returns actor by id
+		Actor* GetActorByID(UInt64 id) const;
 
 		// Returns actor by path (ex "some node/other/target")
 		Actor* FindActor(const String& path);
@@ -105,8 +117,15 @@ namespace o2
 		// Saves scene into file
 		void Save(const String& path);
 
+		// Returns actor's index in hierarchy
+		int GetActorHierarchyIdx(Actor* actor) const;
+
+		// Reparent actors to new parent at next of prevActor;
+		void ReparentActors(const ActorsVec& actors, Actor* newParent, Actor* prevActor);
+
 	protected:
-		ActorsVec mActors;       // Scene root actors		
+		ActorsVec mRootActors;       // Scene root actors		
+		ActorsVec mAllActors;    // All scene actors
 		LayersVec mLayers;       // Scene layers
 		Layer*    mDefaultLayer; // Default scene layer
 				  
@@ -136,7 +155,7 @@ namespace o2
 	Vector<_type>* Scene::FindAllActorsComponents()
 	{
 		Vector<_type>* res;
-		for (auto actor : mActors)
+		for (auto actor : mRootActors)
 			res.Add(actor->GetComponentsInChildren<_type>());
 
 		return res;
@@ -145,7 +164,7 @@ namespace o2
 	template<typename _type>
 	_type* Scene::FindActorComponent()
 	{
-		for (auto actor : mActors)
+		for (auto actor : mRootActors)
 		{
 			_type> res = actor->GetComponentInChildren<_type*();
 			if (res)

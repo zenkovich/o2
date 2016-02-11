@@ -43,6 +43,9 @@ namespace o2
 		// Explicit constructor from unsigned integer value
 		explicit TString(UInt value);
 
+		// Explicit constructor from unsigned integer value
+		explicit TString(UInt64 value);
+
 		// Explicit constructor from float value
 		explicit TString(float value);
 
@@ -89,6 +92,9 @@ namespace o2
 
 		// Cast operator to unsigned integer
 		explicit operator UInt() const;
+
+		// Cast operator to unsigned integer
+		explicit operator UInt64() const;
 
 		// Cast operator to float vector
 		explicit operator Vec2F() const;
@@ -407,6 +413,25 @@ namespace o2
 	}
 
 	template<typename T>
+	TString<T>::TString(UInt64 value):
+		mCapacity(64), mData((T*)malloc(64 * sizeof(T)))
+	{
+		int len = 0;
+
+		do
+		{
+			mData[len++] = (value % 10) + '0';
+			value /= 10;
+		}
+		while (value > 0);
+
+		for (int i = 0; i < len / 2; i++)
+			Math::Swap(mData[i], mData[len - 1 - i]);
+
+		mData[len++] = '\0';
+	}
+
+	template<typename T>
 	TString<T>::TString(float value):
 		mCapacity(64), mData((T*)malloc(64 * sizeof(T)))
 	{
@@ -693,6 +718,27 @@ namespace o2
 	{
 		int res = 0;
 		int m = 1;
+		int l = Length();
+		for (int i = l - 1; i >= 0; i--)
+		{
+			auto c = mData[i];
+			if ((c >= '0' && c <= '9') || (i == 0 && c == '-'))
+			{
+				res += m*(c - '0');
+				m *= 10;
+			}
+			else return 0;
+		}
+
+		return res;
+	}
+
+
+	template<typename T>
+	TString<T>::operator UInt64() const
+	{
+		UInt64 res = 0;
+		UInt64 m = 1;
 		int l = Length();
 		for (int i = l - 1; i >= 0; i--)
 		{

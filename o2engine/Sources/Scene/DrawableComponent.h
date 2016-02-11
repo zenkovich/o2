@@ -48,6 +48,12 @@ namespace o2
 		// Sets owner actor
 		void SetOwnerActor(Actor* actor);
 
+		// Calls when actor was excluded from scene
+		void OnExcludeFromScene();
+
+		// Calls when actor was included to scene
+		void OnIncludeToScene();
+
 		// Initializes property
 		void InitializeProperties();
 

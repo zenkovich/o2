@@ -1,9 +1,16 @@
 #include "TreeWindow.h"
 
 #include "Animation/AnimatedFloat.h"
+#include "Core/Actions/CreateActors.h"
+#include "Core/Actions/DeleteActors.h"
+#include "Core/Actions/EnableAction.h"
+#include "Core/Actions/LockAction.h"
+#include "Core/Actions/ReparentActors.h"
+#include "Core/EditorApplication.h"
 #include "Scene/Actor.h"
 #include "Scene/Components/ImageComponent.h"
 #include "Scene/Scene.h"
+#include "SceneWindow/SceneEditScreen.h"
 #include "UI/Button.h"
 #include "UI/ContextMenu.h"
 #include "UI/EditBox.h"
@@ -106,7 +113,10 @@ void TreeWindow::InitializeWindow()
 	mWindow->AddChild(mActorsTree);
 
 	mEnableActorsTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
+	mEnableActorsTogglesGroup->onReleased = Function<void(bool)>(this, &TreeWindow::EnableActorsGroupReleased);
+
 	mLockActorsTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
+	mLockActorsTogglesGroup->onReleased = Function<void(bool)>(this, &TreeWindow::LockActorsGroupReleased);
 
 	mTreeContextMenu = o2UI.CreateWidget<UIContextMenu>("standard");
 	mTreeContextMenu->AddItems({
@@ -132,8 +142,8 @@ void TreeWindow::InitializeWindow()
 
 		UIContextMenu::Item::Separator(),
 
-		UIContextMenu::Item("Enable/disable", [&]() { OnContextLockPressed(); }, nullptr, ShortcutKeys('L', true)),
-		UIContextMenu::Item("Lock/unlock", [&]() { OnContextEnablePressed(); }, nullptr, ShortcutKeys('O', true)),
+		UIContextMenu::Item("Enable/disable", [&]() { OnContextEnablePressed(); }, nullptr, ShortcutKeys('L', true)),
+		UIContextMenu::Item("Lock/unlock", [&]() { OnContextLockPressed(); }, nullptr, ShortcutKeys('O', true)),
 
 		UIContextMenu::Item::Separator(),
 
@@ -169,6 +179,13 @@ void TreeWindow::InitializeWindow()
 	mActorsTree->RebuildTree();
 }
 
+void TreeWindow::PostInitializeWindow()
+{
+	o2Scene.onActorCreated += [&](auto x) { mActorsTree->RebuildTree(); };
+	o2Scene.onActorDeleting += [&](auto x) { mActorsTree->RebuildTree(); };
+	//o2Scene.onChanged += [&](auto x) { mActorsTree->RebuildTree(); };
+}
+
 void TreeWindow::OnSearchPressed()
 {}
 
@@ -183,7 +200,7 @@ void TreeWindow::OnSearchEdited(const WString& searchStr)
 	{
 		mSearchActors.Clear();
 
-		for (auto actor : o2Scene.GetAllActors())
+		for (auto actor : o2Scene.GetRootActors())
 			SearchActorsRecursive(actor, (String)searchStr);
 	}
 
@@ -224,7 +241,7 @@ Vector<UnknownType*> TreeWindow::GetActorsChildren(UnknownType* parentObj)
 		return parent->GetChilds().Select<UnknownType*>([](auto x) { return (UnknownType*)(void*)x; });
 	}
 
-	return o2Scene.GetAllActors().Select<UnknownType*>([](auto x) { return (UnknownType*)(void*)x; });
+	return o2Scene.GetRootActors().Select<UnknownType*>([](auto x) { return (UnknownType*)(void*)x; });
 }
 
 void TreeWindow::SetupTreeNodeActor(UITreeNode* node, UnknownType* actorObj)
@@ -259,68 +276,18 @@ void TreeWindow::SetupTreeNodeActor(UITreeNode* node, UnknownType* actorObj)
 	actor->onLockChanged = [=](bool enabled) { mActorsTree->UpdateTreeNode(actorObj); };
 }
 
-int GetActorIdx(Actor* actor)
-{
-	if (actor->GetParent())
-	{
-		return actor->GetParent()->GetChilds().Find(actor) + GetActorIdx(actor->GetParent());
-	}
-
-	return o2Scene.GetAllActors().Find(actor);
-}
-
 void TreeWindow::RearrangeActors(Vector<UnknownType*> objects, UnknownType*parentObj, UnknownType* prevObj)
 {
 	Actor* parent = (Actor*)(void*)parentObj;
+	Actor* prevActor = (Actor*)(void*)prevObj;
+	Vector<Actor*> actors = objects.Select<Actor*>([](UnknownType* x) { return (Actor*)(void*)x; });
 
-	struct ActorDef
-	{
-		Actor* actor;
-		int    idx;
-		Basis  transform;
+	auto action = mnew EditorReparentActorsAction(actors);
 
-		bool operator==(const ActorDef& other) const { return actor == other.actor; }
-	};
-	Vector<ActorDef> actorsDefs;
+	o2Scene.ReparentActors(actors, parent, prevActor);
 
-	for (auto obj : objects)
-	{
-		ActorDef def;
-		def.actor = (Actor*)(void*)obj;
-		def.idx = GetActorIdx(def.actor);
-		def.transform = def.actor->transform.GetWorldBasis();
-		actorsDefs.Add(def);
-	}
-
-	for (auto def : actorsDefs)
-		def.actor->ExcludeFromScene();
-
-	actorsDefs.Sort([](auto& a, auto& b) { return a.idx < b.idx; });
-
-	if (parent)
-	{
-		int insertIdx = parent->GetChilds().Find((Actor*)(void*)prevObj);
-		if (insertIdx < 0)
-			insertIdx = parent->GetChilds().Count();
-
-		for (auto def : actorsDefs)
-		{
-			parent->AddChild(def.actor, insertIdx++);
-			def.actor->transform.SetWorldBasis(def.transform);
-		}
-	}
-	else
-	{
-		int insertIdx = o2Scene.GetAllActors().Find((Actor*)(void*)prevObj);
-		if (insertIdx < 0)
-			insertIdx = o2Scene.GetAllActors().Count();
-
-		for (auto def : actorsDefs)
-		{
-			def.actor->SetPositionIndexInParent(insertIdx++);
-			def.actor->transform.SetWorldBasis(def.transform);
-		}
-	}
+	action->ActorsReparented(parent, prevActor);
+	o2EditorApplication.DoneAction(action);
 }
 
 void TreeWindow::OnTreeNodeDblClick(UITreeNode* node)
@@ -346,38 +313,75 @@ void TreeWindow::OnTreeRBPressed(UITreeNode* node)
 	mTreeContextMenu->Show();
 }
 
-void TreeWindow::OnContextCreateNewPressed()
+void TreeWindow::EnableActorsGroupPressed(bool value)
+{}
+
+void TreeWindow::EnableActorsGroupReleased(bool value)
+{
+	auto action = mnew EditorEnableAction(
+		mEnableActorsTogglesGroup->GetToggled().Select<Actor*>([](UIToggle* x) {
+		return (Actor*)(void*)(((UITreeNode*)x->GetParent())->GetObject());
+	}), value);
+
+	o2EditorApplication.DoneAction(action);
+}
+
+void TreeWindow::LockActorsGroupPressed(bool value)
+{}
+
+void TreeWindow::LockActorsGroupReleased(bool value)
+{
+	auto action = mnew EditorLockAction(
+		mLockActorsTogglesGroup->GetToggled().Select<Actor*>([](UIToggle* x) {
+		return (Actor*)(void*)(((UITreeNode*)x->GetParent())->GetObject());
+	}), value);
+
+	o2EditorApplication.DoneAction(action);
+}
+
+void TreeWindow::CreateActor(Actor* newActor)
 {
 	auto selectedObjects = mActorsTree->GetSelectedObjects();
 
-	for (auto obj : selectedObjects)
+	if (selectedObjects.Count() > 0)
 	{
+		auto obj = selectedObjects.Last();
 		auto node = mActorsTree->GetNode(obj);
 
-		Actor* newActor = mnew Actor();
-		newActor->name = "Empty";
 		Actor* parentActor = (Actor*)(void*)obj;
 		parentActor->AddChild(newActor);
 
 		node->Rebuild(true);
+
+		auto parentChilds = parentActor->GetChilds();
+		auto action = mnew EditorCreateActorsAction({ newActor }, parentActor,
+													parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
+		o2EditorApplication.DoneAction(action);
 	}
+	else
+	{
+		mActorsTree->RebuildTree();
+
+		auto scereActors = o2Scene.GetRootActors();
+		auto action = mnew EditorCreateActorsAction({ newActor }, nullptr,
+													scereActors.Count() > 1 ? scereActors[scereActors.Count() - 2] : nullptr);
+		o2EditorApplication.DoneAction(action);
+	}
+}
+
+void TreeWindow::OnContextCreateNewPressed()
+{
+	Actor* newActor = mnew Actor();
+	newActor->name = "Empty";
+	CreateActor(newActor);
 }
 
 void TreeWindow::OnContextCreateSprite()
 {
-	auto selectedObjects = mActorsTree->GetSelectedObjects();
-
-	for (auto obj : selectedObjects)
-	{
-		auto node = mActorsTree->GetNode(obj);
-
-		Actor* newActor = mnew Actor({ mnew ImageComponent() });
-		newActor->name = "Sprite";
-		Actor* parentActor = (Actor*)(void*)obj;
-		parentActor->AddChild(newActor);
-
-		node->Rebuild(true);
-	}
+	Actor* newActor = mnew Actor({ mnew ImageComponent() });
+	newActor->name = "Sprite";
+	newActor->transform.size = Vec2F(10, 10);
+	CreateActor(newActor);
 }
 
 void TreeWindow::OnContextCreateButton()
@@ -415,36 +419,44 @@ void TreeWindow::OnContextPastePressed()
 	actors = data;
 
 	for (auto actor : actors)
+		actor->GenNewId();
+
+	auto parentChilds = parent ? parent->GetChilds() : o2Scene.GetRootActors();
+	Actor* prevActor = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
+
+	for (auto actor : actors)
 		actor->SetParent(parent);
 
 	mActorsTree->RebuildTree();
 
 	Vector<UnknownType*> newActorsObjs = actors.Select<UnknownType*>([](auto x) { return (UnknownType*)(void*)x; });
 	mActorsTree->SetSelectedObjects(newActorsObjs);
+
+	auto action = mnew EditorCreateActorsAction(actors, parent, prevActor);
+	o2EditorApplication.DoneAction(action);
 }
 
 void TreeWindow::OnContextDeletePressed()
 {
-	auto selectedObjects = mActorsTree->GetSelectedObjects();
+	auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
+	o2EditorSceneScreen.ClearSelectionWithoutAction();
 
-	for (auto obj : selectedObjects)
-	{
-		Actor* actor = (Actor*)(void*)obj;
+	auto action = mnew EditorDeleteActorsAction(selectedActors);
+	o2EditorApplication.DoneAction(action);
+
+	for (auto actor : selectedActors)
 		delete actor;
-	}
 
 	mActorsTree->RebuildTree();
 }
 
 void TreeWindow::OnContextDuplicatePressed()
 {
-	auto selectedObjects = mActorsTree->GetSelectedObjects();
+	auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
 	Vector<UnknownType*> newActorsObjs;
 
-	for (auto obj : selectedObjects)
+	for (auto actor : selectedActors)
 	{
-		Actor* actor = (Actor*)(void*)obj;
-
 		Actor* copy = actor->Clone();
 		copy->SetParent(actor->GetParent());
 
@@ -483,14 +495,17 @@ void TreeWindow::OnContextCollapseAllPressed()
 
 void TreeWindow::OnContextLockPressed()
 {
-	auto selectedObjects = mActorsTree->GetSelectedObjects();
+	auto selectedActors = mActorsTree->GetSelectedObjects().Select<Actor*>([](UnknownType* x) { return (Actor*)(void*)x; });
 
-	for (auto obj : selectedObjects)
+	bool value = selectedActors.Count() > 0 ? !selectedActors.Last()->IsLocked() : true;
+	auto action = mnew EditorLockAction(selectedActors, value);
+	o2EditorApplication.DoneAction(action);
+
+	for (auto actor : selectedActors)
 	{
-		Actor* actor = (Actor*)(void*)obj;
-		actor->SetLocked(!actor->IsLocked());
+		actor->SetLocked(value);
 
-		auto node = mActorsTree->GetNode(obj);
+		auto node = mActorsTree->GetNode((UnknownType*)(void*)actor);
 		if (node)
 			node->Rebuild();
 	}
@@ -498,14 +513,17 @@ void TreeWindow::OnContextLockPressed()
 
 void TreeWindow::OnContextEnablePressed()
 {
-	auto selectedObjects = mActorsTree->GetSelectedObjects();
+	auto selectedActors = mActorsTree->GetSelectedObjects().Select<Actor*>([](UnknownType* x) { return (Actor*)(void*)x; });
 
-	for (auto obj : selectedObjects)
+	bool value = selectedActors.Count() > 0 ? !selectedActors.Last()->IsEnabled() : true;
+	auto action = mnew EditorLockAction(selectedActors, value);
+	o2EditorApplication.DoneAction(action);
+
+	for (auto actor : selectedActors)
 	{
-		Actor* actor = (Actor*)(void*)obj;
-		actor->SetEnabled(!actor->IsEnabled());
+		actor->SetEnabled(value);
 
-		auto node = mActorsTree->GetNode(obj);
+		auto node = mActorsTree->GetNode((UnknownType*)(void*)actor);
 		if (node)
 			node->Rebuild();
 	}

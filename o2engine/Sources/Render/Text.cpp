@@ -113,9 +113,10 @@ namespace o2
 		for (auto mesh : mMeshes)
 		{
 			mesh->Draw();
-			mDrawingDepth = mesh->GetDrawingDepth();
 			//o2Render.DrawMeshWire(mesh, Color4(0, 255, 0, 150));
 		}
+
+		OnDrawn();
 	}
 
 	void Text::SetFont(FontRef font)

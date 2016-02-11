@@ -6,7 +6,7 @@
 namespace o2
 {
 	UICustomDropDown::UICustomDropDown():
-		UIWidget(), mClipLayout(Layout::BothStretch()), mMaxListItems(10), mList(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this), mClipLayout(Layout::BothStretch()), mMaxListItems(10), mList(nullptr)
 	{
 		mList = mnew UICustomList();
 		mList->mParent = this;
@@ -16,7 +16,7 @@ namespace o2
 	}
 
 	UICustomDropDown::UICustomDropDown(const UICustomDropDown& other):
-		UIWidget(other), mClipLayout(other.mClipLayout), mMaxListItems(other.mMaxListItems)
+		UIWidget(other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout), mMaxListItems(other.mMaxListItems)
 	{
 		mList = other.mList->Clone();
 		mList->mParent = this;
@@ -229,16 +229,6 @@ namespace o2
 		return mClipLayout;
 	}
 
-	bool UICustomDropDown::IsUnderPoint(const Vec2F& point)
-	{
-		return layout.GetAbsoluteRect().IsInside(point);
-	}
-
-	float UICustomDropDown::Depth()
-	{
-		return GetMaxDrawingDepth();
-	}
-
 	void UICustomDropDown::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
@@ -252,7 +242,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (IsUnderPoint(cursor.mPosition))
+		if (UIWidget::IsUnderPoint(cursor.mPosition))
 		{
 			if (IsExpanded())
 				Collapse();

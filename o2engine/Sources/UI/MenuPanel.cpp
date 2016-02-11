@@ -8,7 +8,7 @@ namespace o2
 {
 
 	UIMenuPanel::UIMenuPanel():
-		UIWidget(), mSelectedItem(-1), mSelectSubContextTime(-1), mOpenedContext(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this), mSelectedItem(-1), mSelectSubContextTime(-1), mOpenedContext(nullptr)
 	{
 		mItemSample = mnew UIWidget();
 		mItemSample->AddLayer("text", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
@@ -26,7 +26,8 @@ namespace o2
 	}
 
 	UIMenuPanel::UIMenuPanel(const UIMenuPanel& other):
-		UIWidget(other), mSelectedItem(-1), mSelectSubContextTime(-1), mOpenedContext(nullptr)
+		UIWidget(other), DrawableCursorEventsListener(this), mSelectedItem(-1), mSelectSubContextTime(-1), 
+		mOpenedContext(nullptr)
 	{
 		mItemSample = other.mItemSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
@@ -105,6 +106,8 @@ namespace o2
 
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
+
+		IDrawable::OnDrawn();
 
 		for (auto child : mChilds)
 			child->Draw();
@@ -290,16 +293,6 @@ namespace o2
 	Layout UIMenuPanel::GetSelectionDrawableLayout() const
 	{
 		return mSelectionLayout;
-	}
-
-	bool UIMenuPanel::IsUnderPoint(const Vec2F& point)
-	{
-		return layout.mAbsoluteRect.IsInside(point);
-	}
-
-	float UIMenuPanel::Depth()
-	{
-		return GetMaxDrawingDepth();
 	}
 
 	UIWidget* UIMenuPanel::CreateItem(const Item& item)

@@ -1,14 +1,14 @@
 #pragma once
 
 #include "UI/Widget.h"
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 
 namespace o2
 {
 	// -----------------------
 	// Horizontal progress bar
 	// -----------------------
-	class UIHorizontalProgress: public UIWidget, public CursorEventsListener
+	class UIHorizontalProgress: public UIWidget, public DrawableCursorEventsListener
 	{
 	public: 
 		enum class Orientation { Right, Left };
@@ -73,9 +73,6 @@ namespace o2
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
 
 		// Returns is listener scrollable
 		bool IsScrollable() const;

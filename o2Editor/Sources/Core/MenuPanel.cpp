@@ -1,6 +1,7 @@
 #include "MenuPanel.h"
 
 #include "Application/Application.h"
+#include "Core/EditorApplication.h"
 #include "Core/EditorConfig.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "LogWindow/LogWindow.h"
@@ -35,7 +36,7 @@ MenuPanel::MenuPanel()
 
 	// EDIT
 	mMenuPanel->AddItem("Edit/Undo", [&]() { OnUndoPressed(); }, nullptr, ShortcutKeys('Z', true));
-	mMenuPanel->AddItem("Edit/Redo", [&]() { OnRedoPressed(); }, nullptr, ShortcutKeys('Y', true));
+	mMenuPanel->AddItem("Edit/Redo", [&]() { OnRedoPressed(); }, nullptr, ShortcutKeys('Z', true, true));
 
 	mMenuPanel->AddItem("Edit/---");
 
@@ -164,12 +165,12 @@ void MenuPanel::OnExitPressed()
 
 void MenuPanel::OnUndoPressed()
 {
-
+	o2EditorApplication.UndoAction();
 }
 
 void MenuPanel::OnRedoPressed()
 {
-
+	o2EditorApplication.RedoAction();
 }
 
 void MenuPanel::OnShowTreePressed()

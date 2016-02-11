@@ -41,8 +41,8 @@ void LogWindow::InitializeWindow()
 		iconLayer->layout = Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 1));
 	}
 
-	mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
-	mWindow->SetClippingLayout(Layout::BothStretch(0, 0, 0, 18));
+	mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
+	mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
 
 	mList = o2UI.CreateWidget<UILongList>();
 	mList->layout = UIWidgetLayout::BothStretch(0, 19, 0, 0);
@@ -58,7 +58,7 @@ void LogWindow::InitializeWindow()
 	listItemSample->AddLayer("error", mnew Sprite(Color4(211, 87, 40, 255)),
 							 Layout::VerStretch(HorAlign::Left, 0, 0, 10, 0));
 
-	Text* captionText = mnew Text("arial.ttf");
+	Text* captionText = mnew Text("stdFont.ttf");
 	captionText->text = "text";
 	captionText->horAlign = HorAlign::Left;
 	captionText->verAlign = VerAlign::Middle;

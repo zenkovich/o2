@@ -10,7 +10,6 @@ namespace o2
 	class FunctionalDragHandle: public CursorEventsListener
 	{
 	public:
-		Function<float()>                    getDepth;         // Function for getting depth
 		Function<bool(const Vec2F&)>         isUnderPoint;     // Function for detecting collision (parameter - cursor position)
 		Function<void(const Input::Cursor&)> onMoved;          // Event when handle was moved (parameter - cursor)
 		Function<void()>                     onCursorPressed;  // Event when handle was pressed
@@ -24,9 +23,6 @@ namespace o2
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
 
 	protected:
 		// Calls when cursor pressed on this

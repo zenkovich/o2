@@ -7,7 +7,7 @@
 namespace o2
 {
 	UIButton::UIButton():
-		UIWidget(), mIconSprite(nullptr), mCaptionText(nullptr), mButtonGroup(nullptr)
+		UIWidget(), CursorEventsListener(), mIconSprite(nullptr), mCaptionText(nullptr), mButtonGroup(nullptr)
 	{
 		InitializeProperties();
 	}
@@ -29,6 +29,12 @@ namespace o2
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
 		RetargetStatesAnimations();
 		return *this;
+	}
+
+	void UIButton::Draw()
+	{
+		UIWidget::Draw();
+		CursorEventsListener::OnDrawn();
 	}
 
 	void UIButton::SetCaption(const WString& text)
@@ -93,19 +99,14 @@ namespace o2
 		return mButtonGroup;
 	}
 
-	bool UIButton::IsUnderPoint(const Vec2F& point)
-	{
-		return layout.GetAbsoluteRect().IsInside(point);
-	}
-
-	float UIButton::Depth()
-	{
-		return GetMaxDrawingDepth();
-	}
-
 	bool UIButton::IsSelectable() const
 	{
 		return true;
+	}
+
+	bool UIButton::IsUnderPoint(const Vec2F& point)
+	{
+		return UIWidget::IsUnderPoint(point);
 	}
 
 	void UIButton::OnCursorPressed(const Input::Cursor& cursor)
@@ -129,7 +130,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (IsUnderPoint(cursor.mPosition) && !mButtonGroup)
+		if (UIWidget::IsUnderPoint(cursor.mPosition) && !mButtonGroup)
 			onClick();
 
 		if (mButtonGroup && mButtonGroup->mPressed)

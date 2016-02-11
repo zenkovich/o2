@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Tools/SelectionTool.h"
+#include "Scene/ActorTransform.h"
 #include "SceneWindow/SceneDragHandle.h"
 
 // -----------------------
@@ -9,7 +10,10 @@
 class EditorMoveTool: public EditorSelectionTool
 {
 public:
-	float snapStep = 10.0f;
+	typedef Vector<ActorTransform> ActorsTransformsVec;
+
+public:
+	float snapStep = 10.0f; // Moving snap step
 
 	// Default constructor
 	EditorMoveTool();
@@ -20,12 +24,13 @@ public:
 	IOBJECT(EditorMoveTool);
 
 protected:
-	SceneDragHandle mHorDragHandle;
-	SceneDragHandle mVerDragHandle;
-	SceneDragHandle mBothDragHandle;
-	Vec2F           mLastSceneHandlesPos;
-	Vec2F           mSnapPosition;
-	float           mHandlesAngle = 0.0f;
+	SceneDragHandle     mHorDragHandle;       // Horizontal arrow handle
+	SceneDragHandle     mVerDragHandle;       // Vertical arrow handle
+	SceneDragHandle     mBothDragHandle;      // Both arrow handle
+	Vec2F               mLastSceneHandlesPos; // Last scene handles position 
+	Vec2F               mSnapPosition;        // Snapping handles position
+	float               mHandlesAngle = 0.0f; // Handles angle, in radians
+	ActorsTransformsVec mBeforeTransforms;    // Before transformation transforms
 
 protected:
 	// Updates tool
@@ -52,6 +57,12 @@ protected:
 	// Calls when horizontal drag handle was moved
 	void OnBothDragHandleMoved(const Vec2F& position);
 
+	// Calls when some handle was pressed, stores before transformations
+	void HandlePressed();
+
+	// Calls when handle was released, completes transformation action
+	void HandleReleased();
+
 	// Handles moved
 	void HandlesMoved(const Vec2F& delta, bool snapHor = false, bool spanVer = false);
 
@@ -69,4 +80,7 @@ protected:
 
 	// Moves selected actors on delta
 	void MoveSelectedActors(const Vec2F& delta);
+
+	// Moves selected actors on delta
+	void MoveSelectedActorsWithAction(const Vec2F& delta);
 };

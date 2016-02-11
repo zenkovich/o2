@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "UI/Widget.h"
 #include "Utils/ShortcutKeys.h"
@@ -21,6 +21,9 @@ namespace o2
 		enum class Type { OnlySingleTrue, VerOneClick, HorOneClick };
 
 	public:
+		Function<void(bool)> onPressed;
+		Function<void(bool)> onReleased;
+
 		UIToggleGroup(Type type);
 		~UIToggleGroup();
 
@@ -28,11 +31,13 @@ namespace o2
 		void RemoveToggle(UIToggle* toggle);
 
 		const TogglesVec& GetToggles() const;
+		const TogglesVec& GetToggled() const;
 
 	protected:
 		bool       mPressed;
 		bool       mPressedValue;
 		TogglesVec mToggles; 
+		TogglesVec mToggled;
 		UIToggle*  mOwner;
 		Type       mType;
 
@@ -41,7 +46,7 @@ namespace o2
 		friend class UIToggle;
 	};
 
-	class UIToggle: public UIWidget, public CursorEventsListener, public KeyboardEventsListener
+	class UIToggle: public UIWidget, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
 		Property<WString>        caption;        // Caption property. Searches text layer with name "caption" or creates them if he's not exist
@@ -78,12 +83,6 @@ namespace o2
 
 		// Returns current value
 		bool GetValue() const;
-
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
 
 		// Returns is this widget can be selected
 		bool IsSelectable() const;

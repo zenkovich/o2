@@ -273,7 +273,7 @@ namespace o2
 
 	String FileSystem::GetPathWithoutDirectories(const String& path)
 	{
-		return path.SubStr(Math::Max(path.FindLast("/"), path.FindLast("\\")));
+		return path.SubStr(Math::Max(path.FindLast("/"), path.FindLast("\\")) + 1);
 	}
 
 	String FileSystem::GetParentPath(const String& path)

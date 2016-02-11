@@ -26,11 +26,11 @@ namespace o2
 
 	void FileLogStream::OutStrEx(const WString& str)
 	{
-		std::fstream ofs(mFilename, std::ios::app);
+		/*std::fstream ofs(mFilename, std::ios::app);
 		if (ofs)
 		{
 			ofs << ((String)str).Data() << std::endl;
 			ofs.close();
-		}
+		}*/
 	}
 }

@@ -19,10 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Sources\AssetsWindow\AssetsWindow.cpp" />
+    <ClCompile Include="..\..\Sources\AssetsWindow\UIAssetIcon.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\ActorsTransform.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\CreateActors.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\DeleteActors.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\EnableAction.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\LockAction.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\ReparentActors.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\Selection.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorConfig.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp" />
     <ClCompile Include="..\..\Sources\Core\MenuPanel.cpp" />
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\FrameTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\MoveTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\RotateTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\ScaleTool.cpp" />
@@ -44,10 +54,21 @@
     <ClCompile Include="..\..\Sources\Windows\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Sources\AssetsWindow\AssetsWindow.h" />
+    <ClInclude Include="..\..\Sources\AssetsWindow\UIAssetIcon.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\ActorsTransform.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\CreateActors.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\DeleteActors.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\EnableAction.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\IAction.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\LockAction.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\ReparentActors.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\Selection.h" />
     <ClInclude Include="..\..\Sources\Core\EditorConfig.h" />
     <ClInclude Include="..\..\Sources\Core\EditorApplication.h" />
     <ClInclude Include="..\..\Sources\Core\MenuPanel.h" />
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\FrameTool.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\IEditorTool.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\MoveTool.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\RotateTool.h" />

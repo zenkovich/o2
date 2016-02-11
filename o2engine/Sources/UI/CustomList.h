@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "Render/Sprite.h"
 #include "ScrollArea.h"
 #include "UI/VerticalLayout.h"
@@ -10,7 +10,7 @@ namespace o2
 	// -------------------------------
 	// List view widget with selection
 	// -------------------------------
-	class UICustomList: public UIScrollArea, public CursorEventsListener
+	class UICustomList: public UIScrollArea, public DrawableCursorEventsListener
 	{
 	public:
 		Property<UIWidget*>       selectedItem;    // Selected item widget property
@@ -110,12 +110,6 @@ namespace o2
 
 		// Returns hover drawable layout
 		Layout GetHoverDrawableLayout() const;
-
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
 
 		// Returns is listener scrollable
 		bool IsScrollable() const;

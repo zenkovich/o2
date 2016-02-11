@@ -47,6 +47,9 @@ namespace o2
 
 		// Assign operator
 		Transform& operator=(const Transform& other);
+
+		// Check equals operator
+		bool operator==(const Transform& other) const;
 		
 		// Sets position
 		virtual void SetPosition(const Vec2F& position);

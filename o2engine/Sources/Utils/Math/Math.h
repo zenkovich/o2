@@ -2,6 +2,8 @@
 
 #include <float.h>
 #include <math.h>
+#include <stdlib.h>
+#include "Utils/CommonTypes.h"
 
 namespace o2
 {
@@ -104,6 +106,16 @@ namespace o2
 		inline T Random(const T& minValue = 0, const T& maxValue = 1)
 		{
 			return (T)((float)rand() / RAND_MAX*(float)(maxValue - minValue) + (float)minValue);
+		}
+		
+		inline UInt64 Random()
+		{
+			unsigned long long r = 0;
+
+			for (int i = 0; i < 5; ++i)
+				r = (r << 15) | (rand() & 0x7FFF);
+
+			return r & 0xFFFFFFFFFFFFFFFFULL;
 		}
 
 		template<typename T>

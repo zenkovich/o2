@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "UI/Widget.h"
 #include "Utils/FunctionalDragHandle.h"
 #include "Utils/Math/Layout.h"
@@ -11,7 +11,7 @@ using namespace o2;
 // ------------------------------------
 // Dockable windows place for attaching
 // ------------------------------------
-class UIDockWindowPlace: public o2::UIWidget, public CursorEventsListener
+class UIDockWindowPlace: public o2::UIWidget, public DrawableCursorEventsListener
 {
 public:
 	// Default constructor
@@ -31,9 +31,6 @@ public:
 
 	// Returns true if point is in this object
 	bool IsUnderPoint(const Vec2F& point);
-
-	// Returns depth (event system will catch listener with highest depth)
-	float Depth();
 
 	// Sets resizible side and configures drag handle when draggable is true
 	void SetResizibleDir(TwoDirection dir, float border,

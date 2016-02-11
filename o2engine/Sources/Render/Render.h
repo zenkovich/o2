@@ -151,6 +151,9 @@ namespace o2
 		// Returns scissor rect
 		RectI GetScissorRect() const;
 
+		// Returns result scissor rect of all scissor stack
+		RectI GetResScissorRect() const;
+
 		// Returns scissors stack
 		const StackScissorVec& GetScissorsStack() const;
 

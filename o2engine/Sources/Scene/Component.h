@@ -86,6 +86,12 @@ namespace o2
 		// Sets owner actor
 		virtual void SetOwnerActor(Actor* actor);
 
+		// Calls when actor was excluded from scene
+		virtual void OnExcludeFromScene() {}
+
+		// Calls when actor was included to scene
+		virtual void OnIncludeToScene() {}
+
 		// Initializes properties
 		void InitializeProperties();
 

@@ -499,6 +499,12 @@
     <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h">
       <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Events\DrawableCursorEventsListener.h">
+      <Filter>Sources\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\GridLayout.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -824,6 +830,15 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Reflection\FunctionInfo.cpp">
       <Filter>Sources\Utils\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Render\IDrawable.cpp">
+      <Filter>Sources\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Events\DrawableCursorEventsListener.cpp">
+      <Filter>Sources\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\GridLayout.cpp">
+      <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

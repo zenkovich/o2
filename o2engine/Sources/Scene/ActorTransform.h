@@ -32,8 +32,17 @@ namespace o2
 		// Assign operator
 		ActorTransform& operator=(const Transform& other);
 
+		// Check EqualSid operator
+		bool operator==(const ActorTransform& other) const;
+
 		// Returns owner actor
 		Actor* GetOwnerActor() const;
+
+		// Sets pivot by world coordinates
+		void SetWorldPivot(const Vec2F& pivot);
+
+		// Returns pivot position in world coordinates
+		Vec2F GetWorldPivot() const;
 
 		// Sets world position
 		void SetWorldPosition(const Vec2F& position);

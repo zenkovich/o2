@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "UI/ScrollArea.h"
 #include "UI/VerticalLayout.h"
 
@@ -96,9 +96,11 @@ namespace o2
 	// -------
 	// UI Tree
 	// -------
-	class UITree: public UIScrollArea, public CursorEventsListener
+	class UITree: public UIScrollArea, public DrawableCursorEventsListener
 	{
 	public:
+		enum class RearrangeType { Disabled, Enabled, OnlyReparent };
+
 		typedef Vector<UnknownType*> UnknownObjectsVec;
 		typedef Vector<UITreeNode*> TreeNodesVec;
 
@@ -107,6 +109,7 @@ namespace o2
 		Function<UnknownType*(UnknownType*)>                          getParentFunc;
 		Function<Vector<UnknownType*>(UnknownType*)>                  getChildsFunc;
 		Function<void(UITreeNode*, UnknownType*)>                     setupNodeFunc;
+		Function<void(UITreeNode*)>                                   onItemClick;
 		Function<void(UITreeNode*)>                                   onItemDblClick;
 		Function<void(UITreeNode*)>                                   onItemRBClick;
 		Function<void(UnknownObjectsVec)>                             onItemsSelectionChanged;
@@ -180,12 +183,6 @@ namespace o2
 		// Removes tree node for object
 		void OnObjectRemoved(UnknownType* object);
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
-
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
@@ -195,11 +192,15 @@ namespace o2
 		// Sets selection sprites pool resize count
 		void SetSelectionSpritesPoolResizeCount(int count);
 
+		// Sets rearrange type
+		void SetRearrangeType(RearrangeType type);
+
+		// Returns available rearrange type 
+		RearrangeType GetRearrangeType() const;
+
 		SERIALIZABLE(UITree);
 
 	protected:
-		enum class IntertionType { Prev, Next, Into };
-
 		struct SelectedNode
 		{
 			UnknownType* object = nullptr;
@@ -212,7 +213,6 @@ namespace o2
 		typedef Vector<Sprite*>  SpritesVec;
 
 	protected:
-
 		int               mNodesPoolResizeCount = 20;            
 		int               mSelectionSpritesPoolResizeCount = 10;
 						  
@@ -234,8 +234,9 @@ namespace o2
 		TreeNodesVec      mNodesPool;             // Tree nodes pool
 		SpritesVec        mSelectionSpritesPool;  // Selections sprites pool
 
-		UnknownObjectsVec mExpandedObjects;      // Expanded objects nodes
-						 
+		UnknownObjectsVec mExpandedObjects;       // Expanded objects nodes
+
+		RearrangeType     mRearrangeType;         // Current available rearrange type
 		bool              mDraggingNodes;         // Is nodes moving by cursor
 		UITreeNode*       mDragNode;              // Dragging node
 		Sprite*           mDragNodeBack;          // Background for dragging node

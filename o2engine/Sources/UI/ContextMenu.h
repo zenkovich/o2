@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "UI/ScrollArea.h"
 #include "Utils/Delegates.h"
@@ -51,7 +51,7 @@ namespace o2
 	// -----------------------
 	// Context menu ui element
 	// -----------------------
-	class UIContextMenu: public UIScrollArea, public CursorEventsListener, public KeyboardEventsListener
+	class UIContextMenu: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
 		typedef Function<void()> ClickFunc;
@@ -164,12 +164,6 @@ namespace o2
 
 		// Sets minimal fitting size
 		void SetMinFitSize(float size);
-
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
 
 		// Returns is listener scrollable
 		bool IsScrollable() const;

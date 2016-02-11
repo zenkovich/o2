@@ -3,6 +3,7 @@
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
 #include "Application/Input.h"
+#include "Core/Actions/IAction.h"
 #include "Core/MenuPanel.h"
 #include "Core/ToolsPanel.h"
 #include "Core/WindowsSystem/WindowsManager.h"
@@ -24,6 +25,50 @@ EditorApplication::EditorApplication()
 
 EditorApplication::~EditorApplication()
 {}
+
+String EditorApplication::GetLastActionName() const
+{
+	if (mActions.Count() > 0)
+		return mActions.Last()->GetName();
+
+	return "";
+}
+
+String EditorApplication::GetNextForwardActionName() const
+{
+	if (mForwardActions.Count() > 0)
+		return mForwardActions.Last()->GetName();
+
+	return "";
+}
+
+void EditorApplication::UndoAction()
+{
+	if (mActions.Count() > 0)
+	{
+		mActions.Last()->Undo();
+		mForwardActions.Add(mActions.PopBack());
+	}
+}
+
+void EditorApplication::RedoAction()
+{
+	if (mForwardActions.Count() > 0)
+	{
+		mForwardActions.Last()->Redo();
+		mActions.Add(mForwardActions.PopBack());
+	}
+}
+
+void EditorApplication::DoneAction(IEditorAction* action)
+{
+	mActions.Add(action);
+
+	for (auto action : mForwardActions)
+		delete action;
+
+	mForwardActions.Clear();
+}
 
 void EditorApplication::OnStarted()
 {
@@ -102,6 +147,8 @@ void EditorApplication::OnUpdate(float dt)
 		MemoryManager::instance->DumpInfo();
 }
 
+#undef DrawText
+
 void EditorApplication::OnDraw()
 {
 	o2Render.Clear();
@@ -110,6 +157,9 @@ void EditorApplication::OnDraw()
 	mBackground->Draw();
 	mBackSign->Draw();
 	mWindowsManager->Draw();
+
+	for (int i = 0; i < mActions.Count(); i++)
+		o2Debug.DrawText(Vec2F(0, 20 * i), (String)i + mActions[i]->GetName());
 }
 
 void EditorApplication::OnActivated()

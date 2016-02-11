@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "Render/Camera.h"
+#include "Render/IDrawable.h"
 #include "Render/TextureRef.h"
 #include "Utils/Singleton.h"
 
@@ -25,8 +26,8 @@ class IEditorTool;
 // --------------------
 // Scene editing screen
 // --------------------
-class SceneEditScreen: public CursorEventsListener, public KeyboardEventsListener, public Singleton<SceneEditScreen>,
-	public IObject
+class SceneEditScreen: public CursorEventsListener, public KeyboardEventsListener, 
+	public Singleton<SceneEditScreen>, public IObject
 {
 public:
 	typedef Vector<Actor*> ActorsVec;
@@ -47,12 +48,6 @@ public:
 	// Updates drawables, states and widget
 	void Update(float dt);
 
-	// Returns true if point is in this object
-	bool IsUnderPoint(const Vec2F& point);
-
-	// Returns depth (event system will catch listener with highest depth)
-	float Depth();
-
 	// Returns is listener scrollable
 	bool IsScrollable() const;
 
@@ -61,6 +56,12 @@ public:
 
 	// Transforms point from scene space to screen space
 	Vec2F SceneToScreenPoint(const Vec2F& point);
+
+	// Transforms point from screen space to scene space
+	Vec2F ScreenToSceneVector(const Vec2F& point);
+
+	// Transforms point from scene space to screen space
+	Vec2F SceneToScreenVector(const Vec2F& point);
 
 	// Sets size
 	void SetRect(const RectF& rect);
@@ -77,6 +78,9 @@ public:
 	// Selects actor
 	void SelectActor(Actor* actor, bool additive = true);
 
+	// Selects all actors
+	void SelectAllActors();
+
 	// Clears actors selection
 	void ClearSelection();
 
@@ -90,11 +94,14 @@ public:
 	// Returns top selected actors in hierarchy
 	const ActorsVec& GetTopSelectedActors() const;
 
-	// Returns color for singl selected actor
+	// Returns color for single selected actor
 	const Color4& GetSingleActorSelectionColor() const;
 
 	// Return color for multiple selected actors
 	const Color4& GetManyActorsSelectionColor() const;
+
+	// Returns true if point is in this object
+	bool IsUnderPoint(const Vec2F& point);
 
 	IOBJECT(SceneEditScreen);
 
@@ -237,8 +244,22 @@ protected:
 	// Calls when actors was changed
 	void OnSceneChanged(ActorsVec actors);
 
-	friend class SceneWindow;
+	// Clears actors selection
+	void ClearSelectionWithoutAction();
+
+	// Selects actors
+	void SelectActorsWithoutAction(ActorsVec actors, bool additive = true);
+
+	// Selects actor
+	void SelectActorWithoutAction(Actor* actor, bool additive = true);
+
+	friend class EditorDeleteActorsAction;
+	friend class EditorSelectionAction;
+	friend class EditorSelectionTool;
 	friend class SceneDragHandle;
+	friend class SceneWindow;
+	friend class TreeWindow;
+	friend class EditorCreateActorsAction;
 };
 
 template<typename _type>

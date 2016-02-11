@@ -157,6 +157,7 @@
     <ClInclude Include="..\Sources\Events\ApplicationEventsListener.h" />
     <ClInclude Include="..\Sources\Events\CursorEventsListener.h" />
     <ClInclude Include="..\Sources\Events\DragEventsListener.h" />
+    <ClInclude Include="..\Sources\Events\DrawableCursorEventsListener.h" />
     <ClInclude Include="..\Sources\Events\EventSystem.h" />
     <ClInclude Include="..\Sources\Events\KeyboardEventsListener.h" />
     <ClInclude Include="..\Sources\O2.h" />
@@ -189,6 +190,7 @@
     <ClInclude Include="..\Sources\UI\CustomDropDown.h" />
     <ClInclude Include="..\Sources\UI\DropDown.h" />
     <ClInclude Include="..\Sources\UI\EditBox.h" />
+    <ClInclude Include="..\Sources\UI\GridLayout.h" />
     <ClInclude Include="..\Sources\UI\HorizontalLayout.h" />
     <ClInclude Include="..\Sources\UI\HorizontalScrollBar.h" />
     <ClInclude Include="..\Sources\UI\Label.h" />
@@ -300,12 +302,14 @@
     <ClCompile Include="..\Sources\Events\ApplicationEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\CursorEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\DragEventsListener.cpp" />
+    <ClCompile Include="..\Sources\Events\DrawableCursorEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\EventSystem.cpp" />
     <ClCompile Include="..\Sources\Events\KeyboardEventsListener.cpp" />
     <ClCompile Include="..\Sources\Render\BitmapFont.cpp" />
     <ClCompile Include="..\Sources\Render\Camera.cpp" />
     <ClCompile Include="..\Sources\Render\Font.cpp" />
     <ClCompile Include="..\Sources\Render\FontRef.cpp" />
+    <ClCompile Include="..\Sources\Render\IDrawable.cpp" />
     <ClCompile Include="..\Sources\Render\Mesh.cpp" />
     <ClCompile Include="..\Sources\Render\RectDrawable.cpp" />
     <ClCompile Include="..\Sources\Render\Sprite.cpp" />
@@ -327,6 +331,7 @@
     <ClCompile Include="..\Sources\UI\CustomDropDown.cpp" />
     <ClCompile Include="..\Sources\UI\DropDown.cpp" />
     <ClCompile Include="..\Sources\UI\EditBox.cpp" />
+    <ClCompile Include="..\Sources\UI\GridLayout.cpp" />
     <ClCompile Include="..\Sources\UI\HorizontalLayout.cpp" />
     <ClCompile Include="..\Sources\UI\HorizontalScrollBar.cpp" />
     <ClCompile Include="..\Sources\UI\Label.cpp" />

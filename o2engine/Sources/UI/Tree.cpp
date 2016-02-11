@@ -401,9 +401,10 @@ namespace o2
 	}
 
 	UITree::UITree():
-		UIScrollArea(), mWaitSelectionsUpdate(false), mDraggingNodes(false), mNeedUpdateLayout(false),
-		mExpandInsertTime(-1), mPressedTime(10.0f), mHoveredItem(nullptr), mPressedNode(nullptr), mInsertNodeCandidate(nullptr),
-		mUnderCursorItem(nullptr), mExpandNodeCandidate(nullptr)
+		UIScrollArea(), DrawableCursorEventsListener(this), mWaitSelectionsUpdate(false), mDraggingNodes(false), 
+		mNeedUpdateLayout(false), mExpandInsertTime(-1), mPressedTime(10.0f), mHoveredItem(nullptr), mPressedNode(nullptr),
+		mInsertNodeCandidate(nullptr), mUnderCursorItem(nullptr), mExpandNodeCandidate(nullptr),
+		mRearrangeType(RearrangeType::Enabled)
 	{
 		mNodeSample = mnew UITreeNode();
 		mNodeSample->layout.minHeight = 20;
@@ -417,9 +418,10 @@ namespace o2
 	}
 
 	UITree::UITree(const UITree& other):
-		UIScrollArea(other), mWaitSelectionsUpdate(false), mDraggingNodes(false), mNeedUpdateLayout(false),
-		mExpandInsertTime(-1), mPressedTime(10.0f), mHoveredItem(nullptr), mPressedNode(nullptr), mInsertNodeCandidate(nullptr),
-		mUnderCursorItem(nullptr), mExpandNodeCandidate(nullptr)
+		UIScrollArea(other), DrawableCursorEventsListener(this), mWaitSelectionsUpdate(false), mDraggingNodes(false), 
+		mNeedUpdateLayout(false), mExpandInsertTime(-1), mPressedTime(10.0f), mHoveredItem(nullptr), mPressedNode(nullptr), 
+		mInsertNodeCandidate(nullptr), mUnderCursorItem(nullptr), mExpandNodeCandidate(nullptr), 
+		mRearrangeType(RearrangeType::Enabled)
 	{
 		mNodeSample = other.mNodeSample->Clone();
 		mHoverDrawable = other.mHoverDrawable->Clone();
@@ -487,6 +489,8 @@ namespace o2
 
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
+
+		IDrawable::OnDrawn();
 
 		mDrawDepth = o2Render.GetDrawingDepth() + 1;
 
@@ -677,7 +681,10 @@ namespace o2
 
 	void UITree::SetSelectedObjects(const Vector<UnknownType*>& objects)
 	{
-		DeselectAllObjects();
+		for (auto sel : mSelectedItems)
+			FreeSelectionSprite(sel.selectionSprite);
+
+		mSelectedItems.Clear();
 
 		for (auto obj : objects)
 		{
@@ -754,16 +761,6 @@ namespace o2
 		return mHoverLayout;
 	}
 
-	bool UITree::IsUnderPoint(const Vec2F& point)
-	{
-		return layout.GetAbsoluteRect().IsInside(point);
-	}
-
-	float UITree::Depth()
-	{
-		return mDrawDepth;
-	}
-
 	bool UITree::IsScrollable() const
 	{
 		return true;
@@ -777,6 +774,16 @@ namespace o2
 	void UITree::SetSelectionSpritesPoolResizeCount(int count)
 	{
 		mSelectionSpritesPoolResizeCount = count;
+	}
+
+	void UITree::SetRearrangeType(RearrangeType type)
+	{
+		mRearrangeType = type;
+	}
+
+	UITree::RearrangeType UITree::GetRearrangeType() const
+	{
+		return mRearrangeType;
 	}
 
 	void UITree::OnObjectCreated(UnknownType* object, UnknownType* parent)
@@ -1006,8 +1013,11 @@ namespace o2
 	{
 		const float dragThreshold = 5.0f;
 
-		if (!mDraggingNodes && (cursor.mPosition - mPressedPoint).Length() > dragThreshold)
+		if (!mDraggingNodes && (cursor.mPosition - mPressedPoint).Length() > dragThreshold &&
+			mRearrangeType != RearrangeType::Disabled)
+		{
 			BeginDragging();
+		}
 
 		if (mDraggingNodes && cursor.mDelta.Length() > 0.5f)
 			UpdateDragging(cursor);
@@ -1085,15 +1095,22 @@ namespace o2
 		{
 			mInsertNodeCandidate = currentInsertCandidate;
 
-			for (auto node : mAllNodes)
-				node->SetState("inserting", node->layout.mAbsoluteRect.Center().y < cursor.mPosition.y);
+			if (mRearrangeType == RearrangeType::Enabled)
+			{
+				for (auto node : mAllNodes)
+					node->SetState("inserting", node->layout.mAbsoluteRect.Center().y < cursor.mPosition.y);
+			}
 		}
 
-		mUnderCursorItem = GetItemUnderPoint(cursor.mPosition);
-		if (mUnderCursorItem != mExpandNodeCandidate)
+		if (mRearrangeType != RearrangeType::Disabled)
 		{
-			mExpandNodeCandidate = mUnderCursorItem;
-			mExpandInsertTime = 0.6f;
+			mUnderCursorItem = GetItemUnderPoint(cursor.mPosition);
+
+			if (mUnderCursorItem != mExpandNodeCandidate)
+			{
+				mExpandNodeCandidate = mUnderCursorItem;
+				mExpandInsertTime = 0.6f;
+			}
 		}
 
 		UpdateHover(mUnderCursorItem);
@@ -1128,7 +1145,11 @@ namespace o2
 				if (mInsertNodeCandidate->mParent && mInsertNodeCandidate->mParent->GetType() == UITreeNode::type)
 					targetParent = ((UITreeNode*)mInsertNodeCandidate->mParent)->mObject;
 
-				targetPrevObject = mInsertNodeCandidate->mObject;
+				int idx = mInsertNodeCandidate->mParent->mChilds.Find(mInsertNodeCandidate);
+				if (idx > 0)
+					targetPrevObject = ((UITreeNode*)(mInsertNodeCandidate->mParent->mChilds[idx - 1]))->mObject;
+				else
+					targetPrevObject = nullptr;
 			}
 		}
 
@@ -1206,8 +1227,7 @@ namespace o2
 	{
 		if (mDraggingNodes)
 			EndDragging();
-		else
-			if (!o2Input.IsKeyDown(VK_SHIFT)) SelectSingleNode(cursor);
+		else if (!o2Input.IsKeyDown(VK_SHIFT)) SelectSingleNode(cursor);
 	}
 
 	void UITree::OnCursorRightMouseReleased(const Input::Cursor& cursor)
@@ -1216,14 +1236,18 @@ namespace o2
 			SelectSingleNode(cursor);
 
 		auto node = GetItemUnderPoint(cursor.mPosition);
-		if (node)
-			onItemRBClick(node);
+		onItemRBClick(node);
 	}
 
 	void UITree::SelectSingleNode(const Input::Cursor &cursor)
 	{
 		if (!o2Input.IsKeyDown(VK_CONTROL))
-			DeselectAllObjects();
+		{
+			for (auto sel : mSelectedItems)
+				FreeSelectionSprite(sel.selectionSprite);
+
+			mSelectedItems.Clear();
+		}
 
 		auto nodeUnderCursor = GetItemUnderPoint(cursor.mPosition);
 
@@ -1238,6 +1262,8 @@ namespace o2
 				selectionNode.node = GetNode(nodeUnderCursor->mObject);
 
 				mSelectedItems.Add(selectionNode);
+				onItemClick(nodeUnderCursor);
+
 				OnItemsSelected();
 
 				UpdateLayout();
@@ -1262,6 +1288,7 @@ namespace o2
 				float selectionUp = Math::Max<float>(cursor.mPosition.y, mSelectedItems.Last().node->layout.absTop);
 				float selectionDown = Math::Min<float>(cursor.mPosition.y, mSelectedItems.Last().node->layout.absBottom);
 
+				bool someSelected = false;
 				for (auto node : mAllNodes)
 				{
 					float top = node->layout.absTop;
@@ -1276,10 +1303,13 @@ namespace o2
 							selectionNode.node = GetNode(node->mObject);
 
 							mSelectedItems.Add(selectionNode);
-							OnItemsSelected();
+							someSelected = true;
 						}
 					}
 				}
+
+				if (someSelected)
+					OnItemsSelected();
 
 				UpdateLayout();
 			}

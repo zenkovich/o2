@@ -65,6 +65,7 @@ namespace o2
 	void Mesh::Draw()
 	{
 		o2Render.DrawMesh(this);
+		OnDrawn();
 	}
 
 	void Mesh::SetTexture(TextureRef texture)

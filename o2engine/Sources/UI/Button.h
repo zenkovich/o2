@@ -57,6 +57,9 @@ namespace o2
 		// Assign operator
 		UIButton& operator=(const UIButton& other);
 
+		// Draws widget
+		void Draw();
+
 		// Sets caption of button. Searches text layer with name "caption". If can't find this layer, creates them
 		void SetCaption(const WString& text);
 		
@@ -75,14 +78,11 @@ namespace o2
 		// Return button group
 		UIButtonGroup* GetButtonGroup() const;
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
-
 		// Returns is this widget can be selected
 		bool IsSelectable() const;
+
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point);
 
 		SERIALIZABLE(UIButton);
 

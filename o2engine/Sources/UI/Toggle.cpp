@@ -7,13 +7,14 @@
 namespace o2
 {
 	UIToggle::UIToggle():
-		mValue(false), mToggleGroup(nullptr), mCaptionText(nullptr), mBackLayer(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this), mValue(false), mToggleGroup(nullptr), mCaptionText(nullptr), 
+		mBackLayer(nullptr)
 	{
 		InitializeProperties();
 	}
 
 	UIToggle::UIToggle(const UIToggle& other):
-		UIWidget(other), mToggleGroup(nullptr)
+		UIWidget(other), DrawableCursorEventsListener(this), mToggleGroup(nullptr)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = GetLayer("back");
@@ -61,6 +62,7 @@ namespace o2
 			{
 				SetValue(!mValue);
 				onClick();
+				mToggleGroup->mToggled.Add(this);
 			}
 		}
 	}
@@ -96,22 +98,6 @@ namespace o2
 	bool UIToggle::GetValue() const
 	{
 		return mValue;
-	}
-
-	bool UIToggle::IsUnderPoint(const Vec2F& point)
-	{
-		if (mBackLayer && mBackLayer->IsUnderPoint(point))
-			return true;
-
-		if (mCaptionText && mCaptionText->IsPointInside(point))
-			return true;
-
-		return layout.GetAbsoluteRect().IsInside(point);
-	}
-
-	float UIToggle::Depth()
-	{
-		return GetMaxDrawingDepth();
 	}
 
 	bool UIToggle::IsSelectable() const
@@ -171,6 +157,9 @@ namespace o2
 
 			mToggleGroup->mPressed = true;
 			mToggleGroup->mPressedValue = mValue;
+			mToggleGroup->mToggled.Clear();
+			mToggleGroup->mToggled.Add(this);
+			mToggleGroup->onPressed(mValue);
 		}
 	}
 
@@ -180,7 +169,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (IsUnderPoint(cursor.mPosition) && 
+		if (UIWidget::IsUnderPoint(cursor.mPosition) && 
 			!(mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick || 
 							   mToggleGroup->mType == UIToggleGroup::Type::HorOneClick) && 
 			  mToggleGroup->mPressed))
@@ -193,6 +182,7 @@ namespace o2
 							 mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
 		{
 			mToggleGroup->mPressed = false;
+			mToggleGroup->onReleased(mValue);
 		}
 	}
 
@@ -206,6 +196,7 @@ namespace o2
 							 mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
 		{
 			mToggleGroup->mPressed = false;
+			mToggleGroup->onReleased(mValue);
 		}
 	}
 
@@ -302,6 +293,11 @@ namespace o2
 	const UIToggleGroup::TogglesVec& UIToggleGroup::GetToggles() const
 	{
 		return mToggles;
+	}
+
+	const UIToggleGroup::TogglesVec& UIToggleGroup::GetToggled() const
+	{
+		return mToggled;
 	}
 
 	void UIToggleGroup::OnToggled(UIToggle* toggle)

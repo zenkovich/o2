@@ -5,16 +5,17 @@
 namespace o2
 {
 	UIVerticalScrollBar::UIVerticalScrollBar():
-		mValue(0), mMinValue(0), mMaxValue(1), mScrollSense(1.0f), mScrollHandleSize(0.2f), mHandlePressed(false),
-		mScrollhandleMinPxSize(5), mSmoothValue(mValue), mHandleLayer(nullptr), mBackLayer(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this), mValue(0), mMinValue(0), mMaxValue(1), mScrollSense(1.0f), 
+		mScrollHandleSize(0.2f), mHandlePressed(false), mScrollhandleMinPxSize(5), mSmoothValue(mValue), 
+		mHandleLayer(nullptr), mBackLayer(nullptr)
 	{
 		InitializeProperties();
 	}
 
 	UIVerticalScrollBar::UIVerticalScrollBar(const UIVerticalScrollBar& other):
-		UIWidget(other), mValue(other.mValue), mMinValue(other.mMinValue), mMaxValue(other.mMaxValue),
-		mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize), mHandlePressed(false),
-		mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue)
+		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue), 
+		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize), 
+		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue)
 	{
 		mHandleLayer = GetLayer("handle");
 		mBackLayer = GetLayer("back");
@@ -151,6 +152,9 @@ namespace o2
 
 	bool UIVerticalScrollBar::IsUnderPoint(const Vec2F& point)
 	{
+		if (!mDrawingScissorRect.IsInside(point))
+			return false;
+
 		if (mHandleLayer && mHandleLayer->IsUnderPoint(point))
 			return true;
 
@@ -158,11 +162,6 @@ namespace o2
 			return true;
 
 		return false;
-	}
-
-	float UIVerticalScrollBar::Depth()
-	{
-		return GetMaxDrawingDepth();
 	}
 
 	bool UIVerticalScrollBar::IsScrollable() const

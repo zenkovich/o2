@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Tools/SelectionTool.h"
+#include "Scene/ActorTransform.h"
 #include "SceneWindow/SceneDragHandle.h"
 
 // ------------------------
@@ -9,6 +10,11 @@
 class EditorScaleTool: public EditorSelectionTool
 {
 public:
+	typedef Vector<ActorTransform> ActorsTransformsVec;
+
+public:
+	float bothScaleSence = 0.01f;
+
 	// Default constructor
 	EditorScaleTool();
 
@@ -18,15 +24,23 @@ public:
 	IOBJECT(EditorScaleTool);
 
 protected:
-	SceneDragHandle mHorDragHandle;
-	SceneDragHandle mVerDragHandle;
-	SceneDragHandle mBothDragHandle;
-	float           mHandlesAngle = 0.0f;
-	Vec2F           mSceneHandlesPos;
+	SceneDragHandle     mHorDragHandle;					// Horizontal scale drag handle
+	SceneDragHandle     mVerDragHandle;					// Vertical scale drag handle
+	SceneDragHandle     mBothDragHandle;				// Bot axis scale drag handle
+	float               mHandlesAngle = 0.0f;			// Handles angle in radians
+	Vec2F               mSceneHandlesPos;				// Scene space handles position
+	Vec2F               mHandlesSize = Vec2F(100, 100);	// Handles size in screen space
+	Vec2F               mLastHorHandlePos;				// Last horizontal handle position
+	Vec2F               mLastVerHandlePos;				// Last vertical handle position
+	Vec2F               mLastBothHandlePos;				// Last both axis handle position
+	ActorsTransformsVec mBeforeTransforms;				// Array of actors' transformations before changing
 
 protected:
 	// Updates tool
 	void Update(float dt);
+
+	// Draws screen
+	void DrawScreen();
 
 	// Calls when tool was enabled
 	void OnEnabled();
@@ -52,6 +66,12 @@ protected:
 	// Updates handles position
 	void UpdateHandlesPosition();
 
+	// Updates handles angle and position
+	void UpdateHandlesAngleAndPositions(float angle);
+
+	// Updates handles position
+	void UpdateHandlesPositions();
+
 	// Calls when key was pressed
 	void OnKeyPressed(const Input::Key& key);
 
@@ -63,4 +83,10 @@ protected:
 
 	// Moves selected actors on delta
 	void ScaleSelectedActors(const Vec2F& scale);
+
+	// Calls when some handle was pressed, stores before transformations
+	void HandlePressed();
+
+	// Calls when handle was released, completes transformation action
+	void HandleReleased();
 };

@@ -142,6 +142,8 @@ namespace o2
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
+		OnDrawn();
+
 		for (auto child : mChilds)
 			child->Draw();
 
@@ -227,6 +229,27 @@ namespace o2
 		OnChildAdded(widget);
 
 		return widget;
+	}
+
+	void UIWidget::AddChilds(const WidgetsVec& widgets)
+	{
+		for (auto widget : widgets)
+		{
+			if (mChilds.Contains(widget))
+				continue;
+
+			if (widget->mParent)
+				widget->mParent->RemoveChild(widget, false);
+
+			mChilds.Add(widget);
+			widget->mParent = this;
+
+			OnChildAdded(widget);
+		}
+
+		UpdateLayout();
+		UpdateTransparency();
+		UpdateVisibility();
 	}
 
 	UIWidget* UIWidget::AddChild(UIWidget* widget, int index)
@@ -610,6 +633,11 @@ namespace o2
 		return false;
 	}
 
+	bool UIWidget::IsUnderPoint(const Vec2F& point)
+	{
+		return mDrawingScissorRect.IsInside(point) && layout.mAbsoluteRect.IsInside(point);
+	}
+
 	void UIWidget::UpdateLayout(bool forcible /*= false*/)
 	{
 		if (layout.mDrivenByParent && !forcible)
@@ -751,14 +779,6 @@ namespace o2
 		mTopDrawingLayers.Sort([](auto a, auto b) { return a->mDepth < b->mDepth; });
 	}
 
-	float UIWidget::GetMaxDrawingDepth()
-	{
-		if (mDrawingLayers.Count() > 0)
-			return mDrawingLayers.Last()->drawable->GetDrawingDepth();
-
-		return 0.0f;
-	}
-
 	UIWidget::WidgetsVec UIWidget::GetChildsNonConst()
 	{
 		return mChilds;
@@ -861,4 +881,5 @@ namespace o2
 		layer.SetAllAccessFunc(this, &UIWidget::GetAllLayers);
 		child.SetAllAccessFunc(this, &UIWidget::GetAllChilds);
 	}
+
 }

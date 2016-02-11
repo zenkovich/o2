@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "Render/Sprite.h"
 #include "UI/ScrollArea.h"
 #include "Utils/FunctionalDragHandle.h"
@@ -12,7 +12,7 @@ namespace o2
 	// ----------------------------------------------------
 	// Window with caption, icon, options and close buttons
 	// ----------------------------------------------------
-	class UIWindow: public UIScrollArea, public CursorEventsListener
+	class UIWindow: public UIScrollArea, public DrawableCursorEventsListener
 	{
 	public:
 		Property<WString> caption; // Window caption property
@@ -62,12 +62,6 @@ namespace o2
 								const Layout& right, const Layout& leftTop, const Layout& rightTop, const Layout& leftBottom,
 								const Layout& rightBottom);
 
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
-
 		// Returns is this widget can be selected
 		bool IsSelectable() const;
 
@@ -77,7 +71,6 @@ namespace o2
 		Sprite*              mIconDrawable;              // Icon drawable from layer "icon"
 		Text*                mCaptionDrawable;           // text caption from layer "caption"
 		WidgetsVec           mWindowElements;            // Windows elements widgets @SERIALIZABLE
-		float                mDrawingDepth;              // Window's drawing depth
 
 		FunctionalDragHandle mHeadDragHandle;			 // Head drag handle, for moving window
 		Layout               mHeadDragAreaLayout;		 // Head drag handle layout @SERIALIZABLE

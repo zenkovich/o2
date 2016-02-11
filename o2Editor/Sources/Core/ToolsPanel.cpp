@@ -2,6 +2,7 @@
 
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
+#include "Core/Tools/FrameTool.h"
 #include "Core/Tools/MoveTool.h"
 #include "Core/Tools/RotateTool.h"
 #include "Core/Tools/ScaleTool.h"
@@ -160,7 +161,7 @@ void ToolsPanel::InitializeToolsPanel()
 	mMoveToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorMoveTool>(); };
 	mRotateToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorRotateTool>(); };
 	mScaleToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorScaleTool>(); };
-	mFrameToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorSelectionTool>(); };
+	mFrameToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<EditorFrameTool>(); };
 
 	mArrowToolToggle->SetValue(true);
 }

@@ -31,9 +31,26 @@ namespace o2
 		return *this;
 	}
 
+	bool ActorTransform::operator==(const ActorTransform& other) const
+	{
+		return Transform::operator==(other);
+	}
+
 	Actor* ActorTransform::GetOwnerActor() const
 	{
 		return mOwner;
+	}
+
+	void ActorTransform::SetWorldPivot(const Vec2F& pivot)
+	{
+		Basis trasform = mWorldTransform;
+		SetSizePivot(World2LocalPoint(pivot));
+		SetWorldBasis(trasform);
+	}
+
+	Vec2F ActorTransform::GetWorldPivot() const
+	{
+		return Local2WorldPoint(mPivot*mSize);
 	}
 
 	void ActorTransform::SetWorldPosition(const Vec2F& position)
@@ -107,57 +124,98 @@ namespace o2
 
 	void ActorTransform::SetWorldLeftTop(const Vec2F& position)
 	{
+		Basis transformed = mWorldTransform;
+		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mWorldTransform;
+		Vec2F delta = position - lastHandleCoords;
+		Vec2F frameDeltaX = delta.Project(mWorldTransform.xv);
+		Vec2F frameDeltaY = delta.Project(mWorldTransform.yv);
 
+		transformed.offs += frameDeltaX;
+		transformed.xv -= frameDeltaX;
+		transformed.yv += frameDeltaY;
+
+		SetWorldBasis(transformed);
 	}
 
 	Vec2F ActorTransform::GetWorldLeftTop() const
 	{
-		return Vec2F();
+		return mWorldTransform.offs + mWorldTransform.yv;
 	}
 
 	void ActorTransform::SetWorldRightTop(const Vec2F& position)
 	{
+		Basis transformed = mWorldTransform;
+		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mWorldTransform;
+		Vec2F delta = position - lastHandleCoords;
+		Vec2F frameDeltaX = delta.Project(mWorldTransform.xv);
+		Vec2F frameDeltaY = delta.Project(mWorldTransform.yv);
 
+		transformed.xv += frameDeltaX;
+		transformed.yv += frameDeltaY;
+
+		SetWorldBasis(transformed);
 	}
 
 	Vec2F ActorTransform::GetWorldRightTop() const
 	{
-		return Vec2F();
+		return mWorldTransform.offs + mWorldTransform.yv + mWorldTransform.xv;
 	}
 
 	void ActorTransform::SetWorldLeftBottom(const Vec2F& position)
 	{
+		Basis transformed = mWorldTransform;
+		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mWorldTransform;
+		Vec2F delta = position - lastHandleCoords;
+		Vec2F frameDeltaX = delta.Project(mWorldTransform.xv);
+		Vec2F frameDeltaY = delta.Project(mWorldTransform.yv);
 
+		transformed.offs += frameDeltaX + frameDeltaY;
+		transformed.xv -= frameDeltaX;
+		transformed.yv -= frameDeltaY;
+
+		SetWorldBasis(transformed);
 	}
 
 	Vec2F ActorTransform::GetWorldLeftBottom() const
 	{
-		return Vec2F();
+		return mWorldTransform.offs;
 	}
 
 	void ActorTransform::SetWorldRightBottom(const Vec2F& position)
 	{
+		Basis transformed = mWorldTransform;
+		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mWorldTransform;
+		Vec2F delta = position - lastHandleCoords;
+		Vec2F frameDeltaX = delta.Project(mWorldTransform.xv);
+		Vec2F frameDeltaY = delta.Project(mWorldTransform.yv);
 
+		transformed.offs += frameDeltaY;
+		transformed.xv += frameDeltaX;
+		transformed.yv -= frameDeltaY;
+
+		SetWorldBasis(transformed);
 	}
 
 	Vec2F ActorTransform::GetWorldRightBottom() const
 	{
-		return Vec2F();
+		return mWorldTransform.offs + mWorldTransform.xv;
 	}
 
 	void ActorTransform::SetWorldCenter(const Vec2F& position)
 	{
-
+		Vec2F translate = position - GetWorldCenter();
+		SetWorldBasis(mWorldTransform*Basis::Translated(translate));
 	}
 
 	Vec2F ActorTransform::GetWorldCenter() const
 	{
-		return Vec2F();
+		return mWorldTransform.offs + (mWorldTransform.xv + mWorldTransform.yv)*0.5f;
 	}
 
 	void ActorTransform::SetRight(const Vec2F& dir)
 	{
-
+		Basis transf = Basis::Rotated(GetRight().SignedAngle(dir));
+		SetWorldBasis(mWorldTransform*transf);
 	}
 
 	Vec2F ActorTransform::GetRight() const
@@ -167,7 +225,8 @@ namespace o2
 
 	void ActorTransform::SetLeft(const Vec2F& dir)
 	{
-
+		Basis transf = Basis::Rotated(GetLeft().SignedAngle(dir));
+		SetWorldBasis(mWorldTransform*transf);
 	}
 
 	Vec2F ActorTransform::GetLeft() const
@@ -177,7 +236,8 @@ namespace o2
 
 	void ActorTransform::SetUp(const Vec2F& dir)
 	{
-
+		Basis transf = Basis::Rotated(GetUp().SignedAngle(dir));
+		SetWorldBasis(mWorldTransform*transf);
 	}
 
 	Vec2F ActorTransform::GetUp() const
@@ -187,7 +247,8 @@ namespace o2
 
 	void ActorTransform::SetDown(const Vec2F& dir)
 	{
-
+		Basis transf = Basis::Rotated(GetDown().SignedAngle(dir));
+		SetWorldBasis(mWorldTransform*transf);
 	}
 
 	Vec2F ActorTransform::GetDown() const
@@ -197,7 +258,7 @@ namespace o2
 
 	void ActorTransform::LookAt(const Vec2F& worldPoint)
 	{
-
+		SetUp((worldPoint - mPosition).Normalized());
 	}
 
 	Vec2F ActorTransform::World2LocalPoint(const Vec2F& worldPoint) const

@@ -45,9 +45,9 @@ SceneDragHandle::SceneDragHandle(const SceneDragHandle& other):
 
 SceneDragHandle::~SceneDragHandle()
 {
-	delete regularSprite;
-	delete hoverSprite;
-	delete pressedSprite;
+	if (regularSprite) delete regularSprite;
+	if (hoverSprite) delete hoverSprite;
+	if (pressedSprite) delete pressedSprite;
 
 	if (WindowsManager::IsSingletonInitialzed())
 		o2EditorSceneScreen.mDragHandles.Remove(this);
@@ -83,9 +83,9 @@ void SceneDragHandle::Draw()
 
 SceneDragHandle& SceneDragHandle::operator=(const SceneDragHandle& other)
 {
-	delete regularSprite;
-	delete hoverSprite;
-	delete pressedSprite;
+	if (regularSprite) delete regularSprite;
+	if (hoverSprite) delete hoverSprite;
+	if (pressedSprite) delete pressedSprite;
 
 	if (other.regularSprite)
 		regularSprite = other.regularSprite->Clone();
@@ -115,11 +115,6 @@ bool SceneDragHandle::IsUnderPoint(const Vec2F& point)
 	return false;
 }
 
-float SceneDragHandle::Depth()
-{
-	return regularSprite ? regularSprite->GetDrawingDepth() : 0.0f;
-}
-
 void SceneDragHandle::OnCursorPressed(const Input::Cursor& cursor)
 {
 	mIsPressed = true;
@@ -131,6 +126,7 @@ void SceneDragHandle::OnCursorPressed(const Input::Cursor& cursor)
 		pressedSprite->enabled = true;
 
 	mPressOffset = mPosition - o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition);
+	onPressed();
 }
 
 void SceneDragHandle::OnCursorReleased(const Input::Cursor& cursor)
@@ -142,6 +138,8 @@ void SceneDragHandle::OnCursorReleased(const Input::Cursor& cursor)
 
 	if (pressedSprite)
 		pressedSprite->enabled = false;
+
+	onReleased();
 }
 
 void SceneDragHandle::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -153,6 +151,8 @@ void SceneDragHandle::OnCursorPressBreak(const Input::Cursor& cursor)
 
 	if (pressedSprite)
 		pressedSprite->enabled = false;
+
+	onReleased();
 }
 
 void SceneDragHandle::OnCursorStillDown(const Input::Cursor& cursor)
@@ -238,7 +238,7 @@ bool SceneDragHandle::IsEnabled() const
 
 bool SceneDragHandle::IsPressed() const
 {
-	return mEnabled;
+	return mIsPressed;
 }
 
 void SceneDragHandle::InitializeProperties()

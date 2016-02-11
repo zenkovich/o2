@@ -111,6 +111,9 @@ namespace o2
 
 		// Rebuilds all assets
 		void RebuildAssets(bool forcible = false);
+
+		// Returns assets tree
+		const AssetTree& GetAssetsTree() const;
 		
 		// Returns random asset id
 		static AssetId GetRandomAssetId();

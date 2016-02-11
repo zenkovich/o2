@@ -6,15 +6,13 @@ namespace o2
 {
 	FieldInfo::FieldInfo():
 		mOffset(0), mIsProperty(false), mType(nullptr), mIsPtr(false)
-	{
-	}
+	{}
 
-	FieldInfo::FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Type* type):
+	FieldInfo::FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Type* type) :
 		mName(name), mOffset(offset), mIsProperty(isProperty), mType(type), mIsPtr(isPtr)
-	{
-	}
+	{}
 
-	FieldInfo::FieldInfo(const FieldInfo& other):
+	FieldInfo::FieldInfo(const FieldInfo& other) :
 		mName(other.mName), mOffset(other.mOffset), mIsProperty(other.mIsProperty), mType(other.mType),
 		mIsPtr(other.mIsPtr)
 	{
@@ -79,7 +77,7 @@ namespace o2
 		return mAttributes;
 	}
 
-	FieldInfo* FieldInfo::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+	FieldInfo* FieldInfo::SearchFieldPath(void* obj, void* target, const String& path, String& res,
 										  Vector<void*>& passedObjects)
 	{
 		if (!mType)

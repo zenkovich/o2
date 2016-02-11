@@ -141,8 +141,10 @@ namespace o2
 
 		// Invokes function for all elements in array
 		virtual void ForEach(const Function<void(_type&)>& func);
-	};
 
+		// Reversing array
+		void Reverse();
+	};
 
 	template<typename _type>
 	_type& IArray<_type>::First()
@@ -460,6 +462,20 @@ namespace o2
 		for (int i = 0; i < count; i++)
 		{
 			func(Get(i));
+		}
+	}
+
+	template<typename _type>
+	void IArray<_type>::Reverse()
+	{
+		int c = Count();
+		for (int i = 0; i < c/2; i++)
+		{
+			_type a = Get(i);
+			_type b = Get(c - i - 1);
+
+			Set(i, b);
+			Set(c - i - 1, a);
 		}
 	}
 }

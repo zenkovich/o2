@@ -17,7 +17,7 @@ namespace o2
 	UIEditBox::UIEditBox():
 		UIScrollArea(), mSelectionBegin(0), mSelectionEnd(0), mMultiLine(true), mWordWrap(false), mMaxLineChars(0),
 		mMaxLinesCount(0), mSelectionColor(0.1f, 0.2f, 0.6f, 0.3f), mCaretBlinkDelay(1), mCaretBlinkTime(0),
-		mLastClickTime(-10.0f)
+		mLastClickTime(-10.0f), DrawableCursorEventsListener(this)
 	{
 		mSelectionMesh = mnew Mesh();
 		mTextDrawable = mnew Text();
@@ -29,7 +29,8 @@ namespace o2
 		UIScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
 		mMaxLinesCount(other.mMaxLinesCount), mSelectionBegin(0), mSelectionEnd(0), mText(other.mText), mLastText(other.mText),
 		mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
-		mCaretBlinkDelay(other.mCaretBlinkDelay), mCaretBlinkTime(0), mLastClickTime(-10.0f)
+		mCaretBlinkDelay(other.mCaretBlinkDelay), mCaretBlinkTime(0), mLastClickTime(-10.0f), 
+		DrawableCursorEventsListener(this)
 	{
 		mSelectionMesh = mnew Mesh();
 		mTextDrawable = other.mTextDrawable->Clone();
@@ -91,6 +92,8 @@ namespace o2
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
+		IDrawable::OnDrawn();
+
 		mDrawDepth = o2Render.GetDrawingDepth();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
@@ -127,7 +130,7 @@ namespace o2
 		UIScrollArea::Update(dt);
 		UpdateCaretBlinking(dt);
 
-		if (mIsSelected && o2Input.IsCursorReleased() && !IsUnderPoint(o2Input.GetCursorPos()))
+		if (mIsSelected && o2Input.IsCursorReleased() && !UIWidget::IsUnderPoint(o2Input.GetCursorPos()))
 			UIWidget::Deselect();
 	}
 
@@ -371,16 +374,6 @@ namespace o2
 		return mCaretBlinkDelay;
 	}
 
-	bool UIEditBox::IsUnderPoint(const Vec2F& point)
-	{
-		return layout.mAbsoluteRect.IsInside(point);
-	}
-
-	float UIEditBox::Depth()
-	{
-		return mDrawDepth;
-	}
-
 	bool UIEditBox::IsScrollable() const
 	{
 		return mEnableHorScroll || mEnableVerScroll;
@@ -444,7 +437,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (!IsUnderPoint(cursor.mPosition))
+		if (!UIWidget::IsUnderPoint(cursor.mPosition))
 		{
 			o2Application.SetCursor(CursorType::Arrow);
 			UIWidget::Deselect();
@@ -457,7 +450,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (!IsUnderPoint(cursor.mPosition))
+		if (!UIWidget::IsUnderPoint(cursor.mPosition))
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 

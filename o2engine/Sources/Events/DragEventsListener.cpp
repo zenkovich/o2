@@ -6,9 +6,7 @@ namespace o2
 {
 	DragEventsListener::DragEventsListener():
 		mIsDragging(false), mDragDistanceThreshold(2.0f), CursorEventsListener()
-	{
-		EventSystem::RegDragListener(this);
-	}
+	{}
 
 	DragEventsListener::~DragEventsListener()
 	{
@@ -77,4 +75,11 @@ namespace o2
 	{
 		return mIsDragging;
 	}
+
+	void DragEventsListener::OnDrawn()
+	{
+		CursorEventsListener::OnDrawn();
+		EventSystem::RegDragListener(this);
+	}
+
 }

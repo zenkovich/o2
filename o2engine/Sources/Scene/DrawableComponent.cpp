@@ -96,6 +96,18 @@ namespace o2
 		}
 	}
 
+	void DrawableComponent::OnExcludeFromScene()
+	{
+		if (mOwner)
+			mOwner->mLayer->UnregDrawableComponent(this);
+	}
+
+	void DrawableComponent::OnIncludeToScene()
+	{
+		if (mOwner)
+			mOwner->mLayer->RegDrawableComponent(this);
+	}
+
 	void DrawableComponent::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(DrawableComponent, drawDepth, SetDrawingDepth, GetDrawingDepth);

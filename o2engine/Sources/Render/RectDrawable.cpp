@@ -63,6 +63,11 @@ namespace o2
 		return mEnabled;
 	}
 
+	bool IRectDrawable::IsUnderPoint(const Vec2F& point)
+	{
+		return mDrawingScissorRect.IsInside(point) && Transform::IsPointInside(point);
+	}
+
 	void IRectDrawable::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(IRectDrawable, color, SetColor, GetColor);

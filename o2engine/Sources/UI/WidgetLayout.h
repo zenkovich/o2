@@ -217,6 +217,7 @@ namespace o2
 		friend class UICustomDropDown;
 		friend class UICustomList;
 		friend class UIEditBox;
+		friend class UIGridLayout;
 		friend class UIHorizontalLayout;
 		friend class UIHorizontalProgress;
 		friend class UIHorizontalScrollBar;

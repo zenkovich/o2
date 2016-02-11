@@ -22,10 +22,10 @@ namespace o2
 
 	void Scene::Update(float dt)
 	{
-		for (auto actor : mActors)
+		for (auto actor : mRootActors)
 			actor->Update(dt);
 
-		for (auto actor : mActors)
+		for (auto actor : mRootActors)
 			actor->UpdateChilds(dt);
 	}
 
@@ -103,14 +103,29 @@ namespace o2
 		return mLayers;
 	}
 
+	const Scene::ActorsVec& Scene::GetRootActors() const
+	{
+		return mRootActors;
+	}
+
+	Scene::ActorsVec& Scene::GetRootActors()
+	{
+		return mRootActors;
+	}
+
 	const Scene::ActorsVec& Scene::GetAllActors() const
 	{
-		return mActors;
+		return mAllActors;
 	}
 
 	Scene::ActorsVec& Scene::GetAllActors()
 	{
-		return mActors;
+		return mAllActors;
+	}
+
+	Actor* Scene::GetActorByID(UInt64 id) const
+	{
+		return mAllActors.FindMatch([=](Actor* x) { return x->mId == id; });
 	}
 
 	Actor* Scene::FindActor(const String& path)
@@ -118,7 +133,7 @@ namespace o2
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
 
-		for (auto actor : mActors)
+		for (auto actor : mRootActors)
 		{
 			if (actor->mName == pathPart)
 			{
@@ -134,7 +149,7 @@ namespace o2
 
 	void Scene::Clear()
 	{
-		auto allActors = mActors;
+		auto allActors = mRootActors;
 		for (auto actor : allActors)
 			delete actor;
 	}
@@ -152,8 +167,66 @@ namespace o2
 	void Scene::Save(const String& path)
 	{
 		DataNode data;
-		data = mActors;
+		data = mRootActors;
 		data.SaveToFile(path);
+	}
+
+	int Scene::GetActorHierarchyIdx(Actor* actor) const
+	{
+		if (actor->GetParent())
+		{
+			return actor->GetParent()->GetChilds().Find(actor) + GetActorHierarchyIdx(actor->GetParent());
+		}
+
+		return mRootActors.Find(actor);
+	}
+
+	void Scene::ReparentActors(const ActorsVec& actors, Actor* newParent, Actor* prevActor)
+	{
+		struct ActorDef
+		{
+			Actor* actor;
+			int    idx;
+			Basis  transform;
+
+			bool operator==(const ActorDef& other) const { return actor == other.actor; }
+		};
+		Vector<ActorDef> actorsDefs;
+
+		for (auto actor : actors)
+		{
+			ActorDef def;
+			def.actor = actor;
+			def.transform = actor->transform.GetWorldNonSizedBasis();
+			def.idx = o2Scene.GetActorHierarchyIdx(def.actor);
+			actorsDefs.Add(def);
+		}
+
+		for (auto def : actorsDefs)
+			def.actor->ExcludeFromScene();
+
+		actorsDefs.Sort([](auto& a, auto& b) { return a.idx < b.idx; });
+
+		if (newParent)
+		{
+			int insertIdx = newParent->GetChilds().Find(prevActor) + 1;
+
+			for (auto def : actorsDefs)
+				newParent->AddChild(def.actor, insertIdx++);
+		}
+		else
+		{
+			int insertIdx = o2Scene.GetRootActors().Find(prevActor) + 1;
+
+			for (auto def : actorsDefs)
+				def.actor->SetPositionIndexInParent(insertIdx++);
+		}
+
+		for (auto def : actorsDefs)
+		{
+			def.actor->IncludeInScene();
+			def.actor->transform.SetWorldNonSizedBasis(def.transform);
+		}
 	}
 
 	void Scene::Layer::RegDrawableComponent(DrawableComponent* component)

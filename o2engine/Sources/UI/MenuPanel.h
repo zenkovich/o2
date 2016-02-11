@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "UI/ContextMenu.h"
 #include "UI/Widget.h"
 #include "Utils/Delegates.h"
@@ -12,7 +12,7 @@ namespace o2
 	// -------------
 	// UI Menu panel
 	// -------------
-	class UIMenuPanel: public UIWidget, public CursorEventsListener
+	class UIMenuPanel: public UIWidget, public DrawableCursorEventsListener
 	{
 	public:
 		typedef Function<void()> ClickFunc;
@@ -105,12 +105,6 @@ namespace o2
 
 		// Returns selection drawable layout
 		Layout GetSelectionDrawableLayout() const;
-
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
 
 		SERIALIZABLE(UIMenuPanel);
 

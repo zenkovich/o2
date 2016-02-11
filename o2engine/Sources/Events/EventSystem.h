@@ -113,9 +113,6 @@ namespace o2
 		// Processes key released event
 		void ProcessKeyReleased(const Input::Key& key);
 
-		// Returns true if listener was clipped by scissors in render
-		bool IsListenerClipped(float depth, const Vec2F& cursorPos) const;
-
 	protected:
 		CursEventsListenersVec                      mCursorListeners;             // All cursor listeners
 		Dictionary<CursorId, CursorEventsListener*> mPressedListeners;            // Pressed listeners for all pressed cursors
@@ -129,7 +126,7 @@ namespace o2
 
 	protected:
 		// Registering cursor events listener
-		static void RegCursorListener(CursorEventsListener* listener);
+		static void DrawnCursorListener(CursorEventsListener* listener);
 
 		// Unregistering cursor events listener
 		static void UnregCursorListener(CursorEventsListener* listener);

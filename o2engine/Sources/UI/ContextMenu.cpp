@@ -38,9 +38,9 @@ namespace o2
 	}
 
 	UIContextMenu::UIContextMenu():
-		UIScrollArea(), mSelectedItem(nullptr), mSelectSubContextTime(-1), mParentContextMenu(nullptr),
-		mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr), mSelectionDrawable(nullptr),
-		mSeparatorSample(nullptr)
+		UIScrollArea(), DrawableCursorEventsListener(this), mSelectedItem(nullptr), mSelectSubContextTime(-1), 
+		mParentContextMenu(nullptr), mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr), 
+		mSelectionDrawable(nullptr), mSeparatorSample(nullptr)
 	{
 		mItemSample = mnew UIContextMenuItem();
 		mItemSample->AddLayer("icon", nullptr, Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(10, 0), Vec2F(10, 0)));
@@ -71,9 +71,9 @@ namespace o2
 	}
 
 	UIContextMenu::UIContextMenu(const UIContextMenu& other):
-		UIScrollArea(other), mSelectedItem(nullptr), mSelectSubContextTime(-1), mParentContextMenu(nullptr),
-		mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr), mSelectionDrawable(nullptr),
-		mFitSizeMin(other.mFitSizeMin)
+		UIScrollArea(other), DrawableCursorEventsListener(this), mSelectedItem(nullptr), mSelectSubContextTime(-1),
+		mParentContextMenu(nullptr), mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr),
+		mSelectionDrawable(nullptr), mFitSizeMin(other.mFitSizeMin)
 	{
 		mItemSample = other.mItemSample->Clone();
 		mSeparatorSample = other.mSeparatorSample->Clone();
@@ -533,16 +533,6 @@ namespace o2
 		mFitSizeMin = size;
 	}
 
-	bool UIContextMenu::IsUnderPoint(const Vec2F& point)
-	{
-		return layout.mAbsoluteRect.IsInside(point);
-	}
-
-	float UIContextMenu::Depth()
-	{
-		return GetMaxDrawingDepth();
-	}
-
 	bool UIContextMenu::IsScrollable() const
 	{
 		return true;
@@ -640,6 +630,8 @@ namespace o2
 
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
+
+		IDrawable::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 

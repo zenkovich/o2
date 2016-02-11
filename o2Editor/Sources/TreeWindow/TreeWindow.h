@@ -57,6 +57,9 @@ protected:
 	// Initializes window
 	void InitializeWindow();
 
+	// Calls after that all windows was created
+	void PostInitializeWindow();
+
 	// Calls when search button pressed
 	void OnSearchPressed();
 
@@ -87,17 +90,55 @@ protected:
 	// Calls when tree node clicked by right button (For tree widget)
 	void OnTreeRBPressed(UITreeNode* node);
 
+	// Calls when enable actors toggle group pressed
+	void EnableActorsGroupPressed(bool value);
+
+	// Calls when enable actors toggle group released
+	void EnableActorsGroupReleased(bool value);
+
+	// Calls when lock actors toggle group pressed
+	void LockActorsGroupPressed(bool value);
+
+	// Calls when lock actors toggle group released
+	void LockActorsGroupReleased(bool value);
+
+	// Calls when some actor needs to created and registers actor insert action
+	void CreateActor(Actor* newActor);
+
+	// Calls when pressed "Create new" in context menu
 	void OnContextCreateNewPressed();
+
+	// Calls when pressed "Create sprite" in context menu
 	void OnContextCreateSprite();
+
+	// Calls when pressed "Create button" in context menu
 	void OnContextCreateButton();
+
+	// Calls when pressed "Copy" in context menu
 	void OnContextCopyPressed();
+
+	// Calls when pressed "Cut" in context menu
 	void OnContextCutPressed();
+
+	// Calls when pressed "Paste" in context menu
 	void OnContextPastePressed();
+
+	// Calls when pressed "Delete" in context menu
 	void OnContextDeletePressed();
+
+	// Calls when pressed "Duplicate" in context menu
 	void OnContextDuplicatePressed();
+
+	// Calls when pressed "Expand all" in context menu
 	void OnContextExpandAllPressed();
+
+	// Calls when pressed "Collapse all" in context menu
 	void OnContextCollapseAllPressed();
+
+	// Calls when pressed "Lock/unlock" in context menu
 	void OnContextLockPressed();
+
+	// Calls when pressed "Enable/disable" in context menu
 	void OnContextEnablePressed();
 
 	friend class SceneEditWidget;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "UI/CustomList.h"
 
 namespace o2
@@ -8,7 +8,7 @@ namespace o2
 	// ---------------------------------
 	// Custom items drop down ui element
 	// ---------------------------------
-	class UICustomDropDown: public UIWidget, public CursorEventsListener
+	class UICustomDropDown: public UIWidget, public DrawableCursorEventsListener
 	{
 	public:
 		Property<UIWidget*>       selectedItem;    // Selected item widget property
@@ -111,12 +111,6 @@ namespace o2
 
 		// Returns clipping layout
 		Layout GetClippingLayout();
-
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
 
 		SERIALIZABLE(UICustomDropDown);
 

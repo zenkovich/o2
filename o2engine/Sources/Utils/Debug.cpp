@@ -29,7 +29,7 @@ namespace o2
 
 	void Debug::InitializeFont()
 	{
-		mFont = mnew VectorFont("C:\\Windows\\Fonts\\Arial.ttf");
+		mFont = mnew VectorFont("C:\\Windows\\Fonts\\arial.ttf");
 		mText = mnew Text(FontRef(mFont));
 	}
 

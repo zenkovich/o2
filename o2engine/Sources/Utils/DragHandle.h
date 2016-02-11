@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Events/CursorEventsListener.h"
+#include "Render/IDrawable.h"
 #include "Utils/Delegates.h"
 #include "Utils/Property.h"
 
@@ -11,7 +12,7 @@ namespace o2
 	// -----------
 	// Drag handle
 	// -----------
-	class DragHandle: public CursorEventsListener
+	class DragHandle: public IDrawable, public CursorEventsListener
 	{
 	public:
 		Sprite*                      regularSprite; // Regular view sprite
@@ -40,9 +41,6 @@ namespace o2
 
 		// Returns true if point is above this
 		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth
-		float Depth();
 
 		// Sets position
 		void SetPosition(const Vec2F& position);

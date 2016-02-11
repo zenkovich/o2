@@ -77,12 +77,12 @@ namespace o2
 		const AttributesVec& Attributes() const;
 
 	protected:
-		String        mName;       // Name of field
-		UInt          mOffset;     // Offset of field in bytes from owner address
-		bool          mIsProperty; // Is it property or field
-		bool          mIsPtr;      // Is property Ptr<>
-		Type*         mType;       // Field type
-		AttributesVec mAttributes; // Attributes array
+		String            mName;       // Name of field
+		UInt              mOffset;     // Offset of field in bytes from owner address
+		bool              mIsProperty; // Is it property or field
+		bool              mIsPtr;      // Is property Ptr<>
+		Type*             mType;       // Field type
+		AttributesVec     mAttributes; // Attributes array
 
 	protected:
 		// Searches field recursively by pointer

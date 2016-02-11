@@ -28,10 +28,11 @@ public:
 	IOBJECT(EditorSelectionTool);
 
 protected:
-	Sprite*   mSelectionSprite;
-	ActorsVec mCurrentSelectingActors;
-	Vec2F     mPressPoint;
-	bool      mSelectingActors = false;
+	Sprite*   mSelectionSprite;			// Selection frame sprite
+	ActorsVec mCurrentSelectingActors;	// Current selecting actors (when cursor pressed, but not released yet)
+	ActorsVec mBeforeSelectingActors;	// Before selection actors array
+	Vec2F     mPressPoint;				// Press point before selecting
+	bool      mSelectingActors = false;	// Is selecting actors now
 
 protected:
 	// Draws tool
@@ -66,4 +67,7 @@ protected:
 
 	// Calls when cursor moved on this (or moved outside when this was pressed)
 	void OnCursorMoved(const Input::Cursor& cursor);
+
+	// Calls when key was pressed
+	void OnKeyPressed(const Input::Key& key);
 };

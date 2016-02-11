@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Events/CursorEventsListener.h"
+#include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "Render/Mesh.h"
 #include "Render/Sprite.h"
@@ -12,7 +13,7 @@ namespace o2
 	// --------------------
 	// Text edit box widget
 	// --------------------
-	class UIEditBox: public UIScrollArea, public CursorEventsListener, public KeyboardEventsListener
+	class UIEditBox: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
 		Property<WString>              text;			  // Text property
@@ -132,12 +133,6 @@ namespace o2
 
 		// Returns caret blinking delay in seconds
 		float GetCaretBlinkingDelay() const;
-
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
-
-		// Returns depth (event system will catch listener with highest depth)
-		float Depth();
 
 		// Returns is listener scrollable
 		bool IsScrollable() const;

@@ -39,7 +39,7 @@ namespace UIStyle
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_button_pressed.png"), Layout::BothStretch(-9, -9, -10, -10));
 		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI_button_focus.png"), Layout::BothStretch(-9, -9, -10, -10));
 
-		Text* captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Button";
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
@@ -283,7 +283,7 @@ namespace UIStyle
 		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"),
 										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
 
-		Text* captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Checkbox";
 		captionText->horAlign = HorAlign::Left;
 		captionText->verAlign = VerAlign::Middle;
@@ -381,7 +381,7 @@ namespace UIStyle
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetBottom,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
 															  -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -397,7 +397,7 @@ namespace UIStyle
 		sample->horOverflow = UILabel::HorOverflow::Dots;
 		sample->verOverflow = UILabel::VerOverflow::None;
 
-		Text* captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Checkbox";
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
@@ -463,7 +463,7 @@ namespace UIStyle
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Top;
 		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->SetFontAsset("arial.ttf");
+		textDrawable->SetFontAsset("stdFont.ttf");
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -508,7 +508,7 @@ namespace UIStyle
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetBottom,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
 															  -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
@@ -556,7 +556,7 @@ namespace UIStyle
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetBottom,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
 															  -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
@@ -611,7 +611,7 @@ namespace UIStyle
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetBottom,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
 															  -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
@@ -720,7 +720,7 @@ namespace UIStyle
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_o2_sign.png"),
 										  Layout(Vec2F(0.0f, 1.0f), Vec2F(0.0f, 1.0f), Vec2F(3, -14), Vec2F(17, 1)));
 
-		Text* captionText = mnew Text("arial.ttf");
+		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Window";
 		captionText->horAlign = HorAlign::Left;
 		captionText->verAlign = VerAlign::Middle;
@@ -749,7 +749,7 @@ namespace UIStyle
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetBottom,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
 															  -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -806,14 +806,14 @@ namespace UIStyle
 		UIWidget* itemSample = sample->GetItemSample();
 
 		UIWidgetLayer* captionLayer = itemSample->GetLayer("caption");
-		Text* captionLayerText = mnew Text("arial.ttf");
+		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayer->drawable = captionLayerText;
 		captionLayer->layout = Layout::BothStretch(20, 1, 0, -1);
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
 
 		UIWidgetLayer* shortcutLayer = itemSample->GetLayer("shortcut");
-		Text* shortcutLayerText = mnew Text("arial.ttf");
+		Text* shortcutLayerText = mnew Text("stdFont.ttf");
 		shortcutLayer->layout = Layout::BothStretch(20, 1, 10, -1);
 		shortcutLayer->drawable = shortcutLayerText;
 		shortcutLayerText->horAlign = HorAlign::Right;
@@ -840,7 +840,7 @@ namespace UIStyle
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetBottom,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
 															  -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
@@ -888,7 +888,7 @@ namespace UIStyle
 
 		UITreeNode* itemSample = sample->GetNodeSample();
 
-		Text* captionLayerText = mnew Text("arial.ttf");
+		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
 		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
@@ -949,7 +949,7 @@ namespace UIStyle
 		verScrollBar->layout.offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetRight,
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
 															  5.0f, 15.0f, 0.2f));
 
 		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
@@ -1015,13 +1015,47 @@ namespace UIStyle
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->SetFontAsset("arial.ttf");
+		textDrawable->SetFontAsset("stdFont.ttf");
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
 		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeight()*1.7f);
 		caretDrawable->pivot = Vec2F(0, 0.26f);
 		caretDrawable->color = Color4::Black();
+
+		o2UI.AddWidgetStyle(sample, "backless");
+	}
+
+	void RebuildBacklessScrollarea()
+	{
+		UIScrollArea* sample = mnew UIScrollArea();
+		sample->layout.minSize = Vec2F(20, 20);
+		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+		sample->SetEnableScrollsHiding(true);
+
+		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		horScrollBar->layout.anchorMin = Vec2F(0, 0);
+		horScrollBar->layout.anchorMax = Vec2F(1, 0);
+		horScrollBar->layout.offsetMin = Vec2F(5, 0);
+		horScrollBar->layout.offsetMax = Vec2F(-15, 15);
+		sample->SetHorizontalScrollBar(horScrollBar);
+
+		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		verScrollBar->layout.anchorMin = Vec2F(1, 0);
+		verScrollBar->layout.anchorMax = Vec2F(1, 1);
+		verScrollBar->layout.offsetMin = Vec2F(-15, 15);
+		verScrollBar->layout.offsetMax = Vec2F(0, -5);
+		sample->SetVerticalScrollBar(verScrollBar);
+
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
+															  5.0f, 15.0f, 0.2f));
+
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
+															  -5.0f, -15.0f, 0.2f));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "backless");
 	}
@@ -1053,6 +1087,7 @@ namespace UIStyle
 		RebuildBacklessDropdown();
 		RebuildBacklessEditbox();
 		RebuildLongListStyle();
+		RebuildBacklessScrollarea();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

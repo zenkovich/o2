@@ -43,6 +43,9 @@ namespace o2
 		// Returns true if it's dragging
 		bool IsDragging() const;
 
+		// Calls when listener was drawn
+		virtual void OnDrawn();
+
 	protected:
 		bool  mIsDragging;            // True when dragging
 		float mDragDistanceThreshold; // Drag distance threshold: object starts dragging when cursor moves more tan this distance

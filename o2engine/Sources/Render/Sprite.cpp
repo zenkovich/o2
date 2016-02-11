@@ -123,7 +123,7 @@ namespace o2
 			return;
 
 		mMesh->Draw();
-		mDrawingDepth = mMesh->mDrawingDepth;
+		OnDrawn();
 // 		o2Render.DrawMeshWire(mMesh, Color4(255, 255, 255, 100));
 // 		o2Render.DrawBasis(mTransform);
 	}

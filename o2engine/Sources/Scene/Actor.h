@@ -20,6 +20,7 @@ namespace o2
 		typedef Vector<String> StringsVec;
 
 	public:
+		Getter<UInt64>                      id;                 // Actor's unique id
 		Property<String>                    name;               // Actor name property
 		Property<bool>                      enabled;            // Is actor enabled property
 		Getter<bool>                        enabledInHierarchy; // Is actor enabled in hierarchy getter
@@ -68,8 +69,20 @@ namespace o2
 		// Returns name
 		String GetName() const;
 
+		// Returns actor's unique id
+		UInt64 GetId() const;
+
+		// Sets id. Be carefully! Ids must be unique! Don't recommending to change this
+		void SetId(UInt64 id);
+
+		// Generates new random id 
+		void GenNewId(bool childs = true);
+
 		// Excludes from scene and will not be update and draw automatically from scene
 		void ExcludeFromScene();
+
+		// Incliudes to scene and now will be update and draw automatically from scene
+		void IncludeInScene();
 
 		// Sets actor enabling
 		void SetEnabled(bool active);
@@ -193,6 +206,7 @@ namespace o2
 		SERIALIZABLE(Actor);
 
 	protected:
+		UInt64         mId;          // Unique actor id @SERIALIZABLE
 		String         mName;        // Name of actor @SERIALIZABLE
 
 		Actor*         mParent;      // Parent actor
@@ -232,6 +246,12 @@ namespace o2
 		// Returns dictionary of all components by type names
 		Dictionary<String, Component*> GetAllComponents();
 
+		// Applies excluding from scene for all components in hierarchy
+		void ComponentsExcludeFromScene();
+
+		// Applies including to scene for all components in hierarchy
+		void ComponentsIncludeToScene();
+
 #if IS_EDITOR
 		// Calls when something in actor was changed
 		void OnChanged();
@@ -242,8 +262,8 @@ namespace o2
 
 		friend class ActorTransform;
 		friend class Component;
-		friend class Scene;
 		friend class DrawableComponent;
+		friend class Scene;
 	};
 
 	template<typename _type>

@@ -1,5 +1,7 @@
 #include "SceneEditScreen.h"
 
+#include "Core/Actions/Selection.h"
+#include "Core/EditorApplication.h"
 #include "Core/Tools/IEditorTool.h"
 #include "Core/Tools/MoveTool.h"
 #include "Core/Tools/SelectionTool.h"
@@ -47,6 +49,8 @@ void SceneEditScreen::Draw()
 
 	for (auto handle : mDragHandles)
 		handle->Draw();
+
+	CursorEventsListener::OnDrawn();
 }
 
 #undef DrawText
@@ -99,16 +103,6 @@ void SceneEditScreen::UpdateCamera(float dt)
 	}
 }
 
-bool SceneEditScreen::IsUnderPoint(const Vec2F& point)
-{
-	return mRectangle.IsInside(point);
-}
-
-float SceneEditScreen::Depth()
-{
-	return mDrawDepth + 1.0f;
-}
-
 bool SceneEditScreen::IsScrollable() const
 {
 	return true;
@@ -122,6 +116,16 @@ Vec2F SceneEditScreen::ScreenToScenePoint(const Vec2F& point)
 Vec2F SceneEditScreen::SceneToScreenPoint(const Vec2F& point)
 {
 	return point*mSceneToScreenTransform;
+}
+
+Vec2F SceneEditScreen::ScreenToSceneVector(const Vec2F& point)
+{
+	return point*mViewCamera.GetScale();
+}
+
+Vec2F SceneEditScreen::SceneToScreenVector(const Vec2F& point)
+{
+	return point/mViewCamera.GetScale();
 }
 
 void SceneEditScreen::SetRect(const RectF& rect)
@@ -355,36 +359,59 @@ void SceneEditScreen::DrawActorSelection(Actor* actor, const Color4& color)
 
 void SceneEditScreen::SelectActors(ActorsVec actors, bool additive /*= true*/)
 {
-	if (!additive)
-		mSelectedActors.Clear();
+	auto prevSelectedActors = mSelectedActors;
 
-	mSelectedActors.Add(actors);
-	mNeedRedraw = true;
+	SelectActorsWithoutAction(actors, additive);
 
-	UpdateTopSelectedActors();
-
-	OnActorsSelectedFromThis();
+	if (mSelectedActors != prevSelectedActors)
+	{
+		auto selectionAction = mnew EditorSelectionAction(mSelectedActors, prevSelectedActors);
+		o2EditorApplication.DoneAction(selectionAction);
+	}
 }
 
 void SceneEditScreen::SelectActor(Actor* actor, bool additive /*= true*/)
 {
-	if (!additive)
-		mSelectedActors.Clear();
+	auto prevSelectedActors = mSelectedActors;
 
-	mSelectedActors.Add(actor);
+	SelectActorWithoutAction(actor, additive);
+
+	if (mSelectedActors != prevSelectedActors)
+	{
+		auto selectionAction = mnew EditorSelectionAction(mSelectedActors, prevSelectedActors);
+		o2EditorApplication.DoneAction(selectionAction);
+	}
+}
+
+void SceneEditScreen::SelectAllActors()
+{
+	auto prevSelectedActors = mSelectedActors;
+
+	mSelectedActors.Clear();
+	for (auto layer : o2Scene.GetLayers())
+		mSelectedActors.Add(layer->enabledActors.FindAll([](auto x) { return !x->IsLockedInHierarchy(); }));
+
 	mNeedRedraw = true;
-
-	UpdateTopSelectedActors();
-
 	OnActorsSelectedFromThis();
+
+	if (mSelectedActors != prevSelectedActors)
+	{
+		auto selectionAction = mnew EditorSelectionAction(mSelectedActors, prevSelectedActors);
+		o2EditorApplication.DoneAction(selectionAction);
+	}
 }
 
 void SceneEditScreen::ClearSelection()
 {
-	mSelectedActors.Clear();
-	mTopSelectedActors.Clear();
-	mNeedRedraw = true;
-	OnActorsSelectedFromThis();
+	auto prevSelectedActors = mSelectedActors;
+
+	ClearSelectionWithoutAction();
+
+	if (mSelectedActors != prevSelectedActors)
+	{
+		auto selectionAction = mnew EditorSelectionAction(mSelectedActors, prevSelectedActors);
+		o2EditorApplication.DoneAction(selectionAction);
+	}
 }
 
 const SceneEditScreen::ActorsVec& SceneEditScreen::GetSelectedActors() const
@@ -405,6 +432,11 @@ const Color4& SceneEditScreen::GetSingleActorSelectionColor() const
 const Color4& SceneEditScreen::GetManyActorsSelectionColor() const
 {
 	return mMultiSelectedActorColor;
+}
+
+bool SceneEditScreen::IsUnderPoint(const Vec2F& point)
+{
+	return mRectangle.IsInside(point);
 }
 
 void SceneEditScreen::UpdateSceneScreenTransforms()
@@ -437,6 +469,8 @@ void SceneEditScreen::OnTreeSelectionChanged(Vector<UnknownType*> selectedObject
 		return;
 	}
 
+	auto prevSelectedActors = mSelectedActors;
+
 	mSelectedActors = selectedObjects.Select<Actor*>([](auto x) { return (Actor*)(void*)x; });
 	mNeedRedraw = true;
 
@@ -444,8 +478,13 @@ void SceneEditScreen::OnTreeSelectionChanged(Vector<UnknownType*> selectedObject
 
 	if (mEnabledTool)
 		mEnabledTool->OnActorsSelectionChanged(mSelectedActors);
-}
 
+	if (mSelectedActors != prevSelectedActors)
+	{
+		auto selectionAction = mnew EditorSelectionAction(mSelectedActors, prevSelectedActors);
+		o2EditorApplication.DoneAction(selectionAction);
+	}
+}
 
 int SceneEditScreen::GetActorIdx(Actor* actor)
 {
@@ -454,7 +493,7 @@ int SceneEditScreen::GetActorIdx(Actor* actor)
 		return actor->GetParent()->GetChilds().Find(actor) + GetActorIdx(actor->GetParent());
 	}
 
-	return o2Scene.GetAllActors().Find(actor);
+	return o2Scene.GetRootActors().Find(actor);
 }
 
 void SceneEditScreen::UpdateTopSelectedActors()
@@ -487,6 +526,38 @@ void SceneEditScreen::OnSceneChanged(ActorsVec actors)
 
 	if (mEnabledTool)
 		mEnabledTool->OnSceneChanged(actors);
+}
+
+void SceneEditScreen::ClearSelectionWithoutAction()
+{
+	mSelectedActors.Clear();
+	mTopSelectedActors.Clear();
+	mNeedRedraw = true;
+	OnActorsSelectedFromThis();
+}
+
+void SceneEditScreen::SelectActorsWithoutAction(ActorsVec actors, bool additive /*= true*/)
+{
+	if (!additive)
+		mSelectedActors.Clear();
+
+	mSelectedActors.Add(actors);
+	mNeedRedraw = true;
+
+	UpdateTopSelectedActors();
+	OnActorsSelectedFromThis();
+}
+
+void SceneEditScreen::SelectActorWithoutAction(Actor* actor, bool additive /*= true*/)
+{
+	if (!additive)
+		mSelectedActors.Clear();
+
+	mSelectedActors.Add(actor);
+	mNeedRedraw = true;
+
+	UpdateTopSelectedActors();
+	OnActorsSelectedFromThis();
 }
 
 void SceneEditScreen::OnScrolled(float scroll)

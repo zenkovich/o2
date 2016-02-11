@@ -5,8 +5,8 @@
 namespace o2
 {
 	UILongList::UILongList():
-		UIScrollArea(), mSelectedItem(-1), mHoverLayout(Layout::BothStretch()), mSelectionLayout(Layout::BothStretch()),
-		mMaxVisibleItemIdx(-1), mMinVisibleItemIdx(-1)
+		UIScrollArea(), DrawableCursorEventsListener(this), mSelectedItem(-1), mHoverLayout(Layout::BothStretch()), 
+		mSelectionLayout(Layout::BothStretch()), mMaxVisibleItemIdx(-1), mMinVisibleItemIdx(-1)
 	{
 		mItemSample = mnew UIWidget();
 		mSelectionDrawable = mnew Sprite();
@@ -16,8 +16,8 @@ namespace o2
 	}
 
 	UILongList::UILongList(const UILongList& other):
-		UIScrollArea(other), mSelectedItem(-1), mHoverLayout(other.mHoverLayout), mSelectionLayout(other.mSelectionLayout),
-		mMaxVisibleItemIdx(-1), mMinVisibleItemIdx(-1)
+		UIScrollArea(other), DrawableCursorEventsListener(this), mSelectedItem(-1), mHoverLayout(other.mHoverLayout),
+		mSelectionLayout(other.mSelectionLayout), mMaxVisibleItemIdx(-1), mMinVisibleItemIdx(-1)
 	{
 		mItemSample = other.mItemSample->Clone();
 		mItemSample->UpdateLayout(true);
@@ -89,6 +89,8 @@ namespace o2
 
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
+
+		IDrawable::OnDrawn();
 
 		mDrawDepth = o2Render.GetDrawingDepth();
 
@@ -182,16 +184,6 @@ namespace o2
 	Layout UILongList::GetHoverDrawableLayout() const
 	{
 		return mHoverLayout;
-	}
-
-	bool UILongList::IsUnderPoint(const Vec2F& point)
-	{
-		return mAbsoluteClipArea.IsInside(point);
-	}
-
-	float UILongList::Depth()
-	{
-		return mDrawDepth;
 	}
 
 	bool UILongList::IsScrollable() const

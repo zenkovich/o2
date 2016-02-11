@@ -24,6 +24,16 @@ namespace UIStyle
 	void RebuildMessagesDownPanelToggle();
 	void RebuildWarningsDownPanelToggle();
 	void RebuildErrorsDownPanelToggle();
+	void RebuildFilterMenuButton();
+	void RebuildTreeMenuButton();
+	void RebuildFoldersTree();
+	void RebuildRegularAssetIcon();
+	void RebuildFolderAssetIcon();
+	void RebuildPrefabAssetIcon();
+	void RebuildPrefabPreviewAssetIcon();
+	void RebuildImagePreviewAssetIcon();
+	void RebuildTextAssetIcon();
+	void RebuildAnimationAssetIcon();
 
 	void RebuildEditorUIStyle();
 }

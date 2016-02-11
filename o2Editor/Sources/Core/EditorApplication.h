@@ -17,11 +17,19 @@ namespace o2
 	class UIMenuPanel;
 }
 
+class IEditorAction;
+
+// Editor application access macros
+#define o2EditorApplication (*(EditorApplication*)(Application::InstancePtr()))
+
 // ------------------
 // Editor application
 // ------------------
 class EditorApplication: public Application
 {
+public:
+	typedef Vector<IEditorAction*> EditorActionsVec;
+
 public:
 	// Default constructor. Initializes all editor components
 	EditorApplication();
@@ -29,14 +37,32 @@ public:
 	// Destructor
 	~EditorApplication();
 
+	// Returns last action name
+	String GetLastActionName() const;
+
+	// Returns next forward action name
+	String GetNextForwardActionName() const;
+
+	// Undo last action
+	void UndoAction();
+
+	// Redo next action
+	void RedoAction();
+
+	// Calls when action was done
+	void DoneAction(IEditorAction* action);
+
 protected:
 	Sprite*            mBackground;     // Background sprite
 	Sprite*            mBackSign;       // Background o2 signature
 
 	WindowsManager*    mWindowsManager; // Windows manager
-	EditorConfig* mConfig;         // Application configuration
+	EditorConfig*      mConfig;         // Application configuration
 	ToolsPanel*        mToolsPanel;     // Tools panel
 	MenuPanel*         mMenuPanel;      // Menu panel
+
+	EditorActionsVec   mActions;        // Done actions
+	EditorActionsVec   mForwardActions; // Forward actions, what you can redo
 
 protected:
 	// Calling on updating

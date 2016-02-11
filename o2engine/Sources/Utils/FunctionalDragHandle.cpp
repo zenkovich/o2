@@ -15,11 +15,6 @@ namespace o2
 		return isUnderPoint(point);
 	}
 
-	float FunctionalDragHandle::Depth()
-	{
-		return getDepth();
-	}
-
 	void FunctionalDragHandle::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		onCursorPressed();

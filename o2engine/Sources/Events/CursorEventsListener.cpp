@@ -1,36 +1,31 @@
 #include "CursorEventsListener.h"
 
 #include "Events/EventSystem.h"
+#include "Render/IDrawable.h"
+#include "Render/Render.h"
 
 namespace o2
 {
 	CursorEventsListener::CursorEventsListener():
 		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0), mInteractable(true)
 	{
-		EventSystem::RegCursorListener(this);
 		INITIALIZE_PROPERTY(CursorEventsListener, interactable, SetInteractable, IsInteractable);
 	}
 
 	CursorEventsListener::CursorEventsListener(const CursorEventsListener& other):
 		mIsPressed(false), mIsRightMousePressed(false), mIsMiddleMousePressed(0), mInteractable(other.mInteractable)
 	{
-		EventSystem::RegCursorListener(this);
 		INITIALIZE_PROPERTY(CursorEventsListener, interactable, SetInteractable, IsInteractable);
 	}
 
 	CursorEventsListener::~CursorEventsListener()
 	{
-		EventSystem::UnregCursorListener(this);
+		o2Events.UnregCursorListener(this);
 	}
 
 	bool CursorEventsListener::IsUnderPoint(const Vec2F& point)
 	{
 		return false;
-	}
-
-	float CursorEventsListener::Depth()
-	{
-		return 0.0f;
 	}
 
 	bool CursorEventsListener::IsScrollable() const
@@ -43,9 +38,6 @@ namespace o2
 		if (mInteractable == interactable)
 			return;
 
-		if (interactable) EventSystem::RegCursorListener(this);
-		else              EventSystem::UnregCursorListener(this);
-
 		mInteractable = interactable;
 
 		if (mInteractable)
@@ -57,6 +49,15 @@ namespace o2
 	bool CursorEventsListener::IsInteractable() const
 	{
 		return mInteractable;
+	}
+
+	void CursorEventsListener::OnDrawn()
+	{
+		if (!mInteractable)
+			return;
+
+		mScissorRect = o2Render.GetResScissorRect();
+		o2Events.DrawnCursorListener(this);
 	}
 
 	void CursorEventsListener::OnCursorPressed(const Input::Cursor& cursor)

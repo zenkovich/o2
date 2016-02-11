@@ -1,5 +1,8 @@
 #include "ScaleTool.h"
 
+#include "Core/Actions/ActorsTransform.h"
+#include "Core/EditorApplication.h"
+#include "Render/Render.h"
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -23,13 +26,16 @@ EditorScaleTool::EditorScaleTool():
 	mVerDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &EditorScaleTool::OnVerDragHandleMoved);
 	mBothDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &EditorScaleTool::OnBothDragHandleMoved);
 
-	mHorDragHandle.regularSprite->SetSizePivot(Vec2F(1, 5));
-	mHorDragHandle.hoverSprite->SetSizePivot(Vec2F(1, 5));
-	mHorDragHandle.pressedSprite->SetSizePivot(Vec2F(1, 5));
+	mHorDragHandle.onPressed = Function<void()>(this, &EditorScaleTool::HandlePressed);
+	mVerDragHandle.onPressed = Function<void()>(this, &EditorScaleTool::HandlePressed);
+	mBothDragHandle.onPressed = Function<void()>(this, &EditorScaleTool::HandlePressed);
 
-	mVerDragHandle.regularSprite->SetSizePivot(Vec2F(5, 1));
-	mVerDragHandle.hoverSprite->SetSizePivot(Vec2F(5, 1));
-	mVerDragHandle.pressedSprite->SetSizePivot(Vec2F(5, 1));
+	mHorDragHandle.onReleased = Function<void()>(this, &EditorScaleTool::UpdateHandlesPosition);
+	mVerDragHandle.onReleased = Function<void()>(this, &EditorScaleTool::UpdateHandlesPosition);
+
+	mHorDragHandle.onReleased += Function<void()>(this, &EditorScaleTool::HandleReleased);
+	mVerDragHandle.onReleased += Function<void()>(this, &EditorScaleTool::HandleReleased);
+	mBothDragHandle.onReleased += Function<void()>(this, &EditorScaleTool::HandleReleased);
 }
 
 EditorScaleTool::~EditorScaleTool()
@@ -37,6 +43,20 @@ EditorScaleTool::~EditorScaleTool()
 
 void EditorScaleTool::Update(float dt)
 {}
+
+void EditorScaleTool::DrawScreen()
+{
+	EditorSelectionTool::DrawScreen();
+
+	if (!mHorDragHandle.IsPressed() && !mVerDragHandle.IsPressed() && !mBothDragHandle.IsPressed())
+		UpdateHandlesPositions();
+
+	Vec2F screenHandlesPos = o2EditorSceneScreen.SceneToScreenPoint(mSceneHandlesPos);
+	Vec2F screenHorHandlePos = o2EditorSceneScreen.SceneToScreenPoint(mHorDragHandle.GetPosition());
+	Vec2F screenVerHandlePos = o2EditorSceneScreen.SceneToScreenPoint(mVerDragHandle.GetPosition());
+	o2Render.DrawLine(screenHandlesPos, screenHorHandlePos, Color4::Green());
+	o2Render.DrawLine(screenHandlesPos, screenVerHandlePos, Color4::Red());
+}
 
 void EditorScaleTool::OnEnabled()
 {
@@ -63,17 +83,39 @@ void EditorScaleTool::OnActorsSelectionChanged(Vector<Actor*> actors)
 
 void EditorScaleTool::OnHorDragHandleMoved(const Vec2F& position)
 {
+	Vec2F axis = Vec2F::Rotated(mHandlesAngle);
+	Vec2F handlePos = (position - mSceneHandlesPos).Project(axis) + mSceneHandlesPos;
+	float scale = (handlePos - mSceneHandlesPos).Length() / (mLastHorHandlePos - mSceneHandlesPos).Length();
 
+	mLastHorHandlePos = handlePos;
+	mHorDragHandle.position = handlePos;
+
+	ScaleSelectedActors(Vec2F(scale, 1.0f));
 }
 
 void EditorScaleTool::OnVerDragHandleMoved(const Vec2F& position)
 {
+	Vec2F axis = Vec2F::Rotated(mHandlesAngle).Perpendicular();
+	Vec2F handlePos = (position - mSceneHandlesPos).Project(axis) + mSceneHandlesPos;
+	float scale = (handlePos - mSceneHandlesPos).Length() / (mLastVerHandlePos - mSceneHandlesPos).Length();
 
+	mLastVerHandlePos = handlePos;
+	mVerDragHandle.position = handlePos;
+
+	ScaleSelectedActors(Vec2F(1.0f, scale));
 }
 
 void EditorScaleTool::OnBothDragHandleMoved(const Vec2F& position)
 {
+	float delta = o2EditorSceneScreen.SceneToScreenPoint(position).x -
+		o2EditorSceneScreen.SceneToScreenPoint(mLastBothHandlePos).x;
 
+	float scale = 1.0f + delta*bothScaleSence;
+	mLastBothHandlePos = position;
+
+	mBothDragHandle.position = mSceneHandlesPos;
+
+	ScaleSelectedActors(Vec2F(scale, scale));
 }
 
 void EditorScaleTool::UpdateHandlesPosition()
@@ -83,37 +125,46 @@ void EditorScaleTool::UpdateHandlesPosition()
 		selectedActors.Sum<Vec2F>([](auto x) { return x->transform.GetWorldPosition(); }) /
 		(float)selectedActors.Count();
 
-	mVerDragHandle.position = mSceneHandlesPos;
-	mHorDragHandle.position = mSceneHandlesPos;
-	mBothDragHandle.position = mSceneHandlesPos;
-
 	if (selectedActors.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
 	{
 		Actor* lastSelectedActor = selectedActors.Last();
-		mHandlesAngle = -lastSelectedActor->transform.right->Angle(Vec2F::Right());
+		UpdateHandlesAngleAndPositions(-lastSelectedActor->transform.right->Angle(Vec2F::Right()));
+	}
+	else UpdateHandlesAngleAndPositions(0.0f);
+}
 
-		mVerDragHandle.angle = mHandlesAngle;
-		mHorDragHandle.angle = mHandlesAngle;
-		mBothDragHandle.angle = mHandlesAngle;
-	}
-	else
-	{
-		mHandlesAngle = 0.0f;
-		mVerDragHandle.angle = mHandlesAngle;
-		mHorDragHandle.angle = mHandlesAngle;
-		mBothDragHandle.angle = mHandlesAngle;
-	}
+void EditorScaleTool::UpdateHandlesAngleAndPositions(float angle)
+{
+	mHandlesAngle = angle;
+
+	mVerDragHandle.angle = mHandlesAngle;
+	mHorDragHandle.angle = mHandlesAngle;
+	mBothDragHandle.angle = mHandlesAngle;
+
+	UpdateHandlesPositions();
+}
+
+void EditorScaleTool::UpdateHandlesPositions()
+{
+	Vec2F handlesAxis = Vec2F::Rotated(mHandlesAngle);
+	Vec2F handlesSceneSize = o2EditorSceneScreen.ScreenToScenePoint(mHandlesSize) -
+		o2EditorSceneScreen.ScreenToScenePoint(Vec2F());
+
+	mVerDragHandle.position = mSceneHandlesPos + handlesAxis.Perpendicular()*handlesSceneSize.y;
+	mHorDragHandle.position = mSceneHandlesPos + handlesAxis*handlesSceneSize.x;
+	mBothDragHandle.position = mSceneHandlesPos;
+
+	mLastVerHandlePos = mVerDragHandle.position;
+	mLastHorHandlePos = mHorDragHandle.position;
+	mLastBothHandlePos = mBothDragHandle.position;
 }
 
 void EditorScaleTool::OnKeyPressed(const Input::Key& key)
 {
 	if (key == VK_CONTROL)
-	{
-		mHandlesAngle = 0.0f;
-		mVerDragHandle.angle = mHandlesAngle;
-		mHorDragHandle.angle = mHandlesAngle;
-		mBothDragHandle.angle = mHandlesAngle;
-	}
+		UpdateHandlesAngleAndPositions(0.0f);
+
+	EditorSelectionTool::OnKeyPressed(key);
 }
 
 void EditorScaleTool::OnKeyStayDown(const Input::Key& key)
@@ -127,16 +178,32 @@ void EditorScaleTool::OnKeyReleased(const Input::Key& key)
 		if (selectedActors.Count() > 0)
 		{
 			Actor* lastSelectedActor = selectedActors.Last();
-			mHandlesAngle = -lastSelectedActor->transform.right->Angle(Vec2F::Right());
-
-			mVerDragHandle.angle = mHandlesAngle;
-			mHorDragHandle.angle = mHandlesAngle;
-			mBothDragHandle.angle = mHandlesAngle;
+			UpdateHandlesAngleAndPositions(-lastSelectedActor->transform.right->Angle(Vec2F::Right()));
 		}
 	}
 }
 
 void EditorScaleTool::ScaleSelectedActors(const Vec2F& scale)
 {
+	Basis transform =
+		Basis::Translated(mSceneHandlesPos*-1.0f)*
+		Basis::Rotated(-mHandlesAngle)*
+		Basis::Scaled(scale)*
+		Basis::Rotated(mHandlesAngle)*
+		Basis::Translated(mSceneHandlesPos);
 
+	for (auto actor : o2EditorSceneScreen.GetTopSelectedActors())
+		actor->transform.SetWorldNonSizedBasis(actor->transform.GetWorldNonSizedBasis()*transform);
+}
+
+void EditorScaleTool::HandlePressed()
+{
+	mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
+		[](Actor* x) { return x->transform; });
+}
+
+void EditorScaleTool::HandleReleased()
+{
+	auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+	o2EditorApplication.DoneAction(action);
 }

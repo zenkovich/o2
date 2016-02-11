@@ -2,7 +2,7 @@
 #include "Render\Render.h"
 
 UIDockWindowPlace::UIDockWindowPlace():
-	UIWidget(), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()), 
+	UIWidget(), DrawableCursorEventsListener(this), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()), 
 	mDragHandleLayoutMax(Vec2F(), Vec2F(), Vec2F(), Vec2F()), mNeighborMax(nullptr), mNeighborMin(nullptr)
 {
 	InitializeDragHandle();
@@ -11,7 +11,7 @@ UIDockWindowPlace::UIDockWindowPlace():
 }
 
 UIDockWindowPlace::UIDockWindowPlace(const UIDockWindowPlace& other):
-	UIWidget(other), mNeighborMax(nullptr), mNeighborMin(nullptr)
+	UIWidget(other), DrawableCursorEventsListener(this), mNeighborMax(nullptr), mNeighborMin(nullptr)
 {
 	InitializeDragHandle();
 	RetargetStatesAnimations();
@@ -31,6 +31,10 @@ UIDockWindowPlace& UIDockWindowPlace::operator=(const UIDockWindowPlace& other)
 void UIDockWindowPlace::Draw()
 {
 	UIWidget::Draw();
+
+	mDragHandleMin.OnDrawn();
+	mDragHandleMax.OnDrawn();
+
 	mDragHandleDepth = o2Render.GetDrawingDepth();
 	if (o2Input.IsKeyDown(VK_F1))
 	{
@@ -61,11 +65,6 @@ void UIDockWindowPlace::Draw()
 bool UIDockWindowPlace::IsUnderPoint(const Vec2F& point)
 {
 	return layout.GetAbsoluteRect().IsInside(point);
-}
-
-float UIDockWindowPlace::Depth()
-{
-	return 0;
 }
 
 void UIDockWindowPlace::SetResizibleDir(TwoDirection dir, float border,
@@ -170,11 +169,9 @@ void UIDockWindowPlace::CheckInteractable()
 
 void UIDockWindowPlace::InitializeDragHandle()
 {
-	mDragHandleMin.getDepth = [&]() { return mDragHandleDepth; };
 	mDragHandleMin.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMin.IsInside(point); };
 	mDragHandleMin.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.mDelta); };
 
-	mDragHandleMax.getDepth = [&]() { return mDragHandleDepth; };
 	mDragHandleMax.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMax.IsInside(point); };
 	mDragHandleMax.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.mDelta); };
 }

@@ -26,4 +26,5 @@ namespace UIStyle
 	void RebuildBasicUIStyle();
 	void RebuildBacklessDropdown();
 	void RebuildBacklessEditbox();
+	void RebuildBacklessScrollarea();
 }

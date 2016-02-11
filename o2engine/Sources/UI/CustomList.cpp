@@ -10,7 +10,8 @@
 namespace o2
 {
 	UICustomList::UICustomList():
-		UIScrollArea(), mSelectedItem(-1), mHoverLayout(Layout::BothStretch()), mSelectionLayout(Layout::BothStretch())
+		UIScrollArea(), DrawableCursorEventsListener(this), mSelectedItem(-1), mHoverLayout(Layout::BothStretch()), 
+		mSelectionLayout(Layout::BothStretch())
 	{
 		mItemSample = mnew UIWidget();
 		mSelectionDrawable = mnew Sprite();
@@ -33,7 +34,8 @@ namespace o2
 	}
 
 	UICustomList::UICustomList(const UICustomList& other):
-		UIScrollArea(other), mSelectedItem(-1), mHoverLayout(other.mHoverLayout), mSelectionLayout(other.mSelectionLayout)
+		UIScrollArea(other), DrawableCursorEventsListener(this), mSelectedItem(-1), mHoverLayout(other.mHoverLayout), 
+		mSelectionLayout(other.mSelectionLayout)
 	{
 		mVerLayout = FindChild<UIVerticalLayout>();
 		mItemSample = other.mItemSample->Clone();
@@ -108,6 +110,8 @@ namespace o2
 
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
+
+		IDrawable::OnDrawn();
 
  		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -317,16 +321,6 @@ namespace o2
 	Layout UICustomList::GetHoverDrawableLayout() const
 	{
 		return mHoverLayout;
-	}
-
-	bool UICustomList::IsUnderPoint(const Vec2F& point)
-	{
-		return mAbsoluteClipArea.IsInside(point);
-	}
-
-	float UICustomList::Depth()
-	{
-		return GetMaxDrawingDepth();
 	}
 
 	bool UICustomList::IsScrollable() const

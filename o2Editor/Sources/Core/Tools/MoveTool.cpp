@@ -1,5 +1,7 @@
 #include "MoveTool.h"
 
+#include "Core/Actions/ActorsTransform.h"
+#include "Core/EditorApplication.h"
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -22,6 +24,14 @@ EditorMoveTool::EditorMoveTool():
 	mHorDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &EditorMoveTool::OnHorDragHandleMoved);
 	mVerDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &EditorMoveTool::OnVerDragHandleMoved);
 	mBothDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &EditorMoveTool::OnBothDragHandleMoved);
+
+	mHorDragHandle.onPressed = Function<void()>(this, &EditorMoveTool::HandlePressed);
+	mVerDragHandle.onPressed = Function<void()>(this, &EditorMoveTool::HandlePressed);
+	mBothDragHandle.onPressed = Function<void()>(this, &EditorMoveTool::HandlePressed);
+
+	mHorDragHandle.onReleased = Function<void()>(this, &EditorMoveTool::HandleReleased);
+	mVerDragHandle.onReleased = Function<void()>(this, &EditorMoveTool::HandleReleased);
+	mBothDragHandle.onReleased = Function<void()>(this, &EditorMoveTool::HandleReleased);
 
 	mHorDragHandle.regularSprite->SetSizePivot(Vec2F(1, 5));
 	mHorDragHandle.hoverSprite->SetSizePivot(Vec2F(1, 5));
@@ -91,6 +101,18 @@ void EditorMoveTool::OnBothDragHandleMoved(const Vec2F& position)
 	HandlesMoved(position - mLastSceneHandlesPos, snap, snap);
 }
 
+void EditorMoveTool::HandlePressed()
+{
+	mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
+		[](Actor* x) { return x->transform; });
+}
+
+void EditorMoveTool::HandleReleased()
+{
+	auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+	o2EditorApplication.DoneAction(action);
+}
+
 void EditorMoveTool::HandlesMoved(const Vec2F& delta, bool snapHor /*= false*/, bool spanVer /*= false*/)
 {
 	if (spanVer || snapHor)
@@ -156,16 +178,16 @@ void EditorMoveTool::OnKeyPressed(const Input::Key& key)
 	float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
 
 	if (key == VK_LEFT)
-		MoveSelectedActors(Vec2F::Left()*delta);
+		MoveSelectedActorsWithAction(Vec2F::Left()*delta);
 
 	if (key == VK_RIGHT)
-		MoveSelectedActors(Vec2F::Right()*delta);
+		MoveSelectedActorsWithAction(Vec2F::Right()*delta);
 
 	if (key == VK_UP)
-		MoveSelectedActors(Vec2F::Up()*delta);
+		MoveSelectedActorsWithAction(Vec2F::Up()*delta);
 
 	if (key == VK_DOWN)
-		MoveSelectedActors(Vec2F::Down()*delta);
+		MoveSelectedActorsWithAction(Vec2F::Down()*delta);
 
 	if (key == VK_CONTROL)
 	{
@@ -174,6 +196,8 @@ void EditorMoveTool::OnKeyPressed(const Input::Key& key)
 		mHorDragHandle.angle = mHandlesAngle;
 		mBothDragHandle.angle = mHandlesAngle;
 	}
+
+	EditorSelectionTool::OnKeyPressed(key);
 }
 
 void EditorMoveTool::OnKeyStayDown(const Input::Key& key)
@@ -184,16 +208,16 @@ void EditorMoveTool::OnKeyStayDown(const Input::Key& key)
 		return;
 
 	if (key == VK_LEFT)
-		MoveSelectedActors(Vec2F::Left()*delta);
+		MoveSelectedActorsWithAction(Vec2F::Left()*delta);
 
 	if (key == VK_RIGHT)
-		MoveSelectedActors(Vec2F::Right()*delta);
+		MoveSelectedActorsWithAction(Vec2F::Right()*delta);
 
 	if (key == VK_UP)
-		MoveSelectedActors(Vec2F::Up()*delta);
+		MoveSelectedActorsWithAction(Vec2F::Up()*delta);
 
 	if (key == VK_DOWN)
-		MoveSelectedActors(Vec2F::Down()*delta);
+		MoveSelectedActorsWithAction(Vec2F::Down()*delta);
 }
 
 void EditorMoveTool::OnKeyReleased(const Input::Key& key)
@@ -218,4 +242,15 @@ void EditorMoveTool::MoveSelectedActors(const Vec2F& delta)
 	auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
 	for (auto actor : selectedActors)
 		actor->transform.SetWorldPosition(actor->transform.GetWorldPosition() + delta);
+}
+
+void EditorMoveTool::MoveSelectedActorsWithAction(const Vec2F& delta)
+{
+	mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
+		[](Actor* x) { return x->transform; });
+
+	MoveSelectedActors(delta);
+
+	auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+	o2EditorApplication.DoneAction(action);
 }

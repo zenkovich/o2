@@ -5,6 +5,8 @@
 
 namespace o2
 {
+	class IDrawable;
+
 	// -----------------------
 	// Cursors events listener
 	// -----------------------
@@ -25,20 +27,20 @@ namespace o2
 		// Returns true if point is in this object
 		virtual bool IsUnderPoint(const Vec2F& point);
 
-		// Returns depth (event system will catch listener with highest depth)
-		virtual float Depth();
-
 		// Returns is listener scrollable
 		virtual bool IsScrollable() const;
 
 		// Sets interactable flag
-		void SetInteractable(bool interactable);
+		virtual void SetInteractable(bool interactable);
 
 		// Returns interactable flag
 		virtual bool IsInteractable() const;
 
 		// Returns true if this was pressed by some cursor
 		bool IsPressed() const;
+
+		// Calls when listener was drawn
+		virtual void OnDrawn();
 
 	protected:
 		// Calls when cursor pressed on this
@@ -84,10 +86,11 @@ namespace o2
 		virtual void OnScrolled(float scroll);
 		
 	protected:
-		bool mInteractable;         // True when listener is interactable
-		bool mIsPressed;            // True when was pressed by cursor
-		bool mIsRightMousePressed;  // True when was pressed by right mouse button
-		bool mIsMiddleMousePressed; // True when was pressed by middle mouse button
+		RectF mScissorRect;          // Scissor rect at drawing moment
+		bool  mInteractable;         // True when listener is interactable
+		bool  mIsPressed;            // True when was pressed by cursor
+		bool  mIsRightMousePressed;  // True when was pressed by right mouse button
+		bool  mIsMiddleMousePressed; // True when was pressed by middle mouse button
 
 	protected:
 		// Calls when listener becomes interactable

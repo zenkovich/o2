@@ -575,9 +575,19 @@ namespace o2
 	RectI Render::GetScissorRect() const
 	{
 		if (mStackScissors.IsEmpty())
-			return RectI();
+			return RectI(-(int)(mCurrentResolution.x*0.5f), -(int)(mCurrentResolution.y*0.5f),
+						 (int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
 
 		return (RectI)(mStackScissors.Last().mScrissorRect);
+	}
+
+	RectI Render::GetResScissorRect() const
+	{
+		if (mStackScissors.IsEmpty())
+			return RectI(-(int)(mCurrentResolution.x*0.5f), -(int)(mCurrentResolution.y*0.5f),
+						 (int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
+
+		return (RectI)(mStackScissors.Last().mSummaryScissorRect);
 	}
 
 	const Render::StackScissorVec& Render::GetScissorsStack() const
@@ -671,7 +681,6 @@ namespace o2
 			return false;
 
 		mDrawingDepth += 1.0f;
-		mesh->mDrawingDepth = mDrawingDepth;
 
 		if (mClippingEverything)
 			return true;

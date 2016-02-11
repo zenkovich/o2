@@ -211,6 +211,11 @@ namespace o2
 		LoadAssetsTree();
 	}
 
+	const AssetTree& Assets::GetAssetsTree() const
+	{
+		return mAssetsTree;
+	}
+
 	void Assets::LoadAssetsTree()
 	{
 		mAssetsTree.BuildTree(DATA_PATH);

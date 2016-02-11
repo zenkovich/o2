@@ -23,8 +23,8 @@ namespace o2
 
 	void EventSystem::Update(float dt)
 	{
-		mCursorListeners.Sort([](CursorEventsListener* a, CursorEventsListener* b) { return a->Depth() > b->Depth(); });
-		mDragListeners.Sort([](DragEventsListener* a, DragEventsListener* b) { return a->Depth() > b->Depth(); });
+		mCursorListeners.Reverse();
+		mDragListeners.Reverse();
 
 		mLastUnderCursorListeners = mUnderCursorListeners;
 		mUnderCursorListeners.Clear();
@@ -99,6 +99,9 @@ namespace o2
 				line += 20;
 			}
 		}
+
+		mCursorListeners.Clear();
+		mDragListeners.Clear();
 	}
 
 	void EventSystem::OnApplicationStarted()
@@ -135,7 +138,7 @@ namespace o2
 	{
 		for (auto listener : mCursorListeners)
 		{
-			if (IsListenerClipped(listener->Depth(), cursor.mPosition) || !listener->IsUnderPoint(cursor.mPosition))
+			if (!listener->IsUnderPoint(cursor.mPosition))
 				continue;
 
 			auto drag = dynamic_cast<DragEventsListener*>(listener);
@@ -181,7 +184,7 @@ namespace o2
 			if (listener->IsDragging())
 				continue;
 
-			if (IsListenerClipped(listener->Depth(), cursorPos) || !listener->IsUnderPoint(cursorPos))
+			if (!listener->IsUnderPoint(cursorPos))
 				continue;
 
 			return listener;
@@ -206,7 +209,7 @@ namespace o2
 		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
 		for (auto listener : mCursorListeners)
 		{
-			if (IsListenerClipped(listener->Depth(), cursorPos) || !listener->IsUnderPoint(cursorPos))
+			if (!listener->IsUnderPoint(cursorPos))
 				continue;
 
 			res.Add(listener);
@@ -357,25 +360,7 @@ namespace o2
 			listener->OnKeyReleased(key);
 	}
 
-	bool EventSystem::IsListenerClipped(float depth, const Vec2F& cursorPos) const
-	{
-		if (depth < 0)
-			return true;
-
-		bool clipped = false;
-		for (auto scissorInfo : o2Render.GetScissorInfos())
-		{
-			if (depth > scissorInfo.mBeginDepth && depth <= scissorInfo.mEndDepth &&
-				!scissorInfo.mScissorRect.IsInside(cursorPos))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	void EventSystem::RegCursorListener(CursorEventsListener* listener)
+	void EventSystem::DrawnCursorListener(CursorEventsListener* listener)
 	{
 		if (!IsSingletonInitialzed())
 			return;

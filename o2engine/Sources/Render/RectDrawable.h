@@ -52,6 +52,9 @@ namespace o2
 		// Returns enabled
 		virtual bool IsEnabled() const;
 
+		// Returns true if point is under drawable
+		bool IsUnderPoint(const Vec2F& point);
+
 		SERIALIZABLE(IRectDrawable);
 
 	protected:

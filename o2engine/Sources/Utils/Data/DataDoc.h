@@ -113,6 +113,9 @@ namespace o2
 		// Assign operator to integer value
 		DataNode& operator=(int value);
 
+		// Assign operator to integer value
+		DataNode& operator=(UInt64 value);
+
 		// Assign operator to boolean value
 		DataNode& operator=(bool value);
 
@@ -176,6 +179,9 @@ namespace o2
 
 		// Cast operator to unsigned integer
 		operator UInt() const;
+
+		// Cast operator to unsigned integer
+		operator UInt64() const;
 
 		// Cast operator to string
 		operator String() const;

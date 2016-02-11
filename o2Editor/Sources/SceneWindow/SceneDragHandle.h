@@ -23,6 +23,8 @@ public:
 	Sprite*                      pressedSprite; // Pressed view sprite
 	Function<void(const Vec2F&)> onChangedPos;  // On position changed event (parameter - position in scene)
 	Function<void(const Vec2F&)> onMoved;       // On moved event (parameter - delta in scene)
+	Function<void()>             onPressed;     // On cursor pressed event
+	Function<void()>             onReleased;    // On cursor released event
 	Property<Vec2F>              position;      // Current position in scene property
 	Property<float>              angle;         // Handle angle in radians property
 	Property<bool>               enabled;       // Handle enabling property
@@ -47,9 +49,6 @@ public:
 
 	// Returns true if point in screen space is above this
 	bool IsUnderPoint(const Vec2F& point);
-
-	// Returns depth
-	float Depth();
 
 	// Sets position in scene
 	void SetPosition(const Vec2F& position);

@@ -1,5 +1,7 @@
 #include "SelectionTool.h"
 
+#include "Core/Actions/Selection.h"
+#include "Core/EditorApplication.h"
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -50,15 +52,16 @@ void EditorSelectionTool::OnCursorReleased(const Input::Cursor& cursor)
 {
 	if (mSelectingActors)
 	{
-		o2EditorSceneScreen.SelectActors(mCurrentSelectingActors, true);
+		o2EditorSceneScreen.SelectActorsWithoutAction(mCurrentSelectingActors, true);
 		mCurrentSelectingActors.Clear();
 		mSelectingActors = false;
+
+		auto selectionAction = mnew EditorSelectionAction(o2EditorSceneScreen.GetSelectedActors(), mBeforeSelectingActors);
+		o2EditorApplication.DoneAction(selectionAction);
 	}
 	else
 	{
-		if (!o2Input.IsKeyDown(VK_SHIFT))
-			o2EditorSceneScreen.ClearSelection();
-
+		bool selected = false;
 		Vec2F sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition);
 		for (auto layer : o2Scene.GetLayers())
 		{
@@ -66,12 +69,25 @@ void EditorSelectionTool::OnCursorReleased(const Input::Cursor& cursor)
 			{
 				if (!actor->IsLockedInHierarchy() && actor->transform.IsPointInside(sceneSpaceCursor))
 				{
-					o2EditorSceneScreen.SelectActor(actor);
+					mBeforeSelectingActors = o2EditorSceneScreen.GetSelectedActors();
+
+					if (!o2Input.IsKeyDown(VK_SHIFT))
+						o2EditorSceneScreen.ClearSelectionWithoutAction();
+
+					o2EditorSceneScreen.SelectActorWithoutAction(actor);
 					o2EditorTree.ExpandActorsTreeNode(actor);
+					selected = true;
+
+					auto selectionAction = mnew EditorSelectionAction(o2EditorSceneScreen.GetSelectedActors(), 
+																	  mBeforeSelectingActors);
+					o2EditorApplication.DoneAction(selectionAction);
 					break;
 				}
 			}
 		}
+
+		if (!o2Input.IsKeyDown(VK_SHIFT) && !selected)
+			o2EditorSceneScreen.ClearSelection();
 	}
 }
 
@@ -90,8 +106,10 @@ void EditorSelectionTool::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		mSelectingActors = true;
 
+		mBeforeSelectingActors = o2EditorSceneScreen.GetSelectedActors();
+
 		if (!o2Input.IsKeyDown(VK_SHIFT))
-			o2EditorSceneScreen.ClearSelection();
+			o2EditorSceneScreen.ClearSelectionWithoutAction();
 	}
 
 	if (mSelectingActors && cursor.mDelta.Length() > 0.1f)
@@ -128,3 +146,12 @@ void EditorSelectionTool::OnCursorStillDown(const Input::Cursor& cursor)
 
 void EditorSelectionTool::OnCursorMoved(const Input::Cursor& cursor)
 {}
+
+void EditorSelectionTool::OnKeyPressed(const Input::Key& key)
+{
+	if (key == VK_ESCAPE)
+		o2EditorSceneScreen.ClearSelection();
+
+	if (key == 'A' && o2Input.IsKeyDown(VK_CONTROL))
+		o2EditorSceneScreen.SelectAllActors();
+}
