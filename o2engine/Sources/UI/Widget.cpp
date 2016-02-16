@@ -340,13 +340,15 @@ namespace o2
 		return nullptr;
 	}
 
-	void UIWidget::RemoveAllChilds()
+	void UIWidget::RemoveAllChilds(bool release /*= true*/)
 	{
 		for (auto child : mChilds)
 		{
 			child->mParent = nullptr;
 			OnChildRemoved(child);
-			delete child;
+			
+			if (release)
+				delete child;
 		}
 
 		mChilds.Clear();
@@ -708,6 +710,8 @@ namespace o2
 
 	void UIWidget::RecalculateAbsRect()
 	{
+		RectF lastAbsRect = layout.mAbsoluteRect;
+
 		Vec2F parentSize, parentPos;
 		if (mParent)
 		{
@@ -739,6 +743,9 @@ namespace o2
 		layout.mLocalRect.top = Math::Floor(layout.mLocalRect.top);
 
 		layout.mAbsoluteRect = layout.mLocalRect + parentPos;
+
+		if (lastAbsRect != layout.mAbsoluteRect)
+			onLayoutChanged();
 	}
 
 	void UIWidget::UpdateLayersLayouts()

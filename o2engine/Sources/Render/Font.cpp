@@ -11,7 +11,7 @@ namespace o2
 	}
 
 	Font::Font(const Font& font):
-		mCharacters(font.mCharacters), mBaseHeight(font.mBaseHeight), mTexture(font.mTexture), 
+		mCharacters(font.mCharacters), mTexture(font.mTexture), 
 		mTextureSrcRect(font.mTextureSrcRect), mReady(font.mReady)
 	{
 		o2Render.mFonts.Add(this);
@@ -22,26 +22,26 @@ namespace o2
 		o2Render.mFonts.Remove(this);
 	}
 
-	float Font::GetHeight() const
+	float Font::GetHeightPx(int height) const
 	{
-		return mBaseHeight;
+		return 1.0f;
 	}
 
-	float Font::GetLineHeight() const
+	float Font::GetLineHeightPx(int height) const
 	{
-		return mLineHeight;
+		return 1.0f;
 	}
 
-	const Font::Character& Font::GetCharacter(UInt16 id)
+	const Font::Character& Font::GetCharacter(UInt16 id, int height)
 	{
 		for (const Character& ch : mCharacters)
-			if (ch.mId == id)
+			if (ch.mId == id && height == ch.mHeight)
 				return ch;
 
 		return mCharacters.Get(0);
 	}
 
-	void Font::CheckCharacters(const WString& needChararacters)
+	void Font::CheckCharacters(const WString& needChararacters, int height)
 	{}
 
 	String Font::GetFileName() const
@@ -51,6 +51,6 @@ namespace o2
 
 	bool Font::Character::operator==(const Character& other) const
 	{
-		return mId == other.mId;
+		return mId == other.mId && mHeight == other.mHeight;
 	}
 }

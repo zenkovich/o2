@@ -198,6 +198,27 @@ namespace o2
 		// Returns available rearrange type 
 		RearrangeType GetRearrangeType() const;
 
+		// Sets selected nodes sprite color
+		void SetSelectedColor(const Color4& color);
+
+		// Returns selected nodes sprite color
+		Color4 GetSelectedColor() const;
+
+		// Sets not selected nodes sprite color
+		void SetUnselectedColor(const Color4& color);
+
+		// Returns not selected nodes sprite color
+		Color4 GetUnselectedColor() const;
+
+		// Sets hover nodes sprite color
+		void SetHoverColor(const Color4& color);
+
+		// Returns hover nodes sprite color
+		Color4 GetHoverColor() const;
+
+		// Returns is this widget can be selected
+		bool IsSelectable() const;
+
 		SERIALIZABLE(UITree);
 
 	protected:
@@ -215,11 +236,14 @@ namespace o2
 	protected:
 		int               mNodesPoolResizeCount = 20;            
 		int               mSelectionSpritesPoolResizeCount = 10;
+		Color4            mSelectedColor = Color4(175, 175, 255, 150);   // @SERIALIZABLE
+		Color4            mUnselectedColor = Color4(100, 100, 100, 100); // @SERIALIZABLE
+		Color4            mHoverColor = Color4(100, 100, 100, 100);      // @SERIALIZABLE
 						  
 		TreeNodesVec      mAllNodes;              // Array of all tree nodes
 		UITreeNode*       mNodeSample;            // Item sample @SERIALIZABLE
 		Sprite*           mHoverDrawable;         // Selection sprite @SERIALIZABLE
-		Sprite*           mSelectedDrawable;      // Node selection drawable
+		Sprite*           mSelectedDrawable;      // Node selection drawable @SERIALIZABLE
 		Layout            mHoverLayout;           // Selection layout, result selection area depends on selected item @SERIALIZABLE
 						  
 		RectF             mCurrentHoverRect;      // Current selection rectangle (for smoothing)
@@ -252,6 +276,12 @@ namespace o2
 		bool              mNeedUpdateLayout;      // True if layout needs to update
 
 	protected:
+		// Calls when widget was selected
+		void OnSelected();
+
+		// Calls when widget was deselected
+		void OnDeselected();
+
 		// Updates layout
 		void UpdateLayout(bool forcible = false);
 

@@ -493,9 +493,6 @@
     <ClInclude Include="..\Sources\Utils\DragHandle.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\FunctionalDragHandle.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h">
       <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
@@ -504,6 +501,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\UI\GridLayout.h">
       <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\CursorEventsArea.h">
+      <Filter>Sources\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -825,9 +825,6 @@
     <ClCompile Include="..\Sources\Utils\DragHandle.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\FunctionalDragHandle.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Utils\Reflection\FunctionInfo.cpp">
       <Filter>Sources\Utils\Reflection</Filter>
     </ClCompile>
@@ -839,6 +836,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\UI\GridLayout.cpp">
       <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\CursorEventsArea.cpp">
+      <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

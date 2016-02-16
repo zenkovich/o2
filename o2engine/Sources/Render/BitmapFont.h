@@ -22,7 +22,18 @@ namespace o2
 		// Returns file name
 		String GetFileName() const;
 
+		// Returns base height in pixels for font with size
+		float GetHeightPx(int height) const;
+
+		// Returns line height in pixels for font with size
+		float GetLineHeightPx(int height) const;
+
+		// Returns character constant reference by id
+		const Character& GetCharacter(UInt16 id, int height);
+
 	protected:
-		String mFileName; // Source file name
+		String mFileName;   // Source file name
+		float  mBaseHeight; // Source font height
+		float  mLineHeight; // Source font line height
 	};
 }

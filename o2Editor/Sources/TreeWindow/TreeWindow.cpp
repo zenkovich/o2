@@ -62,7 +62,10 @@ TreeWindow::TreeWindow(const TreeWindow& other):
 }
 
 TreeWindow::~TreeWindow()
-{}
+{
+	o2Scene.onActorCreated -= Function<void(Actor*)>(this, &TreeWindow::OnActorCreated);
+	o2Scene.onActorDeleting -= Function<void(Actor*)>(this, &TreeWindow::OnActorDestroyed);
+}
 
 void TreeWindow::InitializeWindow()
 {
@@ -181,8 +184,8 @@ void TreeWindow::InitializeWindow()
 
 void TreeWindow::PostInitializeWindow()
 {
-	o2Scene.onActorCreated += [&](auto x) { mActorsTree->RebuildTree(); };
-	o2Scene.onActorDeleting += [&](auto x) { mActorsTree->RebuildTree(); };
+	o2Scene.onActorCreated += Function<void(Actor*)>(this, &TreeWindow::OnActorCreated);
+	o2Scene.onActorDeleting += Function<void(Actor*)>(this, &TreeWindow::OnActorDestroyed);
 	//o2Scene.onChanged += [&](auto x) { mActorsTree->RebuildTree(); };
 }
 
@@ -527,5 +530,15 @@ void TreeWindow::OnContextEnablePressed()
 		if (node)
 			node->Rebuild();
 	}
+}
+
+void TreeWindow::OnActorCreated(Actor* actor)
+{
+	mActorsTree->RebuildTree();
+}
+
+void TreeWindow::OnActorDestroyed(Actor* actor)
+{
+	mActorsTree->RebuildTree();
 }
 

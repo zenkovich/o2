@@ -2,7 +2,6 @@
 
 #include "Assets/AssetInfo.h"
 #include "UI/Widget.h"
-#include "Utils/DragHandle.h"
 
 using namespace o2;
 
@@ -38,11 +37,6 @@ public:
 	SERIALIZABLE(UIAssetIcon);
 
 protected:
-	DragHandle mDragHandle; // Drag handle
-	Text*      mNameText;   // Asset name text layer
-	AssetInfo  mAssetInfo;  // Asset information
-
-protected:
-	// Updates layout
-	void UpdateLayout(bool forcible = false);
+	Text*     mNameText;   // Asset name text layer
+	AssetInfo mAssetInfo;  // Asset information
 };

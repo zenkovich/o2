@@ -141,5 +141,11 @@ protected:
 	// Calls when pressed "Enable/disable" in context menu
 	void OnContextEnablePressed();
 
+	// Calls when actor was created
+	void OnActorCreated(Actor* actor);
+
+	// Calls when actor was destroyed
+	void OnActorDestroyed(Actor* actor);
+
 	friend class SceneEditWidget;
 };

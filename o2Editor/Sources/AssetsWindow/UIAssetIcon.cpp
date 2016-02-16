@@ -41,10 +41,3 @@ const AssetInfo& UIAssetIcon::GetAssetInfo() const
 {
 	return mAssetInfo;
 }
-
-void UIAssetIcon::UpdateLayout(bool forcible /*= false*/)
-{
-	UIWidget::UpdateLayout(forcible);
-
-	mDragHandle.position = layout.absRect->Center();
-}

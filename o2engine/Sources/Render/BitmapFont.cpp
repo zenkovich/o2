@@ -97,4 +97,24 @@ namespace o2
 	{
 		return mFileName;
 	}
+
+	float BitmapFont::GetHeightPx(int height) const
+	{
+		return mBaseHeight;
+	}
+
+	float BitmapFont::GetLineHeightPx(int height) const
+	{
+		return mLineHeight;
+	}
+
+	const Font::Character& BitmapFont::GetCharacter(UInt16 id, int height)
+	{
+		for (const Character& ch : mCharacters)
+			if (ch.mId == id)
+				return ch;
+
+		return mCharacters.Get(0);
+	}
+
 }

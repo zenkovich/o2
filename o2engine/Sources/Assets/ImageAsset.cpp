@@ -118,6 +118,21 @@ namespace o2
 		return mAtlasRect;
 	}
 
+	Vec2F ImageAsset::GetSize() const
+	{
+		return mAtlasRect.Size();
+	}
+
+	float ImageAsset::GetWidth() const
+	{
+		return (float)mAtlasRect.Width();
+	}
+
+	float ImageAsset::GetHeight() const
+	{
+		return (float)mAtlasRect.Height();
+	}
+
 	TextureRef ImageAsset::GetAtlasTextureRef() const
 	{
 		return AtlasAsset::GetPageTextureRef(GetAtlasId(), GetAtlasPage());
@@ -160,6 +175,9 @@ namespace o2
 		INITIALIZE_GETTER(ImageAsset, atlasPage, GetAtlasPage);
 		INITIALIZE_GETTER(ImageAsset, atlasRect, GetAtlasRect);
 		INITIALIZE_GETTER(ImageAsset, meta, GetMeta);
+		INITIALIZE_GETTER(ImageAsset, size, GetSize);
+		INITIALIZE_GETTER(ImageAsset, width, GetWidth);
+		INITIALIZE_GETTER(ImageAsset, height, GetHeight);
 	}
 
 	bool ImageAsset::PlatformMeta::operator==(const PlatformMeta& other) const

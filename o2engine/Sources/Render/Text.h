@@ -23,6 +23,7 @@ namespace o2
 	public:
 		Property<FontRef>  font;                // Font pointer property
 		Property<WString>  text;                // Text property, wstring
+		Property<int>      height;              // Text height
 		Property<VerAlign> verAlign;            // vertical align property
 		Property<HorAlign> horAlign;            // Horizontal align property
 		Property<bool>     wordWrap;            // Words wrapping flag property
@@ -84,6 +85,12 @@ namespace o2
 		// Returns font asset id
 		AssetId GetFontAssetId() const;
 
+		// Sets font height
+		void SetHeight(int height);
+
+		// Returns font height
+		int GetHeight() const;
+
 		// Sets text
 		void SetText(const WString& text);
 
@@ -136,7 +143,7 @@ namespace o2
 		RectF GetRealRect();
 
 		// Returns text size
-		static Vec2F GetTextSize(const WString& text, Font* font,
+		static Vec2F GetTextSize(const WString& text, Font* font, int height = 11,
 								 const Vec2F& areaSize = Vec2F(), 
 								 HorAlign horAlign = HorAlign::Left, VerAlign verAlign = VerAlign::Top, 
 								 bool wordWrap = true, bool dotsEngings = false, float charsDistCoef = 1.0f, 
@@ -198,6 +205,7 @@ namespace o2
 
 		public:
 			FontRef     mFont;            // Font
+			int         mHeight;          // Text height
 			WString     mText;            // Text string
 			Vec2F       mPosition;        // Position, in pixels
 			Vec2F       mAreaSize;        // Area size, in pixels
@@ -212,8 +220,9 @@ namespace o2
 
 		public:
 			// Calculating characters layout by parameters
-			void Initialize(FontRef font, const WString& text, const Vec2F& position, const Vec2F& areaSize, 
-							HorAlign horAlign, VerAlign verAlign, bool wordWrap, bool dotsEngings, float charsDistCoef, float linesDistCoef);
+			void Initialize(FontRef font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize, 
+							HorAlign horAlign, VerAlign verAlign, bool wordWrap, bool dotsEngings, float charsDistCoef, 
+							float linesDistCoef);
 
 			// Moves symbols 
 			void Move(const Vec2F& offs);
@@ -222,11 +231,13 @@ namespace o2
 	protected:
 		typedef Vector<Mesh*> MeshesVec;
 
+		static char* mBasicSymbolsPreset;
 		const UInt mMeshMaxPolyCount = 4096;
 
 		WString    mText;              // Wide char string, containing rendering text @SERIALIZABLE
 		AssetId    mFontAssetId;       // Font asset id @SERIALIZABLE
 		FontRef    mFont;              // Using font
+		int        mHeight;            // Text height
 		float      mSymbolsDistCoef;   // Characters distance coef, 1 is standard @SERIALIZABLE
 		float      mLinesDistanceCoef; // Lines distance coef, 1 is standard @SERIALIZABLE
 		VerAlign   mVerAlign;          // Vertical align @SERIALIZABLE

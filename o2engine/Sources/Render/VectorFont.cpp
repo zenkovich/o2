@@ -12,14 +12,14 @@
 namespace o2
 {
 	VectorFont::VectorFont():
-		Font(), mFreeTypeFace(nullptr), mSize(11)
+		Font(), mFreeTypeFace(nullptr)
 	{
 		mTexture = TextureRef(Vec2I(256, 256));
 		mTextureSrcRect.Set(0, 0, 256, 256);
 	}
 
 	VectorFont::VectorFont(const String& fileName):
-		Font(), mFreeTypeFace(nullptr), mSize(11)
+		Font(), mFreeTypeFace(nullptr)
 	{
 		mTexture = TextureRef(Vec2I(256, 256));
 		mTextureSrcRect.Set(0, 0, 256, 256);
@@ -32,9 +32,6 @@ namespace o2
 	{
 		mTexture = TextureRef(Vec2I(256, 256));
 		mTextureSrcRect.Set(0, 0, 256, 256);
-
-		mSize = other.mSize;
-		mBaseHeight = other.mBaseHeight;
 	}
 
 	VectorFont::~VectorFont()
@@ -57,49 +54,61 @@ namespace o2
 
 		mFileName = fileName;
 
-		auto lastSize = mSize;
-		mSize = 0;
-		SetSize(lastSize);
-
 		return true;
 	}
 
-	void VectorFont::SetSize(UInt size)
-	{
-		if (size == mSize)
-			return;
-
-		mSize = size;
-		Vec2I dpi = o2Render.GetDPI();
-		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, mSize*64, dpi.x, dpi.y);
-
-		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
-		mBaseHeight = mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
-		mLineHeight = mBaseHeight*2.0f;
-
-// 		mBaseHeight = mFreeTypeFace->ascender/64.0f;
-// 		mLineHeight = (mFreeTypeFace->ascender - mFreeTypeFace->descender)/64.0f + 5.0f;
-
-		Reset();
-	}
-
-	UInt VectorFont::GetSize() const
-	{
-		return mSize;
-	}
+// 	void VectorFont::SetSize(UInt size)
+// 	{
+// 		if (size == mSize)
+// 			return;
+// 
+// 		mSize = size;
+// 		Vec2I dpi = o2Render.GetDPI();
+// 		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, mSize*64, dpi.x, dpi.y);
+// 
+// 		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
+// 		mBaseHeight = mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
+// 		mLineHeight = mBaseHeight*2.0f;
+// 
+// // 		mBaseHeight = mFreeTypeFace->ascender/64.0f;
+// // 		mLineHeight = (mFreeTypeFace->ascender - mFreeTypeFace->descender)/64.0f + 5.0f;
+// 
+// 		Reset();
+// 	}
 
 	String VectorFont::GetFileName() const
 	{
 		return mFileName;
 	}
 
-	void VectorFont::CheckCharacters(const WString& needChararacters)
+	float VectorFont::GetHeightPx(int height) const
+	{
+		Vec2I dpi = o2Render.GetDPI();
+		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, height*64, dpi.x, dpi.y);
+		
+		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
+		return mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
+	}
+
+	float VectorFont::GetLineHeightPx(int height) const
+	{
+		Vec2I dpi = o2Render.GetDPI();
+		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
+
+		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
+		return (mFreeTypeFace->glyph->metrics.horiBearingY / 64.0f)*2.0f;
+	}
+
+	void VectorFont::CheckCharacters(const WString& needChararacters, int height)
 	{
 		Vector<wchar_t> needToRenderChars;
 		for (int i = 0; i < needChararacters.Length(); i++)
 		{
-			if (mCharacters.ContainsPred([&](const Character& ch) { return ch.mId == needChararacters[i]; }))
+			if (mCharacters.ContainsPred([&](const Character& ch) {
+				return ch.mId == needChararacters[i] && Math::Equals(ch.mHeight, height); }))
+			{
 				continue;
+			}
 
 			if (needToRenderChars.Contains(needChararacters[i]))
 				continue;
@@ -108,7 +117,7 @@ namespace o2
 		}
 
 		if (needToRenderChars.Count() > 0)
-			UpdateCharacters(needToRenderChars);
+			UpdateCharacters(needToRenderChars, height);
 	}
 
 	VectorFont::Effect* VectorFont::AddEffect(Effect* effect)
@@ -136,13 +145,13 @@ namespace o2
 		mCharacters.Clear();
 	}
 
-	void VectorFont::UpdateCharacters(Vector<wchar_t>& newCharacters)
+	void VectorFont::UpdateCharacters(Vector<wchar_t>& newCharacters, int height)
 	{
 		CharDefsVec charactersDefs;
 		mRectsPacker.Clear();
 		
 		ExtractCharacterDefsFromTexture(charactersDefs);
-		RenderNewCharacters(charactersDefs, newCharacters);
+		RenderNewCharacters(charactersDefs, newCharacters, height);
 		PackCharactersDefs(charactersDefs);
 
 		onCharactersRebuild();
@@ -183,8 +192,11 @@ namespace o2
 		}
 	}
 
-	void VectorFont::RenderNewCharacters(CharDefsVec& charDefs, Vector<wchar_t>& newCharacters)
+	void VectorFont::RenderNewCharacters(CharDefsVec& charDefs, Vector<wchar_t>& newCharacters, int height)
 	{
+		Vec2I dpi = o2Render.GetDPI();
+		FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
+
 		Vec2I border;
 		for (auto effect : mEffects)
 		{
@@ -226,6 +238,7 @@ namespace o2
 			newCharDef.mPackRect = mRectsPacker.AddRect(glyphSize + border*2);
 			newCharDef.mBitmap = newBitmap;
 			newCharDef.mCharacter.mId = ch;
+			newCharDef.mCharacter.mHeight = height;
 			newCharDef.mCharacter.mSize = newBitmapSize;
 			newCharDef.mCharacter.mAdvance = glyph->advance.x/64.0f;
 			newCharDef.mCharacter.mOrigin.x = -glyph->metrics.horiBearingX/64.0f + border.x;
@@ -285,10 +298,5 @@ namespace o2
 
 		GL_CHECK_ERROR(o2Render.mLog);
 		//glBindTexture(GL_TEXTURE_2D, o2Render.mLastDrawTexture->mHandle);
-	}
-
-	void VectorFont::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(VectorFont, size, SetSize, GetSize);
 	}
 }

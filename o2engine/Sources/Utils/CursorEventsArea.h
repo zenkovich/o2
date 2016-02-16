@@ -7,19 +7,19 @@ namespace o2
 	// ----------------------
 	// Functional drag handle
 	// ----------------------
-	class FunctionalDragHandle: public CursorEventsListener
+	class CursorEventsArea: public CursorEventsListener
 	{
 	public:
 		Function<bool(const Vec2F&)>         isUnderPoint;     // Function for detecting collision (parameter - cursor position)
 		Function<void(const Input::Cursor&)> onMoved;          // Event when handle was moved (parameter - cursor)
-		Function<void()>                     onCursorPressed;  // Event when handle was pressed
-		Function<void()>                     onCursorReleased; // Event when handle was released
-		Function<void()>                     onCursorEnter;	   // Event when cursor was entered to handle
-		Function<void()>                     onCursorExit;	   // Event when cursor was exited to handle
+		Function<void(const Input::Cursor&)> onCursorPressed;  // Event when handle was pressed
+		Function<void(const Input::Cursor&)> onCursorReleased; // Event when handle was released
+		Function<void(const Input::Cursor&)> onCursorEnter;	   // Event when cursor was entered to handle
+		Function<void(const Input::Cursor&)> onCursorExit;	   // Event when cursor was exited to handle
 		CursorType                           cursorType;       // Cursor type when hovering and dragging
 
 		// Default constructor
-		FunctionalDragHandle();
+		CursorEventsArea();
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);

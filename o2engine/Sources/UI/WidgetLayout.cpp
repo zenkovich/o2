@@ -57,6 +57,11 @@ namespace o2
 		mOwner->UpdateLayout();
 	}
 
+	bool UIWidgetLayout::IsUnderPoint(const Vec2F& point) const
+	{
+		return mAbsoluteRect.IsInside(point);
+	}
+
 	Vec2F UIWidgetLayout::GetPosition()
 	{
 		Vec2F parentPivot;

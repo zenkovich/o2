@@ -10,7 +10,7 @@
 namespace o2
 {
 	UITreeNode::UITreeNode():
-		UIWidget(), mExpandCoef(0), mDragSizeCoef(1.0f), mInsertSizeCoef(0.0f), mExpandedState(nullptr), mTree(nullptr), 
+		UIWidget(), mExpandCoef(0), mDragSizeCoef(1.0f), mInsertSizeCoef(0.0f), mExpandedState(nullptr), mTree(nullptr),
 		mObject(nullptr)
 	{
 		AddState("visible", Animation::EaseInOut<float>(this, &transparency, 0.0f, 1.0f, 0.1f));
@@ -401,7 +401,7 @@ namespace o2
 	}
 
 	UITree::UITree():
-		UIScrollArea(), DrawableCursorEventsListener(this), mWaitSelectionsUpdate(false), mDraggingNodes(false), 
+		UIScrollArea(), DrawableCursorEventsListener(this), mWaitSelectionsUpdate(false), mDraggingNodes(false),
 		mNeedUpdateLayout(false), mExpandInsertTime(-1), mPressedTime(10.0f), mHoveredItem(nullptr), mPressedNode(nullptr),
 		mInsertNodeCandidate(nullptr), mUnderCursorItem(nullptr), mExpandNodeCandidate(nullptr),
 		mRearrangeType(RearrangeType::Enabled)
@@ -418,10 +418,11 @@ namespace o2
 	}
 
 	UITree::UITree(const UITree& other):
-		UIScrollArea(other), DrawableCursorEventsListener(this), mWaitSelectionsUpdate(false), mDraggingNodes(false), 
-		mNeedUpdateLayout(false), mExpandInsertTime(-1), mPressedTime(10.0f), mHoveredItem(nullptr), mPressedNode(nullptr), 
-		mInsertNodeCandidate(nullptr), mUnderCursorItem(nullptr), mExpandNodeCandidate(nullptr), 
-		mRearrangeType(RearrangeType::Enabled)
+		UIScrollArea(other), DrawableCursorEventsListener(this), mWaitSelectionsUpdate(false), mDraggingNodes(false),
+		mNeedUpdateLayout(false), mExpandInsertTime(-1), mPressedTime(10.0f), mHoveredItem(nullptr), mPressedNode(nullptr),
+		mInsertNodeCandidate(nullptr), mUnderCursorItem(nullptr), mExpandNodeCandidate(nullptr),
+		mRearrangeType(RearrangeType::Enabled), mSelectedColor(other.mSelectedColor), mUnselectedColor(other.mUnselectedColor),
+		mHoverColor(other.mHoverColor)
 	{
 		mNodeSample = other.mNodeSample->Clone();
 		mHoverDrawable = other.mHoverDrawable->Clone();
@@ -470,6 +471,9 @@ namespace o2
 		mDragNode = other.mNodeSample->Clone();
 		mDragNodeBack = other.mSelectedDrawable->Clone();
 		mHoverLayout = other.mHoverLayout;
+		mSelectedColor = other.mSelectedColor;
+		mUnselectedColor = other.mUnselectedColor;
+		mHoverColor = other.mHoverColor;
 
 		mDragNode->AddLayer("selectionBack", mSelectedDrawable->Clone(), mHoverLayout, -1.0f);
 
@@ -544,6 +548,7 @@ namespace o2
 		{
 			mCurrentHoverRect = Math::Lerp(mCurrentHoverRect, mTargetHoverRect, dt*rectLerpCoef);
 			mHoverDrawable->SetRect(mCurrentHoverRect);
+			mHoverDrawable->SetColor(mHoverColor);
 		}
 
 		if (mExpandNodeCandidate)
@@ -786,6 +791,41 @@ namespace o2
 		return mRearrangeType;
 	}
 
+	void UITree::SetSelectedColor(const Color4& color)
+	{
+		mSelectedColor = color;
+	}
+
+	Color4 UITree::GetSelectedColor() const
+	{
+		return mSelectedColor;
+	}
+
+	void UITree::SetUnselectedColor(const Color4& color)
+	{
+		mUnselectedColor = color;
+	}
+
+	Color4 UITree::GetUnselectedColor() const
+	{
+		return mUnselectedColor;
+	}
+
+	void UITree::SetHoverColor(const Color4& color)
+	{
+		mHoverColor = color;
+	}
+
+	Color4 UITree::GetHoverColor() const
+	{
+		return mHoverColor;
+	}
+
+	bool UITree::IsSelectable() const
+	{
+		return true;
+	}
+
 	void UITree::OnObjectCreated(UnknownType* object, UnknownType* parent)
 	{
 		auto parentNode = GetNode(parent);
@@ -815,6 +855,18 @@ namespace o2
 		}
 
 		CheckSelectedNodes();
+	}
+
+	void UITree::OnSelected()
+	{
+		for (auto& sel : mSelectedItems)
+			sel.selectionSprite->SetColor(mSelectedColor);
+	}
+
+	void UITree::OnDeselected()
+	{
+		for (auto& sel : mSelectedItems)
+			sel.selectionSprite->SetColor(mUnselectedColor);
 	}
 
 	void UITree::UpdateLayout(bool forcible /*= false*/)
@@ -1002,11 +1054,13 @@ namespace o2
 		}
 		else
 		{
-			if (o2Input.IsKeyDown(VK_SHIFT)) 
+			if (o2Input.IsKeyDown(VK_SHIFT))
 				SelectMultipleNodes(cursor);
 		}
 
 		mPressedTime = 0.0f;
+
+		o2UI.SelectWidget(this);
 	}
 
 	void UITree::OnCursorStillDown(const Input::Cursor& cursor)
@@ -1232,7 +1286,7 @@ namespace o2
 
 	void UITree::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
-		if (mSelectedItems.Count() < 2) 
+		if (mSelectedItems.Count() < 2)
 			SelectSingleNode(cursor);
 
 		auto node = GetItemUnderPoint(cursor.mPosition);
@@ -1241,21 +1295,26 @@ namespace o2
 
 	void UITree::SelectSingleNode(const Input::Cursor &cursor)
 	{
+		bool selectionReseted = false;
 		if (!o2Input.IsKeyDown(VK_CONTROL))
 		{
 			for (auto sel : mSelectedItems)
 				FreeSelectionSprite(sel.selectionSprite);
 
 			mSelectedItems.Clear();
+			selectionReseted = true;
 		}
 
 		auto nodeUnderCursor = GetItemUnderPoint(cursor.mPosition);
 
+		bool nodeSelected = false;
 		if (nodeUnderCursor)
 		{
 			int selIdx = mSelectedItems.FindIdx([&](auto x) { return x.node == nodeUnderCursor; });
 			if (selIdx < 0)
 			{
+				nodeSelected = true;
+
 				SelectedNode selectionNode;
 				selectionNode.object = nodeUnderCursor->mObject;
 				selectionNode.selectionSprite = CreateSelectionSprite();
@@ -1275,6 +1334,9 @@ namespace o2
 				OnItemsSelected();
 			}
 		}
+
+		if (!nodeUnderCursor && selectionReseted)
+			onItemClick(nullptr);
 	}
 
 	void UITree::SelectMultipleNodes(const Input::Cursor &cursor)
@@ -1319,9 +1381,7 @@ namespace o2
 	}
 
 	void UITree::OnCursorPressBreak(const Input::Cursor& cursor)
-	{
-
-	}
+	{}
 
 	void UITree::OnCursorExit(const Input::Cursor& cursor)
 	{
@@ -1367,13 +1427,18 @@ namespace o2
 
 	Sprite* UITree::CreateSelectionSprite()
 	{
+		Sprite* res = nullptr;
+
 		if (mSelectionSpritesPool.Count() == 0)
 		{
 			for (int i = 0; i < mSelectionSpritesPoolResizeCount; i++)
 				mSelectionSpritesPool.Add(mSelectedDrawable->Clone());
 		}
 
-		return mSelectionSpritesPool.PopBack();
+		res = mSelectionSpritesPool.PopBack();
+		res->SetColor(mIsSelected ? mSelectedColor : mUnselectedColor);
+
+		return res;
 	}
 
 	void UITree::FreeSelectionSprite(Sprite* sprite)

@@ -229,7 +229,7 @@
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />
     <ClInclude Include="..\Sources\Utils\Delegates.h" />
-    <ClInclude Include="..\Sources\Utils\FunctionalDragHandle.h" />
+    <ClInclude Include="..\Sources\Utils\CursorEventsArea.h" />
     <ClInclude Include="..\Sources\Utils\IDynamic.h" />
     <ClInclude Include="..\Sources\Utils\ImageFormats\PngFormat.h" />
     <ClInclude Include="..\Sources\Utils\IObject.h" />
@@ -362,7 +362,7 @@
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp" />
-    <ClCompile Include="..\Sources\Utils\FunctionalDragHandle.cpp" />
+    <ClCompile Include="..\Sources\Utils\CursorEventsArea.cpp" />
     <ClCompile Include="..\Sources\Utils\ImageFormats\PngFormat.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />

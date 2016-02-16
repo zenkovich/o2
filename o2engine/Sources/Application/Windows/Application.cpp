@@ -87,7 +87,6 @@ namespace o2
 
 	Application::~Application()
 	{
-		delete mRender;
 		DeinitializeSystems();
 	}
 
@@ -121,8 +120,9 @@ namespace o2
 
 	void Application::DeinitializeSystems()
 	{
-		mScene->Clear();
+		delete mScene;
 		delete mUIManager;
+		delete mRender;
 		delete mInput;
 		delete mTime;
 		delete mTimer;

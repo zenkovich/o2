@@ -256,46 +256,46 @@ namespace o2
 	{
 		mHeadDragHandle.isUnderPoint = [&](const Vec2F& point) { return mHeadDragAreaRect.IsInside(point); };
 		mHeadDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.position += cursor.mDelta; };
-		mHeadDragHandle.onCursorPressed = [&]() { OnSelected(); };
+		mHeadDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
 
 		mTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mTopDragAreaRect.IsInside(point); };
 		mTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absTop += cursor.mDelta.y; };
-		mTopDragHandle.onCursorPressed = [&]() { OnSelected(); };
+		mTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
 		mTopDragHandle.cursorType = CursorType::SizeNS;
 
 		mBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mBottomDragAreaRect.IsInside(point); };
 		mBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absBottom += cursor.mDelta.y; };
-		mBottomDragHandle.onCursorPressed = [&]() { OnSelected(); };
+		mBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
 		mBottomDragHandle.cursorType = CursorType::SizeNS;
 
 		mLeftDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftDragAreaRect.IsInside(point); };
 		mLeftDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeft += cursor.mDelta.x; };
-		mLeftDragHandle.onCursorPressed = [&]() { OnSelected(); };
+		mLeftDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
 		mLeftDragHandle.cursorType = CursorType::SizeWE;
 
 		mRightDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightDragAreaRect.IsInside(point); };
 		mRightDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRight += cursor.mDelta.x; };
-		mRightDragHandle.onCursorPressed = [&]() { OnSelected(); };
+		mRightDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
 		mRightDragHandle.cursorType = CursorType::SizeWE;
 
 		mLeftTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftTopDragAreaRect.IsInside(point); };
 		mLeftTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeftTop += cursor.mDelta; };
-		mLeftTopDragHandle.onCursorPressed = [&]() { OnSelected(); };
+		mLeftTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
 		mLeftTopDragHandle.cursorType = CursorType::SizeNwSe;
 
 		mLeftBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftBottomDragAreaRect.IsInside(point); };
 		mLeftBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeftBottom += cursor.mDelta; };
-		mLeftBottomDragHandle.onCursorPressed = [&]() { OnSelected(); };
+		mLeftBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
 		mLeftBottomDragHandle.cursorType = CursorType::SizeNeSw;
 
 		mRightTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightTopDragAreaRect.IsInside(point); };
 		mRightTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRightTop += cursor.mDelta; };
-		mRightTopDragHandle.onCursorPressed = [&]() { OnSelected(); };
+		mRightTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
 		mRightTopDragHandle.cursorType = CursorType::SizeNeSw;
 
 		mRightBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightBottomDragAreaRect.IsInside(point); };
 		mRightBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRightBottom += cursor.mDelta; };
-		mRightBottomDragHandle.onCursorPressed = [&]() { OnSelected(); };
+		mRightBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
 		mRightBottomDragHandle.cursorType = CursorType::SizeNwSe;
 
 		BindHandlesInteractableToVisibility();

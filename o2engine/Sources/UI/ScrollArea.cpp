@@ -129,6 +129,8 @@ namespace o2
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
+		OnDrawn();
+
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
 		for (auto child : mChilds)

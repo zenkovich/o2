@@ -3,6 +3,8 @@
 #include "Assets/Assets.h"
 #include "Assets/AssetsTree.h"
 #include "Assets/FolderAsset.h"
+#include "Assets/ImageAsset.h"
+#include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/UIAssetIcon.h"
 #include "UI/Button.h"
 #include "UI/EditBox.h"
@@ -18,7 +20,6 @@ DECLARE_SINGLETON(AssetsWindow);
 AssetsWindow::AssetsWindow()
 {
 	InitializeWindow();
-	PrepareIconsPools();
 }
 
 AssetsWindow::~AssetsWindow()
@@ -83,8 +84,9 @@ void AssetsWindow::InitializeWindow()
 	mFoldersTree = o2UI.CreateWidget<UITree>("folders");
 	mFoldersTree->layout = UIWidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
 
-	mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI_Ver_separator.png"),
-						   Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
+	auto separatorLayer = mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI_Ver_separator.png"),
+												 Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
+
 	mFoldersTree->SetRearrangeType(UITree::RearrangeType::OnlyReparent);
 
 	mFoldersTree->getParentFunc = Function<UnknownType*(UnknownType*)>(this, &AssetsWindow::GetFoldersTreeNodeParent);
@@ -97,22 +99,24 @@ void AssetsWindow::InitializeWindow()
 	mWindow->AddChild(mFoldersTree);
 
 	// assets scroll & grid
-	mAssetsScroll = o2UI.CreateWidget<UIScrollArea>("backless");
-	mAssetsScroll->layout = UIWidgetLayout(0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
+	mAssetsGridScroll = o2UI.CreateWidget<UIAssetsIconsScrollArea>();
+	mAssetsGridScroll->layout = UIWidgetLayout(0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
+	mWindow->AddChild(mAssetsGridScroll);
 
-	mAssetsGrid = mnew UIGridLayout();
-	mAssetsGrid->layout = UIWidgetLayout::BothStretch();
-	mAssetsGrid->baseCorner = BaseCorner::LeftTop;
-	mAssetsGrid->fitByChildren = true;
-	mAssetsGrid->cellSize = Vec2F(40, 50);
-	mAssetsGrid->border = RectF(5, 5, 5, 5);
-	mAssetsGrid->spacing = 5;
-	mAssetsGrid->arrangeAxis = TwoDirection::Horizontal;
-	mAssetsGrid->arrangeAxisMaxCells = 5;
+	// separator
+	mSeparatorHandle.isUnderPoint = [=](const Vec2F& point) {
+		return separatorLayer->drawable->IsUnderPoint(point);
+	};
 
-	mAssetsScroll->AddChild(mAssetsGrid);
+	mSeparatorHandle.onMoved = [&](const Input::Cursor& cursor) {
+		float anchorDelta = cursor.mDelta.x / mWindow->layout.width;
+		mFoldersTree->layout.anchorRight += anchorDelta;
+		mAssetsGridScroll->layout.anchorLeft += anchorDelta;
+	};
 
-	mWindow->AddChild(mAssetsScroll);
+	mWindow->onDraw += [&]() { mSeparatorHandle.OnDrawn(); };
+
+	mSeparatorHandle.cursorType = CursorType::SizeWE;
 }
 
 void AssetsWindow::OnSearchEdited(const WString& search)
@@ -128,41 +132,6 @@ void AssetsWindow::OnMenuFilterPressed()
 void AssetsWindow::OnShowTreePressed()
 {
 
-}
-
-void AssetsWindow::UpdateAssetsFolder(const String& folder)
-{
-	o2Debug.LogWarning("Update assets folder: %s", folder);
-
-	auto prevIcons = mAssetsGrid->GetChilds();
-	for (auto child : prevIcons)
-	{
-		mAssetsGrid->RemoveChild(child, false);
-		FreeAssetIconToPool((UIAssetIcon*)child);
-	}
-
-	FolderAsset* folderAsset = mnew FolderAsset(folder);
-
-	Vector<UIWidget*> addingIcons;
-	for (auto asset : folderAsset->GetContainingAssetsInfos())
-	{
-		o2Debug.Log(asset.mPath);
-
-		String assetIconStyle = "standard";
-
-		if (asset.mType == FolderAsset::type.ID())
-			assetIconStyle = "folder";
-
-		UIAssetIcon* assetIcon = GetAssetIconFromPool(assetIconStyle);
-		assetIcon->SetAssetInfo(asset);
-		assetIcon->name = assetIconStyle;
-
-		addingIcons.Add(assetIcon);
-	}
-
-	mAssetsGrid->AddChilds(addingIcons);
-
-	delete folderAsset;
 }
 
 UnknownType* AssetsWindow::GetFoldersTreeNodeParent(UnknownType* object)
@@ -223,51 +192,10 @@ void AssetsWindow::OnFoldersTreeNodeDblClick(UITreeNode* node)
 
 void AssetsWindow::OnFoldersTreeClick(UITreeNode* node)
 {
-	AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)node->GetObject();
-
-	UpdateAssetsFolder(assetTreeNode->mPath);
-}
-
-void AssetsWindow::PrepareIconsPools()
-{
-	int poolSize = 10;
-	String iconsStyles[] = { "standard", "folder", "prefab", "prefab preview", "image preview", "text", "animation" };
-
-	for (auto style : iconsStyles)
+	if (node)
 	{
-		mIconsPools.Add(style, Vector<UIAssetIcon*>());
-
-		for (int i = 0; i < poolSize; i++)
-		{
-			UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>(style);
-			mIconsPools[style].Add(sample);
-		}
+		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)node->GetObject();
+		mAssetsGridScroll->SetAssetPath(assetTreeNode->mPath);
 	}
-}
-
-UIAssetIcon* AssetsWindow::GetAssetIconFromPool(const String& style)
-{
-	if (!mIconsPools.ContainsKey(style))
-		return o2UI.CreateWidget<UIAssetIcon>(style);
-
-	int poolResizeStep = 10;
-	if (mIconsPools[style].Count() == 0)
-	{
-		for (int i = 0; i < poolResizeStep; i++)
-		{
-			UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>(style);
-			mIconsPools[style].Add(sample);
-		}
-	}
-
-	UIAssetIcon* sample = mIconsPools[style].PopBack();
-	return sample;
-}
-
-void AssetsWindow::FreeAssetIconToPool(UIAssetIcon* icon)
-{
-	if (mIconsPools.ContainsKey(icon->name))
-		mIconsPools[icon->name].Add(icon);
-	else
-		delete icon;
+	else mAssetsGridScroll->SetAssetPath("");
 }

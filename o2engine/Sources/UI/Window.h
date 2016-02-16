@@ -3,7 +3,7 @@
 #include "Events/DrawableCursorEventsListener.h"
 #include "Render/Sprite.h"
 #include "UI/ScrollArea.h"
-#include "Utils/FunctionalDragHandle.h"
+#include "Utils/CursorEventsArea.h"
 
 namespace o2
 {
@@ -72,39 +72,39 @@ namespace o2
 		Text*                mCaptionDrawable;           // text caption from layer "caption"
 		WidgetsVec           mWindowElements;            // Windows elements widgets @SERIALIZABLE
 
-		FunctionalDragHandle mHeadDragHandle;			 // Head drag handle, for moving window
+		CursorEventsArea mHeadDragHandle;			 // Head drag handle, for moving window
 		Layout               mHeadDragAreaLayout;		 // Head drag handle layout @SERIALIZABLE
 		RectF                mHeadDragAreaRect;			 // Head drag handle rect
 														 
-		FunctionalDragHandle mTopDragHandle;			 //	Top drag handle, for resizing window
+		CursorEventsArea mTopDragHandle;			 //	Top drag handle, for resizing window
 		Layout               mTopDragAreaLayout;		 //	Top drag handle layout @SERIALIZABLE
 		RectF                mTopDragAreaRect;			 //	Top drag handle rect
 														 
-		FunctionalDragHandle mBottomDragHandle;			 //	Bottom drag handle, for resizing window
+		CursorEventsArea mBottomDragHandle;			 //	Bottom drag handle, for resizing window
 		Layout               mBottomDragAreaLayout;		 //	Bottom drag handle layout @SERIALIZABLE
 		RectF                mBottomDragAreaRect;		 //	Bottom drag handle rect
 														 
-		FunctionalDragHandle mLeftDragHandle;			 //	Left drag handle, for resizing window
+		CursorEventsArea mLeftDragHandle;			 //	Left drag handle, for resizing window
 		Layout               mLeftDragAreaLayout;		 //	Left drag handle layout @SERIALIZABLE
 		RectF                mLeftDragAreaRect;			 //	Left drag handle rect
 														 
-		FunctionalDragHandle mRightDragHandle;			 //	Right drag handle, for resizing window
+		CursorEventsArea mRightDragHandle;			 //	Right drag handle, for resizing window
 		Layout               mRightDragAreaLayout;		 //	Right drag handle layout @SERIALIZABLE
 		RectF                mRightDragAreaRect;		 //	Right drag handle rect
 														 
-		FunctionalDragHandle mLeftTopDragHandle;		 //	Left Top drag handle, for resizing window
+		CursorEventsArea mLeftTopDragHandle;		 //	Left Top drag handle, for resizing window
 		Layout               mLeftTopDragAreaLayout;	 //	Left Top drag handle layout @SERIALIZABLE
 		RectF                mLeftTopDragAreaRect;		 //	Left Top drag handle rect
 														 
-		FunctionalDragHandle mRightTopDragHandle;		 //	Right Top drag handle, for resizing window
+		CursorEventsArea mRightTopDragHandle;		 //	Right Top drag handle, for resizing window
 		Layout               mRightTopDragAreaLayout;	 //	Right Top drag handle layout @SERIALIZABLE
 		RectF                mRightTopDragAreaRect;		 //	Right Top drag handle rect
 														 
-		FunctionalDragHandle mLeftBottomDragHandle;		 //	Left Bottom drag handle, for resizing window
+		CursorEventsArea mLeftBottomDragHandle;		 //	Left Bottom drag handle, for resizing window
 		Layout               mLeftBottomDragAreaLayout;	 //	Left Bottom drag handle layout @SERIALIZABLE
 		RectF                mLeftBottomDragAreaRect;	 //	Left Bottom drag handle rect
 														 
-		FunctionalDragHandle mRightBottomDragHandle;	 //	Right Bottom drag handle, for resizing window
+		CursorEventsArea mRightBottomDragHandle;	 //	Right Bottom drag handle, for resizing window
 		Layout               mRightBottomDragAreaLayout; //	Right Bottom drag handle layout @SERIALIZABLE
 		RectF                mRightBottomDragAreaRect;   //	Right Bottom drag handle rect
 

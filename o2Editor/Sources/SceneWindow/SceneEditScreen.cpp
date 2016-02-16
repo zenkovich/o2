@@ -14,6 +14,7 @@
 #include "SceneWindow/SceneDragHandle.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/Tree.h"
+#include "UI/UIManager.h"
 #include "Utils/Math/Math.h"
 
 
@@ -588,6 +589,8 @@ void SceneEditScreen::OnKeyStayDown(const Input::Key& key)
 
 void SceneEditScreen::OnCursorPressed(const Input::Cursor& cursor)
 {
+	o2UI.SelectWidget(mActorsTree);
+
 	if (mEnabledTool && !IsHandleWorking(cursor))
 		mEnabledTool->OnCursorPressed(cursor);
 }
@@ -630,6 +633,8 @@ void SceneEditScreen::OnCursorExit(const Input::Cursor& cursor)
 
 void SceneEditScreen::OnCursorRightMousePressed(const Input::Cursor& cursor)
 {
+	o2UI.SelectWidget(mActorsTree);
+
 	if (mEnabledTool && !IsHandleWorking(cursor))
 		mEnabledTool->OnCursorRightMousePressed(cursor);
 }

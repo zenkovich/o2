@@ -61,10 +61,10 @@ protected:
 	void OnMoved(const Input::Cursor& cursor);
 
 	// Calls when window moving was completed
-	void OnMoveCompleted();
+	void OnMoveCompleted(const Input::Cursor&);
 
 	// Calls when window going to move
-	void OnMoveBegin();
+	void OnMoveBegin(const Input::Cursor&);
 
 	// Searches dock place under cursor and returns parameters of them
 	bool TraceDock(UIDockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect);

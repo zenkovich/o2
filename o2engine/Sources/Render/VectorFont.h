@@ -39,8 +39,6 @@ namespace o2
 		};
 
 	public:
-		Property<UInt> size; // Characters size property
-
 		// Default constructor
 		VectorFont();
 
@@ -56,17 +54,17 @@ namespace o2
 		// Loads font
 		bool Load(const String& fileName);
 
-		// Sets font size
-		void SetSize(UInt size);
-
-		// Returns font size
-		UInt GetSize() const;
-
 		// Returns font file name
 		String GetFileName() const;
 
-		// Checks characters for pre loading
-		void CheckCharacters(const WString& needChararacters);
+		// Returns base height in pixels for font with size
+		float GetHeightPx(int height) const;
+
+		// Returns line height in pixels for font with size
+		float GetLineHeightPx(int height) const;
+
+		// Checks characters for preloading
+		void CheckCharacters(const WString& needChararacters, int height);
 
 		// Adds effect
 		Effect* AddEffect(Effect* effect);
@@ -100,29 +98,23 @@ namespace o2
 		typedef Vector<Effect*> EffectsVec;
 
 	protected:
-
 		String        mFileName;     // Source file name
-
 		RectsPacker   mRectsPacker;  // Characters packer
-		UInt          mSize;         // Font size
 		FT_Face       mFreeTypeFace; // Free Type font face
 		EffectsVec    mEffects;      // Font effects
 
 	protected:
 		// Updates characters set
-		void UpdateCharacters(Vector<wchar_t>& newCharacters);
+		void UpdateCharacters(Vector<wchar_t>& newCharacters, int height);
 
 		// Extracts characters from texture
 		void ExtractCharacterDefsFromTexture(CharDefsVec& charDefs);
 
 		// Renders new characters
-		void RenderNewCharacters(CharDefsVec& charDefs, Vector<wchar_t>& newCharacters);
+		void RenderNewCharacters(CharDefsVec& charDefs, Vector<wchar_t>& newCharacters, int height);
 
 		// Pack all characters
 		void PackCharactersDefs(CharDefsVec& charDefs);
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 
 	template<typename _eff_type, typename ... _args>

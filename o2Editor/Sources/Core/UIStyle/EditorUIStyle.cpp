@@ -2,6 +2,7 @@
 
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
+#include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/UIAssetIcon.h"
 #include "Core/UIStyle/BasicUIStyle.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
@@ -1046,117 +1047,108 @@ namespace UIStyle
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
-		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+		captionText->height = 7;
+		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, -4, -4, 15, -10));
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
 	void RebuildFolderAssetIcon()
 	{
-		UIAssetIcon* sample = mnew UIAssetIcon();
+		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
-		sample->AddLayer("icon", mnew Sprite("ui/UI2_big_folder_icon.png"),
-						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
-
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "file name";
-		captionText->horAlign = HorAlign::Middle;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->dotsEngings = true;
-		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+		auto iconLayer = sample->layer["icon"];
+		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_big_folder_icon.png");
 
 		o2UI.AddWidgetStyle(sample, "folder");
 	}
 
 	void RebuildPrefabAssetIcon()
 	{
-		UIAssetIcon* sample = mnew UIAssetIcon();
+		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
-		sample->AddLayer("icon", mnew Sprite("ui/UI2_actor_icon.png"),
-						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
-
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "file name";
-		captionText->horAlign = HorAlign::Middle;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->dotsEngings = true;
-		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+		auto iconLayer = sample->layer["icon"];
+		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_actor_icon.png");
 
 		o2UI.AddWidgetStyle(sample, "prefab");
 	}
 
 	void RebuildPrefabPreviewAssetIcon()
 	{
-		UIAssetIcon* sample = mnew UIAssetIcon();
+		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
-		sample->AddLayer("icon", mnew Sprite("ui/UI2_image_asset_back.png"),
-						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
+		auto iconLayer = sample->layer["icon"];
+		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_image_asset_back.png");
 
 		sample->AddLayer("preview", mnew Sprite(),
 						 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 20)));
-
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "file name";
-		captionText->horAlign = HorAlign::Middle;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->dotsEngings = true;
-		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
 
 		o2UI.AddWidgetStyle(sample, "prefab preview");
 	}
 
 	void RebuildImagePreviewAssetIcon()
 	{
-		UIAssetIcon* sample = mnew UIAssetIcon();
+		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
-		sample->AddLayer("icon", mnew Sprite("ui/UI2_image_asset_back.png"),
-						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
-
+		sample->RemoveLayer("icon");
 		sample->AddLayer("preview", mnew Sprite(),
-						 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 20)));
-
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "file name";
-		captionText->horAlign = HorAlign::Middle;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->dotsEngings = true;
-		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+						 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 15)));
 
 		o2UI.AddWidgetStyle(sample, "image preview");
 	}
 
 	void RebuildTextAssetIcon()
 	{
-		UIAssetIcon* sample = mnew UIAssetIcon();
+		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
-		sample->AddLayer("icon", mnew Sprite("ui/UI2_big_text_file_icon.png"),
-						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
-
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "file name";
-		captionText->horAlign = HorAlign::Middle;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->dotsEngings = true;
-		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+		auto iconLayer = sample->layer["icon"];
+		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_big_text_file_icon.png");
 
 		o2UI.AddWidgetStyle(sample, "text");
 	}
 
 	void RebuildAnimationAssetIcon()
 	{
-		UIAssetIcon* sample = mnew UIAssetIcon();
+		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
-		sample->AddLayer("icon", mnew Sprite("ui/UI2_anim_file_icon.png"),
-						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
-
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "file name";
-		captionText->horAlign = HorAlign::Middle;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->dotsEngings = true;
-		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, 0, 0, 15, -10));
+		auto iconLayer = sample->layer["icon"];
+		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_anim_file_icon.png");
 
 		o2UI.AddWidgetStyle(sample, "animation");
+	}
+
+	void RebuildAssetsGridScroll()
+	{
+		UIAssetsIconsScrollArea* sample = mnew UIAssetsIconsScrollArea();
+		sample->layout.minSize = Vec2F(20, 20);
+		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+		sample->SetEnableScrollsHiding(true);
+
+		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		horScrollBar->layout.anchorMin = Vec2F(0, 0);
+		horScrollBar->layout.anchorMax = Vec2F(1, 0);
+		horScrollBar->layout.offsetMin = Vec2F(5, 0);
+		horScrollBar->layout.offsetMax = Vec2F(-15, 15);
+		sample->SetHorizontalScrollBar(horScrollBar);
+
+		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		verScrollBar->layout.anchorMin = Vec2F(1, 0);
+		verScrollBar->layout.anchorMax = Vec2F(1, 1);
+		verScrollBar->layout.offsetMin = Vec2F(-15, 15);
+		verScrollBar->layout.offsetMax = Vec2F(0, -5);
+		sample->SetVerticalScrollBar(verScrollBar);
+
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
+															  5.0f, 15.0f, 0.2f));
+
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
+															  -5.0f, -15.0f, 0.2f));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
 	void RebuildEditorUIStyle()
@@ -1219,6 +1211,7 @@ namespace UIStyle
 		RebuildImagePreviewAssetIcon();
 		RebuildTextAssetIcon();
 		RebuildAnimationAssetIcon();
+		RebuildAssetsGridScroll();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

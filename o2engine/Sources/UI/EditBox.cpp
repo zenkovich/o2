@@ -616,7 +616,7 @@ namespace o2
 	void UIEditBox::UpdateScrollParams()
 	{
 		if (mTextDrawable->GetFont())
-			mTextDrawable->GetFont()->CheckCharacters(" ");
+			mTextDrawable->GetFont()->CheckCharacters(" ", mTextDrawable->GetHeight());
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
 		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
@@ -783,7 +783,7 @@ namespace o2
 
 		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
 		auto font = mTextDrawable->GetFont();
-		float spaceAdvance = font->GetCharacter(' ').mAdvance;
+		float spaceAdvance = font->GetCharacter(' ', mTextDrawable->GetHeight()).mAdvance;
 
 		for (auto line : symbolsSet.mLines)
 		{
@@ -870,7 +870,7 @@ namespace o2
 			if (fakeSymbols)
 				mTextDrawable->SetText("");
 
-			return mAbsoluteViewArea.LeftTop() - Vec2F(0, mTextDrawable->GetFont()->GetHeight());
+			return mAbsoluteViewArea.LeftTop() - Vec2F(0, mTextDrawable->GetFont()->GetHeightPx(mTextDrawable->GetHeight()));
 		}
 
 		return Vec2F();
@@ -880,7 +880,7 @@ namespace o2
 	{
 		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
 		auto font = mTextDrawable->GetFont();
-		float lineHeight = font->GetLineHeight();
+		float lineHeight = font->GetLineHeightPx(mTextDrawable->GetHeight());
 		float lineOffCoef = 0.25f;
 
 		bool checkUp, checkDown, checkLeft, checkRight;
@@ -976,7 +976,7 @@ namespace o2
 		float rightOffs = Math::Max(caretPos.x - clipRect.right + 5.0f, 0.0f);
 		float leftOffs = Math::Max(clipRect.left - caretPos.x + 5.0f, 0.0f);
 
-		float downOffs = Math::Max(caretPos.y - clipRect.top + font->GetHeight(), 0.0f);
+		float downOffs = Math::Max(caretPos.y - clipRect.top + font->GetHeightPx(mTextDrawable->GetHeight()), 0.0f);
 		float topOffs = Math::Max(clipRect.bottom - caretPos.y, 0.0f);
 
 		float horOffs = rightOffs - leftOffs;
@@ -1210,11 +1210,11 @@ namespace o2
 
 		if (key == VK_UP)
 			MoveCaret(GetTextCaretPosition(GetTextCaretPosition(mSelectionEnd) +
-										   Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeight()*1.5f)), selecting);
+										   Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetHeight())*1.5f)), selecting);
 
 		if (key == VK_DOWN)
 			MoveCaret(GetTextCaretPosition(GetTextCaretPosition(mSelectionEnd) -
-										   Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeight()*0.5f)), selecting);
+										   Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetHeight())*0.5f)), selecting);
 
 		if (key == VK_END)
 		{

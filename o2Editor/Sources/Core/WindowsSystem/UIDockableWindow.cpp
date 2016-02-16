@@ -110,8 +110,8 @@ void UIDockableWindow::InitializeDockFrameAppearanceAnim()
 void UIDockableWindow::InitializeDragHandles()
 {
 	mHeadDragHandle.onMoved = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoved);
-	mHeadDragHandle.onCursorPressed = Function<void()>(this, &UIDockableWindow::OnMoveBegin);
-	mHeadDragHandle.onCursorReleased = Function<void()>(this, &UIDockableWindow::OnMoveCompleted);
+	mHeadDragHandle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoveBegin);
+	mHeadDragHandle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoveCompleted);
 }
 
 void UIDockableWindow::OnMoved(const Input::Cursor& cursor)
@@ -145,7 +145,7 @@ void UIDockableWindow::OnMoved(const Input::Cursor& cursor)
 	}
 }
 
-void UIDockableWindow::OnMoveCompleted()
+void UIDockableWindow::OnMoveCompleted(const Input::Cursor& cursro)
 {
 	UIDockWindowPlace* targetDock = nullptr;
 	Side dockPosition = Side::None;
@@ -174,7 +174,7 @@ void UIDockableWindow::OnMoveCompleted()
 		PlaceNonLineDock(targetDock, dockPosition);
 }
 
-void UIDockableWindow::OnMoveBegin()
+void UIDockableWindow::OnMoveBegin(const Input::Cursor& cursor)
 {
 	OnSelected();
 

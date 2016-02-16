@@ -2,7 +2,7 @@
 
 #include "Events/DrawableCursorEventsListener.h"
 #include "UI/Widget.h"
-#include "Utils/FunctionalDragHandle.h"
+#include "Utils/CursorEventsArea.h"
 #include "Utils/Math/Layout.h"
 #include "Utils/Math/Rect.h"
 
@@ -45,12 +45,12 @@ protected:
 	TwoDirection         mResizibleDir;        // Resizible dragable side
 						 
 	UIDockWindowPlace*   mNeighborMin;         // Resizing neighbor, using when dragging this side
-	FunctionalDragHandle mDragHandleMin;       // Separator drag handle
+	CursorEventsArea mDragHandleMin;       // Separator drag handle
 	Layout               mDragHandleLayoutMin; // Separator drag handle layout
 	RectF                mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
 						 
 	UIDockWindowPlace*   mNeighborMax;         // Resizing neighbor, using when dragging this side
-	FunctionalDragHandle mDragHandleMax;       // Separator drag handle
+	CursorEventsArea mDragHandleMax;       // Separator drag handle
 	Layout               mDragHandleLayoutMax; // Separator drag handle layout
 	RectF                mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 						 

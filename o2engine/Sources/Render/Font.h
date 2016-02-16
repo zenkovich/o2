@@ -37,17 +37,17 @@ namespace o2
 		// Destructor
 		virtual ~Font();
 
-		// Returns base height
-		float GetHeight() const;
+		// Returns base height in pixels for font with size
+		virtual float GetHeightPx(int height) const;
 
-		// Returns line height in pixels
-		float GetLineHeight() const;
+		// Returns line height in pixels for font with size
+		virtual float GetLineHeightPx(int height) const;
 
 		// Returns character constant reference by id
-		virtual const Character& GetCharacter(UInt16 id);
+		virtual const Character& GetCharacter(UInt16 id, int height);
 
-		// Checks characters for pre loading
-		virtual void CheckCharacters(const WString& needChararacters);
+		// Checks characters for preloading
+		virtual void CheckCharacters(const WString& needChararacters, int height);
 
 		// Returns font file name
 		virtual String GetFileName() const;
@@ -63,6 +63,7 @@ namespace o2
 			Vec2F  mOrigin;  // Symbol origin point
 			float  mAdvance; // Symbol advance
 			UInt16 mId;      // Character id
+			int    mHeight;  // Character height
 
 			bool operator==(const Character& other) const;
 		};
@@ -73,8 +74,6 @@ namespace o2
 	protected:
 		FontRefsVec   mRefs;           // Array of reference to this font
 		CharactersVec mCharacters;     // Characters array
-		float         mBaseHeight;     // Base height, in pixels
-		float         mLineHeight;     // Line height in pixels
 		TextureRef    mTexture;        // Texture
 		RectI         mTextureSrcRect; // Texture source rectangle
 		bool          mReady;          // True when font is ready to use

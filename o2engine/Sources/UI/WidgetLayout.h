@@ -68,6 +68,8 @@ namespace o2
 
 		bool operator==(const UIWidgetLayout& other) const;
 
+		bool IsUnderPoint(const Vec2F& point) const;
+
 		void SetPosition(const Vec2F& position);
 		Vec2F GetPosition();
 

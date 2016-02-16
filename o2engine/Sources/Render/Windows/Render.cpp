@@ -156,18 +156,19 @@ namespace o2
 
 		if (mGLContext)
 		{
-			// 			for (auto texture : mTextures)
-			// 				delete texture;
+			auto fonts = mFonts;
+			for (auto font : fonts)
+				delete font;
+
+			auto textures = mTextures;
+			for (auto texture : textures)
+				delete texture;
 
 			if (!wglMakeCurrent(NULL, NULL))
-			{
-				mLog->Error("Release Of DC And RC Failed.\n");
-			}
+				mLog->Error("Release ff DC And RC Failed.\n");
 
 			if (!wglDeleteContext(mGLContext))
-			{
 				mLog->Error("Release Rendering Context Failed.\n");
-			}
 
 			mGLContext = NULL;
 		}

@@ -467,7 +467,7 @@ namespace UIStyle
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeight()*1.7f);
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight())*1.7f);
 		caretDrawable->pivot = Vec2F(0, 0.16f);
 		caretDrawable->color = Color4::Black();
 
@@ -882,8 +882,8 @@ namespace UIStyle
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
 
-		*sample->GetHoverDrawable() = Sprite("ui/UI_ListBox_selection_hover.png");
-		*sample->GetSelectionDrawable() = Sprite("ui/UI_ListBox_selection_regular.png");
+		*sample->GetHoverDrawable() = Sprite("ui/UI_Context_menu_white.png");
+		*sample->GetSelectionDrawable() = Sprite("ui/UI_Context_menu_white.png");
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		UITreeNode* itemSample = sample->GetNodeSample();
@@ -1019,7 +1019,7 @@ namespace UIStyle
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
-		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeight()*1.7f);
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight())*1.7f);
 		caretDrawable->pivot = Vec2F(0, 0.26f);
 		caretDrawable->color = Color4::Black();
 

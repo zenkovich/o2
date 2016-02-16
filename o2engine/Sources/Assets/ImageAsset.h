@@ -23,6 +23,9 @@ namespace o2
 		Property<AtlasAsset*> atlas;     // Atlas owner asset property
 		Getter<UInt>          atlasPage; // Atlas page index getter
 		Getter<RectI>         atlasRect; // Atlas source image rectangle getter
+		Getter<Vec2F>         size;      // Image size getter
+		Getter<float>         width;     // Image width getter
+		Getter<float>         height;    // Image height getter
 		Getter<MetaInfo*>     meta;      // Meta information getter
 
 		// Default constructor
@@ -66,6 +69,15 @@ namespace o2
 
 		// Returns atlas source rectangle
 		RectI GetAtlasRect() const;
+
+		// Returns image size
+		Vec2F GetSize() const;
+
+		// Returns image width
+		float GetWidth() const;
+
+		// Returns image height
+		float GetHeight() const;
 
 		// Returns atlas texture reference
 		TextureRef GetAtlasTextureRef() const;

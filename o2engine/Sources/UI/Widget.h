@@ -38,7 +38,9 @@ namespace o2
 		Accessor<UIWidget*, const String&>      child;
 		Accessor<UIWidgetLayer*, const String&> layer;
 		Accessor<UIWidgetState*, const String&> state;
-		UIWidgetLayout                          layout; // @SERIALIZABLE
+
+		UIWidgetLayout                          layout;          // @SERIALIZABLE
+		Function<void()>                        onLayoutChanged; // Layout change event
 
 		// Default constructor
 		UIWidget();
@@ -97,7 +99,7 @@ namespace o2
 		_type* FindLayer();
 
 		// Removes all child widgets
-		virtual void RemoveAllChilds();
+		virtual void RemoveAllChilds(bool release = true);
 
 		// Returns constant children widgets vector
 		virtual const WidgetsVec& GetChilds() const;
