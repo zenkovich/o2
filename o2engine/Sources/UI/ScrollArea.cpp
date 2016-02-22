@@ -582,15 +582,16 @@ namespace o2
 
 		if (mHorScrollBar)
 		{
-			if (Math::Equals(mScrollRange.left, mScrollRange.right, 1.0f))
+			if (Math::Equals(mScrollRange.left, mScrollRange.right, 1.2f))
 			{
-				if (mEnableHorScroll)
+				if (mHorScrollBar->IsVisible())
 				{
 					auto enableHorBarState = state["enableHorBar"];
 					if (enableHorBarState)
 						*enableHorBarState = false;
 
 					mHorScrollBar->Hide();
+					mHorScrollBar->SetValueRange(0, 0);
 				}
 
 				mEnableHorScroll = false;
@@ -615,15 +616,16 @@ namespace o2
 
 		if (mVerScrollBar)
 		{
-			if (Math::Equals(mScrollRange.bottom, mScrollRange.top, 1.0f))
+			if (Math::Equals(mScrollRange.bottom, mScrollRange.top, 1.2f))
 			{
-				if (mEnableVerScroll)
+				if (mVerScrollBar->IsVisible())
 				{
 					auto enableVerBarState = state["enableVerBar"];
 					if (enableVerBarState)
 						*enableVerBarState = false;
 
 					mVerScrollBar->Hide();
+					mVerScrollBar->SetValueRange(0, 0);
 				}
 
 				mEnableVerScroll = false;
@@ -731,6 +733,9 @@ namespace o2
 			mVerScrollBar->onSmoothChange += Function<void(float)>(this, &UIScrollArea::OnVerScrollChanged);
 		}
 		else mVerScrollBar = nullptr;
+
+		for (auto child : mChilds)
+			child->layout.mDrivenByParent = true;
 
 		UIWidget::OnDeserialized(node);
 	}

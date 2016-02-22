@@ -112,6 +112,9 @@ namespace o2
 		ChildsVec      mChilds;           // Children layers @SERIALIZABLE
 
 	protected:
+		// Completion deserialization callback
+		void OnDeserialized(const DataNode& node);
+
 		// Sets owner widget for this and children
 		void SetOwnerWidget(UIWidget* owner);
 

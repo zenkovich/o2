@@ -158,8 +158,9 @@ void EditorApplication::OnDraw()
 	mBackSign->Draw();
 	mWindowsManager->Draw();
 
-	for (int i = 0; i < mActions.Count(); i++)
-		o2Debug.DrawText(Vec2F(0, 20 * i), (String)i + mActions[i]->GetName());
+	// Debug draw undo actions
+// 	for (int i = 0; i < mActions.Count(); i++)
+// 		o2Debug.DrawText(Vec2F(0, 20 * i), (String)i + mActions[i]->GetName());
 }
 
 void EditorApplication::OnActivated()

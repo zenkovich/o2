@@ -39,6 +39,12 @@ namespace o2
 		// Constructor from file
 		Texture(const String& fileName);
 
+		// Constructor from atlas page
+		Texture(AssetId atlasAssetId, int page);
+
+		// Constructor from atlas page
+		Texture(const String& atlasAssetName, int page);
+
 		// Constructor from bitmap
 		Texture(Bitmap* bitmap);
 
@@ -51,8 +57,17 @@ namespace o2
 		// Creates texture from file
 		void Create(const String& fileName);
 
+		// Creates texture from atlas page
+		void Create(AssetId atlasAssetId, int page);
+
+		// Creates texture from atlas page
+		void Create(const String& atlasAssetName, int page);
+
 		// Creates texture from bitmap
 		void Create(Bitmap* bitmap);
+
+		// Reloads texture
+		void Reload();
 
 		// Returns size of texture
 		Vec2I GetSize() const;
@@ -69,15 +84,26 @@ namespace o2
 		// Returns true when texture ready to use
 		bool IsReady() const;
 
+		// Returns is texture from atlas page
+		bool IsAtlasPage() const;
+
+		// Returns atlas asset id
+		AssetId GetAtlasAssetId() const;
+
+		// Returns atlas page
+		int GetAtlasPage() const;
+
 	protected:
 		typedef Vector<TextureRef*> TextureRefsVec;
 
-		Vec2I          mSize;     // Size of texture
-		Format         mFormat;   // Texture format
-		Usage          mUsage;    // Texture usage
-		String         mFileName; // Source file name
-		bool           mReady;    // Is texture ready to use
-		TextureRefsVec mRefs;     // Texture references
+		Vec2I          mSize;         // Size of texture
+		Format         mFormat;       // Texture format
+		Usage          mUsage;        // Texture usage
+		String         mFileName;     // Source file name
+		AssetId        mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture
+		int            mAtlasPage;    // Atlas page
+		bool           mReady;        // Is texture ready to use
+		TextureRefsVec mRefs;         // Texture references
 
 	protected:
 		// Initializes properties

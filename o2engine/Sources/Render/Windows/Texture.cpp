@@ -1,5 +1,7 @@
 #include "Render/Texture.h"
 
+#include "Assets/Assets.h"
+#include "Assets/AtlasAsset.h"
 #include "Render/Render.h"
 #include "Utils/Bitmap.h"
 #include "Utils/Log/LogStream.h"
@@ -7,35 +9,56 @@
 namespace o2
 {
 	Texture::Texture():
-		mReady(false)
+		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		o2Render.mTextures.Add(this);
 		InitializeProperties();
 	}
 
-	Texture::Texture(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/)
+	Texture::Texture(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/):
+		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(size, format, usage);
 		o2Render.mTextures.Add(this);
 		InitializeProperties();
 	}
 
-	Texture::Texture(const String& fileName)
+	Texture::Texture(const String& fileName):
+		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(fileName);
 		o2Render.mTextures.Add(this);
 		InitializeProperties();
 	}
 
-	Texture::Texture(Bitmap* bitmap)
+	Texture::Texture(Bitmap* bitmap):
+		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(bitmap);
 		o2Render.mTextures.Add(this);
 		InitializeProperties();
 	}
 
+	Texture::Texture(AssetId atlasAssetId, int page):
+		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
+	{
+		Create(atlasAssetId, page);
+		o2Render.mTextures.Add(this);
+		InitializeProperties();
+	}
+
+	Texture::Texture(const String& atlasAssetName, int page):
+		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
+	{
+		Create(atlasAssetName, page);
+		o2Render.mTextures.Add(this);
+		InitializeProperties();
+	}
+
 	Texture::~Texture()
 	{
+		o2Render.mTextures.Remove(this);
+
 		if (!mReady)
 			return;
 
@@ -43,12 +66,18 @@ namespace o2
 			glDeleteFramebuffersEXT(1, &mFrameBuffer);
 
 		glDeleteTextures(1, &mHandle);
-
-		o2Render.mTextures.Remove(this);
 	}
 
 	void Texture::Create(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/)
 	{
+		if (mReady)
+		{
+			if (mUsage == Usage::RenderTarget)
+				glDeleteFramebuffersEXT(1, &mFrameBuffer);
+
+			glDeleteTextures(1, &mHandle);
+		}
+
 		mFormat = format;
 		mUsage = usage;
 		mSize = size;
@@ -108,10 +137,19 @@ namespace o2
 		}
 
 		delete image;
+		mReady = true;
 	}
 
 	void Texture::Create(Bitmap* bitmap)
 	{
+		if (mReady)
+		{
+			if (mUsage == Usage::RenderTarget)
+				glDeleteFramebuffersEXT(1, &mFrameBuffer);
+
+			glDeleteTextures(1, &mHandle);
+		}
+
 		Bitmap::Format imageFormat = bitmap->GetFormat();
 
 		if (imageFormat == Bitmap::Format::Default)
@@ -143,6 +181,40 @@ namespace o2
 		mReady = true;
 	}
 
+	void Texture::Create(AssetId atlasAssetId, int page)
+	{
+		if (o2Assets.IsAssetExist(atlasAssetId))
+		{
+			mAtlasAssetId = atlasAssetId;
+			mAtlasPage = page;
+			String textureFileName = AtlasAsset::GetPageTextureFileName(atlasAssetId, page);
+			Create(textureFileName);
+
+			mReady = true;
+		}
+		else o2Render.mLog->Error("Failed to load atlas texture with id %i and page %i", atlasAssetId, page);
+	}
+
+	void Texture::Create(const String& atlasAssetName, int page)
+	{
+		if (o2Assets.IsAssetExist(atlasAssetName))
+		{
+			mAtlasAssetId = o2Assets.GetAssetId(atlasAssetName);
+			mAtlasPage = page;
+			String textureFileName = AtlasAsset::GetPageTextureFileName(atlasAssetName, page);
+			Create(textureFileName);
+
+			mReady = true;
+		}
+		else o2Render.mLog->Error("Failed to load atlas texture with %s and page %i", atlasAssetName, page);
+	}
+
+	void Texture::Reload()
+	{
+		if (!mFileName.IsEmpty())
+			Create(mFileName);
+	}
+
 	Vec2I Texture::GetSize() const
 	{
 		return mSize;
@@ -166,6 +238,21 @@ namespace o2
 	bool Texture::IsReady() const
 	{
 		return mReady;
+	}
+
+	bool Texture::IsAtlasPage() const
+	{
+		return mAtlasAssetId != 0;
+	}
+
+	AssetId Texture::GetAtlasAssetId() const
+	{
+		return mAtlasAssetId;
+	}
+
+	int Texture::GetAtlasPage() const
+	{
+		return mAtlasPage;
 	}
 
 	void Texture::InitializeProperties()

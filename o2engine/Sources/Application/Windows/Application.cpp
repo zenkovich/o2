@@ -510,6 +510,13 @@ namespace o2
 		return IS_EDITOR;
 	}
 
+	String Application::GetBinPath() const
+	{
+		TCHAR szFileName[MAX_PATH];
+		GetModuleFileName(NULL, szFileName, MAX_PATH);
+		return o2FileSystem.GetParentPath((String)szFileName);
+	}
+
 	void Application::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(Application, fullscreen, SetFullscreen, IsFullScreen);

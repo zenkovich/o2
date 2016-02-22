@@ -26,7 +26,8 @@ namespace o2
 		typedef Dictionary<String, Type*> TypesExtsDict;
 
 	public:
-		Getter<String> assetsPath; // Assets path getter
+		Getter<String>                         assetsPath;        // Assets path getter
+		Function<void(const Vector<AssetId>&)> onAssetsRebuilded; // Assets rebuilding event
 
 		// Default constructor
 		Assets();
@@ -97,6 +98,18 @@ namespace o2
 		// Removes asset by info
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
 
+		// Copies asset
+		bool CopyAsset(Asset* asset, const String& dest, bool rebuildAssets = true);
+
+		// Copies asset by path
+		bool CopyAsset(const String& path, const String& dest, bool rebuildAssets = true);
+
+		// Copies asset by id
+		bool CopyAsset(AssetId id, const String& dest, bool rebuildAssets = true);
+
+		// Copies asset by info
+		bool CopyAsset(const AssetInfo& info, const String& dest, bool rebuildAssets = true);
+
 		// Moves asset to new path
 		bool MoveAsset(Asset* asset, const String& newPath, bool rebuildAssets = true);
 
@@ -108,6 +121,18 @@ namespace o2
 
 		// Moves asset to new path
 		bool MoveAsset(const AssetInfo& info, const String& newPath, bool rebuildAssets = true);
+
+		// Renames asset to new path
+		bool RenameAsset(Asset* asset, const String& newName, bool rebuildAssets = true);
+
+		// Renames asset by path to new path
+		bool RenameAsset(const String& path, const String& newName, bool rebuildAssets = true);
+
+		// Renames asset by id to new path
+		bool RenameAsset(AssetId id, const String& newName, bool rebuildAssets = true);
+
+		// Renames asset to new path
+		bool RenameAsset(const AssetInfo& info, const String& newName, bool rebuildAssets = true);
 
 		// Rebuilds all assets
 		void RebuildAssets(bool forcible = false);

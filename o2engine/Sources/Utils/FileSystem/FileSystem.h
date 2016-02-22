@@ -58,8 +58,14 @@ namespace o2
 		// Creates folder
 		bool FolderCreate(const String& path, bool recursive = true) const;
 
+		// Moves folder
+		bool FolderCopy(const String& from, const String& to) const;
+
 		// Removes directory
 		bool FolderRemove(const String& path, bool recursive = true) const;
+
+		// Renames file or directory
+		bool Rename(const String& old, const String& newPath) const;
 
 		// Returns true if specified directory exist
 		bool IsFolderExist(const String& path) const;

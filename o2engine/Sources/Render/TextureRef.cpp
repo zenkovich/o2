@@ -1,6 +1,8 @@
 #include "TextureRef.h"
 
+#include "Assets/Assets.h"
 #include "Render/Render.h"
+#include "Utils/Log/LogStream.h"
 
 namespace o2
 {
@@ -44,6 +46,38 @@ namespace o2
 	{
 		if (mTexture)
 			mTexture->mRefs.Add(this);
+	}
+
+	TextureRef::TextureRef(AssetId atlasAssetId, int page)
+	{
+		mTexture = o2Render.mTextures.FindMatch([&](Texture* tex) { 
+			return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
+		});
+
+		if (!mTexture)
+			mTexture = mnew Texture(atlasAssetId, page);
+
+		mTexture->mRefs.Add(this);
+	}
+
+	TextureRef::TextureRef(const String& atlasAssetName, int page)
+	{
+		AssetId atlasAssetId = o2Assets.GetAssetId(atlasAssetName);
+		if (atlasAssetId == 0)
+		{
+			o2Render.mLog->Error("Can't load texture for atlas %s and page %i: atlas isn't exist", atlasAssetName, page);
+			mTexture = nullptr;
+			return;
+		}
+
+		mTexture = o2Render.mTextures.FindMatch([&](Texture* tex) {
+			return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
+		});
+
+		if (!mTexture)
+			mTexture = mnew Texture(atlasAssetId, page);
+
+		mTexture->mRefs.Add(this);
 	}
 
 	TextureRef::~TextureRef()

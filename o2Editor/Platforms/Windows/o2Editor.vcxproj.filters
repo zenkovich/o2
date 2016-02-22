@@ -142,6 +142,9 @@
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h">
       <Filter>AssetsWindow</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\AssetsWindow\FoldersTree.h">
+      <Filter>AssetsWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
@@ -242,6 +245,9 @@
       <Filter>AssetsWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp">
+      <Filter>AssetsWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\AssetsWindow\FoldersTree.cpp">
       <Filter>AssetsWindow</Filter>
     </ClCompile>
   </ItemGroup>

@@ -53,6 +53,9 @@ namespace o2
 		// Builds tree for folder
 		void BuildTree(const String& path);
 
+		// Rebuilds tree for current folder
+		void RebuildTree();
+
 		// Returns asset by path. (nullptr if not asset with path)
 		AssetNode* FindAsset(const String& path) const;
 

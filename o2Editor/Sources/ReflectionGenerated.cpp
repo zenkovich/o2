@@ -5,6 +5,7 @@
 // Includes
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\AssetsWindow\AssetsIconsScroll.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\AssetsWindow\AssetsWindow.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\AssetsWindow\FoldersTree.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\AssetsWindow\UIAssetIcon.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\EditorConfig.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\Actions\ActorsTransform.h"
@@ -100,6 +101,7 @@
 // Types declarations
 o2::Type UIAssetsIconsScrollArea::type;
 o2::Type AssetsWindow::type;
+o2::Type UIAssetsFoldersTree::type;
 o2::Type UIAssetIcon::type;
 o2::Type EditorConfig::type;
 o2::Type EditorActorsTransformAction::type;
@@ -233,20 +235,37 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	TypeInitializer::RegField(&type, "mCurrentPath", (size_t)(char*)(&sample->mCurrentPath) - (size_t)(char*)sample, sample->mCurrentPath);
 	TypeInitializer::RegField(&type, "mGrid", (size_t)(char*)(&sample->mGrid) - (size_t)(char*)sample, sample->mGrid);
 	TypeInitializer::RegField(&type, "mSelection", (size_t)(char*)(&sample->mSelection) - (size_t)(char*)sample, sample->mSelection);
+	TypeInitializer::RegField(&type, "mContextMenu", (size_t)(char*)(&sample->mContextMenu) - (size_t)(char*)sample, sample->mContextMenu);
 	TypeInitializer::RegField(&type, "mSelectedAssetsIcons", (size_t)(char*)(&sample->mSelectedAssetsIcons) - (size_t)(char*)sample, sample->mSelectedAssetsIcons);
 	TypeInitializer::RegField(&type, "mIconSelectionSprite", (size_t)(char*)(&sample->mIconSelectionSprite) - (size_t)(char*)sample, sample->mIconSelectionSprite);
 	TypeInitializer::RegField(&type, "mSelectionSpriteLayout", (size_t)(char*)(&sample->mSelectionSpriteLayout) - (size_t)(char*)sample, sample->mSelectionSpriteLayout);
 	TypeInitializer::RegField(&type, "mSelectionSpritesPool", (size_t)(char*)(&sample->mSelectionSpritesPool) - (size_t)(char*)sample, sample->mSelectionSpritesPool);
+	TypeInitializer::RegField(&type, "mHoverIcon", (size_t)(char*)(&sample->mHoverIcon) - (size_t)(char*)sample, sample->mHoverIcon);
+	TypeInitializer::RegField(&type, "mIconHoverSprite", (size_t)(char*)(&sample->mIconHoverSprite) - (size_t)(char*)sample, sample->mIconHoverSprite);
+	TypeInitializer::RegField(&type, "mTargetHoverSpriteRect", (size_t)(char*)(&sample->mTargetHoverSpriteRect) - (size_t)(char*)sample, sample->mTargetHoverSpriteRect);
+	TypeInitializer::RegField(&type, "mCurrentHoverSpriteRect", (size_t)(char*)(&sample->mCurrentHoverSpriteRect) - (size_t)(char*)sample, sample->mCurrentHoverSpriteRect);
 	TypeInitializer::RegField(&type, "mIconsPool", (size_t)(char*)(&sample->mIconsPool) - (size_t)(char*)sample, sample->mIconsPool);
 	TypeInitializer::RegField(&type, "mSelecting", (size_t)(char*)(&sample->mSelecting) - (size_t)(char*)sample, sample->mSelecting);
 	TypeInitializer::RegField(&type, "mPressedPoint", (size_t)(char*)(&sample->mPressedPoint) - (size_t)(char*)sample, sample->mPressedPoint);
+	TypeInitializer::RegField(&type, "mPressTime", (size_t)(char*)(&sample->mPressTime) - (size_t)(char*)sample, sample->mPressTime);
 	TypeInitializer::RegField(&type, "mCurrentSelectingIcons", (size_t)(char*)(&sample->mCurrentSelectingIcons) - (size_t)(char*)sample, sample->mCurrentSelectingIcons);
+	TypeInitializer::RegField(&type, "mCuttingAssets", (size_t)(char*)(&sample->mCuttingAssets) - (size_t)(char*)sample, sample->mCuttingAssets);
+	TypeInitializer::RegField(&type, "mNeedRebuildAssets", (size_t)(char*)(&sample->mNeedRebuildAssets) - (size_t)(char*)sample, sample->mNeedRebuildAssets);
 	auto funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "Draw", &::UIAssetsIconsScrollArea::Draw);
-	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const String&>(&type, "SetAssetPath", &::UIAssetsIconsScrollArea::SetAssetPath);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, float>(&type, "Update", &::UIAssetsIconsScrollArea::Update);
+	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const String&>(&type, "SetViewingPath", &::UIAssetsIconsScrollArea::SetViewingPath);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, String>(&type, "GetViewingPath", &::UIAssetsIconsScrollArea::GetViewingPath);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "UpdateAssetsPath", &::UIAssetsIconsScrollArea::UpdateAssetsPath);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, bool>(&type, "IsSelectable", &::UIAssetsIconsScrollArea::IsSelectable);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, AssetId>(&type, "SelectAsset", &::UIAssetsIconsScrollArea::SelectAsset);
+	TypeInitializer::RegFuncParam<AssetId>(funcInfo, "id");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "DeselectAllAssets", &::UIAssetsIconsScrollArea::DeselectAllAssets);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, Vector<AssetInfo>>(&type, "GetSelectedAssets", &::UIAssetsIconsScrollArea::GetSelectedAssets);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, bool>(&type, "UpdateLayout", &::UIAssetsIconsScrollArea::UpdateLayout);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "UpdateCuttingAssets", &::UIAssetsIconsScrollArea::UpdateCuttingAssets);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnSelected", &::UIAssetsIconsScrollArea::OnSelected);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnDeselected", &::UIAssetsIconsScrollArea::OnDeselected);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorPressed", &::UIAssetsIconsScrollArea::OnCursorPressed);
@@ -257,14 +276,20 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorStillDown", &::UIAssetsIconsScrollArea::OnCursorStillDown);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "UpdateSelection", &::UIAssetsIconsScrollArea::UpdateSelection);
+	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorMoved", &::UIAssetsIconsScrollArea::OnCursorMoved);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorRightMouseReleased", &::UIAssetsIconsScrollArea::OnCursorRightMouseReleased);
+	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Key&>(&type, "OnKeyReleased", &::UIAssetsIconsScrollArea::OnKeyReleased);
+	TypeInitializer::RegFuncParam<const Input::Key&>(funcInfo, "key");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "InitializeContext", &::UIAssetsIconsScrollArea::InitializeContext);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "PrepareIconsPools", &::UIAssetsIconsScrollArea::PrepareIconsPools);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, UIAssetIcon*, const String&>(&type, "GetAssetIconFromPool", &::UIAssetsIconsScrollArea::GetAssetIconFromPool);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "style");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, UIAssetIcon*>(&type, "FreeAssetIconToPool", &::UIAssetsIconsScrollArea::FreeAssetIconToPool);
 	TypeInitializer::RegFuncParam<UIAssetIcon*>(funcInfo, "icon");
-	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "ClearAssetIconsSelection", &::UIAssetsIconsScrollArea::ClearAssetIconsSelection);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, UIAssetIcon*, const AssetInfo&>(&type, "GetImageAssetIcon", &::UIAssetsIconsScrollArea::GetImageAssetIcon);
 	TypeInitializer::RegFuncParam<const AssetInfo&>(funcInfo, "asset");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "UpdateAssetsGridSize", &::UIAssetsIconsScrollArea::UpdateAssetsGridSize);
@@ -272,6 +297,22 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, Sprite*>(&type, "GetSelectionSprite", &::UIAssetsIconsScrollArea::GetSelectionSprite);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, Sprite*>(&type, "FreeSelectionSprite", &::UIAssetsIconsScrollArea::FreeSelectionSprite);
 	TypeInitializer::RegFuncParam<Sprite*>(funcInfo, "sprite");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, UIAssetIcon*>(&type, "OnIconDblClicked", &::UIAssetsIconsScrollArea::OnIconDblClicked);
+	TypeInitializer::RegFuncParam<UIAssetIcon*>(funcInfo, "icon");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, UIAssetIcon*, const Vec2F&>(&type, "GetIconUnderPoint", &::UIAssetsIconsScrollArea::GetIconUnderPoint);
+	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "UpdateHover", &::UIAssetsIconsScrollArea::UpdateHover);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCopyPressed", &::UIAssetsIconsScrollArea::OnContextCopyPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCutPressed", &::UIAssetsIconsScrollArea::OnContextCutPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextPastePressed", &::UIAssetsIconsScrollArea::OnContextPastePressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextDeletePressed", &::UIAssetsIconsScrollArea::OnContextDeletePressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextOpenPressed", &::UIAssetsIconsScrollArea::OnContextOpenPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextShowInExplorerPressed", &::UIAssetsIconsScrollArea::OnContextShowInExplorerPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextImportPressed", &::UIAssetsIconsScrollArea::OnContextImportPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCreateFolderPressed", &::UIAssetsIconsScrollArea::OnContextCreateFolderPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCreatePrefabPressed", &::UIAssetsIconsScrollArea::OnContextCreatePrefabPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCreateScriptPressed", &::UIAssetsIconsScrollArea::OnContextCreateScriptPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCreateAnimationPressed", &::UIAssetsIconsScrollArea::OnContextCreateAnimationPressed);
 }
 
 void ::AssetsWindow::InitializeType(::AssetsWindow* sample)
@@ -282,24 +323,98 @@ void ::AssetsWindow::InitializeType(::AssetsWindow* sample)
 	TypeInitializer::RegField(&type, "mFoldersTree", (size_t)(char*)(&sample->mFoldersTree) - (size_t)(char*)sample, sample->mFoldersTree);
 	TypeInitializer::RegField(&type, "mAssetsGridScroll", (size_t)(char*)(&sample->mAssetsGridScroll) - (size_t)(char*)sample, sample->mAssetsGridScroll);
 	TypeInitializer::RegField(&type, "mAssetsTree", (size_t)(char*)(&sample->mAssetsTree) - (size_t)(char*)sample, sample->mAssetsTree);
-	TypeInitializer::RegField(&type, "mOpenedAssetFolder", (size_t)(char*)(&sample->mOpenedAssetFolder) - (size_t)(char*)sample, sample->mOpenedAssetFolder);
 	TypeInitializer::RegField(&type, "mSeparatorHandle", (size_t)(char*)(&sample->mSeparatorHandle) - (size_t)(char*)sample, sample->mSeparatorHandle);
-	auto funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void>(&type, "InitializeWindow", &::AssetsWindow::InitializeWindow);
+	TypeInitializer::RegField(&type, "mCuttingAssets", (size_t)(char*)(&sample->mCuttingAssets) - (size_t)(char*)sample, sample->mCuttingAssets);
+	auto funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, AssetId>(&type, "SelectAsset", &::AssetsWindow::SelectAsset);
+	TypeInitializer::RegFuncParam<AssetId>(funcInfo, "id");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "SelectAsset", &::AssetsWindow::SelectAsset);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const Vector<AssetId>&>(&type, "SelectAsset", &::AssetsWindow::SelectAsset);
+	TypeInitializer::RegFuncParam<const Vector<AssetId>&>(funcInfo, "ids");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const Vector<String>&>(&type, "SelectAssets", &::AssetsWindow::SelectAssets);
+	TypeInitializer::RegFuncParam<const Vector<String>&>(funcInfo, "paths");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, AssetId>(&type, "OpenAsset", &::AssetsWindow::OpenAsset);
+	TypeInitializer::RegFuncParam<AssetId>(funcInfo, "id");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "OpenAsset", &::AssetsWindow::OpenAsset);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, AssetId>(&type, "OpenAndEditAsset", &::AssetsWindow::OpenAndEditAsset);
+	TypeInitializer::RegFuncParam<AssetId>(funcInfo, "id");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "OpenAndEditAsset", &::AssetsWindow::OpenAndEditAsset);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void>(&type, "DeselectAssets", &::AssetsWindow::DeselectAssets);
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, Vector<AssetInfo>>(&type, "GetSelectedAssets", &::AssetsWindow::GetSelectedAssets);
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, String>(&type, "GetOpenedFolderPath", &::AssetsWindow::GetOpenedFolderPath);
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "OpenFolder", &::AssetsWindow::OpenFolder);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, AssetId>(&type, "ShowAssetIcon", &::AssetsWindow::ShowAssetIcon);
+	TypeInitializer::RegFuncParam<AssetId>(funcInfo, "id");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "ShowAssetIcon", &::AssetsWindow::ShowAssetIcon);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const Vector<String>&>(&type, "CopyAssets", &::AssetsWindow::CopyAssets);
+	TypeInitializer::RegFuncParam<const Vector<String>&>(funcInfo, "assetsPaths");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const Vector<String>&>(&type, "CutAssets", &::AssetsWindow::CutAssets);
+	TypeInitializer::RegFuncParam<const Vector<String>&>(funcInfo, "assetsPaths");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "PasteAssets", &::AssetsWindow::PasteAssets);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "targetPath");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const Vector<String>&>(&type, "DeleteAssets", &::AssetsWindow::DeleteAssets);
+	TypeInitializer::RegFuncParam<const Vector<String>&>(funcInfo, "assetsPaths");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "ImportAssets", &::AssetsWindow::ImportAssets);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "targetPath");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "CreateFolderAsset", &::AssetsWindow::CreateFolderAsset);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "targetPath");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "CreatePrefabAsset", &::AssetsWindow::CreatePrefabAsset);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "targetPath");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "CreateScriptAsset", &::AssetsWindow::CreateScriptAsset);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "targetPath");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&>(&type, "CreateAnimationAsset", &::AssetsWindow::CreateAnimationAsset);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "targetPath");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void>(&type, "InitializeWindow", &::AssetsWindow::InitializeWindow);
 	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const WString&>(&type, "OnSearchEdited", &::AssetsWindow::OnSearchEdited);
 	TypeInitializer::RegFuncParam<const WString&>(funcInfo, "search");
 	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void>(&type, "OnMenuFilterPressed", &::AssetsWindow::OnMenuFilterPressed);
 	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void>(&type, "OnShowTreePressed", &::AssetsWindow::OnShowTreePressed);
-	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, UnknownType*, UnknownType*>(&type, "GetFoldersTreeNodeParent", &::AssetsWindow::GetFoldersTreeNodeParent);
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const Vector<AssetId>&>(&type, "OnAssetsRebuilded", &::AssetsWindow::OnAssetsRebuilded);
+	TypeInitializer::RegFuncParam<const Vector<AssetId>&>(funcInfo, "changedAssets");
+	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, const String&, const String&>(&type, "CopyAssetFolder", &::AssetsWindow::CopyAssetFolder);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "src");
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "dst");
+}
+
+void ::UIAssetsFoldersTree::InitializeType(::UIAssetsFoldersTree* sample)
+{
+	TypeInitializer::RegField(&type, "mFoldersTree", (size_t)(char*)(&sample->mFoldersTree) - (size_t)(char*)sample, sample->mFoldersTree);
+	TypeInitializer::RegField(&type, "mContextMenu", (size_t)(char*)(&sample->mContextMenu) - (size_t)(char*)sample, sample->mContextMenu);
+	TypeInitializer::RegField(&type, "mCurrentPath", (size_t)(char*)(&sample->mCurrentPath) - (size_t)(char*)sample, sample->mCurrentPath);
+	auto funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void, const String&>(&type, "SelectAndExpandFolder", &::UIAssetsFoldersTree::SelectAndExpandFolder);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "RebuildTree", &::UIAssetsFoldersTree::RebuildTree);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "InitializeContext", &::UIAssetsFoldersTree::InitializeContext);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, UnknownType*, UnknownType*>(&type, "GetFoldersTreeNodeParent", &::UIAssetsFoldersTree::GetFoldersTreeNodeParent);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
-	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, Vector<UnknownType*>, UnknownType*>(&type, "GetFoldersTreeNodeChilds", &::AssetsWindow::GetFoldersTreeNodeChilds);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, Vector<UnknownType*>, UnknownType*>(&type, "GetFoldersTreeNodeChilds", &::UIAssetsFoldersTree::GetFoldersTreeNodeChilds);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
-	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, UITreeNode*, UnknownType*>(&type, "SetupFoldersTreeNode", &::AssetsWindow::SetupFoldersTreeNode);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void, UITreeNode*, UnknownType*>(&type, "SetupFoldersTreeNode", &::UIAssetsFoldersTree::SetupFoldersTreeNode);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
-	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, UITreeNode*>(&type, "OnFoldersTreeNodeDblClick", &::AssetsWindow::OnFoldersTreeNodeDblClick);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void, UITreeNode*>(&type, "OnFoldersTreeNodeDblClick", &::UIAssetsFoldersTree::OnFoldersTreeNodeDblClick);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
-	funcInfo = TypeInitializer::RegFunction<::AssetsWindow, void, UITreeNode*>(&type, "OnFoldersTreeClick", &::AssetsWindow::OnFoldersTreeClick);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void, UITreeNode*>(&type, "OnFoldersTreeClick", &::UIAssetsFoldersTree::OnFoldersTreeClick);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void, UITreeNode*>(&type, "OnFoldersTreeRightClick", &::UIAssetsFoldersTree::OnFoldersTreeRightClick);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextCopyPressed", &::UIAssetsFoldersTree::OnContextCopyPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextCutPressed", &::UIAssetsFoldersTree::OnContextCutPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextPastePressed", &::UIAssetsFoldersTree::OnContextPastePressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextDeletePressed", &::UIAssetsFoldersTree::OnContextDeletePressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextOpenPressed", &::UIAssetsFoldersTree::OnContextOpenPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextShowInExplorerPressed", &::UIAssetsFoldersTree::OnContextShowInExplorerPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextImportPressed", &::UIAssetsFoldersTree::OnContextImportPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextCreateFolderPressed", &::UIAssetsFoldersTree::OnContextCreateFolderPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextCreatePrefabPressed", &::UIAssetsFoldersTree::OnContextCreatePrefabPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextCreateScriptPressed", &::UIAssetsFoldersTree::OnContextCreateScriptPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextCreateAnimationPressed", &::UIAssetsFoldersTree::OnContextCreateAnimationPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextExpandPressed", &::UIAssetsFoldersTree::OnContextExpandPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsFoldersTree, void>(&type, "OnContextCollapsePressed", &::UIAssetsFoldersTree::OnContextCollapsePressed);
 }
 
 void ::UIAssetIcon::InitializeType(::UIAssetIcon* sample)
@@ -1535,6 +1650,8 @@ void o2::FolderAsset::InitializeType(o2::FolderAsset* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::FolderAsset, MetaInfo*>(&type, "GetMeta", &o2::FolderAsset::GetMeta);
 	funcInfo = TypeInitializer::RegFunction<o2::FolderAsset, void, const String&>(&type, "LoadData", &o2::FolderAsset::LoadData);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<o2::FolderAsset, void, const String&>(&type, "SaveData", &o2::FolderAsset::SaveData);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
 	funcInfo = TypeInitializer::RegFunction<o2::FolderAsset, void>(&type, "InitializeProperties", &o2::FolderAsset::InitializeProperties);
 }
 
@@ -1606,11 +1723,11 @@ void o2::AtlasAssetConverter::InitializeType(o2::AtlasAssetConverter* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, void, const AssetTree::AssetNode&, const AssetTree::AssetNode&>(&type, "MoveAsset", &o2::AtlasAssetConverter::MoveAsset);
 	TypeInitializer::RegFuncParam<const AssetTree::AssetNode&>(funcInfo, "nodeFrom");
 	TypeInitializer::RegFuncParam<const AssetTree::AssetNode&>(funcInfo, "nodeTo");
-	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, void>(&type, "AssetsPostProcess", &o2::AtlasAssetConverter::AssetsPostProcess);
+	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, Vector<AssetId>>(&type, "AssetsPostProcess", &o2::AtlasAssetConverter::AssetsPostProcess);
 	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, void>(&type, "Reset", &o2::AtlasAssetConverter::Reset);
 	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, void>(&type, "CheckBasicAtlas", &o2::AtlasAssetConverter::CheckBasicAtlas);
-	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, void>(&type, "CheckRebuildingAtlases", &o2::AtlasAssetConverter::CheckRebuildingAtlases);
-	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, void, AssetTree::AssetNode*>(&type, "CheckAtlasRebuilding", &o2::AtlasAssetConverter::CheckAtlasRebuilding);
+	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, Vector<AssetId>>(&type, "CheckRebuildingAtlases", &o2::AtlasAssetConverter::CheckRebuildingAtlases);
+	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, bool, AssetTree::AssetNode*>(&type, "CheckAtlasRebuilding", &o2::AtlasAssetConverter::CheckAtlasRebuilding);
 	TypeInitializer::RegFuncParam<AssetTree::AssetNode*>(funcInfo, "atlasInfo");
 	funcInfo = TypeInitializer::RegFunction<o2::AtlasAssetConverter, bool, ImagesVec&, ImagesVec&>(&type, "IsAtlasNeedRebuild", &o2::AtlasAssetConverter::IsAtlasNeedRebuild);
 	TypeInitializer::RegFuncParam<ImagesVec&>(funcInfo, "currentImages");
@@ -1633,7 +1750,7 @@ void o2::FolderAssetConverter::InitializeType(o2::FolderAssetConverter* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::FolderAssetConverter, void, const AssetTree::AssetNode&, const AssetTree::AssetNode&>(&type, "MoveAsset", &o2::FolderAssetConverter::MoveAsset);
 	TypeInitializer::RegFuncParam<const AssetTree::AssetNode&>(funcInfo, "nodeFrom");
 	TypeInitializer::RegFuncParam<const AssetTree::AssetNode&>(funcInfo, "nodeTo");
-	funcInfo = TypeInitializer::RegFunction<o2::FolderAssetConverter, void>(&type, "AssetsPostProcess", &o2::FolderAssetConverter::AssetsPostProcess);
+	funcInfo = TypeInitializer::RegFunction<o2::FolderAssetConverter, Vector<AssetId>>(&type, "AssetsPostProcess", &o2::FolderAssetConverter::AssetsPostProcess);
 	funcInfo = TypeInitializer::RegFunction<o2::FolderAssetConverter, void>(&type, "Reset", &o2::FolderAssetConverter::Reset);
 }
 
@@ -1648,7 +1765,7 @@ void o2::IAssetConverter::InitializeType(o2::IAssetConverter* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::IAssetConverter, void, const AssetTree::AssetNode&, const AssetTree::AssetNode&>(&type, "MoveAsset", &o2::IAssetConverter::MoveAsset);
 	TypeInitializer::RegFuncParam<const AssetTree::AssetNode&>(funcInfo, "nodeFrom");
 	TypeInitializer::RegFuncParam<const AssetTree::AssetNode&>(funcInfo, "nodeTo");
-	funcInfo = TypeInitializer::RegFunction<o2::IAssetConverter, void>(&type, "AssetsPostProcess", &o2::IAssetConverter::AssetsPostProcess);
+	funcInfo = TypeInitializer::RegFunction<o2::IAssetConverter, Vector<AssetId>>(&type, "AssetsPostProcess", &o2::IAssetConverter::AssetsPostProcess);
 	funcInfo = TypeInitializer::RegFunction<o2::IAssetConverter, void>(&type, "Reset", &o2::IAssetConverter::Reset);
 	funcInfo = TypeInitializer::RegFunction<o2::IAssetConverter, void, AssetsBuilder*>(&type, "SetAssetsBuilder", &o2::IAssetConverter::SetAssetsBuilder);
 	TypeInitializer::RegFuncParam<AssetsBuilder*>(funcInfo, "builder");
@@ -1746,6 +1863,7 @@ void o2::Sprite::InitializeType(o2::Sprite* sample)
 	TypeInitializer::RegField(&type, "mTextureSrcRect", (size_t)(char*)(&sample->mTextureSrcRect) - (size_t)(char*)sample, sample->mTextureSrcRect);
 	TypeInitializer::RegField(&type, "mCornersColors", (size_t)(char*)(&sample->mCornersColors) - (size_t)(char*)sample, sample->mCornersColors);
 	TypeInitializer::RegField(&type, "mImageAssetId", (size_t)(char*)(&sample->mImageAssetId) - (size_t)(char*)sample, sample->mImageAssetId);
+	TypeInitializer::RegField(&type, "mAtlasAssetId", (size_t)(char*)(&sample->mAtlasAssetId) - (size_t)(char*)sample, sample->mAtlasAssetId);
 	TypeInitializer::RegField(&type, "mMode", (size_t)(char*)(&sample->mMode) - (size_t)(char*)sample, sample->mMode).AddAttribute<SerializableAttribute<decltype(mMode)>>();
 	TypeInitializer::RegField(&type, "mSlices", (size_t)(char*)(&sample->mSlices) - (size_t)(char*)sample, sample->mSlices).AddAttribute<SerializableAttribute<decltype(mSlices)>>();
 	TypeInitializer::RegField(&type, "mFill", (size_t)(char*)(&sample->mFill) - (size_t)(char*)sample, sample->mFill).AddAttribute<SerializableAttribute<decltype(mFill)>>();
@@ -1795,6 +1913,7 @@ void o2::Sprite::InitializeType(o2::Sprite* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void, Bitmap*>(&type, "LoadFromBitmap", &o2::Sprite::LoadFromBitmap);
 	TypeInitializer::RegFuncParam<Bitmap*>(funcInfo, "bitmap");
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, AssetId>(&type, "GetImageId", &o2::Sprite::GetImageId);
+	funcInfo = TypeInitializer::RegFunction<o2::Sprite, AssetId>(&type, "GetAtlasAssetId", &o2::Sprite::GetAtlasAssetId);
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void>(&type, "NormalizeSize", &o2::Sprite::NormalizeSize);
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void>(&type, "NormalizeAspectByWidth", &o2::Sprite::NormalizeAspectByWidth);
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void>(&type, "NormalizeAspectByHeight", &o2::Sprite::NormalizeAspectByHeight);
@@ -1814,6 +1933,7 @@ void o2::Sprite::InitializeType(o2::Sprite* sample)
 	TypeInitializer::RegFuncParam<DataNode&>(funcInfo, "node");
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void, const DataNode&>(&type, "OnDeserialized", &o2::Sprite::OnDeserialized);
 	TypeInitializer::RegFuncParam<const DataNode&>(funcInfo, "node");
+	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void>(&type, "ReloadImage", &o2::Sprite::ReloadImage);
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void>(&type, "InitializeProperties", &o2::Sprite::InitializeProperties);
 }
 
@@ -3406,6 +3526,7 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegField(&type, "mSelectionSpritesPool", (size_t)(char*)(&sample->mSelectionSpritesPool) - (size_t)(char*)sample, sample->mSelectionSpritesPool);
 	TypeInitializer::RegField(&type, "mExpandedObjects", (size_t)(char*)(&sample->mExpandedObjects) - (size_t)(char*)sample, sample->mExpandedObjects);
 	TypeInitializer::RegField(&type, "mRearrangeType", (size_t)(char*)(&sample->mRearrangeType) - (size_t)(char*)sample, sample->mRearrangeType);
+	TypeInitializer::RegField(&type, "mMultiSelectAvailable", (size_t)(char*)(&sample->mMultiSelectAvailable) - (size_t)(char*)sample, sample->mMultiSelectAvailable);
 	TypeInitializer::RegField(&type, "mDraggingNodes", (size_t)(char*)(&sample->mDraggingNodes) - (size_t)(char*)sample, sample->mDraggingNodes);
 	TypeInitializer::RegField(&type, "mDragNode", (size_t)(char*)(&sample->mDragNode) - (size_t)(char*)sample, sample->mDragNode);
 	TypeInitializer::RegField(&type, "mDragNodeBack", (size_t)(char*)(&sample->mDragNodeBack) - (size_t)(char*)sample, sample->mDragNodeBack);
@@ -3433,6 +3554,8 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegFuncParam<const Vector<UnknownType*>&>(funcInfo, "objects");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "SelectObject", &o2::UITree::SelectObject);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "SelectAndExpandObject", &o2::UITree::SelectAndExpandObject);
+	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "DeselectObject", &o2::UITree::DeselectObject);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "DeselectAllObjects", &o2::UITree::DeselectAllObjects);
@@ -3455,6 +3578,9 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, RearrangeType>(&type, "SetRearrangeType", &o2::UITree::SetRearrangeType);
 	TypeInitializer::RegFuncParam<RearrangeType>(funcInfo, "type");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, RearrangeType>(&type, "GetRearrangeType", &o2::UITree::GetRearrangeType);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "SetMultipleSelectionAvailable", &o2::UITree::SetMultipleSelectionAvailable);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "available");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool>(&type, "IsMultiSelectionAvailable", &o2::UITree::IsMultiSelectionAvailable);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Color4&>(&type, "SetSelectedColor", &o2::UITree::SetSelectedColor);
 	TypeInitializer::RegFuncParam<const Color4&>(funcInfo, "color");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, Color4>(&type, "GetSelectedColor", &o2::UITree::GetSelectedColor);
@@ -3909,6 +4035,8 @@ void o2::UIWidgetLayer::InitializeType(o2::UIWidgetLayer* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, float>(&type, "GetTransparency", &o2::UIWidgetLayer::GetTransparency);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UIWidgetLayer::IsUnderPoint);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, void, const DataNode&>(&type, "OnDeserialized", &o2::UIWidgetLayer::OnDeserialized);
+	TypeInitializer::RegFuncParam<const DataNode&>(funcInfo, "node");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, void, UIWidget*>(&type, "SetOwnerWidget", &o2::UIWidgetLayer::SetOwnerWidget);
 	TypeInitializer::RegFuncParam<UIWidget*>(funcInfo, "owner");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, void, UIWidgetLayer*>(&type, "OnChildAdded", &o2::UIWidgetLayer::OnChildAdded);
@@ -4883,6 +5011,7 @@ void RegReflectionTypes()
 	// Initialize types
 	o2::Reflection::InitializeType<::UIAssetsIconsScrollArea>("::UIAssetsIconsScrollArea");
 	o2::Reflection::InitializeType<::AssetsWindow>("::AssetsWindow");
+	o2::Reflection::InitializeType<::UIAssetsFoldersTree>("::UIAssetsFoldersTree");
 	o2::Reflection::InitializeType<::UIAssetIcon>("::UIAssetIcon");
 	o2::Reflection::InitializeType<::EditorConfig>("::EditorConfig");
 	o2::Reflection::InitializeType<::EditorActorsTransformAction>("::EditorActorsTransformAction");
@@ -5011,6 +5140,7 @@ void RegReflectionTypes()
 	TypeInitializer::AddBaseType(&o2::UIScrollArea::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&::UIAssetsIconsScrollArea::type, &o2::UIScrollArea::type);
 	TypeInitializer::AddBaseType(&::AssetsWindow::type, &::IEditorWindow::type);
+	TypeInitializer::AddBaseType(&::UIAssetsFoldersTree::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&::UIAssetIcon::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&::EditorConfig::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&::IEditorAction::type, &o2::ISerializable::type);

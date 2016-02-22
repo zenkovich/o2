@@ -1,10 +1,12 @@
 #include "AssetsWindow.h"
 
+#include "Application/Application.h"
 #include "Assets/Assets.h"
 #include "Assets/AssetsTree.h"
 #include "Assets/FolderAsset.h"
 #include "Assets/ImageAsset.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
+#include "AssetsWindow/FoldersTree.h"
 #include "AssetsWindow/UIAssetIcon.h"
 #include "UI/Button.h"
 #include "UI/EditBox.h"
@@ -12,6 +14,7 @@
 #include "UI/Label.h"
 #include "UI/Tree.h"
 #include "UI/UIManager.h"
+#include "Utils/Clipboard.h"
 #include "Utils/Delegates.h"
 #include "Utils/FileSystem/FileSystem.h"
 
@@ -25,8 +28,223 @@ AssetsWindow::AssetsWindow()
 AssetsWindow::~AssetsWindow()
 {}
 
+void AssetsWindow::SelectAsset(AssetId id)
+{
+	String assetPath = o2Assets.GetAssetPath(id);
+	String folder = o2FileSystem.GetParentPath(assetPath);
+
+	if (GetOpenedFolderPath() != folder)
+		OpenFolder(folder);
+
+	mAssetsGridScroll->SelectAsset(id);
+}
+
+void AssetsWindow::SelectAsset(const String& path)
+{
+	AssetId id = o2Assets.GetAssetId(path);
+	String folder = o2FileSystem.GetParentPath(path);
+
+	if (GetOpenedFolderPath() != folder)
+		OpenFolder(folder);
+
+	mAssetsGridScroll->SelectAsset(id);
+}
+
+void AssetsWindow::SelectAsset(const Vector<AssetId>& ids)
+{
+	for (auto id : ids)
+		SelectAsset(id);
+}
+
+void AssetsWindow::SelectAssets(const Vector<String>& paths)
+{
+	for (auto path : paths)
+		SelectAsset(path);
+}
+
+void AssetsWindow::OpenAsset(AssetId id)
+{
+	OpenAsset(o2Assets.GetAssetPath(id));
+}
+
+void AssetsWindow::OpenAsset(const String& path)
+{
+	String fullPath = o2FileSystem.GetParentPath(o2Application.GetBinPath() + "/" + o2Assets.GetAssetsPath() + path);
+	ShellExecute(NULL, "explore", fullPath, NULL, NULL, SW_SHOWNORMAL);
+}
+
+void AssetsWindow::OpenAndEditAsset(AssetId id)
+{
+	OpenAndEditAsset(o2Assets.GetAssetPath(id));
+}
+
+void AssetsWindow::OpenAndEditAsset(const String& path)
+{
+	String fullPath = o2Application.GetBinPath() + "/" + o2Assets.GetAssetsPath() + path;
+	ShellExecute(NULL, "edit", fullPath, NULL, NULL, SW_SHOWNORMAL);
+}
+
+void AssetsWindow::DeselectAssets()
+{
+	mAssetsGridScroll->DeselectAllAssets();
+}
+
+Vector<AssetInfo> AssetsWindow::GetSelectedAssets() const
+{
+	return mAssetsGridScroll->GetSelectedAssets();
+}
+
+String AssetsWindow::GetOpenedFolderPath() const
+{
+	return mAssetsGridScroll->GetViewingPath();
+}
+
+void AssetsWindow::OpenFolder(const String& path)
+{
+	mAssetsGridScroll->SetViewingPath(path);
+	mFoldersTree->SelectAndExpandFolder(path);
+}
+
+void AssetsWindow::ShowAssetIcon(AssetId id)
+{
+	SelectAsset(id);
+}
+
+void AssetsWindow::ShowAssetIcon(const String& path)
+{
+	SelectAsset(path);
+}
+
+void AssetsWindow::CopyAssets(const Vector<String>& assetsPaths)
+{
+	mCuttingAssets.Clear();
+	mAssetsGridScroll->UpdateCuttingAssets();
+
+	Vector<WString> paths;
+	for (auto& path : assetsPaths)
+		paths.Add(o2Application.GetBinPath() + "/" + o2Assets.GetAssetsPath() + path);
+
+	Clipboard::CopyFiles(paths);
+}
+
+void AssetsWindow::CutAssets(const Vector<String>& assetsPaths)
+{
+	mCuttingAssets.Clear();
+
+	Vector<WString> paths;
+	for (auto& path : assetsPaths)
+	{
+		String fullPath = o2Application.GetBinPath() + "/" + o2Assets.GetAssetsPath() + path;
+		mCuttingAssets.Add(Pair<AssetId, String>(o2Assets.GetAssetId(path), fullPath));
+		paths.Add(fullPath);
+	}
+
+	Clipboard::CopyFiles(paths);
+
+	mAssetsGridScroll->UpdateCuttingAssets();
+}
+
+void AssetsWindow::PasteAssets(const String& targetPath)
+{
+	Vector<WString> paths = Clipboard::GetCopyFiles();
+	for (auto path : paths)
+	{
+		String fileName = o2FileSystem.GetPathWithoutDirectories(path);
+		bool isFolder = o2FileSystem.IsFolderExist(path);
+
+		String copyFileName = o2Application.GetBinPath() + "/" + o2Assets.GetAssetsPath() + targetPath + "/" + fileName;
+		String extension = o2FileSystem.GetFileExtension(fileName);
+		String fileNameWithoutExt = o2FileSystem.GetFileNameWithoutExtension(fileName);
+		bool endsAsCopy = fileNameWithoutExt.EndsWith("copy");
+		int i = 0;
+		while (o2FileSystem.IsFileExist(copyFileName))
+		{
+			copyFileName = o2Application.GetBinPath() + "/" + o2Assets.GetAssetsPath() + targetPath + "/" +
+				fileNameWithoutExt;
+
+			if (!endsAsCopy)
+				copyFileName += " copy";
+
+			if (i > 0)
+				copyFileName += (String)(i + 1) + "." + extension;
+
+			if (!isFolder)
+				copyFileName += "." + extension;
+
+			i++;
+		}
+
+		if (mCuttingAssets.ContainsPred([&](auto x) { return x.mSecond == path; }))
+		{
+			o2FileSystem.FileMove(path, copyFileName);
+			o2FileSystem.FileMove(path + ".meta", copyFileName + ".meta");
+		}
+		else
+		{
+			if (!isFolder)
+				o2FileSystem.FileCopy(path, copyFileName);
+			else
+				CopyAssetFolder(path, copyFileName);
+		}
+	}
+
+	mCuttingAssets.Clear();
+	mAssetsGridScroll->UpdateCuttingAssets();
+
+	o2Assets.RebuildAssets();
+}
+
+void AssetsWindow::DeleteAssets(const Vector<String>& assetsPaths)
+{
+	mCuttingAssets.Clear();
+	mAssetsGridScroll->UpdateCuttingAssets();
+
+	for (auto& path : assetsPaths)
+		o2Assets.RemoveAsset(path, false);
+
+	o2Assets.RebuildAssets();
+}
+
+void AssetsWindow::ImportAssets(const String& targetPath)
+{
+
+}
+
+void AssetsWindow::CreateFolderAsset(const String& targetPath)
+{
+	int id = 0;
+	String folderName = targetPath + "/New folder";
+	while (o2FileSystem.IsFolderExist(folderName))
+	{
+		folderName = targetPath + "/New folder " + (String)id;
+		id++;
+	}
+
+	FolderAsset folderAsset(folderName);
+	folderAsset.Save();
+
+	o2Assets.RebuildAssets();
+}
+
+void AssetsWindow::CreatePrefabAsset(const String& targetPath)
+{
+
+}
+
+void AssetsWindow::CreateScriptAsset(const String& targetPath)
+{
+
+}
+
+void AssetsWindow::CreateAnimationAsset(const String& targetPath)
+{
+
+}
+
 void AssetsWindow::InitializeWindow()
 {
+	o2Assets.onAssetsRebuilded += Function<void(const Vector<AssetId>&)>(this, &AssetsWindow::OnAssetsRebuilded);
+
 	mWindow->caption = "Assets";
 	mWindow->name = "assets window";
 	if (auto iconLayer = mWindow->GetLayer("icon"))
@@ -81,21 +299,12 @@ void AssetsWindow::InitializeWindow()
 	mWindow->AddChild(downPanel);
 
 	// folders tree
-	mFoldersTree = o2UI.CreateWidget<UITree>("folders");
+	mFoldersTree = mnew UIAssetsFoldersTree();
 	mFoldersTree->layout = UIWidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
 
 	auto separatorLayer = mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI_Ver_separator.png"),
 												 Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
-
-	mFoldersTree->SetRearrangeType(UITree::RearrangeType::OnlyReparent);
-
-	mFoldersTree->getParentFunc = Function<UnknownType*(UnknownType*)>(this, &AssetsWindow::GetFoldersTreeNodeParent);
-	mFoldersTree->getChildsFunc = Function<Vector<UnknownType*>(UnknownType*)>(this, &AssetsWindow::GetFoldersTreeNodeChilds);
-	mFoldersTree->setupNodeFunc = Function<void(UITreeNode*, UnknownType*)>(this, &AssetsWindow::SetupFoldersTreeNode);
-	mFoldersTree->onItemDblClick = Function<void(UITreeNode*)>(this, &AssetsWindow::OnFoldersTreeNodeDblClick);
-	mFoldersTree->onItemClick = Function<void(UITreeNode*)>(this, &AssetsWindow::OnFoldersTreeClick);
 	mFoldersTree->RebuildTree();
-
 	mWindow->AddChild(mFoldersTree);
 
 	// assets scroll & grid
@@ -117,6 +326,8 @@ void AssetsWindow::InitializeWindow()
 	mWindow->onDraw += [&]() { mSeparatorHandle.OnDrawn(); };
 
 	mSeparatorHandle.cursorType = CursorType::SizeWE;
+
+	OpenFolder("");
 }
 
 void AssetsWindow::OnSearchEdited(const WString& search)
@@ -134,68 +345,25 @@ void AssetsWindow::OnShowTreePressed()
 
 }
 
-UnknownType* AssetsWindow::GetFoldersTreeNodeParent(UnknownType* object)
+void AssetsWindow::OnAssetsRebuilded(const Vector<AssetId>& changedAssets)
 {
-	AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
-	return (UnknownType*)(void*)(assetTreeNode->GetParent());
+	mFoldersTree->RebuildTree();
+	mAssetsGridScroll->UpdateAssetsPath();
 }
 
-Vector<UnknownType*> AssetsWindow::GetFoldersTreeNodeChilds(UnknownType* object)
+void AssetsWindow::CopyAssetFolder(const String& src, const String& dst)
 {
-	AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
+	o2FileSystem.FolderCreate(dst);
 
-	if (assetTreeNode)
+	FolderInfo info = o2FileSystem.GetFolderInfo(src);
+	info.ClampPathNames();
+
+	for (auto& file : info.mFiles)
 	{
-		return assetTreeNode->GetChilds().
-			FindAll([](AssetTree::AssetNode* x) { return x->mType == FolderAsset::type.ID(); }).
-			Select<UnknownType*>([](AssetTree::AssetNode* x) { return (UnknownType*)(void*)x; });
+		if (!file.mPath.EndsWith(".meta"))
+			o2FileSystem.FileCopy(src + "/" + file.mPath, dst + "/" + file.mPath);
 	}
-	else
-	{
-		const AssetTree& assetsTree = o2Assets.GetAssetsTree();
 
-		return assetsTree.mRootAssets.
-			FindAll([](AssetTree::AssetNode* x) { return x->mType == FolderAsset::type.ID(); }).
-			Select<UnknownType*>([](AssetTree::AssetNode* x) { return (UnknownType*)(void*)x; });
-	}
-}
-
-void AssetsWindow::SetupFoldersTreeNode(UITreeNode* node, UnknownType* object)
-{
-	AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
-	String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->mPath);
-
-	node->name = pathName;
-
-	auto nameLayer = node->layer["name"];
-	((Text*)nameLayer->drawable)->text = pathName;
-}
-
-void AssetsWindow::OnFoldersTreeNodeDblClick(UITreeNode* node)
-{
-	AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)node->GetObject();
-	String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->mPath);
-
-	node->SetState("edit", true);
-
-	auto editBox = (UIEditBox*)node->GetChild("nameEditBox");
-	editBox->text = (String)pathName;
-	editBox->SelectAll();
-	editBox->UIWidget::Select();
-
-	editBox->onChangeCompleted = [=](const WString& text) {
-		//actor->SetName(text);
-		node->SetState("edit", false);
-		node->Rebuild(false);
-	};
-}
-
-void AssetsWindow::OnFoldersTreeClick(UITreeNode* node)
-{
-	if (node)
-	{
-		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)node->GetObject();
-		mAssetsGridScroll->SetAssetPath(assetTreeNode->mPath);
-	}
-	else mAssetsGridScroll->SetAssetPath("");
+	for (auto& folder : info.mFolders)
+		CopyAssetFolder(src + "/" + folder.mPath, dst + "/" + folder.mPath);
 }

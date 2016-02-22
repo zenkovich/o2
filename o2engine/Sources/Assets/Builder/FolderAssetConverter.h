@@ -23,7 +23,7 @@ namespace o2
 		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
 		// Post processing folders
-		void AssetsPostProcess();
+		Vector<AssetId> AssetsPostProcess();
 
 		// Resets converter
 		void Reset();

@@ -642,6 +642,9 @@ namespace o2
 
 	void UIWidget::UpdateLayout(bool forcible /*= false*/)
 	{
+		if (mFullyDisabled)
+			return;
+
 		if (layout.mDrivenByParent && !forcible)
 		{
 			if (mParent)
@@ -689,6 +692,7 @@ namespace o2
 			else
 				mFullyDisabled = !mResVisible;
 
+			UpdateLayout();
 			OnVisibleChanged();
 		}
 

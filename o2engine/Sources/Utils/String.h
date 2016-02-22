@@ -1293,7 +1293,7 @@ namespace o2
 		int len = format.Length();
 
 		TString res;
-		res.Reserve(len * 2);
+		res.Reserve(len * 2 + 100);
 
 		int resLen = 0;
 

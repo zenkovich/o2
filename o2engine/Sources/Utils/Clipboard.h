@@ -13,5 +13,14 @@ namespace o2
 
 		// Gets text from clipboard
 		static WString GetText();
+
+		// Copy file to clipboard
+		static void CopyFile(const WString& path);
+
+		// Copy files to clipboard
+		static void CopyFiles(const Vector<WString>& paths);
+
+		// Returns copying files
+		static Vector<WString> GetCopyFiles();
 	};
 }

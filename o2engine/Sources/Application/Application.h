@@ -120,6 +120,9 @@ namespace o2
 		// Is application run in editor
 		virtual bool IsEditor() const;
 
+		// Returns application's path
+		virtual String GetBinPath() const;
+
 		// Returns is application ready to use
 		static bool IsReady();
 

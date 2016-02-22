@@ -48,10 +48,12 @@ namespace o2
 		mRemovedFolders.Remove(fullPathTo);
 	}
 
-	void FolderAssetConverter::AssetsPostProcess()
+	Vector<AssetId> FolderAssetConverter::AssetsPostProcess()
 	{
 		for (auto fold : mRemovedFolders)
 			o2FileSystem.FolderRemove(fold);
+
+		return Vector<AssetId>();
 	}
 
 	void FolderAssetConverter::Reset()

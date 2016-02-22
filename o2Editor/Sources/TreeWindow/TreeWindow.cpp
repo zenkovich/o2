@@ -303,6 +303,7 @@ void TreeWindow::OnTreeNodeDblClick(UITreeNode* node)
 	editBox->text = (String)actor->name;
 	editBox->SelectAll();
 	editBox->UIWidget::Select();
+	editBox->ResetSroll();
 
 	editBox->onChangeCompleted = [=](const WString& text) {
 		actor->SetName(text);
@@ -374,6 +375,9 @@ void TreeWindow::CreateActor(Actor* newActor)
 
 void TreeWindow::OnContextCreateNewPressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	Actor* newActor = mnew Actor();
 	newActor->name = "Empty";
 	CreateActor(newActor);
@@ -381,6 +385,9 @@ void TreeWindow::OnContextCreateNewPressed()
 
 void TreeWindow::OnContextCreateSprite()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	Actor* newActor = mnew Actor({ mnew ImageComponent() });
 	newActor->name = "Sprite";
 	newActor->transform.size = Vec2F(10, 10);
@@ -388,10 +395,16 @@ void TreeWindow::OnContextCreateSprite()
 }
 
 void TreeWindow::OnContextCreateButton()
-{}
+{
+	if (!mActorsTree->IsSelected())
+		return;
+}
 
 void TreeWindow::OnContextCopyPressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	Vector<Actor*> selectedNodes = mActorsTree->GetSelectedObjects().Select<Actor*>([](auto x) { return (Actor*)(void*)x; });
 
 	DataNode data;
@@ -404,12 +417,18 @@ void TreeWindow::OnContextCopyPressed()
 
 void TreeWindow::OnContextCutPressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	OnContextCopyPressed();
 	OnContextDeletePressed();
 }
 
 void TreeWindow::OnContextPastePressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	auto selectedObjs = mActorsTree->GetSelectedObjects();
 
 	Actor* parent = selectedObjs.Count() > 0 ? (Actor*)(void*)selectedObjs.Last() : nullptr;
@@ -441,6 +460,9 @@ void TreeWindow::OnContextPastePressed()
 
 void TreeWindow::OnContextDeletePressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
 	o2EditorSceneScreen.ClearSelectionWithoutAction();
 
@@ -455,6 +477,9 @@ void TreeWindow::OnContextDeletePressed()
 
 void TreeWindow::OnContextDuplicatePressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
 	Vector<UnknownType*> newActorsObjs;
 
@@ -472,6 +497,9 @@ void TreeWindow::OnContextDuplicatePressed()
 
 void TreeWindow::OnContextExpandAllPressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	auto selectedObjects = mActorsTree->GetSelectedObjects();
 
 	for (auto obj : selectedObjects)
@@ -485,6 +513,9 @@ void TreeWindow::OnContextExpandAllPressed()
 
 void TreeWindow::OnContextCollapseAllPressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	auto selectedObjects = mActorsTree->GetSelectedObjects();
 
 	for (auto obj : selectedObjects)
@@ -498,6 +529,9 @@ void TreeWindow::OnContextCollapseAllPressed()
 
 void TreeWindow::OnContextLockPressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	auto selectedActors = mActorsTree->GetSelectedObjects().Select<Actor*>([](UnknownType* x) { return (Actor*)(void*)x; });
 
 	bool value = selectedActors.Count() > 0 ? !selectedActors.Last()->IsLocked() : true;
@@ -516,6 +550,9 @@ void TreeWindow::OnContextLockPressed()
 
 void TreeWindow::OnContextEnablePressed()
 {
+	if (!mActorsTree->IsSelected())
+		return;
+
 	auto selectedActors = mActorsTree->GetSelectedObjects().Select<Actor*>([](UnknownType* x) { return (Actor*)(void*)x; });
 
 	bool value = selectedActors.Count() > 0 ? !selectedActors.Last()->IsEnabled() : true;

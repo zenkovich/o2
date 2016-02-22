@@ -27,7 +27,7 @@ namespace o2
 		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
 		// Post processing atlases. Here checking atlases for rebuild
-		void AssetsPostProcess();
+		Vector<AssetId> AssetsPostProcess();
 
 		// Resets converter
 		void Reset();
@@ -76,10 +76,10 @@ namespace o2
 		void CheckBasicAtlas();
 
 		// Checks atlases for rebuilding
-		void CheckRebuildingAtlases();
+		Vector<AssetId> CheckRebuildingAtlases();
 
 		// Checks atlas for rebuilding
-		void CheckAtlasRebuilding(AssetTree::AssetNode* atlasInfo);
+		bool CheckAtlasRebuilding(AssetTree::AssetNode* atlasInfo);
 
 		// Returns true if atlas needs to rebuild
 		bool IsAtlasNeedRebuild(ImagesVec& currentImages, ImagesVec& lastImages);

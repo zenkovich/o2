@@ -1,8 +1,9 @@
 #include "FileSystem.h"
 
 #include <Windows.h>
-#include "Utils/Log/LogStream.h"
+#include "Application/Application.h"
 #include "Utils/Debug.h"
+#include "Utils/Log/LogStream.h"
 
 namespace o2
 {
@@ -200,6 +201,21 @@ namespace o2
 		return FolderCreate(extrPath, true);
 	}
 
+	bool FileSystem::FolderCopy(const String& from, const String& to) const
+	{
+		if (!IsFolderExist(from) || !IsFolderExist(to))
+			return false;
+
+		SHFILEOPSTRUCT s = { 0 };
+		s.hwnd = o2Application.mHWnd;
+		s.wFunc = FO_COPY;
+		s.fFlags = FOF_SILENT;
+		s.pTo = to;
+		s.pFrom = from;
+		auto res = SHFileOperation(&s);
+		return res == 0;
+	}
+
 	bool FileSystem::FolderRemove(const String& path, bool recursive /*= true*/) const
 	{
 		if (!IsFolderExist(path))
@@ -228,6 +244,12 @@ namespace o2
 		FindClose(h);
 
 		return RemoveDirectoryA(path.Data()) == TRUE;
+	}
+
+	bool FileSystem::Rename(const String& old, const String& newPath) const
+	{
+		int res = rename(old, newPath);
+		return res == 0;
 	}
 
 	bool FileSystem::IsFolderExist(const String& path) const
@@ -263,7 +285,12 @@ namespace o2
 
 	String FileSystem::GetFileExtension(const String& filePath)
 	{
-		return filePath.SubStr(filePath.FindLast(".")).TrimedStart(".");
+		int dotIdx = filePath.FindLast(".");
+
+		if (dotIdx != -1)
+			return filePath.SubStr(dotIdx + 1);
+
+		return String();
 	}
 
 	String FileSystem::GetFileNameWithoutExtension(const String& filePath)
@@ -278,7 +305,12 @@ namespace o2
 
 	String FileSystem::GetParentPath(const String& path)
 	{
-		return path.SubStr(0, Math::Max(path.FindLast("/"), path.FindLast("\\")));
+		int idx = Math::Max(path.FindLast("/"), path.FindLast("\\"));
+
+		if (idx == -1)
+			return String();
+
+		return path.SubStr(0, idx);
 	}
 
 	String FileSystem::ReadFile(const String& path)

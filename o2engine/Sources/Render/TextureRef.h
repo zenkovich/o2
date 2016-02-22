@@ -23,6 +23,12 @@ namespace o2
 		// Constructor from bitmap
 		TextureRef(Bitmap* bitmap);
 
+		// Constructor from atlas page
+		TextureRef(AssetId atlasAssetId, int page);
+
+		// Constructor from atlas page
+		TextureRef(const String& atlasAssetName, int page);
+
 		// Copy-constructor
 		TextureRef(const TextureRef& other);
 

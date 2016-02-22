@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsWindow.cpp" />
+    <ClCompile Include="..\..\Sources\AssetsWindow\FoldersTree.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\UIAssetIcon.cpp" />
     <ClCompile Include="..\..\Sources\Core\Actions\ActorsTransform.cpp" />
     <ClCompile Include="..\..\Sources\Core\Actions\CreateActors.cpp" />
@@ -57,6 +58,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h" />
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsWindow.h" />
+    <ClInclude Include="..\..\Sources\AssetsWindow\FoldersTree.h" />
     <ClInclude Include="..\..\Sources\AssetsWindow\UIAssetIcon.h" />
     <ClInclude Include="..\..\Sources\Core\Actions\ActorsTransform.h" />
     <ClInclude Include="..\..\Sources\Core\Actions\CreateActors.h" />

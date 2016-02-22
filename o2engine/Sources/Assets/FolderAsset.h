@@ -62,6 +62,9 @@ namespace o2
 		// Loads data
 		void LoadData(const String& path);
 
+		// Saves asset data
+		void SaveData(const String& path);
+
 		// Initializes properties
 		void InitializeProperties();
 	};

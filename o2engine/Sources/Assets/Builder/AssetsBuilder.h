@@ -16,6 +16,9 @@ namespace o2
 	class AssetsBuilder
 	{
 	public:
+		typedef Vector<AssetId> AssetsIdsVec;
+
+	public:
 		// Default constructor
 		AssetsBuilder();
 
@@ -23,7 +26,7 @@ namespace o2
 		~AssetsBuilder();
 
 		// Builds asset from assets path to dataAssetsPath. Removes all builded assets if forcible is true
-		void BuildAssets(const String& assetsPath, const String& dataAssetsPath, bool forcible = false);
+		AssetsIdsVec BuildAssets(const String& assetsPath, const String& dataAssetsPath, bool forcible = false);
 
 	protected:
 		typedef Dictionary<Type::Id, IAssetConverter*> ConvertersDict;
@@ -54,16 +57,16 @@ namespace o2
 		void CreateMissingMetas();
 
 		// Searching and removing assets
-		void ProcessRemovedAssets();
+		AssetsIdsVec ProcessRemovedAssets();
 
 		// Searching modified and moved assets
-		void ProcessModifiedAssets();
+		AssetsIdsVec ProcessModifiedAssets();
 
 		// Searches new assets
-		void ProcessNewAssets();
+		AssetsIdsVec ProcessNewAssets();
 
 		// Launches converters post process
-		void ConvertersPostProcess();
+		AssetsIdsVec ConvertersPostProcess();
 		
 		// Processes folder for missing metas
 		void ProcessMissingMetasCreation(FolderInfo& folder);

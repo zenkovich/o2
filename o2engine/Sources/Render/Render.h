@@ -16,6 +16,7 @@ namespace o2
 {
 	class Mesh;
 	class Font;
+	class Sprite;
 
 	// ------------------
 	// 2D Graphics render
@@ -199,34 +200,37 @@ namespace o2
 	protected:
 		typedef Vector<Texture*> TexturesVec;
 		typedef Vector<Font*> FontsVec;
+		typedef Vector<Sprite*> SpritesVec;
 
-		LogStream*      mLog;                    // Render log stream
+		LogStream*        mLog;                    // Render log stream
+						  
+		TexturesVec       mTextures;               // Loaded textures
+		FontsVec          mFonts;                  // Loaded fonts
+						  
+		Camera            mCamera;                 // Camera transformation
+		Vec2I             mResolution;             // Primary back buffer size
+		Vec2I             mCurrentResolution;      // Current back buffer size
+		Vec2I             mDPI;                    // Current device screen DPI
+						  
+		bool              mRenderTargetsAvailable; // True, if render targets is available
+		Vec2I             mMaxTextureSize;         // Max texture size
+						  
+		bool              mStencilDrawing;         // True, if drawing in stencil buffer
+		bool              mStencilTest;            // True, if drawing with stencil test
+						  
+		ScissorInfosVec   mScissorInfos;           // Scissor clipping depth infos vector
+		StackScissorVec   mStackScissors;          // Stack of scissors clippings
+		bool              mClippingEverything;     // Is everything clipped
+						  
+		TextureRef        mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
+						  
+		float             mDrawingDepth;           // Current drawing depth, increments after each drawing drawables
+						  
+		FT_Library        mFreeTypeLib;            // FreeType library, for rendering fonts
 
-		TexturesVec     mTextures;               // Loaded textures
-		FontsVec        mFonts;                  // Loaded fonts
-
-		Camera          mCamera;                 // Camera transformation
-		Vec2I           mResolution;             // Primary back buffer size
-		Vec2I           mCurrentResolution;      // Current back buffer size
-		Vec2I           mDPI;                    // Current device screen DPI
-
-		bool            mRenderTargetsAvailable; // True, if render targets is available
-		Vec2I           mMaxTextureSize;         // Max texture size
-
-		bool            mStencilDrawing;         // True, if drawing in stencil buffer
-		bool            mStencilTest;            // True, if drawing with stencil test
-
-		ScissorInfosVec mScissorInfos;           // Scissor clipping depth infos vector
-		StackScissorVec mStackScissors;          // Stack of scissors clippings
-		bool            mClippingEverything;     // Is everything clipped
-
-		TextureRef      mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
-
-		float           mDrawingDepth;           // Current drawing depth, increments after each drawing drawables
-
-		FT_Library      mFreeTypeLib;            // FreeType library, for rendering fonts
-
-		bool            mReady;                  // True, if render system initialized
+		SpritesVec        mSprites;                // All sprites
+						  
+		bool              mReady;                  // True, if render system initialized
 
 	protected:
 		// Don't copy
@@ -262,15 +266,19 @@ namespace o2
 		// Checks font for unloading
 		void CheckFontsUnloading();
 
+		// Calls when assets was rebuilded
+		void OnAssetsRebuilded(const Vector<AssetId>& changedAssets);
+
 		// initializes properties
 		void InitializeProperties();
 
+		friend class BitmapFont;
+		friend class BitmapFontAsset;
+		friend class Font;
+		friend class Sprite;
 		friend class Texture;
 		friend class TextureRef;
-		friend class Font;
-		friend class BitmapFont;
 		friend class VectorFont;
-		friend class BitmapFontAsset;
 		friend class VectorFontAsset;
 		friend class WndProcFunc;
 	};

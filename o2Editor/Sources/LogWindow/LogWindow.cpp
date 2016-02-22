@@ -194,7 +194,7 @@ void LogWindow::SetupListMessage(UIWidget* item, UnknownType* object)
 	item->layer["back"]->drawable->enabled = message->idx % 2 == 1;
 
 	Text* text = item->GetLayerDrawable<Text>("caption");
-	text->text = message->message;
+	text->text = message->message.SubStr(0, message->message.Find("\n"));
 }
 
 void LogWindow::OutStrEx(const WString& str)

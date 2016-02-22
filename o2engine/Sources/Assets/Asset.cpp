@@ -119,7 +119,7 @@ namespace o2
 
 	void Asset::Save(const String& path, bool rebuildAssetsImmediately /*= true*/)
 	{
-		if (path != mPath)
+		if (path != mPath || IdRef() == 0)
 		{
 			IdRef() = Assets::GetRandomAssetId();
 			mPath = path;
@@ -142,6 +142,9 @@ namespace o2
 
 	void Asset::Save(bool rebuildAssetsImmediately /*= true*/)
 	{
+		if (IdRef() == 0)
+			IdRef() = Assets::GetRandomAssetId();
+
 		AssetId destPathAssetId = o2Assets.GetAssetId(mPath);
 		if (destPathAssetId != 0 && destPathAssetId != mMeta->mId)
 		{

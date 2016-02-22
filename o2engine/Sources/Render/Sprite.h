@@ -142,6 +142,9 @@ namespace o2
 		// Returns image asset id (returns 0 when asset id is unknown)
 		AssetId GetImageId() const;
 
+		// Returns atlas asset id (returns 0 when sprite is not from atlas)
+		AssetId GetAtlasAssetId() const;
+
 		// Sets size by texture source rectangle size
 		void NormalizeSize();
 
@@ -160,6 +163,7 @@ namespace o2
 		RectI      mTextureSrcRect;   // Texture source rectangle
 		Color4     mCornersColors[4]; // Corners colors
 		AssetId    mImageAssetId;     // Image asset id (0 by default)
+		AssetId    mAtlasAssetId;     // Atlas asset id (0 by default)
 		SpriteMode mMode;             // Drawing mode @SERIALIZABLE
 		RectI      mSlices;           // Slice borders @SERIALIZABLE
 		float      mFill;             // Sprite fillness @SERIALIZABLE
@@ -207,7 +211,12 @@ namespace o2
 		// Calling when deserializing
 		void OnDeserialized(const DataNode& node);
 
+		// Calls when assets was rebuilded
+		void ReloadImage();
+
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class Render;
 	};
 }

@@ -26,5 +26,6 @@ namespace o2
 		HCURSOR mCurrentCursor;
 
 		friend class Render;
+		friend class FileSystem;
 	};
 }

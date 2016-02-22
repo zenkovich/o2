@@ -16,8 +16,10 @@ namespace o2
 	void IAssetConverter::MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo)
 	{}
 
-	void IAssetConverter::AssetsPostProcess()
-	{}
+	Vector<AssetId> IAssetConverter::AssetsPostProcess()
+	{
+		return Vector<AssetId>();
+	}
 
 	void IAssetConverter::Reset()
 	{}

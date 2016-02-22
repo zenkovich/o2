@@ -1,8 +1,10 @@
 #include "Render/Render.h"
 
 #include "Application/Application.h"
+#include "Assets/Assets.h"
 #include "Render/Font.h"
 #include "Render/Mesh.h"
+#include "Render/Sprite.h"
 #include "Render/Texture.h"
 #include "Utils/Debug.h"
 #include "Utils/Log/LogStream.h"
@@ -129,6 +131,10 @@ namespace o2
 		InitializeFreeType();
 
 		mCurrentRenderTarget = TextureRef();
+
+		if (IS_DEV_MODE)
+			o2Assets.onAssetsRebuilded += Function<void(const Vector<AssetId>&)>(this, &Render::OnAssetsRebuilded);
+
 		mReady = true;
 	}
 
@@ -153,6 +159,9 @@ namespace o2
 	{
 		if (!mReady)
 			return;
+
+		if (IS_DEV_MODE)
+			o2Assets.onAssetsRebuilded -= Function<void(const Vector<AssetId>&)>(this, &Render::OnAssetsRebuilded);
 
 		if (mGLContext)
 		{
@@ -353,6 +362,21 @@ namespace o2
 				unloadFonts.Add(font);
 
 		unloadFonts.ForEach([](auto fnt) { delete fnt; });
+	}
+
+	void Render::OnAssetsRebuilded(const Vector<AssetId>& changedAssets)
+	{
+		for (auto tex : mTextures)
+		{
+			if (changedAssets.Contains(tex->GetAtlasAssetId()))
+				tex->Reload();
+		}
+
+		for (auto spr : mSprites)
+		{
+			if (changedAssets.Contains(spr->GetAtlasAssetId()))
+				spr->ReloadImage();
+		}
 	}
 
 	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/)

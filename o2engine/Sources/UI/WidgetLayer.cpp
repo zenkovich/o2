@@ -216,6 +216,12 @@ namespace o2
 	{
 		return mInteractableArea.IsInside(point);
 	}
+	
+	void UIWidgetLayer::OnDeserialized(const DataNode& node)
+	{
+		for (auto child : mChilds)
+			child->mParent = this;
+	}
 
 	void UIWidgetLayer::SetOwnerWidget(UIWidget* owner)
 	{

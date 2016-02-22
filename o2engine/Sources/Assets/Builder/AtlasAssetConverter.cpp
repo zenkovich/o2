@@ -64,10 +64,10 @@ namespace o2
 		o2FileSystem.FileMove(fullMetaPathFrom, fullMetaPathTo);
 	}
 
-	void AtlasAssetConverter::AssetsPostProcess()
+	Vector<AssetId> AtlasAssetConverter::AssetsPostProcess()
 	{
 		CheckBasicAtlas();
-		CheckRebuildingAtlases();
+		return CheckRebuildingAtlases();
 	}
 
 	void AtlasAssetConverter::Reset()
@@ -104,18 +104,22 @@ namespace o2
 		}
 	}
 
-	void AtlasAssetConverter::CheckRebuildingAtlases()
+	Vector<AssetId> AtlasAssetConverter::CheckRebuildingAtlases()
 	{
+		Vector<AssetId> res;
 		Type::Id atlasAssetTypeId = AtlasAsset::type.ID();
 
 		for (auto info : mAssetsBuilder->mBuildedAssetsTree.mAllAssets)
 		{
 			if (info->mType == atlasAssetTypeId)
-				CheckAtlasRebuilding(info);
+				if (CheckAtlasRebuilding(info))
+					res.Add(info->mId);
 		}
+
+		return res;
 	}
 
-	void AtlasAssetConverter::CheckAtlasRebuilding(AssetTree::AssetNode* atlasInfo)
+	bool AtlasAssetConverter::CheckAtlasRebuilding(AssetTree::AssetNode* atlasInfo)
 	{
 		DataNode atlasData;
 		atlasData.LoadFromFile(mAssetsBuilder->mBuildedAssetsPath + atlasInfo->mPath);
@@ -139,7 +143,12 @@ namespace o2
 		}
 
 		if (IsAtlasNeedRebuild(currentImages, lastImages))
+		{
 			RebuildAtlas(atlasInfo, currentImages);
+			return true;
+		}
+
+		return false;
 	}
 
 	bool AtlasAssetConverter::IsAtlasNeedRebuild(ImagesVec& currentImages, ImagesVec& lastImages)

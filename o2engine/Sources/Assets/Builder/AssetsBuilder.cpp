@@ -23,9 +23,12 @@ namespace o2
 		Reset();
 	}
 
-	void AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, bool forcible /*= false*/)
+	AssetsBuilder::AssetsIdsVec AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, 
+														   bool forcible /*= false*/)
 	{
 		Reset();
+
+		AssetsIdsVec res;
 
 		mSourceAssetsPath = assetsPath;
 		mBuildedAssetsPath = dataAssetsPath;
@@ -47,16 +50,17 @@ namespace o2
 		mSourceAssetsTree.BuildTree(assetsPath);
 		mBuildedAssetsTree.BuildTree(dataAssetsPath);
 
-		ProcessModifiedAssets();
-		ProcessRemovedAssets();
-		ProcessNewAssets();
-
-		ConvertersPostProcess();
+		res.Add(ProcessModifiedAssets());
+		res.Add(ProcessRemovedAssets());
+		res.Add(ProcessNewAssets());
+		res.Add(ConvertersPostProcess());
 
 		mLog->OutStr("===================================");
 		mLog->Out("Completed assets building \n        from: %s\n        to: %s\n        for %f seconds",
 				  assetsPath, dataAssetsPath, timer.GetDeltaTime());
 		mLog->OutStr("===================================\n");
+
+		return res;
 	}
 
 	void AssetsBuilder::InitializeConverters()
@@ -143,8 +147,9 @@ namespace o2
 		}
 	}
 
-	void AssetsBuilder::ProcessRemovedAssets()
+	AssetsBuilder::AssetsIdsVec AssetsBuilder::ProcessRemovedAssets()
 	{
+		AssetsIdsVec res;
 		Type::Id folderTypeId = FolderAsset::type.ID();
 
 		// in first pass skipping folders (only files), in second - files
@@ -179,6 +184,8 @@ namespace o2
 
 				GetAssetConverter((*bldAssetInfoIt)->mType)->RemoveAsset(**bldAssetInfoIt);
 
+				res.Add((*bldAssetInfoIt)->mId);
+
 				mLog->OutStr("Removed asset: " + (*bldAssetInfoIt)->mPath);
 
 				auto bldAssetInfo = *bldAssetInfoIt;
@@ -189,10 +196,13 @@ namespace o2
 					(*bldAssetInfoIt)->GetParent()->RemoveChild(bldAssetInfo);
 			}
 		}
+
+		return res;
 	}
 
-	void AssetsBuilder::ProcessModifiedAssets()
+	AssetsBuilder::AssetsIdsVec AssetsBuilder::ProcessModifiedAssets()
 	{
+		AssetsIdsVec res;
 		Type::Id folderTypeId = FolderAsset::type.ID();
 
 		// in first pass skipping files (only folders), in second - folders
@@ -215,6 +225,7 @@ namespace o2
 								!srcAssetInfo->mMeta->IsEqual(buildedAssetInfo->mMeta))
 							{
 								GetAssetConverter(srcAssetInfo->mType)->ConvertAsset(*srcAssetInfo);
+								res.Add(srcAssetInfo->mId);
 								buildedAssetInfo->mTime = srcAssetInfo->mTime;
 								delete buildedAssetInfo->mMeta;
 								buildedAssetInfo->mMeta = static_cast<Asset::IMetaInfo*>(srcAssetInfo->mMeta->Clone());
@@ -242,6 +253,8 @@ namespace o2
 								GetAssetConverter(srcAssetInfo->mType)->ConvertAsset(*srcAssetInfo);
 								mLog->Out("Modified and moved to %s asset: %s", srcAssetInfo->mPath, buildedAssetInfo->mPath);
 
+								res.Add(srcAssetInfo->mId);
+
 								mModifiedAssets.Add(buildedAssetInfo);
 
 								mBuildedAssetsTree.AddAsset(buildedAssetInfo);
@@ -249,6 +262,7 @@ namespace o2
 							else
 							{
 								GetAssetConverter(srcAssetInfo->mType)->MoveAsset(*buildedAssetInfo, *srcAssetInfo);
+								res.Add(srcAssetInfo->mId);
 								mLog->Out("Moved asset: %s to %s", buildedAssetInfo->mPath, srcAssetInfo->mPath);
 
 								mBuildedAssetsTree.RemoveAsset(buildedAssetInfo, false);
@@ -267,10 +281,13 @@ namespace o2
 				}
 			}
 		}
+
+		return res;
 	}
 
-	void AssetsBuilder::ProcessNewAssets()
+	AssetsBuilder::AssetsIdsVec AssetsBuilder::ProcessNewAssets()
 	{
+		AssetsIdsVec res;
 		Type::Id folderTypeId = FolderAsset::type.ID();
 
 		// in first pass skipping files (only folders), in second - folders
@@ -300,6 +317,8 @@ namespace o2
 
 				GetAssetConverter((*srcAssetInfoIt)->mType)->ConvertAsset(**srcAssetInfoIt);
 
+				res.Add((*srcAssetInfoIt)->mId);
+
 				mLog->Out("New asset: %s", (*srcAssetInfoIt)->mPath);
 
 				AssetTree::AssetNode* newBuildedAsset = mnew AssetTree::AssetNode();
@@ -312,14 +331,20 @@ namespace o2
 				mBuildedAssetsTree.AddAsset(newBuildedAsset);
 			}
 		}
+
+		return res;
 	}
 
-	void AssetsBuilder::ConvertersPostProcess()
+	AssetsBuilder::AssetsIdsVec AssetsBuilder::ConvertersPostProcess()
 	{
-		for (auto it = mAssetConverters.Begin(); it != mAssetConverters.End(); ++it)
-			it.Value()->AssetsPostProcess();
+		AssetsIdsVec res;
 
-		mStdAssetConverter.AssetsPostProcess();
+		for (auto it = mAssetConverters.Begin(); it != mAssetConverters.End(); ++it)
+			res.Add(it.Value()->AssetsPostProcess());
+
+		res.Add(mStdAssetConverter.AssetsPostProcess());
+
+		return res;
 	}
 
 	void AssetsBuilder::GenerateMeta(Type* assetType, const String& metaFullPath)

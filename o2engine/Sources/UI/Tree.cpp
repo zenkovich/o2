@@ -39,7 +39,7 @@ namespace o2
 
 		UIButton* expandBtn = (UIButton*)GetChild("expandBtn");
 		if (expandBtn)
-			expandBtn->onClick = [&]() { if (IsExpanded()) Collapse(); else Expand(); };
+			expandBtn->onClick = [&]() { if (IsExpanded()) Collapse(); else Expand(); o2UI.SelectWidget(mTree); };
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -404,7 +404,7 @@ namespace o2
 		UIScrollArea(), DrawableCursorEventsListener(this), mWaitSelectionsUpdate(false), mDraggingNodes(false),
 		mNeedUpdateLayout(false), mExpandInsertTime(-1), mPressedTime(10.0f), mHoveredItem(nullptr), mPressedNode(nullptr),
 		mInsertNodeCandidate(nullptr), mUnderCursorItem(nullptr), mExpandNodeCandidate(nullptr),
-		mRearrangeType(RearrangeType::Enabled)
+		mRearrangeType(RearrangeType::Enabled), mMultiSelectAvailable(true)
 	{
 		mNodeSample = mnew UITreeNode();
 		mNodeSample->layout.minHeight = 20;
@@ -422,7 +422,7 @@ namespace o2
 		mNeedUpdateLayout(false), mExpandInsertTime(-1), mPressedTime(10.0f), mHoveredItem(nullptr), mPressedNode(nullptr),
 		mInsertNodeCandidate(nullptr), mUnderCursorItem(nullptr), mExpandNodeCandidate(nullptr),
 		mRearrangeType(RearrangeType::Enabled), mSelectedColor(other.mSelectedColor), mUnselectedColor(other.mUnselectedColor),
-		mHoverColor(other.mHoverColor)
+		mHoverColor(other.mHoverColor), mMultiSelectAvailable(true)
 	{
 		mNodeSample = other.mNodeSample->Clone();
 		mHoverDrawable = other.mHoverDrawable->Clone();
@@ -707,6 +707,9 @@ namespace o2
 
 	void UITree::SelectObject(UnknownType* object)
 	{
+		if (!mMultiSelectAvailable)
+			DeselectAllObjects();
+
 		SelectedNode selectionNode;
 		selectionNode.object = object;
 		selectionNode.selectionSprite = CreateSelectionSprite();
@@ -716,6 +719,32 @@ namespace o2
 		OnItemsSelected();
 
 		UpdateLayout();
+	}
+
+	void UITree::SelectAndExpandObject(UnknownType* object)
+	{
+		Vector<UnknownType*> parentsStack;
+		UnknownType* treeVisibleNodeObject = object;
+		while (!GetNode(treeVisibleNodeObject))
+		{
+			treeVisibleNodeObject = getParentFunc(treeVisibleNodeObject);
+
+			if (!treeVisibleNodeObject)
+			{
+				SelectObject(object);
+				return;
+			}
+
+			parentsStack.Add(treeVisibleNodeObject);
+		}
+
+		for (int i = parentsStack.Count() - 1; i >= 0; i--)
+		{
+			auto node = GetNode(parentsStack[i]);
+			node->Expand();
+		}
+
+		SelectObject(object);
 	}
 
 	void UITree::DeselectObject(UnknownType* object)
@@ -789,6 +818,26 @@ namespace o2
 	UITree::RearrangeType UITree::GetRearrangeType() const
 	{
 		return mRearrangeType;
+	}
+
+	void UITree::SetMultipleSelectionAvailable(bool available)
+	{
+		mMultiSelectAvailable = available;
+
+		if (!mMultiSelectAvailable)
+		{
+			if (mSelectedItems.Count() > 0)
+			{
+				UnknownType* lastSelected = mSelectedItems.Last().object;
+				DeselectAllObjects();
+				SelectObject(lastSelected);
+			}
+		}
+	}
+
+	bool UITree::IsMultiSelectionAvailable() const
+	{
+		return mMultiSelectAvailable;
 	}
 
 	void UITree::SetSelectedColor(const Color4& color)
@@ -871,7 +920,7 @@ namespace o2
 
 	void UITree::UpdateLayout(bool forcible /*= false*/)
 	{
-		if (!forcible)
+		if (layout.mDrivenByParent && !forcible)
 		{
 			if (mParent)
 				mParent->UpdateLayout();
@@ -1056,11 +1105,12 @@ namespace o2
 		{
 			if (o2Input.IsKeyDown(VK_SHIFT))
 				SelectMultipleNodes(cursor);
+
+			o2UI.SelectWidget(this);
 		}
 
 		mPressedTime = 0.0f;
 
-		o2UI.SelectWidget(this);
 	}
 
 	void UITree::OnCursorStillDown(const Input::Cursor& cursor)
@@ -1296,7 +1346,7 @@ namespace o2
 	void UITree::SelectSingleNode(const Input::Cursor &cursor)
 	{
 		bool selectionReseted = false;
-		if (!o2Input.IsKeyDown(VK_CONTROL))
+		if (!o2Input.IsKeyDown(VK_CONTROL) || !mMultiSelectAvailable)
 		{
 			for (auto sel : mSelectedItems)
 				FreeSelectionSprite(sel.selectionSprite);
@@ -1345,7 +1395,7 @@ namespace o2
 
 		if (nodeUnderCursor)
 		{
-			if (mSelectedItems.Count() > 0)
+			if (mSelectedItems.Count() > 0 && mMultiSelectAvailable)
 			{
 				float selectionUp = Math::Max<float>(cursor.mPosition.y, mSelectedItems.Last().node->layout.absTop);
 				float selectionDown = Math::Min<float>(cursor.mPosition.y, mSelectedItems.Last().node->layout.absBottom);

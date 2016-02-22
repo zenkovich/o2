@@ -1,6 +1,7 @@
 #include "FolderAsset.h"
 
 #include "Assets/Assets.h"
+#include "Utils/FileSystem/FileSystem.h"
 
 namespace o2
 {
@@ -64,6 +65,12 @@ namespace o2
 		if (folderAssetInfo)
 			mContainingAssetsInfos = folderAssetInfo->GetChilds().Select<AssetInfo>(
 				[&](AssetTree::AssetNode* asset) { return (AssetInfo)(*asset); });
+	}
+
+	void FolderAsset::SaveData(const String& path)
+	{
+		if (!o2FileSystem.IsFolderExist(path))
+			o2FileSystem.FolderCreate(path);
 	}
 
 	void FolderAsset::InitializeProperties()

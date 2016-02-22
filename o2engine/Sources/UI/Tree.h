@@ -156,6 +156,9 @@ namespace o2
 		// Selects object
 		void SelectObject(UnknownType* object);
 
+		// Selects object
+		void SelectAndExpandObject(UnknownType* object);
+
 		// Deselects object
 		void DeselectObject(UnknownType* object);
 
@@ -197,6 +200,12 @@ namespace o2
 
 		// Returns available rearrange type 
 		RearrangeType GetRearrangeType() const;
+
+		// Setes available multi selection
+		void SetMultipleSelectionAvailable(bool available);
+
+		// Returns is multi selection available
+		bool IsMultiSelectionAvailable() const;
 
 		// Sets selected nodes sprite color
 		void SetSelectedColor(const Color4& color);
@@ -261,6 +270,7 @@ namespace o2
 		UnknownObjectsVec mExpandedObjects;       // Expanded objects nodes
 
 		RearrangeType     mRearrangeType;         // Current available rearrange type
+		bool              mMultiSelectAvailable;  // Is multi selection available
 		bool              mDraggingNodes;         // Is nodes moving by cursor
 		UITreeNode*       mDragNode;              // Dragging node
 		Sprite*           mDragNodeBack;          // Background for dragging node

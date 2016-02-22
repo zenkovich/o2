@@ -246,6 +246,10 @@ namespace o2
 		int lastMaxItemIdx = mMaxVisibleItemIdx;
 
 		float itemHeight = mItemSample->layout.height;
+
+		if (itemHeight < FLT_EPSILON)
+			return;
+
 		mMinVisibleItemIdx = Math::FloorToInt(mScrollPos.y / itemHeight);
 		mMaxVisibleItemIdx = Math::FloorToInt((mScrollPos.y + mAbsoluteViewArea.Height()) / itemHeight);
 		mMaxVisibleItemIdx = Math::Min(mMaxVisibleItemIdx, getItemsCountFunc() - 1);

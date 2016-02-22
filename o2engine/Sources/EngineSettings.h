@@ -26,6 +26,9 @@
 // Describes that engine running as editor
 #define IS_EDITOR true
 
+// Is development mode
+#define IS_DEV_MODE true
+
 // ----------------------------
 // Assets configuration section
 // ----------------------------

@@ -1,8 +1,9 @@
 #include "AssetsTree.h"
 
-#include "Utils\Debug.h"
-#include "Utils\FileSystem\FileSystem.h"
-#include "Utils\Log\LogStream.h"
+#include "Assets/FolderAsset.h"
+#include "Utils/Debug.h"
+#include "Utils/FileSystem/FileSystem.h"
+#include "Utils/Log/LogStream.h"
 
 namespace o2
 {
@@ -30,11 +31,16 @@ namespace o2
 
 	void AssetTree::BuildTree(const String& path)
 	{
-		Clear();
-
 		mPath = path;
 
 		FolderInfo folderInfo = o2FileSystem.GetFolderInfo(path);
+		folderInfo.ClampPathNames();
+		LoadFolder(folderInfo, nullptr);
+	}
+
+	void AssetTree::RebuildTree()
+	{
+		FolderInfo folderInfo = o2FileSystem.GetFolderInfo(mPath);
 		folderInfo.ClampPathNames();
 		LoadFolder(folderInfo, nullptr);
 	}
@@ -100,7 +106,19 @@ namespace o2
 		mAllAssets.Remove(asset);
 
 		if (asset->GetParent())
-			asset->GetParent()->RemoveChild(asset, release);
+			asset->GetParent()->RemoveChild(asset, false);
+		else
+			mRootAssets.Remove(asset);
+
+		if (asset->mType == FolderAsset::type.ID() && release)
+		{
+			auto childs = asset->GetChilds();
+			for (auto ch : childs)
+				RemoveAsset(ch, release);
+		}
+
+		if (release)
+			delete asset;
 	}
 
 	void AssetTree::Clear()
@@ -114,8 +132,29 @@ namespace o2
 
 	void AssetTree::LoadFolder(FolderInfo& folder, AssetNode* parentAsset)
 	{
+		Vector<AssetNode*> missingAssetNodes;
+		auto parentChilds = parentAsset ? parentAsset->GetChilds() : mRootAssets;
+		for (auto assetNode : parentChilds)
+		{
+			bool exist = false;
+
+			if (assetNode->mType == FolderAsset::type.ID())
+				exist = folder.mFolders.ContainsPred([=](const FolderInfo& x) { return x.mPath == assetNode->mPath; });
+			else
+				exist = folder.mFiles.ContainsPred([=](const FileInfo& x) { return x.mPath == assetNode->mPath; });
+
+			if (!exist)
+				missingAssetNodes.Add(assetNode);
+		}
+
+		for (auto assetNode : missingAssetNodes)
+			RemoveAsset(assetNode);
+
 		for (auto fileInfo : folder.mFiles)
 		{
+			if (parentChilds.ContainsPred([&](AssetNode* x) { return x->mPath == fileInfo.mPath; }))
+				continue;
+
 			String extension = o2FileSystem.GetFileExtension(fileInfo.mPath);
 
 			if (extension != "meta")
@@ -133,17 +172,23 @@ namespace o2
 
 		for (auto subFolder : folder.mFolders)
 		{
-			String folderFullPath = mPath + subFolder.mPath;
-			String metaFullPath = folderFullPath + ".meta";
+			AssetNode* asset = nullptr;
 
-			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
-			if (!isExistMetaForFolder)
+			if (!parentChilds.ContainsPred([&](AssetNode* x) { return x->mPath == subFolder.mPath; }))
 			{
-				mLog->Warning("Can't load asset info for %s - missing meta file", subFolder.mPath);
-				continue;
-			}
+				String folderFullPath = mPath + subFolder.mPath;
+				String metaFullPath = folderFullPath + ".meta";
 
-			auto asset = LoadAsset(subFolder.mPath, parentAsset, TimeStamp());
+				bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
+				if (!isExistMetaForFolder)
+				{
+					mLog->Warning("Can't load asset info for %s - missing meta file", subFolder.mPath);
+					continue;
+				}
+
+				asset = LoadAsset(subFolder.mPath, parentAsset, TimeStamp());
+			}
+			else asset = parentChilds.FindMatch([&](AssetNode* x) { return x->mPath == subFolder.mPath; });
 
 			LoadFolder(subFolder, asset);
 		}

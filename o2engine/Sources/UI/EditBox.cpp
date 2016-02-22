@@ -715,6 +715,9 @@ namespace o2
 
 	void UIEditBox::UpdateLayout(bool forcible /*= false*/)
 	{
+		if (mFullyDisabled)
+			return;
+
 		if (layout.mDrivenByParent && !forcible)
 		{
 			if (mParent)

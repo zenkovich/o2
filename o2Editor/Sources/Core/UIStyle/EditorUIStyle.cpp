@@ -1048,7 +1048,36 @@ namespace UIStyle
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
 		captionText->height = 7;
-		sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, -4, -4, 15, -10));
+		auto nameLayer = sample->AddLayer("assetName", captionText, Layout::HorStretch(VerAlign::Middle, -4, -4, 15, -10));
+
+		UIEditBox* nameEditBox = mnew UIEditBox();
+		nameEditBox->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
+		nameEditBox->SetViewLayout(Layout::BothStretch(0, 0, 2, 0));
+		nameEditBox->SetCaretBlinkingDelay(0.85f);
+		nameEditBox->SetMultiLine(false);
+		nameEditBox->layout.minSize = Vec2F(30, 40);
+
+		Text* textDrawable = nameEditBox->GetTextDrawable();
+		textDrawable->verAlign = VerAlign::Middle;
+		textDrawable->horAlign = HorAlign::Middle;
+		textDrawable->SetFontAsset("stdFont.ttf");
+		textDrawable->height = 7;
+
+		Sprite* caretDrawable = nameEditBox->GetCaretDrawable();
+		*caretDrawable = Sprite();
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight())*1.7f);
+		caretDrawable->pivot = Vec2F(0, 0.26f);
+		caretDrawable->color = Color4::Black();
+
+		nameEditBox->name = "nameEditBox";
+		nameEditBox->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, -4, -4, 15, -10);
+		sample->AddChild(nameEditBox);
+
+		Animation itemEditStateAnim = Animation::EaseInOut(sample, &nameLayer->transparency, 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim.AddAnimationValue(&nameEditBox->visible) = AnimatedValue<bool>::Linear(false, true, 0.15f);
+		sample->AddState("edit", itemEditStateAnim);
+
+		sample->AddState("halfHide", Animation::EaseInOut(sample, &sample->transparency, 1.0f, 0.5f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
