@@ -111,6 +111,10 @@ protected:
 	Vec2F             mPressedPoint;              // Pressed point
 	float             mPressTime;                 // Time elapsed from pressing
 	IconSelectionsVec mCurrentSelectingIcons;     // Selecting icons at current selection
+
+	bool              mDragging = false;          // Is dragging icons
+	UIAssetIcon*      mDragIcon;                  // Dragging icon
+	Vec2F             mDragOffset;                // Dragging offset from cursor to icon center
 											      
 	AssetIdPathVec    mCuttingAssets;             // Current cutted assets
 
@@ -141,8 +145,22 @@ protected:
 	// Calls when cursor stay down during frame
 	void OnCursorStillDown(const Input::Cursor& cursor);
 
+	void BeginSelecting();
+
 	// Updates selection frame
 	void UpdateSelection(const Input::Cursor& cursor);
+
+	// Completes selecting
+	void CompleteSelecting();
+
+	// Begins dragging
+	void BeginDragging(UIAssetIcon* iconUnderCursor, const Input::Cursor& cursor);
+
+	// Updates dragging icons
+	void UpdateDragging(const Input::Cursor& cursor);
+
+	//Completes dragging
+	void CompleteDragging();
 
 	// Calls when cursor moved on this (or moved outside when this was pressed)
 	void OnCursorMoved(const Input::Cursor& cursor);

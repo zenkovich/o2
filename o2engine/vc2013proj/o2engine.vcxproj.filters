@@ -505,6 +505,15 @@
     <ClInclude Include="..\Sources\Utils\CursorEventsArea.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Assets\DataAsset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\AnimationAsset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Assets\ActorAsset.h">
+      <Filter>Sources\Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -839,6 +848,15 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\CursorEventsArea.cpp">
       <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\DataAsset.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\AnimationAsset.cpp">
+      <Filter>Sources\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Assets\ActorAsset.cpp">
+      <Filter>Sources\Assets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

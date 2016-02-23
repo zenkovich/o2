@@ -66,18 +66,26 @@ namespace o2
 		if (mParent)
 			mParent->RemoveChild(this, false);
 		else
-			o2Scene.mRootActors.Remove(this);
+		{
+			if (Scene::IsSingletonInitialzed())
+				o2Scene.mRootActors.Remove(this);
+		}
 
-		o2Scene.onActorDeleting(this);
+		if (Scene::IsSingletonInitialzed())
+			o2Scene.onActorDeleting(this);
 
 		RemoveAllChilds();
 		RemoveAllComponents();
 
-		mLayer->actors.Remove(this);
-		if (mResEnabled)
-			mLayer->enabledActors.Remove(this);
+		if (mLayer)
+		{
+			mLayer->actors.Remove(this);
+			if (mResEnabled)
+				mLayer->enabledActors.Remove(this);
+		}
 
-		o2Scene.mAllActors.Remove(this);
+		if (Scene::IsSingletonInitialzed())
+			o2Scene.mAllActors.Remove(this);
 	}
 
 	Actor& Actor::operator=(const Actor& other)
@@ -160,6 +168,9 @@ namespace o2
 	{
 		if (mParent)
 			SetParent(nullptr);
+
+		if (!Scene::IsSingletonInitialzed())
+			return;
 
 		o2Scene.mRootActors.Remove(this);
 
@@ -652,7 +663,9 @@ namespace o2
 	void Actor::OnChanged()
 	{
 		onChanged();
-		o2Scene.OnActorChanged(this);
+
+		if (Scene::IsSingletonInitialzed())
+			o2Scene.OnActorChanged(this);
 	}
 #endif
 

@@ -1,6 +1,8 @@
 #include "AssetsWindow.h"
 
 #include "Application/Application.h"
+#include "Assets/ActorAsset.h"
+#include "Assets/AnimationAsset.h"
 #include "Assets/Assets.h"
 #include "Assets/AssetsTree.h"
 #include "Assets/FolderAsset.h"
@@ -220,15 +222,26 @@ void AssetsWindow::CreateFolderAsset(const String& targetPath)
 		id++;
 	}
 
-	FolderAsset folderAsset(folderName);
-	folderAsset.Save();
+	FolderAsset folderAsset;
+	folderAsset.Save(folderName);
 
 	o2Assets.RebuildAssets();
 }
 
 void AssetsWindow::CreatePrefabAsset(const String& targetPath)
 {
+	int id = 0;
+	String assetName = targetPath + "/New prefab.prefab";
+	while (o2Assets.IsAssetExist(assetName))
+	{
+		assetName = targetPath + "/New prefab " + (String)id + ".prefab";
+		id++;
+	}
 
+	ActorAsset folderAsset;
+	folderAsset.Save(assetName);
+
+	o2Assets.RebuildAssets();
 }
 
 void AssetsWindow::CreateScriptAsset(const String& targetPath)
@@ -238,7 +251,18 @@ void AssetsWindow::CreateScriptAsset(const String& targetPath)
 
 void AssetsWindow::CreateAnimationAsset(const String& targetPath)
 {
+	int id = 0;
+	String assetName = targetPath + "/New animation.anim";
+	while (o2Assets.IsAssetExist(assetName))
+	{
+		assetName = targetPath + "/New animation " + (String)id + ".anim";
+		id++;
+	}
 
+	AnimationAsset folderAsset;
+	folderAsset.Save(assetName);
+
+	o2Assets.RebuildAssets();
 }
 
 void AssetsWindow::InitializeWindow()

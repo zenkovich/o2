@@ -39,11 +39,14 @@
 #include "C:\work\o2\o2Engine\Sources\Animation\AnimationMask.h"
 #include "C:\work\o2\o2Engine\Sources\Animation\AnimationState.h"
 #include "C:\work\o2\o2Engine\Sources\Animation\IAnimation.h"
+#include "C:\work\o2\o2Engine\Sources\Assets\ActorAsset.h"
+#include "C:\work\o2\o2Engine\Sources\Assets\AnimationAsset.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\Asset.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\AssetInfo.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\AtlasAsset.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\BinaryAsset.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\BitmapFontAsset.h"
+#include "C:\work\o2\o2Engine\Sources\Assets\DataAsset.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\FolderAsset.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\ImageAsset.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\VectorFontAsset.h"
@@ -135,11 +138,14 @@ o2::Type o2::Animation::type;
 o2::Type o2::AnimationMask::type;
 o2::Type o2::AnimationState::type;
 o2::Type o2::IAnimation::type;
+o2::Type o2::ActorAsset::type;
+o2::Type o2::AnimationAsset::type;
 o2::Type o2::Asset::type;
 o2::Type o2::AssetInfo::type;
 o2::Type o2::AtlasAsset::type;
 o2::Type o2::BinaryAsset::type;
 o2::Type o2::BitmapFontAsset::type;
+o2::Type o2::DataAsset::type;
 o2::Type o2::FolderAsset::type;
 o2::Type o2::ImageAsset::type;
 o2::Type o2::VectorFontAsset::type;
@@ -197,6 +203,8 @@ o2::Type o2::Layout::type;
 o2::Type o2::Transform::type;
 o2::Type o2::AnimatedValue<Vec2F>::Key::type;
 o2::Type o2::Animation::AnimatedValueDef::type;
+o2::Type o2::ActorAsset::MetaInfo::type;
+o2::Type o2::AnimationAsset::MetaInfo::type;
 o2::Type o2::Asset::IMetaInfo::type;
 o2::Type o2::AssetTree::AssetNode::type;
 o2::Type o2::AtlasAsset::PlatformMeta::type;
@@ -204,6 +212,7 @@ o2::Type o2::AtlasAsset::MetaInfo::type;
 o2::Type o2::AtlasAsset::Page::type;
 o2::Type o2::BinaryAsset::MetaInfo::type;
 o2::Type o2::BitmapFontAsset::MetaInfo::type;
+o2::Type o2::DataAsset::MetaInfo::type;
 o2::Type o2::FolderAsset::MetaInfo::type;
 o2::Type o2::ImageAsset::PlatformMeta::type;
 o2::Type o2::ImageAsset::MetaInfo::type;
@@ -249,6 +258,9 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	TypeInitializer::RegField(&type, "mPressedPoint", (size_t)(char*)(&sample->mPressedPoint) - (size_t)(char*)sample, sample->mPressedPoint);
 	TypeInitializer::RegField(&type, "mPressTime", (size_t)(char*)(&sample->mPressTime) - (size_t)(char*)sample, sample->mPressTime);
 	TypeInitializer::RegField(&type, "mCurrentSelectingIcons", (size_t)(char*)(&sample->mCurrentSelectingIcons) - (size_t)(char*)sample, sample->mCurrentSelectingIcons);
+	TypeInitializer::RegField(&type, "mDragging", (size_t)(char*)(&sample->mDragging) - (size_t)(char*)sample, sample->mDragging);
+	TypeInitializer::RegField(&type, "mDragIcon", (size_t)(char*)(&sample->mDragIcon) - (size_t)(char*)sample, sample->mDragIcon);
+	TypeInitializer::RegField(&type, "mDragOffset", (size_t)(char*)(&sample->mDragOffset) - (size_t)(char*)sample, sample->mDragOffset);
 	TypeInitializer::RegField(&type, "mCuttingAssets", (size_t)(char*)(&sample->mCuttingAssets) - (size_t)(char*)sample, sample->mCuttingAssets);
 	TypeInitializer::RegField(&type, "mNeedRebuildAssets", (size_t)(char*)(&sample->mNeedRebuildAssets) - (size_t)(char*)sample, sample->mNeedRebuildAssets);
 	auto funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "Draw", &::UIAssetsIconsScrollArea::Draw);
@@ -276,8 +288,16 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorStillDown", &::UIAssetsIconsScrollArea::OnCursorStillDown);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "BeginSelecting", &::UIAssetsIconsScrollArea::BeginSelecting);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "UpdateSelection", &::UIAssetsIconsScrollArea::UpdateSelection);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "CompleteSelecting", &::UIAssetsIconsScrollArea::CompleteSelecting);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, UIAssetIcon*, const Input::Cursor&>(&type, "BeginDragging", &::UIAssetsIconsScrollArea::BeginDragging);
+	TypeInitializer::RegFuncParam<UIAssetIcon*>(funcInfo, "iconUnderCursor");
+	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "UpdateDragging", &::UIAssetsIconsScrollArea::UpdateDragging);
+	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "CompleteDragging", &::UIAssetsIconsScrollArea::CompleteDragging);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorMoved", &::UIAssetsIconsScrollArea::OnCursorMoved);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorRightMouseReleased", &::UIAssetsIconsScrollArea::OnCursorRightMouseReleased);
@@ -1526,6 +1546,32 @@ void o2::IAnimation::InitializeType(o2::IAnimation* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::IAnimation, void>(&type, "InitializeProperties", &o2::IAnimation::InitializeProperties);
 }
 
+void o2::ActorAsset::InitializeType(o2::ActorAsset* sample)
+{
+	TypeInitializer::RegField(&type, "actor", (size_t)(char*)(&sample->actor) - (size_t)(char*)sample, sample->actor);
+	TypeInitializer::RegField(&type, "meta", (size_t)(char*)(&sample->meta) - (size_t)(char*)sample, sample->meta);
+	auto funcInfo = TypeInitializer::RegFunction<o2::ActorAsset, MetaInfo*>(&type, "GetMeta", &o2::ActorAsset::GetMeta);
+	funcInfo = TypeInitializer::RegFunction<o2::ActorAsset, const char*>(&type, "GetFileExtensions", &o2::ActorAsset::GetFileExtensions);
+	funcInfo = TypeInitializer::RegFunction<o2::ActorAsset, void, const String&>(&type, "LoadData", &o2::ActorAsset::LoadData);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<o2::ActorAsset, void, const String&>(&type, "SaveData", &o2::ActorAsset::SaveData);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<o2::ActorAsset, void>(&type, "InitializeProperties", &o2::ActorAsset::InitializeProperties);
+}
+
+void o2::AnimationAsset::InitializeType(o2::AnimationAsset* sample)
+{
+	TypeInitializer::RegField(&type, "animation", (size_t)(char*)(&sample->animation) - (size_t)(char*)sample, sample->animation);
+	TypeInitializer::RegField(&type, "meta", (size_t)(char*)(&sample->meta) - (size_t)(char*)sample, sample->meta);
+	auto funcInfo = TypeInitializer::RegFunction<o2::AnimationAsset, MetaInfo*>(&type, "GetMeta", &o2::AnimationAsset::GetMeta);
+	funcInfo = TypeInitializer::RegFunction<o2::AnimationAsset, const char*>(&type, "GetFileExtensions", &o2::AnimationAsset::GetFileExtensions);
+	funcInfo = TypeInitializer::RegFunction<o2::AnimationAsset, void, const String&>(&type, "LoadData", &o2::AnimationAsset::LoadData);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<o2::AnimationAsset, void, const String&>(&type, "SaveData", &o2::AnimationAsset::SaveData);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<o2::AnimationAsset, void>(&type, "InitializeProperties", &o2::AnimationAsset::InitializeProperties);
+}
+
 void o2::Asset::InitializeType(o2::Asset* sample)
 {
 	TypeInitializer::RegField(&type, "path", (size_t)(char*)(&sample->path) - (size_t)(char*)sample, sample->path);
@@ -1639,6 +1685,19 @@ void o2::BitmapFontAsset::InitializeType(o2::BitmapFontAsset* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::BitmapFontAsset, void, const String&>(&type, "LoadData", &o2::BitmapFontAsset::LoadData);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
 	funcInfo = TypeInitializer::RegFunction<o2::BitmapFontAsset, void>(&type, "InitializeProperties", &o2::BitmapFontAsset::InitializeProperties);
+}
+
+void o2::DataAsset::InitializeType(o2::DataAsset* sample)
+{
+	TypeInitializer::RegField(&type, "data", (size_t)(char*)(&sample->data) - (size_t)(char*)sample, sample->data);
+	TypeInitializer::RegField(&type, "meta", (size_t)(char*)(&sample->meta) - (size_t)(char*)sample, sample->meta);
+	auto funcInfo = TypeInitializer::RegFunction<o2::DataAsset, MetaInfo*>(&type, "GetMeta", &o2::DataAsset::GetMeta);
+	funcInfo = TypeInitializer::RegFunction<o2::DataAsset, const char*>(&type, "GetFileExtensions", &o2::DataAsset::GetFileExtensions);
+	funcInfo = TypeInitializer::RegFunction<o2::DataAsset, void, const String&>(&type, "LoadData", &o2::DataAsset::LoadData);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<o2::DataAsset, void, const String&>(&type, "SaveData", &o2::DataAsset::SaveData);
+	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
+	funcInfo = TypeInitializer::RegFunction<o2::DataAsset, void>(&type, "InitializeProperties", &o2::DataAsset::InitializeProperties);
 }
 
 void o2::FolderAsset::InitializeType(o2::FolderAsset* sample)
@@ -3559,6 +3618,8 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "DeselectObject", &o2::UITree::DeselectObject);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "DeselectAllObjects", &o2::UITree::DeselectAllObjects);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*, const Vec2F&>(&type, "GetTreeNodeUnderPoint", &o2::UITree::GetTreeNodeUnderPoint);
+	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*>(&type, "GetNodeSample", &o2::UITree::GetNodeSample);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, Sprite*>(&type, "GetHoverDrawable", &o2::UITree::GetHoverDrawable);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, Sprite*>(&type, "GetSelectionDrawable", &o2::UITree::GetSelectionDrawable);
@@ -3616,8 +3677,6 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "OnCursorExit", &o2::UITree::OnCursorExit);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*, const Vec2F&>(&type, "GetItemUnderPoint", &o2::UITree::GetItemUnderPoint);
-	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "UpdateDragging", &o2::UITree::UpdateDragging);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "UpdateHover", &o2::UITree::UpdateHover);
@@ -3876,6 +3935,9 @@ void o2::UIWidget::InitializeType(o2::UIWidget* sample)
 	auto funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, float>(&type, "Update", &o2::UIWidget::Update);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "Draw", &o2::UIWidget::Draw);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, const RectF&, float>(&type, "ForceDraw", &o2::UIWidget::ForceDraw);
+	TypeInitializer::RegFuncParam<const RectF&>(funcInfo, "area");
+	TypeInitializer::RegFuncParam<float>(funcInfo, "transparency");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, const String&>(&type, "SetName", &o2::UIWidget::SetName);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "name");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, String>(&type, "GetName", &o2::UIWidget::GetName);
@@ -3981,9 +4043,6 @@ void o2::UIWidget::InitializeType(o2::UIWidget* sample)
 	TypeInitializer::RegFuncParam<UIWidget*>(funcInfo, "child");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, const DataNode&>(&type, "OnDeserialized", &o2::UIWidget::OnDeserialized);
 	TypeInitializer::RegFuncParam<const DataNode&>(funcInfo, "node");
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, const RectF&, float>(&type, "ForceDraw", &o2::UIWidget::ForceDraw);
-	TypeInitializer::RegFuncParam<const RectF&>(funcInfo, "area");
-	TypeInitializer::RegFuncParam<float>(funcInfo, "transparency");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "OnVisibleChanged", &o2::UIWidget::OnVisibleChanged);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "InitializeProperties", &o2::UIWidget::InitializeProperties);
 }
@@ -4548,6 +4607,16 @@ void o2::Animation::AnimatedValueDef::InitializeType(o2::Animation::AnimatedValu
 	TypeInitializer::RegField(&type, "mAnimatedValue", (size_t)(char*)(&sample->mAnimatedValue) - (size_t)(char*)sample, sample->mAnimatedValue).AddAttribute<SerializableAttribute<decltype(mAnimatedValue)>>();
 }
 
+void o2::ActorAsset::MetaInfo::InitializeType(o2::ActorAsset::MetaInfo* sample)
+{
+	auto funcInfo = TypeInitializer::RegFunction<o2::ActorAsset::MetaInfo, Type::Id>(&type, "GetAssetType", &o2::ActorAsset::MetaInfo::GetAssetType);
+}
+
+void o2::AnimationAsset::MetaInfo::InitializeType(o2::AnimationAsset::MetaInfo* sample)
+{
+	auto funcInfo = TypeInitializer::RegFunction<o2::AnimationAsset::MetaInfo, Type::Id>(&type, "GetAssetType", &o2::AnimationAsset::MetaInfo::GetAssetType);
+}
+
 void o2::Asset::IMetaInfo::InitializeType(o2::Asset::IMetaInfo* sample)
 {
 	TypeInitializer::RegField(&type, "mId", (size_t)(char*)(&sample->mId) - (size_t)(char*)sample, sample->mId).AddAttribute<SerializableAttribute<decltype(mId)>>();
@@ -4602,6 +4671,11 @@ void o2::BinaryAsset::MetaInfo::InitializeType(o2::BinaryAsset::MetaInfo* sample
 void o2::BitmapFontAsset::MetaInfo::InitializeType(o2::BitmapFontAsset::MetaInfo* sample)
 {
 	auto funcInfo = TypeInitializer::RegFunction<o2::BitmapFontAsset::MetaInfo, Type::Id>(&type, "GetAssetType", &o2::BitmapFontAsset::MetaInfo::GetAssetType);
+}
+
+void o2::DataAsset::MetaInfo::InitializeType(o2::DataAsset::MetaInfo* sample)
+{
+	auto funcInfo = TypeInitializer::RegFunction<o2::DataAsset::MetaInfo, Type::Id>(&type, "GetAssetType", &o2::DataAsset::MetaInfo::GetAssetType);
 }
 
 void o2::FolderAsset::MetaInfo::InitializeType(o2::FolderAsset::MetaInfo* sample)
@@ -5045,11 +5119,14 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::AnimationMask>("o2::AnimationMask");
 	o2::Reflection::InitializeType<o2::AnimationState>("o2::AnimationState");
 	o2::Reflection::InitializeType<o2::IAnimation>("o2::IAnimation");
+	o2::Reflection::InitializeType<o2::ActorAsset>("o2::ActorAsset");
+	o2::Reflection::InitializeType<o2::AnimationAsset>("o2::AnimationAsset");
 	o2::Reflection::InitializeType<o2::Asset>("o2::Asset");
 	o2::Reflection::InitializeType<o2::AssetInfo>("o2::AssetInfo");
 	o2::Reflection::InitializeType<o2::AtlasAsset>("o2::AtlasAsset");
 	o2::Reflection::InitializeType<o2::BinaryAsset>("o2::BinaryAsset");
 	o2::Reflection::InitializeType<o2::BitmapFontAsset>("o2::BitmapFontAsset");
+	o2::Reflection::InitializeType<o2::DataAsset>("o2::DataAsset");
 	o2::Reflection::InitializeType<o2::FolderAsset>("o2::FolderAsset");
 	o2::Reflection::InitializeType<o2::ImageAsset>("o2::ImageAsset");
 	o2::Reflection::InitializeType<o2::VectorFontAsset>("o2::VectorFontAsset");
@@ -5107,6 +5184,8 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::Transform>("o2::Transform");
 	o2::Reflection::InitializeType<o2::AnimatedValue<Vec2F>::Key>("o2::AnimatedValue<Vec2F>::Key");
 	o2::Reflection::InitializeType<o2::Animation::AnimatedValueDef>("o2::Animation::AnimatedValueDef");
+	o2::Reflection::InitializeType<o2::ActorAsset::MetaInfo>("o2::ActorAsset::MetaInfo");
+	o2::Reflection::InitializeType<o2::AnimationAsset::MetaInfo>("o2::AnimationAsset::MetaInfo");
 	o2::Reflection::InitializeType<o2::Asset::IMetaInfo>("o2::Asset::IMetaInfo");
 	o2::Reflection::InitializeType<o2::AssetTree::AssetNode>("o2::AssetTree::AssetNode");
 	o2::Reflection::InitializeType<o2::AtlasAsset::PlatformMeta>("o2::AtlasAsset::PlatformMeta");
@@ -5114,6 +5193,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::AtlasAsset::Page>("o2::AtlasAsset::Page");
 	o2::Reflection::InitializeType<o2::BinaryAsset::MetaInfo>("o2::BinaryAsset::MetaInfo");
 	o2::Reflection::InitializeType<o2::BitmapFontAsset::MetaInfo>("o2::BitmapFontAsset::MetaInfo");
+	o2::Reflection::InitializeType<o2::DataAsset::MetaInfo>("o2::DataAsset::MetaInfo");
 	o2::Reflection::InitializeType<o2::FolderAsset::MetaInfo>("o2::FolderAsset::MetaInfo");
 	o2::Reflection::InitializeType<o2::ImageAsset::PlatformMeta>("o2::ImageAsset::PlatformMeta");
 	o2::Reflection::InitializeType<o2::ImageAsset::MetaInfo>("o2::ImageAsset::MetaInfo");
@@ -5173,10 +5253,13 @@ void RegReflectionTypes()
 	TypeInitializer::AddBaseType(&o2::AnimationMask::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&o2::AnimationState::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&o2::Asset::type, &o2::ISerializable::type);
+	TypeInitializer::AddBaseType(&o2::ActorAsset::type, &o2::Asset::type);
+	TypeInitializer::AddBaseType(&o2::AnimationAsset::type, &o2::Asset::type);
 	TypeInitializer::AddBaseType(&o2::AssetInfo::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&o2::AtlasAsset::type, &o2::Asset::type);
 	TypeInitializer::AddBaseType(&o2::BinaryAsset::type, &o2::Asset::type);
 	TypeInitializer::AddBaseType(&o2::BitmapFontAsset::type, &o2::Asset::type);
+	TypeInitializer::AddBaseType(&o2::DataAsset::type, &o2::Asset::type);
 	TypeInitializer::AddBaseType(&o2::FolderAsset::type, &o2::Asset::type);
 	TypeInitializer::AddBaseType(&o2::ImageAsset::type, &o2::Asset::type);
 	TypeInitializer::AddBaseType(&o2::VectorFontAsset::type, &o2::Asset::type);
@@ -5231,12 +5314,15 @@ void RegReflectionTypes()
 	TypeInitializer::AddBaseType(&o2::AnimatedValue<Vec2F>::Key::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&o2::Animation::AnimatedValueDef::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&o2::Asset::IMetaInfo::type, &o2::ISerializable::type);
+	TypeInitializer::AddBaseType(&o2::ActorAsset::MetaInfo::type, &o2::Asset::IMetaInfo::type);
+	TypeInitializer::AddBaseType(&o2::AnimationAsset::MetaInfo::type, &o2::Asset::IMetaInfo::type);
 	TypeInitializer::AddBaseType(&o2::AssetTree::AssetNode::type, &o2::AssetInfo::type);
 	TypeInitializer::AddBaseType(&o2::AtlasAsset::PlatformMeta::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&o2::AtlasAsset::MetaInfo::type, &o2::Asset::IMetaInfo::type);
 	TypeInitializer::AddBaseType(&o2::AtlasAsset::Page::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&o2::BinaryAsset::MetaInfo::type, &o2::Asset::IMetaInfo::type);
 	TypeInitializer::AddBaseType(&o2::BitmapFontAsset::MetaInfo::type, &o2::Asset::IMetaInfo::type);
+	TypeInitializer::AddBaseType(&o2::DataAsset::MetaInfo::type, &o2::Asset::IMetaInfo::type);
 	TypeInitializer::AddBaseType(&o2::FolderAsset::MetaInfo::type, &o2::Asset::IMetaInfo::type);
 	TypeInitializer::AddBaseType(&o2::ImageAsset::PlatformMeta::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&o2::ImageAsset::MetaInfo::type, &o2::Asset::IMetaInfo::type);

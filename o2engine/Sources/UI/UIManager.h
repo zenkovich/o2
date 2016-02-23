@@ -208,6 +208,9 @@ namespace o2
 		// Draws widgets
 		void Draw();
 
+		// Registering widget for draing at top of all regular widgets
+		void DrawWidgetAtTop(UIWidget* widget);
+
 	protected:
 		LogStream* mLog;            // UI Log stream
 		UIWidget*  mScreenWidget;   // Root screen widget
@@ -225,9 +228,6 @@ namespace o2
 
 		// Updates root widget size
 		void UpdateRootSize();
-
-		// Registering top drawing widget
-		void RegTopWidget(UIWidget* widget);
 
 		// Tries to load style "ui_style.xml"
 		void TryLoadStyle();

@@ -489,7 +489,7 @@ namespace o2
 			return;
 
 		if (mDraggingNodes)
-			o2UI.RegTopWidget(mDragNode);
+			o2UI.DrawWidgetAtTop(mDragNode);
 
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
@@ -1095,7 +1095,7 @@ namespace o2
 	void UITree::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		mPressedPoint = cursor.mPosition;
-		mPressedNode = GetItemUnderPoint(cursor.mPosition);
+		mPressedNode = GetTreeNodeUnderPoint(cursor.mPosition);
 
 		if (mPressedNode && mPressedTime < 0.3f)
 		{
@@ -1208,7 +1208,7 @@ namespace o2
 
 		if (mRearrangeType != RearrangeType::Disabled)
 		{
-			mUnderCursorItem = GetItemUnderPoint(cursor.mPosition);
+			mUnderCursorItem = GetTreeNodeUnderPoint(cursor.mPosition);
 
 			if (mUnderCursorItem != mExpandNodeCandidate)
 			{
@@ -1316,7 +1316,7 @@ namespace o2
 		if ((cursor.mPosition - mLastHoverCheckCursor).Length() < checkDeltaThreshold || mDraggingNodes)
 			return;
 
-		auto nodeUnderCursor = GetItemUnderPoint(cursor.mPosition);
+		auto nodeUnderCursor = GetTreeNodeUnderPoint(cursor.mPosition);
 
 		if (auto hoverState = state["hover"])
 			hoverState->SetState(nodeUnderCursor != nullptr);
@@ -1339,7 +1339,7 @@ namespace o2
 		if (mSelectedItems.Count() < 2)
 			SelectSingleNode(cursor);
 
-		auto node = GetItemUnderPoint(cursor.mPosition);
+		auto node = GetTreeNodeUnderPoint(cursor.mPosition);
 		onItemRBClick(node);
 	}
 
@@ -1355,7 +1355,7 @@ namespace o2
 			selectionReseted = true;
 		}
 
-		auto nodeUnderCursor = GetItemUnderPoint(cursor.mPosition);
+		auto nodeUnderCursor = GetTreeNodeUnderPoint(cursor.mPosition);
 
 		bool nodeSelected = false;
 		if (nodeUnderCursor)
@@ -1391,7 +1391,7 @@ namespace o2
 
 	void UITree::SelectMultipleNodes(const Input::Cursor &cursor)
 	{
-		auto nodeUnderCursor = GetItemUnderPoint(cursor.mPosition);
+		auto nodeUnderCursor = GetTreeNodeUnderPoint(cursor.mPosition);
 
 		if (nodeUnderCursor)
 		{
@@ -1441,7 +1441,7 @@ namespace o2
 			mHoverDrawable->SetEnabled(false);
 	}
 
-	UITreeNode* UITree::GetItemUnderPoint(const Vec2F& point)
+	UITreeNode* UITree::GetTreeNodeUnderPoint(const Vec2F& point)
 	{
 		for (auto node : mAllNodes)
 		{

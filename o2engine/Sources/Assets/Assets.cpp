@@ -245,6 +245,21 @@ namespace o2
 		return true;
 	}
 
+	bool Assets::MoveAssets(const Vector<AssetInfo>& assets, const String& destPath, bool rebuildAssets /*= true*/)
+	{
+		bool res = true;
+		for (auto& info : assets)
+		{
+			if (!o2Assets.MoveAsset(info, destPath + "/" + o2FileSystem.GetPathWithoutDirectories(info.mPath), false))
+				res = false;
+		}
+
+		if (rebuildAssets)
+			RebuildAssets();
+
+		return res;
+	}
+
 	bool Assets::RenameAsset(Asset* asset, const String& newName, bool rebuildAssets /*= true*/)
 	{
 		return RenameAsset(GetAssetInfo(asset->GetAssetId()), newName, rebuildAssets);

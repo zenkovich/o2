@@ -427,7 +427,7 @@ namespace o2
 		mScreenWidget->layout.size = o2Render.GetResolution();
 	}
 
-	void UIManager::RegTopWidget(UIWidget* widget)
+	void UIManager::DrawWidgetAtTop(UIWidget* widget)
 	{
 		mTopWidgets.Add(widget);
 	}

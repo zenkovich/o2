@@ -165,6 +165,9 @@ namespace o2
 		// Deselects all objects
 		void DeselectAllObjects();
 
+		// Returns item widget under point
+		UITreeNode* GetTreeNodeUnderPoint(const Vec2F& point);
+
 		// Returns item sample
 		UITreeNode* GetNodeSample() const;
 
@@ -330,9 +333,6 @@ namespace o2
 
 		// Calls when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
-
-		// Returns item widget under point
-		UITreeNode* GetItemUnderPoint(const Vec2F& point);
 
 		// Updates nodes dragging
 		void UpdateDragging(const Input::Cursor& cursor);

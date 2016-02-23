@@ -38,6 +38,7 @@ namespace o2
 			delete child;
 
 		mChilds.Clear();
+		drawable = nullptr;
 
 		mDepth = other.mDepth;
 		name = other.name;

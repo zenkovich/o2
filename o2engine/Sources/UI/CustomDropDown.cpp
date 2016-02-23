@@ -72,7 +72,7 @@ namespace o2
 
 		UIWidget::Draw();
 
-		o2UI.RegTopWidget(mList);
+		o2UI.DrawWidgetAtTop(mList);
 
 		UIWidget* selectedItem = mList->GetSelectedItem();
 		if (selectedItem)

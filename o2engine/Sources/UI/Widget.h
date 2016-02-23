@@ -60,6 +60,9 @@ namespace o2
 		// Draws widget
 		virtual void Draw();
 
+		// Forcible drawing in area
+		void ForceDraw(const RectF& area, float transparency);
+
 		// Sets widget name
 		virtual void SetName(const String& name);
 
@@ -287,9 +290,6 @@ namespace o2
 
 		// Calls when deserialized
 		void OnDeserialized(const DataNode& node);
-
-		// Forcible drawing in area
-		void ForceDraw(const RectF& area, float transparency);
 
 		// Calls when visible was changed
 		virtual void OnVisibleChanged();

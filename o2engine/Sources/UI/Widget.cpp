@@ -84,6 +84,8 @@ namespace o2
 			delete child;
 		}
 		mChilds.Clear();
+		mLayers.Clear();
+		mStates.Clear();
 		mVisibleState = nullptr;
 		mSelectedState = nullptr;
 
@@ -98,6 +100,8 @@ namespace o2
 			mLayers.Add(newLayer);
 			OnLayerAdded(newLayer);
 		}
+
+		UpdateLayersDrawingSequence();
 
 		for (auto child : other.mChilds)
 		{
@@ -190,7 +194,7 @@ namespace o2
 
 	void UIWidget::SetParent(UIWidget* parent)
 	{
-		if (parent->mChilds.Contains(this))
+		if (parent && parent->mChilds.Contains(this))
 			return;
 
 		if (mParent)

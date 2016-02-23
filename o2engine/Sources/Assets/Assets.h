@@ -122,6 +122,9 @@ namespace o2
 		// Moves asset to new path
 		bool MoveAsset(const AssetInfo& info, const String& newPath, bool rebuildAssets = true);
 
+		// Moves assets to new path
+		bool MoveAssets(const Vector<AssetInfo>& assets, const String& destPath, bool rebuildAssets = true);
+
 		// Renames asset to new path
 		bool RenameAsset(Asset* asset, const String& newName, bool rebuildAssets = true);
 
