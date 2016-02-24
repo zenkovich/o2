@@ -52,6 +52,7 @@
     <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneEditWidget.cpp" />
+    <ClCompile Include="..\..\Sources\TreeWindow\ActorsTree.cpp" />
     <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp" />
     <ClCompile Include="..\..\Sources\Windows\main.cpp" />
   </ItemGroup>
@@ -91,6 +92,7 @@
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditWidget.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
+    <ClInclude Include="..\..\Sources\TreeWindow\ActorsTree.h" />
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

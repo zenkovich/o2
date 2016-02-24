@@ -680,7 +680,7 @@ namespace o2
 					size.y = newItem->layout.height;
 				}
 
-				iconLayer->AddChildLayer("sprite", mnew Sprite(item.icon),
+				iconLayer->AddChildLayer("sprite", mnew Sprite(*item.icon),
 										 Layout(Vec2F(), Vec2F(),
 												Vec2F(-Math::Floor(size.x*0.5f), Math::Floor(size.y*0.5f)),
 												Vec2F(Math::Floor(size.x*0.5f), -Math::Floor(size.y*0.5f))));

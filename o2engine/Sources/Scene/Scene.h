@@ -54,14 +54,15 @@ namespace o2
 		typedef Vector<Layer*> LayersVec;
 
 	public:
-		Function<void(Actor*)> onActorCreated;
-		Function<void(Actor*)> onActorDeleting;
+		Function<void(Actor*)> onActorCreated;       // Actor creation event
+		Function<void(Actor*)> onActorDestroying;    // Actor destroying event
+		Function<void(Actor*)> onActorEnableChanged; // Actor enable changing
 
 #if IS_EDITOR
-		Function<void(ActorsVec)> onChanged; // Calls when some actor (or actors) was changed
-
-		void OnActorChanged(Actor* actor);   // Calls when actor was changed
-		void CheckChangedActors();           // Checks is any actors was changed and calls OnChanged() if changed
+		Function<void(ActorsVec)> onChanged;                     // Actors some change event
+		Function<void(Actor*)>    onActorLockChanged;			 // Actor locking change
+		Function<void(Actor*)>    onActorNameChanged;			 // Actor name changing event
+		Function<void(Actor*)>    onActorChildsHierarchyChanged; // Actor childs hierarchy change event
 #endif
 
 		// Returns layer by name
@@ -122,6 +123,14 @@ namespace o2
 
 		// Reparent actors to new parent at next of prevActor;
 		void ReparentActors(const ActorsVec& actors, Actor* newParent, Actor* prevActor);
+
+#if IS_EDITOR	  
+		// Calls when actor was changed
+		void OnActorChanged(Actor* actor);   
+
+		// Checks is any actors was changed and calls OnChanged() if changed
+		void CheckChangedActors();
+#endif       
 
 	protected:
 		ActorsVec mRootActors;       // Scene root actors		

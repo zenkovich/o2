@@ -121,7 +121,7 @@ namespace o2
 		else mTree->mExpandedObjects.Remove(mObject);
 
 		if (expanded)
-			RebuildChildrenNodes(mTree->getChildsFunc(mObject));
+			RebuildChildrenNodes(mTree->getChildsFunc(mObject), true);
 
 		if (mExpandedState)
 		{
@@ -197,7 +197,7 @@ namespace o2
 		return nullptr;
 	}
 
-	void UITreeNode::Rebuild(bool withChilds /*= true*/)
+	void UITreeNode::Rebuild(bool withChilds /*= true*/, bool deepRebuild /*= true*/)
 	{
 		if (!mTree)
 			return;
@@ -213,10 +213,10 @@ namespace o2
 		if (!withChilds || !IsExpanded())
 			return;
 
-		RebuildChildrenNodes(objects);
+		RebuildChildrenNodes(objects, deepRebuild);
 	}
 
-	void UITreeNode::RebuildChildrenNodes(Vector<UnknownType*> objects)
+	void UITreeNode::RebuildChildrenNodes(Vector<UnknownType*> objects, bool deepRebuild)
 	{
 		//check removed objects
 		Vector<UITreeNode*> removedNodes;
@@ -261,7 +261,8 @@ namespace o2
 
 			mTree->mAllNodes.Add(newNode);
 
-			newNode->Rebuild();
+			if (deepRebuild)
+				newNode->Rebuild();
 		}
 
 		if (!mTree->mWaitSelectionsUpdate)
@@ -567,70 +568,7 @@ namespace o2
 
 	void UITree::RebuildTree()
 	{
-		mWaitSelectionsUpdate = true;
-		Vector<UnknownType*> objects = getChildsFunc(nullptr);
-
-		//check removed objects
-		Vector<UITreeNode*> removedNodes;
-		Vector<UITreeNode*> thisNodes;
-		for (auto child : mChilds)
-		{
-			if (child->GetType() != UITreeNode::type)
-				continue;
-
-			UITreeNode* childNode = (UITreeNode*)child;
-
-			thisNodes.Add(childNode);
-
-			if (!objects.Contains(childNode->mObject))
-				removedNodes.Add(childNode);
-		}
-
-		for (auto node : removedNodes)
-		{
-			node->RemoveChildrenNodes();
-			mAllNodes.Remove(node);
-			RemoveChild(node, false);
-			FreeTreeNode(node);
-		}
-
-		//check new objects and rebuild old
-		for (auto obj : objects)
-		{
-			auto node = thisNodes.FindMatch([&](auto x) { return x->mObject == obj; });
-
-			if (node)
-			{
-				node->Rebuild();
-				continue;
-			}
-
-			UITreeNode* newNode = CreateTreeNode();
-			newNode->mObject = obj;
-			newNode->mTree = this;
-			newNode->mParent = this;
-			newNode->SetExpanded(mExpandedObjects.Contains(obj), true);
-			mChilds.Add(newNode);
-
-			mAllNodes.Add(newNode);
-
-			newNode->Rebuild();
-		}
-
-		// rearrange nodes by objects arranging
-		auto childs = mChilds;
-		mChilds.Clear();
-
-		for (auto obj : objects)
-		{
-			auto node = childs.FindMatch([&](auto x) {
-				return x->GetType() == UITreeNode::type && ((UITreeNode*)x)->mObject == obj;
-			});
-			mChilds.Add(node);
-		}
-
-		CheckSelectedNodes();
-		UpdateLayout();
+		UpdateRootNodes(true);
 	}
 
 	void UITree::UpdateTreeNode(UnknownType* object)
@@ -904,6 +842,90 @@ namespace o2
 		}
 
 		CheckSelectedNodes();
+	}
+
+	void UITree::OnObjectsChanged(const UnknownObjectsVec& objects)
+	{
+		UpdateRootNodes(false);
+
+		for (auto obj : objects)
+		{
+			UITreeNode* node = GetNode(obj);
+
+			if (node)
+				node->Rebuild(true, false);
+		}
+	}
+
+	void UITree::UpdateRootNodes(bool updateChilds)
+	{
+		mWaitSelectionsUpdate = true;
+		Vector<UnknownType*> objects = getChildsFunc(nullptr);
+
+		//check removed objects
+		Vector<UITreeNode*> removedNodes;
+		Vector<UITreeNode*> thisNodes;
+		for (auto child : mChilds)
+		{
+			if (child->GetType() != UITreeNode::type)
+				continue;
+
+			UITreeNode* childNode = (UITreeNode*)child;
+
+			thisNodes.Add(childNode);
+
+			if (!objects.Contains(childNode->mObject))
+				removedNodes.Add(childNode);
+		}
+
+		for (auto node : removedNodes)
+		{
+			node->RemoveChildrenNodes();
+			mAllNodes.Remove(node);
+			RemoveChild(node, false);
+			FreeTreeNode(node);
+		}
+
+		//check new objects and rebuild old
+		for (auto obj : objects)
+		{
+			auto node = thisNodes.FindMatch([&](auto x) { return x->mObject == obj; });
+
+			if (node)
+			{
+				if (updateChilds)
+					node->Rebuild();
+
+				continue;
+			}
+
+			UITreeNode* newNode = CreateTreeNode();
+			newNode->mObject = obj;
+			newNode->mTree = this;
+			newNode->mParent = this;
+			newNode->SetExpanded(mExpandedObjects.Contains(obj), true);
+			mChilds.Add(newNode);
+
+			mAllNodes.Add(newNode);
+
+			if (updateChilds)
+				newNode->Rebuild();
+		}
+
+		// rearrange nodes by objects arranging
+		auto childs = mChilds;
+		mChilds.Clear();
+
+		for (auto obj : objects)
+		{
+			auto node = childs.FindMatch([&](auto x) {
+				return x->GetType() == UITreeNode::type && ((UITreeNode*)x)->mObject == obj;
+			});
+			mChilds.Add(node);
+		}
+
+		CheckSelectedNodes();
+		UpdateLayout();
 	}
 
 	void UITree::OnSelected()

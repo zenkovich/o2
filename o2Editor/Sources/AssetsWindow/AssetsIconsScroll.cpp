@@ -14,8 +14,10 @@
 #include "Events/EventSystem.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
+#include "Scene/Components/ImageComponent.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "SceneWindow/SceneEditWidget.h"
+#include "TreeWindow/ActorsTree.h"
 #include "UI/ContextMenu.h"
 #include "UI/EditBox.h"
 #include "UI/GridLayout.h"
@@ -47,7 +49,7 @@ UIAssetsIconsScrollArea::UIAssetsIconsScrollArea():
 }
 
 UIAssetsIconsScrollArea::UIAssetsIconsScrollArea(const UIAssetsIconsScrollArea& other):
-	UIScrollArea(other), mSelection(other.mSelection->Clone()), DrawableCursorEventsListener(this), mPressTime(10), 
+	UIScrollArea(other), mSelection(other.mSelection->Clone()), DrawableCursorEventsListener(this), mPressTime(10),
 	mIconHoverSprite(nullptr), mContextMenu(nullptr)
 {
 	mGrid = FindChild<UIGridLayout>();
@@ -123,7 +125,7 @@ void UIAssetsIconsScrollArea::Draw()
 	if (mOwnVerScrollBar)
 		mVerScrollBar->Draw();
 
-	if (mDragging)
+	if (mDragState == DragState::Regular)
 		o2UI.DrawWidgetAtTop(mDragIcon);
 
 	if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
@@ -217,7 +219,7 @@ void UIAssetsIconsScrollArea::UpdateAssetsPath()
 			assetIcon->name = "standard";
 		}
 
-		assetIcon->SetAssetInfo(asset);		
+		assetIcon->SetAssetInfo(asset);
 		assetIcon->SetState("halfHide", mCuttingAssets.ContainsPred([&](auto x) { return x.mFirst == asset.mId; }));
 
 		addingIcons.Add(assetIcon);
@@ -270,7 +272,7 @@ void UIAssetsIconsScrollArea::UpdateLayout(bool forcible /*= false*/)
 	UIScrollArea::UpdateLayout(forcible);
 
 	mPressedPoint = localPressPoint + mChildsAbsRect.LeftBottom();
-	
+
 	if (mSelecting)
 		UpdateSelection(*o2Input.GetCursor(0));
 
@@ -288,7 +290,7 @@ void UIAssetsIconsScrollArea::UpdateCuttingAssets()
 	for (auto child : mGrid->GetChilds())
 	{
 		UIAssetIcon* icon = (UIAssetIcon*)child;
-		icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.ContainsPred([=](auto x) { 
+		icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.ContainsPred([=](auto x) {
 			return x.mFirst == icon->GetAssetInfo().mId; }));
 	}
 }
@@ -318,7 +320,7 @@ void UIAssetsIconsScrollArea::OnCursorStillDown(const Input::Cursor& cursor)
 
 	float beginDragOrSelectThreshold = 5.0f;
 
-	if (!mSelecting && !mDragging && (cursor.mPosition - mPressedPoint).Length() > beginDragOrSelectThreshold)
+	if (!mSelecting && mDragState == DragState::Off && (cursor.mPosition - mPressedPoint).Length() > beginDragOrSelectThreshold)
 	{
 		UIAssetIcon* iconUnderCursor = GetIconUnderPoint(mPressedPoint);
 		if (iconUnderCursor && mSelectedAssetsIcons.ContainsPred([=](auto x) { return x.icon == iconUnderCursor; }))
@@ -330,7 +332,7 @@ void UIAssetsIconsScrollArea::OnCursorStillDown(const Input::Cursor& cursor)
 	if (mSelecting)
 		UpdateSelection(cursor);
 
-	if (mDragging)
+	if (mDragState != DragState::Off)
 		UpdateDragging(cursor);
 }
 
@@ -353,7 +355,7 @@ void UIAssetsIconsScrollArea::OnCursorReleased(const Input::Cursor& cursor)
 	mPressTime = 0.0f;
 
 	if (mSelecting) CompleteSelecting();
-	else if (mDragging) CompleteDragging();
+	else if (mDragState != DragState::Off) CompleteDragging();
 	else
 	{
 		if (!o2Input.IsKeyDown(VK_CONTROL))
@@ -373,7 +375,7 @@ void UIAssetsIconsScrollArea::OnCursorReleased(const Input::Cursor& cursor)
 
 void UIAssetsIconsScrollArea::BeginDragging(UIAssetIcon* iconUnderCursor, const Input::Cursor &cursor)
 {
-	mDragging = true;
+	mDragState = DragState::Regular;
 	for (auto sel : mSelectedAssetsIcons)
 		sel.icon->Hide();
 
@@ -389,36 +391,96 @@ void UIAssetsIconsScrollArea::UpdateDragging(const Input::Cursor& cursor)
 	mDragIcon->SetParent(nullptr);
 	mDragIcon->layout.SetRect(RectF(cursor.mPosition - mAssetIconSize*0.5f + mDragOffset,
 									cursor.mPosition + mAssetIconSize*0.5f + mDragOffset));
+
+	CursorEventsListener* listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
+
+	SceneEditScreen* sceneEdit = dynamic_cast<SceneEditScreen*>(listenerUnderCursor);
+	if (sceneEdit && mDragState != DragState::Scene)
+	{
+		InstantiateDraggingAssets();
+		mDragState = DragState::Scene;
+	}
+
+	if (!sceneEdit && mDragState == DragState::Scene)
+	{
+		ClearInstantiatedDraggingAssets();
+		mDragState = DragState::Regular;
+	}
+
+	UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(listenerUnderCursor);
+	if (actorsTree && mDragState != DragState::Tree)
+	{
+		InstantiateDraggingAssets();
+		mDragState = DragState::Tree;
+	}
+
+	if (!actorsTree && mDragState == DragState::Tree)
+	{
+		ClearInstantiatedDraggingAssets();
+		mDragState = DragState::Regular;
+	}
+
+	if (mDragState == DragState::Scene)
+	{
+		Vec2F sceneCursorPos = o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition);
+		for (auto actor : mInstSceneDragActors)
+			actor->transform.worldPosition = sceneCursorPos;
+	}
+}
+
+void UIAssetsIconsScrollArea::ClearInstantiatedDraggingAssets()
+{
+	for (auto actor : mInstSceneDragActors)
+		delete actor;
+
+	mInstSceneDragActors.Clear();
+}
+
+void UIAssetsIconsScrollArea::InstantiateDraggingAssets()
+{
+	if (mDragState != DragState::Regular)
+		return;
+
+	for (auto& sel : mSelectedAssetsIcons)
+	{
+		auto info = sel.icon->GetAssetInfo();
+		Actor* actor = InstantiateAsset(info);
+		if (actor)
+		{
+			actor->name = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(info.mPath));
+			mInstSceneDragActors.Add(actor);
+		}
+	}
 }
 
 void UIAssetsIconsScrollArea::CompleteDragging()
 {
-	mDragging = false;
+	mDragState = DragState::Off;
 	for (auto sel : mSelectedAssetsIcons)
 		sel.icon->Show();
 
 	CursorEventsListener* listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
 
+	UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(listenerUnderCursor);
+	if (actorsTree)
+	{
+		o2Debug.Log("Put actors tree");
+		mInstSceneDragActors.Clear();
+	}
+
 	UITree* treeWindow = dynamic_cast<UITree*>(listenerUnderCursor);
 	if (treeWindow)
 	{
-		if (treeWindow->name == "actors")
+		UITreeNode* nodeUnderCursor = treeWindow->GetTreeNodeUnderPoint(o2Input.GetCursorPos());
+		if (nodeUnderCursor)
 		{
-			o2Debug.Log("Put actors tree");
-		}
-		else if (treeWindow->name == "folders")
-		{
-			UITreeNode* nodeUnderCursor = treeWindow->GetTreeNodeUnderPoint(o2Input.GetCursorPos());
-			if (nodeUnderCursor)
-			{
-				AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)nodeUnderCursor->GetObject();
+			AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)nodeUnderCursor->GetObject();
 
-				String destPath = assetTreeNode->mPath;
-				auto assetsInfos = mSelectedAssetsIcons.Select<AssetInfo>([](auto x) { return x.icon->GetAssetInfo(); });
-				o2Assets.MoveAssets(assetsInfos, destPath, true);
+			String destPath = assetTreeNode->mPath;
+			auto assetsInfos = mSelectedAssetsIcons.Select<AssetInfo>([](auto x) { return x.icon->GetAssetInfo(); });
+			o2Assets.MoveAssets(assetsInfos, destPath, true);
 
-				DeselectAllAssets();
-			}
+			DeselectAllAssets();
 		}
 	}
 
@@ -439,6 +501,7 @@ void UIAssetsIconsScrollArea::CompleteDragging()
 	SceneEditScreen* sceneEdit = dynamic_cast<SceneEditScreen*>(listenerUnderCursor);
 	if (sceneEdit)
 	{
+		mInstSceneDragActors.Clear();
 		o2Debug.Log("Put scene");
 	}
 }
@@ -599,7 +662,7 @@ UIAssetIcon* UIAssetsIconsScrollArea::GetImageAssetIcon(const AssetInfo& asset)
 											 Vec2F(0, 10));
 	}
 
-	previewSprite->imageAsset = &previewSpriteAsset;
+	previewSprite->imageAsset = previewSpriteAsset;
 	previewSprite->mode = SpriteMode::Default;
 
 	return assetIcon;
@@ -808,6 +871,26 @@ void UIAssetsIconsScrollArea::OnContextCreateAnimationPressed()
 		return;
 
 	o2EditorAssets.CreateAnimationAsset(mCurrentPath);
+}
+
+Actor* UIAssetsIconsScrollArea::InstantiateAsset(const ImageAsset& asset)
+{
+	return mnew Actor({ mnew ImageComponent(asset) });
+}
+
+Actor* UIAssetsIconsScrollArea::InstantiateAsset(const ActorAsset& asset)
+{
+	return mnew Actor(asset.actor);
+}
+
+Actor* UIAssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
+{
+	if (assetInfo.mType == ImageAsset::type.ID())
+		return InstantiateAsset(ImageAsset(assetInfo.mId));
+	else if (assetInfo.mType == ActorAsset::type.ID())
+		return InstantiateAsset(ActorAsset(assetInfo.mId));
+
+	return nullptr;
 }
 
 UIAssetsIconsScrollArea::IconSelection::IconSelection():

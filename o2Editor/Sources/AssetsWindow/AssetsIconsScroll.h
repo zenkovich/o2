@@ -10,9 +10,12 @@ using namespace o2;
 
 namespace o2
 {
+	class Actor;
+	class ActorAsset;
+	class ImageAsset;
 	class Sprite;
-	class UIGridLayout;
 	class UIContextMenu;
+	class UIGridLayout;
 }
 
 class UIAssetIcon;
@@ -65,10 +68,13 @@ public:
 	SERIALIZABLE(UIAssetsIconsScrollArea);
 
 protected:
+	// ------------------------
+	// Asset icon selection def
+	// ------------------------
 	struct IconSelection
 	{
-		UIAssetIcon* icon;
-		Sprite*      selectionSprite;
+		UIAssetIcon* icon;            // Asset icon widget pointer
+		Sprite*      selectionSprite; // Selection sprite
 
 		IconSelection();
 		IconSelection(UIAssetIcon* icon, Sprite* selectionSprite);
@@ -76,11 +82,14 @@ protected:
 		bool operator==(const IconSelection& other) const;
 	};
 
+	enum class DragState { Off, Regular, Scene, Tree };
+
 	typedef Vector<IconSelection> IconSelectionsVec;
 	typedef Vector<UIAssetIcon*> AssetsIconsVec;
 	typedef Vector<Sprite*> SpritesVec;
 	typedef Dictionary<String, AssetsIconsVec> IconArrsDict;
 	typedef Vector<Pair<AssetId, String>> AssetIdPathVec;
+	typedef Vector<Actor*> ActorsVec;
 
 
 	const Vec2F       mAssetIconSize = Vec2F(50, 60);
@@ -88,37 +97,38 @@ protected:
 	Color4            mUnselectedColor = Color4(100, 100, 100, 100);
 	Color4            mHoverColor = Color4(100, 100, 100, 100);     
 
-	String            mCurrentPath;               // Current viewing path
-											      
-	UIGridLayout*     mGrid;                      // Assets icons grid
-	Sprite*           mSelection;                 // Icons selection sprite
-											      
-	UIContextMenu*    mContextMenu;               // Assets Context menu
-										   	      
-	IconSelectionsVec mSelectedAssetsIcons;       // Selected assets icons
-	Sprite*           mIconSelectionSprite;       // Selection sprite drawable
-	Layout            mSelectionSpriteLayout;     // Selection sprite layout 
-	SpritesVec        mSelectionSpritesPool;      // Selection sprites pool
-											      
-	UIAssetIcon*      mHoverIcon = nullptr;       // Current hovered asset icon
-	Sprite*           mIconHoverSprite;           // icons hovering sprite
-	RectF             mTargetHoverSpriteRect;     // Target hover rectangle
-	RectF             mCurrentHoverSpriteRect;    // Current hover rectangle
-										   	      
-	IconArrsDict      mIconsPool;                 // Assets icons pool
-											      
-	bool              mSelecting = false;         // Is selecting icons 
-	Vec2F             mPressedPoint;              // Pressed point
-	float             mPressTime;                 // Time elapsed from pressing
-	IconSelectionsVec mCurrentSelectingIcons;     // Selecting icons at current selection
+	String            mCurrentPath;                // Current viewing path
+											       
+	UIGridLayout*     mGrid;                       // Assets icons grid
+	Sprite*           mSelection;                  // Icons selection sprite
+											       
+	UIContextMenu*    mContextMenu;                // Assets Context menu
+										   	       
+	IconSelectionsVec mSelectedAssetsIcons;        // Selected assets icons
+	Sprite*           mIconSelectionSprite;        // Selection sprite drawable
+	Layout            mSelectionSpriteLayout;      // Selection sprite layout 
+	SpritesVec        mSelectionSpritesPool;       // Selection sprites pool
+											       
+	UIAssetIcon*      mHoverIcon = nullptr;        // Current hovered asset icon
+	Sprite*           mIconHoverSprite;            // icons hovering sprite
+	RectF             mTargetHoverSpriteRect;      // Target hover rectangle
+	RectF             mCurrentHoverSpriteRect;     // Current hover rectangle
+										   	       
+	IconArrsDict      mIconsPool;                  // Assets icons pool
+											       
+	bool              mSelecting = false;          // Is selecting icons 
+	Vec2F             mPressedPoint;               // Pressed point
+	float             mPressTime;                  // Time elapsed from pressing
+	IconSelectionsVec mCurrentSelectingIcons;      // Selecting icons at current selection
 
-	bool              mDragging = false;          // Is dragging icons
-	UIAssetIcon*      mDragIcon;                  // Dragging icon
-	Vec2F             mDragOffset;                // Dragging offset from cursor to icon center
-											      
-	AssetIdPathVec    mCuttingAssets;             // Current cutted assets
-
-	bool              mNeedRebuildAssets = false; // Is assets needs to rebuild
+	DragState         mDragState = DragState::Off; // Is dragging icons
+	UIAssetIcon*      mDragIcon;                   // Dragging icon
+	Vec2F             mDragOffset;                 // Dragging offset from cursor to icon center
+	ActorsVec         mInstSceneDragActors;        // Instantiated actors when dragging asset above scene
+											       
+	AssetIdPathVec    mCuttingAssets;              // Current cutted assets
+												   
+	bool              mNeedRebuildAssets = false;  // Is assets needs to rebuild
 
 protected:
 	// Updates layout
@@ -240,5 +250,31 @@ protected:
 	// Calls when context create animation pressed
 	void OnContextCreateAnimationPressed();
 
+	// Instantiates dragging assets
+	void InstantiateDraggingAssets();
+
+	// Removes and clears instantiated dragging assets
+	void ClearInstantiatedDraggingAssets();
+
+	// Instentiates actor from asset info
+	Actor* InstantiateAsset(const AssetInfo& assetInfo);
+
+	// Dummy asset instantiate function from asset
+	template<typename _type>
+	Actor* InstantiateAsset(const _type& asset);
+
+	// Instantiate actor from image asset
+	Actor* InstantiateAsset(const ImageAsset& asset);
+
+	// Instantiate actor from actor asset
+	Actor* InstantiateAsset(const ActorAsset& asset);
+
 	friend class AssetsWindow;
 };
+
+template<typename _type>
+Actor* UIAssetsIconsScrollArea::InstantiateAsset(const _type& asset)
+{
+	return nullptr;
+}
+

@@ -10,7 +10,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	ImageComponent::ImageComponent(ImageAsset* image):
+	ImageComponent::ImageComponent(const ImageAsset& image):
 		DrawableComponent(), mSprite(image)
 	{
 		InitializeProperties();
@@ -174,7 +174,7 @@ namespace o2
 		return mSprite.GetSliceBorder();
 	}
 
-	void ImageComponent::LoadFromImage(ImageAsset* image)
+	void ImageComponent::LoadFromImage(const ImageAsset& image)
 	{
 		mSprite.LoadFromImage(image);
 	}

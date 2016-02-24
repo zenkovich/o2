@@ -12,6 +12,7 @@
 #include "Scene/DrawableComponent.h"
 #include "Scene/Scene.h"
 #include "SceneWindow/SceneDragHandle.h"
+#include "TreeWindow/ActorsTree.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/Tree.h"
 #include "UI/UIManager.h"
@@ -243,8 +244,7 @@ bool SceneEditScreen::IsHandleWorking(const Input::Cursor& cursor) const
 void SceneEditScreen::OnActorsSelectedFromThis()
 {
 	mSelectedFromThis = true;
-	mActorsTree->SetSelectedObjects(
-		mSelectedActors.Select<UnknownType*>([](auto x) { return (UnknownType*)(void*)x; }));
+	mActorsTree->SetSelectedActors(mSelectedActors);
 
 	if (mEnabledTool)
 		mEnabledTool->OnActorsSelectionChanged(mSelectedActors);
@@ -457,12 +457,12 @@ void SceneEditScreen::BindActorsTree()
 	mActorsTree = o2EditorWindows.GetWindow<TreeWindow>()->GetActorsTree();
 
 	mActorsTree->onItemsSelectionChanged +=
-		Function<void(Vector<UnknownType*>)>(this, &SceneEditScreen::OnTreeSelectionChanged);
+		Function<void(Vector<Actor*>)>(this, &SceneEditScreen::OnTreeSelectionChanged);
 
 	o2Scene.onChanged += Function<void(ActorsVec)>(this, &SceneEditScreen::OnSceneChanged);
 }
 
-void SceneEditScreen::OnTreeSelectionChanged(Vector<UnknownType*> selectedObjects)
+void SceneEditScreen::OnTreeSelectionChanged(Vector<Actor*> selectedActors)
 {
 	if (mSelectedFromThis)
 	{
@@ -472,7 +472,7 @@ void SceneEditScreen::OnTreeSelectionChanged(Vector<UnknownType*> selectedObject
 
 	auto prevSelectedActors = mSelectedActors;
 
-	mSelectedActors = selectedObjects.Select<Actor*>([](auto x) { return (Actor*)(void*)x; });
+	mSelectedActors = selectedActors;
 	mNeedRedraw = true;
 
 	UpdateTopSelectedActors();

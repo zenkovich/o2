@@ -17,7 +17,7 @@ namespace o2
 		Property<RectI>      textureSrcRect;   // Texture source rectangle property
 		Property<AssetId>    imageAssetId;     // Image asset id property
 		Setter<String>       imageAssetPath;   // Sets image asset from path
-		Setter<ImageAsset*>  imageAsset;       // Sets image asset
+		Setter<ImageAsset>   imageAsset;       // Sets image asset
 		Setter<Bitmap*>      bitmap;           // Sets image from bitmap
 		Property<Color4>     leftTopColor;	  // Color of left top corner property
 		Property<Color4>     rightTopColor;	  // Color of right top corner property
@@ -31,7 +31,7 @@ namespace o2
 		ImageComponent();
 
 		// Constructor from image asset
-		ImageComponent(ImageAsset* image);
+		ImageComponent(const ImageAsset& image);
 
 		// Constructor from image asset by path
 		ImageComponent(const String& imagePath);
@@ -124,7 +124,7 @@ namespace o2
 		RectI GetSliceBorder() const;
 
 		// Loads sprite from image asset
-		void LoadFromImage(ImageAsset* image);
+		void LoadFromImage(const ImageAsset& image);
 
 		// Loads sprite from image asset by path
 		void LoadFromImage(const String& imagePath);

@@ -52,7 +52,7 @@ namespace o2
 		UITreeNode* GetNode(UnknownType* object);
 
 		// Rebuilds this node
-		void Rebuild(bool withChilds = true);
+		void Rebuild(bool withChilds = true, bool deepRebuild = true);
 
 		// Sets children offset
 		void SetChildrenOffset(float offset);
@@ -76,7 +76,7 @@ namespace o2
 
 	protected:
 		// Creates children nodes
-		void RebuildChildrenNodes(Vector<UnknownType*> objects);
+		void RebuildChildrenNodes(Vector<UnknownType*> objects, bool deepRebuild);
 
 		// Removes children nodes
 		void RemoveChildrenNodes();
@@ -189,6 +189,9 @@ namespace o2
 		// Removes tree node for object
 		void OnObjectRemoved(UnknownType* object);
 
+		// Updates tree for changed objects
+		void OnObjectsChanged(const UnknownObjectsVec& objects);
+
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
@@ -204,7 +207,7 @@ namespace o2
 		// Returns available rearrange type 
 		RearrangeType GetRearrangeType() const;
 
-		// Setes available multi selection
+		// Sets available multi selection
 		void SetMultipleSelectionAvailable(bool available);
 
 		// Returns is multi selection available
@@ -289,6 +292,9 @@ namespace o2
 		bool              mNeedUpdateLayout;      // True if layout needs to update
 
 	protected:
+		// Updates root nodes and their childs if need
+		void UpdateRootNodes(bool updateChilds);
+
 		// Calls when widget was selected
 		void OnSelected();
 

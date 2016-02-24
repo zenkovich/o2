@@ -22,7 +22,7 @@ namespace o2
 		o2Render.mSprites.Add(this);
 	}
 
-	Sprite::Sprite(ImageAsset* image):
+	Sprite::Sprite(const ImageAsset& image):
 		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -272,19 +272,15 @@ namespace o2
 		return mSlices;
 	}
 
-	void Sprite::LoadFromImage(ImageAsset* image)
+	void Sprite::LoadFromImage(const ImageAsset& image)
 	{
-		if (image)
-		{
-			mMesh->mTexture = TextureRef(image->GetAtlasId(), image->GetAtlasPage());
-			mAtlasAssetId = image->GetAtlasId();
-			mImageAssetId = image->GetAssetId();
-			mTextureSrcRect = image->GetAtlasRect();
-			mSlices = image->GetMeta()->mSliceBorder;
-			SetMode(image->GetMeta()->mDefaultMode);
-			SetSize(mTextureSrcRect.Size());
-		}
-		else o2Debug.LogWarningStr("Can't load sprite from image: image is null");
+		mMesh->mTexture = TextureRef(image.GetAtlasId(), image.GetAtlasPage());
+		mAtlasAssetId = image.GetAtlasId();
+		mImageAssetId = image.GetAssetId();
+		mTextureSrcRect = image.GetAtlasRect();
+		mSlices = image.GetMeta()->mSliceBorder;
+		SetMode(image.GetMeta()->mDefaultMode);
+		SetSize(mTextureSrcRect.Size());
 	}
 
 	void Sprite::LoadFromImage(const String& imagePath)

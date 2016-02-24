@@ -8,6 +8,7 @@
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
+#include "TreeWindow/ActorsTree.h"
 #include "UI/Button.h"
 #include "UI/ContextMenu.h"
 #include "UI/CustomDropDown.h"
@@ -543,10 +544,10 @@ namespace UIStyle
 
 	void RebuildActorsTree()
 	{
-		UITree* sample = mnew UITree();
+		UIActorsTree* sample = mnew UIActorsTree();
 		sample->layout.minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+		sample->SetViewLayout(Layout::BothStretch(0, 0, 0, 0));
 		sample->SetEnableScrollsHiding(true);
 
 		*sample->GetHoverDrawable() = Sprite("ui/UI_ListBox_selection_hover.png");
@@ -656,7 +657,7 @@ namespace UIStyle
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5;
 
-		o2UI.AddWidgetStyle(sample, "actors");
+		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
 	void RebuildPanelDownButton()

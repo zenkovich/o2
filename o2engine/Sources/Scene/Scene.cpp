@@ -38,23 +38,6 @@ namespace o2
 		}
 	}
 
-#if IS_EDITOR
-	void Scene::OnActorChanged(Actor* actor)
-	{
-		if (!mChangedActors.Contains(actor))
-			mChangedActors.Add(actor);
-	}
-
-	void Scene::CheckChangedActors()
-	{
-		if (mChangedActors.Count() > 0)
-		{
-			onChanged(mChangedActors);
-			mChangedActors.Clear();
-		}
-	}
-#endif
-
 	Scene::Layer* Scene::GetLayer(const String& name) const
 	{
 		return mLayers.FindMatch([&](auto x) { return x->name == name; });
@@ -292,4 +275,20 @@ namespace o2
 		enabledDrawables.Remove(component);
 	}
 
+#if IS_EDITOR
+	void Scene::OnActorChanged(Actor* actor)
+	{
+		if (!mChangedActors.Contains(actor))
+			mChangedActors.Add(actor);
+	}
+
+	void Scene::CheckChangedActors()
+	{
+		if (mChangedActors.Count() > 0)
+		{
+			onChanged(mChangedActors);
+			mChangedActors.Clear();
+		}
+	}
+#endif
 }

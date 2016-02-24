@@ -19,6 +19,7 @@ namespace o2
 
 class SceneDragHandle;
 class IEditorTool;
+class UIActorsTree;
 
 // Editor scene screen accessor macros
 #define o2EditorSceneScreen SceneEditScreen::Instance()
@@ -132,7 +133,7 @@ protected:
 	bool           mNeedRedraw;								              // If scene was changed and needs to redraw
 	float          mDrawDepth;								              // Drawing depth
 
-	UITree*        mActorsTree;								              // Pointer to actors tree widget
+	UIActorsTree*  mActorsTree;								              // Pointer to actors tree widget
 	ActorsVec      mSelectedActors;							              // Current selected actors
 	ActorsVec      mTopSelectedActors;                                    // Current selected actors most top in hierarchy
 	bool           mSelectedFromThis = false;				              // True if selection changed from this, needs to break recursive selection update
@@ -233,7 +234,7 @@ protected:
 	void BindActorsTree();
 
 	// Calls when actors tree selection changed
-	void OnTreeSelectionChanged(Vector<UnknownType*> selectedObjects);
+	void OnTreeSelectionChanged(Vector<Actor*> selectedObjects);
 
 	// Updates top selected actors
 	void UpdateTopSelectedActors();

@@ -7,7 +7,6 @@ namespace o2
 {
 	class UIToggle;
 	class UIEditBox;
-	class UITree;
 	class UIButtonGroup;
 	class UIToggleGroup;
 	class UIContextMenu;
@@ -19,6 +18,8 @@ using namespace o2;
 // Editor actors tree access macros
 #define o2EditorTree TreeWindow::Instance()
 
+class UIActorsTree;
+
 // ------------------
 // Actors tree window
 // ------------------
@@ -28,7 +29,7 @@ public:
 	IOBJECT(TreeWindow);
 
 	// Returns actors tree widget
-	UITree* GetActorsTree() const;
+	UIActorsTree* GetActorsTree() const;
 
 	// Expands all parent actor's nodes in actors tree
 	void ExpandActorsTreeNode(Actor* targetActor);
@@ -36,9 +37,7 @@ public:
 protected:
 	UIToggle*      mListTreeToggle;			  // TOggle between list and tree views
 	UIEditBox*     mSearchEditBox;			  // Search actors edit box
-	UITree*        mActorsTree;				  // Main actors tree
-	UIToggleGroup* mEnableActorsTogglesGroup; // Enable actors toggles group
-	UIToggleGroup* mLockActorsTogglesGroup;	  // Lock actors toggles group
+	UIActorsTree*  mActorsTree;				  // Main actors tree
 	UIContextMenu* mTreeContextMenu;		  // Context menu
 
 	bool           mInSearch = false;		  // True when searching actors (mSearchEditBox isn't empty)
@@ -72,35 +71,8 @@ protected:
 	// Searches actors
 	void SearchActorsRecursive(Actor* actor, const String& searchStr);
 
-	// Returns actor's parent (For tree widget)
-	UnknownType* GetActorsParent(UnknownType* obj);
-
-	// Returns actor's children (For tree widget)
-	Vector<UnknownType*> GetActorsChildren(UnknownType* parentObj);
-
-	// Initializes tree node by actor (For tree widget)
-	void SetupTreeNodeActor(UITreeNode* node, UnknownType* actorObj);
-
-	// Moves actors to new parent and position, when they was dragged in tree (For tree widget)
-	void RearrangeActors(Vector<UnknownType*> objects, UnknownType* parentObj, UnknownType* prevObj);
-
-	// Calls when tree node double clicked (For tree widget)
-	void OnTreeNodeDblClick(UITreeNode* node);
-
 	// Calls when tree node clicked by right button (For tree widget)
-	void OnTreeRBPressed(UITreeNode* node);
-
-	// Calls when enable actors toggle group pressed
-	void EnableActorsGroupPressed(bool value);
-
-	// Calls when enable actors toggle group released
-	void EnableActorsGroupReleased(bool value);
-
-	// Calls when lock actors toggle group pressed
-	void LockActorsGroupPressed(bool value);
-
-	// Calls when lock actors toggle group released
-	void LockActorsGroupReleased(bool value);
+	void OnTreeRBPressed(UITreeNode* node, Actor* actor);
 
 	// Calls when some actor needs to created and registers actor insert action
 	void CreateActor(Actor* newActor);

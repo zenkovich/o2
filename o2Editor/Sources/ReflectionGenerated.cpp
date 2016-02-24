@@ -30,6 +30,7 @@
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneEditScreen.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneEditWidget.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneWindow.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\TreeWindow\ActorsTree.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\TreeWindow\TreeWindow.h"
 #include "C:\work\o2\o2Engine\Sources\Animation\Animatable.h"
 #include "C:\work\o2\o2Engine\Sources\Animation\AnimatedFloat.h"
@@ -129,6 +130,7 @@ o2::Type LogWindow::type;
 o2::Type SceneEditScreen::type;
 o2::Type SceneEditWidget::type;
 o2::Type SceneWindow::type;
+o2::Type UIActorsTree::type;
 o2::Type TreeWindow::type;
 o2::Type o2::Animatable::type;
 o2::Type o2::AnimatedValue<float>::type;
@@ -258,9 +260,10 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	TypeInitializer::RegField(&type, "mPressedPoint", (size_t)(char*)(&sample->mPressedPoint) - (size_t)(char*)sample, sample->mPressedPoint);
 	TypeInitializer::RegField(&type, "mPressTime", (size_t)(char*)(&sample->mPressTime) - (size_t)(char*)sample, sample->mPressTime);
 	TypeInitializer::RegField(&type, "mCurrentSelectingIcons", (size_t)(char*)(&sample->mCurrentSelectingIcons) - (size_t)(char*)sample, sample->mCurrentSelectingIcons);
-	TypeInitializer::RegField(&type, "mDragging", (size_t)(char*)(&sample->mDragging) - (size_t)(char*)sample, sample->mDragging);
+	TypeInitializer::RegField(&type, "mDragState", (size_t)(char*)(&sample->mDragState) - (size_t)(char*)sample, sample->mDragState);
 	TypeInitializer::RegField(&type, "mDragIcon", (size_t)(char*)(&sample->mDragIcon) - (size_t)(char*)sample, sample->mDragIcon);
 	TypeInitializer::RegField(&type, "mDragOffset", (size_t)(char*)(&sample->mDragOffset) - (size_t)(char*)sample, sample->mDragOffset);
+	TypeInitializer::RegField(&type, "mInstSceneDragActors", (size_t)(char*)(&sample->mInstSceneDragActors) - (size_t)(char*)sample, sample->mInstSceneDragActors);
 	TypeInitializer::RegField(&type, "mCuttingAssets", (size_t)(char*)(&sample->mCuttingAssets) - (size_t)(char*)sample, sample->mCuttingAssets);
 	TypeInitializer::RegField(&type, "mNeedRebuildAssets", (size_t)(char*)(&sample->mNeedRebuildAssets) - (size_t)(char*)sample, sample->mNeedRebuildAssets);
 	auto funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "Draw", &::UIAssetsIconsScrollArea::Draw);
@@ -333,6 +336,14 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCreatePrefabPressed", &::UIAssetsIconsScrollArea::OnContextCreatePrefabPressed);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCreateScriptPressed", &::UIAssetsIconsScrollArea::OnContextCreateScriptPressed);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCreateAnimationPressed", &::UIAssetsIconsScrollArea::OnContextCreateAnimationPressed);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "InstantiateDraggingAssets", &::UIAssetsIconsScrollArea::InstantiateDraggingAssets);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "ClearInstantiatedDraggingAssets", &::UIAssetsIconsScrollArea::ClearInstantiatedDraggingAssets);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, Actor*, const AssetInfo&>(&type, "InstantiateAsset", &::UIAssetsIconsScrollArea::InstantiateAsset);
+	TypeInitializer::RegFuncParam<const AssetInfo&>(funcInfo, "assetInfo");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, Actor*, const ImageAsset&>(&type, "InstantiateAsset", &::UIAssetsIconsScrollArea::InstantiateAsset);
+	TypeInitializer::RegFuncParam<const ImageAsset&>(funcInfo, "asset");
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, Actor*, const ActorAsset&>(&type, "InstantiateAsset", &::UIAssetsIconsScrollArea::InstantiateAsset);
+	TypeInitializer::RegFuncParam<const ActorAsset&>(funcInfo, "asset");
 }
 
 void ::AssetsWindow::InitializeType(::AssetsWindow* sample)
@@ -1096,8 +1107,8 @@ void ::SceneEditScreen::InitializeType(::SceneEditScreen* sample)
 	funcInfo = TypeInitializer::RegFunction<::SceneEditScreen, void>(&type, "DrawSelection", &::SceneEditScreen::DrawSelection);
 	funcInfo = TypeInitializer::RegFunction<::SceneEditScreen, void>(&type, "UpdateSceneScreenTransforms", &::SceneEditScreen::UpdateSceneScreenTransforms);
 	funcInfo = TypeInitializer::RegFunction<::SceneEditScreen, void>(&type, "BindActorsTree", &::SceneEditScreen::BindActorsTree);
-	funcInfo = TypeInitializer::RegFunction<::SceneEditScreen, void, Vector<UnknownType*>>(&type, "OnTreeSelectionChanged", &::SceneEditScreen::OnTreeSelectionChanged);
-	TypeInitializer::RegFuncParam<Vector<UnknownType*>>(funcInfo, "selectedObjects");
+	funcInfo = TypeInitializer::RegFunction<::SceneEditScreen, void, Vector<Actor*>>(&type, "OnTreeSelectionChanged", &::SceneEditScreen::OnTreeSelectionChanged);
+	TypeInitializer::RegFuncParam<Vector<Actor*>>(funcInfo, "selectedObjects");
 	funcInfo = TypeInitializer::RegFunction<::SceneEditScreen, void>(&type, "UpdateTopSelectedActors", &::SceneEditScreen::UpdateTopSelectedActors);
 	funcInfo = TypeInitializer::RegFunction<::SceneEditScreen, int, Actor*>(&type, "GetActorIdx", &::SceneEditScreen::GetActorIdx);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
@@ -1132,17 +1143,97 @@ void ::SceneWindow::InitializeType(::SceneWindow* sample)
 	funcInfo = TypeInitializer::RegFunction<::SceneWindow, void>(&type, "PostInitializeWindow", &::SceneWindow::PostInitializeWindow);
 }
 
+void ::UIActorsTree::InitializeType(::UIActorsTree* sample)
+{
+	TypeInitializer::RegField(&type, "onDraggedActors", (size_t)(char*)(&sample->onDraggedActors) - (size_t)(char*)sample, sample->onDraggedActors);
+	TypeInitializer::RegField(&type, "onItemClick", (size_t)(char*)(&sample->onItemClick) - (size_t)(char*)sample, sample->onItemClick);
+	TypeInitializer::RegField(&type, "onItemDblClick", (size_t)(char*)(&sample->onItemDblClick) - (size_t)(char*)sample, sample->onItemDblClick);
+	TypeInitializer::RegField(&type, "onItemRBClick", (size_t)(char*)(&sample->onItemRBClick) - (size_t)(char*)sample, sample->onItemRBClick);
+	TypeInitializer::RegField(&type, "onItemsSelectionChanged", (size_t)(char*)(&sample->onItemsSelectionChanged) - (size_t)(char*)sample, sample->onItemsSelectionChanged);
+	TypeInitializer::RegField(&type, "mEnableActorsTogglesGroup", (size_t)(char*)(&sample->mEnableActorsTogglesGroup) - (size_t)(char*)sample, sample->mEnableActorsTogglesGroup);
+	TypeInitializer::RegField(&type, "mLockActorsTogglesGroup", (size_t)(char*)(&sample->mLockActorsTogglesGroup) - (size_t)(char*)sample, sample->mLockActorsTogglesGroup);
+	auto funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "AttachToSceneEvents", &::UIActorsTree::AttachToSceneEvents);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "Draw", &::UIActorsTree::Draw);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, float>(&type, "Update", &::UIActorsTree::Update);
+	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "RebuildTree", &::UIActorsTree::RebuildTree);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, Actor*>(&type, "UpdateTreeNode", &::UIActorsTree::UpdateTreeNode);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, UITreeNode*, Actor*>(&type, "GetNode", &::UIActorsTree::GetNode);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "ExpandAll", &::UIActorsTree::ExpandAll);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "CollapseAll", &::UIActorsTree::CollapseAll);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, ActorsVec>(&type, "GetSelectedActors", &::UIActorsTree::GetSelectedActors);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, const ActorsVec&>(&type, "SetSelectedActors", &::UIActorsTree::SetSelectedActors);
+	TypeInitializer::RegFuncParam<const ActorsVec&>(funcInfo, "actors");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, Actor*>(&type, "SelectActor", &::UIActorsTree::SelectActor);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, Actor*>(&type, "SelectAndExpandActor", &::UIActorsTree::SelectAndExpandActor);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, Actor*>(&type, "DeselectActor", &::UIActorsTree::DeselectActor);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "DeselectAllActors", &::UIActorsTree::DeselectAllActors);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, UITreeNode*, const Vec2F&>(&type, "GetTreeNodeUnderPoint", &::UIActorsTree::GetTreeNodeUnderPoint);
+	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, UITreeNode*>(&type, "GetNodeSample", &::UIActorsTree::GetNodeSample);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, Sprite*>(&type, "GetHoverDrawable", &::UIActorsTree::GetHoverDrawable);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, Sprite*>(&type, "GetSelectionDrawable", &::UIActorsTree::GetSelectionDrawable);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, const Layout&>(&type, "SetSelectionDrawableLayout", &::UIActorsTree::SetSelectionDrawableLayout);
+	TypeInitializer::RegFuncParam<const Layout&>(funcInfo, "layout");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, Layout>(&type, "GetSelectionDrawableLayout", &::UIActorsTree::GetSelectionDrawableLayout);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, bool>(&type, "IsScrollable", &::UIActorsTree::IsScrollable);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, int>(&type, "SetNodesPoolResizeCount", &::UIActorsTree::SetNodesPoolResizeCount);
+	TypeInitializer::RegFuncParam<int>(funcInfo, "count");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, int>(&type, "SetSelectionSpritesPoolResizeCount", &::UIActorsTree::SetSelectionSpritesPoolResizeCount);
+	TypeInitializer::RegFuncParam<int>(funcInfo, "count");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, const Color4&>(&type, "SetSelectedColor", &::UIActorsTree::SetSelectedColor);
+	TypeInitializer::RegFuncParam<const Color4&>(funcInfo, "color");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, Color4>(&type, "GetSelectedColor", &::UIActorsTree::GetSelectedColor);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, const Color4&>(&type, "SetUnselectedColor", &::UIActorsTree::SetUnselectedColor);
+	TypeInitializer::RegFuncParam<const Color4&>(funcInfo, "color");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, Color4>(&type, "GetUnselectedColor", &::UIActorsTree::GetUnselectedColor);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, const Color4&>(&type, "SetHoverColor", &::UIActorsTree::SetHoverColor);
+	TypeInitializer::RegFuncParam<const Color4&>(funcInfo, "color");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, Color4>(&type, "GetHoverColor", &::UIActorsTree::GetHoverColor);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, bool>(&type, "IsSelectable", &::UIActorsTree::IsSelectable);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "Initialize", &::UIActorsTree::Initialize);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, UnknownType*, UnknownType*>(&type, "GetActorsParent", &::UIActorsTree::GetActorsParent);
+	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "obj");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, Vector<UnknownType*>, UnknownType*>(&type, "GetActorsChildren", &::UIActorsTree::GetActorsChildren);
+	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "parentObj");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, UITreeNode*, UnknownType*>(&type, "SetupTreeNodeActor", &::UIActorsTree::SetupTreeNodeActor);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
+	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "actorObj");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, Vector<UnknownType*>, UnknownType*, UnknownType*>(&type, "RearrangeActors", &::UIActorsTree::RearrangeActors);
+	TypeInitializer::RegFuncParam<Vector<UnknownType*>>(funcInfo, "objects");
+	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "parentObj");
+	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "prevObj");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, UITreeNode*, Actor*>(&type, "OnTreeNodeDblClick", &::UIActorsTree::OnTreeNodeDblClick);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, bool>(&type, "EnableActorsGroupPressed", &::UIActorsTree::EnableActorsGroupPressed);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, bool>(&type, "EnableActorsGroupReleased", &::UIActorsTree::EnableActorsGroupReleased);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, bool>(&type, "LockActorsGroupPressed", &::UIActorsTree::LockActorsGroupPressed);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, bool>(&type, "LockActorsGroupReleased", &::UIActorsTree::LockActorsGroupReleased);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, Actor*>(&type, "OnActorCreated", &::UIActorsTree::OnActorCreated);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, Actor*>(&type, "OnActorDestroyed", &::UIActorsTree::OnActorDestroyed);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
+}
+
 void ::TreeWindow::InitializeType(::TreeWindow* sample)
 {
 	TypeInitializer::RegField(&type, "mListTreeToggle", (size_t)(char*)(&sample->mListTreeToggle) - (size_t)(char*)sample, sample->mListTreeToggle);
 	TypeInitializer::RegField(&type, "mSearchEditBox", (size_t)(char*)(&sample->mSearchEditBox) - (size_t)(char*)sample, sample->mSearchEditBox);
 	TypeInitializer::RegField(&type, "mActorsTree", (size_t)(char*)(&sample->mActorsTree) - (size_t)(char*)sample, sample->mActorsTree);
-	TypeInitializer::RegField(&type, "mEnableActorsTogglesGroup", (size_t)(char*)(&sample->mEnableActorsTogglesGroup) - (size_t)(char*)sample, sample->mEnableActorsTogglesGroup);
-	TypeInitializer::RegField(&type, "mLockActorsTogglesGroup", (size_t)(char*)(&sample->mLockActorsTogglesGroup) - (size_t)(char*)sample, sample->mLockActorsTogglesGroup);
 	TypeInitializer::RegField(&type, "mTreeContextMenu", (size_t)(char*)(&sample->mTreeContextMenu) - (size_t)(char*)sample, sample->mTreeContextMenu);
 	TypeInitializer::RegField(&type, "mInSearch", (size_t)(char*)(&sample->mInSearch) - (size_t)(char*)sample, sample->mInSearch);
 	TypeInitializer::RegField(&type, "mSearchActors", (size_t)(char*)(&sample->mSearchActors) - (size_t)(char*)sample, sample->mSearchActors);
-	auto funcInfo = TypeInitializer::RegFunction<::TreeWindow, UITree*>(&type, "GetActorsTree", &::TreeWindow::GetActorsTree);
+	auto funcInfo = TypeInitializer::RegFunction<::TreeWindow, UIActorsTree*>(&type, "GetActorsTree", &::TreeWindow::GetActorsTree);
 	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, Actor*>(&type, "ExpandActorsTreeNode", &::TreeWindow::ExpandActorsTreeNode);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "targetActor");
 	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void>(&type, "InitializeWindow", &::TreeWindow::InitializeWindow);
@@ -1155,29 +1246,9 @@ void ::TreeWindow::InitializeType(::TreeWindow* sample)
 	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, Actor*, const String&>(&type, "SearchActorsRecursive", &::TreeWindow::SearchActorsRecursive);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "searchStr");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, UnknownType*, UnknownType*>(&type, "GetActorsParent", &::TreeWindow::GetActorsParent);
-	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "obj");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, Vector<UnknownType*>, UnknownType*>(&type, "GetActorsChildren", &::TreeWindow::GetActorsChildren);
-	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "parentObj");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, UITreeNode*, UnknownType*>(&type, "SetupTreeNodeActor", &::TreeWindow::SetupTreeNodeActor);
+	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, UITreeNode*, Actor*>(&type, "OnTreeRBPressed", &::TreeWindow::OnTreeRBPressed);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
-	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "actorObj");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, Vector<UnknownType*>, UnknownType*, UnknownType*>(&type, "RearrangeActors", &::TreeWindow::RearrangeActors);
-	TypeInitializer::RegFuncParam<Vector<UnknownType*>>(funcInfo, "objects");
-	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "parentObj");
-	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "prevObj");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, UITreeNode*>(&type, "OnTreeNodeDblClick", &::TreeWindow::OnTreeNodeDblClick);
-	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, UITreeNode*>(&type, "OnTreeRBPressed", &::TreeWindow::OnTreeRBPressed);
-	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, bool>(&type, "EnableActorsGroupPressed", &::TreeWindow::EnableActorsGroupPressed);
-	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, bool>(&type, "EnableActorsGroupReleased", &::TreeWindow::EnableActorsGroupReleased);
-	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, bool>(&type, "LockActorsGroupPressed", &::TreeWindow::LockActorsGroupPressed);
-	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
-	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, bool>(&type, "LockActorsGroupReleased", &::TreeWindow::LockActorsGroupReleased);
-	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
 	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void, Actor*>(&type, "CreateActor", &::TreeWindow::CreateActor);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "newActor");
 	funcInfo = TypeInitializer::RegFunction<::TreeWindow, void>(&type, "OnContextCreateNewPressed", &::TreeWindow::OnContextCreateNewPressed);
@@ -1961,8 +2032,8 @@ void o2::Sprite::InitializeType(o2::Sprite* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void, const RectI&>(&type, "SetSliceBorder", &o2::Sprite::SetSliceBorder);
 	TypeInitializer::RegFuncParam<const RectI&>(funcInfo, "border");
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, RectI>(&type, "GetSliceBorder", &o2::Sprite::GetSliceBorder);
-	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void, ImageAsset*>(&type, "LoadFromImage", &o2::Sprite::LoadFromImage);
-	TypeInitializer::RegFuncParam<ImageAsset*>(funcInfo, "image");
+	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void, const ImageAsset&>(&type, "LoadFromImage", &o2::Sprite::LoadFromImage);
+	TypeInitializer::RegFuncParam<const ImageAsset&>(funcInfo, "image");
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void, const String&>(&type, "LoadFromImage", &o2::Sprite::LoadFromImage);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "imagePath");
 	funcInfo = TypeInitializer::RegFunction<o2::Sprite, void, AssetId>(&type, "LoadFromImage", &o2::Sprite::LoadFromImage);
@@ -2142,7 +2213,6 @@ void o2::Actor::InitializeType(o2::Actor* sample)
 	TypeInitializer::RegField(&type, "tag", (size_t)(char*)(&sample->tag) - (size_t)(char*)sample, sample->tag);
 	TypeInitializer::RegField(&type, "transform", (size_t)(char*)(&sample->transform) - (size_t)(char*)sample, sample->transform).AddAttribute<SerializableAttribute<decltype(transform)>>();
 	TypeInitializer::RegField(&type, "onEnableChanged", (size_t)(char*)(&sample->onEnableChanged) - (size_t)(char*)sample, sample->onEnableChanged);
-	TypeInitializer::RegField(&type, "onLockChanged", (size_t)(char*)(&sample->onLockChanged) - (size_t)(char*)sample, sample->onLockChanged);
 	TypeInitializer::RegField(&type, "mId", (size_t)(char*)(&sample->mId) - (size_t)(char*)sample, sample->mId).AddAttribute<SerializableAttribute<decltype(mId)>>();
 	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)sample, sample->mName).AddAttribute<SerializableAttribute<decltype(mName)>>();
 	TypeInitializer::RegField(&type, "mParent", (size_t)(char*)(&sample->mParent) - (size_t)(char*)sample, sample->mParent);
@@ -2416,8 +2486,8 @@ void o2::ImageComponent::InitializeType(o2::ImageComponent* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::ImageComponent, void, const RectI&>(&type, "SetSliceBorder", &o2::ImageComponent::SetSliceBorder);
 	TypeInitializer::RegFuncParam<const RectI&>(funcInfo, "border");
 	funcInfo = TypeInitializer::RegFunction<o2::ImageComponent, RectI>(&type, "GetSliceBorder", &o2::ImageComponent::GetSliceBorder);
-	funcInfo = TypeInitializer::RegFunction<o2::ImageComponent, void, ImageAsset*>(&type, "LoadFromImage", &o2::ImageComponent::LoadFromImage);
-	TypeInitializer::RegFuncParam<ImageAsset*>(funcInfo, "image");
+	funcInfo = TypeInitializer::RegFunction<o2::ImageComponent, void, const ImageAsset&>(&type, "LoadFromImage", &o2::ImageComponent::LoadFromImage);
+	TypeInitializer::RegFuncParam<const ImageAsset&>(funcInfo, "image");
 	funcInfo = TypeInitializer::RegFunction<o2::ImageComponent, void, const String&>(&type, "LoadFromImage", &o2::ImageComponent::LoadFromImage);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "imagePath");
 	funcInfo = TypeInitializer::RegFunction<o2::ImageComponent, void, AssetId>(&type, "LoadFromImage", &o2::ImageComponent::LoadFromImage);
@@ -3546,8 +3616,9 @@ void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void>(&type, "CollapseAll", &o2::UITreeNode::CollapseAll);
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, UITreeNode*, UnknownType*>(&type, "GetNode", &o2::UITreeNode::GetNode);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
-	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, bool>(&type, "Rebuild", &o2::UITreeNode::Rebuild);
+	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, bool, bool>(&type, "Rebuild", &o2::UITreeNode::Rebuild);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChilds");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "deepRebuild");
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, float>(&type, "SetChildrenOffset", &o2::UITreeNode::SetChildrenOffset);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "offset");
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, float>(&type, "GetChildrenOffset", &o2::UITreeNode::GetChildrenOffset);
@@ -3631,6 +3702,8 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "parent");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "OnObjectRemoved", &o2::UITree::OnObjectRemoved);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const UnknownObjectsVec&>(&type, "OnObjectsChanged", &o2::UITree::OnObjectsChanged);
+	TypeInitializer::RegFuncParam<const UnknownObjectsVec&>(funcInfo, "objects");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool>(&type, "IsScrollable", &o2::UITree::IsScrollable);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, int>(&type, "SetNodesPoolResizeCount", &o2::UITree::SetNodesPoolResizeCount);
 	TypeInitializer::RegFuncParam<int>(funcInfo, "count");
@@ -3652,6 +3725,8 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegFuncParam<const Color4&>(funcInfo, "color");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, Color4>(&type, "GetHoverColor", &o2::UITree::GetHoverColor);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool>(&type, "IsSelectable", &o2::UITree::IsSelectable);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "UpdateRootNodes", &o2::UITree::UpdateRootNodes);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "updateChilds");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnSelected", &o2::UITree::OnSelected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnDeselected", &o2::UITree::OnDeselected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "UpdateLayout", &o2::UITree::UpdateLayout);
@@ -5110,6 +5185,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<::SceneEditScreen>("::SceneEditScreen");
 	o2::Reflection::InitializeType<::SceneEditWidget>("::SceneEditWidget");
 	o2::Reflection::InitializeType<::SceneWindow>("::SceneWindow");
+	o2::Reflection::InitializeType<::UIActorsTree>("::UIActorsTree");
 	o2::Reflection::InitializeType<::TreeWindow>("::TreeWindow");
 	o2::Reflection::InitializeType<o2::Animatable>("o2::Animatable");
 	o2::Reflection::InitializeType<o2::AnimatedValue<float>>("o2::AnimatedValue<float>");
@@ -5243,6 +5319,8 @@ void RegReflectionTypes()
 	TypeInitializer::AddBaseType(&::LogWindow::type, &::IEditorWindow::type);
 	TypeInitializer::AddBaseType(&::SceneEditWidget::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&::SceneWindow::type, &::IEditorWindow::type);
+	TypeInitializer::AddBaseType(&o2::UITree::type, &o2::UIScrollArea::type);
+	TypeInitializer::AddBaseType(&::UIActorsTree::type, &o2::UITree::type);
 	TypeInitializer::AddBaseType(&::TreeWindow::type, &::IEditorWindow::type);
 	TypeInitializer::AddBaseType(&o2::Animatable::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&o2::IAnimation::type, &o2::ISerializable::type);
@@ -5300,7 +5378,6 @@ void RegReflectionTypes()
 	TypeInitializer::AddBaseType(&o2::UIMenuPanel::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&o2::UIToggle::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&o2::UITreeNode::type, &o2::UIWidget::type);
-	TypeInitializer::AddBaseType(&o2::UITree::type, &o2::UIScrollArea::type);
 	TypeInitializer::AddBaseType(&o2::UIVerticalLayout::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&o2::UIVerticalProgress::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&o2::UIVerticalScrollBar::type, &o2::UIWidget::type);

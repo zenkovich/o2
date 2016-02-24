@@ -2,8 +2,8 @@
 
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
+#include "TreeWindow/ActorsTree.h"
 #include "TreeWindow/TreeWindow.h"
-#include "UI/Tree.h"
 
 EditorReparentActorsAction::EditorReparentActorsAction()
 {}
