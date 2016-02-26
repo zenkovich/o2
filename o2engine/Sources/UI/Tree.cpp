@@ -22,7 +22,8 @@ namespace o2
 	}
 
 	UITreeNode::UITreeNode(const UITreeNode& other):
-		UIWidget(other), mExpandCoef(0), mChildsOffset(other.mChildsOffset), mDragSizeCoef(1.0f), mInsertSizeCoef(0.0f)
+		UIWidget(other), mExpandCoef(0), mChildsOffset(other.mChildsOffset), mDragSizeCoef(1.0f), mInsertSizeCoef(0.0f),
+		mTree(nullptr)
 	{
 		mExpandedState = GetStateObject("expanded");
 		if (mExpandedState)
@@ -106,6 +107,17 @@ namespace o2
 
 		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
 			DrawDebugFrame();
+	}
+
+	void UITreeNode::Update(float dt)
+	{
+		UIWidget::Update(dt);
+
+		if (mNeedRebuild)
+		{
+			Rebuild();
+			mNeedRebuild = false;
+		}
 	}
 
 	void UITreeNode::SetExpanded(bool expanded, bool forcible /*= false*/)
@@ -197,10 +209,16 @@ namespace o2
 		return nullptr;
 	}
 
-	void UITreeNode::Rebuild(bool withChilds /*= true*/, bool deepRebuild /*= true*/)
+	void UITreeNode::Rebuild(bool withChilds /*= true*/, bool deepRebuild /*= true*/, bool immediately /*= true*/)
 	{
 		if (!mTree)
 			return;
+
+		if (!immediately)
+		{
+			mNeedRebuild = true;
+			return;
+		}
 
 		Vector<UnknownType*> objects = mTree->getChildsFunc(mObject);
 
@@ -535,6 +553,12 @@ namespace o2
 		if (mFullyDisabled)
 			return;
 
+		if (mNeedRebuild)
+		{
+			UpdateRootNodes(true);
+			mNeedRebuild = false;
+		}
+
 		if (mNeedUpdateLayout)
 		{
 			UpdateLayout();
@@ -552,30 +576,52 @@ namespace o2
 			mHoverDrawable->SetColor(mHoverColor);
 		}
 
-		if (mExpandNodeCandidate)
-		{
-			mExpandInsertTime -= dt;
-
-			if (mExpandInsertTime <= 0.0f)
-			{
-				mExpandNodeCandidate->Expand();
-				mExpandNodeCandidate = nullptr;
-			}
-		}
+		UpdatePressedNodeExpand(dt);
 
 		mPressedTime += dt;
 	}
 
-	void UITree::RebuildTree()
+	void UITree::UpdatePressedNodeExpand(float dt)
 	{
-		UpdateRootNodes(true);
+		if (o2Input.IsCursorDown())
+		{
+			if (mRearrangeType != RearrangeType::Disabled)
+			{
+				auto underCursorItem = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
+
+				if (underCursorItem != mExpandNodeCandidate)
+				{
+					mExpandNodeCandidate = underCursorItem;
+					mExpandInsertTime = mNodeExpandTimer;
+				}
+			}
+
+			if (mExpandNodeCandidate)
+			{
+				mExpandInsertTime -= dt;
+
+				if (mExpandInsertTime <= 0.0f)
+				{
+					mExpandNodeCandidate->Expand();
+					mExpandNodeCandidate = nullptr;
+				}
+			}
+		}
+	}
+
+	void UITree::RebuildTree(bool immediately /*= true*/)
+	{
+		if (immediately)
+			UpdateRootNodes(true);
+		else
+			mNeedRebuild = true;
 	}
 
 	void UITree::UpdateTreeNode(UnknownType* object)
 	{
 		if (!object)
 		{
-			RebuildTree();
+			RebuildTree(false);
 			return;
 		}
 
@@ -583,7 +629,7 @@ namespace o2
 		if (!node)
 			return;
 
-		node->Rebuild(true);
+		node->Rebuild(true, true, false);
 	}
 
 	UITreeNode* UITree::GetNode(UnknownType* object)
@@ -806,6 +852,16 @@ namespace o2
 	Color4 UITree::GetHoverColor() const
 	{
 		return mHoverColor;
+	}
+
+	void UITree::SetNodeExpandTimer(float time)
+	{
+		mExpandInsertTime = time;
+	}
+
+	float UITree::GetNodeExpandTimer() const
+	{
+		return mExpandInsertTime;
 	}
 
 	bool UITree::IsSelectable() const
@@ -1228,17 +1284,6 @@ namespace o2
 			}
 		}
 
-		if (mRearrangeType != RearrangeType::Disabled)
-		{
-			mUnderCursorItem = GetTreeNodeUnderPoint(cursor.mPosition);
-
-			if (mUnderCursorItem != mExpandNodeCandidate)
-			{
-				mExpandNodeCandidate = mUnderCursorItem;
-				mExpandInsertTime = 0.6f;
-			}
-		}
-
 		UpdateHover(mUnderCursorItem);
 	}
 
@@ -1276,6 +1321,21 @@ namespace o2
 					targetPrevObject = ((UITreeNode*)(mInsertNodeCandidate->mParent->mChilds[idx - 1]))->mObject;
 				else
 					targetPrevObject = nullptr;
+			}
+			else
+			{
+				if (mChilds.Count() > 0)
+				{
+					targetPrevObject = ((UITreeNode*)(mChilds.Last()))->mObject;
+
+					if (mSelectedItems.ContainsPred([=](auto x) { return x.object == targetPrevObject; }))
+					{
+						if (mChilds.Count() > 1)
+							targetPrevObject = ((UITreeNode*)(mChilds[mChilds.Count() - 2]))->mObject;
+						else
+							targetPrevObject = nullptr;
+					}
+				}
 			}
 		}
 

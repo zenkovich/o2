@@ -62,7 +62,13 @@ public:
 	void CollapseAll();
 
 	// Forcible begins to dragging actors' nodes
-	void BeginDraggingActors(const ActorsVec& actors);
+	void ManualBeginDraggingActors(const ActorsVec& actors);
+
+	// Updates manual actors dragging
+	void ManualUpdateDraggingActors(const Input::Cursor& cursor);
+
+	// Completed manual dragging actors
+	void CompleteManualDraggingActors();
 
 	// Breaks actors' nodes dragging
 	void BreakDragging();
@@ -138,6 +144,7 @@ public:
 protected:
 	UIToggleGroup* mEnableActorsTogglesGroup; // Enable actors toggles group
 	UIToggleGroup* mLockActorsTogglesGroup;	  // Lock actors toggles group
+	bool           mAttackedToSceneEvents;    // Is tree attached to scene events
 
 protected:
 	// Initializes widget logic
@@ -175,4 +182,10 @@ protected:
 
 	// Calls when actor was destroyed
 	void OnActorDestroyed(Actor* actor);
+
+	// Updates nodes dragging
+	void UpdateDragging(const Input::Cursor& cursor);
+
+	// End nodes dragging
+	void EndDragging();
 };

@@ -1,9 +1,15 @@
 #include "ActorsTree.h"
 
+#include "Assets/ActorAsset.h"
+#include "Assets/Assets.h"
+#include "Assets/FolderAsset.h"
+#include "AssetsWindow/AssetsIconsScroll.h"
+#include "AssetsWindow/UIAssetIcon.h"
 #include "Core/Actions/EnableAction.h"
 #include "Core/Actions/LockAction.h"
 #include "Core/Actions/ReparentActors.h"
 #include "Core/EditorApplication.h"
+#include "Events/EventSystem.h"
 #include "Scene/Actor.h"
 #include "Scene/Scene.h"
 #include "UI/Button.h"
@@ -11,21 +17,37 @@
 #include "UI/Toggle.h"
 
 UIActorsTree::UIActorsTree():
-	UITree()
+	UITree(), mAttackedToSceneEvents(false)
 {
 	Initialize();
 }
 
-UIActorsTree::UIActorsTree(const UIActorsTree& other) :
-	UITree(other)
+UIActorsTree::UIActorsTree(const UIActorsTree& other):
+	UITree(other), mAttackedToSceneEvents(false)
 {
 	Initialize();
 }
 
 UIActorsTree::~UIActorsTree()
 {
-	o2Scene.onActorCreated -= Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
-	o2Scene.onActorDestroying -= Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
+	if (Scene::IsSingletonInitialzed())
+	{
+		o2Scene.onActorCreated -= Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
+		o2Scene.onActorDestroying -= Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
+
+		if (mAttackedToSceneEvents)
+		{
+			auto updateActorTreeNode = Function<void(Actor*)>(this, &UIActorsTree::UpdateTreeNode);
+
+			o2Scene.onActorCreated -= Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
+			o2Scene.onActorDestroying -= Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
+
+			o2Scene.onActorEnableChanged -= updateActorTreeNode;
+			o2Scene.onActorLockChanged -= updateActorTreeNode;
+			o2Scene.onActorNameChanged -= updateActorTreeNode;
+			o2Scene.onActorChildsHierarchyChanged -= updateActorTreeNode;
+		}
+	}
 }
 
 UIActorsTree& UIActorsTree::operator=(const UIActorsTree& other)
@@ -45,6 +67,8 @@ void UIActorsTree::AttachToSceneEvents()
 	o2Scene.onActorLockChanged += updateActorTreeNode;
 	o2Scene.onActorNameChanged += updateActorTreeNode;
 	o2Scene.onActorChildsHierarchyChanged += updateActorTreeNode;
+
+	mAttackedToSceneEvents = true;
 }
 
 void UIActorsTree::Draw()
@@ -82,14 +106,54 @@ void UIActorsTree::CollapseAll()
 	UITree::CollapseAll();
 }
 
-void UIActorsTree::BeginDraggingActors(const ActorsVec& actors)
+void UIActorsTree::ManualBeginDraggingActors(const ActorsVec& actors)
 {
+	mDraggingNodes = true;
+	SetSelectedActors(actors);
 
+	mDragOffset = Vec2F();
+	mDragNode->Show(true);
+
+	setupNodeFunc(mDragNode, mSelectedItems.Last().object);
+
+	if (mSelectedItems.Count() > 1)
+	{
+		if (auto nameLayer = mDragNode->FindLayer<Text>())
+			nameLayer->text = String::Format("%i items", mSelectedItems.Count());
+	}
+
+	for (auto sel : mSelectedItems)
+	{
+		if (sel.node)
+			sel.node->SetState("dragging", true);
+	}
+}
+
+void UIActorsTree::ManualUpdateDraggingActors(const Input::Cursor& cursor)
+{
+	UpdateDragging(cursor);
+}
+
+void UIActorsTree::CompleteManualDraggingActors()
+{
+	EndDragging();
 }
 
 void UIActorsTree::BreakDragging()
 {
+	mDraggingNodes = false;
+	mDragNode->Hide(true);
 
+	for (auto node : mAllNodes)
+		node->SetState("inserting", false);
+
+	for (auto sel : mSelectedItems)
+	{
+		if (sel.node)
+			sel.node->SetState("dragging", false);
+	}
+
+	DeselectAllActors();
 }
 
 UIActorsTree::ActorsVec UIActorsTree::GetSelectedActors() const
@@ -216,7 +280,11 @@ void UIActorsTree::Initialize()
 	setupNodeFunc = Function<void(UITreeNode*, UnknownType*)>(this, &UIActorsTree::SetupTreeNodeActor);
 	onDraggedObjects = Function<void(Vector<UnknownType*>, UnknownType*, UnknownType*)>(this, &UIActorsTree::RearrangeActors);
 	onItemDblClick = Function<void(UITreeNode*, Actor*)>(this, &UIActorsTree::OnTreeNodeDblClick);
+
 	UITree::onItemRBClick = [&](UITreeNode* x) { onItemRBClick(x, (Actor*)(void*)x->GetObject()); };
+
+	UITree::onItemsSelectionChanged = [&](Vector<UnknownType*> x) {
+		onItemsSelectionChanged(x.Select<Actor*>([](auto x) { return (Actor*)(void*)x; })); };
 }
 
 UnknownType* UIActorsTree::GetActorsParent(UnknownType* obj)
@@ -324,10 +392,40 @@ void UIActorsTree::LockActorsGroupReleased(bool value)
 
 void UIActorsTree::OnActorCreated(Actor* actor)
 {
-	RebuildTree();
+	UITree::RebuildTree(false);
 }
 
 void UIActorsTree::OnActorDestroyed(Actor* actor)
 {
-	RebuildTree();
+	UITree::RebuildTree(false);
+}
+
+void UIActorsTree::UpdateDragging(const Input::Cursor& cursor)
+{
+	UITree::UpdateDragging(cursor);
+}
+
+void UIActorsTree::EndDragging()
+{
+	auto listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
+	UIAssetsIconsScrollArea* assetsScrollArea = dynamic_cast<UIAssetsIconsScrollArea*>(listenerUnderCursor);
+	if (assetsScrollArea)
+	{
+		String targetPath = assetsScrollArea->GetViewingPath();
+
+		auto iconUnderCursor = assetsScrollArea->GetIconUnderPoint(o2Input.GetCursorPos());
+		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == FolderAsset::type.ID())
+			targetPath = iconUnderCursor->GetAssetInfo().mPath;
+
+		for (auto& sel : mSelectedItems)
+		{
+			ActorAsset newAsset;
+			newAsset.actor = *(Actor*)(void*)sel.object;
+			String path = targetPath.IsEmpty() ? newAsset.actor.name + ".prefab" : targetPath + "/" + newAsset.actor.name + ".prefab";
+			newAsset.Save(o2Assets.MakeUniqueAssetName(path));
+		}
+
+		BreakDragging();
+	}
+	else UITree::EndDragging();
 }

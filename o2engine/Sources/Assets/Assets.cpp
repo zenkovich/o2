@@ -316,6 +316,43 @@ namespace o2
 		return mAssetsTree;
 	}
 
+	String Assets::MakeUniqueAssetName(const String& path)
+	{
+		if (!IsAssetExist(path))
+			return path;
+
+		String extension = o2FileSystem.GetFileExtension(path);
+		String withoutExtension = o2FileSystem.GetFileNameWithoutExtension(path);
+
+		if (withoutExtension.EndsWith("copy"))
+		{
+			if (extension.IsEmpty())
+				return MakeUniqueAssetName(withoutExtension.SubStr(0, withoutExtension.FindLast("copy")) + "copy 1");
+			else
+				return MakeUniqueAssetName(withoutExtension.SubStr(0, withoutExtension.FindLast("copy")) + "copy 1." + extension);
+		}
+
+		int copyPos = withoutExtension.FindLast("copy");
+		if (copyPos >= 0)
+		{
+			String end = withoutExtension.SubStr(copyPos + 4).Trimed(" ");
+			int endNum = (int)end;
+
+			if (endNum > 0)
+			{
+				if (extension.IsEmpty())
+					return MakeUniqueAssetName(withoutExtension.SubStr(0, copyPos) + "copy " + (String)(endNum + 1));
+				else
+					return MakeUniqueAssetName(withoutExtension.SubStr(0, copyPos) + "copy " + (String)(endNum + 1) + "." + extension);
+			}
+		}
+
+		if (extension.IsEmpty())
+			return MakeUniqueAssetName(path + " copy");
+		
+		return MakeUniqueAssetName(withoutExtension + " copy." + extension);
+	}
+
 	void Assets::LoadAssetsTree()
 	{
 		mAssetsTree.BuildTree(DATA_PATH);

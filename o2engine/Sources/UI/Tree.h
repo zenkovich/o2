@@ -30,6 +30,9 @@ namespace o2
 		// Draws widget
 		void Draw();
 
+		// Updates widget
+		void Update(float dt);
+
 		// Sets expanding
 		void SetExpanded(bool expanded, bool forcible = false);
 
@@ -52,7 +55,7 @@ namespace o2
 		UITreeNode* GetNode(UnknownType* object);
 
 		// Rebuilds this node
-		void Rebuild(bool withChilds = true, bool deepRebuild = true);
+		void Rebuild(bool withChilds = true, bool deepRebuild = true, bool immediately = true);
 
 		// Sets children offset
 		void SetChildrenOffset(float offset);
@@ -66,13 +69,14 @@ namespace o2
 		SERIALIZABLE(UITreeNode);
 
 	protected:
-		UIWidgetState* mExpandedState;  // Expanded state. Changes mExpandCoef
-		float          mExpandCoef;     // Expand coefficient (0...1)
-		UnknownType*   mObject;         // Object pointer
-		UITree*        mTree;           // Owner tree
-		float          mChildsOffset;   // Children nodes offset @SERIALIZABLE
-		float          mInsertSizeCoef; // Inserting as previous size coef 
-		float          mDragSizeCoef;   // Dragging size coef 1 -> 0
+		bool           mNeedRebuild = false; // Is node needs to be rebuilded
+		UIWidgetState* mExpandedState;       // Expanded state. Changes mExpandCoef
+		float          mExpandCoef;          // Expand coefficient (0...1)
+		UnknownType*   mObject;              // Object pointer
+		UITree*        mTree;                // Owner tree
+		float          mChildsOffset;        // Children nodes offset @SERIALIZABLE
+		float          mInsertSizeCoef;      // Inserting as previous size coef 
+		float          mDragSizeCoef;        // Dragging size coef 1 -> 0
 
 	protected:
 		// Creates children nodes
@@ -133,7 +137,7 @@ namespace o2
 		void Update(float dt);
 
 		// Rebuilds all tree
-		void RebuildTree();
+		void RebuildTree(bool immediately = true);
 
 		// Updates tree node for object
 		void UpdateTreeNode(UnknownType* object);
@@ -231,6 +235,12 @@ namespace o2
 		// Returns hover nodes sprite color
 		Color4 GetHoverColor() const;
 
+		// Sets node pressing and expanding time
+		void SetNodeExpandTimer(float time);
+
+		// Returns node pressing and expanding time
+		float GetNodeExpandTimer() const;
+
 		// Returns is this widget can be selected
 		bool IsSelectable() const;
 
@@ -254,7 +264,9 @@ namespace o2
 		Color4            mSelectedColor = Color4(175, 175, 255, 150);   // @SERIALIZABLE
 		Color4            mUnselectedColor = Color4(100, 100, 100, 100); // @SERIALIZABLE
 		Color4            mHoverColor = Color4(100, 100, 100, 100);      // @SERIALIZABLE
+		float             mNodeExpandTimer = 0.6f;                       // @SERIALIZABLE
 						  
+		bool              mNeedRebuild = false;   // Is tree needs to be rebuilded
 		TreeNodesVec      mAllNodes;              // Array of all tree nodes
 		UITreeNode*       mNodeSample;            // Item sample @SERIALIZABLE
 		Sprite*           mHoverDrawable;         // Selection sprite @SERIALIZABLE
@@ -292,6 +304,9 @@ namespace o2
 		bool              mNeedUpdateLayout;      // True if layout needs to update
 
 	protected:
+		// Checks and updates pressed node expanding
+		void UpdatePressedNodeExpand(float dt);
+
 		// Updates root nodes and their childs if need
 		void UpdateRootNodes(bool updateChilds);
 
@@ -340,17 +355,17 @@ namespace o2
 		// Calls when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Updates nodes dragging
-		void UpdateDragging(const Input::Cursor& cursor);
-
 		// Updates hover target rect and visibility
 		void UpdateHover(UITreeNode* itemUnderCursor);
 
 		// Begins dragging selected items
-		void BeginDragging();
+		virtual void BeginDragging();
+
+		// Updates nodes dragging
+		virtual void UpdateDragging(const Input::Cursor& cursor);
 
 		// End nodes dragging
-		void EndDragging();
+		virtual void EndDragging();
 
 		// Gets tree node from pool
 		UITreeNode* CreateTreeNode();

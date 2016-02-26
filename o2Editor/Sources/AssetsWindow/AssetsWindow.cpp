@@ -214,32 +214,16 @@ void AssetsWindow::ImportAssets(const String& targetPath)
 
 void AssetsWindow::CreateFolderAsset(const String& targetPath)
 {
-	int id = 0;
-	String folderName = targetPath + "/New folder";
-	while (o2FileSystem.IsFolderExist(folderName))
-	{
-		folderName = targetPath + "/New folder " + (String)id;
-		id++;
-	}
-
 	FolderAsset folderAsset;
-	folderAsset.Save(folderName);
+	folderAsset.Save(o2Assets.MakeUniqueAssetName(targetPath + "/New folder"));
 
 	o2Assets.RebuildAssets();
 }
 
 void AssetsWindow::CreatePrefabAsset(const String& targetPath)
 {
-	int id = 0;
-	String assetName = targetPath + "/New prefab.prefab";
-	while (o2Assets.IsAssetExist(assetName))
-	{
-		assetName = targetPath + "/New prefab " + (String)id + ".prefab";
-		id++;
-	}
-
 	ActorAsset folderAsset;
-	folderAsset.Save(assetName);
+	folderAsset.Save(o2Assets.MakeUniqueAssetName(targetPath + "/New prefab.prefab"));
 
 	o2Assets.RebuildAssets();
 }
@@ -251,16 +235,8 @@ void AssetsWindow::CreateScriptAsset(const String& targetPath)
 
 void AssetsWindow::CreateAnimationAsset(const String& targetPath)
 {
-	int id = 0;
-	String assetName = targetPath + "/New animation.anim";
-	while (o2Assets.IsAssetExist(assetName))
-	{
-		assetName = targetPath + "/New animation " + (String)id + ".anim";
-		id++;
-	}
-
 	AnimationAsset folderAsset;
-	folderAsset.Save(assetName);
+	folderAsset.Save(o2Assets.MakeUniqueAssetName(targetPath + "/New animation.anim"));
 
 	o2Assets.RebuildAssets();
 }

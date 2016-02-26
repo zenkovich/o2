@@ -27,6 +27,17 @@
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\Core\WindowsSystem\WindowsLayout.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\LogWindow\LogWindow.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\PropertiesWindow.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorAnimationViewer.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorComponentViewer.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorHeaderViewer.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorTransformViewer.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorAnimationViewer.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorComponentViewer.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorHeaderViewer.h"
+#include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorTransformViewer.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneEditScreen.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneEditWidget.h"
 #include "C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources\SceneWindow\SceneWindow.h"
@@ -127,6 +138,17 @@ o2::Type UIDockableWindow::type;
 o2::Type UIDockWindowPlace::type;
 o2::Type WindowsLayout::type;
 o2::Type LogWindow::type;
+o2::Type IObjectPropertiesViewer::type;
+o2::Type PropertiesWindow::type;
+o2::Type EditorActorPropertiesViewer::type;
+o2::Type DefaultEditorActorAnimationViewer::type;
+o2::Type DefaultEditorActorComponentViewer::type;
+o2::Type DefaultEditorActorHeaderViewer::type;
+o2::Type DefaultEditorActorTransformViewer::type;
+o2::Type IEditorActorAnimationViewer::type;
+o2::Type IEditorActorComponentViewer::type;
+o2::Type IEditorActorHeaderViewer::type;
+o2::Type IEditorActorTransformViewer::type;
 o2::Type SceneEditScreen::type;
 o2::Type SceneEditWidget::type;
 o2::Type SceneWindow::type;
@@ -278,6 +300,8 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	TypeInitializer::RegFuncParam<AssetId>(funcInfo, "id");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "DeselectAllAssets", &::UIAssetsIconsScrollArea::DeselectAllAssets);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, Vector<AssetInfo>>(&type, "GetSelectedAssets", &::UIAssetsIconsScrollArea::GetSelectedAssets);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, UIAssetIcon*, const Vec2F&>(&type, "GetIconUnderPoint", &::UIAssetsIconsScrollArea::GetIconUnderPoint);
+	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, bool>(&type, "UpdateLayout", &::UIAssetsIconsScrollArea::UpdateLayout);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "UpdateCuttingAssets", &::UIAssetsIconsScrollArea::UpdateCuttingAssets);
@@ -301,6 +325,7 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "UpdateDragging", &::UIAssetsIconsScrollArea::UpdateDragging);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "CompleteDragging", &::UIAssetsIconsScrollArea::CompleteDragging);
+	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "RegActorsCreationAction", &::UIAssetsIconsScrollArea::RegActorsCreationAction);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorMoved", &::UIAssetsIconsScrollArea::OnCursorMoved);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorRightMouseReleased", &::UIAssetsIconsScrollArea::OnCursorRightMouseReleased);
@@ -322,8 +347,6 @@ void ::UIAssetsIconsScrollArea::InitializeType(::UIAssetsIconsScrollArea* sample
 	TypeInitializer::RegFuncParam<Sprite*>(funcInfo, "sprite");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void, UIAssetIcon*>(&type, "OnIconDblClicked", &::UIAssetsIconsScrollArea::OnIconDblClicked);
 	TypeInitializer::RegFuncParam<UIAssetIcon*>(funcInfo, "icon");
-	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, UIAssetIcon*, const Vec2F&>(&type, "GetIconUnderPoint", &::UIAssetsIconsScrollArea::GetIconUnderPoint);
-	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "UpdateHover", &::UIAssetsIconsScrollArea::UpdateHover);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCopyPressed", &::UIAssetsIconsScrollArea::OnContextCopyPressed);
 	funcInfo = TypeInitializer::RegFunction<::UIAssetsIconsScrollArea, void>(&type, "OnContextCutPressed", &::UIAssetsIconsScrollArea::OnContextCutPressed);
@@ -991,8 +1014,133 @@ void ::LogWindow::InitializeType(::LogWindow* sample)
 	funcInfo = TypeInitializer::RegFunction<::LogWindow, void>(&type, "UpdateLastMessageView", &::LogWindow::UpdateLastMessageView);
 }
 
+void ::IObjectPropertiesViewer::InitializeType(::IObjectPropertiesViewer* sample)
+{
+	TypeInitializer::RegField(&type, "mContentWidget", (size_t)(char*)(&sample->mContentWidget) - (size_t)(char*)sample, sample->mContentWidget);
+	auto funcInfo = TypeInitializer::RegFunction<::IObjectPropertiesViewer, Type*>(&type, "GetViewingObjectType", &::IObjectPropertiesViewer::GetViewingObjectType);
+	funcInfo = TypeInitializer::RegFunction<::IObjectPropertiesViewer, void, const Vector<IObject*>>(&type, "SetTargets", &::IObjectPropertiesViewer::SetTargets);
+	TypeInitializer::RegFuncParam<const Vector<IObject*>>(funcInfo, "targets");
+	funcInfo = TypeInitializer::RegFunction<::IObjectPropertiesViewer, void>(&type, "OnEnabled", &::IObjectPropertiesViewer::OnEnabled);
+	funcInfo = TypeInitializer::RegFunction<::IObjectPropertiesViewer, void>(&type, "OnDisabled", &::IObjectPropertiesViewer::OnDisabled);
+	funcInfo = TypeInitializer::RegFunction<::IObjectPropertiesViewer, void, float>(&type, "Update", &::IObjectPropertiesViewer::Update);
+	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
+	funcInfo = TypeInitializer::RegFunction<::IObjectPropertiesViewer, void>(&type, "Draw", &::IObjectPropertiesViewer::Draw);
+}
+
+void ::PropertiesWindow::InitializeType(::PropertiesWindow* sample)
+{
+	TypeInitializer::RegField(&type, "mTargets", (size_t)(char*)(&sample->mTargets) - (size_t)(char*)sample, sample->mTargets);
+	TypeInitializer::RegField(&type, "mCurrentViewer", (size_t)(char*)(&sample->mCurrentViewer) - (size_t)(char*)sample, sample->mCurrentViewer);
+	TypeInitializer::RegField(&type, "mViewers", (size_t)(char*)(&sample->mViewers) - (size_t)(char*)sample, sample->mViewers);
+	auto funcInfo = TypeInitializer::RegFunction<::PropertiesWindow, void, IObject*>(&type, "SetTarget", &::PropertiesWindow::SetTarget);
+	TypeInitializer::RegFuncParam<IObject*>(funcInfo, "target");
+	funcInfo = TypeInitializer::RegFunction<::PropertiesWindow, void, const Vector<IObject*>>(&type, "SetTargets", &::PropertiesWindow::SetTargets);
+	TypeInitializer::RegFuncParam<const Vector<IObject*>>(funcInfo, "targets");
+	funcInfo = TypeInitializer::RegFunction<::PropertiesWindow, Vector<IObject*>>(&type, "GetTargets", &::PropertiesWindow::GetTargets);
+	funcInfo = TypeInitializer::RegFunction<::PropertiesWindow, void, float>(&type, "Update", &::PropertiesWindow::Update);
+	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
+	funcInfo = TypeInitializer::RegFunction<::PropertiesWindow, void>(&type, "Draw", &::PropertiesWindow::Draw);
+	funcInfo = TypeInitializer::RegFunction<::PropertiesWindow, void>(&type, "InitializeWindow", &::PropertiesWindow::InitializeWindow);
+	funcInfo = TypeInitializer::RegFunction<::PropertiesWindow, void>(&type, "InitializeViewers", &::PropertiesWindow::InitializeViewers);
+}
+
+void ::EditorActorPropertiesViewer::InitializeType(::EditorActorPropertiesViewer* sample)
+{
+	TypeInitializer::RegField(&type, "mTargetActors", (size_t)(char*)(&sample->mTargetActors) - (size_t)(char*)sample, sample->mTargetActors);
+	TypeInitializer::RegField(&type, "mHeaderViewer", (size_t)(char*)(&sample->mHeaderViewer) - (size_t)(char*)sample, sample->mHeaderViewer);
+	TypeInitializer::RegField(&type, "mTransformViewer", (size_t)(char*)(&sample->mTransformViewer) - (size_t)(char*)sample, sample->mTransformViewer);
+	TypeInitializer::RegField(&type, "mAnimationViewer", (size_t)(char*)(&sample->mAnimationViewer) - (size_t)(char*)sample, sample->mAnimationViewer);
+	TypeInitializer::RegField(&type, "mComponentsViewers", (size_t)(char*)(&sample->mComponentsViewers) - (size_t)(char*)sample, sample->mComponentsViewers);
+	TypeInitializer::RegField(&type, "mDefaultComponentViewer", (size_t)(char*)(&sample->mDefaultComponentViewer) - (size_t)(char*)sample, sample->mDefaultComponentViewer);
+	TypeInitializer::RegField(&type, "mAvailableComponentsViewers", (size_t)(char*)(&sample->mAvailableComponentsViewers) - (size_t)(char*)sample, sample->mAvailableComponentsViewers);
+	TypeInitializer::RegField(&type, "mComponentViewersPool", (size_t)(char*)(&sample->mComponentViewersPool) - (size_t)(char*)sample, sample->mComponentViewersPool);
+	TypeInitializer::RegField(&type, "mViewersLayout", (size_t)(char*)(&sample->mViewersLayout) - (size_t)(char*)sample, sample->mViewersLayout);
+	auto funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, Type*>(&type, "GetViewingObjectType", &::EditorActorPropertiesViewer::GetViewingObjectType);
+	funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, void, IEditorActorHeaderViewer*>(&type, "SetActorHeaderViewer", &::EditorActorPropertiesViewer::SetActorHeaderViewer);
+	TypeInitializer::RegFuncParam<IEditorActorHeaderViewer*>(funcInfo, "viewer");
+	funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, void, IEditorActorTransformViewer*>(&type, "SetActorTransformViewer", &::EditorActorPropertiesViewer::SetActorTransformViewer);
+	TypeInitializer::RegFuncParam<IEditorActorTransformViewer*>(funcInfo, "viewer");
+	funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, void, IEditorActorAnimationViewer*>(&type, "SetActorAnimationViewer", &::EditorActorPropertiesViewer::SetActorAnimationViewer);
+	TypeInitializer::RegFuncParam<IEditorActorAnimationViewer*>(funcInfo, "viewer");
+	funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, void, IEditorActorComponentViewer*>(&type, "AddComponentViewerType", &::EditorActorPropertiesViewer::AddComponentViewerType);
+	TypeInitializer::RegFuncParam<IEditorActorComponentViewer*>(funcInfo, "viewer");
+	funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, void, const Vector<IObject*>>(&type, "SetTargets", &::EditorActorPropertiesViewer::SetTargets);
+	TypeInitializer::RegFuncParam<const Vector<IObject*>>(funcInfo, "targets");
+	funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, void>(&type, "OnEnabled", &::EditorActorPropertiesViewer::OnEnabled);
+	funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, void>(&type, "OnDisabled", &::EditorActorPropertiesViewer::OnDisabled);
+	funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, void, float>(&type, "Update", &::EditorActorPropertiesViewer::Update);
+	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
+	funcInfo = TypeInitializer::RegFunction<::EditorActorPropertiesViewer, void>(&type, "Draw", &::EditorActorPropertiesViewer::Draw);
+}
+
+void ::DefaultEditorActorAnimationViewer::InitializeType(::DefaultEditorActorAnimationViewer* sample)
+{
+	auto funcInfo = TypeInitializer::RegFunction<::DefaultEditorActorAnimationViewer, void, const Vector<Actor*>&>(&type, "SetTargetActors", &::DefaultEditorActorAnimationViewer::SetTargetActors);
+	TypeInitializer::RegFuncParam<const Vector<Actor*>&>(funcInfo, "actors");
+}
+
+void ::DefaultEditorActorComponentViewer::InitializeType(::DefaultEditorActorComponentViewer* sample)
+{
+	auto funcInfo = TypeInitializer::RegFunction<::DefaultEditorActorComponentViewer, void, const Vector<Actor*>&>(&type, "SetTargetActors", &::DefaultEditorActorComponentViewer::SetTargetActors);
+	TypeInitializer::RegFuncParam<const Vector<Actor*>&>(funcInfo, "actors");
+	funcInfo = TypeInitializer::RegFunction<::DefaultEditorActorComponentViewer, Type*>(&type, "GetComponentType", &::DefaultEditorActorComponentViewer::GetComponentType);
+}
+
+void ::DefaultEditorActorHeaderViewer::InitializeType(::DefaultEditorActorHeaderViewer* sample)
+{
+	TypeInitializer::RegField(&type, "mDataView", (size_t)(char*)(&sample->mDataView) - (size_t)(char*)sample, sample->mDataView);
+	auto funcInfo = TypeInitializer::RegFunction<::DefaultEditorActorHeaderViewer, void, const Vector<Actor*>&>(&type, "SetTargetActors", &::DefaultEditorActorHeaderViewer::SetTargetActors);
+	TypeInitializer::RegFuncParam<const Vector<Actor*>&>(funcInfo, "actors");
+	funcInfo = TypeInitializer::RegFunction<::DefaultEditorActorHeaderViewer, UIWidget*>(&type, "GetWidget", &::DefaultEditorActorHeaderViewer::GetWidget);
+}
+
+void ::DefaultEditorActorTransformViewer::InitializeType(::DefaultEditorActorTransformViewer* sample)
+{
+	auto funcInfo = TypeInitializer::RegFunction<::DefaultEditorActorTransformViewer, void, const Vector<Actor*>&>(&type, "SetTargetActors", &::DefaultEditorActorTransformViewer::SetTargetActors);
+	TypeInitializer::RegFuncParam<const Vector<Actor*>&>(funcInfo, "actors");
+}
+
+void ::IEditorActorAnimationViewer::InitializeType(::IEditorActorAnimationViewer* sample)
+{
+	TypeInitializer::RegField(&type, "mDataView", (size_t)(char*)(&sample->mDataView) - (size_t)(char*)sample, sample->mDataView);
+	auto funcInfo = TypeInitializer::RegFunction<::IEditorActorAnimationViewer, void, const Vector<Actor*>&>(&type, "SetTargetActors", &::IEditorActorAnimationViewer::SetTargetActors);
+	TypeInitializer::RegFuncParam<const Vector<Actor*>&>(funcInfo, "actors");
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorAnimationViewer, UIWidget*>(&type, "GetWidget", &::IEditorActorAnimationViewer::GetWidget);
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorAnimationViewer, void>(&type, "Expand", &::IEditorActorAnimationViewer::Expand);
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorAnimationViewer, void>(&type, "Collapse", &::IEditorActorAnimationViewer::Collapse);
+}
+
+void ::IEditorActorComponentViewer::InitializeType(::IEditorActorComponentViewer* sample)
+{
+	TypeInitializer::RegField(&type, "mDataView", (size_t)(char*)(&sample->mDataView) - (size_t)(char*)sample, sample->mDataView);
+	auto funcInfo = TypeInitializer::RegFunction<::IEditorActorComponentViewer, void, const Vector<Actor*>&>(&type, "SetTargetActors", &::IEditorActorComponentViewer::SetTargetActors);
+	TypeInitializer::RegFuncParam<const Vector<Actor*>&>(funcInfo, "actors");
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorComponentViewer, Type*>(&type, "GetComponentType", &::IEditorActorComponentViewer::GetComponentType);
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorComponentViewer, UIWidget*>(&type, "GetWidget", &::IEditorActorComponentViewer::GetWidget);
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorComponentViewer, void>(&type, "Expand", &::IEditorActorComponentViewer::Expand);
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorComponentViewer, void>(&type, "Collapse", &::IEditorActorComponentViewer::Collapse);
+}
+
+void ::IEditorActorHeaderViewer::InitializeType(::IEditorActorHeaderViewer* sample)
+{
+	auto funcInfo = TypeInitializer::RegFunction<::IEditorActorHeaderViewer, void, const Vector<Actor*>&>(&type, "SetTargetActors", &::IEditorActorHeaderViewer::SetTargetActors);
+	TypeInitializer::RegFuncParam<const Vector<Actor*>&>(funcInfo, "actors");
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorHeaderViewer, UIWidget*>(&type, "GetWidget", &::IEditorActorHeaderViewer::GetWidget);
+}
+
+void ::IEditorActorTransformViewer::InitializeType(::IEditorActorTransformViewer* sample)
+{
+	TypeInitializer::RegField(&type, "mDataView", (size_t)(char*)(&sample->mDataView) - (size_t)(char*)sample, sample->mDataView);
+	auto funcInfo = TypeInitializer::RegFunction<::IEditorActorTransformViewer, void, const Vector<Actor*>&>(&type, "SetTargetActors", &::IEditorActorTransformViewer::SetTargetActors);
+	TypeInitializer::RegFuncParam<const Vector<Actor*>&>(funcInfo, "actors");
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorTransformViewer, UIWidget*>(&type, "GetWidget", &::IEditorActorTransformViewer::GetWidget);
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorTransformViewer, void>(&type, "Expand", &::IEditorActorTransformViewer::Expand);
+	funcInfo = TypeInitializer::RegFunction<::IEditorActorTransformViewer, void>(&type, "Collapse", &::IEditorActorTransformViewer::Collapse);
+}
+
 void ::SceneEditScreen::InitializeType(::SceneEditScreen* sample)
 {
+	TypeInitializer::RegField(&type, "onSelectionChanged", (size_t)(char*)(&sample->onSelectionChanged) - (size_t)(char*)sample, sample->onSelectionChanged);
 	TypeInitializer::RegField(&type, "mRectangle", (size_t)(char*)(&sample->mRectangle) - (size_t)(char*)sample, sample->mRectangle);
 	TypeInitializer::RegField(&type, "mViewCamera", (size_t)(char*)(&sample->mViewCamera) - (size_t)(char*)sample, sample->mViewCamera);
 	TypeInitializer::RegField(&type, "mViewCameraTargetScale", (size_t)(char*)(&sample->mViewCameraTargetScale) - (size_t)(char*)sample, sample->mViewCameraTargetScale);
@@ -1152,6 +1300,7 @@ void ::UIActorsTree::InitializeType(::UIActorsTree* sample)
 	TypeInitializer::RegField(&type, "onItemsSelectionChanged", (size_t)(char*)(&sample->onItemsSelectionChanged) - (size_t)(char*)sample, sample->onItemsSelectionChanged);
 	TypeInitializer::RegField(&type, "mEnableActorsTogglesGroup", (size_t)(char*)(&sample->mEnableActorsTogglesGroup) - (size_t)(char*)sample, sample->mEnableActorsTogglesGroup);
 	TypeInitializer::RegField(&type, "mLockActorsTogglesGroup", (size_t)(char*)(&sample->mLockActorsTogglesGroup) - (size_t)(char*)sample, sample->mLockActorsTogglesGroup);
+	TypeInitializer::RegField(&type, "mAttackedToSceneEvents", (size_t)(char*)(&sample->mAttackedToSceneEvents) - (size_t)(char*)sample, sample->mAttackedToSceneEvents);
 	auto funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "AttachToSceneEvents", &::UIActorsTree::AttachToSceneEvents);
 	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "Draw", &::UIActorsTree::Draw);
 	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, float>(&type, "Update", &::UIActorsTree::Update);
@@ -1163,6 +1312,12 @@ void ::UIActorsTree::InitializeType(::UIActorsTree* sample)
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "ExpandAll", &::UIActorsTree::ExpandAll);
 	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "CollapseAll", &::UIActorsTree::CollapseAll);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, const ActorsVec&>(&type, "ManualBeginDraggingActors", &::UIActorsTree::ManualBeginDraggingActors);
+	TypeInitializer::RegFuncParam<const ActorsVec&>(funcInfo, "actors");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, const Input::Cursor&>(&type, "ManualUpdateDraggingActors", &::UIActorsTree::ManualUpdateDraggingActors);
+	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "CompleteManualDraggingActors", &::UIActorsTree::CompleteManualDraggingActors);
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "BreakDragging", &::UIActorsTree::BreakDragging);
 	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, ActorsVec>(&type, "GetSelectedActors", &::UIActorsTree::GetSelectedActors);
 	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, const ActorsVec&>(&type, "SetSelectedActors", &::UIActorsTree::SetSelectedActors);
 	TypeInitializer::RegFuncParam<const ActorsVec&>(funcInfo, "actors");
@@ -1223,6 +1378,9 @@ void ::UIActorsTree::InitializeType(::UIActorsTree* sample)
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
 	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, Actor*>(&type, "OnActorDestroyed", &::UIActorsTree::OnActorDestroyed);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void, const Input::Cursor&>(&type, "UpdateDragging", &::UIActorsTree::UpdateDragging);
+	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<::UIActorsTree, void>(&type, "EndDragging", &::UIActorsTree::EndDragging);
 }
 
 void ::TreeWindow::InitializeType(::TreeWindow* sample)
@@ -3596,6 +3754,7 @@ void o2::UIToggle::InitializeType(o2::UIToggle* sample)
 
 void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
 {
+	TypeInitializer::RegField(&type, "mNeedRebuild", (size_t)(char*)(&sample->mNeedRebuild) - (size_t)(char*)sample, sample->mNeedRebuild);
 	TypeInitializer::RegField(&type, "mExpandedState", (size_t)(char*)(&sample->mExpandedState) - (size_t)(char*)sample, sample->mExpandedState);
 	TypeInitializer::RegField(&type, "mExpandCoef", (size_t)(char*)(&sample->mExpandCoef) - (size_t)(char*)sample, sample->mExpandCoef);
 	TypeInitializer::RegField(&type, "mObject", (size_t)(char*)(&sample->mObject) - (size_t)(char*)sample, sample->mObject);
@@ -3604,6 +3763,8 @@ void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
 	TypeInitializer::RegField(&type, "mInsertSizeCoef", (size_t)(char*)(&sample->mInsertSizeCoef) - (size_t)(char*)sample, sample->mInsertSizeCoef);
 	TypeInitializer::RegField(&type, "mDragSizeCoef", (size_t)(char*)(&sample->mDragSizeCoef) - (size_t)(char*)sample, sample->mDragSizeCoef);
 	auto funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void>(&type, "Draw", &o2::UITreeNode::Draw);
+	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, float>(&type, "Update", &o2::UITreeNode::Update);
+	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, bool, bool>(&type, "SetExpanded", &o2::UITreeNode::SetExpanded);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "expanded");
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
@@ -3616,9 +3777,10 @@ void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void>(&type, "CollapseAll", &o2::UITreeNode::CollapseAll);
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, UITreeNode*, UnknownType*>(&type, "GetNode", &o2::UITreeNode::GetNode);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
-	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, bool, bool>(&type, "Rebuild", &o2::UITreeNode::Rebuild);
+	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, bool, bool, bool>(&type, "Rebuild", &o2::UITreeNode::Rebuild);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChilds");
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "deepRebuild");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "immediately");
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, float>(&type, "SetChildrenOffset", &o2::UITreeNode::SetChildrenOffset);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "offset");
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, float>(&type, "GetChildrenOffset", &o2::UITreeNode::GetChildrenOffset);
@@ -3640,6 +3802,8 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegField(&type, "mSelectedColor", (size_t)(char*)(&sample->mSelectedColor) - (size_t)(char*)sample, sample->mSelectedColor).AddAttribute<SerializableAttribute<decltype(mSelectedColor)>>();
 	TypeInitializer::RegField(&type, "mUnselectedColor", (size_t)(char*)(&sample->mUnselectedColor) - (size_t)(char*)sample, sample->mUnselectedColor).AddAttribute<SerializableAttribute<decltype(mUnselectedColor)>>();
 	TypeInitializer::RegField(&type, "mHoverColor", (size_t)(char*)(&sample->mHoverColor) - (size_t)(char*)sample, sample->mHoverColor).AddAttribute<SerializableAttribute<decltype(mHoverColor)>>();
+	TypeInitializer::RegField(&type, "mNodeExpandTimer", (size_t)(char*)(&sample->mNodeExpandTimer) - (size_t)(char*)sample, sample->mNodeExpandTimer).AddAttribute<SerializableAttribute<decltype(mNodeExpandTimer)>>();
+	TypeInitializer::RegField(&type, "mNeedRebuild", (size_t)(char*)(&sample->mNeedRebuild) - (size_t)(char*)sample, sample->mNeedRebuild);
 	TypeInitializer::RegField(&type, "mAllNodes", (size_t)(char*)(&sample->mAllNodes) - (size_t)(char*)sample, sample->mAllNodes);
 	TypeInitializer::RegField(&type, "mNodeSample", (size_t)(char*)(&sample->mNodeSample) - (size_t)(char*)sample, sample->mNodeSample).AddAttribute<SerializableAttribute<decltype(mNodeSample)>>();
 	TypeInitializer::RegField(&type, "mHoverDrawable", (size_t)(char*)(&sample->mHoverDrawable) - (size_t)(char*)sample, sample->mHoverDrawable).AddAttribute<SerializableAttribute<decltype(mHoverDrawable)>>();
@@ -3672,7 +3836,8 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	auto funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "Draw", &o2::UITree::Draw);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, float>(&type, "Update", &o2::UITree::Update);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "RebuildTree", &o2::UITree::RebuildTree);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "RebuildTree", &o2::UITree::RebuildTree);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "immediately");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "UpdateTreeNode", &o2::UITree::UpdateTreeNode);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*, UnknownType*>(&type, "GetNode", &o2::UITree::GetNode);
@@ -3724,7 +3889,12 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Color4&>(&type, "SetHoverColor", &o2::UITree::SetHoverColor);
 	TypeInitializer::RegFuncParam<const Color4&>(funcInfo, "color");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, Color4>(&type, "GetHoverColor", &o2::UITree::GetHoverColor);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, float>(&type, "SetNodeExpandTimer", &o2::UITree::SetNodeExpandTimer);
+	TypeInitializer::RegFuncParam<float>(funcInfo, "time");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, float>(&type, "GetNodeExpandTimer", &o2::UITree::GetNodeExpandTimer);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool>(&type, "IsSelectable", &o2::UITree::IsSelectable);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, float>(&type, "UpdatePressedNodeExpand", &o2::UITree::UpdatePressedNodeExpand);
+	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "UpdateRootNodes", &o2::UITree::UpdateRootNodes);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "updateChilds");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnSelected", &o2::UITree::OnSelected);
@@ -3752,11 +3922,11 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "OnCursorExit", &o2::UITree::OnCursorExit);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "UpdateDragging", &o2::UITree::UpdateDragging);
-	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "UpdateHover", &o2::UITree::UpdateHover);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "itemUnderCursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "BeginDragging", &o2::UITree::BeginDragging);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "UpdateDragging", &o2::UITree::UpdateDragging);
+	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "EndDragging", &o2::UITree::EndDragging);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*>(&type, "CreateTreeNode", &o2::UITree::CreateTreeNode);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "FreeTreeNode", &o2::UITree::FreeTreeNode);
@@ -5182,6 +5352,17 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<::UIDockWindowPlace>("::UIDockWindowPlace");
 	o2::Reflection::InitializeType<::WindowsLayout>("::WindowsLayout");
 	o2::Reflection::InitializeType<::LogWindow>("::LogWindow");
+	o2::Reflection::InitializeType<::IObjectPropertiesViewer>("::IObjectPropertiesViewer");
+	o2::Reflection::InitializeType<::PropertiesWindow>("::PropertiesWindow");
+	o2::Reflection::InitializeType<::EditorActorPropertiesViewer>("::EditorActorPropertiesViewer");
+	o2::Reflection::InitializeType<::DefaultEditorActorAnimationViewer>("::DefaultEditorActorAnimationViewer");
+	o2::Reflection::InitializeType<::DefaultEditorActorComponentViewer>("::DefaultEditorActorComponentViewer");
+	o2::Reflection::InitializeType<::DefaultEditorActorHeaderViewer>("::DefaultEditorActorHeaderViewer");
+	o2::Reflection::InitializeType<::DefaultEditorActorTransformViewer>("::DefaultEditorActorTransformViewer");
+	o2::Reflection::InitializeType<::IEditorActorAnimationViewer>("::IEditorActorAnimationViewer");
+	o2::Reflection::InitializeType<::IEditorActorComponentViewer>("::IEditorActorComponentViewer");
+	o2::Reflection::InitializeType<::IEditorActorHeaderViewer>("::IEditorActorHeaderViewer");
+	o2::Reflection::InitializeType<::IEditorActorTransformViewer>("::IEditorActorTransformViewer");
 	o2::Reflection::InitializeType<::SceneEditScreen>("::SceneEditScreen");
 	o2::Reflection::InitializeType<::SceneEditWidget>("::SceneEditWidget");
 	o2::Reflection::InitializeType<::SceneWindow>("::SceneWindow");
@@ -5317,6 +5498,12 @@ void RegReflectionTypes()
 	TypeInitializer::AddBaseType(&::UIDockWindowPlace::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&::WindowsLayout::type, &o2::ISerializable::type);
 	TypeInitializer::AddBaseType(&::LogWindow::type, &::IEditorWindow::type);
+	TypeInitializer::AddBaseType(&::PropertiesWindow::type, &::IEditorWindow::type);
+	TypeInitializer::AddBaseType(&::EditorActorPropertiesViewer::type, &::IObjectPropertiesViewer::type);
+	TypeInitializer::AddBaseType(&::DefaultEditorActorAnimationViewer::type, &::IEditorActorAnimationViewer::type);
+	TypeInitializer::AddBaseType(&::DefaultEditorActorComponentViewer::type, &::IEditorActorComponentViewer::type);
+	TypeInitializer::AddBaseType(&::DefaultEditorActorHeaderViewer::type, &::IEditorActorHeaderViewer::type);
+	TypeInitializer::AddBaseType(&::DefaultEditorActorTransformViewer::type, &::IEditorActorTransformViewer::type);
 	TypeInitializer::AddBaseType(&::SceneEditWidget::type, &o2::UIWidget::type);
 	TypeInitializer::AddBaseType(&::SceneWindow::type, &::IEditorWindow::type);
 	TypeInitializer::AddBaseType(&o2::UITree::type, &o2::UIScrollArea::type);

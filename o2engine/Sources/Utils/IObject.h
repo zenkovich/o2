@@ -18,7 +18,7 @@ namespace o2
 		virtual IObject* Clone() const = 0;
 
 		// Returns type
-		virtual const Type& GetType() const = 0;
+		virtual Type& GetType() const = 0;
 
 		static Type type;
 	};
@@ -27,7 +27,7 @@ namespace o2
 #define IOBJECT(CLASS)  							   \
 	CLASS* Clone() const { return mnew CLASS(*this); } \
 	static Type type;								   \
-	const Type& GetType() const { return type; };	   \
+	Type& GetType() const { return type; };	           \
 	friend struct o2::Type::TypeCreator<CLASS>;        \
 	static void InitializeType(CLASS* sample)   
 

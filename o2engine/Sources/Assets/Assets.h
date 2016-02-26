@@ -142,6 +142,9 @@ namespace o2
 
 		// Returns assets tree
 		const AssetTree& GetAssetsTree() const;
+
+		// Makes unique asset name from first path variant
+		String MakeUniqueAssetName(const String& path);
 		
 		// Returns random asset id
 		static AssetId GetRandomAssetId();

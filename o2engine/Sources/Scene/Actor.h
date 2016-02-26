@@ -20,29 +20,29 @@ namespace o2
 		typedef Vector<String> StringsVec;
 
 	public:
-		Getter<UInt64>                      id;                 // Actor's unique id
-		Property<String>                    name;               // Actor name property
-		Property<bool>                      enabled;            // Is actor enabled property
-		Getter<bool>                        enabledInHierarchy; // Is actor enabled in hierarchy getter
-		Property<bool>                      locked;             // Is actor locked property
-		Getter<bool>                        lockedInHierarchy;  // Is actor locked in hierarchy getter
-		Property<Actor*>                    parent;             // Parent actor property
-		Property<Scene::Layer*>             layer;              // Layer property
-		Property<String>                    layerName;          // Layer name property
-		Getter<ActorsVec>                   childs;             // Children array getter
-		Accessor<Actor*, const String&>     child;              // Children accessor
-		Getter<ComponentsVec>               components;         // Components array getter
-		Accessor<Component*, const String&> component;          // Component accessor by type name
-		Accessor<bool, const String&>       tag;                // Tag existing accessor
-		ActorTransform                      transform;          // Transformation @SERIALIZABLE
-		Function<void(bool)>                onEnableChanged;    // Enable changing event
+		Getter<UInt64>                      id;                      // Actor's unique id
+		Property<String>                    name;                    // Actor name property
+		Property<bool>                      enabled;                 // Is actor enabled property
+		Getter<bool>                        enabledInHierarchy;      // Is actor enabled in hierarchy getter
+		Property<bool>                      locked;                  // Is actor locked property
+		Getter<bool>                        lockedInHierarchy;       // Is actor locked in hierarchy getter
+		Property<Actor*>                    parent;                  // Parent actor property
+		Property<Scene::Layer*>             layer;                   // Layer property
+		Property<String>                    layerName;               // Layer name property
+		Getter<ActorsVec>                   childs;                  // Children array getter
+		Accessor<Actor*, const String&>     child;                   // Children accessor
+		Getter<ComponentsVec>               components;              // Components array getter
+		Accessor<Component*, const String&> component;               // Component accessor by type name
+		Accessor<bool, const String&>       tag;                     // Tag existing accessor
+		ActorTransform                      transform;               // Transformation @SERIALIZABLE
+		Function<void(bool)>                onEnableChanged;         // Enable changing event
 
 #if IS_EDITOR
-		Function<void()>       onChanged;               // Something in actor change event
-		Function<void(Actor*)> onParentChanged;         // Actor reparent event
-		Function<void()>       onChildHierarchyChanged; // Actor childs hierarchy change event
-		Function<void(bool)>   onLockChanged;           // Locking changing event
-		Function<void()>       onNameChanged;           // Name changing event
+		Function<void()>                    onChanged;               // Something in actor change event
+		Function<void(Actor*)>              onParentChanged;         // Actor reparent event
+		Function<void()>                    onChildHierarchyChanged; // Actor childs hierarchy change event
+		Function<void(bool)>                onLockChanged;           // Locking changing event
+		Function<void()>                    onNameChanged;           // Name changing event
 #endif
 
 		// Default constructor

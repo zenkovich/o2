@@ -19,6 +19,7 @@ namespace o2
 }
 
 class UIAssetIcon;
+class UIActorsTree;
 
 // ------------------------
 // Assets icons scroll area
@@ -64,6 +65,9 @@ public:
 
 	// Returns selected assets infos
 	Vector<AssetInfo> GetSelectedAssets() const;
+
+	// Return asset icon under point
+	UIAssetIcon* GetIconUnderPoint(const Vec2F& point) const;
 
 	SERIALIZABLE(UIAssetsIconsScrollArea);
 
@@ -155,6 +159,7 @@ protected:
 	// Calls when cursor stay down during frame
 	void OnCursorStillDown(const Input::Cursor& cursor);
 
+	// Begins selecting icons
 	void BeginSelecting();
 
 	// Updates selection frame
@@ -171,6 +176,9 @@ protected:
 
 	//Completes dragging
 	void CompleteDragging();
+
+	// Registers actors creation undo action
+	void RegActorsCreationAction();
 
 	// Calls when cursor moved on this (or moved outside when this was pressed)
 	void OnCursorMoved(const Input::Cursor& cursor);
@@ -210,9 +218,6 @@ protected:
 
 	// Calls when asset icon double clicked
 	void OnIconDblClicked(UIAssetIcon* icon);
-
-	// Return asset icon under point
-	UIAssetIcon* GetIconUnderPoint(const Vec2F& point) const;
 
 	// Update hover sprite
 	void UpdateHover();

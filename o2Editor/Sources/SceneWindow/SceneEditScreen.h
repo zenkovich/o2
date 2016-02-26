@@ -37,6 +37,8 @@ public:
 	typedef Vector<IEditorTool*> ToolsVec;
 
 public:
+	Function<void(const ActorsVec&)> onSelectionChanged; // Actors selection change event
+
 	// Default constructor
 	SceneEditScreen();
 

@@ -93,8 +93,8 @@ void UIAssetsFoldersTree::InitializeContext()
 	mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, nullptr, ShortcutKeys('V', true));
 	mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, nullptr, ShortcutKeys(VK_DELETE));
 	mContextMenu->AddItem("---");
-	mContextMenu->AddItem("Expand", [&]() { OnContextExpandPressed(); });
-	mContextMenu->AddItem("Collapse", [&]() { OnContextCollapsePressed(); });
+	mContextMenu->AddItem("Expand all", [&]() { OnContextExpandPressed(); });
+	mContextMenu->AddItem("Collapse all", [&]() { OnContextCollapsePressed(); });
 
 	AddChild(mContextMenu);
 }

@@ -6,6 +6,7 @@
 #include "Core/Tools/MoveTool.h"
 #include "Core/Tools/SelectionTool.h"
 #include "Core/WindowsSystem/WindowsManager.h"
+#include "PropertiesWindow/PropertiesWindow.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
@@ -248,6 +249,9 @@ void SceneEditScreen::OnActorsSelectedFromThis()
 
 	if (mEnabledTool)
 		mEnabledTool->OnActorsSelectionChanged(mSelectedActors);
+
+	onSelectionChanged(mSelectedActors);
+	o2EditorProperties.SetTargets(mSelectedActors.Select<IObject*>([](auto x) { return (IObject*)x; }));
 }
 
 void SceneEditScreen::RedrawScene()
@@ -484,6 +488,9 @@ void SceneEditScreen::OnTreeSelectionChanged(Vector<Actor*> selectedActors)
 	{
 		auto selectionAction = mnew EditorSelectionAction(mSelectedActors, prevSelectedActors);
 		o2EditorApplication.DoneAction(selectionAction);
+
+		onSelectionChanged(mSelectedActors);		
+		o2EditorProperties.SetTargets(mSelectedActors.Select<IObject*>([](auto x) { return (IObject*)x; }));
 	}
 }
 

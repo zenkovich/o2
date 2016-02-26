@@ -10,6 +10,8 @@
 #include "Assets/FolderAsset.h"
 #include "Assets/ImageAsset.h"
 #include "AssetsWindow/AssetsWindow.h"
+#include "Core/Actions/CreateActors.h"
+#include "Core/EditorApplication.h"
 #include "Events/CursorEventsListener.h"
 #include "Events/EventSystem.h"
 #include "Render/Render.h"
@@ -18,6 +20,7 @@
 #include "SceneWindow/SceneEditScreen.h"
 #include "SceneWindow/SceneEditWidget.h"
 #include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/TreeWindow.h"
 #include "UI/ContextMenu.h"
 #include "UI/EditBox.h"
 #include "UI/GridLayout.h"
@@ -45,7 +48,7 @@ UIAssetsIconsScrollArea::UIAssetsIconsScrollArea():
 	mSelection = mnew Sprite("ui/UI_Window_place.png");
 	InitializeSelectionSprite();
 
-	mDragIcon = o2UI.CreateWidget<UIAssetIcon>();
+	mDragIcon = mnew UIAssetIcon();
 }
 
 UIAssetsIconsScrollArea::UIAssetsIconsScrollArea(const UIAssetsIconsScrollArea& other):
@@ -395,11 +398,7 @@ void UIAssetsIconsScrollArea::UpdateDragging(const Input::Cursor& cursor)
 	CursorEventsListener* listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
 
 	SceneEditScreen* sceneEdit = dynamic_cast<SceneEditScreen*>(listenerUnderCursor);
-	if (sceneEdit && mDragState != DragState::Scene)
-	{
-		InstantiateDraggingAssets();
-		mDragState = DragState::Scene;
-	}
+	UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(listenerUnderCursor);
 
 	if (!sceneEdit && mDragState == DragState::Scene)
 	{
@@ -407,17 +406,30 @@ void UIAssetsIconsScrollArea::UpdateDragging(const Input::Cursor& cursor)
 		mDragState = DragState::Regular;
 	}
 
-	UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(listenerUnderCursor);
+	if (!actorsTree && mDragState == DragState::Tree)
+	{
+		o2EditorTree.GetActorsTree()->BreakDragging();
+		ClearInstantiatedDraggingAssets();
+		mDragState = DragState::Regular;
+	}
+
+	if (sceneEdit && mDragState != DragState::Scene)
+	{
+		InstantiateDraggingAssets();
+
+		if (!mInstSceneDragActors.IsEmpty())
+			mDragState = DragState::Scene;
+	}
+
 	if (actorsTree && mDragState != DragState::Tree)
 	{
 		InstantiateDraggingAssets();
-		mDragState = DragState::Tree;
-	}
 
-	if (!actorsTree && mDragState == DragState::Tree)
-	{
-		ClearInstantiatedDraggingAssets();
-		mDragState = DragState::Regular;
+		if (!mInstSceneDragActors.IsEmpty())
+		{
+			o2EditorTree.GetActorsTree()->ManualBeginDraggingActors(mInstSceneDragActors);
+			mDragState = DragState::Tree;
+		}
 	}
 
 	if (mDragState == DragState::Scene)
@@ -426,14 +438,84 @@ void UIAssetsIconsScrollArea::UpdateDragging(const Input::Cursor& cursor)
 		for (auto actor : mInstSceneDragActors)
 			actor->transform.worldPosition = sceneCursorPos;
 	}
+
+	if (mDragState == DragState::Tree)
+		o2EditorTree.GetActorsTree()->ManualUpdateDraggingActors(cursor);
 }
 
-void UIAssetsIconsScrollArea::ClearInstantiatedDraggingAssets()
+void UIAssetsIconsScrollArea::CompleteDragging()
 {
-	for (auto actor : mInstSceneDragActors)
-		delete actor;
+	for (auto sel : mSelectedAssetsIcons)
+		sel.icon->Show();
 
-	mInstSceneDragActors.Clear();
+	CursorEventsListener* listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
+
+	if (mDragState == DragState::Tree)
+	{
+		o2EditorTree.GetActorsTree()->CompleteManualDraggingActors();
+		RegActorsCreationAction();
+		mInstSceneDragActors.Clear();
+
+		o2UI.SelectWidget(o2EditorTree.GetActorsTree());
+	}
+
+	if (mDragState == DragState::Regular)
+	{
+		UITree* treeWindow = dynamic_cast<UITree*>(listenerUnderCursor);
+		if (treeWindow)
+		{
+			UITreeNode* nodeUnderCursor = treeWindow->GetTreeNodeUnderPoint(o2Input.GetCursorPos());
+			if (nodeUnderCursor)
+			{
+				AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)nodeUnderCursor->GetObject();
+
+				String destPath = assetTreeNode->mPath;
+				auto assetsInfos = mSelectedAssetsIcons.Select<AssetInfo>([](auto x) { return x.icon->GetAssetInfo(); });
+				o2Assets.MoveAssets(assetsInfos, destPath, true);
+
+				DeselectAllAssets();
+			}
+		}
+
+		UIAssetsIconsScrollArea* scrollArea = dynamic_cast<UIAssetsIconsScrollArea*>(listenerUnderCursor);
+		if (scrollArea)
+		{
+			UIAssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
+			if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == FolderAsset::type.ID())
+			{
+				String destPath = iconUnderCursor->GetAssetInfo().mPath;
+				auto assetsInfos = mSelectedAssetsIcons.Select<AssetInfo>([](auto x) { return x.icon->GetAssetInfo(); });
+				o2Assets.MoveAssets(assetsInfos, destPath, true);
+
+				DeselectAllAssets();
+			}
+		}
+	}
+
+	if (mDragState == DragState::Scene)
+	{
+		RegActorsCreationAction();
+
+		o2UI.SelectWidget(o2EditorTree.GetActorsTree());
+		o2EditorTree.GetActorsTree()->SetSelectedActors(mInstSceneDragActors);
+
+		mInstSceneDragActors.Clear();
+	}
+
+	mDragState = DragState::Off;
+}
+
+void UIAssetsIconsScrollArea::RegActorsCreationAction()
+{
+	auto firstInstActor = mInstSceneDragActors[0];
+	auto parent = firstInstActor->GetParent();
+	auto parentChilds = parent ? parent->GetChilds() : o2Scene.GetRootActors();
+	int idx = parentChilds.Find(firstInstActor);
+	auto prevActor = idx > 0 ? parentChilds[idx - 1] : nullptr;
+
+	auto createAction = mnew EditorCreateActorsAction(mInstSceneDragActors, parent, prevActor);
+
+	o2EditorApplication.DoneAction(createAction);
 }
 
 void UIAssetsIconsScrollArea::InstantiateDraggingAssets()
@@ -453,57 +535,12 @@ void UIAssetsIconsScrollArea::InstantiateDraggingAssets()
 	}
 }
 
-void UIAssetsIconsScrollArea::CompleteDragging()
+void UIAssetsIconsScrollArea::ClearInstantiatedDraggingAssets()
 {
-	mDragState = DragState::Off;
-	for (auto sel : mSelectedAssetsIcons)
-		sel.icon->Show();
+	for (auto actor : mInstSceneDragActors)
+		delete actor;
 
-	CursorEventsListener* listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
-
-	UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(listenerUnderCursor);
-	if (actorsTree)
-	{
-		o2Debug.Log("Put actors tree");
-		mInstSceneDragActors.Clear();
-	}
-
-	UITree* treeWindow = dynamic_cast<UITree*>(listenerUnderCursor);
-	if (treeWindow)
-	{
-		UITreeNode* nodeUnderCursor = treeWindow->GetTreeNodeUnderPoint(o2Input.GetCursorPos());
-		if (nodeUnderCursor)
-		{
-			AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)nodeUnderCursor->GetObject();
-
-			String destPath = assetTreeNode->mPath;
-			auto assetsInfos = mSelectedAssetsIcons.Select<AssetInfo>([](auto x) { return x.icon->GetAssetInfo(); });
-			o2Assets.MoveAssets(assetsInfos, destPath, true);
-
-			DeselectAllAssets();
-		}
-	}
-
-	UIAssetsIconsScrollArea* scrollArea = dynamic_cast<UIAssetsIconsScrollArea*>(listenerUnderCursor);
-	if (scrollArea)
-	{
-		UIAssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
-		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == FolderAsset::type.ID())
-		{
-			String destPath = iconUnderCursor->GetAssetInfo().mPath;
-			auto assetsInfos = mSelectedAssetsIcons.Select<AssetInfo>([](auto x) { return x.icon->GetAssetInfo(); });
-			o2Assets.MoveAssets(assetsInfos, destPath, true);
-
-			DeselectAllAssets();
-		}
-	}
-
-	SceneEditScreen* sceneEdit = dynamic_cast<SceneEditScreen*>(listenerUnderCursor);
-	if (sceneEdit)
-	{
-		mInstSceneDragActors.Clear();
-		o2Debug.Log("Put scene");
-	}
+	mInstSceneDragActors.Clear();
 }
 
 void UIAssetsIconsScrollArea::OnCursorPressBreak(const Input::Cursor& cursor)
