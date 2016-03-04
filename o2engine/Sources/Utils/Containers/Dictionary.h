@@ -166,6 +166,9 @@ namespace o2
 		// Copy-constructor
 		Dictionary(const Dictionary& other);
 
+		// Constructor from initializer list
+		Dictionary(std::initializer_list<TKeyValue> init);
+
 		// Destructor
 		~Dictionary();
 
@@ -583,6 +586,13 @@ namespace o2
 	Dictionary<_key_type, _value_type>::Dictionary(const Dictionary<_key_type, _value_type>& other)
 	{
 		mPairs = other.mPairs;
+	}
+
+	template<typename _key_type, typename _value_type>
+	Dictionary<_key_type, _value_type>::Dictionary(std::initializer_list<TKeyValue> init)
+	{
+		for (auto elem : init)
+			Add(elem);
 	}
 
 	template<typename _key_type, typename _value_type>

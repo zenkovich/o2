@@ -65,7 +65,7 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const;
 
-		IOBJECT(VectorFontAsset);
+		SERIALIZABLE(VectorFontAsset);
 
 	public:
 		// ----------------

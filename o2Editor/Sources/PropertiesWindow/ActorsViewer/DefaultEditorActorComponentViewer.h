@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PropertiesWindow/ActorsViewer/IEditorActorComponentViewer.h"
+#include "PropertiesWindow/Properties/IPropertyField.h"
 
 // ------------------------------
 // Default actor component viewer
@@ -15,10 +16,14 @@ public:
 	~DefaultEditorActorComponentViewer();
 
 	// Sets target actors
-	void SetTargetActors(const Vector<Actor*>& actors);
+	void SetTargetComponents(const Vector<Component*>& components);
 
 	// Returns viewing component type 
-	Type* GetComponentType() const;
+	const Type* GetComponentType() const;
 
 	IOBJECT(DefaultEditorActorComponentViewer);
+
+protected:
+	Vector<Component*>            mTargetComponents;   // Target components
+	Vector<IEditorPropertyField*> mUsedPropertyFields; // Used property fields
 };

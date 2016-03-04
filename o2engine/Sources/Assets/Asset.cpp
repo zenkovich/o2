@@ -216,6 +216,24 @@ namespace o2
  		return mId;
 	}
 
+	void Asset::OnSerialize(DataNode& node)
+	{
+		*node.AddNode("path") = mPath;
+		*node.AddNode("id") = IdRef();
+	}
+
+	void Asset::OnDeserialized(const DataNode& node)
+	{
+		if (auto pathNode = node.GetNode("path"))
+			mPath = *pathNode;
+
+		if (auto idNode = node.GetNode("id"))
+			mPath = *idNode;
+
+		if (IdRef() != 0 || !mPath.IsEmpty())
+			Load();
+	}
+
 	void Asset::LoadMeta(const String& path)
 	{
 		DataNode metaData;

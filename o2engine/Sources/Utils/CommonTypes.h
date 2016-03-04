@@ -36,4 +36,6 @@ namespace o2
 
 	enum class VerAlign { Top, Middle, Bottom, Both };
 	enum class HorAlign { Left, Middle, Right, Both };
+
+	enum class ProtectSection { Public, Private, Protected };
 }

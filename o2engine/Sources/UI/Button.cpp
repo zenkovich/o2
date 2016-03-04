@@ -191,10 +191,10 @@ namespace o2
 
 	void UIButton::OnLayerAdded(UIWidgetLayer* layer)
 	{
-		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == Text::type)
+		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == TypeOf(Text))
 			mCaptionText = (Text*)layer->drawable;
 
-		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == Sprite::type)
+		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == TypeOf(Sprite))
 			mIconSprite = (Sprite*)layer->drawable;
 	}
 

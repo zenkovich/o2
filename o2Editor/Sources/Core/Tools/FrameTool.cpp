@@ -25,12 +25,9 @@ EditorFrameTool::EditorFrameTool()
 	mRightTopRotateHandle = mLeftTopRotateHandle;
 	mRightBottomRotateHandle = mLeftTopRotateHandle;
 
-	mLeftTopHandle.regularSprite = mnew Sprite(mHandleRegularColor);
-	mLeftTopHandle.hoverSprite = mnew Sprite(mHandleSelectColor);
-	mLeftTopHandle.pressedSprite = mnew Sprite(mHandlePressedColor);
-	mLeftTopHandle.regularSprite->size = frameHandleSize;
-	mLeftTopHandle.hoverSprite->size = frameHandleSize;
-	mLeftTopHandle.pressedSprite->size = frameHandleSize;
+	mLeftTopHandle.regularSprite = mnew Sprite("ui/UI2_handle_regular.png");
+	mLeftTopHandle.hoverSprite = mnew Sprite("ui/UI2_handle_select.png");
+	mLeftTopHandle.pressedSprite = mnew Sprite("ui/UI2_handle_pressed.png");
 
 	mLeftHandle = mLeftTopHandle;
 	mLeftBottomHandle = mLeftTopHandle;
@@ -463,6 +460,30 @@ void EditorFrameTool::UdateHandlesTransform()
 {
 	float handlesAngle = mFrame.GetAngle();
 
+	auto getHandleType = [&](const Vec2F& pos) { 
+		Vec2F v = pos - Vec2F(0.5f, 0.5f)*mFrame;
+		float angle = Math::Rad2deg(v.Angle(Vec2F::Right()));
+
+		if (angle < 22.5f || angle > 337.5f)
+			return CursorType::SizeWE;
+		else if (angle > 22.5f && angle < 67.5f)
+			return CursorType::SizeNwSe;
+		else if (angle > 67.5f && angle < 112.5f)
+			return CursorType::SizeNS;
+		else if (angle > 112.5f && angle < 157.5f)
+			return CursorType::SizeNeSw;
+		else if (angle > 157.5f && angle < 202.5f)
+			return CursorType::SizeWE;
+		else if (angle > 202.5f && angle < 247.5f)
+			return CursorType::SizeNwSe;
+		else if (angle > 247.5f && angle < 292.5f)
+			return CursorType::SizeNS;
+		else if (angle > 292.5f && angle < 337.5f)
+			return CursorType::SizeNeSw;
+
+		return CursorType::SizeNeSw;
+	};
+
 	mLeftTopHandle.position = Vec2F(0.0f, 1.0f)*mFrame;
 	mLeftHandle.position = Vec2F(0.0f, 0.5f)*mFrame;
 	mLeftBottomHandle.position = Vec2F(0.0f, 0.0f)*mFrame;
@@ -471,6 +492,15 @@ void EditorFrameTool::UdateHandlesTransform()
 	mRightTopHandle.position = Vec2F(1.0f, 1.0f)*mFrame;
 	mRightHandle.position = Vec2F(1.0f, 0.5f)*mFrame;
 	mRightBottomHandle.position = Vec2F(1.0f, 0.0f)*mFrame;
+
+	mLeftTopHandle.cursorType = getHandleType(mLeftTopHandle.GetPosition());
+	mLeftHandle.cursorType = getHandleType(mLeftHandle.GetPosition());
+	mLeftBottomHandle.cursorType = getHandleType(mLeftBottomHandle.GetPosition());
+	mTopHandle.cursorType = getHandleType(mTopHandle.GetPosition());
+	mBottomHandle.cursorType = getHandleType(mBottomHandle.GetPosition());
+	mRightTopHandle.cursorType = getHandleType(mRightTopHandle.GetPosition());
+	mRightHandle.cursorType = getHandleType(mRightHandle.GetPosition());
+	mRightBottomHandle.cursorType = getHandleType(mRightBottomHandle.GetPosition());
 
 	mLeftTopRotateHandle.position = Vec2F(0.0f, 1.0f)*mFrame;
 	mLeftBottomRotateHandle.position = Vec2F(0.0f, 0.0f)*mFrame;

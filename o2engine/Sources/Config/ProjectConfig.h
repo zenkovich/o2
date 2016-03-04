@@ -50,7 +50,64 @@ namespace o2
 		// Sets new project path. Loads config from new path and will o2 works with new path
 		void SetProjectPath(const String& path);
 
-		SERIALIZABLE(ProjectConfig);
+		//SERIALIZABLE(ProjectConfig);
+	private:
+		static Type type;
+
+		friend struct o2::Type::TypeAgent<ProjectConfig>;
+
+		template<typename _type>
+		friend const Type& o2::_TypeOf();
+		friend class o2::TypeInitializer;
+		friend class o2::Reflection;
+		template<typename _type>
+		friend struct o2::Type::TypeAgent;
+		friend class o2::DataNode;
+
+	public:
+		ProjectConfig* Clone() const { return mnew ProjectConfig(*this); }
+		Type& GetType() const { return type; };
+		ProjectConfig& operator=(const DataNode& node)
+		{
+			Deserialize(node); return *this;
+		}
+		operator DataNode()
+		{
+			return Serialize();
+		}
+		DataNode Serialize()
+		{
+			DataNode res;
+			OnSerialize(res);
+			for (auto field : GetType().Fields())
+			{
+				auto srlzAttribute = field->Attribute<ISerializableAttribute>();
+				if (srlzAttribute)
+				{
+					field->SerializeObject((void*)field->GetValuePtr<char>(this), *res.AddNode(field->Name()));
+				}
+			}
+
+			return res;
+		}
+
+		void Deserialize(const DataNode& node)
+		{
+			for (auto field : GetType().Fields())
+			{
+				auto srlzAttribute = field->Attribute<ISerializableAttribute>();
+				if (srlzAttribute)
+				{
+					auto fldNode = node.GetNode(field->Name());
+					if (fldNode)
+					{
+						field->DeserializeObject((void*)field->GetValuePtr<char>(this), *fldNode);
+					}
+				}
+			}
+			OnDeserialized(node);
+		}
+		static void InitializeType(ProjectConfig* sample);
 
 	protected:
 		String   mProjectName; // Current project name @SERIALIZABLE

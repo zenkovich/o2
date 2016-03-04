@@ -474,6 +474,15 @@ namespace o2
 		return nullptr;
 	}
 
+	Component* Actor::GetComponent(const Type* type)
+	{
+		for (auto comp : mCompontents)
+			if (&comp->GetType()== type)
+				return comp;
+
+		return nullptr;
+	}
+
 	Actor::ComponentsVec Actor::GetComponents() const
 	{
 		return mCompontents;

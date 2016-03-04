@@ -14,7 +14,8 @@ template<> o2::Debug* o2::Singleton<o2::Debug>::mInstance = mnew o2::Debug();   
 template<> o2::FileSystem* o2::Singleton<o2::FileSystem>::mInstance = mnew o2::FileSystem(); \
 o2::Reflection* o2::Reflection::instance = mnew Reflection()
 
-#define MAIN_O2 \
-RegReflectionTypes()
+#define MAIN_O2                                        \
+RegReflectionTypes();                                  \
+o2::Reflection::instance->InitializeFundamentalTypes()
 
 

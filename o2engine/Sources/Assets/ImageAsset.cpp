@@ -89,7 +89,7 @@ namespace o2
 	void ImageAsset::SetAtlasId(AssetId id)
 	{
 		AssetInfo atlasInfp = o2Assets.GetAssetInfo(id);
-		if (atlasInfp.mType != AtlasAsset::type.ID())
+		if (atlasInfp.mType != TypeOf(AtlasAsset).ID())
 		{
 			GetAssetsLogStream()->Error("Can' setup image atlas id (%i): wrong id", id);
 			return;
@@ -152,7 +152,12 @@ namespace o2
 	{
 		DataNode data;
 		data.LoadFromFile(path);
-		Deserialize(data);
+
+		if (auto node = data.GetNode("mAtlasPage"))
+			mAtlasPage = *node;
+
+		if (auto node = data.GetNode("mAtlasRect"))
+			mAtlasRect = *node;
 	}
 
 	void ImageAsset::SaveData(const String& path)

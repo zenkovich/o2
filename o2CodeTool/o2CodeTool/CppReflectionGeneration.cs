@@ -5,9 +5,10 @@ using System.Linq;
 
 public class CppReflectionGenerator
 {
-	LexClass       iobjectClass;
-	List<LexClass> reflectableClasses;
-	string         directoriesCut;
+	LexClass                    iobjectClass;
+	List<LexClass>              reflectableClasses;
+	Dictionary<string, LexEnum> enums = new Dictionary<string, LexEnum>();
+	string                      directoriesCut;
 
 	string CutPath(string input)
 	{
@@ -27,9 +28,20 @@ public class CppReflectionGenerator
 
 		}).ToList();
 
+		SearchEnums(map.globalNamespace);
+
 		GenerateHeader(outputPath);
 		GenerateSource(outputPath);
     }
+
+	void SearchEnums(LexSection section)
+	{
+		foreach (var x in section.enums)
+			enums.Add(section.name + "::" + x.name, x);
+
+		foreach (var x in section.childSections)
+			SearchEnums(x);
+	}
 
 	void GenerateHeader(string outputPath)
 	{
@@ -44,10 +56,16 @@ public class CppReflectionGenerator
 			"// Types initializations\n" + GetTypesInitializationsData() + "\n" +
 			"// Registering all types\n" + 
 			"void RegReflectionTypes()\n{\n" + 
+			"\t// Initialize enums\n" + GetEnumsInitializationData() + "\n" +
 			"\t// Initialize types\n" + GetTypeInitializationData() + "\n" +
 			"\t// Resolve inheritance\n" + GetBaseTypesResolvingData() + "\n}";
 
-		File.WriteAllText(outputPath + ".cpp", sourceData);
+		string oldData = File.ReadAllText(outputPath + ".cpp");
+
+		if (oldData != sourceData)
+			File.WriteAllText(outputPath + ".cpp", sourceData);
+		else
+			Console.Write("Output is the same as old. Don't writing.\n");
 	}
 
 	string GetIncludesData()
@@ -92,9 +110,16 @@ public class CppReflectionGenerator
 			{
 				if (fld.isStatic)
 					continue;
-				
+
+				String protectSection = "Public";
+
+				if (fld.protectLevel == ProtectLevel.Protected)
+					protectSection = "Protected";
+				else if (fld.protectLevel == ProtectLevel.Private)
+					protectSection = "Private";
+
 				res += "\tTypeInitializer::RegField(&type, \"" + fld.name + "\", (size_t)(char*)(&sample->" + fld.name + 
-					") - (size_t)(char*)sample, sample->" + fld.name + ")";
+					") - (size_t)(char*)sample, sample->" + fld.name + ", o2::ProtectSection::" + protectSection + ")";
 
 				if (fld.comment != null && fld.comment.comment.Contains("@SERIALIZABLE"))
 					res += ".AddAttribute<SerializableAttribute<decltype(" + fld.name + ")>>()";
@@ -121,25 +146,55 @@ public class CppReflectionGenerator
 				}
 				else res += "\tfuncInfo = TypeInitializer::RegFunction<" + cls.name + ", " + fnc.returnType.definition;
 
+				String protectSection = "Public";
+
+				if (fnc.protectLevel == ProtectLevel.Protected)
+					protectSection = "Protected";
+				else if (fnc.protectLevel == ProtectLevel.Private)
+					protectSection = "Private";
+
 				foreach (var param in fnc.parameters)
 					res += ", " + param.type.definition;
 
-				res += ">(&type, \"" + fnc.name + "\", &" + cls.name + "::" + fnc.name + ");\n";
-
-				//TypeInitializer::RegFuncParam<float>(funcInfo, "dt", false, false, false);
+				res += ">(&type, \"" + fnc.name + "\", &" + cls.name + "::" + fnc.name + ", o2::ProtectSection::" + 
+					protectSection + ");\n";
+				
 				foreach (var param in fnc.parameters)
 				{
 					res += "\tTypeInitializer::RegFuncParam<" + param.type.definition + ">(funcInfo, \"" + param.name +
 						"\");\n";
 				}
-
-				//res += "\n";
             }
 
 			res += "}\n\n";
 		}
 
 		Console.Write("CPP Generation: Types initializations functions done " + DateTime.Now + "\n");
+
+		return res;
+	}
+
+	string GetEnumsInitializationData()
+	{
+		string res = "";
+
+		//o2::Reflection::InitializeEnum<o2::BaseCorner>({ { (int)o2::BaseCorner::Bottom, "Bottom" },{ (int)o2::BaseCorner::Center, "Center" } });
+
+		foreach (var x in enums)
+		{
+			res += "\to2::Reflection::InitializeEnum<" + x.Key + ">( { ";
+
+			int id = 0;
+			foreach (var y in x.Value.content)
+			{
+				res += "{ (int)" + x.Key + "::" + y + ", \"" + y + "\" }";
+				id++;
+				if (id != x.Value.content.Count)
+					res += ", ";
+			}
+
+			res += " });\n";
+        }
 
 		return res;
 	}
@@ -185,7 +240,7 @@ public class CppReflectionGenerator
 				continue;
 
 			res += GetBaseClassSetting(cls.lexClass, processed);
-			res += "\tTypeInitializer::AddBaseType(&" + lexClass.name + "::type, &" + cls.lexClass.name + "::type);\n";
+			res += "\tTypeInitializer::AddBaseType<" + lexClass.name + ", " + cls.lexClass.name + ">();\n";
 		}
 
 		return res;

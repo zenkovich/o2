@@ -172,7 +172,12 @@ namespace o2
 	{
 		DataNode data;
 		data.LoadFromFile(path);
-		Deserialize(data);
+
+		if (auto node = data.GetNode("mImagesAssetsInfos"))
+			mImagesAssetsInfos = *node;
+
+		if (auto node = data.GetNode("mPages"))
+			mPages = *node;
 
 		for (auto& page : mPages)
 			page.mOwner = this;

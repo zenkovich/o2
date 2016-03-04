@@ -24,6 +24,8 @@ public:
 	// Default constructor
 	EditorFrameTool();
 
+	EditorFrameTool& operator=(const EditorFrameTool& other) { return *this; }
+
 	// Destructor
 	~EditorFrameTool();
 

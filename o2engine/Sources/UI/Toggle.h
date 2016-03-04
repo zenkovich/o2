@@ -81,6 +81,12 @@ namespace o2
 		// Sets current value
 		void SetValue(bool value);
 
+		// Sets value as unknown
+		void SetValueUnknown();
+
+		// Is value unknown
+		bool IsValueUnknown() const;
+
 		// Returns current value
 		bool GetValue() const;
 
@@ -96,10 +102,11 @@ namespace o2
 		SERIALIZABLE(UIToggle);
 
 	protected:
-		bool           mValue;       // Current value
-		Text*          mCaptionText; // Caption layer text
-		UIWidgetLayer* mBackLayer;   // Background layer
-		UIToggleGroup* mToggleGroup; // Toggle group
+		bool           mValue;        // Current value
+		bool           mValueUnknown; // Is value unknown
+		Text*          mCaptionText;  // Caption layer text
+		UIWidgetLayer* mBackLayer;    // Background layer
+		UIToggleGroup* mToggleGroup;  // Toggle group
 
 	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true

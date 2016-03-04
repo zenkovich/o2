@@ -9,7 +9,7 @@ namespace o2
 	Vector<Type::Id> ImageAssetConverter::GetProcessingAssetsTypes() const
 	{
 		Vector<Type::Id> res;
-		res.Add(ImageAsset::type.ID());
+		res.Add(TypeOf(ImageAsset).ID());
 		return res;
 	}
 

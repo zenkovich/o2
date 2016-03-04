@@ -110,7 +110,7 @@ namespace o2
 		else
 			mRootAssets.Remove(asset);
 
-		if (asset->mType == FolderAsset::type.ID() && release)
+		if (asset->mType == TypeOf(FolderAsset).ID() && release)
 		{
 			auto childs = asset->GetChilds();
 			for (auto ch : childs)
@@ -138,7 +138,7 @@ namespace o2
 		{
 			bool exist = false;
 
-			if (assetNode->mType == FolderAsset::type.ID())
+			if (assetNode->mType == TypeOf(FolderAsset).ID())
 				exist = folder.mFolders.ContainsPred([=](const FolderInfo& x) { return x.mPath == assetNode->mPath; });
 			else
 				exist = folder.mFiles.ContainsPred([=](const FileInfo& x) { return x.mPath == assetNode->mPath; });

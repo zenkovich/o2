@@ -283,6 +283,9 @@ namespace UIStyle
 		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"),
 										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
 
+		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI_Check_unknown.png"),
+										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
+
 		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Checkbox";
 		captionText->horAlign = HorAlign::Left;
@@ -296,6 +299,9 @@ namespace UIStyle
 		sample->AddState("value", Animation::EaseInOut(sample, &checkLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.5f;
 
+		sample->AddState("unknown", Animation::EaseInOut(sample, &unknownLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 0.5f;
+
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
@@ -306,6 +312,49 @@ namespace UIStyle
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
+	}
+
+	void RebuildCheckboxWithoutCaptionStyle()
+	{
+		UIToggle* sample = mnew UIToggle();
+		sample->layout.minSize = Vec2F(20, 20);
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Check_bk.png"),
+										  Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+
+		auto selectLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
+											Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+
+		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI_Check_bk_pressed.png"),
+											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+
+		auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI_Check_bk_focus.png"),
+										   Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+
+		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"),
+										   Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+
+		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI_Check_unknown.png"),
+											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("value", Animation::EaseInOut(sample, &checkLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("unknown", Animation::EaseInOut(sample, &unknownLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "without caption");
 	}
 
 	void RebuildScrollAreaStraightBarsStyle()
@@ -800,7 +849,7 @@ namespace UIStyle
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		UIWidget* separatorSample = sample->GetSeparatorSample();
-		separatorSample->AddLayer("line", mnew Sprite("ui/UI_Separator.png"), 
+		separatorSample->AddLayer("line", mnew Sprite("ui/UI_Separator.png"),
 								  Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
 
 		UIWidget* itemSample = sample->GetItemSample();
@@ -954,7 +1003,7 @@ namespace UIStyle
 
 		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
 															  -5.0f, -15.0f, 0.2f));
-															  
+
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
@@ -1026,10 +1075,45 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "backless");
 	}
 
+	void RebuildSinglelineEditbox()
+	{
+		UIEditBox* sample = mnew UIEditBox();
+		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
+		sample->SetViewLayout(Layout::BothStretch(3, 1, 3, -1));
+		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetMultiLine(false);
+		sample->layout.minSize = Vec2F(10, 10);
+
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue(&selectLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		sample->AddState("selected", focusAnim)
+			->offStateAnimationSpeed = 0.5f;
+
+		Text* textDrawable = sample->GetTextDrawable();
+		textDrawable->verAlign = VerAlign::Middle;
+		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->SetFontAsset("stdFont.ttf");
+
+		Sprite* caretDrawable = sample->GetCaretDrawable();
+		*caretDrawable = Sprite();
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight())*1.7f);
+		caretDrawable->pivot = Vec2F(0, 0.26f);
+		caretDrawable->color = Color4::Black();
+
+		o2UI.AddWidgetStyle(sample, "singleline");
+	}
+
 	void RebuildBacklessScrollarea()
 	{
 		UIScrollArea* sample = mnew UIScrollArea();
-		sample->layout.minSize = Vec2F(20, 20);
+		sample->layout.minSize = Vec2F(10, 10);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
@@ -1088,6 +1172,8 @@ namespace UIStyle
 		RebuildBacklessEditbox();
 		RebuildLongListStyle();
 		RebuildBacklessScrollarea();
+		RebuildSinglelineEditbox();
+		RebuildCheckboxWithoutCaptionStyle();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

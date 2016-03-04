@@ -157,8 +157,8 @@ namespace o2
 		};
 
 	protected:
-		AssetInfosVec mImagesAssetsInfos; // Loaded image infos  @SERIALIZABLE
-		PagesVec      mPages;             // Pages @SERIALIZABLE
+		AssetInfosVec mImagesAssetsInfos; // Loaded image infos
+		PagesVec      mPages;             // Pages
 
 	protected:
 		// Loads data

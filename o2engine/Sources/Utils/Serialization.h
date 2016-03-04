@@ -5,6 +5,7 @@
 #include "Utils/IObject.h"
 #include "Utils/Reflection/Reflection.h"
 #include "Utils/String.h"
+#include "Utils/Singleton.h"
 
 namespace o2
 {
@@ -15,10 +16,10 @@ namespace o2
 	{
 	public:
 		// Serializing object into data node
-		virtual DataNode Serialize() { return DataNode(); };
+		virtual DataNode Serialize() { return DataNode(); }
 
 		// Deserializing object from data node
-		virtual void Deserialize(const DataNode& node) {};
+		virtual void Deserialize(const DataNode& node) {}
 
 		// DataNode converting operator
 		virtual operator DataNode() { return Serialize(); };
@@ -59,43 +60,64 @@ namespace o2
 		IAttribute* Clone() const { return mnew SerializableAttribute(*this); }
 	};
 
-// Serialization implementation macros
-#define SERIALIZABLE(CLASS)                                                                \
-    CLASS* Clone() const { return mnew CLASS(*this); }                                     \
-	static Type type;								                                       \
-	Type& GetType() const { return type; };	                                               \
-	friend struct o2::Type::TypeCreator<CLASS>;                                            \
-	DataNode Serialize()                                                        		   \
-	{                                                              						   \
-		DataNode res;																	   \
-		OnSerialize(res);																   \
-		for (auto field : type.Fields())												   \
-		{																				   \
-			ISerializableAttribute* srlzAttr = field->Attribute<ISerializableAttribute>(); \
-			if (srlzAttr)																   \
-				srlzAttr->Serialize(this, res);										       \
-		}																				   \
-																						   \
-		return res;																		   \
-	}																					   \
-	void Deserialize(const DataNode& node)												   \
-	{																					   \
-		for (auto field : type.Fields())												   \
-		{																				   \
-			ISerializableAttribute* srlzAttr = field->Attribute<ISerializableAttribute>(); \
-			if (srlzAttr)																   \
-				srlzAttr->Deserialize(this, node);										   \
-		}																				   \
-		OnDeserialized(node);   														   \
-	}																					   \
-	CLASS& operator=(const DataNode& node) 												   \
-	{																					   \
-		Deserialize(node); return *this; 												   \
-	} 																					   \
-	operator DataNode() 																   \
-	{ 																					   \
-		return Serialize(); 															   \
-	}                                                                                      \
+	// Serialization implementation macros
+#define SERIALIZABLE(CLASS)                                                                                            \
+private:                                                                                                               \
+	static Type type;								                                                                   \
+                                                                                                                       \
+	friend struct o2::Type::TypeAgent<CLASS>;                                                                          \
+                                                                                                                       \
+    template<typename _type>                                                                                           \
+	friend const Type& o2::_TypeOf();                                                                                  \
+    friend class o2::TypeInitializer;                                                                                  \
+    friend class o2::Reflection;                                                                                       \
+    template<typename _type>                                                                                           \
+    friend struct o2::Type::TypeAgent;                                                                                 \
+    friend class o2::DataNode;                                                                                         \
+                                                                                                                       \
+public:                                                                                                                \
+	CLASS* Clone() const { return mnew CLASS(*this); }                                                                 \
+	Type& GetType() const { return type; };	                                                                           \
+	CLASS& operator=(const DataNode& node) 			                                                                   \
+	{												                                                                   \
+		Deserialize(node); return *this; 			                                                                   \
+	} 												                                                                   \
+	operator DataNode() 							                                                                   \
+	{ 												                                                                   \
+		return Serialize(); 						                                                                   \
+	}                                                                                                                  \
+    DataNode Serialize()																				               \
+	{																												   \
+		DataNode res;																								   \
+		OnSerialize(res);																							   \
+		for (auto field : GetType().Fields())																		   \
+		{																											   \
+			auto srlzAttribute = field->Attribute<ISerializableAttribute>();										   \
+			if (srlzAttribute)																						   \
+			{																										   \
+				field->SerializeObject((void*)field->GetValuePtrStrong<char>(this), *res.AddNode(field->Name()));      \
+			}																										   \
+		}																											   \
+																													   \
+		return res;																									   \
+	}																												   \
+																													   \
+	void Deserialize(const DataNode& node)															                   \
+	{																												   \
+		for (auto field : GetType().Fields())																		   \
+		{																											   \
+			auto srlzAttribute = field->Attribute<ISerializableAttribute>();										   \
+			if (srlzAttribute)																						   \
+			{																										   \
+				auto fldNode = node.GetNode(field->Name());															   \
+				if (fldNode)																						   \
+				{																									   \
+					field->DeserializeObject((void*)field->GetValuePtrStrong<char>(this), *fldNode);			       \
+				}																									   \
+			}																										   \
+		}																											   \
+		OnDeserialized(node);																						   \
+	}																												   \
 	static void InitializeType(CLASS* sample)   
 
 	template<typename _type>

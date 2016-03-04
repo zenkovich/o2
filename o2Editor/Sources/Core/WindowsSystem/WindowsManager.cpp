@@ -62,7 +62,7 @@ void ProcHierarchy(String& hierarchy, UIWidget* widget, int level)
 
 	hierarchy += widget->GetName();
 
-	if (widget->GetType() == UIDockWindowPlace::type)
+	if (widget->GetType() == TypeOf(UIDockWindowPlace))
 	{
 		hierarchy += ": ";
 		hierarchy += (String)(bool)((UIDockWindowPlace*)widget)->interactable;
@@ -104,7 +104,7 @@ WindowsLayout WindowsManager::GetWindowsLayout()
 
 	for (auto widget : o2UI.GetAllWidgets())
 	{
-		if (widget->GetType() == UIDockableWindow::type)
+		if (widget->GetType() == TypeOf(UIDockableWindow))
 			res.windows.Add(widget->name, widget->layout);
 	}
 

@@ -776,7 +776,7 @@ namespace o2
 
 	void UIContextMenuItem::OnChildAdded(UIWidget* child)
 	{
-		if (child->GetType() == UIContextMenu::type)
+		if (child->GetType() == TypeOf(UIContextMenu))
 			mSubMenu = (UIContextMenu*)child;
 	}
 

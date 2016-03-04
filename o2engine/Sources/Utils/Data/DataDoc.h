@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils/Containers/Vector.h"
 #include "Utils/Containers/Dictionary.h"
+#include "Utils/Containers/Vector.h"
 #include "Utils/String.h"
 
 namespace o2
@@ -114,6 +114,12 @@ namespace o2
 		DataNode& operator=(int value);
 
 		// Assign operator to integer value
+		DataNode& operator=(unsigned long value);
+
+		// Assign operator to integer value
+		DataNode& operator=(long long int value);
+
+		// Assign operator to integer value
 		DataNode& operator=(UInt64 value);
 
 		// Assign operator to boolean value
@@ -121,6 +127,9 @@ namespace o2
 
 		// Assign operator to float value
 		DataNode& operator=(float value);
+
+		// Assign operator to float value
+		DataNode& operator=(double value);
 
 		// Assign operator to unsigned integer value
 		DataNode& operator=(UInt value);
@@ -161,8 +170,8 @@ namespace o2
 		// Assign operator to enum class value
 		template<class _type, class = typename std::enable_if<std::is_enum<_type>::value>::type>
 		DataNode& operator=(_type value)
-		{
-			return operator=((int)value);
+		{			
+			return operator=(Reflection::GetEnumName<_type>(value));
 		}
 
 		// Cast operator to wide string
@@ -204,6 +213,30 @@ namespace o2
 		// Cast operator to color
 		operator Color4() const;
 
+		// Cast operator to char
+		operator char() const;
+
+		// Cast operator to char
+		operator unsigned char() const;
+
+		// Cast operator to char
+		operator wchar_t() const;
+
+		// Cast operator to char
+		operator short() const;
+
+		// Cast operator to char
+		operator unsigned short() const;
+
+		// Cast operator to char
+		operator long() const;
+
+		// Cast operator to char
+		operator unsigned long() const;
+
+		// Cast operator to char
+		operator long long int() const;
+
 		// Cast operator to pointer
 		template<typename _type>
 		operator _type*() const;
@@ -219,8 +252,8 @@ namespace o2
 		// Cast operator to enum class
 		template<class _type, class = typename std::enable_if<std::is_enum<_type>::value>::type>
 		operator _type() const
-		{
-			return (_type)((int)mData);
+		{			
+			return Reflection::GetEnum<_type>(mData);;
 		}
 
 		// [] assign operator. nodePath sample: "node/node/abc/cde"
@@ -303,6 +336,30 @@ namespace o2
 
 		// End constant iterator (for range based "for")
 		ConstIterator end() const;
+
+		// Is DataNode supporting type trait
+		template<typename T>
+		struct IsSupport:
+			std::integral_constant<bool,
+			(std::is_fundamental<T>::value ||
+			 std::is_enum<T>::value ||
+			 std::is_base_of<ISerializable, T>::value ||
+			 std::is_base_of<ISerializable, typename std::remove_pointer<T>::type>::value ||
+			 std::is_same<Color4, T>::value ||
+			 std::is_same<RectI, T>::value ||
+			 std::is_same<RectF, T>::value ||
+			 std::is_same<Vec2I, T>::value ||
+			 std::is_same<Vec2F, T>::value ||
+			 std::is_same<String, T>::value ||
+			 std::is_same<WString, T>::value ||
+			 std::is_same<DataNode, T>::value) && !std::is_const<T>::value>
+		{};
+
+		template<typename T2>
+		struct IsSupport<Vector<T2>>: IsSupport<T2> {};
+
+		template<typename T2, typename T3>
+		struct IsSupport<Dictionary<T2, T3>>: std::integral_constant<bool, IsSupport<T2>::value && IsSupport<T3>::value> {};
 	};
 
 	template<typename _type>

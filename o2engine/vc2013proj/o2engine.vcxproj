@@ -185,6 +185,7 @@
     <ClInclude Include="..\Sources\Scene\Actor.h" />
     <ClInclude Include="..\Sources\Scene\ActorTransform.h" />
     <ClInclude Include="..\Sources\Scene\Component.h" />
+    <ClInclude Include="..\Sources\Scene\Components\EditorTestComponent.h" />
     <ClInclude Include="..\Sources\Scene\Components\ImageComponent.h" />
     <ClInclude Include="..\Sources\Scene\DrawableComponent.h" />
     <ClInclude Include="..\Sources\Scene\Scene.h" />
@@ -262,6 +263,7 @@
     <ClInclude Include="..\Sources\Utils\Reflection\Type.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h" />
     <ClInclude Include="..\Sources\Utils\Serialization.h" />
+    <ClInclude Include="..\Sources\Utils\Serializer.h" />
     <ClInclude Include="..\Sources\Utils\ShortcutKeys.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
@@ -383,6 +385,8 @@
     <ClCompile Include="..\Sources\Utils\Reflection\FunctionInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Reflection.cpp" />
+    <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
+    <ClCompile Include="..\Sources\Utils\Serializer.cpp" />
     <ClCompile Include="..\Sources\Utils\ShortcutKeys.cpp" />
     <ClCompile Include="..\Sources\Utils\StackTrace.cpp" />
     <ClCompile Include="..\Sources\Utils\Task.cpp" />

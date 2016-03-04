@@ -172,10 +172,14 @@ namespace o2
 	}
 
 	void UIWidget::OnSelected()
-	{}
+	{
+		onSelected();
+	}
 
 	void UIWidget::OnDeselected()
-	{}
+	{
+		onDeselected();
+	}
 
 	void UIWidget::SetName(const String& name)
 	{

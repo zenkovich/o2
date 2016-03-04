@@ -65,7 +65,7 @@ namespace o2
 
 	void AssetsBuilder::InitializeConverters()
 	{
-		auto converterTypes = IAssetConverter::type.DerivedTypes();
+		auto converterTypes = TypeOf(IAssetConverter).DerivedTypes();
 		for (auto converterType : converterTypes)
 		{
 			IAssetConverter* converter = (IAssetConverter*)converterType->CreateSample();
@@ -127,7 +127,7 @@ namespace o2
 				if (!isExistMetaForAsset)
 				{
 					auto assetType = o2Assets.GetAssetTypeByExtension(extension);
-					GenerateMeta(assetType, metaFullPath);
+					GenerateMeta(*assetType, metaFullPath);
 				}
 			}
 		}
@@ -139,7 +139,7 @@ namespace o2
 			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 			if (!isExistMetaForFolder)
 			{
-				auto assetType = &FolderAsset::type;
+				auto assetType = TypeOf(FolderAsset);
 				GenerateMeta(assetType, metaFullPath);
 			}
 
@@ -150,7 +150,7 @@ namespace o2
 	AssetsBuilder::AssetsIdsVec AssetsBuilder::ProcessRemovedAssets()
 	{
 		AssetsIdsVec res;
-		Type::Id folderTypeId = FolderAsset::type.ID();
+		Type::Id folderTypeId = TypeOf(FolderAsset).ID();
 
 		// in first pass skipping folders (only files), in second - files
 		for (int pass = 0; pass < 2; pass++)
@@ -203,7 +203,7 @@ namespace o2
 	AssetsBuilder::AssetsIdsVec AssetsBuilder::ProcessModifiedAssets()
 	{
 		AssetsIdsVec res;
-		Type::Id folderTypeId = FolderAsset::type.ID();
+		Type::Id folderTypeId = TypeOf(FolderAsset).ID();
 
 		// in first pass skipping files (only folders), in second - folders
 		for (int pass = 0; pass < 2; pass++)
@@ -288,7 +288,7 @@ namespace o2
 	AssetsBuilder::AssetsIdsVec AssetsBuilder::ProcessNewAssets()
 	{
 		AssetsIdsVec res;
-		Type::Id folderTypeId = FolderAsset::type.ID();
+		Type::Id folderTypeId = TypeOf(FolderAsset).ID();
 
 		// in first pass skipping files (only folders), in second - folders
 		for (int pass = 0; pass < 2; pass++)
@@ -347,9 +347,9 @@ namespace o2
 		return res;
 	}
 
-	void AssetsBuilder::GenerateMeta(Type* assetType, const String& metaFullPath)
+	void AssetsBuilder::GenerateMeta(const Type& assetType, const String& metaFullPath)
 	{
-		auto assetTypeSample = (Asset*)assetType->CreateSample();
+		auto assetTypeSample = (Asset*)assetType.CreateSample();
 		auto assetTypeSampleMeta = assetTypeSample->GetMeta();
 
 		DataNode metaData;

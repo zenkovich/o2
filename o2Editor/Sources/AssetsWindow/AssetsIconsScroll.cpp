@@ -191,27 +191,27 @@ void UIAssetsIconsScrollArea::UpdateAssetsPath()
 	{
 		UIAssetIcon* assetIcon;
 
-		if (asset.mType == FolderAsset::type.ID())
+		if (asset.mType == TypeOf(FolderAsset).ID())
 		{
 			assetIcon = GetAssetIconFromPool("folder");
 			assetIcon->name = "folder";
 		}
-		else if (asset.mType == ImageAsset::type.ID())
+		else if (asset.mType == TypeOf(ImageAsset).ID())
 		{
 			assetIcon = GetImageAssetIcon(asset);
 			assetIcon->name = "image preview";
 		}
-		else if (asset.mType == DataAsset::type.ID())
+		else if (asset.mType == TypeOf(DataAsset).ID())
 		{
 			assetIcon = GetAssetIconFromPool("text");
 			assetIcon->name = "text";
 		}
-		else if (asset.mType == AnimationAsset::type.ID())
+		else if (asset.mType == TypeOf(AnimationAsset).ID())
 		{
 			assetIcon = GetAssetIconFromPool("animation");
 			assetIcon->name = "animation";
 		}
-		else if (asset.mType == ActorAsset::type.ID())
+		else if (asset.mType == TypeOf(ActorAsset).ID())
 		{
 			assetIcon = GetAssetIconFromPool("prefab");
 			assetIcon->name = "prefab";
@@ -302,12 +302,16 @@ void UIAssetsIconsScrollArea::OnSelected()
 {
 	for (auto& sel : mSelectedAssetsIcons)
 		sel.selectionSprite->SetColor(mSelectedColor);
+
+	onSelected();
 }
 
 void UIAssetsIconsScrollArea::OnDeselected()
 {
 	for (auto& sel : mSelectedAssetsIcons)
 		sel.selectionSprite->SetColor(mUnselectedColor);
+
+	onDeselected();
 }
 
 void UIAssetsIconsScrollArea::OnCursorPressed(const Input::Cursor& cursor)
@@ -481,7 +485,7 @@ void UIAssetsIconsScrollArea::CompleteDragging()
 		if (scrollArea)
 		{
 			UIAssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
-			if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == FolderAsset::type.ID())
+			if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == TypeOf(FolderAsset).ID())
 			{
 				String destPath = iconUnderCursor->GetAssetInfo().mPath;
 				auto assetsInfos = mSelectedAssetsIcons.Select<AssetInfo>([](auto x) { return x.icon->GetAssetInfo(); });
@@ -773,7 +777,7 @@ void UIAssetsIconsScrollArea::OnIconDblClicked(UIAssetIcon* icon)
 		return;
 	}
 
-	if (iconAssetInfo.mType == FolderAsset::type.ID())
+	if (iconAssetInfo.mType == TypeOf(FolderAsset).ID())
 		o2EditorAssets.OpenFolder(iconAssetInfo.mPath);
 	else
 		o2EditorAssets.OpenAndEditAsset(iconAssetInfo.mId);
@@ -922,9 +926,9 @@ Actor* UIAssetsIconsScrollArea::InstantiateAsset(const ActorAsset& asset)
 
 Actor* UIAssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
 {
-	if (assetInfo.mType == ImageAsset::type.ID())
+	if (assetInfo.mType == TypeOf(ImageAsset).ID())
 		return InstantiateAsset(ImageAsset(assetInfo.mId));
-	else if (assetInfo.mType == ActorAsset::type.ID())
+	else if (assetInfo.mType == TypeOf(ActorAsset).ID())
 		return InstantiateAsset(ActorAsset(assetInfo.mId));
 
 	return nullptr;

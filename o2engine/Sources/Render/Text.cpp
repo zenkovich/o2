@@ -188,7 +188,7 @@ namespace o2
 
 		mFontAssetId = assetId;
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
-		if (fontAssetInfo.GetType() == BitmapFontAsset::type)
+		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
 		{
 			auto asset = BitmapFontAsset(mFontAssetId);
 			mFont = asset.GetFont();
@@ -221,7 +221,7 @@ namespace o2
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(fileName);
 		mFontAssetId = fontAssetInfo.mId;
 
-		if (fontAssetInfo.GetType() == BitmapFontAsset::type)
+		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
 		{
 			auto asset = BitmapFontAsset(mFontAssetId);
 			mFont = asset.GetFont();
@@ -241,7 +241,7 @@ namespace o2
 	Asset* Text::GetFontAsset() const
 	{
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
-		if (fontAssetInfo.GetType() == BitmapFontAsset::type)
+		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
 			return mnew BitmapFontAsset(mFontAssetId);
 		
 		return mnew VectorFontAsset(mFontAssetId);

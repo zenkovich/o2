@@ -10,6 +10,7 @@ namespace UIStyle
 	void RebuildHorScrollBarStyle();
 	void RebuildVerScrollBarStyle();
 	void RebuildCheckboxStyle();
+	void RebuildCheckboxWithoutCaptionStyle();
 	void RebuildScrollAreaStyle();
 	void RebuildScrollAreaStraightBarsStyle();
 	void RebuildLabelStyle();
@@ -26,5 +27,6 @@ namespace UIStyle
 	void RebuildBasicUIStyle();
 	void RebuildBacklessDropdown();
 	void RebuildBacklessEditbox();
+	void RebuildSinglelineEditbox();
 	void RebuildBacklessScrollarea();
 }

@@ -414,7 +414,7 @@ void UIActorsTree::EndDragging()
 		String targetPath = assetsScrollArea->GetViewingPath();
 
 		auto iconUnderCursor = assetsScrollArea->GetIconUnderPoint(o2Input.GetCursorPos());
-		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == FolderAsset::type.ID())
+		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == TypeOf(FolderAsset).ID())
 			targetPath = iconUnderCursor->GetAssetInfo().mPath;
 
 		for (auto& sel : mSelectedItems)

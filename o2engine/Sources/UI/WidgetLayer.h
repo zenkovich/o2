@@ -140,7 +140,7 @@ namespace o2
 	_type* UIWidgetLayer::FindLayer() const
 	{
 		for (auto child : mChilds)
-			if (child->drawable && child->drawable->GetType() == _type::type)
+			if (child->drawable && child->drawable->GetType() == TypeOf(_type))
 				return (_type*)(child->drawable);
 
 		for (auto child : mChilds)

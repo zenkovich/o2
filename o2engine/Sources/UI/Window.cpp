@@ -37,7 +37,7 @@ namespace o2
 		}
 
 		UIButton* closeBtn = (UIButton*)mWindowElements.FindMatch(
-			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == UIButton::type; });
+			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); });
 
 		if (closeBtn)
 			closeBtn->onClick += [&]() { Hide(); };
@@ -73,7 +73,7 @@ namespace o2
 		}
 		
 		UIButton* closeBtn = (UIButton*)mWindowElements.FindMatch(
-			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == UIButton::type; });
+			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); });
 
 		if (closeBtn)
 			closeBtn->onClick += [&]() { Hide(); };
@@ -245,10 +245,10 @@ namespace o2
 
 	void UIWindow::OnLayerAdded(UIWidgetLayer* layer)
 	{
-		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == Sprite::type)
+		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == TypeOf(Sprite))
 			mIconDrawable = (Sprite*)layer->drawable;
 
-		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == Text::type)
+		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == TypeOf(Text))
 			mCaptionDrawable = (Text*)layer->drawable;
 	}
 
@@ -330,6 +330,8 @@ namespace o2
 			mParent->mChilds.Remove(this);
 			mParent->mChilds.Add(this);
 		}
+
+		onSelected();
 	}
 
 	void UIWindow::OnChildSelected(UIWidget* child)

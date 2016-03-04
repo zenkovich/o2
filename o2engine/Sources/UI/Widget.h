@@ -41,6 +41,8 @@ namespace o2
 
 		UIWidgetLayout                          layout;          // @SERIALIZABLE
 		Function<void()>                        onLayoutChanged; // Layout change event
+		Function<void()>                        onSelected;      // Select event
+		Function<void()>                        onDeselected;    // Deselect event
 
 		// Default constructor
 		UIWidget();
@@ -326,7 +328,7 @@ namespace o2
 	_type* UIWidget::FindChild()
 	{
 		for (auto child : mChilds)
-			if (child->GetType() == _type::type)
+			if (child->GetType() == TypeOf(_type))
 				return (_type*)child;
 
 		return nullptr;
@@ -337,7 +339,7 @@ namespace o2
 	{
 		for (auto layer : mLayers)
 		{
-			if (layer->drawable && layer->drawable->GetType() == _type::type)
+			if (layer->drawable && layer->drawable->GetType() == TypeOf(_type))
 				return (_type*)layer->drawable;
 		}
 
@@ -355,7 +357,7 @@ namespace o2
 	_type* UIWidget::GetLayerDrawable(const String& path) const
 	{
 		auto layer = GetLayer(path);
-		if (layer && layer->drawable && layer->drawable->GetType() == _type::type)
+		if (layer && layer->drawable && layer->drawable->GetType() == TypeOf(_type))
 			return (_type*)layer->drawable;
 
 		return nullptr;

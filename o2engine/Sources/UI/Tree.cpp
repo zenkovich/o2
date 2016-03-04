@@ -988,12 +988,16 @@ namespace o2
 	{
 		for (auto& sel : mSelectedItems)
 			sel.selectionSprite->SetColor(mSelectedColor);
+
+		onSelected();
 	}
 
 	void UITree::OnDeselected()
 	{
 		for (auto& sel : mSelectedItems)
 			sel.selectionSprite->SetColor(mUnselectedColor);
+
+		onDeselected();
 	}
 
 	void UITree::UpdateLayout(bool forcible /*= false*/)

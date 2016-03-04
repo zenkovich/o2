@@ -8,6 +8,7 @@
 namespace o2
 {
 	class Type;
+	class DataNode;
 
 	// -----------------------
 	// Class field information
@@ -17,12 +18,39 @@ namespace o2
 	public:
 		typedef Vector<IAttribute*> AttributesVec;
 
+		struct IFieldSerializer
+		{
+			virtual void Serialize(void* object, DataNode& data) const = 0;
+			virtual void Deserialize(void* object, DataNode& data) const = 0;
+			virtual IFieldSerializer* Clone() const = 0;
+		};
+
+		template<typename _type>
+		struct FieldSerializer: public IFieldSerializer
+		{
+			void Serialize(void* object, DataNode& data) const
+			{
+				Serializer::Serialize<_type>(*(_type*)object, data);
+			}
+
+			void Deserialize(void* object, DataNode& data) const
+			{
+				Serializer::Deserialize<_type>(*(_type*)object, data);
+			}
+			
+			IFieldSerializer* Clone() const
+			{
+				return mnew FieldSerializer(*this);
+			}
+		};
+
 	public:
 		// Default constructor
 		FieldInfo();
 
 		// Constructor
-		FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Type* type);
+		FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, const Type* type, ProtectSection sect,
+				  IFieldSerializer* serializer);
 
 		// Copy-constructor
 		FieldInfo(const FieldInfo& other);
@@ -73,16 +101,30 @@ namespace o2
 		template<typename _attr_type>
 		bool HaveAttribute() const;
 
+		// Protection section
+		ProtectSection GetProtectionSection() const;
+
+		// Returns type
+		const Type& GetType() const;
+
 		// Returns attributes array
 		const AttributesVec& Attributes() const;
 
+		// Serializes object by pointer
+		void SerializeObject(void* object, DataNode& data) const;
+
+		// Deserializes object by pointer
+		void DeserializeObject(void* object, DataNode& data) const;
+
 	protected:
-		String            mName;       // Name of field
-		UInt              mOffset;     // Offset of field in bytes from owner address
-		bool              mIsProperty; // Is it property or field
-		bool              mIsPtr;      // Is property Ptr<>
-		Type*             mType;       // Field type
-		AttributesVec     mAttributes; // Attributes array
+		ProtectSection    mProtectSection; // Protection section
+		String            mName;           // Name of field
+		UInt              mOffset;         // Offset of field in bytes from owner address
+		bool              mIsProperty;     // Is it property or field
+		bool              mIsPtr;          // Is property Ptr<>
+		const Type*       mType;           // Field type
+		AttributesVec     mAttributes;     // Attributes array
+		IFieldSerializer* mSerializer;     // field serializer
 
 	protected:
 		// Searches field recursively by pointer
@@ -109,8 +151,9 @@ namespace o2
 		AccessorFieldInfo():FieldInfo() {}
 
 		// Constructor
-		AccessorFieldInfo(const String& name, UInt offset, Type* type):
-			FieldInfo(name, offset, false, false, type) {}
+		AccessorFieldInfo(const String& name, UInt offset, const Type* type, ProtectSection sect, 
+						  IFieldSerializer* serializer):
+			FieldInfo(name, offset, false, false, type, sect, serializer) {}
 
 		// Returns cloned copy
 		virtual FieldInfo* Clone() const;

@@ -131,8 +131,8 @@ namespace o2
 
 	protected:
 		Bitmap* mBitmap;    // Image bitmap. Loading only when needs
-		UInt    mAtlasPage; // Owner atlas page index @SERIALIZABLE
-		RectI   mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
+		UInt    mAtlasPage; // Owner atlas page index
+		RectI   mAtlasRect; // Owner atlas rectange
 
 	protected:
 		// Loads data

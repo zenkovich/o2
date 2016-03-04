@@ -1,9 +1,18 @@
 #pragma once
 
+#include "Utils/Data/DataDoc.h"
+#include "Utils/Math/Basis.h"
+#include "Utils/Math/Color.h"
+#include "Utils/Math/Rect.h"
+#include "Utils/Math/Vector2.h"
+#include "Utils/Math/Vertex2.h"
 #include "Utils/Property.h"
 #include "Utils/Reflection/FieldInfo.h"
 #include "Utils/Reflection/FunctionInfo.h"
 #include "Utils/String.h"
+#include "Utils/Serializer.h"
+
+#define TypeOf(TYPE) _TypeOf<TYPE>()
 
 namespace o2
 {
@@ -25,15 +34,30 @@ namespace o2
 			static Type type;
 		};
 
-		struct ITypeCreator
+		struct ITypeAgent
 		{
-			virtual IObject* Create() const = 0;
+			virtual void* CreateSample() const = 0;
+			virtual void Serialize(void* object, DataNode& data) const = 0;
+			virtual void Deserialize(void* object, DataNode& data) const = 0;
 		};
 
 		template<typename _type>
-		struct TypeCreator: public ITypeCreator
+		struct TypeAgent: public ITypeAgent
 		{
-			IObject* Create() const { return mnew _type(); }
+			void* CreateSample() const 
+			{
+				return mnew _type();
+			}
+
+			void Serialize(void* object, DataNode& data) const
+			{
+				Serializer::Serialize<_type>(*(_type*)object, data);
+			}
+
+			void Deserialize(void* object, DataNode& data) const
+			{
+				Serializer::Deserialize<_type>(*(_type*)object, data);
+			}
 		};
 
 	public:
@@ -78,7 +102,13 @@ namespace o2
 		TypesVec DerivedTypes() const;
 
 		// Creates sample copy and returns him
-		IObject* CreateSample() const;
+		void* CreateSample() const;
+
+		// Serializes object by pointer
+		void SerializeObject(void* object, DataNode& data) const;
+
+		// Deserializes object by pointer
+		void DeserializeObject(void* object, DataNode& data) const;
 
 		// Returns filed pointer by path
 		template<typename _type>
@@ -88,12 +118,12 @@ namespace o2
 		String GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const;
 
 	protected:
-		String            mName;        // Name of object type
-		FieldInfosVec     mFields;      // Fields information
-		FunctionsInfosVec mFunctions;   // Functions informations
-		Id                mId;          // Id of type
-		TypesVec          mBaseTypes;   // Base types ids
-		ITypeCreator*     mTypeCreator; // Type creator
+		String            mName;      // Name of object type
+		FieldInfosVec     mFields;    // Fields information
+		FunctionsInfosVec mFunctions; // Functions informations
+		Id                mId;        // Id of type
+		TypesVec          mBaseTypes; // Base types ids
+		ITypeAgent*       mTypeAgent; // Template type agent
 
 		friend class FieldInfo;
 		friend class FunctionInfo;
@@ -104,99 +134,138 @@ namespace o2
 		friend class AccessorFieldInfo;
 	};
 
+	// --------------------------
+	// Fundamental type container
+	// --------------------------
+	template<typename _type>
+	class FundamentalType
+	{
+	public:
+		static Type type;
+	};
 
+	template<typename _type>
+	const Type& _TypeOf()
+	{
+		return std::conditional<std::is_base_of<IObject, _type>::value, _type, 
+			std::conditional<std::is_fundamental<_type>::value || std::is_same<_type, Basis>::value
+			|| std::is_same<_type, Color4>::value || std::is_same<_type, RectI>::value || std::is_same<_type, RectF>::value
+			|| std::is_same<_type, Vec2I>::value || std::is_same<_type, Vec2F>::value || std::is_same<_type, Vertex2>::value
+			|| std::is_same<_type, String>::value || std::is_same<_type, WString>::value || std::is_same<_type, DataNode>::value,
+			FundamentalType<_type>, Type::Dummy>::type>::type::type;
+	}
+
+	// ----------------
+	// Type initializer
+	// ----------------
 	class TypeInitializer
 	{
 	public:
 		// Adds basic type
-		static void AddBaseType(Type* type, Type* baseType);
+		template<typename _type, typename _baseType>
+		static void AddBaseType();
 
 		// Registers field in type
 		template<typename _type>
-		static FieldInfo& RegField(Type* type, const String& name, UInt offset, _type*& value);
+		static FieldInfo& RegField(Type* type, const String& name, UInt offset, _type*& value, ProtectSection section);
 
 		// Registers field in type
 		template<typename _type>
-		static FieldInfo& RegField(Type* type, const String& name, UInt offset, _type& value);
+		static FieldInfo& RegField(Type* type, const String& name, UInt offset, _type& value, ProtectSection section);
 
 		// Registers field in type
 		template<typename _type>
-		static FieldInfo& RegField(Type* type, const String& name, UInt offset, Property<_type>& value);
+		static FieldInfo& RegField(Type* type, const String& name, UInt offset, Property<_type>& value, ProtectSection section);
 
 		// Registers field in type
 		template<typename _type>
-		static FieldInfo& RegField(Type* type, const String& name, UInt offset, Accessor<_type*, const String&>& value);
+		static FieldInfo& RegField(Type* type, const String& name, UInt offset, Accessor<_type*, const String&>& value, ProtectSection section);
 
 		// Registers function in type
 		template<typename _class_type, typename _res_type, typename ... _args>
-		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...));
+		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...), ProtectSection section);
 
 		// Registers function in type
 		template<typename _class_type, typename _res_type, typename ... _args>
-		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const);
+		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section);
 
 		// Registers parameter in function info
 		template<typename _type>
 		static FunctionInfo* RegFuncParam(FunctionInfo* info, const String& name);
-	};
+	}; 
+	
+	template<typename _type, typename _baseType>
+	void TypeInitializer::AddBaseType()
+	{
+		_type::type.mBaseTypes.Add(&_baseType::type);
+
+		for (auto field : _baseType::type.mFields)
+			_type::type.mFields.Insert(field->Clone(), 0);
+	}
 
 	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type*& value)
+	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type*& value, ProtectSection section)
 	{
-		Type* valType = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Type::Dummy>::type::type;
-		type->mFields.Add(new FieldInfo(name, offset, false, true, valType));
+		auto valType = &TypeOf(_type);
+		type->mFields.Add(new FieldInfo(name, offset, false, true, valType, section,
+										new FieldInfo::FieldSerializer<_type*>()));
 		return *type->mFields.Last();
 	}
 
 	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type& value)
+	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type& value, ProtectSection section)
 	{
-		Type* valType = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Type::Dummy>::type::type;
-		type->mFields.Add(new FieldInfo(name, offset, false, false, valType));
+		auto valType = &TypeOf(_type);
+		type->mFields.Add(new FieldInfo(name, offset, false, false, valType, section, 
+										new FieldInfo::FieldSerializer<_type>()));
 		return *type->mFields.Last();
 	}
 
 	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Property<_type>& value)
+	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Property<_type>& value, ProtectSection section)
 	{
-		Type* valType = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Type::Dummy>::type::type;
-		type->mFields.Add(new FieldInfo(name, offset, true, false, valType));
+		auto valType = &TypeOf(_type);
+		type->mFields.Add(new FieldInfo(name, offset, true, false, valType, section,
+										new FieldInfo::FieldSerializer<Property<_type>>()));
 		return *type->mFields.Last();
 	}
 
 	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Accessor<_type*, const String&>& value)
+	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Accessor<_type*, const String&>& value, ProtectSection section)
 	{
-		Type* valType = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Type::Dummy>::type::type;
-		type->mFields.Add(new AccessorFieldInfo<_type>(name, offset, valType));
+		auto valType = &TypeOf(_type);
+		type->mFields.Add(new AccessorFieldInfo<_type>(name, offset, valType, section,
+													   new FieldInfo::FieldSerializer<Accessor<_type*, const String&>>()));
 		return *type->mFields.Last();
 	}
 
 	template<typename _class_type, typename _res_type, typename ... _args>
-	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...))
+	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...), ProtectSection section)
 	{
-		Type* retType = &std::conditional<std::is_base_of<IObject, _res_type>::value, _res_type, Type::Dummy>::type::type;
+		auto retType = &TypeOf(_res_type);
 
 		auto funcInfo = new SpecFunctionInfo<_class_type, _res_type, _args ...>();
 		funcInfo->mName = name;
 		funcInfo->mFunctionPtr = pointer;
 		funcInfo->mReturnType = retType;
 		funcInfo->mIsContant = false;
+		funcInfo->mProtectSection = section;
 		type->mFunctions.Add(funcInfo);
 
 		return funcInfo;
 	}
 
 	template<typename _class_type, typename _res_type, typename ... _args>
-	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const)
+	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section)
 	{
-		Type* retType = &std::conditional<std::is_base_of<IObject, _res_type>::value, _res_type, Type::Dummy>::type::type;
+		auto retType = &TypeOf(_res_type);
 
 		auto funcInfo = new SpecConstFunctionInfo<_class_type, _res_type, _args ...>();
 		funcInfo->mName = name;
 		funcInfo->mFunctionPtr = pointer;
 		funcInfo->mReturnType = retType;
 		funcInfo->mIsContant = true;
+		funcInfo->mProtectSection = section;
 		type->mFunctions.Add(funcInfo);
 
 		return funcInfo;
@@ -205,7 +274,7 @@ namespace o2
 	template<typename _type>
 	FunctionInfo* TypeInitializer::RegFuncParam(FunctionInfo* info, const String& name)
 	{
-		Type* valType = &std::conditional<std::is_base_of<IObject, _type>::value, _type, Type::Dummy>::type::type;
+		auto valType = &TypeOf(_type);
 
 		FunctionInfo::Parameter param;
 		param.type = valType;

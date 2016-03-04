@@ -1242,6 +1242,8 @@ namespace UIStyle
 		RebuildTextAssetIcon();
 		RebuildAnimationAssetIcon();
 		RebuildAssetsGridScroll();
+		RebuildSinglelineEditbox();
+		RebuildCheckboxWithoutCaptionStyle();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

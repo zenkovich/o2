@@ -161,6 +161,9 @@ namespace o2
 		Component* GetComponent(const String& typeName);
 
 		// Returns component with type
+		Component* GetComponent(const Type* type);
+
+		// Returns component with type
 		template<typename _type>
 		_type* GetComponent() const;
 

@@ -20,15 +20,30 @@ namespace o2
 		// Returns type
 		virtual Type& GetType() const = 0;
 
+	private:
 		static Type type;
+
+		template<typename _type>
+		friend const Type& o2::_TypeOf();
 	};
 
 	// IObject header definition
 #define IOBJECT(CLASS)  							   \
-	CLASS* Clone() const { return mnew CLASS(*this); } \
+private:                                               \
 	static Type type;								   \
+                                                       \
+	friend struct o2::Type::TypeAgent<CLASS>;          \
+                                                       \
+    template<typename _type>                           \
+	friend const Type& o2::_TypeOf();                  \
+    friend class o2::TypeInitializer;                  \
+    friend class o2::Reflection;                       \
+    template<typename _type>                           \
+    friend struct o2::Type::TypeAgent;                 \
+    friend class o2::DataNode;                         \
+                                                       \
+public:                                                \
+	CLASS* Clone() const { return mnew CLASS(*this); } \
 	Type& GetType() const { return type; };	           \
-	friend struct o2::Type::TypeCreator<CLASS>;        \
 	static void InitializeType(CLASS* sample)   
-
 }

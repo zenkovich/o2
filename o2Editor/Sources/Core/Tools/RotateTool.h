@@ -25,6 +25,8 @@ public:
 	// Default constructor
 	EditorRotateTool();
 
+	EditorRotateTool& operator=(const EditorRotateTool& other) { return *this; }
+
 	// Destructor
 	~EditorRotateTool();
 

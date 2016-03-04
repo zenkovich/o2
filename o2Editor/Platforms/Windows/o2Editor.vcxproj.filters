@@ -40,6 +40,9 @@
     <Filter Include="PropertiesWindow\ActorsViewer">
       <UniqueIdentifier>{1a5e4942-3ef7-4c21-98c0-9a6601c46599}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PropertiesWindow\Properties">
+      <UniqueIdentifier>{959d9a3b-03fb-4f42-80a3-ee432a6d6d45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
@@ -184,6 +187,24 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorComponentViewer.h">
       <Filter>PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\FloatProperty.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IPropertyField.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
@@ -318,6 +339,21 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorComponentViewer.cpp">
       <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FloatProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

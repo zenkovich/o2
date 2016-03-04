@@ -28,8 +28,9 @@ public:
 	Property<Vec2F>              position;      // Current position in scene property
 	Property<float>              angle;         // Handle angle in radians property
 	Property<bool>               enabled;       // Handle enabling property
+	CursorType                   cursorType;    // Cursor type when hovering and dragging
 
-	// Default constructor
+    // Default constructor
 	SceneDragHandle();
 
 	// Constructor with views

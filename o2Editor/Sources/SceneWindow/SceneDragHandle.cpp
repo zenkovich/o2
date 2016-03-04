@@ -1,12 +1,13 @@
 #include "SceneDragHandle.h"
 
+#include "Application/Application.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "Render/Sprite.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "SceneWindow/SceneWindow.h"
 
 SceneDragHandle::SceneDragHandle():
-	regularSprite(nullptr), hoverSprite(nullptr), pressedSprite(nullptr)
+	regularSprite(nullptr), hoverSprite(nullptr), pressedSprite(nullptr), cursorType(CursorType::Arrow)
 {
 	if (WindowsManager::IsSingletonInitialzed())
 		o2EditorSceneScreen.mDragHandles.Add(this);
@@ -15,7 +16,7 @@ SceneDragHandle::SceneDragHandle():
 }
 
 SceneDragHandle::SceneDragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/):
-	regularSprite(regular), hoverSprite(hover), pressedSprite(pressed)
+	regularSprite(regular), hoverSprite(hover), pressedSprite(pressed), cursorType(CursorType::Arrow)
 {
 	if (WindowsManager::IsSingletonInitialzed())
 		o2EditorSceneScreen.mDragHandles.Add(this);
@@ -24,7 +25,7 @@ SceneDragHandle::SceneDragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, S
 }
 
 SceneDragHandle::SceneDragHandle(const SceneDragHandle& other):
-	regularSprite(nullptr), hoverSprite(nullptr), pressedSprite(nullptr)
+	regularSprite(nullptr), hoverSprite(nullptr), pressedSprite(nullptr), cursorType(other.cursorType)
 {
 	if (WindowsManager::IsSingletonInitialzed())
 		o2EditorSceneScreen.mDragHandles.Add(this);
@@ -59,8 +60,8 @@ void SceneDragHandle::Draw()
 		return;
 
 	Vec2F screenPosition = o2EditorSceneScreen.SceneToScreenPoint(position);
-	screenPosition.x = Math::Round(screenPosition.x);
-	screenPosition.y = Math::Round(screenPosition.y);
+	/*screenPosition.x = Math::Round(screenPosition.x);
+	screenPosition.y = Math::Round(screenPosition.y);*/
 
 	if (regularSprite)
 	{
@@ -102,6 +103,8 @@ SceneDragHandle& SceneDragHandle::operator=(const SceneDragHandle& other)
 	else
 		pressedSprite = nullptr;
 
+	cursorType = other.cursorType;
+
 	SetPosition(other.mPosition);
 
 	return *this;
@@ -140,6 +143,9 @@ void SceneDragHandle::OnCursorReleased(const Input::Cursor& cursor)
 		pressedSprite->enabled = false;
 
 	onReleased();
+
+	if (!IsUnderPoint(cursor.mPosition))
+		o2Application.SetCursor(CursorType::Arrow);
 }
 
 void SceneDragHandle::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -153,6 +159,9 @@ void SceneDragHandle::OnCursorPressBreak(const Input::Cursor& cursor)
 		pressedSprite->enabled = false;
 
 	onReleased();
+
+	if (!IsUnderPoint(cursor.mPosition))
+		o2Application.SetCursor(CursorType::Arrow);
 }
 
 void SceneDragHandle::OnCursorStillDown(const Input::Cursor& cursor)
@@ -172,12 +181,18 @@ void SceneDragHandle::OnCursorEnter(const Input::Cursor& cursor)
 {
 	if (hoverSprite)
 		hoverSprite->enabled = true;
+
+	if (!cursor.mPressed)
+		o2Application.SetCursor(cursorType);
 }
 
 void SceneDragHandle::OnCursorExit(const Input::Cursor& cursor)
 {
 	if (hoverSprite)
 		hoverSprite->enabled = false;
+
+	if (!IsPressed() && !cursor.mPressed)
+		o2Application.SetCursor(CursorType::Arrow);
 }
 
 void SceneDragHandle::SetPosition(const Vec2F& position)

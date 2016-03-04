@@ -228,12 +228,12 @@ namespace o2
 
 	void UIEditBox::SetFilterInteger()
 	{
-		SetAvailableSymbols("1234567890");
+		SetAvailableSymbols("1234567890-");
 	}
 
 	void UIEditBox::SetFilterFloat()
 	{
-		SetAvailableSymbols("1234567890.,");
+		SetAvailableSymbols("-1234567890.,");
 	}
 
 	void UIEditBox::SetFilterNames()
@@ -396,6 +396,11 @@ namespace o2
 	{
 		mLastText = mText;
 		onChangeCompleted(mText);
+
+		if (!mMultiLine)
+			Deselect();
+
+		onDeselected();
 	}
 
 	void UIEditBox::OnCursorPressed(const Input::Cursor& cursor)
@@ -419,7 +424,14 @@ namespace o2
 		}
 		else
 		{
-			mSelectionBegin = mSelectionEnd = GetTextCaretPosition(cursor.mPosition);
+			if (mMultiLine)
+				mSelectionBegin = mSelectionEnd = GetTextCaretPosition(cursor.mPosition);
+			else
+			{
+				mSelectionBegin = 0;
+				mSelectionEnd = mText.Length();
+			}
+
 			mSelectingByWords = false;
 
 			UpdateSelectionAndCaret();
@@ -591,7 +603,8 @@ namespace o2
 		if (mAvailableSymbols.Length() == 0)
 			return text;
 
-		WString filteredText(text.Capacity() + 1);
+		WString filteredText;
+		filteredText.Reserve(text.Capacity() + 1);
 		for (int i = 0; i < text.Length(); i++)
 		{
 			bool pass = false;

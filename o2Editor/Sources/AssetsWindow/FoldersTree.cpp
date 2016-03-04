@@ -115,7 +115,7 @@ Vector<UnknownType*> UIAssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownType* 
 	if (assetTreeNode)
 	{
 		return assetTreeNode->GetChilds().
-			FindAll([](AssetTree::AssetNode* x) { return x->mType == FolderAsset::type.ID(); }).
+			FindAll([](AssetTree::AssetNode* x) { return x->mType == TypeOf(FolderAsset).ID(); }).
 			Select<UnknownType*>([](AssetTree::AssetNode* x) { return (UnknownType*)(void*)x; });
 	}
 	else
@@ -123,7 +123,7 @@ Vector<UnknownType*> UIAssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownType* 
 		const AssetTree& assetsTree = o2Assets.GetAssetsTree();
 
 		return assetsTree.mRootAssets.
-			FindAll([](AssetTree::AssetNode* x) { return x->mType == FolderAsset::type.ID(); }).
+			FindAll([](AssetTree::AssetNode* x) { return x->mType == TypeOf(FolderAsset).ID(); }).
 			Select<UnknownType*>([](AssetTree::AssetNode* x) { return (UnknownType*)(void*)x; });
 	}
 }

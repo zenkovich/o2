@@ -27,6 +27,9 @@ class UIActorsTree;
 class UIAssetsIconsScrollArea: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 {
 public:
+	enum class DragState { Off, Regular, Scene, Tree };
+
+public:
 	// Default constructor
 	UIAssetsIconsScrollArea();
 
@@ -85,8 +88,6 @@ protected:
 
 		bool operator==(const IconSelection& other) const;
 	};
-
-	enum class DragState { Off, Regular, Scene, Tree };
 
 	typedef Vector<IconSelection> IconSelectionsVec;
 	typedef Vector<UIAssetIcon*> AssetsIconsVec;

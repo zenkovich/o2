@@ -73,9 +73,19 @@ namespace o2
 		return res;
 	}
 
-	IObject* Type::CreateSample() const
+	void* Type::CreateSample() const
 	{
-		return mTypeCreator->Create();
+		return mTypeAgent->CreateSample();
+	}
+
+	void Type::SerializeObject(void* object, DataNode& data) const
+	{
+		mTypeAgent->Serialize(object, data);
+	}
+
+	void Type::DeserializeObject(void* object, DataNode& data) const
+	{
+		mTypeAgent->Deserialize(object, data);
 	}
 
 	String Type::GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const
@@ -111,14 +121,6 @@ namespace o2
 		}
 
 		return res;
-	}
-
-	void TypeInitializer::AddBaseType(Type* type, Type* baseType)
-	{
-		type->mBaseTypes.Add(baseType);
-
-		for (auto field : baseType->mFields)
-			type->mFields.Insert(field->Clone(), 0);
 	}
 
 	bool Type::operator!=(const Type& other) const

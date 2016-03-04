@@ -127,7 +127,19 @@ namespace o2
 		mData = (WString)value;
 		return *this;
 	}	
-	
+
+	DataNode& DataNode::operator=(unsigned long value)
+	{
+		mData = (WString)(unsigned int)value;
+		return *this;
+	}
+
+	DataNode& DataNode::operator=(long long int value)
+	{
+		mData = (WString)(int)value;
+		return *this;
+	}
+
 	DataNode& DataNode::operator=(UInt64 value)
 	{
 		mData = (WString)value;
@@ -137,6 +149,12 @@ namespace o2
 	DataNode& DataNode::operator=(float value)
 	{
 		mData = (WString)value;
+		return *this;
+	}	
+	
+	DataNode& DataNode::operator=(double value)
+	{
+		mData = (WString)(float)value;
 		return *this;
 	}
 
@@ -266,6 +284,46 @@ namespace o2
 		return (Color4)mData;
 	}
 
+
+	DataNode::operator char() const
+	{
+		return (char)(int)mData;
+	}
+
+	DataNode::operator unsigned char() const
+	{
+		return (unsigned char)(unsigned int)mData;
+	}
+
+	DataNode::operator wchar_t() const
+	{
+		return (wchar_t)(int)mData;
+	}
+
+	DataNode::operator short() const
+	{
+		return (short)(int)mData;
+	}
+
+	DataNode::operator unsigned short() const
+	{
+		return (unsigned short)(unsigned int)mData;
+	}
+
+	DataNode::operator long() const
+	{
+		return (long)(int)mData;
+	}
+
+	DataNode::operator unsigned long() const
+	{
+		return (unsigned long)(unsigned int)mData;
+	}
+
+	DataNode::operator long long int() const
+	{
+		return (long long int)(int)mData;
+	}
 
 	DataNode* DataNode::operator[](const WString& nodePath)
 	{

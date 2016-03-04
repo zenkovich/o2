@@ -8,7 +8,7 @@ namespace o2
 {
 	UIToggle::UIToggle():
 		UIWidget(), DrawableCursorEventsListener(this), mValue(false), mToggleGroup(nullptr), mCaptionText(nullptr), 
-		mBackLayer(nullptr)
+		mBackLayer(nullptr), mValueUnknown(false)
 	{
 		InitializeProperties();
 	}
@@ -21,6 +21,8 @@ namespace o2
 
 		RetargetStatesAnimations();
 		SetValue(other.mValue);
+		if (other.IsValueUnknown())
+			SetValueUnknown();
 		InitializeProperties();
 	}
 
@@ -30,6 +32,8 @@ namespace o2
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = GetLayer("back");
 		SetValue(other.mValue);
+		if (other.IsValueUnknown())
+			SetValueUnknown();
 		RetargetStatesAnimations();
 		return *this;
 	}
@@ -62,6 +66,7 @@ namespace o2
 			{
 				SetValue(!mValue);
 				onClick();
+				onToggleByUser(mValue);
 				mToggleGroup->mToggled.Add(this);
 			}
 		}
@@ -84,15 +89,38 @@ namespace o2
 	void UIToggle::SetValue(bool value)
 	{
 		mValue = value;
+		mValueUnknown = false;
 
 		auto valueState = state["value"];
 		if (valueState)
 			*valueState = mValue;
 
+		auto unknownState = state["unknown"];
+		if (unknownState)
+			*unknownState = false;
+
 		onToggle(mValue);
 
 		if (mToggleGroup)
 			mToggleGroup->OnToggled(this);
+	}
+
+	void UIToggle::SetValueUnknown()
+	{
+		mValueUnknown = true;
+
+		auto unknownState = state["unknown"];
+		if (unknownState)
+			*unknownState = true;
+
+		auto valueState = state["value"];
+		if (valueState)
+			*valueState = false;
+	}
+
+	bool UIToggle::IsValueUnknown() const
+	{
+		return mValueUnknown;
 	}
 
 	bool UIToggle::GetValue() const
@@ -176,6 +204,7 @@ namespace o2
 		{
 			SetValue(!mValue);
 			onClick();
+			onToggleByUser(mValue);
 		}
 
 		if (mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick ||
@@ -248,7 +277,7 @@ namespace o2
 
 	void UIToggle::OnLayerAdded(UIWidgetLayer* layer)
 	{
-		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == Text::type)
+		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == TypeOf(Text))
 			mCaptionText = (Text*)layer->drawable;
 
 		if (layer->name == "back")

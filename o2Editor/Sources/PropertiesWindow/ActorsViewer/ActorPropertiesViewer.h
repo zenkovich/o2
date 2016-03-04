@@ -28,7 +28,7 @@ public:
 	~EditorActorPropertiesViewer();
 
 	// Returns viewing object type
-	Type* GetViewingObjectType() const;
+	const Type* GetViewingObjectType() const;
 
 	// Sets header viewer
 	void SetActorHeaderViewer(IEditorActorHeaderViewer* viewer);
@@ -45,6 +45,8 @@ public:
 	IOBJECT(EditorActorPropertiesViewer);
 
 protected:
+	typedef Dictionary<const Type*, Vector<IEditorActorComponentViewer*>> TypeCompViewersDict;
+
 	Vector<Actor*>                       mTargetActors;               // Current target actors
 										 
 	IEditorActorHeaderViewer*            mHeaderViewer;               // Actor header viewer
@@ -55,7 +57,7 @@ protected:
 	DefaultEditorActorComponentViewer*   mDefaultComponentViewer;     // Default component viewer sample
 	Vector<IEditorActorComponentViewer*> mAvailableComponentsViewers; // Available components' viewers
 
-	Dictionary<Type*, Vector<IEditorActorComponentViewer*>> mComponentViewersPool; // Components viewers pool
+	TypeCompViewersDict                  mComponentViewersPool;       // Components viewers pool
 
 	UIVerticalLayout*                    mViewersLayout;              // Viewers layout
 

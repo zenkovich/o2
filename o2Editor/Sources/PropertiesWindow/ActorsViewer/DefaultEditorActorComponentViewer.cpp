@@ -1,6 +1,9 @@
 #include "DefaultEditorActorComponentViewer.h"
 
+#include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Component.h"
+#include "UI/VerticalLayout.h"
+#include "UI/Widget.h"
 
 DefaultEditorActorComponentViewer::DefaultEditorActorComponentViewer()
 {
@@ -12,12 +15,17 @@ DefaultEditorActorComponentViewer::~DefaultEditorActorComponentViewer()
 
 }
 
-void DefaultEditorActorComponentViewer::SetTargetActors(const Vector<Actor*>& actors)
+void DefaultEditorActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
 {
+	mTargetComponents = components;
 
+	o2EditorProperties.BuildTypeViewer((UIVerticalLayout*)mDataView, 
+									   &components[0]->GetType(), 
+									   components.Select<IObject*>([](auto x) { return (IObject*)x; }),
+									   mUsedPropertyFields);
 }
 
-Type* DefaultEditorActorComponentViewer::GetComponentType() const
+const Type* DefaultEditorActorComponentViewer::GetComponentType() const
 {
-	return &Component::type;
+	return &TypeOf(Component);
 }

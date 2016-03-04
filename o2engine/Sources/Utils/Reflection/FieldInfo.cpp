@@ -5,16 +5,18 @@
 namespace o2
 {
 	FieldInfo::FieldInfo():
-		mOffset(0), mIsProperty(false), mType(nullptr), mIsPtr(false)
+		mOffset(0), mIsProperty(false), mType(nullptr), mIsPtr(false), mProtectSection(ProtectSection::Public)
 	{}
 
-	FieldInfo::FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, Type* type) :
-		mName(name), mOffset(offset), mIsProperty(isProperty), mType(type), mIsPtr(isPtr)
+	FieldInfo::FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, const Type* type, 
+						 ProtectSection sect, IFieldSerializer* serializer):
+		mName(name), mOffset(offset), mIsProperty(isProperty), mType(type), mIsPtr(isPtr), mProtectSection(sect),
+		mSerializer(serializer)
 	{}
 
 	FieldInfo::FieldInfo(const FieldInfo& other) :
 		mName(other.mName), mOffset(other.mOffset), mIsProperty(other.mIsProperty), mType(other.mType),
-		mIsPtr(other.mIsPtr)
+		mIsPtr(other.mIsPtr), mProtectSection(other.mProtectSection), mSerializer(other.mSerializer->Clone())
 	{
 		for (auto attr : other.mAttributes)
 		{
@@ -28,12 +30,16 @@ namespace o2
 	{
 		for (auto attr : mAttributes)
 			delete attr;
+
+		delete mSerializer;
 	}
 
 	FieldInfo& FieldInfo::operator=(const FieldInfo& other)
 	{
 		for (auto attr : mAttributes)
 			delete attr;
+
+		delete mSerializer;
 
 		for (auto attr : other.mAttributes)
 		{
@@ -47,6 +53,8 @@ namespace o2
 		mIsProperty = other.mIsProperty;
 		mIsPtr = other.mIsPtr;
 		mType = other.mType;
+		mProtectSection = other.mProtectSection;
+		mSerializer = other.mSerializer->Clone();
 
 		return *this;
 	}
@@ -72,9 +80,29 @@ namespace o2
 		return mIsProperty;
 	}
 
+	ProtectSection FieldInfo::GetProtectionSection() const
+	{
+		return mProtectSection;
+	}
+
+	const Type& FieldInfo::GetType() const
+	{
+		return *mType;
+	}
+
 	const FieldInfo::AttributesVec& FieldInfo::Attributes() const
 	{
 		return mAttributes;
+	}
+
+	void FieldInfo::SerializeObject(void* object, DataNode& data) const
+	{
+		mSerializer->Serialize(object, data);
+	}
+
+	void FieldInfo::DeserializeObject(void* object, DataNode& data) const
+	{
+		mSerializer->Deserialize(object, data);
 	}
 
 	FieldInfo* FieldInfo::SearchFieldPath(void* obj, void* target, const String& path, String& res,

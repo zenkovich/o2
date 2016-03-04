@@ -20,11 +20,11 @@ EditorActorPropertiesViewer::EditorActorPropertiesViewer()
 	mAnimationViewer = mnew DefaultEditorActorAnimationViewer();
 	mDefaultComponentViewer = mnew DefaultEditorActorComponentViewer();
 
-	auto componentsViewersTypes = IEditorActorComponentViewer::type.DerivedTypes();
+	auto componentsViewersTypes = TypeOf(IEditorActorComponentViewer).DerivedTypes();
 	for (auto type : componentsViewersTypes)
 		mAvailableComponentsViewers.Add((IEditorActorComponentViewer*)type->CreateSample());
 
-	mContentWidget = o2UI.CreateScrollArea();
+	mContentWidget = o2UI.CreateScrollArea("backless");
 
 	mViewersLayout = o2UI.CreateVerLayout();
 	mViewersLayout->spacing = 0.0f;
@@ -54,9 +54,9 @@ EditorActorPropertiesViewer::~EditorActorPropertiesViewer()
 	delete mAnimationViewer;
 }
 
-Type* EditorActorPropertiesViewer::GetViewingObjectType() const
+const Type* EditorActorPropertiesViewer::GetViewingObjectType() const
 {
-	return &Actor::type;
+	return &TypeOf(Actor);
 }
 
 void EditorActorPropertiesViewer::SetActorHeaderViewer(IEditorActorHeaderViewer* viewer)
@@ -106,10 +106,13 @@ void EditorActorPropertiesViewer::SetTargets(const Vector<IObject*> targets)
 	mAnimationViewer->SetTargetActors(mTargetActors);
 
 	// components
-	auto commonComponentsTypes = mTargetActors[0]->GetComponents().Select<Type*>([](auto x) { return &x->GetType(); });
-	for (int i = 1; i < mTargetActors.Count() - 1; i++)
+	auto commonComponentsTypes = mTargetActors[0]->GetComponents().Select<const Type*>([](auto x) { 
+		return &x->GetType(); });
+
+	for (int i = 1; i < mTargetActors.Count(); i++)
 	{
-		auto actorComponentsTypes = mTargetActors[i]->GetComponents().Select<Type*>([](auto x) { return &x->GetType(); });
+		auto actorComponentsTypes = mTargetActors[i]->GetComponents().Select<const Type*>([](auto x) { 
+			return &x->GetType(); });
 
 		auto commTypesTemp = commonComponentsTypes;
 		for (auto type : commTypesTemp)
@@ -119,26 +122,33 @@ void EditorActorPropertiesViewer::SetTargets(const Vector<IObject*> targets)
 		}
 	}
 
-	for (Type* type : commonComponentsTypes)
+	for (const Type* type : commonComponentsTypes)
 	{
-		if (!mComponentViewersPool.ContainsKey(type) || mComponentViewersPool[type].IsEmpty())
+		auto viewerSample = mAvailableComponentsViewers.FindMatch([&](IEditorActorComponentViewer* x) {
+			return x->GetComponentType() == type; });
+
+		if (!viewerSample)
+			viewerSample = mDefaultComponentViewer;
+
+		auto availableViewerType = viewerSample->GetComponentType();
+
+		if (!mComponentViewersPool.ContainsKey(availableViewerType) || 
+			mComponentViewersPool[availableViewerType].IsEmpty())
 		{
-			auto viewerSample = mAvailableComponentsViewers.FindMatch([&](IEditorActorComponentViewer* x) {
-				return x->GetComponentType() == type; });
-
-			if (!viewerSample)
-				viewerSample = mDefaultComponentViewer;
-
-			if (!mComponentViewersPool.ContainsKey(type))
-				mComponentViewersPool.Add(type, Vector<IEditorActorComponentViewer*>());
+			if (!mComponentViewersPool.ContainsKey(availableViewerType))
+				mComponentViewersPool.Add(availableViewerType, Vector<IEditorActorComponentViewer*>());
 			
-			mComponentViewersPool[type].Add(viewerSample->Clone());
+			mComponentViewersPool[availableViewerType].Add(
+				(IEditorActorComponentViewer*)(viewerSample->GetType().CreateSample()));
 		}
 
-		auto componentViewer = mComponentViewersPool[type].PopBack();
+		auto componentViewer = mComponentViewersPool[availableViewerType].PopBack();
+
 		viewersWidgets.Add(componentViewer->GetWidget());
-		componentViewer->SetTargetActors(mTargetActors);
 		mComponentsViewers.Add(componentViewer);
+
+		componentViewer->SetTargetComponents(mTargetActors.Select<Component*>([&](Actor* x) { 
+			return x->GetComponent(type); }));
 	}
 
 	mViewersLayout->AddChilds(viewersWidgets);

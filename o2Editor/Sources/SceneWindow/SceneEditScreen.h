@@ -268,13 +268,13 @@ protected:
 template<typename _type>
 void SceneEditScreen::SelectTool()
 {
-	if (mEnabledTool && mEnabledTool->GetType() == _type::type)
+	if (mEnabledTool && mEnabledTool->GetType() == TypeOf(_type))
 		return;
 
 	if (mEnabledTool)
 		mEnabledTool->OnDisabled();
 
-	mEnabledTool = mTools.FindMatch([&](auto x) { return x->GetType() == _type::type; });
+	mEnabledTool = mTools.FindMatch([&](auto x) { return x->GetType() == TypeOf(_type); });
 
 	if (mEnabledTool)
 		mEnabledTool->OnEnabled();

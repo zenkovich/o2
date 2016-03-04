@@ -10,6 +10,7 @@ using namespace o2;
 namespace o2
 {
 	class Actor;
+	class Component;
 	class UIWidget;
 }
 
@@ -26,10 +27,10 @@ public:
 	virtual ~IEditorActorComponentViewer();
 
 	// Sets target actors
-	virtual void SetTargetActors(const Vector<Actor*>& actors) {}
+	virtual void SetTargetComponents(const Vector<Component*>& components) {}
 
 	// Returns viewing component type 
-	virtual Type* GetComponentType() const { return nullptr; }
+	virtual const Type* GetComponentType() const { return nullptr; }
 
 	// Returns data widget
 	virtual UIWidget* GetWidget() const;

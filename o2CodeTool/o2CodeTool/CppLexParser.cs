@@ -616,7 +616,15 @@ class CppLexParser
 			name = name
 		};
 
-		content.ForEach(x => newEnum.content.Add(x.Trim(' ', '\n', '\t', '\r')));
+		foreach (var x in content)
+		{
+			string xc = x.Trim(' ', '\n', '\t', '\r');
+
+			if (xc.IndexOf('=') >= 0)
+				xc = xc.Substring(0, xc.IndexOf('=')).Trim(' ', '\n', '\t', '\r');
+
+			newEnum.content.Add(xc);
+		}
 
 		section.enums.Add(newEnum);
 	}

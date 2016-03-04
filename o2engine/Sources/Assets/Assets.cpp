@@ -78,12 +78,12 @@ namespace o2
 		return mAssetsTypes;
 	}
 
-	Type* Assets::GetStdAssetType() const
+	const Type* Assets::GetStdAssetType() const
 	{
 		return mStdAssetType;
 	}
 
-	Type* Assets::GetAssetTypeByExtension(const String& extension) const
+	const Type* Assets::GetAssetTypeByExtension(const String& extension) const
 	{
 		if (mAssetsTypes.ContainsKey(extension))
 			return mAssetsTypes[extension];
@@ -145,7 +145,7 @@ namespace o2
 
 		o2FileSystem.FileDelete(GetAssetsPath() + info.mPath + ".meta");
 
-		if (info.mType == FolderAsset::type.ID())
+		if (info.mType == TypeOf(FolderAsset).ID())
 			o2FileSystem.FolderRemove(GetAssetsPath() + info.mPath);
 		else
 			o2FileSystem.FileDelete(GetAssetsPath() + info.mPath);
@@ -186,7 +186,7 @@ namespace o2
 			return false;
 		}
 
-		if (info.mType == FolderAsset::type.ID())
+		if (info.mType == TypeOf(FolderAsset).ID())
 		{
 			o2FileSystem.FolderCreate(GetAssetsPath() + dest);
 			FolderAsset folderAsset(info.mId);
@@ -234,7 +234,7 @@ namespace o2
 
 		o2FileSystem.FileMove(GetAssetsPath() + info.mPath + ".meta", GetAssetsPath() + newPath + ".meta");
 
-		if (info.mType == FolderAsset::type.ID())
+		if (info.mType == TypeOf(FolderAsset).ID())
 			o2FileSystem.FileMove(GetAssetsPath() + info.mPath, GetAssetsPath() + newPath);
 		else
 			o2FileSystem.FileMove(GetAssetsPath() + info.mPath, GetAssetsPath() + newPath);
@@ -360,9 +360,9 @@ namespace o2
 
 	void Assets::LoadAssetTypes()
 	{
-		mStdAssetType = &BinaryAsset::type;
+		mStdAssetType = &TypeOf(BinaryAsset);
 
-		auto assetTypes = Asset::type.DerivedTypes();
+		auto assetTypes = TypeOf(Asset).DerivedTypes();
 
 		for (auto type : assetTypes)
 		{

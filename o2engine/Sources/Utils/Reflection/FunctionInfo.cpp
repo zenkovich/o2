@@ -18,7 +18,7 @@ namespace o2
 		return mName;
 	}
 
-	Type* FunctionInfo::GetReturnType() const
+	const Type* FunctionInfo::GetReturnType() const
 	{
 		return mReturnType;
 	}

@@ -21,7 +21,7 @@ public:
 	virtual ~IObjectPropertiesViewer() {}
 
 	// Returns viewing object type
-	virtual Type* GetViewingObjectType() const { return nullptr; }
+	virtual const Type* GetViewingObjectType() const { return nullptr; }
 
 	IOBJECT(IObjectPropertiesViewer);
 

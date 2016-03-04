@@ -16,11 +16,11 @@ namespace o2
 	public:
 		struct Parameter
 		{
-			String name;
-			Type*  type;
-			bool   isConstant;
-			bool   isReference;
-			bool   isPointer;
+			String      name;
+			const Type* type;
+			bool        isConstant;
+			bool        isReference;
+			bool        isPointer;
 
 			bool operator==(const Parameter& other) const;
 		};
@@ -37,7 +37,7 @@ namespace o2
 		const String& GetName() const;
 
 		// Returns return value type
-		Type* GetReturnType() const;
+		const Type* GetReturnType() const;
 
 		// Returns is function constant
 		bool IsConstant() const;
@@ -50,11 +50,12 @@ namespace o2
 		_res_type Invoke(void* object, _args ... args) const;
 
 	protected:
-		Type*         mOwnerType;
-		String        mName;
-		Type*         mReturnType;
-		bool          mIsContant;
-		ParametersVec mParameters;
+		ProtectSection mProtectSection; // Protection section
+		Type*          mOwnerType;      // Owner type pointer
+		String         mName;           // Name of function
+		const Type*    mReturnType;     // Function returning type
+		bool           mIsContant;      // Is function contant
+		ParametersVec  mParameters;     // Function parameters list
 
 		friend class Type;
 		friend class TypeInitializer;

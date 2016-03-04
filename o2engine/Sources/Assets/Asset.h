@@ -114,6 +114,12 @@ namespace o2
 		IMetaInfo* mMeta; // Asset meta information
 
 	protected:
+		// Beginning serialization callback
+		void OnSerialize(DataNode& node);
+
+		// Completion deserialization callback
+		void OnDeserialized(const DataNode& node);
+
 		// Loads asset data
 		virtual void LoadData(const String& path) {};
 
