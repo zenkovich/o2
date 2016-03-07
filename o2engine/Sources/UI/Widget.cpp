@@ -10,7 +10,7 @@ namespace o2
 {
 	UIWidget::UIWidget():
 		mParent(nullptr), mTransparency(1.0f), mResTransparency(1.0f), mVisible(true), mIsSelected(false), mResVisible(true),
-		mFullyDisabled(false), mVisibleState(nullptr), mSelectedState(nullptr)
+		mFullyDisabled(false), mVisibleState(nullptr), mSelectedState(nullptr), mIsSelectable(false)
 	{
 		layout.mOwner = this;
 		InitializeProperties();
@@ -20,7 +20,7 @@ namespace o2
 	UIWidget::UIWidget(const UIWidget& other):
 		mName(other.mName), layout(other.layout), mParent(nullptr), mTransparency(other.mTransparency),
 		mVisible(other.mVisible), mIsSelected(false), mResVisible(other.mVisible), mFullyDisabled(!other.mVisible),
-		mVisibleState(nullptr), mSelectedState(nullptr)
+		mVisibleState(nullptr), mSelectedState(nullptr), mIsSelectable(false)
 	{
 		layout.mOwner = this;
 		InitializeProperties();
@@ -92,6 +92,7 @@ namespace o2
 		mName = other.mName;
 		layout.CopyFrom(other.layout);
 		mTransparency = other.mTransparency;
+		mIsSelectable = other.mIsSelectable;
 
 		for (auto layer : other.mLayers)
 		{
@@ -640,7 +641,12 @@ namespace o2
 
 	bool UIWidget::IsSelectable() const
 	{
-		return false;
+		return mIsSelectable;
+	}
+
+	void UIWidget::SetSelectable(bool selectable)
+	{
+		mIsSelectable = selectable;
 	}
 
 	bool UIWidget::IsUnderPoint(const Vec2F& point)

@@ -76,11 +76,31 @@ namespace o2
 		Asset(asset), mFont(asset.mFont)
 	{
 		mMeta = mnew MetaInfo();
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
 		InitializeProperties();
 	}
 
 	VectorFontAsset::~VectorFontAsset()
 	{}
+
+	VectorFontAsset& VectorFontAsset::operator=(const VectorFontAsset& asset)
+	{
+		Asset::operator=(asset);
+		mFont = asset.mFont;
+		*mMeta = *(MetaInfo*)(asset.mMeta);
+		return *this;
+	}
+
+	bool VectorFontAsset::operator==(const VectorFontAsset& other) const
+	{
+		return mMeta->IsEqual(other.mMeta);
+	}
+
+	bool VectorFontAsset::operator!=(const VectorFontAsset& other) const
+	{
+		return !mMeta->IsEqual(other.mMeta);
+	}
 
 	FontRef VectorFontAsset::GetFont() const
 	{
@@ -142,11 +162,5 @@ namespace o2
 	{
 		INITIALIZE_GETTER(VectorFontAsset, meta, GetMeta);
 		INITIALIZE_GETTER(VectorFontAsset, font, GetFont);
-	}
-
-	VectorFontAsset& VectorFontAsset::operator=(const VectorFontAsset& asset)
-	{
-		mFont = asset.mFont;
-		return *this;
 	}
 }

@@ -20,152 +20,155 @@
 #include "Utils/Time.h"
 #include "Utils/Timer.h"
 
-EditorApplication::EditorApplication()
-{}
-
-EditorApplication::~EditorApplication()
-{}
-
-String EditorApplication::GetLastActionName() const
+namespace Editor
 {
-	if (mActions.Count() > 0)
-		return mActions.Last()->GetName();
+	EditorApplication::EditorApplication()
+	{}
 
-	return "";
-}
+	EditorApplication::~EditorApplication()
+	{}
 
-String EditorApplication::GetNextForwardActionName() const
-{
-	if (mForwardActions.Count() > 0)
-		return mForwardActions.Last()->GetName();
-
-	return "";
-}
-
-void EditorApplication::UndoAction()
-{
-	if (mActions.Count() > 0)
+	String EditorApplication::GetLastActionName() const
 	{
-		mActions.Last()->Undo();
-		mForwardActions.Add(mActions.PopBack());
-	}
-}
+		if (mActions.Count() > 0)
+			return mActions.Last()->GetName();
 
-void EditorApplication::RedoAction()
-{
-	if (mForwardActions.Count() > 0)
+		return "";
+	}
+
+	String EditorApplication::GetNextForwardActionName() const
 	{
-		mForwardActions.Last()->Redo();
-		mActions.Add(mForwardActions.PopBack());
+		if (mForwardActions.Count() > 0)
+			return mForwardActions.Last()->GetName();
+
+		return "";
 	}
-}
 
-void EditorApplication::DoneAction(IEditorAction* action)
-{
-	mActions.Add(action);
+	void EditorApplication::UndoAction()
+	{
+		if (mActions.Count() > 0)
+		{
+			mActions.Last()->Undo();
+			mForwardActions.Add(mActions.PopBack());
+		}
+	}
 
-	for (auto action : mForwardActions)
-		delete action;
+	void EditorApplication::RedoAction()
+	{
+		if (mForwardActions.Count() > 0)
+		{
+			mForwardActions.Last()->Redo();
+			mActions.Add(mForwardActions.PopBack());
+		}
+	}
 
-	mForwardActions.Clear();
-}
+	void EditorApplication::DoneAction(IAction* action)
+	{
+		mActions.Add(action);
 
-void EditorApplication::OnStarted()
-{
-	o2Application.SetWindowCaption("o2 Editor");
+		for (auto action : mForwardActions)
+			delete action;
 
-	mBackground = mnew Sprite("ui/UI_Background.png");
-	mBackSign = mnew Sprite("ui/UI_o2_sign.png");
+		mForwardActions.Clear();
+	}
 
-	mConfig = mnew EditorConfig();
-	mWindowsManager = mnew WindowsManager();
-	mMenuPanel = mnew MenuPanel();
-	mToolsPanel = mnew ToolsPanel();
+	void EditorApplication::OnStarted()
+	{
+		o2Application.SetWindowCaption("o2 Editor");
 
-	OnResizing();
-	mConfig->LoadConfigs();
-}
+		mBackground = mnew Sprite("ui/UI_Background.png");
+		mBackSign = mnew Sprite("ui/UI_o2_sign.png");
 
-void EditorApplication::OnClosing()
-{
-	delete mConfig;
-	delete mWindowsManager;
-	delete mBackground;
-	delete mBackSign;
-	delete mToolsPanel;
-	delete mMenuPanel;
-}
+		mConfig = mnew EditorConfig();
+		mWindowsManager = mnew WindowsManager();
+		mMenuPanel = mnew MenuPanel();
+		mToolsPanel = mnew ToolsPanel();
 
-void EditorApplication::OnResizing()
-{
-	mBackground->SetSize(o2Render.GetResolution() + Vec2F(20, 20));
-	mBackSign->position = (Vec2F)(o2Render.GetResolution()).InvertedX()*0.5f + Vec2F(40.0f, -85.0f);
+		OnResizing();
+		mConfig->LoadConfigs();
+	}
 
-	mConfig->OnWindowChange();
-}
+	void EditorApplication::OnClosing()
+	{
+		delete mConfig;
+		delete mWindowsManager;
+		delete mBackground;
+		delete mBackSign;
+		delete mToolsPanel;
+		delete mMenuPanel;
+	}
 
-void EditorApplication::OnMoved()
-{
-	mConfig->OnWindowChange();
-}
+	void EditorApplication::OnResizing()
+	{
+		mBackground->SetSize(o2Render.GetResolution() + Vec2F(20, 20));
+		mBackSign->position = (Vec2F)(o2Render.GetResolution()).InvertedX()*0.5f + Vec2F(40.0f, -85.0f);
 
-void EditorApplication::ProcessFrame()
-{
-	if (!mReady)
-		return;
+		mConfig->OnWindowChange();
+	}
 
-	float realdDt = mTimer->GetDeltaTime();
-	float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
+	void EditorApplication::OnMoved()
+	{
+		mConfig->OnWindowChange();
+	}
 
-	mTime->Update(realdDt);
-	o2Debug.Update(dt);
-	mTaskManager->Update(dt);
-	mEventSystem->Update(dt);
+	void EditorApplication::ProcessFrame()
+	{
+		if (!mReady)
+			return;
 
-	OnUpdate(dt);
+		float realdDt = mTimer->GetDeltaTime();
+		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
 
-	mUIManager->Update(dt);
+		mTime->Update(realdDt);
+		o2Debug.Update(dt);
+		mTaskManager->Update(dt);
+		mEventSystem->Update(dt);
 
-	mRender->Begin();
+		OnUpdate(dt);
 
-	OnDraw();
-	mUIManager->Draw();
-	o2Debug.Draw();
+		mUIManager->Update(dt);
 
-	mRender->End();
+		mRender->Begin();
 
-	mInput->Update(dt);
-}
+		OnDraw();
+		mUIManager->Draw();
+		o2Debug.Draw();
 
-void EditorApplication::OnUpdate(float dt)
-{
-	mWindowsManager->Update(dt);
-	o2Application.windowCaption = String::Format("o2 Editor. FPS: %i DC: %i (%vi)", (int)o2Time.GetFPS(),
-												 o2Render.GetDrawCallsCount(), (Vec2I)o2Input.GetCursorPos());
+		mRender->End();
 
-	if (o2Input.IsKeyPressed('K'))
-		MemoryManager::instance->DumpInfo();
-}
+		mInput->Update(dt);
+	}
+
+	void EditorApplication::OnUpdate(float dt)
+	{
+		mWindowsManager->Update(dt);
+		o2Application.windowCaption = String::Format("o2 Editor. FPS: %i DC: %i (%vi)", (int)o2Time.GetFPS(),
+													 o2Render.GetDrawCallsCount(), (Vec2I)o2Input.GetCursorPos());
+
+		if (o2Input.IsKeyPressed('K'))
+			MemoryManager::instance->DumpInfo();
+	}
 
 #undef DrawText
 
-void EditorApplication::OnDraw()
-{
-	o2Render.Clear();
-	o2Render.camera = Camera::Default();
+	void EditorApplication::OnDraw()
+	{
+		o2Render.Clear();
+		o2Render.camera = Camera::Default();
 
-	mBackground->Draw();
-	mBackSign->Draw();
-	mWindowsManager->Draw();
+		mBackground->Draw();
+		mBackSign->Draw();
+		mWindowsManager->Draw();
 
-	// Debug draw undo actions
-// 	for (int i = 0; i < mActions.Count(); i++)
-// 		o2Debug.DrawText(Vec2F(0, 20 * i), (String)i + mActions[i]->GetName());
+		// Debug draw undo actions
+	// 	for (int i = 0; i < mActions.Count(); i++)
+	// 		o2Debug.DrawText(Vec2F(0, 20 * i), (String)i + mActions[i]->GetName());
+	}
+
+	void EditorApplication::OnActivated()
+	{}
+
+	void EditorApplication::OnDeactivated()
+	{}
+
 }
-
-void EditorApplication::OnActivated()
-{}
-
-void EditorApplication::OnDeactivated()
-{}
-

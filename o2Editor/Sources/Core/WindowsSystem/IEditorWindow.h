@@ -1,54 +1,57 @@
 #pragma once
 
 #include "UIDockableWindow.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 using namespace o2;
 
-// -----------------------------
-// Basic editor window interface
-// -----------------------------
-class IEditorWindow: public IObject
+namespace Editor
 {
-public:
-	Property<bool> visible; // Window visibility property
+	// -----------------------------
+	// Basic editor window interface
+	// -----------------------------
+	class IEditorWindow: public IObject
+	{
+	public:
+		Property<bool> visible; // Window visibility property
 
-	// Default constructor
-	IEditorWindow();
+		// Default constructor
+		IEditorWindow();
 
-	// Copy-constructor
-	IEditorWindow(const IEditorWindow& other);
+		// Copy-constructor
+		IEditorWindow(const IEditorWindow& other);
 
-	// Virtual destructor
-	virtual ~IEditorWindow();
+		// Virtual destructor
+		virtual ~IEditorWindow();
 
-	// Sets visibility
-	virtual void SetVisible(bool visible);
+		// Sets visibility
+		virtual void SetVisible(bool visible);
 
-	// Updates window logic
-	virtual void Update(float dt);
+		// Updates window logic
+		virtual void Update(float dt);
 
-	// Draws window stuff
-	virtual void Draw();
+		// Draws window stuff
+		virtual void Draw();
 
-	// Returns is window is visible
-	bool IsVisible();
-	
-	// Shows window
-	void Show();
+		// Returns is window is visible
+		bool IsVisible();
 
-	// Hides window
-	void Hide();
+		// Shows window
+		void Show();
 
-	IOBJECT(IEditorWindow);
+		// Hides window
+		void Hide();
 
-protected:
-	UIDockableWindow* mWindow; // Dockable UI window 
+		IOBJECT(IEditorWindow);
 
-protected:
-	// Calls after that all windows was created
-	virtual void PostInitializeWindow() {}
+	protected:
+		UIDockableWindow* mWindow; // Dockable UI window 
 
-	friend class WindowsManager;
-	friend class WindowsLayout;
-};
+	protected:
+		// Calls after that all windows was created
+		virtual void PostInitializeWindow() {}
+
+		friend class WindowsManager;
+		friend class WindowsLayout;
+	};
+}

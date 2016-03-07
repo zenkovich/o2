@@ -37,6 +37,12 @@ namespace o2
 		// Check equals operator
 		BitmapFontAsset& operator=(const BitmapFontAsset& asset);
 
+		// Check equals operator
+		bool operator==(const BitmapFontAsset& other) const;
+
+		// Check not equals operator
+		bool operator!=(const BitmapFontAsset& other) const;
+
 		// Returns meta information
 		MetaInfo* GetMeta() const;
 

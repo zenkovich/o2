@@ -41,6 +41,10 @@ namespace o2
 	ImageAsset::ImageAsset(const ImageAsset& asset):
 		Asset(asset)
 	{
+		mMeta = mnew MetaInfo();
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
+
 		if (asset.mBitmap)
 			mBitmap = asset.mBitmap->Clone();
 		else
@@ -49,7 +53,6 @@ namespace o2
 		mAtlasPage = asset.mAtlasPage;
 		mAtlasRect = asset.mAtlasRect;
 
-		mMeta = mnew MetaInfo();
 		InitializeProperties();
 	}
 
@@ -59,10 +62,32 @@ namespace o2
 			delete mBitmap;
 	}
 
-	ImageAsset& ImageAsset::operator=(ImageAsset& asset)
+	ImageAsset& ImageAsset::operator=(const ImageAsset& asset)
 	{
-		SetBitmap(asset.GetBitmap());
+		Asset::operator=(asset);
+
+		if (mBitmap)
+			delete mBitmap;
+
+		if (asset.mBitmap)
+			SetBitmap(asset.mBitmap);
+
+		mAtlasPage = asset.mAtlasPage;
+		mAtlasRect = asset.mAtlasRect;
+
+		*mMeta = *(MetaInfo*)(asset.mMeta);
+
 		return *this;
+	}
+
+	bool ImageAsset::operator==(const ImageAsset& other) const
+	{
+		return mMeta->IsEqual(other.mMeta);
+	}
+
+	bool ImageAsset::operator!=(const ImageAsset& other) const
+	{
+		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	Bitmap* ImageAsset::GetBitmap()

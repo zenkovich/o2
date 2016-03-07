@@ -2,6 +2,7 @@
 
 #include "Assets/ActorAsset.h"
 #include "Assets/Asset.h"
+#include "Assets/DataAsset.h"
 #include "Assets/ImageAsset.h"
 #include "ImageComponent.h"
 #include "Scene/Component.h"
@@ -11,23 +12,23 @@ namespace o2
 	class EditorTestComponent: public Component
 	{
 	public:
-		int mInteger;
-		float mFloat;
-		String mString;
-		WString mWString;
-		bool mBool;
-		ImageAsset mImageAsset;
-		ActorAsset mActorAsset;
-		Actor* mActor;
-		Component* mComponent;
-		ImageComponent* mImageComponent;
-		Asset* mAsset;
-		Color4 mColor;
-		Vec2F mVec2F;
-		Vec2I mVec2I;
-		Vertex2 mVertex;
-		RectF mRectF;
-		RectI mRectI;
+		int mInteger;					           // @SERIALIZABLE
+		float mFloat;					           // @SERIALIZABLE
+		String mString;					           // @SERIALIZABLE
+		WString mWString;				           // @SERIALIZABLE
+		bool mBool;						           // @SERIALIZABLE
+		ImageAsset mImageAsset;			           // @SERIALIZABLE
+		ActorAsset mActorAsset;			           // @SERIALIZABLE
+		DataAsset mDataAsset;                      // @SERIALIZABLE
+		Actor* mActor = nullptr;                   // @SERIALIZABLE
+		Component* mComponent = nullptr;           // @SERIALIZABLE
+		ImageComponent* mImageComponent = nullptr; // @SERIALIZABLE
+		Color4 mColor;					           // @SERIALIZABLE
+		Vec2F mVec2F;					           // @SERIALIZABLE
+		Vec2I mVec2I;					           // @SERIALIZABLE
+		Vertex2 mVertex;				           // @SERIALIZABLE
+		RectF mRectF;					           // @SERIALIZABLE
+		RectI mRectI;					           // @SERIALIZABLE
 
 		SERIALIZABLE(EditorTestComponent);
 	};

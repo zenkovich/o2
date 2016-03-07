@@ -7,7 +7,7 @@ namespace o2
 {
 	Actor::Actor():
 		mName("unnamed"), mEnabled(true), mResEnabled(true), mLocked(false), mResLocked(false), Animatable(),
-		mParent(nullptr), mLayer(nullptr), mId(Math::Random())
+		mParent(nullptr), mLayer(nullptr), mId(Math::Random()), mAssetId(0), mIsAsset(false), mIsOnScene(false)
 	{
 		transform.SetOwner(this);
 		InitializeProperties();
@@ -21,13 +21,15 @@ namespace o2
 			mLayer->enabledActors.Add(this);
 
 			o2Scene.onActorCreated(this);
+
+			mIsOnScene = true;
 		}
 	}
 
 	Actor::Actor(const Actor& other):
 		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mLocked(other.mLocked),
 		mResLocked(other.mResLocked), Animatable(other), transform(other.transform), mParent(nullptr),
-		mLayer(other.mLayer), mId(Math::Random())
+		mLayer(other.mLayer), mId(Math::Random()), mAssetId(other.mAssetId), mIsAsset(false), mIsOnScene(false)
 	{
 		transform.SetOwner(this);
 
@@ -54,6 +56,8 @@ namespace o2
 			mLayer->enabledActors.Add(this);
 
 			o2Scene.onActorCreated(this);
+
+			mIsOnScene = true;
 		}
 	}
 
@@ -101,6 +105,7 @@ namespace o2
 		mName = other.mName;
 		mEnabled = other.mEnabled;
 		transform = other.transform;
+		mAssetId = other.mAssetId;
 
 		for (auto child : other.mChilds)
 			AddChild(child->Clone());
@@ -157,6 +162,16 @@ namespace o2
 		mId = id;
 	}
 
+	AssetId Actor::GetAssetId() const
+	{
+		return mAssetId;
+	}
+
+	bool Actor::IsAsset() const
+	{
+		return mIsAsset;
+	}
+
 	void Actor::GenNewId(bool childs /*= true*/)
 	{
 		mId = Math::Random();
@@ -187,6 +202,8 @@ namespace o2
 		}
 
 		ComponentsExcludeFromScene();
+
+		mIsOnScene = false;
 	}
 
 	void Actor::IncludeInScene()
@@ -200,6 +217,13 @@ namespace o2
 		}
 
 		ComponentsIncludeToScene();
+
+		mIsOnScene = true;
+	}
+
+	bool Actor::IsOnScene() const
+	{
+		return mIsOnScene;
 	}
 
 	void Actor::SetEnabled(bool active)

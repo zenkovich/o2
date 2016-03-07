@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 namespace o2
 {

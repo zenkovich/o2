@@ -70,7 +70,8 @@ namespace o2
 
 	Text::Text(AssetId fontAssetId):
 		mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
-		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mDotsEndings(false), mHeight(11)
+		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mDotsEndings(false), mHeight(11),
+		mUpdatingMesh(false)
 	{
 		InitializeProperties();
 		SetFontAsset(fontAssetId);

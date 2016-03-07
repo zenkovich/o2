@@ -29,6 +29,7 @@
 #include "UI/Window.h"
 
 using namespace o2;
+using namespace Editor;
 
 namespace UIStyle
 {
@@ -1181,6 +1182,25 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
+	void RebuildLinkBtn()
+	{
+		UIButton* sample = mnew UIButton();
+
+		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
+		auto selectLayer = halfHideLayer->AddChildLayer("select", nullptr);
+		auto pressedLayer = selectLayer->AddChildLayer("pressed", nullptr);
+		auto back = pressedLayer->AddChildLayer("back", mnew Sprite("ui/UI2_link_icon.png"),
+												Layout::Based(BaseCorner::Center, Vec2F(15, 15), Vec2F(0, 0)));
+
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f));
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.8f, 1.0f, 0.1f));
+
+		o2UI.AddWidgetStyle(sample, "asset link");
+	}
+
 	void RebuildEditorUIStyle()
 	{
 		o2UI.ClearStyle();
@@ -1244,6 +1264,7 @@ namespace UIStyle
 		RebuildAssetsGridScroll();
 		RebuildSinglelineEditbox();
 		RebuildCheckboxWithoutCaptionStyle();
+		RebuildLinkBtn();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

@@ -78,6 +78,12 @@ namespace o2
 		// Sets id. Be carefully! Ids must be unique! Don't recommending to change this
 		void SetId(UInt64 id);
 
+		// Returns asset id
+		AssetId GetAssetId() const;
+
+		// Is this from asset
+		bool IsAsset() const;
+
 		// Generates new random id 
 		void GenNewId(bool childs = true);
 
@@ -86,6 +92,9 @@ namespace o2
 
 		// Includes to scene and now will be update and draw automatically from scene
 		void IncludeInScene();
+
+		// Is actor on scene
+		bool IsOnScene() const;
 
 		// Sets actor enabling
 		void SetEnabled(bool active);
@@ -227,6 +236,11 @@ namespace o2
 		bool           mLocked;      // Is actor locked @SERIALIZABLE
 		bool           mResLocked;   // Is actor locked in hierarchy
 
+		bool           mIsOnScene;   // Is actor on scene
+
+		bool           mIsAsset;     // Is this actor cached asset
+		AssetId        mAssetId;     // Source asset id
+
 	protected:
 		// Calls when transformation was changed
 		void OnTransformChanged();
@@ -261,6 +275,7 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
+		friend class ActorAsset;
 		friend class ActorTransform;
 		friend class Component;
 		friend class DrawableComponent;

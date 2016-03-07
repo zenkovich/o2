@@ -1,5 +1,6 @@
 #include "Scene.h"
 
+#include "Assets/ActorAsset.h"
 #include "Scene/Actor.h"
 #include "Scene/DrawableComponent.h"
 
@@ -15,6 +16,7 @@ namespace o2
 	Scene::~Scene()
 	{
 		Clear();
+		ClearCache();
 
 		for (auto layer : mLayers)
 			delete layer;
@@ -111,6 +113,19 @@ namespace o2
 		return mAllActors.FindMatch([=](Actor* x) { return x->mId == id; });
 	}
 
+	Actor* Scene::GetAssetActorByID(AssetId id)
+	{
+		auto cached = mCache.FindMatch([=](ActorAsset* x) { return x->GetAssetId() == id; });
+
+		if (!cached)
+		{
+			cached = mnew ActorAsset(id);
+			mCache.Add(cached);
+		}
+
+		return &cached->actor;
+	}
+
 	Actor* Scene::FindActor(const String& path)
 	{
 		int delPos = path.Find("/");
@@ -135,6 +150,14 @@ namespace o2
 		auto allActors = mRootActors;
 		for (auto actor : allActors)
 			delete actor;
+	}
+
+	void Scene::ClearCache()
+	{
+		for (auto asset : mCache)
+			delete asset;
+
+		mCache.Clear();
 	}
 
 	void Scene::Load(const String& path, bool append /*= false*/)

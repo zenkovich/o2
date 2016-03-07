@@ -11,55 +11,58 @@ namespace o2
 	class UIToggle;
 }
 
-// -----------------------
-// Editor boolean property
-// -----------------------
-class EditorBooleanProperty: public IEditorPropertyField
+namespace Editor
 {
-public:
-	// Default constructor
-	EditorBooleanProperty();
+	// -----------------------
+	// Editor boolean property
+	// -----------------------
+	class BooleanProperty: public IPropertyField
+	{
+	public:
+		// Default constructor
+		BooleanProperty();
 
-	// Constructor
-	EditorBooleanProperty(const Vector<void*>& targets, bool isProperty);
+		// Constructor
+		BooleanProperty(const Vector<void*>& targets, bool isProperty);
 
-	// Destructor
-	~EditorBooleanProperty();
+		// Destructor
+		~BooleanProperty();
 
-	// Sets fields
-	void Setup(const Vector<void*>& targets, bool isProperty);
+		// Sets fields
+		void Setup(const Vector<void*>& targets, bool isProperty);
 
-	// Updates and checks value
-	void Update();
+		// Updates and checks value
+		void Update();
 
-	// Returns root widget
-	UIWidget* GetWidget() const;
+		// Returns root widget
+		UIWidget* GetWidget() const;
 
-	// Returns value
-	bool GetCommonValue() const;
+		// Returns value
+		bool GetCommonValue() const;
 
-	// Returns is values different
-	bool IsValuesDifferent() const;
+		// Returns is values different
+		bool IsValuesDifferent() const;
 
-	// Returns editing by this field type
-	const Type* GetFieldType() const;
+		// Returns editing by this field type
+		const Type* GetFieldType() const;
 
-	IOBJECT(EditorBooleanProperty);
+		IOBJECT(BooleanProperty);
 
-protected:
-	Function<void(void*, const bool&)> mAssignFunc; // Value assign function
-	Function<bool(void*)>              mGetFunc;    // Get value function
+	protected:
+		Function<void(void*, const bool&)> mAssignFunc; // Value assign function
+		Function<bool(void*)>              mGetFunc;    // Get value function
 
-	Vector<void*> mValuesPointers;  // Fields' pointers
-	bool          mCommonValue;     // Common field value (if not different)
-	bool          mValuesDifferent; // Are values different
+		Vector<void*> mValuesPointers;  // Fields' pointers
+		bool          mCommonValue;     // Common field value (if not different)
+		bool          mValuesDifferent; // Are values different
 
-	UIToggle*     mToggle;          // Toggle 
+		UIToggle*     mToggle;          // Toggle 
 
-protected:
-	// Initializes widget
-	void InitializeWidget();
+	protected:
+		// Initializes widget
+		void InitializeWidget();
 
-	// Edit box change event
-	void OnEdited(bool value);
-};
+		// Edit box change event
+		void OnEdited(bool value);
+	};
+}

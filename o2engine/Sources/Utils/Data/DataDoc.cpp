@@ -3,7 +3,7 @@
 #include "Utils/Data/XmlDataFormat.h"
 #include "Utils/FileSystem/File.h"
 #include "Utils/Memory/MemoryManager.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 namespace o2
 {

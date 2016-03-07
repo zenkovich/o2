@@ -1,17 +1,20 @@
 #pragma once
 
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 using namespace o2;
 
-class IEditorAction: public ISerializable
+namespace Editor
 {
-public:
-	virtual ~IEditorAction() {}
+	class IAction: public ISerializable
+	{
+	public:
+		virtual ~IAction() {}
 
-	virtual String GetName() const { return "Unknown"; }
-	virtual void Redo() {}
-	virtual void Undo() {}
+		virtual String GetName() const { return "Unknown"; }
+		virtual void Redo() {}
+		virtual void Undo() {}
 
-	SERIALIZABLE(IEditorAction);
-};
+		SERIALIZABLE(IAction);
+	};
+}

@@ -35,6 +35,12 @@ namespace o2
 		// Check equals operator
 		DataAsset& operator=(const DataAsset& asset);
 
+		// Check equals operator
+		bool operator==(const DataAsset& other) const;
+
+		// Check not equals operator
+		bool operator!=(const DataAsset& other) const;
+
 		// Returns meta information
 		MetaInfo* GetMeta() const;
 

@@ -4,7 +4,7 @@
 #include "Utils/Delegates.h"
 #include "Utils/IObject.h"
 #include "Utils/Property.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 namespace o2
 {

@@ -7,6 +7,7 @@
 #include "Utils/Serializer.h"
 
 using namespace o2;
+using namespace Editor;
 
 INITIALIZE_O2;
 

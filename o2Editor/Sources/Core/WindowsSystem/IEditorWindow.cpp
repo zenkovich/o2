@@ -4,50 +4,54 @@
 #include "Application/Application.h"
 #include "UI/UIManager.h"
 
-IEditorWindow::IEditorWindow()
+namespace Editor
 {
-	if (Application::IsReady())
+	IEditorWindow::IEditorWindow()
 	{
-		mWindow = o2UI.CreateWidget<UIDockableWindow>();
-		mWindow->layout.size = Vec2F(200, 200);
-		o2UI.AddWidget(mWindow);
+		if (Application::IsReady())
+		{
+			mWindow = o2UI.CreateWidget<UIDockableWindow>();
+			mWindow->layout.size = Vec2F(200, 200);
+			o2UI.AddWidget(mWindow);
+		}
 	}
-}
 
-IEditorWindow::IEditorWindow(const IEditorWindow& other):
-	mWindow(other.mWindow->Clone())
-{
-	if (mWindow)
-		o2UI.AddWidget(mWindow);
-}
+	IEditorWindow::IEditorWindow(const IEditorWindow& other):
+		mWindow(other.mWindow->Clone())
+	{
+		if (mWindow)
+			o2UI.AddWidget(mWindow);
+	}
 
-IEditorWindow::~IEditorWindow()
-{
-	delete mWindow;
-}
+	IEditorWindow::~IEditorWindow()
+	{
+		delete mWindow;
+	}
 
-void IEditorWindow::Show()
-{
-	SetVisible(true);
-}
+	void IEditorWindow::Show()
+	{
+		SetVisible(true);
+	}
 
-void IEditorWindow::Hide()
-{
-	SetVisible(false);
-}
+	void IEditorWindow::Hide()
+	{
+		SetVisible(false);
+	}
 
-void IEditorWindow::SetVisible(bool visible)
-{
-	mWindow->SetVisible(visible);
-}
+	void IEditorWindow::SetVisible(bool visible)
+	{
+		mWindow->SetVisible(visible);
+	}
 
-void IEditorWindow::Update(float dt)
-{}
+	void IEditorWindow::Update(float dt)
+	{}
 
-void IEditorWindow::Draw()
-{}
+	void IEditorWindow::Draw()
+	{}
 
-bool IEditorWindow::IsVisible()
-{
-	return mWindow->IsVisible();
+	bool IEditorWindow::IsVisible()
+	{
+		return mWindow->IsVisible();
+	}
+
 }

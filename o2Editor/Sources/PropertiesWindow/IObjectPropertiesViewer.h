@@ -11,38 +11,41 @@ namespace o2
 	class UIWidget;
 }
 
-// ----------------------------------
-// Object properties viewer interface
-// ----------------------------------
-class IObjectPropertiesViewer: public IObject
+namespace Editor
 {
-public:
-	// Virtual destructor
-	virtual ~IObjectPropertiesViewer() {}
+	// ----------------------------------
+	// Object properties viewer interface
+	// ----------------------------------
+	class IObjectPropertiesViewer: public IObject
+	{
+	public:
+		// Virtual destructor
+		virtual ~IObjectPropertiesViewer() {}
 
-	// Returns viewing object type
-	virtual const Type* GetViewingObjectType() const { return nullptr; }
+		// Returns viewing object type
+		virtual const Type* GetViewingObjectType() const { return nullptr; }
 
-	IOBJECT(IObjectPropertiesViewer);
+		IOBJECT(IObjectPropertiesViewer);
 
-protected:
-	UIWidget* mContentWidget; // Data content widget (turning on/off on enabling/disabling)
+	protected:
+		UIWidget* mContentWidget; // Data content widget (turning on/off on enabling/disabling)
 
-protected:
-	// Sets target objects
-	virtual void SetTargets(const Vector<IObject*> targets) {}
+	protected:
+		// Sets target objects
+		virtual void SetTargets(const Vector<IObject*> targets) {}
 
-	// Enable viewer event function
-	virtual void OnEnabled() {}
+		// Enable viewer event function
+		virtual void OnEnabled() {}
 
-	// Disable viewer event function
-	virtual void OnDisabled() {}
+		// Disable viewer event function
+		virtual void OnDisabled() {}
 
-	// Updates viewer
-	virtual void Update(float dt) {}
+		// Updates viewer
+		virtual void Update(float dt) {}
 
-	// Draws something
-	virtual void Draw() {}
+		// Draws something
+		virtual void Draw() {}
 
-	friend class PropertiesWindow;
-};
+		friend class PropertiesWindow;
+	};
+}

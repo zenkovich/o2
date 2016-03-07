@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/CommonTypes.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 #include "Utils/Singleton.h"
 #include "Utils/TimeStamp.h"
 

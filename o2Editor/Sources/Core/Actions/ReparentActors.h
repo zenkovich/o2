@@ -11,32 +11,35 @@ namespace o2
 	class Actor;
 }
 
-class EditorReparentActorsAction: public IEditorAction
+namespace Editor
 {
-public:
-	struct ActorInfo
+	class ReparentActorsAction: public IAction
 	{
-		UInt64 actorId;
-		UInt64 lastParentId;
-		UInt64 lastPrevActorId;
-		int    actorHierarchyIdx;
-		Basis  transform;
+	public:
+		struct ActorInfo
+		{
+			UInt64 actorId;
+			UInt64 lastParentId;
+			UInt64 lastPrevActorId;
+			int    actorHierarchyIdx;
+			Basis  transform;
+		};
+
+		Vector<ActorInfo*> actorsInfos;
+		UInt64             newParentId;
+		UInt64             newPrevActorId;
+
+	public:
+		ReparentActorsAction();
+		ReparentActorsAction(const Vector<Actor*>& beginActors);
+		~ReparentActorsAction();
+
+		void ActorsReparented(Actor* newParent, Actor* prevActor);
+
+		String GetName() const;
+		void Redo();
+		void Undo();
+
+		SERIALIZABLE(ReparentActorsAction);
 	};
-
-	Vector<ActorInfo*> actorsInfos;
-	UInt64             newParentId;
-	UInt64             newPrevActorId;
-
-public:
-	EditorReparentActorsAction();
-	EditorReparentActorsAction(const Vector<Actor*>& beginActors);
-	~EditorReparentActorsAction();
-
-	void ActorsReparented(Actor* newParent, Actor* prevActor);
-
-	String GetName() const;
-	void Redo();
-	void Undo();
-
-	SERIALIZABLE(EditorReparentActorsAction);
-};
+}

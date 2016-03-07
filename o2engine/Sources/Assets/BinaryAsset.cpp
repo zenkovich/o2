@@ -42,6 +42,10 @@ namespace o2
 	BinaryAsset::BinaryAsset(const BinaryAsset& asset):
 		Asset(asset)
 	{
+		mMeta = mnew MetaInfo();
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
+
 		if (asset.mDataSize > 0)
 		{
 			mDataSize = asset.mDataSize;
@@ -54,7 +58,6 @@ namespace o2
 			mData = nullptr;
 		}
 
-		mMeta = mnew MetaInfo();
 		InitializeProperties();
 	}
 
@@ -66,6 +69,8 @@ namespace o2
 
 	BinaryAsset& BinaryAsset::operator=(const BinaryAsset& asset)
 	{
+		Asset::operator=(asset);
+
 		if (mData)
 			delete[] mData;
 
@@ -81,7 +86,19 @@ namespace o2
 			mData = nullptr;
 		}
 
+		*mMeta = *(MetaInfo*)(asset.mMeta);
+
 		return *this;
+	}
+
+	bool BinaryAsset::operator==(const BinaryAsset& other) const
+	{
+		return mMeta->IsEqual(other.mMeta);
+	}
+
+	bool BinaryAsset::operator!=(const BinaryAsset& other) const
+	{
+		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	char* BinaryAsset::GetData() const

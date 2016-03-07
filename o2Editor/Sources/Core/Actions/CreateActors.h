@@ -10,21 +10,25 @@ namespace o2
 	class Actor;
 }
 
-class EditorCreateActorsAction: public IEditorAction
+namespace Editor
 {
-public:
-	DataNode       actors;
-	Vector<UInt64> actorsIds;
-	UInt64         insertParentId;
-	UInt64         insertPrevActorId;
+	class CreateActorsAction: public IAction
+	{
+	public:
+		DataNode       actors;
+		Vector<UInt64> actorsIds;
+		UInt64         insertParentId;
+		UInt64         insertPrevActorId;
 
-public:
-	EditorCreateActorsAction();
-	EditorCreateActorsAction(const Vector<Actor*>& actors, Actor* parent, Actor* prevActor);
+	public:
+		CreateActorsAction();
+		CreateActorsAction(const Vector<Actor*>& actors, Actor* parent, Actor* prevActor);
 
-	String GetName() const;
-	void Redo();
-	void Undo();
+		String GetName() const;
+		void Redo();
+		void Undo();
 
-	SERIALIZABLE(EditorCreateActorsAction);
-};
+		SERIALIZABLE(CreateActorsAction);
+	};
+
+}

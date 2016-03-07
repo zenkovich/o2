@@ -45,6 +45,8 @@ namespace o2
 		Asset(asset), mFont(asset.mFont)
 	{
 		mMeta = mnew MetaInfo();
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
 		InitializeProperties();
 	}
 
@@ -54,6 +56,24 @@ namespace o2
 	FontRef BitmapFontAsset::GetFont() const
 	{
 		return mFont;
+	}
+
+	BitmapFontAsset& BitmapFontAsset::operator=(const BitmapFontAsset& asset)
+	{
+		Asset::operator=(asset);
+		mFont = asset.mFont;
+		*mMeta = *(MetaInfo*)(asset.mMeta);
+		return *this;
+	}
+
+	bool BitmapFontAsset::operator==(const BitmapFontAsset& other) const
+	{
+		return mMeta->IsEqual(other.mMeta);
+	}
+
+	bool BitmapFontAsset::operator!=(const BitmapFontAsset& other) const
+	{
+		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	const char* BitmapFontAsset::GetFileExtensions() const
@@ -78,11 +98,5 @@ namespace o2
 	{
 		INITIALIZE_GETTER(BitmapFontAsset, meta, GetMeta);
 		INITIALIZE_GETTER(BitmapFontAsset, font, GetFont);
-	}
-
-	BitmapFontAsset& BitmapFontAsset::operator=(const BitmapFontAsset& asset)
-	{
-		mFont = asset.mFont;
-		return *this;
 	}
 }

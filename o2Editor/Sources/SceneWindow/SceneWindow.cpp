@@ -6,60 +6,63 @@
 #include "UI/CustomDropDown.h"
 #include "UI/UIManager.h"
 
-SceneWindow::SceneWindow():
-	IEditorWindow()
+namespace Editor
 {
-	InitializeWindow();
-}
-
-SceneWindow::SceneWindow(const SceneWindow& other) :
-	IEditorWindow(other)
-{
-	InitializeWindow();
-}
-
-SceneWindow::~SceneWindow()
-{}
-
-void SceneWindow::InitializeWindow()
-{
-	mWindow->caption = "Scene";
-	mWindow->name = "scene window";
-	if (auto iconLayer = mWindow->GetLayer("icon"))
+	SceneWindow::SceneWindow():
+		IEditorWindow()
 	{
-		*((Sprite*)iconLayer->drawable) = Sprite("ui/UI2_scene_icon.png");
-		iconLayer->layout = Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-2, 2));
+		InitializeWindow();
 	}
 
-	mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
+	SceneWindow::SceneWindow(const SceneWindow& other):
+		IEditorWindow(other)
+	{
+		InitializeWindow();
+	}
 
-	mEditWidget = mnew SceneEditWidget();
-	mEditWidget->layout = UIWidgetLayout::BothStretch(0, 0, 0, 19);
-	mWindow->AddChild(mEditWidget);
+	SceneWindow::~SceneWindow()
+	{}
 
-	UIWidget* upPanel = mnew UIWidget();
-	upPanel->name = "up panel";
-	upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-	upPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
-	mWindow->AddChild(upPanel);
+	void SceneWindow::InitializeWindow()
+	{
+		mWindow->caption = "Scene";
+		mWindow->name = "scene window";
+		if (auto iconLayer = mWindow->GetLayer("icon"))
+		{
+			*((Sprite*)iconLayer->drawable) = Sprite("ui/UI2_scene_icon.png");
+			iconLayer->layout = Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-2, 2));
+		}
 
-	auto layersButton = o2UI.CreateWidget<UIButton>("panel down");
-	layersButton->caption = "Layers";
-	layersButton->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 0);
-	upPanel->AddChild(layersButton);
+		mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
 
-	auto gizmosButton = o2UI.CreateWidget<UIButton>("panel down");
-	gizmosButton->caption = "Gizmos";
-	gizmosButton->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 100);
-	upPanel->AddChild(gizmosButton);
-}
+		mEditWidget = mnew SceneEditWidget();
+		mEditWidget->layout = UIWidgetLayout::BothStretch(0, 0, 0, 19);
+		mWindow->AddChild(mEditWidget);
 
-void SceneWindow::InitializeLayersView()
-{
+		UIWidget* upPanel = mnew UIWidget();
+		upPanel->name = "up panel";
+		upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		upPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
+		mWindow->AddChild(upPanel);
 
-}
+		auto layersButton = o2UI.CreateWidget<UIButton>("panel down");
+		layersButton->caption = "Layers";
+		layersButton->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 0);
+		upPanel->AddChild(layersButton);
 
-void SceneWindow::PostInitializeWindow()
-{
-	o2EditorSceneScreen.BindActorsTree();
+		auto gizmosButton = o2UI.CreateWidget<UIButton>("panel down");
+		gizmosButton->caption = "Gizmos";
+		gizmosButton->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 100);
+		upPanel->AddChild(gizmosButton);
+	}
+
+	void SceneWindow::InitializeLayersView()
+	{
+
+	}
+
+	void SceneWindow::PostInitializeWindow()
+	{
+		o2EditorSceneScreen.BindActorsTree();
+	}
 }

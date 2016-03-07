@@ -66,8 +66,8 @@ namespace o2
 	{
 		Vec2F parentPivot;
 
-		if (mOwner->mParent)
-			parentPivot = mOwner->mParent->layout.mLocalRect.Size()*mOwner->mParent->layout.mPivot;
+// 		if (mOwner->mParent)
+// 			parentPivot = mOwner->mParent->layout.mLocalRect.Size()*mOwner->mParent->layout.mPivot;
 
 		return mLocalRect.LeftBottom() + mLocalRect.Size()*mPivot - parentPivot;
 	}

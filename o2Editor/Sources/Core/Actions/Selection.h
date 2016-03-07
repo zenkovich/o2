@@ -10,20 +10,23 @@ namespace o2
 	class Actor;
 }
 
-class EditorSelectionAction: public IEditorAction
+namespace Editor
 {
-public:
-	Vector<UInt64> selectedActorsIds;
-	Vector<UInt64> prevSelectedActorsIds;
+	class SelectionAction: public IAction
+	{
+	public:
+		Vector<UInt64> selectedActorsIds;
+		Vector<UInt64> prevSelectedActorsIds;
 
-public:
-	EditorSelectionAction();
-	EditorSelectionAction(const Vector<Actor*>& selectedActors, const Vector<Actor*>& prevSelectedActors);
-	~EditorSelectionAction();
+	public:
+		SelectionAction();
+		SelectionAction(const Vector<Actor*>& selectedActors, const Vector<Actor*>& prevSelectedActors);
+		~SelectionAction();
 
-	String GetName() const;
-	void Redo();
-	void Undo();
+		String GetName() const;
+		void Redo();
+		void Undo();
 
-	SERIALIZABLE(EditorSelectionAction);
-};
+		SERIALIZABLE(SelectionAction);
+	};
+}

@@ -11,20 +11,23 @@ namespace o2
 	class Actor;
 }
 
-class EditorActorsTransformAction: public IEditorAction
+namespace Editor
 {
-public:
-	Vector<UInt64>         actorsIds;
-	Vector<ActorTransform> beforeTransforms;
-	Vector<ActorTransform> doneTransforms;
+	class EditorActorsTransformAction: public IAction
+	{
+	public:
+		Vector<UInt64>         actorsIds;
+		Vector<ActorTransform> beforeTransforms;
+		Vector<ActorTransform> doneTransforms;
 
-public:
-	EditorActorsTransformAction();
-	EditorActorsTransformAction(const Vector<Actor*>& actors, const Vector<ActorTransform>& beforeTransforms);
+	public:
+		EditorActorsTransformAction();
+		EditorActorsTransformAction(const Vector<Actor*>& actors, const Vector<ActorTransform>& beforeTransforms);
 
-	String GetName() const;
-	void Redo();
-	void Undo();
+		String GetName() const;
+		void Redo();
+		void Undo();
 
-	SERIALIZABLE(EditorActorsTransformAction);
-};
+		SERIALIZABLE(EditorActorsTransformAction);
+	};
+}

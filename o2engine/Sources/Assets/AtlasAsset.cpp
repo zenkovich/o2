@@ -82,12 +82,15 @@ namespace o2
 	AtlasAsset::AtlasAsset(const AtlasAsset& asset):
 		Asset(asset)
 	{
+		mMeta = mnew MetaInfo();
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
+
 		mImagesAssetsInfos = asset.mImagesAssetsInfos;
 		mPages = asset.mPages;
 		for (auto& page : mPages)
 			page.mOwner = this;
 
-		mMeta = mnew MetaInfo();
 		InitializeProperties();
 	}
 
@@ -96,7 +99,24 @@ namespace o2
 
 	AtlasAsset& AtlasAsset::operator=(const AtlasAsset& asset)
 	{
+		Asset::operator=(asset);
+
+		mImagesAssetsInfos = asset.mImagesAssetsInfos;
+		mPages = asset.mPages;
+
+		*mMeta = *(MetaInfo*)(asset.mMeta);
+
 		return *this;
+	}
+
+	bool AtlasAsset::operator==(const AtlasAsset& other) const
+	{
+		return mMeta->IsEqual(other.mMeta);
+	}
+
+	bool AtlasAsset::operator!=(const AtlasAsset& other) const
+	{
+		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	AssetInfosVec AtlasAsset::GetImages() const

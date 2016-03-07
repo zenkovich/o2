@@ -21,129 +21,132 @@ namespace o2
 	class UIWidget;
 }
 
-class UIAssetsIconsScrollArea;
-class UIAssetsFoldersTree;
-
 // Editor assets window accessor macros
 #define o2EditorAssets AssetsWindow::Instance()
 
-// -------------
-// Assets window
-// -------------
-class AssetsWindow: public IEditorWindow, public Singleton<AssetsWindow>
+namespace Editor
 {
-public:
-	// Default constructor. Initializes window
-	AssetsWindow();
+	class UIAssetsIconsScrollArea;
+	class UIAssetsFoldersTree;
 
-	// Destructor
-	~AssetsWindow();
+	// -------------
+	// Assets window
+	// -------------
+	class AssetsWindow: public IEditorWindow, public Singleton<AssetsWindow>
+	{
+	public:
+		// Default constructor. Initializes window
+		AssetsWindow();
 
-	// Selects asset with id
-	void SelectAsset(AssetId id);
+		// Destructor
+		~AssetsWindow();
 
-	// Selects asset by path
-	void SelectAsset(const String& path);
+		// Selects asset with id
+		void SelectAsset(AssetId id);
 
-	// Selects assets with ids
-	void SelectAsset(const Vector<AssetId>& ids);
+		// Selects asset by path
+		void SelectAsset(const String& path);
 
-	// Selects assets by paths
-	void SelectAssets(const Vector<String>& paths);
+		// Selects assets with ids
+		void SelectAsset(const Vector<AssetId>& ids);
 
-	// Opens asset in folder
-	void OpenAsset(AssetId id);
+		// Selects assets by paths
+		void SelectAssets(const Vector<String>& paths);
 
-	// Opens asset in folder
-	void OpenAsset(const String& path);
+		// Opens asset in folder
+		void OpenAsset(AssetId id);
 
-	// Opens asset for editing 
-	void OpenAndEditAsset(AssetId id);
+		// Opens asset in folder
+		void OpenAsset(const String& path);
 
-	// Opens asset for editing 
-	void OpenAndEditAsset(const String& path);
+		// Opens asset for editing 
+		void OpenAndEditAsset(AssetId id);
 
-	// Deselects all assets
-	void DeselectAssets();
+		// Opens asset for editing 
+		void OpenAndEditAsset(const String& path);
 
-	// Returns selected assets infos
-	Vector<AssetInfo> GetSelectedAssets() const;
+		// Deselects all assets
+		void DeselectAssets();
 
-	// Returns opened folder path
-	String GetOpenedFolderPath() const;
+		// Returns selected assets infos
+		Vector<AssetInfo> GetSelectedAssets() const;
 
-	// Opens folder
-	void OpenFolder(const String& path);
+		// Returns opened folder path
+		String GetOpenedFolderPath() const;
 
-	// Shows asset
-	void ShowAssetIcon(AssetId id);
+		// Opens folder
+		void OpenFolder(const String& path);
 
-	// Shows asset
-	void ShowAssetIcon(const String& path);
+		// Shows asset
+		void ShowAssetIcon(AssetId id);
 
-	// Copy assets in clipboard
-	void CopyAssets(const Vector<String>& assetsPaths);
+		// Shows asset
+		void ShowAssetIcon(const String& path);
 
-	// Cut assets and put into clipboard
-	void CutAssets(const Vector<String>& assetsPaths);
+		// Copy assets in clipboard
+		void CopyAssets(const Vector<String>& assetsPaths);
 
-	// Paste assets from clipboard to path
-	void PasteAssets(const String& targetPath);
+		// Cut assets and put into clipboard
+		void CutAssets(const Vector<String>& assetsPaths);
 
-	// Removes assets in clipboard
-	void DeleteAssets(const Vector<String>& assetsPaths);
+		// Paste assets from clipboard to path
+		void PasteAssets(const String& targetPath);
 
-	// Calls when context import pressed
-	void ImportAssets(const String& targetPath);
+		// Removes assets in clipboard
+		void DeleteAssets(const Vector<String>& assetsPaths);
 
-	// Calls when context create folder pressed
-	void CreateFolderAsset(const String& targetPath);
+		// Calls when context import pressed
+		void ImportAssets(const String& targetPath);
 
-	// Calls when context create prefab pressed
-	void CreatePrefabAsset(const String& targetPath);
+		// Calls when context create folder pressed
+		void CreateFolderAsset(const String& targetPath);
 
-	// Calls when context create script pressed
-	void CreateScriptAsset(const String& targetPath);
+		// Calls when context create prefab pressed
+		void CreatePrefabAsset(const String& targetPath);
 
-	// Calls when context create animation pressed
-	void CreateAnimationAsset(const String& targetPath);
+		// Calls when context create script pressed
+		void CreateScriptAsset(const String& targetPath);
 
-	IOBJECT(AssetsWindow);
+		// Calls when context create animation pressed
+		void CreateAnimationAsset(const String& targetPath);
 
-protected:
-	typedef Vector<Pair<AssetId, String>> AssetIdPathVec;
+		IOBJECT(AssetsWindow);
 
-	UIButton*                mFilterButton;           // Search filter button
-	UIEditBox*               mSearchEditBox;          // Search edit box
-	UILabel*                 mSelectedAssetPathLabel; // Selected asset path label
-				             
-	UIAssetsFoldersTree*     mFoldersTree;            // Folders tree				         
-	UIAssetsIconsScrollArea* mAssetsGridScroll;       // Assets grid scroll
- 	UITree*                  mAssetsTree;             // Assets tree
+	protected:
+		typedef Vector<Pair<AssetId, String>> AssetIdPathVec;
 
-	CursorEventsArea         mSeparatorHandle;        // Folders tree and assets tree/grid separator handle
+		UIButton*                mFilterButton;           // Search filter button
+		UIEditBox*               mSearchEditBox;          // Search edit box
+		UILabel*                 mSelectedAssetPathLabel; // Selected asset path label
 
-	AssetIdPathVec           mCuttingAssets;          // Current cutted assets
+		UIAssetsFoldersTree*     mFoldersTree;            // Folders tree				         
+		UIAssetsIconsScrollArea* mAssetsGridScroll;       // Assets grid scroll
+		UITree*                  mAssetsTree;             // Assets tree
 
-protected:
-	// Initializes window
-	void InitializeWindow();
+		CursorEventsArea         mSeparatorHandle;        // Folders tree and assets tree/grid separator handle
 
-	// Calls when search edit box text was changed
-	void OnSearchEdited(const WString& search);
+		AssetIdPathVec           mCuttingAssets;          // Current cutted assets
 
-	// Calls when menu filter button was pressed
-	void OnMenuFilterPressed();
+	protected:
+		// Initializes window
+		void InitializeWindow();
 
-	// Calls when show folders tree button pressed
-	void OnShowTreePressed();
+		// Calls when search edit box text was changed
+		void OnSearchEdited(const WString& search);
 
-	// Calls when assets was rebuilded
-	void OnAssetsRebuilded(const Vector<AssetId>& changedAssets);
+		// Calls when menu filter button was pressed
+		void OnMenuFilterPressed();
 
-	// Copies asset folder recursively
-	void CopyAssetFolder(const String& src, const String& dst);
+		// Calls when show folders tree button pressed
+		void OnShowTreePressed();
 
-	friend class UIAssetsFoldersTree;
-	friend class UIAssetsIconsScrollArea;
-};
+		// Calls when assets was rebuilded
+		void OnAssetsRebuilded(const Vector<AssetId>& changedAssets);
+
+		// Copies asset folder recursively
+		void CopyAssetFolder(const String& src, const String& dst);
+
+		friend class UIAssetsFoldersTree;
+		friend class UIAssetsIconsScrollArea;
+	};
+}

@@ -19,6 +19,9 @@ namespace o2
 
 	Asset& Asset::operator=(const Asset& asset)
 	{
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
+
 		return *this;
 	}
 
@@ -128,7 +131,7 @@ namespace o2
 		AssetId destPathAssetId = o2Assets.GetAssetId(path);
 		if (destPathAssetId != 0 && destPathAssetId != mMeta->mId)
 		{
-			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui) to %s: another asset exist in target path", 
+			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui) to %s: another asset exist in target path",
 										mPath, mMeta->mId, path);
 			return;
 		}
@@ -193,13 +196,11 @@ namespace o2
 	}
 
 	Asset::IMetaInfo::IMetaInfo():
-		mId(Assets::GetRandomAssetId())
-	{
-	}
+		mId(0)
+	{}
 
 	Asset::IMetaInfo::~IMetaInfo()
-	{
-	}
+	{}
 
 	Type::Id Asset::IMetaInfo::GetAssetType() const
 	{
@@ -213,7 +214,7 @@ namespace o2
 
 	AssetId Asset::IMetaInfo::ID() const
 	{
- 		return mId;
+		return mId;
 	}
 
 	void Asset::OnSerialize(DataNode& node)
@@ -228,7 +229,7 @@ namespace o2
 			mPath = *pathNode;
 
 		if (auto idNode = node.GetNode("id"))
-			mPath = *idNode;
+			IdRef() = *idNode;
 
 		if (IdRef() != 0 || !mPath.IsEmpty())
 			Load();

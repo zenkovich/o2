@@ -10,70 +10,74 @@ namespace o2
 	class UIVerticalLayout;
 }
 
-class IEditorActorHeaderViewer;
-class IEditorActorComponentViewer;
-class IEditorActorTransformViewer;
-class IEditorActorAnimationViewer;
-class DefaultEditorActorComponentViewer;
-
-// ------------------------
-// Actors properties viewer
-// ------------------------
-class EditorActorPropertiesViewer: IObjectPropertiesViewer
+namespace Editor
 {
-public:
-	EditorActorPropertiesViewer();
+	class IActorHeaderViewer;
+	class IActorComponentViewer;
+	class IActorTransformViewer;
+	class IActorAnimationViewer;
+	class DefaultActorComponentViewer;
 
-	// Virtual destructor
-	~EditorActorPropertiesViewer();
+	// ------------------------
+	// Actors properties viewer
+	// ------------------------
+	class ActorPropertiesViewer: IObjectPropertiesViewer
+	{
+	public:
+		ActorPropertiesViewer();
 
-	// Returns viewing object type
-	const Type* GetViewingObjectType() const;
+		// Virtual destructor
+		~ActorPropertiesViewer();
 
-	// Sets header viewer
-	void SetActorHeaderViewer(IEditorActorHeaderViewer* viewer);
+		// Returns viewing object type
+		const Type* GetViewingObjectType() const;
 
-	// Sets transform viewer
-	void SetActorTransformViewer(IEditorActorTransformViewer* viewer);
+		// Sets header viewer
+		void SetActorHeaderViewer(IActorHeaderViewer* viewer);
 
-	// Sets animation viewer
-	void SetActorAnimationViewer(IEditorActorAnimationViewer* viewer);
+		// Sets transform viewer
+		void SetActorTransformViewer(IActorTransformViewer* viewer);
 
-	// Adds new available component viewer type
-	void AddComponentViewerType(IEditorActorComponentViewer* viewer);
+		// Sets animation viewer
+		void SetActorAnimationViewer(IActorAnimationViewer* viewer);
 
-	IOBJECT(EditorActorPropertiesViewer);
+		// Adds new available component viewer type
+		void AddComponentViewerType(IActorComponentViewer* viewer);
 
-protected:
-	typedef Dictionary<const Type*, Vector<IEditorActorComponentViewer*>> TypeCompViewersDict;
+		IOBJECT(ActorPropertiesViewer);
 
-	Vector<Actor*>                       mTargetActors;               // Current target actors
-										 
-	IEditorActorHeaderViewer*            mHeaderViewer;               // Actor header viewer
-	IEditorActorTransformViewer*         mTransformViewer;            // Actor transform viewer
-	IEditorActorAnimationViewer*         mAnimationViewer;            // Actor animation viewer
-	Vector<IEditorActorComponentViewer*> mComponentsViewers;          // Components viewers
-										 
-	DefaultEditorActorComponentViewer*   mDefaultComponentViewer;     // Default component viewer sample
-	Vector<IEditorActorComponentViewer*> mAvailableComponentsViewers; // Available components' viewers
+	protected:
+		typedef Dictionary<const Type*, Vector<IActorComponentViewer*>> TypeCompViewersDict;
 
-	TypeCompViewersDict                  mComponentViewersPool;       // Components viewers pool
+		Vector<Actor*>                       mTargetActors;               // Current target actors
 
-	UIVerticalLayout*                    mViewersLayout;              // Viewers layout
+		IActorHeaderViewer*            mHeaderViewer;               // Actor header viewer
+		IActorTransformViewer*         mTransformViewer;            // Actor transform viewer
+		IActorAnimationViewer*         mAnimationViewer;            // Actor animation viewer
+		Vector<IActorComponentViewer*> mComponentsViewers;          // Components viewers
 
-protected:
-	// Sets target objects
-	void SetTargets(const Vector<IObject*> targets);
+		DefaultActorComponentViewer*   mDefaultComponentViewer;     // Default component viewer sample
+		Vector<IActorComponentViewer*> mAvailableComponentsViewers; // Available components' viewers
 
-	// Enable viewer event function
-	void OnEnabled();
+		TypeCompViewersDict                  mComponentViewersPool;       // Components viewers pool
 
-	// Disable viewer event function
-	void OnDisabled();
+		UIVerticalLayout*                    mViewersLayout;              // Viewers layout
 
-	// Updates viewer
-	void Update(float dt);
+	protected:
+		// Sets target objects
+		void SetTargets(const Vector<IObject*> targets);
 
-	// Draws something
-	void Draw();
-};
+		// Enable viewer event function
+		void OnEnabled();
+
+		// Disable viewer event function
+		void OnDisabled();
+
+		// Updates viewer
+		void Update(float dt);
+
+		// Draws something
+		void Draw();
+	};
+
+}

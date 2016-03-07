@@ -38,6 +38,8 @@ namespace o2
 	{
 		animation = asset.animation;
 		mMeta = mnew MetaInfo();
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
 		InitializeProperties();
 	}
 
@@ -49,7 +51,19 @@ namespace o2
 		Asset::operator=(asset);
 		animation = asset.animation;
 
+		*mMeta = *(MetaInfo*)(asset.mMeta);
+
 		return *this;
+	}
+
+	bool AnimationAsset::operator==(const AnimationAsset& other) const
+	{
+		return mMeta->IsEqual(other.mMeta);
+	}
+
+	bool AnimationAsset::operator!=(const AnimationAsset& other) const
+	{
+		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	AnimationAsset::MetaInfo* AnimationAsset::GetMeta() const

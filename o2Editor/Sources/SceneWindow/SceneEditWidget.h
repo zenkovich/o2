@@ -7,39 +7,42 @@
 
 using namespace o2;
 
-class SceneEditScreen;
-
-// --------------------
-// Scene editing widget
-// --------------------
-class SceneEditWidget: public UIWidget
+namespace Editor
 {
+	class SceneEditScreen;
 
-public:
-	// Default constructor
-	SceneEditWidget();
+	// --------------------
+	// Scene editing widget
+	// --------------------
+	class SceneEditWidget: public UIWidget
+	{
 
-	// Copy-constructor
-	SceneEditWidget(const SceneEditWidget& other);
+	public:
+		// Default constructor
+		SceneEditWidget();
 
-	// Destructor
-	~SceneEditWidget();
+		// Copy-constructor
+		SceneEditWidget(const SceneEditWidget& other);
 
-	// Copy-operator
-	SceneEditWidget& operator=(const SceneEditWidget& other);
+		// Destructor
+		~SceneEditWidget();
 
-	// Draws widget
-	void Draw();
+		// Copy-operator
+		SceneEditWidget& operator=(const SceneEditWidget& other);
 
-	// Updates drawables, states and widget
-	void Update(float dt);
+		// Draws widget
+		void Draw();
 
-	SERIALIZABLE(SceneEditWidget);
+		// Updates drawables, states and widget
+		void Update(float dt);
 
-protected:
-	SceneEditScreen* mSceneEditScreen; // Scene editing screen
+		SERIALIZABLE(SceneEditWidget);
 
-protected:
-	// Updates layout
-	void UpdateLayout(bool forcible = false);
-};
+	protected:
+		SceneEditScreen* mSceneEditScreen; // Scene editing screen
+
+	protected:
+		// Updates layout
+		void UpdateLayout(bool forcible = false);
+	};
+}

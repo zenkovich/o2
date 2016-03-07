@@ -44,7 +44,13 @@ namespace o2
 		~ImageAsset();
 
 		// Check equals operator
-		ImageAsset& operator=(ImageAsset& asset);
+		ImageAsset& operator=(const ImageAsset& asset);
+
+		// Check equals operator
+		bool operator==(const ImageAsset& other) const;
+
+		// Check not equals operator
+		bool operator!=(const ImageAsset& other) const;
 
 		// Returns bitmap data
 		Bitmap* GetBitmap();

@@ -18,65 +18,69 @@ namespace o2
 // Editor tools panel accessor macros
 #define o2EditorTools ToolsPanel::Instance()
 
-// ------------------
-// Editor tools panel
-// ------------------
-class ToolsPanel: public Singleton<ToolsPanel>
+namespace Editor
 {
-public:
-	// Returns panel's widgets
-	UIWidget* GetPanelWidget() const;
+	// ------------------
+	// Editor tools panel
+	// ------------------
+	class ToolsPanel: public Singleton<ToolsPanel>
+	{
+	public:
+		// Returns panel's widgets
+		UIWidget* GetPanelWidget() const;
 
-	// Returns play panel's widget
-	UIWidget* GetPlayPanel() const;
+		// Returns play panel's widget
+		UIWidget* GetPlayPanel() const;
 
-	// Returns tools' panel widget 
-	UIHorizontalLayout* GetToolsPanel() const;
+		// Returns tools' panel widget 
+		UIHorizontalLayout* GetToolsPanel() const;
 
-protected:
-	const String        mDefaultSchemeName = "Default";    
-	const String        mSaveAsSchemeName = "Save as ...";
+	protected:
+		const String        mDefaultSchemeName = "Default";
+		const String        mSaveAsSchemeName = "Save as ...";
 
-	UIWidget*           mPanelRoot;			// Root panel widget
+		UIWidget*           mPanelRoot;			// Root panel widget
 
-	UIWidget*           mPlayPanel;			// Play panel widget
-	UIToggle*           mPlayToggle;		// Play toggle
-	UIToggle*           mPauseToggle;		// Pause toggle
-	UIButton*           mStepButton;		// Step button
-	UIDropDown*         mDevicesList;		// Devices list dropdown
+		UIWidget*           mPlayPanel;			// Play panel widget
+		UIToggle*           mPlayToggle;		// Play toggle
+		UIToggle*           mPauseToggle;		// Pause toggle
+		UIButton*           mStepButton;		// Step button
+		UIDropDown*         mDevicesList;		// Devices list dropdown
 
-	UIHorizontalLayout* mEditToolsPanel;	// Tools panel layout
-	UIToggle*           mArrowToolToggle;	// Arrow tool
-	UIToggle*           mBrushToolToggle;	// Brush tool
-	UIToggle*           mMoveToolToggle;	// Move tool
-	UIToggle*           mRotateToolToggle;	// Rotate tool
-	UIToggle*           mScaleToolToggle;	// Scale tool
-	UIToggle*           mFrameToolToggle;	// Frame tool
+		UIHorizontalLayout* mEditToolsPanel;	// Tools panel layout
+		UIToggle*           mArrowToolToggle;	// Arrow tool
+		UIToggle*           mBrushToolToggle;	// Brush tool
+		UIToggle*           mMoveToolToggle;	// Move tool
+		UIToggle*           mRotateToolToggle;	// Rotate tool
+		UIToggle*           mScaleToolToggle;	// Scale tool
+		UIToggle*           mFrameToolToggle;	// Frame tool
 
-	UIDropDown*         mLayoutSchemesList; // Layouts schemes list
+		UIDropDown*         mLayoutSchemesList; // Layouts schemes list
 
-protected:
-	// Default constructor. Initializes all panel
-	ToolsPanel();
+	protected:
+		// Default constructor. Initializes all panel
+		ToolsPanel();
 
-	// Destructor
-	~ToolsPanel();
+		// Destructor
+		~ToolsPanel();
 
-	// initializes play panel
-	void InitializePlayPanel();
+		// initializes play panel
+		void InitializePlayPanel();
 
-	// initializes schemes panel
-	void InitializeLayoutSchemesPanel();
+		// initializes schemes panel
+		void InitializeLayoutSchemesPanel();
 
-	// Initializes tools panel
-	void InitializeToolsPanel();
+		// Initializes tools panel
+		void InitializeToolsPanel();
 
-	// Updates schemes list
-	void UpdateWndLayoutSchemas();
+		// Updates schemes list
+		void UpdateWndLayoutSchemas();
 
-	// Calls when selected scheme
-	void OnSchemeSelected(const WString& name);
+		// Calls when selected scheme
+		void OnSchemeSelected(const WString& name);
 
-	friend class EditorApplication;
-	friend class EditorConfig;
-};
+		friend class EditorApplication;
+		friend class EditorConfig;
+	};
+
+}

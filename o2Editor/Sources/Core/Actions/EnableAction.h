@@ -10,19 +10,22 @@ namespace o2
 	class Actor;
 }
 
-class EditorEnableAction: public IEditorAction
+namespace Editor
 {
-public:
-	Vector<UInt64> actorsIds;
-	bool           enable;
+	class EnableAction: public IAction
+	{
+	public:
+		Vector<UInt64> actorsIds;
+		bool           enable;
 
-public:
-	EditorEnableAction();
-	EditorEnableAction(const Vector<Actor*>& actors, bool enable);
+	public:
+		EnableAction();
+		EnableAction(const Vector<Actor*>& actors, bool enable);
 
-	String GetName() const;
-	void Redo();
-	void Undo();
+		String GetName() const;
+		void Redo();
+		void Undo();
 
-	SERIALIZABLE(EditorEnableAction);
-};
+		SERIALIZABLE(EnableAction);
+	};
+}

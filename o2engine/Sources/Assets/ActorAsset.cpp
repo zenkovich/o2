@@ -7,19 +7,25 @@ namespace o2
 	ActorAsset::ActorAsset():
 		Asset()
 	{
-		actor.ExcludeFromScene();
 		mMeta = mnew MetaInfo();
 		InitializeProperties();
+
+		actor.ExcludeFromScene();
+		actor.mIsAsset = true;
+		actor.mAssetId = IdRef();
 	}
 
 	ActorAsset::ActorAsset(const String& path):
 		Asset()
 	{
-		actor.ExcludeFromScene();
 		mPath = path;
 		mMeta = mnew MetaInfo();
 		IdRef() = o2Assets.GetAssetId(path);
 		InitializeProperties();
+
+		actor.ExcludeFromScene();
+		actor.mIsAsset = true;
+		actor.mAssetId = IdRef();
 
 		Load();
 	}
@@ -27,11 +33,14 @@ namespace o2
 	ActorAsset::ActorAsset(AssetId id):
 		Asset()
 	{
-		actor.ExcludeFromScene();
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
 		mPath = o2Assets.GetAssetPath(id);
 		InitializeProperties();
+
+		actor.ExcludeFromScene();
+		actor.mIsAsset = true;
+		actor.mAssetId = IdRef();
 
 		Load();
 	}
@@ -39,9 +48,15 @@ namespace o2
 	ActorAsset::ActorAsset(const ActorAsset& asset):
 		Asset(asset)
 	{
+		mMeta = mnew MetaInfo();
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
+
 		actor = asset.actor;
 		actor.ExcludeFromScene();
-		mMeta = mnew MetaInfo();
+		actor.mIsAsset = true;
+		actor.mAssetId = IdRef();
+
 		InitializeProperties();
 	}
 
@@ -51,9 +66,24 @@ namespace o2
 	ActorAsset& ActorAsset::operator=(const ActorAsset& asset)
 	{
 		Asset::operator=(asset);
+
 		actor = asset.actor;
+		actor.mIsAsset = true;
+		actor.mAssetId = IdRef();
+
+		*mMeta = *(MetaInfo*)(asset.mMeta);
 
 		return *this;
+	}
+
+	bool ActorAsset::operator==(const ActorAsset& other) const
+	{
+		return mMeta->IsEqual(other.mMeta);
+	}
+
+	bool ActorAsset::operator!=(const ActorAsset& other) const
+	{
+		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	ActorAsset::MetaInfo* ActorAsset::GetMeta() const
@@ -72,10 +102,15 @@ namespace o2
 		data.LoadFromFile(path);
 		actor = data;
 		actor.ExcludeFromScene();
+		actor.mIsAsset = true;
+		actor.mAssetId = IdRef();
 	}
 
 	void ActorAsset::SaveData(const String& path)
 	{
+		actor.mIsAsset = true;
+		actor.mAssetId = IdRef();
+
 		DataNode data;
 		data = actor;
 		data.SaveToFile(path);

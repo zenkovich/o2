@@ -3,7 +3,7 @@
 #include "Animation/Animation.h"
 #include "Animation/AnimationMask.h"
 #include "Utils/Containers/Vector.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 namespace o2
 {

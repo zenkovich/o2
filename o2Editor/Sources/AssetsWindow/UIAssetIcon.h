@@ -10,33 +10,36 @@ namespace o2
 	class Text;
 }
 
-// ---------------------------
-// Draggable asset icon widget
-// ---------------------------
-class UIAssetIcon: public UIWidget
+namespace Editor
 {
-public:
-	// Default constructor
-	UIAssetIcon();
+	// ---------------------------
+	// Draggable asset icon widget
+	// ---------------------------
+	class UIAssetIcon: public UIWidget
+	{
+	public:
+		// Default constructor
+		UIAssetIcon();
 
-	// Copy-constructor
-	UIAssetIcon(const UIAssetIcon& other);
+		// Copy-constructor
+		UIAssetIcon(const UIAssetIcon& other);
 
-	// Destructor
-	~UIAssetIcon();
+		// Destructor
+		~UIAssetIcon();
 
-	// Copy operator
-	UIAssetIcon& operator=(const UIAssetIcon& other);
+		// Copy operator
+		UIAssetIcon& operator=(const UIAssetIcon& other);
 
-	// Sets asset info
-	void SetAssetInfo(const AssetInfo& info);
+		// Sets asset info
+		void SetAssetInfo(const AssetInfo& info);
 
-	// Returns asset info
-	const AssetInfo& GetAssetInfo() const;
+		// Returns asset info
+		const AssetInfo& GetAssetInfo() const;
 
-	SERIALIZABLE(UIAssetIcon);
+		SERIALIZABLE(UIAssetIcon);
 
-protected:
-	Text*     mNameText;   // Asset name text layer
-	AssetInfo mAssetInfo;  // Asset information
-};
+	protected:
+		Text*     mNameText;   // Asset name text layer
+		AssetInfo mAssetInfo;  // Asset information
+	};
+}

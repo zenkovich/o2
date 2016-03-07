@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Scene/Scene.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 namespace o2
 {

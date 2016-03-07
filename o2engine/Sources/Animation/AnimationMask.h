@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/Containers/Dictionary.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 #include "Utils/String.h"
 
 namespace o2

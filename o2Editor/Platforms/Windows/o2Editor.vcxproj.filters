@@ -163,30 +163,6 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.h">
       <Filter>PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorComponentViewer.h">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorHeaderViewer.h">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorTransformViewer.h">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorAnimationViewer.h">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorHeaderViewer.h">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorTransformViewer.h">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorAnimationViewer.h">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorComponentViewer.h">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.h">
       <Filter>PropertiesWindow\Properties</Filter>
     </ClInclude>
@@ -203,6 +179,33 @@
       <Filter>PropertiesWindow\Properties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IPropertyField.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.h">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.h">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.h">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.h">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\AssetProperty.h">
       <Filter>PropertiesWindow\Properties</Filter>
     </ClInclude>
   </ItemGroup>
@@ -319,27 +322,6 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.cpp">
       <Filter>PropertiesWindow\ActorsViewer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorComponentViewer.cpp">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorTransformViewer.cpp">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IEditorActorAnimationViewer.cpp">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorHeaderViewer.cpp">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorTransformViewer.cpp">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorAnimationViewer.cpp">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultEditorActorComponentViewer.cpp">
-      <Filter>PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.cpp">
       <Filter>PropertiesWindow\Properties</Filter>
     </ClCompile>
@@ -354,6 +336,27 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.cpp">
       <Filter>PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.cpp">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.cpp">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp">
+      <Filter>PropertiesWindow\ActorsViewer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

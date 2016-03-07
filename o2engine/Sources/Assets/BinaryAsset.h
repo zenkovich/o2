@@ -35,6 +35,12 @@ namespace o2
 		// Check equals operator
 		BinaryAsset& operator=(const BinaryAsset& asset);
 
+		// Check equals operator
+		bool operator==(const BinaryAsset& other) const;
+
+		// Check not equals operator
+		bool operator!=(const BinaryAsset& other) const;
+
 		// Returns data pointer
 		char* GetData() const;
 

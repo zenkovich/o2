@@ -12,87 +12,90 @@
 #include "ToolsPanel.h"
 
 
-EditorConfig::EditorConfig()
-{}
-
-EditorConfig::~EditorConfig()
+namespace Editor
 {
-	SaveProjectConfigs();
-	SaveGlobalConfigs();
-}
+	EditorConfig::EditorConfig()
+	{}
 
-void EditorConfig::SaveGlobalConfigs()
-{
-	DataNode data;
-
-	mGlobalConfig.mLastOpenedProjectpath = o2Config.GetProjectPath();
-	mGlobalConfig.mAvailableLayouts = o2EditorWindows.mAvailableLayouts;
-
-	data = mGlobalConfig;
-	data.SaveToFile(mGlobalConfigPath);
-}
-
-void EditorConfig::SaveProjectConfigs()
-{
-	mProjectConfig.mLayout = o2EditorWindows.GetWindowsLayout();
-
-	DataNode data;
-	data = mProjectConfig;
-	data.SaveToFile(o2Config.GetProjectPath() + mConfigPath);
-}
-
-void EditorConfig::LoadConfigs()
-{
-	LoadGlobalConfig();
-	LoadProjectConfig();
-}
-
-void EditorConfig::LoadProjectConfig()
-{
-	DataNode data;
-	o2Config.SetProjectPath(mGlobalConfig.mLastOpenedProjectpath);
-	
-	if (data.LoadFromFile(o2Config.GetProjectPath() + mConfigPath))
-		mProjectConfig = data;
-	else
+	EditorConfig::~EditorConfig()
 	{
-		mProjectConfig = ProjectConfig();
+		SaveProjectConfigs();
+		SaveGlobalConfigs();
 	}
 
-	if (mProjectConfig.mMaximized)
+	void EditorConfig::SaveGlobalConfigs()
 	{
-		o2Application.Maximize();
-	}
-	else
-	{
-		Vec2I pos = mProjectConfig.mWindowPosition;
-		o2Application.SetWindowSize(mProjectConfig.mWindowSize);
-		o2Application.SetWindowPosition(pos);
-		mProjectConfig.mWindowPosition = pos;
-	}
+		DataNode data;
 
-	o2EditorWindows.SetWindowsLayout(mProjectConfig.mLayout);
-}
+		mGlobalConfig.mLastOpenedProjectpath = o2Config.GetProjectPath();
+		mGlobalConfig.mAvailableLayouts = o2EditorWindows.mAvailableLayouts;
 
-void EditorConfig::LoadGlobalConfig()
-{
-	DataNode data;
-	if (data.LoadFromFile(mGlobalConfigPath))
-		mGlobalConfig = data;
-	else
-	{
-		mGlobalConfig = GlobalConfig();
-		mGlobalConfig.mLastOpenedProjectpath = PROJECT_PATH;
+		data = mGlobalConfig;
+		data.SaveToFile(mGlobalConfigPath);
 	}
 
-	o2EditorWindows.mAvailableLayouts = mGlobalConfig.mAvailableLayouts;
-	o2EditorTools.UpdateWndLayoutSchemas();
-}
+	void EditorConfig::SaveProjectConfigs()
+	{
+		mProjectConfig.mLayout = o2EditorWindows.GetWindowsLayout();
 
-void EditorConfig::OnWindowChange()
-{
-	mProjectConfig.mWindowPosition = o2Application.GetWindowPosition();
-	mProjectConfig.mWindowSize = o2Application.GetWindowSize();
-	mProjectConfig.mMaximized = o2Application.IsMaximized();
-}
+		DataNode data;
+		data = mProjectConfig;
+		data.SaveToFile(o2Config.GetProjectPath() + mConfigPath);
+	}
 
+	void EditorConfig::LoadConfigs()
+	{
+		LoadGlobalConfig();
+		LoadProjectConfig();
+	}
+
+	void EditorConfig::LoadProjectConfig()
+	{
+		DataNode data;
+		o2Config.SetProjectPath(mGlobalConfig.mLastOpenedProjectpath);
+
+		if (data.LoadFromFile(o2Config.GetProjectPath() + mConfigPath))
+			mProjectConfig = data;
+		else
+		{
+			mProjectConfig = ProjectConfig();
+		}
+
+		if (mProjectConfig.mMaximized)
+		{
+			o2Application.Maximize();
+		}
+		else
+		{
+			Vec2I pos = mProjectConfig.mWindowPosition;
+			o2Application.SetWindowSize(mProjectConfig.mWindowSize);
+			o2Application.SetWindowPosition(pos);
+			mProjectConfig.mWindowPosition = pos;
+		}
+
+		o2EditorWindows.SetWindowsLayout(mProjectConfig.mLayout);
+	}
+
+	void EditorConfig::LoadGlobalConfig()
+	{
+		DataNode data;
+		if (data.LoadFromFile(mGlobalConfigPath))
+			mGlobalConfig = data;
+		else
+		{
+			mGlobalConfig = GlobalConfig();
+			mGlobalConfig.mLastOpenedProjectpath = PROJECT_PATH;
+		}
+
+		o2EditorWindows.mAvailableLayouts = mGlobalConfig.mAvailableLayouts;
+		o2EditorTools.UpdateWndLayoutSchemas();
+	}
+
+	void EditorConfig::OnWindowChange()
+	{
+		mProjectConfig.mWindowPosition = o2Application.GetWindowPosition();
+		mProjectConfig.mWindowSize = o2Application.GetWindowSize();
+		mProjectConfig.mMaximized = o2Application.IsMaximized();
+	}
+
+}

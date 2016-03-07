@@ -42,6 +42,12 @@ namespace o2
 		// Check equals operator
 		AtlasAsset& operator=(const AtlasAsset& asset);
 
+		// Check equals operator
+		bool operator==(const AtlasAsset& other) const;
+
+		// Check not equals operator
+		bool operator!=(const AtlasAsset& other) const;
+
 		// Returns containing images infos array
 		AssetInfosVec GetImages() const;
 

@@ -7,7 +7,7 @@
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Property.h"
 #include "Utils/RectPacker.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 namespace o2
 {

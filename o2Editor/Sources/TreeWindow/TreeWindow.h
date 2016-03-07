@@ -18,106 +18,109 @@ using namespace o2;
 // Editor actors tree access macros
 #define o2EditorTree TreeWindow::Instance()
 
-class UIActorsTree;
-
-// ------------------
-// Actors tree window
-// ------------------
-class TreeWindow: public IEditorWindow, public Singleton<TreeWindow>
+namespace Editor
 {
-public:
-	IOBJECT(TreeWindow);
+	class UIActorsTree;
 
-	// Returns actors tree widget
-	UIActorsTree* GetActorsTree() const;
+	// ------------------
+	// Actors tree window
+	// ------------------
+	class TreeWindow: public IEditorWindow, public Singleton<TreeWindow>
+	{
+	public:
+		IOBJECT(TreeWindow);
 
-	// Expands all parent actor's nodes in actors tree
-	void ExpandActorsTreeNode(Actor* targetActor);
+		// Returns actors tree widget
+		UIActorsTree* GetActorsTree() const;
 
-protected:
-	UIToggle*      mListTreeToggle;			  // TOggle between list and tree views
-	UIEditBox*     mSearchEditBox;			  // Search actors edit box
-	UIActorsTree*  mActorsTree;				  // Main actors tree
-	UIContextMenu* mTreeContextMenu;		  // Context menu
+		// Expands all parent actor's nodes in actors tree
+		void ExpandActorsTreeNode(Actor* targetActor);
 
-	bool           mInSearch = false;		  // True when searching actors (mSearchEditBox isn't empty)
-	Vector<Actor*> mSearchActors;			  // Array of searched actors
+	protected:
+		UIToggle*      mListTreeToggle;			  // TOggle between list and tree views
+		UIEditBox*     mSearchEditBox;			  // Search actors edit box
+		UIActorsTree*  mActorsTree;				  // Main actors tree
+		UIContextMenu* mTreeContextMenu;		  // Context menu
 
-protected:
-	// Default constructor
-	TreeWindow();
+		bool           mInSearch = false;		  // True when searching actors (mSearchEditBox isn't empty)
+		Vector<Actor*> mSearchActors;			  // Array of searched actors
 
-	// Copy-constructor
-	TreeWindow(const TreeWindow& other);
+	protected:
+		// Default constructor
+		TreeWindow();
 
-	// Destructor
-	~TreeWindow();
+		// Copy-constructor
+		TreeWindow(const TreeWindow& other);
 
-	// Initializes window
-	void InitializeWindow();
+		// Destructor
+		~TreeWindow();
 
-	// Calls after that all windows was created
-	void PostInitializeWindow();
+		// Initializes window
+		void InitializeWindow();
 
-	// Calls when search button pressed
-	void OnSearchPressed();
+		// Calls after that all windows was created
+		void PostInitializeWindow();
 
-	// Calls when list-tree toggle changed value
-	void OnListTreeToggled(bool value);
+		// Calls when search button pressed
+		void OnSearchPressed();
 
-	// Calls when search field was changed
-	void OnSearchEdited(const WString& searchStr);
+		// Calls when list-tree toggle changed value
+		void OnListTreeToggled(bool value);
 
-	// Searches actors
-	void SearchActorsRecursive(Actor* actor, const String& searchStr);
+		// Calls when search field was changed
+		void OnSearchEdited(const WString& searchStr);
 
-	// Calls when tree node clicked by right button (For tree widget)
-	void OnTreeRBPressed(UITreeNode* node, Actor* actor);
+		// Searches actors
+		void SearchActorsRecursive(Actor* actor, const String& searchStr);
 
-	// Calls when some actor needs to created and registers actor insert action
-	void CreateActor(Actor* newActor);
+		// Calls when tree node clicked by right button (For tree widget)
+		void OnTreeRBPressed(UITreeNode* node, Actor* actor);
 
-	// Calls when pressed "Create new" in context menu
-	void OnContextCreateNewPressed();
+		// Calls when some actor needs to created and registers actor insert action
+		void CreateActor(Actor* newActor);
 
-	// Calls when pressed "Create sprite" in context menu
-	void OnContextCreateSprite();
+		// Calls when pressed "Create new" in context menu
+		void OnContextCreateNewPressed();
 
-	// Calls when pressed "Create button" in context menu
-	void OnContextCreateButton();
+		// Calls when pressed "Create sprite" in context menu
+		void OnContextCreateSprite();
 
-	// Calls when pressed "Copy" in context menu
-	void OnContextCopyPressed();
+		// Calls when pressed "Create button" in context menu
+		void OnContextCreateButton();
 
-	// Calls when pressed "Cut" in context menu
-	void OnContextCutPressed();
+		// Calls when pressed "Copy" in context menu
+		void OnContextCopyPressed();
 
-	// Calls when pressed "Paste" in context menu
-	void OnContextPastePressed();
+		// Calls when pressed "Cut" in context menu
+		void OnContextCutPressed();
 
-	// Calls when pressed "Delete" in context menu
-	void OnContextDeletePressed();
+		// Calls when pressed "Paste" in context menu
+		void OnContextPastePressed();
 
-	// Calls when pressed "Duplicate" in context menu
-	void OnContextDuplicatePressed();
+		// Calls when pressed "Delete" in context menu
+		void OnContextDeletePressed();
 
-	// Calls when pressed "Expand all" in context menu
-	void OnContextExpandAllPressed();
+		// Calls when pressed "Duplicate" in context menu
+		void OnContextDuplicatePressed();
 
-	// Calls when pressed "Collapse all" in context menu
-	void OnContextCollapseAllPressed();
+		// Calls when pressed "Expand all" in context menu
+		void OnContextExpandAllPressed();
 
-	// Calls when pressed "Lock/unlock" in context menu
-	void OnContextLockPressed();
+		// Calls when pressed "Collapse all" in context menu
+		void OnContextCollapseAllPressed();
 
-	// Calls when pressed "Enable/disable" in context menu
-	void OnContextEnablePressed();
+		// Calls when pressed "Lock/unlock" in context menu
+		void OnContextLockPressed();
 
-	// Calls when actor was created
-	void OnActorCreated(Actor* actor);
+		// Calls when pressed "Enable/disable" in context menu
+		void OnContextEnablePressed();
 
-	// Calls when actor was destroyed
-	void OnActorDestroyed(Actor* actor);
+		// Calls when actor was created
+		void OnActorCreated(Actor* actor);
 
-	friend class SceneEditWidget;
-};
+		// Calls when actor was destroyed
+		void OnActorDestroyed(Actor* actor);
+
+		friend class SceneEditWidget;
+	};
+}

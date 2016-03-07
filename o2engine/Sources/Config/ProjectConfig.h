@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/String.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 #include "Utils/Singleton.h"
 
 #include "Utils/Property.h"
@@ -81,7 +81,7 @@ namespace o2
 			OnSerialize(res);
 			for (auto field : GetType().Fields())
 			{
-				auto srlzAttribute = field->Attribute<ISerializableAttribute>();
+				auto srlzAttribute = field->Attribute<SerializableAttribute>();
 				if (srlzAttribute)
 				{
 					field->SerializeObject((void*)field->GetValuePtr<char>(this), *res.AddNode(field->Name()));
@@ -95,7 +95,7 @@ namespace o2
 		{
 			for (auto field : GetType().Fields())
 			{
-				auto srlzAttribute = field->Attribute<ISerializableAttribute>();
+				auto srlzAttribute = field->Attribute<SerializableAttribute>();
 				if (srlzAttribute)
 				{
 					auto fldNode = node.GetNode(field->Name());

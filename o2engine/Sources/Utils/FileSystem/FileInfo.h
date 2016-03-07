@@ -2,7 +2,7 @@
 
 #include "Utils/CommonTypes.h"
 #include "Utils/FileSystem/File.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 #include "Utils/Time.h"
 
 namespace o2

@@ -40,6 +40,12 @@ namespace o2
 		// Check equals operator
 		VectorFontAsset& operator=(const VectorFontAsset& asset);
 
+		// Check equals operator
+		bool operator==(const VectorFontAsset& other) const;
+
+		// Check not equals operator
+		bool operator!=(const VectorFontAsset& other) const;
+
 		// Returns meta information
 		MetaInfo* GetMeta() const;
 

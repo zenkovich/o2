@@ -2,31 +2,35 @@
 
 #include "Core/WindowsSystem/IEditorWindow.h"
 
-class SceneEditWidget;
 
 namespace o2
 {
 	class UIWidget;
 }
 
-class SceneWindow: public IEditorWindow
+namespace Editor
 {
-public:
-	IOBJECT(SceneWindow);
+	class SceneEditWidget;
 
-protected:
-	SceneEditWidget* mEditWidget;
-	UIWidget*        mLayersView;
-	UIWidget*        mGizomsView;
+	class SceneWindow: public IEditorWindow
+	{
+	public:
+		IOBJECT(SceneWindow);
 
-protected:
-	SceneWindow();
-	SceneWindow(const SceneWindow& other);
-	~SceneWindow();
+	protected:
+		SceneEditWidget* mEditWidget;
+		UIWidget*        mLayersView;
+		UIWidget*        mGizomsView;
 
-	void InitializeWindow();
-	void InitializeLayersView();
+	protected:
+		SceneWindow();
+		SceneWindow(const SceneWindow& other);
+		~SceneWindow();
 
-	// Calls after that all windows was created
-	void PostInitializeWindow();
-};
+		void InitializeWindow();
+		void InitializeLayersView();
+
+		// Calls after that all windows was created
+		void PostInitializeWindow();
+	};
+}

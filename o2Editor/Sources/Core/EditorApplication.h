@@ -7,91 +7,93 @@
 
 using namespace o2;
 
-class WindowsManager;
-class EditorConfig;
-class ToolsPanel;
-class MenuPanel;
-
 namespace o2
 {
 	class UIMenuPanel;
 }
 
-class IEditorAction;
-
 // Editor application access macros
 #define o2EditorApplication (*(EditorApplication*)(Application::InstancePtr()))
 
-// ------------------
-// Editor application
-// ------------------
-class EditorApplication: public Application
+namespace Editor
 {
-public:
-	typedef Vector<IEditorAction*> EditorActionsVec;
+	class EditorConfig;
+	class IAction;
+	class MenuPanel;
+	class ToolsPanel;
+	class WindowsManager;
 
-public:
-	// Default constructor. Initializes all editor components
-	EditorApplication();
+	// ------------------
+	// Editor application
+	// ------------------
+	class EditorApplication: public Application
+	{
+	public:
+		typedef Vector<IAction*> EditorActionsVec;
 
-	// Destructor
-	~EditorApplication();
+	public:
+		// Default constructor. Initializes all editor components
+		EditorApplication();
 
-	// Returns last action name
-	String GetLastActionName() const;
+		// Destructor
+		~EditorApplication();
 
-	// Returns next forward action name
-	String GetNextForwardActionName() const;
+		// Returns last action name
+		String GetLastActionName() const;
 
-	// Undo last action
-	void UndoAction();
+		// Returns next forward action name
+		String GetNextForwardActionName() const;
 
-	// Redo next action
-	void RedoAction();
+		// Undo last action
+		void UndoAction();
 
-	// Calls when action was done
-	void DoneAction(IEditorAction* action);
+		// Redo next action
+		void RedoAction();
 
-protected:
-	Sprite*            mBackground;     // Background sprite
-	Sprite*            mBackSign;       // Background o2 signature
+		// Calls when action was done
+		void DoneAction(IAction* action);
 
-	WindowsManager*    mWindowsManager; // Windows manager
-	EditorConfig*      mConfig;         // Application configuration
-	ToolsPanel*        mToolsPanel;     // Tools panel
-	MenuPanel*         mMenuPanel;      // Menu panel
+	protected:
+		Sprite*            mBackground;     // Background sprite
+		Sprite*            mBackSign;       // Background o2 signature
 
-	EditorActionsVec   mActions;        // Done actions
-	EditorActionsVec   mForwardActions; // Forward actions, what you can redo
+		WindowsManager*    mWindowsManager; // Windows manager
+		EditorConfig*      mConfig;         // Application configuration
+		ToolsPanel*        mToolsPanel;     // Tools panel
+		MenuPanel*         mMenuPanel;      // Menu panel
 
-protected:
-	// Calling on updating
-	void OnUpdate(float dt);
+		EditorActionsVec   mActions;        // Done actions
+		EditorActionsVec   mForwardActions; // Forward actions, what you can redo
 
-	// Calling on drawing
-	void OnDraw();
+	protected:
+		// Calling on updating
+		void OnUpdate(float dt);
 
-	// Calling when application activated
-	void OnActivated();
+		// Calling on drawing
+		void OnDraw();
 
-	// Calling when application deactivated
-	void OnDeactivated();
+		// Calling when application activated
+		void OnActivated();
 
-	// Calling when application is starting
-	void OnStarted();
+		// Calling when application deactivated
+		void OnDeactivated();
 
-	// Initializes menu
-	void InitializeMenu();
+		// Calling when application is starting
+		void OnStarted();
 
-	// Calling when application is closing
-	void OnClosing();
+		// Initializes menu
+		void InitializeMenu();
 
-	// Calling when application window resized. Ignoring on mobiles/tablets
-	void OnResizing();
+		// Calling when application is closing
+		void OnClosing();
 
-	// Calling when application window moved. Ignoring on mobiles/tablets
-	void OnMoved();
+		// Calling when application window resized. Ignoring on mobiles/tablets
+		void OnResizing();
 
-	// Processing frame update, drawing and input messages without scene
-	void ProcessFrame();
-};
+		// Calling when application window moved. Ignoring on mobiles/tablets
+		void OnMoved();
+
+		// Processing frame update, drawing and input messages without scene
+		void ProcessFrame();
+	};
+}

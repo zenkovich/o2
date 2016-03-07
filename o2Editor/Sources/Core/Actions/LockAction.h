@@ -10,19 +10,22 @@ namespace o2
 	class Actor;
 }
 
-class EditorLockAction: public IEditorAction
+namespace Editor
 {
-public:
-	Vector<UInt64> actorsIds;
-	bool           lock;
+	class LockAction: public IAction
+	{
+	public:
+		Vector<UInt64> actorsIds;
+		bool           lock;
 
-public:
-	EditorLockAction();
-	EditorLockAction(const Vector<Actor*>& actors, bool lock);
+	public:
+		LockAction();
+		LockAction(const Vector<Actor*>& actors, bool lock);
 
-	String GetName() const;
-	void Redo();
-	void Undo();
+		String GetName() const;
+		void Redo();
+		void Undo();
 
-	SERIALIZABLE(EditorLockAction);
-};
+		SERIALIZABLE(LockAction);
+	};
+}

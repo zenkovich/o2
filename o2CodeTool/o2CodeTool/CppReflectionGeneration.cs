@@ -122,7 +122,7 @@ public class CppReflectionGenerator
 					") - (size_t)(char*)sample, sample->" + fld.name + ", o2::ProtectSection::" + protectSection + ")";
 
 				if (fld.comment != null && fld.comment.comment.Contains("@SERIALIZABLE"))
-					res += ".AddAttribute<SerializableAttribute<decltype(" + fld.name + ")>>()";
+					res += ".AddAttribute<SerializableAttribute>()";
 
 				res += ";\n";
             }

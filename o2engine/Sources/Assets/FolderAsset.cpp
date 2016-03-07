@@ -43,11 +43,31 @@ namespace o2
 		Asset(asset), mContainingAssetsInfos(asset.mContainingAssetsInfos)
 	{
 		mMeta = mnew MetaInfo();
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
 		InitializeProperties();
 	}
 
 	FolderAsset::~FolderAsset()
 	{}
+
+	FolderAsset& FolderAsset::operator=(const FolderAsset& asset)
+	{
+		Asset::operator=(asset);
+		mContainingAssetsInfos = asset.mContainingAssetsInfos;
+		*mMeta = *(MetaInfo*)(asset.mMeta);
+		return *this;
+	}
+
+	bool FolderAsset::operator==(const FolderAsset& other) const
+	{
+		return mMeta->IsEqual(other.mMeta);
+	}
+
+	bool FolderAsset::operator!=(const FolderAsset& other) const
+	{
+		return !mMeta->IsEqual(other.mMeta);
+	}
 
 	AssetInfosVec FolderAsset::GetContainingAssetsInfos() const
 	{
@@ -77,11 +97,5 @@ namespace o2
 	{
 		INITIALIZE_GETTER(FolderAsset, meta, GetMeta);
 		INITIALIZE_GETTER(FolderAsset, insideAssets, GetContainingAssetsInfos);
-	}
-
-	FolderAsset& FolderAsset::operator=(const FolderAsset& asset)
-	{
-		mContainingAssetsInfos = asset.mContainingAssetsInfos;
-		return *this;
 	}
 }

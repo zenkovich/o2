@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/Containers/Vector.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
 
@@ -11,6 +11,7 @@
 namespace o2
 {
 	class Actor;
+	class ActorAsset;
 	class DrawableComponent;
 
 	// ----------
@@ -21,6 +22,7 @@ namespace o2
 	public:
 		typedef Vector<Actor*> ActorsVec;
 		typedef Vector<DrawableComponent*> DrawCompsVec;
+		typedef Vector<ActorAsset*> ActorsAssetsVec;
 
 		// -----------
 		// Scene layer
@@ -98,6 +100,9 @@ namespace o2
 		// Returns actor by id
 		Actor* GetActorByID(UInt64 id) const;
 
+		// Returns asset actor by asset id. Tries to find in cache
+		Actor* GetAssetActorByID(AssetId id);
+
 		// Returns actor by path (ex "some node/other/target")
 		Actor* FindActor(const String& path);
 
@@ -111,6 +116,9 @@ namespace o2
 
 		// Removes all actors
 		void Clear();
+
+		// Clears assets cache
+		void ClearCache();
 
 		// Loads scene from file. If append is true, old actors will not be destroyed
 		void Load(const String& path, bool append = false);
@@ -133,10 +141,11 @@ namespace o2
 #endif       
 
 	protected:
-		ActorsVec mRootActors;       // Scene root actors		
-		ActorsVec mAllActors;    // All scene actors
-		LayersVec mLayers;       // Scene layers
-		Layer*    mDefaultLayer; // Default scene layer
+		ActorsVec       mRootActors;   // Scene root actors		
+		ActorsVec       mAllActors;    // All scene actors
+		LayersVec       mLayers;       // Scene layers
+		Layer*          mDefaultLayer; // Default scene layer
+		ActorsAssetsVec mCache;        // Cached actors assets
 				  
 #if IS_EDITOR	  
 		ActorsVec mChangedActors; // Changed actors array

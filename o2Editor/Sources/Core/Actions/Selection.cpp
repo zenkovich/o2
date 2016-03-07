@@ -3,39 +3,43 @@
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
 
-EditorSelectionAction::EditorSelectionAction()
-{}
-
-EditorSelectionAction::EditorSelectionAction(const Vector<Actor*>& selectedActors, const Vector<Actor*>& prevSelectedActors)
+namespace Editor
 {
-	selectedActorsIds = selectedActors.Select<UInt64>([](Actor* actor) { return actor->GetId(); });
-	prevSelectedActorsIds = prevSelectedActors.Select<UInt64>([](Actor* actor) { return actor->GetId(); });
-}
+	SelectionAction::SelectionAction()
+	{}
 
-EditorSelectionAction::~EditorSelectionAction()
-{}
+	SelectionAction::SelectionAction(const Vector<Actor*>& selectedActors, const Vector<Actor*>& prevSelectedActors)
+	{
+		selectedActorsIds = selectedActors.Select<UInt64>([](Actor* actor) { return actor->GetId(); });
+		prevSelectedActorsIds = prevSelectedActors.Select<UInt64>([](Actor* actor) { return actor->GetId(); });
+	}
 
-String EditorSelectionAction::GetName() const
-{
-	return "Actors selection";
-}
+	SelectionAction::~SelectionAction()
+	{}
 
-void EditorSelectionAction::Redo()
-{
-	auto& selScreen = o2EditorSceneScreen;
+	String SelectionAction::GetName() const
+	{
+		return "Actors selection";
+	}
 
-	selScreen.mSelectedActors = selectedActorsIds.Select<Actor*>([&](UInt64 id) { return o2Scene.GetActorByID(id); });
-	selScreen.UpdateTopSelectedActors();
-	selScreen.OnActorsSelectedFromThis();
-	selScreen.mNeedRedraw = true;
-}
+	void SelectionAction::Redo()
+	{
+		auto& selScreen = o2EditorSceneScreen;
 
-void EditorSelectionAction::Undo()
-{
-	auto& selScreen = o2EditorSceneScreen;
+		selScreen.mSelectedActors = selectedActorsIds.Select<Actor*>([&](UInt64 id) { return o2Scene.GetActorByID(id); });
+		selScreen.UpdateTopSelectedActors();
+		selScreen.OnActorsSelectedFromThis();
+		selScreen.mNeedRedraw = true;
+	}
 
-	selScreen.mSelectedActors = prevSelectedActorsIds.Select<Actor*>([&](UInt64 id) { return o2Scene.GetActorByID(id); });
-	selScreen.UpdateTopSelectedActors();
-	selScreen.OnActorsSelectedFromThis();
-	selScreen.mNeedRedraw = true;
+	void SelectionAction::Undo()
+	{
+		auto& selScreen = o2EditorSceneScreen;
+
+		selScreen.mSelectedActors = prevSelectedActorsIds.Select<Actor*>([&](UInt64 id) { return o2Scene.GetActorByID(id); });
+		selScreen.UpdateTopSelectedActors();
+		selScreen.OnActorsSelectedFromThis();
+		selScreen.mNeedRedraw = true;
+	}
+
 }

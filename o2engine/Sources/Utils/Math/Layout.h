@@ -2,7 +2,7 @@
 
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Rect.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 namespace o2
 {

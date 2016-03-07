@@ -156,9 +156,6 @@
     <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h">
       <Filter>Sources\Utils\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Serialization.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Delegates.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
@@ -520,6 +517,9 @@
     <ClInclude Include="..\Sources\Utils\Serializer.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Serializable.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -864,10 +864,10 @@
     <ClCompile Include="..\Sources\Assets\ActorAsset.cpp">
       <Filter>Sources\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Serialization.cpp">
+    <ClCompile Include="..\Sources\Utils\Serializer.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Serializer.cpp">
+    <ClCompile Include="..\Sources\Utils\Serializable.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>

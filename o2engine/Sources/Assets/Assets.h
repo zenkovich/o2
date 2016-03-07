@@ -5,7 +5,7 @@
 #include "Utils/Containers/Vector.h"
 #include "Utils/FileSystem/FileInfo.h"
 #include "Utils/Property.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 #include "Utils/Singleton.h"
 
 // Assets system access macros

@@ -262,7 +262,7 @@
     <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Type.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h" />
-    <ClInclude Include="..\Sources\Utils\Serialization.h" />
+    <ClInclude Include="..\Sources\Utils\Serializable.h" />
     <ClInclude Include="..\Sources\Utils\Serializer.h" />
     <ClInclude Include="..\Sources\Utils\ShortcutKeys.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />
@@ -385,7 +385,7 @@
     <ClCompile Include="..\Sources\Utils\Reflection\FunctionInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp" />
     <ClCompile Include="..\Sources\Utils\Reflection\Reflection.cpp" />
-    <ClCompile Include="..\Sources\Utils\Serialization.cpp" />
+    <ClCompile Include="..\Sources\Utils\Serializable.cpp" />
     <ClCompile Include="..\Sources\Utils\Serializer.cpp" />
     <ClCompile Include="..\Sources\Utils\ShortcutKeys.cpp" />
     <ClCompile Include="..\Sources\Utils\StackTrace.cpp" />

@@ -8,7 +8,7 @@
 #include "Utils/Math/Layout.h"
 
 #include "Utils/Property.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 #include "Utils/Tree.h"
 
 namespace o2
@@ -201,6 +201,9 @@ namespace o2
 		// Returns is this widget can be selected
 		virtual bool IsSelectable() const;
 
+		// Sets widget selectable
+		void SetSelectable(bool selectable);
+
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point);
 
@@ -228,6 +231,8 @@ namespace o2
 		bool           mVisible;          // Visibility of widget. Uses state 'visible'
 		bool           mResVisible;       // Result visibility of widget. Depends on this visibility and parent result visibility
 		bool           mFullyDisabled;    // True, if widget is not visible and visible state is fully false
+
+		bool           mIsSelectable;     // Is widget selectable
 
 	protected:
 		// Draws debug frame by mAbsoluteRect

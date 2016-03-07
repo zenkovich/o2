@@ -11,36 +11,39 @@ namespace o2
 	class Actor;
 }
 
-class EditorDeleteActorsAction: public IEditorAction
+namespace Editor
 {
-public:
-	class ActorInfo: public ISerializable
+	class DeleteActorsAction: public IAction
 	{
 	public:
-		DataNode actor;		  // @SERIALIZABLE
-		UInt64   parentId;	  // @SERIALIZABLE
-		UInt64   prevActorId; // @SERIALIZABLE
-		int      idx;         // @SERIALIZABLE
+		class ActorInfo: public ISerializable
+		{
+		public:
+			DataNode actor;		  // @SERIALIZABLE
+			UInt64   parentId;	  // @SERIALIZABLE
+			UInt64   prevActorId; // @SERIALIZABLE
+			int      idx;         // @SERIALIZABLE
 
-		bool operator==(const ActorInfo& other) const;
+			bool operator==(const ActorInfo& other) const;
 
-		SERIALIZABLE(ActorInfo);
+			SERIALIZABLE(ActorInfo);
+		};
+
+	public:
+		Vector<ActorInfo> actorsInfos;
+
+	public:
+		DeleteActorsAction();
+		DeleteActorsAction(const Vector<Actor*>& deletingActors);
+		~DeleteActorsAction();
+
+		String GetName() const;
+		void Redo();
+		void Undo();
+
+		SERIALIZABLE(DeleteActorsAction);
+
+	protected:
+		int GetActorIdx(Actor* actor);
 	};
-
-public:
-	Vector<ActorInfo> actorsInfos;
-
-public:
-	EditorDeleteActorsAction();
-	EditorDeleteActorsAction(const Vector<Actor*>& deletingActors);
-	~EditorDeleteActorsAction();
-
-	String GetName() const;
-	void Redo();
-	void Undo();
-
-	SERIALIZABLE(EditorDeleteActorsAction);
-
-protected:
-	int GetActorIdx(Actor* actor);
-};
+}

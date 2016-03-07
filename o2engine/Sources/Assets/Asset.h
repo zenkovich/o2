@@ -3,7 +3,7 @@
 #include "Assets/AssetInfo.h"
 #include "Utils/FileSystem/FileInfo.h"
 #include "Utils/Property.h"
-#include "Utils/Serialization.h"
+#include "Utils/Serializable.h"
 
 namespace o2
 {

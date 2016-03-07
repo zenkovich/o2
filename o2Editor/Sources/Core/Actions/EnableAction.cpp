@@ -3,36 +3,40 @@
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
 
-EditorEnableAction::EditorEnableAction()
-{}
-
-EditorEnableAction::EditorEnableAction(const Vector<Actor*>& actors, bool enable):
-	enable(enable)
+namespace Editor
 {
-	actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetId(); });
-}
+	EnableAction::EnableAction()
+	{}
 
-String EditorEnableAction::GetName() const
-{
-	return enable ? "Enable actors" : "Disable actors";
-}
-
-void EditorEnableAction::Redo()
-{
-	for (auto actorId : actorsIds)
+	EnableAction::EnableAction(const Vector<Actor*>& actors, bool enable):
+		enable(enable)
 	{
-		auto actor = o2Scene.GetActorByID(actorId);
-		if (actor)
-			actor->SetEnabled(enable);
+		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetId(); });
 	}
-}
 
-void EditorEnableAction::Undo()
-{
-	for (auto actorId : actorsIds)
+	String EnableAction::GetName() const
 	{
-		auto actor = o2Scene.GetActorByID(actorId);
-		if (actor)
-			actor->SetEnabled(!enable);
+		return enable ? "Enable actors" : "Disable actors";
 	}
+
+	void EnableAction::Redo()
+	{
+		for (auto actorId : actorsIds)
+		{
+			auto actor = o2Scene.GetActorByID(actorId);
+			if (actor)
+				actor->SetEnabled(enable);
+		}
+	}
+
+	void EnableAction::Undo()
+	{
+		for (auto actorId : actorsIds)
+		{
+			auto actor = o2Scene.GetActorByID(actorId);
+			if (actor)
+				actor->SetEnabled(!enable);
+		}
+	}
+
 }

@@ -4,82 +4,85 @@
 
 using namespace o2;
 
-class UIDockWindowPlace;
-
-// -----------------------------
-// Dockable editor window widget
-// -----------------------------
-class UIDockableWindow: public UIWindow
+namespace Editor
 {
-public:
-	// Default constructor
-	UIDockableWindow();
+	class UIDockWindowPlace;
 
-	// Copy-constructor
-	UIDockableWindow(const UIDockableWindow& other);
+	// -----------------------------
+	// Dockable editor window widget
+	// -----------------------------
+	class UIDockableWindow: public UIWindow
+	{
+	public:
+		// Default constructor
+		UIDockableWindow();
 
-	// Destructor
-	~UIDockableWindow();
+		// Copy-constructor
+		UIDockableWindow(const UIDockableWindow& other);
 
-	// Copy-operator
-	UIDockableWindow& operator=(const UIDockableWindow& other);
+		// Destructor
+		~UIDockableWindow();
 
-	// Updates drawables, states and widget
-	void Update(float dt);
+		// Copy-operator
+		UIDockableWindow& operator=(const UIDockableWindow& other);
 
-	// Draws widget
-	void Draw();
+		// Updates drawables, states and widget
+		void Update(float dt);
 
-	// Returns is window docked
-	bool IsDocked() const;
+		// Draws widget
+		void Draw();
 
-	// Return pointer to docking sample sprite
-	Sprite* GetDockingFrameSample() const;
+		// Returns is window docked
+		bool IsDocked() const;
 
-	SERIALIZABLE(UIDockableWindow);
+		// Return pointer to docking sample sprite
+		Sprite* GetDockingFrameSample() const;
 
-protected:
-	const float mDockSizeCoef = 0.2f;
-	const float mDockBorder = 1.5f;
-			    
-	bool        mDocked;                 // Is window is docked
-	Sprite*     mDockingFrameSample;     // Docking frame sample @SERIALIZABLE
-	Animation   mDockingFrameAppearance; // Docking frame appearance tween
-	RectF       mDockingFrameCurrent;    // Docking sample current frame
-	RectF       mDockingFrameTarget;     // Docking sample target  frame
-	Vec2F       mNonDockSize;            // Size of widget before docking
-	Vec2F       mDragOffset;             // Offset from cursor to dragging anchor point
+		SERIALIZABLE(UIDockableWindow);
 
-protected:
-	//Initialize animation for frame appearance
-	void InitializeDockFrameAppearanceAnim();
+	protected:
+		const float mDockSizeCoef = 0.2f;
+		const float mDockBorder = 1.5f;
 
-	// Initializes drag handles
-	void InitializeDragHandles();
+		bool        mDocked;                 // Is window is docked
+		Sprite*     mDockingFrameSample;     // Docking frame sample @SERIALIZABLE
+		Animation   mDockingFrameAppearance; // Docking frame appearance tween
+		RectF       mDockingFrameCurrent;    // Docking sample current frame
+		RectF       mDockingFrameTarget;     // Docking sample target  frame
+		Vec2F       mNonDockSize;            // Size of widget before docking
+		Vec2F       mDragOffset;             // Offset from cursor to dragging anchor point
 
-	// Calls when window was moved
-	void OnMoved(const Input::Cursor& cursor);
+	protected:
+		//Initialize animation for frame appearance
+		void InitializeDockFrameAppearanceAnim();
 
-	// Calls when window moving was completed
-	void OnMoveCompleted(const Input::Cursor&);
+		// Initializes drag handles
+		void InitializeDragHandles();
 
-	// Calls when window going to move
-	void OnMoveBegin(const Input::Cursor&);
+		// Calls when window was moved
+		void OnMoved(const Input::Cursor& cursor);
 
-	// Searches dock place under cursor and returns parameters of them
-	bool TraceDock(UIDockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect);
+		// Calls when window moving was completed
+		void OnMoveCompleted(const Input::Cursor&);
 
-	// Places this into target dock as non line arranged
-	void PlaceNonLineDock(UIDockWindowPlace* targetDock, Side dockPosition);
+		// Calls when window going to move
+		void OnMoveBegin(const Input::Cursor&);
 
-	// Places this into target dock as line arranged
-	void PlaceLineDock(UIDockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect);
+		// Searches dock place under cursor and returns parameters of them
+		bool TraceDock(UIDockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect);
 
-	// Undocks this window, using when window moved out from dock
-	void Undock();
+		// Places this into target dock as non line arranged
+		void PlaceNonLineDock(UIDockWindowPlace* targetDock, Side dockPosition);
 
-	// Sets window docked
-	void SetDocked(bool docked);
+		// Places this into target dock as line arranged
+		void PlaceLineDock(UIDockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect);
 
-	friend class WindowsLayout;
-};
+		// Undocks this window, using when window moved out from dock
+		void Undock();
+
+		// Sets window docked
+		void SetDocked(bool docked);
+
+		friend class WindowsLayout;
+	};
+}

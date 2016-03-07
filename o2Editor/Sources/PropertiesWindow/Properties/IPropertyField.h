@@ -11,26 +11,29 @@ namespace o2
 	class UIWidget;
 }
 
-// -------------------------------
-// Editor property field interface
-// -------------------------------
-class IEditorPropertyField: public IObject
+namespace Editor
 {
-public:
-	// Virtual destructor
-	virtual ~IEditorPropertyField() {}
+	// -------------------------------
+	// Editor property field interface
+	// -------------------------------
+	class IPropertyField: public IObject
+	{
+	public:
+		// Virtual destructor
+		virtual ~IPropertyField() {}
 
-	// Sets targets pointers
-	virtual void Setup(const Vector<void*>& targets, bool isProperty) {}
+		// Sets targets pointers
+		virtual void Setup(const Vector<void*>& targets, bool isProperty) {}
 
-	// Checks common value and fill fields
-	virtual void Update() {}
+		// Checks common value and fill fields
+		virtual void Update() {}
 
-	// Returns control widget
-	virtual UIWidget* GetWidget() const { return nullptr; }
+		// Returns control widget
+		virtual UIWidget* GetWidget() const { return nullptr; }
 
-	// Returns editing by this field type
-	virtual const Type* GetFieldType() const { return nullptr; }
+		// Returns editing by this field type
+		virtual const Type* GetFieldType() const { return nullptr; }
 
-	IOBJECT(IEditorPropertyField);
-};
+		IOBJECT(IPropertyField);
+	};
+}

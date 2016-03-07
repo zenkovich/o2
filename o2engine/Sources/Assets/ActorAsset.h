@@ -35,6 +35,12 @@ namespace o2
 		// Check equals operator
 		ActorAsset& operator=(const ActorAsset& asset);
 
+		// Check equals operator
+		bool operator==(const ActorAsset& other) const;
+
+		// Check not equals operator
+		bool operator!=(const ActorAsset& other) const;
+
 		// Returns meta information
 		MetaInfo* GetMeta() const;
 

@@ -3,36 +3,40 @@
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
 
-EditorLockAction::EditorLockAction()
-{}
-
-EditorLockAction::EditorLockAction(const Vector<Actor*>& actors, bool lock):
-	lock(lock)
+namespace Editor
 {
-	actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetId(); });
-}
+	LockAction::LockAction()
+	{}
 
-String EditorLockAction::GetName() const
-{
-	return lock ? "Lock actors" : "Unlock actors";
-}
-
-void EditorLockAction::Redo()
-{
-	for (auto actorId : actorsIds)
+	LockAction::LockAction(const Vector<Actor*>& actors, bool lock):
+		lock(lock)
 	{
-		auto actor = o2Scene.GetActorByID(actorId);
-		if (actor)
-			actor->SetLocked(lock);
+		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetId(); });
 	}
-}
 
-void EditorLockAction::Undo()
-{
-	for (auto actorId : actorsIds)
+	String LockAction::GetName() const
 	{
-		auto actor = o2Scene.GetActorByID(actorId);
-		if (actor)
-			actor->SetLocked(!lock);
+		return lock ? "Lock actors" : "Unlock actors";
 	}
+
+	void LockAction::Redo()
+	{
+		for (auto actorId : actorsIds)
+		{
+			auto actor = o2Scene.GetActorByID(actorId);
+			if (actor)
+				actor->SetLocked(lock);
+		}
+	}
+
+	void LockAction::Undo()
+	{
+		for (auto actorId : actorsIds)
+		{
+			auto actor = o2Scene.GetActorByID(actorId);
+			if (actor)
+				actor->SetLocked(!lock);
+		}
+	}
+
 }

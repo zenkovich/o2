@@ -34,6 +34,12 @@ namespace o2
 		// Check equals operator
 		FolderAsset& operator=(const FolderAsset& asset);
 
+		// Check equals operator
+		bool operator==(const FolderAsset& other) const;
+
+		// Check not equals operator
+		bool operator!=(const FolderAsset& other) const;
+
 		// Returns containing assets infos
 		AssetInfosVec GetContainingAssetsInfos() const;
 

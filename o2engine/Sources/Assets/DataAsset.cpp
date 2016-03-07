@@ -37,8 +37,12 @@ namespace o2
 	DataAsset::DataAsset(const DataAsset& asset):
 		Asset(asset)
 	{
-		data = asset.data;
 		mMeta = mnew MetaInfo();
+		mPath = asset.mPath;
+		IdRef() = asset.GetAssetId();
+
+		data = asset.data;
+
 		InitializeProperties();
 	}
 
@@ -49,9 +53,22 @@ namespace o2
 	DataAsset& DataAsset::operator=(const DataAsset& asset)
 	{
 		Asset::operator=(asset);
+
 		data = asset.data;
 
+		*mMeta = *(MetaInfo*)(asset.mMeta);
+
 		return *this;
+	}
+
+	bool DataAsset::operator==(const DataAsset& other) const
+	{
+		return mMeta->IsEqual(other.mMeta);
+	}
+
+	bool DataAsset::operator!=(const DataAsset& other) const
+	{
+		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	DataAsset::MetaInfo* DataAsset::GetMeta() const

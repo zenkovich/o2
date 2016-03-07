@@ -11,55 +11,58 @@ namespace o2
 	class UIEditBox;
 }
 
-// -------------------------------
-// Editor string property edit box
-// -------------------------------
-class EditorStringProperty: public IEditorPropertyField
+namespace Editor
 {
-public:
-	// Default constructor
-	EditorStringProperty();
+	// -------------------------------
+	// Editor string property edit box
+	// -------------------------------
+	class StringProperty: public IPropertyField
+	{
+	public:
+		// Default constructor
+		StringProperty();
 
-	// Constructor
-	EditorStringProperty(const Vector<void*>& targets, bool isProperty);
+		// Constructor
+		StringProperty(const Vector<void*>& targets, bool isProperty);
 
-	// Destructor
-	~EditorStringProperty();
+		// Destructor
+		~StringProperty();
 
-	// Sets fields
-	void Setup(const Vector<void*>& targets, bool isProperty);
+		// Sets fields
+		void Setup(const Vector<void*>& targets, bool isProperty);
 
-	// Updates and checks value
-	void Update();
+		// Updates and checks value
+		void Update();
 
-	// Returns root widget
-	UIWidget* GetWidget() const;
+		// Returns root widget
+		UIWidget* GetWidget() const;
 
-	// Returns value
-	String GetCommonValue() const;
+		// Returns value
+		String GetCommonValue() const;
 
-	// Returns is values different
-	bool IsValuesDifferent() const;
+		// Returns is values different
+		bool IsValuesDifferent() const;
 
-	// Returns editing by this field type
-	const Type* GetFieldType() const;
+		// Returns editing by this field type
+		const Type* GetFieldType() const;
 
-	IOBJECT(EditorStringProperty);
+		IOBJECT(StringProperty);
 
-protected:
-	Function<void(void*, const String&)> mAssignFunc; // Value assign function
-	Function<String(void*)>              mGetFunc;    // Get value function
+	protected:
+		Function<void(void*, const String&)> mAssignFunc; // Value assign function
+		Function<String(void*)>              mGetFunc;    // Get value function
 
-	Vector<void*> mValuesPointers;  // Fields' pointers
-	String        mCommonValue;     // Common field value (if not different)
-	bool          mValuesDifferent; // Are values different
+		Vector<void*> mValuesPointers;  // Fields' pointers
+		String        mCommonValue;     // Common field value (if not different)
+		bool          mValuesDifferent; // Are values different
 
-	UIEditBox*    mEditBox;         // Edit box 
+		UIEditBox*    mEditBox;         // Edit box 
 
-protected:
-	// Initializes widget
-	void InitializeWidget();
+	protected:
+		// Initializes widget
+		void InitializeWidget();
 
-	// Edit box change event
-	void OnEdited(const WString& data);
-};
+		// Edit box change event
+		void OnEdited(const WString& data);
+	};
+}
