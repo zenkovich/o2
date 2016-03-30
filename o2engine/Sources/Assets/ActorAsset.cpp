@@ -100,7 +100,7 @@ namespace o2
 	{
 		DataNode data;
 		data.LoadFromFile(path);
-		actor = data;
+		actor.Deserialize(data);
 		actor.ExcludeFromScene();
 		actor.mIsAsset = true;
 		actor.mAssetId = IdRef();
@@ -112,7 +112,7 @@ namespace o2
 		actor.mAssetId = IdRef();
 
 		DataNode data;
-		data = actor;
+		data = actor.Serialize();
 		data.SaveToFile(path);
 	}
 

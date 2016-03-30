@@ -1214,9 +1214,14 @@ namespace o2
 		if (!mPressedNode)
 			return;
 
+		mBeforeDragSelected = mSelectedItems;
+
 		if (!mSelectedItems.Any([&](auto x) { return x.node == mPressedNode; }))
 		{
-			DeselectAllObjects();
+			for (auto sel : mSelectedItems)
+				FreeSelectionSprite(sel.selectionSprite);
+
+			mSelectedItems.Clear();
 
 			SelectedNode selectionNode;
 			selectionNode.object = mPressedNode->mObject;
@@ -1224,7 +1229,6 @@ namespace o2
 			selectionNode.node = GetNode(mPressedNode->mObject);
 
 			mSelectedItems.Add(selectionNode);
-			OnItemsSelected();
 
 			UpdateLayout();
 		}
@@ -1293,6 +1297,8 @@ namespace o2
 
 	void UITree::EndDragging()
 	{
+		OnItemsSelected();
+
 		mDraggingNodes = false;
 		mDragNode->Hide(true);
 

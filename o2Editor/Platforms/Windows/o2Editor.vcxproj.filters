@@ -208,6 +208,18 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\AssetProperty.h">
       <Filter>PropertiesWindow\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
@@ -357,6 +369,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp">
       <Filter>PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

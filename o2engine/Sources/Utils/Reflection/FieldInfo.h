@@ -30,12 +30,12 @@ namespace o2
 		{
 			void Serialize(void* object, DataNode& data) const
 			{
-				Serializer::Serialize<_type>(*(_type*)object, data);
+				Serializer::Serialize(*(_type*)object, data);
 			}
 
 			void Deserialize(void* object, DataNode& data) const
 			{
-				Serializer::Deserialize<_type>(*(_type*)object, data);
+				Serializer::Deserialize(*(_type*)object, data);
 			}
 			
 			IFieldSerializer* Clone() const

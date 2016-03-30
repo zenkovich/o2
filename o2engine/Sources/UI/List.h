@@ -11,6 +11,7 @@ namespace o2
 	{
 	public:
 		Property<WString>              value;    // Current selected item text
+		Property<Vector<WString>>      values;   // Current selected items texts
 		Accessor<WString, int>         textItem; // Text item accessor by position
 
 		Function<void(const WString&)> onSelectedText; // Change text selected event
@@ -43,7 +44,7 @@ namespace o2
 		int FindItem(const WString& text);
 
 		// Returns item text by position
-		WString GetItemText(int position);
+		WString GetItemText(int position) const;
 
 		// Returns array of all text items
 		Vector<WString> GetAllItemsText() const;
@@ -53,6 +54,12 @@ namespace o2
 
 		// Selects item text
 		void SelectItemText(const WString& text);
+
+		// Selects items texts
+		void SetSelectedItems(const Vector<WString>& items);
+
+		// Returns selected items texts
+		Vector<WString> GetSelectedItemsText() const;
 
 		SERIALIZABLE(UIList);
 

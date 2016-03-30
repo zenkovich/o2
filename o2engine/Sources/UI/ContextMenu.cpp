@@ -40,7 +40,7 @@ namespace o2
 	UIContextMenu::UIContextMenu():
 		UIScrollArea(), DrawableCursorEventsListener(this), mSelectedItem(nullptr), mSelectSubContextTime(-1), 
 		mParentContextMenu(nullptr), mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr), 
-		mSelectionDrawable(nullptr), mSeparatorSample(nullptr)
+		mSelectionDrawable(nullptr), mSeparatorSample(nullptr), mShownAtFrame(false), mMaxVisibleItems(INT_MAX)
 	{
 		mItemSample = mnew UIContextMenuItem();
 		mItemSample->AddLayer("icon", nullptr, Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(10, 0), Vec2F(10, 0)));
@@ -73,7 +73,8 @@ namespace o2
 	UIContextMenu::UIContextMenu(const UIContextMenu& other):
 		UIScrollArea(other), DrawableCursorEventsListener(this), mSelectedItem(nullptr), mSelectSubContextTime(-1),
 		mParentContextMenu(nullptr), mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr),
-		mSelectionDrawable(nullptr), mFitSizeMin(other.mFitSizeMin)
+		mSelectionDrawable(nullptr), mFitSizeMin(other.mFitSizeMin), mShownAtFrame(false),
+		mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample = other.mItemSample->Clone();
 		mSeparatorSample = other.mSeparatorSample->Clone();
@@ -105,6 +106,7 @@ namespace o2
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
 		mSelectionLayout = other.mSelectionLayout;
 		mLayout = FindChild<UIVerticalLayout>();
+		mMaxVisibleItems = other.mMaxVisibleItems;
 
 		mFitSizeMin = other.mFitSizeMin;
 
@@ -129,7 +131,7 @@ namespace o2
 		}
 
 		if (!mChildContextMenu && (o2Input.IsCursorPressed() || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
-			!layout.mAbsoluteRect.IsInside(o2Input.GetCursorPos()))
+			!layout.mAbsoluteRect.IsInside(o2Input.GetCursorPos()) && !mShownAtFrame && mVisible)
 		{
 			HideWithParent();
 		}
@@ -147,6 +149,8 @@ namespace o2
 					mSelectedItem->GetSubMenu()->Show(this, mSelectedItem->layout.absRightTop);
 			}
 		}
+
+		mShownAtFrame = false;
 	}
 
 	void UIContextMenu::Draw()
@@ -177,6 +181,8 @@ namespace o2
 		FitPosition();
 		UpdateLayout();
 
+		mShownAtFrame = true;
+
 		UIWidget::Show();
 	}
 
@@ -199,6 +205,10 @@ namespace o2
 		UIContextMenuItem* newItem = CreateItem(item);
 		mLayout->AddChild(newItem);
 		newItem->onClick = item.onClick;
+
+		FitSize();
+		FitPosition();
+		UpdateLayout();
 
 		return newItem;
 	}
@@ -262,6 +272,10 @@ namespace o2
 
 		if (item.subItems.Count() == 0)
 			newItem->onClick = item.onClick;
+
+		FitSize();
+		FitPosition();
+		UpdateLayout();
 
 		return newItem;
 	}
@@ -496,6 +510,7 @@ namespace o2
 	void UIContextMenu::RemoveAllItems()
 	{
 		mLayout->RemoveAllChilds();
+		mSelectedItem = nullptr;
 	}
 
 	UIVerticalLayout* UIContextMenu::GetItemsLayout() const
@@ -531,6 +546,11 @@ namespace o2
 	void UIContextMenu::SetMinFitSize(float size)
 	{
 		mFitSizeMin = size;
+	}
+
+	void UIContextMenu::SetMaxItemsVisible(int count)
+	{
+		mMaxVisibleItems = count;
 	}
 
 	bool UIContextMenu::IsScrollable() const
@@ -578,6 +598,8 @@ namespace o2
 		Vec2F size;
 		float maxCaption = 0.0f;
 		float maxShortcut = 0.0f;
+
+		int i = 0;
 		for (auto child : mLayout->GetChilds())
 		{
 			if (auto childCaption = child->GetLayerDrawable<Text>("caption"))
@@ -587,6 +609,10 @@ namespace o2
 				maxShortcut = Math::Max(shortcutCaption->GetRealSize().x, maxShortcut);
 
 			size.y += child->layout.height;
+
+			i++;
+			if (i == mMaxVisibleItems)
+				break;
 		}
 
 		size.x = mFitSizeMin + maxCaption + maxShortcut;

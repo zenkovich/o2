@@ -148,6 +148,9 @@ namespace Editor
 
 		mWindow->AddChild(mTreeContextMenu);
 
+		for (int i = 0; i < 10; i++)
+			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
+
 		// test actors
 		for (int i = 0; i < 10; i++)
 		{

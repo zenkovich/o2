@@ -13,7 +13,8 @@ namespace o2
 	class UICustomList: public UIScrollArea, public DrawableCursorEventsListener
 	{
 	public:
-		Property<UIWidget*>       selectedItem;    // Selected item widget property
+		Property<Vector<int>>     selectedItems;   // Selected item widget property
+		Property<UIWidget*>       selectedItem;    // Selected item widget
 		Property<int>             selectedItemPos; // Selected item position property
 		Accessor<UIWidget*, int>  item;            // Items by position accessor
 		Getter<int>               itemsCount;      // All items count getter
@@ -87,11 +88,26 @@ namespace o2
 		// Selects item at position
 		void SelectItemAt(int position);
 
+		// Sets items selection
+		void SetSelectedItems(const Vector<int>& items);
+
+		// Clears selection
+		void ClearSelection();
+
 		// Returns selected item
-		UIWidget* GetSelectedItem() const;
+		Vector<int> GetSelectedItems() const;
 
 		// Returns selected item position
-		int GetSelectedItemPosition() const;
+		int GetSelectedItemPos() const;
+
+		// Returns selected item widget
+		UIWidget* GetSelectedItem() const;
+
+		// Sets multi selection
+		void SetMultiselectionAvailable(bool available);
+
+		// Returns is multi selection available
+		bool IsMultiselectionAvailable() const;
 
 		// Returns selection drawable
 		Sprite* GetSelectionDrawable() const;
@@ -117,6 +133,17 @@ namespace o2
 		SERIALIZABLE(UICustomList);
 
 	protected:
+		struct Selection
+		{
+			int     idx;
+			Sprite* selection;
+
+			bool operator==(const Selection& other) const;
+		};
+
+		typedef Vector<Selection> SelectionsVec;
+		typedef Vector<Sprite*> SpritesVec;
+
 		UIVerticalLayout* mVerLayout;             // Child vertical layout
 		UIWidget*         mItemSample;            // Item sample widget @SERIALIZABLE
 		Sprite*           mSelectionDrawable;     // Selection sprite @SERIALIZABLE
@@ -124,15 +151,16 @@ namespace o2
 		Layout            mSelectionLayout;       // Selection layout, result selection area depends on selected item @SERIALIZABLE
 		Layout            mHoverLayout;           // Hover layout, result selection area depends on selected item @SERIALIZABLE
 						  
-		int               mSelectedItem;          // Position of current selected item (-1 if no item isn't selected)
+		bool              mMultiSelection;        // Is multi selection available @SERIALIZABLE
+		SelectionsVec     mSelectedItems;         // Current selected items
 						  
-		RectF             mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
-		RectF             mTargetSelectionRect;   // Target selection rectangle (over selected item)
 		RectF             mCurrentHoverRect;      // Current hover rectangle (for smoothing)
 		RectF             mTargetHoverRect;       // Target hover rectangle (over selected item)
 						  
 		Vec2F             mLastHoverCheckCursor;  // Last cursor position on hover check
 		Vec2F             mLastSelectCheckCursor; // Last cursor position on selection check
+
+		SpritesVec        mSelectionSpritesPool;  // Selection sprites pool
 
 	protected:
 		// Updates mouse control
@@ -174,8 +202,8 @@ namespace o2
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
 
-		// Updates selection
-		void UpdateSelection(int position, UIWidget* item);
+		// Returns selection sprite
+		Sprite* GetSelectionSprite();
 
 		// Calls when selected item index was changed
 		virtual void OnSelectionChanged();

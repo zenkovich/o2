@@ -102,7 +102,7 @@ namespace o2
 	void UIDropDown::SelectItemText(const WString& text)
 	{
 		int idx = FindItem(text);
-		mList->UpdateSelection(idx, GetItem(idx));
+		mList->SelectItemAt(idx);
 	}
 
 	void UIDropDown::OnSelectionChanged()

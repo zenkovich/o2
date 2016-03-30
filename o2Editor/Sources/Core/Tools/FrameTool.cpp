@@ -22,6 +22,7 @@ namespace Editor
 		mLeftTopRotateHandle.regularSprite->szPivot = frameHandleSize*0.5f;
 		mLeftTopRotateHandle.hoverSprite->szPivot = frameHandleSize*0.5f;
 		mLeftTopRotateHandle.pressedSprite->szPivot = frameHandleSize*0.5f;
+		mLeftTopRotateHandle.pixelPerfect = false;
 
 		mLeftBottomRotateHandle = mLeftTopRotateHandle;
 		mRightTopRotateHandle = mLeftTopRotateHandle;
@@ -30,6 +31,7 @@ namespace Editor
 		mLeftTopHandle.regularSprite = mnew Sprite("ui/UI2_handle_regular.png");
 		mLeftTopHandle.hoverSprite = mnew Sprite("ui/UI2_handle_select.png");
 		mLeftTopHandle.pressedSprite = mnew Sprite("ui/UI2_handle_pressed.png");
+		mLeftTopHandle.pixelPerfect = false;
 
 		mLeftHandle = mLeftTopHandle;
 		mLeftBottomHandle = mLeftTopHandle;

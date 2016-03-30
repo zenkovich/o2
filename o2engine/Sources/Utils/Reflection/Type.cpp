@@ -25,6 +25,23 @@ namespace o2
 		return mId;
 	}
 
+	bool Type::IsBasedOn(const Type& other) const
+	{
+		if (mId == other.mId)
+			return true;
+
+		for (auto type : mBaseTypes)
+		{
+			if (type->mId == mId)
+				return true;
+
+			if (type->IsBasedOn(other))
+				return true;
+		}
+
+		return false;
+	}
+
 	const Type::TypesVec& Type::BaseTypes() const
 	{
 		return mBaseTypes;
@@ -76,16 +93,6 @@ namespace o2
 	void* Type::CreateSample() const
 	{
 		return mTypeAgent->CreateSample();
-	}
-
-	void Type::SerializeObject(void* object, DataNode& data) const
-	{
-		mTypeAgent->Serialize(object, data);
-	}
-
-	void Type::DeserializeObject(void* object, DataNode& data) const
-	{
-		mTypeAgent->Deserialize(object, data);
 	}
 
 	String Type::GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const

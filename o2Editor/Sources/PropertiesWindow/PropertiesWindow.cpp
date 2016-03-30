@@ -166,16 +166,22 @@ namespace Editor
 
 		usedPropertyFields.Clear();
 
+		Vector<UIWidget*> layoutChilds;
+
 		// and build
 		for (auto fieldInfo : type->Fields())
 		{
 			const Type* fieldType = &fieldInfo->GetType();
 
-			if (!mAvailablePropertiesFields.ContainsPred([=](IPropertyField* x) { return x->GetFieldType() == fieldType; }))
-				continue;
-
 			if (fieldInfo->GetProtectionSection() != ProtectSection::Public)
 				continue;
+
+			IPropertyField* fieldSample = GetAvailableField(fieldType);
+
+			if (!fieldSample)
+				continue;
+
+			const Type* fieldPropertyType = fieldSample->GetFieldType();
 
 			if (mHorLayoutsPool.IsEmpty())
 			{
@@ -211,17 +217,18 @@ namespace Editor
 			label->layout.widthWeight = 0.5f;
 
 			// add property
-			if (!mFieldPropertiesPool.ContainsKey(fieldType))
-				mFieldPropertiesPool.Add(fieldType, Vector<IPropertyField*>());
+			if (!mFieldPropertiesPool.ContainsKey(fieldPropertyType))
+				mFieldPropertiesPool.Add(fieldPropertyType, Vector<IPropertyField*>());
 
-			if (mFieldPropertiesPool[fieldType].IsEmpty())
+			if (mFieldPropertiesPool[fieldPropertyType].IsEmpty())
 			{
 				for (int i = 0; i < mPropertyFieldsPoolStep; i++)
-					mFieldPropertiesPool[fieldType].Add(CreatePropertyField(fieldType));
+					mFieldPropertiesPool[fieldPropertyType].Add((IPropertyField*)fieldSample->GetType().CreateSample());
 			}
 
-			IPropertyField* fieldProperty = mFieldPropertiesPool[fieldType].PopBack();
-			Vector<void*> fieldPointers = objects.Select<void*>([&](IObject* x) { return fieldInfo->GetValuePtr<char>(x); });
+			IPropertyField* fieldProperty = mFieldPropertiesPool[fieldPropertyType].PopBack();
+			Vector<void*> fieldPointers = objects.Select<void*>([&](IObject* x) { return fieldInfo->GetValuePtrStrong<char>(x); });
+			fieldProperty->SpecializeType(fieldType);
 			fieldProperty->Setup(fieldPointers, fieldInfo->IsProperty());
 
 			usedPropertyFields.Add(fieldProperty);
@@ -230,8 +237,10 @@ namespace Editor
 			horLayout->AddChild(label);
 			horLayout->AddChild(fieldProperty->GetWidget());
 
-			layout->AddChild(horLayout);
+			layoutChilds.Add(horLayout);
 		}
+
+		layout->AddChilds(layoutChilds);
 	}
 
 	String PropertiesWindow::MakeSmartFieldName(const String& fieldName)
@@ -279,10 +288,22 @@ namespace Editor
 
 	IPropertyField* PropertiesWindow::CreatePropertyField(const Type* type)
 	{
-		auto sample = mAvailablePropertiesFields.FindMatch([=](IPropertyField* x) { return x->GetFieldType() == type; });
+		auto sample = GetAvailableField(type);
 		if (sample)
 			return (IPropertyField*)sample->GetType().CreateSample();
 
 		return nullptr;
 	}
+
+	IPropertyField* PropertiesWindow::GetAvailableField(const Type* type)
+	{
+		for (auto field : mAvailablePropertiesFields)
+		{
+			if (type->IsBasedOn(*field->GetFieldType()))
+				return field;
+		}
+
+		return nullptr;
+	}
+
 }

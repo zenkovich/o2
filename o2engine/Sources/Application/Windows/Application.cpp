@@ -64,7 +64,7 @@ namespace o2
 			return;
 		}
 
-		if (!(mHWnd = CreateWindowEx(NULL, wndClass.lpszClassName, "App test",
+		if (!(mHWnd = CreateWindowEx(NULL, wndClass.lpszClassName, "o2 application",
 									 WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 									 mWindowedPos.x, mWindowedPos.y, mWindowedSize.x, mWindowedSize.y,
 									 NULL, NULL, NULL, NULL)))

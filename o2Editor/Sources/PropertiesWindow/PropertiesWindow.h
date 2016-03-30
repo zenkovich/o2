@@ -79,10 +79,13 @@ namespace Editor
 		// Initializes viewers
 		void InitializeViewers();
 
-		// Initializes available roperties fields and pools
+		// Initializes available properties fields and pools
 		void InitializePropertiesFields();
 
 		// Creates property field by type
 		IPropertyField* CreatePropertyField(const Type* type);
+
+		// Returns available field by type
+		IPropertyField* GetAvailableField(const Type* type);
 	};
 }

@@ -20,17 +20,18 @@ namespace Editor
 	class SceneDragHandle
 	{
 	public:
-		Sprite*                      regularSprite; // Regular view sprite
-		Sprite*                      hoverSprite;   // Hovered view sprite
-		Sprite*                      pressedSprite; // Pressed view sprite
-		Function<void(const Vec2F&)> onChangedPos;  // On position changed event (parameter - position in scene)
-		Function<void(const Vec2F&)> onMoved;       // On moved event (parameter - delta in scene)
-		Function<void()>             onPressed;     // On cursor pressed event
-		Function<void()>             onReleased;    // On cursor released event
-		Property<Vec2F>              position;      // Current position in scene property
-		Property<float>              angle;         // Handle angle in radians property
-		Property<bool>               enabled;       // Handle enabling property
-		CursorType                   cursorType;    // Cursor type when hovering and dragging
+		Sprite*                      regularSprite;       // Regular view sprite
+		Sprite*                      hoverSprite;         // Hovered view sprite
+		Sprite*                      pressedSprite;       // Pressed view sprite
+		Function<void(const Vec2F&)> onChangedPos;        // On position changed event (parameter - position in scene)
+		Function<void(const Vec2F&)> onMoved;             // On moved event (parameter - delta in scene)
+		Function<void()>             onPressed;           // On cursor pressed event
+		Function<void()>             onReleased;          // On cursor released event
+		Property<Vec2F>              position;            // Current position in scene property
+		Property<float>              angle;               // Handle angle in radians property
+		Property<bool>               enabled;             // Handle enabling property
+		CursorType                   cursorType;          // Cursor type when hovering and dragging
+		bool                         pixelPerfect = true; // Is handle draws pixel perfect
 
 		// Default constructor
 		SceneDragHandle();

@@ -6,13 +6,13 @@ namespace o2
 {
 	void Serializer::Serialize(Actor* actor, DataNode& data)
 	{
-		if (actor->IsAsset())
+		if (actor && actor->IsAsset())
 		{
 			*data.AddNode("AssetId") = actor->GetAssetId();
 		}
-		else if (actor->IsOnScene())
+		else if (actor && actor->IsOnScene())
 		{
-			*data.AddNode("SceneId") = actor->GetId();
+			*data.AddNode("SceneId") = actor->GetID();
 		}
 		else
 		{

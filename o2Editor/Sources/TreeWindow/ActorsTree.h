@@ -12,6 +12,9 @@ using namespace o2;
 
 namespace Editor
 {
+	class ActorProperty;
+	class ComponentProperty;
+
 	// ------------------
 	// Actors tree widget
 	// ------------------
@@ -144,9 +147,12 @@ namespace Editor
 		SERIALIZABLE(UIActorsTree);
 
 	protected:
-		UIToggleGroup* mEnableActorsTogglesGroup; // Enable actors toggles group
-		UIToggleGroup* mLockActorsTogglesGroup;	  // Lock actors toggles group
-		bool           mAttackedToSceneEvents;    // Is tree attached to scene events
+		UIToggleGroup*     mEnableActorsTogglesGroup;   // Enable actors toggles group
+		UIToggleGroup*     mLockActorsTogglesGroup;	    // Lock actors toggles group
+		bool               mAttackedToSceneEvents;      // Is tree attached to scene events
+						    						    
+		ActorProperty*     mDragActorPropertyField;     // Actor property field under cursor when dragging actor
+		ComponentProperty* mDragComponentPropertyField; // Component property field under cursor when dragging actor
 
 	protected:
 		// Initializes widget logic

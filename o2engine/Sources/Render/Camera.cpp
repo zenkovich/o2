@@ -12,6 +12,13 @@ namespace o2
 			SetSize(o2Render.GetCurrentResolution());
 	}
 
+	Camera::Camera():
+		Transform(Vec2F(), Vec2F(), 0.0f)
+	{
+		if (size == Vec2F() && Render::IsSingletonInitialzed())
+			SetSize(o2Render.GetCurrentResolution());
+	}
+
 	Camera Camera::Default()
 	{
 		return Camera();

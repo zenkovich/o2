@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Utils/Data/DataDoc.h"
 #include "Utils/Math/Basis.h"
 #include "Utils/Math/Color.h"
 #include "Utils/Math/Rect.h"
@@ -10,7 +9,6 @@
 #include "Utils/Reflection/FieldInfo.h"
 #include "Utils/Reflection/FunctionInfo.h"
 #include "Utils/String.h"
-#include "Utils/Serializer.h"
 
 #define TypeOf(TYPE) _TypeOf<TYPE>()
 
@@ -37,8 +35,6 @@ namespace o2
 		struct ITypeAgent
 		{
 			virtual void* CreateSample() const = 0;
-			virtual void Serialize(void* object, DataNode& data) const = 0;
-			virtual void Deserialize(void* object, DataNode& data) const = 0;
 		};
 
 		template<typename _type>
@@ -47,16 +43,6 @@ namespace o2
 			void* CreateSample() const 
 			{
 				return mnew _type();
-			}
-
-			void Serialize(void* object, DataNode& data) const
-			{
-				Serializer::Serialize<_type>(*(_type*)object, data);
-			}
-
-			void Deserialize(void* object, DataNode& data) const
-			{
-				Serializer::Deserialize<_type>(*(_type*)object, data);
 			}
 		};
 
@@ -78,6 +64,9 @@ namespace o2
 
 		// Returns id of type
 		Id ID() const;
+
+		// Is this type based on other
+		bool IsBasedOn(const Type& other) const;
 
 		// Returns vector of base types
 		const TypesVec& BaseTypes() const;
@@ -103,12 +92,6 @@ namespace o2
 
 		// Creates sample copy and returns him
 		void* CreateSample() const;
-
-		// Serializes object by pointer
-		void SerializeObject(void* object, DataNode& data) const;
-
-		// Deserializes object by pointer
-		void DeserializeObject(void* object, DataNode& data) const;
 
 		// Returns filed pointer by path
 		template<typename _type>

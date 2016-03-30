@@ -19,10 +19,10 @@ namespace Editor
 			Vector<Actor*> parentChilds = parent ? parent->GetChilds() : o2Scene.GetRootActors();
 			int actorIdx = parentChilds.Find(actor);
 
-			info->actorId = actor->GetId();
+			info->actorId = actor->GetID();
 			info->actorHierarchyIdx = o2Scene.GetActorHierarchyIdx(actor);
-			info->lastParentId = parent ? parent->GetId() : 0;
-			info->lastPrevActorId = actorIdx > 0 ? parentChilds[actorIdx - 1]->GetId() : 0;
+			info->lastParentId = parent ? parent->GetID() : 0;
+			info->lastPrevActorId = actorIdx > 0 ? parentChilds[actorIdx - 1]->GetID() : 0;
 			info->transform = actor->transform.GetWorldNonSizedBasis();
 
 			actorsInfos.Add(info);
@@ -39,8 +39,8 @@ namespace Editor
 
 	void ReparentActorsAction::ActorsReparented(Actor* newParent, Actor* prevActor)
 	{
-		newParentId = newParent ? newParent->GetId() : 0;
-		newPrevActorId = prevActor ? prevActor->GetId() : 0;
+		newParentId = newParent ? newParent->GetID() : 0;
+		newPrevActorId = prevActor ? prevActor->GetID() : 0;
 	}
 
 	String ReparentActorsAction::GetName() const

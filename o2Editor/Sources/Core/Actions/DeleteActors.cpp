@@ -22,7 +22,7 @@ namespace Editor
 			if (actor->GetParent())
 			{
 				auto parent = actor->GetParent();
-				info.parentId = parent->GetId();
+				info.parentId = parent->GetID();
 
 				auto parentChilds = parent->GetChilds();
 				info.prevActorId = 0;
@@ -86,7 +86,7 @@ namespace Editor
 			if (parent)
 			{
 				UInt64 prevId = info.prevActorId;
-				int idx = parent->GetChilds().FindIdx([=](Actor* x) { return x->GetId() == prevId; }) + 1;
+				int idx = parent->GetChilds().FindIdx([=](Actor* x) { return x->GetID() == prevId; }) + 1;
 
 				Actor* newActor = info.actor;
 				parent->AddChild(newActor, idx);
@@ -95,7 +95,7 @@ namespace Editor
 			}
 			else
 			{
-				int idx = o2Scene.GetRootActors().FindIdx([&](Actor* x) { return x->GetId() == info.prevActorId; }) + 1;
+				int idx = o2Scene.GetRootActors().FindIdx([&](Actor* x) { return x->GetID() == info.prevActorId; }) + 1;
 
 				Actor* newActor = info.actor;
 				newActor->SetPositionIndexInParent(idx);

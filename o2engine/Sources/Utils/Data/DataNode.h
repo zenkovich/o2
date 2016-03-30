@@ -6,15 +6,41 @@
 
 namespace o2
 {
+	class Actor;
+	class Component;
+	class DataNode;
 	class ISerializable;
+	class Type;
+
+	class IDataNodeTypeConverter
+	{
+	public:
+		virtual void ToData(void* object, DataNode& data) {}
+		virtual void FromData(void*& object, const DataNode& data) {}
+		virtual bool CheckType(const Type* type) const { return false; }
+	};
+
+	class ActorDataNodeConverter: public IDataNodeTypeConverter
+	{
+	public:
+		void ToData(void* object, DataNode& data);
+		void FromData(void*& object, const DataNode& data);
+		bool CheckType(const Type* type) const;
+	};
+
+	class ComponentDataNodeConverter: public IDataNodeTypeConverter
+	{
+	public:
+		void ToData(void* object, DataNode& data);
+		void FromData(void*& object, const DataNode& data);
+		bool CheckType(const Type* type) const;
+	};
 
 	//====================
 	// Tree-like data node
 	// ===================
 	class DataNode
 	{
-		friend class DataDoc;
-
 	public:
 		enum class Format { Xml, JSON, Binary };
 
@@ -23,6 +49,24 @@ namespace o2
 		typedef DataNodesVec::ConstIterator ConstIterator;
 
 	protected:
+		template<typename _type>
+		class EnumDataConverter
+		{
+		public:
+			static void ToData(_type& object, DataNode& data);
+			static void FromData(_type& object, const DataNode& data);
+		};
+
+		template<typename _type>
+		class CustomDataConverter
+		{
+		public:
+			static void ToData(_type& object, DataNode& data);
+			static void FromData(_type& object, const DataNode& data);
+		};
+
+		static Vector<IDataNodeTypeConverter*> mDataConverters; // Data converters
+
 		WString      mName;       // Name of node
 		WString      mData;       // Node data
 		DataNode*    mParent;     // Node parent. Nullptr if no parent
@@ -95,8 +139,10 @@ namespace o2
 		template<typename _key, typename _value>
 		DataNode(const WString& name, const Dictionary<_key, _value>& value);
 
+
 		// Destructor
 		virtual ~DataNode();
+
 
 		// Assign operator to other node
 		DataNode& operator=(const DataNode& other);
@@ -106,6 +152,12 @@ namespace o2
 
 		// Assign operator string value
 		DataNode& operator=(char* value);
+
+		// Assign operator actor value
+		DataNode& operator=(Actor* value);
+
+		// Assign operator component value
+		DataNode& operator=(Component* value);
 
 		// Assign operator wide string value
 		DataNode& operator=(wchar_t* value);
@@ -168,11 +220,11 @@ namespace o2
 		DataNode& operator=(Dictionary<_key, _value>& value);
 
 		// Assign operator to enum class value
-		template<class _type, class = typename std::enable_if<std::is_enum<_type>::value>::type>
-		DataNode& operator=(_type value)
-		{			
-			return operator=(Reflection::GetEnumName<_type>(value));
-		}
+		template<typename _type, 
+			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, CustomDataConverter<_type>>::type,
+			typename X = std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
+		DataNode& operator=(_type& value);
+
 
 		// Cast operator to wide string
 		operator wchar_t*() const;
@@ -237,6 +289,12 @@ namespace o2
 		// Cast operator to char
 		operator long long int() const;
 
+		// Cast operator to actor
+		operator Actor*() const;
+
+		// Cast operator to component
+		operator Component*() const;
+
 		// Cast operator to pointer
 		template<typename _type>
 		operator _type*() const;
@@ -250,11 +308,11 @@ namespace o2
 		operator Dictionary<_key, _value>() const;
 
 		// Cast operator to enum class
-		template<class _type, class = typename std::enable_if<std::is_enum<_type>::value>::type>
-		operator _type() const
-		{			
-			return Reflection::GetEnum<_type>(mData);;
-		}
+		template<typename _type,
+			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, CustomDataConverter<_type>>::type,
+			typename X = std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
+		operator _type() const;
+
 
 		// [] assign operator. nodePath sample: "node/node/abc/cde"
 		DataNode* operator[](const WString& nodePath);
@@ -337,6 +395,9 @@ namespace o2
 		// End constant iterator (for range based "for")
 		ConstIterator end() const;
 
+		// Registers data converter
+		static void RegDataConverter(IDataNodeTypeConverter* converter);
+
 		// Is DataNode supporting type trait
 		template<typename T>
 		struct IsSupport:
@@ -360,6 +421,47 @@ namespace o2
 
 		template<typename T2, typename T3>
 		struct IsSupport<Dictionary<T2, T3>>: std::integral_constant<bool, IsSupport<T2>::value && IsSupport<T3>::value> {};
+	};
+	
+	// ----------------------------------------
+	// Unified type object serializer interface
+	// ----------------------------------------
+	struct Serializer
+	{
+		// ------------------------------
+		// Dummy serializer. Does nothing
+		// ------------------------------
+		template<typename T>
+		struct Dummy
+		{
+		public:
+			static void Serialize(T& x, DataNode& data) {}
+			static void Deserialize(T& x, DataNode& data) {}
+		};
+
+		// --------------------------------------------------------------------------------------
+		// Regular and fundamental serializer, works for types, that convertible to/from DataNode
+		// --------------------------------------------------------------------------------------
+		template<typename T>
+		struct Fundamental
+		{
+			static void Serialize(T& x, DataNode& data);
+			static void Deserialize(T& x, DataNode& data);
+		};
+
+		// Serializes param to data
+		template<typename T, typename X = std::conditional<DataNode::IsSupport<T>::value, Fundamental<T>, Dummy<T>>::type>
+		static void Serialize(T& param, DataNode& data);
+
+		// Serializes actor to data (as object or asset)
+		static void Serialize(Actor* actor, DataNode& data);
+
+		// Deserializes param from data
+		template<typename T, typename X = std::conditional<DataNode::IsSupport<T>::value, Fundamental<T>, Dummy<T>>::type>
+		static void Deserialize(T& param, DataNode& data);
+
+		// Deserializes actor form data (as object or asset)
+		static void Deserialize(Actor*& actor, DataNode& data);
 	};
 
 	template<typename _type>
@@ -487,5 +589,91 @@ namespace o2
 		}
 
 		return res;
+	}
+
+	template<typename _type, typename _conv, typename X>
+	DataNode& DataNode::operator=(_type& value)
+	{
+		_conv::ToData(value, *this);
+		return *this;
+	}
+
+	template<typename _type, typename _conv, typename X>
+	DataNode::operator _type() const
+	{
+		_type value;
+		_conv::FromData(value, *this);
+		return value;
+	}
+
+	template<typename _type>
+	void DataNode::EnumDataConverter<_type>::FromData(_type& object, const DataNode& data)
+	{
+		object = Reflection::GetEnum<_type>(data);
+	}
+
+	template<typename _type>
+	void DataNode::EnumDataConverter<_type>::ToData(_type& object, DataNode& data)
+	{
+		data = Reflection::GetEnumName<_type>(object);
+	}
+
+	class Type;
+
+	template<typename _type>
+	const Type& _TypeOf();
+
+	template<typename _type>
+	void DataNode::CustomDataConverter<_type>::FromData(_type& object, const DataNode& data)
+	{
+		for (auto conv : mDataConverters)
+		{
+			if (conv->CheckType(&_TypeOf<_type>()))
+			{
+				conv->FromData(&object, data);
+				return;
+			}
+		}
+
+		object.Deserialize(data);
+	}
+
+	template<typename _type>
+	void DataNode::CustomDataConverter<_type>::ToData(_type& object, DataNode& data)
+	{
+		for (auto conv : mDataConverters)
+		{
+			if (conv->CheckType(&_TypeOf<_type>()))
+			{
+				conv->ToData(&object, data);
+				return;
+			}
+		}
+
+		data = object.Serialize();
+	}
+
+	template<typename T>
+	void Serializer::Fundamental<T>::Deserialize(T& x, DataNode& data)
+	{
+		x = data;
+	}
+
+	template<typename T>
+	void Serializer::Fundamental<T>::Serialize(T& x, DataNode& data)
+	{
+		data = x;
+	}
+
+	template<typename T, typename X /*= SerializerSelector<T>::type*/>
+	void Serializer::Serialize(T& param, DataNode& data)
+	{
+		X::Serialize(param, data);
+	}
+
+	template<typename T, typename X /*= SerializerSelector<T>::type*/>
+	void Serializer::Deserialize(T& param, DataNode& data)
+	{
+		X::Deserialize(param, data);
 	}
 }

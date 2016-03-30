@@ -20,6 +20,8 @@ namespace o2
 
 namespace Editor
 {
+	class ActorProperty;
+	class ComponentProperty;
 	class IAssetProperty;
 	class UIActorsTree;
 	class UIAssetIcon;
@@ -30,7 +32,7 @@ namespace Editor
 	class UIAssetsIconsScrollArea: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		enum class DragState { Off, Regular, Scene, Tree, AssetPropertyField };
+		enum class DragState { Off, Regular, Scene, Tree, AssetField, ActorField, ComponentField };
 
 	public:
 		// Default constructor
@@ -100,45 +102,47 @@ namespace Editor
 		typedef Vector<Actor*> ActorsVec;
 
 
-		const Vec2F       mAssetIconSize = Vec2F(50, 60);
-		Color4            mSelectedColor = Color4(175, 175, 255, 150);
-		Color4            mUnselectedColor = Color4(100, 100, 100, 100);
-		Color4            mHoverColor = Color4(100, 100, 100, 100);
+		const Vec2F        mAssetIconSize = Vec2F(50, 60);
+		Color4             mSelectedColor = Color4(175, 175, 255, 150);
+		Color4             mUnselectedColor = Color4(100, 100, 100, 100);
+		Color4             mHoverColor = Color4(100, 100, 100, 100);
 
-		String            mCurrentPath;                // Current viewing path
+		String             mCurrentPath;                // Current viewing path
 
-		UIGridLayout*     mGrid;                       // Assets icons grid
-		Sprite*           mSelection;                  // Icons selection sprite
+		UIGridLayout*      mGrid;                       // Assets icons grid
+		Sprite*            mSelection;                  // Icons selection sprite
 
-		UIContextMenu*    mContextMenu;                // Assets Context menu
+		UIContextMenu*     mContextMenu;                // Assets Context menu
 
-		IconSelectionsVec mSelectedAssetsIcons;        // Selected assets icons
-		Sprite*           mIconSelectionSprite;        // Selection sprite drawable
-		Layout            mSelectionSpriteLayout;      // Selection sprite layout 
-		SpritesVec        mSelectionSpritesPool;       // Selection sprites pool
+		IconSelectionsVec  mSelectedAssetsIcons;        // Selected assets icons
+		Sprite*            mIconSelectionSprite;        // Selection sprite drawable
+		Layout             mSelectionSpriteLayout;      // Selection sprite layout 
+		SpritesVec         mSelectionSpritesPool;       // Selection sprites pool
 
-		UIAssetIcon*      mHoverIcon = nullptr;        // Current hovered asset icon
-		Sprite*           mIconHoverSprite;            // icons hovering sprite
-		RectF             mTargetHoverSpriteRect;      // Target hover rectangle
-		RectF             mCurrentHoverSpriteRect;     // Current hover rectangle
+		UIAssetIcon*       mHoverIcon = nullptr;        // Current hovered asset icon
+		Sprite*            mIconHoverSprite;            // icons hovering sprite
+		RectF              mTargetHoverSpriteRect;      // Target hover rectangle
+		RectF              mCurrentHoverSpriteRect;     // Current hover rectangle
 
-		IconArrsDict      mIconsPool;                  // Assets icons pool
+		IconArrsDict       mIconsPool;                  // Assets icons pool
 
-		bool              mSelecting = false;          // Is selecting icons 
-		Vec2F             mPressedPoint;               // Pressed point
-		float             mPressTime;                  // Time elapsed from pressing
-		IconSelectionsVec mCurrentSelectingIcons;      // Selecting icons at current selection
+		bool               mSelecting = false;          // Is selecting icons 
+		Vec2F              mPressedPoint;               // Pressed point
+		float              mPressTime;                  // Time elapsed from pressing
+		IconSelectionsVec  mCurrentSelectingIcons;      // Selecting icons at current selection
 
-		DragState         mDragState = DragState::Off; // Is dragging icons
-		UIAssetIcon*      mDragIcon;                   // Dragging icon
-		Vec2F             mDragOffset;                 // Dragging offset from cursor to icon center
-		ActorsVec         mInstSceneDragActors;        // Instantiated actors when dragging asset above scene
+		DragState          mDragState = DragState::Off; // Is dragging icons
+		UIAssetIcon*       mDragIcon;                   // Dragging icon
+		Vec2F              mDragOffset;                 // Dragging offset from cursor to icon center
+		ActorsVec          mInstSceneDragActors;        // Instantiated actors when dragging asset above scene
 
-		IAssetProperty*   mDragAssetPropertyField;     // Asset property field under cursor, when dragging asset
+		IAssetProperty*    mDragAssetPropertyField;     // Asset property field under cursor, when dragging asset
+		ActorProperty*     mDragActorPropertyField;     // Actor property field under cursor, when dragging asset
+		ComponentProperty* mDragComponentPropertyField; // Component property field under cursor, when dragging asset
 
-		AssetIdPathVec    mCuttingAssets;              // Current cutted assets
-
-		bool              mNeedRebuildAssets = false;  // Is assets needs to rebuild
+		AssetIdPathVec     mCuttingAssets;              // Current cutted assets
+						   
+		bool               mNeedRebuildAssets = false;  // Is assets needs to rebuild
 
 	protected:
 		// Updates layout

@@ -189,6 +189,7 @@
     <ClInclude Include="..\Sources\Scene\Components\ImageComponent.h" />
     <ClInclude Include="..\Sources\Scene\DrawableComponent.h" />
     <ClInclude Include="..\Sources\Scene\Scene.h" />
+    <ClInclude Include="..\Sources\Scene\Tags.h" />
     <ClInclude Include="..\Sources\UI\Button.h" />
     <ClInclude Include="..\Sources\UI\ContextMenu.h" />
     <ClInclude Include="..\Sources\UI\CustomDropDown.h" />
@@ -225,7 +226,7 @@
     <ClInclude Include="..\Sources\Utils\Containers\IArray.h" />
     <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h" />
     <ClInclude Include="..\Sources\Utils\Containers\Pair.h" />
-    <ClInclude Include="..\Sources\Utils\Data\DataDoc.h" />
+    <ClInclude Include="..\Sources\Utils\Data\DataNode.h" />
     <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
     <ClInclude Include="..\Sources\Utils\DragHandle.h" />
@@ -334,6 +335,7 @@
     <ClCompile Include="..\Sources\Scene\Components\ImageComponent.cpp" />
     <ClCompile Include="..\Sources\Scene\DrawableComponent.cpp" />
     <ClCompile Include="..\Sources\Scene\Scene.cpp" />
+    <ClCompile Include="..\Sources\Scene\Tags.cpp" />
     <ClCompile Include="..\Sources\UI\Button.cpp" />
     <ClCompile Include="..\Sources\UI\ContextMenu.cpp" />
     <ClCompile Include="..\Sources\UI\CustomDropDown.cpp" />
@@ -363,7 +365,7 @@
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />
     <ClCompile Include="..\Sources\Utils\Bitmap.cpp" />
     <ClCompile Include="..\Sources\Utils\Clipboard.cpp" />
-    <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp" />
+    <ClCompile Include="..\Sources\Utils\Data\DataNode.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp" />
     <ClCompile Include="..\Sources\Utils\Debug.cpp" />
     <ClCompile Include="..\Sources\Utils\DragHandle.cpp" />

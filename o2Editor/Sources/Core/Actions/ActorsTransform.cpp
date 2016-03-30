@@ -12,7 +12,7 @@ namespace Editor
 															 const Vector<ActorTransform>& beforeTransforms):
 		beforeTransforms(beforeTransforms)
 	{
-		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetId(); });
+		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetID(); });
 		doneTransforms = actors.Select<ActorTransform>([](Actor* x) { return x->transform; });
 	}
 

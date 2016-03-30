@@ -6,6 +6,7 @@
 #include "Assets/Asset.h"
 #include "Assets/Assets.h"
 #include "Events/DrawableCursorEventsListener.h"
+#include "Events/KeyboardEventsListener.h"
 #include "PropertiesWindow/Properties/IPropertyField.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
@@ -22,7 +23,7 @@ namespace Editor
 	// ------------------------------
 	// Asset property field interface
 	// ------------------------------
-	class IAssetProperty: public IPropertyField, public DrawableCursorEventsListener
+	class IAssetProperty: public IPropertyField, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
 		// Sets value asset id
@@ -96,6 +97,9 @@ namespace Editor
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
+
+		// Calls when key was pressed
+		void OnKeyPressed(const Input::Key& key);
 	};
 
 	template<typename _type>
@@ -114,6 +118,7 @@ namespace Editor
 	template<typename _type>
 	AssetProperty<_type>::~AssetProperty()
 	{
+		SetEventHandleDrawable(nullptr);
 		delete mBox;
 	}
 
@@ -233,7 +238,7 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::SetAssetId(AssetId id)
 	{
-		mCommonValue = _type(id);
+		mCommonValue = id == 0 ? _type() : _type(id);
 		mValuesDifferent = false;
 
 		for (auto ptr : mValuesPointers)
@@ -259,5 +264,12 @@ namespace Editor
 	void AssetProperty<_type>::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		mBox->SetState("select", true);
+	}
+
+	template<typename _type>
+	void AssetProperty<_type>::OnKeyPressed(const Input::Key& key)
+	{
+		if (mBox->IsSelected() && key == VK_DELETE || key == VK_BACK)
+			SetAssetId(0);
 	}
 }

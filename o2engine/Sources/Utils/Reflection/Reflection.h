@@ -4,6 +4,9 @@
 #include "Utils/Containers/Vector.h"
 #include "Utils/Reflection/Type.h"
 
+// Reflection access macros
+#define o2Reflection (*Reflection::instance)
+
 namespace o2
 {
 	// ------------------------------

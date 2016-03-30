@@ -1160,19 +1160,24 @@ namespace o2
 	Vector<TString<T>> TString<T>::Split(const TString& splitStr) const
 	{
 		Vector<TString> res;
-		int lastFnd = 0;
+
+		if (IsEmpty())
+			return res;
+
 		int i = 0;
 		int l1 = Length(), l2 = splitStr.Length();
 		while (i < l1)
 		{
 			int f = Find(splitStr, i);
 			if (f < 0)
+			{
+				res.Add(SubStr(i));
 				break;
+			}
 
 			res.Add(SubStr(i, f));
 			i = f + l2;
 		}
-		res.Add(SubStr(i));
 
 		return res;
 	}

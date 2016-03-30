@@ -2,6 +2,7 @@
 
 #include "Scene/Scene.h"
 #include "Utils/Math/Basis.h"
+#include "Utils/Reflection/Reflection.h"
 
 namespace o2
 {
@@ -9,6 +10,9 @@ namespace o2
 		mName("unnamed"), mEnabled(true), mResEnabled(true), mLocked(false), mResLocked(false), Animatable(),
 		mParent(nullptr), mLayer(nullptr), mId(Math::Random()), mAssetId(0), mIsAsset(false), mIsOnScene(false)
 	{
+		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
+		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
+
 		transform.SetOwner(this);
 		InitializeProperties();
 
@@ -152,7 +156,7 @@ namespace o2
 		return mName;
 	}
 
-	UInt64 Actor::GetId() const
+	UInt64 Actor::GetID() const
 	{
 		return mId;
 	}
@@ -169,6 +173,9 @@ namespace o2
 
 	bool Actor::IsAsset() const
 	{
+		if (mParent)
+			return mIsAsset || mParent->IsAsset();
+
 		return mIsAsset;
 	}
 
@@ -501,7 +508,16 @@ namespace o2
 	Component* Actor::GetComponent(const Type* type)
 	{
 		for (auto comp : mCompontents)
-			if (&comp->GetType()== type)
+			if (comp->GetType().IsBasedOn(*type))
+				return comp;
+
+		return nullptr;
+	}
+
+	Component* Actor::GetComponent(UInt64 id)
+	{
+		for (auto comp : mCompontents)
+			if (comp->GetID() == id)
 				return comp;
 
 		return nullptr;
@@ -548,36 +564,6 @@ namespace o2
 	String Actor::GetLayerName() const
 	{
 		return mLayer->name;
-	}
-
-	void Actor::AddTag(const String& tag)
-	{
-		if (!mTags.Contains(tag))
-			mTags.Add(tag);
-
-		ACTOR_CHANGED(this);
-	}
-
-	void Actor::RemoveTag(const String& tag)
-	{
-		mTags.Remove(tag);
-		ACTOR_CHANGED(this);
-	}
-
-	bool Actor::IsHaveTag(const String& tag) const
-	{
-		return mTags.Contains(tag);
-	}
-
-	void Actor::ClearTags()
-	{
-		mTags.Clear();
-		ACTOR_CHANGED(this);
-	}
-
-	const Actor::StringsVec& Actor::GetTags() const
-	{
-		return mTags;
 	}
 
 	void Actor::OnTransformChanged()
@@ -640,18 +626,45 @@ namespace o2
 
 	void Actor::OnSerialize(DataNode& node)
 	{
-		*node["mLayerName"] = mLayer->name;
+		if (mLayer)
+			*node["mLayerName"] = mLayer->name;
+
+		auto childsNode = node.AddNode("Childs");
+		for (auto child : mChilds)
+			*childsNode->AddNode("Child") = child->Serialize();
+
+		auto componentsNode = node.AddNode("Components");
+		for (auto comp : mCompontents)
+		{
+			auto compNode = componentsNode->AddNode("Component");
+			*compNode->AddNode("Data") = comp->Serialize();
+			*compNode->AddNode("Type") = comp->GetType().Name();
+		}
 	}
 
 	void Actor::OnDeserialized(const DataNode& node)
 	{
-		for (auto comp : mCompontents)
-			comp->mOwner = this;
-
-		for (auto child : mChilds)
+		if (auto childsNode = node.GetNode("Components"))
 		{
-			o2Scene.mRootActors.Remove(child);
-			child->mParent = this;
+			for (auto childNode : childsNode->GetChildNodes())
+			{
+				Component* comp = (Component*)o2Reflection.CreateTypeSample(*childNode->GetNode("Type"));
+				comp->Deserialize(*childNode->GetNode("Data"));
+				comp->mOwner = this;
+				mCompontents.Add(comp);
+			}
+		}
+
+		if (auto childsNode = node.GetNode("Childs"))
+		{
+			for (auto childNode : childsNode->GetChildNodes())
+			{
+				Actor* child = mnew Actor();
+				child->Deserialize(*childNode);
+				o2Scene.mRootActors.Remove(child);
+				child->mParent = this;
+				mChilds.Add(child);
+			}
 		}
 
 		String layerName = (String)(*node.GetNode("mLayerName"));
@@ -696,7 +709,7 @@ namespace o2
 
 	void Actor::InitializeProperties()
 	{
-		INITIALIZE_GETTER(Actor, id, GetId);
+		INITIALIZE_GETTER(Actor, id, GetID);
 		INITIALIZE_PROPERTY(Actor, name, SetName, GetName);
 		INITIALIZE_PROPERTY(Actor, enabled, SetEnabled, IsEnabled);
 		INITIALIZE_GETTER(Actor, enabledInHierarchy, IsEnabledInHierarchy);
@@ -709,7 +722,6 @@ namespace o2
 		INITIALIZE_ACCESSOR(Actor, component, GetComponent);
 		INITIALIZE_PROPERTY(Actor, layer, SetLayer, GetLayer);
 		INITIALIZE_PROPERTY(Actor, layerName, SetLayerName, GetLayerName);
-		INITIALIZE_ACCESSOR(Actor, tag, IsHaveTag);
 
 		child.SetAllAccessFunc(this, &Actor::GetAllChilds);
 		component.SetAllAccessFunc(this, &Actor::GetAllComponents);

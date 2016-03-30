@@ -10,10 +10,10 @@ namespace Editor
 
 	CreateActorsAction::CreateActorsAction(const Vector<Actor*>& actors, Actor* parent, Actor* prevActor)
 	{
-		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetId(); });
+		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetID(); });
 		this->actors = actors;
-		insertParentId = parent ? parent->GetId() : 0;
-		insertPrevActorId = prevActor ? prevActor->GetId() : 0;
+		insertParentId = parent ? parent->GetID() : 0;
+		insertPrevActorId = prevActor ? prevActor->GetID() : 0;
 	}
 
 	String CreateActorsAction::GetName() const

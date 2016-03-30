@@ -13,8 +13,11 @@ namespace o2
 	class Camera: public Transform
 	{
 	public:
+		// Default constructor
+		Camera();
+
 		// Constructor
-		Camera(const Vec2F& position = Vec2F(), const Vec2F& size = Vec2F(), float angle = 0.0f);
+		Camera(const Vec2F& position, const Vec2F& size = Vec2F(), float angle = 0.0f);
 
 		// Returns default camera
 		static Camera Default();

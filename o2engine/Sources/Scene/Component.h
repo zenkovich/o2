@@ -29,6 +29,9 @@ namespace o2
 		// Copy-operator
 		Component& operator=(const Component& other);
 
+		// Returns component id
+		UInt64 GetID() const;
+
 		// Updates component
 		virtual void Update(float dt);
 
@@ -69,6 +72,7 @@ namespace o2
 		SERIALIZABLE(Component);
 
 	protected:
+		UInt64 mId;         // Component id @SERIALIZABLE
 		Actor* mOwner;      // Owner actor
 		bool   mEnabled;    // Is component enabled @SERIALIZABLE
 		bool   mResEnabled; // Is component enabled in hierarchy

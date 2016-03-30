@@ -3,6 +3,7 @@
 #include "Assets/ActorAsset.h"
 #include "Scene/Actor.h"
 #include "Scene/DrawableComponent.h"
+#include "Scene/Tags.h"
 
 namespace o2
 {
@@ -83,9 +84,48 @@ namespace o2
 		RemoveLayer(GetLayer(name), removeActors);
 	}
 
+	Tag* Scene::GetTag(const String& name) const
+	{
+		return mTags.FindMatch([&](auto x) { return x->GetName() == name; });
+	}
+
+	Tag* Scene::AddTag(const String& name)
+	{
+		if (GetTag(name))
+		{
+			o2Debug.LogError("Can't create new tag with name %s: already exist", name);
+			return nullptr;
+		}
+
+		Tag* newTag = mnew Tag();
+		newTag->SetName(name);
+		mTags.Add(newTag);
+
+		return newTag;
+	}
+
+	void Scene::RemoveTag(Tag* tag)
+	{
+		if (!tag)
+			return;
+
+		mTags.Remove(tag);
+		delete tag;
+	}
+
+	void Scene::RemoveTag(const String& name)
+	{
+		RemoveTag(GetTag(name));
+	}
+
 	Scene::LayersVec& Scene::GetLayers()
 	{
 		return mLayers;
+	}
+
+	const TagsVec& Scene::GetTags() const
+	{
+		return mTags;
 	}
 
 	const Scene::ActorsVec& Scene::GetRootActors() const

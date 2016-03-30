@@ -5,6 +5,7 @@
 
 #include "Scene/Actor.h"
 #include "Utils/Serializer.h"
+#include "Render/Camera.h"
 
 using namespace o2;
 using namespace Editor;
@@ -21,18 +22,15 @@ int main()
 	MAIN_O2;
 
 	DataNode data;
-	TimeStamp t;
-	Vec2F f;
-	char y = 'd';
-	Actor* ss = nullptr;
-	Vector<Actor*> arr;
-	Vector<Basis> ass;
-	Dictionary<int, Actor*> dc;
-	bool xxx = DataNode::IsSupport<Actor*>::value;
-	data = ss;
-	int h = 5;
-	Serializer::Serialize<char>(y, data);
-	Serializer::Deserialize(y, data);
+	Vector<Actor*> xx = { mnew Actor(), mnew Actor(), mnew Actor() };
+	TimeStamp* ts = mnew TimeStamp();
+	data = ts;
+
+	ts = data;
+
+	Camera b;
+	data = b;
+	b = data;
 
 	EditorApplication* app = mnew EditorApplication();
 	app->Launch();

@@ -10,8 +10,8 @@
 namespace o2
 {
 	UICustomList::UICustomList():
-		UIScrollArea(), DrawableCursorEventsListener(this), mSelectedItem(-1), mHoverLayout(Layout::BothStretch()), 
-		mSelectionLayout(Layout::BothStretch())
+		UIScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()), 
+		mSelectionLayout(Layout::BothStretch()), mMultiSelection(true)
 	{
 		mItemSample = mnew UIWidget();
 		mSelectionDrawable = mnew Sprite();
@@ -34,8 +34,8 @@ namespace o2
 	}
 
 	UICustomList::UICustomList(const UICustomList& other):
-		UIScrollArea(other), DrawableCursorEventsListener(this), mSelectedItem(-1), mHoverLayout(other.mHoverLayout), 
-		mSelectionLayout(other.mSelectionLayout)
+		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout), 
+		mSelectionLayout(other.mSelectionLayout), mMultiSelection(true)
 	{
 		mVerLayout = FindChild<UIVerticalLayout>();
 		mItemSample = other.mItemSample->Clone();
@@ -95,12 +95,6 @@ namespace o2
 			mCurrentHoverRect = Math::Lerp(mCurrentHoverRect, mTargetHoverRect, dt*rectLerpCoef);
 			mHoverDrawable->SetRect(mCurrentHoverRect);
 		}
-
-		if (mCurrentSelectionRect != mTargetSelectionRect)
-		{
-			mCurrentSelectionRect = Math::Lerp(mCurrentSelectionRect, mTargetSelectionRect, dt*rectLerpCoef);
-			mSelectionDrawable->SetRect(mCurrentSelectionRect);
-		}
 	}
 
 	void UICustomList::Draw()
@@ -118,7 +112,9 @@ namespace o2
 		for (auto child : mChilds)
 			child->Draw();
 
-		mSelectionDrawable->Draw();
+		for (auto& sel : mSelectedItems)
+			sel.selection->Draw();
+
 		mHoverDrawable->Draw();
 
 		o2Render.DisableScissorTest();
@@ -246,51 +242,107 @@ namespace o2
 
 	void UICustomList::SelectItem(UIWidget* item)
 	{
-		int lastSelected = mSelectedItem;
+		int itemPos = GetItemPosition(item);
 
-		mSelectedItem = GetItemPosition(item);
+		if (mSelectedItems.ContainsPred([=](auto x) { return x.idx == itemPos; }))
+			return;
 
-		if (lastSelected != mSelectedItem)
-		{
-			lastSelected = mSelectedItem;
-			onSelectedPos(mSelectedItem);
-			onSelectedItem(GetItem(mSelectedItem));
-			OnSelectionChanged();
-		}
+		if (!mMultiSelection)
+			ClearSelection();
+
+		Selection selection;
+		selection.idx = itemPos;
+		selection.selection = GetSelectionSprite();
+		mSelectedItems.Add(selection);
+
+		onSelectedPos(itemPos);
+		onSelectedItem(item);
+		OnSelectionChanged();
+		UpdateLayout();
 	}
 
 	void UICustomList::SelectItemAt(int position)
 	{
-		int lastSelected = mSelectedItem;
+		if (!mMultiSelection)
+			ClearSelection();
 
-		if (position < 0 || position >= mVerLayout->GetChilds().Count())
+		if (position >= mVerLayout->GetChilds().Count())
 		{
 			o2Debug.LogWarning("Can't select item at %i: out of range (%i)", position, GetItemsCount());
-			position = -1;
+			return;
 		}
 
-		mSelectedItem = position;
+		if (mSelectedItems.ContainsPred([=](auto x) { return x.idx == position; }))
+			return;
 
-		if (lastSelected != mSelectedItem)
+		if (position >= 0)
 		{
-			lastSelected = mSelectedItem;
-			onSelectedPos(mSelectedItem);
-			onSelectedItem(GetItem(mSelectedItem));
-			OnSelectionChanged();
+			Selection selection;
+			selection.idx = position;
+			selection.selection = GetSelectionSprite();
+			mSelectedItems.Add(selection);
+
+			onSelectedPos(position);
+			onSelectedItem(GetItem(position));
 		}
+
+		OnSelectionChanged();
+		UpdateLayout();
+	}
+
+	void UICustomList::SetSelectedItems(const Vector<int>& items)
+	{
+		for (auto x : items)
+			SelectItemAt(x);
+	}
+
+	void UICustomList::ClearSelection()
+	{
+		for (auto& sel : mSelectedItems)
+			mSelectionSpritesPool.Add(sel.selection);
+
+		mSelectedItems.Clear();
+	}
+
+	Vector<int> UICustomList::GetSelectedItems() const
+	{
+		return mSelectedItems.Select<int>([](auto x) { return x.idx; });
+	}
+
+	int UICustomList::GetSelectedItemPos() const
+	{
+		if (mSelectedItems.IsEmpty())
+			return -1;
+
+		return mSelectedItems.Last().idx;
 	}
 
 	UIWidget* UICustomList::GetSelectedItem() const
 	{
-		if (mSelectedItem < 0)
+		if (mSelectedItems.IsEmpty())
 			return nullptr;
 
-		return GetItem(mSelectedItem);
+		return GetItem(mSelectedItems.Last().idx);
 	}
 
-	int UICustomList::GetSelectedItemPosition() const
+	void UICustomList::SetMultiselectionAvailable(bool available)
 	{
-		return mSelectedItem;
+		mMultiSelection = available;
+
+		if (!mMultiSelection)
+		{
+			int count = mSelectedItems.Count();
+			for (int i = 0; i < count - 1; i++)
+			{
+				mSelectionSpritesPool.Add(mSelectedItems.Last().selection);
+				mSelectedItems.PopBack();
+			}
+		}
+	}
+
+	bool UICustomList::IsMultiselectionAvailable() const
+	{
+		return mMultiSelection;
 	}
 
 	Sprite* UICustomList::GetSelectionDrawable() const
@@ -338,13 +390,14 @@ namespace o2
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);
 
-		UpdateSelection(mSelectedItem, GetItem(mSelectedItem));
-
 		mCurrentHoverRect = mTargetHoverRect;
-		mCurrentSelectionRect = mTargetSelectionRect;
-
-		mSelectionDrawable->SetRect(mCurrentSelectionRect);
 		mHoverDrawable->SetRect(mCurrentHoverRect);
+
+		for (auto& sel : mSelectedItems)
+		{
+			UIWidget* item = GetItem(sel.idx);
+			sel.selection->SetRect(mSelectionLayout.Calculate(item->layout.GetAbsoluteRect()));
+		}
 	}
 
 	void UICustomList::OnCursorPressed(const Input::Cursor& cursor)
@@ -361,11 +414,6 @@ namespace o2
 			return;
 
 		mLastSelectCheckCursor = cursor.mPosition;
-
-		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
-
-		UpdateSelection(itemIdx, itemUnderCursor);
 	}
 
 	void UICustomList::OnCursorReleased(const Input::Cursor& cursor)
@@ -376,9 +424,8 @@ namespace o2
 
 		int itemIdx = -1;
 		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		SelectItemAt(itemIdx);
 		
-		onSelectedItem(itemUnderCursor);
-		onSelectedPos(itemIdx);
 		OnSelectionChanged();
 	}
 
@@ -470,8 +517,7 @@ namespace o2
 				mHoverDrawable->SetEnabled(true);
 				*hoverState = false;
 			}
-			else
-				mHoverDrawable->SetEnabled(false);
+			else mHoverDrawable->SetEnabled(false);
 		}
 		else
 		{
@@ -481,49 +527,22 @@ namespace o2
 			if (hoverState)
 			{
 				mHoverDrawable->SetEnabled(true);
-				*hoverState = itemIdx != mSelectedItem;
+				*hoverState = true;
 			}
-			else
-				mHoverDrawable->SetEnabled(itemIdx != mSelectedItem);
+			else mHoverDrawable->SetEnabled(true);
 		}
 	}
 
-	void UICustomList::UpdateSelection(int position, UIWidget* item)
+	Sprite* UICustomList::GetSelectionSprite()
 	{
-		mSelectedItem = position;
-
-		if (position < 0)
+		if (mSelectionSpritesPool.IsEmpty())
 		{
-			auto selectedState = state["selected"];
-			if (selectedState)
-			{
-				mSelectionDrawable->SetEnabled(true);
-				*selectedState = false;
-			}
-			else
-			{
-				if (mSelectionDrawable)
-					mSelectionDrawable->SetEnabled(false);
-			}
+			const int poolStep = 5;
+			for (int i = 0; i < poolStep; i++)
+				mSelectionSpritesPool.Add(mSelectionDrawable->Clone());
 		}
-		else
-		{
-			mTargetSelectionRect = mHoverLayout.Calculate(item->layout.mAbsoluteRect);
 
-			auto selectedState = state["selected"];
-			if (selectedState)
-			{
-				mSelectionDrawable->SetEnabled(true);
-				*selectedState = true;
-			}
-			else
-			{
-				if (mSelectionDrawable)
-					mSelectionDrawable->SetEnabled(false);
-			}
-
-			UpdateHover(o2Input.cursorPos);
-		}
+		return mSelectionSpritesPool.PopBack();
 	}
 
 	void UICustomList::OnScrolled(float scroll)
@@ -544,10 +563,16 @@ namespace o2
 
 	void UICustomList::InitializeProperties()
 	{
+		INITIALIZE_PROPERTY(UICustomList, selectedItems, SetSelectedItems, GetSelectedItems);
 		INITIALIZE_PROPERTY(UICustomList, selectedItem, SelectItem, GetSelectedItem);
-		INITIALIZE_PROPERTY(UICustomList, selectedItemPos, SelectItemAt, GetSelectedItemPosition);
+		INITIALIZE_PROPERTY(UICustomList, selectedItemPos, SelectItemAt, GetSelectedItemPos);
 		INITIALIZE_ACCESSOR(UICustomList, item, GetItem);
 		INITIALIZE_GETTER(UICustomList, itemsCount, GetItemsCount);
+	}
+
+	bool UICustomList::Selection::operator==(const Selection& other) const
+	{
+		return idx == other.idx;
 	}
 
 }

@@ -4,6 +4,7 @@
 #include "Scene/ActorTransform.h"
 #include "Scene/Component.h"
 #include "Scene/Scene.h"
+#include "Scene/Tags.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/String.h"
 
@@ -20,6 +21,7 @@ namespace o2
 		typedef Vector<String> StringsVec;
 
 	public:
+		TagGroup                            tags;                    // Tags group
 		Getter<UInt64>                      id;                      // Actor's unique id
 		Property<String>                    name;                    // Actor name property
 		Property<bool>                      enabled;                 // Is actor enabled property
@@ -33,7 +35,6 @@ namespace o2
 		Accessor<Actor*, const String&>     child;                   // Children accessor
 		Getter<ComponentsVec>               components;              // Components array getter
 		Accessor<Component*, const String&> component;               // Component accessor by type name
-		Accessor<bool, const String&>       tag;                     // Tag existing accessor
 		ActorTransform                      transform;               // Transformation @SERIALIZABLE
 		Function<void(bool)>                onEnableChanged;         // Enable changing event
 
@@ -73,7 +74,7 @@ namespace o2
 		String GetName() const;
 
 		// Returns actor's unique id
-		UInt64 GetId() const;
+		UInt64 GetID() const;
 
 		// Sets id. Be carefully! Ids must be unique! Don't recommending to change this
 		void SetId(UInt64 id);
@@ -172,6 +173,9 @@ namespace o2
 		// Returns component with type
 		Component* GetComponent(const Type* type);
 
+		// Returns component by id
+		Component* GetComponent(UInt64 id);
+
 		// Returns component with type
 		template<typename _type>
 		_type* GetComponent() const;
@@ -203,21 +207,6 @@ namespace o2
 		// Returns layer name
 		String GetLayerName() const;
 
-		// Adds tag
-		void AddTag(const String& tag);
-
-		// Removes tag
-		void RemoveTag(const String& tag);
-
-		// Returns is actor have tag
-		bool IsHaveTag(const String& tag) const;
-
-		// Removes all tags
-		void ClearTags();
-
-		// Returns tags array
-		const StringsVec& GetTags() const;
-
 		SERIALIZABLE(Actor);
 
 	protected:
@@ -225,10 +214,9 @@ namespace o2
 		String         mName;        // Name of actor @SERIALIZABLE
 
 		Actor*         mParent;      // Parent actor
-		ActorsVec      mChilds;      // Children actors @SERIALIZABLE
-		ComponentsVec  mCompontents; // Components vector @SERIALIZABLE
+		ActorsVec      mChilds;      // Children actors 
+		ComponentsVec  mCompontents; // Components vector 
 		Scene::Layer*  mLayer;       // Scene layer
-		StringsVec     mTags;        // Tags
 
 		bool           mEnabled;     // Is actor enabled @SERIALIZABLE
 		bool           mResEnabled;  // Is actor enabled in hierarchy
@@ -280,6 +268,7 @@ namespace o2
 		friend class Component;
 		friend class DrawableComponent;
 		friend class Scene;
+		friend class Tag;
 	};
 
 	template<typename _type>
@@ -316,7 +305,7 @@ namespace o2
 	{
 		for (auto comp : mCompontents)
 		{
-			if (comp->GetType() == *_type::type)
+			if (comp->GetType().IsBasedOn(TypeOf(_type)))
 				return comp;
 		}
 
@@ -329,7 +318,7 @@ namespace o2
 		Vector<_type>* res;
 		for (auto comp : mCompontents)
 		{
-			if (comp->GetType() == *_type::type)
+			if (comp->GetType().IsBasedOn(TypeOf(_type)))
 				res.Add(comp);
 		}
 

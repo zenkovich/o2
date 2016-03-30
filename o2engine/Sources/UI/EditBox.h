@@ -168,6 +168,7 @@ namespace o2
 
 		float   mDrawDepth;        // Drawing depth at current frame
 
+		bool    mJustSelected;     // Is edit box selected at current frame
 		float   mLastClickTime;    // Time of last clicking
 		Vec2F   mLastCursorPos;    // Last pressed cursor position
 
@@ -177,6 +178,9 @@ namespace o2
 
 		// Calls when visible was changed
 		void OnVisibleChanged();
+
+		// Calls when widget was selected
+		void OnSelected();
 
 		// Calls when widget was deselected
 		void OnDeselected();

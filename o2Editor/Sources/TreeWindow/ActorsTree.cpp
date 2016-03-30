@@ -10,6 +10,8 @@
 #include "Core/Actions/ReparentActors.h"
 #include "Core/EditorApplication.h"
 #include "Events/EventSystem.h"
+#include "PropertiesWindow/Properties/ActorProperty.h"
+#include "PropertiesWindow/Properties/ComponentProperty.h"
 #include "Scene/Actor.h"
 #include "Scene/Scene.h"
 #include "UI/Button.h"
@@ -19,13 +21,13 @@
 namespace Editor
 {
 	UIActorsTree::UIActorsTree():
-		UITree(), mAttackedToSceneEvents(false)
+		UITree(), mAttackedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		Initialize();
 	}
 
 	UIActorsTree::UIActorsTree(const UIActorsTree& other):
-		UITree(other), mAttackedToSceneEvents(false)
+		UITree(other), mAttackedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		Initialize();
 	}
@@ -283,7 +285,10 @@ namespace Editor
 		onDraggedObjects = Function<void(Vector<UnknownType*>, UnknownType*, UnknownType*)>(this, &UIActorsTree::RearrangeActors);
 		onItemDblClick = Function<void(UITreeNode*, Actor*)>(this, &UIActorsTree::OnTreeNodeDblClick);
 
-		UITree::onItemRBClick = [&](UITreeNode* x) { onItemRBClick(x, (Actor*)(void*)x->GetObject()); };
+		UITree::onItemRBClick = [&](UITreeNode* x) { 
+			Actor* actor = x ? (Actor*)(void*)x->GetObject() : nullptr;
+			onItemRBClick(x, actor);
+		};
 
 		UITree::onItemsSelectionChanged = [&](Vector<UnknownType*> x) {
 			onItemsSelectionChanged(x.Select<Actor*>([](auto x) { return (Actor*)(void*)x; })); };
@@ -405,6 +410,48 @@ namespace Editor
 	void UIActorsTree::UpdateDragging(const Input::Cursor& cursor)
 	{
 		UITree::UpdateDragging(cursor);
+
+		auto listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
+		ActorProperty* actorProperty = dynamic_cast<ActorProperty*>(listenerUnderCursor);
+		ComponentProperty* componentProperty = dynamic_cast<ComponentProperty*>(listenerUnderCursor);
+
+		if (actorProperty && !mDragActorPropertyField)
+		{
+			if (mSelectedItems.Count() == 1)
+			{
+				mDragActorPropertyField = actorProperty;
+				mDragActorPropertyField->GetWidget()->SetState("selected", true);
+				o2Application.SetCursor(CursorType::Hand);
+			}
+		}
+
+		if (componentProperty && !mDragComponentPropertyField)
+		{
+			if (mSelectedItems.Count() == 1)
+			{
+				Actor* actor = (Actor*)(void*)mSelectedItems[0].object;
+				if (actor->GetComponent(componentProperty->GetSpecializedType()))
+				{
+					mDragComponentPropertyField = componentProperty;
+					mDragComponentPropertyField->GetWidget()->SetState("selected", true);
+					o2Application.SetCursor(CursorType::Hand);
+				}
+			}
+		}
+
+		if (!actorProperty && mDragActorPropertyField)
+		{
+			mDragActorPropertyField->GetWidget()->SetState("selected", false);
+			mDragActorPropertyField = nullptr;
+			o2Application.SetCursor(CursorType::Arrow);
+		}
+
+		if (!componentProperty && mDragComponentPropertyField)
+		{
+			mDragComponentPropertyField->GetWidget()->SetState("selected", false);
+			mDragComponentPropertyField = nullptr;
+			o2Application.SetCursor(CursorType::Arrow);
+		}
 	}
 
 	void UIActorsTree::EndDragging()
@@ -428,6 +475,83 @@ namespace Editor
 			}
 
 			BreakDragging();
+		}
+		else if (mDragActorPropertyField)
+		{
+			mDragActorPropertyField->SetValue((Actor*)(void*)(mSelectedItems[0].object));
+			mDragActorPropertyField->GetWidget()->SetState("selected", false);
+			o2Application.SetCursor(CursorType::Arrow);
+
+			mDragActorPropertyField = nullptr;
+
+			mDraggingNodes = false;
+			mDragNode->Hide(true);
+
+			for (auto node : mAllNodes)
+				node->SetState("inserting", false);
+
+			for (auto sel : mSelectedItems)
+			{
+				if (sel.node)
+					sel.node->SetState("dragging", false);
+			}
+
+			for (auto sel : mSelectedItems)
+				FreeSelectionSprite(sel.selectionSprite);
+
+			mSelectedItems.Clear();
+
+			for (auto obj : mBeforeDragSelected)
+			{
+				SelectedNode selectionNode;
+				selectionNode.object = obj.object;
+				selectionNode.selectionSprite = CreateSelectionSprite();
+				selectionNode.node = UITree::GetNode(obj.object);
+
+				mSelectedItems.Add(selectionNode);
+			}
+
+			UpdateLayout();
+		}
+		else if (mDragComponentPropertyField)
+		{
+			Actor* actor = (Actor*)(void*)mSelectedItems[0].object;
+			auto component = actor->GetComponent(mDragComponentPropertyField->GetSpecializedType());
+
+			mDragComponentPropertyField->SetValue(component);
+			mDragComponentPropertyField->GetWidget()->SetState("selected", false);
+			o2Application.SetCursor(CursorType::Arrow);
+
+			mDragComponentPropertyField = nullptr;
+
+			mDraggingNodes = false;
+			mDragNode->Hide(true);
+
+			for (auto node : mAllNodes)
+				node->SetState("inserting", false);
+
+			for (auto sel : mSelectedItems)
+			{
+				if (sel.node)
+					sel.node->SetState("dragging", false);
+			}
+
+			for (auto sel : mSelectedItems)
+				FreeSelectionSprite(sel.selectionSprite);
+
+			mSelectedItems.Clear();
+
+			for (auto obj : mBeforeDragSelected)
+			{
+				SelectedNode selectionNode;
+				selectionNode.object = obj.object;
+				selectionNode.selectionSprite = CreateSelectionSprite();
+				selectionNode.node = UITree::GetNode(obj.object);
+
+				mSelectedItems.Add(selectionNode);
+			}
+
+			UpdateLayout();
 		}
 		else UITree::EndDragging();
 	}

@@ -129,9 +129,6 @@
     <ClInclude Include="..\Sources\Utils\SmartPointers.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Data\DataDoc.h">
-      <Filter>Sources\Utils\Data</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h">
       <Filter>Sources\Utils\Data</Filter>
     </ClInclude>
@@ -520,6 +517,12 @@
     <ClInclude Include="..\Sources\Utils\Serializable.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Scene\Tags.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Data\DataNode.h">
+      <Filter>Sources\Utils\Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -542,9 +545,6 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp">
       <Filter>Sources\Utils\FileSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Data\DataDoc.cpp">
-      <Filter>Sources\Utils\Data</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp">
       <Filter>Sources\Utils\Data</Filter>
@@ -869,6 +869,12 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Serializable.cpp">
       <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Scene\Tags.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Data\DataNode.cpp">
+      <Filter>Sources\Utils\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

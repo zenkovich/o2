@@ -289,6 +289,7 @@ namespace o2
 
 		RearrangeType     mRearrangeType;         // Current available rearrange type
 		bool              mMultiSelectAvailable;  // Is multi selection available
+
 		bool              mDraggingNodes;         // Is nodes moving by cursor
 		UITreeNode*       mDragNode;              // Dragging node
 		Sprite*           mDragNodeBack;          // Background for dragging node
@@ -296,6 +297,8 @@ namespace o2
 		UITreeNode*       mPressedNode;           // Node pressed by cursor
 		UITreeNode*       mInsertNodeCandidate;   // Insertion node candidate when dragging nodes
 		UITreeNode*       mUnderCursorItem;       // Item under cursor
+		SelectedNodesVec  mBeforeDragSelected;    // Before drag begin selection
+
 		UITreeNode*       mExpandNodeCandidate;   // Expand node candidate when dragging
 		float             mExpandInsertTime;      // Remaining time to expanding item under cursor when dragging nodes
 		float             mPressedTime;           // Time from last item pressing

@@ -165,6 +165,9 @@ namespace o2
 		// Sets minimal fitting size
 		void SetMinFitSize(float size);
 
+		// Sets maximum visible items count
+		void SetMaxItemsVisible(int count);
+
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
@@ -174,23 +177,26 @@ namespace o2
 		static UIContextMenu* mVisibleContextMenu; // Current visible context menu
 		const float mOpenSubMenuDelay = 0.8f;
 
-		float              mFitSizeMin = 40.0f;     // Minimal fitting size @SERIALIZABLE
-						   
+		float              mFitSizeMin = 40.0f;    // Minimal fitting size @SERIALIZABLE
+		int                mMaxVisibleItems;       // Maximum visible items @SERIALIZABLE
+						   						   
 		UIContextMenu*     mParentContextMenu;	   // Parent visible context menu
 		UIContextMenu*     mChildContextMenu;	   // Child visible context menu
-						   
-		UIVerticalLayout*  mLayout;                 // Items layout
-		UIContextMenuItem* mItemSample;             // Item sample @SERIALIZABLE
-		UIWidget*          mSeparatorSample;        // Items separator sample @SERIALIZABLE
-		Sprite*            mSelectionDrawable;      // Selection sprite @SERIALIZABLE
-		Layout             mSelectionLayout;        // Selection layout, result selection area depends on selected item @SERIALIZABLE
-						   
-		RectF              mCurrentSelectionRect;   // Current selection rectangle (for smoothing)
-		RectF              mTargetSelectionRect;    // Target selection rectangle (over selected item)
-		Vec2F              mLastSelectCheckCursor;  // Last cursor position on selection check
-						   
-		UIContextMenuItem* mSelectedItem;           // Index of selected item
-		float              mSelectSubContextTime;   // Time to appearing selected sub context
+						   						   
+		UIVerticalLayout*  mLayout;                // Items layout
+		UIContextMenuItem* mItemSample;            // Item sample @SERIALIZABLE
+		UIWidget*          mSeparatorSample;       // Items separator sample @SERIALIZABLE
+		Sprite*            mSelectionDrawable;     // Selection sprite @SERIALIZABLE
+		Layout             mSelectionLayout;       // Selection layout, result selection area depends on selected item @SERIALIZABLE
+						   						   
+		RectF              mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
+		RectF              mTargetSelectionRect;   // Target selection rectangle (over selected item)
+		Vec2F              mLastSelectCheckCursor; // Last cursor position on selection check
+						   						   
+		UIContextMenuItem* mSelectedItem;          // Index of selected item
+		float              mSelectSubContextTime;  // Time to appearing selected sub context
+												   
+		bool               mShownAtFrame;          // Is context was shown at current frame
 
 	protected:
 		// Updates layout

@@ -14,7 +14,9 @@
 #include "Core/EditorApplication.h"
 #include "Events/CursorEventsListener.h"
 #include "Events/EventSystem.h"
+#include "PropertiesWindow/Properties/ActorProperty.h"
 #include "PropertiesWindow/Properties/AssetProperty.h"
+#include "PropertiesWindow/Properties/ComponentProperty.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
 #include "Scene/Components/ImageComponent.h"
@@ -36,7 +38,7 @@ namespace Editor
 
 	UIAssetsIconsScrollArea::UIAssetsIconsScrollArea():
 		UIScrollArea(), DrawableCursorEventsListener(this), mSelection(nullptr), mPressTime(10), mIconHoverSprite(nullptr),
-		mContextMenu(nullptr)
+		mContextMenu(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		mGrid = mnew UIGridLayout();
 		mGrid->layout = UIWidgetLayout::BothStretch();
@@ -57,7 +59,7 @@ namespace Editor
 
 	UIAssetsIconsScrollArea::UIAssetsIconsScrollArea(const UIAssetsIconsScrollArea& other):
 		UIScrollArea(other), mSelection(other.mSelection->Clone()), DrawableCursorEventsListener(this), mPressTime(10),
-		mIconHoverSprite(nullptr), mContextMenu(nullptr)
+		mIconHoverSprite(nullptr), mContextMenu(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		mGrid = FindChild<UIGridLayout>();
 		onLayoutChanged += Function<void()>(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
@@ -132,7 +134,8 @@ namespace Editor
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
 
-		if (mDragState == DragState::Regular || mDragState == DragState::AssetPropertyField)
+		if (mDragState == DragState::Regular || mDragState == DragState::AssetField || mDragState == DragState::ActorField ||
+			mDragState == DragState::ComponentField)
 			o2UI.DrawWidgetAtTop(mDragIcon);
 
 		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
@@ -413,6 +416,8 @@ namespace Editor
 		SceneEditScreen* sceneEdit = dynamic_cast<SceneEditScreen*>(listenerUnderCursor);
 		UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(listenerUnderCursor);
 		IAssetProperty* assetProperty = dynamic_cast<IAssetProperty*>(listenerUnderCursor);
+		ActorProperty* actorProperty = dynamic_cast<ActorProperty*>(listenerUnderCursor);
+		ComponentProperty* componentProperty = dynamic_cast<ComponentProperty*>(listenerUnderCursor);
 
 		if (!sceneEdit && mDragState == DragState::Scene)
 		{
@@ -427,19 +432,62 @@ namespace Editor
 			mDragState = DragState::Regular;
 		}
 
-		if (!assetProperty && mDragState == DragState::AssetPropertyField)
+		if (!assetProperty && mDragState == DragState::AssetField)
 		{
 			mDragState = DragState::Regular;
 			mDragAssetPropertyField->GetWidget()->SetState("selected", false);
 			o2Application.SetCursor(CursorType::Arrow);
 		}
 
-		if (assetProperty && mDragState != DragState::AssetPropertyField)
+		if (!actorProperty && mDragState == DragState::ActorField)
+		{
+			mDragState = DragState::Regular;
+			mDragActorPropertyField->GetWidget()->SetState("selected", false);
+			o2Application.SetCursor(CursorType::Arrow);
+		}
+
+		if (!componentProperty && mDragState == DragState::ComponentField)
+		{
+			mDragState = DragState::Regular;
+			mDragComponentPropertyField->GetWidget()->SetState("selected", false);
+			o2Application.SetCursor(CursorType::Arrow);
+		}
+
+		if (componentProperty && mDragState != DragState::ComponentField)
+		{
+			if (mSelectedAssetsIcons.Count() == 1 && mSelectedAssetsIcons[0].icon->GetAssetInfo().mType ==
+				TypeOf(ActorAsset).ID())
+			{
+				Actor* assetActor = o2Scene.GetAssetActorByID(mSelectedAssetsIcons[0].icon->GetAssetInfo().mId);
+
+				if (assetActor->GetComponent(componentProperty->GetSpecializedType()))
+				{
+					mDragState = DragState::ComponentField;
+					componentProperty->GetWidget()->SetState("selected", true);
+					mDragComponentPropertyField = componentProperty;
+					o2Application.SetCursor(CursorType::Hand);
+				}
+			}
+		}
+
+		if (actorProperty && mDragState != DragState::ActorField)
+		{
+			if (mSelectedAssetsIcons.Count() == 1 && mSelectedAssetsIcons[0].icon->GetAssetInfo().mType ==
+				TypeOf(ActorAsset).ID())
+			{
+				mDragState = DragState::ActorField;
+				actorProperty->GetWidget()->SetState("selected", true);
+				mDragActorPropertyField = actorProperty;
+				o2Application.SetCursor(CursorType::Hand);
+			}
+		}
+
+		if (assetProperty && mDragState != DragState::AssetField)
 		{
 			if (mSelectedAssetsIcons.Count() == 1 && assetProperty->GetFieldType()->ID() ==
 				mSelectedAssetsIcons[0].icon->GetAssetInfo().mType)
 			{
-				mDragState = DragState::AssetPropertyField;
+				mDragState = DragState::AssetField;
 				assetProperty->GetWidget()->SetState("selected", true);
 				mDragAssetPropertyField = assetProperty;
 				o2Application.SetCursor(CursorType::Hand);
@@ -492,10 +540,25 @@ namespace Editor
 			o2UI.SelectWidget(o2EditorTree.GetActorsTree());
 		}
 
-		if (mDragState == DragState::AssetPropertyField)
+		if (mDragState == DragState::AssetField)
 		{
 			mDragAssetPropertyField->SetAssetId(mSelectedAssetsIcons[0].icon->GetAssetInfo().mId);
 			mDragAssetPropertyField->GetWidget()->SetState("selected", false);
+			o2Application.SetCursor(CursorType::Arrow);
+		}
+
+		if (mDragState == DragState::ActorField)
+		{
+			mDragActorPropertyField->SetValue(o2Scene.GetAssetActorByID(mSelectedAssetsIcons[0].icon->GetAssetInfo().mId));
+			mDragActorPropertyField->GetWidget()->SetState("selected", false);
+			o2Application.SetCursor(CursorType::Arrow);
+		}
+
+		if (mDragState == DragState::ComponentField)
+		{
+			Actor* actorAsset = o2Scene.GetAssetActorByID(mSelectedAssetsIcons[0].icon->GetAssetInfo().mId);
+			mDragComponentPropertyField->SetValue(actorAsset->GetComponent(mDragComponentPropertyField->GetSpecializedType()));
+			mDragComponentPropertyField->GetWidget()->SetState("selected", false);
 			o2Application.SetCursor(CursorType::Arrow);
 		}
 

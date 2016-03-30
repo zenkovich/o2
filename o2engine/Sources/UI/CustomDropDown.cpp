@@ -11,6 +11,7 @@ namespace o2
 		mList = mnew UICustomList();
 		mList->mParent = this;
 		mList->onSelectedItem += [&](auto x) { OnItemSelected(); };
+		mList->SetMultiselectionAvailable(false);
 
 		InitializeProperties();
 	}
@@ -22,6 +23,7 @@ namespace o2
 		mList->mParent = this;
 		mList->Hide(true);
 		mList->onSelectedItem += [&](auto x) { OnItemSelected(); };
+		mList->SetMultiselectionAvailable(false);
 
 		RetargetStatesAnimations();
 		InitializeProperties();
@@ -42,6 +44,7 @@ namespace o2
 		mList->mParent = this;
 		mList->Hide(true);
 		mList->onSelectedItem += [&](auto x) { OnItemSelected(); };
+		mList->SetMultiselectionAvailable(false);
 
 		mClipLayout = other.mClipLayout;
 		mMaxListItems = other.mMaxListItems;
@@ -74,7 +77,7 @@ namespace o2
 
 		o2UI.DrawWidgetAtTop(mList);
 
-		UIWidget* selectedItem = mList->GetSelectedItem();
+		UIWidget* selectedItem = mList->GetItem(mList->GetSelectedItemPos());
 		if (selectedItem)
 		{
 			o2Render.EnableScissorTest(mAbsoluteClip);
@@ -205,7 +208,7 @@ namespace o2
 
 	int UICustomDropDown::GetSelectedItemPosition() const
 	{
-		return mList->GetSelectedItemPosition();
+		return mList->GetSelectedItemPos();
 	}
 
 	UICustomList* UICustomDropDown::GetListView() const
@@ -306,7 +309,7 @@ namespace o2
 			*pressedState = false;
 
 		Collapse();
-		onSelectedPos(mList->GetSelectedItemPosition());
+		onSelectedPos(mList->GetSelectedItemPos());
 		onSelectedItem(mList->GetSelectedItem());
 
 		OnSelectionChanged();

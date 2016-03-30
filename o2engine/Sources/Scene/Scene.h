@@ -13,6 +13,7 @@ namespace o2
 	class Actor;
 	class ActorAsset;
 	class DrawableComponent;
+	class Tag;
 
 	// ----------
 	// Scene host
@@ -23,6 +24,8 @@ namespace o2
 		typedef Vector<Actor*> ActorsVec;
 		typedef Vector<DrawableComponent*> DrawCompsVec;
 		typedef Vector<ActorAsset*> ActorsAssetsVec;
+		typedef Vector<String> StringsVec;
+		typedef Vector<Tag*> TagsVec;
 
 		// -----------
 		// Scene layer
@@ -82,8 +85,23 @@ namespace o2
 		// Removes layer by name
 		void RemoveLayer(const String& name, bool removeActors = true);
 
+		// Returns tag with name
+		Tag* GetTag(const String& name) const;
+
+		// Adds tag with name
+		Tag* AddTag(const String& name);
+
+		// Removes tag
+		void RemoveTag(Tag* tag);
+
+		// Removes tag with name
+		void RemoveTag(const String& name);
+
 		// Returns layers array
 		LayersVec& GetLayers();
+
+		// Returns tags array
+		const TagsVec& GetTags() const;
 
 		// Returns root actors
 		const ActorsVec& GetRootActors() const;
@@ -141,14 +159,15 @@ namespace o2
 #endif       
 
 	protected:
-		ActorsVec       mRootActors;   // Scene root actors		
-		ActorsVec       mAllActors;    // All scene actors
-		LayersVec       mLayers;       // Scene layers
-		Layer*          mDefaultLayer; // Default scene layer
-		ActorsAssetsVec mCache;        // Cached actors assets
+		ActorsVec       mRootActors;    // Scene root actors		
+		ActorsVec       mAllActors;     // All scene actors
+		LayersVec       mLayers;        // Scene layers
+		TagsVec         mTags;          // Scene tags
+		Layer*          mDefaultLayer;  // Default scene layer
+		ActorsAssetsVec mCache;         // Cached actors assets
 				  
 #if IS_EDITOR	  
-		ActorsVec mChangedActors; // Changed actors array
+		ActorsVec       mChangedActors; // Changed actors array
 #endif
 
 	protected:
@@ -168,6 +187,7 @@ namespace o2
 		friend class Application;
 		friend class DrawableComponent;
 	};
+
 
 	template<typename _type>
 	Vector<_type>* Scene::FindAllActorsComponents()

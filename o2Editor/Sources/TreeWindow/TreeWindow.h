@@ -37,13 +37,13 @@ namespace Editor
 		void ExpandActorsTreeNode(Actor* targetActor);
 
 	protected:
-		UIToggle*      mListTreeToggle;			  // TOggle between list and tree views
-		UIEditBox*     mSearchEditBox;			  // Search actors edit box
-		UIActorsTree*  mActorsTree;				  // Main actors tree
-		UIContextMenu* mTreeContextMenu;		  // Context menu
+		UIToggle*      mListTreeToggle;		// TOggle between list and tree views
+		UIEditBox*     mSearchEditBox;		// Search actors edit box
+		UIActorsTree*  mActorsTree;			// Main actors tree
+		UIContextMenu* mTreeContextMenu;	// Context menu
 
-		bool           mInSearch = false;		  // True when searching actors (mSearchEditBox isn't empty)
-		Vector<Actor*> mSearchActors;			  // Array of searched actors
+		bool           mInSearch = false;	// True when searching actors (mSearchEditBox isn't empty)
+		Vector<Actor*> mSearchActors;		// Array of searched actors
 
 	protected:
 		// Default constructor

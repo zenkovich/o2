@@ -1201,6 +1201,56 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "asset link");
 	}
 
+	void RebuildEditorDropdown()
+	{
+		UIDropDown* sample = mnew UIDropDown();
+		sample->layout.minSize = Vec2F(20, 20);
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
+										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
+
+		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
+
+		auto list = sample->GetListView();
+		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
+		delete list->layer["back"]->drawable;
+		list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
+		list->layout.pivot = Vec2F(0.5f, 1.0f);
+		list->layout.anchorMin = Vec2F(0, 0);
+		list->layout.anchorMax = Vec2F(1, 0);
+		list->layout.offsetMin = Vec2F(-1, -60);
+		list->layout.offsetMax = Vec2F(0, 3);
+
+		Text* undefinedText = mnew Text("stdFont.ttf");
+		undefinedText->text = "--";
+		undefinedText->horAlign = HorAlign::Left;
+		undefinedText->verAlign = VerAlign::Middle;
+		undefinedText->dotsEngings = true;
+		auto undefinedLayer = sample->AddLayer("undefined", undefinedText, Layout::BothStretch(3, 0, 3, 0));
+
+		UILabel* itemSample = o2UI.CreateLabel("empty");
+		itemSample->horAlign = HorAlign::Left;
+		sample->SetItemSample(itemSample);
+
+		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+
+		sample->AddState("undefined", Animation::EaseInOut(sample, &undefinedLayer->transparency, 0.0f, 1.0f, 0.05f));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "editor property");
+	}
+
 	void RebuildEditorUIStyle()
 	{
 		o2UI.ClearStyle();
@@ -1265,6 +1315,7 @@ namespace UIStyle
 		RebuildSinglelineEditbox();
 		RebuildCheckboxWithoutCaptionStyle();
 		RebuildLinkBtn();
+		RebuildEditorDropdown();
 
 		o2UI.SaveStyle("ui_style.xml");
 	}

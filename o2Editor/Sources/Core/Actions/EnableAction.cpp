@@ -11,7 +11,7 @@ namespace Editor
 	EnableAction::EnableAction(const Vector<Actor*>& actors, bool enable):
 		enable(enable)
 	{
-		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetId(); });
+		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetID(); });
 	}
 
 	String EnableAction::GetName() const

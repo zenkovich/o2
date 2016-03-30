@@ -32,7 +32,10 @@ namespace Editor
 		virtual UIWidget* GetWidget() const { return nullptr; }
 
 		// Returns editing by this field type
-		virtual const Type* GetFieldType() const { return nullptr; }
+		virtual const Type* GetFieldType() const { return &TypeOf(void); }
+
+		// Specializes field type
+		virtual void SpecializeType(const Type* type) {}
 
 		IOBJECT(IPropertyField);
 	};

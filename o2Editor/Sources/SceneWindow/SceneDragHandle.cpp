@@ -27,7 +27,8 @@ namespace Editor
 	}
 
 	SceneDragHandle::SceneDragHandle(const SceneDragHandle& other):
-		regularSprite(nullptr), hoverSprite(nullptr), pressedSprite(nullptr), cursorType(other.cursorType)
+		regularSprite(nullptr), hoverSprite(nullptr), pressedSprite(nullptr), cursorType(other.cursorType),
+		pixelPerfect(other.pixelPerfect)
 	{
 		if (WindowsManager::IsSingletonInitialzed())
 			o2EditorSceneScreen.mDragHandles.Add(this);
@@ -62,8 +63,11 @@ namespace Editor
 			return;
 
 		Vec2F screenPosition = o2EditorSceneScreen.SceneToScreenPoint(position);
-		/*screenPosition.x = Math::Round(screenPosition.x);
-		screenPosition.y = Math::Round(screenPosition.y);*/
+		if (pixelPerfect)
+		{
+			screenPosition.x = Math::Round(screenPosition.x);
+			screenPosition.y = Math::Round(screenPosition.y);
+		}
 
 		if (regularSprite)
 		{
@@ -106,6 +110,7 @@ namespace Editor
 			pressedSprite = nullptr;
 
 		cursorType = other.cursorType;
+		pixelPerfect = other.pixelPerfect;
 
 		SetPosition(other.mPosition);
 

@@ -36,6 +36,7 @@ namespace UIStyle
 	void RebuildAnimationAssetIcon();
 	void RebuildAssetsGridScroll();
 	void RebuildLinkBtn();
+	void RebuildEditorDropdown();
 
 	void RebuildEditorUIStyle();
 }

@@ -5,13 +5,13 @@
 namespace o2
 {
 	Component::Component():
-		mEnabled(true), mResEnabled(true), mOwner(nullptr)
+		mEnabled(true), mResEnabled(true), mOwner(nullptr), mId(Math::Random())
 	{
 		InitializeProperties();
 	}
 
 	Component::Component(const Component& other):
-		mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mOwner(nullptr)
+		mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mOwner(nullptr), mId(Math::Random())
 	{
 		InitializeProperties();
 	}
@@ -28,6 +28,11 @@ namespace o2
 		UpdateEnabled();
 		COMPONENT_CHANGED(this);
 		return *this;
+	}
+
+	UInt64 Component::GetID() const
+	{
+		return mId;
 	}
 
 	void Component::Update(float dt)

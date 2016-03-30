@@ -10,8 +10,8 @@ namespace Editor
 
 	SelectionAction::SelectionAction(const Vector<Actor*>& selectedActors, const Vector<Actor*>& prevSelectedActors)
 	{
-		selectedActorsIds = selectedActors.Select<UInt64>([](Actor* actor) { return actor->GetId(); });
-		prevSelectedActorsIds = prevSelectedActors.Select<UInt64>([](Actor* actor) { return actor->GetId(); });
+		selectedActorsIds = selectedActors.Select<UInt64>([](Actor* actor) { return actor->GetID(); });
+		prevSelectedActorsIds = prevSelectedActors.Select<UInt64>([](Actor* actor) { return actor->GetID(); });
 	}
 
 	SelectionAction::~SelectionAction()

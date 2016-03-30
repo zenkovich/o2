@@ -11,7 +11,7 @@ namespace Editor
 	LockAction::LockAction(const Vector<Actor*>& actors, bool lock):
 		lock(lock)
 	{
-		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetId(); });
+		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetID(); });
 	}
 
 	String LockAction::GetName() const

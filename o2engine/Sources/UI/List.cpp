@@ -73,7 +73,7 @@ namespace o2
 		return -1;
 	}
 
-	WString UIList::GetItemText(int position)
+	WString UIList::GetItemText(int position) const
 	{
 		auto item = (UILabel*)GetItem(position);
 		if (item)
@@ -93,7 +93,7 @@ namespace o2
 
 	WString UIList::GetSelectedItemText()
 	{
-		auto selectedItem = (UILabel*)GetSelectedItem();
+		auto selectedItem = (UILabel*)GetSelectedItemPos();
 		if (selectedItem)
 			return selectedItem->GetText();
 
@@ -103,7 +103,18 @@ namespace o2
 	void UIList::SelectItemText(const WString& text)
 	{
 		int idx = FindItem(text);
-		UpdateSelection(idx, GetItem(idx));
+		SelectItemAt(idx);
+	}
+
+	void UIList::SetSelectedItems(const Vector<WString>& items)
+	{
+		for (auto& x : items)
+			SelectItemText(x);
+	}
+
+	Vector<WString> UIList::GetSelectedItemsText() const
+	{
+		return mSelectedItems.Select<WString>([&](auto x) { return GetItemText(x.idx); });
 	}
 
 	void UIList::OnSelectionChanged()
@@ -114,6 +125,7 @@ namespace o2
 	void UIList::initializeProperties()
 	{
 		INITIALIZE_PROPERTY(UIList, value, SelectItemText, GetSelectedItemText);
+		INITIALIZE_PROPERTY(UIList, values, SetSelectedItems, GetSelectedItemsText);
 		INITIALIZE_ACCESSOR(UIList, textItem, GetItemText);
 	}
 }

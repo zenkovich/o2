@@ -6,6 +6,7 @@
 #include "Assets/ImageAsset.h"
 #include "ImageComponent.h"
 #include "Scene/Component.h"
+#include "Scene/Tags.h"
 
 namespace o2
 {
@@ -21,6 +22,8 @@ namespace o2
 		ActorAsset mActorAsset;			           // @SERIALIZABLE
 		DataAsset mDataAsset;                      // @SERIALIZABLE
 		Actor* mActor = nullptr;                   // @SERIALIZABLE
+		TagGroup mTags;                            // @SERIALIZABLE
+		Scene::Layer* mLayer;                      // @SERIALIZABLE
 		Component* mComponent = nullptr;           // @SERIALIZABLE
 		ImageComponent* mImageComponent = nullptr; // @SERIALIZABLE
 		Color4 mColor;					           // @SERIALIZABLE
