@@ -154,7 +154,7 @@ namespace Editor
 
 	protected:
 		// Initializes tools
-		void InitializeTools(Type* toolType = nullptr);
+		void InitializeTools(const Type* toolType = nullptr);
 
 		// Updates handles interaction
 		void UpdateHandles();

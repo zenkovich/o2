@@ -146,7 +146,7 @@ namespace Editor
 													 o2Render.GetDrawCallsCount(), (Vec2I)o2Input.GetCursorPos());
 
 		if (o2Input.IsKeyPressed('K'))
-			MemoryManager::instance->DumpInfo();
+			o2Memory.DumpInfo();
 	}
 
 #undef DrawText

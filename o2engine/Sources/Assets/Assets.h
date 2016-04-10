@@ -23,7 +23,7 @@ namespace o2
 	class Assets: public Singleton<Assets>
 	{
 	public:
-		typedef Dictionary<String, Type*> TypesExtsDict;
+		typedef Dictionary<String, const Type*> TypesExtsDict;
 
 	public:
 		Getter<String>                         assetsPath;        // Assets path getter

@@ -81,7 +81,7 @@ namespace o2
 	{
 		if (mOwner)
 		{
-			mOwner->mCompontents.Remove(this);
+			mOwner->mComponents.Remove(this);
 			mOwner->mLayer->UnregDrawableComponent(this);
 		}
 
@@ -89,7 +89,7 @@ namespace o2
 
 		if (mOwner)
 		{
-			mOwner->mCompontents.Add(this);
+			mOwner->mComponents.Add(this);
 			mOwner->mLayer->RegDrawableComponent(this);
 
 			OnTransformChanged();

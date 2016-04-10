@@ -199,4 +199,25 @@ namespace o2
 		AddTag(name);
 		return *this;
 	}
+
+	void TagDataNodeConverter::ToData(void* object, DataNode& data)
+	{
+		if (object)
+		{
+			Tag* value = (Tag*)object;
+			data = value->GetName();
+		}
+	}
+
+	void TagDataNodeConverter::FromData(void*& object, const DataNode& data)
+	{
+		Tag*& value = (Tag*&)object;
+		value = o2Scene.GetTag(data);
+	}
+
+	bool TagDataNodeConverter::CheckType(const Type* type) const
+	{
+		return type == &TypeOf(Tag);
+	}
+
 }

@@ -207,13 +207,21 @@ namespace o2
 
 		DataNode data;
 		data.LoadFromFile(path);
+
+		LayersVec loadLayers = *data["layers"];
+
+		for (auto layer : loadLayers)
+			if (!GetLayer(layer->name))
+				mLayers.Add(layer);
+
 		ActorsVec loadActors = *data["actors"];
 	}
 
 	void Scene::Save(const String& path)
 	{
 		DataNode data;
-		data = mRootActors;
+		*data.AddNode("layers") = mLayers;
+		*data.AddNode("actors") = mRootActors;
 		data.SaveToFile(path);
 	}
 
@@ -354,4 +362,25 @@ namespace o2
 		}
 	}
 #endif
+
+	void LayerDataNodeConverter::ToData(void* object, DataNode& data)
+	{
+		if (object)
+		{
+			Scene::Layer* value = (Scene::Layer*)object;
+			data = value->name;
+		}
+	}
+
+	void LayerDataNodeConverter::FromData(void*& object, const DataNode& data)
+	{
+		Scene::Layer*& value = (Scene::Layer*&)object;
+		value = o2Scene.GetLayer(data);
+	}
+
+	bool LayerDataNodeConverter::CheckType(const Type* type) const
+	{
+		return type == &TypeOf(Scene::Layer);
+	}
+
 }

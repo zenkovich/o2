@@ -5,7 +5,7 @@
 #include "Utils/Reflection/Type.h"
 
 // Reflection access macros
-#define o2Reflection (*Reflection::instance)
+#define o2Reflection Reflection::Instance()
 
 namespace o2
 {
@@ -15,14 +15,11 @@ namespace o2
 	class Reflection
 	{
 	public:
-		static Reflection* instance;
+		// Returns reflection instance
+		static Reflection& Instance();
 
-	public:
-		// Constructor. Initializes dummy type
-		Reflection();
-
-		// Destructor. Destroys types
-		~Reflection();
+		// Initializes reflection
+		static void Initialize();
 
 		// Returns array of all registered types
 		static const Vector<Type*>& GetTypes();
@@ -35,14 +32,11 @@ namespace o2
 
 		// Returns enum value from string
 		template<typename _type>
-		static _type GetEnum(const String& name);
+		static _type GetEnumValue(const String& name);
 
 		// Returns enum name from value
 		template<typename _type>
 		static String GetEnumName(_type value);
-
-		// Initializes fundamental types
-		static void InitializeFundamentalTypes();
 
 		// Initializes type
 		template<typename _type>
@@ -56,23 +50,33 @@ namespace o2
 		template<typename _type>
 		static void InitializeEnum(const Dictionary<int, String>& defs);
 
+		// Initializes fundamental types
+		static void InitializeFundamentalTypes();
+
 	protected:
 		typedef Dictionary<const char*, Dictionary<int, String>> EnumsDict;
 
-		Vector<Type*> mTypes;           // All registered types
-		UInt          mLastGivenTypeId; // Last given type index
-		EnumsDict     mEnums;           // Enums
+		static Reflection* mInstance;        // Reflection instance
+
+		Vector<Type*>      mTypes;           // All registered types
+		UInt               mLastGivenTypeId; // Last given type index
+		EnumsDict          mEnums;           // Enums
 		
 	protected:
+		// Constructor. Initializes dummy type
+		Reflection();
+
+		// Destructor. Destroys types
+		~Reflection();
 	};
 
 	template<typename _type>
-	_type Reflection::GetEnum(const String& name)
+	_type Reflection::GetEnumValue(const String& name)
 	{
 		auto typeName = typeid(_type).name();
-		if (instance->mEnums.ContainsKey(typeName))
+		if (mInstance->mEnums.ContainsKey(typeName))
 		{
-			return (_type)(instance->mEnums[typeName].FindValue(name).Key());
+			return (_type)(mInstance->mEnums[typeName].FindValue(name).Key());
 		}
 
 		return (_type)0;
@@ -82,9 +86,9 @@ namespace o2
 	String Reflection::GetEnumName(_type value)
 	{
 		auto typeName = typeid(_type).name();
-		if (instance->mEnums.ContainsKey(typeName))
+		if (mInstance->mEnums.ContainsKey(typeName))
 		{
-			return instance->mEnums[typeName][(int)value];
+			return mInstance->mEnums[typeName][(int)value];
 		}
 
 		return "unknown";
@@ -97,25 +101,25 @@ namespace o2
 
 		_type::InitializeType(sample);
 		_type::type.mName = name;
-		_type::type.mId = instance->mLastGivenTypeId++;
-		_type::type.mTypeAgent = new Type::TypeAgent<_type>();
+		_type::type.mId = mInstance->mLastGivenTypeId++;
+		_type::type.mTypeAgent = new Type::TypeCreator<_type>();
 
-		instance->mTypes.Add(&_type::type);
+		mInstance->mTypes.Add(&_type::type);
 	}
 
 	template<typename _type>
 	void Reflection::InitializeFundamentalType()
 	{
 		FundamentalType<_type>::type.mName = typeid(_type).name();
-		FundamentalType<_type>::type.mId = instance->mLastGivenTypeId++;
-		FundamentalType<_type>::type.mTypeAgent = new Type::TypeAgent<_type>();
+		FundamentalType<_type>::type.mId = mInstance->mLastGivenTypeId++;
+		FundamentalType<_type>::type.mTypeAgent = new Type::TypeCreator<_type>();
 
-		instance->mTypes.Add(&FundamentalType<_type>::type);
+		mInstance->mTypes.Add(&FundamentalType<_type>::type);
 	}
 
 	template<typename _type>
 	void Reflection::InitializeEnum(const Dictionary<int, String>& defs)
 	{
-		instance->mEnums.Add(typeid(_type).name(), defs);
+		mInstance->mEnums.Add(typeid(_type).name(), defs);
 	}
 }

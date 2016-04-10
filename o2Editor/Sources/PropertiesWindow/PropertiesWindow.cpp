@@ -64,7 +64,11 @@ namespace Editor
 
 	void PropertiesWindow::InitializePropertiesFields()
 	{
-		auto avaialbleTypes = TypeOf(IAssetProperty).DerivedTypes() + TypeOf(IPropertyField).DerivedTypes();
+		auto a = TypeOf(IAssetProperty).DerivedTypes();
+		auto b = TypeOf(IPropertyField).DerivedTypes();
+		auto avaialbleTypes = a + b;
+
+		avaialbleTypes.Remove(&TypeOf(IAssetProperty));
 
 		const int initialPoolSize = 5;
 		for (auto x : avaialbleTypes)

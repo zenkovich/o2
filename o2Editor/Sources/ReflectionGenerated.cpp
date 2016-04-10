@@ -1251,7 +1251,7 @@ void o2::Actor::InitializeType(o2::Actor* sample)
 	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)sample, sample->mName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mParent", (size_t)(char*)(&sample->mParent) - (size_t)(char*)sample, sample->mParent, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mChilds", (size_t)(char*)(&sample->mChilds) - (size_t)(char*)sample, sample->mChilds, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mCompontents", (size_t)(char*)(&sample->mCompontents) - (size_t)(char*)sample, sample->mCompontents, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mComponents", (size_t)(char*)(&sample->mComponents) - (size_t)(char*)sample, sample->mComponents, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mLayer", (size_t)(char*)(&sample->mLayer) - (size_t)(char*)sample, sample->mLayer, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mEnabled", (size_t)(char*)(&sample->mEnabled) - (size_t)(char*)sample, sample->mEnabled, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mResEnabled", (size_t)(char*)(&sample->mResEnabled) - (size_t)(char*)sample, sample->mResEnabled, o2::ProtectSection::Protected);
@@ -1327,6 +1327,16 @@ void o2::Actor::InitializeType(o2::Actor* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, Scene::Layer*>(&type, "GetLayer", &o2::Actor::GetLayer, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, String>(&type, "GetLayerName", &o2::Actor::GetLayerName, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, void>(&type, "OnTransformChanged", &o2::Actor::OnTransformChanged, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::Actor, void, Actor*, const Actor*, Vector<Actor**>&, Vector<Component**>&, Dictionary<const Actor*, Actor*>&>(&type, "ProcessCopying", &o2::Actor::ProcessCopying, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "dest");
+	TypeInitializer::RegFuncParam<const Actor*>(funcInfo, "source");
+	TypeInitializer::RegFuncParam<Vector<Actor**>&>(funcInfo, "actorsPointers");
+	TypeInitializer::RegFuncParam<Vector<Component**>&>(funcInfo, "componentsPointers");
+	TypeInitializer::RegFuncParam<Dictionary<const Actor*, Actor*>&>(funcInfo, "actorsMap");
+	funcInfo = TypeInitializer::RegFunction<o2::Actor, void, const Vector<Actor**>&, const Vector<Component**>&, const Dictionary<const Actor*, Actor*>&>(&type, "FixComponentFieldsPointers", &o2::Actor::FixComponentFieldsPointers, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<const Vector<Actor**>&>(funcInfo, "actorsPointers");
+	TypeInitializer::RegFuncParam<const Vector<Component**>&>(funcInfo, "componentsPointers");
+	TypeInitializer::RegFuncParam<const Dictionary<const Actor*, Actor*>&>(funcInfo, "actorsMap");
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, void, Actor*>(&type, "SetParentProp", &o2::Actor::SetParentProp, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, void>(&type, "UpdateEnabled", &o2::Actor::UpdateEnabled, o2::ProtectSection::Protected);
@@ -1492,7 +1502,7 @@ void o2::TagGroup::InitializeType(o2::TagGroup* sample)
 {
 	TypeInitializer::RegField(&type, "onTagAdded", (size_t)(char*)(&sample->onTagAdded) - (size_t)(char*)sample, sample->onTagAdded, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "onTagRemoved", (size_t)(char*)(&sample->onTagRemoved) - (size_t)(char*)sample, sample->onTagRemoved, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "mTags", (size_t)(char*)(&sample->mTags) - (size_t)(char*)sample, sample->mTags, o2::ProtectSection::Private);
+	TypeInitializer::RegField(&type, "mTags", (size_t)(char*)(&sample->mTags) - (size_t)(char*)sample, sample->mTags, o2::ProtectSection::Private).AddAttribute<SerializableAttribute>();
 	auto funcInfo = TypeInitializer::RegFunction<o2::TagGroup, void, const String&>(&type, "AddTag", &o2::TagGroup::AddTag, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "name");
 	funcInfo = TypeInitializer::RegFunction<o2::TagGroup, void, Tag*>(&type, "AddTag", &o2::TagGroup::AddTag, o2::ProtectSection::Public);
@@ -5192,8 +5202,8 @@ void Editor::SceneEditScreen::InitializeType(Editor::SceneEditScreen* sample)
 	funcInfo = TypeInitializer::RegFunction<Editor::SceneEditScreen, const Color4&>(&type, "GetManyActorsSelectionColor", &Editor::SceneEditScreen::GetManyActorsSelectionColor, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<Editor::SceneEditScreen, bool, const Vec2F&>(&type, "IsUnderPoint", &Editor::SceneEditScreen::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
-	funcInfo = TypeInitializer::RegFunction<Editor::SceneEditScreen, void, Type*>(&type, "InitializeTools", &Editor::SceneEditScreen::InitializeTools, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<Type*>(funcInfo, "toolType");
+	funcInfo = TypeInitializer::RegFunction<Editor::SceneEditScreen, void, const Type*>(&type, "InitializeTools", &Editor::SceneEditScreen::InitializeTools, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<const Type*>(funcInfo, "toolType");
 	funcInfo = TypeInitializer::RegFunction<Editor::SceneEditScreen, void>(&type, "UpdateHandles", &Editor::SceneEditScreen::UpdateHandles, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<Editor::SceneEditScreen, bool, const Input::Cursor&>(&type, "IsHandleWorking", &Editor::SceneEditScreen::IsHandleWorking, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");

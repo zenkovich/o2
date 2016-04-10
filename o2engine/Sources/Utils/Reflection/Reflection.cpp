@@ -14,7 +14,7 @@ namespace o2
 	Reflection::Reflection():
 		mLastGivenTypeId(1)
 	{
-		instance = this;
+		mInstance = this;
 		InitializeFundamentalTypes();
 	}
 
@@ -24,14 +24,24 @@ namespace o2
 			delete type;
 	}
 
+	Reflection& Reflection::Instance()
+	{
+		return *mInstance;
+	}
+
+	void Reflection::Initialize()
+	{
+		mInstance = new Reflection();
+	}
+
 	const Vector<Type*>& Reflection::GetTypes()
 	{
-		return instance->mTypes;
+		return mInstance->mTypes;
 	}
 
 	void* Reflection::CreateTypeSample(const String& typeName)
 	{
-		for (auto type : instance->mTypes)
+		for (auto type : mInstance->mTypes)
 		{
 			if (type->Name() == typeName)
 				return type->CreateSample();
@@ -42,7 +52,7 @@ namespace o2
 
 	Type* Reflection::GetType(Type::Id id)
 	{
-		for (auto type : instance->mTypes)
+		for (auto type : mInstance->mTypes)
 		{
 			if (type->ID() == id)
 				return type;
@@ -79,14 +89,14 @@ namespace o2
 		InitializeFundamentalType<DataNode>();
 
 		FundamentalType<void>::type.mName = typeid(void).name();
-		FundamentalType<void>::type.mId = instance->mLastGivenTypeId++;
-		FundamentalType<void>::type.mTypeAgent = new Type::TypeAgent<int>();
+		FundamentalType<void>::type.mId = mInstance->mLastGivenTypeId++;
+		FundamentalType<void>::type.mTypeAgent = new Type::TypeCreator<int>();
 
 		Type::Dummy::type.mName = "Unknown";
-		Type::Dummy::type.mId = instance->mLastGivenTypeId++;
-		Type::Dummy::type.mTypeAgent = new Type::TypeAgent<int>();
+		Type::Dummy::type.mId = mInstance->mLastGivenTypeId++;
+		Type::Dummy::type.mTypeAgent = new Type::TypeCreator<int>();
 
-		instance->mTypes.Add(&FundamentalType<void>::type);
+		mInstance->mTypes.Add(&FundamentalType<void>::type);
 	}
 
 	Type IObject::type;

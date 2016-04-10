@@ -54,14 +54,14 @@ namespace o2
 	private:
 		static Type type;
 
-		friend struct o2::Type::TypeAgent<ProjectConfig>;
+		friend struct o2::Type::TypeCreator<ProjectConfig>;
 
 		template<typename _type>
 		friend const Type& o2::_TypeOf();
 		friend class o2::TypeInitializer;
 		friend class o2::Reflection;
 		template<typename _type>
-		friend struct o2::Type::TypeAgent;
+		friend struct o2::Type::TypeCreator;
 		friend class o2::DataNode;
 
 	public:

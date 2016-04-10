@@ -15,11 +15,21 @@ namespace o2
 		StackWalker()
 	{}
 
+	o2StackWalker& o2StackWalker::Instance()
+	{
+		return *mInstance;
+	}
+
+	void o2StackWalker::Initialize()
+	{
+		mInstance = new o2StackWalker();
+	}
+
 	o2::String o2StackWalker::GetStackTrace()
 	{
-		instance->mRes = "";
-		instance->ShowCallstack();
-		return instance->mRes;
+		mInstance->mRes = "";
+		mInstance->ShowCallstack();
+		return mInstance->mRes;
 	}
 
 	void o2StackWalker::OnOutput(LPCSTR szText)

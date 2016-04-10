@@ -10,10 +10,19 @@ namespace o2
 	// ---------------
 	class o2StackWalker: public StackWalker
 	{
-		String mRes; // Here puts result of stack trace
-
 	public:
-		static o2StackWalker* instance; // Static instance pointer
+		// Returns stack walker instance
+		static o2StackWalker& Instance();
+
+		// Initializes stack walker
+		static void Initialize();
+
+		// Returns stack trace as text
+		static String GetStackTrace();
+
+	protected:
+		static o2StackWalker* mInstance; // Static instance pointer
+		String mRes; // Here puts result of stack trace
 
 		// Default constructor
 		o2StackWalker();
@@ -21,10 +30,6 @@ namespace o2
 		// Constructor for process
 		o2StackWalker(DWORD dwProcessId, HANDLE hProcess);
 
-		// Returns stack trace as text
-		static String GetStackTrace();
-
-	protected:
 		void OnOutput(LPCSTR szText);
 	};
 

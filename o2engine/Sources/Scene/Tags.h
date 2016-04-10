@@ -129,8 +129,24 @@ namespace o2
 		SERIALIZABLE(TagGroup);
 
 	private:
-		TagsVec mTags;
+		TagsVec mTags; // @SERIALIZABLE
 
 		friend class Tag;
+	};
+
+	// -----------------------
+	// Tag data node converter
+	// -----------------------
+	class TagDataNodeConverter: public IDataNodeTypeConverter
+	{
+	public:
+		// Converts tag pointer to data 
+		void ToData(void* object, DataNode& data);
+
+		// Gets tag pointer from data
+		void FromData(void*& object, const DataNode& data);
+
+		// Checks that type is tag's type
+		bool CheckType(const Type* type) const;
 	};
 }

@@ -152,7 +152,7 @@ namespace Editor
 		return mRectangle;
 	}
 
-	void SceneEditScreen::InitializeTools(Type* toolType /*= nullptr*/)
+	void SceneEditScreen::InitializeTools(const Type* toolType /*= nullptr*/)
 	{
 		auto toolsTypes = toolType ? toolType->DerivedTypes() : IEditTool::type.DerivedTypes();
 		for (auto toolType : toolsTypes)

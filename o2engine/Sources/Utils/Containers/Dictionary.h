@@ -241,6 +241,9 @@ namespace o2
 		// Returns constant value reference by key
 		const _value_type& Get(const _key_type& key) const;
 
+		// Tries to get value by key, returns true if found
+		bool TryGetValue(const _key_type& key, _value_type& output) const;
+
 		// Returns value reference by index
 		TKeyValue& GetIdx(int index) const;
 
@@ -776,6 +779,22 @@ namespace o2
 		Assert(false, "Failed to get value from dictionary: not found key");
 
 		return mPairs.Get(0).mValue;
+	}
+
+	template<typename _key_type, typename _value_type>
+	bool Dictionary<_key_type, _value_type>::TryGetValue(const _key_type& key, _value_type& output) const
+	{
+		for (auto it = mPairs.Begin(); it != mPairs.End(); ++it)
+		{
+			const TKeyValue& kv = *it;
+			if (kv.mKey == key)
+			{
+				output = kv.mValue;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 

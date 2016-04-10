@@ -2,6 +2,7 @@
 
 #include "Scene/Actor.h"
 #include "Scene/Component.h"
+#include "Scene/Scene.h"
 #include "Utils/Data/XmlDataFormat.h"
 #include "Utils/FileSystem/File.h"
 #include "Utils/Memory/MemoryManager.h"
@@ -10,9 +11,6 @@
 
 namespace o2
 {
-
-	Vector<IDataNodeTypeConverter*> DataNode::mDataConverters = { new ActorDataNodeConverter(), new ComponentDataNodeConverter() };
-
 	DataNode::DataNode():
 		mParent(nullptr)
 	{}
@@ -225,53 +223,6 @@ namespace o2
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(Actor* value)
-	{
-		if (value)
-		{
-			if (value->IsAsset())
-				*AddNode("AssetId") = value->GetAssetId();
-			else if (value->IsOnScene())
-				*AddNode("SceneId") = value->GetID();
-			else
-				*AddNode("Data") = value ? value->Serialize() : (String)"null";
-		}
-
-		return *this;
-	}
-
-	DataNode& DataNode::operator=(Component* value)
-	{
-		if (value)
-		{
-			if (auto ownerActor = value->GetOwnerActor())
-			{
-				if (ownerActor->IsAsset())
-				{
-					*AddNode("AssetId") = ownerActor->GetAssetId();
-					*AddNode("ComponentId") = value->GetID();
-				}
-				else if (ownerActor->IsOnScene())
-				{
-					*AddNode("SceneId") = ownerActor->GetID();
-					*AddNode("ComponentId") = value->GetID();
-				}
-				else
-				{
-					*AddNode("Data") = value->Serialize();
-					*AddNode("Type") = value->GetType().Name();
-				}
-			}
-			else
-			{
-				*AddNode("Data") = value->Serialize();
-				*AddNode("Type") = value->GetType().Name();
-			}
-		}
-
-		return *this;
-	}
-
 	DataNode::operator wchar_t*() const
 	{
 		return mData;
@@ -376,63 +327,6 @@ namespace o2
 	DataNode::operator long long int() const
 	{
 		return (long long int)(int)mData;
-	}
-
-	DataNode::operator Actor*() const
-	{
-		Actor* actor = nullptr;
-
-		if (auto assetIdNode = GetNode("AssetId"))
-		{
-			AssetId assetId = *assetIdNode;
-			actor = o2Scene.GetAssetActorByID(assetId);
-		}
-		else if (auto sceneIdNode = GetNode("SceneId"))
-		{
-			actor = o2Scene.GetActorByID(*sceneIdNode);
-		}
-		else if (auto dataNode = GetNode("Data"))
-		{
-			if (dataNode->Data() == "null")
-				actor = nullptr;
-			else
-			{
-				actor = mnew Actor();
-				actor->ExcludeFromScene();
-				actor->Deserialize(*dataNode);
-			}
-		}
-
-		return actor;
-	}
-
-	DataNode::operator Component*() const
-	{
-		Component* component = nullptr;
-
-		if (auto assetIdNode = GetNode("AssetId"))
-		{
-			AssetId assetId = *assetIdNode;
-			auto actor = o2Scene.GetAssetActorByID(assetId);
-
-			UInt64 componentId = *GetNode("ComponentId");
-			component = actor->GetComponent(componentId);
-		}
-		else if (auto sceneIdNode = GetNode("SceneId"))
-		{
-			auto actor = o2Scene.GetActorByID(*sceneIdNode);
-
-			UInt64 componentId = *GetNode("ComponentId");
-			component = actor->GetComponent(componentId);
-		}
-		else if (auto dataNode = GetNode("Data"))
-		{
-			String type = *GetNode("Type");
-			component = (Component*)o2Reflection.CreateTypeSample(type);
-			component->Deserialize(*dataNode);
-		}
-
-		return component;
 	}
 
 	DataNode* DataNode::operator[](const WString& nodePath)
@@ -665,113 +559,13 @@ namespace o2
 		return XmlDataFormat::SaveDataDoc(*this);
 	}
 
-	void ComponentDataNodeConverter::ToData(void* object, DataNode& data)
+	void DataNode::RegBasicConverters()
 	{
-		Component* value = (Component*)object;
-
-		if (value)
-		{
-			if (auto ownerActor = value->GetOwnerActor())
-			{
-				if (ownerActor->IsAsset())
-				{
-					*data.AddNode("AssetId") = ownerActor->GetAssetId();
-					*data.AddNode("ComponentId") = value->GetID();
-				}
-				else if (ownerActor->IsOnScene())
-				{
-					*data.AddNode("SceneId") = ownerActor->GetID();
-					*data.AddNode("ComponentId") = value->GetID();
-				}
-				else
-				{
-					*data.AddNode("Data") = value->Serialize();
-					*data.AddNode("Type") = value->GetType().Name();
-				}
-			}
-			else
-			{
-				*data.AddNode("Data") = value->Serialize();
-				*data.AddNode("Type") = value->GetType().Name();
-			}
-		}
+		RegDataConverter(new ActorDataNodeConverter());
+		RegDataConverter(new ComponentDataNodeConverter());
+		RegDataConverter(new LayerDataNodeConverter());
+		RegDataConverter(new TagDataNodeConverter());
 	}
 
-	void ComponentDataNodeConverter::FromData(void*& object, const DataNode& data)
-	{
-		Component*& component = (Component*&)object;
-
-		if (auto assetIdNode = data.GetNode("AssetId"))
-		{
-			AssetId assetId = *assetIdNode;
-			auto actor = o2Scene.GetAssetActorByID(assetId);
-
-			UInt64 componentId = *data.GetNode("ComponentId");
-			component = actor->GetComponent(componentId);
-		}
-		else if (auto sceneIdNode = data.GetNode("SceneId"))
-		{
-			auto actor = o2Scene.GetActorByID(*sceneIdNode);
-
-			UInt64 componentId = *data.GetNode("ComponentId");
-			component = actor->GetComponent(componentId);
-		}
-		else if (auto dataNode = data.GetNode("Data"))
-		{
-			String type = *data.GetNode("Type");
-			component = (Component*)o2Reflection.CreateTypeSample(type);
-			component->Deserialize(*dataNode);
-		}
-	}
-
-	bool ActorDataNodeConverter::CheckType(const Type* type) const
-	{
-		return type->IsBasedOn(TypeOf(Actor));
-	}
-
-	void ActorDataNodeConverter::ToData(void* object, DataNode& data)
-	{
-		if (object)
-		{
-			Actor* value = (Actor*)object;
-
-			if (value->IsAsset())
-				*data.AddNode("AssetId") = value->GetAssetId();
-			else if (value->IsOnScene())
-				*data.AddNode("SceneId") = value->GetID();
-			else
-				*data.AddNode("Data") = value ? value->Serialize() : (String)"null";
-		}
-	}
-
-	void ActorDataNodeConverter::FromData(void*& object, const DataNode& data)
-	{
-		Actor*& actor = (Actor*&)object;
-
-		if (auto assetIdNode = data.GetNode("AssetId"))
-		{
-			AssetId assetId = *assetIdNode;
-			actor = o2Scene.GetAssetActorByID(assetId);
-		}
-		else if (auto sceneIdNode = data.GetNode("SceneId"))
-		{
-			actor = o2Scene.GetActorByID(*sceneIdNode);
-		}
-		else if (auto dataNode = data.GetNode("Data"))
-		{
-			if (dataNode->Data() == "null")
-				actor = nullptr;
-			else
-			{
-				actor = mnew Actor();
-				actor->ExcludeFromScene();
-				actor->Deserialize(*dataNode);
-			}
-		}
-	}
-
-	bool ComponentDataNodeConverter::CheckType(const Type* type) const
-	{
-		return type->IsBasedOn(TypeOf(Component));
-	}
+	Vector<IDataNodeTypeConverter*> DataNode::mDataConverters;
 }

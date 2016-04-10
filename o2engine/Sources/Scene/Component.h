@@ -102,6 +102,22 @@ namespace o2
 		friend class Actor;
 	};
 
+	// ------------------------
+	// Component data converter
+	// ------------------------
+	class ComponentDataNodeConverter: public IDataNodeTypeConverter
+	{
+	public:
+		// Converts component pointer to data
+		void ToData(void* object, DataNode& data);
+
+		// Converts from data to component pointer
+		void FromData(void*& object, const DataNode& data);
+
+		// Checks that type is based on Component type
+		bool CheckType(const Type* type) const;
+	};
+
 	template<typename _type>
 	Vector<_type>* Component::GetComponentsInChildren() const
 	{

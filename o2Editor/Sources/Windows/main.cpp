@@ -24,9 +24,9 @@ int main()
 	DataNode data;
 	Vector<Actor*> xx = { mnew Actor(), mnew Actor(), mnew Actor() };
 	TimeStamp* ts = mnew TimeStamp();
-	data = ts;
+	data = xx[0];
 
-	ts = data;
+	//ts = data;
 
 	Camera b;
 	data = b;
@@ -35,7 +35,6 @@ int main()
 	EditorApplication* app = mnew EditorApplication();
 	app->Launch();
 	delete app;
-	delete MemoryManager::instance;
 
 	return 0;
 }

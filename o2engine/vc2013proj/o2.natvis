@@ -7,7 +7,7 @@
   </Type>
 
   <Type Name="o2::Rect&lt;*&gt;">
-    <DisplayString>{{ (L { left } T { top })-(R { right } B { bottom}) }}</DisplayString>
+    <DisplayString>{{ (L { left } T { top })-(R { right } B { bottom }) }}</DisplayString>
     <Expand>
       <Item Name="left" ExcludeView="simple">left</Item>
       <Item Name="top" ExcludeView="simple">top</Item>
@@ -97,33 +97,12 @@
     </Expand>
   </Type>
 
-  <Type Name="o2::Ptr&lt;*&gt;">
-    <AlternativeType Name="o2::ITemplPtr&lt;*&gt;" />
-    <DisplayString>{{ {mObject} }}</DisplayString>
-    <Expand>
-      <Item Name="object">mObject</Item>
-      <Item Name="info">mObjectInfo</Item>
-      <Item Name="pos">mMemTreePosition</Item>
-    </Expand>
-  </Type>
-
   <Type Name="o2::FieldInfo&lt;*&gt;">
     <DisplayString>{{ name={ mName } value={ mFieldRef } }}</DisplayString>
     <Expand>
       <Item Name="name">mName</Item>
       <Item Name="value">mFieldRef</Item>
       <Item Name="owner">mOwner</Item>
-    </Expand>
-  </Type>
-
-  <Type Name="o2::DataDoc">
-    <DisplayString>{{ nodes={ mChildNodes.mCount } }}</DisplayString>
-    <Expand>
-      <Item Name="count" ExcludeView="simple">mChildNodes.mCount</Item>
-      <ArrayItems>
-        <Size>mChildNodes.mCount</Size>
-        <ValuePointer>mChildNodes.mValues</ValuePointer>
-      </ArrayItems>
     </Expand>
   </Type>
 
@@ -193,6 +172,71 @@
     </Expand>
   </Type>
 
+  <Type Name="o2::Actor">
+    <DisplayString>{ mName }:{ mId }</DisplayString>
+    <Expand>
+      <Item Name="name" ExcludeView="simple">mName</Item>
+      <Item Name="id" ExcludeView="simple">mId</Item>
+      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+      <Item Name="locked" ExcludeView="simple">mLocked</Item>
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
+      <Item Name="layer" ExcludeView="simple">mLayer->name</Item>
+      <Item Name="tags" ExcludeView="simple">tags</Item>
+      
+      <Synthetic Name="transform">
+        <DisplayString>(positon={ transform.mPosition }, size={ transform.mSize }, scale={ transform.mScale }, pivot={ transform.mPivot }, angle={ transform.mAngle })</DisplayString>
+        <Expand>
+          <ExpandedItem>transform</ExpandedItem>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="components">
+        <DisplayString>count={mComponents.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mComponents.mCount</Size>
+            <ValuePointer>mComponents.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="children">
+        <DisplayString>count={mChilds.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mChilds.mCount</Size>
+            <ValuePointer>mChilds.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+      
+      <Item Name="is on scene" ExcludeView="simple">mIsOnScene</Item>
+      <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
+      <Item Name="asset id" ExcludeView="simple">mAssetId</Item>
+      <Item Name="layer ptr" ExcludeView="simple">mLayer</Item>
+
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Component">
+    <DisplayString>(ID:{ mId })</DisplayString>
+    <Expand>
+      <Item Name="id" ExcludeView="simple">mId</Item>
+      <Item Name="owner" ExcludeView="simple">mOwner</Item>
+      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::ImageComponent">
+    <DisplayString>(ImageComponent ID:{ mId })</DisplayString>
+    <Expand>
+      <Item Name="id" ExcludeView="simple">mId</Item>
+      <Item Name="owner" ExcludeView="simple">mOwner</Item>
+      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+      <Item Name="sprite" ExcludeView="simple">mSprite</Item>
+    </Expand>
+  </Type>
+
   <Type Name="o2::UIWidgetLayout">
     <DisplayString>({ (int)mAbsoluteRect.left }, { (int)mAbsoluteRect.bottom }, { (int)mAbsoluteRect.right }, { (int)mAbsoluteRect.top })</DisplayString>
     <Expand>
@@ -207,6 +251,86 @@
       <Item Name="driven by parent" ExcludeView="simple">mDrivenByParent</Item>
       <Item Name="abs rect" ExcludeView="simple">mAbsoluteRect</Item>
       <Item Name="local rect" ExcludeView="simple">mLocalRect</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Transform">
+    <DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
+    <Expand>
+      <Item Name="position" ExcludeView="simple">mPosition</Item>
+      <Item Name="pivot" ExcludeView="simple">mPivot</Item>
+      <Item Name="size" ExcludeView="simple">mSize</Item>
+      <Item Name="angle" ExcludeView="simple">mAngle</Item>
+      <Item Name="shear" ExcludeView="simple">mShear</Item>
+      <Item Name="transform" ExcludeView="simple">mTransform</Item>
+      <Item Name="no size transform" ExcludeView="simple">mNonSizedTransform</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::TimeStamp">
+    <DisplayString>({ mSecond }:{ mMinute}:{ mHour } { mDay }.{ mMonth }.{ mYear })</DisplayString>
+    <Expand>
+      <Item Name="year" ExcludeView="simple">mYear</Item>
+      <Item Name="month" ExcludeView="simple">mMonth</Item>
+      <Item Name="day" ExcludeView="simple">mDay</Item>
+      <Item Name="hout" ExcludeView="simple">mHour</Item>
+      <Item Name="minute" ExcludeView="simple">mMinute</Item>
+      <Item Name="secont" ExcludeView="simple">mSecond</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Curve">
+    <DisplayString>(keys count={ mKeys.mCount })</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>mKeys.mCount</Size>
+        <ValuePointer>mKeys.mValues</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Curve::Key">
+    <DisplayString>({ value }:{ position })</DisplayString>
+    <Expand>
+      <Item Name="value" ExcludeView="simple">value</Item>
+      <Item Name="position" ExcludeView="simple">position</Item>
+      <Item Name="leftCoef" ExcludeView="simple">leftCoef</Item>
+      <Item Name="leftCoefPosition" ExcludeView="simple">leftCoefPosition</Item>
+      <Item Name="rightCoef" ExcludeView="simple">rightCoef</Item>
+      <Item Name="rightCoefPosition" ExcludeView="simple">rightCoefPosition</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Sprite">
+    <DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
+    <Expand>
+      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+      <Item Name="position" ExcludeView="simple">mPosition</Item>
+      <Item Name="pivot" ExcludeView="simple">mPivot</Item>
+      <Item Name="size" ExcludeView="simple">mSize</Item>
+      <Item Name="angle" ExcludeView="simple">mAngle</Item>
+      <Item Name="shear" ExcludeView="simple">mShear</Item>
+      <Item Name="alpha" ExcludeView="simple">mColor.a</Item>
+      <Item Name="color" ExcludeView="simple">mColor</Item>
+      <Item Name="texture src" ExcludeView="simple">mTextureSrcRect</Item>
+      <Item Name="mode" ExcludeView="simple">mMode</Item>
+      <Item Name="slices" ExcludeView="simple">mSlices</Item>
+      <Item Name="fill" ExcludeView="simple">mFill</Item>
+      <Item Name="asset id" ExcludeView="simple">mImageAssetId</Item>
+      <Item Name="atlas id" ExcludeView="simple">mAtlasAssetId</Item>
+      
+      <Synthetic Name="corners' colors">
+        <DisplayString>LT { mCornersColors[0] }; RT { mCornersColors[1] }; RB { mCornersColors[2] }; LB { mCornersColors[3] }</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>4</Size>
+            <ValuePointer>mCornersColors</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+      
+      <Item Name="transform" ExcludeView="simple">mTransform</Item>
+      <Item Name="no size transform" ExcludeView="simple">mNonSizedTransform</Item>
     </Expand>
   </Type>
 

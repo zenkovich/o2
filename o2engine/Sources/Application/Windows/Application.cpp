@@ -32,6 +32,8 @@ namespace o2
 		mProjectConfig(nullptr), mRender(nullptr), mScene(nullptr), mTaskManager(nullptr), mTime(nullptr), mTimer(nullptr),
 		mUIManager(nullptr)
 	{
+		DataNode::RegBasicConverters();
+
 		InitializeProperties();
 		InitalizeSystems();
 

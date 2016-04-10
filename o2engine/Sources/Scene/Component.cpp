@@ -93,14 +93,14 @@ namespace o2
 		if (mOwner)
 		{
 			COMPONENT_CHANGED(this);
-			mOwner->mCompontents.Remove(this);
+			mOwner->mComponents.Remove(this);
 		}
 
 		mOwner = actor;
 
 		if (mOwner)
 		{
-			mOwner->mCompontents.Add(this);
+			mOwner->mComponents.Add(this);
 			OnTransformChanged();
 			COMPONENT_CHANGED(this);
 		}
@@ -113,4 +113,67 @@ namespace o2
 		INITIALIZE_GETTER(Component, enabledInHierarchy, IsEnabledInHierarchy);
 	}
 
+	void ComponentDataNodeConverter::ToData(void* object, DataNode& data)
+	{
+		Component* value = (Component*)object;
+
+		if (value)
+		{
+			if (auto ownerActor = value->GetOwnerActor())
+			{
+				if (ownerActor->IsAsset())
+				{
+					*data.AddNode("AssetId") = ownerActor->GetAssetId();
+					*data.AddNode("ComponentId") = value->GetID();
+				}
+				else if (ownerActor->IsOnScene())
+				{
+					*data.AddNode("SceneId") = ownerActor->GetID();
+					*data.AddNode("ComponentId") = value->GetID();
+				}
+				else
+				{
+					*data.AddNode("Data") = value->Serialize();
+					*data.AddNode("Type") = value->GetType().Name();
+				}
+			}
+			else
+			{
+				*data.AddNode("Data") = value->Serialize();
+				*data.AddNode("Type") = value->GetType().Name();
+			}
+		}
+	}
+
+	void ComponentDataNodeConverter::FromData(void*& object, const DataNode& data)
+	{
+		Component*& component = (Component*&)object;
+
+		if (auto assetIdNode = data.GetNode("AssetId"))
+		{
+			AssetId assetId = *assetIdNode;
+			auto actor = o2Scene.GetAssetActorByID(assetId);
+
+			UInt64 componentId = *data.GetNode("ComponentId");
+			component = actor->GetComponent(componentId);
+		}
+		else if (auto sceneIdNode = data.GetNode("SceneId"))
+		{
+			auto actor = o2Scene.GetActorByID(*sceneIdNode);
+
+			UInt64 componentId = *data.GetNode("ComponentId");
+			component = actor->GetComponent(componentId);
+		}
+		else if (auto dataNode = data.GetNode("Data"))
+		{
+			String type = *data.GetNode("Type");
+			component = (Component*)o2Reflection.CreateTypeSample(type);
+			component->Deserialize(*dataNode);
+		}
+	}
+
+	bool ComponentDataNodeConverter::CheckType(const Type* type) const
+	{
+		return type->IsBasedOn(TypeOf(Component));
+	}
 }

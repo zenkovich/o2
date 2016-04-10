@@ -40,7 +40,7 @@ namespace o2
 		for (auto child : other.mChilds)
 			AddChild(child->Clone());
 
-		for (auto component : other.mCompontents)
+		for (auto component : other.mComponents)
 			AddComponent(component->Clone());
 
 		UpdateEnabled();
@@ -104,34 +104,75 @@ namespace o2
 		RemoveAllChilds();
 		RemoveAllComponents();
 
-		Animatable::operator=(other);
+		Vector<Actor**> actorPointersFields;
+		Vector<Component**> componentPointersFields;
+		Dictionary<const Actor*, Actor*> actorsMap;
 
-		mName = other.mName;
-		mEnabled = other.mEnabled;
-		transform = other.transform;
-		mAssetId = other.mAssetId;
-
-		for (auto child : other.mChilds)
-			AddChild(child->Clone());
-
-		for (auto component : other.mCompontents)
-			AddComponent(component->Clone());
+		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap);
+		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap);
 
 		UpdateEnabled();
 		transform.UpdateTransform();
-
-		SetLayer(other.mLayer);
 
 		ACTOR_CHANGED(this);
 
 		return *this;
 	}
 
+	void Actor::ProcessCopying(Actor* dest, const Actor* source, Vector<Actor**>& actorsPointers, 
+							   Vector<Component**>& componentsPointers, Dictionary<const Actor*, Actor*>& actorsMap)
+	{
+		dest->Animatable::operator=(*source);
+
+		dest->mName = source->mName;
+		dest->mEnabled = source->mEnabled;
+		dest->transform = source->transform;
+		dest->mAssetId = source->mAssetId;
+
+		actorsMap.Add(source, dest);
+
+		for (auto child : source->mChilds)
+		{
+			Actor* newChild = mnew Actor();
+			dest->AddChild(newChild);
+
+			ProcessCopying(newChild, child, actorsPointers, componentsPointers, actorsMap);
+		}
+
+		for (auto component : source->mComponents)
+		{
+			Component* newComponent = dest->AddComponent(component->Clone());
+
+			for (auto field : newComponent->GetType().Fields())
+			{
+				if (field->GetType().IsBasedOn(TypeOf(Component)))
+					componentsPointers.Add(field->GetValuePtrStrong<Component*>(newComponent));
+
+				if (field->GetType() == TypeOf(Actor))
+					actorsPointers.Add(field->GetValuePtrStrong<Actor*>(newComponent));
+			}
+		}
+
+		dest->SetLayer(source->mLayer);
+	}
+
+	void Actor::FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers, 
+										   const Vector<Component**>& componentsPointers, 
+										   const Dictionary<const Actor*, Actor*>& actorsMap)
+	{
+		for (auto actorPtr : actorsPointers)
+		{
+			Actor* newActorPtr;
+			if (actorsMap.TryGetValue(*actorPtr, newActorPtr))
+				*actorPtr = newActorPtr;
+		}
+	}
+
 	void Actor::Update(float dt)
 	{
 		Animatable::Update(dt);
 
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 			comp->Update(dt);
 	}
 
@@ -477,7 +518,7 @@ namespace o2
 
 	void Actor::RemoveComponent(Component* component, bool release /*= true*/)
 	{
-		mCompontents.Remove(component);
+		mComponents.Remove(component);
 		component->mOwner = nullptr;
 
 		ACTOR_CHANGED(this);
@@ -488,17 +529,17 @@ namespace o2
 
 	void Actor::RemoveAllComponents()
 	{
-		auto components = mCompontents;
+		auto components = mComponents;
 		for (auto comp : components)
 			delete comp;
 
-		mCompontents.Clear();
+		mComponents.Clear();
 		ACTOR_CHANGED(this);
 	}
 
 	Component* Actor::GetComponent(const String& typeName)
 	{
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 			if (comp->GetType().Name() == typeName)
 				return comp;
 
@@ -507,7 +548,7 @@ namespace o2
 
 	Component* Actor::GetComponent(const Type* type)
 	{
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 			if (comp->GetType().IsBasedOn(*type))
 				return comp;
 
@@ -516,7 +557,7 @@ namespace o2
 
 	Component* Actor::GetComponent(UInt64 id)
 	{
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 			if (comp->GetID() == id)
 				return comp;
 
@@ -525,7 +566,7 @@ namespace o2
 
 	Actor::ComponentsVec Actor::GetComponents() const
 	{
-		return mCompontents;
+		return mComponents;
 	}
 
 	void Actor::SetLayer(Scene::Layer* layer)
@@ -545,7 +586,7 @@ namespace o2
 			layer->enabledActors.Add(this);
 		}
 
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 			comp->OnLayerChanged(lastLayer, layer);
 
 		ACTOR_CHANGED(this);
@@ -568,7 +609,7 @@ namespace o2
 
 	void Actor::OnTransformChanged()
 	{
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 			comp->OnTransformChanged();
 
 		for (auto child : mChilds)
@@ -601,7 +642,7 @@ namespace o2
 			ACTOR_CHANGED(this);
 		}
 
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 			comp->UpdateEnabled();
 
 		for (auto child : mChilds)
@@ -634,7 +675,7 @@ namespace o2
 			*childsNode->AddNode("Child") = child->Serialize();
 
 		auto componentsNode = node.AddNode("Components");
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 		{
 			auto compNode = componentsNode->AddNode("Component");
 			*compNode->AddNode("Data") = comp->Serialize();
@@ -651,7 +692,7 @@ namespace o2
 				Component* comp = (Component*)o2Reflection.CreateTypeSample(*childNode->GetNode("Type"));
 				comp->Deserialize(*childNode->GetNode("Data"));
 				comp->mOwner = this;
-				mCompontents.Add(comp);
+				mComponents.Add(comp);
 			}
 		}
 
@@ -683,7 +724,7 @@ namespace o2
 	Dictionary<String, Component*> Actor::GetAllComponents()
 	{
 		Dictionary<String, Component*> res;
-		for (auto child : mCompontents)
+		for (auto child : mComponents)
 			res.Add(child->GetType().Name(), child);
 
 		return res;
@@ -691,7 +732,7 @@ namespace o2
 
 	void Actor::ComponentsExcludeFromScene()
 	{
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 			comp->OnExcludeFromScene();
 
 		for (auto child : mChilds)
@@ -700,7 +741,7 @@ namespace o2
 
 	void Actor::ComponentsIncludeToScene()
 	{
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 			comp->OnIncludeToScene();
 
 		for (auto child : mChilds)
@@ -727,4 +768,49 @@ namespace o2
 		component.SetAllAccessFunc(this, &Actor::GetAllComponents);
 	}
 
+	void ActorDataNodeConverter::ToData(void* object, DataNode& data)
+	{
+		if (object)
+		{
+			Actor* value = (Actor*)object;
+
+			if (value->IsAsset())
+				*data.AddNode("AssetId") = value->GetAssetId();
+			else if (value->IsOnScene())
+				*data.AddNode("SceneId") = value->GetID();
+			else
+				*data.AddNode("Data") = value ? value->Serialize() : (String)"null";
+		}
+	}
+
+	void ActorDataNodeConverter::FromData(void*& object, const DataNode& data)
+	{
+		Actor*& actor = (Actor*&)object;
+
+		if (auto assetIdNode = data.GetNode("AssetId"))
+		{
+			AssetId assetId = *assetIdNode;
+			actor = o2Scene.GetAssetActorByID(assetId);
+		}
+		else if (auto sceneIdNode = data.GetNode("SceneId"))
+		{
+			actor = o2Scene.GetActorByID(*sceneIdNode);
+		}
+		else if (auto dataNode = data.GetNode("Data"))
+		{
+			if (dataNode->Data() == "null")
+				actor = nullptr;
+			else
+			{
+				actor = mnew Actor();
+				actor->ExcludeFromScene();
+				actor->Deserialize(*dataNode);
+			}
+		}
+	}
+
+	bool ActorDataNodeConverter::CheckType(const Type* type) const
+	{
+		return type->IsBasedOn(TypeOf(Actor));
+	}
 }

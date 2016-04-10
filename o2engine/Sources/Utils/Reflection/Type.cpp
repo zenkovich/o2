@@ -75,9 +75,9 @@ namespace o2
 		return nullptr;
 	}
 
-	Type::TypesVec Type::DerivedTypes() const
+	Vector<const Type*> Type::DerivedTypes() const
 	{
-		TypesVec res;
+		Vector<const Type*> res;
 		for (auto type : Reflection::GetTypes())
 		{
 			auto baseTypes = type->BaseTypes();

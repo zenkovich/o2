@@ -27,25 +27,6 @@ namespace o2
 		typedef Vector<FunctionInfo*> FunctionsInfosVec;
 		typedef Vector<Type*> TypesVec;
 
-		struct Dummy
-		{
-			static Type type;
-		};
-
-		struct ITypeAgent
-		{
-			virtual void* CreateSample() const = 0;
-		};
-
-		template<typename _type>
-		struct TypeAgent: public ITypeAgent
-		{
-			void* CreateSample() const 
-			{
-				return mnew _type();
-			}
-		};
-
 	public:
 		// Default constructor
 		Type();
@@ -88,7 +69,7 @@ namespace o2
 		_res_type Invoke(const String& name, void* object, _args ... args);
 
 		// Returns inherited types
-		TypesVec DerivedTypes() const;
+		Vector<const Type*> DerivedTypes() const;
 
 		// Creates sample copy and returns him
 		void* CreateSample() const;
@@ -100,13 +81,41 @@ namespace o2
 		// Returns field path by pointer from source object
 		String GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const;
 
+	public:
+		// --------------------
+		// Dummy type container
+		// --------------------
+		struct Dummy
+		{
+			static Type type;
+		};
+
+		// -----------------------------
+		// Type sample creator interface
+		// -----------------------------
+		struct ITypeCreator
+		{
+			// Returns new sample of type
+			virtual void* CreateSample() const = 0;
+		};
+
+		// -------------------------------
+		// Specialized type sample creator
+		// -------------------------------
+		template<typename _type>
+		struct TypeCreator: public ITypeCreator
+		{
+			// Returns new sample of type
+			void* CreateSample() const { return mnew _type(); }
+		};
+
 	protected:
 		String            mName;      // Name of object type
 		FieldInfosVec     mFields;    // Fields information
 		FunctionsInfosVec mFunctions; // Functions informations
 		Id                mId;        // Id of type
 		TypesVec          mBaseTypes; // Base types ids
-		ITypeAgent*       mTypeAgent; // Template type agent
+		ITypeCreator*     mTypeAgent; // Template type agent
 
 		friend class FieldInfo;
 		friend class FunctionInfo;
@@ -177,6 +186,7 @@ namespace o2
 		static FunctionInfo* RegFuncParam(FunctionInfo* info, const String& name);
 	}; 
 	
+
 	template<typename _type, typename _baseType>
 	void TypeInitializer::AddBaseType()
 	{

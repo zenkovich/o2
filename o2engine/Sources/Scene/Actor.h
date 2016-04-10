@@ -215,7 +215,7 @@ namespace o2
 
 		Actor*         mParent;      // Parent actor
 		ActorsVec      mChilds;      // Children actors 
-		ComponentsVec  mCompontents; // Components vector 
+		ComponentsVec  mComponents; // Components vector 
 		Scene::Layer*  mLayer;       // Scene layer
 
 		bool           mEnabled;     // Is actor enabled @SERIALIZABLE
@@ -232,6 +232,15 @@ namespace o2
 	protected:
 		// Calls when transformation was changed
 		void OnTransformChanged();
+
+		// Processes copying actor
+		void ProcessCopying(Actor* dest, const Actor* source, Vector<Actor**>& actorsPointers, 
+							Vector<Component**>& componentsPointers, Dictionary<const Actor*, Actor*>& actorsMap);
+
+		// Fixes actors and components pointers by actors map
+		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
+										const Vector<Component**>& componentsPointers,
+										const Dictionary<const Actor*, Actor*>& actorsMap);
 
 		// Sets parent
 		void SetParentProp(Actor* actor);
@@ -271,6 +280,22 @@ namespace o2
 		friend class Tag;
 	};
 
+	// -------------------------
+	// Actor data node converter
+	// -------------------------
+	class ActorDataNodeConverter: public IDataNodeTypeConverter
+	{
+	public:
+		// Converts actor pointer to data 
+		void ToData(void* object, DataNode& data);
+
+		// Gets actor pointer from data
+		void FromData(void*& object, const DataNode& data);
+
+		// Checks that type is based on Actor's type
+		bool CheckType(const Type* type) const;
+	};
+
 	template<typename _type>
 	Vector<_type>* Actor::GetComponentsInChildren() const
 	{
@@ -303,7 +328,7 @@ namespace o2
 	template<typename _type>
 	_type* Actor::GetComponent() const
 	{
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 		{
 			if (comp->GetType().IsBasedOn(TypeOf(_type)))
 				return comp;
@@ -316,7 +341,7 @@ namespace o2
 	Vector<_type>* Actor::GetComponents() const
 	{
 		Vector<_type>* res;
-		for (auto comp : mCompontents)
+		for (auto comp : mComponents)
 		{
 			if (comp->GetType().IsBasedOn(TypeOf(_type)))
 				res.Add(comp);
@@ -415,4 +440,4 @@ namespace o2
 #define ACTOR_HIERARCHY_CHANGED(ACTOR) 
 #endif
 
-}
+	}

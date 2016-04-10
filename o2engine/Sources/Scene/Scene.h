@@ -188,6 +188,21 @@ namespace o2
 		friend class DrawableComponent;
 	};
 
+	// -------------------------
+	// Layer data node converter
+	// -------------------------
+	class LayerDataNodeConverter: public IDataNodeTypeConverter
+	{
+	public:
+		// Converts layer pointer to data 
+		void ToData(void* object, DataNode& data);
+
+		// Gets layer pointer from data
+		void FromData(void*& object, const DataNode& data);
+
+		// Checks that type is layer's type
+		bool CheckType(const Type* type) const;
+	};
 
 	template<typename _type>
 	Vector<_type>* Scene::FindAllActorsComponents()

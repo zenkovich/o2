@@ -81,7 +81,7 @@ namespace o2
 		template<typename _type>
 		_type GetValue(void* object) const;
 
-		// Returns value pointer of field in specified object
+		// Returns value pointer of field in specified object (checks is it pointer)
 		template<typename _type>
 		_type* GetValuePtr(void* object) const;
 
