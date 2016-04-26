@@ -111,7 +111,9 @@ namespace o2
 		if (!mType)
 			return nullptr;
 
-		for (auto field : mType->mFields)
+		auto& fields = mIsPtr ? mType->GetUnpointedType()->mFields : mType->mFields;
+
+		for (auto field : fields)
 		{
 			char* fieldObj = field->GetValuePtr<char>(obj);
 
@@ -141,6 +143,9 @@ namespace o2
 	{
 		if (!mType)
 			return nullptr;
+
+		if (mIsPtr)
+			return mType->GetUnpointedType()->GetFieldPtr<char>(obj, path, fieldInfo);
 
 		return mType->GetFieldPtr<char>(obj, path, fieldInfo);
 	}

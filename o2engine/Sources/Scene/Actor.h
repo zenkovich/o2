@@ -6,6 +6,7 @@
 #include "Scene/Scene.h"
 #include "Scene/Tags.h"
 #include "Utils/Containers/Vector.h"
+#include "Utils/Singleton.h"
 #include "Utils/String.h"
 
 namespace o2
@@ -234,13 +235,16 @@ namespace o2
 		void OnTransformChanged();
 
 		// Processes copying actor
-		void ProcessCopying(Actor* dest, const Actor* source, Vector<Actor**>& actorsPointers, 
-							Vector<Component**>& componentsPointers, Dictionary<const Actor*, Actor*>& actorsMap);
+		void ProcessCopying(Actor* dest, const Actor* source, 
+							Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers, 
+							Dictionary<const Actor*, Actor*>& actorsMap,
+							Dictionary<const Component*, Component*>& componentsMap);
 
 		// Fixes actors and components pointers by actors map
 		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
 										const Vector<Component**>& componentsPointers,
-										const Dictionary<const Actor*, Actor*>& actorsMap);
+										const Dictionary<const Actor*, Actor*>& actorsMap,
+										const Dictionary<const Component*, Component*>& componentsMap);
 
 		// Sets parent
 		void SetParentProp(Actor* actor);
@@ -252,7 +256,7 @@ namespace o2
 		void UpdateLocking();
 
 		// Beginning serialization callback
-		void OnSerialize(DataNode& node);
+		void OnSerialize(DataNode& node) const;
 
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node);
@@ -273,6 +277,7 @@ namespace o2
 		void InitializeProperties();
 
 		friend class ActorAsset;
+		friend class ActorDataNodeConverter;
 		friend class ActorTransform;
 		friend class Component;
 		friend class DrawableComponent;
@@ -283,17 +288,60 @@ namespace o2
 	// -------------------------
 	// Actor data node converter
 	// -------------------------
-	class ActorDataNodeConverter: public IDataNodeTypeConverter
+	class ActorDataNodeConverter: public IDataNodeTypeConverter, public Singleton<ActorDataNodeConverter>
 	{
 	public:
 		// Converts actor pointer to data 
 		void ToData(void* object, DataNode& data);
 
 		// Gets actor pointer from data
-		void FromData(void*& object, const DataNode& data);
+		void FromData(void* object, const DataNode& data);
 
 		// Checks that type is based on Actor's type
 		bool CheckType(const Type* type) const;
+
+	protected:
+		struct ActorDef
+		{
+			Actor** target;
+			bool    isAsset;
+			UInt64  id;
+
+			ActorDef() {}
+			
+			ActorDef(Actor** target, bool isAsset, UInt64 id):
+				target(target), isAsset(isAsset), id(id)
+			{}
+
+			bool operator==(const ActorDef& other) const
+			{
+				return target == other.target;
+			}
+		};
+
+		typedef Vector<ActorDef> ActorDefsVec;
+		typedef Vector<Actor*> ActorsVec;
+
+	protected:
+		ActorDefsVec mUnresolvedActors; 
+		ActorsVec    mNewActors;
+		int          mLockDepth = 0;
+
+	protected:
+		// Locks pointers resolving depth
+		void LockPointersResolving();
+
+		// Unlocks pointers resolving depth
+		void UnlockPointersResolving();
+
+		// Resolves actors' pointers. Works when lock depth is 0
+		void ResolvePointers();
+
+		// Calls when new actor was created
+		static void ActorCreated(Actor* actor);
+
+		friend class Actor;
+		friend class Scene;
 	};
 
 	template<typename _type>

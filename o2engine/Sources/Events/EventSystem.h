@@ -29,9 +29,6 @@ namespace o2
 
 	public:
 		// Returns drag event listener under cursor
-		DragEventsListener* GetDragListenerUnderCursor(CursorId cursorId) const;
-
-		// Returns drag event listener under cursor
 		CursorEventsListener* GetCursorListenerUnderCursor(CursorId cursorId) const;
 
 		// Returns all cursor listeners under cursor arranged by depth

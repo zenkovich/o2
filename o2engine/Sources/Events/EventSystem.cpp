@@ -175,26 +175,6 @@ namespace o2
 		}
 	}
 
-	DragEventsListener* EventSystem::GetDragListenerUnderCursor(CursorId cursorId) const
-	{
-		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
-
-		for (auto listener : mDragListeners)
-		{
-			if (listener->IsDragging())
-				continue;
-
-			if (!listener->IsUnderPoint(cursorPos))
-				continue;
-
-			return listener;
-
-			break;
-		}
-
-		return nullptr;
-	}
-
 	CursorEventsListener* EventSystem::GetCursorListenerUnderCursor(CursorId cursorId) const
 	{
 		if (mUnderCursorListeners.ContainsKey(cursorId))

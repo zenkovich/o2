@@ -430,7 +430,7 @@ namespace Editor
 			if (mSelectedItems.Count() == 1)
 			{
 				Actor* actor = (Actor*)(void*)mSelectedItems[0].object;
-				if (actor->GetComponent(componentProperty->GetSpecializedType()))
+				if (actor->GetComponent(componentProperty->GetSpecializedType()->GetUnpointedType()))
 				{
 					mDragComponentPropertyField = componentProperty;
 					mDragComponentPropertyField->GetWidget()->SetState("selected", true);
@@ -516,7 +516,7 @@ namespace Editor
 		else if (mDragComponentPropertyField)
 		{
 			Actor* actor = (Actor*)(void*)mSelectedItems[0].object;
-			auto component = actor->GetComponent(mDragComponentPropertyField->GetSpecializedType());
+			auto component = actor->GetComponent(mDragComponentPropertyField->GetSpecializedType()->GetUnpointedType());
 
 			mDragComponentPropertyField->SetValue(component);
 			mDragComponentPropertyField->GetWidget()->SetState("selected", false);

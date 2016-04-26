@@ -157,7 +157,7 @@ namespace o2
 		void OnVerScrollChanged(float value);
 
 		// Beginning serialization callback
-		void OnSerialize(DataNode& node);
+		void OnSerialize(DataNode& node) const;
 
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node);

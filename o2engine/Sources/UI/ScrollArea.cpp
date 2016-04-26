@@ -691,7 +691,7 @@ namespace o2
 		OnScrolled();
 	}
 
-	void UIScrollArea::OnSerialize(DataNode& node)
+	void UIScrollArea::OnSerialize(DataNode& node) const
 	{
 		if (mOwnHorScrollBar)
 			*node.AddNode("mHorScrollBar") = mHorScrollBar;

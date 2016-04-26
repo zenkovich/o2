@@ -15,7 +15,6 @@ namespace o2
 		mLastGivenTypeId(1)
 	{
 		mInstance = this;
-		InitializeFundamentalTypes();
 	}
 
 	Reflection::~Reflection()
@@ -50,12 +49,29 @@ namespace o2
 		return nullptr;
 	}
 
-	Type* Reflection::GetType(Type::Id id)
+	const Type* Reflection::GetType(Type::Id id)
 	{
 		for (auto type : mInstance->mTypes)
 		{
 			if (type->ID() == id)
 				return type;
+		}
+
+		return nullptr;
+	}
+
+	const Type* Reflection::GetType(const String& name)
+	{
+		for (auto type : mInstance->mTypes)
+		{
+			if (type->Name() == name)
+				return type;
+		}
+
+		if (name[name.Length() - 1] == '*')
+		{
+			const Type* unptrType = GetType(name.SubStr(0, name.Length() - 1));
+			return InitializePointerType(unptrType);
 		}
 
 		return nullptr;
@@ -99,34 +115,53 @@ namespace o2
 		mInstance->mTypes.Add(&FundamentalType<void>::type);
 	}
 
-	Type IObject::type;
-	Type FundamentalType<int>::type;
-	Type FundamentalType<bool>::type;
-	Type FundamentalType<char>::type;
-	Type FundamentalType<wchar_t>::type;
-	Type FundamentalType<short int>::type;
-	Type FundamentalType<long int>::type;
-	Type FundamentalType<long long int>::type;
-	Type FundamentalType<unsigned char>::type;
-	Type FundamentalType<unsigned short int>::type;
-	Type FundamentalType<unsigned int>::type;
-	Type FundamentalType<unsigned long int>::type;
-	Type FundamentalType<unsigned long long int>::type;
-	Type FundamentalType<float>::type;
-	Type FundamentalType<double>::type;
-	Type FundamentalType<long double>::type;
-	Type FundamentalType<void>::type;
-	Type FundamentalType<float const>::type;
-	Type FundamentalType<int const>::type;
-	Type FundamentalType<unsigned int const>::type;
-	Type FundamentalType<Basis>::type;
-	Type FundamentalType<Color4>::type;
-	Type FundamentalType<RectF>::type;
-	Type FundamentalType<RectI>::type;
-	Type FundamentalType<Vec2F>::type;
-	Type FundamentalType<Vec2I>::type;
-	Type FundamentalType<Vertex2>::type;
-	Type FundamentalType<String>::type;
-	Type FundamentalType<WString>::type;
-	Type FundamentalType<DataNode>::type;
+	const Type* Reflection::InitializePointerType(const Type* type)
+	{
+		if (type->mPtrType)
+			return type->mPtrType;
+
+		Type* newType = new Type(type->mName + "*");
+		newType->mId = mInstance->mLastGivenTypeId++;
+		newType->mTypeAgent = new Type::TypeCreator<void*>();
+		newType->mSize = sizeof(void*);
+		newType->mPointer = type->mPointer + 1;
+
+		type->mPtrType = newType;
+		newType->mUnptrType = const_cast<Type*>(type);
+
+		mInstance->mTypes.Add(newType);
+
+		return newType;
+	}
+
+	Type IObject::type("o2::IObject");
+	Type FundamentalType<int>::type("int");
+	Type FundamentalType<bool>::type("bool");
+	Type FundamentalType<char>::type("char");
+	Type FundamentalType<wchar_t>::type("wchar_t");
+	Type FundamentalType<short int>::type("short int");
+	Type FundamentalType<long int>::type("long int");
+	Type FundamentalType<long long int>::type("long long int");
+	Type FundamentalType<unsigned char>::type("unsigned char");
+	Type FundamentalType<unsigned short int>::type("unsigned short int");
+	Type FundamentalType<unsigned int>::type("unsigned int");
+	Type FundamentalType<unsigned long int>::type("unsigned long int");
+	Type FundamentalType<unsigned long long int>::type("unsigned long long int");
+	Type FundamentalType<float>::type("float");
+	Type FundamentalType<double>::type("double");
+	Type FundamentalType<long double>::type("long double");
+	Type FundamentalType<void>::type("void");
+	Type FundamentalType<float const>::type("float const");
+	Type FundamentalType<int const>::type("int const");
+	Type FundamentalType<unsigned int const>::type("unsigned int const");
+	Type FundamentalType<Basis>::type("o2::Basis");
+	Type FundamentalType<Color4>::type("o2::Color4");
+	Type FundamentalType<RectF>::type("o2::RectF");
+	Type FundamentalType<RectI>::type("o2::RectI");
+	Type FundamentalType<Vec2F>::type("o2::Vec2F");
+	Type FundamentalType<Vec2I>::type("o2::Vec2I");
+	Type FundamentalType<Vertex2>::type("o2::Vertex2");
+	Type FundamentalType<String>::type("o2::String");
+	Type FundamentalType<WString>::type("o2::WString");
+	Type FundamentalType<DataNode>::type("o2::DataNode");
 }

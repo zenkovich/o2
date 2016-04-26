@@ -303,7 +303,12 @@ namespace Editor
 	{
 		for (auto field : mAvailablePropertiesFields)
 		{
-			if (type->IsBasedOn(*field->GetFieldType()))
+			if (type->IsPointer())
+			{
+				if (type->GetUnpointedType()->IsBasedOn(*field->GetFieldType()->GetUnpointedType()))
+					return field;
+			}
+			else if (type->IsBasedOn(*field->GetFieldType()))
 				return field;
 		}
 

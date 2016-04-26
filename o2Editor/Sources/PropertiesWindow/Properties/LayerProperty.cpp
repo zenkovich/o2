@@ -113,7 +113,7 @@ namespace Editor
 
 	const Type* LayerProperty::GetFieldType() const
 	{
-		return &TypeOf(Scene::Layer);
+		return &TypeOf(Scene::Layer*);
 	}
 
 	void LayerProperty::SelectLayer(const WString& name)

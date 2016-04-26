@@ -218,15 +218,6 @@
     </Expand>
   </Type>
 
-  <Type Name="o2::Component">
-    <DisplayString>(ID:{ mId })</DisplayString>
-    <Expand>
-      <Item Name="id" ExcludeView="simple">mId</Item>
-      <Item Name="owner" ExcludeView="simple">mOwner</Item>
-      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
-    </Expand>
-  </Type>
-
   <Type Name="o2::ImageComponent">
     <DisplayString>(ImageComponent ID:{ mId })</DisplayString>
     <Expand>

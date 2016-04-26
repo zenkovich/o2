@@ -29,7 +29,7 @@ namespace o2
 
 	public:
 		// Default constructor
-		Type();
+		Type(const String& name);
 
 		// Destructor
 		~Type();
@@ -46,8 +46,20 @@ namespace o2
 		// Returns id of type
 		Id ID() const;
 
+		// Returns size of type in bytes
+		int Size() const;
+
 		// Is this type based on other
 		bool IsBasedOn(const Type& other) const;
+
+		// Returns pointer of type (type -> type*)
+		const Type* GetPointerType() const;
+
+		// Returns type with removed pointer (type* -> type)
+		const Type* GetUnpointedType() const;
+
+		// Is type pointer
+		bool IsPointer() const;
 
 		// Returns vector of base types
 		const TypesVec& BaseTypes() const;
@@ -116,6 +128,14 @@ namespace o2
 		Id                mId;        // Id of type
 		TypesVec          mBaseTypes; // Base types ids
 		ITypeCreator*     mTypeAgent; // Template type agent
+		int               mPointer;   // Amount of pointers of type
+		mutable Type*     mPtrType;   // Pointer type from this
+		mutable Type*     mUnptrType; // Unpoint type from this
+		int               mSize;      // Size of type in bytes
+
+	protected:
+		// Sets name for this and pointer/unpoint types
+		void SetName(const String& name);
 
 		friend class FieldInfo;
 		friend class FunctionInfo;
@@ -136,15 +156,43 @@ namespace o2
 		static Type type;
 	};
 
+	template<typename T, typename X = 	
+		    std::conditional<std::is_base_of<IObject, T>::value, 
+		        T,
+		    //else
+		        std::conditional<(std::is_fundamental<T>::value ||
+		                         std::is_same<T, Basis>::value ||
+		                         std::is_same<T, Color4>::value ||
+		                         std::is_same<T, RectI>::value ||
+		                         std::is_same<T, RectF>::value ||
+		                         std::is_same<T, Vec2I>::value ||
+		                         std::is_same<T, Vec2F>::value ||
+		                         std::is_same<T, Vertex2>::value ||
+		                         std::is_same<T, String>::value ||
+		                         std::is_same<T, WString>::value ||
+		                         std::is_same<T, DataNode>::value) && !std::is_const<T>::value,
+		            FundamentalType<T>,
+		        //else
+		            Type::Dummy
+		        >::type
+			>::type>
+	struct TypeDeductor
+	{
+		typedef X type;
+	};
+
 	template<typename _type>
 	const Type& _TypeOf()
 	{
-		return std::conditional<std::is_base_of<IObject, _type>::value, _type, 
-			std::conditional<std::is_fundamental<_type>::value || std::is_same<_type, Basis>::value
-			|| std::is_same<_type, Color4>::value || std::is_same<_type, RectI>::value || std::is_same<_type, RectF>::value
-			|| std::is_same<_type, Vec2I>::value || std::is_same<_type, Vec2F>::value || std::is_same<_type, Vertex2>::value
-			|| std::is_same<_type, String>::value || std::is_same<_type, WString>::value || std::is_same<_type, DataNode>::value,
-			FundamentalType<_type>, Type::Dummy>::type>::type::type;
+		if (std::is_pointer<_type>::value)
+			return *_TypeOf<std::remove_pointer<_type>::type>().GetPointerType();
+
+
+		return std::conditional<std::is_pointer<_type>::value, 
+			       TypeDeductor<std::remove_pointer<_type>::type>::type,
+			   //else
+			       TypeDeductor<_type>::type
+		       >::type::type;
 	}
 
 	// ----------------
@@ -199,7 +247,7 @@ namespace o2
 	template<typename _type>
 	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type*& value, ProtectSection section)
 	{
-		auto valType = &TypeOf(_type);
+		auto valType = &TypeOf(_type*);
 		type->mFields.Add(new FieldInfo(name, offset, false, true, valType, section,
 										new FieldInfo::FieldSerializer<_type*>()));
 		return *type->mFields.Last();

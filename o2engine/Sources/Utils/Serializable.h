@@ -16,10 +16,10 @@ namespace o2
 	{
 	public:
 		// Serializing object into data node
-		virtual DataNode Serialize() { return DataNode(); }
+		virtual DataNode Serialize() const;
 
 		// Deserializing object from data node
-		virtual void Deserialize(const DataNode& node) {}
+		virtual void Deserialize(const DataNode& node);
 
 		// DataNode converting operator
 		virtual operator DataNode() { return Serialize(); };
@@ -31,7 +31,7 @@ namespace o2
 
 	protected:
 		// Beginning serialization callback
-		virtual void OnSerialize(DataNode& node) {}
+		virtual void OnSerialize(DataNode& node) const {}
 
 		// Completion deserialization callback
 		virtual void OnDeserialized(const DataNode& node) {}
@@ -71,38 +71,6 @@ public:                                                                         
 	operator DataNode() 							                                                                   \
 	{ 												                                                                   \
 		return Serialize(); 						                                                                   \
-	}                                                                                                                  \
-    DataNode Serialize()																				               \
-	{																												   \
-		DataNode res;																								   \
-		OnSerialize(res);																							   \
-		for (auto field : GetType().Fields())																		   \
-		{																											   \
-			auto srlzAttribute = field->Attribute<SerializableAttribute>();										       \
-			if (srlzAttribute)																						   \
-			{																										   \
-				field->SerializeObject((void*)field->GetValuePtrStrong<char>(this), *res.AddNode(field->Name()));      \
-			}																										   \
-		}																											   \
-																													   \
-		return res;																									   \
-	}																												   \
-																													   \
-	void Deserialize(const DataNode& node)															                   \
-	{																												   \
-		for (auto field : GetType().Fields())																		   \
-		{																											   \
-			auto srlzAttribute = field->Attribute<SerializableAttribute>();										       \
-			if (srlzAttribute)																						   \
-			{																										   \
-				auto fldNode = node.GetNode(field->Name());															   \
-				if (fldNode)																						   \
-				{																									   \
-					field->DeserializeObject((void*)field->GetValuePtrStrong<char>(this), *fldNode);			       \
-				}																									   \
-			}																										   \
-		}																											   \
-		OnDeserialized(node);																						   \
-	}																												   \
+	}            																									   \
 	static void InitializeType(CLASS* sample)   
 }

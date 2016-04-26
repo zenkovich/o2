@@ -207,6 +207,7 @@
     <ClInclude Include="..\Sources\UI\List.h" />
     <ClInclude Include="..\Sources\UI\Toggle.h" />
     <ClInclude Include="..\Sources\UI\Tree.h" />
+    <ClInclude Include="..\Sources\UI\Treex.h" />
     <ClInclude Include="..\Sources\UI\UIManager.h" />
     <ClInclude Include="..\Sources\UI\VerticalLayout.h" />
     <ClInclude Include="..\Sources\UI\VerticalProgress.h" />

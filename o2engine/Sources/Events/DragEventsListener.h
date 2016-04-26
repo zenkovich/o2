@@ -4,6 +4,20 @@
 
 namespace o2
 {
+	class DragEventsListener;
+
+	class DragDropArea: public CursorEventsListener
+	{
+	protected:
+		// Calls when some DragEventsListener was dropped to this
+		virtual void OnDropped(DragEventsListener* draggable);
+
+		// Calls when some drag listener was dragged above this area
+		virtual void OnDraggedAbove(DragEventsListener* draggable);
+
+		friend class DragEventsListener;
+	};
+
 	// --------------------
 	// Drag events listener
 	// --------------------
@@ -16,6 +30,19 @@ namespace o2
 		// Destructor
 		virtual ~DragEventsListener();
 
+		// Returns true if it's dragging
+		bool IsDragging() const;
+
+		// Calls when listener was drawn
+		virtual void OnDrawn();
+
+	protected:
+		bool  mIsDragging;            // True when dragging
+		float mDragDistanceThreshold; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
+		Vec2F mPressedCursorPos;      // Cursor pressed position
+		int   mPressedCursorId;       // Id of pressed cursor
+
+	protected:
 		// Calls when cursor pressed on this
 		virtual void OnCursorPressed(const Input::Cursor& cursor);
 
@@ -32,26 +59,15 @@ namespace o2
 		virtual void OnDragStart(const Input::Cursor& cursor);
 
 		// Calls when dragged
-		virtual void OnDragged(const Input::Cursor& cursor);
+		virtual void OnDragged(const Input::Cursor& cursor, DragDropArea* area);
 
 		// Calls when dragging completed
-		virtual void OnDragEnd(const Input::Cursor& cursor, DragEventsListener* underDragListener);
+		virtual void OnDragEnd(const Input::Cursor& cursor);
 
-		// Calls when some other DragEventListener was dragged to this
-		virtual void OnDropped(DragEventsListener* dropped);
-
-		// Returns true if it's dragging
-		bool IsDragging() const;
-
-		// Calls when listener was drawn
-		virtual void OnDrawn();
-
-	protected:
-		bool  mIsDragging;            // True when dragging
-		float mDragDistanceThreshold; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
-		Vec2F mPressedCursorPos;      // Cursor pressed position
-		int   mPressedCursorId;       // Id of pressed cursor
+		// Calls when this was dropped
+		virtual void OnDropped(DragDropArea* area);
 
 		friend class EventSystem;
+		friend class DragDropArea;
 	};
 }

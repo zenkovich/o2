@@ -28,7 +28,10 @@ namespace o2
 		static void* CreateTypeSample(const String& typeName);
 
 		// Returns type by type id
-		static Type* GetType(Type::Id id);
+		static const Type* GetType(Type::Id id);
+
+		// Returns type by name
+		static const Type* GetType(const String& name);
 
 		// Returns enum value from string
 		template<typename _type>
@@ -40,7 +43,7 @@ namespace o2
 
 		// Initializes type
 		template<typename _type>
-		static void InitializeType(const String& name);
+		static void InitializeType();
 
 		// Initializes fundamental type
 		template<typename _type>
@@ -52,6 +55,9 @@ namespace o2
 
 		// Initializes fundamental types
 		static void InitializeFundamentalTypes();
+
+		// Initializes pointer type
+		static const Type* InitializePointerType(const Type* type);
 
 	protected:
 		typedef Dictionary<const char*, Dictionary<int, String>> EnumsDict;
@@ -95,14 +101,14 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Reflection::InitializeType(const String& name)
+	void Reflection::InitializeType()
 	{
 		_type* sample = nullptr;
 
 		_type::InitializeType(sample);
-		_type::type.mName = name;
 		_type::type.mId = mInstance->mLastGivenTypeId++;
 		_type::type.mTypeAgent = new Type::TypeCreator<_type>();
+		_type::type.mSize = sizeof(_type);
 
 		mInstance->mTypes.Add(&_type::type);
 	}
@@ -110,9 +116,10 @@ namespace o2
 	template<typename _type>
 	void Reflection::InitializeFundamentalType()
 	{
-		FundamentalType<_type>::type.mName = typeid(_type).name();
+		FundamentalType<_type>::type.SetName(typeid(_type).name());
 		FundamentalType<_type>::type.mId = mInstance->mLastGivenTypeId++;
 		FundamentalType<_type>::type.mTypeAgent = new Type::TypeCreator<_type>();
+		FundamentalType<_type>::type.mSize = sizeof(_type);
 
 		mInstance->mTypes.Add(&FundamentalType<_type>::type);
 	}

@@ -217,10 +217,10 @@ namespace o2
 		return mId;
 	}
 
-	void Asset::OnSerialize(DataNode& node)
+	void Asset::OnSerialize(DataNode& node) const
 	{
 		*node.AddNode("path") = mPath;
-		*node.AddNode("id") = IdRef();
+		*node.AddNode("id") = GetAssetId();
 	}
 
 	void Asset::OnDeserialized(const DataNode& node)

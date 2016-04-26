@@ -206,7 +206,7 @@ namespace o2
 		void BuildFill360CCWMesh();
 
 		// Calling when serializing
-		void OnSerialize(DataNode& node);
+		void OnSerialize(DataNode& node) const;
 
 		// Calling when deserializing
 		void OnDeserialized(const DataNode& node);

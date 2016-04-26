@@ -115,7 +115,7 @@ namespace o2
 
 	void ComponentDataNodeConverter::ToData(void* object, DataNode& data)
 	{
-		Component* value = (Component*)object;
+		Component* value = *(Component**)object;
 
 		if (value)
 		{
@@ -145,9 +145,9 @@ namespace o2
 		}
 	}
 
-	void ComponentDataNodeConverter::FromData(void*& object, const DataNode& data)
+	void ComponentDataNodeConverter::FromData(void* object, const DataNode& data)
 	{
-		Component*& component = (Component*&)object;
+		Component* component = *(Component**)object;
 
 		if (auto assetIdNode = data.GetNode("AssetId"))
 		{

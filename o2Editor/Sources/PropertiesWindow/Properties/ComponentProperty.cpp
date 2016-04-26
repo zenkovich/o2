@@ -136,7 +136,7 @@ namespace Editor
 
 	const Type* ComponentProperty::GetFieldType() const
 	{
-		return &TypeOf(Component);
+		return &TypeOf(Component*);
 	}
 
 	void ComponentProperty::SpecializeType(const Type* type)

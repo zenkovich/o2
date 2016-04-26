@@ -202,6 +202,8 @@ namespace o2
 
 	void Scene::Load(const String& path, bool append /*= false*/)
 	{
+		ActorDataNodeConverter::Instance().LockPointersResolving();
+
 		if (!append)
 			Clear();
 
@@ -215,6 +217,9 @@ namespace o2
 				mLayers.Add(layer);
 
 		ActorsVec loadActors = *data["actors"];
+
+		ActorDataNodeConverter::Instance().UnlockPointersResolving();
+		ActorDataNodeConverter::Instance().ResolvePointers();
 	}
 
 	void Scene::Save(const String& path)

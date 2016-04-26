@@ -523,6 +523,9 @@
     <ClInclude Include="..\Sources\Utils\Data\DataNode.h">
       <Filter>Sources\Utils\Data</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\UI\Treex.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">

@@ -89,7 +89,7 @@ public class CppReflectionGenerator
 	{
 		string res = "";
 
-		reflectableClasses.ForEach(x => res += "o2::Type " + x.name.TrimStart(':') + "::type;\n");
+		reflectableClasses.ForEach(x => res += "o2::Type " + x.name.TrimStart(':') + "::type(\"" + x.name.TrimStart(':') + "\");\n");
 
 		Console.Write("CPP Generation: Types declaration done " + DateTime.Now + "\n");
 
@@ -203,7 +203,7 @@ public class CppReflectionGenerator
 	{
 		string res = "";
 
-		reflectableClasses.ForEach(x => res += "\to2::Reflection::InitializeType<" + x.name + ">(\"" + x.name + "\");\n");
+		reflectableClasses.ForEach(x => res += "\to2::Reflection::InitializeType<" + x.name + ">();\n");
 
 		Console.Write("CPP Generation: Types initializations done " + DateTime.Now + "\n");
 

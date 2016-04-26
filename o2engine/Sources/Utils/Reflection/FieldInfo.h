@@ -87,6 +87,10 @@ namespace o2
 
 		// Returns value pointer of field in specified object
 		template<typename _type>
+		const _type* GetValuePtrStrong(const void* object) const;
+
+		// Returns value pointer of field in specified object
+		template<typename _type>
 		_type* GetValuePtrStrong(void* object) const;
 
 		// Sets value of field in specified object
@@ -202,6 +206,12 @@ namespace o2
 	_type FieldInfo::GetValue(void* object) const
 	{
 		return *(_type*)((char*)object + mOffset);
+	}
+
+	template<typename _type>
+	const _type* FieldInfo::GetValuePtrStrong(const void* object) const
+	{
+		return (_type*)((char*)object + mOffset);
 	}
 
 	template<typename _type>

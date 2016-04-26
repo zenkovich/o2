@@ -15,63 +15,6 @@ namespace o2
 		mParent(nullptr)
 	{}
 
-	DataNode::DataNode(const WString& name) :
-		mName(name), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, char* value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, wchar_t* value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, bool value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-
-	DataNode::DataNode(const WString& name, int value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, float value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, UInt value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, const String& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, const WString& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, const Vec2F& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, const Vec2I& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, const RectF& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, const RectI& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
-	DataNode::DataNode(const WString& name, const Color4& value) :
-		mName(name), mData(value), mParent(nullptr)
-	{}
-
 	DataNode::DataNode(const DataNode& other) :
 		mName(other.mName), mData(other.mData), mParent(nullptr)
 	{
@@ -83,14 +26,8 @@ namespace o2
 		}
 	}
 
-	DataNode::DataNode(const WString& name, ISerializable& value):
-		mName(mName), mParent(nullptr)
-	{
-		*this = value.Serialize();
-	}
-
-	DataNode::DataNode(int value):
-		mData(value), mParent(nullptr)
+	DataNode::DataNode(const WString& name):
+		mName(name), mParent(nullptr)
 	{}
 
 	DataNode::~DataNode()
@@ -98,7 +35,12 @@ namespace o2
 		Clear();
 	}
 
-	DataNode& DataNode::operator=(const DataNode& other)
+	DataNode& DataNode::operator=(const DataNode& value)
+	{
+		return SetValue(value);
+	}
+
+	DataNode& DataNode::SetValue(const DataNode& other)
 	{
 		for (auto child : mChildNodes)
 			delete child;
@@ -114,219 +56,219 @@ namespace o2
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(char* value)
+	DataNode& DataNode::SetValue(char* value)
 	{
 		mData = value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(wchar_t* value)
+	DataNode& DataNode::SetValue(wchar_t* value)
 	{
 		mData = value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(int value)
+	DataNode& DataNode::SetValue(int value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(unsigned long value)
+	DataNode& DataNode::SetValue(unsigned long value)
 	{
 		mData = (WString)(unsigned int)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(long long int value)
+	DataNode& DataNode::SetValue(long long int value)
 	{
 		mData = (WString)(int)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(UInt64 value)
+	DataNode& DataNode::SetValue(UInt64 value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(float value)
+	DataNode& DataNode::SetValue(float value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(double value)
+	DataNode& DataNode::SetValue(double value)
 	{
 		mData = (WString)(float)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(UInt value)
+	DataNode& DataNode::SetValue(UInt value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
 
-	DataNode& DataNode::operator=(bool value)
+	DataNode& DataNode::SetValue(bool value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const String& value)
+	DataNode& DataNode::SetValue(const String& value)
 	{
 		mData = value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const WString& value)
+	DataNode& DataNode::SetValue(const WString& value)
 	{
 		mData = value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const Vec2F& value)
+	DataNode& DataNode::SetValue(const Vec2F& value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const Vec2I& value)
+	DataNode& DataNode::SetValue(const Vec2I& value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const RectF& value)
+	DataNode& DataNode::SetValue(const RectF& value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const RectI& value)
+	DataNode& DataNode::SetValue(const RectI& value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(const Color4& value)
+	DataNode& DataNode::SetValue(const Color4& value)
 	{
 		mData = (WString)value;
 		return *this;
 	}
 
-	DataNode& DataNode::operator=(ISerializable& other)
+	DataNode& DataNode::SetValue(ISerializable& other)
 	{
 		*this = other.Serialize();
 		return *this;
 	}
 
-	DataNode::operator wchar_t*() const
+	void DataNode::DataNode::GetValue(wchar_t*& value) const
 	{
-		return mData;
+		memcpy(value, mData.Data(), sizeof(wchar_t)*mData.Length() + 1);
 	}
 
-	DataNode::operator bool() const
+	void DataNode::GetValue(bool& value) const
 	{
-		return (bool)mData;
+		value = (bool)mData;
 	}
 
-	DataNode::operator int() const
+	void DataNode::GetValue(int& value) const
 	{
-		return (int)mData;
+		value = (int)mData;
 	}
 
-	DataNode::operator float() const
+	void DataNode::GetValue(float& value) const
 	{
-		return (float)mData;
+		value = (float)mData;
 	}
 
-	DataNode::operator UInt() const
+	void DataNode::GetValue(UInt& value) const
 	{
-		return (UInt)mData;
+		value = (UInt)mData;
 	}
 
-	DataNode::operator UInt64() const
+	void DataNode::GetValue(UInt64& value) const
 	{
-		return (UInt64)mData;
+		value = (UInt64)mData;
 	}
 
-	DataNode::operator String() const
+	void DataNode::GetValue(String& value) const
 	{
-		return mData;
+		value = mData;
 	}
 
-	DataNode::operator WString() const
+	void DataNode::GetValue(WString& value) const
 	{
-		return mData;
+		value = mData;
 	}
 
-	DataNode::operator Vec2F() const
+	void DataNode::GetValue(Vec2F& value) const
 	{
-		return (Vec2F)mData;
+		value = (Vec2F)mData;
 	}
 
-	DataNode::operator Vec2I() const
+	void DataNode::GetValue(Vec2I& value) const
 	{
-		return (Vec2I)mData;
+		value = (Vec2I)mData;
 	}
 
-	DataNode::operator RectF() const
+	void DataNode::GetValue(RectF& value) const
 	{
-		return (RectF)mData;
+		value = (RectF)mData;
 	}
 
-	DataNode::operator RectI() const
+	void DataNode::GetValue(RectI& value) const
 	{
-		return (RectI)mData;
+		value = (RectI)mData;
 	}
 
-	DataNode::operator Color4() const
+	void DataNode::GetValue(Color4& value) const
 	{
-		return (Color4)mData;
+		value = (Color4)mData;
 	}
 
 
-	DataNode::operator char() const
+	void DataNode::GetValue(char& value) const
 	{
-		return (char)(int)mData;
+		value = (char)(int)mData;
 	}
 
-	DataNode::operator unsigned char() const
+	void DataNode::GetValue(unsigned char& value) const
 	{
-		return (unsigned char)(unsigned int)mData;
+		value = (unsigned char)(unsigned int)mData;
 	}
 
-	DataNode::operator wchar_t() const
+	void DataNode::GetValue(wchar_t& value) const
 	{
-		return (wchar_t)(int)mData;
+		value = (wchar_t)(int)mData;
 	}
 
-	DataNode::operator short() const
+	void DataNode::GetValue(short& value) const
 	{
-		return (short)(int)mData;
+		value = (short)(int)mData;
 	}
 
-	DataNode::operator unsigned short() const
+	void DataNode::GetValue(unsigned short& value) const
 	{
-		return (unsigned short)(unsigned int)mData;
+		value = (unsigned short)(unsigned int)mData;
 	}
 
-	DataNode::operator long() const
+	void DataNode::GetValue(long& value) const
 	{
-		return (long)(int)mData;
+		value = (long)(int)mData;
 	}
 
-	DataNode::operator unsigned long() const
+	void DataNode::GetValue(unsigned long& value) const
 	{
-		return (unsigned long)(unsigned int)mData;
+		value = (unsigned long)(unsigned int)mData;
 	}
 
-	DataNode::operator long long int() const
+	void DataNode::GetValue(long long int& value) const
 	{
-		return (long long int)(int)mData;
+		value = (long long int)(int)mData;
 	}
 
 	DataNode* DataNode::operator[](const WString& nodePath)
@@ -400,7 +342,8 @@ namespace o2
 			DataNode* node = GetNode(namePart);
 			if (!node)
 			{
-				node = mnew DataNode(namePart);
+				node = mnew DataNode();
+				node->SetName(namePart);
 				node->mParent = this;
 				mChildNodes.Add(node);
 			}
@@ -408,7 +351,8 @@ namespace o2
 			return node->AddNode(name.SubStr(delPos + 1));
 		}
 
-		DataNode* newNode = mnew DataNode(name);
+		DataNode* newNode = mnew DataNode();
+		newNode->SetName(name);
 		newNode->mParent = this;
 		mChildNodes.Add(newNode);
 

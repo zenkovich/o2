@@ -134,7 +134,7 @@ namespace Editor
 
 	const Type* ActorProperty::GetFieldType() const
 	{
-		return &TypeOf(Actor);
+		return &TypeOf(Actor*);
 	}
 
 	void ActorProperty::SetValue(Actor* value)

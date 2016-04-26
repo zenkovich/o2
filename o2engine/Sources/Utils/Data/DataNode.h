@@ -19,10 +19,10 @@ namespace o2
 	{
 	public:
 		// Converts data to DataNode
-		virtual void ToData(void* object, DataNode& data) {}
+		virtual void ToData(const void* object, DataNode& data) {}
 
 		// Converts from DataNode to object
-		virtual void FromData(void*& object, const DataNode& data) {}
+		virtual void FromData(void* object, const DataNode& data) {}
 
 		// Checks that type is supports by this converter
 		virtual bool CheckType(const Type* type) const { return false; }
@@ -67,232 +67,183 @@ namespace o2
 		// Default constructor
 		DataNode();
 
-		// Copy-constructor
-		DataNode(const DataNode& other);
-
 		// Constructor with name
 		DataNode(const WString& name);
 
-		// Constructor with name and string value
-		DataNode(const WString& name, char* value);
-
-		// Constructor with name and wide characters string value
-		DataNode(const WString& name, wchar_t* value);
-
-		// Constructor with name and boolean value
-		DataNode(const WString& name, bool value);
-
-		// Constructor with name and integer value
-		DataNode(const WString& name, int value);
-
-		// Constructor with name and float value
-		DataNode(const WString& name, float value);
-
-		// Constructor with name and unsigned integer value
-		DataNode(const WString& name, UInt value);
-
-		// Constructor with name and string value
-		DataNode(const WString& name, const String& value);
-
-		// Constructor with name and wide characters string value
-		DataNode(const WString& name, const WString& value);
-
-		// Constructor with name and float vector value
-		DataNode(const WString& name, const Vec2F& value);
-
-		// Constructor with name and integer vector value
-		DataNode(const WString& name, const Vec2I& value);
-
-		// Constructor with name and float rectangle value
-		DataNode(const WString& name, const RectF& value);
-
-		// Constructor with name and integer rectangle value
-		DataNode(const WString& name, const RectI& value);
-
-		// Constructor with name and color value
-		DataNode(const WString& name, const Color4& value);
-
-		// Constructor with name and serializable value
-		DataNode(const WString& name, ISerializable& value);
-
-		// Constructor with integer value
-		DataNode(int value);
-
-		// Constructor with name and pointer value
-		template<typename _type>
-		DataNode(const WString& name, _type* value);
-
-		// Constructor with name and vector value
-		template<typename _type>
-		DataNode(const WString& name, const Vector<_type>& value);
-
-		// Constructor with name and dictionary value
-		template<typename _key, typename _value>
-		DataNode(const WString& name, const Dictionary<_key, _value>& value);
-
+		// Copy-constructor
+		DataNode(const DataNode& other);
 
 		// Destructor
 		virtual ~DataNode();
 
+		// Assign operator
+		DataNode& operator=(const DataNode& value);
 
-		// Assign operator to other node
-		DataNode& operator=(const DataNode& other);
+		// Assign operator
+		template<typename _type>
+		DataNode& operator=(const _type& value);
 
-		// Assign operator to other node
-		DataNode& operator=(ISerializable& other);
+		// Cast to type operator
+		template<typename _type>
+		operator _type() const;
+
+		// Sets value from other node
+		DataNode& SetValue(const DataNode& other);
+
+		// Sets value from other node
+		DataNode& SetValue(ISerializable& other);
 
 		// Assign operator string value
-		DataNode& operator=(char* value);
+		DataNode& SetValue(char* value);
 
 		// Assign operator wide string value
-		DataNode& operator=(wchar_t* value);
+		DataNode& SetValue(wchar_t* value);
 
-		// Assign operator to integer value
-		DataNode& operator=(int value);
+		// Sets value from integer value
+		DataNode& SetValue(int value);
 
-		// Assign operator to integer value
-		DataNode& operator=(unsigned long value);
+		// Sets value from integer value
+		DataNode& SetValue(unsigned long value);
 
-		// Assign operator to integer value
-		DataNode& operator=(long long int value);
+		// Sets value from integer value
+		DataNode& SetValue(long long int value);
 
-		// Assign operator to integer value
-		DataNode& operator=(UInt64 value);
+		// Sets value from integer value
+		DataNode& SetValue(UInt64 value);
 
-		// Assign operator to boolean value
-		DataNode& operator=(bool value);
+		// Sets value from boolean value
+		DataNode& SetValue(bool value);
 
-		// Assign operator to float value
-		DataNode& operator=(float value);
+		// Sets value from float value
+		DataNode& SetValue(float value);
 
-		// Assign operator to float value
-		DataNode& operator=(double value);
+		// Sets value from float value
+		DataNode& SetValue(double value);
 
-		// Assign operator to unsigned integer value
-		DataNode& operator=(UInt value);
+		// Sets value from unsigned integer value
+		DataNode& SetValue(UInt value);
 
-		// Assign operator to string value
-		DataNode& operator=(const String& value);
+		// Sets value from string value
+		DataNode& SetValue(const String& value);
 
-		// Assign operator to wide string value
-		DataNode& operator=(const WString& value);
+		// Sets value from wide string value
+		DataNode& SetValue(const WString& value);
 
-		// Assign operator to float vector value
-		DataNode& operator=(const Vec2F& value);
+		// Sets value from float vector value
+		DataNode& SetValue(const Vec2F& value);
 
-		// Assign operator to integer vector value
-		DataNode& operator=(const Vec2I& value);
+		// Sets value from integer vector value
+		DataNode& SetValue(const Vec2I& value);
 
-		// Assign operator to float rectangle value
-		DataNode& operator=(const RectF& value);
+		// Sets value from float rectangle value
+		DataNode& SetValue(const RectF& value);
 
-		// Assign operator to integer rectangle value
-		DataNode& operator=(const RectI& value);
+		// Sets value from integer rectangle value
+		DataNode& SetValue(const RectI& value);
 
-		// Assign operator to color value
-		DataNode& operator=(const Color4& value);
+		// Sets value from color value
+		DataNode& SetValue(const Color4& value);
 
-		// Assign operator to pointer value
-		template<typename _type,
-			typename X = std::enable_if<std::is_base_of<ISerializable, _type>::value>::type>
-		DataNode& operator=(_type* value);
+		// Sets value from pointer value
+		template<typename _type, typename X = std::enable_if<std::is_base_of<ISerializable, _type>::value>::type>
+		DataNode& SetValue(_type* value);
 
-		// Assign operator to vector value
+		// Sets value from vector value
 		template<typename _type>
-		DataNode& operator=(const Vector<_type>& value);
+		DataNode& SetValue(const Vector<_type>& value);
 
-		// Assign operator to dictionary value
+		// Sets value from dictionary value
 		template<typename _key, typename _value>
-		DataNode& operator=(Dictionary<_key, _value>& value);
+		DataNode& SetValue(const Dictionary<_key, _value>& value);
 
-		// Assign operator to enum class value
+		// Sets value from enum class or IObject based value
 		template<typename _type,
 			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, CustomDataConverter<_type>>::type,
 			typename X = std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
-			DataNode& operator=(_type& value);
+		DataNode& SetValue(_type& value);
 
 
-		// Cast operator to wide string
-		operator wchar_t*() const;
+		// Gets value as wide string
+		void GetValue(wchar_t*& value) const;
 
-		// Cast operator to boolean
-		operator bool() const;
+		// Gets value as boolean
+		void GetValue(bool& value) const;
 
-		// Cast operator to integer
-		operator int() const;
+		// Gets value as integer
+		void GetValue(int& value) const;
 
-		// Cast operator to float
-		operator float() const;
+		// Gets value as float
+		void GetValue(float& value) const;
 
-		// Cast operator to unsigned integer
-		operator UInt() const;
+		// Gets value as unsigned integer
+		void GetValue(UInt& value) const;
 
-		// Cast operator to unsigned integer
-		operator UInt64() const;
+		// Gets value as unsigned integer
+		void GetValue(UInt64& value) const;
 
-		// Cast operator to string
-		operator String() const;
+		// Gets value as string
+		void GetValue(String& value) const;
 
-		// Cast operator to wide string
-		operator WString() const;
+		// Gets value as wide string
+		void GetValue(WString& value) const;
 
-		// Cast operator to float vector
-		operator Vec2F() const;
+		// Gets value as float vector
+		void GetValue(Vec2F& value) const;
 
-		// Cast operator to integer vector
-		operator Vec2I() const;
+		// Gets value as integer vector
+		void GetValue(Vec2I& value) const;
 
-		// Cast operator to float rectangle
-		operator RectF() const;
+		// Gets value as float rectangle
+		void GetValue(RectF& value) const;
 
-		// Cast operator to integer rectangle
-		operator RectI() const;
+		// Gets value as integer rectangle
+		void GetValue(RectI& value) const;
 
-		// Cast operator to color
-		operator Color4() const;
+		// Gets value as color
+		void GetValue(Color4& value) const;
 
-		// Cast operator to char
-		operator char() const;
+		// Gets value as char
+		void GetValue(char& value) const;
 
-		// Cast operator to char
-		operator unsigned char() const;
+		// Gets value as char
+		void GetValue(unsigned char& value) const;
 
-		// Cast operator to char
-		operator wchar_t() const;
+		// Gets value as char
+		void GetValue(wchar_t& value) const;
 
-		// Cast operator to char
-		operator short() const;
+		// Gets value as char
+		void GetValue(short& value) const;
 
-		// Cast operator to char
-		operator unsigned short() const;
+		// Gets value as char
+		void GetValue(unsigned short& value) const;
 
-		// Cast operator to char
-		operator long() const;
+		// Gets value as char
+		void GetValue(long& value) const;
 
-		// Cast operator to char
-		operator unsigned long() const;
+		// Gets value as char
+		void GetValue(unsigned long& value) const;
 
-		// Cast operator to char
-		operator long long int() const;
+		// Gets value as char
+		void GetValue(long long int& value) const;
 
-		// Cast operator to pointer
+		// Gets value as pointer
 		template<typename _type,
 			typename X = std::enable_if<std::is_base_of<ISerializable, _type>::value>::type>
-		operator _type*() const;
+		void GetValue(_type*& value) const;
 
-		// Cast operator to vector
+		// Gets value as vector
 		template<typename _type>
-		operator Vector<_type>() const;
+		void GetValue(Vector<_type>& value) const;
 
-		// Cast operator to dictionary
+		// Gets value as dictionary
 		template<typename _key, typename _value>
-		operator Dictionary<_key, _value>() const;
+		void GetValue(Dictionary<_key, _value>& value) const;
 
-		// Cast operator to enum class
+		// Gets value as enum class
 		template<typename _type,
 			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, CustomDataConverter<_type>>::type,
 			typename X = std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
-			operator _type() const;
+		void GetValue(_type& value) const;
 
 
 		// [] assign operator. nodePath sample: "node/node/abc/cde"
@@ -408,7 +359,7 @@ namespace o2
 
 		WString      mName;       // Name of node
 		WString      mData;       // Node data
-		DataNode*    mParent;     // Node parent. Nullptr if no parent
+		DataNode*    mParent;     // Node parent
 		DataNodesVec mChildNodes; // Children nodes
 
 	protected:
@@ -448,15 +399,9 @@ namespace o2
 		template<typename T, typename X = std::conditional<DataNode::IsSupport<T>::value, Fundamental<T>, Dummy<T>>::type>
 		static void Serialize(T& param, DataNode& data);
 
-		// Serializes actor to data (as object or asset)
-		static void Serialize(Actor* actor, DataNode& data);
-
 		// Deserializes param from data
 		template<typename T, typename X = std::conditional<DataNode::IsSupport<T>::value, Fundamental<T>, Dummy<T>>::type>
 		static void Deserialize(T& param, DataNode& data);
-
-		// Deserializes actor form data (as object or asset)
-		static void Deserialize(Actor*& actor, DataNode& data);
 	};
 
 	// Type and type getting forward declaration
@@ -465,24 +410,15 @@ namespace o2
 	template<typename _type>
 	const Type& _TypeOf();
 
-	template<typename _type>
-	DataNode::DataNode(const WString& name, _type* value):
-		mName(name), mParent(nullptr)
-	{
-		*AddNode("Type") = value->GetType().Name();
-		*AddNode("Value") = *value;
-	}
-
 	template<typename _type, typename X>
-	DataNode::operator _type*() const
+	void DataNode::GetValue(_type*& value) const
 	{
 		for (auto conv : mDataConverters)
 		{
-			void* value = nullptr;
 			if (conv->CheckType(&_TypeOf<_type>()))
 			{
-				conv->FromData(value, *this);
-				return (_type*)value;
+				conv->FromData(&value, *this);
+				return;
 			}
 		}
 
@@ -492,19 +428,33 @@ namespace o2
 
 			if (auto valueNode = GetNode("Value"))
 			{
-				ISerializable* value = static_cast<ISerializable*>(Reflection::CreateTypeSample(type));
+				value = static_cast<_type*>(Reflection::CreateTypeSample(type));
 				if (value)
-					*value = *valueNode;
+					valueNode->GetValue(*value);
 
-				return (_type*)value;
+				return;
 			}
 		}
 
-		return nullptr;
+		value = nullptr;
+	}
+
+	template<typename _type>
+	DataNode& DataNode::operator=(const _type& value)
+	{
+		return SetValue(value);
+	}
+
+	template<typename _type>
+	DataNode::operator _type() const
+	{
+		_type res;
+		GetValue(res);
+		return res;
 	}
 
 	template<typename _type, typename X>
-	DataNode& DataNode::operator=(_type* value)
+	DataNode& DataNode::SetValue(_type* value)
 	{
 		if (value)
 		{
@@ -512,69 +462,47 @@ namespace o2
 			{
 				if (conv->CheckType(&_TypeOf<_type>()))
 				{
-					conv->ToData(value, *this);
+					conv->ToData(&value, *this);
 					return *this;
 				}
 			}
 
-			*AddNode("Type") = value->GetType().Name();
-			*AddNode("Value") = *value;
+			AddNode("Type")->SetValue(value->GetType().Name());
+			AddNode("Value")->SetValue(*value);
 		}
 
 		return *this;
 	}
 
-
 	template<typename _key, typename _value>
-	DataNode::DataNode(const WString& name, const Dictionary<_key, _value>& value):
-		mName(name), mParent(nullptr)
-	{
-		for (auto kv : value)
-		{
-			DataNode* child = AddNode("Element");
-			*child->AddNode("Key") = kv.Key();
-			*child->AddNode("Value") = kv.Value();
-		}
-	}
-
-	template<typename _type>
-	DataNode::DataNode(const WString& name, const Vector<_type>& value)
-	{
-		for (auto v : value)
-			*AddNode("Element") = v;
-	}
-
-	template<typename _key, typename _value>
-	DataNode& DataNode::operator=(Dictionary<_key, _value>& value)
+	DataNode& DataNode::SetValue(const Dictionary<_key, _value>& value)
 	{
 		Clear();
 
 		for (auto kv : value)
 		{
 			DataNode* child = AddNode("Element");
-			*child->AddNode("Key") = kv.Key();
-			*child->AddNode("Value") = kv.Value();
+			child->AddNode("Key")->SetValue(kv.Key());
+			child->AddNode("Value")->SetValue(kv.Value());
 		}
 
 		return *this;
 	}
 
 	template<typename _type>
-	DataNode& DataNode::operator=(const Vector<_type>& value)
+	DataNode& DataNode::SetValue(const Vector<_type>& value)
 	{
 		Clear();
 
 		for (auto v : value)
-			*AddNode("Element") = v;
+			AddNode("Element")->SetValue(v);
 
 		return *this;
 	}
 
 	template<typename _key, typename _value>
-	DataNode::operator Dictionary<_key, _value>() const
+	void DataNode::GetValue(Dictionary<_key, _value>& value) const
 	{
-		Dictionary<_key, _value> res;
-
 		int count = mChildNodes.Count();
 		_value v = _value();
 		_key k = _key();
@@ -585,44 +513,35 @@ namespace o2
 
 			if (keyNode && valueNode)
 			{
-				k = *keyNode;
-				v = *valueNode;
-				res.Add(k, v);
+				keyNode->GetValue(k);
+				valueNode->GetValue(v);
+				value.Add(k, v);
 			}
 		}
-
-		return res;
 	}
 
 	template<typename _type>
-	DataNode::operator Vector<_type>() const
+	void DataNode::GetValue(Vector<_type>& value) const
 	{
-		int count = mChildNodes.Count();
-
-		Vector<_type> res(count + 2);
 		_type v = _type();
 		for (auto childNode : mChildNodes)
 		{
-			v = *childNode;
-			res.Add(v);
+			childNode->GetValue(v);
+			value.Add(v);
 		}
-
-		return res;
 	}
 
 	template<typename _type, typename _conv, typename X>
-	DataNode& DataNode::operator=(_type& value)
+	DataNode& DataNode::SetValue(_type& value)
 	{
 		_conv::ToData(value, *this);
 		return *this;
 	}
 
 	template<typename _type, typename _conv, typename X>
-	DataNode::operator _type() const
+	void DataNode::GetValue(_type& value) const
 	{
-		_type value;
 		_conv::FromData(value, *this);
-		return value;
 	}
 
 	template<typename _type>

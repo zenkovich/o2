@@ -23,11 +23,15 @@ namespace o2
 	{
 		if (mIsDragging)
 		{
-			auto underCursorListener = o2Events.GetDragListenerUnderCursor(cursor.mId);
-			if (underCursorListener)
+			OnDragEnd(cursor);
+
+			auto underCursorListener = o2Events.GetCursorListenerUnderCursor(cursor.mId);
+			auto dragArea = dynamic_cast<DragDropArea*>(underCursorListener);
+
+			if (dragArea)
 			{
-				underCursorListener->OnDropped(this);
-				OnDragEnd(cursor, underCursorListener);
+				OnDropped(dragArea);
+				dragArea->OnDropped(this);
 			}
 		}
 
@@ -47,28 +51,31 @@ namespace o2
 		if (cursor.mId != mPressedCursorId)
 			return;
 
+		auto underCursorListener = o2Events.GetCursorListenerUnderCursor(cursor.mId);
+		auto dragArea = dynamic_cast<DragDropArea*>(underCursorListener);
+
 		if (!mIsDragging)
 		{
 			float delta = (cursor.mPosition - mPressedCursorPos).Length();
 			if (delta > mDragDistanceThreshold)
 			{
 				mIsDragging = true;
-				OnDragged(cursor);
+				OnDragged(cursor, dragArea);
 			}
 		}
-		else OnDragged(cursor);
+		else OnDragged(cursor, dragArea);
 	}
 
 	void DragEventsListener::OnDragStart(const Input::Cursor& cursor)
 	{}
 
-	void DragEventsListener::OnDragged(const Input::Cursor& cursor)
+	void DragEventsListener::OnDragged(const Input::Cursor& cursor, DragDropArea* area)
 	{}
 
-	void DragEventsListener::OnDragEnd(const Input::Cursor& cursor, DragEventsListener* underDragListener)
+	void DragEventsListener::OnDragEnd(const Input::Cursor& cursor)
 	{}
 
-	void DragEventsListener::OnDropped(DragEventsListener* dropped)
+	void DragEventsListener::OnDropped(DragDropArea* area)
 	{}
 
 	bool DragEventsListener::IsDragging() const
@@ -81,5 +88,11 @@ namespace o2
 		CursorEventsListener::OnDrawn();
 		EventSystem::RegDragListener(this);
 	}
+
+	void DragDropArea::OnDropped(DragEventsListener* draggable)
+	{}
+
+	void DragDropArea::OnDraggedAbove(DragEventsListener* draggable)
+	{}
 
 }

@@ -28,6 +28,8 @@ namespace o2
 
 			mIsOnScene = true;
 		}
+
+		ActorDataNodeConverter::ActorCreated(this);
 	}
 
 	Actor::Actor(const Actor& other):
@@ -63,6 +65,8 @@ namespace o2
 
 			mIsOnScene = true;
 		}
+
+		ActorDataNodeConverter::ActorCreated(this);
 	}
 
 	Actor::Actor(ComponentsVec components):
@@ -107,9 +111,10 @@ namespace o2
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
 		Dictionary<const Actor*, Actor*> actorsMap;
+		Dictionary<const Component*, Component*> componentsMap;
 
-		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap);
-		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap);
+		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap);
+		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
 		transform.UpdateTransform();
@@ -120,7 +125,8 @@ namespace o2
 	}
 
 	void Actor::ProcessCopying(Actor* dest, const Actor* source, Vector<Actor**>& actorsPointers, 
-							   Vector<Component**>& componentsPointers, Dictionary<const Actor*, Actor*>& actorsMap)
+							   Vector<Component**>& componentsPointers, Dictionary<const Actor*, Actor*>& actorsMap,
+							   Dictionary<const Component*, Component*>& componentsMap)
 	{
 		dest->Animatable::operator=(*source);
 
@@ -136,12 +142,14 @@ namespace o2
 			Actor* newChild = mnew Actor();
 			dest->AddChild(newChild);
 
-			ProcessCopying(newChild, child, actorsPointers, componentsPointers, actorsMap);
+			ProcessCopying(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap);
 		}
 
 		for (auto component : source->mComponents)
 		{
 			Component* newComponent = dest->AddComponent(component->Clone());
+
+			componentsMap.Add(component, newComponent);
 
 			for (auto field : newComponent->GetType().Fields())
 			{
@@ -158,13 +166,21 @@ namespace o2
 
 	void Actor::FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers, 
 										   const Vector<Component**>& componentsPointers, 
-										   const Dictionary<const Actor*, Actor*>& actorsMap)
+										   const Dictionary<const Actor*, Actor*>& actorsMap,
+										   const Dictionary<const Component*, Component*>& componentsMap)
 	{
 		for (auto actorPtr : actorsPointers)
 		{
 			Actor* newActorPtr;
 			if (actorsMap.TryGetValue(*actorPtr, newActorPtr))
 				*actorPtr = newActorPtr;
+		}
+
+		for (auto componentPtr : componentsPointers)
+		{
+			Component* newComponentPtr;
+			if (componentsMap.TryGetValue(*componentPtr, newComponentPtr))
+				*componentPtr = newComponentPtr;
 		}
 	}
 
@@ -665,7 +681,7 @@ namespace o2
 			child->UpdateLocking();
 	}
 
-	void Actor::OnSerialize(DataNode& node)
+	void Actor::OnSerialize(DataNode& node) const
 	{
 		if (mLayer)
 			*node["mLayerName"] = mLayer->name;
@@ -685,6 +701,8 @@ namespace o2
 
 	void Actor::OnDeserialized(const DataNode& node)
 	{
+		ActorDataNodeConverter::Instance().LockPointersResolving();
+
 		if (auto childsNode = node.GetNode("Components"))
 		{
 			for (auto childNode : childsNode->GetChildNodes())
@@ -710,6 +728,9 @@ namespace o2
 
 		String layerName = (String)(*node.GetNode("mLayerName"));
 		SetLayerName(layerName);
+
+		ActorDataNodeConverter::Instance().UnlockPointersResolving();
+		ActorDataNodeConverter::Instance().ResolvePointers();
 	}
 
 	Dictionary<String, Actor*> Actor::GetAllChilds()
@@ -768,33 +789,41 @@ namespace o2
 		component.SetAllAccessFunc(this, &Actor::GetAllComponents);
 	}
 
+	DECLARE_SINGLETON(ActorDataNodeConverter);
+
 	void ActorDataNodeConverter::ToData(void* object, DataNode& data)
 	{
-		if (object)
-		{
-			Actor* value = (Actor*)object;
+		Actor* value = *(Actor**)object;
 
-			if (value->IsAsset())
+		if (value)
+		{
+			if (value->mIsAsset)
 				*data.AddNode("AssetId") = value->GetAssetId();
-			else if (value->IsOnScene())
-				*data.AddNode("SceneId") = value->GetID();
+			else if (value->IsOnScene() || value->IsAsset())
+				*data.AddNode("ID") = value->GetID();
 			else
 				*data.AddNode("Data") = value ? value->Serialize() : (String)"null";
 		}
 	}
 
-	void ActorDataNodeConverter::FromData(void*& object, const DataNode& data)
+	void ActorDataNodeConverter::FromData(void* object, const DataNode& data)
 	{
-		Actor*& actor = (Actor*&)object;
+		Actor* actor = *(Actor**)object;
 
 		if (auto assetIdNode = data.GetNode("AssetId"))
 		{
 			AssetId assetId = *assetIdNode;
 			actor = o2Scene.GetAssetActorByID(assetId);
+			
+			if (!actor)
+				mUnresolvedActors.Add(ActorDef(&actor, true, assetId));
 		}
-		else if (auto sceneIdNode = data.GetNode("SceneId"))
+		else if (auto sceneIdNode = data.GetNode("ID"))
 		{
 			actor = o2Scene.GetActorByID(*sceneIdNode);
+			
+			if (!actor)
+				mUnresolvedActors.Add(ActorDef(&actor, false, *sceneIdNode));
 		}
 		else if (auto dataNode = data.GetNode("Data"))
 		{
@@ -811,6 +840,54 @@ namespace o2
 
 	bool ActorDataNodeConverter::CheckType(const Type* type) const
 	{
-		return type->IsBasedOn(TypeOf(Actor));
+		return type->IsBasedOn(*TypeOf(Actor).GetPointerType());
 	}
+
+	void ActorDataNodeConverter::LockPointersResolving()
+	{
+		mLockDepth++;
+	}
+
+	void ActorDataNodeConverter::UnlockPointersResolving()
+	{
+		mLockDepth--;
+
+		if (mLockDepth < 0)
+		{
+			o2Debug.LogWarning("ActorDataNodeConverter lock depth is less than zero. Something going wrong");
+			mLockDepth = 0;
+		}
+	}
+
+	void ActorDataNodeConverter::ResolvePointers()
+	{
+		if (mLockDepth > 0)
+			return;
+
+		for (auto def : mUnresolvedActors)
+		{
+			if (def.isAsset)
+				*def.target = o2Scene.GetAssetActorByID(def.id);
+			else
+				*def.target = o2Scene.GetActorByID(def.id);
+
+			if (!*def.target)
+				*def.target = mNewActors.FindMatch([&](Actor* x) { return x->GetID() == def.id; });
+		}
+
+		mNewActors.Clear();
+		mUnresolvedActors.Clear();
+	}
+
+	void ActorDataNodeConverter::ActorCreated(Actor* actor)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		if (mInstance->mLockDepth < 1)
+			return;
+
+		mInstance->mNewActors.Add(actor);
+	}
+
 }

@@ -221,3 +221,5 @@ pip-log.txt
 /o2TestProject/Platforms/Windows/o2Test.sdf
 /o2TestProject/Platforms/Windows/Data
 /o2TestProject/Platforms/Windows/Tmp
+/o2Editor/Platforms/Windows/o2Editor.VC.VC.opendb
+/o2Editor/Platforms/Windows/o2Editor.VC.db

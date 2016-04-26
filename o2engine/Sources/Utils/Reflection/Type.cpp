@@ -5,8 +5,8 @@
 
 namespace o2
 {
-	Type::Type():
-		mId(0)
+	Type::Type(const String& name):
+		mId(0), mPointer(0), mPtrType(nullptr), mUnptrType(nullptr), mSize(4), mName(name)
 	{}
 
 	Type::~Type()
@@ -25,6 +25,11 @@ namespace o2
 		return mId;
 	}
 
+	int Type::Size() const
+	{
+		return mSize;
+	}
+
 	bool Type::IsBasedOn(const Type& other) const
 	{
 		if (mId == other.mId)
@@ -40,6 +45,27 @@ namespace o2
 		}
 
 		return false;
+	}
+
+	const Type* Type::GetPointerType() const
+	{
+		if (!mPtrType)
+			Reflection::InitializePointerType(this);
+
+		return mPtrType;
+	}
+
+	const Type* Type::GetUnpointedType() const
+	{
+		if (mUnptrType)
+			return mUnptrType;
+
+		return this;
+	}
+
+	bool Type::IsPointer() const
+	{
+		return mPointer > 0;
 	}
 
 	const Type::TypesVec& Type::BaseTypes() const
@@ -130,6 +156,14 @@ namespace o2
 		return res;
 	}
 
+	void Type::SetName(const String& name)
+	{
+		mName = name;
+
+		if (mPtrType)
+			mPtrType->SetName(name + "*");
+	}
+
 	bool Type::operator!=(const Type& other) const
 	{
 		return other.mId != mId;
@@ -140,5 +174,5 @@ namespace o2
 		return other.mId == mId;
 	}
 
-	Type Type::Dummy::type;
+	Type Type::Dummy::type("Dummy");
 }

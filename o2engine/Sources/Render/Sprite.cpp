@@ -1030,7 +1030,7 @@ namespace o2
 		}
 	}
 
-	void Sprite::OnSerialize(DataNode& node)
+	void Sprite::OnSerialize(DataNode& node) const
 	{
 		if (mImageAssetId != 0)
 			*node["mImageAssetId"] = mImageAssetId;

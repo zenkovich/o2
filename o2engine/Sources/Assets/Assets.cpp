@@ -93,7 +93,7 @@ namespace o2
 
 	Asset* Assets::LoadAsset(const AssetInfo& info)
 	{
-		Type* assetType = Reflection::GetType(info.mType);
+		const Type* assetType = Reflection::GetType(info.mType);
 		if (!assetType)
 		{
 			mLog->Error("Failed to load asset by info: incorrect type (%i)", info.mType);
