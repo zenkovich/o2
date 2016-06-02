@@ -45,26 +45,11 @@ namespace Editor
 		// Attaches to scene events
 		void AttachToSceneEvents();
 
-		// Draws widget
-		void Draw();
-
-		// Updates widget
-		void Update(float dt);
-
-		// Rebuilds all tree
-		void RebuildTree();
-
 		// Updates tree node for object
-		void UpdateTreeNode(Actor* object);
+		void UpdateNodeView(Actor* object);
 
 		// Returns ui node for object
 		UITreeNode* GetNode(Actor* object);
-
-		// Expands all nodes
-		void ExpandAll();
-
-		// Collapses all nodes
-		void CollapseAll();
 
 		// Forcible begins to dragging actors' nodes
 		void ManualBeginDraggingActors(const ActorsVec& actors);
@@ -96,53 +81,8 @@ namespace Editor
 		// Deselects all objects
 		void DeselectAllActors();
 
-		// Returns item widget under point
-		UITreeNode* GetTreeNodeUnderPoint(const Vec2F& point);
-
-		// Returns item sample
-		UITreeNode* GetNodeSample() const;
-
-		// Returns hover drawable
-		Sprite* GetHoverDrawable() const;
-
-		// Returns selection drawable
-		Sprite* GetSelectionDrawable() const;
-
-		// Sets selection drawable layout
-		void SetSelectionDrawableLayout(const Layout& layout);
-
-		// Returns selection drawable layout
-		Layout GetSelectionDrawableLayout() const;
-
-		// Returns is listener scrollable
-		bool IsScrollable() const;
-
-		// Sets nodes pool resize count
-		void SetNodesPoolResizeCount(int count);
-
-		// Sets selection sprites pool resize count
-		void SetSelectionSpritesPoolResizeCount(int count);
-
-		// Sets selected nodes sprite color
-		void SetSelectedColor(const Color4& color);
-
-		// Returns selected nodes sprite color
-		Color4 GetSelectedColor() const;
-
-		// Sets not selected nodes sprite color
-		void SetUnselectedColor(const Color4& color);
-
-		// Returns not selected nodes sprite color
-		Color4 GetUnselectedColor() const;
-
-		// Sets hover nodes sprite color
-		void SetHoverColor(const Color4& color);
-
-		// Returns hover nodes sprite color
-		Color4 GetHoverColor() const;
-
-		// Returns is this widget can be selected
-		bool IsSelectable() const;
+		// Scrolls view to actor's tree node
+		void ScrollTo(Actor* object);
 
 		SERIALIZABLE(UIActorsTree);
 
@@ -190,11 +130,11 @@ namespace Editor
 
 		// Calls when actor was destroyed
 		void OnActorDestroyed(Actor* actor);
-
-		// Updates nodes dragging
-		void UpdateDragging(const Input::Cursor& cursor);
-
-		// End nodes dragging
-		void EndDragging();
+// 
+// 		// Calls when some selectable drag listeners was dragged above this area
+// 		void OnDraggedAbove(SelectableDragableObjectsGroup* group);
+// 
+// 		// Calls when some selectable drag listeners was dropped to this
+// 		void OnDropped(SelectableDragableObjectsGroup* group);
 	};
 }

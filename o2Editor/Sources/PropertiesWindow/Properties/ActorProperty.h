@@ -3,6 +3,7 @@
 #include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "PropertiesWindow/Properties/IPropertyField.h"
+#include "Utils/DragAndDrop.h"
 
 namespace o2
 {
@@ -16,7 +17,7 @@ namespace Editor
 	// -------------------------
 	// Editor actor property box
 	// -------------------------
-	class ActorProperty: public IPropertyField, public DrawableCursorEventsListener, public KeyboardEventsListener
+	class ActorProperty: public IPropertyField, public KeyboardEventsListener, public DragDropArea
 	{
 	public:
 		// Default constructor
@@ -49,6 +50,9 @@ namespace Editor
 		// Sets value actor
 		void SetValue(Actor* value);
 
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point);
+
 		IOBJECT(ActorProperty);
 
 	protected:
@@ -77,5 +81,14 @@ namespace Editor
 
 		// Calls when key was pressed
 		void OnKeyPressed(const Input::Key& key);
+
+		// Calls when some selectable listeners was dropped to this
+		void OnDropped(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some drag listeners was entered to this area
+		void OnDragEnter(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some drag listeners was exited from this area
+		void OnDragExit(ISelectableDragableObjectsGroup* group);
 	};
 }

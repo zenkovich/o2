@@ -52,7 +52,7 @@ namespace o2
 		if (pressedSprite)
 			pressedSprite->Draw();
 
-		CursorEventsListener::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 	}
 
 	DragHandle& DragHandle::operator=(const DragHandle& other)
@@ -105,9 +105,9 @@ namespace o2
 
 	void DragHandle::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		if (mIsPressed && cursor.mDelta != Vec2F())
+		if (mIsPressed && cursor.delta != Vec2F())
 		{
-			SetPosition(cursor.mPosition);
+			SetPosition(cursor.position);
 			onChangedPos(mPosition);
 		}
 	}

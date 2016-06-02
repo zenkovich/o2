@@ -20,18 +20,25 @@ namespace o2
 		typedef Vector<UIButton*> ButtonsVec;
 
 	public:
+		// Default constructor
 		UIButtonGroup();
+
+		// Destructor
 		~UIButtonGroup();
 
+		// Adds button to group
 		void AddButton(UIButton* toggle);
+
+		// Removes button from group
 		void RemoveButton(UIButton* toggle);
 
+		// Returns all buttons in group
 		const ButtonsVec& GetButtons() const;
 
 	protected:
-		ButtonsVec mButtons;
-		UIButton*  mOwner;
-		bool       mPressed;
+		ButtonsVec mButtons; // Buttons in this group
+		UIButton*  mOwner;   // Owner button (only one button can be owner)
+		bool       mPressed; // Is group pressed
 
 		friend class UIButton;
 	};
@@ -39,7 +46,7 @@ namespace o2
 	// -----------------------
 	// Button clickable widget
 	// -----------------------
-	class UIButton: public UIWidget, public CursorEventsListener, public KeyboardEventsListener
+	class UIButton: public UIWidget, public CursorAreaEventsListener, public KeyboardEventsListener
 	{
 	public:
 		Property<WString>        caption;      // Caption property. Searches text layer with name "caption" or creates them if he's not exist
@@ -79,7 +86,7 @@ namespace o2
 		UIButtonGroup* GetButtonGroup() const;
 
 		// Returns is this widget can be selected
-		bool IsSelectable() const;
+		bool IsFocusable() const;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
@@ -87,9 +94,9 @@ namespace o2
 		SERIALIZABLE(UIButton);
 
 	protected:
-		Text*          mCaptionText; // Caption layer text
-		Sprite*        mIconSprite;  // Icon layer sprite
-		UIButtonGroup* mButtonGroup; // Button group
+		Text*          mCaptionText = nullptr; // Caption layer text
+		Sprite*        mIconSprite = nullptr;  // Icon layer sprite
+		UIButtonGroup* mButtonGroup = nullptr; // Button group
 
 	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true

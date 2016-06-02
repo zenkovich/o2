@@ -14,7 +14,7 @@ namespace o2
 	}
 
 	DrawableCursorEventsListener::DrawableCursorEventsListener(const DrawableCursorEventsListener& other):
-		CursorEventsListener(other), mEventHandleDrawable(nullptr)
+		CursorAreaEventsListener(other), mEventHandleDrawable(nullptr)
 	{
 		SetEventHandleDrawable(other.mEventHandleDrawable);
 		INITIALIZE_PROPERTY(DrawableCursorEventsListener, eventHandleDrawable, SetEventHandleDrawable, GetEventHandleDrawable);
@@ -49,6 +49,6 @@ namespace o2
 
 	void DrawableCursorEventsListener::OnDrawn()
 	{
-		CursorEventsListener::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 	}
 }

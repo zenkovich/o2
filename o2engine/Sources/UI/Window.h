@@ -63,13 +63,13 @@ namespace o2
 								const Layout& rightBottom);
 
 		// Returns is this widget can be selected
-		bool IsSelectable() const;
+		bool IsFocusable() const;
 
 		SERIALIZABLE(UIWindow);
 
 	protected:
-		Sprite*              mIconDrawable;              // Icon drawable from layer "icon"
-		Text*                mCaptionDrawable;           // text caption from layer "caption"
+		Sprite*              mIconDrawable = nullptr;    // Icon drawable from layer "icon"
+		Text*                mCaptionDrawable = nullptr; // text caption from layer "caption"
 		WidgetsVec           mWindowElements;            // Windows elements widgets @SERIALIZABLE
 
 		CursorEventsArea     mHeadDragHandle;			 // Head drag handle, for moving window
@@ -128,10 +128,10 @@ namespace o2
 		void BindHandlesInteractableToVisibility();
 
 		// Calls when widget was selected
-		void OnSelected();
+		void OnFocused();
 
 		// Calls when child widget was selected
-		void OnChildSelected(UIWidget* child);
+		void OnChildFocused(UIWidget* child);
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);

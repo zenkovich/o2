@@ -47,7 +47,7 @@ namespace Editor
 
 	void SelectionTool::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		mPressPoint = cursor.mPosition;
+		mPressPoint = cursor.position;
 	}
 
 	void SelectionTool::OnCursorReleased(const Input::Cursor& cursor)
@@ -64,7 +64,7 @@ namespace Editor
 		else
 		{
 			bool selected = false;
-			Vec2F sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition);
+			Vec2F sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
 			for (auto layer : o2Scene.GetLayers())
 			{
 				for (auto actor : layer->enabledActors)
@@ -104,7 +104,7 @@ namespace Editor
 
 	void SelectionTool::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		if (!mSelectingActors && (mPressPoint - cursor.mPosition).Length() > 5.0f)
+		if (!mSelectingActors && (mPressPoint - cursor.position).Length() > 5.0f)
 		{
 			mSelectingActors = true;
 
@@ -114,10 +114,10 @@ namespace Editor
 				o2EditorSceneScreen.ClearSelectionWithoutAction();
 		}
 
-		if (mSelectingActors && cursor.mDelta.Length() > 0.1f)
+		if (mSelectingActors && cursor.delta.Length() > 0.1f)
 		{
-			mSelectionSprite->SetRect(RectF(mPressPoint, cursor.mPosition));
-			RectF selectionRect(o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition),
+			mSelectionSprite->SetRect(RectF(mPressPoint, cursor.position));
+			RectF selectionRect(o2EditorSceneScreen.ScreenToScenePoint(cursor.position),
 								o2EditorSceneScreen.ScreenToScenePoint(mPressPoint));
 
 			auto currentSelectedActors = mCurrentSelectingActors;

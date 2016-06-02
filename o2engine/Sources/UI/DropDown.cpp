@@ -28,6 +28,7 @@ namespace o2
 	{
 		UICustomDropDown::operator=(other);
 		RetargetStatesAnimations();
+
 		return *this;
 	}
 
@@ -61,7 +62,7 @@ namespace o2
 	int UIDropDown::FindItem(const WString& text)
 	{
 		int i = 0;
-		for (auto child : mList->mVerLayout->mChilds)
+		for (auto child : mItemsList->mVerLayout->mChilds)
 		{
 			if (((UILabel*)child)->GetText() == text)
 				return i;
@@ -84,7 +85,7 @@ namespace o2
 	Vector<WString> UIDropDown::GetAllItemsText() const
 	{
 		Vector<WString> res;
-		for (auto child : mList->mVerLayout->mChilds)
+		for (auto child : mItemsList->mVerLayout->mChilds)
 			res.Add(((UILabel*)child)->GetText());
 
 		return res;
@@ -102,7 +103,7 @@ namespace o2
 	void UIDropDown::SelectItemText(const WString& text)
 	{
 		int idx = FindItem(text);
-		mList->SelectItemAt(idx);
+		mItemsList->SelectItemAt(idx);
 	}
 
 	void UIDropDown::OnSelectionChanged()

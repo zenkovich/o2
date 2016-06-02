@@ -37,7 +37,6 @@ namespace Editor
 		mDragHandleMin.OnDrawn();
 		mDragHandleMax.OnDrawn();
 
-		mDragHandleDepth = o2Render.GetDrawingDepth();
 		if (o2Input.IsKeyDown(VK_F1))
 		{
 			if (mDragHandleMin.IsInteractable())
@@ -172,10 +171,10 @@ namespace Editor
 	void UIDockWindowPlace::InitializeDragHandle()
 	{
 		mDragHandleMin.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMin.IsInside(point); };
-		mDragHandleMin.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.mDelta); };
+		mDragHandleMin.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMinMoved(cursor.delta); };
 
 		mDragHandleMax.isUnderPoint = [&](const Vec2F& point) { return mDragHandleAreaMax.IsInside(point); };
-		mDragHandleMax.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.mDelta); };
+		mDragHandleMax.onMoved = [&](const Input::Cursor& cursor) { OnDragHandleMaxMoved(cursor.delta); };
 	}
 
 }

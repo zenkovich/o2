@@ -138,39 +138,37 @@ namespace o2
 		bool IsScrollable() const;
 
 		// Returns is this widget can be selected
-		bool IsSelectable() const;
+		bool IsFocusable() const;
 
 		SERIALIZABLE(UIEditBox);
 
 	protected:
-		WString mLastText;         // Last text
-		WString mText;             // Current text @SERIALIZABLE
-		WString mAvailableSymbols; // Available symbols @SERIALIZABLE
+		WString mLastText;                                        // Last text
+		WString mText;                                            // Current text @SERIALIZABLE
+		WString mAvailableSymbols;                                // Available symbols @SERIALIZABLE
 
-		Text*   mTextDrawable;     // Text drawable @SERIALIZABLE
-		Mesh*   mSelectionMesh;    // Selection mesh
-		Sprite* mCaretDrawable;    // Caret drawable @SERIALIZABLE
+		Text*   mTextDrawable = nullptr;                          // Text drawable @SERIALIZABLE
+		Mesh*   mSelectionMesh = nullptr;                         // Selection mesh
+		Sprite* mCaretDrawable = nullptr;                         // Caret drawable @SERIALIZABLE
 
-		float   mCaretBlinkDelay;  // Caret blinking delay @SERIALIZABLE
-		float   mCaretBlinkTime;   // Caret blinking timer
+		float   mCaretBlinkDelay = 1.0f;                          // Caret blinking delay @SERIALIZABLE
+		float   mCaretBlinkTime = 0.0f;                           // Caret blinking timer
 
-		int     mSelectionBegin;   // Selection begin index
-		int     mSelectionEnd;	   // Selection end index
-		Color4  mSelectionColor;   // Text selection color @SERIALIZABLE
-		bool    mSelectingByWords; // Selection works by solid words
-		int     mSelWordBegin;     // Selection by words begin index
-		int     mSelWordEnd;       // Selection by words end index
+		int     mSelectionBegin = 0;                              // Selection begin index
+		int     mSelectionEnd = 0;	                              // Selection end index
+		Color4  mSelectionColor = Color4(0.1f, 0.2f, 0.6f, 0.3f); // Text selection color @SERIALIZABLE
+		bool    mSelectingByWords = false;                        // Selection works by solid words
+		int     mSelWordBegin = 0;                                // Selection by words begin index
+		int     mSelWordEnd = 0;                                  // Selection by words end index
 
-		bool    mMultiLine;		   // True if text is multiline @SERIALIZABLE
-		bool    mWordWrap;		   // True if text words wrapping @SERIALIZABLE
-		int     mMaxLineChars;	   // Count of maximum characters in line @SERIALIZABLE
-		int     mMaxLinesCount;	   // Count of maximum lines count @SERIALIZABLE
+		bool    mMultiLine = true;		                          // True if text is multiline @SERIALIZABLE
+		bool    mWordWrap = false;		                          // True if text words wrapping @SERIALIZABLE
+		int     mMaxLineChars = INT_MAX;	                      // Count of maximum characters in line @SERIALIZABLE
+		int     mMaxLinesCount = INT_MAX;	                      // Count of maximum lines count @SERIALIZABLE
 
-		float   mDrawDepth;        // Drawing depth at current frame
-
-		bool    mJustSelected;     // Is edit box selected at current frame
-		float   mLastClickTime;    // Time of last clicking
-		Vec2F   mLastCursorPos;    // Last pressed cursor position
+		bool    mJustSelected = false;                            // Is edit box selected at current frame
+		float   mLastClickTime = -1.0f;                           // Time of last clicking
+		Vec2F   mLastCursorPos;                                   // Last pressed cursor position
 
 	protected:
 		// Updates mouse control
@@ -180,10 +178,10 @@ namespace o2
 		void OnVisibleChanged();
 
 		// Calls when widget was selected
-		void OnSelected();
+		void OnFocused();
 
 		// Calls when widget was deselected
-		void OnDeselected();
+		void OnUnfocused();
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
@@ -207,7 +205,7 @@ namespace o2
 		void OnCursorRightMousePressed(const Input::Cursor& cursor);
 
 		// Calls when right mouse button stay down on this
-		void OnCursorRightMouseStayDown(const Input::Cursor& cursor);
+		void OnCursorRightMouseStillDown(const Input::Cursor& cursor);
 
 		// Calls when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor);

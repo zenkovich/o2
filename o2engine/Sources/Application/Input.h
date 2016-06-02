@@ -5,6 +5,7 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
+#include <Windows.h>
 
 // Input access macros
 #define o2Input Input::Instance()
@@ -100,7 +101,7 @@ namespace o2
 		float GetMouseWheelDelta() const;
 
 		// Returns cursor by id. Returns nullptr if no cursor with specified id
-		Cursor* GetCursor(CursorId id);
+		Cursor* GetCursor(CursorId id = 0);
 
 		// Returns cursors vector
 		const CursorsVec& GetCursors() const;
@@ -126,11 +127,11 @@ namespace o2
 		// -----------------
 		struct Cursor
 		{
-			Vec2F    mPosition;    // Current cursor position, in pixels, from left top corner 
-			Vec2F    mDelta;       // Cursor moving delta between frames
-			CursorId mId;          // Cursor id
-			float    mPressedTime; // Time until key is pressed in seconds
-			bool     mPressed;     // True when cursor is pressed down
+			Vec2F    position;    // Current cursor position, in pixels, from left top corner 
+			Vec2F    delta;       // Cursor moving delta between frames
+			CursorId id;          // Cursor id
+			float    pressedTime; // Time until key is pressed in seconds
+			bool     isPressed;   // True when cursor is pressed down
 
 		public:
 			// Constructor
@@ -145,8 +146,8 @@ namespace o2
 		// ---------------------
 		struct Key
 		{
-			KeyboardKey mKey;         // Key id
-			float       mPressedTime; // Key pressing time
+			KeyboardKey keyCode;     // Key id
+			float       pressedTime; // Key pressing time
 
 		public:
 			// Constructor

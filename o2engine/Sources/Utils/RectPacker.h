@@ -2,10 +2,9 @@
 
 #include "Utils/Containers/Pool.h"
 #include "Utils/Containers/Vector.h"
+#include "Utils/ITree.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
-
-#include "Utils/Tree.h"
 
 namespace o2
 {

@@ -203,33 +203,33 @@ namespace o2
 		return mScreenWidget;
 	}
 
-	void UIManager::SelectWidget(UIWidget* widget)
+	void UIManager::FocusWidget(UIWidget* widget)
 	{
-		if (widget == mSelectedWidget || (widget && !widget->IsSelectable()))
+		if (widget == mSelectedWidget || (widget && !widget->IsFocusable()))
 			return;
 
 		if (mSelectedWidget)
 		{
-			mSelectedWidget->mIsSelected = false;
-			mSelectedWidget->OnDeselected();
+			mSelectedWidget->mIsFocused = false;
+			mSelectedWidget->OnUnfocused();
 
-			if (mSelectedWidget->mSelectedState)
-				mSelectedWidget->mSelectedState->SetState(false);
+			if (mSelectedWidget->mFocusedState)
+				mSelectedWidget->mFocusedState->SetState(false);
 		}
 
 		mSelectedWidget = widget;
 
 		if (mSelectedWidget)
 		{
-			mSelectedWidget->mIsSelected = true;
+			mSelectedWidget->mIsFocused = true;
 
-			mSelectedWidget->OnSelected();
+			mSelectedWidget->OnFocused();
 
 			if (mSelectedWidget->mParent)
-				mSelectedWidget->mParent->OnChildSelected(mSelectedWidget);
+				mSelectedWidget->mParent->OnChildFocused(mSelectedWidget);
 
-			if (mSelectedWidget->mSelectedState)
-				mSelectedWidget->mSelectedState->SetState(true);
+			if (mSelectedWidget->mFocusedState)
+				mSelectedWidget->mFocusedState->SetState(true);
 		}
 	}
 
@@ -241,7 +241,7 @@ namespace o2
 	void UIManager::SelectNextWidget()
 	{
 		bool fnd = mSelectedWidget == nullptr;
-		SelectWidget(SearchSelectableWidget(mScreenWidget, fnd));
+		FocusWidget(SearchSelectableWidget(mScreenWidget, fnd));
 	}
 
 	void UIManager::LoadStyle(const String& path)
@@ -449,7 +449,7 @@ namespace o2
 			}
 			else
 			{
-				if (child->IsSelectable())
+				if (child->IsFocusable())
 					return child;
 			}
 		}

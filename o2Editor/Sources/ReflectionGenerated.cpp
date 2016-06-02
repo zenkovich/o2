@@ -1631,7 +1631,7 @@ void o2::UIButton::InitializeType(o2::UIButton* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIButton, void, UIButtonGroup*>(&type, "SetButtonGroup", &o2::UIButton::SetButtonGroup, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<UIButtonGroup*>(funcInfo, "group");
 	funcInfo = TypeInitializer::RegFunction<o2::UIButton, UIButtonGroup*>(&type, "GetButtonGroup", &o2::UIButton::GetButtonGroup, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIButton, bool>(&type, "IsSelectable", &o2::UIButton::IsSelectable, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UIButton, bool>(&type, "IsFocusable", &o2::UIButton::IsFocusable, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIButton, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UIButton::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UIButton, void, const Input::Cursor&>(&type, "OnCursorPressed", &o2::UIButton::OnCursorPressed, o2::ProtectSection::Protected);
@@ -1671,7 +1671,7 @@ void o2::UIContextMenu::InitializeType(o2::UIContextMenu* sample)
 	TypeInitializer::RegField(&type, "mMaxVisibleItems", (size_t)(char*)(&sample->mMaxVisibleItems) - (size_t)(char*)sample, sample->mMaxVisibleItems, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mParentContextMenu", (size_t)(char*)(&sample->mParentContextMenu) - (size_t)(char*)sample, sample->mParentContextMenu, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mChildContextMenu", (size_t)(char*)(&sample->mChildContextMenu) - (size_t)(char*)sample, sample->mChildContextMenu, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mLayout", (size_t)(char*)(&sample->mLayout) - (size_t)(char*)sample, sample->mLayout, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mItemsLayout", (size_t)(char*)(&sample->mItemsLayout) - (size_t)(char*)sample, sample->mItemsLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mItemSample", (size_t)(char*)(&sample->mItemSample) - (size_t)(char*)sample, sample->mItemSample, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mSeparatorSample", (size_t)(char*)(&sample->mSeparatorSample) - (size_t)(char*)sample, sample->mSeparatorSample, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mSelectionDrawable", (size_t)(char*)(&sample->mSelectionDrawable) - (size_t)(char*)sample, sample->mSelectionDrawable, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
@@ -1763,7 +1763,7 @@ void o2::UICustomDropDown::InitializeType(o2::UICustomDropDown* sample)
 	TypeInitializer::RegField(&type, "itemsCount", (size_t)(char*)(&sample->itemsCount) - (size_t)(char*)sample, sample->itemsCount, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "onSelectedPos", (size_t)(char*)(&sample->onSelectedPos) - (size_t)(char*)sample, sample->onSelectedPos, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "onSelectedItem", (size_t)(char*)(&sample->onSelectedItem) - (size_t)(char*)sample, sample->onSelectedItem, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "mList", (size_t)(char*)(&sample->mList) - (size_t)(char*)sample, sample->mList, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mItemsList", (size_t)(char*)(&sample->mItemsList) - (size_t)(char*)sample, sample->mItemsList, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mClipLayout", (size_t)(char*)(&sample->mClipLayout) - (size_t)(char*)sample, sample->mClipLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mAbsoluteClip", (size_t)(char*)(&sample->mAbsoluteClip) - (size_t)(char*)sample, sample->mAbsoluteClip, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mMaxListItems", (size_t)(char*)(&sample->mMaxListItems) - (size_t)(char*)sample, sample->mMaxListItems, o2::ProtectSection::Protected);
@@ -1984,7 +1984,6 @@ void o2::UIEditBox::InitializeType(o2::UIEditBox* sample)
 	TypeInitializer::RegField(&type, "mWordWrap", (size_t)(char*)(&sample->mWordWrap) - (size_t)(char*)sample, sample->mWordWrap, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mMaxLineChars", (size_t)(char*)(&sample->mMaxLineChars) - (size_t)(char*)sample, sample->mMaxLineChars, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mMaxLinesCount", (size_t)(char*)(&sample->mMaxLinesCount) - (size_t)(char*)sample, sample->mMaxLinesCount, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
-	TypeInitializer::RegField(&type, "mDrawDepth", (size_t)(char*)(&sample->mDrawDepth) - (size_t)(char*)sample, sample->mDrawDepth, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mJustSelected", (size_t)(char*)(&sample->mJustSelected) - (size_t)(char*)sample, sample->mJustSelected, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mLastClickTime", (size_t)(char*)(&sample->mLastClickTime) - (size_t)(char*)sample, sample->mLastClickTime, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mLastCursorPos", (size_t)(char*)(&sample->mLastCursorPos) - (size_t)(char*)sample, sample->mLastCursorPos, o2::ProtectSection::Protected);
@@ -2038,12 +2037,12 @@ void o2::UIEditBox::InitializeType(o2::UIEditBox* sample)
 	TypeInitializer::RegFuncParam<float>(funcInfo, "delay");
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, float>(&type, "GetCaretBlinkingDelay", &o2::UIEditBox::GetCaretBlinkingDelay, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, bool>(&type, "IsScrollable", &o2::UIEditBox::IsScrollable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, bool>(&type, "IsSelectable", &o2::UIEditBox::IsSelectable, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, bool>(&type, "IsFocusable", &o2::UIEditBox::IsFocusable, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void, float>(&type, "UpdateControls", &o2::UIEditBox::UpdateControls, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void>(&type, "OnVisibleChanged", &o2::UIEditBox::OnVisibleChanged, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void>(&type, "OnSelected", &o2::UIEditBox::OnSelected, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void>(&type, "OnDeselected", &o2::UIEditBox::OnDeselected, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void>(&type, "OnFocused", &o2::UIEditBox::OnFocused, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void>(&type, "OnUnfocused", &o2::UIEditBox::OnUnfocused, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void, const Input::Cursor&>(&type, "OnCursorPressed", &o2::UIEditBox::OnCursorPressed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void, const Input::Cursor&>(&type, "OnCursorReleased", &o2::UIEditBox::OnCursorReleased, o2::ProtectSection::Protected);
@@ -2058,7 +2057,7 @@ void o2::UIEditBox::InitializeType(o2::UIEditBox* sample)
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void, const Input::Cursor&>(&type, "OnCursorRightMousePressed", &o2::UIEditBox::OnCursorRightMousePressed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void, const Input::Cursor&>(&type, "OnCursorRightMouseStayDown", &o2::UIEditBox::OnCursorRightMouseStayDown, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void, const Input::Cursor&>(&type, "OnCursorRightMouseStillDown", &o2::UIEditBox::OnCursorRightMouseStillDown, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void, const Input::Cursor&>(&type, "OnCursorRightMouseReleased", &o2::UIEditBox::OnCursorRightMouseReleased, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
@@ -2470,7 +2469,7 @@ void o2::UIList::InitializeType(o2::UIList* sample)
 void o2::UILongList::InitializeType(o2::UILongList* sample)
 {
 	TypeInitializer::RegField(&type, "selectedItemPos", (size_t)(char*)(&sample->selectedItemPos) - (size_t)(char*)sample, sample->selectedItemPos, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onSelected", (size_t)(char*)(&sample->onSelected) - (size_t)(char*)sample, sample->onSelected, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "onFocused", (size_t)(char*)(&sample->onFocused) - (size_t)(char*)sample, sample->onFocused, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "getItemsCountFunc", (size_t)(char*)(&sample->getItemsCountFunc) - (size_t)(char*)sample, sample->getItemsCountFunc, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "getItemsRangeFunc", (size_t)(char*)(&sample->getItemsRangeFunc) - (size_t)(char*)sample, sample->getItemsRangeFunc, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "setupItemFunc", (size_t)(char*)(&sample->setupItemFunc) - (size_t)(char*)sample, sample->setupItemFunc, o2::ProtectSection::Public);
@@ -2489,7 +2488,6 @@ void o2::UILongList::InitializeType(o2::UILongList* sample)
 	TypeInitializer::RegField(&type, "mLastHoverCheckCursor", (size_t)(char*)(&sample->mLastHoverCheckCursor) - (size_t)(char*)sample, sample->mLastHoverCheckCursor, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mLastSelectCheckCursor", (size_t)(char*)(&sample->mLastSelectCheckCursor) - (size_t)(char*)sample, sample->mLastSelectCheckCursor, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mItemsPool", (size_t)(char*)(&sample->mItemsPool) - (size_t)(char*)sample, sample->mItemsPool, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mDrawDepth", (size_t)(char*)(&sample->mDrawDepth) - (size_t)(char*)sample, sample->mDrawDepth, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<o2::UILongList, void, float>(&type, "Update", &o2::UILongList::Update, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
 	funcInfo = TypeInitializer::RegFunction<o2::UILongList, void>(&type, "Draw", &o2::UILongList::Draw, o2::ProtectSection::Public);
@@ -2693,7 +2691,7 @@ void o2::UIToggle::InitializeType(o2::UIToggle* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIToggle, void>(&type, "SetValueUnknown", &o2::UIToggle::SetValueUnknown, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIToggle, bool>(&type, "IsValueUnknown", &o2::UIToggle::IsValueUnknown, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIToggle, bool>(&type, "GetValue", &o2::UIToggle::GetValue, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIToggle, bool>(&type, "IsSelectable", &o2::UIToggle::IsSelectable, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UIToggle, bool>(&type, "IsFocusable", &o2::UIToggle::IsFocusable, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIToggle, void, UIToggleGroup*>(&type, "SetToggleGroup", &o2::UIToggle::SetToggleGroup, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<UIToggleGroup*>(funcInfo, "toggleGroup");
 	funcInfo = TypeInitializer::RegFunction<o2::UIToggle, UIToggleGroup*>(&type, "GetToggleGroup", &o2::UIToggle::GetToggleGroup, o2::ProtectSection::Public);
@@ -2723,7 +2721,7 @@ void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
 	TypeInitializer::RegField(&type, "mExpandedState", (size_t)(char*)(&sample->mExpandedState) - (size_t)(char*)sample, sample->mExpandedState, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mExpandCoef", (size_t)(char*)(&sample->mExpandCoef) - (size_t)(char*)sample, sample->mExpandCoef, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mObject", (size_t)(char*)(&sample->mObject) - (size_t)(char*)sample, sample->mObject, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mTree", (size_t)(char*)(&sample->mTree) - (size_t)(char*)sample, sample->mTree, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mOwnerTree", (size_t)(char*)(&sample->mOwnerTree) - (size_t)(char*)sample, sample->mOwnerTree, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mChildsOffset", (size_t)(char*)(&sample->mChildsOffset) - (size_t)(char*)sample, sample->mChildsOffset, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mInsertSizeCoef", (size_t)(char*)(&sample->mInsertSizeCoef) - (size_t)(char*)sample, sample->mInsertSizeCoef, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mDragSizeCoef", (size_t)(char*)(&sample->mDragSizeCoef) - (size_t)(char*)sample, sample->mDragSizeCoef, o2::ProtectSection::Protected);
@@ -2742,7 +2740,7 @@ void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void>(&type, "CollapseAll", &o2::UITreeNode::CollapseAll, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, UITreeNode*, UnknownType*>(&type, "GetNode", &o2::UITreeNode::GetNode, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
-	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, bool, bool, bool>(&type, "Rebuild", &o2::UITreeNode::Rebuild, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, void, bool, bool, bool>(&type, "UpdateView", &o2::UITreeNode::UpdateView, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChilds");
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "deepRebuild");
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "immediately");
@@ -2750,6 +2748,8 @@ void o2::UITreeNode::InitializeType(o2::UITreeNode* sample)
 	TypeInitializer::RegFuncParam<float>(funcInfo, "offset");
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, float>(&type, "GetChildrenOffset", &o2::UITreeNode::GetChildrenOffset, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, UnknownType*>(&type, "GetObject", &o2::UITreeNode::GetObject, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UITreeNode, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UITreeNode::IsUnderPoint, o2::ProtectSection::Public);
+	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 }
 
 void o2::UITree::InitializeType(o2::UITree* sample)
@@ -2767,8 +2767,9 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegField(&type, "mSelectedColor", (size_t)(char*)(&sample->mSelectedColor) - (size_t)(char*)sample, sample->mSelectedColor, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mUnselectedColor", (size_t)(char*)(&sample->mUnselectedColor) - (size_t)(char*)sample, sample->mUnselectedColor, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mHoverColor", (size_t)(char*)(&sample->mHoverColor) - (size_t)(char*)sample, sample->mHoverColor, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
-	TypeInitializer::RegField(&type, "mNodeExpandTimer", (size_t)(char*)(&sample->mNodeExpandTimer) - (size_t)(char*)sample, sample->mNodeExpandTimer, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
-	TypeInitializer::RegField(&type, "mNeedRebuild", (size_t)(char*)(&sample->mNeedRebuild) - (size_t)(char*)sample, sample->mNeedRebuild, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mNodeExpandTime", (size_t)(char*)(&sample->mNodeExpandTime) - (size_t)(char*)sample, sample->mNodeExpandTime, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mNodeDragIntoZone", (size_t)(char*)(&sample->mNodeDragIntoZone) - (size_t)(char*)sample, sample->mNodeDragIntoZone, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mNeedUpdateView", (size_t)(char*)(&sample->mNeedUpdateView) - (size_t)(char*)sample, sample->mNeedUpdateView, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mAllNodes", (size_t)(char*)(&sample->mAllNodes) - (size_t)(char*)sample, sample->mAllNodes, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mNodeSample", (size_t)(char*)(&sample->mNodeSample) - (size_t)(char*)sample, sample->mNodeSample, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mHoverDrawable", (size_t)(char*)(&sample->mHoverDrawable) - (size_t)(char*)sample, sample->mHoverDrawable, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
@@ -2786,25 +2787,22 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegField(&type, "mExpandedObjects", (size_t)(char*)(&sample->mExpandedObjects) - (size_t)(char*)sample, sample->mExpandedObjects, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mRearrangeType", (size_t)(char*)(&sample->mRearrangeType) - (size_t)(char*)sample, sample->mRearrangeType, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mMultiSelectAvailable", (size_t)(char*)(&sample->mMultiSelectAvailable) - (size_t)(char*)sample, sample->mMultiSelectAvailable, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mDraggingNodes", (size_t)(char*)(&sample->mDraggingNodes) - (size_t)(char*)sample, sample->mDraggingNodes, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mDragNode", (size_t)(char*)(&sample->mDragNode) - (size_t)(char*)sample, sample->mDragNode, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mDragNodeBack", (size_t)(char*)(&sample->mDragNodeBack) - (size_t)(char*)sample, sample->mDragNodeBack, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mIsDraggingNodes", (size_t)(char*)(&sample->mIsDraggingNodes) - (size_t)(char*)sample, sample->mIsDraggingNodes, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mFakeDragNode", (size_t)(char*)(&sample->mFakeDragNode) - (size_t)(char*)sample, sample->mFakeDragNode, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mFakeDragNodeBack", (size_t)(char*)(&sample->mFakeDragNodeBack) - (size_t)(char*)sample, sample->mFakeDragNodeBack, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mDragOffset", (size_t)(char*)(&sample->mDragOffset) - (size_t)(char*)sample, sample->mDragOffset, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mPressedNode", (size_t)(char*)(&sample->mPressedNode) - (size_t)(char*)sample, sample->mPressedNode, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mInsertNodeCandidate", (size_t)(char*)(&sample->mInsertNodeCandidate) - (size_t)(char*)sample, sample->mInsertNodeCandidate, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mUnderCursorItem", (size_t)(char*)(&sample->mUnderCursorItem) - (size_t)(char*)sample, sample->mUnderCursorItem, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mBeforeDragSelected", (size_t)(char*)(&sample->mBeforeDragSelected) - (size_t)(char*)sample, sample->mBeforeDragSelected, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mBeforeDragSelectedItems", (size_t)(char*)(&sample->mBeforeDragSelectedItems) - (size_t)(char*)sample, sample->mBeforeDragSelectedItems, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mExpandNodeCandidate", (size_t)(char*)(&sample->mExpandNodeCandidate) - (size_t)(char*)sample, sample->mExpandNodeCandidate, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mExpandInsertTime", (size_t)(char*)(&sample->mExpandInsertTime) - (size_t)(char*)sample, sample->mExpandInsertTime, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mPressedTime", (size_t)(char*)(&sample->mPressedTime) - (size_t)(char*)sample, sample->mPressedTime, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mDrawDepth", (size_t)(char*)(&sample->mDrawDepth) - (size_t)(char*)sample, sample->mDrawDepth, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mNeedUpdateLayout", (size_t)(char*)(&sample->mNeedUpdateLayout) - (size_t)(char*)sample, sample->mNeedUpdateLayout, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "Draw", &o2::UITree::Draw, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, float>(&type, "Update", &o2::UITree::Update, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "RebuildTree", &o2::UITree::RebuildTree, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "UpdateView", &o2::UITree::UpdateView, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "immediately");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "UpdateTreeNode", &o2::UITree::UpdateTreeNode, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "UpdateNodeView", &o2::UITree::UpdateNodeView, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*, UnknownType*>(&type, "GetNode", &o2::UITree::GetNode, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
@@ -2820,6 +2818,8 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "DeselectObject", &o2::UITree::DeselectObject, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "DeselectAllObjects", &o2::UITree::DeselectAllObjects, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "ScrollTo", &o2::UITree::ScrollTo, o2::ProtectSection::Public);
+	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*, const Vec2F&>(&type, "GetTreeNodeUnderPoint", &o2::UITree::GetTreeNodeUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*>(&type, "GetNodeSample", &o2::UITree::GetNodeSample, o2::ProtectSection::Public);
@@ -2858,20 +2858,38 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, float>(&type, "SetNodeExpandTimer", &o2::UITree::SetNodeExpandTimer, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "time");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, float>(&type, "GetNodeExpandTimer", &o2::UITree::GetNodeExpandTimer, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool>(&type, "IsSelectable", &o2::UITree::IsSelectable, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool>(&type, "IsFocusable", &o2::UITree::IsFocusable, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UITree::IsUnderPoint, o2::ProtectSection::Public);
+	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, SelectDragObjectsVec>(&type, "GetSelectedDragObjects", &o2::UITree::GetSelectedDragObjects, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, SelectDragObjectsVec>(&type, "GetAllObjects", &o2::UITree::GetAllObjects, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, SelectableDragableObject*>(&type, "Select", &o2::UITree::Select, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<SelectableDragableObject*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, SelectableDragableObject*>(&type, "Deselect", &o2::UITree::Deselect, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<SelectableDragableObject*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, SelectableDragableObject*>(&type, "AddSelectableObject", &o2::UITree::AddSelectableObject, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<SelectableDragableObject*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, SelectableDragableObject*>(&type, "RemoveSelectableObject", &o2::UITree::RemoveSelectableObject, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<SelectableDragableObject*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, SelectableDragableObject*, const Input::Cursor&>(&type, "OnSelectableObjectCursorReleased", &o2::UITree::OnSelectableObjectCursorReleased, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<SelectableDragableObject*>(funcInfo, "object");
+	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, SelectableDragableObject*>(&type, "OnSelectableObjectBeganDragging", &o2::UITree::OnSelectableObjectBeganDragging, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<SelectableDragableObject*>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool, const Vec2F&>(&type, "CheckMultipleSelection", &o2::UITree::CheckMultipleSelection, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnSelectionChanged", &o2::UITree::OnSelectionChanged, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, float>(&type, "UpdatePressedNodeExpand", &o2::UITree::UpdatePressedNodeExpand, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "UpdateRootNodes", &o2::UITree::UpdateRootNodes, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "updateChilds");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnSelected", &o2::UITree::OnSelected, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnDeselected", &o2::UITree::OnDeselected, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnFocused", &o2::UITree::OnFocused, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnUnfocused", &o2::UITree::OnUnfocused, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "UpdateLayout", &o2::UITree::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "UpdateScrollParams", &o2::UITree::UpdateScrollParams, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "CalculateScrollArea", &o2::UITree::CalculateScrollArea, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, float>(&type, "GetCurrentHeight", &o2::UITree::GetCurrentHeight, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "OnCursorPressed", &o2::UITree::OnCursorPressed, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "OnCursorStillDown", &o2::UITree::OnCursorStillDown, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "OnCursorMoved", &o2::UITree::OnCursorMoved, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
@@ -2879,21 +2897,12 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "OnCursorRightMouseReleased", &o2::UITree::OnCursorRightMouseReleased, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "SelectSingleNode", &o2::UITree::SelectSingleNode, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "SelectMultipleNodes", &o2::UITree::SelectMultipleNodes, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnItemsSelected", &o2::UITree::OnItemsSelected, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "OnCursorPressBreak", &o2::UITree::OnCursorPressBreak, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "OnCursorExit", &o2::UITree::OnCursorExit, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "UpdateHover", &o2::UITree::UpdateHover, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "itemUnderCursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "BeginDragging", &o2::UITree::BeginDragging, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "UpdateDragging", &o2::UITree::UpdateDragging, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "EndDragging", &o2::UITree::EndDragging, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*>(&type, "CreateTreeNode", &o2::UITree::CreateTreeNode, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "FreeTreeNode", &o2::UITree::FreeTreeNode, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
@@ -2901,6 +2910,21 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, Sprite*>(&type, "FreeSelectionSprite", &o2::UITree::FreeSelectionSprite, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<Sprite*>(funcInfo, "sprite");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "CheckSelectedNodes", &o2::UITree::CheckSelectedNodes, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "BeginDragging", &o2::UITree::BeginDragging, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "EndDragging", &o2::UITree::EndDragging, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "UpdateDraggingGraphics", &o2::UITree::UpdateDraggingGraphics, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "UpdateDraggingInsertion", &o2::UITree::UpdateDraggingInsertion, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, ISelectableDragableObjectsGroup*>(&type, "OnDragEnter", &o2::UITree::OnDragEnter, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<ISelectableDragableObjectsGroup*>(funcInfo, "group");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, ISelectableDragableObjectsGroup*>(&type, "OnDraggedAbove", &o2::UITree::OnDraggedAbove, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<ISelectableDragableObjectsGroup*>(funcInfo, "group");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, ISelectableDragableObjectsGroup*>(&type, "OnDragExit", &o2::UITree::OnDragExit, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<ISelectableDragableObjectsGroup*>(funcInfo, "group");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, ISelectableDragableObjectsGroup*>(&type, "OnDropped", &o2::UITree::OnDropped, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<ISelectableDragableObjectsGroup*>(funcInfo, "group");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, float, UITreeNode*>(&type, "GetTreeNodeOffset", &o2::UITree::GetTreeNodeOffset, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
 }
 
 void o2::UIVerticalLayout::InitializeType(o2::UIVerticalLayout* sample)
@@ -3128,8 +3152,8 @@ void o2::UIWidget::InitializeType(o2::UIWidget* sample)
 	TypeInitializer::RegField(&type, "state", (size_t)(char*)(&sample->state) - (size_t)(char*)sample, sample->state, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "layout", (size_t)(char*)(&sample->layout) - (size_t)(char*)sample, sample->layout, o2::ProtectSection::Public).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "onLayoutChanged", (size_t)(char*)(&sample->onLayoutChanged) - (size_t)(char*)sample, sample->onLayoutChanged, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onSelected", (size_t)(char*)(&sample->onSelected) - (size_t)(char*)sample, sample->onSelected, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onDeselected", (size_t)(char*)(&sample->onDeselected) - (size_t)(char*)sample, sample->onDeselected, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "onFocused", (size_t)(char*)(&sample->onFocused) - (size_t)(char*)sample, sample->onFocused, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "onUnfocused", (size_t)(char*)(&sample->onUnfocused) - (size_t)(char*)sample, sample->onUnfocused, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)sample, sample->mName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mLayers", (size_t)(char*)(&sample->mLayers) - (size_t)(char*)sample, sample->mLayers, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mStates", (size_t)(char*)(&sample->mStates) - (size_t)(char*)sample, sample->mStates, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
@@ -3139,13 +3163,13 @@ void o2::UIWidget::InitializeType(o2::UIWidget* sample)
 	TypeInitializer::RegField(&type, "mTransparency", (size_t)(char*)(&sample->mTransparency) - (size_t)(char*)sample, sample->mTransparency, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mResTransparency", (size_t)(char*)(&sample->mResTransparency) - (size_t)(char*)sample, sample->mResTransparency, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mDrawingLayers", (size_t)(char*)(&sample->mDrawingLayers) - (size_t)(char*)sample, sample->mDrawingLayers, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mSelectedState", (size_t)(char*)(&sample->mSelectedState) - (size_t)(char*)sample, sample->mSelectedState, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mIsSelected", (size_t)(char*)(&sample->mIsSelected) - (size_t)(char*)sample, sample->mIsSelected, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mFocusedState", (size_t)(char*)(&sample->mFocusedState) - (size_t)(char*)sample, sample->mFocusedState, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mIsFocused", (size_t)(char*)(&sample->mIsFocused) - (size_t)(char*)sample, sample->mIsFocused, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mIsFocusable", (size_t)(char*)(&sample->mIsFocusable) - (size_t)(char*)sample, sample->mIsFocusable, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mVisibleState", (size_t)(char*)(&sample->mVisibleState) - (size_t)(char*)sample, sample->mVisibleState, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mVisible", (size_t)(char*)(&sample->mVisible) - (size_t)(char*)sample, sample->mVisible, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mResVisible", (size_t)(char*)(&sample->mResVisible) - (size_t)(char*)sample, sample->mResVisible, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mFullyDisabled", (size_t)(char*)(&sample->mFullyDisabled) - (size_t)(char*)sample, sample->mFullyDisabled, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mIsSelectable", (size_t)(char*)(&sample->mIsSelectable) - (size_t)(char*)sample, sample->mIsSelectable, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, float>(&type, "Update", &o2::UIWidget::Update, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "Draw", &o2::UIWidget::Draw, o2::ProtectSection::Public);
@@ -3223,22 +3247,22 @@ void o2::UIWidget::InitializeType(o2::UIWidget* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, bool>(&type, "Hide", &o2::UIWidget::Hide, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, bool>(&type, "IsVisible", &o2::UIWidget::IsVisible, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "Select", &o2::UIWidget::Select, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "Deselect", &o2::UIWidget::Deselect, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, bool>(&type, "IsSelected", &o2::UIWidget::IsSelected, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, bool>(&type, "IsSelectable", &o2::UIWidget::IsSelectable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, bool>(&type, "SetSelectable", &o2::UIWidget::SetSelectable, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<bool>(funcInfo, "selectable");
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "Focus", &o2::UIWidget::Focus, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "Unfocus", &o2::UIWidget::Unfocus, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, bool>(&type, "IsFocused", &o2::UIWidget::IsFocused, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, bool>(&type, "IsFocusable", &o2::UIWidget::IsFocusable, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, bool>(&type, "SetFocusable", &o2::UIWidget::SetFocusable, o2::ProtectSection::Public);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "focusable");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UIWidget::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "DrawDebugFrame", &o2::UIWidget::DrawDebugFrame, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "OnSelected", &o2::UIWidget::OnSelected, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "OnDeselected", &o2::UIWidget::OnDeselected, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "OnFocused", &o2::UIWidget::OnFocused, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "OnUnfocused", &o2::UIWidget::OnUnfocused, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, bool>(&type, "UpdateLayout", &o2::UIWidget::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "UpdateTransparency", &o2::UIWidget::UpdateTransparency, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "UpdateVisibility", &o2::UIWidget::UpdateVisibility, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, UIWidget*>(&type, "OnChildSelected", &o2::UIWidget::OnChildSelected, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, UIWidget*>(&type, "OnChildFocused", &o2::UIWidget::OnChildFocused, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UIWidget*>(funcInfo, "child");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "RetargetStatesAnimations", &o2::UIWidget::RetargetStatesAnimations, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "RecalculateAbsRect", &o2::UIWidget::RecalculateAbsRect, o2::ProtectSection::Protected);
@@ -3576,7 +3600,7 @@ void o2::UIWindow::InitializeType(o2::UIWindow* sample)
 	TypeInitializer::RegFuncParam<const Layout&>(funcInfo, "rightTop");
 	TypeInitializer::RegFuncParam<const Layout&>(funcInfo, "leftBottom");
 	TypeInitializer::RegFuncParam<const Layout&>(funcInfo, "rightBottom");
-	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, bool>(&type, "IsSelectable", &o2::UIWindow::IsSelectable, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, bool>(&type, "IsFocusable", &o2::UIWindow::IsFocusable, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void, bool>(&type, "UpdateLayout", &o2::UIWindow::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void>(&type, "UpdateTransparency", &o2::UIWindow::UpdateTransparency, o2::ProtectSection::Protected);
@@ -3586,8 +3610,8 @@ void o2::UIWindow::InitializeType(o2::UIWindow* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void, bool>(&type, "SetHandlesInteractable", &o2::UIWindow::SetHandlesInteractable, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "interactable");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void>(&type, "BindHandlesInteractableToVisibility", &o2::UIWindow::BindHandlesInteractableToVisibility, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void>(&type, "OnSelected", &o2::UIWindow::OnSelected, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void, UIWidget*>(&type, "OnChildSelected", &o2::UIWindow::OnChildSelected, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void>(&type, "OnFocused", &o2::UIWindow::OnFocused, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void, UIWidget*>(&type, "OnChildFocused", &o2::UIWindow::OnChildFocused, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UIWidget*>(funcInfo, "child");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void, const Input::Cursor&>(&type, "OnCursorPressed", &o2::UIWindow::OnCursorPressed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
@@ -4028,7 +4052,7 @@ void Editor::UIAssetsIconsScrollArea::InitializeType(Editor::UIAssetsIconsScroll
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, String>(&type, "GetViewingPath", &Editor::UIAssetsIconsScrollArea::GetViewingPath, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void>(&type, "UpdateAssetsPath", &Editor::UIAssetsIconsScrollArea::UpdateAssetsPath, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, bool>(&type, "IsSelectable", &Editor::UIAssetsIconsScrollArea::IsSelectable, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, bool>(&type, "IsFocusable", &Editor::UIAssetsIconsScrollArea::IsFocusable, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void, AssetId, bool>(&type, "SelectAsset", &Editor::UIAssetsIconsScrollArea::SelectAsset, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<AssetId>(funcInfo, "id");
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "scroll");
@@ -4039,8 +4063,8 @@ void Editor::UIAssetsIconsScrollArea::InitializeType(Editor::UIAssetsIconsScroll
 	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void, bool>(&type, "UpdateLayout", &Editor::UIAssetsIconsScrollArea::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void>(&type, "UpdateCuttingAssets", &Editor::UIAssetsIconsScrollArea::UpdateCuttingAssets, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void>(&type, "OnSelected", &Editor::UIAssetsIconsScrollArea::OnSelected, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void>(&type, "OnDeselected", &Editor::UIAssetsIconsScrollArea::OnDeselected, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void>(&type, "OnFocused", &Editor::UIAssetsIconsScrollArea::OnFocused, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void>(&type, "OnUnfocused", &Editor::UIAssetsIconsScrollArea::OnUnfocused, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorPressed", &Editor::UIAssetsIconsScrollArea::OnCursorPressed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsIconsScrollArea, void, const Input::Cursor&>(&type, "OnCursorReleased", &Editor::UIAssetsIconsScrollArea::OnCursorReleased, o2::ProtectSection::Protected);
@@ -4175,7 +4199,7 @@ void Editor::UIAssetsFoldersTree::InitializeType(Editor::UIAssetsFoldersTree* sa
 	TypeInitializer::RegField(&type, "mCurrentPath", (size_t)(char*)(&sample->mCurrentPath) - (size_t)(char*)sample, sample->mCurrentPath, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsFoldersTree, void, const String&>(&type, "SelectAndExpandFolder", &Editor::UIAssetsFoldersTree::SelectAndExpandFolder, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "path");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsFoldersTree, void>(&type, "RebuildTree", &Editor::UIAssetsFoldersTree::RebuildTree, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsFoldersTree, void>(&type, "UpdateView", &Editor::UIAssetsFoldersTree::UpdateView, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsFoldersTree, void>(&type, "InitializeContext", &Editor::UIAssetsFoldersTree::InitializeContext, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<Editor::UIAssetsFoldersTree, UnknownType*, UnknownType*>(&type, "GetFoldersTreeNodeParent", &Editor::UIAssetsFoldersTree::GetFoldersTreeNodeParent, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
@@ -4677,7 +4701,6 @@ void Editor::UIDockWindowPlace::InitializeType(Editor::UIDockWindowPlace* sample
 	TypeInitializer::RegField(&type, "mDragHandleMax", (size_t)(char*)(&sample->mDragHandleMax) - (size_t)(char*)sample, sample->mDragHandleMax, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mDragHandleLayoutMax", (size_t)(char*)(&sample->mDragHandleLayoutMax) - (size_t)(char*)sample, sample->mDragHandleLayoutMax, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mDragHandleAreaMax", (size_t)(char*)(&sample->mDragHandleAreaMax) - (size_t)(char*)sample, sample->mDragHandleAreaMax, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mDragHandleDepth", (size_t)(char*)(&sample->mDragHandleDepth) - (size_t)(char*)sample, sample->mDragHandleDepth, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<Editor::UIDockWindowPlace, void>(&type, "Draw", &Editor::UIDockWindowPlace::Draw, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<Editor::UIDockWindowPlace, bool, const Vec2F&>(&type, "IsUnderPoint", &Editor::UIDockWindowPlace::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
@@ -4910,6 +4933,8 @@ void Editor::ActorProperty::InitializeType(Editor::ActorProperty* sample)
 	funcInfo = TypeInitializer::RegFunction<Editor::ActorProperty, const Type*>(&type, "GetFieldType", &Editor::ActorProperty::GetFieldType, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<Editor::ActorProperty, void, Actor*>(&type, "SetValue", &Editor::ActorProperty::SetValue, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "value");
+	funcInfo = TypeInitializer::RegFunction<Editor::ActorProperty, bool, const Vec2F&>(&type, "IsUnderPoint", &Editor::ActorProperty::IsUnderPoint, o2::ProtectSection::Public);
+	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<Editor::ActorProperty, void>(&type, "InitializeWidget", &Editor::ActorProperty::InitializeWidget, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<Editor::ActorProperty, void, const Input::Cursor&>(&type, "OnCursorEnter", &Editor::ActorProperty::OnCursorEnter, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
@@ -4919,6 +4944,12 @@ void Editor::ActorProperty::InitializeType(Editor::ActorProperty* sample)
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<Editor::ActorProperty, void, const Input::Key&>(&type, "OnKeyPressed", &Editor::ActorProperty::OnKeyPressed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Key&>(funcInfo, "key");
+	funcInfo = TypeInitializer::RegFunction<Editor::ActorProperty, void, ISelectableDragableObjectsGroup*>(&type, "OnDropped", &Editor::ActorProperty::OnDropped, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<ISelectableDragableObjectsGroup*>(funcInfo, "group");
+	funcInfo = TypeInitializer::RegFunction<Editor::ActorProperty, void, ISelectableDragableObjectsGroup*>(&type, "OnDragEnter", &Editor::ActorProperty::OnDragEnter, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<ISelectableDragableObjectsGroup*>(funcInfo, "group");
+	funcInfo = TypeInitializer::RegFunction<Editor::ActorProperty, void, ISelectableDragableObjectsGroup*>(&type, "OnDragExit", &Editor::ActorProperty::OnDragExit, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<ISelectableDragableObjectsGroup*>(funcInfo, "group");
 }
 
 void Editor::IAssetProperty::InitializeType(Editor::IAssetProperty* sample)
@@ -5297,16 +5328,10 @@ void Editor::UIActorsTree::InitializeType(Editor::UIActorsTree* sample)
 	TypeInitializer::RegField(&type, "mDragActorPropertyField", (size_t)(char*)(&sample->mDragActorPropertyField) - (size_t)(char*)sample, sample->mDragActorPropertyField, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mDragComponentPropertyField", (size_t)(char*)(&sample->mDragComponentPropertyField) - (size_t)(char*)sample, sample->mDragComponentPropertyField, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void>(&type, "AttachToSceneEvents", &Editor::UIActorsTree::AttachToSceneEvents, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void>(&type, "Draw", &Editor::UIActorsTree::Draw, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, float>(&type, "Update", &Editor::UIActorsTree::Update, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void>(&type, "RebuildTree", &Editor::UIActorsTree::RebuildTree, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "UpdateTreeNode", &Editor::UIActorsTree::UpdateTreeNode, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "UpdateNodeView", &Editor::UIActorsTree::UpdateNodeView, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, UITreeNode*, Actor*>(&type, "GetNode", &Editor::UIActorsTree::GetNode, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void>(&type, "ExpandAll", &Editor::UIActorsTree::ExpandAll, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void>(&type, "CollapseAll", &Editor::UIActorsTree::CollapseAll, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, const ActorsVec&>(&type, "ManualBeginDraggingActors", &Editor::UIActorsTree::ManualBeginDraggingActors, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const ActorsVec&>(funcInfo, "actors");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, const Input::Cursor&>(&type, "ManualUpdateDraggingActors", &Editor::UIActorsTree::ManualUpdateDraggingActors, o2::ProtectSection::Public);
@@ -5323,29 +5348,8 @@ void Editor::UIActorsTree::InitializeType(Editor::UIActorsTree* sample)
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "DeselectActor", &Editor::UIActorsTree::DeselectActor, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void>(&type, "DeselectAllActors", &Editor::UIActorsTree::DeselectAllActors, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, UITreeNode*, const Vec2F&>(&type, "GetTreeNodeUnderPoint", &Editor::UIActorsTree::GetTreeNodeUnderPoint, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, UITreeNode*>(&type, "GetNodeSample", &Editor::UIActorsTree::GetNodeSample, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, Sprite*>(&type, "GetHoverDrawable", &Editor::UIActorsTree::GetHoverDrawable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, Sprite*>(&type, "GetSelectionDrawable", &Editor::UIActorsTree::GetSelectionDrawable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, const Layout&>(&type, "SetSelectionDrawableLayout", &Editor::UIActorsTree::SetSelectionDrawableLayout, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<const Layout&>(funcInfo, "layout");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, Layout>(&type, "GetSelectionDrawableLayout", &Editor::UIActorsTree::GetSelectionDrawableLayout, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, bool>(&type, "IsScrollable", &Editor::UIActorsTree::IsScrollable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, int>(&type, "SetNodesPoolResizeCount", &Editor::UIActorsTree::SetNodesPoolResizeCount, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<int>(funcInfo, "count");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, int>(&type, "SetSelectionSpritesPoolResizeCount", &Editor::UIActorsTree::SetSelectionSpritesPoolResizeCount, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<int>(funcInfo, "count");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, const Color4&>(&type, "SetSelectedColor", &Editor::UIActorsTree::SetSelectedColor, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<const Color4&>(funcInfo, "color");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, Color4>(&type, "GetSelectedColor", &Editor::UIActorsTree::GetSelectedColor, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, const Color4&>(&type, "SetUnselectedColor", &Editor::UIActorsTree::SetUnselectedColor, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<const Color4&>(funcInfo, "color");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, Color4>(&type, "GetUnselectedColor", &Editor::UIActorsTree::GetUnselectedColor, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, const Color4&>(&type, "SetHoverColor", &Editor::UIActorsTree::SetHoverColor, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<const Color4&>(funcInfo, "color");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, Color4>(&type, "GetHoverColor", &Editor::UIActorsTree::GetHoverColor, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, bool>(&type, "IsSelectable", &Editor::UIActorsTree::IsSelectable, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "ScrollTo", &Editor::UIActorsTree::ScrollTo, o2::ProtectSection::Public);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void>(&type, "Initialize", &Editor::UIActorsTree::Initialize, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, UnknownType*, UnknownType*>(&type, "GetActorsParent", &Editor::UIActorsTree::GetActorsParent, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "obj");
@@ -5373,9 +5377,6 @@ void Editor::UIActorsTree::InitializeType(Editor::UIActorsTree* sample)
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "OnActorDestroyed", &Editor::UIActorsTree::OnActorDestroyed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, const Input::Cursor&>(&type, "UpdateDragging", &Editor::UIActorsTree::UpdateDragging, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void>(&type, "EndDragging", &Editor::UIActorsTree::EndDragging, o2::ProtectSection::Protected);
 }
 
 void Editor::TreeWindow::InitializeType(Editor::TreeWindow* sample)

@@ -3,8 +3,7 @@
 namespace o2
 {
 	UIHorizontalProgress::UIHorizontalProgress():
-		UIWidget(), DrawableCursorEventsListener(this), mValue(0), mMinValue(0), mMaxValue(1), 
-		mOrientation(Orientation::Right), mScrollSense(1.0f), mBarLayer(nullptr), mBackLayer(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this)
 	{
 		InitializeProperties();
 	}
@@ -27,14 +26,15 @@ namespace o2
 	UIHorizontalProgress& UIHorizontalProgress::operator=(const UIHorizontalProgress& other)
 	{
 		UIWidget::operator=(other);
-		mValue = other.mValue;
-		mMinValue = other.mMinValue;
-		mMaxValue = other.mMaxValue;
+
+		mValue       = other.mValue;
+		mMinValue    = other.mMinValue;
+		mMaxValue    = other.mMaxValue;
 		mOrientation = other.mOrientation;
 		mScrollSense = other.mScrollSense;
 
-		mBarLayer = GetLayer("bar");
-		mBackLayer = GetLayer("back");
+		mBarLayer    = GetLayer("bar");
+		mBackLayer   = GetLayer("back");
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -51,7 +51,7 @@ namespace o2
 
 		if (!Math::Equals(mValue, mSmoothValue, threshold))
 		{
-			mSmoothValue = Math::Clamp(Math::Lerp(mSmoothValue, mValue, dt*smoothCoef), mMinValue, mMaxValue);
+			mSmoothValue = Math::Clamp(Math::Lerpc(mSmoothValue, mValue, dt*smoothCoef), mMinValue, mMaxValue);
 
 			if (Math::Abs(mValue - mSmoothValue) < threshold)
 				mSmoothValue = mValue;
@@ -186,9 +186,9 @@ namespace o2
 		float width = layout.mAbsoluteRect.Width();
 		float d = mMaxValue - mMinValue;
 		if (mOrientation == Orientation::Right)
-			SetValue((cursor.mPosition.x - layout.mAbsoluteRect.left)/width*d + mMinValue);
+			SetValue((cursor.position.x - layout.mAbsoluteRect.left)/width*d + mMinValue);
 		else
-			SetValue((width - (cursor.mPosition.x - layout.mAbsoluteRect.left))/width*d + mMinValue);
+			SetValue((width - (cursor.position.x - layout.mAbsoluteRect.left))/width*d + mMinValue);
 	}
 
 	void UIHorizontalProgress::OnCursorEnter(const Input::Cursor& cursor)

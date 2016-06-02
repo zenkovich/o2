@@ -3,8 +3,7 @@
 namespace o2
 {
 	UIVerticalProgress::UIVerticalProgress():
-		UIWidget(), DrawableCursorEventsListener(this),mValue(0), mMinValue(0), mMaxValue(1), mOrientation(Orientation::Down),
-		mScrollSense(1.0f), mBarLayer(nullptr), mBackLayer(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this)
 	{
 		InitializeProperties();
 	}
@@ -26,14 +25,14 @@ namespace o2
 	UIVerticalProgress& UIVerticalProgress::operator=(const UIVerticalProgress& other)
 	{
 		UIWidget::operator=(other);
-		mValue = other.mValue;
-		mMinValue = other.mMinValue;
-		mMaxValue = other.mMaxValue;
+
+		mValue       = other.mValue;
+		mMinValue    = other.mMinValue;
+		mMaxValue    = other.mMaxValue;
 		mOrientation = other.mOrientation;
 		mScrollSense = other.mScrollSense;
-
-		mBarLayer = GetLayer("bar");
-		mBackLayer = GetLayer("back");
+		mBarLayer    = GetLayer("bar");
+		mBackLayer   = GetLayer("back");
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -186,9 +185,9 @@ namespace o2
 		float d = mMaxValue - mMinValue;
 		if (mOrientation == UIVerticalProgress::Orientation::Up)
 
-			SetValue((cursor.mPosition.y - layout.mAbsoluteRect.bottom)/height*d + mMinValue);
+			SetValue((cursor.position.y - layout.mAbsoluteRect.bottom)/height*d + mMinValue);
 		else
-			SetValue((height - (cursor.mPosition.y - layout.mAbsoluteRect.bottom))/height*d + mMinValue);
+			SetValue((height - (cursor.position.y - layout.mAbsoluteRect.bottom))/height*d + mMinValue);
 	}
 
 	void UIVerticalProgress::OnCursorEnter(const Input::Cursor& cursor)

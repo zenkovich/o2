@@ -148,7 +148,7 @@ namespace Editor
 
 	void FrameTool::OnKeyStayDown(const Input::Key& key)
 	{
-		if (key.mPressedTime < 0.3f)
+		if (key.pressedTime < 0.3f)
 			return;
 
 		if (key == VK_LEFT)
@@ -246,7 +246,7 @@ namespace Editor
 	{
 		if (o2EditorSceneScreen.GetSelectedActors().Count() > 0)
 		{
-			if (mFrame.IsPointInside(o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition)))
+			if (mFrame.IsPointInside(o2EditorSceneScreen.ScreenToScenePoint(cursor.position)))
 			{
 				mIsDragging = true;
 				SetHandlesEnable(false);
@@ -283,7 +283,7 @@ namespace Editor
 	{
 		if (mIsDragging)
 		{
-			TransformActors(Basis::Translated(o2EditorSceneScreen.ScreenToSceneVector(cursor.mDelta)));
+			TransformActors(Basis::Translated(o2EditorSceneScreen.ScreenToSceneVector(cursor.delta)));
 		}
 		else SelectionTool::OnCursorStillDown(cursor);
 	}

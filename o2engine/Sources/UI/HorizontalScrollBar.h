@@ -85,17 +85,17 @@ namespace o2
 		SERIALIZABLE(UIHorizontalScrollBar);
 
 	protected:
-		float          mValue;                 // Current value @SERIALIZABLE
-		float          mSmoothValue;           // Smooth value
-		float          mMinValue;              // Minimum value @SERIALIZABLE
-		float          mMaxValue;              // Maximum value @SERIALIZABLE
-		float          mScrollSense;           // Scroll sense coefficient @SERIALIZABLE
-		float          mScrollHandleSize;      // Scroll handle size (in value range) @SERIALIZABLE
-		float          mScrollhandleMinPxSize; // Minimal scroll size in pixels
-		float          mPressHandleOffset;     // Value offset when handle was pressed
-		bool           mHandlePressed;         // True, when handle was pressed
-		UIWidgetLayer* mHandleLayer;           // Handle layer
-		UIWidgetLayer* mBackLayer;             // Background layer
+		float          mValue = 0.0f;                 // Current value @SERIALIZABLE
+		float          mSmoothValue = 0.0f;           // Smooth value
+		float          mMinValue = 0.0f;              // Minimum value @SERIALIZABLE
+		float          mMaxValue = 1.0f;              // Maximum value @SERIALIZABLE
+		float          mScrollSense = 1.0f;           // Scroll sense coefficient @SERIALIZABLE
+		float          mScrollHandleSize = 0.2f;      // Scroll handle size (in value range) @SERIALIZABLE
+		float          mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels
+		float          mPressHandleOffset = 0.0f;     // Value offset when handle was pressed
+		bool           mHandlePressed = false;        // True, when handle was pressed
+		UIWidgetLayer* mHandleLayer = nullptr;        // Handle layer
+		UIWidgetLayer* mBackLayer = nullptr;          // Background layer
 
 	protected:
 		// Updates layout

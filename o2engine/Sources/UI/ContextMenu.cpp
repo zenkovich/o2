@@ -38,9 +38,7 @@ namespace o2
 	}
 
 	UIContextMenu::UIContextMenu():
-		UIScrollArea(), DrawableCursorEventsListener(this), mSelectedItem(nullptr), mSelectSubContextTime(-1), 
-		mParentContextMenu(nullptr), mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr), 
-		mSelectionDrawable(nullptr), mSeparatorSample(nullptr), mShownAtFrame(false), mMaxVisibleItems(INT_MAX)
+		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
 		mItemSample = mnew UIContextMenuItem();
 		mItemSample->AddLayer("icon", nullptr, Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(10, 0), Vec2F(10, 0)));
@@ -54,14 +52,14 @@ namespace o2
 
 		mSelectionDrawable = mnew Sprite();
 
-		mLayout = mnew UIVerticalLayout();
-		AddChild(mLayout);
+		mItemsLayout = mnew UIVerticalLayout();
+		AddChild(mItemsLayout);
 
-		mLayout->expandHeight = false;
-		mLayout->expandWidth = true;
-		mLayout->baseCorner = BaseCorner::LeftTop;
-		mLayout->fitByChildren = true;
-		mLayout->layout = UIWidgetLayout::BothStretch();
+		mItemsLayout->expandHeight = false;
+		mItemsLayout->expandWidth = true;
+		mItemsLayout->baseCorner = BaseCorner::LeftTop;
+		mItemsLayout->fitByChildren = true;
+		mItemsLayout->layout = UIWidgetLayout::BothStretch();
 	}
 
 	UIContextMenu::UIContextMenu(Vector<Item> items):
@@ -71,16 +69,13 @@ namespace o2
 	}
 
 	UIContextMenu::UIContextMenu(const UIContextMenu& other):
-		UIScrollArea(other), DrawableCursorEventsListener(this), mSelectedItem(nullptr), mSelectSubContextTime(-1),
-		mParentContextMenu(nullptr), mChildContextMenu(nullptr), mLayout(nullptr), mItemSample(nullptr),
-		mSelectionDrawable(nullptr), mFitSizeMin(other.mFitSizeMin), mShownAtFrame(false),
-		mMaxVisibleItems(other.mMaxVisibleItems)
+		UIScrollArea(other), DrawableCursorEventsListener(this), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
-		mItemSample = other.mItemSample->Clone();
-		mSeparatorSample = other.mSeparatorSample->Clone();
+		mItemSample        = other.mItemSample->Clone();
+		mSeparatorSample   = other.mSeparatorSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mSelectionLayout = other.mSelectionLayout;
-		mLayout = FindChild<UIVerticalLayout>();
+		mSelectionLayout   = other.mSelectionLayout;
+		mItemsLayout       = FindChild<UIVerticalLayout>();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -105,7 +100,7 @@ namespace o2
 		mSeparatorSample = other.mSeparatorSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
 		mSelectionLayout = other.mSelectionLayout;
-		mLayout = FindChild<UIVerticalLayout>();
+		mItemsLayout = FindChild<UIVerticalLayout>();
 		mMaxVisibleItems = other.mMaxVisibleItems;
 
 		mFitSizeMin = other.mFitSizeMin;
@@ -165,8 +160,8 @@ namespace o2
 		}
 		else mVisibleContextMenu = this;
 
-		layout.mOffsetMin.x = position.x;
-		layout.mOffsetMax.y = position.y;
+		layout.mOffsetMin.x = Math::Round(position.x);
+		layout.mOffsetMax.y = Math::Round(position.y);
 
 		auto hoverState = state["hover"];
 		if (hoverState)
@@ -197,13 +192,13 @@ namespace o2
 		{
 			UIWidget* newItem = mSeparatorSample->Clone();
 			newItem->name = "Separator";
-			mLayout->AddChild(newItem);
+			mItemsLayout->AddChild(newItem);
 
 			return newItem;
 		}
 
 		UIContextMenuItem* newItem = CreateItem(item);
-		mLayout->AddChild(newItem);
+		mItemsLayout->AddChild(newItem);
 		newItem->onClick = item.onClick;
 
 		FitSize();
@@ -227,7 +222,7 @@ namespace o2
 
 			WString subMenu = targetPath.SubStr(0, slashPos);
 
-			UIWidget* subChild = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
+			UIWidget* subChild = targetContext->mItemsLayout->mChilds.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("caption"))
 					return text->text == subMenu;
 
@@ -262,13 +257,13 @@ namespace o2
 		{
 			UIWidget* newItem = mSeparatorSample->Clone();
 			newItem->name = "Separator";
-			mLayout->AddChild(newItem, position);
+			mItemsLayout->AddChild(newItem, position);
 
 			return newItem;
 		}
 
 		UIContextMenuItem* newItem = CreateItem(item);
-		mLayout->AddChild(newItem, position);
+		mItemsLayout->AddChild(newItem, position);
 
 		if (item.subItems.Count() == 0)
 			newItem->onClick = item.onClick;
@@ -298,7 +293,7 @@ namespace o2
 
 	UIContextMenu::Item UIContextMenu::GetItem(int position)
 	{
-		if (position > 0 && position < mLayout->GetChilds().Count())
+		if (position > 0 && position < mItemsLayout->GetChilds().Count())
 			return GetItemDef(position);
 
 		return Item();
@@ -311,10 +306,10 @@ namespace o2
 
 	UIContextMenuItem* UIContextMenu::GetItemUnderPoint(const Vec2F& point)
 	{
-		if (!mLayout)
+		if (!mItemsLayout)
 			return nullptr;
 
-		for (auto child : mLayout->mChilds)
+		for (auto child : mItemsLayout->mChilds)
 		{
 			if (child->layout.mAbsoluteRect.IsInside(point) && child->GetType() == UIContextMenuItem::type)
 				return (UIContextMenuItem*)child;
@@ -370,7 +365,7 @@ namespace o2
 
 	void UIContextMenu::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		UIContextMenuItem* itemUnderCursor = GetItemUnderPoint(cursor.mPosition);
+		UIContextMenuItem* itemUnderCursor = GetItemUnderPoint(cursor.position);
 
 		if (itemUnderCursor)
 			itemUnderCursor->onClick();
@@ -391,12 +386,12 @@ namespace o2
 	void UIContextMenu::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
-		if ((cursor.mPosition - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
+		if ((cursor.position - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
 			return;
 
-		mLastSelectCheckCursor = cursor.mPosition;
+		mLastSelectCheckCursor = cursor.position;
 
-		UpdateHover(cursor.mPosition);
+		UpdateHover(cursor.position);
 	}
 
 	void UIContextMenu::OnKeyPressed(const Input::Key& key)
@@ -404,7 +399,7 @@ namespace o2
 		if (mVisibleContextMenu && mVisibleContextMenu->IsVisible() && mVisibleContextMenu != this)
 			return;
 
-		for (auto child : mLayout->mChilds)
+		for (auto child : mItemsLayout->mChilds)
 		{
 			if (child->GetType() == UIContextMenuItem::type)
 			{
@@ -427,6 +422,7 @@ namespace o2
 			mParentContextMenu->HideWithParent();
 
 		mParentContextMenu = nullptr;
+		mChildContextMenu = nullptr;
 	}
 
 	void UIContextMenu::HideWithChild()
@@ -442,7 +438,7 @@ namespace o2
 	Vector<UIContextMenu::Item> UIContextMenu::GetItems() const
 	{
 		Vector<Item> res;
-		for (int i = 0; i < mLayout->GetChilds().Count(); i++)
+		for (int i = 0; i < mItemsLayout->GetChilds().Count(); i++)
 			res.Add(GetItemDef(i));
 
 		return res;
@@ -450,8 +446,8 @@ namespace o2
 
 	void UIContextMenu::RemoveItem(int position)
 	{
-		if (position > 0 && position < mLayout->GetChilds().Count())
-			mLayout->RemoveChild(mLayout->GetChilds()[position]);
+		if (position > 0 && position < mItemsLayout->GetChilds().Count())
+			mItemsLayout->RemoveChild(mItemsLayout->GetChilds()[position]);
 	}
 
 	void UIContextMenu::RemoveItem(const WString& path)
@@ -467,7 +463,7 @@ namespace o2
 
 			WString subMenu = targetPath.SubStr(0, slashPos);
 
-			UIWidget* subChild = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
+			UIWidget* subChild = targetContext->mItemsLayout->mChilds.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("caption"))
 					return text->text == subMenu;
 
@@ -491,7 +487,7 @@ namespace o2
 			targetPath = targetPath.SubStr(slashPos + 1);
 		}
 
-		UIWidget* removingItem = targetContext->mLayout->mChilds.FindMatch([&](auto x) {
+		UIWidget* removingItem = targetContext->mItemsLayout->mChilds.FindMatch([&](auto x) {
 			if (auto text = x->GetLayerDrawable<Text>("caption"))
 				return text->text == targetPath;
 
@@ -504,18 +500,18 @@ namespace o2
 			return;
 		}
 
-		targetContext->mLayout->RemoveChild(removingItem);
+		targetContext->mItemsLayout->RemoveChild(removingItem);
 	}
 
 	void UIContextMenu::RemoveAllItems()
 	{
-		mLayout->RemoveAllChilds();
+		mItemsLayout->RemoveAllChilds();
 		mSelectedItem = nullptr;
 	}
 
 	UIVerticalLayout* UIContextMenu::GetItemsLayout() const
 	{
-		return mLayout;
+		return mItemsLayout;
 	}
 
 	UIContextMenuItem* UIContextMenu::GetItemSample() const
@@ -600,7 +596,7 @@ namespace o2
 		float maxShortcut = 0.0f;
 
 		int i = 0;
-		for (auto child : mLayout->GetChilds())
+		for (auto child : mItemsLayout->GetChilds())
 		{
 			if (auto childCaption = child->GetLayerDrawable<Text>("caption"))
 				maxCaption = Math::Max(childCaption->GetRealSize().x, maxCaption);
@@ -644,6 +640,9 @@ namespace o2
 
 		if (thisRect.bottom < screenRect.bottom)
 			offs.y = screenRect.bottom - thisRect.bottom;
+
+		offs.x = Math::Round(offs.x);
+		offs.y = Math::Round(offs.y);
 
 		layout.mOffsetMax += offs;
 		layout.mOffsetMin += offs;
@@ -741,7 +740,7 @@ namespace o2
 	UIContextMenu::Item UIContextMenu::GetItemDef(int idx) const
 	{
 		Item res;
-		auto item = mLayout->mChilds[idx];
+		auto item = mItemsLayout->mChilds[idx];
 
 		if (item->name == "Separator")
 		{

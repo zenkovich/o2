@@ -12,7 +12,7 @@ namespace o2
 	// -----------
 	// Drag handle
 	// -----------
-	class DragHandle: public IDrawable, public CursorEventsListener
+	class DragHandle: public IDrawable, public CursorAreaEventsListener
 	{
 	public:
 		Sprite*                      regularSprite; // Regular view sprite

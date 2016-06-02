@@ -7,7 +7,7 @@ namespace o2
 	// ----------------------
 	// Functional drag handle
 	// ----------------------
-	class CursorEventsArea: public CursorEventsListener
+	class CursorEventsArea: public CursorAreaEventsListener
 	{
 	public:
 		Function<bool(const Vec2F&)>         isUnderPoint;     // Function for detecting collision (parameter - cursor position)

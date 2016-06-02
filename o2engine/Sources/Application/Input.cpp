@@ -12,7 +12,7 @@ namespace o2
 		if (PLATFORM == ProjectConfig::Platform::Windows)
 		{
 			mCursors.Add(Cursor());
-			mCursors.Last().mPressed = false;
+			mCursors.Last().isPressed = false;
 		}
 
 		InitializeProperties();
@@ -22,7 +22,7 @@ namespace o2
 	{
 		for (auto ikey : mPressedKeys)
 		{
-			if (ikey.mKey == key)
+			if (ikey.keyCode == key)
 				return true;
 		}
 
@@ -33,7 +33,7 @@ namespace o2
 	{
 		for (auto ikey : mDownKeys)
 		{
-			if (ikey.mKey == key)
+			if (ikey.keyCode == key)
 				return true;
 		}
 
@@ -44,7 +44,7 @@ namespace o2
 	{
 		for (auto ikey : mReleasedKeys)
 		{
-			if (ikey.mKey == key)
+			if (ikey.keyCode == key)
 				return true;
 		}
 
@@ -63,8 +63,8 @@ namespace o2
 	{
 		for (auto ikey : mDownKeys)
 		{
-			if (ikey.mKey == key)
-				return ikey.mPressedTime;
+			if (ikey.keyCode == key)
+				return ikey.pressedTime;
 		}
 
 		return 0;
@@ -74,8 +74,8 @@ namespace o2
 	{
 		for (auto cursor : mCursors)
 		{
-			if (cursor.mId == id)
-				return cursor.mPosition;
+			if (cursor.id == id)
+				return cursor.position;
 		}
 
 		if (id == 0)
@@ -88,7 +88,7 @@ namespace o2
 	{
 		for (auto cursor : mCursors)
 		{
-			if (cursor.mId == id && cursor.mPressedTime < FLT_EPSILON && cursor.mPressed)
+			if (cursor.id == id && cursor.pressedTime < FLT_EPSILON && cursor.isPressed)
 				return true;
 		}
 
@@ -99,7 +99,7 @@ namespace o2
 	{
 		for (auto cursor : mCursors)
 		{
-			if (cursor.mId == id && cursor.mPressed)
+			if (cursor.id == id && cursor.isPressed)
 				return true;
 		}
 
@@ -110,7 +110,7 @@ namespace o2
 	{
 		for (auto cursor : mReleasedCursors)
 		{
-			if (cursor.mId == id)
+			if (cursor.id == id)
 				return true;
 		}
 
@@ -121,8 +121,8 @@ namespace o2
 	{
 		for (auto cursor : mCursors)
 		{
-			if (cursor.mId == id)
-				return cursor.mPressedTime;
+			if (cursor.id == id)
+				return cursor.pressedTime;
 		}
 
 		return 0;
@@ -132,9 +132,9 @@ namespace o2
 	{
 		for (auto cursor : mCursors)
 		{
-			if (cursor.mId == id)
+			if (cursor.id == id)
 			{
-				return cursor.mDelta;
+				return cursor.delta;
 			}
 		}
 
@@ -192,7 +192,7 @@ namespace o2
 	Input::Cursor* Input::GetCursor(CursorId id)
 	{
 		for (auto& cursor : mCursors)
-			if (cursor.mId == id)
+			if (cursor.id == id)
 				return &cursor;
 
 		return nullptr;
@@ -236,7 +236,7 @@ namespace o2
 	{
 		for (auto ikey : mDownKeys)
 		{
-			if (ikey.mKey == key)
+			if (ikey.keyCode == key)
 			{
 				mDownKeys.Remove(ikey);
 				mReleasedKeys.Add(key);
@@ -246,7 +246,7 @@ namespace o2
 
 		for (auto ikey : mPressedKeys)
 		{
-			if (ikey.mKey == key)
+			if (ikey.keyCode == key)
 			{
 				mPressedKeys.Remove(ikey);
 				return;
@@ -263,7 +263,7 @@ namespace o2
 			bool success = true;
 			for (auto it : mCursors)
 			{
-				if (it.mId == id && it.mPressed)
+				if (it.id == id && it.isPressed)
 				{
 					success = false;
 					break;
@@ -278,9 +278,9 @@ namespace o2
 
 		if (id == 0 && o2Config.GetPlatform() == ProjectConfig::Platform::Windows)
 		{
-			mCursors[0].mPosition = pos;
-			mCursors[0].mPressed = true;
-			mCursors[0].mPressedTime = 0.0f;
+			mCursors[0].position = pos;
+			mCursors[0].isPressed = true;
+			mCursors[0].pressedTime = 0.0f;
 		}
 		else mCursors.Add(Cursor(pos, id));
 
@@ -292,12 +292,12 @@ namespace o2
 		Cursor releasedCuros(Vec2F(), -100);
 		for (auto& cursor : mCursors)
 		{
-			if (cursor.mId == id)
+			if (cursor.id == id)
 			{
 				releasedCuros = cursor;
 
 				if (id == 0 && o2Config.GetPlatform() == ProjectConfig::Platform::Windows)
-					cursor.mPressed = false;
+					cursor.isPressed = false;
 				else
 					mCursors.Remove(cursor);
 
@@ -312,10 +312,10 @@ namespace o2
 	{
 		for (Cursor& cursor : mCursors)
 		{
-			if (cursor.mId == id)
+			if (cursor.id == id)
 			{
-				cursor.mDelta = pos - cursor.mPosition;
-				cursor.mPosition = pos;
+				cursor.delta = pos - cursor.position;
+				cursor.position = pos;
 				break;
 			}
 		}
@@ -334,12 +334,12 @@ namespace o2
 		mReleasedKeys.Clear();
 
 		for (Key& ikey : mDownKeys)
-			ikey.mPressedTime += dt;
+			ikey.pressedTime += dt;
 
 		for (Cursor& cursor : mCursors)
 		{
-			cursor.mPressedTime += dt;
-			cursor.mDelta = Vec2F();
+			cursor.pressedTime += dt;
+			cursor.delta = Vec2F();
 		}
 
 		mMainCursorDelta = Vec2F();
@@ -419,26 +419,26 @@ namespace o2
 
 	bool Input::Cursor::operator==(const Cursor& other)
 	{
-		return Math::Equals(mPosition, other.mPosition) && Math::Equals(mDelta, other.mDelta) && mId == other.mId &&
-			Math::Equals(mPressedTime, other.mPressedTime);
+		return Math::Equals(position, other.position) && Math::Equals(delta, other.delta) && id == other.id &&
+			Math::Equals(pressedTime, other.pressedTime);
 	}
 
 	Input::Cursor::Cursor(const Vec2F& position /*= Vec2F()*/, CursorId id /*= 0*/):
-		mPosition(position), mDelta(), mId(id), mPressedTime(0), mPressed(true)
+		position(position), delta(), id(id), pressedTime(0), isPressed(true)
 	{}
 
 
 	bool Input::Key::operator==(const Key& other) const
 	{
-		return mKey == other.mKey && Math::Equals(other.mPressedTime, mPressedTime);
+		return keyCode == other.keyCode && Math::Equals(other.pressedTime, pressedTime);
 	}
 
-	Input::Key::Key(KeyboardKey key /*= 0*/):mKey(key), mPressedTime(0)
+	Input::Key::Key(KeyboardKey key /*= 0*/):keyCode(key), pressedTime(0)
 	{}
 
 	bool Input::Key::operator==(KeyboardKey key) const
 	{
-		return mKey == key;
+		return keyCode == key;
 	}
 
 }

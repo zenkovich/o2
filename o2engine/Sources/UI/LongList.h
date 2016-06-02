@@ -17,7 +17,7 @@ namespace o2
 
 	public:
 		Property<int>                           selectedItemPos;   // Selected item position property								 				   
-		Function<void(int)>                     onSelected;        // Select item position event
+		Function<void(int)>                     onFocused;        // Select item position event
 		Function<int()>                         getItemsCountFunc; // Items count getting function
 		Function<UnknownsVec(int, int)>         getItemsRangeFunc; // Items getting in range function
 		Function<void(UIWidget*, UnknownType*)> setupItemFunc;     // Setup item widget function
@@ -79,27 +79,25 @@ namespace o2
 		SERIALIZABLE(UILongList);
 
 	protected:
-		UIWidget*         mItemSample;            // Item sample widget @SERIALIZABLE
-		Sprite*           mSelectionDrawable;     // Selection sprite @SERIALIZABLE
-		Sprite*           mHoverDrawable;         // Item hover drawable @SERIALIZABLE
-		Layout            mSelectionLayout;       // Selection layout, result selection area depends on selected item @SERIALIZABLE
-		Layout            mHoverLayout;           // Hover layout, result selection area depends on selected item @SERIALIZABLE
-
-		int               mMinVisibleItemIdx;     // Visible item with minimal index
-		int               mMaxVisibleItemIdx;     // Visible item with maximal index
-		int               mSelectedItem;          // Position of current selected item (-1 if no item isn't selected)
-
-		RectF             mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
-		RectF             mTargetSelectionRect;   // Target selection rectangle (over selected item)
-		RectF             mCurrentHoverRect;      // Current hover rectangle (for smoothing)
-		RectF             mTargetHoverRect;       // Target hover rectangle (over selected item)
-
-		Vec2F             mLastHoverCheckCursor;  // Last cursor position on hover check
-		Vec2F             mLastSelectCheckCursor; // Last cursor position on selection check
-
-		WidgetsVec        mItemsPool;             // Items pool
-
-		float             mDrawDepth;             // Drawing depth
+		UIWidget*         mItemSample = nullptr;                    // Item sample widget @SERIALIZABLE
+		Sprite*           mSelectionDrawable = nullptr;             // Selection sprite @SERIALIZABLE
+		Sprite*           mHoverDrawable = nullptr;                 // Item hover drawable @SERIALIZABLE
+		Layout            mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
+		Layout            mHoverLayout = Layout::BothStretch();     // Hover layout, result selection area depends on selected item @SERIALIZABLE
+													    
+		int               mMinVisibleItemIdx = -1;                  // Visible item with minimal index
+		int               mMaxVisibleItemIdx = -1;                  // Visible item with maximal index
+		int               mSelectedItem = -1;                       // Position of current selected item (-1 if no item isn't selected)
+													    
+		RectF             mCurrentSelectionRect;                    // Current selection rectangle (for smoothing)
+		RectF             mTargetSelectionRect;                     // Target selection rectangle (over selected item)
+		RectF             mCurrentHoverRect;                        // Current hover rectangle (for smoothing)
+		RectF             mTargetHoverRect;                         // Target hover rectangle (over selected item)
+													    
+		Vec2F             mLastHoverCheckCursor;                    // Last cursor position on hover check
+		Vec2F             mLastSelectCheckCursor;                   // Last cursor position on selection check
+													    
+		WidgetsVec        mItemsPool;                               // Items pool
 
 	protected:
 		// Calculates scroll area

@@ -195,7 +195,7 @@ namespace o2
 		UIWidget* GetScreenWidget() const;
 
 		// Sets widget as selected
-		void SelectWidget(UIWidget* widget);
+		void FocusWidget(UIWidget* widget);
 
 		// Returns current selected widget
 		UIWidget* GetSelectedWidget() const;

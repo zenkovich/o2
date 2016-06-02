@@ -29,7 +29,7 @@ namespace Editor
 	// --------------------
 	// Scene editing screen
 	// --------------------
-	class SceneEditScreen: public CursorEventsListener, public KeyboardEventsListener,
+	class SceneEditScreen: public CursorAreaEventsListener, public KeyboardEventsListener,
 		public Singleton<SceneEditScreen>, public IObject
 	{
 	public:
@@ -147,8 +147,8 @@ namespace Editor
 
 		DragHandlesVec                         mDragHandles; 			      // Dragging handles array
 		Dictionary<CursorId, SceneDragHandle*> mPressedHandles;               // Pressed handles for all pressed cursors
-		CursorEventsListener*                  mRightButtonPressedHandle;     // Right mouse button pressed handle
-		CursorEventsListener*                  mMiddleButtonPressedHandle;    // Middle mouse button pressed handle
+		CursorAreaEventsListener*                  mRightButtonPressedHandle;     // Right mouse button pressed handle
+		CursorAreaEventsListener*                  mMiddleButtonPressedHandle;    // Middle mouse button pressed handle
 		Dictionary<CursorId, SceneDragHandle*> mUnderCursorHandles;           // Under cursor handles for each cursor
 		Dictionary<CursorId, SceneDragHandle*> mLastUnderCursorHandles;       // Under cursor handles for each cursor on last frame
 

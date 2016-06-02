@@ -8,19 +8,15 @@
 
 namespace o2
 {
-	UIWidget::UIWidget():
-		mParent(nullptr), mTransparency(1.0f), mResTransparency(1.0f), mVisible(true), mIsSelected(false), mResVisible(true),
-		mFullyDisabled(false), mVisibleState(nullptr), mSelectedState(nullptr), mIsSelectable(false)
+	UIWidget::UIWidget()
 	{
 		layout.mOwner = this;
 		InitializeProperties();
-		UpdateLayout();
 	}
 
 	UIWidget::UIWidget(const UIWidget& other):
-		mName(other.mName), layout(other.layout), mParent(nullptr), mTransparency(other.mTransparency),
-		mVisible(other.mVisible), mIsSelected(false), mResVisible(other.mVisible), mFullyDisabled(!other.mVisible),
-		mVisibleState(nullptr), mSelectedState(nullptr), mIsSelectable(false)
+		mName(other.mName), layout(other.layout),  mTransparency(other.mTransparency), mVisible(other.mVisible), 
+		mFullyDisabled(!other.mVisible)
 	{
 		layout.mOwner = this;
 		InitializeProperties();
@@ -48,8 +44,8 @@ namespace o2
 
 		UpdateLayersDrawingSequence();
 		UpdateTransparency();
-		UpdateLayout();
 		UpdateVisibility();
+		UpdateLayout();
 	}
 
 	UIWidget::~UIWidget()
@@ -83,16 +79,17 @@ namespace o2
 			child->mParent = nullptr;
 			delete child;
 		}
+
 		mChilds.Clear();
 		mLayers.Clear();
 		mStates.Clear();
 		mVisibleState = nullptr;
-		mSelectedState = nullptr;
+		mFocusedState = nullptr;
 
 		mName = other.mName;
 		layout.CopyFrom(other.layout);
 		mTransparency = other.mTransparency;
-		mIsSelectable = other.mIsSelectable;
+		mIsFocusable = other.mIsFocusable;
 
 		for (auto layer : other.mLayers)
 		{
@@ -117,9 +114,9 @@ namespace o2
 			AddState(newState);
 		}
 
-		UpdateLayout();
 		UpdateTransparency();
 		UpdateVisibility();
+		UpdateLayout();
 
 		return *this;
 	}
@@ -172,14 +169,14 @@ namespace o2
 		o2Render.DrawRectFrame(layout.mAbsoluteRect, Color4::SomeColor(colr++));
 	}
 
-	void UIWidget::OnSelected()
+	void UIWidget::OnFocused()
 	{
-		onSelected();
+		onFocused();
 	}
 
-	void UIWidget::OnDeselected()
+	void UIWidget::OnUnfocused()
 	{
-		onDeselected();
+		onUnfocused();
 	}
 
 	void UIWidget::SetName(const String& name)
@@ -375,6 +372,7 @@ namespace o2
 		layer->SetOwnerWidget(this);
 		UpdateLayersDrawingSequence();
 		OnLayerAdded(layer);
+
 		return layer;
 	}
 
@@ -434,6 +432,7 @@ namespace o2
 
 		bool res = mLayers.Remove(layer);
 		UpdateLayersDrawingSequence();
+
 		return res;
 	}
 
@@ -457,6 +456,7 @@ namespace o2
 		UIWidgetState* newState = mnew UIWidgetState();
 		newState->name = name;
 		newState->animation.SetTarget(this);
+
 		return AddState(newState);
 	}
 
@@ -467,6 +467,7 @@ namespace o2
 		newState->animation = animation;
 		newState->animation.SetTarget(this);
 		newState->animation.relTime = 0.0f;
+
 		return AddState(newState);
 	}
 
@@ -490,8 +491,8 @@ namespace o2
 
 		if (state->name == "selected")
 		{
-			mSelectedState = state;
-			mSelectedState->SetStateForcible(mIsSelected);
+			mFocusedState = state;
+			mFocusedState->SetStateForcible(mIsFocused);
 		}
 
 		OnStateAdded(state);
@@ -508,8 +509,8 @@ namespace o2
 		if (mStates[idx] == mVisibleState)
 			mVisibleState = nullptr;
 
-		if (mStates[idx] == mSelectedState)
-			mSelectedState = nullptr;
+		if (mStates[idx] == mFocusedState)
+			mFocusedState = nullptr;
 
 		delete mStates[idx];
 		mStates.RemoveAt(idx);
@@ -538,7 +539,7 @@ namespace o2
 			delete state;
 
 		mVisibleState = nullptr;
-		mSelectedState = nullptr;
+		mFocusedState = nullptr;
 
 		mStates.Clear();
 	}
@@ -600,6 +601,7 @@ namespace o2
 
 		mVisible = visible;
 		mFullyDisabled = !visible;
+
 		UpdateVisibility();
 	}
 
@@ -624,29 +626,29 @@ namespace o2
 		return mVisible;
 	}
 
-	void UIWidget::Select()
+	void UIWidget::Focus()
 	{
-		o2UI.SelectWidget(this);
+		o2UI.FocusWidget(this);
 	}
 
-	void UIWidget::Deselect()
+	void UIWidget::Unfocus()
 	{
-		o2UI.SelectWidget(nullptr);
+		o2UI.FocusWidget(nullptr);
 	}
 
-	bool UIWidget::IsSelected() const
+	bool UIWidget::IsFocused() const
 	{
-		return mIsSelected;
+		return mIsFocused;
 	}
 
-	bool UIWidget::IsSelectable() const
+	bool UIWidget::IsFocusable() const
 	{
-		return mIsSelectable;
+		return mIsFocusable;
 	}
 
-	void UIWidget::SetSelectable(bool selectable)
+	void UIWidget::SetFocusable(bool selectable)
 	{
-		mIsSelectable = selectable;
+		mIsFocusable = selectable;
 	}
 
 	bool UIWidget::IsUnderPoint(const Vec2F& point)
@@ -714,10 +716,10 @@ namespace o2
 			child->UpdateVisibility();
 	}
 
-	void UIWidget::OnChildSelected(UIWidget* child)
+	void UIWidget::OnChildFocused(UIWidget* child)
 	{
 		if (mParent)
-			mParent->OnChildSelected(child);
+			mParent->OnChildFocused(child);
 	}
 
 	void UIWidget::RetargetStatesAnimations()
@@ -906,5 +908,4 @@ namespace o2
 		layer.SetAllAccessFunc(this, &UIWidget::GetAllLayers);
 		child.SetAllAccessFunc(this, &UIWidget::GetAllChilds);
 	}
-
 }

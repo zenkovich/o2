@@ -42,7 +42,7 @@ namespace Editor
 		void SelectAndExpandFolder(const String& path);
 
 		// Rebuilds folders tree
-		void RebuildTree();
+		void UpdateView();
 
 		// Initializes assets context menu
 		void InitializeContext();

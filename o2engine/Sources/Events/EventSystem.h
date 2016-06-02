@@ -11,10 +11,11 @@
 
 namespace o2
 {
-	class CursorEventsListener;
-	class DragEventsListener;
-	class KeyboardEventsListener;
 	class ApplicationEventsListener;
+	class CursorAreaEventsListener;
+	class CursorEventsListener;
+	class DragableObject;
+	class KeyboardEventsListener;
 
 	// -----------------------
 	// Event processing system
@@ -22,17 +23,19 @@ namespace o2
 	class EventSystem: public Singleton<EventSystem>
 	{
 	public:
-		typedef Vector<CursorEventsListener*>      CursEventsListenersVec;
-		typedef Vector<DragEventsListener*>        DragEventsListenersVec;
-		typedef Vector<KeyboardEventsListener*>    KeybEventsListenersVec;
-		typedef Vector<ApplicationEventsListener*> AppEventsListenersVec;
+		typedef Vector<CursorEventsListener*>                   CursorEventsListenersVec;
+		typedef Vector<CursorAreaEventsListener*>               CursorAreaEventsListenersVec;
+		typedef Vector<DragableObject*>                         DragEventsListenersVec;
+		typedef Vector<KeyboardEventsListener*>                 KeybEventsListenersVec;
+		typedef Vector<ApplicationEventsListener*>              AppEventsListenersVec;
+		typedef Dictionary<CursorId, CursorAreaEventsListener*> CursorListenerDict;
 
 	public:
 		// Returns drag event listener under cursor
-		CursorEventsListener* GetCursorListenerUnderCursor(CursorId cursorId) const;
+		CursorAreaEventsListener* GetCursorListenerUnderCursor(CursorId cursorId) const;
 
 		// Returns all cursor listeners under cursor arranged by depth
-		CursEventsListenersVec GetAllCursorListenersUnderCursor(CursorId cursorId) const;
+		CursorAreaEventsListenersVec GetAllCursorListenersUnderCursor(CursorId cursorId) const;
 
 		// Breaks cursor event. All pressed listeners will be unpressed with specific event OnPressBreak
 		void BreakCursorEvent();
@@ -46,6 +49,9 @@ namespace o2
 
 		// Destructor
 		~EventSystem();
+
+		// Returns time between clicks for double click reaction
+		float GetDoubleClickTime() const;
 
 		// Calls when application was started
 		void OnApplicationStarted();
@@ -111,28 +117,37 @@ namespace o2
 		void ProcessKeyReleased(const Input::Key& key);
 
 	protected:
-		CursEventsListenersVec                      mCursorListeners;             // All cursor listeners
-		Dictionary<CursorId, CursorEventsListener*> mPressedListeners;            // Pressed listeners for all pressed cursors
-		CursorEventsListener*                       mRightButtonPressedListener;  // Right mouse button pressed listener
-		CursorEventsListener*                       mMiddleButtonPressedListener; // Middle mouse button pressed listener
-		Dictionary<CursorId, CursorEventsListener*> mUnderCursorListeners;        // Under cursor listeners for each cursor
-		Dictionary<CursorId, CursorEventsListener*> mLastUnderCursorListeners;    // Under cursor listeners for each cursor on last frame
-		DragEventsListenersVec                      mDragListeners;               // Drag events listeners
-		KeybEventsListenersVec                      mKeyboardListeners;           // Keyboard events listeners
-		AppEventsListenersVec                       mApplicationListeners;        // Application events listeners
+		float                        mDblClickTime = 0.3f;                   // Time between clicks for double click reaction
+
+		CursorEventsListenersVec     mCursorListeners;                       // All cursor non area listeners
+		CursorAreaEventsListenersVec mAreaCursorListeners;                   // All cursor area listeners
+		CursorListenerDict           mPressedListeners;                      // Pressed listeners for all pressed cursors
+		CursorAreaEventsListener*    mRightButtonPressedListener = nullptr;  // Right mouse button pressed listener
+		CursorAreaEventsListener*    mMiddleButtonPressedListener = nullptr; // Middle mouse button pressed listener
+		CursorListenerDict           mUnderCursorListeners;                  // Under cursor listeners for each cursor
+		CursorListenerDict           mLastUnderCursorListeners;              // Under cursor listeners for each cursor on last frame
+		DragEventsListenersVec       mDragListeners;                         // Drag events listeners
+		KeybEventsListenersVec       mKeyboardListeners;                     // Keyboard events listeners
+		AppEventsListenersVec        mApplicationListeners;                  // Application events listeners
 
 	protected:
+		// Registering cursor area events listener
+		static void DrawnCursorAreaListener(CursorAreaEventsListener* listener);
+
+		// Unregistering cursor area events listener
+		static void UnregCursorAreaListener(CursorAreaEventsListener* listener);
+
 		// Registering cursor events listener
-		static void DrawnCursorListener(CursorEventsListener* listener);
+		static void RegCursorListener(CursorEventsListener* listener);
 
 		// Unregistering cursor events listener
 		static void UnregCursorListener(CursorEventsListener* listener);
 
 		// Registering drag events listener
-		static void RegDragListener(DragEventsListener* listener);
+		static void RegDragListener(DragableObject* listener);
 
 		// Unregistering drag events listener
-		static void UnregDragListener(DragEventsListener* listener);
+		static void UnregDragListener(DragableObject* listener);
 
 		// Registering keyboard events listener
 		static void RegKeyboardListener(KeyboardEventsListener* listener);
@@ -148,8 +163,9 @@ namespace o2
 
 		friend class Application;
 		friend class ApplicationEventsListener;
+		friend class CursorAreaEventsListener;
 		friend class CursorEventsListener;
-		friend class DragEventsListener;
+		friend class DragableObject;
 		friend class KeyboardEventsListener;
 		friend class WndProcFunc;
 	};

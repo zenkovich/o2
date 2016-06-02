@@ -3,11 +3,13 @@
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
 #include "Animation/Animation.h"
+#include "Application/Application.h"
 #include "Assets/Assets.h"
 #include "AssetsWindow/AssetsWindow.h"
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
+#include "TreeWindow/ActorsTree.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/Button.h"
 #include "UI/UIManager.h"
@@ -28,7 +30,6 @@ namespace Editor
 
 	ActorProperty::~ActorProperty()
 	{
-		SetEventHandleDrawable(nullptr);
 		delete mBox;
 	}
 
@@ -36,7 +37,7 @@ namespace Editor
 	{
 		mBox = mnew UIWidget();
 
-		mBox->SetSelectable(true);
+		mBox->SetFocusable(true);
 
 		auto backLayer = mBox->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto selectLayer = mBox->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
@@ -59,7 +60,7 @@ namespace Editor
 		linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
 		mBox->AddChild(linkBtn);
 
-		SetEventHandleDrawable(mBox);
+		mBox->onDraw += [&]() { OnDrawn(); };
 	}
 
 	void ActorProperty::Setup(const Vector<void*>& targets, bool isProperty)
@@ -148,6 +149,11 @@ namespace Editor
 		Update();
 	}
 
+	bool ActorProperty::IsUnderPoint(const Vec2F& point)
+	{
+		return mBox->IsUnderPoint(point);
+	}
+
 	void ActorProperty::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		mBox->SetState("select", true);
@@ -160,7 +166,7 @@ namespace Editor
 
 	void ActorProperty::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		o2UI.SelectWidget(mBox);
+		o2UI.FocusWidget(mBox);
 
 		if (mCommonValue)
 		{
@@ -178,8 +184,39 @@ namespace Editor
 
 	void ActorProperty::OnKeyPressed(const Input::Key& key)
 	{
-		if (mBox->IsSelected() && key == VK_DELETE || key == VK_BACK)
+		if (mBox->IsFocused() && key == VK_DELETE || key == VK_BACK)
 			SetValue(nullptr);
 	}
 
+	void ActorProperty::OnDropped(ISelectableDragableObjectsGroup* group)
+	{
+		UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(group);
+
+		if (!actorsTree || actorsTree->GetSelectedActors().Count() > 1)
+			return;
+
+		SetValue(actorsTree->GetSelectedActors()[0]);
+
+		o2Application.SetCursor(CursorType::Arrow);
+	}
+
+	void ActorProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	{
+		UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(group);
+
+		if (!actorsTree || actorsTree->GetSelectedActors().Count() > 1)
+			return;
+
+		o2Application.SetCursor(CursorType::Hand);
+	}
+
+	void ActorProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
+	{
+		UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(group);
+
+		if (!actorsTree || actorsTree->GetSelectedActors().Count() > 1)
+			return;
+
+		o2Application.SetCursor(CursorType::Arrow);
+	}
 }

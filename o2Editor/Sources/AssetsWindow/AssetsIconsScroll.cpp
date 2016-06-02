@@ -240,7 +240,7 @@ namespace Editor
 		UpdateCuttingAssets();
 	}
 
-	bool UIAssetsIconsScrollArea::IsSelectable() const
+	bool UIAssetsIconsScrollArea::IsFocusable() const
 	{
 		return true;
 	}
@@ -310,36 +310,36 @@ namespace Editor
 		}
 	}
 
-	void UIAssetsIconsScrollArea::OnSelected()
+	void UIAssetsIconsScrollArea::OnFocused()
 	{
 		for (auto& sel : mSelectedAssetsIcons)
 			sel.selectionSprite->SetColor(mSelectedColor);
 
-		onSelected();
+		UIWidget::OnFocused();
 	}
 
-	void UIAssetsIconsScrollArea::OnDeselected()
+	void UIAssetsIconsScrollArea::OnUnfocused()
 	{
 		for (auto& sel : mSelectedAssetsIcons)
 			sel.selectionSprite->SetColor(mUnselectedColor);
 
-		onDeselected();
+		UIWidget::OnFocused();
 	}
 
 	void UIAssetsIconsScrollArea::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		mPressedPoint = cursor.mPosition;
-		o2UI.SelectWidget(this);
+		mPressedPoint = cursor.position;
+		o2UI.FocusWidget(this);
 	}
 
 	void UIAssetsIconsScrollArea::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		if (cursor.mDelta == Vec2F())
+		if (cursor.delta == Vec2F())
 			return;
 
 		float beginDragOrSelectThreshold = 5.0f;
 
-		if (!mSelecting && mDragState == DragState::Off && (cursor.mPosition - mPressedPoint).Length() > beginDragOrSelectThreshold)
+		if (!mSelecting && mDragState == DragState::Off && (cursor.position - mPressedPoint).Length() > beginDragOrSelectThreshold)
 		{
 			UIAssetIcon* iconUnderCursor = GetIconUnderPoint(mPressedPoint);
 			if (iconUnderCursor && mSelectedAssetsIcons.ContainsPred([=](auto x) { return x.icon == iconUnderCursor; }))
@@ -367,7 +367,7 @@ namespace Editor
 	{
 		if (mPressTime < 0.3f && !mSelecting)
 		{
-			UIAssetIcon* iconUnderCursor = GetIconUnderPoint(cursor.mPosition);
+			UIAssetIcon* iconUnderCursor = GetIconUnderPoint(cursor.position);
 			if (iconUnderCursor)
 				OnIconDblClicked(iconUnderCursor);
 		}
@@ -380,7 +380,7 @@ namespace Editor
 			if (!o2Input.IsKeyDown(VK_CONTROL))
 				DeselectAllAssets();
 
-			UIAssetIcon* iconUnderCursor = GetIconUnderPoint(cursor.mPosition);
+			UIAssetIcon* iconUnderCursor = GetIconUnderPoint(cursor.position);
 			if (iconUnderCursor && !mSelectedAssetsIcons.ContainsPred([=](auto x) { return x.icon == iconUnderCursor; }))
 			{
 				iconUnderCursor->SetState("assetSelection", true);
@@ -399,7 +399,7 @@ namespace Editor
 			sel.icon->Hide();
 
 		*mDragIcon = *mSelectedAssetsIcons.Last().icon;
-		mDragOffset = iconUnderCursor->layout.absRect->Center() - cursor.mPosition;
+		mDragOffset = iconUnderCursor->layout.absRect->Center() - cursor.position;
 
 		if (mSelectedAssetsIcons.Count() > 1)
 			((Text*)mDragIcon->layer["assetName"]->drawable)->text = (String)mSelectedAssetsIcons.Count() + " items";
@@ -408,10 +408,10 @@ namespace Editor
 	void UIAssetsIconsScrollArea::UpdateDragging(const Input::Cursor& cursor)
 	{
 		mDragIcon->SetParent(nullptr);
-		mDragIcon->layout.SetRect(RectF(cursor.mPosition - mAssetIconSize*0.5f + mDragOffset,
-										cursor.mPosition + mAssetIconSize*0.5f + mDragOffset));
+		mDragIcon->layout.SetRect(RectF(cursor.position - mAssetIconSize*0.5f + mDragOffset,
+										cursor.position + mAssetIconSize*0.5f + mDragOffset));
 
-		CursorEventsListener* listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
+		CursorAreaEventsListener* listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
 
 		SceneEditScreen* sceneEdit = dynamic_cast<SceneEditScreen*>(listenerUnderCursor);
 		UIActorsTree* actorsTree = dynamic_cast<UIActorsTree*>(listenerUnderCursor);
@@ -515,7 +515,7 @@ namespace Editor
 
 		if (mDragState == DragState::Scene)
 		{
-			Vec2F sceneCursorPos = o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition);
+			Vec2F sceneCursorPos = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
 			for (auto actor : mInstSceneDragActors)
 				actor->transform.worldPosition = sceneCursorPos;
 		}
@@ -529,7 +529,7 @@ namespace Editor
 		for (auto sel : mSelectedAssetsIcons)
 			sel.icon->Show();
 
-		CursorEventsListener* listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
+		CursorAreaEventsListener* listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
 
 		if (mDragState == DragState::Tree)
 		{
@@ -537,7 +537,7 @@ namespace Editor
 			RegActorsCreationAction();
 			mInstSceneDragActors.Clear();
 
-			o2UI.SelectWidget(o2EditorTree.GetActorsTree());
+			o2UI.FocusWidget(o2EditorTree.GetActorsTree());
 		}
 
 		if (mDragState == DragState::AssetField)
@@ -599,7 +599,7 @@ namespace Editor
 		{
 			RegActorsCreationAction();
 
-			o2UI.SelectWidget(o2EditorTree.GetActorsTree());
+			o2UI.FocusWidget(o2EditorTree.GetActorsTree());
 			o2EditorTree.GetActorsTree()->SetSelectedActors(mInstSceneDragActors);
 
 			mInstSceneDragActors.Clear();
@@ -651,7 +651,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::UpdateSelection(const Input::Cursor& cursor)
 	{
-		RectF selectionRect(cursor.mPosition, mPressedPoint);
+		RectF selectionRect(cursor.position, mPressedPoint);
 		mSelection->SetRect(selectionRect);
 
 		for (auto icon : mCurrentSelectingIcons)
@@ -684,7 +684,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
-		UIAssetIcon* iconUnderCursor = GetIconUnderPoint(cursor.mPosition);
+		UIAssetIcon* iconUnderCursor = GetIconUnderPoint(cursor.position);
 		if (iconUnderCursor)
 		{
 			if (!mSelectedAssetsIcons.ContainsPred([=](const IconSelection& x) { return x.icon == iconUnderCursor; }))
@@ -697,13 +697,13 @@ namespace Editor
 			}
 		}
 
-		o2UI.SelectWidget(this);
+		o2UI.FocusWidget(this);
 		mContextMenu->Show();
 	}
 
 	void UIAssetsIconsScrollArea::OnKeyReleased(const Input::Key& key)
 	{
-		if (mIsSelected && key == VK_BACK)
+		if (mIsFocused && key == VK_BACK)
 		{
 			if (mCurrentPath.CountOf("/") > 0)
 				o2EditorAssets.OpenFolder(o2FileSystem.GetParentPath(mCurrentPath));
@@ -837,7 +837,7 @@ namespace Editor
 		}
 
 		Sprite* res = mSelectionSpritesPool.PopBack();
-		res->SetColor(mIsSelected ? mSelectedColor : mUnselectedColor);
+		res->SetColor(mIsFocused ? mSelectedColor : mUnselectedColor);
 		return res;
 	}
 
@@ -860,7 +860,7 @@ namespace Editor
 				o2FileSystem.GetPathWithoutDirectories(iconAssetInfo.mPath));
 
 			editBox->SelectAll();
-			editBox->UIWidget::Select();
+			editBox->UIWidget::Focus();
 			editBox->ResetSroll();
 
 			editBox->onChangeCompleted = [=](const WString& text) {
@@ -921,7 +921,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextCopyPressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		o2EditorAssets.CopyAssets(
@@ -930,7 +930,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextCutPressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		o2EditorAssets.CutAssets(
@@ -939,7 +939,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextPastePressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		o2EditorAssets.PasteAssets(mCurrentPath);
@@ -948,7 +948,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextDeletePressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		o2EditorAssets.DeleteAssets(
@@ -957,7 +957,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextOpenPressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		if (mSelectedAssetsIcons.Count() > 0)
@@ -966,7 +966,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextShowInExplorerPressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		if (mSelectedAssetsIcons.Count() > 0)
@@ -975,7 +975,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextImportPressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		o2EditorAssets.ImportAssets(mCurrentPath);
@@ -983,7 +983,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextCreateFolderPressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		o2EditorAssets.CreateFolderAsset(mCurrentPath);
@@ -991,7 +991,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextCreatePrefabPressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		o2EditorAssets.CreatePrefabAsset(mCurrentPath);
@@ -999,7 +999,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextCreateScriptPressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		o2EditorAssets.CreateScriptAsset(mCurrentPath);
@@ -1007,7 +1007,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextCreateAnimationPressed()
 	{
-		if (!IsSelected())
+		if (!IsFocused())
 			return;
 
 		o2EditorAssets.CreateAnimationAsset(mCurrentPath);

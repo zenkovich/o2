@@ -226,9 +226,6 @@
     <ClInclude Include="..\Sources\Utils\RectPacker.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Tree.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Containers\Pool.h">
       <Filter>Sources\Utils\Containers</Filter>
     </ClInclude>
@@ -323,9 +320,6 @@
       <Filter>Sources\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Events\CursorEventsListener.h">
-      <Filter>Sources\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Events\DragEventsListener.h">
       <Filter>Sources\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Events\ApplicationEventsListener.h">
@@ -523,8 +517,11 @@
     <ClInclude Include="..\Sources\Utils\Data\DataNode.h">
       <Filter>Sources\Utils\Data</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Treex.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Utils\DragAndDrop.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\ITree.h">
+      <Filter>Sources\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -682,9 +679,6 @@
       <Filter>Sources\Events</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Events\CursorEventsListener.cpp">
-      <Filter>Sources\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Events\DragEventsListener.cpp">
       <Filter>Sources\Events</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Events\ApplicationEventsListener.cpp">
@@ -878,6 +872,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Data\DataNode.cpp">
       <Filter>Sources\Utils\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\DragAndDrop.cpp">
+      <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

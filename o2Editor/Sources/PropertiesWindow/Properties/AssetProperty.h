@@ -127,7 +127,7 @@ namespace Editor
 	{
 		mBox = mnew UIWidget();
 
-		mBox->SetSelectable(true);
+		mBox->SetFocusable(true);
 
 		auto backLayer = mBox->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto selectLayer = mBox->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
@@ -250,7 +250,7 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		o2UI.SelectWidget(mBox);
+		o2UI.FocusWidget(mBox);
 		o2EditorAssets.ShowAssetIcon(mCommonValue.GetPath());
 	}
 
@@ -269,7 +269,7 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::OnKeyPressed(const Input::Key& key)
 	{
-		if (mBox->IsSelected() && key == VK_DELETE || key == VK_BACK)
+		if (mBox->IsFocused() && key == VK_DELETE || key == VK_BACK)
 			SetAssetId(0);
 	}
 }

@@ -5,8 +5,8 @@
 namespace o2
 {
 	UILongList::UILongList():
-		UIScrollArea(), DrawableCursorEventsListener(this), mSelectedItem(-1), mHoverLayout(Layout::BothStretch()), 
-		mSelectionLayout(Layout::BothStretch()), mMaxVisibleItemIdx(-1), mMinVisibleItemIdx(-1)
+		UIScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()), 
+		mSelectionLayout(Layout::BothStretch())
 	{
 		mItemSample = mnew UIWidget();
 		mSelectionDrawable = mnew Sprite();
@@ -16,8 +16,8 @@ namespace o2
 	}
 
 	UILongList::UILongList(const UILongList& other):
-		UIScrollArea(other), DrawableCursorEventsListener(this), mSelectedItem(-1), mHoverLayout(other.mHoverLayout),
-		mSelectionLayout(other.mSelectionLayout), mMaxVisibleItemIdx(-1), mMinVisibleItemIdx(-1)
+		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
+		mSelectionLayout(other.mSelectionLayout)
 	{
 		mItemSample = other.mItemSample->Clone();
 		mItemSample->UpdateLayout(true);
@@ -92,8 +92,6 @@ namespace o2
 
 		IDrawable::OnDrawn();
 
-		mDrawDepth = o2Render.GetDrawingDepth();
-
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
 		for (auto child : mChilds)
@@ -146,7 +144,7 @@ namespace o2
 		if (lastSelected != mSelectedItem)
 		{
 			lastSelected = mSelectedItem;
-			onSelected(mSelectedItem);
+			onFocused(mSelectedItem);
 			OnSelectionChanged();
 		}
 	}
@@ -309,25 +307,25 @@ namespace o2
 	void UILongList::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
-		if ((cursor.mPosition - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
+		if ((cursor.position - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
 			return;
 
-		mLastSelectCheckCursor = cursor.mPosition;
+		mLastSelectCheckCursor = cursor.position;
 
 		int itemIdx = -1;
-		GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		GetItemUnderPoint(cursor.position, &itemIdx);
 		UpdateSelection(itemIdx);
 	}
 
 	void UILongList::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
-		if ((cursor.mPosition - mLastHoverCheckCursor).Length() < checkDeltaThreshold)
+		if ((cursor.position - mLastHoverCheckCursor).Length() < checkDeltaThreshold)
 			return;
 
-		mLastHoverCheckCursor = cursor.mPosition;
+		mLastHoverCheckCursor = cursor.position;
 
-		UpdateHover(cursor.mPosition);
+		UpdateHover(cursor.position);
 	}
 
 	void UILongList::OnCursorReleased(const Input::Cursor& cursor)
@@ -337,9 +335,9 @@ namespace o2
 			*pressedState = false;
 
 		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
 
-		onSelected(itemIdx);
+		onFocused(itemIdx);
 		OnSelectionChanged();
 	}
 

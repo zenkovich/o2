@@ -135,7 +135,7 @@ namespace Editor
 		if (pressedSprite)
 			pressedSprite->enabled = true;
 
-		mPressOffset = mPosition - o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition);
+		mPressOffset = mPosition - o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
 		onPressed();
 	}
 
@@ -151,7 +151,7 @@ namespace Editor
 
 		onReleased();
 
-		if (!IsUnderPoint(cursor.mPosition))
+		if (!IsUnderPoint(cursor.position))
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 
@@ -167,15 +167,15 @@ namespace Editor
 
 		onReleased();
 
-		if (!IsUnderPoint(cursor.mPosition))
+		if (!IsUnderPoint(cursor.position))
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 
 	void SceneDragHandle::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		if (mIsPressed && cursor.mDelta != Vec2F())
+		if (mIsPressed && cursor.delta != Vec2F())
 		{
-			Vec2F newPos = o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition) + mPressOffset;
+			Vec2F newPos = o2EditorSceneScreen.ScreenToScenePoint(cursor.position) + mPressOffset;
 			Vec2F delta = newPos - mPosition;
 
 			SetPosition(newPos);
@@ -189,7 +189,7 @@ namespace Editor
 		if (hoverSprite)
 			hoverSprite->enabled = true;
 
-		if (!cursor.mPressed)
+		if (!cursor.isPressed)
 			o2Application.SetCursor(cursorType);
 	}
 
@@ -198,7 +198,7 @@ namespace Editor
 		if (hoverSprite)
 			hoverSprite->enabled = false;
 
-		if (!IsPressed() && !cursor.mPressed)
+		if (!IsPressed() && !cursor.isPressed)
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 

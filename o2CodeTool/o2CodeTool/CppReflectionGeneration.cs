@@ -24,13 +24,15 @@ public class CppReflectionGenerator
 		iobjectClass = map.allClasses.Find(x => x.name == "o2::IObject");
 		reflectableClasses = map.allClasses.FindAll(x =>
 		{
+            if (x.shortName.Contains("UIButton"))
+                Console.Write("asd");
+
 			return x.IsBasedOn(iobjectClass) &&  !x.isTemplate && !x.isTypedef;
 
 		}).ToList();
 
 		SearchEnums(map.globalNamespace);
 
-		GenerateHeader(outputPath);
 		GenerateSource(outputPath);
     }
 
@@ -62,10 +64,13 @@ public class CppReflectionGenerator
 
 		string oldData = File.ReadAllText(outputPath + ".cpp");
 
-		if (oldData != sourceData)
-			File.WriteAllText(outputPath + ".cpp", sourceData);
-		else
-			Console.Write("Output is the same as old. Don't writing.\n");
+        if (oldData != sourceData)
+        {
+            File.WriteAllText(outputPath + ".cpp", sourceData);
+            GenerateHeader(outputPath);
+        }
+        else
+            Console.Write("Output is the same as old. Don't writing.\n");
 	}
 
 	string GetIncludesData()

@@ -75,7 +75,7 @@ namespace Editor
 		}
 
 		o2EditorSceneScreen.ClearSelectionWithoutAction();
-		o2EditorTree.GetActorsTree()->RebuildTree();
+		o2EditorTree.GetActorsTree()->UpdateView();
 	}
 
 	void DeleteActorsAction::Undo()
@@ -104,7 +104,7 @@ namespace Editor
 			}
 		}
 
-		o2EditorTree.GetActorsTree()->RebuildTree();
+		o2EditorTree.GetActorsTree()->UpdateView();
 	}
 
 	bool DeleteActorsAction::ActorInfo::operator==(const ActorInfo& other) const

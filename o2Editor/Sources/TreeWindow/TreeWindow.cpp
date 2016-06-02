@@ -46,26 +46,29 @@ namespace Editor
 
 	void TreeWindow::ExpandActorsTreeNode(Actor* targetActor)
 	{
-		if (auto node = mActorsTree->GetNode(targetActor))
-			return;
-
-		Vector<Actor*> parentsStack;
-		Actor* treeVisibleNodeActor = targetActor;
-		while (!mActorsTree->GetNode(treeVisibleNodeActor))
+		if (!mActorsTree->GetNode(targetActor))
 		{
-			treeVisibleNodeActor = treeVisibleNodeActor->GetParent();
 
-			if (!treeVisibleNodeActor)
-				return;
+			Vector<Actor*> parentsStack;
+			Actor* treeVisibleNodeActor = targetActor;
+			while (!mActorsTree->GetNode(treeVisibleNodeActor))
+			{
+				treeVisibleNodeActor = treeVisibleNodeActor->GetParent();
 
-			parentsStack.Add(treeVisibleNodeActor);
+				if (!treeVisibleNodeActor)
+					return;
+
+				parentsStack.Add(treeVisibleNodeActor);
+			}
+
+			for (int i = parentsStack.Count() - 1; i >= 0; i--)
+			{
+				auto node = mActorsTree->GetNode(parentsStack[i]);
+				node->Expand();
+			}
 		}
 
-		for (int i = parentsStack.Count() - 1; i >= 0; i--)
-		{
-			auto node = mActorsTree->GetNode(parentsStack[i]);
-			node->Expand();
-		}
+		mActorsTree->ScrollTo(targetActor);
 	}
 
 	void TreeWindow::InitializeWindow()
@@ -174,7 +177,7 @@ namespace Editor
 			}
 		}
 
-		mActorsTree->RebuildTree();
+		mActorsTree->UpdateView();
 	}
 
 	void TreeWindow::PostInitializeWindow()
@@ -200,7 +203,7 @@ namespace Editor
 				SearchActorsRecursive(actor, (String)searchStr);
 		}
 
-		mActorsTree->RebuildTree();
+		mActorsTree->UpdateView();
 	}
 
 	void TreeWindow::SearchActorsRecursive(Actor* actor, const String& searchStr)
@@ -229,7 +232,7 @@ namespace Editor
 			Actor* parentActor = obj;
 			parentActor->AddChild(newActor);
 
-			node->Rebuild(true);
+			node->UpdateView(true);
 
 			auto parentChilds = parentActor->GetChilds();
 			auto action = mnew CreateActorsAction({ newActor }, parentActor,
@@ -238,7 +241,7 @@ namespace Editor
 		}
 		else
 		{
-			mActorsTree->RebuildTree();
+			mActorsTree->UpdateView();
 
 			auto scereActors = o2Scene.GetRootActors();
 			auto action = mnew CreateActorsAction({ newActor }, nullptr,
@@ -249,7 +252,7 @@ namespace Editor
 
 	void TreeWindow::OnContextCreateNewPressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		Actor* newActor = mnew Actor();
@@ -259,7 +262,7 @@ namespace Editor
 
 	void TreeWindow::OnContextCreateSprite()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		Actor* newActor = mnew Actor({ mnew ImageComponent() });
@@ -270,13 +273,13 @@ namespace Editor
 
 	void TreeWindow::OnContextCreateButton()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 	}
 
 	void TreeWindow::OnContextCopyPressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		Vector<Actor*> selectedNodes = mActorsTree->GetSelectedObjects().Select<Actor*>([](auto x) { return (Actor*)(void*)x; });
@@ -291,7 +294,7 @@ namespace Editor
 
 	void TreeWindow::OnContextCutPressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		OnContextCopyPressed();
@@ -300,7 +303,7 @@ namespace Editor
 
 	void TreeWindow::OnContextPastePressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		auto selectedActors = mActorsTree->GetSelectedActors();
@@ -323,7 +326,7 @@ namespace Editor
 		for (auto actor : actors)
 			actor->SetParent(parent);
 
-		mActorsTree->RebuildTree();
+		mActorsTree->UpdateView();
 		mActorsTree->SetSelectedActors(actors);
 
 		auto action = mnew CreateActorsAction(actors, parent, prevActor);
@@ -332,7 +335,7 @@ namespace Editor
 
 	void TreeWindow::OnContextDeletePressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
@@ -344,12 +347,12 @@ namespace Editor
 		for (auto actor : selectedActors)
 			delete actor;
 
-		mActorsTree->RebuildTree();
+		mActorsTree->UpdateView();
 	}
 
 	void TreeWindow::OnContextDuplicatePressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
@@ -360,13 +363,13 @@ namespace Editor
 			copy->SetParent(actor->GetParent());
 		}
 
-		mActorsTree->RebuildTree();
+		mActorsTree->UpdateView();
 		mActorsTree->SetSelectedActors(selectedActors);
 	}
 
 	void TreeWindow::OnContextExpandAllPressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		auto selectedActors = mActorsTree->GetSelectedActors();
@@ -382,7 +385,7 @@ namespace Editor
 
 	void TreeWindow::OnContextCollapseAllPressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		auto selectedActors = mActorsTree->GetSelectedActors();
@@ -398,7 +401,7 @@ namespace Editor
 
 	void TreeWindow::OnContextLockPressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		auto selectedActors = mActorsTree->GetSelectedActors();
@@ -413,13 +416,13 @@ namespace Editor
 
 			auto node = mActorsTree->GetNode(actor);
 			if (node)
-				node->Rebuild();
+				node->UpdateView();
 		}
 	}
 
 	void TreeWindow::OnContextEnablePressed()
 	{
-		if (!mActorsTree->IsSelected())
+		if (!mActorsTree->IsFocused())
 			return;
 
 		auto selectedActors = mActorsTree->GetSelectedActors();
@@ -434,18 +437,18 @@ namespace Editor
 
 			auto node = mActorsTree->GetNode(actor);
 			if (node)
-				node->Rebuild();
+				node->UpdateView();
 		}
 	}
 
 	void TreeWindow::OnActorCreated(Actor* actor)
 	{
-		mActorsTree->RebuildTree();
+		mActorsTree->UpdateView();
 	}
 
 	void TreeWindow::OnActorDestroyed(Actor* actor)
 	{
-		mActorsTree->RebuildTree();
+		mActorsTree->UpdateView();
 	}
 
 }

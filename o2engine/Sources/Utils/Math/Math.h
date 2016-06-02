@@ -10,6 +10,11 @@ namespace o2
 	template<typename T>
 	class Rect;
 
+	template<typename T>
+	class Vec2;
+
+	typedef Vec2<float> Vec2F;
+
 	typedef Rect<float> RectF;
 
 	namespace Math
@@ -28,6 +33,10 @@ namespace o2
 		{
 			return roundf(value);
 		}
+
+		Vec2F Round(const Vec2F& value);
+
+		RectF Round(const RectF& value);
 
 		inline float Pow(float value, float s)
 		{
@@ -122,6 +131,12 @@ namespace o2
 		inline T Lerp(const T& a, const T& b, float coef)
 		{
 			return (b - a)*coef + a;
+		}
+
+		template<typename T>
+		inline T Lerpc(const T& a, const T& b, float coef)
+		{
+			return Clamp((b - a)*coef + a, a, b);
 		}
 
 		RectF Lerp(const RectF& a, const RectF& b, float coef);

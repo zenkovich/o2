@@ -15,13 +15,13 @@ namespace o2
 	class UIWidgetState: public ISerializable
 	{
 	public:
-		String           name;                   // State name @SERIALIZABLE
-		Animation        animation;              // UIWidget animation @SERIALIZABLE
-		float            offStateAnimationSpeed; // False state transition animation speed @SERIALIZABLE
-		Function<void()> onStateFullyTrue;		 // This event calls when state is completely true (at the end of animation)
-		Function<void()> onStateFullyFalse;		 // This event calls when state is completely false (at the end of animation)
-		Function<void()> onStateBecomesTrue;	 // This event calls when state becomes to true
-		Function<void()> onStateBecomesFalse;	 // This event calls when state becomes to true
+		String           name;                          // State name @SERIALIZABLE
+		Animation        animation;                     // UIWidget animation @SERIALIZABLE
+		float            offStateAnimationSpeed = 1.0f; // False state transition animation speed @SERIALIZABLE
+		Function<void()> onStateFullyTrue;		        // This event calls when state is completely true (at the end of animation)
+		Function<void()> onStateFullyFalse;		        // This event calls when state is completely false (at the end of animation)
+		Function<void()> onStateBecomesTrue;	        // This event calls when state becomes to true
+		Function<void()> onStateBecomesFalse;	        // This event calls when state becomes to true
 
 		// Default constructor
 		UIWidgetState();
@@ -53,8 +53,8 @@ namespace o2
 		SERIALIZABLE(UIWidgetState);
 
 	protected:
-		bool      mState; // Current state @SERIALIZABLE
-		UIWidget* mOwner; // Owner widget pointer
+		bool      mState = false; // Current state @SERIALIZABLE
+		UIWidget* mOwner = nullptr; // Owner widget pointer
 	};
 	typedef Vector<UIWidgetState*>  StatesVec;
 }

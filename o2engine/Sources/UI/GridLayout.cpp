@@ -2,9 +2,7 @@
 
 namespace o2
 {
-	UIGridLayout::UIGridLayout():
-		UIWidget(), mBaseCorner(BaseCorner::Left), mSpacing(0), mFitByChildren(false), mCellSize(100, 100),
-		mArrangeAxis(TwoDirection::Horizontal), mArrangeAxisMaxCells(INT_MAX)
+	UIGridLayout::UIGridLayout(): UIWidget()
 	{
 		InitializeProperties();
 		UpdateLayout();
@@ -25,12 +23,13 @@ namespace o2
 
 	UIGridLayout& UIGridLayout::operator=(const UIGridLayout& other)
 	{
-		mBaseCorner = other.mBaseCorner;
-		mSpacing = other.mSpacing;
-		mBorder = other.mBorder;
-		mCellSize = other.mCellSize;
-		mArrangeAxis = other.mArrangeAxis;
+		mBaseCorner          = other.mBaseCorner;
+		mSpacing             = other.mSpacing;
+		mBorder              = other.mBorder;
+		mCellSize            = other.mCellSize;
+		mArrangeAxis         = other.mArrangeAxis;
 		mArrangeAxisMaxCells = other.mArrangeAxisMaxCells;
+
 		UIWidget::operator=(other);
 
 		RetargetStatesAnimations();

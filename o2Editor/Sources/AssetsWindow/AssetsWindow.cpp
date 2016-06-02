@@ -308,7 +308,7 @@ namespace Editor
 
 		auto separatorLayer = mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI_Ver_separator.png"),
 													 Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
-		mFoldersTree->RebuildTree();
+		mFoldersTree->UpdateView();
 		mWindow->AddChild(mFoldersTree);
 
 		// assets scroll & grid
@@ -322,7 +322,7 @@ namespace Editor
 		};
 
 		mSeparatorHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float anchorDelta = cursor.mDelta.x / mWindow->layout.width;
+			float anchorDelta = cursor.delta.x / mWindow->layout.width;
 			mFoldersTree->layout.anchorRight += anchorDelta;
 			mAssetsGridScroll->layout.anchorLeft += anchorDelta;
 		};
@@ -351,7 +351,7 @@ namespace Editor
 
 	void AssetsWindow::OnAssetsRebuilded(const Vector<AssetId>& changedAssets)
 	{
-		mFoldersTree->RebuildTree();
+		mFoldersTree->UpdateView();
 		mAssetsGridScroll->UpdateAssetsPath();
 	}
 

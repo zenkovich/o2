@@ -5,9 +5,8 @@
 namespace o2
 {
 	UIWidgetLayer::UIWidgetLayer():
-		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)), mTransparency(1.0f), mResTransparency(1.0f),
-		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mOwnerWidget(nullptr), mParent(nullptr),
-		drawable(nullptr)
+		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)), 
+		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), drawable(nullptr)
 	{
 		InitializeProperties();
 	}

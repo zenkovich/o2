@@ -652,7 +652,7 @@ namespace UIStyle
 		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
 															  -5.0f, -15.0f, 0.2f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 0.8f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))

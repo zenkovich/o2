@@ -2,9 +2,7 @@
 
 namespace o2
 {
-	UIHorizontalLayout::UIHorizontalLayout():
-		mBaseCorner(BaseCorner::Left), mSpacing(0), mExpandWidth(true), mExpandHeight(true), UIWidget(),
-		mFitByChildren(false)
+	UIHorizontalLayout::UIHorizontalLayout(): UIWidget()
 	{
 		InitializeProperties();
 		UpdateLayout();
@@ -24,11 +22,12 @@ namespace o2
 
 	UIHorizontalLayout& UIHorizontalLayout::operator=(const UIHorizontalLayout& other)
 	{
-		mBaseCorner = other.mBaseCorner;
-		mSpacing = other.mSpacing;
-		mBorder = other.mBorder;
-		mExpandWidth = other.mExpandWidth;
+		mBaseCorner   = other.mBaseCorner;
+		mSpacing      = other.mSpacing;
+		mBorder       = other.mBorder;
+		mExpandWidth  = other.mExpandWidth;
 		mExpandHeight = other.mExpandHeight;
+
 		UIWidget::operator=(other);
 
 		RetargetStatesAnimations();

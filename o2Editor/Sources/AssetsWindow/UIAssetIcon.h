@@ -39,7 +39,7 @@ namespace Editor
 		SERIALIZABLE(UIAssetIcon);
 
 	protected:
-		Text*     mNameText;   // Asset name text layer
-		AssetInfo mAssetInfo;  // Asset information
+		Text*     mNameText;  // Asset name text layer
+		AssetInfo mAssetInfo; // Asset information
 	};
 }

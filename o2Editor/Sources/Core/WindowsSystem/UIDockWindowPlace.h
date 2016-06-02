@@ -44,19 +44,17 @@ namespace Editor
 		SERIALIZABLE(UIDockWindowPlace);
 
 	protected:
-		TwoDirection         mResizibleDir;        // Resizible dragable side
+		TwoDirection       mResizibleDir;        // Resizible dragable side
 
-		UIDockWindowPlace*   mNeighborMin;         // Resizing neighbor, using when dragging this side
-		CursorEventsArea mDragHandleMin;       // Separator drag handle
-		Layout               mDragHandleLayoutMin; // Separator drag handle layout
-		RectF                mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
+		UIDockWindowPlace* mNeighborMin;         // Resizing neighbor, using when dragging this side
+		CursorEventsArea   mDragHandleMin;       // Separator drag handle
+		Layout             mDragHandleLayoutMin; // Separator drag handle layout
+		RectF              mDragHandleAreaMin;   // Separator drag handle area calculated from mDragHandleLayout
 
-		UIDockWindowPlace*   mNeighborMax;         // Resizing neighbor, using when dragging this side
-		CursorEventsArea mDragHandleMax;       // Separator drag handle
-		Layout               mDragHandleLayoutMax; // Separator drag handle layout
-		RectF                mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
-
-		float                mDragHandleDepth;     // Drag handle drawing depth
+		UIDockWindowPlace* mNeighborMax;         // Resizing neighbor, using when dragging this side
+		CursorEventsArea   mDragHandleMax;       // Separator drag handle
+		Layout             mDragHandleLayoutMax; // Separator drag handle layout
+		RectF              mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 
 	protected:
 		// Updates layout

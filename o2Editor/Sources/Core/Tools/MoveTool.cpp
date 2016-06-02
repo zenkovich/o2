@@ -206,7 +206,7 @@ namespace Editor
 	{
 		float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
 
-		if (key.mPressedTime < 0.3f)
+		if (key.pressedTime < 0.3f)
 			return;
 
 		if (key == VK_LEFT)

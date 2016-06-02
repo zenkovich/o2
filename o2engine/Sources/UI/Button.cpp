@@ -7,13 +7,13 @@
 namespace o2
 {
 	UIButton::UIButton():
-		UIWidget(), CursorEventsListener(), mIconSprite(nullptr), mCaptionText(nullptr), mButtonGroup(nullptr)
+		UIWidget(), CursorAreaEventsListener()
 	{
 		InitializeProperties();
 	}
 
 	UIButton::UIButton(const UIButton& other):
-		UIWidget(other), mButtonGroup(nullptr)
+		UIWidget(other)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
@@ -25,16 +25,17 @@ namespace o2
 	UIButton& UIButton::operator=(const UIButton& other)
 	{
 		UIWidget::operator=(other);
+
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
 		RetargetStatesAnimations();
 		return *this;
-	}
+	} 
 
 	void UIButton::Draw()
 	{
 		UIWidget::Draw();
-		CursorEventsListener::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 	}
 
 	void UIButton::SetCaption(const WString& text)
@@ -99,7 +100,7 @@ namespace o2
 		return mButtonGroup;
 	}
 
-	bool UIButton::IsSelectable() const
+	bool UIButton::IsFocusable() const
 	{
 		return true;
 	}
@@ -115,7 +116,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = true;
 
-		o2UI.SelectWidget(this);
+		o2UI.FocusWidget(this);
 
 		if (mButtonGroup)
 		{
@@ -130,7 +131,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (UIWidget::IsUnderPoint(cursor.mPosition) && !mButtonGroup)
+		if (UIWidget::IsUnderPoint(cursor.position) && !mButtonGroup)
 			onClick();
 
 		if (mButtonGroup && mButtonGroup->mPressed)
@@ -166,7 +167,7 @@ namespace o2
 
 	void UIButton::OnKeyPressed(const Input::Key& key)
 	{
-		if (mIsSelected && (key.mKey == VK_SPACE || key.mKey == VK_RETURN))
+		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
 		{
 			auto pressedState = state["pressed"];
 			if (pressedState)
@@ -179,7 +180,7 @@ namespace o2
 
 	void UIButton::OnKeyReleased(const Input::Key& key)
 	{
-		if (mIsSelected && (key.mKey == VK_SPACE || key.mKey == VK_RETURN))
+		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
 		{
 			auto pressedState = state["pressed"];
 			if (pressedState)

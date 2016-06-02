@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Render/RectDrawable.h"
+#include "Utils/ITree.h"
 #include "Utils/Math/Layout.h"
-
 #include "Utils/Serializable.h"
 #include "Utils/String.h"
-#include "Utils/Tree.h"
 
 namespace o2
 {
@@ -102,14 +101,14 @@ namespace o2
 		SERIALIZABLE(UIWidgetLayer);
 
 	protected:
-		float          mTransparency;     // Layer transparency @SERIALIZABLE
-		float          mResTransparency;  // Result drawable transparency, depends on parent transparency
-		float          mDepth;            // Depth of drawable @SERIALIZABLE
-		RectF          mAbsolutePosition; // Result absolute drawable position
-		RectF          mInteractableArea; // Interactable area, depends on interactableLayout
-		UIWidget*      mOwnerWidget;      // Owner widget pointer
-		UIWidgetLayer* mParent;           // Pointer to parent layer
-		ChildsVec      mChilds;           // Children layers @SERIALIZABLE
+		float          mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
+		float          mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
+		float          mDepth = 0.0f;           // Depth of drawable @SERIALIZABLE
+		RectF          mAbsolutePosition;       // Result absolute drawable position
+		RectF          mInteractableArea;       // Interactable area, depends on interactableLayout
+		UIWidget*      mOwnerWidget = nullptr;  // Owner widget pointer
+		UIWidgetLayer* mParent = nullptr;       // Pointer to parent layer
+		ChildsVec      mChilds;                 // Children layers @SERIALIZABLE
 
 	protected:
 		// Completion deserialization callback

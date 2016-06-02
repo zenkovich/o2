@@ -10,7 +10,7 @@
 namespace Editor
 {
 	UIDockableWindow::UIDockableWindow():
-		UIWindow(), mDocked(false)
+		UIWindow()
 	{
 		InitializeDragHandles();
 		SetDocked(false);
@@ -20,7 +20,7 @@ namespace Editor
 	}
 
 	UIDockableWindow::UIDockableWindow(const UIDockableWindow& other):
-		UIWindow(other), mDocked(false)
+		UIWindow(other)
 	{
 		InitializeDragHandles();
 		SetDocked(false);
@@ -77,13 +77,13 @@ namespace Editor
 		if (dockedState)
 			*dockedState = docked;
 
-		mTopDragHandle.interactable = !docked;
-		mBottomDragHandle.interactable = !docked;
-		mLeftDragHandle.interactable = !docked;
-		mRightDragHandle.interactable = !docked;
-		mLeftTopDragHandle.interactable = !docked;
-		mLeftBottomDragHandle.interactable = !docked;
-		mRightTopDragHandle.interactable = !docked;
+		mTopDragHandle.interactable         = !docked;
+		mBottomDragHandle.interactable      = !docked;
+		mLeftDragHandle.interactable        = !docked;
+		mRightDragHandle.interactable       = !docked;
+		mLeftTopDragHandle.interactable     = !docked;
+		mLeftBottomDragHandle.interactable  = !docked;
+		mRightTopDragHandle.interactable    = !docked;
 		mRightBottomDragHandle.interactable = !docked;
 	}
 
@@ -111,8 +111,8 @@ namespace Editor
 
 	void UIDockableWindow::InitializeDragHandles()
 	{
-		mHeadDragHandle.onMoved = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoved);
-		mHeadDragHandle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoveBegin);
+		mHeadDragHandle.onMoved          = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoved);
+		mHeadDragHandle.onCursorPressed  = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoveBegin);
 		mHeadDragHandle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoveCompleted);
 	}
 
@@ -120,13 +120,13 @@ namespace Editor
 	{
 		if (mDocked)
 		{
-			if (!layout.GetAbsoluteRect().IsInside(cursor.mPosition))
+			if (!layout.GetAbsoluteRect().IsInside(cursor.position))
 				Undock();
 
 			return;
 		}
 
-		layout.position += cursor.mDelta;
+		layout.position += cursor.delta;
 
 		UIDockWindowPlace* targetDock;
 		Side dockPosition = Side::None;
@@ -178,7 +178,7 @@ namespace Editor
 
 	void UIDockableWindow::OnMoveBegin(const Input::Cursor& cursor)
 	{
-		OnSelected();
+		OnFocused();
 
 		if (mDocked)
 			mDragOffset = (Vec2F)o2Input.cursorPos - layout.absLeftTop;
@@ -188,7 +188,7 @@ namespace Editor
 	{
 		Vec2F cursorPos = o2Input.cursorPos;
 		auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
-		auto dockPlaceListener = listenersUnderCursor.FindMatch([](CursorEventsListener* x) {
+		auto dockPlaceListener = listenersUnderCursor.FindMatch([](CursorAreaEventsListener* x) {
 			return dynamic_cast<UIDockWindowPlace*>(x) != nullptr;
 		});
 

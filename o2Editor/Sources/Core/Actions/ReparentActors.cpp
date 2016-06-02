@@ -80,7 +80,7 @@ namespace Editor
 			}
 		}
 
-		o2EditorTree.GetActorsTree()->RebuildTree();
+		o2EditorTree.GetActorsTree()->UpdateView();
 	}
 
 	void ReparentActorsAction::Undo()
@@ -107,6 +107,6 @@ namespace Editor
 			}
 		}
 
-		o2EditorTree.GetActorsTree()->RebuildTree();
+		o2EditorTree.GetActorsTree()->UpdateView();
 	}
 }

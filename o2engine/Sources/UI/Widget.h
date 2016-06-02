@@ -5,11 +5,10 @@
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
 #include "Utils/Containers/Vector.h"
+#include "Utils/ITree.h"
 #include "Utils/Math/Layout.h"
-
 #include "Utils/Property.h"
 #include "Utils/Serializable.h"
-#include "Utils/Tree.h"
 
 namespace o2
 {
@@ -41,8 +40,8 @@ namespace o2
 
 		UIWidgetLayout                          layout;          // @SERIALIZABLE
 		Function<void()>                        onLayoutChanged; // Layout change event
-		Function<void()>                        onSelected;      // Select event
-		Function<void()>                        onDeselected;    // Deselect event
+		Function<void()>                        onFocused;       // On widget focused event
+		Function<void()>                        onUnfocused;     // On widget unfocised event
 
 		// Default constructor
 		UIWidget();
@@ -189,20 +188,20 @@ namespace o2
 		// Returns visibility
 		bool IsVisible() const;
 
-		// Selects this widget
-		void Select();
+		// Focus this widget
+		void Focus();
 
-		// Deselects this widget
-		void Deselect();
+		// Unfocus this widget
+		void Unfocus();
 
-		// Returns is this widget selected
-		bool IsSelected() const;
+		// Returns is this widget focused
+		bool IsFocused() const;
 
-		// Returns is this widget can be selected
-		virtual bool IsSelectable() const;
+		// Returns is this widget can be focused
+		virtual bool IsFocusable() const;
 
-		// Sets widget selectable
-		void SetSelectable(bool selectable);
+		// Sets widget can be focused
+		void SetFocusable(bool focusable);
 
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point);
@@ -210,39 +209,38 @@ namespace o2
 		SERIALIZABLE(UIWidget);
 
 	protected:
-		String         mName;             // Name @SERIALIZABLE
-					   
-		LayersVec      mLayers;           // Layers array @SERIALIZABLE
-		StatesVec      mStates;           // States array @SERIALIZABLE
-					   
-		UIWidget*      mParent;           // Parent widget
-		WidgetsVec     mChilds;           // Children widgets @SERIALIZABLE
-		RectF          mChildsAbsRect;    // Absolute rectangle for children arranging
-					   
-		float          mTransparency;	  // Widget transparency @SERIALIZABLE
-		float          mResTransparency;  // Widget result transparency, depends on parent's result transparency
-		LayersVec      mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000)
-		LayersVec      mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000)
-					   
-		UIWidgetState* mSelectedState;    // Selected widget state
-		bool           mIsSelected;       // Is widget selected
-					   
-		UIWidgetState* mVisibleState;     // Widget visibility state
-		bool           mVisible;          // Visibility of widget. Uses state 'visible'
-		bool           mResVisible;       // Result visibility of widget. Depends on this visibility and parent result visibility
-		bool           mFullyDisabled;    // True, if widget is not visible and visible state is fully false
-
-		bool           mIsSelectable;     // Is widget selectable
+		String         mName;                   // Name @SERIALIZABLE
+					   						    
+		LayersVec      mLayers;                 // Layers array @SERIALIZABLE
+		StatesVec      mStates;                 // States array @SERIALIZABLE
+					   						    
+		UIWidget*      mParent = nullptr;       // Parent widget
+		WidgetsVec     mChilds;                 // Children widgets @SERIALIZABLE
+		RectF          mChildsAbsRect;          // Absolute rectangle for children arranging
+					   						    
+		float          mTransparency = 1.0f;	 // Widget transparency @SERIALIZABLE
+		float          mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
+		LayersVec      mDrawingLayers;          // Layers ordered by depth, which drawing before children (depth < 1000)
+		LayersVec      mTopDrawingLayers;       // Layers ordered by depth, which drawing after children (depth > 1000)
+					   						    
+		UIWidgetState* mFocusedState = nullptr; // Focused widget state
+		bool           mIsFocused = false;      // Is widget focused
+		bool           mIsFocusable = false;    // Is widget can be focused
+					   						    
+		UIWidgetState* mVisibleState = nullptr; // Widget visibility state
+		bool           mVisible = true;         // Visibility of widget. Uses state 'visible'
+		bool           mResVisible = true;      // Result visibility of widget. Depends on this visibility and parent result visibility
+		bool           mFullyDisabled = false;  // True, if widget is not visible and visible state is fully false
 
 	protected:
 		// Draws debug frame by mAbsoluteRect
 		void DrawDebugFrame();
 
 		// Calls when widget was selected
-		virtual void OnSelected();
+		virtual void OnFocused();
 
 		// Calls when widget was deselected
-		virtual void OnDeselected();
+		virtual void OnUnfocused();
 
 		// Updates layout
 		virtual void UpdateLayout(bool forcible = false);
@@ -254,7 +252,7 @@ namespace o2
 		virtual void UpdateVisibility();
 
 		// Calls when child widget was selected
-		virtual void OnChildSelected(UIWidget* child);
+		virtual void OnChildFocused(UIWidget* child);
 
 		// Sets target for all states animations
 		void RetargetStatesAnimations();

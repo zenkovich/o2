@@ -11,8 +11,7 @@
 namespace o2
 {
 	UIWindow::UIWindow():
-		UIScrollArea(), DrawableCursorEventsListener(this), mIconDrawable(nullptr), 
-		mCaptionDrawable(nullptr)
+		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
 		InitializeHandles();
 		InitializeProperties();
@@ -78,14 +77,14 @@ namespace o2
 		if (closeBtn)
 			closeBtn->onClick += [&]() { Hide(); };
 
-		mHeadDragAreaLayout = other.mHeadDragAreaLayout;
-		mTopDragAreaLayout = other.mTopDragAreaLayout;
-		mBottomDragAreaLayout = other.mBottomDragAreaLayout;
-		mLeftDragAreaLayout = other.mLeftDragAreaLayout;
-		mRightDragAreaLayout = other.mRightDragAreaLayout;
-		mLeftTopDragAreaLayout = other.mLeftTopDragAreaLayout;
-		mRightTopDragAreaLayout = other.mRightTopDragAreaLayout;
-		mLeftBottomDragAreaLayout = other.mLeftBottomDragAreaLayout;
+		mHeadDragAreaLayout        = other.mHeadDragAreaLayout;
+		mTopDragAreaLayout         = other.mTopDragAreaLayout;
+		mBottomDragAreaLayout      = other.mBottomDragAreaLayout;
+		mLeftDragAreaLayout        = other.mLeftDragAreaLayout;
+		mRightDragAreaLayout       = other.mRightDragAreaLayout;
+		mLeftTopDragAreaLayout     = other.mLeftTopDragAreaLayout;
+		mRightTopDragAreaLayout    = other.mRightTopDragAreaLayout;
+		mLeftBottomDragAreaLayout  = other.mLeftBottomDragAreaLayout;
 		mRightBottomDragAreaLayout = other.mRightBottomDragAreaLayout;
 
 		RetargetStatesAnimations();
@@ -204,7 +203,7 @@ namespace o2
 		mRightBottomDragAreaLayout = rightBottom;
 	}
 
-	bool UIWindow::IsSelectable() const
+	bool UIWindow::IsFocusable() const
 	{
 		return true;
 	}
@@ -223,14 +222,14 @@ namespace o2
 
 			mChildsAbsRect = _mChildsAbsRect;
 
-			mHeadDragAreaRect = mHeadDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mTopDragAreaRect = mTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mBottomDragAreaRect = mBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mLeftDragAreaRect = mLeftDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mRightDragAreaRect = mRightDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mLeftTopDragAreaRect = mLeftTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mRightTopDragAreaRect = mRightTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mLeftBottomDragAreaRect = mLeftBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
+			mHeadDragAreaRect        = mHeadDragAreaLayout.Calculate(layout.mAbsoluteRect);
+			mTopDragAreaRect         = mTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
+			mBottomDragAreaRect      = mBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
+			mLeftDragAreaRect        = mLeftDragAreaLayout.Calculate(layout.mAbsoluteRect);
+			mRightDragAreaRect       = mRightDragAreaLayout.Calculate(layout.mAbsoluteRect);
+			mLeftTopDragAreaRect     = mLeftTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
+			mRightTopDragAreaRect    = mRightTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
+			mLeftBottomDragAreaRect  = mLeftBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
 			mRightBottomDragAreaRect = mRightBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
 		}
 	}
@@ -255,47 +254,47 @@ namespace o2
 	void UIWindow::InitializeHandles()
 	{
 		mHeadDragHandle.isUnderPoint = [&](const Vec2F& point) { return mHeadDragAreaRect.IsInside(point); };
-		mHeadDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.position += cursor.mDelta; };
-		mHeadDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
+		mHeadDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.position += cursor.delta; };
+		mHeadDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 
 		mTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mTopDragAreaRect.IsInside(point); };
-		mTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absTop += cursor.mDelta.y; };
-		mTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
+		mTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absTop += cursor.delta.y; };
+		mTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 		mTopDragHandle.cursorType = CursorType::SizeNS;
 
 		mBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mBottomDragAreaRect.IsInside(point); };
-		mBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absBottom += cursor.mDelta.y; };
-		mBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
+		mBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absBottom += cursor.delta.y; };
+		mBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 		mBottomDragHandle.cursorType = CursorType::SizeNS;
 
 		mLeftDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftDragAreaRect.IsInside(point); };
-		mLeftDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeft += cursor.mDelta.x; };
-		mLeftDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
+		mLeftDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeft += cursor.delta.x; };
+		mLeftDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 		mLeftDragHandle.cursorType = CursorType::SizeWE;
 
 		mRightDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightDragAreaRect.IsInside(point); };
-		mRightDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRight += cursor.mDelta.x; };
-		mRightDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
+		mRightDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRight += cursor.delta.x; };
+		mRightDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 		mRightDragHandle.cursorType = CursorType::SizeWE;
 
 		mLeftTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftTopDragAreaRect.IsInside(point); };
-		mLeftTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeftTop += cursor.mDelta; };
-		mLeftTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
+		mLeftTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeftTop += cursor.delta; };
+		mLeftTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 		mLeftTopDragHandle.cursorType = CursorType::SizeNwSe;
 
 		mLeftBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mLeftBottomDragAreaRect.IsInside(point); };
-		mLeftBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeftBottom += cursor.mDelta; };
-		mLeftBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
+		mLeftBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absLeftBottom += cursor.delta; };
+		mLeftBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 		mLeftBottomDragHandle.cursorType = CursorType::SizeNeSw;
 
 		mRightTopDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightTopDragAreaRect.IsInside(point); };
-		mRightTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRightTop += cursor.mDelta; };
-		mRightTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
+		mRightTopDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRightTop += cursor.delta; };
+		mRightTopDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 		mRightTopDragHandle.cursorType = CursorType::SizeNeSw;
 
 		mRightBottomDragHandle.isUnderPoint = [&](const Vec2F& point) { return mRightBottomDragAreaRect.IsInside(point); };
-		mRightBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRightBottom += cursor.mDelta; };
-		mRightBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnSelected(); };
+		mRightBottomDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.absRightBottom += cursor.delta; };
+		mRightBottomDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
 		mRightBottomDragHandle.cursorType = CursorType::SizeNwSe;
 
 		BindHandlesInteractableToVisibility();
@@ -303,14 +302,14 @@ namespace o2
 
 	void UIWindow::SetHandlesInteractable(bool interactable)
 	{
-		mHeadDragHandle.interactable = interactable;
-		mTopDragHandle.interactable = interactable;
-		mBottomDragHandle.interactable = interactable;
-		mLeftDragHandle.interactable = interactable;
-		mRightDragHandle.interactable = interactable;
-		mLeftTopDragHandle.interactable = interactable;
-		mRightTopDragHandle.interactable = interactable;
-		mLeftBottomDragHandle.interactable = interactable;
+		mHeadDragHandle.interactable        = interactable;
+		mTopDragHandle.interactable         = interactable;
+		mBottomDragHandle.interactable      = interactable;
+		mLeftDragHandle.interactable        = interactable;
+		mRightDragHandle.interactable       = interactable;
+		mLeftTopDragHandle.interactable     = interactable;
+		mRightTopDragHandle.interactable    = interactable;
+		mLeftBottomDragHandle.interactable  = interactable;
 		mRightBottomDragHandle.interactable = interactable;
 	}
 
@@ -323,7 +322,7 @@ namespace o2
 		}
 	}
 
-	void UIWindow::OnSelected()
+	void UIWindow::OnFocused()
 	{
 		if (mParent)
 		{
@@ -331,17 +330,17 @@ namespace o2
 			mParent->mChilds.Add(this);
 		}
 
-		onSelected();
+		onFocused();
 	}
 
-	void UIWindow::OnChildSelected(UIWidget* child)
+	void UIWindow::OnChildFocused(UIWidget* child)
 	{
-		OnSelected();
+		OnFocused();
 	}
 
 	void UIWindow::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		o2UI.SelectWidget(this);
+		o2UI.FocusWidget(this);
 	}
 
 	void UIWindow::OnStateAdded(UIWidgetState* state)

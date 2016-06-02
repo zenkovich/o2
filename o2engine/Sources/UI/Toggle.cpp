@@ -21,8 +21,10 @@ namespace o2
 
 		RetargetStatesAnimations();
 		SetValue(other.mValue);
+
 		if (other.IsValueUnknown())
 			SetValueUnknown();
+
 		InitializeProperties();
 	}
 
@@ -32,8 +34,10 @@ namespace o2
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = GetLayer("back");
 		SetValue(other.mValue);
+
 		if (other.IsValueUnknown())
 			SetValueUnknown();
+
 		RetargetStatesAnimations();
 		return *this;
 	}
@@ -128,7 +132,7 @@ namespace o2
 		return mValue;
 	}
 
-	bool UIToggle::IsSelectable() const
+	bool UIToggle::IsFocusable() const
 	{
 		return true;
 	}
@@ -176,7 +180,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = true;
 
-		o2UI.SelectWidget(this);
+		o2UI.FocusWidget(this);
 
 		if (mToggleGroup)
 		{
@@ -197,7 +201,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (UIWidget::IsUnderPoint(cursor.mPosition) && 
+		if (UIWidget::IsUnderPoint(cursor.position) && 
 			!(mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick || 
 							   mToggleGroup->mType == UIToggleGroup::Type::HorOneClick) && 
 			  mToggleGroup->mPressed))
@@ -245,7 +249,7 @@ namespace o2
 
 	void UIToggle::OnKeyPressed(const Input::Key& key)
 	{
-		if (mIsSelected && (key.mKey == VK_SPACE || key.mKey == VK_RETURN))
+		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
 		{
 			auto pressedState = state["pressed"];
 			if (pressedState)
@@ -262,7 +266,7 @@ namespace o2
 
 	void UIToggle::OnKeyReleased(const Input::Key& key)
 	{
-		if (mIsSelected && (key.mKey == VK_SPACE || key.mKey == VK_RETURN))
+		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
 		{
 			auto pressedState = state["pressed"];
 			if (pressedState)

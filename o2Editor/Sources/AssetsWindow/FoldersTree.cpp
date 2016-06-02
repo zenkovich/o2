@@ -28,7 +28,7 @@ namespace Editor
 		mFoldersTree->onItemDblClick = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeNodeDblClick);
 		mFoldersTree->onItemClick = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeClick);
 		mFoldersTree->onItemRBClick = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeRightClick);
-		mFoldersTree->RebuildTree();
+		mFoldersTree->UpdateView();
 
 		AddChild(mFoldersTree);
 
@@ -71,9 +71,9 @@ namespace Editor
 		mFoldersTree->SelectAndExpandObject((UnknownType*)(void*)(o2Assets.GetAssetsTree().FindAsset(path)));
 	}
 
-	void UIAssetsFoldersTree::RebuildTree()
+	void UIAssetsFoldersTree::UpdateView()
 	{
-		mFoldersTree->RebuildTree();
+		mFoldersTree->UpdateView();
 	}
 
 	void UIAssetsFoldersTree::InitializeContext()
@@ -138,7 +138,8 @@ namespace Editor
 		node->name = pathName;
 
 		auto nameLayer = node->layer["name"];
-		((Text*)nameLayer->drawable)->text = pathName;
+		if (nameLayer)
+			((Text*)nameLayer->drawable)->text = pathName;
 	}
 
 	void UIAssetsFoldersTree::OnFoldersTreeNodeDblClick(UITreeNode* node)
@@ -151,7 +152,7 @@ namespace Editor
 		auto editBox = (UIEditBox*)node->GetChild("nameEditBox");
 		editBox->text = (String)pathName;
 		editBox->SelectAll();
-		editBox->UIWidget::Select();
+		editBox->UIWidget::Focus();
 		editBox->ResetSroll();
 
 		editBox->onChangeCompleted = [=](const WString& text) {
@@ -160,7 +161,7 @@ namespace Editor
 			o2Assets.RenameAsset(*assetTreeNode, text);
 
 			node->SetState("edit", false);
-			node->Rebuild(false);
+			node->UpdateView(false);
 
 			o2EditorAssets.OpenFolder(newPathAsset);
 		};
@@ -178,13 +179,13 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnFoldersTreeRightClick(UITreeNode* node)
 	{
-		o2UI.SelectWidget(this);
+		o2UI.FocusWidget(this);
 		mContextMenu->Show();
 	}
 
 	void UIAssetsFoldersTree::OnContextCopyPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		if (!mCurrentPath.IsEmpty())
@@ -193,7 +194,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextCutPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		if (!mCurrentPath.IsEmpty())
@@ -202,7 +203,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextPastePressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		o2EditorAssets.PasteAssets(mCurrentPath);
@@ -210,7 +211,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextDeletePressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		if (!mCurrentPath.IsEmpty())
@@ -219,7 +220,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextOpenPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		o2EditorAssets.OpenAsset(mCurrentPath);
@@ -227,7 +228,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextShowInExplorerPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		o2EditorAssets.OpenAsset(mCurrentPath);
@@ -235,7 +236,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextImportPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		o2EditorAssets.ImportAssets(mCurrentPath);
@@ -243,7 +244,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextCreateFolderPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		o2EditorAssets.CreateFolderAsset(mCurrentPath);
@@ -251,7 +252,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextCreatePrefabPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		o2EditorAssets.CreatePrefabAsset(mCurrentPath);
@@ -259,7 +260,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextCreateScriptPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		o2EditorAssets.CreateScriptAsset(mCurrentPath);
@@ -267,7 +268,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextCreateAnimationPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		o2EditorAssets.CreateAnimationAsset(mCurrentPath);
@@ -275,7 +276,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextExpandPressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		auto selectedObjects = mFoldersTree->GetSelectedObjects();
@@ -291,7 +292,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextCollapsePressed()
 	{
-		if (!mFoldersTree->IsSelected())
+		if (!mFoldersTree->IsFocused())
 			return;
 
 		auto selectedObjects = mFoldersTree->GetSelectedObjects();

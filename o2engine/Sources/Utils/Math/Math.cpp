@@ -7,6 +7,17 @@ namespace o2
 {
 	namespace Math
 	{
+
+		Vec2F Round(const Vec2F& value)
+		{
+			return Vec2F(Round(value.x), Round(value.y));
+		}
+
+		RectF Round(const RectF& value)
+		{
+			return RectF(Round(value.left), Round(value.top), Round(value.right), Round(value.bottom));
+		}
+
 		RectF Lerp(const RectF& a, const RectF& b, float coef)
 		{
 			return RectF(Lerp(a.left, b.left, coef), Lerp(a.top, b.top, coef),

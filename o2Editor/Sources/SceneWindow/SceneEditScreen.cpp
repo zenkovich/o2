@@ -55,7 +55,7 @@ namespace Editor
 		for (auto handle : mDragHandles)
 			handle->Draw();
 
-		CursorEventsListener::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 	}
 
 #undef DrawText
@@ -177,9 +177,9 @@ namespace Editor
 			{
 				SceneDragHandle* handle = mDragHandles[i];
 
-				if (handle->IsUnderPoint(cursor.mPosition))
+				if (handle->IsUnderPoint(cursor.position))
 				{
-					mUnderCursorHandles.Add(cursor.mId, handle);
+					mUnderCursorHandles.Add(cursor.id, handle);
 					break;
 				}
 			}
@@ -208,40 +208,40 @@ namespace Editor
 		// Process cursor pressing
 		for (const Input::Cursor& cursor : o2Input.GetCursors())
 		{
-			if (cursor.mPressedTime < FLT_EPSILON && cursor.mPressed)
+			if (cursor.pressedTime < FLT_EPSILON && cursor.isPressed)
 			{
-				if (!mUnderCursorHandles.ContainsKey(cursor.mId))
+				if (!mUnderCursorHandles.ContainsKey(cursor.id))
 					return;
 
-				auto handle = mUnderCursorHandles[cursor.mId];
+				auto handle = mUnderCursorHandles[cursor.id];
 
-				mPressedHandles.Add(cursor.mId, handle);
+				mPressedHandles.Add(cursor.id, handle);
 
 				handle->OnCursorPressed(cursor);
 				handle->mIsPressed = true;
 			}
 			else
 			{
-				if (mPressedHandles.ContainsKey(cursor.mId))
-					mPressedHandles[cursor.mId]->OnCursorStillDown(cursor);
+				if (mPressedHandles.ContainsKey(cursor.id))
+					mPressedHandles[cursor.id]->OnCursorStillDown(cursor);
 			}
 		}
 
 		// Process cursor releasing
 		for (const Input::Cursor& cursor : o2Input.GetReleasedCursors())
 		{
-			if (mPressedHandles.ContainsKey(cursor.mId))
+			if (mPressedHandles.ContainsKey(cursor.id))
 			{
-				mPressedHandles[cursor.mId]->mIsPressed = false;
-				mPressedHandles[cursor.mId]->OnCursorReleased(cursor);
-				mPressedHandles.Remove(cursor.mId);
+				mPressedHandles[cursor.id]->mIsPressed = false;
+				mPressedHandles[cursor.id]->OnCursorReleased(cursor);
+				mPressedHandles.Remove(cursor.id);
 			}
 		}
 	}
 
 	bool SceneEditScreen::IsHandleWorking(const Input::Cursor& cursor) const
 	{
-		return mUnderCursorHandles.ContainsKey(cursor.mId) || mPressedHandles.ContainsKey(cursor.mId);
+		return mUnderCursorHandles.ContainsKey(cursor.id) || mPressedHandles.ContainsKey(cursor.id);
 	}
 
 	void SceneEditScreen::OnActorsSelectedFromThis()
@@ -598,7 +598,7 @@ namespace Editor
 
 	void SceneEditScreen::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		o2UI.SelectWidget(mActorsTree);
+		o2UI.FocusWidget(mActorsTree);
 
 		if (mEnabledTool && !IsHandleWorking(cursor))
 			mEnabledTool->OnCursorPressed(cursor);
@@ -642,7 +642,7 @@ namespace Editor
 
 	void SceneEditScreen::OnCursorRightMousePressed(const Input::Cursor& cursor)
 	{
-		o2UI.SelectWidget(mActorsTree);
+		o2UI.FocusWidget(mActorsTree);
 
 		if (mEnabledTool && !IsHandleWorking(cursor))
 			mEnabledTool->OnCursorRightMousePressed(cursor);
@@ -650,39 +650,39 @@ namespace Editor
 
 	void SceneEditScreen::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
 	{
-		if (cursor.mDelta.Length() > 0.5f)
+		if (cursor.delta.Length() > 0.5f)
 		{
-			Vec2F delta = cursor.mDelta*mViewCamera.scale*-1.0f;
+			Vec2F delta = cursor.delta*mViewCamera.scale*-1.0f;
 			mViewCameraVelocity = delta / o2Time.GetDeltaTime();
 			mViewCameraTargetPos += delta;
 			mNeedRedraw = true;
 		}
 
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.mId))
+		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
 			mEnabledTool->OnCursorRightMouseStayDown(cursor);
 	}
 
 	void SceneEditScreen::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.mId))
+		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
 			mEnabledTool->OnCursorRightMouseReleased(cursor);
 	}
 
 	void SceneEditScreen::OnCursorMiddleMousePressed(const Input::Cursor& cursor)
 	{
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.mId))
+		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
 			mEnabledTool->OnCursorMiddleMousePressed(cursor);
 	}
 
 	void SceneEditScreen::OnCursorMiddleMouseStayDown(const Input::Cursor& cursor)
 	{
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.mId))
+		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
 			mEnabledTool->OnCursorMiddleMouseStayDown(cursor);
 	}
 
 	void SceneEditScreen::OnCursorMiddleMouseReleased(const Input::Cursor& cursor)
 	{
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.mId))
+		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
 			mEnabledTool->OnCursorMiddleMouseReleased(cursor);
 	}
 }

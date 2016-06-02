@@ -23,34 +23,34 @@ namespace o2
 	void CursorEventsArea::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		onCursorReleased(cursor);
-		if (!IsUnderPoint(cursor.mPosition))
+		if (!IsUnderPoint(cursor.position))
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 
 	void CursorEventsArea::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		onCursorReleased(cursor);
-		if (!IsUnderPoint(cursor.mPosition))
+		if (!IsUnderPoint(cursor.position))
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 
 	void CursorEventsArea::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		if (cursor.mDelta != Vec2F())
+		if (cursor.delta != Vec2F())
 			onMoved(cursor);
 	}
 
 	void CursorEventsArea::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		onCursorEnter(cursor);
-		if (!cursor.mPressed)
+		if (!cursor.isPressed)
 			o2Application.SetCursor(cursorType);
 	}
 
 	void CursorEventsArea::OnCursorExit(const Input::Cursor& cursor)
 	{
 		onCursorExit(cursor);
-		if (!IsPressed() && !cursor.mPressed)
+		if (!IsPressed() && !cursor.isPressed)
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 

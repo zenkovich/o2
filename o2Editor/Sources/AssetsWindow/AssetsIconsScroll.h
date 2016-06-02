@@ -63,7 +63,7 @@ namespace Editor
 		void UpdateAssetsPath();
 
 		// Returns is this widget can be selected
-		bool IsSelectable() const;
+		bool IsFocusable() const;
 
 		// Selects asset
 		void SelectAsset(AssetId id, bool scroll = true);
@@ -152,10 +152,10 @@ namespace Editor
 		void UpdateCuttingAssets();
 
 		// Calls when widget was selected
-		void OnSelected();
+		void OnFocused();
 
 		// Calls when widget was deselected
-		void OnDeselected();
+		void OnUnfocused();
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);

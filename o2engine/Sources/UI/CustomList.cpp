@@ -11,11 +11,11 @@ namespace o2
 {
 	UICustomList::UICustomList():
 		UIScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()), 
-		mSelectionLayout(Layout::BothStretch()), mMultiSelection(true)
+		mSelectionLayout(Layout::BothStretch())
 	{
-		mItemSample = mnew UIWidget();
+		mItemSample        = mnew UIWidget();
 		mSelectionDrawable = mnew Sprite();
-		mHoverDrawable = mnew Sprite();
+		mHoverDrawable     = mnew Sprite();
 
 		mVerLayout = mnew UIVerticalLayout();
 		mVerLayout->baseCorner = BaseCorner::LeftTop;
@@ -35,11 +35,13 @@ namespace o2
 
 	UICustomList::UICustomList(const UICustomList& other):
 		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout), 
-		mSelectionLayout(other.mSelectionLayout), mMultiSelection(true)
+		mSelectionLayout(other.mSelectionLayout)
 	{
 		mVerLayout = FindChild<UIVerticalLayout>();
+
 		mItemSample = other.mItemSample->Clone();
 		mItemSample->UpdateLayout(true);
+
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
 		mHoverDrawable = other.mHoverDrawable->Clone();
 
@@ -410,10 +412,10 @@ namespace o2
 	void UICustomList::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
-		if ((cursor.mPosition - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
+		if ((cursor.position - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
 			return;
 
-		mLastSelectCheckCursor = cursor.mPosition;
+		mLastSelectCheckCursor = cursor.position;
 	}
 
 	void UICustomList::OnCursorReleased(const Input::Cursor& cursor)
@@ -423,7 +425,7 @@ namespace o2
 			*pressedState = false;
 
 		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
 		SelectItemAt(itemIdx);
 		
 		OnSelectionChanged();
@@ -448,12 +450,12 @@ namespace o2
 	void UICustomList::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
-		if ((cursor.mPosition - mLastHoverCheckCursor).Length() < checkDeltaThreshold)
+		if ((cursor.position - mLastHoverCheckCursor).Length() < checkDeltaThreshold)
 			return;
 
-		mLastHoverCheckCursor = cursor.mPosition;
+		mLastHoverCheckCursor = cursor.position;
 
-		UpdateHover(cursor.mPosition);
+		UpdateHover(cursor.position);
 	}
 
 	UIWidget* UICustomList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
@@ -574,5 +576,4 @@ namespace o2
 	{
 		return idx == other.idx;
 	}
-
 }

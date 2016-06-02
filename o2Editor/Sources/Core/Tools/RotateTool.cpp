@@ -200,10 +200,10 @@ namespace Editor
 
 	void RotateTool::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		if (IsPointInRotateRing(cursor.mPosition))
+		if (IsPointInRotateRing(cursor.position))
 		{
 			mRingPressed = true;
-			Vec2F cursorInScene = o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition);
+			Vec2F cursorInScene = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
 			mPressAngle = Vec2F::Angle(cursorInScene - mScenePivot, Vec2F::Right());
 			mCurrentRotateAngle = mPressAngle;
 			mSnapAngleAccumulated = 0.0f;
@@ -242,10 +242,10 @@ namespace Editor
 	{
 		if (mRingPressed)
 		{
-			if (cursor.mDelta != Vec2F())
+			if (cursor.delta != Vec2F())
 			{
-				Vec2F cursorInScene = o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition);
-				Vec2F lastCursorInScene = o2EditorSceneScreen.ScreenToScenePoint(cursor.mPosition - cursor.mDelta);
+				Vec2F cursorInScene = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
+				Vec2F lastCursorInScene = o2EditorSceneScreen.ScreenToScenePoint(cursor.position - cursor.delta);
 				float angleDelta = Vec2F::SignedAngle(cursorInScene - mScenePivot, lastCursorInScene - mScenePivot);
 
 				if (o2Input.IsKeyDown(VK_SHIFT))
@@ -295,7 +295,7 @@ namespace Editor
 
 	void RotateTool::OnKeyStayDown(const Input::Key& key)
 	{
-		if (key.mPressedTime < 0.3f)
+		if (key.pressedTime < 0.3f)
 			return;
 
 		float angle = o2Input.IsKeyDown(VK_SHIFT) ? angleSnapStep : 1.0f;

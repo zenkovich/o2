@@ -94,10 +94,10 @@ namespace o2
 		SERIALIZABLE(UILabel);
 
 	protected:
-		Text*       mTextLayer;    // Text layer drawable. Getting from layer "text"
-		HorOverflow mHorOverflow;  // Text horizontal overflow logic
-		VerOverflow mVerOverflow;  // Text vertical overflow logic
-		Vec2F       mExpandBorder; // Expand overflow border size
+		Text*       mTextLayer = nullptr;             // Text layer drawable. Getting from layer "text"
+		HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic
+		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic
+		Vec2F       mExpandBorder;                    // Expand overflow border size
 
 	protected:
 		// Updates layout

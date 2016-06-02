@@ -159,7 +159,6 @@
     <ClInclude Include="..\Sources\EngineSettings.h" />
     <ClInclude Include="..\Sources\Events\ApplicationEventsListener.h" />
     <ClInclude Include="..\Sources\Events\CursorEventsListener.h" />
-    <ClInclude Include="..\Sources\Events\DragEventsListener.h" />
     <ClInclude Include="..\Sources\Events\DrawableCursorEventsListener.h" />
     <ClInclude Include="..\Sources\Events\EventSystem.h" />
     <ClInclude Include="..\Sources\Events\KeyboardEventsListener.h" />
@@ -207,7 +206,6 @@
     <ClInclude Include="..\Sources\UI\List.h" />
     <ClInclude Include="..\Sources\UI\Toggle.h" />
     <ClInclude Include="..\Sources\UI\Tree.h" />
-    <ClInclude Include="..\Sources\UI\Treex.h" />
     <ClInclude Include="..\Sources\UI\UIManager.h" />
     <ClInclude Include="..\Sources\UI\VerticalLayout.h" />
     <ClInclude Include="..\Sources\UI\VerticalProgress.h" />
@@ -230,6 +228,7 @@
     <ClInclude Include="..\Sources\Utils\Data\DataNode.h" />
     <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h" />
     <ClInclude Include="..\Sources\Utils\Debug.h" />
+    <ClInclude Include="..\Sources\Utils\DragAndDrop.h" />
     <ClInclude Include="..\Sources\Utils\DragHandle.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
@@ -276,7 +275,7 @@
     <ClInclude Include="..\Sources\Utils\Time.h" />
     <ClInclude Include="..\Sources\Utils\Timer.h" />
     <ClInclude Include="..\Sources\Utils\TimeStamp.h" />
-    <ClInclude Include="..\Sources\Utils\Tree.h" />
+    <ClInclude Include="..\Sources\Utils\ITree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Animation\Animatable.cpp" />
@@ -311,7 +310,6 @@
     <ClCompile Include="..\Sources\Config\ProjectConfig.cpp" />
     <ClCompile Include="..\Sources\Events\ApplicationEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\CursorEventsListener.cpp" />
-    <ClCompile Include="..\Sources\Events\DragEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\DrawableCursorEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\EventSystem.cpp" />
     <ClCompile Include="..\Sources\Events\KeyboardEventsListener.cpp" />
@@ -369,6 +367,7 @@
     <ClCompile Include="..\Sources\Utils\Data\DataNode.cpp" />
     <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp" />
     <ClCompile Include="..\Sources\Utils\Debug.cpp" />
+    <ClCompile Include="..\Sources\Utils\DragAndDrop.cpp" />
     <ClCompile Include="..\Sources\Utils\DragHandle.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp" />

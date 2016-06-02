@@ -109,19 +109,19 @@ namespace o2
 		SERIALIZABLE(UIMenuPanel);
 
 	protected:
-		UIHorizontalLayout* mLayout;                 // Items layout
-		UIWidget*           mItemSample;             // Item sample @SERIALIZABLE
-		Vector<ClickFunc>   mClickFunctions;         // Items click functions
-		Sprite*             mSelectionDrawable;      // Selection sprite @SERIALIZABLE
-		Layout              mSelectionLayout;        // Selection layout, result selection area depends on selected item @SERIALIZABLE
-							 
-		RectF               mCurrentSelectionRect;   // Current selection rectangle (for smoothing)
-		RectF               mTargetSelectionRect;    // Target selection rectangle (over selected item)
-		Vec2F               mLastSelectCheckCursor;  // Last cursor position on selection check
-							 
-		int                 mSelectedItem;           // Index of selected item
-		float               mSelectSubContextTime;   // Time to appearing selected sub context
-		UIContextMenu*      mOpenedContext;          // Last opened context in menu
+		UIHorizontalLayout* mLayout = nullptr;             // Items layout
+		UIWidget*           mItemSample = nullptr;         // Item sample @SERIALIZABLE
+		Vector<ClickFunc>   mClickFunctions;               // Items click functions
+		Sprite*             mSelectionDrawable = nullptr;  // Selection sprite @SERIALIZABLE
+		Layout              mSelectionLayout;              // Selection layout, result selection area depends on selected item @SERIALIZABLE
+							 							   
+		RectF               mCurrentSelectionRect;         // Current selection rectangle (for smoothing)
+		RectF               mTargetSelectionRect;          // Target selection rectangle (over selected item)
+		Vec2F               mLastSelectCheckCursor;        // Last cursor position on selection check
+							 							   
+		int                 mSelectedItem = -1;            // Index of selected item
+		float               mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
+		UIContextMenu*      mOpenedContext = nullptr;      // Last opened context in menu
 
 	protected:
 		// Creates item widget

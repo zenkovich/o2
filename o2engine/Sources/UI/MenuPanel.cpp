@@ -8,7 +8,7 @@ namespace o2
 {
 
 	UIMenuPanel::UIMenuPanel():
-		UIWidget(), DrawableCursorEventsListener(this), mSelectedItem(-1), mSelectSubContextTime(-1), mOpenedContext(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this)
 	{
 		mItemSample = mnew UIWidget();
 		mItemSample->AddLayer("text", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
@@ -26,13 +26,12 @@ namespace o2
 	}
 
 	UIMenuPanel::UIMenuPanel(const UIMenuPanel& other):
-		UIWidget(other), DrawableCursorEventsListener(this), mSelectedItem(-1), mSelectSubContextTime(-1), 
-		mOpenedContext(nullptr)
+		UIWidget(other), DrawableCursorEventsListener(this)
 	{
-		mItemSample = other.mItemSample->Clone();
+		mItemSample        = other.mItemSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mSelectionLayout = other.mSelectionLayout;
-		mLayout = FindChild<UIHorizontalLayout>();
+		mSelectionLayout   = other.mSelectionLayout;
+		mLayout            = FindChild<UIHorizontalLayout>();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -51,10 +50,10 @@ namespace o2
 		delete mItemSample;
 		delete mSelectionDrawable;
 
-		mItemSample = other.mItemSample->Clone();
+		mItemSample        = other.mItemSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mSelectionLayout = other.mSelectionLayout;
-		mLayout = FindChild<UIHorizontalLayout>();
+		mSelectionLayout   = other.mSelectionLayout;
+		mLayout            = FindChild<UIHorizontalLayout>();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -407,7 +406,7 @@ namespace o2
 	void UIMenuPanel::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.mPosition, &itemIdx);
+		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
 
 		if (itemIdx >= 0)
 		{
@@ -430,17 +429,17 @@ namespace o2
 	void UIMenuPanel::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
-		if ((cursor.mPosition - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
+		if ((cursor.position - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
 			return;
 
-		mLastSelectCheckCursor = cursor.mPosition;
+		mLastSelectCheckCursor = cursor.position;
 
-		UpdateHover(cursor.mPosition);
+		UpdateHover(cursor.position);
 	}
 
 	void UIMenuPanel::OnCursorExit(const Input::Cursor& cursor)
 	{
-		UpdateHover(cursor.mPosition);
+		UpdateHover(cursor.position);
 	}
 
 	UIMenuPanel::Item::Item()

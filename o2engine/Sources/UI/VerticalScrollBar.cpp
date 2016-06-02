@@ -5,9 +5,7 @@
 namespace o2
 {
 	UIVerticalScrollBar::UIVerticalScrollBar():
-		UIWidget(), DrawableCursorEventsListener(this), mValue(0), mMinValue(0), mMaxValue(1), mScrollSense(1.0f), 
-		mScrollHandleSize(0.2f), mHandlePressed(false), mScrollhandleMinPxSize(5), mSmoothValue(mValue), 
-		mHandleLayer(nullptr), mBackLayer(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this)
 	{
 		InitializeProperties();
 	}
@@ -22,6 +20,7 @@ namespace o2
 
 		RetargetStatesAnimations();
 		InitializeProperties();
+		UpdateLayout();
 	}
 
 	UIVerticalScrollBar::~UIVerticalScrollBar()
@@ -30,17 +29,17 @@ namespace o2
 	UIVerticalScrollBar& UIVerticalScrollBar::operator=(const UIVerticalScrollBar& other)
 	{
 		UIWidget::operator=(other);
-		mValue = other.mValue;
-		mMinValue = other.mMinValue;
-		mMaxValue = other.mMaxValue;
-		mScrollSense = other.mScrollSense;
-		mScrollHandleSize = other.mScrollHandleSize;
-		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
-		mSmoothValue = mValue;
-		mHandlePressed = false;
 
-		mHandleLayer = GetLayer("handle");
-		mBackLayer = GetLayer("back");
+		mValue                 = other.mValue;
+		mMinValue              = other.mMinValue;
+		mMaxValue              = other.mMaxValue;
+		mScrollSense           = other.mScrollSense;
+		mScrollHandleSize      = other.mScrollHandleSize;
+		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
+		mSmoothValue           = mValue;
+		mHandlePressed         = false;
+		mHandleLayer           = GetLayer("handle");
+		mBackLayer             = GetLayer("back");
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -172,7 +171,7 @@ namespace o2
 	void UIVerticalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
 
-		if (mHandleLayer && mHandleLayer->IsUnderPoint(cursor.mPosition))
+		if (mHandleLayer && mHandleLayer->IsUnderPoint(cursor.position))
 		{
 			mHandlePressed = true;
 			float pressedValue = GetValueFromCursor(cursor);
@@ -219,7 +218,7 @@ namespace o2
 			const float timeThreshold = 0.5f;
 			const float speed = 5.0f;
 
-			if (cursor.mPressedTime > timeThreshold && !(mHandleLayer && mHandleLayer->IsUnderPoint(cursor.mPosition)))
+			if (cursor.pressedTime > timeThreshold && !(mHandleLayer && mHandleLayer->IsUnderPoint(cursor.position)))
 			{
 				float pressedValue = GetValueFromCursor(cursor);
 				if (pressedValue > mValue + mScrollHandleSize*0.5f)
@@ -236,7 +235,7 @@ namespace o2
 		float szRange = range - mScrollHandleSize*(range/(range + mScrollHandleSize));
 		float height = layout.mAbsoluteRect.Height();
 
-		return (height - (cursor.mPosition.y - layout.mAbsoluteRect.bottom))/height*range/szRange*range + mMinValue;
+		return (height - (cursor.position.y - layout.mAbsoluteRect.bottom))/height*range/szRange*range + mMinValue;
 	}
 
 	void UIVerticalScrollBar::OnCursorEnter(const Input::Cursor& cursor)

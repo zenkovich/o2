@@ -521,9 +521,14 @@ namespace o2
 			UpdateMesh();
 		else
 		{
-			Basis transf = CalculateTextBasis();
-			TransformMesh(mLastTransform.Inverted()*transf);
-			mLastTransform = transf;
+			Basis transform = CalculateTextBasis();
+			Basis meshTransform = mLastTransform.Inverted()*transform;
+
+			meshTransform.offs.x = Math::Round(meshTransform.offs.x);
+			meshTransform.offs.y = Math::Round(meshTransform.offs.y);
+
+			TransformMesh(mLastTransform.Inverted()*transform);
+			mLastTransform = transform;
 		}
 	}
 
@@ -553,7 +558,7 @@ namespace o2
 		mFont = font;
 		mText = text;
 		mHeight = height;
-		mPosition = position;
+		mPosition = Vec2F(Math::Round(position.x), Math::Round(position.y));
 		mAreaSize = areaSize;
 		mRealSize = Vec2F();
 		mHorAlign = horAlign;

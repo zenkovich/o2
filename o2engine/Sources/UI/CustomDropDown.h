@@ -115,10 +115,10 @@ namespace o2
 		SERIALIZABLE(UICustomDropDown);
 
 	protected:
-		UICustomList* mList;         // List view @SERIALIZABLE
-		Layout        mClipLayout;   // Clipping layout
-		RectF         mAbsoluteClip; // Absolute clipping rectangle
-		int           mMaxListItems; // Maximum visible items in list
+		UICustomList* mItemsList = nullptr;                // List view @SERIALIZABLE
+		Layout        mClipLayout = Layout::BothStretch(); // Clipping layout
+		RectF         mAbsoluteClip;                       // Absolute clipping rectangle
+		int           mMaxListItems = 10;                  // Maximum visible items in list
 
 	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true

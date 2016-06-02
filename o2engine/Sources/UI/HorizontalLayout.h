@@ -96,12 +96,12 @@ namespace o2
 		SERIALIZABLE(UIHorizontalLayout);
 
 	protected:
-		BaseCorner mBaseCorner;    // Base corner of widgets arranging
-		float      mSpacing;       // Space between widgets
-		RectF      mBorder;        // Border
-		bool       mExpandWidth;   // Expanding by width
-		bool       mExpandHeight;  // Expanding by height
-		bool       mFitByChildren; // Fitting by children
+		BaseCorner mBaseCorner = BaseCorner::Left; // Base corner of widgets arranging
+		float      mSpacing = 0.0f;                // Space between widgets
+		RectF      mBorder;                        // Border
+		bool       mExpandWidth = true;            // Expanding by width
+		bool       mExpandHeight = true;           // Expanding by height
+		bool       mFitByChildren = false;         // Fitting by children
 
 	protected:
 		// Updates layout

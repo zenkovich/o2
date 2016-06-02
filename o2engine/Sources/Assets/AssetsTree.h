@@ -3,7 +3,7 @@
 #include "Assets/Asset.h"
 #include "Assets/AssetInfo.h"
 #include "Utils/FileSystem/FileInfo.h"
-#include "Utils/Tree.h"
+#include "Utils/ITree.h"
 
 namespace o2
 {

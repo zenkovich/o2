@@ -2,9 +2,7 @@
 
 namespace o2
 {
-	UIVerticalLayout::UIVerticalLayout():
-		mBaseCorner(BaseCorner::Top), mSpacing(0), mExpandWidth(true), mExpandHeight(true), UIWidget(), 
-		mFitByChildren(false)
+	UIVerticalLayout::UIVerticalLayout(): UIWidget()
 	{
 		InitializeProperties();
 		UpdateLayout();
@@ -24,12 +22,13 @@ namespace o2
 
 	UIVerticalLayout& UIVerticalLayout::operator=(const UIVerticalLayout& other)
 	{
-		mBaseCorner = other.mBaseCorner;
-		mSpacing = other.mSpacing;
-		mBorder = other.mBorder;
-		mExpandWidth = other.mExpandWidth;
-		mExpandHeight = other.mExpandHeight;
+		mBaseCorner    = other.mBaseCorner;
+		mSpacing       = other.mSpacing;
+		mBorder        = other.mBorder;
+		mExpandWidth   = other.mExpandWidth;
+		mExpandHeight  = other.mExpandHeight;
 		mFitByChildren = other.mFitByChildren;
+
 		UIWidget::operator=(other);
 
 		RetargetStatesAnimations();
@@ -397,10 +396,10 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			childrenRect.left = Math::Min(childrenRect.left, child->layout.mLocalRect.left);
-			childrenRect.right = Math::Max(childrenRect.right, child->layout.mLocalRect.right);
+			childrenRect.left   = Math::Min(childrenRect.left, child->layout.mLocalRect.left);
+			childrenRect.right  = Math::Max(childrenRect.right, child->layout.mLocalRect.right);
 			childrenRect.bottom = Math::Min(childrenRect.bottom, child->layout.mLocalRect.bottom);
-			childrenRect.top = Math::Max(childrenRect.top, child->layout.mLocalRect.top);
+			childrenRect.top    = Math::Max(childrenRect.top, child->layout.mLocalRect.top);
 		}
 
 		Vec2F szDelta = (childrenRect.Size() + mBorder.LeftBottom() + mBorder.RightTop()) - mChildsAbsRect.Size();

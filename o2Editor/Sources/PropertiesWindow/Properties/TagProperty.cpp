@@ -27,7 +27,7 @@ namespace Editor
 	{
 		mEditBox = o2UI.CreateWidget<UIEditBox>("singleline");
 
-		mEditBox->onSelected = [&]() { UpdateContextData(""); };
+		mEditBox->onFocused = [&]() { UpdateContextData(""); };
 		mEditBox->onChangeCompleted = Function<void(const WString&)>(this, &TagsProperty::OnEditBoxChangeCompleted);
 		mEditBox->onChanged = Function<void(const WString&)>(this, &TagsProperty::OnEditBoxChanged);
 

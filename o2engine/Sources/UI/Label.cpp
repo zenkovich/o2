@@ -5,8 +5,7 @@
 
 namespace o2
 {
-	UILabel::UILabel():
-		mHorOverflow(HorOverflow::None), mVerOverflow(VerOverflow::None), mTextLayer(nullptr)
+	UILabel::UILabel()
 	{
 		InitializeProperties();
 	}
@@ -25,12 +24,15 @@ namespace o2
 	UILabel& UILabel::operator=(const UILabel& other)
 	{
 		UIWidget::operator=(other);
-		mTextLayer = GetLayerDrawable<Text>("text");
-		mHorOverflow = other.mHorOverflow;
-		mVerOverflow = other.mVerOverflow;
+
+		mTextLayer    = GetLayerDrawable<Text>("text");
+		mHorOverflow  = other.mHorOverflow;
+		mVerOverflow  = other.mVerOverflow;
 		mExpandBorder = other.mExpandBorder;
+
 		RetargetStatesAnimations();
 		UpdateLayout();
+
 		return *this;
 	}
 

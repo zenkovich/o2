@@ -133,34 +133,38 @@ namespace o2
 		SERIALIZABLE(UICustomList);
 
 	protected:
+		// ------------------
+		// Selected item info
+		// ------------------
 		struct Selection
 		{
-			int     idx;
-			Sprite* selection;
+			int     idx;       // Item index
+			Sprite* selection; // Selection sprite
 
+			// Check equals operator
 			bool operator==(const Selection& other) const;
 		};
 
 		typedef Vector<Selection> SelectionsVec;
 		typedef Vector<Sprite*> SpritesVec;
 
-		UIVerticalLayout* mVerLayout;             // Child vertical layout
-		UIWidget*         mItemSample;            // Item sample widget @SERIALIZABLE
-		Sprite*           mSelectionDrawable;     // Selection sprite @SERIALIZABLE
-		Sprite*           mHoverDrawable;         // Item hover drawable @SERIALIZABLE
-		Layout            mSelectionLayout;       // Selection layout, result selection area depends on selected item @SERIALIZABLE
-		Layout            mHoverLayout;           // Hover layout, result selection area depends on selected item @SERIALIZABLE
-						  
-		bool              mMultiSelection;        // Is multi selection available @SERIALIZABLE
-		SelectionsVec     mSelectedItems;         // Current selected items
-						  
-		RectF             mCurrentHoverRect;      // Current hover rectangle (for smoothing)
-		RectF             mTargetHoverRect;       // Target hover rectangle (over selected item)
-						  
-		Vec2F             mLastHoverCheckCursor;  // Last cursor position on hover check
-		Vec2F             mLastSelectCheckCursor; // Last cursor position on selection check
-
-		SpritesVec        mSelectionSpritesPool;  // Selection sprites pool
+		UIVerticalLayout* mVerLayout = nullptr;                     // Child vertical layout
+		UIWidget*         mItemSample = nullptr;                    // Item sample widget @SERIALIZABLE
+		Sprite*           mSelectionDrawable = nullptr;             // Selection sprite @SERIALIZABLE
+		Sprite*           mHoverDrawable = nullptr;                 // Item hover drawable @SERIALIZABLE
+		Layout            mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
+		Layout            mHoverLayout = Layout::BothStretch();     // Hover layout, result selection area depends on selected item @SERIALIZABLE
+						  							    
+		bool              mMultiSelection = true;                   // Is multi selection available @SERIALIZABLE
+		SelectionsVec     mSelectedItems;                           // Current selected items
+						  							    
+		RectF             mCurrentHoverRect;                        // Current hover rectangle (for smoothing)
+		RectF             mTargetHoverRect;                         // Target hover rectangle (over selected item)
+						  							    
+		Vec2F             mLastHoverCheckCursor;                    // Last cursor position on hover check
+		Vec2F             mLastSelectCheckCursor;                   // Last cursor position on selection check
+													    
+		SpritesVec        mSelectionSpritesPool;                    // Selection sprites pool
 
 	protected:
 		// Updates mouse control

@@ -21,26 +21,37 @@ namespace o2
 		enum class Type { OnlySingleTrue, VerOneClick, HorOneClick };
 
 	public:
-		Function<void(bool)> onPressed;
-		Function<void(bool)> onReleased;
+		Function<void(bool)> onPressed;  // Toggle group press event
+		Function<void(bool)> onReleased; // Toggle group release event
 
+		// Contructor by type
 		UIToggleGroup(Type type);
+
+		// Destructor
 		~UIToggleGroup();
 
+		// Adds toggle to group
 		void AddToggle(UIToggle* toggle);
+
+		// Removes toggle from group
 		void RemoveToggle(UIToggle* toggle);
 
+		// Returns all toggles in group
 		const TogglesVec& GetToggles() const;
+
+		// Returns toggled toggles in group
 		const TogglesVec& GetToggled() const;
 
 	protected:
-		bool       mPressed;
-		bool       mPressedValue;
-		TogglesVec mToggles; 
-		TogglesVec mToggled;
-		UIToggle*  mOwner;
-		Type       mType;
+		bool       mPressed = false;      // Is group in pressed state
+		bool       mPressedValue = false; // Group pressed value
+		TogglesVec mToggles;              // All toggles in group
+		TogglesVec mToggled;              // Toggled toggles in group
+		UIToggle*  mOwner = nullptr;      // Owner toggle
+		Type       mType;                 // Toggle group type
 
+	protected:
+		// Calls when some toggle was toggled, 
 		void OnToggled(UIToggle* toggle);
 
 		friend class UIToggle;
@@ -91,7 +102,7 @@ namespace o2
 		bool GetValue() const;
 
 		// Returns is this widget can be selected
-		bool IsSelectable() const;
+		bool IsFocusable() const;
 
 		// Sets toggle group
 		void SetToggleGroup(UIToggleGroup* toggleGroup);

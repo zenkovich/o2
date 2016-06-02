@@ -5,9 +5,7 @@
 namespace o2
 {
 	UIHorizontalScrollBar::UIHorizontalScrollBar():
-		UIWidget(), DrawableCursorEventsListener(this), mValue(0), mMinValue(0), mMaxValue(1), mScrollSense(1.0f), 
-		mScrollHandleSize(0.2f), mHandlePressed(false), mScrollhandleMinPxSize(5), mSmoothValue(mValue), 
-		mHandleLayer(nullptr), mBackLayer(nullptr)
+		UIWidget(), DrawableCursorEventsListener(this)
 	{
 		InitializeProperties();
 	}
@@ -22,6 +20,7 @@ namespace o2
 
 		RetargetStatesAnimations();
 		InitializeProperties();
+		UpdateLayout();
 	}
 
 	UIHorizontalScrollBar::~UIHorizontalScrollBar()
@@ -30,14 +29,15 @@ namespace o2
 	UIHorizontalScrollBar& UIHorizontalScrollBar::operator=(const UIHorizontalScrollBar& other)
 	{
 		UIWidget::operator=(other);
-		mValue = other.mValue;
-		mMinValue = other.mMinValue;
-		mMaxValue = other.mMaxValue;
-		mScrollSense = other.mScrollSense;
-		mScrollHandleSize = other.mScrollHandleSize;
+
+		mValue                 = other.mValue;
+		mMinValue              = other.mMinValue;
+		mMaxValue              = other.mMaxValue;
+		mScrollSense           = other.mScrollSense;
+		mScrollHandleSize      = other.mScrollHandleSize;
 		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
-		mSmoothValue = mValue;
-		mHandlePressed = false;
+		mSmoothValue           = mValue;
+		mHandlePressed         = false;
 
 		mHandleLayer = GetLayer("handle");
 		mBackLayer = GetLayer("back");
@@ -57,7 +57,7 @@ namespace o2
 
 		if (!Math::Equals(mValue, mSmoothValue, threshold))
 		{
-			mSmoothValue = Math::Clamp(Math::Lerp(mSmoothValue, mValue, dt*smoothCoef), mMinValue, mMaxValue);
+			mSmoothValue = Math::Clamp(Math::Lerpc(mSmoothValue, mValue, dt*smoothCoef), mMinValue, mMaxValue);
 
 			if (Math::Abs(mValue - mSmoothValue) < threshold)
 				mSmoothValue = mValue;
@@ -177,7 +177,7 @@ namespace o2
 	void UIHorizontalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
 
-		if (mHandleLayer && mHandleLayer->IsUnderPoint(cursor.mPosition))
+		if (mHandleLayer && mHandleLayer->IsUnderPoint(cursor.position))
 		{
 			mHandlePressed = true;
 			float pressedValue = GetValueFromCursor(cursor);
@@ -224,7 +224,7 @@ namespace o2
 			const float timeThreshold = 0.5f;
 			const float speed = 5.0f;
 
-			if (cursor.mPressedTime > timeThreshold && !(mHandleLayer && mHandleLayer->IsUnderPoint(cursor.mPosition)))
+			if (cursor.pressedTime > timeThreshold && !(mHandleLayer && mHandleLayer->IsUnderPoint(cursor.position)))
 			{
 				float pressedValue = GetValueFromCursor(cursor);
 				if (pressedValue > mValue + mScrollHandleSize*0.5f)
@@ -241,7 +241,7 @@ namespace o2
 		float szRange = range - mScrollHandleSize*(range/(range + mScrollHandleSize));
 		float width = layout.mAbsoluteRect.Width();
 
-		return (cursor.mPosition.x - layout.mAbsoluteRect.left)/width*range/szRange*range + mMinValue;
+		return (cursor.position.x - layout.mAbsoluteRect.left)/width*range/szRange*range + mMinValue;
 	}
 
 	void UIHorizontalScrollBar::OnCursorEnter(const Input::Cursor& cursor)

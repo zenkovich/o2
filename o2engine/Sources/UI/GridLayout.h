@@ -103,13 +103,13 @@ namespace o2
 		SERIALIZABLE(UIGridLayout);
 
 	protected:
-		BaseCorner   mBaseCorner;          // Base corner of widgets arranging
-		float        mSpacing;             // Space between widgets
-		Vec2F        mCellSize;            // Grid cell size
-		TwoDirection mArrangeAxis;         // Cells arrange axis
-		int          mArrangeAxisMaxCells; // Arrange axis maximum cells count
-		RectF        mBorder;              // Border
-		bool         mFitByChildren;       // Fitting by children
+		BaseCorner   mBaseCorner = BaseCorner::Left;          // Base corner of widgets arranging
+		float        mSpacing = 0.0f;                         // Space between widgets
+		Vec2F        mCellSize = Vec2F(50, 50);               // Grid cell size
+		TwoDirection mArrangeAxis = TwoDirection::Horizontal; // Cells arrange axis
+		int          mArrangeAxisMaxCells = 5;                // Arrange axis maximum cells count
+		RectF        mBorder;                                 // Border
+		bool         mFitByChildren = false;                  // Fitting by children
 
 	protected:
 		// Updates layout
