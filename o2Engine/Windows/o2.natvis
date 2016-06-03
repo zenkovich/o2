@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+  <Type Name="o2::Vec2&lt;*&gt;">
+    <DisplayString>{{ { x } { y } }}</DisplayString>
+  </Type>
+
+  <Type Name="o2::Rect&lt;*&gt;">
+    <DisplayString>{{ (L { left } T { top })-(R { right } B { bottom }) }}</DisplayString>
+    <Expand>
+      <Item Name="left" ExcludeView="simple">left</Item>
+      <Item Name="top" ExcludeView="simple">top</Item>
+      <Item Name="right" ExcludeView="simple">right</Item>
+      <Item Name="bottom" ExcludeView="simple">bottom</Item>
+      <Item Name="width" ExcludeView="simple">right - left</Item>
+      <Item Name="height" ExcludeView="simple">top - bottom</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Vertex2">
+    <DisplayString>{{ x: { x } y: { y } z: { z } c: { color } u: { tu } v: { tv }}</DisplayString>
+  </Type>
+
+  <Type Name="o2::Color4">
+    <DisplayString>{{ { r } { g } { b } { a }}</DisplayString>
+  </Type>
+
+  <Type Name="o2::Mesh">
+    <DisplayString>{{ vertx = { vertexCount }/{ mMaxVertexCount } poly = { polyCount }/{ mMaxPolyCount } tex = { mTexture.mTexture } }}</DisplayString>
+    <Expand>
+      <Item Name="texture" ExcludeView="simple">mTexture.mTexture</Item>
+      <Item Name="verticies" ExcludeView="simple">vertexCount</Item>
+      <Item Name="polygons" ExcludeView="simple">polyCount</Item>
+      <ArrayItems>
+        <Size>vertexCount</Size>
+        <ValuePointer>vertices</ValuePointer>
+      </ArrayItems>
+      <ArrayItems>
+        <Size>polyCount*3</Size>
+        <ValuePointer>indexes</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Vector&lt;*&gt;">
+    <DisplayString>{{ size={ mCount } }}</DisplayString>
+    <Expand>
+      <Item Name="size" ExcludeView="simple">mCount</Item>
+      <Item Name="capacity" ExcludeView="simple">mCapacity</Item>
+      <ArrayItems>
+        <Size>mCount</Size>
+        <ValuePointer>mValues</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::KeyValuePair&lt;*&gt;">
+    <DisplayString>{{ { mKey } { mValue } }}</DisplayString>
+    <Expand>
+      <Item Name="key" ExcludeView="simple">mKey</Item>
+      <Item Name="value" ExcludeView="simple">mValue</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Dictionary&lt;*&gt;">
+    <DisplayString>{{ size={ mPairs.mCount } }}</DisplayString>
+    <Expand>
+      <Item Name="size" ExcludeView="simple">mPairs.mCount</Item>
+      <Item Name="capacity" ExcludeView="simple">mPairs.mCapacity</Item>
+      <ArrayItems>
+        <Size>mPairs.mCount</Size>
+        <ValuePointer>mPairs.mValues</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::TString&lt;char&gt;">
+    <DisplayString>{{ {mData,s} }}</DisplayString>
+    <Expand>
+      <Item Name="capacity">mCapacity</Item>
+      <ArrayItems>
+        <Size>mCapacity</Size>
+        <ValuePointer>mData</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::TString&lt;wchar_t&gt;">
+    <DisplayString>{{ {mData,su} }}</DisplayString>
+    <Expand>
+      <Item Name="capacity">mCapacity</Item>
+      <ArrayItems>
+        <Size>mCapacity</Size>
+        <ValuePointer>mData</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::FieldInfo&lt;*&gt;">
+    <DisplayString>{{ name={ mName } value={ mFieldRef } }}</DisplayString>
+    <Expand>
+      <Item Name="name">mName</Item>
+      <Item Name="value">mFieldRef</Item>
+      <Item Name="owner">mOwner</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::DataNode">
+    <DisplayString>{{ name={ mName } data={ mData } childs={mChildNodes.mCount} }}</DisplayString>
+    <Expand>
+      <Item Name="name" ExcludeView="simple">mName</Item>
+      <Item Name="data" ExcludeView="simple">mData</Item>
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
+      <Item Name="childs" ExcludeView="simple">mChildNodes.mCount</Item>
+      <ArrayItems>
+        <Size>mChildNodes.mCount</Size>
+        <ValuePointer>mChildNodes.mValues</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::UIWidget">
+    <DisplayString>name={ mName } rect=({ (int)layout.mAbsoluteRect.left }, { (int)layout.mAbsoluteRect.bottom }, { (int)layout.mAbsoluteRect.right }, { (int)layout.mAbsoluteRect.top })</DisplayString>
+    <Expand>
+      <Item Name="name" ExcludeView="simple">mName</Item>
+      <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
+      <Item Name="visible" ExcludeView="simple">mVisible</Item>
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
+      <Synthetic Name="layout">
+        <DisplayString>({ (int)layout.mAbsoluteRect.left }, { (int)layout.mAbsoluteRect.bottom }, { (int)layout.mAbsoluteRect.right }, { (int)layout.mAbsoluteRect.top })</DisplayString>
+        <Expand>
+          <ExpandedItem>layout</ExpandedItem>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="layers">
+        <DisplayString>count={mLayers.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mLayers.mCount</Size>
+            <ValuePointer>mLayers.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="states">
+        <DisplayString>count={mStates.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mStates.mCount</Size>
+            <ValuePointer>mStates.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="draw layers">
+        <DisplayString>count={mDrawingLayers.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mDrawingLayers.mCount</Size>
+            <ValuePointer>mDrawingLayers.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
+      <ArrayItems>
+        <Size>mChilds.mCount</Size>
+        <ValuePointer>mChilds.mValues</ValuePointer>
+      </ArrayItems>
+
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Actor">
+    <DisplayString>{ mName }:{ mId }</DisplayString>
+    <Expand>
+      <Item Name="name" ExcludeView="simple">mName</Item>
+      <Item Name="id" ExcludeView="simple">mId</Item>
+      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+      <Item Name="locked" ExcludeView="simple">mLocked</Item>
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
+      <Item Name="layer" ExcludeView="simple">mLayer->name</Item>
+      <Item Name="tags" ExcludeView="simple">tags</Item>
+      
+      <Synthetic Name="transform">
+        <DisplayString>(positon={ transform.mPosition }, size={ transform.mSize }, scale={ transform.mScale }, pivot={ transform.mPivot }, angle={ transform.mAngle })</DisplayString>
+        <Expand>
+          <ExpandedItem>transform</ExpandedItem>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="components">
+        <DisplayString>count={mComponents.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mComponents.mCount</Size>
+            <ValuePointer>mComponents.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="children">
+        <DisplayString>count={mChilds.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mChilds.mCount</Size>
+            <ValuePointer>mChilds.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+      
+      <Item Name="is on scene" ExcludeView="simple">mIsOnScene</Item>
+      <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
+      <Item Name="asset id" ExcludeView="simple">mAssetId</Item>
+      <Item Name="layer ptr" ExcludeView="simple">mLayer</Item>
+
+    </Expand>
+  </Type>
+
+  <Type Name="o2::ImageComponent">
+    <DisplayString>(ImageComponent ID:{ mId })</DisplayString>
+    <Expand>
+      <Item Name="id" ExcludeView="simple">mId</Item>
+      <Item Name="owner" ExcludeView="simple">mOwner</Item>
+      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+      <Item Name="sprite" ExcludeView="simple">mSprite</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::UIWidgetLayout">
+    <DisplayString>({ (int)mAbsoluteRect.left }, { (int)mAbsoluteRect.bottom }, { (int)mAbsoluteRect.right }, { (int)mAbsoluteRect.top })</DisplayString>
+    <Expand>
+      <Item Name="pivot" ExcludeView="simple">mPivot</Item>
+      <Item Name="anchor min" ExcludeView="simple">mAnchorMin</Item>
+      <Item Name="anchor max" ExcludeView="simple">mAnchorMax</Item>
+      <Item Name="offset min" ExcludeView="simple">mOffsetMin</Item>
+      <Item Name="offset max" ExcludeView="simple">mOffsetMax</Item>
+      <Item Name="min size" ExcludeView="simple">mMinSize</Item>
+      <Item Name="max size" ExcludeView="simple">mMaxSize</Item>
+      <Item Name="weight" ExcludeView="simple">mWeight</Item>
+      <Item Name="driven by parent" ExcludeView="simple">mDrivenByParent</Item>
+      <Item Name="abs rect" ExcludeView="simple">mAbsoluteRect</Item>
+      <Item Name="local rect" ExcludeView="simple">mLocalRect</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Transform">
+    <DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
+    <Expand>
+      <Item Name="position" ExcludeView="simple">mPosition</Item>
+      <Item Name="pivot" ExcludeView="simple">mPivot</Item>
+      <Item Name="size" ExcludeView="simple">mSize</Item>
+      <Item Name="angle" ExcludeView="simple">mAngle</Item>
+      <Item Name="shear" ExcludeView="simple">mShear</Item>
+      <Item Name="transform" ExcludeView="simple">mTransform</Item>
+      <Item Name="no size transform" ExcludeView="simple">mNonSizedTransform</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::TimeStamp">
+    <DisplayString>({ mSecond }:{ mMinute}:{ mHour } { mDay }.{ mMonth }.{ mYear })</DisplayString>
+    <Expand>
+      <Item Name="year" ExcludeView="simple">mYear</Item>
+      <Item Name="month" ExcludeView="simple">mMonth</Item>
+      <Item Name="day" ExcludeView="simple">mDay</Item>
+      <Item Name="hout" ExcludeView="simple">mHour</Item>
+      <Item Name="minute" ExcludeView="simple">mMinute</Item>
+      <Item Name="secont" ExcludeView="simple">mSecond</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Curve">
+    <DisplayString>(keys count={ mKeys.mCount })</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>mKeys.mCount</Size>
+        <ValuePointer>mKeys.mValues</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Curve::Key">
+    <DisplayString>({ value }:{ position })</DisplayString>
+    <Expand>
+      <Item Name="value" ExcludeView="simple">value</Item>
+      <Item Name="position" ExcludeView="simple">position</Item>
+      <Item Name="leftCoef" ExcludeView="simple">leftCoef</Item>
+      <Item Name="leftCoefPosition" ExcludeView="simple">leftCoefPosition</Item>
+      <Item Name="rightCoef" ExcludeView="simple">rightCoef</Item>
+      <Item Name="rightCoefPosition" ExcludeView="simple">rightCoefPosition</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Sprite">
+    <DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
+    <Expand>
+      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+      <Item Name="position" ExcludeView="simple">mPosition</Item>
+      <Item Name="pivot" ExcludeView="simple">mPivot</Item>
+      <Item Name="size" ExcludeView="simple">mSize</Item>
+      <Item Name="angle" ExcludeView="simple">mAngle</Item>
+      <Item Name="shear" ExcludeView="simple">mShear</Item>
+      <Item Name="alpha" ExcludeView="simple">mColor.a</Item>
+      <Item Name="color" ExcludeView="simple">mColor</Item>
+      <Item Name="texture src" ExcludeView="simple">mTextureSrcRect</Item>
+      <Item Name="mode" ExcludeView="simple">mMode</Item>
+      <Item Name="slices" ExcludeView="simple">mSlices</Item>
+      <Item Name="fill" ExcludeView="simple">mFill</Item>
+      <Item Name="asset id" ExcludeView="simple">mImageAssetId</Item>
+      <Item Name="atlas id" ExcludeView="simple">mAtlasAssetId</Item>
+      
+      <Synthetic Name="corners' colors">
+        <DisplayString>LT { mCornersColors[0] }; RT { mCornersColors[1] }; RB { mCornersColors[2] }; LB { mCornersColors[3] }</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>4</Size>
+            <ValuePointer>mCornersColors</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+      
+      <Item Name="transform" ExcludeView="simple">mTransform</Item>
+      <Item Name="no size transform" ExcludeView="simple">mNonSizedTransform</Item>
+    </Expand>
+  </Type>
+
+</AutoVisualizer>
