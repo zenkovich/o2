@@ -10,23 +10,23 @@
 namespace o2
 {
 	UICustomList::UICustomList():
-		UIScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()), 
+		UIScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()),
 		mSelectionLayout(Layout::BothStretch())
 	{
 		mItemSample        = mnew UIWidget();
 		mSelectionDrawable = mnew Sprite();
 		mHoverDrawable     = mnew Sprite();
 
-		mVerLayout = mnew UIVerticalLayout();
-		mVerLayout->baseCorner = BaseCorner::LeftTop;
-		mVerLayout->name = "layout";
-		mVerLayout->expandHeight = false;
-		mVerLayout->expandWidth = true;
+		mVerLayout                   = mnew UIVerticalLayout();
+		mVerLayout->baseCorner       = BaseCorner::LeftTop;
+		mVerLayout->name             = "layout";
+		mVerLayout->expandHeight     = false;
+		mVerLayout->expandWidth      = true;
 		mVerLayout->layout.anchorMin = Vec2F(0, 0);
 		mVerLayout->layout.anchorMax = Vec2F(1, 1);
 		mVerLayout->layout.offsetMin = Vec2F();
 		mVerLayout->layout.offsetMax = Vec2F();
-		mVerLayout->fitByChildren = true;
+		mVerLayout->fitByChildren    = true;
 
 		AddChild(mVerLayout);
 
@@ -34,7 +34,7 @@ namespace o2
 	}
 
 	UICustomList::UICustomList(const UICustomList& other):
-		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout), 
+		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
 		mSelectionLayout(other.mSelectionLayout)
 	{
 		mVerLayout = FindChild<UIVerticalLayout>();
@@ -85,7 +85,7 @@ namespace o2
 
 	void UICustomList::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		UIScrollArea::Update(dt);
@@ -101,7 +101,7 @@ namespace o2
 
 	void UICustomList::Draw()
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -109,7 +109,7 @@ namespace o2
 
 		IDrawable::OnDrawn();
 
- 		o2Render.EnableScissorTest(mAbsoluteClipArea);
+		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
 		for (auto child : mChilds)
 			child->Draw();
@@ -130,8 +130,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	void UICustomList::SetItemSample(UIWidget* sample)
@@ -385,9 +384,12 @@ namespace o2
 	void UICustomList::UpdateControls(float dt)
 	{}
 
-	void UICustomList::UpdateLayout(bool forcible /*= false*/)
+	void UICustomList::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		UIScrollArea::UpdateLayout(forcible);
+		if (CheckIsLayoutDrivenByParent(forcible))
+			return;
+
+		UIScrollArea::UpdateLayout(forcible, withChildren);
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);
@@ -427,7 +429,7 @@ namespace o2
 		int itemIdx = -1;
 		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
 		SelectItemAt(itemIdx);
-		
+
 		OnSelectionChanged();
 	}
 

@@ -38,7 +38,7 @@ namespace o2
 
 	void UILabel::Draw()
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		bool enabledClipping = false;
@@ -76,8 +76,7 @@ namespace o2
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	void UILabel::SetFont(FontRef font)
@@ -216,15 +215,10 @@ namespace o2
 		return mExpandBorder;
 	}
 
-	void UILabel::UpdateLayout(bool forcible /*= false*/)
+	void UILabel::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		if (mTextLayer)
 		{
@@ -238,19 +232,19 @@ namespace o2
 
 				switch (mTextLayer->GetHorAlign())
 				{
-					case HorAlign::Left: 
-					layout.mOffsetMax.x += sizeDelta;
-					break;
+				case HorAlign::Left:
+				layout.mOffsetMax.x += sizeDelta;
+				break;
 
-					case HorAlign::Middle:
-					case HorAlign::Both:
-					layout.mOffsetMax.x += sizeDelta*0.5f; 
-					layout.mOffsetMin.x -= sizeDelta*0.5f;
-					break;
+				case HorAlign::Middle:
+				case HorAlign::Both:
+				layout.mOffsetMax.x += sizeDelta*0.5f;
+				layout.mOffsetMin.x -= sizeDelta*0.5f;
+				break;
 
-					case HorAlign::Right:
-					layout.mOffsetMin.x -= sizeDelta;
-					break;
+				case HorAlign::Right:
+				layout.mOffsetMin.x -= sizeDelta;
+				break;
 				}
 			}
 
@@ -264,19 +258,19 @@ namespace o2
 
 				switch (mTextLayer->GetVerAlign())
 				{
-					case VerAlign::Top:
-					layout.mOffsetMin.y -= sizeDelta;
-					break;
+				case VerAlign::Top:
+				layout.mOffsetMin.y -= sizeDelta;
+				break;
 
-					case VerAlign::Middle:
-					case VerAlign::Both:
-					layout.mOffsetMax.y += sizeDelta*0.5f;
-					layout.mOffsetMin.y -= sizeDelta*0.5f;
-					break;
+				case VerAlign::Middle:
+				case VerAlign::Both:
+				layout.mOffsetMax.y += sizeDelta*0.5f;
+				layout.mOffsetMin.y -= sizeDelta*0.5f;
+				break;
 
-					case VerAlign::Bottom:
-					layout.mOffsetMax.y += sizeDelta;
-					break;
+				case VerAlign::Bottom:
+				layout.mOffsetMax.y += sizeDelta;
+				break;
 				}
 			}
 		}
@@ -284,10 +278,8 @@ namespace o2
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
-		mChildsAbsRect = layout.mAbsoluteRect;
-
-		for (auto child : mChilds)
-			child->UpdateLayout();
+		if (withChildren)
+			UpdateChildrenLayouts();
 	}
 
 	void UILabel::OnLayerAdded(UIWidgetLayer* layer)

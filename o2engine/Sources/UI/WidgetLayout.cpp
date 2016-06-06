@@ -18,7 +18,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	UIWidgetLayout::UIWidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax, 
+	UIWidgetLayout::UIWidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax,
 								   const Vec2F& offsetMin, const Vec2F& offsetMax):
 		mAnchorMin(anchorMin), mAnchorMax(anchorMax), mOffsetMin(offsetMin), mOffsetMax(offsetMax)
 	{
@@ -27,7 +27,7 @@ namespace o2
 
 	UIWidgetLayout::UIWidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
 								   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom):
-		mAnchorMin(anchorLeft, anchorBottom), mAnchorMax(anchorRight, anchorTop), 
+		mAnchorMin(anchorLeft, anchorBottom), mAnchorMax(anchorRight, anchorTop),
 		mOffsetMin(offsetLeft, offsetBottom), mOffsetMax(offsetRight, offsetTop)
 	{
 		InitializeProperties();
@@ -408,6 +408,7 @@ namespace o2
 	void UIWidgetLayout::SetMinimalSize(const Vec2F& minSize)
 	{
 		mMinSize = minSize;
+		mCheckMinMaxFunc = Function<void()>(this, &UIWidgetLayout::CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -419,6 +420,7 @@ namespace o2
 	void UIWidgetLayout::SetMinimalWidth(float value)
 	{
 		mMinSize.x = value;
+		mCheckMinMaxFunc = Function<void()>(this, &UIWidgetLayout::CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -430,6 +432,7 @@ namespace o2
 	void UIWidgetLayout::SetMinimalHeight(float value)
 	{
 		mMinSize.y = value;
+		mCheckMinMaxFunc = Function<void()>(this, &UIWidgetLayout::CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -441,6 +444,7 @@ namespace o2
 	void UIWidgetLayout::SetMaximalSize(const Vec2F& maxSize)
 	{
 		mMaxSize = maxSize;
+		mCheckMinMaxFunc = Function<void()>(this, &UIWidgetLayout::CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -452,6 +456,7 @@ namespace o2
 	void UIWidgetLayout::SetMaximalWidth(float value)
 	{
 		mMaxSize.x = value;
+		mCheckMinMaxFunc = Function<void()>(this, &UIWidgetLayout::CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -463,12 +468,18 @@ namespace o2
 	void UIWidgetLayout::SetMaximalHeight(float value)
 	{
 		mMaxSize.y = value;
+		mCheckMinMaxFunc = Function<void()>(this, &UIWidgetLayout::CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetMaximalHeight() const
 	{
 		return mMaxSize.y;
+	}
+
+	void UIWidgetLayout::DisableMinMaxSizes()
+	{
+		mCheckMinMaxFunc = Function<void()>(this, &UIWidgetLayout::DontCheckMinMax);
 	}
 
 	void UIWidgetLayout::SetWeight(const Vec2F& weight)
@@ -519,60 +530,67 @@ namespace o2
 		UIWidgetLayout res;
 		switch (corner)
 		{
-			case BaseCorner::Left:
-			res.mAnchorMin = Vec2F(0.0f, 0.5f);
-			res.mAnchorMax = Vec2F(0.0f, 0.5f);
-			res.mOffsetMin = Vec2F(0.0f, -size.y*0.5f) + offset;
-			res.mOffsetMax = Vec2F(size.x, size.y*0.5f) + offset;
-			break;
-			case BaseCorner::Right:
-			res.mAnchorMin = Vec2F(1.0f, 0.5f);
-			res.mAnchorMax = Vec2F(1.0f, 0.5f);
-			res.mOffsetMin = Vec2F(-size.x, -size.y*0.5f) + offset;
-			res.mOffsetMax = Vec2F(0.0f, size.y*0.5f) + offset;
-			break;
-			case BaseCorner::Top:
-			res.mAnchorMin = Vec2F(0.5f, 1.0f);
-			res.mAnchorMax = Vec2F(0.5f, 1.0f);
-			res.mOffsetMin = Vec2F(-size.x*0.5f, -size.y) + offset;
-			res.mOffsetMax = Vec2F(size.x*0.5f, 0.0f) + offset;
-			break;
-			case BaseCorner::Bottom:
-			res.mAnchorMin = Vec2F(0.5f, 0.0f);
-			res.mAnchorMax = Vec2F(0.5f, 0.0f);
-			res.mOffsetMin = Vec2F(-size.x*0.5f, 0.0f) + offset;
-			res.mOffsetMax = Vec2F(size.x*0.5f, size.y) + offset;
-			break;
-			case BaseCorner::Center:
-			res.mAnchorMin = Vec2F(0.5f, 0.5f);
-			res.mAnchorMax = Vec2F(0.5f, 0.5f);
-			res.mOffsetMin = Vec2F(-size.x*0.5f, -size.y*0.5f) + offset;
-			res.mOffsetMax = Vec2F(size.x*0.5f, size.y*0.5f) + offset;
-			break;
-			case BaseCorner::LeftBottom:
-			res.mAnchorMin = Vec2F(0.0f, 0.0f);
-			res.mAnchorMax = Vec2F(0.0f, 0.0f);
-			res.mOffsetMin = Vec2F(0.0f, 0.0f) + offset;
-			res.mOffsetMax = Vec2F(size.x, size.y) + offset;
-			break;
-			case BaseCorner::LeftTop:
-			res.mAnchorMin = Vec2F(0.0f, 1.0f);
-			res.mAnchorMax = Vec2F(0.0f, 1.0f);
-			res.mOffsetMin = Vec2F(0.0f, -size.y) + offset;
-			res.mOffsetMax = Vec2F(size.x, 0.0f) + offset;
-			break;
-			case BaseCorner::RightBottom:
-			res.mAnchorMin = Vec2F(1.0f, 0.0f);
-			res.mAnchorMax = Vec2F(1.0f, 0.0f);
-			res.mOffsetMin = Vec2F(-size.x, 0.0f) + offset;
-			res.mOffsetMax = Vec2F(0.0f, size.y) + offset;
-			break;
-			case BaseCorner::RightTop:
-			res.mAnchorMin = Vec2F(1.0f, 1.0f);
-			res.mAnchorMax = Vec2F(1.0f, 1.0f);
-			res.mOffsetMin = Vec2F(-size.x, -size.y) + offset;
-			res.mOffsetMax = Vec2F(0.0f, 0.0f) + offset;
-			break;
+		case BaseCorner::Left:
+		res.mAnchorMin = Vec2F(0.0f, 0.5f);
+		res.mAnchorMax = Vec2F(0.0f, 0.5f);
+		res.mOffsetMin = Vec2F(0.0f, -size.y*0.5f) + offset;
+		res.mOffsetMax = Vec2F(size.x, size.y*0.5f) + offset;
+		break;
+
+		case BaseCorner::Right:
+		res.mAnchorMin = Vec2F(1.0f, 0.5f);
+		res.mAnchorMax = Vec2F(1.0f, 0.5f);
+		res.mOffsetMin = Vec2F(-size.x, -size.y*0.5f) + offset;
+		res.mOffsetMax = Vec2F(0.0f, size.y*0.5f) + offset;
+		break;
+		case BaseCorner::Top:
+		res.mAnchorMin = Vec2F(0.5f, 1.0f);
+		res.mAnchorMax = Vec2F(0.5f, 1.0f);
+		res.mOffsetMin = Vec2F(-size.x*0.5f, -size.y) + offset;
+		res.mOffsetMax = Vec2F(size.x*0.5f, 0.0f) + offset;
+		break;
+
+		case BaseCorner::Bottom:
+		res.mAnchorMin = Vec2F(0.5f, 0.0f);
+		res.mAnchorMax = Vec2F(0.5f, 0.0f);
+		res.mOffsetMin = Vec2F(-size.x*0.5f, 0.0f) + offset;
+		res.mOffsetMax = Vec2F(size.x*0.5f, size.y) + offset;
+		break;
+
+		case BaseCorner::Center:
+		res.mAnchorMin = Vec2F(0.5f, 0.5f);
+		res.mAnchorMax = Vec2F(0.5f, 0.5f);
+		res.mOffsetMin = Vec2F(-size.x*0.5f, -size.y*0.5f) + offset;
+		res.mOffsetMax = Vec2F(size.x*0.5f, size.y*0.5f) + offset;
+		break;
+
+		case BaseCorner::LeftBottom:
+		res.mAnchorMin = Vec2F(0.0f, 0.0f);
+		res.mAnchorMax = Vec2F(0.0f, 0.0f);
+		res.mOffsetMin = Vec2F(0.0f, 0.0f) + offset;
+		res.mOffsetMax = Vec2F(size.x, size.y) + offset;
+		break;
+
+		case BaseCorner::LeftTop:
+		res.mAnchorMin = Vec2F(0.0f, 1.0f);
+		res.mAnchorMax = Vec2F(0.0f, 1.0f);
+		res.mOffsetMin = Vec2F(0.0f, -size.y) + offset;
+		res.mOffsetMax = Vec2F(size.x, 0.0f) + offset;
+		break;
+
+		case BaseCorner::RightBottom:
+		res.mAnchorMin = Vec2F(1.0f, 0.0f);
+		res.mAnchorMax = Vec2F(1.0f, 0.0f);
+		res.mOffsetMin = Vec2F(-size.x, 0.0f) + offset;
+		res.mOffsetMax = Vec2F(0.0f, size.y) + offset;
+		break;
+
+		case BaseCorner::RightTop:
+		res.mAnchorMin = Vec2F(1.0f, 1.0f);
+		res.mAnchorMax = Vec2F(1.0f, 1.0f);
+		res.mOffsetMin = Vec2F(-size.x, -size.y) + offset;
+		res.mOffsetMax = Vec2F(0.0f, 0.0f) + offset;
+		break;
 		}
 
 		return res;
@@ -588,24 +606,26 @@ namespace o2
 
 		switch (align)
 		{
-			case HorAlign::Left:
-			res.mAnchorMin.x = 0.0f;
-			res.mAnchorMax.x = 0.0f;
-			res.mOffsetMin.x = offsX;
-			res.mOffsetMax.x = offsX + width;
-			break;
-			case HorAlign::Middle:
-			res.mAnchorMin.x = 0.5f;
-			res.mAnchorMax.x = 0.5f;
-			res.mOffsetMin.x = offsX - width*0.5f;
-			res.mOffsetMax.x = offsX + width*0.5f;
-			break;
-			case HorAlign::Right:
-			res.mAnchorMin.x = 1.0f;
-			res.mAnchorMax.x = 1.0f;
-			res.mOffsetMin.x = -offsX - width; 
-			res.mOffsetMax.x = -offsX;
-			break;
+		case HorAlign::Left:
+		res.mAnchorMin.x = 0.0f;
+		res.mAnchorMax.x = 0.0f;
+		res.mOffsetMin.x = offsX;
+		res.mOffsetMax.x = offsX + width;
+		break;
+
+		case HorAlign::Middle:
+		res.mAnchorMin.x = 0.5f;
+		res.mAnchorMax.x = 0.5f;
+		res.mOffsetMin.x = offsX - width*0.5f;
+		res.mOffsetMax.x = offsX + width*0.5f;
+		break;
+
+		case HorAlign::Right:
+		res.mAnchorMin.x = 1.0f;
+		res.mAnchorMax.x = 1.0f;
+		res.mOffsetMin.x = -offsX - width;
+		res.mOffsetMax.x = -offsX;
+		break;
 		}
 
 		return res;
@@ -621,24 +641,26 @@ namespace o2
 
 		switch (align)
 		{
-			case VerAlign::Top:
-			res.mAnchorMin.y = 1.0f;
-			res.mAnchorMax.y = 1.0f;
-			res.mOffsetMin.y = -offsY - height;
-			res.mOffsetMax.y = -offsY;
-			break;
-			case VerAlign::Middle:
-			res.mAnchorMin.y = 0.5f;
-			res.mAnchorMax.y = 0.5f;
-			res.mOffsetMin.y = offsY - height*0.5f;
-			res.mOffsetMax.y = offsY + height*0.5f;
-			break;
-			case VerAlign::Bottom:
-			res.mAnchorMin.y = 0.0f;
-			res.mAnchorMax.y = 0.0f;
-			res.mOffsetMin.y = offsY;
-			res.mOffsetMax.y = offsY + height;
-			break;
+		case VerAlign::Top:
+		res.mAnchorMin.y = 1.0f;
+		res.mAnchorMax.y = 1.0f;
+		res.mOffsetMin.y = -offsY - height;
+		res.mOffsetMax.y = -offsY;
+		break;
+
+		case VerAlign::Middle:
+		res.mAnchorMin.y = 0.5f;
+		res.mAnchorMax.y = 0.5f;
+		res.mOffsetMin.y = offsY - height*0.5f;
+		res.mOffsetMax.y = offsY + height*0.5f;
+		break;
+
+		case VerAlign::Bottom:
+		res.mAnchorMin.y = 0.0f;
+		res.mAnchorMax.y = 0.0f;
+		res.mOffsetMin.y = offsY;
+		res.mOffsetMax.y = offsY + height;
+		break;
 		}
 
 		return res;
@@ -646,15 +668,39 @@ namespace o2
 
 	void UIWidgetLayout::CopyFrom(const UIWidgetLayout& other)
 	{
-		mPivot = other.mPivot;
+		mPivot     = other.mPivot;
 		mAnchorMin = other.mAnchorMin;
 		mAnchorMax = other.mAnchorMax;
 		mOffsetMin = other.mOffsetMin;
 		mOffsetMax = other.mOffsetMax;
-		mMinSize = other.mMinSize;
-		mMaxSize = other.mMaxSize;
-		mWeight = other.mWeight;
+		mMinSize   = other.mMinSize;
+		mMaxSize   = other.mMaxSize;
+		mWeight    = other.mWeight;
 	}
+
+	void UIWidgetLayout::CheckMinMax()
+	{
+		Vec2F resSize = mLocalRect.Size();
+		Vec2F clampSize(Math::Clamp(resSize.x, mMinSize.x, mMaxSize.x),
+						Math::Clamp(resSize.y, mMinSize.y, mMaxSize.y));
+		Vec2F szDelta = clampSize - resSize;
+
+		if (szDelta != Vec2F())
+		{
+			mLocalRect.left   -= szDelta.x*mPivot.x;
+			mLocalRect.right  += szDelta.x*(1.0f - mPivot.x);
+			mLocalRect.bottom -= szDelta.y*mPivot.y;
+			mLocalRect.top    += szDelta.y*(1.0f - mPivot.y);
+		}
+
+		mLocalRect.left   = Math::Floor(mLocalRect.left);
+		mLocalRect.right  = Math::Floor(mLocalRect.right);
+		mLocalRect.bottom = Math::Floor(mLocalRect.bottom);
+		mLocalRect.top    = Math::Floor(mLocalRect.top);
+	}
+
+	void UIWidgetLayout::DontCheckMinMax()
+	{}
 
 	void UIWidgetLayout::InitializeProperties()
 	{

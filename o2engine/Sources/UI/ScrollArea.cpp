@@ -14,11 +14,13 @@ namespace o2
 		InitializeProperties();
 	}
 
-	UIScrollArea::UIScrollArea(const UIScrollArea& other):
+	UIScrollArea::UIScrollArea(const UIScrollArea& other) :
 		UIWidget(other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
-		mClipAreaLayout(other.mClipAreaLayout), mScrollPos(other.mScrollPos), mScrollSpeedDamp(other.mScrollSpeedDamp), 
+		mClipAreaLayout(other.mClipAreaLayout), mScrollPos(other.mScrollPos), mScrollSpeedDamp(other.mScrollSpeedDamp),
 		mViewAreaLayout(other.mViewAreaLayout), mEnableScrollsHiding(other.mEnableScrollsHiding)
 	{
+		InitializeProperties();
+
 		if (mOwnHorScrollBar)
 		{
 			mHorScrollBar = other.mHorScrollBar->Clone();
@@ -39,8 +41,6 @@ namespace o2
 
 		RetargetStatesAnimations();
 		UpdateLayout();
-
-		InitializeProperties();
 	}
 
 	UIScrollArea::~UIScrollArea()
@@ -117,7 +117,7 @@ namespace o2
 
 	void UIScrollArea::Draw()
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -141,13 +141,12 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	void UIScrollArea::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		UIWidget::Update(dt);
@@ -206,18 +205,20 @@ namespace o2
 		Vec2F newScrollPos(Math::Clamp(scroll.x, mScrollRange.left, mScrollRange.right),
 						   Math::Clamp(scroll.y, mScrollRange.bottom, mScrollRange.top));
 
+		Vec2F scrollDelta;
+
 		if (mHorScrollBar)
 			mHorScrollBar->SetValue(newScrollPos.x);
 		else
-			mScrollPos.x = newScrollPos.x;
+			scrollDelta.x = newScrollPos.x;
 
 		if (mVerScrollBar)
 			mVerScrollBar->SetValue(newScrollPos.y);
 		else
-			mScrollPos.y = newScrollPos.y;
+			scrollDelta.y = newScrollPos.y;
 
 		if (!mVerScrollBar || !mHorScrollBar)
-			UpdateLayout();
+			MoveScrollPosition(scrollDelta);
 
 		onScrolled(newScrollPos);
 		OnScrolled();
@@ -262,9 +263,9 @@ namespace o2
 	{
 		if (mHorScrollBar)
 		{
-			if (mOwnHorScrollBar) 
+			if (mOwnHorScrollBar)
 				delete mHorScrollBar;
-			else                  
+			else
 				mHorScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnHorScrollChanged);
 		}
 
@@ -291,7 +292,7 @@ namespace o2
 	{
 		if (mVerScrollBar)
 		{
-			if (mOwnVerScrollBar) 
+			if (mOwnVerScrollBar)
 				delete mVerScrollBar;
 			else
 				mVerScrollBar->onSmoothChange -= Function<void(float)>(this, &UIScrollArea::OnVerScrollChanged);
@@ -404,7 +405,6 @@ namespace o2
 				*selectState = false;
 		}
 
-
 		if (!Math::Equals(o2Input.GetMouseWheelDelta(), 0.0f) && underClippingArea && !underScrollbars)
 		{
 			CursorAreaEventsListener* listenerunderCursor = nullptr;
@@ -417,7 +417,6 @@ namespace o2
 						listenerunderCursor = x;
 
 					break;
-
 				}
 			}
 
@@ -503,31 +502,52 @@ namespace o2
 		}
 	}
 
-	void UIScrollArea::UpdateLayout(bool forcible /*= false*/)
+	void UIScrollArea::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
 		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout.mAbsoluteRect);
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
 
-		for (auto child : mChilds)
-			child->UpdateLayout(true);
+		if (withChildren)
+			UpdateChildrenLayouts(true);
 
+		CheckChildrenClipping();
 		UpdateScrollParams();
+		UpdateScrollBarsLayout();
+	}
 
-		RectF _mChildsAbsRect = mChildsAbsRect;
+	void UIScrollArea::MoveScrollPosition(const Vec2F& delta)
+	{
+		mScrollPos += delta;
+
+		Vec2F widgetsMove(-delta.x, delta.y);
+		for (auto child : mChilds)
+			MoveWidgetAndCheckClipping(child, widgetsMove);
+	}
+
+	void UIScrollArea::MoveWidgetAndCheckClipping(UIWidget* widget, const Vec2F& delta)
+	{
+		widget->mBoundsWithChilds += delta;
+		widget->CheckClipping(mAbsoluteClipArea);
+
+		if (!widget->mIsClipped)
+			widget->UpdateLayout(true, false);
+
+		for (auto child : widget->mChilds)
+			MoveWidgetAndCheckClipping(child, delta);
+	}
+
+	void UIScrollArea::UpdateScrollBarsLayout()
+	{
+		RectF tmpChildsAbsRect = mChildsAbsRect;
 		mChildsAbsRect = layout.mAbsoluteRect;
 
 		if (mOwnHorScrollBar)
@@ -536,7 +556,23 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->UpdateLayout(true);
 
-		mChildsAbsRect = _mChildsAbsRect;
+		mChildsAbsRect = tmpChildsAbsRect;
+	}
+
+	void UIScrollArea::CheckChildrenClipping()
+	{
+		for (auto child : mChilds)
+			child->CheckClipping(mAbsoluteClipArea);
+	}
+
+	void UIScrollArea::CheckClipping(const RectF& clipArea)
+	{
+		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
+
+		RectF newClipArea = clipArea.GetIntersection(mAbsoluteClipArea);
+
+		for (auto child : mChilds)
+			child->CheckClipping(newClipArea);
 	}
 
 	void UIScrollArea::UpdateTransparency()
@@ -661,8 +697,7 @@ namespace o2
 		mLastHorScrollChangeTime = o2Time.GetApplicationTime();
 
 		Vec2F delta(Math::Clamp(value, mScrollRange.left, mScrollRange.right) - mScrollPos.x, 0.0f);
-		mScrollPos += delta;
-		UpdateLayout();
+		MoveScrollPosition(delta);
 
 		onScrolled(mScrollPos);
 		OnScrolled();
@@ -682,8 +717,7 @@ namespace o2
 		mLastVerScrollChangeTime = o2Time.GetApplicationTime();
 
 		Vec2F delta(0.0f, Math::Clamp(value, mScrollRange.bottom, mScrollRange.top) - mScrollPos.y);
-		mScrollPos += delta;
-		UpdateLayout();
+		MoveScrollPosition(delta);
 
 		onScrolled(mScrollPos);
 		OnScrolled();

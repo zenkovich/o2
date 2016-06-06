@@ -92,7 +92,7 @@ namespace o2
 		void UpdateTreeLayout(float dt);
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Returns current height with children, if straight is false - don't using coefficients
 		float GetCurrentHeight(bool straight = false) const;
@@ -384,7 +384,7 @@ namespace o2
 		void OnUnfocused();
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Calculates scroll area
 		void CalculateScrollArea();

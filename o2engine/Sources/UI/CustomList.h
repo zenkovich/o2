@@ -171,7 +171,7 @@ namespace o2
 		void UpdateControls(float dt);
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);

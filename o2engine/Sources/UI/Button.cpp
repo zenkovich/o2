@@ -29,6 +29,7 @@ namespace o2
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
 		RetargetStatesAnimations();
+
 		return *this;
 	} 
 

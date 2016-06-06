@@ -42,18 +42,18 @@ namespace o2
 	// Static function delegate
 	// ------------------------
 	template<typename _res_type, typename ... _args>
-	class FunctionPtr <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	class FunctionPtr <_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
 	{
 		_res_type(*mFunctionPtr)(_args ... args); // Pointer to static function
 
 	public:
 		// Constructor
-		FunctionPtr(_res_type(*functionPtr)(_args ... args)) :
+		FunctionPtr(_res_type(*functionPtr)(_args ... args)):
 			mFunctionPtr(functionPtr)
 		{}
 
 		// Copy-constructor
-		FunctionPtr(const FunctionPtr& other) :
+		FunctionPtr(const FunctionPtr& other):
 			mFunctionPtr(other.mFunctionPtr)
 		{}
 
@@ -232,7 +232,7 @@ namespace o2
 	// Shared lambda delegate
 	// ----------------------
 	template<typename _res_type, typename ... _args>
-	class SharedLambda <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	class SharedLambda <_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
 	{
 		// ------------------------
 		// Lambda invoker interface
@@ -250,13 +250,13 @@ namespace o2
 		// Template lambda invoker
 		// -----------------------
 		template<typename _lambda_type>
-		struct LambdaInvoker : ILambdaInvoker
+		struct LambdaInvoker: ILambdaInvoker
 		{
 			_lambda_type mLambda;     // Lambda object (anonymous functor)
 			int          mReferences; // References count to this
 
 			// Constructor
-			LambdaInvoker(const _lambda_type& lambda) :
+			LambdaInvoker(const _lambda_type& lambda):
 				mLambda(lambda), mReferences(1)
 			{}
 
@@ -290,13 +290,12 @@ namespace o2
 	public:
 		// Constructor
 		template<typename _lambda_type>
-		SharedLambda(const _lambda_type& lambda) :
+		SharedLambda(const _lambda_type& lambda):
 			mInvokerPtr(new LambdaInvoker<_lambda_type>(lambda))
-		{
-		}
+		{}
 
 		// Copy-constructor
-		SharedLambda(const SharedLambda& other) :
+		SharedLambda(const SharedLambda& other):
 			mInvokerPtr(other.mInvokerPtr)
 		{
 			mInvokerPtr->IncRef();
@@ -365,7 +364,7 @@ namespace o2
 	// Combined delegate. Can contain many other functors
 	// --------------------------------------------------
 	template<typename _res_type, typename ... _args>
-	class Function <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	class Function <_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
 	{
 		typedef std::vector<IFunction*> FunctionsVec;
 
@@ -374,8 +373,7 @@ namespace o2
 	public:
 		// Constructor
 		Function()
-		{
-		}
+		{}
 
 		// Copy-constructor
 		Function(const Function& other)
@@ -570,7 +568,7 @@ namespace o2
 			Clear();
 			Add(other);
 			return *this;
-		}		
+		}
 
 		// Equal operator
 		bool operator==(const Function& other) const

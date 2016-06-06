@@ -141,7 +141,7 @@ namespace o2
 		void OnVisibleChanged();
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Calls when item was selected in list
 		void OnItemSelected();

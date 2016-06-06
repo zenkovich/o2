@@ -101,7 +101,7 @@ namespace o2
 
 	protected:
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Calls when layer added and updates drawing sequence
 		void OnLayerAdded(UIWidgetLayer* layer);

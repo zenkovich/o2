@@ -105,7 +105,7 @@ namespace o2
 
 	protected:
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Calls when child widget was added
 		void OnChildAdded(UIWidget* child);

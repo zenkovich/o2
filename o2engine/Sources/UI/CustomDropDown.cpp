@@ -55,7 +55,7 @@ namespace o2
 
 	void UICustomDropDown::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		UIWidget::Update(dt);
@@ -85,18 +85,19 @@ namespace o2
 			o2Render.DisableScissorTest();
 		}
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	void UICustomDropDown::Expand()
 	{
-		float itemHeight = mItemsList->GetItemSample()->layout.height;
-		int itemsVisible = Math::Min(mMaxListItems, mItemsList->GetItemsCount());
+		float itemHeight   = mItemsList->GetItemSample()->layout.height;
+		int itemsVisible   = Math::Min(mMaxListItems, mItemsList->GetItemsCount());
 		RectF listViewArea = mItemsList->mAbsoluteViewArea;
-		RectF listAbsRect = mItemsList->layout.mAbsoluteRect;
+		RectF listAbsRect  = mItemsList->layout.mAbsoluteRect;
+
 		RectF border(listViewArea.left - listAbsRect.left, listViewArea.bottom - listAbsRect.bottom,
 					 listAbsRect.right - listViewArea.right, listAbsRect.top - listViewArea.top);
+
 		mItemsList->layout.height = itemHeight*(float)itemsVisible + border.bottom + border.top;
 
 		auto openedState = state["opened"];
@@ -280,15 +281,10 @@ namespace o2
 		interactable = mResVisible;
 	}
 
-	void UICustomDropDown::UpdateLayout(bool forcible /*= false*/)
+	void UICustomDropDown::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
@@ -296,8 +292,8 @@ namespace o2
 		mChildsAbsRect = layout.mAbsoluteRect;
 		mAbsoluteClip = mClipLayout.Calculate(layout.mAbsoluteRect);
 
-		for (auto child : mChilds)
-			child->UpdateLayout();
+		if (withChildren)
+			UpdateChildrenLayouts();
 
 		mItemsList->UpdateLayout();
 	}

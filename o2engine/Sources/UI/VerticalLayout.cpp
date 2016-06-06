@@ -147,25 +147,21 @@ namespace o2
 		return mFitByChildren;
 	}
 
-	void UIVerticalLayout::UpdateLayout(bool forcible /*= false*/)
+	void UIVerticalLayout::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
-		mChildsAbsRect = layout.mAbsoluteRect;
+		if (withChildren)
+		{
+			RearrangeChilds();
 
-		RearrangeChilds();
-		
-		if (mFitByChildren)
-			ExpandSizeByChilds();
+			if (mFitByChildren)
+				ExpandSizeByChilds();
+		}
 	}
 
 	void UIVerticalLayout::OnChildAdded(UIWidget* child)
@@ -409,6 +405,8 @@ namespace o2
 
 		if (mExpandHeight)
 			szDelta.y = 0;
+
+		szDelta *= Vec2F(Math::Sign(layout.mLocalRect.Width()), Math::Sign(layout.mLocalRect.Height()));
 
 		if (szDelta != Vec2F())
 		{

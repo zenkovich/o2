@@ -15,7 +15,7 @@ namespace o2
 	}
 
 	UIWidget::UIWidget(const UIWidget& other):
-		mName(other.mName), layout(other.layout),  mTransparency(other.mTransparency), mVisible(other.mVisible), 
+		mName(other.mName), layout(other.layout), mTransparency(other.mTransparency), mVisible(other.mVisible),
 		mFullyDisabled(!other.mVisible)
 	{
 		layout.mOwner = this;
@@ -99,8 +99,6 @@ namespace o2
 			OnLayerAdded(newLayer);
 		}
 
-		UpdateLayersDrawingSequence();
-
 		for (auto child : other.mChilds)
 		{
 			auto cloned = child->Clone();
@@ -114,6 +112,7 @@ namespace o2
 			AddState(newState);
 		}
 
+		UpdateLayersDrawingSequence();
 		UpdateTransparency();
 		UpdateVisibility();
 		UpdateLayout();
@@ -123,7 +122,7 @@ namespace o2
 
 	void UIWidget::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		for (auto layer : mLayers)
@@ -138,7 +137,7 @@ namespace o2
 
 	void UIWidget::Draw()
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -152,12 +151,14 @@ namespace o2
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	void UIWidget::DrawDebugFrame()
 	{
+		if (!UI_DEBUG && !o2Input.IsKeyDown(VK_F2))
+			return;
+
 		static int colr = 0;
 		static int lastFrame = 0;
 
@@ -352,7 +353,7 @@ namespace o2
 		{
 			child->mParent = nullptr;
 			OnChildRemoved(child);
-			
+
 			if (release)
 				delete child;
 		}
@@ -377,7 +378,7 @@ namespace o2
 	}
 
 	UIWidgetLayer* UIWidget::AddLayer(const String& name, IRectDrawable* drawable,
-										  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+									  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		if (Math::Equals(depth, 0.0f))
 			depth = (float)mDrawingLayers.Count();
@@ -480,7 +481,7 @@ namespace o2
 			mVisibleState = state;
 			mVisibleState->SetStateForcible(mVisible);
 
-			mVisibleState->onStateBecomesTrue += [&]() { 
+			mVisibleState->onStateBecomesTrue += [&]() {
 				mFullyDisabled = false;
 			};
 
@@ -656,26 +657,57 @@ namespace o2
 		return mDrawingScissorRect.IsInside(point) && layout.mAbsoluteRect.IsInside(point);
 	}
 
-	void UIWidget::UpdateLayout(bool forcible /*= false*/)
+	bool UIWidget::CheckIsLayoutDrivenByParent(bool forcibleLayout)
 	{
-		if (mFullyDisabled)
-			return;
-
-		if (layout.mDrivenByParent && !forcible)
+		if (layout.mDrivenByParent && !forcibleLayout)
 		{
 			if (mParent)
 				mParent->UpdateLayout();
 
-			return;
+			return true;
 		}
+
+		return false;
+	}
+
+	void UIWidget::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	{
+		if (mFullyDisabled)
+			return;
+
+		if (CheckIsLayoutDrivenByParent(forcible))
+			return;
 
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
-		mChildsAbsRect = layout.mAbsoluteRect;
+		if (withChildren)
+			UpdateChildrenLayouts(forcible);
+	}
 
+	void UIWidget::UpdateChildrenLayouts(bool forcible /*= false*/)
+	{
 		for (auto child : mChilds)
 			child->UpdateLayout(forcible);
+	}
+
+	void UIWidget::UpdateBoundsWithChilds()
+	{
+		mBoundsWithChilds = mBounds;
+
+		for (auto child : mChilds)
+			mBoundsWithChilds.Expand(child->mBoundsWithChilds);
+
+		if (mParent)
+			mParent->UpdateBoundsWithChilds();
+	}
+
+	void UIWidget::CheckClipping(const RectF& clipArea)
+	{
+		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
+
+		for (auto child : mChilds)
+			child->CheckClipping(clipArea);
 	}
 
 	void UIWidget::UpdateTransparency()
@@ -739,30 +771,15 @@ namespace o2
 			parentPos = mParent->mChildsAbsRect.LeftBottom();
 		}
 
-		layout.mLocalRect.left = parentSize.x*layout.mAnchorMin.x + layout.mOffsetMin.x;
-		layout.mLocalRect.right = parentSize.x*layout.mAnchorMax.x + layout.mOffsetMax.x;
+		layout.mLocalRect.left   = parentSize.x*layout.mAnchorMin.x + layout.mOffsetMin.x;
+		layout.mLocalRect.right  = parentSize.x*layout.mAnchorMax.x + layout.mOffsetMax.x;
 		layout.mLocalRect.bottom = parentSize.y*layout.mAnchorMin.y + layout.mOffsetMin.y;
-		layout.mLocalRect.top = parentSize.y*layout.mAnchorMax.y + layout.mOffsetMax.y;
+		layout.mLocalRect.top    = parentSize.y*layout.mAnchorMax.y + layout.mOffsetMax.y;
 
-		Vec2F resSize = layout.mLocalRect.Size();
-		Vec2F clampSize(Math::Clamp(resSize.x, layout.mMinSize.x, layout.mMaxSize.x),
-						Math::Clamp(resSize.y, layout.mMinSize.y, layout.mMaxSize.y));
-		Vec2F szDelta = clampSize - resSize;
-
-		if (szDelta != Vec2F())
-		{
-			layout.mLocalRect.left -= szDelta.x*layout.mPivot.x;
-			layout.mLocalRect.right += szDelta.x*(1.0f - layout.mPivot.x);
-			layout.mLocalRect.bottom -= szDelta.y*layout.mPivot.y;
-			layout.mLocalRect.top += szDelta.y*(1.0f - layout.mPivot.y);
-		}
-
-		layout.mLocalRect.left = Math::Floor(layout.mLocalRect.left);
-		layout.mLocalRect.right = Math::Floor(layout.mLocalRect.right);
-		layout.mLocalRect.bottom = Math::Floor(layout.mLocalRect.bottom);
-		layout.mLocalRect.top = Math::Floor(layout.mLocalRect.top);
+		layout.mCheckMinMaxFunc();
 
 		layout.mAbsoluteRect = layout.mLocalRect + parentPos;
+		mChildsAbsRect = layout.mAbsoluteRect;
 
 		if (lastAbsRect != layout.mAbsoluteRect)
 			onLayoutChanged();
@@ -772,6 +789,19 @@ namespace o2
 	{
 		for (auto layer : mLayers)
 			layer->UpdateLayout();
+
+		UpdateBounds();
+	}
+
+	void UIWidget::UpdateBounds()
+	{
+		mBounds = layout.mAbsoluteRect;
+
+		for (auto layer : mDrawingLayers)
+			mBounds.Expand(layer->GetRect());
+
+		if (mChilds.IsEmpty())
+			UpdateBoundsWithChilds();
 	}
 
 	void UIWidget::UpdateLayersDrawingSequence()

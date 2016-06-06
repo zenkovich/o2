@@ -50,7 +50,7 @@ namespace o2
 
 	void UIToggle::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		UIWidget::Update(dt);

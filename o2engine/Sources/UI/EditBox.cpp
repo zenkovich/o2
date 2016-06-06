@@ -25,8 +25,8 @@ namespace o2
 
 	UIEditBox::UIEditBox(const UIEditBox& other):
 		UIScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
-		mMaxLinesCount(other.mMaxLinesCount), mText(other.mText), mLastText(other.mText), 
-		mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor), 
+		mMaxLinesCount(other.mMaxLinesCount), mText(other.mText), mLastText(other.mText),
+		mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
 		mCaretBlinkDelay(other.mCaretBlinkDelay), DrawableCursorEventsListener(this)
 	{
 		mSelectionMesh = mnew Mesh();
@@ -83,7 +83,7 @@ namespace o2
 
 	void UIEditBox::Draw()
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -113,13 +113,12 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	void UIEditBox::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		UIScrollArea::Update(dt);
@@ -410,8 +409,6 @@ namespace o2
 
 		if (!mMultiLine)
 			Unfocus();
-
-		onUnfocused();
 	}
 
 	void UIEditBox::OnCursorPressed(const Input::Cursor& cursor)
@@ -732,18 +729,10 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::UpdateLayout(bool forcible /*= false*/)
+	void UIEditBox::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (mFullyDisabled)
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
-			return;
-		}
 
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
@@ -756,8 +745,8 @@ namespace o2
 
 		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
 
-		for (auto child : mChilds)
-			child->UpdateLayout();
+		if (withChildren)
+			UpdateChildrenLayouts();
 
 		UpdateScrollParams();
 
@@ -935,7 +924,7 @@ namespace o2
 
 				if (ls && rs && ts && bs)
 				{
-					if (point.x > (symb.mFrame.left + symb.mFrame.right)*0.5f)
+					if (point.x >(symb.mFrame.left + symb.mFrame.right)*0.5f)
 						return line.mLineBegSymbol + idx + 1;
 					else
 						return line.mLineBegSymbol + idx;
@@ -1234,11 +1223,11 @@ namespace o2
 
 		if (key == VK_UP)
 			MoveCaret(GetTextCaretPosition(GetTextCaretPosition(mSelectionEnd) +
-										   Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetHeight())*1.5f)), selecting);
+					  Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetHeight())*1.5f)), selecting);
 
 		if (key == VK_DOWN)
 			MoveCaret(GetTextCaretPosition(GetTextCaretPosition(mSelectionEnd) -
-										   Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetHeight())*0.5f)), selecting);
+					  Vec2F(0.0f, mTextDrawable->GetFont()->GetLineHeightPx(mTextDrawable->GetHeight())*0.5f)), selecting);
 
 		if (key == VK_END)
 		{
@@ -1280,12 +1269,12 @@ namespace o2
 
 		if (key == 'C')
 			Clipboard::SetText(mText.SubStr(Math::Min(mSelectionBegin, mSelectionEnd),
-											Math::Max(mSelectionBegin, mSelectionEnd)));
+							   Math::Max(mSelectionBegin, mSelectionEnd)));
 
 		if (key == 'X')
 		{
 			Clipboard::SetText(mText.SubStr(Math::Min(mSelectionBegin, mSelectionEnd),
-											Math::Max(mSelectionBegin, mSelectionEnd)));
+							   Math::Max(mSelectionBegin, mSelectionEnd)));
 
 			if (mSelectionBegin != mSelectionEnd)
 			{

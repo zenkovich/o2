@@ -5,7 +5,7 @@
 namespace o2
 {
 	UILongList::UILongList():
-		UIScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()), 
+		UIScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()),
 		mSelectionLayout(Layout::BothStretch())
 	{
 		mItemSample = mnew UIWidget();
@@ -62,7 +62,7 @@ namespace o2
 
 	void UILongList::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		UIScrollArea::Update(dt);
@@ -84,7 +84,7 @@ namespace o2
 
 	void UILongList::Draw()
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -111,8 +111,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	void UILongList::SetItemSample(UIWidget* sample)
@@ -212,19 +211,14 @@ namespace o2
 	void UILongList::UpdateControls(float dt)
 	{}
 
-	void UILongList::UpdateLayout(bool forcible /*= false*/)
+	void UILongList::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		UpdateVisibleItems();
 
-		UIScrollArea::UpdateLayout(forcible);
+		UIScrollArea::UpdateLayout(forcible, withChildren);
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);

@@ -42,6 +42,9 @@ namespace o2
 
 	void UIVerticalProgress::Update(float dt)
 	{
+		if (mFullyDisabled || mIsClipped)
+			return;
+
 		UIWidget::Update(dt);
 
 		const float threshold = 0.01f;
@@ -222,24 +225,17 @@ namespace o2
 		interactable = mResVisible;
 	}
 
-	void UIVerticalProgress::UpdateLayout(bool forcible /*= false*/)
+	void UIVerticalProgress::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		RecalculateAbsRect();
 		UpdateProgressLayersLayouts();
 		UpdateLayersLayouts();
 
-		mChildsAbsRect = layout.mAbsoluteRect;
-
-		for (auto child : mChilds)
-			child->UpdateLayout();
+		if (withChildren)
+			UpdateChildrenLayouts();
 	}
 
 	void UIVerticalProgress::UpdateProgressLayersLayouts()

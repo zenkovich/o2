@@ -159,24 +159,18 @@ namespace o2
 		return mFitByChildren;
 	}
 
-	void UIGridLayout::UpdateLayout(bool forcible /*= false*/)
+	void UIGridLayout::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
-		mChildsAbsRect = layout.mAbsoluteRect;
+		if (withChildren)
+			RearrangeChilds();
 
-		RearrangeChilds();
-
-		if (mFitByChildren)
+		if (mFitByChildren && withChildren)
 			ExpandSizeByChilds();
 	}
 

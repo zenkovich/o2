@@ -231,6 +231,10 @@ namespace o2
 		bool           mVisible = true;         // Visibility of widget. Uses state 'visible'
 		bool           mResVisible = true;      // Result visibility of widget. Depends on this visibility and parent result visibility
 		bool           mFullyDisabled = false;  // True, if widget is not visible and visible state is fully false
+		bool           mIsClipped = false;      // Is widget fully clipped by some scissors
+
+		RectF          mBounds;                 // Widget bounds by drawing layers
+		RectF          mBoundsWithChilds;       // Widget with childs bounds
 
 	protected:
 		// Draws debug frame by mAbsoluteRect
@@ -242,8 +246,23 @@ namespace o2
 		// Calls when widget was deselected
 		virtual void OnUnfocused();
 
+		// Checks is this layout driven by parent and calls UpdateLayout in parent if needed
+		virtual bool CheckIsLayoutDrivenByParent(bool forcibleLayout);
+
 		// Updates layout
-		virtual void UpdateLayout(bool forcible = false);
+		virtual void UpdateLayout(bool forcible = false, bool withChildren = true);
+
+		// Updates children layouts
+		virtual void UpdateChildrenLayouts(bool forcible = false);
+
+		// Updates bounds by drawing layers
+		virtual void UpdateBounds();
+
+		// Updates bound with children
+		virtual void UpdateBoundsWithChilds();
+
+		// Checks widget clipping by area
+		virtual void CheckClipping(const RectF& clipArea);
 
 		// Updates transparency for this and children widgets
 		virtual void UpdateTransparency();

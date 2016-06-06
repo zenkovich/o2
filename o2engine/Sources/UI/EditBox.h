@@ -229,7 +229,7 @@ namespace o2
 		void UpdateScrollParams();
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Updates transparency for this and children widgets
 		void UpdateTransparency();

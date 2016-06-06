@@ -217,6 +217,11 @@ namespace o2
 		return mInteractableArea.IsInside(point);
 	}
 	
+	const o2::RectF& UIWidgetLayer::GetRect() const
+	{
+		return mAbsolutePosition;
+	}
+
 	void UIWidgetLayer::OnDeserialized(const DataNode& node)
 	{
 		for (auto child : mChilds)

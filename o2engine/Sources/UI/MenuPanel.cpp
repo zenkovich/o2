@@ -18,11 +18,11 @@ namespace o2
 		mLayout = mnew UIHorizontalLayout();
 		AddChild(mLayout);
 
-		mLayout->expandHeight = true;
-		mLayout->expandWidth = false;
-		mLayout->baseCorner = BaseCorner::LeftTop;
+		mLayout->expandHeight  = true;
+		mLayout->expandWidth   = false;
+		mLayout->baseCorner    = BaseCorner::LeftTop;
 		mLayout->fitByChildren = true;
-		mLayout->layout = UIWidgetLayout::BothStretch();
+		mLayout->layout        = UIWidgetLayout::BothStretch();
 	}
 
 	UIMenuPanel::UIMenuPanel(const UIMenuPanel& other):
@@ -63,7 +63,7 @@ namespace o2
 
 	void UIMenuPanel::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		UIWidget::Update(dt);
@@ -116,8 +116,7 @@ namespace o2
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	UIWidget* UIMenuPanel::AddItem(const Item& item)
@@ -297,7 +296,7 @@ namespace o2
 	UIWidget* UIMenuPanel::CreateItem(const Item& item)
 	{
 		UIWidget* newItem = mItemSample->Clone();
-		newItem->name = (WString)"Menu Item " + item.text;
+		newItem->name = (WString)"Menu Item:" + item.text;
 
 		if (auto textLayer = newItem->GetLayerDrawable<Text>("text"))
 			textLayer->text = item.text;

@@ -208,9 +208,9 @@ namespace o2
 		return true;
 	}
 
-	void UIWindow::UpdateLayout(bool forcible /*= false*/)
+	void UIWindow::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		UIScrollArea::UpdateLayout(forcible);
+		UIScrollArea::UpdateLayout(forcible, withChildren);
 
 		if (!layout.mDrivenByParent && !forcible)
 		{

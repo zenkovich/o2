@@ -99,7 +99,7 @@ namespace o2
 
 	protected:
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Updates bar, back and handle layers layout by value
 		void UpdateProgressLayersLayouts();

@@ -79,11 +79,11 @@ namespace o2
 
 	void UITreeNode::Draw()
 	{
-		if (!o2Render.IsScissorTestEnabled() || layout.mAbsoluteRect.IsIntersects((RectF)o2Render.GetScissorRect()))
-		{
-			for (auto layer : mDrawingLayers)
-				layer->Draw();
-		}
+		if (mFullyDisabled || mIsClipped)
+			return;
+
+		for (auto layer : mDrawingLayers)
+			layer->Draw();
 
 		//if (o2Input.IsKeyDown(VK_F1))
 		//	o2Debug.DrawText(layout.absRect->Center(), (String)mIsSelected);
@@ -97,7 +97,7 @@ namespace o2
 		if (clipping)
 		{
 			o2Render.EnableScissorTest(RectF(-o2Render.GetResolution().x*0.5f, layout.mAbsoluteRect.top - GetCurrentHeight(),
-									   o2Render.GetResolution().x*0.5f, layout.mAbsoluteRect.top));
+									         o2Render.GetResolution().x*0.5f, layout.mAbsoluteRect.top));
 		}
 
 		for (auto child : mChilds)
@@ -116,8 +116,7 @@ namespace o2
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	void UITreeNode::Update(float dt)
@@ -237,7 +236,7 @@ namespace o2
 
 		UIButton* expandBtn = (UIButton*)GetChild("expandBtn");
 		if (expandBtn)
-			expandBtn->SetVisible(objects.Count() > 0);
+			expandBtn->SetVisibleForcible(objects.Count() > 0);
 
 		if (!withChilds || !IsExpanded())
 			return;
@@ -359,7 +358,7 @@ namespace o2
 		mOwnerTree->mNeedUpdateLayout = true;
 	}
 
-	void UITreeNode::UpdateLayout(bool forcible /*= false*/)
+	void UITreeNode::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
 		if (!forcible)
 		{
@@ -406,21 +405,25 @@ namespace o2
 
 		mChildsAbsRect = layout.mAbsoluteRect;
 
-		for (auto child : mChilds)
+		if (withChildren)
 		{
-			bool isTreeNode = child->GetType() == UITreeNode::type;
-			if (isTreeNode)
+			bool childNodesClipped = false;
+			for (auto child : mChilds)
 			{
-				mChildsAbsRect.top    += insertOffs;
-				mChildsAbsRect.bottom += insertOffs;
-			}
+				bool isTreeNode = child->GetType() == UITreeNode::type;
+				if (isTreeNode)
+				{
+					mChildsAbsRect.top    += insertOffs;
+					mChildsAbsRect.bottom += insertOffs;
+				}
 
-			child->UpdateLayout(true);
+				child->UpdateLayout(true);
 
-			if (isTreeNode)
-			{
-				mChildsAbsRect.top    -= insertOffs;
-				mChildsAbsRect.bottom -= insertOffs;
+				if (isTreeNode)
+				{
+					mChildsAbsRect.top    -= insertOffs;
+					mChildsAbsRect.bottom -= insertOffs;
+				}
 			}
 		}
 	}
@@ -567,7 +570,7 @@ namespace o2
 
 	void UITree::Draw()
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		if (mIsDraggingNodes)
@@ -606,13 +609,12 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 	}
 
 	void UITree::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled || mIsClipped)
 			return;
 
 		if (mNeedUpdateView)
@@ -1131,15 +1133,10 @@ namespace o2
 		onUnfocused();
 	}
 
-	void UITree::UpdateLayout(bool forcible /*= false*/)
+	void UITree::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		float currentHeight = GetCurrentHeight();
 
@@ -1167,8 +1164,8 @@ namespace o2
 
 		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
 
-		for (auto child : mChilds)
-			child->UpdateLayout(true);
+		if (withChildren)
+			UpdateChildrenLayouts(true);
 
 		UpdateScrollParams();
 

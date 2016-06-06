@@ -113,7 +113,7 @@ namespace o2
 
 	protected:
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Calls when child widget was added
 		void OnChildAdded(UIWidget* child);
@@ -121,7 +121,7 @@ namespace o2
 		// Calls when child widget was removed
 		void OnChildRemoved(UIWidget* child);
 
-		// Invokes reque function for childs arranging
+		// Invokes required function for childs arranging
 		void RearrangeChilds();
 
 		// Arrange childs from left top

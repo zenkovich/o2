@@ -41,6 +41,7 @@ namespace o2
 		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
 		mItemSample = mnew UIContextMenuItem();
+		mItemSample->layout.minHeight = 20.0f;
 		mItemSample->AddLayer("icon", nullptr, Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(10, 0), Vec2F(10, 0)));
 		mItemSample->AddLayer("subIcon", nullptr, Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-10, 0), Vec2F(-10, 0)));
 		mItemSample->AddLayer("caption", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
@@ -55,11 +56,11 @@ namespace o2
 		mItemsLayout = mnew UIVerticalLayout();
 		AddChild(mItemsLayout);
 
-		mItemsLayout->expandHeight = false;
-		mItemsLayout->expandWidth = true;
-		mItemsLayout->baseCorner = BaseCorner::LeftTop;
+		mItemsLayout->expandHeight  = false;
+		mItemsLayout->expandWidth   = true;
+		mItemsLayout->baseCorner    = BaseCorner::LeftTop;
 		mItemsLayout->fitByChildren = true;
-		mItemsLayout->layout = UIWidgetLayout::BothStretch();
+		mItemsLayout->layout        = UIWidgetLayout::BothStretch();
 	}
 
 	UIContextMenu::UIContextMenu(Vector<Item> items):
@@ -96,12 +97,12 @@ namespace o2
 		delete mSelectionDrawable;
 		delete mSeparatorSample;
 
-		mItemSample = other.mItemSample->Clone();
-		mSeparatorSample = other.mSeparatorSample->Clone();
+		mItemSample        = other.mItemSample->Clone();
+		mSeparatorSample   = other.mSeparatorSample->Clone();
 		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mSelectionLayout = other.mSelectionLayout;
-		mItemsLayout = FindChild<UIVerticalLayout>();
-		mMaxVisibleItems = other.mMaxVisibleItems;
+		mSelectionLayout   = other.mSelectionLayout;
+		mItemsLayout       = FindChild<UIVerticalLayout>();
+		mMaxVisibleItems   = other.mMaxVisibleItems;
 
 		mFitSizeMin = other.mFitSizeMin;
 
@@ -169,16 +170,14 @@ namespace o2
 			mSelectionDrawable->SetEnabled(true);
 			*hoverState = false;
 		}
-		else
-			mSelectionDrawable->SetEnabled(false);
+		else mSelectionDrawable->SetEnabled(false);
 
+		UIWidget::Show();
 		FitSize();
 		FitPosition();
 		UpdateLayout();
 
 		mShownAtFrame = true;
-
-		UIWidget::Show();
 	}
 
 	void UIContextMenu::Show(const Vec2F& position /*= o2Input.GetCursorPos()*/)
@@ -556,13 +555,13 @@ namespace o2
 
 	UIContextMenu* UIContextMenu::mVisibleContextMenu = nullptr;
 
-	void UIContextMenu::UpdateLayout(bool forcible /*= false*/)
+	void UIContextMenu::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		layout.mLocalRect.left = layout.mOffsetMin.x;
-		layout.mLocalRect.right = layout.mOffsetMax.x;
+		layout.mLocalRect.left   = layout.mOffsetMin.x;
+		layout.mLocalRect.right  = layout.mOffsetMax.x;
 		layout.mLocalRect.bottom = layout.mOffsetMin.y;
-		layout.mLocalRect.top = layout.mOffsetMax.y;
-		layout.mAbsoluteRect = layout.mLocalRect;
+		layout.mLocalRect.top    = layout.mOffsetMax.y;
+		layout.mAbsoluteRect     = layout.mLocalRect;
 
 		UpdateLayersLayouts();
 
@@ -572,8 +571,8 @@ namespace o2
 
 		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
 
-		for (auto child : mChilds)
-			child->UpdateLayout(true);
+		if (withChildren)
+			UpdateChildrenLayouts(true);
 
 		UpdateScrollParams();
 
@@ -604,7 +603,7 @@ namespace o2
 			if (auto shortcutCaption = child->GetLayerDrawable<Text>("shortcut"))
 				maxShortcut = Math::Max(shortcutCaption->GetRealSize().x, maxShortcut);
 
-			size.y += child->layout.height;
+			size.y += child->layout.minHeight;
 
 			i++;
 			if (i == mMaxVisibleItems)
@@ -676,8 +675,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
-			DrawDebugFrame();
+		DrawDebugFrame();
 
 		if (mChildContextMenu)
 			mChildContextMenu->SpecialDraw();

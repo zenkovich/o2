@@ -137,7 +137,22 @@ namespace o2
 		void CheckScrollBarsVisibility();
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
+		// Moves scroll position and updates children widgets clipping and layout
+		void MoveScrollPosition(const Vec2F& delta);
+
+		// Moves widget's to delta and checks for clipping
+		void MoveWidgetAndCheckClipping(UIWidget* widget, const Vec2F& delta);
+
+		// Updates scrollbars layouts
+		void UpdateScrollBarsLayout();
+
+		// Checks children clippings
+		void CheckChildrenClipping();
+
+		// Checks widget clipping by area
+		void CheckClipping(const RectF& clipArea);
 
 		// Updates transparency for this and children widgets
 		void UpdateTransparency();

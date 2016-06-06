@@ -94,6 +94,9 @@ namespace o2
 		// Returns true if layer is under point
 		bool IsUnderPoint(const Vec2F& point);
 
+		// Returns layout rectangle
+		const RectF& GetRect() const;
+
 		// Returns child layer with type
 		template<typename _type>
 		_type* FindLayer() const;

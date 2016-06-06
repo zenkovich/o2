@@ -50,6 +50,9 @@ namespace o2
 
 	void UIHorizontalScrollBar::Update(float dt)
 	{
+		if (mFullyDisabled || mIsClipped)
+			return;
+
 		UIWidget::Update(dt);
 
 		const float threshold = 0.01f;
@@ -282,24 +285,17 @@ namespace o2
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIHorizontalScrollBar::UpdateLayout(bool forcible /*= false*/)
+	void UIHorizontalScrollBar::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		RecalculateAbsRect();
 		UpdateProgressLayersLayouts();
 		UpdateLayersLayouts();
 
-		mChildsAbsRect = layout.mAbsoluteRect;
-
-		for (auto child : mChilds)
-			child->UpdateLayout();
+		if (withChildren)
+			UpdateChildrenLayouts();
 	}
 
 	void UIHorizontalScrollBar::UpdateProgressLayersLayouts()

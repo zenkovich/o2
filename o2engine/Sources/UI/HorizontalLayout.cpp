@@ -146,25 +146,21 @@ namespace o2
 		return mFitByChildren;
 	}
 
-	void UIHorizontalLayout::UpdateLayout(bool forcible /*= false*/)
+	void UIHorizontalLayout::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (layout.mDrivenByParent && !forcible)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
+		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
-		}
 
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
-		mChildsAbsRect = layout.mAbsoluteRect;
+		if (withChildren)
+		{
+			RearrangeChilds();
 
-		RearrangeChilds();
-
-		if (mFitByChildren)
-			ExpandSizeByChilds();
+			if (mFitByChildren)
+				ExpandSizeByChilds();
+		}
 	}
 
 	void UIHorizontalLayout::OnChildAdded(UIWidget* child)
@@ -396,10 +392,10 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			childrenRect.left = Math::Min(childrenRect.left, child->layout.mLocalRect.left);
-			childrenRect.right = Math::Max(childrenRect.right, child->layout.mLocalRect.right);
+			childrenRect.left   = Math::Min(childrenRect.left, child->layout.mLocalRect.left);
+			childrenRect.right  = Math::Max(childrenRect.right, child->layout.mLocalRect.right);
 			childrenRect.bottom = Math::Min(childrenRect.bottom, child->layout.mLocalRect.bottom);
-			childrenRect.top = Math::Max(childrenRect.top, child->layout.mLocalRect.top);
+			childrenRect.top    = Math::Max(childrenRect.top, child->layout.mLocalRect.top);
 		}
 
 		Vec2F szDelta = (childrenRect.Size() + mBorder.LeftBottom() + mBorder.RightTop()) - mChildsAbsRect.Size();
@@ -409,6 +405,8 @@ namespace o2
 
 		if (mExpandHeight)
 			szDelta.y = 0;
+
+		szDelta *= Vec2F(Math::Sign(layout.mLocalRect.Width()), Math::Sign(layout.mLocalRect.Height()));
 
 		if (szDelta != Vec2F())
 		{

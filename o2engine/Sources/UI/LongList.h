@@ -107,7 +107,7 @@ namespace o2
 		void UpdateControls(float dt);
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Updates visible items
 		void UpdateVisibleItems();

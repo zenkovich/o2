@@ -174,33 +174,33 @@ namespace o2
 		SERIALIZABLE(UIContextMenu);
 
 	protected:
-		static UIContextMenu* mVisibleContextMenu;        // Current visible context menu
-		const float           mOpenSubMenuDelay = 0.8f;
+		static UIContextMenu* mVisibleContextMenu;           // Current visible context menu
+		const float           mOpenSubMenuDelay = 0.8f;      // Sub menu opengin delay whe cursor hover it
 
-		float              mFitSizeMin = 40.0f;           // Minimal fitting size @SERIALIZABLE
-		int                mMaxVisibleItems = 10;         // Maximum visible items @SERIALIZABLE
+		float                 mFitSizeMin = 40.0f;           // Minimal fitting size @SERIALIZABLE
+		int                   mMaxVisibleItems = 10;         // Maximum visible items @SERIALIZABLE
 
-		UIContextMenu*     mParentContextMenu = nullptr;  // Parent visible context menu
-		UIContextMenu*     mChildContextMenu = nullptr;	  // Child visible context menu
+		UIContextMenu*        mParentContextMenu = nullptr;  // Parent visible context menu
+		UIContextMenu*        mChildContextMenu = nullptr;	 // Child visible context menu
 
-		UIVerticalLayout*  mItemsLayout = nullptr;        // Items layout
-		UIContextMenuItem* mItemSample = nullptr;         // Item sample @SERIALIZABLE
-		UIWidget*          mSeparatorSample = nullptr;    // Items separator sample @SERIALIZABLE
-		Sprite*            mSelectionDrawable = nullptr;  // Selection sprite @SERIALIZABLE
-		Layout             mSelectionLayout;              // Selection layout, result selection area depends on selected item @SERIALIZABLE
+		UIVerticalLayout*     mItemsLayout = nullptr;        // Items layout
+		UIContextMenuItem*    mItemSample = nullptr;         // Item sample @SERIALIZABLE
+		UIWidget*             mSeparatorSample = nullptr;    // Items separator sample @SERIALIZABLE
+		Sprite*               mSelectionDrawable = nullptr;  // Selection sprite @SERIALIZABLE
+		Layout                mSelectionLayout;              // Selection layout, result selection area depends on selected item @SERIALIZABLE
 
-		RectF              mCurrentSelectionRect;         // Current selection rectangle (for smoothing)
-		RectF              mTargetSelectionRect;          // Target selection rectangle (over selected item)
-		Vec2F              mLastSelectCheckCursor;        // Last cursor position on selection check
+		RectF                 mCurrentSelectionRect;         // Current selection rectangle (for smoothing)
+		RectF                 mTargetSelectionRect;          // Target selection rectangle (over selected item)
+		Vec2F                 mLastSelectCheckCursor;        // Last cursor position on selection check
 
-		UIContextMenuItem* mSelectedItem = nullptr;       // Index of selected item
-		float              mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
+		UIContextMenuItem*    mSelectedItem = nullptr;       // Index of selected item
+		float                 mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
 
-		bool               mShownAtFrame = false;         // Is context was shown at current frame
+		bool                  mShownAtFrame = false;         // Is context was shown at current frame
 
 	protected:
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Fits size by items
 		void FitSize();

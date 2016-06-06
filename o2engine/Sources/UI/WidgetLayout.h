@@ -178,6 +178,8 @@ namespace o2
 		void SetMaximalHeight(float value);
 		float GetMaximalHeight() const;
 
+		void DisableMinMaxSizes();
+
 		void SetWeight(const Vec2F& weight);
 		Vec2F GetWeight() const;
 
@@ -211,8 +213,12 @@ namespace o2
 		Vec2F     mWeight         = Vec2F(1.0f, 1.0f);	   // @SERIALIZABLE
 		bool      mDrivenByParent = false;
 
+		Function<void()> mCheckMinMaxFunc; // Check minimum and maximum of layout delegate
+
 	protected:
 		void CopyFrom(const UIWidgetLayout& other);
+		void CheckMinMax();
+		void DontCheckMinMax();
 		void InitializeProperties();
 
 		friend class UIContextMenu;
