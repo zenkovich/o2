@@ -116,7 +116,17 @@ namespace Editor
 		if (!mReady)
 			return;
 
+		float maxFPS = 60.0f;
+		float maxFPSDeltaTime = 1.0f/maxFPS;
+
 		float realdDt = mTimer->GetDeltaTime();
+
+		if (realdDt < maxFPSDeltaTime)
+		{
+			Sleep((int)((maxFPSDeltaTime - realdDt)*1000.0f));
+			realdDt = maxFPSDeltaTime;
+		}
+
 		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
 
 		mTime->Update(realdDt);

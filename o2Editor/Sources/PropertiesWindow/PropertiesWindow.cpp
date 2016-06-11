@@ -51,7 +51,7 @@ namespace Editor
 		}
 
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
-		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
+		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 15));
 	}
 
 	void PropertiesWindow::InitializeViewers()

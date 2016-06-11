@@ -408,7 +408,7 @@ namespace o2
 		onChangeCompleted(mText);
 
 		if (!mMultiLine)
-			Unfocus();
+			Deselect();
 	}
 
 	void UIEditBox::OnCursorPressed(const Input::Cursor& cursor)

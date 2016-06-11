@@ -58,7 +58,7 @@ namespace Editor
 
 	protected:
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Calls when cursor drag handle was moved
 		void OnDragHandleMinMoved(const Vec2F& delta);

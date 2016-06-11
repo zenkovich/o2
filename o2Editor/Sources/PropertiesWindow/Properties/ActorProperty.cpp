@@ -43,7 +43,7 @@ namespace Editor
 		auto selectLayer = mBox->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto focusLayer = mBox->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		mBox->AddState("selected", Animation::EaseInOut(mBox, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		mBox->AddState("focused", Animation::EaseInOut(mBox, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		mBox->AddState("select", Animation::EaseInOut(mBox, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))

@@ -29,13 +29,13 @@ namespace Editor
 		mContentWidget = o2UI.CreateScrollArea("backless");
 
 		mViewersLayout = o2UI.CreateVerLayout();
-		mViewersLayout->spacing = 0.0f;
-		mViewersLayout->border = RectF();
-		mViewersLayout->expandHeight = false;
-		mViewersLayout->expandWidth = true;
+		mViewersLayout->spacing       = 0.0f;
+		mViewersLayout->border        = RectF();
+		mViewersLayout->expandHeight  = false;
+		mViewersLayout->expandWidth   = true;
 		mViewersLayout->fitByChildren = true;
-		mViewersLayout->baseCorner = BaseCorner::Top;
-		mViewersLayout->layout = UIWidgetLayout::BothStretch();
+		mViewersLayout->baseCorner    = BaseCorner::Top;
+		mViewersLayout->layout        = UIWidgetLayout::BothStretch();
 		mContentWidget->AddChild(mViewersLayout);
 	}
 

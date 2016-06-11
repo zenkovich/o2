@@ -1725,8 +1725,9 @@ void o2::UIContextMenu::InitializeType(o2::UIContextMenu* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIContextMenu, void, int>(&type, "SetMaxItemsVisible", &o2::UIContextMenu::SetMaxItemsVisible, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<int>(funcInfo, "count");
 	funcInfo = TypeInitializer::RegFunction<o2::UIContextMenu, bool>(&type, "IsScrollable", &o2::UIContextMenu::IsScrollable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIContextMenu, void, bool>(&type, "UpdateLayout", &o2::UIContextMenu::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIContextMenu, void, bool, bool>(&type, "UpdateLayout", &o2::UIContextMenu::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIContextMenu, void>(&type, "FitSize", &o2::UIContextMenu::FitSize, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIContextMenu, void>(&type, "FitPosition", &o2::UIContextMenu::FitPosition, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIContextMenu, void>(&type, "SpecialDraw", &o2::UIContextMenu::SpecialDraw, o2::ProtectSection::Protected);
@@ -1821,8 +1822,9 @@ void o2::UICustomDropDown::InitializeType(o2::UICustomDropDown* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UICustomDropDown, void, const Input::Cursor&>(&type, "OnCursorExit", &o2::UICustomDropDown::OnCursorExit, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UICustomDropDown, void>(&type, "OnVisibleChanged", &o2::UICustomDropDown::OnVisibleChanged, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UICustomDropDown, void, bool>(&type, "UpdateLayout", &o2::UICustomDropDown::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UICustomDropDown, void, bool, bool>(&type, "UpdateLayout", &o2::UICustomDropDown::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UICustomDropDown, void>(&type, "OnItemSelected", &o2::UICustomDropDown::OnItemSelected, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UICustomDropDown, void>(&type, "OnSelectionChanged", &o2::UICustomDropDown::OnSelectionChanged, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UICustomDropDown, void>(&type, "InitializeProperties", &o2::UICustomDropDown::InitializeProperties, o2::ProtectSection::Protected);
@@ -1902,8 +1904,9 @@ void o2::UICustomList::InitializeType(o2::UICustomList* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UICustomList, bool>(&type, "IsScrollable", &o2::UICustomList::IsScrollable, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UICustomList, void, float>(&type, "UpdateControls", &o2::UICustomList::UpdateControls, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
-	funcInfo = TypeInitializer::RegFunction<o2::UICustomList, void, bool>(&type, "UpdateLayout", &o2::UICustomList::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UICustomList, void, bool, bool>(&type, "UpdateLayout", &o2::UICustomList::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UICustomList, void, const Input::Cursor&>(&type, "OnCursorPressed", &o2::UICustomList::OnCursorPressed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UICustomList, void, const Input::Cursor&>(&type, "OnCursorStillDown", &o2::UICustomList::OnCursorStillDown, o2::ProtectSection::Protected);
@@ -2072,8 +2075,9 @@ void o2::UIEditBox::InitializeType(o2::UIEditBox* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, WString, const WString&>(&type, "GetFilteredText", &o2::UIEditBox::GetFilteredText, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const WString&>(funcInfo, "text");
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void>(&type, "UpdateScrollParams", &o2::UIEditBox::UpdateScrollParams, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void, bool>(&type, "UpdateLayout", &o2::UIEditBox::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void, bool, bool>(&type, "UpdateLayout", &o2::UIEditBox::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void>(&type, "UpdateTransparency", &o2::UIEditBox::UpdateTransparency, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void>(&type, "CheckCharactersAndLinesBounds", &o2::UIEditBox::CheckCharactersAndLinesBounds, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIEditBox, void>(&type, "UpdateSelectionAndCaret", &o2::UIEditBox::UpdateSelectionAndCaret, o2::ProtectSection::Protected);
@@ -2156,8 +2160,9 @@ void o2::UIGridLayout::InitializeType(o2::UIGridLayout* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIGridLayout, void, bool>(&type, "SetFitByChildren", &o2::UIGridLayout::SetFitByChildren, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "fit");
 	funcInfo = TypeInitializer::RegFunction<o2::UIGridLayout, bool>(&type, "IsFittingByChildren", &o2::UIGridLayout::IsFittingByChildren, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIGridLayout, void, bool>(&type, "UpdateLayout", &o2::UIGridLayout::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIGridLayout, void, bool, bool>(&type, "UpdateLayout", &o2::UIGridLayout::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIGridLayout, void, UIWidget*>(&type, "OnChildAdded", &o2::UIGridLayout::OnChildAdded, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UIWidget*>(funcInfo, "child");
 	funcInfo = TypeInitializer::RegFunction<o2::UIGridLayout, void, UIWidget*>(&type, "OnChildRemoved", &o2::UIGridLayout::OnChildRemoved, o2::ProtectSection::Protected);
@@ -2224,8 +2229,9 @@ void o2::UIHorizontalLayout::InitializeType(o2::UIHorizontalLayout* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalLayout, void, bool>(&type, "SetFitByChildren", &o2::UIHorizontalLayout::SetFitByChildren, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "fit");
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalLayout, bool>(&type, "IsFittingByChildren", &o2::UIHorizontalLayout::IsFittingByChildren, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalLayout, void, bool>(&type, "UpdateLayout", &o2::UIHorizontalLayout::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalLayout, void, bool, bool>(&type, "UpdateLayout", &o2::UIHorizontalLayout::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalLayout, void, UIWidget*>(&type, "OnChildAdded", &o2::UIHorizontalLayout::OnChildAdded, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UIWidget*>(funcInfo, "child");
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalLayout, void, UIWidget*>(&type, "OnChildRemoved", &o2::UIHorizontalLayout::OnChildRemoved, o2::ProtectSection::Protected);
@@ -2283,8 +2289,9 @@ void o2::UIHorizontalProgress::InitializeType(o2::UIHorizontalProgress* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalProgress, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UIHorizontalProgress::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalProgress, bool>(&type, "IsScrollable", &o2::UIHorizontalProgress::IsScrollable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalProgress, void, bool>(&type, "UpdateLayout", &o2::UIHorizontalProgress::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalProgress, void, bool, bool>(&type, "UpdateLayout", &o2::UIHorizontalProgress::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalProgress, void>(&type, "UpdateProgressLayersLayouts", &o2::UIHorizontalProgress::UpdateProgressLayersLayouts, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalProgress, void, UIWidgetLayer*>(&type, "OnLayerAdded", &o2::UIHorizontalProgress::OnLayerAdded, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UIWidgetLayer*>(funcInfo, "layer");
@@ -2358,8 +2365,9 @@ void o2::UIHorizontalScrollBar::InitializeType(o2::UIHorizontalScrollBar* sample
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalScrollBar, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UIHorizontalScrollBar::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalScrollBar, bool>(&type, "IsScrollable", &o2::UIHorizontalScrollBar::IsScrollable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalScrollBar, void, bool>(&type, "UpdateLayout", &o2::UIHorizontalScrollBar::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalScrollBar, void, bool, bool>(&type, "UpdateLayout", &o2::UIHorizontalScrollBar::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalScrollBar, void>(&type, "UpdateProgressLayersLayouts", &o2::UIHorizontalScrollBar::UpdateProgressLayersLayouts, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalScrollBar, void>(&type, "OnLayoutUpdated", &o2::UIHorizontalScrollBar::OnLayoutUpdated, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIHorizontalScrollBar, void, UIWidgetLayer*>(&type, "OnLayerAdded", &o2::UIHorizontalScrollBar::OnLayerAdded, o2::ProtectSection::Protected);
@@ -2429,8 +2437,9 @@ void o2::UILabel::InitializeType(o2::UILabel* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UILabel, void, const Vec2F&>(&type, "SetExpandBorder", &o2::UILabel::SetExpandBorder, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "border");
 	funcInfo = TypeInitializer::RegFunction<o2::UILabel, Vec2F>(&type, "GetExpandBorder", &o2::UILabel::GetExpandBorder, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UILabel, void, bool>(&type, "UpdateLayout", &o2::UILabel::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UILabel, void, bool, bool>(&type, "UpdateLayout", &o2::UILabel::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UILabel, void, UIWidgetLayer*>(&type, "OnLayerAdded", &o2::UILabel::OnLayerAdded, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UIWidgetLayer*>(funcInfo, "layer");
 	funcInfo = TypeInitializer::RegFunction<o2::UILabel, void>(&type, "InitializeProperties", &o2::UILabel::InitializeProperties, o2::ProtectSection::Protected);
@@ -2511,8 +2520,11 @@ void o2::UILongList::InitializeType(o2::UILongList* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UILongList, void>(&type, "CalculateScrollArea", &o2::UILongList::CalculateScrollArea, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UILongList, void, float>(&type, "UpdateControls", &o2::UILongList::UpdateControls, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
-	funcInfo = TypeInitializer::RegFunction<o2::UILongList, void, bool>(&type, "UpdateLayout", &o2::UILongList::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UILongList, void, bool, bool>(&type, "UpdateLayout", &o2::UILongList::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
+	funcInfo = TypeInitializer::RegFunction<o2::UILongList, void, const Vec2F&>(&type, "MoveScrollPosition", &o2::UILongList::MoveScrollPosition, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "delta");
 	funcInfo = TypeInitializer::RegFunction<o2::UILongList, void>(&type, "UpdateVisibleItems", &o2::UILongList::UpdateVisibleItems, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UILongList, void, const Input::Cursor&>(&type, "OnCursorPressed", &o2::UILongList::OnCursorPressed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
@@ -2833,8 +2845,8 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "parent");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownType*>(&type, "OnObjectRemoved", &o2::UITree::OnObjectRemoved, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<UnknownType*>(funcInfo, "object");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const UnknownObjectsVec&>(&type, "OnObjectsChanged", &o2::UITree::OnObjectsChanged, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<const UnknownObjectsVec&>(funcInfo, "objects");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const UnknownPtrsVec&>(&type, "OnObjectsChanged", &o2::UITree::OnObjectsChanged, o2::ProtectSection::Public);
+	TypeInitializer::RegFuncParam<const UnknownPtrsVec&>(funcInfo, "objects");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool>(&type, "IsScrollable", &o2::UITree::IsScrollable, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, int>(&type, "SetNodesPoolResizeCount", &o2::UITree::SetNodesPoolResizeCount, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<int>(funcInfo, "count");
@@ -2885,8 +2897,9 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "updateChilds");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnFocused", &o2::UITree::OnFocused, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnUnfocused", &o2::UITree::OnUnfocused, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "UpdateLayout", &o2::UITree::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool, bool>(&type, "UpdateLayout", &o2::UITree::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "CalculateScrollArea", &o2::UITree::CalculateScrollArea, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, float>(&type, "GetCurrentHeight", &o2::UITree::GetCurrentHeight, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, const Input::Cursor&>(&type, "OnCursorPressed", &o2::UITree::OnCursorPressed, o2::ProtectSection::Protected);
@@ -2975,8 +2988,9 @@ void o2::UIVerticalLayout::InitializeType(o2::UIVerticalLayout* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalLayout, void, bool>(&type, "SetFitByChildren", &o2::UIVerticalLayout::SetFitByChildren, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "fit");
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalLayout, bool>(&type, "IsFittingByChildren", &o2::UIVerticalLayout::IsFittingByChildren, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalLayout, void, bool>(&type, "UpdateLayout", &o2::UIVerticalLayout::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalLayout, void, bool, bool>(&type, "UpdateLayout", &o2::UIVerticalLayout::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalLayout, void, UIWidget*>(&type, "OnChildAdded", &o2::UIVerticalLayout::OnChildAdded, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UIWidget*>(funcInfo, "child");
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalLayout, void, UIWidget*>(&type, "OnChildRemoved", &o2::UIVerticalLayout::OnChildRemoved, o2::ProtectSection::Protected);
@@ -3034,8 +3048,9 @@ void o2::UIVerticalProgress::InitializeType(o2::UIVerticalProgress* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalProgress, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UIVerticalProgress::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalProgress, bool>(&type, "IsScrollable", &o2::UIVerticalProgress::IsScrollable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalProgress, void, bool>(&type, "UpdateLayout", &o2::UIVerticalProgress::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalProgress, void, bool, bool>(&type, "UpdateLayout", &o2::UIVerticalProgress::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalProgress, void>(&type, "UpdateProgressLayersLayouts", &o2::UIVerticalProgress::UpdateProgressLayersLayouts, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalProgress, void, UIWidgetLayer*>(&type, "OnLayerAdded", &o2::UIVerticalProgress::OnLayerAdded, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UIWidgetLayer*>(funcInfo, "layer");
@@ -3109,8 +3124,9 @@ void o2::UIVerticalScrollBar::InitializeType(o2::UIVerticalScrollBar* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalScrollBar, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UIVerticalScrollBar::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalScrollBar, bool>(&type, "IsScrollable", &o2::UIVerticalScrollBar::IsScrollable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalScrollBar, void, bool>(&type, "UpdateLayout", &o2::UIVerticalScrollBar::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalScrollBar, void, bool, bool>(&type, "UpdateLayout", &o2::UIVerticalScrollBar::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalScrollBar, void>(&type, "UpdateProgressLayersLayouts", &o2::UIVerticalScrollBar::UpdateProgressLayersLayouts, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalScrollBar, void>(&type, "OnLayoutUpdated", &o2::UIVerticalScrollBar::OnLayoutUpdated, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIVerticalScrollBar, void, UIWidgetLayer*>(&type, "OnLayerAdded", &o2::UIVerticalScrollBar::OnLayerAdded, o2::ProtectSection::Protected);
@@ -3170,6 +3186,9 @@ void o2::UIWidget::InitializeType(o2::UIWidget* sample)
 	TypeInitializer::RegField(&type, "mVisible", (size_t)(char*)(&sample->mVisible) - (size_t)(char*)sample, sample->mVisible, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mResVisible", (size_t)(char*)(&sample->mResVisible) - (size_t)(char*)sample, sample->mResVisible, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mFullyDisabled", (size_t)(char*)(&sample->mFullyDisabled) - (size_t)(char*)sample, sample->mFullyDisabled, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mIsClipped", (size_t)(char*)(&sample->mIsClipped) - (size_t)(char*)sample, sample->mIsClipped, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mBounds", (size_t)(char*)(&sample->mBounds) - (size_t)(char*)sample, sample->mBounds, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mBoundsWithChilds", (size_t)(char*)(&sample->mBoundsWithChilds) - (size_t)(char*)sample, sample->mBoundsWithChilds, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, float>(&type, "Update", &o2::UIWidget::Update, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "Draw", &o2::UIWidget::Draw, o2::ProtectSection::Public);
@@ -3258,8 +3277,17 @@ void o2::UIWidget::InitializeType(o2::UIWidget* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "DrawDebugFrame", &o2::UIWidget::DrawDebugFrame, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "OnFocused", &o2::UIWidget::OnFocused, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "OnUnfocused", &o2::UIWidget::OnUnfocused, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, bool>(&type, "UpdateLayout", &o2::UIWidget::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, bool, bool>(&type, "CheckIsLayoutDrivenByParent", &o2::UIWidget::CheckIsLayoutDrivenByParent, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcibleLayout");
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, bool, bool>(&type, "UpdateLayout", &o2::UIWidget::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, bool>(&type, "UpdateChildrenLayouts", &o2::UIWidget::UpdateChildrenLayouts, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "UpdateBounds", &o2::UIWidget::UpdateBounds, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "UpdateBoundsWithChilds", &o2::UIWidget::UpdateBoundsWithChilds, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, const RectF&>(&type, "CheckClipping", &o2::UIWidget::CheckClipping, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<const RectF&>(funcInfo, "clipArea");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "UpdateTransparency", &o2::UIWidget::UpdateTransparency, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void>(&type, "UpdateVisibility", &o2::UIWidget::UpdateVisibility, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidget, void, UIWidget*>(&type, "OnChildFocused", &o2::UIWidget::OnChildFocused, o2::ProtectSection::Protected);
@@ -3334,6 +3362,7 @@ void o2::UIWidgetLayer::InitializeType(o2::UIWidgetLayer* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, float>(&type, "GetTransparency", &o2::UIWidgetLayer::GetTransparency, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UIWidgetLayer::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, const RectF&>(&type, "GetRect", &o2::UIWidgetLayer::GetRect, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, void, const DataNode&>(&type, "OnDeserialized", &o2::UIWidgetLayer::OnDeserialized, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const DataNode&>(funcInfo, "node");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayer, void, UIWidget*>(&type, "SetOwnerWidget", &o2::UIWidgetLayer::SetOwnerWidget, o2::ProtectSection::Protected);
@@ -3398,6 +3427,7 @@ void o2::UIWidgetLayout::InitializeType(o2::UIWidgetLayout* sample)
 	TypeInitializer::RegField(&type, "mLocalRect", (size_t)(char*)(&sample->mLocalRect) - (size_t)(char*)sample, sample->mLocalRect, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mWeight", (size_t)(char*)(&sample->mWeight) - (size_t)(char*)sample, sample->mWeight, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mDrivenByParent", (size_t)(char*)(&sample->mDrivenByParent) - (size_t)(char*)sample, sample->mDrivenByParent, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mCheckMinMaxFunc", (size_t)(char*)(&sample->mCheckMinMaxFunc) - (size_t)(char*)sample, sample->mCheckMinMaxFunc, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UIWidgetLayout::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, void, const Vec2F&>(&type, "SetPosition", &o2::UIWidgetLayout::SetPosition, o2::ProtectSection::Public);
@@ -3508,6 +3538,7 @@ void o2::UIWidgetLayout::InitializeType(o2::UIWidgetLayout* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, void, float>(&type, "SetMaximalHeight", &o2::UIWidgetLayout::SetMaximalHeight, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "value");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, float>(&type, "GetMaximalHeight", &o2::UIWidgetLayout::GetMaximalHeight, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, void>(&type, "DisableMinMaxSizes", &o2::UIWidgetLayout::DisableMinMaxSizes, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, void, const Vec2F&>(&type, "SetWeight", &o2::UIWidgetLayout::SetWeight, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "weight");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, Vec2F>(&type, "GetWeight", &o2::UIWidgetLayout::GetWeight, o2::ProtectSection::Public);
@@ -3519,6 +3550,8 @@ void o2::UIWidgetLayout::InitializeType(o2::UIWidgetLayout* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, float>(&type, "GetHeightWeight", &o2::UIWidgetLayout::GetHeightWeight, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, void, const UIWidgetLayout&>(&type, "CopyFrom", &o2::UIWidgetLayout::CopyFrom, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const UIWidgetLayout&>(funcInfo, "other");
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, void>(&type, "CheckMinMax", &o2::UIWidgetLayout::CheckMinMax, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, void>(&type, "DontCheckMinMax", &o2::UIWidgetLayout::DontCheckMinMax, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWidgetLayout, void>(&type, "InitializeProperties", &o2::UIWidgetLayout::InitializeProperties, o2::ProtectSection::Protected);
 }
 
@@ -3601,8 +3634,9 @@ void o2::UIWindow::InitializeType(o2::UIWindow* sample)
 	TypeInitializer::RegFuncParam<const Layout&>(funcInfo, "leftBottom");
 	TypeInitializer::RegFuncParam<const Layout&>(funcInfo, "rightBottom");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, bool>(&type, "IsFocusable", &o2::UIWindow::IsFocusable, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void, bool>(&type, "UpdateLayout", &o2::UIWindow::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void, bool, bool>(&type, "UpdateLayout", &o2::UIWindow::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void>(&type, "UpdateTransparency", &o2::UIWindow::UpdateTransparency, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UIWindow, void, UIWidgetLayer*>(&type, "OnLayerAdded", &o2::UIWindow::OnLayerAdded, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UIWidgetLayer*>(funcInfo, "layer");
@@ -4710,8 +4744,9 @@ void Editor::UIDockWindowPlace::InitializeType(Editor::UIDockWindowPlace* sample
 	TypeInitializer::RegFuncParam<UIDockWindowPlace*>(funcInfo, "neighborMin");
 	TypeInitializer::RegFuncParam<UIDockWindowPlace*>(funcInfo, "neighborMax");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIDockWindowPlace, TwoDirection>(&type, "GetResizibleDir", &Editor::UIDockWindowPlace::GetResizibleDir, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIDockWindowPlace, void, bool>(&type, "UpdateLayout", &Editor::UIDockWindowPlace::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<Editor::UIDockWindowPlace, void, bool, bool>(&type, "UpdateLayout", &Editor::UIDockWindowPlace::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIDockWindowPlace, void, const Vec2F&>(&type, "OnDragHandleMinMoved", &Editor::UIDockWindowPlace::OnDragHandleMinMoved, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "delta");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIDockWindowPlace, void, const Vec2F&>(&type, "OnDragHandleMaxMoved", &Editor::UIDockWindowPlace::OnDragHandleMaxMoved, o2::ProtectSection::Protected);
@@ -5301,8 +5336,9 @@ void Editor::SceneEditWidget::InitializeType(Editor::SceneEditWidget* sample)
 	auto funcInfo = TypeInitializer::RegFunction<Editor::SceneEditWidget, void>(&type, "Draw", &Editor::SceneEditWidget::Draw, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<Editor::SceneEditWidget, void, float>(&type, "Update", &Editor::SceneEditWidget::Update, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
-	funcInfo = TypeInitializer::RegFunction<Editor::SceneEditWidget, void, bool>(&type, "UpdateLayout", &Editor::SceneEditWidget::UpdateLayout, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<Editor::SceneEditWidget, void, bool, bool>(&type, "UpdateLayout", &Editor::SceneEditWidget::UpdateLayout, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "forcible");
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "withChildren");
 }
 
 void Editor::SceneWindow::InitializeType(Editor::SceneWindow* sample)

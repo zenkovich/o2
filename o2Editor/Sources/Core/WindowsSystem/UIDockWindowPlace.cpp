@@ -116,9 +116,9 @@ namespace Editor
 		return mResizibleDir;
 	}
 
-	void UIDockWindowPlace::UpdateLayout(bool forcible /*= false*/)
+	void UIDockWindowPlace::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		UIWidget::UpdateLayout(forcible);
+		UIWidget::UpdateLayout(forcible, withChildren);
 		mDragHandleAreaMin = mDragHandleLayoutMin.Calculate(layout.GetAbsoluteRect());
 		mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout.GetAbsoluteRect());
 	}

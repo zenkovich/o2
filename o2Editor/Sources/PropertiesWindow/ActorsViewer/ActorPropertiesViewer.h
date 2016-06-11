@@ -49,7 +49,7 @@ namespace Editor
 	protected:
 		typedef Dictionary<const Type*, Vector<IActorComponentViewer*>> TypeCompViewersDict;
 
-		Vector<Actor*>                       mTargetActors;               // Current target actors
+		Vector<Actor*>                 mTargetActors;               // Current target actors
 
 		IActorHeaderViewer*            mHeaderViewer;               // Actor header viewer
 		IActorTransformViewer*         mTransformViewer;            // Actor transform viewer
@@ -59,9 +59,9 @@ namespace Editor
 		DefaultActorComponentViewer*   mDefaultComponentViewer;     // Default component viewer sample
 		Vector<IActorComponentViewer*> mAvailableComponentsViewers; // Available components' viewers
 
-		TypeCompViewersDict                  mComponentViewersPool;       // Components viewers pool
-
-		UIVerticalLayout*                    mViewersLayout;              // Viewers layout
+		TypeCompViewersDict            mComponentViewersPool;       // Components viewers pool
+									   
+		UIVerticalLayout*              mViewersLayout;              // Viewers layout
 
 	protected:
 		// Sets target objects

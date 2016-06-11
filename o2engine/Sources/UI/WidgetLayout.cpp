@@ -692,11 +692,6 @@ namespace o2
 			mLocalRect.bottom -= szDelta.y*mPivot.y;
 			mLocalRect.top    += szDelta.y*(1.0f - mPivot.y);
 		}
-
-		mLocalRect.left   = Math::Floor(mLocalRect.left);
-		mLocalRect.right  = Math::Floor(mLocalRect.right);
-		mLocalRect.bottom = Math::Floor(mLocalRect.bottom);
-		mLocalRect.top    = Math::Floor(mLocalRect.top);
 	}
 
 	void UIWidgetLayout::DontCheckMinMax()

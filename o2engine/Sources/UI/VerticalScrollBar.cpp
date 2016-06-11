@@ -49,9 +49,6 @@ namespace o2
 
 	void UIVerticalScrollBar::Update(float dt)
 	{
-		if (mFullyDisabled || mIsClipped)
-			return;
-
 		UIWidget::Update(dt);
 
 		const float threshold = 0.01f;

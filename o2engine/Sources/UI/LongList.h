@@ -109,6 +109,9 @@ namespace o2
 		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
+		// Moves scroll position and updates children widgets clipping and layout
+		void MoveScrollPosition(const Vec2F& delta);
+
 		// Updates visible items
 		void UpdateVisibleItems();
 

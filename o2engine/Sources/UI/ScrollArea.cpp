@@ -146,9 +146,6 @@ namespace o2
 
 	void UIScrollArea::Update(float dt)
 	{
-		if (mFullyDisabled || mIsClipped)
-			return;
-
 		UIWidget::Update(dt);
 
 		if (mOwnHorScrollBar)
@@ -528,15 +525,21 @@ namespace o2
 	{
 		mScrollPos += delta;
 
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
+
 		Vec2F widgetsMove(-delta.x, delta.y);
 		for (auto child : mChilds)
 			MoveWidgetAndCheckClipping(child, widgetsMove);
+
+		UpdateScrollParams();
+		UpdateScrollBarsLayout();
 	}
 
 	void UIScrollArea::MoveWidgetAndCheckClipping(UIWidget* widget, const Vec2F& delta)
 	{
 		widget->mBoundsWithChilds += delta;
-		widget->CheckClipping(mAbsoluteClipArea);
+		widget->mIsClipped = !widget->mBoundsWithChilds.IsIntersects(mAbsoluteClipArea);
 
 		if (!widget->mIsClipped)
 			widget->UpdateLayout(true, false);

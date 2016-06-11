@@ -50,9 +50,6 @@ namespace o2
 
 	void UIHorizontalScrollBar::Update(float dt)
 	{
-		if (mFullyDisabled || mIsClipped)
-			return;
-
 		UIWidget::Update(dt);
 
 		const float threshold = 0.01f;

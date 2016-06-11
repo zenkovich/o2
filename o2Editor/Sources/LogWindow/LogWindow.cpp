@@ -47,13 +47,14 @@ namespace Editor
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
 
 		mList = o2UI.CreateWidget<UILongList>();
-		mList->layout = UIWidgetLayout::BothStretch(0, 19, 0, 0);
+		mList->layout = UIWidgetLayout::BothStretch(0, 18, 0, -1);
+		mList->SetViewLayout(Layout::BothStretch());
 		mList->getItemsCountFunc = Function<int()>(this, &LogWindow::GetVisibleMessagesCount);
 		mList->getItemsRangeFunc = Function<Vector<UnknownType*>(int, int)>(this, &LogWindow::GetVisibleMessagesRange);
 		mList->setupItemFunc = Function<void(UIWidget*, UnknownType*)>(this, &LogWindow::SetupListMessage);
 
 		UIWidget* listItemSample = mnew UIWidget();
-		listItemSample->layout.height = 25;
+		listItemSample->layout.minHeight = 25;
 		listItemSample->AddLayer("back", mnew Sprite(Color4(212, 216, 224, 255)));
 		listItemSample->AddLayer("warning", mnew Sprite(Color4(239, 196, 25, 255)),
 								 Layout::VerStretch(HorAlign::Left, 0, 0, 10, 0));

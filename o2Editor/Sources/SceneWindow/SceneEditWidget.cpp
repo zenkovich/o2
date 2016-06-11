@@ -45,9 +45,9 @@ namespace Editor
 		mSceneEditScreen->Update(dt);
 	}
 
-	void SceneEditWidget::UpdateLayout(bool forcible /*= false*/)
+	void SceneEditWidget::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		UIWidget::UpdateLayout(forcible);
+		UIWidget::UpdateLayout(forcible, withChildren);
 		mSceneEditScreen->SetRect(layout.GetAbsoluteRect());
 	}
 

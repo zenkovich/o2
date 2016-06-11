@@ -276,6 +276,7 @@
     <ClInclude Include="..\Sources\Utils\Timer.h" />
     <ClInclude Include="..\Sources\Utils\TimeStamp.h" />
     <ClInclude Include="..\Sources\Utils\ITree.h" />
+    <ClInclude Include="..\Sources\Utils\UnknownPtr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Animation\Animatable.cpp" />

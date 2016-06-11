@@ -172,10 +172,10 @@ namespace o2
 		}
 		else mSelectionDrawable->SetEnabled(false);
 
-		UIWidget::Show();
 		FitSize();
 		FitPosition();
 		UpdateLayout();
+		UIWidget::Show();
 
 		mShownAtFrame = true;
 	}

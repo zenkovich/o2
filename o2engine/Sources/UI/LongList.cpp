@@ -232,6 +232,23 @@ namespace o2
 		mHoverDrawable->SetRect(mCurrentHoverRect);
 	}
 
+	void UILongList::MoveScrollPosition(const Vec2F& delta)
+	{
+		mScrollPos += delta;
+
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
+
+		UpdateVisibleItems();
+
+		Vec2F widgetsMove(-delta.x, delta.y);
+		for (auto child : mChilds)
+			MoveWidgetAndCheckClipping(child, widgetsMove);
+
+		UpdateScrollParams();
+		UpdateScrollBarsLayout();
+	}
+
 	void UILongList::UpdateVisibleItems()
 	{
 		int lastMinItemIdx = mMinVisibleItemIdx;
@@ -444,7 +461,7 @@ namespace o2
 
 		if (position < 0 || item == nullptr)
 		{
-			auto selectedState = state["selected"];
+			auto selectedState = state["focused"];
 			if (selectedState)
 			{
 				mSelectionDrawable->SetEnabled(true);
@@ -460,7 +477,7 @@ namespace o2
 		{
 			mTargetSelectionRect = mHoverLayout.Calculate(item->layout.mAbsoluteRect);
 
-			auto selectedState = state["selected"];
+			auto selectedState = state["focused"];
 			if (selectedState)
 			{
 				mSelectionDrawable->SetEnabled(true);

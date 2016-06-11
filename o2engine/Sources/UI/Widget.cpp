@@ -490,7 +490,7 @@ namespace o2
 			};
 		}
 
-		if (state->name == "selected")
+		if (state->name == "focused")
 		{
 			mFocusedState = state;
 			mFocusedState->SetStateForcible(mIsFocused);
@@ -777,6 +777,11 @@ namespace o2
 		layout.mLocalRect.top    = parentSize.y*layout.mAnchorMax.y + layout.mOffsetMax.y;
 
 		layout.mCheckMinMaxFunc();
+
+		layout.mLocalRect.left   = Math::Floor(layout.mLocalRect.left);
+		layout.mLocalRect.right  = Math::Floor(layout.mLocalRect.right);
+		layout.mLocalRect.bottom = Math::Floor(layout.mLocalRect.bottom);
+		layout.mLocalRect.top    = Math::Floor(layout.mLocalRect.top);
 
 		layout.mAbsoluteRect = layout.mLocalRect + parentPos;
 		mChildsAbsRect = layout.mAbsoluteRect;

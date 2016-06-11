@@ -34,25 +34,32 @@ namespace UIStyle
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(20, 20);
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_button_regular.png"), Layout::BothStretch(-9, -9, -10, -10));
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_button_select.png"), Layout::BothStretch(-9, -9, -10, -10));
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_button_pressed.png"), Layout::BothStretch(-9, -9, -10, -10));
-		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI_button_focus.png"), Layout::BothStretch(-9, -9, -10, -10));
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_button_regular.png"), 
+											 Layout::BothStretch(-9, -9, -10, -10));
 
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "Button";
-		captionText->horAlign = HorAlign::Middle;
-		captionText->verAlign = VerAlign::Middle;
+		auto hoverLayer   = sample->AddLayer("hover", mnew Sprite("ui/UI_button_select.png"),
+											 Layout::BothStretch(-9, -9, -10, -10));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_button_pressed.png"), 
+											 Layout::BothStretch(-9, -9, -10, -10));
+
+		auto focusLayer   = sample->AddLayer("focus", mnew Sprite("ui/UI_button_focus.png"), 
+											 Layout::BothStretch(-9, -9, -10, -10));
+
+		Text* captionText        = mnew Text("stdFont.ttf");
+		captionText->text        = "Button";
+		captionText->horAlign    = HorAlign::Middle;
+		captionText->verAlign    = VerAlign::Middle;
 		captionText->dotsEngings = true;
 		sample->AddLayer("caption", captionText);
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -67,16 +74,16 @@ namespace UIStyle
 		sample->layout.minSize = Vec2F(5, 5);
 
 		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Close_button_regular.png"),
-											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Close_button_select.png"),
-											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Close_button_select.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Close_button_pressed.png"),
-											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -94,16 +101,16 @@ namespace UIStyle
 		sample->layout.minSize = Vec2F(5, 5);
 
 		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Options_button_regular.png"),
-											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Options_button_select.png"),
-											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Options_button_select.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Options_button_pressed.png"),
-											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -131,7 +138,7 @@ namespace UIStyle
 														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 															   Vec2F(-2, -4), Vec2F(2, 5)));
 
-		auto barSelectSprite = barLayer->AddChildLayer("select", mnew Sprite("ui/UI_Hor_scrollhandle_select.png"),
+		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite("ui/UI_Hor_scrollhandle_select.png"),
 													   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 															  Vec2F(-2, -4), Vec2F(2, 5)));
 
@@ -139,7 +146,7 @@ namespace UIStyle
 														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 															   Vec2F(-2, -4), Vec2F(2, 5)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &barPressedSprite->transparency, 0.0f, 1.0f, 0.05f))
@@ -169,7 +176,7 @@ namespace UIStyle
 														Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 															   Vec2F(-4, -2), Vec2F(5, 2)));
 
-		auto barSelectSprite = barLayer->AddChildLayer("select", mnew Sprite("ui/UI_Ver_scrollhandle_select.png"),
+		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite("ui/UI_Ver_scrollhandle_select.png"),
 													   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 															  Vec2F(-4, -2), Vec2F(5, 2)));
 
@@ -178,7 +185,7 @@ namespace UIStyle
 															   Vec2F(-4, -2), Vec2F(5, 2)));
 
 
-		sample->AddState("select", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &barPressedSprite->transparency, 0.0f, 1.0f, 0.05f))
@@ -207,7 +214,7 @@ namespace UIStyle
 														   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 																  Vec2F(-2, -4), Vec2F(2, 5)));
 
-		auto barSelectSprite = handleLayer->AddChildLayer("select", mnew Sprite("ui/UI_Hor_scrollhandle_select.png"),
+		auto barSelectSprite = handleLayer->AddChildLayer("hover", mnew Sprite("ui/UI_Hor_scrollhandle_select.png"),
 														  Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 																 Vec2F(-2, -4), Vec2F(2, 5)));
 
@@ -215,7 +222,7 @@ namespace UIStyle
 														   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 																  Vec2F(-2, -4), Vec2F(2, 5)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &barPressedSprite->transparency, 0.0f, 1.0f, 0.05f))
@@ -244,7 +251,7 @@ namespace UIStyle
 														   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 																  Vec2F(-4, -2), Vec2F(5, 2)));
 
-		auto barSelectSprite = handleLayer->AddChildLayer("select", mnew Sprite("ui/UI_Ver_scrollhandle_select.png"),
+		auto barSelectSprite = handleLayer->AddChildLayer("hover", mnew Sprite("ui/UI_Ver_scrollhandle_select.png"),
 														  Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 																 Vec2F(-4, -2), Vec2F(5, 2)));
 
@@ -252,7 +259,7 @@ namespace UIStyle
 														   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 																  Vec2F(-4, -2), Vec2F(5, 2)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &barPressedSprite->transparency, 0.0f, 1.0f, 0.05f))
@@ -271,7 +278,7 @@ namespace UIStyle
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Check_bk.png"),
 										  Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
-		auto selectLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
+		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
 											Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
 		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI_Check_bk_pressed.png"),
@@ -293,7 +300,7 @@ namespace UIStyle
 		captionText->dotsEngings = true;
 		sample->AddLayer("caption", captionText, Layout(Vec2F(0, 0), Vec2F(1, 1), Vec2F(20, 0), Vec2F(0, 0)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("value", Animation::EaseInOut(sample, &checkLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -305,7 +312,7 @@ namespace UIStyle
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -321,7 +328,7 @@ namespace UIStyle
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Check_bk.png"),
 										  Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
-		auto selectLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
+		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
 											Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
 		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI_Check_bk_pressed.png"),
@@ -336,7 +343,7 @@ namespace UIStyle
 		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI_Check_unknown.png"),
 											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("value", Animation::EaseInOut(sample, &checkLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -348,7 +355,7 @@ namespace UIStyle
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -468,8 +475,8 @@ namespace UIStyle
 		sample->layout.minSize = Vec2F(30, 40);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto focusLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto focusLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout.anchorMin = Vec2F(0, 0);
@@ -506,7 +513,7 @@ namespace UIStyle
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("selected", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Text* textDrawable = sample->GetTextDrawable();
@@ -563,7 +570,7 @@ namespace UIStyle
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("selected", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("focused", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -611,7 +618,7 @@ namespace UIStyle
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("selected", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("focused", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -666,7 +673,7 @@ namespace UIStyle
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("selected", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("focused", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -680,7 +687,7 @@ namespace UIStyle
 		UICustomDropDown* sample = mnew UICustomDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
 										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
@@ -702,7 +709,7 @@ namespace UIStyle
 		list->layout.offsetMin = Vec2F(-1, -60);
 		list->layout.offsetMax = Vec2F(0, 3);
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -721,7 +728,7 @@ namespace UIStyle
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
 										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
@@ -743,7 +750,7 @@ namespace UIStyle
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -951,14 +958,14 @@ namespace UIStyle
 		auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto selectLayer = itemSampleExpandBtn->AddLayer("select", mnew Sprite("ui/UI_Right_icn_select.png"),
+		auto hoverLayer = itemSampleExpandBtn->AddLayer("hover", mnew Sprite("ui/UI_Right_icn_select.png"),
 														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		itemSampleExpandBtn->AddState("select", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -977,7 +984,7 @@ namespace UIStyle
 		Animation expandedStateAnim = Animation::EaseInOut(itemSample, "mExpandCoef", 0.0f, 1.0f, 0.2f);
 		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&hoverLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
@@ -1085,15 +1092,15 @@ namespace UIStyle
 		sample->layout.minSize = Vec2F(10, 10);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddAnimationValue(&selectLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
-		sample->AddState("selected", focusAnim)
+		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
 		Text* textDrawable = sample->GetTextDrawable();
