@@ -14,7 +14,12 @@ namespace Editor
 	WindowsManager::WindowsManager()
 	{
 		if (mNeedRebuildWndStyle)
-			UIStyle::RebuildEditorUIStyle();
+		{
+			EditorUIStyleBuilder builder;
+			builder.RebuildEditorUIStyle();
+		}
+
+		o2UI.LoadStyle("editor_ui_style.xml");
 
 		InitializeDock();
 		InitializeWindows();

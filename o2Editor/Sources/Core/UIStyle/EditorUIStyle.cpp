@@ -29,11 +29,10 @@
 #include "UI/Window.h"
 
 using namespace o2;
-using namespace Editor;
 
-namespace UIStyle
+namespace Editor
 {
-	void RebuildDockableWndStyle()
+	void EditorUIStyleBuilder::EditorUIStyleBuilder::RebuildDockableWndStyle()
 	{
 		UIDockableWindow* sample = mnew UIDockableWindow();
 
@@ -115,7 +114,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildPlayStopButtonStyle()
+	void EditorUIStyleBuilder::RebuildPlayStopButtonStyle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto playRootIconLayer = sample->AddLayer("playRootIcon", nullptr);
@@ -160,7 +159,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "play-stop");
 	}
 
-	void RebuildPauseButtonStyle()
+	void EditorUIStyleBuilder::RebuildPauseButtonStyle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto pauseIconRootLayer = sample->AddLayer("regular", nullptr);
@@ -189,7 +188,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "pause");
 	}
 
-	void RebuildStepButtonStyle()
+	void EditorUIStyleBuilder::RebuildStepButtonStyle()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->name = "step button";
@@ -216,7 +215,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "step");
 	}
 
-	void RebuildRoundDropDown()
+	void EditorUIStyleBuilder::RebuildRoundDropDown()
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -267,7 +266,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "round");
 	}
 
-	void RebuildArrowToggle()
+	void EditorUIStyleBuilder::RebuildArrowToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
@@ -291,7 +290,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "arrow");
 	}
 
-	void RebuildBrushToggle()
+	void EditorUIStyleBuilder::RebuildBrushToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
@@ -315,7 +314,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "brush");
 	}
 
-	void RebuildMoveToggle()
+	void EditorUIStyleBuilder::RebuildMoveToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
@@ -339,7 +338,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "move");
 	}
 
-	void RebuildRotateToggle()
+	void EditorUIStyleBuilder::RebuildRotateToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
@@ -363,7 +362,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "rotate");
 	}
 
-	void RebuildScaleToggle()
+	void EditorUIStyleBuilder::RebuildScaleToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
@@ -387,7 +386,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "scale");
 	}
 
-	void RebuildFrameToggle()
+	void EditorUIStyleBuilder::RebuildFrameToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
@@ -411,7 +410,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "frame");
 	}
 
-	void RebuildSearchButton()
+	void EditorUIStyleBuilder::RebuildSearchButton()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -438,7 +437,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "search");
 	}
 
-	void RebuildListTreeToggle()
+	void EditorUIStyleBuilder::RebuildListTreeToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -478,7 +477,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "list-tree");
 	}
 
-	void RebuildActorsTreeNodeEnableToggle()
+	void EditorUIStyleBuilder::RebuildActorsTreeNodeEnableToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 
@@ -501,7 +500,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "actorNodeEnable");
 	}
 
-	void RebuildActorsTreeLockToggle()
+	void EditorUIStyleBuilder::RebuildActorsTreeLockToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 
@@ -524,7 +523,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "actorNodeLock");
 	}
 
-	void RebuildActorsTreeLinkBtn()
+	void EditorUIStyleBuilder::RebuildActorsTreeLinkBtn()
 	{
 		UIButton* sample = mnew UIButton();
 
@@ -543,21 +542,26 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "actorNodeLink");
 	}
 
-	void RebuildActorsTree()
+	void EditorUIStyleBuilder::RebuildActorsTree()
 	{
 		UIActorsTree* sample = mnew UIActorsTree();
 		sample->layout.minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(0, 0, 0, 0));
 		sample->SetEnableScrollsHiding(true);
+		sample->SetChildsNodesOffset(10);
 
 		*sample->GetHoverDrawable() = Sprite("ui/UI_ListBox_selection_hover.png");
-		*sample->GetSelectionDrawable() = Sprite("ui/UI_ListBox_selection_regular.png");
-		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		UITreeNode* itemSample = sample->GetNodeSample();
 
-		itemSample->SetChildrenOffset(10);
+		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
+
+		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_ListBox_selection_regular.png"),
+																  Layout::BothStretch(-10, -16, -10, -16));
+
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_hover.png"),
+																  Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
@@ -622,15 +626,23 @@ namespace UIStyle
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		Animation expandedStateAnim = Animation::EaseInOut(itemSample, "mExpandCoef", 0.0f, 1.0f, 0.2f);
+		Animation expandedStateAnim(itemSample);
 		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
 		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
 		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+		itemSample->AddState("selected", Animation::EaseInOut(itemSample, &itemSelectionLayer->transparency, 0.0f, 1.0f, 0.2f));
+
+		Animation focusedItemAnim = Animation::EaseInOut(itemSample, &itemFocusedLayer->transparency, 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.2f);
+		itemSample->AddState("focused", focusedItemAnim);
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout.anchorMin = Vec2F(0, 0);
@@ -661,7 +673,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildPanelDownButton()
+	void EditorUIStyleBuilder::RebuildPanelDownButton()
 	{
 		UIButton* sample = mnew UIButton();
 
@@ -702,7 +714,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "panel down");
 	}
 
-	void RebuildTrashDownPanelButton()
+	void EditorUIStyleBuilder::RebuildTrashDownPanelButton()
 	{
 		auto sample = mnew UIButton();
 
@@ -734,7 +746,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "down panel trash");
 	}
 
-	void RebuildMessagesDownPanelToggle()
+	void EditorUIStyleBuilder::RebuildMessagesDownPanelToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -780,7 +792,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "log messages");
 	}
 
-	void RebuildWarningsDownPanelToggle()
+	void EditorUIStyleBuilder::RebuildWarningsDownPanelToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -826,7 +838,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "log warnings");
 	}
 
-	void RebuildErrorsDownPanelToggle()
+	void EditorUIStyleBuilder::RebuildErrorsDownPanelToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -872,7 +884,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "log errors");
 	}
 
-	void RebuildFilterMenuButton()
+	void EditorUIStyleBuilder::RebuildFilterMenuButton()
 	{
 		UIButton* sample = mnew UIButton();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -903,7 +915,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "menu filter");
 	}
 
-	void RebuildTreeMenuButton()
+	void EditorUIStyleBuilder::RebuildTreeMenuButton()
 	{
 		UIButton* sample = mnew UIButton();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -934,37 +946,45 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "menu tree");
 	}
 
-	void RebuildFoldersTree()
+	void EditorUIStyleBuilder::RebuildFoldersTree()
 	{
-		UITree* sample = mnew UITree();
+		UIActorsTree* sample = mnew UIActorsTree();
 		sample->layout.minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
+		sample->SetViewLayout(Layout::BothStretch(0, 0, 0, 0));
 		sample->SetEnableScrollsHiding(true);
+		sample->SetChildsNodesOffset(10);
 
 		*sample->GetHoverDrawable() = Sprite("ui/UI_ListBox_selection_hover.png");
-		*sample->GetSelectionDrawable() = Sprite("ui/UI_ListBox_selection_regular.png");
-		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		UITreeNode* itemSample = sample->GetNodeSample();
 
-		itemSample->SetChildrenOffset(10);
+		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
+
+		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_ListBox_selection_regular.png"),
+																  Layout::BothStretch(-10, -16, -10, -16));
+
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_hover.png"),
+																	Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
-		captionLayerText->dotsEngings = true;
-		itemSample->AddLayer("name", captionLayerText, Layout::BothStretch(30, 0, 0, 0));
+		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
+
+		auto nameLayer = itemSample->layer["name"];
+		nameLayer->layout = Layout::BothStretch(10, 0, 55, 0);
+		((Text*)nameLayer->drawable)->dotsEngings = true;
 
 		itemSample->AddLayer("folderIcon", mnew Sprite("ui/UI2_folder_icon.png"),
 							 Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(10, 0)));
 
 		auto actorNodeEditBox = o2UI.CreateWidget<UIEditBox>("backless");
 		actorNodeEditBox->name = "nameEditBox";
-		actorNodeEditBox->layout = UIWidgetLayout::BothStretch(30, 0, 0, 0);
+		actorNodeEditBox->layout = UIWidgetLayout::BothStretch(10, 0, 55, 0);
 		itemSample->AddChild(actorNodeEditBox);
 
-		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, &itemSample->layer["name"]->transparency, 1.0f, 0.0f, 0.15f);
+		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, &nameLayer->transparency, 1.0f, 0.0f, 0.15f);
 		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->visible) = AnimatedValue<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
@@ -998,15 +1018,23 @@ namespace UIStyle
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		Animation expandedStateAnim = Animation::EaseInOut(itemSample, "mExpandCoef", 0.0f, 1.0f, 0.2f);
+		Animation expandedStateAnim(itemSample);
 		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
 		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
 		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+		itemSample->AddState("selected", Animation::EaseInOut(itemSample, &itemSelectionLayer->transparency, 0.0f, 1.0f, 0.2f));
+
+		Animation focusedItemAnim = Animation::EaseInOut(itemSample, &itemFocusedLayer->transparency, 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.2f);
+		itemSample->AddState("focused", focusedItemAnim);
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout.anchorMin = Vec2F(0, 0);
@@ -1023,12 +1051,12 @@ namespace UIStyle
 		sample->SetVerticalScrollBar(verScrollBar);
 
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
-															  5.0f, 15.0f, 0.2f));
+						 5.0f, 15.0f, 0.2f));
 
 		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
-															  -5.0f, -15.0f, 0.2f));
+						 -5.0f, -15.0f, 0.2f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 0.8f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -1037,7 +1065,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "folders");
 	}
 
-	void RebuildRegularAssetIcon()
+	void EditorUIStyleBuilder::RebuildRegularAssetIcon()
 	{
 		UIAssetIcon* sample = mnew UIAssetIcon();
 
@@ -1084,7 +1112,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildFolderAssetIcon()
+	void EditorUIStyleBuilder::RebuildFolderAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1094,7 +1122,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "folder");
 	}
 
-	void RebuildPrefabAssetIcon()
+	void EditorUIStyleBuilder::RebuildPrefabAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1104,7 +1132,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "prefab");
 	}
 
-	void RebuildPrefabPreviewAssetIcon()
+	void EditorUIStyleBuilder::RebuildPrefabPreviewAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1117,7 +1145,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "prefab preview");
 	}
 
-	void RebuildImagePreviewAssetIcon()
+	void EditorUIStyleBuilder::RebuildImagePreviewAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1128,7 +1156,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "image preview");
 	}
 
-	void RebuildTextAssetIcon()
+	void EditorUIStyleBuilder::RebuildTextAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1138,7 +1166,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "text");
 	}
 
-	void RebuildAnimationAssetIcon()
+	void EditorUIStyleBuilder::RebuildAnimationAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1148,7 +1176,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "animation");
 	}
 
-	void RebuildAssetsGridScroll()
+	void EditorUIStyleBuilder::RebuildAssetsGridScroll()
 	{
 		UIAssetsIconsScrollArea* sample = mnew UIAssetsIconsScrollArea();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -1182,7 +1210,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildLinkBtn()
+	void EditorUIStyleBuilder::RebuildLinkBtn()
 	{
 		UIButton* sample = mnew UIButton();
 
@@ -1201,7 +1229,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "asset link");
 	}
 
-	void RebuildEditorDropdown()
+	void EditorUIStyleBuilder::RebuildEditorDropdown()
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -1251,72 +1279,19 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "editor property");
 	}
 
-	void RebuildEditorUIStyle()
+	void EditorUIStyleBuilder::RebuildEditorUIStyle()
 	{
 		o2UI.ClearStyle();
 
-		RebuildButtonStyle();
-		RebuildCloseButtonStyle();
-		RebuildArrowButtonStyle();
-		RebuildHorProgressBarStyle();
-		RebuildVerProgressBarStyle();
-		RebuildHorScrollBarStyle();
-		RebuildVerScrollBarStyle();
-		RebuildCheckboxStyle();
-		RebuildScrollAreaStyle();
-		RebuildScrollAreaStraightBarsStyle();
-		RebuildLabelStyle();
-		RebuildEditBoxStyle();
-		RebuildCustomListStyle();
-		RebuildListStyle();
-		RebuildCustomDropDownStyle();
-		RebuildDropDownStyle();
-		RebuildWindowStyle();
-		RebuildContextMenuStyle();
-		RebuildTreeStyle();
-		RebuildDockableWndStyle();
-		RebuildMenuPanelStyle();
-		RebuildPlayStopButtonStyle();
-		RebuildPauseButtonStyle();
-		RebuildStepButtonStyle();
-		RebuildBacklessDropdown();
-		RebuildRoundDropDown();
-		RebuildArrowToggle();
-		RebuildBrushToggle();
-		RebuildMoveToggle();
-		RebuildRotateToggle();
-		RebuildScaleToggle();
-		RebuildFrameToggle();
-		RebuildSearchButton();
-		RebuildListTreeToggle();
-		RebuildBacklessEditbox();
-		RebuildActorsTreeNodeEnableToggle();
-		RebuildActorsTreeLockToggle();
-		RebuildActorsTreeLinkBtn();
-		RebuildActorsTree();
-		RebuildPanelDownButton();
-		RebuildTrashDownPanelButton();
-		RebuildMessagesDownPanelToggle();
-		RebuildWarningsDownPanelToggle();
-		RebuildErrorsDownPanelToggle();
-		RebuildLongListStyle();
-		RebuildFilterMenuButton();
-		RebuildTreeMenuButton();
-		RebuildFoldersTree();
-		RebuildBacklessScrollarea();
-		RebuildRegularAssetIcon();
-		RebuildFolderAssetIcon();
-		RebuildPrefabAssetIcon();
-		RebuildPrefabPreviewAssetIcon();
-		RebuildImagePreviewAssetIcon();
-		RebuildTextAssetIcon();
-		RebuildAnimationAssetIcon();
-		RebuildAssetsGridScroll();
-		RebuildSinglelineEditbox();
-		RebuildCheckboxWithoutCaptionStyle();
-		RebuildLinkBtn();
-		RebuildEditorDropdown();
+		auto funcs = GetType().Functions();
+		for (auto func : funcs)
+		{
+			if (func->GetName() == "RebuildBasicUIStyle" || func->GetName() == "RebuildEditorUIStyle")
+				continue;
 
-		o2UI.SaveStyle("ui_style.xml");
+			func->Invoke<void>(this);
+		}
+
+		o2UI.SaveStyle("editor_ui_style.xml");
 	}
 }

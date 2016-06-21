@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UI/Widget.h"
+#include "Utils/UnknownPtr.h"
 
 using namespace o2;
 
@@ -48,13 +49,13 @@ namespace Editor
 		void InitializeContext();
 
 		// Returns folder parent (for folders tree)
-		UnknownType* GetFoldersTreeNodeParent(UnknownType* object);
+		UnknownPtr GetFoldersTreeNodeParent(UnknownPtr object);
 
 		// Returns folder childs (for folders tree)
-		Vector<UnknownType*> GetFoldersTreeNodeChilds(UnknownType* object);
+		Vector<UnknownPtr> GetFoldersTreeNodeChilds(UnknownPtr object);
 
 		// Setups tree node by folder (for folders tree)
-		void SetupFoldersTreeNode(UITreeNode* node, UnknownType* object);
+		void SetupFoldersTreeNode(UITreeNode* node, UnknownPtr object);
 
 		// Calls when folder item double clicked (for folders tree)
 		void OnFoldersTreeNodeDblClick(UITreeNode* node);

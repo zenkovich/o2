@@ -16,7 +16,7 @@ namespace o2
 
 		// Constructor from other pointer
 		template<typename T>
-		UnknownPtr(T* ptr):mPointer((void*)mPointer) {}
+		UnknownPtr(T* ptr):mPointer((void*)ptr) {}
 
 		// Cope operator
 		UnknownPtr& operator=(const UnknownPtr& other)
@@ -41,9 +41,9 @@ namespace o2
 		}
 
 		// Boolean cast operator, returns false when pointer is null
-		operator bool() const;
+		operator bool() const
 		{
-			return mPointer;
+			return mPointer != nullptr;
 		}
 
 		// Check equals operator

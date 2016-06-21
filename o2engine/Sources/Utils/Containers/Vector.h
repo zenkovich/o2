@@ -289,8 +289,15 @@ namespace o2
 		template<typename _sel_type>
 		Vector<_sel_type> Select(const Function<_sel_type(const _type&)>& selector) const;
 
+		// Return vector with casted type
+		template<typename _sel_type>
+		Vector<_sel_type> Cast() const;
+
 		// Returns first specified count elements
 		Vector Take(int count) const;
+
+		// Returns array from begin to end
+		Vector Take(int begin, int end) const;
 
 		// Returns begin iterator
 		Iterator Begin();
@@ -916,8 +923,13 @@ namespace o2
 		if (mCount + arrCount >= mCapacity)
 			Reserve(GetReservingSize(mCount + arrCount));
 
-		for (int i = position; i < mCount; i++)
-			new (mValues + i + arrCount) _type(mValues[i]);
+		for (int i = mCount - 1; i >= position; i--)
+		{
+			if (i < mCount)
+				mValues[i + arrCount] = mValues[i];
+			else
+				new (mValues + i + arrCount) _type(mValues[i]);
+		}
 
 		for (int i = 0; i < arrCount; i++)
 		{
@@ -1119,6 +1131,17 @@ namespace o2
 	}
 
 	template<typename _type>
+	template<typename _sel_type>
+	Vector<_sel_type> Vector<_type>::Cast() const
+	{
+		Vector<_sel_type> res;
+		for (auto x : *this)
+			res.Add((_sel_type)x);
+		return res;
+	}
+
+
+	template<typename _type>
 	Vector<_type> Vector<_type>::Take(int count) const
 	{
 		Vector<_type> res;
@@ -1132,6 +1155,17 @@ namespace o2
 		}
 		return res;
 	}
+
+	template<typename _type>
+	Vector<_type> Vector<_type>::Take(int begin, int end) const
+	{
+		Vector<_type> res;
+		for (int i = begin; i < end && i < mCount; i++)
+			res.Add(Get(i));
+
+		return res;
+	}
+
 
 #pragma endregion Array implementation
 

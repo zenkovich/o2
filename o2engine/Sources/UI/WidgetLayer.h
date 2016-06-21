@@ -23,7 +23,7 @@ namespace o2
 
 	public:
 		Layout                                  layout;             // Drawable layout @SERIALIZABLE
-		Layout                                  interactableLayout; // Interactable area layout
+		Layout                                  interactableLayout; // Interactable area layout @SERIALIZABLE
 		String                                  name;               // Name of layer @SERIALIZABLE
 		Property<float>                         depth;              // Drawing depth (higher depths will draw later)
 		Property<float>                         transparency;       // Drawable transparency property

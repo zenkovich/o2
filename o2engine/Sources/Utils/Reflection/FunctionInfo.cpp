@@ -8,6 +8,11 @@ namespace o2
 			mReturnType == other.mReturnType && mParameters == other.mParameters;
 	}
 
+	FunctionInfo* FunctionInfo::Clone() const
+	{
+		return mnew FunctionInfo(*this);
+	}
+
 	Type* FunctionInfo::GetOwnerType() const
 	{
 		return mOwnerType;

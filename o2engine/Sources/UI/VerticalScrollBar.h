@@ -91,7 +91,7 @@ namespace o2
 		float          mMaxValue = 1.0f;              // Maximum value @SERIALIZABLE
 		float          mScrollSense = 1.0f;           // Scroll sense coefficient @SERIALIZABLE
 		float          mScrollHandleSize = 0.2f;      // Scroll handle size (in value range) @SERIALIZABLE
-		float          mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels
+		float          mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels @SERIALIZABLE
 		float          mPressHandleOffset = 0.0f;     // Value offset when handle was pressed
 		bool           mHandlePressed = false;        // True, when handle was pressed
 		UIWidgetLayer* mHandleLayer = nullptr;        // Handle layer

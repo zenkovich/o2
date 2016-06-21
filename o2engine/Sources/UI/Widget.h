@@ -38,10 +38,10 @@ namespace o2
 		Accessor<UIWidgetLayer*, const String&> layer;
 		Accessor<UIWidgetState*, const String&> state;
 
-		UIWidgetLayout                          layout;          // @SERIALIZABLE
+		UIWidgetLayout                          layout;          // Widget's layout @SERIALIZABLE
 		Function<void()>                        onLayoutChanged; // Layout change event
 		Function<void()>                        onFocused;       // On widget focused event
-		Function<void()>                        onUnfocused;     // On widget unfocised event
+		Function<void()>                        onUnfocused;     // On widget unfocused event
 
 		// Default constructor
 		UIWidget();
@@ -154,6 +154,9 @@ namespace o2
 
 		// Sets state value
 		void SetState(const String& name, bool state);
+
+		// Sets state value immediately
+		void SetStateForcible(const String& name, bool state);
 
 		// Returns state value
 		bool GetState(const String& name) const;

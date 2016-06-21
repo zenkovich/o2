@@ -22,9 +22,9 @@ namespace Editor
 		mFoldersTree->SetRearrangeType(UITree::RearrangeType::OnlyReparent);
 		mFoldersTree->SetMultipleSelectionAvailable(false);
 
-		mFoldersTree->getParentFunc = Function<UnknownType*(UnknownType*)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeParent);
-		mFoldersTree->getChildsFunc = Function<Vector<UnknownType*>(UnknownType*)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeChilds);
-		mFoldersTree->setupNodeFunc = Function<void(UITreeNode*, UnknownType*)>(this, &UIAssetsFoldersTree::SetupFoldersTreeNode);
+		mFoldersTree->getParentFunc = Function<UnknownPtr(UnknownPtr)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeParent);
+		mFoldersTree->getChildsFunc = Function<Vector<UnknownPtr>(UnknownPtr)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeChilds);
+		mFoldersTree->setupNodeFunc = Function<void(UITreeNode*, UnknownPtr)>(this, &UIAssetsFoldersTree::SetupFoldersTreeNode);
 		mFoldersTree->onItemDblClick = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeNodeDblClick);
 		mFoldersTree->onItemClick = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeClick);
 		mFoldersTree->onItemRBClick = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeRightClick);
@@ -68,7 +68,7 @@ namespace Editor
 	void UIAssetsFoldersTree::SelectAndExpandFolder(const String& path)
 	{
 		mCurrentPath = path;
-		mFoldersTree->SelectAndExpandObject((UnknownType*)(void*)(o2Assets.GetAssetsTree().FindAsset(path)));
+		mFoldersTree->SelectAndExpandObject(o2Assets.GetAssetsTree().FindAsset(path));
 	}
 
 	void UIAssetsFoldersTree::UpdateView()
@@ -101,24 +101,24 @@ namespace Editor
 		AddChild(mContextMenu);
 	}
 
-	UnknownType* UIAssetsFoldersTree::GetFoldersTreeNodeParent(UnknownType* object)
+	UnknownPtr UIAssetsFoldersTree::GetFoldersTreeNodeParent(UnknownPtr object)
 	{
 		if (!object)
-			return nullptr;
+			return UnknownPtr();
 
 		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
-		return (UnknownType*)(void*)(assetTreeNode->GetParent());
+		return (UnknownPtr)(void*)(assetTreeNode->GetParent());
 	}
 
-	Vector<UnknownType*> UIAssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownType* object)
+	Vector<UnknownPtr> UIAssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownPtr object)
 	{
-		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
+		AssetTree::AssetNode* assetTreeNode = object;
 
 		if (assetTreeNode)
 		{
 			return assetTreeNode->GetChilds().
 				FindAll([](AssetTree::AssetNode* x) { return x->mType == TypeOf(FolderAsset).ID(); }).
-				Select<UnknownType*>([](AssetTree::AssetNode* x) { return (UnknownType*)(void*)x; });
+				Select<UnknownPtr>([](AssetTree::AssetNode* x) { return UnknownPtr(x); });
 		}
 		else
 		{
@@ -126,11 +126,11 @@ namespace Editor
 
 			return assetsTree.mRootAssets.
 				FindAll([](AssetTree::AssetNode* x) { return x->mType == TypeOf(FolderAsset).ID(); }).
-				Select<UnknownType*>([](AssetTree::AssetNode* x) { return (UnknownType*)(void*)x; });
+				Select<UnknownPtr>([](AssetTree::AssetNode* x) { return UnknownPtr(x); });
 		}
 	}
 
-	void UIAssetsFoldersTree::SetupFoldersTreeNode(UITreeNode* node, UnknownType* object)
+	void UIAssetsFoldersTree::SetupFoldersTreeNode(UITreeNode* node, UnknownPtr object)
 	{
 		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->mPath);
@@ -161,7 +161,7 @@ namespace Editor
 			o2Assets.RenameAsset(*assetTreeNode, text);
 
 			node->SetState("edit", false);
-			node->UpdateView(false);
+			//node->UpdateView(false);
 
 			o2EditorAssets.OpenFolder(newPathAsset);
 		};
@@ -285,8 +285,8 @@ namespace Editor
 		{
 			auto node = mFoldersTree->GetNode(obj);
 
-			if (node)
-				node->ExpandAll();
+// 			if (node)
+// 				node->ExpandAll();
 		}
 	}
 
@@ -301,8 +301,8 @@ namespace Editor
 		{
 			auto node = mFoldersTree->GetNode(obj);
 
-			if (node)
-				node->CollapseAll();
+// 			if (node)
+// 				node->CollapseAll();
 		}
 	}
 

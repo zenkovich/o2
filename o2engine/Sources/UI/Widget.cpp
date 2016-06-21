@@ -553,6 +553,14 @@ namespace o2
 			stateObj->SetState(state);
 	}
 
+	void UIWidget::SetStateForcible(const String& name, bool state)
+	{
+		auto stateObj = GetStateObject(name);
+
+		if (stateObj)
+			stateObj->SetStateForcible(state);
+	}
+
 	bool UIWidget::GetState(const String& name) const
 	{
 		auto state = GetStateObject(name);
@@ -672,7 +680,7 @@ namespace o2
 
 	void UIWidget::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		if (mFullyDisabled)
+		if (mFullyDisabled && !forcible)
 			return;
 
 		if (CheckIsLayoutDrivenByParent(forcible))

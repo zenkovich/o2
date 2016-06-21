@@ -95,9 +95,9 @@ namespace o2
 
 	protected:
 		Text*       mTextLayer = nullptr;             // Text layer drawable. Getting from layer "text"
-		HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic
-		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic
-		Vec2F       mExpandBorder;                    // Expand overflow border size
+		HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
+		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZEBLE
+		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
 
 	protected:
 		// Updates layout

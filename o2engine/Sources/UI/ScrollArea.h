@@ -106,7 +106,7 @@ namespace o2
 
 		Vec2F                  mScrollPos;                              // Scroll position @SERIALIZABLE
 		Vec2F                  mScrollSpeed;                            // Scrolling speed
-		float                  mScrollSpeedDamp = 7.0f;                 // Scroll speed damping
+		float                  mScrollSpeedDamp = 7.0f;                 // Scroll speed damping  @SERIALIZABLE
 		RectF                  mScrollArea;                             // Maximum scroll area size
 		RectF                  mScrollRange;                            // Scroll range by width and height
 		bool                   mEnableHorScroll = false;                // Is horizontal scroll enabled (range > 0)
@@ -119,7 +119,7 @@ namespace o2
 
 		float                  mSpeedUpdTime = 0.0f;                    // Elapsed time from last scroll speed updating
 
-		bool                   mEnableScrollsHiding = true;             // Enables scroll hiding when they are stopped
+		bool                   mEnableScrollsHiding = true;             // Enables scroll hiding when they are stopped @SERIALIZABLE
 		float                  mLastHorScrollChangeTime = -1.0f;        // Last time when horizontal scroll bar was changed
 		float                  mLastVerScrollChangeTime = -1.0f;        // Last time when horizontal scroll bar was changed
 

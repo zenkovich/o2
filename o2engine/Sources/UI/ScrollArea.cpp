@@ -759,7 +759,7 @@ namespace o2
 		}
 		else mHorScrollBar = nullptr;
 
-		auto varScrollNode = node.GetNode("mHorScrollBar");
+		auto varScrollNode = node.GetNode("mVerScrollBar");
 		mOwnVerScrollBar = varScrollNode != nullptr;
 		if (mOwnVerScrollBar)
 		{

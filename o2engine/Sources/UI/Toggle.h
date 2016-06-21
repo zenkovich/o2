@@ -113,8 +113,8 @@ namespace o2
 		SERIALIZABLE(UIToggle);
 
 	protected:
-		bool           mValue;        // Current value
-		bool           mValueUnknown; // Is value unknown
+		bool           mValue;        // Current value @SERIALIZABLE
+		bool           mValueUnknown; // Is value unknown @SERIALIZABLE
 		Text*          mCaptionText;  // Caption layer text
 		UIWidgetLayer* mBackLayer;    // Background layer
 		UIToggleGroup* mToggleGroup;  // Toggle group

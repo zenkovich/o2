@@ -144,12 +144,17 @@ namespace o2
 		// --------------------
 		struct Node
 		{
-			UnknownPtr  object;           // Pointer to object
-			UITreeNode* widget = nullptr; // Node widget
-			bool        selected = false; // Is node selected
+			UnknownPtr  object;             // Pointer to object
+			UITreeNode* widget = nullptr;   // Node widget
+			bool        selected = false;   // Is node selected
+										    
+			Node*       parent = nullptr;   // Parent node definition
+			NodesVec    childs;             // Children nodes definitions
+										    
+			int         level = 0;          // Hierarchy depth level
 
-			Node*       parent = nullptr; // Parent node definition
-			NodesVec    childs;           // Children nodes definitions
+			bool        isExpanded = false; // Is node expanded
+			float       insertCoef = 0.0f;  // Inserting coefficient (0...1)
 
 		public:
 			// Returns height of node with children and coefficients
@@ -157,24 +162,32 @@ namespace o2
 
 			// Sets widget state to selected and stores selected flag
 			void SetSelected(bool selected);
+
+			// Returns all children count
+			int GetChildCount() const;
 		};
 
 	protected:
 		RearrangeType  mRearrangeType = RearrangeType::Enabled; // Current available rearrange type @SERIALIZABLE
 		bool           mMultiSelectAvailable = true;            // Is multi selection available @SERIALIZABLE
 					   
-		UITreeNode*    mNodeSample = nullptr;                   // Item sample @SERIALIZABLE
+		UITreeNode*    mNodeWidgetSample = nullptr;             // Item sample @SERIALIZABLE
 		float          mChildsOffset = 10.0f;                   // Children nodes offset from parent @SERIALIZABLE
 					   
-		bool           mNeedUpdateView = false;                 // Is tree needs to be rebuild
+		bool           mIsNeedUpdateView = false;               // Is tree needs to be rebuild
+		bool           mIsNeedUdateLayout = false;              // Is layout needs to rebuild
+		bool           mIsNeedUpdateVisibleNodes = false;       // In need to update visible nodes
 					   
 		NodesVec       mAllNodes;                               // All expanded nodes definitions
 		NodesVec       mSelectedNodes;                          // Selected nodes definitions
-		NodesVec       mVisibleNodes;
-		NodesVec       mNodesBuf;
+		NodesVec       mVisibleNodes;                           // Visible nodes
+
+		TreeNodesVec   mNodeWidgetsBuf;                         // Nodes widgets buffer
+		NodesVec       mNodesBuf;                               // Nodes buffer
 
 		int            mMinVisibleNodeIdx = 0;                  // Minimal visible node index
 		int            mMaxVisibleNodeIdx = 0;                  // Maximum visible node index
+		int            mInvalidVisibleNodeIdx = -1;             // Minimum of ivalide visible node index. Sets when nodes hierarchy changing in visible range
 
 		Vec2F          mLastClickPos;                           // Last click position in scroll space (depends on scroll position)
 					   
@@ -189,15 +202,17 @@ namespace o2
 		Vec2F          mDragOffset;                             // Offset from cursor to dragging node's center
 		UITreeNode*    mInsertNodeCandidate = nullptr;          // Insertion node candidate when dragging nodes
 		NodesVec       mBeforeDragSelectedItems;                // Before drag begin selection
-															   
+
+		int            mExpandingNodeIdx = -1;                  // Current expanding node index. -1 if no expanding node
+		float          mExpandingOffset = 0.0f;                 // Current expanding node offset
+		UnknownPtrsVec mExpandedObjects;                        // Expanded objects
 		UITreeNode*    mExpandNodeCandidate = nullptr;          // Expand node candidate when dragging
 		float          mExpandInsertTime = -1.0f;               // Remaining time to expanding item under cursor when dragging nodes
 		float          mPressedTime = 10.0f;                    // Time from last item pressing
 
 		float          mNodeExpandTime = 0.6f;                  // Node expand time when dragging actors @SERIALIZABLE
-		float          mNodeDragIntoZone = 0.3f;                // Node inside dragging zone coefficient (0.5 is full node area)
+		float          mNodeDragIntoZone = 0.3f;                // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
 
-		bool           mIsNeedUdateLayout = false;              // Is layout needs to rebuild
 
 	protected:
 		// Returns selected objects in group
@@ -234,10 +249,13 @@ namespace o2
 		void UpdatePressedNodeExpand(float dt);
 
 		// Updates root nodes and their childs if need
-		void UpdateRootNodes();
+		void UpdateNodes();
 
-		// Updates children nodes for object
-		void UpdateNodes(Node* node);
+		// Inserts node to hierarchy
+		int InsertNodes(Node* parentNode, int position, NodesVec* newNodes = nullptr);
+
+		// Removes node from hierarchy
+		void RemoveNodes(Node* parentNode);
 
 		// Calls when widget was selected
 		void OnFocused();
@@ -251,11 +269,23 @@ namespace o2
 		// Updates visible nodes (calculates range and initializes nodes)
 		void UpdateVisibleNodes();
 
+		// Returns node index from mAllNodes by position in local coordinates
+		int GetNodeIndex(float position) const;
+
+		// Returns node position in local coordinates by index in mAllNodes array
+		float GetNodePosition(int idx) const;
+
+		// Expands node: creates his children and sets expanded state
+		void ExpandNode(UITreeNode* node);
+
+		// Collapses node: removes children from hierarchy and widgets if they're visible
+		void CollapseNode(UITreeNode* node);
+
 		// Calculates scroll area
 		void CalculateScrollArea();
 
-		// Returns current height with children
-		float GetCurrentHeight() const;
+		// Moves scroll position and updates children widgets clipping and layout
+		void MoveScrollPosition(const Vec2F& delta);
 		
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
@@ -281,18 +311,6 @@ namespace o2
 		// Gets tree node from pool
 		UITreeNode* CreateTreeNode();
 
-		// Frees node to pool
-		void FreeTreeNode(UITreeNode* node);
-
-		// Gets free selection sprite from pool
-		Sprite* CreateSelectionSprite();
-
-		// Frees selection sprite and puts in pool
-		void FreeSelectionSprite(Sprite* sprite);
-
-		// Checks selected object for nodes bindings
-		void CheckSelectedNodes();
-
 		// Begins dragging selected items
 		void BeginDragging(UITreeNode* node);
 
@@ -317,9 +335,6 @@ namespace o2
 		// Calls when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group);
 
-		// Returns tree node offset from top of this
-		float GetTreeNodeOffset(UITreeNode* node);
-
 		friend class UITreeNode;
 	};
 
@@ -341,9 +356,6 @@ namespace o2
 		// Copy-operator
 		UITreeNode& operator=(const UITreeNode& other);
 
-		// Draws widget
-		void Draw();
-
 		// Sets expanding
 		void SetExpanded(bool expanded, bool forcible = false);
 
@@ -356,12 +368,6 @@ namespace o2
 		// Collapses node
 		void Collapse(bool forcible = false);
 
-		// Expands all nodes
-		void ExpandAll();
-
-		// Collapses all nodes
-		void CollapseAll();
-
 		// Returns object pointer
 		UnknownPtr GetObject() const;
 
@@ -373,13 +379,7 @@ namespace o2
 	protected:
 		UITree::Node*  mNodeDef = nullptr;       // Node definition
 		UITree*        mOwnerTree = nullptr;     // Owner tree
-
-		UIWidgetState* mExpandedState = nullptr; // Expanded state. Changes mExpandCoef
-		UIWidgetState* mSelectedState;           // Node selected state
-
-		float          mExpandCoef = 0.0f;       // Expand coefficient (0...1)
-		float          mInsertSizeCoef = 0.0f;   // Inserting as previous size coef 
-		float          mDragSizeCoef = 1.0f;     // Dragging size coef 1 -> 0
+		UIWidgetState* mSelectedState = nullptr; // Node selected state
 
 	protected:
 		// Updates expanding

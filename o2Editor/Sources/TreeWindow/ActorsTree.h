@@ -5,6 +5,8 @@
 namespace o2
 {
 	class Actor;
+	class UIButton;
+	class UIEditBox;
 	class UIToggleGroup;
 }
 
@@ -45,8 +47,8 @@ namespace Editor
 		// Attaches to scene events
 		void AttachToSceneEvents();
 
-		// Updates tree node for object
-		void UpdateNodeView(Actor* object);
+		// Deattaches from scene events
+		void DeattachFromSceneEvents();
 
 		// Returns ui node for object
 		UITreeNode* GetNode(Actor* object);
@@ -99,16 +101,16 @@ namespace Editor
 		void Initialize();
 
 		// Returns actor's parent (For tree widget)
-		UnknownType* GetActorsParent(UnknownType* obj);
+		UnknownPtr GetActorsParent(UnknownPtr obj);
 
 		// Returns actor's children (For tree widget)
-		Vector<UnknownType*> GetActorsChildren(UnknownType* parentObj);
+		Vector<UnknownPtr> GetActorsChildren(UnknownPtr parentObj);
 
 		// Initializes tree node by actor (For tree widget)
-		void SetupTreeNodeActor(UITreeNode* node, UnknownType* actorObj);
+		void SetupTreeNodeActor(UITreeNode* node, UnknownPtr actorObj);
 
 		// Moves actors to new parent and position, when they was dragged in tree (For tree widget)
-		void RearrangeActors(Vector<UnknownType*> objects, UnknownType* parentObj, UnknownType* prevObj);
+		void RearrangeActors(Vector<UnknownPtr> objects, UnknownPtr parentObj, UnknownPtr prevObj);
 
 		// Calls when tree node double clicked (For tree widget)
 		void OnTreeNodeDblClick(UITreeNode* node, Actor* actor);
@@ -130,11 +132,62 @@ namespace Editor
 
 		// Calls when actor was destroyed
 		void OnActorDestroyed(Actor* actor);
+
+		// Calls when actor was changed
+		void OnActorChanged(Actor* actor);
 // 
 // 		// Calls when some selectable drag listeners was dragged above this area
 // 		void OnDraggedAbove(SelectableDragableObjectsGroup* group);
 // 
 // 		// Calls when some selectable drag listeners was dropped to this
 // 		void OnDropped(SelectableDragableObjectsGroup* group);
+// 		
+		friend class UIActorsTreeNode;
+	};
+
+	// ----------------
+	// Actors tree node
+	// ----------------
+	class UIActorsTreeNode: public UITreeNode
+	{
+	public:
+		// Default constructor
+		UIActorsTreeNode();
+
+		// Copy-constructor
+		UIActorsTreeNode(const UIActorsTreeNode& other);
+
+		// Copy operator
+		UIActorsTreeNode& operator=(const UIActorsTreeNode& other);
+
+		// Sets actor and updates content
+		void SetActor(Actor* actor);
+
+		// Enables edit name edit box
+		void EnableEditName();
+
+		SERIALIZABLE(UIActorsTreeNode);
+
+	protected:
+		Actor*         mTargetActor = nullptr;  // target actor
+
+		Text*          mNameDrawable = nullptr; // Actor name drawable
+		UIToggle*      mLockToggle = nullptr;   // Lock toggle
+		UIToggle*      mEnableToggle = nullptr; // Enable toggle
+		UIButton*      mLinkBtn = nullptr;      // View link button
+		UIEditBox*     mNameEditBox = nullptr;  // Actor's name edit box
+		UIWidgetState* mEditState = nullptr;    // Actor's name edit state
+
+	protected:
+		// initializes controls and widgets
+		void InitializeControls();
+
+		// Calls when lock toggle was clicked and changes target actor's lock state
+		void OnLockClicked();
+
+		// Calls when enable toggle was clicked and changes target actor's enable state
+		void OnEnableCkicked();
+
+		friend class UIActorsTree;
 	};
 }

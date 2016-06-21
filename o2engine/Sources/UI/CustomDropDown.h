@@ -116,9 +116,9 @@ namespace o2
 
 	protected:
 		UICustomList* mItemsList = nullptr;                // List view @SERIALIZABLE
-		Layout        mClipLayout = Layout::BothStretch(); // Clipping layout
+		Layout        mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
 		RectF         mAbsoluteClip;                       // Absolute clipping rectangle
-		int           mMaxListItems = 10;                  // Maximum visible items in list
+		int           mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
 
 	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true

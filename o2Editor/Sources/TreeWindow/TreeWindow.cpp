@@ -232,11 +232,9 @@ namespace Editor
 			Actor* parentActor = obj;
 			parentActor->AddChild(newActor);
 
-			node->UpdateView(true);
-
 			auto parentChilds = parentActor->GetChilds();
 			auto action = mnew CreateActorsAction({ newActor }, parentActor,
-														parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
+												  parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
 			o2EditorApplication.DoneAction(action);
 		}
 		else
@@ -245,7 +243,7 @@ namespace Editor
 
 			auto scereActors = o2Scene.GetRootActors();
 			auto action = mnew CreateActorsAction({ newActor }, nullptr,
-														scereActors.Count() > 1 ? scereActors[scereActors.Count() - 2] : nullptr);
+												  scereActors.Count() > 1 ? scereActors[scereActors.Count() - 2] : nullptr);
 			o2EditorApplication.DoneAction(action);
 		}
 	}
@@ -414,9 +412,9 @@ namespace Editor
 		{
 			actor->SetLocked(value);
 
-			auto node = mActorsTree->GetNode(actor);
-			if (node)
-				node->UpdateView();
+// 			auto node = mActorsTree->GetNode(actor);
+// 			if (node)
+// 				node->UpdateView();
 		}
 	}
 
@@ -435,9 +433,9 @@ namespace Editor
 		{
 			actor->SetEnabled(value);
 
-			auto node = mActorsTree->GetNode(actor);
-			if (node)
-				node->UpdateView();
+// 			auto node = mActorsTree->GetNode(actor);
+// 			if (node)
+// 				node->UpdateView();
 		}
 	}
 

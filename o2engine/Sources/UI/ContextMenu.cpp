@@ -61,6 +61,8 @@ namespace o2
 		mItemsLayout->baseCorner    = BaseCorner::LeftTop;
 		mItemsLayout->fitByChildren = true;
 		mItemsLayout->layout        = UIWidgetLayout::BothStretch();
+
+		SetVisibleForcible(false);
 	}
 
 	UIContextMenu::UIContextMenu(Vector<Item> items):
@@ -80,6 +82,8 @@ namespace o2
 
 		RetargetStatesAnimations();
 		UpdateLayout();
+
+		SetVisibleForcible(false);
 	}
 
 	UIContextMenu::~UIContextMenu()

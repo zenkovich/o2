@@ -2,11 +2,11 @@
 
 namespace o2
 {
-	DataNode ISerializable::Serialize() const
+	DataNode ISerializable::SerializeBasic(const void* thisObject) const
 	{
 		DataNode res;
 		OnSerialize(res);
-		char* thisPtr = (char*)this;
+		char* thisPtr = (char*)thisObject;
 		for (auto field : GetType().Fields())
 		{
 			auto srlzAttribute = field->Attribute<SerializableAttribute>();
@@ -19,9 +19,9 @@ namespace o2
 		return res;
 	}
 
-	void ISerializable::Deserialize(const DataNode& node)
+	void ISerializable::DeserializeBasic(const DataNode& node, const void* thisObject)
 	{
-		char* thisPtr = (char*)this;
+		char* thisPtr = (char*)thisObject;
 		for (auto field : GetType().Fields())
 		{
 			auto srlzAttribute = field->Attribute<SerializableAttribute>();

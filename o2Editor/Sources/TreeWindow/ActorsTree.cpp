@@ -23,6 +23,11 @@ namespace Editor
 	UIActorsTree::UIActorsTree():
 		UITree(), mAttackedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
+		delete mNodeWidgetSample;
+		mNodeWidgetSample = mnew UIActorsTreeNode();
+		mNodeWidgetSample->layout.minHeight = 20;
+		mNodeWidgetSample->AddLayer("caption", nullptr);
+
 		Initialize();
 	}
 
@@ -34,24 +39,7 @@ namespace Editor
 
 	UIActorsTree::~UIActorsTree()
 	{
-		if (Scene::IsSingletonInitialzed())
-		{
-			o2Scene.onActorCreated -= Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
-			o2Scene.onActorDestroying -= Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
-
-			if (mAttackedToSceneEvents)
-			{
-				auto updateActorTreeNode = Function<void(Actor*)>(this, &UIActorsTree::UpdateNodeView);
-
-				o2Scene.onActorCreated -= Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
-				o2Scene.onActorDestroying -= Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
-
-				o2Scene.onActorEnableChanged -= updateActorTreeNode;
-				o2Scene.onActorLockChanged -= updateActorTreeNode;
-				o2Scene.onActorNameChanged -= updateActorTreeNode;
-				o2Scene.onActorChildsHierarchyChanged -= updateActorTreeNode;
-			}
-		}
+		DeattachFromSceneEvents();
 	}
 
 	UIActorsTree& UIActorsTree::operator=(const UIActorsTree& other)
@@ -62,7 +50,7 @@ namespace Editor
 
 	void UIActorsTree::AttachToSceneEvents()
 	{
-		auto updateActorTreeNode = Function<void(Actor*)>(this, &UIActorsTree::UpdateNodeView);
+		auto updateActorTreeNode = Function<void(Actor*)>(this, &UIActorsTree::OnActorChanged);
 
 		o2Scene.onActorCreated += Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
 		o2Scene.onActorDestroying += Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
@@ -75,14 +63,31 @@ namespace Editor
 		mAttackedToSceneEvents = true;
 	}
 
-	void UIActorsTree::UpdateNodeView(Actor* object)
+	void UIActorsTree::DeattachFromSceneEvents()
 	{
-		UITree::UpdateNodeView((UnknownType*)(void*)object);
+		if (Scene::IsSingletonInitialzed())
+		{
+			o2Scene.onActorCreated -= Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
+			o2Scene.onActorDestroying -= Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
+
+			if (mAttackedToSceneEvents)
+			{
+				auto updateActorTreeNode = Function<void(Actor*)>(this, &UIActorsTree::OnActorChanged);
+
+				o2Scene.onActorCreated -= Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
+				o2Scene.onActorDestroying -= Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
+
+				o2Scene.onActorEnableChanged -= updateActorTreeNode;
+				o2Scene.onActorLockChanged -= updateActorTreeNode;
+				o2Scene.onActorNameChanged -= updateActorTreeNode;
+				o2Scene.onActorChildsHierarchyChanged -= updateActorTreeNode;
+			}
+		}
 	}
 
 	UITreeNode* UIActorsTree::GetNode(Actor* object)
 	{
-		return UITree::GetNode((UnknownType*)(void*)object);
+		return UITree::GetNode((UnknownPtr)(void*)object);
 	}
 
 	void UIActorsTree::ManualBeginDraggingActors(const ActorsVec& actors)
@@ -93,18 +98,18 @@ namespace Editor
 		mDragOffset = Vec2F();
 		mFakeDragNode->Show(true);
 
-		setupNodeFunc(mFakeDragNode, mSelectedItems.Last().object);
+		setupNodeFunc(mFakeDragNode, mSelectedNodes.Last()->object);
 
-		if (mSelectedItems.Count() > 1)
+		if (mSelectedNodes.Count() > 1)
 		{
 			if (auto nameLayer = mFakeDragNode->FindLayer<Text>())
-				nameLayer->text = String::Format("%i items", mSelectedItems.Count());
+				nameLayer->text = String::Format("%i items", mSelectedNodes.Count());
 		}
 
-		for (auto sel : mSelectedItems)
+		for (auto sel : mSelectedNodes)
 		{
-			if (sel.node)
-				sel.node->SetState("dragging", true);
+			if (sel->widget)
+				sel->widget->SetState("dragging", true);
 		}
 	}
 
@@ -121,13 +126,13 @@ namespace Editor
 		mIsDraggingNodes = false;
 		mFakeDragNode->Hide(true);
 
-		for (auto node : mAllNodes)
-			node->SetState("inserting", false);
+		for (auto node : mVisibleNodes)
+			node->widget->SetState("inserting", false);
 
-		for (auto sel : mSelectedItems)
+		for (auto sel : mSelectedNodes)
 		{
-			if (sel.node)
-				sel.node->SetState("dragging", false);
+			if (sel->widget)
+				sel->widget->SetState("dragging", false);
 		}
 
 		DeselectAllActors();
@@ -140,22 +145,22 @@ namespace Editor
 
 	void UIActorsTree::SetSelectedActors(const ActorsVec& actors)
 	{
-		UITree::SetSelectedObjects(actors.Select<UnknownType*>([](auto x) { return (UnknownType*)(void*)x; }));
+		UITree::SetSelectedObjects(actors.Select<UnknownPtr>([](auto x) { return (UnknownPtr)(void*)x; }));
 	}
 
 	void UIActorsTree::SelectActor(Actor* object)
 	{
-		UITree::SelectObject((UnknownType*)(void*)object);
+		UITree::SelectObject((UnknownPtr)(void*)object);
 	}
 
 	void UIActorsTree::SelectAndExpandActor(Actor* object)
 	{
-		UITree::SelectAndExpandObject((UnknownType*)(void*)object);
+		UITree::SelectAndExpandObject((UnknownPtr)(void*)object);
 	}
 
 	void UIActorsTree::DeselectActor(Actor* object)
 	{
-		UITree::DeselectObject((UnknownType*)(void*)object);
+		UITree::DeselectObject((UnknownPtr)(void*)object);
 	}
 
 	void UIActorsTree::DeselectAllActors()
@@ -165,7 +170,7 @@ namespace Editor
 
 	void UIActorsTree::ScrollTo(Actor* object)
 	{
-		UITree::ScrollTo((UnknownType*)(void*)object);
+		UITree::ScrollTo((UnknownPtr)(void*)object);
 	}
 
 	void UIActorsTree::Initialize()
@@ -176,78 +181,62 @@ namespace Editor
 		mLockActorsTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
 		mLockActorsTogglesGroup->onReleased = Function<void(bool)>(this, &UIActorsTree::LockActorsGroupReleased);
 
-		SetNodesPoolResizeCount(100);
-		getParentFunc = Function<UnknownType*(UnknownType*)>(this, &UIActorsTree::GetActorsParent);
-		getChildsFunc = Function<Vector<UnknownType*>(UnknownType*)>(this, &UIActorsTree::GetActorsChildren);
-		setupNodeFunc = Function<void(UITreeNode*, UnknownType*)>(this, &UIActorsTree::SetupTreeNodeActor);
-		onDraggedObjects = Function<void(Vector<UnknownType*>, UnknownType*, UnknownType*)>(this, &UIActorsTree::RearrangeActors);
-		onItemDblClick = Function<void(UITreeNode*, Actor*)>(this, &UIActorsTree::OnTreeNodeDblClick);
+		getParentFunc    = Function<UnknownPtr(UnknownPtr)>(this, &UIActorsTree::GetActorsParent);
+		getChildsFunc    = Function<Vector<UnknownPtr>(UnknownPtr)>(this, &UIActorsTree::GetActorsChildren);
+		setupNodeFunc    = Function<void(UITreeNode*, UnknownPtr)>(this, &UIActorsTree::SetupTreeNodeActor);
+		onDraggedObjects = Function<void(Vector<UnknownPtr>, UnknownPtr, UnknownPtr)>(this, &UIActorsTree::RearrangeActors);
+		onItemDblClick   = Function<void(UITreeNode*, Actor*)>(this, &UIActorsTree::OnTreeNodeDblClick);
+
+		UIActorsTreeNode* actorNodeWidgetSample = (UIActorsTreeNode*)mNodeWidgetSample;
+		actorNodeWidgetSample->InitializeControls();
+		if (actorNodeWidgetSample->mLockToggle)
+			actorNodeWidgetSample->mLockToggle->SetToggleGroup(mLockActorsTogglesGroup);
+
+		if (actorNodeWidgetSample->mEnableToggle)
+			actorNodeWidgetSample->mEnableToggle->SetToggleGroup(mEnableActorsTogglesGroup);
 
 		UITree::onItemRBClick = [&](UITreeNode* x) {
-			Actor* actor = x ? (Actor*)(void*)x->GetObject() : nullptr;
+			Actor* actor = x ? (Actor*)x->GetObject() : nullptr;
 			onItemRBClick(x, actor);
 		};
 
 		UITree::onItemDblClick = [&](UITreeNode* x) {
-			Actor* actor = x ? (Actor*)(void*)x->GetObject() : nullptr;
+			Actor* actor = x ? (Actor*)x->GetObject() : nullptr;
 			onItemDblClick(x, actor);
 		};
 
-		UITree::onItemsSelectionChanged = [&](Vector<UnknownType*> x) {
-			onItemsSelectionChanged(x.Select<Actor*>([](auto x) { return (Actor*)(void*)x; })); };
+		UITree::onItemsSelectionChanged = [&](Vector<UnknownPtr> x) {
+			onItemsSelectionChanged(x.Select<Actor*>([](auto x) { return (Actor*)(void*)x; })); 
+		};
 	}
 
-	UnknownType* UIActorsTree::GetActorsParent(UnknownType* obj)
+	UnknownPtr UIActorsTree::GetActorsParent(UnknownPtr obj)
 	{
-		Actor* actor = (Actor*)(void*)obj;
-		return (UnknownType*)(void*)actor->GetParent();
+		Actor* actor = obj;
+		return actor->GetParent();
 	}
 
-	Vector<UnknownType*> UIActorsTree::GetActorsChildren(UnknownType* parentObj)
+	Vector<UnknownPtr> UIActorsTree::GetActorsChildren(UnknownPtr parentObj)
 	{
 		if (parentObj)
 		{
-			Actor* parent = (Actor*)(void*)parentObj;
-			return parent->GetChilds().Select<UnknownType*>([](auto x) { return (UnknownType*)(void*)x; });
+			Actor* parent = parentObj;
+			return parent->GetChilds().Cast<UnknownPtr>();
 		}
 
-		return o2Scene.GetRootActors().Select<UnknownType*>([](auto x) { return (UnknownType*)(void*)x; });
+		return o2Scene.GetRootActors().Cast<UnknownPtr>();
 	}
 
-	void UIActorsTree::SetupTreeNodeActor(UITreeNode* node, UnknownType* actorObj)
+	void UIActorsTree::SetupTreeNodeActor(UITreeNode* node, UnknownPtr actorObj)
 	{
-		Actor* actor = (Actor*)(void*)actorObj;
-
-		node->name = actor->GetName();
-
-		auto nameLayer = node->layer["name"];
-		((Text*)nameLayer->drawable)->text = actor->GetName();
-
-		auto enableToggle = (UIToggle*)node->GetChild("enableToggle");
-		enableToggle->SetValue(actor->IsEnabled());
-		enableToggle->onClick = [=]() { actor->SetEnabled(enableToggle->GetValue()); };
-		enableToggle->SetToggleGroup(mEnableActorsTogglesGroup);
-
-		auto lockToggle = (UIToggle*)node->GetChild("lockToggle");
-		lockToggle->SetValue(actor->IsLocked());
-		lockToggle->SetState("locked", actor->IsLockedInHierarchy());
-		lockToggle->SetState("halfHide", actor->IsLockedInHierarchy() && !actor->IsLocked());
-		lockToggle->onClick = [=]() { actor->SetLocked(lockToggle->GetValue()); };
-		lockToggle->SetToggleGroup(mLockActorsTogglesGroup);
-
-		auto lingBtn = (UIButton*)node->GetChild("linkBtn");
-
-		float alpha = actor->IsEnabledInHierarchy() ? 1.0f : 0.5f;
-		nameLayer->transparency = alpha;
-		enableToggle->SetState("halfHide", !actor->IsEnabledInHierarchy());
-		lingBtn->SetState("halfHide", !actor->IsEnabledInHierarchy());
+		((UIActorsTreeNode*)node)->SetActor(actorObj);
 	}
 
-	void UIActorsTree::RearrangeActors(Vector<UnknownType*> objects, UnknownType*parentObj, UnknownType* prevObj)
+	void UIActorsTree::RearrangeActors(Vector<UnknownPtr> objects, UnknownPtr parentObj, UnknownPtr prevObj)
 	{
-		Actor* parent = (Actor*)(void*)parentObj;
-		Actor* prevActor = (Actor*)(void*)prevObj;
-		Vector<Actor*> actors = objects.Select<Actor*>([](UnknownType* x) { return (Actor*)(void*)x; });
+		Actor* parent = parentObj;
+		Actor* prevActor = prevObj;
+		Vector<Actor*> actors = objects.Cast<Actor*>();
 
 		auto action = mnew ReparentActorsAction(actors);
 
@@ -259,19 +248,7 @@ namespace Editor
 
 	void UIActorsTree::OnTreeNodeDblClick(UITreeNode* node, Actor* actor)
 	{
-		node->SetState("edit", true);
-
-		auto editBox = (UIEditBox*)node->GetChild("nameEditBox");
-		editBox->text = (String)actor->name;
-		editBox->SelectAll();
-		editBox->UIWidget::Focus();
-		editBox->ResetSroll();
-
-		editBox->onChangeCompleted = [=](const WString& text) {
-			actor->SetName(text);
-			node->SetState("edit", false);
-			node->UpdateView(false);
-		};
+		((UIActorsTreeNode*)node)->EnableEditName();
 	}
 
 	void UIActorsTree::EnableActorsGroupPressed(bool value)
@@ -279,11 +256,10 @@ namespace Editor
 
 	void UIActorsTree::EnableActorsGroupReleased(bool value)
 	{
-		auto action = mnew EnableAction(
-			mEnableActorsTogglesGroup->GetToggled().Select<Actor*>([](UIToggle* x) {
-			return (Actor*)(void*)(((UITreeNode*)x->GetParent())->GetObject());
-		}), value);
+		ActorsVec actors = mEnableActorsTogglesGroup->GetToggled().Select<Actor*>(
+			[](UIToggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
 
+		auto action = mnew EnableAction(actors, value);
 		o2EditorApplication.DoneAction(action);
 	}
 
@@ -292,25 +268,29 @@ namespace Editor
 
 	void UIActorsTree::LockActorsGroupReleased(bool value)
 	{
-		auto action = mnew LockAction(
-			mLockActorsTogglesGroup->GetToggled().Select<Actor*>([](UIToggle* x) {
-			return (Actor*)(void*)(((UITreeNode*)x->GetParent())->GetObject());
-		}), value);
+		ActorsVec actors = mLockActorsTogglesGroup->GetToggled().Select<Actor*>(
+			[](UIToggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
 
+		auto action = mnew LockAction(actors, value);
 		o2EditorApplication.DoneAction(action);
 	}
 
 	void UIActorsTree::OnActorCreated(Actor* actor)
 	{
-		UITree::UpdateView(false);
+		UITree::OnObjectCreated(actor, actor->GetParent());
 	}
 
 	void UIActorsTree::OnActorDestroyed(Actor* actor)
 	{
-		UITree::UpdateView(false);
+		UITree::OnObjectRemoved(actor);
 	}
 
-	// 	void UIActorsTree::OnDraggedAbove(SelectableDragableObjectsGroup* group)
+	void UIActorsTree::OnActorChanged(Actor* actor)
+	{
+		UITree::OnObjectsChanged({ actor });
+	}
+
+		// 	void UIActorsTree::OnDraggedAbove(SelectableDragableObjectsGroup* group)
 	// 	{
 	// 		UITree::OnDraggedAbove(group);
 	// 
@@ -458,4 +438,88 @@ namespace Editor
 	// 		}
 	// 		else UITree::OnDropped(group);
 	// 	}
+
+UIActorsTreeNode::UIActorsTreeNode():
+	UITreeNode()
+{}
+
+UIActorsTreeNode::UIActorsTreeNode(const UIActorsTreeNode& other):
+	UITreeNode(other)
+{
+	InitializeControls();
+}
+
+Editor::UIActorsTreeNode& UIActorsTreeNode::operator=(const UIActorsTreeNode& other)
+{
+	UITreeNode::operator=(other);
+	InitializeControls();
+
+	return *this;
+}
+
+void UIActorsTreeNode::InitializeControls()
+{
+	mNameDrawable = GetLayerDrawable<Text>("name");
+	mLockToggle   = (UIToggle*)GetChild("lockToggle");
+	mEnableToggle = (UIToggle*)GetChild("enableToggle");
+	mLinkBtn      = (UIButton*)GetChild("linkBtn");
+	mNameEditBox  = (UIEditBox*)GetChild("nameEditBox");
+	mEditState    = GetStateObject("edit");
+
+	if (mLockToggle)
+		mLockToggle->onClick = Function<void()>(this, &UIActorsTreeNode::OnLockClicked);
+
+	if (mEnableToggle)
+		mEnableToggle->onClick = Function<void()>(this, &UIActorsTreeNode::OnEnableCkicked);
+
+	if (mNameEditBox)
+	{
+		mNameEditBox->onChangeCompleted = [=](const WString& text) {
+			mTargetActor->SetName(text);
+			mEditState->SetState(false);
+			((UIActorsTree*)mOwnerTree)->OnActorChanged(mTargetActor);
+		};
+	}
+}
+
+void UIActorsTreeNode::SetActor(Actor* actor)
+{
+	mTargetActor = actor;
+	mName = actor->GetName();
+
+	float alpha = actor->IsEnabledInHierarchy() ? 1.0f : 0.5f;
+
+	mNameDrawable->SetText(mName);
+	mNameDrawable->SetTransparency(alpha);
+
+	mEnableToggle->SetValue(actor->IsEnabled());
+	mEnableToggle->SetTransparency(alpha);
+
+	mLockToggle->SetValue(actor->IsLocked());
+	mLockToggle->SetStateForcible("locked", actor->IsLockedInHierarchy());
+	mLockToggle->SetStateForcible("halfHide", actor->IsLockedInHierarchy() && !actor->IsLocked());
+
+	mLinkBtn->SetTransparency(alpha);
+}
+
+void UIActorsTreeNode::EnableEditName()
+{
+	mEditState->SetState(true);
+
+	mNameEditBox->text = (String)mTargetActor->name;
+	mNameEditBox->SelectAll();
+	mNameEditBox->UIWidget::Focus();
+	mNameEditBox->ResetSroll();
+}
+
+void UIActorsTreeNode::OnLockClicked()
+{
+	mTargetActor->SetLocked(mLockToggle->GetValue());
+}
+
+void UIActorsTreeNode::OnEnableCkicked()
+{
+	mTargetActor->SetEnabled(mEnableToggle->GetValue());
+}
+
 }

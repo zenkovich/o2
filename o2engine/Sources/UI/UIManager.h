@@ -1,5 +1,6 @@
 #pragma once
 
+#include "UI/ContextMenu.h"
 #include "Utils/Log/LogStream.h"
 #include "Utils/Property.h"
 #include "Utils/Reflection/Type.h"
@@ -304,7 +305,8 @@ namespace o2
 			res = mnew _type();
 		}
 
-		res->SetVisibleForcible(true);
+		if (TypeOf(_type) != TypeOf(UIContextMenu))
+			res->SetVisibleForcible(true);
 
 		return res;
 	}

@@ -239,9 +239,8 @@ namespace o2
 	void TypeInitializer::AddBaseType()
 	{
 		_type::type.mBaseTypes.Add(&_baseType::type);
-
-		for (auto field : _baseType::type.mFields)
-			_type::type.mFields.Insert(field->Clone(), 0);
+		_type::type.mFields.Insert(_baseType::type.mFields.Select<FieldInfo*>([](FieldInfo* x) { return x->Clone(); }), 0);
+		_type::type.mFunctions.Insert(_baseType::type.mFunctions.Select<FunctionInfo*>([](FunctionInfo* x) { return x->Clone(); }), 0);
 	}
 
 	template<typename _type>

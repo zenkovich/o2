@@ -27,6 +27,9 @@ namespace o2
 		typedef Vector<Parameter> ParametersVec;
 
 	public:
+		// Returns cloned copy
+		virtual FunctionInfo* Clone() const;
+
 		// Check Equals operator
 		bool operator==(const FunctionInfo& other) const;
 
@@ -78,6 +81,12 @@ namespace o2
 	class SpecFunctionInfo: public ISpecFunctionInfo<_res_type, _args ...>
 	{
 	public:
+		// Returns cloned copy
+		FunctionInfo* Clone() const
+		{
+			return mnew SpecFunctionInfo(*this);
+		}
+
 		// Invokes function with parameters
 		_res_type Invoke(void* object, _args ... args) const
 		{
@@ -98,6 +107,12 @@ namespace o2
 	class SpecConstFunctionInfo: public ISpecFunctionInfo<_res_type, _args ...>
 	{
 	public:
+		// Returns cloned copy
+		FunctionInfo* Clone() const
+		{
+			return mnew SpecConstFunctionInfo(*this);
+		}
+
 		// Invokes function with parameters
 		_res_type Invoke(void* object, _args ... args) const
 		{

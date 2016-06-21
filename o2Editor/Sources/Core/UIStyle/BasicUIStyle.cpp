@@ -25,11 +25,9 @@
 #include "UI/VerticalScrollBar.h"
 #include "UI/Window.h"
 
-using namespace o2;
-
-namespace UIStyle
+namespace o2
 {
-	void RebuildButtonStyle()
+	void BasicUIStyleBuilder::RebuildButtonStyle()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -68,7 +66,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildCloseButtonStyle()
+	void BasicUIStyleBuilder::RebuildCloseButtonStyle()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -95,7 +93,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "close");
 	}
 
-	void RebuildArrowButtonStyle()
+	void BasicUIStyleBuilder::RebuildArrowButtonStyle()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -122,7 +120,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "arrow");
 	}
 
-	void RebuildHorProgressBarStyle()
+	void BasicUIStyleBuilder::RebuildHorProgressBarStyle()
 	{
 		UIHorizontalProgress* sample = mnew UIHorizontalProgress();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -161,7 +159,7 @@ namespace UIStyle
 	}
 
 
-	void RebuildVerProgressBarStyle()
+	void BasicUIStyleBuilder::RebuildVerProgressBarStyle()
 	{
 		UIVerticalProgress* sample = mnew UIVerticalProgress();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -197,7 +195,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildHorScrollBarStyle()
+	void BasicUIStyleBuilder::RebuildHorScrollBarStyle()
 	{
 		UIHorizontalScrollBar* sample = mnew UIHorizontalScrollBar();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -234,7 +232,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildVerScrollBarStyle()
+	void BasicUIStyleBuilder::RebuildVerScrollBarStyle()
 	{
 		UIVerticalScrollBar* sample = mnew UIVerticalScrollBar();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -271,7 +269,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildCheckboxStyle()
+	void BasicUIStyleBuilder::RebuildCheckboxStyle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -321,7 +319,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildCheckboxWithoutCaptionStyle()
+	void BasicUIStyleBuilder::RebuildCheckboxWithoutCaptionStyle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -364,7 +362,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "without caption");
 	}
 
-	void RebuildScrollAreaStraightBarsStyle()
+	void BasicUIStyleBuilder::RebuildScrollAreaStraightBarsStyle()
 	{
 		UIScrollArea* sample = mnew UIScrollArea();
 		sample->layout.minSize = Vec2F(30, 30);
@@ -411,7 +409,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "straightBars");
 	}
 
-	void RebuildScrollAreaStyle()
+	void BasicUIStyleBuilder::RebuildScrollAreaStyle()
 	{
 		UIScrollArea* sample = mnew UIScrollArea();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -446,7 +444,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildLabelStyle()
+	void BasicUIStyleBuilder::RebuildLabelStyle()
 	{
 		UILabel* sample = mnew UILabel();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -465,7 +463,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildEditBoxStyle()
+	void BasicUIStyleBuilder::RebuildEditBoxStyle()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
@@ -530,7 +528,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildCustomListStyle()
+	void BasicUIStyleBuilder::RebuildCustomListStyle()
 	{
 		UICustomList* sample = mnew UICustomList();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -579,7 +577,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildLongListStyle()
+	void BasicUIStyleBuilder::RebuildLongListStyle()
 	{
 		UILongList* sample = mnew UILongList();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -627,7 +625,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildListStyle()
+	void BasicUIStyleBuilder::RebuildListStyle()
 	{
 		UIList* sample = mnew UIList();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -682,7 +680,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildCustomDropDownStyle()
+	void BasicUIStyleBuilder::RebuildCustomDropDownStyle()
 	{
 		UICustomDropDown* sample = mnew UICustomDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -723,7 +721,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildDropDownStyle()
+	void BasicUIStyleBuilder::RebuildDropDownStyle()
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -764,7 +762,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildWindowStyle()
+	void BasicUIStyleBuilder::RebuildWindowStyle()
 	{
 		UIWindow* sample = mnew UIWindow();
 
@@ -840,7 +838,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildContextMenuStyle()
+	void BasicUIStyleBuilder::RebuildContextMenuStyle()
 	{
 		UIContextMenu* sample = mnew UIContextMenu();
 
@@ -907,7 +905,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildMenuPanelStyle()
+	void BasicUIStyleBuilder::RebuildMenuPanelStyle()
 	{
 		UIMenuPanel* sample = mnew UIMenuPanel();
 
@@ -930,26 +928,31 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildTreeStyle()
+	void BasicUIStyleBuilder::RebuildTreeStyle()
 	{
 		UITree* sample = mnew UITree();
 		sample->layout.minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
+		sample->SetChildsNodesOffset(10.0f);
 
 		*sample->GetHoverDrawable() = Sprite("ui/UI_Context_menu_white.png");
-		*sample->GetSelectionDrawable() = Sprite("ui/UI_Context_menu_white.png");
-		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		UITreeNode* itemSample = sample->GetNodeSample();
+
+		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
+
+		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_ListBox_selection_regular.png"),
+																  Layout::BothStretch(-10, -16, -10, -16));
+
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_hover.png"),
+																	Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
 		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
-
-		itemSample->SetChildrenOffset(10);
 
 		UIButton* itemSampleExpandBtn = mnew UIButton();
 		itemSampleExpandBtn->layout.minSize = Vec2F(5, 5);
@@ -981,7 +984,7 @@ namespace UIStyle
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
-		Animation expandedStateAnim = Animation::EaseInOut(itemSample, "mExpandCoef", 0.0f, 1.0f, 0.2f);
+		Animation expandedStateAnim(itemSample);
 		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 		*expandedStateAnim.AddAnimationValue(&hoverLayer->drawable->angle) =
@@ -990,6 +993,12 @@ namespace UIStyle
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+		itemSample->AddState("selected", Animation::EaseInOut(itemSample, &itemSelectionLayer->transparency, 0.0f, 1.0f, 0.2f));
+
+		Animation focusedItemAnim = Animation::EaseInOut(itemSample, &itemFocusedLayer->transparency, 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.2f);
+		itemSample->AddState("focused", focusedItemAnim);
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout.anchorMin = Vec2F(0, 0);
@@ -1020,7 +1029,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void RebuildBacklessDropdown()
+	void BasicUIStyleBuilder::RebuildBacklessDropdown()
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -1056,7 +1065,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "backless");
 	}
 
-	void RebuildBacklessEditbox()
+	void BasicUIStyleBuilder::RebuildBacklessEditbox()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
@@ -1082,7 +1091,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "backless");
 	}
 
-	void RebuildSinglelineEditbox()
+	void BasicUIStyleBuilder::RebuildSinglelineEditbox()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
@@ -1117,7 +1126,7 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "singleline");
 	}
 
-	void RebuildBacklessScrollarea()
+	void BasicUIStyleBuilder::RebuildBacklessScrollarea()
 	{
 		UIScrollArea* sample = mnew UIScrollArea();
 		sample->layout.minSize = Vec2F(10, 10);
@@ -1151,37 +1160,18 @@ namespace UIStyle
 		o2UI.AddWidgetStyle(sample, "backless");
 	}
 
-	void RebuildBasicUIStyle()
+	void BasicUIStyleBuilder::RebuildBasicUIStyle()
 	{
 		o2UI.ClearStyle();
 
-		RebuildButtonStyle();
-		RebuildCloseButtonStyle();
-		RebuildArrowButtonStyle();
-		RebuildHorProgressBarStyle();
-		RebuildVerProgressBarStyle();
-		RebuildHorScrollBarStyle();
-		RebuildVerScrollBarStyle();
-		RebuildCheckboxStyle();
-		RebuildScrollAreaStyle();
-		RebuildScrollAreaStraightBarsStyle();
-		RebuildLabelStyle();
-		RebuildEditBoxStyle();
-		RebuildCustomListStyle();
-		RebuildListStyle();
-		RebuildCustomDropDownStyle();
-		RebuildDropDownStyle();
-		RebuildWindowStyle();
-		RebuildContextMenuStyle();
-		RebuildTreeStyle();
-		RebuildMenuPanelStyle();
-		RebuildBacklessDropdown();
-		RebuildBacklessEditbox();
-		RebuildLongListStyle();
-		RebuildBacklessScrollarea();
-		RebuildSinglelineEditbox();
-		RebuildCheckboxWithoutCaptionStyle();
+		for (auto func : GetType().Functions())
+		{
+			if (func->GetName() == "RebuildBasicUIStyle")
+				continue;
 
-		o2UI.SaveStyle("ui_style.xml");
+			func->Invoke<void>(this);
+		}
+
+		o2UI.SaveStyle("basic_ui_style.xml");
 	}
 }

@@ -110,6 +110,7 @@ public class CppReflectionGenerator
 		foreach (var cls in reflectableClasses)
 		{
 			res += "void " + cls.name + "::InitializeType(" + cls.name + "* sample)\n{\n";
+            res += "\tauto iobject = dynamic_cast<o2::IObject*>(sample);\n";
 
 			foreach (var fld in cls.variables)
 			{
@@ -123,8 +124,8 @@ public class CppReflectionGenerator
 				else if (fld.protectLevel == ProtectLevel.Private)
 					protectSection = "Private";
 
-				res += "\tTypeInitializer::RegField(&type, \"" + fld.name + "\", (size_t)(char*)(&sample->" + fld.name + 
-					") - (size_t)(char*)sample, sample->" + fld.name + ", o2::ProtectSection::" + protectSection + ")";
+				res += "\tTypeInitializer::RegField(&type, \"" + fld.name + "\", (size_t)(char*)(&sample->" + fld.name +
+                    ") - (size_t)(char*)iobject, sample->" + fld.name + ", o2::ProtectSection::" + protectSection + ")";
 
 				if (fld.comment != null && fld.comment.comment.Contains("@SERIALIZABLE"))
 					res += ".AddAttribute<SerializableAttribute>()";
