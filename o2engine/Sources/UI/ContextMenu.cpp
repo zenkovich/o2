@@ -592,6 +592,16 @@ namespace o2
 		mChildsAbsRect = _mChildsAbsRect;
 	}
 
+	void UIContextMenu::CheckClipping(const RectF& clipArea)
+	{
+		mIsClipped = false;
+
+		Vec2F resolution = o2Render.GetCurrentResolution();
+		RectF fullScreenRect(resolution*0.5f, resolution*(-0.5f));
+		for (auto child : mChilds)
+			child->CheckClipping(fullScreenRect);
+	}
+
 	void UIContextMenu::FitSize()
 	{
 		Vec2F size;

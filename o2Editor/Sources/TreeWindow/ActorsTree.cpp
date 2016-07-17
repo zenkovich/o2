@@ -153,9 +153,12 @@ namespace Editor
 		UITree::SelectObject((UnknownPtr)(void*)object);
 	}
 
-	void UIActorsTree::SelectAndExpandActor(Actor* object)
+	void UIActorsTree::SelectAndHightlightActor(Actor* object)
 	{
-		UITree::SelectAndExpandObject((UnknownPtr)(void*)object);
+		o2Debug.Log("%i: Hightligh actor:%s %i", o2Time.GetCurrentFrame(), object->GetName(), 
+					mAllNodes.FindIdx([=](Node* x) { return x->object == object; }));
+
+		UITree::SelectAndHightlightObject((UnknownPtr)(void*)object);
 	}
 
 	void UIActorsTree::DeselectActor(Actor* object)
@@ -189,11 +192,6 @@ namespace Editor
 
 		UIActorsTreeNode* actorNodeWidgetSample = (UIActorsTreeNode*)mNodeWidgetSample;
 		actorNodeWidgetSample->InitializeControls();
-		if (actorNodeWidgetSample->mLockToggle)
-			actorNodeWidgetSample->mLockToggle->SetToggleGroup(mLockActorsTogglesGroup);
-
-		if (actorNodeWidgetSample->mEnableToggle)
-			actorNodeWidgetSample->mEnableToggle->SetToggleGroup(mEnableActorsTogglesGroup);
 
 		UITree::onItemRBClick = [&](UITreeNode* x) {
 			Actor* actor = x ? (Actor*)x->GetObject() : nullptr;
@@ -229,7 +227,10 @@ namespace Editor
 
 	void UIActorsTree::SetupTreeNodeActor(UITreeNode* node, UnknownPtr actorObj)
 	{
-		((UIActorsTreeNode*)node)->SetActor(actorObj);
+		UIActorsTreeNode* actorNode = (UIActorsTreeNode*)node;
+		actorNode->SetActor(actorObj);
+		actorNode->mLockToggle->SetToggleGroup(mLockActorsTogglesGroup);
+		actorNode->mEnableToggle->SetToggleGroup(mEnableActorsTogglesGroup);
 	}
 
 	void UIActorsTree::RearrangeActors(Vector<UnknownPtr> objects, UnknownPtr parentObj, UnknownPtr prevObj)
@@ -490,16 +491,18 @@ void UIActorsTreeNode::SetActor(Actor* actor)
 	float alpha = actor->IsEnabledInHierarchy() ? 1.0f : 0.5f;
 
 	mNameDrawable->SetText(mName);
-	mNameDrawable->SetTransparency(alpha);
+	if (!Math::Equals(alpha, mNameDrawable->GetTransparency()))
+	{
+		mNameDrawable->SetTransparency(alpha);
+		mEnableToggle->SetTransparency(alpha);
+		mLinkBtn->SetTransparency(alpha);
+	}
 
 	mEnableToggle->SetValue(actor->IsEnabled());
-	mEnableToggle->SetTransparency(alpha);
 
 	mLockToggle->SetValue(actor->IsLocked());
 	mLockToggle->SetStateForcible("locked", actor->IsLockedInHierarchy());
 	mLockToggle->SetStateForcible("halfHide", actor->IsLockedInHierarchy() && !actor->IsLocked());
-
-	mLinkBtn->SetTransparency(alpha);
 }
 
 void UIActorsTreeNode::EnableEditName()

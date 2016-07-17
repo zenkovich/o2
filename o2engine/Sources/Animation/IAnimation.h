@@ -90,7 +90,7 @@ namespace o2
 		virtual void SetPlaying(bool playing);
 
 		// Returns true if animation playing
-		virtual bool IsPlaying();
+		virtual bool IsPlaying() const;
 
 		// Sets time
 		virtual void SetTime(float time);

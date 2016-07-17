@@ -92,6 +92,9 @@ namespace o2
 
 	void UIToggle::SetValue(bool value)
 	{
+		if (mValue == value)
+			return;
+
 		mValue = value;
 		mValueUnknown = false;
 

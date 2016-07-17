@@ -268,8 +268,12 @@ class CppLexParser
 			if (spec.Length > 0 && spec[0] == '<' && spec[spec.Length - 1] == '>')
 			{
 				string sspec = spec.Substring(1, spec.Length - 2).Trim(' ', '\n', '\t', '\r');
-				if (!specializations.Contains(sspec) && !cls.templates.Contains(sspec))
-					specializations.Add(sspec);
+
+                if (sspec != "_type" && sspec != "T")
+                {
+                    if (!specializations.Contains(sspec) && !cls.templates.Contains(sspec))
+                        specializations.Add(sspec);
+                }
 			}
 		}
 	}

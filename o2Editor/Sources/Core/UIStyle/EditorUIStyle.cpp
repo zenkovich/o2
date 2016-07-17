@@ -1,5 +1,6 @@
 #include "EditorUIStyle.h"
 
+#include "Animation/Animate.h"
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
@@ -544,15 +545,30 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorsTree()
 	{
+		// basics
 		UIActorsTree* sample = mnew UIActorsTree();
 		sample->layout.minSize = Vec2F(20, 20);
-		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
-		sample->SetViewLayout(Layout::BothStretch(0, 0, 0, 0));
+		sample->SetClippingLayout(Layout::BothStretch(1, 2, 0, 1));
+		sample->SetViewLayout(Layout::BothStretch(0, 0, 1, 0));
 		sample->SetEnableScrollsHiding(true);
 		sample->SetChildsNodesOffset(10);
 
+		// hover
 		*sample->GetHoverDrawable() = Sprite("ui/UI_ListBox_selection_hover.png");
+		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
+		// hightlight
+		*sample->GetHightlightDrawable() = Sprite("ui/UI_Window_place.png");
+		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
+		sample->SetHightlightLayout(Layout::BothStretch());
+		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
+									   Hide().Scale(1.5f).Then().
+									   Wait(0.3f).Then().
+									   Show().Scale(1.0f).For(0.2f).Then().
+									   Wait(1.0f).Then().
+									   Hide().For(0.2f));
+
+		// node sample
 		UITreeNode* itemSample = sample->GetNodeSample();
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
@@ -560,7 +576,7 @@ namespace Editor
 		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_ListBox_selection_regular.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
-		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_hover.png"),
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_pressed.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
@@ -590,12 +606,14 @@ namespace Editor
 		auto actorNodeEditBox = o2UI.CreateWidget<UIEditBox>("backless");
 		actorNodeEditBox->name = "nameEditBox";
 		actorNodeEditBox->layout = UIWidgetLayout::BothStretch(10, 0, 55, 0);
+		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
 		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, &nameLayer->transparency, 1.0f, 0.0f, 0.15f);
 		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->visible) = AnimatedValue<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
+		// node sample button
 		UIButton* itemSampleExpandBtn = mnew UIButton();
 		itemSampleExpandBtn->layout.minSize = Vec2F(5, 5);
 		itemSampleExpandBtn->name = "expandBtn";
@@ -641,9 +659,10 @@ namespace Editor
 		itemSample->AddState("selected", Animation::EaseInOut(itemSample, &itemSelectionLayer->transparency, 0.0f, 1.0f, 0.2f));
 
 		Animation focusedItemAnim = Animation::EaseInOut(itemSample, &itemFocusedLayer->transparency, 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.2f);
+		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
+		// scrollbars
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout.anchorMin = Vec2F(0, 0);
 		horScrollBar->layout.anchorMax = Vec2F(1, 0);
@@ -666,6 +685,8 @@ namespace Editor
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 0.8f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
+
+		sample->SetStateForcible("hover", false);
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5;

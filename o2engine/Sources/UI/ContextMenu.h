@@ -202,6 +202,9 @@ namespace o2
 		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
+		// Checks widget clipping by area
+		void CheckClipping(const RectF& clipArea);
+
 		// Fits size by items
 		void FitSize();
 

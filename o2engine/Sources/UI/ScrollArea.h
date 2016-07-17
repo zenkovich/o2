@@ -39,6 +39,9 @@ namespace o2
 		// Sets scroll position
 		void SetScroll(const Vec2F& scroll);
 
+		// Sets scroll position
+		void SetScrollForcible(const Vec2F& scroll);
+
 		// Returns scroll position
 		Vec2F GetScroll() const;
 

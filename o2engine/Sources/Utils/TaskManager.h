@@ -10,6 +10,7 @@
 namespace o2
 {
 	class Task;
+	class Animation;
 
 	// -----------------------
 	// Tasks manager singleton
@@ -36,10 +37,13 @@ namespace o2
 		void Run(const Function<void(float)>& update, float time);
 
 		// Calls function after delay
-		void Call(const Function<void()> func, float delay);
+		void Invoke(const Function<void()> func, float delay);
 
 		// Updates tasks and checking for done
 		void Update(float dt);
+
+		// Plays animation task
+		void Play(const Animation& animation, float delay = 0.0f);
 
 	protected:
 		TasksVec mTasks;      // All tasks array

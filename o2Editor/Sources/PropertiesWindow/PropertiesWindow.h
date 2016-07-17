@@ -82,6 +82,15 @@ namespace Editor
 		// Initializes available properties fields and pools
 		void InitializePropertiesFields();
 
+		// Initializes properties parts pools: mLabelsPool and mHorLayoutsPool
+		void InitializePools();
+
+		// Creates new horizontal layout for property
+		UIHorizontalLayout* CreatePropertyHorLayout();
+
+		// Creates new property label
+		UILabel* CreatePropertyLabel();
+
 		// Creates property field by type
 		IPropertyField* CreatePropertyField(const Type* type);
 

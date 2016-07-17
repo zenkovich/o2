@@ -14,9 +14,9 @@ namespace o2
 	}
 
 	Animation::Animation(const Animation& other):
-		mTarget(other.mTarget), IAnimation(other), mAnimationState(nullptr)
+		mTarget(nullptr), IAnimation(other), mAnimationState(nullptr)
 	{
-		for (auto val : other.mAnimatedValues)
+		for (auto& val : other.mAnimatedValues)
 		{
 			AnimatedValueDef def(val);
 			def.mAnimatedValue = val.mAnimatedValue->Clone();
@@ -24,6 +24,8 @@ namespace o2
 
 			OnAnimatedValueAdded(def);
 		}
+
+		SetTarget(other.mTarget);
 	}
 
 	Animation::~Animation()
@@ -37,7 +39,7 @@ namespace o2
 
 		IAnimation::operator=(other);
 
-		for (auto val : other.mAnimatedValues)
+		for (auto& val : other.mAnimatedValues)
 		{
 			AnimatedValueDef def(val);
 			def.mAnimatedValue = val.mAnimatedValue->Clone();
@@ -79,7 +81,7 @@ namespace o2
 
 		if (mTarget)
 		{
-			for (auto val : mAnimatedValues)
+			for (auto& val : mAnimatedValues)
 			{
 				FieldInfo* fieldInfo = nullptr;
 				val.mTargetPtr = mTarget->GetType().GetFieldPtr<char>(mTarget, val.mTargetPath, fieldInfo);
@@ -100,7 +102,7 @@ namespace o2
 		}
 		else
 		{
-			for (auto val : mAnimatedValues)
+			for (auto& val : mAnimatedValues)
 			{
 				val.mTargetPtr = nullptr;
 				val.mAnimatedValue->SetTargetVoid(val.mTargetPtr);
@@ -108,12 +110,27 @@ namespace o2
 		}
 	}
 
+	IObject* Animation::GetTarget() const
+	{
+		return mTarget;
+	}
+
 	void Animation::Clear()
 	{
-		for (auto val : mAnimatedValues)
+		for (auto& val : mAnimatedValues)
 			delete val.mAnimatedValue;
 
 		mAnimatedValues.Clear();
+	}
+
+	Animation::AnimatedValuesVec& Animation::GetAnimationsValues()
+	{
+		return mAnimatedValues;
+	}
+
+	const Animation::AnimatedValuesVec& Animation::GetAnimationsValues() const
+	{
+		return mAnimatedValues;
 	}
 
 	bool Animation::RemoveAnimationValue(const String& path)
@@ -133,7 +150,7 @@ namespace o2
 
 	void Animation::Evaluate()
 	{
-		for (auto val : mAnimatedValues)
+		for (auto& val : mAnimatedValues)
 			val.mAnimatedValue->ForceSetTime(mInDurationTime, mDuration);
 	}
 
@@ -142,7 +159,7 @@ namespace o2
 		float lastDuration = mDuration;
 		mDuration = 0.0f;
 
-		for (auto val : mAnimatedValues)
+		for (auto& val : mAnimatedValues)
 			mDuration = Math::Max(mDuration, val.mAnimatedValue->mDuration);
 
 		if (Math::Equals(lastDuration, mEndTime))
@@ -151,7 +168,7 @@ namespace o2
 
 	void Animation::OnDeserialized(const DataNode& node)
 	{
-		for (auto val : mAnimatedValues)
+		for (auto& val : mAnimatedValues)
 			val.mAnimatedValue->onKeysChanged += Function<void()>(this, &Animation::RecalculateDuration);
 
 		RecalculateDuration();

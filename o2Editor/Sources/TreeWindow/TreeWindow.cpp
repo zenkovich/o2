@@ -44,31 +44,9 @@ namespace Editor
 		return mActorsTree;
 	}
 
-	void TreeWindow::ExpandActorsTreeNode(Actor* targetActor)
+	void TreeWindow::HightlightActorsTreeNode(Actor* targetActor)
 	{
-		if (!mActorsTree->GetNode(targetActor))
-		{
-
-			Vector<Actor*> parentsStack;
-			Actor* treeVisibleNodeActor = targetActor;
-			while (!mActorsTree->GetNode(treeVisibleNodeActor))
-			{
-				treeVisibleNodeActor = treeVisibleNodeActor->GetParent();
-
-				if (!treeVisibleNodeActor)
-					return;
-
-				parentsStack.Add(treeVisibleNodeActor);
-			}
-
-			for (int i = parentsStack.Count() - 1; i >= 0; i--)
-			{
-				auto node = mActorsTree->GetNode(parentsStack[i]);
-				node->Expand();
-			}
-		}
-
-		mActorsTree->ScrollTo(targetActor);
+		mActorsTree->SelectAndHightlightActor(targetActor);
 	}
 
 	void TreeWindow::InitializeWindow()
@@ -170,8 +148,9 @@ namespace Editor
 				for (int k = 0; k < 20; k++)
 				{
 					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png"), mnew EditorTestComponent() });
-					childActor2->name = String::Format("Sub Child actor #%i", k + 1);
-					childActor2->transform.position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
+					childActor2->name = String::Format("%i %i Sub Child actor #%i", i, j, k + 1);
+					//childActor2->transform.position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
+					childActor2->transform.position = Vec2F(k*100, (i*2 + j)*100);
 					childActor->AddChild(childActor2);
 				}
 			}

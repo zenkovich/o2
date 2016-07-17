@@ -526,6 +526,12 @@
     <ClInclude Include="..\Sources\Utils\UnknownPtr.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Animation\Animate.h">
+      <Filter>Sources\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\AnimationTask.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
@@ -877,6 +883,12 @@
       <Filter>Sources\Utils\Data</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\DragAndDrop.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Animation\Animate.cpp">
+      <Filter>Sources\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\AnimationTask.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>

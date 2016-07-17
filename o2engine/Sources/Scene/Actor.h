@@ -21,6 +21,8 @@ namespace o2
 		typedef Vector<Component*> ComponentsVec;
 		typedef Vector<String> StringsVec;
 
+		enum class CreateMode { InScene, NotInScene };
+
 	public:
 		TagGroup                            tags;                    // Tags group
 		Getter<UInt64>                      id;                      // Actor's unique id
@@ -46,9 +48,12 @@ namespace o2
 		Function<void(bool)>                onLockChanged;           // Locking changing event
 		Function<void()>                    onNameChanged;           // Name changing event
 #endif
-
+		
 		// Default constructor
 		Actor();
+
+		// Create mode
+		Actor(CreateMode mode);
 
 		// Constructor with components
 		Actor(ComponentsVec components);
@@ -420,7 +425,7 @@ namespace o2
 #define ACTOR_LOCK_CHANGED(ACTOR)                  \
     if (ACTOR)                                     \
 	{                                              \
-		(ACTOR)->onLockChanged((ACTOR)->mEnabled); \
+		(ACTOR)->onLockChanged((ACTOR)->mLocked); \
 		(ACTOR)->onChanged();                      \
     }                                              \
 	if (Scene::IsSingletonInitialzed())            \

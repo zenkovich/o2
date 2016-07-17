@@ -566,6 +566,8 @@ namespace Editor
 		mSelectedActors.Add(actor);
 		mNeedRedraw = true;
 
+		o2Debug.Log("%i: Select actor:%s", o2Time.GetCurrentFrame(), actor->GetName());
+
 		UpdateTopSelectedActors();
 		OnActorsSelectedFromThis();
 	}

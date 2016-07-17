@@ -202,6 +202,8 @@ namespace Editor
 
 	void LogWindow::OutStrEx(const WString& str)
 	{
+		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f);
+
 		LogMessage msg;
 		msg.message = str;
 		msg.type = LogMessage::Type::Regular;
@@ -215,7 +217,9 @@ namespace Editor
 		}
 
 		mList->OnItemsUpdated();
-		mList->SetScroll(Vec2F(0, mList->GetScrollRange().top));
+
+		if (isScrollDown)
+			mList->SetScrollForcible(Vec2F(0, mList->GetScrollRange().top));
 
 		mRegularMessagesCount++;
 		mMessagesCountLabel->text = (String)mRegularMessagesCount;
@@ -225,6 +229,8 @@ namespace Editor
 
 	void LogWindow::OutErrorEx(const WString& str)
 	{
+		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f);
+
 		LogMessage msg;
 		msg.message = str;
 		msg.type = LogMessage::Type::Error;
@@ -238,7 +244,9 @@ namespace Editor
 		}
 
 		mList->OnItemsUpdated();
-		mList->SetScroll(Vec2F(0, mList->GetScrollRange().top));
+
+		if (isScrollDown)
+			mList->SetScrollForcible(Vec2F(0, mList->GetScrollRange().top));
 
 		mErrorMessagesCount++;
 		mErrorsCountLabel->text = (String)mErrorMessagesCount;
@@ -248,6 +256,8 @@ namespace Editor
 
 	void LogWindow::OutWarningEx(const WString& str)
 	{
+		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f);
+
 		LogMessage msg;
 		msg.message = str;
 		msg.type = LogMessage::Type::Warning;
@@ -261,7 +271,9 @@ namespace Editor
 		}
 
 		mList->OnItemsUpdated();
-		mList->SetScroll(Vec2F(0, mList->GetScrollRange().top));
+
+		if (isScrollDown)
+			mList->SetScrollForcible(Vec2F(0, mList->GetScrollRange().top));
 
 		mWarningMessagesCount++;
 		mWarningsCountLabel->text = (String)mWarningMessagesCount;

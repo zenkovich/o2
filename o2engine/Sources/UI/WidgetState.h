@@ -55,6 +55,8 @@ namespace o2
 	protected:
 		bool      mState = false; // Current state @SERIALIZABLE
 		UIWidget* mOwner = nullptr; // Owner widget pointer
+
+		friend class UIWidget;
 	};
 	typedef Vector<UIWidgetState*>  StatesVec;
 }

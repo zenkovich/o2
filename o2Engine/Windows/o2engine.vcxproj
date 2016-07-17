@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Animation\Animatable.h" />
+    <ClInclude Include="..\Sources\Animation\Animate.h" />
     <ClInclude Include="..\Sources\Animation\AnimatedFloat.h" />
     <ClInclude Include="..\Sources\Animation\AnimatedVector.h" />
     <ClInclude Include="..\Sources\Animation\Animation.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="..\Sources\UI\WidgetState.h" />
     <ClInclude Include="..\Sources\UI\Widget.h" />
     <ClInclude Include="..\Sources\UI\Window.h" />
+    <ClInclude Include="..\Sources\Utils\AnimationTask.h" />
     <ClInclude Include="..\Sources\Utils\Assert.h" />
     <ClInclude Include="..\Sources\Utils\Bitmap.h" />
     <ClInclude Include="..\Sources\Utils\Clipboard.h" />
@@ -280,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Animation\Animatable.cpp" />
+    <ClCompile Include="..\Sources\Animation\Animate.cpp" />
     <ClCompile Include="..\Sources\Animation\AnimatedFloat.cpp" />
     <ClCompile Include="..\Sources\Animation\AnimatedVector.cpp" />
     <ClCompile Include="..\Sources\Animation\Animation.cpp" />
@@ -362,6 +365,7 @@
     <ClCompile Include="..\Sources\UI\WidgetState.cpp" />
     <ClCompile Include="..\Sources\UI\Widget.cpp" />
     <ClCompile Include="..\Sources\UI\Window.cpp" />
+    <ClCompile Include="..\Sources\Utils\AnimationTask.cpp" />
     <ClCompile Include="..\Sources\Utils\Assert.cpp" />
     <ClCompile Include="..\Sources\Utils\Bitmap.cpp" />
     <ClCompile Include="..\Sources\Utils\Clipboard.cpp" />

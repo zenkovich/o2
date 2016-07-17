@@ -68,7 +68,7 @@ namespace Editor
 	void UIAssetsFoldersTree::SelectAndExpandFolder(const String& path)
 	{
 		mCurrentPath = path;
-		mFoldersTree->SelectAndExpandObject(o2Assets.GetAssetsTree().FindAsset(path));
+		mFoldersTree->SelectAndHightlightObject(o2Assets.GetAssetsTree().FindAsset(path));
 	}
 
 	void UIAssetsFoldersTree::UpdateView()

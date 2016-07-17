@@ -411,10 +411,10 @@ namespace o2
 		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		mMesh->vertices[0] = Vertex2(mTransform.offs + mTransform.yv, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1] = Vertex2(mTransform.offs + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2] = Vertex2(mTransform.offs + mTransform.xv, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3] = Vertex2(mTransform.offs, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.offs, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -491,25 +491,25 @@ namespace o2
 			v2 = Math::Lerp(v0, v3, (texSrcSize.y - mSlices.top + d)*invTexSrcSize.y);
 		}
 
-		mMesh->vertices[0]  = Vertex2(o      + t3, rcc[0], u0, v3);
-		mMesh->vertices[1]  = Vertex2(o + r1 + t3, rcc[0], u1, v3);
-		mMesh->vertices[2]  = Vertex2(o + r2 + t3, rcc[1], u2, v3);
-		mMesh->vertices[3]  = Vertex2(o + r3 + t3, rcc[1], u3, v3);
+		mMesh->vertices[0] .Set(o      + t3, rcc[0], u0, v3);
+		mMesh->vertices[1] .Set(o + r1 + t3, rcc[0], u1, v3);
+		mMesh->vertices[2] .Set(o + r2 + t3, rcc[1], u2, v3);
+		mMesh->vertices[3] .Set(o + r3 + t3, rcc[1], u3, v3);
 
-		mMesh->vertices[4]  = Vertex2(o      + t2, rcc[0], u0, v2);
-		mMesh->vertices[5]  = Vertex2(o + r1 + t2, rcc[0], u1, v2);
-		mMesh->vertices[6]  = Vertex2(o + r2 + t2, rcc[1], u2, v2);
-		mMesh->vertices[7]  = Vertex2(o + r3 + t2, rcc[1], u3, v2);
+		mMesh->vertices[4] .Set(o      + t2, rcc[0], u0, v2);
+		mMesh->vertices[5] .Set(o + r1 + t2, rcc[0], u1, v2);
+		mMesh->vertices[6] .Set(o + r2 + t2, rcc[1], u2, v2);
+		mMesh->vertices[7] .Set(o + r3 + t2, rcc[1], u3, v2);
 
-		mMesh->vertices[8]  = Vertex2(o      + t1, rcc[3], u0, v1);
-		mMesh->vertices[9]  = Vertex2(o + r1 + t1, rcc[3], u1, v1);
-		mMesh->vertices[10] = Vertex2(o + r2 + t1, rcc[2], u2, v1);
-		mMesh->vertices[11] = Vertex2(o + r3 + t1, rcc[2], u3, v1);
+		mMesh->vertices[8] .Set(o      + t1, rcc[3], u0, v1);
+		mMesh->vertices[9] .Set(o + r1 + t1, rcc[3], u1, v1);
+		mMesh->vertices[10].Set(o + r2 + t1, rcc[2], u2, v1);
+		mMesh->vertices[11].Set(o + r3 + t1, rcc[2], u3, v1);
 
-		mMesh->vertices[12] = Vertex2(o + Vec2F(), rcc[3], u0, v0);
-		mMesh->vertices[13] = Vertex2(o      + r1, rcc[3], u1, v0);
-		mMesh->vertices[14] = Vertex2(o      + r2, rcc[2], u2, v0);
-		mMesh->vertices[15] = Vertex2(o      + r3, rcc[2], u3, v0);
+		mMesh->vertices[12].Set(o + Vec2F(), rcc[3], u0, v0);
+		mMesh->vertices[13].Set(o      + r1, rcc[3], u1, v0);
+		mMesh->vertices[14].Set(o      + r2, rcc[2], u2, v0);
+		mMesh->vertices[15].Set(o      + r3, rcc[2], u3, v0);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*18*3);
 
@@ -586,25 +586,25 @@ namespace o2
 			v2 = Math::Lerp(v0, v3, (texSrcSize.y - mSlices.top + d)/texSrcSize.y);
 		}
 
-		mMesh->vertices[0]  = Vertex2(o      + t3, rcc[0], u0, v3);
-		mMesh->vertices[1]  = Vertex2(o + r1 + t3, rcc[0], u1, v3);
-		mMesh->vertices[2]  = Vertex2(o + r2 + t3, rcc[1], u2, v3);
-		mMesh->vertices[3]  = Vertex2(o + r3 + t3, rcc[1], u3, v3);
+		mMesh->vertices[0] .Set(o      + t3, rcc[0], u0, v3);
+		mMesh->vertices[1] .Set(o + r1 + t3, rcc[0], u1, v3);
+		mMesh->vertices[2] .Set(o + r2 + t3, rcc[1], u2, v3);
+		mMesh->vertices[3] .Set(o + r3 + t3, rcc[1], u3, v3);
 
-		mMesh->vertices[4]  = Vertex2(o      + t2, rcc[0], u0, v2);
-		mMesh->vertices[5]  = Vertex2(o + r1 + t2, rcc[0], u1, v2);
-		mMesh->vertices[6]  = Vertex2(o + r2 + t2, rcc[1], u2, v2);
-		mMesh->vertices[7]  = Vertex2(o + r3 + t2, rcc[1], u3, v2);
+		mMesh->vertices[4] .Set(o      + t2, rcc[0], u0, v2);
+		mMesh->vertices[5] .Set(o + r1 + t2, rcc[0], u1, v2);
+		mMesh->vertices[6] .Set(o + r2 + t2, rcc[1], u2, v2);
+		mMesh->vertices[7] .Set(o + r3 + t2, rcc[1], u3, v2);
 
-		mMesh->vertices[8]  = Vertex2(o      + t1, rcc[3], u0, v1);
-		mMesh->vertices[9]  = Vertex2(o + r1 + t1, rcc[3], u1, v1);
-		mMesh->vertices[10] = Vertex2(o + r2 + t1, rcc[2], u2, v1);
-		mMesh->vertices[11] = Vertex2(o + r3 + t1, rcc[2], u3, v1);
+		mMesh->vertices[8] .Set(o      + t1, rcc[3], u0, v1);
+		mMesh->vertices[9] .Set(o + r1 + t1, rcc[3], u1, v1);
+		mMesh->vertices[10].Set(o + r2 + t1, rcc[2], u2, v1);
+		mMesh->vertices[11].Set(o + r3 + t1, rcc[2], u3, v1);
 
-		mMesh->vertices[12] = Vertex2(o + Vec2F(), rcc[3], u0, v0);
-		mMesh->vertices[13] = Vertex2(o      + r1, rcc[3], u1, v0);
-		mMesh->vertices[14] = Vertex2(o      + r2, rcc[2], u2, v0);
-		mMesh->vertices[15] = Vertex2(o      + r3, rcc[2], u3, v0);
+		mMesh->vertices[12].Set(o + Vec2F(), rcc[3], u0, v0);
+		mMesh->vertices[13].Set(o      + r1, rcc[3], u1, v0);
+		mMesh->vertices[14].Set(o      + r2, rcc[2], u2, v0);
+		mMesh->vertices[15].Set(o      + r3, rcc[2], u3, v0);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*18*3);
 
@@ -638,10 +638,10 @@ namespace o2
 		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		mMesh->vertices[0] = Vertex2(mTransform.offs + mTransform.yv, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1] = Vertex2(mTransform.offs + mTransform.yv + mTransform.xv*coef, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2] = Vertex2(mTransform.offs + mTransform.xv*coef, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3] = Vertex2(mTransform.offs, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv + mTransform.xv*coef, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv*coef, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.offs, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -672,10 +672,10 @@ namespace o2
 		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		mMesh->vertices[0] = Vertex2(mTransform.offs + mTransform.yv + mTransform.xv*invCoef, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1] = Vertex2(mTransform.offs + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2] = Vertex2(mTransform.offs + mTransform.xv, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3] = Vertex2(mTransform.offs + mTransform.xv*invCoef, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv + mTransform.xv*invCoef, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.offs + mTransform.xv*invCoef, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -706,10 +706,10 @@ namespace o2
 		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float uvDown = 1.0f - Math::Lerp((float)mTextureSrcRect.bottom, (float)mTextureSrcRect.top, coef)*invTexSize.y;
 
-		mMesh->vertices[0] = Vertex2(mTransform.offs + mTransform.yv, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1] = Vertex2(mTransform.offs + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2] = Vertex2(mTransform.offs + mTransform.xv + mTransform.yv*invCoef, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3] = Vertex2(mTransform.offs + mTransform.yv*invCoef, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv + mTransform.yv*invCoef, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.offs + mTransform.yv*invCoef, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -739,10 +739,10 @@ namespace o2
 		float uvUp = 1.0f - Math::Lerp((float)mTextureSrcRect.top, (float)mTextureSrcRect.bottom, coef)*invTexSize.y;
 		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		mMesh->vertices[0] = Vertex2(mTransform.offs + mTransform.yv*coef, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1] = Vertex2(mTransform.offs + mTransform.yv*coef + mTransform.xv, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2] = Vertex2(mTransform.offs + mTransform.xv, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3] = Vertex2(mTransform.offs, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv*coef, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv*coef + mTransform.xv, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.offs, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -786,9 +786,9 @@ namespace o2
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[1], dirCoef)).ABGR();
 			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(dirPoint, dirColor, uDir, vUp);
-			mMesh->vertices[2] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(dirPoint, dirColor, uDir, vUp);
+			mMesh->vertices[2].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={0, 1, 2};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3);
@@ -805,10 +805,10 @@ namespace o2
 
 			Vec2F cornerPos1 = mTransform.offs + mTransform.yv + mTransform.xv;
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(cornerPos1, cornerResColr[1], uRight, vUp);
-			mMesh->vertices[2] = Vertex2(dirPoint, dirColor, uRight, vDir);
-			mMesh->vertices[3] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(cornerPos1, cornerResColr[1], uRight, vUp);
+			mMesh->vertices[2].Set(dirPoint, dirColor, uRight, vDir);
+			mMesh->vertices[3].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={0, 1, 3, 1, 2, 3};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*2);
@@ -826,11 +826,11 @@ namespace o2
 			Vec2F cornerPos1 = mTransform.offs + mTransform.yv + mTransform.xv;
 			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(cornerPos1, cornerResColr[1], uRight, vUp);
-			mMesh->vertices[2] = Vertex2(cornerPos2, cornerResColr[2], uRight, vDown);
-			mMesh->vertices[3] = Vertex2(dirPoint, dirColor, uDir, vDown);
-			mMesh->vertices[4] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(cornerPos1, cornerResColr[1], uRight, vUp);
+			mMesh->vertices[2].Set(cornerPos2, cornerResColr[2], uRight, vDown);
+			mMesh->vertices[3].Set(dirPoint, dirColor, uDir, vDown);
+			mMesh->vertices[4].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={0, 1, 4, 1, 2, 4, 2, 3, 4};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*3);
@@ -849,12 +849,12 @@ namespace o2
 			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
 			Vec2F cornerPos3 = mTransform.offs;
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(cornerPos1, cornerResColr[1], uRight, vUp);
-			mMesh->vertices[2] = Vertex2(cornerPos2, cornerResColr[2], uRight, vDown);
-			mMesh->vertices[3] = Vertex2(cornerPos3, cornerResColr[3], uLeft, vDown);
-			mMesh->vertices[4] = Vertex2(dirPoint, dirColor, uLeft, vDir);
-			mMesh->vertices[5] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(cornerPos1, cornerResColr[1], uRight, vUp);
+			mMesh->vertices[2].Set(cornerPos2, cornerResColr[2], uRight, vDown);
+			mMesh->vertices[3].Set(cornerPos3, cornerResColr[3], uLeft, vDown);
+			mMesh->vertices[4].Set(dirPoint, dirColor, uLeft, vDir);
+			mMesh->vertices[5].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={0, 1, 5, 1, 2, 5, 2, 3, 5, 3, 4, 5};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*4);
@@ -874,13 +874,13 @@ namespace o2
 			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
 			Vec2F cornerPos3 = mTransform.offs;
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(cornerPos1, cornerResColr[0], uRight, vUp);
-			mMesh->vertices[2] = Vertex2(cornerPos2, cornerResColr[1], uRight, vDown);
-			mMesh->vertices[3] = Vertex2(cornerPos3, cornerResColr[2], uLeft, vDown);
-			mMesh->vertices[4] = Vertex2(cornerPos0, cornerResColr[3], uLeft, vUp);
-			mMesh->vertices[5] = Vertex2(dirPoint, dirColor, uDir, vUp);
-			mMesh->vertices[6] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(cornerPos1, cornerResColr[0], uRight, vUp);
+			mMesh->vertices[2].Set(cornerPos2, cornerResColr[1], uRight, vDown);
+			mMesh->vertices[3].Set(cornerPos3, cornerResColr[2], uLeft, vDown);
+			mMesh->vertices[4].Set(cornerPos0, cornerResColr[3], uLeft, vUp);
+			mMesh->vertices[5].Set(dirPoint, dirColor, uDir, vUp);
+			mMesh->vertices[6].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={0, 1, 6, 1, 2, 6, 2, 3, 6, 3, 4, 6, 4, 5, 6};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*5);
@@ -926,9 +926,9 @@ namespace o2
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[1], dirCoef)).ABGR();
 			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(dirPoint, dirColor, uDir, vUp);
-			mMesh->vertices[2] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(dirPoint, dirColor, uDir, vUp);
+			mMesh->vertices[2].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={1, 0, 2};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3);
@@ -945,10 +945,10 @@ namespace o2
 
 			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(cornerPos0, cornerResColr[0], uLeft, vUp);
-			mMesh->vertices[2] = Vertex2(dirPoint, dirColor, uLeft, vDir);
-			mMesh->vertices[3] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(cornerPos0, cornerResColr[0], uLeft, vUp);
+			mMesh->vertices[2].Set(dirPoint, dirColor, uLeft, vDir);
+			mMesh->vertices[3].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={1, 0, 3, 2, 1, 3};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*2);
@@ -966,11 +966,11 @@ namespace o2
 			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
 			Vec2F cornerPos3 = mTransform.offs;
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(cornerPos0, cornerResColr[0], uLeft, vUp);
-			mMesh->vertices[2] = Vertex2(cornerPos3, cornerResColr[3], uLeft, vDown);
-			mMesh->vertices[3] = Vertex2(dirPoint, dirColor, uDir, vDown);
-			mMesh->vertices[4] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(cornerPos0, cornerResColr[0], uLeft, vUp);
+			mMesh->vertices[2].Set(cornerPos3, cornerResColr[3], uLeft, vDown);
+			mMesh->vertices[3].Set(dirPoint, dirColor, uDir, vDown);
+			mMesh->vertices[4].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={1, 0, 4, 2, 1, 4, 3, 2, 4};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*3);
@@ -989,12 +989,12 @@ namespace o2
 			Vec2F cornerPos3 = mTransform.offs;
 			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(cornerPos0, cornerResColr[0], uLeft, vUp);
-			mMesh->vertices[2] = Vertex2(cornerPos3, cornerResColr[3], uLeft, vDown);
-			mMesh->vertices[3] = Vertex2(cornerPos2, cornerResColr[2], uRight, vDown);
-			mMesh->vertices[4] = Vertex2(dirPoint, dirColor, uRight, vDir);
-			mMesh->vertices[5] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(cornerPos0, cornerResColr[0], uLeft, vUp);
+			mMesh->vertices[2].Set(cornerPos3, cornerResColr[3], uLeft, vDown);
+			mMesh->vertices[3].Set(cornerPos2, cornerResColr[2], uRight, vDown);
+			mMesh->vertices[4].Set(dirPoint, dirColor, uRight, vDir);
+			mMesh->vertices[5].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={1, 0, 5, 2, 1, 5, 3, 2, 5, 4, 3, 5};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*4);
@@ -1014,13 +1014,13 @@ namespace o2
 			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
 			Vec2F cornerPos1 = mTransform.offs + mTransform.yv + mTransform.xv;
 
-			mMesh->vertices[0] = Vertex2(zeroPos, zeroResColor, uZero, vUp);
-			mMesh->vertices[1] = Vertex2(cornerPos0, cornerResColr[0], uLeft, vUp);
-			mMesh->vertices[2] = Vertex2(cornerPos3, cornerResColr[3], uLeft, vDown);
-			mMesh->vertices[3] = Vertex2(cornerPos2, cornerResColr[2], uRight, vDown);
-			mMesh->vertices[4] = Vertex2(cornerPos1, cornerResColr[1], uRight, vUp);
-			mMesh->vertices[5] = Vertex2(dirPoint, dirColor, uDir, vUp);
-			mMesh->vertices[6] = Vertex2(centerPos, centerResColr, uCenter, vCenter);
+			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
+			mMesh->vertices[1].Set(cornerPos0, cornerResColr[0], uLeft, vUp);
+			mMesh->vertices[2].Set(cornerPos3, cornerResColr[3], uLeft, vDown);
+			mMesh->vertices[3].Set(cornerPos2, cornerResColr[2], uRight, vDown);
+			mMesh->vertices[4].Set(cornerPos1, cornerResColr[1], uRight, vUp);
+			mMesh->vertices[5].Set(dirPoint, dirColor, uDir, vUp);
+			mMesh->vertices[6].Set(centerPos, centerResColr, uCenter, vCenter);
 
 			static UInt16 indexes[] ={1, 0, 6, 2, 1, 6, 3, 2, 6, 4, 3, 6, 5, 4, 6};
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*5);

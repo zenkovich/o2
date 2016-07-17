@@ -76,6 +76,17 @@ namespace o2
 			AddComponent(comp);
 	}
 
+	Actor::Actor(CreateMode mode):
+		mName("unnamed"), mEnabled(true), mResEnabled(true), mLocked(false), mResLocked(false), Animatable(),
+		mParent(nullptr), mLayer(nullptr), mId(Math::Random()), mAssetId(0), mIsAsset(false), mIsOnScene(false)
+	{
+		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
+		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
+
+		transform.SetOwner(this);
+		InitializeProperties();
+	}
+
 	Actor::~Actor()
 	{
 		if (mParent)
@@ -593,12 +604,16 @@ namespace o2
 
 		mLayer = layer;
 
-		lastLayer->actors.Remove(this);
+		if (lastLayer)
+			lastLayer->actors.Remove(this);
+
 		layer->actors.Add(this);
 
 		if (mResEnabled)
 		{
-			lastLayer->enabledActors.Remove(this);
+			if (lastLayer)
+				lastLayer->enabledActors.Remove(this);
+
 			layer->enabledActors.Add(this);
 		}
 
@@ -655,6 +670,7 @@ namespace o2
 			else
 				mLayer->enabledActors.Remove(this);
 
+			o2Scene.onActorEnableChanged(this);
 			ACTOR_CHANGED(this);
 		}
 
@@ -675,7 +691,7 @@ namespace o2
 			mResLocked = mLocked;
 
 		if (lastResLocked != mResLocked)
-			ACTOR_CHANGED(this);
+			ACTOR_LOCK_CHANGED(this);
 
 		for (auto child : mChilds)
 			child->UpdateLocking();

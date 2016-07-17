@@ -5,7 +5,7 @@
 namespace o2
 {
 	ActorAsset::ActorAsset():
-		Asset()
+		Asset(), actor(Actor::CreateMode::NotInScene)
 	{
 		mMeta = mnew MetaInfo();
 		InitializeProperties();
@@ -16,7 +16,7 @@ namespace o2
 	}
 
 	ActorAsset::ActorAsset(const String& path):
-		Asset()
+		Asset(), actor(Actor::CreateMode::NotInScene)
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
@@ -31,7 +31,7 @@ namespace o2
 	}
 
 	ActorAsset::ActorAsset(AssetId id):
-		Asset()
+		Asset(), actor(Actor::CreateMode::NotInScene)
 	{
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
@@ -46,7 +46,7 @@ namespace o2
 	}
 
 	ActorAsset::ActorAsset(const ActorAsset& asset):
-		Asset(asset)
+		Asset(asset), actor(Actor::CreateMode::NotInScene)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;

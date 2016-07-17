@@ -77,7 +77,7 @@ namespace o2
 		virtual void SetParent(UIWidget* parent);
 
 		// Adds child widget
-		virtual UIWidget* AddChild(UIWidget* widget);
+		virtual UIWidget* AddChild(UIWidget* widget, bool updateNow = true);
 
 		// Adds child widgets
 		virtual void AddChilds(const WidgetsVec& widgets);
@@ -103,7 +103,7 @@ namespace o2
 		_type* FindLayer();
 
 		// Removes all child widgets
-		virtual void RemoveAllChilds(bool release = true);
+		virtual void RemoveAllChilds(bool release = true, bool updateLayout = true);
 
 		// Returns constant children widgets vector
 		virtual const WidgetsVec& GetChilds() const;
@@ -231,7 +231,7 @@ namespace o2
 		bool           mIsFocusable = false;    // Is widget can be focused
 					   						    
 		UIWidgetState* mVisibleState = nullptr; // Widget visibility state
-		bool           mVisible = true;         // Visibility of widget. Uses state 'visible'
+		bool           mVisible = true;         // Visibility of widget. Uses state 'visible' @SERIALIZABLE
 		bool           mResVisible = true;      // Result visibility of widget. Depends on this visibility and parent result visibility
 		bool           mFullyDisabled = false;  // True, if widget is not visible and visible state is fully false
 		bool           mIsClipped = false;      // Is widget fully clipped by some scissors

@@ -23,6 +23,7 @@ namespace Editor
 		InitializeWindow();
 		InitializeViewers();
 		InitializePropertiesFields();
+		InitializePools();
 	}
 
 	PropertiesWindow::~PropertiesWindow()
@@ -75,12 +76,54 @@ namespace Editor
 		{
 			auto sample = (IAssetProperty*)x->CreateSample();
 			mAvailablePropertiesFields.Add(sample);
+		}
+	}
 
-			mFieldPropertiesPool.Add(sample->GetFieldType(), PropertiesFieldsVec());
+	void PropertiesWindow::InitializePools()
+	{
+		const int initialPoolSize = 15;
+
+		// properties pool
+		for (auto fieldSample : mAvailablePropertiesFields)
+		{
+			mFieldPropertiesPool.Add(fieldSample->GetFieldType(), PropertiesFieldsVec());
 
 			for (int i = 0; i < initialPoolSize; i++)
-				mFieldPropertiesPool[sample->GetFieldType()].Add((IAssetProperty*)x->CreateSample());
+				mFieldPropertiesPool[fieldSample->GetFieldType()].Add((IAssetProperty*)fieldSample->GetType().CreateSample());
 		}
+
+		// horizontal layouts pool
+		for (int i = 0; i < initialPoolSize; i++)
+			mHorLayoutsPool.Add(CreatePropertyHorLayout());
+
+		// labels pool
+		for (int i = 0; i < initialPoolSize; i++)
+			mLabelsPool.Add(CreatePropertyLabel());
+	}
+
+	UIHorizontalLayout* PropertiesWindow::CreatePropertyHorLayout()
+	{
+		UIHorizontalLayout* horLayout = mnew UIHorizontalLayout();
+		horLayout->spacing = 5.0f;
+		horLayout->border = RectF();
+		horLayout->expandHeight = true;
+		horLayout->expandWidth = true;
+		horLayout->fitByChildren = true;
+		horLayout->baseCorner = BaseCorner::Left;
+		horLayout->layout = UIWidgetLayout::BothStretch();
+		horLayout->layout.minHeight = 20;
+
+		return horLayout;
+	}
+
+	UILabel* PropertiesWindow::CreatePropertyLabel()
+	{
+		auto newLabel = o2UI.CreateWidget<UILabel>();
+		newLabel->horAlign = HorAlign::Left;
+		newLabel->layout.minWidth = 100;
+		newLabel->layout.widthWeight = 0.5f;
+
+		return newLabel;
 	}
 
 	void PropertiesWindow::SetTarget(IObject* target)
@@ -156,12 +199,12 @@ namespace Editor
 			if (childHorLayout->GetChilds()[0]->GetType() == TypeOf(UILabel))
 				mLabelsPool.Add((UILabel*)childHorLayout->GetChilds()[0]);
 
-			childHorLayout->RemoveAllChilds(false);
+			childHorLayout->RemoveAllChilds(false, false);
 
 			mHorLayoutsPool.Add(childHorLayout);
 		}
 
-		layout->RemoveAllChilds(false);
+		layout->RemoveAllChilds(false, false);
 		for (auto widget : unknownTypeChilds)
 			delete widget;
 
@@ -169,8 +212,6 @@ namespace Editor
 			mFieldPropertiesPool[field->GetFieldType()].Add(field);
 
 		usedPropertyFields.Clear();
-
-		Vector<UIWidget*> layoutChilds;
 
 		// and build
 		for (auto fieldInfo : type->Fields())
@@ -190,19 +231,7 @@ namespace Editor
 			if (mHorLayoutsPool.IsEmpty())
 			{
 				for (int i = 0; i < mPropertyFieldsPoolStep; i++)
-				{
-					UIHorizontalLayout* horLayout = mnew UIHorizontalLayout();
-					horLayout->spacing = 5.0f;
-					horLayout->border = RectF();
-					horLayout->expandHeight = true;
-					horLayout->expandWidth = true;
-					horLayout->fitByChildren = true;
-					horLayout->baseCorner = BaseCorner::Left;
-					horLayout->layout = UIWidgetLayout::BothStretch();
-					horLayout->layout.minHeight = 20;
-
-					mHorLayoutsPool.Add(horLayout);
-				}
+					mHorLayoutsPool.Add(CreatePropertyHorLayout());
 			}
 
 			UIHorizontalLayout* horLayout = mHorLayoutsPool.PopBack();
@@ -211,14 +240,11 @@ namespace Editor
 			if (mLabelsPool.IsEmpty())
 			{
 				for (int i = 0; i < mPropertyFieldsPoolStep; i++)
-					mLabelsPool.Add(o2UI.CreateWidget<UILabel>());
+					mLabelsPool.Add(CreatePropertyLabel());
 			}
 
 			UILabel* label = mLabelsPool.PopBack();
 			label->text = MakeSmartFieldName(fieldInfo->Name());
-			label->horAlign = HorAlign::Left;
-			label->layout.minWidth = 100;
-			label->layout.widthWeight = 0.5f;
 
 			// add property
 			if (!mFieldPropertiesPool.ContainsKey(fieldPropertyType))
@@ -238,13 +264,11 @@ namespace Editor
 			usedPropertyFields.Add(fieldProperty);
 
 			// add to layout
-			horLayout->AddChild(label);
-			horLayout->AddChild(fieldProperty->GetWidget());
+			horLayout->AddChild(label, false);
+			horLayout->AddChild(fieldProperty->GetWidget(), false);
 
-			layoutChilds.Add(horLayout);
+			layout->AddChild(horLayout, false);
 		}
-
-		layout->AddChilds(layoutChilds);
 	}
 
 	String PropertiesWindow::MakeSmartFieldName(const String& fieldName)

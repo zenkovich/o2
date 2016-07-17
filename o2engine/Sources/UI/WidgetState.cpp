@@ -25,6 +25,9 @@ namespace o2
 
 	void UIWidgetState::SetState(bool state)
 	{
+ 		if (mState == state && !animation.IsPlaying())
+ 			return;
+
 		mState = state;
 
 		if (state)
@@ -41,11 +44,13 @@ namespace o2
 
 			onStateBecomesFalse();
 		}
-
 	}
 
 	void UIWidgetState::SetStateForcible(bool state)
 	{
+  		if (mState == state && !animation.IsPlaying())
+  			return;
+
 		mState = state;
 
 		if (mState)

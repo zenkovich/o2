@@ -251,6 +251,7 @@
       <Item Name="position" ExcludeView="simple">mPosition</Item>
       <Item Name="pivot" ExcludeView="simple">mPivot</Item>
       <Item Name="size" ExcludeView="simple">mSize</Item>
+      <Item Name="scale" ExcludeView="simple">mScale</Item>
       <Item Name="angle" ExcludeView="simple">mAngle</Item>
       <Item Name="shear" ExcludeView="simple">mShear</Item>
       <Item Name="transform" ExcludeView="simple">mTransform</Item>
@@ -299,6 +300,7 @@
       <Item Name="position" ExcludeView="simple">mPosition</Item>
       <Item Name="pivot" ExcludeView="simple">mPivot</Item>
       <Item Name="size" ExcludeView="simple">mSize</Item>
+      <Item Name="scale" ExcludeView="simple">mScale</Item>
       <Item Name="angle" ExcludeView="simple">mAngle</Item>
       <Item Name="shear" ExcludeView="simple">mShear</Item>
       <Item Name="alpha" ExcludeView="simple">mColor.a</Item>
@@ -309,6 +311,7 @@
       <Item Name="fill" ExcludeView="simple">mFill</Item>
       <Item Name="asset id" ExcludeView="simple">mImageAssetId</Item>
       <Item Name="atlas id" ExcludeView="simple">mAtlasAssetId</Item>
+      <Item Name="mesh" ExcludeView="simple">mMesh</Item>
       
       <Synthetic Name="corners' colors">
         <DisplayString>LT { mCornersColors[0] }; RT { mCornersColors[1] }; RB { mCornersColors[2] }; LB { mCornersColors[3] }</DisplayString>

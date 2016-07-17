@@ -75,7 +75,7 @@ namespace Editor
 		void SelectActor(Actor* object);
 
 		// Selects object
-		void SelectAndExpandActor(Actor* object);
+		void SelectAndHightlightActor(Actor* object);
 
 		// Deselects object
 		void DeselectActor(Actor* object);

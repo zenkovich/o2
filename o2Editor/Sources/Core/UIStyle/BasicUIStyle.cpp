@@ -200,6 +200,8 @@ namespace o2
 		UIHorizontalScrollBar* sample = mnew UIHorizontalScrollBar();
 		sample->layout.minSize = Vec2F(5, 5);
 		sample->SetScrollSense(0.25f);
+		sample->SetMinimalScrollhandleSize(10);
+
 		auto backLayer = sample->AddLayer("back", nullptr);
 		backLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
 		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI_Hor_scrollbar_bk.png"),
@@ -237,6 +239,9 @@ namespace o2
 		UIVerticalScrollBar* sample = mnew UIVerticalScrollBar();
 		sample->layout.minSize = Vec2F(5, 5);
 		sample->SetScrollSense(0.25f);
+		sample->SetMinimalScrollhandleSize(10);
+
+
 		auto backLayer = sample->AddLayer("back", nullptr);
 		backLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
 		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI_Ver_scrollbar_bk.png"),

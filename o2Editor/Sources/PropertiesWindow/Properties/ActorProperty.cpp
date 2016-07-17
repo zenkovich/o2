@@ -176,7 +176,7 @@ namespace Editor
 			}
 			else if (mCommonValue->IsOnScene())
 			{
-				o2EditorTree.ExpandActorsTreeNode(mCommonValue);
+				o2EditorTree.HightlightActorsTreeNode(mCommonValue);
 				o2EditorSceneScreen.SelectActor(mCommonValue, false);
 			}
 		}

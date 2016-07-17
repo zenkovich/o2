@@ -205,7 +205,7 @@ namespace o2
 		Evaluate();
 	}
 
-	bool IAnimation::IsPlaying()
+	bool IAnimation::IsPlaying() const
 	{
 		return mPlaying;
 	}

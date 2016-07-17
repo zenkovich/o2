@@ -539,6 +539,9 @@ namespace o2
 
 	void Text::TransformMesh(const Basis& bas)
 	{
+		if (bas == Basis::Identity())
+			return;
+
 		for (auto& mesh : mMeshes)
 		{
 			for (unsigned int i = 0; i < mesh->vertexCount; i++)

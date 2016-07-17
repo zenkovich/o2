@@ -218,7 +218,7 @@ namespace o2
 		UpdateVisibility();
 	}
 
-	UIWidget* UIWidget::AddChild(UIWidget* widget)
+	UIWidget* UIWidget::AddChild(UIWidget* widget, bool updateNow /*= true*/)
 	{
 		if (mChilds.Contains(widget))
 			return widget;
@@ -229,9 +229,12 @@ namespace o2
 		mChilds.Add(widget);
 		widget->mParent = this;
 
-		UpdateLayout();
-		UpdateTransparency();
-		UpdateVisibility();
+		if (updateNow)
+		{
+			UpdateLayout();
+			UpdateTransparency();
+			UpdateVisibility();
+		}
 
 		OnChildAdded(widget);
 
@@ -347,7 +350,7 @@ namespace o2
 		return nullptr;
 	}
 
-	void UIWidget::RemoveAllChilds(bool release /*= true*/)
+	void UIWidget::RemoveAllChilds(bool release /*= true*/, bool updateLayout /*= true*/)
 	{
 		for (auto child : mChilds)
 		{
@@ -359,7 +362,9 @@ namespace o2
 		}
 
 		mChilds.Clear();
-		UpdateLayout();
+		
+		if (updateLayout)
+			UpdateLayout();
 	}
 
 	const UIWidget::WidgetsVec& UIWidget::GetChilds() const
@@ -495,6 +500,8 @@ namespace o2
 			mFocusedState = state;
 			mFocusedState->SetStateForcible(mIsFocused);
 		}
+
+		state->mOwner = this;
 
 		OnStateAdded(state);
 
@@ -765,11 +772,17 @@ namespace o2
 	void UIWidget::RetargetStatesAnimations()
 	{
 		for (auto state : mStates)
+		{
 			state->animation.SetTarget(this, false);
+			state->animation.relTime = state->GetState() ? 1.0f : 0.0f;
+		}
 	}
 
 	void UIWidget::RecalculateAbsRect()
 	{
+// 		if (name != "label")
+// 			o2Debug.Log("- RecalculateAbsRect: %s at %i", mName, o2Time.GetCurrentFrame());
+
 		RectF lastAbsRect = layout.mAbsoluteRect;
 
 		Vec2F parentSize, parentPos;
@@ -899,9 +912,8 @@ namespace o2
 		for (auto layer : mLayers)
 			layer->mOwnerWidget = this;
 
-		for (auto state : mStates)
-			state->animation.SetTarget(this);
-
+		RetargetStatesAnimations();
+		SetVisibleForcible(mVisible);
 		UpdateLayersDrawingSequence();
 	}
 

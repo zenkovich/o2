@@ -136,7 +136,7 @@ namespace o2
 		template<typename T>
 		inline T Lerpc(const T& a, const T& b, float coef)
 		{
-			return Clamp((b - a)*coef + a, a, b);
+			return (b - a)*Clamp01(coef) + a;
 		}
 
 		RectF Lerp(const RectF& a, const RectF& b, float coef);

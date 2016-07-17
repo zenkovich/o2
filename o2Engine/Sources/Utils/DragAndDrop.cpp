@@ -276,6 +276,8 @@ namespace o2
 
 		if (mSelectGroup)
 			mSelectGroup->OnSelectableObjectCursorPressed(this, cursor);
+
+		CursorAreaEventsListener::OnCursorPressed(cursor);
 	}
 
 	void SelectableDragableObject::OnCursorStillDown(const Input::Cursor& cursor)
@@ -341,6 +343,8 @@ namespace o2
 					dragArea->OnDraggedAbove(this);
 			}
 		}
+
+		CursorAreaEventsListener::OnCursorStillDown(cursor);
 	}
 
 	void SelectableDragableObject::OnCursorReleased(const Input::Cursor& cursor)
@@ -371,6 +375,8 @@ namespace o2
 			else
 				SetSelected(!IsSelected());
 		}
+
+		CursorAreaEventsListener::OnCursorReleased(cursor);
 	}
 
 	void SelectableDragableObject::OnCursorReleasedOutside(const Input::Cursor& cursor)

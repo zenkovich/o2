@@ -221,6 +221,30 @@ namespace o2
 		OnScrolled();
 	}
 
+	void UIScrollArea::SetScrollForcible(const Vec2F& scroll)
+	{
+		Vec2F newScrollPos(Math::Clamp(scroll.x, mScrollRange.left, mScrollRange.right),
+						   Math::Clamp(scroll.y, mScrollRange.bottom, mScrollRange.top));
+
+		Vec2F scrollDelta;
+
+		if (mHorScrollBar)
+			mHorScrollBar->SetValueForcible(newScrollPos.x);
+		else
+			scrollDelta.x = newScrollPos.x;
+
+		if (mVerScrollBar)
+			mVerScrollBar->SetValueForcible(newScrollPos.y);
+		else
+			scrollDelta.y = newScrollPos.y;
+
+		if (!mVerScrollBar || !mHorScrollBar)
+			MoveScrollPosition(scrollDelta);
+
+		onScrolled(newScrollPos);
+		OnScrolled();
+	}
+
 	Vec2F UIScrollArea::GetScroll() const
 	{
 		return mScrollPos;
@@ -516,7 +540,7 @@ namespace o2
 		if (withChildren)
 			UpdateChildrenLayouts(true);
 
-		CheckChildrenClipping();
+		//CheckChildrenClipping();
 		UpdateScrollParams();
 		UpdateScrollBarsLayout();
 	}

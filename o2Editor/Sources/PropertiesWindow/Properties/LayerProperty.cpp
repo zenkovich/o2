@@ -47,10 +47,19 @@ namespace Editor
 
 		mValuesPointers = targets;
 
-		mDropDown->RemoveAllItems();
+		auto layers = o2Scene.GetLayers();
+		auto dropdownLayers = mDropDown->GetAllItemsText();
+		for (auto itemName : dropdownLayers)
+		{
+			if (!layers.ContainsPred([&](Scene::Layer* x) { return x->name == itemName; }))
+				mDropDown->RemoveItem(itemName);
+		}
 
-		for (auto layer : o2Scene.GetLayers())
-			mDropDown->AddItem(layer->name);
+		for (auto layer : layers)
+		{
+			if (!dropdownLayers.Contains(layer->name))
+				mDropDown->AddItem(layer->name);
+		}
 
 		Update();
 	}

@@ -1,9 +1,7 @@
 #pragma once
 
-//#include "Animation/AnimatedValue.h"
 #include "Animation/IAnimation.h"
 #include "Utils/Debug.h"
-
 #include "Utils/Property.h"
 #include "Utils/Reflection/Attribute.h"
 #include "Utils/String.h"
@@ -25,6 +23,10 @@ namespace o2
 	class Animation: public IAnimation
 	{
 	public:
+		struct AnimatedValueDef;
+		typedef Vector<AnimatedValueDef> AnimatedValuesVec;
+
+	public:
 		// Default constructor
 		Animation(IObject* target = nullptr);
 
@@ -41,8 +43,17 @@ namespace o2
 		// Bind all animation values to target's child fields (if it possible)
 		void SetTarget(IObject* target, bool errors = true);
 
+		// Returns animation's target
+		IObject* GetTarget() const;
+
 		// Removes and clears all animated values
 		void Clear();
+
+		// Returns animation values
+		AnimatedValuesVec& GetAnimationsValues();
+
+		// Returns animation values
+		const AnimatedValuesVec& GetAnimationsValues() const;
 
 		// Returns animated value by path (some like "path/abc/cde")
 		template<typename _type>
@@ -163,7 +174,6 @@ namespace o2
 
 			SERIALIZABLE(AnimatedValueDef);
 		};
-		typedef Vector<AnimatedValueDef> AnimatedValuesVec;
 
 	protected:
 		AnimatedValuesVec mAnimatedValues;   // Animated value @SERIALIZABLE
@@ -192,6 +202,7 @@ namespace o2
 		void OnAnimatedValueAdded(AnimatedValueDef& valueDef);
 
 		friend class Animatable;
+		friend class Animate;
 	};
 
 	template<typename _type>

@@ -56,7 +56,7 @@ namespace o2
 
 		if (!Math::Equals(mValue, mSmoothValue, threshold))
 		{
-			mSmoothValue = Math::Clamp(Math::Lerp(mSmoothValue, mValue, dt*smoothCoef), mMinValue, mMaxValue);
+			mSmoothValue = Math::Clamp(Math::Lerpc(mSmoothValue, mValue, dt*smoothCoef), mMinValue, mMaxValue);
 
 			if (Math::Abs(mValue - mSmoothValue) < threshold)
 				mSmoothValue = mValue;

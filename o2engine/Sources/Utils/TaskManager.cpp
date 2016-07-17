@@ -1,5 +1,6 @@
 #include "TaskManager.h"
 
+#include "Utils/AnimationTask.h"
 #include "Utils/Task.h"
 
 namespace o2
@@ -43,7 +44,7 @@ namespace o2
 		task->update = update;
 	}
 
-	void TaskManager::Call(const Function<void()> func, float delay)
+	void TaskManager::Invoke(const Function<void()> func, float delay)
 	{
 		auto task = mnew FunctionalDelayedTask(delay);
 		task->doTask = func;
@@ -70,5 +71,10 @@ namespace o2
 
 		for (auto doneTask : doneTasks)
 			delete doneTask;
+	}
+
+	void TaskManager::Play(const Animation& animation, float delay /*= 0.0f*/)
+	{
+		mnew AnimationTask(animation, delay);
 	}
 }

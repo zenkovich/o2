@@ -276,6 +276,9 @@ namespace o2
 		Key& beginKey = mKeys[begi];
 		Key& endKey = mKeys[endi];
 
+		if (Math::Equals(endKey.mApproxTotalLength, 0.0f, 0.001f))
+			return endKey.value;
+
 		float curveCoef = 0.0f;
 		{
 			int segBeg = 0;

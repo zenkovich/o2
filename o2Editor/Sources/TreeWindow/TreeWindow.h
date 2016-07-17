@@ -33,8 +33,8 @@ namespace Editor
 		// Returns actors tree widget
 		UIActorsTree* GetActorsTree() const;
 
-		// Expands all parent actor's nodes in actors tree
-		void ExpandActorsTreeNode(Actor* targetActor);
+		// Expands all actor's parents nodes in tree and hightlights actor
+		void HightlightActorsTreeNode(Actor* targetActor);
 
 	protected:
 		UIToggle*      mListTreeToggle;		// TOggle between list and tree views
