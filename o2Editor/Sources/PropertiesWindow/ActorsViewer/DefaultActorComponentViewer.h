@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PropertiesWindow/ActorsViewer/IActorComponentViewer.h"
+#include "PropertiesWindow/Properties/FieldPropertiesInfo.h"
 #include "PropertiesWindow/Properties/IPropertyField.h"
 
 namespace Editor
@@ -23,10 +24,14 @@ namespace Editor
 		// Returns viewing component type 
 		const Type* GetComponentType() const;
 
+		// Specialize viewing component type. Creates all using properties
+		void SepcializeComponentType(const Type* type);
+
 		IOBJECT(DefaultActorComponentViewer);
 
 	protected:
-		Vector<Component*>            mTargetComponents;   // Target components
-		Vector<IPropertyField*> mUsedPropertyFields; // Used property fields
+		Vector<Component*>  mTargetComponents;        // Target components
+		FieldPropertiesInfo mFieldProperties;         // Field properties information
+		const Type*         mComponentType = nullptr; // Target component type
 	};
 }

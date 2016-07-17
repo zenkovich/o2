@@ -20,15 +20,18 @@ namespace Editor
 	void DefaultActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
 	{
 		mTargetComponents = components;
-
-		o2EditorProperties.BuildTypeViewer((UIVerticalLayout*)mDataView,
-										   &components[0]->GetType(),
-										   components.Select<IObject*>([](auto x) { return (IObject*)x; }),
-										   mUsedPropertyFields);
+		mFieldProperties.Set(components.Select<IObject*>([](auto x) { return (IObject*)x; }));
 	}
 
 	const Type* DefaultActorComponentViewer::GetComponentType() const
 	{
-		return &TypeOf(Component);
+		return mComponentType;
 	}
+
+	void DefaultActorComponentViewer::SepcializeComponentType(const Type* type)
+	{
+		mComponentType = type;
+		o2EditorProperties.BuildTypeViewer((UIVerticalLayout*)mDataView, type, mFieldProperties);
+	}
+
 }

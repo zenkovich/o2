@@ -7,6 +7,7 @@
 #include "PropertiesWindow/Properties/IntegerProperty.h"
 #include "PropertiesWindow/Properties/StringProperty.h"
 #include "PropertiesWindow/Properties/WStringProperty.h"
+#include "PropertiesWindow/Properties/FieldPropertiesInfo.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/Label.h"
 #include "UI/UIManager.h"
@@ -182,8 +183,7 @@ namespace Editor
 			mCurrentViewer->Draw();
 	}
 
-	void PropertiesWindow::BuildTypeViewer(UIVerticalLayout* layout, const Type* type, const Vector<IObject*>& objects,
-										   Vector<IPropertyField*>& usedPropertyFields)
+	void PropertiesWindow::BuildTypeViewer(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo)
 	{
 		// clear and fill pools
 		Vector<UIWidget*> unknownTypeChilds;
@@ -208,10 +208,10 @@ namespace Editor
 		for (auto widget : unknownTypeChilds)
 			delete widget;
 
-		for (auto field : usedPropertyFields)
-			mFieldPropertiesPool[field->GetFieldType()].Add(field);
+		for (auto prop : propertiesInfo.properties)
+			mFieldPropertiesPool[prop.Value()->GetFieldType()].Add(prop.Value());
 
-		usedPropertyFields.Clear();
+		propertiesInfo.properties.Clear();
 
 		// and build
 		for (auto fieldInfo : type->Fields())
@@ -257,11 +257,9 @@ namespace Editor
 			}
 
 			IPropertyField* fieldProperty = mFieldPropertiesPool[fieldPropertyType].PopBack();
-			Vector<void*> fieldPointers = objects.Select<void*>([&](IObject* x) { return fieldInfo->GetValuePtrStrong<char>(x); });
 			fieldProperty->SpecializeType(fieldType);
-			fieldProperty->Setup(fieldPointers, fieldInfo->IsProperty());
 
-			usedPropertyFields.Add(fieldProperty);
+			propertiesInfo.properties.Add(fieldInfo, fieldProperty);
 
 			// add to layout
 			horLayout->AddChild(label, false);
@@ -338,5 +336,4 @@ namespace Editor
 
 		return nullptr;
 	}
-
 }

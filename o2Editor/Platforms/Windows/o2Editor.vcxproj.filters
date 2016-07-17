@@ -220,6 +220,9 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.h">
       <Filter>PropertiesWindow\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.h">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
@@ -380,6 +383,9 @@
       <Filter>PropertiesWindow\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.cpp">
+      <Filter>PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.cpp">
       <Filter>PropertiesWindow\Properties</Filter>
     </ClCompile>
   </ItemGroup>

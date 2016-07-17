@@ -18,6 +18,8 @@ namespace o2
 namespace Editor
 {
 	class IObjectPropertiesViewer;
+	struct FieldPropertiesInfo;
+
 	// ------------------------
 	// Editor properties window
 	// ------------------------
@@ -46,8 +48,7 @@ namespace Editor
 		void Draw();
 
 		// Builds layout viewer by type for objects
-		void BuildTypeViewer(UIVerticalLayout* layout, const Type* type, const Vector<IObject*>& objects,
-							 Vector<IPropertyField*>& usedPropertyFields);
+		void BuildTypeViewer(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo);
 
 		// Makes smarter field name
 		String MakeSmartFieldName(const String& fieldName);

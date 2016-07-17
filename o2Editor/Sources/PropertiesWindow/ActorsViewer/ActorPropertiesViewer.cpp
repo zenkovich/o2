@@ -126,31 +126,37 @@ namespace Editor
 
 		for (const Type* type : commonComponentsTypes)
 		{
+			bool usingDefaultComponentViewer = false;
+
 			auto viewerSample = mAvailableComponentsViewers.FindMatch([&](IActorComponentViewer* x) {
 				return x->GetComponentType() == type; });
 
 			if (!viewerSample)
-				viewerSample = mDefaultComponentViewer;
-
-			auto availableViewerType = viewerSample->GetComponentType();
-
-			if (!mComponentViewersPool.ContainsKey(availableViewerType) ||
-				mComponentViewersPool[availableViewerType].IsEmpty())
 			{
-				if (!mComponentViewersPool.ContainsKey(availableViewerType))
-					mComponentViewersPool.Add(availableViewerType, Vector<IActorComponentViewer*>());
-
-				mComponentViewersPool[availableViewerType].Add(
-					(IActorComponentViewer*)(viewerSample->GetType().CreateSample()));
+				viewerSample = mDefaultComponentViewer;
+				usingDefaultComponentViewer = true;
 			}
 
-			auto componentViewer = mComponentViewersPool[availableViewerType].PopBack();
+			if (!mComponentViewersPool.ContainsKey(type) || mComponentViewersPool[type].IsEmpty())
+			{
+				if (!mComponentViewersPool.ContainsKey(type))
+					mComponentViewersPool.Add(type, Vector<IActorComponentViewer*>());
+
+				auto newViewer = (IActorComponentViewer*)(viewerSample->GetType().CreateSample());
+
+				if (usingDefaultComponentViewer)
+					((DefaultActorComponentViewer*)newViewer)->SepcializeComponentType(type);
+
+				mComponentViewersPool[type].Add(newViewer);
+			}
+
+			auto componentViewer = mComponentViewersPool[type].PopBack();
 
 			viewersWidgets.Add(componentViewer->GetWidget());
 			mComponentsViewers.Add(componentViewer);
 
-			componentViewer->SetTargetComponents(mTargetActors.Select<Component*>([&](Actor* x) {
-				return x->GetComponent(type); }));
+			componentViewer->SetTargetComponents(
+				mTargetActors.Select<Component*>([&](Actor* x) { return x->GetComponent(type); }));
 		}
 
 		mViewersLayout->AddChilds(viewersWidgets);

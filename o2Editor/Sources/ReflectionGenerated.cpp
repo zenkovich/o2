@@ -5086,11 +5086,10 @@ void Editor::PropertiesWindow::InitializeType(Editor::PropertiesWindow* sample)
 	funcInfo = TypeInitializer::RegFunction<Editor::PropertiesWindow, void, float>(&type, "Update", &Editor::PropertiesWindow::Update, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
 	funcInfo = TypeInitializer::RegFunction<Editor::PropertiesWindow, void>(&type, "Draw", &Editor::PropertiesWindow::Draw, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<Editor::PropertiesWindow, void, UIVerticalLayout*, const Type*, const Vector<IObject*>&, Vector<IPropertyField*>&>(&type, "BuildTypeViewer", &Editor::PropertiesWindow::BuildTypeViewer, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<Editor::PropertiesWindow, void, UIVerticalLayout*, const Type*, FieldPropertiesInfo&>(&type, "BuildTypeViewer", &Editor::PropertiesWindow::BuildTypeViewer, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<UIVerticalLayout*>(funcInfo, "layout");
 	TypeInitializer::RegFuncParam<const Type*>(funcInfo, "type");
-	TypeInitializer::RegFuncParam<const Vector<IObject*>&>(funcInfo, "objects");
-	TypeInitializer::RegFuncParam<Vector<IPropertyField*>&>(funcInfo, "usedPropertyFields");
+	TypeInitializer::RegFuncParam<FieldPropertiesInfo&>(funcInfo, "propertiesInfo");
 	funcInfo = TypeInitializer::RegFunction<Editor::PropertiesWindow, String, const String&>(&type, "MakeSmartFieldName", &Editor::PropertiesWindow::MakeSmartFieldName, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "fieldName");
 	funcInfo = TypeInitializer::RegFunction<Editor::PropertiesWindow, void>(&type, "InitializeWindow", &Editor::PropertiesWindow::InitializeWindow, o2::ProtectSection::Protected);
@@ -5146,10 +5145,13 @@ void Editor::DefaultActorComponentViewer::InitializeType(Editor::DefaultActorCom
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
 	TypeInitializer::RegField(&type, "mTargetComponents", (size_t)(char*)(&sample->mTargetComponents) - (size_t)(char*)iobject, sample->mTargetComponents, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mUsedPropertyFields", (size_t)(char*)(&sample->mUsedPropertyFields) - (size_t)(char*)iobject, sample->mUsedPropertyFields, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mFieldProperties", (size_t)(char*)(&sample->mFieldProperties) - (size_t)(char*)iobject, sample->mFieldProperties, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mComponentType", (size_t)(char*)(&sample->mComponentType) - (size_t)(char*)iobject, sample->mComponentType, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<Editor::DefaultActorComponentViewer, void, const Vector<Component*>&>(&type, "SetTargetComponents", &Editor::DefaultActorComponentViewer::SetTargetComponents, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vector<Component*>&>(funcInfo, "components");
 	funcInfo = TypeInitializer::RegFunction<Editor::DefaultActorComponentViewer, const Type*>(&type, "GetComponentType", &Editor::DefaultActorComponentViewer::GetComponentType, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<Editor::DefaultActorComponentViewer, void, const Type*>(&type, "SepcializeComponentType", &Editor::DefaultActorComponentViewer::SepcializeComponentType, o2::ProtectSection::Public);
+	TypeInitializer::RegFuncParam<const Type*>(funcInfo, "type");
 }
 
 void Editor::DefaultActorHeaderViewer::InitializeType(Editor::DefaultActorHeaderViewer* sample)

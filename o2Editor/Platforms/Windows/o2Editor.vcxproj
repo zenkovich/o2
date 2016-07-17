@@ -59,6 +59,7 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FloatProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\FloatProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\AssetProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.h" />
