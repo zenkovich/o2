@@ -82,6 +82,8 @@ namespace Editor
 
 	void PropertiesWindow::InitializePools()
 	{
+		return;
+
 		const int initialPoolSize = 15;
 
 		// properties pool

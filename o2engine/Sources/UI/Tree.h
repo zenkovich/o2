@@ -168,14 +168,14 @@ namespace o2
 			String      id;
 			UnknownPtr  object;             // Pointer to object
 			UITreeNode* widget = nullptr;   // Node widget
+			int         level = 0;          // Hierarchy depth level
 			bool        isSelected = false; // Is node selected
+			bool        isExpanded = false; // Is node expanded
 										    
 			Node*       parent = nullptr;   // Parent node definition
 			NodesVec    childs;             // Children nodes definitions
-										    
-			int         level = 0;          // Hierarchy depth level
 
-			bool        isExpanded = false; // Is node expanded
+			bool        inserting = false;  // Node insertion flag
 			float       insertCoef = 0.0f;  // Inserting coefficient (0...1)
 
 		public:
@@ -210,8 +210,7 @@ namespace o2
 		NodesVec       mNodesBuf;                               // Nodes buffer
 
 		int            mMinVisibleNodeIdx = 0;                  // Minimal visible node index
-		int            mMaxVisibleNodeIdx = -1;                  // Maximum visible node index
-		int            mInvalidVisibleNodeIdx = -1;             // Minimum of ivalide visible node index. Sets when nodes hierarchy changing in visible range
+		int            mMaxVisibleNodeIdx = -1;                 // Maximum visible node index
 
 		Vec2F          mLastClickPos;                           // Last click position in scroll space (depends on scroll position)
 					   
@@ -226,6 +225,7 @@ namespace o2
 		Vec2F          mDragOffset;                             // Offset from cursor to dragging node's center
 		UITreeNode*    mInsertNodeCandidate = nullptr;          // Insertion node candidate when dragging nodes
 		NodesVec       mBeforeDragSelectedItems;                // Before drag begin selection
+		Vector<int>    mDraggingNodesIndexes;                   // Current dragging node indexes in mAllNodes
 
 		UnknownPtrsVec mExpandedObjects;                        // Expanded objects
 
@@ -237,7 +237,7 @@ namespace o2
 		float          mExpandingNodeCurrCoef = 0.0f;           // Current expanding node coefficient of expanding
 		float          mExpandingNodeCurrHeight = 0.0f;         // Current expanding node current height
 		float          mExpandingNodeTargetHeight = 0.0f;       // Current expanding node target height
-		float          mExpandNodeTime = 0.25f;                  // Node expanding time
+		float          mExpandNodeTime = 0.25f;                 // Node expanding time
 		Curve          mExpandingNodeFunc = Curve::EaseInOut(); // Expanding easing node curve
 
 		UITreeNode*    mExpandNodeCandidate = nullptr;          // Expand node candidate when dragging
@@ -328,6 +328,9 @@ namespace o2
 		// Updates node view
 		void UpdateNode(Node* node, UITreeNode* widget, int idx);
 
+		// Updates node widget layout
+		void UpdateNodeWidgetLayout(Node* node, int idx);
+
 		// Returns node index from mAllNodes by position in local coordinates
 		int GetNodeIndex(float position) const;
 
@@ -387,6 +390,9 @@ namespace o2
 
 		// Updates insert states on nodes when dragging
 		void UpdateDraggingInsertion();
+
+		// Updates insertion animation when dragging
+		void UpdateDraggingInsertionAnim(float dt);
 
 		// Calls when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group);

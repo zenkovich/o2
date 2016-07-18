@@ -136,8 +136,8 @@ namespace o2
 		mNodeWidgetSample->layout.minHeight = 20;
 		mNodeWidgetSample->AddLayer("caption", nullptr);
 
-		mFakeDragNode  = mnew UITreeNode();
-		mHoverDrawable = mnew Sprite();
+		mFakeDragNode     = mnew UITreeNode();
+		mHoverDrawable    = mnew Sprite();
 		mHightlightSprite = mnew Sprite();
 
 		mHightlightAnim.SetTarget(mHightlightSprite);
@@ -297,6 +297,9 @@ namespace o2
 		}
 
 		UpdateNodeExpanding(dt);
+
+		if (mIsDraggingNodes)
+			UpdateDraggingInsertionAnim(dt);
 
 		if (mIsNeedUpdateView)
 			UpdateNodes();
@@ -465,7 +468,7 @@ namespace o2
 				if (underCursorItem != mExpandNodeCandidate)
 				{
 					mExpandNodeCandidate = underCursorItem;
-					mExpandInsertTime = mNodeExpandTime;
+					mExpandInsertTime = mNodeExpandTime + 100.0f;
 				}
 			}
 
@@ -474,7 +477,7 @@ namespace o2
 				mExpandNodeCandidate->Expand();
 
 				if (mIsDraggingNodes)
-					mExpandNodeCandidate->SetState("inserting", false);
+					mExpandNodeCandidate->mNodeDef->inserting = false;
 
 				mExpandNodeCandidate = nullptr;
 			}
@@ -739,8 +742,6 @@ namespace o2
 			position += InsertNodes(node, position);
 		}
 
-		mInvalidVisibleNodeIdx = 0;
-
 		UpdateVisibleNodes();
 		UpdateLayout();
 	}
@@ -748,7 +749,6 @@ namespace o2
 	int UITree::InsertNodes(Node* parentNode, int position, NodesVec* newNodes /*= nullptr*/)
 	{
 		int initialPosition = position;
-		mInvalidVisibleNodeIdx = mInvalidVisibleNodeIdx < 0 ? position - 1 : Math::Min(mInvalidVisibleNodeIdx, position - 1);
 
 		if (mExpandedObjects.Contains(parentNode->object))
 		{
@@ -889,18 +889,18 @@ namespace o2
 				node->widget->UpdateLayout(true);
 		}
 
-		mNodeWidgetsBuf.Add(mVisibleWidgetsCache.FindAll([](const VisibleWidgetDef& x) { return x.widget; })
-							                    .Select<UITreeNode*>([](const VisibleWidgetDef& x) { return x.widget; }));
+		mNodeWidgetsBuf.Add(mVisibleWidgetsCache.FindAll([](const VisibleWidgetDef& x) { return x.widget != nullptr; })
+							.Select<UITreeNode*>([](const VisibleWidgetDef& x) { return x.widget; }));
 		mVisibleWidgetsCache.Clear();
 	}
 
 	void UITree::CreateVisibleNodeWidget(Node* node, int i)
 	{
-		int cacheIdx = mVisibleWidgetsCache.FindIdx([=](const VisibleWidgetDef& x) { 
+		int cacheIdx = mVisibleWidgetsCache.FindIdx([=](const VisibleWidgetDef& x) {
 			return x.object == node->object && x.position == i; });
 
 		UITreeNode* widget;
-		
+
 		if (cacheIdx < 0)
 		{
 			widget = CreateTreeNode();
@@ -923,6 +923,7 @@ namespace o2
 	void UITree::UpdateNode(Node* node, UITreeNode* widget, int idx)
 	{
 		float nodeHeight = mNodeWidgetSample->layout.GetMinimalHeight();
+		node->widget = widget;
 
 		setupNodeFunc(widget, node->object);
 
@@ -941,8 +942,22 @@ namespace o2
 		widget->SetStateForcible("selected", node->isSelected);
 		widget->SetStateForcible("focused", mIsFocused);
 
-		widget->layout.CopyFrom(UIWidgetLayout::HorStretch(VerAlign::Top, mChildsOffset*(float)node->level, 0,
-								                           nodeHeight, GetNodePosition(idx)));
+		UpdateNodeWidgetLayout(node, idx);
+	}
+
+	void UITree::UpdateNodeWidgetLayout(Node* node, int idx)
+	{
+		float nodeHeight = mNodeWidgetSample->layout.GetMinimalHeight();
+		float dragModeOffset = 0.0f;
+
+		if (mIsDraggingNodes)
+		{
+			dragModeOffset = mExpandingNodeFunc.Evaluate(node->insertCoef)*nodeHeight;
+			dragModeOffset -= mDraggingNodesIndexes.CountMatch([=](int x) { return x < idx; })*nodeHeight;
+		}
+
+		node->widget->layout.CopyFrom(UIWidgetLayout::HorStretch(VerAlign::Top, mChildsOffset*(float)node->level, 0,
+									                             nodeHeight, GetNodePosition(idx) + dragModeOffset));
 	}
 
 	int UITree::GetNodeIndex(float position) const
@@ -1023,7 +1038,6 @@ namespace o2
 		}
 
 		mIsNeedUdateLayout = true;
-		mInvalidVisibleNodeIdx = -1;
 	}
 
 	void UITree::CollapseNode(Node* node)
@@ -1045,7 +1059,6 @@ namespace o2
 			StartExpandingAnimation(ExpandState::Collaping, node, collapseNodesCount);
 
 		mIsNeedUdateLayout = true;
-		mInvalidVisibleNodeIdx = -1;
 	}
 
 	void UITree::StartExpandingAnimation(ExpandState direction, Node* node, int childrenCount)
@@ -1069,9 +1082,6 @@ namespace o2
 	{
 		if (mExpandingNodeState == ExpandState::None)
 			return;
-
-		if (o2Input.IsKeyDown('A'))
-			o2Debug.Log("asd");
 
 		if (mExpandingNodeState == ExpandState::Expanding)
 		{
@@ -1147,19 +1157,13 @@ namespace o2
 
 	void UITree::MoveScrollPosition(const Vec2F& delta)
 	{
-		if (o2Input.IsKeyDown('V'))
-			o2Debug.Log("ASS");
-
-		//o2Debug.Log("=========MoveScrollPosition=========");
-
 		mScrollPos += delta;
 
 		UpdateLayout(true, true);
 	}
 
 	void UITree::OnCursorPressed(const Input::Cursor& cursor)
-	{
-	}
+	{}
 
 	void UITree::UpdateHover(UITreeNode* itemUnderCursor)
 	{
@@ -1178,7 +1182,8 @@ namespace o2
 
 	void UITree::OnCursorMoved(const Input::Cursor& cursor)
 	{
-		UpdateHover(GetTreeNodeUnderPoint(cursor.position));
+		if (!mIsDraggingNodes)
+			UpdateHover(GetTreeNodeUnderPoint(cursor.position));
 	}
 
 	void UITree::OnCursorReleased(const Input::Cursor& cursor)
@@ -1270,6 +1275,8 @@ namespace o2
 		mDragOffset = node->layout.mAbsoluteRect.Center() - node->GetCursorPressedPoint();
 		mFakeDragNode->Show(true);
 		mFakeDragNode->SetInteractable(false);
+		mFakeDragNode->SetStateForcible("selected", true);
+		mFakeDragNode->SetStateForcible("focused", true);
 
 		setupNodeFunc(mFakeDragNode, mSelectedNodes.Last()->object);
 
@@ -1278,11 +1285,15 @@ namespace o2
 			if (auto nameLayer = mFakeDragNode->FindLayer<Text>())
 				nameLayer->text = String::Format("%i items", mSelectedNodes.Count());
 		}
+		
+		mDraggingNodesIndexes.Clear();
 
 		for (auto sel : mSelectedNodes)
 		{
 			if (sel->widget)
-				sel->widget->SetState("dragging", true);
+				sel->widget->Hide();
+
+			mDraggingNodesIndexes.Add(mAllNodes.Find(sel));
 		}
 
 		for (auto node : mVisibleNodes)
@@ -1296,11 +1307,15 @@ namespace o2
 		mIsDraggingNodes = false;
 		mFakeDragNode->Hide(true);
 
-		for (auto node : mVisibleNodes)
+		for (auto node : mAllNodes)
 		{
-			node->widget->SetState("inserting", false);
-			node->widget->SetState("dragging", false);
-			node->widget->SetInteractable(true);
+			node->inserting = false;
+
+			if (node->widget)
+			{
+				node->widget->Show();
+				node->widget->SetInteractable(true);
+			}
 		}
 	}
 
@@ -1324,12 +1339,49 @@ namespace o2
 		float ycursor = o2Input.GetCursor(0)->position.y;
 		for (auto node : mVisibleNodes)
 		{
+			if (!node->widget)
+				return;
+
 			float y = node->widget->layout.mAbsoluteRect.Center().y;
 			float h = node->widget->layout.mAbsoluteRect.Height();
 			float cy = first ? y : (y > ycursor ? y + h*mNodeDragIntoZone : y - h*mNodeDragIntoZone);
 			first = false;
 
-			node->widget->SetState("inserting", cy < ycursor);
+			node->inserting = cy < ycursor;
+		}
+	}
+
+	void UITree::UpdateDraggingInsertionAnim(float dt)
+	{
+		float nodeHeight = mNodeWidgetSample->layout.GetMinimalHeight();
+		for (auto node : mVisibleNodes)
+		{
+			bool changed = false;
+			if (node->inserting && node->insertCoef < 1.0f)
+			{
+				node->insertCoef += dt/mExpandNodeTime*2.0f;
+
+				if (node->insertCoef > 1.0f)
+					node->insertCoef = 1.0f;
+
+				changed = true;
+			}
+
+			if (!node->inserting && node->insertCoef > 0.0f)
+			{
+				node->insertCoef -= dt/mExpandNodeTime*2.0f;
+
+				if (node->insertCoef < 0.0f)
+					node->insertCoef = 0.0f;
+
+				changed = true;
+			}
+
+			if (node->widget && changed)
+			{
+				UpdateNodeWidgetLayout(node, mAllNodes.Find(node));
+				node->widget->UpdateLayout(true, true);
+			}
 		}
 	}
 
@@ -1350,6 +1402,9 @@ namespace o2
 		{
 // 			if (node->widget->mDragSizeCoef < 0.95f)
 // 				continue;
+// 				
+			if (!node->widget)
+				continue;
 
 			float dst = cursor.position.y - node->widget->layout.mAbsoluteRect.Center().y;
 			if (!first)
@@ -1369,12 +1424,11 @@ namespace o2
 			mInsertNodeCandidate = currentInsertCandidate;
 
 			if (mRearrangeType == RearrangeType::Enabled)
-			{
 				UpdateDraggingInsertion();
-			}
 		}
 
 		UpdateHover(mInsertNodeCandidate);
+
 		if (mInsertNodeCandidate && !mInsertNodeCandidate->IsUnderPoint(cursor.position))
 			mTargetHoverRect += Vec2F::Up()*mInsertNodeCandidate->layout.height;
 	}
@@ -1382,7 +1436,7 @@ namespace o2
 	void UITree::OnDragExit(ISelectableDragableObjectsGroup* group)
 	{
 		for (auto node : mVisibleNodes)
-			node->widget->SetState("inserting", false);
+			node->inserting = false;
 	}
 
 	void UITree::OnDropped(ISelectableDragableObjectsGroup* group)
@@ -1392,17 +1446,22 @@ namespace o2
 		mIsDraggingNodes = false;
 		mFakeDragNode->Hide(true);
 
-		for (auto node : mVisibleNodes)
+		for (auto node : mAllNodes)
 		{
-			node->widget->SetState("inserting", false);
-			node->widget->SetState("dragging", false);
-			node->widget->SetInteractable(true);
+			node->inserting = false;
+
+			if (node->widget)
+			{
+				node->widget->Show();
+				node->widget->SetInteractable(true);
+			}
 		}
 
 		UnknownPtrsVec objects;
 		UnknownPtr targetParent = UnknownPtr();
 		UnknownPtr targetPrevObject = UnknownPtr();
 		auto underCursorItem = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
+		Node* insertNodeCandidate = mInsertNodeCandidate->mNodeDef;
 
 		if (underCursorItem)
 		{
@@ -1410,21 +1469,16 @@ namespace o2
 		}
 		else
 		{
-			if (mInsertNodeCandidate)
+			if (insertNodeCandidate)
 			{
-				if (mInsertNodeCandidate->mParent && mInsertNodeCandidate->mParent->GetType() == UITreeNode::type)
-					targetParent = ((UITreeNode*)mInsertNodeCandidate->mParent)->mNodeDef->object;
+				targetParent = insertNodeCandidate->parent ? insertNodeCandidate->parent->object : UnknownPtr();
+				auto parentChilds = getChildsFunc(targetParent);
 
-				int idx = mInsertNodeCandidate->mParent->mChilds.Find(mInsertNodeCandidate);
+				int idx = parentChilds.Find(insertNodeCandidate->object);
 				if (idx > 0)
-				{
-					auto child = mInsertNodeCandidate->mParent->mChilds[idx - 1];
-					if (child->GetType() == TypeOf(UITreeNode))
-						targetPrevObject = ((UITreeNode*)(child))->mNodeDef->object;
-					else
-						targetPrevObject = UnknownPtr();
-				}
-				else targetPrevObject = UnknownPtr();
+					targetPrevObject = parentChilds[idx - 1];
+				else
+					targetPrevObject = UnknownPtr();
 			}
 			else
 			{
