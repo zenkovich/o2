@@ -904,7 +904,6 @@ namespace o2
 		if (cacheIdx < 0)
 		{
 			widget = CreateTreeNode();
-			widget->mNodeDef = node;
 			UpdateNode(node, widget, i);
 		}
 		else
@@ -915,6 +914,7 @@ namespace o2
 			o2Debug.Log("Used cached widget at %i", i);
 		}
 
+		widget->mNodeDef = node;
 		node->widget = widget;
 		widget->mParent = this;
 		mChilds.Add(widget);
@@ -1310,6 +1310,7 @@ namespace o2
 		for (auto node : mAllNodes)
 		{
 			node->inserting = false;
+			node->insertCoef = 0.0f;
 
 			if (node->widget)
 			{
@@ -1442,31 +1443,16 @@ namespace o2
 	void UITree::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
 		OnSelectionChanged();
-
-		mIsDraggingNodes = false;
-		mFakeDragNode->Hide(true);
-
-		for (auto node : mAllNodes)
-		{
-			node->inserting = false;
-
-			if (node->widget)
-			{
-				node->widget->Show();
-				node->widget->SetInteractable(true);
-			}
-		}
+		EndDragging();
 
 		UnknownPtrsVec objects;
 		UnknownPtr targetParent = UnknownPtr();
 		UnknownPtr targetPrevObject = UnknownPtr();
 		auto underCursorItem = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
-		Node* insertNodeCandidate = mInsertNodeCandidate->mNodeDef;
+		Node* insertNodeCandidate = mInsertNodeCandidate ? mInsertNodeCandidate->mNodeDef : nullptr;
 
 		if (underCursorItem)
-		{
 			targetParent = underCursorItem->mNodeDef->object;
-		}
 		else
 		{
 			if (insertNodeCandidate)
@@ -1482,14 +1468,15 @@ namespace o2
 			}
 			else
 			{
-				if (mChilds.Count() > 0)
+				auto rootObjects = getChildsFunc(UnknownPtr());
+				if (rootObjects.Count() > 0)
 				{
-					targetPrevObject = ((UITreeNode*)(mChilds.Last()))->mNodeDef->object;
+					targetPrevObject = rootObjects.Last();
 
-					if (mSelectedObjects.Contains(targetPrevObject))
+					if (mSelectedObjects.ContainsPred([&](Node* x) { return x->object == targetPrevObject; }))
 					{
-						if (mChilds.Count() > 1)
-							targetPrevObject = ((UITreeNode*)(mChilds[mChilds.Count() - 2]))->mNodeDef->object;
+						if (rootObjects.Count() > 1)
+							targetPrevObject = rootObjects[rootObjects.Count() - 2];
 						else
 							targetPrevObject = UnknownPtr();
 					}
