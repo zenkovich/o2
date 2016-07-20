@@ -2834,7 +2834,6 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegField(&type, "mDragOffset", (size_t)(char*)(&sample->mDragOffset) - (size_t)(char*)iobject, sample->mDragOffset, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mInsertNodeCandidate", (size_t)(char*)(&sample->mInsertNodeCandidate) - (size_t)(char*)iobject, sample->mInsertNodeCandidate, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mBeforeDragSelectedItems", (size_t)(char*)(&sample->mBeforeDragSelectedItems) - (size_t)(char*)iobject, sample->mBeforeDragSelectedItems, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mDraggingNodesIndexes", (size_t)(char*)(&sample->mDraggingNodesIndexes) - (size_t)(char*)iobject, sample->mDraggingNodesIndexes, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mExpandedObjects", (size_t)(char*)(&sample->mExpandedObjects) - (size_t)(char*)iobject, sample->mExpandedObjects, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mExpandingNodeState", (size_t)(char*)(&sample->mExpandingNodeState) - (size_t)(char*)iobject, sample->mExpandingNodeState, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mExpandingNodeIdx", (size_t)(char*)(&sample->mExpandingNodeIdx) - (size_t)(char*)iobject, sample->mExpandingNodeIdx, o2::ProtectSection::Protected);
@@ -2935,7 +2934,7 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "OnSelectionChanged", &o2::UITree::OnSelectionChanged, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, float>(&type, "UpdatePressedNodeExpand", &o2::UITree::UpdatePressedNodeExpand, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "UpdateNodes", &o2::UITree::UpdateNodes, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "UpdateNodesStructure", &o2::UITree::UpdateNodesStructure, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, int, Node*, int, NodesVec*>(&type, "InsertNodes", &o2::UITree::InsertNodes, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<Node*>(funcInfo, "parentNode");
 	TypeInitializer::RegFuncParam<int>(funcInfo, "position");
@@ -2995,7 +2994,8 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*>(&type, "CreateTreeNode", &o2::UITree::CreateTreeNode, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "BeginDragging", &o2::UITree::BeginDragging, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "EndDragging", &o2::UITree::EndDragging, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "EndDragging", &o2::UITree::EndDragging, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<bool>(funcInfo, "updateNodes");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "UpdateDraggingGraphics", &o2::UITree::UpdateDraggingGraphics, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "UpdateDraggingInsertion", &o2::UITree::UpdateDraggingInsertion, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, float>(&type, "UpdateDraggingInsertionAnim", &o2::UITree::UpdateDraggingInsertionAnim, o2::ProtectSection::Protected);

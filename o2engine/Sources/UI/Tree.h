@@ -225,7 +225,6 @@ namespace o2
 		Vec2F          mDragOffset;                             // Offset from cursor to dragging node's center
 		UITreeNode*    mInsertNodeCandidate = nullptr;          // Insertion node candidate when dragging nodes
 		NodesVec       mBeforeDragSelectedItems;                // Before drag begin selection
-		Vector<int>    mDraggingNodesIndexes;                   // Current dragging node indexes in mAllNodes
 
 		UnknownPtrsVec mExpandedObjects;                        // Expanded objects
 
@@ -299,7 +298,7 @@ namespace o2
 		void UpdatePressedNodeExpand(float dt);
 
 		// Updates root nodes and their childs if need
-		void UpdateNodes();
+		void UpdateNodesStructure();
 
 		// Inserts node to hierarchy
 		int InsertNodes(Node* parentNode, int position, NodesVec* newNodes = nullptr);
@@ -383,7 +382,7 @@ namespace o2
 		void BeginDragging(UITreeNode* node);
 
 		// Ends dragging items
-		void EndDragging();
+		void EndDragging(bool updateNodes = true);
 
 		// Updates dragging graphics
 		void UpdateDraggingGraphics();
