@@ -2808,6 +2808,7 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegField(&type, "onItemDblClick", (size_t)(char*)(&sample->onItemDblClick) - (size_t)(char*)iobject, sample->onItemDblClick, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "onItemRBClick", (size_t)(char*)(&sample->onItemRBClick) - (size_t)(char*)iobject, sample->onItemRBClick, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "onItemsSelectionChanged", (size_t)(char*)(&sample->onItemsSelectionChanged) - (size_t)(char*)iobject, sample->onItemsSelectionChanged, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "getDbgString", (size_t)(char*)(&sample->getDbgString) - (size_t)(char*)iobject, sample->getDbgString, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "mRearrangeType", (size_t)(char*)(&sample->mRearrangeType) - (size_t)(char*)iobject, sample->mRearrangeType, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mMultiSelectAvailable", (size_t)(char*)(&sample->mMultiSelectAvailable) - (size_t)(char*)iobject, sample->mMultiSelectAvailable, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mNodeWidgetSample", (size_t)(char*)(&sample->mNodeWidgetSample) - (size_t)(char*)iobject, sample->mNodeWidgetSample, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
@@ -2834,6 +2835,7 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegField(&type, "mDragOffset", (size_t)(char*)(&sample->mDragOffset) - (size_t)(char*)iobject, sample->mDragOffset, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mInsertNodeCandidate", (size_t)(char*)(&sample->mInsertNodeCandidate) - (size_t)(char*)iobject, sample->mInsertNodeCandidate, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mBeforeDragSelectedItems", (size_t)(char*)(&sample->mBeforeDragSelectedItems) - (size_t)(char*)iobject, sample->mBeforeDragSelectedItems, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mDragEnded", (size_t)(char*)(&sample->mDragEnded) - (size_t)(char*)iobject, sample->mDragEnded, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mExpandedObjects", (size_t)(char*)(&sample->mExpandedObjects) - (size_t)(char*)iobject, sample->mExpandedObjects, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mExpandingNodeState", (size_t)(char*)(&sample->mExpandingNodeState) - (size_t)(char*)iobject, sample->mExpandingNodeState, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mExpandingNodeIdx", (size_t)(char*)(&sample->mExpandingNodeIdx) - (size_t)(char*)iobject, sample->mExpandingNodeIdx, o2::ProtectSection::Protected);

@@ -119,7 +119,7 @@ namespace o2
 
 	void UITreeNode::OnDragEnd(const Input::Cursor& cursor)
 	{
-		mOwnerTree->EndDragging();
+		mOwnerTree->mDragEnded = true;
 	}
 
 	void UITreeNode::OnSelected()
@@ -228,7 +228,15 @@ namespace o2
 		if (mExpandingNodeState == ExpandState::None)
 		{
 			for (auto child : mChilds)
+			{
 				child->Draw();
+
+// 				if (child->GetType().IsBasedOn(TypeOf(UITreeNode)))
+// 				{
+// 					String dbg = getDbgString(((UITreeNode*)child)->mNodeDef->object);
+// 					o2Debug.DrawText(child->layout.GetAbsoluteRect().Center(), dbg);
+// 				}
+			}
 		}
 		else
 		{
@@ -297,6 +305,9 @@ namespace o2
 		}
 
 		UpdateNodeExpanding(dt);
+
+		if (mDragEnded)
+			EndDragging();
 
 		if (mIsDraggingNodes)
 			UpdateDraggingInsertionAnim(dt);
@@ -468,7 +479,7 @@ namespace o2
 				if (underCursorItem != mExpandNodeCandidate)
 				{
 					mExpandNodeCandidate = underCursorItem;
-					mExpandInsertTime = mNodeExpandTime + 100.0f;
+					mExpandInsertTime = mNodeExpandTime;
 				}
 			}
 
@@ -745,6 +756,11 @@ namespace o2
 		}
 
 		UpdateLayout();
+
+		o2Debug.Log("Nodes structure updated");
+
+		if (o2Input.IsKeyDown('A'))
+			o2Debug.Log("dd");
 	}
 
 	int UITree::InsertNodes(Node* parentNode, int position, NodesVec* newNodes /*= nullptr*/)
@@ -792,6 +808,8 @@ namespace o2
 		node->isSelected = mSelectedObjects.Contains(object);
 		node->isExpanded = mExpandedObjects.Contains(object);
 		node->level      = parent ? parent->level + 1 : 0;
+
+		node->id = getDbgString(object);
 
 		if (parent)
 			parent->childs.Add(node);
@@ -914,8 +932,6 @@ namespace o2
 		{
 			widget = mVisibleWidgetsCache[cacheIdx].widget;
 			mVisibleWidgetsCache[cacheIdx].widget = nullptr;
-
-			o2Debug.Log("Used cached widget at %i", i);
 		}
 
 		widget->mNodeDef = node;
@@ -1303,6 +1319,7 @@ namespace o2
 	void UITree::EndDragging(bool updateNodes /*= true*/)
 	{
 		mIsDraggingNodes = false;
+		mDragEnded = false;
 		mFakeDragNode->Hide(true);
 
 		for (auto node : mAllNodes)
@@ -1311,10 +1328,7 @@ namespace o2
 			node->insertCoef = 0.0f;
 
 			if (node->widget)
-			{
-				node->widget->Show();
 				node->widget->SetInteractable(true);
-			}
 		}
 
 		if (updateNodes)
@@ -1424,6 +1438,7 @@ namespace o2
 		if (currentInsertCandidate != mInsertNodeCandidate)
 		{
 			mInsertNodeCandidate = currentInsertCandidate;
+			o2Debug.Log("Insert candidate %s", mInsertNodeCandidate ? getDbgString(mInsertNodeCandidate->mNodeDef->object):String("null"));
 
 			if (mRearrangeType == RearrangeType::Enabled)
 				UpdateDraggingInsertion();
@@ -1443,8 +1458,8 @@ namespace o2
 
 	void UITree::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
-		OnSelectionChanged();
 		EndDragging(false);
+		//OnSelectionChanged();
 
 		UnknownPtrsVec objects;
 		UnknownPtr targetParent = UnknownPtr();
@@ -1485,14 +1500,14 @@ namespace o2
 			}
 		}
 
-		for (auto sel : mSelectedNodes)
+		for (auto sel : mSelectedObjects)
 		{
 			bool processing = true;
 
-			UnknownPtr parent = getParentFunc(sel->object);
+			UnknownPtr parent = getParentFunc(sel);
 			while (parent)
 			{
-				if (mSelectedNodes.Contains(parent))
+				if (mSelectedObjects.Contains(parent))
 				{
 					processing = false;
 					break;
@@ -1502,9 +1517,10 @@ namespace o2
 			}
 
 			if (processing)
-				objects.Add(sel->object);
+				objects.Add(sel);
 		}
 
+		o2Debug.Log("Drop parent:%s, prev:%s", getDbgString(targetParent), getDbgString(targetPrevObject));
 		onDraggedObjects(objects, targetParent, targetPrevObject);
 
 		UpdateNodesStructure();

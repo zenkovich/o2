@@ -33,6 +33,7 @@ namespace o2
 		Function<void(UITreeNode*)>                            onItemDblClick;          // Item double clicked event
 		Function<void(UITreeNode*)>                            onItemRBClick;           // Item right button click event
 		Function<void(UnknownPtrsVec)>                         onItemsSelectionChanged; // Items selected event
+		Function<String(UnknownPtr)>                           getDbgString;
 
 		// Default constructor
 		UITree();
@@ -225,6 +226,7 @@ namespace o2
 		Vec2F          mDragOffset;                             // Offset from cursor to dragging node's center
 		UITreeNode*    mInsertNodeCandidate = nullptr;          // Insertion node candidate when dragging nodes
 		NodesVec       mBeforeDragSelectedItems;                // Before drag begin selection
+		bool           mDragEnded = false;                      // Is dragging ended and it needs to call EndDragging
 
 		UnknownPtrsVec mExpandedObjects;                        // Expanded objects
 

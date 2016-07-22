@@ -202,7 +202,7 @@ namespace Editor
 
 	void LogWindow::OutStrEx(const WString& str)
 	{
-		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f);
+		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f) || true;
 
 		LogMessage msg;
 		msg.message = str;
@@ -229,7 +229,7 @@ namespace Editor
 
 	void LogWindow::OutErrorEx(const WString& str)
 	{
-		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f);
+		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f) || true;
 
 		LogMessage msg;
 		msg.message = str;
@@ -256,7 +256,7 @@ namespace Editor
 
 	void LogWindow::OutWarningEx(const WString& str)
 	{
-		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f);
+		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f) || true;
 
 		LogMessage msg;
 		msg.message = str;

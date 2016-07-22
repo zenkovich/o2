@@ -142,13 +142,13 @@ namespace Editor
 			for (int j = 0; j < 2; j++)
 			{
 				Actor* childActor = mnew Actor();
-				childActor->name = String::Format("Child actor #%i", j + 1);
+				childActor->name = String::Format("%i Child actor #%i", i + 1, j + 1);
 				actor->AddChild(childActor);
 
 				for (int k = 0; k < 20; k++)
 				{
 					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png"), mnew EditorTestComponent() });
-					childActor2->name = String::Format("%i %i Sub Child actor #%i", i, j, k + 1);
+					childActor2->name = String::Format("%i %i Sub Child actor #%i", i + 1, j + 1, k + 1);
 					//childActor2->transform.position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
 					childActor2->transform.position = Vec2F(k*100, (i*2 + j)*100);
 					childActor->AddChild(childActor2);
