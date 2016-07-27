@@ -26,7 +26,10 @@ namespace o2
 	{
 		mEnabled = other.mEnabled;
 		UpdateEnabled();
-		COMPONENT_CHANGED(this);
+
+		if (mOwner)
+			mOwner->OnChanged();
+
 		return *this;
 	}
 
@@ -45,7 +48,9 @@ namespace o2
 
 		mEnabled = active;
 		UpdateEnabled();
-		COMPONENT_CHANGED(this);
+
+		if (mOwner)
+			mOwner->OnChanged();
 	}
 
 	void Component::Enable()
@@ -82,17 +87,15 @@ namespace o2
 		else
 			mResEnabled = mEnabled;
 
-		if (lastResEnabled != mResEnabled)
-		{
-			COMPONENT_CHANGED(this);
-		}
+		if (lastResEnabled != mResEnabled && mOwner)
+			mOwner->OnChanged();
 	}
 
 	void Component::SetOwnerActor(Actor* actor)
 	{
 		if (mOwner)
 		{
-			COMPONENT_CHANGED(this);
+			mOwner->OnChanged();
 			mOwner->mComponents.Remove(this);
 		}
 
@@ -102,7 +105,7 @@ namespace o2
 		{
 			mOwner->mComponents.Add(this);
 			OnTransformChanged();
-			COMPONENT_CHANGED(this);
+			mOwner->OnChanged();
 		}
 	}
 

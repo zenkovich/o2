@@ -1360,7 +1360,7 @@ void o2::Actor::InitializeType(o2::Actor* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, ComponentsVec>(&type, "GetComponents", &o2::Actor::GetComponents, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, void, Scene::Layer*>(&type, "SetLayer", &o2::Actor::SetLayer, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<Scene::Layer*>(funcInfo, "layer");
-	funcInfo = TypeInitializer::RegFunction<o2::Actor, void, const String&>(&type, "SetLayerName", &o2::Actor::SetLayerName, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::Actor, void, const String&>(&type, "SetLayer", &o2::Actor::SetLayer, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "layerName");
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, Scene::Layer*>(&type, "GetLayer", &o2::Actor::GetLayer, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, String>(&type, "GetLayerName", &o2::Actor::GetLayerName, o2::ProtectSection::Public);
@@ -1389,6 +1389,12 @@ void o2::Actor::InitializeType(o2::Actor* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, Dictionary<String, Component*>>(&type, "GetAllComponents", &o2::Actor::GetAllComponents, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, void>(&type, "ComponentsExcludeFromScene", &o2::Actor::ComponentsExcludeFromScene, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, void>(&type, "ComponentsIncludeToScene", &o2::Actor::ComponentsIncludeToScene, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::Actor, void>(&type, "OnChanged", &o2::Actor::OnChanged, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::Actor, void>(&type, "OnLockChanged", &o2::Actor::OnLockChanged, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::Actor, void>(&type, "OnNameChanged", &o2::Actor::OnNameChanged, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::Actor, void>(&type, "OnChildsChanged", &o2::Actor::OnChildsChanged, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::Actor, void, Actor*>(&type, "OnParentChanged", &o2::Actor::OnParentChanged, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "oldParent");
 	funcInfo = TypeInitializer::RegFunction<o2::Actor, void>(&type, "InitializeProperties", &o2::Actor::InitializeProperties, o2::ProtectSection::Protected);
 }
 
@@ -4190,19 +4196,23 @@ void o2::Scene::Layer::InitializeType(o2::Scene::Layer* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
 	TypeInitializer::RegField(&type, "name", (size_t)(char*)(&sample->name) - (size_t)(char*)iobject, sample->name, o2::ProtectSection::Public).AddAttribute<SerializableAttribute>();
-	TypeInitializer::RegField(&type, "actors", (size_t)(char*)(&sample->actors) - (size_t)(char*)iobject, sample->actors, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "enabledActors", (size_t)(char*)(&sample->enabledActors) - (size_t)(char*)iobject, sample->enabledActors, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "drawables", (size_t)(char*)(&sample->drawables) - (size_t)(char*)iobject, sample->drawables, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "enabledDrawables", (size_t)(char*)(&sample->enabledDrawables) - (size_t)(char*)iobject, sample->enabledDrawables, o2::ProtectSection::Public);
-	auto funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "RegDrawableComponent", &o2::Scene::Layer::RegDrawableComponent, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "mActors", (size_t)(char*)(&sample->mActors) - (size_t)(char*)iobject, sample->mActors, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mEnabledActors", (size_t)(char*)(&sample->mEnabledActors) - (size_t)(char*)iobject, sample->mEnabledActors, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mDrawables", (size_t)(char*)(&sample->mDrawables) - (size_t)(char*)iobject, sample->mDrawables, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mEnabledDrawables", (size_t)(char*)(&sample->mEnabledDrawables) - (size_t)(char*)iobject, sample->mEnabledDrawables, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, const ActorsVec&>(&type, "GetActors", &o2::Scene::Layer::GetActors, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, const ActorsVec&>(&type, "GetEnabledActors", &o2::Scene::Layer::GetEnabledActors, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, const DrawCompsVec&>(&type, "GetDrawableComponents", &o2::Scene::Layer::GetDrawableComponents, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, const DrawCompsVec&>(&type, "GetEnabledDrawableComponents", &o2::Scene::Layer::GetEnabledDrawableComponents, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "RegDrawableComponent", &o2::Scene::Layer::RegDrawableComponent, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<DrawableComponent*>(funcInfo, "component");
-	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "UnregDrawableComponent", &o2::Scene::Layer::UnregDrawableComponent, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "UnregDrawableComponent", &o2::Scene::Layer::UnregDrawableComponent, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<DrawableComponent*>(funcInfo, "component");
-	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "ComponentDepthChanged", &o2::Scene::Layer::ComponentDepthChanged, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "ComponentDepthChanged", &o2::Scene::Layer::ComponentDepthChanged, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<DrawableComponent*>(funcInfo, "component");
-	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "ComponentEnabled", &o2::Scene::Layer::ComponentEnabled, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "ComponentEnabled", &o2::Scene::Layer::ComponentEnabled, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<DrawableComponent*>(funcInfo, "component");
-	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "ComponentDisabled", &o2::Scene::Layer::ComponentDisabled, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::Scene::Layer, void, DrawableComponent*>(&type, "ComponentDisabled", &o2::Scene::Layer::ComponentDisabled, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<DrawableComponent*>(funcInfo, "component");
 }
 

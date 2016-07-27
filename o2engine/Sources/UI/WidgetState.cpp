@@ -48,8 +48,14 @@ namespace o2
 
 	void UIWidgetState::SetStateForcible(bool state)
 	{
-  		if (mState == state && !animation.IsPlaying())
-  			return;
+		if (mState == state)
+		{
+			if ((state && Math::Equals(animation.GetRelTime(), 1.0f)) ||
+				(!state && Math::Equals(animation.GetRelTime(), 0.0f)))
+			{
+				return;
+			}
+		}
 
 		mState = state;
 

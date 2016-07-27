@@ -36,7 +36,7 @@ namespace o2
 	{
 		for (auto layer : mLayers)
 		{
-			for (auto comp : layer->enabledDrawables)
+			for (auto comp : layer->mEnabledDrawables)
 				comp->Draw();
 		}
 	}
@@ -69,7 +69,7 @@ namespace o2
 
 		if (removeActors)
 		{
-			auto actors = layer->actors;
+			auto actors = layer->mActors;
 			for (auto actor : actors)
 				delete actor;
 		}
@@ -286,11 +286,37 @@ namespace o2
 			def.actor->IncludeInScene();
 			def.actor->transform.SetWorldNonSizedBasis(def.transform);
 		}
+
+		if (newParent)
+			OnActorChanged(newParent);
+
+		if (prevActor)
+			OnActorChanged(prevActor);
+	}
+
+	const Scene::ActorsVec& Scene::Layer::GetActors() const
+	{
+		return mActors;
+	}
+
+	const Scene::ActorsVec& Scene::Layer::GetEnabledActors() const
+	{
+		return mEnabledActors;
+	}
+
+	const Scene::DrawCompsVec& Scene::Layer::GetDrawableComponents() const
+	{
+		return mDrawables;
+	}
+
+	const Scene::DrawCompsVec& Scene::Layer::GetEnabledDrawableComponents() const
+	{
+		return mEnabledDrawables;
 	}
 
 	void Scene::Layer::RegDrawableComponent(DrawableComponent* component)
 	{
-		drawables.Add(component);
+		mDrawables.Add(component);
 
 		if (component->mResEnabled)
 			ComponentEnabled(component);
@@ -301,7 +327,7 @@ namespace o2
 		if (component->mResEnabled)
 			ComponentDisabled(component);
 
-		drawables.Remove(component);
+		mDrawables.Remove(component);
 	}
 
 	void Scene::Layer::ComponentDepthChanged(DrawableComponent* component)
@@ -313,7 +339,7 @@ namespace o2
 	void Scene::Layer::ComponentEnabled(DrawableComponent* component)
 	{
 		const int binSearchRangeSizeStop = 5;
-		int rangeMin = 0, rangeMax = enabledDrawables.Count();
+		int rangeMin = 0, rangeMax = mEnabledDrawables.Count();
 		float targetDepth = component->mDrawingDepth;
 		int position = 0;
 		bool skipLinearSearch = false;
@@ -322,7 +348,7 @@ namespace o2
 		{
 			int center = (rangeMin + rangeMax) >> 1;
 
-			float centerValue = enabledDrawables[center]->mDrawingDepth;
+			float centerValue = mEnabledDrawables[center]->mDrawingDepth;
 
 			if (targetDepth < centerValue)
 				rangeMax = center;
@@ -339,16 +365,16 @@ namespace o2
 		if (!skipLinearSearch)
 		{
 			for (position = rangeMin; position < rangeMax; position++)
-				if (enabledDrawables[position]->mDrawingDepth > targetDepth)
+				if (mEnabledDrawables[position]->mDrawingDepth > targetDepth)
 					break;
 		}
 
-		enabledDrawables.Insert(component, position);
+		mEnabledDrawables.Insert(component, position);
 	}
 
 	void Scene::Layer::ComponentDisabled(DrawableComponent* component)
 	{
-		enabledDrawables.Remove(component);
+		mEnabledDrawables.Remove(component);
 	}
 
 #if IS_EDITOR

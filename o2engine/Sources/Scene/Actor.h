@@ -39,6 +39,7 @@ namespace o2
 		Getter<ComponentsVec>               components;              // Components array getter
 		Accessor<Component*, const String&> component;               // Component accessor by type name
 		ActorTransform                      transform;               // Transformation @SERIALIZABLE
+
 		Function<void(bool)>                onEnableChanged;         // Enable changing event
 
 #if IS_EDITOR
@@ -48,12 +49,9 @@ namespace o2
 		Function<void(bool)>                onLockChanged;           // Locking changing event
 		Function<void()>                    onNameChanged;           // Name changing event
 #endif
-		
-		// Default constructor
-		Actor();
 
-		// Create mode
-		Actor(CreateMode mode);
+		// Default constructor
+		Actor(CreateMode mode = CreateMode::InScene);
 
 		// Constructor with components
 		Actor(ComponentsVec components);
@@ -205,7 +203,7 @@ namespace o2
 		void SetLayer(Scene::Layer* layer);
 
 		// Sets layer by name
-		void SetLayerName(const String& layerName);
+		void SetLayer(const String& layerName);
 
 		// Returns layer
 		Scene::Layer* GetLayer() const;
@@ -240,8 +238,8 @@ namespace o2
 		void OnTransformChanged();
 
 		// Processes copying actor
-		void ProcessCopying(Actor* dest, const Actor* source, 
-							Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers, 
+		void ProcessCopying(Actor* dest, const Actor* source,
+							Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
 							Dictionary<const Actor*, Actor*>& actorsMap,
 							Dictionary<const Component*, Component*>& componentsMap);
 
@@ -278,6 +276,21 @@ namespace o2
 		// Applies including to scene for all components in hierarchy
 		void ComponentsIncludeToScene();
 
+		// Calls when some changed in actor
+		void OnChanged();
+
+		// Calls when actor's locking was changed
+		void OnLockChanged();
+
+		// Calls when actor's name was changed
+		void OnNameChanged();
+
+		// Calls when child changed
+		void OnChildsChanged();
+
+		// Calls when parent changed
+		void OnParentChanged(Actor* oldParent);
+
 		// Initializes properties
 		void InitializeProperties();
 
@@ -313,7 +326,7 @@ namespace o2
 			UInt64  id;
 
 			ActorDef() {}
-			
+
 			ActorDef(Actor** target, bool isAsset, UInt64 id):
 				target(target), isAsset(isAsset), id(id)
 			{}
@@ -328,7 +341,7 @@ namespace o2
 		typedef Vector<Actor*> ActorsVec;
 
 	protected:
-		ActorDefsVec mUnresolvedActors; 
+		ActorDefsVec mUnresolvedActors;
 		ActorsVec    mNewActors;
 		int          mLockDepth = 0;
 
@@ -414,83 +427,4 @@ namespace o2
 		return newComponent;
 	}
 
-
-#if IS_EDITOR
-
-#define ACTOR_CHANGED(ACTOR)            \
-    if (ACTOR) (ACTOR)->onChanged();    \
-	if (Scene::IsSingletonInitialzed()) \
-	    o2Scene.OnActorChanged(ACTOR);
-
-#define ACTOR_LOCK_CHANGED(ACTOR)                  \
-    if (ACTOR)                                     \
-	{                                              \
-		(ACTOR)->onLockChanged((ACTOR)->mLocked); \
-		(ACTOR)->onChanged();                      \
-    }                                              \
-	if (Scene::IsSingletonInitialzed())            \
-    {                                              \
-	    o2Scene.OnActorChanged(ACTOR);             \
-        o2Scene.onActorLockChanged(ACTOR);         \
-    }
-
-#define ACTOR_NAME_CHANGED(ACTOR)          \
-    if (ACTOR)                             \
-	{                                      \
-		(ACTOR)->onNameChanged();          \
-		(ACTOR)->onChanged();              \
-    }                                      \
-	if (Scene::IsSingletonInitialzed())    \
-    {                                      \
-	    o2Scene.OnActorChanged(ACTOR);     \
-        o2Scene.onActorNameChanged(ACTOR); \
-    }
-
-#define ACTOR_HIERARCHY_CHANGED(ACTOR)                \
-    if (ACTOR)                                        \
-	{                                                 \
-		(ACTOR)->onChildHierarchyChanged();           \
-		(ACTOR)->onChanged();                         \
-    }                                                 \
-	if (Scene::IsSingletonInitialzed())               \
-    {                                                 \
-	    o2Scene.OnActorChanged(ACTOR);                \
-        o2Scene.onActorChildsHierarchyChanged(ACTOR); \
-    }
-
-#define ACTOR_PARENT_CHANGED(ACTOR, OLD_PARENT)                      \
-    if (ACTOR)                                                       \
-	{                                                                \
-		(ACTOR)->onParentChanged(OLD_PARENT);                        \
-		(ACTOR)->onChanged();                                        \
-    }                                                                \
-	if (Scene::IsSingletonInitialzed())                              \
-	{                                                                \
-	    o2Scene.OnActorChanged(ACTOR);                               \
-	    o2Scene.OnActorChanged(OLD_PARENT);                          \
-	    o2Scene.onActorChildsHierarchyChanged(OLD_PARENT);           \
-	    if (ACTOR)                                                   \
-        {                                                            \
-	        o2Scene.OnActorChanged((ACTOR)->mParent);                \
-	        o2Scene.onActorChildsHierarchyChanged((ACTOR)->mParent); \
-        }                                                            \
-    }
-
-#define COMPONENT_CHANGED(COMPONENT) 		             \
-    if ((COMPONENT)->mOwner)                             \
-    { 										             \
-        (COMPONENT)->mOwner->onChanged();                \
-    	if (Scene::IsSingletonInitialzed())              \
-    	    o2Scene.OnActorChanged((COMPONENT)->mOwner); \
-    }		
-
-#else
-#define ACTOR_CHANGED(ACTOR)
-#define COMPONENT_CHANGED(COMPONENT)
-#define ACTOR_ENABLE_CHANGED(ACTOR)
-#define ACTOR_NAME_CHANGED(ACTOR)
-#define ACTOR_PARENT_CHANGED(ACTOR, OLD_PARENT)
-#define ACTOR_HIERARCHY_CHANGED(ACTOR) 
-#endif
-
-	}
+}

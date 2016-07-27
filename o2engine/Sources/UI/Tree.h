@@ -245,7 +245,7 @@ namespace o2
 		float          mExpandInsertTime = -1.0f;               // Remaining time to expanding item under cursor when dragging nodes
 		float          mPressedTime = 10.0f;                    // Time from last item pressing
 
-		float          mNodeExpandTime = 0.6f;                  // Node expand time when dragging actors @SERIALIZABLE
+		float          mNodeExpandTime = 2.0f;                  // Node expand time when dragging actors @SERIALIZABLE
 		float          mNodeDragIntoZone = 0.3f;                // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
 
 		Animation      mHightlightAnim;                         // Node hightlight animation @SERIALIZABLE

@@ -67,7 +67,7 @@ namespace Editor
 			Vec2F sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
 			for (auto layer : o2Scene.GetLayers())
 			{
-				for (auto actor : layer->enabledActors)
+				for (auto actor : layer->GetEnabledActors())
 				{
 					if (!actor->IsLockedInHierarchy() && actor->transform.IsPointInside(sceneSpaceCursor))
 					{
@@ -130,7 +130,7 @@ namespace Editor
 
 			for (auto layer : o2Scene.GetLayers())
 			{
-				for (auto actor : layer->enabledActors)
+				for (auto actor : layer->GetEnabledActors())
 				{
 					if (mCurrentSelectingActors.Contains(actor))
 						continue;

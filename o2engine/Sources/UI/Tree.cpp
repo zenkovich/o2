@@ -470,9 +470,9 @@ namespace o2
 
 	void UITree::UpdatePressedNodeExpand(float dt)
 	{
-		if (o2Input.IsCursorDown())
+		if (o2Input.IsCursorDown() && mIsDraggingNodes)
 		{
-			if (mRearrangeType != RearrangeType::Disabled && mIsDraggingNodes)
+			if (mRearrangeType != RearrangeType::Disabled)
 			{
 				auto underCursorItem = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
 
@@ -719,6 +719,14 @@ namespace o2
 	{
 		mIsNeedUpdateView = false;
 
+		if (mExpandingNodeState != ExpandState::None)
+		{
+			UpdateNodeExpanding(mExpandNodeTime);
+
+			for (auto child : mChilds)
+				child->UpdateLayout();
+		}
+
 		Vector<UnknownPtr> rootObjects = getChildsFunc(UnknownPtr());
 
 		mVisibleWidgetsCache.Clear();
@@ -934,6 +942,7 @@ namespace o2
 			mVisibleWidgetsCache[cacheIdx].widget = nullptr;
 		}
 
+		widget->mIsSelected = node->isSelected;
 		widget->mNodeDef = node;
 		node->widget = widget;
 		widget->mParent = this;
@@ -1322,13 +1331,20 @@ namespace o2
 		mDragEnded = false;
 		mFakeDragNode->Hide(true);
 
+		int idx = 0;
 		for (auto node : mAllNodes)
 		{
 			node->inserting = false;
 			node->insertCoef = 0.0f;
 
 			if (node->widget)
+			{
 				node->widget->SetInteractable(true);
+				UpdateNodeWidgetLayout(node, idx);
+				node->widget->UpdateLayout();
+			}
+
+			idx++;
 		}
 
 		if (updateNodes)
@@ -1458,13 +1474,14 @@ namespace o2
 
 	void UITree::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
+		auto underCursorItem = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
+
 		EndDragging(false);
 		//OnSelectionChanged();
 
 		UnknownPtrsVec objects;
 		UnknownPtr targetParent = UnknownPtr();
 		UnknownPtr targetPrevObject = UnknownPtr();
-		auto underCursorItem = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
 		Node* insertNodeCandidate = mInsertNodeCandidate ? mInsertNodeCandidate->mNodeDef : nullptr;
 
 		if (underCursorItem)
@@ -1523,6 +1540,7 @@ namespace o2
 		o2Debug.Log("Drop parent:%s, prev:%s", getDbgString(targetParent), getDbgString(targetPrevObject));
 		onDraggedObjects(objects, targetParent, targetPrevObject);
 
+		o2Scene.CheckChangedActors();
 		UpdateNodesStructure();
 	}
 

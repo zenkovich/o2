@@ -189,6 +189,7 @@ namespace Editor
 		setupNodeFunc    = Function<void(UITreeNode*, UnknownPtr)>(this, &UIActorsTree::SetupTreeNodeActor);
 		onDraggedObjects = Function<void(Vector<UnknownPtr>, UnknownPtr, UnknownPtr)>(this, &UIActorsTree::RearrangeActors);
 		onItemDblClick   = Function<void(UITreeNode*, Actor*)>(this, &UIActorsTree::OnTreeNodeDblClick);
+
 		getDbgString = [](UnknownPtr x) {
 			Actor* actor = x;
 			if (x)

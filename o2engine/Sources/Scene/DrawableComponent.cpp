@@ -43,9 +43,10 @@ namespace o2
 		mDrawingDepth = depth;
 
 		if (mOwner)
+		{
 			mOwner->mLayer->ComponentDepthChanged(this);
-
-		COMPONENT_CHANGED(this);
+			mOwner->OnChanged();
+		}
 	}
 
 	float DrawableComponent::GetDrawingDepth() const

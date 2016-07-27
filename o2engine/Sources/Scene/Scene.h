@@ -33,13 +33,30 @@ namespace o2
 		class Layer: public ISerializable
 		{
 		public:
-			String       name;             // Name of layer @SERIALIZABLE
-			ActorsVec    actors;           // Actors in layer
-			ActorsVec    enabledActors;    // Enabled actors
-			DrawCompsVec drawables;        // Drawable components in layer
-			DrawCompsVec enabledDrawables; // Enabled drawable components in layer
+			String name; // Name of layer @SERIALIZABLE
 
-            // Registers drawable component
+			// Returns all actors in layer
+			const ActorsVec& GetActors() const;
+
+			// Returns enabled actors in layer
+			const ActorsVec& GetEnabledActors() const;
+
+			// Returns all drawable components of actors in layer
+			const DrawCompsVec& GetDrawableComponents() const;
+
+			// Returns enabled drawable components of actors in layer
+			const DrawCompsVec& GetEnabledDrawableComponents() const;
+
+			SERIALIZABLE(Layer);
+
+		protected:
+			ActorsVec    mActors;           // Actors in layer
+			ActorsVec    mEnabledActors;    // Enabled actors
+			DrawCompsVec mDrawables;        // Drawable components in layer
+			DrawCompsVec mEnabledDrawables; // Enabled drawable components in layer
+
+		protected:
+			// Registers drawable component
 			void RegDrawableComponent(DrawableComponent* component);
 
 			// Unregisters drawable component
@@ -54,7 +71,9 @@ namespace o2
 			// Calls when component was enabled
 			void ComponentDisabled(DrawableComponent* component);
 
-			SERIALIZABLE(Layer);
+			friend class DrawableComponent;
+			friend class Scene;
+			friend class Actor;
 		};
 		typedef Vector<Layer*> LayersVec;
 
@@ -85,6 +104,9 @@ namespace o2
 		// Removes layer by name
 		void RemoveLayer(const String& name, bool removeActors = true);
 
+		// Returns layers array
+		LayersVec& GetLayers();
+
 		// Returns tag with name
 		Tag* GetTag(const String& name) const;
 
@@ -96,9 +118,6 @@ namespace o2
 
 		// Removes tag with name
 		void RemoveTag(const String& name);
-
-		// Returns layers array
-		LayersVec& GetLayers();
 
 		// Returns tags array
 		const TagsVec& GetTags() const;

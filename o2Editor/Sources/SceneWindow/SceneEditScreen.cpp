@@ -329,7 +329,7 @@ namespace Editor
 	void SceneEditScreen::DrawActors()
 	{
 		for (auto layer : o2Scene.GetLayers())
-			for (auto drw : layer->enabledDrawables)
+			for (auto drw : layer->GetEnabledDrawableComponents())
 				drw->Draw();
 	}
 
@@ -396,7 +396,7 @@ namespace Editor
 
 		mSelectedActors.Clear();
 		for (auto layer : o2Scene.GetLayers())
-			mSelectedActors.Add(layer->enabledActors.FindAll([](auto x) { return !x->IsLockedInHierarchy(); }));
+			mSelectedActors.Add(layer->GetEnabledActors().FindAll([](auto x) { return !x->IsLockedInHierarchy(); }));
 
 		mNeedRedraw = true;
 		OnActorsSelectedFromThis();
