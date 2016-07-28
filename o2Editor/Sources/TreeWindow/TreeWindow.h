@@ -74,7 +74,7 @@ namespace Editor
 		void SearchActorsRecursive(Actor* actor, const String& searchStr);
 
 		// Calls when tree node clicked by right button (For tree widget)
-		void OnTreeRBPressed(UITreeNode* node, Actor* actor);
+		void OnTreeRBPressed(UITreeNode* node);
 
 		// Calls when some actor needs to created and registers actor insert action
 		void CreateActor(Actor* newActor);

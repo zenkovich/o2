@@ -86,7 +86,7 @@ namespace o2
 				o2Scene.mRootActors.Remove(this);
 		}
 
-		if (Scene::IsSingletonInitialzed())
+		if (Scene::IsSingletonInitialzed() && mIsOnScene)
 		{
 			o2Scene.onActorDestroying(this);
 			o2Scene.mAllActors.Remove(this);

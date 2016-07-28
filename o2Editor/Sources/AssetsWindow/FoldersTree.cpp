@@ -22,13 +22,13 @@ namespace Editor
 		mFoldersTree->SetRearrangeType(UITree::RearrangeType::OnlyReparent);
 		mFoldersTree->SetMultipleSelectionAvailable(false);
 
-		mFoldersTree->getParentFunc = Function<UnknownPtr(UnknownPtr)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeParent);
-		mFoldersTree->getChildsFunc = Function<Vector<UnknownPtr>(UnknownPtr)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeChilds);
-		mFoldersTree->setupNodeFunc = Function<void(UITreeNode*, UnknownPtr)>(this, &UIAssetsFoldersTree::SetupFoldersTreeNode);
-		mFoldersTree->onItemDblClick = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeNodeDblClick);
-		mFoldersTree->onItemClick = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeClick);
-		mFoldersTree->onItemRBClick = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeRightClick);
-		mFoldersTree->UpdateView();
+		mFoldersTree->getObjectParentDelegate = Function<UnknownPtr(UnknownPtr)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeParent);
+		mFoldersTree->getObjectChildrenDelegate = Function<Vector<UnknownPtr>(UnknownPtr)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeChilds);
+		mFoldersTree->fillNodeDataByObjectDelegate = Function<void(UITreeNode*, UnknownPtr)>(this, &UIAssetsFoldersTree::SetupFoldersTreeNode);
+		mFoldersTree->onNodeDoubleClicked = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeNodeDblClick);
+		mFoldersTree->onNodeClicked = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeClick);
+		mFoldersTree->onNodeRightButtonClicked = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeRightClick);
+		mFoldersTree->UpdateNodesView();
 
 		AddChild(mFoldersTree);
 
@@ -73,7 +73,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::UpdateView()
 	{
-		mFoldersTree->UpdateView();
+		mFoldersTree->UpdateNodesView();
 	}
 
 	void UIAssetsFoldersTree::InitializeContext()

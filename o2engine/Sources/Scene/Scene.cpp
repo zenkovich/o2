@@ -392,6 +392,12 @@ namespace o2
 			mChangedActors.Clear();
 		}
 	}
+
+	const Scene::ActorsVec& Scene::GetChangedActors() const
+	{
+		return mChangedActors;
+	}
+
 #endif
 
 	void LayerDataNodeConverter::ToData(void* object, DataNode& data)

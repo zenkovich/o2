@@ -2806,15 +2806,15 @@ void o2::UIToggle::InitializeType(o2::UIToggle* sample)
 void o2::UITree::InitializeType(o2::UITree* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "getObjectParentDelegate", (size_t)(char*)(&sample->getObjectParentDelegate) - (size_t)(char*)iobject, sample->getObjectParentDelegate, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "getObjectChildrenDelegate", (size_t)(char*)(&sample->getObjectChildrenDelegate) - (size_t)(char*)iobject, sample->getObjectChildrenDelegate, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "fillNodeDataByObjectDelegate", (size_t)(char*)(&sample->fillNodeDataByObjectDelegate) - (size_t)(char*)iobject, sample->fillNodeDataByObjectDelegate, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "getDebugForObject", (size_t)(char*)(&sample->getDebugForObject) - (size_t)(char*)iobject, sample->getDebugForObject, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "onNodeClicked", (size_t)(char*)(&sample->onNodeClicked) - (size_t)(char*)iobject, sample->onNodeClicked, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "onNodeDoubleClicked", (size_t)(char*)(&sample->onNodeDoubleClicked) - (size_t)(char*)iobject, sample->onNodeDoubleClicked, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "onNodeRightButtonClicked", (size_t)(char*)(&sample->onNodeRightButtonClicked) - (size_t)(char*)iobject, sample->onNodeRightButtonClicked, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "onObjectsSelectionChanged", (size_t)(char*)(&sample->onObjectsSelectionChanged) - (size_t)(char*)iobject, sample->onObjectsSelectionChanged, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "onDraggedObjects", (size_t)(char*)(&sample->onDraggedObjects) - (size_t)(char*)iobject, sample->onDraggedObjects, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "getParentFunc", (size_t)(char*)(&sample->getParentFunc) - (size_t)(char*)iobject, sample->getParentFunc, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "getChildsFunc", (size_t)(char*)(&sample->getChildsFunc) - (size_t)(char*)iobject, sample->getChildsFunc, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "setupNodeFunc", (size_t)(char*)(&sample->setupNodeFunc) - (size_t)(char*)iobject, sample->setupNodeFunc, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onItemClick", (size_t)(char*)(&sample->onItemClick) - (size_t)(char*)iobject, sample->onItemClick, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onItemDblClick", (size_t)(char*)(&sample->onItemDblClick) - (size_t)(char*)iobject, sample->onItemDblClick, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onItemRBClick", (size_t)(char*)(&sample->onItemRBClick) - (size_t)(char*)iobject, sample->onItemRBClick, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onItemsSelectionChanged", (size_t)(char*)(&sample->onItemsSelectionChanged) - (size_t)(char*)iobject, sample->onItemsSelectionChanged, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "getDbgString", (size_t)(char*)(&sample->getDbgString) - (size_t)(char*)iobject, sample->getDbgString, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "mRearrangeType", (size_t)(char*)(&sample->mRearrangeType) - (size_t)(char*)iobject, sample->mRearrangeType, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mMultiSelectAvailable", (size_t)(char*)(&sample->mMultiSelectAvailable) - (size_t)(char*)iobject, sample->mMultiSelectAvailable, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mNodeWidgetSample", (size_t)(char*)(&sample->mNodeWidgetSample) - (size_t)(char*)iobject, sample->mNodeWidgetSample, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
@@ -2866,7 +2866,7 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	auto funcInfo = TypeInitializer::RegFunction<o2::UITree, void>(&type, "Draw", &o2::UITree::Draw, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, float>(&type, "Update", &o2::UITree::Update, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<float>(funcInfo, "dt");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "UpdateView", &o2::UITree::UpdateView, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "UpdateNodesView", &o2::UITree::UpdateNodesView, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "immediately");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*, UnknownPtr>(&type, "GetNode", &o2::UITree::GetNode, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "object");
@@ -2922,6 +2922,27 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool>(&type, "IsFocusable", &o2::UITree::IsFocusable, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, bool, const Vec2F&>(&type, "IsUnderPoint", &o2::UITree::IsUnderPoint, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<const Vec2F&>(funcInfo, "point");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, UnknownPtr, UnknownPtr>(&type, "GetObjectParent", &o2::UITree::GetObjectParent, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, Vector<UnknownPtr>, UnknownPtr>(&type, "GetObjectChilds", &o2::UITree::GetObjectChilds, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, String, UnknownPtr>(&type, "GetObjectDebug", &o2::UITree::GetObjectDebug, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*, UnknownPtr>(&type, "FillNodeDataByObject", &o2::UITree::FillNodeDataByObject, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "nodeWidget");
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "OnNodeClick", &o2::UITree::OnNodeClick, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "nodeWidget");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "OnNodeDblClick", &o2::UITree::OnNodeDblClick, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "nodeWidget");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "OnNodeRBClick", &o2::UITree::OnNodeRBClick, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "nodeWidget");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownPtrsVec>(&type, "OnNodesSelectionChanged", &o2::UITree::OnNodesSelectionChanged, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UnknownPtrsVec>(funcInfo, "objects");
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UnknownPtrsVec, UnknownPtr, UnknownPtr>(&type, "OnDraggedObjects", &o2::UITree::OnDraggedObjects, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UnknownPtrsVec>(funcInfo, "objects");
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "newParent");
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "prevObject");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, SelectDragObjectsVec>(&type, "GetSelectedDragObjects", &o2::UITree::GetSelectedDragObjects, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, SelectDragObjectsVec>(&type, "GetAllObjects", &o2::UITree::GetAllObjects, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, SelectableDragableObject*>(&type, "Select", &o2::UITree::Select, o2::ProtectSection::Protected);
@@ -2961,7 +2982,7 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, Node*, int>(&type, "CreateVisibleNodeWidget", &o2::UITree::CreateVisibleNodeWidget, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<Node*>(funcInfo, "node");
 	TypeInitializer::RegFuncParam<int>(funcInfo, "i");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, Node*, UITreeNode*, int>(&type, "UpdateNode", &o2::UITree::UpdateNode, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, Node*, UITreeNode*, int>(&type, "UpdateNode", &o2::UITree::UpdateNodeView, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<Node*>(funcInfo, "node");
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "widget");
 	TypeInitializer::RegFuncParam<int>(funcInfo, "idx");
@@ -2999,7 +3020,7 @@ void o2::UITree::InitializeType(o2::UITree* sample)
 	TypeInitializer::RegFuncParam<const Input::Cursor&>(funcInfo, "cursor");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "UpdateHover", &o2::UITree::UpdateHover, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "itemUnderCursor");
-	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*>(&type, "CreateTreeNode", &o2::UITree::CreateTreeNode, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<o2::UITree, UITreeNode*>(&type, "CreateTreeNode", &o2::UITree::CreateTreeNodeWidget, o2::ProtectSection::Protected);
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, UITreeNode*>(&type, "BeginDragging", &o2::UITree::BeginDragging, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
 	funcInfo = TypeInitializer::RegFunction<o2::UITree, void, bool>(&type, "EndDragging", &o2::UITree::EndDragging, o2::ProtectSection::Protected);
@@ -5648,11 +5669,7 @@ void Editor::SceneWindow::InitializeType(Editor::SceneWindow* sample)
 void Editor::UIActorsTree::InitializeType(Editor::UIActorsTree* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "onDraggedActors", (size_t)(char*)(&sample->onDraggedActors) - (size_t)(char*)iobject, sample->onDraggedActors, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onItemClick", (size_t)(char*)(&sample->onItemClick) - (size_t)(char*)iobject, sample->onItemClick, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onItemDblClick", (size_t)(char*)(&sample->onItemDblClick) - (size_t)(char*)iobject, sample->onItemDblClick, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onItemRBClick", (size_t)(char*)(&sample->onItemRBClick) - (size_t)(char*)iobject, sample->onItemRBClick, o2::ProtectSection::Public);
-	TypeInitializer::RegField(&type, "onItemsSelectionChanged", (size_t)(char*)(&sample->onItemsSelectionChanged) - (size_t)(char*)iobject, sample->onItemsSelectionChanged, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "onObjectsSelectionChanged", (size_t)(char*)(&sample->onObjectsSelectionChanged) - (size_t)(char*)iobject, sample->onObjectsSelectionChanged, o2::ProtectSection::Public);
 	TypeInitializer::RegField(&type, "mEnableActorsTogglesGroup", (size_t)(char*)(&sample->mEnableActorsTogglesGroup) - (size_t)(char*)iobject, sample->mEnableActorsTogglesGroup, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mLockActorsTogglesGroup", (size_t)(char*)(&sample->mLockActorsTogglesGroup) - (size_t)(char*)iobject, sample->mLockActorsTogglesGroup, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mAttackedToSceneEvents", (size_t)(char*)(&sample->mAttackedToSceneEvents) - (size_t)(char*)iobject, sample->mAttackedToSceneEvents, o2::ProtectSection::Protected);
@@ -5681,19 +5698,28 @@ void Editor::UIActorsTree::InitializeType(Editor::UIActorsTree* sample)
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "ScrollTo", &Editor::UIActorsTree::ScrollTo, o2::ProtectSection::Public);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "object");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void>(&type, "Initialize", &Editor::UIActorsTree::Initialize, o2::ProtectSection::Protected);
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, UnknownPtr, UnknownPtr>(&type, "GetActorsParent", &Editor::UIActorsTree::GetActorsParent, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "obj");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, Vector<UnknownPtr>, UnknownPtr>(&type, "GetActorsChildren", &Editor::UIActorsTree::GetActorsChildren, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "parentObj");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, UITreeNode*, UnknownPtr>(&type, "SetupTreeNodeActor", &Editor::UIActorsTree::SetupTreeNodeActor, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
-	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "actorObj");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Vector<UnknownPtr>, UnknownPtr, UnknownPtr>(&type, "RearrangeActors", &Editor::UIActorsTree::RearrangeActors, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<Vector<UnknownPtr>>(funcInfo, "objects");
-	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "parentObj");
-	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "prevObj");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, UITreeNode*, Actor*>(&type, "OnTreeNodeDblClick", &Editor::UIActorsTree::OnTreeNodeDblClick, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, UnknownPtr, UnknownPtr>(&type, "GetObjectParent", &Editor::UIActorsTree::GetObjectParent, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, Vector<UnknownPtr>, UnknownPtr>(&type, "GetObjectChilds", &Editor::UIActorsTree::GetObjectChilds, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, String, UnknownPtr>(&type, "GetObjectDebug", &Editor::UIActorsTree::GetObjectDebug, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, UITreeNode*, UnknownPtr>(&type, "FillNodeDataByObject", &Editor::UIActorsTree::FillNodeDataByObject, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "nodeWidget");
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "object");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, UITreeNode*>(&type, "OnNodeDblClick", &Editor::UIActorsTree::OnNodeDblClick, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "nodeWidget");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, UnknownPtrsVec, UnknownPtr, UnknownPtr>(&type, "OnDraggedObjects", &Editor::UIActorsTree::OnDraggedObjects, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<UnknownPtrsVec>(funcInfo, "objects");
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "newParent");
+	TypeInitializer::RegFuncParam<UnknownPtr>(funcInfo, "prevObject");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "OnActorCreated", &Editor::UIActorsTree::OnActorCreated, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "OnActorDestroyed", &Editor::UIActorsTree::OnActorDestroyed, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, const ActorsVec&>(&type, "OnActorsChanged", &Editor::UIActorsTree::OnActorsChanged, o2::ProtectSection::Protected);
+	TypeInitializer::RegFuncParam<const ActorsVec&>(funcInfo, "actors");
+	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "OnActorChanged", &Editor::UIActorsTree::OnActorChanged, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, bool>(&type, "EnableActorsGroupPressed", &Editor::UIActorsTree::EnableActorsGroupPressed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
@@ -5703,12 +5729,6 @@ void Editor::UIActorsTree::InitializeType(Editor::UIActorsTree* sample)
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
 	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, bool>(&type, "LockActorsGroupReleased", &Editor::UIActorsTree::LockActorsGroupReleased, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<bool>(funcInfo, "value");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "OnActorCreated", &Editor::UIActorsTree::OnActorCreated, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "OnActorDestroyed", &Editor::UIActorsTree::OnActorDestroyed, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
-	funcInfo = TypeInitializer::RegFunction<Editor::UIActorsTree, void, Actor*>(&type, "OnActorChanged", &Editor::UIActorsTree::OnActorChanged, o2::ProtectSection::Protected);
-	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
 }
 
 void Editor::UIActorsTreeNode::InitializeType(Editor::UIActorsTreeNode* sample)
@@ -5751,9 +5771,8 @@ void Editor::TreeWindow::InitializeType(Editor::TreeWindow* sample)
 	funcInfo = TypeInitializer::RegFunction<Editor::TreeWindow, void, Actor*, const String&>(&type, "SearchActorsRecursive", &Editor::TreeWindow::SearchActorsRecursive, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
 	TypeInitializer::RegFuncParam<const String&>(funcInfo, "searchStr");
-	funcInfo = TypeInitializer::RegFunction<Editor::TreeWindow, void, UITreeNode*, Actor*>(&type, "OnTreeRBPressed", &Editor::TreeWindow::OnTreeRBPressed, o2::ProtectSection::Protected);
+	funcInfo = TypeInitializer::RegFunction<Editor::TreeWindow, void, UITreeNode*>(&type, "OnTreeRBPressed", &Editor::TreeWindow::OnTreeRBPressed, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<UITreeNode*>(funcInfo, "node");
-	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "actor");
 	funcInfo = TypeInitializer::RegFunction<Editor::TreeWindow, void, Actor*>(&type, "CreateActor", &Editor::TreeWindow::CreateActor, o2::ProtectSection::Protected);
 	TypeInitializer::RegFuncParam<Actor*>(funcInfo, "newActor");
 	funcInfo = TypeInitializer::RegFunction<Editor::TreeWindow, void>(&type, "OnContextCreateNewPressed", &Editor::TreeWindow::OnContextCreateNewPressed, o2::ProtectSection::Protected);

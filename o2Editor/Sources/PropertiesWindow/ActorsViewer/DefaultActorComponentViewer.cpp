@@ -8,14 +8,10 @@
 namespace Editor
 {
 	DefaultActorComponentViewer::DefaultActorComponentViewer()
-	{
-
-	}
+	{}
 
 	DefaultActorComponentViewer::~DefaultActorComponentViewer()
-	{
-
-	}
+	{}
 
 	void DefaultActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
 	{

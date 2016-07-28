@@ -18,22 +18,26 @@ namespace o2
 	class UITree: public UIScrollArea, public DragDropArea, public ISelectableDragableObjectsGroup
 	{
 	public:
+		// Tree nodes rearrange available types
 		enum class RearrangeType { Disabled, Enabled, OnlyReparent };
+
+		// Tree node expand states
 		enum class ExpandState { None, Expanding, Collaping };
 
 		typedef Vector<UnknownPtr>  UnknownPtrsVec;
 		typedef Vector<UITreeNode*> TreeNodesVec;
 
 	public:
-		Function<void(UnknownPtrsVec, UnknownPtr, UnknownPtr)> onDraggedObjects;        // Items dragged event
-		Function<UnknownPtr(UnknownPtr)>                       getParentFunc;           // Getting objects' parent delegate
-		Function<Vector<UnknownPtr>(UnknownPtr)>               getChildsFunc;           // Getting objects' childs count delegate 
-		Function<void(UITreeNode*, UnknownPtr)>                setupNodeFunc;           // Setup tree node item delegate
-		Function<void(UITreeNode*)>                            onItemClick;             // Item click event
-		Function<void(UITreeNode*)>                            onItemDblClick;          // Item double clicked event
-		Function<void(UITreeNode*)>                            onItemRBClick;           // Item right button click event
-		Function<void(UnknownPtrsVec)>                         onItemsSelectionChanged; // Items selected event
-		Function<String(UnknownPtr)>                           getDbgString;
+		Function<UnknownPtr(UnknownPtr)>         getObjectParentDelegate;        // Getting objects' parent delegate
+		Function<Vector<UnknownPtr>(UnknownPtr)> getObjectChildrenDelegate;      // Getting objects' childs count delegate 
+		Function<void(UITreeNode*, UnknownPtr)>  fillNodeDataByObjectDelegate;   // Setup tree node item delegate
+		Function<String(UnknownPtr)>             getDebugForObject;              // Getting debug string for object delegate
+		Function<void(UITreeNode*)>              onNodeClicked;                  // Node click event
+		Function<void(UITreeNode*)>              onNodeDoubleClicked;            // Node double clicked event
+		Function<void(UITreeNode*)>              onNodeRightButtonClicked;       // Node right button click event
+		Function<void(UnknownPtrsVec)>           onObjectsSelectionChanged;      // Objects selected event
+
+		Function<void(UnknownPtrsVec, UnknownPtr, UnknownPtr)> onDraggedObjects; // Objects dragged event
 
 		// Default constructor
 		UITree();
@@ -47,6 +51,15 @@ namespace o2
 		// Copy-operator
 		UITree& operator=(const UITree& other);
 
+		// Creates tree node for object
+		void OnObjectCreated(UnknownPtr object, UnknownPtr parent);
+
+		// Removes tree node for object
+		void OnObjectRemoved(UnknownPtr object);
+
+		// Updates tree for changed objects
+		void OnObjectsChanged(const UnknownPtrsVec& objects);
+
 		// Draws widget
 		void Draw();
 
@@ -54,7 +67,7 @@ namespace o2
 		void Update(float dt);
 
 		// Rebuilds all tree
-		void UpdateView(bool immediately = true);
+		void UpdateNodesView(bool immediately = true);
 
 		// Returns ui node for object
 		UITreeNode* GetNode(UnknownPtr object);
@@ -95,6 +108,18 @@ namespace o2
 		// Returns item widget under point
 		UITreeNode* GetTreeNodeUnderPoint(const Vec2F& point);
 
+		// Sets rearrange type
+		void SetRearrangeType(RearrangeType type);
+
+		// Returns available rearrange type 
+		RearrangeType GetRearrangeType() const;
+
+		// Sets available multi selection
+		void SetMultipleSelectionAvailable(bool available);
+
+		// Returns is multi selection available
+		bool IsMultiSelectionAvailable() const;
+
 		// Returns item sample
 		UITreeNode* GetNodeSample() const;
 
@@ -113,27 +138,6 @@ namespace o2
 		// Sets hightlight layout
 		void SetHightlightLayout(const Layout& layout);
 
-		// Creates tree node for object
-		void OnObjectCreated(UnknownPtr object, UnknownPtr parent);
-
-		// Removes tree node for object
-		void OnObjectRemoved(UnknownPtr object);
-
-		// Updates tree for changed objects
-		void OnObjectsChanged(const UnknownPtrsVec& objects);
-
-		// Sets rearrange type
-		void SetRearrangeType(RearrangeType type);
-
-		// Returns available rearrange type 
-		RearrangeType GetRearrangeType() const;
-
-		// Sets available multi selection
-		void SetMultipleSelectionAvailable(bool available);
-
-		// Returns is multi selection available
-		bool IsMultiSelectionAvailable() const;
-
 		// Sets node pressing and expanding time
 		void SetNodeExpandTimer(float time);
 
@@ -145,7 +149,7 @@ namespace o2
 
 		// Returns childs nodes horizontal offset
 		float GetChildsNodesOffset() const;
-		
+
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
@@ -172,7 +176,7 @@ namespace o2
 			int         level = 0;          // Hierarchy depth level
 			bool        isSelected = false; // Is node selected
 			bool        isExpanded = false; // Is node expanded
-										    
+
 			Node*       parent = nullptr;   // Parent node definition
 			NodesVec    childs;             // Children nodes definitions
 
@@ -191,18 +195,31 @@ namespace o2
 		};
 
 	protected:
+		// -----------------------------------
+		// Visible tree node widget cache info
+		// -----------------------------------
+		struct VisibleWidgetDef
+		{
+			UnknownPtr  object;
+			UITreeNode* widget;
+			int         position;
+
+			bool operator==(const VisibleWidgetDef& other) const;
+		};
+		typedef Vector<VisibleWidgetDef> VisibleWidgetsDefsVec;
+
+	protected:
 		RearrangeType  mRearrangeType = RearrangeType::Enabled; // Current available rearrange type @SERIALIZABLE
 		bool           mMultiSelectAvailable = true;            // Is multi selection available @SERIALIZABLE
-					   
+
 		UITreeNode*    mNodeWidgetSample = nullptr;             // Item sample @SERIALIZABLE
 		float          mChildsOffset = 10.0f;                   // Children nodes offset from parent @SERIALIZABLE
-					   
+
 		bool           mIsNeedUpdateView = false;               // Is tree needs to be rebuild
 		bool           mIsNeedUdateLayout = false;              // Is layout needs to rebuild
 		bool           mIsNeedUpdateVisibleNodes = false;       // In need to update visible nodes
 
 		NodesVec       mAllNodes;                               // All expanded nodes definitions
-		NodesVec       mVisibleNodes;                           // Visible nodes
 
 		UnknownPtrsVec mSelectedObjects;                        // Selected objects
 		NodesVec       mSelectedNodes;                          // Selected nodes definitions
@@ -210,17 +227,18 @@ namespace o2
 		TreeNodesVec   mNodeWidgetsBuf;                         // Nodes widgets buffer
 		NodesVec       mNodesBuf;                               // Nodes buffer
 
+		NodesVec       mVisibleNodes;                           // Visible nodes
 		int            mMinVisibleNodeIdx = 0;                  // Minimal visible node index
 		int            mMaxVisibleNodeIdx = -1;                 // Maximum visible node index
 
 		Vec2F          mLastClickPos;                           // Last click position in scroll space (depends on scroll position)
-					   
+
 		UITreeNode*    mHoveredItem = nullptr;                  // Current hovered tree node item
 		Sprite*        mHoverDrawable = nullptr;                // Selection sprite @SERIALIZABLE
 		Layout         mHoverLayout;                            // Selection layout, result selection area depends on selected item @SERIALIZABLE						  										   
 		RectF          mCurrentHoverRect;                       // Current selection rectangle (for smoothing)
 		RectF          mTargetHoverRect;                        // Target selection rectangle (over selected item)	
-																   
+
 		bool           mIsDraggingNodes = false;                // Is nodes moving by cursor
 		UITreeNode*    mFakeDragNode = nullptr;                 // Dragging node
 		Vec2F          mDragOffset;                             // Offset from cursor to dragging node's center
@@ -253,19 +271,37 @@ namespace o2
 		Layout         mHightlightLayout;                       // Node hightlight sprite layout @SERIALIZABLE
 		Node*          mHightlighNode = nullptr;                // Hightlighting node
 
-		struct VisibleWidgetDef
-		{
-			UnknownPtr  object;
-			UITreeNode* widget;
-			int         position;
-
-			bool operator==(const VisibleWidgetDef& other) const;
-		};
-		typedef Vector<VisibleWidgetDef> VisibleWidgetsDefsVec;
-
-		VisibleWidgetsDefsVec mVisibleWidgetsCache;
+		VisibleWidgetsDefsVec mVisibleWidgetsCache;             // Visible widgets cache
 
 	protected:
+		// Returns object's parent
+		virtual UnknownPtr GetObjectParent(UnknownPtr object);
+
+		// Returns object's children
+		virtual Vector<UnknownPtr> GetObjectChilds(UnknownPtr object);
+
+		// Returns debugging string for object
+		virtual String GetObjectDebug(UnknownPtr object);
+
+		// Sets nodeWidget data by object
+		virtual void FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object);
+
+		// Calls when thee node was clicked
+		virtual void OnNodeClick(UITreeNode* nodeWidget);
+
+		// Calls when tree node was double clicked
+		virtual void OnNodeDblClick(UITreeNode* nodeWidget);
+
+		// Calls when tree node was clicked by right button
+		virtual void OnNodeRBClick(UITreeNode* nodeWidget);
+
+		// Calls when list of selected objects was changed
+		virtual void OnNodesSelectionChanged(UnknownPtrsVec objects);
+
+		// Calls when objects was dragged in new parent in position next of prevObject
+		virtual void OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject);
+
+// ISelectableDragableObjectsGroup implementation
 		// Returns selected objects in group
 		SelectDragObjectsVec GetSelectedDragObjects() const;
 
@@ -289,6 +325,8 @@ namespace o2
 
 		// Calls when selectable object was began to drag
 		void OnSelectableObjectBeganDragging(SelectableDragableObject* object);
+
+// -------------
 
 		// Checks multiple selection nodes (when Shift key is down) and returns is someone was selected
 		bool CheckMultipleSelection(const Vec2F& point);
@@ -327,7 +365,7 @@ namespace o2
 		void CreateVisibleNodeWidget(Node* node, int i);
 
 		// Updates node view
-		void UpdateNode(Node* node, UITreeNode* widget, int idx);
+		void UpdateNodeView(Node* node, UITreeNode* widget, int idx);
 
 		// Updates node widget layout
 		void UpdateNodeWidgetLayout(Node* node, int idx);
@@ -355,7 +393,7 @@ namespace o2
 
 		// Moves scroll position and updates children widgets clipping and layout
 		void MoveScrollPosition(const Vec2F& delta);
-		
+
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
@@ -378,7 +416,9 @@ namespace o2
 		void UpdateHover(UITreeNode* itemUnderCursor);
 
 		// Gets tree node from pool
-		UITreeNode* CreateTreeNode();
+		UITreeNode* CreateTreeNodeWidget();
+
+// DragDropArea implementation
 
 		// Begins dragging selected items
 		void BeginDragging(UITreeNode* node);
@@ -406,6 +446,8 @@ namespace o2
 
 		// Calls when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group);
+
+// ------------
 
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node);

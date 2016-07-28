@@ -88,7 +88,7 @@ namespace Editor
 		mActorsTree = o2UI.CreateWidget<UIActorsTree>("standard");
 		mActorsTree->layout = UIWidgetLayout::BothStretch(2, 0, 0, 18);
 
-		mActorsTree->onItemRBClick = Function<void(UITreeNode*, Actor*)>(this, &TreeWindow::OnTreeRBPressed);
+		mActorsTree->onNodeRightButtonClicked = Function<void(UITreeNode*)>(this, &TreeWindow::OnTreeRBPressed);
 
 		mWindow->AddChild(mActorsTree);
 
@@ -156,7 +156,7 @@ namespace Editor
 			}
 		}
 
-		mActorsTree->UpdateView();
+		mActorsTree->UpdateNodesView();
 	}
 
 	void TreeWindow::PostInitializeWindow()
@@ -182,7 +182,7 @@ namespace Editor
 				SearchActorsRecursive(actor, (String)searchStr);
 		}
 
-		mActorsTree->UpdateView();
+		mActorsTree->UpdateNodesView();
 	}
 
 	void TreeWindow::SearchActorsRecursive(Actor* actor, const String& searchStr)
@@ -194,7 +194,7 @@ namespace Editor
 			SearchActorsRecursive(child, searchStr);
 	}
 
-	void TreeWindow::OnTreeRBPressed(UITreeNode* node, Actor* actor)
+	void TreeWindow::OnTreeRBPressed(UITreeNode* node)
 	{
 		mTreeContextMenu->Show();
 	}
@@ -218,7 +218,7 @@ namespace Editor
 		}
 		else
 		{
-			mActorsTree->UpdateView();
+			mActorsTree->UpdateNodesView();
 
 			auto scereActors = o2Scene.GetRootActors();
 			auto action = mnew CreateActorsAction({ newActor }, nullptr,
@@ -303,7 +303,7 @@ namespace Editor
 		for (auto actor : actors)
 			actor->SetParent(parent);
 
-		mActorsTree->UpdateView();
+		mActorsTree->UpdateNodesView();
 		mActorsTree->SetSelectedActors(actors);
 
 		auto action = mnew CreateActorsAction(actors, parent, prevActor);
@@ -324,7 +324,7 @@ namespace Editor
 		for (auto actor : selectedActors)
 			delete actor;
 
-		mActorsTree->UpdateView();
+		mActorsTree->UpdateNodesView();
 	}
 
 	void TreeWindow::OnContextDuplicatePressed()
@@ -340,7 +340,7 @@ namespace Editor
 			copy->SetParent(actor->GetParent());
 		}
 
-		mActorsTree->UpdateView();
+		mActorsTree->UpdateNodesView();
 		mActorsTree->SetSelectedActors(selectedActors);
 	}
 
@@ -420,12 +420,12 @@ namespace Editor
 
 	void TreeWindow::OnActorCreated(Actor* actor)
 	{
-		mActorsTree->UpdateView();
+		mActorsTree->UpdateNodesView();
 	}
 
 	void TreeWindow::OnActorDestroyed(Actor* actor)
 	{
-		mActorsTree->UpdateView();
+		mActorsTree->UpdateNodesView();
 	}
 
 }

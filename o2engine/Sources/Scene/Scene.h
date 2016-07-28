@@ -175,6 +175,9 @@ namespace o2
 
 		// Checks is any actors was changed and calls OnChanged() if changed
 		void CheckChangedActors();
+
+		// Returns current changed actors
+		const ActorsVec& GetChangedActors() const;
 #endif       
 
 	protected:

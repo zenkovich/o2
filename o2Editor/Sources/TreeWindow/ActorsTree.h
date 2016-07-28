@@ -26,11 +26,7 @@ namespace Editor
 		typedef Vector<Actor*> ActorsVec;
 
 	public:
-		Function<void(ActorsVec, Actor*, Actor*)> onDraggedActors;
-		Function<void(UITreeNode*, Actor*)>       onItemClick;
-		Function<void(UITreeNode*, Actor*)>       onItemDblClick;
-		Function<void(UITreeNode*, Actor*)>       onItemRBClick;
-		Function<void(ActorsVec)>                 onItemsSelectionChanged;
+		Function<void(ActorsVec)> onObjectsSelectionChanged;
 
 		// Default constructor
 		UIActorsTree();
@@ -100,20 +96,35 @@ namespace Editor
 		// Initializes widget logic
 		void Initialize();
 
-		// Returns actor's parent (For tree widget)
-		UnknownPtr GetActorsParent(UnknownPtr obj);
+		// Returns object's parent
+		UnknownPtr GetObjectParent(UnknownPtr object);
 
-		// Returns actor's children (For tree widget)
-		Vector<UnknownPtr> GetActorsChildren(UnknownPtr parentObj);
+		// Returns object's children
+		Vector<UnknownPtr> GetObjectChilds(UnknownPtr object);
 
-		// Initializes tree node by actor (For tree widget)
-		void SetupTreeNodeActor(UITreeNode* node, UnknownPtr actorObj);
+		// Returns debugging string for object
+		String GetObjectDebug(UnknownPtr object);
 
-		// Moves actors to new parent and position, when they was dragged in tree (For tree widget)
-		void RearrangeActors(Vector<UnknownPtr> objects, UnknownPtr parentObj, UnknownPtr prevObj);
+		// Sets nodeWidget data by object
+		void FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object);
 
-		// Calls when tree node double clicked (For tree widget)
-		void OnTreeNodeDblClick(UITreeNode* node, Actor* actor);
+		// Calls when tree node was double clicked
+		void OnNodeDblClick(UITreeNode* nodeWidget);
+
+		// Calls when objects was dragged in new parent in position next of prevObject
+		void OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject);
+
+		// Calls when actor was created
+		void OnActorCreated(Actor* actor);
+
+		// Calls when actor was destroyed
+		void OnActorDestroyed(Actor* actor);
+
+		// Calls when some actors were changed
+		void OnActorsChanged(const ActorsVec& actors);
+
+		// Calls when actor was changed
+		void OnActorChanged(Actor* actor);
 
 		// Calls when enable actors toggle group pressed
 		void EnableActorsGroupPressed(bool value);
@@ -126,15 +137,6 @@ namespace Editor
 
 		// Calls when lock actors toggle group released
 		void LockActorsGroupReleased(bool value);
-
-		// Calls when actor was created
-		void OnActorCreated(Actor* actor);
-
-		// Calls when actor was destroyed
-		void OnActorDestroyed(Actor* actor);
-
-		// Calls when actor was changed
-		void OnActorChanged(Actor* actor);
 // 
 // 		// Calls when some selectable drag listeners was dragged above this area
 // 		void OnDraggedAbove(SelectableDragableObjectsGroup* group);
