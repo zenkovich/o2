@@ -477,6 +477,9 @@ namespace o2
 		mLog->Out("Set Content Size: %ix%i", size.x, size.y);
 
 		SetFullscreen(!mWindowed);
+
+		mRender->OnFrameResized();
+		onResizingEvent();
 	}
 
 	Vec2I Application::GetContentSize() const

@@ -63,6 +63,10 @@ namespace o2
 		template<typename _type>
 		AnimatedValue<_type>* GetAnimationValue(_type* target);
 
+		// Returns animation value for target (animating target must be setted)
+		template<typename _type>
+		AnimatedValue<_type>* GetAnimationValue(Setter<_type>* target);
+
 		// Adds animation value by target(animating target must be setted)
 		template<typename _type>
 		AnimatedValue<_type>* AddAnimationValue(_type* target);
@@ -502,6 +506,18 @@ namespace o2
 		{
 			if (val.mTargetPtr == target)
 				return val.mAnimatedValue;
+		}
+
+		return nullptr;
+	}
+
+	template<typename _type>
+	AnimatedValue<_type>* Animation::GetAnimationValue(Setter<_type>* target)
+	{
+		for (auto& val : mAnimatedValues)
+		{
+			if (val.mTargetPtr == target)
+				return dynamic_cast<AnimatedValue<_type>*>(val.mAnimatedValue);
 		}
 
 		return nullptr;

@@ -272,6 +272,7 @@ namespace o2
 		// initializes properties
 		void InitializeProperties();
 
+		friend class Application;
 		friend class BitmapFont;
 		friend class BitmapFontAsset;
 		friend class Font;

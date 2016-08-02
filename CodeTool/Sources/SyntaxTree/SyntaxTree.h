@@ -31,6 +31,9 @@ namespace CodeTool
 	class SyntaxTree: public ISerializable
 	{
 	public:
+		SyntaxTree();
+		~SyntaxTree();
+
 		const SyntaxFilesVec& GetFiles() const;
 		SyntaxNamespace* GetGlobalNamespace() const;
 
@@ -46,6 +49,9 @@ namespace CodeTool
 	class SyntaxFile: public ISerializable
 	{
 	public:
+		SyntaxFile();
+		~SyntaxFile();
+
 		const String& GetPath() const;
 		const String& GetData() const;
 		const TimeStamp& GetLastEditedDate() const;
@@ -85,6 +91,9 @@ namespace CodeTool
 	class SyntaxSection: public SyntaxEntry
 	{
 	public:
+		SyntaxSection();
+		~SyntaxSection();
+
 		SyntaxSection* GetParentSection() const;
 		const String& GetName() const;
 		const String& GetFullName() const;
@@ -107,6 +116,7 @@ namespace CodeTool
 		SyntaxEnumsVec     mEnums;
 
 		friend class CppSyntaxParser;
+		friend class SyntaxTree;
 	};
 
 	class SyntaxNamespace: public SyntaxSection
@@ -184,6 +194,9 @@ namespace CodeTool
 	class SyntaxFunction: public SyntaxEntry
 	{
 	public:
+		SyntaxFunction();
+		~SyntaxFunction();
+
 		const SyntaxType& GetReturnType() const;
 		const String& GetName() const;
 		const SyntaxVariablesVec& GetParameters() const;

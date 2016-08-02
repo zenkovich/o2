@@ -166,6 +166,18 @@ namespace o2
 		return *this;
 	}
 
+	Animate& Animate::Looped()
+	{
+		mAnimation.SetLoop(Loop::Repeat);
+		return *this;
+	}
+
+	Animate& Animate::PingPong()
+	{
+		mAnimation.SetLoop(Loop::PingPong);
+		return *this;
+	}
+
 	void Animate::CheckColorAnimatedValue()
 	{
 		if (mColorAnimatedValue)

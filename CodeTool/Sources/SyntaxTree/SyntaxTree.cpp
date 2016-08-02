@@ -3,6 +3,23 @@
 namespace CodeTool
 {
 
+	SyntaxTree::SyntaxTree():
+		mGlobalNamespace(new SyntaxNamespace())
+	{}
+
+	SyntaxTree::~SyntaxTree()
+	{
+		for (auto file : mFiles)
+			delete file;
+
+		mGlobalNamespace->mSections.Clear();
+		mGlobalNamespace->mEnums.Clear();
+		mGlobalNamespace->mFunctions.Clear();
+		mGlobalNamespace->mVariables.Clear();
+
+		delete mGlobalNamespace;
+	}
+
 	const SyntaxFilesVec& SyntaxTree::GetFiles() const
 	{
 		return mFiles;
@@ -11,6 +28,15 @@ namespace CodeTool
 	SyntaxNamespace* SyntaxTree::GetGlobalNamespace() const
 	{
 		return mGlobalNamespace;
+	}
+
+	SyntaxFile::SyntaxFile():
+		mGlobalNamespace(new SyntaxNamespace())
+	{}
+
+	SyntaxFile::~SyntaxFile()
+	{
+		delete mGlobalNamespace;
 	}
 
 	const String& SyntaxFile::GetPath() const
@@ -56,6 +82,24 @@ namespace CodeTool
 	SyntaxFile* SyntaxEntry::GetOwnerFile() const
 	{
 		return mFile;
+	}
+
+	SyntaxSection::SyntaxSection()
+	{}
+
+	SyntaxSection::~SyntaxSection()
+	{
+		for (auto x : mFunctions)
+			delete x;
+
+		for (auto x : mVariables)
+			delete x;
+
+		for (auto x : mEnums)
+			delete x;
+
+		for (auto x : mSections)
+			delete x;
 	}
 
 	SyntaxSection* SyntaxSection::GetParentSection() const
@@ -174,6 +218,15 @@ namespace CodeTool
 	ClassBodySection SyntaxVariable::GetClassSection() const
 	{
 		return mClassSection;
+	}
+
+	SyntaxFunction::SyntaxFunction()
+	{}
+
+	SyntaxFunction::~SyntaxFunction()
+	{
+		for (auto x : mParameters)
+			delete x;
 	}
 
 	const SyntaxType& SyntaxFunction::GetReturnType() const
