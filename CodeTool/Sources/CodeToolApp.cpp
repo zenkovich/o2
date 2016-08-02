@@ -1,12 +1,9 @@
 #include "CodeToolApp.h"
 
 #include "Render/Render.h"
-#include "Render/Sprite.h"
+#include "SyntaxTree/CppSyntaxParser.h"
+#include "SyntaxTree/SyntaxTree.h"
 #include "Utils/Debug.h"
-#include "BasicUIStyle.h"
-#include "Utils/Timer.h"
-#include "UI/UIManager.h"
-#include "UI/Button.h"
 
 namespace CodeTool
 {
@@ -16,10 +13,25 @@ namespace CodeTool
 	CodeToolApplication::~CodeToolApplication()
 	{}
 
+	void CodeToolApplication::SetArguments(char** args, int nargs)
+	{
+		if (nargs > 1)
+			mSourcesPath = args[1];
+
+		if (nargs > 2)
+			mMSVCProjectPath = args[2];
+
+		if (nargs > 3)
+			mXCodeProjectPath = args[3];
+	}
+
 	void CodeToolApplication::OnStarted()
 	{
-		auto button = o2UI.AddButton("Hello world", []() { o2Debug.Log("Click!"); });
-		button->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(100, 30));
+		SetContentSize(Vec2I(300, 50));
+		SetWindowCaption("o2 Code Tool");
+
+		mSyntaxTree = mnew SyntaxTree();
+		BeginParse();
 	}
 
 	void CodeToolApplication::OnClosing()
@@ -30,8 +42,14 @@ namespace CodeTool
 
 	void CodeToolApplication::OnDraw()
 	{
-		o2Render.Clear();
+		o2Render.Clear(Color4(192, 196, 204, 255));
 		o2Render.camera = Camera::Default();
+	}
+
+	void CodeToolApplication::BeginParse()
+	{
+		CppSyntaxParser parser;
+		parser.Parse(*mSyntaxTree, mSourcesPath);
 	}
 
 }

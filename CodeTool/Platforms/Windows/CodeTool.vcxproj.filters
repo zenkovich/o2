@@ -8,6 +8,9 @@
     <Filter Include="Sources\Windows">
       <UniqueIdentifier>{3c67f936-19d1-4a7c-a7b2-a26c2bcc5aae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\SyntaxTree">
+      <UniqueIdentifier>{a8b9aed4-fc6a-40a8-a78e-ee3eef4408a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\Windows\CodeTool.cpp">
@@ -19,8 +22,11 @@
     <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\BasicUIStyle.cpp">
-      <Filter>Sources</Filter>
+    <ClCompile Include="..\..\Sources\SyntaxTree\SyntaxTree.cpp">
+      <Filter>Sources\SyntaxTree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SyntaxTree\CppSyntaxParser.cpp">
+      <Filter>Sources\SyntaxTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -30,8 +36,11 @@
     <ClInclude Include="..\..\Sources\ReflectionGenerated.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\BasicUIStyle.h">
-      <Filter>Sources</Filter>
+    <ClInclude Include="..\..\Sources\SyntaxTree\SyntaxTree.h">
+      <Filter>Sources\SyntaxTree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SyntaxTree\CppSyntaxParser.h">
+      <Filter>Sources\SyntaxTree</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

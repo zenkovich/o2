@@ -11,8 +11,8 @@ namespace o2
 		int r, g, b, a;
 
 		inline Color4();
-		inline Color4(int r, int g, int b, int a);
-		inline Color4(float r, float g, float b, float a);
+		inline Color4(int r, int g, int b, int a = 255);
+		inline Color4(float r, float g, float b, float a = 1.0f);
 		
 		inline bool operator==(const Color4& color) const;
 		inline bool operator!=(const Color4& color) const;

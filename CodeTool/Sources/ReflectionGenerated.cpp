@@ -71,11 +71,11 @@
 #include "C:\work\o2\o2Engine\Sources\Utils\Math\Curve.h"
 #include "C:\work\o2\o2Engine\Sources\Utils\Math\Layout.h"
 #include "C:\work\o2\o2Engine\Sources\Utils\Math\Transform.h"
-#include "C:\work\o2\CodeTool\Platforms\Windows\..\..\Sources\BasicUIStyle.h"
 #include "C:\work\o2\o2Engine\Sources\Assets\AssetsTree.h"
 #include "C:\work\o2\o2Engine\Sources\Render\VectorFont.h"
 #include "C:\work\o2\o2Engine\Sources\Scene\Scene.h"
 #include "C:\work\o2\CodeTool\Platforms\Windows\..\..\Sources\CodeToolApp.h"
+#include "C:\work\o2\CodeTool\Platforms\Windows\..\..\Sources\SyntaxTree\SyntaxTree.h"
 
 // Types declarations
 o2::Type o2::Animatable::type("o2::Animatable");
@@ -152,7 +152,6 @@ o2::Type o2::TimeStamp::type("o2::TimeStamp");
 o2::Type o2::Curve::type("o2::Curve");
 o2::Type o2::Layout::type("o2::Layout");
 o2::Type o2::Transform::type("o2::Transform");
-o2::Type o2::BasicUIStyleBuilder::type("o2::BasicUIStyleBuilder");
 o2::Type o2::AnimatedValue<Vec2F>::Key::type("o2::AnimatedValue<Vec2F>::Key");
 o2::Type o2::Animation::AnimatedValueDef::type("o2::Animation::AnimatedValueDef");
 o2::Type o2::ActorAsset::MetaInfo::type("o2::ActorAsset::MetaInfo");
@@ -176,6 +175,16 @@ o2::Type o2::UIContextMenu::Item::type("o2::UIContextMenu::Item");
 o2::Type o2::UIMenuPanel::Item::type("o2::UIMenuPanel::Item");
 o2::Type o2::Curve::Key::type("o2::Curve::Key");
 o2::Type CodeTool::Tmp::type("CodeTool::Tmp");
+o2::Type CodeTool::SyntaxTree::type("CodeTool::SyntaxTree");
+o2::Type CodeTool::SyntaxFile::type("CodeTool::SyntaxFile");
+o2::Type CodeTool::SyntaxEntry::type("CodeTool::SyntaxEntry");
+o2::Type CodeTool::SyntaxSection::type("CodeTool::SyntaxSection");
+o2::Type CodeTool::SyntaxNamespace::type("CodeTool::SyntaxNamespace");
+o2::Type CodeTool::SyntaxClass::type("CodeTool::SyntaxClass");
+o2::Type CodeTool::SyntaxType::type("CodeTool::SyntaxType");
+o2::Type CodeTool::SyntaxVariable::type("CodeTool::SyntaxVariable");
+o2::Type CodeTool::SyntaxFunction::type("CodeTool::SyntaxFunction");
+o2::Type CodeTool::SyntaxEnum::type("CodeTool::SyntaxEnum");
 o2::Type o2::AnimatedValue<Color4>::type("o2::AnimatedValue<Color4>");
 o2::Type o2::AnimatedValue<Color4>::Key::type("o2::AnimatedValue<Color4>::Key");
 o2::Type o2::AnimatedValue<RectF>::type("o2::AnimatedValue<RectF>");
@@ -3904,38 +3913,6 @@ void o2::Transform::InitializeType(o2::Transform* sample)
 	funcInfo = TypeInitializer::RegFunction<o2::Transform, void>(&type, "InitializeProperties", &o2::Transform::InitializeProperties, o2::ProtectSection::Protected);
 }
 
-void o2::BasicUIStyleBuilder::InitializeType(o2::BasicUIStyleBuilder* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildButtonStyle", &o2::BasicUIStyleBuilder::RebuildButtonStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildCloseButtonStyle", &o2::BasicUIStyleBuilder::RebuildCloseButtonStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildArrowButtonStyle", &o2::BasicUIStyleBuilder::RebuildArrowButtonStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildHorProgressBarStyle", &o2::BasicUIStyleBuilder::RebuildHorProgressBarStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildVerProgressBarStyle", &o2::BasicUIStyleBuilder::RebuildVerProgressBarStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildHorScrollBarStyle", &o2::BasicUIStyleBuilder::RebuildHorScrollBarStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildVerScrollBarStyle", &o2::BasicUIStyleBuilder::RebuildVerScrollBarStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildCheckboxStyle", &o2::BasicUIStyleBuilder::RebuildCheckboxStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildCheckboxWithoutCaptionStyle", &o2::BasicUIStyleBuilder::RebuildCheckboxWithoutCaptionStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildScrollAreaStyle", &o2::BasicUIStyleBuilder::RebuildScrollAreaStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildScrollAreaStraightBarsStyle", &o2::BasicUIStyleBuilder::RebuildScrollAreaStraightBarsStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildLabelStyle", &o2::BasicUIStyleBuilder::RebuildLabelStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildEditBoxStyle", &o2::BasicUIStyleBuilder::RebuildEditBoxStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildCustomListStyle", &o2::BasicUIStyleBuilder::RebuildCustomListStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildLongListStyle", &o2::BasicUIStyleBuilder::RebuildLongListStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildListStyle", &o2::BasicUIStyleBuilder::RebuildListStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildCustomDropDownStyle", &o2::BasicUIStyleBuilder::RebuildCustomDropDownStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildDropDownStyle", &o2::BasicUIStyleBuilder::RebuildDropDownStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildWindowStyle", &o2::BasicUIStyleBuilder::RebuildWindowStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildContextMenuStyle", &o2::BasicUIStyleBuilder::RebuildContextMenuStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildTreeStyle", &o2::BasicUIStyleBuilder::RebuildTreeStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildMenuPanelStyle", &o2::BasicUIStyleBuilder::RebuildMenuPanelStyle, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildBacklessDropdown", &o2::BasicUIStyleBuilder::RebuildBacklessDropdown, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildBacklessEditbox", &o2::BasicUIStyleBuilder::RebuildBacklessEditbox, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildSinglelineEditbox", &o2::BasicUIStyleBuilder::RebuildSinglelineEditbox, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildBacklessScrollarea", &o2::BasicUIStyleBuilder::RebuildBacklessScrollarea, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<o2::BasicUIStyleBuilder, void>(&type, "RebuildBasicUIStyle", &o2::BasicUIStyleBuilder::RebuildBasicUIStyle, o2::ProtectSection::Public);
-}
-
 void o2::AnimatedValue<Vec2F>::Key::InitializeType(o2::AnimatedValue<Vec2F>::Key* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
@@ -4154,6 +4131,133 @@ void o2::Curve::Key::InitializeType(o2::Curve::Key* sample)
 void CodeTool::Tmp::InitializeType(CodeTool::Tmp* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
+}
+
+void CodeTool::SyntaxTree::InitializeType(CodeTool::SyntaxTree* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mFiles", (size_t)(char*)(&sample->mFiles) - (size_t)(char*)iobject, sample->mFiles, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mGlobalNamespace", (size_t)(char*)(&sample->mGlobalNamespace) - (size_t)(char*)iobject, sample->mGlobalNamespace, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxTree, const SyntaxFilesVec&>(&type, "GetFiles", &CodeTool::SyntaxTree::GetFiles, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxTree, SyntaxNamespace*>(&type, "GetGlobalNamespace", &CodeTool::SyntaxTree::GetGlobalNamespace, o2::ProtectSection::Public);
+}
+
+void CodeTool::SyntaxFile::InitializeType(CodeTool::SyntaxFile* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mPath", (size_t)(char*)(&sample->mPath) - (size_t)(char*)iobject, sample->mPath, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mData", (size_t)(char*)(&sample->mData) - (size_t)(char*)iobject, sample->mData, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mLastEditedDate", (size_t)(char*)(&sample->mLastEditedDate) - (size_t)(char*)iobject, sample->mLastEditedDate, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mGlobalNamespace", (size_t)(char*)(&sample->mGlobalNamespace) - (size_t)(char*)iobject, sample->mGlobalNamespace, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFile, const String&>(&type, "GetPath", &CodeTool::SyntaxFile::GetPath, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFile, const String&>(&type, "GetData", &CodeTool::SyntaxFile::GetData, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFile, const TimeStamp&>(&type, "GetLastEditedDate", &CodeTool::SyntaxFile::GetLastEditedDate, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFile, SyntaxNamespace*>(&type, "GetGlobalNamespace", &CodeTool::SyntaxFile::GetGlobalNamespace, o2::ProtectSection::Public);
+}
+
+void CodeTool::SyntaxEntry::InitializeType(CodeTool::SyntaxEntry* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mBegin", (size_t)(char*)(&sample->mBegin) - (size_t)(char*)iobject, sample->mBegin, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mLength", (size_t)(char*)(&sample->mLength) - (size_t)(char*)iobject, sample->mLength, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mData", (size_t)(char*)(&sample->mData) - (size_t)(char*)iobject, sample->mData, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mFile", (size_t)(char*)(&sample->mFile) - (size_t)(char*)iobject, sample->mFile, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEntry, int>(&type, "GetBegin", &CodeTool::SyntaxEntry::GetBegin, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEntry, int>(&type, "GetLength", &CodeTool::SyntaxEntry::GetLength, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEntry, int>(&type, "GetEnd", &CodeTool::SyntaxEntry::GetEnd, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEntry, const String&>(&type, "GetData", &CodeTool::SyntaxEntry::GetData, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEntry, SyntaxFile*>(&type, "GetOwnerFile", &CodeTool::SyntaxEntry::GetOwnerFile, o2::ProtectSection::Public);
+}
+
+void CodeTool::SyntaxSection::InitializeType(CodeTool::SyntaxSection* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mFullName", (size_t)(char*)(&sample->mFullName) - (size_t)(char*)iobject, sample->mFullName, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mParentSection", (size_t)(char*)(&sample->mParentSection) - (size_t)(char*)iobject, sample->mParentSection, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mFunctions", (size_t)(char*)(&sample->mFunctions) - (size_t)(char*)iobject, sample->mFunctions, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mVariables", (size_t)(char*)(&sample->mVariables) - (size_t)(char*)iobject, sample->mVariables, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mSections", (size_t)(char*)(&sample->mSections) - (size_t)(char*)iobject, sample->mSections, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mEnums", (size_t)(char*)(&sample->mEnums) - (size_t)(char*)iobject, sample->mEnums, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, SyntaxSection*>(&type, "GetParentSection", &CodeTool::SyntaxSection::GetParentSection, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const String&>(&type, "GetName", &CodeTool::SyntaxSection::GetName, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const String&>(&type, "GetFullName", &CodeTool::SyntaxSection::GetFullName, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const SyntaxFunctionsVec&>(&type, "GetFunctions", &CodeTool::SyntaxSection::GetFunctions, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const SyntaxVariablesVec&>(&type, "GetVariables", &CodeTool::SyntaxSection::GetVariables, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const SyntaxSectionsVec&>(&type, "GetSections", &CodeTool::SyntaxSection::GetSections, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const SyntaxEnumsVec&>(&type, "GetEnums", &CodeTool::SyntaxSection::GetEnums, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, bool>(&type, "IsClass", &CodeTool::SyntaxSection::IsClass, o2::ProtectSection::Public);
+}
+
+void CodeTool::SyntaxNamespace::InitializeType(CodeTool::SyntaxNamespace* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxNamespace, bool>(&type, "IsClass", &CodeTool::SyntaxNamespace::IsClass, o2::ProtectSection::Public);
+}
+
+void CodeTool::SyntaxClass::InitializeType(CodeTool::SyntaxClass* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mBaseClasses", (size_t)(char*)(&sample->mBaseClasses) - (size_t)(char*)iobject, sample->mBaseClasses, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mIsTemplate", (size_t)(char*)(&sample->mIsTemplate) - (size_t)(char*)iobject, sample->mIsTemplate, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mTemplateParameters", (size_t)(char*)(&sample->mTemplateParameters) - (size_t)(char*)iobject, sample->mTemplateParameters, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, const StringsVec&>(&type, "GetBaseClassesNames", &CodeTool::SyntaxClass::GetBaseClassesNames, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, SyntaxClassesVec>(&type, "GetBaseClasses", &CodeTool::SyntaxClass::GetBaseClasses, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, bool>(&type, "IsTemplate", &CodeTool::SyntaxClass::IsTemplate, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, const String&>(&type, "GetTemplateParameters", &CodeTool::SyntaxClass::GetTemplateParameters, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, ClassBodySection>(&type, "GetClassSection", &CodeTool::SyntaxClass::GetClassSection, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, bool>(&type, "IsClass", &CodeTool::SyntaxClass::IsClass, o2::ProtectSection::Public);
+}
+
+void CodeTool::SyntaxType::InitializeType(CodeTool::SyntaxType* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mIsContant", (size_t)(char*)(&sample->mIsContant) - (size_t)(char*)iobject, sample->mIsContant, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mIsReference", (size_t)(char*)(&sample->mIsReference) - (size_t)(char*)iobject, sample->mIsReference, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mIsPointer", (size_t)(char*)(&sample->mIsPointer) - (size_t)(char*)iobject, sample->mIsPointer, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxType, const String&>(&type, "GetName", &CodeTool::SyntaxType::GetName, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxType, bool>(&type, "IsContant", &CodeTool::SyntaxType::IsContant, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxType, bool>(&type, "IsReference", &CodeTool::SyntaxType::IsReference, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxType, bool>(&type, "IsPointer", &CodeTool::SyntaxType::IsPointer, o2::ProtectSection::Public);
+}
+
+void CodeTool::SyntaxVariable::InitializeType(CodeTool::SyntaxVariable* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mType", (size_t)(char*)(&sample->mType) - (size_t)(char*)iobject, sample->mType, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mAttributes", (size_t)(char*)(&sample->mAttributes) - (size_t)(char*)iobject, sample->mAttributes, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxVariable, const SyntaxType&>(&type, "GetSynType", &CodeTool::SyntaxVariable::GetSynType, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxVariable, const String&>(&type, "GetName", &CodeTool::SyntaxVariable::GetName, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxVariable, const StringsVec&>(&type, "GetAttributes", &CodeTool::SyntaxVariable::GetAttributes, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxVariable, ClassBodySection>(&type, "GetClassSection", &CodeTool::SyntaxVariable::GetClassSection, o2::ProtectSection::Public);
+}
+
+void CodeTool::SyntaxFunction::InitializeType(CodeTool::SyntaxFunction* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mReturnType", (size_t)(char*)(&sample->mReturnType) - (size_t)(char*)iobject, sample->mReturnType, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mParameters", (size_t)(char*)(&sample->mParameters) - (size_t)(char*)iobject, sample->mParameters, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFunction, const SyntaxType&>(&type, "GetReturnType", &CodeTool::SyntaxFunction::GetReturnType, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFunction, const String&>(&type, "GetName", &CodeTool::SyntaxFunction::GetName, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFunction, const SyntaxVariablesVec&>(&type, "GetParameters", &CodeTool::SyntaxFunction::GetParameters, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFunction, ClassBodySection>(&type, "GetClassSection", &CodeTool::SyntaxFunction::GetClassSection, o2::ProtectSection::Public);
+}
+
+void CodeTool::SyntaxEnum::InitializeType(CodeTool::SyntaxEnum* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mEntries", (size_t)(char*)(&sample->mEntries) - (size_t)(char*)iobject, sample->mEntries, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected);
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEnum, const String&>(&type, "GetName", &CodeTool::SyntaxEnum::GetName, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEnum, const StringsVec&>(&type, "GetEntries", &CodeTool::SyntaxEnum::GetEntries, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEnum, ClassBodySection>(&type, "GetClassSection", &CodeTool::SyntaxEnum::GetClassSection, o2::ProtectSection::Public);
 }
 
 void o2::AnimatedValue<Color4>::InitializeType(o2::AnimatedValue<Color4>* sample)
@@ -4465,6 +4569,7 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeEnum<o2::Bitmap::Format>( { { (int)o2::Bitmap::Format::Default, "Default" }, { (int)o2::Bitmap::Format::R8G8B8A8, "R8G8B8A8" } });
 	o2::Reflection::InitializeEnum<o2::Bitmap::ImageType>( { { (int)o2::Bitmap::ImageType::Auto, "Auto" }, { (int)o2::Bitmap::ImageType::Png, "Png" } });
 	o2::Reflection::InitializeEnum<o2::DataNode::Format>( { { (int)o2::DataNode::Format::Xml, "Xml" }, { (int)o2::DataNode::Format::JSON, "JSON" }, { (int)o2::DataNode::Format::Binary, "Binary" } });
+	o2::Reflection::InitializeEnum<CodeTool::ClassBodySection>( { { (int)CodeTool::ClassBodySection::Public, "Public" }, { (int)CodeTool::ClassBodySection::Private, "Private" }, { (int)CodeTool::ClassBodySection::Protected, "Protected" } });
 
 	// Initialize types
 	o2::Reflection::InitializeType<o2::Animatable>();
@@ -4541,7 +4646,6 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::Curve>();
 	o2::Reflection::InitializeType<o2::Layout>();
 	o2::Reflection::InitializeType<o2::Transform>();
-	o2::Reflection::InitializeType<o2::BasicUIStyleBuilder>();
 	o2::Reflection::InitializeType<o2::AnimatedValue<Vec2F>::Key>();
 	o2::Reflection::InitializeType<o2::Animation::AnimatedValueDef>();
 	o2::Reflection::InitializeType<o2::ActorAsset::MetaInfo>();
@@ -4565,6 +4669,16 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::UIMenuPanel::Item>();
 	o2::Reflection::InitializeType<o2::Curve::Key>();
 	o2::Reflection::InitializeType<CodeTool::Tmp>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxTree>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxFile>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxEntry>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxSection>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxNamespace>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxClass>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxType>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxVariable>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxFunction>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxEnum>();
 	o2::Reflection::InitializeType<o2::AnimatedValue<Color4>>();
 	o2::Reflection::InitializeType<o2::AnimatedValue<Color4>::Key>();
 	o2::Reflection::InitializeType<o2::AnimatedValue<RectF>>();
@@ -4667,6 +4781,16 @@ void RegReflectionTypes()
 	TypeInitializer::AddBaseType<o2::UIContextMenu::Item, o2::ISerializable>();
 	TypeInitializer::AddBaseType<o2::UIMenuPanel::Item, o2::ISerializable>();
 	TypeInitializer::AddBaseType<o2::Curve::Key, o2::ISerializable>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxTree, o2::ISerializable>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxFile, o2::ISerializable>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxEntry, o2::ISerializable>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxSection, CodeTool::SyntaxEntry>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxNamespace, CodeTool::SyntaxSection>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxClass, CodeTool::SyntaxSection>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxType, CodeTool::SyntaxEntry>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxVariable, CodeTool::SyntaxEntry>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxFunction, CodeTool::SyntaxEntry>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxEnum, CodeTool::SyntaxEntry>();
 	TypeInitializer::AddBaseType<o2::AnimatedValue<Color4>, o2::IAnimatedValue>();
 	TypeInitializer::AddBaseType<o2::AnimatedValue<Color4>::Key, o2::ISerializable>();
 	TypeInitializer::AddBaseType<o2::AnimatedValue<RectF>, o2::IAnimatedValue>();

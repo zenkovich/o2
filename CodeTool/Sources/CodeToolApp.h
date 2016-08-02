@@ -14,12 +14,13 @@ namespace CodeTool
 		IOBJECT(Tmp);
 	};
 
+	class SyntaxTree;
+
 	// ---------------------
 	// Code tool application
 	// ---------------------
 	class CodeToolApplication: public Application
 	{
-
 	public:
 		// Default constructor. Initializes all editor components
 		CodeToolApplication();
@@ -27,7 +28,14 @@ namespace CodeTool
 		// Destructor
 		~CodeToolApplication();
 
+		// Sets arguments from main()
+		void SetArguments(char** args, int nargs);
+
 	protected:
+		String      mSourcesPath;
+		String      mMSVCProjectPath;
+		String      mXCodeProjectPath;
+		SyntaxTree* mSyntaxTree;
 
 	protected:
 		// Calling when application is starting
@@ -41,5 +49,8 @@ namespace CodeTool
 
 		// Calling on drawing
 		void OnDraw();
+
+		// Begins parsing sources
+		void BeginParse();
 	};
 }
