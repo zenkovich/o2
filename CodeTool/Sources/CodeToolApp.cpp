@@ -33,7 +33,7 @@ namespace CodeTool
 
 	void CodeToolApplication::OnStarted()
 	{
-		SetContentSize(Vec2I(300, 150));
+		SetContentSize(Vec2I(300, 80));
 		SetWindowCaption("o2 Code Tool");
 
 		UIVerticalLayout* layout = o2UI.AddVerLayout();

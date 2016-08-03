@@ -26,7 +26,7 @@ namespace CodeTool
 	typedef Vector<SyntaxEnum*>     SyntaxEnumsVec;
 	typedef Vector<String>          StringsVec;
 
-	enum class ClassBodySection { Public, Private, Protected };
+	enum class SyntaxProtectionSection { Public, Private, Protected };
 
 	class SyntaxTree: public ISerializable
 	{
@@ -71,6 +71,9 @@ namespace CodeTool
 	class SyntaxEntry: public ISerializable
 	{
 	public:
+		SyntaxEntry() {}
+		virtual ~SyntaxEntry() {}
+
 		int GetBegin() const;
 		int GetLength() const;
 		int GetEnd() const;
@@ -138,7 +141,7 @@ namespace CodeTool
 		SyntaxClassesVec GetBaseClasses() const;
 		bool IsTemplate() const;
 		const String& GetTemplateParameters() const;
-		ClassBodySection GetClassSection() const;
+		SyntaxProtectionSection GetClassSection() const;
 
 		virtual bool IsClass() const;
 
@@ -148,7 +151,7 @@ namespace CodeTool
 		StringsVec       mBaseClasses;
 		bool             mIsTemplate = false;
 		String           mTemplateParameters;
-		ClassBodySection mClassSection = ClassBodySection::Public;
+		SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
 
 		friend class CppSyntaxParser;
 	};
@@ -178,7 +181,7 @@ namespace CodeTool
 		const SyntaxType& GetSynType() const;
 		const String& GetName() const;
 		const StringsVec& GetAttributes() const;
-		ClassBodySection GetClassSection() const;
+		SyntaxProtectionSection GetClassSection() const;
 
 		SERIALIZABLE(SyntaxVariable);
 
@@ -186,7 +189,7 @@ namespace CodeTool
 		SyntaxType       mType;
 		String           mName;
 		StringsVec       mAttributes;
-		ClassBodySection mClassSection = ClassBodySection::Public;
+		SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
 
 		friend class CppSyntaxParser;
 	};
@@ -200,7 +203,7 @@ namespace CodeTool
 		const SyntaxType& GetReturnType() const;
 		const String& GetName() const;
 		const SyntaxVariablesVec& GetParameters() const;
-		ClassBodySection GetClassSection() const;
+		SyntaxProtectionSection GetClassSection() const;
 
 		SERIALIZABLE(SyntaxFunction);
 
@@ -208,7 +211,7 @@ namespace CodeTool
 		SyntaxType         mReturnType;
 		String             mName;
 		SyntaxVariablesVec mParameters;
-		ClassBodySection   mClassSection = ClassBodySection::Public;
+		SyntaxProtectionSection   mClassSection = SyntaxProtectionSection::Public;
 
 		friend class CppSyntaxParser;
 	};
@@ -218,14 +221,14 @@ namespace CodeTool
 	public:
 		const String& GetName() const;
 		const StringsVec& GetEntries() const;
-		ClassBodySection GetClassSection() const;
+		SyntaxProtectionSection GetClassSection() const;
 
 		SERIALIZABLE(SyntaxEnum);
 
 	protected:
 		String           mName;
 		StringsVec       mEntries;
-		ClassBodySection mClassSection = ClassBodySection::Public;
+		SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
 
 		friend class CppSyntaxParser;
 	};

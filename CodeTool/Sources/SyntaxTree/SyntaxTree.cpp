@@ -170,7 +170,7 @@ namespace CodeTool
 		return mTemplateParameters;
 	}
 
-	ClassBodySection SyntaxClass::GetClassSection() const
+	SyntaxProtectionSection SyntaxClass::GetClassSection() const
 	{
 		return mClassSection;
 	}
@@ -215,7 +215,7 @@ namespace CodeTool
 		return mAttributes;
 	}
 
-	ClassBodySection SyntaxVariable::GetClassSection() const
+	SyntaxProtectionSection SyntaxVariable::GetClassSection() const
 	{
 		return mClassSection;
 	}
@@ -244,7 +244,7 @@ namespace CodeTool
 		return mParameters;
 	}
 
-	ClassBodySection SyntaxFunction::GetClassSection() const
+	SyntaxProtectionSection SyntaxFunction::GetClassSection() const
 	{
 		return mClassSection;
 	}
@@ -259,7 +259,7 @@ namespace CodeTool
 		return mEntries;
 	}
 
-	ClassBodySection SyntaxEnum::GetClassSection() const
+	SyntaxProtectionSection SyntaxEnum::GetClassSection() const
 	{
 		return mClassSection;
 	}

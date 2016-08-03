@@ -87,6 +87,7 @@
     <OutDir>$(SolutionDir)\Bin</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
     <TargetName>CodeTool_dbg</TargetName>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -96,6 +97,7 @@
     <OutDir>$(SolutionDir)\Bin</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
     <TargetName>CodeTool</TargetName>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

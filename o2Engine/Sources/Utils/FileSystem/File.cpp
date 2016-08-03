@@ -70,7 +70,7 @@ namespace o2
 
 	void InFile::ReadData(void *dataPtr, UInt bytes)
 	{
-		mIfstream.read((char*)dataPtr, bytes);
+		auto& r = mIfstream.read((char*)dataPtr, bytes);
 	}
 
 	void InFile::SetCaretPos(UInt pos)
@@ -87,7 +87,10 @@ namespace o2
 	{
 		mIfstream.seekg(0, std::ios::beg);
 		mIfstream.seekg(0, std::ios::end);
-		return (long unsigned int)mIfstream.tellg();
+		UInt res = (long unsigned int)mIfstream.tellg();
+		mIfstream.seekg(0, std::ios::beg);
+
+		return res;
 	}
 
 	const String& InFile::GetFilename() const
