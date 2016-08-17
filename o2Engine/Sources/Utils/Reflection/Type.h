@@ -10,7 +10,7 @@
 #include "Utils/Reflection/FunctionInfo.h"
 #include "Utils/String.h"
 
-#define TypeOf(TYPE) _TypeOf<TYPE>()
+#define TypeOf(TYPE) GetTypeOf<TYPE>()
 
 namespace o2
 {
@@ -27,9 +27,11 @@ namespace o2
 		typedef Vector<FunctionInfo*> FunctionsInfosVec;
 		typedef Vector<Type*> TypesVec;
 
+		struct ISampleCreator;
+
 	public:
 		// Default constructor
-		Type(const String& name);
+		Type(const String& name, ISampleCreator* creator, int size);
 
 		// Destructor
 		~Type();
@@ -99,13 +101,13 @@ namespace o2
 		// --------------------
 		struct Dummy
 		{
-			static Type type;
+			static Type* type;
 		};
 
 		// -----------------------------
 		// Type sample creator interface
 		// -----------------------------
-		struct ITypeCreator
+		struct ISampleCreator
 		{
 			// Returns new sample of type
 			virtual void* CreateSample() const = 0;
@@ -115,23 +117,23 @@ namespace o2
 		// Specialized type sample creator
 		// -------------------------------
 		template<typename _type>
-		struct TypeCreator: public ITypeCreator
+		struct SampleCreator: public ISampleCreator
 		{
 			// Returns new sample of type
 			void* CreateSample() const { return mnew _type(); }
 		};
 
 	protected:
-		String            mName;      // Name of object type
-		FieldInfosVec     mFields;    // Fields information
-		FunctionsInfosVec mFunctions; // Functions informations
-		Id                mId;        // Id of type
-		TypesVec          mBaseTypes; // Base types ids
-		ITypeCreator*     mTypeAgent; // Template type agent
-		int               mPointer;   // Amount of pointers of type
-		mutable Type*     mPtrType;   // Pointer type from this
-		mutable Type*     mUnptrType; // Unpoint type from this
-		int               mSize;      // Size of type in bytes
+		String            mName;          // Name of object type
+		FieldInfosVec     mFields;        // Fields information
+		FunctionsInfosVec mFunctions;     // Functions informations
+		Id                mId;            // Id of type
+		TypesVec          mBaseTypes;     // Base types ids
+		ISampleCreator*   mSampleCreator; // Template type agent
+		int               mPointer;       // Amount of pointers of type
+		mutable Type*     mPtrType;       // Pointer type from this
+		mutable Type*     mUnptrType;     // Unpoint type from this
+		int               mSize;          // Size of type in bytes
 
 	protected:
 		// Sets name for this and pointer/unpoint types
@@ -153,7 +155,7 @@ namespace o2
 	class FundamentalType
 	{
 	public:
-		static Type type;
+		static Type* type;
 	};
 
 	template<typename T, typename X = 	
@@ -182,17 +184,17 @@ namespace o2
 	};
 
 	template<typename _type>
-	const Type& _TypeOf()
+	const Type& GetTypeOf()
 	{
 		if (std::is_pointer<_type>::value)
-			return *_TypeOf<std::remove_pointer<_type>::type>().GetPointerType();
+			return *GetTypeOf<std::remove_pointer<_type>::type>().GetPointerType();
 
 
-		return std::conditional<std::is_pointer<_type>::value, 
-			       TypeDeductor<std::remove_pointer<_type>::type>::type,
-			   //else
-			       TypeDeductor<_type>::type
-		       >::type::type;
+		return *std::conditional<std::is_pointer<_type>::value, 
+			        TypeDeductor<std::remove_pointer<_type>::type>::type,
+			    //else
+			        TypeDeductor<_type>::type
+		        >::type::type;
 	}
 
 	// ----------------

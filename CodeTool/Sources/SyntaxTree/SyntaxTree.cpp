@@ -3,31 +3,18 @@
 namespace CodeTool
 {
 
-	SyntaxTree::SyntaxTree():
-		mGlobalNamespace(new SyntaxNamespace())
+	SyntaxTree::SyntaxTree()
 	{}
 
 	SyntaxTree::~SyntaxTree()
 	{
 		for (auto file : mFiles)
 			delete file;
-
-		mGlobalNamespace->mSections.Clear();
-		mGlobalNamespace->mEnums.Clear();
-		mGlobalNamespace->mFunctions.Clear();
-		mGlobalNamespace->mVariables.Clear();
-
-		delete mGlobalNamespace;
 	}
 
 	const SyntaxFilesVec& SyntaxTree::GetFiles() const
 	{
 		return mFiles;
-	}
-
-	SyntaxNamespace* SyntaxTree::GetGlobalNamespace() const
-	{
-		return mGlobalNamespace;
 	}
 
 	SyntaxFile::SyntaxFile():
@@ -100,6 +87,9 @@ namespace CodeTool
 
 		for (auto x : mSections)
 			delete x;
+
+		for (auto x : mComments)
+			delete x;
 	}
 
 	SyntaxSection* SyntaxSection::GetParentSection() const
@@ -137,6 +127,11 @@ namespace CodeTool
 		return mEnums;
 	}
 
+	const CodeTool::SyntaxClassMetasVec& SyntaxSection::GetClassMetas() const
+	{
+		return mClassMetas;
+	}
+
 	bool SyntaxSection::IsClass() const
 	{
 		return false;
@@ -150,7 +145,7 @@ namespace CodeTool
 		return false;
 	}
 
-	const StringsVec& SyntaxClass::GetBaseClassesNames() const
+	const SyntaxClassInheritancsVec& SyntaxClass::GetBaseClassesNames() const
 	{
 		return mBaseClasses;
 	}
@@ -162,7 +157,7 @@ namespace CodeTool
 
 	bool SyntaxClass::IsTemplate() const
 	{
-		return mIsTemplate;
+		return !mTemplateParameters.IsEmpty();
 	}
 
 	const String& SyntaxClass::GetTemplateParameters() const
@@ -254,7 +249,7 @@ namespace CodeTool
 		return mName;
 	}
 
-	const StringsVec& SyntaxEnum::GetEntries() const
+	const StringStringDict& SyntaxEnum::GetEntries() const
 	{
 		return mEntries;
 	}
@@ -262,6 +257,30 @@ namespace CodeTool
 	SyntaxProtectionSection SyntaxEnum::GetClassSection() const
 	{
 		return mClassSection;
+	}
+
+	SyntaxClassInheritance::SyntaxClassInheritance(const String& className, SyntaxProtectionSection type):
+		mClassName(className), mInheritanceType(type)
+	{}
+
+	const String& SyntaxClassInheritance::GetClassName() const
+	{
+		return mClassName;
+	}
+
+	SyntaxProtectionSection SyntaxClassInheritance::GetInheritanceType() const
+	{
+		return mInheritanceType;
+	}
+
+	bool SyntaxClassInheritance::operator==(const SyntaxClassInheritance& other) const
+	{
+		return mInheritanceType == other.mInheritanceType && mClassName == other.mClassName;
+	}
+
+	const String& SyntaxClassMeta::GetClassName() const
+	{
+		return mClassName;
 	}
 
 }

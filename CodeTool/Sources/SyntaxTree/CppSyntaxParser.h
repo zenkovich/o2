@@ -10,8 +10,6 @@ using namespace o2;
 
 namespace CodeTool
 {
-	class ICppSyntaxStatementParser;
-
 	class CppSyntaxParser
 	{
 	public:
@@ -19,189 +17,73 @@ namespace CodeTool
 		~CppSyntaxParser();
 
 		void Parse(SyntaxTree& syntaxTree, const String& sourcesPath);
-
-	protected:
-		void ParseSourcesInFolder(FolderInfo& folderInfo);
 		void ParseFile(SyntaxFile& file, const FileInfo& fileInfo);
 
 	protected:
-		typedef Vector<ICppSyntaxStatementParser*> SyntaxParsersVec;
+		typedef void(CppSyntaxParser::*ParserDelegate)(SyntaxSection&, int&, int&, SyntaxProtectionSection&);
 
-		SyntaxTree*      mSyntaxTree = nullptr;
-		String           mSourcesPath;
-		SyntaxParsersVec mParsers;
+		struct ExpressionParser
+		{
+			const char*    keyWord = nullptr;
+			bool           isPossibleInClass = true;
+			bool           isPossibleInNamespace = true;
+			ParserDelegate parser;
+
+			ExpressionParser() {}
+			ExpressionParser(const char* keyWord, ParserDelegate parser, bool isPossibleInClass = true,
+							 bool isPossibleInNamespace = true);
+		};
+		typedef Vector<ExpressionParser*> ParsersVec;
 
 	protected:
-		void ParseSyntaxSection(SyntaxSection& section, const String& source, SyntaxFile& file);
+		SyntaxTree* mSyntaxTree = nullptr;
+		String      mSourcesPath;
+		ParsersVec  mParsers;
 
-	};
+	protected:
+		void InitializeParsers();
 
-	class ICppSyntaxStatementParser: public IObject
-	{
-	public:
-		virtual ~ICppSyntaxStatementParser() {}
-		virtual const char* GetKeyWord() const;
-		virtual bool IsPossibleInNamespace() const;
-		virtual bool IsPossibleInClass() const;
-		virtual void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection) {}
+		void ParseSourcesInFolder(FolderInfo& folderInfo);
+		void ParseSyntaxSection(SyntaxSection& section, const String& source, SyntaxFile& file,
+								SyntaxProtectionSection protectionSection);
 
-		IOBJECT(ICppSyntaxStatementParser);
-	};
+		String ReadWord(const String& data, int& caret, int& line,
+						const char* breakSymbols = " \n\r(){}.,;+-*/=@!|&*:~\\",
+						const char* skipSymbols = " \n\r");
+		String ReadBlock(const String& data, int& caret, int& line);
+		String ReadBraces(const String& data, int& caret, int& line);
+		char GetNextSymbol(const String& data, int begin, const char* skipSymbols = " \n\r\t()[]{}");
+		Vector<String> Split(const String& data, char splitSymbol);
+		void RemoveComments(String& input);
 
-	class CppSyntaxNamespaceParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "namespace"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+		void TryParseBlock(SyntaxSection& section, const String& block, int blockBegin, int& caret, int& line,
+						   SyntaxProtectionSection& protectionSection);
 
-		IOBJECT(CppSyntaxNamespaceParser);
-	};
+		bool IsFunction(const String& data);
 
-	class CppSyntaxMultilineCommentParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "/*"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+		SyntaxVariable* ParseVariable(const String& data, SyntaxProtectionSection& protectionSection, int begin, int end);
+		SyntaxFunction* ParseFunction(const String& data, SyntaxProtectionSection& protectionSection, int begin, int end);
 
-		IOBJECT(CppSyntaxMultilineCommentParser);
-	};
-
-	class CppSyntaxCommentParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "//"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxCommentParser);
-	};
-
-	class CppSyntaxPragmaParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "#pragma"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxPragmaParser);
-	};
-
-	class CppSyntaxIncludeParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "#include"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxIncludeParser);
-	};
-
-	class CppSyntaxDefineParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "#define"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxDefineParser);
-	};
-
-	class CppSyntaxIfMacroParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "#if"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxIfMacroParser);
-	};
-
-	class CppSyntaxClassParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "class"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxClassParser);
-	};
-
-	class CppSyntaxStructParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "struct"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxStructParser);
-	};
-
-	class CppSyntaxTemplateParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "template"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxTemplateParser);
-	};
-
-	class CppSyntaxTypedefParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "typedef"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxTypedefParser);
-	};
-
-	class CppSyntaxEnumParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "enum"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxEnumParser);
-	};
-
-	class CppSyntaxUsingParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "using"; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxUsingParser);
-	};
-
-	class CppSyntaxPublicSectionParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "public:"; }
-		bool IsPossibleInNamespace() const { return false; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxPublicSectionParser);
-	};
-
-	class CppSyntaxPrivateSectionParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "private:"; }
-		bool IsPossibleInNamespace() const { return false; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxPrivateSectionParser);
-	};
-
-	class CppSyntaxProtectedSectionParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "protected:"; }
-		bool IsPossibleInNamespace() const { return false; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxProtectedSectionParser);
-	};
-
-	class CppSyntaxFriendParser: public ICppSyntaxStatementParser
-	{
-	public:
-		const char* GetKeyWord() const { return "friend"; }
-		bool IsPossibleInNamespace() const { return false; }
-		void Parse(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
-
-		IOBJECT(CppSyntaxFriendParser);
+		void ParseNamespace(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseComment(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseMultilineComment(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParsePragma(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseInclude(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseDefine(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseIfMacros(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseMetaClass(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseClass(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseStruct(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseClassOrStruct(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection,
+								bool isClass, bool isMeta, const String& templates);
+		void ParseTemplate(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseTypedef(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseEnum(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseUsing(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParsePublicSection(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParsePrivateSection(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseProtectedSection(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseFriend(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
+		void ParseClassMeta(SyntaxSection& section, int& caret, int& line, SyntaxProtectionSection& protectionSection);
 	};
 }

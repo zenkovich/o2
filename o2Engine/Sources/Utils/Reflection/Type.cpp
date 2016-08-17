@@ -5,9 +5,15 @@
 
 namespace o2
 {
-	Type::Type(const String& name):
-		mId(0), mPointer(0), mPtrType(nullptr), mUnptrType(nullptr), mSize(4), mName(name)
-	{}
+	Type::Type(const String& name, ISampleCreator* creator, int size):
+		mId(0), mPointer(0), mPtrType(nullptr), mUnptrType(nullptr), mName(name),
+		mSampleCreator(creator), mSize(size)
+	{
+		InitializeType();
+		mId = Reflection::Instance().mLastGivenTypeId++;
+
+		Reflection::Instance().mTypes.Add(&_type::type);
+	}
 
 	Type::~Type()
 	{
@@ -118,7 +124,7 @@ namespace o2
 
 	void* Type::CreateSample() const
 	{
-		return mTypeAgent->CreateSample();
+		return mSampleCreator->CreateSample();
 	}
 
 	String Type::GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const
@@ -174,5 +180,5 @@ namespace o2
 		return other.mId == mId;
 	}
 
-	Type Type::Dummy::type("Dummy");
+	Type Type::Dummy::type("Unknown", nullptr, 0);
 }

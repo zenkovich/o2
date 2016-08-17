@@ -1,15 +1,17 @@
 #include "CodeToolApp.h"
 
+#include "Animation/Animate.h"
 #include "Render/Render.h"
 #include "SyntaxTree/CppSyntaxParser.h"
 #include "SyntaxTree/SyntaxTree.h"
+#include "UI/HorizontalProgress.h"
 #include "UI/Label.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
-#include "UI/HorizontalProgress.h"
 #include "Utils/Debug.h"
+#include "Utils/FileSystem/FileSystem.h"
 #include "Utils/TaskManager.h"
-#include "Animation/Animate.h"
+#include "Utils/Timer.h"
 
 namespace CodeTool
 {
@@ -29,30 +31,24 @@ namespace CodeTool
 
 		if (nargs > 3)
 			mXCodeProjectPath = args[3];
+
+		if (nargs > 4)
+			mNeedReset = strcmp(args[4], "-reset") == 0;
+		else
+			mNeedReset = false;
 	}
 
 	void CodeToolApplication::OnStarted()
 	{
-		SetContentSize(Vec2I(300, 80));
-		SetWindowCaption("o2 Code Tool");
+		Timer timer;
 
-		UIVerticalLayout* layout = o2UI.AddVerLayout();
-		layout->baseCorner = BaseCorner::Top;
-		layout->expandHeight = true;
-		layout->expandWidth = true;
-		layout->border = RectF(10, 10, 10, 10);
-		layout->layout = UIWidgetLayout::BothStretch();
+		LoadCache();
+		UpdateCodeReflection();
+		SaveCache();
 
-		//layout->AddChild(o2UI.CreateLabel(String::Format("Code tool: %s", mSourcesPath)));
-		layout->AddChild(o2UI.CreateLabel(String::Format("Code tool", mSourcesPath)));
-		
-		auto progress = o2UI.CreateHorProgress();
-		layout->AddChild(progress);
+		o2Debug.Log("Code generation done for %f seconds", timer.GetTime());
 
-		o2Tasks.Play(Animate(*progress).Change(&progress->value, 0.0f).Then().Change(&progress->value, 1.0f).For(1.0f).PingPong());
-
-		mSyntaxTree = mnew SyntaxTree();
-		BeginParse();
+		Shutdown();
 	}
 
 	void CodeToolApplication::OnClosing()
@@ -67,10 +63,82 @@ namespace CodeTool
 		o2Render.camera = Camera::Default();
 	}
 
-	void CodeToolApplication::BeginParse()
+	void CodeToolApplication::LoadCache()
 	{
-		CppSyntaxParser parser;
-		parser.Parse(*mSyntaxTree, mSourcesPath);
+		if (mNeedReset)
+			return;
+
+		DataNode data;
+		data.LoadFromFile(mSourcesPath + "/" + mCachePath);
+		mCache = data;
 	}
 
+	void CodeToolApplication::SaveCache()
+	{
+		DataNode data;
+		data = mCache;
+		data.SaveToFile(mSourcesPath + "/" + mCachePath);
+	}
+
+	void CodeToolApplication::UpdateCodeReflection()
+	{
+		mParser = mnew CppSyntaxParser();
+
+		FolderInfo sourcesFolderInfo = o2FileSystem.GetFolderInfo(mSourcesPath);
+		ParseSourcesFolder(sourcesFolderInfo);
+
+		delete mParser;
+	}
+
+	void CodeToolApplication::ParseSourcesFolder(const FolderInfo& folder)
+	{
+		for (auto& file : folder.mFiles)
+		{
+			if (!file.mPath.EndsWith(".h"))
+				continue;
+
+			ParseSource(file);
+		}
+
+		for (auto& childFolder : folder.mFolders)
+			ParseSourcesFolder(childFolder);
+	}
+
+	void CodeToolApplication::ParseSource(const FileInfo& file)
+	{
+		// check edit date
+		bool isCached = false;
+		for (auto& cacheFile : mCache.parseFilesInfos)
+		{
+			if (file.mPath == cacheFile.path)
+			{
+				if (file.mEditDate == cacheFile.parsedDate)
+					return;
+
+				cacheFile.parsedDate = file.mEditDate;
+				isCached = true;
+
+				break;
+			}
+		}
+
+		// parse source
+		SyntaxFile syntaxFile;
+		mParser->ParseFile(syntaxFile, file);
+
+		if (!isCached)
+			mCache.parseFilesInfos.Add(ParseFileInfo(file.mPath, file.mEditDate));
+	}
+
+	bool ParseFileInfo::operator==(const ParseFileInfo& other) const
+	{
+		return path == other.path;
+	}
+
+	ParseFileInfo::ParseFileInfo()
+	{}
+
+	ParseFileInfo::ParseFileInfo(const String& path, const TimeStamp& parsedDate):
+		path(path), parsedDate(parsedDate)
+	{}
 }

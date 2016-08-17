@@ -188,6 +188,12 @@ namespace o2
 		// Gets symbol from back, removes him and returns
 		T PopBack();
 
+		// Returns first symbol
+		T First() const;
+
+		// Returns last symbol
+		T Last() const;
+
 		// Replace part of string to another string in range
 		void Replace(const TString& other, int begin, int end);
 
@@ -196,6 +202,15 @@ namespace o2
 
 		// Return index of specified string. Returns -1 if can't find
 		int Find(const TString& other, int startIdx = 0) const;
+
+		// Return index of specified symbol. Returns -1 if can't find
+		int Find(T symbol, int startIdx = 0) const;
+
+		// Return this contains string. Returns -1 if can't find
+		bool Contains(const TString& other, int startIdx = 0) const;
+
+		// Return is this contains symbol. Returns -1 if can't find
+		bool Contains(T symbol, int startIdx = 0) const;
 
 		// Returns count of string inside this
 		int CountOf(const TString& other, int startIdx = 0) const;
@@ -1070,6 +1085,30 @@ namespace o2
 	}
 
 	template<typename T>
+	int TString<T>::Find(T symbol, int startIdx /*= 0*/) const
+	{
+		int l = Length();
+
+		for (int i = 0; i < l; i++)
+			if (mData[i] == symbol)
+				return i;
+
+		return -1;
+	}
+
+	template<typename T>
+	bool TString<T>::Contains(const TString& other, int startIdx /*= 0*/) const
+	{
+		return Find(other, startIdx) != -1;
+	}
+
+	template<typename T>
+	bool TString<T>::Contains(T symbol, int startIdx /*= 0*/) const
+	{
+		return Find(symbol, startIdx) != -1;
+	}
+
+	template<typename T>
 	int TString<T>::CountOf(const TString& other, int startIdx /*= 0*/) const
 	{
 		int res = 0;
@@ -1132,11 +1171,11 @@ namespace o2
 		int l1 = Length(), l2 = other.Length();
 		for (int i = 0; i < l1 && i < l2; i++)
 		{
-			if (mData[i] == other.mData[i] && i == l2 - 1)
-				return true;
+			if (mData[i] != other.mData[i])
+				return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	template<typename T>
@@ -1432,6 +1471,22 @@ namespace o2
 		T res = mData[l];
 		mData[l] = '\0';
 		return res;
+	}
+
+	template<typename T>
+	T TString<T>::First() const
+	{
+		return mData[0];
+	}
+
+	template<typename T>
+	T TString<T>::Last() const
+	{
+		int len = Length();
+		if (len == 0)
+			return T();
+
+		return mData[len - 1];
 	}
 
 	template<typename T>

@@ -408,7 +408,7 @@ namespace o2
 	class Type;
 
 	template<typename _type>
-	const Type& _TypeOf();
+	const Type& GetTypeOf();
 
 	template<typename _type, typename X>
 	void DataNode::GetValue(_type*& value) const

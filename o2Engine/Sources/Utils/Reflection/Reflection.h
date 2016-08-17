@@ -18,9 +18,6 @@ namespace o2
 		// Returns reflection instance
 		static Reflection& Instance();
 
-		// Initializes reflection
-		static void Initialize();
-
 		// Returns array of all registered types
 		static const Vector<Type*>& GetTypes();
 
@@ -41,20 +38,16 @@ namespace o2
 		template<typename _type>
 		static String GetEnumName(_type value);
 
-		// Initializes type
+	public:
 		template<typename _type>
-		static void InitializeType();
+		static Type* InitializeType();
 
-		// Initializes fundamental type
 		template<typename _type>
-		static void InitializeFundamentalType();
+		static Type* InitializeFundamentalType();
 
 		// Initializes enum
 		template<typename _type>
 		static void InitializeEnum(const Dictionary<int, String>& defs);
-
-		// Initializes fundamental types
-		static void InitializeFundamentalTypes();
 
 		// Initializes pointer type
 		static const Type* InitializePointerType(const Type* type);
@@ -74,7 +67,18 @@ namespace o2
 
 		// Destructor. Destroys types
 		~Reflection();
+
+		// Initializes fundamental types
+		static void InitializeFundamentalTypes();
+
+		friend class Type;
 	};
+
+#define REG_TYPE(CLASS) \
+	o2::Type* CLASS::type = Reflection::InitializeType<CLASS>()
+
+#define REG_FUNDAMENTAL_TYPE(TYPE) \
+	o2::Type o2::FundamentalType<TYPE>::type(#TYPE); 
 
 	template<typename _type>
 	_type Reflection::GetEnumValue(const String& name)
@@ -101,27 +105,29 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Reflection::InitializeType()
+	Type* Reflection::InitializeType()
 	{
-		_type* sample = nullptr;
+		Type* res = new Type();
 
-		_type::InitializeType(sample);
-		_type::type.mId = mInstance->mLastGivenTypeId++;
-		_type::type.mTypeAgent = new Type::TypeCreator<_type>();
-		_type::type.mSize = sizeof(_type);
+		_type::InitializeType(res);
+		res->mId            = mInstance->mLastGivenTypeId++;
+		res->mSampleCreator = new Type::SampleCreator<_type>();
+		res->mSize          = sizeof(_type);
 
-		mInstance->mTypes.Add(&_type::type);
+		Reflection::Instance().mTypes.Add(res);
+
+		return res;
 	}
 
 	template<typename _type>
-	void Reflection::InitializeFundamentalType()
+	Type* Reflection::InitializeFundamentalType()
 	{
 		FundamentalType<_type>::type.SetName(typeid(_type).name());
 		FundamentalType<_type>::type.mId = mInstance->mLastGivenTypeId++;
-		FundamentalType<_type>::type.mTypeAgent = new Type::TypeCreator<_type>();
+		FundamentalType<_type>::type.mSampleCreator = new Type::SampleCreator<_type>();
 		FundamentalType<_type>::type.mSize = sizeof(_type);
 
-		mInstance->mTypes.Add(&FundamentalType<_type>::type);
+		Reflection::Instance().mTypes.Add(&FundamentalType<_type>::type);
 	}
 
 	template<typename _type>

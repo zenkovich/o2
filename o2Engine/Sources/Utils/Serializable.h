@@ -61,7 +61,7 @@ private:                                                            \
 	friend struct o2::Type::TypeCreator<CLASS>;                     \
                                                                     \
     template<typename _type>                                        \
-	friend const Type& o2::_TypeOf();                               \
+	friend const Type& o2::GetTypeOf();                               \
     friend class o2::TypeInitializer;                               \
     friend class o2::Reflection;                                    \
     template<typename _type>                                        \

@@ -45,7 +45,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h">
       <Filter>Core\WindowsSystem</Filter>
     </ClInclude>
@@ -228,7 +227,6 @@
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp">
       <Filter>Core\WindowsSystem</Filter>
     </ClCompile>

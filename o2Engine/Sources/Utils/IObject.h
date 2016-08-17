@@ -5,6 +5,8 @@
 
 namespace o2
 {
+	class IClassMetaProcessor;
+
 	// ----------------------------------------------------
 	// Basic object interface with type information support
 	// ----------------------------------------------------
@@ -24,26 +26,30 @@ namespace o2
 		static Type type;
 
 		template<typename _type>
-		friend const Type& o2::_TypeOf();
+		friend const Type& o2::GetTypeOf();
 	};
+
+#define metaclass class
 
 	// IObject header definition
 #define IOBJECT(CLASS)  							   \
 private:                                               \
-	static Type type;								   \
-                                                       \
-	friend struct o2::Type::TypeCreator<CLASS>;        \
+	static o2::Type* type;							   \
                                                        \
     template<typename _type>                           \
-	friend const Type& o2::_TypeOf();                  \
-    friend class o2::TypeInitializer;                  \
-    friend class o2::Reflection;                       \
+	friend const o2::Type& o2::GetTypeOf();            \
+                                                       \
     template<typename _type>                           \
     friend struct o2::Type::TypeCreator;               \
+                                                       \
+    friend class o2::TypeInitializer;                  \
+    friend class o2::Reflection;                       \
     friend class o2::DataNode;                         \
                                                        \
 public:                                                \
 	CLASS* Clone() const { return mnew CLASS(*this); } \
-	Type& GetType() const { return type; };	           \
-	static void InitializeType(CLASS* sample)   
+	o2::Type& GetType() const { return *type; };       \
+                                                       \
+private:                                               \
+	static void InitializeType(o2::Type* type)                       
 }

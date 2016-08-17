@@ -66,7 +66,6 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.cpp" />
-    <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneDragHandle.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
@@ -129,7 +128,6 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.h" />
-    <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneDragHandle.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditWidget.h" />
@@ -193,7 +191,7 @@
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_dbg</TargetName>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -205,7 +203,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

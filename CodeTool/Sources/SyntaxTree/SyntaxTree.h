@@ -2,29 +2,38 @@
 
 #include "Utils/Serializable.h"
 #include "Utils/Containers/Vector.h"
+#include "Utils/Containers/Dictionary.h"
 #include "Utils/String.h"
 #include "Utils/TimeStamp.h"
+
+#undef GetClassName
 
 using namespace o2;
 
 namespace CodeTool
 {
+	class SyntaxClass;
+	class SyntaxClassInheritance;
+	class SyntaxClassMeta;
+	class SyntaxComment;
+	class SyntaxEnum;
 	class SyntaxFile;
+	class SyntaxFunction;
 	class SyntaxNamespace;
 	class SyntaxSection;
-	class SyntaxClass;
 	class SyntaxType;
 	class SyntaxVariable;
-	class SyntaxFunction;
-	class SyntaxEnum;
 
-	typedef Vector<SyntaxSection*>  SyntaxSectionsVec;
-	typedef Vector<SyntaxClass*>    SyntaxClassesVec;
-	typedef Vector<SyntaxVariable*> SyntaxVariablesVec;
-	typedef Vector<SyntaxFunction*> SyntaxFunctionsVec;
-	typedef Vector<SyntaxFile*>     SyntaxFilesVec;
-	typedef Vector<SyntaxEnum*>     SyntaxEnumsVec;
-	typedef Vector<String>          StringsVec;
+	typedef Vector<String>             StringsVec;
+	typedef Dictionary<String, String> StringStringDict;
+	typedef Vector<SyntaxClass*>       SyntaxClassesVec;
+	typedef Vector<SyntaxComment*>     SyntaxCommentsVec;
+	typedef Vector<SyntaxEnum*>        SyntaxEnumsVec;
+	typedef Vector<SyntaxFile*>        SyntaxFilesVec;
+	typedef Vector<SyntaxFunction*>    SyntaxFunctionsVec;
+	typedef Vector<SyntaxSection*>     SyntaxSectionsVec;
+	typedef Vector<SyntaxVariable*>    SyntaxVariablesVec;
+	typedef Vector<SyntaxClassMeta*>   SyntaxClassMetasVec;
 
 	enum class SyntaxProtectionSection { Public, Private, Protected };
 
@@ -35,13 +44,11 @@ namespace CodeTool
 		~SyntaxTree();
 
 		const SyntaxFilesVec& GetFiles() const;
-		SyntaxNamespace* GetGlobalNamespace() const;
 
 		SERIALIZABLE(SyntaxTree);
 
 	protected:
-		SyntaxFilesVec   mFiles; 
-		SyntaxNamespace* mGlobalNamespace = nullptr; 
+		SyntaxFilesVec mFiles; // @SERIALIZABLE
 
 		friend class CppSyntaxParser;
 	};
@@ -60,10 +67,10 @@ namespace CodeTool
 		SERIALIZABLE(SyntaxFile);
 
 	protected:
-		String           mPath;
-		String           mData;
-		TimeStamp        mLastEditedDate;
-		SyntaxNamespace* mGlobalNamespace = nullptr;
+		String           mPath;                      // @SERIALIZABLE
+		String           mData;                      // xx
+		TimeStamp        mLastEditedDate;            // @SERIALIZABLE
+		SyntaxNamespace* mGlobalNamespace = nullptr; // @SERIALIZABLE
 
 		friend class CppSyntaxParser;
 	};
@@ -83,12 +90,19 @@ namespace CodeTool
 		SERIALIZABLE(SyntaxEntry);
 
 	protected:
-		int         mBegin = 0;
-		int         mLength = 0;
-		String      mData;
-		SyntaxFile* mFile = nullptr;
+		int            mBegin = 0;         // @SERIALIZABLE
+		int            mLength = 0;        // @SERIALIZABLE
+		String         mData;              // xx
+		SyntaxFile*    mFile = nullptr;    // xx
+		SyntaxComment* mComment = nullptr; // xx
 
 		friend class CppSyntaxParser;
+	};
+
+	class SyntaxComment: public SyntaxEntry
+	{
+	public:
+		SERIALIZABLE(SyntaxComment);
 	};
 
 	class SyntaxSection: public SyntaxEntry
@@ -104,19 +118,22 @@ namespace CodeTool
 		const SyntaxVariablesVec& GetVariables() const;
 		const SyntaxSectionsVec& GetSections() const;
 		const SyntaxEnumsVec& GetEnums() const;
+		const SyntaxClassMetasVec& GetClassMetas() const;
 
 		virtual bool IsClass() const;
 
 		SERIALIZABLE(SyntaxSection);
 
-	protected:
-		String             mName;     
-		String             mFullName;
-		SyntaxSection*     mParentSection = nullptr;
-		SyntaxFunctionsVec mFunctions;
-		SyntaxVariablesVec mVariables;
-		SyntaxSectionsVec  mSections; 
-		SyntaxEnumsVec     mEnums;
+	protected: 
+		String              mName;                    // @SERIALIZABLE
+		String              mFullName;                // @SERIALIZABLE
+		SyntaxSection*      mParentSection = nullptr; // xx
+		SyntaxFunctionsVec  mFunctions;               // @SERIALIZABLE
+		SyntaxVariablesVec  mVariables;               // @SERIALIZABLE
+		SyntaxSectionsVec   mSections;                // @SERIALIZABLE
+		SyntaxEnumsVec      mEnums;                   // @SERIALIZABLE
+		SyntaxCommentsVec   mComments;                // @SERIALIZABLE
+		SyntaxClassMetasVec mClassMetas;              // @SERIALIZABLE
 
 		friend class CppSyntaxParser;
 		friend class SyntaxTree;
@@ -134,10 +151,29 @@ namespace CodeTool
 		friend class CppSyntaxParser;
 	};
 
+	class SyntaxClassInheritance: public SyntaxEntry
+	{
+	public:
+		SyntaxClassInheritance() {}
+		SyntaxClassInheritance(const String& className, SyntaxProtectionSection type);
+
+		const String& GetClassName() const;
+		SyntaxProtectionSection GetInheritanceType() const;
+
+		bool operator==(const SyntaxClassInheritance& other) const;
+
+		SERIALIZABLE(SyntaxClassInheritance);
+
+	protected:
+		String                  mClassName;       // @SERIALIZABLE
+		SyntaxProtectionSection mInheritanceType; // @SERIALIZABLE
+	};
+	typedef Vector<SyntaxClassInheritance> SyntaxClassInheritancsVec;
+
 	class SyntaxClass: public SyntaxSection
 	{
 	public:
-		const StringsVec& GetBaseClassesNames() const;
+		const SyntaxClassInheritancsVec& GetBaseClassesNames() const;
 		SyntaxClassesVec GetBaseClasses() const;
 		bool IsTemplate() const;
 		const String& GetTemplateParameters() const;
@@ -148,10 +184,23 @@ namespace CodeTool
 		SERIALIZABLE(SyntaxClass);
 
 	protected:
-		StringsVec       mBaseClasses;
-		bool             mIsTemplate = false;
-		String           mTemplateParameters;
-		SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
+		SyntaxClassInheritancsVec mBaseClasses;                                    // @SERIALIZABLE
+		bool                      mIsMeta = false;                                 // @SERIALIZABLE
+		String                    mTemplateParameters;                             // @SERIALIZABLE
+		SyntaxProtectionSection   mClassSection = SyntaxProtectionSection::Public; // @SERIALIZABLE
+
+		friend class CppSyntaxParser;
+	};
+
+	class SyntaxClassMeta: public SyntaxEntry
+	{
+	public:
+		const String& GetClassName() const;
+
+		SERIALIZABLE(SyntaxClassMeta);
+
+	protected:
+		String mClassName; // @SERIALIZABLE
 
 		friend class CppSyntaxParser;
 	};
@@ -167,10 +216,10 @@ namespace CodeTool
 		SERIALIZABLE(SyntaxType);
 
 	protected:
-		String mName;
-		bool   mIsContant = false;
-		bool   mIsReference = false;
-		bool   mIsPointer = false;
+		String mName;                // @SERIALIZABLE
+		bool   mIsContant = false;   // @SERIALIZABLE
+		bool   mIsReference = false; // @SERIALIZABLE
+		bool   mIsPointer = false;   // @SERIALIZABLE
 
 		friend class CppSyntaxParser;
 	};
@@ -186,10 +235,11 @@ namespace CodeTool
 		SERIALIZABLE(SyntaxVariable);
 
 	protected:
-		SyntaxType       mType;
-		String           mName;
-		StringsVec       mAttributes;
-		SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
+		SyntaxType              mType;                                           // @SERIALIZABLE
+		String                  mName;                                           // @SERIALIZABLE
+		StringsVec              mAttributes;                                     // @SERIALIZABLE
+		SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public; // @SERIALIZABLE
+		bool                    mIsStatic = false;                               // @SERIALIZABLE
 
 		friend class CppSyntaxParser;
 	};
@@ -208,10 +258,14 @@ namespace CodeTool
 		SERIALIZABLE(SyntaxFunction);
 
 	protected:
-		SyntaxType         mReturnType;
-		String             mName;
-		SyntaxVariablesVec mParameters;
-		SyntaxProtectionSection   mClassSection = SyntaxProtectionSection::Public;
+		SyntaxType              mReturnType;									 // @SERIALIZABLE
+		String                  mName;											 // @SERIALIZABLE
+		SyntaxVariablesVec      mParameters;									 // @SERIALIZABLE
+		SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public; // @SERIALIZABLE
+		bool                    mIsStatic = false;								 // @SERIALIZABLE
+		bool                    mIsVirtual = false;								 // @SERIALIZABLE
+		bool                    mIsContstant = false;							 // @SERIALIZABLE
+		String                  mTemplates;                                      // @SERIALIZABLE
 
 		friend class CppSyntaxParser;
 	};
@@ -220,15 +274,15 @@ namespace CodeTool
 	{
 	public:
 		const String& GetName() const;
-		const StringsVec& GetEntries() const;
+		const StringStringDict& GetEntries() const;
 		SyntaxProtectionSection GetClassSection() const;
 
 		SERIALIZABLE(SyntaxEnum);
 
-	protected:
-		String           mName;
-		StringsVec       mEntries;
-		SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
+	protected:																	
+		String                  mName;											 // @SERIALIZABLE
+		StringStringDict        mEntries;										 // @SERIALIZABLE
+		SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public; // @SERIALIZABLE
 
 		friend class CppSyntaxParser;
 	};

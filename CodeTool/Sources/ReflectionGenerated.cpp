@@ -75,7 +75,6 @@
 #include "C:\work\o2\o2Engine\Sources\Render\VectorFont.h"
 #include "C:\work\o2\o2Engine\Sources\Scene\Scene.h"
 #include "C:\work\o2\CodeTool\Platforms\Windows\..\..\Sources\CodeToolApp.h"
-#include "C:\work\o2\CodeTool\Platforms\Windows\..\..\Sources\SyntaxTree\CppSyntaxParser.h"
 #include "C:\work\o2\CodeTool\Platforms\Windows\..\..\Sources\SyntaxTree\SyntaxTree.h"
 
 // Types declarations
@@ -175,31 +174,17 @@ o2::Type o2::Scene::Layer::type("o2::Scene::Layer");
 o2::Type o2::UIContextMenu::Item::type("o2::UIContextMenu::Item");
 o2::Type o2::UIMenuPanel::Item::type("o2::UIMenuPanel::Item");
 o2::Type o2::Curve::Key::type("o2::Curve::Key");
-o2::Type CodeTool::Tmp::type("CodeTool::Tmp");
-o2::Type CodeTool::ICppSyntaxStatementParser::type("CodeTool::ICppSyntaxStatementParser");
-o2::Type CodeTool::CppSyntaxNamespaceParser::type("CodeTool::CppSyntaxNamespaceParser");
-o2::Type CodeTool::CppSyntaxMultilineCommentParser::type("CodeTool::CppSyntaxMultilineCommentParser");
-o2::Type CodeTool::CppSyntaxCommentParser::type("CodeTool::CppSyntaxCommentParser");
-o2::Type CodeTool::CppSyntaxPragmaParser::type("CodeTool::CppSyntaxPragmaParser");
-o2::Type CodeTool::CppSyntaxIncludeParser::type("CodeTool::CppSyntaxIncludeParser");
-o2::Type CodeTool::CppSyntaxDefineParser::type("CodeTool::CppSyntaxDefineParser");
-o2::Type CodeTool::CppSyntaxIfMacroParser::type("CodeTool::CppSyntaxIfMacroParser");
-o2::Type CodeTool::CppSyntaxClassParser::type("CodeTool::CppSyntaxClassParser");
-o2::Type CodeTool::CppSyntaxStructParser::type("CodeTool::CppSyntaxStructParser");
-o2::Type CodeTool::CppSyntaxTemplateParser::type("CodeTool::CppSyntaxTemplateParser");
-o2::Type CodeTool::CppSyntaxTypedefParser::type("CodeTool::CppSyntaxTypedefParser");
-o2::Type CodeTool::CppSyntaxEnumParser::type("CodeTool::CppSyntaxEnumParser");
-o2::Type CodeTool::CppSyntaxUsingParser::type("CodeTool::CppSyntaxUsingParser");
-o2::Type CodeTool::CppSyntaxPublicSectionParser::type("CodeTool::CppSyntaxPublicSectionParser");
-o2::Type CodeTool::CppSyntaxPrivateSectionParser::type("CodeTool::CppSyntaxPrivateSectionParser");
-o2::Type CodeTool::CppSyntaxProtectedSectionParser::type("CodeTool::CppSyntaxProtectedSectionParser");
-o2::Type CodeTool::CppSyntaxFriendParser::type("CodeTool::CppSyntaxFriendParser");
+o2::Type CodeTool::ParseFileInfo::type("CodeTool::ParseFileInfo");
+o2::Type CodeTool::CodeToolCache::type("CodeTool::CodeToolCache");
 o2::Type CodeTool::SyntaxTree::type("CodeTool::SyntaxTree");
 o2::Type CodeTool::SyntaxFile::type("CodeTool::SyntaxFile");
 o2::Type CodeTool::SyntaxEntry::type("CodeTool::SyntaxEntry");
+o2::Type CodeTool::SyntaxComment::type("CodeTool::SyntaxComment");
 o2::Type CodeTool::SyntaxSection::type("CodeTool::SyntaxSection");
 o2::Type CodeTool::SyntaxNamespace::type("CodeTool::SyntaxNamespace");
+o2::Type CodeTool::SyntaxClassInheritance::type("CodeTool::SyntaxClassInheritance");
 o2::Type CodeTool::SyntaxClass::type("CodeTool::SyntaxClass");
+o2::Type CodeTool::SyntaxClassMeta::type("CodeTool::SyntaxClassMeta");
 o2::Type CodeTool::SyntaxType::type("CodeTool::SyntaxType");
 o2::Type CodeTool::SyntaxVariable::type("CodeTool::SyntaxVariable");
 o2::Type CodeTool::SyntaxFunction::type("CodeTool::SyntaxFunction");
@@ -4147,213 +4132,33 @@ void o2::Curve::Key::InitializeType(o2::Curve::Key* sample)
 	TypeInitializer::RegField(&type, "mApproxValues", (size_t)(char*)(&sample->mApproxValues) - (size_t)(char*)iobject, sample->mApproxValues, o2::ProtectSection::Public);
 }
 
-void CodeTool::Tmp::InitializeType(CodeTool::Tmp* sample)
+void CodeTool::ParseFileInfo::InitializeType(CodeTool::ParseFileInfo* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "parsedDate", (size_t)(char*)(&sample->parsedDate) - (size_t)(char*)iobject, sample->parsedDate, o2::ProtectSection::Public).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "path", (size_t)(char*)(&sample->path) - (size_t)(char*)iobject, sample->path, o2::ProtectSection::Public).AddAttribute<SerializableAttribute>();
 }
 
-void CodeTool::ICppSyntaxStatementParser::InitializeType(CodeTool::ICppSyntaxStatementParser* sample)
+void CodeTool::CodeToolCache::InitializeType(CodeTool::CodeToolCache* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::ICppSyntaxStatementParser, const char*>(&type, "GetKeyWord", &CodeTool::ICppSyntaxStatementParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::ICppSyntaxStatementParser, bool>(&type, "IsPossibleInNamespace", &CodeTool::ICppSyntaxStatementParser::IsPossibleInNamespace, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::ICppSyntaxStatementParser, bool>(&type, "IsPossibleInClass", &CodeTool::ICppSyntaxStatementParser::IsPossibleInClass, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::ICppSyntaxStatementParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::ICppSyntaxStatementParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxNamespaceParser::InitializeType(CodeTool::CppSyntaxNamespaceParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxNamespaceParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxNamespaceParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxNamespaceParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxNamespaceParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxMultilineCommentParser::InitializeType(CodeTool::CppSyntaxMultilineCommentParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxMultilineCommentParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxMultilineCommentParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxMultilineCommentParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxMultilineCommentParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxCommentParser::InitializeType(CodeTool::CppSyntaxCommentParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxCommentParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxCommentParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxCommentParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxCommentParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxPragmaParser::InitializeType(CodeTool::CppSyntaxPragmaParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxPragmaParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxPragmaParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxPragmaParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxPragmaParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxIncludeParser::InitializeType(CodeTool::CppSyntaxIncludeParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxIncludeParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxIncludeParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxIncludeParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxIncludeParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxDefineParser::InitializeType(CodeTool::CppSyntaxDefineParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxDefineParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxDefineParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxDefineParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxDefineParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxIfMacroParser::InitializeType(CodeTool::CppSyntaxIfMacroParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxIfMacroParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxIfMacroParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxIfMacroParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxIfMacroParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxClassParser::InitializeType(CodeTool::CppSyntaxClassParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxClassParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxClassParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxClassParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxClassParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxStructParser::InitializeType(CodeTool::CppSyntaxStructParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxStructParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxStructParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxStructParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxStructParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxTemplateParser::InitializeType(CodeTool::CppSyntaxTemplateParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxTemplateParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxTemplateParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxTemplateParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxTemplateParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxTypedefParser::InitializeType(CodeTool::CppSyntaxTypedefParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxTypedefParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxTypedefParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxTypedefParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxTypedefParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxEnumParser::InitializeType(CodeTool::CppSyntaxEnumParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxEnumParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxEnumParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxEnumParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxEnumParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxUsingParser::InitializeType(CodeTool::CppSyntaxUsingParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxUsingParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxUsingParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxUsingParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxUsingParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxPublicSectionParser::InitializeType(CodeTool::CppSyntaxPublicSectionParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxPublicSectionParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxPublicSectionParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxPublicSectionParser, bool>(&type, "IsPossibleInNamespace", &CodeTool::CppSyntaxPublicSectionParser::IsPossibleInNamespace, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxPublicSectionParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxPublicSectionParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxPrivateSectionParser::InitializeType(CodeTool::CppSyntaxPrivateSectionParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxPrivateSectionParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxPrivateSectionParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxPrivateSectionParser, bool>(&type, "IsPossibleInNamespace", &CodeTool::CppSyntaxPrivateSectionParser::IsPossibleInNamespace, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxPrivateSectionParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxPrivateSectionParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxProtectedSectionParser::InitializeType(CodeTool::CppSyntaxProtectedSectionParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxProtectedSectionParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxProtectedSectionParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxProtectedSectionParser, bool>(&type, "IsPossibleInNamespace", &CodeTool::CppSyntaxProtectedSectionParser::IsPossibleInNamespace, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxProtectedSectionParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxProtectedSectionParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
-}
-
-void CodeTool::CppSyntaxFriendParser::InitializeType(CodeTool::CppSyntaxFriendParser* sample)
-{
-	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxFriendParser, const char*>(&type, "GetKeyWord", &CodeTool::CppSyntaxFriendParser::GetKeyWord, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxFriendParser, bool>(&type, "IsPossibleInNamespace", &CodeTool::CppSyntaxFriendParser::IsPossibleInNamespace, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::CppSyntaxFriendParser, void, SyntaxSection&, int&, SyntaxProtectionSection&>(&type, "Parse", &CodeTool::CppSyntaxFriendParser::Parse, o2::ProtectSection::Public);
-	TypeInitializer::RegFuncParam<SyntaxSection&>(funcInfo, "section");
-	TypeInitializer::RegFuncParam<int&>(funcInfo, "caret");
-	TypeInitializer::RegFuncParam<SyntaxProtectionSection&>(funcInfo, "protectionSection");
+	TypeInitializer::RegField(&type, "parseFilesInfos", (size_t)(char*)(&sample->parseFilesInfos) - (size_t)(char*)iobject, sample->parseFilesInfos, o2::ProtectSection::Public).AddAttribute<SerializableAttribute>();
 }
 
 void CodeTool::SyntaxTree::InitializeType(CodeTool::SyntaxTree* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "mFiles", (size_t)(char*)(&sample->mFiles) - (size_t)(char*)iobject, sample->mFiles, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mGlobalNamespace", (size_t)(char*)(&sample->mGlobalNamespace) - (size_t)(char*)iobject, sample->mGlobalNamespace, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mFiles", (size_t)(char*)(&sample->mFiles) - (size_t)(char*)iobject, sample->mFiles, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxTree, const SyntaxFilesVec&>(&type, "GetFiles", &CodeTool::SyntaxTree::GetFiles, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxTree, SyntaxNamespace*>(&type, "GetGlobalNamespace", &CodeTool::SyntaxTree::GetGlobalNamespace, o2::ProtectSection::Public);
 }
 
 void CodeTool::SyntaxFile::InitializeType(CodeTool::SyntaxFile* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "mPath", (size_t)(char*)(&sample->mPath) - (size_t)(char*)iobject, sample->mPath, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mPath", (size_t)(char*)(&sample->mPath) - (size_t)(char*)iobject, sample->mPath, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mData", (size_t)(char*)(&sample->mData) - (size_t)(char*)iobject, sample->mData, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mLastEditedDate", (size_t)(char*)(&sample->mLastEditedDate) - (size_t)(char*)iobject, sample->mLastEditedDate, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mGlobalNamespace", (size_t)(char*)(&sample->mGlobalNamespace) - (size_t)(char*)iobject, sample->mGlobalNamespace, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mLastEditedDate", (size_t)(char*)(&sample->mLastEditedDate) - (size_t)(char*)iobject, sample->mLastEditedDate, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mGlobalNamespace", (size_t)(char*)(&sample->mGlobalNamespace) - (size_t)(char*)iobject, sample->mGlobalNamespace, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFile, const String&>(&type, "GetPath", &CodeTool::SyntaxFile::GetPath, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFile, const String&>(&type, "GetData", &CodeTool::SyntaxFile::GetData, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFile, const TimeStamp&>(&type, "GetLastEditedDate", &CodeTool::SyntaxFile::GetLastEditedDate, o2::ProtectSection::Public);
@@ -4363,10 +4168,11 @@ void CodeTool::SyntaxFile::InitializeType(CodeTool::SyntaxFile* sample)
 void CodeTool::SyntaxEntry::InitializeType(CodeTool::SyntaxEntry* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "mBegin", (size_t)(char*)(&sample->mBegin) - (size_t)(char*)iobject, sample->mBegin, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mLength", (size_t)(char*)(&sample->mLength) - (size_t)(char*)iobject, sample->mLength, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mBegin", (size_t)(char*)(&sample->mBegin) - (size_t)(char*)iobject, sample->mBegin, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mLength", (size_t)(char*)(&sample->mLength) - (size_t)(char*)iobject, sample->mLength, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mData", (size_t)(char*)(&sample->mData) - (size_t)(char*)iobject, sample->mData, o2::ProtectSection::Protected);
 	TypeInitializer::RegField(&type, "mFile", (size_t)(char*)(&sample->mFile) - (size_t)(char*)iobject, sample->mFile, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mComment", (size_t)(char*)(&sample->mComment) - (size_t)(char*)iobject, sample->mComment, o2::ProtectSection::Protected);
 	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEntry, int>(&type, "GetBegin", &CodeTool::SyntaxEntry::GetBegin, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEntry, int>(&type, "GetLength", &CodeTool::SyntaxEntry::GetLength, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEntry, int>(&type, "GetEnd", &CodeTool::SyntaxEntry::GetEnd, o2::ProtectSection::Public);
@@ -4374,16 +4180,23 @@ void CodeTool::SyntaxEntry::InitializeType(CodeTool::SyntaxEntry* sample)
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEntry, SyntaxFile*>(&type, "GetOwnerFile", &CodeTool::SyntaxEntry::GetOwnerFile, o2::ProtectSection::Public);
 }
 
+void CodeTool::SyntaxComment::InitializeType(CodeTool::SyntaxComment* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+}
+
 void CodeTool::SyntaxSection::InitializeType(CodeTool::SyntaxSection* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mFullName", (size_t)(char*)(&sample->mFullName) - (size_t)(char*)iobject, sample->mFullName, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mFullName", (size_t)(char*)(&sample->mFullName) - (size_t)(char*)iobject, sample->mFullName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	TypeInitializer::RegField(&type, "mParentSection", (size_t)(char*)(&sample->mParentSection) - (size_t)(char*)iobject, sample->mParentSection, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mFunctions", (size_t)(char*)(&sample->mFunctions) - (size_t)(char*)iobject, sample->mFunctions, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mVariables", (size_t)(char*)(&sample->mVariables) - (size_t)(char*)iobject, sample->mVariables, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mSections", (size_t)(char*)(&sample->mSections) - (size_t)(char*)iobject, sample->mSections, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mEnums", (size_t)(char*)(&sample->mEnums) - (size_t)(char*)iobject, sample->mEnums, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mFunctions", (size_t)(char*)(&sample->mFunctions) - (size_t)(char*)iobject, sample->mFunctions, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mVariables", (size_t)(char*)(&sample->mVariables) - (size_t)(char*)iobject, sample->mVariables, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mSections", (size_t)(char*)(&sample->mSections) - (size_t)(char*)iobject, sample->mSections, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mEnums", (size_t)(char*)(&sample->mEnums) - (size_t)(char*)iobject, sample->mEnums, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mComments", (size_t)(char*)(&sample->mComments) - (size_t)(char*)iobject, sample->mComments, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mClassMetas", (size_t)(char*)(&sample->mClassMetas) - (size_t)(char*)iobject, sample->mClassMetas, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, SyntaxSection*>(&type, "GetParentSection", &CodeTool::SyntaxSection::GetParentSection, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const String&>(&type, "GetName", &CodeTool::SyntaxSection::GetName, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const String&>(&type, "GetFullName", &CodeTool::SyntaxSection::GetFullName, o2::ProtectSection::Public);
@@ -4391,6 +4204,7 @@ void CodeTool::SyntaxSection::InitializeType(CodeTool::SyntaxSection* sample)
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const SyntaxVariablesVec&>(&type, "GetVariables", &CodeTool::SyntaxSection::GetVariables, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const SyntaxSectionsVec&>(&type, "GetSections", &CodeTool::SyntaxSection::GetSections, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const SyntaxEnumsVec&>(&type, "GetEnums", &CodeTool::SyntaxSection::GetEnums, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, const SyntaxClassMetasVec&>(&type, "GetClassMetas", &CodeTool::SyntaxSection::GetClassMetas, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxSection, bool>(&type, "IsClass", &CodeTool::SyntaxSection::IsClass, o2::ProtectSection::Public);
 }
 
@@ -4400,14 +4214,23 @@ void CodeTool::SyntaxNamespace::InitializeType(CodeTool::SyntaxNamespace* sample
 	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxNamespace, bool>(&type, "IsClass", &CodeTool::SyntaxNamespace::IsClass, o2::ProtectSection::Public);
 }
 
+void CodeTool::SyntaxClassInheritance::InitializeType(CodeTool::SyntaxClassInheritance* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mClassName", (size_t)(char*)(&sample->mClassName) - (size_t)(char*)iobject, sample->mClassName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mInheritanceType", (size_t)(char*)(&sample->mInheritanceType) - (size_t)(char*)iobject, sample->mInheritanceType, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClassInheritance, const String&>(&type, "GetClassName", &CodeTool::SyntaxClassInheritance::GetClassName, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClassInheritance, SyntaxProtectionSection>(&type, "GetInheritanceType", &CodeTool::SyntaxClassInheritance::GetInheritanceType, o2::ProtectSection::Public);
+}
+
 void CodeTool::SyntaxClass::InitializeType(CodeTool::SyntaxClass* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "mBaseClasses", (size_t)(char*)(&sample->mBaseClasses) - (size_t)(char*)iobject, sample->mBaseClasses, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mIsTemplate", (size_t)(char*)(&sample->mIsTemplate) - (size_t)(char*)iobject, sample->mIsTemplate, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mTemplateParameters", (size_t)(char*)(&sample->mTemplateParameters) - (size_t)(char*)iobject, sample->mTemplateParameters, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected);
-	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, const StringsVec&>(&type, "GetBaseClassesNames", &CodeTool::SyntaxClass::GetBaseClassesNames, o2::ProtectSection::Public);
+	TypeInitializer::RegField(&type, "mBaseClasses", (size_t)(char*)(&sample->mBaseClasses) - (size_t)(char*)iobject, sample->mBaseClasses, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mIsMeta", (size_t)(char*)(&sample->mIsMeta) - (size_t)(char*)iobject, sample->mIsMeta, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mTemplateParameters", (size_t)(char*)(&sample->mTemplateParameters) - (size_t)(char*)iobject, sample->mTemplateParameters, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, const SyntaxClassInheritancsVec&>(&type, "GetBaseClassesNames", &CodeTool::SyntaxClass::GetBaseClassesNames, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, SyntaxClassesVec>(&type, "GetBaseClasses", &CodeTool::SyntaxClass::GetBaseClasses, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, bool>(&type, "IsTemplate", &CodeTool::SyntaxClass::IsTemplate, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, const String&>(&type, "GetTemplateParameters", &CodeTool::SyntaxClass::GetTemplateParameters, o2::ProtectSection::Public);
@@ -4415,13 +4238,20 @@ void CodeTool::SyntaxClass::InitializeType(CodeTool::SyntaxClass* sample)
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClass, bool>(&type, "IsClass", &CodeTool::SyntaxClass::IsClass, o2::ProtectSection::Public);
 }
 
+void CodeTool::SyntaxClassMeta::InitializeType(CodeTool::SyntaxClassMeta* sample)
+{
+	auto iobject = dynamic_cast<o2::IObject*>(sample);
+	TypeInitializer::RegField(&type, "mClassName", (size_t)(char*)(&sample->mClassName) - (size_t)(char*)iobject, sample->mClassName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxClassMeta, const String&>(&type, "GetClassName", &CodeTool::SyntaxClassMeta::GetClassName, o2::ProtectSection::Public);
+}
+
 void CodeTool::SyntaxType::InitializeType(CodeTool::SyntaxType* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mIsContant", (size_t)(char*)(&sample->mIsContant) - (size_t)(char*)iobject, sample->mIsContant, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mIsReference", (size_t)(char*)(&sample->mIsReference) - (size_t)(char*)iobject, sample->mIsReference, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mIsPointer", (size_t)(char*)(&sample->mIsPointer) - (size_t)(char*)iobject, sample->mIsPointer, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mIsContant", (size_t)(char*)(&sample->mIsContant) - (size_t)(char*)iobject, sample->mIsContant, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mIsReference", (size_t)(char*)(&sample->mIsReference) - (size_t)(char*)iobject, sample->mIsReference, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mIsPointer", (size_t)(char*)(&sample->mIsPointer) - (size_t)(char*)iobject, sample->mIsPointer, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxType, const String&>(&type, "GetName", &CodeTool::SyntaxType::GetName, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxType, bool>(&type, "IsContant", &CodeTool::SyntaxType::IsContant, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxType, bool>(&type, "IsReference", &CodeTool::SyntaxType::IsReference, o2::ProtectSection::Public);
@@ -4431,10 +4261,11 @@ void CodeTool::SyntaxType::InitializeType(CodeTool::SyntaxType* sample)
 void CodeTool::SyntaxVariable::InitializeType(CodeTool::SyntaxVariable* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "mType", (size_t)(char*)(&sample->mType) - (size_t)(char*)iobject, sample->mType, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mAttributes", (size_t)(char*)(&sample->mAttributes) - (size_t)(char*)iobject, sample->mAttributes, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mType", (size_t)(char*)(&sample->mType) - (size_t)(char*)iobject, sample->mType, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mAttributes", (size_t)(char*)(&sample->mAttributes) - (size_t)(char*)iobject, sample->mAttributes, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mIsStatic", (size_t)(char*)(&sample->mIsStatic) - (size_t)(char*)iobject, sample->mIsStatic, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxVariable, const SyntaxType&>(&type, "GetSynType", &CodeTool::SyntaxVariable::GetSynType, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxVariable, const String&>(&type, "GetName", &CodeTool::SyntaxVariable::GetName, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxVariable, const StringsVec&>(&type, "GetAttributes", &CodeTool::SyntaxVariable::GetAttributes, o2::ProtectSection::Public);
@@ -4444,10 +4275,14 @@ void CodeTool::SyntaxVariable::InitializeType(CodeTool::SyntaxVariable* sample)
 void CodeTool::SyntaxFunction::InitializeType(CodeTool::SyntaxFunction* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "mReturnType", (size_t)(char*)(&sample->mReturnType) - (size_t)(char*)iobject, sample->mReturnType, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mParameters", (size_t)(char*)(&sample->mParameters) - (size_t)(char*)iobject, sample->mParameters, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mReturnType", (size_t)(char*)(&sample->mReturnType) - (size_t)(char*)iobject, sample->mReturnType, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mParameters", (size_t)(char*)(&sample->mParameters) - (size_t)(char*)iobject, sample->mParameters, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mIsStatic", (size_t)(char*)(&sample->mIsStatic) - (size_t)(char*)iobject, sample->mIsStatic, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mIsVirtual", (size_t)(char*)(&sample->mIsVirtual) - (size_t)(char*)iobject, sample->mIsVirtual, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mIsContstant", (size_t)(char*)(&sample->mIsContstant) - (size_t)(char*)iobject, sample->mIsContstant, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mTemplates", (size_t)(char*)(&sample->mTemplates) - (size_t)(char*)iobject, sample->mTemplates, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFunction, const SyntaxType&>(&type, "GetReturnType", &CodeTool::SyntaxFunction::GetReturnType, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFunction, const String&>(&type, "GetName", &CodeTool::SyntaxFunction::GetName, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxFunction, const SyntaxVariablesVec&>(&type, "GetParameters", &CodeTool::SyntaxFunction::GetParameters, o2::ProtectSection::Public);
@@ -4457,11 +4292,11 @@ void CodeTool::SyntaxFunction::InitializeType(CodeTool::SyntaxFunction* sample)
 void CodeTool::SyntaxEnum::InitializeType(CodeTool::SyntaxEnum* sample)
 {
 	auto iobject = dynamic_cast<o2::IObject*>(sample);
-	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mEntries", (size_t)(char*)(&sample->mEntries) - (size_t)(char*)iobject, sample->mEntries, o2::ProtectSection::Protected);
-	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected);
+	TypeInitializer::RegField(&type, "mName", (size_t)(char*)(&sample->mName) - (size_t)(char*)iobject, sample->mName, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mEntries", (size_t)(char*)(&sample->mEntries) - (size_t)(char*)iobject, sample->mEntries, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
+	TypeInitializer::RegField(&type, "mClassSection", (size_t)(char*)(&sample->mClassSection) - (size_t)(char*)iobject, sample->mClassSection, o2::ProtectSection::Protected).AddAttribute<SerializableAttribute>();
 	auto funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEnum, const String&>(&type, "GetName", &CodeTool::SyntaxEnum::GetName, o2::ProtectSection::Public);
-	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEnum, const StringsVec&>(&type, "GetEntries", &CodeTool::SyntaxEnum::GetEntries, o2::ProtectSection::Public);
+	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEnum, const StringStringDict&>(&type, "GetEntries", &CodeTool::SyntaxEnum::GetEntries, o2::ProtectSection::Public);
 	funcInfo = TypeInitializer::RegFunction<CodeTool::SyntaxEnum, SyntaxProtectionSection>(&type, "GetClassSection", &CodeTool::SyntaxEnum::GetClassSection, o2::ProtectSection::Public);
 }
 
@@ -4873,31 +4708,17 @@ void RegReflectionTypes()
 	o2::Reflection::InitializeType<o2::UIContextMenu::Item>();
 	o2::Reflection::InitializeType<o2::UIMenuPanel::Item>();
 	o2::Reflection::InitializeType<o2::Curve::Key>();
-	o2::Reflection::InitializeType<CodeTool::Tmp>();
-	o2::Reflection::InitializeType<CodeTool::ICppSyntaxStatementParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxNamespaceParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxMultilineCommentParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxCommentParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxPragmaParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxIncludeParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxDefineParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxIfMacroParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxClassParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxStructParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxTemplateParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxTypedefParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxEnumParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxUsingParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxPublicSectionParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxPrivateSectionParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxProtectedSectionParser>();
-	o2::Reflection::InitializeType<CodeTool::CppSyntaxFriendParser>();
+	o2::Reflection::InitializeType<CodeTool::ParseFileInfo>();
+	o2::Reflection::InitializeType<CodeTool::CodeToolCache>();
 	o2::Reflection::InitializeType<CodeTool::SyntaxTree>();
 	o2::Reflection::InitializeType<CodeTool::SyntaxFile>();
 	o2::Reflection::InitializeType<CodeTool::SyntaxEntry>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxComment>();
 	o2::Reflection::InitializeType<CodeTool::SyntaxSection>();
 	o2::Reflection::InitializeType<CodeTool::SyntaxNamespace>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxClassInheritance>();
 	o2::Reflection::InitializeType<CodeTool::SyntaxClass>();
+	o2::Reflection::InitializeType<CodeTool::SyntaxClassMeta>();
 	o2::Reflection::InitializeType<CodeTool::SyntaxType>();
 	o2::Reflection::InitializeType<CodeTool::SyntaxVariable>();
 	o2::Reflection::InitializeType<CodeTool::SyntaxFunction>();
@@ -5004,29 +4825,17 @@ void RegReflectionTypes()
 	TypeInitializer::AddBaseType<o2::UIContextMenu::Item, o2::ISerializable>();
 	TypeInitializer::AddBaseType<o2::UIMenuPanel::Item, o2::ISerializable>();
 	TypeInitializer::AddBaseType<o2::Curve::Key, o2::ISerializable>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxNamespaceParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxMultilineCommentParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxCommentParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxPragmaParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxIncludeParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxDefineParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxIfMacroParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxClassParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxStructParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxTemplateParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxTypedefParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxEnumParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxUsingParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxPublicSectionParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxPrivateSectionParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxProtectedSectionParser, CodeTool::ICppSyntaxStatementParser>();
-	TypeInitializer::AddBaseType<CodeTool::CppSyntaxFriendParser, CodeTool::ICppSyntaxStatementParser>();
+	TypeInitializer::AddBaseType<CodeTool::ParseFileInfo, o2::ISerializable>();
+	TypeInitializer::AddBaseType<CodeTool::CodeToolCache, o2::ISerializable>();
 	TypeInitializer::AddBaseType<CodeTool::SyntaxTree, o2::ISerializable>();
 	TypeInitializer::AddBaseType<CodeTool::SyntaxFile, o2::ISerializable>();
 	TypeInitializer::AddBaseType<CodeTool::SyntaxEntry, o2::ISerializable>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxComment, CodeTool::SyntaxEntry>();
 	TypeInitializer::AddBaseType<CodeTool::SyntaxSection, CodeTool::SyntaxEntry>();
 	TypeInitializer::AddBaseType<CodeTool::SyntaxNamespace, CodeTool::SyntaxSection>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxClassInheritance, CodeTool::SyntaxEntry>();
 	TypeInitializer::AddBaseType<CodeTool::SyntaxClass, CodeTool::SyntaxSection>();
+	TypeInitializer::AddBaseType<CodeTool::SyntaxClassMeta, CodeTool::SyntaxEntry>();
 	TypeInitializer::AddBaseType<CodeTool::SyntaxType, CodeTool::SyntaxEntry>();
 	TypeInitializer::AddBaseType<CodeTool::SyntaxVariable, CodeTool::SyntaxEntry>();
 	TypeInitializer::AddBaseType<CodeTool::SyntaxFunction, CodeTool::SyntaxEntry>();

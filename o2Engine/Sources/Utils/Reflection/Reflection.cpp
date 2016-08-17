@@ -15,6 +15,7 @@ namespace o2
 		mLastGivenTypeId(1)
 	{
 		mInstance = this;
+		InitializeFundamentalTypes();
 	}
 
 	Reflection::~Reflection()
@@ -25,12 +26,10 @@ namespace o2
 
 	Reflection& Reflection::Instance()
 	{
-		return *mInstance;
-	}
+		if (!mInstance)
+			mInstance = new Reflection();
 
-	void Reflection::Initialize()
-	{
-		mInstance = new Reflection();
+		return *mInstance;
 	}
 
 	const Vector<Type*>& Reflection::GetTypes()
@@ -79,38 +78,13 @@ namespace o2
 
 	void Reflection::InitializeFundamentalTypes()
 	{
-		InitializeFundamentalType<int>();
-		InitializeFundamentalType<bool>();
-		InitializeFundamentalType<char>();
-		InitializeFundamentalType<wchar_t>();
-		InitializeFundamentalType<short int>();
-		InitializeFundamentalType<long int>();
-		InitializeFundamentalType<long long int>();
-		InitializeFundamentalType<unsigned char>();
-		InitializeFundamentalType<unsigned short int>();
-		InitializeFundamentalType<unsigned int>();
-		InitializeFundamentalType<unsigned long int>();
-		InitializeFundamentalType<unsigned long long int>();
-		InitializeFundamentalType<float>();
-		InitializeFundamentalType<double>();
-		InitializeFundamentalType<Basis>();
-		InitializeFundamentalType<RectI>();
-		InitializeFundamentalType<Color4>();
-		InitializeFundamentalType<RectF>();
-		InitializeFundamentalType<Vec2F>();
-		InitializeFundamentalType<Vec2I>();
-		//InitializeFundamentalType<Vertex2>();
-		InitializeFundamentalType<String>();
-		InitializeFundamentalType<WString>();
-		InitializeFundamentalType<DataNode>();
-
 		FundamentalType<void>::type.mName = typeid(void).name();
 		FundamentalType<void>::type.mId = mInstance->mLastGivenTypeId++;
-		FundamentalType<void>::type.mTypeAgent = new Type::TypeCreator<int>();
+		FundamentalType<void>::type.mSampleCreator = new Type::SampleCreator<int>();
 
 		Type::Dummy::type.mName = "Unknown";
 		Type::Dummy::type.mId = mInstance->mLastGivenTypeId++;
-		Type::Dummy::type.mTypeAgent = new Type::TypeCreator<int>();
+		Type::Dummy::type.mSampleCreator = new Type::SampleCreator<int>();
 
 		mInstance->mTypes.Add(&FundamentalType<void>::type);
 	}
@@ -122,7 +96,7 @@ namespace o2
 
 		Type* newType = new Type(type->mName + "*");
 		newType->mId = mInstance->mLastGivenTypeId++;
-		newType->mTypeAgent = new Type::TypeCreator<void*>();
+		newType->mSampleCreator = new Type::SampleCreator<void*>();
 		newType->mSize = sizeof(void*);
 		newType->mPointer = type->mPointer + 1;
 

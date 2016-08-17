@@ -5,6 +5,11 @@
 
 namespace o2
 {
+	metaclass TestClass: public IObject
+	{
+
+	};
+
 	// -----------------
 	// Text label widget
 	// -----------------
