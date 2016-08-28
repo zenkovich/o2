@@ -317,18 +317,13 @@ void o2::Test::InitializeType(o2::Type* type)
 	o2::TypeInitializer::RegFunction<thisclass, void, String, int>(type, "Func", &thisclass::Func, ProtectSection::Public);
 }
 
-o2::Type* o2::Test2::type = o2::Reflection::InitializeType<o2::Test2>("Test2");
-void o2::Test2::InitializeType(o2::Type* type)
+CLASS_META(o2::Test2)
 {
-	typedef o2::Test2 thisclass;
-	thisclass::type = type;
-	o2::TypeInitializer::CheckTypeResolving(thisclass::type);
-	thisclass* __this = 0;
+	BASE_CLASS(o2::Test);
 
-	o2::TypeInitializer::AddBaseType<o2::Test>(type);
+	PUBLIC_FIELD(e);
+	PUBLIC_FIELD(f);
 
-	o2::TypeInitializer::RegField<decltype(e)>(type, "e", (size_t)(&__this->e), __this->e, ProtectSection::Public);
-	o2::TypeInitializer::RegField<decltype(f)>(type, "f", (size_t)(&__this->f), __this->f, ProtectSection::Public);
-
-	o2::TypeInitializer::RegFunction<thisclass, void, int, String>(type, "Func", &thisclass::Func, ProtectSection::Public);
+	PUBLIC_FUNCTION(Func, void, int, String);
 }
+END_META;

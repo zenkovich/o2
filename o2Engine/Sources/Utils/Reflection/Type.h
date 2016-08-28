@@ -240,9 +240,42 @@ namespace o2
 	};
 
 #define CLASS_META(NAME) \
-    o2::Type* NAME::type = o2::Reflection::InitializeType<NAME>(); 
+    o2::Type* NAME::type = o2::Reflection::InitializeType<NAME>(#NAME); \
+    void NAME::InitializeType(o2::Type* type)                           \
+	{                                                                   \
+	    typedef NAME thisclass;                                         \
+	    thisclass::type = type;                                         \
+	    o2::TypeInitializer::CheckTypeResolving(thisclass::type);       \
+	    thisclass* __this = 0;                                          
 
+#define BASE_CLASS(NAME) \
+    o2::TypeInitializer::AddBaseType<NAME>(type)
 
+#define FIELD(NAME, PROTECT_SECTION) \
+    o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::PROTECT_SECTION)
+
+#define PUBLIC_FIELD(NAME) \
+    o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Public)
+
+#define PRIVATE_FIELD(NAME) \
+    o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Private)
+
+#define PROTECTED_FIELD(NAME) \
+    o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Protected)
+
+#define FUNCTION(PROTECT_SECTION, NAME, RETURN_TYPE, ...) \
+    o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
+
+#define PUBLIC_FUNCTION(NAME, RETURN_TYPE, ...) \
+    o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Public)
+
+#define PRIVATE_FUNCTION(NAME, RETURN_TYPE, ...) \
+    o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Private)
+
+#define PROTECTED_FUNCTION(NAME, RETURN_TYPE, ...) \
+    o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Protected)
+
+#define END_META }
 
 	template<typename _type>
 	_type* Type::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
