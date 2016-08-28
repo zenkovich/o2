@@ -28,6 +28,23 @@ namespace o2
 		IOBJECT(Test2);
 	};
 
+	template<typename T>
+	class TempTest: public IObject
+	{
+	public:
+		int a;
+		int b;
+
+		IOBJECT(TempTest);
+	};
+
+	CLASS_TEMPLATE_META(TempTest, typename T)
+	{
+		PUBLIC_FIELD(a);
+		PUBLIC_FIELD(b);
+	}
+	END_META;
+
 	// -----------------
 	// Text label widget
 	// -----------------

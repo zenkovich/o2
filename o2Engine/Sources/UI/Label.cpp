@@ -317,6 +317,8 @@ void o2::Test::InitializeType(o2::Type* type)
 	o2::TypeInitializer::RegFunction<thisclass, void, String, int>(type, "Func", &thisclass::Func, ProtectSection::Public);
 }
 
+REG_TYPE(o2::TempTest<float>);
+
 CLASS_META(o2::Test2)
 {
 	BASE_CLASS(o2::Test);
@@ -324,6 +326,6 @@ CLASS_META(o2::Test2)
 	PUBLIC_FIELD(e);
 	PUBLIC_FIELD(f);
 
-	PUBLIC_FUNCTION(Func, void, int, String);
+	PUBLIC_FUNCTION(void, Func, int, String);
 }
 END_META;

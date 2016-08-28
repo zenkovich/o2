@@ -246,6 +246,15 @@ namespace o2
 	    typedef NAME thisclass;                                         \
 	    thisclass::type = type;                                         \
 	    o2::TypeInitializer::CheckTypeResolving(thisclass::type);       \
+	    thisclass* __this = 0;      
+
+#define CLASS_TEMPLATE_META(NAME, ...) \
+    template<__VA_ARGS__>                                               \
+    void NAME<__VA_ARGS__>::InitializeType(o2::Type* type)              \
+	{                                                                   \
+	    typedef NAME<__VA_ARGS__> thisclass;                            \
+	    thisclass::type = type;                                         \
+	    o2::TypeInitializer::CheckTypeResolving(thisclass::type);       \
 	    thisclass* __this = 0;                                          
 
 #define BASE_CLASS(NAME) \
@@ -263,16 +272,16 @@ namespace o2
 #define PROTECTED_FIELD(NAME) \
     o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Protected)
 
-#define FUNCTION(PROTECT_SECTION, NAME, RETURN_TYPE, ...) \
+#define FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
     o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
 
-#define PUBLIC_FUNCTION(NAME, RETURN_TYPE, ...) \
+#define PUBLIC_FUNCTION(RETURN_TYPE, NAME, ...) \
     o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Public)
 
-#define PRIVATE_FUNCTION(NAME, RETURN_TYPE, ...) \
+#define PRIVATE_FUNCTION(RETURN_TYPE, NAME, ...) \
     o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Private)
 
-#define PROTECTED_FUNCTION(NAME, RETURN_TYPE, ...) \
+#define PROTECTED_FUNCTION(RETURN_TYPE, NAME, ...) \
     o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Protected)
 
 #define END_META }
