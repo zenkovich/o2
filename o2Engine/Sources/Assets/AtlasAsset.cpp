@@ -7,7 +7,7 @@ namespace o2
 {
 	Type::Id AtlasAsset::MetaInfo::GetAssetType() const
 	{
-		return AtlasAsset::type.ID();
+		return TypeOf(AtlasAsset).ID();
 	}
 
 	bool AtlasAsset::MetaInfo::IsEqual(IMetaInfo* other) const

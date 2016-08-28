@@ -97,6 +97,6 @@ namespace o2
 
 	Type::Id AnimationAsset::MetaInfo::GetAssetType() const
 	{
-		return AnimationAsset::type.ID();
+		return TypeOf(AnimationAsset).ID();
 	}
 }

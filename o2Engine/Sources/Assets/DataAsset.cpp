@@ -99,6 +99,6 @@ namespace o2
 
 	Type::Id DataAsset::MetaInfo::GetAssetType() const
 	{
-		return DataAsset::type.ID();
+		return TypeOf(DataAsset).ID();
 	}
 }

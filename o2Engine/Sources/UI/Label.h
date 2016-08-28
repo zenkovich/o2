@@ -5,9 +5,27 @@
 
 namespace o2
 {
-	metaclass TestClass: public IObject
+	class Test: public IObject
 	{
+	public:
+		int a;
+		String b;
 
+		void Func(int c, String d) {}
+		void Func(String c, int d) {}
+
+		IOBJECT(Test);
+	};
+
+	class Test2: public Test
+	{
+	public:
+		int e;
+		String f;
+
+		void Func(int g, String h) {}
+
+		IOBJECT(Test2);
 	};
 
 	// -----------------

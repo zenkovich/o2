@@ -204,8 +204,11 @@ namespace o2
 	{
 	public:
 		// Adds basic type
-		template<typename _type, typename _baseType>
-		static void AddBaseType();
+		template<typename _type>
+		static void AddBaseType(Type*& type);
+
+		// Checks for type inheritance resolving
+		static void CheckTypeResolving(Type*& type);
 
 		// Registers field in type
 		template<typename _type>
@@ -231,18 +234,65 @@ namespace o2
 		template<typename _class_type, typename _res_type, typename ... _args>
 		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section);
 
-		// Registers parameter in function info
-		template<typename _type>
-		static FunctionInfo* RegFuncParam(FunctionInfo* info, const String& name);
-	}; 
-	
+	protected:
+		static Vector<Type**>             mInitializedTypes;
+		static Dictionary<Type**, Type**> mUnresolvedBaseTypes;
+	};
 
-	template<typename _type, typename _baseType>
-	void TypeInitializer::AddBaseType()
+#define CLASS_META(NAME) \
+    o2::Type* NAME::type = o2::Reflection::InitializeType<NAME>(); 
+
+
+
+	template<typename _type>
+	_type* Type::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
 	{
-		_type::type.mBaseTypes.Add(&_baseType::type);
-		_type::type.mFields.Insert(_baseType::type.mFields.Select<FieldInfo*>([](FieldInfo* x) { return x->Clone(); }), 0);
-		_type::type.mFunctions.Insert(_baseType::type.mFunctions.Select<FunctionInfo*>([](FunctionInfo* x) { return x->Clone(); }), 0);
+		int delPos = path.Find("/");
+		WString pathPart = path.SubStr(0, delPos);
+
+		for (auto field : mFields)
+		{
+			if (field->mName == pathPart)
+			{
+				if (delPos == -1)
+				{
+					fieldInfo = field;
+					return field->GetValuePtr<_type>(object);
+				}
+				else
+				{
+					char* val = field->GetValuePtr<char>(object);
+
+					if (!val)
+						return nullptr;
+
+					return (_type*)(field->SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo));
+				}
+			}
+		}
+
+		return nullptr;
+	}
+
+	template<typename _res_type, typename ... _args>
+	_res_type Type::Invoke(const String& name, void* object, _args ... args)
+	{
+		FunctionInfo* func = GetFunction(name);
+		if (func)
+			return func->Invoke(object, args ...);
+
+		return _res_type();
+	}
+
+	template<typename _type>
+	void TypeInitializer::AddBaseType(Type*& type)
+	{
+		Type*& baseType = _type::type;
+
+		if (mInitializedTypes.Contains(&baseType))
+			type->mBaseTypes.Add(baseType);
+		else
+			mUnresolvedBaseTypes[&baseType] = &type;
 	}
 
 	template<typename _type>
@@ -311,61 +361,5 @@ namespace o2
 		type->mFunctions.Add(funcInfo);
 
 		return funcInfo;
-	}
-
-	template<typename _type>
-	FunctionInfo* TypeInitializer::RegFuncParam(FunctionInfo* info, const String& name)
-	{
-		auto valType = &TypeOf(_type);
-
-		FunctionInfo::Parameter param;
-		param.type = valType;
-		param.name = name;
-		param.isPointer = std::is_pointer<_type>::value;
-		param.isConstant = std::is_const<_type>::value;
-		param.isReference = std::is_reference<_type>::value;
-		info->mParameters.Add(param);
-
-		return info;
-	}
-
-	template<typename _type>
-	_type* Type::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
-	{
-		int delPos = path.Find("/");
-		WString pathPart = path.SubStr(0, delPos);
-
-		for (auto field : mFields)
-		{
-			if (field->mName == pathPart)
-			{
-				if (delPos == -1)
-				{
-					fieldInfo = field;
-					return field->GetValuePtr<_type>(object);
-				}
-				else
-				{
-					char* val = field->GetValuePtr<char>(object);
-
-					if (!val)
-						return nullptr;
-
-					return (_type*)(field->SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo));
-				}
-			}
-		}
-
-		return nullptr;
-	}
-
-	template<typename _res_type, typename ... _args>
-	_res_type Type::Invoke(const String& name, void* object, _args ... args)
-	{
-		FunctionInfo* func = GetFunction(name);
-		if (func)
-			return func->Invoke(object, args ...);
-
-		return _res_type();
 	}
 }

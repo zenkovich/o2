@@ -54,38 +54,40 @@ namespace o2
 	};
 
 	// Serialization implementation macros
-#define SERIALIZABLE(CLASS)                                         \
-private:                                                            \
-	static Type type;								                \
-                                                                    \
-	friend struct o2::Type::TypeCreator<CLASS>;                     \
-                                                                    \
-    template<typename _type>                                        \
-	friend const Type& o2::GetTypeOf();                               \
-    friend class o2::TypeInitializer;                               \
-    friend class o2::Reflection;                                    \
-    template<typename _type>                                        \
-    friend struct o2::Type::TypeCreator;                            \
-    friend class o2::DataNode;                                      \
-                                                                    \
-public:                                                             \
-	CLASS* Clone() const { return mnew CLASS(*this); }              \
-	Type& GetType() const { return type; };	                        \
-    DataNode Serialize() const                                      \
-    {													            \
-        return SerializeBasic((const void*)this);                   \
-	}													            \
-    void Deserialize(const DataNode& node)                          \
-    {													            \
-        DeserializeBasic(node, (const void*)this);                  \
-	}													            \
-	CLASS& operator=(const DataNode& node) 			                \
-	{												                \
-		Deserialize(node); return *this; 			                \
-	} 												                \
-	operator DataNode() 							                \
-	{ 												                \
-		return Serialize(); 						                \
-	}            										            \
-	static void InitializeType(CLASS* sample)   
+#define SERIALIZABLE(CLASS)                            \
+private:                                               \
+	static o2::Type* type;							   \
+                                                       \
+    template<typename _type>                           \
+	friend const o2::Type& o2::GetTypeOf();            \
+                                                       \
+    template<typename _type>                           \
+    friend struct o2::Type::SampleCreator;             \
+                                                       \
+    friend class o2::TypeInitializer;                  \
+    friend class o2::Reflection;                       \
+    friend class o2::DataNode;                         \
+                                                       \
+public:                                                \
+	CLASS* Clone() const { return mnew CLASS(*this); } \
+	o2::Type& GetType() const { return *type; };       \
+    o2::DataNode Serialize() const                     \
+    {												   \
+        return SerializeBasic((const void*)this);      \
+	}												   \
+    void Deserialize(const o2::DataNode& node)         \
+    {												   \
+        DeserializeBasic(node, (const void*)this);     \
+	}												   \
+	CLASS& operator=(const o2::DataNode& node) 		   \
+	{												   \
+		Deserialize(node); return *this; 			   \
+	} 												   \
+	operator o2::DataNode() 						   \
+	{ 												   \
+		return Serialize(); 						   \
+	}            									   \
+                                                       \
+private:                                               \
+	static void InitializeType(o2::Type* type)      
 }

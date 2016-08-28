@@ -415,7 +415,7 @@ namespace o2
 	{
 		for (auto conv : mDataConverters)
 		{
-			if (conv->CheckType(&_TypeOf<_type>()))
+			if (conv->CheckType(&GetTypeOf<_type>()))
 			{
 				conv->FromData(&value, *this);
 				return;
@@ -460,7 +460,7 @@ namespace o2
 		{
 			for (auto conv : mDataConverters)
 			{
-				if (conv->CheckType(&_TypeOf<_type>()))
+				if (conv->CheckType(&GetTypeOf<_type>()))
 				{
 					conv->ToData(&value, *this);
 					return *this;
@@ -561,7 +561,7 @@ namespace o2
 	{
 		for (auto conv : mDataConverters)
 		{
-			if (conv->CheckType(&_TypeOf<_type>()))
+			if (conv->CheckType(&GetTypeOf<_type>()))
 			{
 				conv->FromData(&object, data);
 				return;
@@ -576,7 +576,7 @@ namespace o2
 	{
 		for (auto conv : mDataConverters)
 		{
-			if (conv->CheckType(&_TypeOf<_type>()))
+			if (conv->CheckType(&GetTypeOf<_type>()))
 			{
 				conv->ToData(&object, data);
 				return;

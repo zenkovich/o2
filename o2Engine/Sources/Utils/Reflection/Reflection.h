@@ -40,10 +40,10 @@ namespace o2
 
 	public:
 		template<typename _type>
-		static Type* InitializeType();
+		static Type* InitializeType(const char* name);
 
 		template<typename _type>
-		static Type* InitializeFundamentalType();
+		static Type* InitializeFundamentalType(const char* name);
 
 		// Initializes enum
 		template<typename _type>
@@ -75,10 +75,10 @@ namespace o2
 	};
 
 #define REG_TYPE(CLASS) \
-	o2::Type* CLASS::type = Reflection::InitializeType<CLASS>()
+	o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
 
 #define REG_FUNDAMENTAL_TYPE(TYPE) \
-	o2::Type o2::FundamentalType<TYPE>::type(#TYPE); 
+	o2::Type* o2::FundamentalType<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
 
 	template<typename _type>
 	_type Reflection::GetEnumValue(const String& name)
@@ -105,14 +105,12 @@ namespace o2
 	}
 
 	template<typename _type>
-	Type* Reflection::InitializeType()
+	Type* Reflection::InitializeType(const char* name)
 	{
-		Type* res = new Type();
+		Type* res = new Type(name, new Type::SampleCreator<_type>(), sizeof(_type));
 
 		_type::InitializeType(res);
-		res->mId            = mInstance->mLastGivenTypeId++;
-		res->mSampleCreator = new Type::SampleCreator<_type>();
-		res->mSize          = sizeof(_type);
+		res->mId = mInstance->mLastGivenTypeId++;
 
 		Reflection::Instance().mTypes.Add(res);
 
@@ -120,14 +118,14 @@ namespace o2
 	}
 
 	template<typename _type>
-	Type* Reflection::InitializeFundamentalType()
+	Type* Reflection::InitializeFundamentalType(const char* name)
 	{
-		FundamentalType<_type>::type.SetName(typeid(_type).name());
-		FundamentalType<_type>::type.mId = mInstance->mLastGivenTypeId++;
-		FundamentalType<_type>::type.mSampleCreator = new Type::SampleCreator<_type>();
-		FundamentalType<_type>::type.mSize = sizeof(_type);
+		Type* res = new Type(name, new Type::SampleCreator<_type>(), sizeof(_type));
 
-		Reflection::Instance().mTypes.Add(&FundamentalType<_type>::type);
+		res->mId = mInstance->mLastGivenTypeId++;
+		Reflection::Instance().mTypes.Add(res);
+
+		return res;
 	}
 
 	template<typename _type>

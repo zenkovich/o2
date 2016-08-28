@@ -7,7 +7,7 @@ namespace o2
 {
 	Type::Id BinaryAsset::MetaInfo::GetAssetType() const
 	{
-		return BinaryAsset::type.ID();
+		return TypeOf(BinaryAsset).ID();
 	}
 
 	BinaryAsset::BinaryAsset():

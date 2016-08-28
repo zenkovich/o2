@@ -78,15 +78,11 @@ namespace o2
 
 	void Reflection::InitializeFundamentalTypes()
 	{
-		FundamentalType<void>::type.mName = typeid(void).name();
-		FundamentalType<void>::type.mId = mInstance->mLastGivenTypeId++;
-		FundamentalType<void>::type.mSampleCreator = new Type::SampleCreator<int>();
+		FundamentalType<void>::type->mId = mInstance->mLastGivenTypeId++;
+		Type::Dummy::type->mId = mInstance->mLastGivenTypeId++;
 
-		Type::Dummy::type.mName = "Unknown";
-		Type::Dummy::type.mId = mInstance->mLastGivenTypeId++;
-		Type::Dummy::type.mSampleCreator = new Type::SampleCreator<int>();
-
-		mInstance->mTypes.Add(&FundamentalType<void>::type);
+		mInstance->mTypes.Add(FundamentalType<void>::type);
+		mInstance->mTypes.Add(Type::Dummy::type);
 	}
 
 	const Type* Reflection::InitializePointerType(const Type* type)
@@ -94,7 +90,7 @@ namespace o2
 		if (type->mPtrType)
 			return type->mPtrType;
 
-		Type* newType = new Type(type->mName + "*");
+		Type* newType = new Type(type->mName + "*", new Type::SampleCreator<void*>(), sizeof(void*));
 		newType->mId = mInstance->mLastGivenTypeId++;
 		newType->mSampleCreator = new Type::SampleCreator<void*>();
 		newType->mSize = sizeof(void*);
@@ -108,34 +104,31 @@ namespace o2
 		return newType;
 	}
 
-	Type IObject::type("o2::IObject");
-	Type FundamentalType<int>::type("int");
-	Type FundamentalType<bool>::type("bool");
-	Type FundamentalType<char>::type("char");
-	Type FundamentalType<wchar_t>::type("wchar_t");
-	Type FundamentalType<short int>::type("short int");
-	Type FundamentalType<long int>::type("long int");
-	Type FundamentalType<long long int>::type("long long int");
-	Type FundamentalType<unsigned char>::type("unsigned char");
-	Type FundamentalType<unsigned short int>::type("unsigned short int");
-	Type FundamentalType<unsigned int>::type("unsigned int");
-	Type FundamentalType<unsigned long int>::type("unsigned long int");
-	Type FundamentalType<unsigned long long int>::type("unsigned long long int");
-	Type FundamentalType<float>::type("float");
-	Type FundamentalType<double>::type("double");
-	Type FundamentalType<long double>::type("long double");
-	Type FundamentalType<void>::type("void");
-	Type FundamentalType<float const>::type("float const");
-	Type FundamentalType<int const>::type("int const");
-	Type FundamentalType<unsigned int const>::type("unsigned int const");
-	Type FundamentalType<Basis>::type("o2::Basis");
-	Type FundamentalType<Color4>::type("o2::Color4");
-	Type FundamentalType<RectF>::type("o2::RectF");
-	Type FundamentalType<RectI>::type("o2::RectI");
-	Type FundamentalType<Vec2F>::type("o2::Vec2F");
-	Type FundamentalType<Vec2I>::type("o2::Vec2I");
-	Type FundamentalType<Vertex2>::type("o2::Vertex2");
-	Type FundamentalType<String>::type("o2::String");
-	Type FundamentalType<WString>::type("o2::WString");
-	Type FundamentalType<DataNode>::type("o2::DataNode");
+	Type* FundamentalType<void>::type = new Type("void", nullptr, 0);
+
+	REG_FUNDAMENTAL_TYPE(int);
+	REG_FUNDAMENTAL_TYPE(bool);
+	REG_FUNDAMENTAL_TYPE(char);
+	REG_FUNDAMENTAL_TYPE(wchar_t);
+	REG_FUNDAMENTAL_TYPE(short int);
+	REG_FUNDAMENTAL_TYPE(long int);
+	REG_FUNDAMENTAL_TYPE(long long int);
+	REG_FUNDAMENTAL_TYPE(unsigned char);
+	REG_FUNDAMENTAL_TYPE(unsigned short int);
+	REG_FUNDAMENTAL_TYPE(unsigned int);
+	REG_FUNDAMENTAL_TYPE(unsigned long int);
+	REG_FUNDAMENTAL_TYPE(unsigned long long int);
+	REG_FUNDAMENTAL_TYPE(float);
+	REG_FUNDAMENTAL_TYPE(double);
+	REG_FUNDAMENTAL_TYPE(long double);
+	REG_FUNDAMENTAL_TYPE(Basis);
+	REG_FUNDAMENTAL_TYPE(Color4);
+	REG_FUNDAMENTAL_TYPE(RectF);
+	REG_FUNDAMENTAL_TYPE(RectI);
+	REG_FUNDAMENTAL_TYPE(Vec2F);
+	REG_FUNDAMENTAL_TYPE(Vec2I);
+	REG_FUNDAMENTAL_TYPE(Vertex2);
+	REG_FUNDAMENTAL_TYPE(String);
+	REG_FUNDAMENTAL_TYPE(WString);
+	REG_FUNDAMENTAL_TYPE(DataNode);
 }

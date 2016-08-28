@@ -23,13 +23,11 @@ namespace o2
 		virtual Type& GetType() const = 0;
 
 	private:
-		static Type type;
+		static Type* type;
 
 		template<typename _type>
 		friend const Type& o2::GetTypeOf();
 	};
-
-#define metaclass class
 
 	// IObject header definition
 #define IOBJECT(CLASS)  							   \
@@ -40,7 +38,7 @@ private:                                               \
 	friend const o2::Type& o2::GetTypeOf();            \
                                                        \
     template<typename _type>                           \
-    friend struct o2::Type::TypeCreator;               \
+    friend struct o2::Type::SampleCreator;             \
                                                        \
     friend class o2::TypeInitializer;                  \
     friend class o2::Reflection;                       \

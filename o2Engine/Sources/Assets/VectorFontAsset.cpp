@@ -15,7 +15,7 @@ namespace o2
 
 	Type::Id VectorFontAsset::MetaInfo::GetAssetType() const
 	{
-		return VectorFontAsset::type.ID();
+		return TypeOf(VectorFontAsset).ID();
 	}
 
 	bool VectorFontAsset::MetaInfo::IsEqual(IMetaInfo* other) const

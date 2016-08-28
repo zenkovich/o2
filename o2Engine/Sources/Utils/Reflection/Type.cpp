@@ -9,10 +9,6 @@ namespace o2
 		mId(0), mPointer(0), mPtrType(nullptr), mUnptrType(nullptr), mName(name),
 		mSampleCreator(creator), mSize(size)
 	{
-		InitializeType();
-		mId = Reflection::Instance().mLastGivenTypeId++;
-
-		Reflection::Instance().mTypes.Add(&_type::type);
 	}
 
 	Type::~Type()
@@ -180,5 +176,21 @@ namespace o2
 		return other.mId == mId;
 	}
 
-	Type Type::Dummy::type("Unknown", nullptr, 0);
+	Type* Type::Dummy::type = new Type("Unknown", nullptr, 0);
+
+	void TypeInitializer::CheckTypeResolving(Type*& type)
+	{
+		mInitializedTypes.Add(&type);
+
+		for (auto x : mUnresolvedBaseTypes)
+		{
+			if (x.Key() == &type)
+			{
+				(*x.Value())->mBaseTypes.Add(type);
+			}
+		}
+
+		mUnresolvedBaseTypes.RemoveAll([=](auto x) { return x.Key() == &type; });
+	}
+
 }

@@ -217,7 +217,7 @@ namespace o2
 
 	Type::Id ImageAsset::MetaInfo::GetAssetType() const
 	{
-		return ImageAsset::type.ID();
+		return TypeOf(ImageAsset).ID();
 	}
 
 	bool ImageAsset::MetaInfo::IsEqual(IMetaInfo* other) const

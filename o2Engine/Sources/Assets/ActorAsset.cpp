@@ -123,6 +123,6 @@ namespace o2
 
 	Type::Id ActorAsset::MetaInfo::GetAssetType() const
 	{
-		return ActorAsset::type.ID();
+		return TypeOf(ActorAsset).ID();
 	}
 }

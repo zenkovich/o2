@@ -314,7 +314,7 @@ namespace o2
 
 		for (auto child : mItemsLayout->mChilds)
 		{
-			if (child->layout.mAbsoluteRect.IsInside(point) && child->GetType() == UIContextMenuItem::type)
+			if (child->layout.mAbsoluteRect.IsInside(point) && child->GetType() == TypeOf(UIContextMenuItem))
 				return (UIContextMenuItem*)child;
 		}
 
@@ -404,7 +404,7 @@ namespace o2
 
 		for (auto child : mItemsLayout->mChilds)
 		{
-			if (child->GetType() == UIContextMenuItem::type)
+			if (child->GetType() == TypeOf(UIContextMenuItem))
 			{
 				auto item = (UIContextMenuItem*)child;
 
