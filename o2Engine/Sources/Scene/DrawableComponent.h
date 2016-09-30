@@ -36,7 +36,7 @@ namespace o2
 		SERIALIZABLE(DrawableComponent);
 
 	protected:
-		float mDrawingDepth; // Drawing depth. Components with higher depth will be drawn later
+		float mDrawingDepth; // Drawing depth. Components with higher depth will be drawn later @SERIALIZABLE
 
 	protected:
 		// Calls when actor changed layer

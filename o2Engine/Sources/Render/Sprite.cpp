@@ -1102,3 +1102,81 @@ namespace o2
 		INITIALIZE_PROPERTY(Sprite, sliceBorder, SetSliceBorder, GetSliceBorder);
 	}
 }
+ 
+CLASS_META(o2::Sprite)
+{
+	BASE_CLASS(o2::IRectDrawable);
+
+	PUBLIC_FIELD(texture);
+	PUBLIC_FIELD(textureSrcRect);
+	PUBLIC_FIELD(imageAssetId);
+	PUBLIC_FIELD(imageAssetPath);
+	PUBLIC_FIELD(imageAsset);
+	PUBLIC_FIELD(bitmap);
+	PUBLIC_FIELD(leftTopColor);
+	PUBLIC_FIELD(rightTopColor);
+	PUBLIC_FIELD(leftBottomColor);
+	PUBLIC_FIELD(rightBottomColor);
+	PUBLIC_FIELD(mode);
+	PUBLIC_FIELD(fill);
+	PUBLIC_FIELD(sliceBorder);
+	PROTECTED_FIELD(mTextureSrcRect);
+	PROTECTED_FIELD(mCornersColors);
+	PROTECTED_FIELD(mImageAssetId);
+	PROTECTED_FIELD(mAtlasAssetId);
+	PROTECTED_FIELD(mMode).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSlices).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mFill).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMesh);
+	PROTECTED_FIELD(mMeshBuildFunc);
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, SetTexture, TextureRef);
+	PUBLIC_FUNCTION(TextureRef, GetTexture);
+	PUBLIC_FUNCTION(void, SetTextureSrcRect, const RectI&);
+	PUBLIC_FUNCTION(RectI, GetTextureSrcRect);
+	PUBLIC_FUNCTION(void, SetCornerColor, Corner, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetCornerColor, Corner);
+	PUBLIC_FUNCTION(void, SetLeftTopColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetLeftTopCorner);
+	PUBLIC_FUNCTION(void, SetRightTopColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetRightTopCorner);
+	PUBLIC_FUNCTION(void, SetRightBottomColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetRightBottomCorner);
+	PUBLIC_FUNCTION(void, SetLeftBottomColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetLeftBottomCorner);
+	PUBLIC_FUNCTION(void, SetFill, float);
+	PUBLIC_FUNCTION(float, GetFill);
+	PUBLIC_FUNCTION(void, SetMode, SpriteMode);
+	PUBLIC_FUNCTION(SpriteMode, GetMode);
+	PUBLIC_FUNCTION(void, SetSliceBorder, const RectI&);
+	PUBLIC_FUNCTION(RectI, GetSliceBorder);
+	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAsset&);
+	PUBLIC_FUNCTION(void, LoadFromImage, const String&);
+	PUBLIC_FUNCTION(void, LoadFromImage, AssetId);
+	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
+	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*);
+	PUBLIC_FUNCTION(AssetId, GetImageId);
+	PUBLIC_FUNCTION(AssetId, GetAtlasAssetId);
+	PUBLIC_FUNCTION(void, NormalizeSize);
+	PUBLIC_FUNCTION(void, NormalizeAspectByWidth);
+	PUBLIC_FUNCTION(void, NormalizeAspectByHeight);
+	PUBLIC_FUNCTION(void, NormalizeAspect);
+	PROTECTED_FUNCTION(void, BasisChanged);
+	PROTECTED_FUNCTION(void, ColorChanged);
+	PROTECTED_FUNCTION(void, UpdateMesh);
+	PROTECTED_FUNCTION(void, BuildDefaultMesh);
+	PROTECTED_FUNCTION(void, BuildSlicedMesh);
+	PROTECTED_FUNCTION(void, BuildFillLeftToRightMesh);
+	PROTECTED_FUNCTION(void, BuildFillRightToLeftMesh);
+	PROTECTED_FUNCTION(void, BuildFillUpToDownMesh);
+	PROTECTED_FUNCTION(void, BuildFillDownToUpMesh);
+	PROTECTED_FUNCTION(void, BuildFill360CWMesh);
+	PROTECTED_FUNCTION(void, BuildFill360CCWMesh);
+	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, ReloadImage);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+ 

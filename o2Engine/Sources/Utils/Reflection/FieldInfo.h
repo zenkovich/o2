@@ -67,6 +67,9 @@ namespace o2
 		// Returns cloned copy
 		virtual FieldInfo* Clone() const;
 
+		// Adds attribute
+		FieldInfo& AddAttribute(IAttribute* attribute);
+
 		// Adds attribute by type and parameters
 		template<typename _attr_type, typename ... _args>
 		FieldInfo& AddAttribute(_args ... args);

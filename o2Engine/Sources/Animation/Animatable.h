@@ -149,6 +149,9 @@ namespace o2
 		ValueAgentsVec     mValues; // Assigning value agents
 		BlendState         mBlend;  // Current blend parameters
 
+		ATTRIBUTES(SerializableAttribute);
+		int test;
+
 	protected:
 		// Removes animated value from agent by path
 		void UnregAnimatedValue(IAnimatedValue* value, const String& path);

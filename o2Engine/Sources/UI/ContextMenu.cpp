@@ -818,3 +818,97 @@ namespace o2
 	}
 
 }
+ 
+CLASS_META(o2::UIContextMenuItem)
+{
+	BASE_CLASS(o2::UIWidget);
+
+	PUBLIC_FIELD(onClick);
+	PUBLIC_FIELD(shortcut);
+	PROTECTED_FIELD(mSubMenu);
+
+	PUBLIC_FUNCTION(UIContextMenu*, GetSubMenu);
+	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
+}
+END_META;
+
+CLASS_META(o2::UIContextMenu)
+{
+	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::DrawableCursorEventsListener);
+	BASE_CLASS(o2::KeyboardEventsListener);
+
+	PROTECTED_FIELD(mVisibleContextMenu);
+	PROTECTED_FIELD(mOpenSubMenuDelay);
+	PROTECTED_FIELD(mFitSizeMin).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMaxVisibleItems).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mParentContextMenu);
+	PROTECTED_FIELD(mChildContextMenu);
+	PROTECTED_FIELD(mItemsLayout);
+	PROTECTED_FIELD(mItemSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSeparatorSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectionDrawable).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectionLayout).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mCurrentSelectionRect);
+	PROTECTED_FIELD(mTargetSelectionRect);
+	PROTECTED_FIELD(mLastSelectCheckCursor);
+	PROTECTED_FIELD(mSelectedItem);
+	PROTECTED_FIELD(mSelectSubContextTime);
+	PROTECTED_FIELD(mShownAtFrame);
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Show, UIContextMenu*, const Vec2F&);
+	PUBLIC_FUNCTION(void, Show, const Vec2F&);
+	PUBLIC_FUNCTION(UIWidget*, AddItem, const Item&);
+	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, ImageAsset*, const ShortcutKeys&);
+	PUBLIC_FUNCTION(UIWidget*, InsertItem, const Item&, int);
+	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
+	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
+	PUBLIC_FUNCTION(Item, GetItem, int);
+	PUBLIC_FUNCTION(Vector<Item>, GetItems);
+	PUBLIC_FUNCTION(void, RemoveItem, int);
+	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
+	PUBLIC_FUNCTION(void, RemoveAllItems);
+	PUBLIC_FUNCTION(UIVerticalLayout*, GetItemsLayout);
+	PUBLIC_FUNCTION(UIContextMenuItem*, GetItemSample);
+	PUBLIC_FUNCTION(UIWidget*, GetSeparatorSample);
+	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
+	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
+	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
+	PUBLIC_FUNCTION(void, SetMinFitSize, float);
+	PUBLIC_FUNCTION(void, SetMaxItemsVisible, int);
+	PUBLIC_FUNCTION(bool, IsScrollable);
+	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
+	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
+	PROTECTED_FUNCTION(void, FitSize);
+	PROTECTED_FUNCTION(void, FitPosition);
+	PROTECTED_FUNCTION(void, SpecialDraw);
+	PROTECTED_FUNCTION(UIContextMenuItem*, CreateItem, const Item&);
+	PROTECTED_FUNCTION(Item, GetItemDef, int);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(UIContextMenuItem*, GetItemUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
+	PROTECTED_FUNCTION(void, HideWithParent);
+	PROTECTED_FUNCTION(void, HideWithChild);
+}
+END_META;
+
+CLASS_META(o2::UIContextMenu::Item)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(text).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(shortcut).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(icon).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(subItems).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(onClick);
+}
+END_META;
+ 

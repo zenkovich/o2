@@ -204,7 +204,7 @@ namespace o2
 	{
 	public:
 		// Adds basic type
-		template<typename _type>
+		template<typename _type, typename X = std::conditional<std::is_base_of<IObject, _type>::value, _type, Type::Dummy>::type>
 		static void AddBaseType(Type*& type);
 
 		// Checks for type inheritance resolving
@@ -239,7 +239,7 @@ namespace o2
 		static Dictionary<Type**, Type**> mUnresolvedBaseTypes;
 	};
 
-#define CLASS_META(NAME) \
+#define CLASS_META(NAME)                                                \
     o2::Type* NAME::type = o2::Reflection::InitializeType<NAME>(#NAME); \
     void NAME::InitializeType(o2::Type* type)                           \
 	{                                                                   \
@@ -248,11 +248,13 @@ namespace o2
 	    o2::TypeInitializer::CheckTypeResolving(thisclass::type);       \
 	    thisclass* __this = 0;      
 
-#define CLASS_TEMPLATE_META(NAME, ...) \
-    template<__VA_ARGS__>                                               \
-    void NAME<__VA_ARGS__>::InitializeType(o2::Type* type)              \
+#define META_TEMPLATES(...) \
+    template<__VA_ARGS__>
+
+#define CLASS_TEMPLATE_META(NAME)                                       \
+    void NAME::InitializeType(o2::Type* type)                           \
 	{                                                                   \
-	    typedef NAME<__VA_ARGS__> thisclass;                            \
+	    typedef NAME thisclass;                                         \
 	    thisclass::type = type;                                         \
 	    o2::TypeInitializer::CheckTypeResolving(thisclass::type);       \
 	    thisclass* __this = 0;                                          
@@ -271,6 +273,15 @@ namespace o2
 
 #define PROTECTED_FIELD(NAME) \
     o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Protected)
+
+#define ATTRIBUTE(NAME) \
+    AddAttribute(new NAME)
+
+#define ATTRIBUTES(...)
+
+#define ATTRIBUTE_COMMENT_DEFINITION(X)
+
+#define ATTRIBUTE_SHORT_DEFINITION(X)
 
 #define FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
     o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
@@ -326,10 +337,13 @@ namespace o2
 		return _res_type();
 	}
 
-	template<typename _type>
+	template<typename _type, typename X>
 	void TypeInitializer::AddBaseType(Type*& type)
 	{
-		Type*& baseType = _type::type;
+		if (std::is_same<X, Type::Dummy>::value)
+			return;
+
+		Type*& baseType = X::type;
 
 		if (mInitializedTypes.Contains(&baseType))
 			type->mBaseTypes.Add(baseType);

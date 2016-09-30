@@ -33,7 +33,7 @@ namespace Editor
 
 	void WindowsManager::InitializeWindows()
 	{
-		auto windowTypes = IEditorWindow::type.DerivedTypes();
+		auto windowTypes = TypeOf(IEditorWindow).DerivedTypes();
 
 		for (auto type : windowTypes)
 		{

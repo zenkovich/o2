@@ -725,3 +725,4 @@ namespace o2
 		return position == other.position && value == other.value;
 	}
 };
+  

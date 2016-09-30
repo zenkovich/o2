@@ -27,9 +27,9 @@ namespace Editor
 	// ------------------
 	class TreeWindow: public IEditorWindow, public Singleton<TreeWindow>
 	{
-	public:
 		IOBJECT(TreeWindow);
 
+	public:
 		// Returns actors tree widget
 		UIActorsTree* GetActorsTree() const;
 

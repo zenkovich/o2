@@ -300,3 +300,15 @@ namespace o2
 		//glBindTexture(GL_TEXTURE_2D, o2Render.mLastDrawTexture->mHandle);
 	}
 }
+ 
+CLASS_META(o2::VectorFont::Effect)
+{
+	BASE_CLASS(o2::ISerializable);
+
+
+	PUBLIC_FUNCTION(void, Process, Bitmap*);
+	PUBLIC_FUNCTION(Vec2I, GetSizeExtend);
+	PUBLIC_FUNCTION(bool, IsEqual, Effect*);
+}
+END_META;
+ 

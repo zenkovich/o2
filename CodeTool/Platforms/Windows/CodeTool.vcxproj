@@ -20,14 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\CodeToolApp.cpp" />
-    <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
     <ClCompile Include="..\..\Sources\SyntaxTree\CppSyntaxParser.cpp" />
     <ClCompile Include="..\..\Sources\SyntaxTree\SyntaxTree.cpp" />
     <ClCompile Include="..\..\Sources\Windows\CodeTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\CodeToolApp.h" />
-    <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
     <ClInclude Include="..\..\Sources\SyntaxTree\CppSyntaxParser.h" />
     <ClInclude Include="..\..\Sources\SyntaxTree\SyntaxTree.h" />
   </ItemGroup>

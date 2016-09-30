@@ -158,7 +158,7 @@ namespace Editor
 
 		bool allOnLine = targetDock->mParent && targetDock->mParent->GetChilds().All([&](auto x) {
 
-			if (x->GetType() != UIDockWindowPlace::type)
+			if (x->GetType() != TypeOf(UIDockWindowPlace))
 				return false;
 
 			UIDockWindowPlace* dock = (UIDockWindowPlace*)x;

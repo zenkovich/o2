@@ -758,3 +758,73 @@ namespace o2
 		return false;
 	}
 }
+ 
+CLASS_META(o2::Text)
+{
+	BASE_CLASS(o2::IRectDrawable);
+
+	PUBLIC_FIELD(font);
+	PUBLIC_FIELD(text);
+	PUBLIC_FIELD(height);
+	PUBLIC_FIELD(verAlign);
+	PUBLIC_FIELD(horAlign);
+	PUBLIC_FIELD(wordWrap);
+	PUBLIC_FIELD(dotsEngings);
+	PUBLIC_FIELD(symbolsDistanceCoef);
+	PUBLIC_FIELD(linesDistanceCoef);
+	PROTECTED_FIELD(mBasicSymbolsPreset);
+	PROTECTED_FIELD(mMeshMaxPolyCount);
+	PROTECTED_FIELD(mText).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mFontAssetId).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mFont);
+	PROTECTED_FIELD(mHeight);
+	PROTECTED_FIELD(mSymbolsDistCoef).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mLinesDistanceCoef).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mVerAlign).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHorAlign).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mWordWrap).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mDotsEndings).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMeshes);
+	PROTECTED_FIELD(mLastTransform);
+	PROTECTED_FIELD(mSymbolsSet);
+	PROTECTED_FIELD(mUpdatingMesh);
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, SetFont, FontRef);
+	PUBLIC_FUNCTION(FontRef, GetFont);
+	PUBLIC_FUNCTION(void, SetFontAsset, BitmapFontAsset*);
+	PUBLIC_FUNCTION(void, SetFontAsset, VectorFontAsset*);
+	PUBLIC_FUNCTION(void, SetFontAsset, AssetId);
+	PUBLIC_FUNCTION(void, SetFontAsset, const String&);
+	PUBLIC_FUNCTION(Asset*, GetFontAsset);
+	PUBLIC_FUNCTION(AssetId, GetFontAssetId);
+	PUBLIC_FUNCTION(void, SetHeight, int);
+	PUBLIC_FUNCTION(int, GetHeight);
+	PUBLIC_FUNCTION(void, SetText, const WString&);
+	PUBLIC_FUNCTION(WString, GetText);
+	PUBLIC_FUNCTION(void, SetHorAlign, HorAlign);
+	PUBLIC_FUNCTION(HorAlign, GetHorAlign);
+	PUBLIC_FUNCTION(void, SetVerAlign, VerAlign);
+	PUBLIC_FUNCTION(VerAlign, GetVerAlign);
+	PUBLIC_FUNCTION(void, SetWordWrap, bool);
+	PUBLIC_FUNCTION(bool, GetWordWrap);
+	PUBLIC_FUNCTION(void, SetDotsEngings, bool);
+	PUBLIC_FUNCTION(bool, IsDotsEngings);
+	PUBLIC_FUNCTION(void, SetSymbolsDistanceCoef, float);
+	PUBLIC_FUNCTION(float, GetSymbolsDistanceCoef);
+	PUBLIC_FUNCTION(void, SetLinesDistanceCoef, float);
+	PUBLIC_FUNCTION(float, GetLinesDistanceCoef);
+	PUBLIC_FUNCTION(SymbolsSet&, GetSymbolsSet);
+	PUBLIC_FUNCTION(Vec2F, GetRealSize);
+	PUBLIC_FUNCTION(RectF, GetRealRect);
+	PROTECTED_FUNCTION(void, UpdateMesh);
+	PROTECTED_FUNCTION(void, TransformMesh, const Basis&);
+	PROTECTED_FUNCTION(void, PrepareMesh, int);
+	PROTECTED_FUNCTION(Basis, CalculateTextBasis);
+	PROTECTED_FUNCTION(void, ColorChanged);
+	PROTECTED_FUNCTION(void, BasisChanged);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+ 

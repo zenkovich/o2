@@ -414,3 +414,93 @@ namespace o2
 		INITIALIZE_SETTER(Transform, lookAtPoint, LookAt);
 	}
 }
+ 
+CLASS_META(o2::Transform)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(position);
+	PUBLIC_FIELD(size);
+	PUBLIC_FIELD(scale);
+	PUBLIC_FIELD(pivot);
+	PUBLIC_FIELD(worldPivot);
+	PUBLIC_FIELD(szPivot);
+	PUBLIC_FIELD(rect);
+	PUBLIC_FIELD(angle);
+	PUBLIC_FIELD(shear);
+	PUBLIC_FIELD(basis);
+	PUBLIC_FIELD(nonSizedBasis);
+	PUBLIC_FIELD(AABB);
+	PUBLIC_FIELD(leftTop);
+	PUBLIC_FIELD(leftBottom);
+	PUBLIC_FIELD(rightTop);
+	PUBLIC_FIELD(rightBottom);
+	PUBLIC_FIELD(right);
+	PUBLIC_FIELD(left);
+	PUBLIC_FIELD(up);
+	PUBLIC_FIELD(down);
+	PUBLIC_FIELD(lookAtPoint);
+	PROTECTED_FIELD(mPosition).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSize).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mScale).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mPivot).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAngle).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mShear).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mTransform);
+	PROTECTED_FIELD(mNonSizedTransform);
+
+	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetPosition);
+	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetSize);
+	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetPivot);
+	PUBLIC_FUNCTION(void, SetWorldPivot, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldPivot);
+	PUBLIC_FUNCTION(void, SetSizePivot, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetSizePivot);
+	PUBLIC_FUNCTION(void, SetRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetRect);
+	PUBLIC_FUNCTION(void, SetScale, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetScale);
+	PUBLIC_FUNCTION(void, SetAngle, float);
+	PUBLIC_FUNCTION(float, GetAngle);
+	PUBLIC_FUNCTION(void, SetShear, float);
+	PUBLIC_FUNCTION(float, GetShear);
+	PUBLIC_FUNCTION(void, SetBasis, const Basis&);
+	PUBLIC_FUNCTION(Basis, GetBasis);
+	PUBLIC_FUNCTION(void, SetNonSizedBasis, const Basis&);
+	PUBLIC_FUNCTION(Basis, GetNonSizedBasis);
+	PUBLIC_FUNCTION(void, SetAxisAlignedRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetAxisAlignedRect);
+	PUBLIC_FUNCTION(void, SetLeftTop, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetLeftTop);
+	PUBLIC_FUNCTION(void, SetRightTop, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetRightTop);
+	PUBLIC_FUNCTION(void, SetLeftBottom, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetLeftBottom);
+	PUBLIC_FUNCTION(void, SetRightBottom, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetRightBottom);
+	PUBLIC_FUNCTION(void, SetCenter, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetCenter);
+	PUBLIC_FUNCTION(void, SetRight, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetRight);
+	PUBLIC_FUNCTION(void, SetLeft, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetLeft);
+	PUBLIC_FUNCTION(void, SetUp, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetUp);
+	PUBLIC_FUNCTION(void, SetDown, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetDown);
+	PUBLIC_FUNCTION(void, LookAt, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, World2LocalPoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, Local2WorldPoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, World2LocalDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, Local2WorldDir, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsPointInside, const Vec2F&);
+	PROTECTED_FUNCTION(void, BasisChanged);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, UpdateTransform);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+ 

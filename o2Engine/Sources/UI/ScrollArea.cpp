@@ -809,3 +809,51 @@ namespace o2
 		INITIALIZE_PROPERTY(UIScrollArea, verScroll, SetVerticalScroll, GetVerticalScroll);
 	}
 }
+ 
+CLASS_META(o2::UIScrollArea)
+{
+	BASE_CLASS(o2::UIWidget);
+
+	PUBLIC_FIELD(scroll);
+	PUBLIC_FIELD(horScroll);
+	PUBLIC_FIELD(verScroll);
+	PUBLIC_FIELD(onScrolled);
+	PROTECTED_FIELD(mHorScrollBar);
+	PROTECTED_FIELD(mVerScrollBar);
+	PROTECTED_FIELD(mOwnHorScrollBar);
+	PROTECTED_FIELD(mOwnVerScrollBar);
+	PROTECTED_FIELD(mViewAreaLayout).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAbsoluteViewArea);
+	PROTECTED_FIELD(mClipAreaLayout).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAbsoluteClipArea);
+	PROTECTED_FIELD(mScrollPos).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mScrollSpeed);
+	PROTECTED_FIELD(mScrollSpeedDamp).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mScrollArea);
+	PROTECTED_FIELD(mScrollRange);
+	PROTECTED_FIELD(mEnableHorScroll);
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, SetScroll, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetScrollForcible, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetScroll);
+	PUBLIC_FUNCTION(RectF, GetScrollRange);
+	PUBLIC_FUNCTION(void, ResetSroll);
+	PUBLIC_FUNCTION(void, SetHorizontalScroll, float);
+	PUBLIC_FUNCTION(float, GetHorizontalScroll);
+	PUBLIC_FUNCTION(void, SetVerticalScroll, float);
+	PUBLIC_FUNCTION(float, GetVerticalScroll);
+	PUBLIC_FUNCTION(void, SetHorizontalScrollBar, UIHorizontalScrollBar*, bool);
+	PUBLIC_FUNCTION(UIHorizontalScrollBar*, GetHorizontalScrollbar);
+	PUBLIC_FUNCTION(void, SetVerticalScrollBar, UIVerticalScrollBar*, bool);
+	PUBLIC_FUNCTION(UIVerticalScrollBar*, GetVerticalScrollbar);
+	PUBLIC_FUNCTION(void, SetEnableScrollsHiding, bool);
+	PUBLIC_FUNCTION(bool, IsScrollsHiding);
+	PUBLIC_FUNCTION(void, SetClippingLayout, const Layout&);
+	PUBLIC_FUNCTION(Layout, GetClippingLayout);
+	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
+	PUBLIC_FUNCTION(Layout, GetViewLayout);
+}
+END_META;
+ 

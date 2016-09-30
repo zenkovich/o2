@@ -219,3 +219,13 @@ namespace o2
 		return asset;
 	}
 }
+
+CLASS_META(o2::AssetTree::AssetNode)
+{
+	BASE_CLASS(o2::ITreeNode<AssetNode>);
+	BASE_CLASS(o2::AssetInfo);
+
+	PUBLIC_FIELD(mMeta);
+	PUBLIC_FIELD(mTime);
+}
+END_META;

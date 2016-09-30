@@ -353,3 +353,68 @@ namespace o2
 	}
 
 }
+ 
+CLASS_META(o2::ActorTransform)
+{
+	BASE_CLASS(o2::Transform);
+
+	PUBLIC_FIELD(actor);
+	PUBLIC_FIELD(worldPosition);
+	PUBLIC_FIELD(worldRect);
+	PUBLIC_FIELD(worldAngle);
+	PUBLIC_FIELD(worldBasis);
+	PUBLIC_FIELD(worldNonSizedBasis);
+	PUBLIC_FIELD(worldAABB);
+	PROTECTED_FIELD(mWorldNonSizedTransform);
+	PROTECTED_FIELD(mWorldTransform);
+	PROTECTED_FIELD(mParentInvertedTransform);
+	PROTECTED_FIELD(mParentTransform);
+	PROTECTED_FIELD(mIsParentInvTransformActual);
+	PROTECTED_FIELD(mOwner);
+
+	PUBLIC_FUNCTION(Actor*, GetOwnerActor);
+	PUBLIC_FUNCTION(void, SetWorldPivot, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldPivot);
+	PUBLIC_FUNCTION(void, SetWorldPosition, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldPosition);
+	PUBLIC_FUNCTION(void, SetWorldRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetWorldRect);
+	PUBLIC_FUNCTION(void, SetWorldAngle, float);
+	PUBLIC_FUNCTION(float, GetWorldAngle);
+	PUBLIC_FUNCTION(void, SetWorldBasis, const Basis&);
+	PUBLIC_FUNCTION(Basis, GetWorldBasis);
+	PUBLIC_FUNCTION(void, SetWorldNonSizedBasis, const Basis&);
+	PUBLIC_FUNCTION(Basis, GetWorldNonSizedBasis);
+	PUBLIC_FUNCTION(void, SetWorldAxisAlignedRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetWorldAxisAlignedRect);
+	PUBLIC_FUNCTION(void, SetWorldLeftTop, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldLeftTop);
+	PUBLIC_FUNCTION(void, SetWorldRightTop, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldRightTop);
+	PUBLIC_FUNCTION(void, SetWorldLeftBottom, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldLeftBottom);
+	PUBLIC_FUNCTION(void, SetWorldRightBottom, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldRightBottom);
+	PUBLIC_FUNCTION(void, SetWorldCenter, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldCenter);
+	PUBLIC_FUNCTION(void, SetRight, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetRight);
+	PUBLIC_FUNCTION(void, SetLeft, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetLeft);
+	PUBLIC_FUNCTION(void, SetUp, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetUp);
+	PUBLIC_FUNCTION(void, SetDown, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetDown);
+	PUBLIC_FUNCTION(void, LookAt, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, World2LocalPoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, Local2WorldPoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, World2LocalDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, Local2WorldDir, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsPointInside, const Vec2F&);
+	PROTECTED_FUNCTION(void, SetOwner, Actor*);
+	PROTECTED_FUNCTION(void, UpdateTransform);
+	PROTECTED_FUNCTION(void, CheckParentInvTransform);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+ 

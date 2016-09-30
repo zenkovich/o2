@@ -154,7 +154,7 @@ namespace Editor
 
 	void SceneEditScreen::InitializeTools(const Type* toolType /*= nullptr*/)
 	{
-		auto toolsTypes = toolType ? toolType->DerivedTypes() : IEditTool::type.DerivedTypes();
+		auto toolsTypes = toolType ? toolType->DerivedTypes() : TypeOf(IEditTool).DerivedTypes();
 		for (auto toolType : toolsTypes)
 		{
 			mTools.Add((IEditTool*)toolType->CreateSample());

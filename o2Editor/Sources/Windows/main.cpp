@@ -1,7 +1,6 @@
 #include "Core/EditorApplication.h"
 #include "Core/ToolsPanel.h"
 #include "O2.h"
-#include "ReflectionGenerated.h"
 
 #include "Scene/Actor.h"
 #include "Utils/Serializer.h"
@@ -19,8 +18,6 @@ DECLARE_SINGLETON(ToolsPanel);
 
 int main()
 {
-	MAIN_O2;
-
 	DataNode data;
 	Vector<Actor*> xx = { mnew Actor(), mnew Actor(), mnew Actor() };
 	TimeStamp* ts = mnew TimeStamp();

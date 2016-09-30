@@ -58,7 +58,7 @@ namespace Editor
 
 	void PropertiesWindow::InitializeViewers()
 	{
-		auto viewersTypes = IObjectPropertiesViewer::type.DerivedTypes();
+		auto viewersTypes = TypeOf(IObjectPropertiesViewer).DerivedTypes();
 
 		for (auto type : viewersTypes)
 			mViewers.Add((IObjectPropertiesViewer*)type->CreateSample());

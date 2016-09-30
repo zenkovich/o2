@@ -19,9 +19,6 @@
     <ClCompile Include="..\..\Sources\CodeToolApp.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\SyntaxTree\SyntaxTree.cpp">
       <Filter>Sources\SyntaxTree</Filter>
     </ClCompile>
@@ -31,9 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\CodeToolApp.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\ReflectionGenerated.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\SyntaxTree\SyntaxTree.h">

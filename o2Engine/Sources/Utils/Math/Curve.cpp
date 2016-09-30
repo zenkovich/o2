@@ -374,3 +374,51 @@ namespace o2
 	}
 
 }
+ 
+CLASS_META(o2::Curve)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(value);
+	PUBLIC_FIELD(key);
+	PUBLIC_FIELD(keys);
+	PUBLIC_FIELD(length);
+	PUBLIC_FIELD(onKeysChanged);
+	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
+
+	PUBLIC_FUNCTION(float, Evaluate, float);
+	PUBLIC_FUNCTION(void, AddKeys, Vector<Vec2F>, float);
+	PUBLIC_FUNCTION(void, AddKey, const Key&);
+	PUBLIC_FUNCTION(void, AddKey, float, float, float, float, float, float);
+	PUBLIC_FUNCTION(void, AddKey, float, float, float);
+	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(bool, RemoveKey, float);
+	PUBLIC_FUNCTION(void, RemoveAllKeys);
+	PUBLIC_FUNCTION(bool, ContainsKey, float);
+	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
+	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, SmoothKey, float, float);
+	PUBLIC_FUNCTION(float, Length);
+	PUBLIC_FUNCTION(bool, IsEmpty);
+	PROTECTED_FUNCTION(void, UpdateApproximation);
+	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_META(o2::Curve::Key)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftCoef).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftCoefPosition).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightCoef).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightCoefPosition).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mApproxValuesCount);
+	PUBLIC_FIELD(mApproxValues);
+}
+END_META;
+ 

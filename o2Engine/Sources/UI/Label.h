@@ -5,46 +5,6 @@
 
 namespace o2
 {
-	class Test: public IObject
-	{
-	public:
-		int a;
-		String b;
-
-		void Func(int c, String d) {}
-		void Func(String c, int d) {}
-
-		IOBJECT(Test);
-	};
-
-	class Test2: public Test
-	{
-	public:
-		int e;
-		String f;
-
-		void Func(int g, String h) {}
-
-		IOBJECT(Test2);
-	};
-
-	template<typename T>
-	class TempTest: public IObject
-	{
-	public:
-		int a;
-		int b;
-
-		IOBJECT(TempTest);
-	};
-
-	CLASS_TEMPLATE_META(TempTest, typename T)
-	{
-		PUBLIC_FIELD(a);
-		PUBLIC_FIELD(b);
-	}
-	END_META;
-
 	// -----------------
 	// Text label widget
 	// -----------------
@@ -138,6 +98,8 @@ namespace o2
 		HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
 		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZEBLE
 		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
+
+		int field;
 
 	protected:
 		// Updates layout

@@ -159,11 +159,11 @@ namespace Editor
 
 	void UIDockWindowPlace::CheckInteractable()
 	{
-		interactable = mChilds.CountMatch([](auto x) { return x->GetType() == UIDockWindowPlace::type; }) == 0;
+		interactable = mChilds.CountMatch([](auto x) { return x->GetType() == TypeOf(UIDockWindowPlace); }) == 0;
 
 		for (auto child : mChilds)
 		{
-			if (child->GetType() == UIDockWindowPlace::type)
+			if (child->GetType() == TypeOf(UIDockWindowPlace))
 				((UIDockWindowPlace*)child)->CheckInteractable();
 		}
 	}

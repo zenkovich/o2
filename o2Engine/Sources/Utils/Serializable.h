@@ -49,6 +49,9 @@ namespace o2
 	// ----------------------------
 	class SerializableAttribute: public IAttribute
 	{
+		ATTRIBUTE_COMMENT_DEFINITION("SERIALIZABLE");
+		ATTRIBUTE_SHORT_DEFINITION("SERIALIZABLE_ATTRIBUTE()");
+
 		// Returns copy of this
 		IAttribute* Clone() const { return new SerializableAttribute(*this); }
 	};
@@ -89,5 +92,8 @@ public:                                                \
 	}            									   \
                                                        \
 private:                                               \
-	static void InitializeType(o2::Type* type)      
+	static void InitializeType(o2::Type* type)    
+
+#define SERIALIZABLE_ATTRIBUTE() \
+    AddAttribute(new SerializableAttribute())
 }

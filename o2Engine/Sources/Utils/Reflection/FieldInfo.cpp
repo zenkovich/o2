@@ -70,6 +70,12 @@ namespace o2
 		return mnew FieldInfo(*this);
 	}
 
+	FieldInfo& FieldInfo::AddAttribute(IAttribute* attribute)
+	{
+		mAttributes.Add(attribute);
+		return *this;
+	}
+
 	const String& FieldInfo::Name() const
 	{
 		return mName;

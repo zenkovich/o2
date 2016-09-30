@@ -975,3 +975,108 @@ namespace o2
 	}
 
 }
+ 
+CLASS_META(o2::Actor)
+{
+	BASE_CLASS(o2::Animatable);
+
+	PUBLIC_FIELD(tags);
+	PUBLIC_FIELD(id);
+	PUBLIC_FIELD(name);
+	PUBLIC_FIELD(enabled);
+	PUBLIC_FIELD(enabledInHierarchy);
+	PUBLIC_FIELD(locked);
+	PUBLIC_FIELD(lockedInHierarchy);
+	PUBLIC_FIELD(parent);
+	PUBLIC_FIELD(layer);
+	PUBLIC_FIELD(layerName);
+	PUBLIC_FIELD(childs);
+	PUBLIC_FIELD(child);
+	PUBLIC_FIELD(components);
+	PUBLIC_FIELD(component);
+	PUBLIC_FIELD(transform).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(onEnableChanged);
+	PROTECTED_FIELD(mId).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mParent);
+	PROTECTED_FIELD(mChilds);
+	PROTECTED_FIELD(mComponents);
+	PROTECTED_FIELD(mLayer);
+	PROTECTED_FIELD(mEnabled).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mResEnabled);
+	PROTECTED_FIELD(mLocked).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mResLocked);
+	PROTECTED_FIELD(mIsOnScene);
+	PROTECTED_FIELD(mIsAsset);
+	PROTECTED_FIELD(mAssetId);
+
+	typedef Dictionary<const Actor*, Actor*>& _tmp1;
+	typedef Dictionary<const Component*, Component*>& _tmp2;
+	typedef const Dictionary<const Actor*, Actor*>& _tmp3;
+	typedef const Dictionary<const Component*, Component*>& _tmp4;
+	typedef Dictionary<String, Actor*> _tmp5;
+	typedef Dictionary<String, Component*> _tmp6;
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, UpdateChilds, float);
+	PUBLIC_FUNCTION(void, SetName, const String&);
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(UInt64, GetID);
+	PUBLIC_FUNCTION(void, SetId, UInt64);
+	PUBLIC_FUNCTION(AssetId, GetAssetId);
+	PUBLIC_FUNCTION(bool, IsAsset);
+	PUBLIC_FUNCTION(void, GenNewId, bool);
+	PUBLIC_FUNCTION(void, ExcludeFromScene);
+	PUBLIC_FUNCTION(void, IncludeInScene);
+	PUBLIC_FUNCTION(bool, IsOnScene);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(void, Enable);
+	PUBLIC_FUNCTION(void, Disable);
+	PUBLIC_FUNCTION(bool, IsEnabled);
+	PUBLIC_FUNCTION(bool, IsEnabledInHierarchy);
+	PUBLIC_FUNCTION(void, SetLocked, bool);
+	PUBLIC_FUNCTION(void, Lock);
+	PUBLIC_FUNCTION(void, Unlock);
+	PUBLIC_FUNCTION(bool, IsLocked);
+	PUBLIC_FUNCTION(bool, IsLockedInHierarchy);
+	PUBLIC_FUNCTION(void, SetPositionIndexInParent, int);
+	PUBLIC_FUNCTION(void, SetParent, Actor*, bool);
+	PUBLIC_FUNCTION(Actor*, GetParent);
+	PUBLIC_FUNCTION(Actor*, AddChild, Actor*);
+	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
+	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
+	PUBLIC_FUNCTION(ActorsVec, GetChilds);
+	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
+	PUBLIC_FUNCTION(void, RemoveAllChilds);
+	PUBLIC_FUNCTION(Component*, AddComponent, Component*);
+	PUBLIC_FUNCTION(void, RemoveComponent, Component*, bool);
+	PUBLIC_FUNCTION(void, RemoveAllComponents);
+	PUBLIC_FUNCTION(Component*, GetComponent, const String&);
+	PUBLIC_FUNCTION(Component*, GetComponent, const Type*);
+	PUBLIC_FUNCTION(Component*, GetComponent, UInt64);
+	PUBLIC_FUNCTION(ComponentsVec, GetComponents);
+	PUBLIC_FUNCTION(void, SetLayer, Scene::Layer*);
+	PUBLIC_FUNCTION(void, SetLayer, const String&);
+	PUBLIC_FUNCTION(Scene::Layer*, GetLayer);
+	PUBLIC_FUNCTION(String, GetLayerName);
+	PROTECTED_FUNCTION(void, OnTransformChanged);
+	PROTECTED_FUNCTION(void, ProcessCopying, Actor*, const Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp1, _tmp2);
+	PROTECTED_FUNCTION(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp3, _tmp4);
+	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
+	PROTECTED_FUNCTION(void, UpdateEnabled);
+	PROTECTED_FUNCTION(void, UpdateLocking);
+	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(_tmp5, GetAllChilds);
+	PROTECTED_FUNCTION(_tmp6, GetAllComponents);
+	PROTECTED_FUNCTION(void, ComponentsExcludeFromScene);
+	PROTECTED_FUNCTION(void, ComponentsIncludeToScene);
+	PROTECTED_FUNCTION(void, OnChanged);
+	PROTECTED_FUNCTION(void, OnLockChanged);
+	PROTECTED_FUNCTION(void, OnNameChanged);
+	PROTECTED_FUNCTION(void, OnChildsChanged);
+	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+ 
