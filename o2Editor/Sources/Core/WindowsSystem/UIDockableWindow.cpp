@@ -452,3 +452,35 @@ namespace Editor
 	}
 
 }
+ 
+CLASS_META(Editor::UIDockableWindow)
+{
+	BASE_CLASS(o2::UIWindow);
+
+	PROTECTED_FIELD(mDockSizeCoef);
+	PROTECTED_FIELD(mDockBorder);
+	PROTECTED_FIELD(mDocked);
+	PROTECTED_FIELD(mDockingFrameSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mDockingFrameAppearance);
+	PROTECTED_FIELD(mDockingFrameCurrent);
+	PROTECTED_FIELD(mDockingFrameTarget);
+	PROTECTED_FIELD(mNonDockSize);
+	PROTECTED_FIELD(mDragOffset);
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(bool, IsDocked);
+	PUBLIC_FUNCTION(Sprite*, GetDockingFrameSample);
+	PROTECTED_FUNCTION(void, InitializeDockFrameAppearanceAnim);
+	PROTECTED_FUNCTION(void, InitializeDragHandles);
+	PROTECTED_FUNCTION(void, OnMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnMoveCompleted, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnMoveBegin, const Input::Cursor&);
+	PROTECTED_FUNCTION(bool, TraceDock, UIDockWindowPlace*&, Side&, RectF&);
+	PROTECTED_FUNCTION(void, PlaceNonLineDock, UIDockWindowPlace*, Side);
+	PROTECTED_FUNCTION(void, PlaceLineDock, UIDockWindowPlace*, Side, RectF);
+	PROTECTED_FUNCTION(void, Undock);
+	PROTECTED_FUNCTION(void, SetDocked, bool);
+}
+END_META;
+ 

@@ -392,6 +392,8 @@ void SyntaxClass::SaveTo(pugi::xml_node& node) const
 	node.append_attribute("isMeta") = mIsMeta;
 	node.append_attribute("templates") = mTemplateParameters.c_str();
 	node.append_attribute("protection") = (int)mClassSection;
+	node.append_attribute("attributeCommentDef") = mAttributeCommentDef.c_str();
+	node.append_attribute("attributeShortDef") = mAttributeShortDef.c_str();
 
 	pugi::xml_node baseClassesNode = node.append_child("baseClasses");
 	for (auto& x : mBaseClasses)
@@ -405,6 +407,8 @@ void SyntaxClass::LoadFrom(pugi::xml_node& node)
 	mIsMeta = node.attribute("isMeta").as_bool();
 	mTemplateParameters = node.attribute("templates").as_string();
 	mClassSection = (SyntaxProtectionSection)node.attribute("protection").as_int();
+	mAttributeCommentDef = node.attribute("attributeCommentDef").as_string();
+	mAttributeShortDef = node.attribute("attributeShortDef").as_string();
 
 	pugi::xml_node baseClassesNode = node.child("baseClasses");
 	for (auto node : baseClassesNode)

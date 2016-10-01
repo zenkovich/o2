@@ -1,6 +1,5 @@
 #include "CodeToolApp.h"
 
-#include <Windows.h>
 #include <algorithm>
 #include <cctype>
 #include <fstream>
@@ -14,20 +13,38 @@
 
 #undef GetClassName
 
-void split(const string &s, char delim, vector<string> &elems)
+Timer::Timer()
 {
-	stringstream ss;
-	ss.str(s);
-	string item;
-	while (getline(ss, item, delim))
-		elems.push_back(item);
+	Reset();
 }
 
-vector<string> split(const string &s, char delim)
+void Timer::Reset()
 {
-	vector<string> elems;
-	split(s, delim, elems);
-	return elems;
+	QueryPerformanceFrequency(&mFrequency);
+	QueryPerformanceCounter(&mStartTime);
+	mLastElapsedTime = mStartTime.QuadPart;
+}
+
+float Timer::GetTime()
+{
+	LARGE_INTEGER curTime;
+	QueryPerformanceCounter(&curTime);
+
+	float res = (float)((double)(curTime.QuadPart - (double)mStartTime.QuadPart)/(double)mFrequency.QuadPart);
+	mLastElapsedTime = curTime.QuadPart;
+
+	return res;
+}
+
+float Timer::GetDeltaTime()
+{
+	LARGE_INTEGER curTime;
+	QueryPerformanceCounter(&curTime);
+
+	float res = (float)((double)(curTime.QuadPart - (double)mLastElapsedTime)/(double)mFrequency.QuadPart);
+	mLastElapsedTime = curTime.QuadPart;
+
+	return res;
 }
 
 CodeToolApplication::CodeToolApplication()
@@ -43,18 +60,48 @@ void CodeToolApplication::SetArguments(char** args, int nargs)
 	mSourcesPath = argsMap["sources"];
 	mMSVCProjectPath = argsMap["msvs_project"];
 	mXCodeProjectPath = argsMap["xcode_project"];
-	mNeedReset = argsMap.find("reset") != argsMap.end();
+	mNeedReset = argsMap.find("reset") != argsMap.end() || argsMap.find("r") != argsMap.end();
+	mVerbose = argsMap.find("verbose") != argsMap.end() || argsMap.find("v") != argsMap.end();
 
-	mCache.parentProjects = split(argsMap["parent_projects"], ' ');
+	mCache.parentProjects = Split(argsMap["parent_projects"], ' ');
 }
 
 void CodeToolApplication::Process()
 {
+	Timer t;
+
 	LoadCache();
 	UpdateCodeReflection();
 	SaveCache();
 
 	UpdateProjectFilesFilter();
+
+	Log("Code reflection generated for %.3f seconds", t.GetDeltaTime());
+}
+
+bool CodeToolApplication::mVerbose = true;
+
+void CodeToolApplication::Log(const char* format, ...)
+{
+	va_list vlist;
+	va_start(vlist, format);
+
+	vprintf(format, vlist);
+
+	va_end(vlist);
+}
+
+void CodeToolApplication::VerboseLog(const char* format, ...)
+{
+	if (!mVerbose)
+		return;
+
+	va_list vlist;
+	va_start(vlist, format);
+
+	vprintf(format, vlist);
+
+	va_end(vlist);
 }
 
 map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
@@ -79,35 +126,41 @@ map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
 			else
 			{
 				string filePath = path + "/" + f.cFileName;
-
-				FILETIME creationTime, lastAccessTime, lastWriteTime;
-				HANDLE hFile = CreateFileA(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
-										   FILE_FLAG_OVERLAPPED, NULL);
-
-				if (hFile == NULL || hFile == INVALID_HANDLE_VALUE)
-					continue;
-
-				if (!GetFileTime(hFile, &creationTime, &lastAccessTime, &lastWriteTime))
-				{
-					CloseHandle(hFile);
-					continue;
-				}
-
-				SYSTEMTIME stUTC, stLocal;
-
-				FileTimeToSystemTime(&lastWriteTime, &stUTC);
-				SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
-
-				res[filePath] = TimeStamp(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth,
-										  stLocal.wYear);
-
-				CloseHandle(hFile);
+				res[filePath] = GetFileEditedDate(filePath);
 			}
 		}
 		while (FindNextFile(h, &f));
 	}
 
 	FindClose(h);
+
+	return res;
+}
+
+TimeStamp CodeToolApplication::GetFileEditedDate(const string& path)
+{
+	FILETIME creationTime, lastAccessTime, lastWriteTime;
+	HANDLE hFile = CreateFileA(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
+							   FILE_FLAG_OVERLAPPED, NULL);
+
+	if (hFile == NULL || hFile == INVALID_HANDLE_VALUE)
+		return TimeStamp();
+
+	if (!GetFileTime(hFile, &creationTime, &lastAccessTime, &lastWriteTime))
+	{
+		CloseHandle(hFile);
+		return TimeStamp();
+	}
+
+	SYSTEMTIME stUTC, stLocal;
+
+	FileTimeToSystemTime(&lastWriteTime, &stUTC);
+	SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+
+	TimeStamp res(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth,
+				  stLocal.wYear);
+
+	CloseHandle(hFile);
 
 	return res;
 }
@@ -205,7 +258,12 @@ string CodeToolApplication::GetRelativePath(const string& from, const string& to
 void CodeToolApplication::LoadCache()
 {
 	if (mNeedReset)
+	{
+		for (auto& file : mCache.parentProjects)
+			mCache.Load(file, false);
+
 		return;
+	}
 
 	mCache.Load(mSourcesPath + "/" + mCachePath);
 }
@@ -236,7 +294,7 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 	{
 		string filePath = file.first;
 
-		if (!endsWith(filePath, ".h") && !endsWith(filePath, ".cpp"))
+		if (!EndsWith(filePath, ".h") && !EndsWith(filePath, ".cpp"))
 			continue;
 
 		for (int i = 0; i < filePath.length(); i++)
@@ -247,17 +305,27 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 
 		string dir = GetRelativePath(MSVCProjectDir, GetParentPath(filePath));
 
-		auto firstSlashPos = dir.find('\\');
-		if (firstSlashPos != string::npos)
-			dir.erase(0, firstSlashPos + 1);
+		while (!dir.empty() && dir[0] == '.')
+		{
+			auto slashPos = dir.find('\\');
+			if (slashPos != string::npos)
+				dir.erase(0, slashPos + 1);
+		}
 
 		if (dir.find("OSX") != string::npos)
 			continue;
 
-		if (find(filters.begin(), filters.end(), dir) == filters.end())
+		while (!dir.empty() && find(filters.begin(), filters.end(), dir) == filters.end())
+		{
 			filters.push_back(dir);
+			dir = GetParentPath(dir);
+		}
 
 		string relativePath = GetRelativePath(MSVCProjectDir, filePath);
+
+		if (relativePath.length() > 1 && relativePath[0] == '.' && relativePath[1] == '\\')
+			relativePath.erase(0, 2);
+
 		files.push_back(relativePath);
 	}
 
@@ -277,15 +345,22 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 					oldFiltersNodes.push_back(itemNode);
 					oldFilters.push_back(filter);
 				}
-				else projectStructureChanged = true;
+				else
+				{
+					VerboseLog("Project changed: %s - removed filter\n", filter.c_str());
+					projectStructureChanged = true;
+				}
 			}
 			else if ((string)"ClInclude" == itemNode.name() || (string)"ClCompile" == itemNode.name())
 			{
 				string file = itemNode.attribute("Include").as_string();
 				if (find(files.begin(), files.end(), file) != files.end())
 					oldFiles.push_back(file);
-				else 
+				else
+				{
+					VerboseLog("Project changed: %s - removed file\n", file.c_str());
 					projectStructureChanged = true;
+				}
 			}
 			else
 			{
@@ -306,7 +381,13 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 	projectStructureChanged = projectStructureChanged || !newFiles.empty() || !newFilters.empty() || mNeedReset;
 
 	if (!projectStructureChanged)
+	{
+		VerboseLog("Project wasn't changed\n");
 		return;
+	}
+
+	VerboseLog("Project changed. New files:%i, new filters:%i, need reset:%s\n", newFiles.size(), newFilters.size(),
+			   (mNeedReset ? "true":"false"));
 
 	// generate new filters file
 	pugi::xml_document newDoc;
@@ -326,7 +407,7 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 	pugi::xml_node headersNode = newProjectNode.append_child("ItemGroup");
 	for (auto& file : files)
 	{
-		if (endsWith(file, ".h"))
+		if (EndsWith(file, ".h"))
 		{
 			auto node = headersNode.append_child("ClInclude");
 			node.append_attribute("Include") = file.c_str();
@@ -334,6 +415,9 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 			auto slashPos = file.find('\\');
 			if (slashPos != string::npos)
 			{
+				while (file[slashPos + 1] == '.')
+					slashPos = file.find('\\', slashPos + 1);
+
 				string filter = GetParentPath(file.substr(slashPos + 1));
 				if (!filter.empty())
 					node.append_child("Filter").append_child(pugi::node_pcdata).set_value(filter.c_str());
@@ -345,7 +429,7 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 	pugi::xml_node sourcesNode = newProjectNode.append_child("ItemGroup");
 	for (auto& file : files)
 	{
-		if (endsWith(file, ".cpp"))
+		if (EndsWith(file, ".cpp"))
 		{
 			auto node = sourcesNode.append_child("ClCompile");
 			node.append_attribute("Include") = file.c_str();
@@ -353,6 +437,9 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 			auto slashPos = file.find('\\');
 			if (slashPos != string::npos)
 			{
+				while (file[slashPos + 1] == '.')
+					slashPos = file.find('\\', slashPos + 1);
+
 				string filter = GetParentPath(file.substr(slashPos + 1));
 				if (!filter.empty())
 					node.append_child("Filter").append_child(pugi::node_pcdata).set_value(filter.c_str());
@@ -386,7 +473,7 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 	pugi::xml_node newProjectHeadersGroup = newProjectNode.append_child("ItemGroup");
 	for (auto& file : files)
 	{
-		if (endsWith(file, ".h"))
+		if (EndsWith(file, ".h"))
 			newProjectHeadersGroup.append_child("ClInclude").append_attribute("Include") = file.c_str();
 	}
 
@@ -394,7 +481,7 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 	pugi::xml_node newProjectSourcesGroup = newProjectNode.append_child("ItemGroup");
 	for (auto& file : files)
 	{
-		if (endsWith(file, ".cpp"))
+		if (EndsWith(file, ".cpp"))
 			newProjectSourcesGroup.append_child("ClCompile").append_attribute("Include") = file.c_str();
 	}
 
@@ -411,7 +498,7 @@ void CodeToolApplication::UpdateCodeReflection()
 	// parse all headers
 	for (auto fileInfo : mSourceFiles)
 	{
-		if (!endsWith(fileInfo.first, ".h"))
+		if (!EndsWith(fileInfo.first, ".h"))
 			continue;
 
 		ParseSource(fileInfo.first, fileInfo.second);
@@ -425,6 +512,7 @@ void CodeToolApplication::UpdateCodeReflection()
 		{
 			delete *parseFileInfo;
 			parseFileInfo = mCache.originalFiles.erase(parseFileInfo);
+			mCache.files.erase(find(mCache.files.begin(), mCache.files.end(), *parseFileInfo));
 		}
 		else ++parseFileInfo;
 	}
@@ -450,6 +538,7 @@ void CodeToolApplication::ParseSource(const string& path, const TimeStamp& editD
 
 			delete cacheFile;
 			mCache.originalFiles.erase(find(mCache.originalFiles.begin(), mCache.originalFiles.end(), cacheFile));
+			mCache.files.erase(find(mCache.files.begin(), mCache.files.end(), cacheFile));
 
 			break;
 		}
@@ -461,8 +550,9 @@ void CodeToolApplication::ParseSource(const string& path, const TimeStamp& editD
 	mParsedFiles.push_back(syntaxFile);
 
 	mCache.originalFiles.push_back(syntaxFile);
+	mCache.files.push_back(syntaxFile);
 
-	printf("Parsed %s\n", path.c_str());
+	VerboseLog("Parsed %s\n", path.c_str());
 }
 
 void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
@@ -481,10 +571,10 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 
 	for (auto cls : classes)
 	{
-		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || cls != baseObjectClass)
+		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || cls == baseObjectClass)
 			continue;
 
-		if (!cppLoaded)
+		if (!cppLoaded && !cls->IsTemplate())
 		{
 			if (IsFileExist(cppSourcePath))
 			{
@@ -493,8 +583,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 				RemoveClassMetas(cppSource, "CLASS_META(");
 				RemoveClassMetas(cppSource, "CLASS_TEMPLATE_META(");
 			}
-			else
-				cppSource = "#include \"" + GetPathWithoutDirectories(file->GetPath()) + "\"\n\n";
+			else cppSource = "#include \"" + GetPathWithoutDirectories(file->GetPath()) + "\"\n\n";
 
 			cppLoaded = true;
 		}
@@ -509,9 +598,12 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 		WriteFile(cppSourcePath, cppSource);
 
 	if (hSource != file->GetData())
+	{
 		WriteFile(file->GetPath(), hSource);
+		file->mLastEditedDate = GetFileEditedDate(file->GetPath());
+	}
 
-	printf("Reflection generated for %s\n", file->GetPath().c_str());
+	VerboseLog("Reflection generated for %s\n", file->GetPath().c_str());
 }
 
 string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
@@ -762,15 +854,15 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 		}
 
 		string templateParamsStr = name.substr(begin, fnd - begin);
-		vector<string> templateParams = split(templateParamsStr, ',');
+		vector<string> templateParams = Split(templateParamsStr, ',');
 
 		fullName += name.substr(lastFnd, begin - lastFnd);
 		bool firstParam = true;
 		for (auto& templateParam : templateParams)
 		{
-			trim(templateParam);
+			Trim(templateParam);
 
-			if (startsWith(templateParam, "typename "))
+			if (StartsWith(templateParam, "typename "))
 				templateParam.erase(0, strlen("typename "));
 
 			if (!firstParam)
@@ -830,8 +922,8 @@ bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, Syntax
 {
 	static vector<string> ignoringNames ={ "SERIALIZABLE", "IOBJECT", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
 
-	return !startsWith(owner->GetName(), function->GetName()) &&
-		!startsWith(function->GetName(), string("~") + owner->GetName()) &&
+	return !StartsWith(owner->GetName(), function->GetName()) &&
+		!StartsWith(function->GetName(), string("~") + owner->GetName()) &&
 		function->GetName().find("operator") == function->GetName().npos &&
 		!function->IsTemplate() &&
 		!function->IsStatic() &&
@@ -1151,7 +1243,7 @@ void CodeToolCache::ResolveDependencies(SyntaxSection* section)
 		tdef->mWhatSection = FindSection(tdef->mWhatName, section);
 
 		if (!tdef->mWhatSection)
-			printf("Not found section for typedef: %s\n", tdef->mWhatName.c_str());
+			CodeToolApplication::VerboseLog("Not found section for typedef: %s\n", tdef->mWhatName.c_str());
 	}
 
 	for (auto nspace : section->mUsingNamespaces)
@@ -1159,7 +1251,7 @@ void CodeToolCache::ResolveDependencies(SyntaxSection* section)
 		nspace->mUsingNamespace = FindSection(nspace->mUsingNamespaceName);
 
 		if (!nspace->mUsingNamespace)
-			printf("Not found section for using namespace: %s\n", nspace->mUsingNamespaceName.c_str());
+			CodeToolApplication::VerboseLog("Not found section for using namespace: %s\n", nspace->mUsingNamespaceName.c_str());
 	}
 
 	auto sections = section->mSections;
@@ -1177,7 +1269,7 @@ void CodeToolCache::ResolveBaseClassDependencies(SyntaxSection* section)
 			baseClass.mClass = (SyntaxClass*)FindSection(baseClass.mClassName, section);
 
 			if (!baseClass.mClass)
-				printf("Not found base class: %s\n", baseClass.mClassName.c_str());
+				CodeToolApplication::VerboseLog("Not found base class: %s\n", baseClass.mClassName.c_str());
 
 			baseClass.mClass = (SyntaxClass*)FindSection(baseClass.mClassName, section);
 		}

@@ -258,3 +258,37 @@ namespace Editor
 	}
 
 }
+ 
+CLASS_META(Editor::MoveTool)
+{
+	BASE_CLASS(Editor::SelectionTool);
+
+	PUBLIC_FIELD(snapStep);
+	PROTECTED_FIELD(mHorDragHandle);
+	PROTECTED_FIELD(mVerDragHandle);
+	PROTECTED_FIELD(mBothDragHandle);
+	PROTECTED_FIELD(mLastSceneHandlesPos);
+	PROTECTED_FIELD(mSnapPosition);
+	PROTECTED_FIELD(mHandlesAngle);
+	PROTECTED_FIELD(mBeforeTransforms);
+
+	PROTECTED_FUNCTION(void, Update, float);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
+	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnHorDragHandleMoved, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnVerDragHandleMoved, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnBothDragHandleMoved, const Vec2F&);
+	PROTECTED_FUNCTION(void, HandlePressed);
+	PROTECTED_FUNCTION(void, HandleReleased);
+	PROTECTED_FUNCTION(void, HandlesMoved, const Vec2F&, bool, bool);
+	PROTECTED_FUNCTION(void, UpdateHandlesPosition);
+	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PROTECTED_FUNCTION(void, MoveSelectedActors, const Vec2F&);
+	PROTECTED_FUNCTION(void, MoveSelectedActorsWithAction, const Vec2F&);
+}
+END_META;
+ 

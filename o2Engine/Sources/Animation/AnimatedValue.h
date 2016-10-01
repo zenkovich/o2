@@ -725,4 +725,69 @@ namespace o2
 		return position == other.position && value == other.value;
 	}
 };
-  
+ 
+META_TEMPLATES(typename _type)
+CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>)
+{
+	BASE_CLASS(o2::IAnimatedValue);
+
+	PUBLIC_FIELD(value);
+	PUBLIC_FIELD(target);
+	PUBLIC_FIELD(targetDelegate);
+	PUBLIC_FIELD(targetProperty);
+	PUBLIC_FIELD(key);
+	PUBLIC_FIELD(keys);
+	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mValue);
+	PROTECTED_FIELD(mTarget);
+	PROTECTED_FIELD(mTargetDelegate);
+	PROTECTED_FIELD(mTargetProperty);
+
+	PUBLIC_FUNCTION(void, SetTarget, _type*);
+	PUBLIC_FUNCTION(void, SetTarget, _type*, const Function<void()>&);
+	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
+	PUBLIC_FUNCTION(void, SetTargetProperty, Setter<_type>*);
+	PUBLIC_FUNCTION(_type, GetValue);
+	PUBLIC_FUNCTION(_type, GetValue, float);
+	PUBLIC_FUNCTION(void, AddKeys, Vector<Key>, float);
+	PUBLIC_FUNCTION(void, AddKey, const Key&);
+	PUBLIC_FUNCTION(void, AddKey, const Key&, float);
+	PUBLIC_FUNCTION(void, AddSmoothKey, const Key&, float);
+	PUBLIC_FUNCTION(void, AddKey, float, const _type&, float, float, float, float);
+	PUBLIC_FUNCTION(void, AddKey, float, const _type&, float);
+	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(bool, RemoveKey, float);
+	PUBLIC_FUNCTION(void, RemoveAllKeys);
+	PUBLIC_FUNCTION(bool, ContainsKey, float);
+	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
+	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, SmoothKey, float, float);
+	PROTECTED_FUNCTION(void, Evaluate);
+	PROTECTED_FUNCTION(_type, Evaluate, float);
+	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
+	PROTECTED_FUNCTION(void, UpdateApproximation);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, SetTargetVoid, void*);
+	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
+	PROTECTED_FUNCTION(void, SetTargetPropertyVoid, void*);
+	PROTECTED_FUNCTION(void, RegInAnimatable, AnimationState*, const String&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+META_TEMPLATES(typename _type)
+CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>::Key)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(curvePrevCoef).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(curvePrevCoefPos).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(curveNextCoef).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(curveNextCoefPos).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mApproxValuesCount);
+	PUBLIC_FIELD(mCurveApproxValues);
+}
+END_META;
+ 

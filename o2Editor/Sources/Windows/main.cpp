@@ -3,7 +3,6 @@
 #include "O2.h"
 
 #include "Scene/Actor.h"
-#include "Utils/Serializer.h"
 #include "Render/Camera.h"
 
 using namespace o2;

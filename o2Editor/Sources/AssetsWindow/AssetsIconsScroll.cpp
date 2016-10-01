@@ -1046,3 +1046,99 @@ namespace Editor
 		return icon == other.icon;
 	}
 }
+ 
+CLASS_META(Editor::UIAssetsIconsScrollArea)
+{
+	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::DrawableCursorEventsListener);
+	BASE_CLASS(o2::KeyboardEventsListener);
+
+	PROTECTED_FIELD(mAssetIconSize);
+	PROTECTED_FIELD(mSelectedColor);
+	PROTECTED_FIELD(mUnselectedColor);
+	PROTECTED_FIELD(mHoverColor);
+	PROTECTED_FIELD(mCurrentPath);
+	PROTECTED_FIELD(mGrid);
+	PROTECTED_FIELD(mSelection);
+	PROTECTED_FIELD(mContextMenu);
+	PROTECTED_FIELD(mSelectedAssetsIcons);
+	PROTECTED_FIELD(mIconSelectionSprite);
+	PROTECTED_FIELD(mSelectionSpriteLayout);
+	PROTECTED_FIELD(mSelectionSpritesPool);
+	PROTECTED_FIELD(mHoverIcon);
+	PROTECTED_FIELD(mIconHoverSprite);
+	PROTECTED_FIELD(mTargetHoverSpriteRect);
+	PROTECTED_FIELD(mCurrentHoverSpriteRect);
+	PROTECTED_FIELD(mIconsPool);
+	PROTECTED_FIELD(mSelecting);
+	PROTECTED_FIELD(mPressedPoint);
+	PROTECTED_FIELD(mPressTime);
+	PROTECTED_FIELD(mCurrentSelectingIcons);
+	PROTECTED_FIELD(mDragState);
+	PROTECTED_FIELD(mDragIcon);
+	PROTECTED_FIELD(mDragOffset);
+	PROTECTED_FIELD(mInstSceneDragActors);
+	PROTECTED_FIELD(mDragAssetPropertyField);
+	PROTECTED_FIELD(mDragActorPropertyField);
+	PROTECTED_FIELD(mDragComponentPropertyField);
+	PROTECTED_FIELD(mCuttingAssets);
+	PROTECTED_FIELD(mNeedRebuildAssets);
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, SetViewingPath, const String&);
+	PUBLIC_FUNCTION(String, GetViewingPath);
+	PUBLIC_FUNCTION(void, UpdateAssetsPath);
+	PUBLIC_FUNCTION(bool, IsFocusable);
+	PUBLIC_FUNCTION(void, SelectAsset, AssetId, bool);
+	PUBLIC_FUNCTION(void, DeselectAllAssets);
+	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
+	PUBLIC_FUNCTION(UIAssetIcon*, GetIconUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, UpdateCuttingAssets);
+	PROTECTED_FUNCTION(void, OnFocused);
+	PROTECTED_FUNCTION(void, OnUnfocused);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, BeginSelecting);
+	PROTECTED_FUNCTION(void, UpdateSelection, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, CompleteSelecting);
+	PROTECTED_FUNCTION(void, BeginDragging, UIAssetIcon*, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, UpdateDragging, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, CompleteDragging);
+	PROTECTED_FUNCTION(void, RegActorsCreationAction);
+	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PROTECTED_FUNCTION(void, InitializeContext);
+	PROTECTED_FUNCTION(void, PrepareIconsPools);
+	PROTECTED_FUNCTION(UIAssetIcon*, GetAssetIconFromPool, const String&);
+	PROTECTED_FUNCTION(void, FreeAssetIconToPool, UIAssetIcon*);
+	PROTECTED_FUNCTION(UIAssetIcon*, GetImageAssetIcon, const AssetInfo&);
+	PROTECTED_FUNCTION(void, UpdateAssetsGridSize);
+	PROTECTED_FUNCTION(void, InitializeSelectionSprite);
+	PROTECTED_FUNCTION(Sprite*, GetSelectionSprite);
+	PROTECTED_FUNCTION(void, FreeSelectionSprite, Sprite*);
+	PROTECTED_FUNCTION(void, OnIconDblClicked, UIAssetIcon*);
+	PROTECTED_FUNCTION(void, UpdateHover);
+	PROTECTED_FUNCTION(void, OnContextCopyPressed);
+	PROTECTED_FUNCTION(void, OnContextCutPressed);
+	PROTECTED_FUNCTION(void, OnContextPastePressed);
+	PROTECTED_FUNCTION(void, OnContextDeletePressed);
+	PROTECTED_FUNCTION(void, OnContextOpenPressed);
+	PROTECTED_FUNCTION(void, OnContextShowInExplorerPressed);
+	PROTECTED_FUNCTION(void, OnContextImportPressed);
+	PROTECTED_FUNCTION(void, OnContextCreateFolderPressed);
+	PROTECTED_FUNCTION(void, OnContextCreatePrefabPressed);
+	PROTECTED_FUNCTION(void, OnContextCreateScriptPressed);
+	PROTECTED_FUNCTION(void, OnContextCreateAnimationPressed);
+	PROTECTED_FUNCTION(void, InstantiateDraggingAssets);
+	PROTECTED_FUNCTION(void, ClearInstantiatedDraggingAssets);
+	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const AssetInfo&);
+	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ImageAsset&);
+	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ActorAsset&);
+}
+END_META;
+ 

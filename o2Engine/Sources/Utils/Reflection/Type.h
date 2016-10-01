@@ -235,8 +235,8 @@ namespace o2
 		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section);
 
 	protected:
-		static Vector<Type**>             mInitializedTypes;
-		static Dictionary<Type**, Type**> mUnresolvedBaseTypes;
+		static Vector<Type**>*             mInitializedTypes;
+		static Dictionary<Type**, Type**>* mUnresolvedBaseTypes;
 	};
 
 #define CLASS_META(NAME)                                                \
@@ -345,10 +345,10 @@ namespace o2
 
 		Type*& baseType = X::type;
 
-		if (mInitializedTypes.Contains(&baseType))
+		if (mInitializedTypes->Contains(&baseType))
 			type->mBaseTypes.Add(baseType);
 		else
-			mUnresolvedBaseTypes[&baseType] = &type;
+			mUnresolvedBaseTypes->Add(&baseType, &type);
 	}
 
 	template<typename _type>

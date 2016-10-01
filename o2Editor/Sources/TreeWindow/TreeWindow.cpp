@@ -429,3 +429,43 @@ namespace Editor
 	}
 
 }
+ 
+CLASS_META(Editor::TreeWindow)
+{
+	BASE_CLASS(Editor::IEditorWindow);
+	BASE_CLASS(o2::Singleton<TreeWindow>);
+
+	PROTECTED_FIELD(mListTreeToggle);
+	PROTECTED_FIELD(mSearchEditBox);
+	PROTECTED_FIELD(mActorsTree);
+	PROTECTED_FIELD(mTreeContextMenu);
+	PROTECTED_FIELD(mInSearch);
+	PROTECTED_FIELD(mSearchActors);
+
+	PUBLIC_FUNCTION(UIActorsTree*, GetActorsTree);
+	PUBLIC_FUNCTION(void, HightlightActorsTreeNode, Actor*);
+	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, PostInitializeWindow);
+	PROTECTED_FUNCTION(void, OnSearchPressed);
+	PROTECTED_FUNCTION(void, OnListTreeToggled, bool);
+	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
+	PROTECTED_FUNCTION(void, SearchActorsRecursive, Actor*, const String&);
+	PROTECTED_FUNCTION(void, OnTreeRBPressed, UITreeNode*);
+	PROTECTED_FUNCTION(void, CreateActor, Actor*);
+	PROTECTED_FUNCTION(void, OnContextCreateNewPressed);
+	PROTECTED_FUNCTION(void, OnContextCreateSprite);
+	PROTECTED_FUNCTION(void, OnContextCreateButton);
+	PROTECTED_FUNCTION(void, OnContextCopyPressed);
+	PROTECTED_FUNCTION(void, OnContextCutPressed);
+	PROTECTED_FUNCTION(void, OnContextPastePressed);
+	PROTECTED_FUNCTION(void, OnContextDeletePressed);
+	PROTECTED_FUNCTION(void, OnContextDuplicatePressed);
+	PROTECTED_FUNCTION(void, OnContextExpandAllPressed);
+	PROTECTED_FUNCTION(void, OnContextCollapseAllPressed);
+	PROTECTED_FUNCTION(void, OnContextLockPressed);
+	PROTECTED_FUNCTION(void, OnContextEnablePressed);
+	PROTECTED_FUNCTION(void, OnActorCreated, Actor*);
+	PROTECTED_FUNCTION(void, OnActorDestroyed, Actor*);
+}
+END_META;
+ 

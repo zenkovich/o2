@@ -180,9 +180,15 @@ namespace o2
 
 	void TypeInitializer::CheckTypeResolving(Type*& type)
 	{
-		mInitializedTypes.Add(&type);
+		static Vector<Type**> initializedTypes;
+		static Dictionary<Type**, Type**> unresolvedBaseTypes;
 
-		for (auto x : mUnresolvedBaseTypes)
+		mInitializedTypes = &initializedTypes;
+		mUnresolvedBaseTypes = &unresolvedBaseTypes;
+
+		mInitializedTypes->Add(&type);
+
+		for (auto x : *mUnresolvedBaseTypes)
 		{
 			if (x.Key() == &type)
 			{
@@ -190,7 +196,11 @@ namespace o2
 			}
 		}
 
-		mUnresolvedBaseTypes.RemoveAll([=](auto x) { return x.Key() == &type; });
+		mUnresolvedBaseTypes->RemoveAll([=](auto x) { return x.Key() == &type; });
 	}
+
+	Type* IObject::type = nullptr;
+	Vector<Type**>* TypeInitializer::mInitializedTypes;
+	Dictionary<Type**, Type**>* TypeInitializer::mUnresolvedBaseTypes;
 
 }

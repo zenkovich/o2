@@ -540,3 +540,66 @@ namespace Editor
 	}
 
 }
+ 
+CLASS_META(Editor::FrameTool)
+{
+	BASE_CLASS(Editor::SelectionTool);
+
+	PROTECTED_FIELD(mHandleRegularColor);
+	PROTECTED_FIELD(mHandleSelectColor);
+	PROTECTED_FIELD(mHandlePressedColor);
+	PROTECTED_FIELD(mFrameHandlesSize);
+	PROTECTED_FIELD(mHandlesRotateSize);
+	PROTECTED_FIELD(mLeftTopRotateHandle);
+	PROTECTED_FIELD(mLeftBottomRotateHandle);
+	PROTECTED_FIELD(mRightTopRotateHandle);
+	PROTECTED_FIELD(mRightBottomRotateHandle);
+	PROTECTED_FIELD(mLeftTopHandle);
+	PROTECTED_FIELD(mLeftHandle);
+	PROTECTED_FIELD(mLeftBottomHandle);
+	PROTECTED_FIELD(mTopHandle);
+	PROTECTED_FIELD(mBottomHandle);
+	PROTECTED_FIELD(mRightTopHandle);
+	PROTECTED_FIELD(mRightHandle);
+	PROTECTED_FIELD(mRightBottomHandle);
+	PROTECTED_FIELD(mPivotHandle);
+	PROTECTED_FIELD(mFrame);
+	PROTECTED_FIELD(mIsDragging);
+	PROTECTED_FIELD(mChangedFromThis);
+	PROTECTED_FIELD(mBeforeTransforms);
+
+	PUBLIC_FUNCTION(void, DrawScene);
+	PUBLIC_FUNCTION(void, OnEnabled);
+	PUBLIC_FUNCTION(void, OnDisabled);
+	PUBLIC_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
+	PUBLIC_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PUBLIC_FUNCTION(void, OnKeyPressed, const Input::Key&);
+	PUBLIC_FUNCTION(void, OnKeyStayDown, const Input::Key&);
+	PUBLIC_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PUBLIC_FUNCTION(void, TransformActors, const Basis&);
+	PUBLIC_FUNCTION(void, TransformActorsWithAction, const Basis&);
+	PUBLIC_FUNCTION(void, UpdateSelectionFrame);
+	PUBLIC_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PUBLIC_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PUBLIC_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PUBLIC_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PUBLIC_FUNCTION(void, OnLeftTopHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnLeftHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnLeftBottomHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnTopHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnBottomHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnRightTopHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnRightHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnRightBottomHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnPivotHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnLeftTopRotateHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnLeftBottomRotateHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnRightTopRotateHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, OnRightBottomRotateHandle, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetHandlesEnable, bool);
+	PUBLIC_FUNCTION(void, UdateHandlesTransform);
+	PUBLIC_FUNCTION(void, HandlePressed);
+	PUBLIC_FUNCTION(void, HandleReleased);
+}
+END_META;
+ 

@@ -2,11 +2,13 @@
 
 #include "SyntaxTree.h"
 
-bool endsWith(const string& str, const string& ends);
-bool startsWith(const string& str, const string& starts);
-string& trim(string &str, const string& chars = " ");
-string& rtrim(string &str, const string& chars = " ");
-string& ltrim(string &str, const string& chars = " ");
+bool EndsWith(const string& str, const string& ends);
+bool StartsWith(const string& str, const string& starts);
+string& Trim(string &str, const string& chars = " ");
+string& TrimEnd(string &str, const string& chars = " ");
+string& TrimStart(string &str, const string& chars = " ");
+void Split(const string &s, char delim, vector<string> &elems);
+vector<string> Split(const string &s, char delim);
 
 class CppSyntaxParser
 {

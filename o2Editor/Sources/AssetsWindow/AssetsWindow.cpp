@@ -372,3 +372,50 @@ namespace Editor
 			CopyAssetFolder(src + "/" + folder.mPath, dst + "/" + folder.mPath);
 	}
 }
+ 
+CLASS_META(Editor::AssetsWindow)
+{
+	BASE_CLASS(Editor::IEditorWindow);
+	BASE_CLASS(o2::Singleton<AssetsWindow>);
+
+	PROTECTED_FIELD(mFilterButton);
+	PROTECTED_FIELD(mSearchEditBox);
+	PROTECTED_FIELD(mSelectedAssetPathLabel);
+	PROTECTED_FIELD(mFoldersTree);
+	PROTECTED_FIELD(mAssetsGridScroll);
+	PROTECTED_FIELD(mAssetsTree);
+	PROTECTED_FIELD(mSeparatorHandle);
+	PROTECTED_FIELD(mCuttingAssets);
+
+	PUBLIC_FUNCTION(void, SelectAsset, AssetId);
+	PUBLIC_FUNCTION(void, SelectAsset, const String&);
+	PUBLIC_FUNCTION(void, SelectAsset, const Vector<AssetId>&);
+	PUBLIC_FUNCTION(void, SelectAssets, const Vector<String>&);
+	PUBLIC_FUNCTION(void, OpenAsset, AssetId);
+	PUBLIC_FUNCTION(void, OpenAsset, const String&);
+	PUBLIC_FUNCTION(void, OpenAndEditAsset, AssetId);
+	PUBLIC_FUNCTION(void, OpenAndEditAsset, const String&);
+	PUBLIC_FUNCTION(void, DeselectAssets);
+	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
+	PUBLIC_FUNCTION(String, GetOpenedFolderPath);
+	PUBLIC_FUNCTION(void, OpenFolder, const String&);
+	PUBLIC_FUNCTION(void, ShowAssetIcon, AssetId);
+	PUBLIC_FUNCTION(void, ShowAssetIcon, const String&);
+	PUBLIC_FUNCTION(void, CopyAssets, const Vector<String>&);
+	PUBLIC_FUNCTION(void, CutAssets, const Vector<String>&);
+	PUBLIC_FUNCTION(void, PasteAssets, const String&);
+	PUBLIC_FUNCTION(void, DeleteAssets, const Vector<String>&);
+	PUBLIC_FUNCTION(void, ImportAssets, const String&);
+	PUBLIC_FUNCTION(void, CreateFolderAsset, const String&);
+	PUBLIC_FUNCTION(void, CreatePrefabAsset, const String&);
+	PUBLIC_FUNCTION(void, CreateScriptAsset, const String&);
+	PUBLIC_FUNCTION(void, CreateAnimationAsset, const String&);
+	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
+	PROTECTED_FUNCTION(void, OnMenuFilterPressed);
+	PROTECTED_FUNCTION(void, OnShowTreePressed);
+	PROTECTED_FUNCTION(void, OnAssetsRebuilded, const Vector<AssetId>&);
+	PROTECTED_FUNCTION(void, CopyAssetFolder, const String&, const String&);
+}
+END_META;
+ 

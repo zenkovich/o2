@@ -90,6 +90,7 @@ protected:
 	SyntaxNamespace* mGlobalNamespace = nullptr; // Global syntax namespace in file
 
 	friend class CppSyntaxParser;
+	friend class CodeToolApplication;
 };
 
 // Syntax expression base

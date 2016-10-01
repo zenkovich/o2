@@ -1,6 +1,28 @@
 #pragma once
 
+#include <windows.h>
 #include "CppSyntaxParser.h"
+
+class Timer
+{
+public:
+	// Default constructor
+	Timer();
+
+	// Resets time
+	void Reset();
+
+	// Returns time in seconds from last Reset() call
+	float GetTime();
+
+	// Returns time in seconds from last Reset() or GetElapsedTime() call
+	float GetDeltaTime();
+
+protected:
+	LONGLONG      mLastElapsedTime;
+	LARGE_INTEGER mFrequency;
+	LARGE_INTEGER mStartTime;
+};
 
 class CodeToolCache
 {
@@ -58,13 +80,20 @@ public:
 	// Generates new reflection
 	void Process();
 
+	// Outs string to log
+	static void Log(const char* format, ...);
+
+	// Outs string to log if verbose move is enabled
+	static void VerboseLog(const char* format, ...);
+
 protected:
 	string                 mCachePath = "CodeToolCache.xml";
 					       
 	string                 mSourcesPath;
 	string                 mMSVCProjectPath;
 	string                 mXCodeProjectPath;
-	bool                   mNeedReset;
+	bool                   mNeedReset = true;
+	static bool            mVerbose;
 					       
 	CppSyntaxParser*       mParser;
 	vector<SyntaxFile*>    mParsedFiles;
@@ -74,6 +103,9 @@ protected:
 protected:
 	// Returns list of all files in path and in sub paths
 	map<string, TimeStamp> GetFolderFiles(const string& path);
+
+	// Returns last edited date for file
+	TimeStamp GetFileEditedDate(const string& path);
 
 	// Parses startup arguments and puts into map
 	map<string, string> ParseArguments(char** args, int nargs);

@@ -18,123 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp" />
-    <ClCompile Include="..\..\Sources\AssetsWindow\AssetsWindow.cpp" />
-    <ClCompile Include="..\..\Sources\AssetsWindow\FoldersTree.cpp" />
-    <ClCompile Include="..\..\Sources\AssetsWindow\UIAssetIcon.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Actions\ActorsTransform.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Actions\CreateActors.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Actions\DeleteActors.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Actions\EnableAction.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Actions\LockAction.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Actions\ReparentActors.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Actions\Selection.cpp" />
-    <ClCompile Include="..\..\Sources\Core\EditorConfig.cpp" />
-    <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp" />
-    <ClCompile Include="..\..\Sources\Core\MenuPanel.cpp" />
-    <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Tools\FrameTool.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Tools\MoveTool.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Tools\RotateTool.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Tools\ScaleTool.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Tools\SelectionTool.cpp" />
-    <ClCompile Include="..\..\Sources\Core\UIStyle\BasicUIStyle.cpp" />
-    <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp" />
-    <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />
-    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp" />
-    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp" />
-    <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.cpp" />
-    <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
-    <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\PropertiesWindow.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FloatProperty.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.cpp" />
-    <ClCompile Include="..\..\Sources\SceneWindow\SceneDragHandle.cpp" />
-    <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp" />
-    <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
-    <ClCompile Include="..\..\Sources\SceneWindow\SceneEditWidget.cpp" />
-    <ClCompile Include="..\..\Sources\TreeWindow\ActorsTree.cpp" />
-    <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp" />
-    <ClCompile Include="..\..\Sources\Windows\main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h" />
-    <ClInclude Include="..\..\Sources\AssetsWindow\AssetsWindow.h" />
-    <ClInclude Include="..\..\Sources\AssetsWindow\FoldersTree.h" />
-    <ClInclude Include="..\..\Sources\AssetsWindow\UIAssetIcon.h" />
-    <ClInclude Include="..\..\Sources\Core\Actions\ActorsTransform.h" />
-    <ClInclude Include="..\..\Sources\Core\Actions\CreateActors.h" />
-    <ClInclude Include="..\..\Sources\Core\Actions\DeleteActors.h" />
-    <ClInclude Include="..\..\Sources\Core\Actions\EnableAction.h" />
-    <ClInclude Include="..\..\Sources\Core\Actions\IAction.h" />
-    <ClInclude Include="..\..\Sources\Core\Actions\LockAction.h" />
-    <ClInclude Include="..\..\Sources\Core\Actions\ReparentActors.h" />
-    <ClInclude Include="..\..\Sources\Core\Actions\Selection.h" />
-    <ClInclude Include="..\..\Sources\Core\EditorConfig.h" />
-    <ClInclude Include="..\..\Sources\Core\EditorApplication.h" />
-    <ClInclude Include="..\..\Sources\Core\MenuPanel.h" />
-    <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
-    <ClInclude Include="..\..\Sources\Core\Tools\FrameTool.h" />
-    <ClInclude Include="..\..\Sources\Core\Tools\IEditorTool.h" />
-    <ClInclude Include="..\..\Sources\Core\Tools\MoveTool.h" />
-    <ClInclude Include="..\..\Sources\Core\Tools\RotateTool.h" />
-    <ClInclude Include="..\..\Sources\Core\Tools\ScaleTool.h" />
-    <ClInclude Include="..\..\Sources\Core\Tools\SelectionTool.h" />
-    <ClInclude Include="..\..\Sources\Core\UIStyle\BasicUIStyle.h" />
-    <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h" />
-    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h" />
-    <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h" />
-    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h" />
-    <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.h" />
-    <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h" />
-    <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\PropertiesWindow.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\FloatProperty.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\AssetProperty.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IPropertyField.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.h" />
-    <ClInclude Include="..\..\Sources\SceneWindow\SceneDragHandle.h" />
-    <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h" />
-    <ClInclude Include="..\..\Sources\SceneWindow\SceneEditWidget.h" />
-    <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
-    <ClInclude Include="..\..\Sources\TreeWindow\ActorsTree.h" />
-    <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F0C3F9F6-349D-4D58-9175-0AE646039318}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -169,10 +52,8 @@
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -191,7 +72,7 @@
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_dbg</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -203,7 +84,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -213,8 +94,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -241,7 +121,7 @@
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
     <PreBuildEvent>
-      <Command>%O2%\o2CodeTool\o2CodeTool\bin\Release\o2CodeTool.exe $(ProjectDir)..\..\Sources\ReflectionGenerated %O2%\o2Engine\Sources $(ProjectDir)..\..\Sources\</Command>
+      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml" -v</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generating reflection</Message>
@@ -249,8 +129,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -268,8 +147,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -293,7 +171,7 @@
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
     <PreBuildEvent>
-      <Command>%O2%\o2CodeTool\o2CodeTool\bin\Release\o2CodeTool.exe $(ProjectDir)..\..\Sources\ReflectionGenerated %O2%\o2Engine\Sources $(ProjectDir)..\..\Sources\</Command>
+      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml" -v</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generating reflection</Message>
@@ -302,8 +180,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -322,6 +199,128 @@
     </BuildLog>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h" />
+    <ClInclude Include="..\..\Sources\AssetsWindow\AssetsWindow.h" />
+    <ClInclude Include="..\..\Sources\AssetsWindow\FoldersTree.h" />
+    <ClInclude Include="..\..\Sources\AssetsWindow\UIAssetIcon.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\ActorsTransform.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\CreateActors.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\DeleteActors.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\EnableAction.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\IAction.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\LockAction.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\ReparentActors.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\Selection.h" />
+    <ClInclude Include="..\..\Sources\Core\EditorApplication.h" />
+    <ClInclude Include="..\..\Sources\Core\EditorConfig.h" />
+    <ClInclude Include="..\..\Sources\Core\MenuPanel.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\FrameTool.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\IEditorTool.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\MoveTool.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\RotateTool.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\ScaleTool.h" />
+    <ClInclude Include="..\..\Sources\Core\Tools\SelectionTool.h" />
+    <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
+    <ClInclude Include="..\..\Sources\Core\UIStyle\BasicUIStyle.h" />
+    <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h" />
+    <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\AssetProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\FloatProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IPropertyField.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\PropertiesWindow.h" />
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneDragHandle.h" />
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h" />
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneEditWidget.h" />
+    <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
+    <ClInclude Include="..\..\Sources\TreeWindow\ActorsTree.h" />
+    <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp" />
+    <ClCompile Include="..\..\Sources\AssetsWindow\AssetsWindow.cpp" />
+    <ClCompile Include="..\..\Sources\AssetsWindow\FoldersTree.cpp" />
+    <ClCompile Include="..\..\Sources\AssetsWindow\UIAssetIcon.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\ActorsTransform.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\CreateActors.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\DeleteActors.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\EnableAction.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\IAction.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\LockAction.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\ReparentActors.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\Selection.cpp" />
+    <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp" />
+    <ClCompile Include="..\..\Sources\Core\EditorConfig.cpp" />
+    <ClCompile Include="..\..\Sources\Core\MenuPanel.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\FrameTool.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\IEditorTool.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\MoveTool.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\RotateTool.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\ScaleTool.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Tools\SelectionTool.cpp" />
+    <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UIStyle\BasicUIStyle.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
+    <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorHeaderViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\AssetProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FloatProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\IPropertyField.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\PropertiesWindow.cpp" />
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneDragHandle.cpp" />
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp" />
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneEditWidget.cpp" />
+    <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
+    <ClCompile Include="..\..\Sources\TreeWindow\ActorsTree.cpp" />
+    <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp" />
+    <ClCompile Include="..\..\Sources\Windows\main.cpp" />
+  </ItemGroup>
 </Project>

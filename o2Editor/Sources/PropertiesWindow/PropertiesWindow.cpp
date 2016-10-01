@@ -339,3 +339,36 @@ namespace Editor
 		return nullptr;
 	}
 }
+ 
+CLASS_META(Editor::PropertiesWindow)
+{
+	BASE_CLASS(Editor::IEditorWindow);
+	BASE_CLASS(o2::Singleton<PropertiesWindow>);
+
+	PROTECTED_FIELD(mPropertyFieldsPoolStep);
+	PROTECTED_FIELD(mTargets);
+	PROTECTED_FIELD(mCurrentViewer);
+	PROTECTED_FIELD(mViewers);
+	PROTECTED_FIELD(mAvailablePropertiesFields);
+	PROTECTED_FIELD(mFieldPropertiesPool);
+	PROTECTED_FIELD(mLabelsPool);
+	PROTECTED_FIELD(mHorLayoutsPool);
+
+	PUBLIC_FUNCTION(void, SetTarget, IObject*);
+	PUBLIC_FUNCTION(void, SetTargets, const Vector<IObject*>);
+	PUBLIC_FUNCTION(Vector<IObject*>, GetTargets);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, BuildTypeViewer, UIVerticalLayout*, const Type*, FieldPropertiesInfo&);
+	PUBLIC_FUNCTION(String, MakeSmartFieldName, const String&);
+	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, InitializeViewers);
+	PROTECTED_FUNCTION(void, InitializePropertiesFields);
+	PROTECTED_FUNCTION(void, InitializePools);
+	PROTECTED_FUNCTION(UIHorizontalLayout*, CreatePropertyHorLayout);
+	PROTECTED_FUNCTION(UILabel*, CreatePropertyLabel);
+	PROTECTED_FUNCTION(IPropertyField*, CreatePropertyField, const Type*);
+	PROTECTED_FUNCTION(IPropertyField*, GetAvailableField, const Type*);
+}
+END_META;
+ 

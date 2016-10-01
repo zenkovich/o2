@@ -688,3 +688,104 @@ namespace Editor
 			mEnabledTool->OnCursorMiddleMouseReleased(cursor);
 	}
 }
+ 
+CLASS_META(Editor::SceneEditScreen)
+{
+	BASE_CLASS(o2::CursorAreaEventsListener);
+	BASE_CLASS(o2::KeyboardEventsListener);
+	BASE_CLASS(o2::Singleton<SceneEditScreen>);
+	BASE_CLASS(o2::IObject);
+
+	PUBLIC_FIELD(onSelectionChanged);
+	PROTECTED_FIELD(mRectangle);
+	PROTECTED_FIELD(mViewCamera);
+	PROTECTED_FIELD(mViewCameraTargetScale);
+	PROTECTED_FIELD(mViewCameraScaleSence);
+	PROTECTED_FIELD(mViewCameraScaleElasticyCoef);
+	PROTECTED_FIELD(mViewCameraTargetPos);
+	PROTECTED_FIELD(mViewCameraVelocity);
+	PROTECTED_FIELD(mViewCameraPosElasticyCoef);
+	PROTECTED_FIELD(mViewCameraVelocityDampingCoef);
+	PROTECTED_FIELD(mViewCameraMinScale);
+	PROTECTED_FIELD(mViewCameraMaxScale);
+	PROTECTED_FIELD(mBackColor);
+	PROTECTED_FIELD(mGridColor);
+	PROTECTED_FIELD(mSelectedActorColor);
+	PROTECTED_FIELD(mMultiSelectedActorColor);
+	PROTECTED_FIELD(mActorMinimalSelectionSize);
+	PROTECTED_FIELD(mSceneToScreenTransform);
+	PROTECTED_FIELD(mScreenToSceneTransform);
+	PROTECTED_FIELD(mRenderTarget);
+	PROTECTED_FIELD(mRenderTargetSprite);
+	PROTECTED_FIELD(mNeedRedraw);
+	PROTECTED_FIELD(mDrawDepth);
+	PROTECTED_FIELD(mActorsTree);
+	PROTECTED_FIELD(mSelectedActors);
+	PROTECTED_FIELD(mTopSelectedActors);
+	PROTECTED_FIELD(mSelectedFromThis);
+	PROTECTED_FIELD(mTools);
+	PROTECTED_FIELD(mEnabledTool);
+	PROTECTED_FIELD(mDragHandles);
+	PROTECTED_FIELD(mPressedHandles);
+	PROTECTED_FIELD(mRightButtonPressedHandle);
+	PROTECTED_FIELD(mMiddleButtonPressedHandle);
+	PROTECTED_FIELD(mUnderCursorHandles);
+	PROTECTED_FIELD(mLastUnderCursorHandles);
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(Vec2F, ScreenToScenePoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, SceneToScreenPoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, ScreenToSceneVector, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, SceneToScreenVector, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetRect);
+	PUBLIC_FUNCTION(void, DrawActorSelection, Actor*, const Color4&);
+	PUBLIC_FUNCTION(void, SelectActors, ActorsVec, bool);
+	PUBLIC_FUNCTION(void, SelectActor, Actor*, bool);
+	PUBLIC_FUNCTION(void, SelectAllActors);
+	PUBLIC_FUNCTION(void, ClearSelection);
+	PUBLIC_FUNCTION(const ActorsVec&, GetSelectedActors);
+	PUBLIC_FUNCTION(const ActorsVec&, GetTopSelectedActors);
+	PUBLIC_FUNCTION(const Color4&, GetSingleActorSelectionColor);
+	PUBLIC_FUNCTION(const Color4&, GetManyActorsSelectionColor);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, InitializeTools, const Type*);
+	PROTECTED_FUNCTION(void, UpdateHandles);
+	PROTECTED_FUNCTION(bool, IsHandleWorking, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorMiddleMousePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorMiddleMouseStayDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorMiddleMouseReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnScrolled, float);
+	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnActorsSelectedFromThis);
+	PROTECTED_FUNCTION(void, UpdateCamera, float);
+	PROTECTED_FUNCTION(void, RedrawScene);
+	PROTECTED_FUNCTION(void, DrawGrid);
+	PROTECTED_FUNCTION(void, DrawActors);
+	PROTECTED_FUNCTION(void, DrawSelection);
+	PROTECTED_FUNCTION(void, UpdateSceneScreenTransforms);
+	PROTECTED_FUNCTION(void, BindActorsTree);
+	PROTECTED_FUNCTION(void, OnTreeSelectionChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, UpdateTopSelectedActors);
+	PROTECTED_FUNCTION(int, GetActorIdx, Actor*);
+	PROTECTED_FUNCTION(void, OnSceneChanged, ActorsVec);
+	PROTECTED_FUNCTION(void, ClearSelectionWithoutAction);
+	PROTECTED_FUNCTION(void, SelectActorsWithoutAction, ActorsVec, bool);
+	PROTECTED_FUNCTION(void, SelectActorWithoutAction, Actor*, bool);
+}
+END_META;
+ 

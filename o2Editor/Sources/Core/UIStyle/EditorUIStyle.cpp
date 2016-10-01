@@ -1316,3 +1316,48 @@ namespace Editor
 		o2UI.SaveStyle("editor_ui_style.xml");
 	}
 }
+ 
+CLASS_META(Editor::EditorUIStyleBuilder)
+{
+	BASE_CLASS(o2::BasicUIStyleBuilder);
+
+
+	PUBLIC_FUNCTION(void, RebuildDockableWndStyle);
+	PUBLIC_FUNCTION(void, RebuildPlayStopButtonStyle);
+	PUBLIC_FUNCTION(void, RebuildPauseButtonStyle);
+	PUBLIC_FUNCTION(void, RebuildStepButtonStyle);
+	PUBLIC_FUNCTION(void, RebuildRoundDropDown);
+	PUBLIC_FUNCTION(void, RebuildArrowToggle);
+	PUBLIC_FUNCTION(void, RebuildBrushToggle);
+	PUBLIC_FUNCTION(void, RebuildMoveToggle);
+	PUBLIC_FUNCTION(void, RebuildRotateToggle);
+	PUBLIC_FUNCTION(void, RebuildScaleToggle);
+	PUBLIC_FUNCTION(void, RebuildFrameToggle);
+	PUBLIC_FUNCTION(void, RebuildSearchButton);
+	PUBLIC_FUNCTION(void, RebuildListTreeToggle);
+	PUBLIC_FUNCTION(void, RebuildActorsTreeNodeEnableToggle);
+	PUBLIC_FUNCTION(void, RebuildActorsTreeLockToggle);
+	PUBLIC_FUNCTION(void, RebuildActorsTreeLinkBtn);
+	PUBLIC_FUNCTION(void, RebuildActorsTree);
+	PUBLIC_FUNCTION(void, RebuildPanelDownButton);
+	PUBLIC_FUNCTION(void, RebuildTrashDownPanelButton);
+	PUBLIC_FUNCTION(void, RebuildMessagesDownPanelToggle);
+	PUBLIC_FUNCTION(void, RebuildWarningsDownPanelToggle);
+	PUBLIC_FUNCTION(void, RebuildErrorsDownPanelToggle);
+	PUBLIC_FUNCTION(void, RebuildFilterMenuButton);
+	PUBLIC_FUNCTION(void, RebuildTreeMenuButton);
+	PUBLIC_FUNCTION(void, RebuildFoldersTree);
+	PUBLIC_FUNCTION(void, RebuildRegularAssetIcon);
+	PUBLIC_FUNCTION(void, RebuildFolderAssetIcon);
+	PUBLIC_FUNCTION(void, RebuildPrefabAssetIcon);
+	PUBLIC_FUNCTION(void, RebuildPrefabPreviewAssetIcon);
+	PUBLIC_FUNCTION(void, RebuildImagePreviewAssetIcon);
+	PUBLIC_FUNCTION(void, RebuildTextAssetIcon);
+	PUBLIC_FUNCTION(void, RebuildAnimationAssetIcon);
+	PUBLIC_FUNCTION(void, RebuildAssetsGridScroll);
+	PUBLIC_FUNCTION(void, RebuildLinkBtn);
+	PUBLIC_FUNCTION(void, RebuildEditorDropdown);
+	PUBLIC_FUNCTION(void, RebuildEditorUIStyle);
+}
+END_META;
+ 
