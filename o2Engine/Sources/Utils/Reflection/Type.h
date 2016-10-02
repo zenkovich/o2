@@ -135,6 +135,8 @@ namespace o2
 		mutable Type*     mUnptrType;     // Unpoint type from this
 		int               mSize;          // Size of type in bytes
 
+		void(*mInitializeFunc)(Type*);    // Type initializing function
+
 	protected:
 		// Sets name for this and pointer/unpoint types
 		void SetName(const String& name);
@@ -207,9 +209,6 @@ namespace o2
 		template<typename _type, typename X = std::conditional<std::is_base_of<IObject, _type>::value, _type, Type::Dummy>::type>
 		static void AddBaseType(Type*& type);
 
-		// Checks for type inheritance resolving
-		static void CheckTypeResolving(Type*& type);
-
 		// Registers field in type
 		template<typename _type>
 		static FieldInfo& RegField(Type* type, const String& name, UInt offset, _type*& value, ProtectSection section);
@@ -233,10 +232,6 @@ namespace o2
 		// Registers function in type
 		template<typename _class_type, typename _res_type, typename ... _args>
 		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section);
-
-	protected:
-		static Vector<Type**>*             mInitializedTypes;
-		static Dictionary<Type**, Type**>* mUnresolvedBaseTypes;
 	};
 
 #define CLASS_META(NAME)                                                \
@@ -245,7 +240,6 @@ namespace o2
 	{                                                                   \
 	    typedef NAME thisclass;                                         \
 	    thisclass::type = type;                                         \
-	    o2::TypeInitializer::CheckTypeResolving(thisclass::type);       \
 	    thisclass* __this = 0;      
 
 #define META_TEMPLATES(...) \
@@ -256,7 +250,6 @@ namespace o2
 	{                                                                   \
 	    typedef NAME thisclass;                                         \
 	    thisclass::type = type;                                         \
-	    o2::TypeInitializer::CheckTypeResolving(thisclass::type);       \
 	    thisclass* __this = 0;                                          
 
 #define BASE_CLASS(NAME) \
@@ -345,10 +338,7 @@ namespace o2
 
 		Type*& baseType = X::type;
 
-		if (mInitializedTypes->Contains(&baseType))
-			type->mBaseTypes.Add(baseType);
-		else
-			mUnresolvedBaseTypes->Add(&baseType, &type);
+		type->mBaseTypes.Add(baseType);
 	}
 
 	template<typename _type>

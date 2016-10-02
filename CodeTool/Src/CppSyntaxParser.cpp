@@ -779,12 +779,13 @@ void CppSyntaxParser::ParseEnum(SyntaxSection& section, int& caret,
 	auto content = Split(block, ',');
 
 	SyntaxEnum* newEnum = new SyntaxEnum();
-	newEnum->mBegin  = begin;
-	newEnum->mLength = caret - begin;
-	newEnum->mLine   = GetLineNumber(section.mData, caret);
-	newEnum->mData   = section.mData.substr(begin, caret - begin);
-	newEnum->mName   = name;
-	newEnum->mFile   = section.mFile;
+	newEnum->mBegin    = begin;
+	newEnum->mLength   = caret - begin;
+	newEnum->mLine     = GetLineNumber(section.mData, caret);
+	newEnum->mData     = section.mData.substr(begin, caret - begin);
+	newEnum->mName     = name;
+	newEnum->mFullName = section.GetFullName().empty() ? name : section.GetFullName() + "::" + name;
+	newEnum->mFile     = section.mFile;
 
 	for (auto& x : content)
 	{

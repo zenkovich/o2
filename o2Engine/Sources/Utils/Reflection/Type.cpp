@@ -175,32 +175,4 @@ namespace o2
 	{
 		return other.mId == mId;
 	}
-
-	Type* Type::Dummy::type = new Type("Unknown", nullptr, 0);
-
-	void TypeInitializer::CheckTypeResolving(Type*& type)
-	{
-		static Vector<Type**> initializedTypes;
-		static Dictionary<Type**, Type**> unresolvedBaseTypes;
-
-		mInitializedTypes = &initializedTypes;
-		mUnresolvedBaseTypes = &unresolvedBaseTypes;
-
-		mInitializedTypes->Add(&type);
-
-		for (auto x : *mUnresolvedBaseTypes)
-		{
-			if (x.Key() == &type)
-			{
-				(*x.Value())->mBaseTypes.Add(type);
-			}
-		}
-
-		mUnresolvedBaseTypes->RemoveAll([=](auto x) { return x.Key() == &type; });
-	}
-
-	Type* IObject::type = nullptr;
-	Vector<Type**>* TypeInitializer::mInitializedTypes;
-	Dictionary<Type**, Type**>* TypeInitializer::mUnresolvedBaseTypes;
-
 }

@@ -187,6 +187,19 @@ SyntaxClassesVec SyntaxSection::GetAllClasses() const
 	return res;
 }
 
+SyntaxEnumsVec SyntaxSection::GetAllEnums() const
+{
+	SyntaxEnumsVec res = mEnums;
+
+	for (auto x : mSections)
+	{
+		for (auto y : x->GetAllEnums())
+			res.push_back(y);
+	}
+
+	return res;
+}
+
 bool SyntaxSection::IsClass() const
 {
 	return false;
@@ -501,6 +514,11 @@ bool SyntaxFunction::IsStatic() const
 const string& SyntaxEnum::GetName() const
 {
 	return mName;
+}
+
+const string& SyntaxEnum::GetFullName() const
+{
+	return mFullName;
 }
 
 const StringStringDict& SyntaxEnum::GetEntries() const

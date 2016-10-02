@@ -557,41 +557,60 @@ void CodeToolApplication::ParseSource(const string& path, const TimeStamp& editD
 
 void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 {
-	auto classes = file->GetGlobalNamespace()->GetAllClasses();
 
 	string cppSource, cppSourceInitial;
 	bool cppLoaded = false;
 
 	string hSource = file->GetData();
-	RemoveClassMetas(hSource, "META_TEMPLATES(");
+	RemoveMetas(hSource, "META_TEMPLATES(", "END_META;");
 
 	string cppSourcePath = file->GetPath().substr(0, file->GetPath().rfind('.')) + ".cpp";
 
 	SyntaxClass* baseObjectClass = (SyntaxClass*)(mCache.FindSection("o2::IObject"));
 
-	for (auto cls : classes)
+	auto checkCppLoad = [&]()
 	{
-		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || cls == baseObjectClass)
-			continue;
-
-		if (!cppLoaded && !cls->IsTemplate())
+		if (!cppLoaded)
 		{
 			if (IsFileExist(cppSourcePath))
 			{
 				cppSource = ReadFile(cppSourcePath);
 				cppSourceInitial = cppSource;
-				RemoveClassMetas(cppSource, "CLASS_META(");
-				RemoveClassMetas(cppSource, "CLASS_TEMPLATE_META(");
+				RemoveMetas(cppSource, "ENUM_META(", "END_ENUM_META;");
+				RemoveMetas(cppSource, "CLASS_META(", "END_META;");
+				RemoveMetas(cppSource, "CLASS_TEMPLATE_META(", "END_META;");
 			}
 			else cppSource = "#include \"" + GetPathWithoutDirectories(file->GetPath()) + "\"\n\n";
 
 			cppLoaded = true;
 		}
+	};
 
-		if (cls->IsTemplate())
-			hSource += GetClassMeta(cls);
-		else
+	auto classes = file->GetGlobalNamespace()->GetAllClasses();
+	for (auto cls : classes)
+	{
+		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || cls == baseObjectClass)
+			continue;
+
+		if (!cls->IsTemplate())
+		{
+			checkCppLoad();
 			cppSource += GetClassMeta(cls);
+		}
+		else hSource += GetClassMeta(cls);
+
+		VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
+	}
+
+	auto enums = file->GetGlobalNamespace()->GetAllEnums();
+
+	if (!enums.empty())
+		checkCppLoad();
+
+	for (auto enm : enums)
+	{
+		cppSource += GetEnumMeta(enm);
+		VerboseLog("Generated meta for enum:%s\n", enm->GetFullName().c_str());
 	}
 
 	if (cppLoaded && cppSource != cppSourceInitial)
@@ -796,6 +815,21 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	return res;
 }
 
+string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)
+{
+	string res;
+	res.reserve(enm->GetEntries().size()*15);
+
+	res += "\nENUM_META(" + enm->GetFullName() + ")\n{\n";
+
+	for (auto e : enm->GetEntries())
+		res += "\tENUM_ENTRY(" + e.first + ");\n";
+
+	res += "}\nEND_ENUM_META;\n";
+
+	return res;
+}
+
 void CodeToolApplication::AggregateTemplates(SyntaxSection* sec, string& res, string& fullName)
 {
 	if (sec->GetParentSection())
@@ -879,7 +913,7 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 	return fullName;
 }
 
-void CodeToolApplication::RemoveClassMetas(string& data, const char* keyword)
+void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const char* endword)
 {
 	int caret = (int)data.find(keyword);
 	while (caret != data.npos)
@@ -891,7 +925,7 @@ void CodeToolApplication::RemoveClassMetas(string& data, const char* keyword)
 
 		caret = newCaret;
 
-		int end = (int)data.find("END_META;", caret);
+		int end = (int)data.find(endword, caret);
 		if (end == data.npos)
 		{
 			caret++;
@@ -913,7 +947,7 @@ void CodeToolApplication::RemoveClassMetas(string& data, const char* keyword)
 		if (removedNewLines)
 			caret++;
 
-		data.erase(caret, end + strlen("END_META;") - caret);
+		data.erase(caret, end + strlen(endword) - caret);
 		caret = 0;
 	}
 }

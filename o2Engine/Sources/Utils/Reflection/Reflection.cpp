@@ -15,7 +15,6 @@ namespace o2
 		mLastGivenTypeId(1)
 	{
 		mInstance = this;
-		InitializeFundamentalTypes();
 	}
 
 	Reflection::~Reflection()
@@ -30,6 +29,18 @@ namespace o2
 			mInstance = new Reflection();
 
 		return *mInstance;
+	}
+
+	void Reflection::InitializeTypes()
+	{
+		InitializeFundamentalTypes();
+
+		auto types = mInstance->mTypes;
+		for (auto type : types)
+		{
+			if (type->mInitializeFunc)
+				type->mInitializeFunc(type);
+		}
 	}
 
 	const Vector<Type*>& Reflection::GetTypes()
@@ -78,6 +89,7 @@ namespace o2
 
 	void Reflection::InitializeFundamentalTypes()
 	{
+		IObject::type->mId = mInstance->mLastGivenTypeId++;
 		FundamentalType<void>::type->mId = mInstance->mLastGivenTypeId++;
 		Type::Dummy::type->mId = mInstance->mLastGivenTypeId++;
 
@@ -105,6 +117,8 @@ namespace o2
 	}
 
 	Type* FundamentalType<void>::type = new Type("void", nullptr, 0);
+	Type* IObject::type = new Type("IObject", nullptr, 0);
+	Type* Type::Dummy::type = new Type("Unknown", nullptr, 0);
 
 	REG_FUNDAMENTAL_TYPE(int);
 	REG_FUNDAMENTAL_TYPE(bool);

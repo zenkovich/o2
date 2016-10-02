@@ -231,6 +231,9 @@ public:
 	// Returns all inside classes
 	virtual SyntaxClassesVec GetAllClasses() const;
 
+	// Returns all enums
+	virtual SyntaxEnumsVec GetAllEnums() const;
+
 	// Returns is this section is class
 	virtual bool IsClass() const;
 
@@ -502,6 +505,9 @@ public:
 	// Returns name of enum
 	const string& GetName() const;
 
+	// Returns full name of enum with all parent spaces names
+	const string& GetFullName() const;
+
 	// Returns enum entries
 	const StringStringDict& GetEntries() const;
 
@@ -509,8 +515,9 @@ public:
 	SyntaxProtectionSection GetClassSection() const;
 
 protected:
-	string                  mName;	  // Name of enum
-	StringStringDict        mEntries; // Entries of enum
+	string                  mName;	   // Name of enum
+	string                  mFullName; // Full enum name with all parent spaces names
+	StringStringDict        mEntries;  // Entries of enum
 	SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
 
 	friend class CppSyntaxParser;

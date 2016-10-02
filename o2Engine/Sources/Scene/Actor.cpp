@@ -975,6 +975,7 @@ namespace o2
 	}
 
 }
+
  
 CLASS_META(o2::Actor)
 {
@@ -1079,4 +1080,11 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
+
+ENUM_META(o2::Actor::CreateMode)
+{
+	ENUM_ENTRY(InScene);
+	ENUM_ENTRY(NotInScene);
+}
+END_ENUM_META;
  

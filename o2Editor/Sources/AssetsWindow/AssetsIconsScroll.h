@@ -292,5 +292,4 @@ namespace Editor
 	{
 		return nullptr;
 	}
-
 }

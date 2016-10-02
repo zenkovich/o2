@@ -1728,6 +1728,7 @@ namespace o2
 	}
 
 }
+
  
 CLASS_META(o2::UITree)
 {
@@ -1916,4 +1917,20 @@ CLASS_META(o2::UITreeNode)
 	PROTECTED_FUNCTION(void, OnDeselected);
 }
 END_META;
+
+ENUM_META(o2::UITree::RearrangeType)
+{
+	ENUM_ENTRY(Disabled);
+	ENUM_ENTRY(Enabled);
+	ENUM_ENTRY(OnlyReparent);
+}
+END_ENUM_META;
+
+ENUM_META(o2::UITree::ExpandState)
+{
+	ENUM_ENTRY(Collaping);
+	ENUM_ENTRY(Expanding);
+	ENUM_ENTRY(None);
+}
+END_ENUM_META;
  

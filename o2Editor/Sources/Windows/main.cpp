@@ -17,6 +17,8 @@ DECLARE_SINGLETON(ToolsPanel);
 
 int main()
 {
+	o2::Reflection::InitializeTypes();
+
 	DataNode data;
 	Vector<Actor*> xx = { mnew Actor(), mnew Actor(), mnew Actor() };
 	TimeStamp* ts = mnew TimeStamp();

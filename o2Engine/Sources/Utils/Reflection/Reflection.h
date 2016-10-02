@@ -18,6 +18,9 @@ namespace o2
 		// Returns reflection instance
 		static Reflection& Instance();
 
+		// Initializes all types
+		static void InitializeTypes();
+
 		// Returns array of all registered types
 		static const Vector<Type*>& GetTypes();
 
@@ -47,20 +50,20 @@ namespace o2
 
 		// Initializes enum
 		template<typename _type>
-		static void InitializeEnum(const Dictionary<int, String>& defs);
+		static int InitializeEnum(std::function<Dictionary<int, const char*>()> func);
 
 		// Initializes pointer type
 		static const Type* InitializePointerType(const Type* type);
 
 	protected:
-		typedef Dictionary<const char*, Dictionary<int, String>> EnumsDict;
+		typedef Dictionary<const char*, Dictionary<int, const char*>> EnumsDict;
 
 		static Reflection* mInstance;        // Reflection instance
 
 		Vector<Type*>      mTypes;           // All registered types
 		UInt               mLastGivenTypeId; // Last given type index
 		EnumsDict          mEnums;           // Enums
-		
+
 	protected:
 		// Constructor. Initializes dummy type
 		Reflection();
@@ -79,6 +82,21 @@ namespace o2
 
 #define REG_FUNDAMENTAL_TYPE(TYPE) \
 	o2::Type* o2::FundamentalType<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
+
+#define CONCATENATE_DETAIL(x, y, z) x##y##z
+#define CONCATENATE(x, y, z) CONCATENATE_DETAIL(x, y, z)
+#define MAKE_UNIQUE(x) CONCATENATE(x, __LINE__, __COUNTER__)
+
+#define ENUM_META(NAME)                                                      \
+    int MAKE_UNIQUE(_enum_def) = o2::Reflection::InitializeEnum<NAME>([]() { \
+    typedef NAME EnumName;                                                   \
+    o2::Dictionary<int, const char*> res;                                        
+
+#define ENUM_ENTRY(NAME) \
+    res.Add((int)EnumName::NAME, #NAME)
+
+#define END_ENUM_META \
+    return res; });
 
 	template<typename _type>
 	_type Reflection::GetEnumValue(const String& name)
@@ -109,8 +127,8 @@ namespace o2
 	{
 		Type* res = new Type(name, new Type::SampleCreator<_type>(), sizeof(_type));
 
-		_type::InitializeType(res);
-		res->mId = mInstance->mLastGivenTypeId++;
+		res->mInitializeFunc = &_type::InitializeType;
+		res->mId = Reflection::Instance().mLastGivenTypeId++;
 
 		Reflection::Instance().mTypes.Add(res);
 
@@ -122,15 +140,16 @@ namespace o2
 	{
 		Type* res = new Type(name, new Type::SampleCreator<_type>(), sizeof(_type));
 
-		res->mId = mInstance->mLastGivenTypeId++;
+		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
 
 		return res;
 	}
 
 	template<typename _type>
-	void Reflection::InitializeEnum(const Dictionary<int, String>& defs)
+	int Reflection::InitializeEnum(std::function<Dictionary<int, const char*>()> func)
 	{
-		mInstance->mEnums.Add(typeid(_type).name(), defs);
+		Reflection::Instance().mEnums.Add(typeid(_type).name(), func());
+		return 0;
 	}
 }

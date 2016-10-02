@@ -28,7 +28,8 @@ namespace o2
 		template<typename _type>
 		friend const Type& o2::GetTypeOf();
 
-		friend class o2::TypeInitializer;
+		friend class TypeInitializer;
+		friend class Reflection;
 	};
 
 	// IObject header definition
