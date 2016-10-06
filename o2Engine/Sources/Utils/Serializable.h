@@ -42,6 +42,12 @@ namespace o2
 
 		// Deserializing object from data node
 		void DeserializeBasic(const DataNode& node, const void* thisObject);
+
+		// Serializing object into data node
+		void SerializeBasicType(DataNode& node, const void* thisObject, const Type& type) const;
+
+		// Deserializing object from data node
+		void DeserializeBasicType(const DataNode& node, const void* thisObject, const Type& type);
 	};
 
 	// ----------------------------

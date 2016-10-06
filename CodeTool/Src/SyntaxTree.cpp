@@ -467,6 +467,11 @@ SyntaxProtectionSection SyntaxVariable::GetClassSection() const
 	return mClassSection;
 }
 
+bool SyntaxVariable::IsStatic() const
+{
+	return mIsStatic;
+}
+
 SyntaxFunction::SyntaxFunction()
 {}
 

@@ -233,3 +233,5 @@ pip-log.txt
 /CodeTool/Platforms/Windows/CodeTool.VC.db
 /CodeTool/CodeTool.VC.db
 /CodeTool/CodeTool.VC.VC.opendb
+/o2Engine/dependencies/vs2013/Dependencies.VC.db
+/o2Engine/dependencies/vs2013/FreeType/FreeType_Debug.lib

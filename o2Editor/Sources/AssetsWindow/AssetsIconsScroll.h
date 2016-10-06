@@ -136,9 +136,9 @@ namespace Editor
 		Vec2F              mDragOffset;                 // Dragging offset from cursor to icon center
 		ActorsVec          mInstSceneDragActors;        // Instantiated actors when dragging asset above scene
 
-		IAssetProperty*    mDragAssetPropertyField;     // Asset property field under cursor, when dragging asset
-		ActorProperty*     mDragActorPropertyField;     // Actor property field under cursor, when dragging asset
-		ComponentProperty* mDragComponentPropertyField; // Component property field under cursor, when dragging asset
+		IAssetProperty*    mDragAssetPropertyField = nullptr;     // Asset property field under cursor, when dragging asset
+		ActorProperty*     mDragActorPropertyField = nullptr;     // Actor property field under cursor, when dragging asset
+		ComponentProperty* mDragComponentPropertyField = nullptr; // Component property field under cursor, when dragging asset
 
 		AssetIdPathVec     mCuttingAssets;              // Current cutted assets
 						   

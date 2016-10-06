@@ -12,7 +12,7 @@ o2::o2StackWalker* o2::o2StackWalker::mInstance = new o2StackWalker();				      
 o2::MemoryManager* o2::MemoryManager::mInstance = new MemoryManager();				         \
 template<> o2::Debug* o2::Singleton<o2::Debug>::mInstance = mnew o2::Debug();                \
 template<> o2::FileSystem* o2::Singleton<o2::FileSystem>::mInstance = mnew o2::FileSystem(); \
-o2::Reflection* o2::Reflection::mInstance = mnew Reflection()
+o2::Reflection* o2::Reflection::mInstance
 
 #define MAIN_O2                              \
 RegReflectionTypes();                        \

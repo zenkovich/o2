@@ -1304,7 +1304,7 @@ namespace Editor
 	{
 		o2UI.ClearStyle();
 
-		auto funcs = GetType().Functions();
+		auto funcs = GetType().AllFunctions();
 		for (auto func : funcs)
 		{
 			if (func->GetName() == "RebuildBasicUIStyle" || func->GetName() == "RebuildEditorUIStyle")

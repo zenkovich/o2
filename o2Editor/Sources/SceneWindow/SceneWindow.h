@@ -22,10 +22,12 @@ namespace Editor
 		UIWidget*        mLayersView;
 		UIWidget*        mGizomsView;
 
-	protected:
+	public:
 		SceneWindow();
 		SceneWindow(const SceneWindow& other);
 		~SceneWindow();
+
+	protected:
 
 		void InitializeWindow();
 		void InitializeLayersView();

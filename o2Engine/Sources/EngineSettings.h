@@ -34,7 +34,7 @@
 // ----------------------------
 
 // Building assets before launching app
-#define ASSETS_PREBUILDING_ENABLE false
+#define ASSETS_PREBUILDING_ENABLE true
 
 // Assets path. Relative from project path
 #define ASSETS_PATH "Assets/"

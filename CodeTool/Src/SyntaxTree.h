@@ -445,6 +445,9 @@ public:
 	// Returns class definition section
 	SyntaxProtectionSection GetClassSection() const;
 
+	// Returns is variable is static
+	bool IsStatic() const;
+
 protected:
 	SyntaxType              mType;                                           // Type of variable
 	string                  mName;                                           // Name of variable

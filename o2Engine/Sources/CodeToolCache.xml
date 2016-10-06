@@ -113,7 +113,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Animation/AnimatedValue.h">
-		<date year="2016" month="10" day="2" hour="23" minute="15" second="40" />
+		<date year="2016" month="10" day="6" hour="14" minute="9" second="19" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -304,7 +304,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Animation/TweenValue.h">
-		<date year="2016" month="10" day="2" hour="23" minute="15" second="41" />
+		<date year="2016" month="10" day="6" hour="14" minute="9" second="19" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1023,7 +1023,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/EngineSettings.h">
-		<date year="2016" month="7" day="31" hour="13" minute="53" second="46" />
+		<date year="2016" month="10" day="3" hour="1" minute="40" second="40" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -1153,7 +1153,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/O2.h">
-		<date year="2016" month="8" day="27" hour="14" minute="17" second="19" />
+		<date year="2016" month="10" day="5" hour="0" minute="3" second="20" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -1416,7 +1416,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Render/Text.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
+		<date year="2016" month="10" day="6" hour="13" minute="43" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2942,7 +2942,7 @@
 									<typedefs />
 									<usings />
 									<baseClasses>
-										<class name="||&#10;			 std::is_enum&lt;T&gt;::value ||&#10;			 std::is_base_of&lt;ISerializable, T&gt;::value ||&#10;			 std::is_base_of&lt;ISerializable, typename std::remove_pointer&lt;T&gt;::type&gt;::value ||&#10;			 std::is_same&lt;Color4, T&gt;::value ||&#10;			 std::is_same&lt;RectI, T&gt;::value ||&#10;			 std::is_same&lt;RectF, T&gt;::value ||&#10;			 std::is_same&lt;Vec2I, T&gt;::value ||&#10;			 std::is_same&lt;Vec2F, T&gt;::value ||&#10;			 std::is_same&lt;String, T&gt;::value ||&#10;			 std::is_same&lt;WString, T&gt;::value ||&#10;			 std::is_same&lt;DataNode, T&gt;::value) &amp;&amp; !std::is_const&lt;T&gt;::value&gt;" protection="1" />
+										<class name="||&#10;    std::is_enum&lt;T&gt;::value ||&#10;    std::is_base_of&lt;ISerializable, T&gt;::value ||&#10;    std::is_base_of&lt;ISerializable, typename std::remove_pointer&lt;T&gt;::type&gt;::value ||&#10;    std::is_same&lt;Color4, T&gt;::value ||&#10;    std::is_same&lt;RectI, T&gt;::value ||&#10;    std::is_same&lt;RectF, T&gt;::value ||&#10;    std::is_same&lt;Vec2I, T&gt;::value ||&#10;    std::is_same&lt;Vec2F, T&gt;::value ||&#10;    std::is_same&lt;String, T&gt;::value ||&#10;    std::is_same&lt;WString, T&gt;::value ||&#10;    std::is_same&lt;DataNode, T&gt;::value) &amp;&amp; !std::is_const&lt;T&gt;::value&gt;" protection="1" />
 									</baseClasses>
 								</section>
 								<section name="IsSupport&lt;Vector&lt;T2&gt;&gt;" fullname="o2::DataNode::IsSupport&lt;Vector&lt;T2&gt;&gt;" isClass="true" isMeta="false" templates="typename T2" protection="0" attributeCommentDef="" attributeShortDef="">
@@ -2960,6 +2960,66 @@
 									<baseClasses>
 										<class name="IsSupport&lt;T2&gt;::value &amp;&amp; IsSupport&lt;T3&gt;::value&gt;" protection="1" />
 									</baseClasses>
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
 								</section>
 								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 									<sections />
@@ -3306,7 +3366,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/IObject.h">
-		<date year="2016" month="10" day="1" hour="23" minute="32" second="45" />
+		<date year="2016" month="10" day="4" hour="16" minute="10" second="46" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3890,7 +3950,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/FieldInfo.h">
-		<date year="2016" month="9" day="29" hour="20" minute="35" second="18" />
+		<date year="2016" month="10" day="5" hour="13" minute="10" second="28" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3990,7 +4050,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/Reflection.h">
-		<date year="2016" month="10" day="2" hour="23" minute="14" second="12" />
+		<date year="2016" month="10" day="5" hour="10" minute="8" second="11" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3998,54 +4058,8 @@
 						<section name="Reflection" fullname="o2::Reflection" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs>
-								<typedef what="Dictionary&lt;const char*, Dictionary&lt;int, const char*&gt;&gt;" newDef="EnumsDict" />
+								<typedef what="Dictionary&lt;String, Dictionary&lt;int, String&gt;&gt;" newDef="EnumsDict" />
 							</typedefs>
-							<usings />
-							<baseClasses />
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/Type.h">
-		<date year="2016" month="10" day="1" hour="23" minute="32" second="45" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Type" fullname="o2::Type" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="UInt" newDef="Id" />
-								<typedef what="Vector&lt;FieldInfo*&gt;" newDef="FieldInfosVec" />
-								<typedef what="Vector&lt;FunctionInfo*&gt;" newDef="FunctionsInfosVec" />
-								<typedef what="Vector&lt;Type*&gt;" newDef="TypesVec" />
-							</typedefs>
-							<usings />
-							<baseClasses />
-						</section>
-						<section name="FundamentalType" fullname="o2::FundamentalType" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses />
-						</section>
-						<section name="TypeDeductor" fullname="o2::TypeDeductor" isClass="true" isMeta="false" templates="typename T, typename X = 	&#10;		    std::conditional&lt;std::is_base_of&lt;IObject, T&gt;::value, &#10;		        T,&#10;		    //else&#10;		        std::conditional&lt;(std::is_fundamental&lt;T&gt;::value ||&#10;		                         std::is_same&lt;T, Basis&gt;::value ||&#10;		                         std::is_same&lt;T, Color4&gt;::value ||&#10;		                         std::is_same&lt;T, RectI&gt;::value ||&#10;		                         std::is_same&lt;T, RectF&gt;::value ||&#10;		                         std::is_same&lt;T, Vec2I&gt;::value ||&#10;		                         std::is_same&lt;T, Vec2F&gt;::value ||&#10;		                         std::is_same&lt;T, Vertex2&gt;::value ||&#10;		                         std::is_same&lt;T, String&gt;::value ||&#10;		                         std::is_same&lt;T, WString&gt;::value ||&#10;		                         std::is_same&lt;T, DataNode&gt;::value) &amp;&amp; !std::is_const&lt;T&gt;::value,&#10;		            FundamentalType&lt;T&gt;,&#10;		        //else&#10;		            Type::Dummy&#10;		        &gt;::type&#10;			&gt;::type" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="X" newDef="type" />
-							</typedefs>
-							<usings />
-							<baseClasses />
-						</section>
-						<section name="TypeInitializer" fullname="o2::TypeInitializer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
 							<usings />
 							<baseClasses />
 						</section>
@@ -4059,7 +4073,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Serializable.h">
-		<date year="2016" month="9" day="29" hour="23" minute="23" second="5" />
+		<date year="2016" month="10" day="4" hour="16" minute="10" second="46" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4367,6 +4381,52 @@
 				<section name="o2" fullname="o2">
 					<sections>
 						<section name="UnknownPtr" fullname="o2::UnknownPtr" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/Type.h">
+		<date year="2016" month="10" day="6" hour="16" minute="27" second="53" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Type" fullname="o2::Type" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="UInt" newDef="Id" />
+								<typedef what="Vector&lt;FieldInfo*&gt;" newDef="FieldInfosVec" />
+								<typedef what="Vector&lt;FunctionInfo*&gt;" newDef="FunctionsInfosVec" />
+								<typedef what="Vector&lt;Type*&gt;" newDef="TypesVec" />
+							</typedefs>
+							<usings />
+							<baseClasses />
+						</section>
+						<section name="FundamentalType" fullname="o2::FundamentalType" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+						<section name="TypeDeductor" fullname="o2::TypeDeductor" isClass="true" isMeta="false" templates="typename T, typename X = 	&#10;		    std::conditional&lt;std::is_base_of&lt;IObject, T&gt;::value, &#10;		        T,&#10;		    //else&#10;		        std::conditional&lt;(std::is_fundamental&lt;T&gt;::value ||&#10;		                         std::is_same&lt;T, Basis&gt;::value ||&#10;		                         std::is_same&lt;T, Color4&gt;::value ||&#10;		                         std::is_same&lt;T, RectI&gt;::value ||&#10;		                         std::is_same&lt;T, RectF&gt;::value ||&#10;		                         std::is_same&lt;T, Vec2I&gt;::value ||&#10;		                         std::is_same&lt;T, Vec2F&gt;::value ||&#10;		                         std::is_same&lt;T, Vertex2&gt;::value ||&#10;		                         std::is_same&lt;T, String&gt;::value ||&#10;		                         std::is_same&lt;T, WString&gt;::value ||&#10;		                         std::is_same&lt;T, DataNode&gt;::value) &amp;&amp; !std::is_const&lt;T&gt;::value,&#10;		            FundamentalType&lt;T&gt;,&#10;		        //else&#10;		            Type::Dummy&#10;		        &gt;::type&#10;			&gt;::type" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="X" newDef="type" />
+							</typedefs>
+							<usings />
+							<baseClasses />
+						</section>
+						<section name="TypeInitializer" fullname="o2::TypeInitializer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs />
 							<usings />

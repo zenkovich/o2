@@ -579,7 +579,6 @@ CLASS_META(o2::AnimatedValue<o2::Vec2<float>>::Key)
 	PUBLIC_FIELD(curvePrevCoefPos).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(curveNextCoef).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(curveNextCoefPos).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mApproxValuesCount);
 	PUBLIC_FIELD(mApproxValues);
 	PUBLIC_FIELD(mCurveApproxValues);
 	PUBLIC_FIELD(mApproxLengths);

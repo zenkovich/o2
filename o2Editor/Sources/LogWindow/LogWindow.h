@@ -16,9 +16,9 @@ namespace Editor
 {
 	class LogWindow: public IEditorWindow, public LogStream
 	{
-	public:
 		IOBJECT(LogWindow);
 
+	public:
 		class LogMessage
 		{
 		public:
@@ -50,12 +50,14 @@ namespace Editor
 		int         mWarningMessagesCount;
 		int         mErrorMessagesCount;
 
-	protected:
+	public:
 		// Default constructor
 		LogWindow();
 
 		// Destructor
 		~LogWindow();
+
+	protected:
 
 		// Initializes window
 		void InitializeWindow();

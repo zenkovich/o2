@@ -513,3 +513,20 @@ namespace o2
 
 	Vector<IDataNodeTypeConverter*> DataNode::mDataConverters;
 }
+ 
+ENUM_META_(o2::DataNode::Format, Format)
+{
+	ENUM_ENTRY(Binary);
+	ENUM_ENTRY(JSON);
+	ENUM_ENTRY(Xml);
+}
+END_ENUM_META;
+ 
+ENUM_META_(o2::DataNode::Format, Format)
+{
+	ENUM_ENTRY(Binary);
+	ENUM_ENTRY(JSON);
+	ENUM_ENTRY(Xml);
+}
+END_ENUM_META;
+ 

@@ -1046,6 +1046,18 @@ namespace Editor
 		return icon == other.icon;
 	}
 }
+
+ENUM_META_(Editor::UIAssetsIconsScrollArea::DragState, DragState)
+{
+	ENUM_ENTRY(ActorField);
+	ENUM_ENTRY(AssetField);
+	ENUM_ENTRY(ComponentField);
+	ENUM_ENTRY(Off);
+	ENUM_ENTRY(Regular);
+	ENUM_ENTRY(Scene);
+	ENUM_ENTRY(Tree);
+}
+END_ENUM_META;
  
 CLASS_META(Editor::UIAssetsIconsScrollArea)
 {
@@ -1141,4 +1153,16 @@ CLASS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ActorAsset&);
 }
 END_META;
+
+ENUM_META_(Editor::UIAssetsIconsScrollArea::DragState, DragState)
+{
+	ENUM_ENTRY(ActorField);
+	ENUM_ENTRY(AssetField);
+	ENUM_ENTRY(ComponentField);
+	ENUM_ENTRY(Off);
+	ENUM_ENTRY(Regular);
+	ENUM_ENTRY(Scene);
+	ENUM_ENTRY(Tree);
+}
+END_ENUM_META;
  

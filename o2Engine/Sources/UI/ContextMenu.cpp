@@ -838,7 +838,6 @@ CLASS_META(o2::UIContextMenu)
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 
-	PROTECTED_FIELD(mVisibleContextMenu);
 	PROTECTED_FIELD(mOpenSubMenuDelay);
 	PROTECTED_FIELD(mFitSizeMin).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMaxVisibleItems).SERIALIZABLE_ATTRIBUTE();

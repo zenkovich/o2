@@ -786,7 +786,6 @@ CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>::Key)
 	PUBLIC_FIELD(curvePrevCoefPos).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(curveNextCoef).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(curveNextCoefPos).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mApproxValuesCount);
 	PUBLIC_FIELD(mCurveApproxValues);
 }
 END_META;

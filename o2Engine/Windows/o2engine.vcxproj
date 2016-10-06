@@ -63,6 +63,7 @@
 			<FunctionLevelLinking>true</FunctionLevelLinking>
 			<MinimalRebuild>true</MinimalRebuild>
 			<MultiProcessorCompilation>false</MultiProcessorCompilation>
+			<RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
 		</ClCompile>
 		<Link>
 			<GenerateDebugInformation>true</GenerateDebugInformation>
@@ -76,6 +77,7 @@
 		<Lib>
 			<Verbose>true</Verbose>
 			<AdditionalDependencies>$(ProjectDir)..\Dependencies\Dependencies_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalOptions>/WHOLEARCHIVE %(AdditionalOptions)</AdditionalOptions>
 		</Lib>
 		<PreBuildEvent>
 			<Command>$(O2)/CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)" -v</Command>
@@ -333,7 +335,7 @@
 		<ClCompile Include="..\Sources\Render\VectorFontEffects.cpp" />
 		<ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp" />
 		<ClCompile Include="..\Sources\Render\Windows\Render.cpp" />
-		<ClCompile Include="..\Sources\Render\Windows\Texture.cpp" />
+		<ClCompile Include="..\Sources\Render\Windows\TextureImpl.cpp" />
 		<ClCompile Include="..\Sources\Scene\Actor.cpp" />
 		<ClCompile Include="..\Sources\Scene\ActorTransform.cpp" />
 		<ClCompile Include="..\Sources\Scene\Component.cpp" />

@@ -642,7 +642,7 @@
 		<ClCompile Include="..\Sources\Render\Windows\Render.cpp">
 			<Filter>Sources\Render\Windows</Filter>
 		</ClCompile>
-		<ClCompile Include="..\Sources\Render\Windows\Texture.cpp">
+		<ClCompile Include="..\Sources\Render\Windows\TextureImpl.cpp">
 			<Filter>Sources\Render\Windows</Filter>
 		</ClCompile>
 		<ClCompile Include="..\Sources\Scene\Actor.cpp">

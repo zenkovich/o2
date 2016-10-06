@@ -1171,30 +1171,42 @@ vector<string> CppSyntaxParser::Split(const string& data, char splitSymbol)
 
 void CppSyntaxParser::RemoveComments(string& input)
 {
-	int len = (int)input.length();
-	int offs = 0;
-	for (int i = 0; i < len; i++)
+	size_t p;
+	do
 	{
-		if (input[i] == '/' && i < len - 1 && input[i + 1] == '/')
-		{
-			for (; i < len; i++, offs++)
-			{
-				if (input[i] == '\n')
-					break;
-			}
-		}
+		p = input.find("/*");
 
-		if (input[i] == '/' && i < len - 1 && input[i + 1] == '*')
-		{
-			for (; i < len; i++, offs++)
-			{
-				if (input[i - 1] == '*' && input[i] == '/')
-					break;
-			}
-		}
+		if (p == string::npos)
+			break;
 
-		input[i - offs] = input[i];
+		size_t end = input.find("*/", p);
+
+		if (end == string::npos)
+			end = input.length();
+		else
+			end += 2;
+
+		input.erase(p, end - p);
 	}
+	while (p != string::npos);
+
+	do
+	{
+		p = input.find("//");
+
+		if (p == string::npos)
+			break;
+
+		size_t end = input.find('\n', p);
+
+		if (end == string::npos)
+			end = input.length();
+		else
+			end++;
+
+		input.erase(p, end - p);
+	}
+	while (p != string::npos);
 }
 
 CppSyntaxParser::ExpressionParser::ExpressionParser(const char* keyWord, ParserDelegate parser,

@@ -976,6 +976,12 @@ namespace o2
 
 }
 
+ENUM_META_(o2::Actor::CreateMode, CreateMode)
+{
+	ENUM_ENTRY(InScene);
+	ENUM_ENTRY(NotInScene);
+}
+END_ENUM_META;
  
 CLASS_META(o2::Actor)
 {
@@ -1081,7 +1087,7 @@ CLASS_META(o2::Actor)
 }
 END_META;
 
-ENUM_META(o2::Actor::CreateMode)
+ENUM_META_(o2::Actor::CreateMode, CreateMode)
 {
 	ENUM_ENTRY(InScene);
 	ENUM_ENTRY(NotInScene);

@@ -1729,6 +1729,21 @@ namespace o2
 
 }
 
+ENUM_META_(o2::UITree::RearrangeType, RearrangeType)
+{
+	ENUM_ENTRY(Disabled);
+	ENUM_ENTRY(Enabled);
+	ENUM_ENTRY(OnlyReparent);
+}
+END_ENUM_META;
+
+ENUM_META_(o2::UITree::ExpandState, ExpandState)
+{
+	ENUM_ENTRY(Collaping);
+	ENUM_ENTRY(Expanding);
+	ENUM_ENTRY(None);
+}
+END_ENUM_META;
  
 CLASS_META(o2::UITree)
 {
@@ -1918,7 +1933,7 @@ CLASS_META(o2::UITreeNode)
 }
 END_META;
 
-ENUM_META(o2::UITree::RearrangeType)
+ENUM_META_(o2::UITree::RearrangeType, RearrangeType)
 {
 	ENUM_ENTRY(Disabled);
 	ENUM_ENTRY(Enabled);
@@ -1926,7 +1941,7 @@ ENUM_META(o2::UITree::RearrangeType)
 }
 END_ENUM_META;
 
-ENUM_META(o2::UITree::ExpandState)
+ENUM_META_(o2::UITree::ExpandState, ExpandState)
 {
 	ENUM_ENTRY(Collaping);
 	ENUM_ENTRY(Expanding);

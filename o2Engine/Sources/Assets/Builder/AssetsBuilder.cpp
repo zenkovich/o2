@@ -2,6 +2,9 @@
 
 #include "Assets/Assets.h"
 #include "Assets/AtlasAsset.h"
+#include "Assets/Builder/AtlasAssetConverter.h"
+#include "Assets/Builder/FolderAssetConverter.h"
+#include "Assets/Builder/ImageAssetConverter.h"
 #include "Assets/FolderAsset.h"
 #include "Utils/Debug.h"
 #include "Utils/FileSystem/FileSystem.h"

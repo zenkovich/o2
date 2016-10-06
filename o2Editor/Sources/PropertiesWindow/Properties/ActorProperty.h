@@ -59,9 +59,9 @@ namespace Editor
 		Function<void(void*, Actor*)> mAssignFunc; // Value assign function
 		Function<Actor*(void*)>       mGetFunc;    // Get value function
 
-		Vector<void*> mValuesPointers;  // Fields' pointers
-		Actor*        mCommonValue;     // Common field value (if not different)
-		bool          mValuesDifferent; // Are values different
+		Vector<void*> mValuesPointers;        // Fields' pointers
+		Actor*        mCommonValue = nullptr; // Common field value (if not different)
+		bool          mValuesDifferent;       // Are values different
 
 		UIWidget*     mBox;             // Edit box 
 		Text*         mNameText;        // Asset name text

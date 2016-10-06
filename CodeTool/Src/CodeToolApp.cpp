@@ -659,6 +659,9 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	// fields
 	for (auto x : cls->GetVariables())
 	{
+		if (x->IsStatic())
+			continue;
+
 		if (x->GetClassSection() == SyntaxProtectionSection::Public)
 			res += "\tPUBLIC_FIELD(" + x->GetName() + ")";
 		else if (x->GetClassSection() == SyntaxProtectionSection::Private)
@@ -820,7 +823,7 @@ string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)
 	string res;
 	res.reserve(enm->GetEntries().size()*15);
 
-	res += "\nENUM_META(" + enm->GetFullName() + ")\n{\n";
+	res += "\nENUM_META_(" + enm->GetFullName() + ", " + enm->GetName() + ")\n{\n";
 
 	for (auto e : enm->GetEntries())
 		res += "\tENUM_ENTRY(" + e.first + ");\n";
@@ -915,40 +918,19 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 
 void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const char* endword)
 {
-	int caret = (int)data.find(keyword);
-	while (caret != data.npos)
+	auto caret = data.find(keyword);
+	while (caret != string::npos)
 	{
-		int newCaret = (int)data.find(keyword, caret);
-
-		if (newCaret == data.npos)
+		auto end = data.find(endword, caret);
+		if (end == string::npos)
 			break;
 
-		caret = newCaret;
-
-		int end = (int)data.find(endword, caret);
-		if (end == data.npos)
-		{
-			caret++;
-			continue;
-		}
-
-		if (caret > 0)
+		while (caret > 0 && (data[caret - 1] == '\n' || data[caret - 1] == '\r' ||
+			   data[caret - 1] == '\t' || data[caret - 1] == '\0'))
 			caret--;
 
-		bool removedNewLines = false;
-		for (; caret >= 0; caret--)
-		{
-			if (data[caret] != '\r' && data[caret] != '\n' && data[caret] != '\0')
-				break;
-
-			removedNewLines = true;
-		}
-
-		if (removedNewLines)
-			caret++;
-
 		data.erase(caret, end + strlen(endword) - caret);
-		caret = 0;
+		caret = data.find(keyword);
 	}
 }
 

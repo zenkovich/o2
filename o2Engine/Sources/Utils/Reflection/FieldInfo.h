@@ -260,7 +260,7 @@ namespace o2
 
 		for (auto kv : allFromAccessor)
 		{
-			for (auto field : mType->mFields)
+			for (auto field : mType->AllFields())
 			{
 				char* fieldObj = field->GetValuePtr<char>(kv.Value());
 

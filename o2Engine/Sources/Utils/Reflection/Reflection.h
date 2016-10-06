@@ -50,13 +50,13 @@ namespace o2
 
 		// Initializes enum
 		template<typename _type>
-		static int InitializeEnum(std::function<Dictionary<int, const char*>()> func);
+		static int InitializeEnum(std::function<Dictionary<int, String>()> func);
 
 		// Initializes pointer type
 		static const Type* InitializePointerType(const Type* type);
 
 	protected:
-		typedef Dictionary<const char*, Dictionary<int, const char*>> EnumsDict;
+		typedef Dictionary<String, Dictionary<int, String>> EnumsDict;
 
 		static Reflection* mInstance;        // Reflection instance
 
@@ -90,7 +90,12 @@ namespace o2
 #define ENUM_META(NAME)                                                      \
     int MAKE_UNIQUE(_enum_def) = o2::Reflection::InitializeEnum<NAME>([]() { \
     typedef NAME EnumName;                                                   \
-    o2::Dictionary<int, const char*> res;                                        
+    o2::Dictionary<int, o2::String> res;    
+
+#define ENUM_META_(NAME, U)                                                     \
+    int MAKE_UNIQUE(U##_enum_def) = o2::Reflection::InitializeEnum<NAME>([]() { \
+    typedef NAME EnumName;                                                      \
+    o2::Dictionary<int, o2::String> res;                                        
 
 #define ENUM_ENTRY(NAME) \
     res.Add((int)EnumName::NAME, #NAME)
@@ -132,6 +137,8 @@ namespace o2
 
 		Reflection::Instance().mTypes.Add(res);
 
+		//printf("Reflection::InitializeType(%s): instance:%x - %i\n", name, mInstance, Reflection::Instance().mTypes.Count());
+
 		return res;
 	}
 
@@ -147,7 +154,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	int Reflection::InitializeEnum(std::function<Dictionary<int, const char*>()> func)
+	int Reflection::InitializeEnum(std::function<Dictionary<int, String>()> func)
 	{
 		Reflection::Instance().mEnums.Add(typeid(_type).name(), func());
 		return 0;

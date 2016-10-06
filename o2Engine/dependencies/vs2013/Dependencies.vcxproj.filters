@@ -113,9 +113,6 @@
     <ClCompile Include="..\..\Dependencies\LibPNG\pngset.c">
       <Filter>LibPNG</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Dependencies\LibPNG\pngtest.c">
-      <Filter>LibPNG</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Dependencies\LibPNG\pngtrans.c">
       <Filter>LibPNG</Filter>
     </ClCompile>

@@ -45,7 +45,7 @@ namespace Editor
 		bool           mInSearch = false;	// True when searching actors (mSearchEditBox isn't empty)
 		Vector<Actor*> mSearchActors;		// Array of searched actors
 
-	protected:
+	public:
 		// Default constructor
 		TreeWindow();
 
@@ -54,6 +54,8 @@ namespace Editor
 
 		// Destructor
 		~TreeWindow();
+
+	protected:
 
 		// Initializes window
 		void InitializeWindow();

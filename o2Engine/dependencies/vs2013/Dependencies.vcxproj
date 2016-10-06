@@ -52,7 +52,6 @@
     <ClCompile Include="..\..\Dependencies\LibPNG\pngrtran.c" />
     <ClCompile Include="..\..\Dependencies\LibPNG\pngrutil.c" />
     <ClCompile Include="..\..\Dependencies\LibPNG\pngset.c" />
-    <ClCompile Include="..\..\Dependencies\LibPNG\pngtest.c" />
     <ClCompile Include="..\..\Dependencies\LibPNG\pngtrans.c" />
     <ClCompile Include="..\..\Dependencies\LibPNG\pngvcrd.c" />
     <ClCompile Include="..\..\Dependencies\LibPNG\pngwio.c" />
@@ -168,6 +167,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -200,6 +200,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

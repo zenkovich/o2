@@ -297,6 +297,14 @@ namespace Editor
 	}
 
 }
+
+ENUM_META_(Editor::LogWindow::LogMessage::Type, Type)
+{
+	ENUM_ENTRY(Error);
+	ENUM_ENTRY(Regular);
+	ENUM_ENTRY(Warning);
+}
+END_ENUM_META;
  
 CLASS_META(Editor::LogWindow)
 {
@@ -333,4 +341,12 @@ CLASS_META(Editor::LogWindow)
 	PROTECTED_FUNCTION(void, UpdateLastMessageView);
 }
 END_META;
+
+ENUM_META_(Editor::LogWindow::LogMessage::Type, Type)
+{
+	ENUM_ENTRY(Error);
+	ENUM_ENTRY(Regular);
+	ENUM_ENTRY(Warning);
+}
+END_ENUM_META;
  

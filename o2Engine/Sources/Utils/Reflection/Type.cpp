@@ -80,9 +80,33 @@ namespace o2
 		return mFields;
 	}
 
+	Type::FieldInfosVec Type::AllFields() const
+	{
+		FieldInfosVec res;
+
+		for (auto baseType : mBaseTypes)
+			res += baseType->AllFields();
+
+		res += mFields;
+
+		return res;
+	}
+
 	const Type::FunctionsInfosVec& Type::Functions() const
 	{
 		return mFunctions;
+	}
+
+	Type::FunctionsInfosVec Type::AllFunctions() const
+	{
+		FunctionsInfosVec res;
+
+		for (auto baseType : mBaseTypes)
+			res += baseType->AllFunctions();
+
+		res += mFunctions;
+
+		return res;
 	}
 
 	const FieldInfo* Type::Field(const String& name) const
@@ -90,6 +114,10 @@ namespace o2
 		for (auto field : mFields)
 			if (field->Name() == name)
 				return field;
+
+		for (auto baseType : mBaseTypes)
+			if (auto res = baseType->Field(name))
+				return res;
 
 		return nullptr;
 	}
@@ -152,6 +180,16 @@ namespace o2
 			{
 				fieldInfo = info;
 				return res;
+			}
+		}
+
+		if (!res)
+		{
+			for (auto baseType : mBaseTypes)
+			{
+				auto baseRes = baseType->GetFieldPath(sourceObject, targetObject, fieldInfo);
+				if (fieldInfo)
+					return baseRes;
 			}
 		}
 

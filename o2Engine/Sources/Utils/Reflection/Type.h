@@ -69,8 +69,14 @@ namespace o2
 		// Returns fields informations array
 		const FieldInfosVec& Fields() const;
 
+		// Returns fields informations array with all base types
+		FieldInfosVec AllFields() const;
+
 		// Returns functions informations array
 		const FunctionsInfosVec& Functions() const;
+
+		// Returns functions informations array with all base types
+		FunctionsInfosVec AllFunctions() const;
 
 		// Returns field information by name
 		const FieldInfo* Field(const String& name) const;
@@ -256,16 +262,16 @@ namespace o2
     o2::TypeInitializer::AddBaseType<NAME>(type)
 
 #define FIELD(NAME, PROTECT_SECTION) \
-    o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::PROTECT_SECTION)
+    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::PROTECT_SECTION)
 
 #define PUBLIC_FIELD(NAME) \
-    o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Public)
+    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Public)
 
 #define PRIVATE_FIELD(NAME) \
-    o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Private)
+    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Private)
 
 #define PROTECTED_FIELD(NAME) \
-    o2::TypeInitializer::RegField<decltype(NAME)>(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Protected)
+    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Protected)
 
 #define ATTRIBUTE(NAME) \
     AddAttribute(new NAME)
@@ -315,6 +321,13 @@ namespace o2
 					return (_type*)(field->SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo));
 				}
 			}
+		}
+
+		for (auto baseType : mBaseTypes)
+		{
+			auto res = baseType->GetFieldPtr<_type>(object, path, fieldInfo);
+			if (res)
+				return res;
 		}
 
 		return nullptr;
@@ -369,7 +382,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Accessor<_type*, const String&>& value, ProtectSection section)
+	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, o2::Accessor<_type*, const o2::String&>& value, ProtectSection section)
 	{
 		auto valType = &TypeOf(_type);
 		type->mFields.Add(new AccessorFieldInfo<_type>(name, offset, valType, section,
@@ -388,6 +401,7 @@ namespace o2
 		funcInfo->mReturnType = retType;
 		funcInfo->mIsContant = false;
 		funcInfo->mProtectSection = section;
+		funcInfo->mOwnerType = type;
 		type->mFunctions.Add(funcInfo);
 
 		return funcInfo;
@@ -404,6 +418,7 @@ namespace o2
 		funcInfo->mReturnType = retType;
 		funcInfo->mIsContant = true;
 		funcInfo->mProtectSection = section;
+		funcInfo->mOwnerType = type;
 		type->mFunctions.Add(funcInfo);
 
 		return funcInfo;

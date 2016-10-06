@@ -72,6 +72,7 @@ namespace o2
 
 	FieldInfo& FieldInfo::AddAttribute(IAttribute* attribute)
 	{
+		attribute->mOwnerFieldInfo = this;
 		mAttributes.Add(attribute);
 		return *this;
 	}
@@ -117,9 +118,8 @@ namespace o2
 		if (!mType)
 			return nullptr;
 
-		auto& fields = mIsPtr ? mType->GetUnpointedType()->mFields : mType->mFields;
-
-		for (auto field : fields)
+		auto type = mIsPtr ? mType->GetUnpointedType() : mType;
+		for (auto field : type->AllFields())
 		{
 			char* fieldObj = field->GetValuePtr<char>(obj);
 
