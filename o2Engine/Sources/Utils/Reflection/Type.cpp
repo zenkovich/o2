@@ -8,8 +8,7 @@ namespace o2
 	Type::Type(const String& name, ISampleCreator* creator, int size):
 		mId(0), mPointer(0), mPtrType(nullptr), mUnptrType(nullptr), mName(name),
 		mSampleCreator(creator), mSize(size)
-	{
-	}
+	{}
 
 	Type::~Type()
 	{
@@ -158,6 +157,13 @@ namespace o2
 
 		String res;
 
+		for (auto baseType : mBaseTypes)
+		{
+			auto baseRes = baseType->GetFieldPath(sourceObject, targetObject, fieldInfo);
+			if (fieldInfo)
+				return baseRes;
+		}
+
 		for (auto field : mFields)
 		{
 			char* fieldObject = field->GetValuePtr<char>(sourceObject);
@@ -180,16 +186,6 @@ namespace o2
 			{
 				fieldInfo = info;
 				return res;
-			}
-		}
-
-		if (!res)
-		{
-			for (auto baseType : mBaseTypes)
-			{
-				auto baseRes = baseType->GetFieldPath(sourceObject, targetObject, fieldInfo);
-				if (fieldInfo)
-					return baseRes;
 			}
 		}
 

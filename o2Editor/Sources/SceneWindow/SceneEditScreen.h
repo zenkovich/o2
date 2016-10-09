@@ -143,12 +143,12 @@ namespace Editor
 		bool           mSelectedFromThis = false;				              // True if selection changed from this, needs to break recursive selection update
 
 		ToolsVec       mTools;									              // Available tools
-		IEditTool*   mEnabledTool = nullptr;					              // Current enabled tool
+		IEditTool*     mEnabledTool = nullptr;					              // Current enabled tool
 
 		DragHandlesVec                         mDragHandles; 			      // Dragging handles array
 		Dictionary<CursorId, SceneDragHandle*> mPressedHandles;               // Pressed handles for all pressed cursors
-		CursorAreaEventsListener*                  mRightButtonPressedHandle;     // Right mouse button pressed handle
-		CursorAreaEventsListener*                  mMiddleButtonPressedHandle;    // Middle mouse button pressed handle
+		CursorAreaEventsListener*              mRightButtonPressedHandle;     // Right mouse button pressed handle
+		CursorAreaEventsListener*              mMiddleButtonPressedHandle;    // Middle mouse button pressed handle
 		Dictionary<CursorId, SceneDragHandle*> mUnderCursorHandles;           // Under cursor handles for each cursor
 		Dictionary<CursorId, SceneDragHandle*> mLastUnderCursorHandles;       // Under cursor handles for each cursor on last frame
 

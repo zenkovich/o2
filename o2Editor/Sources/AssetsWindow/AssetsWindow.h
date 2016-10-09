@@ -109,7 +109,7 @@ namespace Editor
 
 		// Calls when context create animation pressed
 		void CreateAnimationAsset(const String& targetPath);
-
+		 
 		IOBJECT(AssetsWindow);
 
 	protected:

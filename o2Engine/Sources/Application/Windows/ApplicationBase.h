@@ -25,6 +25,10 @@ namespace o2
 
 		HCURSOR mCurrentCursor;
 
+	public:
+		// Returns window handle
+		HWND GetWindowHandle() const { return mHWnd; }
+
 		friend class Render;
 		friend class FileSystem;
 	};

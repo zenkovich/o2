@@ -19,8 +19,7 @@ namespace o2
 		Clear();
 		ClearCache();
 
-		for (auto layer : mLayers)
-			delete layer;
+		delete mDefaultLayer;
 	}
 
 	void Scene::Update(float dt)
@@ -190,6 +189,18 @@ namespace o2
 		auto allActors = mRootActors;
 		for (auto actor : allActors)
 			delete actor;
+
+		for (auto layer : mLayers)
+			delete layer;
+
+		mLayers.Clear();
+
+		mDefaultLayer = AddLayer("Default");
+
+		for (auto tag : mTags)
+			delete tag;
+
+		mTags.Clear();
 	}
 
 	void Scene::ClearCache()
@@ -205,18 +216,39 @@ namespace o2
 		ActorDataNodeConverter::Instance().LockPointersResolving();
 
 		if (!append)
+		{
 			Clear();
+			delete mDefaultLayer;
+			mLayers.Clear();
+		}
 
 		DataNode data;
 		data.LoadFromFile(path);
 
-		LayersVec loadLayers = *data["layers"];
+		auto layersNode = data.GetNode("Layers");
+		for (auto layerNode : *layersNode)
+		{
+			auto layer = mnew Layer();
+			layer->Deserialize(*layerNode);
+			mLayers.Add(layer);
+		}
 
-		for (auto layer : loadLayers)
-			if (!GetLayer(layer->name))
-				mLayers.Add(layer);
+		mDefaultLayer = GetLayer(data.GetNode("DefaultLayer")->Data());
 
-		ActorsVec loadActors = *data["actors"];
+		auto tagsNode = data.GetNode("Tags");
+		for (auto tagNode : *tagsNode)
+		{
+			auto tag = mnew Tag();
+			tag->Deserialize(*tagNode);
+			mTags.Add(tag);
+		}
+
+		auto actorsNode = data.GetNode("Actors");
+		for (auto actorNode : *actorsNode)
+		{
+			auto actor = mnew Actor();
+			actor->Deserialize(*actorNode);
+		}
 
 		ActorDataNodeConverter::Instance().UnlockPointersResolving();
 		ActorDataNodeConverter::Instance().ResolvePointers();
@@ -225,8 +257,21 @@ namespace o2
 	void Scene::Save(const String& path)
 	{
 		DataNode data;
-		*data.AddNode("layers") = mLayers;
-		*data.AddNode("actors") = mRootActors;
+
+		auto layersNode = data.AddNode("Layers");
+		for (auto layer : mLayers)
+			*layersNode->AddNode("Layer") = layer->Serialize();
+
+		*data.AddNode("DefaultLayer") = mDefaultLayer->name;
+
+		auto tagsNode = data.AddNode("Tags");
+		for (auto tag : mTags)
+			*tagsNode->AddNode("Tag") = tag->Serialize();
+
+		auto actorsNode = data.AddNode("Actors");
+		for (auto actor : mRootActors)
+			*actorsNode->AddNode("Actor") = actor->Serialize();
+
 		data.SaveToFile(path);
 	}
 
@@ -409,15 +454,15 @@ namespace o2
 		}
 	}
 
-	void LayerDataNodeConverter::FromData(void*& object, const DataNode& data)
+	void LayerDataNodeConverter::FromData(void* object, const DataNode& data)
 	{
-		Scene::Layer*& value = (Scene::Layer*&)object;
+		Scene::Layer*& value = *(Scene::Layer**)object;
 		value = o2Scene.GetLayer(data);
 	}
 
 	bool LayerDataNodeConverter::CheckType(const Type* type) const
 	{
-		return type == &TypeOf(Scene::Layer);
+		return type->IsBasedOn(*TypeOf(Scene::Layer).GetPointerType());
 	}
 
 }

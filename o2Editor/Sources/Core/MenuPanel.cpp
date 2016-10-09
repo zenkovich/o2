@@ -5,6 +5,7 @@
 #include "Core/EditorConfig.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "LogWindow/LogWindow.h"
+#include "Scene/Scene.h"
 #include "SceneWindow/SceneWindow.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/MenuPanel.h"
@@ -74,6 +75,14 @@ namespace Editor
 
 		// DEBUG
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
+		mMenuPanel->AddItem("Debug/Get path", [&]() {
+
+			char oldDir[MAX_PATH];
+
+			GetCurrentDirectory(MAX_PATH, oldDir);
+
+			o2Debug.Log(oldDir);
+		});
 	}
 
 	MenuPanel::~MenuPanel()
@@ -127,22 +136,44 @@ namespace Editor
 
 	void MenuPanel::OnNewScenePressed()
 	{
+		if (o2EditorApplication.IsSceneChanged())
+			o2Debug.Log("Check saving scene");
 
+		o2EditorApplication.MakeNewScene();
 	}
 
 	void MenuPanel::OnOpenScenePressed()
 	{
+		String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" }, { "All", "*.*" } });
 
+		if (fileName.IsEmpty())
+			return;
+
+		if (o2EditorApplication.IsSceneChanged())
+			o2Debug.Log("Check saving scene");
+
+		o2EditorApplication.LoadScene(fileName);
 	}
 
 	void MenuPanel::OnSaveScenePressed()
 	{
-
+		if (o2EditorApplication.GetLoadedSceneName().IsEmpty())
+			OnSaveSceneAsPressed();
+		else
+			o2EditorApplication.SaveScene(o2EditorApplication.GetLoadedSceneName());
 	}
 
 	void MenuPanel::OnSaveSceneAsPressed()
 	{
+		String fileName = GetSaveFileNameDialog("Save scene", { { "o2 Scene", "*.scn" },{ "All", "*.*" } });
 
+		if (fileName.IsEmpty())
+			return;
+
+		if (!fileName.EndsWith(".scn"))
+			fileName += ".scn";
+
+		o2EditorApplication.SaveScene(fileName);
 	}
 
 	void MenuPanel::OnNewProjectPressed()
@@ -246,4 +277,93 @@ namespace Editor
 		o2EditorConfig.mGlobalConfig.mDefaultLayout = o2EditorWindows.GetWindowsLayout();
 		o2Debug.Log("Default windows layout saved!");
 	}
+
+	String MenuPanel::GetOpenFileNameDialog(const String& title, const Dictionary<String, String>& extensions)
+	{
+		char szFile[MAX_PATH];
+		char oldDir[MAX_PATH];
+
+		GetCurrentDirectory(MAX_PATH, oldDir);
+
+		OPENFILENAME ofn;
+		ZeroMemory(&ofn, sizeof(ofn));
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = o2Application.GetWindowHandle();
+		ofn.lpstrFile = szFile;
+		ofn.lpstrFile[0] = '\0';
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFileTitle = NULL;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = NULL;
+		ofn.Flags = OFN_SHOWHELP | OFN_OVERWRITEPROMPT;
+
+		int filterStrSize = extensions.Sum<int>([](auto x) { return x.Key().Length() + x.Value().Length() + 2; }) + 1;
+		char* filterStr = new char[filterStrSize];
+		filterStr[filterStrSize - 1] = '\0';
+		ofn.lpstrFilter = filterStr;
+
+		int i = 0;
+		for (auto x : extensions)
+		{
+			memcpy(filterStr + i, x.Key().Data(), x.Key().Length() + 1);
+			i += x.Key().Length() + 1;
+
+			memcpy(filterStr + i, x.Value().Data(), x.Value().Length() + 1);
+			i += x.Value().Length() + 1;
+		}
+
+		if (GetOpenFileName(&ofn)==TRUE)
+		{
+			SetCurrentDirectory(oldDir);
+			return ofn.lpstrFile;
+		}
+
+		return "";
+	}
+
+	String MenuPanel::GetSaveFileNameDialog(const String& title, const Dictionary<String, String>& extensions)
+	{
+		char szFile[MAX_PATH];
+		char oldDir[MAX_PATH];
+
+		GetCurrentDirectory(MAX_PATH, oldDir);
+
+		OPENFILENAME ofn;
+		ZeroMemory(&ofn, sizeof(ofn));
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = o2Application.GetWindowHandle();
+		ofn.lpstrFile = szFile;
+		ofn.lpstrFile[0] = '\0';
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFileTitle = NULL;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = NULL;
+		ofn.Flags = OFN_SHOWHELP | OFN_OVERWRITEPROMPT;
+
+		int filterStrSize = extensions.Sum<int>([](auto x) { return x.Key().Length() + x.Value().Length() + 2; }) + 1;
+		char* filterStr = new char[filterStrSize];
+		filterStr[filterStrSize - 1] = '\0';
+		ofn.lpstrFilter = filterStr;
+
+		int i = 0;
+		for (auto x : extensions)
+		{
+			memcpy(filterStr + i, x.Key().Data(), x.Key().Length() + 1);
+			i += x.Key().Length() + 1;
+
+			memcpy(filterStr + i, x.Value().Data(), x.Value().Length() + 1);
+			i += x.Value().Length() + 1;
+		}
+
+		if (GetSaveFileName(&ofn) == TRUE)
+		{
+			SetCurrentDirectory(oldDir);
+			return ofn.lpstrFile;
+		}
+
+		return "";
+	}
+
 }

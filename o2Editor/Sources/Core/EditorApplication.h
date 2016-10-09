@@ -38,6 +38,12 @@ namespace Editor
 		// Destructor
 		~EditorApplication();
 
+		// Returns count of undo actions
+		int GetUndoActionsCount() const;
+
+		// Returns count of redo actions
+		int GetRedoActionsCount() const;
+
 		// Returns last action name
 		String GetLastActionName() const;
 
@@ -53,6 +59,24 @@ namespace Editor
 		// Calls when action was done
 		void DoneAction(IAction* action);
 
+		// Resets undo and redo actions
+		void ResetUndoActions();
+
+		// Returns current scene name
+		const String& GetLoadedSceneName() const;
+
+		// Loads scene from file
+		void LoadScene(const String& name);
+
+		// Saves scene from file
+		void SaveScene(const String& name);
+
+		// Makes new scene
+		void MakeNewScene();
+
+		// Returns is current scene was changed
+		bool IsSceneChanged() const;
+
 	protected:
 		Sprite*            mBackground;     // Background sprite
 		Sprite*            mBackSign;       // Background o2 signature
@@ -64,6 +88,8 @@ namespace Editor
 
 		EditorActionsVec   mActions;        // Done actions
 		EditorActionsVec   mForwardActions; // Forward actions, what you can redo
+
+		String             mLoadedScene;    // Current loaded scene
 
 	protected:
 		// Calling on updating

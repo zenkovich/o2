@@ -231,6 +231,8 @@ namespace Editor
 
 		action->ActorsReparented(parent, prevActor);
 		o2EditorApplication.DoneAction(action);
+
+		UITree::OnDraggedObjects(objects, newParent, prevObject);
 	}
 
 	void UIActorsTree::EnableActorsGroupPressed(bool value)
@@ -255,6 +257,12 @@ namespace Editor
 
 		auto action = mnew LockAction(actors, value);
 		o2EditorApplication.DoneAction(action);
+	}
+
+	void UIActorsTree::OnNodesSelectionChanged(UnknownPtrsVec objects)
+	{
+		onObjectsSelectionChanged(objects.Cast<Actor*>());
+		UITree::OnNodesSelectionChanged(objects);
 	}
 
 	void UIActorsTree::OnActorCreated(Actor* actor)
@@ -553,6 +561,7 @@ CLASS_META(Editor::UIActorsTree)
 	PROTECTED_FUNCTION(void, EnableActorsGroupReleased, bool);
 	PROTECTED_FUNCTION(void, LockActorsGroupPressed, bool);
 	PROTECTED_FUNCTION(void, LockActorsGroupReleased, bool);
+	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
 }
 END_META;
 

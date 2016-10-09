@@ -137,6 +137,9 @@ namespace Editor
 
 		// Calls when lock actors toggle group released
 		void LockActorsGroupReleased(bool value);
+
+		// Calls when list of selected objects was changed
+		void OnNodesSelectionChanged(UnknownPtrsVec objects);
 // 
 // 		// Calls when some selectable drag listeners was dragged above this area
 // 		void OnDraggedAbove(SelectableDragableObjectsGroup* group);

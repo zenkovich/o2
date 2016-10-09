@@ -302,6 +302,12 @@ namespace o2
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
 
+		for (auto baseType : mBaseTypes)
+		{
+			if (auto res = baseType->GetFieldPtr<_type>(object, path, fieldInfo))
+				return res;
+		}
+
 		for (auto field : mFields)
 		{
 			if (field->mName == pathPart)
@@ -321,13 +327,6 @@ namespace o2
 					return (_type*)(field->SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo));
 				}
 			}
-		}
-
-		for (auto baseType : mBaseTypes)
-		{
-			auto res = baseType->GetFieldPtr<_type>(object, path, fieldInfo);
-			if (res)
-				return res;
 		}
 
 		return nullptr;
@@ -358,8 +357,11 @@ namespace o2
 	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type*& value, ProtectSection section)
 	{
 		auto valType = &TypeOf(_type*);
-		type->mFields.Add(new FieldInfo(name, offset, false, true, valType, section,
-										new FieldInfo::FieldSerializer<_type*>()));
+		typedef std::conditional<DataNode::IsSupport<_type*>::value,
+			FieldInfo::FieldSerializer<_type*>,
+			FieldInfo::IFieldSerializer>::type serializerType;
+
+		type->mFields.Add(new FieldInfo(name, offset, false, true, valType, section, new serializerType()));
 		return *type->mFields.Last();
 	}
 
@@ -367,8 +369,11 @@ namespace o2
 	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type& value, ProtectSection section)
 	{
 		auto valType = &TypeOf(_type);
-		type->mFields.Add(new FieldInfo(name, offset, false, false, valType, section, 
-										new FieldInfo::FieldSerializer<_type>()));
+		typedef std::conditional<DataNode::IsSupport<_type>::value,
+			FieldInfo::FieldSerializer<_type>,
+			FieldInfo::IFieldSerializer>::type serializerType;
+
+		type->mFields.Add(new FieldInfo(name, offset, false, false, valType, section, new serializerType()));
 		return *type->mFields.Last();
 	}
 
@@ -376,17 +381,23 @@ namespace o2
 	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Property<_type>& value, ProtectSection section)
 	{
 		auto valType = &TypeOf(_type);
-		type->mFields.Add(new FieldInfo(name, offset, true, false, valType, section,
-										new FieldInfo::FieldSerializer<Property<_type>>()));
+		typedef std::conditional<DataNode::IsSupport<Property<_type>>::value,
+			FieldInfo::FieldSerializer<Property<_type>>,
+			FieldInfo::IFieldSerializer>::type serializerType;
+
+		type->mFields.Add(new FieldInfo(name, offset, true, false, valType, section, new serializerType()));
 		return *type->mFields.Last();
 	}
 
 	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, o2::Accessor<_type*, const o2::String&>& value, ProtectSection section)
+	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Accessor<_type*, const String&>& value, ProtectSection section)
 	{
 		auto valType = &TypeOf(_type);
-		type->mFields.Add(new AccessorFieldInfo<_type>(name, offset, valType, section,
-													   new FieldInfo::FieldSerializer<Accessor<_type*, const String&>>()));
+		typedef std::conditional<DataNode::IsSupport<Accessor<_type*, const String&>>::value,
+			FieldInfo::FieldSerializer<Accessor<_type*, const String&>>,
+			FieldInfo::IFieldSerializer>::type serializerType;
+
+		type->mFields.Add(new AccessorFieldInfo<_type>(name, offset, valType, section, new serializerType()));
 		return *type->mFields.Last();
 	}
 

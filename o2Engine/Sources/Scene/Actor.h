@@ -219,7 +219,7 @@ namespace o2
 
 		Actor*         mParent;      // Parent actor
 		ActorsVec      mChilds;      // Children actors 
-		ComponentsVec  mComponents; // Components vector 
+		ComponentsVec  mComponents;  // Components vector 
 		Scene::Layer*  mLayer;       // Scene layer
 
 		bool           mEnabled;     // Is actor enabled @SERIALIZABLE
@@ -302,7 +302,7 @@ namespace o2
 		friend class Scene;
 		friend class Tag;
 	};
-
+	 
 	// -------------------------
 	// Actor data node converter
 	// -------------------------
@@ -310,7 +310,7 @@ namespace o2
 	{
 	public:
 		// Converts actor pointer to data 
-		void ToData(void* object, DataNode& data);
+		void ToData(const void* object, DataNode& data);
 
 		// Gets actor pointer from data
 		void FromData(void* object, const DataNode& data);

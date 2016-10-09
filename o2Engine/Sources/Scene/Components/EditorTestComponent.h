@@ -33,6 +33,11 @@ namespace o2
 		RectF mRectF;					           // @SERIALIZABLE
 		RectI mRectI;					           // @SERIALIZABLE
 
+		void DeserializeBasic(const DataNode& node, const void* thisObject)
+		{
+			Component::DeserializeBasic(node, thisObject);
+		}
+
 		SERIALIZABLE(EditorTestComponent);
 	};
 }

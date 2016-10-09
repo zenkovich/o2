@@ -115,6 +115,8 @@ namespace o2
 
 		return newType;
 	}
+	
+	Reflection* Reflection::mInstance;
 
 	Type* FundamentalType<void>::type = new Type("void", nullptr, 0);
 	Type* IObject::type = new Type("IObject", nullptr, 0);

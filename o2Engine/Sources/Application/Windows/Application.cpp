@@ -12,6 +12,7 @@
 #include "Utils/Log/ConsoleLogStream.h"
 #include "Utils/Log/FileLogStream.h"
 #include "Utils/Log/LogStream.h"
+#include "Utils/StackTrace.h"
 #include "Utils/TaskManager.h"
 #include "Utils/Time.h"
 #include "Utils/Timer.h"
@@ -531,4 +532,9 @@ namespace o2
 		INITIALIZE_PROPERTY(Application, windowPosition, SetWindowPosition, GetWindowPosition);
 		INITIALIZE_PROPERTY(Application, windowCaption, SetWindowCaption, GetWindowCaption);
 	}
+
+	o2StackWalker* o2StackWalker::mInstance = new o2StackWalker();
+	MemoryManager* MemoryManager::mInstance = new MemoryManager();
+	template<> Debug* Singleton<Debug>::mInstance = mnew Debug();
+	template<> FileSystem* Singleton<FileSystem>::mInstance = mnew FileSystem();
 }

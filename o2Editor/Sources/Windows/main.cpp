@@ -8,16 +8,13 @@
 using namespace o2;
 using namespace Editor;
 
-INITIALIZE_O2;
-
 DECLARE_SINGLETON(WindowsManager);
 DECLARE_SINGLETON(EditorConfig);
 DECLARE_SINGLETON(ToolsPanel);
 
-
 int main()
 {
-	o2::Reflection::InitializeTypes();
+	INITIALIZE_O2;
 
 	DataNode data;
 	Vector<Actor*> xx = { mnew Actor(), mnew Actor(), mnew Actor() };

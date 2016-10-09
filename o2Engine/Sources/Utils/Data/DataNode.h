@@ -28,9 +28,9 @@ namespace o2
 		virtual bool CheckType(const Type* type) const { return false; }
 	};
 
-	//====================
+	// -------------------
 	// Tree-like data node
-	// ===================
+	// -------------------
 	class DataNode
 	{
 	public:
@@ -144,7 +144,7 @@ namespace o2
 		// Sets value from color value
 		DataNode& SetValue(const Color4& value);
 
-		// Sets value from pointer value
+		// Sets value from pointer value, only for objects, based on ISerializable
 		template<typename _type, typename X = std::enable_if<std::is_base_of<ISerializable, _type>::value>::type>
 		DataNode& SetValue(_type* value);
 
@@ -162,6 +162,8 @@ namespace o2
 			typename X = std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
 		DataNode& SetValue(_type& value);
 
+		// Gets value
+		void GetValue(DataNode& other) const;
 
 		// Gets value as wide string
 		void GetValue(wchar_t*& value) const;
@@ -226,7 +228,7 @@ namespace o2
 		// Gets value as char
 		void GetValue(long long int& value) const;
 
-		// Gets value as pointer
+		// Gets value as pointer, only for objects, based on ISerializable
 		template<typename _type,
 			typename X = std::enable_if<std::is_base_of<ISerializable, _type>::value>::type>
 		void GetValue(_type*& value) const;
@@ -239,7 +241,7 @@ namespace o2
 		template<typename _key, typename _value>
 		void GetValue(Dictionary<_key, _value>& value) const;
 
-		// Gets value as enum class
+		// Gets value as enum class or IObject
 		template<typename _type,
 			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, CustomDataConverter<_type>>::type,
 			typename X = std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
@@ -369,41 +371,6 @@ namespace o2
 		friend class Application;
 	};
 
-	// ----------------------------------------
-	// Unified type object serializer interface
-	// ----------------------------------------
-	struct Serializer
-	{
-		// ------------------------------
-		// Dummy serializer. Does nothing
-		// ------------------------------
-		template<typename T>
-		struct Dummy
-		{
-		public:
-			static void Serialize(T& x, DataNode& data) {}
-			static void Deserialize(T& x, DataNode& data) {}
-		};
-
-		// --------------------------------------------------------------------------------------
-		// Regular and fundamental serializer, works for types, that convertible to/from DataNode
-		// --------------------------------------------------------------------------------------
-		template<typename T>
-		struct Fundamental
-		{
-			static void Serialize(T& x, DataNode& data);
-			static void Deserialize(T& x, DataNode& data);
-		};
-
-		// Serializes param to data
-		template<typename T, typename X = std::conditional<DataNode::IsSupport<T>::value, Fundamental<T>, Dummy<T>>::type>
-		static void Serialize(T& param, DataNode& data);
-
-		// Deserializes param from data
-		template<typename T, typename X = std::conditional<DataNode::IsSupport<T>::value, Fundamental<T>, Dummy<T>>::type>
-		static void Deserialize(T& param, DataNode& data);
-	};
-
 	// Type and type getting forward declaration
 	class Type;
 
@@ -415,7 +382,7 @@ namespace o2
 	{
 		for (auto conv : mDataConverters)
 		{
-			if (conv->CheckType(&GetTypeOf<_type>()))
+			if (conv->CheckType(&GetTypeOf<_type*>()))
 			{
 				conv->FromData(&value, *this);
 				return;
@@ -460,7 +427,7 @@ namespace o2
 		{
 			for (auto conv : mDataConverters)
 			{
-				if (conv->CheckType(&GetTypeOf<_type>()))
+				if (conv->CheckType(&GetTypeOf<_type*>()))
 				{
 					conv->ToData(&value, *this);
 					return *this;
@@ -584,29 +551,5 @@ namespace o2
 		}
 
 		data = object.Serialize();
-	}
-
-	template<typename T>
-	void Serializer::Fundamental<T>::Deserialize(T& x, DataNode& data)
-	{
-		x = data;
-	}
-
-	template<typename T>
-	void Serializer::Fundamental<T>::Serialize(T& x, DataNode& data)
-	{
-		data = x;
-	}
-
-	template<typename T, typename X /*= SerializerSelector<T>::type*/>
-	void Serializer::Serialize(T& param, DataNode& data)
-	{
-		X::Serialize(param, data);
-	}
-
-	template<typename T, typename X /*= SerializerSelector<T>::type*/>
-	void Serializer::Deserialize(T& param, DataNode& data)
-	{
-		X::Deserialize(param, data);
 	}
 }

@@ -577,6 +577,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 				cppSource = ReadFile(cppSourcePath);
 				cppSourceInitial = cppSource;
 				RemoveMetas(cppSource, "ENUM_META(", "END_ENUM_META;");
+				RemoveMetas(cppSource, "ENUM_META_(", "END_ENUM_META;");
 				RemoveMetas(cppSource, "CLASS_META(", "END_META;");
 				RemoveMetas(cppSource, "CLASS_TEMPLATE_META(", "END_META;");
 			}

@@ -1583,7 +1583,7 @@ namespace o2
 		}
 
 		o2Debug.Log("Drop parent:%s, prev:%s", GetObjectDebug(targetParent), GetObjectDebug(targetPrevObject));
-		onDraggedObjects(objects, targetParent, targetPrevObject);
+		OnDraggedObjects(objects, targetParent, targetPrevObject);
 
 		UpdateNodesStructure();
 	}
@@ -1728,22 +1728,6 @@ namespace o2
 	}
 
 }
-
-ENUM_META_(o2::UITree::RearrangeType, RearrangeType)
-{
-	ENUM_ENTRY(Disabled);
-	ENUM_ENTRY(Enabled);
-	ENUM_ENTRY(OnlyReparent);
-}
-END_ENUM_META;
-
-ENUM_META_(o2::UITree::ExpandState, ExpandState)
-{
-	ENUM_ENTRY(Collaping);
-	ENUM_ENTRY(Expanding);
-	ENUM_ENTRY(None);
-}
-END_ENUM_META;
  
 CLASS_META(o2::UITree)
 {

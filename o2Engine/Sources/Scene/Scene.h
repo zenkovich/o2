@@ -220,7 +220,7 @@ namespace o2
 		void ToData(void* object, DataNode& data);
 
 		// Gets layer pointer from data
-		void FromData(void*& object, const DataNode& data);
+		void FromData(void* object, const DataNode& data);
 
 		// Checks that type is layer's type
 		bool CheckType(const Type* type) const;

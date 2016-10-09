@@ -122,5 +122,11 @@ namespace Editor
 
 		// On Debug/Save layout as default pressed in menu
 		void OnSaveDefaultLayoutPressed();
+
+		// Show open file dialog and returns name
+		String GetOpenFileNameDialog(const String& title, const Dictionary<String, String>& extensions);
+
+		// Show save file dialog and returns name
+		String GetSaveFileNameDialog(const String& title, const Dictionary<String, String>& extensions);
 	};
 }

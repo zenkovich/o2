@@ -20,28 +20,17 @@ namespace o2
 
 		struct IFieldSerializer
 		{
-			virtual void Serialize(void* object, DataNode& data) const = 0;
-			virtual void Deserialize(void* object, DataNode& data) const = 0;
-			virtual IFieldSerializer* Clone() const = 0;
+			virtual void Serialize(void* object, DataNode& data) const {}
+			virtual void Deserialize(void* object, DataNode& data) const {}
+			virtual IFieldSerializer* Clone() const { return mnew IFieldSerializer(); }
 		};
 
 		template<typename _type>
 		struct FieldSerializer: public IFieldSerializer
 		{
-			void Serialize(void* object, DataNode& data) const
-			{
-				Serializer::Serialize(*(_type*)object, data);
-			}
-
-			void Deserialize(void* object, DataNode& data) const
-			{
-				Serializer::Deserialize(*(_type*)object, data);
-			}
-			
-			IFieldSerializer* Clone() const
-			{
-				return mnew FieldSerializer(*this);
-			}
+			void Serialize(void* object, DataNode& data) const;
+			void Deserialize(void* object, DataNode& data) const;			
+			IFieldSerializer* Clone() const;
 		};
 
 	public:
@@ -306,4 +295,21 @@ namespace o2
 		return nullptr;
 	}
 
+	template<typename _type>
+	void FieldInfo::FieldSerializer<_type>::Serialize(void* object, DataNode& data) const
+	{
+		data.SetValue(*(_type*)object);
+	}
+
+	template<typename _type>
+	void FieldInfo::FieldSerializer<_type>::Deserialize(void* object, DataNode& data) const
+	{
+		data.GetValue(*(_type*)object);
+	}
+
+	template<typename _type>
+	FieldInfo::IFieldSerializer* FieldInfo::FieldSerializer<_type>::Clone() const
+	{
+		return mnew FieldSerializer();
+	}
 }

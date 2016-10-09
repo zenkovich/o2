@@ -39,11 +39,13 @@ namespace o2
 	{
 		transform.SetOwner(this);
 
-		for (auto child : other.mChilds)
-			AddChild(child->Clone());
+		Vector<Actor**> actorPointersFields;
+		Vector<Component**> componentPointersFields;
+		Dictionary<const Actor*, Actor*> actorsMap;
+		Dictionary<const Component*, Component*> componentsMap;
 
-		for (auto component : other.mComponents)
-			AddComponent(component->Clone());
+		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap);
+		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
 		transform.UpdateTransform();
@@ -101,6 +103,9 @@ namespace o2
 			if (mResEnabled)
 				mLayer->mEnabledActors.Remove(this);
 		}
+
+		if (Scene::IsSingletonInitialzed())
+			o2Scene.mChangedActors.Remove(this);
 	}
 
 	Actor& Actor::operator=(const Actor& other)
@@ -875,9 +880,9 @@ namespace o2
 
 	DECLARE_SINGLETON(ActorDataNodeConverter);
 
-	void ActorDataNodeConverter::ToData(void* object, DataNode& data)
+	void ActorDataNodeConverter::ToData(const void* object, DataNode& data)
 	{
-		Actor* value = *(Actor**)object;
+		const Actor* value = *(const Actor**)object;
 
 		if (value)
 		{
@@ -892,7 +897,7 @@ namespace o2
 
 	void ActorDataNodeConverter::FromData(void* object, const DataNode& data)
 	{
-		Actor* actor = *(Actor**)object;
+		Actor*& actor = *(Actor**)object;
 
 		if (auto assetIdNode = data.GetNode("AssetId"))
 		{
@@ -920,6 +925,7 @@ namespace o2
 				actor->Deserialize(*dataNode);
 			}
 		}
+		else actor = nullptr;
 	}
 
 	bool ActorDataNodeConverter::CheckType(const Type* type) const
@@ -975,13 +981,6 @@ namespace o2
 	}
 
 }
-
-ENUM_META_(o2::Actor::CreateMode, CreateMode)
-{
-	ENUM_ENTRY(InScene);
-	ENUM_ENTRY(NotInScene);
-}
-END_ENUM_META;
  
 CLASS_META(o2::Actor)
 {

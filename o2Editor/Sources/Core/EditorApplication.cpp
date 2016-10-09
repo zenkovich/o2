@@ -28,6 +28,16 @@ namespace Editor
 	EditorApplication::~EditorApplication()
 	{}
 
+	int EditorApplication::GetUndoActionsCount() const
+	{
+		return mActions.Count();
+	}
+
+	int EditorApplication::GetRedoActionsCount() const
+	{
+		return mForwardActions.Count();
+	}
+
 	String EditorApplication::GetLastActionName() const
 	{
 		if (mActions.Count() > 0)
@@ -70,6 +80,50 @@ namespace Editor
 			delete action;
 
 		mForwardActions.Clear();
+	}
+
+	void EditorApplication::ResetUndoActions()
+	{
+		for (auto x : mActions)
+			delete x;
+
+		for (auto x : mForwardActions)
+			delete x;
+
+		mActions.Clear();
+		mForwardActions.Clear();
+	}
+
+	const String& EditorApplication::GetLoadedSceneName() const
+	{
+		return mLoadedScene;
+	}
+
+	void EditorApplication::LoadScene(const String& name)
+	{
+		mLoadedScene = name;
+		o2Scene.Load(name);
+
+		ResetUndoActions();
+	}
+
+	void EditorApplication::SaveScene(const String& name)
+	{
+		mLoadedScene = name;
+		o2Scene.Save(name);
+	}
+
+	void EditorApplication::MakeNewScene()
+	{
+		mLoadedScene = "";
+		o2Scene.Clear();
+
+		ResetUndoActions();
+	}
+
+	bool EditorApplication::IsSceneChanged() const
+	{
+		return GetUndoActionsCount() > 0;
 	}
 
 	void EditorApplication::OnStarted()

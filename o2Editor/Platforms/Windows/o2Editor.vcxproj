@@ -124,7 +124,7 @@
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
     <PreBuildEvent>
-      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml" -v</Command>
+      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml"</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generating reflection</Message>
@@ -175,7 +175,7 @@
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
     <PreBuildEvent>
-      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml" -v</Command>
+      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml"</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generating reflection</Message>

@@ -429,17 +429,3 @@ ENUM_META_(o2::Bitmap::ImageType, ImageType)
 }
 END_ENUM_META;
  
-ENUM_META_(o2::Bitmap::Format, Format)
-{
-	ENUM_ENTRY(Default);
-	ENUM_ENTRY(R8G8B8A8);
-}
-END_ENUM_META;
-
-ENUM_META_(o2::Bitmap::ImageType, ImageType)
-{
-	ENUM_ENTRY(Auto);
-	ENUM_ENTRY(Png);
-}
-END_ENUM_META;
- 
