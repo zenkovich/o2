@@ -471,8 +471,6 @@ namespace o2
 	void DataNode::GetValue(Dictionary<_key, _value>& value) const
 	{
 		int count = mChildNodes.Count();
-		_value v = _value();
-		_key k = _key();
 		for (auto childNode : mChildNodes)
 		{
 			auto keyNode = childNode->GetNode("Key");
@@ -480,6 +478,8 @@ namespace o2
 
 			if (keyNode && valueNode)
 			{
+				_value v = _value();
+				_key k = _key();
 				keyNode->GetValue(k);
 				valueNode->GetValue(v);
 				value.Add(k, v);
@@ -490,9 +490,9 @@ namespace o2
 	template<typename _type>
 	void DataNode::GetValue(Vector<_type>& value) const
 	{
-		_type v = _type();
 		for (auto childNode : mChildNodes)
 		{
+			_type v = _type();
 			childNode->GetValue(v);
 			value.Add(v);
 		}

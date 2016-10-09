@@ -44,6 +44,7 @@ namespace Editor
 		void RebuildAssetsGridScroll();
 		void RebuildLinkBtn();
 		void RebuildEditorDropdown();
+		void RebuildActorHeadEnableToggle();
 
 		void RebuildEditorUIStyle();
 

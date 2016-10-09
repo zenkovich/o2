@@ -49,6 +49,7 @@ namespace o2
 		captionText->horAlign    = HorAlign::Middle;
 		captionText->verAlign    = VerAlign::Middle;
 		captionText->dotsEngings = true;
+		captionText->wordWrap    = true;
 		sample->AddLayer("caption", captionText);
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))

@@ -8,8 +8,12 @@
 #include "Scene/Scene.h"
 #include "SceneWindow/SceneWindow.h"
 #include "TreeWindow/TreeWindow.h"
+#include "UI/Button.h"
+#include "UI/HorizontalLayout.h"
+#include "UI/Label.h"
 #include "UI/MenuPanel.h"
 #include "UI/UIManager.h"
+#include "UI/VerticalLayout.h"
 
 DECLARE_SINGLETON(Editor::MenuPanel);
 
@@ -144,13 +148,39 @@ namespace Editor
 
 	void MenuPanel::OnOpenScenePressed()
 	{
+		if (o2EditorApplication.IsSceneChanged())
+		{
+			auto wnd = o2UI.AddWindow("Save scene?");
+			wnd->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(300, 200));
+
+			auto verLayout = o2UI.CreateVerLayout();
+			wnd->AddChild(verLayout);
+			verLayout->layout = UIWidgetLayout::BothStretch();
+			verLayout->baseCorner = BaseCorner::Top;
+
+			auto text = o2UI.CreateLabel("Current scene was modified and not saved. Do you want to save it?");
+			text->horOverflow = UILabel::HorOverflow::Wrap;
+			verLayout->AddChild(text);
+
+			auto horLayout = o2UI.CreateHorLayout();
+			verLayout->AddChild(horLayout);
+
+			horLayout->layout = UIWidgetLayout::BothStretch();
+			horLayout->border = RectF(20, 20, 20, 20);
+			horLayout->spacing = 20;
+			horLayout->AddChild(o2UI.CreateButton("Save"));
+			horLayout->AddChild(o2UI.CreateButton("Don't save"));
+			horLayout->AddChild(o2UI.CreateButton("Cancel"));
+
+			o2Debug.Log("Check saving scene");
+			return;
+		}
+
 		String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" }, { "All", "*.*" } });
 
 		if (fileName.IsEmpty())
 			return;
 
-		if (o2EditorApplication.IsSceneChanged())
-			o2Debug.Log("Check saving scene");
 
 		o2EditorApplication.LoadScene(fileName);
 	}

@@ -4283,7 +4283,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Data/DataNode.h">
-		<date year="2016" month="10" day="9" hour="14" minute="54" second="41" />
+		<date year="2016" month="10" day="9" hour="19" minute="38" second="48" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4313,7 +4313,7 @@
 									<typedefs />
 									<usings />
 									<baseClasses>
-										<class name="||&#10;			 std::is_enum&lt;T&gt;::value ||&#10;			 std::is_base_of&lt;ISerializable, T&gt;::value ||&#10;			 std::is_base_of&lt;ISerializable, typename std::remove_pointer&lt;T&gt;::type&gt;::value ||&#10;			 std::is_same&lt;Color4, T&gt;::value ||&#10;			 std::is_same&lt;RectI, T&gt;::value ||&#10;			 std::is_same&lt;RectF, T&gt;::value ||&#10;			 std::is_same&lt;Vec2I, T&gt;::value ||&#10;			 std::is_same&lt;Vec2F, T&gt;::value ||&#10;			 std::is_same&lt;String, T&gt;::value ||&#10;			 std::is_same&lt;WString, T&gt;::value ||&#10;			 std::is_same&lt;DataNode, T&gt;::value) &amp;&amp; !std::is_const&lt;T&gt;::value&gt;" protection="1" />
+										<class name="||&#10;    std::is_enum&lt;T&gt;::value ||&#10;    std::is_base_of&lt;ISerializable, T&gt;::value ||&#10;    std::is_base_of&lt;ISerializable, typename std::remove_pointer&lt;T&gt;::type&gt;::value ||&#10;    std::is_same&lt;Color4, T&gt;::value ||&#10;    std::is_same&lt;RectI, T&gt;::value ||&#10;    std::is_same&lt;RectF, T&gt;::value ||&#10;    std::is_same&lt;Vec2I, T&gt;::value ||&#10;    std::is_same&lt;Vec2F, T&gt;::value ||&#10;    std::is_same&lt;String, T&gt;::value ||&#10;    std::is_same&lt;WString, T&gt;::value ||&#10;    std::is_same&lt;DataNode, T&gt;::value) &amp;&amp; !std::is_const&lt;T&gt;::value&gt;" protection="1" />
 									</baseClasses>
 								</section>
 								<section name="IsSupport&lt;Vector&lt;T2&gt;&gt;" fullname="o2::DataNode::IsSupport&lt;Vector&lt;T2&gt;&gt;" isClass="true" isMeta="false" templates="typename T2" protection="0" attributeCommentDef="" attributeShortDef="">
@@ -4331,6 +4331,18 @@
 									<baseClasses>
 										<class name="IsSupport&lt;T2&gt;::value &amp;&amp; IsSupport&lt;T3&gt;::value&gt;" protection="1" />
 									</baseClasses>
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
 								</section>
 								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 									<sections />

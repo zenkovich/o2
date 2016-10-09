@@ -1300,6 +1300,29 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "editor property");
 	}
 
+	void EditorUIStyleBuilder::RebuildActorHeadEnableToggle()
+	{
+		UIToggle* sample = mnew UIToggle();
+
+		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
+
+		auto back = halfHideLayer->AddChildLayer("back", mnew Sprite("ui/UI_off_dot.png"),
+												 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		auto dot = halfHideLayer->AddChildLayer("dot", mnew Sprite("ui/UI_on_dot.png"),
+												Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+
+		Animation valueAnim = Animation::EaseInOut(sample, &dot->transparency, 0.0f, 1.0f, 0.1f);
+		*valueAnim.AddAnimationValue(&back->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.1f);
+		sample->AddState("value", valueAnim);
+
+		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
+
+		o2UI.AddWidgetStyle(sample, "actorHeadEnable");
+	}
+
 	void EditorUIStyleBuilder::RebuildEditorUIStyle()
 	{
 		o2UI.ClearStyle();
