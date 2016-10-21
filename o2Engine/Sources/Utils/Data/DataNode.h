@@ -3,6 +3,7 @@
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/String.h"
+#include "Utils/UID.h"
 
 namespace o2
 {
@@ -144,6 +145,9 @@ namespace o2
 		// Sets value from color value
 		DataNode& SetValue(const Color4& value);
 
+		// Sets value from UID value
+		DataNode& SetValue(const UID& value);
+
 		// Sets value from pointer value, only for objects, based on ISerializable
 		template<typename _type, typename X = std::enable_if<std::is_base_of<ISerializable, _type>::value>::type>
 		DataNode& SetValue(_type* value);
@@ -203,6 +207,9 @@ namespace o2
 
 		// Gets value as color
 		void GetValue(Color4& value) const;
+
+		// Gets value as UID
+		void GetValue(UID& value) const;
 
 		// Gets value as char
 		void GetValue(char& value) const;
@@ -347,6 +354,7 @@ namespace o2
 			 std::is_same<Vec2F, T>::value ||
 			 std::is_same<String, T>::value ||
 			 std::is_same<WString, T>::value ||
+			 std::is_same<UID, T>::value ||
 			 std::is_same<DataNode, T>::value) && !std::is_const<T>::value>
 		{};
 

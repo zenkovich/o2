@@ -68,7 +68,7 @@ namespace o2
 		Text(o2Assets.GetAssetId(fontFileName))
 	{}
 
-	Text::Text(AssetId fontAssetId):
+	Text::Text(UID fontAssetId):
 		mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
 		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mDotsEndings(false), mHeight(11),
 		mUpdatingMesh(false)
@@ -176,7 +176,7 @@ namespace o2
 		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 	}
 
-	void Text::SetFontAsset(AssetId assetId)
+	void Text::SetFontAsset(UID assetId)
 	{
 		if (!o2Assets.IsAssetExist(assetId))
 		{
@@ -248,7 +248,7 @@ namespace o2
 		return mnew VectorFontAsset(mFontAssetId);
 	}
 
-	AssetId Text::GetFontAssetId() const
+	UID Text::GetFontAssetId() const
 	{
 		return mFontAssetId;
 	}
@@ -793,10 +793,10 @@ CLASS_META(o2::Text)
 	PUBLIC_FUNCTION(FontRef, GetFont);
 	PUBLIC_FUNCTION(void, SetFontAsset, BitmapFontAsset*);
 	PUBLIC_FUNCTION(void, SetFontAsset, VectorFontAsset*);
-	PUBLIC_FUNCTION(void, SetFontAsset, AssetId);
+	PUBLIC_FUNCTION(void, SetFontAsset, UID);
 	PUBLIC_FUNCTION(void, SetFontAsset, const String&);
 	PUBLIC_FUNCTION(Asset*, GetFontAsset);
-	PUBLIC_FUNCTION(AssetId, GetFontAssetId);
+	PUBLIC_FUNCTION(UID, GetFontAssetId);
 	PUBLIC_FUNCTION(void, SetHeight, int);
 	PUBLIC_FUNCTION(int, GetHeight);
 	PUBLIC_FUNCTION(void, SetText, const WString&);

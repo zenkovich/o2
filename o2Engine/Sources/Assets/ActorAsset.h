@@ -24,7 +24,7 @@ namespace o2
 		ActorAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		ActorAsset(AssetId id);
+		ActorAsset(UID id);
 
 		// Copy-constructor
 		ActorAsset(const ActorAsset& asset);

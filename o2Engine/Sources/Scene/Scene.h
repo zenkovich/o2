@@ -4,6 +4,7 @@
 #include "Utils/Serializable.h"
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
+#include "Utils/UID.h"
 
 // Scene graph access macros
 #define o2Scene Scene::Instance()
@@ -138,7 +139,7 @@ namespace o2
 		Actor* GetActorByID(UInt64 id) const;
 
 		// Returns asset actor by asset id. Tries to find in cache
-		Actor* GetAssetActorByID(AssetId id);
+		Actor* GetAssetActorByID(UID id);
 
 		// Returns actor by path (ex "some node/other/target")
 		Actor* FindActor(const String& path);

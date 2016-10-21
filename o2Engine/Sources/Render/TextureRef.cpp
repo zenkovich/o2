@@ -48,7 +48,7 @@ namespace o2
 			mTexture->mRefs.Add(this);
 	}
 
-	TextureRef::TextureRef(AssetId atlasAssetId, int page)
+	TextureRef::TextureRef(UID atlasAssetId, int page)
 	{
 		mTexture = o2Render.mTextures.FindMatch([&](Texture* tex) { 
 			return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
@@ -62,7 +62,7 @@ namespace o2
 
 	TextureRef::TextureRef(const String& atlasAssetName, int page)
 	{
-		AssetId atlasAssetId = o2Assets.GetAssetId(atlasAssetName);
+		UID atlasAssetId = o2Assets.GetAssetId(atlasAssetName);
 		if (atlasAssetId == 0)
 		{
 			o2Render.mLog->Error("Can't load texture for atlas %s and page %i: atlas isn't exist", atlasAssetName, page);

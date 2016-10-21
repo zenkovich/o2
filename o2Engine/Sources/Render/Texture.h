@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Render/Windows/TextureBase.h"
-
 #include "Utils/Math/Vector2.h"
-
 #include "Utils/Property.h"
 #include "Utils/String.h"
+#include "Utils/UID.h"
 
 namespace o2
 {
@@ -40,7 +39,7 @@ namespace o2
 		Texture(const String& fileName);
 
 		// Constructor from atlas page
-		Texture(AssetId atlasAssetId, int page);
+		Texture(UID atlasAssetId, int page);
 
 		// Constructor from atlas page
 		Texture(const String& atlasAssetName, int page);
@@ -58,7 +57,7 @@ namespace o2
 		void Create(const String& fileName);
 
 		// Creates texture from atlas page
-		void Create(AssetId atlasAssetId, int page);
+		void Create(UID atlasAssetId, int page);
 
 		// Creates texture from atlas page
 		void Create(const String& atlasAssetName, int page);
@@ -88,7 +87,7 @@ namespace o2
 		bool IsAtlasPage() const;
 
 		// Returns atlas asset id
-		AssetId GetAtlasAssetId() const;
+		UID GetAtlasAssetId() const;
 
 		// Returns atlas page
 		int GetAtlasPage() const;
@@ -100,7 +99,7 @@ namespace o2
 		Format         mFormat;       // Texture format
 		Usage          mUsage;        // Texture usage
 		String         mFileName;     // Source file name
-		AssetId        mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture
+		UID        mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture
 		int            mAtlasPage;    // Atlas page
 		bool           mReady;        // Is texture ready to use
 		TextureRefsVec mRefs;         // Texture references

@@ -16,7 +16,7 @@ namespace o2
 	class AssetsBuilder
 	{
 	public:
-		typedef Vector<AssetId> AssetsIdsVec;
+		typedef Vector<UID> AssetsIdsVec;
 
 	public:
 		// Default constructor

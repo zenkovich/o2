@@ -97,8 +97,6 @@ namespace o2
 		Text*          mCaptionText = nullptr; // Caption layer text
 		Sprite*        mIconSprite = nullptr;  // Icon layer sprite
 		UIButtonGroup* mButtonGroup = nullptr; // Button group
-		int xx; // @SERIALIZABLE
-		int ff;
 
 	protected:
 		// Calls when cursor pressed on this. Sets state "pressed" to true

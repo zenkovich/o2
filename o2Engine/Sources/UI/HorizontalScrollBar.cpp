@@ -246,14 +246,14 @@ namespace o2
 
 	void UIHorizontalScrollBar::OnCursorEnter(const Input::Cursor& cursor)
 	{
-		auto selectState = state["select"];
+		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
 	}
 
 	void UIHorizontalScrollBar::OnCursorExit(const Input::Cursor& cursor)
 	{
-		auto selectState = state["select"];
+		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = false;
 	}

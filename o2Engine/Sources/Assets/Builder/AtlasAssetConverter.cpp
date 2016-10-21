@@ -64,7 +64,7 @@ namespace o2
 		o2FileSystem.FileMove(fullMetaPathFrom, fullMetaPathTo);
 	}
 
-	Vector<AssetId> AtlasAssetConverter::AssetsPostProcess()
+	Vector<UID> AtlasAssetConverter::AssetsPostProcess()
 	{
 		CheckBasicAtlas();
 		return CheckRebuildingAtlases();
@@ -80,7 +80,7 @@ namespace o2
 
 		AssetTree::AssetNode* basicAtlasInfo = nullptr;
 
-		Vector<AssetId> availableAtlasesIds;
+		Vector<UID> availableAtlasesIds;
 		for (auto assetInfo : mAssetsBuilder->mBuildedAssetsTree.mAllAssets)
 		{
 			if (assetInfo->mType == atlasTypeId)
@@ -104,9 +104,9 @@ namespace o2
 		}
 	}
 
-	Vector<AssetId> AtlasAssetConverter::CheckRebuildingAtlases()
+	Vector<UID> AtlasAssetConverter::CheckRebuildingAtlases()
 	{
-		Vector<AssetId> res;
+		Vector<UID> res;
 		Type::Id atlasAssetTypeId = TypeOf(AtlasAsset).ID();
 
 		for (auto info : mAssetsBuilder->mBuildedAssetsTree.mAllAssets)
@@ -129,7 +129,7 @@ namespace o2
 
 		ImagesVec currentImages;
 		Type::Id imageTypeId = TypeOf(ImageAsset).ID();
-		AssetId atlasId = atlasInfo->mMeta->ID();
+		UID atlasId = atlasInfo->mMeta->ID();
 		for (auto assetInfo : mAssetsBuilder->mBuildedAssetsTree.mAllAssets)
 		{
 			if (assetInfo->mType == imageTypeId)
@@ -313,7 +313,7 @@ namespace o2
 		metaData.SaveToFile(mAssetsBuilder->mSourceAssetsPath + imgDef.mAssetInfo->mPath + ".meta");
 	}
 
-	AtlasAssetConverter::Image::Image(AssetId id, const TimeStamp& time):
+	AtlasAssetConverter::Image::Image(UID id, const TimeStamp& time):
 		mId(id), mTime(time)
 	{}
 
@@ -337,10 +337,10 @@ CLASS_META(o2::AtlasAssetConverter)
 	PUBLIC_FUNCTION(void, ConvertAsset, const AssetTree::AssetNode&);
 	PUBLIC_FUNCTION(void, RemoveAsset, const AssetTree::AssetNode&);
 	PUBLIC_FUNCTION(void, MoveAsset, const AssetTree::AssetNode&, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(Vector<AssetId>, AssetsPostProcess);
+	PUBLIC_FUNCTION(Vector<UID>, AssetsPostProcess);
 	PUBLIC_FUNCTION(void, Reset);
 	PROTECTED_FUNCTION(void, CheckBasicAtlas);
-	PROTECTED_FUNCTION(Vector<AssetId>, CheckRebuildingAtlases);
+	PROTECTED_FUNCTION(Vector<UID>, CheckRebuildingAtlases);
 	PROTECTED_FUNCTION(bool, CheckAtlasRebuilding, AssetTree::AssetNode*);
 	PROTECTED_FUNCTION(bool, IsAtlasNeedRebuild, ImagesVec&, ImagesVec&);
 	PROTECTED_FUNCTION(void, RebuildAtlas, AssetTree::AssetNode*, ImagesVec&);

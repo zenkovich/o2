@@ -24,7 +24,7 @@ namespace o2
 		BinaryAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		BinaryAsset(AssetId id);
+		BinaryAsset(UID id);
 
 		// Copy-constructor
 		BinaryAsset(const BinaryAsset& asset);

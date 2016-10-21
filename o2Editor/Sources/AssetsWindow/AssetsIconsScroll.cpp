@@ -245,7 +245,7 @@ namespace Editor
 		return true;
 	}
 
-	void UIAssetsIconsScrollArea::SelectAsset(AssetId id, bool scroll /*= true*/)
+	void UIAssetsIconsScrollArea::SelectAsset(UID id, bool scroll /*= true*/)
 	{
 		UIAssetIcon* icon = (UIAssetIcon*)(mGrid->GetChilds().FindMatch([=](UIWidget* x) {
 			return ((UIAssetIcon*)x)->GetAssetInfo().mId == id; }));
@@ -1090,7 +1090,7 @@ CLASS_META(Editor::UIAssetsIconsScrollArea)
 	PUBLIC_FUNCTION(String, GetViewingPath);
 	PUBLIC_FUNCTION(void, UpdateAssetsPath);
 	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(void, SelectAsset, AssetId, bool);
+	PUBLIC_FUNCTION(void, SelectAsset, UID, bool);
 	PUBLIC_FUNCTION(void, DeselectAllAssets);
 	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
 	PUBLIC_FUNCTION(UIAssetIcon*, GetIconUnderPoint, const Vec2F&);

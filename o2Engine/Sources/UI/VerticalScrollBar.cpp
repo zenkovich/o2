@@ -240,14 +240,14 @@ namespace o2
 
 	void UIVerticalScrollBar::OnCursorEnter(const Input::Cursor& cursor)
 	{
-		auto selectState = state["select"];
+		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
 	}
 
 	void UIVerticalScrollBar::OnCursorExit(const Input::Cursor& cursor)
 	{
-		auto selectState = state["select"];
+		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = false;
 	}

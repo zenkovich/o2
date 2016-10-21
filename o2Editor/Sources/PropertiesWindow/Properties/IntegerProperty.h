@@ -20,10 +20,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		IntegerProperty();
-
-		// Constructor
-		IntegerProperty(const Vector<void*>& targets, bool isProperty);
+		IntegerProperty(UIWidget* widget = nullptr);
 
 		// Destructor
 		~IntegerProperty();
@@ -59,9 +56,6 @@ namespace Editor
 		UIEditBox*    mEditBox;         // Edit box 
 
 	protected:
-		// Initializes widget
-		void InitializeWidget();
-
 		// Edit box change event
 		void OnEdited(const WString& data);
 	};

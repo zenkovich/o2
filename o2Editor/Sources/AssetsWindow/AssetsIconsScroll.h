@@ -66,7 +66,7 @@ namespace Editor
 		bool IsFocusable() const;
 
 		// Selects asset
-		void SelectAsset(AssetId id, bool scroll = true);
+		void SelectAsset(UID id, bool scroll = true);
 
 		// Deselects all assets
 		void DeselectAllAssets();
@@ -98,7 +98,7 @@ namespace Editor
 		typedef Vector<UIAssetIcon*> AssetsIconsVec;
 		typedef Vector<Sprite*> SpritesVec;
 		typedef Dictionary<String, AssetsIconsVec> IconArrsDict;
-		typedef Vector<Pair<AssetId, String>> AssetIdPathVec;
+		typedef Vector<Pair<UID, String>> AssetIdPathVec;
 		typedef Vector<Actor*> ActorsVec;
 
 

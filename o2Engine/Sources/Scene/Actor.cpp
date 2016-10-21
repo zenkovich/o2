@@ -228,7 +228,7 @@ namespace o2
 		mId = id;
 	}
 
-	AssetId Actor::GetAssetId() const
+	UID Actor::GetAssetId() const
 	{
 		return mAssetId;
 	}
@@ -901,18 +901,18 @@ namespace o2
 
 		if (auto assetIdNode = data.GetNode("AssetId"))
 		{
-			AssetId assetId = *assetIdNode;
+			UID assetId = *assetIdNode;
 			actor = o2Scene.GetAssetActorByID(assetId);
 
 			if (!actor)
-				mUnresolvedActors.Add(ActorDef(&actor, true, assetId));
+				mUnresolvedActors.Add(ActorDef(&actor, assetId));
 		}
 		else if (auto sceneIdNode = data.GetNode("ID"))
 		{
 			actor = o2Scene.GetActorByID(*sceneIdNode);
 
 			if (!actor)
-				mUnresolvedActors.Add(ActorDef(&actor, false, *sceneIdNode));
+				mUnresolvedActors.Add(ActorDef(&actor, (UInt64)*sceneIdNode));
 		}
 		else if (auto dataNode = data.GetNode("Data"))
 		{
@@ -957,12 +957,12 @@ namespace o2
 		for (auto def : mUnresolvedActors)
 		{
 			if (def.isAsset)
-				*def.target = o2Scene.GetAssetActorByID(def.id);
+				*def.target = o2Scene.GetAssetActorByID(def.assetId);
 			else
-				*def.target = o2Scene.GetActorByID(def.id);
+				*def.target = o2Scene.GetActorByID(def.actorId);
 
 			if (!*def.target)
-				*def.target = mNewActors.FindMatch([&](Actor* x) { return x->GetID() == def.id; });
+				*def.target = mNewActors.FindMatch([&](Actor* x) { return x->GetID() == def.actorId; });
 		}
 
 		mNewActors.Clear();
@@ -1029,7 +1029,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(UInt64, GetID);
 	PUBLIC_FUNCTION(void, SetId, UInt64);
-	PUBLIC_FUNCTION(AssetId, GetAssetId);
+	PUBLIC_FUNCTION(UID, GetAssetId);
 	PUBLIC_FUNCTION(bool, IsAsset);
 	PUBLIC_FUNCTION(void, GenNewId, bool);
 	PUBLIC_FUNCTION(void, ExcludeFromScene);

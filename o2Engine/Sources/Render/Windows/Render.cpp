@@ -133,7 +133,7 @@ namespace o2
 		mCurrentRenderTarget = TextureRef();
 
 		if (IS_DEV_MODE)
-			o2Assets.onAssetsRebuilded += Function<void(const Vector<AssetId>&)>(this, &Render::OnAssetsRebuilded);
+			o2Assets.onAssetsRebuilded += Function<void(const Vector<UID>&)>(this, &Render::OnAssetsRebuilded);
 
 		mReady = true;
 	}
@@ -161,7 +161,7 @@ namespace o2
 			return;
 
 		if (IS_DEV_MODE)
-			o2Assets.onAssetsRebuilded -= Function<void(const Vector<AssetId>&)>(this, &Render::OnAssetsRebuilded);
+			o2Assets.onAssetsRebuilded -= Function<void(const Vector<UID>&)>(this, &Render::OnAssetsRebuilded);
 
 		if (mGLContext)
 		{
@@ -364,7 +364,7 @@ namespace o2
 		unloadFonts.ForEach([](auto fnt) { delete fnt; });
 	}
 
-	void Render::OnAssetsRebuilded(const Vector<AssetId>& changedAssets)
+	void Render::OnAssetsRebuilded(const Vector<UID>& changedAssets)
 	{
 		for (auto tex : mTextures)
 		{

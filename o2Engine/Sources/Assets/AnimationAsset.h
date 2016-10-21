@@ -27,7 +27,7 @@ namespace o2
 		AnimationAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		AnimationAsset(AssetId id);
+		AnimationAsset(UID id);
 
 		// Copy-constructor
 		AnimationAsset(const AnimationAsset& asset);

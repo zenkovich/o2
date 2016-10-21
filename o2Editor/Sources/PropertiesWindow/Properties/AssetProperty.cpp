@@ -27,6 +27,6 @@ CLASS_META(Editor::IAssetProperty)
 	BASE_CLASS(o2::KeyboardEventsListener);
 
 
-	PUBLIC_FUNCTION(void, SetAssetId, AssetId);
+	PUBLIC_FUNCTION(void, SetAssetId, UID);
 }
 END_META;

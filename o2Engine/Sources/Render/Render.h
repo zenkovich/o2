@@ -267,7 +267,7 @@ namespace o2
 		void CheckFontsUnloading();
 
 		// Calls when assets was rebuilded
-		void OnAssetsRebuilded(const Vector<AssetId>& changedAssets);
+		void OnAssetsRebuilded(const Vector<UID>& changedAssets);
 
 		// initializes properties
 		void InitializeProperties();

@@ -19,7 +19,7 @@ namespace o2
 	public:
 		Property<TextureRef> texture;          // Texture property
 		Property<RectI>      textureSrcRect;   // Texture source rectangle property
-		Property<AssetId>    imageAssetId;     // Image asset id property
+		Property<UID>    imageAssetId;     // Image asset id property
 		Setter<String>       imageAssetPath;   // Sets image asset from path
 		Setter<ImageAsset>   imageAsset;       // Sets image asset
 		Setter<Bitmap*>      bitmap;           // Sets image from bitmap
@@ -41,7 +41,7 @@ namespace o2
 		Sprite(const String& imagePath);
 
 		// Constructor from image asset by id
-		Sprite(AssetId imageId);
+		Sprite(UID imageId);
 
 		// Constructor from texture and source rectangle
 		Sprite(TextureRef texture, const RectI& srcRect);
@@ -131,7 +131,7 @@ namespace o2
 		void LoadFromImage(const String& imagePath);
 
 		// Loads sprite from image asset by id
-		void LoadFromImage(AssetId imageId);
+		void LoadFromImage(UID imageId);
 
 		// Loads sprite from mono color
 		void LoadMonoColor(const Color4& color);
@@ -140,10 +140,10 @@ namespace o2
 		void LoadFromBitmap(Bitmap* bitmap);
 
 		// Returns image asset id (returns 0 when asset id is unknown)
-		AssetId GetImageId() const;
+		UID GetImageId() const;
 
 		// Returns atlas asset id (returns 0 when sprite is not from atlas)
-		AssetId GetAtlasAssetId() const;
+		UID GetAtlasAssetId() const;
 
 		// Sets size by texture source rectangle size
 		void NormalizeSize();
@@ -162,8 +162,8 @@ namespace o2
 	protected:
 		RectI      mTextureSrcRect;   // Texture source rectangle
 		Color4     mCornersColors[4]; // Corners colors
-		AssetId    mImageAssetId;     // Image asset id (0 by default)
-		AssetId    mAtlasAssetId;     // Atlas asset id (0 by default)
+		UID        mImageAssetId;     // Image asset id (0 by default)
+		UID        mAtlasAssetId;     // Atlas asset id (0 by default)
 		SpriteMode mMode;             // Drawing mode @SERIALIZABLE
 		RectI      mSlices;           // Slice borders @SERIALIZABLE
 		float      mFill;             // Sprite fillness @SERIALIZABLE

@@ -20,10 +20,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		BooleanProperty();
-
-		// Constructor
-		BooleanProperty(const Vector<void*>& targets, bool isProperty);
+		BooleanProperty(UIWidget* widget = nullptr);
 
 		// Destructor
 		~BooleanProperty();
@@ -59,9 +56,6 @@ namespace Editor
 		UIToggle*     mToggle;          // Toggle 
 
 	protected:
-		// Initializes widget
-		void InitializeWidget();
-
 		// Edit box change event
 		void OnEdited(bool value);
 	};

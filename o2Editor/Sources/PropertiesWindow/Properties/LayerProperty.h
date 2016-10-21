@@ -18,10 +18,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		LayerProperty();
-
-		// Constructor
-		LayerProperty(const Vector<void*>& targets, bool isProperty);
+		LayerProperty(UIWidget* widget = nullptr);
 
 		// Destructor
 		~LayerProperty();
@@ -58,9 +55,6 @@ namespace Editor
 		bool           mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
 
 	protected:
-		// Initializes widget
-		void InitializeWidget();
-
 		// Selects layer
 		void SelectLayer(const WString& name);
 	};

@@ -19,7 +19,7 @@ namespace o2
 
 	public:
 		Property<Bitmap*>     bitmap;    // Bitmap data property
-		Property<AssetId>     atlasId;   // Atlas owner id property
+		Property<UID>     atlasId;   // Atlas owner id property
 		Property<AtlasAsset*> atlas;     // Atlas owner asset property
 		Getter<UInt>          atlasPage; // Atlas page index getter
 		Getter<RectI>         atlasRect; // Atlas source image rectangle getter
@@ -35,7 +35,7 @@ namespace o2
 		ImageAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		ImageAsset(AssetId id);
+		ImageAsset(UID id);
 
 		// Copy-constructor
 		ImageAsset(const ImageAsset& asset);
@@ -59,10 +59,10 @@ namespace o2
 		void SetBitmap(Bitmap* bitmap);
 
 		// Returns atlas id
-		AssetId GetAtlasId() const;
+		UID GetAtlasId() const;
 
 		// Sets atlas id
-		void SetAtlasId(AssetId id);
+		void SetAtlasId(UID id);
 
 		// Returns atlas asset
 		AtlasAsset* GetAtlas() const;
@@ -117,7 +117,7 @@ namespace o2
 		class MetaInfo: public IMetaInfo
 		{
 		public:
-			AssetId      mAtlasId;     // Atlas owner id @SERIALIZABLE
+			UID      mAtlasId;     // Atlas owner id @SERIALIZABLE
 			PlatformMeta mIOS;         // IOS specified meta @SERIALIZABLE
 			PlatformMeta mAndroid;     // Android specified meta @SERIALIZABLE
 			PlatformMeta mMacOS;       // MacOS specified meta @SERIALIZABLE

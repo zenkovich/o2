@@ -39,7 +39,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	Texture::Texture(AssetId atlasAssetId, int page):
+	Texture::Texture(UID atlasAssetId, int page):
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(atlasAssetId, page);
@@ -181,7 +181,7 @@ namespace o2
 		mReady = true;
 	}
 
-	void Texture::Create(AssetId atlasAssetId, int page)
+	void Texture::Create(UID atlasAssetId, int page)
 	{
 		if (o2Assets.IsAssetExist(atlasAssetId))
 		{
@@ -245,7 +245,7 @@ namespace o2
 		return mAtlasAssetId != 0;
 	}
 
-	AssetId Texture::GetAtlasAssetId() const
+	UID Texture::GetAtlasAssetId() const
 	{
 		return mAtlasAssetId;
 	}

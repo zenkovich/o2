@@ -24,7 +24,7 @@ namespace o2
 		DataAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		DataAsset(AssetId id);
+		DataAsset(UID id);
 
 		// Copy-constructor
 		DataAsset(const DataAsset& asset);

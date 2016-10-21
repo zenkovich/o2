@@ -21,10 +21,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		ComponentProperty();
-
-		// Constructor
-		ComponentProperty(const Vector<void*>& targets, bool isProperty);
+		ComponentProperty(UIWidget* widget = nullptr);
 
 		// Destructor
 		~ComponentProperty();
@@ -71,9 +68,6 @@ namespace Editor
 		Text*         mNameText;        // Component name text
 
 	protected:
-		// Initializes widget
-		void InitializeWidget();
-
 		// Calls when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 

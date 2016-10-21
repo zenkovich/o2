@@ -16,6 +16,8 @@ namespace Editor
 
 	class TagsProperty;
 	class LayerProperty;
+	class BooleanProperty;
+	class StringProperty;
 
 	template<typename _type>
 	class AssetProperty;
@@ -42,12 +44,13 @@ namespace Editor
 
 	public:
 		UIWidget*                  mDataView;
-		UIToggle*                  mEnableToggle;
-		UIToggle*                  mLockToggle;
-		AssetProperty<ActorAsset>* mPrefabProperty;
-		UIButton*                  mPrefabApplyBtn;
-		UIButton*                  mPrefabRevertBtn;
-		UIButton*                  mPrefabBreakBtn;
+		BooleanProperty*           mEnableProperty;
+		StringProperty*            mNameProperty;
+		BooleanProperty*           mLockProperty;
+		AssetProperty<ActorAsset>* mPrototypeProperty;
+		UIButton*                  mPrototypeApplyBtn;
+		UIButton*                  mPrototypeRevertBtn;
+		UIButton*                  mPrototypeBreakBtn;
 		TagsProperty*              mTagsProperty;
 		LayerProperty*             mLayerProperty;
 	};

@@ -18,7 +18,7 @@ namespace o2
 	public:
 		Property<String>   path;     // Asset path property
 		Getter<String>     fullPath; // Full asset path getter (from binary path)
-		Getter<AssetId>    id;       // Asset id getter
+		Getter<UID>    id;       // Asset id getter
 		Getter<IMetaInfo*> meta;     // Asset meta information pointer getter
 
 		// Default constructor
@@ -49,7 +49,7 @@ namespace o2
 		String GetDataFullPath() const;
 
 		// Returns id of asset
-		AssetId GetAssetId() const;
+		UID GetAssetId() const;
 
 		// Returns meta information pointer
 		IMetaInfo* GetMeta() const;
@@ -61,7 +61,7 @@ namespace o2
 		void Load(const String& path);
 
 		// Loads asset by id
-		void Load(AssetId id);
+		void Load(UID id);
 
 		// Loads asset by info
 		void Load(const AssetInfo& info);
@@ -88,7 +88,7 @@ namespace o2
 		{
 			friend class Asset;
 
-			AssetId mId; // Id of assets @SERIALIZABLE
+			UID mId; // Id of assets @SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -104,7 +104,9 @@ namespace o2
 			virtual bool IsEqual(IMetaInfo* other) const;
 
 			// Returns asset id
-			AssetId ID() const;
+			UID ID() const;
+
+			void r() { mId.Randomize(); }
 
 			SERIALIZABLE(IMetaInfo);
 		};
@@ -136,7 +138,7 @@ namespace o2
 		String GetMetaFullPath() const;
 
 		// Returns reference to id in meta
-		AssetId& IdRef();
+		UID& IdRef();
 
 		// Returns assets log stream pointer
 		LogStream* GetAssetsLogStream() const;

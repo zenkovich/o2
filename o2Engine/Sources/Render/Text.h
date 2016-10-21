@@ -41,7 +41,7 @@ namespace o2
 		Text(const String& fontFileName);
 
 		// Constructor
-		Text(AssetId fontAssetId);
+		Text(UID fontAssetId);
 
 		// Constructor
 		Text(BitmapFontAsset* fontAsset);
@@ -74,7 +74,7 @@ namespace o2
 		void SetFontAsset(VectorFontAsset* asset);
 
 		// Sets font asset id (loads asset by this id)
-		void SetFontAsset(AssetId assetId);
+		void SetFontAsset(UID assetId);
 
 		// Sets font asset (loads asset by file name)
 		void SetFontAsset(const String& fileName);
@@ -83,7 +83,7 @@ namespace o2
 		Asset* GetFontAsset() const;
 
 		// Returns font asset id
-		AssetId GetFontAssetId() const;
+		UID GetFontAssetId() const;
 
 		// Sets font height
 		void SetHeight(int height);
@@ -235,7 +235,7 @@ namespace o2
 		const UInt mMeshMaxPolyCount = 4096;
 
 		WString    mText;              // Wide char string, containing rendering text @SERIALIZABLE
-		AssetId    mFontAssetId;       // Font asset id @SERIALIZABLE
+		UID    mFontAssetId;       // Font asset id @SERIALIZABLE
 		FontRef    mFont;              // Using font
 		int        mHeight;            // Text height
 		float      mSymbolsDistCoef;   // Characters distance coef, 1 is standard @SERIALIZABLE

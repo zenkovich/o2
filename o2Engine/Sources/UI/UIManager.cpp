@@ -12,6 +12,7 @@
 #include "UI/HorizontalLayout.h"
 #include "UI/HorizontalProgress.h"
 #include "UI/HorizontalScrollBar.h"
+#include "UI/Image.h"
 #include "UI/Label.h"
 #include "UI/List.h"
 #include "UI/ScrollArea.h"
@@ -169,6 +170,13 @@ namespace o2
 	UIToggle* UIManager::AddToggle(const WString& caption, const String& style /*= "standard"*/)
 	{
 		UIToggle* res = CreateToggle(caption, style);
+		AddWidget(res);
+		return res;
+	}
+
+	UIImage* UIManager::AddImage(const String& name)
+	{
+		UIImage* res = CreateImage(name);
 		AddWidget(res);
 		return res;
 	}
@@ -398,6 +406,13 @@ namespace o2
 		auto res = CreateWidget<UIToggle>(style);
 		res->caption = caption;
 		res->name = "toggle";
+		return res;
+	}
+
+	UIImage* UIManager::CreateImage(const String& name)
+	{
+		auto res = mnew UIImage();
+		res->SetImageName(name);
 		return res;
 	}
 

@@ -26,7 +26,7 @@ namespace o2
 		BitmapFontAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		BitmapFontAsset(AssetId id);
+		BitmapFontAsset(UID id);
 
 		// Copy-constructor
 		BitmapFontAsset(const BitmapFontAsset& asset);

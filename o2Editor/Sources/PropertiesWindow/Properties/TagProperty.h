@@ -18,10 +18,7 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		TagsProperty();
-
-		// Constructor
-		TagsProperty(const Vector<void*>& targets, bool isProperty);
+		TagsProperty(UIWidget* widget = nullptr);
 
 		// Destructor
 		~TagsProperty();
@@ -59,9 +56,6 @@ namespace Editor
 		bool           mPushingTag = false; // Is pushing tag and we don't need to check edit text
 
 	protected:
-		// Initializes widget
-		void InitializeWidget();
-
 		// Updates context menu data with filter
 		void UpdateContextData(const WString& filter);
 

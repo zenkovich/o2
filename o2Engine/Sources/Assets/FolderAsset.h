@@ -23,7 +23,7 @@ namespace o2
 		FolderAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		FolderAsset(AssetId id);
+		FolderAsset(UID id);
 
 		// Copy-constructor
 		FolderAsset(const FolderAsset& asset);

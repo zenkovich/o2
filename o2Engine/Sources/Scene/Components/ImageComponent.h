@@ -4,6 +4,7 @@
 #include "Render/Sprite.h"
 #include "Render/TextureRef.h"
 #include "Scene/DrawableComponent.h"
+#include "Utils/UID.h"
 
 namespace o2
 {
@@ -15,7 +16,7 @@ namespace o2
 	public:
 		Property<TextureRef> texture;          // Texture property
 		Property<RectI>      textureSrcRect;   // Texture source rectangle property
-		Property<AssetId>    imageAssetId;     // Image asset id property
+		Property<UID>    imageAssetId;     // Image asset id property
 		Setter<String>       imageAssetPath;   // Sets image asset from path
 		Setter<ImageAsset>   imageAsset;       // Sets image asset
 		Setter<Bitmap*>      bitmap;           // Sets image from bitmap
@@ -37,7 +38,7 @@ namespace o2
 		ImageComponent(const String& imagePath);
 
 		// Constructor from image asset by id
-		ImageComponent(AssetId imageId);
+		ImageComponent(UID imageId);
 
 		// Constructor from texture and source rectangle
 		ImageComponent(TextureRef texture, const RectI& srcRect);
@@ -130,7 +131,7 @@ namespace o2
 		void LoadFromImage(const String& imagePath);
 
 		// Loads sprite from image asset by id
-		void LoadFromImage(AssetId imageId);
+		void LoadFromImage(UID imageId);
 
 		// Loads sprite from mono color
 		void LoadMonoColor(const Color4& color);
@@ -139,7 +140,7 @@ namespace o2
 		void LoadFromBitmap(Bitmap* bitmap);
 
 		// Returns image asset id (returns 0 when asset id is unknown)
-		AssetId GetImageId() const;
+		UID GetImageId() const;
 
 		// Sets size by texture source rectangle size
 		void NormalizeSize();

@@ -27,7 +27,7 @@ namespace o2
 
 	public:
 		Getter<String>                         assetsPath;        // Assets path getter
-		Function<void(const Vector<AssetId>&)> onAssetsRebuilded; // Assets rebuilding event
+		Function<void(const Vector<UID>&)> onAssetsRebuilded; // Assets rebuilding event
 
 		// Default constructor
 		Assets();
@@ -42,13 +42,13 @@ namespace o2
 		String GetDataPath() const;
 
 		// Returns asset path by asset id
-		String GetAssetPath(AssetId id) const;
+		String GetAssetPath(UID id) const;
 
 		// Returns asset id by path
-		AssetId GetAssetId(const String& path) const;
+		UID GetAssetId(const String& path) const;
 
 		// Returns asset info by id
-		AssetInfo GetAssetInfo(AssetId id) const;
+		AssetInfo GetAssetInfo(UID id) const;
 
 		// Returns asset info by path
 		AssetInfo GetAssetInfo(const String& path) const;
@@ -72,7 +72,7 @@ namespace o2
 
 		// Loads new asset by id
 		template<typename _asset_type>
-		_asset_type* LoadAsset(AssetId id);
+		_asset_type* LoadAsset(UID id);
 
 		// Loads asset by info
 		Asset* LoadAsset(const AssetInfo& info);
@@ -81,7 +81,7 @@ namespace o2
 		bool IsAssetExist(const String& path) const;
 
 		// Returns true if asset exist by id
-		bool IsAssetExist(AssetId id) const;
+		bool IsAssetExist(UID id) const;
 
 		// Returns true if asset exist
 		bool IsAssetExist(const AssetInfo& info) const;
@@ -93,7 +93,7 @@ namespace o2
 		bool RemoveAsset(const String& path, bool rebuildAssets = true);
 
 		// Removes asset by id
-		bool RemoveAsset(AssetId id, bool rebuildAssets = true);
+		bool RemoveAsset(UID id, bool rebuildAssets = true);
 
 		// Removes asset by info
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
@@ -105,7 +105,7 @@ namespace o2
 		bool CopyAsset(const String& path, const String& dest, bool rebuildAssets = true);
 
 		// Copies asset by id
-		bool CopyAsset(AssetId id, const String& dest, bool rebuildAssets = true);
+		bool CopyAsset(UID id, const String& dest, bool rebuildAssets = true);
 
 		// Copies asset by info
 		bool CopyAsset(const AssetInfo& info, const String& dest, bool rebuildAssets = true);
@@ -117,7 +117,7 @@ namespace o2
 		bool MoveAsset(const String& path, const String& newPath, bool rebuildAssets = true);
 
 		// Moves asset by id to new path
-		bool MoveAsset(AssetId id, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(UID id, const String& newPath, bool rebuildAssets = true);
 
 		// Moves asset to new path
 		bool MoveAsset(const AssetInfo& info, const String& newPath, bool rebuildAssets = true);
@@ -132,7 +132,7 @@ namespace o2
 		bool RenameAsset(const String& path, const String& newName, bool rebuildAssets = true);
 
 		// Renames asset by id to new path
-		bool RenameAsset(AssetId id, const String& newName, bool rebuildAssets = true);
+		bool RenameAsset(UID id, const String& newName, bool rebuildAssets = true);
 
 		// Renames asset to new path
 		bool RenameAsset(const AssetInfo& info, const String& newName, bool rebuildAssets = true);
@@ -147,7 +147,7 @@ namespace o2
 		String MakeUniqueAssetName(const String& path);
 		
 		// Returns random asset id
-		static AssetId GetRandomAssetId();
+		static UID GetRandomAssetId();
 
 	protected:
 		String         mAssetsFolderPath; // Project assets path
@@ -186,7 +186,7 @@ namespace o2
 	}
 
 	template<typename _asset_type>
-	_asset_type* Assets::LoadAsset(AssetId id)
+	_asset_type* Assets::LoadAsset(UID id)
 	{
 		return mnew _asset_type(id);
 	}

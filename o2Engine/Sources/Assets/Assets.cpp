@@ -48,17 +48,17 @@ namespace o2
 		return mDataFolderPath;
 	}
 
-	String Assets::GetAssetPath(AssetId id) const
+	String Assets::GetAssetPath(UID id) const
 	{
 		return GetAssetInfo(id).mPath;
 	}
 
-	AssetId Assets::GetAssetId(const String& path) const
+	UID Assets::GetAssetId(const String& path) const
 	{
 		return GetAssetInfo(path).mId;
 	}
 
-	AssetInfo Assets::GetAssetInfo(AssetId id) const
+	AssetInfo Assets::GetAssetInfo(UID id) const
 	{
 		return mAssetsTree.FindAssetInfo(id);
 	}
@@ -68,9 +68,9 @@ namespace o2
 		return mAssetsTree.FindAssetInfo(path);
 	}
 
-	AssetId Assets::GetRandomAssetId()
+	UID Assets::GetRandomAssetId()
 	{
-		return Math::Random<AssetId>(1, UINT_MAX);
+		return UID();
 	}
 
 	const Assets::TypesExtsDict Assets::GetAssetsExtensionsTypes() const
@@ -110,7 +110,7 @@ namespace o2
 		return GetAssetInfo(path).mId != 0;
 	}
 
-	bool Assets::IsAssetExist(AssetId id) const
+	bool Assets::IsAssetExist(UID id) const
 	{
 		return GetAssetInfo(id).mId != 0;
 	}
@@ -130,7 +130,7 @@ namespace o2
 		return RemoveAsset(GetAssetInfo(path), rebuildAssets);
 	}
 
-	bool Assets::RemoveAsset(AssetId id, bool rebuildAssets /*= true*/)
+	bool Assets::RemoveAsset(UID id, bool rebuildAssets /*= true*/)
 	{
 		return RemoveAsset(GetAssetInfo(id), rebuildAssets);
 	}
@@ -166,7 +166,7 @@ namespace o2
 		return CopyAsset(GetAssetInfo(path), dest, rebuildAssets);
 	}
 
-	bool Assets::CopyAsset(AssetId id, const String& dest, bool rebuildAssets /*= true*/)
+	bool Assets::CopyAsset(UID id, const String& dest, bool rebuildAssets /*= true*/)
 	{
 		return CopyAsset(GetAssetInfo(id), dest, rebuildAssets);
 	}
@@ -212,7 +212,7 @@ namespace o2
 		return MoveAsset(GetAssetInfo(path), newPath, rebuildAssets);
 	}
 
-	bool Assets::MoveAsset(AssetId id, const String& newPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAsset(UID id, const String& newPath, bool rebuildAssets /*= true*/)
 	{
 		return MoveAsset(GetAssetInfo(id), newPath, rebuildAssets);
 	}
@@ -270,7 +270,7 @@ namespace o2
 		return RenameAsset(GetAssetInfo(path), newName, rebuildAssets);
 	}
 
-	bool Assets::RenameAsset(AssetId id, const String& newName, bool rebuildAssets /*= true*/)
+	bool Assets::RenameAsset(UID id, const String& newName, bool rebuildAssets /*= true*/)
 	{
 		return RenameAsset(GetAssetInfo(id), newName, rebuildAssets);
 	}

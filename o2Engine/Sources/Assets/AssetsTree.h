@@ -28,7 +28,7 @@ namespace o2
 			AssetNode();
 
 			// Constructor
-			AssetNode(const String& path, AssetId id, Type::Id type);
+			AssetNode(const String& path, UID id, Type::Id type);
 
 			// Destructor
 			~AssetNode();
@@ -60,13 +60,13 @@ namespace o2
 		AssetNode* FindAsset(const String& path) const;
 
 		// Returns asset by id. (nullptr if not asset with id)
-		AssetNode* FindAsset(AssetId id) const;
+		AssetNode* FindAsset(UID id) const;
 
 		// Returns asset info by path
 		AssetInfo FindAssetInfo(const String& path) const;
 
 		// Returns asset info by id
-		AssetInfo FindAssetInfo(AssetId id) const;
+		AssetInfo FindAssetInfo(UID id) const;
 
 		// Adds asset node information into structure
 		AssetNode* AddAsset(AssetNode* asset);

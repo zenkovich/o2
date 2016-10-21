@@ -33,7 +33,7 @@ namespace o2
 		virtual void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
 		// Post processing
-		virtual Vector<AssetId> AssetsPostProcess();
+		virtual Vector<UID> AssetsPostProcess();
 
 		// Resets converter
 		virtual void Reset();

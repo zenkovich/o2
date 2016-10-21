@@ -152,7 +152,7 @@ namespace o2
 		return mAllActors.FindMatch([=](Actor* x) { return x->mId == id; });
 	}
 
-	Actor* Scene::GetAssetActorByID(AssetId id)
+	Actor* Scene::GetAssetActorByID(UID id)
 	{
 		auto cached = mCache.FindMatch([=](ActorAsset* x) { return x->GetAssetId() == id; });
 

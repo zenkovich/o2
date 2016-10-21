@@ -8,6 +8,7 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"
 #include "Utils/String.h"
+#include "Utils/UID.h"
 
 namespace o2
 {
@@ -147,4 +148,5 @@ namespace o2
 	REG_FUNDAMENTAL_TYPE(String);
 	REG_FUNDAMENTAL_TYPE(WString);
 	REG_FUNDAMENTAL_TYPE(DataNode);
+	REG_FUNDAMENTAL_TYPE(UID);
 }

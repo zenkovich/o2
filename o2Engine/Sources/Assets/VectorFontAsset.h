@@ -29,7 +29,7 @@ namespace o2
 		VectorFontAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		VectorFontAsset(AssetId id);
+		VectorFontAsset(UID id);
 
 		// Copy-constructor
 		VectorFontAsset(const VectorFontAsset& asset);

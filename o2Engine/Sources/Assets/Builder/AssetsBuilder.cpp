@@ -185,6 +185,16 @@ namespace o2
 					continue;
 				}
 
+				for (auto srcAssetInfo : mSourceAssetsTree.mAllAssets)
+				{
+					if ((*bldAssetInfoIt)->mPath == srcAssetInfo->mPath &&
+						(*bldAssetInfoIt)->mMeta->ID() == srcAssetInfo->mMeta->ID())
+					{
+						needRemove = false;
+						break;
+					}
+				}
+
 				GetAssetConverter((*bldAssetInfoIt)->mType)->RemoveAsset(**bldAssetInfoIt);
 
 				res.Add((*bldAssetInfoIt)->mId);
@@ -220,6 +230,9 @@ namespace o2
 
 				for (auto buildedAssetInfo : mBuildedAssetsTree.mAllAssets)
 				{
+					if (srcAssetInfo->mPath.Contains("handle_regular") && buildedAssetInfo->mPath.Contains("handle_regular"))
+						skip = skip;
+
 					if (srcAssetInfo->mMeta->ID() == buildedAssetInfo->mMeta->ID())
 					{
 						if (srcAssetInfo->mPath == buildedAssetInfo->mPath)

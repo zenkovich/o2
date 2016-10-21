@@ -19,6 +19,7 @@ namespace o2
 	class UIHorizontalLayout;
 	class UIHorizontalProgress;
 	class UIHorizontalScrollBar;
+	class UIImage;
 	class UILabel;
 	class UIList;
 	class UIScrollArea;
@@ -124,6 +125,9 @@ namespace o2
 		// Adds toggle
 		UIToggle* AddToggle(const WString& caption, const String& style = "standard");
 
+		// Adds image
+		UIImage* AddImage(const String& name);
+
 		// Creates widget by style
 		template<typename _type>
 		_type* CreateWidget(const String& style = "standard");
@@ -176,6 +180,9 @@ namespace o2
 
 		// Creates toggle
 		UIToggle* CreateToggle(const WString& caption, const String& style = "standard");
+
+		// Creates image
+		UIImage* CreateImage(const String& name);
 
 		// Removes widget by path
 		bool RemoveWidget(const String& path);

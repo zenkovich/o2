@@ -31,7 +31,7 @@ namespace o2
 		AtlasAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		AtlasAsset(AssetId id);
+		AtlasAsset(UID id);
 
 		// Copy-constructor
 		AtlasAsset(const AtlasAsset& asset);
@@ -64,7 +64,7 @@ namespace o2
 		bool ContainsImage(const AssetInfo& imageAssetInfo);
 
 		// Is contains image
-		bool ContainsImage(AssetId id);
+		bool ContainsImage(UID id);
 
 		// Is contains image
 		bool ContainsImage(const String& path);
@@ -76,13 +76,13 @@ namespace o2
 		const char* GetFileExtensions() const;
 
 		// Returns atlas page's texture file name
-		static String GetPageTextureFileName(AssetId atlasId, UInt pageIdx);
+		static String GetPageTextureFileName(UID atlasId, UInt pageIdx);
 
 		// Returns atlas page's texture file name
 		static String GetPageTextureFileName(const String& atlasPath, UInt pageIdx);
 
 		// Returns atlas page's texture reference
-		static TextureRef GetPageTextureRef(AssetId atlasId, UInt pageIdx);
+		static TextureRef GetPageTextureRef(UID atlasId, UInt pageIdx);
 
 		// Returns atlas page's texture reference
 		static TextureRef GetPageTextureRef(const String& atlasPath, UInt pageIdx);
@@ -134,7 +134,7 @@ namespace o2
 		{
 			UInt                       mId;          // Page number @SERIALIZABLE
 			Vec2I                      mSize;        // Size of page @SERIALIZABLE
-			Dictionary<AssetId, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
+			Dictionary<UID, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
 			AtlasAsset*                mOwner;       // Owner atlas
 
 		public:
@@ -151,7 +151,7 @@ namespace o2
 			String GetTextureFileName() const;
 
 			// Returns images rectangles
-			const Dictionary<AssetId, RectI>& ImagesRects() const;
+			const Dictionary<UID, RectI>& ImagesRects() const;
 
 			// Check equal operator
 			bool operator==(const Page& other) const;

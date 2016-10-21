@@ -204,6 +204,7 @@
     <ClInclude Include="..\Sources\UI\HorizontalLayout.h" />
     <ClInclude Include="..\Sources\UI\HorizontalProgress.h" />
     <ClInclude Include="..\Sources\UI\HorizontalScrollBar.h" />
+    <ClInclude Include="..\Sources\UI\Image.h" />
     <ClInclude Include="..\Sources\UI\Label.h" />
     <ClInclude Include="..\Sources\UI\List.h" />
     <ClInclude Include="..\Sources\UI\LongList.h" />
@@ -281,6 +282,7 @@
     <ClInclude Include="..\Sources\Utils\Time.h" />
     <ClInclude Include="..\Sources\Utils\TimeStamp.h" />
     <ClInclude Include="..\Sources\Utils\Timer.h" />
+    <ClInclude Include="..\Sources\Utils\UID.h" />
     <ClInclude Include="..\Sources\Utils\UnknownPtr.h" />
   </ItemGroup>
   <ItemGroup>
@@ -354,6 +356,7 @@
     <ClCompile Include="..\Sources\UI\HorizontalLayout.cpp" />
     <ClCompile Include="..\Sources\UI\HorizontalProgress.cpp" />
     <ClCompile Include="..\Sources\UI\HorizontalScrollBar.cpp" />
+    <ClCompile Include="..\Sources\UI\Image.cpp" />
     <ClCompile Include="..\Sources\UI\Label.cpp" />
     <ClCompile Include="..\Sources\UI\List.cpp" />
     <ClCompile Include="..\Sources\UI\LongList.cpp" />

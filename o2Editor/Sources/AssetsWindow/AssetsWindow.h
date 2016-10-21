@@ -42,25 +42,25 @@ namespace Editor
 		~AssetsWindow();
 
 		// Selects asset with id
-		void SelectAsset(AssetId id);
+		void SelectAsset(UID id);
 
 		// Selects asset by path
 		void SelectAsset(const String& path);
 
 		// Selects assets with ids
-		void SelectAsset(const Vector<AssetId>& ids);
+		void SelectAsset(const Vector<UID>& ids);
 
 		// Selects assets by paths
 		void SelectAssets(const Vector<String>& paths);
 
 		// Opens asset in folder
-		void OpenAsset(AssetId id);
+		void OpenAsset(UID id);
 
 		// Opens asset in folder
 		void OpenAsset(const String& path);
 
 		// Opens asset for editing 
-		void OpenAndEditAsset(AssetId id);
+		void OpenAndEditAsset(UID id);
 
 		// Opens asset for editing 
 		void OpenAndEditAsset(const String& path);
@@ -78,7 +78,7 @@ namespace Editor
 		void OpenFolder(const String& path);
 
 		// Shows asset
-		void ShowAssetIcon(AssetId id);
+		void ShowAssetIcon(UID id);
 
 		// Shows asset
 		void ShowAssetIcon(const String& path);
@@ -113,7 +113,7 @@ namespace Editor
 		IOBJECT(AssetsWindow);
 
 	protected:
-		typedef Vector<Pair<AssetId, String>> AssetIdPathVec;
+		typedef Vector<Pair<UID, String>> AssetIdPathVec;
 
 		UIButton*                mFilterButton;           // Search filter button
 		UIEditBox*               mSearchEditBox;          // Search edit box
@@ -141,7 +141,7 @@ namespace Editor
 		void OnShowTreePressed();
 
 		// Calls when assets was rebuilded
-		void OnAssetsRebuilded(const Vector<AssetId>& changedAssets);
+		void OnAssetsRebuilded(const Vector<UID>& changedAssets);
 
 		// Copies asset folder recursively
 		void CopyAssetFolder(const String& src, const String& dst);

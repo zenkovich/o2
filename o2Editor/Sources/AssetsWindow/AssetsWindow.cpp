@@ -32,7 +32,7 @@ namespace Editor
 	AssetsWindow::~AssetsWindow()
 	{}
 
-	void AssetsWindow::SelectAsset(AssetId id)
+	void AssetsWindow::SelectAsset(UID id)
 	{
 		String assetPath = o2Assets.GetAssetPath(id);
 		String folder = o2FileSystem.GetParentPath(assetPath);
@@ -45,7 +45,7 @@ namespace Editor
 
 	void AssetsWindow::SelectAsset(const String& path)
 	{
-		AssetId id = o2Assets.GetAssetId(path);
+		UID id = o2Assets.GetAssetId(path);
 		String folder = o2FileSystem.GetParentPath(path);
 
 		if (GetOpenedFolderPath() != folder)
@@ -54,7 +54,7 @@ namespace Editor
 		mAssetsGridScroll->SelectAsset(id);
 	}
 
-	void AssetsWindow::SelectAsset(const Vector<AssetId>& ids)
+	void AssetsWindow::SelectAsset(const Vector<UID>& ids)
 	{
 		for (auto id : ids)
 			SelectAsset(id);
@@ -66,7 +66,7 @@ namespace Editor
 			SelectAsset(path);
 	}
 
-	void AssetsWindow::OpenAsset(AssetId id)
+	void AssetsWindow::OpenAsset(UID id)
 	{
 		OpenAsset(o2Assets.GetAssetPath(id));
 	}
@@ -77,7 +77,7 @@ namespace Editor
 		ShellExecute(NULL, "explore", fullPath, NULL, NULL, SW_SHOWNORMAL);
 	}
 
-	void AssetsWindow::OpenAndEditAsset(AssetId id)
+	void AssetsWindow::OpenAndEditAsset(UID id)
 	{
 		OpenAndEditAsset(o2Assets.GetAssetPath(id));
 	}
@@ -109,7 +109,7 @@ namespace Editor
 		mFoldersTree->SelectAndExpandFolder(path);
 	}
 
-	void AssetsWindow::ShowAssetIcon(AssetId id)
+	void AssetsWindow::ShowAssetIcon(UID id)
 	{
 		DeselectAssets();
 		SelectAsset(id);
@@ -141,7 +141,7 @@ namespace Editor
 		for (auto& path : assetsPaths)
 		{
 			String fullPath = o2Application.GetBinPath() + "/" + o2Assets.GetAssetsPath() + path;
-			mCuttingAssets.Add(Pair<AssetId, String>(o2Assets.GetAssetId(path), fullPath));
+			mCuttingAssets.Add(Pair<UID, String>(o2Assets.GetAssetId(path), fullPath));
 			paths.Add(fullPath);
 		}
 
@@ -247,7 +247,7 @@ namespace Editor
 
 	void AssetsWindow::InitializeWindow()
 	{
-		o2Assets.onAssetsRebuilded += Function<void(const Vector<AssetId>&)>(this, &AssetsWindow::OnAssetsRebuilded);
+		o2Assets.onAssetsRebuilded += Function<void(const Vector<UID>&)>(this, &AssetsWindow::OnAssetsRebuilded);
 
 		mWindow->caption = "Assets";
 		mWindow->name = "assets window";
@@ -349,7 +349,7 @@ namespace Editor
 
 	}
 
-	void AssetsWindow::OnAssetsRebuilded(const Vector<AssetId>& changedAssets)
+	void AssetsWindow::OnAssetsRebuilded(const Vector<UID>& changedAssets)
 	{
 		mFoldersTree->UpdateView();
 		mAssetsGridScroll->UpdateAssetsPath();
@@ -387,19 +387,19 @@ CLASS_META(Editor::AssetsWindow)
 	PROTECTED_FIELD(mSeparatorHandle);
 	PROTECTED_FIELD(mCuttingAssets);
 
-	PUBLIC_FUNCTION(void, SelectAsset, AssetId);
+	PUBLIC_FUNCTION(void, SelectAsset, UID);
 	PUBLIC_FUNCTION(void, SelectAsset, const String&);
-	PUBLIC_FUNCTION(void, SelectAsset, const Vector<AssetId>&);
+	PUBLIC_FUNCTION(void, SelectAsset, const Vector<UID>&);
 	PUBLIC_FUNCTION(void, SelectAssets, const Vector<String>&);
-	PUBLIC_FUNCTION(void, OpenAsset, AssetId);
+	PUBLIC_FUNCTION(void, OpenAsset, UID);
 	PUBLIC_FUNCTION(void, OpenAsset, const String&);
-	PUBLIC_FUNCTION(void, OpenAndEditAsset, AssetId);
+	PUBLIC_FUNCTION(void, OpenAndEditAsset, UID);
 	PUBLIC_FUNCTION(void, OpenAndEditAsset, const String&);
 	PUBLIC_FUNCTION(void, DeselectAssets);
 	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
 	PUBLIC_FUNCTION(String, GetOpenedFolderPath);
 	PUBLIC_FUNCTION(void, OpenFolder, const String&);
-	PUBLIC_FUNCTION(void, ShowAssetIcon, AssetId);
+	PUBLIC_FUNCTION(void, ShowAssetIcon, UID);
 	PUBLIC_FUNCTION(void, ShowAssetIcon, const String&);
 	PUBLIC_FUNCTION(void, CopyAssets, const Vector<String>&);
 	PUBLIC_FUNCTION(void, CutAssets, const Vector<String>&);
@@ -414,7 +414,7 @@ CLASS_META(Editor::AssetsWindow)
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnMenuFilterPressed);
 	PROTECTED_FUNCTION(void, OnShowTreePressed);
-	PROTECTED_FUNCTION(void, OnAssetsRebuilded, const Vector<AssetId>&);
+	PROTECTED_FUNCTION(void, OnAssetsRebuilded, const Vector<UID>&);
 	PROTECTED_FUNCTION(void, CopyAssetFolder, const String&, const String&);
 }
 END_META;

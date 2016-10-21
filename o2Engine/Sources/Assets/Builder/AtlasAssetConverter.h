@@ -27,7 +27,7 @@ namespace o2
 		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
 
 		// Post processing atlases. Here checking atlases for rebuild
-		Vector<AssetId> AssetsPostProcess();
+		Vector<UID> AssetsPostProcess();
 
 		// Resets converter
 		void Reset();
@@ -40,7 +40,7 @@ namespace o2
 		// ----------------
 		struct Image: public ISerializable
 		{
-			AssetId   mId;   // Image asset id @SERIALIZABLE
+			UID   mId;   // Image asset id @SERIALIZABLE
 			TimeStamp mTime; // Image asset edited date @SERIALIZABLE
 
 		public:
@@ -48,7 +48,7 @@ namespace o2
 			Image() {}
 
 			// Constructor
-			Image(AssetId id, const TimeStamp& time);
+			Image(UID id, const TimeStamp& time);
 
 			// Check equal operator
 			bool operator==(const Image& other) const;
@@ -76,7 +76,7 @@ namespace o2
 		void CheckBasicAtlas();
 
 		// Checks atlases for rebuilding
-		Vector<AssetId> CheckRebuildingAtlases();
+		Vector<UID> CheckRebuildingAtlases();
 
 		// Checks atlas for rebuilding
 		bool CheckAtlasRebuilding(AssetTree::AssetNode* atlasInfo);

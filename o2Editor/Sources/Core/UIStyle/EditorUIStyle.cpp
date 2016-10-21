@@ -84,10 +84,10 @@ namespace Editor
 		auto dockedState = sample->AddState("docked", dockedStateAnim);
 
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
-															  5.0f, 15.0f, 0.2f));
+						 5.0f, 15.0f, 0.2f));
 
 		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetBottom,
-															  -5.0f, -15.0f, 0.2f));
+						 -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 2.0f;
@@ -124,7 +124,7 @@ namespace Editor
 		auto playIconLayer = playRootIconLayer->AddChildLayer("regular", mnew Sprite("ui/UI_play_btn_regular.png"),
 															  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto playSelectIconLayer = playRootIconLayer->AddChildLayer("select", mnew Sprite("ui/UI_play_btn_select.png"),
+		auto playSelectIconLayer = playRootIconLayer->AddChildLayer("hover", mnew Sprite("ui/UI_play_btn_select.png"),
 																	Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto playPressedIconLayer = playRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_play_btn_select copy.png"),
@@ -133,7 +133,7 @@ namespace Editor
 		auto stopIconLayer = stopRootIconLayer->AddChildLayer("regular", mnew Sprite("ui/UI_stop_btn_regular.png"),
 															  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto stopSelectIconLayer = stopRootIconLayer->AddChildLayer("select", mnew Sprite("ui/UI_stop_btn_select.png"),
+		auto stopSelectIconLayer = stopRootIconLayer->AddChildLayer("hover", mnew Sprite("ui/UI_stop_btn_select.png"),
 																	Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto stopPressedIconLayer = stopRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_stop_btn_pressed.png"),
@@ -143,7 +143,7 @@ namespace Editor
 		*playBtnSelectAnim.AddAnimationValue(&stopSelectIconLayer->transparency) =
 			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
-		sample->AddState("select", playBtnSelectAnim)->offStateAnimationSpeed = 0.25f;
+		sample->AddState("hover", playBtnSelectAnim)->offStateAnimationSpeed = 0.25f;
 
 		Animation playBtnPressAnim = Animation::EaseInOut(sample, &playPressedIconLayer->transparency, 0.0f, 1.0f, 0.1f);
 		*playBtnPressAnim.AddAnimationValue(&stopPressedIconLayer->transparency) =
@@ -166,17 +166,17 @@ namespace Editor
 		auto pauseIconRootLayer = sample->AddLayer("regular", nullptr);
 		auto pauseIconLayer = pauseIconRootLayer->AddChildLayer("icon", mnew Sprite("ui/UI_pause_btn_regular.png"),
 																Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-																	   Vec2F(-10, 10), Vec2F(10, -10)));
+																Vec2F(-10, 10), Vec2F(10, -10)));
 
-		auto pauseSelectIconLayer = pauseIconRootLayer->AddChildLayer("select", mnew Sprite("ui/UI_pause_btn_select.png"),
+		auto pauseSelectIconLayer = pauseIconRootLayer->AddChildLayer("hover", mnew Sprite("ui/UI_pause_btn_select.png"),
 																	  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-																			 Vec2F(-10, 10), Vec2F(10, -10)));
+																	  Vec2F(-10, 10), Vec2F(10, -10)));
 
 		auto pausePressedIconLayer = pauseIconRootLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_pause_btn_pressed.png"),
 																	   Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-																			  Vec2F(-10, 10), Vec2F(10, -10)));
+																	   Vec2F(-10, 10), Vec2F(10, -10)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &pauseSelectIconLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &pauseSelectIconLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pausePressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -195,17 +195,17 @@ namespace Editor
 		sample->name = "step button";
 		auto stepIconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_step_btn_regular.png"),
 											  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-													 Vec2F(-10, 10), Vec2F(10, -10)));
+											  Vec2F(-10, 10), Vec2F(10, -10)));
 
-		auto stepSelectIconLayer = sample->AddLayer("select", mnew Sprite("ui/UI_step_btn_select.png"),
+		auto stepSelectIconLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_step_btn_select.png"),
 													Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-														   Vec2F(-10, 10), Vec2F(10, -10)));
+													Vec2F(-10, 10), Vec2F(10, -10)));
 
 		auto stepPressedIconLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_step_btn_pressed.png"),
 													 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-															Vec2F(-10, 10), Vec2F(10, -10)));
+													 Vec2F(-10, 10), Vec2F(10, -10)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &stepSelectIconLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &stepSelectIconLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &stepPressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -223,7 +223,7 @@ namespace Editor
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_panel_subpanel_bk.png"),
 										  Layout::BothStretch(-7, -5, -5, -5));
 
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_panel_subpanel_select.png"),
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_panel_subpanel_select.png"),
 											Layout::BothStretch(-7, -5, -5, -5));
 
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_panel_subpanel_pressed.png"),
@@ -253,7 +253,7 @@ namespace Editor
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -271,14 +271,14 @@ namespace Editor
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
-		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
+		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_select_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_select_tool_pressed.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -295,14 +295,14 @@ namespace Editor
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
-		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
+		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_brush_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_brush_tool_pressed.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -319,14 +319,14 @@ namespace Editor
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
-		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
+		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_move_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_move_tool_pressed.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -343,14 +343,14 @@ namespace Editor
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
-		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
+		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_rotate_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_rotate_tool_pressed.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -367,14 +367,14 @@ namespace Editor
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
-		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
+		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_scale_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_scale_tool_pressed.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -391,14 +391,14 @@ namespace Editor
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto rootLayer = sample->AddLayer("root", nullptr);
-		auto selectLayer = rootLayer->AddChildLayer("select", nullptr);
+		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_frame_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_frame_tool_pressed.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -419,14 +419,14 @@ namespace Editor
 		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_search_regular.png"),
 											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_search_select.png"),
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_search_select.png"),
 											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_search_pressed.png"),
 											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -460,7 +460,7 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -529,7 +529,7 @@ namespace Editor
 		UIButton* sample = mnew UIButton();
 
 		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
-		auto selectLayer = halfHideLayer->AddChildLayer("select", nullptr);
+		auto selectLayer = halfHideLayer->AddChildLayer("hover", nullptr);
 		auto pressedLayer = selectLayer->AddChildLayer("pressed", nullptr);
 		auto back = pressedLayer->AddChildLayer("back", mnew Sprite("ui/UI_link_icon.png"),
 												Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
@@ -537,7 +537,7 @@ namespace Editor
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
 		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f));
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f));
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.8f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "actorNodeLink");
@@ -577,7 +577,7 @@ namespace Editor
 																  Layout::BothStretch(-10, -16, -10, -16));
 
 		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_pressed.png"),
-																  Layout::BothStretch(-10, -16, -10, -16));
+																	Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
@@ -621,14 +621,14 @@ namespace Editor
 		auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto selectLayer = itemSampleExpandBtn->AddLayer("select", mnew Sprite("ui/UI_Right_icn_select.png"),
+		auto selectLayer = itemSampleExpandBtn->AddLayer("hover", mnew Sprite("ui/UI_Right_icn_select.png"),
 														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		itemSampleExpandBtn->AddState("select", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -678,10 +678,10 @@ namespace Editor
 		sample->SetVerticalScrollBar(verScrollBar);
 
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
-															  5.0f, 15.0f, 0.2f));
+						 5.0f, 15.0f, 0.2f));
 
 		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
-															  -5.0f, -15.0f, 0.2f));
+						 -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 0.8f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -720,7 +720,7 @@ namespace Editor
 		captionText->dotsEngings = true;
 		sample->AddLayer("caption", captionText, Layout::BothStretch(0, 0, 15, 0));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -755,7 +755,7 @@ namespace Editor
 											   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -795,7 +795,7 @@ namespace Editor
 		captionText->dotsEngings = true;
 		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -841,7 +841,7 @@ namespace Editor
 		captionText->dotsEngings = true;
 		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -887,7 +887,7 @@ namespace Editor
 		captionText->dotsEngings = true;
 		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -924,7 +924,7 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(1, 0)));
 
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -955,7 +955,7 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -1016,14 +1016,14 @@ namespace Editor
 		auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto selectLayer = itemSampleExpandBtn->AddLayer("select", mnew Sprite("ui/UI_Right_icn_select.png"),
+		auto selectLayer = itemSampleExpandBtn->AddLayer("hoverF", mnew Sprite("ui/UI_Right_icn_select.png"),
 														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		itemSampleExpandBtn->AddState("select", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -1220,10 +1220,10 @@ namespace Editor
 		sample->SetVerticalScrollBar(verScrollBar);
 
 		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
-															  5.0f, 15.0f, 0.2f));
+						 5.0f, 15.0f, 0.2f));
 
 		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
-															  -5.0f, -15.0f, 0.2f));
+						 -5.0f, -15.0f, 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -1236,7 +1236,7 @@ namespace Editor
 		UIButton* sample = mnew UIButton();
 
 		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
-		auto selectLayer = halfHideLayer->AddChildLayer("select", nullptr);
+		auto selectLayer = halfHideLayer->AddChildLayer("hover", nullptr);
 		auto pressedLayer = selectLayer->AddChildLayer("pressed", nullptr);
 		auto back = pressedLayer->AddChildLayer("back", mnew Sprite("ui/UI2_link_icon.png"),
 												Layout::Based(BaseCorner::Center, Vec2F(15, 15), Vec2F(0, 0)));
@@ -1244,7 +1244,7 @@ namespace Editor
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
 		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f));
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f));
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.8f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "asset link");
@@ -1255,7 +1255,7 @@ namespace Editor
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto selectLayer = sample->AddLayer("select", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
 										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
@@ -1284,7 +1284,7 @@ namespace Editor
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
-		sample->AddState("select", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -1303,24 +1303,324 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildActorHeadEnableToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
+		sample->layout.minSize = Vec2F(20, 20);
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI2_enable_toggle_big.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
+		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI2_enable_toggle_big_select.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto back = halfHideLayer->AddChildLayer("back", mnew Sprite("ui/UI_off_dot.png"),
-												 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI2_enable_toggle_big_pressed.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto dot = halfHideLayer->AddChildLayer("dot", mnew Sprite("ui/UI_on_dot.png"),
-												Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+		auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI2_enable_toggle_big_focused.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI2_enable_dot_big.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(10, 10)));
 
-		Animation valueAnim = Animation::EaseInOut(sample, &dot->transparency, 0.0f, 1.0f, 0.1f);
-		*valueAnim.AddAnimationValue(&back->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.1f);
-		sample->AddState("value", valueAnim);
+		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI2_enable_dot_big_unknown.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(10, 10)));
 
-		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
+		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("value", Animation::EaseInOut(sample, &checkLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("unknown", Animation::EaseInOut(sample, &unknownLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "actorHeadEnable");
+	}
+
+	void EditorUIStyleBuilder::RebuildActorHeadName()
+	{
+
+		UIEditBox* sample = mnew UIEditBox();
+		sample->SetClippingLayout(Layout::BothStretch(5, 0, 5, 0));
+		sample->SetViewLayout(Layout::BothStretch(7, 0, 7, 0));
+		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetMultiLine(false);
+		sample->layout.minSize = Vec2F(50, 17);
+
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI2_round_field.png"),
+										  Layout::BothStretch(-4, -4, -5, -4));
+
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"),
+										   Layout::BothStretch(-4, -4, -5, -4));
+
+		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI2_round_field_select.png"),
+										   Layout::BothStretch(-4, -4, -5, -4));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		sample->AddState("focused", focusAnim)
+			->offStateAnimationSpeed = 0.5f;
+
+		Text* textDrawable = sample->GetTextDrawable();
+		textDrawable->verAlign = VerAlign::Middle;
+		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->SetFontAsset("stdFont.ttf");
+
+		Sprite* caretDrawable = sample->GetCaretDrawable();
+		*caretDrawable = Sprite();
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight())*1.7f);
+		caretDrawable->pivot = Vec2F(0, 0.26f);
+		caretDrawable->color = Color4::Black();
+
+		o2UI.AddWidgetStyle(sample, "actorHeadName");
+	}
+
+	void EditorUIStyleBuilder::RebuildActorHeadLockToggle()
+	{
+		UIToggle* sample = mnew UIToggle();
+		sample->layout.minSize = Vec2F(20, 20);
+
+		auto rootLayer = sample->AddLayer("root", nullptr);
+		auto valueLayer = rootLayer->AddChildLayer("value", nullptr);
+
+		auto unlockLayer = valueLayer->AddChildLayer("unlock", mnew Sprite("ui/UI2_big_lock_open.png"),
+													 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto lockLayer = valueLayer->AddChildLayer("lock", mnew Sprite("ui/UI2_big_lock_close.png"),
+												   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto unknownLayer = rootLayer->AddChildLayer("unknown", mnew Sprite("ui/UI2_big_lock_unknown.png"),
+													 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &rootLayer->transparency, 1.0f, 0.7f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		auto valueAnim = Animation::EaseInOut(sample, &unlockLayer->transparency, 1.0f, 0.0f, 0.1f);
+		*valueAnim.AddAnimationValue(&lockLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueAnim)->offStateAnimationSpeed = 0.5f;
+
+		auto unknownAnim = Animation::EaseInOut(sample, &valueLayer->transparency, 1.0f, 0.0f, 0.1f);
+		*unknownAnim.AddAnimationValue(&unknownLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("unknown", unknownAnim)->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "actorHeadLock");
+	}
+
+	void EditorUIStyleBuilder::RebuildActorHeadActorAssetProperty()
+	{
+		auto widget = mnew UIWidget();
+		widget->SetFocusable(true);
+
+		auto backLayer = widget->AddLayer("back", mnew Sprite("ui/UI2_round_field_gray.png"),
+										  Layout::BothStretch(-4, -4, -5, -4));
+
+		auto selectLayer = widget->AddLayer("hover", mnew Sprite("ui/UI2_round_field_gray_select.png"),
+											Layout::BothStretch(-4, -4, -5, -4));
+
+		auto focusLayer = widget->AddLayer("focus", mnew Sprite("ui/UI2_round_field_focused.png"),
+										   Layout::BothStretch(-4, -4, -5, -4));
+
+		widget->AddState("focused", Animation::EaseInOut(widget, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		widget->AddState("hover", Animation::EaseInOut(widget, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		auto nameText = mnew Text("stdFont.ttf");
+		nameText->text = "--";
+		nameText->horAlign = HorAlign::Left;
+		nameText->verAlign = VerAlign::Middle;
+		nameText->dotsEngings = true;
+		widget->AddLayer("caption", nameText, Layout::BothStretch(0, 5, 0, 5));
+
+		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
+		linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
+		widget->AddChild(linkBtn);
+
+		o2UI.AddWidgetStyle(widget, "actorHeadAssetProperty");
+	}
+
+	void EditorUIStyleBuilder::RebuildAcceptPrototypeBtn()
+	{
+		UIButton* sample = mnew UIButton();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_accept_prefab.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI2_accept_prefab_select.png"),
+											Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI2_accept_prefab_pressed.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "acceptPrototype");
+	}
+
+	void EditorUIStyleBuilder::RebuildRevertPrototypeBtn()
+	{
+		UIButton* sample = mnew UIButton();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_revert_prefab.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI2_revert_prefab_select.png"),
+											Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI2_revert_prefab_pressed.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "revertPrototype");
+	}
+
+	void EditorUIStyleBuilder::RebuildBreakPrototypeBtn()
+	{
+		UIButton* sample = mnew UIButton();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_break_prefab.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI2_break_prefab_select.png"),
+											Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI2_break_prefab_pressed.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "breakPrototype");
+	}
+
+	void EditorUIStyleBuilder::RebuildActorPropety()
+	{
+		auto widget = mnew UIWidget();
+
+		widget->SetFocusable(true);
+
+		auto backLayer = widget->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), 
+										  Layout::BothStretch(-9, -9, -9, -9));
+
+		auto selectLayer = widget->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), 
+											Layout::BothStretch(-9, -9, -9, -9));
+
+		auto focusLayer = widget->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"),
+										   Layout::BothStretch(-9, -9, -9, -9));
+
+		widget->AddState("focused", Animation::EaseInOut(widget, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		widget->AddState("hover", Animation::EaseInOut(widget, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		auto nameText = mnew Text("stdFont.ttf");
+		nameText->text = "--";
+		nameText->horAlign = HorAlign::Left;
+		nameText->verAlign = VerAlign::Middle;
+		nameText->dotsEngings = true;
+		widget->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
+
+		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
+		linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
+		widget->AddChild(linkBtn);
+
+		o2UI.AddWidgetStyle(widget, "actorProperty");
+	}
+
+	void EditorUIStyleBuilder::RebuildAssetPropety()
+	{
+		auto widget = mnew UIWidget();
+		widget->SetFocusable(true);
+
+		auto backLayer = widget->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), 
+										  Layout::BothStretch(-9, -9, -9, -9));
+
+		auto selectLayer = widget->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), 
+											Layout::BothStretch(-9, -9, -9, -9));
+
+		auto focusLayer = widget->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"), 
+										   Layout::BothStretch(-9, -9, -9, -9));
+
+		widget->AddState("focused", Animation::EaseInOut(widget, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		widget->AddState("hover", Animation::EaseInOut(widget, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		auto nameText = mnew Text("stdFont.ttf");
+		nameText->text = "--";
+		nameText->horAlign = HorAlign::Left;
+		nameText->verAlign = VerAlign::Middle;
+		nameText->dotsEngings = true;
+		widget->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
+
+		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
+		linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
+		widget->AddChild(linkBtn);
+
+		o2UI.AddWidgetStyle(widget, "assetProperty");
+	}
+
+	void EditorUIStyleBuilder::RebuildComponentProperty()
+	{
+		auto widget = mnew UIWidget();
+		widget->SetFocusable(true);
+
+		auto backLayer = widget->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
+										  Layout::BothStretch(-9, -9, -9, -9));
+
+		auto selectLayer = widget->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"),
+											Layout::BothStretch(-9, -9, -9, -9));
+
+		auto focusLayer = widget->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"),
+										   Layout::BothStretch(-9, -9, -9, -9));
+
+		widget->AddState("focused", Animation::EaseInOut(widget, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		widget->AddState("hover", Animation::EaseInOut(widget, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		auto nameText = mnew Text("stdFont.ttf");
+		nameText->text = "--";
+		nameText->horAlign = HorAlign::Left;
+		nameText->verAlign = VerAlign::Middle;
+		nameText->dotsEngings = true;
+		widget->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
+
+		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
+		linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
+		widget->AddChild(linkBtn);
+
+		o2UI.AddWidgetStyle(widget, "componentProperty");
 	}
 
 	void EditorUIStyleBuilder::RebuildEditorUIStyle()
@@ -1380,6 +1680,16 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildAssetsGridScroll);
 	PUBLIC_FUNCTION(void, RebuildLinkBtn);
 	PUBLIC_FUNCTION(void, RebuildEditorDropdown);
+	PUBLIC_FUNCTION(void, RebuildActorPropety);
+	PUBLIC_FUNCTION(void, RebuildAssetPropety);
+	PUBLIC_FUNCTION(void, RebuildComponentProperty);
+	PUBLIC_FUNCTION(void, RebuildActorHeadEnableToggle);
+	PUBLIC_FUNCTION(void, RebuildActorHeadName);
+	PUBLIC_FUNCTION(void, RebuildActorHeadLockToggle);
+	PUBLIC_FUNCTION(void, RebuildActorHeadActorAssetProperty);
+	PUBLIC_FUNCTION(void, RebuildAcceptPrototypeBtn);
+	PUBLIC_FUNCTION(void, RebuildRevertPrototypeBtn);
+	PUBLIC_FUNCTION(void, RebuildBreakPrototypeBtn);
 	PUBLIC_FUNCTION(void, RebuildEditorUIStyle);
 }
 END_META;

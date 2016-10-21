@@ -48,7 +48,7 @@ namespace o2
 		o2Render.mSprites.Add(this);
 	}
 
-	Sprite::Sprite(AssetId imageId):
+	Sprite::Sprite(UID imageId):
 		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -299,7 +299,7 @@ namespace o2
 		else o2Debug.LogWarning("Can't load sprite from image by path (%s): image isn't exist", imagePath);
 	}
 
-	void Sprite::LoadFromImage(AssetId imageId)
+	void Sprite::LoadFromImage(UID imageId)
 	{
 		if (o2Assets.IsAssetExist(imageId))
 		{
@@ -341,12 +341,12 @@ namespace o2
 		else o2Debug.LogWarningStr("Can't create sprite from bitmap: bitmap is null");
 	}
 
-	AssetId Sprite::GetImageId() const
+	UID Sprite::GetImageId() const
 	{
 		return mImageAssetId;
 	}
 
-	AssetId Sprite::GetAtlasAssetId() const
+	UID Sprite::GetAtlasAssetId() const
 	{
 		return mAtlasAssetId;
 	}
@@ -1061,7 +1061,7 @@ namespace o2
 		}
 		else
 		{
-			mImageAssetId = *imageAssedIdNode;
+			mImageAssetId = (UID)*imageAssedIdNode;
 			LoadFromImage(mImageAssetId);
 		}
 
@@ -1153,11 +1153,11 @@ CLASS_META(o2::Sprite)
 	PUBLIC_FUNCTION(RectI, GetSliceBorder);
 	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAsset&);
 	PUBLIC_FUNCTION(void, LoadFromImage, const String&);
-	PUBLIC_FUNCTION(void, LoadFromImage, AssetId);
+	PUBLIC_FUNCTION(void, LoadFromImage, UID);
 	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
 	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*);
-	PUBLIC_FUNCTION(AssetId, GetImageId);
-	PUBLIC_FUNCTION(AssetId, GetAtlasAssetId);
+	PUBLIC_FUNCTION(UID, GetImageId);
+	PUBLIC_FUNCTION(UID, GetAtlasAssetId);
 	PUBLIC_FUNCTION(void, NormalizeSize);
 	PUBLIC_FUNCTION(void, NormalizeAspectByWidth);
 	PUBLIC_FUNCTION(void, NormalizeAspectByHeight);

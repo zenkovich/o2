@@ -512,7 +512,7 @@ namespace o2
 
 	void UIEditBox::OnCursorEnter(const Input::Cursor& cursor)
 	{
-		auto selectState = state["select"];
+		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
 
@@ -522,7 +522,7 @@ namespace o2
 
 	void UIEditBox::OnCursorExit(const Input::Cursor& cursor)
 	{
-		auto selectState = state["select"];
+		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = false;
 

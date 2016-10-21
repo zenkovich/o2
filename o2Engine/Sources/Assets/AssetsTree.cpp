@@ -11,7 +11,7 @@ namespace o2
 		mMeta(nullptr)
 	{}
 
-	AssetTree::AssetNode::AssetNode(const String& path, AssetId id, Type::Id type) :
+	AssetTree::AssetNode::AssetNode(const String& path, UID id, Type::Id type) :
 		AssetInfo(path, id, type)
 	{}
 
@@ -50,7 +50,7 @@ namespace o2
 		return mAllAssets.FindMatch([&](const AssetNode* asset) { return asset->mPath == path; });
 	}
 
-	AssetTree::AssetNode* AssetTree::FindAsset(AssetId id) const
+	AssetTree::AssetNode* AssetTree::FindAsset(UID id) const
 	{
 		return mAllAssets.FindMatch([&](const AssetNode* asset) { return asset->mId == id; });
 	}
@@ -64,7 +64,7 @@ namespace o2
 		return AssetInfo();
 	}
 
-	AssetInfo AssetTree::FindAssetInfo(AssetId id) const
+	AssetInfo AssetTree::FindAssetInfo(UID id) const
 	{
 		auto asset = FindAsset(id);
 		if (asset)
@@ -208,6 +208,11 @@ namespace o2
 		asset->mTime = time;
 		asset->mId = meta->ID();
 		asset->mType = meta->GetAssetType();
+
+// 		meta->r();
+// 		DataNode xx;
+// 		xx = meta;
+// 		xx.SaveToFile(mPath + path + ".meta");
 
 		asset->SetParent(parent);
 

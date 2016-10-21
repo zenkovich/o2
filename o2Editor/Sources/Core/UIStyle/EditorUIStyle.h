@@ -44,7 +44,16 @@ namespace Editor
 		void RebuildAssetsGridScroll();
 		void RebuildLinkBtn();
 		void RebuildEditorDropdown();
+		void RebuildActorPropety();
+		void RebuildAssetPropety();
+		void RebuildComponentProperty();
 		void RebuildActorHeadEnableToggle();
+		void RebuildActorHeadName();
+		void RebuildActorHeadLockToggle();
+		void RebuildActorHeadActorAssetProperty();
+		void RebuildAcceptPrototypeBtn();
+		void RebuildRevertPrototypeBtn();
+		void RebuildBreakPrototypeBtn();
 
 		void RebuildEditorUIStyle();
 

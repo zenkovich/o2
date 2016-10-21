@@ -8,6 +8,7 @@
 #include "Utils/Containers/Vector.h"
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
+#include "Utils/UID.h"
 
 namespace o2
 {
@@ -84,7 +85,7 @@ namespace o2
 		void SetId(UInt64 id);
 
 		// Returns asset id
-		AssetId GetAssetId() const;
+		UID GetAssetId() const;
 
 		// Is this from asset
 		bool IsAsset() const;
@@ -231,7 +232,7 @@ namespace o2
 		bool           mIsOnScene;   // Is actor on scene
 
 		bool           mIsAsset;     // Is this actor cached asset
-		AssetId        mAssetId;     // Source asset id
+		UID            mAssetId;     // Source asset id
 
 	protected:
 		// Calls when transformation was changed
@@ -323,12 +324,17 @@ namespace o2
 		{
 			Actor** target;
 			bool    isAsset;
-			UInt64  id;
+			UInt64  actorId;
+			UID     assetId;
 
 			ActorDef() {}
 
-			ActorDef(Actor** target, bool isAsset, UInt64 id):
-				target(target), isAsset(isAsset), id(id)
+			ActorDef(Actor** target, UInt64 id):
+				target(target), isAsset(false), actorId(id)
+			{}
+
+			ActorDef(Actor** target, UID id):
+				target(target), isAsset(true), assetId(id)
 			{}
 
 			bool operator==(const ActorDef& other) const

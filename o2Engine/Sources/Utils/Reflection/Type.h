@@ -9,6 +9,7 @@
 #include "Utils/Reflection/FieldInfo.h"
 #include "Utils/Reflection/FunctionInfo.h"
 #include "Utils/String.h"
+#include "Utils/UID.h"
 
 #define TypeOf(TYPE) GetTypeOf<TYPE>()
 
@@ -178,8 +179,9 @@ namespace o2
 		                         std::is_same<T, Vec2I>::value ||
 		                         std::is_same<T, Vec2F>::value ||
 		                         std::is_same<T, Vertex2>::value ||
-		                         std::is_same<T, String>::value ||
-		                         std::is_same<T, WString>::value ||
+								 std::is_same<T, String>::value ||
+								 std::is_same<T, WString>::value ||
+		                         std::is_same<T, UID>::value ||
 		                         std::is_same<T, DataNode>::value) && !std::is_const<T>::value,
 		            FundamentalType<T>,
 		        //else

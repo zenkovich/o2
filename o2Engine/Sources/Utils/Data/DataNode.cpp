@@ -165,6 +165,12 @@ namespace o2
 		return *this;
 	}
 
+	DataNode& DataNode::SetValue(const UID& value)
+	{
+		mData = (String)value;
+		return *this;
+	}
+
 	void DataNode::DataNode::GetValue(wchar_t*& value) const
 	{
 		memcpy(value, mData.Data(), sizeof(wchar_t)*mData.Length() + 1);
@@ -274,6 +280,11 @@ namespace o2
 	void DataNode::GetValue(DataNode& other) const
 	{
 		other = *this;
+	}
+
+	void DataNode::GetValue(UID& value) const
+	{
+		value = mData;
 	}
 
 	DataNode* DataNode::operator[](const WString& nodePath)
