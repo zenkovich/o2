@@ -114,7 +114,7 @@
       <AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AssemblyDebug>false</AssemblyDebug>
       <OptimizeReferences>false</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
@@ -165,7 +165,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>

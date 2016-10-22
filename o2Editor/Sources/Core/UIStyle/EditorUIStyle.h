@@ -51,6 +51,8 @@ namespace Editor
 		void RebuildActorHeadName();
 		void RebuildActorHeadLockToggle();
 		void RebuildActorHeadActorAssetProperty();
+		void RebuildActorHeadTagsProperty();
+		void RebuildActorHeadLayerProperty();
 		void RebuildAcceptPrototypeBtn();
 		void RebuildRevertPrototypeBtn();
 		void RebuildBreakPrototypeBtn();

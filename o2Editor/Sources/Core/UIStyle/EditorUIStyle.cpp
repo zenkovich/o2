@@ -1345,7 +1345,6 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorHeadName()
 	{
-
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(5, 0, 5, 0));
 		sample->SetViewLayout(Layout::BothStretch(7, 0, 7, 0));
@@ -1445,13 +1444,110 @@ namespace Editor
 		nameText->horAlign = HorAlign::Left;
 		nameText->verAlign = VerAlign::Middle;
 		nameText->dotsEngings = true;
-		widget->AddLayer("caption", nameText, Layout::BothStretch(0, 5, 0, 5));
+		widget->AddLayer("caption", nameText, Layout::BothStretch(5, 1, 5, 1));
 
 		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
 		linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
 		widget->AddChild(linkBtn);
 
 		o2UI.AddWidgetStyle(widget, "actorHeadAssetProperty");
+	}
+
+	void EditorUIStyleBuilder::RebuildActorHeadTagsProperty()
+	{
+		UIEditBox* sample = mnew UIEditBox();
+		sample->SetClippingLayout(Layout::BothStretch(5, 0, 5, 0));
+		sample->SetViewLayout(Layout::BothStretch(7, 0, 7, 0));
+		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetMultiLine(false);
+		sample->layout.minSize = Vec2F(50, 17);
+
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI2_round_field_gray.png"),
+										  Layout::BothStretch(-4, -4, -5, -4));
+
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI2_round_field_gray_select.png"),
+										   Layout::BothStretch(-4, -4, -5, -4));
+
+		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI2_round_field_select.png"),
+										   Layout::BothStretch(-4, -4, -5, -4));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		sample->AddState("focused", focusAnim)
+			->offStateAnimationSpeed = 0.5f;
+
+		Text* textDrawable = sample->GetTextDrawable();
+		textDrawable->verAlign = VerAlign::Middle;
+		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->SetFontAsset("stdFont.ttf");
+
+		Sprite* caretDrawable = sample->GetCaretDrawable();
+		*caretDrawable = Sprite();
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight())*1.7f);
+		caretDrawable->pivot = Vec2F(0, 0.26f);
+		caretDrawable->color = Color4::Black();
+
+		o2UI.AddWidgetStyle(sample, "actorHeadTags");
+	}
+
+	void EditorUIStyleBuilder::RebuildActorHeadLayerProperty()
+	{
+		UIDropDown* sample = mnew UIDropDown();
+		sample->layout.minSize = Vec2F(20, 20);
+
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI2_round_field_gray.png"),
+										  Layout::BothStretch(-4, -4, -5, -4));
+
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI2_round_field_gray_select.png"),
+										   Layout::BothStretch(-4, -4, -5, -4));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI2_round_field_pressed.png"),
+										   Layout::BothStretch(-4, -4, -5, -4));
+
+		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
+										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
+
+		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
+
+		auto list = sample->GetListView();
+		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
+		delete list->layer["back"]->drawable;
+		list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
+		list->layout.pivot = Vec2F(0.5f, 1.0f);
+		list->layout.anchorMin = Vec2F(0, 0);
+		list->layout.anchorMax = Vec2F(1, 0);
+		list->layout.offsetMin = Vec2F(-1, -60);
+		list->layout.offsetMax = Vec2F(0, 3);
+
+		Text* undefinedText = mnew Text("stdFont.ttf");
+		undefinedText->text = "--";
+		undefinedText->horAlign = HorAlign::Left;
+		undefinedText->verAlign = VerAlign::Middle;
+		undefinedText->dotsEngings = true;
+		auto undefinedLayer = sample->AddLayer("undefined", undefinedText, Layout::BothStretch(3, 0, 3, 0));
+
+		UILabel* itemSample = o2UI.CreateLabel("empty");
+		itemSample->horAlign = HorAlign::Left;
+		sample->SetItemSample(itemSample);
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+
+		sample->AddState("undefined", Animation::EaseInOut(sample, &undefinedLayer->transparency, 0.0f, 1.0f, 0.05f));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "actorHeadLayer");
 	}
 
 	void EditorUIStyleBuilder::RebuildAcceptPrototypeBtn()
@@ -1687,6 +1783,8 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildActorHeadName);
 	PUBLIC_FUNCTION(void, RebuildActorHeadLockToggle);
 	PUBLIC_FUNCTION(void, RebuildActorHeadActorAssetProperty);
+	PUBLIC_FUNCTION(void, RebuildActorHeadTagsProperty);
+	PUBLIC_FUNCTION(void, RebuildActorHeadLayerProperty);
 	PUBLIC_FUNCTION(void, RebuildAcceptPrototypeBtn);
 	PUBLIC_FUNCTION(void, RebuildRevertPrototypeBtn);
 	PUBLIC_FUNCTION(void, RebuildBreakPrototypeBtn);

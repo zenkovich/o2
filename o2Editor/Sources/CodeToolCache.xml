@@ -1637,61 +1637,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h">
-		<date year="2016" month="10" day="15" hour="15" minute="54" second="57" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="DefaultActorHeaderViewer" fullname="Editor::DefaultActorHeaderViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IActorHeaderViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings>
-						<typedef name="o2" />
-					</usings>
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIStyle/EditorUIStyle.h">
-		<date year="2016" month="10" day="15" hour="16" minute="6" second="38" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="EditorUIStyleBuilder" fullname="Editor::EditorUIStyleBuilder" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="BasicUIStyleBuilder" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/AssetsIconsScroll.h">
 		<date year="2016" month="10" day="16" hour="23" minute="31" second="59" />
 		<globalNamespace name="" fullname="">
@@ -1804,6 +1749,62 @@
 			<usings>
 				<typedef name="o2" />
 			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIStyle/EditorUIStyle.h">
+		<date year="2016" month="10" day="22" hour="14" minute="19" second="7" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="EditorUIStyleBuilder" fullname="Editor::EditorUIStyleBuilder" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="BasicUIStyleBuilder" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h">
+		<date year="2016" month="10" day="22" hour="15" minute="4" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="DefaultActorHeaderViewer" fullname="Editor::DefaultActorHeaderViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IActorHeaderViewer" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings>
+						<typedef name="o2" />
+					</usings>
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
 		</globalNamespace>
 	</file>
 </files>

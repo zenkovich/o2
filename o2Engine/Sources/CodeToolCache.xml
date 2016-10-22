@@ -4434,6 +4434,18 @@
 									<usings />
 									<baseClasses />
 								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
 							</sections>
 							<typedefs>
 								<typedef what="Vector&lt;DataNode*&gt;" newDef="DataNodesVec" />

@@ -2,6 +2,7 @@
 
 #include "Assets/ActorAsset.h"
 #include "PropertiesWindow/ActorsViewer/IActorHeaderViewer.h"
+#include "Events/KeyboardEventsListener.h"
 
 namespace o2
 {
@@ -25,7 +26,7 @@ namespace Editor
 	// ---------------------------
 	// Default actor header viewer
 	// ---------------------------
-	class DefaultActorHeaderViewer: public IActorHeaderViewer
+	class DefaultActorHeaderViewer: public IActorHeaderViewer, public KeyboardEventsListener
 	{
 	public:
 		// Default constructor
@@ -53,5 +54,9 @@ namespace Editor
 		UIButton*                  mPrototypeBreakBtn;
 		TagsProperty*              mTagsProperty;
 		LayerProperty*             mLayerProperty;
+
+	protected:
+		// Calls when key was pressed
+		void OnKeyPressed(const Input::Key& key);
 	};
 }
