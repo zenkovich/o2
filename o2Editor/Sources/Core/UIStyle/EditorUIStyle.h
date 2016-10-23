@@ -9,6 +9,7 @@ namespace Editor
 	class EditorUIStyleBuilder: public BasicUIStyleBuilder
 	{
 	public:
+		void RebuildExpandButton();
 		void RebuildDockableWndStyle();
 		void RebuildPlayStopButtonStyle();
 		void RebuildPauseButtonStyle();
@@ -56,6 +57,8 @@ namespace Editor
 		void RebuildAcceptPrototypeBtn();
 		void RebuildRevertPrototypeBtn();
 		void RebuildBreakPrototypeBtn();
+		void RebuildComponentOptionsBtn();
+		void RebuildComponentSaveBtn();
 
 		void RebuildEditorUIStyle();
 

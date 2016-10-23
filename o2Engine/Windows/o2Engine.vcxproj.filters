@@ -493,6 +493,9 @@
     <ClInclude Include="..\Sources\Utils\UID.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\UI\Spoiler.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Animation\Animatable.cpp">
@@ -862,6 +865,9 @@
       <Filter>Sources\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\UI\Image.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\Spoiler.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>

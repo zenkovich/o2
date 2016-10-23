@@ -233,6 +233,7 @@ namespace o2
 		friend class UILongList;
 		friend class UIMenuPanel;
 		friend class UIScrollArea;
+		friend class UISpoiler;
 		friend class UIToggle;
 		friend class UITree;
 		friend class UITreeNode;

@@ -11,6 +11,7 @@ namespace o2
 	UIWidget::UIWidget()
 	{
 		layout.mOwner = this;
+		UpdateLayout();
 		InitializeProperties();
 	}
 
