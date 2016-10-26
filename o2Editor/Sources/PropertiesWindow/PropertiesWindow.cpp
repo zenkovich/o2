@@ -3,13 +3,14 @@
 #include "PropertiesWindow/IObjectPropertiesViewer.h"
 #include "PropertiesWindow/Properties/AssetProperty.h"
 #include "PropertiesWindow/Properties/BooleanProperty.h"
+#include "PropertiesWindow/Properties/FieldPropertiesInfo.h"
 #include "PropertiesWindow/Properties/FloatProperty.h"
 #include "PropertiesWindow/Properties/IntegerProperty.h"
 #include "PropertiesWindow/Properties/StringProperty.h"
 #include "PropertiesWindow/Properties/WStringProperty.h"
-#include "PropertiesWindow/Properties/FieldPropertiesInfo.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/Label.h"
+#include "UI/Spoiler.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
@@ -24,7 +25,6 @@ namespace Editor
 		InitializeWindow();
 		InitializeViewers();
 		InitializePropertiesFields();
-		InitializePools();
 	}
 
 	PropertiesWindow::~PropertiesWindow()
@@ -34,12 +34,6 @@ namespace Editor
 
 		for (auto field : mAvailablePropertiesFields)
 			delete field;
-
-		for (auto kv : mFieldPropertiesPool)
-		{
-			for (auto field : kv.Value())
-				delete field;
-		}
 	}
 
 	void PropertiesWindow::InitializeWindow()
@@ -78,55 +72,6 @@ namespace Editor
 			auto sample = (IAssetProperty*)x->CreateSample();
 			mAvailablePropertiesFields.Add(sample);
 		}
-	}
-
-	void PropertiesWindow::InitializePools()
-	{
-		return;
-
-		const int initialPoolSize = 15;
-
-		// properties pool
-		for (auto fieldSample : mAvailablePropertiesFields)
-		{
-			mFieldPropertiesPool.Add(fieldSample->GetFieldType(), PropertiesFieldsVec());
-
-			for (int i = 0; i < initialPoolSize; i++)
-				mFieldPropertiesPool[fieldSample->GetFieldType()].Add((IAssetProperty*)fieldSample->GetType().CreateSample());
-		}
-
-		// horizontal layouts pool
-		for (int i = 0; i < initialPoolSize; i++)
-			mHorLayoutsPool.Add(CreatePropertyHorLayout());
-
-		// labels pool
-		for (int i = 0; i < initialPoolSize; i++)
-			mLabelsPool.Add(CreatePropertyLabel());
-	}
-
-	UIHorizontalLayout* PropertiesWindow::CreatePropertyHorLayout()
-	{
-		UIHorizontalLayout* horLayout = mnew UIHorizontalLayout();
-		horLayout->spacing = 5.0f;
-		horLayout->border = RectF();
-		horLayout->expandHeight = true;
-		horLayout->expandWidth = true;
-		horLayout->fitByChildren = true;
-		horLayout->baseCorner = BaseCorner::Left;
-		horLayout->layout = UIWidgetLayout::BothStretch();
-		horLayout->layout.minHeight = 20;
-
-		return horLayout;
-	}
-
-	UILabel* PropertiesWindow::CreatePropertyLabel()
-	{
-		auto newLabel = o2UI.CreateWidget<UILabel>();
-		newLabel->horAlign = HorAlign::Left;
-		newLabel->layout.minWidth = 100;
-		newLabel->layout.widthWeight = 0.5f;
-
-		return newLabel;
 	}
 
 	void PropertiesWindow::SetTarget(IObject* target)
@@ -187,35 +132,6 @@ namespace Editor
 
 	void PropertiesWindow::BuildTypeViewer(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo)
 	{
-		// clear and fill pools
-		Vector<UIWidget*> unknownTypeChilds;
-		for (auto child : layout->GetChilds())
-		{
-			if (child->GetType() != TypeOf(UIHorizontalLayout))
-			{
-				unknownTypeChilds.Add(child);
-				continue;
-			}
-
-			UIHorizontalLayout* childHorLayout = (UIHorizontalLayout*)child;
-			if (childHorLayout->GetChilds()[0]->GetType() == TypeOf(UILabel))
-				mLabelsPool.Add((UILabel*)childHorLayout->GetChilds()[0]);
-
-			childHorLayout->RemoveAllChilds(false, false);
-
-			mHorLayoutsPool.Add(childHorLayout);
-		}
-
-		layout->RemoveAllChilds(false, false);
-		for (auto widget : unknownTypeChilds)
-			delete widget;
-
-		for (auto prop : propertiesInfo.properties)
-			mFieldPropertiesPool[prop.Value()->GetFieldType()].Add(prop.Value());
-
-		propertiesInfo.properties.Clear();
-
-		// and build
 		for (auto fieldInfo : type->Fields())
 		{
 			const Type* fieldType = &fieldInfo->GetType();
@@ -223,51 +139,10 @@ namespace Editor
 			if (fieldInfo->GetProtectionSection() != ProtectSection::Public)
 				continue;
 
-			IPropertyField* fieldSample = GetAvailableField(fieldType);
-
-			if (!fieldSample)
-				continue;
-
-			const Type* fieldPropertyType = fieldSample->GetFieldType();
-
-			if (mHorLayoutsPool.IsEmpty())
-			{
-				for (int i = 0; i < mPropertyFieldsPoolStep; i++)
-					mHorLayoutsPool.Add(CreatePropertyHorLayout());
-			}
-
-			UIHorizontalLayout* horLayout = mHorLayoutsPool.PopBack();
-
-			//add label
-			if (mLabelsPool.IsEmpty())
-			{
-				for (int i = 0; i < mPropertyFieldsPoolStep; i++)
-					mLabelsPool.Add(CreatePropertyLabel());
-			}
-
-			UILabel* label = mLabelsPool.PopBack();
-			label->text = MakeSmartFieldName(fieldInfo->Name());
-
-			// add property
-			if (!mFieldPropertiesPool.ContainsKey(fieldPropertyType))
-				mFieldPropertiesPool.Add(fieldPropertyType, Vector<IPropertyField*>());
-
-			if (mFieldPropertiesPool[fieldPropertyType].IsEmpty())
-			{
-				for (int i = 0; i < mPropertyFieldsPoolStep; i++)
-					mFieldPropertiesPool[fieldPropertyType].Add((IPropertyField*)fieldSample->GetType().CreateSample());
-			}
-
-			IPropertyField* fieldProperty = mFieldPropertiesPool[fieldPropertyType].PopBack();
-			fieldProperty->SpecializeType(fieldType);
-
-			propertiesInfo.properties.Add(fieldInfo, fieldProperty);
-
-			// add to layout
-			horLayout->AddChild(label, false);
-			horLayout->AddChild(fieldProperty->GetWidget(), false);
-
-			layout->AddChild(horLayout, false);
+			if (IPropertyField* fieldSample = GetAvailableField(fieldType))
+				CreateRegularField(fieldSample, fieldInfo, propertiesInfo, layout);
+			else if (fieldType->IsBasedOn(TypeOf(IObject)))
+				CreateObjectField(fieldInfo, propertiesInfo, layout);
 		}
 	}
 
@@ -338,6 +213,96 @@ namespace Editor
 
 		return nullptr;
 	}
+
+	void PropertiesWindow::CreateRegularField(IPropertyField* fieldSample, FieldInfo* fieldInfo,
+											  FieldPropertiesInfo &propertiesInfo, UIVerticalLayout* layout)
+	{
+		const Type* fieldPropertyType = fieldSample->GetFieldType();
+
+		UIHorizontalLayout* horLayout = mnew UIHorizontalLayout();
+		horLayout->spacing = 5.0f;
+		horLayout->borderLeft = 10;
+		horLayout->expandHeight = true;
+		horLayout->expandWidth = true;
+		horLayout->fitByChildren = true;
+		horLayout->baseCorner = BaseCorner::Left;
+		horLayout->layout = UIWidgetLayout::BothStretch();
+		horLayout->layout.minHeight = 20;
+
+		UILabel* label = o2UI.CreateWidget<UILabel>();
+		label->horAlign = HorAlign::Left;
+		label->layout.minWidth = 100;
+		label->layout.widthWeight = 0.5f;
+		label->text = MakeSmartFieldName(fieldInfo->Name());
+
+		IPropertyField* fieldProperty = (IPropertyField*)fieldSample->GetType().CreateSample();
+		fieldProperty->SpecializeType(&fieldInfo->GetType());
+
+		propertiesInfo.properties.Add(fieldInfo, fieldProperty);
+
+		horLayout->AddChild(label, false);
+		horLayout->AddChild(fieldProperty->GetWidget(), false);
+
+		layout->AddChild(horLayout, false);
+	}
+
+	void PropertiesWindow::CreateObjectField(FieldInfo* fieldInfo, FieldPropertiesInfo &propertiesInfo,
+											 UIVerticalLayout* layout)
+	{
+		UIVerticalLayout* objLayout = mnew UIVerticalLayout();
+		objLayout->spacing = 0.0f;
+		objLayout->border = RectF(0, 0, 0, 0);
+		objLayout->expandHeight = false;
+		objLayout->expandWidth = true;
+		objLayout->fitByChildren = true;
+		objLayout->baseCorner = BaseCorner::RightTop;
+		objLayout->layout = UIWidgetLayout::BothStretch();
+
+		auto header = mnew UIWidget();
+		header->layout = UIWidgetLayout::BothStretch();
+		header->layout.minHeight = 20;
+
+		auto expandBtn = o2UI.CreateWidget<UIButton>("expand");
+		expandBtn->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-7, 0));
+		header->AddChild(expandBtn, false);
+
+		UILabel* label = o2UI.CreateWidget<UILabel>();
+		label->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 10, 0, 20, 0);
+		label->horAlign = HorAlign::Left;
+		label->text = MakeSmartFieldName(fieldInfo->Name());
+		header->AddChild(label, false);
+
+		auto spoiler = mnew UISpoiler();
+		auto spoilerVerLayout = mnew UIVerticalLayout();
+		spoilerVerLayout->spacing = 5.0f;
+		spoilerVerLayout->borderLeft = 10;
+		spoilerVerLayout->expandHeight = false;
+		spoilerVerLayout->expandWidth = true;
+		spoilerVerLayout->fitByChildren = true;
+		spoilerVerLayout->baseCorner = BaseCorner::RightTop;
+		spoilerVerLayout->layout = UIWidgetLayout::BothStretch();
+		spoiler->AddChild(spoilerVerLayout);
+
+		expandBtn->onClick = [=]() {
+			if (spoiler->IsExpanded())
+			{
+				spoiler->Collapse();
+				expandBtn->SetState("expanded", false);
+			}
+			else
+			{
+				spoiler->Expand();
+				expandBtn->SetState("expanded", true);
+			}
+		};
+
+		objLayout->AddChild(header, false);
+		objLayout->AddChild(spoiler, false);
+
+		BuildTypeViewer(spoilerVerLayout, &fieldInfo->GetType(), propertiesInfo);
+
+		layout->AddChild(objLayout, true);
+	}
 }
  
 CLASS_META(Editor::PropertiesWindow)
@@ -350,9 +315,6 @@ CLASS_META(Editor::PropertiesWindow)
 	PROTECTED_FIELD(mCurrentViewer);
 	PROTECTED_FIELD(mViewers);
 	PROTECTED_FIELD(mAvailablePropertiesFields);
-	PROTECTED_FIELD(mFieldPropertiesPool);
-	PROTECTED_FIELD(mLabelsPool);
-	PROTECTED_FIELD(mHorLayoutsPool);
 
 	PUBLIC_FUNCTION(void, SetTarget, IObject*);
 	PUBLIC_FUNCTION(void, SetTargets, const Vector<IObject*>);
@@ -364,11 +326,10 @@ CLASS_META(Editor::PropertiesWindow)
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeViewers);
 	PROTECTED_FUNCTION(void, InitializePropertiesFields);
-	PROTECTED_FUNCTION(void, InitializePools);
-	PROTECTED_FUNCTION(UIHorizontalLayout*, CreatePropertyHorLayout);
-	PROTECTED_FUNCTION(UILabel*, CreatePropertyLabel);
 	PROTECTED_FUNCTION(IPropertyField*, CreatePropertyField, const Type*);
 	PROTECTED_FUNCTION(IPropertyField*, GetAvailableField, const Type*);
+	PROTECTED_FUNCTION(void, CreateRegularField, IPropertyField*, FieldInfo*, FieldPropertiesInfo&, UIVerticalLayout*);
+	PROTECTED_FUNCTION(void, CreateObjectField, FieldInfo*, FieldPropertiesInfo&, UIVerticalLayout*);
 }
 END_META;
  

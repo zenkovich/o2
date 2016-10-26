@@ -8,8 +8,9 @@ using namespace o2;
 
 namespace o2
 {
-	class UILabel;
 	class UIHorizontalLayout;
+	class UILabel;
+	class UIVerticalLayout;
 }
 
 // Editor properties window accessor macros
@@ -61,6 +62,7 @@ namespace Editor
 		typedef Dictionary<const Type*, PropertiesFieldsVec> TypePropFieldsDict;
 		typedef Vector<UILabel*> LabelsVec;
 		typedef Vector<UIHorizontalLayout*> HorLayoutsVec;
+		typedef Vector<UIVerticalLayout*> VerLayoutsVec;
 
 		int                      mPropertyFieldsPoolStep = 5; // Field properties pools resize step
 
@@ -69,9 +71,6 @@ namespace Editor
 		PropViewersVec           mViewers;                    // All available object types viewers
 
 		PropertiesFieldsVec      mAvailablePropertiesFields;  // Available properties fields
-		TypePropFieldsDict       mFieldPropertiesPool;        // Field properties pools
-		LabelsVec                mLabelsPool;                 // Labels pool
-		HorLayoutsVec            mHorLayoutsPool;             // Horizontal layouts pool
 
 	protected:
 		// Initializes window
@@ -83,19 +82,17 @@ namespace Editor
 		// Initializes available properties fields and pools
 		void InitializePropertiesFields();
 
-		// Initializes properties parts pools: mLabelsPool and mHorLayoutsPool
-		void InitializePools();
-
-		// Creates new horizontal layout for property
-		UIHorizontalLayout* CreatePropertyHorLayout();
-
-		// Creates new property label
-		UILabel* CreatePropertyLabel();
-
 		// Creates property field by type
 		IPropertyField* CreatePropertyField(const Type* type);
 
 		// Returns available field by type
 		IPropertyField* GetAvailableField(const Type* type);
+
+		// Creates regular primitive property field
+		void CreateRegularField(IPropertyField* fieldSample, FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo,
+								UIVerticalLayout* layout);
+
+		// Creates field for IObject based
+		void CreateObjectField(FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo, UIVerticalLayout* layout);
 	};
 }

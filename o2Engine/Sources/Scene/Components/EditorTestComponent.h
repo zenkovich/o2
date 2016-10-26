@@ -13,6 +13,19 @@ namespace o2
 	class EditorTestComponent: public Component
 	{
 	public:
+		class TestInside: public ISerializable
+		{
+		public:
+			float mFloat;					           // @SERIALIZABLE
+			String mString;					           // @SERIALIZABLE
+			WString mWString;				           // @SERIALIZABLE
+			bool mBool;						           // @SERIALIZABLE
+
+			bool operator==(const TestInside& other) const { return false; }
+
+			SERIALIZABLE(TestInside);
+		};
+
 		int mInteger;					           // @SERIALIZABLE
 		float mFloat;					           // @SERIALIZABLE
 		String mString;					           // @SERIALIZABLE
@@ -32,6 +45,14 @@ namespace o2
 		Vertex2 mVertex;				           // @SERIALIZABLE
 		RectF mRectF;					           // @SERIALIZABLE
 		RectI mRectI;					           // @SERIALIZABLE
+		TestInside mTestInside;                    // @SERIALIZABLE
+
+		Vector<int> mIntVector;                    // @SERIALIZABLE
+		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE
+		Vector<Actor*> mActorVector;               // @SERIALIZABLE
+
+		Dictionary<String, String> mDictionary;    // @SERIALIZABLE
+		float mFloat2;					           // @SERIALIZABLE
 
 		void DeserializeBasic(const DataNode& node, const void* thisObject)
 		{

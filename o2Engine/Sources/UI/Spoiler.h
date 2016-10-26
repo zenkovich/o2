@@ -42,6 +42,12 @@ namespace o2
 		float          mTargetHeight = 0.0f;   // target expanding height
 
 	protected:
+		// Calls when child widget was added
+		void OnChildAdded(UIWidget* child);
+
+		// Calls when child widget was removed
+		void OnChildRemoved(UIWidget* child);
+
 		// Updates expanding
 		void UpdateExpanding(float dt);
 

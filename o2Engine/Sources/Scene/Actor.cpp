@@ -529,8 +529,8 @@ namespace o2
 
 	Component* Actor::AddComponent(Component* component)
 	{
-		if (GetComponent(component->GetType().Name()) != nullptr)
-			return nullptr;
+// 		if (GetComponent(component->GetType().Name()) != nullptr)
+// 			return nullptr;
 
 		component->SetOwnerActor(this);
 
