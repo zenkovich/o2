@@ -10,6 +10,12 @@
 
 namespace o2
 {
+#define TStringEnableType \
+	typename X = std::enable_if<std::is_same<T2, char>::value || \
+	                            std::is_same<T2, wchar_t>::value || \
+		                        std::is_same<T2, const char>::value || \
+		                        std::is_same<T2, const wchar_t>::value>::type
+
 	// -------------------------
 	// Template character string
 	// -------------------------
@@ -24,11 +30,11 @@ namespace o2
 		TString();
 
 		// Copy-constructor from string with another characters type
-		template<typename T2>
+		template<typename T2, TStringEnableType>
 		TString(const TString<T2>& other);
 
 		// Constructor from characters array
-		template<typename T2>
+		template<typename T2, TStringEnableType>
 		TString(T2* data);
 
 		// Copy-constructor
@@ -68,14 +74,14 @@ namespace o2
 		~TString();
 
 		// Copy-operator from string with another characters type
-		template<typename T2>
+		template<typename T2, TStringEnableType>
 		TString& operator=(const TString<T2>& other);
 
 		// Copy-operator
 		TString& operator=(const TString& other);
 
 		// Assign operator from characters array
-		template<typename T2>
+		template<typename T2, TStringEnableType>
 		TString& operator=(T2* data);
 
 		// Cast to characters array
@@ -112,11 +118,11 @@ namespace o2
 		explicit operator Color4() const;
 
 		// Check equal operator to characters array
-		template<typename T2>
+		template<typename T2, TStringEnableType>
 		bool operator==(T2* data) const;
 
 		// Check not equal operator to characters array
-		template<typename T2>
+		template<typename T2, TStringEnableType>
 		bool operator!=(T2* data) const;
 
 		// Check equal operator
@@ -351,7 +357,7 @@ namespace o2
 	}
 
 	template<typename T>
-	template<typename T2>
+	template<typename T2, typename X>
 	TString<T>::TString(T2* data):
 		mCapacity(0)
 	{
@@ -367,7 +373,7 @@ namespace o2
 
 
 	template<typename T>
-	template<typename T2>
+	template<typename T2, typename X>
 	TString<T>::TString(const TString<T2>& other):
 		mCapacity(other.Capacity()), mData((T*)malloc(other.Capacity()*sizeof(T)))
 	{
@@ -609,7 +615,7 @@ namespace o2
 	}
 
 	template<typename T>
-	template<typename T2>
+	template<typename T2, typename X>
 	TString<T>& TString<T>::operator=(const TString<T2>& other)
 	{
 		Reserve(other.Capacity());
@@ -626,7 +632,7 @@ namespace o2
 	}
 
 	template<typename T>
-	template<typename T2>
+	template<typename T2, typename X>
 	TString<T>& TString<T>::operator=(T2* data)
 	{
 		int dataLength = 0;
@@ -841,7 +847,7 @@ namespace o2
 	}
 
 	template<typename T>
-	template<typename T2>
+	template<typename T2, typename X>
 	bool TString<T>::operator==(T2* data) const
 	{
 		int l2 = 0;
@@ -861,7 +867,7 @@ namespace o2
 	}
 
 	template<typename T>
-	template<typename T2>
+	template<typename T2, typename X>
 	bool TString<T>::operator!=(T2* data) const
 	{
 		return !(*this == data);
@@ -1420,7 +1426,7 @@ namespace o2
 				}
 				else if (format.mData[i + 1] == 'b')
 				{
-					appendStr(va_arg(vlist, bool) ? "true":"false");
+					appendStr(va_arg(vlist, bool) ? "true" : "false");
 					i++;
 				}
 				else

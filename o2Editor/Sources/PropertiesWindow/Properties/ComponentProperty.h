@@ -45,7 +45,7 @@ namespace Editor
 		const Type* GetFieldType() const;
 
 		// Specializes field type
-		void SpecializeType(const Type* type);
+		void SpecializeType(const FieldInfo* info);
 
 		// Returns specialized type
 		const Type* GetSpecializedType() const;

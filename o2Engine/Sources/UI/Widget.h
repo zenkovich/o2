@@ -220,8 +220,9 @@ namespace o2
 		UIWidget*      mParent = nullptr;       // Parent widget
 		WidgetsVec     mChilds;                 // Children widgets @SERIALIZABLE
 		RectF          mChildsAbsRect;          // Absolute rectangle for children arranging
+		RectF          mLastChildsAbsRect;      // Absolute rectangle for children arranging from last layout updating
 					   						    
-		float          mTransparency = 1.0f;	 // Widget transparency @SERIALIZABLE
+		float          mTransparency = 1.0f;	// Widget transparency @SERIALIZABLE
 		float          mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
 		LayersVec      mDrawingLayers;          // Layers ordered by depth, which drawing before children (depth < 1000)
 		LayersVec      mTopDrawingLayers;       // Layers ordered by depth, which drawing after children (depth > 1000)
@@ -271,7 +272,7 @@ namespace o2
 		virtual void UpdateTransparency();
 
 		// Updates result visibility
-		virtual void UpdateVisibility();
+		virtual void UpdateVisibility(bool updateLayout = true);
 
 		// Calls when child widget was selected
 		virtual void OnChildFocused(UIWidget* child);

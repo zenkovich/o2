@@ -82,8 +82,8 @@ void glCheckError(o2::LogStream* log, const char* filename /*= nullptr*/, unsign
 	GLenum errId = glGetError();
 	if (errId != GL_NO_ERROR)
 	{
-		log->Out("OpenGL ERROR %x: %sc at file: %sc line: %i", errId, GetGLErrorDesc(errId), (filename ? filename:"unknown"),
-				 line);
+		log->Out("OpenGL ERROR %i: %s at file: %s line: %i", errId, (o2::String)GetGLErrorDesc(errId),
+			(o2::String)(filename ? filename : "unknown"), line);
 	}
 }
 

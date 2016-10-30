@@ -1911,86 +1911,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Delegates.h">
-		<date year="2016" month="8" day="30" hour="23" minute="11" second="45" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="IFunction" fullname="o2::IFunction" isClass="true" isMeta="false" templates="typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="...)&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="FunctionPtr" fullname="o2::FunctionPtr" isClass="true" isMeta="false" templates="typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="...)&gt;: public IFunction&lt;_res_type(_args ...)&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="ObjFunctionPtr" fullname="o2::ObjFunctionPtr" isClass="true" isMeta="false" templates="typename _class_type, typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IFunction&lt;_res_type(_args ...)&gt;" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="ObjConstFunctionPtr" fullname="o2::ObjConstFunctionPtr" isClass="true" isMeta="false" templates="typename _class_type, typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IFunction&lt;_res_type(_args ...)&gt;" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="SharedLambda" fullname="o2::SharedLambda" isClass="true" isMeta="false" templates="typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="ILambdaInvoker" fullname="o2::SharedLambda::ILambdaInvoker" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="LambdaInvoker" fullname="o2::SharedLambda::LambdaInvoker" isClass="true" isMeta="false" templates="typename _lambda_type" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ILambdaInvoker" protection="1" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="...)&gt;: public IFunction&lt;_res_type(_args ...)&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="Function" fullname="o2::Function" isClass="true" isMeta="false" templates="typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="std::vector&lt;IFunction*&gt;" newDef="FunctionsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="...)&gt;: public IFunction&lt;_res_type(_args ...)&gt;" protection="1" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/DragAndDrop.h">
 		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
 		<globalNamespace name="" fullname="">
@@ -2941,30 +2861,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/String.h">
-		<date year="2016" month="8" day="30" hour="23" minute="11" second="51" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="TString" fullname="o2::TString" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses />
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="TString&lt;wchar_t&gt;" newDef="WString" />
-						<typedef what="TString&lt;char&gt;" newDef="String" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Task.h">
 		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
 		<globalNamespace name="" fullname="">
@@ -3198,52 +3094,6 @@
 					<typedefs>
 						<typedef what="Vector&lt;Tag*&gt;" newDef="TagsVec" />
 					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/FieldInfo.h">
-		<date year="2016" month="10" day="9" hour="13" minute="50" second="19" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="FieldInfo" fullname="o2::FieldInfo" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="IFieldSerializer" fullname="o2::FieldInfo::IFieldSerializer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="FieldSerializer" fullname="o2::FieldInfo::FieldSerializer" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="IFieldSerializer" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs>
-								<typedef what="Vector&lt;IAttribute*&gt;" newDef="AttributesVec" />
-							</typedefs>
-							<usings />
-							<baseClasses />
-						</section>
-						<section name="AccessorFieldInfo" fullname="o2::AccessorFieldInfo" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="FieldInfo" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
 					<usings />
 				</section>
 			</sections>
@@ -4710,58 +4560,312 @@
 									<usings />
 									<baseClasses />
 								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
 							</sections>
 							<typedefs>
 								<typedef what="Vector&lt;DataNode*&gt;" newDef="DataNodesVec" />
 								<typedef what="DataNodesVec::Iterator" newDef="Iterator" />
 								<typedef what="DataNodesVec::ConstIterator" newDef="ConstIterator" />
 							</typedefs>
-							<usings />
-							<baseClasses />
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/Type.h">
-		<date year="2016" month="10" day="18" hour="23" minute="59" second="6" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Type" fullname="o2::Type" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="UInt" newDef="Id" />
-								<typedef what="Vector&lt;FieldInfo*&gt;" newDef="FieldInfosVec" />
-								<typedef what="Vector&lt;FunctionInfo*&gt;" newDef="FunctionsInfosVec" />
-								<typedef what="Vector&lt;Type*&gt;" newDef="TypesVec" />
-							</typedefs>
-							<usings />
-							<baseClasses />
-						</section>
-						<section name="FundamentalType" fullname="o2::FundamentalType" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses />
-						</section>
-						<section name="TypeDeductor" fullname="o2::TypeDeductor" isClass="true" isMeta="false" templates="typename T, typename X =  &#10;      std::conditional&lt;std::is_base_of&lt;IObject, T&gt;::value, &#10;          T,&#10;      //else&#10;          std::conditional&lt;(std::is_fundamental&lt;T&gt;::value ||&#10;                           std::is_same&lt;T, Basis&gt;::value ||&#10;                           std::is_same&lt;T, Color4&gt;::value ||&#10;                           std::is_same&lt;T, RectI&gt;::value ||&#10;                           std::is_same&lt;T, RectF&gt;::value ||&#10;                           std::is_same&lt;T, Vec2I&gt;::value ||&#10;                           std::is_same&lt;T, Vec2F&gt;::value ||&#10;                           std::is_same&lt;T, Vertex2&gt;::value ||&#10;         std::is_same&lt;T, String&gt;::value ||&#10;         std::is_same&lt;T, WString&gt;::value ||&#10;                           std::is_same&lt;T, UID&gt;::value ||&#10;                           std::is_same&lt;T, DataNode&gt;::value) &amp;&amp; !std::is_const&lt;T&gt;::value,&#10;              FundamentalType&lt;T&gt;,&#10;          //else&#10;              Type::Dummy&#10;          &gt;::type&#10;   &gt;::type" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="X" newDef="type" />
-							</typedefs>
-							<usings />
-							<baseClasses />
-						</section>
-						<section name="TypeInitializer" fullname="o2::TypeInitializer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
 							<usings />
 							<baseClasses />
 						</section>
@@ -4921,32 +5025,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Widget.h">
-		<date year="2016" month="10" day="22" hour="21" minute="40" second="52" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIWidget" fullname="o2::UIWidget" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;UIWidget*&gt;" newDef="WidgetsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-								<class name="IDrawable" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/WidgetLayout.h">
 		<date year="2016" month="10" day="23" hour="13" minute="49" second="51" />
 		<globalNamespace name="" fullname="">
@@ -5014,6 +5092,244 @@
 							<usings />
 							<baseClasses>
 								<class name="UIWidget" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Delegates.h">
+		<date year="2016" month="10" day="29" hour="11" minute="15" second="38" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="IFunction" fullname="o2::IFunction" isClass="true" isMeta="false" templates="typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="...)&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="FunctionPtr" fullname="o2::FunctionPtr" isClass="true" isMeta="false" templates="typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="...)&gt;: public IFunction&lt;_res_type(_args ...)&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="ObjFunctionPtr" fullname="o2::ObjFunctionPtr" isClass="true" isMeta="false" templates="typename _class_type, typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IFunction&lt;_res_type(_args ...)&gt;" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="ObjConstFunctionPtr" fullname="o2::ObjConstFunctionPtr" isClass="true" isMeta="false" templates="typename _class_type, typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IFunction&lt;_res_type(_args ...)&gt;" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="SharedLambda" fullname="o2::SharedLambda" isClass="true" isMeta="false" templates="typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="ILambdaInvoker" fullname="o2::SharedLambda::ILambdaInvoker" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="LambdaInvoker" fullname="o2::SharedLambda::LambdaInvoker" isClass="true" isMeta="false" templates="typename _lambda_type" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ILambdaInvoker" protection="1" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="...)&gt;: public IFunction&lt;_res_type(_args ...)&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="Function" fullname="o2::Function" isClass="true" isMeta="false" templates="typename _res_type, typename ... _args" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="std::vector&lt;IFunction*&gt;" newDef="FunctionsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="...)&gt;: public IFunction&lt;_res_type(_args ...)&gt;" protection="1" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/String.h">
+		<date year="2016" month="10" day="29" hour="14" minute="43" second="18" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs>
+						<typedef what="TString&lt;wchar_t&gt;" newDef="WString" />
+						<typedef what="TString&lt;char&gt;" newDef="String" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/FieldInfo.h">
+		<date year="2016" month="10" day="29" hour="17" minute="32" second="45" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="FieldInfo" fullname="o2::FieldInfo" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="IFieldSerializer" fullname="o2::FieldInfo::IFieldSerializer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="FieldSerializer" fullname="o2::FieldInfo::FieldSerializer" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="IFieldSerializer" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Vector&lt;IAttribute*&gt;" newDef="AttributesVec" />
+							</typedefs>
+							<usings />
+							<baseClasses />
+						</section>
+						<section name="AccessorFieldInfo" fullname="o2::AccessorFieldInfo" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="FieldInfo" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="VectorFieldInfo" fullname="o2::VectorFieldInfo" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="IVectorHelper" fullname="o2::VectorFieldInfo::IVectorHelper" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="VectorHelper" fullname="o2::VectorFieldInfo::VectorHelper" isClass="true" isMeta="false" templates="typename _type" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="IVectorHelper" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="FieldInfo" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/Type.h">
+		<date year="2016" month="10" day="29" hour="17" minute="38" second="17" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Type" fullname="o2::Type" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="UInt" newDef="Id" />
+								<typedef what="Vector&lt;FieldInfo*&gt;" newDef="FieldInfosVec" />
+								<typedef what="Vector&lt;FunctionInfo*&gt;" newDef="FunctionsInfosVec" />
+								<typedef what="Vector&lt;Type*&gt;" newDef="TypesVec" />
+							</typedefs>
+							<usings />
+							<baseClasses />
+						</section>
+						<section name="FundamentalType" fullname="o2::FundamentalType" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+						<section name="TypeDeductor" fullname="o2::TypeDeductor" isClass="true" isMeta="false" templates="typename T, typename X =  &#10;      std::conditional&lt;std::is_base_of&lt;IObject, T&gt;::value, &#10;          T,&#10;      //else&#10;          std::conditional&lt;(std::is_fundamental&lt;T&gt;::value ||&#10;                           std::is_same&lt;T, Basis&gt;::value ||&#10;                           std::is_same&lt;T, Color4&gt;::value ||&#10;                           std::is_same&lt;T, RectI&gt;::value ||&#10;                           std::is_same&lt;T, RectF&gt;::value ||&#10;                           std::is_same&lt;T, Vec2I&gt;::value ||&#10;                           std::is_same&lt;T, Vec2F&gt;::value ||&#10;                           std::is_same&lt;T, Vertex2&gt;::value ||&#10;         std::is_same&lt;T, String&gt;::value ||&#10;         std::is_same&lt;T, WString&gt;::value ||&#10;                           std::is_same&lt;T, UID&gt;::value ||&#10;                           std::is_same&lt;T, DataNode&gt;::value) &amp;&amp; !std::is_const&lt;T&gt;::value,&#10;              FundamentalType&lt;T&gt;,&#10;          //else&#10;              Type::Dummy&#10;          &gt;::type&#10;   &gt;::type" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="X" newDef="type" />
+							</typedefs>
+							<usings />
+							<baseClasses />
+						</section>
+						<section name="TypeInitializer" fullname="o2::TypeInitializer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Widget.h">
+		<date year="2016" month="10" day="30" hour="12" minute="27" second="34" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIWidget" fullname="o2::UIWidget" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;UIWidget*&gt;" newDef="WidgetsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+								<class name="IDrawable" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>

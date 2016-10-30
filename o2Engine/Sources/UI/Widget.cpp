@@ -740,7 +740,7 @@ namespace o2
 			child->UpdateTransparency();
 	}
 
-	void UIWidget::UpdateVisibility()
+	void UIWidget::UpdateVisibility(bool updateLayout /*= true*/)
 	{
 		bool lastResVisible = mResVisible;
 
@@ -749,6 +749,9 @@ namespace o2
 		else
 			mResVisible = mVisible;
 
+		for (auto child : mChilds)
+			child->UpdateVisibility(false);
+
 		if (mResVisible != lastResVisible)
 		{
 			if (mVisibleState)
@@ -756,12 +759,11 @@ namespace o2
 			else
 				mFullyDisabled = !mResVisible;
 
-			UpdateLayout();
+			if (updateLayout)
+				UpdateLayout();
+
 			OnVisibleChanged();
 		}
-
-		for (auto child : mChilds)
-			child->UpdateVisibility();
 	}
 
 	void UIWidget::OnChildFocused(UIWidget* child)
@@ -781,9 +783,6 @@ namespace o2
 
 	void UIWidget::RecalculateAbsRect()
 	{
-// 		if (name != "label")
-// 			o2Debug.Log("- RecalculateAbsRect: %s at %i", mName, o2Time.GetCurrentFrame());
-
 		RectF lastAbsRect = layout.mAbsoluteRect;
 
 		Vec2F parentSize, parentPos;
@@ -806,6 +805,7 @@ namespace o2
 		layout.mLocalRect.top    = Math::Floor(layout.mLocalRect.top);
 
 		layout.mAbsoluteRect = layout.mLocalRect + parentPos;
+		mLastChildsAbsRect = mChildsAbsRect;
 		mChildsAbsRect = layout.mAbsoluteRect;
 
 		if (lastAbsRect != layout.mAbsoluteRect)
@@ -992,6 +992,7 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FIELD(mParent);
 	PROTECTED_FIELD(mChilds).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mChildsAbsRect);
+	PROTECTED_FIELD(mLastChildsAbsRect);
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);
 	PROTECTED_FIELD(mDrawingLayers);
@@ -1066,7 +1067,7 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, UpdateBoundsWithChilds);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, UpdateVisibility);
+	PROTECTED_FUNCTION(void, UpdateVisibility, bool);
 	PROTECTED_FUNCTION(void, OnChildFocused, UIWidget*);
 	PROTECTED_FUNCTION(void, RetargetStatesAnimations);
 	PROTECTED_FUNCTION(void, RecalculateAbsRect);

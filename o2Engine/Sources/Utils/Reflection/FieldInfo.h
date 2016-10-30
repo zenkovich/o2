@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils/CommonTypes.h"
+#include "Utils/Containers/Dictionary.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/Reflection/Attribute.h"
 #include "Utils/String.h"
@@ -29,7 +30,7 @@ namespace o2
 		struct FieldSerializer: public IFieldSerializer
 		{
 			void Serialize(void* object, DataNode& data) const;
-			void Deserialize(void* object, DataNode& data) const;			
+			void Deserialize(void* object, DataNode& data) const;
 			IFieldSerializer* Clone() const;
 		};
 
@@ -55,6 +56,12 @@ namespace o2
 
 		// Returns cloned copy
 		virtual FieldInfo* Clone() const;
+
+		// Returns is field is vector
+		virtual bool IsVector() const;
+
+		// Returns is field is dictionary
+		virtual bool IsDictionary() const;
 
 		// Adds attribute
 		FieldInfo& AddAttribute(IAttribute* attribute);
@@ -124,7 +131,7 @@ namespace o2
 
 	protected:
 		// Searches field recursively by pointer
-		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
 										   Vector<void*>& passedObjects);
 
 		// Searches field recursively by path
@@ -147,11 +154,12 @@ namespace o2
 		AccessorFieldInfo():FieldInfo() {}
 
 		// Constructor
-		AccessorFieldInfo(const String& name, UInt offset, const Type* type, ProtectSection sect, 
+		AccessorFieldInfo(const String& name, UInt offset, const Type* type, ProtectSection sect,
 						  IFieldSerializer* serializer):
-			FieldInfo(name, offset, false, false, type, sect, serializer) {}
+			FieldInfo(name, offset, false, false, type, sect, serializer)
+		{}
 
-		// Returns cloned copy
+        // Returns cloned copy
 		virtual FieldInfo* Clone() const;
 
 	protected:
@@ -161,6 +169,66 @@ namespace o2
 
 		// Searches field recursively by path
 		void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
+	};
+
+	// -----------------
+	// Vector field info
+	// -----------------
+	class VectorFieldInfo: public FieldInfo
+	{
+	protected:
+		struct IVectorHelper;
+
+	public:
+		// Default constructor
+		VectorFieldInfo():FieldInfo() {}
+
+		// Constructor
+		VectorFieldInfo(const String& name, UInt offset, const Type* type, ProtectSection sect,
+						IFieldSerializer* serializer, IVectorHelper* helper) :
+			FieldInfo(name, offset, false, false, type, sect, serializer), mHelper(helper)
+		{}
+
+		~VectorFieldInfo();
+
+		// Returns cloned copy
+		virtual FieldInfo* Clone() const;
+
+		// Returns is field is vector
+		virtual bool IsVector() const;
+
+		// Returns size of vector field
+		int GetValueSize(void* object) const;
+
+		// Sets value size
+		void SetValueSize(void* object, int size) const;
+
+		// Returns pointer to vector field value from index
+		void* GetValueAt(int idx, void* object) const;
+
+	protected:
+		struct IVectorHelper
+		{
+			virtual ~IVectorHelper() {}
+			virtual int GetSize(void* target) const { return 0; }
+			virtual void SetSize(void* target, int size) {}
+			virtual void* GetValue(void* target, int idx) { return nullptr; }
+			virtual IVectorHelper* Clone() const { return nullptr; }
+		};
+
+		template<typename _type>
+		struct VectorHelper: public IVectorHelper
+		{
+			virtual int GetSize(void* target) const { return ((Vector<_type>*)target)->Count(); }
+			virtual void* GetValue(void* target, int idx) { return &((Vector<_type>*)target)->Get(idx); }
+			virtual void SetSize(void* target, int size) { ((Vector<_type>*)target)->Resize(size); }
+			virtual IVectorHelper* Clone() const { return new VectorHelper<_type>(); }
+		};
+
+	protected:
+		IVectorHelper* mHelper;
+
+		friend class TypeInitializer;
 	};
 
 	template<typename _attr_type>

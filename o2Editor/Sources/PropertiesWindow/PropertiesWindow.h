@@ -51,18 +51,26 @@ namespace Editor
 		// Builds layout viewer by type for objects
 		void BuildTypeViewer(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo);
 
+		// Creates field property by type field info
+		Pair<IPropertyField*, UIWidget*> CreateFieldProperty(const FieldInfo* fieldInfo);
+
+		// Returns available field by type
+		IPropertyField* GetFieldPropertyPrototype(const Type* type);
+
+		// Creates regular primitive property field
+		Pair<IPropertyField*, UIWidget*> CreateRegularField(IPropertyField* fieldSample, const FieldInfo* fieldInfo);
+
+		// Creates object field
+		Pair<IPropertyField*, UIWidget*> CreateObjectField(const FieldInfo* fieldInfo);
+
 		// Makes smarter field name
-		String MakeSmartFieldName(const String& fieldName);
+		static String MakeSmartFieldName(const String& fieldName);
 
 		IOBJECT(PropertiesWindow);
 
 	protected:
 		typedef Vector<IObjectPropertiesViewer*> PropViewersVec;
 		typedef Vector<IPropertyField*> PropertiesFieldsVec;
-		typedef Dictionary<const Type*, PropertiesFieldsVec> TypePropFieldsDict;
-		typedef Vector<UILabel*> LabelsVec;
-		typedef Vector<UIHorizontalLayout*> HorLayoutsVec;
-		typedef Vector<UIVerticalLayout*> VerLayoutsVec;
 
 		int                      mPropertyFieldsPoolStep = 5; // Field properties pools resize step
 
@@ -81,18 +89,5 @@ namespace Editor
 
 		// Initializes available properties fields and pools
 		void InitializePropertiesFields();
-
-		// Creates property field by type
-		IPropertyField* CreatePropertyField(const Type* type);
-
-		// Returns available field by type
-		IPropertyField* GetAvailableField(const Type* type);
-
-		// Creates regular primitive property field
-		void CreateRegularField(IPropertyField* fieldSample, FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo,
-								UIVerticalLayout* layout);
-
-		// Creates field for IObject based
-		void CreateObjectField(FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo, UIVerticalLayout* layout);
 	};
 }

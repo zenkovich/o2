@@ -35,7 +35,7 @@ namespace Editor
 		virtual const Type* GetFieldType() const { return &TypeOf(void); }
 
 		// Specializes field type
-		virtual void SpecializeType(const Type* type) {}
+		virtual void SpecializeType(const FieldInfo* info) {}
 
 		IOBJECT(IPropertyField);
 	};

@@ -227,6 +227,10 @@ namespace o2
 
 		// Registers field in type
 		template<typename _type>
+		static FieldInfo& RegField(Type* type, const String& name, UInt offset, Vector<_type>& value, ProtectSection section);
+
+		// Registers field in type
+		template<typename _type>
 		static FieldInfo& RegField(Type* type, const String& name, UInt offset, Property<_type>& value, ProtectSection section);
 
 		// Registers field in type
@@ -376,6 +380,19 @@ namespace o2
 			FieldInfo::IFieldSerializer>::type serializerType;
 
 		type->mFields.Add(new FieldInfo(name, offset, false, false, valType, section, new serializerType()));
+		return *type->mFields.Last();
+	}
+
+	template<typename _type>
+	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Vector<_type>& value, ProtectSection section)
+	{
+		auto valType = &TypeOf(Vector<_type>);
+		typedef std::conditional<DataNode::IsSupport<Vector<_type>>::value,
+			FieldInfo::FieldSerializer<Vector<_type>>,
+			FieldInfo::IFieldSerializer>::type serializerType;
+
+		type->mFields.Add(new VectorFieldInfo(name, offset, valType, section, new serializerType(),
+						  new VectorFieldInfo::VectorHelper<_type>()));
 		return *type->mFields.Last();
 	}
 

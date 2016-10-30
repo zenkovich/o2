@@ -70,6 +70,16 @@ namespace o2
 		return mnew FieldInfo(*this);
 	}
 
+	bool FieldInfo::IsVector() const
+	{
+		return false;
+	}
+
+	bool FieldInfo::IsDictionary() const
+	{
+		return false;
+	}
+
 	FieldInfo& FieldInfo::AddAttribute(IAttribute* attribute)
 	{
 		attribute->mOwnerFieldInfo = this;
@@ -154,6 +164,38 @@ namespace o2
 			return mType->GetUnpointedType()->GetFieldPtr<char>(obj, path, fieldInfo);
 
 		return mType->GetFieldPtr<char>(obj, path, fieldInfo);
+	}
+
+	VectorFieldInfo::~VectorFieldInfo()
+	{
+		delete mHelper;
+	}
+
+	FieldInfo* VectorFieldInfo::Clone() const
+	{
+		VectorFieldInfo* copy = new VectorFieldInfo(*this);
+		copy->mHelper = mHelper->Clone();
+		return copy;
+	}
+
+	bool VectorFieldInfo::IsVector() const
+	{
+		return true;
+	}
+
+	int VectorFieldInfo::GetValueSize(void* object) const
+	{
+		return mHelper->GetSize(GetValuePtr<char*>(object));
+	}
+
+	void VectorFieldInfo::SetValueSize(void* object, int size) const
+	{
+		mHelper->SetSize(GetValuePtr<char*>(object), size);
+	}
+
+	void* VectorFieldInfo::GetValueAt(int idx, void* object) const
+	{
+		return mHelper->GetValue(GetValuePtr<char*>(object), idx);
 	}
 
 }

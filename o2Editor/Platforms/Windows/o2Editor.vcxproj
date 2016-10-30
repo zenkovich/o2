@@ -254,6 +254,7 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IPropertyField.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.h" />
@@ -315,6 +316,7 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\IPropertyField.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\IntegerProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.cpp" />
