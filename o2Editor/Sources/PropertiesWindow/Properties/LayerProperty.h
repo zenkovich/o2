@@ -38,6 +38,12 @@ namespace Editor
 		// Returns is values different
 		bool IsValuesDifferent() const;
 
+		// Sets value
+		void SetValue(Scene::Layer* value);
+
+		// Sets value as unknown
+		void SetUnknownValue();
+
 		// Returns editing by this field type
 		const Type* GetFieldType() const;
 
@@ -57,6 +63,9 @@ namespace Editor
 	protected:
 		// Selects layer
 		void SelectLayer(const WString& name);
+
+		// Updates drop down by value
+		void UpdateDropDownValue();
 	};
 }
 

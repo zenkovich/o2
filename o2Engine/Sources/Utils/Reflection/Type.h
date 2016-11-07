@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Utils/Delegates.h"
 #include "Utils/Math/Basis.h"
 #include "Utils/Math/Color.h"
 #include "Utils/Math/Rect.h"
@@ -8,6 +9,7 @@
 #include "Utils/Property.h"
 #include "Utils/Reflection/FieldInfo.h"
 #include "Utils/Reflection/FunctionInfo.h"
+#include "Utils/Reflection/TypeTraits.h"
 #include "Utils/String.h"
 #include "Utils/UID.h"
 
@@ -15,14 +17,19 @@
 
 namespace o2
 {
-	class IObject; 
+	class IObject;
 
-	// -----------------------
-	// Object type information
-	// -----------------------
+	// -----------
+	// Object type
+	// -----------
 	class Type
 	{
 	public:
+		enum class Usage
+		{
+			Regular, Vector, Dictionary, StringAccessor
+		};
+
 		typedef UInt Id;
 		typedef Vector<FieldInfo*> FieldInfosVec;
 		typedef Vector<FunctionInfo*> FunctionsInfosVec;
@@ -35,7 +42,7 @@ namespace o2
 		Type(const String& name, ISampleCreator* creator, int size);
 
 		// Destructor
-		~Type();
+		virtual ~Type();
 
 		// Check equals operator
 		bool operator==(const Type& other) const;
@@ -63,6 +70,9 @@ namespace o2
 
 		// Is type pointer
 		bool IsPointer() const;
+
+		// Returns type usage
+		virtual Usage GetUsage() const;
 
 		// Returns vector of base types
 		const TypesVec& BaseTypes() const;
@@ -96,8 +106,7 @@ namespace o2
 		void* CreateSample() const;
 
 		// Returns filed pointer by path
-		template<typename _type>
-		_type* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
 
 		// Returns field path by pointer from source object
 		String GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const;
@@ -106,10 +115,7 @@ namespace o2
 		// --------------------
 		// Dummy type container
 		// --------------------
-		struct Dummy
-		{
-			static Type* type;
-		};
+		struct Dummy { static Type* type; };
 
 		// -----------------------------
 		// Type sample creator interface
@@ -131,11 +137,11 @@ namespace o2
 		};
 
 	protected:
+		Id                mId;            // Id of type
 		String            mName;          // Name of object type
+		TypesVec          mBaseTypes;     // Base types ids
 		FieldInfosVec     mFields;        // Fields information
 		FunctionsInfosVec mFunctions;     // Functions informations
-		Id                mId;            // Id of type
-		TypesVec          mBaseTypes;     // Base types ids
 		ISampleCreator*   mSampleCreator; // Template type agent
 		int               mPointer;       // Amount of pointers of type
 		mutable Type*     mPtrType;       // Pointer type from this
@@ -145,16 +151,132 @@ namespace o2
 		void(*mInitializeFunc)(Type*);    // Type initializing function
 
 	protected:
-		// Sets name for this and pointer/unpoint types
-		void SetName(const String& name);
+		// Searches field recursively by pointer
+		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
+										   Vector<void*>& passedObjects) const;
 
 		friend class FieldInfo;
 		friend class FunctionInfo;
 		friend class Reflection;
 		friend class TypeInitializer;
+		friend class VectorType;
 
 		template<typename _type>
-		friend class AccessorFieldInfo;
+		friend class StringPointerAccessorType;
+	};
+
+	// ----------------------
+	// Type of Vector<> value
+	// ----------------------
+	class VectorType: public Type
+	{
+	public:
+		// Default constructor
+		template<typename _element_type>
+		VectorType(_element_type* x);
+
+		// Returns type usage
+		virtual Usage GetUsage() const;
+
+		// Returns type of vector element
+		const Type* GetElementType() const;
+
+		// Returns size of vector by pointer
+		int GetObjectVectorSize(void* object) const;
+
+		// Sets size of vector by pointer
+		void SetObjectVectorSize(void* object, int size) const;
+
+		// Returns element's pointer by index
+		void* GetObjectVectorElementPtr(void* object, int idx) const;
+
+		// Returns filed pointer by path
+		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+
+	protected:
+		const Type* mElementType;
+
+		SharedLambda<int(void*)>        mGetVectorObjectSizeFunc;
+		SharedLambda<void(void*, int)>  mSetVectorObjectSizeFunc;
+		SharedLambda<void*(void*, int)> mGetObjectVectorElementPtrFunc;
+
+	protected:
+		// Searches field recursively by pointer
+		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
+										   Vector<void*>& passedObjects) const;
+	};
+
+	// --------------------------
+	// Type of Dictionary<> value
+	// --------------------------
+	class DictionaryType: public Type
+	{
+	public:
+		// Default constructor
+		template<typename _key_type, typename _value_type>
+		DictionaryType(_key_type* x, _value_type* y);
+
+		// Returns type usage
+		virtual Usage GetUsage() const;
+
+		// Returns type of dictionary key
+		const Type* GetKeyType() const;
+
+		// Returns type of dictionary value
+		const Type* GetValueType() const;
+
+		// Returns size of dictionary by pointer
+		int GetObjectDictionarySize(void* object) const;
+
+		// Sets size of dictionary by pointer
+		void SetObjectDictionarySize(void* object, int size) const;
+
+		// Returns element's key pointer by index
+		void* GetObjectDictionaryKeyPtr(void* object, int idx) const;
+
+		// Returns element's value pointer by index
+		void* GetObjectDictionaryValuePtr(void* object, int idx) const;
+
+		// Returns filed pointer by path
+		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+
+	protected:
+		const Type* mKeyType;
+		const Type* mValueType;
+
+		SharedLambda<int(void*)>        mGetDictionaryObjectSizeFunc;
+		SharedLambda<void(void*, int)>  mSetDictionaryObjectSizeFunc;
+		SharedLambda<void*(void*, int)> mGetObjectDictionaryKeyPtrFunc;
+		SharedLambda<void*(void*, int)> mGetObjectDictionaryValuePtrFunc;
+
+	protected:
+		// Searches field recursively by pointer
+		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
+										   Vector<void*>& passedObjects) const;
+	};
+
+	// -------------------------------------------
+	// Accessor<_return_type*, const String&> type
+	// -------------------------------------------
+	template<typename _return_type>
+	class StringPointerAccessorType: public Type
+	{
+	public:
+		StringPointerAccessorType();
+
+		// Returns type usage
+		virtual Usage GetUsage() const;
+
+		// Returns filed pointer by path
+		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+
+	protected:
+		const Type* mReturnType;
+
+	protected:
+		// Searches field recursively by pointer
+		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
+										   Vector<void*>& passedObjects) const;
 	};
 
 	// --------------------------
@@ -166,46 +288,6 @@ namespace o2
 	public:
 		static Type* type;
 	};
-
-	template<typename T, typename X = 	
-		    std::conditional<std::is_base_of<IObject, T>::value, 
-		        T,
-		    //else
-		        std::conditional<(std::is_fundamental<T>::value ||
-		                         std::is_same<T, Basis>::value ||
-		                         std::is_same<T, Color4>::value ||
-		                         std::is_same<T, RectI>::value ||
-		                         std::is_same<T, RectF>::value ||
-		                         std::is_same<T, Vec2I>::value ||
-		                         std::is_same<T, Vec2F>::value ||
-		                         std::is_same<T, Vertex2>::value ||
-								 std::is_same<T, String>::value ||
-								 std::is_same<T, WString>::value ||
-		                         std::is_same<T, UID>::value ||
-		                         std::is_same<T, DataNode>::value) && !std::is_const<T>::value,
-		            FundamentalType<T>,
-		        //else
-		            Type::Dummy
-		        >::type
-			>::type>
-	struct TypeDeductor
-	{
-		typedef X type;
-	};
-
-	template<typename _type>
-	const Type& GetTypeOf()
-	{
-		if (std::is_pointer<_type>::value)
-			return *GetTypeOf<std::remove_pointer<_type>::type>().GetPointerType();
-
-
-		return *std::conditional<std::is_pointer<_type>::value, 
-			        TypeDeductor<std::remove_pointer<_type>::type>::type,
-			    //else
-			        TypeDeductor<_type>::type
-		        >::type::type;
-	}
 
 	// ----------------
 	// Type initializer
@@ -219,23 +301,7 @@ namespace o2
 
 		// Registers field in type
 		template<typename _type>
-		static FieldInfo& RegField(Type* type, const String& name, UInt offset, _type*& value, ProtectSection section);
-
-		// Registers field in type
-		template<typename _type>
 		static FieldInfo& RegField(Type* type, const String& name, UInt offset, _type& value, ProtectSection section);
-
-		// Registers field in type
-		template<typename _type>
-		static FieldInfo& RegField(Type* type, const String& name, UInt offset, Vector<_type>& value, ProtectSection section);
-
-		// Registers field in type
-		template<typename _type>
-		static FieldInfo& RegField(Type* type, const String& name, UInt offset, Property<_type>& value, ProtectSection section);
-
-		// Registers field in type
-		template<typename _type>
-		static FieldInfo& RegField(Type* type, const String& name, UInt offset, Accessor<_type*, const String&>& value, ProtectSection section);
 
 		// Registers function in type
 		template<typename _class_type, typename _res_type, typename ... _args>
@@ -246,6 +312,10 @@ namespace o2
 		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section);
 	};
 
+	// -------------------------------
+	// Types meta information macroses
+	// -------------------------------
+	// 
 #define CLASS_META(NAME)                                                \
     o2::Type* NAME::type = o2::Reflection::InitializeType<NAME>(#NAME); \
     void NAME::InitializeType(o2::Type* type)                           \
@@ -302,41 +372,9 @@ namespace o2
 
 #define END_META }
 
-	template<typename _type>
-	_type* Type::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
-	{
-		int delPos = path.Find("/");
-		WString pathPart = path.SubStr(0, delPos);
-
-		for (auto baseType : mBaseTypes)
-		{
-			if (auto res = baseType->GetFieldPtr<_type>(object, path, fieldInfo))
-				return res;
-		}
-
-		for (auto field : mFields)
-		{
-			if (field->mName == pathPart)
-			{
-				if (delPos == -1)
-				{
-					fieldInfo = field;
-					return field->GetValuePtr<_type>(object);
-				}
-				else
-				{
-					char* val = field->GetValuePtr<char>(object);
-
-					if (!val)
-						return nullptr;
-
-					return (_type*)(field->SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo));
-				}
-			}
-		}
-
-		return nullptr;
-	}
+	// -------------------
+	// Type implementation
+	// -------------------
 
 	template<typename _res_type, typename ... _args>
 	_res_type Type::Invoke(const String& name, void* object, _args ... args)
@@ -347,6 +385,134 @@ namespace o2
 
 		return _res_type();
 	}
+
+	// -------------------------
+	// VectorType implementation
+	// -------------------------
+
+	template<typename _element_type>
+	VectorType::VectorType(_element_type* x):
+		Type((String)"o2::Vector<" + GetTypeOf<_element_type>().Name() + ">", new SampleCreator<Vector<_element_type>>(),
+			 sizeof(Vector<_element_type>))
+	{
+		mElementType = &GetTypeOf<_element_type>();
+
+		mGetVectorObjectSizeFunc = [](void* obj) { return ((Vector<_element_type>*)obj)->Count(); };
+
+		mSetVectorObjectSizeFunc = [](void* obj, int size) { 
+			auto vectorObj = ((Vector<_element_type>*)obj);
+			int oldSize = vectorObj->Count();
+			vectorObj->Resize(size);
+
+			for (int i = oldSize; i < size; i++)
+				(*vectorObj)[i] = _element_type();
+		};
+
+		mGetObjectVectorElementPtrFunc = [](void* obj, int idx) { return &((Vector<_element_type>*)obj)->Get(idx); };
+	}
+
+	// -----------------------------
+	// DictionaryType implementation
+	// ----------------------------- 
+
+	template<typename _key_type, typename _value_type>
+	DictionaryType::DictionaryType(_key_type* x, _value_type* y):
+		Type((String)"o2::Dictionary<" + GetTypeOf<_key_type>().Name() + ", " + GetTypeOf<_value_type>().Name() + ">",
+			 new SampleCreator<Dictionary<_key_type, _value_type>>, sizeof(Dictionary<_key_type, _value_type>))
+	{
+		mKeyType = &GetTypeOf<_key_type>();
+		mValueType = &GetTypeOf<_value_type>();
+
+		mGetDictionaryObjectSizeFunc = [](void* obj) { return ((Dictionary<_key_type, _value_type>*)obj)->Count(); };
+		mSetDictionaryObjectSizeFunc = [](void* obj, int size) { ((Dictionary<_key_type, _value_type>*)obj)->Resize(size); };
+
+		mGetObjectDictionaryKeyPtrFunc = [](void* obj, int idx) {
+			return &(((Dictionary<_key_type, _value_type>*)obj)->Begin() + idx).Key();
+		};
+
+		mGetObjectDictionaryValuePtrFunc = [](void* obj, int idx) {
+			return &(((Dictionary<_key_type, _value_type>*)obj)->Begin() + idx).Value();
+		};
+	}
+
+	// ----------------------------------------
+	// StringPointerAccessorType implementation
+	// ----------------------------------------
+
+	template<typename _return_type>
+	StringPointerAccessorType<_return_type>::StringPointerAccessorType():
+		Type((String)"Accessor<" + GetTypeOf<_return_type>().Name() + "*, const o2::String&>",
+			 new SampleCreator<Accessor<_return_type*, const String&>>(),
+			 sizeof(Accessor<_return_type*, const String&>))
+	{
+		mReturnType = &GetTypeOf<_return_type>();
+	}
+
+	template<typename _return_type>
+	Type::Usage StringPointerAccessorType<_return_type>::GetUsage() const
+	{
+		return Usage::StringAccessor;
+	}
+
+	template<typename _return_type>
+	void* StringPointerAccessorType<_return_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	{
+		int delPos = path.Find("/");
+		String pathPart = path.SubStr(0, delPos);
+
+		Accessor<_return_type*, const String&>* accessor = ((Accessor<_return_type*, const String&>*)object);
+
+		auto allFromAccessor = accessor->GetAll();
+		for (auto kv : allFromAccessor)
+		{
+			if (kv.Key() == pathPart)
+				return mReturnType->GetFieldPtr(kv.Value(), path.SubStr(delPos + 1), fieldInfo);
+		}
+
+		return nullptr;
+	}
+
+	template<typename _return_type>
+	FieldInfo* StringPointerAccessorType<_return_type>::SearchFieldPath(void* obj, void* target, const String& path, String& res,
+																		Vector<void*>& passedObjects) const
+	{
+		Accessor<_return_type*, const String&>* accessor = ((Accessor<_return_type*, const String&>*)obj);
+
+		auto allFromAccessor = accessor->GetAll();
+		auto allFields = mReturnType->AllFields();
+		for (auto kv : allFromAccessor)
+		{
+			for (auto field : allFields)
+			{
+				void* fieldObj = field->GetValuePtr(kv.Value());
+
+				if (fieldObj == nullptr)
+					continue;
+
+				if (passedObjects.Contains(fieldObj))
+					continue;
+
+				passedObjects.Add(fieldObj);
+
+				String newPath = path + "/" + kv.Key() + "/" + field->mName;
+				if (fieldObj == target)
+				{
+					res = newPath;
+					return field;
+				}
+
+				FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res, passedObjects);
+				if (childField)
+					return childField;
+			}
+		}
+
+		return nullptr;
+	}
+
+	// ------------------------------
+	// TypeInitializer implementation
+	// ------------------------------
 
 	template<typename _type, typename X>
 	void TypeInitializer::AddBaseType(Type*& type)
@@ -360,63 +526,17 @@ namespace o2
 	}
 
 	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type*& value, ProtectSection section)
-	{
-		auto valType = &TypeOf(_type*);
-		typedef std::conditional<DataNode::IsSupport<_type*>::value,
-			FieldInfo::FieldSerializer<_type*>,
-			FieldInfo::IFieldSerializer>::type serializerType;
-
-		type->mFields.Add(new FieldInfo(name, offset, false, true, valType, section, new serializerType()));
-		return *type->mFields.Last();
-	}
-
-	template<typename _type>
 	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type& value, ProtectSection section)
 	{
 		auto valType = &TypeOf(_type);
+		bool isProperty = IsProperty<_type>::value;
+		bool isPointer = std::is_pointer<_type>::value;
+
 		typedef std::conditional<DataNode::IsSupport<_type>::value,
 			FieldInfo::FieldSerializer<_type>,
 			FieldInfo::IFieldSerializer>::type serializerType;
 
-		type->mFields.Add(new FieldInfo(name, offset, false, false, valType, section, new serializerType()));
-		return *type->mFields.Last();
-	}
-
-	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Vector<_type>& value, ProtectSection section)
-	{
-		auto valType = &TypeOf(Vector<_type>);
-		typedef std::conditional<DataNode::IsSupport<Vector<_type>>::value,
-			FieldInfo::FieldSerializer<Vector<_type>>,
-			FieldInfo::IFieldSerializer>::type serializerType;
-
-		type->mFields.Add(new VectorFieldInfo(name, offset, valType, section, new serializerType(),
-						  new VectorFieldInfo::VectorHelper<_type>()));
-		return *type->mFields.Last();
-	}
-
-	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Property<_type>& value, ProtectSection section)
-	{
-		auto valType = &TypeOf(_type);
-		typedef std::conditional<DataNode::IsSupport<Property<_type>>::value,
-			FieldInfo::FieldSerializer<Property<_type>>,
-			FieldInfo::IFieldSerializer>::type serializerType;
-
-		type->mFields.Add(new FieldInfo(name, offset, true, false, valType, section, new serializerType()));
-		return *type->mFields.Last();
-	}
-
-	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, Accessor<_type*, const String&>& value, ProtectSection section)
-	{
-		auto valType = &TypeOf(_type);
-		typedef std::conditional<DataNode::IsSupport<Accessor<_type*, const String&>>::value,
-			FieldInfo::FieldSerializer<Accessor<_type*, const String&>>,
-			FieldInfo::IFieldSerializer>::type serializerType;
-
-		type->mFields.Add(new AccessorFieldInfo<_type>(name, offset, valType, section, new serializerType()));
+		type->mFields.Add(new FieldInfo(name, offset, isProperty, isPointer, valType, section, new serializerType()));
 		return *type->mFields.Last();
 	}
 
@@ -453,4 +573,4 @@ namespace o2
 
 		return funcInfo;
 	}
-}
+	}

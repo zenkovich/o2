@@ -19,6 +19,8 @@ namespace Editor
 	class IPropertyField: public IObject
 	{
 	public:
+		Function<void()> onChanged; // Change value by user event
+
 		// Virtual destructor
 		virtual ~IPropertyField() {}
 
@@ -35,7 +37,7 @@ namespace Editor
 		virtual const Type* GetFieldType() const { return &TypeOf(void); }
 
 		// Specializes field type
-		virtual void SpecializeType(const FieldInfo* info) {}
+		virtual void SpecializeType(const Type* type) {}
 
 		IOBJECT(IPropertyField);
 	};

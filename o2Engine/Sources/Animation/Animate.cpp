@@ -188,7 +188,7 @@ namespace o2
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
-			if (mAnimation.GetTarget()->GetType().GetFieldPtr<Color4>((void*)mAnimation.GetTarget(), nameVariant, fi))
+			if (mAnimation.GetTarget()->GetType().GetFieldPtr((void*)mAnimation.GetTarget(), nameVariant, fi))
 			{
 				mColorAnimatedValue = mAnimation.AddAnimationValue<Color4>(nameVariant);
 				return;
@@ -206,7 +206,7 @@ namespace o2
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
-			if (mAnimation.GetTarget()->GetType().GetFieldPtr<Vec2F>((void*)mAnimation.GetTarget(), nameVariant, fi))
+			if (mAnimation.GetTarget()->GetType().GetFieldPtr((void*)mAnimation.GetTarget(), nameVariant, fi))
 			{
 				mPositionAnimatedValue = mAnimation.AddAnimationValue<Vec2F>(nameVariant);
 				return;
@@ -224,7 +224,7 @@ namespace o2
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
-			if (mAnimation.GetTarget()->GetType().GetFieldPtr<Vec2F>((void*)mAnimation.GetTarget(), nameVariant, fi))
+			if (mAnimation.GetTarget()->GetType().GetFieldPtr((void*)mAnimation.GetTarget(), nameVariant, fi))
 			{
 				mScaleAnimatedValue = mAnimation.AddAnimationValue<Vec2F>(nameVariant);
 				return;
@@ -242,7 +242,7 @@ namespace o2
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
-			if (mAnimation.GetTarget()->GetType().GetFieldPtr<float>((void*)mAnimation.GetTarget(), nameVariant, fi))
+			if (mAnimation.GetTarget()->GetType().GetFieldPtr((void*)mAnimation.GetTarget(), nameVariant, fi))
 			{
 				mRotationAnimatedValue = mAnimation.AddAnimationValue<float>(nameVariant);
 				return;

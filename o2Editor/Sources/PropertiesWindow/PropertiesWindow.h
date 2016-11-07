@@ -52,16 +52,19 @@ namespace Editor
 		void BuildTypeViewer(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo);
 
 		// Creates field property by type field info
-		Pair<IPropertyField*, UIWidget*> CreateFieldProperty(const FieldInfo* fieldInfo);
+		Pair<IPropertyField*, UIWidget*> CreateFieldProperty(const Type* type);
 
 		// Returns available field by type
 		IPropertyField* GetFieldPropertyPrototype(const Type* type);
 
 		// Creates regular primitive property field
-		Pair<IPropertyField*, UIWidget*> CreateRegularField(IPropertyField* fieldSample, const FieldInfo* fieldInfo);
+		Pair<IPropertyField*, UIWidget*> CreateRegularField(IPropertyField* fieldSample, const String& name);
 
 		// Creates object field
-		Pair<IPropertyField*, UIWidget*> CreateObjectField(const FieldInfo* fieldInfo);
+		Pair<IPropertyField*, UIWidget*> CreateObjectField(const Type* type);
+
+		// Creates vector field
+		Pair<IPropertyField*, UIWidget*> CreateVectorField(const Type* type);
 
 		// Makes smarter field name
 		static String MakeSmartFieldName(const String& fieldName);

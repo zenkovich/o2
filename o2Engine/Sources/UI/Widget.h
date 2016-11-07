@@ -358,6 +358,10 @@ namespace o2
 			if (child->GetType() == TypeOf(_type))
 				return (_type*)child;
 
+		for (auto child : mChilds)
+			if (auto res = child->FindChild<_type>())
+				return res;
+
 		return nullptr;
 	}
 

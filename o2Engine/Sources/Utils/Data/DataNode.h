@@ -382,7 +382,7 @@ namespace o2
 	// Type and type getting forward declaration
 	class Type;
 
-	template<typename _type>
+	template<typename _type, typename _getter>
 	const Type& GetTypeOf();
 
 	template<typename _type, typename X>

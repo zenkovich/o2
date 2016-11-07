@@ -14,7 +14,7 @@ namespace Editor
 		for (auto fieldInfo : fields)
 		{
 			Vector<void*> fieldPointers = targets.Select<void*>(
-				[&](IObject* x) { return fieldInfo->GetValuePtrStrong<char>(x); });
+				[&](IObject* x) { return fieldInfo->GetValuePtrStrong(x); });
 
 			IPropertyField* propertyField;
 			if (properties.TryGetValue(fieldInfo, propertyField))

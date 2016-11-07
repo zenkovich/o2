@@ -794,7 +794,7 @@ namespace o2
 
 		Reserve(GetReservingSize(newCount));
 
-		if (mCount < newCount)
+		if (mCount > newCount)
 		{
 			for (int i = newCount; i < mCount; i++)
 				mValues[i].~_type();

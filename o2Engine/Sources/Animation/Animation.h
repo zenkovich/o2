@@ -435,7 +435,7 @@ namespace o2
 		if (mTarget)
 		{
 			FieldInfo* fieldInfo = nullptr;
-			def.mTargetPtr = mTarget->GetType().GetFieldPtr<_type>(mTarget, path, fieldInfo);
+			def.mTargetPtr = (_type*)mTarget->GetType().GetFieldPtr(mTarget, path, fieldInfo);
 
 			if (!fieldInfo)
 			{

@@ -197,6 +197,9 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp">
@@ -380,6 +383,9 @@
       <Filter>Sources\Windows</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.cpp">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
   </ItemGroup>

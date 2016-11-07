@@ -41,7 +41,7 @@ namespace Editor
 		const Type* GetFieldType() const;
 
 		// Specializes field type
-		void SpecializeType(const FieldInfo* info);
+		void SpecializeType(const Type* type);
 
 		// Expands property fields
 		void Expand();
@@ -58,13 +58,13 @@ namespace Editor
 		IOBJECT(ObjectProperty);
 
 	protected:
-		const Type*         mObjectType;       // Type of target objects
-		Vector<IObject*>    mTargetObjects;    // Target objects
-		FieldPropertiesInfo mFieldProperties;  // Field properties information
-		UIVerticalLayout*   mLayout;           // Property layout
-		UILabel*            mNameLabel;        // Name label
-		UIButton*           mExpandButton;     // Spoiler expanding button
-		UISpoiler*          mSpoiler;          // Properties spoiler
-		UIVerticalLayout*   mPropertiesLayout; // Properties vertical layout
+		const Type*         mObjectType = nullptr;       // Type of target objects
+		Vector<IObject*>    mTargetObjects;              // Target objects
+		FieldPropertiesInfo mFieldProperties;            // Field properties information
+		UIVerticalLayout*   mLayout = nullptr;           // Property layout
+		UILabel*            mNameLabel = nullptr;        // Name label
+		UIButton*           mExpandButton = nullptr;     // Spoiler expanding button
+		UISpoiler*          mSpoiler = nullptr;          // Properties spoiler
+		UIVerticalLayout*   mPropertiesLayout = nullptr; // Properties vertical layout
 	};
 }

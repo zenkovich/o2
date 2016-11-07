@@ -193,7 +193,7 @@ namespace o2
 		newAgent->animValues.Add(state, value);
 
 		FieldInfo* fieldInfo = nullptr;
-		_type* fieldPtr = GetType().GetFieldPtr<_type>(this, path, fieldInfo);
+		_type* fieldPtr = (_type*)GetType().GetFieldPtr(this, path, fieldInfo);
 
 		if (!fieldInfo)
 		{

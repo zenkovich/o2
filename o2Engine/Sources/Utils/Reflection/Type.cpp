@@ -1,7 +1,8 @@
 #include "Type.h"
 
-#include "Utils/Reflection/Reflection.h"
+#include "Utils/Data/DataNode.h"
 #include "Utils/IObject.h"
+#include "Utils/Reflection/Reflection.h"
 
 namespace o2
 {
@@ -14,6 +15,16 @@ namespace o2
 	{
 		for (auto field : mFields)
 			delete field;
+	}
+
+	bool Type::operator!=(const Type& other) const
+	{
+		return other.mId != mId;
+	}
+
+	bool Type::operator==(const Type& other) const
+	{
+		return other.mId == mId;
 	}
 
 	const String& Type::Name() const
@@ -67,6 +78,11 @@ namespace o2
 	bool Type::IsPointer() const
 	{
 		return mPointer > 0;
+	}
+
+	Type::Usage Type::GetUsage() const
+	{
+		return Usage::Regular;
 	}
 
 	const Type::TypesVec& Type::BaseTypes() const
@@ -166,7 +182,7 @@ namespace o2
 
 		for (auto field : mFields)
 		{
-			char* fieldObject = field->GetValuePtr<char>(sourceObject);
+			void* fieldObject = field->GetValuePtr(sourceObject);
 
 			if (fieldObject == nullptr)
 				continue;
@@ -192,21 +208,212 @@ namespace o2
 		return res;
 	}
 
-	void Type::SetName(const String& name)
+	FieldInfo* Type::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+									 Vector<void*>& passedObjects) const
 	{
-		mName = name;
+		auto allFields = AllFields();
+		for (auto field : allFields)
+		{
+			void* fieldObj = field->GetValuePtr(obj);
 
-		if (mPtrType)
-			mPtrType->SetName(name + "*");
+			if (fieldObj == nullptr)
+				continue;
+
+			if (passedObjects.Contains(fieldObj))
+				continue;
+
+			passedObjects.Add(fieldObj);
+
+			if (fieldObj == target)
+			{
+				res = path + "/" + field->mName;
+				return field;
+			}
+
+			FieldInfo* childField = field->SearchFieldPath(fieldObj, target, path + "/" + field->mName, res, passedObjects);
+			if (childField)
+				return childField;
+		}
+
+		return nullptr;
+	}
+	
+	void* Type::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	{
+		int delPos = path.Find("/");
+		WString pathPart = path.SubStr(0, delPos);
+
+		for (auto baseType : mBaseTypes)
+		{
+			if (auto res = baseType->GetFieldPtr(object, path, fieldInfo))
+				return res;
+		}
+
+		for (auto field : mFields)
+		{
+			if (field->mName == pathPart)
+			{
+				if (delPos == -1)
+				{
+					fieldInfo = field;
+					return field->GetValuePtr(object);
+				}
+				else
+				{
+					void* val = field->GetValuePtr(object);
+
+					if (!val)
+						return nullptr;
+
+					return field->SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo);
+				}
+			}
+		}
+
+		return nullptr;
 	}
 
-	bool Type::operator!=(const Type& other) const
+	Type::Usage VectorType::GetUsage() const
 	{
-		return other.mId != mId;
+		return Usage::Vector;
 	}
 
-	bool Type::operator==(const Type& other) const
+	const Type* VectorType::GetElementType() const
 	{
-		return other.mId == mId;
+		return mElementType;
 	}
+
+	int VectorType::GetObjectVectorSize(void* object) const
+	{
+		return mGetVectorObjectSizeFunc(object);
+	}
+
+	void VectorType::SetObjectVectorSize(void* object, int size) const
+	{
+		mSetVectorObjectSizeFunc(object, size);
+	}
+
+	void* VectorType::GetObjectVectorElementPtr(void* object, int idx) const
+	{
+		return mGetObjectVectorElementPtrFunc(object, idx);
+	}
+
+	void* VectorType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	{
+		int delPos = path.Find("/");
+		String pathPart = path.SubStr(0, delPos);
+
+		int count = GetObjectVectorSize(object);
+		int idx = (int)pathPart;
+
+		if (idx < count)
+			return mElementType->GetFieldPtr(GetObjectVectorElementPtr(object, idx), path.SubStr(delPos + 1), fieldInfo);
+
+		return nullptr;
+	}
+
+	FieldInfo* VectorType::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+										   Vector<void*>& passedObjects) const
+	{
+		int count = GetObjectVectorSize(obj);
+
+		auto allFields = mElementType->AllFields();
+		for (int i = 0; i < count; i++)
+		{
+			void* elementPtr = GetObjectVectorElementPtr(obj, i);
+			for (auto field : allFields)
+			{
+				void* fieldObj = field->GetValuePtr(elementPtr);
+
+				if (fieldObj == nullptr)
+					continue;
+
+				if (passedObjects.Contains(fieldObj))
+					continue;
+
+				passedObjects.Add(fieldObj);
+
+				String newPath = path + "/" + (String)i + "/" + field->Name();
+				if (fieldObj == target)
+				{
+					res = newPath;
+					return field;
+				}
+
+				FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res, passedObjects);
+				if (childField)
+					return childField;
+			}
+		}
+
+		return nullptr;
+	}
+
+	Type::Usage DictionaryType::GetUsage() const
+	{
+		return Usage::Dictionary;
+	}
+
+	const Type* DictionaryType::GetKeyType() const
+	{
+		return mKeyType;
+	}
+
+	const Type* DictionaryType::GetValueType() const
+	{
+		return mValueType;
+	}
+
+	int DictionaryType::GetObjectDictionarySize(void* object) const
+	{
+		return mGetDictionaryObjectSizeFunc(object);
+	}
+
+	void DictionaryType::SetObjectDictionarySize(void* object, int size) const
+	{
+		mSetDictionaryObjectSizeFunc(object, size);
+	}
+
+	void* DictionaryType::GetObjectDictionaryKeyPtr(void* object, int idx) const
+	{
+		return mGetObjectDictionaryKeyPtrFunc(object, idx);
+	}
+
+	void* DictionaryType::GetObjectDictionaryValuePtr(void* object, int idx) const
+	{
+		return mGetObjectDictionaryValuePtrFunc(object, idx);
+	}
+
+	void* DictionaryType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	{
+// 		int delPos = path.Find("/");
+// 		String pathPart = path.SubStr(0, delPos);
+// 		DataNode data;
+// 		data = pathPart;
+// 
+// 		int count = GetObjectDictionarySize(object);
+// 		int idx = (int)pathPart;
+// 
+// 		if (idx < count)
+// 			return mElementType->GetFieldPtr(GetObjectVectorElementPtr(object, idx), path.SubStr(delPos + 1), fieldInfo);
+
+		return nullptr;
+	}
+
+	FieldInfo* DictionaryType::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+											   Vector<void*>& passedObjects) const
+	{
+		return nullptr;
+	}
+
 }
+ 
+ENUM_META_(o2::Type::Usage, Usage)
+{
+	ENUM_ENTRY(Dictionary);
+	ENUM_ENTRY(Regular);
+	ENUM_ENTRY(StringAccessor);
+	ENUM_ENTRY(Vector);
+}
+END_ENUM_META;
+ 

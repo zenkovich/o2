@@ -34,6 +34,12 @@ namespace Editor
 		// Returns root widget
 		UIWidget* GetWidget() const;
 
+		// Sets value
+		void SetValue(int value);
+
+		// Sets value as unknown
+		void SetUnknownValue();
+
 		// Returns value
 		int GetCommonValue() const;
 

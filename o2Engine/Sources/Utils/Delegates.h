@@ -288,6 +288,8 @@ namespace o2
 		ILambdaInvoker* mInvokerPtr; // Lambda invoker pinter
 
 	public:
+		SharedLambda():mInvokerPtr(nullptr) {}
+
 		// Constructor
 		template<typename _lambda_type>
 		SharedLambda(const _lambda_type& lambda):
@@ -304,17 +306,23 @@ namespace o2
 		// Destructor
 		~SharedLambda()
 		{
-			mInvokerPtr->DecRef();
-			if (mInvokerPtr->RefCount() == 0)
-				delete mInvokerPtr;
+			if (mInvokerPtr)
+			{
+				mInvokerPtr->DecRef();
+				if (mInvokerPtr->RefCount() == 0)
+					delete mInvokerPtr;
+			}
 		}
 
 		// Copy-operator
 		SharedLambda& operator=(const SharedLambda& other)
 		{
-			mInvokerPtr->DecRef();
-			if (mInvokerPtr->RefCount() == 0)
-				delete mInvokerPtr;
+			if (mInvokerPtr)
+			{
+				mInvokerPtr->DecRef();
+				if (mInvokerPtr->RefCount() == 0)
+					delete mInvokerPtr;
+			}
 
 			mInvokerPtr = other.mInvokerPtr;
 			mInvokerPtr->IncRef();

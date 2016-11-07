@@ -47,6 +47,9 @@ namespace Editor
 		// Sets value actor
 		void SetValue(Actor* value);
 
+		// Sets value as unknown
+		void SetUnknownValue();
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
 

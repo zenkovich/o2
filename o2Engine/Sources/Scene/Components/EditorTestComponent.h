@@ -7,6 +7,7 @@
 #include "ImageComponent.h"
 #include "Scene/Component.h"
 #include "Scene/Tags.h"
+#include "Utils/Math/Curve.h"
 
 namespace o2
 {
@@ -45,9 +46,10 @@ namespace o2
 		Vertex2 mVertex;				           // @SERIALIZABLE
 		RectF mRectF;					           // @SERIALIZABLE
 		RectI mRectI;					           // @SERIALIZABLE
+		Curve mCurve;                              // @SERIALIZABLE
 		TestInside mTestInside;                    // @SERIALIZABLE
 
-		Vector<int> mIntVector;                    // @SERIALIZABLE
+		Vector<int> mIntVector ={ 1, 2, 3, 4, 5 }; // @SERIALIZABLE
 		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE
 		Vector<Actor*> mActorVector;               // @SERIALIZABLE
 

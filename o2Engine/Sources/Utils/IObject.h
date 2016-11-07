@@ -25,8 +25,14 @@ namespace o2
 	private:
 		static Type* type;
 
-		template<typename _type>
+		template<typename _type, typename _getter>
 		friend const Type& o2::GetTypeOf();
+
+		template<typename T>
+		friend struct RegularTypeGetter;
+
+		template<typename T, typename X>
+		friend struct o2::GetTypeHelper;
 
 		friend class TypeInitializer;
 		friend class Reflection;
@@ -37,8 +43,14 @@ namespace o2
 private:                                               \
 	static o2::Type* type;							   \
                                                        \
-    template<typename _type>                           \
+    template<typename _type, typename _getter>         \
 	friend const o2::Type& o2::GetTypeOf();            \
+                                                       \
+	template<typename T>                               \
+	friend struct o2::RegularTypeGetter;               \
+                                                       \
+	template<typename T, typename X>                   \
+	friend struct o2::GetTypeHelper;                   \
                                                        \
     template<typename _type>                           \
     friend struct o2::Type::SampleCreator;             \

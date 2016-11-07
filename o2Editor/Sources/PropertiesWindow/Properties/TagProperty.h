@@ -38,6 +38,12 @@ namespace Editor
 		// Returns is values different
 		bool IsValuesDifferent() const;
 
+		// Sets value
+		void SetValue(const TagGroup& value);
+
+		// Sets value as unknown
+		void SetUnknownValue();
+
 		// Returns editing by this field type
 		const Type* GetFieldType() const;
 
@@ -56,6 +62,9 @@ namespace Editor
 		bool           mPushingTag = false; // Is pushing tag and we don't need to check edit text
 
 	protected:
+		// Updates edit box value
+		void UpdateEditBoxValue();
+
 		// Updates context menu data with filter
 		void UpdateContextData(const WString& filter);
 

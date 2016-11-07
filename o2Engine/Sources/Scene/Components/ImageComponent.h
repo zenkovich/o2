@@ -16,7 +16,7 @@ namespace o2
 	public:
 		Property<TextureRef> texture;          // Texture property
 		Property<RectI>      textureSrcRect;   // Texture source rectangle property
-		Property<UID>    imageAssetId;     // Image asset id property
+		Property<UID>        imageAssetId;     // Image asset id property
 		Setter<String>       imageAssetPath;   // Sets image asset from path
 		Setter<ImageAsset>   imageAsset;       // Sets image asset
 		Setter<Bitmap*>      bitmap;           // Sets image from bitmap

@@ -250,6 +250,9 @@ namespace o2
 		// Returns count of elements
 		int Count() const;
 
+		// Sets new count of elements
+		void Resize(int count);
+
 		// Returns count of elements which pass function
 		int Count(const Function<bool(const TKeyValue&)>& match) const;
 
@@ -809,6 +812,13 @@ namespace o2
 	{
 		return mPairs.Count();
 	}
+
+	template<typename _key_type, typename _value_type>
+	void Dictionary<_key_type, _value_type>::Resize(int count)
+	{
+		mPairs.Resize(count);
+	}
+
 
 	template<typename _key_type, typename _value_type>
 	bool Dictionary<_key_type, _value_type>::IsEmpty() const

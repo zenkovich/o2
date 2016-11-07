@@ -159,10 +159,10 @@ namespace o2
 			for (auto field : newComponent->GetType().Fields())
 			{
 				if (field->GetType().IsBasedOn(TypeOf(Component)))
-					componentsPointers.Add(field->GetValuePtrStrong<Component*>(newComponent));
+					componentsPointers.Add((Component**)(field->GetValuePtrStrong(newComponent)));
 
 				if (field->GetType() == TypeOf(Actor))
-					actorsPointers.Add(field->GetValuePtrStrong<Actor*>(newComponent));
+					actorsPointers.Add((Actor**)(field->GetValuePtrStrong(newComponent)));
 			}
 		}
 

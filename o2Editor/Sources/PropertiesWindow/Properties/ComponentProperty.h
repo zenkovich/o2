@@ -45,13 +45,16 @@ namespace Editor
 		const Type* GetFieldType() const;
 
 		// Specializes field type
-		void SpecializeType(const FieldInfo* info);
+		void SpecializeType(const Type* type);
 
 		// Returns specialized type
 		const Type* GetSpecializedType() const;
 
 		// Sets value actor
 		void SetValue(Component* value);
+
+		// Sets value as unknown
+		void SetUnknownValue();
 
 		IOBJECT(ComponentProperty);
 

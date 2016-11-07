@@ -42,26 +42,11 @@ namespace o2
 		FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, const Type* type, ProtectSection sect,
 				  IFieldSerializer* serializer);
 
-		// Copy-constructor
-		FieldInfo(const FieldInfo& other);
-
 		// Destructor
 		~FieldInfo();
 
-		// Copy-operator
-		FieldInfo& operator=(const FieldInfo& other);
-
 		// Equal operator
 		bool operator==(const FieldInfo& other) const;
-
-		// Returns cloned copy
-		virtual FieldInfo* Clone() const;
-
-		// Returns is field is vector
-		virtual bool IsVector() const;
-
-		// Returns is field is dictionary
-		virtual bool IsDictionary() const;
 
 		// Adds attribute
 		FieldInfo& AddAttribute(IAttribute* attribute);
@@ -73,24 +58,30 @@ namespace o2
 		// Returns name of field
 		const String& Name() const;
 
+		// Protection section
+		ProtectSection GetProtectionSection() const;
+
+		// Returns type
+		const Type& GetType() const;
+
 		// Returns is it property or not
 		bool IsProperty() const;
+
+		// Return is field is pointer
+		bool IsPointer() const;
 
 		// Returns value of field in specified object
 		template<typename _type>
 		_type GetValue(void* object) const;
 
 		// Returns value pointer of field in specified object (checks is it pointer)
-		template<typename _type>
-		_type* GetValuePtr(void* object) const;
+		void* GetValuePtr(void* object) const;
 
 		// Returns value pointer of field in specified object
-		template<typename _type>
-		const _type* GetValuePtrStrong(const void* object) const;
+		const void* GetValuePtrStrong(const void* object) const;
 
 		// Returns value pointer of field in specified object
-		template<typename _type>
-		_type* GetValuePtrStrong(void* object) const;
+		void* GetValuePtrStrong(void* object) const;
 
 		// Sets value of field in specified object
 		template<typename _type>
@@ -103,12 +94,6 @@ namespace o2
 		// Returns true if exist attribute with specified type
 		template<typename _attr_type>
 		bool HaveAttribute() const;
-
-		// Protection section
-		ProtectSection GetProtectionSection() const;
-
-		// Returns type
-		const Type& GetType() const;
 
 		// Returns attributes array
 		const AttributesVec& Attributes() const;
@@ -124,7 +109,7 @@ namespace o2
 		String            mName;           // Name of field
 		UInt              mOffset;         // Offset of field in bytes from owner address
 		bool              mIsProperty;     // Is it property or field
-		bool              mIsPtr;          // Is property Ptr<>
+		bool              mIsPointer;      // Is property pointer
 		const Type*       mType;           // Field type
 		AttributesVec     mAttributes;     // Attributes array
 		IFieldSerializer* mSerializer;     // field serializer
@@ -137,98 +122,19 @@ namespace o2
 		// Searches field recursively by path
 		virtual void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
 
+	private:
+		// Deprecated Copy-constructor
+		FieldInfo(const FieldInfo& other);
+
+		// Deprecated Copy-operator
+		FieldInfo& operator=(const FieldInfo& other);
+
+
 		friend class Type;
+		friend class VectorType;
 
 		template<typename _type>
-		friend class AccessorFieldInfo;
-	};
-
-	// -------------------
-	// Accessor field info
-	// -------------------
-	template<typename _type>
-	class AccessorFieldInfo: public FieldInfo
-	{
-	public:
-		// Default constructor
-		AccessorFieldInfo():FieldInfo() {}
-
-		// Constructor
-		AccessorFieldInfo(const String& name, UInt offset, const Type* type, ProtectSection sect,
-						  IFieldSerializer* serializer):
-			FieldInfo(name, offset, false, false, type, sect, serializer)
-		{}
-
-        // Returns cloned copy
-		virtual FieldInfo* Clone() const;
-
-	protected:
-		// Searches field recursively by pointer
-		FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-								   Vector<void*>& passedObjects);
-
-		// Searches field recursively by path
-		void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
-	};
-
-	// -----------------
-	// Vector field info
-	// -----------------
-	class VectorFieldInfo: public FieldInfo
-	{
-	protected:
-		struct IVectorHelper;
-
-	public:
-		// Default constructor
-		VectorFieldInfo():FieldInfo() {}
-
-		// Constructor
-		VectorFieldInfo(const String& name, UInt offset, const Type* type, ProtectSection sect,
-						IFieldSerializer* serializer, IVectorHelper* helper) :
-			FieldInfo(name, offset, false, false, type, sect, serializer), mHelper(helper)
-		{}
-
-		~VectorFieldInfo();
-
-		// Returns cloned copy
-		virtual FieldInfo* Clone() const;
-
-		// Returns is field is vector
-		virtual bool IsVector() const;
-
-		// Returns size of vector field
-		int GetValueSize(void* object) const;
-
-		// Sets value size
-		void SetValueSize(void* object, int size) const;
-
-		// Returns pointer to vector field value from index
-		void* GetValueAt(int idx, void* object) const;
-
-	protected:
-		struct IVectorHelper
-		{
-			virtual ~IVectorHelper() {}
-			virtual int GetSize(void* target) const { return 0; }
-			virtual void SetSize(void* target, int size) {}
-			virtual void* GetValue(void* target, int idx) { return nullptr; }
-			virtual IVectorHelper* Clone() const { return nullptr; }
-		};
-
-		template<typename _type>
-		struct VectorHelper: public IVectorHelper
-		{
-			virtual int GetSize(void* target) const { return ((Vector<_type>*)target)->Count(); }
-			virtual void* GetValue(void* target, int idx) { return &((Vector<_type>*)target)->Get(idx); }
-			virtual void SetSize(void* target, int size) { ((Vector<_type>*)target)->Resize(size); }
-			virtual IVectorHelper* Clone() const { return new VectorHelper<_type>(); }
-		};
-
-	protected:
-		IVectorHelper* mHelper;
-
-		friend class TypeInitializer;
+		friend class StringPointerAccessorType;
 	};
 
 	template<typename _attr_type>
@@ -268,26 +174,6 @@ namespace o2
 		return *(_type*)((char*)object + mOffset);
 	}
 
-	template<typename _type>
-	const _type* FieldInfo::GetValuePtrStrong(const void* object) const
-	{
-		return (_type*)((char*)object + mOffset);
-	}
-
-	template<typename _type>
-	_type* FieldInfo::GetValuePtrStrong(void* object) const
-	{
-		return (_type*)((char*)object + mOffset);
-	}
-
-	template<typename _type>
-	_type* FieldInfo::GetValuePtr(void* object) const
-	{
-		if (mIsPtr) return *(_type**)((char*)object + mOffset);
-
-		return (_type*)((char*)object + mOffset);
-	}
-
 	template<typename _attr_type, typename ... _args>
 	FieldInfo& FieldInfo::AddAttribute(_args ... args)
 	{
@@ -295,72 +181,6 @@ namespace o2
 		attribute->mOwnerFieldInfo = this;
 		mAttributes.Add(attribute);
 		return *this;
-	}
-
-
-	template<typename _type>
-	FieldInfo* AccessorFieldInfo<_type>::Clone() const
-	{
-		return mnew AccessorFieldInfo<_type>(*this);
-	}
-
-	template<typename _type>
-	FieldInfo* AccessorFieldInfo<_type>::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-														 Vector<void*>& passedObjects)
-	{
-		if (!mType)
-			return false;
-
-		Accessor<_type*, const String&>* accessor = ((Accessor<_type*, const String&>*)obj);
-
-		auto allFromAccessor = accessor->GetAll();
-
-		for (auto kv : allFromAccessor)
-		{
-			for (auto field : mType->AllFields())
-			{
-				char* fieldObj = field->GetValuePtr<char>(kv.Value());
-
-				if (fieldObj == nullptr)
-					continue;
-
-				if (passedObjects.Contains(fieldObj))
-					continue;
-
-				passedObjects.Add(fieldObj);
-
-				String newPath = path + "/" + kv.Key() + "/" + field->mName;
-				if (fieldObj == target)
-				{
-					res = newPath;
-					return field;
-				}
-
-				FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res, passedObjects);
-				if (childField)
-					return childField;
-			}
-		}
-
-		return nullptr;
-	}
-
-	template<typename _type>
-	void* AccessorFieldInfo<_type>::SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo)
-	{
-		int delPos = path.Find("/");
-		String pathPart = path.SubStr(0, delPos);
-
-		Accessor<_type*, const String&>* accessor = ((Accessor<_type*, const String&>*)obj);
-		auto allFromAccessor = accessor->GetAll();
-
-		for (auto kv : allFromAccessor)
-		{
-			if (kv.Key() == pathPart)
-				return mType->GetFieldPtr<char>(kv.Value(), path.SubStr(delPos + 1), fieldInfo);
-		}
-
-		return nullptr;
 	}
 
 	template<typename _type>

@@ -5,26 +5,14 @@
 namespace o2
 {
 	FieldInfo::FieldInfo():
-		mOffset(0), mIsProperty(false), mType(nullptr), mIsPtr(false), mProtectSection(ProtectSection::Public)
+		mOffset(0), mIsProperty(false), mType(nullptr), mIsPointer(false), mProtectSection(ProtectSection::Public)
 	{}
 
 	FieldInfo::FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, const Type* type, 
 						 ProtectSection sect, IFieldSerializer* serializer):
-		mName(name), mOffset(offset), mIsProperty(isProperty), mType(type), mIsPtr(isPtr), mProtectSection(sect),
+		mName(name), mOffset(offset), mIsProperty(isProperty), mType(type), mIsPointer(isPtr), mProtectSection(sect),
 		mSerializer(serializer)
 	{}
-
-	FieldInfo::FieldInfo(const FieldInfo& other) :
-		mName(other.mName), mOffset(other.mOffset), mIsProperty(other.mIsProperty), mType(other.mType),
-		mIsPtr(other.mIsPtr), mProtectSection(other.mProtectSection), mSerializer(other.mSerializer->Clone())
-	{
-		for (auto attr : other.mAttributes)
-		{
-			IAttribute* newAttr = attr->Clone();
-			newAttr->mOwnerFieldInfo = this;
-			mAttributes.Add(newAttr);
-		}
-	}
 
 	FieldInfo::~FieldInfo()
 	{
@@ -34,50 +22,10 @@ namespace o2
 		delete mSerializer;
 	}
 
-	FieldInfo& FieldInfo::operator=(const FieldInfo& other)
-	{
-		for (auto attr : mAttributes)
-			delete attr;
-
-		delete mSerializer;
-
-		for (auto attr : other.mAttributes)
-		{
-			IAttribute* newAttr = attr->Clone();
-			newAttr->mOwnerFieldInfo = this;
-			mAttributes.Add(newAttr);
-		}
-
-		mName = other.mName;
-		mOffset = other.mOffset;
-		mIsProperty = other.mIsProperty;
-		mIsPtr = other.mIsPtr;
-		mType = other.mType;
-		mProtectSection = other.mProtectSection;
-		mSerializer = other.mSerializer->Clone();
-
-		return *this;
-	}
-
 	bool FieldInfo::operator==(const FieldInfo& other) const
 	{
 		return mName == other.mName && mOffset == other.mOffset && mIsProperty == other.mIsProperty &&
-			mAttributes == other.mAttributes;
-	}
-
-	FieldInfo* FieldInfo::Clone() const
-	{
-		return mnew FieldInfo(*this);
-	}
-
-	bool FieldInfo::IsVector() const
-	{
-		return false;
-	}
-
-	bool FieldInfo::IsDictionary() const
-	{
-		return false;
+			mAttributes == other.mAttributes && mIsPointer == other.mIsPointer && mProtectSection == other.mProtectSection;
 	}
 
 	FieldInfo& FieldInfo::AddAttribute(IAttribute* attribute)
@@ -95,6 +43,11 @@ namespace o2
 	bool FieldInfo::IsProperty() const
 	{
 		return mIsProperty;
+	}
+
+	bool FieldInfo::IsPointer() const
+	{
+		return mIsPointer;
 	}
 
 	ProtectSection FieldInfo::GetProtectionSection() const
@@ -128,31 +81,8 @@ namespace o2
 		if (!mType)
 			return nullptr;
 
-		auto type = mIsPtr ? mType->GetUnpointedType() : mType;
-		for (auto field : type->AllFields())
-		{
-			char* fieldObj = field->GetValuePtr<char>(obj);
-
-			if (fieldObj == nullptr)
-				continue;
-
-			if (passedObjects.Contains(fieldObj))
-				continue;
-
-			passedObjects.Add(fieldObj);
-
-			if (fieldObj == target)
-			{
-				res = path + "/" + field->mName;
-				return field;
-			}
-
-			FieldInfo* childField = field->SearchFieldPath(fieldObj, target, path + "/" + field->mName, res, passedObjects);
-			if (childField)
-				return childField;
-		}
-
-		return nullptr;
+		auto type = mIsPointer ? mType->GetUnpointedType() : mType;
+		return type->SearchFieldPath(obj, target, path, res, passedObjects);
 	}
 
 	void* FieldInfo::SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo)
@@ -160,42 +90,27 @@ namespace o2
 		if (!mType)
 			return nullptr;
 
-		if (mIsPtr)
-			return mType->GetUnpointedType()->GetFieldPtr<char>(obj, path, fieldInfo);
+		if (mIsPointer)
+			return mType->GetUnpointedType()->GetFieldPtr(obj, path, fieldInfo);
 
-		return mType->GetFieldPtr<char>(obj, path, fieldInfo);
+		return mType->GetFieldPtr(obj, path, fieldInfo);
 	}
 
-	VectorFieldInfo::~VectorFieldInfo()
+	void* FieldInfo::GetValuePtr(void* object) const
 	{
-		delete mHelper;
+		if (mIsPointer)
+			return *(void**)((char*)object + mOffset);
+
+		return (void*)((char*)object + mOffset);
 	}
 
-	FieldInfo* VectorFieldInfo::Clone() const
+	const void* FieldInfo::GetValuePtrStrong(const void* object) const
 	{
-		VectorFieldInfo* copy = new VectorFieldInfo(*this);
-		copy->mHelper = mHelper->Clone();
-		return copy;
+		return (void*)((char*)object + mOffset);
 	}
 
-	bool VectorFieldInfo::IsVector() const
+	void* FieldInfo::GetValuePtrStrong(void* object) const
 	{
-		return true;
+		return (void*)((char*)object + mOffset);
 	}
-
-	int VectorFieldInfo::GetValueSize(void* object) const
-	{
-		return mHelper->GetSize(GetValuePtr<char*>(object));
-	}
-
-	void VectorFieldInfo::SetValueSize(void* object, int size) const
-	{
-		mHelper->SetSize(GetValuePtr<char*>(object), size);
-	}
-
-	void* VectorFieldInfo::GetValueAt(int idx, void* object) const
-	{
-		return mHelper->GetValue(GetValuePtr<char*>(object), idx);
-	}
-
 }

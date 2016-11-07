@@ -272,6 +272,7 @@
     <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Type.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\TypeTraits.h" />
     <ClInclude Include="..\Sources\Utils\Serializable.h" />
     <ClInclude Include="..\Sources\Utils\ShortcutKeys.h" />
     <ClInclude Include="..\Sources\Utils\Singleton.h" />

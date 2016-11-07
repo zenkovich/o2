@@ -55,6 +55,18 @@ namespace o2
 		// Initializes pointer type
 		static const Type* InitializePointerType(const Type* type);
 
+		// Initializes vector type
+		template<typename _element_type>
+		static const VectorType* InitializeVectorType();
+
+		// Initializes dictionary type
+		template<typename _key_type, typename _value_type>
+		static const DictionaryType* InitializeDictionaryType();
+
+		// Initializes accessor type
+		template<typename _return_type>
+		static const StringPointerAccessorType<_return_type>* InitializeAccessorType();
+
 	protected:
 		typedef Dictionary<String, Dictionary<int, String>> EnumsDict;
 
@@ -159,4 +171,57 @@ namespace o2
 		Reflection::Instance().mEnums.Add(typeid(_type).name(), func());
 		return 0;
 	}
+
+	template<typename _element_type>
+	const VectorType* Reflection::InitializeVectorType()
+	{
+		String typeName = "o2::Vector<" + TypeOf(_element_type).Name() + ">";
+
+		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
+			return (VectorType*)fnd;
+
+		_element_type* f = nullptr;
+		VectorType* newType = new VectorType(f);
+		newType->mId = mInstance->mLastGivenTypeId++;
+
+		mInstance->mTypes.Add(newType);
+
+		return newType;
+	}
+
+	template<typename _key_type, typename _value_type>
+	const DictionaryType* Reflection::InitializeDictionaryType()
+	{
+		String typeName = "o2::Dictionary<" + TypeOf(_key_type).Name() + ", " + TypeOf(_value_type).Name() + ">";
+
+		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
+			return (DictionaryType*)fnd;
+
+		_key_type* x = nullptr;
+		_value_type* y = nullptr;
+		DictionaryType* newType = new DictionaryType(x, y);
+		newType->mId = mInstance->mLastGivenTypeId++;
+
+		mInstance->mTypes.Add(newType);
+
+		return newType;
+	}
+
+	template<typename _return_type>
+	const StringPointerAccessorType<_return_type>* Reflection::InitializeAccessorType()
+	{
+		const Type* type = &TypeOf(_return_type);
+		String typeName = "o2::Accessor<" + type->mName + "*, const o2::String&>";
+
+		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
+			return (StringPointerAccessorType<_return_type>*)fnd;
+
+		StringPointerAccessorType<_return_type>* newType = new StringPointerAccessorType<_return_type>();
+		newType->mId = mInstance->mLastGivenTypeId++;
+
+		mInstance->mTypes.Add(newType);
+
+		return newType;
+	}
+
 }
