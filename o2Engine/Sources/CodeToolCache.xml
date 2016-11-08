@@ -4453,6 +4453,18 @@
 									<usings />
 									<baseClasses />
 								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
 							</sections>
 							<typedefs>
 								<typedef what="Vector&lt;DataNode*&gt;" newDef="DataNodesVec" />
@@ -4937,38 +4949,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Scene/Components/EditorTestComponent.h">
-		<date year="2016" month="11" day="7" hour="23" minute="53" second="42" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="EditorTestComponent" fullname="o2::EditorTestComponent" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="TestInside" fullname="o2::EditorTestComponent::TestInside" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ISerializable" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Component" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/Type.h">
 		<date year="2016" month="11" day="8" hour="0" minute="20" second="58" />
 		<globalNamespace name="" fullname="">
@@ -5056,6 +5036,38 @@
 							<usings />
 							<baseClasses>
 								<class name="IArray&lt;_type&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Scene/Components/EditorTestComponent.h">
+		<date year="2016" month="11" day="9" hour="0" minute="43" second="44" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="EditorTestComponent" fullname="o2::EditorTestComponent" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="TestInside" fullname="o2::EditorTestComponent::TestInside" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Component" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>

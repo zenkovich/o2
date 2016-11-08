@@ -257,6 +257,8 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\Vector2FloatProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\Vector2IntProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\PropertiesWindow.h" />
@@ -320,6 +322,8 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\Vector2FloatProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\Vector2IntProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\PropertiesWindow.cpp" />

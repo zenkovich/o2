@@ -48,6 +48,7 @@ namespace Editor
 		void RebuildActorPropety();
 		void RebuildAssetPropety();
 		void RebuildComponentProperty();
+		void RebuildVector2Property();
 		void RebuildActorHeadEnableToggle();
 		void RebuildActorHeadName();
 		void RebuildActorHeadLockToggle();

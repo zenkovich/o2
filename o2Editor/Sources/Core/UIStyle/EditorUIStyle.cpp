@@ -16,6 +16,7 @@
 #include "UI/CustomList.h"
 #include "UI/DropDown.h"
 #include "UI/EditBox.h"
+#include "UI/HorizontalLayout.h"
 #include "UI/HorizontalProgress.h"
 #include "UI/HorizontalScrollBar.h"
 #include "UI/Label.h"
@@ -1803,6 +1804,35 @@ namespace Editor
 		o2UI.AddWidgetStyle(widget, "componentProperty");
 	}
 
+	void EditorUIStyleBuilder::RebuildVector2Property()
+	{
+		auto layout = mnew UIWidget();
+		layout->name = "vector2 property";
+
+		auto xLabel = o2UI.CreateLabel("X");
+		xLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
+		xLabel->horOverflow = UILabel::HorOverflow::None;
+		layout->AddChild(xLabel);
+
+		auto xEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		xEdit->name = "x edit";
+		xEdit->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F());
+		layout->AddChild(xEdit);
+
+		auto yLabel = o2UI.CreateLabel("Y");
+		yLabel->layout.maxWidth = 15;
+		yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
+		yLabel->horOverflow = UILabel::HorOverflow::None;
+		layout->AddChild(yLabel);
+
+		auto yEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		yEdit->name = "y edit";
+		yEdit->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(20, 0), Vec2F());
+		layout->AddChild(yEdit);
+
+		o2UI.AddWidgetStyle(layout, "vector2 property");
+	}
+
 	void EditorUIStyleBuilder::RebuildEditorUIStyle()
 	{
 		o2UI.ClearStyle();
@@ -1864,6 +1894,7 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildActorPropety);
 	PUBLIC_FUNCTION(void, RebuildAssetPropety);
 	PUBLIC_FUNCTION(void, RebuildComponentProperty);
+	PUBLIC_FUNCTION(void, RebuildVector2Property);
 	PUBLIC_FUNCTION(void, RebuildActorHeadEnableToggle);
 	PUBLIC_FUNCTION(void, RebuildActorHeadName);
 	PUBLIC_FUNCTION(void, RebuildActorHeadLockToggle);

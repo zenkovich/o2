@@ -200,6 +200,12 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\Vector2IntProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\Vector2FloatProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp">
@@ -386,6 +392,12 @@
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\Vector2IntProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\Vector2FloatProperty.cpp">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
   </ItemGroup>
