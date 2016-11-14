@@ -101,19 +101,28 @@ namespace o2
 
 	void VectorFont::CheckCharacters(const WString& needChararacters, int height)
 	{
-		Vector<wchar_t> needToRenderChars;
-		for (int i = 0; i < needChararacters.Length(); i++)
+		int len = needChararacters.Length();
+		Vector<wchar_t> needToRenderChars(len);
+		for (int i = 0; i < len; i++)
 		{
-			if (mCharacters.ContainsPred([&](const Character& ch) {
-				return ch.mId == needChararacters[i] && Math::Equals(ch.mHeight, height); }))
+			bool isNew = true;
+			wchar_t c = needChararacters[i];
+			for (auto ch : mCharacters)
 			{
-				continue;
+				if (ch.mId == c && ch.mHeight == height)
+				{
+					isNew = false;
+					break;
+				}
 			}
 
-			if (needToRenderChars.Contains(needChararacters[i]))
+			if (isNew)
+				isNew = !needToRenderChars.Contains(c);
+
+			if (!isNew)
 				continue;
 
-			needToRenderChars.Add(needChararacters[i]);
+			needToRenderChars.Add(c);
 		}
 
 		if (needToRenderChars.Count() > 0)

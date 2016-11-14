@@ -22,8 +22,8 @@ void TestApplication::OnStarted()
 	mTestScreens.Add(mnew MainTestScreen(this));
 
 	//GoToScreen("MainTestScreen");
-	//GoToScreen("UITestScreen");
-	GoToScreen("TextTestScreen");
+	GoToScreen("UITestScreen");
+	//GoToScreen("TextTestScreen");
 }
 
 void TestApplication::OnUpdate(float dt)
@@ -69,16 +69,5 @@ void TestApplication::GoToScreen(const String& id)
 
 void TestApplication::CheckArialFontEffects()
 {
-	VectorFontAsset arialFont("arial.ttf");
-	if (!arialFont.GetEffects().ContainsPred([](auto eff) { return eff->GetType() == *FontGradientEffect::type; }))
-		arialFont.AddEffect<FontGradientEffect>();
-
-	if (!arialFont.GetEffects().ContainsPred([](auto eff) { return eff->GetType() == *FontColorEffect::type; }))
-		arialFont.AddEffect<FontColorEffect>(Color4(100, 100, 100, 255));
-
-	if (!arialFont.GetEffects().ContainsPred([](auto eff) { return eff->GetType() == *FontShadowEffect::type; }))
-		arialFont.AddEffect<FontShadowEffect>(2.0f, Vec2F(), Color4(50, 50, 100, 100));
-
-	arialFont.Save();
 }
 

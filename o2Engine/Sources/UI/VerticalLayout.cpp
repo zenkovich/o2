@@ -152,16 +152,29 @@ namespace o2
 		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
 
+		if (mFitByChildren)
+			layout.mOffsetMin.y = layout.mOffsetMax.y - GetLayoutHeight();
+
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
 		if (withChildren)
-		{
 			RearrangeChilds();
+	}
 
-			if (mFitByChildren)
-				ExpandSizeByChilds();
+	float UIVerticalLayout::GetLayoutHeight() const
+	{
+		if (!mFitByChildren)
+			return UIWidget::GetLayoutHeight();
+
+		float res = mBorder.left + mBorder.right + (mChilds.Count() - 1)*mSpacing;
+		for (auto child : mChilds)
+		{
+			if (!child->mFullyDisabled)
+				res += child->GetLayoutHeight();
 		}
+
+		return res;
 	}
 
 	void UIVerticalLayout::OnChildAdded(UIWidget* child)
@@ -542,6 +555,7 @@ CLASS_META(o2::UIVerticalLayout)
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
 	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
+	PROTECTED_FUNCTION(float, GetLayoutHeight);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);

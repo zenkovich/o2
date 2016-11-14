@@ -1,6 +1,7 @@
 #pragma once
 
-#include "O2.h"
+#include "Utils\IObject.h"
+#include "Utils\Reflection\Reflection.h"
 
 using namespace o2;
 
@@ -15,7 +16,7 @@ public:
 class ITestScreen
 {
 public:
-	ITestScreen(Ptr<TestApplication> application):mApplication(application) {}
+	ITestScreen(TestApplication* application):mApplication(application) {}
 	virtual ~ITestScreen() {}
 
 	virtual void Load() = 0;
@@ -26,6 +27,6 @@ public:
 	virtual String GetId() const = 0;
 
 protected:
-	Ptr<TestApplication> mApplication;
+	TestApplication* mApplication;
 };
-typedef Vector<Ptr<ITestScreen>> TestScreensVec;
+typedef Vector<ITestScreen*> TestScreensVec;

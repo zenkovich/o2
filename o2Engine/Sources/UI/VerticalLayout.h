@@ -107,6 +107,9 @@ namespace o2
 		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
+		// Returns layout height
+		float GetLayoutHeight() const;
+
 		// Calls when child widget was added
 		void OnChildAdded(UIWidget* child);
 

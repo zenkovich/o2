@@ -3,7 +3,7 @@
 #include "TestApplication.h"
 #include "Render\Render.h"
 
-TextTestScreen::TextTestScreen(Ptr<TestApplication> application):
+TextTestScreen::TextTestScreen(TestApplication* application):
 	ITestScreen(application)
 {
 }
@@ -20,7 +20,7 @@ void TextTestScreen::Load()
 	mFakeWindow.LoadFromImage("ui/UI_window_frame_regular.png");
 	mFakeWindow.size = Vec2F(400, 400);
 
-	mText.font = FontRef("arial.ttf");
+	mText.font = FontRef("stdFont.ttf");
 	//mText.font = FontRef("myriad.xml");
 	mText.text = "Hello, I'm text\nmulti line\nand many symbols\nha h a h ah\n1 2 3 4 5 6 7 8 9 0";
 	//mText.ctext = "abcdefghklmnopqrstuvxyz12345";

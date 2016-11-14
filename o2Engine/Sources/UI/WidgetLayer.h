@@ -91,6 +91,9 @@ namespace o2
 		// Returns transparency
 		float GetTransparency();
 
+		// Returns result transparency
+		float GetResTransparency() const;
+
 		// Returns true if layer is under point
 		bool IsUnderPoint(const Vec2F& point);
 

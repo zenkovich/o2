@@ -49,10 +49,10 @@ namespace o2
 		Curve mCurve;                              // @SERIALIZABLE
 		TestInside mTestInside;                    // @SERIALIZABLE
 
+		Vector<Vec2I> mVecs;                       // @SERIALIZABLE
 		Vector<int> mIntVector ={ 1, 2, 3, 4, 5 }; // @SERIALIZABLE
 		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE
 		Vector<Actor*> mActorVector;               // @SERIALIZABLE
-		Vector<Vec2I> mVecs;                       // @SERIALIZABLE
 
 		Dictionary<String, String> mDictionary;    // @SERIALIZABLE
 		float mFloat2;					           // @SERIALIZABLE

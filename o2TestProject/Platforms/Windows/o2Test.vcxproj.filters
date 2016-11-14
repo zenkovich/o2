@@ -1,21 +1,50 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <ClCompile Include="..\..\Sources\Windows\o2Test.cpp" />
-    <ClCompile Include="..\..\Sources\TestApplication.cpp" />
-    <ClCompile Include="..\..\Sources\TextTestScreen.cpp" />
-    <ClCompile Include="..\..\Sources\UITestScreen.cpp" />
-    <ClCompile Include="..\..\Sources\MainTestScreen.cpp" />
-    <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
-    <ClCompile Include="..\..\Sources\BasicUIStyle.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Sources\TestApplication.h" />
-    <ClInclude Include="..\..\Sources\ITestScreen.h" />
-    <ClInclude Include="..\..\Sources\TextTestScreen.h" />
-    <ClInclude Include="..\..\Sources\UITestScreen.h" />
-    <ClInclude Include="..\..\Sources\MainTestScreen.h" />
-    <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
-    <ClInclude Include="..\..\Sources\BasicUIStyle.h" />
-  </ItemGroup>
+	<ItemGroup>
+		<Filter Include="Sources" />
+		<Filter Include="Sources\Windows" />
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\Sources\BasicUIStyle.h">
+			<Filter>Sources</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\ITestScreen.h">
+			<Filter>Sources</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\MainTestScreen.h">
+			<Filter>Sources</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\TestApplication.h">
+			<Filter>Sources</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\TextTestScreen.h">
+			<Filter>Sources</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\UITestScreen.h">
+			<Filter>Sources</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\Sources\BasicUIStyle.cpp">
+			<Filter>Sources</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\ITestScreen.cpp">
+			<Filter>Sources</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\MainTestScreen.cpp">
+			<Filter>Sources</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\TestApplication.cpp">
+			<Filter>Sources</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\TextTestScreen.cpp">
+			<Filter>Sources</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\UITestScreen.cpp">
+			<Filter>Sources</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\Windows\o2Test.cpp">
+			<Filter>Sources\Windows</Filter>
+		</ClCompile>
+	</ItemGroup>
 </Project>

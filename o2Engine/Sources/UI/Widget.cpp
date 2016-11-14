@@ -701,6 +701,16 @@ namespace o2
 			UpdateChildrenLayouts(forcible);
 	}
 
+	float UIWidget::GetLayoutWidth() const
+	{
+		return Math::Clamp(layout.mOffsetMax.x - layout.mOffsetMin.x, layout.mMinSize.x, layout.mMaxSize.x);
+	}
+
+	float UIWidget::GetLayoutHeight() const
+	{
+		return Math::Clamp(layout.mOffsetMax.y - layout.mOffsetMin.y, layout.mMinSize.y, layout.mMaxSize.y);
+	}
+
 	void UIWidget::UpdateChildrenLayouts(bool forcible /*= false*/)
 	{
 		for (auto child : mChilds)
@@ -783,6 +793,23 @@ namespace o2
 
 	void UIWidget::RecalculateAbsRect()
 	{
+// 		if (UI_DEBUG || o2Input.IsKeyDown(VK_F2))
+// 		{
+// 			static int frame = 0;
+// 			static int counter = 0;
+// 			int curFrame = o2Time.GetCurrentFrame();
+// 
+// 			printf("-- %s\n", mName.Data());
+// 			if (curFrame != frame)
+// 			{
+// 				printf("----------------%i widget layouts recalculates\n", counter);
+// 				counter = 0;
+// 				frame = curFrame;
+// 			}
+// 
+// 			counter++;
+// 		}
+
 		RectF lastAbsRect = layout.mAbsoluteRect;
 
 		Vec2F parentSize, parentPos;
@@ -1062,6 +1089,8 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(bool, CheckIsLayoutDrivenByParent, bool);
 	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
+	PROTECTED_FUNCTION(float, GetLayoutWidth);
+	PROTECTED_FUNCTION(float, GetLayoutHeight);
 	PROTECTED_FUNCTION(void, UpdateChildrenLayouts, bool);
 	PROTECTED_FUNCTION(void, UpdateBounds);
 	PROTECTED_FUNCTION(void, UpdateBoundsWithChilds);

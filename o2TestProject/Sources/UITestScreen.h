@@ -6,7 +6,7 @@
 class UITestScreen: public ITestScreen
 {
 public:
-	UITestScreen(Ptr<TestApplication> application);
+	UITestScreen(TestApplication* application);
 	~UITestScreen();
 
 	void Load();

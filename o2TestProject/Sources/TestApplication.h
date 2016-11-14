@@ -1,6 +1,5 @@
 #pragma once
 
-#include "O2.h"
 #include "ITestScreen.h"
 #include "Application/Application.h"
 
@@ -23,9 +22,9 @@ public:
 	void GoToScreen(const String& id);
 
 protected:
-	TestScreensVec   mTestScreens;
-	Ptr<ITestScreen> mCurrentScreen;
-	Ptr<ITestScreen> mNextCurrentScreen;
+	TestScreensVec mTestScreens;
+	ITestScreen*   mCurrentScreen;
+	ITestScreen*   mNextCurrentScreen;
 
 	void CheckArialFontEffects();
 };

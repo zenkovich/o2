@@ -3,12 +3,12 @@
 #include "ITestScreen.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
-#include "Utils/Editor/DragHandle.h"
+#include "Utils/DragHandle.h"
 
 class TextTestScreen: public ITestScreen
 {
 public:
-	TextTestScreen(Ptr<TestApplication> application);
+	TextTestScreen(TestApplication* application);
 	~TextTestScreen();
 
 	void Load();

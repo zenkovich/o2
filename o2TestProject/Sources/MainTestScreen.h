@@ -5,7 +5,7 @@
 class MainTestScreen: public ITestScreen
 {
 public:
-	MainTestScreen(Ptr<TestApplication> application);
+	MainTestScreen(TestApplication* application);
 	~MainTestScreen();
 
 	void Load();

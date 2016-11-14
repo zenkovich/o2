@@ -20,7 +20,8 @@ namespace o2
 			mFont->mRefs.Add(this);
 	}
 
-	FontRef::FontRef(const String& fileName)
+	FontRef::FontRef(const String& fileName):
+		mFont(nullptr)
 	{
 		String ext = o2FileSystem.GetFileExtension(fileName);
 		if (ext == "xml")

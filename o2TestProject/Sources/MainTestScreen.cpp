@@ -5,7 +5,7 @@
 #include "UI\UIManager.h"
 #include "UI\Widget.h"
 
-MainTestScreen::MainTestScreen(Ptr<TestApplication> application):
+MainTestScreen::MainTestScreen(TestApplication* application):
 	ITestScreen(application)
 {
 }
@@ -34,8 +34,8 @@ void MainTestScreen::Load()
 	uiTest->layout.offsetBottom = -70.0f;
 	uiTest->onClick += [&]() { mApplication->GoToScreen("UITestScreen"); };
 
-	root->AddChild(textTest.Cast<UIWidget>());
-	root->AddChild(uiTest.Cast<UIWidget>());
+	root->AddChild(textTest);
+	root->AddChild(uiTest);
 }
 
 void MainTestScreen::Unload()

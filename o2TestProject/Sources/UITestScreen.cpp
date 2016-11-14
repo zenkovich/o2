@@ -21,7 +21,7 @@
 #include "UI/Window.h"
 #include "Utils/CommonTypes.h"
 
-UITestScreen::UITestScreen(Ptr<TestApplication> application):
+UITestScreen::UITestScreen(TestApplication* application):
 	ITestScreen(application)
 {}
 
@@ -32,7 +32,8 @@ UITestScreen::~UITestScreen()
 
 void UITestScreen::Load()
 {
-	UIStyle::RebuildBasicUIStyle();
+	BasicUIStyleBuilder uiBuilder;
+	uiBuilder.RebuildBasicUIStyle();
 
 	mBackground.LoadFromImage("ui/UI_Background.png");
 	mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30);
@@ -68,7 +69,7 @@ void UITestScreen::Load()
 	}
 
 	buttonContext->AddItem(
-		UIContextMenu::Item("Icon item", []() { o2Debug.Log("Pressed icon"); }, "",
+		UIContextMenu::Item("Icon item", []() { o2Debug.Log("Pressed icon"); },
 							mnew ImageAsset("ui/UI_search_regular.png")));
 
 	UIContextMenu::Item itm("Sub items", {
@@ -232,35 +233,6 @@ void UITestScreen::Load()
 
 	auto treeWnd = o2UI.AddWindow("Tree");
 	treeWnd->layout.size = Vec2F(300, 300);
-
-	auto tree = o2UI.CreateWidget<UITree>();
-	treeWnd->AddChild(tree);
-	tree->layout = UIWidgetLayout::BothStretch();
-
-	Function<Vector<Ptr<UnknownType>>(Ptr<UnknownType>)> getChildsFunc = [=](Ptr<UnknownType> parent) {
-		Vector<Ptr<UnknownType>> res;
-
-		Ptr<UIWidget> parentWidget = parent ? (UIWidget*)(void*)parent.Get() : window;
-		for (auto child : parentWidget->GetChilds())
-			res.Add((UnknownType*)(void*)child.Get());
-
-		return res;
-	};
-
-	Function<void(Ptr<UITreeNode>, Ptr<UnknownType>)> setupNodeFunc = [](Ptr<UITreeNode> node, Ptr<UnknownType> object) {
-		Ptr<UIWidget> widget = (UIWidget*)(void*)object.Get();
-		node->GetLayerDrawable<Text>("name")->text = widget->GetName() + ":" + widget->GetType().Name();
-	};
-
-	Function<Ptr<UnknownType>(Ptr<UnknownType>)> getParentFunc = [](Ptr<UnknownType> object) {
-		Ptr<UIWidget> widget = (UIWidget*)(void*)object.Get();
-		return (UnknownType*)(void*)widget->GetParent().Get();
-	};
-
-	tree->getChildsFunc = getChildsFunc;
-	tree->setupNodeFunc = setupNodeFunc;
-	tree->getParentFunc = getParentFunc;
-	tree->RebuildTree();
 }
 
 void UITestScreen::Unload()

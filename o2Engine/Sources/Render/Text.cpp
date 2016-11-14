@@ -266,6 +266,13 @@ namespace o2
 	void Text::SetText(const WString& text)
 	{
 		mText = text;
+
+		if (mFont)
+		{
+			mFont->CheckCharacters(text, height);
+			mFont->CheckCharacters(".", height);
+		}
+
 		UpdateMesh();
 	}
 
@@ -419,7 +426,7 @@ namespace o2
 		int currentMeshIdx = 0;
 		Mesh* currentMesh = mMeshes[0];
 
-		mSymbolsSet.Initialize(mFont, mText, mHeight, mTransform.offs, mSize, mHorAlign, mVerAlign, mWordWrap, mDotsEndings, 
+		mSymbolsSet.Initialize(mFont, mText, mHeight, mTransform.offs, mSize, mHorAlign, mVerAlign, mWordWrap, mDotsEndings,
 							   mSymbolsDistCoef, mLinesDistanceCoef);
 
 		Basis transf = CalculateTextBasis();
@@ -446,14 +453,16 @@ namespace o2
 				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[2], color, symb.mTexSrc.right, 1.0f - symb.mTexSrc.bottom);
 				currentMesh->vertices[currentMesh->vertexCount++] = Vertex2(points[3], color, symb.mTexSrc.left, 1.0f - symb.mTexSrc.bottom);
 
-				currentMesh->indexes[currentMesh->polyCount*3] = currentMesh->vertexCount - 4;
-				currentMesh->indexes[currentMesh->polyCount*3 + 1] = currentMesh->vertexCount - 3;
-				currentMesh->indexes[currentMesh->polyCount*3 + 2] = currentMesh->vertexCount - 2;
+				int pp = currentMesh->polyCount*3;
+				currentMesh->indexes[pp] = currentMesh->vertexCount - 4;
+				currentMesh->indexes[pp + 1] = currentMesh->vertexCount - 3;
+				currentMesh->indexes[pp + 2] = currentMesh->vertexCount - 2;
 				currentMesh->polyCount++;
 
-				currentMesh->indexes[currentMesh->polyCount*3] = currentMesh->vertexCount - 4;
-				currentMesh->indexes[currentMesh->polyCount*3 + 1] = currentMesh->vertexCount - 2;
-				currentMesh->indexes[currentMesh->polyCount*3 + 2] = currentMesh->vertexCount - 1;
+				pp += 3;
+				currentMesh->indexes[pp] = currentMesh->vertexCount - 4;
+				currentMesh->indexes[pp + 1] = currentMesh->vertexCount - 2;
+				currentMesh->indexes[pp + 2] = currentMesh->vertexCount - 1;
 				currentMesh->polyCount++;
 			}
 		}
@@ -577,9 +586,6 @@ namespace o2
 		if (textLen == 0)
 			return;
 
-		mFont->CheckCharacters(text, height);
-		mFont->CheckCharacters(".", height);
-
 		float linesDist = mFont->GetLineHeightPx(mHeight)*mLinesDistCoef;
 		float fontHeight = mFont->GetHeightPx(mHeight);
 
@@ -687,8 +693,6 @@ namespace o2
 			yOffset -= mAreaSize.y*0.5f - fullSize.y*0.5f;
 
 		yOffset += mPosition.y;
- 
-// 		o2Debug.DrawRect(RectF(Vec2F(), fullSize), Color4::Red());
 
 		for (LineDefsVec::Iterator it = mLines.begin(); it != mLines.end(); ++it)
 		{
@@ -709,9 +713,6 @@ namespace o2
 			Vec2F locOrigin((float)(int)xOffset, (float)(int)yOffset);
 			line->mPosition = locOrigin;
 			yOffset -= lineHeight;
-
-// 			o2Debug.DrawRect(RectF(locOrigin, locOrigin + line->mSize), Color4::Red());
-// 			o2Debug.DrawRect(RectF(locOrigin, locOrigin + Vec2F(10, linesDist)), Color4::Blue());
 
 			for (SymbolDefsVec::Iterator jt = line->mSymbols.begin(); jt != line->mSymbols.end(); ++jt)
 			{

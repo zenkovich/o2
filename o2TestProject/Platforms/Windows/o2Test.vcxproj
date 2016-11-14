@@ -18,24 +18,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Sources\BasicUIStyle.cpp" />
-    <ClCompile Include="..\..\Sources\MainTestScreen.cpp" />
-    <ClCompile Include="..\..\Sources\ReflectionGenerated.cpp" />
-    <ClCompile Include="..\..\Sources\TestApplication.cpp" />
-    <ClCompile Include="..\..\Sources\TextTestScreen.cpp" />
-    <ClCompile Include="..\..\Sources\UITestScreen.cpp" />
-    <ClCompile Include="..\..\Sources\Windows\o2Test.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Sources\BasicUIStyle.h" />
-    <ClInclude Include="..\..\Sources\ITestScreen.h" />
-    <ClInclude Include="..\..\Sources\MainTestScreen.h" />
-    <ClInclude Include="..\..\Sources\ReflectionGenerated.h" />
-    <ClInclude Include="..\..\Sources\TestApplication.h" />
-    <ClInclude Include="..\..\Sources\TextTestScreen.h" />
-    <ClInclude Include="..\..\Sources\UITestScreen.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F0C3F9F6-349D-4D58-9175-0AE646039318}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -70,10 +52,8 @@
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -112,12 +92,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\work\o2\o2Engine\;C:\work\o2\o2Engine\Sources\;$(SolutionDir)..\..\Sources\;C:\work\o2\o2Engine\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%O2%\o2Engine\;%O2%\o2Engine\Sources\;$(SolutionDir)..\..\Sources\;%O2%\o2Engine\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
@@ -130,6 +109,7 @@
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AssemblyDebug>false</AssemblyDebug>
+      <AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -138,7 +118,7 @@
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
     <PreBuildEvent>
-      <Command>C:\work\o2\o2CodeTool\o2CodeTool\bin\Release\o2CodeTool.exe $(ProjectDir)..\..\Sources\ReflectionGenerated C:\work\o2\o2Engine\Sources $(ProjectDir)..\..\Sources\</Command>
+      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml"</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generating reflection</Message>
@@ -146,12 +126,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(O2ENGINE)Sources\;$(O2ENGINE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>\%O2%Sources\;%O2%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -165,13 +144,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\work\o2\o2Engine\;C:\work\o2\o2Engine\Sources\;$(SolutionDir)..\..\Sources\;C:\work\o2\o2Engine\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%O2%\o2Engine\;%O2%\o2Engine\Sources\;$(SolutionDir)..\..\Sources\;%O2%\o2Engine\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
@@ -187,12 +165,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
     <PreBuildEvent>
-      <Command>C:\work\o2\o2CodeTool\o2CodeTool\bin\Release\o2CodeTool.exe $(ProjectDir)..\..\Sources\ReflectionGenerated C:\work\o2\o2Engine\Sources $(ProjectDir)..\..\Sources\</Command>
+      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml"</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generating reflection</Message>
@@ -201,13 +180,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(O2ENGINE)Sources\;$(O2ENGINE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%O2%\Sources\;%O2%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -221,6 +199,22 @@
     </BuildLog>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\BasicUIStyle.h" />
+    <ClInclude Include="..\..\Sources\ITestScreen.h" />
+    <ClInclude Include="..\..\Sources\MainTestScreen.h" />
+    <ClInclude Include="..\..\Sources\TestApplication.h" />
+    <ClInclude Include="..\..\Sources\TextTestScreen.h" />
+    <ClInclude Include="..\..\Sources\UITestScreen.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\BasicUIStyle.cpp" />
+    <ClCompile Include="..\..\Sources\ITestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\MainTestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\TestApplication.cpp" />
+    <ClCompile Include="..\..\Sources\TextTestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\UITestScreen.cpp" />
+    <ClCompile Include="..\..\Sources\Windows\o2Test.cpp" />
+  </ItemGroup>
 </Project>

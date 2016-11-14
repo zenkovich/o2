@@ -26,17 +26,17 @@ namespace o2
 		typedef Vector<UIWidget*> WidgetsVec;
 
 	public:
-		Property<String>                        name;
-		Property<UIWidget*>                     parent;
-		Getter<WidgetsVec>                      childs;
-		Getter<LayersVec>                       layers;
-		Getter<StatesVec>                       states;
-		Property<float>                         transparency;
-		Getter<float>                           resTransparency;
-		Property<bool>                          visible;
-		Accessor<UIWidget*, const String&>      child;
-		Accessor<UIWidgetLayer*, const String&> layer;
-		Accessor<UIWidgetState*, const String&> state;
+		Property<String>                        name;            // Name of widget property
+		Property<UIWidget*>                     parent;          // Parent widget property
+		Getter<WidgetsVec>                      childs;          // Widget children getter
+		Getter<LayersVec>                       layers;          // Layers getter
+		Getter<StatesVec>                       states;          // States getter
+		Property<float>                         transparency;    // Transparency property
+		Getter<float>                           resTransparency; // Result transparency getter, depends on parent transparency
+		Property<bool>                          visible;         // Is widget visible property
+		Accessor<UIWidget*, const String&>      child;           // Widget child accessor by name
+		Accessor<UIWidgetLayer*, const String&> layer;           // Widget layer accessor by name
+		Accessor<UIWidgetState*, const String&> state;           // Widget state accessor by name
 
 		UIWidgetLayout                          layout;          // Widget's layout @SERIALIZABLE
 		Function<void()>                        onLayoutChanged; // Layout change event
@@ -255,6 +255,12 @@ namespace o2
 
 		// Updates layout
 		virtual void UpdateLayout(bool forcible = false, bool withChildren = true);
+
+		// Returns layout width
+		virtual float GetLayoutWidth() const;
+
+		// Returns layout height
+		virtual float GetLayoutHeight() const;
 
 		// Updates children layouts
 		virtual void UpdateChildrenLayouts(bool forcible = false);
