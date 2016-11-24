@@ -52,12 +52,15 @@ namespace o2
 		float GetLayoutHeight() const;
 
 		// Expands size by children
-		virtual void ExpandSizeByChilds();
+		//virtual void ExpandSizeByChilds();
 
 		// Updates layout's weight and minimal size
 		virtual void UpdateLayoutParametres();
 
 		// Returns is spoiler fully expanded and not animating
 		bool IsFullyExpanded() const;
+
+		// Returns is spoiler fully collapsed and not animating
+		bool IsFullyCollapsed() const;
 	};
 }

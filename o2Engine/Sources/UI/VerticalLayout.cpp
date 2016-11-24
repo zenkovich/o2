@@ -397,7 +397,7 @@ namespace o2
 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
 		Vec2F size(GetLayoutWidth(), GetLayoutHeight());
 
-		Vec2F szDelta = size - layout.mLocalRect.Size();
+		Vec2F szDelta = size - (layout.mOffsetMax - layout.mOffsetMin);
 
 		if (mExpandWidth)
 			szDelta.x = 0;
