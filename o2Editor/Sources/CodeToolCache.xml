@@ -1933,6 +1933,14 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/ColorProperty.h">
+		<date year="2015" month="9" day="20" hour="17" minute="20" second="18" />
+		<globalNamespace name="" fullname="">
+			<sections />
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
 </files>
 <parentProjects>
 	<project path="C:\work\o2\o2Engine\Sources\CodeToolCache.xml" />

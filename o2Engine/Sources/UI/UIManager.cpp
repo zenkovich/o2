@@ -439,7 +439,8 @@ namespace o2
 
 	void UIManager::UpdateRootSize()
 	{
-		mScreenWidget->layout.size = o2Render.GetResolution();
+		Vec2I resolution = o2Render.GetResolution();
+		mScreenWidget->layout = UIWidgetLayout::Based(BaseCorner::Center, resolution);
 	}
 
 	void UIManager::DrawWidgetAtTop(UIWidget* widget)

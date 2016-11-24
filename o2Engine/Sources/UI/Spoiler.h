@@ -1,13 +1,13 @@
 #pragma once
 
-#include "UI/Widget.h"
+#include "UI/VerticalLayout.h"
 
 namespace o2
 {
 	// -------------------------------------
 	// UI Spoiler. Can hide children widgets
 	// -------------------------------------
-	class UISpoiler: public UIWidget
+	class UISpoiler: public UIVerticalLayout
 	{
 	public:
 		// Default constructor
@@ -42,20 +42,20 @@ namespace o2
 		float          mTargetHeight = 0.0f;   // target expanding height
 
 	protected:
-		// Calls when child widget was added
-		void OnChildAdded(UIWidget* child);
-
-		// Calls when child widget was removed
-		void OnChildRemoved(UIWidget* child);
-
 		// Updates expanding
 		void UpdateExpanding(float dt);
 
 		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
-		// Expands size by childs
-		void ExpandSizeByChilds();
+		// Returns layout height
+		float GetLayoutHeight() const;
+
+		// Expands size by children
+		virtual void ExpandSizeByChilds();
+
+		// Updates layout's weight and minimal size
+		virtual void UpdateLayoutParametres();
 
 		// Returns is spoiler fully expanded and not animating
 		bool IsFullyExpanded() const;

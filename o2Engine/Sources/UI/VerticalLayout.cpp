@@ -152,8 +152,10 @@ namespace o2
 		if (CheckIsLayoutDrivenByParent(forcible))
 			return;
 
+		UpdateLayoutParametres();
+
 		if (mFitByChildren)
-			layout.mOffsetMin.y = layout.mOffsetMax.y - GetLayoutHeight();
+			ExpandSizeByChilds();
 
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
@@ -167,7 +169,7 @@ namespace o2
 		if (!mFitByChildren)
 			return UIWidget::GetLayoutHeight();
 
-		float res = mBorder.left + mBorder.right + (mChilds.Count() - 1)*mSpacing;
+		float res = mBorder.top + mBorder.bottom + Math::Max(mChilds.Count() - 1, 0)*mSpacing;
 		for (auto child : mChilds)
 		{
 			if (!child->mFullyDisabled)
@@ -189,8 +191,6 @@ namespace o2
 
 	void UIVerticalLayout::RearrangeChilds()
 	{
-		UpdateLayoutParametres();
-
 		switch (mBaseCorner)
 		{
 			case BaseCorner::LeftTop:
@@ -332,11 +332,8 @@ namespace o2
 			float position = mBorder.top;
 			for (auto child : mChilds)
 			{
-				Vec2F childSize(Math::Max(child->layout.mMinSize.x, child->layout.mOffsetMax.x - child->layout.mOffsetMin.x),
-								Math::Max(child->layout.mMinSize.y, child->layout.mOffsetMax.y - child->layout.mOffsetMin.y));
-
 				child->layout.mOffsetMax.y = -position;
-				position += Math::Abs(childSize.y);
+				position += Math::Abs(Math::Max(child->layout.mMinSize.y, child->GetLayoutHeight()));
 
 				child->layout.mOffsetMin.y = -position;
 				position += mSpacing;
@@ -398,20 +395,9 @@ namespace o2
 		};
 
 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
+		Vec2F size(GetLayoutWidth(), GetLayoutHeight());
 
-		RectF childrenRect;
-		if (mChilds.Count() > 0)
-			childrenRect = mChilds[0]->layout.mLocalRect;
-
-		for (auto child : mChilds)
-		{
-			childrenRect.left   = Math::Min(childrenRect.left, child->layout.mLocalRect.left);
-			childrenRect.right  = Math::Max(childrenRect.right, child->layout.mLocalRect.right);
-			childrenRect.bottom = Math::Min(childrenRect.bottom, child->layout.mLocalRect.bottom);
-			childrenRect.top    = Math::Max(childrenRect.top, child->layout.mLocalRect.top);
-		}
-
-		Vec2F szDelta = (childrenRect.Size() + mBorder.LeftBottom() + mBorder.RightTop()) - mChildsAbsRect.Size();
+		Vec2F szDelta = size - layout.mLocalRect.Size();
 
 		if (mExpandWidth)
 			szDelta.x = 0;
@@ -419,15 +405,8 @@ namespace o2
 		if (mExpandHeight)
 			szDelta.y = 0;
 
-		szDelta *= Vec2F(Math::Sign(layout.mLocalRect.Width()), Math::Sign(layout.mLocalRect.Height()));
-
-		if (szDelta != Vec2F())
-		{
-			layout.mOffsetMax += szDelta*(Vec2F::One() - relativePivot);
-			layout.mOffsetMin -= szDelta*relativePivot;
-
-			UpdateLayout();
-		}
+		layout.mOffsetMax += szDelta*(Vec2F::One() - relativePivot);
+		layout.mOffsetMin -= szDelta*relativePivot;
 	}
 
 	Vector<float> UIVerticalLayout::CalculateExpandedHeights()

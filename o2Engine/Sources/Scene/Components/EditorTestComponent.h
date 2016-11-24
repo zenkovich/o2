@@ -56,6 +56,13 @@ namespace o2
 
 		Dictionary<String, String> mDictionary;    // @SERIALIZABLE
 		float mFloat2;					           // @SERIALIZABLE
+		float mFloat3;					           // @SERIALIZABLE
+		float mFloat4;					           // @SERIALIZABLE
+		float mFloat5;					           // @SERIALIZABLE
+		float mFloat6;					           // @SERIALIZABLE
+		float mFloat7;					           // @SERIALIZABLE
+		float mFloat8;					           // @SERIALIZABLE
+		float mFloat9;					           // @SERIALIZABLE
 
 		void DeserializeBasic(const DataNode& node, const void* thisObject)
 		{

@@ -703,12 +703,12 @@ namespace o2
 
 	float UIWidget::GetLayoutWidth() const
 	{
-		return Math::Clamp(layout.mOffsetMax.x - layout.mOffsetMin.x, layout.mMinSize.x, layout.mMaxSize.x);
+		return layout.mAbsoluteRect.Width();
 	}
 
 	float UIWidget::GetLayoutHeight() const
 	{
-		return Math::Clamp(layout.mOffsetMax.y - layout.mOffsetMin.y, layout.mMinSize.y, layout.mMaxSize.y);
+		return layout.mAbsoluteRect.Height();
 	}
 
 	void UIWidget::UpdateChildrenLayouts(bool forcible /*= false*/)

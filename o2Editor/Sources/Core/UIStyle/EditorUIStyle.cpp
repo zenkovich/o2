@@ -84,12 +84,6 @@ namespace Editor
 
 		auto dockedState = sample->AddState("docked", dockedStateAnim);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
-						 5.0f, 15.0f, 0.2f));
-
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetBottom,
-						 -5.0f, -15.0f, 0.2f));
-
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 2.0f;
 

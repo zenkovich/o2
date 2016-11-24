@@ -129,7 +129,7 @@ namespace o2
 		void ArrangeFromCenter();
 
 		// Expands size by children
-		void ExpandSizeByChilds();
+		virtual void ExpandSizeByChilds();
 
 		// Calculates children widths by weights and minimal sizes
 		Vector<float> CalculateExpandedHeights();
@@ -138,7 +138,7 @@ namespace o2
 		void AlignWidgetByWidth(UIWidget* child, float heightAnchor);
 
 		// Updates layout's weight and minimal size
-		void UpdateLayoutParametres();
+		virtual void UpdateLayoutParametres();
 
 		// Initializes properties
 		void InitializeProperties();

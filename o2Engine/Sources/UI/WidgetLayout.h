@@ -202,9 +202,9 @@ namespace o2
 	protected:
 		UIWidget* mOwner;								
 		Vec2F     mPivot          = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
-		Vec2F     mAnchorMin      = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
-		Vec2F     mAnchorMax      = Vec2F(0.5f, 0.5f);	   // @SERIALIZABLE
-		Vec2F     mOffsetMin      = Vec2F(-10.0f, -10.0f); // @SERIALIZABLE
+		Vec2F     mAnchorMin      = Vec2F(0.0f, 0.0f);	   // @SERIALIZABLE
+		Vec2F     mAnchorMax      = Vec2F(0.0f, 0.0f);	   // @SERIALIZABLE
+		Vec2F     mOffsetMin      = Vec2F(0.0f, 0.0f);     // @SERIALIZABLE
 		Vec2F     mOffsetMax      = Vec2F(10.0f, 10.0f);   // @SERIALIZABLE
 		Vec2F     mMinSize        = Vec2F(0.0f, 0.0f);	   // @SERIALIZABLE
 		Vec2F     mMaxSize        = Vec2F(10000, 10000);   // @SERIALIZABLE
