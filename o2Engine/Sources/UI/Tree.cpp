@@ -228,15 +228,7 @@ namespace o2
 		if (mExpandingNodeState == ExpandState::None)
 		{
 			for (auto child : mChilds)
-			{
 				child->Draw();
-
-// 				if (child->GetType().IsBasedOn(TypeOf(UITreeNode)))
-// 				{
-// 					String dbg = getDbgString(((UITreeNode*)child)->mNodeDef->object);
-// 					o2Debug.DrawText(child->layout.GetAbsoluteRect().Center(), dbg);
-// 				}
-			}
 		}
 		else
 		{
@@ -266,10 +258,6 @@ namespace o2
 
 		mHoverDrawable->Draw();
 		mHightlightSprite->Draw();
-		//o2Render.DrawCross(mHightlightSprite->position);
-
-// 		if (mInsertNodeCandidate)
-// 			o2Render.DrawRectFrame(mInsertNodeCandidate->layout.absRect);
 
 		o2Render.DisableScissorTest();
 
@@ -393,7 +381,7 @@ namespace o2
 		return SelectDragObjectsVec();
 	}
 
-	void UITree::Select(SelectableDragableObject* object)
+	void UITree::Select(SelectableDragableObject* object, bool sendOnSelectionChanged)
 	{
 		bool someSelected = false;
 		UITreeNode* uiNode = (UITreeNode*)object;
@@ -425,8 +413,13 @@ namespace o2
 			mSelectedObjects.Add(node->object);
 		}
 
-		if (someSelected)
+		if (someSelected && sendOnSelectionChanged)
 			OnSelectionChanged();
+	}
+
+	void UITree::Select(SelectableDragableObject* object)
+	{
+		Select(object, true);
 	}
 
 	void UITree::Deselect(SelectableDragableObject* object)
@@ -466,11 +459,10 @@ namespace o2
 
 	void UITree::OnSelectableObjectBeganDragging(SelectableDragableObject* object)
 	{
+		mBeforeDragSelectedItems = mSelectedObjects;
+
 		if (!object->IsSelected())
-		{
-			DeselectAllObjects();
-			Select(object);
-		}
+			Select(object, false);
 	}
 
 	bool UITree::CheckMultipleSelection(const Vec2F& point)
@@ -1013,6 +1005,7 @@ namespace o2
 				widget->mExpandBtn->Show(true);
 		}
 
+		widget->mIsSelected = node->isSelected;
 		widget->SetStateForcible("selected", node->isSelected);
 		widget->SetStateForcible("focused", mIsFocused);
 
@@ -1347,8 +1340,6 @@ namespace o2
 		if (mRearrangeType == RearrangeType::Disabled)
 			return;
 
-		mBeforeDragSelectedItems = mSelectedNodes;
-
 		mDragOffset = node->layout.mAbsoluteRect.Center() - node->GetCursorPressedPoint();
 		mFakeDragNode->Show(true);
 		mFakeDragNode->SetInteractable(false);
@@ -1370,7 +1361,7 @@ namespace o2
 		UpdateNodesStructure();
 	}
 
-	void UITree::EndDragging(bool updateNodes /*= true*/)
+	void UITree::EndDragging(bool droppedToThis /*= false*/)
 	{
 		mIsDraggingNodes = false;
 		mDragEnded = false;
@@ -1392,8 +1383,11 @@ namespace o2
 			idx++;
 		}
 
-		if (updateNodes)
+		if (!droppedToThis)
+		{
 			UpdateNodesStructure();
+			SetSelectedObjects(mBeforeDragSelectedItems);
+		}
 	}
 
 	void UITree::UpdateDraggingGraphics()
@@ -1521,8 +1515,8 @@ namespace o2
 	{
 		auto underCursorItem = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
 
-		EndDragging(false);
-		//OnSelectionChanged();
+		EndDragging(true);
+		OnSelectionChanged();
 
 		UnknownPtrsVec objects;
 		UnknownPtr targetParent = UnknownPtr();
@@ -1829,6 +1823,7 @@ CLASS_META(o2::UITree)
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
@@ -1841,6 +1836,7 @@ CLASS_META(o2::UITree)
 	PROTECTED_FUNCTION(SelectDragObjectsVec, GetSelectedDragObjects);
 	PROTECTED_FUNCTION(SelectDragObjectsVec, GetAllObjects);
 	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*);
+	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*, bool);
 	PROTECTED_FUNCTION(void, Deselect, SelectableDragableObject*);
 	PROTECTED_FUNCTION(void, AddSelectableObject, SelectableDragableObject*);
 	PROTECTED_FUNCTION(void, RemoveSelectableObject, SelectableDragableObject*);
@@ -1855,7 +1851,6 @@ CLASS_META(o2::UITree)
 	PROTECTED_FUNCTION(Node*, CreateNode, UnknownPtr, Node*);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
 	PROTECTED_FUNCTION(void, CreateVisibleNodeWidget, Node*, int);
 	PROTECTED_FUNCTION(void, UpdateNodeView, Node*, UITreeNode*, int);

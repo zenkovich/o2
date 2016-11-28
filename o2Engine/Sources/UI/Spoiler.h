@@ -34,6 +34,9 @@ namespace o2
 		// Draws spoiler
 		void Draw();
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UISpoiler);
 
 	protected:
@@ -44,9 +47,6 @@ namespace o2
 	protected:
 		// Updates expanding
 		void UpdateExpanding(float dt);
-
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Returns layout height
 		float GetLayoutHeight() const;

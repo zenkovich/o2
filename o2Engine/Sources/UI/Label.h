@@ -91,6 +91,9 @@ namespace o2
 		// Returns expanding overflow border
 		Vec2F GetExpandBorder() const;
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UILabel);
 
 	protected:
@@ -102,9 +105,6 @@ namespace o2
 		int field;
 
 	protected:
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
-
 		// Calls when layer added and updates drawing sequence
 		void OnLayerAdded(UIWidgetLayer* layer);
 

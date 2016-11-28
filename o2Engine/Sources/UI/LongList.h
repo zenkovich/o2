@@ -76,6 +76,9 @@ namespace o2
 		// Updates items
 		void OnItemsUpdated(bool itemsRearranged = false);
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UILongList);
 
 	protected:
@@ -105,9 +108,6 @@ namespace o2
 
 		// Updates mouse control
 		void UpdateControls(float dt);
-
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Moves scroll position and updates children widgets clipping and layout
 		void MoveScrollPosition(const Vec2F& delta);

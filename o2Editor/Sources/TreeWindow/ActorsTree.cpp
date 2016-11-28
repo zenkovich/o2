@@ -157,6 +157,11 @@ namespace Editor
 		UITree::SelectAndHightlightObject((UnknownPtr)(void*)object);
 	}
 
+	void UIActorsTree::ScrollToAndHightlight(Actor* object)
+	{
+		UITree::ScrollToAndHightlight(object);
+	}
+
 	void UIActorsTree::DeselectActor(Actor* object)
 	{
 		UITree::DeselectObject((UnknownPtr)(void*)object);
@@ -543,6 +548,7 @@ CLASS_META(Editor::UIActorsTree)
 	PUBLIC_FUNCTION(void, SetSelectedActors, const ActorsVec&);
 	PUBLIC_FUNCTION(void, SelectActor, Actor*);
 	PUBLIC_FUNCTION(void, SelectAndHightlightActor, Actor*);
+	PUBLIC_FUNCTION(void, ScrollToAndHightlight, Actor*);
 	PUBLIC_FUNCTION(void, DeselectActor, Actor*);
 	PUBLIC_FUNCTION(void, DeselectAllActors);
 	PUBLIC_FUNCTION(void, ScrollTo, Actor*);

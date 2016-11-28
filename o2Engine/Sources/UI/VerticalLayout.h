@@ -93,6 +93,9 @@ namespace o2
 		// Returns fitting by children
 		bool IsFittingByChildren() const;
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UIVerticalLayout);
 
 	protected:
@@ -104,9 +107,6 @@ namespace o2
 		bool       mFitByChildren = false;         // Fitting by children @SERIALIZABLE
 
 	protected:
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
-
 		// Returns layout height
 		float GetLayoutHeight() const;
 

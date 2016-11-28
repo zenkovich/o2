@@ -986,7 +986,7 @@ CLASS_META(o2::UIGridLayout)
 	PUBLIC_FUNCTION(int, GetArrangeAxisMaxCells);
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);

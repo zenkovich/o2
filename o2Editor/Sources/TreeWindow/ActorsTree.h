@@ -73,6 +73,9 @@ namespace Editor
 		// Selects object
 		void SelectAndHightlightActor(Actor* object);
 
+		// Scrolls view to object and hightlights
+		void ScrollToAndHightlight(Actor* object);
+
 		// Deselects object
 		void DeselectActor(Actor* object);
 

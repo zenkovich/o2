@@ -863,37 +863,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Scene/Component.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Component" fullname="o2::Component" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="ComponentDataNodeConverter" fullname="o2::ComponentDataNodeConverter" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IDataNodeTypeConverter" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Scene/DrawableComponent.h">
 		<date year="2016" month="9" day="30" hour="12" minute="29" second="50" />
 		<globalNamespace name="" fullname="">
@@ -906,108 +875,6 @@
 							<usings />
 							<baseClasses>
 								<class name="Component" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/ContextMenu.h">
-		<date year="2016" month="6" day="25" hour="14" minute="13" second="19" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIContextMenuItem" fullname="o2::UIContextMenuItem" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="UIContextMenu" fullname="o2::UIContextMenu" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="Item" fullname="o2::UIContextMenu::Item" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ISerializable" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs>
-								<typedef what="Function&lt;void()&gt;" newDef="ClickFunc" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="UIScrollArea" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/CustomDropDown.h">
-		<date year="2016" month="6" day="20" hour="23" minute="34" second="16" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UICustomDropDown" fullname="o2::UICustomDropDown" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/CustomList.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UICustomList" fullname="o2::UICustomList" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="Selection" fullname="o2::UICustomList::Selection" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-							</sections>
-							<typedefs>
-								<typedef what="Vector&lt;Selection&gt;" newDef="SelectionsVec" />
-								<typedef what="Vector&lt;Sprite*&gt;" newDef="SpritesVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="UIScrollArea" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -1042,148 +909,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/EditBox.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIEditBox" fullname="o2::UIEditBox" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIScrollArea" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/GridLayout.h">
-		<date year="2016" month="6" day="20" hour="21" minute="28" second="4" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIGridLayout" fullname="o2::UIGridLayout" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/HorizontalLayout.h">
-		<date year="2016" month="6" day="20" hour="21" minute="28" second="4" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIHorizontalLayout" fullname="o2::UIHorizontalLayout" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/HorizontalProgress.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIHorizontalProgress" fullname="o2::UIHorizontalProgress" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/HorizontalScrollBar.h">
-		<date year="2016" month="6" day="20" hour="23" minute="34" second="16" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIHorizontalScrollBar" fullname="o2::UIHorizontalScrollBar" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Label.h">
-		<date year="2016" month="9" day="28" hour="23" minute="47" second="53" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UILabel" fullname="o2::UILabel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/List.h">
 		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
 		<globalNamespace name="" fullname="">
@@ -1196,32 +921,6 @@
 							<usings />
 							<baseClasses>
 								<class name="UICustomList" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/LongList.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UILongList" fullname="o2::UILongList" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;UnknownType*&gt;" newDef="UnknownsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="UIScrollArea" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -1301,106 +1000,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Tree.h">
-		<date year="2016" month="7" day="28" hour="21" minute="44" second="29" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UITree" fullname="o2::UITree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="Node" fullname="o2::UITree::Node" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="VisibleWidgetDef" fullname="o2::UITree::VisibleWidgetDef" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-							</sections>
-							<typedefs>
-								<typedef what="Vector&lt;UnknownPtr&gt;" newDef="UnknownPtrsVec" />
-								<typedef what="Vector&lt;UITreeNode*&gt;" newDef="TreeNodesVec" />
-								<typedef what="Vector&lt;Node*&gt;" newDef="NodesVec" />
-								<typedef what="Vector&lt;VisibleWidgetDef&gt;" newDef="VisibleWidgetsDefsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="UIScrollArea" protection="0" />
-								<class name="DragDropArea" protection="0" />
-								<class name="ISelectableDragableObjectsGroup" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="UITreeNode" fullname="o2::UITreeNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-								<class name="SelectableDragableObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/VerticalProgress.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIVerticalProgress" fullname="o2::UIVerticalProgress" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/VerticalScrollBar.h">
-		<date year="2016" month="6" day="20" hour="23" minute="34" second="16" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIVerticalScrollBar" fullname="o2::UIVerticalScrollBar" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/WidgetState.h">
 		<date year="2016" month="7" day="2" hour="12" minute="45" second="58" />
 		<globalNamespace name="" fullname="">
@@ -1419,30 +1018,6 @@
 					<typedefs>
 						<typedef what="Vector&lt;UIWidgetState*&gt;" newDef="StatesVec" />
 					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Window.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="57" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIWindow" fullname="o2::UIWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIScrollArea" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
 					<usings />
 				</section>
 			</sections>
@@ -3710,29 +3285,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Scene/Components/ImageComponent.h">
-		<date year="2016" month="11" day="2" hour="0" minute="46" second="35" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="ImageComponent" fullname="o2::ImageComponent" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="DrawableComponent" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Utils/Reflection/FieldInfo.h">
 		<date year="2016" month="11" day="4" hour="15" minute="1" second="56" />
 		<globalNamespace name="" fullname="">
@@ -3910,6 +3462,318 @@
 									<baseClasses>
 										<class name="IsSupport&lt;T2&gt;::value &amp;&amp; IsSupport&lt;T3&gt;::value&gt;" protection="1" />
 									</baseClasses>
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
 								</section>
 								<section name="IsSupport&lt;T2&gt;" fullname="o2::DataNode::IsSupport&lt;T2&gt;" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 									<sections />
@@ -6435,29 +6299,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/ScrollArea.h">
-		<date year="2016" month="11" day="9" hour="23" minute="2" second="38" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIScrollArea" fullname="o2::UIScrollArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/WidgetLayer.h">
 		<date year="2016" month="11" day="11" hour="0" minute="17" second="38" />
 		<globalNamespace name="" fullname="">
@@ -6502,32 +6343,6 @@
 							<typedefs />
 							<usings />
 							<baseClasses />
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Widget.h">
-		<date year="2016" month="11" day="15" hour="0" minute="33" second="35" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UIWidget" fullname="o2::UIWidget" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;UIWidget*&gt;" newDef="WidgetsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-								<class name="IDrawable" protection="0" />
-							</baseClasses>
 						</section>
 					</sections>
 					<typedefs />
@@ -6593,8 +6408,430 @@
 			<usings />
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Scene/Component.h">
+		<date year="2016" month="11" day="26" hour="23" minute="28" second="57" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Component" fullname="o2::Component" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="ComponentDataNodeConverter" fullname="o2::ComponentDataNodeConverter" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IDataNodeTypeConverter" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/Scene/Components/ImageComponent.h">
+		<date year="2016" month="11" day="26" hour="23" minute="28" second="57" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="ImageComponent" fullname="o2::ImageComponent" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="DrawableComponent" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/ContextMenu.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIContextMenuItem" fullname="o2::UIContextMenuItem" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="UIContextMenu" fullname="o2::UIContextMenu" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Item" fullname="o2::UIContextMenu::Item" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Function&lt;void()&gt;" newDef="ClickFunc" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="UIScrollArea" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/CustomDropDown.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UICustomDropDown" fullname="o2::UICustomDropDown" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/CustomList.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UICustomList" fullname="o2::UICustomList" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Selection" fullname="o2::UICustomList::Selection" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Vector&lt;Selection&gt;" newDef="SelectionsVec" />
+								<typedef what="Vector&lt;Sprite*&gt;" newDef="SpritesVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="UIScrollArea" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/EditBox.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIEditBox" fullname="o2::UIEditBox" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIScrollArea" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/GridLayout.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIGridLayout" fullname="o2::UIGridLayout" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/HorizontalLayout.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIHorizontalLayout" fullname="o2::UIHorizontalLayout" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/HorizontalProgress.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIHorizontalProgress" fullname="o2::UIHorizontalProgress" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/HorizontalScrollBar.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIHorizontalScrollBar" fullname="o2::UIHorizontalScrollBar" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Label.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UILabel" fullname="o2::UILabel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/LongList.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UILongList" fullname="o2::UILongList" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;UnknownType*&gt;" newDef="UnknownsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="UIScrollArea" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/ScrollArea.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIScrollArea" fullname="o2::UIScrollArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Spoiler.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UISpoiler" fullname="o2::UISpoiler" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIVerticalLayout" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Tree.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UITree" fullname="o2::UITree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Node" fullname="o2::UITree::Node" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="VisibleWidgetDef" fullname="o2::UITree::VisibleWidgetDef" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Vector&lt;UnknownPtr&gt;" newDef="UnknownPtrsVec" />
+								<typedef what="Vector&lt;UITreeNode*&gt;" newDef="TreeNodesVec" />
+								<typedef what="Vector&lt;Node*&gt;" newDef="NodesVec" />
+								<typedef what="Vector&lt;VisibleWidgetDef&gt;" newDef="VisibleWidgetsDefsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="UIScrollArea" protection="0" />
+								<class name="DragDropArea" protection="0" />
+								<class name="ISelectableDragableObjectsGroup" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="UITreeNode" fullname="o2::UITreeNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+								<class name="SelectableDragableObject" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/VerticalLayout.h">
-		<date year="2016" month="11" day="24" hour="0" minute="21" second="1" />
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -6616,18 +6853,93 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Spoiler.h">
-		<date year="2016" month="11" day="24" hour="23" minute="15" second="58" />
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/VerticalProgress.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
 					<sections>
-						<section name="UISpoiler" fullname="o2::UISpoiler" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="UIVerticalProgress" fullname="o2::UIVerticalProgress" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs />
 							<usings />
 							<baseClasses>
-								<class name="UIVerticalLayout" protection="0" />
+								<class name="UIWidget" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/VerticalScrollBar.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIVerticalScrollBar" fullname="o2::UIVerticalScrollBar" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Widget.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIWidget" fullname="o2::UIWidget" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;UIWidget*&gt;" newDef="WidgetsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+								<class name="IDrawable" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Engine\Windows\..\Sources/UI/Window.h">
+		<date year="2016" month="11" day="28" hour="3" minute="12" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UIWindow" fullname="o2::UIWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIScrollArea" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>

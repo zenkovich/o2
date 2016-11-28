@@ -640,8 +640,8 @@ CLASS_META(o2::UICustomList)
 	PUBLIC_FUNCTION(void, SetHoverDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
 	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);

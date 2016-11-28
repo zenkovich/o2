@@ -140,6 +140,9 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsFocusable() const;
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UIEditBox);
 
 	protected:
@@ -227,9 +230,6 @@ namespace o2
 
 		// Updates scroll parameters: clip area, scroll size
 		void UpdateScrollParams();
-
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Updates transparency for this and children widgets
 		void UpdateTransparency();

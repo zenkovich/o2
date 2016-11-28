@@ -93,6 +93,9 @@ namespace o2
 		// Returns fitting by children
 		bool IsFittingByChildren() const;
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UIHorizontalLayout);
 
 	protected:
@@ -104,8 +107,8 @@ namespace o2
 		bool       mFitByChildren = false;         // Fitting by children @SERIALIZABLE
 
 	protected:
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		// Returns layout width
+		float GetLayoutWidth() const;
 
 		// Calls when child widget was added
 		void OnChildAdded(UIWidget* child);

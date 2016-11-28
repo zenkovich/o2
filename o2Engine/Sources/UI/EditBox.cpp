@@ -1398,6 +1398,7 @@ CLASS_META(o2::UIEditBox)
 	PUBLIC_FUNCTION(float, GetCaretBlinkingDelay);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnFocused);
@@ -1417,7 +1418,6 @@ CLASS_META(o2::UIEditBox)
 	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
 	PROTECTED_FUNCTION(WString, GetFilteredText, const WString&);
 	PROTECTED_FUNCTION(void, UpdateScrollParams);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, CheckCharactersAndLinesBounds);
 	PROTECTED_FUNCTION(void, UpdateSelectionAndCaret);

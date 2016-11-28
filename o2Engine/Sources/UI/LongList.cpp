@@ -547,9 +547,9 @@ CLASS_META(o2::UILongList)
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, CalculateScrollArea);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateVisibleItems);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

@@ -305,6 +305,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildArrowToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
+		sample->layout.minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_select_tool.png"),
@@ -329,6 +330,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildBrushToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
+		sample->layout.minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_brush_tool.png"),
@@ -353,6 +355,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildMoveToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
+		sample->layout.minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_move_tool.png"),
@@ -377,6 +380,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildRotateToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
+		sample->layout.minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_rotate_tool.png"),
@@ -401,6 +405,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildScaleToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
+		sample->layout.minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_scale_tool.png"),
@@ -425,6 +430,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildFrameToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
+		sample->layout.minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI_frame_tool.png"),

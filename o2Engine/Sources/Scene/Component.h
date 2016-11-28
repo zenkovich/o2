@@ -69,6 +69,9 @@ namespace o2
 		template<typename _type>
 		Vector<_type>* GetComponentsInChildren() const;
 
+		// Returns name of component
+		virtual String GetName() const;
+
 		SERIALIZABLE(Component);
 
 	protected:

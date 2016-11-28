@@ -159,6 +159,9 @@ namespace o2
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UITree);
 
 	protected:
@@ -243,7 +246,7 @@ namespace o2
 		UITreeNode*    mFakeDragNode = nullptr;                 // Dragging node
 		Vec2F          mDragOffset;                             // Offset from cursor to dragging node's center
 		UITreeNode*    mInsertNodeCandidate = nullptr;          // Insertion node candidate when dragging nodes
-		NodesVec       mBeforeDragSelectedItems;                // Before drag begin selection
+		UnknownPtrsVec mBeforeDragSelectedItems;                // Before drag begin selection
 		bool           mDragEnded = false;                      // Is dragging ended and it needs to call EndDragging
 
 		UnknownPtrsVec mExpandedObjects;                        // Expanded objects
@@ -302,6 +305,7 @@ namespace o2
 		virtual void OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject);
 
 // ISelectableDragableObjectsGroup implementation
+
 		// Returns selected objects in group
 		SelectDragObjectsVec GetSelectedDragObjects() const;
 
@@ -310,6 +314,9 @@ namespace o2
 
 		// Selects object
 		void Select(SelectableDragableObject* object);
+
+		// Selects object
+		void Select(SelectableDragableObject* object, bool sendOnSelectionChanged);
 
 		// Deselects object
 		void Deselect(SelectableDragableObject* object);
@@ -354,9 +361,6 @@ namespace o2
 
 		// Calls when widget was deselected
 		void OnUnfocused();
-
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Updates visible nodes (calculates range and initializes nodes)
 		void UpdateVisibleNodes();
@@ -424,7 +428,7 @@ namespace o2
 		void BeginDragging(UITreeNode* node);
 
 		// Ends dragging items
-		void EndDragging(bool updateNodes = true);
+		void EndDragging(bool droppedToThis = false);
 
 		// Updates dragging graphics
 		void UpdateDraggingGraphics();

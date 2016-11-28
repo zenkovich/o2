@@ -209,6 +209,9 @@ namespace o2
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point);
 
+		// Updates layout
+		virtual void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UIWidget);
 
 	protected:
@@ -252,9 +255,6 @@ namespace o2
 
 		// Checks is this layout driven by parent and calls UpdateLayout in parent if needed
 		virtual bool CheckIsLayoutDrivenByParent(bool forcibleLayout);
-
-		// Updates layout
-		virtual void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Returns layout width
 		virtual float GetLayoutWidth() const;

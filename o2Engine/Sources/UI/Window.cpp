@@ -409,7 +409,7 @@ CLASS_META(o2::UIWindow)
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(void, SetDragAreaLayouts, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&);
 	PUBLIC_FUNCTION(bool, IsFocusable);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, InitializeHandles);

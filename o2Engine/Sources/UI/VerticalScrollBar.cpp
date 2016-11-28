@@ -382,7 +382,7 @@ CLASS_META(o2::UIVerticalScrollBar)
 	PUBLIC_FUNCTION(void, SetMinimalScrollhandleSize, float);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
 	PROTECTED_FUNCTION(void, OnLayoutUpdated);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);

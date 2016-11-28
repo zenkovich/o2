@@ -130,6 +130,9 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UICustomList);
 
 	protected:
@@ -169,9 +172,6 @@ namespace o2
 	protected:
 		// Updates mouse control
 		void UpdateControls(float dt);
-
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);

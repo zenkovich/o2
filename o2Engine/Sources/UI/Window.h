@@ -65,6 +65,9 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsFocusable() const;
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UIWindow);
 
 	protected:
@@ -109,9 +112,6 @@ namespace o2
 		RectF                mRightBottomDragAreaRect;   //	Right Bottom drag handle rect
 
 	protected:
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
-
 		// Updates transparency for this and children widgets
 		void UpdateTransparency();
 

@@ -171,6 +171,9 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UIContextMenu);
 
 	protected:
@@ -199,9 +202,6 @@ namespace o2
 		bool                  mShownAtFrame = false;         // Is context was shown at current frame
 
 	protected:
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
-
 		// Checks widget clipping by area
 		void CheckClipping(const RectF& clipArea);
 

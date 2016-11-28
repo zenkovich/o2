@@ -245,17 +245,13 @@ namespace o2
 		}
 		else
 		{
-			float totalHeight = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetHeight(); });
+			float totalHeight = mChilds.Sum<float>([&](UIWidget* child) { return child->GetLayoutHeight(); });
 			totalHeight += (mChilds.Count() - 1)*mSpacing;
 			float position = -totalHeight*0.5f;
 			for (auto child : mChilds)
 			{
-				Vec2F childSize(Math::Max(child->layout.mMinSize.x, child->layout.mOffsetMax.x - child->layout.mOffsetMin.x),
-								Math::Max(child->layout.mMinSize.y, child->layout.mOffsetMax.y - child->layout.mOffsetMin.y));
-
-
 				child->layout.mOffsetMin.y = position;
-				position += Math::Abs(childSize.y);
+				position += Math::Abs(Math::Max(child->layout.mMinSize.y, child->GetLayoutHeight()));
 
 				child->layout.mOffsetMax.y = position;
 				position += mSpacing;
@@ -291,12 +287,8 @@ namespace o2
 			float position = mBorder.bottom;
 			for (auto child : mChilds)
 			{
-				Vec2F childSize(Math::Max(child->layout.mMinSize.x, child->layout.mOffsetMax.x - child->layout.mOffsetMin.x),
-								Math::Max(child->layout.mMinSize.y, child->layout.mOffsetMax.y - child->layout.mOffsetMin.y));
-
-
 				child->layout.mOffsetMin.y = position;
-				position += Math::Abs(childSize.y);
+				position += Math::Abs(Math::Max(child->layout.mMinSize.y, child->GetLayoutHeight()));
 
 				child->layout.mOffsetMax.y = position;
 				position += mSpacing;
@@ -397,7 +389,8 @@ namespace o2
 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
 		Vec2F size(GetLayoutWidth(), GetLayoutHeight());
 
-		Vec2F szDelta = size - (layout.mOffsetMax - layout.mOffsetMin);
+		Vec2F parentSize = mParent ? mParent->layout.mAbsoluteRect.Size() : Vec2F();		
+		Vec2F szDelta = size - (layout.mOffsetMax - layout.mOffsetMin + (layout.mAnchorMax - layout.mAnchorMin)*parentSize);
 
 		if (mExpandWidth)
 			szDelta.x = 0;
@@ -533,7 +526,7 @@ CLASS_META(o2::UIVerticalLayout)
 	PUBLIC_FUNCTION(bool, IsHeightExpand);
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(float, GetLayoutHeight);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);

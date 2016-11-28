@@ -124,7 +124,7 @@ namespace Editor
 		mEditToolsPanel->name = "edit tools";
 		mEditToolsPanel->AddLayer("back", mnew Sprite("ui/UI_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
 		mEditToolsPanel->layout = UIWidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
-		mEditToolsPanel->expandHeight = false;
+		mEditToolsPanel->expandHeight = true;
 		mEditToolsPanel->expandWidth = false;
 		mEditToolsPanel->fitByChildren = true;
 		mEditToolsPanel->baseCorner = BaseCorner::Center;

@@ -46,7 +46,7 @@ namespace Editor
 
 	void TreeWindow::HightlightActorsTreeNode(Actor* targetActor)
 	{
-		mActorsTree->SelectAndHightlightActor(targetActor);
+		mActorsTree->ScrollToAndHightlight(targetActor);
 	}
 
 	void TreeWindow::InitializeWindow()

@@ -878,7 +878,7 @@ CLASS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(void, SetMinFitSize, float);
 	PUBLIC_FUNCTION(void, SetMaxItemsVisible, int);
 	PUBLIC_FUNCTION(bool, IsScrollable);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, FitSize);
 	PROTECTED_FUNCTION(void, FitPosition);

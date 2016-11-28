@@ -537,8 +537,6 @@ namespace o2
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
 
-		//o2Debug.Log(mName + " scroll is " + (String)roundedScrollPos);
-
 		if (withChildren)
 			UpdateChildrenLayouts(true);
 
@@ -565,7 +563,7 @@ namespace o2
 	void UIScrollArea::MoveWidgetAndCheckClipping(UIWidget* widget, const Vec2F& delta)
 	{
 		widget->mBoundsWithChilds += delta;
-		//widget->mIsClipped = !widget->mBoundsWithChilds.IsIntersects(mAbsoluteClipArea);
+		widget->mIsClipped = !widget->mBoundsWithChilds.IsIntersects(mAbsoluteClipArea);
 
 		if (!widget->mIsClipped)
 			widget->UpdateLayout(true, false);
@@ -642,18 +640,6 @@ namespace o2
 							 localViewArea.Height() - mScrollArea.top + localViewArea.bottom,
 							 -(localViewArea.Width() - mScrollArea.right + localViewArea.left),
 							 -mScrollArea.bottom + localViewArea.bottom);
-
-		//o2Debug.Log(mName + " scroll range " + (String)mScrollRange);
-
-		if (mScrollRange.Height() < 1.0f)
-		{
-			CalculateScrollArea();
-
-			mScrollRange = RectF(mScrollArea.left - localViewArea.left,
-								 localViewArea.Height() - mScrollArea.top + localViewArea.bottom,
-								 -(localViewArea.Width() - mScrollArea.right + localViewArea.left),
-								 -mScrollArea.bottom + localViewArea.bottom);
-		}
 
 		if (mHorScrollBar)
 		{
@@ -868,6 +854,7 @@ CLASS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetViewLayout);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 }
 END_META;
  

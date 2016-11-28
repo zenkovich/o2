@@ -374,19 +374,22 @@ namespace o2
 
 	void EventSystem::ProcessKeyPressed(const Input::Key& key)
 	{
-		for (auto listener : mKeyboardListeners)
+		auto listeners = mKeyboardListeners;
+		for (auto listener : listeners)
 			listener->OnKeyPressed(key);
 	}
 
 	void EventSystem::ProcessKeyDown(const Input::Key& key)
 	{
-		for (auto listener : mKeyboardListeners)
+		auto listeners = mKeyboardListeners;
+		for (auto listener : listeners)
 			listener->OnKeyStayDown(key);
 	}
 
 	void EventSystem::ProcessKeyReleased(const Input::Key& key)
 	{
-		for (auto listener : mKeyboardListeners)
+		auto listeners = mKeyboardListeners;
+		for (auto listener : listeners)
 			listener->OnKeyReleased(key);
 	}
 

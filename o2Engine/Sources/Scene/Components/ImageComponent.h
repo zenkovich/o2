@@ -154,6 +154,9 @@ namespace o2
 		// Sets size with equal aspect as texture source rectangle by nearest value
 		void NormalizeAspect();
 
+		// Returns name of component
+		String GetName() const;
+
 		SERIALIZABLE(ImageComponent);
 
 	protected:

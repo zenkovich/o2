@@ -100,6 +100,9 @@ namespace o2
 		// Returns fitting by children
 		bool IsFittingByChildren() const;
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UIGridLayout);
 
 	protected:
@@ -112,9 +115,6 @@ namespace o2
 		bool         mFitByChildren = false;                  // Fitting by children @SERIALIZABLE
 
 	protected:
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
-
 		// Calls when child widget was added
 		void OnChildAdded(UIWidget* child);
 

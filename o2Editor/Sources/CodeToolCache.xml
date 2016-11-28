@@ -1169,46 +1169,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/TreeWindow/ActorsTree.h">
-		<date year="2016" month="10" day="7" hour="18" minute="23" second="16" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="UIActorsTree" fullname="Editor::UIActorsTree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;Actor*&gt;" newDef="ActorsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="UITree" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="UIActorsTreeNode" fullname="Editor::UIActorsTreeNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UITreeNode" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/EditorApplication.h">
 		<date year="2016" month="10" day="8" hour="1" minute="24" second="44" />
 		<globalNamespace name="" fullname="">
@@ -1382,36 +1342,6 @@
 			</sections>
 			<typedefs />
 			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorComponentViewer.h">
-		<date year="2016" month="10" day="22" hour="22" minute="38" second="1" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IActorComponentViewer" fullname="Editor::IActorComponentViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/ActorProperty.h">
@@ -1939,6 +1869,76 @@
 			<sections />
 			<typedefs />
 			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorComponentViewer.h">
+		<date year="2016" month="11" day="26" hour="23" minute="28" second="57" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="IActorComponentViewer" fullname="Editor::IActorComponentViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IObject" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/TreeWindow/ActorsTree.h">
+		<date year="2016" month="11" day="28" hour="3" minute="25" second="38" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="UIActorsTree" fullname="Editor::UIActorsTree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;Actor*&gt;" newDef="ActorsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="UITree" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="UIActorsTreeNode" fullname="Editor::UIActorsTreeNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UITreeNode" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
 		</globalNamespace>
 	</file>
 </files>

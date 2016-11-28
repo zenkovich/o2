@@ -1084,11 +1084,11 @@ CLASS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, DrawDebugFrame);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(bool, CheckIsLayoutDrivenByParent, bool);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(float, GetLayoutWidth);
 	PROTECTED_FUNCTION(float, GetLayoutHeight);
 	PROTECTED_FUNCTION(void, UpdateChildrenLayouts, bool);

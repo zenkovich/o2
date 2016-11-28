@@ -93,6 +93,9 @@ namespace o2
 		// Returns view layout
 		Layout GetViewLayout() const;
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UIScrollArea);
 
 	protected:
@@ -138,9 +141,6 @@ namespace o2
 
 		// Check scroll bars showing
 		void CheckScrollBarsVisibility();
-
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Moves scroll position and updates children widgets clipping and layout
 		virtual void MoveScrollPosition(const Vec2F& delta);

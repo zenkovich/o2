@@ -112,6 +112,9 @@ namespace o2
 		// Returns clipping layout
 		Layout GetClippingLayout();
 
+		// Updates layout
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
 		SERIALIZABLE(UICustomDropDown);
 
 	protected:
@@ -139,9 +142,6 @@ namespace o2
 
 		// Calls when visible was changed
 		void OnVisibleChanged();
-
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Calls when item was selected in list
 		void OnItemSelected();
