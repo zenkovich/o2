@@ -497,10 +497,7 @@ namespace o2
 		}
 
 		if (state->name == "focused")
-		{
 			mFocusedState = state;
-			mFocusedState->SetStateForcible(mIsFocused);
-		}
 
 		state->mOwner = this;
 

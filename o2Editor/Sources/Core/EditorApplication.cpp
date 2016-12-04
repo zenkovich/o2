@@ -134,12 +134,25 @@ namespace Editor
 		mBackSign = mnew Sprite("ui/UI_o2_sign.png");
 
 		mConfig = mnew EditorConfig();
+		mConfig->LoadConfigs();
+
 		mWindowsManager = mnew WindowsManager();
 		mMenuPanel = mnew MenuPanel();
 		mToolsPanel = mnew ToolsPanel();
 
+		if (mConfig->mProjectConfig.mMaximized)
+		{
+			o2Application.Maximize();
+		}
+		else
+		{
+			Vec2I pos = mConfig->mProjectConfig.mWindowPosition;
+			o2Application.SetWindowSize(mConfig->mProjectConfig.mWindowSize);
+			o2Application.SetWindowPosition(pos);
+			mConfig->mProjectConfig.mWindowPosition = pos;
+		}
+
 		OnResizing();
-		mConfig->LoadConfigs();
 	}
 
 	void EditorApplication::OnClosing()

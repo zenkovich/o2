@@ -370,7 +370,7 @@ namespace o2
 
 		DataNode metaData;
 		metaData = assetTypeSampleMeta;
-		*metaData["Value/mId"] = Assets::GetRandomAssetId();
+		metaData["Value/mId"] = Assets::GetRandomAssetId();
 
 		metaData.SaveToFile(metaFullPath);
 

@@ -17,6 +17,7 @@ namespace o2
 	public:
 		Property<FontRef>     font;                // Font pointer property
 		Property<WString>     text;                // Text property, wstring
+		Property<int>         height;              // Text height property
 		Property<VerAlign>    verAlign;            // vertical align property
 		Property<HorAlign>    horAlign;            // Horizontal align property
 		Property<HorOverflow> horOverflow;		   // Horizontal text overflow logic property
@@ -91,6 +92,12 @@ namespace o2
 		// Returns expanding overflow border
 		Vec2F GetExpandBorder() const;
 
+		// Sets text height
+		void SetHeight(int height);
+
+		// Returns text height
+		int GetHeight() const;
+
 		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
@@ -99,10 +106,8 @@ namespace o2
 	protected:
 		Text*       mTextLayer = nullptr;             // Text layer drawable. Getting from layer "text"
 		HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
-		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZEBLE
+		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
 		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
-
-		int field;
 
 	protected:
 		// Calls when layer added and updates drawing sequence

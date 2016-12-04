@@ -235,9 +235,9 @@ namespace o2
 		const UInt mMeshMaxPolyCount = 4096;
 
 		WString    mText;              // Wide char string, containing rendering text @SERIALIZABLE
-		UID    mFontAssetId;       // Font asset id @SERIALIZABLE
+		UID        mFontAssetId;       // Font asset id @SERIALIZABLE
 		FontRef    mFont;              // Using font
-		int        mHeight;            // Text height
+		int        mHeight;            // Text height @SERIALIZABLE
 		float      mSymbolsDistCoef;   // Characters distance coef, 1 is standard @SERIALIZABLE
 		float      mLinesDistanceCoef; // Lines distance coef, 1 is standard @SERIALIZABLE
 		VerAlign   mVerAlign;          // Vertical align @SERIALIZABLE

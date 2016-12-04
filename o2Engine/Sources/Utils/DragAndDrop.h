@@ -204,7 +204,7 @@ namespace o2
 		bool IsSelected() const;
 
 		// Sets is this selected
-		void SetSelected(bool selected);
+		virtual void SetSelected(bool selected);
 
 		// Selects this
 		void Select();

@@ -32,6 +32,12 @@ namespace Editor
 		// Destructor. Saves application configuration
 		~EditorConfig();
 
+		// Returns user data from global config
+		DataNode& GetGlobalUserData();
+
+		// Returns user data from project config
+		DataNode& GetProjectUserData();
+
 		SERIALIZABLE(EditorConfig);
 
 	public:
@@ -43,6 +49,7 @@ namespace Editor
 			String         mLastOpenedProjectpath; // Last opened project path @SERIALIZABLE
 			WindowsLayout  mDefaultLayout;         // Default windows layout, using in resetting @SERIALIZABLE
 			WndLayoutsDict mAvailableLayouts;      // Available windows layouts @SERIALIZABLE
+			DataNode       mUserData;              // User data  @SERIALIZABLE
 
 			SERIALIZABLE(GlobalConfig);
 		};
@@ -54,6 +61,7 @@ namespace Editor
 			Vec2I         mWindowPosition;               // Application window position @SERIALIZABLE
 			bool          mMaximized = true;             // Is application window is maximized @SERIALIZABLE
 			WindowsLayout mLayout;                       // Windows layout @SERIALIZABLE
+			DataNode      mUserData;                     // User data  @SERIALIZABLE
 
 			SERIALIZABLE(ProjectConfig);
 		};

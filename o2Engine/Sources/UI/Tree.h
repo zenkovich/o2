@@ -32,7 +32,6 @@ namespace o2
 		Function<Vector<UnknownPtr>(UnknownPtr)> getObjectChildrenDelegate;      // Getting objects' childs count delegate 
 		Function<void(UITreeNode*, UnknownPtr)>  fillNodeDataByObjectDelegate;   // Setup tree node item delegate
 		Function<String(UnknownPtr)>             getDebugForObject;              // Getting debug string for object delegate
-		Function<void(UITreeNode*)>              onNodeClicked;                  // Node click event
 		Function<void(UITreeNode*)>              onNodeDoubleClicked;            // Node double clicked event
 		Function<void(UITreeNode*)>              onNodeRightButtonClicked;       // Node right button click event
 		Function<void(UnknownPtrsVec)>           onObjectsSelectionChanged;      // Objects selected event
@@ -289,9 +288,6 @@ namespace o2
 		// Sets nodeWidget data by object
 		virtual void FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object);
 
-		// Calls when thee node was clicked
-		virtual void OnNodeClick(UITreeNode* nodeWidget);
-
 		// Calls when tree node was double clicked
 		virtual void OnNodeDblClick(UITreeNode* nodeWidget);
 
@@ -498,10 +494,9 @@ namespace o2
 		SERIALIZABLE(UITreeNode);
 
 	protected:
-		UITree::Node*  mNodeDef = nullptr;       // Node definition
-		UITree*        mOwnerTree = nullptr;     // Owner tree
-		UIWidgetState* mSelectedState = nullptr; // Node selected state
-		UIButton*      mExpandBtn = nullptr;     // Node expanding button
+		UITree::Node* mNodeDef = nullptr;       // Node definition
+		UITree*       mOwnerTree = nullptr;     // Owner tree
+		UIButton*     mExpandBtn = nullptr;     // Node expanding button
 
 	protected:
 		// Updates expanding

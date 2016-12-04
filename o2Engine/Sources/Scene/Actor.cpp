@@ -697,7 +697,7 @@ namespace o2
 	void Actor::OnSerialize(DataNode& node) const
 	{
 		if (mLayer)
-			*node["mLayerName"] = mLayer->name;
+			node["mLayerName"] = mLayer->name;
 
 		auto childsNode = node.AddNode("Childs");
 		for (auto child : mChilds)

@@ -38,6 +38,8 @@ namespace Editor
 		UIContextMenu* mContextMenu; // Context menu
 		String         mCurrentPath; // Current viewing path
 
+		bool           mOpengingFolderFromThis = false;
+
 	protected:
 		// Selects and expands folder
 		void SelectAndExpandFolder(const String& path);
@@ -61,7 +63,7 @@ namespace Editor
 		void OnFoldersTreeNodeDblClick(UITreeNode* node);
 
 		// Calls when folder item clicked (for folders tree)
-		void OnFoldersTreeClick(UITreeNode* node);
+		void OnFoldersTreeSelect(Vector<UnknownPtr> nodes);
 
 		// Calls when folders tree clicked by right button
 		void OnFoldersTreeRightClick(UITreeNode* node);

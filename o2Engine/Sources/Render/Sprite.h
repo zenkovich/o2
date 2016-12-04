@@ -19,7 +19,7 @@ namespace o2
 	public:
 		Property<TextureRef> texture;          // Texture property
 		Property<RectI>      textureSrcRect;   // Texture source rectangle property
-		Property<UID>    imageAssetId;     // Image asset id property
+		Property<UID>        imageAssetId;     // Image asset id property
 		Setter<String>       imageAssetPath;   // Sets image asset from path
 		Setter<ImageAsset>   imageAsset;       // Sets image asset
 		Setter<Bitmap*>      bitmap;           // Sets image from bitmap
@@ -164,6 +164,7 @@ namespace o2
 		Color4     mCornersColors[4]; // Corners colors
 		UID        mImageAssetId;     // Image asset id (0 by default)
 		UID        mAtlasAssetId;     // Atlas asset id (0 by default)
+		String     mImageName;        // Image name
 		SpriteMode mMode;             // Drawing mode @SERIALIZABLE
 		RectI      mSlices;           // Slice borders @SERIALIZABLE
 		float      mFill;             // Sprite fillness @SERIALIZABLE

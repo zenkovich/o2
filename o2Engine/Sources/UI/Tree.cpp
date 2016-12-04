@@ -346,11 +346,6 @@ namespace o2
 		fillNodeDataByObjectDelegate(nodeWidget, object);
 	}
 
-	void UITree::OnNodeClick(UITreeNode* nodeWidget)
-	{
-		onNodeClicked(nodeWidget);
-	}
-
 	void UITree::OnNodeDblClick(UITreeNode* nodeWidget)
 	{
 		onNodeDoubleClicked(nodeWidget);
@@ -1534,7 +1529,12 @@ namespace o2
 
 				int idx = parentChilds.Find(insertNodeCandidate->object);
 				if (idx > 0)
+				{
 					targetPrevObject = parentChilds[idx - 1];
+					
+					if (mSelectedObjects.Contains(targetPrevObject) && idx > 1)
+						targetPrevObject = parentChilds[idx - 2];
+				}
 				else
 					targetPrevObject = UnknownPtr();
 			}
@@ -1733,7 +1733,6 @@ CLASS_META(o2::UITree)
 	PUBLIC_FIELD(getObjectChildrenDelegate);
 	PUBLIC_FIELD(fillNodeDataByObjectDelegate);
 	PUBLIC_FIELD(getDebugForObject);
-	PUBLIC_FIELD(onNodeClicked);
 	PUBLIC_FIELD(onNodeDoubleClicked);
 	PUBLIC_FIELD(onNodeRightButtonClicked);
 	PUBLIC_FIELD(onObjectsSelectionChanged);
@@ -1828,7 +1827,6 @@ CLASS_META(o2::UITree)
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
 	PROTECTED_FUNCTION(void, FillNodeDataByObject, UITreeNode*, UnknownPtr);
-	PROTECTED_FUNCTION(void, OnNodeClick, UITreeNode*);
 	PROTECTED_FUNCTION(void, OnNodeDblClick, UITreeNode*);
 	PROTECTED_FUNCTION(void, OnNodeRBClick, UITreeNode*);
 	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
@@ -1891,7 +1889,6 @@ CLASS_META(o2::UITreeNode)
 
 	PROTECTED_FIELD(mNodeDef);
 	PROTECTED_FIELD(mOwnerTree);
-	PROTECTED_FIELD(mSelectedState);
 	PROTECTED_FIELD(mExpandBtn);
 
 	PUBLIC_FUNCTION(void, SetExpanded, bool, bool);

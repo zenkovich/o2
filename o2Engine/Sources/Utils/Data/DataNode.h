@@ -256,10 +256,10 @@ namespace o2
 
 
 		// [] assign operator. nodePath sample: "node/node/abc/cde"
-		DataNode* operator[](const WString& nodePath);
+		DataNode& operator[](const WString& nodePath);
 
 		// [] assign operator. nodePath sample: "node/node/abc/cde"
-		DataNode* operator[](const char* nodePath);
+		DataNode& operator[](const char* nodePath);
 
 		// Equals operator
 		bool operator==(const DataNode& other) const;

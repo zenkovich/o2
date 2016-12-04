@@ -3,6 +3,7 @@
 #include "Assets/Assets.h"
 #include "Assets/AssetsTree.h"
 #include "Assets/FolderAsset.h"
+#include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/AssetsWindow.h"
 #include "Render/Sprite.h"
 #include "UI/ContextMenu.h"
@@ -26,7 +27,7 @@ namespace Editor
 		mFoldersTree->getObjectChildrenDelegate = Function<Vector<UnknownPtr>(UnknownPtr)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeChilds);
 		mFoldersTree->fillNodeDataByObjectDelegate = Function<void(UITreeNode*, UnknownPtr)>(this, &UIAssetsFoldersTree::SetupFoldersTreeNode);
 		mFoldersTree->onNodeDoubleClicked = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeNodeDblClick);
-		mFoldersTree->onNodeClicked = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeClick);
+		mFoldersTree->onObjectsSelectionChanged = Function<void(Vector<UnknownPtr>)>(this, &UIAssetsFoldersTree::OnFoldersTreeSelect);
 		mFoldersTree->onNodeRightButtonClicked = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeRightClick);
 		mFoldersTree->UpdateNodesView();
 
@@ -167,14 +168,21 @@ namespace Editor
 		};
 	}
 
-	void UIAssetsFoldersTree::OnFoldersTreeClick(UITreeNode* node)
+	void UIAssetsFoldersTree::OnFoldersTreeSelect(Vector<UnknownPtr> nodes)
 	{
-		if (node)
+		if (mOpengingFolderFromThis)
+			return;
+
+		mOpengingFolderFromThis = true;
+
+		if (nodes.Count() > 0)
 		{
-			AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)node->GetObject();
-			o2EditorAssets.OpenFolder(assetTreeNode->mPath);
+			AssetTree::AssetNode* assetTreeNode = nodes.Last();
+			o2EditorAssets.mAssetsGridScroll->SetViewingPath(assetTreeNode->mPath);
 		}
 		else o2EditorAssets.OpenFolder("");
+
+		mOpengingFolderFromThis = false;
 	}
 
 	void UIAssetsFoldersTree::OnFoldersTreeRightClick(UITreeNode* node)
@@ -315,6 +323,7 @@ CLASS_META(Editor::UIAssetsFoldersTree)
 	PROTECTED_FIELD(mFoldersTree);
 	PROTECTED_FIELD(mContextMenu);
 	PROTECTED_FIELD(mCurrentPath);
+	PROTECTED_FIELD(mOpengingFolderFromThis);
 
 	PROTECTED_FUNCTION(void, SelectAndExpandFolder, const String&);
 	PROTECTED_FUNCTION(void, UpdateView);
@@ -323,7 +332,7 @@ CLASS_META(Editor::UIAssetsFoldersTree)
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetFoldersTreeNodeChilds, UnknownPtr);
 	PROTECTED_FUNCTION(void, SetupFoldersTreeNode, UITreeNode*, UnknownPtr);
 	PROTECTED_FUNCTION(void, OnFoldersTreeNodeDblClick, UITreeNode*);
-	PROTECTED_FUNCTION(void, OnFoldersTreeClick, UITreeNode*);
+	PROTECTED_FUNCTION(void, OnFoldersTreeSelect, Vector<UnknownPtr>);
 	PROTECTED_FUNCTION(void, OnFoldersTreeRightClick, UITreeNode*);
 	PROTECTED_FUNCTION(void, OnContextCopyPressed);
 	PROTECTED_FUNCTION(void, OnContextCutPressed);

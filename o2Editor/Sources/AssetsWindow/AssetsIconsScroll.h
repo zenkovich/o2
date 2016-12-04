@@ -5,6 +5,7 @@
 #include "Events/KeyboardEventsListener.h"
 #include "UI/ScrollArea.h"
 #include "Utils/Containers/Pair.h"
+#include "Utils/DragAndDrop.h"
 
 using namespace o2;
 
@@ -29,11 +30,9 @@ namespace Editor
 	// ------------------------
 	// Assets icons scroll area
 	// ------------------------
-	class UIAssetsIconsScrollArea: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
+	class UIAssetsIconsScrollArea: public UIScrollArea, public DragDropArea, public KeyboardEventsListener, 
+		public ISelectableDragableObjectsGroup
 	{
-	public:
-		enum class DragState { Off, Regular, Scene, Tree, AssetField, ActorField, ComponentField };
-
 	public:
 		// Default constructor
 		UIAssetsIconsScrollArea();
@@ -65,6 +64,9 @@ namespace Editor
 		// Returns is this widget can be selected
 		bool IsFocusable() const;
 
+		// Hightlights asset
+		void HightlightAsset(UID id);
+
 		// Selects asset
 		void SelectAsset(UID id, bool scroll = true);
 
@@ -77,68 +79,56 @@ namespace Editor
 		// Return asset icon under point
 		UIAssetIcon* GetIconUnderPoint(const Vec2F& point) const;
 
+		// Returns node hightlight drawable
+		Sprite* GetHightlightDrawable() const;
+
+		// Sets hightlight animation
+		void SetHightlightAnimation(const Animation& animation);
+
+		// Sets hightlight layout
+		void SetHightlightLayout(const Layout& layout);
+
+		// Returns selecting rectangle drawable
+		Sprite* GetSelectingDrawable() const;
+
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point);
+
 		SERIALIZABLE(UIAssetsIconsScrollArea);
 
 	protected:
-		// ------------------------
-		// Asset icon selection def
-		// ------------------------
-		struct IconSelection
-		{
-			UIAssetIcon* icon;            // Asset icon widget pointer
-			Sprite*      selectionSprite; // Selection sprite
-
-			IconSelection();
-			IconSelection(UIAssetIcon* icon, Sprite* selectionSprite);
-
-			bool operator==(const IconSelection& other) const;
-		};
-
-		typedef Vector<IconSelection> IconSelectionsVec;
 		typedef Vector<UIAssetIcon*> AssetsIconsVec;
 		typedef Vector<Sprite*> SpritesVec;
 		typedef Dictionary<String, AssetsIconsVec> IconArrsDict;
 		typedef Vector<Pair<UID, String>> AssetIdPathVec;
 		typedef Vector<Actor*> ActorsVec;
 
-
 		const Vec2F        mAssetIconSize = Vec2F(50, 60);
-		Color4             mSelectedColor = Color4(175, 175, 255, 150);
-		Color4             mUnselectedColor = Color4(100, 100, 100, 100);
-		Color4             mHoverColor = Color4(100, 100, 100, 100);
 
-		String             mCurrentPath;                // Current viewing path
+		String             mCurrentPath = "_";          // Current viewing path
 
-		UIGridLayout*      mGrid;                       // Assets icons grid
-		Sprite*            mSelection;                  // Icons selection sprite
+		UIGridLayout*      mGrid = nullptr;             // Assets icons grid
+		UIContextMenu*     mContextMenu = nullptr;      // Assets Context menu
 
-		UIContextMenu*     mContextMenu;                // Assets Context menu
+		AssetsIconsVec     mSelectedAssetsIcons;        // Selected assets icons
 
-		IconSelectionsVec  mSelectedAssetsIcons;        // Selected assets icons
-		Sprite*            mIconSelectionSprite;        // Selection sprite drawable
-		Layout             mSelectionSpriteLayout;      // Selection sprite layout 
-		SpritesVec         mSelectionSpritesPool;       // Selection sprites pool
-
-		UIAssetIcon*       mHoverIcon = nullptr;        // Current hovered asset icon
-		Sprite*            mIconHoverSprite;            // icons hovering sprite
-		RectF              mTargetHoverSpriteRect;      // Target hover rectangle
-		RectF              mCurrentHoverSpriteRect;     // Current hover rectangle
+		UIAssetIcon*       mHightlightIcon = nullptr;  // Current hightlighting asset icon
+		Animation          mHightlightAnim;             // Icon hightlight animation @SERIALIZABLE
+		Sprite*            mHightlightSprite = nullptr; // Icon hightlight sprite @SERIALIZABLE
+		Layout             mHightlightLayout;           // Icon hightlight sprite layout @SERIALIZABLE
 
 		IconArrsDict       mIconsPool;                  // Assets icons pool
 
+		Sprite*            mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
 		bool               mSelecting = false;          // Is selecting icons 
 		Vec2F              mPressedPoint;               // Pressed point
-		float              mPressTime;                  // Time elapsed from pressing
-		IconSelectionsVec  mCurrentSelectingIcons;      // Selecting icons at current selection
+		AssetsIconsVec     mCurrentSelectingIcons;      // Selecting icons at current selection
 
-		DragState          mDragState = DragState::Off; // Is dragging icons
-		UIAssetIcon*       mDragIcon;                   // Dragging icon
+		bool               mIsDraggingIcons = false;    // Is dragging icons
+		bool               mDragEnded = false;          // Is dragging ended
+		UIAssetIcon*       mDragIcon = nullptr;         // Dragging icon
 		Vec2F              mDragOffset;                 // Dragging offset from cursor to icon center
 		ActorsVec          mInstSceneDragActors;        // Instantiated actors when dragging asset above scene
-
-		IAssetProperty*    mDragAssetPropertyField = nullptr;     // Asset property field under cursor, when dragging asset
-		ActorProperty*     mDragActorPropertyField = nullptr;     // Actor property field under cursor, when dragging asset
-		ComponentProperty* mDragComponentPropertyField = nullptr; // Component property field under cursor, when dragging asset
 
 		AssetIdPathVec     mCuttingAssets;              // Current cutted assets
 						   
@@ -146,7 +136,7 @@ namespace Editor
 
 	protected:
 		// Updates layout
-		void UpdateLayout(bool forcible = false);
+		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		// Updates cutting assets
 		void UpdateCuttingAssets();
@@ -178,15 +168,6 @@ namespace Editor
 		// Completes selecting
 		void CompleteSelecting();
 
-		// Begins dragging
-		void BeginDragging(UIAssetIcon* iconUnderCursor, const Input::Cursor& cursor);
-
-		// Updates dragging icons
-		void UpdateDragging(const Input::Cursor& cursor);
-
-		//Completes dragging
-		void CompleteDragging();
-
 		// Registers actors creation undo action
 		void RegActorsCreationAction();
 
@@ -217,20 +198,8 @@ namespace Editor
 		// Updates assets grid size
 		void UpdateAssetsGridSize();
 
-		// Initializes selection sprite and pool
-		void InitializeSelectionSprite();
-
-		// Returns selection sprite from pool
-		Sprite* GetSelectionSprite();
-
-		// Frees selection sprite in pool
-		void FreeSelectionSprite(Sprite* sprite);
-
 		// Calls when asset icon double clicked
 		void OnIconDblClicked(UIAssetIcon* icon);
-
-		// Update hover sprite
-		void UpdateHover();
 
 		// Calls when context copy pressed
 		void OnContextCopyPressed();
@@ -283,8 +252,61 @@ namespace Editor
 
 		// Instantiate actor from actor asset
 		Actor* InstantiateAsset(const ActorAsset& asset);
+		
+// ISelectableDragableObjectsGroup implementation
+
+		// Returns selected objects in group
+		SelectDragObjectsVec GetSelectedDragObjects() const;
+
+		// Returns all objects in group 
+		SelectDragObjectsVec GetAllObjects() const;
+
+		// Selects object
+		void Select(SelectableDragableObject* object);
+
+		// Selects object
+		void Select(SelectableDragableObject* object, bool sendOnSelectionChanged);
+
+		// Deselects object
+		void Deselect(SelectableDragableObject* object);
+
+		// Adds selectable object to group
+		void AddSelectableObject(SelectableDragableObject* object);
+
+		// Removes selectable object from group
+		void RemoveSelectableObject(SelectableDragableObject* object);
+
+		// Calls when selectable draggable object was released
+		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor);
+
+		// Calls when selectable object was began to drag
+		void OnSelectableObjectBeganDragging(SelectableDragableObject* object);
+
+// DragDropArea implementation
+
+		// Begins dragging selected items
+		void BeginDragging(UIAssetIcon* icon);
+
+		// Ends dragging items
+		void EndDragging(bool droppedToThis = false);
+
+		// Updates dragging graphics
+		void UpdateDraggingGraphics();
+
+		// Calls when some drag listeners was entered to this area
+		void OnDragEnter(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some drag listeners was dragged above this area
+		void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some drag listeners was exited from this area
+		void OnDragExit(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some selectable listeners was dropped to this
+		void OnDropped(ISelectableDragableObjectsGroup* group);
 
 		friend class AssetsWindow;
+		friend class UIAssetIcon;
 	};
 
 	template<typename _type>

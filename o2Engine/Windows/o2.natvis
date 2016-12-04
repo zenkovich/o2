@@ -296,6 +296,7 @@
   <Type Name="o2::Sprite">
     <DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
     <Expand>
+      <Item Name="image" ExcludeView="simple">mImageName</Item>
       <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
       <Item Name="position" ExcludeView="simple">mPosition</Item>
       <Item Name="pivot" ExcludeView="simple">mPivot</Item>

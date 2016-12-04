@@ -19,6 +19,7 @@
 #include "Utils/Clipboard.h"
 #include "Utils/Delegates.h"
 #include "Utils/FileSystem/FileSystem.h"
+#include "Core/EditorConfig.h"
 
 DECLARE_SINGLETON(Editor::AssetsWindow);
 
@@ -318,16 +319,29 @@ namespace Editor
 
 		// separator
 		mSeparatorHandle.isUnderPoint = [=](const Vec2F& point) {
-			return separatorLayer->drawable->IsUnderPoint(point);
+			RectF rt = separatorLayer->drawable->GetRect();
+			rt.left -= 2; rt.right += 2;
+			return rt.IsInside(point);
 		};
+
+		float anchorCoef = o2EditorConfig.GetProjectUserData()["layout/assetsWindow/separator_coef"];
+
+		if (anchorCoef < FLT_EPSILON)
+			anchorCoef = 0.5f;
+
+		mFoldersTree->layout.anchorRight = anchorCoef;
+		mAssetsGridScroll->layout.anchorLeft = anchorCoef;
 
 		mSeparatorHandle.onMoved = [&](const Input::Cursor& cursor) {
 			float anchorDelta = cursor.delta.x / mWindow->layout.width;
 			mFoldersTree->layout.anchorRight += anchorDelta;
 			mAssetsGridScroll->layout.anchorLeft += anchorDelta;
+
+			auto& userData = o2EditorConfig.GetProjectUserData();
+			userData["layout/assetsWindow/separator_coef"].SetValue(mFoldersTree->layout.GetAnchorRight());
 		};
 
-		mWindow->onDraw += [&]() { mSeparatorHandle.OnDrawn(); };
+		mAssetsGridScroll->onDraw += [&]() { mSeparatorHandle.OnDrawn(); };
 
 		mSeparatorHandle.cursorType = CursorType::SizeWE;
 

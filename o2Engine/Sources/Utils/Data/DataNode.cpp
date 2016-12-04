@@ -287,16 +287,15 @@ namespace o2
 		value = mData;
 	}
 
-	DataNode* DataNode::operator[](const WString& nodePath)
+	DataNode& DataNode::operator[](const WString& nodePath)
 	{
-		auto node = GetNode(nodePath);
-		if (!node)
-			return AddNode(nodePath);
+		if (auto node = GetNode(nodePath))
+			return *node;
 
-		return node;
+		return *AddNode(nodePath);
 	}
 
-	DataNode* DataNode::operator[](const char* nodePath)
+	DataNode& DataNode::operator[](const char* nodePath)
 	{
 		return operator[]((WString)nodePath);
 	}

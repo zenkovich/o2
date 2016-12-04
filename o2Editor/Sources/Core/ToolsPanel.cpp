@@ -49,6 +49,7 @@ namespace Editor
 		InitializeToolsPanel();
 
 		o2UI.AddWidget(mPanelRoot);
+		UpdateWndLayoutSchemas();
 	}
 
 	ToolsPanel::~ToolsPanel()

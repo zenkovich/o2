@@ -23,6 +23,10 @@ namespace Editor
 
 		InitializeDock();
 		InitializeWindows();
+
+		SetWindowsLayout(o2EditorConfig.mProjectConfig.mLayout);
+
+		mAvailableLayouts = o2EditorConfig.mGlobalConfig.mAvailableLayouts;
 	}
 
 	WindowsManager::~WindowsManager()
