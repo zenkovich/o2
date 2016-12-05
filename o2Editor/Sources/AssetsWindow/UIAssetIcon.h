@@ -57,6 +57,9 @@ namespace Editor
 		// Calls when cursor double clicked
 		void OnCursorDblClicked(const Input::Cursor& cursor);
 
+		// Calls when right mouse button was released (only when right mouse button pressed this at previous time)
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+
 		// Calls when cursor enters this object, moving hover of tree to this
 		void OnCursorEnter(const Input::Cursor& cursor);
 

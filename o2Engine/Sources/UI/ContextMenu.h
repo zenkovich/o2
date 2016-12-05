@@ -181,7 +181,7 @@ namespace o2
 		const float           mOpenSubMenuDelay = 0.8f;      // Sub menu opengin delay whe cursor hover it
 
 		float                 mFitSizeMin = 40.0f;           // Minimal fitting size @SERIALIZABLE
-		int                   mMaxVisibleItems = 10;         // Maximum visible items @SERIALIZABLE
+		int                   mMaxVisibleItems = 100;        // Maximum visible items @SERIALIZABLE
 
 		UIContextMenu*        mParentContextMenu = nullptr;  // Parent visible context menu
 		UIContextMenu*        mChildContextMenu = nullptr;	 // Child visible context menu
