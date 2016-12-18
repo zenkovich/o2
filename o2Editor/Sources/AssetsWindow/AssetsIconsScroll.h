@@ -34,6 +34,8 @@ namespace Editor
 		public ISelectableDragableObjectsGroup
 	{
 	public:
+		Function<void(const Vector<String>&)> onAssetsSelected; // Assets selected event
+
 		// Default constructor
 		UIAssetsIconsScrollArea();
 
@@ -305,7 +307,15 @@ namespace Editor
 		// Calls when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group);
 
+		// Calls when dropped dragged assets icons selected and started dragging from this
+		void OnDroppedFromThis();
+
+		// Calls when dropped dragged actors tree nodes selected and started dragging from actors tree
+		void OnDroppedFromActorsTree(UIActorsTree* actorsTree);
+
 		friend class AssetsWindow;
+		friend class SceneEditScreen;
+		friend class UIActorsTree;
 		friend class UIAssetIcon;
 	};
 

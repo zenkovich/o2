@@ -5,6 +5,8 @@
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
+#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/TreeWindow.h"
 
 namespace Editor
 {
@@ -177,6 +179,9 @@ namespace Editor
 
 	void MoveTool::OnKeyPressed(const Input::Key& key)
 	{
+		if (!o2EditorTree.GetActorsTree()->IsFocused())
+			return;
+
 		float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
 
 		if (key == VK_LEFT)
@@ -204,6 +209,9 @@ namespace Editor
 
 	void MoveTool::OnKeyStayDown(const Input::Key& key)
 	{
+		if (!o2EditorTree.GetActorsTree()->IsFocused())
+			return;
+
 		float delta = o2Input.IsKeyDown(VK_SHIFT) ? snapStep : 1.0f;
 
 		if (key.pressedTime < 0.3f)

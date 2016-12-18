@@ -280,7 +280,11 @@ namespace o2
 
 	String FileSystem::ExtractPathStr(const String& path) const
 	{
-		return path.SubStr(0, path.FindLast("/"));
+		auto fnd = path.FindLast("/");
+		if (fnd < 0)
+			return "";
+
+		return path.SubStr(0, fnd);
 	}
 
 	String FileSystem::GetFileExtension(const String& filePath)

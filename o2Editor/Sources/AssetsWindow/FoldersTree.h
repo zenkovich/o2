@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Events/KeyboardEventsListener.h"
 #include "UI/Widget.h"
 #include "Utils/UnknownPtr.h"
 
@@ -16,7 +17,7 @@ namespace Editor
 	// --------------------------
 	// Assets folders tree widget
 	// --------------------------
-	class UIAssetsFoldersTree: public UIWidget
+	class UIAssetsFoldersTree: public UIWidget, public KeyboardEventsListener
 	{
 	public:
 		// Default constructor
@@ -106,6 +107,9 @@ namespace Editor
 
 		// Calls when context expand pressed
 		void OnContextCollapsePressed();
+
+		// Calls when key was released
+		void OnKeyReleased(const Input::Key& key);
 
 		friend class AssetsWindow;
 	};

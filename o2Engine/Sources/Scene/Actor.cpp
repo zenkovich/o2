@@ -166,7 +166,8 @@ namespace o2
 			}
 		}
 
-		dest->SetLayer(source->mLayer);
+		if (dest->mIsOnScene)
+			dest->SetLayer(source->mLayer);
 	}
 
 	void Actor::FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
@@ -254,6 +255,9 @@ namespace o2
 
 	void Actor::ExcludeFromScene()
 	{
+		if (!mIsOnScene)
+			return;
+
 		if (mParent)
 			SetParent(nullptr);
 
@@ -277,6 +281,9 @@ namespace o2
 
 	void Actor::IncludeInScene()
 	{
+		if (mIsOnScene)
+			return;
+
 		if (mLayer)
 		{
 			mLayer->mActors.Add(this);
@@ -739,8 +746,9 @@ namespace o2
 			}
 		}
 
-		String layerName = (String)(*node.GetNode("mLayerName"));
-		SetLayer(layerName);
+		auto layerNode = node.GetNode("mLayerName");
+		if (layerNode)
+			SetLayer(layerNode->Data());
 
 		ActorDataNodeConverter::Instance().UnlockPointersResolving();
 		ActorDataNodeConverter::Instance().ResolvePointers();

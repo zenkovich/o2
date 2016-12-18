@@ -3,6 +3,7 @@
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
 #include "Application/Input.h"
+#include "Assets/Assets.h"
 #include "Core/Actions/IAction.h"
 #include "Core/MenuPanel.h"
 #include "Core/ToolsPanel.h"
@@ -243,7 +244,9 @@ namespace Editor
 	}
 
 	void EditorApplication::OnActivated()
-	{}
+	{
+		//o2Assets.RebuildAssets();
+	}
 
 	void EditorApplication::OnDeactivated()
 	{}

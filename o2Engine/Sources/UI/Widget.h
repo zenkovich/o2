@@ -232,7 +232,7 @@ namespace o2
 					   						    
 		UIWidgetState* mFocusedState = nullptr; // Focused widget state
 		bool           mIsFocused = false;      // Is widget focused
-		bool           mIsFocusable = false;    // Is widget can be focused
+		bool           mIsFocusable = false;    // Is widget can be focused @SERIALIZABLE
 					   						    
 		UIWidgetState* mVisibleState = nullptr; // Widget visibility state
 		bool           mVisible = true;         // Visibility of widget. Uses state 'visible' @SERIALIZABLE

@@ -291,7 +291,19 @@ namespace o2
 		if (cursor.delta.Length() < 0.5f)
 			return;
 
-		auto underCursorListener = o2Events.GetCursorListenerUnderCursor(cursor.id);
+
+		auto underCursorListeners = o2Events.GetAllCursorListenersUnderCursor(cursor.id);
+		CursorAreaEventsListener* underCursorListener = nullptr;
+
+		for (auto listener : underCursorListeners)
+		{
+			if (listener != this)
+			{
+				underCursorListener = listener;
+				break;
+			}
+		}
+
 		auto dragArea = dynamic_cast<DragDropArea*>(underCursorListener);
 
 		if (!mIsDragging)
@@ -353,7 +365,18 @@ namespace o2
 		{
 			OnDragEnd(cursor);
 
-			auto underCursorListener = o2Events.GetCursorListenerUnderCursor(cursor.id);
+			auto underCursorListeners = o2Events.GetAllCursorListenersUnderCursor(cursor.id);
+			CursorAreaEventsListener* underCursorListener = nullptr;
+
+			for (auto listener : underCursorListeners)
+			{
+				if (listener != this)
+				{
+					underCursorListener = listener;
+					break;
+				}
+			}
+
 			auto dragArea = dynamic_cast<DragDropArea*>(underCursorListener);
 
 			if (dragArea)

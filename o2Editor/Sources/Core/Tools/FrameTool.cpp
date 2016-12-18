@@ -6,6 +6,8 @@
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
+#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/TreeWindow.h"
 
 namespace Editor
 {
@@ -131,6 +133,9 @@ namespace Editor
 
 	void FrameTool::OnKeyPressed(const Input::Key& key)
 	{
+		if (!o2EditorTree.GetActorsTree()->IsFocused())
+			return;
+
 		if (key == VK_LEFT)
 			TransformActorsWithAction(Basis::Translated(Vec2F::Left()));
 
@@ -148,6 +153,9 @@ namespace Editor
 
 	void FrameTool::OnKeyStayDown(const Input::Key& key)
 	{
+		if (!o2EditorTree.GetActorsTree()->IsFocused())
+			return;
+
 		if (key.pressedTime < 0.3f)
 			return;
 

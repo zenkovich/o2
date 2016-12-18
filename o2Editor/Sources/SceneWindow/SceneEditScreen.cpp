@@ -1,5 +1,6 @@
 #include "SceneEditScreen.h"
 
+#include "AssetsWindow/AssetsIconsScroll.h"
 #include "Core/Actions/Selection.h"
 #include "Core/EditorApplication.h"
 #include "Core/Tools/IEditorTool.h"
@@ -566,10 +567,57 @@ namespace Editor
 		mSelectedActors.Add(actor);
 		mNeedRedraw = true;
 
-		o2Debug.Log("%i: Select actor:%s", o2Time.GetCurrentFrame(), actor->GetName());
-
 		UpdateTopSelectedActors();
 		OnActorsSelectedFromThis();
+	}
+
+	void SceneEditScreen::OnDropped(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		if (!assetsScroll)
+			return;
+
+		assetsScroll->RegActorsCreationAction();
+		
+		o2UI.FocusWidget(o2EditorTree.GetActorsTree());
+		o2EditorTree.GetActorsTree()->SetSelectedActors(assetsScroll->mInstSceneDragActors);
+		
+		assetsScroll->mInstSceneDragActors.Clear();
+
+		o2Application.SetCursor(CursorType::Arrow);
+	}
+
+	void SceneEditScreen::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		if (!assetsScroll)
+			return;
+
+		assetsScroll->InstantiateDraggingAssets();
+		if (assetsScroll->mInstSceneDragActors.Count() > 0)
+			o2Application.SetCursor(CursorType::Hand);
+	}
+
+	void SceneEditScreen::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		if (!assetsScroll)
+			return;
+
+		for (auto actor : assetsScroll->mInstSceneDragActors)
+			actor->transform.position = ScreenToScenePoint(o2Input.cursorPos);
+	}
+
+	void SceneEditScreen::OnDragExit(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		if (!assetsScroll)
+			return;
+
+		assetsScroll->ClearInstantiatedDraggingAssets();
+		o2Application.SetCursor(CursorType::Arrow);
+
+		mNeedRedraw = true;
 	}
 
 	void SceneEditScreen::OnScrolled(float scroll)
@@ -691,7 +739,7 @@ namespace Editor
  
 CLASS_META(Editor::SceneEditScreen)
 {
-	BASE_CLASS(o2::CursorAreaEventsListener);
+	BASE_CLASS(o2::DragDropArea);
 	BASE_CLASS(o2::KeyboardEventsListener);
 	BASE_CLASS(o2::Singleton<SceneEditScreen>);
 	BASE_CLASS(o2::IObject);
@@ -786,6 +834,10 @@ CLASS_META(Editor::SceneEditScreen)
 	PROTECTED_FUNCTION(void, ClearSelectionWithoutAction);
 	PROTECTED_FUNCTION(void, SelectActorsWithoutAction, ActorsVec, bool);
 	PROTECTED_FUNCTION(void, SelectActorWithoutAction, Actor*, bool);
+	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 }
 END_META;
  

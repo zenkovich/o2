@@ -49,7 +49,7 @@ namespace o2
 		RectF GetScrollRange() const;
 
 		// Resets scroll to left top corner
-		void ResetSroll();
+		void ResetScroll();
 
 		// Sets horizontal scroll position
 		void SetHorizontalScroll(float scroll);

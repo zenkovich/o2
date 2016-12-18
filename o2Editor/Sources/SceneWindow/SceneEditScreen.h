@@ -5,6 +5,7 @@
 #include "Render/Camera.h"
 #include "Render/IDrawable.h"
 #include "Render/TextureRef.h"
+#include "Utils/DragAndDrop.h"
 #include "Utils/Singleton.h"
 
 using namespace o2;
@@ -29,7 +30,7 @@ namespace Editor
 	// --------------------
 	// Scene editing screen
 	// --------------------
-	class SceneEditScreen: public CursorAreaEventsListener, public KeyboardEventsListener,
+	class SceneEditScreen: public DragDropArea, public KeyboardEventsListener,
 		public Singleton<SceneEditScreen>, public IObject
 	{
 	public:
@@ -257,6 +258,18 @@ namespace Editor
 
 		// Selects actor
 		void SelectActorWithoutAction(Actor* actor, bool additive = true);
+
+		// Calls when some selectable listeners was dropped to this
+		void OnDropped(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some drag listeners was entered to this area
+		void OnDragEnter(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some drag listeners was dragged above this area
+		void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some drag listeners was exited from this area
+		void OnDragExit(ISelectableDragableObjectsGroup* group);
 
 		friend class DeleteActorsAction;
 		friend class SelectionAction;

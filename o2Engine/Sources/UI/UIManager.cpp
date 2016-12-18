@@ -241,12 +241,12 @@ namespace o2
 		}
 	}
 
-	UIWidget* UIManager::GetSelectedWidget() const
+	UIWidget* UIManager::GetFocusedWidget() const
 	{
 		return mSelectedWidget;
 	}
 
-	void UIManager::SelectNextWidget()
+	void UIManager::FocusNextWidget()
 	{
 		bool fnd = mSelectedWidget == nullptr;
 		FocusWidget(SearchSelectableWidget(mScreenWidget, fnd));
@@ -421,7 +421,7 @@ namespace o2
 		mScreenWidget->Update(dt);
 
 		if (o2Input.IsKeyPressed(VK_TAB))
-			SelectNextWidget();
+			FocusNextWidget();
 	}
 
 	void UIManager::Draw()

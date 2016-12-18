@@ -7,6 +7,8 @@
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
+#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/TreeWindow.h"
 
 namespace Editor
 {
@@ -240,6 +242,9 @@ namespace Editor
 
 	void RotateTool::OnCursorStillDown(const Input::Cursor& cursor)
 	{
+		if (!o2EditorTree.GetActorsTree()->IsFocused())
+			return;
+
 		if (mRingPressed)
 		{
 			if (cursor.delta != Vec2F())
@@ -276,6 +281,9 @@ namespace Editor
 
 	void RotateTool::OnKeyPressed(const Input::Key& key)
 	{
+		if (!o2EditorTree.GetActorsTree()->IsFocused())
+			return;
+
 		float angle = o2Input.IsKeyDown(VK_SHIFT) ? angleSnapStep : 1.0f;
 
 		if (key == VK_LEFT || key == VK_DOWN)

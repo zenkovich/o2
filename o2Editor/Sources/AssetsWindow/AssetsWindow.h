@@ -41,6 +41,9 @@ namespace Editor
 		// Destructor
 		~AssetsWindow();
 
+		// Updates window logic
+		void Update(float dt);
+
 		// Selects asset with id
 		void SelectAsset(UID id);
 
@@ -119,17 +122,38 @@ namespace Editor
 		UIEditBox*               mSearchEditBox;          // Search edit box
 		UILabel*                 mSelectedAssetPathLabel; // Selected asset path label
 
-		UIAssetsFoldersTree*     mFoldersTree;            // Folders tree				         
+		UIAssetsFoldersTree*     mFoldersTree;            // Folders tree			
+		Animation                mFoldersTreeShowAnim;    // Folders tree visible animation
+		float                    mFoldersTreeShowCoef;    // Animating show folders tree coefficient (0...1)
+		bool                     mFoldersTreeVisible;     // Is folders tree visible
+
 		UIAssetsIconsScrollArea* mAssetsGridScroll;       // Assets grid scroll
+
 		UITree*                  mAssetsTree;             // Assets tree
 
 		CursorEventsArea         mSeparatorHandle;        // Folders tree and assets tree/grid separator handle
+		float                    mSeparatorCoef;          // Separator coefficient, means anchors for tree nad assets scroll
 
 		AssetIdPathVec           mCuttingAssets;          // Current cutted assets
 
 	protected:
 		// Initializes window
 		void InitializeWindow();
+
+		// Initializes folders tree separator
+		void InitializeFoldersTreeSeparator();
+
+		// Initializes folders tree visible state
+		void InitializeFoldersTreeVisibleState();
+
+		// Initializes folders tree
+		void InitializeFoldersTree();
+
+		// Initializes down panel
+		void InitializeDownPanel();
+
+		// Initializes up search panel
+		void InitializeUpPanel();
 
 		// Calls when search edit box text was changed
 		void OnSearchEdited(const WString& search);

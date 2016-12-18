@@ -532,9 +532,15 @@ namespace o2
 	void UITree::UpdateNodesView(bool immediately /*= true*/)
 	{
 		if (immediately)
+		{
 			UpdateNodesStructure();
-		else
-			mIsNeedUpdateView = true;
+			for (int i = 0; i < mAllNodes.Count(); i++)
+			{
+				if (mAllNodes[i]->widget)
+					UpdateNodeView(mAllNodes[i], mAllNodes[i]->widget, i);
+			}
+		}
+		else mIsNeedUpdateView = true;
 	}
 
 	UITreeNode* UITree::GetNode(UnknownPtr object)
@@ -656,7 +662,7 @@ namespace o2
 	{
 		if (!object)
 		{
-			ResetSroll();
+			ResetScroll();
 			return;
 		}
 
@@ -672,7 +678,7 @@ namespace o2
 	{
 		if (!object)
 		{
-			ResetSroll();
+			ResetScroll();
 			return;
 		}
 
@@ -796,11 +802,6 @@ namespace o2
 		}
 
 		UpdateLayout();
-
-		o2Debug.Log("Nodes structure updated");
-
-		if (o2Input.IsKeyDown('A'))
-			o2Debug.Log("dd");
 	}
 
 	int UITree::InsertNodes(Node* parentNode, int position, NodesVec* newNodes /*= nullptr*/)
@@ -1488,7 +1489,6 @@ namespace o2
 		if (currentInsertCandidate != mInsertNodeCandidate)
 		{
 			mInsertNodeCandidate = currentInsertCandidate;
-			o2Debug.Log("Insert candidate %s", mInsertNodeCandidate ? GetObjectDebug(mInsertNodeCandidate->mNodeDef->object):String("null"));
 
 			if (mRearrangeType == RearrangeType::Enabled)
 				UpdateDraggingInsertion();
@@ -1508,6 +1508,9 @@ namespace o2
 
 	void UITree::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
+		if (dynamic_cast<UITree*>(group) == nullptr)
+			return;
+
 		auto underCursorItem = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
 
 		EndDragging(true);

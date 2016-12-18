@@ -1317,12 +1317,6 @@ namespace Editor
 		verScrollBar->layout.offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout.offsetBottom,
-						 5.0f, 15.0f, 0.2f));
-
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout.offsetRight,
-						 -5.0f, -15.0f, 0.2f));
-
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
@@ -1785,6 +1779,8 @@ namespace Editor
 		nameText->verAlign = VerAlign::Middle;
 		nameText->dotsEngings = true;
 		widget->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
+
+		widget->SetFocusable(true);
 
 		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
 		linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());

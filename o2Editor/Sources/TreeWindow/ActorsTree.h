@@ -49,18 +49,6 @@ namespace Editor
 		// Returns ui node for object
 		UITreeNode* GetNode(Actor* object);
 
-		// Forcible begins to dragging actors' nodes
-		void ManualBeginDraggingActors(const ActorsVec& actors);
-
-		// Updates manual actors dragging
-		void ManualUpdateDraggingActors(const Input::Cursor& cursor);
-
-		// Completed manual dragging actors
-		void CompleteManualDraggingActors();
-
-		// Breaks actors' nodes dragging
-		void BreakDragging();
-
 		// Returns selected objects vector
 		ActorsVec GetSelectedActors() const;
 
@@ -143,13 +131,19 @@ namespace Editor
 
 		// Calls when list of selected objects was changed
 		void OnNodesSelectionChanged(UnknownPtrsVec objects);
-// 
-// 		// Calls when some selectable drag listeners was dragged above this area
-// 		void OnDraggedAbove(SelectableDragableObjectsGroup* group);
-// 
-// 		// Calls when some selectable drag listeners was dropped to this
-// 		void OnDropped(SelectableDragableObjectsGroup* group);
-// 		
+
+		// Calls when some drag listeners was entered to this area
+		void OnDragEnter(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some drag listeners was exited from this area
+		void OnDragExit(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some drag listeners was dragged above this area
+		void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
+
+		// Calls when some selectable listeners was dropped to this
+		void OnDropped(ISelectableDragableObjectsGroup* group);
+
 		friend class UIActorsTreeNode;
 	};
 

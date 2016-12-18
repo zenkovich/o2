@@ -17,6 +17,7 @@
 #include "UI/Button.h"
 #include "UI/EditBox.h"
 #include "UI/Toggle.h"
+#include "UI/UIManager.h"
 
 namespace Editor
 {
@@ -84,54 +85,6 @@ namespace Editor
 	UITreeNode* UIActorsTree::GetNode(Actor* object)
 	{
 		return UITree::GetNode((UnknownPtr)(void*)object);
-	}
-
-	void UIActorsTree::ManualBeginDraggingActors(const ActorsVec& actors)
-	{
-		mIsDraggingNodes = true;
-		SetSelectedActors(actors);
-
-		mDragOffset = Vec2F();
-		mFakeDragNode->Show(true);
-
-		FillNodeDataByObject(mFakeDragNode, mSelectedNodes.Last()->object);
-
-		if (mSelectedNodes.Count() > 1)
-		{
-			if (auto nameLayer = mFakeDragNode->FindLayer<Text>())
-				nameLayer->text = String::Format("%i items", mSelectedNodes.Count());
-		}
-
-		for (auto sel : mSelectedNodes)
-		{
-			if (sel->widget)
-				sel->widget->SetState("dragging", true);
-		}
-	}
-
-	void UIActorsTree::ManualUpdateDraggingActors(const Input::Cursor& cursor)
-	{
-		//UpdateDragging(cursor);
-	}
-
-	void UIActorsTree::CompleteManualDraggingActors()
-	{}
-
-	void UIActorsTree::BreakDragging()
-	{
-		mIsDraggingNodes = false;
-		mFakeDragNode->Hide(true);
-
-		for (auto node : mVisibleNodes)
-			node->widget->SetState("inserting", false);
-
-		for (auto sel : mSelectedNodes)
-		{
-			if (sel->widget)
-				sel->widget->SetState("dragging", false);
-		}
-
-		DeselectAllActors();
 	}
 
 	UIActorsTree::ActorsVec UIActorsTree::GetSelectedActors() const
@@ -268,6 +221,60 @@ namespace Editor
 	{
 		onObjectsSelectionChanged(objects.Cast<Actor*>());
 		UITree::OnNodesSelectionChanged(objects);
+	}
+
+	void UIActorsTree::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		if (assetsScroll)
+		{
+			assetsScroll->InstantiateDraggingAssets();
+			UpdateNodesView(true);
+			UpdateLayout(true);
+
+			Focus();
+			SetSelectedActors(assetsScroll->mInstSceneDragActors);
+			BeginDragging(GetNode(assetsScroll->mInstSceneDragActors.Last()));
+			mDragOffset = Vec2F();
+		}
+		else UITree::OnDragEnter(group);
+	}
+
+	void UIActorsTree::OnDragExit(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		if (assetsScroll)
+		{
+			DeselectAllActors();
+			EndDragging();
+			assetsScroll->ClearInstantiatedDraggingAssets();
+			assetsScroll->Focus();
+		}
+		else UITree::OnDragExit(group);
+	}
+
+	void UIActorsTree::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		if (assetsScroll)
+		{
+			UpdateDraggingGraphics();
+			UITree::OnDraggedAbove(this);
+		}
+		else UITree::OnDraggedAbove(group);
+	}
+
+	void UIActorsTree::OnDropped(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		if (assetsScroll)
+		{
+			UITree::OnDropped(this);
+			
+			assetsScroll->RegActorsCreationAction();
+			assetsScroll->mInstSceneDragActors.Clear();
+		}
+		else UITree::OnDropped(group);
 	}
 
 	void UIActorsTree::OnActorCreated(Actor* actor)
@@ -511,7 +518,7 @@ namespace Editor
 		mNameEditBox->text = (String)mTargetActor->name;
 		mNameEditBox->SelectAll();
 		mNameEditBox->UIWidget::Focus();
-		mNameEditBox->ResetSroll();
+		mNameEditBox->ResetScroll();
 	}
 
 	void UIActorsTreeNode::OnLockClicked()
@@ -540,10 +547,6 @@ CLASS_META(Editor::UIActorsTree)
 	PUBLIC_FUNCTION(void, AttachToSceneEvents);
 	PUBLIC_FUNCTION(void, DeattachFromSceneEvents);
 	PUBLIC_FUNCTION(UITreeNode*, GetNode, Actor*);
-	PUBLIC_FUNCTION(void, ManualBeginDraggingActors, const ActorsVec&);
-	PUBLIC_FUNCTION(void, ManualUpdateDraggingActors, const Input::Cursor&);
-	PUBLIC_FUNCTION(void, CompleteManualDraggingActors);
-	PUBLIC_FUNCTION(void, BreakDragging);
 	PUBLIC_FUNCTION(ActorsVec, GetSelectedActors);
 	PUBLIC_FUNCTION(void, SetSelectedActors, const ActorsVec&);
 	PUBLIC_FUNCTION(void, SelectActor, Actor*);
@@ -568,6 +571,10 @@ CLASS_META(Editor::UIActorsTree)
 	PROTECTED_FUNCTION(void, LockActorsGroupPressed, bool);
 	PROTECTED_FUNCTION(void, LockActorsGroupReleased, bool);
 	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
+	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
 }
 END_META;
 

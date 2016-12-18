@@ -18,7 +18,7 @@ namespace o2
 	public:
 		Property<String>   path;     // Asset path property
 		Getter<String>     fullPath; // Full asset path getter (from binary path)
-		Getter<UID>    id;       // Asset id getter
+		Getter<UID>        id;       // Asset id getter
 		Getter<IMetaInfo*> meta;     // Asset meta information pointer getter
 
 		// Default constructor

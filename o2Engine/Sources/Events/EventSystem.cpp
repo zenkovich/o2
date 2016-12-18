@@ -195,7 +195,7 @@ namespace o2
 		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
 		for (auto listener : mAreaCursorListeners)
 		{
-			if (!listener->IsUnderPoint(cursorPos) || !listener->mScissorRect.IsInside(cursorPos))
+			if (!listener->IsUnderPoint(cursorPos) || !listener->mScissorRect.IsInside(cursorPos) || !listener->mInteractable)
 				continue;
 
 			res.Add(listener);

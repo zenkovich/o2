@@ -68,8 +68,8 @@ namespace Editor
 
 	void UIAssetsFoldersTree::SelectAndExpandFolder(const String& path)
 	{
-		mCurrentPath = path;
 		mFoldersTree->SelectAndHightlightObject(o2Assets.GetAssetsTree().FindAsset(path));
+		mCurrentPath = path;
 	}
 
 	void UIAssetsFoldersTree::UpdateView()
@@ -154,7 +154,7 @@ namespace Editor
 		editBox->text = (String)pathName;
 		editBox->SelectAll();
 		editBox->UIWidget::Focus();
-		editBox->ResetSroll();
+		editBox->ResetScroll();
 
 		editBox->onChangeCompleted = [=](const WString& text) {
 
@@ -178,7 +178,8 @@ namespace Editor
 		if (nodes.Count() > 0)
 		{
 			AssetTree::AssetNode* assetTreeNode = nodes.Last();
-			o2EditorAssets.mAssetsGridScroll->SetViewingPath(assetTreeNode->mPath);
+			mCurrentPath = assetTreeNode->mPath;
+			o2EditorAssets.mAssetsGridScroll->SetViewingPath(mCurrentPath);
 		}
 		else o2EditorAssets.OpenFolder("");
 
@@ -314,11 +315,23 @@ namespace Editor
 		}
 	}
 
+	void UIAssetsFoldersTree::OnKeyReleased(const Input::Key& key)
+	{
+		if (o2UI.GetFocusedWidget() == mFoldersTree && key == VK_BACK)
+		{
+			if (mCurrentPath.CountOf("/") > 0)
+				o2EditorAssets.OpenFolder(o2FileSystem.GetParentPath(mCurrentPath));
+			else
+				o2EditorAssets.OpenFolder("");
+		}
+	}
+
 }
  
 CLASS_META(Editor::UIAssetsFoldersTree)
 {
 	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::KeyboardEventsListener);
 
 	PROTECTED_FIELD(mFoldersTree);
 	PROTECTED_FIELD(mContextMenu);
@@ -347,6 +360,7 @@ CLASS_META(Editor::UIAssetsFoldersTree)
 	PROTECTED_FUNCTION(void, OnContextCreateAnimationPressed);
 	PROTECTED_FUNCTION(void, OnContextExpandPressed);
 	PROTECTED_FUNCTION(void, OnContextCollapsePressed);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
  

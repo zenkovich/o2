@@ -2,6 +2,7 @@
 
 #include "Events/EventSystem.h"
 #include "Render/Render.h"
+#include "UI/ContextMenu.h"
 #include "UI/HorizontalScrollBar.h"
 #include "UI/VerticalScrollBar.h"
 #include "Utils/Debug.h"
@@ -255,7 +256,7 @@ namespace o2
 		return mScrollRange;
 	}
 
-	void UIScrollArea::ResetSroll()
+	void UIScrollArea::ResetScroll()
 	{
 		SetScroll(mScrollArea.LeftBottom());
 	}
@@ -540,7 +541,7 @@ namespace o2
 		if (withChildren)
 			UpdateChildrenLayouts(true);
 
-		//CheckChildrenClipping();
+		CheckChildrenClipping();
 		UpdateScrollParams();
 		UpdateScrollBarsLayout();
 	}
@@ -619,7 +620,7 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			if (child->mFullyDisabled)
+			if (child->mFullyDisabled || child->GetType() == TypeOf(UIContextMenu))
 				continue;
 
 			mScrollArea.left   = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
@@ -839,7 +840,7 @@ CLASS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(void, SetScrollForcible, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetScroll);
 	PUBLIC_FUNCTION(RectF, GetScrollRange);
-	PUBLIC_FUNCTION(void, ResetSroll);
+	PUBLIC_FUNCTION(void, ResetScroll);
 	PUBLIC_FUNCTION(void, SetHorizontalScroll, float);
 	PUBLIC_FUNCTION(float, GetHorizontalScroll);
 	PUBLIC_FUNCTION(void, SetVerticalScroll, float);

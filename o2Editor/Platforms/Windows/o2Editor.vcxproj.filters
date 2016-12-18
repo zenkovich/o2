@@ -146,6 +146,9 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ColorProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
@@ -164,10 +167,22 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\Vector2FloatProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\Vector2IntProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.h">
@@ -193,21 +208,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h">
       <Filter>Sources\TreeWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\Vector2IntProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\Vector2FloatProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ColorProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -358,10 +358,22 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\LayerProperty.cpp">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.cpp">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\TagProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\Vector2FloatProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\Vector2IntProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.cpp">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\WStringProperty.cpp">
@@ -390,18 +402,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
       <Filter>Sources\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\VectorProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\Vector2IntProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\Vector2FloatProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

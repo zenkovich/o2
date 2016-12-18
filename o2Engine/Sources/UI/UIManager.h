@@ -202,14 +202,14 @@ namespace o2
 		// Returns main screen widget
 		UIWidget* GetScreenWidget() const;
 
-		// Sets widget as selected
+		// Sets widget as focused
 		void FocusWidget(UIWidget* widget);
 
-		// Returns current selected widget
-		UIWidget* GetSelectedWidget() const;
+		// Returns current focused widget
+		UIWidget* GetFocusedWidget() const;
 
-		// Selects next widget 
-		void SelectNextWidget();
+		// Sets next widget focused
+		void FocusNextWidget();
 
 		// Updates widgets
 		void Update(float dt);

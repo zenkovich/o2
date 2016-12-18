@@ -47,6 +47,7 @@ namespace o2
 		UpdateTransparency();
 		UpdateVisibility();
 		UpdateLayout();
+		RetargetStatesAnimations();
 	}
 
 	UIWidget::~UIWidget()
@@ -117,6 +118,7 @@ namespace o2
 		UpdateTransparency();
 		UpdateVisibility();
 		UpdateLayout();
+		RetargetStatesAnimations();
 
 		return *this;
 	}
@@ -1022,7 +1024,7 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FIELD(mDrawingLayers);
 	PROTECTED_FIELD(mFocusedState);
 	PROTECTED_FIELD(mIsFocused);
-	PROTECTED_FIELD(mIsFocusable);
+	PROTECTED_FIELD(mIsFocusable).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mVisibleState);
 	PROTECTED_FIELD(mVisible).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResVisible);

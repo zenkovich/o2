@@ -14,6 +14,9 @@ namespace o2
 
 namespace Editor
 {
+	class UIActorsTree;
+	class UIAssetsIconsScrollArea;
+
 	// -------------------------
 	// Editor actor property box
 	// -------------------------
@@ -87,5 +90,23 @@ namespace Editor
 
 		// Calls when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group);
+
+		// Calls when actors tree nodes was dragged and dropped to this
+		void OnDroppedFromActorsTree(UIActorsTree* actorsTree);
+
+		// Calls when actors tree nodes was dragged and entered to this
+		void OnDragEnterFromActorsTree(UIActorsTree* actorsTree);
+
+		// Calls when actors tree nodes was dragged and exited from this
+		void OnDragExitFromActorsTree(UIActorsTree* actorsTree);
+
+		// Calls when assets scroll icons was dragged and dropped to this
+		void OnDroppedFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
+
+		// Calls when assets scroll icons was dragged and entered to this
+		void OnDragEnterFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
+
+		// Calls when assets scroll icons was dragged and exited from this
+		void OnDragExitFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
 	};
 }

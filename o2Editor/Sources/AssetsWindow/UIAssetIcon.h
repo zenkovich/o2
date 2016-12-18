@@ -18,7 +18,7 @@ namespace Editor
 	// ---------------------------
 	// Draggable asset icon widget
 	// ---------------------------
-	class UIAssetIcon: public UIWidget, public SelectableDragableObject
+	class UIAssetIcon: public UIWidget, public SelectableDragableObject, public DragDropArea
 	{
 	public:
 		// Default constructor
@@ -80,6 +80,9 @@ namespace Editor
 
 		// Calls when this was unselected
 		void OnDeselected();
+
+		// Calls when some selectable listeners was dropped to this
+		void OnDropped(ISelectableDragableObjectsGroup* group);
 
 		friend class UIAssetsIconsScrollArea;
 	};
