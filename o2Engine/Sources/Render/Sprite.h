@@ -76,6 +76,9 @@ namespace o2
 		// Returns texture source rectangle
 		RectI GetTextureSrcRect() const;
 
+		// Returns original or texture source size
+		Vec2I GetOriginalSize() const;
+
 		// Sets corner color
 		void SetCornerColor(Corner corner, const Color4& color);
 

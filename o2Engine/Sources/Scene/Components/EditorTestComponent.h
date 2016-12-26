@@ -14,6 +14,8 @@ namespace o2
 	class EditorTestComponent: public Component
 	{
 	public:
+		enum class TestEnum { A, B, C, D, E, F, G, H, K, L, M, N };
+		 
 		class TestInside: public ISerializable
 		{
 		public:
@@ -48,6 +50,8 @@ namespace o2
 		RectI mRectI;					           // @SERIALIZABLE
 		Curve mCurve;                              // @SERIALIZABLE
 		TestInside mTestInside;                    // @SERIALIZABLE
+		TestEnum mTestEnum;                        // @SERIALIZABLE
+		TestInside* mTestInsidePtr = nullptr;      // @SERIALIZABLE
 
 		Vector<Vec2I> mVecs;                       // @SERIALIZABLE
 		Vector<int> mIntVector ={ 1, 2, 3, 4, 5 }; // @SERIALIZABLE

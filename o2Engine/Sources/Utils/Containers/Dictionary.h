@@ -187,6 +187,9 @@ namespace o2
 		// Adds element
 		void Add(const TKeyValue& keyValue);
 
+		// Adds elements from other dictionary
+		void Add(const Dictionary& other);
+
 		// Removes element by key
 		void Remove(const _key_type& key);
 
@@ -656,6 +659,13 @@ namespace o2
 	void Dictionary<_key_type, _value_type>::Add(const TKeyValue& keyValue)
 	{
 		mPairs.Add(keyValue);
+	}
+
+	template<typename _key_type, typename _value_type>
+	void Dictionary<_key_type, _value_type>::Add(const Dictionary& other)
+	{
+		for (auto kv : other)
+			Add(kv.Key(), kv.Value());
 	}
 
 	template<typename _key_type, typename _value_type>

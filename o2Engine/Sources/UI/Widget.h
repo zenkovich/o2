@@ -89,7 +89,7 @@ namespace o2
 		virtual bool RemoveChild(const String& path);
 
 		// Removes child widget
-		virtual bool RemoveChild(UIWidget* widget, bool release = true);
+		virtual bool RemoveChild(UIWidget* widget, bool release = true, bool updateLayout = true);
 
 		// Returns child by path. Returns nullptr if isn't exist
 		virtual UIWidget* GetChild(const String& path);

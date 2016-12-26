@@ -170,6 +170,12 @@ namespace o2
 		SpritesVec        mSelectionSpritesPool;                    // Selection sprites pool
 
 	protected:
+		// Moves scroll position and updates children widgets clipping and layout
+		void MoveScrollPosition(const Vec2F& delta);
+
+		// Updates selections sprites rectangles
+		void UpdateSelectionSprites();
+
 		// Updates mouse control
 		void UpdateControls(float dt);
 

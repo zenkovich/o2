@@ -50,7 +50,7 @@ namespace o2
 
 		// Initializes enum
 		template<typename _type>
-		static int InitializeEnum(std::function<Dictionary<int, String>()> func);
+		static EnumType* InitializeEnum(const char* name, std::function<Dictionary<int, String>()> func);
 
 		// Initializes pointer type
 		static const Type* InitializePointerType(const Type* type);
@@ -68,13 +68,10 @@ namespace o2
 		static const StringPointerAccessorType<_return_type>* InitializeAccessorType();
 
 	protected:
-		typedef Dictionary<String, Dictionary<int, String>> EnumsDict;
-
 		static Reflection* mInstance;        // Reflection instance
 
 		Vector<Type*>      mTypes;           // All registered types
 		UInt               mLastGivenTypeId; // Last given type index
-		EnumsDict          mEnums;           // Enums
 
 	protected:
 		// Constructor. Initializes dummy type
@@ -93,20 +90,16 @@ namespace o2
 	o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
 
 #define REG_FUNDAMENTAL_TYPE(TYPE) \
-	o2::Type* o2::FundamentalType<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
+	o2::Type* o2::FundamentalTypeContainer<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
 
-#define CONCATENATE_DETAIL(x, y, z) x##y##z
-#define CONCATENATE(x, y, z) CONCATENATE_DETAIL(x, y, z)
-#define MAKE_UNIQUE(x) CONCATENATE(x, __LINE__, __COUNTER__)
-
-#define ENUM_META(NAME)                                                      \
-    int MAKE_UNIQUE(_enum_def) = o2::Reflection::InitializeEnum<NAME>([]() { \
-    typedef NAME EnumName;                                                   \
+#define ENUM_META(NAME)                                                                                  \
+    o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
+    typedef NAME EnumName;                                                                               \
     o2::Dictionary<int, o2::String> res;    
 
-#define ENUM_META_(NAME, U)                                                     \
-    int MAKE_UNIQUE(U##_enum_def) = o2::Reflection::InitializeEnum<NAME>([]() { \
-    typedef NAME EnumName;                                                      \
+#define ENUM_META_(NAME, U)                                                                              \
+    o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
+    typedef NAME EnumName;                                                                               \
     o2::Dictionary<int, o2::String> res;                                        
 
 #define ENUM_ENTRY(NAME) \
@@ -118,11 +111,11 @@ namespace o2
 	template<typename _type>
 	_type Reflection::GetEnumValue(const String& name)
 	{
-		auto typeName = typeid(_type).name();
-		if (mInstance->mEnums.ContainsKey(typeName))
-		{
-			return (_type)(mInstance->mEnums[typeName].FindValue(name).Key());
-		}
+		EnumType* type = (EnumType*)(&TypeOf(_type));
+		auto& entries = type->GetEntries();
+
+		if (entries.ContainsValue(name))
+			return (_type)(entries.FindValue(name).Key());
 
 		return (_type)0;
 	}
@@ -130,13 +123,14 @@ namespace o2
 	template<typename _type>
 	String Reflection::GetEnumName(_type value)
 	{
-		auto typeName = typeid(_type).name();
-		if (mInstance->mEnums.ContainsKey(typeName))
-		{
-			return mInstance->mEnums[typeName][(int)value];
-		}
+		String res;
 
-		return "unknown";
+		EnumType* type = (EnumType*)(&TypeOf(_type));
+		auto& entries = type->GetEntries();
+
+		entries.TryGetValue((int)value, res);
+
+		return res;
 	}
 
 	template<typename _type>
@@ -159,6 +153,7 @@ namespace o2
 	{
 		Type* res = new Type(name, new Type::SampleCreator<_type>(), sizeof(_type));
 
+		res->mInitializeFunc = nullptr;
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
 
@@ -166,10 +161,16 @@ namespace o2
 	}
 
 	template<typename _type>
-	int Reflection::InitializeEnum(std::function<Dictionary<int, String>()> func)
+	EnumType* Reflection::InitializeEnum(const char* name, std::function<Dictionary<int, String>()> func)
 	{
-		Reflection::Instance().mEnums.Add(typeid(_type).name(), func());
-		return 0;
+		EnumType* res = new EnumType(name, new Type::SampleCreator<_type>(), sizeof(_type));
+
+		res->mInitializeFunc = nullptr;
+		res->mId = Reflection::Instance().mLastGivenTypeId++;
+		Reflection::Instance().mTypes.Add(res);
+		res->mEntries.Add(func());
+
+		return res;
 	}
 
 	template<typename _element_type>

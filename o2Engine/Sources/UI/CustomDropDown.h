@@ -131,6 +131,9 @@ namespace o2
 		// Calls onClicked if cursor is still above this
 		void OnCursorReleased(const Input::Cursor& cursor);
 
+		// Calls when cursor released outside this(only when cursor pressed this at previous time)
+		void OnCursorReleasedOutside(const Input::Cursor& cursor);
+
 		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 

@@ -412,6 +412,7 @@ namespace o2
 	UIImage* UIManager::CreateImage(const String& name)
 	{
 		auto res = mnew UIImage();
+		res->name = name;
 		res->SetImageName(name);
 		return res;
 	}

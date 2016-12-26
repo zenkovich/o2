@@ -91,10 +91,10 @@ namespace o2
 	void Reflection::InitializeFundamentalTypes()
 	{
 		IObject::type->mId = mInstance->mLastGivenTypeId++;
-		FundamentalType<void>::type->mId = mInstance->mLastGivenTypeId++;
+		FundamentalTypeContainer<void>::type->mId = mInstance->mLastGivenTypeId++;
 		Type::Dummy::type->mId = mInstance->mLastGivenTypeId++;
 
-		mInstance->mTypes.Add(FundamentalType<void>::type);
+		mInstance->mTypes.Add(FundamentalTypeContainer<void>::type);
 		mInstance->mTypes.Add(Type::Dummy::type);
 	}
 
@@ -119,7 +119,7 @@ namespace o2
 	
 	Reflection* Reflection::mInstance;
 
-	Type* FundamentalType<void>::type = new Type("void", nullptr, 0);
+	Type* FundamentalTypeContainer<void>::type = new Type("void", nullptr, 0);
 	Type* IObject::type = new Type("IObject", nullptr, 0);
 	Type* Type::Dummy::type = new Type("Unknown", nullptr, 0);
 

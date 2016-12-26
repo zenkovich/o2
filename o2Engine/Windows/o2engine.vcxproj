@@ -240,6 +240,7 @@
     <ClInclude Include="..\Sources\Utils\Delegates.h" />
     <ClInclude Include="..\Sources\Utils\DragAndDrop.h" />
     <ClInclude Include="..\Sources\Utils\DragHandle.h" />
+    <ClInclude Include="..\Sources\Utils\EditorPropertyAttribute.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />

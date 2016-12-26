@@ -568,9 +568,6 @@ namespace o2
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
@@ -725,9 +722,15 @@ namespace o2
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), 
+										  Layout::BothStretch(-9, -9, -9, -9));
+
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), 
+										   Layout::BothStretch(-9, -9, -9, -9));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), 
+											 Layout::BothStretch(-9, -9, -9, -9));
+
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
 										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
 
@@ -741,7 +744,7 @@ namespace o2
 		list->layout.pivot = Vec2F(0.5f, 1.0f);
 		list->layout.anchorMin = Vec2F(0, 0);
 		list->layout.anchorMax = Vec2F(1, 0);
-		list->layout.offsetMin = Vec2F(-1, -60);
+		list->layout.offsetMin = Vec2F(2, -60);
 		list->layout.offsetMax = Vec2F(0, 3);
 
 		UILabel* itemSample = o2UI.CreateLabel("empty");

@@ -168,6 +168,11 @@ namespace o2
 		return mTextureSrcRect;
 	}
 
+	Vec2I Sprite::GetOriginalSize() const
+	{
+		return mTextureSrcRect.Size();
+	}
+
 	void Sprite::SetCornerColor(Corner corner, const Color4& color)
 	{
 		mCornersColors[(int)corner] = color;
@@ -1048,6 +1053,7 @@ CLASS_META(o2::Sprite)
 	PUBLIC_FUNCTION(TextureRef, GetTexture);
 	PUBLIC_FUNCTION(void, SetTextureSrcRect, const RectI&);
 	PUBLIC_FUNCTION(RectI, GetTextureSrcRect);
+	PUBLIC_FUNCTION(Vec2I, GetOriginalSize);
 	PUBLIC_FUNCTION(void, SetCornerColor, Corner, const Color4&);
 	PUBLIC_FUNCTION(Color4, GetCornerColor, Corner);
 	PUBLIC_FUNCTION(void, SetLeftTopColor, const Color4&);

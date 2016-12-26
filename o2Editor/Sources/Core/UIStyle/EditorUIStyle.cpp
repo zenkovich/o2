@@ -1227,7 +1227,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "folder");
 	}
 
-	void EditorUIStyleBuilder::RebuildPrefabAssetIcon()
+	void EditorUIStyleBuilder::RebuildPrototypeAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1362,8 +1362,8 @@ namespace Editor
 		list->layout.pivot = Vec2F(0.5f, 1.0f);
 		list->layout.anchorMin = Vec2F(0, 0);
 		list->layout.anchorMax = Vec2F(1, 0);
-		list->layout.offsetMin = Vec2F(-1, -60);
-		list->layout.offsetMax = Vec2F(0, 3);
+		list->layout.offsetMin = Vec2F(0, -60);
+		list->layout.offsetMax = Vec2F(0, 1);
 
 		Text* undefinedText = mnew Text("stdFont.ttf");
 		undefinedText->text = "--";
@@ -1863,27 +1863,79 @@ namespace Editor
 		layout->name = "vector2 property";
 
 		auto xLabel = o2UI.CreateLabel("X");
-		xLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
+		xLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(15, 0));
 		xLabel->horOverflow = UILabel::HorOverflow::None;
 		layout->AddChild(xLabel);
 
 		auto xEdit = o2UI.CreateWidget<UIEditBox>("singleline");
 		xEdit->name = "x edit";
-		xEdit->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F());
+		xEdit->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(15, 0), Vec2F());
 		layout->AddChild(xEdit);
 
 		auto yLabel = o2UI.CreateLabel("Y");
 		yLabel->layout.maxWidth = 15;
-		yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
+		yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(0, 0), Vec2F(15, 0));
 		yLabel->horOverflow = UILabel::HorOverflow::None;
 		layout->AddChild(yLabel);
 
 		auto yEdit = o2UI.CreateWidget<UIEditBox>("singleline");
 		yEdit->name = "y edit";
-		yEdit->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(20, 0), Vec2F());
+		yEdit->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(15, 0), Vec2F());
 		layout->AddChild(yEdit);
 
 		o2UI.AddWidgetStyle(layout, "vector2 property");
+	}
+
+	void EditorUIStyleBuilder::RebuildRectProperty()
+	{
+		auto layout = mnew UIWidget();
+		layout->name = "rectangle property";
+
+		// left
+		auto leftLabel = o2UI.CreateLabel("L");
+		leftLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(15, 0));
+		leftLabel->horOverflow = UILabel::HorOverflow::None;
+		layout->AddChild(leftLabel);
+
+		auto leftEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		leftEdit->name = "left edit";
+		leftEdit->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(15, 0), Vec2F());
+		layout->AddChild(leftEdit);
+
+		// bottom
+		auto bottomLabel = o2UI.CreateLabel("B");
+		bottomLabel->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.25f, 1.0f), Vec2F(0, 0), Vec2F(15, 0));
+		bottomLabel->horOverflow = UILabel::HorOverflow::None;
+		layout->AddChild(bottomLabel);
+
+		auto bottomEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		bottomEdit->name = "bottom edit";
+		bottomEdit->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(15, 0), Vec2F());
+		layout->AddChild(bottomEdit);
+
+		// right
+		auto rightLabel = o2UI.CreateLabel("R");
+		rightLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(0, 0), Vec2F(15, 0));
+		rightLabel->horOverflow = UILabel::HorOverflow::None;
+		layout->AddChild(rightLabel);
+
+		auto rightEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		rightEdit->name = "right edit";
+		rightEdit->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(15, 0), Vec2F());
+		layout->AddChild(rightEdit);
+
+		// top
+		auto topLabel = o2UI.CreateLabel("T");
+		topLabel->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(0.75f, 1.0f), Vec2F(0, 0), Vec2F(15, 0));
+		topLabel->horOverflow = UILabel::HorOverflow::None;
+		layout->AddChild(topLabel);
+
+		auto topEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		topEdit->name = "top edit";
+		topEdit->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(15, 0), Vec2F());
+		layout->AddChild(topEdit);
+
+		o2UI.AddWidgetStyle(layout, "rectangle property");
 	}
 
 	void EditorUIStyleBuilder::RebuildEditorUIStyle()
@@ -1936,7 +1988,7 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildFoldersTree);
 	PUBLIC_FUNCTION(void, RebuildRegularAssetIcon);
 	PUBLIC_FUNCTION(void, RebuildFolderAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildPrefabAssetIcon);
+	PUBLIC_FUNCTION(void, RebuildPrototypeAssetIcon);
 	PUBLIC_FUNCTION(void, RebuildPrefabPreviewAssetIcon);
 	PUBLIC_FUNCTION(void, RebuildImagePreviewAssetIcon);
 	PUBLIC_FUNCTION(void, RebuildTextAssetIcon);
@@ -1948,6 +2000,7 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildAssetPropety);
 	PUBLIC_FUNCTION(void, RebuildComponentProperty);
 	PUBLIC_FUNCTION(void, RebuildVector2Property);
+	PUBLIC_FUNCTION(void, RebuildRectProperty);
 	PUBLIC_FUNCTION(void, RebuildActorHeadEnableToggle);
 	PUBLIC_FUNCTION(void, RebuildActorHeadName);
 	PUBLIC_FUNCTION(void, RebuildActorHeadLockToggle);

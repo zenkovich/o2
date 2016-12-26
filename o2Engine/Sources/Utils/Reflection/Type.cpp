@@ -406,11 +406,25 @@ namespace o2
 		return nullptr;
 	}
 
+	EnumType::EnumType(const String& name, ISampleCreator* creator, int size):
+		Type(name, creator, size)
+	{}
+
+	Type::Usage EnumType::GetUsage() const
+	{
+		return Usage::Enumeration;
+	}
+
+	const Dictionary<int, String>& EnumType::GetEntries() const
+	{
+		return mEntries;
+	}
 }
  
 ENUM_META_(o2::Type::Usage, Usage)
 {
 	ENUM_ENTRY(Dictionary);
+	ENUM_ENTRY(Enumeration);
 	ENUM_ENTRY(Regular);
 	ENUM_ENTRY(StringAccessor);
 	ENUM_ENTRY(Vector);

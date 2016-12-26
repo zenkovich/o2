@@ -15,6 +15,9 @@
     <Filter Include="Sources\SceneWindow" />
     <Filter Include="Sources\TreeWindow" />
     <Filter Include="Sources\Windows" />
+    <Filter Include="Sources\PropertiesWindow\AssetsViewer">
+      <UniqueIdentifier>{2e3f02cf-2e2f-4572-9ac3-609ea2e1e6df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h">
@@ -134,6 +137,12 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.h">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\AssetsPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\IAssetPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.h">
       <Filter>Sources\PropertiesWindow</Filter>
     </ClInclude>
@@ -208,6 +217,27 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h">
       <Filter>Sources\TreeWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\EnumProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\EnumMaskProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ObjectPtrProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\RectangleFloatProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\RectangleIntProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +358,12 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\AssetsPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\IAssetPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.cpp">
       <Filter>Sources\PropertiesWindow</Filter>
     </ClCompile>
@@ -402,6 +438,24 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
       <Filter>Sources\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ObjectPtrProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\RectangleFloatProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\RectangleIntProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\EnumProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

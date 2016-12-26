@@ -229,13 +229,17 @@ namespace Editor
 		if (assetsScroll)
 		{
 			assetsScroll->InstantiateDraggingAssets();
-			UpdateNodesView(true);
-			UpdateLayout(true);
 
-			Focus();
-			SetSelectedActors(assetsScroll->mInstSceneDragActors);
-			BeginDragging(GetNode(assetsScroll->mInstSceneDragActors.Last()));
-			mDragOffset = Vec2F();
+			if (!assetsScroll->mInstSceneDragActors.IsEmpty())
+			{
+				UpdateNodesView(true);
+				UpdateLayout(true);
+
+				Focus();
+				SetSelectedActors(assetsScroll->mInstSceneDragActors);
+				BeginDragging(GetNode(assetsScroll->mInstSceneDragActors.Last()));
+				mDragOffset = Vec2F();
+			}
 		}
 		else UITree::OnDragEnter(group);
 	}
@@ -296,155 +300,6 @@ namespace Editor
 	{
 		UITree::OnObjectsChanged({ actor });
 	}
-
-			// 	void UIActorsTree::OnDraggedAbove(SelectableDragableObjectsGroup* group)
-	// 	{
-	// 		UITree::OnDraggedAbove(group);
-	// 
-	// 		auto listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
-	// 		ActorProperty* actorProperty = dynamic_cast<ActorProperty*>(listenerUnderCursor);
-	// 		ComponentProperty* componentProperty = dynamic_cast<ComponentProperty*>(listenerUnderCursor);
-	// 
-	// 		if (actorProperty && !mDragActorPropertyField)
-	// 		{
-	// 			if (mSelectedItems.Count() == 1)
-	// 			{
-	// 				mDragActorPropertyField = actorProperty;
-	// 				mDragActorPropertyField->GetWidget()->SetState("selected", true);
-	// 				o2Application.SetCursor(CursorType::Hand);
-	// 			}
-	// 		}
-	// 
-	// 		if (componentProperty && !mDragComponentPropertyField)
-	// 		{
-	// 			if (mSelectedItems.Count() == 1)
-	// 			{
-	// 				Actor* actor = (Actor*)(void*)mSelectedItems[0].object;
-	// 				if (actor->GetComponent(componentProperty->GetSpecializedType()->GetUnpointedType()))
-	// 				{
-	// 					mDragComponentPropertyField = componentProperty;
-	// 					mDragComponentPropertyField->GetWidget()->SetState("selected", true);
-	// 					o2Application.SetCursor(CursorType::Hand);
-	// 				}
-	// 			}
-	// 		}
-	// 
-	// 		if (!actorProperty && mDragActorPropertyField)
-	// 		{
-	// 			mDragActorPropertyField->GetWidget()->SetState("selected", false);
-	// 			mDragActorPropertyField = nullptr;
-	// 			o2Application.SetCursor(CursorType::Arrow);
-	// 		}
-	// 
-	// 		if (!componentProperty && mDragComponentPropertyField)
-	// 		{
-	// 			mDragComponentPropertyField->GetWidget()->SetState("selected", false);
-	// 			mDragComponentPropertyField = nullptr;
-	// 			o2Application.SetCursor(CursorType::Arrow);
-	// 		}
-	// 	}
-	// 
-	// 	void UIActorsTree::OnDropped(SelectableDragableObjectsGroup* group)
-	// 	{
-	// 		auto listenerUnderCursor = o2Events.GetCursorListenerUnderCursor(0);
-	// 		UIAssetsIconsScrollArea* assetsScrollArea = dynamic_cast<UIAssetsIconsScrollArea*>(listenerUnderCursor);
-	// 		if (assetsScrollArea)
-	// 		{
-	// 			String targetPath = assetsScrollArea->GetViewingPath();
-	// 
-	// 			auto iconUnderCursor = assetsScrollArea->GetIconUnderPoint(o2Input.GetCursorPos());
-	// 			if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == TypeOf(FolderAsset).ID())
-	// 				targetPath = iconUnderCursor->GetAssetInfo().mPath;
-	// 
-	// 			for (auto& sel : mSelectedItems)
-	// 			{
-	// 				ActorAsset newAsset;
-	// 				newAsset.actor = *(Actor*)(void*)sel.object;
-	// 				String path = targetPath.IsEmpty() ? newAsset.actor.name + ".prefab" : targetPath + "/" + newAsset.actor.name + ".prefab";
-	// 				newAsset.Save(o2Assets.MakeUniqueAssetName(path));
-	// 			}
-	// 
-	// 			BreakDragging();
-	// 		}
-	// 		else if (mDragActorPropertyField)
-	// 		{
-	// 			mDragActorPropertyField->SetValue((Actor*)(void*)(mSelectedItems[0].object));
-	// 			mDragActorPropertyField->GetWidget()->SetState("selected", false);
-	// 			o2Application.SetCursor(CursorType::Arrow);
-	// 
-	// 			mDragActorPropertyField = nullptr;
-	// 
-	// 			mDraggingNodes = false;
-	// 			mDragNode->Hide(true);
-	// 
-	// 			for (auto node : mAllNodes)
-	// 				node->SetState("inserting", false);
-	// 
-	// 			for (auto sel : mSelectedItems)
-	// 			{
-	// 				if (sel.node)
-	// 					sel.node->SetState("dragging", false);
-	// 			}
-	// 
-	// 			for (auto sel : mSelectedItems)
-	// 				FreeSelectionSprite(sel.selectionSprite);
-	// 
-	// 			mSelectedItems.Clear();
-	// 
-	// 			for (auto obj : mBeforeDragSelected)
-	// 			{
-	// 				SelectedNode selectionNode;
-	// 				selectionNode.object = obj.object;
-	// 				selectionNode.selectionSprite = CreateSelectionSprite();
-	// 				selectionNode.node = UITree::GetNode(obj.object);
-	// 
-	// 				mSelectedItems.Add(selectionNode);
-	// 			}
-	// 
-	// 			UpdateLayout();
-	// 		}
-	// 		else if (mDragComponentPropertyField)
-	// 		{
-	// 			Actor* actor = (Actor*)(void*)mSelectedItems[0].object;
-	// 			auto component = actor->GetComponent(mDragComponentPropertyField->GetSpecializedType()->GetUnpointedType());
-	// 
-	// 			mDragComponentPropertyField->SetValue(component);
-	// 			mDragComponentPropertyField->GetWidget()->SetState("selected", false);
-	// 			o2Application.SetCursor(CursorType::Arrow);
-	// 
-	// 			mDragComponentPropertyField = nullptr;
-	// 
-	// 			mDraggingNodes = false;
-	// 			mDragNode->Hide(true);
-	// 
-	// 			for (auto node : mAllNodes)
-	// 				node->SetState("inserting", false);
-	// 
-	// 			for (auto sel : mSelectedItems)
-	// 			{
-	// 				if (sel.node)
-	// 					sel.node->SetState("dragging", false);
-	// 			}
-	// 
-	// 			for (auto sel : mSelectedItems)
-	// 				FreeSelectionSprite(sel.selectionSprite);
-	// 
-	// 			mSelectedItems.Clear();
-	// 
-	// 			for (auto obj : mBeforeDragSelected)
-	// 			{
-	// 				SelectedNode selectionNode;
-	// 				selectionNode.object = obj.object;
-	// 				selectionNode.selectionSprite = CreateSelectionSprite();
-	// 				selectionNode.node = UITree::GetNode(obj.object);
-	// 
-	// 				mSelectedItems.Add(selectionNode);
-	// 			}
-	// 
-	// 			UpdateLayout();
-	// 		}
-	// 		else UITree::OnDropped(group);
-	// 	}
 
 	UIActorsTreeNode::UIActorsTreeNode():
 		UITreeNode()

@@ -105,7 +105,10 @@ namespace o2
 				line += 20;
 			}
 		}
+	}
 
+	void EventSystem::PostUpdate()
+	{
 		mAreaCursorListeners.Clear();
 		mDragListeners.Clear();
 	}

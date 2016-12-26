@@ -499,6 +499,9 @@
     <ClInclude Include="..\Sources\Utils\Reflection\TypeTraits.h">
       <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\EditorPropertyAttribute.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Animation\Animatable.cpp">

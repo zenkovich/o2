@@ -39,20 +39,24 @@ namespace o2
 	/* if */   std::conditional<std::is_base_of<IObject, T>::value,
 	/* then */ T,
 	/* else */ std::conditional<(
-		       /* if */   std::is_fundamental<T>::value ||
-					      std::is_same<T, Basis>::value ||
-					      std::is_same<T, Color4>::value ||
-					      std::is_same<T, RectI>::value ||
-					      std::is_same<T, RectF>::value ||
-					      std::is_same<T, Vec2I>::value ||
-					      std::is_same<T, Vec2F>::value ||
-					      std::is_same<T, Vertex2>::value ||
-					      std::is_same<T, String>::value ||
-					      std::is_same<T, WString>::value ||
-					      std::is_same<T, UID>::value ||
-					      std::is_same<T, DataNode>::value) && !std::is_const<T>::value,
-	           /* then */ FundamentalType<T>,
-	           /* else */ Type::Dummy
+	           /* if */   std::is_fundamental<T>::value ||
+		                  std::is_same<T, Basis>::value ||
+		                  std::is_same<T, Color4>::value ||
+		                  std::is_same<T, RectI>::value ||
+		                  std::is_same<T, RectF>::value ||
+		                  std::is_same<T, Vec2I>::value ||
+		                  std::is_same<T, Vec2F>::value ||
+		                  std::is_same<T, Vertex2>::value ||
+		                  std::is_same<T, String>::value ||
+		                  std::is_same<T, WString>::value ||
+		                  std::is_same<T, UID>::value ||
+		                  std::is_same<T, DataNode>::value) && !std::is_const<T>::value,
+		       /* then */ FundamentalTypeContainer<T>,
+		       /* else */ std::conditional<
+		                  /* if */   std::is_enum<T>::value,
+		                  /* then */ EnumTypeContainer<T>,
+		                  /* else */ Type::Dummy
+			              >::type
 	           >::type
 	>::type>
 	struct GetTypeHelper

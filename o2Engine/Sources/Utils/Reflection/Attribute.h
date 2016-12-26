@@ -16,9 +16,6 @@ namespace o2
 		// Virtual destructor
 		virtual ~IAttribute() {}
 
-		// Returns copy of this
-		virtual IAttribute* Clone() const = 0;
-
 	protected:
 		FieldInfo* mOwnerFieldInfo; // Pointer to owner field info object
 

@@ -132,10 +132,10 @@ namespace o2
 		// ----------
 		class Page: public ISerializable
 		{
-			UInt                       mId;          // Page number @SERIALIZABLE
-			Vec2I                      mSize;        // Size of page @SERIALIZABLE
+			UInt                   mId;          // Page number @SERIALIZABLE
+			Vec2I                  mSize;        // Size of page @SERIALIZABLE
 			Dictionary<UID, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
-			AtlasAsset*                mOwner;       // Owner atlas
+			AtlasAsset*            mOwner;       // Owner atlas
 
 		public:
 			// Returns number

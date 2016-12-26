@@ -43,6 +43,9 @@ namespace o2
 		// Updates and processes events
 		void Update(float dt);
 
+		// Post update events
+		void PostUpdate();
+
 	protected:
 		// Default constructor
 		EventSystem();

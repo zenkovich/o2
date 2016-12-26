@@ -205,6 +205,7 @@ namespace Editor
 		OnUpdate(dt);
 
 		mUIManager->Update(dt);
+		mEventSystem->PostUpdate();
 
 		mRender->Begin();
 

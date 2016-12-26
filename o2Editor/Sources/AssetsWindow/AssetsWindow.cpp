@@ -20,6 +20,7 @@
 #include "Utils/Delegates.h"
 #include "Utils/FileSystem/FileSystem.h"
 #include "Core/EditorConfig.h"
+#include "Assets/DataAsset.h"
 
 DECLARE_SINGLETON(Editor::AssetsWindow);
 
@@ -414,6 +415,24 @@ namespace Editor
 		folderAsset.Save(o2Assets.MakeUniqueAssetName(targetPath + "/New animation.anim"));
 
 		o2Assets.RebuildAssets();
+	}
+
+	Sprite* AssetsWindow::GetAssetIconSprite(Asset* asset)
+	{
+		Type& type = asset->GetType();
+
+		if (type == TypeOf(ImageAsset))
+			return mnew Sprite(asset->GetPath());
+		else if (type == TypeOf(ActorAsset))
+			return mnew Sprite("ui/UI2_actor_icon.png");
+		else if (type == TypeOf(FolderAsset))
+			return mnew Sprite("ui/UI2_big_folder_icon.png");
+		else if (type == TypeOf(DataAsset))
+			return mnew Sprite("ui/UI2_big_text_file_icon.png");
+		else if (type == TypeOf(AnimationAsset))
+			return mnew Sprite("ui/UI2_anim_file_icon.png"); 
+
+		return mnew Sprite("ui/UI2_big_file_icon.png"); 
 	}
 
 	void AssetsWindow::OnSearchEdited(const WString& search)

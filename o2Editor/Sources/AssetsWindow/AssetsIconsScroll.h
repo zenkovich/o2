@@ -104,6 +104,7 @@ namespace Editor
 		typedef Dictionary<String, AssetsIconsVec> IconArrsDict;
 		typedef Vector<Pair<UID, String>> AssetIdPathVec;
 		typedef Vector<Actor*> ActorsVec;
+		typedef Vector<Asset*> AssetsVec;
 
 		const Vec2F        mAssetIconSize = Vec2F(50, 60);
 
@@ -113,6 +114,7 @@ namespace Editor
 		UIContextMenu*     mContextMenu = nullptr;      // Assets Context menu
 
 		AssetsIconsVec     mSelectedAssetsIcons;        // Selected assets icons
+		AssetsVec          mSelectedPreloadedAssets;    // Preloaded selected assets
 
 		UIAssetIcon*       mHightlightIcon = nullptr;  // Current hightlighting asset icon
 		Animation          mHightlightAnim;             // Icon hightlight animation @SERIALIZABLE
@@ -137,6 +139,9 @@ namespace Editor
 		bool               mNeedRebuildAssets = false;  // Is assets needs to rebuild
 
 	protected:
+		// Calls when assets selection was changed
+		void OnAssetsSelected();
+
 		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
 

@@ -112,6 +112,9 @@ namespace Editor
 
 		// Calls when context create animation pressed
 		void CreateAnimationAsset(const String& targetPath);
+
+		// Creates and returns icon sprite for asset
+		static Sprite* GetAssetIconSprite(Asset* asset);
 		 
 		IOBJECT(AssetsWindow);
 

@@ -19,7 +19,7 @@ namespace o2
 
 	public:
 		Property<Bitmap*>     bitmap;    // Bitmap data property
-		Property<UID>     atlasId;   // Atlas owner id property
+		Property<UID>         atlasId;   // Atlas owner id property
 		Property<AtlasAsset*> atlas;     // Atlas owner asset property
 		Getter<UInt>          atlasPage; // Atlas page index getter
 		Getter<RectI>         atlasRect; // Atlas source image rectangle getter
@@ -117,7 +117,7 @@ namespace o2
 		class MetaInfo: public IMetaInfo
 		{
 		public:
-			UID      mAtlasId;     // Atlas owner id @SERIALIZABLE
+			UID          mAtlasId;     // Atlas owner id @SERIALIZABLE
 			PlatformMeta mIOS;         // IOS specified meta @SERIALIZABLE
 			PlatformMeta mAndroid;     // Android specified meta @SERIALIZABLE
 			PlatformMeta mMacOS;       // MacOS specified meta @SERIALIZABLE

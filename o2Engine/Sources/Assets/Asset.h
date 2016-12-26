@@ -113,7 +113,7 @@ namespace o2
 
 	protected:
 		String     mPath; // Asset path
-		IMetaInfo* mMeta; // Asset meta information
+		IMetaInfo* mMeta; // Asset meta information @EDITOR_PROPERTY
 
 	protected:
 		// Beginning serialization callback

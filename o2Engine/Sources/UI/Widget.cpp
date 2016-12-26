@@ -299,14 +299,16 @@ namespace o2
 		return res;
 	}
 
-	bool UIWidget::RemoveChild(UIWidget* widget, bool release /*= true*/)
+	bool UIWidget::RemoveChild(UIWidget* widget, bool release /*= true*/, bool updateLayout /*= true*/)
 	{
 		if (!mChilds.Contains(widget))
 			return false;
 
 		widget->mParent = nullptr;
 		mChilds.Remove(widget);
-		UpdateLayout();
+		
+		if (updateLayout)
+			UpdateLayout();
 
 		OnChildRemoved(widget);
 
@@ -950,11 +952,13 @@ namespace o2
 		Vec2F oldLayoutOffsetMax = layout.mOffsetMax;
 		float oldTransparency = mTransparency;
 		auto oldParent = mParent;
+		bool oldClipped= mIsClipped;
 
 		layout.mOffsetMin = area.LeftBottom();
 		layout.mOffsetMax = area.RightTop();
 		mTransparency = transparency;
 		mParent = nullptr;
+		mIsClipped = false;
 
 		UIWidget::UpdateLayout(true);
 		UpdateTransparency();
@@ -965,6 +969,7 @@ namespace o2
 		layout.mOffsetMax = oldLayoutOffsetMax;
 		mTransparency = oldTransparency;
 		mParent = oldParent;
+		mIsClipped = oldClipped;
 
 		UpdateLayout(true);
 		UpdateTransparency();
@@ -1047,7 +1052,7 @@ CLASS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, AddChilds, const WidgetsVec&);
 	PUBLIC_FUNCTION(UIWidget*, AddChild, UIWidget*, int);
 	PUBLIC_FUNCTION(bool, RemoveChild, const String&);
-	PUBLIC_FUNCTION(bool, RemoveChild, UIWidget*, bool);
+	PUBLIC_FUNCTION(bool, RemoveChild, UIWidget*, bool, bool);
 	PUBLIC_FUNCTION(UIWidget*, GetChild, const String&);
 	PUBLIC_FUNCTION(void, RemoveAllChilds, bool, bool);
 	PUBLIC_FUNCTION(const WidgetsVec&, GetChilds);

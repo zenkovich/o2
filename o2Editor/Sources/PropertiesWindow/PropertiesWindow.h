@@ -58,10 +58,13 @@ namespace Editor
 		IPropertyField* GetFieldPropertyPrototype(const Type* type);
 
 		// Creates regular primitive property field
-		Pair<IPropertyField*, UIWidget*> CreateRegularField(IPropertyField* fieldSample, const String& name);
+		Pair<IPropertyField*, UIWidget*> CreateRegularField(const Type* fieldPropertyType, const String& name);
 
 		// Creates object field
 		Pair<IPropertyField*, UIWidget*> CreateObjectField(const Type* type);
+
+		// Creates object pointer field
+		Pair<IPropertyField*, UIWidget*> CreateObjectPtrField(const Type* type);
 
 		// Creates vector field
 		Pair<IPropertyField*, UIWidget*> CreateVectorField(const Type* type);

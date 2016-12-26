@@ -37,7 +37,7 @@ namespace Editor
 		void RebuildFoldersTree();
 		void RebuildRegularAssetIcon();
 		void RebuildFolderAssetIcon();
-		void RebuildPrefabAssetIcon();
+		void RebuildPrototypeAssetIcon();
 		void RebuildPrefabPreviewAssetIcon();
 		void RebuildImagePreviewAssetIcon();
 		void RebuildTextAssetIcon();
@@ -49,6 +49,7 @@ namespace Editor
 		void RebuildAssetPropety();
 		void RebuildComponentProperty();
 		void RebuildVector2Property();
+		void RebuildRectProperty();
 		void RebuildActorHeadEnableToggle();
 		void RebuildActorHeadName();
 		void RebuildActorHeadLockToggle();

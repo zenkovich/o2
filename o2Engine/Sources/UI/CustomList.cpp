@@ -381,6 +381,12 @@ namespace o2
 		return mEnableHorScroll || mEnableVerScroll;
 	}
 
+	void UICustomList::MoveScrollPosition(const Vec2F& delta)
+	{
+		UIScrollArea::MoveScrollPosition(delta);
+		UpdateSelectionSprites();
+	}
+
 	void UICustomList::UpdateControls(float dt)
 	{}
 
@@ -397,6 +403,11 @@ namespace o2
 		mCurrentHoverRect = mTargetHoverRect;
 		mHoverDrawable->SetRect(mCurrentHoverRect);
 
+		UpdateSelectionSprites();
+	}
+
+	void UICustomList::UpdateSelectionSprites()
+	{
 		for (auto& sel : mSelectedItems)
 		{
 			UIWidget* item = GetItem(sel.idx);
@@ -501,11 +512,11 @@ namespace o2
 		if (mVerScrollBar)
 			mVerScrollBar->UpdateTransparency();
 
-		if (mSelectionDrawable)
-			mSelectionDrawable->transparency = mResTransparency;
-
 		if (mHoverDrawable)
 			mHoverDrawable->transparency = mResTransparency;
+
+		for (auto& sel : mSelectedItems)
+			sel.selection->transparency = mResTransparency;
 	}
 
 	void UICustomList::UpdateHover(const Vec2F& point)
@@ -641,6 +652,8 @@ CLASS_META(o2::UICustomList)
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
+	PROTECTED_FUNCTION(void, UpdateSelectionSprites);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
