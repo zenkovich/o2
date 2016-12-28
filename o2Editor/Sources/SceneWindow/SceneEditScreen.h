@@ -106,6 +106,9 @@ namespace Editor
 		// Return color for multiple selected actors
 		const Color4& GetManyActorsSelectionColor() const;
 
+		// Calls when scene was changed and needs to redraw
+		void OnSceneChanged();
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
 

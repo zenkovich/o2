@@ -203,7 +203,7 @@ namespace o2
 
 		newAgent->targetPtr = fieldPtr;
 
-		if (fieldInfo->IsProperty())
+		if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
 			newAgent->assignFunc = &ValueAgent<_type>::AssignSetter;
 		else
 			newAgent->assignFunc = &ValueAgent<_type>::AssignField;

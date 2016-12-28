@@ -58,7 +58,7 @@ namespace Editor
 
 	void PropertiesWindow::InitializeViewers()
 	{
-		auto viewersTypes = TypeOf(IObjectPropertiesViewer).DerivedTypes();
+		auto viewersTypes = TypeOf(IObjectPropertiesViewer).GetDerivedTypes();
 
 		for (auto type : viewersTypes)
 			mViewers.Add((IObjectPropertiesViewer*)type->CreateSample());
@@ -66,8 +66,8 @@ namespace Editor
 
 	void PropertiesWindow::InitializePropertiesFields()
 	{
-		auto a = TypeOf(IAssetProperty).DerivedTypes();
-		auto b = TypeOf(IPropertyField).DerivedTypes();
+		auto a = TypeOf(IAssetProperty).GetDerivedTypes();
+		auto b = TypeOf(IPropertyField).GetDerivedTypes();
 		auto avaialbleTypes = a + b;
 
 		avaialbleTypes.Remove(&TypeOf(IAssetProperty));
@@ -142,25 +142,25 @@ namespace Editor
 
 	void PropertiesWindow::BuildTypeViewer(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo)
 	{
-		auto fields = type->AllFields();
+		auto fields = type->GetFieldsWithBaseClasses();
 		for (auto fieldInfo : fields)
 		{
-			const Type* fieldType = &fieldInfo->GetType();
+			const Type* fieldType = fieldInfo->GetType();
 
 			if (fieldInfo->GetProtectionSection() != ProtectSection::Public &&
-				!fieldInfo->HaveAttribute<SerializableAttribute>() && !fieldInfo->HaveAttribute<EditorPropertyAttribute>())
+				!fieldInfo->HasAttribute<SerializableAttribute>() && !fieldInfo->HasAttribute<EditorPropertyAttribute>())
 			{
 				continue;
 			}
 
-			auto fieldWidgetPair = CreateFieldProperty(&fieldInfo->GetType());
+			auto fieldWidgetPair = CreateFieldProperty(fieldInfo->GetType());
 			if (!fieldWidgetPair.mFirst)
 				continue;
 
 			fieldWidgetPair.mFirst->SpecializeType(fieldType);
 
 			auto nameLabel = fieldWidgetPair.mSecond->FindChild<UILabel>();
-			nameLabel->text = MakeSmartFieldName(fieldInfo->Name());
+			nameLabel->text = MakeSmartFieldName(fieldInfo->GetName());
 
 			layout->AddChild(fieldWidgetPair.mSecond, false);
 			propertiesInfo.properties.Add(fieldInfo, fieldWidgetPair.mFirst);
@@ -174,16 +174,28 @@ namespace Editor
 
 		IPropertyField* fieldSample = GetFieldPropertyPrototype(type);
 		if (fieldSample)
-			return CreateRegularField(&fieldSample->GetType(), type->Name());
+			return CreateRegularField(&fieldSample->GetType(), type->GetName());
 
 		if (type->IsBasedOn(TypeOf(IObject)))
 			return CreateObjectField(type);
 
-		if (type->IsPointer() && type->GetUnpointedType()->IsBasedOn((TypeOf(IObject))))
+		if (type->GetUsage() == Type::Usage::Pointer && ((PointerType*)type)->GetUnpointedType()->IsBasedOn((TypeOf(IObject))))
 			return CreateObjectPtrField(type);
 
 		if (type->GetUsage() == Type::Usage::Enumeration)
-			return CreateRegularField(&TypeOf(EnumProperty), type->Name());
+			return CreateRegularField(&TypeOf(EnumProperty), type->GetName());
+
+		if (type->GetUsage() == Type::Usage::Property)
+		{
+			auto valueType = ((const PropertyType*)type)->GetValueType();
+
+			if (valueType->GetUsage() == Type::Usage::Enumeration)
+				return CreateRegularField(&TypeOf(EnumProperty), valueType->GetName());
+
+			fieldSample = GetFieldPropertyPrototype(valueType);
+			if (fieldSample)
+				return CreateRegularField(&fieldSample->GetType(), valueType->GetName());
+		}
 
 		return Pair<IPropertyField*, UIWidget*>(nullptr, nullptr);
 	}
@@ -240,12 +252,13 @@ namespace Editor
 	{
 		for (auto field : mAvailablePropertiesFields)
 		{
-			if (type->IsPointer())
+			auto fieldType = field->GetFieldType();
+			if (type->GetUsage() == Type::Usage::Pointer && fieldType->GetUsage() == Type::Usage::Pointer)
 			{
-				if (type->GetUnpointedType()->IsBasedOn(*field->GetFieldType()->GetUnpointedType()))
+				if (((PointerType*)type)->GetUnpointedType()->IsBasedOn(*((PointerType*)fieldType)->GetUnpointedType()))
 					return field;
 			}
-			else if (type->IsBasedOn(*field->GetFieldType()))
+			else if (type->IsBasedOn(*fieldType))
 				return field;
 		}
 

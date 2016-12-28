@@ -7,7 +7,7 @@
 namespace o2
 {
 	Type::Type(const String& name, ISampleCreator* creator, int size):
-		mId(0), mPointer(0), mPtrType(nullptr), mUnptrType(nullptr), mName(name),
+		mId(0), mPtrType(nullptr), mName(name),
 		mSampleCreator(creator), mSize(size)
 	{}
 
@@ -27,7 +27,7 @@ namespace o2
 		return other.mId == mId;
 	}
 
-	const String& Type::Name() const
+	const String& Type::GetName() const
 	{
 		return mName;
 	}
@@ -37,7 +37,7 @@ namespace o2
 		return mId;
 	}
 
-	int Type::Size() const
+	int Type::GetSize() const
 	{
 		return mSize;
 	}
@@ -67,71 +67,58 @@ namespace o2
 		return mPtrType;
 	}
 
-	const Type* Type::GetUnpointedType() const
-	{
-		if (mUnptrType)
-			return mUnptrType;
-
-		return this;
-	}
-
-	bool Type::IsPointer() const
-	{
-		return mPointer > 0;
-	}
-
 	Type::Usage Type::GetUsage() const
 	{
 		return Usage::Regular;
 	}
 
-	const Type::TypesVec& Type::BaseTypes() const
+	const Type::TypesVec& Type::GetBaseTypes() const
 	{
 		return mBaseTypes;
 	}
 
-	const Type::FieldInfosVec& Type::Fields() const
+	const Type::FieldInfosVec& Type::GetFields() const
 	{
 		return mFields;
 	}
 
-	Type::FieldInfosVec Type::AllFields() const
+	Type::FieldInfosVec Type::GetFieldsWithBaseClasses() const
 	{
 		FieldInfosVec res;
 
 		for (auto baseType : mBaseTypes)
-			res += baseType->AllFields();
+			res += baseType->GetFieldsWithBaseClasses();
 
 		res += mFields;
 
 		return res;
 	}
 
-	const Type::FunctionsInfosVec& Type::Functions() const
+	const Type::FunctionsInfosVec& Type::GetFunctions() const
 	{
 		return mFunctions;
 	}
 
-	Type::FunctionsInfosVec Type::AllFunctions() const
+	Type::FunctionsInfosVec Type::GetFunctionsWithBaseClasses() const
 	{
 		FunctionsInfosVec res;
 
 		for (auto baseType : mBaseTypes)
-			res += baseType->AllFunctions();
+			res += baseType->GetFunctionsWithBaseClasses();
 
 		res += mFunctions;
 
 		return res;
 	}
 
-	const FieldInfo* Type::Field(const String& name) const
+	const FieldInfo* Type::GetField(const String& name) const
 	{
 		for (auto field : mFields)
-			if (field->Name() == name)
+			if (field->GetName() == name)
 				return field;
 
 		for (auto baseType : mBaseTypes)
-			if (auto res = baseType->Field(name))
+			if (auto res = baseType->GetField(name))
 				return res;
 
 		return nullptr;
@@ -146,12 +133,12 @@ namespace o2
 		return nullptr;
 	}
 
-	Vector<const Type*> Type::DerivedTypes() const
+	Vector<const Type*> Type::GetDerivedTypes() const
 	{
 		Vector<const Type*> res;
 		for (auto type : Reflection::GetTypes())
 		{
-			auto baseTypes = type->BaseTypes();
+			auto baseTypes = type->GetBaseTypes();
 			for (auto btype : baseTypes)
 			{
 				if (btype->mId == mId)
@@ -208,10 +195,10 @@ namespace o2
 		return res;
 	}
 
-	FieldInfo* Type::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+	FieldInfo* Type::SearchFieldPath(void* obj, void* target, const String& path, String& res,
 									 Vector<void*>& passedObjects) const
 	{
-		auto allFields = AllFields();
+		auto allFields = GetFieldsWithBaseClasses();
 		for (auto field : allFields)
 		{
 			void* fieldObj = field->GetValuePtr(obj);
@@ -237,7 +224,7 @@ namespace o2
 
 		return nullptr;
 	}
-	
+
 	void* Type::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
 	{
 		int delPos = path.Find("/");
@@ -273,6 +260,10 @@ namespace o2
 		return nullptr;
 	}
 
+	VectorType::VectorType(const String& name, ISampleCreator* creator, int size):
+		Type(name, creator, size)
+	{}
+
 	Type::Usage VectorType::GetUsage() const
 	{
 		return Usage::Vector;
@@ -281,21 +272,6 @@ namespace o2
 	const Type* VectorType::GetElementType() const
 	{
 		return mElementType;
-	}
-
-	int VectorType::GetObjectVectorSize(void* object) const
-	{
-		return mGetVectorObjectSizeFunc(object);
-	}
-
-	void VectorType::SetObjectVectorSize(void* object, int size) const
-	{
-		mSetVectorObjectSizeFunc(object, size);
-	}
-
-	void* VectorType::GetObjectVectorElementPtr(void* object, int idx) const
-	{
-		return mGetObjectVectorElementPtrFunc(object, idx);
 	}
 
 	void* VectorType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
@@ -312,12 +288,12 @@ namespace o2
 		return nullptr;
 	}
 
-	FieldInfo* VectorType::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+	FieldInfo* VectorType::SearchFieldPath(void* obj, void* target, const String& path, String& res,
 										   Vector<void*>& passedObjects) const
 	{
 		int count = GetObjectVectorSize(obj);
 
-		auto allFields = mElementType->AllFields();
+		auto allFields = mElementType->GetFieldsWithBaseClasses();
 		for (int i = 0; i < count; i++)
 		{
 			void* elementPtr = GetObjectVectorElementPtr(obj, i);
@@ -333,7 +309,7 @@ namespace o2
 
 				passedObjects.Add(fieldObj);
 
-				String newPath = path + "/" + (String)i + "/" + field->Name();
+				String newPath = path + "/" + (String)i + "/" + field->GetName();
 				if (fieldObj == target)
 				{
 					res = newPath;
@@ -400,7 +376,7 @@ namespace o2
 		return nullptr;
 	}
 
-	FieldInfo* DictionaryType::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+	FieldInfo* DictionaryType::SearchFieldPath(void* obj, void* target, const String& path, String& res,
 											   Vector<void*>& passedObjects) const
 	{
 		return nullptr;
@@ -419,12 +395,43 @@ namespace o2
 	{
 		return mEntries;
 	}
+
+	PointerType::PointerType(const Type* unptrType):
+		Type(unptrType->GetName() + "*", new SampleCreator<void*>(), sizeof(void*)), mUnptrType(unptrType)
+	{}
+
+	Type::Usage PointerType::GetUsage() const
+	{
+		return Usage::Pointer;
+	}
+
+	const Type* PointerType::GetUnpointedType() const
+	{
+		return mUnptrType;
+	}
+
+	PropertyType::PropertyType(const String& name, ISampleCreator* creator, int size):
+		Type(name, creator, size)
+	{}
+
+	Type::Usage PropertyType::GetUsage() const
+	{
+		return Usage::Property;
+	}
+
+	const Type* PropertyType::GetValueType() const
+	{
+		return mValueType;
+	}
+
 }
  
 ENUM_META_(o2::Type::Usage, Usage)
 {
 	ENUM_ENTRY(Dictionary);
 	ENUM_ENTRY(Enumeration);
+	ENUM_ENTRY(Pointer);
+	ENUM_ENTRY(Property);
 	ENUM_ENTRY(Regular);
 	ENUM_ENTRY(StringAccessor);
 	ENUM_ENTRY(Vector);

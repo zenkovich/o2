@@ -39,7 +39,7 @@ namespace o2
 		FieldInfo();
 
 		// Constructor
-		FieldInfo(const String& name, UInt offset, bool isProperty, bool isPtr, const Type* type, ProtectSection sect,
+		FieldInfo(const String& name, UInt offset, const Type* type, ProtectSection sect,
 				  IFieldSerializer* serializer);
 
 		// Destructor
@@ -56,19 +56,13 @@ namespace o2
 		FieldInfo& AddAttribute(_args ... args);
 
 		// Returns name of field
-		const String& Name() const;
+		const String& GetName() const;
 
 		// Protection section
 		ProtectSection GetProtectionSection() const;
 
 		// Returns type
-		const Type& GetType() const;
-
-		// Returns is it property or not
-		bool IsProperty() const;
-
-		// Return is field is pointer
-		bool IsPointer() const;
+		const Type* GetType() const;
 
 		// Returns value of field in specified object
 		template<typename _type>
@@ -89,14 +83,14 @@ namespace o2
 
 		// Returns attribute of field, if it is not exist - returns nullptr
 		template<typename _attr_type>
-		_attr_type* Attribute() const;
+		_attr_type* GetAttribute() const;
 
 		// Returns true if exist attribute with specified type
 		template<typename _attr_type>
-		bool HaveAttribute() const;
+		bool HasAttribute() const;
 
 		// Returns attributes array
-		const AttributesVec& Attributes() const;
+		const AttributesVec& GetAttributes() const;
 
 		// Serializes object by pointer
 		void SerializeObject(void* object, DataNode& data) const;
@@ -105,14 +99,12 @@ namespace o2
 		void DeserializeObject(void* object, DataNode& data) const;
 
 	protected:
-		ProtectSection    mProtectSection; // Protection section
-		String            mName;           // Name of field
-		UInt              mOffset;         // Offset of field in bytes from owner address
-		bool              mIsProperty;     // Is it property or field
-		bool              mIsPointer;      // Is property pointer
-		const Type*       mType;           // Field type
-		AttributesVec     mAttributes;     // Attributes array
-		IFieldSerializer* mSerializer;     // field serializer
+		ProtectSection    mProtectSection = ProtectSection::Public; // Protection section
+		String            mName;                                    // Name of field
+		UInt              mOffset = 0;                              // Offset of field in bytes from owner address
+		const Type*       mType = nullptr;                          // Field type
+		AttributesVec     mAttributes;                              // Attributes array
+		IFieldSerializer* mSerializer = nullptr;                    // field serializer
 
 	protected:
 		// Searches field recursively by pointer
@@ -138,7 +130,7 @@ namespace o2
 	};
 
 	template<typename _attr_type>
-	bool FieldInfo::HaveAttribute() const
+	bool FieldInfo::HasAttribute() const
 	{
 		for (auto attr : mAttributes)
 		{
@@ -150,7 +142,7 @@ namespace o2
 	}
 
 	template<typename _attr_type>
-	_attr_type* FieldInfo::Attribute() const
+	_attr_type* FieldInfo::GetAttribute() const
 	{
 		for (auto attr : mAttributes)
 		{

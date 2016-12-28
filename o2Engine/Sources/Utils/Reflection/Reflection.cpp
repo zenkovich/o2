@@ -53,7 +53,7 @@ namespace o2
 	{
 		for (auto type : mInstance->mTypes)
 		{
-			if (type->Name() == typeName)
+			if (type->GetName() == typeName)
 				return type->CreateSample();
 		}
 
@@ -75,7 +75,7 @@ namespace o2
 	{
 		for (auto type : mInstance->mTypes)
 		{
-			if (type->Name() == name)
+			if (type->GetName() == name)
 				return type;
 		}
 
@@ -103,14 +103,10 @@ namespace o2
 		if (type->mPtrType)
 			return type->mPtrType;
 
-		Type* newType = new Type(type->mName + "*", new Type::SampleCreator<void*>(), sizeof(void*));
+		PointerType* newType = new PointerType(type);
 		newType->mId = mInstance->mLastGivenTypeId++;
-		newType->mSampleCreator = new Type::SampleCreator<void*>();
-		newType->mSize = sizeof(void*);
-		newType->mPointer = type->mPointer + 1;
 
 		type->mPtrType = newType;
-		newType->mUnptrType = const_cast<Type*>(type);
 
 		mInstance->mTypes.Add(newType);
 

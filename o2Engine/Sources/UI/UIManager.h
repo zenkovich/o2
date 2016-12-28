@@ -308,7 +308,7 @@ namespace o2
 		}
 		else
 		{
-			mLog->Warning("Can't find style %s for %s", style, TypeOf(_type).Name());
+			mLog->Warning("Can't find style %s for %s", style, TypeOf(_type).GetName());
 			res = mnew _type();
 		}
 

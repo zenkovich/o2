@@ -55,6 +55,10 @@ namespace o2
 		// Initializes pointer type
 		static const Type* InitializePointerType(const Type* type);
 
+		// Initializes property type 
+		template<typename _value_type>
+		static const PropertyType* InitializePropertyType();
+
 		// Initializes vector type
 		template<typename _element_type>
 		static const VectorType* InitializeVectorType();
@@ -173,16 +177,31 @@ namespace o2
 		return res;
 	}
 
+	template<typename _value_type>
+	const PropertyType* Reflection::InitializePropertyType()
+	{
+		String typeName = "o2::Property<" + TypeOf(_value_type).GetName() + ">";
+
+		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
+			return (PropertyType*)fnd;
+
+		TPropertyType<_value_type>* newType = new TPropertyType<_value_type>();
+		newType->mId = mInstance->mLastGivenTypeId++;
+
+		mInstance->mTypes.Add(newType);
+
+		return newType;
+	}
+
 	template<typename _element_type>
 	const VectorType* Reflection::InitializeVectorType()
 	{
-		String typeName = "o2::Vector<" + TypeOf(_element_type).Name() + ">";
+		String typeName = "o2::Vector<" + TypeOf(_element_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
 			return (VectorType*)fnd;
 
-		_element_type* f = nullptr;
-		VectorType* newType = new VectorType(f);
+		TVectorType<_element_type>* newType = new TVectorType<_element_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);
@@ -193,7 +212,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	const DictionaryType* Reflection::InitializeDictionaryType()
 	{
-		String typeName = "o2::Dictionary<" + TypeOf(_key_type).Name() + ", " + TypeOf(_value_type).Name() + ">";
+		String typeName = "o2::Dictionary<" + TypeOf(_key_type).GetName() + ", " + TypeOf(_value_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
 			return (DictionaryType*)fnd;

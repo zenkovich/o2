@@ -10,7 +10,7 @@ namespace Editor
 		if (targets.IsEmpty())
 			return;
 
-		auto fields = targets[0]->GetType().Fields();
+		auto fields = targets[0]->GetType().GetFields();
 		for (auto fieldInfo : fields)
 		{
 			Vector<void*> fieldPointers = targets.Select<void*>(
@@ -18,7 +18,7 @@ namespace Editor
 
 			IPropertyField* propertyField;
 			if (properties.TryGetValue(fieldInfo, propertyField))
-				propertyField->Setup(fieldPointers, fieldInfo->IsProperty());
+				propertyField->Setup(fieldPointers, fieldInfo->GetType()->GetUsage() == Type::Usage::Property);
 		}
 	}
 }

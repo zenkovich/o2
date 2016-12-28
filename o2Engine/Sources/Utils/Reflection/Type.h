@@ -27,7 +27,7 @@ namespace o2
 	public:
 		enum class Usage
 		{
-			Regular, Vector, Dictionary, StringAccessor, Enumeration
+			Regular, Vector, Dictionary, StringAccessor, Enumeration, Pointer, Property
 		};
 
 		typedef UInt Id;
@@ -51,13 +51,13 @@ namespace o2
 		bool operator!=(const Type& other) const;
 
 		// Returns name of type
-		const String& Name() const;
+		const String& GetName() const;
 
 		// Returns id of type
 		Id ID() const;
 
 		// Returns size of type in bytes
-		int Size() const;
+		int GetSize() const;
 
 		// Is this type based on other
 		bool IsBasedOn(const Type& other) const;
@@ -65,32 +65,26 @@ namespace o2
 		// Returns pointer of type (type -> type*)
 		const Type* GetPointerType() const;
 
-		// Returns type with removed pointer (type* -> type)
-		const Type* GetUnpointedType() const;
-
-		// Is type pointer
-		bool IsPointer() const;
-
 		// Returns type usage
 		virtual Usage GetUsage() const;
 
 		// Returns vector of base types
-		const TypesVec& BaseTypes() const;
+		const TypesVec& GetBaseTypes() const;
 
 		// Returns fields informations array
-		const FieldInfosVec& Fields() const;
+		const FieldInfosVec& GetFields() const;
 
 		// Returns fields informations array with all base types
-		FieldInfosVec AllFields() const;
+		FieldInfosVec GetFieldsWithBaseClasses() const;
 
 		// Returns functions informations array
-		const FunctionsInfosVec& Functions() const;
+		const FunctionsInfosVec& GetFunctions() const;
 
 		// Returns functions informations array with all base types
-		FunctionsInfosVec AllFunctions() const;
+		FunctionsInfosVec GetFunctionsWithBaseClasses() const;
 
 		// Returns field information by name
-		const FieldInfo* Field(const String& name) const;
+		const FieldInfo* GetField(const String& name) const;
 
 		// Returns function info by name
 		const FunctionInfo* GetFunction(const String& name) const;
@@ -99,8 +93,8 @@ namespace o2
 		template<typename _res_type, typename ... _args>
 		_res_type Invoke(const String& name, void* object, _args ... args);
 
-		// Returns inherited types
-		Vector<const Type*> DerivedTypes() const;
+		// Returns derived types
+		Vector<const Type*> GetDerivedTypes() const;
 
 		// Creates sample copy and returns him
 		void* CreateSample() const;
@@ -143,9 +137,7 @@ namespace o2
 		FieldInfosVec     mFields;        // Fields information
 		FunctionsInfosVec mFunctions;     // Functions informations
 		ISampleCreator*   mSampleCreator; // Template type agent
-		int               mPointer;       // Amount of pointers of type
 		mutable Type*     mPtrType;       // Pointer type from this
-		mutable Type*     mUnptrType;     // Unpoint type from this
 		int               mSize;          // Size of type in bytes
 
 		void(*mInitializeFunc)(Type*);    // Type initializing function
@@ -165,6 +157,55 @@ namespace o2
 		friend class StringPointerAccessorType;
 	};
 
+	// ------------
+	// Pointer type
+	// ------------
+	class PointerType: public Type
+	{
+	public:
+		// Constructor
+		PointerType(const Type* unptrType);
+
+		// Returns type usage
+		Usage GetUsage() const;
+
+		// Returns unpointed type
+		const Type* GetUnpointedType() const;
+
+	protected:
+		const Type* mUnptrType;
+	};
+
+	// ---------------
+	// Property<> type
+	// ---------------
+	class PropertyType: public Type
+	{
+	public:
+		// Default constructor
+		PropertyType(const String& name, ISampleCreator* creator, int size);
+
+		// Returns type usage
+		Usage GetUsage() const;
+
+		// Returns type of value
+		const Type* GetValueType() const;
+
+	protected:
+		const Type* mValueType;
+	};
+
+	// ---------------------------
+	// Specialized Property<> type
+	// ---------------------------
+	template<typename _value_type>
+	class TPropertyType: public PropertyType
+	{
+	public:
+		// Constructor
+		TPropertyType();
+	};
+
 	// ----------------------
 	// Type of Vector<> value
 	// ----------------------
@@ -172,14 +213,44 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		template<typename _element_type>
-		VectorType(_element_type* x);
+		VectorType(const String& name, ISampleCreator* creator, int size);
 
 		// Returns type usage
 		virtual Usage GetUsage() const;
 
 		// Returns type of vector element
 		const Type* GetElementType() const;
+
+		// Returns size of vector by pointer
+		virtual int GetObjectVectorSize(void* object) const = 0;
+
+		// Sets size of vector by pointer
+		virtual void SetObjectVectorSize(void* object, int size) const = 0;
+
+		// Returns element's pointer by index
+		virtual void* GetObjectVectorElementPtr(void* object, int idx) const = 0;
+
+		// Returns filed pointer by path
+		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+
+	protected:
+		const Type* mElementType;
+
+	protected:
+		// Searches field recursively by pointer
+		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
+										   Vector<void*>& passedObjects) const;
+	};
+
+	// -----------------------
+	// Specialized vector type
+	// -----------------------
+	template<typename _element_type>
+	class TVectorType: public VectorType
+	{
+	public:
+		// Default constructor
+		TVectorType();
 
 		// Returns size of vector by pointer
 		int GetObjectVectorSize(void* object) const;
@@ -189,21 +260,6 @@ namespace o2
 
 		// Returns element's pointer by index
 		void* GetObjectVectorElementPtr(void* object, int idx) const;
-
-		// Returns filed pointer by path
-		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
-
-	protected:
-		const Type* mElementType;
-
-		SharedLambda<int(void*)>        mGetVectorObjectSizeFunc;
-		SharedLambda<void(void*, int)>  mSetVectorObjectSizeFunc;
-		SharedLambda<void*(void*, int)> mGetObjectVectorElementPtrFunc;
-
-	protected:
-		// Searches field recursively by pointer
-		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<void*>& passedObjects) const;
 	};
 
 	// --------------------------
@@ -445,29 +501,51 @@ namespace o2
 		return _res_type();
 	}
 
-	// -------------------------
-	// VectorType implementation
-	// -------------------------
+	// ------------------------------
+	// TPropertyType<> implementation
+	// ------------------------------
+	
+	template<typename _value_type>
+	TPropertyType<_value_type>::TPropertyType():
+		PropertyType((String)"o2::Property<" + GetTypeOf<_value_type>().GetName() + ">", new SampleCreator<_value_type>(),
+			 sizeof(_value_type))
+	{
+		mValueType = &GetTypeOf<_value_type>();
+	}
+
+	// --------------------------
+	// TVectorType implementation
+	// --------------------------
 
 	template<typename _element_type>
-	VectorType::VectorType(_element_type* x):
-		Type((String)"o2::Vector<" + GetTypeOf<_element_type>().Name() + ">", new SampleCreator<Vector<_element_type>>(),
+	void* TVectorType<_element_type>::GetObjectVectorElementPtr(void* object, int idx) const
+	{
+		return &((Vector<_element_type>*)object)->Get(idx);
+	}
+
+	template<typename _element_type>
+	void TVectorType<_element_type>::SetObjectVectorSize(void* object, int size) const
+	{
+		auto vectorObj = ((Vector<_element_type>*)object);
+		int oldSize = vectorObj->Count();
+		vectorObj->Resize(size);
+
+		for (int i = oldSize; i < size; i++)
+			(*vectorObj)[i] = _element_type();
+	}
+
+	template<typename _element_type>
+	int TVectorType<_element_type>::GetObjectVectorSize(void* object) const
+	{
+		return ((Vector<_element_type>*)object)->Count();
+	}
+
+	template<typename _element_type>
+	TVectorType<_element_type>::TVectorType():
+		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">", new SampleCreator<Vector<_element_type>>(),
 			 sizeof(Vector<_element_type>))
 	{
 		mElementType = &GetTypeOf<_element_type>();
-
-		mGetVectorObjectSizeFunc = [](void* obj) { return ((Vector<_element_type>*)obj)->Count(); };
-
-		mSetVectorObjectSizeFunc = [](void* obj, int size) {
-			auto vectorObj = ((Vector<_element_type>*)obj);
-			int oldSize = vectorObj->Count();
-			vectorObj->Resize(size);
-
-			for (int i = oldSize; i < size; i++)
-				(*vectorObj)[i] = _element_type();
-		};
-
-		mGetObjectVectorElementPtrFunc = [](void* obj, int idx) { return &((Vector<_element_type>*)obj)->Get(idx); };
 	}
 
 	// -----------------------------
@@ -476,7 +554,7 @@ namespace o2
 
 	template<typename _key_type, typename _value_type>
 	DictionaryType::DictionaryType(_key_type* x, _value_type* y):
-		Type((String)"o2::Dictionary<" + GetTypeOf<_key_type>().Name() + ", " + GetTypeOf<_value_type>().Name() + ">",
+		Type((String)"o2::Dictionary<" + GetTypeOf<_key_type>().GetName() + ", " + GetTypeOf<_value_type>().GetName() + ">",
 			 new SampleCreator<Dictionary<_key_type, _value_type>>, sizeof(Dictionary<_key_type, _value_type>))
 	{
 		mKeyType = &GetTypeOf<_key_type>();
@@ -500,7 +578,7 @@ namespace o2
 
 	template<typename _return_type>
 	StringPointerAccessorType<_return_type>::StringPointerAccessorType():
-		Type((String)"Accessor<" + GetTypeOf<_return_type>().Name() + "*, const o2::String&>",
+		Type((String)"Accessor<" + GetTypeOf<_return_type>().GetName() + "*, const o2::String&>",
 			 new SampleCreator<Accessor<_return_type*, const String&>>(),
 			 sizeof(Accessor<_return_type*, const String&>))
 	{
@@ -538,7 +616,7 @@ namespace o2
 		Accessor<_return_type*, const String&>* accessor = ((Accessor<_return_type*, const String&>*)obj);
 
 		auto allFromAccessor = accessor->GetAll();
-		auto allFields = mReturnType->AllFields();
+		auto allFields = mReturnType->GetFieldsWithBaseClasses();
 		for (auto kv : allFromAccessor)
 		{
 			for (auto field : allFields)
@@ -587,16 +665,13 @@ namespace o2
 	template<typename _type>
 	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, UInt offset, _type& value, ProtectSection section)
 	{
-		bool isProperty = IsProperty<_type>::value;
-		typedef std::conditional<IsProperty<_type>::value, PropertyTypeGetter<_type>::type, _type>::type valTypeType;
-		auto valType = &TypeOf(valTypeType);
-		bool isPointer = std::is_pointer<_type>::value;
+		auto valType = &TypeOf(_type);
 
 		typedef std::conditional<DataNode::IsSupport<_type>::value,
 			FieldInfo::FieldSerializer<_type>,
 			FieldInfo::IFieldSerializer>::type serializerType;
 
-		type->mFields.Add(new FieldInfo(name, offset, isProperty, isPointer, valType, section, new serializerType()));
+		type->mFields.Add(new FieldInfo(name, offset, valType, section, new serializerType()));
 		return *type->mFields.Last();
 	}
 

@@ -68,7 +68,7 @@ namespace o2
 
 	void AssetsBuilder::InitializeConverters()
 	{
-		auto converterTypes = TypeOf(IAssetConverter).DerivedTypes();
+		auto converterTypes = TypeOf(IAssetConverter).GetDerivedTypes();
 		for (auto converterType : converterTypes)
 		{
 			IAssetConverter* converter = (IAssetConverter*)converterType->CreateSample();

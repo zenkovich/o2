@@ -155,7 +155,7 @@ namespace Editor
 
 	void SceneEditScreen::InitializeTools(const Type* toolType /*= nullptr*/)
 	{
-		auto toolsTypes = toolType ? toolType->DerivedTypes() : TypeOf(IEditTool).DerivedTypes();
+		auto toolsTypes = toolType ? toolType->GetDerivedTypes() : TypeOf(IEditTool).GetDerivedTypes();
 		for (auto toolType : toolsTypes)
 		{
 			mTools.Add((IEditTool*)toolType->CreateSample());
@@ -539,6 +539,11 @@ namespace Editor
 			mEnabledTool->OnSceneChanged(actors);
 	}
 
+	void SceneEditScreen::OnSceneChanged()
+	{
+		mNeedRedraw = true;
+	}
+
 	void SceneEditScreen::ClearSelectionWithoutAction()
 	{
 		mSelectedActors.Clear();
@@ -798,6 +803,7 @@ CLASS_META(Editor::SceneEditScreen)
 	PUBLIC_FUNCTION(const ActorsVec&, GetTopSelectedActors);
 	PUBLIC_FUNCTION(const Color4&, GetSingleActorSelectionColor);
 	PUBLIC_FUNCTION(const Color4&, GetManyActorsSelectionColor);
+	PUBLIC_FUNCTION(void, OnSceneChanged);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, InitializeTools, const Type*);
 	PROTECTED_FUNCTION(void, UpdateHandles);

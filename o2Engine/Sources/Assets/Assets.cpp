@@ -362,7 +362,7 @@ namespace o2
 	{
 		mStdAssetType = &TypeOf(BinaryAsset);
 
-		auto assetTypes = TypeOf(Asset).DerivedTypes();
+		auto assetTypes = TypeOf(Asset).GetDerivedTypes();
 
 		for (auto type : assetTypes)
 		{
@@ -377,7 +377,7 @@ namespace o2
 				if (mAssetsTypes.ContainsKey(ext))
 				{
 					mLog->Warning("Assets extensions duplicating: %s, at %s and %s", 
-								  ext, mAssetsTypes[ext]->Name(), type->Name());
+								  ext, mAssetsTypes[ext]->GetName(), type->GetName());
 					continue;
 				}
 
