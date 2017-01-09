@@ -5,6 +5,7 @@
 #include "Utils/CommonTypes.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Color.h"
+#include "Utils/Math/Border.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Containers/Vector.h"
 
@@ -67,6 +68,12 @@ namespace o2
 		// Explicit constructor from integer rectangle value
 		explicit TString(const RectI& value);
 
+		// Explicit constructor from float border value
+		explicit TString(const BorderF& value);
+
+		// Explicit constructor from integer border value
+		explicit TString(const BorderI& value);
+
 		// Explicit constructor from color value
 		explicit TString(const Color4& value);
 
@@ -113,6 +120,12 @@ namespace o2
 
 		// Cast operator to integer rectangle
 		explicit operator RectI() const;
+
+		// Cast operator to float border
+		explicit operator BorderF() const;
+
+		// Cast operator to integer border
+		explicit operator BorderI() const;
 
 		// Cast operator to color 
 		explicit operator Color4() const;
@@ -595,6 +608,34 @@ namespace o2
 	}
 
 	template<typename T>
+	TString<T>::TString(const BorderF& value):
+		mCapacity(512), mData((T*)malloc(512 * sizeof(T)))
+	{
+		mData[0] = '\0';
+		Append((TString)value.left);
+		Append((TString)";");
+		Append((TString)value.top);
+		Append((TString)";");
+		Append((TString)value.right);
+		Append((TString)";");
+		Append((TString)value.bottom);
+	}
+
+	template<typename T>
+	TString<T>::TString(const BorderI& value):
+		mCapacity(512), mData((T*)malloc(512 * sizeof(T)))
+	{
+		mData[0] = '\0';
+		Append((TString)value.left);
+		Append((TString)";");
+		Append((TString)value.top);
+		Append((TString)";");
+		Append((TString)value.right);
+		Append((TString)";");
+		Append((TString)value.bottom);
+	}
+
+	template<typename T>
 	TString<T>::TString(const Color4& value):
 		mCapacity(512), mData((T*)malloc(512 * sizeof(T)))
 	{
@@ -829,6 +870,36 @@ namespace o2
 		splitted[3].Trim();
 
 		return RectI((int)splitted[0], (int)splitted[1], (int)splitted[2], (int)splitted[3]);
+	}
+
+	template<typename T>
+	TString<T>::operator BorderF() const
+	{
+		auto splitted = Split(";");
+		if (splitted.Count() < 4)
+			return BorderF();
+
+		splitted[0].Trim();
+		splitted[1].Trim();
+		splitted[2].Trim();
+		splitted[3].Trim();
+
+		return BorderF((float)splitted[0], (float)splitted[1], (float)splitted[2], (float)splitted[3]);
+	}
+
+	template<typename T>
+	TString<T>::operator BorderI() const
+	{
+		auto splitted = Split(";");
+		if (splitted.Count() < 4)
+			return BorderI();
+
+		splitted[0].Trim();
+		splitted[1].Trim();
+		splitted[2].Trim();
+		splitted[3].Trim();
+
+		return BorderI((int)splitted[0], (int)splitted[1], (int)splitted[2], (int)splitted[3]);
 	}
 
 	template<typename T>

@@ -114,7 +114,7 @@
       <AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AssemblyDebug>false</AssemblyDebug>
       <OptimizeReferences>false</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
@@ -252,6 +252,8 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\AssetProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BorderFloatProperty.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BorderIntProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ColorProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\EnumMaskProperty.h" />
@@ -327,6 +329,8 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ActorProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\AssetProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BorderFloatProperty.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BorderIntProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\EnumProperty.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.cpp" />

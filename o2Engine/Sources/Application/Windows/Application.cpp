@@ -31,7 +31,7 @@ namespace o2
 	Application::Application():
 		mLog(nullptr), mReady(false), mAssets(nullptr), mEventSystem(nullptr), mFileSystem(nullptr), mInput(nullptr),
 		mProjectConfig(nullptr), mRender(nullptr), mScene(nullptr), mTaskManager(nullptr), mTime(nullptr), mTimer(nullptr),
-		mUIManager(nullptr)
+		mUIManager(nullptr), mCursorInfiniteModeEnabled(false), mCursorPositionCorrecting(false)
 	{
 		DataNode::RegBasicConverters();
 
@@ -140,6 +140,9 @@ namespace o2
 		if (!mReady)
 			return;
 
+		if (mCursorInfiniteModeEnabled)
+			CheckCursorInfiniteMode();
+
 		float realdDt = mTimer->GetDeltaTime();
 		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
 
@@ -164,6 +167,31 @@ namespace o2
 		mRender->End();
 
 		mInput->Update(dt);
+	}
+
+	void Application::CheckCursorInfiniteMode()
+	{
+		mCursorPositionCorrecting = true;
+
+		int threshold = 10;
+		POINT p;
+		GetCursorPos(&p);
+
+		Vec2I resolution = GetScreenResolution();
+
+		if (p.x > resolution.x - threshold)
+			p.x = threshold;
+		else if (p.x < threshold)
+			p.x = resolution.x - threshold;
+
+		if (p.y > resolution.y - threshold)
+			p.y = threshold;
+		else if (p.y < threshold)
+			p.y = resolution.y - threshold;
+
+		SetCursorPos(p.x, p.y);
+
+		mCursorPositionCorrecting = false;
 	}
 
 	LogStream* Application::GetLog() const
@@ -296,7 +324,7 @@ namespace o2
 			break;
 
 			case WM_MOUSEMOVE:
-			app->mInput->SetCursorPos(cursorPos);
+			app->mInput->SetCursorPos(cursorPos, 0, !app->mCursorPositionCorrecting);
 			break;
 
 			case WM_MOUSEWHEEL:
@@ -509,6 +537,21 @@ namespace o2
 		mCurrentCursor = LoadCursor(NULL, cursorsIds[(int)type]);
 		::SetCursor(mCurrentCursor);
 		SetClassLong(mHWnd, GCL_HCURSOR, (DWORD)mCurrentCursor);
+	}
+
+	void Application::SetCursorPosition(const Vec2F& position)
+	{
+		SetCursorPos((int)position.x, (int)position.y);
+	}
+
+	void Application::SetCursorInfiniteMode(bool enabled)
+	{
+		mCursorInfiniteModeEnabled = enabled;
+	}
+
+	bool Application::IsCursorInfiniteModeOn() const
+	{
+		return mCursorInfiniteModeEnabled;
 	}
 
 	bool Application::IsEditor() const

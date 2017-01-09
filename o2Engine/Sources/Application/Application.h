@@ -117,6 +117,15 @@ namespace o2
 		// Sets cursor type
 		virtual void SetCursor(CursorType type);
 
+		// Sets cursor position
+		virtual void SetCursorPosition(const Vec2F& position);
+
+		// Sets cursor infinite moves mode
+		virtual void SetCursorInfiniteMode(bool enabled);
+
+		// Returns is cursor infinite mode enabled
+		virtual bool IsCursorInfiniteModeOn() const;
+
 		// Is application run in editor
 		virtual bool IsEditor() const;
 
@@ -139,7 +148,11 @@ namespace o2
 		Time*          mTime;          // Time utilities
 		Timer*         mTimer;         // Timer for detecting delta time for update
 		UIManager*     mUIManager;     // UI manager
+
 		bool           mReady;         // Is all systems is ready
+
+		bool           mCursorInfiniteModeEnabled; // Is cursor infinite mode enabled
+		bool           mCursorPositionCorrecting;  // True if cursor position corrected and delta will not apply
 
 	protected:
 		// Calling on updating
@@ -174,6 +187,9 @@ namespace o2
 
 		// Processing frame update, drawing and input messages
 		virtual void ProcessFrame();
+
+		// Checks that cursor is near border and moves to opposite border if needs
+		void CheckCursorInfiniteMode();
 
 		// Initializes properties
 		void InitializeProperties();

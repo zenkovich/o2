@@ -27,6 +27,9 @@ namespace Editor
 		// Specialize viewing component type. Creates all using properties
 		void SepcializeComponentType(const Type* type);
 
+		// Updates all component values
+		void Refresh();
+
 		IOBJECT(DefaultActorComponentViewer);
 
 	protected:

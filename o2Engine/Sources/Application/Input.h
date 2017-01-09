@@ -183,7 +183,7 @@ namespace o2
 		int CursorPressed(const Vec2F& pos);
 
 		// Call it when cursor changed position. Id - index of cursor*/
-		void SetCursorPos(const Vec2F& pos, CursorId id = 0);
+		void SetCursorPos(const Vec2F& pos, CursorId id = 0, bool withDelta = true);
 
 		// Call it when cursor released
 		void CursorReleased(CursorId id = 0);

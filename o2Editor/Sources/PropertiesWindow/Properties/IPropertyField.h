@@ -28,7 +28,7 @@ namespace Editor
 		virtual void Setup(const Vector<void*>& targets, bool isProperty) {}
 
 		// Checks common value and fill fields
-		virtual void Update() {}
+		virtual void Refresh() {}
 
 		// Returns control widget
 		virtual UIWidget* GetWidget() const { return nullptr; }

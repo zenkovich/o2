@@ -29,8 +29,8 @@ namespace Editor
 		mCurrentViewer(nullptr)
 	{
 		InitializeWindow();
-		InitializeViewers();
 		InitializePropertiesFields();
+		InitializeViewers();
 	}
 
 	PropertiesWindow::~PropertiesWindow()
@@ -80,13 +80,24 @@ namespace Editor
 		}
 	}
 
+	void PropertiesWindow::OnPropertyChanged(IPropertyField* field)
+	{
+		onFieldChanged(field);
+		mTargetsChanged = true;
+	}
+
 	void PropertiesWindow::SetTarget(IObject* target)
 	{
 		SetTargets({ target });
 	}
 
-	void PropertiesWindow::SetTargets(const Vector<IObject*> targets)
+	void PropertiesWindow::SetTargets(const Vector<IObject*> targets, const Function<void()>& targetsChangedDelegate /*= Function<void()>()*/)
 	{
+		onTargetsChanged();
+
+		if (mTargetsChanged)
+			mOnTargetsChangedDelegate();
+
 		Timer timer;
 
 		IObjectPropertiesViewer* objectViewer = nullptr;
@@ -120,6 +131,9 @@ namespace Editor
 		if (mCurrentViewer)
 			mCurrentViewer->SetTargets(mTargets);
 
+		mOnTargetsChangedDelegate = targetsChangedDelegate;
+		mTargetsChanged = false;
+
 		o2Debug.Log("Set targets time: %f sec", timer.GetTime());
 	}
 
@@ -140,6 +154,11 @@ namespace Editor
 			mCurrentViewer->Draw();
 	}
 
+	bool PropertiesWindow::IsTargetsChanged() const
+	{
+		return mTargetsChanged;
+	}
+
 	void PropertiesWindow::BuildTypeViewer(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo)
 	{
 		auto fields = type->GetFieldsWithBaseClasses();
@@ -152,6 +171,9 @@ namespace Editor
 			{
 				continue;
 			}
+
+			if (fieldInfo->HasAttribute<IgnoreEditorPropertyAttribute>())
+				continue;
 
 			auto fieldWidgetPair = CreateFieldProperty(fieldInfo->GetType());
 			if (!fieldWidgetPair.mFirst)
@@ -281,10 +303,11 @@ namespace Editor
 		UILabel* label = o2UI.CreateWidget<UILabel>();
 		label->horAlign = HorAlign::Left;
 		label->layout.minWidth = 100;
-		label->layout.widthWeight = 0.5f;
+		label->layout.widthWeight = 0.2f;
 		label->text = MakeSmartFieldName(name);
 
 		IPropertyField* fieldProperty = (IPropertyField*)fieldPropertyType->CreateSample();
+		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
 
 		horLayout->AddChild(label, false);
 		horLayout->AddChild(fieldProperty->GetWidget(), false);
@@ -295,21 +318,21 @@ namespace Editor
 	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateObjectField(const Type* type)
 	{
 		IPropertyField* fieldProperty = mnew ObjectProperty();
-		//fieldProperty->SpecializeType(type);
+		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
 		return Pair<IPropertyField*, UIWidget*>(fieldProperty, fieldProperty->GetWidget());
 	}
 
 	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateObjectPtrField(const Type* type)
 	{
 		IPropertyField* fieldProperty = mnew ObjectPtrProperty();
-		//fieldProperty->SpecializeType(type);
+		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
 		return Pair<IPropertyField*, UIWidget*>(fieldProperty, fieldProperty->GetWidget());
 	}
 
 	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateVectorField(const Type* type)
 	{
 		IPropertyField* fieldProperty = mnew VectorProperty();
-		//fieldProperty->SpecializeType(type);
+		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
 		return Pair<IPropertyField*, UIWidget*>(fieldProperty, fieldProperty->GetWidget());
 	}
 }
@@ -319,11 +342,15 @@ CLASS_META(Editor::PropertiesWindow)
 	BASE_CLASS(Editor::IEditorWindow);
 	BASE_CLASS(o2::Singleton<PropertiesWindow>);
 
+	PUBLIC_FIELD(onFieldChanged);
+	PUBLIC_FIELD(onTargetsChanged);
 	PROTECTED_FIELD(mPropertyFieldsPoolStep);
 	PROTECTED_FIELD(mTargets);
 	PROTECTED_FIELD(mCurrentViewer);
 	PROTECTED_FIELD(mViewers);
 	PROTECTED_FIELD(mAvailablePropertiesFields);
+	PROTECTED_FIELD(mOnTargetsChangedDelegate);
+	PROTECTED_FIELD(mTargetsChanged);
 
 	typedef Pair<IPropertyField*, UIWidget*> _tmp1;
 	typedef Pair<IPropertyField*, UIWidget*> _tmp2;
@@ -332,10 +359,11 @@ CLASS_META(Editor::PropertiesWindow)
 	typedef Pair<IPropertyField*, UIWidget*> _tmp5;
 
 	PUBLIC_FUNCTION(void, SetTarget, IObject*);
-	PUBLIC_FUNCTION(void, SetTargets, const Vector<IObject*>);
+	PUBLIC_FUNCTION(void, SetTargets, const Vector<IObject*>, const Function<void()>&);
 	PUBLIC_FUNCTION(Vector<IObject*>, GetTargets);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(bool, IsTargetsChanged);
 	PUBLIC_FUNCTION(void, BuildTypeViewer, UIVerticalLayout*, const Type*, FieldPropertiesInfo&);
 	PUBLIC_FUNCTION(_tmp1, CreateFieldProperty, const Type*);
 	PUBLIC_FUNCTION(IPropertyField*, GetFieldPropertyPrototype, const Type*);
@@ -346,6 +374,7 @@ CLASS_META(Editor::PropertiesWindow)
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeViewers);
 	PROTECTED_FUNCTION(void, InitializePropertiesFields);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;
  

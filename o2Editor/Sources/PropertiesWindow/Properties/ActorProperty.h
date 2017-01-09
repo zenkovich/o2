@@ -17,9 +17,9 @@ namespace Editor
 	class UIActorsTree;
 	class UIAssetsIconsScrollArea;
 
-	// -------------------------
-	// Editor actor property box
-	// -------------------------
+	// ---------------------
+	// Editor actor property
+	// ---------------------
 	class ActorProperty: public IPropertyField, public KeyboardEventsListener, public DragDropArea
 	{
 	public:
@@ -29,11 +29,11 @@ namespace Editor
 		// Destructor
 		~ActorProperty();
 
-		// Sets fields
+		// Sets target fields
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;
@@ -70,6 +70,9 @@ namespace Editor
 		Text*         mNameText;        // Asset name text
 
 	protected:
+		// Sets common value actor
+		void SetCommonValue(Actor* value);
+
 		// Calls when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 

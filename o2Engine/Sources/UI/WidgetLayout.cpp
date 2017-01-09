@@ -676,6 +676,8 @@ namespace o2
 		mMinSize   = other.mMinSize;
 		mMaxSize   = other.mMaxSize;
 		mWeight    = other.mWeight;
+
+		mCheckMinMaxFunc = Function<void()>(this, &UIWidgetLayout::CheckMinMax);
 	}
 
 	void UIWidgetLayout::CheckMinMax()

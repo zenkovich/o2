@@ -27,7 +27,7 @@ namespace Editor
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;
@@ -61,11 +61,14 @@ namespace Editor
 		bool           mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
 
 	protected:
+		// Sets common value
+		void SetCommonValue(Scene::Layer* value);
+
+		// Updates layer list to actual list of layers on scene
+		void UpdateLayersList();
+
 		// Selects layer
 		void SelectLayer(const WString& name);
-
-		// Updates drop down by value
-		void UpdateDropDownValue();
 	};
 }
 

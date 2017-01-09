@@ -44,11 +44,15 @@ namespace Editor
 		void RebuildAnimationAssetIcon();
 		void RebuildAssetsGridScroll();
 		void RebuildLinkBtn();
+		void RebuildSinglelineEditBoxWithArrows();
 		void RebuildEditorDropdown();
 		void RebuildActorPropety();
 		void RebuildAssetPropety();
 		void RebuildComponentProperty();
 		void RebuildVector2Property();
+		void RebuildRedEditBoxStyle();
+		void RebuildGreenEditBoxStyle();
+		void RebuildColoredVector2Property();
 		void RebuildRectProperty();
 		void RebuildActorHeadEnableToggle();
 		void RebuildActorHeadName();

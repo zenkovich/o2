@@ -4,7 +4,7 @@
 #include "Render/Mesh.h"
 #include "Render/RectDrawable.h"
 #include "Render/TextureRef.h"
-
+#include "Utils/Math/Border.h"
 
 namespace o2
 {
@@ -29,7 +29,8 @@ namespace o2
 		Property<Color4>     rightBottomColor; // Color of right bottom corner property
 		Property<SpriteMode> mode;             // Sprite drawing mode property
 		Property<float>      fill;             // Sprite fill property
-		Property<RectI>      sliceBorder;      // Slice border property
+		Property<float>      tileScale;        // Sprite tile scale property, 1.0f is default
+		Property<BorderI>    sliceBorder;      // Slice border property
 
 		// Default constructor
 		Sprite();
@@ -115,6 +116,12 @@ namespace o2
 		// Returns sprite fill
 		float GetFill() const;
 
+		// Sets tile scale. 1.0f is default
+		void SetTileScale(float scale);
+
+		// Returns tile scale
+		float GetTileScale() const;
+
 		// Sets sprite drawing mode
 		void SetMode(SpriteMode mode);
 
@@ -122,10 +129,10 @@ namespace o2
 		SpriteMode GetMode() const;
 
 		// Sets sprite slice border
-		void SetSliceBorder(const RectI& border);
+		void SetSliceBorder(const BorderI& border);
 
 		// Returns sprite slice border
-		RectI GetSliceBorder() const;
+		BorderI GetSliceBorder() const;
 
 		// Loads sprite from image asset
 		void LoadFromImage(const ImageAsset& image);
@@ -169,8 +176,9 @@ namespace o2
 		UID        mAtlasAssetId;     // Atlas asset id (0 by default)
 		String     mImageName;        // Image name
 		SpriteMode mMode;             // Drawing mode @SERIALIZABLE
-		RectI      mSlices;           // Slice borders @SERIALIZABLE
+		BorderI    mSlices;           // Slice borders @SERIALIZABLE
 		float      mFill;             // Sprite fillness @SERIALIZABLE
+		float      mTileScale;        // Scale of tiles in tiled mode. 1.0f is default and equals to default image size @SERIALIZABLE
 		Mesh*      mMesh;             // Drawing mesh
 
 		void(Sprite::*mMeshBuildFunc)(); // Mesh building function pointer (by mode)
@@ -190,6 +198,9 @@ namespace o2
 
 		// Builds mesh for sliced mode
 		void BuildSlicedMesh();
+
+		// Builds mesh for tiled mode
+		void BuildTiledMesh();
 
 		// Builds mesh for fill left to right mode
 		void BuildFillLeftToRightMesh();

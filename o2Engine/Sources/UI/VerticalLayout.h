@@ -108,7 +108,7 @@ namespace o2
 
 	protected:
 		// Returns layout height
-		float GetLayoutHeight() const;
+		float GetMinHeightWithChildren() const;
 
 		// Calls when child widget was added
 		void OnChildAdded(UIWidget* child);

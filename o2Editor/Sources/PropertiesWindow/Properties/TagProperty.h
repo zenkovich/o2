@@ -27,7 +27,7 @@ namespace Editor
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;
@@ -62,8 +62,8 @@ namespace Editor
 		bool           mPushingTag = false; // Is pushing tag and we don't need to check edit text
 
 	protected:
-		// Updates edit box value
-		void UpdateEditBoxValue();
+		// Sets common value
+		void SetCommonValue(const TagGroup& value);
 
 		// Updates context menu data with filter
 		void UpdateContextData(const WString& filter);

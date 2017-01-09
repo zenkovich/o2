@@ -32,7 +32,7 @@ namespace Editor
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;

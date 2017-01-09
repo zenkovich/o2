@@ -21,6 +21,7 @@ namespace o2
 		Property<Vec2F>  szPivot;       // Pivot in size space property
 		Property<RectF>  rect;          // Rectangle property. Sets the position and size
 		Property<float>  angle;         // Rotation angle in radians
+		Property<float>  angleDegree;   // Rotation angle in degrees
 		Property<float>  shear;         // Shear property
 		Property<Basis>  basis;         // Transformation basis property
 		Property<Basis>  nonSizedBasis; // Non sizes transformation basis property
@@ -98,6 +99,12 @@ namespace o2
 
 		// Returns rotation angle in radians
 		virtual float GetAngle() const;
+
+		// Sets rotation angle, in degrees
+		virtual void SetAngleDegrees(float deg);
+
+		// Returns rotation angle in degrees
+		virtual float GetAngleDegrees() const;
 
 		// Sets shear
 		virtual void SetShear(float shear);

@@ -7,8 +7,6 @@
 
 namespace o2
 {
-	// TODO: Need refactor Rect to position&size
-
 	template<typename T>
 	class Rect
 	{

@@ -108,7 +108,7 @@ namespace o2
 
 	protected:
 		// Returns layout width
-		float GetLayoutWidth() const;
+		float GetMinWidthWithChildren() const;
 
 		// Calls when child widget was added
 		void OnChildAdded(UIWidget* child);

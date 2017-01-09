@@ -10,7 +10,8 @@
 namespace o2
 {
 	Sprite::Sprite():
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -23,7 +24,8 @@ namespace o2
 	}
 
 	Sprite::Sprite(const ImageAsset& image):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -36,7 +38,8 @@ namespace o2
 	}
 
 	Sprite::Sprite(const String& imagePath):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -49,7 +52,8 @@ namespace o2
 	}
 
 	Sprite::Sprite(UID imageId):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -62,8 +66,8 @@ namespace o2
 	}
 
 	Sprite::Sprite(TextureRef texture, const RectI& srcRect):
-		mTextureSrcRect(srcRect), mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mAtlasAssetId(0)
+		mTextureSrcRect(srcRect), mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mAtlasAssetId(0), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -76,7 +80,8 @@ namespace o2
 	}
 
 	Sprite::Sprite(const Color4& color):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -89,7 +94,8 @@ namespace o2
 	}
 
 	Sprite::Sprite(Bitmap* bitmap):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -104,7 +110,8 @@ namespace o2
 	Sprite::Sprite(const Sprite& other):
 		mImageAssetId(other.mImageAssetId), mTextureSrcRect(other.mTextureSrcRect),
 		IRectDrawable(other), mMesh(mnew Mesh(*other.mMesh)), mMode(other.mMode), mFill(other.mFill), mSlices(other.mSlices),
-		mMeshBuildFunc(other.mMeshBuildFunc), mAtlasAssetId(other.mAtlasAssetId), mImageName(other.mImageName)
+		mMeshBuildFunc(other.mMeshBuildFunc), mAtlasAssetId(other.mAtlasAssetId), mImageName(other.mImageName),
+		mTileScale(other.mTileScale)
 	{
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = other.mCornersColors[i];
@@ -130,6 +137,7 @@ namespace o2
 		mFill = other.mFill;
 		mSlices = other.mSlices;
 		mImageName = other.mImageName;
+		mTileScale = other.mTileScale;
 		mMeshBuildFunc = other.mMeshBuildFunc;
 		IRectDrawable::operator=(other);
 
@@ -237,6 +245,17 @@ namespace o2
 		return mFill;
 	}
 
+	void Sprite::SetTileScale(float scale)
+	{
+		mTileScale = Math::Abs(scale);
+		UpdateMesh();
+	}
+
+	float Sprite::GetTileScale() const
+	{
+		return mTileScale;
+	}
+
 	void Sprite::SetMode(SpriteMode mode)
 	{
 		if (mode == mMode)
@@ -246,15 +265,16 @@ namespace o2
 
 		switch (mode)
 		{
-			case SpriteMode::Default:         mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
-			case SpriteMode::Sliced:          mMeshBuildFunc = &Sprite::BuildSlicedMesh; break;
-			case SpriteMode::FillLeftToRight: mMeshBuildFunc = &Sprite::BuildFillLeftToRightMesh; break;
-			case SpriteMode::FillRightToLeft: mMeshBuildFunc = &Sprite::BuildFillRightToLeftMesh; break;
-			case SpriteMode::FillUpToDown:    mMeshBuildFunc = &Sprite::BuildFillUpToDownMesh; break;
-			case SpriteMode::FillDownToUp:    mMeshBuildFunc = &Sprite::BuildFillDownToUpMesh; break;
-			case SpriteMode::Fill360CW:       mMeshBuildFunc = &Sprite::BuildFill360CWMesh; break;
-			case SpriteMode::Fill360CCW:      mMeshBuildFunc = &Sprite::BuildFill360CCWMesh; break;
-			default:                          mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
+		case SpriteMode::Default:         mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
+		case SpriteMode::Sliced:          mMeshBuildFunc = &Sprite::BuildSlicedMesh; break;
+		case SpriteMode::Tiled:           mMeshBuildFunc = &Sprite::BuildTiledMesh; break;
+		case SpriteMode::FillLeftToRight: mMeshBuildFunc = &Sprite::BuildFillLeftToRightMesh; break;
+		case SpriteMode::FillRightToLeft: mMeshBuildFunc = &Sprite::BuildFillRightToLeftMesh; break;
+		case SpriteMode::FillUpToDown:    mMeshBuildFunc = &Sprite::BuildFillUpToDownMesh; break;
+		case SpriteMode::FillDownToUp:    mMeshBuildFunc = &Sprite::BuildFillDownToUpMesh; break;
+		case SpriteMode::Fill360CW:       mMeshBuildFunc = &Sprite::BuildFill360CWMesh; break;
+		case SpriteMode::Fill360CCW:      mMeshBuildFunc = &Sprite::BuildFill360CCWMesh; break;
+		default:                          mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
 		}
 
 		UpdateMesh();
@@ -265,7 +285,7 @@ namespace o2
 		return mMode;
 	}
 
-	void Sprite::SetSliceBorder(const RectI& border)
+	void Sprite::SetSliceBorder(const BorderI& border)
 	{
 		if (mSlices == border)
 			return;
@@ -274,7 +294,7 @@ namespace o2
 		UpdateMesh();
 	}
 
-	RectI Sprite::GetSliceBorder() const
+	BorderI Sprite::GetSliceBorder() const
 	{
 		return mSlices;
 	}
@@ -415,7 +435,7 @@ namespace o2
 		for (int i = 0; i < 4; i++)
 			rcc[i] = (mColor*mCornersColors[i]).ABGR();
 
-		static UInt16 indexes[] ={0, 1, 2, 0, 2, 3};
+		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = mTextureSrcRect.left*invTexSize.x;
 		float uvRight = mTextureSrcRect.right*invTexSize.x;
@@ -503,18 +523,18 @@ namespace o2
 			v2 = Math::Lerp(v0, v3, (texSrcSize.y - mSlices.top + d)*invTexSrcSize.y);
 		}
 
-		mMesh->vertices[0] .Set(o      + t3, rcc[0], u0, v3);
-		mMesh->vertices[1] .Set(o + r1 + t3, rcc[0], u1, v3);
-		mMesh->vertices[2] .Set(o + r2 + t3, rcc[1], u2, v3);
-		mMesh->vertices[3] .Set(o + r3 + t3, rcc[1], u3, v3);
+		mMesh->vertices[0].Set(o      + t3, rcc[0], u0, v3);
+		mMesh->vertices[1].Set(o + r1 + t3, rcc[0], u1, v3);
+		mMesh->vertices[2].Set(o + r2 + t3, rcc[1], u2, v3);
+		mMesh->vertices[3].Set(o + r3 + t3, rcc[1], u3, v3);
 
-		mMesh->vertices[4] .Set(o      + t2, rcc[0], u0, v2);
-		mMesh->vertices[5] .Set(o + r1 + t2, rcc[0], u1, v2);
-		mMesh->vertices[6] .Set(o + r2 + t2, rcc[1], u2, v2);
-		mMesh->vertices[7] .Set(o + r3 + t2, rcc[1], u3, v2);
+		mMesh->vertices[4].Set(o      + t2, rcc[0], u0, v2);
+		mMesh->vertices[5].Set(o + r1 + t2, rcc[0], u1, v2);
+		mMesh->vertices[6].Set(o + r2 + t2, rcc[1], u2, v2);
+		mMesh->vertices[7].Set(o + r3 + t2, rcc[1], u3, v2);
 
-		mMesh->vertices[8] .Set(o      + t1, rcc[3], u0, v1);
-		mMesh->vertices[9] .Set(o + r1 + t1, rcc[3], u1, v1);
+		mMesh->vertices[8].Set(o      + t1, rcc[3], u0, v1);
+		mMesh->vertices[9].Set(o + r1 + t1, rcc[3], u1, v1);
 		mMesh->vertices[10].Set(o + r2 + t1, rcc[2], u2, v1);
 		mMesh->vertices[11].Set(o + r3 + t1, rcc[2], u3, v1);
 
@@ -532,6 +552,83 @@ namespace o2
 		mSize.x = lastSizeX;
 	}
 
+	void Sprite::BuildTiledMesh()
+	{
+		Vec2F invTexSize(1.0f, 1.0f);
+		if (mMesh->mTexture)
+			invTexSize.Set(1.0f/mMesh->mTexture->GetSize().x, 1.0f/mMesh->mTexture->GetSize().y);
+
+		ULong rcc[4];
+		for (int i = 0; i < 4; i++)
+			rcc[i] = (mColor*mCornersColors[i]).ABGR();
+
+		float uvLeft = mTextureSrcRect.left*invTexSize.x;
+		float uvRight = mTextureSrcRect.right*invTexSize.x;
+
+		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
+		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
+
+		Vec2F tileSize = (Vec2F)(mTextureSrcRect.Size())*mTileScale;
+		Vec2F sz = mSize*mScale;
+
+		Vec2I tilesCount(Math::CeilToInt(sz.x/tileSize.x), Math::CeilToInt(sz.y/tileSize.y));
+
+		UInt requiredPolygons = tilesCount.x*tilesCount.y*2;
+		UInt requiredVecticiesCount = requiredPolygons*2;
+
+		if (mMesh->GetMaxVertexCount() < requiredVecticiesCount || mMesh->GetMaxPolyCount() < requiredPolygons)
+			mMesh->Resize(requiredVecticiesCount, requiredPolygons);
+
+		Vec2F xv = mTransform.xv/sz.x;
+		Vec2F yv = mTransform.yv/sz.y;
+
+		Vec2F o = mTransform.offs;
+
+		int vi = 0, pi = 0;
+
+		float px0 = 0;
+		for (int x = 0; x < tilesCount.x; x++)
+		{
+			float px = (float)(x + 1)*tileSize.x;
+			float u = uvRight;
+
+			if (px > sz.x)
+			{
+				u = Math::Lerp(uvRight, uvLeft, (px - sz.x)/tileSize.x);
+				px = sz.x;
+			}
+
+			float py0 = 0;
+			for (int y = 0; y < tilesCount.y; y++)
+			{
+				float py = (float)(y + 1)*tileSize.y;
+				float v = uvUp;
+
+				if (py > sz.y)
+				{
+					v = Math::Lerp(uvUp, uvDown, (py - sz.y)/tileSize.y);
+					py = sz.y;
+				}
+
+				int vii = vi;
+				mMesh->vertices[vi++].Set(o + xv*px0 + yv*py,  rcc[0], uvLeft, v);
+				mMesh->vertices[vi++].Set(o + xv*px  + yv*py,  rcc[1], u, v);
+				mMesh->vertices[vi++].Set(o + xv*px  + yv*py0, rcc[2], u, uvDown);
+				mMesh->vertices[vi++].Set(o + xv*px0 + yv*py0, rcc[3], uvLeft, uvDown);
+
+				mMesh->indexes[pi++] = vii; mMesh->indexes[pi++] = vii + 1; mMesh->indexes[pi++] = vii + 2;
+				mMesh->indexes[pi++] = vii; mMesh->indexes[pi++] = vii + 2; mMesh->indexes[pi++] = vii + 3;
+
+				py0 = py;
+			}
+
+			px0 = px;
+		}
+
+		mMesh->vertexCount = vi;
+		mMesh->polyCount = pi/3;
+	}
+
 	void Sprite::BuildFillLeftToRightMesh()
 	{
 		float coef = Math::Clamp01(mFill);
@@ -546,7 +643,7 @@ namespace o2
 		rcc[2] = (mColor*Math::Lerp(mCornersColors[3], mCornersColors[2], coef)).ABGR();
 		rcc[3] = (mColor*mCornersColors[3]).ABGR();
 
-		static UInt16 indexes[] ={0, 1, 2, 0, 2, 3};
+		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = mTextureSrcRect.left*invTexSize.x;
 		float uvRight = Math::Lerp((float)mTextureSrcRect.left, (float)mTextureSrcRect.right, coef)*invTexSize.x;
@@ -580,7 +677,7 @@ namespace o2
 		rcc[2] = (mColor*mCornersColors[2]).ABGR();
 		rcc[3] = (mColor*Math::Lerp(mCornersColors[2], mCornersColors[3], coef)).ABGR();
 
-		static UInt16 indexes[] ={0, 1, 2, 0, 2, 3};
+		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = Math::Lerp((float)mTextureSrcRect.right, (float)mTextureSrcRect.left, coef)*invTexSize.x;
 		float uvRight = mTextureSrcRect.right*invTexSize.x;
@@ -614,7 +711,7 @@ namespace o2
 		rcc[2] = (mColor*Math::Lerp(mCornersColors[1], mCornersColors[2], coef)).ABGR();
 		rcc[3] = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[3], coef)).ABGR();
 
-		static UInt16 indexes[] ={0, 1, 2, 0, 2, 3};
+		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = mTextureSrcRect.left*invTexSize.x;
 		float uvRight = mTextureSrcRect.right*invTexSize.x;
@@ -647,7 +744,7 @@ namespace o2
 		rcc[2] = (mColor*mCornersColors[2]).ABGR();
 		rcc[3] = (mColor*mCornersColors[3]).ABGR();
 
-		static UInt16 indexes[] ={0, 1, 2, 0, 2, 3};
+		static UInt16 indexes[] ={ 0, 1, 2, 0, 2, 3 };
 
 		float uvLeft = mTextureSrcRect.left*invTexSize.x;
 		float uvRight = mTextureSrcRect.right*invTexSize.x;
@@ -687,7 +784,7 @@ namespace o2
 
 		Vec2F zeroPos    = mTransform.offs + mTransform.xv*0.5f + mTransform.yv;
 		Vec2F centerPos  = mTransform.offs + mTransform.xv*0.5f + mTransform.yv*0.5f;
-		
+
 		ULong centerResColr = (mColor*((mCornersColors[0] + mCornersColors[1] + mCornersColors[2] + mCornersColors[3])*0.25f)).ABGR();
 		ULong zeroResColor = (mColor*((mCornersColors[0] + mCornersColors[1])*0.5f)).ABGR();
 		float uZero = (uLeft + uRight)*0.5f;
@@ -706,7 +803,7 @@ namespace o2
 			mMesh->vertices[1].Set(dirPoint, dirColor, uDir, vUp);
 			mMesh->vertices[2].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={0, 1, 2};
+			static UInt16 indexes[] ={ 0, 1, 2 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3);
 
 			mMesh->vertexCount = 3;
@@ -726,7 +823,7 @@ namespace o2
 			mMesh->vertices[2].Set(dirPoint, dirColor, uRight, vDir);
 			mMesh->vertices[3].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={0, 1, 3, 1, 2, 3};
+			static UInt16 indexes[] ={ 0, 1, 3, 1, 2, 3 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*2);
 
 			mMesh->vertexCount = 4;
@@ -748,7 +845,7 @@ namespace o2
 			mMesh->vertices[3].Set(dirPoint, dirColor, uDir, vDown);
 			mMesh->vertices[4].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={0, 1, 4, 1, 2, 4, 2, 3, 4};
+			static UInt16 indexes[] ={ 0, 1, 4, 1, 2, 4, 2, 3, 4 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*3);
 
 			mMesh->vertexCount = 5;
@@ -772,13 +869,13 @@ namespace o2
 			mMesh->vertices[4].Set(dirPoint, dirColor, uLeft, vDir);
 			mMesh->vertices[5].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={0, 1, 5, 1, 2, 5, 2, 3, 5, 3, 4, 5};
+			static UInt16 indexes[] ={ 0, 1, 5, 1, 2, 5, 2, 3, 5, 3, 4, 5 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*4);
 
 			mMesh->vertexCount = 6;
 			mMesh->polyCount = 4;
 		}
-		else 
+		else
 		{
 			float dirCoef = 0.5f + dir.x/dir.y*0.5f;
 			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef + mTransform.yv;
@@ -798,7 +895,7 @@ namespace o2
 			mMesh->vertices[5].Set(dirPoint, dirColor, uDir, vUp);
 			mMesh->vertices[6].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={0, 1, 6, 1, 2, 6, 2, 3, 6, 3, 4, 6, 4, 5, 6};
+			static UInt16 indexes[] ={ 0, 1, 6, 1, 2, 6, 2, 3, 6, 3, 4, 6, 4, 5, 6 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*5);
 
 			mMesh->vertexCount = 7;
@@ -846,7 +943,7 @@ namespace o2
 			mMesh->vertices[1].Set(dirPoint, dirColor, uDir, vUp);
 			mMesh->vertices[2].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={1, 0, 2};
+			static UInt16 indexes[] ={ 1, 0, 2 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3);
 
 			mMesh->vertexCount = 3;
@@ -866,7 +963,7 @@ namespace o2
 			mMesh->vertices[2].Set(dirPoint, dirColor, uLeft, vDir);
 			mMesh->vertices[3].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={1, 0, 3, 2, 1, 3};
+			static UInt16 indexes[] ={ 1, 0, 3, 2, 1, 3 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*2);
 
 			mMesh->vertexCount = 4;
@@ -888,7 +985,7 @@ namespace o2
 			mMesh->vertices[3].Set(dirPoint, dirColor, uDir, vDown);
 			mMesh->vertices[4].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={1, 0, 4, 2, 1, 4, 3, 2, 4};
+			static UInt16 indexes[] ={ 1, 0, 4, 2, 1, 4, 3, 2, 4 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*3);
 
 			mMesh->vertexCount = 5;
@@ -912,7 +1009,7 @@ namespace o2
 			mMesh->vertices[4].Set(dirPoint, dirColor, uRight, vDir);
 			mMesh->vertices[5].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={1, 0, 5, 2, 1, 5, 3, 2, 5, 4, 3, 5};
+			static UInt16 indexes[] ={ 1, 0, 5, 2, 1, 5, 3, 2, 5, 4, 3, 5 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*4);
 
 			mMesh->vertexCount = 6;
@@ -938,7 +1035,7 @@ namespace o2
 			mMesh->vertices[5].Set(dirPoint, dirColor, uDir, vUp);
 			mMesh->vertices[6].Set(centerPos, centerResColr, uCenter, vCenter);
 
-			static UInt16 indexes[] ={1, 0, 6, 2, 1, 6, 3, 2, 6, 4, 3, 6, 5, 4, 6};
+			static UInt16 indexes[] ={ 1, 0, 6, 2, 1, 6, 3, 2, 6, 4, 3, 6, 5, 4, 6 };
 			memcpy(mMesh->indexes, indexes, sizeof(UInt16)*3*5);
 
 			mMesh->vertexCount = 7;
@@ -1016,6 +1113,7 @@ namespace o2
 		INITIALIZE_PROPERTY(Sprite, rightBottomColor, SetRightBottomColor, GetRightBottomCorner);
 		INITIALIZE_PROPERTY(Sprite, mode, SetMode, GetMode);
 		INITIALIZE_PROPERTY(Sprite, fill, SetFill, GetFill);
+		INITIALIZE_PROPERTY(Sprite, tileScale, SetTileScale, GetTileScale);
 		INITIALIZE_PROPERTY(Sprite, sliceBorder, SetSliceBorder, GetSliceBorder);
 	}
 }
@@ -1036,6 +1134,7 @@ CLASS_META(o2::Sprite)
 	PUBLIC_FIELD(rightBottomColor);
 	PUBLIC_FIELD(mode);
 	PUBLIC_FIELD(fill);
+	PUBLIC_FIELD(tileScale);
 	PUBLIC_FIELD(sliceBorder);
 	PROTECTED_FIELD(mTextureSrcRect);
 	PROTECTED_FIELD(mCornersColors);
@@ -1045,6 +1144,7 @@ CLASS_META(o2::Sprite)
 	PROTECTED_FIELD(mMode).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSlices).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mFill).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mTileScale).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMesh);
 	PROTECTED_FIELD(mMeshBuildFunc);
 
@@ -1066,10 +1166,12 @@ CLASS_META(o2::Sprite)
 	PUBLIC_FUNCTION(Color4, GetLeftBottomCorner);
 	PUBLIC_FUNCTION(void, SetFill, float);
 	PUBLIC_FUNCTION(float, GetFill);
+	PUBLIC_FUNCTION(void, SetTileScale, float);
+	PUBLIC_FUNCTION(float, GetTileScale);
 	PUBLIC_FUNCTION(void, SetMode, SpriteMode);
 	PUBLIC_FUNCTION(SpriteMode, GetMode);
-	PUBLIC_FUNCTION(void, SetSliceBorder, const RectI&);
-	PUBLIC_FUNCTION(RectI, GetSliceBorder);
+	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
+	PUBLIC_FUNCTION(BorderI, GetSliceBorder);
 	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAsset&);
 	PUBLIC_FUNCTION(void, LoadFromImage, const String&);
 	PUBLIC_FUNCTION(void, LoadFromImage, UID);
@@ -1086,6 +1188,7 @@ CLASS_META(o2::Sprite)
 	PROTECTED_FUNCTION(void, UpdateMesh);
 	PROTECTED_FUNCTION(void, BuildDefaultMesh);
 	PROTECTED_FUNCTION(void, BuildSlicedMesh);
+	PROTECTED_FUNCTION(void, BuildTiledMesh);
 	PROTECTED_FUNCTION(void, BuildFillLeftToRightMesh);
 	PROTECTED_FUNCTION(void, BuildFillRightToLeftMesh);
 	PROTECTED_FUNCTION(void, BuildFillUpToDownMesh);

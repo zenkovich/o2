@@ -143,6 +143,9 @@ namespace o2
 		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
+		// Returns true if point is under drawable
+		bool IsUnderPoint(const Vec2F& point);
+
 		SERIALIZABLE(UIEditBox);
 
 	protected:

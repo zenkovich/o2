@@ -2,6 +2,8 @@
 
 #include "PropertiesWindow/Properties/IPropertyField.h"
 #include "Utils/IObject.h"
+#include "Utils/Time.h"
+#include "Utils/Debug.h"
 
 namespace Editor
 {

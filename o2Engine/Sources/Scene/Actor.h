@@ -403,7 +403,7 @@ namespace o2
 		for (auto comp : mComponents)
 		{
 			if (comp->GetType().IsBasedOn(TypeOf(_type)))
-				return comp;
+				return dynamic_cast<_type*>(comp);
 		}
 
 		return nullptr;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PropertiesWindow/Properties/IPropertyField.h"
+#include "Utils/CursorEventsArea.h"
 #include "Utils/Property.h"
 
 using namespace o2;
@@ -30,7 +31,7 @@ namespace Editor
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;
@@ -38,8 +39,32 @@ namespace Editor
 		// Sets value
 		void SetValue(const RectF& value);
 
+		// Sets value left
+		void SetValueLeft(float value);
+
+		// Sets value right
+		void SetValueRight(float value);
+
+		// Sets value top
+		void SetValueTop(float value);
+
+		// Sets value bottom
+		void SetValueBottom(float value);
+
 		// Sets value as unknown
-		void SetUnknownValue();
+		void SetUnknownValue(const RectF& defaultValue = RectF());
+
+		// Sets value left as unknown
+		void SetLeftUnknownValue(float defaultValue = 0.0f);
+
+		// Sets value right as unknown
+		void SetRightUnknownValue(float defaultValue = 0.0f);
+
+		// Sets value top as unknown
+		void SetTopUnknownValue(float defaultValue = 0.0f);
+
+		// Sets value bottom as unknown
+		void SetBottomUnknownValue(float defaultValue = 0.0f);
 
 		// Returns value
 		RectF GetCommonValue() const;
@@ -53,23 +78,55 @@ namespace Editor
 		IOBJECT(RectFProperty);
 
 	protected:
-		Function<void(void*, const RectF&)> mAssignFunc; // Value assign function
-		Function<RectF(void*)>              mGetFunc;    // Get value function
+		Function<void(void*, const RectF&)> mAssignFunc;      // Value assign function
+		Function<RectF(void*)>              mGetFunc;         // Get value function
 
-		Vector<void*> mValuesPointers;          // Fields' pointers
-		RectF         mCommonValue;             // Common field value (if not different)
-		bool          mLeftValuesDifferent;     // Are left values different
-		bool          mBottomValuesDifferent;   // Are bottom values different
-		bool          mRightValuesDifferent;    // Are right values different
-		bool          mTopValuesDifferent;      // Are top values different
+		Function<void(void*, float)>        mLeftAssignFunc;  // Left Value assign function
+		Function<float(void*)>              mLeftGetFunc;     // Get left value function
 
-		UIWidget*     mWidget = nullptr;        // horizontal edit boxes layout
-		UIEditBox*    mLeftEditBox = nullptr;   // Left Edit box 
-		UIEditBox*    mBottomEditBox = nullptr; // Bottom Edit box 
-		UIEditBox*    mRightEditBox = nullptr;  // Right Edit box 
-		UIEditBox*    mTopEditBox = nullptr;    // Top Edit box 
+		Function<void(void*, float)>        mRightAssignFunc; // Right Value assign function
+		Function<float(void*)>              mRightGetFunc;    // Get right value function
+
+		Function<void(void*, float)>        mTopAssignFunc;   // Top Value assign function
+		Function<float(void*)>              mTopGetFunc;      // Get top value function
+
+		Function<void(void*, float)>        mBottomAssignFunc; // Bottom Value assign function
+		Function<float(void*)>              mBottomGetFunc;    // Get bottom value function
+
+		Vector<void*> mValuesPointers;                 // Fields' pointers
+		RectF         mCommonValue;                    // Common field value (if not different)
+		bool          mLeftValuesDifferent = true;     // Are left values different
+		bool          mBottomValuesDifferent = true;   // Are bottom values different
+		bool          mRightValuesDifferent = true;    // Are right values different
+		bool          mTopValuesDifferent = true;      // Are top values different
+
+		UIWidget*     mWidget = nullptr;               // horizontal edit boxes layout
+		UIEditBox*    mLeftEditBox = nullptr;          // Left Edit box 
+		UIEditBox*    mBottomEditBox = nullptr;        // Bottom Edit box 
+		UIEditBox*    mRightEditBox = nullptr;         // Right Edit box 
+		UIEditBox*    mTopEditBox = nullptr;           // Top Edit box 
+
+		CursorEventsArea mLeftDragHangle;              // Left Value changing drag handle
+		CursorEventsArea mRightDragHangle;             // Right Value changing drag handle
+		CursorEventsArea mTopDragHangle;               // Top Value changing drag handle
+		CursorEventsArea mBottomDragHangle;            // Bottom Value changing drag handle
 
 	protected:
+		// Sets common value
+		void SetCommonValue(const RectF& value);
+
+		// Sets common value left
+		void SetCommonValueLeft(float value);
+
+		// Sets common value right
+		void SetCommonValueRight(float value);
+
+		// Sets common value top
+		void SetCommonValueTop(float value);
+
+		// Sets common value bottom
+		void SetCommonValueBottom(float value);
+
 		// Left Edit box change event
 		void OnLeftEdited(const WString& data);
 
@@ -81,5 +138,20 @@ namespace Editor
 
 		// Top Edit box change event
 		void OnTopEdited(const WString& data);
+
+		// Returns value increasing multiplier by cursor delta
+		float GetValueMultiplier(float delta) const;
+
+		// Calls when drag handle was moved and changes the property value
+		void OnLeftDragHandleMoved(const Input::Cursor& cursor);
+
+		// Calls when drag handle was moved and changes the property value
+		void OnRightDragHandleMoved(const Input::Cursor& cursor);
+
+		// Calls when drag handle was moved and changes the property value
+		void OnTopDragHandleMoved(const Input::Cursor& cursor);
+
+		// Calls when drag handle was moved and changes the property value
+		void OnBottomDragHandleMoved(const Input::Cursor& cursor);
 	};
 }

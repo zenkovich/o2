@@ -10,6 +10,12 @@ using namespace o2;
 namespace o2
 {
 	class Actor;
+	class Component;
+	class UIButton;
+	class UIImage;
+	class UILabel;
+	class UISpoiler;
+	class UIVerticalLayout;
 	class UIWidget;
 }
 
@@ -39,9 +45,19 @@ namespace Editor
 		// Collapse view
 		void Collapse();
 
+		// Updates properties values
+		virtual void Refresh();
+
 		IOBJECT(IActorTransformViewer);
 
 	protected:
-		UIWidget* mDataView; // Data view widget
+		UIVerticalLayout* mDataView;         // Data view widget
+		UIWidget*         mPropertiesLayout; // Properties layout
+		UIButton*         mExpandBtn;        // Expand spoiler button
+		UISpoiler*        mSpoiler;          // Spoiler, containing properties layout
+		UILabel*          mNameCaption;      // Component name caption label
+		UIButton*         mOptionsBtn;       // Component option button
+		UIButton*         mSaveBtn;          // Save prototype button
+		UIImage*          mIcon;             // Component icon
 	};
 }

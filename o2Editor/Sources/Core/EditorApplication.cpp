@@ -184,6 +184,9 @@ namespace Editor
 		if (!mReady)
 			return;
 
+		if (mCursorInfiniteModeEnabled)
+			CheckCursorInfiniteMode();
+
 		float maxFPS = 60.0f;
 		float maxFPSDeltaTime = 1.0f/maxFPS;
 

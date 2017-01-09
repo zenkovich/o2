@@ -544,12 +544,14 @@ namespace Editor
 		mNeedRedraw = true;
 	}
 
-	void SceneEditScreen::ClearSelectionWithoutAction()
+	void SceneEditScreen::ClearSelectionWithoutAction(bool sendSelectedMessage /*= true*/)
 	{
 		mSelectedActors.Clear();
 		mTopSelectedActors.Clear();
 		mNeedRedraw = true;
-		OnActorsSelectedFromThis();
+
+		if (sendSelectedMessage)
+			OnActorsSelectedFromThis();
 	}
 
 	void SceneEditScreen::SelectActorsWithoutAction(ActorsVec actors, bool additive /*= true*/)
@@ -701,6 +703,8 @@ namespace Editor
 
 		if (mEnabledTool && !IsHandleWorking(cursor))
 			mEnabledTool->OnCursorRightMousePressed(cursor);
+
+		o2Application.SetCursorInfiniteMode(true);
 	}
 
 	void SceneEditScreen::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
@@ -721,6 +725,8 @@ namespace Editor
 	{
 		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
 			mEnabledTool->OnCursorRightMouseReleased(cursor);
+
+		o2Application.SetCursorInfiniteMode(false);
 	}
 
 	void SceneEditScreen::OnCursorMiddleMousePressed(const Input::Cursor& cursor)
@@ -837,7 +843,7 @@ CLASS_META(Editor::SceneEditScreen)
 	PROTECTED_FUNCTION(void, UpdateTopSelectedActors);
 	PROTECTED_FUNCTION(int, GetActorIdx, Actor*);
 	PROTECTED_FUNCTION(void, OnSceneChanged, ActorsVec);
-	PROTECTED_FUNCTION(void, ClearSelectionWithoutAction);
+	PROTECTED_FUNCTION(void, ClearSelectionWithoutAction, bool);
 	PROTECTED_FUNCTION(void, SelectActorsWithoutAction, ActorsVec, bool);
 	PROTECTED_FUNCTION(void, SelectActorWithoutAction, Actor*, bool);
 	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);

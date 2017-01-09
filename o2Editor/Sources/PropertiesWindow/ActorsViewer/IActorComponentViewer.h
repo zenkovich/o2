@@ -48,6 +48,9 @@ namespace Editor
 		// Collapse view
 		void Collapse();
 
+		// Updates all component values
+		virtual void Refresh();
+
 		IOBJECT(IActorComponentViewer);
 
 	protected:

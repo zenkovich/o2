@@ -1342,6 +1342,18 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "asset link");
 	}
 
+	void EditorUIStyleBuilder::RebuildSinglelineEditBoxWithArrows()
+	{
+		UIEditBox* sample = o2UI.CreateWidget<UIEditBox>("singleline");
+		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
+		sample->SetViewLayout(Layout::BothStretch(3, 1, 8, -1));
+
+		sample->AddLayer("arrows", mnew Sprite("ui/UI3_ch_arrows.png"), 
+						 Layout::Based(BaseCorner::Right, Vec2F(10, 20), Vec2F(0, 0)));
+
+		o2UI.AddWidgetStyle(sample, "singleline with arrows");
+	}
+
 	void EditorUIStyleBuilder::RebuildEditorDropdown()
 	{
 		UIDropDown* sample = mnew UIDropDown();
@@ -1752,6 +1764,80 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "componentSave");
 	}
 
+	void EditorUIStyleBuilder::RebuildRedEditBoxStyle()
+	{
+		UIEditBox* sample = mnew UIEditBox();
+		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
+		sample->SetViewLayout(Layout::BothStretch(3, 1, 8, -1));
+		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetMultiLine(false);
+		sample->layout.minSize = Vec2F(10, 10);
+
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI2_red_edit_box.png"), Layout::BothStretch(-4, -4, -4, -4));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
+		sample->AddLayer("arrows", mnew Sprite("ui/UI3_ch_arrows.png"),
+						 Layout::Based(BaseCorner::Right, Vec2F(10, 20), Vec2F(0, 0)));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		sample->AddState("focused", focusAnim)
+			->offStateAnimationSpeed = 0.5f;
+
+		Text* textDrawable = sample->GetTextDrawable();
+		textDrawable->verAlign = VerAlign::Middle;
+		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->SetFontAsset("stdFont.ttf");
+
+		Sprite* caretDrawable = sample->GetCaretDrawable();
+		*caretDrawable = Sprite();
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight())*1.7f);
+		caretDrawable->pivot = Vec2F(0, 0.26f);
+		caretDrawable->color = Color4::Black();
+
+		o2UI.AddWidgetStyle(sample, "red singleline");
+	}
+
+	void EditorUIStyleBuilder::RebuildGreenEditBoxStyle()
+	{
+		UIEditBox* sample = mnew UIEditBox();
+		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
+		sample->SetViewLayout(Layout::BothStretch(3, 1, 8, -1));
+		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetMultiLine(false);
+		sample->layout.minSize = Vec2F(10, 10);
+
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI2_green_edit_box.png"), Layout::BothStretch(-4, -4, -4, -4));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
+		sample->AddLayer("arrows", mnew Sprite("ui/UI3_ch_arrows.png"),
+						 Layout::Based(BaseCorner::Right, Vec2F(10, 20), Vec2F(0, 0)));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		sample->AddState("focused", focusAnim)
+			->offStateAnimationSpeed = 0.5f;
+
+		Text* textDrawable = sample->GetTextDrawable();
+		textDrawable->verAlign = VerAlign::Middle;
+		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->SetFontAsset("stdFont.ttf");
+
+		Sprite* caretDrawable = sample->GetCaretDrawable();
+		*caretDrawable = Sprite();
+		caretDrawable->size = Vec2F(1, textDrawable->GetFont()->GetHeightPx(textDrawable->GetHeight())*1.7f);
+		caretDrawable->pivot = Vec2F(0, 0.26f);
+		caretDrawable->color = Color4::Black();
+
+		o2UI.AddWidgetStyle(sample, "green singleline");
+	}
+
 	void EditorUIStyleBuilder::RebuildActorPropety()
 	{
 		auto widget = mnew UIWidget();
@@ -1863,27 +1949,56 @@ namespace Editor
 		layout->name = "vector2 property";
 
 		auto xLabel = o2UI.CreateLabel("X");
-		xLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(15, 0));
+		xLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
 		xLabel->horOverflow = UILabel::HorOverflow::None;
 		layout->AddChild(xLabel);
 
-		auto xEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		auto xEdit = o2UI.CreateWidget<UIEditBox>("singleline with arrows");
 		xEdit->name = "x edit";
-		xEdit->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(15, 0), Vec2F());
+		xEdit->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F());
 		layout->AddChild(xEdit);
 
 		auto yLabel = o2UI.CreateLabel("Y");
 		yLabel->layout.maxWidth = 15;
-		yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(0, 0), Vec2F(15, 0));
+		yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
 		yLabel->horOverflow = UILabel::HorOverflow::None;
 		layout->AddChild(yLabel);
 
-		auto yEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		auto yEdit = o2UI.CreateWidget<UIEditBox>("singleline with arrows");
 		yEdit->name = "y edit";
-		yEdit->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(15, 0), Vec2F());
+		yEdit->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(20, 0), Vec2F());
 		layout->AddChild(yEdit);
 
 		o2UI.AddWidgetStyle(layout, "vector2 property");
+	}
+
+	void EditorUIStyleBuilder::RebuildColoredVector2Property()
+	{
+		auto layout = mnew UIWidget();
+		layout->name = "vector2 property";
+
+		auto xLabel = o2UI.CreateLabel("X");
+		xLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
+		xLabel->horOverflow = UILabel::HorOverflow::None;
+		layout->AddChild(xLabel);
+
+		auto xEdit = o2UI.CreateWidget<UIEditBox>("red singleline");
+		xEdit->name = "x edit";
+		xEdit->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F());
+		layout->AddChild(xEdit);
+
+		auto yLabel = o2UI.CreateLabel("Y");
+		yLabel->layout.maxWidth = 15;
+		yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
+		yLabel->horOverflow = UILabel::HorOverflow::None;
+		layout->AddChild(yLabel);
+
+		auto yEdit = o2UI.CreateWidget<UIEditBox>("green singleline");
+		yEdit->name = "y edit";
+		yEdit->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(20, 0), Vec2F());
+		layout->AddChild(yEdit);
+
+		o2UI.AddWidgetStyle(layout, "colored vector2 property");
 	}
 
 	void EditorUIStyleBuilder::RebuildRectProperty()
@@ -1897,7 +2012,7 @@ namespace Editor
 		leftLabel->horOverflow = UILabel::HorOverflow::None;
 		layout->AddChild(leftLabel);
 
-		auto leftEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		auto leftEdit = o2UI.CreateWidget<UIEditBox>("singleline with arrows");
 		leftEdit->name = "left edit";
 		leftEdit->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(15, 0), Vec2F());
 		layout->AddChild(leftEdit);
@@ -1908,7 +2023,7 @@ namespace Editor
 		bottomLabel->horOverflow = UILabel::HorOverflow::None;
 		layout->AddChild(bottomLabel);
 
-		auto bottomEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		auto bottomEdit = o2UI.CreateWidget<UIEditBox>("singleline with arrows");
 		bottomEdit->name = "bottom edit";
 		bottomEdit->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(15, 0), Vec2F());
 		layout->AddChild(bottomEdit);
@@ -1919,7 +2034,7 @@ namespace Editor
 		rightLabel->horOverflow = UILabel::HorOverflow::None;
 		layout->AddChild(rightLabel);
 
-		auto rightEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		auto rightEdit = o2UI.CreateWidget<UIEditBox>("singleline with arrows");
 		rightEdit->name = "right edit";
 		rightEdit->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(15, 0), Vec2F());
 		layout->AddChild(rightEdit);
@@ -1930,7 +2045,7 @@ namespace Editor
 		topLabel->horOverflow = UILabel::HorOverflow::None;
 		layout->AddChild(topLabel);
 
-		auto topEdit = o2UI.CreateWidget<UIEditBox>("singleline");
+		auto topEdit = o2UI.CreateWidget<UIEditBox>("singleline with arrows");
 		topEdit->name = "top edit";
 		topEdit->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(15, 0), Vec2F());
 		layout->AddChild(topEdit);
@@ -1995,11 +2110,15 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildAnimationAssetIcon);
 	PUBLIC_FUNCTION(void, RebuildAssetsGridScroll);
 	PUBLIC_FUNCTION(void, RebuildLinkBtn);
+	PUBLIC_FUNCTION(void, RebuildSinglelineEditBoxWithArrows);
 	PUBLIC_FUNCTION(void, RebuildEditorDropdown);
 	PUBLIC_FUNCTION(void, RebuildActorPropety);
 	PUBLIC_FUNCTION(void, RebuildAssetPropety);
 	PUBLIC_FUNCTION(void, RebuildComponentProperty);
 	PUBLIC_FUNCTION(void, RebuildVector2Property);
+	PUBLIC_FUNCTION(void, RebuildRedEditBoxStyle);
+	PUBLIC_FUNCTION(void, RebuildGreenEditBoxStyle);
+	PUBLIC_FUNCTION(void, RebuildColoredVector2Property);
 	PUBLIC_FUNCTION(void, RebuildRectProperty);
 	PUBLIC_FUNCTION(void, RebuildActorHeadEnableToggle);
 	PUBLIC_FUNCTION(void, RebuildActorHeadName);

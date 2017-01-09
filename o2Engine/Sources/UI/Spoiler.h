@@ -49,7 +49,7 @@ namespace o2
 		void UpdateExpanding(float dt);
 
 		// Returns layout height
-		float GetLayoutHeight() const;
+		float GetMinHeightWithChildren() const;
 
 		// Expands size by children
 		//virtual void ExpandSizeByChilds();

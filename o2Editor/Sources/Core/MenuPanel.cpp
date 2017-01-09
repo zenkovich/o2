@@ -1,6 +1,7 @@
 #include "MenuPanel.h"
 
 #include "Application/Application.h"
+#include "Assets/Assets.h"
 #include "Core/EditorApplication.h"
 #include "Core/EditorConfig.h"
 #include "Core/WindowsSystem/WindowsManager.h"
@@ -79,14 +80,7 @@ namespace Editor
 
 		// DEBUG
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
-		mMenuPanel->AddItem("Debug/Get path", [&]() {
-
-			char oldDir[MAX_PATH];
-
-			GetCurrentDirectory(MAX_PATH, oldDir);
-
-			o2Debug.Log(oldDir);
-		});
+		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
 	}
 
 	MenuPanel::~MenuPanel()

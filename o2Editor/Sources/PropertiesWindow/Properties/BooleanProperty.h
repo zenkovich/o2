@@ -29,7 +29,7 @@ namespace Editor
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;
@@ -44,7 +44,7 @@ namespace Editor
 		void SetValue(bool value);
 
 		// Sets value as unknown
-		void SetUnknownValue();
+		void SetUnknownValue(bool defaultValue = false);
 
 		// Returns editing by this field type
 		const Type* GetFieldType() const;
@@ -62,6 +62,9 @@ namespace Editor
 		UIToggle*     mToggle;          // Toggle 
 
 	protected:
+		// Sets value
+		void SetCommonValue(bool value);
+
 		// Edit box change event
 		void OnEdited(bool value);
 	};

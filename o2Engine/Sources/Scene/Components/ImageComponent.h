@@ -20,13 +20,14 @@ namespace o2
 		Setter<String>       imageAssetPath;   // Sets image asset from path
 		Setter<ImageAsset>   imageAsset;       // Sets image asset
 		Setter<Bitmap*>      bitmap;           // Sets image from bitmap
-		Property<Color4>     leftTopColor;	  // Color of left top corner property
-		Property<Color4>     rightTopColor;	  // Color of right top corner property
+		Property<Color4>     leftTopColor;	   // Color of left top corner property
+		Property<Color4>     rightTopColor;	   // Color of right top corner property
 		Property<Color4>     leftBottomColor;  // Color of left bottom corner property
 		Property<Color4>     rightBottomColor; // Color of right bottom corner property
 		Property<SpriteMode> mode;             // Sprite drawing mode property
 		Property<float>      fill;             // Sprite fill property
-		Property<RectI>      sliceBorder;      // Slice border property
+		Property<float>      tileScale;        // Sprite tile scale property, 1.0f is default
+		Property<BorderI>    sliceBorder;      // Slice border property
 
 		// Default constructor
 		ImageComponent();
@@ -112,6 +113,12 @@ namespace o2
 		// Returns sprite fill
 		float GetFill() const;
 
+		// Sets tile scale. 1.0f is default
+		void SetTileScale(float scale);
+
+		// Returns tile scale
+		float GetTileScale() const;
+
 		// Sets sprite drawing mode
 		void SetMode(SpriteMode mode);
 
@@ -119,10 +126,10 @@ namespace o2
 		SpriteMode GetMode() const;
 
 		// Sets sprite slice border
-		void SetSliceBorder(const RectI& border);
+		void SetSliceBorder(const BorderI& border);
 
 		// Returns sprite slice border
-		RectI GetSliceBorder() const;
+		BorderI GetSliceBorder() const;
 
 		// Loads sprite from image asset
 		void LoadFromImage(const ImageAsset& image);
@@ -160,7 +167,7 @@ namespace o2
 		SERIALIZABLE(ImageComponent);
 
 	protected:
-		Sprite mSprite; // @SERIALIZABLE
+		Sprite mSprite; // @SERIALIZABLE @EDITOR_IGNORE
 
 	protected:
 		// Calls when actor's transform was changed

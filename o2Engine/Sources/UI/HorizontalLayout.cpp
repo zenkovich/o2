@@ -161,16 +161,16 @@ namespace o2
 			RearrangeChilds();
 	}
 
-	float UIHorizontalLayout::GetLayoutWidth() const
+	float UIHorizontalLayout::GetMinWidthWithChildren() const
 	{
 		if (!mFitByChildren)
-			return UIWidget::GetLayoutWidth();
+			return UIWidget::GetMinWidthWithChildren();
 
 		float res = mBorder.left + mBorder.right + Math::Max(mChilds.Count() - 1, 0)*mSpacing;
 		for (auto child : mChilds)
 		{
 			if (!child->mFullyDisabled)
-				res += child->GetLayoutWidth();
+				res += child->GetMinWidthWithChildren();
 		}
 
 		return res;
@@ -244,13 +244,13 @@ namespace o2
 		}
 		else
 		{
-			float totalWidth = mChilds.Sum<float>([&](UIWidget* child) { return child->GetLayoutWidth(); });
+			float totalWidth = mChilds.Sum<float>([&](UIWidget* child) { return child->GetMinWidthWithChildren(); });
 			totalWidth += (mChilds.Count() - 1)*mSpacing;
 			float position = -totalWidth*0.5f;
 			for (auto child : mChilds)
 			{
 				child->layout.mOffsetMin.x = position;
-				position += Math::Abs(Math::Max(child->layout.mMinSize.x, child->GetLayoutWidth()));
+				position += Math::Abs(Math::Max(child->layout.mMinSize.x, child->GetMinWidthWithChildren()));
 
 				child->layout.mOffsetMax.x = position;
 				position += mSpacing;
@@ -287,7 +287,7 @@ namespace o2
 			for (auto child : mChilds)
 			{
 				child->layout.mOffsetMin.x = position;
-				position += Math::Abs(Math::Max(child->layout.mMinSize.x, child->GetLayoutWidth()));
+				position += Math::Abs(Math::Max(child->layout.mMinSize.x, child->GetMinWidthWithChildren()));
 
 				child->layout.mOffsetMax.x = position;
 				position += mSpacing;
@@ -324,7 +324,7 @@ namespace o2
 			for (auto child : mChilds)
 			{
 				child->layout.mOffsetMax.x = -position;
-				position += Math::Abs(Math::Max(child->layout.mMinSize.x, child->GetLayoutWidth()));
+				position += Math::Abs(Math::Max(child->layout.mMinSize.x, child->GetMinWidthWithChildren()));
 
 				child->layout.mOffsetMin.x = -position;
 				position += mSpacing;
@@ -386,7 +386,7 @@ namespace o2
 		};
 
 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
-		Vec2F size(GetLayoutWidth(), GetLayoutHeight());
+		Vec2F size(GetMinWidthWithChildren(), GetMinHeightWithChildren());
 
 		Vec2F parentSize = mParent ? mParent->layout.mAbsoluteRect.Size() : Vec2F();
 		Vec2F szDelta = size - (layout.mOffsetMax - layout.mOffsetMin + (layout.mAnchorMax - layout.mAnchorMin)*parentSize);
@@ -526,7 +526,7 @@ CLASS_META(o2::UIHorizontalLayout)
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
-	PROTECTED_FUNCTION(float, GetLayoutWidth);
+	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);

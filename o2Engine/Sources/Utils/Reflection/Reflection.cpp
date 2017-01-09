@@ -3,6 +3,7 @@
 #include "Utils/Data/DataNode.h"
 #include "Utils/IObject.h"
 #include "Utils/Math/Basis.h"
+#include "Utils/Math/Border.h"
 #include "Utils/Math/Color.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
@@ -138,6 +139,8 @@ namespace o2
 	REG_FUNDAMENTAL_TYPE(Color4);
 	REG_FUNDAMENTAL_TYPE(RectF);
 	REG_FUNDAMENTAL_TYPE(RectI);
+	REG_FUNDAMENTAL_TYPE(BorderF);
+	REG_FUNDAMENTAL_TYPE(BorderI);
 	REG_FUNDAMENTAL_TYPE(Vec2F);
 	REG_FUNDAMENTAL_TYPE(Vec2I);
 	REG_FUNDAMENTAL_TYPE(Vertex2);

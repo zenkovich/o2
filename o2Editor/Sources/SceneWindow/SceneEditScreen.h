@@ -254,7 +254,7 @@ namespace Editor
 		void OnSceneChanged(ActorsVec actors);
 
 		// Clears actors selection
-		void ClearSelectionWithoutAction();
+		void ClearSelectionWithoutAction(bool sendSelectedMessage = true);
 
 		// Selects actors
 		void SelectActorsWithoutAction(ActorsVec actors, bool additive = true);

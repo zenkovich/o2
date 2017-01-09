@@ -253,6 +253,9 @@
     <ClInclude Include="..\Sources\UI\HorizontalScrollBar.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\UI\Image.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
     <ClInclude Include="..\Sources\UI\Label.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
@@ -266,6 +269,9 @@
       <Filter>Sources\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\UI\ScrollArea.h">
+      <Filter>Sources\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\Spoiler.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\UI\Toggle.h">
@@ -353,6 +359,9 @@
       <Filter>Sources\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\DragHandle.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\EditorPropertyAttribute.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h">
@@ -451,6 +460,9 @@
     <ClInclude Include="..\Sources\Utils\Reflection\Type.h">
       <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Reflection\TypeTraits.h">
+      <Filter>Sources\Utils\Reflection</Filter>
+    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Serializable.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
@@ -484,23 +496,14 @@
     <ClInclude Include="..\Sources\Utils\Timer.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\UnknownPtr.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\Image.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\UID.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Spoiler.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection\TypeTraits.h">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\EditorPropertyAttribute.h">
+    <ClInclude Include="..\Sources\Utils\UnknownPtr.h">
       <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Border.h">
+      <Filter>Sources\Utils\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -714,6 +717,9 @@
     <ClCompile Include="..\Sources\UI\HorizontalScrollBar.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\UI\Image.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
     <ClCompile Include="..\Sources\UI\Label.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
@@ -727,6 +733,9 @@
       <Filter>Sources\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\UI\ScrollArea.cpp">
+      <Filter>Sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\Spoiler.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\UI\Toggle.cpp">
@@ -869,12 +878,6 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Timer.cpp">
       <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Image.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Spoiler.cpp">
-      <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

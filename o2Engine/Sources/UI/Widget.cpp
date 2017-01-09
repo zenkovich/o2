@@ -702,14 +702,14 @@ namespace o2
 			UpdateChildrenLayouts(forcible);
 	}
 
-	float UIWidget::GetLayoutWidth() const
+	float UIWidget::GetMinWidthWithChildren() const
 	{
-		return layout.mAbsoluteRect.Width();
+		return layout.mMinSize.x;
 	}
 
-	float UIWidget::GetLayoutHeight() const
+	float UIWidget::GetMinHeightWithChildren() const
 	{
-		return layout.mAbsoluteRect.Height();
+		return layout.mMinSize.y;
 	}
 
 	void UIWidget::UpdateChildrenLayouts(bool forcible /*= false*/)
@@ -1093,8 +1093,8 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(bool, CheckIsLayoutDrivenByParent, bool);
-	PROTECTED_FUNCTION(float, GetLayoutWidth);
-	PROTECTED_FUNCTION(float, GetLayoutHeight);
+	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
+	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
 	PROTECTED_FUNCTION(void, UpdateChildrenLayouts, bool);
 	PROTECTED_FUNCTION(void, UpdateBounds);
 	PROTECTED_FUNCTION(void, UpdateBoundsWithChilds);

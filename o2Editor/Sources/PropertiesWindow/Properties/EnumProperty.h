@@ -27,7 +27,7 @@ namespace Editor
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;
@@ -53,25 +53,25 @@ namespace Editor
 		IOBJECT(EnumProperty);
 
 	protected:
-		Function<void(void*, int)> mAssignFunc;  // Value assign function
-		Function<int(void*)>       mGetFunc;     // Get value function
+		Function<void(void*, int)>     mAssignFunc;            // Value assign function
+		Function<int(void*)>           mGetFunc;               // Get value function
+								       
+		const EnumType*                mEnumType;              // Type of enumeration
+		Vector<void*>                  mValuesPointers;        // Fields' pointers
+		int                            mCommonValue;           // Common field value (if not different)
+		bool                           mValuesDifferent;       // Are values different
 
-		const EnumType*    mEnumType;            // Type of enumeration
-		Vector<void*>  mValuesPointers;          // Fields' pointers
-		int            mCommonValue;             // Common field value (if not different)
-		bool           mValuesDifferent;         // Are values different
+		const Dictionary<int, String>* mEntries;               // Enum entries
 
-		const Dictionary<int, String>* mEntries; // Enum entries
-
-		UIDropDown*    mDropDown;                // Layer name dropdown
-		bool           mUpdatingValue = false;   // Is dropdown value updating and we don't we don't check selection
+		UIDropDown*                    mDropDown;              // Layer name dropdown
+		bool                           mUpdatingValue = false; // Is dropdown value updating and we don't we don't check selection
 
 	protected:
+		// Sets common value
+		void SetCommonValue(int value);
+
 		// Selects item
 		void OnSelectedItem(const WString& name);
-
-		// Updates drop down by value
-		void UpdateDropDownValue();
 	};
 }
 

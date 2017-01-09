@@ -54,7 +54,7 @@ namespace Editor
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;
@@ -91,6 +91,9 @@ namespace Editor
 		Text*         mNameText;        // Asset name text
 
 	protected:
+		// Sets common value asset id
+		void SetCommonAssetId(UID id);
+
 		// Calls when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 
@@ -118,7 +121,7 @@ namespace Editor
 	{
 		if (!widget)
 			widget = o2UI.CreateWidget<UIWidget>("assetProperty");
-		
+
 		mBox = widget;
 		mBox->onDraw += [&]() { OnDrawn(); };
 		mBox->SetFocusable(true);
@@ -147,46 +150,34 @@ namespace Editor
 
 		mValuesPointers = targets;
 
-		Update();
+		Refresh();
 	}
 
 	template<typename _type>
-	void AssetProperty<_type>::Update()
+	void AssetProperty<_type>::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
-			return;
+		auto lastCommonValue = mCommonValue.GetAssetId();
+		auto lastDifferent = mValuesDifferent;
 
-		mCommonValue = mGetFunc(mValuesPointers[0]);
-		mValuesDifferent = false;
+		auto newCommonValue = mGetFunc(mValuesPointers[0]);
+		auto newDifferent = false;
 
 		for (int i = 1; i < mValuesPointers.Count(); i++)
 		{
-			if (mCommonValue != mGetFunc(mValuesPointers[i]))
+			if (newCommonValue != mGetFunc(mValuesPointers[i]))
 			{
-				mValuesDifferent = true;
+				newDifferent = true;
 				break;
 			}
 		}
 
-		if (mValuesDifferent)
+		if (newDifferent)
 		{
-			mNameText->text = "--";
-			mBox->layer["caption"]->transparency = 1.0f;
+			if (!lastDifferent)
+				SetUnknownValue();
 		}
-		else
-		{
-			if (!o2Assets.IsAssetExist(mCommonValue.GetAssetId()))
-			{
-				mNameText->text = "Null:" + TypeOf(_type).GetName().SubStr(4);
-				mBox->layer["caption"]->transparency = 0.5f;
-			}
-			else
-			{
-				mNameText->text = o2FileSystem.GetFileNameWithoutExtension(
-					o2FileSystem.GetPathWithoutDirectories(mCommonValue.GetPath()));
-				mBox->layer["caption"]->transparency = 1.0f;
-			}
-		}
+		else if (lastCommonValue != newCommonValue.GetAssetId() || lastDifferent)
+			SetCommonAssetId(newCommonValue.GetAssetId());
 	}
 
 	template<typename _type>
@@ -216,27 +207,45 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::SetAssetId(UID id)
 	{
-		mCommonValue = id == 0 ? _type() : _type(id);
-		mValuesDifferent = false;
-
 		for (auto ptr : mValuesPointers)
 			mAssignFunc(ptr, mCommonValue);
 
+		SetCommonAssetId(id);
+	}
+
+	template<typename _type>
+	void AssetProperty<_type>::SetCommonAssetId(UID id)
+	{
+		mCommonValue = id == 0 ? _type() : _type(id);
+		mValuesDifferent = false;
+
+		if (!o2Assets.IsAssetExist(mCommonValue.GetAssetId()))
+		{
+			mNameText->text = "Null:" + TypeOf(_type).GetName().SubStr(4);
+			mBox->layer["caption"]->transparency = 0.5f;
+		}
+		else
+		{
+			auto name = o2FileSystem.GetFileNameWithoutExtension(
+				o2FileSystem.GetPathWithoutDirectories(mCommonValue.GetPath()));
+
+			mNameText->text = name;
+			mBox->layer["caption"]->transparency = 1.0f;
+		}
+
 		onChanged();
-
-		Update();
-
 		o2EditorSceneScreen.OnSceneChanged();
 	}
 
 	template<typename _type>
-	void Editor::AssetProperty<_type>::SetUnknownValue()
+	void AssetProperty<_type>::SetUnknownValue()
 	{
 		mValuesDifferent = true;
 		mCommonValue = _type();
 		mNameText->text = "--";
 		mBox->layer["caption"]->transparency = 1.0f;
 
+		onChanged();
 		o2EditorSceneScreen.OnSceneChanged();
 	}
 
@@ -289,7 +298,7 @@ namespace Editor
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
 		if (lastSelectedAsset.mType != TypeOf(_type).ID())
 			return;
-		
+
 		o2Application.SetCursor(CursorType::Hand);
 		mBox->SetState("focused", true);
 	}
@@ -326,7 +335,7 @@ CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 	PROTECTED_FIELD(mNameText);
 
 	PUBLIC_FUNCTION(void, Setup, const Vector<void*>&, bool);
-	PUBLIC_FUNCTION(void, Update);
+	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(const _type&, GetCommonValue);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
@@ -334,6 +343,7 @@ CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 	PUBLIC_FUNCTION(void, SetAssetId, UID);
 	PUBLIC_FUNCTION(void, SetUnknownValue);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, SetCommonAssetId, UID);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

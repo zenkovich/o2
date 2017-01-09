@@ -34,7 +34,7 @@ namespace Editor
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;
@@ -78,6 +78,9 @@ namespace Editor
 		Text*         mNameText;        // Component name text
 
 	protected:
+		// Sets common value actor
+		void SetCommonValue(Component* value);
+
 		// Calls when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 

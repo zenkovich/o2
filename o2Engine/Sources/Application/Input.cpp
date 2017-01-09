@@ -308,13 +308,15 @@ namespace o2
 		mReleasedCursors.Add(releasedCuros);
 	}
 
-	void Input::SetCursorPos(const Vec2F& pos, CursorId id /*= 0*/)
+	void Input::SetCursorPos(const Vec2F& pos, CursorId id /*= 0*/, bool withDelta /*= true*/)
 	{
 		for (Cursor& cursor : mCursors)
 		{
 			if (cursor.id == id)
 			{
-				cursor.delta = pos - cursor.position;
+				if (withDelta)
+					cursor.delta += pos - cursor.position;
+
 				cursor.position = pos;
 				break;
 			}
@@ -322,7 +324,9 @@ namespace o2
 
 		if (id == 0)
 		{
-			mMainCursorDelta = pos - mMainCursorPos;
+			if (withDelta)
+				mMainCursorDelta += pos - mMainCursorPos;
+
 			mMainCursorPos = pos;
 		}
 	}

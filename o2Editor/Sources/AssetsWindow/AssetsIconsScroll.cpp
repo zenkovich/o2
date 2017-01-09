@@ -380,7 +380,8 @@ namespace Editor
 		onAssetsSelected(mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().mPath; }));
 
 		if (PropertiesWindow::IsSingletonInitialzed())
-			o2EditorProperties.SetTargets(mSelectedPreloadedAssets.Cast<IObject*>());
+			o2EditorProperties.SetTargets(mSelectedPreloadedAssets.Cast<IObject*>(), 
+										  [&]() { CheckPreloadedAssetsSaving(); });
 	}
 
 	void UIAssetsIconsScrollArea::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
@@ -944,6 +945,17 @@ namespace Editor
 		return mnew Actor(asset.actor);
 	}
 
+	void UIAssetsIconsScrollArea::CheckPreloadedAssetsSaving()
+	{
+		for (auto asset : mSelectedPreloadedAssets)
+		{
+			asset->Save(false);
+			delete asset;
+		}
+
+		mSelectedPreloadedAssets.Clear();
+	}
+
 	void UIAssetsIconsScrollArea::Select(SelectableDragableObject* object, bool sendOnSelectionChanged)
 	{
 		UIAssetIcon* icon = dynamic_cast<UIAssetIcon*>(object);
@@ -1105,6 +1117,7 @@ CLASS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const AssetInfo&);
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ImageAsset&);
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ActorAsset&);
+	PROTECTED_FUNCTION(void, CheckPreloadedAssetsSaving);
 	PROTECTED_FUNCTION(SelectDragObjectsVec, GetSelectedDragObjects);
 	PROTECTED_FUNCTION(SelectDragObjectsVec, GetAllObjects);
 	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*);

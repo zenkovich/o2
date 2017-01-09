@@ -34,7 +34,7 @@ namespace Editor
 		void Setup(const Vector<void*>& targets, bool isProperty);
 
 		// Updates and checks value
-		void Update();
+		void Refresh();
 
 		// Returns root widget
 		UIWidget* GetWidget() const;
@@ -81,6 +81,8 @@ namespace Editor
 		PropertyFieldsVec mValueProperties;            // Values properties
 		PropertyFieldsVec mValuePropertiesPool;        // Unused value properties pool
 		IntegerProperty*  mCountProperty = nullptr;    // Vector count property
+		bool              mCountDifferents = false;    // Is targets counts of elements differents
+		int               mCountOfElements;            // Common count of elements
 
 	protected:
 		// Returns free element property

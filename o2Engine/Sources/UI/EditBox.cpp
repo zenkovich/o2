@@ -764,6 +764,11 @@ namespace o2
 		UpdateSelectionAndCaret();
 	}
 
+	bool UIEditBox::IsUnderPoint(const Vec2F& point)
+	{
+		return mDrawingScissorRect.IsInside(point) && mAbsoluteViewArea.IsInside(point);
+	}
+
 	void UIEditBox::UpdateTransparency()
 	{
 		UIWidget::UpdateTransparency();
@@ -1399,6 +1404,7 @@ CLASS_META(o2::UIEditBox)
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnFocused);

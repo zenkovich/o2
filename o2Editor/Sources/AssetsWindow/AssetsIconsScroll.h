@@ -259,6 +259,9 @@ namespace Editor
 
 		// Instantiate actor from actor asset
 		Actor* InstantiateAsset(const ActorAsset& asset);
+
+		// Checks preloaded assets for saving
+		void CheckPreloadedAssetsSaving();
 		
 // ISelectableDragableObjectsGroup implementation
 

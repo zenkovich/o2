@@ -27,6 +27,9 @@ namespace Editor
 	class PropertiesWindow: public IEditorWindow, public Singleton<PropertiesWindow>
 	{
 	public:
+		Function<void(IPropertyField*)> onFieldChanged;   // Some field changed event
+		Function<void()>                onTargetsChanged; // Targets changing event
+
 		// Default constructor
 		PropertiesWindow();
 
@@ -37,7 +40,7 @@ namespace Editor
 		void SetTarget(IObject* target);
 
 		// Sets target objects
-		void SetTargets(const Vector<IObject*> targets);
+		void SetTargets(const Vector<IObject*> targets, const Function<void()>& targetsChangedDelegate = Function<void()>());
 
 		// Returns target object
 		Vector<IObject*> GetTargets() const;
@@ -47,6 +50,9 @@ namespace Editor
 
 		// Draws current viewer
 		void Draw();
+
+		// Returns were targets changed
+		bool IsTargetsChanged() const;
 
 		// Builds layout viewer by type for objects
 		void BuildTypeViewer(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo);
@@ -81,10 +87,13 @@ namespace Editor
 		int                      mPropertyFieldsPoolStep = 5; // Field properties pools resize step
 
 		Vector<IObject*>         mTargets;                    // Target objects
-		IObjectPropertiesViewer* mCurrentViewer;              // Current properties viewer
+		IObjectPropertiesViewer* mCurrentViewer = nullptr;    // Current properties viewer
 		PropViewersVec           mViewers;                    // All available object types viewers
 
 		PropertiesFieldsVec      mAvailablePropertiesFields;  // Available properties fields
+
+		Function<void()>         mOnTargetsChangedDelegate;   // Calls when targets array changing
+		bool                     mTargetsChanged = false;     // True when targets was changed    
 
 	protected:
 		// Initializes window
@@ -95,5 +104,8 @@ namespace Editor
 
 		// Initializes available properties fields and pools
 		void InitializePropertiesFields();
+
+		// Calls when some property field was changed
+		void OnPropertyChanged(IPropertyField* field);
 	};
 }

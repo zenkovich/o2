@@ -151,6 +151,17 @@ namespace o2
 		return mAngle;
 	}
 
+	void Transform::SetAngleDegrees(float deg)
+	{
+		mAngle = Math::Deg2rad(deg);
+		UpdateTransform();
+	}
+
+	float Transform::GetAngleDegrees() const
+	{
+		return Math::Rad2deg(mAngle);
+	}
+
 	void Transform::SetShear(float shear)
 	{
 		mShear = shear;
@@ -403,6 +414,7 @@ namespace o2
 		INITIALIZE_PROPERTY(Transform, szPivot, SetSizePivot, GetSizePivot);
 		INITIALIZE_PROPERTY(Transform, rect, SetRect, GetRect);
 		INITIALIZE_PROPERTY(Transform, angle, SetAngle, GetAngle);
+		INITIALIZE_PROPERTY(Transform, angleDegree, SetAngleDegrees, GetAngleDegrees);
 		INITIALIZE_PROPERTY(Transform, shear, SetShear, GetShear);
 		INITIALIZE_PROPERTY(Transform, basis, SetBasis, GetBasis);
 		INITIALIZE_PROPERTY(Transform, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis);
@@ -427,6 +439,7 @@ CLASS_META(o2::Transform)
 	PUBLIC_FIELD(szPivot);
 	PUBLIC_FIELD(rect);
 	PUBLIC_FIELD(angle);
+	PUBLIC_FIELD(angleDegree);
 	PUBLIC_FIELD(shear);
 	PUBLIC_FIELD(basis);
 	PUBLIC_FIELD(nonSizedBasis);
@@ -465,6 +478,8 @@ CLASS_META(o2::Transform)
 	PUBLIC_FUNCTION(Vec2F, GetScale);
 	PUBLIC_FUNCTION(void, SetAngle, float);
 	PUBLIC_FUNCTION(float, GetAngle);
+	PUBLIC_FUNCTION(void, SetAngleDegrees, float);
+	PUBLIC_FUNCTION(float, GetAngleDegrees);
 	PUBLIC_FUNCTION(void, SetShear, float);
 	PUBLIC_FUNCTION(float, GetShear);
 	PUBLIC_FUNCTION(void, SetBasis, const Basis&);

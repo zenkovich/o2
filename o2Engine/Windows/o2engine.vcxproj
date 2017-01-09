@@ -252,6 +252,7 @@
     <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h" />
     <ClInclude Include="..\Sources\Utils\Log\LogStream.h" />
     <ClInclude Include="..\Sources\Utils\Math\Basis.h" />
+    <ClInclude Include="..\Sources\Utils\Math\Border.h" />
     <ClInclude Include="..\Sources\Utils\Math\Color.h" />
     <ClInclude Include="..\Sources\Utils\Math\Curve.h" />
     <ClInclude Include="..\Sources\Utils\Math\Interpolation.h" />

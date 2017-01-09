@@ -18,15 +18,16 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Property<Bitmap*>     bitmap;    // Bitmap data property
-		Property<UID>         atlasId;   // Atlas owner id property
-		Property<AtlasAsset*> atlas;     // Atlas owner asset property
-		Getter<UInt>          atlasPage; // Atlas page index getter
-		Getter<RectI>         atlasRect; // Atlas source image rectangle getter
-		Getter<Vec2F>         size;      // Image size getter
-		Getter<float>         width;     // Image width getter
-		Getter<float>         height;    // Image height getter
-		Getter<MetaInfo*>     meta;      // Meta information getter
+		Property<Bitmap*>     bitmap;      // Bitmap data property
+		Property<UID>         atlasId;     // Atlas owner id property
+		Property<AtlasAsset*> atlas;       // Atlas owner asset property
+		Property<BorderI>     sliceBorder; // Slice border
+		Getter<UInt>          atlasPage;   // Atlas page index getter
+		Getter<RectI>         atlasRect;   // Atlas source image rectangle getter
+		Getter<Vec2F>         size;        // Image size getter
+		Getter<float>         width;       // Image width getter
+		Getter<float>         height;      // Image height getter
+		Getter<MetaInfo*>     meta;        // Meta information getter
 
 		// Default constructor
 		ImageAsset();
@@ -69,6 +70,12 @@ namespace o2
 
 		// Sets atlas
 		void SetAtlas(AtlasAsset* atlas);
+
+		// Sets slice border
+		void SetSliceBorder(const BorderI& border);
+
+		// Returns slice border
+		BorderI GetSliceBorder() const;
 
 		// Returns atlas page
 		UInt GetAtlasPage() const;
@@ -122,7 +129,7 @@ namespace o2
 			PlatformMeta mAndroid;     // Android specified meta @SERIALIZABLE
 			PlatformMeta mMacOS;       // MacOS specified meta @SERIALIZABLE
 			PlatformMeta mWindows;     // Windows specified meta @SERIALIZABLE
-			RectI        mSliceBorder; // Default slice border @SERIALIZABLE
+			BorderI      mSliceBorder; // Default slice border @SERIALIZABLE
 			SpriteMode   mDefaultMode; // Default sprite mode @SERIALIZABLE
 
 		public:

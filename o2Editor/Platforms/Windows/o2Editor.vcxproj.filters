@@ -239,6 +239,12 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\RectangleIntProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BorderFloatProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BorderIntProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp">
@@ -455,6 +461,12 @@
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\EnumProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BorderFloatProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BorderIntProperty.cpp">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
   </ItemGroup>

@@ -29,7 +29,7 @@ namespace o2
 
 	enum class TwoDirection { Horizontal, Vertical };
 
-	enum class SpriteMode { Default, Sliced, FillLeftToRight, FillRightToLeft, FillUpToDown, FillDownToUp, 
+	enum class SpriteMode { Default, Sliced, Tiled, FillLeftToRight, FillRightToLeft, FillUpToDown, FillDownToUp, 
 		Fill360CW, Fill360CCW };
 
 	enum class VerAlign { Top, Middle, Bottom, Both };

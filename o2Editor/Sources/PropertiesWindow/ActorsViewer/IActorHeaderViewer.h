@@ -29,6 +29,9 @@ namespace Editor
 		// Returns data widget
 		virtual UIWidget* GetWidget() const { return nullptr; }
 
+		// Updates properties values
+		virtual void Refresh() {}
+
 		IOBJECT(IActorHeaderViewer);
 	};
 }

@@ -257,10 +257,10 @@ namespace o2
 		virtual bool CheckIsLayoutDrivenByParent(bool forcibleLayout);
 
 		// Returns layout width
-		virtual float GetLayoutWidth() const;
+		virtual float GetMinWidthWithChildren() const;
 
 		// Returns layout height
-		virtual float GetLayoutHeight() const;
+		virtual float GetMinHeightWithChildren() const;
 
 		// Updates children layouts
 		virtual void UpdateChildrenLayouts(bool forcible = false);

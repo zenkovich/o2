@@ -142,6 +142,12 @@ namespace o2
 		// Sets value from integer rectangle value
 		DataNode& SetValue(const RectI& value);
 
+		// Sets value from float border value
+		DataNode& SetValue(const BorderF& value);
+
+		// Sets value from integer border value
+		DataNode& SetValue(const BorderI& value);
+
 		// Sets value from color value
 		DataNode& SetValue(const Color4& value);
 
@@ -204,6 +210,12 @@ namespace o2
 
 		// Gets value as integer rectangle
 		void GetValue(RectI& value) const;
+
+		// Gets value as float border
+		void GetValue(BorderF& value) const;
+
+		// Gets value as integer border
+		void GetValue(BorderI& value) const;
 
 		// Gets value as color
 		void GetValue(Color4& value) const;
@@ -350,6 +362,8 @@ namespace o2
 			 std::is_same<Color4, T>::value ||
 			 std::is_same<RectI, T>::value ||
 			 std::is_same<RectF, T>::value ||
+			 std::is_same<BorderI, T>::value ||
+			 std::is_same<BorderF, T>::value ||
 			 std::is_same<Vec2I, T>::value ||
 			 std::is_same<Vec2F, T>::value ||
 			 std::is_same<String, T>::value ||

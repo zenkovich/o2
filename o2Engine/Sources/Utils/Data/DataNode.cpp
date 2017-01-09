@@ -153,6 +153,18 @@ namespace o2
 		return *this;
 	}
 
+	DataNode& DataNode::SetValue(const BorderF& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
+	DataNode& DataNode::SetValue(const BorderI& value)
+	{
+		mData = (WString)value;
+		return *this;
+	}
+
 	DataNode& DataNode::SetValue(const Color4& value)
 	{
 		mData = (WString)value;
@@ -229,6 +241,16 @@ namespace o2
 	void DataNode::GetValue(RectI& value) const
 	{
 		value = (RectI)mData;
+	}
+
+	void DataNode::GetValue(BorderF& value) const
+	{
+		value = (BorderF)mData;
+	}
+
+	void DataNode::GetValue(BorderI& value) const
+	{
+		value = (BorderI)mData;
 	}
 
 	void DataNode::GetValue(Color4& value) const

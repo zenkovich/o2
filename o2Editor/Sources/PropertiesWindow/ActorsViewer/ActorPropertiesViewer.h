@@ -44,6 +44,9 @@ namespace Editor
 		// Adds new available component viewer type
 		void AddComponentViewerType(IActorComponentViewer* viewer);
 
+		// Updates properties values
+		void Refresh();
+
 		IOBJECT(ActorPropertiesViewer);
 
 	protected:

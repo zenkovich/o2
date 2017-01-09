@@ -44,6 +44,8 @@ namespace o2
 		                  std::is_same<T, Color4>::value ||
 		                  std::is_same<T, RectI>::value ||
 		                  std::is_same<T, RectF>::value ||
+		                  std::is_same<T, BorderI>::value ||
+		                  std::is_same<T, BorderF>::value ||
 		                  std::is_same<T, Vec2I>::value ||
 		                  std::is_same<T, Vec2F>::value ||
 		                  std::is_same<T, Vertex2>::value ||
