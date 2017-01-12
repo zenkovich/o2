@@ -537,9 +537,6 @@
     <ClCompile Include="..\Sources\Application\Input.cpp">
       <Filter>Sources\Application</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\Application\Windows\Application.cpp">
-      <Filter>Sources\Application\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\Assets\ActorAsset.cpp">
       <Filter>Sources\Assets</Filter>
     </ClCompile>
@@ -878,6 +875,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Timer.cpp">
       <Filter>Sources\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Application\Windows\Application.cpp">
+      <Filter>Sources\Application\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -266,11 +266,46 @@
 		{
 			SetValueY(mCommonValue.y + cursor.delta.y*GetValueMultiplier(cursor.delta.y));
 		}
-	}
 
+		void Vec2FProperty::OnKeyReleased(const Input::Key& key)
+		{
+			if (mXEditBox->IsFocused())
+			{
+				if (key == VK_UP)
+				{
+					SetValueX(Math::Ceil(mCommonValue.x + 0.01f));
+					mXEditBox->SelectAll();
+				}
+
+				if (key == VK_DOWN)
+				{
+					SetValueX(Math::Floor(mCommonValue.x - 0.01f));
+					mXEditBox->SelectAll();
+				}
+			}
+
+			if (mYEditBox->IsFocused())
+			{
+				if (key == VK_UP)
+				{
+					SetValueY(Math::Ceil(mCommonValue.y + 0.01f));
+					mYEditBox->SelectAll();
+				}
+
+				if (key == VK_DOWN)
+				{
+					SetValueY(Math::Floor(mCommonValue.y - 0.01f));
+					mYEditBox->SelectAll();
+				}
+			}
+		}
+
+	}
+ 
 CLASS_META(Editor::Vec2FProperty)
 {
 	BASE_CLASS(Editor::IPropertyField);
+	BASE_CLASS(o2::KeyboardEventsListener);
 
 	PROTECTED_FIELD(mAssignFunc);
 	PROTECTED_FIELD(mGetFunc);
@@ -308,6 +343,7 @@ CLASS_META(Editor::Vec2FProperty)
 	PROTECTED_FUNCTION(float, GetValueMultiplier, float);
 	PROTECTED_FUNCTION(void, OnXDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnYDragHandleMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
  

@@ -427,11 +427,37 @@ namespace Editor
 		SetValueBottom(mCommonValue.bottom + cursor.delta.y*GetValueMultiplier(cursor.delta.y));
 	}
 
-}
+	void RectFProperty::OnKeyReleased(const Input::Key& key)
+	{
+		auto func =[&](UIEditBox* editbox, float value, void(RectFProperty::*setter)(float))
+		{
+			if (editbox->IsFocused())
+			{
+				if (key == VK_UP)
+				{
+					(this->*setter)(Math::Ceil(value + 0.01f));
+					editbox->SelectAll();
+				}
 
+				if (key == VK_DOWN)
+				{
+					(this->*setter)(Math::Floor(value - 0.01f));
+					editbox->SelectAll();
+				}
+			}
+		};
+
+		func(mLeftEditBox, mCommonValue.left, &RectFProperty::SetValueLeft);
+		func(mRightEditBox, mCommonValue.right, &RectFProperty::SetValueRight);
+		func(mTopEditBox, mCommonValue.top, &RectFProperty::SetValueTop);
+		func(mBottomEditBox, mCommonValue.bottom, &RectFProperty::SetValueBottom);
+	}
+}
+ 
 CLASS_META(Editor::RectFProperty)
 {
 	BASE_CLASS(Editor::IPropertyField);
+	BASE_CLASS(o2::KeyboardEventsListener);
 
 	PROTECTED_FIELD(mAssignFunc);
 	PROTECTED_FIELD(mGetFunc);
@@ -489,6 +515,7 @@ CLASS_META(Editor::RectFProperty)
 	PROTECTED_FUNCTION(void, OnRightDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnTopDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnBottomDragHandleMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
  

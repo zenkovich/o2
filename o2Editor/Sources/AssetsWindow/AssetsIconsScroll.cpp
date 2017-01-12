@@ -364,6 +364,7 @@ namespace Editor
 				return x->GetAssetInfo().mId == asset->GetAssetId(); }))
 			{
 				mSelectedPreloadedAssets.Remove(asset);
+				asset->Save(false);
 				delete asset;
 			}
 		}
@@ -380,8 +381,14 @@ namespace Editor
 		onAssetsSelected(mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().mPath; }));
 
 		if (PropertiesWindow::IsSingletonInitialzed())
-			o2EditorProperties.SetTargets(mSelectedPreloadedAssets.Cast<IObject*>(), 
+		{
+			mChangePropertiesTargetsFromThis = true;
+
+			o2EditorProperties.SetTargets(mSelectedPreloadedAssets.Cast<IObject*>(),
 										  [&]() { CheckPreloadedAssetsSaving(); });
+
+			mChangePropertiesTargetsFromThis = false;
+		}
 	}
 
 	void UIAssetsIconsScrollArea::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
@@ -947,6 +954,9 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::CheckPreloadedAssetsSaving()
 	{
+		if (mChangePropertiesTargetsFromThis)
+			return;
+
 		for (auto asset : mSelectedPreloadedAssets)
 		{
 			asset->Save(false);
@@ -1061,6 +1071,7 @@ CLASS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FIELD(mInstSceneDragActors);
 	PROTECTED_FIELD(mCuttingAssets);
 	PROTECTED_FIELD(mNeedRebuildAssets);
+	PROTECTED_FIELD(mChangePropertiesTargetsFromThis);
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);

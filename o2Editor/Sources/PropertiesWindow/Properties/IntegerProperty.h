@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Events/KeyboardEventsListener.h"
 #include "PropertiesWindow/Properties/IPropertyField.h"
 #include "Utils/CursorEventsArea.h"
 #include "Utils/Property.h"
@@ -17,7 +18,7 @@ namespace Editor
 	// --------------------------------
 	// Editor integer property edit box
 	// --------------------------------
-	class IntegerProperty: public IPropertyField
+	class IntegerProperty: public IPropertyField, public KeyboardEventsListener
 	{
 	public:
 		// Default constructor
@@ -72,5 +73,8 @@ namespace Editor
 
 		// Calls when drag handle was moved and changes the property value
 		void OnDragHandleMoved(const Input::Cursor& cursor);
+
+		// Calls when key was released
+		void OnKeyReleased(const Input::Key& key);
 	};
 }

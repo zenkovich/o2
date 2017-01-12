@@ -31,7 +31,7 @@ namespace o2
 	Application::Application():
 		mLog(nullptr), mReady(false), mAssets(nullptr), mEventSystem(nullptr), mFileSystem(nullptr), mInput(nullptr),
 		mProjectConfig(nullptr), mRender(nullptr), mScene(nullptr), mTaskManager(nullptr), mTime(nullptr), mTimer(nullptr),
-		mUIManager(nullptr), mCursorInfiniteModeEnabled(false), mCursorPositionCorrecting(false)
+		mUIManager(nullptr), mCursorInfiniteModeEnabled(false)
 	{
 		DataNode::RegBasicConverters();
 
@@ -68,9 +68,9 @@ namespace o2
 		}
 
 		if (!(mHWnd = CreateWindowEx(NULL, wndClass.lpszClassName, "o2 application",
-									 WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-									 mWindowedPos.x, mWindowedPos.y, mWindowedSize.x, mWindowedSize.y,
-									 NULL, NULL, NULL, NULL)))
+			WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+			mWindowedPos.x, mWindowedPos.y, mWindowedSize.x, mWindowedSize.y,
+			NULL, NULL, NULL, NULL)))
 		{
 
 			mLog->Error("Can't create window (CreateWindowEx)");
@@ -171,11 +171,10 @@ namespace o2
 
 	void Application::CheckCursorInfiniteMode()
 	{
-		mCursorPositionCorrecting = true;
-
 		int threshold = 10;
-		POINT p;
+		POINT p, lp;
 		GetCursorPos(&p);
+		lp = p;
 
 		Vec2I resolution = GetScreenResolution();
 
@@ -191,7 +190,8 @@ namespace o2
 
 		SetCursorPos(p.x, p.y);
 
-		mCursorPositionCorrecting = false;
+		if (p.x != lp.x || p.y != lp.y)
+			mCursorCorrectionDelta = Vec2F(lp.x - p.x, lp.y - p.y);
 	}
 
 	LogStream* Application::GetLog() const
@@ -291,27 +291,33 @@ namespace o2
 		switch (uMsg)
 		{
 			case WM_LBUTTONDOWN:
+			SetCapture(app->mHWnd);
 			app->mInput->CursorPressed(cursorPos);
 			break;
 
 			case WM_LBUTTONUP:
 			app->mInput->CursorReleased();
+			ReleaseCapture();
 			break;
 
 			case WM_RBUTTONDOWN:
+			SetCapture(app->mHWnd);
 			app->mInput->AltCursorPressed(cursorPos);
 			break;
 
 			case WM_RBUTTONUP:
 			app->mInput->AltCursorReleased();
+			ReleaseCapture();
 			break;
 
 			case WM_MBUTTONDOWN:
+			SetCapture(app->mHWnd);
 			app->mInput->Alt2CursorPressed(cursorPos);
 			break;
 
 			case WM_MBUTTONUP:
 			app->mInput->Alt2CursorReleased();
+			ReleaseCapture();
 			break;
 
 			case WM_KEYDOWN:
@@ -324,7 +330,9 @@ namespace o2
 			break;
 
 			case WM_MOUSEMOVE:
-			app->mInput->SetCursorPos(cursorPos, 0, !app->mCursorPositionCorrecting);
+			app->mInput->SetCursorPos(cursorPos, 0);
+			app->mInput->GetCursor()->delta -= app->mCursorCorrectionDelta;
+			app->mCursorCorrectionDelta = Vec2F();
 			break;
 
 			case WM_MOUSEWHEEL:
@@ -399,7 +407,7 @@ namespace o2
 
 			mWindowed = true;
 
-			RECT rt = { mWindowedPos.x, mWindowedPos.y, mWindowedPos.x + mWindowedSize.x, mWindowedPos.y + mWindowedSize.y };
+			RECT rt ={ mWindowedPos.x, mWindowedPos.y, mWindowedPos.x + mWindowedSize.x, mWindowedPos.y + mWindowedSize.y };
 			AdjustWindowRect(&rt, mWndStyle, false);
 			SetWindowPos(mHWnd, HWND_NOTOPMOST, mWindowedPos.x, mWindowedPos.y,
 						 mWindowedSize.x, mWindowedSize.y, SWP_SHOWWINDOW);
@@ -531,7 +539,7 @@ namespace o2
 
 	void Application::SetCursor(CursorType type)
 	{
-		LPSTR cursorsIds[] = { IDC_APPSTARTING, IDC_ARROW, IDC_CROSS, IDC_HAND, IDC_HELP, IDC_IBEAM, IDC_ICON, IDC_NO,
+		LPSTR cursorsIds[] ={ IDC_APPSTARTING, IDC_ARROW, IDC_CROSS, IDC_HAND, IDC_HELP, IDC_IBEAM, IDC_ICON, IDC_NO,
 			IDC_SIZEALL, IDC_SIZENESW, IDC_SIZENS, IDC_SIZENWSE, IDC_SIZEWE, IDC_UPARROW, IDC_WAIT };
 
 		mCurrentCursor = LoadCursor(NULL, cursorsIds[(int)type]);

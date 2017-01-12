@@ -119,7 +119,7 @@ namespace Editor
 			float px = mPreviewImage->layout.GetWidth()/mPreviewImage->GetImage()->GetOriginalSize().x;
 			mBordersSmoothValue.left += cursor.delta.x/px;
 
-			if (mBorderProperty->GetCommonValue().left != Math::FloorToInt(mBordersSmoothValue.left))
+			if (mBorderProperty->GetCommonValue().left != (int)Math::Round(mBordersSmoothValue.left))
 				UpdateBordersValue();
 		};
 	}
@@ -142,7 +142,7 @@ namespace Editor
 			float px = mPreviewImage->layout.GetWidth()/mPreviewImage->GetImage()->GetOriginalSize().x;
 			mBordersSmoothValue.right -= cursor.delta.x/px;
 
-			if (mBorderProperty->GetCommonValue().right != Math::FloorToInt(mBordersSmoothValue.right))
+			if (mBorderProperty->GetCommonValue().right != (int)Math::Round(mBordersSmoothValue.right))
 				UpdateBordersValue();
 		};
 	}
@@ -165,7 +165,7 @@ namespace Editor
 			float px = mPreviewImage->layout.GetHeight()/mPreviewImage->GetImage()->GetOriginalSize().y;
 			mBordersSmoothValue.top += cursor.delta.y/px;
 
-			if (mBorderProperty->GetCommonValue().top != Math::FloorToInt(mBordersSmoothValue.top))
+			if (mBorderProperty->GetCommonValue().top != (int)Math::Round(mBordersSmoothValue.top))
 				UpdateBordersValue();
 		};
 	}
@@ -188,7 +188,7 @@ namespace Editor
 			float px = mPreviewImage->layout.GetHeight()/mPreviewImage->GetImage()->GetOriginalSize().y;
 			mBordersSmoothValue.bottom -= cursor.delta.y/px;
 
-			if (mBorderProperty->GetCommonValue().bottom != Math::FloorToInt(mBordersSmoothValue.bottom))
+			if (mBorderProperty->GetCommonValue().bottom != (int)Math::Round(mBordersSmoothValue.bottom))
 				UpdateBordersValue();
 		};
 	}
@@ -199,7 +199,7 @@ namespace Editor
 		auto nameLabel = borderPropertyPair.mSecond->FindChild<UILabel>();
 		nameLabel->text = "Slice border";
 		mBorderProperty = (BorderIProperty*)borderPropertyPair.mFirst;
-		mBorderProperty->onChanged += [&]() { UpdateBordersAnchors(); mBordersSmoothValue = mBorderProperty->GetCommonValue(); };
+		mBorderProperty->onChanged += [&]() { UpdateBordersAnchors(); /*mBordersSmoothValue = mBorderProperty->GetCommonValue();*/ };
 		mContent->AddChild(borderPropertyPair.mSecond);
 
 		auto modePropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(SpriteMode));

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Events/KeyboardEventsListener.h"
 #include "PropertiesWindow/Properties/IPropertyField.h"
 #include "Utils/CursorEventsArea.h"
 #include "Utils/Property.h"
@@ -18,7 +19,7 @@ namespace Editor
 	// ----------------------------
 	// Editor float vector property
 	// ----------------------------
-	class Vec2FProperty: public IPropertyField
+	class Vec2FProperty: public IPropertyField, public KeyboardEventsListener
 	{
 	public:
 		// Default constructor
@@ -111,5 +112,8 @@ namespace Editor
 
 		// Calls when drag handle was moved and changes the property value
 		void OnYDragHandleMoved(const Input::Cursor& cursor);
+
+		// Calls when key was released
+		void OnKeyReleased(const Input::Key& key);
 	};
 }

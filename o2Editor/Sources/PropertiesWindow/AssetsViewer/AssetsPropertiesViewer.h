@@ -39,12 +39,6 @@ namespace Editor
 		typedef Vector<Asset*> AssetsVec;
 		typedef Dictionary<const Type*, AssetPropertiesViewersVec> TypeAssetViewersDict;
 
-		UIWidget*                 mHeadWidget = nullptr;         // Asset head widget
-		UIImage*                  mAssetIcon = nullptr;          // Asset icon
-		UIEditBox*                mAssetNameEdit = nullptr;      // Asset name edit box
-		UIButton*                 mRemoveButton = nullptr;       // Remove asset button
-		UILabel*                  mAssetPathLabel = nullptr;     // Asset path label
-
 		AssetsVec                 mTargetAssets;                 // Current target assets
 
 		IAssetPropertiesViewer*   mCurrentViewer = nullptr;      // Current asset viewer
@@ -53,12 +47,6 @@ namespace Editor
 	protected:
 		// Sets target objects
 		void SetTargets(const Vector<IObject*> targets);
-
-		// Tries to get common asset name and inserts to name edit box
-		void UpdateCommonName();
-
-		// Tries to get commin assets icon and sets as selected asset icon
-		void UpdateCommonIcon();
 
 		// Enable viewer event function
 		void OnEnabled();

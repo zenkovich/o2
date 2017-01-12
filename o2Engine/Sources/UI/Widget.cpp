@@ -699,7 +699,7 @@ namespace o2
 		UpdateLayersLayouts();
 
 		if (withChildren)
-			UpdateChildrenLayouts(forcible);
+			UpdateChildrenLayouts(true);
 	}
 
 	float UIWidget::GetMinWidthWithChildren() const

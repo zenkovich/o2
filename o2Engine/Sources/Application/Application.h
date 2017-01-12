@@ -152,7 +152,7 @@ namespace o2
 		bool           mReady;         // Is all systems is ready
 
 		bool           mCursorInfiniteModeEnabled; // Is cursor infinite mode enabled
-		bool           mCursorPositionCorrecting;  // True if cursor position corrected and delta will not apply
+		Vec2F          mCursorCorrectionDelta;     // Cursor corrections delta - result of infinite cursors offset
 
 	protected:
 		// Calling on updating

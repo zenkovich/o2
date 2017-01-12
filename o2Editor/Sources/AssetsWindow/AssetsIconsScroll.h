@@ -138,6 +138,8 @@ namespace Editor
 						   
 		bool               mNeedRebuildAssets = false;  // Is assets needs to rebuild
 
+		bool               mChangePropertiesTargetsFromThis = false;
+
 	protected:
 		// Calls when assets selection was changed
 		void OnAssetsSelected();

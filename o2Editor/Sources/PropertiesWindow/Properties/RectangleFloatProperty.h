@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Events/KeyboardEventsListener.h"
 #include "PropertiesWindow/Properties/IPropertyField.h"
 #include "Utils/CursorEventsArea.h"
 #include "Utils/Property.h"
@@ -18,7 +19,7 @@ namespace Editor
 	// -------------------------------
 	// Editor float rectangle property
 	// -------------------------------
-	class RectFProperty: public IPropertyField
+	class RectFProperty: public IPropertyField, public KeyboardEventsListener
 	{
 	public:
 		// Default constructor
@@ -153,5 +154,8 @@ namespace Editor
 
 		// Calls when drag handle was moved and changes the property value
 		void OnBottomDragHandleMoved(const Input::Cursor& cursor);
+
+		// Calls when key was released
+		void OnKeyReleased(const Input::Key& key);
 	};
 }
