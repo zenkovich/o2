@@ -86,6 +86,9 @@ namespace o2
 		// Fill image with color
 		void Fill(const Color4& color);
 
+		// Fills rect with color
+		void FillRect(int rtLeft, int rtTop, int rtRight, int rtBottom, const Color4& color);
+
 		// Apply blur effect
 		void Blur(float radius);
 

@@ -27,7 +27,7 @@ namespace o2
 
 		LoadAssetTypes();
 
-		if (ASSETS_PREBUILDING_ENABLE && false)
+		if (ASSETS_PREBUILDING_ENABLE)
 			RebuildAssets();
 		else
 			LoadAssetsTree();
@@ -390,4 +390,28 @@ namespace o2
 	{
 		INITIALIZE_GETTER(Assets, assetsPath, GetAssetsPath);
 	}
+
+	Assets::AssetCache* Assets::FindAssetCache(const String& path)
+	{
+		for (auto cache : mCachedAssets)
+			if (cache->path == path)
+				return cache;
+
+		return nullptr;
+	}
+
+	Assets::AssetCache* Assets::FindAssetCache(UID id)
+	{
+		for (auto cache : mCachedAssets)
+			if (cache->id == id)
+				return cache;
+
+		return nullptr;
+	}
+
+	Assets::AssetCache::~AssetCache()
+	{
+		delete asset;
+	}
+
 }

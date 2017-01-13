@@ -313,16 +313,16 @@ namespace o2
 
 	void Sprite::LoadFromImage(const String& imagePath)
 	{
-		if (o2Assets.IsAssetExist(imagePath))
+		ImageAssetRef assetRef = o2Assets.GetAsset<ImageAsset>(imagePath);
+		if (assetRef)
 		{
-			ImageAsset image(imagePath);
-			mMesh->mTexture = TextureRef(image.GetAtlasId(), image.GetAtlasPage());
-			mAtlasAssetId = image.GetAtlasId();
-			mImageAssetId = image.GetAssetId();
-			mTextureSrcRect = image.GetAtlasRect();
+			mMesh->mTexture = TextureRef(assetRef->GetAtlasId(), assetRef->GetAtlasPage());
+			mAtlasAssetId = assetRef->GetAtlasId();
+			mImageAssetId = assetRef->GetAssetId();
+			mTextureSrcRect = assetRef->GetAtlasRect();
 			mImageName = imagePath;
-			mSlices = image.GetMeta()->mSliceBorder;
-			SetMode(image.GetMeta()->mDefaultMode);
+			mSlices = assetRef->GetMeta()->mSliceBorder;
+			SetMode(assetRef->GetMeta()->mDefaultMode);
 			SetSize(mTextureSrcRect.Size());
 		}
 		else o2Debug.LogWarning("Can't load sprite from image by path (%s): image isn't exist", imagePath);
@@ -330,19 +330,20 @@ namespace o2
 
 	void Sprite::LoadFromImage(UID imageId)
 	{
-		if (o2Assets.IsAssetExist(imageId))
+		ImageAssetRef assetRef = o2Assets.GetAsset<ImageAsset>(imageId);
+		if (assetRef)
 		{
 			ImageAsset image(imageId);
-			mMesh->mTexture = TextureRef(image.GetAtlasId(), image.GetAtlasPage());
-			mAtlasAssetId = image.GetAtlasId();
-			mImageAssetId = image.GetAssetId();
-			mTextureSrcRect = image.GetAtlasRect();
-			mSlices = image.GetMeta()->mSliceBorder;
-			mImageName = image.GetPath();
-			SetMode(image.GetMeta()->mDefaultMode);
+			mMesh->mTexture = TextureRef(assetRef->GetAtlasId(), assetRef->GetAtlasPage());
+			mAtlasAssetId = assetRef->GetAtlasId();
+			mImageAssetId = assetRef->GetAssetId();
+			mTextureSrcRect = assetRef->GetAtlasRect();
+			mSlices = assetRef->GetMeta()->mSliceBorder;
+			mImageName = assetRef->GetPath();
+			SetMode(assetRef->GetMeta()->mDefaultMode);
 			SetSize(mTextureSrcRect.Size());
 		}
-		else o2Debug.LogWarning("Can't create sprite from image by id (%i): image isn't exist", imageId);
+		else o2Debug.LogWarning("Can't create sprite from image by id (%s): image isn't exist", imageId.ToString());
 	}
 
 	void Sprite::LoadMonoColor(const Color4& color)

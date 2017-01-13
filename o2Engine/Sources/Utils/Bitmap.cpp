@@ -270,6 +270,19 @@ namespace o2
 			memcpy(mData + x*curbpp, &colrDw, curbpp);
 	}
 
+	void Bitmap::FillRect(int rtLeft, int rtTop, int rtRight, int rtBottom, const Color4& color)
+	{
+		unsigned long colrDw = color.ARGB();
+		int bpp[] ={ 0, 4 };
+		int curbpp = bpp[(int)mFormat];
+
+		for (int x = Math::Max(rtLeft, 0); x < Math::Min(mSize.x, rtRight); x++)
+		{
+			for (int y = Math::Max(rtTop, 0); y < Math::Min(mSize.y, rtBottom); y++)
+				memcpy(&mData[(y*mSize.x + x)*curbpp], &colrDw, curbpp);
+		}
+	}
+
 	void Bitmap::Blur(float radius)
 	{
 		int mapSize = Math::CeilToInt(radius);
@@ -370,8 +383,6 @@ namespace o2
 							int dst = fx*fx + fy*fy;
 							sqrDist += dst;
 							count++;
-							// 							if (dst < sqrDist) 
-							// 								sqrDist = dst;
 						}
 					}
 				}

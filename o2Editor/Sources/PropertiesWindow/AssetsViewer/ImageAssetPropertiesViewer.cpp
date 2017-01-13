@@ -12,6 +12,7 @@
 #include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
 #include "Utils/Reflection/Reflection.h"
+#include "Utils/Bitmap.h"
 
 namespace Editor
 {
@@ -85,8 +86,8 @@ namespace Editor
 		mPreviewImageContent->AddChild(separatorImg);
 
 		mPreviewImageBack = mnew UIImage();
+		mPreviewImageBack->SetImage(CreateGridSprite());
 		mPreviewImageBack->layout = UIWidgetLayout::BothStretch();
-		mPreviewImageBack->GetImage()->color = Color4(100, 100, 100, 255);
 		mPreviewImageContent->AddChild(mPreviewImageBack);
 
 		mPreviewImage = mnew UIImage();
@@ -339,6 +340,22 @@ namespace Editor
 			target->SetAtlasId(id);
 	}
 
+	Sprite* ImageAssetPropertiesViewer::CreateGridSprite()
+	{
+		Vec2I size(20, 20);
+		Color4 c1 = Color4::White();
+		Color4 c2(200, 200, 200, 255);
+
+		Bitmap bmp(Bitmap::Format::R8G8B8A8, size);
+		bmp.Fill(c1);
+		bmp.FillRect(0, 0, 10, 10, c2);
+		bmp.FillRect(10, 10, 20, 20, c2);
+
+		Sprite* res = mnew Sprite(&bmp);
+		res->SetMode(SpriteMode::Tiled);
+		return res;
+	}
+
 }
  
 CLASS_META(Editor::ImageAssetPropertiesViewer)
@@ -371,12 +388,17 @@ CLASS_META(Editor::ImageAssetPropertiesViewer)
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PROTECTED_FUNCTION(void, InitializeImagePreview);
+	PROTECTED_FUNCTION(void, InitializeLeftHandle);
+	PROTECTED_FUNCTION(void, InitializeRightHandle);
+	PROTECTED_FUNCTION(void, InitializeTopHandle);
+	PROTECTED_FUNCTION(void, InitializeBottomHandle);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 	PROTECTED_FUNCTION(void, FitImage);
 	PROTECTED_FUNCTION(void, UpdateBordersAnchors);
 	PROTECTED_FUNCTION(void, UpdateBordersValue);
 	PROTECTED_FUNCTION(void, SetupAtlasProperty);
 	PROTECTED_FUNCTION(void, OnAtlasPropertyChanged);
+	PROTECTED_FUNCTION(Sprite*, CreateGridSprite);
 }
 END_META;
  

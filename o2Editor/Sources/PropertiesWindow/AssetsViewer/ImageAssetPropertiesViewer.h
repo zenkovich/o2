@@ -9,9 +9,10 @@ using namespace o2;
 
 namespace o2
 {
-	class UIVerticalLayout;
-	class UIImage;
 	class ImageAsset;
+	class Sprite;
+	class UIImage;
+	class UIVerticalLayout;
 }
 
 namespace Editor
@@ -101,5 +102,8 @@ namespace Editor
 
 		// Calls when atlas property was changed
 		void OnAtlasPropertyChanged();
+
+		// Creates grid sprite
+		Sprite* CreateGridSprite();
 	};
 }

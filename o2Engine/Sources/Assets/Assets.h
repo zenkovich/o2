@@ -17,6 +17,9 @@ namespace o2
 	class LogStream;
 	class AssetsBuilder;
 
+	template<typename _asset_type>
+	class AssetRef;
+
 	// ----------------
 	// Assets utilities
 	// ----------------
@@ -76,6 +79,14 @@ namespace o2
 
 		// Loads asset by info
 		Asset* LoadAsset(const AssetInfo& info);
+
+		// Returns asset reference by path
+		template<typename _asset_type>
+		AssetRef<_asset_type> GetAsset(const String& path);
+
+		// Returns asset reference by id
+		template<typename _asset_type>
+		AssetRef<_asset_type> GetAsset(UID id);
 
 		// Returns true if asset exist by path
 		bool IsAssetExist(const String& path) const;
@@ -145,18 +156,32 @@ namespace o2
 
 		// Makes unique asset name from first path variant
 		String MakeUniqueAssetName(const String& path);
-		
+
 		// Returns random asset id
 		static UID GetRandomAssetId();
 
 	protected:
-		String         mAssetsFolderPath; // Project assets path
-		String         mDataFolderPath;   // Project data (builded assets) path
-		AssetTree      mAssetsTree;       // Assets information tree
-		LogStream*     mLog;              // Log stream
-		AssetsBuilder* mAssetsBuilder;    // Assets builder
-		TypesExtsDict  mAssetsTypes;      // Assets types and extensions dictionary
-		const Type*    mStdAssetType;     // Standard asset type
+		struct AssetCache
+		{
+			Asset* asset;
+			String path;
+			UID    id;
+			int    referencesCount;
+
+			~AssetCache();
+		};
+		typedef Vector<AssetCache*> AssetsCachesVec;
+
+		String          mAssetsFolderPath; // Project assets path
+		String          mDataFolderPath;   // Project data (builded assets) path
+
+		AssetTree       mAssetsTree;       // Assets information tree
+		LogStream*      mLog;              // Log stream
+		AssetsBuilder*  mAssetsBuilder;    // Assets builder
+		TypesExtsDict   mAssetsTypes;      // Assets types and extensions dictionary
+		const Type*     mStdAssetType;     // Standard asset type
+
+		AssetsCachesVec mCachedAssets;     // Current cached assets
 
 	protected:
 		// Loads asset infos
@@ -168,11 +193,22 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
+		// Returns asset cache by path
+		AssetCache* FindAssetCache(const String& path);
+
+		// Returns asset cache by id
+		AssetCache* FindAssetCache(UID id);
+
 		friend class Asset;
 		friend class FolderAsset;
 	};
 
+}
 
+#include "Assets/AssetRef.h"
+
+namespace o2
+{
 	template<typename _asset_type>
 	_asset_type* Assets::CreateAsset()
 	{
@@ -190,4 +226,55 @@ namespace o2
 	{
 		return mnew _asset_type(id);
 	}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type> Assets::GetAsset(const String& path)
+	{
+		auto cached = FindAssetCache(path);
+
+		if (!cached)
+		{
+			if (!IsAssetExist(path))
+				return AssetRef<_asset_type>();
+
+			_asset_type* asset = mnew _asset_type();
+			asset->Load(path);
+
+			cached = mnew AssetCache();
+			cached->asset = asset;
+			cached->path = path;
+			cached->id = asset->GetAssetId();
+			cached->referencesCount = 0;
+
+			mCachedAssets.Add(cached);
+		}
+
+		return AssetRef<_asset_type>((_asset_type*)cached->asset, &cached->referencesCount);
+	}
+
+	template<typename _asset_type>
+	AssetRef<_asset_type> Assets::GetAsset(UID id)
+	{
+		auto cached = FindAssetCache(id);
+
+		if (!cached)
+		{
+			if (!IsAssetExist(id))
+				return AssetRef<_asset_type>();
+
+			_asset_type* asset = mnew _asset_type();
+			asset->Load(id);
+
+			cached = mnew AssetCache();
+			cached->asset = asset;
+			cached->path = asset->GetPath();
+			cached->id = id;
+			cached->referencesCount = 0;
+
+			mCachedAssets.Add(cached);
+		}
+
+		return AssetRef<_asset_type>((_asset_type*)cached->asset, &cached->referencesCount);
+	}
+
 }

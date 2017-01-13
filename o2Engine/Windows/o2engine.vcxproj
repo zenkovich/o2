@@ -145,6 +145,7 @@
     <ClInclude Include="..\Sources\Assets\AnimationAsset.h" />
     <ClInclude Include="..\Sources\Assets\Asset.h" />
     <ClInclude Include="..\Sources\Assets\AssetInfo.h" />
+    <ClInclude Include="..\Sources\Assets\AssetRef.h" />
     <ClInclude Include="..\Sources\Assets\Assets.h" />
     <ClInclude Include="..\Sources\Assets\AssetsTree.h" />
     <ClInclude Include="..\Sources\Assets\AtlasAsset.h" />

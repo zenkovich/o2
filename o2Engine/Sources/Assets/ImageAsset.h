@@ -4,6 +4,7 @@
 #include "Render/Sprite.h"
 #include "Render/TextureRef.h"
 #include "Utils/Bitmap.h"
+#include "Assets/AssetRef.h"
 
 namespace o2
 {
@@ -162,4 +163,6 @@ namespace o2
 
 		friend class AtlasAsset;
 	};
+
+	typedef AssetRef<ImageAsset> ImageAssetRef;
 }

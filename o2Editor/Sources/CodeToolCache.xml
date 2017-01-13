@@ -1,7 +1,143 @@
 <?xml version="1.0"?>
 <files>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/AssetsIconsScroll.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="UIAssetsIconsScrollArea" fullname="Editor::UIAssetsIconsScrollArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;UIAssetIcon*&gt;" newDef="AssetsIconsVec" />
+								<typedef what="Vector&lt;Sprite*&gt;" newDef="SpritesVec" />
+								<typedef what="Dictionary&lt;String, AssetsIconsVec&gt;" newDef="IconArrsDict" />
+								<typedef what="Vector&lt;Pair&lt;UID, String&gt;&gt;" newDef="AssetIdPathVec" />
+								<typedef what="Vector&lt;Actor*&gt;" newDef="ActorsVec" />
+								<typedef what="Vector&lt;Asset*&gt;" newDef="AssetsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="UIScrollArea" protection="0" />
+								<class name="DragDropArea" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+								<class name="ISelectableDragableObjectsGroup" protection="1" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/AssetsWindow.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="AssetsWindow" fullname="Editor::AssetsWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;Pair&lt;UID, String&gt;&gt;" newDef="AssetIdPathVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="IEditorWindow" protection="0" />
+								<class name="Singleton&lt;AssetsWindow&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/FoldersTree.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="UIAssetsFoldersTree" fullname="Editor::UIAssetsFoldersTree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/UIAssetIcon.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="UIAssetIcon" fullname="Editor::UIAssetIcon" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWidget" protection="0" />
+								<class name="SelectableDragableObject" protection="0" />
+								<class name="DragDropArea" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/ActorsTransform.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -31,7 +167,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/CreateActors.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -61,7 +197,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/DeleteActors.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -100,7 +236,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/EnableAction.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -130,7 +266,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/IAction.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -155,7 +291,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/LockAction.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -185,7 +321,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/ReparentActors.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -222,7 +358,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/Selection.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -251,640 +387,8 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/FrameTool.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="FrameTool" fullname="Editor::FrameTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;ActorTransform&gt;" newDef="ActorsTransformsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="SelectionTool" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/IEditorTool.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IEditTool" fullname="Editor::IEditTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/MoveTool.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="MoveTool" fullname="Editor::MoveTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;ActorTransform&gt;" newDef="ActorsTransformsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="SelectionTool" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/RotateTool.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="RotateTool" fullname="Editor::RotateTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;ActorTransform&gt;" newDef="ActorsTransformsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="SelectionTool" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/ScaleTool.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ScaleTool" fullname="Editor::ScaleTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;ActorTransform&gt;" newDef="ActorsTransformsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="SelectionTool" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/SelectionTool.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="SelectionTool" fullname="Editor::SelectionTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;Actor*&gt;" newDef="ActorsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="IEditTool" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/ToolsPanel.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ToolsPanel" fullname="Editor::ToolsPanel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Singleton&lt;ToolsPanel&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIStyle/BasicUIStyle.h">
-		<date year="2016" month="6" day="18" hour="22" minute="18" second="5" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="BasicUIStyleBuilder" fullname="o2::BasicUIStyleBuilder" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/IEditorWindow.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IEditorWindow" fullname="Editor::IEditorWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/UIDockWindowPlace.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="UIDockWindowPlace" fullname="Editor::UIDockWindowPlace" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="o2::UIWidget" protection="0" />
-								<class name="DrawableCursorEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/UIDockableWindow.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="UIDockableWindow" fullname="Editor::UIDockableWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWindow" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/WindowsLayout.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="WindowsLayout" fullname="Editor::WindowsLayout" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="WindowDockPlace" fullname="Editor::WindowsLayout::WindowDockPlace" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ISerializable" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/LogWindow/LogWindow.h">
-		<date year="2016" month="10" day="4" hour="8" minute="14" second="0" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="LogWindow" fullname="Editor::LogWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="LogMessage" fullname="Editor::LogWindow::LogMessage" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-							</sections>
-							<typedefs>
-								<typedef what="Vector&lt;LogMessage&gt;" newDef="MessagesVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="IEditorWindow" protection="0" />
-								<class name="LogStream" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorAnimationViewer.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="DefaultActorAnimationViewer" fullname="Editor::DefaultActorAnimationViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IActorAnimationViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorAnimationViewer.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IActorAnimationViewer" fullname="Editor::IActorAnimationViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/IObjectPropertiesViewer.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IObjectPropertiesViewer" fullname="Editor::IObjectPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/FieldPropertiesInfo.h">
-		<date year="2016" month="7" day="17" hour="14" minute="8" second="25" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="FieldPropertiesInfo" fullname="Editor::FieldPropertiesInfo" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses />
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneDragHandle.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="SceneDragHandle" fullname="Editor::SceneDragHandle" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses />
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneEditWidget.h">
-		<date year="2016" month="6" day="13" hour="10" minute="50" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="SceneEditWidget" fullname="Editor::SceneEditWidget" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneWindow.h">
-		<date year="2016" month="10" day="4" hour="8" minute="15" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="SceneWindow" fullname="Editor::SceneWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IEditorWindow" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/TreeWindow/TreeWindow.h">
-		<date year="2016" month="10" day="4" hour="8" minute="15" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="TreeWindow" fullname="Editor::TreeWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IEditorWindow" protection="0" />
-								<class name="Singleton&lt;TreeWindow&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/MenuPanel.h">
-		<date year="2016" month="10" day="7" hour="0" minute="35" second="57" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="MenuPanel" fullname="Editor::MenuPanel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Singleton&lt;MenuPanel&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/EditorApplication.h">
-		<date year="2016" month="10" day="8" hour="1" minute="24" second="44" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -915,80 +419,8 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/WindowsManager.h">
-		<date year="2016" month="10" day="9" hour="21" minute="20" second="55" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="WindowsManager" fullname="Editor::WindowsManager" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;IEditorWindow*&gt;" newDef="EditorWindowsVec" />
-								<typedef what="Dictionary&lt;String, WindowsLayout&gt;" newDef="WndLayoutsDict" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="Singleton&lt;WindowsManager&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h">
-		<date year="2016" month="10" day="22" hour="15" minute="4" second="29" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="DefaultActorHeaderViewer" fullname="Editor::DefaultActorHeaderViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IActorHeaderViewer" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings>
-						<typedef name="o2" />
-					</usings>
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/ColorProperty.h">
-		<date year="2015" month="9" day="20" hour="17" minute="20" second="18" />
-		<globalNamespace name="" fullname="">
-			<sections />
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/EditorConfig.h">
-		<date year="2016" month="12" day="4" hour="20" minute="18" second="49" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1037,24 +469,18 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/FoldersTree.h">
-		<date year="2016" month="12" day="10" hour="12" minute="33" second="23" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/MenuPanel.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="UIAssetsFoldersTree" fullname="Editor::UIAssetsFoldersTree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="MenuPanel" fullname="Editor::MenuPanel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs />
 							<usings />
 							<baseClasses>
-								<class name="UIWidget" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
+								<class name="Singleton&lt;MenuPanel&gt;" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -1068,8 +494,8 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/UIAssetIcon.h">
-		<date year="2016" month="12" day="14" hour="23" minute="15" second="30" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/FrameTool.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1079,54 +505,14 @@
 				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="UIAssetIcon" fullname="Editor::UIAssetIcon" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UIWidget" protection="0" />
-								<class name="SelectableDragableObject" protection="0" />
-								<class name="DragDropArea" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/TreeWindow/ActorsTree.h">
-		<date year="2016" month="12" day="18" hour="14" minute="56" second="2" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="UIActorsTree" fullname="Editor::UIActorsTree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="FrameTool" fullname="Editor::FrameTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs>
-								<typedef what="Vector&lt;Actor*&gt;" newDef="ActorsVec" />
+								<typedef what="Vector&lt;ActorTransform&gt;" newDef="ActorsTransformsVec" />
 							</typedefs>
 							<usings />
 							<baseClasses>
-								<class name="UITree" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="UIActorsTreeNode" fullname="Editor::UIActorsTreeNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="UITreeNode" protection="0" />
+								<class name="SelectionTool" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -1140,8 +526,8 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/AssetsWindow.h">
-		<date year="2016" month="12" day="20" hour="20" minute="48" second="6" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/IEditorTool.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1151,68 +537,7 @@
 				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="AssetsWindow" fullname="Editor::AssetsWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;Pair&lt;UID, String&gt;&gt;" newDef="AssetIdPathVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="IEditorWindow" protection="0" />
-								<class name="Singleton&lt;AssetsWindow&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/DefaultAssetPropertiesViewer.h">
-		<date year="2016" month="12" day="21" hour="0" minute="24" second="5" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="DefaultAssetPropertiesViewer" fullname="Editor::DefaultAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IAssetPropertiesViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h">
-		<date year="2016" month="12" day="20" hour="22" minute="1" second="35" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IAssetPropertiesViewer" fullname="Editor::IAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="IEditTool" fullname="Editor::IEditTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs />
 							<usings />
@@ -1231,16 +556,175 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/EnumMaskProperty.h">
-		<date year="2015" month="9" day="20" hour="17" minute="20" second="18" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/MoveTool.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
-			<sections />
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="MoveTool" fullname="Editor::MoveTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;ActorTransform&gt;" newDef="ActorsTransformsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="SelectionTool" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/RotateTool.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="RotateTool" fullname="Editor::RotateTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;ActorTransform&gt;" newDef="ActorsTransformsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="SelectionTool" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/ScaleTool.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ScaleTool" fullname="Editor::ScaleTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;ActorTransform&gt;" newDef="ActorsTransformsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="SelectionTool" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/SelectionTool.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="SelectionTool" fullname="Editor::SelectionTool" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;Actor*&gt;" newDef="ActorsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="IEditTool" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/ToolsPanel.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ToolsPanel" fullname="Editor::ToolsPanel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Singleton&lt;ToolsPanel&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIStyle/BasicUIStyle.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="BasicUIStyleBuilder" fullname="o2::BasicUIStyleBuilder" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IObject" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
 			<typedefs />
 			<usings />
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIStyle/EditorUIStyle.h">
-		<date year="2016" month="12" day="31" hour="1" minute="45" second="54" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1264,30 +748,17 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneEditScreen.h">
-		<date year="2016" month="12" day="31" hour="12" minute="1" second="45" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/IEditorWindow.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="SceneEditScreen" fullname="Editor::SceneEditScreen" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="IEditorWindow" fullname="Editor::IEditorWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;Actor*&gt;" newDef="ActorsVec" />
-								<typedef what="Vector&lt;DrawableComponent*&gt;" newDef="DrawableComponentsVec" />
-								<typedef what="Vector&lt;SceneDragHandle*&gt;" newDef="DragHandlesVec" />
-								<typedef what="Vector&lt;IEditTool*&gt;" newDef="ToolsVec" />
-							</typedefs>
+							<typedefs />
 							<usings />
 							<baseClasses>
-								<class name="DragDropArea" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-								<class name="Singleton&lt;SceneEditScreen&gt;" protection="1" />
 								<class name="IObject" protection="0" />
 							</baseClasses>
 						</section>
@@ -1302,8 +773,171 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/UIDockWindowPlace.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="UIDockWindowPlace" fullname="Editor::UIDockWindowPlace" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="o2::UIWidget" protection="0" />
+								<class name="DrawableCursorEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/UIDockableWindow.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="UIDockableWindow" fullname="Editor::UIDockableWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UIWindow" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/WindowsLayout.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="WindowsLayout" fullname="Editor::WindowsLayout" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="WindowDockPlace" fullname="Editor::WindowsLayout::WindowDockPlace" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/WindowsManager.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="WindowsManager" fullname="Editor::WindowsManager" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;IEditorWindow*&gt;" newDef="EditorWindowsVec" />
+								<typedef what="Dictionary&lt;String, WindowsLayout&gt;" newDef="WndLayoutsDict" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="Singleton&lt;WindowsManager&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/LogWindow/LogWindow.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="LogWindow" fullname="Editor::LogWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="LogMessage" fullname="Editor::LogWindow::LogMessage" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Vector&lt;LogMessage&gt;" newDef="MessagesVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="IEditorWindow" protection="0" />
+								<class name="LogStream" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/ActorPropertiesViewer.h">
-		<date year="2017" month="1" day="1" hour="21" minute="17" second="13" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1334,8 +968,31 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorAnimationViewer.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="DefaultActorAnimationViewer" fullname="Editor::DefaultActorAnimationViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IActorAnimationViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h">
-		<date year="2017" month="1" day="1" hour="21" minute="17" second="13" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1357,8 +1014,92 @@
 			<usings />
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="DefaultActorHeaderViewer" fullname="Editor::DefaultActorHeaderViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IActorHeaderViewer" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings>
+						<typedef name="o2" />
+					</usings>
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorTransformViewer.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="DefaultActorTransformViewer" fullname="Editor::DefaultActorTransformViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IActorTransformViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorAnimationViewer.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="IActorAnimationViewer" fullname="Editor::IActorAnimationViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IObject" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorComponentViewer.h">
-		<date year="2017" month="1" day="1" hour="21" minute="17" second="13" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1388,7 +1129,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorHeaderViewer.h">
-		<date year="2017" month="1" day="4" hour="19" minute="49" second="9" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1418,7 +1159,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorTransformViewer.h">
-		<date year="2017" month="1" day="4" hour="19" minute="49" second="9" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1447,18 +1188,57 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorTransformViewer.h">
-		<date year="2017" month="1" day="4" hour="20" minute="43" second="8" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/AssetsPropertiesViewer.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="DefaultActorTransformViewer" fullname="Editor::DefaultActorTransformViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="AssetsPropertiesViewer" fullname="Editor::AssetsPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;IAssetPropertiesViewer*&gt;" newDef="AssetPropertiesViewersVec" />
+								<typedef what="Vector&lt;Asset*&gt;" newDef="AssetsVec" />
+								<typedef what="Dictionary&lt;const Type*, AssetPropertiesViewersVec&gt;" newDef="TypeAssetViewersDict" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="IObjectPropertiesViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/DefaultAssetPropertiesViewer.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="DefaultAssetPropertiesViewer" fullname="Editor::DefaultAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs />
 							<usings />
 							<baseClasses>
-								<class name="IActorTransformViewer" protection="0" />
+								<class name="IAssetPropertiesViewer" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -1470,8 +1250,8 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/ImageAssetPropertiesViewer.h">
-		<date year="2017" month="1" day="6" hour="15" minute="39" second="13" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1481,12 +1261,42 @@
 				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="ImageAssetPropertiesViewer" fullname="Editor::ImageAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="IAssetPropertiesViewer" fullname="Editor::IAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs />
 							<usings />
 							<baseClasses>
-								<class name="IAssetPropertiesViewer" protection="0" />
+								<class name="IObject" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/IObjectPropertiesViewer.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="IObjectPropertiesViewer" fullname="Editor::IObjectPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IObject" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -1501,7 +1311,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/ActorProperty.h">
-		<date year="2017" month="1" day="8" hour="19" minute="57" second="15" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1530,8 +1340,43 @@
 			<usings />
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/AssetProperty.h">
+		<date year="2017" month="1" day="12" hour="18" minute="58" second="6" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="IAssetProperty" fullname="Editor::IAssetProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+								<class name="DragDropArea" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="AssetProperty" fullname="Editor::AssetProperty" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAssetProperty" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/BooleanProperty.h">
-		<date year="2017" month="1" day="8" hour="19" minute="57" second="14" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1561,7 +1406,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/BorderFloatProperty.h">
-		<date year="2017" month="1" day="8" hour="20" minute="14" second="55" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1591,7 +1436,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/BorderIntProperty.h">
-		<date year="2017" month="1" day="8" hour="20" minute="14" second="55" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1620,8 +1465,16 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/ColorProperty.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections />
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/ComponentProperty.h">
-		<date year="2017" month="1" day="8" hour="19" minute="57" second="14" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1650,8 +1503,16 @@
 			<usings />
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/EnumMaskProperty.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections />
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/EnumProperty.h">
-		<date year="2017" month="1" day="8" hour="20" minute="14" second="55" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1678,8 +1539,67 @@
 			<usings />
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/FieldPropertiesInfo.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="FieldPropertiesInfo" fullname="Editor::FieldPropertiesInfo" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/FloatProperty.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="FloatProperty" fullname="Editor::FloatProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/IPropertyField.h">
-		<date year="2017" month="1" day="8" hour="19" minute="57" second="15" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1708,8 +1628,39 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/IntegerProperty.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="IntegerProperty" fullname="Editor::IntegerProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/LayerProperty.h">
-		<date year="2017" month="1" day="8" hour="20" minute="14" second="55" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1737,7 +1688,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/ObjectProperty.h">
-		<date year="2017" month="1" day="8" hour="19" minute="57" second="15" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1767,7 +1718,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/ObjectPtrProperty.h">
-		<date year="2017" month="1" day="8" hour="19" minute="57" second="15" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1796,8 +1747,39 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/RectangleFloatProperty.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="14" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="RectFProperty" fullname="Editor::RectFProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/RectangleIntProperty.h">
-		<date year="2017" month="1" day="8" hour="20" minute="18" second="53" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1827,7 +1809,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/StringProperty.h">
-		<date year="2017" month="1" day="8" hour="20" minute="18" second="53" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1857,7 +1839,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/TagProperty.h">
-		<date year="2017" month="1" day="8" hour="20" minute="41" second="3" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1884,8 +1866,39 @@
 			<usings />
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/Vector2FloatProperty.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="Vec2FProperty" fullname="Editor::Vec2FProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/Vector2IntProperty.h">
-		<date year="2017" month="1" day="8" hour="21" minute="17" second="18" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1915,7 +1928,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/VectorProperty.h">
-		<date year="2017" month="1" day="8" hour="19" minute="57" second="15" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1954,7 +1967,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/WStringProperty.h">
-		<date year="2017" month="1" day="8" hour="21" minute="17" second="18" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1983,43 +1996,8 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/AssetProperty.h">
-		<date year="2017" month="1" day="8" hour="21" minute="30" second="27" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IAssetProperty" fullname="Editor::IAssetProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-								<class name="DragDropArea" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="AssetProperty" fullname="Editor::AssetProperty" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IAssetProperty" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/PropertiesWindow.h">
-		<date year="2017" month="1" day="9" hour="9" minute="19" second="48" />
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2052,8 +2030,8 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/AssetsIconsScroll.h">
-		<date year="2017" month="1" day="10" hour="20" minute="15" second="3" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneDragHandle.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2063,22 +2041,48 @@
 				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="UIAssetsIconsScrollArea" fullname="Editor::UIAssetsIconsScrollArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="SceneDragHandle" fullname="Editor::SceneDragHandle" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneEditScreen.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="SceneEditScreen" fullname="Editor::SceneEditScreen" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs>
-								<typedef what="Vector&lt;UIAssetIcon*&gt;" newDef="AssetsIconsVec" />
-								<typedef what="Vector&lt;Sprite*&gt;" newDef="SpritesVec" />
-								<typedef what="Dictionary&lt;String, AssetsIconsVec&gt;" newDef="IconArrsDict" />
-								<typedef what="Vector&lt;Pair&lt;UID, String&gt;&gt;" newDef="AssetIdPathVec" />
 								<typedef what="Vector&lt;Actor*&gt;" newDef="ActorsVec" />
-								<typedef what="Vector&lt;Asset*&gt;" newDef="AssetsVec" />
+								<typedef what="Vector&lt;DrawableComponent*&gt;" newDef="DrawableComponentsVec" />
+								<typedef what="Vector&lt;SceneDragHandle*&gt;" newDef="DragHandlesVec" />
+								<typedef what="Vector&lt;IEditTool*&gt;" newDef="ToolsVec" />
 							</typedefs>
 							<usings />
 							<baseClasses>
-								<class name="UIScrollArea" protection="0" />
 								<class name="DragDropArea" protection="0" />
 								<class name="KeyboardEventsListener" protection="0" />
-								<class name="ISelectableDragableObjectsGroup" protection="1" />
+								<class name="Singleton&lt;SceneEditScreen&gt;" protection="1" />
+								<class name="IObject" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -2092,24 +2096,18 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/FloatProperty.h">
-		<date year="2017" month="1" day="11" hour="8" minute="52" second="15" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneEditWidget.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="FloatProperty" fullname="Editor::FloatProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="SceneEditWidget" fullname="Editor::SceneEditWidget" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs />
 							<usings />
 							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
+								<class name="UIWidget" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -2123,8 +2121,8 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/IntegerProperty.h">
-		<date year="2017" month="1" day="11" hour="22" minute="36" second="40" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneWindow.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2134,13 +2132,12 @@
 				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="IntegerProperty" fullname="Editor::IntegerProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="SceneWindow" fullname="Editor::SceneWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs />
 							<usings />
 							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
+								<class name="IEditorWindow" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -2149,13 +2146,11 @@
 				</section>
 			</sections>
 			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
+			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/RectangleFloatProperty.h">
-		<date year="2017" month="1" day="11" hour="22" minute="36" second="40" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/TreeWindow/ActorsTree.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2165,78 +2160,83 @@
 				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
-						<section name="RectFProperty" fullname="Editor::RectFProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/Properties/Vector2FloatProperty.h">
-		<date year="2017" month="1" day="11" hour="22" minute="36" second="40" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="Vec2FProperty" fullname="Editor::Vec2FProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/AssetsPropertiesViewer.h">
-		<date year="2017" month="1" day="12" hour="18" minute="28" second="30" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="AssetsPropertiesViewer" fullname="Editor::AssetsPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+						<section name="UIActorsTree" fullname="Editor::UIActorsTree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs>
-								<typedef what="Vector&lt;IAssetPropertiesViewer*&gt;" newDef="AssetPropertiesViewersVec" />
-								<typedef what="Vector&lt;Asset*&gt;" newDef="AssetsVec" />
-								<typedef what="Dictionary&lt;const Type*, AssetPropertiesViewersVec&gt;" newDef="TypeAssetViewersDict" />
+								<typedef what="Vector&lt;Actor*&gt;" newDef="ActorsVec" />
 							</typedefs>
 							<usings />
 							<baseClasses>
-								<class name="IObjectPropertiesViewer" protection="0" />
+								<class name="UITree" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="UIActorsTreeNode" fullname="Editor::UIActorsTreeNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="UITreeNode" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/TreeWindow/TreeWindow.h">
+		<date year="2017" month="1" day="12" hour="18" minute="46" second="15" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="TreeWindow" fullname="Editor::TreeWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IEditorWindow" protection="0" />
+								<class name="Singleton&lt;TreeWindow&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/ImageAssetPropertiesViewer.h">
+		<date year="2017" month="1" day="12" hour="20" minute="4" second="2" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ImageAssetPropertiesViewer" fullname="Editor::ImageAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAssetPropertiesViewer" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>

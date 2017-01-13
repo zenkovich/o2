@@ -2,6 +2,7 @@
 
 #include "Assets/Asset.h"
 #include "Scene/Actor.h"
+#include "Assets/AssetRef.h"
 
 namespace o2
 {
@@ -72,4 +73,6 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 	};
+
+	typedef AssetRef<ActorAsset> ActorAssetRef;
 }

@@ -19,10 +19,10 @@ namespace o2
 
 	UIWindow::UIWindow(const UIWindow& other):
 		UIScrollArea(other), DrawableCursorEventsListener(this), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
-		mTopDragAreaLayout(other.mTopDragAreaLayout), mBottomDragAreaLayout(other.mBottomDragAreaLayout), 
-		mLeftDragAreaLayout(other.mLeftDragAreaLayout), mRightDragAreaLayout(other.mRightDragAreaLayout), 
+		mTopDragAreaLayout(other.mTopDragAreaLayout), mBottomDragAreaLayout(other.mBottomDragAreaLayout),
+		mLeftDragAreaLayout(other.mLeftDragAreaLayout), mRightDragAreaLayout(other.mRightDragAreaLayout),
 		mLeftTopDragAreaLayout(other.mLeftTopDragAreaLayout), mRightTopDragAreaLayout(other.mRightTopDragAreaLayout),
-		mLeftBottomDragAreaLayout(other.mLeftBottomDragAreaLayout), 
+		mLeftBottomDragAreaLayout(other.mLeftBottomDragAreaLayout),
 		mRightBottomDragAreaLayout(other.mRightBottomDragAreaLayout)
 	{
 		mIconDrawable = GetLayerDrawable<Sprite>("icon");
@@ -70,7 +70,7 @@ namespace o2
 			newElem->mParent = this;
 			mWindowElements.Add(newElem);
 		}
-		
+
 		UIButton* closeBtn = (UIButton*)mWindowElements.FindMatch(
 			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); });
 
@@ -112,9 +112,6 @@ namespace o2
 
 		UIScrollArea::Draw();
 
-		for (auto elem : mWindowElements)
-			elem->Draw();
-
 		mHeadDragHandle.OnDrawn();
 		mTopDragHandle.OnDrawn();
 		mBottomDragHandle.OnDrawn();
@@ -124,6 +121,9 @@ namespace o2
 		mRightTopDragHandle.OnDrawn();
 		mLeftBottomDragHandle.OnDrawn();
 		mRightBottomDragHandle.OnDrawn();
+
+		for (auto elem : mWindowElements)
+			elem->Draw();
 
 //  		int clr = 0;
 //  		o2Render.DrawRectFrame(mHeadDragAreaRect, Color4::SomeColor(clr++));
@@ -188,8 +188,8 @@ namespace o2
 		return mCaptionDrawable->GetText();
 	}
 
-	void UIWindow::SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout&bottom, const Layout&left, 
-									  const Layout& right, const Layout& leftTop, const Layout& rightTop, 
+	void UIWindow::SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout&bottom, const Layout&left,
+									  const Layout& right, const Layout& leftTop, const Layout& rightTop,
 									  const Layout& leftBottom, const Layout& rightBottom)
 	{
 		mHeadDragAreaLayout = head;
@@ -212,26 +212,23 @@ namespace o2
 	{
 		UIScrollArea::UpdateLayout(forcible, withChildren);
 
-		if (!layout.mDrivenByParent && !forcible)
-		{
-			RectF _mChildsAbsRect = mChildsAbsRect;
-			mChildsAbsRect = layout.mAbsoluteRect;
+		RectF _mChildsAbsRect = mChildsAbsRect;
+		mChildsAbsRect = layout.mAbsoluteRect;
 
-			for (auto elem : mWindowElements)
-				elem->UpdateLayout(true);
+		for (auto elem : mWindowElements)
+			elem->UpdateLayout(true);
 
-			mChildsAbsRect = _mChildsAbsRect;
+		mChildsAbsRect = _mChildsAbsRect;
 
-			mHeadDragAreaRect        = mHeadDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mTopDragAreaRect         = mTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mBottomDragAreaRect      = mBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mLeftDragAreaRect        = mLeftDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mRightDragAreaRect       = mRightDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mLeftTopDragAreaRect     = mLeftTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mRightTopDragAreaRect    = mRightTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mLeftBottomDragAreaRect  = mLeftBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
-			mRightBottomDragAreaRect = mRightBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
-		}
+		mHeadDragAreaRect        = mHeadDragAreaLayout.Calculate(layout.mAbsoluteRect);
+		mTopDragAreaRect         = mTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
+		mBottomDragAreaRect      = mBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
+		mLeftDragAreaRect        = mLeftDragAreaLayout.Calculate(layout.mAbsoluteRect);
+		mRightDragAreaRect       = mRightDragAreaLayout.Calculate(layout.mAbsoluteRect);
+		mLeftTopDragAreaRect     = mLeftTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
+		mRightTopDragAreaRect    = mRightTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
+		mLeftBottomDragAreaRect  = mLeftBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
+		mRightBottomDragAreaRect = mRightBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
 	}
 
 	void UIWindow::UpdateTransparency()
