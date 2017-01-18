@@ -1,12 +1,12 @@
 #pragma once
 
+#include "Assets/Asset.h"
 #include "PropertiesWindow/IObjectPropertiesViewer.h"
 
 using namespace o2;
 
 namespace o2
 {
-	class Asset;
 	class UIButton;
 	class UIEditBox;
 	class UIImage;
@@ -36,7 +36,7 @@ namespace Editor
 
 	protected:
 		typedef Vector<IAssetPropertiesViewer*> AssetPropertiesViewersVec;
-		typedef Vector<Asset*> AssetsVec;
+		typedef Vector<AssetRef*> AssetsVec;
 		typedef Dictionary<const Type*, AssetPropertiesViewersVec> TypeAssetViewersDict;
 
 		AssetsVec                 mTargetAssets;                 // Current target assets

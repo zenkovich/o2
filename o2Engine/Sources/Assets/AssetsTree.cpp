@@ -8,16 +8,16 @@
 namespace o2
 {
 	AssetTree::AssetNode::AssetNode():
-		mMeta(nullptr)
+		meta(nullptr)
 	{}
 
-	AssetTree::AssetNode::AssetNode(const String& path, UID id, Type::Id type) :
+	AssetTree::AssetNode::AssetNode(const String& path, UID id, const Type* type) :
 		AssetInfo(path, id, type)
 	{}
 
 	AssetTree::AssetNode::~AssetNode()
 	{
-		delete mMeta;
+		delete meta;
 	}
 
 	AssetTree::AssetTree():
@@ -47,12 +47,12 @@ namespace o2
 
 	AssetTree::AssetNode* AssetTree::FindAsset(const String& path) const
 	{
-		return mAllAssets.FindMatch([&](const AssetNode* asset) { return asset->mPath == path; });
+		return mAllAssets.FindMatch([&](const AssetNode* asset) { return asset->path == path; });
 	}
 
 	AssetTree::AssetNode* AssetTree::FindAsset(UID id) const
 	{
-		return mAllAssets.FindMatch([&](const AssetNode* asset) { return asset->mId == id; });
+		return mAllAssets.FindMatch([&](const AssetNode* asset) { return asset->id == id; });
 	}
 
 	AssetInfo AssetTree::FindAssetInfo(const String& path) const
@@ -75,19 +75,19 @@ namespace o2
 
 	AssetTree::AssetNode* AssetTree::AddAsset(AssetNode* asset)
 	{
-		int delPos = asset->mPath.FindLast("/");
+		int delPos = asset->path.FindLast("/");
 		if (delPos < 0)
 		{
 			mAllAssets.Add(asset);
 		}
 		else
 		{
-			String parentPath = asset->mPath.SubStr(0, delPos);
-			AssetNode* parent = mAllAssets.FindMatch([&](auto info) { return info->mPath == parentPath; });
+			String parentPath = asset->path.SubStr(0, delPos);
+			AssetNode* parent = mAllAssets.FindMatch([&](auto info) { return info->path == parentPath; });
 
 			if (!parent)
 			{
-				if (mLog) mLog->Out("Failed to add builded asset info: %s", asset->mPath);
+				if (mLog) mLog->Out("Failed to add builded asset info: %s", asset->path);
 			}
 			else
 			{
@@ -110,7 +110,7 @@ namespace o2
 		else
 			mRootAssets.Remove(asset);
 
-		if (asset->mType == TypeOf(FolderAsset).ID() && release)
+		if (asset->assetType == &TypeOf(FolderAsset) && release)
 		{
 			auto childs = asset->GetChilds();
 			for (auto ch : childs)
@@ -138,10 +138,10 @@ namespace o2
 		{
 			bool exist = false;
 
-			if (assetNode->mType == TypeOf(FolderAsset).ID())
-				exist = folder.mFolders.ContainsPred([=](const FolderInfo& x) { return x.mPath == assetNode->mPath; });
+			if (assetNode->assetType == &TypeOf(FolderAsset))
+				exist = folder.mFolders.ContainsPred([=](const FolderInfo& x) { return x.mPath == assetNode->path; });
 			else
-				exist = folder.mFiles.ContainsPred([=](const FileInfo& x) { return x.mPath == assetNode->mPath; });
+				exist = folder.mFiles.ContainsPred([=](const FileInfo& x) { return x.mPath == assetNode->path; });
 
 			if (!exist)
 				missingAssetNodes.Add(assetNode);
@@ -152,7 +152,7 @@ namespace o2
 
 		for (auto fileInfo : folder.mFiles)
 		{
-			if (parentChilds.ContainsPred([&](AssetNode* x) { return x->mPath == fileInfo.mPath; }))
+			if (parentChilds.ContainsPred([&](AssetNode* x) { return x->path == fileInfo.mPath; }))
 				continue;
 
 			String extension = o2FileSystem.GetFileExtension(fileInfo.mPath);
@@ -174,7 +174,7 @@ namespace o2
 		{
 			AssetNode* asset = nullptr;
 
-			if (!parentChilds.ContainsPred([&](AssetNode* x) { return x->mPath == subFolder.mPath; }))
+			if (!parentChilds.ContainsPred([&](AssetNode* x) { return x->path == subFolder.mPath; }))
 			{
 				String folderFullPath = mPath + subFolder.mPath;
 				String metaFullPath = folderFullPath + ".meta";
@@ -188,7 +188,7 @@ namespace o2
 
 				asset = LoadAsset(subFolder.mPath, parentAsset, TimeStamp());
 			}
-			else asset = parentChilds.FindMatch([&](AssetNode* x) { return x->mPath == subFolder.mPath; });
+			else asset = parentChilds.FindMatch([&](AssetNode* x) { return x->path == subFolder.mPath; });
 
 			LoadFolder(subFolder, asset);
 		}
@@ -203,11 +203,11 @@ namespace o2
 
 		AssetNode* asset = mnew AssetNode();
 
-		asset->mMeta = meta;
-		asset->mPath = path;
-		asset->mTime = time;
-		asset->mId = meta->ID();
-		asset->mType = meta->GetAssetType();
+		asset->meta = meta;
+		asset->path = path;
+		asset->time = time;
+		asset->id = meta->ID();
+		asset->assetType = meta->GetAssetType();
 
 // 		meta->r();
 // 		DataNode xx;
@@ -230,7 +230,7 @@ CLASS_META(o2::AssetTree::AssetNode)
 	BASE_CLASS(o2::ITreeNode<AssetNode>);
 	BASE_CLASS(o2::AssetInfo);
 
-	PUBLIC_FIELD(mMeta);
-	PUBLIC_FIELD(mTime);
+	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(time);
 }
 END_META;

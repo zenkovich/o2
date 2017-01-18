@@ -129,7 +129,8 @@ namespace o2
 	}
 
 	UIWidget* UIMenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
-								   ImageAsset* icon /*= nullptr*/, const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+								   const ImageAssetRef& icon /*= ImageAssetRef()*/, 
+								   const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
@@ -478,7 +479,7 @@ CLASS_META(o2::UIMenuPanel)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(UIWidget*, AddItem, const Item&);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, ImageAsset*, const ShortcutKeys&);
+	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
 	PUBLIC_FUNCTION(UIWidget*, InsertItem, const Item&, int);
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);

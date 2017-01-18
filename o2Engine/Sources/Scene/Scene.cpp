@@ -154,15 +154,15 @@ namespace o2
 
 	Actor* Scene::GetAssetActorByID(UID id)
 	{
-		auto cached = mCache.FindMatch([=](ActorAsset* x) { return x->GetAssetId() == id; });
+		auto cached = mCache.FindMatch([=](const ActorAssetRef& x) { return x->GetAssetId() == id; });
 
 		if (!cached)
 		{
-			cached = mnew ActorAsset(id);
+			cached = ActorAssetRef(id);
 			mCache.Add(cached);
 		}
 
-		return &cached->actor;
+		return cached->GetActor();
 	}
 
 	Actor* Scene::FindActor(const String& path)
@@ -205,9 +205,6 @@ namespace o2
 
 	void Scene::ClearCache()
 	{
-		for (auto asset : mCache)
-			delete asset;
-
 		mCache.Clear();
 	}
 

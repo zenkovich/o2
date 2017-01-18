@@ -1,6 +1,8 @@
 #include "Debug.h"
 
 #include <cstdarg>
+#include "Assets/VectorFontAsset.h"
+#include "Assets/BitmapFontAsset.h"
 #include "Render/Render.h"
 #include "Render/Text.h"
 #include "Render/VectorFont.h"

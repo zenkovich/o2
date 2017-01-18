@@ -37,26 +37,26 @@ namespace Editor
 		delete mContent;
 	}
 
-	void ImageAssetPropertiesViewer::SetTargetAssets(const Vector<Asset*>& assets)
+	void ImageAssetPropertiesViewer::SetTargetAssets(const Vector<AssetRef*>& assets)
 	{
-		mTargetAssets = assets.Cast<ImageAsset*>();
+		mTargetAssets = assets.Cast<ImageAssetRef*>();
 
-		auto borderTargets = mTargetAssets.Select<void*>([](const ImageAsset* x) { return &(x->GetMeta()->mSliceBorder); });
+		auto borderTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mSliceBorder); });
 		mBorderProperty->Setup(borderTargets, false);
 
-		auto modeTargets = mTargetAssets.Select<void*>([](const ImageAsset* x) { return &(x->GetMeta()->mDefaultMode); });
+		auto modeTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mDefaultMode); });
 		mDefaultTypeProperty->Setup(modeTargets, false);
 
-		auto windowsTargets = mTargetAssets.Select<void*>([](const ImageAsset* x) { return &(x->GetMeta()->mWindows); });
+		auto windowsTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mWindows); });
 		mWindowsProperties->Setup(windowsTargets, false);
 
-		auto osxTargets = mTargetAssets.Select<void*>([](const ImageAsset* x) { return &(x->GetMeta()->mMacOS); });
+		auto osxTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mMacOS); });
 		mOSXProperties->Setup(osxTargets, false);
 
-		auto androidTargets = mTargetAssets.Select<void*>([](const ImageAsset* x) { return &(x->GetMeta()->mAndroid); });
+		auto androidTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mAndroid); });
 		mAndroidProperties->Setup(androidTargets, false);
 
-		auto iosTargets = mTargetAssets.Select<void*>([](const ImageAsset* x) { return &(x->GetMeta()->mIOS); });
+		auto iosTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mIOS); });
 		mIOSProperties->Setup(iosTargets, false);
 
 		mPreviewImage->imageAsset = *mTargetAssets.Last();
@@ -210,10 +210,10 @@ namespace Editor
 		mDefaultTypeProperty->SpecializeType(&TypeOf(SpriteMode));
 		mContent->AddChild(modePropertyPair.mSecond);
 
-		auto atlasPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAsset));
+		auto atlasPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAssetRef));
 		nameLabel = atlasPropertyPair.mSecond->FindChild<UILabel>();
 		nameLabel->text = "Atlas";
-		mAtlasProperty = (AssetProperty<AtlasAsset>*)atlasPropertyPair.mFirst;
+		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasPropertyPair.mFirst;
 		mAtlasProperty->onChanged = Function<void()>(this, &ImageAssetPropertiesViewer::OnAtlasPropertyChanged);
 		mContent->AddChild(atlasPropertyPair.mSecond);
 
@@ -302,7 +302,7 @@ namespace Editor
 	{
 		BorderI value = mBordersSmoothValue;
 		for (auto target : mTargetAssets)
-			target->GetMeta()->mSliceBorder = value;
+			(*target)->GetMeta()->mSliceBorder = value;
 
 		mBorderProperty->Refresh();
 		UpdateBordersAnchors();
@@ -313,12 +313,12 @@ namespace Editor
 		if (mTargetAssets.IsEmpty())
 			return;
 
-		UID commonValue = mTargetAssets[0]->GetAtlasId();
+		UID commonValue = (*mTargetAssets[0])->GetAtlasId();
 		bool valuesDifferent = false;
 
 		for (int i = 1; i < mTargetAssets.Count(); i++)
 		{
-			UID id = mTargetAssets[i]->GetAtlasId();
+			UID id = (*mTargetAssets[i])->GetAtlasId();
 			if (id != commonValue)
 			{
 				valuesDifferent = true;
@@ -334,10 +334,10 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::OnAtlasPropertyChanged()
 	{
-		UID id = mAtlasProperty->GetCommonValue().GetAssetId();
+		UID id = mAtlasProperty->GetCommonValue()->GetAssetId();
 
 		for (auto target : mTargetAssets)
-			target->SetAtlasId(id);
+			(*target)->SetAtlasId(id);
 	}
 
 	Sprite* ImageAssetPropertiesViewer::CreateGridSprite()
@@ -384,7 +384,7 @@ CLASS_META(Editor::ImageAssetPropertiesViewer)
 	PROTECTED_FIELD(mAndroidProperties);
 	PROTECTED_FIELD(mIOSProperties);
 
-	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<Asset*>&);
+	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PROTECTED_FUNCTION(void, InitializeImagePreview);

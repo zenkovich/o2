@@ -11,7 +11,7 @@ namespace o2
 	{
 	public:
 		// Returns vector of processing assets types
-		Vector<Type::Id> GetProcessingAssetsTypes() const;
+		Vector<const Type*> GetProcessingAssetsTypes() const;
 
 		// Copies asset
 		void ConvertAsset(const AssetTree::AssetNode& node);

@@ -10,7 +10,7 @@
 namespace o2
 {
 	Sprite::Sprite():
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
 		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -23,8 +23,8 @@ namespace o2
 		o2Render.mSprites.Add(this);
 	}
 
-	Sprite::Sprite(const ImageAsset& image):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+	Sprite::Sprite(const ImageAssetRef& image):
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
 		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -38,7 +38,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(const String& imagePath):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
 		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -52,7 +52,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(UID imageId):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
 		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -80,7 +80,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(const Color4& color):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
 		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -94,7 +94,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(Bitmap* bitmap):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f), 
+		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
 		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
@@ -131,14 +131,14 @@ namespace o2
 	{
 		mMesh = mnew Mesh(*other.mMesh);
 		mTextureSrcRect = other.mTextureSrcRect;
-		mImageAssetId = other.mImageAssetId;
-		mAtlasAssetId = other.mAtlasAssetId;
-		mMode = other.mMode;
-		mFill = other.mFill;
-		mSlices = other.mSlices;
-		mImageName = other.mImageName;
-		mTileScale = other.mTileScale;
-		mMeshBuildFunc = other.mMeshBuildFunc;
+		mImageAssetId   = other.mImageAssetId;
+		mAtlasAssetId   = other.mAtlasAssetId;
+		mMode           = other.mMode;
+		mFill           = other.mFill;
+		mSlices         = other.mSlices;
+		mImageName      = other.mImageName;
+		mTileScale      = other.mTileScale;
+		mMeshBuildFunc  = other.mMeshBuildFunc;
 		IRectDrawable::operator=(other);
 
 		return *this;
@@ -265,16 +265,16 @@ namespace o2
 
 		switch (mode)
 		{
-		case SpriteMode::Default:         mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
-		case SpriteMode::Sliced:          mMeshBuildFunc = &Sprite::BuildSlicedMesh; break;
-		case SpriteMode::Tiled:           mMeshBuildFunc = &Sprite::BuildTiledMesh; break;
-		case SpriteMode::FillLeftToRight: mMeshBuildFunc = &Sprite::BuildFillLeftToRightMesh; break;
-		case SpriteMode::FillRightToLeft: mMeshBuildFunc = &Sprite::BuildFillRightToLeftMesh; break;
-		case SpriteMode::FillUpToDown:    mMeshBuildFunc = &Sprite::BuildFillUpToDownMesh; break;
-		case SpriteMode::FillDownToUp:    mMeshBuildFunc = &Sprite::BuildFillDownToUpMesh; break;
-		case SpriteMode::Fill360CW:       mMeshBuildFunc = &Sprite::BuildFill360CWMesh; break;
-		case SpriteMode::Fill360CCW:      mMeshBuildFunc = &Sprite::BuildFill360CCWMesh; break;
-		default:                          mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
+			case SpriteMode::Default:         mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
+			case SpriteMode::Sliced:          mMeshBuildFunc = &Sprite::BuildSlicedMesh; break;
+			case SpriteMode::Tiled:           mMeshBuildFunc = &Sprite::BuildTiledMesh; break;
+			case SpriteMode::FillLeftToRight: mMeshBuildFunc = &Sprite::BuildFillLeftToRightMesh; break;
+			case SpriteMode::FillRightToLeft: mMeshBuildFunc = &Sprite::BuildFillRightToLeftMesh; break;
+			case SpriteMode::FillUpToDown:    mMeshBuildFunc = &Sprite::BuildFillUpToDownMesh; break;
+			case SpriteMode::FillDownToUp:    mMeshBuildFunc = &Sprite::BuildFillDownToUpMesh; break;
+			case SpriteMode::Fill360CW:       mMeshBuildFunc = &Sprite::BuildFill360CWMesh; break;
+			case SpriteMode::Fill360CCW:      mMeshBuildFunc = &Sprite::BuildFill360CCWMesh; break;
+			default:                          mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
 		}
 
 		UpdateMesh();
@@ -299,29 +299,29 @@ namespace o2
 		return mSlices;
 	}
 
-	void Sprite::LoadFromImage(const ImageAsset& image)
+	void Sprite::LoadFromImage(const ImageAssetRef& image)
 	{
-		mMesh->mTexture = TextureRef(image.GetAtlasId(), image.GetAtlasPage());
-		mAtlasAssetId = image.GetAtlasId();
-		mImageAssetId = image.GetAssetId();
-		mTextureSrcRect = image.GetAtlasRect();
-		mSlices = image.GetMeta()->mSliceBorder;
-		mImageName = image.GetPath();
-		SetMode(image.GetMeta()->mDefaultMode);
+		mMesh->mTexture = TextureRef(image->GetAtlasId(), image->GetAtlasPage());
+		mAtlasAssetId   = image->GetAtlasId();
+		mImageAssetId   = image->GetAssetId();
+		mTextureSrcRect = image->GetAtlasRect();
+		mSlices         = image->GetMeta()->mSliceBorder;
+		mImageName      = image->GetPath();
+		SetMode(image->GetMeta()->mDefaultMode);
 		SetSize(mTextureSrcRect.Size());
 	}
 
 	void Sprite::LoadFromImage(const String& imagePath)
 	{
-		ImageAssetRef assetRef = o2Assets.GetAsset<ImageAsset>(imagePath);
+		ImageAssetRef assetRef = o2Assets.GetAssetRef(imagePath);
 		if (assetRef)
 		{
 			mMesh->mTexture = TextureRef(assetRef->GetAtlasId(), assetRef->GetAtlasPage());
-			mAtlasAssetId = assetRef->GetAtlasId();
-			mImageAssetId = assetRef->GetAssetId();
+			mAtlasAssetId   = assetRef->GetAtlasId();
+			mImageAssetId   = assetRef->GetAssetId();
 			mTextureSrcRect = assetRef->GetAtlasRect();
-			mImageName = imagePath;
-			mSlices = assetRef->GetMeta()->mSliceBorder;
+			mImageName      = imagePath;
+			mSlices         = assetRef->GetMeta()->mSliceBorder;
 			SetMode(assetRef->GetMeta()->mDefaultMode);
 			SetSize(mTextureSrcRect.Size());
 		}
@@ -330,16 +330,15 @@ namespace o2
 
 	void Sprite::LoadFromImage(UID imageId)
 	{
-		ImageAssetRef assetRef = o2Assets.GetAsset<ImageAsset>(imageId);
+		ImageAssetRef assetRef = o2Assets.GetAssetRef(imageId);
 		if (assetRef)
 		{
-			ImageAsset image(imageId);
 			mMesh->mTexture = TextureRef(assetRef->GetAtlasId(), assetRef->GetAtlasPage());
-			mAtlasAssetId = assetRef->GetAtlasId();
-			mImageAssetId = assetRef->GetAssetId();
+			mAtlasAssetId   = assetRef->GetAtlasId();
+			mImageAssetId   = assetRef->GetAssetId();
 			mTextureSrcRect = assetRef->GetAtlasRect();
-			mSlices = assetRef->GetMeta()->mSliceBorder;
-			mImageName = assetRef->GetPath();
+			mSlices         = assetRef->GetMeta()->mSliceBorder;
+			mImageName      = assetRef->GetPath();
 			SetMode(assetRef->GetMeta()->mDefaultMode);
 			SetSize(mTextureSrcRect.Size());
 		}
@@ -612,8 +611,8 @@ namespace o2
 				}
 
 				int vii = vi;
-				mMesh->vertices[vi++].Set(o + xv*px0 + yv*py,  rcc[0], uvLeft, v);
-				mMesh->vertices[vi++].Set(o + xv*px  + yv*py,  rcc[1], u, v);
+				mMesh->vertices[vi++].Set(o + xv*px0 + yv*py, rcc[0], uvLeft, v);
+				mMesh->vertices[vi++].Set(o + xv*px  + yv*py, rcc[1], u, v);
 				mMesh->vertices[vi++].Set(o + xv*px  + yv*py0, rcc[2], u, uvDown);
 				mMesh->vertices[vi++].Set(o + xv*px0 + yv*py0, rcc[3], uvLeft, uvDown);
 
@@ -1088,13 +1087,17 @@ namespace o2
 	{
 		if (mImageAssetId != 0)
 		{
-			ImageAsset image(mImageAssetId);
-			mMesh->mTexture = TextureRef(image.GetAtlasId(), image.GetAtlasPage());
-			mAtlasAssetId = image.GetAtlasId();
-			mImageAssetId = image.GetAssetId();
-			mTextureSrcRect = image.GetAtlasRect();
-			mSlices = image.GetMeta()->mSliceBorder;
-			mImageName = image.GetPath();
+			ImageAssetRef image(mImageAssetId);
+
+			if (image)
+			{
+				mMesh->mTexture = TextureRef(image->GetAtlasId(), image->GetAtlasPage());
+				mAtlasAssetId   = image->GetAtlasId();
+				mImageAssetId   = image->GetAssetId();
+				mTextureSrcRect = image->GetAtlasRect();
+				mSlices         = image->GetMeta()->mSliceBorder;
+				mImageName      = image->GetPath();
+			}
 
 			UpdateMesh();
 		}
@@ -1173,7 +1176,7 @@ CLASS_META(o2::Sprite)
 	PUBLIC_FUNCTION(SpriteMode, GetMode);
 	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
 	PUBLIC_FUNCTION(BorderI, GetSliceBorder);
-	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAsset&);
+	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, LoadFromImage, const String&);
 	PUBLIC_FUNCTION(void, LoadFromImage, UID);
 	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);

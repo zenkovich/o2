@@ -20,7 +20,7 @@ namespace o2
 		virtual IObject* Clone() const = 0;
 
 		// Returns type
-		virtual Type& GetType() const = 0;
+		virtual const Type& GetType() const = 0;
 
 	private:
 		static Type* type;
@@ -61,7 +61,7 @@ private:                                               \
                                                        \
 public:                                                \
 	CLASS* Clone() const { return mnew CLASS(*this); } \
-	o2::Type& GetType() const { return *type; };       \
+	const o2::Type& GetType() const { return *type; }; \
                                                        \
 private:                                               \
 	static void InitializeType(o2::Type* type)                       

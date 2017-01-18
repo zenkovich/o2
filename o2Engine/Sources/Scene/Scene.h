@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Assets/ActorAsset.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/Serializable.h"
 #include "Utils/Singleton.h"
@@ -12,7 +13,6 @@
 namespace o2
 {
 	class Actor;
-	class ActorAsset;
 	class DrawableComponent;
 	class Tag;
 
@@ -24,7 +24,7 @@ namespace o2
 	public:
 		typedef Vector<Actor*> ActorsVec;
 		typedef Vector<DrawableComponent*> DrawCompsVec;
-		typedef Vector<ActorAsset*> ActorsAssetsVec;
+		typedef Vector<ActorAssetRef> ActorsAssetsVec;
 		typedef Vector<String> StringsVec;
 		typedef Vector<Tag*> TagsVec;
 

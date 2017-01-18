@@ -95,7 +95,7 @@ namespace Editor
 		// Context menu
 		mTreeContextMenu = o2UI.CreateWidget<UIContextMenu>("standard");
 		mTreeContextMenu->AddItems({
-			UIContextMenu::Item("Create new", [&]() { OnContextCreateNewPressed(); }, nullptr, ShortcutKeys('N', true, true)),
+			UIContextMenu::Item("Create new", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(), ShortcutKeys('N', true, true)),
 
 			UIContextMenu::Item("Create", {
 				UIContextMenu::Item("Sprite", [&]() { OnContextCreateSprite(); }),
@@ -104,11 +104,11 @@ namespace Editor
 
 			UIContextMenu::Item::Separator(),
 
-			UIContextMenu::Item("Copy", [&]() { OnContextCopyPressed(); }, nullptr, ShortcutKeys('C', true)),
-			UIContextMenu::Item("Cut", [&]() { OnContextCutPressed(); }, nullptr, ShortcutKeys('X', true)),
-			UIContextMenu::Item("Paste", [&]() { OnContextPastePressed(); }, nullptr, ShortcutKeys('V', true)),
-			UIContextMenu::Item("Delete", [&]() { OnContextDeletePressed(); }, nullptr, ShortcutKeys(VK_DELETE)),
-			UIContextMenu::Item("Duplicate", [&]() { OnContextDuplicatePressed(); }, nullptr, ShortcutKeys('D', true)),
+			UIContextMenu::Item("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true)),
+			UIContextMenu::Item("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true)),
+			UIContextMenu::Item("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true)),
+			UIContextMenu::Item("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE)),
+			UIContextMenu::Item("Duplicate", [&]() { OnContextDuplicatePressed(); }, ImageAssetRef(), ShortcutKeys('D', true)),
 
 			UIContextMenu::Item::Separator(),
 
@@ -117,8 +117,8 @@ namespace Editor
 
 			UIContextMenu::Item::Separator(),
 
-			UIContextMenu::Item("Enable/disable", [&]() { OnContextEnablePressed(); }, nullptr, ShortcutKeys('L', true)),
-			UIContextMenu::Item("Lock/unlock", [&]() { OnContextLockPressed(); }, nullptr, ShortcutKeys('O', true)),
+			UIContextMenu::Item("Enable/disable", [&]() { OnContextEnablePressed(); }, ImageAssetRef(), ShortcutKeys('L', true)),
+			UIContextMenu::Item("Lock/unlock", [&]() { OnContextLockPressed(); }, ImageAssetRef(), ShortcutKeys('O', true)),
 
 			UIContextMenu::Item::Separator(),
 

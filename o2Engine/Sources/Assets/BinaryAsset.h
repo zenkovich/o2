@@ -17,18 +17,6 @@ namespace o2
 		Getter<UInt>      dataSize; // Data size getter
 		Getter<MetaInfo*> meta;     // Meta information getter
 
-		// Default constructor
-		BinaryAsset();
-
-		// Constructor by path - loads asset by path
-		BinaryAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		BinaryAsset(UID id);
-
-		// Copy-constructor
-		BinaryAsset(const BinaryAsset& asset);
-
 		// Destructor
 		~BinaryAsset();
 
@@ -66,7 +54,7 @@ namespace o2
 		{
 		public:
 			// Returns asset type id
-			Type::Id GetAssetType() const;
+			const Type* GetAssetType() const;
 
 			SERIALIZABLE(MetaInfo);
 		};
@@ -76,6 +64,18 @@ namespace o2
 		UInt  mDataSize; // Asset data size
 
 	protected:
+		// Default constructor
+		BinaryAsset();
+
+		// Constructor by path - loads asset by path
+		BinaryAsset(const String& path);
+
+		// Constructor by id - loads asset by id
+		BinaryAsset(UID id);
+
+		// Copy-constructor
+		BinaryAsset(const BinaryAsset& asset);
+
 		// Loads data
 		void LoadData(const String& path);
 
@@ -84,5 +84,65 @@ namespace o2
 
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class Assets;
+	};
+
+	// ---------------------------
+	// Binary data Asset reference
+	// ---------------------------
+	class BinaryAssetRef: public AssetRef
+	{
+	public:
+		// Creates BinaryAsset and returns reference to it
+		static BinaryAssetRef CreateAsset();
+
+		// Default constructor, references to null
+		BinaryAssetRef(): AssetRef() {}
+
+		// Copy-constructor
+		BinaryAssetRef(const AssetRef& other): AssetRef(other) { CheckType<BinaryAsset>(); }
+
+		// Copy-constructor
+		BinaryAssetRef(const BinaryAssetRef& other): AssetRef(other) {}
+
+		// Constructor from asset path
+		BinaryAssetRef(const String& path): AssetRef(path) {}
+
+		// Constructor from asset id
+		BinaryAssetRef(UID id): AssetRef(id) {}
+
+		// Destructor
+		~BinaryAssetRef() {}
+
+		// Boolean cast operator, true means that reference is valid
+		operator bool() const { return IsValid(); }
+
+		// Assign operator
+		BinaryAssetRef& operator=(const BinaryAssetRef& other) { AssetRef::operator=(other); return *this; }
+
+		// Getter operator
+		BinaryAsset& operator*() { return *((BinaryAsset*)mAssetPtr); }
+
+		// Constant getter operator
+		const BinaryAsset& operator*() const { return *((BinaryAsset*)mAssetPtr); }
+
+		// Asset members and field operator
+		BinaryAsset* operator->() { return ((BinaryAsset*)mAssetPtr); }
+
+		// Constant asset members and field operator
+		const BinaryAsset* operator->() const { return ((BinaryAsset*)mAssetPtr); }
+
+		// Check equals operator
+		bool operator==(const BinaryAssetRef& other) const { return AssetRef::operator==(other); }
+
+		// Check not equals operator
+		bool operator!=(const BinaryAssetRef& other) const { return AssetRef::operator!=(other); }
+
+		SERIALIZABLE(BinaryAssetRef);
+
+	protected:
+		// Constructor for Assets manager
+		BinaryAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }

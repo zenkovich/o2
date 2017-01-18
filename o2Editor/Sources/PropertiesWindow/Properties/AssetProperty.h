@@ -156,7 +156,7 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::Refresh()
 	{
-		auto lastCommonValue = mCommonValue.GetAssetId();
+		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
 		auto newCommonValue = mGetFunc(mValuesPointers[0]);
@@ -176,8 +176,8 @@ namespace Editor
 			if (!lastDifferent)
 				SetUnknownValue();
 		}
-		else if (lastCommonValue != newCommonValue.GetAssetId() || lastDifferent)
-			SetCommonAssetId(newCommonValue.GetAssetId());
+		else if (lastCommonValue != newCommonValue || lastDifferent)
+			SetCommonAssetId(newCommonValue ? newCommonValue->GetAssetId() : 0);
 	}
 
 	template<typename _type>
@@ -219,7 +219,7 @@ namespace Editor
 		mCommonValue = id == 0 ? _type() : _type(id);
 		mValuesDifferent = false;
 
-		if (!o2Assets.IsAssetExist(mCommonValue.GetAssetId()))
+		if (!mCommonValue || !o2Assets.IsAssetExist(mCommonValue->GetAssetId()))
 		{
 			mNameText->text = "Null:" + TypeOf(_type).GetName().SubStr(4);
 			mBox->layer["caption"]->transparency = 0.5f;
@@ -227,7 +227,7 @@ namespace Editor
 		else
 		{
 			auto name = o2FileSystem.GetFileNameWithoutExtension(
-				o2FileSystem.GetPathWithoutDirectories(mCommonValue.GetPath()));
+				o2FileSystem.GetPathWithoutDirectories(mCommonValue->GetPath()));
 
 			mNameText->text = name;
 			mBox->layer["caption"]->transparency = 1.0f;
@@ -253,7 +253,7 @@ namespace Editor
 	void AssetProperty<_type>::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.FocusWidget(mBox);
-		o2EditorAssets.ShowAssetIcon(mCommonValue.GetPath());
+		o2EditorAssets.ShowAssetIcon(mCommonValue->GetPath());
 	}
 
 	template<typename _type>
@@ -296,7 +296,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset.mType != TypeOf(_type).ID())
+		if (lastSelectedAsset.assetType != &TypeOf(_type))
 			return;
 
 		o2Application.SetCursor(CursorType::Hand);
@@ -311,10 +311,10 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset.mType != TypeOf(_type).ID())
+		if (lastSelectedAsset.assetType != &TypeOf(_type))
 			return;
 
-		SetAssetId(lastSelectedAsset.mId);
+		SetAssetId(lastSelectedAsset.id);
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();

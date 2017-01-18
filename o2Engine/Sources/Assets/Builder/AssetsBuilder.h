@@ -29,7 +29,7 @@ namespace o2
 		AssetsIdsVec BuildAssets(const String& assetsPath, const String& dataAssetsPath, bool forcible = false);
 
 	protected:
-		typedef Dictionary<Type::Id, IAssetConverter*> ConvertersDict;
+		typedef Dictionary<const Type*, IAssetConverter*> ConvertersDict;
 
 		LogStream*           mLog;                 // Asset builder log stream
 
@@ -75,7 +75,7 @@ namespace o2
 		void GenerateMeta(const Type& assetType, const String& metaFullPath);
 
 		// Returns assets converter by asset type
-		IAssetConverter* GetAssetConverter(Type::Id assetTypeId);
+		IAssetConverter* GetAssetConverter(const Type* assetType);
 
 		// Resets builder
 		void Reset();

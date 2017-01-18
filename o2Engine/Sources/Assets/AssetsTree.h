@@ -20,15 +20,15 @@ namespace o2
 		// ----------------------
 		struct AssetNode: public ITreeNode<AssetNode>, public AssetInfo
 		{ 
-			Asset::IMetaInfo* mMeta; // Asset meta
-			TimeStamp         mTime; // Asset edited time
+			Asset::IMetaInfo* meta; // Asset meta
+			TimeStamp         time; // Asset edited time
 
 		public:
 			// Default constructor
 			AssetNode();
 
 			// Constructor
-			AssetNode(const String& path, UID id, Type::Id type);
+			AssetNode(const String& path, UID id, const Type* type);
 
 			// Destructor
 			~AssetNode();

@@ -114,7 +114,7 @@ namespace Editor
 		void CreateAnimationAsset(const String& targetPath);
 
 		// Creates and returns icon sprite for asset
-		static Sprite* GetAssetIconSprite(Asset* asset);
+		static Sprite* GetAssetIconSprite(const AssetRef& asset);
 		 
 		IOBJECT(AssetsWindow);
 

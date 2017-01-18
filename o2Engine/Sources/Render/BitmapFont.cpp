@@ -36,9 +36,9 @@ namespace o2
 		if (pugi::xml_node commonNode = root.child(L"common"))
 		{
 			String textureName = commonNode.attribute(L"texture").value();
-			ImageAsset image(textureName);
-			mTexture = image.GetAtlasTextureRef();
-			mTextureSrcRect = image.GetAtlasRect();
+			ImageAssetRef image(textureName);
+			mTexture = image->GetAtlasTextureRef();
+			mTextureSrcRect = image->GetAtlasRect();
 
 			mBaseHeight = commonNode.attribute(L"base").as_float();
 			mLineHeight = commonNode.attribute(L"lineHeight").as_float();

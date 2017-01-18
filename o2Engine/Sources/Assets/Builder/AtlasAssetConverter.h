@@ -15,7 +15,7 @@ namespace o2
 	{
 	public:
 		// Returns vector of processing assets types
-		Vector<Type::Id> GetProcessingAssetsTypes() const;
+		Vector<const Type*> GetProcessingAssetsTypes() const;
 
 		// Converts atlas by path
 		void ConvertAsset(const AssetTree::AssetNode& node);
@@ -40,8 +40,8 @@ namespace o2
 		// ----------------
 		struct Image: public ISerializable
 		{
-			UID   mId;   // Image asset id @SERIALIZABLE
-			TimeStamp mTime; // Image asset edited date @SERIALIZABLE
+			UID       id;   // Image asset id @SERIALIZABLE
+			TimeStamp time; // Image asset edited date @SERIALIZABLE
 
 		public:
 			// Default constructor

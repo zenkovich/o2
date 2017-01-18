@@ -390,16 +390,16 @@ namespace Editor
 
 	void AssetsWindow::CreateFolderAsset(const String& targetPath)
 	{
-		FolderAsset folderAsset;
-		folderAsset.Save(o2Assets.MakeUniqueAssetName(targetPath + "/New folder"));
+		FolderAssetRef folderAsset = FolderAssetRef::CreateAsset();
+		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/New folder"));
 
 		o2Assets.RebuildAssets();
 	}
 
 	void AssetsWindow::CreatePrefabAsset(const String& targetPath)
 	{
-		ActorAsset folderAsset;
-		folderAsset.Save(o2Assets.MakeUniqueAssetName(targetPath + "/New prefab.prefab"));
+		ActorAssetRef folderAsset = ActorAssetRef::CreateAsset();
+		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/New prefab.prefab"));
 
 		o2Assets.RebuildAssets();
 	}
@@ -411,15 +411,15 @@ namespace Editor
 
 	void AssetsWindow::CreateAnimationAsset(const String& targetPath)
 	{
-		AnimationAsset folderAsset;
-		folderAsset.Save(o2Assets.MakeUniqueAssetName(targetPath + "/New animation.anim"));
+		AnimationAssetRef folderAsset = AnimationAssetRef::CreateAsset();
+		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/New animation.anim"));
 
 		o2Assets.RebuildAssets();
 	}
 
-	Sprite* AssetsWindow::GetAssetIconSprite(Asset* asset)
+	Sprite* AssetsWindow::GetAssetIconSprite(const AssetRef& asset)
 	{
-		Type& type = asset->GetType();
+		const Type& type = asset->GetType();
 
 		if (type == TypeOf(ImageAsset))
 			return mnew Sprite(asset->GetPath());

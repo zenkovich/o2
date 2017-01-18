@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Assets/Asset.h"
 #include "Assets/AssetInfo.h"
 #include "Assets/AssetsTree.h"
 #include "Utils/Containers/Vector.h"
@@ -13,12 +14,8 @@
 
 namespace o2
 {
-	class Asset;
-	class LogStream;
 	class AssetsBuilder;
-
-	template<typename _asset_type>
-	class AssetRef;
+	class LogStream;
 
 	// ----------------
 	// Assets utilities
@@ -29,7 +26,7 @@ namespace o2
 		typedef Dictionary<String, const Type*> TypesExtsDict;
 
 	public:
-		Getter<String>                         assetsPath;        // Assets path getter
+		Getter<String>                     assetsPath;        // Assets path getter
 		Function<void(const Vector<UID>&)> onAssetsRebuilded; // Assets rebuilding event
 
 		// Default constructor
@@ -65,28 +62,15 @@ namespace o2
 		// Returns asset type for extension
 		const Type* GetAssetTypeByExtension(const String& extension) const;
 
-		// Creates new asset
-		template<typename _asset_type>
-		_asset_type* CreateAsset();
-
-		// Loads new asset by path
-		template<typename _asset_type>
-		_asset_type* LoadAsset(const String& path);
-
-		// Loads new asset by id
-		template<typename _asset_type>
-		_asset_type* LoadAsset(UID id);
-
-		// Loads asset by info
-		Asset* LoadAsset(const AssetInfo& info);
-
 		// Returns asset reference by path
-		template<typename _asset_type>
-		AssetRef<_asset_type> GetAsset(const String& path);
+		AssetRef GetAssetRef(const String& path);
 
 		// Returns asset reference by id
+		AssetRef GetAssetRef(UID id);
+
+		// Creates asset type _asset_type
 		template<typename _asset_type>
-		AssetRef<_asset_type> GetAsset(UID id);
+		AssetRef CreateAsset();
 
 		// Returns true if asset exist by path
 		bool IsAssetExist(const String& path) const;
@@ -98,7 +82,7 @@ namespace o2
 		bool IsAssetExist(const AssetInfo& info) const;
 
 		// Removes asset
-		bool RemoveAsset(Asset* asset, bool rebuildAssets = true);
+		bool RemoveAsset(const AssetRef& asset, bool rebuildAssets = true);
 
 		// Removes asset by path
 		bool RemoveAsset(const String& path, bool rebuildAssets = true);
@@ -110,7 +94,7 @@ namespace o2
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
 
 		// Copies asset
-		bool CopyAsset(Asset* asset, const String& dest, bool rebuildAssets = true);
+		bool CopyAsset(const AssetRef& asset, const String& dest, bool rebuildAssets = true);
 
 		// Copies asset by path
 		bool CopyAsset(const String& path, const String& dest, bool rebuildAssets = true);
@@ -122,7 +106,7 @@ namespace o2
 		bool CopyAsset(const AssetInfo& info, const String& dest, bool rebuildAssets = true);
 
 		// Moves asset to new path
-		bool MoveAsset(Asset* asset, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(const AssetRef& asset, const String& newPath, bool rebuildAssets = true);
 
 		// Moves asset by path to new path
 		bool MoveAsset(const String& path, const String& newPath, bool rebuildAssets = true);
@@ -137,7 +121,7 @@ namespace o2
 		bool MoveAssets(const Vector<AssetInfo>& assets, const String& destPath, bool rebuildAssets = true);
 
 		// Renames asset to new path
-		bool RenameAsset(Asset* asset, const String& newName, bool rebuildAssets = true);
+		bool RenameAsset(const AssetRef& asset, const String& newName, bool rebuildAssets = true);
 
 		// Renames asset by path to new path
 		bool RenameAsset(const String& path, const String& newName, bool rebuildAssets = true);
@@ -199,82 +183,26 @@ namespace o2
 		// Returns asset cache by id
 		AssetCache* FindAssetCache(UID id);
 
+		// Clears assets cache
+		void ClearAssetsCache();
+
 		friend class Asset;
 		friend class FolderAsset;
 	};
 
-}
-
-#include "Assets/AssetRef.h"
-
-namespace o2
-{
 	template<typename _asset_type>
-	_asset_type* Assets::CreateAsset()
+	AssetRef Assets::CreateAsset()
 	{
-		return mnew _asset_type();
-	}
+		_asset_type* newAset = mnew _asset_type();
 
-	template<typename _asset_type>
-	_asset_type* Assets::LoadAsset(const String& path)
-	{
-		return mnew _asset_type(path);
-	}
+		auto cached = mnew AssetCache();
+		cached->asset = newAset;
+		cached->id = newAset->GetAssetId();
+		cached->referencesCount = 0;
 
-	template<typename _asset_type>
-	_asset_type* Assets::LoadAsset(UID id)
-	{
-		return mnew _asset_type(id);
-	}
+		mCachedAssets.Add(cached);
 
-	template<typename _asset_type>
-	AssetRef<_asset_type> Assets::GetAsset(const String& path)
-	{
-		auto cached = FindAssetCache(path);
-
-		if (!cached)
-		{
-			if (!IsAssetExist(path))
-				return AssetRef<_asset_type>();
-
-			_asset_type* asset = mnew _asset_type();
-			asset->Load(path);
-
-			cached = mnew AssetCache();
-			cached->asset = asset;
-			cached->path = path;
-			cached->id = asset->GetAssetId();
-			cached->referencesCount = 0;
-
-			mCachedAssets.Add(cached);
-		}
-
-		return AssetRef<_asset_type>((_asset_type*)cached->asset, &cached->referencesCount);
-	}
-
-	template<typename _asset_type>
-	AssetRef<_asset_type> Assets::GetAsset(UID id)
-	{
-		auto cached = FindAssetCache(id);
-
-		if (!cached)
-		{
-			if (!IsAssetExist(id))
-				return AssetRef<_asset_type>();
-
-			_asset_type* asset = mnew _asset_type();
-			asset->Load(id);
-
-			cached = mnew AssetCache();
-			cached->asset = asset;
-			cached->path = asset->GetPath();
-			cached->id = id;
-			cached->referencesCount = 0;
-
-			mCachedAssets.Add(cached);
-		}
-
-		return AssetRef<_asset_type>((_asset_type*)cached->asset, &cached->referencesCount);
+		return AssetRef(newAset, &cached->referencesCount);
 	}
 
 }

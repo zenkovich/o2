@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/AtlasAsset.h"
+#include "Assets/ImageAsset.h"
 #include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 #include "PropertiesWindow/Properties/AssetProperty.h"
 #include "Utils/CursorEventsArea.h"
@@ -9,7 +10,6 @@ using namespace o2;
 
 namespace o2
 {
-	class ImageAsset;
 	class Sprite;
 	class UIImage;
 	class UIVerticalLayout;
@@ -31,7 +31,7 @@ namespace Editor
 		~ImageAssetPropertiesViewer();
 
 		// Sets target actors
-		void SetTargetAssets(const Vector<Asset*>& assets);
+		void SetTargetAssets(const Vector<AssetRef*>& assets);
 
 		// Returns viewing asset type 
 		const Type* GetAssetType() const;
@@ -42,32 +42,32 @@ namespace Editor
 		IOBJECT(ImageAssetPropertiesViewer);
 
 	protected:
-		Vector<ImageAsset*> mTargetAssets;
-
-		UIVerticalLayout*          mContent = nullptr;
-
-		UIWidget*                  mPreviewImageContent;
-		UIImage*                   mPreviewImage = nullptr;
-		UIImage*                   mPreviewImageBack = nullptr;
-
-		UIImage*                   mBorderLeftHandleWidget = nullptr;
-		UIImage*                   mBorderRightHandleWidget = nullptr;
-		UIImage*                   mBorderTopHandleWidget = nullptr;
-		UIImage*                   mBorderBottomHandleWidget = nullptr;
-
-		CursorEventsArea           mBorderLeftHandle;
-		CursorEventsArea           mBorderRightHandle;
-		CursorEventsArea           mBorderTopHandle;
-		CursorEventsArea           mBorderBottomHandle;
-		BorderF                    mBordersSmoothValue;
-
-		BorderIProperty*           mBorderProperty = nullptr;
-		EnumProperty*              mDefaultTypeProperty = nullptr;
-		AssetProperty<AtlasAsset>* mAtlasProperty = nullptr;
-		ObjectProperty*            mWindowsProperties = nullptr;
-		ObjectProperty*            mOSXProperties = nullptr;
-		ObjectProperty*            mAndroidProperties = nullptr;
-		ObjectProperty*            mIOSProperties = nullptr;
+		Vector<ImageAssetRef*>        mTargetAssets;
+								      
+		UIVerticalLayout*             mContent = nullptr;
+								      
+		UIWidget*                     mPreviewImageContent;
+		UIImage*                      mPreviewImage = nullptr;
+		UIImage*                      mPreviewImageBack = nullptr;
+								      
+		UIImage*                      mBorderLeftHandleWidget = nullptr;
+		UIImage*                      mBorderRightHandleWidget = nullptr;
+		UIImage*                      mBorderTopHandleWidget = nullptr;
+		UIImage*                      mBorderBottomHandleWidget = nullptr;
+								      
+		CursorEventsArea              mBorderLeftHandle;
+		CursorEventsArea              mBorderRightHandle;
+		CursorEventsArea              mBorderTopHandle;
+		CursorEventsArea              mBorderBottomHandle;
+		BorderF                       mBordersSmoothValue;
+								      
+		BorderIProperty*              mBorderProperty = nullptr;
+		EnumProperty*                 mDefaultTypeProperty = nullptr;
+		AssetProperty<AtlasAssetRef>* mAtlasProperty = nullptr;
+		ObjectProperty*               mWindowsProperties = nullptr;
+		ObjectProperty*               mOSXProperties = nullptr;
+		ObjectProperty*               mAndroidProperties = nullptr;
+		ObjectProperty*               mIOSProperties = nullptr;
 
 	protected:
 		// Initializes image preview widgets and border handles

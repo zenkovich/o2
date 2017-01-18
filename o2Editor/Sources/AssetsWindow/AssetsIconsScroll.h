@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Assets/ActorAsset.h"
 #include "Assets/AssetInfo.h"
+#include "Assets/ImageAsset.h"
 #include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "UI/ScrollArea.h"
@@ -12,8 +14,6 @@ using namespace o2;
 namespace o2
 {
 	class Actor;
-	class ActorAsset;
-	class ImageAsset;
 	class Sprite;
 	class UIContextMenu;
 	class UIGridLayout;
@@ -104,7 +104,7 @@ namespace Editor
 		typedef Dictionary<String, AssetsIconsVec> IconArrsDict;
 		typedef Vector<Pair<UID, String>> AssetIdPathVec;
 		typedef Vector<Actor*> ActorsVec;
-		typedef Vector<Asset*> AssetsVec;
+		typedef Vector<AssetRef*> AssetsVec;
 
 		const Vec2F        mAssetIconSize = Vec2F(50, 60);
 
@@ -257,10 +257,10 @@ namespace Editor
 		Actor* InstantiateAsset(const _type& asset);
 
 		// Instantiate actor from image asset
-		Actor* InstantiateAsset(const ImageAsset& asset);
+		Actor* InstantiateAsset(const ImageAssetRef& asset);
 
 		// Instantiate actor from actor asset
-		Actor* InstantiateAsset(const ActorAsset& asset);
+		Actor* InstantiateAsset(const ActorAssetRef& asset);
 
 		// Checks preloaded assets for saving
 		void CheckPreloadedAssetsSaving();

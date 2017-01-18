@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Assets/ImageAsset.h"
 #include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "UI/ScrollArea.h"
@@ -63,17 +64,17 @@ namespace o2
 		class Item:public ISerializable
 		{
 		public:
-			WString      text;	   // @SERIALIZABLE
-			ShortcutKeys shortcut; // @SERIALIZABLE
-			ImageAsset*  icon;	   // @SERIALIZABLE
-			Vector<Item> subItems; // @SERIALIZABLE
-			ClickFunc    onClick;  // On click event	
+			WString       text;	    // @SERIALIZABLE
+			ShortcutKeys  shortcut; // @SERIALIZABLE
+			ImageAssetRef icon;	    // @SERIALIZABLE
+			Vector<Item>  subItems; // @SERIALIZABLE
+			ClickFunc     onClick;  // On click event	
 
 			Item();
 
-			Item(const WString& text, Vector<Item> subItems, ImageAsset* icon = nullptr);
+			Item(const WString& text, Vector<Item> subItems, const ImageAssetRef& icon = ImageAssetRef());
 
-			Item(const WString& text, const Function<void()> onClick, ImageAsset* icon = nullptr,
+			Item(const WString& text, const Function<void()> onClick, const ImageAssetRef& icon = ImageAssetRef(),
 				 const ShortcutKeys& shortcut = ShortcutKeys());
 
 			~Item();
@@ -118,7 +119,7 @@ namespace o2
 
 		// Adds item by path ("node/sub node/target")
 		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-						  ImageAsset* icon = nullptr, const ShortcutKeys& shortcut = ShortcutKeys());
+						  const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Inserts item at position
 		UIWidget* InsertItem(const Item& item, int position);

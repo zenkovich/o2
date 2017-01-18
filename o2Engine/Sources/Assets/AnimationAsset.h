@@ -20,18 +20,6 @@ namespace o2
 		Animation         animation; // Asset data
 		Getter<MetaInfo*> meta;      // Meta information getter
 
-		// Default constructor
-		AnimationAsset();
-
-		// Constructor by path - loads asset by path
-		AnimationAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		AnimationAsset(UID id);
-
-		// Copy-constructor
-		AnimationAsset(const AnimationAsset& asset);
-
 		// Destructor
 		~AnimationAsset();
 
@@ -60,12 +48,24 @@ namespace o2
 		{
 		public:
 			// Returns asset type id
-			Type::Id GetAssetType() const;
+			const Type* GetAssetType() const;
 
 			SERIALIZABLE(MetaInfo);
 		};
 
 	protected:
+		// Default constructor
+		AnimationAsset();
+
+		// Constructor by path - loads asset by path
+		AnimationAsset(const String& path);
+
+		// Constructor by id - loads asset by id
+		AnimationAsset(UID id);
+
+		// Copy-constructor
+		AnimationAsset(const AnimationAsset& asset);
+
 		// Loads data
 		void LoadData(const String& path);
 
@@ -74,5 +74,65 @@ namespace o2
 
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class Assets;
+	};
+
+	// -------------------------
+	// Animation Asset reference
+	// -------------------------
+	class AnimationAssetRef: public AssetRef
+	{
+	public:
+		// Creates AnimationAsset and returns reference to it
+		static AnimationAssetRef CreateAsset();
+
+		// Default constructor, references to null
+		AnimationAssetRef(): AssetRef() {}
+
+		// Copy-constructor
+		AnimationAssetRef(const AssetRef& other): AssetRef(other) { CheckType<AnimationAsset>(); }
+
+		// Copy-constructor
+		AnimationAssetRef(const AnimationAssetRef& other): AssetRef(other) {}
+
+		// Constructor from asset path
+		AnimationAssetRef(const String& path): AssetRef(path) {}
+
+		// Constructor from asset id
+		AnimationAssetRef(UID id): AssetRef(id) {}
+
+		// Destructor
+		~AnimationAssetRef() {}
+
+		// Boolean cast operator, true means that reference is valid
+		operator bool() const { return IsValid(); }
+
+		// Assign operator
+		AnimationAssetRef& operator=(const AnimationAssetRef& other) { AssetRef::operator=(other); return *this; }
+
+		// Getter operator
+		AnimationAsset& operator*() { return *((AnimationAsset*)mAssetPtr); }
+
+		// Constant getter operator
+		const AnimationAsset& operator*() const { return *((AnimationAsset*)mAssetPtr); }
+
+		// Asset members and field operator
+		AnimationAsset* operator->() { return ((AnimationAsset*)mAssetPtr); }
+
+		// Constant asset members and field operator
+		const AnimationAsset* operator->() const { return ((AnimationAsset*)mAssetPtr); }
+
+		// Check equals operator
+		bool operator==(const AnimationAssetRef& other) const { return AssetRef::operator==(other); }
+
+		// Check not equals operator
+		bool operator!=(const AnimationAssetRef& other) const { return AssetRef::operator!=(other); }
+
+		SERIALIZABLE(AnimationAssetRef);
+
+	protected:
+		// Constructor for Assets manager
+		AnimationAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }

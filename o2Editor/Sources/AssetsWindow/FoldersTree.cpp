@@ -91,10 +91,10 @@ namespace Editor
 		mContextMenu->AddItem("Create/Script", [&]() { OnContextCreateScriptPressed(); });
 		mContextMenu->AddItem("Create/Animation", [&]() { OnContextCreateAnimationPressed(); });
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, nullptr, ShortcutKeys('C', true));
-		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, nullptr, ShortcutKeys('X', true));
-		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, nullptr, ShortcutKeys('V', true));
-		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, nullptr, ShortcutKeys(VK_DELETE));
+		mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true));
+		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true));
+		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true));
+		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
 		mContextMenu->AddItem("---");
 		mContextMenu->AddItem("Expand all", [&]() { OnContextExpandPressed(); });
 		mContextMenu->AddItem("Collapse all", [&]() { OnContextCollapsePressed(); });
@@ -118,7 +118,7 @@ namespace Editor
 		if (assetTreeNode)
 		{
 			return assetTreeNode->GetChilds().
-				FindAll([](AssetTree::AssetNode* x) { return x->mType == TypeOf(FolderAsset).ID(); }).
+				FindAll([](AssetTree::AssetNode* x) { return x->assetType == &TypeOf(FolderAsset); }).
 				Select<UnknownPtr>([](AssetTree::AssetNode* x) { return UnknownPtr(x); });
 		}
 		else
@@ -126,7 +126,7 @@ namespace Editor
 			const AssetTree& assetsTree = o2Assets.GetAssetsTree();
 
 			return assetsTree.mRootAssets.
-				FindAll([](AssetTree::AssetNode* x) { return x->mType == TypeOf(FolderAsset).ID(); }).
+				FindAll([](AssetTree::AssetNode* x) { return x->assetType == &TypeOf(FolderAsset); }).
 				Select<UnknownPtr>([](AssetTree::AssetNode* x) { return UnknownPtr(x); });
 		}
 	}
@@ -134,7 +134,7 @@ namespace Editor
 	void UIAssetsFoldersTree::SetupFoldersTreeNode(UITreeNode* node, UnknownPtr object)
 	{
 		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
-		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->mPath);
+		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
 
 		node->name = pathName;
 
@@ -146,7 +146,7 @@ namespace Editor
 	void UIAssetsFoldersTree::OnFoldersTreeNodeDblClick(UITreeNode* node)
 	{
 		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)node->GetObject();
-		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->mPath);
+		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
 
 		node->SetState("edit", true);
 
@@ -158,7 +158,7 @@ namespace Editor
 
 		editBox->onChangeCompleted = [=](const WString& text) {
 
-			String newPathAsset = o2FileSystem.GetParentPath(assetTreeNode->mPath) + "/" + text;
+			String newPathAsset = o2FileSystem.GetParentPath(assetTreeNode->path) + "/" + text;
 			o2Assets.RenameAsset(*assetTreeNode, text);
 
 			node->SetState("edit", false);
@@ -178,7 +178,7 @@ namespace Editor
 		if (nodes.Count() > 0)
 		{
 			AssetTree::AssetNode* assetTreeNode = nodes.Last();
-			mCurrentPath = assetTreeNode->mPath;
+			mCurrentPath = assetTreeNode->path;
 			o2EditorAssets.mAssetsGridScroll->SetViewingPath(mCurrentPath);
 		}
 		else o2EditorAssets.OpenFolder("");

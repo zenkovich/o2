@@ -1,16 +1,16 @@
 #pragma once
 
+#include "Assets/Asset.h"
+#include "Assets/BitmapFontAsset.h"
+#include "Assets/VectorFontAsset.h"
 #include "Render/FontRef.h"
 #include "Render/RectDrawable.h"
 #include "Utils/String.h"
 
 namespace o2
 {
-	class Asset;
-	class BitmapFontAsset;
 	class Mesh;
 	class Render;
-	class VectorFontAsset;
 
 	// ------------------------------------------------------------------------------------------
 	// Text renderer class. Using font, basis and many style parameters. Caching text into meshes
@@ -44,10 +44,10 @@ namespace o2
 		Text(UID fontAssetId);
 
 		// Constructor
-		Text(BitmapFontAsset* fontAsset);
+		Text(const BitmapFontAssetRef& fontAsset);
 
 		// Constructor
-		Text(VectorFontAsset* fontAsset);
+		Text(const VectorFontAssetRef& fontAsset);
 
 		// Copy-constructor
 		Text(const Text& text);
@@ -68,10 +68,10 @@ namespace o2
 		FontRef GetFont() const;
 
 		// Sets bitmap font asset 
-		void SetFontAsset(BitmapFontAsset* asset);
+		void SetFontAsset(const BitmapFontAssetRef& asset);
 
 		// Sets vector font asset
-		void SetFontAsset(VectorFontAsset* asset);
+		void SetFontAsset(const VectorFontAssetRef& asset);
 
 		// Sets font asset id (loads asset by this id)
 		void SetFontAsset(UID assetId);
@@ -80,7 +80,7 @@ namespace o2
 		void SetFontAsset(const String& fileName);
 
 		// Returns asset by font asset id
-		Asset* GetFontAsset() const;
+		AssetRef GetFontAsset() const;
 
 		// Returns font asset id
 		UID GetFontAssetId() const;

@@ -3,12 +3,10 @@
 #include "Animation/AnimatedFloat.h"
 #include "Animation/Animation.h"
 #include "Application/Application.h"
-#include "Assets/ActorAsset.h"
 #include "Assets/AnimationAsset.h"
 #include "Assets/Assets.h"
 #include "Assets/DataAsset.h"
 #include "Assets/FolderAsset.h"
-#include "Assets/ImageAsset.h"
 #include "AssetsWindow.h"
 #include "Core/Actions/CreateActors.h"
 #include "Core/EditorApplication.h"
@@ -209,21 +207,21 @@ namespace Editor
 
 		AssetInfosVec folderAssetsInfos;
 		if (mCurrentPath != "")
-			folderAssetsInfos = FolderAsset(mCurrentPath).GetContainingAssetsInfos();
+			folderAssetsInfos = FolderAssetRef(mCurrentPath)->GetContainingAssetsInfos();
 		else
 			folderAssetsInfos = o2Assets.GetAssetsTree().mRootAssets.Select<AssetInfo>([](auto x) { return (AssetInfo)*x; });
 
 		auto getAssetTypeSortWeight = [](const AssetInfo& asset) {
 
-			if (asset.mType == TypeOf(FolderAsset).ID())
+			if (asset.assetType == &TypeOf(FolderAsset))
 				return 1;
-			else if (asset.mType == TypeOf(ImageAsset).ID())
+			else if (asset.assetType == &TypeOf(ImageAsset))
 				return 2;
-			else if (asset.mType == TypeOf(DataAsset).ID())
+			else if (asset.assetType == &TypeOf(DataAsset))
 				return 5;
-			else if (asset.mType == TypeOf(AnimationAsset).ID())
+			else if (asset.assetType == &TypeOf(AnimationAsset))
 				return 4;
-			else if (asset.mType == TypeOf(ActorAsset).ID())
+			else if (asset.assetType == &TypeOf(ActorAsset))
 				return 3;
 
 			return 100;
@@ -232,7 +230,7 @@ namespace Editor
 		folderAssetsInfos.Sort([&](const AssetInfo& a, const AssetInfo& b) {
 			int wa = getAssetTypeSortWeight(a), wb = getAssetTypeSortWeight(b);
 			if (wa == wb)
-				return a.mPath > b.mPath;
+				return a.path > b.path;
 
 			return wa < wb;
 		});
@@ -242,27 +240,27 @@ namespace Editor
 		{
 			UIAssetIcon* assetIcon;
 
-			if (asset.mType == TypeOf(FolderAsset).ID())
+			if (asset.assetType == &TypeOf(FolderAsset))
 			{
 				assetIcon = GetAssetIconFromPool("folder");
 				assetIcon->name = "folder";
 			}
-			else if (asset.mType == TypeOf(ImageAsset).ID())
+			else if (asset.assetType == &TypeOf(ImageAsset))
 			{
 				assetIcon = GetImageAssetIcon(asset);
 				assetIcon->name = "image preview";
 			}
-			else if (asset.mType == TypeOf(DataAsset).ID())
+			else if (asset.assetType == &TypeOf(DataAsset))
 			{
 				assetIcon = GetAssetIconFromPool("text");
 				assetIcon->name = "text";
 			}
-			else if (asset.mType == TypeOf(AnimationAsset).ID())
+			else if (asset.assetType == &TypeOf(AnimationAsset))
 			{
 				assetIcon = GetAssetIconFromPool("animation");
 				assetIcon->name = "animation";
 			}
-			else if (asset.mType == TypeOf(ActorAsset).ID())
+			else if (asset.assetType == &TypeOf(ActorAsset))
 			{
 				assetIcon = GetAssetIconFromPool("prefab");
 				assetIcon->name = "prefab";
@@ -274,7 +272,7 @@ namespace Editor
 			}
 
 			assetIcon->SetAssetInfo(asset);
-			assetIcon->SetState("halfHide", mCuttingAssets.ContainsPred([&](auto x) { return x.mFirst == asset.mId; }));
+			assetIcon->SetState("halfHide", mCuttingAssets.ContainsPred([&](auto x) { return x.mFirst == asset.id; }));
 			assetIcon->SetSelectionGroup(this);
 			assetIcon->mOwner = this;
 
@@ -299,7 +297,7 @@ namespace Editor
 		SetViewingPath(assetFolder);
 
 		UIAssetIcon* icon = (UIAssetIcon*)(mGrid->GetChilds().FindMatch([=](UIWidget* x) {
-			return ((UIAssetIcon*)x)->GetAssetInfo().mId == id; }));
+			return ((UIAssetIcon*)x)->GetAssetInfo().id == id; }));
 
 		if (!icon)
 			return;
@@ -320,7 +318,7 @@ namespace Editor
 		SetViewingPath(assetFolder);
 
 		UIAssetIcon* icon = (UIAssetIcon*)(mGrid->GetChilds().FindMatch([=](UIWidget* x) {
-			return ((UIAssetIcon*)x)->GetAssetInfo().mId == id; }));
+			return ((UIAssetIcon*)x)->GetAssetInfo().id == id; }));
 
 		if (!icon)
 			return;
@@ -361,24 +359,24 @@ namespace Editor
 		for (auto asset : lastSelectedPreloadedAssets)
 		{
 			if (!mSelectedAssetsIcons.ContainsPred([&](UIAssetIcon* x) {
-				return x->GetAssetInfo().mId == asset->GetAssetId(); }))
+				return x->GetAssetInfo().id == (*asset)->GetAssetId(); }))
 			{
 				mSelectedPreloadedAssets.Remove(asset);
-				asset->Save(false);
+				(*asset)->Save(false);
 				delete asset;
 			}
 		}
 
 		for (auto icon : mSelectedAssetsIcons)
 		{
-			if (mSelectedPreloadedAssets.ContainsPred([&](Asset* x) { return x->GetAssetId() == icon->GetAssetInfo().mId; }))
+			if (mSelectedPreloadedAssets.ContainsPred([&](const AssetRef* x) { return (*x)->GetAssetId() == icon->GetAssetInfo().id; }))
 				continue;
 
-			auto iconAsset = o2Assets.LoadAsset(icon->GetAssetInfo());
+			AssetRef* iconAsset = mnew AssetRef(o2Assets.GetAssetRef(icon->GetAssetInfo().id));
 			mSelectedPreloadedAssets.Add(iconAsset);
 		}
 
-		onAssetsSelected(mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().mPath; }));
+		onAssetsSelected(mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().path; }));
 
 		if (PropertiesWindow::IsSingletonInitialzed())
 		{
@@ -409,7 +407,7 @@ namespace Editor
 		{
 			UIAssetIcon* icon = (UIAssetIcon*)child;
 			icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.ContainsPred([=](auto x) {
-				return x.mFirst == icon->GetAssetInfo().mId; }));
+				return x.mFirst == icon->GetAssetInfo().id; }));
 		}
 	}
 
@@ -529,9 +527,9 @@ namespace Editor
 	void UIAssetsIconsScrollArea::OnDroppedFromThis()
 	{
 		UIAssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
-		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == TypeOf(FolderAsset).ID())
+		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().assetType == &TypeOf(FolderAsset))
 		{
-			String destPath = iconUnderCursor->GetAssetInfo().mPath;
+			String destPath = iconUnderCursor->GetAssetInfo().path;
 			auto assetsInfos = mSelectedAssetsIcons.Select<AssetInfo>([](auto x) { return x->GetAssetInfo(); });
 			o2Assets.MoveAssets(assetsInfos, destPath, true);
 
@@ -547,17 +545,19 @@ namespace Editor
 		String destPath = mCurrentPath;
 
 		UIAssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
-		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mType == TypeOf(FolderAsset).ID())
-			destPath = iconUnderCursor->GetAssetInfo().mPath;
+		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().assetType == &TypeOf(FolderAsset))
+			destPath = iconUnderCursor->GetAssetInfo().path;
 
 		Vector<String> newAssets;
 		for (auto actor : actorsTree->GetSelectedActors())
 		{
-			ActorAsset newAsset;
-			newAsset.actor = *actor;
-			String path = destPath.IsEmpty() ? newAsset.actor.name + ".prefab" : destPath + "/" + newAsset.actor.name + ".prefab";
+			ActorAssetRef newAsset = ActorAssetRef::CreateAsset();
+			*newAsset->GetActor() = *actor;
+			String path = destPath.IsEmpty() ? newAsset->GetActor()->name + ".prefab" : destPath + "/" + 
+				          newAsset->GetActor()->name + ".prefab";
+
 			String uniquePath = o2Assets.MakeUniqueAssetName(path);
-			newAsset.Save(uniquePath, false);
+			newAsset->Save(uniquePath, false);
 
 			newAssets.Add(uniquePath);
 		}
@@ -589,7 +589,7 @@ namespace Editor
 			Actor* actor = InstantiateAsset(info);
 			if (actor)
 			{
-				actor->name = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(info.mPath));
+				actor->name = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(info.path));
 				mInstSceneDragActors.Add(actor);
 			}
 		}
@@ -679,10 +679,10 @@ namespace Editor
 		mContextMenu->AddItem("Create/Script", [&]() { OnContextCreateScriptPressed(); });
 		mContextMenu->AddItem("Create/Animation", [&]() { OnContextCreateAnimationPressed(); });
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, nullptr, ShortcutKeys('C', true));
-		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, nullptr, ShortcutKeys('X', true));
-		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, nullptr, ShortcutKeys('V', true));
-		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, nullptr, ShortcutKeys(VK_DELETE));
+		mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true));
+		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true));
+		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true));
+		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
 
 		AddChild(mContextMenu);
 	}
@@ -739,18 +739,18 @@ namespace Editor
 		auto previewLayer = assetIcon->layer["preview"];
 		Sprite* previewSprite = (Sprite*)previewLayer->drawable;
 
-		ImageAsset previewSpriteAsset(asset.mPath);
+		ImageAssetRef previewSpriteAsset(asset.path);
 		float previewMaxSize = 30;
 
-		if (previewSpriteAsset.width > previewSpriteAsset.height)
+		if (previewSpriteAsset->width > previewSpriteAsset->height)
 		{
-			float cf = previewSpriteAsset.height / previewSpriteAsset.width;
+			float cf = previewSpriteAsset->height / previewSpriteAsset->width;
 			previewLayer->layout = Layout::Based(BaseCorner::Center, Vec2F(previewMaxSize, previewMaxSize*cf),
 												 Vec2F(0, 10));
 		}
 		else
 		{
-			float cf = previewSpriteAsset.width / previewSpriteAsset.height;
+			float cf = previewSpriteAsset->width / previewSpriteAsset->height;
 			previewLayer->layout = Layout::Based(BaseCorner::Center, Vec2F(previewMaxSize*cf, previewMaxSize),
 												 Vec2F(0, 10));
 		}
@@ -781,7 +781,7 @@ namespace Editor
 			auto editBox = (UIEditBox*)icon->GetChild("nameEditBox");
 
 			editBox->text = o2FileSystem.GetFileNameWithoutExtension(
-				o2FileSystem.GetPathWithoutDirectories(iconAssetInfo.mPath));
+				o2FileSystem.GetPathWithoutDirectories(iconAssetInfo.path));
 
 			editBox->SelectAll();
 			editBox->UIWidget::Focus();
@@ -789,21 +789,21 @@ namespace Editor
 
 			editBox->onChangeCompleted = [=](const WString& text) {
 				icon->SetState("edit", false);
-				String ext = o2FileSystem.GetFileExtension(iconAssetInfo.mPath);
+				String ext = o2FileSystem.GetFileExtension(iconAssetInfo.path);
 				if (ext.IsEmpty())
 					o2Assets.RenameAsset(iconAssetInfo, text, false);
 				else
-					o2Assets.RenameAsset(iconAssetInfo, text + "." + o2FileSystem.GetFileExtension(iconAssetInfo.mPath), false);
+					o2Assets.RenameAsset(iconAssetInfo, text + "." + o2FileSystem.GetFileExtension(iconAssetInfo.path), false);
 				mNeedRebuildAssets = true;
 			};
 
 			return;
 		}
 
-		if (iconAssetInfo.mType == TypeOf(FolderAsset).ID())
-			o2EditorAssets.OpenFolder(iconAssetInfo.mPath);
+		if (iconAssetInfo.assetType == &TypeOf(FolderAsset))
+			o2EditorAssets.OpenFolder(iconAssetInfo.path);
 		else
-			o2EditorAssets.OpenAndEditAsset(iconAssetInfo.mId);
+			o2EditorAssets.OpenAndEditAsset(iconAssetInfo.id);
 	}
 
 	UIAssetIcon* UIAssetsIconsScrollArea::GetIconUnderPoint(const Vec2F& point) const
@@ -854,7 +854,7 @@ namespace Editor
 			return;
 
 		o2EditorAssets.CopyAssets(
-			mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().mPath; }));
+			mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().path; }));
 	}
 
 	void UIAssetsIconsScrollArea::OnContextCutPressed()
@@ -863,7 +863,7 @@ namespace Editor
 			return;
 
 		o2EditorAssets.CutAssets(
-			mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().mPath; }));
+			mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().path; }));
 	}
 
 	void UIAssetsIconsScrollArea::OnContextPastePressed()
@@ -881,7 +881,7 @@ namespace Editor
 			return;
 
 		o2EditorAssets.DeleteAssets(
-			mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().mPath; }));
+			mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().path; }));
 	}
 
 	void UIAssetsIconsScrollArea::OnContextOpenPressed()
@@ -890,7 +890,7 @@ namespace Editor
 			return;
 
 		if (mSelectedAssetsIcons.Count() > 0)
-			o2EditorAssets.OpenAndEditAsset(mSelectedAssetsIcons.Last()->GetAssetInfo().mId);
+			o2EditorAssets.OpenAndEditAsset(mSelectedAssetsIcons.Last()->GetAssetInfo().id);
 	}
 
 	void UIAssetsIconsScrollArea::OnContextShowInExplorerPressed()
@@ -899,7 +899,7 @@ namespace Editor
 			return;
 
 		if (mSelectedAssetsIcons.Count() > 0)
-			o2EditorAssets.OpenAsset(mSelectedAssetsIcons.Last()->GetAssetInfo().mId);
+			o2EditorAssets.OpenAsset(mSelectedAssetsIcons.Last()->GetAssetInfo().id);
 	}
 
 	void UIAssetsIconsScrollArea::OnContextImportPressed()
@@ -942,14 +942,14 @@ namespace Editor
 		o2EditorAssets.CreateAnimationAsset(mCurrentPath);
 	}
 
-	Actor* UIAssetsIconsScrollArea::InstantiateAsset(const ImageAsset& asset)
+	Actor* UIAssetsIconsScrollArea::InstantiateAsset(const ImageAssetRef& asset)
 	{
 		return mnew Actor({ mnew ImageComponent(asset) });
 	}
 
-	Actor* UIAssetsIconsScrollArea::InstantiateAsset(const ActorAsset& asset)
+	Actor* UIAssetsIconsScrollArea::InstantiateAsset(const ActorAssetRef& asset)
 	{
-		return mnew Actor(asset.actor);
+		return mnew Actor(*(asset->GetActor()));
 	}
 
 	void UIAssetsIconsScrollArea::CheckPreloadedAssetsSaving()
@@ -959,7 +959,7 @@ namespace Editor
 
 		for (auto asset : mSelectedPreloadedAssets)
 		{
-			asset->Save(false);
+			(*asset)->Save(false);
 			delete asset;
 		}
 
@@ -1017,10 +1017,10 @@ namespace Editor
 
 	Actor* UIAssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
 	{
-		if (assetInfo.mType == TypeOf(ImageAsset).ID())
-			return InstantiateAsset(ImageAsset(assetInfo.mId));
-		else if (assetInfo.mType == TypeOf(ActorAsset).ID())
-			return InstantiateAsset(ActorAsset(assetInfo.mId));
+		if (assetInfo.assetType == &TypeOf(ImageAsset))
+			return InstantiateAsset(ImageAssetRef(assetInfo.id));
+		else if (assetInfo.assetType == &TypeOf(ActorAsset))
+			return InstantiateAsset(ActorAssetRef(assetInfo.id));
 
 		return nullptr;
 	}
@@ -1126,8 +1126,8 @@ CLASS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, InstantiateDraggingAssets);
 	PROTECTED_FUNCTION(void, ClearInstantiatedDraggingAssets);
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const AssetInfo&);
-	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ImageAsset&);
-	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ActorAsset&);
+	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ImageAssetRef&);
+	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ActorAssetRef&);
 	PROTECTED_FUNCTION(void, CheckPreloadedAssetsSaving);
 	PROTECTED_FUNCTION(SelectDragObjectsVec, GetSelectedDragObjects);
 	PROTECTED_FUNCTION(SelectDragObjectsVec, GetAllObjects);

@@ -1,8 +1,6 @@
 #include "Text.h"
 
 #include "Assets/Assets.h"
-#include "Assets/BitmapFontAsset.h"
-#include "Assets/VectorFontAsset.h"
 #include "Render/Mesh.h"
 #include "Render/Render.h"
 #include "Utils/Debug.h"
@@ -52,13 +50,13 @@ namespace o2
 		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 	}
 
-	Text::Text(BitmapFontAsset* fontAsset):
+	Text::Text(const BitmapFontAssetRef& fontAsset):
 		Text(fontAsset->GetFont())
 	{
 		mFontAssetId = fontAsset->GetAssetId();
 	}
 
-	Text::Text(VectorFontAsset* fontAsset):
+	Text::Text(const VectorFontAssetRef& fontAsset):
 		Text(fontAsset->GetFont())
 	{
 		mFontAssetId = fontAsset->GetAssetId();
@@ -148,7 +146,7 @@ namespace o2
 		return mFont;
 	}
 
-	void Text::SetFontAsset(BitmapFontAsset* asset)
+	void Text::SetFontAsset(const BitmapFontAssetRef& asset)
 	{
 		if (mFont)
 			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
@@ -162,7 +160,7 @@ namespace o2
 		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 	}
 
-	void Text::SetFontAsset(VectorFontAsset* asset)
+	void Text::SetFontAsset(const VectorFontAssetRef& asset)
 	{
 		if (mFont)
 			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
@@ -191,13 +189,13 @@ namespace o2
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
 		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
 		{
-			auto asset = BitmapFontAsset(mFontAssetId);
-			mFont = asset.GetFont();
+			auto asset = BitmapFontAssetRef(mFontAssetId);
+			mFont = asset->GetFont();
 		}
 		else
 		{
-			auto asset = VectorFontAsset(mFontAssetId);
-			mFont = asset.GetFont();
+			auto asset = VectorFontAssetRef(mFontAssetId);
+			mFont = asset->GetFont();
 		}
 
 		if (mFont)
@@ -220,17 +218,17 @@ namespace o2
 			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 		
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(fileName);
-		mFontAssetId = fontAssetInfo.mId;
+		mFontAssetId = fontAssetInfo.id;
 
 		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
 		{
-			auto asset = BitmapFontAsset(mFontAssetId);
-			mFont = asset.GetFont();
+			auto asset = BitmapFontAssetRef(mFontAssetId);
+			mFont = asset->GetFont();
 		}
 		else
 		{
-			auto asset = VectorFontAsset(mFontAssetId);
-			mFont = asset.GetFont();
+			auto asset = VectorFontAssetRef(mFontAssetId);
+			mFont = asset->GetFont();
 		}
 
 		if (mFont)
@@ -239,13 +237,13 @@ namespace o2
 		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 	}
 
-	Asset* Text::GetFontAsset() const
+	AssetRef Text::GetFontAsset() const
 	{
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
 		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
-			return mnew BitmapFontAsset(mFontAssetId);
+			return BitmapFontAssetRef(mFontAssetId);
 		
-		return mnew VectorFontAsset(mFontAssetId);
+		return VectorFontAssetRef(mFontAssetId);
 	}
 
 	UID Text::GetFontAssetId() const
@@ -792,11 +790,11 @@ CLASS_META(o2::Text)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetFont, FontRef);
 	PUBLIC_FUNCTION(FontRef, GetFont);
-	PUBLIC_FUNCTION(void, SetFontAsset, BitmapFontAsset*);
-	PUBLIC_FUNCTION(void, SetFontAsset, VectorFontAsset*);
+	PUBLIC_FUNCTION(void, SetFontAsset, const BitmapFontAssetRef&);
+	PUBLIC_FUNCTION(void, SetFontAsset, const VectorFontAssetRef&);
 	PUBLIC_FUNCTION(void, SetFontAsset, UID);
 	PUBLIC_FUNCTION(void, SetFontAsset, const String&);
-	PUBLIC_FUNCTION(Asset*, GetFontAsset);
+	PUBLIC_FUNCTION(AssetRef, GetFontAsset);
 	PUBLIC_FUNCTION(UID, GetFontAssetId);
 	PUBLIC_FUNCTION(void, SetHeight, int);
 	PUBLIC_FUNCTION(int, GetHeight);

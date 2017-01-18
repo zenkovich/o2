@@ -13,9 +13,9 @@ namespace o2
 	class UIImage: public UIWidget
 	{
 	public:
-		Property<Sprite*>    image;      // Image sprite
-		Property<ImageAsset> imageAsset; // Image asset
-		Property<String>     imageName;  // Image asset name
+		Property<Sprite*>       image;      // Image sprite
+		Property<ImageAssetRef> imageAsset; // Image asset
+		Property<String>        imageName;  // Image asset name
 
 		// Default constructor
 		UIImage();
@@ -33,10 +33,10 @@ namespace o2
 		Sprite* GetImage();
 
 		// Sets image asset
-		void SetImageAsset(const ImageAsset& asset);
+		void SetImageAsset(const ImageAssetRef& asset);
 
 		// Returns image asset
-		ImageAsset GetImageAsset() const;
+		ImageAssetRef GetImageAsset() const;
 
 		// Sets image asset name
 		void SetImageName(const String& name);

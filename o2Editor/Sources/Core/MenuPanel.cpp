@@ -27,31 +27,31 @@ namespace Editor
 		o2UI.AddWidget(mMenuPanel);
 
 		// FILE
-		mMenuPanel->AddItem("File/New scene", [&]() { OnNewScenePressed(); }, nullptr, ShortcutKeys('N', true));
-		mMenuPanel->AddItem("File/Open scene", [&]() { OnOpenScenePressed(); }, nullptr, ShortcutKeys('O', true));
-		mMenuPanel->AddItem("File/Save scene", [&]() { OnSaveScenePressed(); }, nullptr, ShortcutKeys('S', true));
-		mMenuPanel->AddItem("File/Save scene as ...", [&]() { OnSaveSceneAsPressed(); }, nullptr, ShortcutKeys('S', true, false, true));
+		mMenuPanel->AddItem("File/New scene", [&]() { OnNewScenePressed(); }, ImageAssetRef(), ShortcutKeys('N', true));
+		mMenuPanel->AddItem("File/Open scene", [&]() { OnOpenScenePressed(); }, ImageAssetRef(), ShortcutKeys('O', true));
+		mMenuPanel->AddItem("File/Save scene", [&]() { OnSaveScenePressed(); }, ImageAssetRef(), ShortcutKeys('S', true));
+		mMenuPanel->AddItem("File/Save scene as ...", [&]() { OnSaveSceneAsPressed(); }, ImageAssetRef(), ShortcutKeys('S', true, false, true));
 
 		mMenuPanel->AddItem("File/---");
 
 		mMenuPanel->AddItem("File/New project", [&]() { OnNewProjectPressed(); });
 		mMenuPanel->AddItem("File/Open project", [&]() { OnOpenProjectPressed(); });
-		mMenuPanel->AddItem("File/Save project", [&]() { OnSaveProjectPressed(); }, nullptr, ShortcutKeys('S', true, true));
+		mMenuPanel->AddItem("File/Save project", [&]() { OnSaveProjectPressed(); }, ImageAssetRef(), ShortcutKeys('S', true, true));
 
 		mMenuPanel->AddItem("File/---");
 
 		mMenuPanel->AddItem("File/Exit", [&]() { OnExitPressed(); });
 
 		// EDIT
-		mMenuPanel->AddItem("Edit/Undo", [&]() { OnUndoPressed(); }, nullptr, ShortcutKeys('Z', true));
-		mMenuPanel->AddItem("Edit/Redo", [&]() { OnRedoPressed(); }, nullptr, ShortcutKeys('Z', true, true));
+		mMenuPanel->AddItem("Edit/Undo", [&]() { OnUndoPressed(); }, ImageAssetRef(), ShortcutKeys('Z', true));
+		mMenuPanel->AddItem("Edit/Redo", [&]() { OnRedoPressed(); }, ImageAssetRef(), ShortcutKeys('Z', true, true));
 
 		mMenuPanel->AddItem("Edit/---");
 
-		mMenuPanel->AddItem("Edit/Copy", [&]() {}, nullptr, ShortcutKeys('C', true));
-		mMenuPanel->AddItem("Edit/Cut", [&]() {}, nullptr, ShortcutKeys('X', true));
-		mMenuPanel->AddItem("Edit/Paste", [&]() {}, nullptr, ShortcutKeys('V', true));
-		mMenuPanel->AddItem("Edit/Delete", [&]() {}, nullptr, ShortcutKeys(VK_DELETE));
+		mMenuPanel->AddItem("Edit/Copy", [&]() {}, ImageAssetRef(), ShortcutKeys('C', true));
+		mMenuPanel->AddItem("Edit/Cut", [&]() {}, ImageAssetRef(), ShortcutKeys('X', true));
+		mMenuPanel->AddItem("Edit/Paste", [&]() {}, ImageAssetRef(), ShortcutKeys('V', true));
+		mMenuPanel->AddItem("Edit/Delete", [&]() {}, ImageAssetRef(), ShortcutKeys(VK_DELETE));
 
 		mMenuPanel->AddItem("Edit/---");
 
@@ -70,9 +70,9 @@ namespace Editor
 		mMenuPanel->AddItem("View/Reset layout", [&]() { OnResetLayoutPressed(); });
 
 		// BUILD
-		mMenuPanel->AddItem("Build/Run", [&]() { OnRunPressed(); }, nullptr, ShortcutKeys(VK_F5));
-		mMenuPanel->AddItem("Build/Build & run", [&]() { OnBuildAndRunPressed(); }, nullptr, ShortcutKeys('R', true));
-		mMenuPanel->AddItem("Build/Build", [&]() { OnBuildPressed(); }, nullptr, ShortcutKeys('R', true, true));
+		mMenuPanel->AddItem("Build/Run", [&]() { OnRunPressed(); }, ImageAssetRef(), ShortcutKeys(VK_F5));
+		mMenuPanel->AddItem("Build/Build & run", [&]() { OnBuildAndRunPressed(); }, ImageAssetRef(), ShortcutKeys('R', true));
+		mMenuPanel->AddItem("Build/Build", [&]() { OnBuildPressed(); }, ImageAssetRef(), ShortcutKeys('R', true, true));
 
 		// HELP
 		mMenuPanel->AddItem("Help/About", [&]() { OnAboutPressed(); });
@@ -92,7 +92,8 @@ namespace Editor
 	}
 
 	UIWidget* MenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
-								 ImageAsset* icon /*= nullptr*/, const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+								 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
+								 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		return mMenuPanel->AddItem(path, clickFunc, icon, shortcut);
 	}

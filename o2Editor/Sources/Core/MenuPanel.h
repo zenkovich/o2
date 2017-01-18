@@ -27,7 +27,7 @@ namespace Editor
 
 		// Adds item by path ("node/sub node/target")
 		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-						  ImageAsset* icon = nullptr, const ShortcutKeys& shortcut = ShortcutKeys());
+						  const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Inserts item at position
 		UIWidget* InsertItem(const UIMenuPanel::Item& item, int position);

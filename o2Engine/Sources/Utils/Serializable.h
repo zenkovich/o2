@@ -62,7 +62,7 @@ namespace o2
 	// Serialization implementation macros
 #define SERIALIZABLE(CLASS)                            \
 private:                                               \
-	static o2::Type* type;							   \
+	static o2::Type* type;       					   \
                                                        \
     template<typename _type, typename _getter>         \
 	friend const o2::Type& o2::GetTypeOf();            \
@@ -82,7 +82,7 @@ private:                                               \
                                                        \
 public:                                                \
 	CLASS* Clone() const { return mnew CLASS(*this); } \
-	o2::Type& GetType() const { return *type; };       \
+	const o2::Type& GetType() const { return *type; }; \
     o2::DataNode Serialize() const                     \
     {												   \
         return SerializeBasic((const void*)this);      \

@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Utils/IObject.h"
+#include "Assets/Asset.h"
 
 using namespace o2;
 
 namespace o2
 {
-	class Asset;
 	class UIWidget;
 }
 
@@ -22,7 +21,7 @@ namespace Editor
 		virtual ~IAssetPropertiesViewer() {}
 
 		// Sets target actors
-		virtual void SetTargetAssets(const Vector<Asset*>& assets) {}
+		virtual void SetTargetAssets(const Vector<AssetRef*>& assets) {}
 
 		// Returns viewing asset type 
 		virtual const Type* GetAssetType() const { return nullptr; }

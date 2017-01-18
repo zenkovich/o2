@@ -21,12 +21,6 @@ namespace o2
 		Getter<UID>        id;       // Asset id getter
 		Getter<IMetaInfo*> meta;     // Asset meta information pointer getter
 
-		// Default constructor
-		Asset();
-
-		// Copy-constructor
-		Asset(const Asset& asset);
-
 		// Virtual destructor
 		virtual ~Asset();
 
@@ -88,7 +82,7 @@ namespace o2
 		{
 			friend class Asset;
 
-			UID mId; // Id of assets @SERIALIZABLE
+			UID mId; // Id of asset @SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -98,7 +92,7 @@ namespace o2
 			virtual ~IMetaInfo();
 
 			// Returns asset type id
-			virtual Type::Id GetAssetType() const;
+			virtual const Type* GetAssetType() const;
 
 			// Returns true if other meta is equal to this
 			virtual bool IsEqual(IMetaInfo* other) const;
@@ -116,6 +110,12 @@ namespace o2
 		IMetaInfo* mMeta; // Asset meta information @EDITOR_PROPERTY
 
 	protected:
+		// Default constructor
+		Asset();
+
+		// Copy-constructor
+		Asset(const Asset& asset);
+
 		// Beginning serialization callback
 		void OnSerialize(DataNode& node) const;
 
@@ -147,5 +147,86 @@ namespace o2
 		void InitializeProperties();
 
 		friend class AssetsBuilder;
+		friend class Assets;
 	};
+
+	// ---------------
+	// Asset reference
+	// ---------------
+	class AssetRef: public ISerializable
+	{
+	public:
+		// Default constructor, references to null
+		AssetRef();
+
+		// Copy-constructor
+		AssetRef(const AssetRef& other);
+
+		// Constructor from asset path
+		AssetRef(const String& path);
+
+		// Constructor from asset id
+		AssetRef(UID id);
+
+		// Destructor
+		virtual ~AssetRef();
+
+		// Boolean cast operator, true means that reference is valid
+		operator bool() const;
+
+		// Assign operator
+		AssetRef& operator=(const AssetRef& other);
+
+		// Getter operator
+		Asset& operator*();
+
+		// Constant getter operator
+		const Asset& operator*() const;
+
+		// Asset members and field operator
+		Asset* operator->();
+
+		// Constant asset members and field operator
+		const Asset* operator->() const;
+
+		// Check equals operator
+		bool operator==(const AssetRef& other) const;
+
+		// Check not equals operator
+		bool operator!=(const AssetRef& other) const;
+
+		// Returns is reference is valid
+		bool IsValid() const;
+
+		SERIALIZABLE(AssetRef);
+
+	protected:
+		int*   mRefCounter;
+		Asset* mAssetPtr;
+
+	protected:
+		// Constructor for Assets manager
+		AssetRef(Asset* assetPtr, int* refCounter);
+
+		// Beginning serialization callback - writes path and id
+		void OnSerialize(DataNode& node) const;
+
+		// Completion deserialization callback -  reads path and id and searchs asset
+		void OnDeserialized(const DataNode& node);
+
+		// Check thats asset type is based on _asset_type. If not, resets reference
+		template<typename _asset_type>
+		void CheckType()
+		{
+			if (mAssetPtr && !mAssetPtr->GetType().IsBasedOn(TypeOf(_asset_type)))
+			{
+				(*mRefCounter)--;
+				mAssetPtr = nullptr;
+				mRefCounter = nullptr;
+			}
+		}
+
+		friend class Assets;
+	};
+
 }

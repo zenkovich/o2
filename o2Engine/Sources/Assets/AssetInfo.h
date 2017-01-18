@@ -12,21 +12,28 @@ namespace o2
 	struct AssetInfo: public virtual ISerializable
 	{
 	public:
-		Type::Id mType; // Type of asset @SERIALIZABLE
-		String   mPath; // Path of asset @SERIALIZABLE
-		UID      mId;   // Id of asset @SERIALIZABLE
+		const Type* assetType; // Type of asset
+		String      path;      // Path of asset @SERIALIZABLE
+		UID         id;        // Id of asset @SERIALIZABLE
 
 	public:
 		// Default constructor
 		AssetInfo();
 
 		// Constructor
-		AssetInfo(const String& path, UID id, Type::Id type);
+		AssetInfo(const String& path, UID id, const Type* type);
 
 		// Check equal operator
 		bool operator==(const AssetInfo& other) const;
 
 		SERIALIZABLE(AssetInfo);
+
+	protected:
+		// Beginning serialization callback, writes asset type name
+		void OnSerialize(DataNode& node) const;
+
+		// Completion deserialization callback, reads asset type name
+		void OnDeserialized(const DataNode& node);
 	};
 	typedef Vector<AssetInfo> AssetInfosVec;
 }

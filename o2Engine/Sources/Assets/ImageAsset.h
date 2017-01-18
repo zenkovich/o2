@@ -1,15 +1,12 @@
 #pragma once
 
 #include "Assets/Asset.h"
-#include "Render/Sprite.h"
+#include "Assets/AtlasAsset.h"
 #include "Render/TextureRef.h"
 #include "Utils/Bitmap.h"
-#include "Assets/AssetRef.h"
 
 namespace o2
 {
-	class AtlasAsset;
-
 	// -----------
 	// Image asset
 	// -----------
@@ -19,28 +16,16 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Property<Bitmap*>     bitmap;      // Bitmap data property
-		Property<UID>         atlasId;     // Atlas owner id property
-		Property<AtlasAsset*> atlas;       // Atlas owner asset property
-		Property<BorderI>     sliceBorder; // Slice border
-		Getter<UInt>          atlasPage;   // Atlas page index getter
-		Getter<RectI>         atlasRect;   // Atlas source image rectangle getter
-		Getter<Vec2F>         size;        // Image size getter
-		Getter<float>         width;       // Image width getter
-		Getter<float>         height;      // Image height getter
-		Getter<MetaInfo*>     meta;        // Meta information getter
-
-		// Default constructor
-		ImageAsset();
-
-		// Constructor by path - loads asset by path
-		ImageAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		ImageAsset(UID id);
-
-		// Copy-constructor
-		ImageAsset(const ImageAsset& asset);
+		Property<Bitmap*>       bitmap;      // Bitmap data property
+		Property<UID>           atlasId;     // Atlas owner id property
+		Property<AtlasAssetRef> atlas;       // Atlas owner asset property
+		Property<BorderI>       sliceBorder; // Slice border
+		Getter<UInt>            atlasPage;   // Atlas page index getter
+		Getter<RectI>           atlasRect;   // Atlas source image rectangle getter
+		Getter<Vec2F>           size;        // Image size getter
+		Getter<float>           width;       // Image width getter
+		Getter<float>           height;      // Image height getter
+		Getter<MetaInfo*>       meta;        // Meta information getter
 
 		// Destructor
 		~ImageAsset();
@@ -67,10 +52,10 @@ namespace o2
 		void SetAtlasId(UID id);
 
 		// Returns atlas asset
-		AtlasAsset* GetAtlas() const;
+		AtlasAssetRef GetAtlas() const;
 
 		// Sets atlas
-		void SetAtlas(AtlasAsset* atlas);
+		void SetAtlas(const AtlasAssetRef& atlas);
 
 		// Sets slice border
 		void SetSliceBorder(const BorderI& border);
@@ -135,7 +120,7 @@ namespace o2
 
 		public:
 			// Returns asset type id
-			Type::Id GetAssetType() const;
+			const Type* GetAssetType() const;
 
 			// Returns true if other meta is equal to this
 			bool IsEqual(IMetaInfo* other) const;
@@ -149,6 +134,18 @@ namespace o2
 		RectI   mAtlasRect; // Owner atlas rectange
 
 	protected:
+		// Default constructor
+		ImageAsset();
+
+		// Constructor by path - loads asset by path
+		ImageAsset(const String& path);
+
+		// Constructor by id - loads asset by id
+		ImageAsset(UID id);
+
+		// Copy-constructor
+		ImageAsset(const ImageAsset& asset);
+
 		// Loads data
 		void LoadData(const String& path);
 
@@ -162,7 +159,64 @@ namespace o2
 		void InitializeProperties();
 
 		friend class AtlasAsset;
+		friend class Assets;
 	};
 
-	typedef AssetRef<ImageAsset> ImageAssetRef;
+	// ---------------------
+	// Image Asset reference
+	// ---------------------
+	class ImageAssetRef: public AssetRef
+	{
+	public:
+		// Creates ImageAsset and returns reference to it
+		static ImageAssetRef CreateAsset();
+
+		// Default constructor, references to null
+		ImageAssetRef(): AssetRef() {}
+
+		// Constructor from asset reference
+		ImageAssetRef(const AssetRef& other): AssetRef(other) { CheckType<ImageAsset>(); }
+
+		// Copy-constructor
+		ImageAssetRef(const ImageAssetRef& other): AssetRef(other) {}
+
+		// Constructor from asset path
+		ImageAssetRef(const String& path): AssetRef(path) {}
+
+		// Constructor from asset id
+		ImageAssetRef(UID id): AssetRef(id) {}
+
+		// Destructor
+		~ImageAssetRef() {}
+
+		// Boolean cast operator, true means that reference is valid
+		operator bool() const { return IsValid(); }
+
+		// Assign operator
+		ImageAssetRef& operator=(const ImageAssetRef& other) { AssetRef::operator=(other); return *this; }
+
+		// Getter operator
+		ImageAsset& operator*() { return *((ImageAsset*)mAssetPtr); }
+
+		// Constant getter operator
+		const ImageAsset& operator*() const { return *((ImageAsset*)mAssetPtr); }
+
+		// Asset members and field operator
+		ImageAsset* operator->() { return ((ImageAsset*)mAssetPtr); }
+
+		// Constant asset members and field operator
+		const ImageAsset* operator->() const { return ((ImageAsset*)mAssetPtr); }
+
+		// Check equals operator
+		bool operator==(const ImageAssetRef& other) const { return AssetRef::operator==(other); }
+
+		// Check not equals operator
+		bool operator!=(const ImageAssetRef& other) const { return AssetRef::operator!=(other); }
+
+		SERIALIZABLE(ImageAssetRef);
+
+	protected:
+		// Constructor for Assets manager
+		ImageAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
+	};
 }

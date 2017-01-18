@@ -44,16 +44,16 @@ namespace Editor
 		IOBJECT(DefaultActorHeaderViewer);
 
 	public:
-		UIWidget*                  mDataView;
-		BooleanProperty*           mEnableProperty;
-		StringProperty*            mNameProperty;
-		BooleanProperty*           mLockProperty;
-		AssetProperty<ActorAsset>* mPrototypeProperty;
-		UIButton*                  mPrototypeApplyBtn;
-		UIButton*                  mPrototypeRevertBtn;
-		UIButton*                  mPrototypeBreakBtn;
-		TagsProperty*              mTagsProperty;
-		LayerProperty*             mLayerProperty;
+		UIWidget*                     mDataView;
+		BooleanProperty*              mEnableProperty;
+		StringProperty*               mNameProperty;
+		BooleanProperty*              mLockProperty;
+		AssetProperty<ActorAssetRef>* mPrototypeProperty;
+		UIButton*                     mPrototypeApplyBtn;
+		UIButton*                     mPrototypeRevertBtn;
+		UIButton*                     mPrototypeBreakBtn;
+		TagsProperty*                 mTagsProperty;
+		LayerProperty*                mLayerProperty;
 
 	protected:
 		// Calls when key was pressed

@@ -34,9 +34,9 @@ namespace o2
 		String mString;					           // @SERIALIZABLE
 		WString mWString;				           // @SERIALIZABLE
 		bool mBool;						           // @SERIALIZABLE
-		ImageAsset mImageAsset;			           // @SERIALIZABLE
-		ActorAsset mActorAsset;			           // @SERIALIZABLE
-		DataAsset mDataAsset;                      // @SERIALIZABLE
+		ImageAssetRef mImageAsset;			       // @SERIALIZABLE
+		ActorAssetRef mActorAsset;			       // @SERIALIZABLE
+		DataAssetRef mDataAsset;                   // @SERIALIZABLE
 		Actor* mActor = nullptr;                   // @SERIALIZABLE
 		TagGroup mTags;                            // @SERIALIZABLE
 		Scene::Layer* mLayer;                      // @SERIALIZABLE
@@ -72,6 +72,8 @@ namespace o2
 		{
 			Component::DeserializeBasic(node, thisObject);
 		}
+
+		//EditorTestComponent(const EditorTestComponent& other) {}
 
 		SERIALIZABLE(EditorTestComponent);
 	};

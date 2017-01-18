@@ -6,6 +6,7 @@
 namespace o2
 {
 	class ImageAsset;
+	class ImageAssetRef;
 
 	// -----------
 	// Atlas asset
@@ -19,22 +20,10 @@ namespace o2
 		typedef Vector<Page> PagesVec;
 
 	public:
-		Getter<MetaInfo*>           meta;        // Meta information getter
-		Getter<AssetInfosVec>       imagesInfos; // Containing images infos getter
-		Getter<Vector<ImageAsset*>> images;      // Images assets getter
-		Getter<PagesVec>            pages;       // Pages getter
-
-		// Default constructor
-		AtlasAsset();
-
-		// Constructor by path - loads asset by path
-		AtlasAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		AtlasAsset(UID id);
-
-		// Copy-constructor
-		AtlasAsset(const AtlasAsset& asset);
+		Getter<MetaInfo*>        meta;        // Meta information getter
+		Getter<AssetInfosVec>    imagesInfos; // Containing images infos getter
+		Getter<Vector<AssetRef>> images;      // Images assets getter
+		Getter<PagesVec>         pages;       // Pages getter
 
 		// Destructor
 		~AtlasAsset();
@@ -52,13 +41,13 @@ namespace o2
 		AssetInfosVec GetImages() const;
 
 		// Returns containing images assets
-		Vector<ImageAsset*> GetImagesAssets() const;
+		Vector<AssetRef> GetImagesAssets() const;
 
 		// Returns pages array
 		PagesVec GetPages() const;
 
 		// Is contains image
-		bool ContainsImage(ImageAsset* image);
+		bool ContainsImage(const ImageAssetRef& image);
 
 		// Is contains image
 		bool ContainsImage(const AssetInfo& imageAssetInfo);
@@ -119,7 +108,7 @@ namespace o2
 
 		public:
 			// Returns asset type id
-			Type::Id GetAssetType() const;
+			const Type* GetAssetType() const;
 
 			// Returns true if other meta is equal to this
 			bool IsEqual(IMetaInfo* other) const;
@@ -167,6 +156,18 @@ namespace o2
 		PagesVec      mPages;             // Pages
 
 	protected:
+		// Default constructor
+		AtlasAsset();
+
+		// Constructor by path - loads asset by path
+		AtlasAsset(const String& path);
+
+		// Constructor by id - loads asset by id
+		AtlasAsset(UID id);
+
+		// Copy-constructor
+		AtlasAsset(const AtlasAsset& asset);
+
 		// Loads data
 		void LoadData(const String& path);
 
@@ -175,5 +176,65 @@ namespace o2
 
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class Assets;
+	};
+
+	// ---------------------
+	// Atlas Asset reference
+	// ---------------------
+	class AtlasAssetRef: public AssetRef
+	{
+	public:
+		// Creates AtlasAsset and returns reference to it
+		static AtlasAssetRef CreateAsset();
+
+		// Default constructor, references to null
+		AtlasAssetRef(): AssetRef() {}
+
+		// Copy-constructor
+		AtlasAssetRef(const AssetRef& other): AssetRef(other) { CheckType<AtlasAsset>(); }
+
+		// Copy-constructor
+		AtlasAssetRef(const AtlasAssetRef& other): AssetRef(other) {}
+
+		// Constructor from asset path
+		AtlasAssetRef(const String& path): AssetRef(path) {}
+
+		// Constructor from asset id
+		AtlasAssetRef(UID id): AssetRef(id) {}
+
+		// Destructor
+		~AtlasAssetRef() {}
+
+		// Boolean cast operator, true means that reference is valid
+		operator bool() const { return IsValid(); }
+
+		// Assign operator
+		AtlasAssetRef& operator=(const AtlasAssetRef& other) { AssetRef::operator=(other); return *this; }
+
+		// Getter operator
+		AtlasAsset& operator*() { return *((AtlasAsset*)mAssetPtr); }
+
+		// Constant getter operator
+		const AtlasAsset& operator*() const { return *((AtlasAsset*)mAssetPtr); }
+
+		// Asset members and field operator
+		AtlasAsset* operator->() { return ((AtlasAsset*)mAssetPtr); }
+
+		// Constant asset members and field operator
+		const AtlasAsset* operator->() const { return ((AtlasAsset*)mAssetPtr); }
+
+		// Check equals operator
+		bool operator==(const AtlasAssetRef& other) const { return AssetRef::operator==(other); }
+
+		// Check not equals operator
+		bool operator!=(const AtlasAssetRef& other) const { return AssetRef::operator!=(other); }
+
+		SERIALIZABLE(AtlasAssetRef);
+
+	protected:
+		// Constructor for Assets manager
+		AtlasAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }

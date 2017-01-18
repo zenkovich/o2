@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Assets/Asset.h"
+#include "Assets/ImageAsset.h"
 #include "Render/Mesh.h"
 #include "Render/RectDrawable.h"
 #include "Render/TextureRef.h"
@@ -8,7 +8,6 @@
 
 namespace o2
 {
-	class ImageAsset;
 	class Bitmap;
 
 	// -----------------
@@ -17,26 +16,26 @@ namespace o2
 	class Sprite: public IRectDrawable
 	{
 	public:
-		Property<TextureRef> texture;          // Texture property
-		Property<RectI>      textureSrcRect;   // Texture source rectangle property
-		Property<UID>        imageAssetId;     // Image asset id property
-		Setter<String>       imageAssetPath;   // Sets image asset from path
-		Setter<ImageAsset>   imageAsset;       // Sets image asset
-		Setter<Bitmap*>      bitmap;           // Sets image from bitmap
-		Property<Color4>     leftTopColor;	   // Color of left top corner property
-		Property<Color4>     rightTopColor;	   // Color of right top corner property
-		Property<Color4>     leftBottomColor;  // Color of left bottom corner property
-		Property<Color4>     rightBottomColor; // Color of right bottom corner property
-		Property<SpriteMode> mode;             // Sprite drawing mode property
-		Property<float>      fill;             // Sprite fill property
-		Property<float>      tileScale;        // Sprite tile scale property, 1.0f is default
-		Property<BorderI>    sliceBorder;      // Slice border property
+		Property<TextureRef>  texture;          // Texture property
+		Property<RectI>       textureSrcRect;   // Texture source rectangle property
+		Property<UID>         imageAssetId;     // Image asset id property
+		Setter<String>        imageAssetPath;   // Sets image asset from path
+		Setter<ImageAssetRef> imageAsset;       // Sets image asset
+		Setter<Bitmap*>       bitmap;           // Sets image from bitmap
+		Property<Color4>      leftTopColor;	    // Color of left top corner property
+		Property<Color4>      rightTopColor;    // Color of right top corner property
+		Property<Color4>      leftBottomColor;  // Color of left bottom corner property
+		Property<Color4>      rightBottomColor; // Color of right bottom corner property
+		Property<SpriteMode>  mode;             // Sprite drawing mode property
+		Property<float>       fill;             // Sprite fill property
+		Property<float>       tileScale;        // Sprite tile scale property, 1.0f is default
+		Property<BorderI>     sliceBorder;      // Slice border property
 
 		// Default constructor
 		Sprite();
 
 		// Constructor from image asset
-		Sprite(const ImageAsset& image);
+		Sprite(const ImageAssetRef& image);
 
 		// Constructor from image asset by path
 		Sprite(const String& imagePath);
@@ -135,7 +134,7 @@ namespace o2
 		BorderI GetSliceBorder() const;
 
 		// Loads sprite from image asset
-		void LoadFromImage(const ImageAsset& image);
+		void LoadFromImage(const ImageAssetRef& image);
 
 		// Loads sprite from image asset by path
 		void LoadFromImage(const String& imagePath);

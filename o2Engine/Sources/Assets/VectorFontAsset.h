@@ -22,18 +22,6 @@ namespace o2
 		Getter<MetaInfo*> meta; // Meta information getter
 		Getter<FontRef>   font; // Font getter
 
-        // Default constructor
-		VectorFontAsset();
-
-		// Constructor by path - loads asset by path
-		VectorFontAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		VectorFontAsset(UID id);
-
-		// Copy-constructor
-		VectorFontAsset(const VectorFontAsset& asset);
-
 		// Destructor
 		~VectorFontAsset();
 
@@ -84,7 +72,7 @@ namespace o2
 			~MetaInfo();
 
 			// Returns asset type id
-			Type::Id GetAssetType() const;
+			const Type* GetAssetType() const;
 
 			// Returns true if other meta is equal to this
 			bool IsEqual(IMetaInfo* other) const;
@@ -101,11 +89,83 @@ namespace o2
 		FontRef mFont;
 
 	protected:
+		// Default constructor
+		VectorFontAsset();
+
+		// Constructor by path - loads asset by path
+		VectorFontAsset(const String& path);
+
+		// Constructor by id - loads asset by id
+		VectorFontAsset(UID id);
+
+		// Copy-constructor
+		VectorFontAsset(const VectorFontAsset& asset);
+
 		// Loads data
 		void LoadData(const String& path);
 
 		// Initializes properties
 		void InitializeProperties();
+
+		friend class Assets;
+	};
+
+	// ---------------------------
+	// Vector font Asset reference
+	// ---------------------------
+	class VectorFontAssetRef: public AssetRef
+	{
+	public:
+		// Creates VectorFontAsset and returns reference to it
+		static VectorFontAssetRef CreateAsset();
+
+		// Default constructor, references to null
+		VectorFontAssetRef(): AssetRef() {}
+
+		// Copy-constructor
+		VectorFontAssetRef(const AssetRef& other): AssetRef(other) { CheckType<VectorFontAsset>(); }
+
+		// Copy-constructor
+		VectorFontAssetRef(const VectorFontAssetRef& other): AssetRef(other) {}
+
+		// Constructor from asset path
+		VectorFontAssetRef(const String& path): AssetRef(path) {}
+
+		// Constructor from asset id
+		VectorFontAssetRef(UID id): AssetRef(id) {}
+
+		// Destructor
+		~VectorFontAssetRef() {}
+
+		// Boolean cast operator, true means that reference is valid
+		operator bool() const { return IsValid(); }
+
+		// Assign operator
+		VectorFontAssetRef& operator=(const VectorFontAssetRef& other) { AssetRef::operator=(other); return *this; }
+
+		// Getter operator
+		VectorFontAsset& operator*() { return *((VectorFontAsset*)mAssetPtr); }
+
+		// Constant getter operator
+		const VectorFontAsset& operator*() const { return *((VectorFontAsset*)mAssetPtr); }
+
+		// Asset members and field operator
+		VectorFontAsset* operator->() { return ((VectorFontAsset*)mAssetPtr); }
+
+		// Constant asset members and field operator
+		const VectorFontAsset* operator->() const { return ((VectorFontAsset*)mAssetPtr); }
+
+		// Check equals operator
+		bool operator==(const VectorFontAssetRef& other) const { return AssetRef::operator==(other); }
+
+		// Check not equals operator
+		bool operator!=(const VectorFontAssetRef& other) const { return AssetRef::operator!=(other); }
+
+		SERIALIZABLE(VectorFontAssetRef);
+
+	protected:
+		// Constructor for Assets manager
+		VectorFontAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 
 	template<typename _type, typename ... _args>

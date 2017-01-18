@@ -14,22 +14,20 @@ namespace o2
 		return text == other.text && shortcut == other.shortcut && icon == other.icon;
 	}
 
-	UIContextMenu::Item::Item():
-		icon(nullptr)
+	UIContextMenu::Item::Item()
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, const Function<void()> onClick, ImageAsset* icon /*= nullptr*/,
+	UIContextMenu::Item::Item(const WString& text, const Function<void()> onClick, const ImageAssetRef& icon /*= ImageAssetRef()*/,
 							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
 		text(text), onClick(onClick), shortcut(shortcut), icon(icon)
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, Vector<Item> subItems, ImageAsset* icon /*= nullptr*/) :
+	UIContextMenu::Item::Item(const WString& text, Vector<Item> subItems, const ImageAssetRef& icon /*= ImageAssetRef()*/) :
 		text(text), subItems(subItems), icon(icon)
 	{}
 
 	UIContextMenu::Item::~Item()
 	{
-		delete icon;
 	}
 
 	UIContextMenu::Item UIContextMenu::Item::Separator()
@@ -212,7 +210,7 @@ namespace o2
 	}
 
 	UIWidget* UIContextMenu::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
-									 ImageAsset* icon /*= nullptr*/, const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+									 const ImageAssetRef& icon /*= ImageAssetRef()*/, const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		UIContextMenu* targetContext = this;
 		WString targetPath = path;
@@ -717,7 +715,7 @@ namespace o2
 					size.y = newItem->layout.height;
 				}
 
-				iconLayer->AddChildLayer("sprite", mnew Sprite(*item.icon),
+				iconLayer->AddChildLayer("sprite", mnew Sprite(item.icon),
 										 Layout(Vec2F(), Vec2F(),
 												Vec2F(-Math::Floor(size.x*0.5f), Math::Floor(size.y*0.5f)),
 												Vec2F(Math::Floor(size.x*0.5f), -Math::Floor(size.y*0.5f))));
@@ -762,7 +760,7 @@ namespace o2
 		{
 			auto contextItem = (UIContextMenuItem*)item;
 			if (auto iconLayer = contextItem->GetLayerDrawable<Sprite>("icon"))
-				res.icon = mnew ImageAsset(iconLayer->imageAssetId);
+				res.icon = ImageAssetRef(iconLayer->imageAssetId);
 
 			if (auto textLayer = contextItem->GetLayerDrawable<Text>("caption"))
 				res.text = textLayer->text;
@@ -860,7 +858,7 @@ CLASS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(void, Show, UIContextMenu*, const Vec2F&);
 	PUBLIC_FUNCTION(void, Show, const Vec2F&);
 	PUBLIC_FUNCTION(UIWidget*, AddItem, const Item&);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, ImageAsset*, const ShortcutKeys&);
+	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
 	PUBLIC_FUNCTION(UIWidget*, InsertItem, const Item&, int);
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);

@@ -965,16 +965,16 @@ string CppSyntaxParser::ReadWord(const string& data, int& caret,
 		switch (s)
 		{
 		case '{': fgBraces++; break;
-		case '}': fgBraces--; break;
+		case '}': fgBraces--; if (fgBraces < 0) fgBraces = 0; break;
 
-		case ')': braces--; break;
+		case ')': braces--; if (braces < 0) braces = 0; break;
 		case '(': braces++; break;
 
 		case '[': sqBraces++; break;
-		case ']': sqBraces--; break;
+		case ']': sqBraces--; if (sqBraces < 0) sqBraces = 0; break;
 
 		case '<': trBraces++; break;
-		case '>': trBraces--; break;
+		case '>': trBraces--; if (trBraces < 0) trBraces = 0; break;
 		}
 
 		res += s;

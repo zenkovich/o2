@@ -26,13 +26,13 @@ namespace o2
 		String ext = o2FileSystem.GetFileExtension(fileName);
 		if (ext == "xml")
 		{
-			BitmapFontAsset fontAsset(fileName);
-			*this = fontAsset.GetFont();
+			BitmapFontAssetRef fontAsset(fileName);
+			*this = fontAsset->GetFont();
 		}
 		else
 		{
-			VectorFontAsset fontAsset(fileName);
-			*this = fontAsset.GetFont();
+			VectorFontAssetRef fontAsset(fileName);
+			*this = fontAsset->GetFont();
 		}
 	}
 

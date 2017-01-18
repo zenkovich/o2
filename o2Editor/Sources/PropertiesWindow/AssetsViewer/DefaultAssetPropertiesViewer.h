@@ -24,7 +24,7 @@ namespace Editor
 		~DefaultAssetPropertiesViewer();
 
 		// Sets target actors
-		void SetTargetAssets(const Vector<Asset*>& assets);
+		void SetTargetAssets(const Vector<AssetRef*>& assets);
 
 		// Returns viewing asset type 
 		const Type* GetAssetType() const;
@@ -39,7 +39,7 @@ namespace Editor
 
 	protected:
 		UIVerticalLayout*   mPropertiesLayout;    // Properties layout
-		Vector<Asset*>      mTargetAssets;        // Target assets
+		Vector<AssetRef*>   mTargetAssets;        // Target assets
 		FieldPropertiesInfo mFieldProperties;     // Field properties information
 		const Type*         mAssetType = nullptr; // Target asset type
 	};

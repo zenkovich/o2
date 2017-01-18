@@ -21,7 +21,7 @@ namespace o2
 		virtual ~IAssetConverter() {}
 
 		// Returns vector of processing assets types
-		virtual Vector<Type::Id> GetProcessingAssetsTypes() const;
+		virtual Vector<const Type*> GetProcessingAssetsTypes() const;
 
 		// Converts asset by path
 		virtual void ConvertAsset(const AssetTree::AssetNode& node);

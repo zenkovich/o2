@@ -191,7 +191,7 @@ namespace o2
 		SetCursorPos(p.x, p.y);
 
 		if (p.x != lp.x || p.y != lp.y)
-			mCursorCorrectionDelta = Vec2F(lp.x - p.x, lp.y - p.y);
+			mCursorCorrectionDelta = Vec2F((float)(lp.x - p.x), (float)(lp.y - p.y));
 	}
 
 	LogStream* Application::GetLog() const
