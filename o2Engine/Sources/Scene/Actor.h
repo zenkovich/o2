@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Animation/Animatable.h"
+#include "Assets/ActorAsset.h"
 #include "Scene/ActorTransform.h"
 #include "Scene/Component.h"
 #include "Scene/Scene.h"
@@ -26,6 +27,7 @@ namespace o2
 
 	public:
 		TagGroup                            tags;                    // Tags group
+		Property<ActorAssetRef>             prototype;               // Prototype asset reference property
 		Getter<UInt64>                      id;                      // Actor's unique id
 		Property<String>                    name;                    // Actor name property
 		Property<bool>                      enabled;                 // Is actor enabled property
@@ -39,7 +41,7 @@ namespace o2
 		Accessor<Actor*, const String&>     child;                   // Children accessor
 		Getter<ComponentsVec>               components;              // Components array getter
 		Accessor<Component*, const String&> component;               // Component accessor by type name
-		ActorTransform                      transform;               // Transformation @SERIALIZABLE
+		ActorTransform                      transform;               // Transformation 
 
 		Function<void(bool)>                onEnableChanged;         // Enable changing event
 
@@ -53,6 +55,9 @@ namespace o2
 
 		// Default constructor
 		Actor(CreateMode mode = CreateMode::InScene);
+
+		// Actor constructor from prototype
+		Actor(const ActorAssetRef& prototype, CreateMode mode = CreateMode::InScene);
 
 		// Constructor with components
 		Actor(ComponentsVec components);
@@ -71,6 +76,12 @@ namespace o2
 
 		// Updates childs
 		void UpdateChilds(float dt);
+
+		// Sets prototype asset
+		void SetPrototype(const ActorAssetRef& asset);
+
+		// Returns prototype
+		ActorAssetRef GetPrototype() const;
 
 		// Sets actor's name
 		void SetName(const String& name);
@@ -214,25 +225,56 @@ namespace o2
 
 		SERIALIZABLE(Actor);
 
+	public:
+		struct ParameterDifference: public ISerializable
+		{
+			String   path;        // @SERIALIZABLE
+			DataNode sourceValue; // @SERIALIZABLE
+
+			SERIALIZABLE(ParameterDifference);
+		};
+		typedef Vector<ParameterDifference*> ParameterDifferencesVec;
+
+		struct ComponentChanges: public ISerializable
+		{
+			ParameterDifferencesVec parametersDiffs; // @SERIALIZABLE
+
+			SERIALIZABLE(ComponentChanges);
+		};
+		typedef Vector<ComponentChanges*> ComponentChangesVec;
+
+		struct PrototypeChanges: public ISerializable
+		{
+			Vector<UInt64>          removedComponents; // @SERIALIZABLE
+			Vector<Component*>      addedComponents;   // @SERIALIZABLE
+			ComponentChangesVec     componentChanges;  // @SERIALIZABLE
+			ParameterDifferencesVec parameterDiffs;    // @SERIALIZABLE
+
+			SERIALIZABLE(PrototypeChanges);
+		};
+
 	protected:
-		UInt64         mId;          // Unique actor id @SERIALIZABLE
-		String         mName;        // Name of actor @SERIALIZABLE
+		ActorAssetRef     mPrototype;                  // Prototype asset
+		PrototypeChanges* mPrototypeChanges = nullptr; // Prototype changes. Null when no prototype
 
-		Actor*         mParent;      // Parent actor
-		ActorsVec      mChilds;      // Children actors 
-		ComponentsVec  mComponents;  // Components vector 
-		Scene::Layer*  mLayer;       // Scene layer
-
-		bool           mEnabled;     // Is actor enabled @SERIALIZABLE
-		bool           mResEnabled;  // Is actor enabled in hierarchy
-
-		bool           mLocked;      // Is actor locked @SERIALIZABLE
-		bool           mResLocked;   // Is actor locked in hierarchy
-
-		bool           mIsOnScene;   // Is actor on scene
-
-		bool           mIsAsset;     // Is this actor cached asset
-		UID            mAssetId;     // Source asset id
+		UInt64            mId;                         // Unique actor id @SERIALIZABLE
+		String            mName;                       // Name of actor @SERIALIZABLE
+					      				               
+		Actor*            mParent = nullptr;           // Parent actor
+		ActorsVec         mChilds;                     // Children actors 
+		ComponentsVec     mComponents;                 // Components vector 
+		Scene::Layer*     mLayer = nullptr;            // Scene layer
+					      				               
+		bool              mEnabled = true;             // Is actor enabled @SERIALIZABLE
+		bool              mResEnabled = true;          // Is actor enabled in hierarchy
+					      				               
+		bool              mLocked = false;             // Is actor locked @SERIALIZABLE
+		bool              mResLocked = false;          // Is actor locked in hierarchy
+					      				               
+		bool              mIsOnScene = true;           // Is actor on scene
+					      				               
+		bool              mIsAsset = false;            // Is this actor cached asset
+		UID               mAssetId;                    // Source asset id
 
 	protected:
 		// Calls when transformation was changed
@@ -264,6 +306,18 @@ namespace o2
 
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node);
+
+		// Regular serializing without prototype
+		void SerializeRaw(DataNode& node) const;
+
+		// Regular deserializing without prototype
+		void DeserializeRaw(const DataNode& node);
+
+		// Regular serializing with prototype
+		void SerializeWithProto(DataNode& node) const;
+
+		// Regular deserializing with prototype
+		void DeserializeWithProto(const DataNode& node);
 
 		// Returns dictionary of all children by names
 		Dictionary<String, Actor*> GetAllChilds();
@@ -303,7 +357,7 @@ namespace o2
 		friend class Scene;
 		friend class Tag;
 	};
-	 
+
 	// -------------------------
 	// Actor data node converter
 	// -------------------------

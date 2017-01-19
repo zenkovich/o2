@@ -235,6 +235,12 @@ namespace Editor
 				UpdateNodesView(true);
 				UpdateLayout(true);
 
+				for (auto instActor : assetsScroll->mInstSceneDragActors)
+				{
+					int idx = mAllNodes.FindIdx([=](Node* x) { return x->object == instActor; });
+					CreateVisibleNodeWidget(mAllNodes[idx], idx);
+				}
+
 				Focus();
 				SetSelectedActors(assetsScroll->mInstSceneDragActors);
 				BeginDragging(GetNode(assetsScroll->mInstSceneDragActors.Last()));

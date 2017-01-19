@@ -78,6 +78,16 @@ namespace o2
 			AddComponent(comp);
 	}
 
+	Actor::Actor(const ActorAssetRef& prototype, CreateMode mode /*= CreateMode::InScene*/):
+		Actor(mode)
+	{
+		if (prototype)
+		{
+			mPrototype = prototype;
+			*this = *prototype->GetActor();
+		}
+	}
+
 	Actor::~Actor()
 	{
 		if (mParent)
@@ -205,6 +215,16 @@ namespace o2
 
 		for (auto child : mChilds)
 			child->UpdateChilds(dt);
+	}
+
+	void Actor::SetPrototype(const ActorAssetRef& asset)
+	{
+		mPrototype = asset;
+	}
+
+	ActorAssetRef Actor::GetPrototype() const
+	{
+		return mPrototype;
 	}
 
 	void Actor::SetName(const String& name)
@@ -703,8 +723,28 @@ namespace o2
 
 	void Actor::OnSerialize(DataNode& node) const
 	{
+		if (mPrototype)
+			SerializeWithProto(node);
+		else
+			SerializeRaw(node);
+	}
+
+	void Actor::OnDeserialized(const DataNode& node)
+	{
+		if (auto prototypeNode = node.GetNode("prototype"))
+		{
+			mPrototype = *prototypeNode;
+			DeserializeWithProto(node);
+		}
+		else DeserializeRaw(node);
+	}
+
+	void Actor::SerializeRaw(DataNode& node) const
+	{
 		if (mLayer)
 			node["mLayerName"] = mLayer->name;
+
+		node["transform"] = transform;
 
 		auto childsNode = node.AddNode("Childs");
 		for (auto child : mChilds)
@@ -719,9 +759,11 @@ namespace o2
 		}
 	}
 
-	void Actor::OnDeserialized(const DataNode& node)
+	void Actor::DeserializeRaw(const DataNode& node)
 	{
 		ActorDataNodeConverter::Instance().LockPointersResolving();
+
+		node.GetNode("transform")->GetValue(transform);
 
 		if (auto childsNode = node.GetNode("Components"))
 		{
@@ -752,6 +794,16 @@ namespace o2
 
 		ActorDataNodeConverter::Instance().UnlockPointersResolving();
 		ActorDataNodeConverter::Instance().ResolvePointers();
+	}
+
+	void Actor::SerializeWithProto(DataNode& node) const
+	{
+
+	}
+
+	void Actor::DeserializeWithProto(const DataNode& node)
+	{
+
 	}
 
 	Dictionary<String, Actor*> Actor::GetAllChilds()
@@ -869,6 +921,7 @@ namespace o2
 	void Actor::InitializeProperties()
 	{
 		INITIALIZE_GETTER(Actor, id, GetID);
+		INITIALIZE_PROPERTY(Actor, prototype, SetPrototype, GetPrototype);
 		INITIALIZE_PROPERTY(Actor, name, SetName, GetName);
 		INITIALIZE_PROPERTY(Actor, enabled, SetEnabled, IsEnabled);
 		INITIALIZE_GETTER(Actor, enabledInHierarchy, IsEnabledInHierarchy);
@@ -995,6 +1048,7 @@ CLASS_META(o2::Actor)
 	BASE_CLASS(o2::Animatable);
 
 	PUBLIC_FIELD(tags);
+	PUBLIC_FIELD(prototype);
 	PUBLIC_FIELD(id);
 	PUBLIC_FIELD(name);
 	PUBLIC_FIELD(enabled);
@@ -1008,8 +1062,10 @@ CLASS_META(o2::Actor)
 	PUBLIC_FIELD(child);
 	PUBLIC_FIELD(components);
 	PUBLIC_FIELD(component);
-	PUBLIC_FIELD(transform).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(transform);
 	PUBLIC_FIELD(onEnableChanged);
+	PROTECTED_FIELD(mPrototype);
+	PROTECTED_FIELD(mPrototypeChanges);
 	PROTECTED_FIELD(mId).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mParent);
@@ -1033,6 +1089,8 @@ CLASS_META(o2::Actor)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChilds, float);
+	PUBLIC_FUNCTION(void, SetPrototype, const ActorAssetRef&);
+	PUBLIC_FUNCTION(ActorAssetRef, GetPrototype);
 	PUBLIC_FUNCTION(void, SetName, const String&);
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(UInt64, GetID);
@@ -1081,6 +1139,10 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, UpdateLocking);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, SerializeRaw, DataNode&);
+	PROTECTED_FUNCTION(void, DeserializeRaw, const DataNode&);
+	PROTECTED_FUNCTION(void, SerializeWithProto, DataNode&);
+	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataNode&);
 	PROTECTED_FUNCTION(_tmp5, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp6, GetAllComponents);
 	PROTECTED_FUNCTION(void, ComponentsExcludeFromScene);
@@ -1091,6 +1153,34 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnChildsChanged);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_META(o2::Actor::ParameterDifference)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(path).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(sourceValue).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+
+CLASS_META(o2::Actor::ComponentChanges)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(parametersDiffs).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+
+CLASS_META(o2::Actor::PrototypeChanges)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(removedComponents).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(addedComponents).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(componentChanges).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(parameterDiffs).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 
