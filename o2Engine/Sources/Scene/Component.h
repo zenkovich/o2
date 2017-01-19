@@ -75,10 +75,11 @@ namespace o2
 		SERIALIZABLE(Component);
 
 	protected:
-		UInt64 mId;         // Component id @SERIALIZABLE
-		Actor* mOwner;      // Owner actor
-		bool   mEnabled;    // Is component enabled @SERIALIZABLE
-		bool   mResEnabled; // Is component enabled in hierarchy
+		Component* mPrototypeLink = nullptr; // Prototype actor component pointer. Null if no actor prototype
+		UInt64 mId;                          // Component id @SERIALIZABLE
+		Actor* mOwner = nullptr;             // Owner actor
+		bool   mEnabled = true;              // Is component enabled @SERIALIZABLE
+		bool   mResEnabled = true;           // Is component enabled in hierarchy
 
 	protected:
 		// Calls when actor changed layer

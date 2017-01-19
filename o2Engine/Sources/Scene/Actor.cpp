@@ -723,7 +723,7 @@ namespace o2
 
 	void Actor::OnSerialize(DataNode& node) const
 	{
-		if (mPrototype)
+		if (mPrototypeLink)
 			SerializeWithProto(node);
 		else
 			SerializeRaw(node);
@@ -731,31 +731,34 @@ namespace o2
 
 	void Actor::OnDeserialized(const DataNode& node)
 	{
-		if (auto prototypeNode = node.GetNode("prototype"))
-		{
-			mPrototype = *prototypeNode;
+		if (node.GetNode("PrototypeLink") || node.GetNode("Prototype"))
 			DeserializeWithProto(node);
-		}
-		else DeserializeRaw(node);
+		else 
+			DeserializeRaw(node);
 	}
 
 	void Actor::SerializeRaw(DataNode& node) const
 	{
-		if (mLayer)
-			node["mLayerName"] = mLayer->name;
+		node["Id"] = mId;
+		node["Name"] = mName;
+		node["Enabled"] = mEnabled;
+		node["Locked"] = mLocked;
 
-		node["transform"] = transform;
+		node["Transform"] = transform;
+
+		if (mLayer)
+			node["LayerName"] = mLayer->name;
 
 		auto childsNode = node.AddNode("Childs");
 		for (auto child : mChilds)
 			*childsNode->AddNode("Child") = child->Serialize();
 
 		auto componentsNode = node.AddNode("Components");
-		for (auto comp : mComponents)
+		for (auto component : mComponents)
 		{
-			auto compNode = componentsNode->AddNode("Component");
-			*compNode->AddNode("Data") = comp->Serialize();
-			*compNode->AddNode("Type") = comp->GetType().GetName();
+			auto componentNode = componentsNode->AddNode("Component");
+			*componentNode->AddNode("Data") = component->Serialize();
+			*componentNode->AddNode("Type") = component->GetType().GetName();
 		}
 	}
 
@@ -763,16 +766,24 @@ namespace o2
 	{
 		ActorDataNodeConverter::Instance().LockPointersResolving();
 
-		node.GetNode("transform")->GetValue(transform);
+		mId = *node.GetNode("Id");
+		mName = *node.GetNode("Name");
+		mLocked = *node.GetNode("Locked");
+		mEnabled = *node.GetNode("Enabled");
 
-		if (auto childsNode = node.GetNode("Components"))
+		if (auto layerNode = node.GetNode("LayerName"))
+			SetLayer(layerNode->Data());
+
+		node.GetNode("Transform")->GetValue(transform);
+
+		if (auto componentsNode = node.GetNode("Components"))
 		{
-			for (auto childNode : childsNode->GetChildNodes())
+			for (auto componentNode : componentsNode->GetChildNodes())
 			{
-				Component* comp = (Component*)o2Reflection.CreateTypeSample(*childNode->GetNode("Type"));
-				comp->Deserialize(*childNode->GetNode("Data"));
-				comp->mOwner = this;
-				mComponents.Add(comp);
+				Component* component = (Component*)o2Reflection.CreateTypeSample(*componentNode->GetNode("Type"));
+				component->Deserialize(*componentNode->GetNode("Data"));
+				component->mOwner = this;
+				mComponents.Add(component);
 			}
 		}
 
@@ -788,17 +799,97 @@ namespace o2
 			}
 		}
 
-		auto layerNode = node.GetNode("mLayerName");
-		if (layerNode)
-			SetLayer(layerNode->Data());
-
 		ActorDataNodeConverter::Instance().UnlockPointersResolving();
 		ActorDataNodeConverter::Instance().ResolvePointers();
 	}
 
 	void Actor::SerializeWithProto(DataNode& node) const
 	{
+		Actor* proto = mPrototypeLink;
 
+		// Prototype data
+		if (mPrototype)
+			node["Prototype"] = mPrototype;
+		else
+			node["PrototypeLink"] = proto->GetID();
+
+		// Basic data
+		node["Id"] = mId;
+
+		if (mName != proto->mName)
+			node["Name"] = mName;
+
+		if (mEnabled != proto->mEnabled)
+			node["Enabled"] = mEnabled;
+
+		if (mLocked != proto->mLocked)
+			node["Locked"] = mLocked;
+
+		if (mLayer != proto->mLayer)
+			node["LayerName"] = mLayer->name;
+
+		// Transform data
+		auto transformNode = node.AddNode("Transform");
+
+		if (transform.mPosition != proto->transform.mPosition)
+			(*transformNode)["Position"] = transform.mPosition;
+
+		if (transform.mSize != proto->transform.mSize)
+			(*transformNode)["Size"] = transform.mSize;
+
+		if (transform.mScale != proto->transform.mScale)
+			(*transformNode)["Scale"] = transform.mScale;
+
+		if (transform.mPivot != proto->transform.mPivot)
+			(*transformNode)["Pivot"] = transform.mPivot;
+
+		if (!Math::Equals(transform.mAngle, proto->transform.mAngle))
+			(*transformNode)["Angle"] = transform.mAngle;
+
+		if (!Math::Equals(transform.mShear, proto->transform.mShear))
+			(*transformNode)["Shear"] = transform.mShear;
+
+		// Children data
+		auto childsNode = node.AddNode("Childs");
+		for (auto child : mChilds)
+			*childsNode->AddNode("Child") = child->Serialize();
+
+		// Components data
+		auto componentsNode = node.AddNode("Components");
+		for (auto component : mComponents)
+		{
+			auto compNode = componentsNode->AddNode("Component");
+			*compNode->AddNode("Type") = component->GetType().GetName();
+
+			auto& dataNode = *compNode->AddNode("Data");
+			if (auto componentProtoLink = component->mPrototypeLink)
+			{
+				dataNode["PrototypeLink"] = componentProtoLink->mId;
+				dataNode["Id"] = component->mId;
+
+				if (component->mEnabled != componentProtoLink->mEnabled)
+					dataNode["Enabled"] = component->mEnabled;
+
+				auto componentFields = component->GetType().GetFieldsWithBaseClasses();
+				for (auto field : componentFields)
+				{
+					if (!field->HasAttribute<SerializableAttribute>())
+						continue;
+
+					auto valuePtr = field->GetValuePtrStrong(component);
+					if (valuePtr == &component->mId || valuePtr == &component->mEnabled)
+						continue;
+
+					DataNode valueData, prototypeLinkValueData;
+					field->SerializeObject(component, valueData);
+					field->SerializeObject(componentProtoLink, prototypeLinkValueData);
+
+					if (valueData != prototypeLinkValueData)
+						dataNode[field->GetName()] = valueData;
+				}
+			}
+			else dataNode = component->Serialize();
+		}
 	}
 
 	void Actor::DeserializeWithProto(const DataNode& node)
@@ -1065,16 +1156,17 @@ CLASS_META(o2::Actor)
 	PUBLIC_FIELD(transform);
 	PUBLIC_FIELD(onEnableChanged);
 	PROTECTED_FIELD(mPrototype);
+	PROTECTED_FIELD(mPrototypeLink);
 	PROTECTED_FIELD(mPrototypeChanges);
-	PROTECTED_FIELD(mId).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mId);
+	PROTECTED_FIELD(mName);
 	PROTECTED_FIELD(mParent);
 	PROTECTED_FIELD(mChilds);
 	PROTECTED_FIELD(mComponents);
 	PROTECTED_FIELD(mLayer);
-	PROTECTED_FIELD(mEnabled).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mResEnabled);
-	PROTECTED_FIELD(mLocked).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mLocked);
 	PROTECTED_FIELD(mResLocked);
 	PROTECTED_FIELD(mIsOnScene);
 	PROTECTED_FIELD(mIsAsset);

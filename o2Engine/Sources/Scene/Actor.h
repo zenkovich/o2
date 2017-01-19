@@ -225,50 +225,22 @@ namespace o2
 
 		SERIALIZABLE(Actor);
 
-	public:
-		struct ParameterDifference: public ISerializable
-		{
-			String   path;        // @SERIALIZABLE
-			DataNode sourceValue; // @SERIALIZABLE
-
-			SERIALIZABLE(ParameterDifference);
-		};
-		typedef Vector<ParameterDifference*> ParameterDifferencesVec;
-
-		struct ComponentChanges: public ISerializable
-		{
-			ParameterDifferencesVec parametersDiffs; // @SERIALIZABLE
-
-			SERIALIZABLE(ComponentChanges);
-		};
-		typedef Vector<ComponentChanges*> ComponentChangesVec;
-
-		struct PrototypeChanges: public ISerializable
-		{
-			Vector<UInt64>          removedComponents; // @SERIALIZABLE
-			Vector<Component*>      addedComponents;   // @SERIALIZABLE
-			ComponentChangesVec     componentChanges;  // @SERIALIZABLE
-			ParameterDifferencesVec parameterDiffs;    // @SERIALIZABLE
-
-			SERIALIZABLE(PrototypeChanges);
-		};
-
 	protected:
 		ActorAssetRef     mPrototype;                  // Prototype asset
-		PrototypeChanges* mPrototypeChanges = nullptr; // Prototype changes. Null when no prototype
+		Actor*            mPrototypeLink = nullptr;    // Prototype link actor. Links to source actor from prototype
 
-		UInt64            mId;                         // Unique actor id @SERIALIZABLE
-		String            mName;                       // Name of actor @SERIALIZABLE
+		UInt64            mId;                         // Unique actor id
+		String            mName;                       // Name of actor
 					      				               
 		Actor*            mParent = nullptr;           // Parent actor
 		ActorsVec         mChilds;                     // Children actors 
 		ComponentsVec     mComponents;                 // Components vector 
 		Scene::Layer*     mLayer = nullptr;            // Scene layer
 					      				               
-		bool              mEnabled = true;             // Is actor enabled @SERIALIZABLE
+		bool              mEnabled = true;             // Is actor enabled
 		bool              mResEnabled = true;          // Is actor enabled in hierarchy
 					      				               
-		bool              mLocked = false;             // Is actor locked @SERIALIZABLE
+		bool              mLocked = false;             // Is actor locked
 		bool              mResLocked = false;          // Is actor locked in hierarchy
 					      				               
 		bool              mIsOnScene = true;           // Is actor on scene
