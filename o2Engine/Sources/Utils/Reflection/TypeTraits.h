@@ -32,7 +32,17 @@ namespace o2
 	template<class T> struct ExtractStringAccessorType { typedef T type; };
 	template<class T> struct ExtractStringAccessorType<Accessor<T*, const String&>> { typedef T type; };
 
+	namespace EqualsTrait
+	{
+		struct No {};
+		template<typename T, typename Arg> No operator== (const T&, const Arg&);
 
+		template<typename T, typename Arg = T>
+		struct IsExists
+		{
+			enum x { value = !std::is_same<decltype(*(T*)(0) == *(Arg*)(0)), No>::value };
+		};
+	}
 
 	// type trait
 	template<typename T, typename X =

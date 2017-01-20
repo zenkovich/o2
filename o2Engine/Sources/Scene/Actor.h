@@ -227,7 +227,7 @@ namespace o2
 
 	protected:
 		ActorAssetRef     mPrototype;                  // Prototype asset
-		Actor*            mPrototypeLink = nullptr;    // Prototype link actor. Links to source actor from prototype
+		const Actor*      mPrototypeLink = nullptr;    // Prototype link actor. Links to source actor from prototype
 
 		UInt64            mId;                         // Unique actor id
 		String            mName;                       // Name of actor
@@ -290,6 +290,9 @@ namespace o2
 
 		// Regular deserializing with prototype
 		void DeserializeWithProto(const DataNode& node);
+
+		// Serializes into node differences between source and object
+		void SerializeObjectDifference(const IObject* object, const IObject* source, DataNode& node) const;
 
 		// Returns dictionary of all children by names
 		Dictionary<String, Actor*> GetAllChilds();

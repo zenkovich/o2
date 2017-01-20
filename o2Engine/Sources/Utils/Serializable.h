@@ -38,17 +38,14 @@ namespace o2
 		virtual void OnDeserialized(const DataNode& node) {}
 
 		// Serializing object into data node
-		DataNode SerializeBasic(const void* thisObject) const;
+		void SerializeBasic(const IObject* thisObject, DataNode& node) const;
 
 		// Deserializing object from data node
-		void DeserializeBasic(const DataNode& node, const void* thisObject);
-
-		// Serializing object into data node
-		void SerializeBasicType(DataNode& node, const void* thisObject, const Type& type) const;
-
-		// Deserializing object from data node
-		void DeserializeBasicType(const DataNode& node, const void* thisObject, const Type& type);
+		void DeserializeBasic(IObject* thisObject, const DataNode& node);
 	};
+
+	void SerializeObject(const IObject* object, DataNode& node);
+	void DeserializeObject(IObject* object, const DataNode& node);
 
 	// ----------------------------
 	// Serializable field attribute
@@ -85,11 +82,13 @@ public:                                                \
 	const o2::Type& GetType() const { return *type; }; \
     o2::DataNode Serialize() const                     \
     {												   \
-        return SerializeBasic((const void*)this);      \
+        o2::DataNode res;                              \
+        SerializeBasic(this, res);                     \
+        return res;                                    \
 	}												   \
     void Deserialize(const o2::DataNode& node)         \
     {												   \
-        DeserializeBasic(node, (const void*)this);     \
+        DeserializeBasic(this, node);                  \
 	}												   \
 	CLASS& operator=(const o2::DataNode& node) 		   \
 	{												   \

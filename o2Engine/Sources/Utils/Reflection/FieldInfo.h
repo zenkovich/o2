@@ -23,14 +23,22 @@ namespace o2
 		{
 			virtual void Serialize(void* object, DataNode& data) const {}
 			virtual void Deserialize(void* object, DataNode& data) const {}
+			virtual bool Equals(void* objectA, void* objectB) const { return false; }
 			virtual IFieldSerializer* Clone() const { return mnew IFieldSerializer(); }
 		};
+
+		template<typename T> struct RealEquals { static bool Check(const T& a, const T& b) { return Math::Equals(a, b); } };
+		template<typename T> struct FakeEquals { static bool Check(const T& a, const T& b) { return false; } };
 
 		template<typename _type>
 		struct FieldSerializer: public IFieldSerializer
 		{
 			void Serialize(void* object, DataNode& data) const;
 			void Deserialize(void* object, DataNode& data) const;
+
+			template<typename _checker = std::conditional<EqualsTrait::IsExists<_type>::value, RealEquals<_type>, FakeEquals<_type>>::type>
+			bool Equals(void* objectA, void* objectB) const;
+
 			IFieldSerializer* Clone() const;
 		};
 
@@ -185,6 +193,13 @@ namespace o2
 	void FieldInfo::FieldSerializer<_type>::Deserialize(void* object, DataNode& data) const
 	{
 		data.GetValue(*(_type*)object);
+	}
+
+	template<typename _type>
+	template<typename _checker>
+	bool FieldInfo::FieldSerializer<_type>::Equals(void* objectA, void* objectB) const
+	{
+		return _checker::Check(*(_type*)objectA, *(_type*)objectB);
 	}
 
 	template<typename _type>
