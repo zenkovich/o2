@@ -374,7 +374,7 @@ namespace o2
 	}
 
 }
- 
+
 CLASS_META(o2::Curve)
 {
 	BASE_CLASS(o2::ISerializable);

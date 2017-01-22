@@ -24,21 +24,25 @@ namespace o2
 			virtual void Serialize(void* object, DataNode& data) const {}
 			virtual void Deserialize(void* object, DataNode& data) const {}
 			virtual bool Equals(void* objectA, void* objectB) const { return false; }
+			virtual void Copy(void* objectA, void* objectB) const {}
 			virtual IFieldSerializer* Clone() const { return mnew IFieldSerializer(); }
 		};
 
 		template<typename T> struct RealEquals { static bool Check(const T& a, const T& b) { return Math::Equals(a, b); } };
 		template<typename T> struct FakeEquals { static bool Check(const T& a, const T& b) { return false; } };
 
-		template<typename _type>
+		template<typename T> struct RealCopy { static void Copy(T& a, const T& b) { a = b; } };
+		template<typename T> struct FakeCopy { static void Copy(T& a, const T& b) {  } };
+
+		template<typename _type, 
+			     typename _checker = std::conditional<EqualsTrait::IsExists<_type>::value, RealEquals<_type>, FakeEquals<_type>>::type,
+			     typename _copier = std::conditional<std::is_assignable<_type, _type>::value, RealCopy<_type>, FakeCopy<_type>>::type>
 		struct FieldSerializer: public IFieldSerializer
 		{
 			void Serialize(void* object, DataNode& data) const;
 			void Deserialize(void* object, DataNode& data) const;
-
-			template<typename _checker = std::conditional<EqualsTrait::IsExists<_type>::value, RealEquals<_type>, FakeEquals<_type>>::type>
 			bool Equals(void* objectA, void* objectB) const;
-
+			void Copy(void* objectA, void* objectB) const;
 			IFieldSerializer* Clone() const;
 		};
 
@@ -105,6 +109,12 @@ namespace o2
 
 		// Deserializes object by pointer
 		void DeserializeObject(void* object, DataNode& data) const;
+
+		// Returns is values getted from object A and object B equals
+		bool IsValueEquals(void* objectA, void* objectB) const;
+
+		// Copies value getter from objectB to value from objectA
+		void CopyValue(void* objectA, void* objectB) const;
 
 	protected:
 		ProtectSection    mProtectSection = ProtectSection::Public; // Protection section
@@ -183,27 +193,32 @@ namespace o2
 		return *this;
 	}
 
-	template<typename _type>
-	void FieldInfo::FieldSerializer<_type>::Serialize(void* object, DataNode& data) const
+	template<typename _type, typename _checker, typename _copier>
+	void FieldInfo::FieldSerializer<_type, _checker, _copier>::Serialize(void* object, DataNode& data) const
 	{
 		data.SetValue(*(_type*)object);
 	}
 
-	template<typename _type>
-	void FieldInfo::FieldSerializer<_type>::Deserialize(void* object, DataNode& data) const
+	template<typename _type, typename _checker, typename _copier>
+	void FieldInfo::FieldSerializer<_type, _checker, _copier>::Deserialize(void* object, DataNode& data) const
 	{
 		data.GetValue(*(_type*)object);
 	}
 
-	template<typename _type>
-	template<typename _checker>
-	bool FieldInfo::FieldSerializer<_type>::Equals(void* objectA, void* objectB) const
+	template<typename _type, typename _checker, typename _copier>
+	bool FieldInfo::FieldSerializer<_type, _checker, _copier>::Equals(void* objectA, void* objectB) const
 	{
 		return _checker::Check(*(_type*)objectA, *(_type*)objectB);
 	}
 
-	template<typename _type>
-	FieldInfo::IFieldSerializer* FieldInfo::FieldSerializer<_type>::Clone() const
+	template<typename _type, typename _checker, typename _copier>
+	void FieldInfo::FieldSerializer<_type, _checker, _copier>::Copy(void* objectA, void* objectB) const
+	{
+		_copier::Copy(*(_type*)objectA, *(_type*)objectB);
+	}
+
+	template<typename _type, typename _checker, typename _copier>
+	FieldInfo::IFieldSerializer* FieldInfo::FieldSerializer<_type, _checker, _copier>::Clone() const
 	{
 		return mnew FieldSerializer();
 	}

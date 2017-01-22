@@ -340,7 +340,7 @@ namespace o2
 		return mSmoothValue;
 	}
 }
- 
+
 CLASS_META(o2::UIVerticalScrollBar)
 {
 	BASE_CLASS(o2::UIWidget);

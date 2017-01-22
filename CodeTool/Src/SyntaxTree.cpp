@@ -536,6 +536,11 @@ SyntaxProtectionSection SyntaxEnum::GetClassSection() const
 	return mClassSection;
 }
 
+SyntaxSection* SyntaxEnum::GetOwnerSyntaxSection() const
+{
+	return mOwnerSection;
+}
+
 SyntaxClassInheritance::SyntaxClassInheritance(const string& className, SyntaxProtectionSection type):
 	mClassName(className), mInheritanceType(type)
 {}

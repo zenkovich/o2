@@ -483,7 +483,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UIHorizontalLayout, fitByChildren, SetFitByChildren, IsFittingByChildren);
 	}
 }
- 
+
 CLASS_META(o2::UIHorizontalLayout)
 {
 	BASE_CLASS(o2::UIWidget);

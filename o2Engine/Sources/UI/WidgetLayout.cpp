@@ -741,7 +741,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UIWidgetLayout, heigthWeight, SetHeightWeight, GetHeightWeight);
 	}
 }
- 
+
 CLASS_META(o2::UIWidgetLayout)
 {
 	BASE_CLASS(o2::ISerializable);

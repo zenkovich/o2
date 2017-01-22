@@ -256,7 +256,8 @@ namespace o2
 		void ProcessCopying(Actor* dest, const Actor* source,
 							Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
 							Dictionary<const Actor*, Actor*>& actorsMap,
-							Dictionary<const Component*, Component*>& componentsMap);
+							Dictionary<const Component*, Component*>& componentsMap,
+							bool isSourcePrototype);
 
 		// Fixes actors and components pointers by actors map
 		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
@@ -290,9 +291,6 @@ namespace o2
 
 		// Regular deserializing with prototype
 		void DeserializeWithProto(const DataNode& node);
-
-		// Serializes into node differences between source and object
-		void SerializeObjectDifference(const IObject* object, const IObject* source, DataNode& node) const;
 
 		// Returns dictionary of all children by names
 		Dictionary<String, Actor*> GetAllChilds();
@@ -463,3 +461,4 @@ namespace o2
 	}
 
 }
+ 

@@ -557,7 +557,6 @@ void CodeToolApplication::ParseSource(const string& path, const TimeStamp& editD
 
 void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 {
-
 	string cppSource, cppSourceInitial;
 	bool cppLoaded = false;
 
@@ -603,12 +602,22 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 		VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
 	}
 
-	auto enums = file->GetGlobalNamespace()->GetAllEnums();
+	SyntaxEnumsVec allEnums = file->GetGlobalNamespace()->GetAllEnums();
+	SyntaxEnumsVec metaEnums;
 
-	if (!enums.empty())
+	for (auto enm : allEnums)
+	{
+		auto owner = enm->GetOwnerSyntaxSection();
+		if (owner && owner->IsClass() && ((SyntaxClass*)owner)->IsTemplate())
+			continue;
+
+		metaEnums.push_back(enm);
+	}
+
+	if (!metaEnums.empty())
 		checkCppLoad();
 
-	for (auto enm : enums)
+	for (auto enm : metaEnums)
 	{
 		cppSource += GetEnumMeta(enm);
 		VerboseLog("Generated meta for enum:%s\n", enm->GetFullName().c_str());
@@ -919,6 +928,8 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 
 void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const char* endword)
 {
+	auto isSkipingChar = [](char x) { return x == '\n' || x == '\r' || x == '\t' || x == '\0' || x == ' '; };
+
 	auto caret = data.find(keyword);
 	while (caret != string::npos)
 	{
@@ -926,13 +937,22 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 		if (end == string::npos)
 			break;
 
-		while (caret > 0 && (data[caret - 1] == '\n' || data[caret - 1] == '\r' ||
-			   data[caret - 1] == '\t' || data[caret - 1] == '\0'))
+		while (caret > 0 && isSkipingChar(data[caret - 1]))
 			caret--;
 
-		data.erase(caret, end + strlen(endword) - caret);
+		if (caret > 0 && isSkipingChar(data[caret]))
+			caret--;
+
+		data.erase(caret + 1, end + strlen(endword) - caret - 1);
 		caret = data.find(keyword);
 	}
+
+	caret = data.length();
+	while (caret > 0 && isSkipingChar(data[caret - 1]))
+		caret--;
+
+	data.erase(caret);
+	data += '\n';
 }
 
 bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const

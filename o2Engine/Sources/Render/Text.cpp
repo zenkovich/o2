@@ -757,7 +757,7 @@ namespace o2
 		return false;
 	}
 }
- 
+
 CLASS_META(o2::Text)
 {
 	BASE_CLASS(o2::IRectDrawable);

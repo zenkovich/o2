@@ -353,7 +353,7 @@ namespace o2
 	}
 
 }
- 
+
 CLASS_META(o2::ActorTransform)
 {
 	BASE_CLASS(o2::Transform);

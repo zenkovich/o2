@@ -426,7 +426,7 @@ namespace o2
 		INITIALIZE_SETTER(Transform, lookAtPoint, LookAt);
 	}
 }
- 
+
 CLASS_META(o2::Transform)
 {
 	BASE_CLASS(o2::ISerializable);

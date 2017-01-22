@@ -484,7 +484,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UIVerticalLayout, fitByChildren, SetFitByChildren, IsFittingByChildren);
 	}
 }
- 
+
 CLASS_META(o2::UIVerticalLayout)
 {
 	BASE_CLASS(o2::UIWidget);

@@ -590,7 +590,7 @@ namespace o2
 		return idx == other.idx;
 	}
 }
- 
+
 CLASS_META(o2::UICustomList)
 {
 	BASE_CLASS(o2::UIScrollArea);

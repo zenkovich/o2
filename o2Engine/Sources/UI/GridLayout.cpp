@@ -940,7 +940,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UIGridLayout, fitByChildren, SetFitByChildren, IsFittingByChildren);
 	}
 }
- 
+
 CLASS_META(o2::UIGridLayout)
 {
 	BASE_CLASS(o2::UIWidget);

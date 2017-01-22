@@ -309,7 +309,7 @@ namespace o2
 		//glBindTexture(GL_TEXTURE_2D, o2Render.mLastDrawTexture->mHandle);
 	}
 }
- 
+
 CLASS_META(o2::VectorFont::Effect)
 {
 	BASE_CLASS(o2::ISerializable);

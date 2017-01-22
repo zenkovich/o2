@@ -996,7 +996,7 @@ namespace o2
 		child.SetAllAccessFunc(this, &UIWidget::GetAllChilds);
 	}
 }
- 
+
 CLASS_META(o2::UIWidget)
 {
 	BASE_CLASS(o2::ISerializable);

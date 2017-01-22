@@ -171,15 +171,73 @@ namespace o2
 		return *this;
 	}
 
-	DataNode& DataNode::SetValue(ISerializable& other)
-	{
-		*this = other.Serialize();
-		return *this;
-	}
+// 	DataNode& DataNode::SetValue(IObject& other)
+// 	{
+// 		ObjectDataConverter<IObject>::ToData(other, *this);
+// 		return *this;
+// 	}
 
 	DataNode& DataNode::SetValue(const UID& value)
 	{
 		mData = (String)value;
+		return *this;
+	}
+
+	DataNode& DataNode::SetValueRaw(const IObject& object)
+	{
+		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
+			((const ISerializable&)object).OnSerialize(*this);
+
+		char* objectPtr = (char*)&object;
+		auto fields = object.GetType().GetFieldsWithBaseClasses();
+		for (auto field : fields)
+		{
+			auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
+			if (srlzAttribute)
+				field->SerializeObject(objectPtr, *AddNode(field->GetName()));
+		}
+
+		return *this;
+	}
+
+	DataNode& DataNode::SetValueDelta(const IObject& object, const IObject& source)
+	{
+		if (!object.GetType().IsBasedOn(source.GetType()) && !source.GetType().IsBasedOn(object.GetType()))
+			return SetValue(object);
+
+		for (auto conv : mDataConverters)
+		{
+			if (conv->CheckType(&object.GetType()))
+			{
+				conv->ToData(&object, *this);
+				return *this;
+			}
+		}
+
+		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
+			((ISerializable&)object).OnSerialize(*this);
+
+		char* objectPtr = (char*)&object;
+		char* sourcePtr = (char*)&source;
+		auto fields = object.GetType().GetFieldsWithBaseClasses();
+		for (auto field : fields)
+		{
+			if (!field->GetAttribute<SerializableAttribute>())
+				continue;
+
+			if (field->GetType()->IsBasedOn(TypeOf(IObject)))
+			{
+				auto& newFieldNode = *AddNode(field->GetName());
+				newFieldNode.SetValueDelta(*(IObject*)field->GetValuePtr(objectPtr), 
+										   *(IObject*)field->GetValuePtr(sourcePtr));
+
+				continue;
+			}
+
+			if (!field->IsValueEquals(objectPtr, sourcePtr))
+				field->SerializeObject(objectPtr, *AddNode(field->GetName()));
+		}
+
 		return *this;
 	}
 
@@ -258,7 +316,6 @@ namespace o2
 		value = (Color4)mData;
 	}
 
-
 	void DataNode::GetValue(char& value) const
 	{
 		value = (char)(int)mData;
@@ -307,6 +364,66 @@ namespace o2
 	void DataNode::GetValue(UID& value) const
 	{
 		value = mData;
+	}
+
+	void DataNode::GetValueDelta(IObject& object, const IObject& source) const
+	{
+		if (!object.GetType().IsBasedOn(source.GetType()) && !source.GetType().IsBasedOn(object.GetType()))
+		{
+			GetValue(object);
+			return;
+		}
+
+		for (auto conv : mDataConverters)
+		{
+			if (conv->CheckType(&object.GetType()))
+			{
+				conv->FromData(&object, *this);
+				return;
+			}
+		}
+
+		char* objectPtr = (char*)&object;
+		char* sourcePtr = (char*)&source;
+		auto fields = object.GetType().GetFieldsWithBaseClasses();
+		for (auto field : fields)
+		{
+			if (!field->GetAttribute<SerializableAttribute>())
+				continue;
+
+			auto fldNode = GetNode(field->GetName());
+			if (fldNode)
+			{
+				if (field->GetType()->IsBasedOn(TypeOf(IObject)))
+					fldNode->GetValueDelta(*(IObject*)field->GetValuePtr(objectPtr),
+										   *(IObject*)field->GetValuePtr(sourcePtr));
+				else
+					field->DeserializeObject(objectPtr, *fldNode);
+			}
+			else field->CopyValue(objectPtr, sourcePtr);
+		}
+
+		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
+			((ISerializable&)object).OnDeserialized(*this);
+	}
+
+	void DataNode::GetValueRaw(IObject& object) const
+	{
+		char* thisPtr = (char*)&object;
+		auto fields = object.GetType().GetFieldsWithBaseClasses();
+		for (auto field : fields)
+		{
+			auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
+			if (srlzAttribute)
+			{
+				auto fldNode = GetNode(field->GetName());
+				if (fldNode)
+					field->DeserializeObject(thisPtr, *fldNode);
+			}
+		}
+
+		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
+			((ISerializable&)object).OnDeserialized(*this);
 	}
 
 	DataNode& DataNode::operator[](const WString& nodePath)
@@ -550,7 +667,7 @@ namespace o2
 
 	Vector<IDataNodeTypeConverter*> DataNode::mDataConverters;
 }
- 
+
 ENUM_META_(o2::DataNode::Format, Format)
 {
 	ENUM_ENTRY(Binary);

@@ -39,12 +39,18 @@ namespace o2
 	{
 		transform.SetOwner(this);
 
+		if (other.mIsAsset)
+		{
+			mPrototype = ActorAssetRef(other.mAssetId);
+			mPrototypeLink = mPrototype->GetActor();
+		}
+
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
 		Dictionary<const Actor*, Actor*> actorsMap;
 		Dictionary<const Component*, Component*> componentsMap;
 
-		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap);
+		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
@@ -79,13 +85,50 @@ namespace o2
 	}
 
 	Actor::Actor(const ActorAssetRef& prototype, CreateMode mode /*= CreateMode::InScene*/):
-		Actor(mode)
+		mName(prototype->GetActor()->mName), mEnabled(prototype->GetActor()->mEnabled), 
+		mResEnabled(prototype->GetActor()->mEnabled), mLocked(prototype->GetActor()->mLocked),
+		mResLocked(prototype->GetActor()->mResLocked), Animatable(*prototype->GetActor()), 
+		transform(prototype->GetActor()->transform), mParent(nullptr), mLayer(prototype->GetActor()->mLayer), 
+		mId(Math::Random()), mAssetId(), mIsAsset(false), mIsOnScene(false)
 	{
-		if (prototype)
+		transform.SetOwner(this);
+
+		if (prototype->GetActor()->mIsAsset)
 		{
-			mPrototype = prototype;
-			*this = *prototype->GetActor();
+			mPrototype = ActorAssetRef(prototype->GetActor()->mAssetId);
+			mPrototypeLink = mPrototype->GetActor();
 		}
+
+		Vector<Actor**> actorPointersFields;
+		Vector<Component**> componentPointersFields;
+		Dictionary<const Actor*, Actor*> actorsMap;
+		Dictionary<const Component*, Component*> componentsMap;
+
+		ProcessCopying(this, prototype->GetActor(), actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
+		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
+
+		UpdateEnabled();
+		transform.UpdateTransform();
+
+		InitializeProperties();
+
+		if (mode == CreateMode::InScene && Scene::IsSingletonInitialzed())
+		{
+			o2Scene.mRootActors.Add(this);
+			o2Scene.mAllActors.Add(this);
+
+			if (!mLayer)
+				mLayer = o2Scene.GetDefaultLayer();
+
+			mLayer->mActors.Add(this);
+			mLayer->mEnabledActors.Add(this);
+
+			o2Scene.onActorCreated(this);
+
+			mIsOnScene = true;
+		}
+
+		ActorDataNodeConverter::ActorCreated(this);
 	}
 
 	Actor::~Actor()
@@ -123,12 +166,23 @@ namespace o2
 		RemoveAllChilds();
 		RemoveAllComponents();
 
+		if (other.mPrototype)
+		{
+			mPrototype = other.mPrototype;
+			mPrototypeLink = mPrototype->GetActor();
+		}
+		else
+		{
+			mPrototype = ActorAssetRef();
+			mPrototypeLink = nullptr;
+		}
+
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
 		Dictionary<const Actor*, Actor*> actorsMap;
 		Dictionary<const Component*, Component*> componentsMap;
 
-		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap);
+		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, false);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
@@ -141,7 +195,8 @@ namespace o2
 
 	void Actor::ProcessCopying(Actor* dest, const Actor* source, Vector<Actor**>& actorsPointers,
 							   Vector<Component**>& componentsPointers, Dictionary<const Actor*, Actor*>& actorsMap,
-							   Dictionary<const Component*, Component*>& componentsMap)
+							   Dictionary<const Component*, Component*>& componentsMap,
+							   bool isSourcePrototype)
 	{
 		dest->Animatable::operator=(*source);
 
@@ -150,6 +205,14 @@ namespace o2
 		dest->transform = source->transform;
 		dest->mAssetId = source->mAssetId;
 
+		if (dest->mParent && dest->mParent->mPrototypeLink)
+		{
+			if (isSourcePrototype)
+				dest->mPrototypeLink = source;
+			else
+				dest->mPrototypeLink = source->mPrototypeLink;
+		}
+
 		actorsMap.Add(source, dest);
 
 		for (auto child : source->mChilds)
@@ -157,7 +220,7 @@ namespace o2
 			Actor* newChild = mnew Actor();
 			dest->AddChild(newChild);
 
-			ProcessCopying(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap);
+			ProcessCopying(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap, isSourcePrototype);
 		}
 
 		for (auto component : source->mComponents)
@@ -165,6 +228,14 @@ namespace o2
 			Component* newComponent = dest->AddComponent(component->Clone());
 
 			componentsMap.Add(component, newComponent);
+
+			if (dest->mPrototypeLink)
+			{
+				if (isSourcePrototype)
+					newComponent->mPrototypeLink = component;
+				else
+					newComponent->mPrototypeLink = component->mPrototypeLink;
+			}
 
 			for (auto field : newComponent->GetType().GetFields())
 			{
@@ -805,7 +876,7 @@ namespace o2
 
 	void Actor::SerializeWithProto(DataNode& node) const
 	{
-		Actor* proto = mPrototypeLink;
+		const Actor* proto = mPrototypeLink;
 
 		// Prototype data
 		if (mPrototype)
@@ -865,27 +936,30 @@ namespace o2
 			if (auto componentProtoLink = component->mPrototypeLink)
 			{
 				dataNode["PrototypeLink"] = componentProtoLink->mId;
-				dataNode["Id"] = component->mId;
+				//dataNode["Id"] = component->mId;
 
-				if (component->mEnabled != componentProtoLink->mEnabled)
-					dataNode["Enabled"] = component->mEnabled;
+				//dataNode.SetValueDelta(*component, *componentProtoLink);
+				component->OnSerialize(dataNode);
 
-				auto componentFields = component->GetType().GetFieldsWithBaseClasses();
-				for (auto field : componentFields)
+				char* objectPtr = (char*)component;
+				char* sourcePtr = (char*)componentProtoLink;
+				auto fields = component->GetType().GetFieldsWithBaseClasses();
+				for (auto field : fields)
 				{
-					if (!field->HasAttribute<SerializableAttribute>())
+					if (!field->GetAttribute<SerializableAttribute>())
 						continue;
 
-					auto valuePtr = field->GetValuePtrStrong(component);
-					if (valuePtr == &component->mId || valuePtr == &component->mEnabled)
+					if (field->GetType()->IsBasedOn(TypeOf(IObject)))
+					{
+						auto& newFieldNode = *dataNode.AddNode(field->GetName());
+						newFieldNode.SetValueDelta(*(IObject*)field->GetValuePtr(objectPtr),
+												   *(IObject*)field->GetValuePtr(sourcePtr));
+
 						continue;
+					}
 
-					DataNode valueData, prototypeLinkValueData;
-					field->SerializeObject(component, valueData);
-					field->SerializeObject(componentProtoLink, prototypeLinkValueData);
-
-					if (valueData != prototypeLinkValueData)
-						dataNode[field->GetName()] = valueData;
+					if (!field->IsValueEquals(objectPtr, sourcePtr))
+						field->SerializeObject(objectPtr, *dataNode.AddNode(field->GetName()));
 				}
 			}
 			else dataNode = component->Serialize();
@@ -1133,7 +1207,7 @@ namespace o2
 	}
 
 }
- 
+
 CLASS_META(o2::Actor)
 {
 	BASE_CLASS(o2::Animatable);
@@ -1157,7 +1231,6 @@ CLASS_META(o2::Actor)
 	PUBLIC_FIELD(onEnableChanged);
 	PROTECTED_FIELD(mPrototype);
 	PROTECTED_FIELD(mPrototypeLink);
-	PROTECTED_FIELD(mPrototypeChanges);
 	PROTECTED_FIELD(mId);
 	PROTECTED_FIELD(mName);
 	PROTECTED_FIELD(mParent);
@@ -1224,7 +1297,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(Scene::Layer*, GetLayer);
 	PUBLIC_FUNCTION(String, GetLayerName);
 	PROTECTED_FUNCTION(void, OnTransformChanged);
-	PROTECTED_FUNCTION(void, ProcessCopying, Actor*, const Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp1, _tmp2);
+	PROTECTED_FUNCTION(void, ProcessCopying, Actor*, const Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp1, _tmp2, bool);
 	PROTECTED_FUNCTION(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp3, _tmp4);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
@@ -1245,34 +1318,6 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnChildsChanged);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
-
-CLASS_META(o2::Actor::ParameterDifference)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(path).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(sourceValue).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
-
-CLASS_META(o2::Actor::ComponentChanges)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(parametersDiffs).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
-
-CLASS_META(o2::Actor::PrototypeChanges)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(removedComponents).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(addedComponents).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(componentChanges).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(parameterDiffs).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 

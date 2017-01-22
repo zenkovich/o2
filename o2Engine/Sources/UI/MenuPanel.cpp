@@ -458,7 +458,7 @@ namespace o2
 		return text == other.text;
 	}
 }
- 
+
 CLASS_META(o2::UIMenuPanel)
 {
 	BASE_CLASS(o2::UIWidget);

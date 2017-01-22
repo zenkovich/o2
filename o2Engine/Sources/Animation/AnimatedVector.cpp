@@ -518,7 +518,7 @@ namespace o2
 		return position == other.position && value == other.value;
 	}
 }
- 
+
 CLASS_META(o2::AnimatedValue<o2::Vec2<float>>)
 {
 	BASE_CLASS(o2::IAnimatedValue);

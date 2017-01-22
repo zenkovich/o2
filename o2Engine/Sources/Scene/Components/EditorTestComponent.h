@@ -68,13 +68,6 @@ namespace o2
 		float mFloat8;					           // @SERIALIZABLE
 		float mFloat9;					           // @SERIALIZABLE
 
-		void DeserializeBasic(const DataNode& node, const void* thisObject)
-		{
-			Component::DeserializeBasic(node, thisObject);
-		}
-
-		//EditorTestComponent(const EditorTestComponent& other) {}
-
 		SERIALIZABLE(EditorTestComponent);
 	};
 }

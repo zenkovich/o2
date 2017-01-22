@@ -544,3 +544,4 @@ namespace o2
 
 #define ANIMATABLE(TYPE) .AddAttribute<AnimAttribute<TYPE>>()
 }
+ 

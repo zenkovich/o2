@@ -506,7 +506,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UILongList, selectedItemPos, SelectItemAt, GetSelectedItemPosition);
 	}
 }
- 
+
 CLASS_META(o2::UILongList)
 {
 	BASE_CLASS(o2::UIScrollArea);

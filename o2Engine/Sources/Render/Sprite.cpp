@@ -1121,7 +1121,7 @@ namespace o2
 		INITIALIZE_PROPERTY(Sprite, sliceBorder, SetSliceBorder, GetSliceBorder);
 	}
 }
- 
+
 CLASS_META(o2::Sprite)
 {
 	BASE_CLASS(o2::IRectDrawable);

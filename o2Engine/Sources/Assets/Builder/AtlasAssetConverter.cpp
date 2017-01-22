@@ -327,7 +327,7 @@ namespace o2
 		return mAssetInfo == other.mAssetInfo && mBitmap == other.mBitmap && mPackRect == other.mPackRect;
 	}
 }
- 
+
 CLASS_META(o2::AtlasAssetConverter)
 {
 	BASE_CLASS(o2::IAssetConverter);

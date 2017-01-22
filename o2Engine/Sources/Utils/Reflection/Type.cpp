@@ -425,7 +425,7 @@ namespace o2
 	}
 
 }
- 
+
 ENUM_META_(o2::Type::Usage, Usage)
 {
 	ENUM_ENTRY(Dictionary);

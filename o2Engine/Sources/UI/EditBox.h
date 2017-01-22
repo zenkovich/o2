@@ -280,3 +280,4 @@ namespace o2
 		void InitializeProperties();
 	};
 }
+ 

@@ -810,7 +810,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UIScrollArea, verScroll, SetVerticalScroll, GetVerticalScroll);
 	}
 }
- 
+
 CLASS_META(o2::UIScrollArea)
 {
 	BASE_CLASS(o2::UIWidget);
@@ -833,6 +833,15 @@ CLASS_META(o2::UIScrollArea)
 	PROTECTED_FIELD(mScrollArea);
 	PROTECTED_FIELD(mScrollRange);
 	PROTECTED_FIELD(mEnableHorScroll);
+	PROTECTED_FIELD(mEnableVerScroll);
+	PROTECTED_FIELD(mUnderCursor);
+	PROTECTED_FIELD(mPressedCursor);
+	PROTECTED_FIELD(mPressedScroll);
+	PROTECTED_FIELD(mPressedCursorPos);
+	PROTECTED_FIELD(mSpeedUpdTime);
+	PROTECTED_FIELD(mEnableScrollsHiding).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mLastHorScrollChangeTime);
+	PROTECTED_FIELD(mLastVerScrollChangeTime);
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
@@ -856,6 +865,24 @@ CLASS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetViewLayout);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
+	PROTECTED_FUNCTION(void, UpdateControls, float);
+	PROTECTED_FUNCTION(void, CheckScrollBarsVisibility);
+	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
+	PROTECTED_FUNCTION(void, MoveWidgetAndCheckClipping, UIWidget*, const Vec2F&);
+	PROTECTED_FUNCTION(void, UpdateScrollBarsLayout);
+	PROTECTED_FUNCTION(void, CheckChildrenClipping);
+	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
+	PROTECTED_FUNCTION(void, UpdateTransparency);
+	PROTECTED_FUNCTION(void, CalculateScrollArea);
+	PROTECTED_FUNCTION(void, UpdateScrollParams);
+	PROTECTED_FUNCTION(void, OnHorScrollChanged, float);
+	PROTECTED_FUNCTION(void, OnVerScrollChanged, float);
+	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnScrolled);
+	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
  

@@ -1333,7 +1333,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UIEditBox, selectionEnd, SetSelectionEnd, GetSelectionEnd);
 	}
 }
- 
+
 CLASS_META(o2::UIEditBox)
 {
 	BASE_CLASS(o2::UIScrollArea);

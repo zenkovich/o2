@@ -360,7 +360,7 @@ namespace o2
 		}
 	}
 }
- 
+
 CLASS_META(o2::UIToggle)
 {
 	BASE_CLASS(o2::UIWidget);

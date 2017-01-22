@@ -725,7 +725,7 @@ namespace o2
 		return position == other.position && value == other.value;
 	}
 };
- 
+
 META_TEMPLATES(typename _type)
 CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>)
 {

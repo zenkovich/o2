@@ -56,12 +56,22 @@ namespace o2
 
 	void FieldInfo::SerializeObject(void* object, DataNode& data) const
 	{
-		mSerializer->Serialize(object, data);
+		mSerializer->Serialize(GetValuePtrStrong(object), data);
 	}
 
 	void FieldInfo::DeserializeObject(void* object, DataNode& data) const
 	{
-		mSerializer->Deserialize(object, data);
+		mSerializer->Deserialize(GetValuePtrStrong(object), data);
+	}
+
+	bool FieldInfo::IsValueEquals(void* objectA, void* objectB) const
+	{
+		return mSerializer->Equals(GetValuePtrStrong(objectA), GetValuePtrStrong(objectB));
+	}
+
+	void FieldInfo::CopyValue(void* objectA, void* objectB) const
+	{
+		mSerializer->Copy(GetValuePtrStrong(objectA), GetValuePtrStrong(objectB));
 	}
 
 	FieldInfo* FieldInfo::SearchFieldPath(void* obj, void* target, const String& path, String& res,

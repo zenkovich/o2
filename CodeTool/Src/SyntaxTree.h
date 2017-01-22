@@ -517,10 +517,14 @@ public:
 	// Returns protection section
 	SyntaxProtectionSection GetClassSection() const;
 
+	// Returns owner syntax section
+	SyntaxSection* GetOwnerSyntaxSection() const;
+
 protected:
-	string                  mName;	   // Name of enum
-	string                  mFullName; // Full enum name with all parent spaces names
-	StringStringDict        mEntries;  // Entries of enum
+	string                  mName;	                 // Name of enum
+	string                  mFullName;               // Full enum name with all parent spaces names
+	StringStringDict        mEntries;                // Entries of enum
+	SyntaxSection*          mOwnerSection = nullptr; // Owner syntax section
 	SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public;
 
 	friend class CppSyntaxParser;

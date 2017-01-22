@@ -10,6 +10,7 @@ namespace o2
 	class Actor;
 	class Component;
 	class DataNode;
+	class IObject;
 	class ISerializable;
 	class Type;
 
@@ -53,11 +54,11 @@ namespace o2
 			static void FromData(_type& object, const DataNode& data);
 		};
 
-		// -----------------------------------
-		// Custom IObject types data converter
-		// -----------------------------------
+		// ----------------------------
+		// IObject types data converter
+		// ----------------------------
 		template<typename _type>
-		class CustomDataConverter
+		class ObjectDataConverter
 		{
 		public:
 			static void ToData(_type& object, DataNode& data);
@@ -91,8 +92,14 @@ namespace o2
 		// Sets value from other node
 		DataNode& SetValue(const DataNode& other);
 
-		// Sets value from other node
-		DataNode& SetValue(ISerializable& other);
+		// Sets value from object
+		DataNode& SetValue(IObject& object);
+
+		// Sets value from object withous custom converters
+		DataNode& SetValueRaw(const IObject& object);
+
+		// Sets value as difference between object and source
+		DataNode& SetValueDelta(const IObject& object, const IObject& source);
 
 		// Assign operator string value
 		DataNode& SetValue(char* value);
@@ -168,7 +175,7 @@ namespace o2
 
 		// Sets value from enum class or IObject based value
 		template<typename _type,
-			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, CustomDataConverter<_type>>::type,
+			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, ObjectDataConverter<_type>>::type,
 			typename X = std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
 		DataNode& SetValue(_type& value);
 
@@ -249,7 +256,7 @@ namespace o2
 
 		// Gets value as pointer, only for objects, based on ISerializable
 		template<typename _type,
-			typename X = std::enable_if<std::is_base_of<ISerializable, _type>::value>::type>
+			typename X = std::enable_if<std::is_base_of<IObject, _type>::value>::type>
 		void GetValue(_type*& value) const;
 
 		// Gets value as vector
@@ -262,10 +269,15 @@ namespace o2
 
 		// Gets value as enum class or IObject
 		template<typename _type,
-			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, CustomDataConverter<_type>>::type,
+			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, ObjectDataConverter<_type>>::type,
 			typename X = std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
 		void GetValue(_type& value) const;
 
+		// Gets objects with delta from source object
+		void GetValueDelta(IObject& object, const IObject& source) const;
+
+		// Gets object from data without custom converters
+		void GetValueRaw(IObject& object) const;
 
 		// [] assign operator. nodePath sample: "node/node/abc/cde"
 		DataNode& operator[](const WString& nodePath);
@@ -369,7 +381,7 @@ namespace o2
 			 std::is_same<String, T>::value ||
 			 std::is_same<WString, T>::value ||
 			 std::is_same<UID, T>::value ||
-			 std::is_same<DataNode, T>::value) && !std::is_const<T>::value>
+			 std::is_same<DataNode, T>::value) && !std::is_const<T>::value && !std::is_const<typename std::remove_pointer<T>::type>::value>
 		{};
 
 		template<typename T2>
@@ -546,32 +558,33 @@ namespace o2
 	}
 
 	template<typename _type>
-	void DataNode::CustomDataConverter<_type>::FromData(_type& object, const DataNode& data)
+	void DataNode::ObjectDataConverter<_type>::FromData(_type& object, const DataNode& data)
 	{
 		for (auto conv : mDataConverters)
 		{
-			if (conv->CheckType(&GetTypeOf<_type>()))
+			if (conv->CheckType(&object.GetType()))
 			{
 				conv->FromData(&object, data);
 				return;
 			}
 		}
 
-		object.Deserialize(data);
+		data.GetValueRaw(object);
 	}
 
 	template<typename _type>
-	void DataNode::CustomDataConverter<_type>::ToData(_type& object, DataNode& data)
+	void DataNode::ObjectDataConverter<_type>::ToData(_type& object, DataNode& data)
 	{
 		for (auto conv : mDataConverters)
 		{
-			if (conv->CheckType(&GetTypeOf<_type>()))
+			if (conv->CheckType(&object.GetType()))
 			{
 				conv->ToData(&object, data);
 				return;
 			}
 		}
 
-		data = object.Serialize();
+		data.SetValueRaw(object);
 	}
 }
+ 

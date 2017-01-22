@@ -463,7 +463,7 @@ namespace o2
 	}
 
 }
- 
+
 CLASS_META(o2::Scene::Layer)
 {
 	BASE_CLASS(o2::ISerializable);

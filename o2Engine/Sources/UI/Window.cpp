@@ -356,7 +356,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UIWindow, caption, SetCaption, GetCaption);
 	}
 }
- 
+
 CLASS_META(o2::UIWindow)
 {
 	BASE_CLASS(o2::UIScrollArea);

@@ -341,7 +341,7 @@ namespace o2
 		INITIALIZE_PROPERTY(UIHorizontalScrollBar, scrollSense, SetScrollSense, GetScrollSense);
 	}
 }
- 
+
 CLASS_META(o2::UIHorizontalScrollBar)
 {
 	BASE_CLASS(o2::UIWidget);

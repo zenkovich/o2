@@ -312,7 +312,7 @@ namespace o2
 		INITIALIZE_PROPERTY(AnimatedValue<float>, keys, SetKeys, GetKeysNonContant);
 	}
 }
- 
+
 CLASS_META(o2::AnimatedValue<float>)
 {
 	BASE_CLASS(o2::IAnimatedValue);
