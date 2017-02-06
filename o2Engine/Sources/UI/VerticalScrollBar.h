@@ -74,7 +74,7 @@ namespace o2
 		float GetScrollhandleSize() const;
 
 		// Sets scroll handle minimum size in pixels
-		void SetMinimalScrollhandleSize(float pixelSize);
+		void SetMinimalScrollHandleSize(float pixelSize);
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);

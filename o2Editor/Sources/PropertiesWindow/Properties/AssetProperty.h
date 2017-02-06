@@ -207,6 +207,8 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::SetAssetId(UID id)
 	{
+		mCommonValue = id == 0 ? _type() : _type(id);
+
 		for (auto ptr : mValuesPointers)
 			mAssignFunc(ptr, mCommonValue);
 
@@ -253,7 +255,8 @@ namespace Editor
 	void AssetProperty<_type>::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.FocusWidget(mBox);
-		o2EditorAssets.ShowAssetIcon(mCommonValue->GetPath());
+		if (mCommonValue)
+			o2EditorAssets.ShowAssetIcon(mCommonValue->GetPath());
 	}
 
 	template<typename _type>
@@ -296,7 +299,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset.assetType != &TypeOf(_type))
+		if (*lastSelectedAsset.assetType != mCommonValue.GetAssetType())
 			return;
 
 		o2Application.SetCursor(CursorType::Hand);
@@ -311,7 +314,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset.assetType != &TypeOf(_type))
+		if (*lastSelectedAsset.assetType != mCommonValue.GetAssetType())
 			return;
 
 		SetAssetId(lastSelectedAsset.id);
@@ -320,7 +323,7 @@ namespace Editor
 		mBox->Focus();
 	}
 }
- 
+
 META_TEMPLATES(typename _type)
 CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 {

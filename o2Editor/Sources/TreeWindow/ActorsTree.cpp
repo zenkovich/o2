@@ -393,7 +393,7 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::UIActorsTree)
 {
 	BASE_CLASS(o2::UITree);

@@ -114,9 +114,7 @@ namespace o2
 
 	void Bitmap::Clear(const Color4& color)
 	{
-		short bpp[] = { 0, 4 };
-
-		memset(mData, color.ARGB(), bpp[(int)mFormat] * mSize.x*mSize.y);
+		Fill(color);
 	}
 
 	unsigned char* Bitmap::GetData()

@@ -205,15 +205,6 @@ namespace o2
 		if (!object.GetType().IsBasedOn(source.GetType()) && !source.GetType().IsBasedOn(object.GetType()))
 			return SetValue(object);
 
-		for (auto conv : mDataConverters)
-		{
-			if (conv->CheckType(&object.GetType()))
-			{
-				conv->ToData(&object, *this);
-				return *this;
-			}
-		}
-
 		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
 			((ISerializable&)object).OnSerialize(*this);
 
@@ -227,15 +218,49 @@ namespace o2
 
 			if (field->GetType()->IsBasedOn(TypeOf(IObject)))
 			{
-				auto& newFieldNode = *AddNode(field->GetName());
-				newFieldNode.SetValueDelta(*(IObject*)field->GetValuePtr(objectPtr), 
-										   *(IObject*)field->GetValuePtr(sourcePtr));
+				bool usedConverter = false;
+				for (auto conv : mDataConverters)
+				{
+					if (conv->IsConvertsType(&object.GetType()))
+					{
+						if (!field->IsValueEquals(objectPtr, sourcePtr))
+							conv->ToData(&object, *AddNode(field->GetName()));
+
+						usedConverter = true;
+
+						break;
+					}
+				}
+
+				if (usedConverter)
+					continue;
+
+				DataNode* newFieldNode = mnew DataNode();
+				newFieldNode->SetName(field->GetName());
+
+				newFieldNode->SetValueDelta(*(IObject*)field->GetValuePtr(objectPtr), 
+								      		*(IObject*)field->GetValuePtr(sourcePtr));
+
+				if (!newFieldNode->IsEmpty())
+					AddNode(newFieldNode);
+				else
+					delete newFieldNode;                 
 
 				continue;
 			}
 
 			if (!field->IsValueEquals(objectPtr, sourcePtr))
-				field->SerializeObject(objectPtr, *AddNode(field->GetName()));
+			{
+				DataNode* newFieldNode = mnew DataNode();
+				newFieldNode->SetName(field->GetName());
+
+				field->SerializeObject(objectPtr, *newFieldNode); 
+				
+				if (!newFieldNode->IsEmpty())
+					AddNode(newFieldNode);
+				else
+					delete newFieldNode;
+			}
 		}
 
 		return *this;
@@ -374,15 +399,6 @@ namespace o2
 			return;
 		}
 
-		for (auto conv : mDataConverters)
-		{
-			if (conv->CheckType(&object.GetType()))
-			{
-				conv->FromData(&object, *this);
-				return;
-			}
-		}
-
 		char* objectPtr = (char*)&object;
 		char* sourcePtr = (char*)&source;
 		auto fields = object.GetType().GetFieldsWithBaseClasses();
@@ -395,10 +411,25 @@ namespace o2
 			if (fldNode)
 			{
 				if (field->GetType()->IsBasedOn(TypeOf(IObject)))
+				{
+					bool usedConverter = false;
+					for (auto conv : mDataConverters)
+					{
+						if (conv->IsConvertsType(field->GetType()))
+						{
+							conv->FromData(field->GetValuePtr(objectPtr), *this);
+							usedConverter = true;
+							break;
+						}
+					}
+
+					if (usedConverter)
+						continue;
+
 					fldNode->GetValueDelta(*(IObject*)field->GetValuePtr(objectPtr),
 										   *(IObject*)field->GetValuePtr(sourcePtr));
-				else
-					field->DeserializeObject(objectPtr, *fldNode);
+				}
+				else field->DeserializeObject(objectPtr, *fldNode);
 			}
 			else field->CopyValue(objectPtr, sourcePtr);
 		}
@@ -607,6 +638,11 @@ namespace o2
 	WString& DataNode::Data()
 	{
 		return mData;
+	}
+
+	bool DataNode::IsEmpty() const
+	{
+		return mData.IsEmpty() && mChildNodes.IsEmpty();
 	}
 
 	void DataNode::Clear()

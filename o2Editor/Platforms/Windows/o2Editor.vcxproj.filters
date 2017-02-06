@@ -18,6 +18,10 @@
     <Filter Include="Sources\PropertiesWindow\AssetsViewer">
       <UniqueIdentifier>{2e3f02cf-2e2f-4572-9ac3-609ea2e1e6df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\PropertiesWindow\ActorsViewer\ComponentsViewers" />
+    <Filter Include="Sources\Core\Dialogs">
+      <UniqueIdentifier>{08026faa-a356-45eb-8f4f-b2213425c6a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h">
@@ -113,6 +117,9 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.h">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ComponentsViewers\ImageComponentViewer.h">
+      <Filter>Sources\PropertiesWindow\ActorsViewer\ComponentsViewers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.h">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
@@ -140,7 +147,13 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\AssetsPropertiesViewer.h">
       <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\IAssetPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.h">
       <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.h">
@@ -155,10 +168,22 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BorderFloatProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BorderIntProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ColorProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\EnumMaskProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\EnumProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.h">
@@ -177,6 +202,15 @@
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ObjectPtrProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\RectangleFloatProperty.h">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\RectangleIntProperty.h">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.h">
@@ -218,32 +252,8 @@
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h">
       <Filter>Sources\TreeWindow</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\EnumProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\EnumMaskProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.h">
-      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.h">
-      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\ObjectPtrProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\RectangleFloatProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\RectangleIntProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BorderFloatProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\Properties\BorderIntProperty.h">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    <ClInclude Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.h">
+      <Filter>Sources\Core\Dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -367,7 +377,13 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\AssetsPropertiesViewer.cpp">
       <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\IAssetPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.cpp">
       <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.cpp">
@@ -382,7 +398,19 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BooleanProperty.cpp">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BorderFloatProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BorderIntProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ColorProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ComponentProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\EnumProperty.cpp">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\FieldPropertiesInfo.cpp">
@@ -401,6 +429,15 @@
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ObjectProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ObjectPtrProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\RectangleFloatProperty.cpp">
+      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\RectangleIntProperty.cpp">
       <Filter>Sources\PropertiesWindow\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\StringProperty.cpp">
@@ -445,29 +482,8 @@
     <ClCompile Include="..\..\Sources\Windows\main.cpp">
       <Filter>Sources\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.cpp">
-      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.cpp">
-      <Filter>Sources\PropertiesWindow\AssetsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\ObjectPtrProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\RectangleFloatProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\RectangleIntProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\EnumProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BorderFloatProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\Properties\BorderIntProperty.cpp">
-      <Filter>Sources\PropertiesWindow\Properties</Filter>
+    <ClCompile Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.cpp">
+      <Filter>Sources\Core\Dialogs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -27,7 +27,7 @@ namespace o2
 		virtual void FromData(void* object, const DataNode& data) {}
 
 		// Checks that type is supports by this converter
-		virtual bool CheckType(const Type* type) const { return false; }
+		virtual bool IsConvertsType(const Type* type) const { return false; }
 	};
 
 	// -------------------
@@ -291,6 +291,9 @@ namespace o2
 		// Not equals operator
 		bool operator!=(const DataNode& other) const;
 
+		// Returns is node data empty and have no children
+		bool IsEmpty() const;
+
 		// Removes all children
 		void Clear();
 
@@ -416,7 +419,7 @@ namespace o2
 	{
 		for (auto conv : mDataConverters)
 		{
-			if (conv->CheckType(&GetTypeOf<_type*>()))
+			if (conv->IsConvertsType(&GetTypeOf<_type*>()))
 			{
 				conv->FromData(&value, *this);
 				return;
@@ -461,7 +464,7 @@ namespace o2
 		{
 			for (auto conv : mDataConverters)
 			{
-				if (conv->CheckType(&GetTypeOf<_type*>()))
+				if (conv->IsConvertsType(&GetTypeOf<_type*>()))
 				{
 					conv->ToData(&value, *this);
 					return *this;
@@ -562,7 +565,7 @@ namespace o2
 	{
 		for (auto conv : mDataConverters)
 		{
-			if (conv->CheckType(&object.GetType()))
+			if (conv->IsConvertsType(&object.GetType()))
 			{
 				conv->FromData(&object, data);
 				return;
@@ -577,7 +580,7 @@ namespace o2
 	{
 		for (auto conv : mDataConverters)
 		{
-			if (conv->CheckType(&object.GetType()))
+			if (conv->IsConvertsType(&object.GetType()))
 			{
 				conv->ToData(&object, data);
 				return;

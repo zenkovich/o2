@@ -270,7 +270,7 @@ namespace o2
 		interactable = mResVisible;
 	}
 
-	void UIVerticalScrollBar::SetMinimalScrollhandleSize(float pixelSize)
+	void UIVerticalScrollBar::SetMinimalScrollHandleSize(float pixelSize)
 	{
 		mScrollhandleMinPxSize = pixelSize;
 		UpdateProgressLayersLayouts();
@@ -379,7 +379,7 @@ CLASS_META(o2::UIVerticalScrollBar)
 	PUBLIC_FUNCTION(float, GetScrollSense);
 	PUBLIC_FUNCTION(void, SetScrollHandleSize, float);
 	PUBLIC_FUNCTION(float, GetScrollhandleSize);
-	PUBLIC_FUNCTION(void, SetMinimalScrollhandleSize, float);
+	PUBLIC_FUNCTION(void, SetMinimalScrollHandleSize, float);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);

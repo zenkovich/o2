@@ -81,6 +81,12 @@ namespace o2
 		// Returns is scroll bars hiding
 		bool IsScrollsHiding();
 
+		// Sets is scroll bars will shown when cursor hover them
+		void SetScrollBarsShowingByCursor(bool showByCursor);
+
+		// Returns is scroll bars will shown when cursor hover them
+		bool IsScrollBarsShowingByCursor();
+
 		// Sets clipping layout
 		void SetClippingLayout(const Layout& clipLayout);
 
@@ -126,6 +132,7 @@ namespace o2
 		float                  mSpeedUpdTime = 0.0f;                    // Elapsed time from last scroll speed updating
 
 		bool                   mEnableScrollsHiding = true;             // Enables scroll hiding when they are stopped @SERIALIZABLE
+		bool                   mShowScrollBarsByCursor = false;         // Enables showing scroll bars when cursor hovers them @SERIALIZABLE
 		float                  mLastHorScrollChangeTime = -1.0f;        // Last time when horizontal scroll bar was changed
 		float                  mLastVerScrollChangeTime = -1.0f;        // Last time when horizontal scroll bar was changed
 

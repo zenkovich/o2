@@ -205,12 +205,14 @@ namespace Editor
 		mTaskManager->Update(dt);
 		mEventSystem->Update(dt);
 
+		mRender->Begin();
+
 		OnUpdate(dt);
 
 		mUIManager->Update(dt);
 		mEventSystem->PostUpdate();
+		mScene->Update(dt);
 
-		mRender->Begin();
 
 		OnDraw();
 		mUIManager->Draw();

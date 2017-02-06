@@ -128,6 +128,9 @@ namespace o2
 		// Check not equals operator
 		bool operator!=(const FolderAssetRef& other) const { return AssetRef::operator!=(other); }
 
+		// Returns asset type
+		const Type& GetAssetType() const { return TypeOf(FolderAsset); }
+
 		SERIALIZABLE(FolderAssetRef);
 
 	protected:

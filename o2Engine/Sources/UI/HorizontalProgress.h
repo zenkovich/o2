@@ -83,14 +83,14 @@ namespace o2
 		SERIALIZABLE(UIHorizontalProgress);
 
 	protected:
-		float          mValue = 0.0f;                    // Current value @SERIALIZABLE
-		float          mSmoothValue = 0.0f;              // Current smoothed value
-		float          mMinValue = 0.0f;                 // Minimal value @SERIALIZABLE
-		float          mMaxValue = 1.0f;                 // Maximal value @SERIALIZABLE
-		float          mScrollSense = 1.0f;              // Scroll sense coefficient @SERIALIZABLE
-		Orientation    mOrientation = Orientation::Left; // Bar orientation @SERIALIZABLE
-		UIWidgetLayer* mBarLayer = nullptr;              // Bar layer
-		UIWidgetLayer* mBackLayer = nullptr;             // background layer
+		float          mValue = 0.0f;                     // Current value @SERIALIZABLE
+		float          mSmoothValue = 0.0f;               // Current smoothed value
+		float          mMinValue = 0.0f;                  // Minimal value @SERIALIZABLE
+		float          mMaxValue = 1.0f;                  // Maximal value @SERIALIZABLE
+		float          mScrollSense = 1.0f;               // Scroll sense coefficient @SERIALIZABLE
+		Orientation    mOrientation = Orientation::Right; // Bar orientation @SERIALIZABLE
+		UIWidgetLayer* mBarLayer = nullptr;               // Bar layer
+		UIWidgetLayer* mBackLayer = nullptr;              // background layer
  
 	protected:
 		// Updates bar, back and handle layers layout by value

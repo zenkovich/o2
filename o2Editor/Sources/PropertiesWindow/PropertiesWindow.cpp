@@ -166,8 +166,8 @@ namespace Editor
 		{
 			const Type* fieldType = fieldInfo->GetType();
 
-			if (fieldInfo->GetProtectionSection() != ProtectSection::Public &&
-				!fieldInfo->HasAttribute<SerializableAttribute>() && !fieldInfo->HasAttribute<EditorPropertyAttribute>())
+			if (fieldInfo->GetProtectionSection() != ProtectSection::Public && 
+				!fieldInfo->HasAttribute<EditorPropertyAttribute>())
 			{
 				continue;
 			}
@@ -336,7 +336,7 @@ namespace Editor
 		return Pair<IPropertyField*, UIWidget*>(fieldProperty, fieldProperty->GetWidget());
 	}
 }
- 
+
 CLASS_META(Editor::PropertiesWindow)
 {
 	BASE_CLASS(Editor::IEditorWindow);

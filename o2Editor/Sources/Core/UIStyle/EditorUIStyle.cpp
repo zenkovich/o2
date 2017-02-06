@@ -117,13 +117,13 @@ namespace Editor
 		sample->name = "expandBtn";
 
 		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
-														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Right_icn_select.png"),
-														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
-														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -1288,7 +1288,7 @@ namespace Editor
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
-		
+
 		// hightlight
 		*sample->GetHightlightDrawable() = Sprite("ui/UI_Window_place.png");
 		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
@@ -1348,7 +1348,7 @@ namespace Editor
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
 		sample->SetViewLayout(Layout::BothStretch(3, 1, 8, -1));
 
-		sample->AddLayer("arrows", mnew Sprite("ui/UI3_ch_arrows.png"), 
+		sample->AddLayer("arrows", mnew Sprite("ui/UI3_ch_arrows.png"),
 						 Layout::Based(BaseCorner::Right, Vec2F(10, 20), Vec2F(0, 0)));
 
 		o2UI.AddWidgetStyle(sample, "singleline with arrows");
@@ -1609,7 +1609,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -4));
 
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI2_round_field_pressed.png"),
-										   Layout::BothStretch(-4, -4, -5, -4));
+											 Layout::BothStretch(-4, -4, -5, -4));
 
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
 										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
@@ -1764,6 +1764,92 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "componentSave");
 	}
 
+	void EditorUIStyleBuilder::RebuildHorWideScrollbar()
+	{
+		UIHorizontalScrollBar* sample = mnew UIHorizontalScrollBar();
+		sample->layout.minSize = Vec2F(5, 5);
+		sample->SetScrollSense(0.25f);
+		sample->SetMinimalScrollHandleSize(10);
+
+		auto backLayer = sample->AddLayer("back", nullptr);
+		auto backLayerImg = backLayer->AddChildLayer("image", mnew Sprite("ui/UI_Editbox_regular.png"),
+													 Layout::BothStretch(-9, -9, -9, -9));
+
+		auto handleLayer = sample->AddLayer("handle", nullptr);
+		handleLayer->interactableLayout = Layout::Based(BaseCorner::Center, Vec2F(8, 30));
+
+		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/ver_hole_handle.png"),
+														   Layout::Based(BaseCorner::Center, Vec2F(8, 30)));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "wide");
+	}
+
+	void EditorUIStyleBuilder::RebuildVerWideScrollbar()
+	{
+		UIVerticalScrollBar* sample = mnew UIVerticalScrollBar();
+		sample->layout.minSize = Vec2F(5, 5);
+		sample->SetScrollSense(0.25f);
+		sample->SetMinimalScrollHandleSize(10);
+
+		auto backLayer = sample->AddLayer("back", nullptr);
+		auto backLayerImg = backLayer->AddChildLayer("image", mnew Sprite("ui/UI_Editbox_regular.png"),
+													 Layout::BothStretch(-9, -9, -9, -9));
+
+		auto handleLayer = sample->AddLayer("handle", nullptr);
+		handleLayer->interactableLayout = Layout::Based(BaseCorner::Center, Vec2F(30, 8));
+
+		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/hor_hole_handle.png"),
+														   Layout::Based(BaseCorner::Center, Vec2F(30, 8)));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "wide");
+	}
+
+	void EditorUIStyleBuilder::RebuildHorWideProgressbar()
+	{
+		UIHorizontalProgress* sample = mnew UIHorizontalProgress();
+		sample->layout.minSize = Vec2F(5, 5);
+		sample->SetScrollSense(0.25f);
+
+		auto backLayer = sample->AddLayer("back", nullptr);
+		auto backLayerImg = backLayer->AddChildLayer("image", mnew Sprite("ui/UI_Editbox_regular.png"),
+													 Layout::BothStretch(-9, -9, -9, -9));
+
+		auto handleLayer = sample->AddLayer("bar", nullptr);
+		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/ver_hole_handle.png"),
+														   Layout::Based(BaseCorner::Right, Vec2F(8, 30), Vec2F(4, 0)));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "wide");
+	}
+
+	void EditorUIStyleBuilder::RebuildVerWideProgressbar()
+	{
+		UIVerticalProgress* sample = mnew UIVerticalProgress();
+		sample->layout.minSize = Vec2F(5, 5);
+		sample->SetScrollSense(0.25f);
+
+		auto backLayer = sample->AddLayer("back", nullptr);
+		auto backLayerImg = backLayer->AddChildLayer("image", mnew Sprite("ui/UI_Editbox_regular.png"),
+													 Layout::BothStretch(-9, -9, -9, -9));
+
+		auto handleLayer = sample->AddLayer("bar", nullptr);
+		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/hor_hole_handle.png"),
+														   Layout::Based(BaseCorner::Bottom, Vec2F(30, 8), Vec2F(0, -4)));
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "wide");
+	}
+
 	void EditorUIStyleBuilder::RebuildRedEditBoxStyle()
 	{
 		UIEditBox* sample = mnew UIEditBox();
@@ -1844,10 +1930,10 @@ namespace Editor
 
 		widget->SetFocusable(true);
 
-		auto backLayer = widget->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), 
+		auto backLayer = widget->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 										  Layout::BothStretch(-9, -9, -9, -9));
 
-		auto selectLayer = widget->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), 
+		auto selectLayer = widget->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"),
 											Layout::BothStretch(-9, -9, -9, -9));
 
 		auto focusLayer = widget->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"),
@@ -1875,18 +1961,27 @@ namespace Editor
 		o2UI.AddWidgetStyle(widget, "actorProperty");
 	}
 
+	void EditorUIStyleBuilder::RebuildColorPropety()
+	{
+		auto widget = mnew UIWidget();
+		auto backLayer = widget->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
+										  Layout::BothStretch(-9, -9, -9, -9));
+
+		o2UI.AddWidgetStyle(widget, "colorProperty");
+	}
+
 	void EditorUIStyleBuilder::RebuildAssetPropety()
 	{
 		auto widget = mnew UIWidget();
 		widget->SetFocusable(true);
 
-		auto backLayer = widget->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), 
+		auto backLayer = widget->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 										  Layout::BothStretch(-9, -9, -9, -9));
 
-		auto selectLayer = widget->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), 
+		auto selectLayer = widget->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"),
 											Layout::BothStretch(-9, -9, -9, -9));
 
-		auto focusLayer = widget->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"), 
+		auto focusLayer = widget->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"),
 										   Layout::BothStretch(-9, -9, -9, -9));
 
 		widget->AddState("focused", Animation::EaseInOut(widget, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
@@ -2069,7 +2164,7 @@ namespace Editor
 		o2UI.SaveStyle("editor_ui_style.xml");
 	}
 }
- 
+
 CLASS_META(Editor::EditorUIStyleBuilder)
 {
 	BASE_CLASS(o2::BasicUIStyleBuilder);
@@ -2113,6 +2208,7 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildSinglelineEditBoxWithArrows);
 	PUBLIC_FUNCTION(void, RebuildEditorDropdown);
 	PUBLIC_FUNCTION(void, RebuildActorPropety);
+	PUBLIC_FUNCTION(void, RebuildColorPropety);
 	PUBLIC_FUNCTION(void, RebuildAssetPropety);
 	PUBLIC_FUNCTION(void, RebuildComponentProperty);
 	PUBLIC_FUNCTION(void, RebuildVector2Property);
@@ -2131,6 +2227,10 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildBreakPrototypeBtn);
 	PUBLIC_FUNCTION(void, RebuildComponentOptionsBtn);
 	PUBLIC_FUNCTION(void, RebuildComponentSaveBtn);
+	PUBLIC_FUNCTION(void, RebuildHorWideScrollbar);
+	PUBLIC_FUNCTION(void, RebuildVerWideScrollbar);
+	PUBLIC_FUNCTION(void, RebuildHorWideProgressbar);
+	PUBLIC_FUNCTION(void, RebuildVerWideProgressbar);
 	PUBLIC_FUNCTION(void, RebuildEditorUIStyle);
 }
 END_META;

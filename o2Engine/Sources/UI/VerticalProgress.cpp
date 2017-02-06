@@ -66,7 +66,7 @@ namespace o2
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		UpdateProgressLayersLayouts();
 
-		onChange(value);
+		onChange(mValue);
 	}
 
 	void UIVerticalProgress::SetValueForcible(float value)
@@ -75,7 +75,7 @@ namespace o2
 		mSmoothValue = mValue;
 		UpdateProgressLayersLayouts();
 
-		onChange(value);
+		onChange(mValue);
 	}
 
 	float UIVerticalProgress::GetValue() const
@@ -89,7 +89,7 @@ namespace o2
 		mValue = Math::Max(mMinValue, mValue);
 		UpdateProgressLayersLayouts();
 
-		onChange(value);
+		onChange(mValue);
 	}
 
 	float UIVerticalProgress::GetMinValue() const

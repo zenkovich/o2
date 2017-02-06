@@ -453,16 +453,16 @@ namespace o2
     o2::TypeInitializer::AddBaseType<NAME>(type)
 
 #define FIELD(NAME, PROTECT_SECTION) \
-    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::PROTECT_SECTION)
+    o2::TypeInitializer::RegField(type, #NAME, (size_t)&__this->NAME - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::PROTECT_SECTION)
 
 #define PUBLIC_FIELD(NAME) \
-    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Public)
+    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME) - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::Public)
 
 #define PRIVATE_FIELD(NAME) \
-    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Private)
+    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME) - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::Private)
 
 #define PROTECTED_FIELD(NAME) \
-    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME), __this->NAME, ProtectSection::Protected)
+    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME) - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::Protected)
 
 #define ATTRIBUTE(NAME) \
     AddAttribute(new NAME)

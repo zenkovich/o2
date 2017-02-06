@@ -344,7 +344,7 @@ namespace o2
 		void FromData(void* object, const DataNode& data);
 
 		// Checks that type is based on Actor's type
-		bool CheckType(const Type* type) const;
+		bool IsConvertsType(const Type* type) const;
 
 	protected:
 		struct ActorDef

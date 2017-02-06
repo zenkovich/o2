@@ -170,6 +170,9 @@ namespace o2
 		// Reparent actors to new parent at next of prevActor;
 		void ReparentActors(const ActorsVec& actors, Actor* newParent, Actor* prevActor);
 
+		// Updates root actors
+		void Update(float dt);
+
 #if IS_EDITOR	  
 		// Calls when actor was changed
 		void OnActorChanged(Actor* actor);   
@@ -200,9 +203,6 @@ namespace o2
 		// Destructor
 		~Scene();
 
-		// Updates root actors
-		void Update(float dt);
-
 		// Draws scene drawable components
 		void Draw();
 
@@ -224,7 +224,7 @@ namespace o2
 		void FromData(void* object, const DataNode& data);
 
 		// Checks that type is layer's type
-		bool CheckType(const Type* type) const;
+		bool IsConvertsType(const Type* type) const;
 	};
 
 	template<typename _type>

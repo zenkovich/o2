@@ -45,7 +45,7 @@ namespace Editor
 	{
 		mDrawDepth = o2Render.GetDrawingDepth();
 
-		if (mNeedRedraw || (mEnabledTool && mEnabledTool->mNeedRedraw))
+		if (mNeedRedraw || (mEnabledTool && mEnabledTool->mNeedRedraw) || true)
 			RedrawScene();
 
 		mRenderTargetSprite->Draw();
@@ -747,7 +747,7 @@ namespace Editor
 			mEnabledTool->OnCursorMiddleMouseReleased(cursor);
 	}
 }
- 
+
 CLASS_META(Editor::SceneEditScreen)
 {
 	BASE_CLASS(o2::DragDropArea);

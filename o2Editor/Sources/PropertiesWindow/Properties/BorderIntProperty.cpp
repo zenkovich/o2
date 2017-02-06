@@ -423,7 +423,7 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::BorderIProperty)
 {
 	BASE_CLASS(Editor::IPropertyField);

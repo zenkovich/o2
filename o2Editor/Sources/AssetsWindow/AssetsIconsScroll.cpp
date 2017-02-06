@@ -134,6 +134,9 @@ namespace Editor
 		if (mSelecting)
 			mSelectionSprite->Draw();
 
+		if (mHightlightSprite)
+			mHightlightSprite->Draw();
+
 		o2Render.DisableScissorTest();
 
 		for (auto layer : mTopDrawingLayers)
@@ -975,7 +978,8 @@ namespace Editor
 			icon->SetSelected(true);
 			mSelectedAssetsIcons.Add(icon);
 
-			OnAssetsSelected();
+			if (sendOnSelectionChanged)
+				OnAssetsSelected();
 		}
 	}
 
@@ -1009,7 +1013,12 @@ namespace Editor
 	void UIAssetsIconsScrollArea::OnSelectableObjectBeganDragging(SelectableDragableObject* object)
 	{
 		if (!o2Input.IsKeyDown(VK_CONTROL) && !mSelectedAssetsIcons.Contains(dynamic_cast<UIAssetIcon*>(object)))
-			DeselectAllAssets();
+		{
+			for (auto icon : mSelectedAssetsIcons)
+				icon->SetSelected(false);
+
+			mSelectedAssetsIcons.Clear();
+		}
 
 		if (!object->IsSelected())
 			Select(object, false);
@@ -1040,7 +1049,7 @@ namespace Editor
 		Select(object, true);
 	}
 }
- 
+
 CLASS_META(Editor::UIAssetsIconsScrollArea)
 {
 	BASE_CLASS(o2::UIScrollArea);

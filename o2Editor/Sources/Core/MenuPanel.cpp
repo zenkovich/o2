@@ -15,6 +15,7 @@
 #include "UI/MenuPanel.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
+#include "UIStyle/EditorUIStyle.h"
 
 DECLARE_SINGLETON(Editor::MenuPanel);
 
@@ -81,6 +82,10 @@ namespace Editor
 		// DEBUG
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
 		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
+		mMenuPanel->AddItem("Debug/RebuildEditorUIStyle", [&]() {
+			EditorUIStyleBuilder builder;
+			builder.RebuildEditorUIStyle();
+		});
 	}
 
 	MenuPanel::~MenuPanel()

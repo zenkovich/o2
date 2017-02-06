@@ -181,6 +181,22 @@ namespace o2
 		mReady = true;
 	}
 
+	void Texture::SetData(Bitmap* bitmap)
+	{
+		glBindTexture(GL_TEXTURE_2D, mHandle);
+
+		GLint texFormat = GL_RGB;
+		if (mFormat == Format::R8G8B8A8)
+			texFormat = GL_RGBA;
+		else if (mFormat == Format::R8G8B8)
+			texFormat = GL_RGB;
+
+		glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
+					 bitmap->GetData());
+
+		GL_CHECK_ERROR(o2Render.mLog);
+	}
+
 	void Texture::Create(UID atlasAssetId, int page)
 	{
 		if (o2Assets.IsAssetExist(atlasAssetId))

@@ -166,6 +166,18 @@
 		<ClInclude Include="..\Sources\Render\Mesh.h">
 			<Filter>Sources\Render</Filter>
 		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Particle.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\ParticlesEffects.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\ParticlesEmitter.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\ParticlesEmitterShapes.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
 		<ClInclude Include="..\Sources\Render\RectDrawable.h">
 			<Filter>Sources\Render</Filter>
 		</ClInclude>
@@ -212,6 +224,9 @@
 			<Filter>Sources\Scene\Components</Filter>
 		</ClInclude>
 		<ClInclude Include="..\Sources\Scene\Components\ImageComponent.h">
+			<Filter>Sources\Scene\Components</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\Components\ParticlesEmitterComponent.h">
 			<Filter>Sources\Scene\Components</Filter>
 		</ClInclude>
 		<ClInclude Include="..\Sources\Scene\DrawableComponent.h">
@@ -633,6 +648,15 @@
 		<ClCompile Include="..\Sources\Render\Mesh.cpp">
 			<Filter>Sources\Render</Filter>
 		</ClCompile>
+		<ClCompile Include="..\Sources\Render\ParticlesEffects.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\ParticlesEmitter.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\ParticlesEmitterShapes.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
 		<ClCompile Include="..\Sources\Render\RectDrawable.cpp">
 			<Filter>Sources\Render</Filter>
 		</ClCompile>
@@ -676,6 +700,9 @@
 			<Filter>Sources\Scene\Components</Filter>
 		</ClCompile>
 		<ClCompile Include="..\Sources\Scene\Components\ImageComponent.cpp">
+			<Filter>Sources\Scene\Components</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\Components\ParticlesEmitterComponent.cpp">
 			<Filter>Sources\Scene\Components</Filter>
 		</ClCompile>
 		<ClCompile Include="..\Sources\Scene\DrawableComponent.cpp">

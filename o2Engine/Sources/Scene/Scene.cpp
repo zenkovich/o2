@@ -457,7 +457,7 @@ namespace o2
 		value = o2Scene.GetLayer(data);
 	}
 
-	bool LayerDataNodeConverter::CheckType(const Type* type) const
+	bool LayerDataNodeConverter::IsConvertsType(const Type* type) const
 	{
 		return type->IsBasedOn(*TypeOf(Scene::Layer).GetPointerType());
 	}

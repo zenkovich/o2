@@ -295,7 +295,13 @@ namespace o2
 
 	ActorAssetRef Actor::GetPrototype() const
 	{
-		return mPrototype;
+		if (mPrototype)
+			return mPrototype;
+
+		if (mPrototypeLink && mParent)
+			return mParent->GetPrototype();
+
+		return ActorAssetRef();
 	}
 
 	void Actor::SetName(const String& name)
@@ -936,31 +942,8 @@ namespace o2
 			if (auto componentProtoLink = component->mPrototypeLink)
 			{
 				dataNode["PrototypeLink"] = componentProtoLink->mId;
-				//dataNode["Id"] = component->mId;
-
-				//dataNode.SetValueDelta(*component, *componentProtoLink);
-				component->OnSerialize(dataNode);
-
-				char* objectPtr = (char*)component;
-				char* sourcePtr = (char*)componentProtoLink;
-				auto fields = component->GetType().GetFieldsWithBaseClasses();
-				for (auto field : fields)
-				{
-					if (!field->GetAttribute<SerializableAttribute>())
-						continue;
-
-					if (field->GetType()->IsBasedOn(TypeOf(IObject)))
-					{
-						auto& newFieldNode = *dataNode.AddNode(field->GetName());
-						newFieldNode.SetValueDelta(*(IObject*)field->GetValuePtr(objectPtr),
-												   *(IObject*)field->GetValuePtr(sourcePtr));
-
-						continue;
-					}
-
-					if (!field->IsValueEquals(objectPtr, sourcePtr))
-						field->SerializeObject(objectPtr, *dataNode.AddNode(field->GetName()));
-				}
+				
+				dataNode.SetValueDelta(*component, *component->mPrototypeLink);
 			}
 			else dataNode = component->Serialize();
 		}
@@ -968,7 +951,148 @@ namespace o2
 
 	void Actor::DeserializeWithProto(const DataNode& node)
 	{
+		RemoveAllChilds();
+		RemoveAllComponents();
 
+		if (auto prototypeNode = node.GetNode("Prototype"))
+		{
+			mPrototype = *prototypeNode;
+			mPrototypeLink = mPrototype->GetActor();
+		}
+		else if (auto prototypeLinkNode = node.GetNode("PrototypeLink"))
+		{
+			UInt64 id = *prototypeLinkNode;
+			if (mParent && mParent->mPrototypeLink)
+			{
+				for (auto child : mParent->mPrototypeLink->mChilds)
+				{
+					if (child->mId == id)
+					{
+						mPrototypeLink = child;
+						break;
+					}
+				}
+			}
+		}
+
+		if (!mPrototypeLink)
+		{
+			DeserializeRaw(node);
+			return;
+		}
+
+		mId = *node.GetNode("Id");
+
+		const Actor* proto = mPrototypeLink;
+
+		if (auto subNode = node.GetNode("Name"))
+			mName = *subNode;
+		else
+			mName = proto->mName;
+
+		if (auto subNode = node.GetNode("Enabled"))
+			mEnabled = *subNode;
+		else
+			mEnabled = proto->mEnabled;
+
+		if (auto subNode = node.GetNode("Locked"))
+			mLocked = *subNode;
+		else
+			mLocked = proto->mLocked;
+
+		if (auto subNode = node.GetNode("LayerName"))
+			mLayer = o2Scene.GetLayer(*subNode);
+		else
+			mLayer = proto->mLayer;
+
+		// Transform data
+		if (auto transformNode = node.GetNode("Transform"))
+		{
+			if (auto subNode = transformNode->GetNode("Position"))
+				transform.mPosition = *subNode;
+			else
+				transform.mPosition = proto->transform.mPosition;
+
+			if (auto subNode = transformNode->GetNode("Size"))
+				transform.mSize = *subNode;
+			else
+				transform.mSize = proto->transform.mSize;
+
+			if (auto subNode = transformNode->GetNode("Scale"))
+				transform.mScale = *subNode;
+			else
+				transform.mScale = proto->transform.mScale;
+
+			if (auto subNode = transformNode->GetNode("Pivot"))
+				transform.mPivot = *subNode;
+			else
+				transform.mPivot = proto->transform.mPivot;
+
+			if (auto subNode = transformNode->GetNode("Angle"))
+				transform.mAngle = *subNode;
+			else
+				transform.mAngle = proto->transform.mAngle;
+
+			if (auto subNode = transformNode->GetNode("Shear"))
+				transform.mShear = *subNode;
+			else
+				transform.mShear = proto->transform.mShear;
+		}
+
+		// children
+		if (auto childsNode = node.GetNode("Childs"))
+		{
+			for (auto childNode : *childsNode)
+			{
+				Actor* child = mnew Actor(mIsOnScene ? CreateMode::InScene : CreateMode::NotInScene);
+				mChilds.Add(child);
+				child->mParent = this;
+
+				child->Deserialize(*childNode);
+			}
+		}
+
+		// components
+		if (auto componentsNode = node.GetNode("Components"))
+		{
+			for (auto componentNode : *componentsNode)
+			{
+				String type = (*componentNode)["Type"];
+				Component* newComponent = (Component*)o2Reflection.CreateTypeSample(type);
+
+				mComponents.Add(newComponent);
+				newComponent->mOwner = this;
+
+				if (newComponent)
+				{
+					auto componentDataNode = (*componentNode)["Data"];
+
+					if (auto prototypeLinkNode = componentDataNode.GetNode("PrototypeLink"))
+					{
+						UInt64 id = *prototypeLinkNode;
+						if (mPrototypeLink)
+						{
+							for (auto protoLinkComponent : mPrototypeLink->mComponents)
+							{
+								if (protoLinkComponent->mId == id)
+								{
+									newComponent->mPrototypeLink = protoLinkComponent;
+									break;
+								}
+							}
+						}
+
+						if (!newComponent->mPrototypeLink)
+							newComponent->Deserialize(componentDataNode);
+						else
+							componentDataNode.GetValueDelta(*newComponent, *newComponent->mPrototypeLink);
+					}
+				}
+				else o2Debug.LogError("Can't create component with type:" + type);
+			}
+		}
+
+		transform.UpdateTransform();
 	}
 
 	Dictionary<String, Actor*> Actor::GetAllChilds()
@@ -1154,7 +1278,7 @@ namespace o2
 		else actor = nullptr;
 	}
 
-	bool ActorDataNodeConverter::CheckType(const Type* type) const
+	bool ActorDataNodeConverter::IsConvertsType(const Type* type) const
 	{
 		return type->IsBasedOn(*TypeOf(Actor).GetPointerType());
 	}

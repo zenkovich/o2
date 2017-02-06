@@ -453,7 +453,7 @@ namespace Editor
 		func(mBottomEditBox, mCommonValue.bottom, &RectFProperty::SetValueBottom);
 	}
 }
- 
+
 CLASS_META(Editor::RectFProperty)
 {
 	BASE_CLASS(Editor::IPropertyField);

@@ -266,14 +266,24 @@ namespace Editor
 
 	void AssetsWindow::ShowAssetIcon(UID id)
 	{
-		DeselectAssets();
-		SelectAsset(id);
+		String assetPath = o2Assets.GetAssetPath(id);
+		String folder = o2FileSystem.GetParentPath(assetPath);
+
+		if (GetOpenedFolderPath() != folder)
+			OpenFolder(folder);
+
+		mAssetsGridScroll->HightlightAsset(id);
 	}
 
 	void AssetsWindow::ShowAssetIcon(const String& path)
 	{
-		DeselectAssets();
-		SelectAsset(path);
+		UID assetId = o2Assets.GetAssetId(path);
+		String folder = o2FileSystem.GetParentPath(path);
+
+		if (GetOpenedFolderPath() != folder)
+			OpenFolder(folder);
+
+		mAssetsGridScroll->HightlightAsset(assetId);
 	}
 
 	void AssetsWindow::CopyAssets(const Vector<String>& assetsPaths)
@@ -457,18 +467,18 @@ namespace Editor
 		mAssetsGridScroll->UpdateAssetsPath();
 	}
 }
- 
+
 CLASS_META(Editor::AssetsWindow)
 {
 	BASE_CLASS(Editor::IEditorWindow);
 	BASE_CLASS(o2::Singleton<AssetsWindow>);
 
+	PROTECTED_FIELD(mFoldersTreeShowCoef);
 	PROTECTED_FIELD(mFilterButton);
 	PROTECTED_FIELD(mSearchEditBox);
 	PROTECTED_FIELD(mSelectedAssetPathLabel);
 	PROTECTED_FIELD(mFoldersTree);
 	PROTECTED_FIELD(mFoldersTreeShowAnim);
-	PROTECTED_FIELD(mFoldersTreeShowCoef);
 	PROTECTED_FIELD(mFoldersTreeVisible);
 	PROTECTED_FIELD(mAssetsGridScroll);
 	PROTECTED_FIELD(mAssetsTree);

@@ -13,6 +13,11 @@ namespace o2
 	UIWindow::UIWindow():
 		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
+		layout.mAnchorMin = Vec2F(0.5f, 0.5f);
+		layout.mAnchorMax = Vec2F(0.5f, 0.5f);
+		layout.mOffsetMin = Vec2F(-100, -100);
+		layout.mOffsetMax = Vec2F(100, 100);
+
 		InitializeHandles();
 		InitializeProperties();
 	}
@@ -110,6 +115,8 @@ namespace o2
 		if (mFullyDisabled)
 			return;
 
+		mBackCursorArea.OnDrawn();
+
 		UIScrollArea::Draw();
 
 		mHeadDragHandle.OnDrawn();
@@ -135,6 +142,12 @@ namespace o2
 //  		o2Render.DrawRectFrame(mRightTopDragAreaRect, Color4::SomeColor(clr++));
 //  		o2Render.DrawRectFrame(mLeftBottomDragAreaRect, Color4::SomeColor(clr++));
 //  		o2Render.DrawRectFrame(mRightBottomDragAreaRect, Color4::SomeColor(clr++));
+	}
+
+	void UIWindow::ShowModal()
+	{
+		Show();
+		SetModal(true);
 	}
 
 	UIWidget* UIWindow::AddWindowElement(UIWidget* widget)
@@ -208,6 +221,16 @@ namespace o2
 		return true;
 	}
 
+	void UIWindow::SetModal(bool isModal)
+	{
+		mBackCursorArea.interactable = isModal;
+	}
+
+	bool UIWindow::IsModal() const
+	{
+		return mBackCursorArea.IsInteractable();
+	}
+
 	void UIWindow::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
 		UIScrollArea::UpdateLayout(forcible, withChildren);
@@ -231,6 +254,11 @@ namespace o2
 		mRightBottomDragAreaRect = mRightBottomDragAreaLayout.Calculate(layout.mAbsoluteRect);
 	}
 
+	CursorEventsArea& UIWindow::GetBackCursorListener()
+	{
+		return mBackCursorArea;
+	}
+
 	void UIWindow::UpdateTransparency()
 	{
 		UIScrollArea::UpdateTransparency();
@@ -250,6 +278,9 @@ namespace o2
 
 	void UIWindow::InitializeHandles()
 	{
+		mBackCursorArea.isUnderPoint = [&](const Vec2F& point) { return true; };
+		mBackCursorArea.interactable = false;
+
 		mHeadDragHandle.isUnderPoint = [&](const Vec2F& point) { return mHeadDragAreaRect.IsInside(point); };
 		mHeadDragHandle.onMoved = [&](const Input::Cursor& cursor) { layout.position += cursor.delta; };
 		mHeadDragHandle.onCursorPressed = [&](const Input::Cursor& cursor) { OnFocused(); };
@@ -348,6 +379,9 @@ namespace o2
 	void UIWindow::OnVisibleChanged()
 	{
 		interactable = mResVisible;
+		
+		if (mResVisible)
+			Focus();
 	}
 
 	void UIWindow::InitializeProperties()
@@ -367,6 +401,7 @@ CLASS_META(o2::UIWindow)
 	PROTECTED_FIELD(mIconDrawable);
 	PROTECTED_FIELD(mCaptionDrawable);
 	PROTECTED_FIELD(mWindowElements).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mBackCursorArea);
 	PROTECTED_FIELD(mHeadDragHandle);
 	PROTECTED_FIELD(mHeadDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHeadDragAreaRect);
@@ -397,6 +432,7 @@ CLASS_META(o2::UIWindow)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, ShowModal);
 	PUBLIC_FUNCTION(UIWidget*, AddWindowElement, UIWidget*);
 	PUBLIC_FUNCTION(void, RemoveWindowElement, UIWidget*);
 	PUBLIC_FUNCTION(void, RemoveAllWindowElements);
@@ -406,7 +442,10 @@ CLASS_META(o2::UIWindow)
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(void, SetDragAreaLayouts, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&);
 	PUBLIC_FUNCTION(bool, IsFocusable);
+	PUBLIC_FUNCTION(void, SetModal, bool);
+	PUBLIC_FUNCTION(bool, IsModal);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(CursorEventsArea&, GetBackCursorListener);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, InitializeHandles);

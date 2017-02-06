@@ -36,6 +36,9 @@ namespace o2
 		// Draws widget
 		void Draw();
 
+		// Shows window as modal
+		void ShowModal();
+
 		// Adds window element widget
 		UIWidget* AddWindowElement(UIWidget* widget);
 
@@ -65,8 +68,17 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsFocusable() const;
 
+		// Sets is window modal
+		void SetModal(bool isModal);
+
+		// Returns is window modal
+		bool IsModal() const;
+
 		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
+
+		// Returns back cursor events listener
+		CursorEventsArea& GetBackCursorListener();
 
 		SERIALIZABLE(UIWindow);
 
@@ -74,6 +86,8 @@ namespace o2
 		Sprite*              mIconDrawable = nullptr;    // Icon drawable from layer "icon"
 		Text*                mCaptionDrawable = nullptr; // text caption from layer "caption"
 		WidgetsVec           mWindowElements;            // Windows elements widgets @SERIALIZABLE
+
+		CursorEventsArea     mBackCursorArea;            // Cursor area listener at back of window, for catching events
 
 		CursorEventsArea     mHeadDragHandle;			 // Head drag handle, for moving window
 		Layout               mHeadDragAreaLayout;		 // Head drag handle layout @SERIALIZABLE

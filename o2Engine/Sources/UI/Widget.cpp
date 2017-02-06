@@ -200,7 +200,7 @@ namespace o2
 
 	void UIWidget::SetParent(UIWidget* parent)
 	{
-		if (parent && parent->mChilds.Contains(this))
+		if ((parent && parent->mChilds.Contains(this)) || parent == this)
 			return;
 
 		if (mParent)
@@ -223,7 +223,7 @@ namespace o2
 
 	UIWidget* UIWidget::AddChild(UIWidget* widget, bool updateNow /*= true*/)
 	{
-		if (mChilds.Contains(widget))
+		if (mChilds.Contains(widget) || widget == this)
 			return widget;
 
 		if (widget->mParent)
@@ -248,7 +248,7 @@ namespace o2
 	{
 		for (auto widget : widgets)
 		{
-			if (mChilds.Contains(widget))
+			if (mChilds.Contains(widget) || widget == this)
 				continue;
 
 			if (widget->mParent)
@@ -267,7 +267,7 @@ namespace o2
 
 	UIWidget* UIWidget::AddChild(UIWidget* widget, int index)
 	{
-		if (mChilds.Contains(widget))
+		if (mChilds.Contains(widget) || widget == this)
 			return widget;
 
 		if (widget->mParent)

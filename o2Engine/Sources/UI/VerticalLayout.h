@@ -99,7 +99,7 @@ namespace o2
 		SERIALIZABLE(UIVerticalLayout);
 
 	protected:
-		BaseCorner mBaseCorner = BaseCorner::Left; // Base corner of widgets arranging @SERIALIZABLE
+		BaseCorner mBaseCorner = BaseCorner::Top;  // Base corner of widgets arranging @SERIALIZABLE
 		float      mSpacing = 0.0f;                // Space between widgets @SERIALIZABLE
 		RectF      mBorder;                        // Border @SERIALIZABLE
 		bool       mExpandWidth = true;            // Expanding by width @SERIALIZABLE

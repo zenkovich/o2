@@ -327,7 +327,7 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::UIAssetsFoldersTree)
 {
 	BASE_CLASS(o2::UIWidget);

@@ -143,6 +143,9 @@ namespace o2
 
 	void UIToggle::SetToggleGroup(UIToggleGroup* toggleGroup)
 	{
+		if (mToggleGroup == toggleGroup)
+			return;
+
 		if (mToggleGroup)
 		{
 			if (mToggleGroup->mOwner == this)

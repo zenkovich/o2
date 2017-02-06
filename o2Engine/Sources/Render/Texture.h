@@ -65,6 +65,9 @@ namespace o2
 		// Creates texture from bitmap
 		void Create(Bitmap* bitmap);
 
+		// Sets texture's data from bitmap
+		void SetData(Bitmap* bitmap);
+
 		// Reloads texture
 		void Reload();
 

@@ -173,7 +173,7 @@ namespace o2
 
 		if (mEnableScrollsHiding)
 		{
-			const float barsHideDelay = 1;
+			const float barsHideDelay = 2;
 			float curTime = o2Time.GetApplicationTime();
 
 			if (curTime - mLastHorScrollChangeTime > barsHideDelay &&mHorScrollBar && mHorScrollBar->IsVisible() &&
@@ -349,6 +349,16 @@ namespace o2
 		return mEnableScrollsHiding;
 	}
 
+	void UIScrollArea::SetScrollBarsShowingByCursor(bool showByCursor)
+	{
+		mShowScrollBarsByCursor = showByCursor;
+	}
+
+	bool UIScrollArea::IsScrollBarsShowingByCursor()
+	{
+		return mShowScrollBarsByCursor;
+	}
+
 	void UIScrollArea::SetClippingLayout(const Layout& clipLayout)
 	{
 		mClipAreaLayout = clipLayout;
@@ -490,10 +500,10 @@ namespace o2
 
 	void UIScrollArea::CheckScrollBarsVisibility()
 	{
-		auto cursor = o2Input.GetCursor(0);
-
-		if (mEnableScrollsHiding)
+		if (mEnableScrollsHiding && mShowScrollBarsByCursor)
 		{
+			auto cursor = o2Input.GetCursor(0);
+
 			if (mHorScrollBar && mHorScrollBar->IsUnderPoint(cursor->position) && mEnableHorScroll)
 			{
 				mLastHorScrollChangeTime = o2Time.GetApplicationTime();
@@ -840,6 +850,7 @@ CLASS_META(o2::UIScrollArea)
 	PROTECTED_FIELD(mPressedCursorPos);
 	PROTECTED_FIELD(mSpeedUpdTime);
 	PROTECTED_FIELD(mEnableScrollsHiding).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mShowScrollBarsByCursor).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mLastHorScrollChangeTime);
 	PROTECTED_FIELD(mLastVerScrollChangeTime);
 
@@ -860,6 +871,8 @@ CLASS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(UIVerticalScrollBar*, GetVerticalScrollbar);
 	PUBLIC_FUNCTION(void, SetEnableScrollsHiding, bool);
 	PUBLIC_FUNCTION(bool, IsScrollsHiding);
+	PUBLIC_FUNCTION(void, SetScrollBarsShowingByCursor, bool);
+	PUBLIC_FUNCTION(bool, IsScrollBarsShowingByCursor);
 	PUBLIC_FUNCTION(void, SetClippingLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);

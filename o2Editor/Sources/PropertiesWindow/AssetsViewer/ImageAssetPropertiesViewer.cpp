@@ -357,7 +357,7 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::ImageAssetPropertiesViewer)
 {
 	BASE_CLASS(Editor::IAssetPropertiesViewer);

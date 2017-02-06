@@ -365,6 +365,11 @@ namespace o2
 		return mAssetPtr != nullptr;
 	}
 
+	const Type& AssetRef::GetAssetType() const
+	{
+		return TypeOf(Asset);
+	}
+
 	bool AssetRef::operator!=(const AssetRef& other) const
 	{
 		return mAssetPtr != other.mAssetPtr;
@@ -424,6 +429,7 @@ CLASS_META(o2::AssetRef)
 	PROTECTED_FIELD(mAssetPtr);
 
 	PUBLIC_FUNCTION(bool, IsValid);
+	PUBLIC_FUNCTION(const Type&, GetAssetType);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 }

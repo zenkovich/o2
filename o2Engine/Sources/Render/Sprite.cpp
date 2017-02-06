@@ -69,7 +69,7 @@ namespace o2
 		mTextureSrcRect(srcRect), mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
 		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mAtlasAssetId(0), mTileScale(1.0f)
 	{
-		mMesh = mnew Mesh(NoTexture(), 16, 18);
+		mMesh = mnew Mesh(texture, 16, 18);
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = Color4::White();
 
@@ -1064,13 +1064,13 @@ namespace o2
 
 		if (!imageAssedIdNode)
 		{
-			String textureFileName = *node.GetNode("textureFileName");
-			if (textureFileName.IsEmpty())
-				mMesh->SetTexture(NoTexture());
+			if (auto textureFileNameNode = node.GetNode("textureFileName"))
+				mMesh->SetTexture(TextureRef((String)*textureFileNameNode));
 			else
-				mMesh->SetTexture(TextureRef(textureFileName));
+				mMesh->SetTexture(NoTexture());
 
-			mTextureSrcRect = *node.GetNode("mTextureSrcRect");
+			if (auto textureSrcRectNode = node.GetNode("mTextureSrcRect"))
+				mTextureSrcRect = *textureSrcRectNode;
 		}
 		else
 		{

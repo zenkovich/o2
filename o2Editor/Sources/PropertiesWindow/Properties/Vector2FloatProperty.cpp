@@ -301,7 +301,7 @@
 		}
 
 	}
- 
+
 CLASS_META(Editor::Vec2FProperty)
 {
 	BASE_CLASS(Editor::IPropertyField);

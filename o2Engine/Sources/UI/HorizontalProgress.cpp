@@ -68,7 +68,7 @@ namespace o2
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		UpdateProgressLayersLayouts();
 
-		onChange(value);
+		onChange(mValue);
 	}
 
 	void UIHorizontalProgress::SetValueForcible(float value)
@@ -77,7 +77,7 @@ namespace o2
 		mSmoothValue = mValue;
 		UpdateProgressLayersLayouts();
 
-		onChange(value);
+		onChange(mValue);
 	}
 
 	float UIHorizontalProgress::GetValue() const

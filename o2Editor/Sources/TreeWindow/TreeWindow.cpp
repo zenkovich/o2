@@ -10,6 +10,7 @@
 #include "Scene/Actor.h"
 #include "Scene/Components/EditorTestComponent.h"
 #include "Scene/Components/ImageComponent.h"
+#include "Scene/Components/ParticlesEmitterComponent.h"
 #include "Scene/Scene.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "TreeWindow/ActorsTree.h"
@@ -133,21 +134,23 @@ namespace Editor
 			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
 
 		// test actors
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			Actor* actor = mnew Actor();
 			actor->name = String::Format("Actor #%i", i + 1);
 			actor->layer = o2Scene.AddLayer(String::Format("Layer #%i", i + 1));
 
-			for (int j = 0; j < 2; j++)
+			for (int j = 0; j < 1; j++)
 			{
 				Actor* childActor = mnew Actor();
 				childActor->name = String::Format("%i Child actor #%i", i + 1, j + 1);
 				actor->AddChild(childActor);
 
-				for (int k = 0; k < 20; k++)
+				for (int k = 0; k < 1; k++)
 				{
-					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png"), mnew EditorTestComponent() });
+					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png"),
+													  mnew EditorTestComponent(),
+					                                  mnew ParticlesEmitterComponent() });
 					childActor2->name = String::Format("%i %i Sub Child actor #%i", i + 1, j + 1, k + 1);
 					//childActor2->transform.position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
 					childActor2->transform.position = Vec2F(k*100, (i*2 + j)*100);

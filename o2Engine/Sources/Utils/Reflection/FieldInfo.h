@@ -36,7 +36,7 @@ namespace o2
 
 		template<typename _type, 
 			     typename _checker = std::conditional<EqualsTrait::IsExists<_type>::value, RealEquals<_type>, FakeEquals<_type>>::type,
-			     typename _copier = std::conditional<std::is_assignable<_type, _type>::value, RealCopy<_type>, FakeCopy<_type>>::type>
+			     typename _copier = std::conditional<std::is_assignable<_type&, _type>::value, RealCopy<_type>, FakeCopy<_type>>::type>
 		struct FieldSerializer: public IFieldSerializer
 		{
 			void Serialize(void* object, DataNode& data) const;

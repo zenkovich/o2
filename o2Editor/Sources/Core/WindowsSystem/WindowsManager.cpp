@@ -1,5 +1,6 @@
 #include "WindowsManager.h"
 
+#include "Core/Dialogs/ColorPickerDlg.h"
 #include "Core/EditorConfig.h"
 #include "Core/UIStyle/EditorUIStyle.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
@@ -21,6 +22,8 @@ namespace Editor
 
 		o2UI.LoadStyle("editor_ui_style.xml");
 
+		mColorPickerDlg = mnew ColorPickerDlg();
+
 		InitializeDock();
 		InitializeWindows();
 
@@ -33,6 +36,8 @@ namespace Editor
 	{
 		for (auto wnd : mEditorWindows)
 			delete wnd;
+
+		delete mColorPickerDlg;
 	}
 
 	void WindowsManager::InitializeWindows()

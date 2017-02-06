@@ -9,7 +9,7 @@ namespace o2
 	// -----------------
 	// Asset information
 	// -----------------
-	struct AssetInfo: public virtual ISerializable
+	struct AssetInfo: public ISerializable
 	{
 	public:
 		const Type* assetType; // Type of asset
