@@ -176,16 +176,16 @@ namespace Editor
 				continue;
 
 			auto fieldWidgetPair = CreateFieldProperty(fieldInfo->GetType());
-			if (!fieldWidgetPair.mFirst)
+			if (!fieldWidgetPair.first)
 				continue;
 
-			fieldWidgetPair.mFirst->SpecializeType(fieldType);
+			fieldWidgetPair.first->SpecializeType(fieldType);
 
-			auto nameLabel = fieldWidgetPair.mSecond->FindChild<UILabel>();
+			auto nameLabel = fieldWidgetPair.second->FindChild<UILabel>();
 			nameLabel->text = MakeSmartFieldName(fieldInfo->GetName());
 
-			layout->AddChild(fieldWidgetPair.mSecond, false);
-			propertiesInfo.properties.Add(fieldInfo, fieldWidgetPair.mFirst);
+			layout->AddChild(fieldWidgetPair.second, false);
+			propertiesInfo.properties.Add(fieldInfo, fieldWidgetPair.first);
 		}
 	}
 
@@ -302,12 +302,13 @@ namespace Editor
 
 		UILabel* label = o2UI.CreateWidget<UILabel>();
 		label->horAlign = HorAlign::Left;
-		label->layout.minWidth = 100;
-		label->layout.widthWeight = 0.2f;
+		label->layout.widthWeight = 3.0f;
+		label->horOverflow = UILabel::HorOverflow::Dots;
 		label->text = MakeSmartFieldName(name);
 
 		IPropertyField* fieldProperty = (IPropertyField*)fieldPropertyType->CreateSample();
 		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
+		fieldProperty->GetWidget()->layout.minWidth = 200.0f;
 
 		horLayout->AddChild(label, false);
 		horLayout->AddChild(fieldProperty->GetWidget(), false);

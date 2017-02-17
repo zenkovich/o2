@@ -5,8 +5,10 @@
 
 namespace o2
 {
-	class UIEditBox;
+	class UIButton;
 	class UIContextMenu;
+	class UIEditBox;
+	class UIWidget;
 }
 
 namespace Editor
@@ -24,7 +26,7 @@ namespace Editor
 		~TagsProperty();
 
 		// Sets fields
-		void Setup(const Vector<void*>& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
 
 		// Updates and checks value
 		void Refresh();
@@ -53,13 +55,15 @@ namespace Editor
 		Function<void(void*, const TagGroup&)> mAssignFunc; // Value assign function
 		Function<TagGroup(void*)>              mGetFunc;    // Get value function
 
-		Vector<void*>  mValuesPointers;     // Fields' pointers
-		TagGroup       mCommonValue;        // Common field value (if not different)
-		bool           mValuesDifferent;    // Are values different
+		TargetsVec mValuesPointers;  // Fields' pointers
+		TagGroup   mCommonValue;     // Common field value (if not different)
+		bool       mValuesDifferent; // Are values different
 
-		UIEditBox*     mEditBox;            // Tags edit box
-		UIContextMenu* mTagsContext;        // tags context
-		bool           mPushingTag = false; // Is pushing tag and we don't need to check edit text
+		UIWidget*      mPropertyWidget = nullptr; // Property root widget, contains editbox and revert button
+		UIEditBox*     mEditBox = nullptr;        // Edit box 
+		UIButton*      mRevertBtn = nullptr;      // Revert to prototype button
+		UIContextMenu* mTagsContext = nullptr;    // tags context
+		bool           mPushingTag = false;       // Is pushing tag and we don't need to check edit text
 
 	protected:
 		// Sets common value

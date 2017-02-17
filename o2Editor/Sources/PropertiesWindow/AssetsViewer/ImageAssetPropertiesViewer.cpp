@@ -42,22 +42,22 @@ namespace Editor
 		mTargetAssets = assets.Cast<ImageAssetRef*>();
 
 		auto borderTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mSliceBorder); });
-		mBorderProperty->Setup(borderTargets, false);
+		mBorderProperty->SetupX(borderTargets, false);
 
 		auto modeTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mDefaultMode); });
-		mDefaultTypeProperty->Setup(modeTargets, false);
+		mDefaultTypeProperty->SetValueAndPrototypePtr(modeTargets, false);
 
 		auto windowsTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mWindows); });
-		mWindowsProperties->Setup(windowsTargets, false);
+		mWindowsProperties->SetValueAndPrototypePtr(windowsTargets, false);
 
 		auto osxTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mMacOS); });
-		mOSXProperties->Setup(osxTargets, false);
+		mOSXProperties->SetValueAndPrototypePtr(osxTargets, false);
 
 		auto androidTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mAndroid); });
-		mAndroidProperties->Setup(androidTargets, false);
+		mAndroidProperties->SetValueAndPrototypePtr(androidTargets, false);
 
 		auto iosTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mIOS); });
-		mIOSProperties->Setup(iosTargets, false);
+		mIOSProperties->SetValueAndPrototypePtr(iosTargets, false);
 
 		mPreviewImage->imageAsset = *mTargetAssets.Last();
 		mPreviewImage->GetImage()->mode = SpriteMode::Default;

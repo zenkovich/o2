@@ -8,8 +8,9 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
+	class UIButton;
 	class UIImage;
+	class UIWidget;
 	class UIWindow;
 }
 
@@ -28,7 +29,7 @@ namespace Editor
 		~ColorProperty();
 
 		// Sets fields
-		void Setup(const Vector<void*>& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
 
 		// Updates and checks value
 		void Refresh();
@@ -57,13 +58,15 @@ namespace Editor
 		Function<void(void*, const Color4&)> mAssignFunc; // Value assign function
 		Function<Color4(void*)>              mGetFunc;    // Get value function
 
-		Vector<void*>    mValuesPointers;         // Fields' pointers
+		TargetsVec       mValuesPointers;         // Fields' pointers
 		Color4           mCommonValue;            // Common field value (if not different)
 		bool             mValuesDifferent = true; // Are values different
 
-		UIWidget*        mEditBox;                // Edit box 
-		UIImage*         mColorSprite;            // Color preview sprite
-		CursorEventsArea mClickArea;              // Box click area
+		UIWidget*        mPropertyWidget = nullptr; // Root property widget
+		UIWidget*        mEditBox = nullptr;        // Edit box 
+		UIButton*        mRevertBtn = nullptr;      // Property revert button to prototype source
+		UIImage*         mColorSprite = nullptr;    // Color preview sprite
+		CursorEventsArea mClickArea;                // Box click area
 
 	protected:
 		// Sets common value

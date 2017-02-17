@@ -51,7 +51,7 @@ namespace Editor
 		~AssetProperty();
 
 		// Sets fields
-		void Setup(const Vector<void*>& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
 
 		// Updates and checks value
 		void Refresh();
@@ -83,12 +83,14 @@ namespace Editor
 		Function<void(void*, const _type&)> mAssignFunc; // Value assign function
 		Function<_type(void*)>              mGetFunc;    // Get value function
 
-		Vector<void*> mValuesPointers;  // Fields' pointers
-		_type         mCommonValue;     // Common field value (if not different)
-		bool          mValuesDifferent; // Are values different
+		TargetsVec mValuesPointers;           // Fields' pointers
+		_type      mCommonValue;              // Common field value (if not different)
+		bool       mValuesDifferent;          // Are values different
 
-		UIWidget*     mBox;             // Edit box 
-		Text*         mNameText;        // Asset name text
+		UIWidget*  mPropertyWidget = nullptr; // Property widget
+		UIButton*  mRevertBtn = nullptr;      // Revert to source prototype button
+		UIWidget*  mBox = nullptr;            // Property edit box
+		Text*      mNameText = nullptr;       // Asset name text
 
 	protected:
 		// Sets common value asset id
@@ -119,23 +121,34 @@ namespace Editor
 	template<typename _type>
 	AssetProperty<_type>::AssetProperty(UIWidget* widget /*= nullptr*/)
 	{
-		if (!widget)
-			widget = o2UI.CreateWidget<UIWidget>("assetProperty");
+		if (widget)
+			mPropertyWidget = widget;
+		else
+			mPropertyWidget = o2UI.CreateWidget<UIWidget>("asset property");
 
-		mBox = widget;
+		mBox = mPropertyWidget->GetChild("box");
+		if (!mBox)
+			mBox = mPropertyWidget;
+
 		mBox->onDraw += [&]() { OnDrawn(); };
 		mBox->SetFocusable(true);
-		mNameText = widget->GetLayerDrawable<Text>("caption");
+
+		mNameText = mBox->GetLayerDrawable<Text>("caption");
+
+		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+
+		if (mPropertyWidget->state["revert"])
+			*mPropertyWidget->state["revert"] = true;
 	}
 
 	template<typename _type>
 	AssetProperty<_type>::~AssetProperty()
 	{
-		delete mBox;
+		delete mPropertyWidget;
 	}
 
 	template<typename _type>
-	void AssetProperty<_type>::Setup(const Vector<void*>& targets, bool isProperty)
+	void AssetProperty<_type>::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
 	{
 		if (isProperty)
 		{
@@ -159,12 +172,12 @@ namespace Editor
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0]);
+		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
 		auto newDifferent = false;
 
 		for (int i = 1; i < mValuesPointers.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i]))
+			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -183,7 +196,7 @@ namespace Editor
 	template<typename _type>
 	UIWidget* AssetProperty<_type>::GetWidget() const
 	{
-		return mBox;
+		return mPropertyWidget;
 	}
 
 	template<typename _type>
@@ -210,7 +223,7 @@ namespace Editor
 		mCommonValue = id == 0 ? _type() : _type(id);
 
 		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr, mCommonValue);
+			mAssignFunc(ptr.first, mCommonValue);
 
 		SetCommonAssetId(id);
 	}
@@ -274,7 +287,7 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::OnKeyPressed(const Input::Key& key)
 	{
-		if (mBox->IsFocused() && key == VK_DELETE || key == VK_BACK)
+		if (mBox->IsFocused() && (key == VK_DELETE || key == VK_BACK))
 			SetAssetId(0);
 	}
 
@@ -334,10 +347,12 @@ CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 	PROTECTED_FIELD(mValuesPointers);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
+	PROTECTED_FIELD(mPropertyWidget);
+	PROTECTED_FIELD(mRevertBtn);
 	PROTECTED_FIELD(mBox);
 	PROTECTED_FIELD(mNameText);
 
-	PUBLIC_FUNCTION(void, Setup, const Vector<void*>&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(const _type&, GetCommonValue);

@@ -9,6 +9,8 @@ using namespace o2;
 
 namespace o2
 {
+	class UIButton;
+	class UIEditBox;
 	class UIEditBox;
 	class UIHorizontalLayout;
 	class UIWidget;
@@ -29,7 +31,7 @@ namespace Editor
 		~Vec2FProperty();
 
 		// Sets fields
-		void Setup(const Vector<void*>& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
 
 		// Updates and checks value
 		void Refresh();
@@ -76,17 +78,18 @@ namespace Editor
 		Function<void(void*, float)>        mYAssignFunc; // Y Value assign function
 		Function<float(void*)>              mYGetFunc;    // Get Y value function
 
-		Vector<void*> mValuesPointers;          // Fields' pointers
-		Vec2F         mCommonValue;             // Common field value (if not different)
-		bool          mXValuesDifferent = true; // Are left values different
-		bool          mYValuesDifferent = true; // Are bottom values different\
-
-		UIWidget*     mWidget = nullptr;        // Horizontal edit boxes layout
-		UIEditBox*    mXEditBox = nullptr;      // X Edit box 
-		UIEditBox*    mYEditBox = nullptr;      // Y Edit box 
-
-		CursorEventsArea mXDragHangle;          // X Value changing drag handle
-		CursorEventsArea mYDragHangle;          // Y Value changing drag handle
+		TargetsVec mValuesPointers;           // Fields' pointers
+		Vec2F      mCommonValue;              // Common field value (if not different)
+		bool       mXValuesDifferent = true;  // Are left values different
+		bool       mYValuesDifferent = true;  // Are bottom values different\
+					 								
+		UIWidget*  mPropertyWidget = nullptr; // Property root widget, contains editbox and revert button
+		UIButton*  mRevertBtn = nullptr;      // Revert to prototype button
+		UIEditBox* mXEditBox = nullptr;       // X Edit box 
+		UIEditBox* mYEditBox = nullptr;       // Y Edit box 
+												 
+		CursorEventsArea mXDragHangle; // X Value changing drag handle
+		CursorEventsArea mYDragHangle; // Y Value changing drag handle
 
 	protected:
 		// Sets common value

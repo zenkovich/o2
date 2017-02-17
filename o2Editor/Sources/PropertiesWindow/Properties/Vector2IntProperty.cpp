@@ -2,6 +2,7 @@
 
 #include "Application/Application.h"
 #include "SceneWindow/SceneEditScreen.h"
+#include "UI/Button.h"
 #include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/UIManager.h"
@@ -11,12 +12,17 @@ namespace Editor
 	Vec2IProperty::Vec2IProperty(UIWidget* widget /*= nullptr*/)
 	{
 		if (widget)
-			mWidget = widget;
+			mPropertyWidget = widget;
 		else
-			mWidget = o2UI.CreateWidget<UIWidget>("vector2 property");
+			mPropertyWidget = o2UI.CreateWidget<UIWidget>("vector2 property");
 
-		mXEditBox = dynamic_cast<UIEditBox*>(mWidget->GetChild("x edit"));
-		mYEditBox = dynamic_cast<UIEditBox*>(mWidget->GetChild("y edit"));
+		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+
+		if (auto state = mPropertyWidget->state["revert"])
+			*state = true;
+
+		mXEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/x edit"));
+		mYEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/y edit"));
 
 		mXEditBox->onChangeCompleted = Function<void(const WString&)>(this, &Vec2IProperty::OnXEdited);
 		mXEditBox->text = "--";
@@ -51,13 +57,13 @@ namespace Editor
 
 	Vec2IProperty::~Vec2IProperty()
 	{
-		delete mWidget;
+		delete mPropertyWidget;
 	}
 
 	void Vec2IProperty::SetValue(const Vec2I& value)
 	{
 		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr, value);
+			mAssignFunc(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -65,7 +71,7 @@ namespace Editor
 	void Vec2IProperty::SetValueX(int value)
 	{
 		for (auto ptr : mValuesPointers)
-			mXAssignFunc(ptr, value);
+			mXAssignFunc(ptr.first, value);
 
 		SetCommonValueX(value);
 	}
@@ -73,7 +79,7 @@ namespace Editor
 	void Vec2IProperty::SetValueY(int value)
 	{
 		for (auto ptr : mValuesPointers)
-			mYAssignFunc(ptr, value);
+			mYAssignFunc(ptr.first, value);
 
 		SetCommonValueY(value);
 	}
@@ -112,7 +118,7 @@ namespace Editor
 		o2EditorSceneScreen.OnSceneChanged();
 	}
 
-	void Vec2IProperty::Setup(const Vector<void*>& targets, bool isProperty)
+	void Vec2IProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
 	{
 		if (isProperty)
 		{
@@ -151,13 +157,13 @@ namespace Editor
 		auto lastXDifferent = mXValuesDifferent;
 		auto lastYDifferent = mYValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0]);
+		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
 		auto newXValuesDifferent = false;
 		auto newYValuesDifferent = false;
 
 		for (int i = 1; i < mValuesPointers.Count(); i++)
 		{
-			auto value = mGetFunc(mValuesPointers[i]);
+			auto value = mGetFunc(mValuesPointers[i].first);
 			if (!Math::Equals(newCommonValue.x, value.x))
 				newXValuesDifferent = true;
 
@@ -184,7 +190,7 @@ namespace Editor
 
 	UIWidget* Vec2IProperty::GetWidget() const
 	{
-		return mWidget;
+		return mPropertyWidget;
 	}
 
 	Vec2I Vec2IProperty::GetCommonValue() const
@@ -277,13 +283,14 @@ CLASS_META(Editor::Vec2IProperty)
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mXValuesDifferent);
 	PROTECTED_FIELD(mYValuesDifferent);
-	PROTECTED_FIELD(mWidget);
+	PROTECTED_FIELD(mPropertyWidget);
+	PROTECTED_FIELD(mRevertBtn);
 	PROTECTED_FIELD(mXEditBox);
 	PROTECTED_FIELD(mYEditBox);
 	PROTECTED_FIELD(mXDragHangle);
 	PROTECTED_FIELD(mYDragHangle);
 
-	PUBLIC_FUNCTION(void, Setup, const Vector<void*>&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(void, SetValue, const Vec2I&);

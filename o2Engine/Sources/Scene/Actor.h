@@ -83,6 +83,9 @@ namespace o2
 		// Returns prototype
 		ActorAssetRef GetPrototype() const;
 
+		// Returns prototype link pointer
+		const Actor* GetPrototypeLink() const;
+
 		// Sets actor's name
 		void SetName(const String& name);
 

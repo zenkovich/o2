@@ -160,6 +160,13 @@ namespace o2
 
 		String res;
 
+		for (auto baseType : mBaseTypes)
+		{
+			auto baseRes = baseType->GetFieldPath(sourceObject, targetObject, fieldInfo);
+			if (fieldInfo)
+				return baseRes;
+		}
+
 		for (auto field : mFields)
 		{
 			void* fieldObject = field->GetValuePtr(sourceObject);
@@ -183,13 +190,6 @@ namespace o2
 				fieldInfo = info;
 				return res;
 			}
-		}
-
-		for (auto baseType : mBaseTypes)
-		{
-			auto baseRes = baseType->GetFieldPath(sourceObject, targetObject, fieldInfo);
-			if (fieldInfo)
-				return baseRes;
 		}
 
 		return res;

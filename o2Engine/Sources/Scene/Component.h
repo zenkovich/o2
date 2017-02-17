@@ -50,6 +50,9 @@ namespace o2
 		// Returns is compontent enabled in hierarchy
 		bool IsEnabledInHierarchy() const;
 
+		// Returns prototype link
+		Component* GetPrototypeLink() const;
+
 		// Returns owner actor
 		Actor* GetOwnerActor() const;
 

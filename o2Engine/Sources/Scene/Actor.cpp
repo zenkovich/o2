@@ -304,6 +304,11 @@ namespace o2
 		return ActorAssetRef();
 	}
 
+	const Actor* Actor::GetPrototypeLink() const
+	{
+		return mPrototypeLink;
+	}
+
 	void Actor::SetName(const String& name)
 	{
 		mName = name;
@@ -1380,6 +1385,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, UpdateChilds, float);
 	PUBLIC_FUNCTION(void, SetPrototype, const ActorAssetRef&);
 	PUBLIC_FUNCTION(ActorAssetRef, GetPrototype);
+	PUBLIC_FUNCTION(const Actor*, GetPrototypeLink);
 	PUBLIC_FUNCTION(void, SetName, const String&);
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(UInt64, GetID);

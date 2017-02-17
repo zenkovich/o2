@@ -8,6 +8,7 @@ using namespace o2;
 
 namespace o2
 {
+	class UIButton;
 	class UIEditBox;
 	class UIHorizontalLayout;
 	class UIWidget;
@@ -28,7 +29,7 @@ namespace Editor
 		~RectIProperty();
 
 		// Sets fields
-		void Setup(const Vector<void*>& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
 
 		// Updates and checks value
 		void Refresh();
@@ -93,23 +94,24 @@ namespace Editor
 		Function<void(void*, int)>          mBottomAssignFunc; // Bottom Value assign function
 		Function<int(void*)>                mBottomGetFunc;    // Get bottom value function
 
-		Vector<void*> mValuesPointers;                 // Fields' pointers
-		RectI         mCommonValue;                    // Common field value (if not different)
-		bool          mLeftValuesDifferent = true;     // Are left values different
-		bool          mBottomValuesDifferent = true;   // Are bottom values different
-		bool          mRightValuesDifferent = true;    // Are right values different
-		bool          mTopValuesDifferent = true;      // Are top values different
+		TargetsVec mValuesPointers;               // Fields' pointers
+		RectI      mCommonValue;                  // Common field value (if not different)
+		bool       mLeftValuesDifferent = true;   // Are left values different
+		bool       mBottomValuesDifferent = true; // Are bottom values different
+		bool       mRightValuesDifferent = true;  // Are right values different
+		bool       mTopValuesDifferent = true;    // Are top values different
 
-		UIWidget*     mWidget = nullptr;               // horizontal edit boxes layout
-		UIEditBox*    mLeftEditBox = nullptr;          // Left Edit box 
-		UIEditBox*    mBottomEditBox = nullptr;        // Bottom Edit box 
-		UIEditBox*    mRightEditBox = nullptr;         // Right Edit box 
-		UIEditBox*    mTopEditBox = nullptr;           // Top Edit box 
+		UIWidget*  mPropertyWidget = nullptr; // Horizontal edit boxes layout
+		UIButton*  mRevertBtn = nullptr;      // Property revert button to prototype source
+		UIEditBox* mLeftEditBox = nullptr;    // Left Edit box 
+		UIEditBox* mBottomEditBox = nullptr;  // Bottom Edit box 
+		UIEditBox* mRightEditBox = nullptr;   // Right Edit box 
+		UIEditBox* mTopEditBox = nullptr;     // Top Edit box 
 
-		CursorEventsArea mLeftDragHangle;              // Left Value changing drag handle
-		CursorEventsArea mRightDragHangle;             // Right Value changing drag handle
-		CursorEventsArea mTopDragHangle;               // Top Value changing drag handle
-		CursorEventsArea mBottomDragHangle;            // Bottom Value changing drag handle
+		CursorEventsArea mLeftDragHangle;   // Left Value changing drag handle
+		CursorEventsArea mRightDragHangle;  // Right Value changing drag handle
+		CursorEventsArea mTopDragHangle;    // Top Value changing drag handle
+		CursorEventsArea mBottomDragHangle; // Bottom Value changing drag handle
 
 	protected:
 		// Sets common value

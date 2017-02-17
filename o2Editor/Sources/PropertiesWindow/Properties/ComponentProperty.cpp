@@ -20,24 +20,34 @@ namespace Editor
 {
 	ComponentProperty::ComponentProperty(UIWidget* widget /*= nullptr*/)
 	{
-		if (!widget)
-			widget = o2UI.CreateWidget<UIWidget>("componentProperty");
+		if (widget)
+			mPropertyWidget = widget;
+		else
+			mPropertyWidget = o2UI.CreateWidget<UIWidget>("component property");
 
-		mBox = widget;
-		mBox->SetFocusable(true);
-		mNameText = widget->GetLayerDrawable<Text>("caption");
+		mBox = mPropertyWidget->GetChild("box");
+		if (!mBox)
+			mBox = mPropertyWidget;
 
 		mBox->onDraw += [&]() { OnDrawn(); };
+		mBox->SetFocusable(true);
+
+		mNameText = mBox->GetLayerDrawable<Text>("caption");
+
+		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+
+		if (auto state = mPropertyWidget->state["revert"])
+			*state = true;
 
 		mComponentType = &TypeOf(Component);
 	}
 
 	ComponentProperty::~ComponentProperty()
 	{
-		delete mBox;
+		delete mPropertyWidget;
 	}
 
-	void ComponentProperty::Setup(const Vector<void*>& targets, bool isProperty)
+	void ComponentProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
 	{
 		if (isProperty)
 		{
@@ -63,12 +73,12 @@ namespace Editor
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0]);
+		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
 		auto newDifferent = false;
 
 		for (int i = 1; i < mValuesPointers.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i]))
+			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -86,7 +96,7 @@ namespace Editor
 
 	UIWidget* ComponentProperty::GetWidget() const
 	{
-		return mBox;
+		return mPropertyWidget;
 	}
 
 	Component* ComponentProperty::GetCommonValue() const
@@ -120,7 +130,7 @@ namespace Editor
 	void ComponentProperty::SetValue(Component* value)
 	{
 		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr, value);
+			mAssignFunc(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -298,10 +308,12 @@ CLASS_META(Editor::ComponentProperty)
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mComponentType);
+	PROTECTED_FIELD(mPropertyWidget);
+	PROTECTED_FIELD(mRevertBtn);
 	PROTECTED_FIELD(mBox);
 	PROTECTED_FIELD(mNameText);
 
-	PUBLIC_FUNCTION(void, Setup, const Vector<void*>&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(Component*, GetCommonValue);

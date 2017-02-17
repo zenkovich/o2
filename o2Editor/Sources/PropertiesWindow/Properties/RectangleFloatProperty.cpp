@@ -2,6 +2,7 @@
 
 #include "Application/Application.h"
 #include "SceneWindow/SceneEditScreen.h"
+#include "UI/Button.h"
 #include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/UIManager.h"
@@ -11,14 +12,19 @@ namespace Editor
 	RectFProperty::RectFProperty(UIWidget* widget /*= nullptr*/)
 	{
 		if (widget)
-			mWidget = widget;
+			mPropertyWidget = widget;
 		else
-			mWidget = o2UI.CreateWidget<UIWidget>("rectangle property");
+			mPropertyWidget = o2UI.CreateWidget<UIWidget>("rectangle property");
 
-		mLeftEditBox = dynamic_cast<UIEditBox*>(mWidget->GetChild("left edit"));
-		mBottomEditBox = dynamic_cast<UIEditBox*>(mWidget->GetChild("bottom edit"));
-		mRightEditBox = dynamic_cast<UIEditBox*>(mWidget->GetChild("right edit"));
-		mTopEditBox = dynamic_cast<UIEditBox*>(mWidget->GetChild("top edit"));
+		mLeftEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/left edit"));
+		mBottomEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/bottom edit"));
+		mRightEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/right edit"));
+		mTopEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/top edit"));
+
+		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+
+		if (auto state = mPropertyWidget->state["revert"])
+			*state = true;
 
 		mLeftEditBox->onChangeCompleted = Function<void(const WString&)>(this, &RectFProperty::OnLeftEdited);
 		mLeftEditBox->text = "--";
@@ -83,13 +89,13 @@ namespace Editor
 
 	RectFProperty::~RectFProperty()
 	{
-		delete mWidget;
+		delete mPropertyWidget;
 	}
 
 	void RectFProperty::SetValue(const RectF& value)
 	{
 		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr, value);
+			mAssignFunc(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -97,7 +103,7 @@ namespace Editor
 	void RectFProperty::SetValueLeft(float value)
 	{
 		for (auto ptr : mValuesPointers)
-			mLeftAssignFunc(ptr, value);
+			mLeftAssignFunc(ptr.first, value);
 
 		SetCommonValueLeft(value);
 	}
@@ -105,7 +111,7 @@ namespace Editor
 	void RectFProperty::SetValueRight(float value)
 	{
 		for (auto ptr : mValuesPointers)
-			mRightAssignFunc(ptr, value);
+			mRightAssignFunc(ptr.first, value);
 
 		SetCommonValueRight(value);
 	}
@@ -113,7 +119,7 @@ namespace Editor
 	void RectFProperty::SetValueTop(float value)
 	{
 		for (auto ptr : mValuesPointers)
-			mTopAssignFunc(ptr, value);
+			mTopAssignFunc(ptr.first, value);
 
 		SetCommonValueTop(value);
 	}
@@ -121,7 +127,7 @@ namespace Editor
 	void RectFProperty::SetValueBottom(float value)
 	{
 		for (auto ptr : mValuesPointers)
-			mBottomAssignFunc(ptr, value);
+			mBottomAssignFunc(ptr.first, value);
 
 		SetCommonValueBottom(value);
 	}
@@ -184,7 +190,7 @@ namespace Editor
 		o2EditorSceneScreen.OnSceneChanged();
 	}
 
-	void RectFProperty::Setup(const Vector<void*>& targets, bool isProperty)
+	void RectFProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
 	{
 		if (isProperty)
 		{
@@ -237,7 +243,7 @@ namespace Editor
 		auto lastTopDifferent = mTopValuesDifferent;
 		auto lastBottomDifferent = mBottomValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0]);
+		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
 		auto newLeftValuesDifferent = false;
 		auto newBottomValuesDifferent = false;
 		auto newRightValuesDifferent = false;
@@ -245,7 +251,7 @@ namespace Editor
 
 		for (int i = 1; i < mValuesPointers.Count(); i++)
 		{
-			auto value = mGetFunc(mValuesPointers[i]);
+			auto value = mGetFunc(mValuesPointers[i].first);
 			if (!Math::Equals(newCommonValue.left, value.left))
 				newLeftValuesDifferent = true;
 
@@ -294,7 +300,7 @@ namespace Editor
 
 	UIWidget* RectFProperty::GetWidget() const
 	{
-		return mWidget;
+		return mPropertyWidget;
 	}
 
 	RectF RectFProperty::GetCommonValue() const
@@ -475,7 +481,8 @@ CLASS_META(Editor::RectFProperty)
 	PROTECTED_FIELD(mBottomValuesDifferent);
 	PROTECTED_FIELD(mRightValuesDifferent);
 	PROTECTED_FIELD(mTopValuesDifferent);
-	PROTECTED_FIELD(mWidget);
+	PROTECTED_FIELD(mPropertyWidget);
+	PROTECTED_FIELD(mRevertBtn);
 	PROTECTED_FIELD(mLeftEditBox);
 	PROTECTED_FIELD(mBottomEditBox);
 	PROTECTED_FIELD(mRightEditBox);
@@ -485,7 +492,7 @@ CLASS_META(Editor::RectFProperty)
 	PROTECTED_FIELD(mTopDragHangle);
 	PROTECTED_FIELD(mBottomDragHangle);
 
-	PUBLIC_FUNCTION(void, Setup, const Vector<void*>&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(void, SetValue, const RectF&);

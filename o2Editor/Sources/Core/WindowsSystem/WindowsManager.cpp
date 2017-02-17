@@ -14,7 +14,7 @@ namespace Editor
 {
 	WindowsManager::WindowsManager()
 	{
-		if (mNeedRebuildWndStyle && false)
+		if (mNeedRebuildWndStyle)
 		{
 			EditorUIStyleBuilder builder;
 			builder.RebuildEditorUIStyle();

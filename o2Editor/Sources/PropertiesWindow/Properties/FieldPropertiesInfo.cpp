@@ -20,7 +20,29 @@ namespace Editor
 
 			IPropertyField* propertyField;
 			if (properties.TryGetValue(fieldInfo, propertyField))
-				propertyField->Setup(fieldPointers, fieldInfo->GetType()->GetUsage() == Type::Usage::Property);
+				propertyField->SetValuePtr(fieldPointers, fieldInfo->GetType()->GetUsage() == Type::Usage::Property);
 		}
 	}
+
+	void FieldPropertiesInfo::Set(const Vector<Pair<IObject*, IObject*>>& targets)
+	{
+		if (targets.IsEmpty())
+			return;
+
+		auto fields = targets[0].first->GetType().GetFields();
+		for (auto fieldInfo : fields)
+		{
+			Vector<Pair<void*, void*>> fieldPointers = targets.Select<Pair<void*, void*>>(
+				[&](const Pair<IObject*, IObject*>& x) 
+			{ 
+				return Pair<void*, void*>(fieldInfo->GetValuePtrStrong(x.first),
+										  x.second ? fieldInfo->GetValuePtrStrong(x.second) : nullptr); 
+			});
+
+			IPropertyField* propertyField;
+			if (properties.TryGetValue(fieldInfo, propertyField))
+				propertyField->SetValueAndPrototypePtr(fieldPointers, fieldInfo->GetType()->GetUsage() == Type::Usage::Property);
+		}
+	}
+
 }

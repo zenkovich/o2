@@ -21,21 +21,29 @@ namespace Editor
 {
 	ActorProperty::ActorProperty(UIWidget* widget /*= nullptr*/)
 	{
-		if (!widget)
-			widget = o2UI.CreateWidget<UIWidget>("actorProperty");
+		if (widget)
+			mPropertyWidget = widget;
+		else
+			mPropertyWidget = o2UI.CreateWidget<UIWidget>("actor property");
 
-		mBox = widget;
-		mNameText = widget->GetLayerDrawable<Text>("caption");
+		mBox = mPropertyWidget->GetChild("box");
+		if (!mBox)
+			mBox = mPropertyWidget;
+
 		mBox->onDraw += [&]() { OnDrawn(); };
 		mBox->SetFocusable(true);
+
+		mNameText = mBox->GetLayerDrawable<Text>("caption");
+
+		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 	}
 
 	ActorProperty::~ActorProperty()
 	{
-		delete mBox;
+		delete mPropertyWidget;
 	}
 
-	void ActorProperty::Setup(const Vector<void*>& targets, bool isProperty)
+	void ActorProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
 	{
 		if (isProperty)
 		{
@@ -61,12 +69,12 @@ namespace Editor
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0]);
+		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
 		auto newDifferent = false;
 
 		for (int i = 1; i < mValuesPointers.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i]))
+			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -84,7 +92,7 @@ namespace Editor
 
 	UIWidget* ActorProperty::GetWidget() const
 	{
-		return mBox;
+		return mPropertyWidget;
 	}
 
 	Actor* ActorProperty::GetCommonValue() const
@@ -105,7 +113,7 @@ namespace Editor
 	void ActorProperty::SetValue(Actor* value)
 	{
 		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr, value);
+			mAssignFunc(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -117,6 +125,8 @@ namespace Editor
 
 		mNameText->text = "--";
 		mBox->layer["caption"]->transparency = 1.0f;
+
+		CheckRevertableState();
 
 		onChanged();
 		o2EditorSceneScreen.OnSceneChanged();
@@ -143,8 +153,27 @@ namespace Editor
 			mBox->layer["caption"]->transparency = 1.0f;
 		}
 
+		CheckRevertableState();
+
 		onChanged();
 		o2EditorSceneScreen.OnSceneChanged();
+	}
+
+	void ActorProperty::CheckRevertableState()
+	{
+		bool revertable = false;
+
+		for (auto ptr : mValuesPointers)
+		{
+			if (!Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			{
+				revertable = true;
+				break;
+			}
+		}
+
+		if (auto state = mPropertyWidget->state["revert"])
+			*state = revertable;
 	}
 
 	void ActorProperty::OnCursorEnter(const Input::Cursor& cursor)
@@ -278,10 +307,12 @@ CLASS_META(Editor::ActorProperty)
 	PROTECTED_FIELD(mValuesPointers);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
+	PROTECTED_FIELD(mPropertyWidget);
+	PROTECTED_FIELD(mRevertBtn);
 	PROTECTED_FIELD(mBox);
 	PROTECTED_FIELD(mNameText);
 
-	PUBLIC_FUNCTION(void, Setup, const Vector<void*>&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(Actor*, GetCommonValue);
@@ -291,6 +322,7 @@ CLASS_META(Editor::ActorProperty)
 	PUBLIC_FUNCTION(void, SetUnknownValue);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, SetCommonValue, Actor*);
+	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

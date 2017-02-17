@@ -48,6 +48,8 @@ namespace o2
 		Vertex2 mVertex;				           // @SERIALIZABLE
 		RectF mRectF;					           // @SERIALIZABLE
 		RectI mRectI;					           // @SERIALIZABLE
+		BorderF mBorderF;					       // @SERIALIZABLE
+		BorderI mBorderI;					       // @SERIALIZABLE
 		Curve mCurve;                              // @SERIALIZABLE
 		TestInside mTestInside;                    // @SERIALIZABLE
 		TestEnum mTestEnum;                        // @SERIALIZABLE

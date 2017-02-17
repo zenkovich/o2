@@ -412,7 +412,7 @@ namespace o2
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		o2UI.AddWidgetStyle(sample, "straightBars");
+		o2UI.AddWidgetStyle(sample, "straight bars");
 	}
 
 	void BasicUIStyleBuilder::RebuildScrollAreaStyle()
