@@ -56,6 +56,9 @@ namespace Editor
 		// Updates and checks value
 		void Refresh();
 
+		// Reverts value to prototype value
+		void Revert();
+
 		// Returns root widget
 		UIWidget* GetWidget() const;
 
@@ -85,7 +88,7 @@ namespace Editor
 
 		TargetsVec mValuesPointers;           // Fields' pointers
 		_type      mCommonValue;              // Common field value (if not different)
-		bool       mValuesDifferent;          // Are values different
+		bool       mValuesDifferent = true;   // Are values different
 
 		UIWidget*  mPropertyWidget = nullptr; // Property widget
 		UIButton*  mRevertBtn = nullptr;      // Revert to source prototype button
@@ -95,6 +98,9 @@ namespace Editor
 	protected:
 		// Sets common value asset id
 		void SetCommonAssetId(UID id);
+
+		// Checks value for reverting to prototype
+		void CheckRevertableState();
 
 		// Calls when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
@@ -134,11 +140,11 @@ namespace Editor
 		mBox->SetFocusable(true);
 
 		mNameText = mBox->GetLayerDrawable<Text>("caption");
+		mNameText->text = "--";
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
-
-		if (mPropertyWidget->state["revert"])
-			*mPropertyWidget->state["revert"] = true;
+		if (mRevertBtn)
+			mRevertBtn->onClick = Function<void()>(this, &AssetProperty<_type>::Revert);
 	}
 
 	template<typename _type>
@@ -191,6 +197,20 @@ namespace Editor
 		}
 		else if (lastCommonValue != newCommonValue || lastDifferent)
 			SetCommonAssetId(newCommonValue ? newCommonValue->GetAssetId() : 0);
+	}
+
+	template<typename _type>
+	void AssetProperty<_type>::Revert()
+	{
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second)
+			{
+				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+			}
+		}
+
+		Refresh();
 	}
 
 	template<typename _type>
@@ -248,6 +268,8 @@ namespace Editor
 			mBox->layer["caption"]->transparency = 1.0f;
 		}
 
+		CheckRevertableState();
+
 		onChanged();
 		o2EditorSceneScreen.OnSceneChanged();
 	}
@@ -260,8 +282,28 @@ namespace Editor
 		mNameText->text = "--";
 		mBox->layer["caption"]->transparency = 1.0f;
 
+		CheckRevertableState();
+
 		onChanged();
 		o2EditorSceneScreen.OnSceneChanged();
+	}
+
+	template<typename _type>
+	void AssetProperty<_type>::CheckRevertableState()
+	{
+		bool revertable = false;
+
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			{
+				revertable = true;
+				break;
+			}
+		}
+
+		if (auto state = mPropertyWidget->state["revert"])
+			*state = revertable;
 	}
 
 	template<typename _type>
@@ -354,6 +396,7 @@ CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(const _type&, GetCommonValue);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
@@ -362,6 +405,7 @@ CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 	PUBLIC_FUNCTION(void, SetUnknownValue);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, SetCommonAssetId, UID);
+	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

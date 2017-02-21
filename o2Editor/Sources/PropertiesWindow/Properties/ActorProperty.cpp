@@ -34,8 +34,11 @@ namespace Editor
 		mBox->SetFocusable(true);
 
 		mNameText = mBox->GetLayerDrawable<Text>("caption");
+		mNameText->text = "--";
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		if (mRevertBtn)
+			mRevertBtn->onClick = Function<void()>(this, &ActorProperty::Revert);
 	}
 
 	ActorProperty::~ActorProperty()
@@ -88,6 +91,19 @@ namespace Editor
 		}
 		else if (lastCommonValue != newCommonValue || lastDifferent)
 			SetCommonValue(newCommonValue);
+	}
+
+	void ActorProperty::Revert()
+	{
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second)
+			{
+				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+			}
+		}
+
+		Refresh();
 	}
 
 	UIWidget* ActorProperty::GetWidget() const
@@ -165,7 +181,7 @@ namespace Editor
 
 		for (auto ptr : mValuesPointers)
 		{
-			if (!Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(mGetFunc(ptr.first)->GetPrototypeLink(), mGetFunc(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -314,6 +330,7 @@ CLASS_META(Editor::ActorProperty)
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(Actor*, GetCommonValue);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);

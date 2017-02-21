@@ -31,6 +31,9 @@ namespace Editor
 		// Updates and checks value
 		void Refresh();
 
+		// Reverts value to prototype value
+		void Revert();
+
 		// Returns root widget
 		UIWidget* GetWidget() const;
 
@@ -55,9 +58,9 @@ namespace Editor
 		Function<void(void*, const TagGroup&)> mAssignFunc; // Value assign function
 		Function<TagGroup(void*)>              mGetFunc;    // Get value function
 
-		TargetsVec mValuesPointers;  // Fields' pointers
-		TagGroup   mCommonValue;     // Common field value (if not different)
-		bool       mValuesDifferent; // Are values different
+		TargetsVec mValuesPointers;         // Fields' pointers
+		TagGroup   mCommonValue;            // Common field value (if not different)
+		bool       mValuesDifferent = true; // Are values different
 
 		UIWidget*      mPropertyWidget = nullptr; // Property root widget, contains editbox and revert button
 		UIEditBox*     mEditBox = nullptr;        // Edit box 
@@ -68,6 +71,9 @@ namespace Editor
 	protected:
 		// Sets common value
 		void SetCommonValue(const TagGroup& value);
+
+		// Checks value for reverting to prototype
+		void CheckRevertableState();
 
 		// Updates context menu data with filter
 		void UpdateContextData(const WString& filter);

@@ -145,6 +145,16 @@ namespace o2
 		return mSprite.GetLeftBottomCorner();
 	}
 
+	void ImageComponent::SetColor(const Color4& color)
+	{
+		mSprite.SetColor(color);
+	}
+
+	Color4 ImageComponent::GetColor() const
+	{
+		return mSprite.GetColor();
+	}
+
 	void ImageComponent::SetFill(float fill)
 	{
 		mSprite.SetFill(fill);
@@ -215,6 +225,11 @@ namespace o2
 		return mSprite.GetImageId();
 	}
 
+	ImageAssetRef ImageComponent::GetImageAsset() const
+	{
+		return ImageAssetRef(mSprite.GetImageId());
+	}
+
 	void ImageComponent::NormalizeSize()
 	{
 		mSprite.NormalizeSize();
@@ -259,8 +274,9 @@ namespace o2
 		INITIALIZE_PROPERTY(ImageComponent, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);
 		INITIALIZE_PROPERTY(ImageComponent, imageAssetId, LoadFromImage, GetImageId);
 		INITIALIZE_SETTER(ImageComponent, imageAssetPath, LoadFromImage);
-		INITIALIZE_SETTER(ImageComponent, imageAsset, LoadFromImage);
+		INITIALIZE_PROPERTY(ImageComponent, imageAsset, LoadFromImage, GetImageAsset);
 		INITIALIZE_SETTER(ImageComponent, bitmap, LoadFromBitmap);
+		INITIALIZE_PROPERTY(ImageComponent, color, SetColor, GetColor);
 		INITIALIZE_PROPERTY(ImageComponent, leftTopColor, SetLeftTopColor, GetLeftTopCorner);
 		INITIALIZE_PROPERTY(ImageComponent, rightTopColor, SetRightTopColor, GetRightTopCorner);
 		INITIALIZE_PROPERTY(ImageComponent, leftBottomColor, SetLeftBottomColor, GetLeftBottomCorner);
@@ -282,6 +298,7 @@ CLASS_META(o2::ImageComponent)
 	PUBLIC_FIELD(imageAssetPath);
 	PUBLIC_FIELD(imageAsset);
 	PUBLIC_FIELD(bitmap);
+	PUBLIC_FIELD(color);
 	PUBLIC_FIELD(leftTopColor);
 	PUBLIC_FIELD(rightTopColor);
 	PUBLIC_FIELD(leftBottomColor);
@@ -307,6 +324,8 @@ CLASS_META(o2::ImageComponent)
 	PUBLIC_FUNCTION(Color4, GetRightBottomCorner);
 	PUBLIC_FUNCTION(void, SetLeftBottomColor, const Color4&);
 	PUBLIC_FUNCTION(Color4, GetLeftBottomCorner);
+	PUBLIC_FUNCTION(void, SetColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetColor);
 	PUBLIC_FUNCTION(void, SetFill, float);
 	PUBLIC_FUNCTION(float, GetFill);
 	PUBLIC_FUNCTION(void, SetTileScale, float);
@@ -321,6 +340,7 @@ CLASS_META(o2::ImageComponent)
 	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
 	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*);
 	PUBLIC_FUNCTION(UID, GetImageId);
+	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
 	PUBLIC_FUNCTION(void, NormalizeSize);
 	PUBLIC_FUNCTION(void, NormalizeAspectByWidth);
 	PUBLIC_FUNCTION(void, NormalizeAspectByHeight);

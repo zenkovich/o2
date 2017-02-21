@@ -255,6 +255,9 @@
     <ClInclude Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.h">
       <Filter>Sources\Core\Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Dialogs\CurveEditor.h">
+      <Filter>Sources\Core\Dialogs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp">
@@ -483,6 +486,9 @@
       <Filter>Sources\Windows</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.cpp">
+      <Filter>Sources\Core\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Dialogs\CurveEditor.cpp">
       <Filter>Sources\Core\Dialogs</Filter>
     </ClCompile>
   </ItemGroup>

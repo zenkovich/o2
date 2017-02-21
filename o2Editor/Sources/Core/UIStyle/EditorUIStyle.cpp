@@ -1588,6 +1588,7 @@ namespace Editor
 		auto sample = mnew UIWidget();
 
 		auto box = mnew UIWidget();
+		box->layout = UIWidgetLayout::BothStretch();
 		box->name = "box";
 		box->SetFocusable(true);
 

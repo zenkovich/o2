@@ -423,6 +423,10 @@ namespace o2
 		INITIALIZE_PROPERTY(Transform, left, SetLeft, GetLeft);
 		INITIALIZE_PROPERTY(Transform, up, SetUp, GetUp);
 		INITIALIZE_PROPERTY(Transform, down, SetDown, GetDown);
+		INITIALIZE_PROPERTY(Transform, leftTop, SetLeftTop, GetLeftTop);
+		INITIALIZE_PROPERTY(Transform, rightTop, SetRightTop, GetRightTop);
+		INITIALIZE_PROPERTY(Transform, leftBottom, SetLeftBottom, GetLeftBottom);
+		INITIALIZE_PROPERTY(Transform, rightBottom, SetRightBottom, GetRightBottom);
 		INITIALIZE_SETTER(Transform, lookAtPoint, LookAt);
 	}
 }

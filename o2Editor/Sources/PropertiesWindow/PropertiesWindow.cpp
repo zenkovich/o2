@@ -88,7 +88,10 @@ namespace Editor
 
 	void PropertiesWindow::SetTarget(IObject* target)
 	{
-		SetTargets({ target });
+		if (target == nullptr)
+			SetTargets(Vector<IObject*>());
+		else
+			SetTargets({ target });
 	}
 
 	void PropertiesWindow::SetTargets(const Vector<IObject*> targets, const Function<void()>& targetsChangedDelegate /*= Function<void()>()*/)

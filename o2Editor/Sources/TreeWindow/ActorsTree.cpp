@@ -365,6 +365,8 @@ namespace Editor
 			mLinkBtn->SetTransparency(alpha);
 		}
 
+		mLinkBtn->SetVisible(actor->GetPrototype());
+
 		mEnableToggle->SetValue(actor->IsEnabled());
 
 		mLockToggle->SetValue(actor->IsLocked());

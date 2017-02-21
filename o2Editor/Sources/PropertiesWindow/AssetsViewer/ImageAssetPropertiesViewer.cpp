@@ -42,22 +42,22 @@ namespace Editor
 		mTargetAssets = assets.Cast<ImageAssetRef*>();
 
 		auto borderTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mSliceBorder); });
-		mBorderProperty->SetupX(borderTargets, false);
+		mBorderProperty->SetValuePtr(borderTargets, false);
 
 		auto modeTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mDefaultMode); });
-		mDefaultTypeProperty->SetValueAndPrototypePtr(modeTargets, false);
+		mDefaultTypeProperty->SetValuePtr(modeTargets, false);
 
 		auto windowsTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mWindows); });
-		mWindowsProperties->SetValueAndPrototypePtr(windowsTargets, false);
+		mWindowsProperties->SetValuePtr(windowsTargets, false);
 
 		auto osxTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mMacOS); });
-		mOSXProperties->SetValueAndPrototypePtr(osxTargets, false);
+		mOSXProperties->SetValuePtr(osxTargets, false);
 
 		auto androidTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mAndroid); });
-		mAndroidProperties->SetValueAndPrototypePtr(androidTargets, false);
+		mAndroidProperties->SetValuePtr(androidTargets, false);
 
 		auto iosTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mIOS); });
-		mIOSProperties->SetValueAndPrototypePtr(iosTargets, false);
+		mIOSProperties->SetValuePtr(iosTargets, false);
 
 		mPreviewImage->imageAsset = *mTargetAssets.Last();
 		mPreviewImage->GetImage()->mode = SpriteMode::Default;
@@ -197,53 +197,53 @@ namespace Editor
 	void ImageAssetPropertiesViewer::InitializeProperties()
 	{
 		auto borderPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(RectI));
-		auto nameLabel = borderPropertyPair.mSecond->FindChild<UILabel>();
+		auto nameLabel = borderPropertyPair.second->FindChild<UILabel>();
 		nameLabel->text = "Slice border";
-		mBorderProperty = (BorderIProperty*)borderPropertyPair.mFirst;
+		mBorderProperty = (BorderIProperty*)borderPropertyPair.first;
 		mBorderProperty->onChanged += [&]() { UpdateBordersAnchors(); /*mBordersSmoothValue = mBorderProperty->GetCommonValue();*/ };
-		mContent->AddChild(borderPropertyPair.mSecond);
+		mContent->AddChild(borderPropertyPair.second);
 
 		auto modePropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(SpriteMode));
-		nameLabel = modePropertyPair.mSecond->FindChild<UILabel>();
+		nameLabel = modePropertyPair.second->FindChild<UILabel>();
 		nameLabel->text = "Default mode";
-		mDefaultTypeProperty = (EnumProperty*)modePropertyPair.mFirst;
+		mDefaultTypeProperty = (EnumProperty*)modePropertyPair.first;
 		mDefaultTypeProperty->SpecializeType(&TypeOf(SpriteMode));
-		mContent->AddChild(modePropertyPair.mSecond);
+		mContent->AddChild(modePropertyPair.second);
 
 		auto atlasPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAssetRef));
-		nameLabel = atlasPropertyPair.mSecond->FindChild<UILabel>();
+		nameLabel = atlasPropertyPair.second->FindChild<UILabel>();
 		nameLabel->text = "Atlas";
-		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasPropertyPair.mFirst;
+		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasPropertyPair.first;
 		mAtlasProperty->onChanged = Function<void()>(this, &ImageAssetPropertiesViewer::OnAtlasPropertyChanged);
-		mContent->AddChild(atlasPropertyPair.mSecond);
+		mContent->AddChild(atlasPropertyPair.second);
 
 		auto windowsPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = windowsPropertyPair.mSecond->FindChild<UILabel>();
+		nameLabel = windowsPropertyPair.second->FindChild<UILabel>();
 		nameLabel->text = "Windows";
-		mWindowsProperties = (ObjectProperty*)windowsPropertyPair.mFirst;
+		mWindowsProperties = (ObjectProperty*)windowsPropertyPair.first;
 		mWindowsProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
-		mContent->AddChild(windowsPropertyPair.mSecond);
+		mContent->AddChild(windowsPropertyPair.second);
 
 		auto osxPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = osxPropertyPair.mSecond->FindChild<UILabel>();
+		nameLabel = osxPropertyPair.second->FindChild<UILabel>();
 		nameLabel->text = "OSX";
-		mOSXProperties = (ObjectProperty*)osxPropertyPair.mFirst;
+		mOSXProperties = (ObjectProperty*)osxPropertyPair.first;
 		mOSXProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
-		mContent->AddChild(osxPropertyPair.mSecond);
+		mContent->AddChild(osxPropertyPair.second);
 
 		auto androidPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = androidPropertyPair.mSecond->FindChild<UILabel>();
+		nameLabel = androidPropertyPair.second->FindChild<UILabel>();
 		nameLabel->text = "Android";
-		mAndroidProperties = (ObjectProperty*)androidPropertyPair.mFirst;
+		mAndroidProperties = (ObjectProperty*)androidPropertyPair.first;
 		mAndroidProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
-		mContent->AddChild(androidPropertyPair.mSecond);
+		mContent->AddChild(androidPropertyPair.second);
 
 		auto iosPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = iosPropertyPair.mSecond->FindChild<UILabel>();
+		nameLabel = iosPropertyPair.second->FindChild<UILabel>();
 		nameLabel->text = "iOS";
-		mIOSProperties = (ObjectProperty*)iosPropertyPair.mFirst;
+		mIOSProperties = (ObjectProperty*)iosPropertyPair.first;
 		mIOSProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
-		mContent->AddChild(iosPropertyPair.mSecond);
+		mContent->AddChild(iosPropertyPair.second);
 	}
 
 	void ImageAssetPropertiesViewer::FitImage()

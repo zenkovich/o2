@@ -34,6 +34,9 @@ namespace Editor
 		// Updates and checks value
 		void Refresh();
 
+		// Reverts value to prototype value
+		void Revert();
+
 		// Returns root widget
 		UIWidget* GetWidget() const;
 
@@ -134,6 +137,9 @@ namespace Editor
 
 		// Bottom Edit box change event
 		void OnBottomEdited(const WString& data);
+
+		// Checks value for reverting to prototype
+		void CheckRevertableState();
 
 		// Right Edit box change event
 		void OnRightEdited(const WString& data);

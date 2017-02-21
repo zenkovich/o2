@@ -77,14 +77,20 @@ namespace o2
 		// Updates childs
 		void UpdateChilds(float dt);
 
-		// Sets prototype asset
-		void SetPrototype(const ActorAssetRef& asset);
-
 		// Returns prototype
 		ActorAssetRef GetPrototype() const;
 
+		// Breaks link to prototype, sets actor as actor without prototype
+		void BreakPrototypeLink();
+
+		// Applies all changes to prototype and saves it
+		void ApplyChangesToPrototype();
+
+		// Reverts all properties to prototype
+		void RevertToPrototype();
+
 		// Returns prototype link pointer
-		const Actor* GetPrototypeLink() const;
+		Actor* GetPrototypeLink() const;
 
 		// Sets actor's name
 		void SetName(const String& name);
@@ -229,29 +235,32 @@ namespace o2
 		SERIALIZABLE(Actor);
 
 	protected:
-		ActorAssetRef     mPrototype;                  // Prototype asset
-		const Actor*      mPrototypeLink = nullptr;    // Prototype link actor. Links to source actor from prototype
-
-		UInt64            mId;                         // Unique actor id
-		String            mName;                       // Name of actor
-					      				               
-		Actor*            mParent = nullptr;           // Parent actor
-		ActorsVec         mChilds;                     // Children actors 
-		ComponentsVec     mComponents;                 // Components vector 
-		Scene::Layer*     mLayer = nullptr;            // Scene layer
-					      				               
-		bool              mEnabled = true;             // Is actor enabled
-		bool              mResEnabled = true;          // Is actor enabled in hierarchy
-					      				               
-		bool              mLocked = false;             // Is actor locked
-		bool              mResLocked = false;          // Is actor locked in hierarchy
-					      				               
-		bool              mIsOnScene = true;           // Is actor on scene
-					      				               
-		bool              mIsAsset = false;            // Is this actor cached asset
-		UID               mAssetId;                    // Source asset id
+		ActorAssetRef mPrototype;               // Prototype asset
+		Actor*        mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
+					  						    
+		UInt64        mId;                      // Unique actor id
+		String        mName;                    // Name of actor
+					  				            
+		Actor*        mParent = nullptr;        // Parent actor
+		ActorsVec     mChilds;                  // Children actors 
+		ComponentsVec mComponents;              // Components vector 
+		Scene::Layer* mLayer = nullptr;         // Scene layer
+					  				            
+		bool          mEnabled = true;          // Is actor enabled
+		bool          mResEnabled = true;       // Is actor enabled in hierarchy
+					  				            
+		bool          mLocked = false;          // Is actor locked
+		bool          mResLocked = false;       // Is actor locked in hierarchy
+					  				            
+		bool          mIsOnScene = true;        // Is actor on scene
+					  				            
+		bool          mIsAsset = false;         // Is this actor cached asset
+		UID           mAssetId;                 // Source asset id
 
 	protected:
+		// Not using prototype setter
+		void SetProtytypeDummy(ActorAssetRef asset);
+
 		// Calls when transformation was changed
 		void OnTransformChanged();
 

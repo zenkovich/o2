@@ -34,6 +34,9 @@ namespace Editor
 		// Updates and checks value
 		void Refresh();
 
+		// Reverts value to prototype value
+		void Revert();
+
 		// Returns root widget
 		UIWidget* GetWidget() const;
 
@@ -98,6 +101,9 @@ namespace Editor
 
 		// Sets common value Y
 		void SetCommonValueY(int value);
+
+		// Checks value for reverting to prototype
+		void CheckRevertableState();
 
 		// X Edit box change event
 		void OnXEdited(const WString& data);

@@ -34,6 +34,9 @@ namespace Editor
 		// Updates and checks value
 		void Refresh();
 
+		// Reverts value to prototype value
+		void Revert();
+
 		// Returns root widget
 		UIWidget* GetWidget() const;
 
@@ -71,6 +74,9 @@ namespace Editor
 	protected:
 		// Sets common value
 		void SetCommonValue(const Color4& value);
+
+		// Checks value for reverting to prototype
+		void CheckRevertableState();
 
 		// Calls when box pressed and shows color picking dialog
 		void OnClicked();

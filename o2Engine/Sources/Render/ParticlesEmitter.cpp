@@ -6,7 +6,8 @@
 
 namespace o2
 {
-	ParticlesEmitter::ParticlesEmitter()
+	ParticlesEmitter::ParticlesEmitter():
+		IRectDrawable()
 	{
 		mShape = mnew CircleParticlesEmitterShape();
 		mParticlesMesh = mnew Mesh(NoTexture(), mParticlesNumLimit*4, mParticlesNumLimit*2);
@@ -24,7 +25,7 @@ namespace o2
 	}
 
 	ParticlesEmitter::ParticlesEmitter(const ParticlesEmitter& other):
-		mImageAsset(other.mImageAsset), mShape(other.mShape->Clone()), mParticlesNumLimit(other.mParticlesNumLimit),
+		IRectDrawable(other), mImageAsset(other.mImageAsset), mShape(other.mShape->Clone()), mParticlesNumLimit(other.mParticlesNumLimit),
 		mPlaying(other.mPlaying), mEmittingCoefficient(other.mEmittingCoefficient), mIsLooped(other.mIsLooped),
 		mIsParticlesRelative(other.mIsParticlesRelative), mDuration(other.mDuration),
 		mParticlesLifetime(other.mParticlesLifetime), mEmitParticlesPerSecond(other.mEmitParticlesPerSecond),
@@ -61,6 +62,8 @@ namespace o2
 			idx++;
 		}
 		mNumAliveParticles = 0;
+
+		IRectDrawable::operator=(other);
 
 		for (auto effect : other.mEffects)
 			AddEffect(effect->Clone());

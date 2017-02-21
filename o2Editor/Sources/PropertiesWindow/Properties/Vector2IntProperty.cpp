@@ -17,9 +17,8 @@ namespace Editor
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("vector2 property");
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
-
-		if (auto state = mPropertyWidget->state["revert"])
-			*state = true;
+		if (mRevertBtn)
+			mRevertBtn->onClick = Function<void()>(this, &Vec2IProperty::Revert);
 
 		mXEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/x edit"));
 		mYEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/y edit"));
@@ -94,8 +93,7 @@ namespace Editor
 		mXEditBox->text = "--";
 		mYEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void Vec2IProperty::SetXUnknownValue(int defaultValue /*= 0*/)
@@ -104,8 +102,7 @@ namespace Editor
 		mCommonValue.x = defaultValue;
 		mXEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void Vec2IProperty::SetYUnknownValue(int defaultValue /*= 0*/)
@@ -114,8 +111,7 @@ namespace Editor
 		mCommonValue.y = defaultValue;
 		mYEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void Vec2IProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
@@ -188,6 +184,19 @@ namespace Editor
 			SetCommonValueY(newCommonValue.y);
 	}
 
+	void Vec2IProperty::Revert()
+	{
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second)
+			{
+				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+			}
+		}
+
+		Refresh();
+	}
+
 	UIWidget* Vec2IProperty::GetWidget() const
 	{
 		return mPropertyWidget;
@@ -218,8 +227,7 @@ namespace Editor
 		mXEditBox->text = (WString)mCommonValue.x;
 		mYEditBox->text = (WString)mCommonValue.y;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void Vec2IProperty::SetCommonValueX(int value)
@@ -228,8 +236,7 @@ namespace Editor
 		mCommonValue.x = value;
 		mXEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void Vec2IProperty::SetCommonValueY(int value)
@@ -238,8 +245,24 @@ namespace Editor
 		mCommonValue.y = value;
 		mYEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
+	}
+
+	void Vec2IProperty::CheckRevertableState()
+	{
+		bool revertable = false;
+
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			{
+				revertable = true;
+				break;
+			}
+		}
+
+		if (auto state = mPropertyWidget->state["revert"])
+			*state = revertable;
 	}
 
 	void Vec2IProperty::OnXEdited(const WString& data)
@@ -292,6 +315,7 @@ CLASS_META(Editor::Vec2IProperty)
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(void, SetValue, const Vec2I&);
 	PUBLIC_FUNCTION(void, SetValueX, int);
@@ -305,6 +329,7 @@ CLASS_META(Editor::Vec2IProperty)
 	PROTECTED_FUNCTION(void, SetCommonValue, const Vec2I&);
 	PROTECTED_FUNCTION(void, SetCommonValueX, int);
 	PROTECTED_FUNCTION(void, SetCommonValueY, int);
+	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, OnXEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnYEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnXDragHandleMoved, const Input::Cursor&);

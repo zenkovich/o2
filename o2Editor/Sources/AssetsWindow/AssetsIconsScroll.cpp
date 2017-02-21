@@ -275,7 +275,7 @@ namespace Editor
 			}
 
 			assetIcon->SetAssetInfo(asset);
-			assetIcon->SetState("halfHide", mCuttingAssets.ContainsPred([&](auto x) { return x.mFirst == asset.id; }));
+			assetIcon->SetState("halfHide", mCuttingAssets.ContainsPred([&](auto x) { return x.first == asset.id; }));
 			assetIcon->SetSelectionGroup(this);
 			assetIcon->mOwner = this;
 
@@ -385,8 +385,16 @@ namespace Editor
 		{
 			mChangePropertiesTargetsFromThis = true;
 
-			o2EditorProperties.SetTargets(mSelectedPreloadedAssets.Cast<IObject*>(),
-										  [&]() { CheckPreloadedAssetsSaving(); });
+			Vector<IObject*> targets;
+
+			if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
+			{
+				targets = mSelectedPreloadedAssets.Select<IObject*>([](AssetRef* x) { 
+					ActorAssetRef asset(*x); return asset->GetActor(); });
+			}
+			else targets = mSelectedPreloadedAssets.Cast<IObject*>();
+
+			o2EditorProperties.SetTargets(targets, Function<void()>(this, &UIAssetsIconsScrollArea::CheckPreloadedAssetsSaving));
 
 			mChangePropertiesTargetsFromThis = false;
 		}
@@ -410,7 +418,7 @@ namespace Editor
 		{
 			UIAssetIcon* icon = (UIAssetIcon*)child;
 			icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.ContainsPred([=](auto x) {
-				return x.mFirst == icon->GetAssetInfo().id; }));
+				return x.first == icon->GetAssetInfo().id; }));
 		}
 	}
 

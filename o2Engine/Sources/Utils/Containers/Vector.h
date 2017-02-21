@@ -1123,6 +1123,7 @@ namespace o2
 	template<typename _type>
 	template<typename _sel_type>
 	Vector<_sel_type> Vector<_type>::Select(const Function<_sel_type(const _type&)>& selector) const
+
 	{
 		Vector<_sel_type> res;
 		for (auto x : *this)

@@ -22,9 +22,8 @@ namespace Editor
 		mTopEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/top edit"));
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
-
-		if (auto state = mPropertyWidget->state["revert"])
-			*state = true;
+		if (mRevertBtn)
+			mRevertBtn->onClick = Function<void()>(this, &BorderIProperty::Revert);
 
 		mLeftEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderIProperty::OnLeftEdited);
 		mLeftEditBox->text = "--";
@@ -146,8 +145,7 @@ namespace Editor
 		mRightEditBox->text = "--";
 		mTopEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void BorderIProperty::SetLeftUnknownValue(int defaultValue /*= 0.0f*/)
@@ -156,8 +154,7 @@ namespace Editor
 		mCommonValue.left = defaultValue;
 		mLeftEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void BorderIProperty::SetRightUnknownValue(int defaultValue /*= 0.0f*/)
@@ -166,8 +163,7 @@ namespace Editor
 		mCommonValue.right = defaultValue;
 		mRightEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void BorderIProperty::SetTopUnknownValue(int defaultValue /*= 0.0f*/)
@@ -176,8 +172,7 @@ namespace Editor
 		mCommonValue.top = defaultValue;
 		mTopEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void BorderIProperty::SetBottomUnknownValue(int defaultValue /*= 0.0f*/)
@@ -186,8 +181,7 @@ namespace Editor
 		mCommonValue.bottom = defaultValue;
 		mBottomEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void BorderIProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
@@ -298,6 +292,19 @@ namespace Editor
 			SetCommonValueBottom(newCommonValue.bottom);
 	}
 
+	void BorderIProperty::Revert()
+	{
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second)
+			{
+				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+			}
+		}
+
+		Refresh();
+	}
+
 	UIWidget* BorderIProperty::GetWidget() const
 	{
 		return mPropertyWidget;
@@ -332,8 +339,7 @@ namespace Editor
 		mRightEditBox->text = (WString)mCommonValue.right;
 		mTopEditBox->text = (WString)mCommonValue.top;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void BorderIProperty::SetCommonValueLeft(int value)
@@ -342,8 +348,7 @@ namespace Editor
 		mCommonValue.left = value;
 		mLeftEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void BorderIProperty::SetCommonValueRight(int value)
@@ -352,8 +357,7 @@ namespace Editor
 		mCommonValue.right = value;
 		mRightEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void BorderIProperty::SetCommonValueTop(int value)
@@ -362,8 +366,7 @@ namespace Editor
 		mCommonValue.top = value;
 		mTopEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void BorderIProperty::SetCommonValueBottom(int value)
@@ -372,8 +375,24 @@ namespace Editor
 		mCommonValue.bottom = value;
 		mBottomEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
+	}
+
+	void BorderIProperty::CheckRevertableState()
+	{
+		bool revertable = false;
+
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			{
+				revertable = true;
+				break;
+			}
+		}
+
+		if (auto state = mPropertyWidget->state["revert"])
+			*state = revertable;
 	}
 
 	void BorderIProperty::OnLeftEdited(const WString& data)
@@ -463,6 +482,7 @@ CLASS_META(Editor::BorderIProperty)
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(void, SetValue, const BorderI&);
 	PUBLIC_FUNCTION(void, SetValueLeft, int);
@@ -474,6 +494,7 @@ CLASS_META(Editor::BorderIProperty)
 	PUBLIC_FUNCTION(void, SetRightUnknownValue, int);
 	PUBLIC_FUNCTION(void, SetTopUnknownValue, int);
 	PUBLIC_FUNCTION(void, SetBottomUnknownValue, int);
+	PUBLIC_FUNCTION(void, CheckRevertableState);
 	PUBLIC_FUNCTION(BorderI, GetCommonValue);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);

@@ -34,6 +34,9 @@ namespace Editor
 		// Updates and checks value
 		void Refresh();
 
+		// Reverts value to prototype value
+		void Revert();
+
 		// Returns root widget
 		UIWidget* GetWidget() const;
 
@@ -66,6 +69,9 @@ namespace Editor
 
 		// Sets value bottom as unknown
 		void SetBottomUnknownValue(int defaultValue = 0.0f);
+
+		// Checks value for reverting to prototype
+		void CheckRevertableState();
 
 		// Returns value
 		BorderI GetCommonValue() const;

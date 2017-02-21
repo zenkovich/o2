@@ -22,9 +22,8 @@ namespace Editor
 		mTopEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/top edit"));
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
-
-		if (auto state = mPropertyWidget->state["revert"])
-			*state = true;
+		if (mRevertBtn)
+			mRevertBtn->onClick = Function<void()>(this, &RectFProperty::Revert);
 
 		mLeftEditBox->onChangeCompleted = Function<void(const WString&)>(this, &RectFProperty::OnLeftEdited);
 		mLeftEditBox->text = "--";
@@ -146,8 +145,7 @@ namespace Editor
 		mRightEditBox->text = "--";
 		mTopEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void RectFProperty::SetLeftUnknownValue(float defaultValue /*= 0.0f*/)
@@ -156,8 +154,7 @@ namespace Editor
 		mCommonValue.left = defaultValue;
 		mLeftEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void RectFProperty::SetRightUnknownValue(float defaultValue /*= 0.0f*/)
@@ -166,8 +163,7 @@ namespace Editor
 		mCommonValue.right = defaultValue;
 		mRightEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void RectFProperty::SetTopUnknownValue(float defaultValue /*= 0.0f*/)
@@ -176,8 +172,7 @@ namespace Editor
 		mCommonValue.top = defaultValue;
 		mTopEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void RectFProperty::SetBottomUnknownValue(float defaultValue /*= 0.0f*/)
@@ -186,8 +181,7 @@ namespace Editor
 		mCommonValue.bottom = defaultValue;
 		mBottomEditBox->text = "--";
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void RectFProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
@@ -298,6 +292,19 @@ namespace Editor
 			SetCommonValueBottom(newCommonValue.bottom);
 	}
 
+	void RectFProperty::Revert()
+	{
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second)
+			{
+				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+			}
+		}
+
+		Refresh();
+	}
+
 	UIWidget* RectFProperty::GetWidget() const
 	{
 		return mPropertyWidget;
@@ -332,8 +339,7 @@ namespace Editor
 		mRightEditBox->text = (WString)mCommonValue.right;
 		mTopEditBox->text = (WString)mCommonValue.top;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void RectFProperty::SetCommonValueLeft(float value)
@@ -342,8 +348,7 @@ namespace Editor
 		mCommonValue.left = value;
 		mLeftEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void RectFProperty::SetCommonValueRight(float value)
@@ -352,8 +357,7 @@ namespace Editor
 		mCommonValue.right = value;
 		mRightEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void RectFProperty::SetCommonValueTop(float value)
@@ -362,8 +366,7 @@ namespace Editor
 		mCommonValue.top = value;
 		mTopEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	void RectFProperty::SetCommonValueBottom(float value)
@@ -372,8 +375,24 @@ namespace Editor
 		mCommonValue.bottom = value;
 		mBottomEditBox->text = (WString)value;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
+	}
+
+	void RectFProperty::CheckRevertableState()
+	{
+		bool revertable = false;
+
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			{
+				revertable = true;
+				break;
+			}
+		}
+
+		if (auto state = mPropertyWidget->state["revert"])
+			*state = revertable;
 	}
 
 	void RectFProperty::OnLeftEdited(const WString& data)
@@ -494,6 +513,7 @@ CLASS_META(Editor::RectFProperty)
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(void, SetValue, const RectF&);
 	PUBLIC_FUNCTION(void, SetValueLeft, float);
@@ -513,6 +533,7 @@ CLASS_META(Editor::RectFProperty)
 	PROTECTED_FUNCTION(void, SetCommonValueRight, float);
 	PROTECTED_FUNCTION(void, SetCommonValueTop, float);
 	PROTECTED_FUNCTION(void, SetCommonValueBottom, float);
+	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, OnLeftEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnBottomEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnRightEdited, const WString&);

@@ -33,11 +33,11 @@ namespace Editor
 		mBox->SetFocusable(true);
 
 		mNameText = mBox->GetLayerDrawable<Text>("caption");
+		mNameText->text = "--";
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
-
-		if (auto state = mPropertyWidget->state["revert"])
-			*state = true;
+		if (mRevertBtn)
+			mRevertBtn->onClick = Function<void()>(this, &ComponentProperty::Revert);
 
 		mComponentType = &TypeOf(Component);
 	}
@@ -90,8 +90,21 @@ namespace Editor
 			if (!lastDifferent)
 				SetUnknownValue();
 		}
-		else if (lastCommonValue != newCommonValue)
+		else if (lastCommonValue != newCommonValue || lastDifferent)
 			SetCommonValue(newCommonValue);
+	}
+
+	void ComponentProperty::Revert()
+	{
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second)
+			{
+				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+			}
+		}
+
+		Refresh();
 	}
 
 	UIWidget* ComponentProperty::GetWidget() const
@@ -142,8 +155,7 @@ namespace Editor
 		mNameText->text = "--";
 		mBox->layer["caption"]->transparency = 1.0f;
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
 	}
 
 	bool ComponentProperty::IsUnderPoint(const Vec2F& point)
@@ -167,8 +179,24 @@ namespace Editor
 			mBox->layer["caption"]->transparency = 1.0f;
 		}
 
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
+		OnChanged();
+	}
+
+	void ComponentProperty::CheckRevertableState()
+	{
+		bool revertable = false;
+
+		for (auto ptr : mValuesPointers)
+		{
+			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			{
+				revertable = true;
+				break;
+			}
+		}
+
+		if (auto state = mPropertyWidget->state["revert"])
+			*state = revertable;
 	}
 
 	void ComponentProperty::OnCursorEnter(const Input::Cursor& cursor)
@@ -315,6 +343,7 @@ CLASS_META(Editor::ComponentProperty)
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(Component*, GetCommonValue);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
@@ -325,6 +354,7 @@ CLASS_META(Editor::ComponentProperty)
 	PUBLIC_FUNCTION(void, SetUnknownValue);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, SetCommonValue, Component*);
+	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
