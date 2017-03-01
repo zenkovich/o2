@@ -440,6 +440,27 @@ namespace o2
 		return mChangedActors;
 	}
 
+	Scene::ActorsCacheDict& Scene::GetPrototypesLinksCache()
+	{
+		return mPrototypeLinksCache;
+	}
+
+	void Scene::OnActorWithPrototypeCreated(Actor* actor)
+	{
+		if (!mPrototypeLinksCache.ContainsKey(actor->GetPrototype()))
+			mPrototypeLinksCache.Add(actor->GetPrototype(), ActorsVec());
+
+		mPrototypeLinksCache[actor->GetPrototype()].Add(actor);
+	}
+
+	void Scene::OnActorPrototypeBreaked(ActorAssetRef& assetRef, Actor* actor)
+	{
+		mPrototypeLinksCache[assetRef].Remove(actor);
+
+		if (mPrototypeLinksCache[assetRef].IsEmpty())
+			mPrototypeLinksCache.Remove(assetRef);
+	}
+
 #endif
 
 	void LayerDataNodeConverter::ToData(void* object, DataNode& data)

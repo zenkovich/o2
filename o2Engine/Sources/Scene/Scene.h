@@ -27,6 +27,7 @@ namespace o2
 		typedef Vector<ActorAssetRef> ActorsAssetsVec;
 		typedef Vector<String> StringsVec;
 		typedef Vector<Tag*> TagsVec;
+		typedef Dictionary<ActorAssetRef, ActorsVec> ActorsCacheDict;
 
 		// -----------
 		// Scene layer
@@ -182,18 +183,28 @@ namespace o2
 
 		// Returns current changed actors
 		const ActorsVec& GetChangedActors() const;
+
+		// Returns cache of linked to prototypes actors
+		ActorsCacheDict& GetPrototypesLinksCache();
+
+		// Calls when created actor with prototype, updates cache
+		void OnActorWithPrototypeCreated(Actor* actor);
+
+		// Calls when actor destroying or prototype link broken, updates cache
+		void OnActorPrototypeBreaked(ActorAssetRef& assetRef, Actor* actor);
 #endif       
 
 	protected:
-		ActorsVec       mRootActors;    // Scene root actors		
-		ActorsVec       mAllActors;     // All scene actors
-		LayersVec       mLayers;        // Scene layers
-		TagsVec         mTags;          // Scene tags
-		Layer*          mDefaultLayer;  // Default scene layer
-		ActorsAssetsVec mCache;         // Cached actors assets
-				  
-#if IS_EDITOR	  
-		ActorsVec       mChangedActors; // Changed actors array
+		ActorsVec       mRootActors;          // Scene root actors		
+		ActorsVec       mAllActors;           // All scene actors
+		LayersVec       mLayers;              // Scene layers
+		TagsVec         mTags;                // Scene tags
+		Layer*          mDefaultLayer;        // Default scene layer
+		ActorsAssetsVec mCache;               // Cached actors assets
+				  						      
+#if IS_EDITOR	  						      
+		ActorsVec       mChangedActors;       // Changed actors array
+		ActorsCacheDict mPrototypeLinksCache; // Cache of linked to prototypes actors
 #endif
 
 	protected:

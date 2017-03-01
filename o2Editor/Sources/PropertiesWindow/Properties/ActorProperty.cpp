@@ -8,6 +8,7 @@
 #include "Assets/Assets.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/AssetsWindow.h"
+#include "PropertiesWindow/PropertiesWindow.h"
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -95,15 +96,43 @@ namespace Editor
 
 	void ActorProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		auto propertyObjects = o2EditorProperties.GetTargets();
+
+		for (int i = 0; i < mValuesPointers.Count() && i < propertyObjects.Count(); i++)
+			RevertoToPrototype(mValuesPointers[i].first, mValuesPointers[i].second, propertyObjects[i]);
+
+		Refresh();
+	}
+
+	void ActorProperty::RevertoToPrototype(void* target, void* source, IObject* targetOwner)
+	{
+		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
+			return;
+
+		Actor* sourceActor = mGetFunc(source);
+		Actor* topSourceActor = sourceActor;
+		while (topSourceActor->GetParent())
+			topSourceActor = topSourceActor->GetParent();
+
+		Actor* actorOwner = dynamic_cast<Actor*>(targetOwner);
+
+		if (actorOwner)
 		{
-			if (ptr.second)
+			Actor* topTargetActor = actorOwner;
+			while (topTargetActor->GetPrototypeLink() != topSourceActor && topTargetActor->GetParent())
+				topTargetActor = topTargetActor->GetParent();
+
+			Actor* sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceActor);
+
+			if (sameToProtoSourceActor)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				mAssignFunc(target, sameToProtoSourceActor);
+				return;
 			}
 		}
 
-		Refresh();
+		if (sourceActor->IsOnScene())
+			mAssignFunc(target, sourceActor);
 	}
 
 	UIWidget* ActorProperty::GetWidget() const
@@ -181,10 +210,27 @@ namespace Editor
 
 		for (auto ptr : mValuesPointers)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first)->GetPrototypeLink(), mGetFunc(ptr.second)))
+			if (ptr.second)
 			{
-				revertable = true;
-				break;
+				Actor* value = mGetFunc(ptr.first);
+				Actor* proto = mGetFunc(ptr.second);
+
+				if (value && value->GetPrototypeLink())
+				{
+					if (value->GetPrototypeLink() != proto)
+					{
+						revertable = true;
+						break;
+					}
+				}
+				else
+				{
+					if (value != proto)
+					{
+						revertable = true;
+						break;
+					}
+				}
 			}
 		}
 
@@ -340,6 +386,7 @@ CLASS_META(Editor::ActorProperty)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, SetCommonValue, Actor*);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
+	PROTECTED_FUNCTION(void, RevertoToPrototype, void*, void*, IObject*);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

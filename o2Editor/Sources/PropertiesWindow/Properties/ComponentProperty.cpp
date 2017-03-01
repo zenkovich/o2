@@ -15,6 +15,7 @@
 #include "UI/UIManager.h"
 #include "UI/Widget.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
+#include "../PropertiesWindow.h"
 
 namespace Editor
 {
@@ -96,13 +97,10 @@ namespace Editor
 
 	void ComponentProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
-		{
-			if (ptr.second)
-			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
-			}
-		}
+		auto propertyObjects = o2EditorProperties.GetTargets();
+
+		for (int i = 0; i < mValuesPointers.Count() && i < propertyObjects.Count(); i++)
+			RevertoToPrototype(mValuesPointers[i].first, mValuesPointers[i].second, propertyObjects[i]);
 
 		Refresh();
 	}
@@ -163,6 +161,43 @@ namespace Editor
 		return mBox->IsUnderPoint(point);
 	}
 
+	void ComponentProperty::RevertoToPrototype(void* target, void* source, IObject* targetOwner)
+	{
+		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
+			return;
+
+		Component* sourceComponent = mGetFunc(source);
+		Actor* topSourceActor = sourceComponent->GetOwnerActor();
+		while (topSourceActor->GetParent())
+			topSourceActor = topSourceActor->GetParent();
+
+		Actor* actorOwner = dynamic_cast<Actor*>(targetOwner);
+
+		if (actorOwner)
+		{
+			Actor* topTargetActor = actorOwner;
+			while (topTargetActor->GetPrototypeLink() != topSourceActor && topTargetActor->GetParent())
+				topTargetActor = topTargetActor->GetParent();
+
+			Actor* sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceComponent->GetOwnerActor());
+
+			if (sameToProtoSourceActor)
+			{
+				Component* sameToProtoSourceComponent = sameToProtoSourceActor->GetComponents().FindMatch(
+					[&](Component* x) { return x->GetPrototypeLink() == sourceComponent; });
+
+				if (sameToProtoSourceComponent)
+				{
+					mAssignFunc(target, sameToProtoSourceComponent);
+					return;
+				}
+			}
+		}
+
+		if (sourceComponent->GetOwnerActor()->IsOnScene())
+			mAssignFunc(target, sourceComponent);
+	}
+
 	void ComponentProperty::SetCommonValue(Component* value)
 	{
 		mCommonValue = value;
@@ -188,10 +223,27 @@ namespace Editor
 
 		for (auto ptr : mValuesPointers)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second)
 			{
-				revertable = true;
-				break;
+				Component* value = mGetFunc(ptr.first);
+				Component* proto = mGetFunc(ptr.second);
+
+				if (value && value->GetPrototypeLink())
+				{
+					if (value->GetPrototypeLink() != proto)
+					{
+						revertable = true;
+						break;
+					}
+				}
+				else
+				{
+					if (value != proto)
+					{
+						revertable = true;
+						break;
+					}
+				}
 			}
 		}
 
@@ -353,6 +405,7 @@ CLASS_META(Editor::ComponentProperty)
 	PUBLIC_FUNCTION(void, SetValue, Component*);
 	PUBLIC_FUNCTION(void, SetUnknownValue);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, RevertoToPrototype, void*, void*, IObject*);
 	PROTECTED_FUNCTION(void, SetCommonValue, Component*);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);

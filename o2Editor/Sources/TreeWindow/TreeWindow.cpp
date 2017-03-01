@@ -7,6 +7,7 @@
 #include "Core/Actions/LockAction.h"
 #include "Core/Actions/ReparentActors.h"
 #include "Core/EditorApplication.h"
+#include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Actor.h"
 #include "Scene/Components/EditorTestComponent.h"
 #include "Scene/Components/ImageComponent.h"
@@ -134,19 +135,19 @@ namespace Editor
 			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
 
 		// test actors
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			Actor* actor = mnew Actor();
 			actor->name = String::Format("Actor #%i", i + 1);
 			actor->layer = o2Scene.AddLayer(String::Format("Layer #%i", i + 1));
 
-			for (int j = 0; j < 10; j++)
+			for (int j = 0; j < 1; j++)
 			{
 				Actor* childActor = mnew Actor();
 				childActor->name = String::Format("%i Child actor #%i", i + 1, j + 1);
 				actor->AddChild(childActor);
 
-				for (int k = 0; k < 20; k++)
+				for (int k = 0; k < 1; k++)
 				{
 					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png"),
 													  mnew EditorTestComponent(),
@@ -317,6 +318,8 @@ namespace Editor
 	{
 		if (!mActorsTree->IsFocused())
 			return;
+
+		o2EditorProperties.SetTarget(nullptr);
 
 		auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
 		o2EditorSceneScreen.ClearSelectionWithoutAction();

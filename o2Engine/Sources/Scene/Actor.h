@@ -232,28 +232,31 @@ namespace o2
 		// Returns layer name
 		String GetLayerName() const;
 
+		// Searches actor in this, what linked to linkActor
+		Actor* FindLinkedActor(Actor* linkActor);
+
 		SERIALIZABLE(Actor);
 
 	protected:
 		ActorAssetRef mPrototype;               // Prototype asset
 		Actor*        mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
-					  						    
+
 		UInt64        mId;                      // Unique actor id
 		String        mName;                    // Name of actor
-					  				            
+
 		Actor*        mParent = nullptr;        // Parent actor
 		ActorsVec     mChilds;                  // Children actors 
 		ComponentsVec mComponents;              // Components vector 
 		Scene::Layer* mLayer = nullptr;         // Scene layer
-					  				            
+
 		bool          mEnabled = true;          // Is actor enabled
 		bool          mResEnabled = true;       // Is actor enabled in hierarchy
-					  				            
+
 		bool          mLocked = false;          // Is actor locked
 		bool          mResLocked = false;       // Is actor locked in hierarchy
-					  				            
+
 		bool          mIsOnScene = true;        // Is actor on scene
-					  				            
+
 		bool          mIsAsset = false;         // Is this actor cached asset
 		UID           mAssetId;                 // Source asset id
 
@@ -264,6 +267,21 @@ namespace o2
 		// Calls when transformation was changed
 		void OnTransformChanged();
 
+		struct ApplyActorInfo
+		{
+			Actor*    actor;
+			Actor*    matchingChild;
+			ActorsVec allChildren;
+
+			Vector<Actor**>     actorPointersFields;
+			Vector<Component**> componentPointersFields;
+
+			Dictionary<const Actor*, Actor*>         actorsMap;
+			Dictionary<const Component*, Component*> componentsMap;
+
+			bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
+		};
+
 		// Processes copying actor
 		void ProcessCopying(Actor* dest, const Actor* source,
 							Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
@@ -271,7 +289,20 @@ namespace o2
 							Dictionary<const Component*, Component*>& componentsMap,
 							bool isSourcePrototype);
 
-		// Fixes actors and components pointers by actors map
+		// Collects fixing actors and components pointers in new component
+		void CollectFixingFields(Component* newComponent, Vector<Component**>& componentsPointers, 
+								 Vector<Actor**>& actorsPointers);
+
+		// Collects component field, except Component class fields
+		void GetComponentFields(Component* component, Vector<FieldInfo*>& fields);
+
+		// Processes reverting actor
+		void ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
+							  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
+							  Dictionary<const Actor*, Actor*>& actorsMap,
+							  Dictionary<const Component*, Component*>& componentsMap);
+
+	    // Fixes actors and components pointers by actors map
 		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
 										const Vector<Component**>& componentsPointers,
 										const Dictionary<const Actor*, Actor*>& actorsMap,
@@ -330,6 +361,12 @@ namespace o2
 
 		// Calls when parent changed
 		void OnParentChanged(Actor* oldParent);
+
+		// Separates children actors to linear array, removes child and parent links
+		void SeparateActors(Vector<Actor*>& separatedActors);
+
+		// Returns all children actors with their children
+		void GetAllChildrenActors(Vector<Actor*>& actors);
 
 		// Initializes properties
 		void InitializeProperties();

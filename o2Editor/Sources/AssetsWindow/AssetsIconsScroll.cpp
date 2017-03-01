@@ -891,6 +891,11 @@ namespace Editor
 		if (!IsFocused())
 			return;
 
+		for (auto asset : mSelectedPreloadedAssets)
+			delete asset;
+
+		mSelectedPreloadedAssets.Clear();
+
 		o2EditorAssets.DeleteAssets(
 			mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().path; }));
 	}

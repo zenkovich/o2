@@ -42,6 +42,11 @@ namespace Editor
 			delete field;
 	}
 
+	void PropertiesWindow::ResetTargets()
+	{
+		SetTarget(nullptr);
+	}
+
 	void PropertiesWindow::InitializeWindow()
 	{
 		mWindow->caption = "Properties";
@@ -362,6 +367,7 @@ CLASS_META(Editor::PropertiesWindow)
 	typedef Pair<IPropertyField*, UIWidget*> _tmp4;
 	typedef Pair<IPropertyField*, UIWidget*> _tmp5;
 
+	PUBLIC_FUNCTION(void, ResetTargets);
 	PUBLIC_FUNCTION(void, SetTarget, IObject*);
 	PUBLIC_FUNCTION(void, SetTargets, const Vector<IObject*>, const Function<void()>&);
 	PUBLIC_FUNCTION(Vector<IObject*>, GetTargets);
