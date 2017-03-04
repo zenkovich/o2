@@ -2,6 +2,8 @@
 
 o2 - it's an open-source technology for easy making 2D games and applications for mobile and PC platforms using C++ and Lua with very flexible editor. The main features are performance, usability and effective development.
 
+Now work in progress.
+
 [Installation](https://github.com/zenkovich/o2/wiki/Installation)  
 [Getting started](https://github.com/zenkovich/o2/wiki/Beginning)  
 [Tutorials](https://github.com/zenkovich/o2/wiki/Tutorials)  
@@ -40,5 +42,5 @@ Multiplatform input processing, easy clicks and touches processing
 - Platforms  
 IOS, Android, Windows, MAC OSX, Webassembly
 
-- Editor
+- Editor  
 Flexible editor "all-in-one", plugins
