@@ -10,8 +10,7 @@
 namespace o2
 {
 	Sprite::Sprite():
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -24,8 +23,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(const ImageAssetRef& image):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -38,8 +36,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(const String& imagePath):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -52,8 +49,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(UID imageId):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -66,8 +62,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(TextureRef texture, const RectI& srcRect):
-		mTextureSrcRect(srcRect), mImageAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mAtlasAssetId(0), mTileScale(1.0f)
+		mTextureSrcRect(srcRect), mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(texture, 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -80,8 +75,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(const Color4& color):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -94,8 +88,7 @@ namespace o2
 	}
 
 	Sprite::Sprite(Bitmap* bitmap):
-		mImageAssetId(0), mAtlasAssetId(0), mMode(SpriteMode::Default), mFill(1.0f),
-		mMeshBuildFunc(&Sprite::BuildDefaultMesh), mTileScale(1.0f)
+		mMeshBuildFunc(&Sprite::BuildDefaultMesh)
 	{
 		mMesh = mnew Mesh(NoTexture(), 16, 18);
 		for (int i = 0; i < 4; i++)
@@ -108,10 +101,9 @@ namespace o2
 	}
 
 	Sprite::Sprite(const Sprite& other):
-		mImageAssetId(other.mImageAssetId), mTextureSrcRect(other.mTextureSrcRect),
-		IRectDrawable(other), mMesh(mnew Mesh(*other.mMesh)), mMode(other.mMode), mFill(other.mFill), mSlices(other.mSlices),
-		mMeshBuildFunc(other.mMeshBuildFunc), mAtlasAssetId(other.mAtlasAssetId), mImageName(other.mImageName),
-		mTileScale(other.mTileScale)
+		mImageAsset(other.mImageAsset), mTextureSrcRect(other.mTextureSrcRect), IRectDrawable(other), 
+		mMesh(mnew Mesh(*other.mMesh)), mMode(other.mMode), mFill(other.mFill), mSlices(other.mSlices),
+		mMeshBuildFunc(other.mMeshBuildFunc), mTileScale(other.mTileScale)
 	{
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = other.mCornersColors[i];
@@ -131,12 +123,10 @@ namespace o2
 	{
 		mMesh = mnew Mesh(*other.mMesh);
 		mTextureSrcRect = other.mTextureSrcRect;
-		mImageAssetId   = other.mImageAssetId;
-		mAtlasAssetId   = other.mAtlasAssetId;
+		mImageAsset     = other.mImageAsset;
 		mMode           = other.mMode;
 		mFill           = other.mFill;
 		mSlices         = other.mSlices;
-		mImageName      = other.mImageName;
 		mTileScale      = other.mTileScale;
 		mMeshBuildFunc  = other.mMeshBuildFunc;
 		IRectDrawable::operator=(other);
@@ -151,6 +141,7 @@ namespace o2
 
 		mMesh->Draw();
 		OnDrawn();
+
 // 		o2Render.DrawMeshWire(mMesh, Color4(255, 255, 255, 100));
 // 		o2Render.DrawBasis(mTransform);
 	}
@@ -158,7 +149,7 @@ namespace o2
 	void Sprite::SetTexture(TextureRef texture)
 	{
 		mMesh->SetTexture(texture);
-		mImageName = texture->GetFileName();
+		mImageAsset = ImageAssetRef();
 	}
 
 	TextureRef Sprite::GetTexture() const
@@ -302,11 +293,10 @@ namespace o2
 	void Sprite::LoadFromImage(const ImageAssetRef& image)
 	{
 		mMesh->mTexture = TextureRef(image->GetAtlasId(), image->GetAtlasPage());
-		mAtlasAssetId   = image->GetAtlasId();
-		mImageAssetId   = image->GetAssetId();
+		mImageAsset     = image;
 		mTextureSrcRect = image->GetAtlasRect();
 		mSlices         = image->GetMeta()->mSliceBorder;
-		mImageName      = image->GetPath();
+
 		SetMode(image->GetMeta()->mDefaultMode);
 		SetSize(mTextureSrcRect.Size());
 	}
@@ -315,47 +305,30 @@ namespace o2
 	{
 		ImageAssetRef assetRef = o2Assets.GetAssetRef(imagePath);
 		if (assetRef)
-		{
-			mMesh->mTexture = TextureRef(assetRef->GetAtlasId(), assetRef->GetAtlasPage());
-			mAtlasAssetId   = assetRef->GetAtlasId();
-			mImageAssetId   = assetRef->GetAssetId();
-			mTextureSrcRect = assetRef->GetAtlasRect();
-			mImageName      = imagePath;
-			mSlices         = assetRef->GetMeta()->mSliceBorder;
-			SetMode(assetRef->GetMeta()->mDefaultMode);
-			SetSize(mTextureSrcRect.Size());
-		}
-		else o2Debug.LogWarning("Can't load sprite from image by path (%s): image isn't exist", imagePath);
+			LoadFromImage(assetRef);
+		else 
+			o2Debug.LogWarning("Can't load sprite from image by path (%s): image isn't exist", imagePath);
 	}
 
 	void Sprite::LoadFromImage(UID imageId)
 	{
 		ImageAssetRef assetRef = o2Assets.GetAssetRef(imageId);
 		if (assetRef)
-		{
-			mMesh->mTexture = TextureRef(assetRef->GetAtlasId(), assetRef->GetAtlasPage());
-			mAtlasAssetId   = assetRef->GetAtlasId();
-			mImageAssetId   = assetRef->GetAssetId();
-			mTextureSrcRect = assetRef->GetAtlasRect();
-			mSlices         = assetRef->GetMeta()->mSliceBorder;
-			mImageName      = assetRef->GetPath();
-			SetMode(assetRef->GetMeta()->mDefaultMode);
-			SetSize(mTextureSrcRect.Size());
-		}
-		else o2Debug.LogWarning("Can't create sprite from image by id (%s): image isn't exist", imageId.ToString());
+			LoadFromImage(assetRef);
+		else 
+			o2Debug.LogWarning("Can't create sprite from image by id (%s): image isn't exist", imageId.ToString());
 	}
 
 	void Sprite::LoadMonoColor(const Color4& color)
 	{
-		mImageAssetId = 0;
-		mAtlasAssetId = 0;
+		mImageAsset = ImageAssetRef();
 		mMesh->mTexture = TextureRef();
 		mColor = color;
 		mCornersColors[0] = Color4::White();
 		mCornersColors[1] = Color4::White();
 		mCornersColors[2] = Color4::White();
 		mCornersColors[3] = Color4::White();
-		mImageName = "";
+
 		UpdateMesh();
 	}
 
@@ -363,24 +336,39 @@ namespace o2
 	{
 		if (bitmap)
 		{
-			mImageAssetId = 0;
-			mAtlasAssetId = 0;
+			mImageAsset = ImageAssetRef();
 			mMesh->mTexture = TextureRef(bitmap);
 			mTextureSrcRect.Set(Vec2F(), mMesh->mTexture->GetSize());
-			mImageName = "";
+
 			SetSize(mMesh->mTexture->GetSize());
 		}
 		else o2Debug.LogWarningStr("Can't create sprite from bitmap: bitmap is null");
 	}
 
-	UID Sprite::GetImageId() const
+	void Sprite::SetImageAsset(const ImageAssetRef& asset)
 	{
-		return mImageAssetId;
+		LoadFromImage(asset);
+	}
+
+	ImageAssetRef Sprite::GetImageAsset() const
+	{
+		return mImageAsset;
+	}
+
+	String Sprite::GetImageName() const
+	{
+		if (mImageAsset)
+			return mImageAsset->GetPath();
+
+		return String();
 	}
 
 	UID Sprite::GetAtlasAssetId() const
 	{
-		return mAtlasAssetId;
+		if (mImageAsset)
+			return mImageAsset->GetAtlasId();
+
+		return 0;
 	}
 
 	void Sprite::NormalizeSize()
@@ -1045,9 +1033,7 @@ namespace o2
 
 	void Sprite::OnSerialize(DataNode& node) const
 	{
-		if (mImageAssetId != 0)
-			node["mImageAssetId"] = mImageAssetId;
-		else
+		if (!mImageAsset)
 		{
 			node["mTextureSrcRect"] = mTextureSrcRect;
 
@@ -1060,9 +1046,13 @@ namespace o2
 
 	void Sprite::OnDeserialized(const DataNode& node)
 	{
-		auto imageAssedIdNode = node.GetNode("mImageAssetId");
-
-		if (!imageAssedIdNode)
+		if (mImageAsset)
+		{
+			mMesh->mTexture = TextureRef(mImageAsset->GetAtlasId(), mImageAsset->GetAtlasPage());
+			mImageAsset     = image;
+			mTextureSrcRect = mImageAsset->GetAtlasRect();
+		}
+		else
 		{
 			if (auto textureFileNameNode = node.GetNode("textureFileName"))
 				mMesh->SetTexture(TextureRef((String)*textureFileNameNode));
@@ -1072,11 +1062,6 @@ namespace o2
 			if (auto textureSrcRectNode = node.GetNode("mTextureSrcRect"))
 				mTextureSrcRect = *textureSrcRectNode;
 		}
-		else
-		{
-			mImageAssetId = (UID)*imageAssedIdNode;
-			LoadFromImage(mImageAssetId);
-		}
 
 		SpriteMode mode = mMode;
 		mMode = (SpriteMode)((int)mode + 1);
@@ -1085,19 +1070,14 @@ namespace o2
 
 	void Sprite::ReloadImage()
 	{
-		if (mImageAssetId != 0)
+		if (mImageAsset)
 		{
-			ImageAssetRef image(mImageAssetId);
+			UID id = mImageAsset->GetAssetId();
+			mImageAsset = ImageAssetRef(id);
 
-			if (image)
-			{
-				mMesh->mTexture = TextureRef(image->GetAtlasId(), image->GetAtlasPage());
-				mAtlasAssetId   = image->GetAtlasId();
-				mImageAssetId   = image->GetAssetId();
-				mTextureSrcRect = image->GetAtlasRect();
-				mSlices         = image->GetMeta()->mSliceBorder;
-				mImageName      = image->GetPath();
-			}
+			mMesh->mTexture = TextureRef(mImageAsset->GetAtlasId(), mImageAsset->GetAtlasPage());
+			mTextureSrcRect = mImageAsset->GetAtlasRect();
+			mSlices         = mImageAsset->GetMeta()->mSliceBorder;
 
 			UpdateMesh();
 		}
@@ -1107,9 +1087,8 @@ namespace o2
 	{
 		INITIALIZE_PROPERTY(Sprite, texture, SetTexture, GetTexture);
 		INITIALIZE_PROPERTY(Sprite, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);
-		INITIALIZE_PROPERTY(Sprite, imageAssetId, LoadFromImage, GetImageId);
-		INITIALIZE_SETTER(Sprite, imageAssetPath, LoadFromImage);
-		INITIALIZE_SETTER(Sprite, imageAsset, LoadFromImage);
+		INITIALIZE_PROPERTY(Sprite, image, SetImageAsset, GetImageAsset);
+		INITIALIZE_PROPERTY(Sprite, imageName, LoadFromImage, GetImageName);
 		INITIALIZE_SETTER(Sprite, bitmap, LoadFromBitmap);
 		INITIALIZE_PROPERTY(Sprite, leftTopColor, SetLeftTopColor, GetLeftTopCorner);
 		INITIALIZE_PROPERTY(Sprite, rightTopColor, SetRightTopColor, GetRightTopCorner);
@@ -1128,9 +1107,8 @@ CLASS_META(o2::Sprite)
 
 	PUBLIC_FIELD(texture);
 	PUBLIC_FIELD(textureSrcRect);
-	PUBLIC_FIELD(imageAssetId);
-	PUBLIC_FIELD(imageAssetPath);
-	PUBLIC_FIELD(imageAsset);
+	PUBLIC_FIELD(image);
+	PUBLIC_FIELD(imageName);
 	PUBLIC_FIELD(bitmap);
 	PUBLIC_FIELD(leftTopColor);
 	PUBLIC_FIELD(rightTopColor);
@@ -1142,9 +1120,7 @@ CLASS_META(o2::Sprite)
 	PUBLIC_FIELD(sliceBorder);
 	PROTECTED_FIELD(mTextureSrcRect);
 	PROTECTED_FIELD(mCornersColors);
-	PROTECTED_FIELD(mImageAssetId);
-	PROTECTED_FIELD(mAtlasAssetId);
-	PROTECTED_FIELD(mImageName);
+	PROTECTED_FIELD(mImageAsset).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMode).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSlices).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mFill).SERIALIZABLE_ATTRIBUTE();
@@ -1181,12 +1157,16 @@ CLASS_META(o2::Sprite)
 	PUBLIC_FUNCTION(void, LoadFromImage, UID);
 	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
 	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*);
-	PUBLIC_FUNCTION(UID, GetImageId);
+	PUBLIC_FUNCTION(void, SetImageAsset, const ImageAssetRef&);
+	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
+	PUBLIC_FUNCTION(String, GetImageName);
 	PUBLIC_FUNCTION(UID, GetAtlasAssetId);
 	PUBLIC_FUNCTION(void, NormalizeSize);
 	PUBLIC_FUNCTION(void, NormalizeAspectByWidth);
 	PUBLIC_FUNCTION(void, NormalizeAspectByHeight);
 	PUBLIC_FUNCTION(void, NormalizeAspect);
+	PUBLIC_FUNCTION(void, OnSerialize, DataNode&);
+	PUBLIC_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, BasisChanged);
 	PROTECTED_FUNCTION(void, ColorChanged);
 	PROTECTED_FUNCTION(void, UpdateMesh);
@@ -1199,8 +1179,6 @@ CLASS_META(o2::Sprite)
 	PROTECTED_FUNCTION(void, BuildFillDownToUpMesh);
 	PROTECTED_FUNCTION(void, BuildFill360CWMesh);
 	PROTECTED_FUNCTION(void, BuildFill360CCWMesh);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, ReloadImage);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }

@@ -487,7 +487,8 @@ namespace Editor
 		if (mEnabledTool)
 			mEnabledTool->OnActorsSelectionChanged(mSelectedActors);
 
-		if (mSelectedActors != prevSelectedActors)
+		if (mSelectedActors != prevSelectedActors || 
+			mSelectedActors.Cast<IObject*>() != o2EditorProperties.GetTargets())
 		{
 			auto selectionAction = mnew SelectionAction(mSelectedActors, prevSelectedActors);
 			o2EditorApplication.DoneAction(selectionAction);

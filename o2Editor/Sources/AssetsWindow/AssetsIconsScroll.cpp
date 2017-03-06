@@ -389,12 +389,16 @@ namespace Editor
 
 			if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
 			{
-				targets = mSelectedPreloadedAssets.Select<IObject*>([](AssetRef* x) { 
+				targets = mSelectedPreloadedAssets.Select<IObject*>([](AssetRef* x) {
 					ActorAssetRef asset(*x); return asset->GetActor(); });
 			}
-			else targets = mSelectedPreloadedAssets.Cast<IObject*>();
+			else if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
+				targets.Clear();
+			else 
+				targets = mSelectedPreloadedAssets.Cast<IObject*>();
 
-			o2EditorProperties.SetTargets(targets, Function<void()>(this, &UIAssetsIconsScrollArea::CheckPreloadedAssetsSaving));
+			if (!targets.IsEmpty())
+				o2EditorProperties.SetTargets(targets, Function<void()>(this, &UIAssetsIconsScrollArea::CheckPreloadedAssetsSaving));
 
 			mChangePropertiesTargetsFromThis = false;
 		}
@@ -562,8 +566,7 @@ namespace Editor
 		Vector<String> newAssets;
 		for (auto actor : actorsTree->GetSelectedActors())
 		{
-			ActorAssetRef newAsset = ActorAssetRef::CreateAsset();
-			*newAsset->GetActor() = *actor;
+			ActorAssetRef newAsset = actor->MakePrototype();
 			String path = destPath.IsEmpty() ? newAsset->GetActor()->name + ".prefab" : destPath + "/" + 
 				          newAsset->GetActor()->name + ".prefab";
 
@@ -766,7 +769,7 @@ namespace Editor
 												 Vec2F(0, 10));
 		}
 
-		previewSprite->imageAsset = previewSpriteAsset;
+		previewSprite->image = previewSpriteAsset;
 		previewSprite->mode = SpriteMode::Default;
 
 		return assetIcon;

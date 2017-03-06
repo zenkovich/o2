@@ -760,7 +760,7 @@ namespace o2
 		{
 			auto contextItem = (UIContextMenuItem*)item;
 			if (auto iconLayer = contextItem->GetLayerDrawable<Sprite>("icon"))
-				res.icon = ImageAssetRef(iconLayer->imageAssetId);
+				res.icon = iconLayer->GetImageAsset();
 
 			if (auto textLayer = contextItem->GetLayerDrawable<Text>("caption"))
 				res.text = textLayer->text;

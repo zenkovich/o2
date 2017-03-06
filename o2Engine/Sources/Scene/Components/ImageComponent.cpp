@@ -198,6 +198,7 @@ namespace o2
 	void ImageComponent::LoadFromImage(const ImageAssetRef& image)
 	{
 		mSprite.LoadFromImage(image);
+		OnTransformChanged();
 	}
 
 	void ImageComponent::LoadFromImage(const String& imagePath)
@@ -220,14 +221,9 @@ namespace o2
 		mSprite.LoadFromBitmap(bitmap);
 	}
 
-	UID ImageComponent::GetImageId() const
-	{
-		return mSprite.GetImageId();
-	}
-
 	ImageAssetRef ImageComponent::GetImageAsset() const
 	{
-		return ImageAssetRef(mSprite.GetImageId());
+		return mSprite.GetImageAsset();
 	}
 
 	void ImageComponent::NormalizeSize()
@@ -268,11 +264,15 @@ namespace o2
 		DrawableComponent::SetOwnerActor(actor);
 	}
 
+	void ImageComponent::OnDeserialized(const DataNode& node)
+	{
+		mSprite.OnDeserialized(node);
+	}
+
 	void ImageComponent::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(ImageComponent, texture, SetTexture, GetTexture);
 		INITIALIZE_PROPERTY(ImageComponent, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);
-		INITIALIZE_PROPERTY(ImageComponent, imageAssetId, LoadFromImage, GetImageId);
 		INITIALIZE_SETTER(ImageComponent, imageAssetPath, LoadFromImage);
 		INITIALIZE_PROPERTY(ImageComponent, imageAsset, LoadFromImage, GetImageAsset);
 		INITIALIZE_SETTER(ImageComponent, bitmap, LoadFromBitmap);
@@ -339,7 +339,6 @@ CLASS_META(o2::ImageComponent)
 	PUBLIC_FUNCTION(void, LoadFromImage, UID);
 	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
 	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*);
-	PUBLIC_FUNCTION(UID, GetImageId);
 	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
 	PUBLIC_FUNCTION(void, NormalizeSize);
 	PUBLIC_FUNCTION(void, NormalizeAspectByWidth);
@@ -348,6 +347,7 @@ CLASS_META(o2::ImageComponent)
 	PUBLIC_FUNCTION(String, GetName);
 	PROTECTED_FUNCTION(void, OnTransformChanged);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

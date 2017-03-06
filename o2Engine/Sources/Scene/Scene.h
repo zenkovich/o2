@@ -92,7 +92,7 @@ namespace o2
 #endif
 
 		// Returns layer by name
-		Layer* GetLayer(const String& name) const;
+		Layer* GetLayer(const String& name);
 
 		// Returns default layer
 		Layer* GetDefaultLayer() const;

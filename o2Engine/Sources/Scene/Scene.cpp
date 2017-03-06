@@ -40,9 +40,12 @@ namespace o2
 		}
 	}
 
-	Scene::Layer* Scene::GetLayer(const String& name) const
+	Scene::Layer* Scene::GetLayer(const String& name)
 	{
-		return mLayers.FindMatch([&](auto x) { return x->name == name; });
+		if (auto layer = mLayers.FindMatch([&](auto x) { return x->name == name; }))
+			return layer;
+
+		return AddLayer(name);
 	}
 
 	Scene::Layer* Scene::GetDefaultLayer() const
@@ -52,8 +55,8 @@ namespace o2
 
 	Scene::Layer* Scene::AddLayer(const String& name)
 	{
-		if (GetLayer(name))
-			return AddLayer(name + "_");
+		if (auto layer = mLayers.FindMatch([&](auto x) { return x->name == name; }))
+			return layer;
 
 		Layer* newLayer = mnew Layer();
 		newLayer->name = name;
@@ -308,25 +311,28 @@ namespace o2
 
 		actorsDefs.Sort([](auto& a, auto& b) { return a.idx < b.idx; });
 
+		for (auto def : actorsDefs)
+			def.actor->IncludeInScene();
+
 		if (newParent)
 		{
 			int insertIdx = newParent->GetChilds().Find(prevActor) + 1;
 
 			for (auto def : actorsDefs)
+			{
 				newParent->AddChild(def.actor, insertIdx++);
+				def.actor->transform.SetWorldNonSizedBasis(def.transform);
+			}
 		}
 		else
 		{
 			int insertIdx = o2Scene.GetRootActors().Find(prevActor) + 1;
 
 			for (auto def : actorsDefs)
+			{
 				def.actor->SetPositionIndexInParent(insertIdx++);
-		}
-
-		for (auto def : actorsDefs)
-		{
-			def.actor->IncludeInScene();
-			def.actor->transform.SetWorldNonSizedBasis(def.transform);
+				def.actor->transform.SetWorldNonSizedBasis(def.transform);
+			}
 		}
 
 		if (newParent)
@@ -360,7 +366,7 @@ namespace o2
 	{
 		mDrawables.Add(component);
 
-		if (component->mResEnabled)
+		if (component->mResEnabled && component->mOwner && component->mOwner->mIsOnScene)
 			ComponentEnabled(component);
 	}
 

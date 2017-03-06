@@ -89,6 +89,9 @@ namespace o2
 		// Reverts all properties to prototype
 		void RevertToPrototype();
 
+		// Makes prototype asset from this actor and links this to new asset
+		ActorAssetRef MakePrototype();
+
 		// Returns prototype link pointer
 		Actor* GetPrototypeLink() const;
 
@@ -267,47 +270,6 @@ namespace o2
 		// Calls when transformation was changed
 		void OnTransformChanged();
 
-		struct ApplyActorInfo
-		{
-			Actor*    actor;
-			Actor*    matchingChild;
-			ActorsVec allChildren;
-
-			Vector<Actor**>     actorPointersFields;
-			Vector<Component**> componentPointersFields;
-
-			Dictionary<const Actor*, Actor*>         actorsMap;
-			Dictionary<const Component*, Component*> componentsMap;
-
-			bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
-		};
-
-		// Processes copying actor
-		void ProcessCopying(Actor* dest, const Actor* source,
-							Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
-							Dictionary<const Actor*, Actor*>& actorsMap,
-							Dictionary<const Component*, Component*>& componentsMap,
-							bool isSourcePrototype);
-
-		// Collects fixing actors and components pointers in new component
-		void CollectFixingFields(Component* newComponent, Vector<Component**>& componentsPointers, 
-								 Vector<Actor**>& actorsPointers);
-
-		// Collects component field, except Component class fields
-		void GetComponentFields(Component* component, Vector<FieldInfo*>& fields);
-
-		// Processes reverting actor
-		void ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
-							  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
-							  Dictionary<const Actor*, Actor*>& actorsMap,
-							  Dictionary<const Component*, Component*>& componentsMap);
-
-	    // Fixes actors and components pointers by actors map
-		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
-										const Vector<Component**>& componentsPointers,
-										const Dictionary<const Actor*, Actor*>& actorsMap,
-										const Dictionary<const Component*, Component*>& componentsMap);
-
 		// Sets parent
 		void SetParentProp(Actor* actor);
 
@@ -370,6 +332,73 @@ namespace o2
 
 		// Initializes properties
 		void InitializeProperties();
+
+		// -----------------------------
+		// Actor prototype applying info
+		// -----------------------------
+		struct ApplyActorInfo
+		{
+			Actor*    actor;
+			Actor*    matchingChild;
+			ActorsVec allChildren;
+
+			Vector<Actor**>     actorPointersFields;
+			Vector<Component**> componentPointersFields;
+
+			Dictionary<const Actor*, Actor*>         actorsMap;
+			Dictionary<const Component*, Component*> componentsMap;
+
+			bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
+		};
+
+		// Processes copying actor
+		void ProcessCopying(Actor* dest, const Actor* source,
+							Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
+							Dictionary<const Actor*, Actor*>& actorsMap,
+							Dictionary<const Component*, Component*>& componentsMap,
+							bool isSourcePrototype);
+
+		// Processes making prototype
+		void ProcessPrototypeMaking(Actor* dest, Actor* source,
+									Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
+									Dictionary<const Actor*, Actor*>& actorsMap,
+									Dictionary<const Component*, Component*>& componentsMap);
+
+		// Copies fields from source to dest
+		void CopyFields(Vector<FieldInfo*>& fields, IObject* source, IObject* dest,
+						Vector<Actor**>& actorsPointers,
+						Vector<Component**>& componentsPointers,
+						Vector<ISerializable*>& serializableObjects);
+
+		// Copies changed field from source to dest
+		void CopyChangedFields(Vector<FieldInfo*>& fields,
+							   IObject* source, IObject* changed, IObject* dest,
+							   Vector<Actor**>& actorsPointers,
+							   Vector<Component**>& componentsPointers,
+							   Vector<ISerializable*>& serializableObjects);
+
+		// Applies basic actor fields and transform from source to dest  
+		void CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds);
+
+		// Collects fixing actors and components pointers in new component
+		void CollectFixingFields(Component* newComponent, Vector<Component**>& componentsPointers,
+								 Vector<Actor**>& actorsPointers);
+
+		// Collects component field, except Component class fields
+		void GetComponentFields(Component* component, Vector<FieldInfo*>& fields);
+
+		// Processes reverting actor
+		void ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
+							  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
+							  Dictionary<const Actor*, Actor*>& actorsMap,
+							  Dictionary<const Component*, Component*>& componentsMap,
+							  Vector<ISerializable*>& serializableObjects);
+
+	   // Fixes actors and components pointers by actors map
+		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
+										const Vector<Component**>& componentsPointers,
+										const Dictionary<const Actor*, Actor*>& actorsMap,
+										const Dictionary<const Component*, Component*>& componentsMap);
 
 		friend class ActorAsset;
 		friend class ActorDataNodeConverter;

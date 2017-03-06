@@ -106,8 +106,6 @@ namespace o2
 
 			cached = mnew AssetCache();
 			cached->asset = asset;
-			cached->path = path;
-			cached->id = asset->GetAssetId();
 			cached->referencesCount = 0;
 
 			mCachedAssets.Add(cached);
@@ -131,8 +129,6 @@ namespace o2
 
 			cached = mnew AssetCache();
 			cached->asset = asset;
-			cached->path = asset->GetPath();
-			cached->id = id;
 			cached->referencesCount = 0;
 
 			mCachedAssets.Add(cached);
@@ -432,7 +428,7 @@ namespace o2
 	Assets::AssetCache* Assets::FindAssetCache(const String& path)
 	{
 		for (auto cache : mCachedAssets)
-			if (cache->path == path)
+			if (cache->asset->mPath == path)
 				return cache;
 
 		return nullptr;
@@ -441,7 +437,7 @@ namespace o2
 	Assets::AssetCache* Assets::FindAssetCache(UID id)
 	{
 		for (auto cache : mCachedAssets)
-			if (cache->id == id)
+			if (cache->asset->IdRef() == id)
 				return cache;
 
 		return nullptr;

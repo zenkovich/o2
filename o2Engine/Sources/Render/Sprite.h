@@ -16,20 +16,19 @@ namespace o2
 	class Sprite: public IRectDrawable
 	{
 	public:
-		Property<TextureRef>  texture;          // Texture property
-		Property<RectI>       textureSrcRect;   // Texture source rectangle property
-		Property<UID>         imageAssetId;     // Image asset id property
-		Setter<String>        imageAssetPath;   // Sets image asset from path
-		Setter<ImageAssetRef> imageAsset;       // Sets image asset
-		Setter<Bitmap*>       bitmap;           // Sets image from bitmap
-		Property<Color4>      leftTopColor;	    // Color of left top corner property
-		Property<Color4>      rightTopColor;    // Color of right top corner property
-		Property<Color4>      leftBottomColor;  // Color of left bottom corner property
-		Property<Color4>      rightBottomColor; // Color of right bottom corner property
-		Property<SpriteMode>  mode;             // Sprite drawing mode property
-		Property<float>       fill;             // Sprite fill property
-		Property<float>       tileScale;        // Sprite tile scale property, 1.0f is default
-		Property<BorderI>     sliceBorder;      // Slice border property
+		Property<TextureRef>    texture;          // Texture property
+		Property<RectI>         textureSrcRect;   // Texture source rectangle property
+		Property<ImageAssetRef> image;            // Sets image asset
+		Property<String>        imageName;        // Sets image asset path
+		Setter<Bitmap*>         bitmap;           // Sets image from bitmap
+		Property<Color4>        leftTopColor;	  // Color of left top corner property
+		Property<Color4>        rightTopColor;    // Color of right top corner property
+		Property<Color4>        leftBottomColor;  // Color of left bottom corner property
+		Property<Color4>        rightBottomColor; // Color of right bottom corner property
+		Property<SpriteMode>    mode;             // Sprite drawing mode property
+		Property<float>         fill;             // Sprite fill property
+		Property<float>         tileScale;        // Sprite tile scale property, 1.0f is default
+		Property<BorderI>       sliceBorder;      // Slice border property
 
 		// Default constructor
 		Sprite();
@@ -148,8 +147,14 @@ namespace o2
 		// Loads sprite from bitmap
 		void LoadFromBitmap(Bitmap* bitmap);
 
-		// Returns image asset id (returns 0 when asset id is unknown)
-		UID GetImageId() const;
+		// Sets asset
+		void SetImageAsset(const ImageAssetRef& asset);
+
+		// Returns asset
+		ImageAssetRef GetImageAsset() const;
+
+		// Returns image asset name
+		String GetImageName() const;
 
 		// Returns atlas asset id (returns 0 when sprite is not from atlas)
 		UID GetAtlasAssetId() const;
@@ -166,19 +171,23 @@ namespace o2
 		// Sets size with equal aspect as texture source rectangle by nearest value
 		void NormalizeAspect();
 
+		// Calling when serializing
+		void OnSerialize(DataNode& node) const;
+
+		// Calling when deserializing
+		void OnDeserialized(const DataNode& node);
+
 		SERIALIZABLE(Sprite);
 
 	protected:
-		RectI      mTextureSrcRect;   // Texture source rectangle
-		Color4     mCornersColors[4]; // Corners colors
-		UID        mImageAssetId;     // Image asset id (0 by default)
-		UID        mAtlasAssetId;     // Atlas asset id (0 by default)
-		String     mImageName;        // Image name
-		SpriteMode mMode;             // Drawing mode @SERIALIZABLE
-		BorderI    mSlices;           // Slice borders @SERIALIZABLE
-		float      mFill;             // Sprite fillness @SERIALIZABLE
-		float      mTileScale;        // Scale of tiles in tiled mode. 1.0f is default and equals to default image size @SERIALIZABLE
-		Mesh*      mMesh;             // Drawing mesh
+		RectI         mTextureSrcRect;             // Texture source rectangle
+		Color4        mCornersColors[4];           // Corners colors
+		ImageAssetRef mImageAsset;                 // Image asset @SERIALIZABLE
+		SpriteMode    mMode = SpriteMode::Default; // Drawing mode @SERIALIZABLE
+		BorderI       mSlices;                     // Slice borders @SERIALIZABLE
+		float         mFill = 1;                   // Sprite fillness @SERIALIZABLE
+		float         mTileScale = 1;              // Scale of tiles in tiled mode. 1.0f is default and equals to default image size @SERIALIZABLE
+		Mesh*         mMesh;                       // Drawing mesh
 
 		void(Sprite::*mMeshBuildFunc)(); // Mesh building function pointer (by mode)
 
@@ -218,12 +227,6 @@ namespace o2
 
 		// Builds mesh for fill 360 counter clock wise mode
 		void BuildFill360CCWMesh();
-
-		// Calling when serializing
-		void OnSerialize(DataNode& node) const;
-
-		// Calling when deserializing
-		void OnDeserialized(const DataNode& node);
 
 		// Calls when assets was rebuilded
 		void ReloadImage();
