@@ -190,8 +190,11 @@ namespace o2
 		// Calls when created actor with prototype, updates cache
 		void OnActorWithPrototypeCreated(Actor* actor);
 
+		// Calls when some actor created and linked to prototype, updates linked actors cache
+		void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
+
 		// Calls when actor destroying or prototype link broken, updates cache
-		void OnActorPrototypeBreaked(ActorAssetRef& assetRef, Actor* actor);
+		void OnActorPrototypeBreaked(Actor* actor);
 #endif       
 
 	protected:

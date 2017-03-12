@@ -77,8 +77,11 @@ namespace o2
 		// Updates childs
 		void UpdateChilds(float dt);
 
-		// Returns prototype
+		// Returns prototype from this or this parent
 		ActorAssetRef GetPrototype() const;
+
+		// Returns prototype directly from only this
+		ActorAssetRef GetPrototypeDirectly() const;
 
 		// Breaks link to prototype, sets actor as actor without prototype
 		void BreakPrototypeLink();
@@ -273,6 +276,9 @@ namespace o2
 		// Sets parent
 		void SetParentProp(Actor* actor);
 
+		// Sets prototype and links actor to them
+		void SetPrototype(ActorAssetRef asset);
+
 		// Updates enabling
 		void UpdateEnabled();
 
@@ -378,7 +384,7 @@ namespace o2
 							   Vector<ISerializable*>& serializableObjects);
 
 		// Applies basic actor fields and transform from source to dest  
-		void CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds);
+		void CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds, bool withTransform);
 
 		// Collects fixing actors and components pointers in new component
 		void CollectFixingFields(Component* newComponent, Vector<Component**>& componentsPointers,

@@ -37,16 +37,13 @@ namespace o2
 
 	Actor::Actor(const Actor& other):
 		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mLocked(other.mLocked),
-		mResLocked(other.mResLocked), Animatable(other), transform(other.transform), mLayer(other.mLayer), 
+		mResLocked(other.mResLocked), Animatable(other), transform(other.transform), mLayer(other.mLayer),
 		mId(Math::Random()), mAssetId(other.mAssetId), mIsOnScene(true)
 	{
 		transform.SetOwner(this);
 
 		if (other.mIsAsset)
-		{
-			mPrototype = ActorAssetRef(other.mAssetId);
-			mPrototypeLink = mPrototype->GetActor();
-		}
+			SetPrototype(ActorAssetRef(other.GetAssetId()));
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
@@ -65,9 +62,6 @@ namespace o2
 		{
 			o2Scene.mRootActors.Add(this);
 			o2Scene.mAllActors.Add(this);
-
-			if (mPrototype)
-				o2Scene.OnActorWithPrototypeCreated(this);
 		}
 
 		ActorDataNodeConverter::ActorCreated(this);
@@ -84,16 +78,12 @@ namespace o2
 		mName(prototype->GetActor()->mName), mEnabled(prototype->GetActor()->mEnabled),
 		mResEnabled(prototype->GetActor()->mEnabled), mLocked(prototype->GetActor()->mLocked),
 		mResLocked(prototype->GetActor()->mResLocked), Animatable(*prototype->GetActor()),
-		transform(prototype->GetActor()->transform), mLayer(prototype->GetActor()->mLayer), mId(Math::Random()), 
+		transform(prototype->GetActor()->transform), mLayer(prototype->GetActor()->mLayer), mId(Math::Random()),
 		mAssetId(), mIsOnScene(mode == CreateMode::InScene)
 	{
 		transform.SetOwner(this);
 
-		if (prototype->GetActor()->mIsAsset)
-		{
-			mPrototype = ActorAssetRef(prototype->GetActor()->mAssetId);
-			mPrototypeLink = mPrototype->GetActor();
-		}
+		SetPrototype(prototype);
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
@@ -108,17 +98,11 @@ namespace o2
 
 		InitializeProperties();
 
-		if (Scene::IsSingletonInitialzed())
+		if (Scene::IsSingletonInitialzed() && mode == CreateMode::InScene)
 		{
-			if (mode == CreateMode::InScene)
-			{
-				o2Scene.mRootActors.Add(this);
-				o2Scene.mAllActors.Add(this);
-				o2Scene.onActorCreated(this);
-			}
-
-			if (mPrototype)
-				o2Scene.OnActorWithPrototypeCreated(this);
+			o2Scene.mRootActors.Add(this);
+			o2Scene.mAllActors.Add(this);
+			o2Scene.onActorCreated(this);
 		}
 
 		ActorDataNodeConverter::ActorCreated(this);
@@ -142,8 +126,7 @@ namespace o2
 				o2Scene.mAllActors.Remove(this);
 			}
 
-			if (mPrototype)
-				o2Scene.OnActorPrototypeBreaked(mPrototype, this);
+			o2Scene.OnActorPrototypeBreaked(this);
 		}
 
 		RemoveAllChilds();
@@ -165,16 +148,7 @@ namespace o2
 		RemoveAllChilds();
 		RemoveAllComponents();
 
-		if (other.mPrototype)
-		{
-			mPrototype = other.mPrototype;
-			mPrototypeLink = mPrototype->GetActor();
-		}
-		else
-		{
-			mPrototype = ActorAssetRef();
-			mPrototypeLink = nullptr;
-		}
+		SetPrototype(other.mPrototype);
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
@@ -221,13 +195,19 @@ namespace o2
 		return ActorAssetRef();
 	}
 
+	ActorAssetRef Actor::GetPrototypeDirectly() const
+	{
+		return mPrototype;
+	}
+
 	void Actor::BreakPrototypeLink()
 	{
 		if (!mPrototype && !mPrototypeLink)
 			return;
 
-		mPrototype = ActorAssetRef();
-		mPrototypeLink = nullptr;
+		SetPrototype(ActorAssetRef());
+
+		// remove from cache
 
 		for (auto child : mChilds)
 			child->BreakPrototypeLink();
@@ -286,9 +266,6 @@ namespace o2
 		prototype->RemoveAllChilds();
 		prototype->RemoveAllComponents();
 
-		mPrototype = prototypeAsset;
-		mPrototypeLink = prototype;
-
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
 		Dictionary<const Actor*, Actor*> actorsMap;
@@ -297,12 +274,11 @@ namespace o2
 		ProcessPrototypeMaking(prototype, this, actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
+		SetPrototype(prototypeAsset);
+
 		prototype->UpdateEnabled();
 		prototype->transform.UpdateTransform();
 		prototype->OnChanged();
-
-		o2Scene.mPrototypeLinksCache.Add(prototypeAsset, ActorsVec());
-		o2Scene.mPrototypeLinksCache[prototypeAsset].Add(this);
 
 		return prototypeAsset;
 	}
@@ -785,6 +761,24 @@ namespace o2
 		SetParent(actor, false);
 	}
 
+	void Actor::SetPrototype(ActorAssetRef asset)
+	{
+		o2Scene.OnActorPrototypeBreaked(this);
+
+		auto linkAsset = asset;
+		while (linkAsset)
+		{
+			o2Scene.OnActorLinkedToPrototype(linkAsset, this);
+			linkAsset = linkAsset->GetActor()->GetPrototype();
+		}
+
+		mPrototype = asset;
+		if (asset)
+			mPrototypeLink = asset->GetActor();
+		else
+			mPrototypeLink = nullptr;
+	}
+
 	void Actor::UpdateEnabled()
 	{
 		bool lastResEnabled = mResEnabled;
@@ -921,7 +915,8 @@ namespace o2
 		// Prototype data
 		if (mPrototype)
 			node["Prototype"] = mPrototype;
-		else
+
+		if (mPrototypeLink)
 			node["PrototypeLink"] = proto->GetID();
 
 		// Basic data
@@ -993,8 +988,7 @@ namespace o2
 
 		if (auto prototypeNode = node.GetNode("Prototype"))
 		{
-			mPrototype = *prototypeNode;
-			mPrototypeLink = mPrototype->GetActor();
+			SetPrototype(*prototypeNode);
 		}
 		else if (auto prototypeLinkNode = node.GetNode("PrototypeLink"))
 		{
@@ -1314,6 +1308,9 @@ namespace o2
 		{
 			Actor* protoChild = child->GetPrototypeLink();
 
+			if (!allProtoChildren.Contains(protoChild))
+				protoChild = nullptr;
+
 			// Modified actor
 			if (protoChild)
 			{
@@ -1323,10 +1320,31 @@ namespace o2
 				{
 					info.matchingChild = info.allChildren.FindMatch([&](Actor* x) { return x->GetPrototypeLink() == protoChild; });
 
+					if (!info.matchingChild)
+					{
+						for (auto x : info.allChildren)
+						{
+							Actor* f = x;
+							do
+							{
+								f = f->GetPrototypeLink();
+								if (f == protoChild)
+								{
+									info.matchingChild = x;
+									break;
+								}
+							}
+							while (f != nullptr);
+
+							if (info.matchingChild)
+								break;
+						}
+					}
+
 					if (info.matchingChild)
 					{
 						info.actorsMap.Add(child, info.matchingChild);
-						CopyActorChangedFields(protoChild, child, info.matchingChild, info.allChildren);
+						CopyActorChangedFields(protoChild, child, info.matchingChild, info.allChildren, info.actor != info.matchingChild);
 					}
 				}
 
@@ -1384,6 +1402,27 @@ namespace o2
 								return x->GetPrototypeLink() == protoComponent; });
 
 							if (!matchingComponent)
+							{
+								for (auto x : info.matchingChild->mComponents)
+								{
+									Component* f = x;
+									do
+									{
+										f = f->GetPrototypeLink();
+										if (f == protoComponent)
+										{
+											matchingComponent = x;
+											break;
+										}
+									}
+									while (f != nullptr);
+
+									if (matchingComponent)
+										break;
+								}
+							}
+
+							if (!matchingComponent)
 								continue;
 
 							CopyChangedFields(fields, protoComponent, component, matchingComponent,
@@ -1427,6 +1466,27 @@ namespace o2
 			actorsMap.Add(child, newProtoChild);
 
 			Actor* childParentProtoLink = child->mParent->mPrototypeLink;
+			if (!allProtoChildren.Contains(childParentProtoLink))
+			{
+				for (auto x : allProtoChildren)
+				{
+					Actor* f = x;
+					do
+					{
+						f = f->GetPrototypeLink();
+						if (f == protoChild)
+						{
+							childParentProtoLink = x;
+							break;
+						}
+					}
+					while (f != nullptr);
+
+					if (childParentProtoLink)
+						break;
+				}
+			}
+
 			newProtoChild->SetParent(childParentProtoLink);
 
 			newProtoChild->Animatable::operator=(*child);
@@ -1437,6 +1497,14 @@ namespace o2
 			newProtoChild->mAssetId = child->mAssetId;
 			newProtoChild->SetLayer(child->mLayer);
 
+			if (child->mPrototype)
+				newProtoChild->SetPrototype(child->mPrototype);
+
+			bool isChildProtoLinked = child->mPrototypeLink != nullptr;
+
+			if (isChildProtoLinked)
+				newProtoChild->mPrototypeLink = child->mPrototypeLink;
+
 			child->mPrototypeLink = newProtoChild;
 
 			// copy components
@@ -1444,7 +1512,12 @@ namespace o2
 			{
 				Component* newProtoComponent = newProtoChild->AddComponent(component->Clone());
 				componentsMap.Add(component, newProtoComponent);
-				component->mPrototypeLink = newProtoComponent;
+
+				if (isChildProtoLinked)
+					newProtoComponent->mPrototypeLink = component->mPrototypeLink;
+				else
+					component->mPrototypeLink = newProtoComponent;
+
 				CollectFixingFields(newProtoComponent, componentPointersFields, actorPointersFields);
 			}
 
@@ -1455,6 +1528,28 @@ namespace o2
 				info.actorsMap.Add(child, newChild);
 
 				Actor* newChildParent = info.allChildren.FindMatch([&](Actor* x) { return x->GetPrototypeLink() == childParentProtoLink; });
+
+				if (!newChildParent)
+				{
+					for (auto x : info.allChildren)
+					{
+						Actor* f = x;
+						do
+						{
+							f = f->GetPrototypeLink();
+							if (f == childParentProtoLink)
+							{
+								newChildParent = x;
+								break;
+							}
+						}
+						while (f != nullptr);
+
+						if (newChildParent)
+							break;
+					}
+				}
+
 				newChild->SetParent(newChildParent);
 
 				newChild->Animatable::operator=(*child);
@@ -1464,6 +1559,9 @@ namespace o2
 				newChild->transform = child->transform;
 				newChild->mAssetId = child->mAssetId;
 				newChild->SetLayer(child->mLayer);
+
+				if (child->mPrototype)
+					newChild->SetPrototype(child->mPrototype);
 
 				newChild->mPrototypeLink = newProtoChild;
 
@@ -1517,6 +1615,18 @@ namespace o2
 		dest->transform = source->transform;
 		dest->mAssetId = source->mAssetId;
 
+		if (!dest->mPrototype && source->mPrototype)
+		{
+			dest->mPrototype = source->mPrototype;
+
+			ActorAssetRef proto = source->mPrototype;
+			while (proto)
+			{
+				o2Scene.OnActorLinkedToPrototype(proto, dest);
+				proto = proto->GetActor()->GetPrototype();
+			}
+		}
+
 		if (dest->mParent && dest->mParent->mPrototypeLink)
 		{
 			if (isSourcePrototype)
@@ -1555,9 +1665,9 @@ namespace o2
 		dest->SetLayer(source->mLayer);
 	}
 
-	void Actor::ProcessPrototypeMaking(Actor* dest, Actor* source, Vector<Actor**>& actorsPointers, 
-									   Vector<Component**>& componentsPointers, 
-									   Dictionary<const Actor*, Actor*>& actorsMap, 
+	void Actor::ProcessPrototypeMaking(Actor* dest, Actor* source, Vector<Actor**>& actorsPointers,
+									   Vector<Component**>& componentsPointers,
+									   Dictionary<const Actor*, Actor*>& actorsMap,
 									   Dictionary<const Component*, Component*>& componentsMap)
 	{
 		dest->Animatable::operator=(*source);
@@ -1567,6 +1677,9 @@ namespace o2
 		dest->transform = source->transform;
 		dest->mAssetId = source->mAssetId;
 
+		dest->SetPrototype(source->mPrototype);
+
+		dest->mPrototypeLink = source->mPrototypeLink;
 		source->mPrototypeLink = dest;
 
 		actorsMap.Add(source, dest);
@@ -1583,6 +1696,7 @@ namespace o2
 		{
 			Component* newComponent = dest->AddComponent(component->Clone());
 			componentsMap.Add(component, newComponent);
+			newComponent->mPrototypeLink = component->mPrototypeLink;
 			component->mPrototypeLink = newComponent;
 			CollectFixingFields(newComponent, componentsPointers, actorsPointers);
 		}
@@ -1775,7 +1889,7 @@ namespace o2
 		}
 	}
 
-	void Actor::CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds)
+	void Actor::CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds, bool withTransform)
 	{
 		if (changed->mParent && changed->mParent->mPrototypeLink)
 		{
@@ -1800,40 +1914,43 @@ namespace o2
 			dest->SetLayer(changed->mLayer);
 
 		// transform
-		if (source->transform.mPosition != changed->transform.mPosition &&
-			dest->transform.mPosition == source->transform.mPosition)
+		if (withTransform)
 		{
-			dest->transform.mPosition = changed->transform.mPosition;
-		}
+			if (source->transform.mPosition != changed->transform.mPosition &&
+				dest->transform.mPosition == source->transform.mPosition)
+			{
+				dest->transform.mPosition = changed->transform.mPosition;
+			}
 
-		if (source->transform.mScale != changed->transform.mScale &&
-			dest->transform.mScale == source->transform.mScale)
-		{
-			dest->transform.mScale = changed->transform.mScale;
-		}
+			if (source->transform.mScale != changed->transform.mScale &&
+				dest->transform.mScale == source->transform.mScale)
+			{
+				dest->transform.mScale = changed->transform.mScale;
+			}
 
-		if (source->transform.mSize != changed->transform.mSize &&
-			dest->transform.mSize == source->transform.mSize)
-		{
-			dest->transform.mSize = changed->transform.mSize;
-		}
+			if (source->transform.mSize != changed->transform.mSize &&
+				dest->transform.mSize == source->transform.mSize)
+			{
+				dest->transform.mSize = changed->transform.mSize;
+			}
 
-		if (source->transform.mPivot != changed->transform.mPivot &&
-			dest->transform.mPivot == source->transform.mPivot)
-		{
-			dest->transform.mPivot = changed->transform.mPivot;
-		}
+			if (source->transform.mPivot != changed->transform.mPivot &&
+				dest->transform.mPivot == source->transform.mPivot)
+			{
+				dest->transform.mPivot = changed->transform.mPivot;
+			}
 
-		if (!Math::Equals(source->transform.mAngle, changed->transform.mAngle) &&
-			Math::Equals(dest->transform.mAngle, source->transform.mAngle))
-		{
-			dest->transform.mAngle = changed->transform.mAngle;
-		}
+			if (!Math::Equals(source->transform.mAngle, changed->transform.mAngle) &&
+				Math::Equals(dest->transform.mAngle, source->transform.mAngle))
+			{
+				dest->transform.mAngle = changed->transform.mAngle;
+			}
 
-		if (!Math::Equals(source->transform.mShear, changed->transform.mShear) &&
-			Math::Equals(dest->transform.mShear, source->transform.mShear))
-		{
-			dest->transform.mShear = changed->transform.mShear;
+			if (!Math::Equals(source->transform.mShear, changed->transform.mShear) &&
+				Math::Equals(dest->transform.mShear, source->transform.mShear))
+			{
+				dest->transform.mShear = changed->transform.mShear;
+			}
 		}
 	}
 
@@ -1930,7 +2047,7 @@ namespace o2
 
 		child.SetAllAccessFunc(this, &Actor::GetAllChilds);
 		component.SetAllAccessFunc(this, &Actor::GetAllComponents);
-	}
+}
 
 	DECLARE_SINGLETON(ActorDataNodeConverter);
 
@@ -2089,6 +2206,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChilds, float);
 	PUBLIC_FUNCTION(ActorAssetRef, GetPrototype);
+	PUBLIC_FUNCTION(ActorAssetRef, GetPrototypeDirectly);
 	PUBLIC_FUNCTION(void, BreakPrototypeLink);
 	PUBLIC_FUNCTION(void, ApplyChangesToPrototype);
 	PUBLIC_FUNCTION(void, RevertToPrototype);
@@ -2138,6 +2256,7 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
 	PROTECTED_FUNCTION(void, OnTransformChanged);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
+	PROTECTED_FUNCTION(void, SetPrototype, ActorAssetRef);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
 	PROTECTED_FUNCTION(void, UpdateLocking);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
@@ -2162,7 +2281,7 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, ProcessPrototypeMaking, Actor*, Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6);
 	PROTECTED_FUNCTION(void, CopyFields, Vector<FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
 	PROTECTED_FUNCTION(void, CopyChangedFields, Vector<FieldInfo*>&, IObject*, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
-	PROTECTED_FUNCTION(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&);
+	PROTECTED_FUNCTION(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
 	PROTECTED_FUNCTION(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
 	PROTECTED_FUNCTION(void, GetComponentFields, Component*, Vector<FieldInfo*>&);
 	PROTECTED_FUNCTION(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp7, _tmp8, Vector<ISerializable*>&);

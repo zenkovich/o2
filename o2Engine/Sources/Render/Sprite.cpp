@@ -292,6 +292,12 @@ namespace o2
 
 	void Sprite::LoadFromImage(const ImageAssetRef& image)
 	{
+		if (!image)
+		{
+			LoadMonoColor(Color4::White());
+			return;
+		}
+
 		mMesh->mTexture = TextureRef(image->GetAtlasId(), image->GetAtlasPage());
 		mImageAsset     = image;
 		mTextureSrcRect = image->GetAtlasRect();

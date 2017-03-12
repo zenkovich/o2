@@ -4,6 +4,7 @@
 #include "Assets/Assets.h"
 #include "Assets/FolderAsset.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
+#include "AssetsWindow/AssetsWindow.h"
 #include "AssetsWindow/UIAssetIcon.h"
 #include "Core/Actions/EnableAction.h"
 #include "Core/Actions/LockAction.h"
@@ -366,6 +367,13 @@ namespace Editor
 		}
 
 		mLinkBtn->SetVisible(actor->GetPrototype());
+		mLinkBtn->SetStateForcible("halfHide", !actor->GetPrototypeDirectly().IsValid());
+
+		if (actor->GetPrototype())
+			mLinkBtn->onClick = [=]() { 
+			auto proto = actor->GetPrototype();
+			o2EditorAssets.ShowAssetIcon(proto->GetPath());
+		};
 
 		mEnableToggle->SetValue(actor->IsEnabled());
 

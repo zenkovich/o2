@@ -304,15 +304,12 @@ namespace o2
 			def.transform = actor->transform.GetWorldNonSizedBasis();
 			def.idx = o2Scene.GetActorHierarchyIdx(def.actor);
 			actorsDefs.Add(def);
+
+			actor->SetParent(nullptr);
+			mRootActors.Remove(actor);
 		}
 
-		for (auto def : actorsDefs)
-			def.actor->ExcludeFromScene();
-
 		actorsDefs.Sort([](auto& a, auto& b) { return a.idx < b.idx; });
-
-		for (auto def : actorsDefs)
-			def.actor->IncludeInScene();
 
 		if (newParent)
 		{
@@ -326,11 +323,21 @@ namespace o2
 		}
 		else
 		{
-			int insertIdx = o2Scene.GetRootActors().Find(prevActor) + 1;
+			int insertIdx = 0;
+			
+			if (prevActor)
+			{
+				insertIdx = mRootActors.Find(prevActor);
+
+				if (insertIdx < 0)
+					insertIdx = mRootActors.Count();
+				else
+					insertIdx++;
+			}
 
 			for (auto def : actorsDefs)
 			{
-				def.actor->SetPositionIndexInParent(insertIdx++);
+				mRootActors.Insert(def.actor, insertIdx++);
 				def.actor->transform.SetWorldNonSizedBasis(def.transform);
 			}
 		}
@@ -453,18 +460,29 @@ namespace o2
 
 	void Scene::OnActorWithPrototypeCreated(Actor* actor)
 	{
-		if (!mPrototypeLinksCache.ContainsKey(actor->GetPrototype()))
-			mPrototypeLinksCache.Add(actor->GetPrototype(), ActorsVec());
-
-		mPrototypeLinksCache[actor->GetPrototype()].Add(actor);
+		OnActorLinkedToPrototype(actor->GetPrototype(), actor);
 	}
 
-	void Scene::OnActorPrototypeBreaked(ActorAssetRef& assetRef, Actor* actor)
+	void Scene::OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor)
 	{
-		mPrototypeLinksCache[assetRef].Remove(actor);
+		if (!mPrototypeLinksCache.ContainsKey(assetRef))
+			mPrototypeLinksCache.Add(assetRef, ActorsVec());
 
-		if (mPrototypeLinksCache[assetRef].IsEmpty())
-			mPrototypeLinksCache.Remove(assetRef);
+		mPrototypeLinksCache[assetRef].Add(actor);
+	}
+
+	void Scene::OnActorPrototypeBreaked(Actor* actor)
+	{
+		for (auto kv = mPrototypeLinksCache.Begin(); kv != mPrototypeLinksCache.End();)
+		{
+			kv.Value().Remove(actor);
+			if (kv.Value().IsEmpty())
+			{
+				mPrototypeLinksCache.Remove(kv.Key());
+				kv = mPrototypeLinksCache.Begin();
+			}
+			else kv++;
+		}
 	}
 
 #endif
