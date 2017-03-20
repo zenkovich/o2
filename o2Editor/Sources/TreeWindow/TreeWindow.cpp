@@ -124,9 +124,9 @@ namespace Editor
 
 			UIContextMenu::Item::Separator(),
 
-			UIContextMenu::Item("Save prefab", [&]() { OnContextCopyPressed(); }),
-			UIContextMenu::Item("Reset to prefab", [&]() { OnContextCopyPressed(); }),
-			UIContextMenu::Item("Break link to prefab", [&]() { OnContextCopyPressed(); }),
+			UIContextMenu::Item("Save prototype", [&]() { OnContextCopyPressed(); }),
+			UIContextMenu::Item("Reset to prototype", [&]() { OnContextCopyPressed(); }),
+			UIContextMenu::Item("Break link to prototype", [&]() { OnContextCopyPressed(); }),
 		});
 
 		mWindow->AddChild(mTreeContextMenu);

@@ -1257,7 +1257,7 @@ namespace Editor
 		auto iconLayer = sample->layer["icon"];
 		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_actor_icon.png");
 
-		o2UI.AddWidgetStyle(sample, "prefab");
+		o2UI.AddWidgetStyle(sample, "prototype");
 	}
 
 	void EditorUIStyleBuilder::RebuildPrefabPreviewAssetIcon()
@@ -1270,7 +1270,7 @@ namespace Editor
 		sample->AddLayer("preview", mnew Sprite(),
 						 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 20)));
 
-		o2UI.AddWidgetStyle(sample, "prefab preview");
+		o2UI.AddWidgetStyle(sample, "prototype preview");
 	}
 
 	void EditorUIStyleBuilder::RebuildImagePreviewAssetIcon()

@@ -53,6 +53,9 @@ namespace o2
 		// Returns prototype link
 		Component* GetPrototypeLink() const;
 
+		// Returns is this linked to specified component with depth links search
+		bool IsLinkedToComponent(Component* component) const;
+
 		// Returns owner actor
 		Actor* GetOwnerActor() const;
 

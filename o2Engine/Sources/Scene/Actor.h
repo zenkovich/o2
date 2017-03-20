@@ -13,6 +13,78 @@
 
 namespace o2
 {
+	class Actor;
+	enum class ActorCreateMode { InScene, NotInScene };
+
+	// --------------------------------------------------------------
+	// Actor reference, automatically invalidates when actor deleting
+	// --------------------------------------------------------------
+	class ActorRef: public ISerializable
+	{
+	public:
+		// Default constructor, nothing to ref
+		ActorRef();
+
+		// Constructor for referencing on actor
+		ActorRef(Actor* actor);
+
+		// Creates actor by prototype and returns reference to it
+		ActorRef(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
+
+		// Creates actor with components and returns reference to it
+		ActorRef(Vector<Component*> components);
+
+		// Creates copy actor and returns reference to it
+		ActorRef(const Actor& other);
+
+		// Destructor
+		~ActorRef();
+
+		// Boolean cast operator, true means that reference is valid
+		operator bool() const;
+
+		// Assign operator
+		ActorRef& operator=(const ActorRef& other);
+
+		// Getter operator
+		Actor& operator*();
+
+		// Constant getter operator
+		const Actor& operator*() const;
+
+		// Actor members access operator
+		Actor* operator->();
+
+		// Constant actor members access operator
+		const Actor* operator->() const;
+
+		// Check equals operator
+		bool operator==(const ActorRef& other) const;
+
+		// Check not equals operator
+		bool operator!=(const ActorRef& other) const;
+
+		// Returns actor pointer
+		Actor* Get();
+
+		// Returns actor pointer
+		const Actor* Get() const;
+
+		// Returns is reference is valid
+		bool IsValid() const;
+
+		// Returns is actor was deleted
+		bool IsWasDeleted() const;
+
+		SERIALIZABLE(ActorRef);
+
+	protected:
+		Actor* mActor = nullptr;
+		bool   mWasDeleted = false;
+
+		friend class Actor;
+	};
+
 	// -----------
 	// Scene actor
 	// -----------
@@ -22,9 +94,7 @@ namespace o2
 		typedef Vector<Actor*> ActorsVec;
 		typedef Vector<Component*> ComponentsVec;
 		typedef Vector<String> StringsVec;
-
-		enum class CreateMode { InScene, NotInScene };
-
+		
 	public:
 		TagGroup                            tags;                    // Tags group
 		Property<ActorAssetRef>             prototype;               // Prototype asset reference property
@@ -54,10 +124,10 @@ namespace o2
 #endif
 
 		// Default constructor
-		Actor(CreateMode mode = CreateMode::InScene);
+		Actor(ActorCreateMode mode = ActorCreateMode::InScene);
 
 		// Actor constructor from prototype
-		Actor(const ActorAssetRef& prototype, CreateMode mode = CreateMode::InScene);
+		Actor(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
 
 		// Constructor with components
 		Actor(ComponentsVec components);
@@ -96,7 +166,10 @@ namespace o2
 		ActorAssetRef MakePrototype();
 
 		// Returns prototype link pointer
-		Actor* GetPrototypeLink() const;
+		ActorRef GetPrototypeLink() const;
+
+		// Returns is this linked to specified actor with depth links search
+		bool IsLinkedToActor(Actor* actor) const;
 
 		// Sets actor's name
 		void SetName(const String& name);
@@ -244,8 +317,10 @@ namespace o2
 		SERIALIZABLE(Actor);
 
 	protected:
+		typedef Vector<ActorRef*> ActorRefsVec;
+
 		ActorAssetRef mPrototype;               // Prototype asset
-		Actor*        mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
+		ActorRef      mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
 
 		UInt64        mId;                      // Unique actor id
 		String        mName;                    // Name of actor
@@ -265,6 +340,8 @@ namespace o2
 
 		bool          mIsAsset = false;         // Is this actor cached asset
 		UID           mAssetId;                 // Source asset id
+
+		ActorRefsVec  mReferences;              // References to this actor
 
 	protected:
 		// Not using prototype setter
@@ -368,7 +445,8 @@ namespace o2
 		void ProcessPrototypeMaking(Actor* dest, Actor* source,
 									Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
 									Dictionary<const Actor*, Actor*>& actorsMap,
-									Dictionary<const Component*, Component*>& componentsMap);
+									Dictionary<const Component*, Component*>& componentsMap,
+									bool isInsidePrototype);
 
 		// Copies fields from source to dest
 		void CopyFields(Vector<FieldInfo*>& fields, IObject* source, IObject* dest,
@@ -408,6 +486,7 @@ namespace o2
 
 		friend class ActorAsset;
 		friend class ActorDataNodeConverter;
+		friend class ActorRef;
 		friend class ActorTransform;
 		friend class Component;
 		friend class DrawableComponent;

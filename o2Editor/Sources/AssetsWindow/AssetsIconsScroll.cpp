@@ -265,8 +265,8 @@ namespace Editor
 			}
 			else if (asset.assetType == &TypeOf(ActorAsset))
 			{
-				assetIcon = GetAssetIconFromPool("prefab");
-				assetIcon->name = "prefab";
+				assetIcon = GetAssetIconFromPool("prototype");
+				assetIcon->name = "prototype";
 			}
 			else
 			{
@@ -567,8 +567,8 @@ namespace Editor
 		for (auto actor : actorsTree->GetSelectedActors())
 		{
 			ActorAssetRef newAsset = actor->MakePrototype();
-			String path = destPath.IsEmpty() ? newAsset->GetActor()->name + ".prefab" : destPath + "/" + 
-				          newAsset->GetActor()->name + ".prefab";
+			String path = destPath.IsEmpty() ? newAsset->GetActor()->name + ".proto" : destPath + "/" + 
+				          newAsset->GetActor()->name + ".proto";
 
 			String uniquePath = o2Assets.MakeUniqueAssetName(path);
 			newAsset->Save(uniquePath, false);
@@ -704,7 +704,7 @@ namespace Editor
 	void UIAssetsIconsScrollArea::PrepareIconsPools()
 	{
 		int poolSize = 10;
-		String iconsStyles[] ={ "standard", "folder", "prefab", "prefab preview", "image preview", "text", "animation" };
+		String iconsStyles[] ={ "standard", "folder", "prototype", "prototype preview", "image preview", "text", "animation" };
 
 		for (auto style : iconsStyles)
 		{

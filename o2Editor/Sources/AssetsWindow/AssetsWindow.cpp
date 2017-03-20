@@ -410,7 +410,7 @@ namespace Editor
 	void AssetsWindow::CreatePrefabAsset(const String& targetPath)
 	{
 		ActorAssetRef folderAsset = ActorAssetRef::CreateAsset();
-		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/New prefab.prefab"));
+		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/New prototye.proto"));
 
 		o2Assets.RebuildAssets();
 	}

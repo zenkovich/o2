@@ -94,7 +94,7 @@ namespace Editor
 		mActors = actors;
 
 		auto getTargetsPair = [&](Actor* x, auto getter) { 
-			return Pair<void*, void*>(getter(x), x->GetPrototypeLink() ? getter(x->GetPrototypeLink()) : nullptr);
+			return Pair<void*, void*>(getter(x), x->GetPrototypeLink() ? getter(x->GetPrototypeLink().Get()) : nullptr);
 		};
 
 		auto getTargets = [&](auto getter) {
@@ -175,7 +175,7 @@ namespace Editor
 			if (!applyActor->GetPrototype())
 				continue;
 
-			while (applyActor && applyActor->GetPrototype()->GetActor() != applyActor->GetPrototypeLink())
+			while (applyActor && !applyActor->GetPrototypeDirectly().IsValid())
 				applyActor = applyActor->GetParent();
 
 			if (applyActor)

@@ -183,6 +183,20 @@
       <Item Name="layer" ExcludeView="simple">mLayer->name</Item>
       <Item Name="tags" ExcludeView="simple">tags</Item>
       
+      <Synthetic Name="prototype">
+        <DisplayString>({ mPrototype })</DisplayString>
+        <Expand>
+          <ExpandedItem>mPrototype</ExpandedItem>
+        </Expand>
+      </Synthetic>
+      
+      <Synthetic Name="prototype link">
+        <DisplayString>({ mPrototypeLink.mActor })</DisplayString>
+        <Expand>
+          <ExpandedItem>mPrototypeLink.mActor</ExpandedItem>
+        </Expand>
+      </Synthetic>
+      
       <Synthetic Name="transform">
         <DisplayString>(positon={ transform.mPosition }, size={ transform.mSize }, scale={ transform.mScale }, pivot={ transform.mPivot }, angle={ transform.mAngle })</DisplayString>
         <Expand>
@@ -296,7 +310,7 @@
   <Type Name="o2::Sprite">
     <DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
     <Expand>
-      <Item Name="image" ExcludeView="simple">mImageName</Item>
+      <Item Name="image" ExcludeView="simple">mImageAsset.mAssetPtr->mPath</Item>
       <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
       <Item Name="position" ExcludeView="simple">mPosition</Item>
       <Item Name="pivot" ExcludeView="simple">mPivot</Item>
@@ -310,8 +324,7 @@
       <Item Name="mode" ExcludeView="simple">mMode</Item>
       <Item Name="slices" ExcludeView="simple">mSlices</Item>
       <Item Name="fill" ExcludeView="simple">mFill</Item>
-      <Item Name="asset id" ExcludeView="simple">mImageAssetId</Item>
-      <Item Name="atlas id" ExcludeView="simple">mAtlasAssetId</Item>
+      <Item Name="asset" ExcludeView="simple">mImageAsset</Item>
       <Item Name="mesh" ExcludeView="simple">mMesh</Item>
       
       <Synthetic Name="corners' colors">

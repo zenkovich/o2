@@ -637,7 +637,7 @@ namespace o2
 			{
 				if (outOfBounds)
 				{
-					if (wrapCharIdx < 0)
+					if (wrapCharIdx < 0 || wrapCharIdx == curLine->mLineBegSymbol)
 						wrapCharIdx = i;
 					else
 						curLine->mSpacesCount--;
@@ -653,7 +653,7 @@ namespace o2
 					else
 						curLine->mSize.x = 0;
 
-					i = wrapCharIdx;
+					i = wrapCharIdx - 1;
 					wrapCharIdx = -1;
 				}
 				else

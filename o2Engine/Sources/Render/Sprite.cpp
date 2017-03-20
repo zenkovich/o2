@@ -142,7 +142,7 @@ namespace o2
 		mMesh->Draw();
 		OnDrawn();
 
-// 		o2Render.DrawMeshWire(mMesh, Color4(255, 255, 255, 100));
+ 		//o2Render.DrawMeshWire(mMesh, Color4(0, 0, 0, 100));
 // 		o2Render.DrawBasis(mTransform);
 	}
 
@@ -1045,8 +1045,6 @@ namespace o2
 
 			if (mMesh->GetTexture())
 				node["textureFileName"] = mMesh->GetTexture()->GetFileName();
-			else
-				node["textureFileName"] = String();
 		}
 	}
 
