@@ -22,6 +22,9 @@
     <Filter Include="Sources\Core\Dialogs">
       <UniqueIdentifier>{08026faa-a356-45eb-8f4f-b2213425c6a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Core\UI">
+      <UniqueIdentifier>{c00662c6-9d1a-48a7-8a68-fceea1ce1873}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h">
@@ -255,8 +258,14 @@
     <ClInclude Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.h">
       <Filter>Sources\Core\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Dialogs\CurveEditor.h">
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEdit.h">
+      <Filter>Sources\Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Dialogs\CurveEditorDlg.h">
       <Filter>Sources\Core\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UI\ScrollView.h">
+      <Filter>Sources\Core\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -488,8 +497,14 @@
     <ClCompile Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.cpp">
       <Filter>Sources\Core\Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Dialogs\CurveEditor.cpp">
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEdit.cpp">
+      <Filter>Sources\Core\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Dialogs\CurveEditorDlg.cpp">
       <Filter>Sources\Core\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UI\ScrollView.cpp">
+      <Filter>Sources\Core\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

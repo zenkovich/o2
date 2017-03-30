@@ -171,6 +171,9 @@ namespace o2
 		// Returns is this linked to specified actor with depth links search
 		bool IsLinkedToActor(Actor* actor) const;
 
+		// Returns is this linked to specified actor id with depth links search
+		bool IsLinkedToActor(UInt64 id) const;
+
 		// Sets actor's name
 		void SetName(const String& name);
 
@@ -313,6 +316,12 @@ namespace o2
 
 		// Searches actor in this, what linked to linkActor
 		Actor* FindLinkedActor(Actor* linkActor);
+
+		// Searches actor in this, what linked to actor with id
+		Actor* FindLinkedActor(UInt64 id);
+
+		// Searches actor with id in this and this children
+		Actor* FindActorById(UInt64 id);
 
 		SERIALIZABLE(Actor);
 

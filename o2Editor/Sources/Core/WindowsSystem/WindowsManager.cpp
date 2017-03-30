@@ -1,6 +1,7 @@
 #include "WindowsManager.h"
 
 #include "Core/Dialogs/ColorPickerDlg.h"
+#include "Core/Dialogs/CurveEditorDlg.h"
 #include "Core/EditorConfig.h"
 #include "Core/UIStyle/EditorUIStyle.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
@@ -23,6 +24,7 @@ namespace Editor
 		o2UI.LoadStyle("editor_ui_style.xml");
 
 		mColorPickerDlg = mnew ColorPickerDlg();
+		mCurveEditorDlg = mnew CurveEditorDlg();
 
 		InitializeDock();
 		InitializeWindows();
@@ -38,6 +40,7 @@ namespace Editor
 			delete wnd;
 
 		delete mColorPickerDlg;
+		delete mCurveEditorDlg;
 	}
 
 	void WindowsManager::InitializeWindows()

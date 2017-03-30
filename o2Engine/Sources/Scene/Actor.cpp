@@ -312,6 +312,23 @@ namespace o2
 		return false;
 	}
 
+	bool Actor::IsLinkedToActor(UInt64 id) const
+	{
+		if (mPrototypeLink)
+		{
+			auto t = mPrototypeLink.Get();
+			while (t)
+			{
+				if (t->mId == id)
+					return true;
+
+				t = t->mPrototypeLink.Get();
+			}
+		}
+
+		return false;
+	}
+
 	void Actor::SetName(const String& name)
 	{
 		mName = name;
@@ -766,6 +783,32 @@ namespace o2
 		return nullptr;
 	}
 
+	Actor* Actor::FindLinkedActor(UInt64 id)
+	{
+		if (IsLinkedToActor(id))
+			return this;
+
+		for (auto child : mChilds)
+		{
+			if (auto res = child->FindLinkedActor(id))
+				return res;
+		}
+
+		return nullptr;
+	}
+
+	Actor* Actor::FindActorById(UInt64 id)
+	{
+		if (mId == id)
+			return this;
+
+		for (auto child : mChilds)
+			if (auto res = child->FindActorById(id))
+				return res;
+
+		return nullptr;
+	}
+
 	void Actor::SetProtytypeDummy(ActorAssetRef asset)
 	{}
 
@@ -1018,28 +1061,28 @@ namespace o2
 		if (auto prototypeLinkNode = node.GetNode("PrototypeLink"))
 		{
 			UInt64 id = *prototypeLinkNode;
-			if (mParent && mParent->mPrototypeLink)
+			Actor* parent = mParent;
+			while (parent && parent->mPrototypeLink)
 			{
-				Actor* protoLink = mParent->mPrototypeLink.Get();
+				bool found = false;
+
+				Actor* protoLink = parent->mPrototypeLink.Get();
 				while (protoLink)
 				{
-					bool found = false;
-
-					for (auto child : protoLink->mChilds)
+					if (auto fnd = protoLink->FindActorById(id))
 					{
-						if (child->mId == id)
-						{
-							mPrototypeLink = child;
-							found = true;
-							break;
-						}
-					}
-
-					if (found)
+						mPrototypeLink = fnd;
+						found = true;
 						break;
+					}
 
 					protoLink = protoLink->mPrototypeLink.Get();
 				}
+
+				if (found)
+					break;
+
+				parent = parent->mParent;
 			}
 		}
 
@@ -1394,7 +1437,7 @@ namespace o2
 				auto childProtoLinkComponents = protoChild->mComponents;
 				for (auto protoComponent : childProtoLinkComponents)
 				{
-					bool removed = child->mComponents.FindMatch([&](Component* x) { 
+					bool removed = child->mComponents.FindMatch([&](Component* x) {
 						return x->IsLinkedToComponent(protoComponent); }) == nullptr;
 
 					if (removed)
@@ -1665,7 +1708,7 @@ namespace o2
 			Actor* newChild = mnew Actor(dest->mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
 			dest->AddChild(newChild);
 
-			ProcessPrototypeMaking(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap, 
+			ProcessPrototypeMaking(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap,
 								   source->mPrototype.IsValid() || isInsidePrototype);
 		}
 
@@ -1866,7 +1909,7 @@ namespace o2
 		}
 	}
 
-	void Actor::CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds, 
+	void Actor::CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds,
 									   bool withTransform)
 	{
 		if (changed->mParent && changed->mParent->mPrototypeLink)
@@ -2025,7 +2068,7 @@ namespace o2
 
 		child.SetAllAccessFunc(this, &Actor::GetAllChilds);
 		component.SetAllAccessFunc(this, &Actor::GetAllComponents);
-}
+	}
 
 	DECLARE_SINGLETON(ActorDataNodeConverter);
 
@@ -2237,7 +2280,7 @@ namespace o2
 		return mWasDeleted;
 	}
 
-}
+		}
 
 CLASS_META(o2::ActorRef)
 {
@@ -2312,6 +2355,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(ActorAssetRef, MakePrototype);
 	PUBLIC_FUNCTION(ActorRef, GetPrototypeLink);
 	PUBLIC_FUNCTION(bool, IsLinkedToActor, Actor*);
+	PUBLIC_FUNCTION(bool, IsLinkedToActor, UInt64);
 	PUBLIC_FUNCTION(void, SetName, const String&);
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(UInt64, GetID);
@@ -2353,6 +2397,8 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(Scene::Layer*, GetLayer);
 	PUBLIC_FUNCTION(String, GetLayerName);
 	PUBLIC_FUNCTION(Actor*, FindLinkedActor, Actor*);
+	PUBLIC_FUNCTION(Actor*, FindLinkedActor, UInt64);
+	PUBLIC_FUNCTION(Actor*, FindActorById, UInt64);
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
 	PROTECTED_FUNCTION(void, OnTransformChanged);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);

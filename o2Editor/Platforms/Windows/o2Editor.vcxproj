@@ -218,7 +218,7 @@
     <ClInclude Include="..\..\Sources\Core\Actions\ReparentActors.h" />
     <ClInclude Include="..\..\Sources\Core\Actions\Selection.h" />
     <ClInclude Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.h" />
-    <ClInclude Include="..\..\Sources\Core\Dialogs\CurveEditor.h" />
+    <ClInclude Include="..\..\Sources\Core\Dialogs\CurveEditorDlg.h" />
     <ClInclude Include="..\..\Sources\Core\EditorApplication.h" />
     <ClInclude Include="..\..\Sources\Core\EditorConfig.h" />
     <ClInclude Include="..\..\Sources\Core\MenuPanel.h" />
@@ -231,6 +231,8 @@
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
     <ClInclude Include="..\..\Sources\Core\UIStyle\BasicUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h" />
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEdit.h" />
+    <ClInclude Include="..\..\Sources\Core\UI\ScrollView.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h" />
@@ -298,7 +300,7 @@
     <ClCompile Include="..\..\Sources\Core\Actions\ReparentActors.cpp" />
     <ClCompile Include="..\..\Sources\Core\Actions\Selection.cpp" />
     <ClCompile Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Dialogs\CurveEditor.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Dialogs\CurveEditorDlg.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorConfig.cpp" />
     <ClCompile Include="..\..\Sources\Core\MenuPanel.cpp" />
@@ -311,6 +313,8 @@
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
     <ClCompile Include="..\..\Sources\Core\UIStyle\BasicUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEdit.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UI\ScrollView.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp" />

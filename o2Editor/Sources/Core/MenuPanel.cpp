@@ -5,6 +5,7 @@
 #include "Core/EditorApplication.h"
 #include "Core/EditorConfig.h"
 #include "Core/WindowsSystem/WindowsManager.h"
+#include "Dialogs/CurveEditorDlg.h"
 #include "LogWindow/LogWindow.h"
 #include "Scene/Scene.h"
 #include "SceneWindow/SceneWindow.h"
@@ -16,6 +17,7 @@
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UIStyle/EditorUIStyle.h"
+#include "Utils/Math/Curve.h"
 
 DECLARE_SINGLETON(Editor::MenuPanel);
 
@@ -80,6 +82,7 @@ namespace Editor
 		mMenuPanel->AddItem("Help/Documentation", [&]() { OnDocumentationPressed(); });
 
 		// DEBUG
+		mMenuPanel->AddItem("Debug/Curve editor test", [&]() { OnCurveEditorTestPressed(); });
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
 		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
 		mMenuPanel->AddItem("Debug/RebuildEditorUIStyle", [&]() {
@@ -306,6 +309,14 @@ namespace Editor
 	{
 		o2EditorConfig.mGlobalConfig.mDefaultLayout = o2EditorWindows.GetWindowsLayout();
 		o2Debug.Log("Default windows layout saved!");
+	}
+
+	void MenuPanel::OnCurveEditorTestPressed()
+	{
+		Curve* curve = mnew Curve();
+		*curve = Curve::EaseInOut();
+		CurveEditorDlg::Show(Function<void()>());
+		CurveEditorDlg::AddEditingCurve(curve);
 	}
 
 	String MenuPanel::GetOpenFileNameDialog(const String& title, const Dictionary<String, String>& extensions)
