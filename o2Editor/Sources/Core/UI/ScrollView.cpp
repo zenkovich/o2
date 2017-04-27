@@ -11,8 +11,8 @@ namespace Editor
 		mRenderTarget = TextureRef(Vec2I(256, 256), Texture::Format::Default, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
 
-		mBackColor = Color4(100, 100, 100, 255);
-		mGridColor = Color4(150, 150, 150, 255);
+		mBackColor = Color4(170, 170, 170, 255);
+		mGridColor = Color4(190, 190, 190, 255);
 
 		mReady = true;
 	}
@@ -109,39 +109,47 @@ namespace Editor
 		return UIWidget::IsUnderPoint(point);
 	}
 
+	bool UIScrollView::IsScrollable() const
+	{
+		return true;
+	}
+
 	void UIScrollView::UpdateCamera(float dt)
 	{
 		if (mViewCameraTargetScale < mViewCameraMinScale)
 		{
-			mViewCameraTargetScale = Math::Lerp<float>(mViewCameraTargetScale, mViewCameraMinScale,
-													   dt*mViewCameraScaleElasticyCoef);
+			mViewCameraTargetScale = Math::Lerpc<float>(mViewCameraTargetScale, mViewCameraMinScale,
+														dt*mViewCameraScaleElasticyCoef);
 		}
 
 		if (mViewCameraTargetScale > mViewCameraMaxScale)
 		{
-			mViewCameraTargetScale = Math::Lerp<float>(mViewCameraTargetScale, mViewCameraMaxScale,
-													   dt*mViewCameraScaleElasticyCoef);
+			mViewCameraTargetScale = Math::Lerpc<float>(mViewCameraTargetScale, mViewCameraMaxScale,
+														dt*mViewCameraScaleElasticyCoef);
 		}
 
 		if (!Math::Equals<float>(mViewCamera.scale->x, mViewCameraTargetScale))
 		{
 			mViewCamera.scale =
-				Math::Lerp<Vec2F>(mViewCamera.scale, Vec2F(mViewCameraTargetScale, mViewCameraTargetScale),
-								  dt*mViewCameraScaleElasticyCoef);
+				Math::Lerpc<Vec2F>(mViewCamera.scale, Vec2F(mViewCameraTargetScale, mViewCameraTargetScale),
+								   dt*mViewCameraScaleElasticyCoef);
 
 			mNeedRedraw = true;
 		}
 
 		if (mViewCameraVelocity.Length() > 0.05f && !o2Input.IsRightMouseDown())
 		{
-			mViewCameraVelocity = Math::Lerp<Vec2F>(mViewCameraVelocity, Vec2F(), dt*mViewCameraVelocityDampingCoef);
+			mViewCameraVelocity = Math::Lerpc<Vec2F>(mViewCameraVelocity, Vec2F(), dt*mViewCameraVelocityDampingCoef);
 			mViewCameraTargetPos += mViewCameraVelocity*dt;
 		}
 
 		if (mViewCamera.position != mViewCameraTargetPos)
 		{
-			mViewCamera.position = Math::Lerp<Vec2F>(mViewCamera.position, mViewCameraTargetPos,
-													 dt*mViewCameraPosElasticyCoef);
+			mViewCamera.position = Math::Lerpc<Vec2F>(mViewCamera.position, mViewCameraTargetPos,
+													  dt*mViewCameraPosElasticyCoef);
+
+			OnCameraPositionChanged();
+
 			mNeedRedraw = true;
 		}
 	}
@@ -172,6 +180,7 @@ namespace Editor
 	void UIScrollView::RedrawRenderTarget()
 	{
 		mNeedRedraw = false;
+		UpdateLocalScreenTransforms();
 		o2Render.SetRenderTexture(mRenderTarget);
 
 		o2Render.Clear(mBackColor);
@@ -234,6 +243,9 @@ namespace Editor
 		}
 	}
 
+	void UIScrollView::OnCameraPositionChanged()
+	{}
+
 	void UIScrollView::OnScrolled(float scroll)
 	{
 		mViewCameraTargetScale *= 1.0f - (scroll*mViewCameraScaleSence);
@@ -294,11 +306,13 @@ CLASS_META(Editor::UIScrollView)
 	PUBLIC_FUNCTION(void, SetGridColor, const Color4&);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsScrollable);
 	PROTECTED_FUNCTION(void, UpdateCamera, float);
 	PROTECTED_FUNCTION(void, UpdateLocalScreenTransforms);
 	PROTECTED_FUNCTION(void, RedrawRenderTarget);
 	PROTECTED_FUNCTION(void, RedrawContent);
 	PROTECTED_FUNCTION(void, DrawGrid);
+	PROTECTED_FUNCTION(void, OnCameraPositionChanged);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/UI/ScrollView.h"
 #include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "Render/Camera.h"
@@ -31,7 +32,7 @@ namespace Editor
 	// Scene editing screen
 	// --------------------
 	class SceneEditScreen: public DragDropArea, public KeyboardEventsListener,
-		public Singleton<SceneEditScreen>, public IObject
+		public Singleton<SceneEditScreen>, public UIScrollView
 	{
 	public:
 		typedef Vector<Actor*> ActorsVec;
@@ -44,6 +45,9 @@ namespace Editor
 
 		// Default constructor
 		SceneEditScreen();
+
+		// Copy-constructor
+		SceneEditScreen(const SceneEditScreen& other);
 
 		// Destructor
 		~SceneEditScreen();
@@ -68,12 +72,6 @@ namespace Editor
 
 		// Transforms point from scene space to screen space
 		Vec2F SceneToScreenVector(const Vec2F& point);
-
-		// Sets size
-		void SetRect(const RectF& rect);
-
-		// Returns size
-		RectF GetRect() const;
 
 		// Draws actor selection
 		void DrawActorSelection(Actor* actor, const Color4& color);
@@ -115,31 +113,9 @@ namespace Editor
 		IOBJECT(SceneEditScreen);
 
 	protected:
-		RectF          mRectangle;                                            // Current position rectangle
-		Camera         mViewCamera;     					                  // Scene view camera
-		float          mViewCameraTargetScale = 1.0f;		                  // Camera target scale
-		float          mViewCameraScaleSence = 0.1f / 120.0f;                 // Camera scale sense
-		float          mViewCameraScaleElasticyCoef = 30.0f;                  // Scale smoothing coefficient
-		Vec2F          mViewCameraTargetPos;				                  // Target camera position
-		Vec2F          mViewCameraVelocity;					                  // Camera velocity
-		float          mViewCameraPosElasticyCoef = 40.0f;	                  // Camera dragging smoothing coefficient
-		float          mViewCameraVelocityDampingCoef = 10.0f;                // Camera velocity damping coefficient
-		float          mViewCameraMinScale = 0.001f;		                  // Minimal camera scale
-		float          mViewCameraMaxScale = 10000.0f;		                  // Maximal camera scale
-
-		Color4         mBackColor = Color4(170, 170, 170, 255);	              // Scene back color
-		Color4         mGridColor = Color4(190, 190, 190, 255);	              // Scene grid color
 		Color4         mSelectedActorColor = Color4(220, 220, 220, 255);      // Selected actor color
 		Color4         mMultiSelectedActorColor = Color4(220, 220, 220, 100); // Selected actor color
 		float          mActorMinimalSelectionSize = 10.0f;                    // Minimal actor size on pixels
-
-		Basis          mSceneToScreenTransform;					              // Scene to screen transformation
-		Basis          mScreenToSceneTransform;					              // Screen to scene transformation
-
-		TextureRef     mRenderTarget;							              // Scene render target
-		Sprite*        mRenderTargetSprite;						              // Render target using sprite
-		bool           mNeedRedraw;								              // If scene was changed and needs to redraw
-		float          mDrawDepth;								              // Drawing depth
 
 		UIActorsTree*  mActorsTree;								              // Pointer to actors tree widget
 		ActorsVec      mSelectedActors;							              // Current selected actors
@@ -220,23 +196,14 @@ namespace Editor
 		// Calls when changed selected actors from this
 		void OnActorsSelectedFromThis();
 
-		// Updates camera
-		void UpdateCamera(float dt);
-
 		// Redraws scene texture
-		void RedrawScene();
-
-		// Draws scene grid
-		void DrawGrid();
+		void RedrawContent();
 
 		// Draws actors drawables components
 		void DrawActors();
 
 		// Draws selection on actors
 		void DrawSelection();
-
-		// Updates scene to screen and screen and scene transformations
-		void UpdateSceneScreenTransforms();
 
 		// Binds to actors tree selection window
 		void BindActorsTree();

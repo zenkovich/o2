@@ -55,6 +55,9 @@ namespace Editor
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point);
 
+		// Returns is listener scrollable
+		bool IsScrollable() const;
+
 		SERIALIZABLE(UIScrollView);
 
 	protected:
@@ -97,8 +100,11 @@ namespace Editor
 		// Redraws content into render target
 		virtual void RedrawContent();
 
-		// Draws grid and captions
-		void DrawGrid();
+		// Draws grid
+		virtual void DrawGrid();
+
+		// Calls when camera position was changed
+		virtual void OnCameraPositionChanged();
 
 		// Calls when scrolling
 		void OnScrolled(float scroll);

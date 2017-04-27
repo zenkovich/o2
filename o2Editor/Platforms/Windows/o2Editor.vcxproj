@@ -232,6 +232,7 @@
     <ClInclude Include="..\..\Sources\Core\UIStyle\BasicUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\UI\CurveEdit.h" />
+    <ClInclude Include="..\..\Sources\Core\UI\FrameScrollView.h" />
     <ClInclude Include="..\..\Sources\Core\UI\ScrollView.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h" />
@@ -281,7 +282,6 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\PropertiesWindow.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneDragHandle.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h" />
-    <ClInclude Include="..\..\Sources\SceneWindow\SceneEditWidget.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
     <ClInclude Include="..\..\Sources\TreeWindow\ActorsTree.h" />
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h" />
@@ -314,6 +314,7 @@
     <ClCompile Include="..\..\Sources\Core\UIStyle\BasicUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\CurveEdit.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UI\FrameScrollView.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\ScrollView.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp" />
@@ -361,7 +362,6 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\PropertiesWindow.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneDragHandle.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp" />
-    <ClCompile Include="..\..\Sources\SceneWindow\SceneEditWidget.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
     <ClCompile Include="..\..\Sources\TreeWindow\ActorsTree.cpp" />
     <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp" />

@@ -12,14 +12,14 @@ namespace o2
 	Curve::Curve(float beginCoef, float beginCoefPosition, float endCoef, float endCoefPosition)
 	{
 		mKeys.Add(Key(0.0f, 0.0f, 0.0f, 0.0f, beginCoef, Math::Clamp01(beginCoefPosition)));
-		mKeys.Add(Key(1.0f, 1.0f, endCoef, Math::Clamp01(endCoefPosition), 0.0f, 0.0f));
+		mKeys.Add(Key(1.0f, 1.0f, 1.0f - endCoef, -(1.0f - Math::Clamp01(endCoefPosition)), 0.0f, 0.0f));
 		UpdateApproximation();
 		InitializeProperties();
 	}
 
-	Curve::Curve(Vector<Vec2F> values, float smooth /*= 1.0f*/)
+	Curve::Curve(Vector<Vec2F> values, bool smooth /*= true*/)
 	{
-		AddKeys(values, smooth);
+		AppendKeys(values, smooth);
 		InitializeProperties();
 	}
 
@@ -32,7 +32,14 @@ namespace o2
 	Curve& Curve::operator=(const Curve& other)
 	{
 		mKeys = other.mKeys;
+		UpdateApproximation();
 		onKeysChanged();
+		return *this;
+	}
+
+	Curve& Curve::operator+=(const Curve& other)
+	{
+		AppendCurve(other);
 		return *this;
 	}
 
@@ -83,18 +90,120 @@ namespace o2
 		return Math::Lerp(begs.y, ends.y, coef);
 	}
 
-	void Curve::AddKeys(Vector<Vec2F> values, float smooth /*= 1.0f*/)
+	void Curve::MoveKeys(float offset)
 	{
-		for (auto val : values)
-			AddKey(val.x, val.y, smooth);
-
-		for (auto val : values)
-			SmoothKey(val.x, smooth);
+		for (auto& key : mKeys)
+			key.position += offset;
 
 		UpdateApproximation();
 	}
 
-	void Curve::AddKey(const Key& key)
+	void Curve::AppendCurve(const Curve& curve)
+	{
+		AppendKeys(curve.mKeys);
+	}
+
+	void Curve::PrependCurve(const Curve& curve)
+	{
+		PrependKeys(curve.mKeys);
+	}
+
+	void Curve::InsertCurve(const Curve& curve, float position)
+	{
+		InsertKeys(curve.mKeys, position);
+	}
+
+	void Curve::AppendKeys(Vector<Vec2F> values, bool smooth /*= true*/)
+	{
+		AppendKeys(values.Select<Key>([=](const Vec2F& v) {
+			Key res(v.x, v.y, 0, 0, 0, 0);
+			res.supportsType = smooth ? Key::Type::Smooth : Key::Type::Broken;
+			return res;
+		}));
+	}
+
+	void Curve::AppendKeys(const KeysVec& keys)
+	{
+		if (keys.IsEmpty())
+			return;
+
+		float offset = (mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) - keys[0].position;
+
+		for (auto key : keys)
+		{
+			key.position += offset;
+			mKeys.Add(key);
+		}
+
+		CheckSmoothKeys();
+		UpdateApproximation();
+	}
+
+	void Curve::PrependKeys(Vector<Vec2F> values, bool smooth /*= true*/)
+	{
+		PrependKeys(values.Select<Key>([=](const Vec2F& v) {
+			Key res(v.x, v.y, 0, 0, 0, 0);
+			res.supportsType = smooth ? Key::Type::Smooth : Key::Type::Broken;
+			return res;
+		}));
+	}
+
+	void Curve::PrependKeys(const KeysVec& keys)
+	{
+		if (keys.IsEmpty())
+			return;
+
+		float currentBegin = mKeys.IsEmpty() ? 0.0f : mKeys[0].position;
+		float offset = keys.Last().position - Math::Min(currentBegin, 0.0f);
+
+		for (int i = 0; i < mKeys.Count(); i++)
+			mKeys[i].position += offset;
+
+		mKeys.Insert(keys, 0);
+
+		CheckSmoothKeys();
+		UpdateApproximation();
+	}
+
+	void Curve::InsertKeys(Vector<Vec2F> values, float position, bool smooth /*= true*/)
+	{
+		InsertKeys(values.Select<Key>([=](const Vec2F& v) {
+			Key res(v.x, v.y, 0, 0, 0, 0);
+			res.supportsType = smooth ? Key::Type::Smooth : Key::Type::Broken;
+			return res;
+		}), position);
+	}
+
+	void Curve::InsertKeys(const KeysVec& keys, float position)
+	{
+		if (keys.IsEmpty())
+			return;
+
+		int pos = mKeys.Count();
+		for (int i = 0; i < mKeys.Count(); i++)
+		{
+			if (mKeys[i].position > position)
+			{
+				pos = i;
+				break;
+			}
+		}
+
+		mKeys.Insert(keys, pos);
+
+		float insertOffset = position - keys[0].position;
+		for (int i = 0; i < keys.Count(); i++)
+			mKeys[i + pos].position += insertOffset;
+
+		float offset = keys.Last().position - keys[0].position;
+		for (int i = pos + keys.Count(); i < mKeys.Count(); i++)
+			mKeys[i].position += offset;
+
+		CheckSmoothKeys();
+		UpdateApproximation();
+	}
+
+	int Curve::InsertKey(const Key& key)
 	{
 		int pos = mKeys.Count();
 		for (int i = 0; i < mKeys.Count(); i++)
@@ -107,19 +216,21 @@ namespace o2
 		}
 
 		pos = Math::Clamp(pos, 0, mKeys.Count());
-
 		mKeys.Insert(key, pos);
 
+		CheckSmoothKeys();
 		UpdateApproximation();
+
+		return pos;
 	}
 
-	void Curve::AddKey(float position, float value, float leftCoef, float leftCoefPosition, 
-					   float rightCoef, float rightCoefPosition)
+	int Curve::InsertKey(float position, float value, float leftCoef, float leftCoefPosition,
+						 float rightCoef, float rightCoefPosition)
 	{
-		AddKey(Key(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition));
+		return InsertKey(Key(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition));
 	}
 
-	void Curve::AddKey(float position, float value, float smooth /*= 1.0f*/)
+	int Curve::InsertKey(float position, float value, float smooth /*= 1.0f*/)
 	{
 		int pos = mKeys.Count();
 		for (int i = 0; i < mKeys.Count(); i++)
@@ -132,12 +243,135 @@ namespace o2
 		}
 
 		pos = Math::Clamp(pos, 0, mKeys.Count());
-
 		mKeys.Insert(Key(position, value, value, 1.0f, value, 0.0f), pos);
-		
 		SmoothKey(position, smooth);
 
 		UpdateApproximation();
+
+		return pos;
+	}
+
+	int Curve::InsertFlatKey(float position, float value)
+	{
+		int pos = mKeys.Count();
+		for (int i = 0; i < mKeys.Count(); i++)
+		{
+			if (mKeys[i].position > position)
+			{
+				pos = i;
+				break;
+			}
+		}
+
+		pos = Math::Clamp(pos, 0, mKeys.Count());
+		float leftSupport = 0, rightSupport = 0;
+		const float supportCoef = 0.4f;
+
+		if (pos > 0)
+			leftSupport = (position - mKeys[pos - 1].position)*supportCoef;
+
+		if (pos < mKeys.Count() - 1)
+			rightSupport = (mKeys[pos + 1] - position)*supportCoef;
+
+		mKeys.Insert(Key(position, value, value, leftSupport, value, rightSupport), pos);
+
+		CheckSmoothKeys();
+		UpdateApproximation();
+
+		return pos;
+	}
+
+	int Curve::AppendKey(float offset, float value, float leftCoef, float leftCoefPosition,
+						 float rightCoef, float rightCoefPosition)
+	{
+		Key newKey((mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset, value, leftCoef, leftCoefPosition,
+				   rightCoef, rightCoefPosition);
+
+		newKey.supportsType = Key::Type::Broken;
+
+		mKeys.Add(newKey);
+		CheckSmoothKeys();
+		UpdateApproximation();
+
+		return mKeys.Count() - 1;
+	}
+
+	int Curve::AppendKey(float offset, float value, float smoothCoef /*= 1.0f*/)
+	{
+		Key newKey((mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset, value, value, 0, value, 0);
+		newKey.supportsType = Key::Type::Smooth;
+
+		mKeys.Add(newKey);
+		CheckSmoothKeys();
+		UpdateApproximation();
+
+		return mKeys.Count() - 1;
+	}
+
+	int Curve::AppendKey(float offset, float value)
+	{
+		Key newKey((mKeys.IsEmpty() ? 0.0f : mKeys.Last().position) + offset, value, value, 0, value, 0);
+		newKey.supportsType = Key::Type::Broken;
+
+		mKeys.Add(newKey);
+		CheckSmoothKeys();
+		UpdateApproximation();
+
+		return mKeys.Count() - 1;
+	}
+
+	int Curve::PrependKey(float offset, float value, float leftCoef, float leftCoefPosition, 
+						  float rightCoef, float rightCoefPosition)
+	{
+		float begin = mKeys.IsEmpty() ? 0.0f : mKeys[0].position;
+
+		for (auto& key : mKeys)
+			key.position += offset;
+
+		Key newKey(begin, value, leftCoef, leftCoefPosition,
+				   rightCoef, rightCoefPosition);
+
+		newKey.supportsType = Key::Type::Broken;
+
+		mKeys.Add(newKey);
+		CheckSmoothKeys();
+		UpdateApproximation();
+
+		return 0;
+	}
+
+	int Curve::PrependKey(float offset, float value, float smoothCoef /*= 1.0f*/)
+	{
+		float begin = mKeys.IsEmpty() ? 0.0f : mKeys[0].position;
+
+		for (auto& key : mKeys)
+			key.position += offset;
+
+		Key newKey(begin, value, value, 0, value, 0);
+		newKey.supportsType = Key::Type::Smooth;
+
+		mKeys.Add(newKey);
+		CheckSmoothKeys();
+		UpdateApproximation();
+
+		return 0;
+	}
+
+	int Curve::PrependKey(float offset, float value)
+	{
+		float begin = mKeys.IsEmpty() ? 0.0f : mKeys[0].position;
+
+		for (auto& key : mKeys)
+			key.position += offset;
+
+		Key newKey(begin, value, value, 0, value, 0);
+		newKey.supportsType = Key::Type::Broken;
+
+		mKeys.Add(newKey);
+		CheckSmoothKeys();
+		UpdateApproximation();
+
+		return 0;
 	}
 
 	Curve::Key Curve::GetKey(float position)
@@ -147,6 +381,14 @@ namespace o2
 				return key;
 
 		return Key();
+	}
+
+	Curve::Key Curve::GetKeyAt(int idx)
+	{
+		if (idx < 0 || idx > mKeys.Count() - 1)
+			return Key();
+
+		return mKeys[idx];
 	}
 
 	bool Curve::RemoveKey(float position)
@@ -162,6 +404,16 @@ namespace o2
 		}
 
 		return false;
+	}
+
+	bool Curve::RemoveKeyAt(int idx)
+	{
+		if (idx < 0 || idx >= mKeys.Count())
+			return false;
+
+		mKeys.RemoveAt(idx);
+		UpdateApproximation();
+		return true;
 	}
 
 	void Curve::RemoveAllKeys()
@@ -187,10 +439,21 @@ namespace o2
 	void Curve::SetKeys(const KeysVec& keys)
 	{
 		mKeys = keys;
+		CheckSmoothKeys();
 		UpdateApproximation();
 	}
 
-	void Curve::SmoothKey(float position, float smooth)
+	void Curve::SetKey(const Key& key, int position)
+	{
+		if (position < 0 || position > mKeys.Count() - 1)
+			return;
+
+		mKeys[position] = key;
+		CheckSmoothKeys();
+		UpdateApproximation();
+	}
+
+	void Curve::SmoothKey(float position, float smoothCoef)
 	{
 		int pos = 0;
 
@@ -203,36 +466,12 @@ namespace o2
 			}
 		}
 
-		if (pos > 0 && pos < mKeys.Count() - 1)
-		{
-			float baseSmooth = 0.3333f;
-			float resSmooth = baseSmooth*smooth;
+		SmoothKeyAt(pos, smoothCoef);
+	}
 
-			Key& prevKey = mKeys[pos - 1];
-			Key& curKey  = mKeys[pos];
-			Key& nextKey = mKeys[pos + 1];
-
-			Vec2F prev = Vec2F(prevKey.position, prevKey.value);
-			Vec2F cur = Vec2F(curKey.position, curKey.value);
-			Vec2F next = Vec2F(nextKey.position, nextKey.value);
-
-			Vec2F prevCur = prev - cur;
-			Vec2F nextCur = next - cur;
-
-			Vec2F nd = (prevCur.Normalized() + nextCur.Normalized()).Perpendicular().Normalized();
-			if (nd == Vec2F()) nd = prevCur.Normalized();
-			nd *= Math::Sign(nd.x);
-
-			Vec2F prevCoef = cur + nd*resSmooth*prevCur.x;
-			Vec2F nextCoef = cur + nd*resSmooth*nextCur.x;
-
-			curKey.leftCoefPosition = -(prevCoef.x - prev.x)/prevCur.x;
-			curKey.leftCoef = prevCoef.y;
-
-			curKey.rightCoefPosition = (nextCoef.x - cur.x)/nextCur.x;
-			curKey.rightCoef = nextCoef.y;
-		}
-
+	void Curve::SmoothKeyAt(int idx, float smoothCoef)
+	{
+		InternalSmoothKeyAt(idx, smoothCoef);
 		UpdateApproximation();
 	}
 
@@ -241,7 +480,7 @@ namespace o2
 		if (mKeys.Count() == 0)
 			return 0.0f;
 
-		return mKeys.Last().position;
+		return mKeys.Last().position - mKeys[0].position;
 	}
 
 	bool Curve::IsEmpty() const
@@ -278,6 +517,15 @@ namespace o2
 		return Curve(0.0f, 0.0f, 1.0f, 1.0f);
 	}
 
+	void Curve::CheckSmoothKeys()
+	{
+		for (int i = 0; i < mKeys.Count(); i++)
+		{
+			if (mKeys[i].supportsType == Key::Type::Smooth)
+				InternalSmoothKeyAt(i);
+		}
+	}
+
 	void Curve::UpdateApproximation()
 	{
 		for (int i = 1; i < mKeys.Count(); i++)
@@ -285,15 +533,25 @@ namespace o2
 			Key& beginKey = mKeys[i - 1];
 			Key& endKey = mKeys[i];
 
-			beginKey.leftCoefPosition = Math::Clamp01(beginKey.leftCoefPosition);
-			endKey.rightCoefPosition = Math::Clamp01(endKey.rightCoefPosition);
+			Vec2F rightSupport(beginKey.rightSupportPosition, beginKey.rightSupportValue);
+			Vec2F leftSupport(endKey.leftSupportPosition, endKey.leftSupportValue);
 
-			float dist = endKey.position - beginKey.position;
+			if (rightSupport.x < 0.0f)
+				rightSupport.x = 0;
+
+			if (rightSupport.x > endKey.position - beginKey.position && rightSupport.x != 0.0f)
+				rightSupport *= (endKey.position - beginKey.position)/rightSupport.x;
+
+			if (leftSupport.x > 0.0f)
+				leftSupport.x = 0;
+
+			if (leftSupport.x < beginKey.position - endKey.position && leftSupport.x != 0.0f)
+				leftSupport *= (beginKey.position - endKey.position)/leftSupport.x;
 
 			Vec2F a(beginKey.position, beginKey.value);
-			Vec2F b(Math::Lerp(beginKey.position, endKey.position, beginKey.rightCoefPosition), beginKey.rightCoef);
-			Vec2F c(Math::Lerp(beginKey.position, endKey.position, endKey.leftCoefPosition), endKey.leftCoef);
 			Vec2F d(endKey.position, endKey.value);
+			Vec2F b = a + rightSupport;
+			Vec2F c = d + leftSupport;
 
 			for (int j = 0; j < Key::mApproxValuesCount; j++)
 			{
@@ -315,6 +573,69 @@ namespace o2
 		UpdateApproximation();
 	}
 
+	void Curve::InternalSmoothKeyAt(int idx, float smoothCoef /*= 1.0f*/)
+	{
+		const float baseSmoothCoef = 0.5f;
+
+		Key& key = mKeys[idx];
+		Vec2F thisKeyPoint(key.position, key.value);
+
+		if (idx == 0)
+		{
+			Key& nextKey = mKeys[Math::Min(idx + 1, mKeys.Count())];
+
+			Vec2F nextKeyPoint(nextKey.position, nextKey.value);
+			Vec2F supportVec = (nextKeyPoint - thisKeyPoint)*baseSmoothCoef*smoothCoef;
+
+			key.rightSupportPosition = supportVec.x;
+			key.rightSupportValue = supportVec.y;
+		}
+		else if (idx == mKeys.Count() - 1)
+		{
+			Key& lastKey = mKeys[Math::Max(0, idx - 1)];
+
+			Vec2F lastKeyPoint(lastKey.position, lastKey.value);
+			Vec2F supportVec = (lastKeyPoint - thisKeyPoint)*baseSmoothCoef*smoothCoef;
+
+			key.leftSupportPosition = supportVec.x;
+			key.leftSupportValue = supportVec.y;
+		}
+		else
+		{
+			Key& lastKey = mKeys[Math::Max(0, idx - 1)];
+			Key& nextKey = mKeys[Math::Min(idx + 1, mKeys.Count())];
+
+			Vec2F lastKeyPoint(lastKey.position, lastKey.value);
+			Vec2F thisKeyPoint(key.position, key.value);
+			Vec2F nextKeyPoint(nextKey.position, nextKey.value);
+
+			Vec2F thisToLast = lastKeyPoint - thisKeyPoint;
+			Vec2F thisToNext = nextKeyPoint - thisKeyPoint;
+
+			float supportLength = Math::Min(thisToNext.Length(), thisToLast.Length())*baseSmoothCoef*smoothCoef;
+			Vec2F supportVec = Math::CalculateEllipseTangent(lastKeyPoint, thisKeyPoint, nextKeyPoint)*supportLength;
+
+			key.leftSupportPosition = -supportVec.x; key.leftSupportValue = -supportVec.y;
+			key.rightSupportPosition = supportVec.x; key.rightSupportValue = supportVec.y;
+		}
+	}
+
+	void Curve::InternalSmoothKey(float position, float smoothCoef /*= 1.0f*/)
+	{
+		int pos = 0;
+
+		for (int i = 0; i < mKeys.Count(); i++)
+		{
+			if (Math::Equals(mKeys[i].position, position))
+			{
+				pos = i;
+				break;
+			}
+		}
+
+		InternalSmoothKeyAt(pos, smoothCoef);
+	}
+
 	void Curve::InitializeProperties()
 	{
 		INITIALIZE_ACCESSOR(Curve, value, Evaluate);
@@ -324,29 +645,42 @@ namespace o2
 	}
 
 	Curve::Key::Key():
-		value(0), position(0), leftCoef(0), leftCoefPosition(0), rightCoef(0), rightCoefPosition(0)
+		value(0), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0), rightSupportPosition(0),
+		supportsType(Type::Smooth)
 	{}
 
-	Curve::Key::Key(float position, float value, float leftCoef, float leftCoefPosition,
-					float rightCoef, float rightCoefPosition):
-		value(value), position(position), leftCoef(leftCoef), leftCoefPosition(leftCoefPosition), rightCoef(rightCoef),
-		rightCoefPosition(rightCoefPosition)
+	Curve::Key::Key(float position, float value, float leftSupportValue, float leftSupportPosition,
+					float rightSupportValue, float rightSupportPosition) :
+		value(value), position(position), leftSupportValue(leftSupportValue), leftSupportPosition(leftSupportPosition),
+		rightSupportValue(rightSupportValue), rightSupportPosition(rightSupportPosition), supportsType(Type::Broken)
 	{}
 
 	Curve::Key::Key(const Key& other):
-		value(other.value), position(other.position), leftCoef(other.leftCoef), leftCoefPosition(other.leftCoefPosition), 
-		rightCoef(other.rightCoef), rightCoefPosition(other.rightCoefPosition)
+		value(other.value), position(other.position), leftSupportValue(other.leftSupportValue),
+		leftSupportPosition(other.leftSupportPosition), rightSupportValue(other.rightSupportValue),
+		rightSupportPosition(other.rightSupportPosition), supportsType(other.supportsType)
 	{
 		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount*sizeof(Vec2F));
 	}
 
 	Curve::Key::Key(float value):
-		value(value), position(0), leftCoef(0), leftCoefPosition(0), rightCoef(0), rightCoefPosition(0)
+		value(value), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0),
+		rightSupportPosition(0), supportsType(Type::Smooth)
 	{}
 
 	Curve::Key::operator float() const
 	{
 		return value;
+	}
+
+	const Vec2F* Curve::Key::GetApproximatedPoints() const
+	{
+		return mApproxValues;
+	}
+
+	int Curve::Key::GetApproximatedPointsCount() const
+	{
+		return mApproxValuesCount;
 	}
 
 	Curve::Key& Curve::Key::operator=(float value)
@@ -359,10 +693,11 @@ namespace o2
 	{
 		value = other.value;
 		position = other.position;
-		leftCoef = other.leftCoef;
-		leftCoefPosition = other.leftCoefPosition;
-		rightCoef = other.rightCoef;
-		rightCoefPosition = other.rightCoefPosition;
+		leftSupportValue = other.leftSupportValue;
+		leftSupportPosition = other.leftSupportPosition;
+		rightSupportValue = other.rightSupportValue;
+		rightSupportPosition = other.rightSupportPosition;
+		supportsType = other.supportsType;
 		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount*sizeof(Vec2F));
 
 		return *this;
@@ -387,22 +722,45 @@ CLASS_META(o2::Curve)
 	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
 
 	PUBLIC_FUNCTION(float, Evaluate, float);
-	PUBLIC_FUNCTION(void, AddKeys, Vector<Vec2F>, float);
-	PUBLIC_FUNCTION(void, AddKey, const Key&);
-	PUBLIC_FUNCTION(void, AddKey, float, float, float, float, float, float);
-	PUBLIC_FUNCTION(void, AddKey, float, float, float);
+	PUBLIC_FUNCTION(void, MoveKeys, float);
+	PUBLIC_FUNCTION(void, AppendCurve, const Curve&);
+	PUBLIC_FUNCTION(void, PrependCurve, const Curve&);
+	PUBLIC_FUNCTION(void, InsertCurve, const Curve&, float);
+	PUBLIC_FUNCTION(void, AppendKeys, Vector<Vec2F>, bool);
+	PUBLIC_FUNCTION(void, AppendKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, PrependKeys, Vector<Vec2F>, bool);
+	PUBLIC_FUNCTION(void, PrependKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, InsertKeys, Vector<Vec2F>, float, bool);
+	PUBLIC_FUNCTION(void, InsertKeys, const KeysVec&, float);
+	PUBLIC_FUNCTION(int, InsertKey, const Key&);
+	PUBLIC_FUNCTION(int, InsertKey, float, float, float, float, float, float);
+	PUBLIC_FUNCTION(int, InsertKey, float, float, float);
+	PUBLIC_FUNCTION(int, InsertFlatKey, float, float);
+	PUBLIC_FUNCTION(int, AppendKey, float, float, float, float, float, float);
+	PUBLIC_FUNCTION(int, AppendKey, float, float, float);
+	PUBLIC_FUNCTION(int, AppendKey, float, float);
+	PUBLIC_FUNCTION(int, PrependKey, float, float, float, float, float, float);
+	PUBLIC_FUNCTION(int, PrependKey, float, float, float);
+	PUBLIC_FUNCTION(int, PrependKey, float, float);
 	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(bool, RemoveKey, float);
+	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, SetKey, const Key&, int);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
+	PUBLIC_FUNCTION(void, SmoothKeyAt, int, float);
 	PUBLIC_FUNCTION(float, Length);
 	PUBLIC_FUNCTION(bool, IsEmpty);
+	PROTECTED_FUNCTION(void, CheckSmoothKeys);
 	PROTECTED_FUNCTION(void, UpdateApproximation);
 	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, InternalSmoothKeyAt, int, float);
+	PROTECTED_FUNCTION(void, InternalSmoothKey, float, float);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
@@ -413,11 +771,25 @@ CLASS_META(o2::Curve::Key)
 
 	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(leftCoef).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(leftCoefPosition).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(rightCoef).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(rightCoefPosition).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftSupportValue).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftSupportPosition).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightSupportValue).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightSupportPosition).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(supportsType);
 	PUBLIC_FIELD(mApproxValues);
+
+	PUBLIC_FUNCTION(const Vec2F*, GetApproximatedPoints);
+	PUBLIC_FUNCTION(int, GetApproximatedPointsCount);
 }
 END_META;
+
+ENUM_META_(o2::Curve::Key::Type, Type)
+{
+	ENUM_ENTRY(Broken);
+	ENUM_ENTRY(Discrete);
+	ENUM_ENTRY(Flat);
+	ENUM_ENTRY(Free);
+	ENUM_ENTRY(Smooth);
+}
+END_ENUM_META;
  

@@ -202,7 +202,6 @@ namespace Editor
 
 	void LogWindow::OutStrEx(const WString& str)
 	{
-		return;
 		bool isScrollDown = Math::Equals(mList->GetScroll().y, mList->GetScrollRange().bottom, 5.0f) || true;
 
 		LogMessage msg;

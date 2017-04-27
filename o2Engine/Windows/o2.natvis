@@ -296,7 +296,7 @@
   </Type>
 
   <Type Name="o2::Curve::Key">
-    <DisplayString>({ value }:{ position })</DisplayString>
+    <DisplayString>({ position }:{ value })</DisplayString>
     <Expand>
       <Item Name="value" ExcludeView="simple">value</Item>
       <Item Name="position" ExcludeView="simple">position</Item>

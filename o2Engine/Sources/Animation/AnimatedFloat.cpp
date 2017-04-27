@@ -91,30 +91,30 @@ namespace o2
 
 	void AnimatedValue<float>::AddKeys(Vector<Vec2F> values, float smooth /*= 1.0f*/)
 	{
-		curve.AddKeys(values, smooth);
+		curve.AppendKeys(values, smooth);
 	}
 
 	void AnimatedValue<float>::AddKey(const Key& key)
 	{
-		curve.AddKey(key);
+		curve.InsertKey(key);
 	}
 
 	void AnimatedValue<float>::AddKey(const Key& key, float position)
 	{
 		Key newKey = key;
 		newKey.position = position;
-		curve.AddKey(newKey);
+		curve.InsertKey(newKey);
 	}
 
 	void AnimatedValue<float>::AddKey(float position, float value, float leftCoef, float leftCoefPosition,
 									  float rightCoef, float rightCoefPosition)
 	{
-		curve.AddKey(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
+		curve.InsertKey(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
 	}
 
 	void AnimatedValue<float>::AddKey(float position, float value, float smooth /*= 1.0f*/)
 	{
-		curve.AddKey(position, value, smooth);
+		curve.InsertKey(position, value, smooth);
 	}
 
 	AnimatedValue<float>::Key AnimatedValue<float>::GetKey(float position)
@@ -276,8 +276,8 @@ namespace o2
 														  float endCoef, float endCoefPosition)
 	{
 		AnimatedValue<float> res;
-		res.curve.AddKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef), beginCoefPosition);
-		res.curve.AddKey(duration, end, Math::Lerp(begin, end, endCoef), endCoefPosition, 0.0f, 0.0f);
+		res.curve.InsertKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef), beginCoefPosition);
+		res.curve.InsertKey(duration, end, Math::Lerp(begin, end, endCoef), endCoefPosition, 0.0f, 0.0f);
 		return res;
 	}
 

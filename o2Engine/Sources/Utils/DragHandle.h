@@ -4,6 +4,7 @@
 #include "Render/IDrawable.h"
 #include "Utils/Delegates.h"
 #include "Utils/Property.h"
+#include "Utils/Serializable.h"
 
 namespace o2
 {
@@ -12,26 +13,28 @@ namespace o2
 	// -----------
 	// Drag handle
 	// -----------
-	class DragHandle: public IDrawable, public CursorAreaEventsListener
+	class DragHandle: public IDrawable, public CursorAreaEventsListener, public ISerializable
 	{
 	public:
-		Sprite*                      regularSprite; // Regular view sprite
-		Sprite*                      hoverSprite;   // Hovered view sprite
-		Sprite*                      pressedSprite; // Pressed view sprite
-		Function<void(const Vec2F&)> onChangedPos;  // On position changed event
-		Property<Vec2F>              position;      // Current position property
+		Function<void(const Vec2F&)> onChangedPos;   // On position changed event
+		Property<Vec2F>              position;       // Current position property
+		Property<bool>               enabled;        // Is handle enabled property. Disabled handle don't drawn and interact
+
+		Function<Vec2F(const Vec2F&)> screenToLocalTransformFunc; // Screen position to local transformation function
+		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc; // Local position to screen transformation function
+		Function<Vec2F(const Vec2F&)> checkPositionFunc;          // Position constraints checking function
 
 		// Default constructor
 		DragHandle();
 
 		// Constructor with views
-		DragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr);
+		DragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr, Sprite* selected = nullptr);
 
 		// Copy-constructor
 		DragHandle(const DragHandle& other);
 
 		// Destructor
-		~DragHandle();
+		virtual ~DragHandle();
 
 		// Copy-operator
 		DragHandle& operator=(const DragHandle& other);
@@ -45,11 +48,38 @@ namespace o2
 		// Sets position
 		void SetPosition(const Vec2F& position);
 
+		// Returns is handle selection
+		bool IsSelected() const;
+
+		// Sets handle selection
+		void SetSelected(bool selected);
+
 		// Returns position
 		Vec2F GetPosition() const;
 
+		// Set handle enabled. Disabled handle don't drawn and interact
+		void SetEnabled(bool enabled);
+
+		// Returns is handle enabled. Disabled handle don't drawn and interact
+		bool IsEnabled() const;
+
+		SERIALIZABLE(DragHandle);
+
 	protected:
-		Vec2F mPosition; // Current handle position
+		bool    mEnabled = true;           // Is handle enabled. Disabled handle don't drawn and interact
+
+		Sprite* mRegularSprite = nullptr;  // Regular view sprite @SERIALIZABLE
+		Sprite* mHoverSprite = nullptr;    // Hovered view sprite @SERIALIZABLE
+		Sprite* mPressedSprite = nullptr;  // Pressed view sprite @SERIALIZABLE
+		Sprite* mSelectedSprite = nullptr; // Selected view sprite @SERIALIZABLE
+
+		Vec2F  mPosition;                  // Current handle position, checked by checkPositionFunc
+		Vec2F  mDragOffset;                // Dragging offset from cursor in local space to center
+		Vec2F  mDragPosition;              // Current drag handle position
+			   						       
+		bool   mIsHovered = false;         // Is handle under cursor, used for hover sprite appearing
+		bool   mIsPressed = false;         // Is handle pressed, used for pressed sprite appearing
+		bool   mIsSelected = false;        // Is handle selected, used for selected sprite appearing
 
 	protected:
 		// Calls when cursor pressed on this

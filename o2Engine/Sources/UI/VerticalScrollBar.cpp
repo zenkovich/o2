@@ -140,11 +140,11 @@ namespace o2
 
 	void UIVerticalScrollBar::SetScrollHandleSize(float size)
 	{
-		mScrollHandleSize = Math::Clamp(size, 0.0f, mMaxValue - mMinValue);
+		mScrollHandleSize = size;
 		UpdateProgressLayersLayouts();
 	}
 
-	float UIVerticalScrollBar::GetScrollhandleSize() const
+	float UIVerticalScrollBar::GetScrollHandleSize() const
 	{
 		return mScrollHandleSize;
 	}
@@ -185,9 +185,9 @@ namespace o2
 		{
 			float pressedValue = GetValueFromCursor(cursor);
 			if (pressedValue > mValue + mScrollHandleSize*0.5f)
-				SetValue(mValue + mScrollHandleSize);
+				SetValueFromUser(mValue + mScrollHandleSize);
 			else
-				SetValue(mValue - mScrollHandleSize);
+				SetValueFromUser(mValue - mScrollHandleSize);
 		}
 	}
 
@@ -212,7 +212,7 @@ namespace o2
 	void UIVerticalScrollBar::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		if (mHandlePressed)
-			SetValue(GetValueFromCursor(cursor) + mPressHandleOffset);
+			SetValueFromUser(GetValueFromCursor(cursor) + mPressHandleOffset);
 		else
 		{
 			const float timeThreshold = 0.5f;
@@ -222,9 +222,9 @@ namespace o2
 			{
 				float pressedValue = GetValueFromCursor(cursor);
 				if (pressedValue > mValue + mScrollHandleSize*0.5f)
-					SetValue(mValue + mScrollHandleSize*o2Time.GetDeltaTime()*speed);
+					SetValueFromUser(mValue + mScrollHandleSize*o2Time.GetDeltaTime()*speed);
 				else
-					SetValue(mValue - mScrollHandleSize*o2Time.GetDeltaTime()*speed);
+					SetValueFromUser(mValue - mScrollHandleSize*o2Time.GetDeltaTime()*speed);
 			}
 		}
 	}
@@ -232,10 +232,22 @@ namespace o2
 	float UIVerticalScrollBar::GetValueFromCursor(const Input::Cursor &cursor)
 	{
 		float range = mMaxValue - mMinValue;
-		float szRange = range - mScrollHandleSize*(range/(range + mScrollHandleSize));
-		float height = layout.mAbsoluteRect.Height();
 
-		return (height - (cursor.position.y - layout.mAbsoluteRect.bottom))/height*range/szRange*range + mMinValue;
+		if (Math::Equals(range, 0.0f))
+			return mValue;
+
+		float height = layout.mAbsoluteRect.Height();
+		float minScrollhandleSize = Math::Max(mScrollhandleMinPxSize/height*range, mScrollHandleSize);
+		float rangleWithHandle = range + minScrollhandleSize;
+		float szCoef = minScrollhandleSize/rangleWithHandle;
+
+		return (height - (cursor.position.y - layout.mAbsoluteRect.bottom))/height*range/(1.0f - szCoef) + mMinValue;
+	}
+
+	void UIVerticalScrollBar::SetValueFromUser(float value)
+	{
+		SetValue(value);
+		onUserChange(mValue);
 	}
 
 	void UIVerticalScrollBar::OnCursorEnter(const Input::Cursor& cursor)
@@ -296,14 +308,20 @@ namespace o2
 			float range = mMaxValue - mMinValue;
 			float height = Math::Max(layout.mAbsoluteRect.Height(), 1.0f);
 			float minScrollhandleSize = Math::Max(mScrollhandleMinPxSize/height*range, mScrollHandleSize);
-			float szCoef = minScrollhandleSize/(range + minScrollhandleSize);
-			float szRange = range - minScrollhandleSize*(range/(range + minScrollhandleSize));
-			float szPos = (mSmoothValue - mMinValue)/range*(szRange/range);
+			float rangleWithHandle = range + minScrollhandleSize;
+			float szCoef = minScrollhandleSize/rangleWithHandle;
+			float szPos = (mSmoothValue - mMinValue)/range*(1.0f - szCoef);
+
+			if (Math::Equals(range, 0.0f))
+			{
+				szPos = 0;
+				szCoef = 1;
+			}
 
 			mHandleLayer->layout.offsetMin = Vec2F();
 			mHandleLayer->layout.offsetMax = Vec2F();
-			mHandleLayer->layout.anchorMin = Vec2F(0, 1.0f - szPos);
-			mHandleLayer->layout.anchorMax = Vec2F(1, 1.0f - szPos - szCoef);
+			mHandleLayer->layout.anchorMin = Vec2F(0, Math::Clamp01(1.0f - szPos));
+			mHandleLayer->layout.anchorMax = Vec2F(1, Math::Clamp01(1.0f - szPos - szCoef));
 		}
 
 		if (mBackLayer)
@@ -352,6 +370,7 @@ CLASS_META(o2::UIVerticalScrollBar)
 	PUBLIC_FIELD(scrollSense);
 	PUBLIC_FIELD(scrollSize);
 	PUBLIC_FIELD(onChange);
+	PUBLIC_FIELD(onUserChange);
 	PUBLIC_FIELD(onSmoothChange);
 	PROTECTED_FIELD(mValue).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSmoothValue);
@@ -378,7 +397,7 @@ CLASS_META(o2::UIVerticalScrollBar)
 	PUBLIC_FUNCTION(void, SetScrollSense, float);
 	PUBLIC_FUNCTION(float, GetScrollSense);
 	PUBLIC_FUNCTION(void, SetScrollHandleSize, float);
-	PUBLIC_FUNCTION(float, GetScrollhandleSize);
+	PUBLIC_FUNCTION(float, GetScrollHandleSize);
 	PUBLIC_FUNCTION(void, SetMinimalScrollHandleSize, float);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
@@ -387,6 +406,7 @@ CLASS_META(o2::UIVerticalScrollBar)
 	PROTECTED_FUNCTION(void, OnLayoutUpdated);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(float, GetValueFromCursor, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, SetValueFromUser, float);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);

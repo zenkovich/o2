@@ -243,9 +243,6 @@
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h">
       <Filter>Sources\SceneWindow</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\SceneWindow\SceneEditWidget.h">
-      <Filter>Sources\SceneWindow</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h">
       <Filter>Sources\SceneWindow</Filter>
     </ClInclude>
@@ -265,6 +262,9 @@
       <Filter>Sources\Core\Dialogs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\UI\ScrollView.h">
+      <Filter>Sources\Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UI\FrameScrollView.h">
       <Filter>Sources\Core\UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -479,9 +479,6 @@
     <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp">
       <Filter>Sources\SceneWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\SceneWindow\SceneEditWidget.cpp">
-      <Filter>Sources\SceneWindow</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp">
       <Filter>Sources\SceneWindow</Filter>
     </ClCompile>
@@ -504,6 +501,9 @@
       <Filter>Sources\Core\Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\UI\ScrollView.cpp">
+      <Filter>Sources\Core\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UI\FrameScrollView.cpp">
       <Filter>Sources\Core\UI</Filter>
     </ClCompile>
   </ItemGroup>

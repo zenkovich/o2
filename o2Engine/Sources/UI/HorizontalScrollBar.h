@@ -17,6 +17,7 @@ namespace o2
 		Property<float>       scrollSense;    // Scroll sense coefficient
 		Property<float>       scrollSize;     // Scroll handle size
 		Function<void(float)> onChange;       // On Value changing event
+		Function<void(float)> onUserChange;   // On Value changing from user event
 		Function<void(float)> onSmoothChange; // On smooth value changing event
 
 		// Constructor
@@ -71,7 +72,7 @@ namespace o2
 		void SetScrollHandleSize(float size);
 
 		// Returns scroll handle size
-		float GetScrollhandleSize() const;
+		float GetScrollHandleSize() const;
 
 		// Sets scroll handle minimum size in pixels
 		void SetMinimalScrollHandleSize(float pixelSize);
@@ -112,6 +113,9 @@ namespace o2
 
 		// Gets value from cursor position, depends on orientation
 		float GetValueFromCursor(const Input::Cursor& cursor);
+
+		// Sets value and calls callback onUserChange
+		void SetValueFromUser(float value);
 
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);

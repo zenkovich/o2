@@ -1,5 +1,6 @@
 #include "Sprite.h"
 
+#include "Application/Input.h"
 #include "Assets/Assets.h"
 #include "Assets/AtlasAsset.h"
 #include "Assets/ImageAsset.h"
@@ -142,7 +143,8 @@ namespace o2
 		mMesh->Draw();
 		OnDrawn();
 
- 		//o2Render.DrawMeshWire(mMesh, Color4(0, 0, 0, 100));
+		if (o2Input.IsKeyDown(VK_F3))
+			o2Render.DrawMeshWire(mMesh, Color4(0, 0, 0, 100));
 // 		o2Render.DrawBasis(mTransform);
 	}
 

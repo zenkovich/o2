@@ -25,28 +25,31 @@ DECLARE_SINGLETON(Editor::SceneEditScreen);
 namespace Editor
 {
 
-	SceneEditScreen::SceneEditScreen():
-		mNeedRedraw(false)
+	SceneEditScreen::SceneEditScreen()
 	{
-		mRenderTargetSprite = mnew Sprite();
 		InitializeTools();
 		SelectTool<MoveTool>();
 	}
 
+	SceneEditScreen::SceneEditScreen(const SceneEditScreen& other):
+		SceneEditScreen()
+	{}
+
 	SceneEditScreen::~SceneEditScreen()
 	{
-		delete mRenderTargetSprite;
-
 		for (auto tool : mTools)
 			delete tool;
 	}
 
 	void SceneEditScreen::Draw()
 	{
-		mDrawDepth = o2Render.GetDrawingDepth();
+		UIWidget::Draw();
+
+		if (!mReady)
+			return;
 
 		if (mNeedRedraw || (mEnabledTool && mEnabledTool->mNeedRedraw) || true)
-			RedrawScene();
+			RedrawRenderTarget();
 
 		mRenderTargetSprite->Draw();
 
@@ -63,6 +66,8 @@ namespace Editor
 
 	void SceneEditScreen::Update(float dt)
 	{
+		UIWidget::Update(dt);
+
 		UpdateCamera(dt);
 		o2Scene.CheckChangedActors();
 
@@ -72,43 +77,6 @@ namespace Editor
 			mEnabledTool->Update(dt);
 	}
 
-	void SceneEditScreen::UpdateCamera(float dt)
-	{
-		if (mViewCameraTargetScale < mViewCameraMinScale)
-		{
-			mViewCameraTargetScale = Math::Lerp<float>(mViewCameraTargetScale, mViewCameraMinScale,
-													   dt*mViewCameraScaleElasticyCoef);
-		}
-
-		if (mViewCameraTargetScale > mViewCameraMaxScale)
-		{
-			mViewCameraTargetScale = Math::Lerp<float>(mViewCameraTargetScale, mViewCameraMaxScale,
-													   dt*mViewCameraScaleElasticyCoef);
-		}
-
-		if (!Math::Equals<float>(mViewCamera.scale->x, mViewCameraTargetScale))
-		{
-			mViewCamera.scale =
-				Math::Lerp<Vec2F>(mViewCamera.scale, Vec2F(mViewCameraTargetScale, mViewCameraTargetScale),
-								  dt*mViewCameraScaleElasticyCoef);
-
-			mNeedRedraw = true;
-		}
-
-		if (mViewCameraVelocity.Length() > 0.05f && !o2Input.IsRightMouseDown())
-		{
-			mViewCameraVelocity = Math::Lerp<Vec2F>(mViewCameraVelocity, Vec2F(), dt*mViewCameraVelocityDampingCoef);
-			mViewCameraTargetPos += mViewCameraVelocity*dt;
-		}
-
-		if (mViewCamera.position != mViewCameraTargetPos)
-		{
-			mViewCamera.position = Math::Lerp<Vec2F>(mViewCamera.position, mViewCameraTargetPos,
-													 dt*mViewCameraPosElasticyCoef);
-			mNeedRedraw = true;
-		}
-	}
-
 	bool SceneEditScreen::IsScrollable() const
 	{
 		return true;
@@ -116,12 +84,12 @@ namespace Editor
 
 	Vec2F SceneEditScreen::ScreenToScenePoint(const Vec2F& point)
 	{
-		return point*mScreenToSceneTransform;
+		return ScreenToLocalPoint(point);
 	}
 
 	Vec2F SceneEditScreen::SceneToScreenPoint(const Vec2F& point)
 	{
-		return point*mSceneToScreenTransform;
+		return LocalToScreenPoint(point);
 	}
 
 	Vec2F SceneEditScreen::ScreenToSceneVector(const Vec2F& point)
@@ -132,25 +100,6 @@ namespace Editor
 	Vec2F SceneEditScreen::SceneToScreenVector(const Vec2F& point)
 	{
 		return point / mViewCamera.GetScale();
-	}
-
-	void SceneEditScreen::SetRect(const RectF& rect)
-	{
-		mRectangle = rect;
-		if (mRectangle.Size().Length() > 1.0f)
-		{
-			mRenderTarget = TextureRef(mRectangle.Size(), Texture::Format::Default, Texture::Usage::RenderTarget);
-			mRenderTargetSprite->SetTexture(mRenderTarget);
-			mRenderTargetSprite->SetTextureSrcRect(RectI(Vec2I(), mRenderTarget->GetSize()));
-			mRenderTargetSprite->SetRect(mRectangle);
-			mNeedRedraw = true;
-			mViewCamera.size = mRectangle.Size();
-		}
-	}
-
-	RectF SceneEditScreen::GetRect() const
-	{
-		return mRectangle;
 	}
 
 	void SceneEditScreen::InitializeTools(const Type* toolType /*= nullptr*/)
@@ -257,14 +206,8 @@ namespace Editor
 		o2EditorProperties.SetTargets(mSelectedActors.Select<IObject*>([](auto x) { return (IObject*)x; }));
 	}
 
-	void SceneEditScreen::RedrawScene()
+	void SceneEditScreen::RedrawContent()
 	{
-		UpdateSceneScreenTransforms();
-		o2Render.SetRenderTexture(mRenderTarget);
-
-		o2Render.Clear(mBackColor);
-		o2Render.SetCamera(mViewCamera);
-
 		DrawGrid();
 		DrawActors();
 		DrawSelection();
@@ -273,57 +216,6 @@ namespace Editor
 		{
 			mEnabledTool->DrawScene();
 			mEnabledTool->mNeedRedraw = false;
-		}
-
-		o2Render.UnbindRenderTexture();
-		o2Render.SetCamera(Camera());
-
-		mNeedRedraw = false;
-	}
-
-	void SceneEditScreen::DrawGrid()
-	{
-		float cameraMaxSize = Math::Max(mViewCamera.size->x*mViewCamera.scale->x,
-										mViewCamera.size->y*mViewCamera.scale->y);
-
-		float x = cameraMaxSize / 4.0f;
-		float minCellSize = 0.000001f;
-		float maxCellSize = 1000000.0f;
-		float cellSize = minCellSize;
-		while (cellSize < maxCellSize)
-		{
-			float next = cellSize*10.0f;
-			if (x > cellSize && x <= next)
-				break;
-
-			cellSize = next;
-		}
-
-		Vec2F gridOrigin(Math::Round(mViewCamera.position->x / cellSize)*cellSize,
-						 Math::Round(mViewCamera.position->y / cellSize)*cellSize);
-
-		int cellsCount = Math::CeilToInt(cameraMaxSize / cellSize);
-		float tenCeilsSize = cellSize*10.0f;
-		float screenCellSize = cellSize / mViewCamera.scale->x;
-		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
-
-		for (int i = -cellsCount / 2; i < cellsCount / 2; i++)
-		{
-			float d = (float)i*cellSize;
-			Vec2F dorigin = gridOrigin + Vec2F(d, d);
-
-			float rdx = Math::Abs(dorigin.x / tenCeilsSize - Math::Floor(dorigin.x / tenCeilsSize));
-			float rdy = Math::Abs(dorigin.y / tenCeilsSize - Math::Floor(dorigin.y / tenCeilsSize));
-			bool xTen = rdx < 0.05f || rdx > 0.95f;
-			bool yTen = rdy < 0.05f || rdy > 0.95f;
-
-			o2Render.DrawLine(Vec2F(-cameraMaxSize, d) + gridOrigin,
-							  Vec2F(cameraMaxSize, d) + gridOrigin,
-							  yTen ? mGridColor : cellColorSmoothed);
-
-			o2Render.DrawLine(Vec2F(d, -cameraMaxSize) + gridOrigin,
-							  Vec2F(d, cameraMaxSize) + gridOrigin,
-							  xTen ? mGridColor : cellColorSmoothed);
 		}
 	}
 
@@ -444,19 +336,7 @@ namespace Editor
 
 	bool SceneEditScreen::IsUnderPoint(const Vec2F& point)
 	{
-		return mRectangle.IsInside(point);
-	}
-
-	void SceneEditScreen::UpdateSceneScreenTransforms()
-	{
-		Basis identityCamTransform = Transform(mRectangle.Size()).basis;
-		Basis cameraTransform = mViewCamera.basis;
-
-		Basis sceneToCamTransform = identityCamTransform.Inverted()*cameraTransform;
-		Basis drawRectTransform = Transform(mRectangle.Size(), mRectangle.Center()).basis;
-
-		mScreenToSceneTransform = Basis::Translated(mRectangle.Center()*-1.0f)*sceneToCamTransform;
-		mSceneToScreenTransform = mScreenToSceneTransform.Inverted();
+		return UIWidget::IsUnderPoint(point);
 	}
 
 	void SceneEditScreen::BindActorsTree()
@@ -630,7 +510,7 @@ namespace Editor
 
 	void SceneEditScreen::OnScrolled(float scroll)
 	{
-		mViewCameraTargetScale *= 1.0f - (scroll*mViewCameraScaleSence);
+		UIScrollView::OnScrolled(scroll);
 
 		if (mEnabledTool)
 			mEnabledTool->OnScrolled(scroll);
@@ -705,18 +585,12 @@ namespace Editor
 		if (mEnabledTool && !IsHandleWorking(cursor))
 			mEnabledTool->OnCursorRightMousePressed(cursor);
 
-		o2Application.SetCursorInfiniteMode(true);
+		UIScrollView::OnCursorRightMousePressed(cursor);
 	}
 
 	void SceneEditScreen::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
 	{
-		if (cursor.delta.Length() > 0.5f)
-		{
-			Vec2F delta = cursor.delta*mViewCamera.scale*-1.0f;
-			mViewCameraVelocity = delta / o2Time.GetDeltaTime();
-			mViewCameraTargetPos += delta;
-			mNeedRedraw = true;
-		}
+		UIScrollView::OnCursorRightMouseStayDown(cursor);
 
 		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
 			mEnabledTool->OnCursorRightMouseStayDown(cursor);
@@ -727,7 +601,7 @@ namespace Editor
 		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
 			mEnabledTool->OnCursorRightMouseReleased(cursor);
 
-		o2Application.SetCursorInfiniteMode(false);
+		UIScrollView::OnCursorRightMouseReleased(cursor);
 	}
 
 	void SceneEditScreen::OnCursorMiddleMousePressed(const Input::Cursor& cursor)
@@ -754,31 +628,12 @@ CLASS_META(Editor::SceneEditScreen)
 	BASE_CLASS(o2::DragDropArea);
 	BASE_CLASS(o2::KeyboardEventsListener);
 	BASE_CLASS(o2::Singleton<SceneEditScreen>);
-	BASE_CLASS(o2::IObject);
+	BASE_CLASS(Editor::UIScrollView);
 
 	PUBLIC_FIELD(onSelectionChanged);
-	PROTECTED_FIELD(mRectangle);
-	PROTECTED_FIELD(mViewCamera);
-	PROTECTED_FIELD(mViewCameraTargetScale);
-	PROTECTED_FIELD(mViewCameraScaleSence);
-	PROTECTED_FIELD(mViewCameraScaleElasticyCoef);
-	PROTECTED_FIELD(mViewCameraTargetPos);
-	PROTECTED_FIELD(mViewCameraVelocity);
-	PROTECTED_FIELD(mViewCameraPosElasticyCoef);
-	PROTECTED_FIELD(mViewCameraVelocityDampingCoef);
-	PROTECTED_FIELD(mViewCameraMinScale);
-	PROTECTED_FIELD(mViewCameraMaxScale);
-	PROTECTED_FIELD(mBackColor);
-	PROTECTED_FIELD(mGridColor);
 	PROTECTED_FIELD(mSelectedActorColor);
 	PROTECTED_FIELD(mMultiSelectedActorColor);
 	PROTECTED_FIELD(mActorMinimalSelectionSize);
-	PROTECTED_FIELD(mSceneToScreenTransform);
-	PROTECTED_FIELD(mScreenToSceneTransform);
-	PROTECTED_FIELD(mRenderTarget);
-	PROTECTED_FIELD(mRenderTargetSprite);
-	PROTECTED_FIELD(mNeedRedraw);
-	PROTECTED_FIELD(mDrawDepth);
 	PROTECTED_FIELD(mActorsTree);
 	PROTECTED_FIELD(mSelectedActors);
 	PROTECTED_FIELD(mTopSelectedActors);
@@ -799,8 +654,6 @@ CLASS_META(Editor::SceneEditScreen)
 	PUBLIC_FUNCTION(Vec2F, SceneToScreenPoint, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, ScreenToSceneVector, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, SceneToScreenVector, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetRect, const RectF&);
-	PUBLIC_FUNCTION(RectF, GetRect);
 	PUBLIC_FUNCTION(void, DrawActorSelection, Actor*, const Color4&);
 	PUBLIC_FUNCTION(void, SelectActors, ActorsVec, bool);
 	PUBLIC_FUNCTION(void, SelectActor, Actor*, bool);
@@ -833,12 +686,9 @@ CLASS_META(Editor::SceneEditScreen)
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnActorsSelectedFromThis);
-	PROTECTED_FUNCTION(void, UpdateCamera, float);
-	PROTECTED_FUNCTION(void, RedrawScene);
-	PROTECTED_FUNCTION(void, DrawGrid);
+	PROTECTED_FUNCTION(void, RedrawContent);
 	PROTECTED_FUNCTION(void, DrawActors);
 	PROTECTED_FUNCTION(void, DrawSelection);
-	PROTECTED_FUNCTION(void, UpdateSceneScreenTransforms);
 	PROTECTED_FUNCTION(void, BindActorsTree);
 	PROTECTED_FUNCTION(void, OnTreeSelectionChanged, Vector<Actor*>);
 	PROTECTED_FUNCTION(void, UpdateTopSelectedActors);

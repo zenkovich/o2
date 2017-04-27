@@ -370,7 +370,7 @@ namespace o2
 		if (!animVal)
 			animVal = AddAnimationValue<_type>(targetPath);
 
-		animVal->AddKey(key, position);
+		animVal->InsertKey(key, position);
 	}
 
 	template<typename _type>
