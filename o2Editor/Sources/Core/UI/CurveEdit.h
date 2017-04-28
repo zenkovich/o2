@@ -15,7 +15,7 @@ namespace Editor
 	// ---------------------
 	// Curves editing widget
 	// ---------------------
-	class UICurveEditor: public UIFrameScrollView
+	class UICurveEditor: public UIFrameScrollView, public ISelectableDragHandlesGroup
 	{
 	public:
 		// Default constructor
@@ -65,26 +65,26 @@ namespace Editor
 		void SetSupportHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed,
 									const ImageAssetRef& selected);
 
-		   // Updates layout
+		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
 		SERIALIZABLE(UICurveEditor);
 
 	protected:
 		typedef Vector<Vec2F> PointsVec;
-		typedef Vector<DragHandle*> HandlesVec;
+		typedef Vector<SelectableDragHandle*> SelectableHandlesVec;
 
 		struct KeyHandles
 		{
-			UICurveEditor* curveEditor = nullptr;
-			DragHandle     mainHandle;
-			DragHandle     leftSupportHandle;
-			DragHandle     rightSupportHandle;
+			UICurveEditor*       curveEditor = nullptr;
+			SelectableDragHandle mainHandle;
+			SelectableDragHandle leftSupportHandle;
+			SelectableDragHandle rightSupportHandle;
 				           
-			int            curveKeyIdx;
+			int                  curveKeyIdx;
 
 			KeyHandles() {}
-			KeyHandles(const DragHandle& mainSample, const DragHandle& supportSample, UICurveEditor* editor);
+			KeyHandles(const SelectableDragHandle& mainSample, const SelectableDragHandle& supportSample, UICurveEditor* editor);
 
 			void Draw();
 		};
@@ -121,15 +121,15 @@ namespace Editor
 		typedef Vector<RangeInfo*> RangeInfosVec;
 
 	protected:
-		DragHandle             mMainHandleSample;             // Main handle sample, uses to copy sprites @SERIALIZABLE
-		DragHandle             mSupportHandleSample;          // Support handle sample, uses to copy sprites @SERIALIZABLE
-
+		SelectableDragHandle   mMainHandleSample;             // Main handle sample, uses to copy sprites @SERIALIZABLE
+		SelectableDragHandle   mSupportHandleSample;          // Support handle sample, uses to copy sprites @SERIALIZABLE
+							   
 		CurveInfosVec          mCurves;                       // Editing curves infos list 
 		RangeInfosVec          mRanges;                       // Curves ranges list
-		HandlesVec             mAllHandles;                   // All handles
-
-		HandlesVec             mSelectedHandles;              // Current selected handles
-		HandlesVec             mSelectingHandlesBuf;          // Potentially selecting handles while selecting
+		SelectableHandlesVec   mAllHandles;                   // All handles
+							   
+		SelectableHandlesVec   mSelectedHandles;              // Current selected handles
+		SelectableHandlesVec   mSelectingHandlesBuf;          // Potentially selecting handles while selecting
 
 		Sprite*                mSelectionSprite = nullptr;    // Selection sprite @SERIALIZABLE
 		FontRef                mTextFont;                     // Captions text font @SERIALIZABLE
@@ -197,5 +197,36 @@ namespace Editor
 
 		// Checks supports handles visibility
 		void CheckHandlesVisible();
+
+	// ISelectableDragHandlesGroup implementation
+		// Returns selected handles in group
+		SelectableDragHandlesVec GetSelectedDragHandles() const;
+
+		// Returns all handles in group 
+		SelectableDragHandlesVec GetAllHandles() const;
+
+		// Selects handle
+		void Select(SelectableDragHandle* handle);
+
+		// Deselects handle
+		void Deselect(SelectableDragHandle* handle);
+
+		// Adds selectable handle to group
+		void AddSelectableHandle(SelectableDragHandle* handle);
+
+		// Removes selectable handle from group
+		void RemoveSelectableHandle(SelectableDragHandle* handle);
+
+		// Calls when selectable draggable handle was pressed
+		void OnSelectableHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor);
+
+		// Calls when selectable draggable handle was released
+		void OnSelectableHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);
+
+		// Calls when selectable handle was began to drag
+		void OnSelectableHandleBeganDragging(SelectableDragHandle* handle);
+
+		// Calls when selectable handle moved, moves all selected handles position
+		void OnSelectableHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
 	};
 }
