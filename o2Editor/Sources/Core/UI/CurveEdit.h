@@ -15,7 +15,7 @@ namespace Editor
 	// ---------------------
 	// Curves editing widget
 	// ---------------------
-	class UICurveEditor: public UIFrameScrollView, public ISelectableDragHandlesGroup
+	class UICurveEditor: public UIFrameScrollView, public SelectableDragHandlesGroup
 	{
 	public:
 		// Default constructor
@@ -126,9 +126,7 @@ namespace Editor
 							   
 		CurveInfosVec          mCurves;                       // Editing curves infos list 
 		RangeInfosVec          mRanges;                       // Curves ranges list
-		SelectableHandlesVec   mAllHandles;                   // All handles
-							   
-		SelectableHandlesVec   mSelectedHandles;              // Current selected handles
+
 		SelectableHandlesVec   mSelectingHandlesBuf;          // Potentially selecting handles while selecting
 
 		Sprite*                mSelectionSprite = nullptr;    // Selection sprite @SERIALIZABLE
@@ -197,36 +195,5 @@ namespace Editor
 
 		// Checks supports handles visibility
 		void CheckHandlesVisible();
-
-	// ISelectableDragHandlesGroup implementation
-		// Returns selected handles in group
-		SelectableDragHandlesVec GetSelectedDragHandles() const;
-
-		// Returns all handles in group 
-		SelectableDragHandlesVec GetAllHandles() const;
-
-		// Selects handle
-		void Select(SelectableDragHandle* handle);
-
-		// Deselects handle
-		void Deselect(SelectableDragHandle* handle);
-
-		// Adds selectable handle to group
-		void AddSelectableHandle(SelectableDragHandle* handle);
-
-		// Removes selectable handle from group
-		void RemoveSelectableHandle(SelectableDragHandle* handle);
-
-		// Calls when selectable draggable handle was pressed
-		void OnSelectableHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor);
-
-		// Calls when selectable draggable handle was released
-		void OnSelectableHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);
-
-		// Calls when selectable handle was began to drag
-		void OnSelectableHandleBeganDragging(SelectableDragHandle* handle);
-
-		// Calls when selectable handle moved, moves all selected handles position
-		void OnSelectableHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
 	};
 }

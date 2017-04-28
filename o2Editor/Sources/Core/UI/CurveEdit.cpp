@@ -120,9 +120,9 @@ namespace Editor
 			{
 				for (auto handle : info->handles)
 				{
-					mAllHandles.Remove(&handle->mainHandle);
-					mAllHandles.Remove(&handle->leftSupportHandle);
-					mAllHandles.Remove(&handle->rightSupportHandle);
+					mHandles.Remove(&handle->mainHandle);
+					mHandles.Remove(&handle->leftSupportHandle);
+					mHandles.Remove(&handle->rightSupportHandle);
 					mSelectedHandles.Remove(&handle->mainHandle);
 					mSelectedHandles.Remove(&handle->leftSupportHandle);
 					mSelectedHandles.Remove(&handle->rightSupportHandle);
@@ -156,35 +156,6 @@ namespace Editor
 	{
 		UIFrameScrollView::UpdateLayout(forcible, withChildren);
 	}
-
-	UICurveEditor::SelectableDragHandlesVec UICurveEditor::GetSelectedDragHandles() const
-	{
-		return mSelectedHandles;
-	}
-
-	UICurveEditor::SelectableDragHandlesVec UICurveEditor::GetAllHandles() const
-	{
-		return mAllHandles;
-	}
-
-	void UICurveEditor::Select(SelectableDragHandle* handle)
-	{
-		if (mSelectedHandles.Contains(handle))
-			return;
-
-		mSelectedHandles.Add(handle);
-	}
-
-	void UICurveEditor::Deselect(SelectableDragHandle* handle)
-	{
-		mSelectedHandles.Remove(handle);
-	}
-
-	void UICurveEditor::AddSelectableHandle(SelectableDragHandle* handle)
-	{}
-
-	void UICurveEditor::RemoveSelectableHandle(SelectableDragHandle* handle)
-	{}
 
 	void UICurveEditor::SetSelectionSpriteImage(const ImageAssetRef& image)
 	{
@@ -469,9 +440,13 @@ namespace Editor
 
 		info->handles.Insert(keyHandles, keyId);
 
-		mAllHandles.Add(&keyHandles->mainHandle);
-		mAllHandles.Add(&keyHandles->leftSupportHandle);
-		mAllHandles.Add(&keyHandles->rightSupportHandle);
+		mHandles.Add(&keyHandles->mainHandle);
+		mHandles.Add(&keyHandles->leftSupportHandle);
+		mHandles.Add(&keyHandles->rightSupportHandle);
+
+		keyHandles->mainHandle.SetSelectionGroup(this);
+		keyHandles->leftSupportHandle.SetSelectionGroup(this);
+		keyHandles->rightSupportHandle.SetSelectionGroup(this);
 	}
 
 	void UICurveEditor::OnCurveKeyMainHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
@@ -777,7 +752,8 @@ namespace Editor
 
 		if (!o2Input.IsKeyDown(VK_SHIFT))
 		{
-			for (auto handle : mSelectedHandles)
+			auto handles = mSelectedHandles;
+			for (auto handle : handles)
 				handle->SetSelected(false);
 
 			mSelectedHandles.Clear();
@@ -800,7 +776,7 @@ namespace Editor
 
 		RectF selectionLocalRect(mSelectingPressedPoint, ScreenToLocalPoint(cursor.position));
 
-		for (auto handle : mAllHandles)
+		for (auto handle : mHandles)
 		{
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(handle->GetPosition()) &&
 				!mSelectedHandles.Contains(handle))
@@ -824,26 +800,6 @@ namespace Editor
 													   handles->rightSupportHandle.IsSelected()) && handles->curveKeyIdx < info->handles.Count() - 1;
 			}
 		}
-	}
-
-	void UICurveEditor::OnSelectableHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor)
-	{
-		ISelectableDragHandlesGroup::OnSelectableHandleCursorPressed(handle, cursor);
-	}
-
-	void UICurveEditor::OnSelectableHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor)
-	{
-		ISelectableDragHandlesGroup::OnSelectableHandleCursorReleased(handle, cursor);
-	}
-
-	void UICurveEditor::OnSelectableHandleBeganDragging(SelectableDragHandle* handle)
-	{
-		ISelectableDragHandlesGroup::OnSelectableHandleBeganDragging(handle);
-	}
-
-	void UICurveEditor::OnSelectableHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor)
-	{
-		ISelectableDragHandlesGroup::OnSelectableHandleMoved(handle, cursor);
 	}
 
 	UICurveEditor::CurveInfo::CurveInfo()
@@ -942,14 +898,12 @@ namespace Editor
 CLASS_META(Editor::UICurveEditor)
 {
 	BASE_CLASS(Editor::UIFrameScrollView);
-	BASE_CLASS(o2::ISelectableDragHandlesGroup);
+	BASE_CLASS(o2::SelectableDragHandlesGroup);
 
 	PROTECTED_FIELD(mMainHandleSample).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSupportHandleSample).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mCurves);
 	PROTECTED_FIELD(mRanges);
-	PROTECTED_FIELD(mAllHandles);
-	PROTECTED_FIELD(mSelectedHandles);
 	PROTECTED_FIELD(mSelectingHandlesBuf);
 	PROTECTED_FIELD(mSelectionSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mTextFont).SERIALIZABLE_ATTRIBUTE();
@@ -990,16 +944,6 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CheckHandlesVisible);
-	PROTECTED_FUNCTION(SelectableDragHandlesVec, GetSelectedDragHandles);
-	PROTECTED_FUNCTION(SelectableDragHandlesVec, GetAllHandles);
-	PROTECTED_FUNCTION(void, Select, SelectableDragHandle*);
-	PROTECTED_FUNCTION(void, Deselect, SelectableDragHandle*);
-	PROTECTED_FUNCTION(void, AddSelectableHandle, SelectableDragHandle*);
-	PROTECTED_FUNCTION(void, RemoveSelectableHandle, SelectableDragHandle*);
-	PROTECTED_FUNCTION(void, OnSelectableHandleCursorPressed, SelectableDragHandle*, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnSelectableHandleCursorReleased, SelectableDragHandle*, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnSelectableHandleBeganDragging, SelectableDragHandle*);
-	PROTECTED_FUNCTION(void, OnSelectableHandleMoved, SelectableDragHandle*, const Input::Cursor&);
 }
 END_META;
  

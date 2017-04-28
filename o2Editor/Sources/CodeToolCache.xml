@@ -2380,7 +2380,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UI/CurveEdit.h">
-		<date year="2017" month="4" day="28" hour="0" minute="59" second="34" />
+		<date year="2017" month="4" day="29" hour="1" minute="19" second="9" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2416,7 +2416,7 @@
 							<usings />
 							<baseClasses>
 								<class name="UIFrameScrollView" protection="0" />
-								<class name="ISelectableDragHandlesGroup" protection="0" />
+								<class name="SelectableDragHandlesGroup" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>

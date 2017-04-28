@@ -212,7 +212,7 @@ namespace o2
 			delete mSelectedSprite;
 
 		if (mSelectGroup)
-			mSelectGroup->RemoveSelectableHandle(this);
+			mSelectGroup->RemoveHandle(this);
 	}
 
 	SelectableDragHandle& SelectableDragHandle::operator=(const SelectableDragHandle& other)
@@ -238,17 +238,17 @@ namespace o2
 		if (mIsSelected == selected)
 			return;
 
-		mIsSelected = selected;
-
 		if (mSelectGroup)
 		{
 			if (selected)
-				mSelectGroup->Select(this);
+				mSelectGroup->SelectHandle(this);
 			else
-				mSelectGroup->Deselect(this);
+				mSelectGroup->DeselectHandle(this);
 		}
 		else
 		{
+			mIsSelected = selected;
+
 			if (mIsSelected)
 				OnSelected();
 			else
@@ -286,12 +286,12 @@ namespace o2
 	void SelectableDragHandle::SetSelectionGroup(ISelectableDragHandlesGroup* group)
 	{
 		if (mSelectGroup)
-			mSelectGroup->RemoveSelectableHandle(this);
+			mSelectGroup->RemoveHandle(this);
 
 		mSelectGroup = group;
 
 		if (mSelectGroup)
-			mSelectGroup->AddSelectableHandle(this);
+			mSelectGroup->AddHandle(this);
 	}
 
 	ISelectableDragHandlesGroup* SelectableDragHandle::GetSelectionGroup() const
@@ -304,7 +304,7 @@ namespace o2
 		DragHandle::OnCursorPressed(cursor);
 
 		if (mSelectGroup)
-			mSelectGroup->OnSelectableHandleCursorPressed(this, cursor);
+			mSelectGroup->OnHandleCursorPressed(this, cursor);
 
 		mPressedCursorPos = cursor.position;
 	}
@@ -328,7 +328,7 @@ namespace o2
 				mIsDragging = true;
 
 				if (mSelectGroup)
-					mSelectGroup->OnSelectableHandleBeganDragging(this);
+					mSelectGroup->OnHandleBeganDragging(this);
 				else
 					Select();
 			}
@@ -340,6 +340,9 @@ namespace o2
 
 			SetPosition(mDragPosition);
 			onChangedPos(mPosition);
+
+			if (mSelectGroup)
+				mSelectGroup->OnHandleMoved(this, cursor);
 		}
 	}
 
@@ -353,7 +356,7 @@ namespace o2
 		else
 		{
 			if (mSelectGroup)
-				mSelectGroup->OnSelectableHandleCursorReleased(this, cursor);
+				mSelectGroup->OnHandleCursorReleased(this, cursor);
 			else
 				SetSelected(!IsSelected());
 		}
@@ -371,21 +374,108 @@ namespace o2
 	void SelectableDragHandle::OnDeselected()
 	{}
 
-	void ISelectableDragHandlesGroup::OnSelectableHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor)
+
+
+	void ISelectableDragHandlesGroup::DeselectAll()
 	{
-		for (auto handle : GetSelectedDragHandles())
+		auto handle = GetAllHandles();
+		for (auto object : handle)
+			DeselectHandle(object);
+	}
+
+	void ISelectableDragHandlesGroup::SelectAll()
+	{
+		auto handles = GetAllHandles();
+		for (auto object : handles)
+			SelectHandle(object);
+	}
+
+	SelectableDragHandlesGroup::~SelectableDragHandlesGroup()
+	{
+		for (auto handle : mHandles)
+		{
+			handle->mSelectGroup = nullptr;
+			delete handle;
+		}
+	}
+
+	SelectableDragHandlesGroup::SelectableDragHandlesVec SelectableDragHandlesGroup::GetSelectedHandles() const
+	{
+		return mSelectedHandles;
+	}
+
+	SelectableDragHandlesGroup::SelectableDragHandlesVec SelectableDragHandlesGroup::GetAllHandles() const
+	{
+		return mHandles;
+	}
+
+	void SelectableDragHandlesGroup::SelectHandle(SelectableDragHandle* handle)
+	{
+		if (mSelectedHandles.Contains(handle))
+			return;
+
+		handle->mIsSelected = true;
+		mSelectedHandles.Add(handle);
+		handle->OnSelected();
+	}
+
+	void SelectableDragHandlesGroup::DeselectHandle(SelectableDragHandle* handle)
+	{
+		if (!mSelectedHandles.Contains(handle))
+			return;
+
+		handle->mIsSelected = false;
+		mSelectedHandles.Remove(handle);
+		handle->OnDeselected();
+	}
+
+	void SelectableDragHandlesGroup::AddHandle(SelectableDragHandle* handle)
+	{
+		mHandles.Add(handle);
+	}
+
+	void SelectableDragHandlesGroup::RemoveHandle(SelectableDragHandle* handle)
+	{
+		mHandles.Remove(handle);
+		mSelectedHandles.Remove(handle);
+		delete handle;
+	}
+
+	void SelectableDragHandlesGroup::OnHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor)
+	{
+		for (auto handle : GetSelectedHandles())
 		{
 			handle->mDragOffset = handle->mPosition - handle->screenToLocalTransformFunc(cursor.position);
 			handle->mDragPosition = handle->mPosition;
 		}
 	}
 
-	void ISelectableDragHandlesGroup::OnSelectableHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor)
+	void SelectableDragHandlesGroup::OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor)
 	{
-		for (auto handle : GetSelectedDragHandles())
+		if (!o2Input.IsKeyDown(VK_SHIFT))
+			DeselectAll();
+
+		SelectHandle(handle);
+	}
+
+	void SelectableDragHandlesGroup::OnHandleBeganDragging(SelectableDragHandle* handle)
+	{
+		if (handle->IsSelected())
+			return;
+
+		if (!o2Input.IsKeyDown(VK_SHIFT))
+			DeselectAll();
+
+		SelectHandle(handle);
+	}
+
+	void SelectableDragHandlesGroup::OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor)
+	{
+		for (auto handle : GetSelectedHandles())
 		{
 			handle->mDragPosition = handle->screenToLocalTransformFunc(cursor.position) + handle->mDragOffset;
 			handle->SetPosition(handle->mDragPosition);
+			handle->onChangedPos(handle->GetPosition());
 		}
 	}
 

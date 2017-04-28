@@ -100,7 +100,7 @@ namespace o2
 	};
 
 	class SelectableDragHandle;
-	
+
 	// --------------------------------------------
 	// Selectable draggable handles group interface
 	// --------------------------------------------
@@ -111,22 +111,22 @@ namespace o2
 
 	public:
 		// Returns selected handles in group
-		virtual SelectableDragHandlesVec GetSelectedDragHandles() const = 0;
+		virtual SelectableDragHandlesVec GetSelectedHandles() const = 0;
 
 		// Returns all handles in group 
 		virtual SelectableDragHandlesVec GetAllHandles() const = 0;
 
 		// Selects handle
-		virtual void Select(SelectableDragHandle* handle) = 0;
+		virtual void SelectHandle(SelectableDragHandle* handle) = 0;
 
 		// Deselects handle
-		virtual void Deselect(SelectableDragHandle* handle) = 0;
+		virtual void DeselectHandle(SelectableDragHandle* handle) = 0;
 
 		// Adds selectable handle to group
-		virtual void AddSelectableHandle(SelectableDragHandle* handle) = 0;
+		virtual void AddHandle(SelectableDragHandle* handle) = 0;
 
 		// Removes selectable handle from group
-		virtual void RemoveSelectableHandle(SelectableDragHandle* handle) = 0;
+		virtual void RemoveHandle(SelectableDragHandle* handle) = 0;
 
 		// Deselects all in group
 		void DeselectAll();
@@ -136,16 +136,67 @@ namespace o2
 
 	protected:
 		// Calls when selectable draggable handle was pressed
-		virtual void OnSelectableHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor);
+		virtual void OnHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
 
 		// Calls when selectable draggable handle was released
-		virtual void OnSelectableHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
+		virtual void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
 
 		// Calls when selectable handle was began to drag
-		virtual void OnSelectableHandleBeganDragging(SelectableDragHandle* handle) {}
+		virtual void OnHandleBeganDragging(SelectableDragHandle* handle) {}
 
 		// Calls when selectable handle moved, moves all selected handles position
-		virtual void OnSelectableHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
+		virtual void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
+
+		friend class SelectableDragHandle;
+	};
+
+
+	// ----------------------------------
+	// Selectable draggable handles group
+	// ----------------------------------
+	class SelectableDragHandlesGroup : public ISelectableDragHandlesGroup
+	{
+	public:
+		typedef Vector<SelectableDragHandle*> SelectableDragHandlesVec;
+
+	public:
+		// Destructor
+		~SelectableDragHandlesGroup();
+
+		// Returns selected handles in group
+		SelectableDragHandlesVec GetSelectedHandles() const;
+
+		// Returns all handles in group 
+		SelectableDragHandlesVec GetAllHandles() const;
+
+		// Selects handle
+		void SelectHandle(SelectableDragHandle* handle);
+
+		// Deselects handle
+		void DeselectHandle(SelectableDragHandle* handle);
+
+		// Adds selectable handle to group
+		void AddHandle(SelectableDragHandle* handle);
+
+		// Removes selectable handle from group
+		void RemoveHandle(SelectableDragHandle* handle);
+
+	protected:
+		SelectableDragHandlesVec mSelectedHandles;
+		SelectableDragHandlesVec mHandles;
+
+	protected:
+		// Calls when selectable draggable handle was pressed
+		void OnHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor);
+
+		// Calls when selectable draggable handle was released
+		void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);
+
+		// Calls when selectable handle was began to drag
+		void OnHandleBeganDragging(SelectableDragHandle* handle);
+
+		// Calls when selectable handle moved, moves all selected handles position
+		void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
 
 		friend class SelectableDragHandle;
 	};
@@ -224,5 +275,6 @@ namespace o2
 		virtual void OnDeselected();
 
 		friend class ISelectableDragHandlesGroup;
+		friend class SelectableDragHandlesGroup;
 	};
 }
