@@ -10,6 +10,11 @@
 
 using namespace o2;
 
+namespace o2
+{
+	class UIContextMenu;
+}
+
 namespace Editor
 {
 	// ---------------------
@@ -121,12 +126,15 @@ namespace Editor
 		typedef Vector<RangeInfo*> RangeInfosVec;
 
 	protected:
+		UIContextMenu*         mContextMenu;                  // Context menu for editing keys properties, copying, pasting and other
+
 		SelectableDragHandle   mMainHandleSample;             // Main handle sample, uses to copy sprites @SERIALIZABLE
 		SelectableDragHandle   mSupportHandleSample;          // Support handle sample, uses to copy sprites @SERIALIZABLE
 							   
 		CurveInfosVec          mCurves;                       // Editing curves infos list 
 		RangeInfosVec          mRanges;                       // Curves ranges list
 
+		SelectableHandlesVec   mSupportHandles;               // Support points handles list
 		SelectableHandlesVec   mSelectingHandlesBuf;          // Potentially selecting handles while selecting
 
 		Sprite*                mSelectionSprite = nullptr;    // Selection sprite @SERIALIZABLE
@@ -138,7 +146,12 @@ namespace Editor
 
 		Vec2F                  mSelectingPressedPoint;        // Point, where cursor was pressed, selection starts here, in local space
 
+		bool                   mIsViewScrolling = false;      // Is scrolling view at this time
+
 	protected:
+		// Initializes context menu items
+		void InitializeContextMenu();
+
 		// Initializes text drawables by font and sets aligning
 		void InitializeTextDrawables();
 
@@ -193,7 +206,46 @@ namespace Editor
 		// Calls when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
+		// Calls when right mouse button stay down on this, overriding from scroll view to call context menu
+		void OnCursorRightMouseStayDown(const Input::Cursor& cursor);
+
+		// Calls when right mouse button was released (only when right mouse button pressed this at previous time), overriding from scroll view to call context menu
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+
 		// Checks supports handles visibility
 		void CheckHandlesVisible();
+
+		// Calls when selectable draggable handle was released
+		void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);
+
+		// Calls when selectable handle was began to drag
+		void OnHandleBeganDragging(SelectableDragHandle* handle);
+
+		// Calls when selectable handle moved, moves all selected handles position
+		void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
+
+		// Sets all selected keys supports type
+		void SetSelectedKeysSupportsType(Curve::Key::Type type);
+
+	// Context menu items functions
+		void OnAutoSmoothChecked(bool checked);
+
+		void OnFlatChecked(bool checked);
+
+		void OnFreeChecked(bool checked);
+
+		void OnBrokenChecked(bool checked);
+
+		void OnDiscreteChecked(bool checked);
+
+		void OnCopyPressed();
+
+		void OnCutPressed();
+
+		void OnPastePressed();
+
+		void OnDeletePressed();
+
+		void OnInsertPressed();
 	};
 }

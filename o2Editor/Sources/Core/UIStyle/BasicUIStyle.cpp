@@ -870,9 +870,13 @@ namespace o2
 		shortcutLayerText->horAlign = HorAlign::Right;
 		shortcutLayerText->verAlign = VerAlign::Middle;
 		shortcutLayer->transparency = 0.7f;
+
 		UIWidgetLayer* subIconLayer = itemSample->GetLayer("subIcon");
 		subIconLayer->drawable = mnew Sprite("ui/UI_Right_icn.png");
 		subIconLayer->layout = Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-15, 10), Vec2F(5, -10));
+
+		itemSample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"), 
+							 Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout.anchorMin = Vec2F(0, 0);

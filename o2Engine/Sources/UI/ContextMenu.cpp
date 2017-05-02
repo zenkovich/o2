@@ -14,21 +14,25 @@ namespace o2
 		return text == other.text && shortcut == other.shortcut && icon == other.icon;
 	}
 
-	UIContextMenu::Item::Item()
+	UIContextMenu::Item::Item():
+		checked(false), checkable(false)
 	{}
 
 	UIContextMenu::Item::Item(const WString& text, const Function<void()> onClick, const ImageAssetRef& icon /*= ImageAssetRef()*/,
-							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
-		text(text), onClick(onClick), shortcut(shortcut), icon(icon)
+							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/):
+		text(text), onClick(onClick), shortcut(shortcut), icon(icon), checked(false), checkable(false)
 	{}
 
 	UIContextMenu::Item::Item(const WString& text, Vector<Item> subItems, const ImageAssetRef& icon /*= ImageAssetRef()*/) :
-		text(text), subItems(subItems), icon(icon)
+		text(text), subItems(subItems), icon(icon), checked(false), checkable(false)
+	{}
+
+	UIContextMenu::Item::Item(const WString& text, bool checked, Function<void(bool)> onChecked /*= Function<void(bool)>()*/) :
+		text(text), checked(checked), onChecked(onChecked), checkable(true)
 	{}
 
 	UIContextMenu::Item::~Item()
-	{
-	}
+	{}
 
 	UIContextMenu::Item UIContextMenu::Item::Separator()
 	{
@@ -300,6 +304,15 @@ namespace o2
 		return Item();
 	}
 
+	void UIContextMenu::SetItem(int position, const Item& item)
+	{
+		if (position < 0 || position >= mItemsLayout->mChilds.Count())
+			return;
+
+		UIContextMenuItem* itemWidget = (UIContextMenuItem*)(mItemsLayout->mChilds[position]);
+		SetupItem(itemWidget, item);
+	}
+
 	void UIContextMenu::OnVisibleChanged()
 	{
 		interactable = mResVisible;
@@ -358,8 +371,7 @@ namespace o2
 	}
 
 	void UIContextMenu::OnCursorPressed(const Input::Cursor& cursor)
-	{
-	}
+	{}
 
 	void UIContextMenu::OnCursorStillDown(const Input::Cursor& cursor)
 	{}
@@ -369,7 +381,15 @@ namespace o2
 		UIContextMenuItem* itemUnderCursor = GetItemUnderPoint(cursor.position);
 
 		if (itemUnderCursor)
+		{
 			itemUnderCursor->onClick();
+
+			if (itemUnderCursor->IsCheckable())
+			{
+				itemUnderCursor->SetChecked(!itemUnderCursor->IsChecked());
+				itemUnderCursor->onChecked(itemUnderCursor->IsChecked());
+			}
+		}
 
 		if (itemUnderCursor && itemUnderCursor->FindChild<UIContextMenu>() == nullptr)
 		{
@@ -508,6 +528,25 @@ namespace o2
 	{
 		mItemsLayout->RemoveAllChilds();
 		mSelectedItem = nullptr;
+	}
+
+	void UIContextMenu::SetItemChecked(int position, bool checked)
+	{
+		if (position < 0 || position >= mItemsLayout->mChilds.Count())
+			return;
+
+		UIContextMenuItem* item = (UIContextMenuItem*)mItemsLayout->mChilds[position];
+		if (item->IsCheckable())
+			item->SetChecked(checked);
+	}
+
+	bool UIContextMenu::IsItemChecked(int position) const
+	{
+		if (position < 0 || position >= mItemsLayout->mChilds.Count())
+			return false;
+
+		UIContextMenuItem* item = (UIContextMenuItem*)mItemsLayout->mChilds[position];
+		return item->IsChecked();
 	}
 
 	UIVerticalLayout* UIContextMenu::GetItemsLayout() const
@@ -695,10 +734,16 @@ namespace o2
 
 	UIContextMenuItem* UIContextMenu::CreateItem(const Item& item)
 	{
-		UIContextMenuItem* newItem = mItemSample->Clone();
-		newItem->name = (WString)"Context Item " + item.text;
+		UIContextMenuItem* itemWidget = mItemSample->Clone();
+		SetupItem(itemWidget, item);
+		return itemWidget;
+	}
 
-		if (auto iconLayer = newItem->GetLayer("icon"))
+	void UIContextMenu::SetupItem(UIContextMenuItem* widget, const Item& item)
+	{
+		widget->name = (WString)"Context Item " + item.text;
+
+		if (auto iconLayer = widget->GetLayer("icon"))
 		{
 			if (item.icon)
 			{
@@ -706,45 +751,49 @@ namespace o2
 
 				if (size.x > size.y)
 				{
-					size.y *= size.x / newItem->layout.height;
-					size.x = newItem->layout.height;
+					size.y *= size.x / widget->layout.height;
+					size.x = widget->layout.height;
 				}
 				else
 				{
-					size.x *= size.y / newItem->layout.height;
-					size.y = newItem->layout.height;
+					size.x *= size.y / widget->layout.height;
+					size.y = widget->layout.height;
 				}
 
 				iconLayer->AddChildLayer("sprite", mnew Sprite(item.icon),
 										 Layout(Vec2F(), Vec2F(),
-												Vec2F(-Math::Floor(size.x*0.5f), Math::Floor(size.y*0.5f)),
-												Vec2F(Math::Floor(size.x*0.5f), -Math::Floor(size.y*0.5f))));
+										 Vec2F(-Math::Floor(size.x*0.5f), Math::Floor(size.y*0.5f)),
+										 Vec2F(Math::Floor(size.x*0.5f), -Math::Floor(size.y*0.5f))));
 
-				newItem->UpdateLayersDrawingSequence();
+				widget->UpdateLayersDrawingSequence();
 			}
 		}
 
-		if (auto textLayer = newItem->GetLayerDrawable<Text>("caption"))
+		if (auto textLayer = widget->GetLayerDrawable<Text>("caption"))
 			textLayer->text = item.text;
 
-		if (auto shortcutLayer = newItem->GetLayerDrawable<Text>("shortcut"))
+		if (auto shortcutLayer = widget->GetLayerDrawable<Text>("shortcut"))
 			shortcutLayer->text = item.shortcut.AsString();
 
-		if (auto subIconLayer = newItem->GetLayer("subIcon"))
+		if (auto subIconLayer = widget->GetLayer("subIcon"))
 			subIconLayer->transparency = item.subItems.Count() > 0 ? 1.0f : 0.0f;
 
-		newItem->shortcut = item.shortcut;
+		if (auto checkLayer = widget->GetLayerDrawable<Sprite>("check"))
+			checkLayer->enabled = item.checked;
 
+		widget->shortcut = item.shortcut;
+		widget->SetCheckable(item.checkable);
+		widget->onChecked = item.onChecked;
+
+		widget->RemoveAllChilds();
 		if (item.subItems.Count() > 0)
 		{
 			UIContextMenu* subMenu = mnew UIContextMenu(*this);
 			subMenu->RemoveAllItems();
 			subMenu->AddItems(item.subItems);
 
-			newItem->AddChild(subMenu);
+			widget->AddChild(subMenu);
 		}
-
-		return newItem;
 	}
 
 	UIContextMenu::Item UIContextMenu::GetItemDef(int idx) const
@@ -771,6 +820,7 @@ namespace o2
 			if (auto subMenu = contextItem->FindChild<UIContextMenu>())
 				res.subItems = subMenu->GetItems();
 
+			res.checked = contextItem->IsChecked();
 			res.onClick = contextItem->onClick;
 		}
 
@@ -809,6 +859,29 @@ namespace o2
 		return mSubMenu;
 	}
 
+	void UIContextMenuItem::SetChecked(bool checked)
+	{
+		if (auto checkLayer = GetLayerDrawable<Sprite>("check"))
+			checkLayer->enabled = checked;
+
+		mChecked = checked;
+	}
+
+	bool UIContextMenuItem::IsChecked() const
+	{
+		return mChecked;
+	}
+
+	void UIContextMenuItem::SetCheckable(bool checkable)
+	{
+		mCheckable = checkable;
+	}
+
+	bool UIContextMenuItem::IsCheckable() const
+	{
+		return mCheckable;
+	}
+
 	void UIContextMenuItem::OnChildAdded(UIWidget* child)
 	{
 		if (child->GetType() == TypeOf(UIContextMenu))
@@ -822,10 +895,17 @@ CLASS_META(o2::UIContextMenuItem)
 	BASE_CLASS(o2::UIWidget);
 
 	PUBLIC_FIELD(onClick);
+	PUBLIC_FIELD(onChecked);
 	PUBLIC_FIELD(shortcut);
 	PROTECTED_FIELD(mSubMenu);
+	PROTECTED_FIELD(mChecked);
+	PROTECTED_FIELD(mCheckable);
 
 	PUBLIC_FUNCTION(UIContextMenu*, GetSubMenu);
+	PUBLIC_FUNCTION(void, SetChecked, bool);
+	PUBLIC_FUNCTION(bool, IsChecked);
+	PUBLIC_FUNCTION(void, SetCheckable, bool);
+	PUBLIC_FUNCTION(bool, IsCheckable);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 }
 END_META;
@@ -863,10 +943,13 @@ CLASS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
 	PUBLIC_FUNCTION(Item, GetItem, int);
+	PUBLIC_FUNCTION(void, SetItem, int, const Item&);
 	PUBLIC_FUNCTION(Vector<Item>, GetItems);
 	PUBLIC_FUNCTION(void, RemoveItem, int);
 	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
 	PUBLIC_FUNCTION(void, RemoveAllItems);
+	PUBLIC_FUNCTION(void, SetItemChecked, int, bool);
+	PUBLIC_FUNCTION(bool, IsItemChecked, int);
 	PUBLIC_FUNCTION(UIVerticalLayout*, GetItemsLayout);
 	PUBLIC_FUNCTION(UIContextMenuItem*, GetItemSample);
 	PUBLIC_FUNCTION(UIWidget*, GetSeparatorSample);
@@ -882,6 +965,7 @@ CLASS_META(o2::UIContextMenu)
 	PROTECTED_FUNCTION(void, FitPosition);
 	PROTECTED_FUNCTION(void, SpecialDraw);
 	PROTECTED_FUNCTION(UIContextMenuItem*, CreateItem, const Item&);
+	PROTECTED_FUNCTION(void, SetupItem, UIContextMenuItem*, const Item&);
 	PROTECTED_FUNCTION(Item, GetItemDef, int);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(UIContextMenuItem*, GetItemUnderPoint, const Vec2F&);
@@ -905,7 +989,10 @@ CLASS_META(o2::UIContextMenu::Item)
 	PUBLIC_FIELD(shortcut).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(icon).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(subItems).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(checked).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(checkable).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(onClick);
+	PUBLIC_FIELD(onChecked);
 }
 END_META;
  

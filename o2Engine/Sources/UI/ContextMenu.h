@@ -19,8 +19,9 @@ namespace o2
 	class UIContextMenuItem: public UIWidget
 	{
 	public:
-		Function<void()> onClick;  // Click function
-		ShortcutKeys     shortcut; // Shortuct keys
+		Function<void()>     onClick;   // Click function
+		Function<void(bool)> onChecked; // Checked function, calls when check was changed and item is checkable
+		ShortcutKeys         shortcut;  // Shortcut keys
 
 		// Default constructor
 		UIContextMenuItem();
@@ -37,10 +38,24 @@ namespace o2
 		// Returns sub context menu
 		UIContextMenu* GetSubMenu() const;
 
+		// Sets checked icon
+		void SetChecked(bool checked);
+
+		// Returns is menu checked
+		bool IsChecked() const;
+
+		// Sets item checkable
+		void SetCheckable(bool checkable);
+
+		// Returns is menu item can be checked
+		bool IsCheckable() const;
+
 		SERIALIZABLE(UIContextMenuItem);
 
 	protected:
-		UIContextMenu* mSubMenu; // Context sub menu
+		UIContextMenu* mSubMenu;           // Context sub menu
+		bool           mChecked = false;   // Is menu item checked
+		bool           mCheckable = false; // Is menu item can be checked
 
 	protected:
 		// Calls when child widget was added
@@ -55,20 +70,20 @@ namespace o2
 	class UIContextMenu: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		typedef Function<void()> ClickFunc;
-
-	public:
 		// ---------
 		// Menu item
 		// ---------
 		class Item:public ISerializable
 		{
 		public:
-			WString       text;	    // @SERIALIZABLE
-			ShortcutKeys  shortcut; // @SERIALIZABLE
-			ImageAssetRef icon;	    // @SERIALIZABLE
-			Vector<Item>  subItems; // @SERIALIZABLE
-			ClickFunc     onClick;  // On click event	
+			WString              text;	    // @SERIALIZABLE
+			ShortcutKeys         shortcut;  // @SERIALIZABLE
+			ImageAssetRef        icon;	    // @SERIALIZABLE
+			Vector<Item>         subItems;  // @SERIALIZABLE
+			bool                 checked;   // @SERIALIZABLE
+			bool                 checkable; // @SERIALIZABLE
+			Function<void()>     onClick;   // On click event	
+			Function<void(bool)> onChecked; // On checked event	
 
 			Item();
 
@@ -76,6 +91,8 @@ namespace o2
 
 			Item(const WString& text, const Function<void()> onClick, const ImageAssetRef& icon = ImageAssetRef(),
 				 const ShortcutKeys& shortcut = ShortcutKeys());
+
+			Item(const WString& text, bool checked, Function<void(bool)> onChecked = Function<void(bool)>());
 
 			~Item();
 
@@ -133,6 +150,9 @@ namespace o2
 		// Returns item at position
 		Item GetItem(int position);
 
+		// Sets item at position
+		void SetItem(int position, const Item& item);
+
 		// Returns array of all items
 		Vector<Item> GetItems() const;
 
@@ -144,6 +164,12 @@ namespace o2
 
 		// Removes all items
 		void RemoveAllItems();
+
+		// Sets item at position checked (if it checkable)
+		void SetItemChecked(int position, bool checked);
+
+		// Returns is item checked
+		bool IsItemChecked(int position) const;
 
 		// Returns items vertical layout
 		UIVerticalLayout* GetItemsLayout() const;
@@ -217,6 +243,9 @@ namespace o2
 
 		// Creates item widget
 		UIContextMenuItem* CreateItem(const Item& item);
+
+		// Sets item widget data and parameters
+		void SetupItem(UIContextMenuItem* widget, const Item& item);
 
 		// Returns item info
 		Item GetItemDef(int idx) const;

@@ -24,6 +24,9 @@ namespace o2
 		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc; // Local position to screen transformation function
 		Function<Vec2F(const Vec2F&)> checkPositionFunc;          // Position constraints checking function
 
+		Function<void(const Input::Cursor&)> onRightButtonPressed;  // Right mouse button pressed event
+		Function<void(const Input::Cursor&)> onRightButtonReleased; // Right mouse button released event
+
 		// Default constructor
 		DragHandle();
 
@@ -48,8 +51,17 @@ namespace o2
 		// Sets position
 		void SetPosition(const Vec2F& position);
 
+		// Sets drag position of handle, updates handle final position after position checking
+		void SetDragPosition(const Vec2F& position);
+
 		// Returns position
 		Vec2F GetPosition() const;
+
+		// Returns handle dragging offset to cursor
+		Vec2F GetDraggingOffset() const;
+
+		// Returns position at beginning of dragging
+		Vec2F GetDraggingBeginPosition() const;
 
 		// Set handle enabled. Disabled handle don't drawn and interact
 		void SetEnabled(bool enabled);
@@ -69,6 +81,7 @@ namespace o2
 		Vec2F  mPosition;                  // Current handle position, checked by checkPositionFunc
 		Vec2F  mDragOffset;                // Dragging offset from cursor in local space to center
 		Vec2F  mDragPosition;              // Current drag handle position
+		Vec2F  mDragBeginPosition;         // Position at beginning dragging
 			   						       
 		bool   mIsHovered = false;         // Is handle under cursor, used for hover sprite appearing
 		bool   mIsPressed = false;         // Is handle pressed, used for pressed sprite appearing
@@ -94,6 +107,12 @@ namespace o2
 
 		// Calls when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
+
+		// Calls when right mouse button was pressed on this, calls onRightButtonPressed event
+		void OnCursorRightMousePressed(const Input::Cursor& cursor);
+
+		// Calls when right mouse button was released (only when right mouse button pressed this at previous time), calls onRightButtonReleased event
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
 
 		// Initializes properties
 		void InitializeProperties();

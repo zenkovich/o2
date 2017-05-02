@@ -2380,9 +2380,14 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UI/CurveEdit.h">
-		<date year="2017" month="4" day="29" hour="1" minute="19" second="9" />
+		<date year="2017" month="5" day="1" hour="13" minute="33" second="27" />
 		<globalNamespace name="" fullname="">
 			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
 				<section name="Editor" fullname="Editor">
 					<sections>
 						<section name="UICurveEditor" fullname="Editor::UICurveEditor" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">

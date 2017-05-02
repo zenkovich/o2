@@ -35,13 +35,18 @@ namespace Editor
 		mLeftTopHandle.pressedSprite = mnew Sprite("ui/UI2_handle_pressed.png");
 		mLeftTopHandle.pixelPerfect = false;
 
-		mLeftHandle = mLeftTopHandle;
 		mLeftBottomHandle = mLeftTopHandle;
-		mTopHandle = mLeftTopHandle;
-		mBottomHandle = mLeftTopHandle;
 		mRightTopHandle = mLeftTopHandle;
-		mRightHandle = mLeftTopHandle;
 		mRightBottomHandle = mLeftTopHandle;
+
+		mLeftHandle.regularSprite = mnew Sprite("ui/UI2_handle_side_regular.png");
+		mLeftHandle.hoverSprite = mnew Sprite("ui/UI2_handle_side_select.png");
+		mLeftHandle.pressedSprite = mnew Sprite("ui/UI2_handle_side_pressed.png");
+		mLeftHandle.pixelPerfect = false;
+
+		mTopHandle = mLeftHandle;
+		mBottomHandle = mLeftHandle;
+		mRightHandle = mLeftHandle;
 
 		mPivotHandle.regularSprite = mnew Sprite("ui/UI2_pivot.png");
 		mPivotHandle.hoverSprite = mnew Sprite("ui/UI2_pivot_select.png");
@@ -495,6 +500,8 @@ namespace Editor
 			return CursorType::SizeNeSw;
 		};
 
+		Vec2F frameSize = o2EditorSceneScreen.SceneToScreenVector(mFrame.GetScale());
+
 		mLeftTopHandle.position = Vec2F(0.0f, 1.0f)*mFrame;
 		mLeftHandle.position = Vec2F(0.0f, 0.5f)*mFrame;
 		mLeftBottomHandle.position = Vec2F(0.0f, 0.0f)*mFrame;
@@ -503,6 +510,8 @@ namespace Editor
 		mRightTopHandle.position = Vec2F(1.0f, 1.0f)*mFrame;
 		mRightHandle.position = Vec2F(1.0f, 0.5f)*mFrame;
 		mRightBottomHandle.position = Vec2F(1.0f, 0.0f)*mFrame;
+
+		//mTopHandle.regularSprite->size = Vec2F(mTopHandle.regularSprite->size->x, frameSize.x);
 
 		mLeftTopHandle.cursorType = getHandleType(mLeftTopHandle.GetPosition());
 		mLeftHandle.cursorType = getHandleType(mLeftHandle.GetPosition());
@@ -518,14 +527,14 @@ namespace Editor
 		mRightTopRotateHandle.position = Vec2F(1.0f, 1.0f)*mFrame;
 		mRightBottomRotateHandle.position = Vec2F(1.0f, 0.0f)*mFrame;
 
-		mLeftTopHandle.angle = handlesAngle;
-		mLeftHandle.angle = handlesAngle;
-		mLeftBottomHandle.angle = handlesAngle;
-		mTopHandle.angle = handlesAngle;
-		mBottomHandle.angle = handlesAngle;
+		mLeftTopHandle.angle = handlesAngle + Math::PI()*0.5f;
+		mLeftHandle.angle = handlesAngle + Math::PI();
+		mLeftBottomHandle.angle = handlesAngle + Math::PI();
+		mTopHandle.angle = handlesAngle + Math::PI()*0.5f;
+		mBottomHandle.angle = handlesAngle - Math::PI()*0.5f;
 		mRightTopHandle.angle = handlesAngle;
 		mRightHandle.angle = handlesAngle;
-		mRightBottomHandle.angle = handlesAngle;
+		mRightBottomHandle.angle = handlesAngle - Math::PI()*0.5f;
 
 		mLeftTopRotateHandle.angle = handlesAngle + Math::PI()*0.5f;
 		mLeftBottomRotateHandle.angle = handlesAngle + Math::PI();

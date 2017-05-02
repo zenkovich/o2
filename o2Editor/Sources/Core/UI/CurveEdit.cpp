@@ -3,7 +3,9 @@
 #include "Application/Application.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
+#include "UI/ContextMenu.h"
 #include "UI/HorizontalScrollBar.h"
+#include "UI/UIManager.h"
 #include "UI/VerticalScrollBar.h"
 
 namespace Editor
@@ -18,6 +20,7 @@ namespace Editor
 		mTextFont->CheckCharacters("0123456789.,+-", 10);
 
 		InitializeTextDrawables();
+		InitializeContextMenu();
 
 		mBackColor = Color4(130, 130, 130, 255);
 
@@ -29,7 +32,12 @@ namespace Editor
 	{
 		mReady = false;
 
+		mContextMenu = FindChild<UIContextMenu>();
+		if (mContextMenu)
+			delete mContextMenu;
+
 		InitializeTextDrawables();
+		InitializeContextMenu();
 		RetargetStatesAnimations();
 
 		mReady = true;
@@ -37,6 +45,9 @@ namespace Editor
 
 	UICurveEditor::~UICurveEditor()
 	{
+		for (auto curve : mCurves)
+			delete curve;
+
 		delete mSelectionSprite;
 		delete mTextLeft;
 		delete mTextRight;
@@ -182,6 +193,29 @@ namespace Editor
 	{
 		mSupportHandleSample = SelectableDragHandle(mnew Sprite(regular), mnew Sprite(hover),
 													mnew Sprite(pressed), mnew Sprite(selected));
+	}
+
+	void UICurveEditor::InitializeContextMenu()
+	{
+		mContextMenu = o2UI.CreateWidget<UIContextMenu>();
+
+		mContextMenu->AddItems({
+			UIContextMenu::Item("Auto smooth", false, Function<void(bool)>(this, &UICurveEditor::OnAutoSmoothChecked)),
+			UIContextMenu::Item("Flat", false, Function<void(bool)>(this, &UICurveEditor::OnFlatChecked)),
+			UIContextMenu::Item("Free", false, Function<void(bool)>(this, &UICurveEditor::OnFreeChecked)),
+			UIContextMenu::Item("Broken", false, Function<void(bool)>(this, &UICurveEditor::OnBrokenChecked)),
+			UIContextMenu::Item("Discrete", false, Function<void(bool)>(this, &UICurveEditor::OnDiscreteChecked)),
+
+			UIContextMenu::Item::Separator(),
+
+			UIContextMenu::Item("Copy keys", Function<void()>(this, &UICurveEditor::OnCopyPressed), ImageAssetRef(), ShortcutKeys('C', true)),
+			UIContextMenu::Item("Cut keys", Function<void()>(this, &UICurveEditor::OnCutPressed), ImageAssetRef(), ShortcutKeys('X', true)),
+			UIContextMenu::Item("Paste keys", Function<void()>(this, &UICurveEditor::OnPastePressed), ImageAssetRef(), ShortcutKeys('V', true)),
+			UIContextMenu::Item("Delete keys", Function<void()>(this, &UICurveEditor::OnDeletePressed), ImageAssetRef(), ShortcutKeys(VK_DELETE)),
+			UIContextMenu::Item("Insert key", Function<void()>(this, &UICurveEditor::OnInsertPressed), ImageAssetRef())
+		});
+
+		AddChild(mContextMenu);
 	}
 
 	void UICurveEditor::InitializeTextDrawables()
@@ -399,6 +433,7 @@ namespace Editor
 		keyHandles->mainHandle.onChangedPos = [=](const Vec2F& pos) { OnCurveKeyMainHandleDragged(info, keyHandles, pos); };
 		keyHandles->mainHandle.localToScreenTransformFunc = [&](const Vec2F& p) { return LocalToScreenPoint(p); };
 		keyHandles->mainHandle.screenToLocalTransformFunc = [&](const Vec2F& p) { return ScreenToLocalPoint(p); };
+		keyHandles->mainHandle.onRightButtonReleased = Function<void(const Input::Cursor&)>(this, &UICurveEditor::OnCursorRightMouseReleased);
 
 
 		// left support handle
@@ -418,6 +453,8 @@ namespace Editor
 			[=](const Vec2F& pos) { return CheckLeftSupportHandlePosition(info, keyHandles, pos); };
 
 		keyHandles->leftSupportHandle.enabled = false;
+		keyHandles->leftSupportHandle.onRightButtonReleased = 
+			Function<void(const Input::Cursor&)>(this, &UICurveEditor::OnCursorRightMouseReleased);
 
 
 		// right support handle
@@ -437,12 +474,17 @@ namespace Editor
 			[=](const Vec2F& pos) { return CheckRightSupportHandlePosition(info, keyHandles, pos); };
 
 		keyHandles->rightSupportHandle.enabled = false;
+		keyHandles->rightSupportHandle.onRightButtonReleased = 
+			Function<void(const Input::Cursor&)>(this, &UICurveEditor::OnCursorRightMouseReleased);
 
 		info->handles.Insert(keyHandles, keyId);
 
 		mHandles.Add(&keyHandles->mainHandle);
 		mHandles.Add(&keyHandles->leftSupportHandle);
 		mHandles.Add(&keyHandles->rightSupportHandle);
+
+		mSupportHandles.Add(&keyHandles->leftSupportHandle);
+		mSupportHandles.Add(&keyHandles->rightSupportHandle);
 
 		keyHandles->mainHandle.SetSelectionGroup(this);
 		keyHandles->leftSupportHandle.SetSelectionGroup(this);
@@ -453,8 +495,28 @@ namespace Editor
 	{
 		Curve::Key key = info->curve->GetKeyAt(handles->curveKeyIdx);
 
-		key.position = position.x;
-		key.value = position.y;
+		Vec2F initialDragPoint = handles->mainHandle.GetDraggingBeginPosition();
+
+		if (o2Input.IsKeyDown(VK_CONTROL) && o2Input.IsKeyDown(VK_SHIFT))
+		{
+			key.position = Math::Round(position.x*10.0f)/10.0f;
+			key.value = Math::Round(position.y*10.0f)/10.0f;
+		}
+		else if (o2Input.IsKeyDown(VK_CONTROL))
+		{
+			key.position = position.x;
+			key.value = initialDragPoint.y;
+		}
+		else if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			key.position = initialDragPoint.x;
+			key.value = position.y;
+		}
+		else
+		{
+			key.position = position.x;
+			key.value = position.y;
+		}
 
 		int newKeyIdx = 0;
 		for (auto& k : info->curve->GetKeys())
@@ -477,11 +539,7 @@ namespace Editor
 			info->handles.Insert(handles, newKeyIdx);
 
 			for (int i = 0; i < info->handles.Count(); i++)
-			{
 				info->handles[i]->curveKeyIdx = i;
-				info->handles[i]->leftSupportHandle.enabled = i > 0;
-				info->handles[i]->rightSupportHandle.enabled = i < info->curve->GetKeys().Count() - 1;
-			}
 		}
 
 		info->curve->SetKey(key, handles->curveKeyIdx);
@@ -489,6 +547,7 @@ namespace Editor
 		info->UpdateHandles();
 		info->UpdateApproximatedPoints();
 
+		CheckHandlesVisible();
 		RecalculateViewArea();
 		mNeedRedraw = true;
 	}
@@ -498,8 +557,34 @@ namespace Editor
 		Curve::Key key = info->curve->GetKeyAt(handles->curveKeyIdx);
 		Curve::Key prevKey = info->curve->GetKeyAt(Math::Max(handles->curveKeyIdx - 1, 0));
 
-		key.leftSupportPosition = position.x - key.position;
-		key.leftSupportValue = position.y - key.value;
+		if (o2Input.IsKeyDown(VK_CONTROL) && o2Input.IsKeyDown(VK_SHIFT))
+		{
+			Vec2F initialDragPoint = handles->leftSupportHandle.GetDraggingBeginPosition();
+			float dst = (initialDragPoint - Vec2F(key.position, key.value)).Length();
+			Vec2F v = (position - Vec2F(key.position, key.value)).Normalized()*dst;
+			key.leftSupportPosition = v.x;
+			key.leftSupportValue = v.y;
+		}
+		else if (o2Input.IsKeyDown(VK_CONTROL))
+		{
+			key.leftSupportPosition = position.x - key.position;
+			key.leftSupportValue = 0;
+		}
+		else if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			Vec2F initialDragPoint = handles->leftSupportHandle.GetDraggingBeginPosition();
+
+			Vec2F v = initialDragPoint - Vec2F(key.position, key.value);
+			float dst = (position - Vec2F(key.position, key.value)).Length();
+			v = v.Normalized()*dst;
+			key.leftSupportPosition = v.x;
+			key.leftSupportValue = v.y;
+		}
+		else
+		{
+			key.leftSupportPosition = position.x - key.position;
+			key.leftSupportValue = position.y - key.value;
+		}
 
 		if (key.supportsType == Curve::Key::Type::Flat || key.supportsType == Curve::Key::Type::Discrete ||
 			key.supportsType == Curve::Key::Type::Smooth)
@@ -521,6 +606,7 @@ namespace Editor
 		info->UpdateHandles();
 		info->UpdateApproximatedPoints();
 
+		CheckHandlesVisible();
 		RecalculateViewArea();
 		mNeedRedraw = true;
 	}
@@ -530,8 +616,34 @@ namespace Editor
 		Curve::Key key = info->curve->GetKeyAt(handles->curveKeyIdx);
 		Curve::Key nextKey = info->curve->GetKeyAt(Math::Min(handles->curveKeyIdx + 1, info->curve->GetKeys().Count() - 1));
 
-		key.rightSupportPosition = position.x - key.position;
-		key.rightSupportValue = position.y - key.value;
+		if (o2Input.IsKeyDown(VK_CONTROL) && o2Input.IsKeyDown(VK_SHIFT))
+		{
+			Vec2F initialDragPoint = handles->rightSupportHandle.GetDraggingBeginPosition();
+			float dst = (initialDragPoint - Vec2F(key.position, key.value)).Length();
+			Vec2F v = (position - Vec2F(key.position, key.value)).Normalized()*dst;
+			key.rightSupportPosition = v.x;
+			key.rightSupportValue = v.y;
+		}
+		else if (o2Input.IsKeyDown(VK_CONTROL))
+		{
+			key.rightSupportPosition = position.x - key.position;
+			key.rightSupportValue = 0;
+		}
+		else if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			Vec2F initialDragPoint = handles->rightSupportHandle.GetDraggingBeginPosition();
+
+			Vec2F v = initialDragPoint - Vec2F(key.position, key.value);
+			float dst = (position - Vec2F(key.position, key.value)).Length();
+			v = v.Normalized()*dst;
+			key.rightSupportPosition = v.x;
+			key.rightSupportValue = v.y;
+		}
+		else
+		{
+			key.rightSupportPosition = position.x - key.position;
+			key.rightSupportValue = position.y - key.value;
+		}
 
 		if (key.supportsType == Curve::Key::Type::Flat || key.supportsType == Curve::Key::Type::Discrete ||
 			key.supportsType == Curve::Key::Type::Smooth)
@@ -558,6 +670,7 @@ namespace Editor
 		info->UpdateHandles();
 		info->UpdateApproximatedPoints();
 
+		CheckHandlesVisible();
 		RecalculateViewArea();
 		mNeedRedraw = true;
 	}
@@ -665,6 +778,9 @@ namespace Editor
 			clickedCurveInfo->UpdateApproximatedPoints();
 
 			mNeedRedraw = true;
+
+			SelectHandle(&clickedCurveInfo->handles[idx]->mainHandle);
+			CheckHandlesVisible();
 		}
 	}
 
@@ -787,6 +903,64 @@ namespace Editor
 		}
 	}
 
+	void UICurveEditor::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
+	{
+		if (cursor.delta.Length() > 0.1f)
+			mIsViewScrolling = true;
+
+		UIScrollView::OnCursorRightMouseStayDown(cursor);
+	}
+
+	void UICurveEditor::OnCursorRightMouseReleased(const Input::Cursor& cursor)
+	{
+		if (!mIsViewScrolling)
+		{
+			Curve::Key::Type supportsType;
+			bool supportsDifferent = false;
+			bool first = true;
+
+			for (auto curve : mCurves)
+			{
+				for (auto handles : curve->handles)
+				{
+					if (!handles->mainHandle.IsSelected())
+						continue;
+
+					if (first)
+					{
+						first = false;
+						supportsType = curve->curve->GetKeyAt(handles->curveKeyIdx).supportsType;
+					}
+					else if (supportsType != curve->curve->GetKeyAt(handles->curveKeyIdx).supportsType)
+					{
+						supportsDifferent = true;
+						break;;
+					}
+				}
+
+				if (supportsDifferent)
+					break;
+			}
+
+			if (supportsDifferent)
+			{
+				for (int i = 0; i < 5; i++)
+					mContextMenu->SetItemChecked(i, false);
+			}
+			else
+			{
+				for (int i = 0; i < 5; i++)
+					mContextMenu->SetItemChecked(i, i == (int)supportsType);
+			}
+
+			mContextMenu->Show();
+		}
+
+		mIsViewScrolling = false;
+
+		UIScrollView::OnCursorRightMouseReleased(cursor);
+	}
+
 	void UICurveEditor::CheckHandlesVisible()
 	{
 		for (auto info : mCurves)
@@ -794,12 +968,168 @@ namespace Editor
 			for (auto handles : info->handles)
 			{
 				handles->leftSupportHandle.enabled = (handles->mainHandle.IsSelected() ||
-													  handles->leftSupportHandle.IsSelected()) && handles->curveKeyIdx > 0;
+													  handles->leftSupportHandle.IsSelected() ||
+													  handles->rightSupportHandle.IsSelected()) && handles->curveKeyIdx > 0;
 
 				handles->rightSupportHandle.enabled = (handles->mainHandle.IsSelected() ||
+													   handles->leftSupportHandle.IsSelected() ||
 													   handles->rightSupportHandle.IsSelected()) && handles->curveKeyIdx < info->handles.Count() - 1;
 			}
 		}
+	}
+
+	void UICurveEditor::OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor)
+	{
+		SelectableDragHandlesGroup::OnHandleCursorReleased(handle, cursor);
+		CheckHandlesVisible();
+	}
+
+	void UICurveEditor::OnHandleBeganDragging(SelectableDragHandle* handle)
+	{
+		if (mSupportHandles.Contains(handle))
+			return;
+
+		SelectableDragHandlesGroup::OnHandleBeganDragging(handle);
+	}
+
+	void UICurveEditor::OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor)
+	{
+		if (mSupportHandles.Contains(handle))
+		{
+			if (!handle->IsSelected())
+				return;
+
+			for (auto handle : mSupportHandles)
+			{
+				if (!handle->IsSelected())
+					continue;
+
+				handle->SetDragPosition(handle->screenToLocalTransformFunc(cursor.position) + handle->GetDraggingOffset());
+				handle->onChangedPos(handle->GetPosition());
+			}
+
+			return;
+		}
+
+		SelectableDragHandlesGroup::OnHandleMoved(handle, cursor);
+	}
+
+	void UICurveEditor::SetSelectedKeysSupportsType(Curve::Key::Type type)
+	{
+		for (auto info : mCurves)
+		{
+			auto keys = info->curve->GetKeys();
+
+			for (auto handles : info->handles)
+			{
+				if (handles->mainHandle.IsSelected())
+				{
+					Curve::Key& key = keys[handles->curveKeyIdx];
+					key.supportsType = type;
+
+					switch (type)
+					{
+						case Curve::Key::Type::Flat:
+						key.leftSupportValue = 0;
+						key.rightSupportValue = 0;
+						break;
+
+						case Curve::Key::Type::Free:
+						key.rightSupportPosition = -key.leftSupportPosition;
+						key.rightSupportValue = -key.leftSupportValue;
+						break;
+					}
+				}
+			}
+
+			info->curve->SetKeys(keys);
+			info->UpdateHandles();
+			info->UpdateApproximatedPoints();
+		}
+
+		CheckHandlesVisible();
+		RecalculateViewArea();
+		mNeedRedraw = true;
+	}
+
+	void UICurveEditor::OnAutoSmoothChecked(bool checked)
+	{
+		mContextMenu->SetItemChecked(0, true);  // auto smooth
+		mContextMenu->SetItemChecked(1, false); // flat
+		mContextMenu->SetItemChecked(2, false); // free
+		mContextMenu->SetItemChecked(3, false); // broken
+		mContextMenu->SetItemChecked(4, false); // discrete
+
+		SetSelectedKeysSupportsType(Curve::Key::Type::Smooth);
+	}
+
+	void UICurveEditor::OnFlatChecked(bool checked)
+	{
+		mContextMenu->SetItemChecked(0, false);  // auto smooth
+		mContextMenu->SetItemChecked(1, true); // flat
+		mContextMenu->SetItemChecked(2, false); // free
+		mContextMenu->SetItemChecked(3, false); // broken
+		mContextMenu->SetItemChecked(4, false); // discrete
+
+		SetSelectedKeysSupportsType(Curve::Key::Type::Flat);
+	}
+
+	void UICurveEditor::OnFreeChecked(bool checked)
+	{
+		mContextMenu->SetItemChecked(0, false);  // auto smooth
+		mContextMenu->SetItemChecked(1, false); // flat
+		mContextMenu->SetItemChecked(2, true); // free
+		mContextMenu->SetItemChecked(3, false); // broken
+		mContextMenu->SetItemChecked(4, false); // discrete
+
+		SetSelectedKeysSupportsType(Curve::Key::Type::Free);
+	}
+
+	void UICurveEditor::OnBrokenChecked(bool checked)
+	{
+		mContextMenu->SetItemChecked(0, false);  // auto smooth
+		mContextMenu->SetItemChecked(1, false); // flat
+		mContextMenu->SetItemChecked(2, false); // free
+		mContextMenu->SetItemChecked(3, true); // broken
+		mContextMenu->SetItemChecked(4, false); // discrete
+
+		SetSelectedKeysSupportsType(Curve::Key::Type::Broken);
+	}
+
+	void UICurveEditor::OnDiscreteChecked(bool checked)
+	{
+		mContextMenu->SetItemChecked(0, false);  // auto smooth
+		mContextMenu->SetItemChecked(1, false); // flat
+		mContextMenu->SetItemChecked(2, false); // free
+		mContextMenu->SetItemChecked(3, false); // broken
+		mContextMenu->SetItemChecked(4, true); // discrete
+
+		SetSelectedKeysSupportsType(Curve::Key::Type::Discrete);
+	}
+
+	void UICurveEditor::OnCopyPressed()
+	{
+
+	}
+
+	void UICurveEditor::OnCutPressed()
+	{
+
+	}
+
+	void UICurveEditor::OnPastePressed()
+	{
+
+	}
+
+	void UICurveEditor::OnDeletePressed()
+	{
+
+	}
+
+	void UICurveEditor::OnInsertPressed()
+	{
+
 	}
 
 	UICurveEditor::CurveInfo::CurveInfo()
@@ -809,7 +1139,14 @@ namespace Editor
 
 	UICurveEditor::CurveInfo::~CurveInfo()
 	{
+		for (auto x : handles)
+		{
+			x->mainHandle.SetSelectionGroup(nullptr);
+			x->leftSupportHandle.SetSelectionGroup(nullptr);
+			x->rightSupportHandle.SetSelectionGroup(nullptr);
 
+			delete x;
+		}
 	}
 
 	void UICurveEditor::CurveInfo::UpdateHandles()
@@ -900,10 +1237,12 @@ CLASS_META(Editor::UICurveEditor)
 	BASE_CLASS(Editor::UIFrameScrollView);
 	BASE_CLASS(o2::SelectableDragHandlesGroup);
 
+	PROTECTED_FIELD(mContextMenu);
 	PROTECTED_FIELD(mMainHandleSample).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSupportHandleSample).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mCurves);
 	PROTECTED_FIELD(mRanges);
+	PROTECTED_FIELD(mSupportHandles);
 	PROTECTED_FIELD(mSelectingHandlesBuf);
 	PROTECTED_FIELD(mSelectionSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mTextFont).SERIALIZABLE_ATTRIBUTE();
@@ -912,6 +1251,7 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FIELD(mTextTop);
 	PROTECTED_FIELD(mTextBottom);
 	PROTECTED_FIELD(mSelectingPressedPoint);
+	PROTECTED_FIELD(mIsViewScrolling);
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
@@ -925,6 +1265,7 @@ CLASS_META(Editor::UICurveEditor)
 	PUBLIC_FUNCTION(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PROTECTED_FUNCTION(void, InitializeContextMenu);
 	PROTECTED_FUNCTION(void, InitializeTextDrawables);
 	PROTECTED_FUNCTION(void, RecalculateViewArea);
 	PROTECTED_FUNCTION(void, RedrawContent);
@@ -943,7 +1284,23 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CheckHandlesVisible);
+	PROTECTED_FUNCTION(void, OnHandleCursorReleased, SelectableDragHandle*, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnHandleBeganDragging, SelectableDragHandle*);
+	PROTECTED_FUNCTION(void, OnHandleMoved, SelectableDragHandle*, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, SetSelectedKeysSupportsType, Curve::Key::Type);
+	PROTECTED_FUNCTION(void, OnAutoSmoothChecked, bool);
+	PROTECTED_FUNCTION(void, OnFlatChecked, bool);
+	PROTECTED_FUNCTION(void, OnFreeChecked, bool);
+	PROTECTED_FUNCTION(void, OnBrokenChecked, bool);
+	PROTECTED_FUNCTION(void, OnDiscreteChecked, bool);
+	PROTECTED_FUNCTION(void, OnCopyPressed);
+	PROTECTED_FUNCTION(void, OnCutPressed);
+	PROTECTED_FUNCTION(void, OnPastePressed);
+	PROTECTED_FUNCTION(void, OnDeletePressed);
+	PROTECTED_FUNCTION(void, OnInsertPressed);
 }
 END_META;
  
