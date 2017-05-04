@@ -6,6 +6,7 @@
 #include "Render/FontRef.h"
 #include "Render/Mesh.h"
 #include "Utils/DragHandle.h"
+#include "Utils/FrameHandles.h"
 #include "Utils/Math/Curve.h"
 
 using namespace o2;
@@ -146,6 +147,9 @@ namespace Editor
 
 		Vec2F                  mSelectingPressedPoint;        // Point, where cursor was pressed, selection starts here, in local space
 
+		FrameHandles           mTransformFrame;               // Keys transformation frame
+		Basis                  mTransformFrameBasis;          // Basis of transform frame in local space
+
 		bool                   mIsViewScrolling = false;      // Is scrolling view at this time
 
 	protected:
@@ -172,6 +176,9 @@ namespace Editor
 
 		// Draw selection sprite
 		void DrawSelection();
+
+		// Draws transformation frame
+		void DrawTransformFrame();
 
 		// Adds curve key main and support handles and initializes them
 		void AddCurveKeyHandles(CurveInfo* info, int keyId);
@@ -215,6 +222,9 @@ namespace Editor
 		// Checks supports handles visibility
 		void CheckHandlesVisible();
 
+		// Updates transformation frame by selected handles
+		void UpdateTransformFrame();
+
 		// Calls when selectable draggable handle was released
 		void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);
 
@@ -226,6 +236,9 @@ namespace Editor
 
 		// Sets all selected keys supports type
 		void SetSelectedKeysSupportsType(Curve::Key::Type type);
+
+		// Calls when transform frame was transformed
+		void OnTransformFrameTransformed(const Basis& basis);
 
 	// Context menu items functions
 		void OnAutoSmoothChecked(bool checked);

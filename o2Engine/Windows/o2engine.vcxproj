@@ -249,6 +249,7 @@
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />
+    <ClInclude Include="..\Sources\Utils\FrameHandles.h" />
     <ClInclude Include="..\Sources\Utils\IDynamic.h" />
     <ClInclude Include="..\Sources\Utils\IObject.h" />
     <ClInclude Include="..\Sources\Utils\ITree.h" />
@@ -401,6 +402,7 @@
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp" />
+    <ClCompile Include="..\Sources\Utils\FrameHandles.cpp" />
     <ClCompile Include="..\Sources\Utils\ImageFormats\PngFormat.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />

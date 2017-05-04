@@ -22,6 +22,11 @@ namespace Editor
 		InitializeTextDrawables();
 		InitializeContextMenu();
 
+		mTransformFrame.SetPivotEnabled(false);
+		mTransformFrame.SetRotationEnabled(false);
+		mTransformFrame.onTransformed = Function<void(const Basis&)>(this, &UICurveEditor::OnTransformFrameTransformed);
+		mTransformFrame.messageFallDownListener = this;
+
 		mBackColor = Color4(130, 130, 130, 255);
 
 		mReady = true;
@@ -85,6 +90,7 @@ namespace Editor
 	{
 		UIFrameScrollView::Draw();
 
+		DrawTransformFrame();
 		DrawHandles();
 		DrawSelection();
 	}
@@ -419,6 +425,20 @@ namespace Editor
 		}
 	}
 
+	void UICurveEditor::DrawTransformFrame()
+	{
+		if (mSelectedHandles.Count() < 2)
+			return;
+
+		Vec2F borders(10, 10);
+
+		mTransformFrame.SetBasis(Basis(LocalToScreenPoint(mTransformFrameBasis.offs) - borders,
+								 mTransformFrameBasis.xv/mViewCamera.GetScale() + Vec2F(borders.x*2.0f, 0),
+								 mTransformFrameBasis.yv/mViewCamera.GetScale() + Vec2F(0, borders.y*2.0f)));
+
+		mTransformFrame.Draw();
+	}
+
 	void UICurveEditor::AddCurveKeyHandles(CurveInfo* info, int keyId)
 	{
 		KeyHandles* keyHandles = mnew KeyHandles(mMainHandleSample, mSupportHandleSample, this);
@@ -453,7 +473,7 @@ namespace Editor
 			[=](const Vec2F& pos) { return CheckLeftSupportHandlePosition(info, keyHandles, pos); };
 
 		keyHandles->leftSupportHandle.enabled = false;
-		keyHandles->leftSupportHandle.onRightButtonReleased = 
+		keyHandles->leftSupportHandle.onRightButtonReleased =
 			Function<void(const Input::Cursor&)>(this, &UICurveEditor::OnCursorRightMouseReleased);
 
 
@@ -474,7 +494,7 @@ namespace Editor
 			[=](const Vec2F& pos) { return CheckRightSupportHandlePosition(info, keyHandles, pos); };
 
 		keyHandles->rightSupportHandle.enabled = false;
-		keyHandles->rightSupportHandle.onRightButtonReleased = 
+		keyHandles->rightSupportHandle.onRightButtonReleased =
 			Function<void(const Input::Cursor&)>(this, &UICurveEditor::OnCursorRightMouseReleased);
 
 		info->handles.Insert(keyHandles, keyId);
@@ -548,6 +568,7 @@ namespace Editor
 		info->UpdateApproximatedPoints();
 
 		CheckHandlesVisible();
+		UpdateTransformFrame();
 		RecalculateViewArea();
 		mNeedRedraw = true;
 	}
@@ -880,6 +901,7 @@ namespace Editor
 	{
 		mSelectedHandles.Add(mSelectingHandlesBuf);
 		mSelectingHandlesBuf.Clear();
+		UpdateTransformFrame();
 		CheckHandlesVisible();
 	}
 
@@ -898,7 +920,7 @@ namespace Editor
 				!mSelectedHandles.Contains(handle))
 			{
 				mSelectingHandlesBuf.Add(handle);
-				handle->SetSelected(true);
+				SetHandleSelectedState(handle, true);
 			}
 		}
 	}
@@ -978,9 +1000,28 @@ namespace Editor
 		}
 	}
 
+	void UICurveEditor::UpdateTransformFrame()
+	{
+		if (mSelectedHandles.Count() < 2)
+			return;
+
+		RectF aabb(mSelectedHandles[0]->GetPosition(), mSelectedHandles[0]->GetPosition());
+
+		for (auto handle : mSelectedHandles)
+		{
+			aabb.left   = Math::Min(handle->GetPosition().x, aabb.left);
+			aabb.right  = Math::Max(handle->GetPosition().x, aabb.right);
+			aabb.top    = Math::Max(handle->GetPosition().y, aabb.top);
+			aabb.bottom = Math::Min(handle->GetPosition().y, aabb.bottom);
+		}
+
+		mTransformFrameBasis = Basis(aabb.LeftBottom(), Vec2F::Right()*aabb.Width(), Vec2F::Up()*aabb.Height());
+	}
+
 	void UICurveEditor::OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor)
 	{
 		SelectableDragHandlesGroup::OnHandleCursorReleased(handle, cursor);
+		UpdateTransformFrame();
 		CheckHandlesVisible();
 	}
 
@@ -1050,6 +1091,27 @@ namespace Editor
 		CheckHandlesVisible();
 		RecalculateViewArea();
 		mNeedRedraw = true;
+	}
+
+	void UICurveEditor::OnTransformFrameTransformed(const Basis& basis)
+	{
+		Vec2F border(10, 10);
+		Basis localBasis(ScreenToLocalPoint(basis.offs + border), 
+						 (basis.xv - Vec2F(border.x*2.0f, 0))*mViewCamera.GetScale(), 
+						 (basis.yv - Vec2F(0, border.y*2.0f))*mViewCamera.GetScale());
+
+		Basis delta = mTransformFrameBasis.Inverted()*localBasis;
+
+		if (delta.offs.Length() > 0.01f || delta.xv != Vec2F(1, 0) || delta.yv != Vec2F(0, 1))
+		{
+			for (auto handle : mSelectedHandles)
+			{
+				handle->position = handle->position*delta;
+				handle->onChangedPos(handle->GetPosition());
+			}
+
+			UpdateTransformFrame();
+		}
 	}
 
 	void UICurveEditor::OnAutoSmoothChecked(bool checked)
@@ -1251,6 +1313,8 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FIELD(mTextTop);
 	PROTECTED_FIELD(mTextBottom);
 	PROTECTED_FIELD(mSelectingPressedPoint);
+	PROTECTED_FIELD(mTransformFrame);
+	PROTECTED_FIELD(mTransformFrameBasis);
 	PROTECTED_FIELD(mIsViewScrolling);
 
 	PUBLIC_FUNCTION(void, Draw);
@@ -1273,6 +1337,7 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FUNCTION(void, DrawCurves);
 	PROTECTED_FUNCTION(void, DrawHandles);
 	PROTECTED_FUNCTION(void, DrawSelection);
+	PROTECTED_FUNCTION(void, DrawTransformFrame);
 	PROTECTED_FUNCTION(void, AddCurveKeyHandles, CurveInfo*, int);
 	PROTECTED_FUNCTION(void, OnCurveKeyMainHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCurveKeyLeftSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
@@ -1287,10 +1352,12 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CheckHandlesVisible);
+	PROTECTED_FUNCTION(void, UpdateTransformFrame);
 	PROTECTED_FUNCTION(void, OnHandleCursorReleased, SelectableDragHandle*, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnHandleBeganDragging, SelectableDragHandle*);
 	PROTECTED_FUNCTION(void, OnHandleMoved, SelectableDragHandle*, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SetSelectedKeysSupportsType, Curve::Key::Type);
+	PROTECTED_FUNCTION(void, OnTransformFrameTransformed, const Basis&);
 	PROTECTED_FUNCTION(void, OnAutoSmoothChecked, bool);
 	PROTECTED_FUNCTION(void, OnFlatChecked, bool);
 	PROTECTED_FUNCTION(void, OnFreeChecked, bool);

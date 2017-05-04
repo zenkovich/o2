@@ -16,6 +16,9 @@ namespace o2
 	class DragHandle: public IDrawable, public CursorAreaEventsListener, public ISerializable
 	{
 	public:
+		Property<float>              angle;          // Handle angle in radians property
+		CursorType                   cursorType;     // Cursor type when hovering and dragging
+
 		Function<void(const Vec2F&)> onChangedPos;   // On position changed event
 		Property<Vec2F>              position;       // Current position property
 		Property<bool>               enabled;        // Is handle enabled property. Disabled handle don't drawn and interact
@@ -69,6 +72,30 @@ namespace o2
 		// Returns is handle enabled. Disabled handle don't drawn and interact
 		bool IsEnabled() const;
 
+		// Sets handle rotation angle in radians
+		virtual void SetAngle(float rad);
+
+		// Return handle rotation angle in radians
+		float GetAngle() const;
+
+		// Sets regular sprite
+		void SetRegularSprite(Sprite* sprite);
+
+		// Returns regular sprite
+		Sprite* GetRegularSprite() const;
+
+		// Sets hovered sprite
+		void SetHoverSprite(Sprite* sprite);
+
+		// Returns hovered sprite
+		Sprite* GetHoverSprite() const;
+
+		// Sets pressed sprite
+		void SetPressedSprite(Sprite* sprite);
+
+		// Returns pressed sprite
+		Sprite* GetPressedSprite() const;
+
 		SERIALIZABLE(DragHandle);
 
 	protected:
@@ -79,6 +106,7 @@ namespace o2
 		Sprite* mPressedSprite = nullptr;  // Pressed view sprite @SERIALIZABLE
 
 		Vec2F  mPosition;                  // Current handle position, checked by checkPositionFunc
+		float  mAngle = 0.0f;              // Handle rotation angle in radians
 		Vec2F  mDragOffset;                // Dragging offset from cursor in local space to center
 		Vec2F  mDragPosition;              // Current drag handle position
 		Vec2F  mDragBeginPosition;         // Position at beginning dragging
@@ -165,6 +193,9 @@ namespace o2
 
 		// Calls when selectable handle moved, moves all selected handles position
 		virtual void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
+
+		// Sets handle selected state without adding to selected handles array
+		void SetHandleSelectedState(SelectableDragHandle* handle, bool selected);
 
 		friend class SelectableDragHandle;
 	};
@@ -262,6 +293,9 @@ namespace o2
 
 		// Returns selection group
 		ISelectableDragHandlesGroup* GetSelectionGroup() const;
+
+		// Sets handle rotation angle in radians
+		void SetAngle(float rad);
 
 		SERIALIZABLE(SelectableDragHandle);
 

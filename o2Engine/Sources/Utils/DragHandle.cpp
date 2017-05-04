@@ -2,11 +2,14 @@
 
 #include "Events/EventSystem.h"
 #include "Render/Sprite.h"
+#include "Application/Application.h"
 
 namespace o2
 {
 	DragHandle::DragHandle()
 	{
+		cursorType = CursorType::Arrow;
+
 		screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToScreenTransformFunc = [](const Vec2F& point) { return point; };
 		checkPositionFunc = [](const Vec2F& point) { return point; };
@@ -17,6 +20,8 @@ namespace o2
 	DragHandle::DragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/):
 		mRegularSprite(regular), mHoverSprite(hover), mPressedSprite(pressed)
 	{
+		cursorType = CursorType::Arrow;
+
 		screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToScreenTransformFunc = [](const Vec2F& point) { return point; };
 		checkPositionFunc = [](const Vec2F& point) { return point; };
@@ -39,6 +44,7 @@ namespace o2
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
 		localToScreenTransformFunc = other.localToScreenTransformFunc;
 		checkPositionFunc = other.checkPositionFunc;
+		cursorType = other.cursorType;
 
 		SetPosition(other.mPosition);
 		InitializeProperties();
@@ -70,6 +76,7 @@ namespace o2
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
 		localToScreenTransformFunc = other.localToScreenTransformFunc;
 		checkPositionFunc = other.checkPositionFunc;
+		cursorType = other.cursorType;
 
 		SetPosition(other.mPosition);
 
@@ -132,6 +139,9 @@ namespace o2
 	{
 		mIsPressed = false;
 		mIsDragging = false;
+
+		if (!IsUnderPoint(cursor.position))
+			o2Application.SetCursor(CursorType::Arrow);
 	}
 
 	void DragHandle::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -156,11 +166,15 @@ namespace o2
 	void DragHandle::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		mIsHovered = true;
+		if (!cursor.isPressed)
+			o2Application.SetCursor(cursorType);
 	}
 
 	void DragHandle::OnCursorExit(const Input::Cursor& cursor)
 	{
 		mIsHovered = false;
+		if (!IsPressed() && !cursor.isPressed)
+			o2Application.SetCursor(CursorType::Arrow);
 	}
 
 	void DragHandle::OnCursorRightMousePressed(const Input::Cursor& cursor)
@@ -209,10 +223,69 @@ namespace o2
 		return mEnabled;
 	}
 
+	void DragHandle::SetAngle(float rad)
+	{
+		mAngle = rad;
+
+		if (mRegularSprite)
+			mRegularSprite->angle = rad;
+
+		if (mHoverSprite)
+			mHoverSprite->angle = rad;
+
+		if (mPressedSprite)
+			mPressedSprite->angle = rad;
+	}
+
+	float DragHandle::GetAngle() const
+	{
+		return mAngle;
+	}
+
+	void DragHandle::SetRegularSprite(Sprite* sprite)
+	{
+		if (mRegularSprite)
+			delete mRegularSprite;
+
+		mRegularSprite = sprite;
+	}
+
+	Sprite* DragHandle::GetRegularSprite() const
+	{
+		return mRegularSprite;
+	}
+
+	void DragHandle::SetHoverSprite(Sprite* sprite)
+	{
+		if (mHoverSprite)
+			delete mHoverSprite;
+
+		mHoverSprite = sprite;
+	}
+
+	Sprite* DragHandle::GetHoverSprite() const
+	{
+		return mHoverSprite;
+	}
+
+	void DragHandle::SetPressedSprite(Sprite* sprite)
+	{
+		if (mPressedSprite)
+			delete mPressedSprite;
+
+		mPressedSprite = sprite;
+	}
+
+	Sprite* DragHandle::GetPressedSprite() const
+	{
+		return mPressedSprite;
+	}
+
 	void DragHandle::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(DragHandle, position, SetPosition, GetPosition);
 		INITIALIZE_PROPERTY(DragHandle, enabled, SetEnabled, IsEnabled);
+		INITIALIZE_PROPERTY(DragHandle, angle, SetAngle, GetAngle);
 	}
 
 	SelectableDragHandle::SelectableDragHandle():
@@ -329,6 +402,14 @@ namespace o2
 		return mSelectGroup;
 	}
 
+	void SelectableDragHandle::SetAngle(float rad)
+	{
+		DragHandle::SetAngle(rad);
+
+		if (mSelectedSprite)
+			mSelectedSprite->angle = rad;
+	}
+
 	void SelectableDragHandle::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		DragHandle::OnCursorPressed(cursor);
@@ -391,6 +472,9 @@ namespace o2
 				SetSelected(!IsSelected());
 		}
 
+		if (!IsUnderPoint(cursor.position))
+			o2Application.SetCursor(CursorType::Arrow);
+
 		mIsPressed = false;
 	}
 
@@ -420,6 +504,11 @@ namespace o2
 		auto handles = GetAllHandles();
 		for (auto handle : handles)
 			SelectHandle(handle);
+	}
+
+	void ISelectableDragHandlesGroup::SetHandleSelectedState(SelectableDragHandle* handle, bool selected)
+	{
+		handle->mIsSelected = selected;
 	}
 
 	SelectableDragHandlesGroup::~SelectableDragHandlesGroup()
@@ -521,6 +610,8 @@ CLASS_META(o2::DragHandle)
 	BASE_CLASS(o2::CursorAreaEventsListener);
 	BASE_CLASS(o2::ISerializable);
 
+	PUBLIC_FIELD(angle);
+	PUBLIC_FIELD(cursorType);
 	PUBLIC_FIELD(onChangedPos);
 	PUBLIC_FIELD(position);
 	PUBLIC_FIELD(enabled);
@@ -534,6 +625,7 @@ CLASS_META(o2::DragHandle)
 	PROTECTED_FIELD(mHoverSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPressedSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPosition);
+	PROTECTED_FIELD(mAngle);
 	PROTECTED_FIELD(mDragOffset);
 	PROTECTED_FIELD(mDragPosition);
 	PROTECTED_FIELD(mDragBeginPosition);
@@ -551,6 +643,14 @@ CLASS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(Vec2F, GetDraggingBeginPosition);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
 	PUBLIC_FUNCTION(bool, IsEnabled);
+	PUBLIC_FUNCTION(void, SetAngle, float);
+	PUBLIC_FUNCTION(float, GetAngle);
+	PUBLIC_FUNCTION(void, SetRegularSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetRegularSprite);
+	PUBLIC_FUNCTION(void, SetHoverSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetHoverSprite);
+	PUBLIC_FUNCTION(void, SetPressedSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetPressedSprite);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
@@ -579,6 +679,7 @@ CLASS_META(o2::SelectableDragHandle)
 	PUBLIC_FUNCTION(void, Deselect);
 	PUBLIC_FUNCTION(void, SetSelectionGroup, ISelectableDragHandlesGroup*);
 	PUBLIC_FUNCTION(ISelectableDragHandlesGroup*, GetSelectionGroup);
+	PUBLIC_FUNCTION(void, SetAngle, float);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

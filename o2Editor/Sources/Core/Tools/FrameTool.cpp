@@ -106,7 +106,7 @@ namespace Editor
 
 		if (o2EditorSceneScreen.GetSelectedActors().Count() > 0)
 		{
-			o2Render.DrawBasis(mFrame, mHandleRegularColor, mHandleRegularColor, mHandleRegularColor);
+			o2Render.DrawBasis(mFrame, mFrameColor, mFrameColor, mFrameColor);
 		}
 	}
 
@@ -193,7 +193,7 @@ namespace Editor
 		mFrame = mFrame*transform;
 		mPivotHandle.position = mPivotHandle.position*transform;
 		mChangedFromThis = true;
-		UdateHandlesTransform();
+		UpdateHandlesTransform();
 	}
 
 	void FrameTool::TransformActorsWithAction(const Basis& transform)
@@ -252,7 +252,7 @@ namespace Editor
 			return;
 		}
 
-		UdateHandlesTransform();
+		UpdateHandlesTransform();
 	}
 
 	void FrameTool::OnCursorPressed(const Input::Cursor& cursor)
@@ -472,7 +472,7 @@ namespace Editor
 		mRightBottomHandle.enabled = enable;
 	}
 
-	void FrameTool::UdateHandlesTransform()
+	void FrameTool::UpdateHandlesTransform()
 	{
 		float handlesAngle = mFrame.GetAngle();
 
@@ -499,8 +499,6 @@ namespace Editor
 
 			return CursorType::SizeNeSw;
 		};
-
-		Vec2F frameSize = o2EditorSceneScreen.SceneToScreenVector(mFrame.GetScale());
 
 		mLeftTopHandle.position = Vec2F(0.0f, 1.0f)*mFrame;
 		mLeftHandle.position = Vec2F(0.0f, 0.5f)*mFrame;
@@ -557,14 +555,12 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::FrameTool)
 {
 	BASE_CLASS(Editor::SelectionTool);
 
-	PROTECTED_FIELD(mHandleRegularColor);
-	PROTECTED_FIELD(mHandleSelectColor);
-	PROTECTED_FIELD(mHandlePressedColor);
+	PROTECTED_FIELD(mFrameColor);
 	PROTECTED_FIELD(mFrameHandlesSize);
 	PROTECTED_FIELD(mHandlesRotateSize);
 	PROTECTED_FIELD(mLeftTopRotateHandle);
@@ -585,38 +581,38 @@ CLASS_META(Editor::FrameTool)
 	PROTECTED_FIELD(mChangedFromThis);
 	PROTECTED_FIELD(mBeforeTransforms);
 
-	PUBLIC_FUNCTION(void, DrawScene);
-	PUBLIC_FUNCTION(void, OnEnabled);
-	PUBLIC_FUNCTION(void, OnDisabled);
-	PUBLIC_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
-	PUBLIC_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
-	PUBLIC_FUNCTION(void, OnKeyPressed, const Input::Key&);
-	PUBLIC_FUNCTION(void, OnKeyStayDown, const Input::Key&);
-	PUBLIC_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PUBLIC_FUNCTION(void, TransformActors, const Basis&);
-	PUBLIC_FUNCTION(void, TransformActorsWithAction, const Basis&);
-	PUBLIC_FUNCTION(void, UpdateSelectionFrame);
-	PUBLIC_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PUBLIC_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PUBLIC_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PUBLIC_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PUBLIC_FUNCTION(void, OnLeftTopHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnLeftHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnLeftBottomHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnTopHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnBottomHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnRightTopHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnRightHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnRightBottomHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnPivotHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnLeftTopRotateHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnLeftBottomRotateHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnRightTopRotateHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnRightBottomRotateHandle, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetHandlesEnable, bool);
-	PUBLIC_FUNCTION(void, UdateHandlesTransform);
-	PUBLIC_FUNCTION(void, HandlePressed);
-	PUBLIC_FUNCTION(void, HandleReleased);
+	PROTECTED_FUNCTION(void, DrawScene);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
+	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PROTECTED_FUNCTION(void, TransformActors, const Basis&);
+	PROTECTED_FUNCTION(void, TransformActorsWithAction, const Basis&);
+	PROTECTED_FUNCTION(void, UpdateSelectionFrame);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnLeftTopHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnLeftHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnLeftBottomHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnTopHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnBottomHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnRightTopHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnRightHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnRightBottomHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnPivotHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnLeftTopRotateHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnLeftBottomRotateHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnRightTopRotateHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnRightBottomRotateHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, SetHandlesEnable, bool);
+	PROTECTED_FUNCTION(void, UpdateHandlesTransform);
+	PROTECTED_FUNCTION(void, HandlePressed);
+	PROTECTED_FUNCTION(void, HandleReleased);
 }
 END_META;
  
