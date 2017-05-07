@@ -618,8 +618,8 @@ namespace o2
 															float endCoef, float endCoefPosition)
 	{
 		AnimatedValue<_type> res;
-		res.AddKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef), beginCoefPosition);
-		res.AddKey(duration, end, Math::Lerp(begin, end, endCoef), endCoefPosition, 0.0f, 0.0f);
+		res.AddKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef), beginCoefPosition*duration);
+		res.AddKey(duration*duration, end, Math::Lerp(begin, end, endCoef), endCoefPosition, 0.0f, 0.0f);
 		return res;
 	}
 

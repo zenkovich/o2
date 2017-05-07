@@ -15,15 +15,12 @@ namespace Editor
 	{
 		Vec2F rotateHandleSize = Vec2F(mHandlesRotateSize, mHandlesRotateSize);
 		Vec2F frameHandleSize = Vec2F(mFrameHandlesSize, mFrameHandlesSize);
-		mLeftTopRotateHandle.regularSprite = mnew Sprite(Color4(0, 0, 0, 20));
-		mLeftTopRotateHandle.hoverSprite = mnew Sprite(Color4(0, 0, 0, 10));
-		mLeftTopRotateHandle.pressedSprite = mnew Sprite(Color4(0, 0, 0, 50));
-		mLeftTopRotateHandle.regularSprite->size = rotateHandleSize;
-		mLeftTopRotateHandle.hoverSprite->size = rotateHandleSize;
-		mLeftTopRotateHandle.pressedSprite->size = rotateHandleSize;
-		mLeftTopRotateHandle.regularSprite->szPivot = frameHandleSize*0.5f;
-		mLeftTopRotateHandle.hoverSprite->szPivot = frameHandleSize*0.5f;
-		mLeftTopRotateHandle.pressedSprite->szPivot = frameHandleSize*0.5f;
+		mLeftTopRotateHandle.regularSprite = mnew Sprite("ui/UI3_rotate_regular.png");
+		mLeftTopRotateHandle.hoverSprite = mnew Sprite("ui/UI3_rotate_hover.png");
+		mLeftTopRotateHandle.pressedSprite = mnew Sprite("ui/UI3_rotate_pressed.png");
+		mLeftTopRotateHandle.regularSprite->pivot = Vec2F(0, 0);
+		mLeftTopRotateHandle.hoverSprite->pivot = Vec2F(0, 0);
+		mLeftTopRotateHandle.pressedSprite->pivot = Vec2F(0, 0);
 		mLeftTopRotateHandle.pixelPerfect = false;
 
 		mLeftBottomRotateHandle = mLeftTopRotateHandle;
@@ -262,6 +259,9 @@ namespace Editor
 			if (mFrame.IsPointInside(o2EditorSceneScreen.ScreenToScenePoint(cursor.position)))
 			{
 				mIsDragging = true;
+				mBeginDraggingFrame = mFrame;
+				mBeginDraggingOffset = cursor.position - mFrame.offs;
+
 				SetHandlesEnable(false);
 				HandlePressed();
 				return;
@@ -296,7 +296,17 @@ namespace Editor
 	{
 		if (mIsDragging)
 		{
-			TransformActors(Basis::Translated(o2EditorSceneScreen.ScreenToSceneVector(cursor.delta)));
+			Basis transformed(cursor.position - mBeginDraggingOffset, mFrame.xv, mFrame.yv);
+
+			if (o2Input.IsKeyDown(VK_SHIFT))
+			{
+				if (Math::Abs(transformed.offs.x - mBeginDraggingFrame.offs.x) > Math::Abs(transformed.offs.y - mBeginDraggingFrame.offs.y))
+					transformed.offs.y = mBeginDraggingFrame.offs.y;
+				else
+					transformed.offs.x = mBeginDraggingFrame.offs.x;
+			}
+
+			TransformActors(mFrame.Inverted()*transformed);
 		}
 		else SelectionTool::OnCursorStillDown(cursor);
 	}
@@ -313,6 +323,21 @@ namespace Editor
 		transformedFrame.xv -= frameDeltaX;
 		transformedFrame.yv += frameDeltaY;
 
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+
+			if (transformedFrame.xv.Length() < transformedFrame.yv.Length())
+			{
+				Vec2F xd = transformedFrame.xv.Normalized()*
+					(transformedFrame.yv.Length()*aspect - transformedFrame.xv.Length());
+
+				transformedFrame.offs -= xd;
+				transformedFrame.xv += xd;
+			}
+			else transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
+		}
+
 		TransformActors(mFrame.Inverted()*transformedFrame);
 	}
 
@@ -325,6 +350,12 @@ namespace Editor
 
 		transformedFrame.offs += frameDeltaX;
 		transformedFrame.xv -= frameDeltaX;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+			transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
+		}
 
 		TransformActors(mFrame.Inverted()*transformedFrame);
 	}
@@ -341,6 +372,28 @@ namespace Editor
 		transformedFrame.xv -= frameDeltaX;
 		transformedFrame.yv -= frameDeltaY;
 
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+
+			if (transformedFrame.xv.Length() < transformedFrame.yv.Length())
+			{
+				Vec2F xd = transformedFrame.xv.Normalized()*
+					(transformedFrame.yv.Length()*aspect - transformedFrame.xv.Length());
+
+				transformedFrame.offs -= xd;
+				transformedFrame.xv += xd;
+			}
+			else
+			{
+				Vec2F yd = transformedFrame.yv.Normalized()*
+					(transformedFrame.xv.Length()/aspect - transformedFrame.yv.Length());
+
+				transformedFrame.offs -= yd;
+				transformedFrame.yv += yd;
+			}
+		}
+
 		TransformActors(mFrame.Inverted()*transformedFrame);
 	}
 
@@ -352,6 +405,12 @@ namespace Editor
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
 		transformedFrame.yv += frameDeltaY;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+			transformedFrame.xv = transformedFrame.xv.Normalized()*transformedFrame.yv.Length()*aspect;
+		}
 
 		TransformActors(mFrame.Inverted()*transformedFrame);
 	}
@@ -365,6 +424,12 @@ namespace Editor
 
 		transformedFrame.offs += frameDeltaY;
 		transformedFrame.yv -= frameDeltaY;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+			transformedFrame.xv = transformedFrame.xv.Normalized()*transformedFrame.yv.Length()*aspect;
+		}
 
 		TransformActors(mFrame.Inverted()*transformedFrame);
 	}
@@ -380,6 +445,16 @@ namespace Editor
 		transformedFrame.xv += frameDeltaX;
 		transformedFrame.yv += frameDeltaY;
 
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+
+			if (transformedFrame.xv.Length() < transformedFrame.yv.Length())
+				transformedFrame.xv = transformedFrame.xv.Normalized()*transformedFrame.yv.Length()*aspect;
+			else
+				transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
+		}
+
 		TransformActors(mFrame.Inverted()*transformedFrame);
 	}
 
@@ -391,6 +466,12 @@ namespace Editor
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 
 		transformedFrame.xv += frameDeltaX;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+			transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
+		}
 
 		TransformActors(mFrame.Inverted()*transformedFrame);
 	}
@@ -407,6 +488,22 @@ namespace Editor
 		transformedFrame.xv += frameDeltaX;
 		transformedFrame.yv -= frameDeltaY;
 
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+
+			if (transformedFrame.xv.Length() < transformedFrame.yv.Length())
+				transformedFrame.xv = transformedFrame.xv.Normalized()*transformedFrame.yv.Length()*aspect;
+			else
+			{
+				Vec2F yd = transformedFrame.yv.Normalized()*
+					(transformedFrame.xv.Length()/aspect - transformedFrame.yv.Length());
+
+				transformedFrame.offs -= yd;
+				transformedFrame.yv += yd;
+			}
+		}
+
 		TransformActors(mFrame.Inverted()*transformedFrame);
 	}
 
@@ -422,37 +519,48 @@ namespace Editor
 	void FrameTool::OnLeftTopRotateHandle(const Vec2F& position)
 	{
 		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mFrame;
-		Vec2F rotatePivot = mPivotHandle.position;
-		float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
-		Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
-		TransformActors(transform);
+		OnRotateHandle(position, lastHandleCoords);
 	}
 
 	void FrameTool::OnLeftBottomRotateHandle(const Vec2F& position)
 	{
 		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mFrame;
-		Vec2F rotatePivot = mPivotHandle.position;
-		float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
-		Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
-		TransformActors(transform);
+		OnRotateHandle(position, lastHandleCoords);
 	}
 
 	void FrameTool::OnRightTopRotateHandle(const Vec2F& position)
 	{
 		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mFrame;
-		Vec2F rotatePivot = mPivotHandle.position;
-		float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
-		Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
-		TransformActors(transform);
+		OnRotateHandle(position, lastHandleCoords);
 	}
 
 	void FrameTool::OnRightBottomRotateHandle(const Vec2F& position)
 	{
 		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mFrame;
+		OnRotateHandle(position, lastHandleCoords);
+	}
+
+	void FrameTool::OnRotateHandle(const Vec2F& position, Vec2F lastHandleCoords)
+	{
 		Vec2F rotatePivot = mPivotHandle.position;
 		float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
 		Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
-		TransformActors(transform);
+		Basis transformed = mFrame*transform;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float angle = Math::Rad2deg(transformed.GetAngle());
+			float step = 15.0f;
+			float targetAngle = Math::Round(angle/step)*step;
+			float delta = targetAngle - angle;
+
+			Basis deltaTransform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(Math::Deg2rad(delta))
+				*Basis::Translated(rotatePivot);
+
+			transformed = transformed*deltaTransform;
+		}
+
+		TransformActors(mFrame.Inverted()*transformed);
 	}
 
 	void FrameTool::SetHandlesEnable(bool enable)
@@ -546,6 +654,8 @@ namespace Editor
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
 			[](Actor* x) { return x->transform; });
+
+		mBeginDraggingFrame = mFrame;
 	}
 
 	void FrameTool::HandleReleased()
@@ -577,6 +687,8 @@ CLASS_META(Editor::FrameTool)
 	PROTECTED_FIELD(mRightBottomHandle);
 	PROTECTED_FIELD(mPivotHandle);
 	PROTECTED_FIELD(mFrame);
+	PROTECTED_FIELD(mBeginDraggingFrame);
+	PROTECTED_FIELD(mBeginDraggingOffset);
 	PROTECTED_FIELD(mIsDragging);
 	PROTECTED_FIELD(mChangedFromThis);
 	PROTECTED_FIELD(mBeforeTransforms);
@@ -609,6 +721,7 @@ CLASS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(void, OnLeftBottomRotateHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnRightTopRotateHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnRightBottomRotateHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnRotateHandle, const Vec2F&, Vec2F);
 	PROTECTED_FUNCTION(void, SetHandlesEnable, bool);
 	PROTECTED_FUNCTION(void, UpdateHandlesTransform);
 	PROTECTED_FUNCTION(void, HandlePressed);

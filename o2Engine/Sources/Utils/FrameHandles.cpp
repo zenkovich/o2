@@ -56,6 +56,21 @@ namespace o2
 		mLeftBottomRotateHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnLeftBottomRotateHandle);
 		mRightTopRotateHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnRightTopRotateHandle);
 		mRightBottomRotateHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnRightBottomRotateHandle);
+
+		mLeftTopHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mLeftHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mLeftBottomHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mTopHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mBottomHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mRightTopHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mRightHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mRightBottomHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mPivotHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mLeftTopRotateHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mLeftBottomRotateHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mRightTopRotateHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mRightBottomRotateHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+
 	}
 
 	void FrameHandles::SetBasis(const Basis& basis)
@@ -136,6 +151,9 @@ namespace o2
 		if (mFrame.IsPointInside(cursor.position))
 		{
 			mIsDragging = true;
+			mBeginDraggingFrame = mFrame;
+			mBeginDraggingOffset = cursor.position - mFrame.offs;
+
 			SetHandlesEnable(false);
 		}
 	}
@@ -161,7 +179,19 @@ namespace o2
 	void FrameHandles::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		if (mIsDragging)
-			OnTransformed(Basis::Translated(cursor.delta));
+		{
+			Basis transformed(cursor.position - mBeginDraggingOffset, mFrame.xv, mFrame.yv);
+
+			if (o2Input.IsKeyDown(VK_SHIFT))
+			{
+				if (Math::Abs(transformed.offs.x - mBeginDraggingFrame.offs.x) > Math::Abs(transformed.offs.y - mBeginDraggingFrame.offs.y))
+					transformed.offs.y = mBeginDraggingFrame.offs.y;
+				else
+					transformed.offs.x = mBeginDraggingFrame.offs.x;
+			}
+
+			OnTransformed(mFrame.Inverted()*transformed);
+		}
 	}
 
 	void FrameHandles::OnLeftTopHandle(const Vec2F& position)
@@ -176,6 +206,21 @@ namespace o2
 		transformedFrame.xv -= frameDeltaX;
 		transformedFrame.yv += frameDeltaY;
 
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+
+			if (transformedFrame.xv.Length() < transformedFrame.yv.Length())
+			{
+				Vec2F xd = transformedFrame.xv.Normalized()*
+					(transformedFrame.yv.Length()*aspect - transformedFrame.xv.Length());
+
+				transformedFrame.offs -= xd;
+				transformedFrame.xv += xd;
+			}
+			else transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
+		}
+
 		OnTransformed(mFrame.Inverted()*transformedFrame);
 	}
 
@@ -188,6 +233,12 @@ namespace o2
 
 		transformedFrame.offs += frameDeltaX;
 		transformedFrame.xv -= frameDeltaX;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+			transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
+		}
 
 		OnTransformed(mFrame.Inverted()*transformedFrame);
 	}
@@ -204,6 +255,28 @@ namespace o2
 		transformedFrame.xv -= frameDeltaX;
 		transformedFrame.yv -= frameDeltaY;
 
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+
+			if (transformedFrame.xv.Length() < transformedFrame.yv.Length())
+			{
+				Vec2F xd = transformedFrame.xv.Normalized()*
+					(transformedFrame.yv.Length()*aspect - transformedFrame.xv.Length());
+
+				transformedFrame.offs -= xd;
+				transformedFrame.xv += xd;
+			}
+			else
+			{
+				Vec2F yd = transformedFrame.yv.Normalized()*
+					(transformedFrame.xv.Length()/aspect - transformedFrame.yv.Length());
+
+				transformedFrame.offs -= yd;
+				transformedFrame.yv += yd;
+			}
+		}
+
 		OnTransformed(mFrame.Inverted()*transformedFrame);
 	}
 
@@ -215,6 +288,12 @@ namespace o2
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
 		transformedFrame.yv += frameDeltaY;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+			transformedFrame.xv = transformedFrame.xv.Normalized()*transformedFrame.yv.Length()*aspect;
+		}
 
 		OnTransformed(mFrame.Inverted()*transformedFrame);
 	}
@@ -228,6 +307,12 @@ namespace o2
 
 		transformedFrame.offs += frameDeltaY;
 		transformedFrame.yv -= frameDeltaY;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+			transformedFrame.xv = transformedFrame.xv.Normalized()*transformedFrame.yv.Length()*aspect;
+		}
 
 		OnTransformed(mFrame.Inverted()*transformedFrame);
 	}
@@ -243,6 +328,16 @@ namespace o2
 		transformedFrame.xv += frameDeltaX;
 		transformedFrame.yv += frameDeltaY;
 
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+
+			if (transformedFrame.xv.Length() < transformedFrame.yv.Length())
+				transformedFrame.xv = transformedFrame.xv.Normalized()*transformedFrame.yv.Length()*aspect;
+			else
+				transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
+		}
+
 		OnTransformed(mFrame.Inverted()*transformedFrame);
 	}
 
@@ -254,6 +349,12 @@ namespace o2
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 
 		transformedFrame.xv += frameDeltaX;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+			transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
+		}
 
 		OnTransformed(mFrame.Inverted()*transformedFrame);
 	}
@@ -270,43 +371,75 @@ namespace o2
 		transformedFrame.xv += frameDeltaX;
 		transformedFrame.yv -= frameDeltaY;
 
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float aspect = mBeginDraggingFrame.xv.Length()/mBeginDraggingFrame.yv.Length();
+
+			if (transformedFrame.xv.Length() < transformedFrame.yv.Length())
+				transformedFrame.xv = transformedFrame.xv.Normalized()*transformedFrame.yv.Length()*aspect;
+			else
+			{
+				Vec2F yd = transformedFrame.yv.Normalized()*
+					(transformedFrame.xv.Length()/aspect - transformedFrame.yv.Length());
+
+				transformedFrame.offs -= yd;
+				transformedFrame.yv += yd;
+			}
+		}
+
 		OnTransformed(mFrame.Inverted()*transformedFrame);
 	}
 
 	void FrameHandles::OnLeftTopRotateHandle(const Vec2F& position)
 	{
 		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mFrame;
-		Vec2F rotatePivot = mPivotHandle.position;
-		float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
-		Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
-		OnTransformed(transform);
+		OnRotateHandle(position, lastHandleCoords);
 	}
 
 	void FrameHandles::OnLeftBottomRotateHandle(const Vec2F& position)
 	{
 		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mFrame;
-		Vec2F rotatePivot = mPivotHandle.position;
-		float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
-		Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
-		OnTransformed(transform);
+		OnRotateHandle(position, lastHandleCoords);
 	}
 
 	void FrameHandles::OnRightTopRotateHandle(const Vec2F& position)
 	{
 		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mFrame;
-		Vec2F rotatePivot = mPivotHandle.position;
-		float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
-		Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
-		OnTransformed(transform);
+		OnRotateHandle(position, lastHandleCoords);
 	}
 
 	void FrameHandles::OnRightBottomRotateHandle(const Vec2F& position)
 	{
 		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mFrame;
+		OnRotateHandle(position, lastHandleCoords);
+	}
+
+	void FrameHandles::OnRotateHandle(const Vec2F& position, Vec2F lastHandleCoords)
+	{
 		Vec2F rotatePivot = mPivotHandle.position;
 		float angle = (position - rotatePivot).SignedAngle(lastHandleCoords - rotatePivot);
 		Basis transform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(-angle)*Basis::Translated(rotatePivot);
-		OnTransformed(transform);
+		Basis transformed = mFrame*transform;
+
+		if (o2Input.IsKeyDown(VK_SHIFT))
+		{
+			float angle = Math::Rad2deg(transformed.GetAngle());
+			float step = 15.0f;
+			float targetAngle = Math::Round(angle/step)*step;
+			float delta = targetAngle - angle;
+
+			Basis deltaTransform = Basis::Translated(rotatePivot*-1.0f)*Basis::Rotated(Math::Deg2rad(delta))
+				*Basis::Translated(rotatePivot);
+
+			transformed = transformed*deltaTransform;
+		}
+
+		OnTransformed(mFrame.Inverted()*transformed);
+	}
+
+	void FrameHandles::OnHandlePressed()
+	{
+		mBeginDraggingFrame = mFrame;
 	}
 
 	void FrameHandles::SetHandlesEnable(bool enable)

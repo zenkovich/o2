@@ -413,8 +413,8 @@ namespace o2
 														  float endCoef, float endCoefPosition)
 	{
 		AnimatedValue<Vec2F> res;
-		res.AddKey(0.0f, begin, begin, begin, 0.0f, 0.0f, beginCoef, beginCoefPosition);
-		res.AddKey(duration, end, end, end, endCoef, endCoefPosition, 0.0f, 0.0f);
+		res.AddKey(0.0f, begin, begin, begin, 0.0f, 0.0f, beginCoef, beginCoefPosition*duration);
+		res.AddKey(duration, end, end, end, 1.0f - endCoef, -endCoefPosition*duration, 0.0f, 0.0f);
 		return res;
 	}
 

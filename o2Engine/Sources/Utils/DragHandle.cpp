@@ -133,6 +133,8 @@ namespace o2
 		mDragOffset = mPosition - screenToLocalTransformFunc(cursor.position);
 		mDragPosition = mPosition;
 		mPressedCursorId = cursor.id;
+
+		onPressed();
 	}
 
 	void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
@@ -142,12 +144,16 @@ namespace o2
 
 		if (!IsUnderPoint(cursor.position))
 			o2Application.SetCursor(CursorType::Arrow);
+
+		onReleased();
 	}
 
 	void DragHandle::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		mIsPressed = false;
 		mIsDragging = false;
+
+		onReleased();
 	}
 
 	void DragHandle::OnCursorStillDown(const Input::Cursor& cursor)
@@ -612,9 +618,11 @@ CLASS_META(o2::DragHandle)
 
 	PUBLIC_FIELD(angle);
 	PUBLIC_FIELD(cursorType);
-	PUBLIC_FIELD(onChangedPos);
 	PUBLIC_FIELD(position);
 	PUBLIC_FIELD(enabled);
+	PUBLIC_FIELD(onChangedPos);
+	PUBLIC_FIELD(onPressed);
+	PUBLIC_FIELD(onReleased);
 	PUBLIC_FIELD(screenToLocalTransformFunc);
 	PUBLIC_FIELD(localToScreenTransformFunc);
 	PUBLIC_FIELD(checkPositionFunc);

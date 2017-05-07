@@ -18,10 +18,12 @@ namespace o2
 	public:
 		Property<float>              angle;          // Handle angle in radians property
 		CursorType                   cursorType;     // Cursor type when hovering and dragging
-
-		Function<void(const Vec2F&)> onChangedPos;   // On position changed event
 		Property<Vec2F>              position;       // Current position property
 		Property<bool>               enabled;        // Is handle enabled property. Disabled handle don't drawn and interact
+
+		Function<void(const Vec2F&)> onChangedPos;   // On position changed event
+		Function<void()>             onPressed;      // Pressed cursor on handle event
+		Function<void()>             onReleased;     // Pressed cursor event
 
 		Function<Vec2F(const Vec2F&)> screenToLocalTransformFunc; // Screen position to local transformation function
 		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc; // Local position to screen transformation function

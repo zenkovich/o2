@@ -100,17 +100,17 @@ namespace Editor
 		UIFrameScrollView::Update(dt);
 	}
 
-	void UICurveEditor::AddEditingCurve(Curve* curve, const Color4& color /*= Color4(-1, -1, -1, -1)*/)
+	void UICurveEditor::AddEditingCurve(Curve* curve, const Color4& color /*= Color4::Green()*/)
 	{
 		CurveInfo* info = mnew CurveInfo();
 		info->curve = curve;
 		info->viewScale = Vec2F();
 		info->UpdateApproximatedPoints();
 
-		if (color == Color4(-1, -1, -1, -1))
+		if (color == Color4::Green())
 		{
 			if (mCurves.IsEmpty())
-				info->color = Color4::Green();
+				info->color = Color4(30, 224, 185, 255);
 			else
 				info->color = Color4::SomeColor(mCurves.Count());
 		}
@@ -517,20 +517,28 @@ namespace Editor
 
 		Vec2F initialDragPoint = handles->mainHandle.GetDraggingBeginPosition();
 
-		if (o2Input.IsKeyDown(VK_CONTROL) && o2Input.IsKeyDown(VK_SHIFT))
+		if (handles->mainHandle.IsPressed())
 		{
-			key.position = Math::Round(position.x*10.0f)/10.0f;
-			key.value = Math::Round(position.y*10.0f)/10.0f;
-		}
-		else if (o2Input.IsKeyDown(VK_CONTROL))
-		{
-			key.position = position.x;
-			key.value = initialDragPoint.y;
-		}
-		else if (o2Input.IsKeyDown(VK_SHIFT))
-		{
-			key.position = initialDragPoint.x;
-			key.value = position.y;
+			if (o2Input.IsKeyDown(VK_CONTROL) && o2Input.IsKeyDown(VK_SHIFT))
+			{
+				key.position = Math::Round(position.x*10.0f)/10.0f;
+				key.value = Math::Round(position.y*10.0f)/10.0f;
+			}
+			else if (o2Input.IsKeyDown(VK_CONTROL))
+			{
+				key.position = position.x;
+				key.value = initialDragPoint.y;
+			}
+			else if (o2Input.IsKeyDown(VK_SHIFT))
+			{
+				key.position = initialDragPoint.x;
+				key.value = position.y;
+			}
+			else
+			{
+				key.position = position.x;
+				key.value = position.y;
+			}
 		}
 		else
 		{
@@ -1106,6 +1114,9 @@ namespace Editor
 		{
 			for (auto handle : mSelectedHandles)
 			{
+				if (mSupportHandles.Contains(handle))
+					continue;
+
 				handle->position = handle->position*delta;
 				handle->onChangedPos(handle->GetPosition());
 			}
