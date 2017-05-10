@@ -37,17 +37,17 @@ namespace Editor
 		mVerDragHandle.onReleased = Function<void()>(this, &MoveTool::HandleReleased);
 		mBothDragHandle.onReleased = Function<void()>(this, &MoveTool::HandleReleased);
 
-		mHorDragHandle.regularSprite->SetSizePivot(Vec2F(1, 5));
-		mHorDragHandle.hoverSprite->SetSizePivot(Vec2F(1, 5));
-		mHorDragHandle.pressedSprite->SetSizePivot(Vec2F(1, 5));
+		mHorDragHandle.GetRegularSprite()->SetSizePivot(Vec2F(1, 5));
+		mHorDragHandle.GetHoverSprite()->SetSizePivot(Vec2F(1, 5));
+		mHorDragHandle.GetPressedSprite()->SetSizePivot(Vec2F(1, 5));
 
-		mVerDragHandle.regularSprite->SetSizePivot(Vec2F(5, 1));
-		mVerDragHandle.hoverSprite->SetSizePivot(Vec2F(5, 1));
-		mVerDragHandle.pressedSprite->SetSizePivot(Vec2F(5, 1));
+		mVerDragHandle.GetRegularSprite()->SetSizePivot(Vec2F(5, 1));
+		mVerDragHandle.GetHoverSprite()->SetSizePivot(Vec2F(5, 1));
+		mVerDragHandle.GetPressedSprite()->SetSizePivot(Vec2F(5, 1));
 
-		mBothDragHandle.regularSprite->SetSizePivot(Vec2F(1, 1));
-		mBothDragHandle.hoverSprite->SetSizePivot(Vec2F(1, 1));
-		mBothDragHandle.pressedSprite->SetSizePivot(Vec2F(1, 1));
+		mBothDragHandle.GetRegularSprite()->SetSizePivot(Vec2F(1, 1));
+		mBothDragHandle.GetHoverSprite()->SetSizePivot(Vec2F(1, 1));
+		mBothDragHandle.GetPressedSprite()->SetSizePivot(Vec2F(1, 1));
 	}
 
 	MoveTool::~MoveTool()

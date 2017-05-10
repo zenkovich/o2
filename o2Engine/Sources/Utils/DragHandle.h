@@ -16,18 +16,19 @@ namespace o2
 	class DragHandle: public IDrawable, public CursorAreaEventsListener, public ISerializable
 	{
 	public:
-		Property<float>              angle;          // Handle angle in radians property
-		CursorType                   cursorType;     // Cursor type when hovering and dragging
-		Property<Vec2F>              position;       // Current position property
-		Property<bool>               enabled;        // Is handle enabled property. Disabled handle don't drawn and interact
+		Property<float>              angle;               // Handle angle in radians property
+		CursorType                   cursorType;          // Cursor type when hovering and dragging
+		Property<Vec2F>              position;            // Current position property
+		Property<bool>               enabled;             // Is handle enabled property. Disabled handle don't drawn and interact
+		bool                         pixelPerfect = true; // Is handle draws pixel perfect
 
-		Function<void(const Vec2F&)> onChangedPos;   // On position changed event
-		Function<void()>             onPressed;      // Pressed cursor on handle event
-		Function<void()>             onReleased;     // Pressed cursor event
+		Function<void(const Vec2F&)> onChangedPos;        // On position changed event
+		Function<void()>             onPressed;           // Pressed cursor on handle event
+		Function<void()>             onReleased;          // Pressed cursor event
 
-		Function<Vec2F(const Vec2F&)> screenToLocalTransformFunc; // Screen position to local transformation function
-		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc; // Local position to screen transformation function
-		Function<Vec2F(const Vec2F&)> checkPositionFunc;          // Position constraints checking function
+		Function<Vec2F(const Vec2F&)> screenToLocalTransformFunc;  // Screen position to local transformation function
+		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc;  // Local position to screen transformation function
+		Function<Vec2F(const Vec2F&)> checkPositionFunc;           // Position constraints checking function
 
 		Function<void(const Input::Cursor&)> onRightButtonPressed;  // Right mouse button pressed event
 		Function<void(const Input::Cursor&)> onRightButtonReleased; // Right mouse button released event
@@ -69,7 +70,7 @@ namespace o2
 		Vec2F GetDraggingBeginPosition() const;
 
 		// Set handle enabled. Disabled handle don't drawn and interact
-		void SetEnabled(bool enabled);
+		virtual void SetEnabled(bool enabled);
 
 		// Returns is handle enabled. Disabled handle don't drawn and interact
 		bool IsEnabled() const;
@@ -113,13 +114,17 @@ namespace o2
 		Vec2F  mDragPosition;              // Current drag handle position
 		Vec2F  mDragBeginPosition;         // Position at beginning dragging
 			   						       
-		bool   mIsHovered = false;         // Is handle under cursor, used for hover sprite appearing
-		bool   mIsPressed = false;         // Is handle pressed, used for pressed sprite appearing
-
 		int    mPressedCursorId;           // Id of pressed cursor
 		bool   mIsDragging = false;        // Is handle in dragging mode
+		bool   mIsHovered = false;         // Is handle under cursor, used for hover sprite appearing
 
 	protected:
+		// Converts point from screen to local space
+		virtual Vec2F ScreenToLocal(const Vec2F& point);
+
+		// Converts point from local to screen space
+		virtual Vec2F LocalToScreen(const Vec2F& point);
+
 		// Calls when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 

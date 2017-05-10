@@ -45,6 +45,7 @@ namespace o2
 		localToScreenTransformFunc = other.localToScreenTransformFunc;
 		checkPositionFunc = other.checkPositionFunc;
 		cursorType = other.cursorType;
+		pixelPerfect = other.pixelPerfect;
 
 		SetPosition(other.mPosition);
 		InitializeProperties();
@@ -77,6 +78,7 @@ namespace o2
 		localToScreenTransformFunc = other.localToScreenTransformFunc;
 		checkPositionFunc = other.checkPositionFunc;
 		cursorType = other.cursorType;
+		pixelPerfect = other.pixelPerfect;
 
 		SetPosition(other.mPosition);
 
@@ -88,8 +90,14 @@ namespace o2
 		if (!mEnabled)
 			return;
 
-		Vec2F screenPosition = localToScreenTransformFunc(mPosition);
+		Vec2F screenPosition = LocalToScreen(mPosition);
 		float alphaChangeCoef = 15.0f;
+
+		if (pixelPerfect)
+		{
+			screenPosition.x = Math::Round(screenPosition.x);
+			screenPosition.y = Math::Round(screenPosition.y);
+		}
 
 		if (mRegularSprite)
 		{
@@ -127,10 +135,19 @@ namespace o2
 		return false;
 	}
 
+	Vec2F DragHandle::ScreenToLocal(const Vec2F& point)
+	{
+		return screenToLocalTransformFunc(point);
+	}
+
+	Vec2F DragHandle::LocalToScreen(const Vec2F& point)
+	{
+		return localToScreenTransformFunc(point);
+	}
+
 	void DragHandle::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		mIsPressed = true;
-		mDragOffset = mPosition - screenToLocalTransformFunc(cursor.position);
+		mDragOffset = mPosition - ScreenToLocal(cursor.position);
 		mDragPosition = mPosition;
 		mPressedCursorId = cursor.id;
 
@@ -139,7 +156,6 @@ namespace o2
 
 	void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		mIsPressed = false;
 		mIsDragging = false;
 
 		if (!IsUnderPoint(cursor.position))
@@ -150,7 +166,6 @@ namespace o2
 
 	void DragHandle::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
-		mIsPressed = false;
 		mIsDragging = false;
 
 		onReleased();
@@ -161,7 +176,7 @@ namespace o2
 		if (mIsPressed && cursor.delta != Vec2F())
 		{
 			mIsDragging = true;
-			mDragPosition = screenToLocalTransformFunc(cursor.position) + mDragOffset;
+			mDragPosition = ScreenToLocal(cursor.position) + mDragOffset;
 			mDragBeginPosition = mPosition;
 
 			SetPosition(mDragPosition);
@@ -369,8 +384,14 @@ namespace o2
 	{
 		DragHandle::Draw();
 
-		Vec2F screenPosition = localToScreenTransformFunc(mPosition);
+		Vec2F screenPosition = LocalToScreen(mPosition);
 		float alphaChangeCoef = 15.0f;
+
+		if (pixelPerfect)
+		{
+			screenPosition.x = Math::Round(screenPosition.x);
+			screenPosition.y = Math::Round(screenPosition.y);
+		}
 
 		if (mSelectedSprite)
 		{
@@ -454,7 +475,7 @@ namespace o2
 
 		if (mIsDragging)
 		{
-			mDragPosition = screenToLocalTransformFunc(cursor.position) + mDragOffset;
+			mDragPosition = ScreenToLocal(cursor.position) + mDragOffset;
 
 			SetPosition(mDragPosition);
 			onChangedPos(mPosition);
@@ -480,8 +501,6 @@ namespace o2
 
 		if (!IsUnderPoint(cursor.position))
 			o2Application.SetCursor(CursorType::Arrow);
-
-		mIsPressed = false;
 	}
 
 	void SelectableDragHandle::OnCursorReleasedOutside(const Input::Cursor& cursor)
@@ -574,14 +593,14 @@ namespace o2
 	{
 		for (auto handle : GetSelectedHandles())
 		{
-			handle->mDragOffset = handle->mPosition - handle->screenToLocalTransformFunc(cursor.position);
+			handle->mDragOffset = handle->mPosition - handle->ScreenToLocal(cursor.position);
 			handle->mDragPosition = handle->mPosition;
 		}
 	}
 
 	void SelectableDragHandlesGroup::OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor)
 	{
-		if (!o2Input.IsKeyDown(VK_SHIFT))
+		if (!o2Input.IsKeyDown(VK_CONTROL))
 			DeselectAll();
 
 		SelectHandle(handle);
@@ -592,7 +611,7 @@ namespace o2
 		if (handle->IsSelected())
 			return;
 
-		if (!o2Input.IsKeyDown(VK_SHIFT))
+		if (!o2Input.IsKeyDown(VK_CONTROL))
 			DeselectAll();
 
 		SelectHandle(handle);
@@ -602,7 +621,7 @@ namespace o2
 	{
 		for (auto handle : GetSelectedHandles())
 		{
-			handle->mDragPosition = handle->screenToLocalTransformFunc(cursor.position) + handle->mDragOffset;
+			handle->mDragPosition = handle->ScreenToLocal(cursor.position) + handle->mDragOffset;
 			handle->SetPosition(handle->mDragPosition);
 			handle->onChangedPos(handle->GetPosition());
 		}
@@ -620,6 +639,7 @@ CLASS_META(o2::DragHandle)
 	PUBLIC_FIELD(cursorType);
 	PUBLIC_FIELD(position);
 	PUBLIC_FIELD(enabled);
+	PUBLIC_FIELD(pixelPerfect);
 	PUBLIC_FIELD(onChangedPos);
 	PUBLIC_FIELD(onPressed);
 	PUBLIC_FIELD(onReleased);
@@ -637,10 +657,9 @@ CLASS_META(o2::DragHandle)
 	PROTECTED_FIELD(mDragOffset);
 	PROTECTED_FIELD(mDragPosition);
 	PROTECTED_FIELD(mDragBeginPosition);
-	PROTECTED_FIELD(mIsHovered);
-	PROTECTED_FIELD(mIsPressed);
 	PROTECTED_FIELD(mPressedCursorId);
 	PROTECTED_FIELD(mIsDragging);
+	PROTECTED_FIELD(mIsHovered);
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
@@ -659,6 +678,8 @@ CLASS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(Sprite*, GetHoverSprite);
 	PUBLIC_FUNCTION(void, SetPressedSprite, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetPressedSprite);
+	PROTECTED_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);

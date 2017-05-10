@@ -895,7 +895,7 @@ namespace Editor
 	{
 		mSelectingPressedPoint = ScreenToLocalPoint(cursor.position);
 
-		if (!o2Input.IsKeyDown(VK_SHIFT))
+		if (!o2Input.IsKeyDown(VK_CONTROL))
 		{
 			auto handles = mSelectedHandles;
 			for (auto handle : handles)
