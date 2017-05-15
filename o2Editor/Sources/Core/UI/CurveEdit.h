@@ -127,30 +127,31 @@ namespace Editor
 		typedef Vector<RangeInfo*> RangeInfosVec;
 
 	protected:
-		UIContextMenu*         mContextMenu;                  // Context menu for editing keys properties, copying, pasting and other
+		UIContextMenu*         mContextMenu;                   // Context menu for editing keys properties, copying, pasting and other
 
-		SelectableDragHandle   mMainHandleSample;             // Main handle sample, uses to copy sprites @SERIALIZABLE
-		SelectableDragHandle   mSupportHandleSample;          // Support handle sample, uses to copy sprites @SERIALIZABLE
-							   
-		CurveInfosVec          mCurves;                       // Editing curves infos list 
-		RangeInfosVec          mRanges;                       // Curves ranges list
+		SelectableDragHandle   mMainHandleSample;              // Main handle sample, uses to copy sprites @SERIALIZABLE
+		SelectableDragHandle   mSupportHandleSample;           // Support handle sample, uses to copy sprites @SERIALIZABLE
 
-		SelectableHandlesVec   mSupportHandles;               // Support points handles list
-		SelectableHandlesVec   mSelectingHandlesBuf;          // Potentially selecting handles while selecting
+		CurveInfosVec          mCurves;                        // Editing curves infos list 
+		RangeInfosVec          mRanges;                        // Curves ranges list
 
-		Sprite*                mSelectionSprite = nullptr;    // Selection sprite @SERIALIZABLE
-		FontRef                mTextFont;                     // Captions text font @SERIALIZABLE
-		Text*                  mTextLeft = nullptr;           // Captions text drawable at left border
-		Text*                  mTextRight = nullptr;          // Captions text drawable at right border
-		Text*                  mTextTop = nullptr;            // Captions text drawable at top border
-		Text*                  mTextBottom = nullptr;         // Captions text drawable at bottom border
+		SelectableHandlesVec   mSupportHandles;                // Support points handles list
+		SelectableHandlesVec   mSelectingHandlesBuf;           // Potentially selecting handles while selecting
 
-		Vec2F                  mSelectingPressedPoint;        // Point, where cursor was pressed, selection starts here, in local space
+		Sprite*                mSelectionSprite = nullptr;     // Selection sprite @SERIALIZABLE
+		FontRef                mTextFont;                      // Captions text font @SERIALIZABLE
+		Text*                  mTextLeft = nullptr;            // Captions text drawable at left border
+		Text*                  mTextRight = nullptr;           // Captions text drawable at right border
+		Text*                  mTextTop = nullptr;             // Captions text drawable at top border
+		Text*                  mTextBottom = nullptr;          // Captions text drawable at bottom border
 
-		FrameHandles           mTransformFrame;               // Keys transformation frame
-		Basis                  mTransformFrameBasis;          // Basis of transform frame in local space
+		Vec2F                  mSelectingPressedPoint;         // Point, where cursor was pressed, selection starts here, in local space
 
-		bool                   mIsViewScrolling = false;      // Is scrolling view at this time
+		FrameHandles           mTransformFrame;                // Keys transformation frame
+		bool                   mTransformFrameVisible = false; // Is tranform frame visible. it visible when 2 or more main handles was selected
+		Basis                  mTransformFrameBasis;           // Basis of transform frame in local space
+															   
+		bool                   mIsViewScrolling = false;       // Is scrolling view at this time
 
 	protected:
 		// Initializes context menu items
@@ -224,6 +225,9 @@ namespace Editor
 
 		// Updates transformation frame by selected handles
 		void UpdateTransformFrame();
+
+		// Returns is transform frame visible. it will be visible when 2 or more main handles was selected
+		bool IsTransformFrameVisible() const;
 
 		// Calls when selectable draggable handle was released
 		void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);

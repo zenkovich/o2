@@ -427,7 +427,7 @@ namespace Editor
 
 	void UICurveEditor::DrawTransformFrame()
 	{
-		if (mSelectedHandles.Count() < 2)
+		if (!mTransformFrameVisible)
 			return;
 
 		Vec2F borders(10, 10);
@@ -1010,7 +1010,9 @@ namespace Editor
 
 	void UICurveEditor::UpdateTransformFrame()
 	{
-		if (mSelectedHandles.Count() < 2)
+		mTransformFrameVisible = IsTransformFrameVisible();
+
+		if (!mTransformFrameVisible)
 			return;
 
 		RectF aabb(mSelectedHandles[0]->GetPosition(), mSelectedHandles[0]->GetPosition());
@@ -1024,6 +1026,18 @@ namespace Editor
 		}
 
 		mTransformFrameBasis = Basis(aabb.LeftBottom(), Vec2F::Right()*aabb.Width(), Vec2F::Up()*aabb.Height());
+	}
+
+	bool UICurveEditor::IsTransformFrameVisible() const
+	{
+		int selectedMainHandles = 0;
+		for (auto handle : mSelectedHandles)
+		{
+			if (!mSupportHandles.Contains(handle))
+				selectedMainHandles++;
+		}
+
+		return selectedMainHandles > 1;
 	}
 
 	void UICurveEditor::OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor)
@@ -1325,6 +1339,7 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FIELD(mTextBottom);
 	PROTECTED_FIELD(mSelectingPressedPoint);
 	PROTECTED_FIELD(mTransformFrame);
+	PROTECTED_FIELD(mTransformFrameVisible);
 	PROTECTED_FIELD(mTransformFrameBasis);
 	PROTECTED_FIELD(mIsViewScrolling);
 
@@ -1364,6 +1379,7 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CheckHandlesVisible);
 	PROTECTED_FUNCTION(void, UpdateTransformFrame);
+	PROTECTED_FUNCTION(bool, IsTransformFrameVisible);
 	PROTECTED_FUNCTION(void, OnHandleCursorReleased, SelectableDragHandle*, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnHandleBeganDragging, SelectableDragHandle*);
 	PROTECTED_FUNCTION(void, OnHandleMoved, SelectableDragHandle*, const Input::Cursor&);

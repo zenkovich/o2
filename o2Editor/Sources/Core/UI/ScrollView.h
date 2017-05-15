@@ -43,6 +43,9 @@ namespace Editor
 		// Transforms point from local space to screen space
 		Vec2F LocalToScreenPoint(const Vec2F& point);
 
+		// Returns view camera
+		const Camera& GetCamera() const;
+
 		// Sets back color
 		void SetBackColor(const Color4& color);
 

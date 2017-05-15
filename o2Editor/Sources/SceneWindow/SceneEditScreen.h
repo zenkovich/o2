@@ -126,18 +126,10 @@ namespace Editor
 		IEditTool*     mEnabledTool = nullptr;					              // Current enabled tool
 
 		DragHandlesVec                         mDragHandles; 			      // Dragging handles array
-		Dictionary<CursorId, SceneDragHandle*> mPressedHandles;               // Pressed handles for all pressed cursors
-		CursorAreaEventsListener*              mRightButtonPressedHandle;     // Right mouse button pressed handle
-		CursorAreaEventsListener*              mMiddleButtonPressedHandle;    // Middle mouse button pressed handle
-		Dictionary<CursorId, SceneDragHandle*> mUnderCursorHandles;           // Under cursor handles for each cursor
-		Dictionary<CursorId, SceneDragHandle*> mLastUnderCursorHandles;       // Under cursor handles for each cursor on last frame
-
+		
 	protected:
 		// Initializes tools
 		void InitializeTools(const Type* toolType = nullptr);
-
-		// Updates handles interaction
-		void UpdateHandles();
 
 		// Returns true if some handle hovered or pressed by cursor
 		bool IsHandleWorking(const Input::Cursor& cursor) const;

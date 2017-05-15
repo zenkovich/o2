@@ -177,6 +177,11 @@ namespace Editor
 		return point*mLocalToScreenTransform;
 	}
 
+	const Camera& UIScrollView::GetCamera() const
+	{
+		return mViewCamera;
+	}
+
 	void UIScrollView::RedrawRenderTarget()
 	{
 		mNeedRedraw = false;
@@ -302,6 +307,7 @@ CLASS_META(Editor::UIScrollView)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(Vec2F, ScreenToLocalPoint, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, LocalToScreenPoint, const Vec2F&);
+	PUBLIC_FUNCTION(const Camera&, GetCamera);
 	PUBLIC_FUNCTION(void, SetBackColor, const Color4&);
 	PUBLIC_FUNCTION(void, SetGridColor, const Color4&);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);

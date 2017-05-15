@@ -56,10 +56,10 @@ namespace Editor
 		if (mEnabledTool)
 			mEnabledTool->DrawScreen();
 
+		CursorAreaEventsListener::OnDrawn();
+
 		for (auto handle : mDragHandles)
 			handle->Draw();
-
-		CursorAreaEventsListener::OnDrawn();
 	}
 
 #undef DrawText
@@ -70,8 +70,6 @@ namespace Editor
 
 		UpdateCamera(dt);
 		o2Scene.CheckChangedActors();
-
-		UpdateHandles();
 
 		if (mEnabledTool)
 			mEnabledTool->Update(dt);
@@ -112,86 +110,9 @@ namespace Editor
 		}
 	}
 
-	void SceneEditScreen::UpdateHandles()
-	{
-		mLastUnderCursorHandles = mUnderCursorHandles;
-		mUnderCursorHandles.Clear();
-
-		if (o2Input.IsKeyPressed('K'))
-			o2Debug.Log("DBG");
-
-		// Trace handles
-		for (const Input::Cursor& cursor : o2Input.GetCursors())
-		{
-			for (int i = mDragHandles.Count() - 1; i >= 0; i--)
-			{
-				SceneDragHandle* handle = mDragHandles[i];
-
-				if (handle->IsUnderPoint(cursor.position))
-				{
-					mUnderCursorHandles.Add(cursor.id, handle);
-					break;
-				}
-			}
-		}
-
-		// Process cursor exit event
-		for (auto lastUnderCursor : mLastUnderCursorHandles)
-		{
-			if (!(mUnderCursorHandles.ContainsKey(lastUnderCursor.Key()) &&
-				  mUnderCursorHandles[lastUnderCursor.Key()] == lastUnderCursor.Value()))
-			{
-				lastUnderCursor.Value()->OnCursorExit(*o2Input.GetCursor(lastUnderCursor.Key()));
-			}
-		}
-
-		// Process cursor enter event
-		for (auto underCursor : mUnderCursorHandles)
-		{
-			if (!(mLastUnderCursorHandles.ContainsKey(underCursor.Key()) &&
-				  mLastUnderCursorHandles[underCursor.Key()] == underCursor.Value()))
-			{
-				underCursor.Value()->OnCursorEnter(*o2Input.GetCursor(underCursor.Key()));
-			}
-		}
-
-		// Process cursor pressing
-		for (const Input::Cursor& cursor : o2Input.GetCursors())
-		{
-			if (cursor.pressedTime < FLT_EPSILON && cursor.isPressed)
-			{
-				if (!mUnderCursorHandles.ContainsKey(cursor.id))
-					return;
-
-				auto handle = mUnderCursorHandles[cursor.id];
-
-				mPressedHandles.Add(cursor.id, handle);
-
-				handle->OnCursorPressed(cursor);
-				handle->mIsPressed = true;
-			}
-			else
-			{
-				if (mPressedHandles.ContainsKey(cursor.id))
-					mPressedHandles[cursor.id]->OnCursorStillDown(cursor);
-			}
-		}
-
-		// Process cursor releasing
-		for (const Input::Cursor& cursor : o2Input.GetReleasedCursors())
-		{
-			if (mPressedHandles.ContainsKey(cursor.id))
-			{
-				mPressedHandles[cursor.id]->mIsPressed = false;
-				mPressedHandles[cursor.id]->OnCursorReleased(cursor);
-				mPressedHandles.Remove(cursor.id);
-			}
-		}
-	}
-
 	bool SceneEditScreen::IsHandleWorking(const Input::Cursor& cursor) const
 	{
-		return mUnderCursorHandles.ContainsKey(cursor.id) || mPressedHandles.ContainsKey(cursor.id);
+		return false;
 	}
 
 	void SceneEditScreen::OnActorsSelectedFromThis()
@@ -592,13 +513,13 @@ namespace Editor
 	{
 		UIScrollView::OnCursorRightMouseStayDown(cursor);
 
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
+		if (mEnabledTool)
 			mEnabledTool->OnCursorRightMouseStayDown(cursor);
 	}
 
 	void SceneEditScreen::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
+		if (mEnabledTool)
 			mEnabledTool->OnCursorRightMouseReleased(cursor);
 
 		UIScrollView::OnCursorRightMouseReleased(cursor);
@@ -606,19 +527,19 @@ namespace Editor
 
 	void SceneEditScreen::OnCursorMiddleMousePressed(const Input::Cursor& cursor)
 	{
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
+		if (mEnabledTool)
 			mEnabledTool->OnCursorMiddleMousePressed(cursor);
 	}
 
 	void SceneEditScreen::OnCursorMiddleMouseStayDown(const Input::Cursor& cursor)
 	{
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
+		if (mEnabledTool)
 			mEnabledTool->OnCursorMiddleMouseStayDown(cursor);
 	}
 
 	void SceneEditScreen::OnCursorMiddleMouseReleased(const Input::Cursor& cursor)
 	{
-		if (mEnabledTool && !mUnderCursorHandles.ContainsKey(cursor.id))
+		if (mEnabledTool)
 			mEnabledTool->OnCursorMiddleMouseReleased(cursor);
 	}
 }
@@ -641,11 +562,6 @@ CLASS_META(Editor::SceneEditScreen)
 	PROTECTED_FIELD(mTools);
 	PROTECTED_FIELD(mEnabledTool);
 	PROTECTED_FIELD(mDragHandles);
-	PROTECTED_FIELD(mPressedHandles);
-	PROTECTED_FIELD(mRightButtonPressedHandle);
-	PROTECTED_FIELD(mMiddleButtonPressedHandle);
-	PROTECTED_FIELD(mUnderCursorHandles);
-	PROTECTED_FIELD(mLastUnderCursorHandles);
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
@@ -666,7 +582,6 @@ CLASS_META(Editor::SceneEditScreen)
 	PUBLIC_FUNCTION(void, OnSceneChanged);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, InitializeTools, const Type*);
-	PROTECTED_FUNCTION(void, UpdateHandles);
 	PROTECTED_FUNCTION(bool, IsHandleWorking, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

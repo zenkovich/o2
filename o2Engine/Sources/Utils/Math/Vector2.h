@@ -76,6 +76,8 @@ namespace o2
 		inline Vec2 Project(const Vec2& other) const;
 		inline Vec2 ClampLength(T newLength) const;
 
+		inline bool IsParallel(const Vec2& other) const;
+
 		static inline Vec2<T> Rotated(float rad);
 		static inline Vec2<T> Up();
 		static inline Vec2<T> Down();
@@ -360,6 +362,12 @@ namespace o2
 	{
 		float sc = newLength/Length();
 		return Scale(sc);
+	}
+
+	template<typename T>
+	bool Vec2<T>::IsParallel(const Vec2<T>& other) const
+	{
+		return Math::Abs<T>(Perpendicular().Normalized().Dot(other)) < (T)0.01f;
 	}
 
 	template<typename T>
