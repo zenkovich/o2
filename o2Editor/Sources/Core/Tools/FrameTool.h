@@ -232,7 +232,9 @@ namespace Editor
 		Vec2F CheckRightBottomSnapping(const Vec2F& point);
 
 		// Calculates snapping offset for point by parallels lines, offset is on normal
-		Vec2F CalculateSnapOffset(const Vec2F& point, const Vec2F& lineBegin, const Vec2F& lineEnd, const Vec2F& normal);
+		Vec2F CalculateSnapOffset(const Vec2F& point, const Basis& frame, 
+								  const Vector<Vec2F>& xLines, const Vec2F& xNormal,
+								  const Vector<Vec2F>& yLines, const Vec2F& yNormal);
 	};
 }
  

@@ -320,19 +320,9 @@ namespace Editor
 			{
 				Basis preTransformed(cursorPos - mBeginDraggingOffset, mBeginDraggingFrame.xv, mBeginDraggingFrame.yv);
 
-				cursorPos = CalculateSnapOffset(cursorPos, Vec2F(0, 0)*preTransformed, Vec2F(1, 0)*preTransformed,
-												preTransformed.yv.Normalized());
-
-				cursorPos = CalculateSnapOffset(cursorPos, Vec2F(0, 0)*preTransformed, Vec2F(0, 1)*preTransformed,
-												preTransformed.xv.Normalized());
-
-				preTransformed = Basis(cursorPos - mBeginDraggingOffset, mBeginDraggingFrame.xv, mBeginDraggingFrame.yv);
-
-				cursorPos = CalculateSnapOffset(cursorPos, Vec2F(0, 1)*preTransformed, Vec2F(1, 1)*preTransformed,
-												preTransformed.yv.Normalized());
-
-				cursorPos = CalculateSnapOffset(cursorPos, Vec2F(1, 0)*preTransformed, Vec2F(1, 1)*preTransformed,
-												preTransformed.xv.Normalized());
+				cursorPos = CalculateSnapOffset(cursorPos, preTransformed, 
+				{ Vec2F(0, 0), Vec2F(0, 1), Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(1, 0), Vec2F(1, 1) }, preTransformed.xv.Normalized(),
+				{ Vec2F(0, 0), Vec2F(1, 0), Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, 1), Vec2F(1, 1) }, preTransformed.yv.Normalized());
 			}
 
 			Vec2F delta = cursorPos - mBeginDraggingOffset;
@@ -812,8 +802,9 @@ namespace Editor
 
 		Basis transformedFrame = GetTopHandleTransformed(point);
 
-		Vec2F snapped = CalculateSnapOffset(point, Vec2F(0.0f, 1.0f)*transformedFrame, Vec2F(1.0f, 1.0f)*transformedFrame,
-											transformedFrame.yv.Normalized());
+		Vec2F snapped = CalculateSnapOffset(point, transformedFrame, 
+		{}, transformedFrame.xv.Normalized(),
+		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized());
 
 		return snapped;
 	}
@@ -830,8 +821,9 @@ namespace Editor
 
 		Basis transformedFrame = GetBottomHandleTransformed(point);
 
-		Vec2F snapped = CalculateSnapOffset(point, Vec2F(0.0f, 0.0f)*transformedFrame, Vec2F(1.0f, 0.0f)*transformedFrame,
-											transformedFrame.yv.Normalized());
+		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+		{}, transformedFrame.xv.Normalized(),
+		{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized());
 
 		return snapped;
 	}
@@ -848,8 +840,9 @@ namespace Editor
 
 		Basis transformedFrame = GetLeftHandleTransformed(point);
 
-		Vec2F snapped = CalculateSnapOffset(point, Vec2F(0.0f, 0.0f)*transformedFrame, Vec2F(0.0f, 1.0f)*transformedFrame,
-											transformedFrame.xv.Normalized());
+		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+		{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
+		{}, transformedFrame.yv.Normalized());
 
 		return snapped;
 	}
@@ -866,8 +859,9 @@ namespace Editor
 
 		Basis transformedFrame = GetRightHandleTransformed(point);
 
-		Vec2F snapped = CalculateSnapOffset(point, Vec2F(1.0f, 0.0f)*transformedFrame, Vec2F(1.0f, 1.0f)*transformedFrame,
-											transformedFrame.xv.Normalized());
+		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+		{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
+		{}, transformedFrame.yv.Normalized());
 
 		return snapped;
 	}
@@ -884,13 +878,9 @@ namespace Editor
 
 		Basis transformedFrame = GetLeftTopHandleTransformed(point);
 
-		Vec2F snapped = point;
-
-		snapped = CalculateSnapOffset(point, Vec2F(0.0f, 1.0f)*transformedFrame, Vec2F(1.0f, 1.0f)*transformedFrame,
-									  transformedFrame.yv.Normalized());
-
-		snapped = CalculateSnapOffset(snapped, Vec2F(0.0f, 0.0f)*transformedFrame, Vec2F(0.0f, 1.0f)*transformedFrame,
-									  transformedFrame.xv.Normalized());
+		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+		{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
+		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized());
 
 		return snapped;
 	}
@@ -907,13 +897,9 @@ namespace Editor
 
 		Basis transformedFrame = GetLeftBottomHandleTransformed(point);
 
-		Vec2F snapped = point;
-
-		snapped = CalculateSnapOffset(point, Vec2F(0.0f, 0.0f)*transformedFrame, Vec2F(1.0f, 0.0f)*transformedFrame,
-									  transformedFrame.yv.Normalized());
-
-		snapped = CalculateSnapOffset(snapped, Vec2F(0.0f, 0.0f)*transformedFrame, Vec2F(0.0f, 1.0f)*transformedFrame,
-									  transformedFrame.xv.Normalized());
+		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+		{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
+		{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized());
 
 		return snapped;
 	}
@@ -930,13 +916,9 @@ namespace Editor
 
 		Basis transformedFrame = GetRightTopHandleTransformed(point);
 
-		Vec2F snapped = point;
-
-		snapped = CalculateSnapOffset(point, Vec2F(0.0f, 1.0f)*transformedFrame, Vec2F(1.0f, 1.0f)*transformedFrame,
-									  transformedFrame.yv.Normalized());
-
-		snapped = CalculateSnapOffset(snapped, Vec2F(1.0f, 0.0f)*transformedFrame, Vec2F(1.0f, 1.0f)*transformedFrame,
-									  transformedFrame.xv.Normalized());
+		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+		{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
+		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized());
 
 		return snapped;
 	}
@@ -953,36 +935,32 @@ namespace Editor
 
 		Basis transformedFrame = GetRightBottomHandleTransformed(point);
 
-		Vec2F snapped = point;
-
-		snapped = CalculateSnapOffset(point, Vec2F(0.0f, 0.0f)*transformedFrame, Vec2F(1.0f, 0.0f)*transformedFrame,
-									  transformedFrame.yv.Normalized());
-
-		snapped = CalculateSnapOffset(snapped, Vec2F(1.0f, 0.0f)*transformedFrame, Vec2F(1.0f, 1.0f)*transformedFrame,
-									  transformedFrame.xv.Normalized());
+		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+		{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
+		{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized());
 
 		return snapped;
 	}
 
-	Vec2F FrameTool::CalculateSnapOffset(const Vec2F& point, const Vec2F& lineBegin, const Vec2F& lineEnd,
-										 const Vec2F& normal)
+	Vec2F FrameTool::CalculateSnapOffset(const Vec2F& point, const Basis& frame, 
+										 const Vector<Vec2F>& xLines, const Vec2F& xNormal,
+										 const Vector<Vec2F>& yLines, const Vec2F& yNormal)
 	{
 		const float pxThreshold = 5.0f;
-
-		Vec2F result = point;
-		bool foundSnapLine = false;
-
-		Vec2F lineVec = lineEnd - lineBegin;
+		const float sameSnapDistanceThreshold = 0.01f;
 		const Camera& camera = o2EditorSceneScreen.GetCamera();
 
-		Vector<Vector<Vec2F>> lines =
+		Vector<Vector<Vec2F>> snapLines =
 		{
 			{ Vec2F(0.0f, 0.0f), Vec2F(1.0f, 0.0f) },
 			{ Vec2F(1.0f, 0.0f), Vec2F(1.0f, 1.0f) },
 			{ Vec2F(1.0f, 1.0f), Vec2F(0.0f, 1.0f) },
-			{ Vec2F(0.0f, 1.0f), Vec2F(0.0f, 0.0f) }
+			{ Vec2F(0.0f, 1.0f), Vec2F(0.0f, 0.0f) },
+			{ Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f) },
+			{ Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f) }
 		};
 
+		Vector<Vec2F> worldSnapLines;
 		for (auto actor : o2Scene.GetAllActors())
 		{
 			if (o2EditorSceneScreen.GetSelectedActors().Contains(actor))
@@ -990,38 +968,110 @@ namespace Editor
 
 			Basis actorBasis = actor->transform.GetWorldBasis();
 
-			for (auto line : lines)
+			for (auto snapLine : snapLines)
 			{
-				Vec2F actorLineBegin = line[0]*actorBasis;
-				Vec2F actorLineEnd = line[1]*actorBasis;
+				Vec2F actorLineBegin = snapLine[0]*actorBasis;
+				Vec2F actorLineEnd = snapLine[1]*actorBasis;
 				Vec2F actorLineVec = actorLineEnd - actorLineBegin;
 
 				if (actorLineVec.SqrLength() < 0.1f)
 					continue;
 
-				if (!lineVec.IsParallel(actorLineVec))
-					continue;
-
-				float projDistance = (actorLineBegin - lineBegin).Dot(normal);
-				float screenProjDistance = projDistance/camera.GetScale().x;
-
-				if (!foundSnapLine)
-				{
-					if (Math::Abs(screenProjDistance) < pxThreshold)
-					{
-						result = point + normal*projDistance;
-						mSnapLines.Add(SnapLine(lineBegin + normal*projDistance, lineEnd + normal*projDistance, Color4::Red()));
-						mSnapLines.Add(SnapLine(actorLineBegin, actorLineEnd, Color4::Red()));
-
-						foundSnapLine = true;
-					}
-				}
-				else if (Math::Abs(projDistance) < 0.01f)
-					mSnapLines.Add(SnapLine(actorLineBegin, actorLineEnd, Color4::Red()));
+				worldSnapLines.Add(actorLineBegin);
+				worldSnapLines.Add(actorLineEnd);
 			}
 		}
 
-		return result;
+		Vec2F offset;
+		Vector<Vec2F> localSnapLines;
+
+		for (int i = 0; i < 2; i++)
+		{
+			const Vector<Vec2F>& currentAxisLines = i == 0 ? xLines : yLines;
+			Vec2F currentAxisNormal = i == 0 ? xNormal : yNormal;
+
+			bool axisSnapLineFound = false;
+			Vec2F axisSnapOffset;
+			float axisSnapDistance = FLT_MAX;
+			Vec2F axisSnapBegin, axisSnapEnd;
+
+			for (int j = 0; j < currentAxisLines.Count(); j += 2)
+			{
+				Vec2F lineBeg = currentAxisLines[j]*frame;
+				Vec2F lineEnd = currentAxisLines[j + 1]*frame;
+				Vec2F lineVec = lineEnd - lineBeg;
+
+				for (int k = 0; k < worldSnapLines.Count(); k += 2)
+				{
+					Vec2F actorLineBegin = worldSnapLines[k];
+					Vec2F actorLineEnd = worldSnapLines[k + 1];
+					Vec2F actorLineVec = actorLineEnd - actorLineBegin;
+
+					if (!lineVec.IsParallel(actorLineVec))
+						continue;
+
+					float projDistance = (actorLineBegin - lineBeg).Dot(currentAxisNormal);
+					float screenProjDistance = Math::Abs(projDistance/camera.GetScale().x);
+
+					if (screenProjDistance < pxThreshold && screenProjDistance < axisSnapDistance)
+					{
+						axisSnapOffset = currentAxisNormal*projDistance;
+						axisSnapDistance = screenProjDistance;
+						axisSnapBegin = currentAxisLines[j];
+						axisSnapEnd = currentAxisLines[j + 1];
+
+						axisSnapLineFound = true;
+					}
+				}
+			}
+
+			if (!axisSnapLineFound)
+				continue;
+
+			for (int j = 0; j < currentAxisLines.Count(); j += 2)
+			{
+				Vec2F lineBeg = currentAxisLines[j]*frame + axisSnapOffset;
+				Vec2F lineEnd = currentAxisLines[j + 1]*frame + axisSnapOffset;
+				Vec2F lineVec = lineEnd - lineBeg;
+
+				bool found = false;
+
+				for (int k = 0; k < worldSnapLines.Count(); k += 2)
+				{
+					Vec2F actorLineBegin = worldSnapLines[k];
+					Vec2F actorLineEnd = worldSnapLines[k + 1];
+					Vec2F actorLineVec = actorLineEnd - actorLineBegin;
+
+					if (!lineVec.IsParallel(actorLineVec))
+						continue;
+
+					float projDistance = Math::Abs((actorLineBegin - lineBeg).Dot(currentAxisNormal));
+
+					if (projDistance < sameSnapDistanceThreshold)
+					{
+						mSnapLines.Add(SnapLine(actorLineBegin, actorLineEnd, Color4::Red()));
+
+						found = true;
+					}
+				}
+
+				if (found)
+				{
+					localSnapLines.Add(currentAxisLines[j]);
+					localSnapLines.Add(currentAxisLines[j + 1]);
+				}
+			}
+
+			offset += axisSnapOffset;
+		}
+
+		Basis frameWithOffset = frame;
+		frameWithOffset.Translate(offset);
+
+		for (int i = 0; i < localSnapLines.Count(); i += 2)
+			mSnapLines.Add(SnapLine(localSnapLines[i]*frameWithOffset, localSnapLines[i + 1]*frameWithOffset, Color4::Red()));
+
+		return point + offset;
 	}
 
 }
@@ -1105,7 +1155,7 @@ CLASS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(Vec2F, CheckLeftBottomSnapping, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckRightTopSnapping, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckRightBottomSnapping, const Vec2F&);
-	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Vec2F&, const Vec2F&, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&);
 }
 END_META;
  
