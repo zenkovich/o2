@@ -954,8 +954,7 @@ namespace o2
 			{
 				Component* component = (Component*)o2Reflection.CreateTypeSample(*componentNode->GetNode("Type"));
 				component->Deserialize(*componentNode->GetNode("Data"));
-				component->mOwner = this;
-				mComponents.Add(component);
+				component->SetOwnerActor(this);
 			}
 		}
 

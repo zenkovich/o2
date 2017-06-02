@@ -14,6 +14,8 @@ using namespace o2;
 namespace o2
 {
 	class UIContextMenu;
+	class UIEditBox;
+	class UIWindow;
 }
 
 namespace Editor
@@ -43,10 +45,13 @@ namespace Editor
 		void Update(float dt);
 
 		// Adds editing curve with color. If color is default it will be randomized
-		void AddEditingCurve(Curve* curve, const Color4& color = Color4::Green());
+		void AddEditingCurve(const String& id, Curve* curve, const Color4& color = Color4::Green());
 
 		// Removed curve from editing
 		void RemoveEditingCurve(Curve* curve);
+
+		// Removed curve from editing
+		void RemoveEditingCurve(const String& id);
 
 		// Removes all editing curves
 		void RemoveAllEditingCurves();
@@ -56,6 +61,12 @@ namespace Editor
 
 		// Removes curve range
 		void RemoveCurvesRange(Curve* curveA, Curve* curveB);
+
+		// Adds curves range with color. It can't be edited, just a solid color between curves
+		void AddCurvesRange(const String& idA, const String& idB, const Color4& color = Color4::Green());
+
+		// Removes curve range
+		void RemoveCurvesRange(const String& idA, const String& idB);
 
 		// Sets selection rectange sprite image
 		void SetSelectionSpriteImage(const ImageAssetRef& image);
@@ -98,6 +109,7 @@ namespace Editor
 
 		struct CurveInfo
 		{
+			String         curveId;
 			Curve*         curve;
 			KeyHandlesVec  handles;
 			PointsVec      approximatedPoints;
@@ -111,6 +123,16 @@ namespace Editor
 			void UpdateApproximatedPoints();
 		};
 		typedef Vector<CurveInfo*> CurveInfosVec;
+
+		class CurveCopyInfo: ISerializable
+		{
+		public:
+			String             curveId; // @SERIALIZABLE
+			Vector<Curve::Key> keys;    // @SERIALIZABLE
+
+			SERIALIZABLE(CurveCopyInfo);
+		};
+		typedef Vector<CurveCopyInfo*> CurveCopyInfosVec;
 
 		struct RangeInfo
 		{
@@ -153,12 +175,25 @@ namespace Editor
 															   
 		bool                   mIsViewScrolling = false;       // Is scrolling view at this time
 
+		UIWindow*              mEditValueWindow;
+		UIEditBox*             mEditValueWindowValue;
+		UIEditBox*             mEditValueWindowPosition;
+
 	protected:
+		// Calls when scrolling
+		void OnScrolled(float scroll);
+
+		// Searches curve by id
+		Curve* FindCurve(const String& id);
+
 		// Initializes context menu items
 		void InitializeContextMenu();
 
 		// Initializes text drawables by font and sets aligning
 		void InitializeTextDrawables();
+
+		// Initializes edit window controls
+		void InitializeEditValueWindow();
 
 		// Recalculates view area by curves approximated points
 		void RecalculateViewArea();
@@ -183,6 +218,9 @@ namespace Editor
 
 		// Adds curve key main and support handles and initializes them
 		void AddCurveKeyHandles(CurveInfo* info, int keyId);
+
+		// Removes curve key handles
+		void RemoveCurveKeyHandles(CurveInfo* info, int keyId);
 
 		// Calls when one of main curve key handles was moved. Updates graphics and handles
 		void OnCurveKeyMainHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
@@ -244,7 +282,15 @@ namespace Editor
 		// Calls when transform frame was transformed
 		void OnTransformFrameTransformed(const Basis& basis);
 
+		// Calls when edit key window position edit box was changed
+		void OnEditKeyPositionChanged(const WString& str);
+
+		// Calls when edit key window value edit box was changed
+		void OnEditKeyValueChanged(const WString& str);
+
 	// Context menu items functions
+		void OnEditPressed();
+
 		void OnAutoSmoothChecked(bool checked);
 
 		void OnFlatChecked(bool checked);

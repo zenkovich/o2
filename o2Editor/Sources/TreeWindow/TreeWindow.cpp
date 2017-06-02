@@ -266,7 +266,7 @@ namespace Editor
 		Vector<Actor*> selectedNodes = mActorsTree->GetSelectedObjects().Select<Actor*>([](auto x) { return (Actor*)(void*)x; });
 
 		DataNode data;
-		data = selectedNodes;
+		data.SetValueRaw(selectedNodes);
 
 		WString clipboardData = data.SaveAsWString();
 
@@ -290,28 +290,28 @@ namespace Editor
 		auto selectedActors = mActorsTree->GetSelectedActors();
 
 		Actor* parent = selectedActors.Count() > 0 ? selectedActors.Last() : nullptr;
+		auto parentChilds = parent ? parent->GetChilds() : o2Scene.GetRootActors();
+		Actor* prevActor = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
 
 		WString clipboardData = Clipboard::GetText();
 		DataNode data;
 		data.LoadFromData(clipboardData);
 
 		Vector<Actor*> actors;
-		actors = data;
+		data.GetValueRaw(actors);
 
 		for (auto actor : actors)
 			actor->GenNewId();
-
-		auto parentChilds = parent ? parent->GetChilds() : o2Scene.GetRootActors();
-		Actor* prevActor = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
 
 		for (auto actor : actors)
 			actor->SetParent(parent);
 
 		mActorsTree->UpdateNodesView();
-		mActorsTree->SetSelectedActors(actors);
 
 		auto action = mnew CreateActorsAction(actors, parent, prevActor);
 		o2EditorApplication.DoneAction(action);
+
+		mActorsTree->SetSelectedActors(actors);
 	}
 
 	void TreeWindow::OnContextDeletePressed()

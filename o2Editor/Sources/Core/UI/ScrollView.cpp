@@ -114,25 +114,41 @@ namespace Editor
 		return true;
 	}
 
+	bool UIScrollView::IsFocusable() const
+	{
+		return true;
+	}
+
 	void UIScrollView::UpdateCamera(float dt)
 	{
-		if (mViewCameraTargetScale < mViewCameraMinScale)
+		if (mViewCameraTargetScale.x < mViewCameraMinScale)
 		{
-			mViewCameraTargetScale = Math::Lerpc<float>(mViewCameraTargetScale, mViewCameraMinScale,
-														dt*mViewCameraScaleElasticyCoef);
+			mViewCameraTargetScale.x = Math::Lerpc<float>(mViewCameraTargetScale.x, mViewCameraMinScale,
+														  dt*mViewCameraScaleElasticyCoef);
+		}
+		if (mViewCameraTargetScale.y < mViewCameraMinScale)
+		{
+			mViewCameraTargetScale.y = Math::Lerpc<float>(mViewCameraTargetScale.y, mViewCameraMinScale,
+														  dt*mViewCameraScaleElasticyCoef);
 		}
 
-		if (mViewCameraTargetScale > mViewCameraMaxScale)
+		if (mViewCameraTargetScale.x > mViewCameraMaxScale)
 		{
-			mViewCameraTargetScale = Math::Lerpc<float>(mViewCameraTargetScale, mViewCameraMaxScale,
-														dt*mViewCameraScaleElasticyCoef);
+			mViewCameraTargetScale.x = Math::Lerpc<float>(mViewCameraTargetScale.x, mViewCameraMaxScale,
+														  dt*mViewCameraScaleElasticyCoef);
 		}
 
-		if (!Math::Equals<float>(mViewCamera.scale->x, mViewCameraTargetScale))
+		if (mViewCameraTargetScale.y > mViewCameraMaxScale)
 		{
-			mViewCamera.scale =
-				Math::Lerpc<Vec2F>(mViewCamera.scale, Vec2F(mViewCameraTargetScale, mViewCameraTargetScale),
-								   dt*mViewCameraScaleElasticyCoef);
+			mViewCameraTargetScale.y = Math::Lerpc<float>(mViewCameraTargetScale.y, mViewCameraMaxScale,
+														  dt*mViewCameraScaleElasticyCoef);
+		}
+
+		if (!Math::Equals<float>(mViewCamera.scale->x, mViewCameraTargetScale.x) ||
+			!Math::Equals<float>(mViewCamera.scale->y, mViewCameraTargetScale.y))
+		{
+			mViewCamera.scale = Math::Lerpc<Vec2F>(mViewCamera.scale, mViewCameraTargetScale,
+												   dt*mViewCameraScaleElasticyCoef);
 
 			mNeedRedraw = true;
 		}
@@ -313,6 +329,7 @@ CLASS_META(Editor::UIScrollView)
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(bool, IsFocusable);
 	PROTECTED_FUNCTION(void, UpdateCamera, float);
 	PROTECTED_FUNCTION(void, UpdateLocalScreenTransforms);
 	PROTECTED_FUNCTION(void, RedrawRenderTarget);

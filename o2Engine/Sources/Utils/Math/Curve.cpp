@@ -98,6 +98,17 @@ namespace o2
 		UpdateApproximation();
 	}
 
+	void Curve::MoveKeysFrom(float begin, float offset)
+	{
+		for (auto& key : mKeys)
+		{
+			if (key.position >= begin)
+				key.position += offset;
+		}
+
+		UpdateApproximation();
+	}
+
 	void Curve::AppendCurve(const Curve& curve)
 	{
 		AppendKeys(curve.mKeys);
@@ -723,6 +734,7 @@ CLASS_META(o2::Curve)
 
 	PUBLIC_FUNCTION(float, Evaluate, float);
 	PUBLIC_FUNCTION(void, MoveKeys, float);
+	PUBLIC_FUNCTION(void, MoveKeysFrom, float, float);
 	PUBLIC_FUNCTION(void, AppendCurve, const Curve&);
 	PUBLIC_FUNCTION(void, PrependCurve, const Curve&);
 	PUBLIC_FUNCTION(void, InsertCurve, const Curve&, float);
@@ -775,7 +787,7 @@ CLASS_META(o2::Curve::Key)
 	PUBLIC_FIELD(leftSupportPosition).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(rightSupportValue).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(rightSupportPosition).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(supportsType);
+	PUBLIC_FIELD(supportsType).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mApproxValues);
 
 	PUBLIC_FUNCTION(const Vec2F*, GetApproximatedPoints);

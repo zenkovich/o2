@@ -315,8 +315,12 @@ namespace Editor
 	{
 		Curve* curve = mnew Curve();
 		*curve = Curve::EaseInOut();
+		Curve* curve2 = mnew Curve();
+		*curve2 = Curve::EaseIn();
+
 		CurveEditorDlg::Show(Function<void()>());
-		CurveEditorDlg::AddEditingCurve(curve);
+		CurveEditorDlg::AddEditingCurve("test", curve);
+		CurveEditorDlg::AddEditingCurve("test2", curve2);
 	}
 
 	String MenuPanel::GetOpenFileNameDialog(const String& title, const Dictionary<String, String>& extensions)

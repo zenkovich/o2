@@ -61,6 +61,9 @@ namespace Editor
 		// Returns is listener scrollable
 		bool IsScrollable() const;
 
+		// Returns is this widget can be focused
+		bool IsFocusable() const;
+
 		SERIALIZABLE(UIScrollView);
 
 	protected:
@@ -77,7 +80,7 @@ namespace Editor
 
 		RectF      mViewArea;                              // View area range
 		Camera     mViewCamera;     					   // Scene view camera
-		float      mViewCameraTargetScale = 1.0f;		   // Camera target scale
+		Vec2F      mViewCameraTargetScale = Vec2F(1, 1);   // Camera target scale
 		float      mViewCameraScaleSence = 0.1f / 120.0f;  // Camera scale sense
 		float      mViewCameraScaleElasticyCoef = 30.0f;   // Scale smoothing coefficient
 		Vec2F      mViewCameraTargetPos;				   // Target camera position

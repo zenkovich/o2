@@ -146,6 +146,11 @@ namespace o2
 		return mIsRotationAvailable;
 	}
 
+	const Color4& FrameHandles::GetFrameColor() const
+	{
+		return mFrameColor;
+	}
+
 	void FrameHandles::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		if (mFrame.IsPointInside(cursor.position))

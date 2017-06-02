@@ -4,9 +4,15 @@
 #include "Render/Render.h"
 #include "Render/Sprite.h"
 #include "UI/ContextMenu.h"
+#include "UI/EditBox.h"
+#include "UI/HorizontalLayout.h"
 #include "UI/HorizontalScrollBar.h"
+#include "UI/Label.h"
 #include "UI/UIManager.h"
+#include "UI/VerticalLayout.h"
 #include "UI/VerticalScrollBar.h"
+#include "UI/Window.h"
+#include "Utils/Clipboard.h"
 
 namespace Editor
 {
@@ -21,6 +27,7 @@ namespace Editor
 
 		InitializeTextDrawables();
 		InitializeContextMenu();
+		InitializeEditValueWindow();
 
 		mTransformFrame.SetPivotEnabled(false);
 		mTransformFrame.SetRotationEnabled(false);
@@ -43,6 +50,7 @@ namespace Editor
 
 		InitializeTextDrawables();
 		InitializeContextMenu();
+		InitializeEditValueWindow();
 		RetargetStatesAnimations();
 
 		mReady = true;
@@ -53,6 +61,7 @@ namespace Editor
 		for (auto curve : mCurves)
 			delete curve;
 
+		delete mEditValueWindow;
 		delete mSelectionSprite;
 		delete mTextLeft;
 		delete mTextRight;
@@ -79,6 +88,7 @@ namespace Editor
 		mSupportHandleSample = other.mSupportHandleSample;
 
 		InitializeTextDrawables();
+		InitializeEditValueWindow();
 		RetargetStatesAnimations();
 
 		mReady = true;
@@ -100,9 +110,10 @@ namespace Editor
 		UIFrameScrollView::Update(dt);
 	}
 
-	void UICurveEditor::AddEditingCurve(Curve* curve, const Color4& color /*= Color4::Green()*/)
+	void UICurveEditor::AddEditingCurve(const String& id, Curve* curve, const Color4& color /*= Color4::Green()*/)
 	{
 		CurveInfo* info = mnew CurveInfo();
+		info->curveId = id;
 		info->curve = curve;
 		info->viewScale = Vec2F();
 		info->UpdateApproximatedPoints();
@@ -110,7 +121,7 @@ namespace Editor
 		if (color == Color4::Green())
 		{
 			if (mCurves.IsEmpty())
-				info->color = Color4(30, 224, 185, 255);
+				info->color = Color4::Green();
 			else
 				info->color = Color4::SomeColor(mCurves.Count());
 		}
@@ -123,10 +134,7 @@ namespace Editor
 		RecalculateViewArea();
 
 		if (mCurves.Count() == 1)
-		{
-			mViewCameraTargetScale = Math::Min(mAvailableArea.Width()/mViewCamera.GetSize().x,
-											   mAvailableArea.Height()/mViewCamera.GetSize().y);
-		}
+			mViewCameraTargetScale = mAvailableArea.Size()/mViewCamera.GetSize();
 	}
 
 	void UICurveEditor::RemoveEditingCurve(Curve* curve)
@@ -152,6 +160,13 @@ namespace Editor
 		}
 	}
 
+	void UICurveEditor::RemoveEditingCurve(const String& id)
+	{
+		Curve* curve = FindCurve(id);
+		if (curve)
+			RemoveEditingCurve(curve);
+	}
+
 	void UICurveEditor::RemoveAllEditingCurves()
 	{
 		auto curves = mCurves;
@@ -164,7 +179,17 @@ namespace Editor
 
 	}
 
+	void UICurveEditor::AddCurvesRange(const String& idA, const String& idB, const Color4& color /*= Color4::Green()*/)
+	{
+
+	}
+
 	void UICurveEditor::RemoveCurvesRange(Curve* curveA, Curve* curveB)
+	{
+
+	}
+
+	void UICurveEditor::RemoveCurvesRange(const String& idA, const String& idB)
 	{
 
 	}
@@ -201,11 +226,36 @@ namespace Editor
 													mnew Sprite(pressed), mnew Sprite(selected));
 	}
 
+	void UICurveEditor::OnScrolled(float scroll)
+	{
+		if (o2Input.IsKeyDown(VK_CONTROL))
+			mViewCameraTargetScale.x *= 1.0f - (scroll*mViewCameraScaleSence);
+		else if (o2Input.IsKeyDown(VK_SHIFT))
+			mViewCameraTargetScale.y *= 1.0f - (scroll*mViewCameraScaleSence);
+		else
+			mViewCameraTargetScale *= 1.0f - (scroll*mViewCameraScaleSence);
+	}
+
+	Curve* UICurveEditor::FindCurve(const String& id)
+	{
+		for (auto curve : mCurves)
+		{
+			if (curve->curveId == id)
+				return curve->curve;
+		}
+	
+		return nullptr;
+	}
+
 	void UICurveEditor::InitializeContextMenu()
 	{
 		mContextMenu = o2UI.CreateWidget<UIContextMenu>();
 
 		mContextMenu->AddItems({
+			UIContextMenu::Item("Edit", Function<void()>(this, &UICurveEditor::OnEditPressed), ImageAssetRef()),
+
+			UIContextMenu::Item::Separator(),
+
 			UIContextMenu::Item("Auto smooth", false, Function<void(bool)>(this, &UICurveEditor::OnAutoSmoothChecked)),
 			UIContextMenu::Item("Flat", false, Function<void(bool)>(this, &UICurveEditor::OnFlatChecked)),
 			UIContextMenu::Item("Free", false, Function<void(bool)>(this, &UICurveEditor::OnFreeChecked)),
@@ -247,6 +297,34 @@ namespace Editor
 		mTextBottom->SetHorAlign(HorAlign::Right);
 		mTextBottom->SetVerAlign(VerAlign::Bottom);
 		mTextBottom->SetAngleDegrees(-90.0f);
+	}
+
+	void UICurveEditor::InitializeEditValueWindow()
+	{
+		mEditValueWindow = o2UI.AddWindow("Edit key");
+
+		auto horLayout = o2UI.CreateHorLayout();
+		horLayout->spacing = 10;
+
+		auto positionVerLayout = o2UI.CreateVerLayout();
+		positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
+
+		mEditValueWindowPosition = o2UI.CreateEditBox("singleline");
+		mEditValueWindowPosition->onChangeCompleted = Function<void(const WString&)>(this, &UICurveEditor::OnEditKeyPositionChanged);
+		positionVerLayout->AddChild(mEditValueWindowPosition);
+		horLayout->AddChild(positionVerLayout);
+
+		auto valueVerLayout = o2UI.CreateVerLayout();
+		valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
+
+		mEditValueWindowValue = o2UI.CreateEditBox("singleline");
+		mEditValueWindowValue->onChangeCompleted = Function<void(const WString&)>(this, &UICurveEditor::OnEditKeyValueChanged);
+		valueVerLayout->AddChild(mEditValueWindowValue);
+		horLayout->AddChild(valueVerLayout);
+
+		mEditValueWindow->AddChild(horLayout);
+		mEditValueWindow->layout.size = Vec2F(200, 80);
+		mEditValueWindow->Hide(true);
 	}
 
 	void UICurveEditor::RecalculateViewArea()
@@ -334,8 +412,10 @@ namespace Editor
 
 		mTextLeft->SetScale(mViewCamera.GetScale());
 		mTextRight->SetScale(mViewCamera.GetScale());
-		mTextTop->SetScale(mViewCamera.GetScale());
-		mTextBottom->SetScale(mViewCamera.GetScale());
+
+		Vec2F invScale(mViewCamera.GetScale().y, mViewCamera.GetScale().x);
+		mTextTop->SetScale(invScale);
+		mTextBottom->SetScale(invScale);
 
 		for (int i = -cellsCount / 2; i < cellsCount / 2; i++)
 		{
@@ -437,6 +517,16 @@ namespace Editor
 								 mTransformFrameBasis.yv/mViewCamera.GetScale() + Vec2F(0, borders.y*2.0f)));
 
 		mTransformFrame.Draw();
+
+		if (o2Input.IsKeyDown(VK_CONTROL))
+		{
+			Vec2F left = mTransformFrame.GetCurrentBasis().offs;
+			Vec2F right = mTransformFrame.GetCurrentBasis().offs + mTransformFrame.GetCurrentBasis().xv;
+			RectF rect = layout.GetAbsoluteRect();
+
+			o2Render.DrawLine(Vec2F(right.x, rect.bottom), Vec2F(right.x, rect.top), mTransformFrame.GetFrameColor());
+			o2Render.DrawLine(Vec2F(left.x, rect.bottom), Vec2F(left.x, rect.top), mTransformFrame.GetFrameColor());
+		}
 	}
 
 	void UICurveEditor::AddCurveKeyHandles(CurveInfo* info, int keyId)
@@ -497,6 +587,9 @@ namespace Editor
 		keyHandles->rightSupportHandle.onRightButtonReleased =
 			Function<void(const Input::Cursor&)>(this, &UICurveEditor::OnCursorRightMouseReleased);
 
+		for (int i = keyId; i < info->handles.Count(); i++)
+			info->handles[i]->curveKeyIdx++;
+
 		info->handles.Insert(keyHandles, keyId);
 
 		mHandles.Add(&keyHandles->mainHandle);
@@ -509,6 +602,22 @@ namespace Editor
 		keyHandles->mainHandle.SetSelectionGroup(this);
 		keyHandles->leftSupportHandle.SetSelectionGroup(this);
 		keyHandles->rightSupportHandle.SetSelectionGroup(this);
+	}
+
+	void UICurveEditor::RemoveCurveKeyHandles(CurveInfo* info, int keyId)
+	{
+		for (int i = keyId + 1; i < info->handles.Count(); i++)
+			info->handles[i]->curveKeyIdx--;
+
+		mHandles.Remove(&info->handles[keyId]->mainHandle);
+		mHandles.Remove(&info->handles[keyId]->leftSupportHandle);
+		mHandles.Remove(&info->handles[keyId]->rightSupportHandle);
+
+		mSupportHandles.Remove(&info->handles[keyId]->leftSupportHandle);
+		mSupportHandles.Remove(&info->handles[keyId]->rightSupportHandle);
+
+		delete info->handles[keyId];
+		info->handles.RemoveAt(keyId);
 	}
 
 	void UICurveEditor::OnCurveKeyMainHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
@@ -800,9 +909,6 @@ namespace Editor
 		{
 			int idx = clickedCurveInfo->curve->InsertKey(newKey);
 
-			for (int i = idx; i < clickedCurveInfo->handles.Count(); i++)
-				clickedCurveInfo->handles[i]->curveKeyIdx++;
-
 			AddCurveKeyHandles(clickedCurveInfo, idx);
 			clickedCurveInfo->UpdateApproximatedPoints();
 
@@ -893,6 +999,8 @@ namespace Editor
 
 	void UICurveEditor::OnCursorPressed(const Input::Cursor& cursor)
 	{
+		Focus();
+
 		mSelectingPressedPoint = ScreenToLocalPoint(cursor.position);
 
 		if (!o2Input.IsKeyDown(VK_CONTROL))
@@ -943,11 +1051,14 @@ namespace Editor
 
 	void UICurveEditor::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
+		Focus();
+
 		if (!mIsViewScrolling)
 		{
-			Curve::Key::Type supportsType;
+			Curve::Key::Type supportsType = Curve::Key::Type::Free;
 			bool supportsDifferent = false;
 			bool first = true;
+			bool someSelected = false;
 
 			for (auto curve : mCurves)
 			{
@@ -955,6 +1066,8 @@ namespace Editor
 				{
 					if (!handles->mainHandle.IsSelected())
 						continue;
+
+					someSelected = true;
 
 					if (first)
 					{
@@ -964,7 +1077,7 @@ namespace Editor
 					else if (supportsType != curve->curve->GetKeyAt(handles->curveKeyIdx).supportsType)
 					{
 						supportsDifferent = true;
-						break;;
+						break;
 					}
 				}
 
@@ -972,7 +1085,7 @@ namespace Editor
 					break;
 			}
 
-			if (supportsDifferent)
+			if (supportsDifferent || !someSelected)
 			{
 				for (int i = 0; i < 5; i++)
 					mContextMenu->SetItemChecked(i, false);
@@ -1019,6 +1132,9 @@ namespace Editor
 
 		for (auto handle : mSelectedHandles)
 		{
+			if (mSupportHandles.Contains(handle))
+				continue;
+
 			aabb.left   = Math::Min(handle->GetPosition().x, aabb.left);
 			aabb.right  = Math::Max(handle->GetPosition().x, aabb.right);
 			aabb.top    = Math::Max(handle->GetPosition().y, aabb.top);
@@ -1118,10 +1234,11 @@ namespace Editor
 	void UICurveEditor::OnTransformFrameTransformed(const Basis& basis)
 	{
 		Vec2F border(10, 10);
-		Basis localBasis(ScreenToLocalPoint(basis.offs + border), 
-						 (basis.xv - Vec2F(border.x*2.0f, 0))*mViewCamera.GetScale(), 
+		Basis localBasis(ScreenToLocalPoint(basis.offs + border),
+			(basis.xv - Vec2F(border.x*2.0f, 0))*mViewCamera.GetScale(),
 						 (basis.yv - Vec2F(0, border.y*2.0f))*mViewCamera.GetScale());
 
+		Basis lastTransformBasis = mTransformFrameBasis;
 		Basis delta = mTransformFrameBasis.Inverted()*localBasis;
 
 		if (delta.offs.Length() > 0.01f || delta.xv != Vec2F(1, 0) || delta.yv != Vec2F(0, 1))
@@ -1135,8 +1252,85 @@ namespace Editor
 				handle->onChangedPos(handle->GetPosition());
 			}
 
+			if (o2Input.IsKeyDown(VK_CONTROL))
+			{
+				float right = lastTransformBasis.offs.x + lastTransformBasis.xv.x;
+				float left = lastTransformBasis.offs.x;
+
+				float rightOffset = localBasis.offs.x + localBasis.xv.x - right;
+				float leftOffset = localBasis.offs.x - left;
+
+				bool rightChanged = !Math::Equals(rightOffset, 0.0f);
+				bool leftChanged = !Math::Equals(leftOffset, 0.0f);
+
+				for (auto handle : mHandles)
+				{
+					if (mSelectedHandles.Contains(handle) || mSupportHandles.Contains(handle))
+						continue;
+
+					if (handle->GetPosition().x >= right && rightChanged)
+					{
+						handle->position += Vec2F(rightOffset, 0);
+						handle->onChangedPos(handle->GetPosition());
+					}
+
+					if (handle->GetPosition().x <= left && leftChanged)
+					{
+						handle->position += Vec2F(leftOffset, 0);
+						handle->onChangedPos(handle->GetPosition());
+					}
+				}
+			}
+
 			UpdateTransformFrame();
 		}
+	}
+
+	void UICurveEditor::OnEditKeyPositionChanged(const WString& str)
+	{
+		for (auto handle : mSelectedHandles)
+		{
+			if (mSupportHandles.Contains(handle))
+				continue;
+
+			handle->SetPosition(Vec2F((float)str, handle->position->y));
+			handle->onChangedPos(handle->position);
+		}
+
+		UpdateTransformFrame();
+	}
+
+	void UICurveEditor::OnEditKeyValueChanged(const WString& str)
+	{
+		for (auto handle : mSelectedHandles)
+		{
+			if (mSupportHandles.Contains(handle))
+				continue;
+
+			handle->SetPosition(Vec2F(handle->position->x, (float)str));
+			handle->onChangedPos(handle->position);
+		}
+
+		UpdateTransformFrame();
+	}
+
+	void UICurveEditor::OnEditPressed()
+	{
+		Vec2F key;
+		bool someSelected = false;
+		for (auto handle : mSelectedHandles)
+		{
+			if (mSupportHandles.Contains(handle))
+				continue;
+
+			someSelected = true;
+
+			key = handle->position;
+		}
+
+		mEditValueWindowPosition->text = (WString)key.x;
+		mEditValueWindowValue->text = (WString)key.y;
+		mEditValueWindow->ShowModal();
 	}
 
 	void UICurveEditor::OnAutoSmoothChecked(bool checked)
@@ -1196,27 +1390,161 @@ namespace Editor
 
 	void UICurveEditor::OnCopyPressed()
 	{
+		if (!IsFocused())
+			return;
 
+		CurveCopyInfosVec copyKeys;
+
+		for (auto curve : mCurves)
+		{
+			CurveCopyInfo* copyInfo = mnew CurveCopyInfo();
+			copyInfo->curveId = curve->curveId;
+
+			for (auto handles : curve->handles)
+			{
+				if (!handles->mainHandle.IsSelected())
+					continue;
+
+				copyInfo->keys.Add(curve->curve->GetKeyAt(handles->curveKeyIdx));
+			}
+
+			if (copyInfo->keys.IsEmpty())
+				delete copyInfo;
+			else
+				copyKeys.Add(copyInfo);
+		}
+
+		DataNode copyData;
+		copyData = copyKeys;
+		String copyDataStr = copyData.SaveAsWString();
+
+		Clipboard::SetText(copyDataStr);
 	}
 
 	void UICurveEditor::OnCutPressed()
 	{
+		if (!IsFocused())
+			return;
 
+		OnCopyPressed();
+		OnDeletePressed();
 	}
 
 	void UICurveEditor::OnPastePressed()
 	{
+		if (!IsFocused())
+			return; 
+		
+		float insertPos = ScreenToLocalPoint(o2Input.cursorPos).x;
+		DataNode data;
+		data.LoadFromData(Clipboard::GetText());
 
+		CurveCopyInfosVec copyKeys;
+		copyKeys = data;
+
+		for (auto curve : copyKeys)
+		{
+			CurveInfo* curveInfo = mCurves.FindMatch([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
+
+			if (curveInfo == nullptr)
+			{
+				if (copyKeys.Count() == 1 && mCurves.Count() == 1)
+					curveInfo = mCurves[0];
+			}
+
+			if (!curveInfo)
+				continue;
+
+			float positionDelta = insertPos - curve->keys[0].position;
+			for (auto& key : curve->keys)
+			{
+				key.position += positionDelta;
+
+				int position = curveInfo->curve->InsertKey(key);
+				AddCurveKeyHandles(curveInfo, position);
+			}
+
+			delete curve;
+
+			curveInfo->UpdateApproximatedPoints();
+			curveInfo->UpdateHandles();
+			mNeedRedraw = true;
+		}
 	}
 
 	void UICurveEditor::OnDeletePressed()
 	{
+		if (!IsFocused())
+			return;
+		
+		for (auto curve : mCurves)
+		{
+			CurveCopyInfo* copyInfo = mnew CurveCopyInfo();
+			copyInfo->curveId = curve->curveId;
 
+			Vector<int> removingIdxs;
+			for (auto handles : curve->handles)
+			{
+				if (!handles->mainHandle.IsSelected())
+					continue;
+
+				removingIdxs.Add(handles->curveKeyIdx);
+			}
+
+			for (int i = removingIdxs.Count() - 1; i >= 0; i--)
+			{
+				curve->curve->RemoveKeyAt(removingIdxs[i]);
+				RemoveCurveKeyHandles(curve, removingIdxs[i]);
+			}
+
+			curve->UpdateApproximatedPoints();
+			curve->UpdateHandles();
+			mNeedRedraw = true;
+		}
+
+		mSelectedHandles.Clear();
+		UpdateTransformFrame();
 	}
 
 	void UICurveEditor::OnInsertPressed()
 	{
+		if (!IsFocused())
+			return;
 
+		float insertPos = ScreenToLocalPoint(o2Input.cursorPos).x;
+		DataNode data;
+		data.LoadFromData(Clipboard::GetText());
+
+		CurveCopyInfosVec copyKeys;
+		copyKeys = data;
+
+		for (auto curve : copyKeys)
+		{
+			CurveInfo* curveInfo = mCurves.FindMatch([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
+
+			if (curveInfo == nullptr)
+			{
+				if (copyKeys.Count() == 1 && mCurves.Count() == 1)
+					curveInfo = mCurves[0];
+			}
+
+			if (!curveInfo)
+				continue;
+
+			float length = curve->keys.Last().position - curve->keys[0].position;
+			curveInfo->curve->MoveKeysFrom(insertPos, length);
+
+			float positionDelta = insertPos - curve->keys[0].position;
+			for (auto& key : curve->keys)
+			{
+				key.position += positionDelta;
+
+				int position = curveInfo->curve->InsertKey(key);
+				AddCurveKeyHandles(curveInfo, position);
+			}
+
+			delete curve;
+		}
 	}
 
 	UICurveEditor::CurveInfo::CurveInfo()
@@ -1342,21 +1670,30 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FIELD(mTransformFrameVisible);
 	PROTECTED_FIELD(mTransformFrameBasis);
 	PROTECTED_FIELD(mIsViewScrolling);
+	PROTECTED_FIELD(mEditValueWindow);
+	PROTECTED_FIELD(mEditValueWindowValue);
+	PROTECTED_FIELD(mEditValueWindowPosition);
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, AddEditingCurve, Curve*, const Color4&);
+	PUBLIC_FUNCTION(void, AddEditingCurve, const String&, Curve*, const Color4&);
 	PUBLIC_FUNCTION(void, RemoveEditingCurve, Curve*);
+	PUBLIC_FUNCTION(void, RemoveEditingCurve, const String&);
 	PUBLIC_FUNCTION(void, RemoveAllEditingCurves);
 	PUBLIC_FUNCTION(void, AddCurvesRange, Curve*, Curve*, const Color4&);
 	PUBLIC_FUNCTION(void, RemoveCurvesRange, Curve*, Curve*);
+	PUBLIC_FUNCTION(void, AddCurvesRange, const String&, const String&, const Color4&);
+	PUBLIC_FUNCTION(void, RemoveCurvesRange, const String&, const String&);
 	PUBLIC_FUNCTION(void, SetSelectionSpriteImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetTextFont, const FontRef&);
 	PUBLIC_FUNCTION(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PROTECTED_FUNCTION(void, OnScrolled, float);
+	PROTECTED_FUNCTION(Curve*, FindCurve, const String&);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
 	PROTECTED_FUNCTION(void, InitializeTextDrawables);
+	PROTECTED_FUNCTION(void, InitializeEditValueWindow);
 	PROTECTED_FUNCTION(void, RecalculateViewArea);
 	PROTECTED_FUNCTION(void, RedrawContent);
 	PROTECTED_FUNCTION(void, DrawGrid);
@@ -1365,6 +1702,7 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FUNCTION(void, DrawSelection);
 	PROTECTED_FUNCTION(void, DrawTransformFrame);
 	PROTECTED_FUNCTION(void, AddCurveKeyHandles, CurveInfo*, int);
+	PROTECTED_FUNCTION(void, RemoveCurveKeyHandles, CurveInfo*, int);
 	PROTECTED_FUNCTION(void, OnCurveKeyMainHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCurveKeyLeftSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCurveKeyRightSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
@@ -1385,6 +1723,9 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FUNCTION(void, OnHandleMoved, SelectableDragHandle*, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SetSelectedKeysSupportsType, Curve::Key::Type);
 	PROTECTED_FUNCTION(void, OnTransformFrameTransformed, const Basis&);
+	PROTECTED_FUNCTION(void, OnEditKeyPositionChanged, const WString&);
+	PROTECTED_FUNCTION(void, OnEditKeyValueChanged, const WString&);
+	PROTECTED_FUNCTION(void, OnEditPressed);
 	PROTECTED_FUNCTION(void, OnAutoSmoothChecked, bool);
 	PROTECTED_FUNCTION(void, OnFlatChecked, bool);
 	PROTECTED_FUNCTION(void, OnFreeChecked, bool);
@@ -1395,6 +1736,15 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FUNCTION(void, OnPastePressed);
 	PROTECTED_FUNCTION(void, OnDeletePressed);
 	PROTECTED_FUNCTION(void, OnInsertPressed);
+}
+END_META;
+
+CLASS_META(Editor::UICurveEditor::CurveCopyInfo)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(curveId).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(keys).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
  

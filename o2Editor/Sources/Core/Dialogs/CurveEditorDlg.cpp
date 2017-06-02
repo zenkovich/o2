@@ -60,14 +60,19 @@ namespace Editor
 		mInstance->mEditorWidget->RemoveAllEditingCurves();
 	}
 
-	void CurveEditorDlg::AddEditingCurve(Curve* curve, const Color4& color /*= Color4::Green()*/)
+	void CurveEditorDlg::AddEditingCurve(const String& id, Curve* curve, const Color4& color /*= Color4::Green()*/)
 	{
-		mInstance->mEditorWidget->AddEditingCurve(curve, color);
+		mInstance->mEditorWidget->AddEditingCurve(id, curve, color);
 	}
 
 	void CurveEditorDlg::RemoveEditingCurve(Curve* curve)
 	{
-		mInstance->mEditorWidget->AddEditingCurve(curve);
+		mInstance->mEditorWidget->RemoveEditingCurve(curve);
+	}
+
+	void CurveEditorDlg::RemoveEditingCurve(const String& id)
+	{
+		mInstance->mEditorWidget->RemoveEditingCurve(id);
 	}
 
 	void CurveEditorDlg::RemoveAllEditingCurves()

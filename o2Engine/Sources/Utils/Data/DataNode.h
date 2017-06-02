@@ -92,9 +92,6 @@ namespace o2
 		// Sets value from other node
 		DataNode& SetValue(const DataNode& other);
 
-		// Sets value from object
-		DataNode& SetValue(IObject& object);
-
 		// Sets value from object withous custom converters
 		DataNode& SetValueRaw(const IObject& object);
 
@@ -161,9 +158,18 @@ namespace o2
 		// Sets value from UID value
 		DataNode& SetValue(const UID& value);
 
-		// Sets value from pointer value, only for objects, based on ISerializable
-		template<typename _type, typename X = std::enable_if<std::is_base_of<ISerializable, _type>::value>::type>
+		// Sets value from pointer value, only for objects, based on IObject
+		template<typename _type, typename X = std::enable_if<std::is_base_of<IObject, _type>::value>::type>
 		DataNode& SetValue(_type* value);
+
+		// Sets value from pointer value, only for objects, based on IObject
+		template<typename _type, typename X = std::enable_if<std::is_base_of<IObject, _type>::value>::type>
+		DataNode& SetValueRaw(_type* value);
+
+		// Sets value from vector value
+		template<typename _type, typename X = std::enable_if<std::is_base_of<IObject, _type>::value || 
+			                                                 std::is_base_of<IObject, std::remove_pointer<_type>::type>::value>::type>
+		DataNode& SetValueRaw(const Vector<_type>& value);
 
 		// Sets value from vector value
 		template<typename _type>
@@ -259,9 +265,18 @@ namespace o2
 			typename X = std::enable_if<std::is_base_of<IObject, _type>::value>::type>
 		void GetValue(_type*& value) const;
 
-		// Gets value as vector
+		// Gets value as pointer, only for objects, based on ISerializable
+		template<typename _type,
+			typename X = std::enable_if<std::is_base_of<IObject, _type>::value>::type>
+		void GetValueRaw(_type*& value) const;
+
+			// Gets value as vector
 		template<typename _type>
 		void GetValue(Vector<_type>& value) const;
+
+		// Gets value as vector
+		template<typename _type>
+		void GetValueRaw(Vector<_type>& value) const;
 
 		// Gets value as dictionary
 		template<typename _key, typename _value>
@@ -414,35 +429,6 @@ namespace o2
 	template<typename _type, typename _getter>
 	const Type& GetTypeOf();
 
-	template<typename _type, typename X>
-	void DataNode::GetValue(_type*& value) const
-	{
-		for (auto conv : mDataConverters)
-		{
-			if (conv->IsConvertsType(&GetTypeOf<_type*>()))
-			{
-				conv->FromData(&value, *this);
-				return;
-			}
-		}
-
-		if (auto typeNode = GetNode("Type"))
-		{
-			String type = *typeNode;
-
-			if (auto valueNode = GetNode("Value"))
-			{
-				value = static_cast<_type*>(Reflection::CreateTypeSample(type));
-				if (value)
-					valueNode->GetValue(*value);
-
-				return;
-			}
-		}
-
-		value = nullptr;
-	}
-
 	template<typename _type>
 	DataNode& DataNode::operator=(const _type& value)
 	{
@@ -478,6 +464,18 @@ namespace o2
 		return *this;
 	}
 
+	template<typename _type, typename X>
+	DataNode& DataNode::SetValueRaw(_type* value)
+	{
+		if (value)
+		{
+			AddNode("Type")->SetValue(value->GetType().GetName());
+			AddNode("Value")->SetValueRaw(*value);
+		}
+
+		return *this;
+	}
+
 	template<typename _key, typename _value>
 	DataNode& DataNode::SetValue(const Dictionary<_key, _value>& value)
 	{
@@ -502,6 +500,52 @@ namespace o2
 			AddNode("Element")->SetValue(v);
 
 		return *this;
+	}
+
+	template<typename _type, typename X>
+	DataNode& DataNode::SetValueRaw(const Vector<_type>& value)
+	{
+		Clear();
+
+		for (auto v : value)
+			AddNode("Element")->SetValueRaw(v);
+
+		return *this;
+	}
+
+	template<typename _type, typename X>
+	void DataNode::GetValue(_type*& value) const
+	{
+		for (auto conv : mDataConverters)
+		{
+			if (conv->IsConvertsType(&GetTypeOf<_type*>()))
+			{
+				conv->FromData(&value, *this);
+				return;
+			}
+		}
+
+		GetValueRaw<_type>(value);
+	}
+
+	template<typename _type, typename X>
+	void DataNode::GetValueRaw(_type*& value) const
+	{
+		if (auto typeNode = GetNode("Type"))
+		{
+			String type = *typeNode;
+
+			if (auto valueNode = GetNode("Value"))
+			{
+				value = static_cast<_type*>(Reflection::CreateTypeSample(type));
+				if (value)
+					valueNode->GetValueRaw(*value);
+
+				return;
+			}
+		}
+
+		value = nullptr;
 	}
 
 	template<typename _key, typename _value>
@@ -531,6 +575,17 @@ namespace o2
 		{
 			_type v = _type();
 			childNode->GetValue(v);
+			value.Add(v);
+		}
+	}
+
+	template<typename _type>
+	void DataNode::GetValueRaw(Vector<_type>& value) const
+	{
+		for (auto childNode : mChildNodes)
+		{
+			_type v = _type();
+			childNode->GetValueRaw(v);
 			value.Add(v);
 		}
 	}

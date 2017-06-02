@@ -321,6 +321,7 @@ namespace o2
 	{
 		auto res = mnew UIHorizontalLayout();
 		res->name = "hor layout";
+		res->layout = UIWidgetLayout::BothStretch();
 		return res;
 	}
 
@@ -328,6 +329,7 @@ namespace o2
 	{
 		auto res = mnew UIVerticalLayout();
 		res->name = "ver layout";
+		res->layout = UIWidgetLayout::BothStretch();
 		return res;
 	}
 
