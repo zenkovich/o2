@@ -2422,4 +2422,3 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildEditorUIStyle);
 }
 END_META;
- 

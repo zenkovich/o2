@@ -413,4 +413,3 @@ ENUM_META_(o2::UIToggleGroup::Type, Type)
 	ENUM_ENTRY(VerOneClick);
 }
 END_ENUM_META;
- 

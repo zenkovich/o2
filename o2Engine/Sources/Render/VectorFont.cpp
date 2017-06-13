@@ -320,4 +320,3 @@ CLASS_META(o2::VectorFont::Effect)
 	PUBLIC_FUNCTION(bool, IsEqual, Effect*);
 }
 END_META;
- 

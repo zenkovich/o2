@@ -995,4 +995,3 @@ CLASS_META(o2::UIContextMenu::Item)
 	PUBLIC_FIELD(onChecked);
 }
 END_META;
- 

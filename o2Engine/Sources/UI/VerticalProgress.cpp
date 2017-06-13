@@ -339,4 +339,3 @@ ENUM_META_(o2::UIVerticalProgress::Orientation, Orientation)
 	ENUM_ENTRY(Up);
 }
 END_ENUM_META;
- 

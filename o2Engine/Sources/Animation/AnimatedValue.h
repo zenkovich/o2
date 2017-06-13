@@ -789,4 +789,3 @@ CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>::Key)
 	PUBLIC_FIELD(mCurveApproxValues);
 }
 END_META;
- 

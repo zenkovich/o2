@@ -378,4 +378,3 @@ CLASS_META(Editor::Vec2FProperty)
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
- 

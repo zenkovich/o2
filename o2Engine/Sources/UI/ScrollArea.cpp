@@ -898,4 +898,3 @@ CLASS_META(o2::UIScrollArea)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

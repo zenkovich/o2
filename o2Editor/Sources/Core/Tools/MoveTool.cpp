@@ -266,7 +266,7 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::MoveTool)
 {
 	BASE_CLASS(Editor::SelectionTool);
@@ -299,4 +299,3 @@ CLASS_META(Editor::MoveTool)
 	PROTECTED_FUNCTION(void, MoveSelectedActorsWithAction, const Vec2F&);
 }
 END_META;
- 

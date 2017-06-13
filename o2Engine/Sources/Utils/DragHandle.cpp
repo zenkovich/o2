@@ -717,4 +717,3 @@ CLASS_META(o2::SelectableDragHandle)
 	PROTECTED_FUNCTION(void, OnDeselected);
 }
 END_META;
- 

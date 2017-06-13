@@ -377,4 +377,3 @@ namespace o2
 		return Color4((idx*33)%255, (idx*58)%255, (idx*77)%255, 255);
 	}
 }
- 

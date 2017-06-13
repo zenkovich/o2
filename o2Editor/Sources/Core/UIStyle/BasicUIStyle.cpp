@@ -1170,7 +1170,7 @@ namespace o2
 		o2UI.SaveStyle("basic_ui_style.xml");
 	}
 }
- 
+
 CLASS_META(o2::BasicUIStyleBuilder)
 {
 	BASE_CLASS(o2::IObject);
@@ -1205,4 +1205,3 @@ CLASS_META(o2::BasicUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildBasicUIStyle);
 }
 END_META;
- 

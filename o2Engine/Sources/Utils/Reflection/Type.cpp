@@ -437,4 +437,3 @@ ENUM_META_(o2::Type::Usage, Usage)
 	ENUM_ENTRY(Vector);
 }
 END_ENUM_META;
- 

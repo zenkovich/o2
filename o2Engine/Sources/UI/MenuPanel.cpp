@@ -517,4 +517,3 @@ CLASS_META(o2::UIMenuPanel::Item)
 	PUBLIC_FIELD(onClick);
 }
 END_META;
- 

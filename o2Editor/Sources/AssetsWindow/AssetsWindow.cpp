@@ -524,4 +524,3 @@ CLASS_META(Editor::AssetsWindow)
 	PROTECTED_FUNCTION(void, CopyAssetFolder, const String&, const String&);
 }
 END_META;
- 

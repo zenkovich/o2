@@ -245,4 +245,3 @@ namespace o2
 		friend class SelectableDragableObjectsGroup;
 	};
 }
- 

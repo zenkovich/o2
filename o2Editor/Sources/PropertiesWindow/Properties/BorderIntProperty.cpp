@@ -513,4 +513,3 @@ CLASS_META(Editor::BorderIProperty)
 	PROTECTED_FUNCTION(void, OnBottomDragHandleMoved, const Input::Cursor&);
 }
 END_META;
- 

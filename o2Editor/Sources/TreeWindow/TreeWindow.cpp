@@ -435,7 +435,7 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::TreeWindow)
 {
 	BASE_CLASS(Editor::IEditorWindow);
@@ -474,4 +474,3 @@ CLASS_META(Editor::TreeWindow)
 	PROTECTED_FUNCTION(void, OnActorDestroyed, Actor*);
 }
 END_META;
- 

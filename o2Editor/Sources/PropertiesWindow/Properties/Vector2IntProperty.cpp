@@ -336,4 +336,3 @@ CLASS_META(Editor::Vec2IProperty)
 	PROTECTED_FUNCTION(void, OnYDragHandleMoved, const Input::Cursor&);
 }
 END_META;
- 

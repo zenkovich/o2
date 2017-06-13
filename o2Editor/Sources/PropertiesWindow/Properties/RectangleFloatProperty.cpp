@@ -546,4 +546,3 @@ CLASS_META(Editor::RectFProperty)
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
- 

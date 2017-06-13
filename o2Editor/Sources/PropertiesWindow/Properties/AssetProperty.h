@@ -415,4 +415,3 @@ CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 }
 END_META;
- 

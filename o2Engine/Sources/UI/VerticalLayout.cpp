@@ -541,4 +541,3 @@ CLASS_META(o2::UIVerticalLayout)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

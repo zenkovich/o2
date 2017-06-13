@@ -400,4 +400,3 @@ ENUM_META_(o2::Loop, Loop)
 	ENUM_ENTRY(Repeat);
 }
 END_ENUM_META;
- 

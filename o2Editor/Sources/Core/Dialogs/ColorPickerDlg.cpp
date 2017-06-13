@@ -486,4 +486,3 @@ ENUM_META_(Editor::ColorPickerDlg::ColorType, ColorType)
 	ENUM_ENTRY(RGB);
 }
 END_ENUM_META;
- 

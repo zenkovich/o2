@@ -540,4 +540,3 @@ CLASS_META(o2::UIHorizontalLayout)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

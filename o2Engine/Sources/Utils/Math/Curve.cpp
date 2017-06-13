@@ -804,4 +804,3 @@ ENUM_META_(o2::Curve::Key::Type, Type)
 	ENUM_ENTRY(Smooth);
 }
 END_ENUM_META;
- 

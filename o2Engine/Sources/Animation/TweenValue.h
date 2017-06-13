@@ -284,4 +284,3 @@ CLASS_TEMPLATE_META(o2::TweenValue<typename _type>)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

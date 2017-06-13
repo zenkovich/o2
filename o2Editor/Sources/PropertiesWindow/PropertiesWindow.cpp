@@ -387,4 +387,3 @@ CLASS_META(Editor::PropertiesWindow)
 	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;
- 

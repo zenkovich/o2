@@ -423,4 +423,3 @@ CLASS_META(Editor::ComponentProperty)
 	PROTECTED_FUNCTION(void, OnDragExitFromAssetsScroll, UIAssetsIconsScrollArea*);
 }
 END_META;
- 

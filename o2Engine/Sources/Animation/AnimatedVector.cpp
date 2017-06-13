@@ -585,4 +585,3 @@ CLASS_META(o2::AnimatedValue<o2::Vec2<float>>::Key)
 	PUBLIC_FIELD(mApproxTotalLength);
 }
 END_META;
- 

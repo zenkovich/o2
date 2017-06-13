@@ -447,4 +447,3 @@ CLASS_META(o2::Asset::IMetaInfo)
 	PUBLIC_FUNCTION(void, r);
 }
 END_META;
- 

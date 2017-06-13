@@ -453,4 +453,3 @@ namespace o2
 		return (b - a).Length();
 	}
 }
- 

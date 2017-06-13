@@ -2440,4 +2440,3 @@ ENUM_META_(o2::ActorCreateMode, ActorCreateMode)
 	ENUM_ENTRY(NotInScene);
 }
 END_ENUM_META;
- 
