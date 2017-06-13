@@ -194,8 +194,8 @@ void CodeToolApplication::WriteFile(const string& path, const string& data) cons
 	fout.open(path.c_str());
 	if (!fout.is_open())
 		return;
-
-	fout.write(data.c_str(), data.length() + 1);
+	
+	fout.write(data.c_str(), data.length());
 
 	fout.close();
 }
