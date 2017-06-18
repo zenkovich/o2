@@ -297,7 +297,7 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::LogWindow)
 {
 	BASE_CLASS(Editor::IEditorWindow);
@@ -341,4 +341,3 @@ ENUM_META_(Editor::LogWindow::LogMessage::Type, Type)
 	ENUM_ENTRY(Warning);
 }
 END_ENUM_META;
- 

@@ -379,4 +379,3 @@ CLASS_META(o2::UICustomDropDown)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

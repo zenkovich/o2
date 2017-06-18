@@ -417,4 +417,3 @@ CLASS_META(o2::ActorTransform)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

@@ -358,4 +358,3 @@ CLASS_META(o2::AnimatedValue<float>)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

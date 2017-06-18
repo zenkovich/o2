@@ -359,7 +359,7 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::RotateTool)
 {
 	BASE_CLASS(Editor::SelectionTool);
@@ -405,4 +405,3 @@ CLASS_META(Editor::RotateTool)
 	PUBLIC_FUNCTION(void, RotateActorsSeparatedWithAction, float);
 }
 END_META;
- 

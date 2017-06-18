@@ -716,4 +716,3 @@ ENUM_META_(o2::DataNode::Format, Format)
 	ENUM_ENTRY(Xml);
 }
 END_ENUM_META;
- 

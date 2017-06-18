@@ -356,4 +356,3 @@ CLASS_META(o2::AtlasAssetConverter::Image)
 	PUBLIC_FIELD(time).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
- 

@@ -672,4 +672,3 @@ CLASS_META(o2::UICustomList)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

@@ -466,4 +466,3 @@ _GETTER.Initialize(&_CLASS::_GET_FUNC)
 _ACCESSOR.Initialize(this, &_CLASS::_FUNC)
 
 }
- 

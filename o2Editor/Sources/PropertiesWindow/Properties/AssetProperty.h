@@ -441,4 +441,3 @@ CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 }
 END_META;
- 

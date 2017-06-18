@@ -459,4 +459,3 @@ CLASS_META(o2::UIWindow)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

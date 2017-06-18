@@ -354,4 +354,3 @@ CLASS_META(o2::UIWidgetLayer)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

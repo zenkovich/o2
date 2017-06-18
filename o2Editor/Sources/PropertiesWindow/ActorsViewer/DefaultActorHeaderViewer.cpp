@@ -193,6 +193,7 @@ CLASS_META(Editor::DefaultActorHeaderViewer)
 	BASE_CLASS(Editor::IActorHeaderViewer);
 	BASE_CLASS(o2::KeyboardEventsListener);
 
+	PUBLIC_FIELD(mActors);
 	PUBLIC_FIELD(mDataView);
 	PUBLIC_FIELD(mEnableProperty);
 	PUBLIC_FIELD(mNameProperty);
@@ -212,4 +213,3 @@ CLASS_META(Editor::DefaultActorHeaderViewer)
 	PROTECTED_FUNCTION(Vector<Actor*>, GetRootApplyActors);
 }
 END_META;
- 

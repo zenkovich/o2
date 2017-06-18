@@ -237,3 +237,4 @@ pip-log.txt
 /o2Engine/dependencies/vs2015/Dependencies.VC.db
 /o2Engine/Sources/CodeToolCache.xml
 /o2Editor/Sources/CodeToolCache.xml
+/o2Engine/Windows/o2Engine.VC.db

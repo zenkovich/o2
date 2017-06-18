@@ -530,4 +530,3 @@ CLASS_META(o2::Scene::Layer)
 	PROTECTED_FUNCTION(void, ComponentDisabled, DrawableComponent*);
 }
 END_META;
- 

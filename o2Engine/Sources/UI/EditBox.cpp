@@ -1441,4 +1441,3 @@ CLASS_META(o2::UIEditBox)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

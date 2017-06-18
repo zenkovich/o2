@@ -452,7 +452,7 @@ namespace Editor
 	}
 
 }
- 
+
 CLASS_META(Editor::UIDockableWindow)
 {
 	BASE_CLASS(o2::UIWindow);
@@ -483,4 +483,3 @@ CLASS_META(Editor::UIDockableWindow)
 	PROTECTED_FUNCTION(void, SetDocked, bool);
 }
 END_META;
- 

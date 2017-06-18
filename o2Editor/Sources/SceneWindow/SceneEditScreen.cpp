@@ -618,4 +618,3 @@ CLASS_META(Editor::SceneEditScreen)
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 }
 END_META;
- 

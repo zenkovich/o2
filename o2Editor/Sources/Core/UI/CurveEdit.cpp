@@ -1747,4 +1747,3 @@ CLASS_META(Editor::UICurveEditor::CurveCopyInfo)
 	PUBLIC_FIELD(keys).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
- 

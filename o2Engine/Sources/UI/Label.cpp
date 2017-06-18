@@ -384,4 +384,3 @@ ENUM_META_(o2::UILabel::VerOverflow, VerOverflow)
 	ENUM_ENTRY(None);
 }
 END_ENUM_META;
- 

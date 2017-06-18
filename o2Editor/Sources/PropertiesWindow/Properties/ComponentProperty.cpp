@@ -441,4 +441,3 @@ CLASS_META(Editor::ComponentProperty)
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 }
 END_META;
- 

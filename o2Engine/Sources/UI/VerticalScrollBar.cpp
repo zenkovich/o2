@@ -419,4 +419,3 @@ CLASS_META(o2::UIVerticalScrollBar)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

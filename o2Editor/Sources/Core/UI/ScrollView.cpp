@@ -342,4 +342,3 @@ CLASS_META(Editor::UIScrollView)
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
 }
 END_META;
- 

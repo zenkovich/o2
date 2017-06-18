@@ -1158,4 +1158,3 @@ CLASS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&);
 }
 END_META;
- 

@@ -468,4 +468,3 @@ CLASS_META(Editor::UIActorsTreeNode)
 	PROTECTED_FUNCTION(void, OnEnableCkicked);
 }
 END_META;
- 

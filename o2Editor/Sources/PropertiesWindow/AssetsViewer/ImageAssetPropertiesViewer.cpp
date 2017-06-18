@@ -401,4 +401,3 @@ CLASS_META(Editor::ImageAssetPropertiesViewer)
 	PROTECTED_FUNCTION(Sprite*, CreateGridSprite);
 }
 END_META;
- 

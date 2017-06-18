@@ -420,4 +420,3 @@ CLASS_META(o2::UIHorizontalScrollBar)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
- 

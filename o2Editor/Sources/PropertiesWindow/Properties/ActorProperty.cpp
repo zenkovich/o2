@@ -420,4 +420,3 @@ CLASS_META(Editor::ActorProperty)
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 }
 END_META;
- 

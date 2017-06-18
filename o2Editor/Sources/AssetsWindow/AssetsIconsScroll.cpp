@@ -1174,4 +1174,3 @@ CLASS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, OnDroppedFromActorsTree, UIActorsTree*);
 }
 END_META;
- 

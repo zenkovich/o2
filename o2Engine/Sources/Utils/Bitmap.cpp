@@ -437,4 +437,3 @@ ENUM_META_(o2::Bitmap::ImageType, ImageType)
 	ENUM_ENTRY(Png);
 }
 END_ENUM_META;
- 

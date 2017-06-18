@@ -237,4 +237,3 @@ namespace Editor
 								  const Vector<Vec2F>& yLines, const Vec2F& yNormal);
 	};
 }
- 
