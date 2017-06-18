@@ -158,5 +158,27 @@ namespace Editor
 
 		// Calls when drag handle was moved and changes the property value
 		void OnBottomDragHandleMoved(const Input::Cursor& cursor);
+
+		// Calls when change value move handle pressed, sets cursor infinite mode and stores value to data
+		void OnMoveHandlePressed(const Input::Cursor& cursor);
+
+		// Calls when change value move handle  released, turns off cursor infinite mode, 
+		// checks value was changed then calls value change completed event
+		void OnMoveHandleReleased(const Input::Cursor& cursor);
+
+		// Sets value, checks value changed, calls onChangeCompleted
+		void SetLeftValueByUser(int value);
+
+		// Sets value, checks value changed, calls onChangeCompleted
+		void SetRightValueByUser(int value);
+
+		// Sets value, checks value changed, calls onChangeCompleted
+		void SetBottomValueByUser(int value);
+
+		// Sets value, checks value changed, calls onChangeCompleted
+		void SetTopValueByUser(int value);
+
+		// Checks that value was changed and calls onChangeCompleted
+		void CheckValueChangeCompleted();
 	};
 }

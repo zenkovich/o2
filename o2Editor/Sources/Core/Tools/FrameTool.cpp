@@ -216,7 +216,7 @@ namespace Editor
 
 		TransformActors(transform);
 
-		auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+		auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
 		o2EditorApplication.DoneAction(action);
 	}
 
@@ -534,7 +534,7 @@ namespace Editor
 
 	void FrameTool::HandleReleased()
 	{
-		auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+		auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
 		o2EditorApplication.DoneAction(action);
 
 		mSnapLines.Clear();

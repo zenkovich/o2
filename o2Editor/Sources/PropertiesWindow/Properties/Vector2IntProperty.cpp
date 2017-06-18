@@ -34,8 +34,8 @@ namespace Editor
 			mXDragHangle.cursorType = CursorType::SizeNS;
 			mXDragHangle.isUnderPoint = [=](const Vec2F& point) { return xHandleLayer->IsUnderPoint(point); };
 			mXDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &Vec2IProperty::OnXDragHandleMoved);
-			mXDragHangle.onCursorPressed = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(true); };
-			mXDragHangle.onCursorReleased = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(false); };
+			mXDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &Vec2IProperty::OnMoveHandlePressed);
+			mXDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &Vec2IProperty::OnMoveHandleReleased);
 		}
 
 		mYEditBox->onChangeCompleted = Function<void(const WString&)>(this, &Vec2IProperty::OnYEdited);
@@ -49,8 +49,8 @@ namespace Editor
 			mYDragHangle.cursorType = CursorType::SizeNS;
 			mYDragHangle.isUnderPoint = [=](const Vec2F& point) { return yHandleLayer->IsUnderPoint(point); };
 			mYDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &Vec2IProperty::OnYDragHandleMoved);
-			mYDragHangle.onCursorPressed = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(true); };
-			mYDragHangle.onCursorReleased = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(false); };
+			mYDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &Vec2IProperty::OnMoveHandlePressed);
+			mYDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &Vec2IProperty::OnMoveHandleReleased);
 		}
 	}
 
@@ -270,7 +270,7 @@ namespace Editor
 		if (mXValuesDifferent && data == "--")
 			return;
 
-		SetValueX((const int)data);
+		SetXValueByUser((const int)data);
 	}
 
 	void Vec2IProperty::OnYEdited(const WString& data)
@@ -278,7 +278,7 @@ namespace Editor
 		if (mYValuesDifferent && data == "--")
 			return;
 
-		SetValueY((const int)data);
+		SetYValueByUser((const int)data);
 	}
 
 	void Vec2IProperty::OnXDragHandleMoved(const Input::Cursor& cursor)
@@ -290,6 +290,42 @@ namespace Editor
 	{
 		SetValueY(mCommonValue.y + (int)cursor.delta.y);
 	}
+
+	void Vec2IProperty::OnMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		mBeforeChangeValue = mCommonValue;
+		o2Application.SetCursorInfiniteMode(true);
+	}
+
+	void Vec2IProperty::OnMoveHandleReleased(const Input::Cursor& cursor)
+	{
+		o2Application.SetCursorInfiniteMode(false);
+		CheckValueChangeCompleted();
+	}
+
+	void Vec2IProperty::SetXValueByUser(int value)
+	{
+		mBeforeChangeValue = mCommonValue;
+		SetValueX(value);
+		CheckValueChangeCompleted();
+	}
+
+	void Vec2IProperty::SetYValueByUser(int value)
+	{
+		mBeforeChangeValue = mCommonValue;
+		SetValueY(value);
+		CheckValueChangeCompleted();
+	}
+
+	void Vec2IProperty::CheckValueChangeCompleted()
+	{
+		DataNode commonValueData;
+		commonValueData = mCommonValue;
+
+		if (mBeforeChangeValue != commonValueData)
+			onChangeCompleted(mBeforeChangeValue, commonValueData);
+	}
+
 }
 
 CLASS_META(Editor::Vec2IProperty)
@@ -334,6 +370,11 @@ CLASS_META(Editor::Vec2IProperty)
 	PROTECTED_FUNCTION(void, OnYEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnXDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnYDragHandleMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, SetXValueByUser, int);
+	PROTECTED_FUNCTION(void, SetYValueByUser, int);
+	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 }
 END_META;
  

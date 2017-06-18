@@ -36,8 +36,8 @@ namespace Editor
 			mLeftDragHangle.cursorType = CursorType::SizeNS;
 			mLeftDragHangle.isUnderPoint = [=](const Vec2F& point) { return leftHandleLayer->IsUnderPoint(point); };
 			mLeftDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnLeftDragHandleMoved);
-			mLeftDragHangle.onCursorPressed = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(true); };
-			mLeftDragHangle.onCursorReleased = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(false); };
+			mLeftDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnMoveHandlePressed);
+			mLeftDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnMoveHandleReleased);
 		}
 
 		mBottomEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderFProperty::OnBottomEdited);
@@ -51,8 +51,8 @@ namespace Editor
 			mBottomDragHangle.cursorType = CursorType::SizeNS;
 			mBottomDragHangle.isUnderPoint = [=](const Vec2F& point) { return bottomHandleLayer->IsUnderPoint(point); };
 			mBottomDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnBottomDragHandleMoved);
-			mBottomDragHangle.onCursorPressed = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(true); };
-			mBottomDragHangle.onCursorReleased = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(false); };
+			mBottomDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnMoveHandlePressed);
+			mBottomDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnMoveHandleReleased);
 		}
 
 		mRightEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderFProperty::OnRightEdited);
@@ -66,8 +66,8 @@ namespace Editor
 			mRightDragHangle.cursorType = CursorType::SizeNS;
 			mRightDragHangle.isUnderPoint = [=](const Vec2F& point) { return rightHandleLayer->IsUnderPoint(point); };
 			mRightDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnRightDragHandleMoved);
-			mRightDragHangle.onCursorPressed = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(true); };
-			mRightDragHangle.onCursorReleased = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(false); };
+			mRightDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnMoveHandlePressed);
+			mRightDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnMoveHandleReleased);
 		}
 
 		mTopEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderFProperty::OnTopEdited);
@@ -81,8 +81,8 @@ namespace Editor
 			mTopDragHangle.cursorType = CursorType::SizeNS;
 			mTopDragHangle.isUnderPoint = [=](const Vec2F& point) { return topHandleLayer->IsUnderPoint(point); };
 			mTopDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnTopDragHandleMoved);
-			mTopDragHangle.onCursorPressed = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(true); };
-			mTopDragHangle.onCursorReleased = [&](const Input::Cursor&) { o2Application.SetCursorInfiniteMode(false); };
+			mTopDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnMoveHandlePressed);
+			mTopDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &BorderFProperty::OnMoveHandleReleased);
 		}
 	}
 
@@ -400,7 +400,7 @@ namespace Editor
 		if (mLeftValuesDifferent && data == "--")
 			return;
 
-		SetValueLeft((const float)data);
+		SetLeftValueByUser((const float)data);
 	}
 
 	void BorderFProperty::OnBottomEdited(const WString& data)
@@ -408,7 +408,7 @@ namespace Editor
 		if (mBottomValuesDifferent && data == "--")
 			return;
 
-		SetValueBottom((const float)data);
+		SetBottomValueByUser((const float)data);
 	}
 
 	void BorderFProperty::OnRightEdited(const WString& data)
@@ -416,7 +416,7 @@ namespace Editor
 		if (mRightValuesDifferent && data == "--")
 			return;
 
-		SetValueRight((const float)data);
+		SetRightValueByUser((const float)data);
 	}
 
 	void BorderFProperty::OnTopEdited(const WString& data)
@@ -424,7 +424,7 @@ namespace Editor
 		if (mTopValuesDifferent && data == "--")
 			return;
 
-		SetValueTop((const float)data);
+		SetTopValueByUser((const float)data);
 	}
 
 	float BorderFProperty::GetValueMultiplier(float delta) const
@@ -450,6 +450,55 @@ namespace Editor
 	void BorderFProperty::OnBottomDragHandleMoved(const Input::Cursor& cursor)
 	{
 		SetValueBottom(mCommonValue.bottom + cursor.delta.y*GetValueMultiplier(cursor.delta.y));
+	}
+
+	void BorderFProperty::OnMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		mBeforeChangeValue = mCommonValue;
+		o2Application.SetCursorInfiniteMode(true);
+	}
+
+	void BorderFProperty::OnMoveHandleReleased(const Input::Cursor& cursor)
+	{
+		o2Application.SetCursorInfiniteMode(false);
+		CheckValueChangeCompleted();
+	}
+
+	void BorderFProperty::SetLeftValueByUser(float value)
+	{
+		mBeforeChangeValue = mCommonValue;
+		SetValueLeft(value);
+		CheckValueChangeCompleted();
+	}
+
+	void BorderFProperty::SetRightValueByUser(float value)
+	{
+		mBeforeChangeValue = mCommonValue;
+		SetValueRight(value);
+		CheckValueChangeCompleted();
+	}
+
+	void BorderFProperty::SetBottomValueByUser(float value)
+	{
+		mBeforeChangeValue = mCommonValue;
+		SetValueBottom(value);
+		CheckValueChangeCompleted();
+	}
+
+	void BorderFProperty::SetTopValueByUser(float value)
+	{
+		mBeforeChangeValue = mCommonValue;
+		SetValueTop(value);
+		CheckValueChangeCompleted();
+	}
+
+	void BorderFProperty::CheckValueChangeCompleted()
+	{
+		DataNode commonValueData;
+		commonValueData = mCommonValue;
+
+		if (mBeforeChangeValue != commonValueData)
+			onChangeCompleted(mBeforeChangeValue, commonValueData);
 	}
 
 }
@@ -517,6 +566,13 @@ CLASS_META(Editor::BorderFProperty)
 	PROTECTED_FUNCTION(void, OnRightDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnTopDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnBottomDragHandleMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, SetLeftValueByUser, float);
+	PROTECTED_FUNCTION(void, SetRightValueByUser, float);
+	PROTECTED_FUNCTION(void, SetBottomValueByUser, float);
+	PROTECTED_FUNCTION(void, SetTopValueByUser, float);
+	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 }
 END_META;
  

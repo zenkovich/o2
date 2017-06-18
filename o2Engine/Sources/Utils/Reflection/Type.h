@@ -3,7 +3,6 @@
 #include "Utils/Delegates.h"
 #include "Utils/Math/Basis.h"
 #include "Utils/Math/Color.h"
-#include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"
 #include "Utils/Property.h"

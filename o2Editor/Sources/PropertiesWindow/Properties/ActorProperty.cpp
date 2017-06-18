@@ -264,7 +264,7 @@ namespace Editor
 	void ActorProperty::OnKeyPressed(const Input::Key& key)
 	{
 		if (mBox->IsFocused() && key == VK_DELETE || key == VK_BACK)
-			SetValue(nullptr);
+			SetValueByUser(nullptr);
 	}
 
 	void ActorProperty::OnDropped(ISelectableDragableObjectsGroup* group)
@@ -296,7 +296,7 @@ namespace Editor
 		if (actorsTree->GetSelectedActors().Count() > 1)
 			return;
 
-		SetValue(actorsTree->GetSelectedActors()[0]);
+		SetValueByUser(actorsTree->GetSelectedActors()[0]);
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();
@@ -329,7 +329,7 @@ namespace Editor
 		if (lastSelectedAsset.assetType != &TypeOf(ActorAsset))
 			return;
 
-		SetValue(o2Scene.GetAssetActorByID(lastSelectedAsset.id));
+		SetValueByUser(o2Scene.GetAssetActorByID(lastSelectedAsset.id));
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();
@@ -355,6 +355,22 @@ namespace Editor
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
+	}
+
+	void ActorProperty::SetValueByUser(Actor* value)
+	{
+		mBeforeChangeValue = mCommonValue;
+		SetValue(value);
+		CheckValueChangeCompleted();
+	}
+
+	void ActorProperty::CheckValueChangeCompleted()
+	{
+		DataNode commonValueData; 
+		commonValueData = mCommonValue;
+
+		if (mBeforeChangeValue != commonValueData)
+			onChangeCompleted(mBeforeChangeValue, commonValueData);
 	}
 }
 
@@ -400,6 +416,8 @@ CLASS_META(Editor::ActorProperty)
 	PROTECTED_FUNCTION(void, OnDroppedFromAssetsScroll, UIAssetsIconsScrollArea*);
 	PROTECTED_FUNCTION(void, OnDragEnterFromAssetsScroll, UIAssetsIconsScrollArea*);
 	PROTECTED_FUNCTION(void, OnDragExitFromAssetsScroll, UIAssetsIconsScrollArea*);
+	PROTECTED_FUNCTION(void, SetValueByUser, Actor*);
+	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 }
 END_META;
  

@@ -6,8 +6,8 @@
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/AssetsWindow.h"
 #include "AssetsWindow/UIAssetIcon.h"
-#include "Core/Actions/EnableAction.h"
-#include "Core/Actions/LockAction.h"
+#include "Core/Actions/EnableActors.h"
+#include "Core/Actions/LockActors.h"
 #include "Core/Actions/ReparentActors.h"
 #include "Core/EditorApplication.h"
 #include "Events/EventSystem.h"
@@ -202,7 +202,7 @@ namespace Editor
 		ActorsVec actors = mEnableActorsTogglesGroup->GetToggled().Select<Actor*>(
 			[](UIToggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
 
-		auto action = mnew EnableAction(actors, value);
+		auto action = mnew EnableActorsAction(actors, value);
 		o2EditorApplication.DoneAction(action);
 	}
 
@@ -214,7 +214,7 @@ namespace Editor
 		ActorsVec actors = mLockActorsTogglesGroup->GetToggled().Select<Actor*>(
 			[](UIToggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
 
-		auto action = mnew LockAction(actors, value);
+		auto action = mnew LockActorsAction(actors, value);
 		o2EditorApplication.DoneAction(action);
 	}
 

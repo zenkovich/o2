@@ -194,7 +194,7 @@ namespace o2
 		{
 			auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
 			if (srlzAttribute)
-				field->SerializeObject(objectPtr, *AddNode(field->GetName()));
+				field->SerializeFromObject(objectPtr, *AddNode(field->GetName()));
 		}
 
 		return *this;
@@ -254,7 +254,7 @@ namespace o2
 				DataNode* newFieldNode = mnew DataNode();
 				newFieldNode->SetName(field->GetName());
 
-				field->SerializeObject(objectPtr, *newFieldNode); 
+				field->SerializeFromObject(objectPtr, *newFieldNode); 
 				
 				if (!newFieldNode->IsEmpty())
 					AddNode(newFieldNode);
@@ -429,7 +429,7 @@ namespace o2
 					fldNode->GetValueDelta(*(IObject*)field->GetValuePtr(objectPtr),
 										   *(IObject*)field->GetValuePtr(sourcePtr));
 				}
-				else field->DeserializeObject(objectPtr, *fldNode);
+				else field->DeserializeFromObject(objectPtr, *fldNode);
 			}
 			else field->CopyValue(objectPtr, sourcePtr);
 		}
@@ -449,7 +449,7 @@ namespace o2
 			{
 				auto fldNode = GetNode(field->GetName());
 				if (fldNode)
-					field->DeserializeObject(thisPtr, *fldNode);
+					field->DeserializeFromObject(thisPtr, *fldNode);
 			}
 		}
 
@@ -636,6 +636,11 @@ namespace o2
 	}
 
 	WString& DataNode::Data()
+	{
+		return mData;
+	}
+
+	const WString& DataNode::Data() const
 	{
 		return mData;
 	}

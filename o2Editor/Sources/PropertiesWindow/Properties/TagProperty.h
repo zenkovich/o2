@@ -89,5 +89,11 @@ namespace Editor
 
 		// Push tag at the end
 		void PushTag(String name);
+
+		// Sets value, checks value changed, calls onChangeCompleted
+		void SetValueByUser(const TagGroup& value);
+
+		// Checks that value was changed and calls onChangeCompleted
+		void CheckValueChangeCompleted();
 	};
 }

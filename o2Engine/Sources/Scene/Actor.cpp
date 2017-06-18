@@ -2414,10 +2414,6 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(_tmp2, GetAllComponents);
 	PROTECTED_FUNCTION(void, ComponentsExcludeFromScene);
 	PROTECTED_FUNCTION(void, ComponentsIncludeToScene);
-	PROTECTED_FUNCTION(void, OnChanged);
-	PROTECTED_FUNCTION(void, OnLockChanged);
-	PROTECTED_FUNCTION(void, OnNameChanged);
-	PROTECTED_FUNCTION(void, OnChildsChanged);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, SeparateActors, Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);

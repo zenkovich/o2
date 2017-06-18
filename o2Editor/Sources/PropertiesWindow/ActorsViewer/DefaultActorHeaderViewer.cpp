@@ -132,7 +132,6 @@ namespace Editor
 	void DefaultActorHeaderViewer::OnRevertPrototypePressed()
 	{
 		bool areViewActorsAssets = mActors[0]->IsAsset();
-		Vector<UInt64> viewActors = mActors.Select<UInt64>([](Actor* x) { return x->GetID(); });
 		o2EditorProperties.SetTarget(nullptr);
 
 		Vector<Actor*> revertingActors = GetRootApplyActors();
@@ -143,11 +142,13 @@ namespace Editor
 		mActors.Clear();
 		if (areViewActorsAssets)
 		{
+			Vector<UID> viewActors = mActors.Select<UID>([](Actor* x) { return x->GetAssetId(); });
 			for (auto id : viewActors)
 				mActors.Add(ActorAssetRef(id)->GetActor());
 		}
 		else
 		{
+			Vector<UInt64> viewActors = mActors.Select<UInt64>([](Actor* x) { return x->GetID(); });
 			for (auto id : viewActors)
 				mActors.Add(o2Scene.GetActorByID(id));
 		}

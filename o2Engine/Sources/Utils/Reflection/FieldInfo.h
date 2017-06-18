@@ -104,11 +104,17 @@ namespace o2
 		// Returns attributes array
 		const AttributesVec& GetAttributes() const;
 
-		// Serializes object by pointer
-		void SerializeObject(void* object, DataNode& data) const;
+		// Serializes from object pointer, that contains this field
+		void SerializeFromObject(void* object, DataNode& data) const;
 
-		// Deserializes object by pointer
-		void DeserializeObject(void* object, DataNode& data) const;
+		// Deserializes from object pointer, that contains this field
+		void DeserializeFromObject(void* object, DataNode& data) const;
+
+		// Serializes value from ptr
+		void Serialize(void* ptr, DataNode& data) const;
+
+		// Deserializes value from ptr
+		void Deserialize(void* ptr, DataNode& data) const;
 
 		// Returns is values getted from object A and object B equals
 		bool IsValueEquals(void* objectA, void* objectB) const;

@@ -165,5 +165,27 @@ namespace Editor
 
 		// Calls when key was released
 		void OnKeyReleased(const Input::Key& key);
+
+		// Calls when change value move handle pressed, sets cursor infinite mode and stores value to data
+		void OnMoveHandlePressed(const Input::Cursor& cursor);
+
+		// Calls when change value move handle  released, turns off cursor infinite mode, 
+		// checks value was changed then calls value change completed event
+		void OnMoveHandleReleased(const Input::Cursor& cursor);
+
+		// Sets value, checks value changed, calls onChangeCompleted
+		void SetLeftValueByUser(float value);
+
+		// Sets value, checks value changed, calls onChangeCompleted
+		void SetRightValueByUser(float value);
+
+		// Sets value, checks value changed, calls onChangeCompleted
+		void SetBottomValueByUser(float value);
+
+		// Sets value, checks value changed, calls onChangeCompleted
+		void SetTopValueByUser(float value);
+
+		// Checks that value was changed and calls onChangeCompleted
+		void CheckValueChangeCompleted();
 	};
 }

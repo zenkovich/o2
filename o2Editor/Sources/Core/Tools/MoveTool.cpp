@@ -113,7 +113,7 @@ namespace Editor
 
 	void MoveTool::HandleReleased()
 	{
-		auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+		auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
 		o2EditorApplication.DoneAction(action);
 	}
 
@@ -261,7 +261,7 @@ namespace Editor
 
 		MoveSelectedActors(delta);
 
-		auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+		auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
 		o2EditorApplication.DoneAction(action);
 	}
 

@@ -167,7 +167,8 @@ namespace Editor
 		return mTargetsChanged;
 	}
 
-	void PropertiesWindow::BuildTypeViewer(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo)
+	void PropertiesWindow::BuildObjectProperties(UIVerticalLayout* layout, const Type* type, 
+												 FieldPropertiesInfo& propertiesInfo, const String& path)
 	{
 		auto fields = type->GetFieldsWithBaseClasses();
 		for (auto fieldInfo : fields)
@@ -187,6 +188,7 @@ namespace Editor
 			if (!fieldWidgetPair.first)
 				continue;
 
+			fieldWidgetPair.first->SetValuePath(path + fieldInfo->GetName());
 			fieldWidgetPair.first->SpecializeType(fieldType);
 
 			auto nameLabel = fieldWidgetPair.second->FindChild<UILabel>();
@@ -374,7 +376,7 @@ CLASS_META(Editor::PropertiesWindow)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsTargetsChanged);
-	PUBLIC_FUNCTION(void, BuildTypeViewer, UIVerticalLayout*, const Type*, FieldPropertiesInfo&);
+	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, const Type*, FieldPropertiesInfo&, const String&);
 	PUBLIC_FUNCTION(_tmp1, CreateFieldProperty, const Type*);
 	PUBLIC_FUNCTION(IPropertyField*, GetFieldPropertyPrototype, const Type*);
 	PUBLIC_FUNCTION(_tmp2, CreateRegularField, const Type*, const String&);

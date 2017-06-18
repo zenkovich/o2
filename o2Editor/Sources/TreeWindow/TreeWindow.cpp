@@ -3,8 +3,8 @@
 #include "Animation/AnimatedFloat.h"
 #include "Core/Actions/CreateActors.h"
 #include "Core/Actions/DeleteActors.h"
-#include "Core/Actions/EnableAction.h"
-#include "Core/Actions/LockAction.h"
+#include "Core/Actions/EnableActors.h"
+#include "Core/Actions/LockActors.h"
 #include "Core/Actions/ReparentActors.h"
 #include "Core/EditorApplication.h"
 #include "PropertiesWindow/PropertiesWindow.h"
@@ -390,7 +390,7 @@ namespace Editor
 		auto selectedActors = mActorsTree->GetSelectedActors();
 
 		bool value = selectedActors.Count() > 0 ? !selectedActors.Last()->IsLocked() : true;
-		auto action = mnew LockAction(selectedActors, value);
+		auto action = mnew LockActorsAction(selectedActors, value);
 		o2EditorApplication.DoneAction(action);
 
 		for (auto actor : selectedActors)
@@ -411,7 +411,7 @@ namespace Editor
 		auto selectedActors = mActorsTree->GetSelectedActors();
 
 		bool value = selectedActors.Count() > 0 ? !selectedActors.Last()->IsEnabled() : true;
-		auto action = mnew LockAction(selectedActors, value);
+		auto action = mnew LockActorsAction(selectedActors, value);
 		o2EditorApplication.DoneAction(action);
 
 		for (auto actor : selectedActors)

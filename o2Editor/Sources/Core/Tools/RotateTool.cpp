@@ -222,7 +222,7 @@ namespace Editor
 		{
 			mRingPressed = false;
 
-			auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+			auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
 			o2EditorApplication.DoneAction(action);
 		}
 		else SelectionTool::OnCursorReleased(cursor);
@@ -234,7 +234,7 @@ namespace Editor
 		{
 			mRingPressed = false;
 
-			auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+			auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
 			o2EditorApplication.DoneAction(action);
 		}
 		else SelectionTool::OnCursorPressBreak(cursor);
@@ -343,7 +343,7 @@ namespace Editor
 
 		RotateActors(angleDelta);
 
-		auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+		auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
 		o2EditorApplication.DoneAction(action);
 	}
 
@@ -354,7 +354,7 @@ namespace Editor
 
 		RotateActorsSeparated(angleDelta);
 
-		auto action = mnew EditorActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
+		auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
 		o2EditorApplication.DoneAction(action);
 	}
 

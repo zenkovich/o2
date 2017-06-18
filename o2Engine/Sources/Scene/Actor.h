@@ -121,6 +121,19 @@ namespace o2
 		Function<void()>                    onChildHierarchyChanged; // Actor childs hierarchy change event
 		Function<void(bool)>                onLockChanged;           // Locking changing event
 		Function<void()>                    onNameChanged;           // Name changing event
+
+
+        // Calls when some changed in actor
+		void OnChanged();
+
+		// Calls when actor's locking was changed
+		void OnLockChanged();
+
+		// Calls when actor's name was changed
+		void OnNameChanged();
+
+		// Calls when child changed
+		void OnChildsChanged();
 #endif
 
 		// Default constructor
@@ -400,18 +413,6 @@ namespace o2
 
 		// Applies including to scene for all components in hierarchy
 		void ComponentsIncludeToScene();
-
-		// Calls when some changed in actor
-		void OnChanged();
-
-		// Calls when actor's locking was changed
-		void OnLockChanged();
-
-		// Calls when actor's name was changed
-		void OnNameChanged();
-
-		// Calls when child changed
-		void OnChildsChanged();
 
 		// Calls when parent changed
 		void OnParentChanged(Actor* oldParent);

@@ -1,7 +1,7 @@
 #include "SceneEditScreen.h"
 
 #include "AssetsWindow/AssetsIconsScroll.h"
-#include "Core/Actions/Selection.h"
+#include "Core/Actions/SelectActors.h"
 #include "Core/EditorApplication.h"
 #include "Core/Tools/IEditorTool.h"
 #include "Core/Tools/MoveTool.h"
@@ -186,7 +186,7 @@ namespace Editor
 
 		if (mSelectedActors != prevSelectedActors)
 		{
-			auto selectionAction = mnew SelectionAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
@@ -199,7 +199,7 @@ namespace Editor
 
 		if (mSelectedActors != prevSelectedActors)
 		{
-			auto selectionAction = mnew SelectionAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
@@ -217,7 +217,7 @@ namespace Editor
 
 		if (mSelectedActors != prevSelectedActors)
 		{
-			auto selectionAction = mnew SelectionAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
@@ -230,7 +230,7 @@ namespace Editor
 
 		if (mSelectedActors != prevSelectedActors)
 		{
-			auto selectionAction = mnew SelectionAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
@@ -291,7 +291,7 @@ namespace Editor
 		if (mSelectedActors != prevSelectedActors || 
 			mSelectedActors.Cast<IObject*>() != o2EditorProperties.GetTargets())
 		{
-			auto selectionAction = mnew SelectionAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
 			o2EditorApplication.DoneAction(selectionAction);
 
 			onSelectionChanged(mSelectedActors);

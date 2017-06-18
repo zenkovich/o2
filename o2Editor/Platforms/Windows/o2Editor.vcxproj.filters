@@ -48,19 +48,10 @@
     <ClInclude Include="..\..\Sources\Core\Actions\DeleteActors.h">
       <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\EnableAction.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Actions\IAction.h">
       <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\LockAction.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Actions\ReparentActors.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\Selection.h">
       <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\EditorApplication.h">
@@ -267,6 +258,18 @@
     <ClInclude Include="..\..\Sources\Core\UI\FrameScrollView.h">
       <Filter>Sources\Core\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\EnableActors.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\LockActors.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\ActorsPropertyChange.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\SelectActors.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp">
@@ -290,19 +293,10 @@
     <ClCompile Include="..\..\Sources\Core\Actions\DeleteActors.cpp">
       <Filter>Sources\Core\Actions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\EnableAction.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Actions\IAction.cpp">
       <Filter>Sources\Core\Actions</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\LockAction.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Actions\ReparentActors.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\Selection.cpp">
       <Filter>Sources\Core\Actions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp">
@@ -505,6 +499,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\UI\FrameScrollView.cpp">
       <Filter>Sources\Core\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\EnableActors.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\LockActors.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\ActorsPropertyChange.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\SelectActors.cpp">
+      <Filter>Sources\Core\Actions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -80,5 +80,8 @@ namespace Editor
 
 		// Calls when box pressed and shows color picking dialog
 		void OnClicked();
+
+		// Checks that value was changed and calls onChangeCompleted
+		void CheckValueChangeCompleted();
 	};
 }

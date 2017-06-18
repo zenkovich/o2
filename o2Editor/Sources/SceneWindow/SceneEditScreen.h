@@ -234,7 +234,7 @@ namespace Editor
 		void OnDragExit(ISelectableDragableObjectsGroup* group);
 
 		friend class DeleteActorsAction;
-		friend class SelectionAction;
+		friend class SelectActorsAction;
 		friend class SelectionTool;
 		friend class SceneDragHandle;
 		friend class SceneWindow;

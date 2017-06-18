@@ -32,11 +32,13 @@ namespace Editor
 		delete mWindow;
 	}
 
-	void ColorPickerDlg::Show(const Color4& color, Function<void(const Color4&)> onChanged)
+	void ColorPickerDlg::Show(const Color4& color, Function<void(const Color4&)> onChanged, 
+							  Function<void()> onCompleted/* = Function<void()>()*/)
 	{
 		mInstance->mColorValue = color;
 		mInstance->mWindow->ShowModal();
 		mInstance->mOnChangedCallback = onChanged;
+		mInstance->mOnCompletedCallback = onCompleted;
 		mInstance->UpdateHandlesValues();
 	}
 
@@ -476,6 +478,7 @@ namespace Editor
 	void ColorPickerDlg::OnCursorPressedOutside()
 	{
 		mOnChangedCallback(mColorValue);
+		mOnCompletedCallback();
 		mWindow->Hide();
 	}
 }

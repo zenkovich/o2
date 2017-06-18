@@ -122,6 +122,12 @@ namespace Editor
 
 		// Calls when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group);
+
+		// Sets asset id, checks value changed, calls onChangeCompleted
+		void SetAssetIdByUser(UID id);
+
+		// Checks that value was changed and calls onChangeCompleted
+		void CheckValueChangeCompleted();
 	};
 
 	template<typename _type>
@@ -330,24 +336,24 @@ namespace Editor
 	void AssetProperty<_type>::OnKeyPressed(const Input::Key& key)
 	{
 		if (mBox->IsFocused() && (key == VK_DELETE || key == VK_BACK))
-			SetAssetId(0);
+			SetAssetIdByUser(0);
 	}
 
 	template<typename _type>
-	bool Editor::AssetProperty<_type>::IsUnderPoint(const Vec2F& point)
+	bool AssetProperty<_type>::IsUnderPoint(const Vec2F& point)
 	{
 		return mBox->IsUnderPoint(point);
 	}
 
 	template<typename _type>
-	void Editor::AssetProperty<_type>::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void AssetProperty<_type>::OnDragExit(ISelectableDragableObjectsGroup* group)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
 	}
 
 	template<typename _type>
-	void Editor::AssetProperty<_type>::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void AssetProperty<_type>::OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
 		auto assetIconsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
 		if (!assetIconsScroll)
@@ -362,7 +368,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void Editor::AssetProperty<_type>::OnDropped(ISelectableDragableObjectsGroup* group)
+	void AssetProperty<_type>::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
 		auto assetIconsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
 		if (!assetIconsScroll)
@@ -372,10 +378,28 @@ namespace Editor
 		if (*lastSelectedAsset.assetType != mCommonValue.GetAssetType())
 			return;
 
-		SetAssetId(lastSelectedAsset.id);
+		SetAssetIdByUser(lastSelectedAsset.id);
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();
+	}
+
+	template<typename _type>
+	void AssetProperty<_type>::CheckValueChangeCompleted()
+	{
+		DataNode commonValueData;
+		commonValueData = mCommonValue;
+
+		if (mBeforeChangeValue != commonValueData)
+			onChangeCompleted(mBeforeChangeValue, commonValueData);
+	}
+
+	template<typename _type>
+	void AssetProperty<_type>::SetAssetIdByUser(UID id)
+	{
+		mBeforeChangeValue = mCommonValue;
+		SetAssetId(id);
+		CheckValueChangeCompleted();
 	}
 }
 
@@ -413,6 +437,8 @@ CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, SetAssetIdByUser, UID);
+	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 }
 END_META;
  
