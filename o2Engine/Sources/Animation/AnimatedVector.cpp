@@ -4,6 +4,7 @@
 #include "Animation/AnimationState.h"
 #include "Utils/Debug.h"
 #include "Utils/Math/Interpolation.h"
+#include "Utils/Math/Vector2.h"
 
 namespace o2
 {
@@ -519,7 +520,7 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::AnimatedValue<o2::Vec2<float>>)
+CLASS_META(o2::AnimatedValue<o2::Vec2F>)
 {
 	BASE_CLASS(o2::IAnimatedValue);
 
@@ -567,7 +568,7 @@ CLASS_META(o2::AnimatedValue<o2::Vec2<float>>)
 }
 END_META;
 
-CLASS_META(o2::AnimatedValue<o2::Vec2<float>>::Key)
+CLASS_META(o2::AnimatedValue<o2::Vec2F>::Key)
 {
 	BASE_CLASS(o2::ISerializable);
 

@@ -697,4 +697,10 @@ namespace o2
 			return *this;
 		}
 	};
+
+	template<typename _class_type, typename _res_type, typename ... _args>
+	Function<_res_type(_args ...)> Func(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
+	{
+		return Function<_res_type(_args ...)>(object, functionPtr);
+	}
 }

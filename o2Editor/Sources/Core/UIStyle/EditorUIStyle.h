@@ -57,6 +57,7 @@ namespace Editor
 		void RebuildGreenEditBoxStyle();
 		void RebuildColoredVector2Property();
 		void RebuildRectProperty();
+		void RebuildNewRectProperty();
 		void RebuildActorHeadEnableToggle();
 		void RebuildActorHeadName();
 		void RebuildActorHeadLockToggle();

@@ -96,6 +96,9 @@ namespace Editor
 			return;
 
 		Vec2I size = layout.GetAbsoluteRect().Size();
+		size.x = Math::Max(size.x, 32);
+		size.y = Math::Max(size.y, 32);
+
 		mRenderTarget = TextureRef(size, Texture::Format::Default, Texture::Usage::RenderTarget);
 		*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
 		mRenderTargetSprite->SetRect(layout.GetAbsoluteRect());

@@ -2,6 +2,7 @@
 
 #include "Application/Input.h"
 #include "Utils/Math/Vector2.h"
+#include "Utils/Math/Rect.h"
 
 namespace o2
 {

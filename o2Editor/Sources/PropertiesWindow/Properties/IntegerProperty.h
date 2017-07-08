@@ -98,5 +98,8 @@ namespace Editor
 
 		// Checks that value was changed and calls onChangeCompleted
 		void CheckValueChangeCompleted();
+
+		// Stores values to data
+		void StoreValues(Vector<DataNode>& data) const;
 	};
 }

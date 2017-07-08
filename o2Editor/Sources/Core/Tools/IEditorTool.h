@@ -2,6 +2,7 @@
 
 #include "Application/Input.h"
 #include "Utils/IObject.h"
+#include "Utils/Data/DataNode.h"
 
 using namespace o2;
 

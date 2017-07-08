@@ -88,6 +88,8 @@ namespace Editor
 		if (mTargetObjects.IsEmpty())
 			return;
 
+		mIsRefreshing = true;
+
 		auto lastCount = mCountOfElements;
 		auto lastDifferent = mCountDifferents;
 
@@ -148,6 +150,12 @@ namespace Editor
 				mPropertiesLayout->AddChild(propertyDef.widget, false);
 				propertyDef.nameLabel->text = (String)"Element " + (String)i;
 				propertyDef.propertyField->SetValueAndPrototypePtr(itemTargetValues, false);
+				propertyDef.propertyField->SetValuePath((String)i);
+				propertyDef.propertyField->onChangeCompleted = 
+					[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+				{
+					onChangeCompleted(mValuesPath + "/" + path, before, after);
+				};
 			}
 
 			for (; i < mValueProperties.Count(); i++)
@@ -161,6 +169,23 @@ namespace Editor
 			onChanged();
 			o2EditorSceneScreen.OnSceneChanged();
 		}
+		else
+		{
+			for (int i = 0; i < mCountOfElements; i++)
+			{
+				Vector<Pair<void*, void*>> itemTargetValues =
+					mTargetObjects.Select<Pair<void*, void*>>([&](const Pair<void*, void*>& x)
+				{
+					return Pair<void*, void*>(mType->GetObjectVectorElementPtr(x.first, i),
+											  x.second ? mType->GetObjectVectorElementPtr(x.second, i) : nullptr);
+				});
+
+				PropertyDef propertyDef = mValueProperties[i];
+				propertyDef.propertyField->SetValueAndPrototypePtr(itemTargetValues, false);
+			}
+		}
+
+		mIsRefreshing = false;
 	}
 
 	UIWidget* VectorProperty::GetWidget() const
@@ -233,11 +258,33 @@ namespace Editor
 
 	void VectorProperty::OnCountChanged()
 	{
+		if (mIsRefreshing)
+			return;
+
+		Vector<DataNode> prevValues, newValues;
+
 		int newCount = mCountProperty->GetCommonValue();
+		auto countFI = mType->GetElementFieldInfo();
 		for (auto target : mTargetObjects)
+		{
+			prevValues.Add(DataNode());
+			prevValues.Last()["Size"].SetValue(mType->GetObjectVectorSize(target.first));
+			DataNode& elementsData = prevValues.Last()["Elements"];
+
+			int lastCount = mType->GetObjectVectorSize(target.first);
+			for (int i = newCount; i < lastCount; i++)
+				countFI->Serialize(mType->GetObjectVectorElementPtr(target.first, i), *elementsData.AddNode("Element" + (String)i));
+
+			newValues.Add(DataNode());
+			newValues.Last()["Size"].SetValue(newCount);
+
 			mType->SetObjectVectorSize(target.first, newCount);
+		}
 
 		Refresh();
+
+		if (prevValues != newValues)
+			onChangeCompleted(mValuesPath + "/count", prevValues, newValues);
 
 		onChanged();
 		o2EditorSceneScreen.OnSceneChanged();
@@ -260,6 +307,7 @@ CLASS_META(Editor::VectorProperty)
 	PROTECTED_FIELD(mCountProperty);
 	PROTECTED_FIELD(mCountDifferents);
 	PROTECTED_FIELD(mCountOfElements);
+	PROTECTED_FIELD(mIsRefreshing);
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);

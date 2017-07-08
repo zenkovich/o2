@@ -6,7 +6,7 @@
 
 namespace o2
 {
-	Type::Type(const String& name, ISampleCreator* creator, int size):
+	Type::Type(const String& name, ITypeSampleCreator* creator, int size):
 		mId(0), mPtrType(nullptr), mName(name),
 		mSampleCreator(creator), mSize(size)
 	{}
@@ -32,7 +32,7 @@ namespace o2
 		return mName;
 	}
 
-	Type::Id Type::ID() const
+	TypeId Type::ID() const
 	{
 		return mId;
 	}
@@ -260,7 +260,7 @@ namespace o2
 		return nullptr;
 	}
 
-	VectorType::VectorType(const String& name, ISampleCreator* creator, int size):
+	VectorType::VectorType(const String& name, ITypeSampleCreator* creator, int size):
 		Type(name, creator, size)
 	{}
 
@@ -279,13 +279,35 @@ namespace o2
 		int delPos = path.Find("/");
 		String pathPart = path.SubStr(0, delPos);
 
+		if (pathPart == "count")
+		{
+			fieldInfo = mCountFieldInfo;
+			return object;
+		}
+
 		int count = GetObjectVectorSize(object);
 		int idx = (int)pathPart;
 
-		if (idx < count)
-			return mElementType->GetFieldPtr(GetObjectVectorElementPtr(object, idx), path.SubStr(delPos + 1), fieldInfo);
+		if (idx >= count || idx < 0)
+			return nullptr;
 
-		return nullptr;
+		if (delPos < 0)
+		{
+			fieldInfo = mElementFieldInfo;
+			return GetObjectVectorElementPtr(object, idx);
+		}
+
+		return mElementType->GetFieldPtr(GetObjectVectorElementPtr(object, idx), path.SubStr(delPos + 1), fieldInfo);
+	}
+
+	FieldInfo* VectorType::GetElementFieldInfo() const
+	{
+		return mElementFieldInfo;
+	}
+
+	FieldInfo* VectorType::GetCountFieldInfo() const
+	{
+		return mCountFieldInfo;
 	}
 
 	FieldInfo* VectorType::SearchFieldPath(void* obj, void* target, const String& path, String& res,
@@ -382,7 +404,7 @@ namespace o2
 		return nullptr;
 	}
 
-	EnumType::EnumType(const String& name, ISampleCreator* creator, int size):
+	EnumType::EnumType(const String& name, ITypeSampleCreator* creator, int size):
 		Type(name, creator, size)
 	{}
 
@@ -397,7 +419,7 @@ namespace o2
 	}
 
 	PointerType::PointerType(const Type* unptrType):
-		Type(unptrType->GetName() + "*", new SampleCreator<void*>(), sizeof(void*)), mUnptrType(unptrType)
+		Type(unptrType->GetName() + "*", new TypeSampleCreator<void*>(), sizeof(void*)), mUnptrType(unptrType)
 	{}
 
 	Type::Usage PointerType::GetUsage() const
@@ -410,7 +432,7 @@ namespace o2
 		return mUnptrType;
 	}
 
-	PropertyType::PropertyType(const String& name, ISampleCreator* creator, int size):
+	PropertyType::PropertyType(const String& name, ITypeSampleCreator* creator, int size):
 		Type(name, creator, size)
 	{}
 

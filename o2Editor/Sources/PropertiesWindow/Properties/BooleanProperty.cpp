@@ -159,19 +159,30 @@ namespace Editor
 
 	void BooleanProperty::SetValueByUser(bool value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreValues(mBeforeChangeValues);
 		SetValue(value);
 		CheckValueChangeCompleted();
 	}
 
 	void BooleanProperty::CheckValueChangeCompleted()
 	{
-		DataNode commonValueData;
-		commonValueData = mCommonValue;
+		Vector<DataNode> valuesData;
+		StoreValues(valuesData);
 
-		if (mBeforeChangeValue != commonValueData)
-			onChangeCompleted(mBeforeChangeValue, commonValueData);
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath, mBeforeChangeValues, valuesData);
 	}
+
+	void BooleanProperty::StoreValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mGetFunc(ptr.first);
+		}
+	}
+
 }
 
 CLASS_META(Editor::BooleanProperty)
@@ -200,5 +211,6 @@ CLASS_META(Editor::BooleanProperty)
 	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, SetValueByUser, bool);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 }
 END_META;

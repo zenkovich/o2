@@ -561,6 +561,10 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	bool cppLoaded = false;
 
 	string hSource = file->GetData();
+
+	if (hSource.find("@CODETOOLIGNORE") != string::npos)
+		return;
+
 	RemoveMetas(hSource, "META_TEMPLATES(", "END_META;");
 
 	string cppSourcePath = file->GetPath().substr(0, file->GetPath().rfind('.')) + ".cpp";

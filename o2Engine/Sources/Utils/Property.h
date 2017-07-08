@@ -2,10 +2,15 @@
 
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Delegates.h"
-#include "Utils/String.h"
 
 namespace o2
 {
+	template<typename T>
+	class TString;
+
+	typedef TString<wchar_t> WString;
+	typedef TString<char> String;
+
 	// -----------------------------
 	// Get function overriding class
 	// -----------------------------

@@ -1,5 +1,15 @@
 #pragma once
 
+#include "Utils/IObject.h"
+#include "Utils/UID.h"
+#include "Utils/Property.h"
+#include "Utils/Math/Basis.h"
+#include "Utils/Math/Vector2.h"
+#include "Utils/Math/Vertex2.h"
+#include "Utils/Math/Rect.h"
+#include "Utils/Math/Color.h"
+#include "Utils/UID.h"
+
 namespace o2
 {
 	template<class T> struct IsVectorHelper: std::false_type {};

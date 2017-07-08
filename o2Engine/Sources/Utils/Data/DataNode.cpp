@@ -472,12 +472,21 @@ namespace o2
 
 	bool DataNode::operator==(const DataNode& other) const
 	{
-		return mName == other.mName && mData == other.mData && mChildNodes == other.mChildNodes;
+		if (mName != other.mName || mData != other.mData || mChildNodes.Count() != other.mChildNodes.Count())
+			return false;
+		
+		for (int i = 0; i < mChildNodes.Count(); i++)
+		{
+			if (*mChildNodes[i] != *other.mChildNodes[i])
+				return false;
+		}
+
+		return true;
 	}
 
 	bool DataNode::operator!=(const DataNode& other) const
 	{
-		return mName != other.mName || mData != other.mData || mChildNodes != other.mChildNodes;
+		return !(*this == other);
 	}
 
 	DataNode* DataNode::GetParent() const

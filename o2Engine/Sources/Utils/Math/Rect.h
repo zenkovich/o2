@@ -4,14 +4,20 @@
 #include <float.h>
 #include "Utils/Math/Math.h"
 #include "Utils/Math/Vector2.h"
+#include "Utils/IObject.h"
 
 namespace o2
 {
+	class DataNode;
+
 	template<typename T>
 	class Rect
 	{
 	public:
-		T left, top, right, bottom;
+		T left;
+		T top;
+		T right;
+		T bottom;
 
 		inline Rect();
 		inline Rect(const Vec2<T>& leftTop, const Vec2<T>& rightDown);
@@ -78,7 +84,7 @@ namespace o2
 
 		inline bool IsZero() const;
 
-		inline static Rect Bound(Vec2<T>* points, int count);
+		static Rect Bound(Vec2<T>* points, int count);
 
 	protected:
 		inline void Normalize();
@@ -261,7 +267,7 @@ namespace o2
 	template<typename T>
 	void Rect<T>::Normalize()
 	{
-		T _left = left, _right = right, _top = top, _bottom - bottom;
+		T _left = left, _right = right, _top = top, _bottom = bottom;
 		left = Math::Min(_left, _right);
 		right = Math::Max(_left, _right);
 		top = Math::Max(_top, _bottom);
@@ -272,7 +278,7 @@ namespace o2
 	void Rect<T>::SetPosition(const Vec2<T>& position)
 	{
 		T dx = position.x - left, dy = position.y - top;
-		left += dx; righ += dx;
+		left += dx; right += dx;
 		top += dy; bottom += dy;
 	}
 
@@ -298,7 +304,7 @@ namespace o2
 	template<typename T>
 	Vec2<T> Rect<T>::Center() const
 	{
-		return Vec2<T>((left + right)*0.5f, (top + bottom)*0.5f);
+		return Vec2<T>((T)((left + right)*0.5f), (T)((top + bottom)*0.5f));
 	}
 
 	template<typename T>
@@ -373,7 +379,7 @@ namespace o2
 	template<typename T>
 	Rect<T> Rect<T>::Scale(float scale) const
 	{
-		return Rect(left, right, left + (right - left)*scale, top + (bottom - top)*scale);
+		return Rect(left, right, left + (T)((right - left)*scale), top + (T)((bottom - top)*scale));
 	}
 
 	template<typename T>
@@ -407,8 +413,8 @@ namespace o2
 	template<typename T>
 	bool Rect<T>::IsZero() const
 	{
-		return Math::Equals(left, 0.0f) && Math::Equals(right, 0.0f) &&
-			Math::Equals(top, 0.0f) && Math::Equals(bottom, 0.0f);
+		return Math::Equals((float)left, 0.0f) && Math::Equals((float)right, 0.0f) &&
+			Math::Equals((float)top, 0.0f) && Math::Equals((float)bottom, 0.0f);
 	}
 
 	template<typename T>

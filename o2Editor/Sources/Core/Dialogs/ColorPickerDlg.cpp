@@ -121,7 +121,7 @@ namespace Editor
 
 		mColorPickAreaHandle->onDraw += [&]() { mColorPickHandle.OnDrawn(); };
 		mColorPickHandle.isUnderPoint = [&](const Vec2F& point) { return mColorPickAreaColor->IsUnderPoint(point); };
-		mColorPickHandle.onMoved = Function<void(const Input::Cursor&)>(this, &ColorPickerDlg::OnColorPickHandleMoved);
+		mColorPickHandle.onMoved = Func(this, &ColorPickerDlg::OnColorPickHandleMoved);
 	}
 
 	void ColorPickerDlg::InitializeColorParams()

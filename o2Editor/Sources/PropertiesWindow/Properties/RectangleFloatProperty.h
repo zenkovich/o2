@@ -163,15 +163,36 @@ namespace Editor
 		// Calls when drag handle was moved and changes the property value
 		void OnBottomDragHandleMoved(const Input::Cursor& cursor);
 
-		// Calls when key was released
+		// Calls when key was released and changes focused value
 		void OnKeyReleased(const Input::Key& key);
 
-		// Calls when change value move handle pressed, sets cursor infinite mode and stores value to data
-		void OnMoveHandlePressed(const Input::Cursor& cursor);
+		// Calls when change left value move handle pressed, sets cursor infinite mode and stores value to data
+		void OnLeftMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Calls when change value move handle  released, turns off cursor infinite mode, 
+		// Calls when change left value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
-		void OnMoveHandleReleased(const Input::Cursor& cursor);
+		void OnLeftMoveHandleReleased(const Input::Cursor& cursor);
+
+		// Calls when change right value move handle pressed, sets cursor infinite mode and stores value to data
+		void OnRightMoveHandlePressed(const Input::Cursor& cursor);
+
+		// Calls when change right value move handle  released, turns off cursor infinite mode, 
+		// checks value was changed then calls value change completed event
+		void OnRightMoveHandleReleased(const Input::Cursor& cursor);
+
+		// Calls when change top value move handle pressed, sets cursor infinite mode and stores value to data
+		void OnTopMoveHandlePressed(const Input::Cursor& cursor);
+
+		// Calls when change top value move handle  released, turns off cursor infinite mode, 
+		// checks value was changed then calls value change completed event
+		void OnTopMoveHandleReleased(const Input::Cursor& cursor);
+
+		// Calls when change bottom value move handle pressed, sets cursor infinite mode and stores value to data
+		void OnBottomMoveHandlePressed(const Input::Cursor& cursor);
+
+		// Calls when change bottom value move handle  released, turns off cursor infinite mode, 
+		// checks value was changed then calls value change completed event
+		void OnBottomMoveHandleReleased(const Input::Cursor& cursor);
 
 		// Sets value, checks value changed, calls onChangeCompleted
 		void SetLeftValueByUser(float value);
@@ -185,7 +206,28 @@ namespace Editor
 		// Sets value, checks value changed, calls onChangeCompleted
 		void SetTopValueByUser(float value);
 
-		// Checks that value was changed and calls onChangeCompleted
-		void CheckValueChangeCompleted();
+		// Checks that left value was changed and calls onChangeCompleted
+		void CheckLeftValueChangeCompleted();
+
+		// Checks that right value was changed and calls onChangeCompleted
+		void CheckRightValueChangeCompleted();
+
+		// Checks that bottom value was changed and calls onChangeCompleted
+		void CheckBottomValueChangeCompleted();
+
+		// Checks that top value was changed and calls onChangeCompleted
+		void CheckTopValueChangeCompleted();
+
+		// Stores left values to data
+		void StoreLeftValues(Vector<DataNode>& data) const;
+
+		// Stores right values to data
+		void StoreRightValues(Vector<DataNode>& data) const;
+
+		// Stores top values to data
+		void StoreTopValues(Vector<DataNode>& data) const;
+
+		// Stores bottom values to data
+		void StoreBottomValues(Vector<DataNode>& data) const;
 	};
 }

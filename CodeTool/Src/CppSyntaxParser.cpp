@@ -143,6 +143,9 @@ void CppSyntaxParser::ParseFile(SyntaxFile& file, const string& filePath, const 
 
 	fin.close();
 
+	if (file.mData.find("@CODETOOLIGNORE") != string::npos)
+		return;
+
 	ParseSyntaxSection(*file.mGlobalNamespace, file.mData, file, SyntaxProtectionSection::Public);
 }
 

@@ -164,18 +164,28 @@ namespace Editor
 
 	void StringProperty::SetValueByUser(const String& value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreValues(mBeforeChangeValues);
 		SetValue(value);
 		CheckValueChangeCompleted();
 	}
 
 	void StringProperty::CheckValueChangeCompleted()
 	{
-		DataNode commonValueData;
-		commonValueData = mCommonValue;
+		Vector<DataNode> valuesData;
+		StoreValues(valuesData);
 
-		if (mBeforeChangeValue != commonValueData)
-			onChangeCompleted(mBeforeChangeValue, commonValueData);
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath, mBeforeChangeValues, valuesData);
+	}
+
+	void StringProperty::StoreValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mGetFunc(ptr.first);
+		}
 	}
 
 }
@@ -207,5 +217,6 @@ CLASS_META(Editor::StringProperty)
 	PROTECTED_FUNCTION(void, OnEdited, const WString&);
 	PROTECTED_FUNCTION(void, SetValueByUser, const String&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 }
 END_META;

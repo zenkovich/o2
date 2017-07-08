@@ -35,7 +35,7 @@ CLASS_META(Editor::IPropertyField)
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onChangeCompleted);
 	PROTECTED_FIELD(mValuesPath);
-	PROTECTED_FIELD(mBeforeChangeValue);
+	PROTECTED_FIELD(mBeforeChangeValues);
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, SetValuePtr, const Vector<void*>&, bool);
@@ -48,5 +48,6 @@ CLASS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, OnChanged);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 }
 END_META;

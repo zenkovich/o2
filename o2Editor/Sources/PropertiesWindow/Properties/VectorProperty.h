@@ -84,6 +84,8 @@ namespace Editor
 		bool              mCountDifferents = false;    // Is targets counts of elements differents
 		int               mCountOfElements;            // Common count of elements
 
+		bool              mIsRefreshing = false;       // Is currently refreshing content. Need to prevent cycled size changing
+
 	protected:
 		// Returns free element property
 		PropertyDef GetFreeValueProperty();

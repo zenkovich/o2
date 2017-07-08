@@ -111,6 +111,9 @@ namespace Editor
 		// Y Edit box change event
 		void OnYEdited(const WString& data);
 
+		// Calls when key was released
+		void OnKeyReleased(const Input::Key& key);
+
 		// Calls when drag handle was moved and changes the property value
 		void OnXDragHandleMoved(const Input::Cursor& cursor);
 
@@ -118,11 +121,18 @@ namespace Editor
 		void OnYDragHandleMoved(const Input::Cursor& cursor);
 
 		// Calls when change value move handle pressed, sets cursor infinite mode and stores value to data
-		void OnMoveHandlePressed(const Input::Cursor& cursor);
+		void OnXMoveHandlePressed(const Input::Cursor& cursor);
+
+		// Calls when change value move handle pressed, sets cursor infinite mode and stores value to data
+		void OnYMoveHandlePressed(const Input::Cursor& cursor);
 
 		// Calls when change value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
-		void OnMoveHandleReleased(const Input::Cursor& cursor);
+		void OnXMoveHandleReleased(const Input::Cursor& cursor);
+
+		// Calls when change value move handle  released, turns off cursor infinite mode, 
+		// checks value was changed then calls value change completed event
+		void OnYMoveHandleReleased(const Input::Cursor& cursor);
 
 		// Sets value, checks value changed, calls onChangeCompleted
 		void SetXValueByUser(int value);
@@ -130,7 +140,16 @@ namespace Editor
 		// Sets value, checks value changed, calls onChangeCompleted
 		void SetYValueByUser(int value);
 
+		// Stores values to data
+		void StoreXValues(Vector<DataNode>& data) const;
+
+		// Stores values to data
+		void StoreYValues(Vector<DataNode>& data) const;
+
 		// Checks that value was changed and calls onChangeCompleted
-		void CheckValueChangeCompleted();
+		void CheckXValueChangeCompleted();
+
+		// Checks that value was changed and calls onChangeCompleted
+		void CheckYValueChangeCompleted();
 	};
 }

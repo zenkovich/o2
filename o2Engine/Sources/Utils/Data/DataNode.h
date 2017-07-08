@@ -51,7 +51,7 @@ namespace o2
 		class EnumDataConverter
 		{
 		public:
-			static void ToData(_type& object, DataNode& data);
+			static void ToData(const _type& object, DataNode& data);
 			static void FromData(_type& object, const DataNode& data);
 		};
 
@@ -62,7 +62,7 @@ namespace o2
 		class ObjectDataConverter
 		{
 		public:
-			static void ToData(_type& object, DataNode& data);
+			static void ToData(const _type& object, DataNode& data);
 			static void FromData(_type& object, const DataNode& data);
 		};
 
@@ -161,11 +161,11 @@ namespace o2
 
 		// Sets value from pointer value, only for objects, based on IObject
 		template<typename _type, typename X = std::enable_if<std::is_base_of<IObject, _type>::value>::type>
-		DataNode& SetValue(_type* value);
+		DataNode& SetValue(const _type* value);
 
 		// Sets value from pointer value, only for objects, based on IObject
 		template<typename _type, typename X = std::enable_if<std::is_base_of<IObject, _type>::value>::type>
-		DataNode& SetValueRaw(_type* value);
+		DataNode& SetValueRaw(const _type* value);
 
 		// Sets value from vector value
 		template<typename _type, typename X = std::enable_if<std::is_base_of<IObject, _type>::value || 
@@ -188,7 +188,7 @@ namespace o2
 		template<typename _type,
 			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, ObjectDataConverter<_type>>::type,
 			typename X = std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
-		DataNode& SetValue(_type& value);
+		DataNode& SetValue(const _type& value);
 
 		// Gets value
 		void GetValue(DataNode& other) const;
@@ -459,7 +459,7 @@ namespace o2
 	}
 
 	template<typename _type, typename X>
-	DataNode& DataNode::SetValue(_type* value)
+	DataNode& DataNode::SetValue(const _type* value)
 	{
 		if (value)
 		{
@@ -487,7 +487,7 @@ namespace o2
 	}
 
 	template<typename _type, typename X>
-	DataNode& DataNode::SetValueRaw(_type* value)
+	DataNode& DataNode::SetValueRaw(const _type* value)
 	{
 		if (value)
 		{
@@ -621,7 +621,7 @@ namespace o2
 	}
 
 	template<typename _type, typename _conv, typename X>
-	DataNode& DataNode::SetValue(_type& value)
+	DataNode& DataNode::SetValue(const _type& value)
 	{
 		_conv::ToData(value, *this);
 		return *this;
@@ -640,7 +640,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void DataNode::EnumDataConverter<_type>::ToData(_type& object, DataNode& data)
+	void DataNode::EnumDataConverter<_type>::ToData(const _type& object, DataNode& data)
 	{
 		data = Reflection::GetEnumName<_type>(object);
 	}
@@ -661,7 +661,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void DataNode::ObjectDataConverter<_type>::ToData(_type& object, DataNode& data)
+	void DataNode::ObjectDataConverter<_type>::ToData(const _type& object, DataNode& data)
 	{
 		for (auto conv : mDataConverters)
 		{

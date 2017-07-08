@@ -24,8 +24,9 @@ namespace Editor
 		typedef Vector<Pair<void*, void*>> TargetsVec;
 
 	public:
-		Function<void()>                                 onChanged;         // Immediate change value by user event
-		Function<void(const DataNode&, const DataNode&)> onChangeCompleted; // Change completed by user event
+		Function<void()> onChanged; // Immediate change value by user event
+
+		Function<void(const String&, const Vector<DataNode>&, const Vector<DataNode>&)> onChangeCompleted; // Change completed by user event
 
 		// Virtual destructor
 		virtual ~IPropertyField() {}
@@ -66,8 +67,11 @@ namespace Editor
 		// Calls when field value changed
 		virtual void OnChanged();
 
+		// Stores values to data
+		virtual void StoreValues(Vector<DataNode>& data) const {}
+
 	protected:
-		String   mValuesPath;        // Reflection path of target values
-		DataNode mBeforeChangeValue; // Serialized value data before changes started
+		String           mValuesPath;         // Reflection path of target values
+		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
 	};
 }

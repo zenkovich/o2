@@ -35,9 +35,9 @@ namespace Editor
 
 			mLeftDragHangle.cursorType = CursorType::SizeNS;
 			mLeftDragHangle.isUnderPoint = [=](const Vec2F& point) { return leftHandleLayer->IsUnderPoint(point); };
-			mLeftDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnLeftDragHandleMoved);
-			mLeftDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnMoveHandlePressed);
-			mLeftDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnMoveHandleReleased);
+			mLeftDragHangle.onMoved = Func(this, &BorderIProperty::OnLeftDragHandleMoved);
+			mLeftDragHangle.onCursorPressed = Func(this, &BorderIProperty::OnLeftMoveHandlePressed);
+			mLeftDragHangle.onCursorReleased = Func(this, &BorderIProperty::OnLeftMoveHandleReleased);
 		}
 
 		mBottomEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderIProperty::OnBottomEdited);
@@ -50,9 +50,9 @@ namespace Editor
 
 			mBottomDragHangle.cursorType = CursorType::SizeNS;
 			mBottomDragHangle.isUnderPoint = [=](const Vec2F& point) { return bottomHandleLayer->IsUnderPoint(point); };
-			mBottomDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnBottomDragHandleMoved);
-			mBottomDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnMoveHandlePressed);
-			mBottomDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnMoveHandleReleased);
+			mBottomDragHangle.onMoved = Func(this, &BorderIProperty::OnBottomDragHandleMoved);
+			mBottomDragHangle.onCursorPressed = Func(this, &BorderIProperty::OnBottomMoveHandlePressed);
+			mBottomDragHangle.onCursorReleased = Func(this, &BorderIProperty::OnBottomMoveHandleReleased);
 		}
 
 		mRightEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderIProperty::OnRightEdited);
@@ -65,9 +65,9 @@ namespace Editor
 
 			mRightDragHangle.cursorType = CursorType::SizeNS;
 			mRightDragHangle.isUnderPoint = [=](const Vec2F& point) { return rightHandleLayer->IsUnderPoint(point); };
-			mRightDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnRightDragHandleMoved);
-			mRightDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnMoveHandlePressed);
-			mRightDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnMoveHandleReleased);
+			mRightDragHangle.onMoved = Func(this, &BorderIProperty::OnRightDragHandleMoved);
+			mRightDragHangle.onCursorPressed = Func(this, &BorderIProperty::OnRightMoveHandlePressed);
+			mRightDragHangle.onCursorReleased = Func(this, &BorderIProperty::OnRightMoveHandleReleased);
 		}
 
 		mTopEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderIProperty::OnTopEdited);
@@ -80,9 +80,9 @@ namespace Editor
 
 			mTopDragHangle.cursorType = CursorType::SizeNS;
 			mTopDragHangle.isUnderPoint = [=](const Vec2F& point) { return topHandleLayer->IsUnderPoint(point); };
-			mTopDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnTopDragHandleMoved);
-			mTopDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnMoveHandlePressed);
-			mTopDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &BorderIProperty::OnMoveHandleReleased);
+			mTopDragHangle.onMoved = Func(this, &BorderIProperty::OnTopDragHandleMoved);
+			mTopDragHangle.onCursorPressed = Func(this, &BorderIProperty::OnTopMoveHandlePressed);
+			mTopDragHangle.onCursorReleased = Func(this, &BorderIProperty::OnTopMoveHandleReleased);
 		}
 	}
 
@@ -447,54 +447,184 @@ namespace Editor
 		SetValueBottom(mCommonValue.bottom + (int)cursor.delta.y);
 	}
 
-	void BorderIProperty::OnMoveHandlePressed(const Input::Cursor& cursor)
+	void BorderIProperty::OnKeyReleased(const Input::Key& key)
 	{
-		mBeforeChangeValue = mCommonValue;
+		auto func =[&](UIEditBox* editbox, int value, void(BorderIProperty::*setter)(int))
+		{
+			if (editbox->IsFocused())
+			{
+				if (key == VK_UP)
+				{
+					(this->*setter)(value + 1);
+					editbox->SelectAll();
+				}
+
+				if (key == VK_DOWN)
+				{
+					(this->*setter)(value - 1);
+					editbox->SelectAll();
+				}
+			}
+		};
+
+		func(mLeftEditBox, mCommonValue.left, &BorderIProperty::SetLeftValueByUser);
+		func(mRightEditBox, mCommonValue.right, &BorderIProperty::SetRightValueByUser);
+		func(mTopEditBox, mCommonValue.top, &BorderIProperty::SetTopValueByUser);
+		func(mBottomEditBox, mCommonValue.bottom, &BorderIProperty::SetBottomValueByUser);
+	}
+
+	void BorderIProperty::OnLeftMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		StoreLeftValues(mBeforeChangeValues);
 		o2Application.SetCursorInfiniteMode(true);
 	}
 
-	void BorderIProperty::OnMoveHandleReleased(const Input::Cursor& cursor)
+	void BorderIProperty::OnLeftMoveHandleReleased(const Input::Cursor& cursor)
 	{
 		o2Application.SetCursorInfiniteMode(false);
-		CheckValueChangeCompleted();
+		CheckLeftValueChangeCompleted();
+	}
+
+	void BorderIProperty::OnRightMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		StoreRightValues(mBeforeChangeValues);
+		o2Application.SetCursorInfiniteMode(true);
+	}
+
+	void BorderIProperty::OnRightMoveHandleReleased(const Input::Cursor& cursor)
+	{
+		o2Application.SetCursorInfiniteMode(false);
+		CheckRightValueChangeCompleted();
+	}
+
+	void BorderIProperty::OnTopMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		StoreTopValues(mBeforeChangeValues);
+		o2Application.SetCursorInfiniteMode(true);
+	}
+
+	void BorderIProperty::OnTopMoveHandleReleased(const Input::Cursor& cursor)
+	{
+		o2Application.SetCursorInfiniteMode(false);
+		CheckTopValueChangeCompleted();
+	}
+
+	void BorderIProperty::OnBottomMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		StoreBottomValues(mBeforeChangeValues);
+		o2Application.SetCursorInfiniteMode(true);
+	}
+
+	void BorderIProperty::OnBottomMoveHandleReleased(const Input::Cursor& cursor)
+	{
+		o2Application.SetCursorInfiniteMode(false);
+		CheckBottomValueChangeCompleted();
 	}
 
 	void BorderIProperty::SetLeftValueByUser(int value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreLeftValues(mBeforeChangeValues);
 		SetValueLeft(value);
-		CheckValueChangeCompleted();
+		CheckLeftValueChangeCompleted();
 	}
 
 	void BorderIProperty::SetRightValueByUser(int value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreRightValues(mBeforeChangeValues);
 		SetValueRight(value);
-		CheckValueChangeCompleted();
+		CheckRightValueChangeCompleted();
 	}
 
 	void BorderIProperty::SetBottomValueByUser(int value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreBottomValues(mBeforeChangeValues);
 		SetValueBottom(value);
-		CheckValueChangeCompleted();
+		CheckBottomValueChangeCompleted();
 	}
 
 	void BorderIProperty::SetTopValueByUser(int value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreTopValues(mBeforeChangeValues);
 		SetValueTop(value);
-		CheckValueChangeCompleted();
+		CheckTopValueChangeCompleted();
 	}
 
-	void BorderIProperty::CheckValueChangeCompleted()
+	void BorderIProperty::CheckLeftValueChangeCompleted()
 	{
-		DataNode commonValueData;
-		commonValueData = mCommonValue;
+		Vector<DataNode> valuesData;
+		StoreLeftValues(valuesData);
 
-		if (mBeforeChangeValue != commonValueData)
-			onChangeCompleted(mBeforeChangeValue, commonValueData);
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/left", mBeforeChangeValues, valuesData);
 	}
+
+	void BorderIProperty::CheckRightValueChangeCompleted()
+	{
+		Vector<DataNode> valuesData;
+		StoreRightValues(valuesData);
+
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/right", mBeforeChangeValues, valuesData);
+	}
+
+	void BorderIProperty::CheckTopValueChangeCompleted()
+	{
+		Vector<DataNode> valuesData;
+		StoreTopValues(valuesData);
+
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/top", mBeforeChangeValues, valuesData);
+	}
+
+	void BorderIProperty::CheckBottomValueChangeCompleted()
+	{
+		Vector<DataNode> valuesData;
+		StoreBottomValues(valuesData);
+
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/bottom", mBeforeChangeValues, valuesData);
+	}
+
+	void BorderIProperty::StoreLeftValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mLeftGetFunc(ptr.first);
+		}
+	}
+
+	void BorderIProperty::StoreRightValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mRightGetFunc(ptr.first);
+		}
+	}
+
+	void BorderIProperty::StoreTopValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mTopGetFunc(ptr.first);
+		}
+	}
+
+	void BorderIProperty::StoreBottomValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mBottomGetFunc(ptr.first);
+		}
+	}
+
 }
 
 CLASS_META(Editor::BorderIProperty)
@@ -559,13 +689,26 @@ CLASS_META(Editor::BorderIProperty)
 	PROTECTED_FUNCTION(void, OnRightDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnTopDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnBottomDragHandleMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnMoveHandlePressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnLeftMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnLeftMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnRightMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnRightMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnTopMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnTopMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnBottomMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnBottomMoveHandleReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SetLeftValueByUser, int);
 	PROTECTED_FUNCTION(void, SetRightValueByUser, int);
 	PROTECTED_FUNCTION(void, SetBottomValueByUser, int);
 	PROTECTED_FUNCTION(void, SetTopValueByUser, int);
-	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, CheckLeftValueChangeCompleted);
+	PROTECTED_FUNCTION(void, CheckRightValueChangeCompleted);
+	PROTECTED_FUNCTION(void, CheckBottomValueChangeCompleted);
+	PROTECTED_FUNCTION(void, CheckTopValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreLeftValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, StoreRightValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, StoreTopValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, StoreBottomValues, Vector<DataNode>&);
 }
 END_META;
- 

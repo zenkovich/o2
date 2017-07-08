@@ -388,6 +388,9 @@
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h">
       <Filter>Sources\Utils\FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\FrameHandles.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="..\Sources\Utils\IDynamic.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
@@ -499,6 +502,12 @@
     <ClInclude Include="..\Sources\Utils\String.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\StringDef.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\StringImpl.h">
+      <Filter>Sources\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Task.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
@@ -518,9 +527,6 @@
       <Filter>Sources\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\UnknownPtr.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\FrameHandles.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
   </ItemGroup>
@@ -843,6 +849,9 @@
     <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp">
       <Filter>Sources\Utils\FileSystem</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Utils\FrameHandles.cpp">
+      <Filter>Sources\Utils</Filter>
+    </ClCompile>
     <ClCompile Include="..\Sources\Utils\ImageFormats\PngFormat.cpp">
       <Filter>Sources\Utils\ImageFormats</Filter>
     </ClCompile>
@@ -854,6 +863,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp">
       <Filter>Sources\Utils\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Math\Color.cpp">
+      <Filter>Sources\Utils\Math</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Math\Curve.cpp">
       <Filter>Sources\Utils\Math</Filter>
@@ -907,9 +919,6 @@
       <Filter>Sources\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Timer.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\FrameHandles.cpp">
       <Filter>Sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>

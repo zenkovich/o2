@@ -2333,6 +2333,27 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "rectangle property");
 	}
 
+	void EditorUIStyleBuilder::RebuildNewRectProperty()
+	{
+		auto sample = mnew UIWidget();
+
+		auto layout = mnew UIWidget();
+		layout->name = "layout";
+		layout->layout = UIWidgetLayout::BothStretch();
+
+		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
+		revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+
+		sample->AddChild(revertBtn);
+		sample->AddChild(layout);
+
+		Animation revertStateAnim = Animation::EaseInOut(sample, &layout->layout.offsetRight, 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		sample->AddState("revert", revertStateAnim);
+
+		o2UI.AddWidgetStyle(sample, "new rectangle property");
+	}
+
 	void EditorUIStyleBuilder::RebuildEditorUIStyle()
 	{
 		o2UI.ClearStyle();
@@ -2403,6 +2424,7 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildGreenEditBoxStyle);
 	PUBLIC_FUNCTION(void, RebuildColoredVector2Property);
 	PUBLIC_FUNCTION(void, RebuildRectProperty);
+	PUBLIC_FUNCTION(void, RebuildNewRectProperty);
 	PUBLIC_FUNCTION(void, RebuildActorHeadEnableToggle);
 	PUBLIC_FUNCTION(void, RebuildActorHeadName);
 	PUBLIC_FUNCTION(void, RebuildActorHeadLockToggle);

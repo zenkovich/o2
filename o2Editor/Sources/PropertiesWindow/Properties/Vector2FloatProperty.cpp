@@ -33,9 +33,9 @@ namespace Editor
 
 			mXDragHangle.cursorType = CursorType::SizeNS;
 			mXDragHangle.isUnderPoint = [=](const Vec2F& point) { return xHandleLayer->IsUnderPoint(point); };
-			mXDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &Vec2FProperty::OnXDragHandleMoved);
-			mXDragHangle.onCursorPressed =  Function<void(const Input::Cursor&)>(this, &Vec2FProperty::OnMoveHandlePressed);
-			mXDragHangle.onCursorReleased =  Function<void(const Input::Cursor&)>(this, &Vec2FProperty::OnMoveHandleReleased);
+			mXDragHangle.onMoved = Func(this, &Vec2FProperty::OnXDragHandleMoved);
+			mXDragHangle.onCursorPressed =  Func(this, &Vec2FProperty::OnXMoveHandlePressed);
+			mXDragHangle.onCursorReleased =  Func(this, &Vec2FProperty::OnXMoveHandleReleased);
 		}
 
 		mYEditBox->onChangeCompleted = Function<void(const WString&)>(this, &Vec2FProperty::OnYEdited);
@@ -48,9 +48,9 @@ namespace Editor
 
 			mYDragHangle.cursorType = CursorType::SizeNS;
 			mYDragHangle.isUnderPoint = [=](const Vec2F& point) { return yHandleLayer->IsUnderPoint(point); };
-			mYDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &Vec2FProperty::OnYDragHandleMoved);
-			mYDragHangle.onCursorPressed =  Function<void(const Input::Cursor&)>(this, &Vec2FProperty::OnMoveHandlePressed);
-			mYDragHangle.onCursorReleased =  Function<void(const Input::Cursor&)>(this, &Vec2FProperty::OnMoveHandleReleased);
+			mYDragHangle.onMoved = Func(this, &Vec2FProperty::OnYDragHandleMoved);
+			mYDragHangle.onCursorPressed =  Func(this, &Vec2FProperty::OnYMoveHandlePressed);
+			mYDragHangle.onCursorReleased =  Func(this, &Vec2FProperty::OnYMoveHandleReleased);
 		}
 	}
 
@@ -329,39 +329,80 @@ namespace Editor
 		}
 	}
 
-	void Vec2FProperty::OnMoveHandlePressed(const Input::Cursor& cursor)
+	void Vec2FProperty::OnXMoveHandlePressed(const Input::Cursor& cursor)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreXValues(mBeforeChangeValues);
 		o2Application.SetCursorInfiniteMode(true);
 	}
 
-	void Vec2FProperty::OnMoveHandleReleased(const Input::Cursor& cursor)
+	void Vec2FProperty::OnYMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		StoreYValues(mBeforeChangeValues);
+		o2Application.SetCursorInfiniteMode(true);
+	}
+
+	void Vec2FProperty::OnXMoveHandleReleased(const Input::Cursor& cursor)
 	{
 		o2Application.SetCursorInfiniteMode(false);
-		CheckValueChangeCompleted();
+		CheckXValueChangeCompleted();
+	}
+
+	void Vec2FProperty::OnYMoveHandleReleased(const Input::Cursor& cursor)
+	{
+		o2Application.SetCursorInfiniteMode(false);
+		CheckYValueChangeCompleted();
 	}
 
 	void Vec2FProperty::SetXValueByUser(float value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreXValues(mBeforeChangeValues);
 		SetValueX(value);
-		CheckValueChangeCompleted();
+		CheckXValueChangeCompleted();
 	}
 
 	void Vec2FProperty::SetYValueByUser(float value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreYValues(mBeforeChangeValues);
 		SetValueY(value);
-		CheckValueChangeCompleted();
+		CheckYValueChangeCompleted();
 	}
 
-	void Vec2FProperty::CheckValueChangeCompleted()
+	void Vec2FProperty::StoreXValues(Vector<DataNode>& data) const
 	{
-		DataNode commonValueData;
-		commonValueData = mCommonValue;
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mXGetFunc(ptr.first);
+		}
+	}
 
-		if (mBeforeChangeValue != commonValueData)
-			onChangeCompleted(mBeforeChangeValue, commonValueData);
+	void Vec2FProperty::StoreYValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mYGetFunc(ptr.first);
+		}
+	}
+
+	void Vec2FProperty::CheckXValueChangeCompleted()
+	{
+		Vector<DataNode> valuesData;
+		StoreXValues(valuesData);
+
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/x", mBeforeChangeValues, valuesData);
+	}
+
+	void Vec2FProperty::CheckYValueChangeCompleted()
+	{
+		Vector<DataNode> valuesData;
+		StoreYValues(valuesData);
+
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/y", mBeforeChangeValues, valuesData);
 	}
 
 }
@@ -411,11 +452,15 @@ CLASS_META(Editor::Vec2FProperty)
 	PROTECTED_FUNCTION(void, OnXDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnYDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnMoveHandlePressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnXMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnXMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnYMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnYMoveHandleReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SetXValueByUser, float);
 	PROTECTED_FUNCTION(void, SetYValueByUser, float);
-	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreXValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, StoreYValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, CheckXValueChangeCompleted);
+	PROTECTED_FUNCTION(void, CheckYValueChangeCompleted);
 }
 END_META;
- 

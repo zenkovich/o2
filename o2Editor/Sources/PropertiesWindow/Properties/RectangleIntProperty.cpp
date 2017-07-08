@@ -35,9 +35,9 @@ namespace Editor
 
 			mLeftDragHangle.cursorType = CursorType::SizeNS;
 			mLeftDragHangle.isUnderPoint = [=](const Vec2F& point) { return leftHandleLayer->IsUnderPoint(point); };
-			mLeftDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnLeftDragHandleMoved);
-			mLeftDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnMoveHandlePressed);
-			mLeftDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnMoveHandleReleased);
+			mLeftDragHangle.onMoved = Func(this, &RectIProperty::OnLeftDragHandleMoved);
+			mLeftDragHangle.onCursorPressed = Func(this, &RectIProperty::OnLeftMoveHandlePressed);
+			mLeftDragHangle.onCursorReleased = Func(this, &RectIProperty::OnLeftMoveHandleReleased);
 		}
 
 		mBottomEditBox->onChangeCompleted = Function<void(const WString&)>(this, &RectIProperty::OnBottomEdited);
@@ -50,9 +50,9 @@ namespace Editor
 
 			mBottomDragHangle.cursorType = CursorType::SizeNS;
 			mBottomDragHangle.isUnderPoint = [=](const Vec2F& point) { return bottomHandleLayer->IsUnderPoint(point); };
-			mBottomDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnBottomDragHandleMoved);
-			mBottomDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnMoveHandlePressed);
-			mBottomDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnMoveHandleReleased);
+			mBottomDragHangle.onMoved = Func(this, &RectIProperty::OnBottomDragHandleMoved);
+			mBottomDragHangle.onCursorPressed = Func(this, &RectIProperty::OnBottomMoveHandlePressed);
+			mBottomDragHangle.onCursorReleased = Func(this, &RectIProperty::OnBottomMoveHandleReleased);
 		}
 
 		mRightEditBox->onChangeCompleted = Function<void(const WString&)>(this, &RectIProperty::OnRightEdited);
@@ -65,9 +65,9 @@ namespace Editor
 
 			mRightDragHangle.cursorType = CursorType::SizeNS;
 			mRightDragHangle.isUnderPoint = [=](const Vec2F& point) { return rightHandleLayer->IsUnderPoint(point); };
-			mRightDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnRightDragHandleMoved);
-			mRightDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnMoveHandlePressed);
-			mRightDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnMoveHandleReleased);
+			mRightDragHangle.onMoved = Func(this, &RectIProperty::OnRightDragHandleMoved);
+			mRightDragHangle.onCursorPressed = Func(this, &RectIProperty::OnRightMoveHandlePressed);
+			mRightDragHangle.onCursorReleased = Func(this, &RectIProperty::OnRightMoveHandleReleased);
 		}
 
 		mTopEditBox->onChangeCompleted = Function<void(const WString&)>(this, &RectIProperty::OnTopEdited);
@@ -80,9 +80,9 @@ namespace Editor
 
 			mTopDragHangle.cursorType = CursorType::SizeNS;
 			mTopDragHangle.isUnderPoint = [=](const Vec2F& point) { return topHandleLayer->IsUnderPoint(point); };
-			mTopDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnTopDragHandleMoved);
-			mTopDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnMoveHandlePressed);
-			mTopDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &RectIProperty::OnMoveHandleReleased);
+			mTopDragHangle.onMoved = Func(this, &RectIProperty::OnTopDragHandleMoved);
+			mTopDragHangle.onCursorPressed = Func(this, &RectIProperty::OnTopMoveHandlePressed);
+			mTopDragHangle.onCursorReleased = Func(this, &RectIProperty::OnTopMoveHandleReleased);
 		}
 	}
 
@@ -447,53 +447,183 @@ namespace Editor
 		SetValueBottom(mCommonValue.bottom + (int)cursor.delta.y);
 	}
 
-	void RectIProperty::OnMoveHandlePressed(const Input::Cursor& cursor)
+	void RectIProperty::OnKeyReleased(const Input::Key& key)
 	{
-		mBeforeChangeValue = mCommonValue;
+		auto func =[&](UIEditBox* editbox, int value, void(RectIProperty::*setter)(int))
+		{
+			if (editbox->IsFocused())
+			{
+				if (key == VK_UP)
+				{
+					(this->*setter)(value + 1);
+					editbox->SelectAll();
+				}
+
+				if (key == VK_DOWN)
+				{
+					(this->*setter)(value - 1);
+					editbox->SelectAll();
+				}
+			}
+		};
+
+		func(mLeftEditBox, mCommonValue.left, &RectIProperty::SetLeftValueByUser);
+		func(mRightEditBox, mCommonValue.right, &RectIProperty::SetRightValueByUser);
+		func(mTopEditBox, mCommonValue.top, &RectIProperty::SetTopValueByUser);
+		func(mBottomEditBox, mCommonValue.bottom, &RectIProperty::SetBottomValueByUser);
+	}
+
+
+	void RectIProperty::OnLeftMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		StoreLeftValues(mBeforeChangeValues);
 		o2Application.SetCursorInfiniteMode(true);
 	}
 
-	void RectIProperty::OnMoveHandleReleased(const Input::Cursor& cursor)
+	void RectIProperty::OnLeftMoveHandleReleased(const Input::Cursor& cursor)
 	{
 		o2Application.SetCursorInfiniteMode(false);
-		CheckValueChangeCompleted();
+		CheckLeftValueChangeCompleted();
+	}
+
+	void RectIProperty::OnRightMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		StoreRightValues(mBeforeChangeValues);
+		o2Application.SetCursorInfiniteMode(true);
+	}
+
+	void RectIProperty::OnRightMoveHandleReleased(const Input::Cursor& cursor)
+	{
+		o2Application.SetCursorInfiniteMode(false);
+		CheckRightValueChangeCompleted();
+	}
+
+	void RectIProperty::OnTopMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		StoreTopValues(mBeforeChangeValues);
+		o2Application.SetCursorInfiniteMode(true);
+	}
+
+	void RectIProperty::OnTopMoveHandleReleased(const Input::Cursor& cursor)
+	{
+		o2Application.SetCursorInfiniteMode(false);
+		CheckTopValueChangeCompleted();
+	}
+
+	void RectIProperty::OnBottomMoveHandlePressed(const Input::Cursor& cursor)
+	{
+		StoreBottomValues(mBeforeChangeValues);
+		o2Application.SetCursorInfiniteMode(true);
+	}
+
+	void RectIProperty::OnBottomMoveHandleReleased(const Input::Cursor& cursor)
+	{
+		o2Application.SetCursorInfiniteMode(false);
+		CheckBottomValueChangeCompleted();
 	}
 
 	void RectIProperty::SetLeftValueByUser(int value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreLeftValues(mBeforeChangeValues);
 		SetValueLeft(value);
-		CheckValueChangeCompleted();
+		CheckLeftValueChangeCompleted();
 	}
 
 	void RectIProperty::SetRightValueByUser(int value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreRightValues(mBeforeChangeValues);
 		SetValueRight(value);
-		CheckValueChangeCompleted();
+		CheckRightValueChangeCompleted();
 	}
 
 	void RectIProperty::SetBottomValueByUser(int value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreBottomValues(mBeforeChangeValues);
 		SetValueBottom(value);
-		CheckValueChangeCompleted();
+		CheckBottomValueChangeCompleted();
 	}
 
 	void RectIProperty::SetTopValueByUser(int value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreTopValues(mBeforeChangeValues);
 		SetValueTop(value);
-		CheckValueChangeCompleted();
+		CheckTopValueChangeCompleted();
 	}
 
-	void RectIProperty::CheckValueChangeCompleted()
+	void RectIProperty::CheckLeftValueChangeCompleted()
 	{
-		DataNode commonValueData;
-		commonValueData = mCommonValue;
+		Vector<DataNode> valuesData;
+		StoreLeftValues(valuesData);
 
-		if (mBeforeChangeValue != commonValueData)
-			onChangeCompleted(mBeforeChangeValue, commonValueData);
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/left", mBeforeChangeValues, valuesData);
+	}
+
+	void RectIProperty::CheckRightValueChangeCompleted()
+	{
+		Vector<DataNode> valuesData;
+		StoreRightValues(valuesData);
+
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/right", mBeforeChangeValues, valuesData);
+	}
+
+	void RectIProperty::CheckTopValueChangeCompleted()
+	{
+		Vector<DataNode> valuesData;
+		StoreTopValues(valuesData);
+
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/top", mBeforeChangeValues, valuesData);
+	}
+
+	void RectIProperty::CheckBottomValueChangeCompleted()
+	{
+		Vector<DataNode> valuesData;
+		StoreBottomValues(valuesData);
+
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath + "/bottom", mBeforeChangeValues, valuesData);
+	}
+
+	void RectIProperty::StoreLeftValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mLeftGetFunc(ptr.first);
+		}
+	}
+
+	void RectIProperty::StoreRightValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mRightGetFunc(ptr.first);
+		}
+	}
+
+	void RectIProperty::StoreTopValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mTopGetFunc(ptr.first);
+		}
+	}
+
+	void RectIProperty::StoreBottomValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mBottomGetFunc(ptr.first);
+		}
 	}
 
 }
@@ -560,13 +690,26 @@ CLASS_META(Editor::RectIProperty)
 	PROTECTED_FUNCTION(void, OnRightDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnTopDragHandleMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnBottomDragHandleMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnMoveHandlePressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnLeftMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnLeftMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnRightMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnRightMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnTopMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnTopMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnBottomMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnBottomMoveHandleReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SetLeftValueByUser, int);
 	PROTECTED_FUNCTION(void, SetRightValueByUser, int);
 	PROTECTED_FUNCTION(void, SetBottomValueByUser, int);
 	PROTECTED_FUNCTION(void, SetTopValueByUser, int);
-	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, CheckLeftValueChangeCompleted);
+	PROTECTED_FUNCTION(void, CheckRightValueChangeCompleted);
+	PROTECTED_FUNCTION(void, CheckBottomValueChangeCompleted);
+	PROTECTED_FUNCTION(void, CheckTopValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreLeftValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, StoreRightValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, StoreTopValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, StoreBottomValues, Vector<DataNode>&);
 }
 END_META;
- 

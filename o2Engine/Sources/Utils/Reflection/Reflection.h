@@ -1,14 +1,27 @@
 #pragma once
 
+#include <functional>
 #include "Utils/Containers/Pair.h"
 #include "Utils/Containers/Vector.h"
-#include "Utils/Reflection/Type.h"
+#include "Utils/Containers/Dictionary.h"
+#include "Utils/StringDef.h"
 
 // Reflection access macros
 #define o2Reflection Reflection::Instance()
 
 namespace o2
 {
+	class Type;
+	class EnumType;
+	class PropertyType;
+	class VectorType;
+	class DictionaryType;
+
+	template<typename _return_type>
+	class StringPointerAccessorType;
+
+	typedef UInt TypeId;
+
 	// ------------------------------
 	// Reflection in application container
 	// ------------------------------
@@ -28,7 +41,7 @@ namespace o2
 		static void* CreateTypeSample(const String& typeName);
 
 		// Returns type by type id
-		static const Type* GetType(Type::Id id);
+		static const Type* GetType(TypeId id);
 
 		// Returns type by name
 		static const Type* GetType(const String& name);
@@ -89,6 +102,7 @@ namespace o2
 
 		friend class Type;
 	};
+}
 
 #define REG_TYPE(CLASS) \
 	o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
@@ -112,6 +126,10 @@ namespace o2
 #define END_ENUM_META \
     return res; });
 
+#include "Utils/Reflection/Type.h"
+
+namespace o2
+{
 	template<typename _type>
 	_type Reflection::GetEnumValue(const String& name)
 	{
@@ -140,7 +158,7 @@ namespace o2
 	template<typename _type>
 	Type* Reflection::InitializeType(const char* name)
 	{
-		Type* res = new Type(name, new Type::SampleCreator<_type>(), sizeof(_type));
+		Type* res = new Type(name, new TypeSampleCreator<_type>(), sizeof(_type));
 
 		res->mInitializeFunc = &_type::InitializeType;
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
@@ -155,9 +173,9 @@ namespace o2
 	template<typename _type>
 	Type* Reflection::InitializeFundamentalType(const char* name)
 	{
-		Type* res = new Type(name, new Type::SampleCreator<_type>(), sizeof(_type));
+		Type* res = new FundamentalType<_type>(name);
 
-		res->mInitializeFunc = nullptr;
+		res->mInitializeFunc = &FundamentalType<_type>::InitializeType;
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
 
@@ -167,7 +185,7 @@ namespace o2
 	template<typename _type>
 	EnumType* Reflection::InitializeEnum(const char* name, std::function<Dictionary<int, String>()> func)
 	{
-		EnumType* res = new EnumType(name, new Type::SampleCreator<_type>(), sizeof(_type));
+		EnumType* res = new EnumType(name, new TypeSampleCreator<_type>(), sizeof(_type));
 
 		res->mInitializeFunc = nullptr;
 		res->mId = Reflection::Instance().mLastGivenTypeId++;

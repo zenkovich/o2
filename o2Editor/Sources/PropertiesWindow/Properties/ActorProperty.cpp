@@ -359,19 +359,30 @@ namespace Editor
 
 	void ActorProperty::SetValueByUser(Actor* value)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreValues(mBeforeChangeValues);
 		SetValue(value);
 		CheckValueChangeCompleted();
 	}
 
 	void ActorProperty::CheckValueChangeCompleted()
 	{
-		DataNode commonValueData; 
-		commonValueData = mCommonValue;
+		Vector<DataNode> valuesData;
+		StoreValues(valuesData);
 
-		if (mBeforeChangeValue != commonValueData)
-			onChangeCompleted(mBeforeChangeValue, commonValueData);
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath, mBeforeChangeValues, valuesData);
 	}
+
+	void ActorProperty::StoreValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mGetFunc(ptr.first);
+		}
+	}
+
 }
 
 CLASS_META(Editor::ActorProperty)
@@ -418,5 +429,6 @@ CLASS_META(Editor::ActorProperty)
 	PROTECTED_FUNCTION(void, OnDragExitFromAssetsScroll, UIAssetsIconsScrollArea*);
 	PROTECTED_FUNCTION(void, SetValueByUser, Actor*);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 }
 END_META;

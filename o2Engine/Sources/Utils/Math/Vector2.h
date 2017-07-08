@@ -1,14 +1,18 @@
 #pragma once
 
 #include "Utils/Math/Math.h"
+#include "Utils/IObject.h"
 
 namespace o2
 {
+	class DataNode;
+
 	template<typename T>
 	class Vec2
 	{
 	public:
-		T x, y;
+		T x;
+		T y;
 
 		inline Vec2();
 		inline Vec2(T vx, T vy);
@@ -100,7 +104,7 @@ namespace o2
 	{}
 
 	template<typename T>
-	Vec2<T>::Vec2(T vx, T vy):
+	Vec2<T>::Vec2(T vx, T vy) :
 		x(vx), y(vy)
 	{}
 

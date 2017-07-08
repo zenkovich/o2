@@ -187,7 +187,7 @@ namespace Editor
 		if (mCursorInfiniteModeEnabled)
 			CheckCursorInfiniteMode();
 
-		float maxFPS = 60.0f;
+		float maxFPS = 600.0f;
 		float maxFPSDeltaTime = 1.0f/maxFPS;
 
 		float realdDt = mTimer->GetDeltaTime();
@@ -207,6 +207,7 @@ namespace Editor
 
 		mRender->Begin();
 
+		OnDraw();
 		OnUpdate(dt);
 
 		mUIManager->Update(dt);

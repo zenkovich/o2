@@ -49,7 +49,7 @@
     <OutDir>$(SolutionDir)Tmp\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\Engine\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -287,6 +287,8 @@
     <ClInclude Include="..\Sources\Utils\SmartPointers.h" />
     <ClInclude Include="..\Sources\Utils\StackTrace.h" />
     <ClInclude Include="..\Sources\Utils\String.h" />
+    <ClInclude Include="..\Sources\Utils\StringDef.h" />
+    <ClInclude Include="..\Sources\Utils\StringImpl.h" />
     <ClInclude Include="..\Sources\Utils\Task.h" />
     <ClInclude Include="..\Sources\Utils\TaskManager.h" />
     <ClInclude Include="..\Sources\Utils\Time.h" />
@@ -407,6 +409,7 @@
     <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp" />
     <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp" />
+    <ClCompile Include="..\Sources\Utils\Math\Color.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Curve.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Layout.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />

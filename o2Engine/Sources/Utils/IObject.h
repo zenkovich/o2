@@ -1,11 +1,25 @@
 #pragma once
 
 #include "Utils/Memory/MemoryManager.h"
-#include "Utils/Reflection/Type.h"
 
 namespace o2
 {
-	class IClassMetaProcessor;
+	class Type;
+
+	template<typename _type, typename _getter>
+	const Type& GetTypeOf();
+
+	template<typename T>
+	struct RegularTypeGetter;
+
+	template<typename T, typename X>
+	struct GetTypeHelper; 
+	
+	template<typename _type>
+	struct TypeSampleCreator;
+
+	class TypeInitializer;
+	class Reflection;
 
 	// ----------------------------------------------------
 	// Basic object interface with type information support
@@ -53,7 +67,7 @@ private:                                               \
 	friend struct o2::GetTypeHelper;                   \
                                                        \
     template<typename _type>                           \
-    friend struct o2::Type::SampleCreator;             \
+    friend struct o2::TypeSampleCreator;               \
                                                        \
     friend class o2::TypeInitializer;                  \
     friend class o2::Reflection;                       \

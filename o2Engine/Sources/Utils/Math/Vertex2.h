@@ -5,10 +5,10 @@
 
 namespace o2
 {
-	class Vertex2: public Vec2<float>
+	class Vertex2
 	{
 	public:
-		//    x, y; - from vec2<float>
+		float x, y;
 		float z;
 		ULong color;
 		float tu, tv;
@@ -32,27 +32,27 @@ namespace o2
 	};
 	
 	Vertex2::Vertex2():
-		Vec2<float>(), color(0), tu(0), tv(0), z(1)
+		x(0), y(0), color(0), tu(0), tv(0), z(1)
 	{}
 
 	Vertex2::Vertex2(float vx, float vy):
-		Vec2<float>(vx, vy), z(1), color(0), tu(0), tv(0)
+		x(vx), y(vy), z(1), color(0), tu(0), tv(0)
 	{}
 
 	Vertex2::Vertex2(float vx, float vy, float vz):
-		Vec2<float>(vx, vy), z(vz), color(0), tu(0), tv(0)
+		x(vx), y(vy), z(vz), color(0), tu(0), tv(0)
 	{}
 
 	Vertex2::Vertex2(float vx, float vy, float vz, ULong vcolor, float vtu, float vtv):
-		Vec2<float>(vx, vy), z(vz), color(vcolor), tu(vtu), tv(vtv)
+		x(vx), y(vy), z(vz), color(vcolor), tu(vtu), tv(vtv)
 	{}
 
 	Vertex2::Vertex2(float vx, float vy, ULong vcolor, float vtu, float vtv):
-		Vec2<float>(vx, vy), z(1), color(vcolor), tu(vtu), tv(vtv)
+		x(vx), y(vy), z(1), color(vcolor), tu(vtu), tv(vtv)
 	{}
 
 	Vertex2::Vertex2(const Vec2F& pos, ULong vcolor, float vtu, float vtv):
-		Vec2<float>(pos), z(1), color(vcolor), tu(vtu), tv(vtv)
+		x(pos.x), y(pos.y), z(1), color(vcolor), tu(vtu), tv(vtv)
 	{}
 
 	void Vertex2::Set(const Vec2F& pos, ULong ccolor, float u, float v)

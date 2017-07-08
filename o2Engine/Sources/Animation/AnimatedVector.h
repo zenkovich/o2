@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AnimatedValue.h"
+#include "Utils/Math/Vector2.h"
 
 namespace o2
 {
@@ -8,7 +9,7 @@ namespace o2
 	// Animated Vec2F value
 	// --------------------
 	template<>
-	class AnimatedValue<Vec2F>: public IAnimatedValue
+	class AnimatedValue<o2::Vec2F>: public IAnimatedValue
 	{
 	public:
 		class Key;

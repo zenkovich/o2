@@ -18,7 +18,7 @@ namespace Editor
 
 	struct FieldPropertiesInfo
 	{
-		Dictionary<FieldInfo*, IPropertyField*> properties;
+		Dictionary<const FieldInfo*, IPropertyField*> properties;
 
 		void Set(const Vector<IObject*>& targets);
 		void Set(const Vector<Pair<IObject*, IObject*>>& targets);

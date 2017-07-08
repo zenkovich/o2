@@ -68,7 +68,7 @@ private:                                               \
 	friend struct o2::GetTypeHelper;                   \
                                                        \
     template<typename _type>                           \
-    friend struct o2::Type::SampleCreator;             \
+    friend struct o2::TypeSampleCreator;               \
                                                        \
     friend class o2::TypeInitializer;                  \
     friend class o2::Reflection;                       \

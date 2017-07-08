@@ -1,22 +1,52 @@
 #pragma once
 
+#include "Utils/Containers/Vector.h"
+#include "Utils/Containers/Dictionary.h"
 #include "Utils/Delegates.h"
-#include "Utils/Math/Basis.h"
-#include "Utils/Math/Color.h"
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vertex2.h"
-#include "Utils/Property.h"
-#include "Utils/Reflection/FieldInfo.h"
-#include "Utils/Reflection/FunctionInfo.h"
-#include "Utils/Reflection/TypeTraits.h"
-#include "Utils/String.h"
-#include "Utils/UID.h"
+#include "Utils/CommonTypes.h"
+#include "Utils/StringDef.h"
 
 #define TypeOf(TYPE) GetTypeOf<TYPE>()
 
 namespace o2
 {
 	class IObject;
+	class FieldInfo;
+	class FunctionInfo;
+	class Type;
+
+	template<typename _key_type, typename _value_type>
+	class Dictionary;
+
+	template<typename _type, typename _getter>
+	const Type& GetTypeOf();
+
+	template<typename T, typename X>
+	struct GetTypeHelper;
+
+	template<typename _element_type>
+	struct VectorCountFieldSerializer;
+
+	typedef UInt TypeId;
+
+	// -----------------------------
+	// Type sample creator interface
+	// -----------------------------
+	struct ITypeSampleCreator
+	{
+		// Returns new sample of type
+		virtual void* CreateSample() const = 0;
+	};
+
+	// -------------------------------
+	// Specialized type sample creator
+	// -------------------------------
+	template<typename _type>
+	struct TypeSampleCreator: public ITypeSampleCreator
+	{
+		// Returns new sample of type
+		void* CreateSample() const { return mnew _type(); }
+	};
 
 	// -----------
 	// Object type
@@ -29,16 +59,13 @@ namespace o2
 			Regular, Vector, Dictionary, StringAccessor, Enumeration, Pointer, Property
 		};
 
-		typedef UInt Id;
 		typedef Vector<FieldInfo*> FieldInfosVec;
 		typedef Vector<FunctionInfo*> FunctionsInfosVec;
 		typedef Vector<Type*> TypesVec;
 
-		struct ISampleCreator;
-
 	public:
 		// Default constructor
-		Type(const String& name, ISampleCreator* creator, int size);
+		Type(const String& name, ITypeSampleCreator* creator, int size);
 
 		// Destructor
 		virtual ~Type();
@@ -53,7 +80,7 @@ namespace o2
 		const String& GetName() const;
 
 		// Returns id of type
-		Id ID() const;
+		TypeId ID() const;
 
 		// Returns size of type in bytes
 		int GetSize() const;
@@ -110,34 +137,15 @@ namespace o2
 		// --------------------
 		struct Dummy { static Type* type; };
 
-		// -----------------------------
-		// Type sample creator interface
-		// -----------------------------
-		struct ISampleCreator
-		{
-			// Returns new sample of type
-			virtual void* CreateSample() const = 0;
-		};
-
-		// -------------------------------
-		// Specialized type sample creator
-		// -------------------------------
-		template<typename _type>
-		struct SampleCreator: public ISampleCreator
-		{
-			// Returns new sample of type
-			void* CreateSample() const { return mnew _type(); }
-		};
-
 	protected:
-		Id                mId;            // Id of type
-		String            mName;          // Name of object type
-		TypesVec          mBaseTypes;     // Base types ids
-		FieldInfosVec     mFields;        // Fields information
-		FunctionsInfosVec mFunctions;     // Functions informations
-		ISampleCreator*   mSampleCreator; // Template type agent
-		mutable Type*     mPtrType;       // Pointer type from this
-		int               mSize;          // Size of type in bytes
+		TypeId                mId;            // Id of type
+		String                mName;          // Name of object type
+		TypesVec              mBaseTypes;     // Base types ids
+		FieldInfosVec         mFields;        // Fields information
+		FunctionsInfosVec     mFunctions;     // Functions informations
+		ITypeSampleCreator*   mSampleCreator; // Template type agent
+		mutable Type*         mPtrType;       // Pointer type from this
+		int                   mSize;          // Size of type in bytes
 
 		void(*mInitializeFunc)(Type*);    // Type initializing function
 
@@ -154,6 +162,20 @@ namespace o2
 
 		template<typename _type>
 		friend class StringPointerAccessorType;
+	};
+
+	// ----------------
+	// Fundamental type
+	// ----------------
+	template<typename _type>
+	class FundamentalType: public Type
+	{
+	public:
+		// Default constructor
+		FundamentalType(const String& name);
+
+		// Initialize type function
+		static void InitializeType(Type* type);
 	};
 
 	// ------------
@@ -182,7 +204,7 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		PropertyType(const String& name, ISampleCreator* creator, int size);
+		PropertyType(const String& name, ITypeSampleCreator* creator, int size);
 
 		// Returns type usage
 		Usage GetUsage() const;
@@ -212,7 +234,7 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		VectorType(const String& name, ISampleCreator* creator, int size);
+		VectorType(const String& name, ITypeSampleCreator* creator, int size);
 
 		// Returns type usage
 		virtual Usage GetUsage() const;
@@ -232,13 +254,24 @@ namespace o2
 		// Returns filed pointer by path
 		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
 
+		// Returns element field info. Element field info is same for all elements
+		FieldInfo* GetElementFieldInfo() const;
+
+		// Returns count field info. This field info can serialize and deserialize size of vector with storing and restoring elements
+		FieldInfo* GetCountFieldInfo() const;
+
 	protected:
 		const Type* mElementType;
+		FieldInfo*  mElementFieldInfo;
+		FieldInfo*  mCountFieldInfo;
 
 	protected:
 		// Searches field recursively by pointer
 		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<void*>& passedObjects) const;
+										   Vector<void*>& passedObjects) const; 
+		
+		template<typename _element_type>
+		friend struct VectorCountFieldSerializer;
 	};
 
 	// -----------------------
@@ -341,7 +374,7 @@ namespace o2
 	{
 	public:
 		// Constructor
-		EnumType(const String& name, ISampleCreator* creator, int size);
+		EnumType(const String& name, ITypeSampleCreator* creator, int size);
 
 		// Returns type usage
 		Usage GetUsage() const;
@@ -372,9 +405,6 @@ namespace o2
 
 		template<typename T, typename X>
 		friend struct o2::GetTypeHelper;
-
-		template<typename T>
-		friend struct RegularTypeGetter;
 
 		friend class Reflection;
 	};
@@ -425,6 +455,7 @@ namespace o2
 		template<typename _class_type, typename _res_type, typename ... _args>
 		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section);
 	};
+}
 
 	// -------------------------------
 	// Types meta information macroses
@@ -446,7 +477,13 @@ namespace o2
 	{                                                                   \
 	    typedef NAME thisclass;                                         \
 	    thisclass::type = type;                                         \
-	    thisclass* __this = 0;                                          
+	    thisclass* __this = 0;
+
+#define FUNDAMENTAL_META(NAME)                                          \
+    void FundamentalType<NAME>::InitializeType(o2::Type* type)          \
+	{                                                                   \
+	    typedef NAME thisclass;                                         \
+	    thisclass* __this = 0;
 
 #define BASE_CLASS(NAME) \
     o2::TypeInitializer::AddBaseType<NAME>(type)
@@ -462,6 +499,10 @@ namespace o2
 
 #define PROTECTED_FIELD(NAME) \
     o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME) - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::Protected)
+
+#define FUNDAMENTAL_FIELD(NAME) \
+    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME) - (size_t)(__this), __this->NAME, ProtectSection::Public)
+
 
 #define ATTRIBUTE(NAME) \
     AddAttribute(new NAME)
@@ -486,6 +527,15 @@ namespace o2
 
 #define END_META }
 
+#include "Utils/Property.h"
+#include "Utils/Reflection/FieldInfo.h"
+#include "Utils/Reflection/FunctionInfo.h"
+#include "Utils/Reflection/TypeTraits.h"
+#include "Utils/StringImpl.h"
+#include "Utils/UID.h"
+
+namespace o2
+{
 	// -------------------
 	// Type implementation
 	// -------------------
@@ -500,14 +550,27 @@ namespace o2
 		return _res_type();
 	}
 
+	// -----------------------------
+	// FundamentalType implementation
+	// -----------------------------
+
+	template<typename _type>
+	FundamentalType<_type>::FundamentalType(const String& name):
+		Type(name, new TypeSampleCreator<_type>(), sizeof(_type))
+	{}
+
+	template<typename _type>
+	void FundamentalType<_type>::InitializeType(Type* type)
+	{}
+
 	// ------------------------------
 	// TPropertyType<> implementation
 	// ------------------------------
-	
+
 	template<typename _value_type>
 	TPropertyType<_value_type>::TPropertyType():
-		PropertyType((String)"o2::Property<" + GetTypeOf<_value_type>().GetName() + ">", new SampleCreator<_value_type>(),
-			 sizeof(_value_type))
+		PropertyType((String)"o2::Property<" + GetTypeOf<_value_type>().GetName() + ">", new TypeSampleCreator<_value_type>(),
+					 sizeof(_value_type))
 	{
 		mValueType = &GetTypeOf<_value_type>();
 	}
@@ -515,6 +578,17 @@ namespace o2
 	// --------------------------
 	// TVectorType implementation
 	// --------------------------
+
+	template<typename _element_type>
+	struct VectorCountFieldSerializer: public FieldInfo::IFieldSerializer
+	{
+		VectorCountFieldSerializer() {}
+		void Serialize(void* object, DataNode& data) const;
+		void Deserialize(void* object, DataNode& data) const;
+		bool Equals(void* objectA, void* objectB) const;
+		void Copy(void* objectA, void* objectB) const;
+		FieldInfo::IFieldSerializer* Clone() const;
+	};
 
 	template<typename _element_type>
 	void* TVectorType<_element_type>::GetObjectVectorElementPtr(void* object, int idx) const
@@ -541,10 +615,75 @@ namespace o2
 
 	template<typename _element_type>
 	TVectorType<_element_type>::TVectorType():
-		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">", new SampleCreator<Vector<_element_type>>(),
-			 sizeof(Vector<_element_type>))
+		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">", new TypeSampleCreator<Vector<_element_type>>(),
+				   sizeof(Vector<_element_type>))
 	{
 		mElementType = &GetTypeOf<_element_type>();
+
+		typedef std::conditional<DataNode::IsSupport<_element_type>::value,
+			FieldInfo::FieldSerializer<_element_type>,
+			FieldInfo::IFieldSerializer>::type serializerType;
+
+		mElementFieldInfo = new FieldInfo("element", 0, mElementType, ProtectSection::Private, new serializerType());
+		mCountFieldInfo = new FieldInfo("count", 0, &GetTypeOf<int>(), ProtectSection::Public, new VectorCountFieldSerializer<_element_type>());
+	}
+
+	template<typename _element_type>
+	void VectorCountFieldSerializer<_element_type>::Serialize(void* object, DataNode& data) const
+	{
+		const VectorType& type = (const VectorType&)(GetTypeOf<Vector<_element_type>>());
+
+		int size = type.GetObjectVectorSize(object);
+		data["Size"].SetValue(size);
+
+		DataNode& elements = data["Elements"];
+		for (int i = 0; i < size; i++)
+		{
+			void* elementPtr = type.GetObjectVectorElementPtr(object, i);
+			type.mElementFieldInfo->Serialize(elementPtr, *elements.AddNode("Element" + (String)i));
+		}
+	}
+
+	template<typename _element_type>
+	void VectorCountFieldSerializer<_element_type>::Deserialize(void* object, DataNode& data) const
+	{
+		const VectorType& type = (const VectorType&)(GetTypeOf<Vector<_element_type>>());
+		int size = type.GetObjectVectorSize(object);
+		int newSize;
+		data["Size"].GetValue(newSize);
+		type.SetObjectVectorSize(object, newSize);
+
+		if (auto elementsData = data.GetNode("Elements"))
+		{
+			for (int i = size; i < newSize; i++)
+			{
+				if (auto elementData = elementsData->GetNode("Element" + (WString)i))
+				{
+					void* elementPtr = type.GetObjectVectorElementPtr(object, i);
+					type.mElementFieldInfo->Deserialize(elementPtr, *elementData);
+				}
+			}
+		}
+	}
+
+	template<typename _element_type>
+	bool VectorCountFieldSerializer<_element_type>::Equals(void* objectA, void* objectB) const
+	{
+		const VectorType& type = (const VectorType&)(GetTypeOf<Vector<_element_type>>());
+		return type.GetObjectVectorSize(objectA) == type.GetObjectVectorSize(objectB);
+	}
+
+	template<typename _element_type>
+	void VectorCountFieldSerializer<_element_type>::Copy(void* objectA, void* objectB) const
+	{
+		const VectorType& type = (const VectorType&)(GetTypeOf<Vector<_element_type>>());
+		type.SetObjectVectorSize(objectA, type.GetObjectVectorSize(objectB));
+	}
+
+	template<typename _element_type>
+	FieldInfo::IFieldSerializer* VectorCountFieldSerializer<_element_type>::Clone() const
+	{
+		return mnew VectorCountFieldSerializer();
 	}
 
 	// -----------------------------
@@ -554,7 +693,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	DictionaryType::DictionaryType(_key_type* x, _value_type* y):
 		Type((String)"o2::Dictionary<" + GetTypeOf<_key_type>().GetName() + ", " + GetTypeOf<_value_type>().GetName() + ">",
-			 new SampleCreator<Dictionary<_key_type, _value_type>>, sizeof(Dictionary<_key_type, _value_type>))
+			 new TypeSampleCreator<Dictionary<_key_type, _value_type>>, sizeof(Dictionary<_key_type, _value_type>))
 	{
 		mKeyType = &GetTypeOf<_key_type>();
 		mValueType = &GetTypeOf<_value_type>();
@@ -578,7 +717,7 @@ namespace o2
 	template<typename _return_type>
 	StringPointerAccessorType<_return_type>::StringPointerAccessorType():
 		Type((String)"Accessor<" + GetTypeOf<_return_type>().GetName() + "*, const o2::String&>",
-			 new SampleCreator<Accessor<_return_type*, const String&>>(),
+			 new TypeSampleCreator<Accessor<_return_type*, const String&>>(),
 			 sizeof(Accessor<_return_type*, const String&>))
 	{
 		mReturnType = &GetTypeOf<_return_type>();

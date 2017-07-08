@@ -38,8 +38,6 @@ namespace Editor
 		const Type*         mComponentType = nullptr; // Target component type
 
 	protected:
-		void GetAllProperties(const FieldPropertiesInfo& properties, Vector<IPropertyField*>& result) const;
-
-		void OnPropertyChanged(const String& path, const DataNode& prevValue, const DataNode& newValue);
+		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
 	};
 }

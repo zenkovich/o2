@@ -45,16 +45,9 @@ namespace Editor
 		mDataView->name = "component " + type->GetName();
 		mComponentType = type;
 		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, type, mFieldProperties, "");
-
-		Vector<IPropertyField*> allComponentProperties;
-		GetAllProperties(mFieldProperties, allComponentProperties);
-		for (auto prop : allComponentProperties)
-		{
-			prop->onChangeCompleted = [=](const DataNode& before, const DataNode& after) 
-			{ 
-				OnPropertyChanged(prop->GetValuePath(), before, after);
-			};
-		}
+		
+		for (auto prop : mFieldProperties.properties)
+			prop.Value()->onChangeCompleted = Func(this, &DefaultActorComponentViewer::OnPropertyChanged);
 
 		mSpoiler->name = "spoiler " + type->GetName();
 		mPropertiesLayout->name = "properties " + type->GetName();
@@ -67,27 +60,11 @@ namespace Editor
 		}));
 	}
 
-	void DefaultActorComponentViewer::GetAllProperties(const FieldPropertiesInfo& properties, 
-													   Vector<IPropertyField*>& result) const
-	{
-		for (auto kv : properties.properties)
-		{
-			result.Add(kv.Value());
-
-			auto objectProperty = dynamic_cast<ObjectProperty*>(kv.Value());
-			if (objectProperty)
-				GetAllProperties(objectProperty->GetPropertiesInfo(), result);
-
-			auto objectPtrProperty = dynamic_cast<ObjectPtrProperty*>(kv.Value());
-			if (objectPtrProperty)
-				GetAllProperties(objectPtrProperty->GetPropertiesInfo(), result);
-		}
-	}
-
 	void DefaultActorComponentViewer::OnPropertyChanged(const String& path, 
-														const DataNode& prevValue, const DataNode& newValue)
+														const Vector<DataNode>& prevValue, 
+														const Vector<DataNode>& newValue)
 	{
-		o2Debug.Log("Changed " + path + ": " + prevValue.Data() + " -> " + newValue.Data());
+		o2Debug.Log("Changed " + path);
 
 		ActorsPropertyChangeAction* action = new ActorsPropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedActors(), mComponentType, path, prevValue, newValue);
@@ -109,7 +86,6 @@ CLASS_META(Editor::DefaultActorComponentViewer)
 	PUBLIC_FUNCTION(const Type*, GetComponentType);
 	PUBLIC_FUNCTION(void, SepcializeComponentType, const Type*);
 	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, GetAllProperties, const FieldPropertiesInfo&, Vector<IPropertyField*>&);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const DataNode&, const DataNode&);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

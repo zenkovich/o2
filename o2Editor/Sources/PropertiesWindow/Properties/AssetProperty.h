@@ -128,6 +128,9 @@ namespace Editor
 
 		// Checks that value was changed and calls onChangeCompleted
 		void CheckValueChangeCompleted();
+
+		// Stores values to data
+		void StoreValues(Vector<DataNode>& data) const;
 	};
 
 	template<typename _type>
@@ -387,19 +390,30 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::CheckValueChangeCompleted()
 	{
-		DataNode commonValueData;
-		commonValueData = mCommonValue;
+		Vector<DataNode> valuesData;
+		StoreValues(valuesData);
 
-		if (mBeforeChangeValue != commonValueData)
-			onChangeCompleted(mBeforeChangeValue, commonValueData);
+		if (mBeforeChangeValues != valuesData)
+			onChangeCompleted(mValuesPath, mBeforeChangeValues, valuesData);
 	}
 
 	template<typename _type>
 	void AssetProperty<_type>::SetAssetIdByUser(UID id)
 	{
-		mBeforeChangeValue = mCommonValue;
+		StoreValues(mBeforeChangeValues);
 		SetAssetId(id);
 		CheckValueChangeCompleted();
+	}
+
+	template<typename _type>
+	void AssetProperty<_type>::StoreValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesPointers)
+		{
+			data.Add(DataNode());
+			data.Last() = mGetFunc(ptr.first);
+		}
 	}
 }
 
@@ -439,5 +453,6 @@ CLASS_TEMPLATE_META(Editor::AssetProperty<typename _type>)
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, SetAssetIdByUser, UID);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 }
 END_META;

@@ -100,11 +100,21 @@ namespace Editor
 
 		mObjectType = ((PointerType*)type)->GetUnpointedType();
 
-		o2EditorProperties.BuildObjectProperties(mPropertiesLayout, mObjectType, mFieldProperties, mValuesPath + "/");
+		o2EditorProperties.BuildObjectProperties(mPropertiesLayout, mObjectType, mFieldProperties, "");
 
-		auto onChangedProperty = [&]() { onChanged(); };
+		auto onChangedFunc = [&]() { onChanged(); };
+
+		auto onChangeCompletedFunc =
+			[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
+
 		for (auto prop : mFieldProperties.properties)
-			prop.Value()->onChanged += onChangedProperty;
+		{
+			prop.Value()->onChanged = onChangedFunc;
+			prop.Value()->onChangeCompleted = onChangeCompletedFunc;
+		}
 	}
 
 	void ObjectPtrProperty::Expand()

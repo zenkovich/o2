@@ -61,7 +61,7 @@ namespace o2
 		return nullptr;
 	}
 
-	const Type* Reflection::GetType(Type::Id id)
+	const Type* Reflection::GetType(TypeId id)
 	{
 		for (auto type : mInstance->mTypes)
 		{
@@ -148,4 +148,63 @@ namespace o2
 	REG_FUNDAMENTAL_TYPE(WString);
 	REG_FUNDAMENTAL_TYPE(DataNode);
 	REG_FUNDAMENTAL_TYPE(UID);
+
+	FUNDAMENTAL_META(RectF)
+	{
+		FUNDAMENTAL_FIELD(left);
+		FUNDAMENTAL_FIELD(right);
+		FUNDAMENTAL_FIELD(top);
+		FUNDAMENTAL_FIELD(bottom);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(RectI)
+	{
+		FUNDAMENTAL_FIELD(left);
+		FUNDAMENTAL_FIELD(right);
+		FUNDAMENTAL_FIELD(top);
+		FUNDAMENTAL_FIELD(bottom);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(BorderF)
+	{
+		FUNDAMENTAL_FIELD(left);
+		FUNDAMENTAL_FIELD(right);
+		FUNDAMENTAL_FIELD(top);
+		FUNDAMENTAL_FIELD(bottom);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(BorderI)
+	{
+		FUNDAMENTAL_FIELD(left);
+		FUNDAMENTAL_FIELD(right);
+		FUNDAMENTAL_FIELD(top);
+		FUNDAMENTAL_FIELD(bottom);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(Vec2F)
+	{
+		FUNDAMENTAL_FIELD(x);
+		FUNDAMENTAL_FIELD(y);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(Vec2I)
+	{
+		FUNDAMENTAL_FIELD(x);
+		FUNDAMENTAL_FIELD(y);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(Color4)
+	{
+		FUNDAMENTAL_FIELD(r);
+		FUNDAMENTAL_FIELD(g);
+		FUNDAMENTAL_FIELD(b);
+		FUNDAMENTAL_FIELD(a);
+	}
+	END_META;
 }
