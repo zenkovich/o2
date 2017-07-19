@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/ImageAsset.h"
+#include "Core/Actions/IAction.h"
 #include "Core/UI/FrameScrollView.h"
 #include "Render/Camera.h"
 #include "Render/FontRef.h"
@@ -90,6 +91,7 @@ namespace Editor
 	protected:
 		typedef Vector<Vec2F> PointsVec;
 		typedef Vector<SelectableDragHandle*> SelectableHandlesVec;
+		typedef Vector<IAction*> ActionsVec;
 
 		struct KeyHandles
 		{
@@ -103,7 +105,8 @@ namespace Editor
 			KeyHandles() {}
 			KeyHandles(const SelectableDragHandle& mainSample, const SelectableDragHandle& supportSample, UICurveEditor* editor);
 
-			void Draw();
+			void Draw(const RectF& camRect);
+			bool IsSomeHandleSelected() const;
 		};
 		typedef Vector<KeyHandles*> KeyHandlesVec;
 
@@ -148,38 +151,67 @@ namespace Editor
 		};
 		typedef Vector<RangeInfo*> RangeInfosVec;
 
-	protected:
-		UIContextMenu*         mContextMenu;                   // Context menu for editing keys properties, copying, pasting and other
+		struct SelectedHandlesInfo
+		{
+			int  index;
+			bool mainHandle;
+			bool leftSupportHandle;
+			bool rightSupportHandle;
 
-		SelectableDragHandle   mMainHandleSample;              // Main handle sample, uses to copy sprites @SERIALIZABLE
-		SelectableDragHandle   mSupportHandleSample;           // Support handle sample, uses to copy sprites @SERIALIZABLE
+			bool operator==(const SelectedHandlesInfo& other) const;
+		};
+		typedef Vector<SelectedHandlesInfo> SelectedHandlesInfosVec;
 
-		CurveInfosVec          mCurves;                        // Editing curves infos list 
-		RangeInfosVec          mRanges;                        // Curves ranges list
+		struct CurveKeysInfo
+		{
+			String                  curveId;
+			Curve::KeysVec          keys;
+			SelectedHandlesInfosVec selectedHandles;
 
-		SelectableHandlesVec   mSupportHandles;                // Support points handles list
-		SelectableHandlesVec   mSelectingHandlesBuf;           // Potentially selecting handles while selecting
-
-		Sprite*                mSelectionSprite = nullptr;     // Selection sprite @SERIALIZABLE
-		FontRef                mTextFont;                      // Captions text font @SERIALIZABLE
-		Text*                  mTextLeft = nullptr;            // Captions text drawable at left border
-		Text*                  mTextRight = nullptr;           // Captions text drawable at right border
-		Text*                  mTextTop = nullptr;             // Captions text drawable at top border
-		Text*                  mTextBottom = nullptr;          // Captions text drawable at bottom border
-
-		Vec2F                  mSelectingPressedPoint;         // Point, where cursor was pressed, selection starts here, in local space
-
-		FrameHandles           mTransformFrame;                // Keys transformation frame
-		bool                   mTransformFrameVisible = false; // Is tranform frame visible. it visible when 2 or more main handles was selected
-		Basis                  mTransformFrameBasis;           // Basis of transform frame in local space
-															   
-		bool                   mIsViewScrolling = false;       // Is scrolling view at this time
-
-		UIWindow*              mEditValueWindow;
-		UIEditBox*             mEditValueWindowValue;
-		UIEditBox*             mEditValueWindowPosition;
+			bool operator==(const CurveKeysInfo& other) const;
+		};
+		typedef Vector<CurveKeysInfo> CurveKeysInfosVec;
 
 	protected:
+		UIContextMenu*          mContextMenu;                   // Context menu for editing keys properties, copying, pasting and other
+							    
+		SelectableDragHandle    mMainHandleSample;              // Main handle sample, uses to copy sprites @SERIALIZABLE
+		SelectableDragHandle    mSupportHandleSample;           // Support handle sample, uses to copy sprites @SERIALIZABLE
+							    
+		CurveInfosVec           mCurves;                        // Editing curves infos list 
+		RangeInfosVec           mRanges;                        // Curves ranges list
+							    
+		SelectableHandlesVec    mSupportHandles;                // Support points handles list
+		SelectableHandlesVec    mSelectingHandlesBuf;           // Potentially selecting handles while selecting
+							    
+		Sprite*                 mSelectionSprite = nullptr;     // Selection sprite @SERIALIZABLE
+		FontRef                 mTextFont;                      // Captions text font @SERIALIZABLE
+		Text*                   mTextLeft = nullptr;            // Captions text drawable at left border
+		Text*                   mTextRight = nullptr;           // Captions text drawable at right border
+		Text*                   mTextTop = nullptr;             // Captions text drawable at top border
+		Text*                   mTextBottom = nullptr;          // Captions text drawable at bottom border
+							    
+		Vec2F                   mSelectingPressedPoint;         // Point, where cursor was pressed, selection starts here, in local space
+							    
+		FrameHandles            mTransformFrame;                // Keys transformation frame
+		bool                    mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
+		Basis                   mTransformFrameBasis;           // Basis of transform frame in local space
+								 							   
+		bool                    mIsViewScrolling = false;       // Is scrolling view at this time
+							    
+		UIWindow*               mEditValueWindow;               // Key position and value editing window
+		UIEditBox*              mEditValueWindowValue;          // Key value editing box
+		UIEditBox*              mEditValueWindowPosition;       // Key position editing box
+							    
+		CurveKeysInfosVec       mBeforeTransformKeys;           // Stored selected keys before handles transformed
+
+		ActionsVec              mUndoActions;                   // Actions that can be undo
+		ActionsVec              mRedoActions;                   // Actions that can be redo
+
+	protected:
+		// Calls when visible was changed. Sets context menu items priority
+		void OnVisibleChanged();
+
 		// Calls when scrolling
 		void OnScrolled(float scroll);
 
@@ -240,7 +272,7 @@ namespace Editor
 		// Calls when cursor double clicked, adds new point in curve
 		void OnCursorDblClicked(const Input::Cursor& cursor);
 
-		// Smoothes key support points and updates handles
+		// Smooths key support points and updates handles
 		void SmoothKey(CurveInfo* info, int idx);
 
 		// Calls when cursor pressed on this
@@ -276,11 +308,20 @@ namespace Editor
 		// Calls when selectable handle moved, moves all selected handles position
 		void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
 
+		// Calls when selectable handle completed changing
+		void OnHandleCompletedChange(SelectableDragHandle* handle);
+
 		// Sets all selected keys supports type
 		void SetSelectedKeysSupportsType(Curve::Key::Type type);
 
 		// Calls when transform frame was transformed
 		void OnTransformFrameTransformed(const Basis& basis);
+
+		// Calls when beginning transforming some handles. Stores selected keys before changing
+		void OnTransformBegin();
+
+		// Calls when transform completed. Checks that selected keys changed, creates action for undo/redo
+		void OnTransformCompleted();
 
 		// Calls when edit key window position edit box was changed
 		void OnEditKeyPositionChanged(const WString& str);
@@ -288,27 +329,111 @@ namespace Editor
 		// Calls when edit key window value edit box was changed
 		void OnEditKeyValueChanged(const WString& str);
 
-	// Context menu items functions
+		// Stores undo action, clears redo actions
+		void DoneAction(IAction* action);
+
+	
+		// On context menu edit pressed. Shows key edit window
 		void OnEditPressed();
 
+		// On context menu auto smooth pressed. Enables auto smoothing for selected keys
 		void OnAutoSmoothChecked(bool checked);
 
+		// On context menu flat pressed. Enables flat support handles for selected keys
 		void OnFlatChecked(bool checked);
 
+		// On context menu free pressed. Free handles transform for selected keys
 		void OnFreeChecked(bool checked);
 
+		// On context menu broken pressed. Breaks connection between left and right supports
 		void OnBrokenChecked(bool checked);
 
+		// On context menu discrete pressed. Sets discrete keys transition for selected
 		void OnDiscreteChecked(bool checked);
 
+		// On context menu copy pressed. Stores keys into buffer
 		void OnCopyPressed();
 
+		// On context menu cut pressed. Stores keys into buffer and removes them
 		void OnCutPressed();
 
+		// On context menu paste pressed. Inserts keys from buffer at cursor position
 		void OnPastePressed();
 
+		// On context menu delete pressed. Deletes selected keys
 		void OnDeletePressed();
 
+		// On context menu insert pressed. Inserts keys from buffer and moves keys to right
 		void OnInsertPressed();
+
+		// On context menu undo pressed. Reverts previous action and puts into actions stack
+		void OnUndoPressed();
+
+		// On context menu redo pressed. Restores action from stack
+		void OnRedoPressed();
+
+	protected:
+		class AddKeysAction: public IAction
+		{
+		public:
+			AddKeysAction();
+			AddKeysAction(const CurveKeysInfosVec& infos, UICurveEditor* editor);
+
+			String GetName();
+			void Redo();
+			void Undo();
+
+			SERIALIZABLE(AddKeysAction);
+
+		protected:
+			CurveKeysInfosVec mInfos;
+			UICurveEditor*    mEditor;
+		};
+
+		class DeleteKeysAction: public IAction
+		{
+		public:
+			DeleteKeysAction();
+			DeleteKeysAction(const CurveKeysInfosVec& infos, UICurveEditor* editor);
+
+			String GetName();
+			void Redo();
+			void Undo();
+
+			SERIALIZABLE(DeleteKeysAction);
+
+		protected:
+			CurveKeysInfosVec mInfos;
+			UICurveEditor*    mEditor;
+		};
+
+		class KeysChangeAction: public IAction
+		{
+		public:
+			struct KeysInfo
+			{
+				String                  curveId;
+				Curve::KeysVec          beforeKeys;
+				Curve::KeysVec          afterKeys;
+				SelectedHandlesInfosVec selectedHandles;
+
+				bool operator==(const KeysInfo& other) const;
+			};
+			typedef Vector<KeysInfo> KeysInfosVec;
+
+		public:
+			KeysChangeAction();
+			KeysChangeAction(const KeysInfosVec& infos, UICurveEditor* editor);
+
+			String GetName();
+			void Redo();
+			void Undo();
+
+			SERIALIZABLE(KeysChangeAction);
+
+		protected:
+			KeysInfosVec   mInfos;
+			UICurveEditor* mEditor;
+		};
 	};
 }

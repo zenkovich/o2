@@ -90,27 +90,18 @@ namespace o2
 		if (!mEnabled)
 			return;
 
-		Vec2F screenPosition = LocalToScreen(mPosition);
+		UpdateScreenPosition();
+
 		float alphaChangeCoef = 15.0f;
 
-		if (pixelPerfect)
-		{
-			screenPosition.x = Math::Round(screenPosition.x);
-			screenPosition.y = Math::Round(screenPosition.y);
-		}
-
 		if (mRegularSprite)
-		{
-			mRegularSprite->SetPosition(screenPosition);
 			mRegularSprite->Draw();
-		}
 
 		if (mHoverSprite)
 		{
 			mHoverSprite->SetTransparency(Math::Lerp(mHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
 										  o2Time.GetDeltaTime()*alphaChangeCoef));
 
-			mHoverSprite->SetPosition(screenPosition);
 			mHoverSprite->Draw();
 		}
 
@@ -119,7 +110,6 @@ namespace o2
 			mPressedSprite->SetTransparency(Math::Lerp(mPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
 											o2Time.GetDeltaTime()*alphaChangeCoef));
 
-			mPressedSprite->SetPosition(screenPosition);
 			mPressedSprite->Draw();
 		}
 
@@ -162,6 +152,9 @@ namespace o2
 			o2Application.SetCursor(CursorType::Arrow);
 
 		onReleased();
+
+		if (mDragBeginPosition != mPosition)
+			onChangeCompleted();
 	}
 
 	void DragHandle::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -169,6 +162,9 @@ namespace o2
 		mIsDragging = false;
 
 		onReleased();
+
+		if (mDragBeginPosition != mPosition)
+			onChangeCompleted();
 	}
 
 	void DragHandle::OnCursorStillDown(const Input::Cursor& cursor)
@@ -210,7 +206,34 @@ namespace o2
 
 	void DragHandle::SetPosition(const Vec2F& position)
 	{
-		mPosition = checkPositionFunc(position);
+		mPosition = checkPositionFunc(position); 
+
+		UpdateScreenPosition();
+	}
+
+	const Vec2F& DragHandle::GetScreenPosition() const
+	{
+		return mScreenPosition;
+	}
+
+	void DragHandle::UpdateScreenPosition()
+	{
+		mScreenPosition = LocalToScreen(mPosition);
+
+		if (pixelPerfect)
+		{
+			mScreenPosition.x = Math::Round(mScreenPosition.x);
+			mScreenPosition.y = Math::Round(mScreenPosition.y);
+		}
+
+		if (mRegularSprite)
+			mRegularSprite->SetPosition(mScreenPosition);
+
+		if (mHoverSprite)
+			mHoverSprite->SetPosition(mScreenPosition);
+
+		if (mPressedSprite)
+			mPressedSprite->SetPosition(mScreenPosition);
 	}
 
 	void DragHandle::SetDragPosition(const Vec2F& position)
@@ -384,21 +407,14 @@ namespace o2
 	{
 		DragHandle::Draw();
 
-		Vec2F screenPosition = LocalToScreen(mPosition);
 		float alphaChangeCoef = 15.0f;
-
-		if (pixelPerfect)
-		{
-			screenPosition.x = Math::Round(screenPosition.x);
-			screenPosition.y = Math::Round(screenPosition.y);
-		}
 
 		if (mSelectedSprite)
 		{
 			mSelectedSprite->SetTransparency(Math::Lerp(mSelectedSprite->GetTransparency(), mIsSelected ? 1.0f : 0.0f,
 											 o2Time.GetDeltaTime()*alphaChangeCoef));
 
-			mSelectedSprite->SetPosition(screenPosition);
+			mSelectedSprite->SetPosition(mScreenPosition);
 			mSelectedSprite->Draw();
 		}
 	}
@@ -490,6 +506,14 @@ namespace o2
 		if (mIsDragging)
 		{
 			mIsDragging = false;
+
+			if (mDragBeginPosition != mPosition)
+			{
+				if (mSelectGroup)
+					mSelectGroup->OnHandleCompletedChange(this);
+				else
+					onChangeCompleted();
+			}
 		}
 		else
 		{
@@ -643,6 +667,7 @@ CLASS_META(o2::DragHandle)
 	PUBLIC_FIELD(onChangedPos);
 	PUBLIC_FIELD(onPressed);
 	PUBLIC_FIELD(onReleased);
+	PUBLIC_FIELD(onChangeCompleted);
 	PUBLIC_FIELD(screenToLocalTransformFunc);
 	PUBLIC_FIELD(localToScreenTransformFunc);
 	PUBLIC_FIELD(checkPositionFunc);
@@ -653,6 +678,7 @@ CLASS_META(o2::DragHandle)
 	PROTECTED_FIELD(mHoverSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPressedSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPosition);
+	PROTECTED_FIELD(mScreenPosition);
 	PROTECTED_FIELD(mAngle);
 	PROTECTED_FIELD(mDragOffset);
 	PROTECTED_FIELD(mDragPosition);
@@ -664,6 +690,7 @@ CLASS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
+	PUBLIC_FUNCTION(const Vec2F&, GetScreenPosition);
 	PUBLIC_FUNCTION(void, SetDragPosition, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetPosition);
 	PUBLIC_FUNCTION(Vec2F, GetDraggingOffset);
@@ -688,6 +715,7 @@ CLASS_META(o2::DragHandle)
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, UpdateScreenPosition);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

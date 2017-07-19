@@ -313,14 +313,21 @@ namespace Editor
 
 	void MenuPanel::OnCurveEditorTestPressed()
 	{
-		Curve* curve = mnew Curve();
-		*curve = Curve::EaseInOut();
-		Curve* curve2 = mnew Curve();
-		*curve2 = Curve::EaseIn();
-
 		CurveEditorDlg::Show(Function<void()>());
-		CurveEditorDlg::AddEditingCurve("test", curve);
-		CurveEditorDlg::AddEditingCurve("test2", curve2);
+
+		int testCurves = 50;
+		int testKeys = 50;
+		for (int i = 0; i < testCurves; i++)
+		{
+			Curve* curve = mnew Curve();
+
+			for (int j = 0; j < testKeys; j++)
+			{
+				curve->AppendKey(Math::Random(0.1f, 2.0f), Math::Random(-1.0f, 1.0f), 1.0f);
+			}
+
+			CurveEditorDlg::AddEditingCurve("test" + (String)i, curve);
+		}
 	}
 
 	String MenuPanel::GetOpenFileNameDialog(const String& title, const Dictionary<String, String>& extensions)

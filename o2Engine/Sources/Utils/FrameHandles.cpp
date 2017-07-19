@@ -44,33 +44,60 @@ namespace o2
 		mPivotHandle.SetHoverSprite(mnew Sprite("ui/UI2_pivot_select.png"));
 		mPivotHandle.SetPressedSprite(mnew Sprite("ui/UI2_pivot_pressed.png"));
 
-		mLeftTopHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnLeftTopHandle);
-		mLeftHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnLeftHandle);
-		mLeftBottomHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnLeftBottomHandle);
-		mTopHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnTopHandle);
-		mBottomHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnBottomHandle);
-		mRightTopHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnRightTopHandle);
-		mRightHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnRightHandle);
-		mRightBottomHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnRightBottomHandle);
-		mLeftTopRotateHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnLeftTopRotateHandle);
-		mLeftBottomRotateHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnLeftBottomRotateHandle);
-		mRightTopRotateHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnRightTopRotateHandle);
-		mRightBottomRotateHandle.onChangedPos = Function<void(const Vec2F&)>(this, &FrameHandles::OnRightBottomRotateHandle);
+		mLeftTopHandle.onChangedPos = Func(this, &FrameHandles::OnLeftTopHandle);
+		mLeftHandle.onChangedPos = Func(this, &FrameHandles::OnLeftHandle);
+		mLeftBottomHandle.onChangedPos = Func(this, &FrameHandles::OnLeftBottomHandle);
+		mTopHandle.onChangedPos = Func(this, &FrameHandles::OnTopHandle);
+		mBottomHandle.onChangedPos = Func(this, &FrameHandles::OnBottomHandle);
+		mRightTopHandle.onChangedPos = Func(this, &FrameHandles::OnRightTopHandle);
+		mRightHandle.onChangedPos = Func(this, &FrameHandles::OnRightHandle);
+		mRightBottomHandle.onChangedPos = Func(this, &FrameHandles::OnRightBottomHandle);
+		mLeftTopRotateHandle.onChangedPos = Func(this, &FrameHandles::OnLeftTopRotateHandle);
+		mLeftBottomRotateHandle.onChangedPos = Func(this, &FrameHandles::OnLeftBottomRotateHandle);
+		mRightTopRotateHandle.onChangedPos = Func(this, &FrameHandles::OnRightTopRotateHandle);
+		mRightBottomRotateHandle.onChangedPos = Func(this, &FrameHandles::OnRightBottomRotateHandle);
 
-		mLeftTopHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mLeftHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mLeftBottomHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mTopHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mBottomHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mRightTopHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mRightHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mRightBottomHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mPivotHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mLeftTopRotateHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mLeftBottomRotateHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mRightTopRotateHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
-		mRightBottomRotateHandle.onPressed = Function<void()>(this, &FrameHandles::OnHandlePressed);
+		mLeftTopHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mLeftHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mLeftBottomHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mTopHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mBottomHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mRightTopHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mRightHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mRightBottomHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mPivotHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mLeftTopRotateHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mLeftBottomRotateHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mRightTopRotateHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
+		mRightBottomRotateHandle.onPressed = Func(this, &FrameHandles::OnHandlePressed);
 
+		mLeftTopHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mLeftHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mLeftBottomHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mTopHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mBottomHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mRightTopHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mRightHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mRightBottomHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mPivotHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mLeftTopRotateHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mLeftBottomRotateHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mRightTopRotateHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+		mRightBottomRotateHandle.onReleased = Func(this, &FrameHandles::OnHandleReleased);
+
+		mLeftTopHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mLeftHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mLeftBottomHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mTopHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mBottomHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mRightTopHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mRightHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mRightBottomHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mPivotHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mLeftTopRotateHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mLeftBottomRotateHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mRightTopRotateHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
+		mRightBottomRotateHandle.onChangeCompleted = Func(this, &FrameHandles::OnChangeCompleted);
 	}
 
 	void FrameHandles::SetBasis(const Basis& basis)
@@ -160,6 +187,8 @@ namespace o2
 			mBeginDraggingOffset = cursor.position - mFrame.offs;
 
 			SetHandlesEnable(false);
+
+			onPressed();
 		}
 	}
 
@@ -169,6 +198,11 @@ namespace o2
 		{
 			mIsDragging = false;
 			SetHandlesEnable(true);
+
+			onReleased();
+
+			if (mBeginDraggingFrame != mFrame)
+				onChangeCompleted();
 		}
 	}
 
@@ -178,6 +212,8 @@ namespace o2
 		{
 			mIsDragging = false;
 			SetHandlesEnable(true);
+
+			onReleased();
 		}
 	}
 
@@ -445,6 +481,12 @@ namespace o2
 	void FrameHandles::OnHandlePressed()
 	{
 		mBeginDraggingFrame = mFrame;
+		onPressed();
+	}
+
+	void FrameHandles::OnHandleReleased()
+	{
+		onReleased();
 	}
 
 	void FrameHandles::SetHandlesEnable(bool enable)
@@ -540,6 +582,11 @@ namespace o2
 		UpdateHandlesTransform();
 
 		onTransformed(mFrame);
+	}
+
+	void FrameHandles::OnChangeCompleted()
+	{
+		onChangeCompleted();
 	}
 
 }

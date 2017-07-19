@@ -417,22 +417,22 @@ namespace o2
 
 	void UIContextMenu::OnKeyPressed(const Input::Key& key)
 	{
-		if (mVisibleContextMenu && mVisibleContextMenu->IsVisible() && mVisibleContextMenu != this)
-			return;
-
-		for (auto child : mItemsLayout->mChilds)
-		{
-			if (child->GetType() == TypeOf(UIContextMenuItem))
-			{
-				auto item = (UIContextMenuItem*)child;
-
-				if (item->shortcut.IsPressed())
-				{
-					item->onClick();
-					break;
-				}
-			}
-		}
+// 		if (mVisibleContextMenu && mVisibleContextMenu->IsVisible() && mVisibleContextMenu != this)
+// 			return;
+// 
+// 		for (auto child : mItemsLayout->mChilds)
+// 		{
+// 			if (child->GetType() == TypeOf(UIContextMenuItem))
+// 			{
+// 				auto item = (UIContextMenuItem*)child;
+// 
+// 				if (item->shortcut.IsPressed())
+// 				{
+// 					item->onClick();
+// 					break;
+// 				}
+// 			}
+// 		}
 	}
 
 	void UIContextMenu::HideWithParent()
@@ -587,6 +587,26 @@ namespace o2
 	void UIContextMenu::SetMaxItemsVisible(int count)
 	{
 		mMaxVisibleItems = count;
+	}
+
+	void UIContextMenu::SetItemsMaxPriority()
+	{
+		for (auto child : mItemsLayout->mChilds)
+		{
+			UIContextMenuItem* item = dynamic_cast<UIContextMenuItem*>(child);
+			if (item)
+				item->SetMaxPriority();
+		}
+	}
+
+	void UIContextMenu::SetItemsMinPriority()
+	{
+		for (auto child : mItemsLayout->mChilds)
+		{
+			UIContextMenuItem* item = dynamic_cast<UIContextMenuItem*>(child);
+			if (item)
+				item->SetMinPriority();
+		}
 	}
 
 	bool UIContextMenu::IsScrollable() const
@@ -781,7 +801,7 @@ namespace o2
 		if (auto checkLayer = widget->GetLayerDrawable<Sprite>("check"))
 			checkLayer->enabled = item.checked;
 
-		widget->shortcut = item.shortcut;
+		widget->SetShortcut(item.shortcut);
 		widget->SetCheckable(item.checkable);
 		widget->onChecked = item.onChecked;
 
@@ -815,7 +835,7 @@ namespace o2
 				res.text = textLayer->text;
 
 			if (auto shortcutLayer = contextItem->GetLayerDrawable<Text>("shortcut"))
-				res.shortcut = contextItem->shortcut;
+				res.shortcut = contextItem->GetShortcut();
 
 			if (auto subMenu = contextItem->FindChild<UIContextMenu>())
 				res.subItems = subMenu->GetItems();
@@ -882,10 +902,20 @@ namespace o2
 		return mCheckable;
 	}
 
+	void UIContextMenuItem::SetShortcut(const ShortcutKeys& shortcut)
+	{
+		ShortcutKeysListener::SetShortcut(shortcut);
+	}
+
 	void UIContextMenuItem::OnChildAdded(UIWidget* child)
 	{
 		if (child->GetType() == TypeOf(UIContextMenu))
 			mSubMenu = (UIContextMenu*)child;
+	}
+
+	void UIContextMenuItem::OnShortcutPressed()
+	{
+		onClick();
 	}
 
 }
@@ -893,10 +923,10 @@ namespace o2
 CLASS_META(o2::UIContextMenuItem)
 {
 	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::ShortcutKeysListener);
 
 	PUBLIC_FIELD(onClick);
 	PUBLIC_FIELD(onChecked);
-	PUBLIC_FIELD(shortcut);
 	PROTECTED_FIELD(mSubMenu);
 	PROTECTED_FIELD(mChecked);
 	PROTECTED_FIELD(mCheckable);
@@ -906,7 +936,9 @@ CLASS_META(o2::UIContextMenuItem)
 	PUBLIC_FUNCTION(bool, IsChecked);
 	PUBLIC_FUNCTION(void, SetCheckable, bool);
 	PUBLIC_FUNCTION(bool, IsCheckable);
+	PUBLIC_FUNCTION(void, SetShortcut, const ShortcutKeys&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
+	PROTECTED_FUNCTION(void, OnShortcutPressed);
 }
 END_META;
 
@@ -958,6 +990,8 @@ CLASS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
 	PUBLIC_FUNCTION(void, SetMinFitSize, float);
 	PUBLIC_FUNCTION(void, SetMaxItemsVisible, int);
+	PUBLIC_FUNCTION(void, SetItemsMaxPriority);
+	PUBLIC_FUNCTION(void, SetItemsMinPriority);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);

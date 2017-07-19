@@ -581,6 +581,8 @@ namespace o2
 	template<typename _key, typename _value>
 	void DataNode::GetValue(Dictionary<_key, _value>& value) const
 	{
+		value.Clear();
+
 		int count = mChildNodes.Count();
 		for (auto childNode : mChildNodes)
 		{
@@ -601,6 +603,8 @@ namespace o2
 	template<typename _type>
 	void DataNode::GetValue(Vector<_type>& value) const
 	{
+		value.Clear();
+
 		for (auto childNode : mChildNodes)
 		{
 			_type v = _type();
@@ -612,6 +616,8 @@ namespace o2
 	template<typename _type>
 	void DataNode::GetValueRaw(Vector<_type>& value) const
 	{
+		value.Clear();
+
 		for (auto childNode : mChildNodes)
 		{
 			_type v = _type();

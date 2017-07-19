@@ -30,7 +30,7 @@ namespace Editor
 		~CurveEditorDlg();
 
 		// Shows editor dialog
-		static void Show(Function<void()> onChanged);
+		static void Show(Function<void()> onChanged, Function<void()> onCompleted = Function<void()>());
 
 		// Adds editing curve with color. If color is default it will be randomized
 		static void AddEditingCurve(const String& id, Curve* curve, const Color4& color = Color4::Green());
@@ -52,11 +52,15 @@ namespace Editor
 
 	protected:
 		Function<void()> mOnChangedCallback;
+		Function<void()> mOnChangeCompletedCallback;
 
 		UIWindow*      mWindow;
 		UICurveEditor* mEditorWidget;
 
 	protected:
+		// Calls when hiding, calls completed callback
+		void OnHide();
+
 		// Initialize controls
 		void InitializeControls();
 

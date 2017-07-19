@@ -24,7 +24,8 @@ namespace o2
 
 		Function<void(const Vec2F&)> onChangedPos;        // On position changed event
 		Function<void()>             onPressed;           // Pressed cursor on handle event
-		Function<void()>             onReleased;          // Pressed cursor event
+		Function<void()>             onReleased;          // Released cursor event
+		Function<void()>             onChangeCompleted;   // Change completed event
 
 		Function<Vec2F(const Vec2F&)> screenToLocalTransformFunc;  // Screen position to local transformation function
 		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc;  // Local position to screen transformation function
@@ -56,6 +57,9 @@ namespace o2
 
 		// Sets position
 		void SetPosition(const Vec2F& position);
+
+		// Reuturns handle screen position, transformed from position with localToScreenTransformFunc
+		const Vec2F& GetScreenPosition() const;
 
 		// Sets drag position of handle, updates handle final position after position checking
 		void SetDragPosition(const Vec2F& position);
@@ -109,6 +113,7 @@ namespace o2
 		Sprite* mPressedSprite = nullptr;  // Pressed view sprite @SERIALIZABLE
 
 		Vec2F  mPosition;                  // Current handle position, checked by checkPositionFunc
+		Vec2F  mScreenPosition;            // Handle screen position, transformed from mPosition with localToScreenTransformFunc
 		float  mAngle = 0.0f;              // Handle rotation angle in radians
 		Vec2F  mDragOffset;                // Dragging offset from cursor in local space to center
 		Vec2F  mDragPosition;              // Current drag handle position
@@ -148,6 +153,9 @@ namespace o2
 
 		// Calls when right mouse button was released (only when right mouse button pressed this at previous time), calls onRightButtonReleased event
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+
+		// Updates screen position from position with localToScreenTransformFunc
+		void UpdateScreenPosition();
 
 		// Initializes properties
 		void InitializeProperties();
@@ -200,6 +208,9 @@ namespace o2
 
 		// Calls when selectable handle moved, moves all selected handles position
 		virtual void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
+
+		// Calls when selectable handle completed changing
+		virtual void OnHandleCompletedChange(SelectableDragHandle* handle) {}
 
 		// Sets handle selected state without adding to selected handles array
 		void SetHandleSelectedState(SelectableDragHandle* handle, bool selected);

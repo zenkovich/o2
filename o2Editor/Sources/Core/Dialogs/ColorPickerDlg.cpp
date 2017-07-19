@@ -25,6 +25,7 @@ namespace Editor
 		mWindow->layout.size = Vec2F(200, 300);
 
 		mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
+		mWindow->onHide = Func(this, &ColorPickerDlg::OnHide);
 	}
 
 	ColorPickerDlg::~ColorPickerDlg()
@@ -40,6 +41,11 @@ namespace Editor
 		mInstance->mOnChangedCallback = onChanged;
 		mInstance->mOnCompletedCallback = onCompleted;
 		mInstance->UpdateHandlesValues();
+	}
+
+	void ColorPickerDlg::OnHide()
+	{
+		mOnCompletedCallback();
 	}
 
 	void ColorPickerDlg::InitializeControls()
@@ -113,7 +119,7 @@ namespace Editor
 		mHUEBar->AddLayer("color", mnew Sprite(mHUEBarTexture, RectI(0, 0, 20, 256)), Layout::BothStretch(1, 1, 1, 1),
 						  0.5f);
 
-		mHUEBar->onChange = Function<void(float)>(this, &ColorPickerDlg::OnHUEEdited);
+		mHUEBar->onChange = Func(this, &ColorPickerDlg::OnHUEEdited);
 
 		pickAreaContainer->AddChild(mHUEBar);
 
@@ -134,7 +140,7 @@ namespace Editor
 			colorTypes.Add(kv.Value());
 
 		mTypeDropdown->AddItems(colorTypes);
-		mTypeDropdown->onSelectedText = Function<void(const WString&)>(this, &ColorPickerDlg::OnColorTypeSelected);
+		mTypeDropdown->onSelectedText = Func(this, &ColorPickerDlg::OnColorTypeSelected);
 
 		mWindow->AddChild(mTypeDropdown);
 
@@ -144,16 +150,16 @@ namespace Editor
 
 		colorParamsArea->AddChilds({
 			InitializeColorParameter(mColor1ParamName, mColor1ParamBar, mColor1ParamEdit, mColor1ParamBarBitmap,
-			mColor1ParamBarTexture, Function<void(float)>(this, &ColorPickerDlg::OnColor1ParameterEdited)),
+			mColor1ParamBarTexture, Func(this, &ColorPickerDlg::OnColor1ParameterEdited)),
 
 			InitializeColorParameter(mColor2ParamName, mColor2ParamBar, mColor2ParamEdit, mColor2ParamBarBitmap,
-			mColor2ParamBarTexture, Function<void(float)>(this, &ColorPickerDlg::OnColor2ParameterEdited)),
+			mColor2ParamBarTexture, Func(this, &ColorPickerDlg::OnColor2ParameterEdited)),
 
 			InitializeColorParameter(mColor3ParamName, mColor3ParamBar, mColor3ParamEdit, mColor3ParamBarBitmap,
-			mColor3ParamBarTexture, Function<void(float)>(this, &ColorPickerDlg::OnColor3ParameterEdited)),
+			mColor3ParamBarTexture, Func(this, &ColorPickerDlg::OnColor3ParameterEdited)),
 
 			InitializeColorParameter(mColorAParamName, mColorAParamBar, mColorAParamEdit, mColorAParamBarBitmap,
-			mColorAParamBarTexture, Function<void(float)>(this, &ColorPickerDlg::OnColorAParameterEdited))
+			mColorAParamBarTexture, Func(this, &ColorPickerDlg::OnColorAParameterEdited))
 		});
 
 		mWindow->AddChild(colorParamsArea);
@@ -478,7 +484,6 @@ namespace Editor
 	void ColorPickerDlg::OnCursorPressedOutside()
 	{
 		mOnChangedCallback(mColorValue);
-		mOnCompletedCallback();
 		mWindow->Hide();
 	}
 }

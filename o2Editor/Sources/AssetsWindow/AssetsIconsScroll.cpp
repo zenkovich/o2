@@ -38,7 +38,7 @@ namespace Editor
 		mGrid->spacing = 5;
 		mGrid->arrangeAxis = TwoDirection::Horizontal;
 		mGrid->arrangeAxisMaxCells = 5;
-		onLayoutChanged += Function<void()>(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
+		onLayoutChanged += Func(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
 		AddChild(mGrid);
 
 		mDragIcon = mnew UIAssetIcon();
@@ -65,10 +65,10 @@ namespace Editor
 		mGrid->spacing = 5;
 		mGrid->arrangeAxis = TwoDirection::Horizontal;
 		mGrid->arrangeAxisMaxCells = 5;
-		onLayoutChanged += Function<void()>(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
+		onLayoutChanged += Func(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
 		AddChild(mGrid);
 
-		onLayoutChanged += Function<void()>(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
+		onLayoutChanged += Func(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
 
 		mDragIcon = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -398,7 +398,7 @@ namespace Editor
 				targets = mSelectedPreloadedAssets.Cast<IObject*>();
 
 			if (!targets.IsEmpty())
-				o2EditorProperties.SetTargets(targets, Function<void()>(this, &UIAssetsIconsScrollArea::CheckPreloadedAssetsSaving));
+				o2EditorProperties.SetTargets(targets, Func(this, &UIAssetsIconsScrollArea::CheckPreloadedAssetsSaving));
 
 			mChangePropertiesTargetsFromThis = false;
 		}
@@ -698,6 +698,9 @@ namespace Editor
 		mContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true));
 		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
 
+		onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
+		onUnfocused = [&]() { mContextMenu->SetItemsMinPriority(); };
+
 		AddChild(mContextMenu);
 	}
 
@@ -864,36 +867,24 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextCopyPressed()
 	{
-		if (!IsFocused())
-			return;
-
 		o2EditorAssets.CopyAssets(
 			mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().path; }));
 	}
 
 	void UIAssetsIconsScrollArea::OnContextCutPressed()
 	{
-		if (!IsFocused())
-			return;
-
 		o2EditorAssets.CutAssets(
 			mSelectedAssetsIcons.Select<String>([](UIAssetIcon* x) { return x->GetAssetInfo().path; }));
 	}
 
 	void UIAssetsIconsScrollArea::OnContextPastePressed()
 	{
-		if (!IsFocused())
-			return;
-
 		o2EditorAssets.PasteAssets(mCurrentPath);
 	}
 
 
 	void UIAssetsIconsScrollArea::OnContextDeletePressed()
 	{
-		if (!IsFocused())
-			return;
-
 		for (auto asset : mSelectedPreloadedAssets)
 			delete asset;
 
@@ -905,59 +896,38 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextOpenPressed()
 	{
-		if (!IsFocused())
-			return;
-
 		if (mSelectedAssetsIcons.Count() > 0)
 			o2EditorAssets.OpenAndEditAsset(mSelectedAssetsIcons.Last()->GetAssetInfo().id);
 	}
 
 	void UIAssetsIconsScrollArea::OnContextShowInExplorerPressed()
 	{
-		if (!IsFocused())
-			return;
-
 		if (mSelectedAssetsIcons.Count() > 0)
 			o2EditorAssets.OpenAsset(mSelectedAssetsIcons.Last()->GetAssetInfo().id);
 	}
 
 	void UIAssetsIconsScrollArea::OnContextImportPressed()
 	{
-		if (!IsFocused())
-			return;
-
 		o2EditorAssets.ImportAssets(mCurrentPath);
 	}
 
 	void UIAssetsIconsScrollArea::OnContextCreateFolderPressed()
 	{
-		if (!IsFocused())
-			return;
-
 		o2EditorAssets.CreateFolderAsset(mCurrentPath);
 	}
 
 	void UIAssetsIconsScrollArea::OnContextCreatePrefabPressed()
 	{
-		if (!IsFocused())
-			return;
-
 		o2EditorAssets.CreatePrefabAsset(mCurrentPath);
 	}
 
 	void UIAssetsIconsScrollArea::OnContextCreateScriptPressed()
 	{
-		if (!IsFocused())
-			return;
-
 		o2EditorAssets.CreateScriptAsset(mCurrentPath);
 	}
 
 	void UIAssetsIconsScrollArea::OnContextCreateAnimationPressed()
 	{
-		if (!IsFocused())
-			return;
-
 		o2EditorAssets.CreateAnimationAsset(mCurrentPath);
 	}
 

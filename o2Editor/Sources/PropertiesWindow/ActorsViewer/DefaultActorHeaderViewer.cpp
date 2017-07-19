@@ -49,17 +49,17 @@ namespace Editor
 
 		mPrototypeApplyBtn = o2UI.CreateWidget<UIButton>("accept prototype");
 		mPrototypeApplyBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-40, -18));
-		mPrototypeApplyBtn->onClick = Function<void()>(this, &DefaultActorHeaderViewer::OnApplyPrototypePressed);
+		mPrototypeApplyBtn->onClick = Func(this, &DefaultActorHeaderViewer::OnApplyPrototypePressed);
 		prototypeRoot->AddChild(mPrototypeApplyBtn);
 
 		mPrototypeRevertBtn = o2UI.CreateWidget<UIButton>("revert prototype");
 		mPrototypeRevertBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-20, -18));
-		mPrototypeRevertBtn->onClick = Function<void()>(this, &DefaultActorHeaderViewer::OnRevertPrototypePressed);
+		mPrototypeRevertBtn->onClick = Func(this, &DefaultActorHeaderViewer::OnRevertPrototypePressed);
 		prototypeRoot->AddChild(mPrototypeRevertBtn);
 
 		mPrototypeBreakBtn = o2UI.CreateWidget<UIButton>("break prototype");
 		mPrototypeBreakBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(0, -18));
-		mPrototypeBreakBtn->onClick = Function<void()>(this, &DefaultActorHeaderViewer::OnBreakPrototypePressed);
+		mPrototypeBreakBtn->onClick = Func(this, &DefaultActorHeaderViewer::OnBreakPrototypePressed);
 		prototypeRoot->AddChild(mPrototypeBreakBtn);
 
 		auto tagsImg = o2UI.CreateImage("ui/UI2_tag_big.png");

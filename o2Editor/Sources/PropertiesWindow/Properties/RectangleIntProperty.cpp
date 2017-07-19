@@ -23,9 +23,9 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &RectIProperty::Revert);
+			mRevertBtn->onClick = Func(this, &RectIProperty::Revert);
 
-		mLeftEditBox->onChangeCompleted = Function<void(const WString&)>(this, &RectIProperty::OnLeftEdited);
+		mLeftEditBox->onChangeCompleted = Func(this, &RectIProperty::OnLeftEdited);
 		mLeftEditBox->text = "--";
 		mLeftEditBox->SetFilterInteger();
 
@@ -40,7 +40,7 @@ namespace Editor
 			mLeftDragHangle.onCursorReleased = Func(this, &RectIProperty::OnLeftMoveHandleReleased);
 		}
 
-		mBottomEditBox->onChangeCompleted = Function<void(const WString&)>(this, &RectIProperty::OnBottomEdited);
+		mBottomEditBox->onChangeCompleted = Func(this, &RectIProperty::OnBottomEdited);
 		mBottomEditBox->text = "--";
 		mBottomEditBox->SetFilterInteger();
 
@@ -55,7 +55,7 @@ namespace Editor
 			mBottomDragHangle.onCursorReleased = Func(this, &RectIProperty::OnBottomMoveHandleReleased);
 		}
 
-		mRightEditBox->onChangeCompleted = Function<void(const WString&)>(this, &RectIProperty::OnRightEdited);
+		mRightEditBox->onChangeCompleted = Func(this, &RectIProperty::OnRightEdited);
 		mRightEditBox->text = "--";
 		mRightEditBox->SetFilterInteger();
 
@@ -70,7 +70,7 @@ namespace Editor
 			mRightDragHangle.onCursorReleased = Func(this, &RectIProperty::OnRightMoveHandleReleased);
 		}
 
-		mTopEditBox->onChangeCompleted = Function<void(const WString&)>(this, &RectIProperty::OnTopEdited);
+		mTopEditBox->onChangeCompleted = Func(this, &RectIProperty::OnTopEdited);
 		mTopEditBox->text = "--";
 		mTopEditBox->SetFilterInteger();
 

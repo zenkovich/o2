@@ -20,7 +20,7 @@ namespace Editor
 		mRotateRingFillMesh = new Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
 		mAngleMesh = new Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
 
-		mPivotDragHandle.onChangedPos += Function<void(const Vec2F&)>(this, &RotateTool::OnPivotDragHandleMoved);
+		mPivotDragHandle.onChangedPos += Func(this, &RotateTool::OnPivotDragHandleMoved);
 		mPivotDragHandle.enabled = false;
 	}
 

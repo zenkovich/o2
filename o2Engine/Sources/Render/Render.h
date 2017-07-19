@@ -64,6 +64,9 @@ namespace o2
 		Getter<bool>         renderTextureAvailable; // Render textures available getter
 		Getter<Vec2I>        maxTextureSize;         // Maximal texture size getter
 
+		Function<void()>     preRender;              // Pre rendering event. Call after beginning drawing. Clearing every fram
+		Function<void()>     postRender;             // Post rendering event. Call before ending drawing. Clearing every frame
+
 		// Default constructor
 		Render();
 

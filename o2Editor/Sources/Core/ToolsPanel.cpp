@@ -116,7 +116,7 @@ namespace Editor
 		mLayoutSchemesList->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 3, 2, 150, 10);
 		mPanelRoot->AddChild(mLayoutSchemesList);
 		UpdateWndLayoutSchemas();
-		mLayoutSchemesList->onSelectedText = Function<void(const WString&)>(this, &ToolsPanel::OnSchemeSelected);
+		mLayoutSchemesList->onSelectedText = Func(this, &ToolsPanel::OnSchemeSelected);
 	}
 
 	void ToolsPanel::InitializeToolsPanel()

@@ -406,7 +406,7 @@ namespace o2
 			AnimatedValueDef def;
 
 			def.mAnimatedValue = mnew AnimatedValue<_type>();
-			def.mAnimatedValue->onKeysChanged += Function<void()>(this, &Animation::RecalculateDuration);
+			def.mAnimatedValue->onKeysChanged += Func(this, &Animation::RecalculateDuration);
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Pointer)
 				def.mAnimatedValue->SetTargetPropertyVoid(target);
@@ -430,7 +430,7 @@ namespace o2
 	{
 		AnimatedValueDef def;
 		def.mAnimatedValue = mnew AnimatedValue<_type>();
-		def.mAnimatedValue->onKeysChanged += Function<void()>(this, &Animation::RecalculateDuration);
+		def.mAnimatedValue->onKeysChanged += Func(this, &Animation::RecalculateDuration);
 
 		if (mTarget)
 		{
@@ -474,7 +474,7 @@ namespace o2
 			AnimatedValueDef def;
 
 			def.mAnimatedValue = mnew AnimatedValue<_type>();
-			def.mAnimatedValue->onKeysChanged += Function<void()>(this, &Animation::RecalculateDuration);
+			def.mAnimatedValue->onKeysChanged += Func(this, &Animation::RecalculateDuration);
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
 				def.mAnimatedValue->SetTargetPropertyVoid(target);

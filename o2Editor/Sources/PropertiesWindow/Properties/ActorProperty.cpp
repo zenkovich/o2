@@ -39,7 +39,7 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &ActorProperty::Revert);
+			mRevertBtn->onClick = Func(this, &ActorProperty::Revert);
 	}
 
 	ActorProperty::~ActorProperty()

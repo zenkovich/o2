@@ -23,12 +23,12 @@ namespace Editor
 		if (!mDropDown)
 			mDropDown = dynamic_cast<UIDropDown*>(mPropertyWidget);
 
-		mDropDown->onSelectedText = Function<void(const WString&)>(this, &LayerProperty::SelectLayer);
+		mDropDown->onSelectedText = Func(this, &LayerProperty::SelectLayer);
 		mDropDown->SetState("undefined", true);
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &LayerProperty::Revert);
+			mRevertBtn->onClick = Func(this, &LayerProperty::Revert);
 	}
 
 	LayerProperty::~LayerProperty()

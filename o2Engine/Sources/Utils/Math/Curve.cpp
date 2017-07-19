@@ -29,6 +29,23 @@ namespace o2
 		InitializeProperties();
 	}
 
+	bool Curve::operator!=(const Curve& other) const
+	{
+		return !(*this == other);
+	}
+
+	bool Curve::operator==(const Curve& other) const
+	{
+		if (mKeys.Count() != other.mKeys.Count())
+			return false;
+
+		for (int i = 0; i < mKeys.Count(); i++)
+			if (mKeys[i] != other.mKeys[i])
+				return false;
+
+		return true;
+	}
+
 	Curve& Curve::operator=(const Curve& other)
 	{
 		mKeys = other.mKeys;
@@ -499,6 +516,30 @@ namespace o2
 		return mKeys.Count() == 0;
 	}
 
+	RectF Curve::GetRect() const
+	{
+		RectF res;
+
+		if (mKeys.IsEmpty())
+			return res;
+
+		res.left = mKeys[0].position; res.right = mKeys[0].position;
+		res.top = mKeys[0].value; res.bottom = mKeys[0].value;
+
+		for (auto& key : mKeys)
+		{
+			for (int i = 0; i < Key::mApproxValuesCount; i++)
+			{
+				res.left = Math::Min(key.mApproxValues[i].x, res.left);
+				res.right = Math::Max(key.mApproxValues[i].x, res.right);
+				res.top = Math::Min(key.mApproxValues[i].y, res.top);
+				res.bottom = Math::Max(key.mApproxValues[i].y, res.bottom);
+			}
+		}
+
+		return res;
+	}
+
 	Curve::Key Curve::operator[](float position)
 	{
 		for (auto& key : mKeys)
@@ -714,9 +755,19 @@ namespace o2
 		return *this;
 	}
 
+	bool Curve::Key::operator!=(const Key& other) const
+	{
+		return !(*this == other);
+	}
+
 	bool Curve::Key::operator==(const Key& other) const
 	{
-		return Math::Equals(position, other.position) && Math::Equals(value, other.value);
+		return Math::Equals(position, other.position) && Math::Equals(value, other.value) &&
+			Math::Equals(leftSupportPosition, other.leftSupportPosition) && 
+			Math::Equals(leftSupportValue, other.leftSupportValue) &&
+			Math::Equals(rightSupportPosition, other.rightSupportPosition) &&
+			Math::Equals(rightSupportValue, other.rightSupportValue) &&
+			supportsType == other.supportsType;
 	}
 
 }
@@ -767,6 +818,7 @@ CLASS_META(o2::Curve)
 	PUBLIC_FUNCTION(void, SmoothKeyAt, int, float);
 	PUBLIC_FUNCTION(float, Length);
 	PUBLIC_FUNCTION(bool, IsEmpty);
+	PUBLIC_FUNCTION(RectF, GetRect);
 	PROTECTED_FUNCTION(void, CheckSmoothKeys);
 	PROTECTED_FUNCTION(void, UpdateApproximation);
 	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);

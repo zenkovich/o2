@@ -19,12 +19,12 @@ namespace Editor
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("enum property");
 
 		mDropDown = mPropertyWidget->FindChild<UIDropDown>();
-		mDropDown->onSelectedText = Function<void(const WString&)>(this, &EnumProperty::OnSelectedItem);
+		mDropDown->onSelectedText = Func(this, &EnumProperty::OnSelectedItem);
 		mDropDown->SetState("undefined", true);
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &EnumProperty::Revert);
+			mRevertBtn->onClick = Func(this, &EnumProperty::Revert);
 	}
 
 	EnumProperty::~EnumProperty()

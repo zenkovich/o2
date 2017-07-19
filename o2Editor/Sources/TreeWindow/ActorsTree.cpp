@@ -52,12 +52,12 @@ namespace Editor
 
 	void UIActorsTree::AttachToSceneEvents()
 	{
-		o2Scene.onChanged += Function<void(const ActorsVec&)>(this, &UIActorsTree::OnActorsChanged);
+		o2Scene.onChanged += Func(this, &UIActorsTree::OnActorsChanged);
 
-		o2Scene.onActorCreated    += Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
-		o2Scene.onActorDestroying += Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
+		o2Scene.onActorCreated    += Func(this, &UIActorsTree::OnActorCreated);
+		o2Scene.onActorDestroying += Func(this, &UIActorsTree::OnActorDestroyed);
 
-		auto updateActorTreeNode = Function<void(Actor*)>(this, &UIActorsTree::OnActorChanged);
+		auto updateActorTreeNode = Func(this, &UIActorsTree::OnActorChanged);
 		o2Scene.onActorEnableChanged          += updateActorTreeNode;
 		o2Scene.onActorLockChanged            += updateActorTreeNode;
 		o2Scene.onActorNameChanged            += updateActorTreeNode;
@@ -70,12 +70,12 @@ namespace Editor
 	{
 		if (Scene::IsSingletonInitialzed() && mAttackedToSceneEvents)
 		{
-			o2Scene.onChanged -= Function<void(const ActorsVec&)>(this, &UIActorsTree::OnActorsChanged);
+			o2Scene.onChanged -= Func(this, &UIActorsTree::OnActorsChanged);
 
-			o2Scene.onActorCreated    -= Function<void(Actor*)>(this, &UIActorsTree::OnActorCreated);
-			o2Scene.onActorDestroying -= Function<void(Actor*)>(this, &UIActorsTree::OnActorDestroyed);
+			o2Scene.onActorCreated    -= Func(this, &UIActorsTree::OnActorCreated);
+			o2Scene.onActorDestroying -= Func(this, &UIActorsTree::OnActorDestroyed);
 
-			auto updateActorTreeNode = Function<void(Actor*)>(this, &UIActorsTree::OnActorChanged);
+			auto updateActorTreeNode = Func(this, &UIActorsTree::OnActorChanged);
 			o2Scene.onActorEnableChanged          -= updateActorTreeNode;
 			o2Scene.onActorLockChanged            -= updateActorTreeNode;
 			o2Scene.onActorNameChanged            -= updateActorTreeNode;
@@ -134,10 +134,10 @@ namespace Editor
 	void UIActorsTree::Initialize()
 	{
 		mEnableActorsTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
-		mEnableActorsTogglesGroup->onReleased = Function<void(bool)>(this, &UIActorsTree::EnableActorsGroupReleased);
+		mEnableActorsTogglesGroup->onReleased = Func(this, &UIActorsTree::EnableActorsGroupReleased);
 
 		mLockActorsTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
-		mLockActorsTogglesGroup->onReleased = Function<void(bool)>(this, &UIActorsTree::LockActorsGroupReleased);
+		mLockActorsTogglesGroup->onReleased = Func(this, &UIActorsTree::LockActorsGroupReleased);
 
 		UIActorsTreeNode* actorNodeWidgetSample = (UIActorsTreeNode*)mNodeWidgetSample;
 		actorNodeWidgetSample->InitializeControls();
@@ -336,10 +336,10 @@ namespace Editor
 		mEditState    = GetStateObject("edit");
 
 		if (mLockToggle)
-			mLockToggle->onClick = Function<void()>(this, &UIActorsTreeNode::OnLockClicked);
+			mLockToggle->onClick = Func(this, &UIActorsTreeNode::OnLockClicked);
 
 		if (mEnableToggle)
-			mEnableToggle->onClick = Function<void()>(this, &UIActorsTreeNode::OnEnableCkicked);
+			mEnableToggle->onClick = Func(this, &UIActorsTreeNode::OnEnableCkicked);
 
 		if (mNameEditBox)
 		{

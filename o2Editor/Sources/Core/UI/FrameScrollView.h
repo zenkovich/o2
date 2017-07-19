@@ -67,6 +67,6 @@ namespace Editor
 		void OnVerScrollScrolled(float value);
 
 		// Calls when camera position was changed
-		void OnCameraPositionChanged();
+		void OnCameraTransformChanged();
 	};
 }

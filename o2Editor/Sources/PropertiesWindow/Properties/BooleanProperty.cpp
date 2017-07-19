@@ -20,12 +20,12 @@ namespace Editor
 			mToggle = dynamic_cast<UIToggle*>(mPropertyWidget);
 
 		mToggle->layout.minHeight = 10;
-		mToggle->onToggleByUser = Function<void(bool)>(this, &BooleanProperty::SetValueByUser);
+		mToggle->onToggleByUser = Func(this, &BooleanProperty::SetValueByUser);
 		mToggle->SetValueUnknown();
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &BooleanProperty::Revert);
+			mRevertBtn->onClick = Func(this, &BooleanProperty::Revert);
 	}
 
 	BooleanProperty::~BooleanProperty()

@@ -153,7 +153,7 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &AssetProperty<_type>::Revert);
+			mRevertBtn->onClick = Func(this, &AssetProperty<_type>::Revert);
 	}
 
 	template<typename _type>

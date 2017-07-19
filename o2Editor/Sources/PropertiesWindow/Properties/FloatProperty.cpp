@@ -16,13 +16,13 @@ namespace Editor
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("singleline edit property");
 
 		mEditBox = mPropertyWidget->FindChild<UIEditBox>();
-		mEditBox->onChangeCompleted = Function<void(const WString&)>(this, &FloatProperty::OnEdited);
+		mEditBox->onChangeCompleted = Func(this, &FloatProperty::OnEdited);
 		mEditBox->text = "--";
 		mEditBox->SetFilterFloat();
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &FloatProperty::Revert);
+			mRevertBtn->onClick = Func(this, &FloatProperty::Revert);
 
 		auto handleLayer = mEditBox->GetLayer("arrows");
 
@@ -32,9 +32,9 @@ namespace Editor
 
 			mDragHangle.cursorType = CursorType::SizeNS;
 			mDragHangle.isUnderPoint = [=](const Vec2F& point) { return handleLayer->IsUnderPoint(point); };
-			mDragHangle.onMoved = Function<void(const Input::Cursor&)>(this, &FloatProperty::OnDragHandleMoved);
-			mDragHangle.onCursorPressed = Function<void(const Input::Cursor&)>(this, &FloatProperty::OnMoveHandlePressed);
-			mDragHangle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &FloatProperty::OnMoveHandleReleased);
+			mDragHangle.onMoved = Func(this, &FloatProperty::OnDragHandleMoved);
+			mDragHangle.onCursorPressed = Func(this, &FloatProperty::OnMoveHandlePressed);
+			mDragHangle.onCursorReleased = Func(this, &FloatProperty::OnMoveHandleReleased);
 		}
 	}
 

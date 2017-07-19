@@ -9,6 +9,8 @@
 #include "Utils/DragAndDrop.h"
 #include "Utils/Time.h"
 
+#include "Events/ShortcutKeysListener.h"
+
 namespace o2
 {
 #undef DrawText
@@ -17,10 +19,14 @@ namespace o2
 
 	EventSystem::EventSystem():
 		mRightButtonPressedListener(nullptr), mMiddleButtonPressedListener(nullptr)
-	{}
+	{
+		mShortcutEventsManager = mnew ShortcutKeysListenersManager();
+	}
 
 	EventSystem::~EventSystem()
-	{}
+	{
+		delete mShortcutEventsManager;
+	}
 
 	float EventSystem::GetDoubleClickTime() const
 	{

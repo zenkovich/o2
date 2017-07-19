@@ -43,7 +43,7 @@ namespace o2
 		{
 			AnimatedValueDef def(val);
 			def.mAnimatedValue = val.mAnimatedValue->Clone();
-			def.mAnimatedValue->onKeysChanged += Function<void()>(this, &Animation::RecalculateDuration);
+			def.mAnimatedValue->onKeysChanged += Func(this, &Animation::RecalculateDuration);
 
 			if (mTarget)
 			{
@@ -169,7 +169,7 @@ namespace o2
 	void Animation::OnDeserialized(const DataNode& node)
 	{
 		for (auto& val : mAnimatedValues)
-			val.mAnimatedValue->onKeysChanged += Function<void()>(this, &Animation::RecalculateDuration);
+			val.mAnimatedValue->onKeysChanged += Func(this, &Animation::RecalculateDuration);
 
 		RecalculateDuration();
 		mEndTime = mDuration;

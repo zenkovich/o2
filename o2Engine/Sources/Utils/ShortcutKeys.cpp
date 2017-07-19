@@ -44,6 +44,11 @@ namespace o2
 		return res;
 	}
 
+	bool ShortcutKeys::IsEmpty() const
+	{
+		return key == -1 && !control && !shift && !alt;
+	}
+
 	bool ShortcutKeys::operator==(const ShortcutKeys& other) const
 	{
 		return key == other.key && control == other.control && shift == other.shift && alt == other.alt;
@@ -63,5 +68,6 @@ CLASS_META(o2::ShortcutKeys)
 	PUBLIC_FUNCTION(bool, IsPressed);
 	PUBLIC_FUNCTION(bool, IsDown);
 	PUBLIC_FUNCTION(String, AsString);
+	PUBLIC_FUNCTION(bool, IsEmpty);
 }
 END_META;

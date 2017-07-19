@@ -21,6 +21,7 @@ namespace o2
 		bool IsPressed() const;
 		bool IsDown() const;
 		String AsString() const;
+		bool IsEmpty() const;
 
 		bool operator==(const ShortcutKeys& other) const;
 

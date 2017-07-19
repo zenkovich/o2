@@ -18,11 +18,18 @@ namespace Editor
 		mWindow->layout.size = Vec2F(600, 500);
 
 		mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
+		mWindow->onHide = Func(this, &CurveEditorDlg::OnHide);
 	}
 
 	CurveEditorDlg::~CurveEditorDlg()
 	{
 		delete mWindow;
+	}
+
+	void CurveEditorDlg::OnHide()
+	{
+		mOnChangedCallback();
+		mOnChangeCompletedCallback();
 	}
 
 	void CurveEditorDlg::InitializeControls()
@@ -53,10 +60,11 @@ namespace Editor
 		mWindow->AddChild(mEditorWidget);
 	}
 
-	void CurveEditorDlg::Show(Function<void()> onChanged)
+	void CurveEditorDlg::Show(Function<void()> onChanged, Function<void()> onCompleted /*= Function<void()>()*/)
 	{
 		mInstance->mWindow->ShowModal();
 		mInstance->mOnChangedCallback = onChanged;
+		mInstance->mOnChangeCompletedCallback = onCompleted;
 		mInstance->mEditorWidget->RemoveAllEditingCurves();
 	}
 

@@ -25,17 +25,17 @@ namespace Editor
 		mVerDragHandle.enabled = false;
 		mBothDragHandle.enabled = false;
 
-		mHorDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &MoveTool::OnHorDragHandleMoved);
-		mVerDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &MoveTool::OnVerDragHandleMoved);
-		mBothDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &MoveTool::OnBothDragHandleMoved);
+		mHorDragHandle.onChangedPos = Func(this, &MoveTool::OnHorDragHandleMoved);
+		mVerDragHandle.onChangedPos = Func(this, &MoveTool::OnVerDragHandleMoved);
+		mBothDragHandle.onChangedPos = Func(this, &MoveTool::OnBothDragHandleMoved);
 
-		mHorDragHandle.onPressed = Function<void()>(this, &MoveTool::HandlePressed);
-		mVerDragHandle.onPressed = Function<void()>(this, &MoveTool::HandlePressed);
-		mBothDragHandle.onPressed = Function<void()>(this, &MoveTool::HandlePressed);
+		mHorDragHandle.onPressed = Func(this, &MoveTool::HandlePressed);
+		mVerDragHandle.onPressed = Func(this, &MoveTool::HandlePressed);
+		mBothDragHandle.onPressed = Func(this, &MoveTool::HandlePressed);
 
-		mHorDragHandle.onReleased = Function<void()>(this, &MoveTool::HandleReleased);
-		mVerDragHandle.onReleased = Function<void()>(this, &MoveTool::HandleReleased);
-		mBothDragHandle.onReleased = Function<void()>(this, &MoveTool::HandleReleased);
+		mHorDragHandle.onReleased = Func(this, &MoveTool::HandleReleased);
+		mVerDragHandle.onReleased = Func(this, &MoveTool::HandleReleased);
+		mBothDragHandle.onReleased = Func(this, &MoveTool::HandleReleased);
 
 		mHorDragHandle.GetRegularSprite()->SetSizePivot(Vec2F(1, 5));
 		mHorDragHandle.GetHoverSprite()->SetSizePivot(Vec2F(1, 5));

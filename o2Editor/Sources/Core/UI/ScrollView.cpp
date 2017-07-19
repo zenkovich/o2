@@ -124,6 +124,8 @@ namespace Editor
 
 	void UIScrollView::UpdateCamera(float dt)
 	{
+		bool transformed = false;
+
 		if (mViewCameraTargetScale.x < mViewCameraMinScale)
 		{
 			mViewCameraTargetScale.x = Math::Lerpc<float>(mViewCameraTargetScale.x, mViewCameraMinScale,
@@ -153,7 +155,7 @@ namespace Editor
 			mViewCamera.scale = Math::Lerpc<Vec2F>(mViewCamera.scale, mViewCameraTargetScale,
 												   dt*mViewCameraScaleElasticyCoef);
 
-			mNeedRedraw = true;
+			transformed = true;
 		}
 
 		if (mViewCameraVelocity.Length() > 0.05f && !o2Input.IsRightMouseDown())
@@ -167,8 +169,13 @@ namespace Editor
 			mViewCamera.position = Math::Lerpc<Vec2F>(mViewCamera.position, mViewCameraTargetPos,
 													  dt*mViewCameraPosElasticyCoef);
 
-			OnCameraPositionChanged();
+			transformed = true;
+		}
 
+		if (transformed)
+		{
+			UpdateLocalScreenTransforms();
+			OnCameraTransformChanged();
 			mNeedRedraw = true;
 		}
 	}
@@ -204,7 +211,6 @@ namespace Editor
 	void UIScrollView::RedrawRenderTarget()
 	{
 		mNeedRedraw = false;
-		UpdateLocalScreenTransforms();
 		o2Render.SetRenderTexture(mRenderTarget);
 
 		o2Render.Clear(mBackColor);
@@ -267,7 +273,7 @@ namespace Editor
 		}
 	}
 
-	void UIScrollView::OnCameraPositionChanged()
+	void UIScrollView::OnCameraTransformChanged()
 	{}
 
 	void UIScrollView::OnScrolled(float scroll)
@@ -338,7 +344,7 @@ CLASS_META(Editor::UIScrollView)
 	PROTECTED_FUNCTION(void, RedrawRenderTarget);
 	PROTECTED_FUNCTION(void, RedrawContent);
 	PROTECTED_FUNCTION(void, DrawGrid);
-	PROTECTED_FUNCTION(void, OnCameraPositionChanged);
+	PROTECTED_FUNCTION(void, OnCameraTransformChanged);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);

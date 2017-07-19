@@ -50,7 +50,7 @@ namespace o2
 		RectI mRectI;					           // @SERIALIZABLE
 		BorderF mBorderF;					       // @SERIALIZABLE
 		BorderI mBorderI;					       // @SERIALIZABLE
-		Curve mCurve;                              // @SERIALIZABLE
+		Curve mCurve = Curve::EaseInOut();                              // @SERIALIZABLE
 		TestInside mTestInside;                    // @SERIALIZABLE
 		TestEnum mTestEnum;                        // @SERIALIZABLE
 		TestInside* mTestInsidePtr = nullptr;      // @SERIALIZABLE

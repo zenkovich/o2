@@ -110,7 +110,7 @@ namespace Editor
 		virtual void DrawGrid();
 
 		// Calls when camera position was changed
-		virtual void OnCameraPositionChanged();
+		virtual void OnCameraTransformChanged();
 
 		// Calls when scrolling
 		void OnScrolled(float scroll);

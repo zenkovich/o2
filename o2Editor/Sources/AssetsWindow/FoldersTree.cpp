@@ -23,12 +23,12 @@ namespace Editor
 		mFoldersTree->SetRearrangeType(UITree::RearrangeType::OnlyReparent);
 		mFoldersTree->SetMultipleSelectionAvailable(false);
 
-		mFoldersTree->getObjectParentDelegate = Function<UnknownPtr(UnknownPtr)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeParent);
-		mFoldersTree->getObjectChildrenDelegate = Function<Vector<UnknownPtr>(UnknownPtr)>(this, &UIAssetsFoldersTree::GetFoldersTreeNodeChilds);
-		mFoldersTree->fillNodeDataByObjectDelegate = Function<void(UITreeNode*, UnknownPtr)>(this, &UIAssetsFoldersTree::SetupFoldersTreeNode);
-		mFoldersTree->onNodeDoubleClicked = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeNodeDblClick);
-		mFoldersTree->onObjectsSelectionChanged = Function<void(Vector<UnknownPtr>)>(this, &UIAssetsFoldersTree::OnFoldersTreeSelect);
-		mFoldersTree->onNodeRightButtonClicked = Function<void(UITreeNode*)>(this, &UIAssetsFoldersTree::OnFoldersTreeRightClick);
+		mFoldersTree->getObjectParentDelegate = Func(this, &UIAssetsFoldersTree::GetFoldersTreeNodeParent);
+		mFoldersTree->getObjectChildrenDelegate = Func(this, &UIAssetsFoldersTree::GetFoldersTreeNodeChilds);
+		mFoldersTree->fillNodeDataByObjectDelegate = Func(this, &UIAssetsFoldersTree::SetupFoldersTreeNode);
+		mFoldersTree->onNodeDoubleClicked = Func(this, &UIAssetsFoldersTree::OnFoldersTreeNodeDblClick);
+		mFoldersTree->onObjectsSelectionChanged = Func(this, &UIAssetsFoldersTree::OnFoldersTreeSelect);
+		mFoldersTree->onNodeRightButtonClicked = Func(this, &UIAssetsFoldersTree::OnFoldersTreeRightClick);
 		mFoldersTree->UpdateNodesView();
 
 		AddChild(mFoldersTree);
@@ -98,6 +98,9 @@ namespace Editor
 		mContextMenu->AddItem("---");
 		mContextMenu->AddItem("Expand all", [&]() { OnContextExpandPressed(); });
 		mContextMenu->AddItem("Collapse all", [&]() { OnContextCollapsePressed(); });
+
+		mFoldersTree->onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
+		mFoldersTree->onUnfocused = [&]() { mContextMenu->SetItemsMinPriority(); };
 
 		AddChild(mContextMenu);
 	}
@@ -194,100 +197,64 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextCopyPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		if (!mCurrentPath.IsEmpty())
 			o2EditorAssets.CopyAssets({ mCurrentPath });
 	}
 
 	void UIAssetsFoldersTree::OnContextCutPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		if (!mCurrentPath.IsEmpty())
 			o2EditorAssets.CutAssets({ mCurrentPath });
 	}
 
 	void UIAssetsFoldersTree::OnContextPastePressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		o2EditorAssets.PasteAssets(mCurrentPath);
 	}
 
 	void UIAssetsFoldersTree::OnContextDeletePressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		if (!mCurrentPath.IsEmpty())
 			o2EditorAssets.DeleteAssets({ mCurrentPath });
 	}
 
 	void UIAssetsFoldersTree::OnContextOpenPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		o2EditorAssets.OpenAsset(mCurrentPath);
 	}
 
 	void UIAssetsFoldersTree::OnContextShowInExplorerPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		o2EditorAssets.OpenAsset(mCurrentPath);
 	}
 
 	void UIAssetsFoldersTree::OnContextImportPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		o2EditorAssets.ImportAssets(mCurrentPath);
 	}
 
 	void UIAssetsFoldersTree::OnContextCreateFolderPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		o2EditorAssets.CreateFolderAsset(mCurrentPath);
 	}
 
 	void UIAssetsFoldersTree::OnContextCreatePrefabPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		o2EditorAssets.CreatePrefabAsset(mCurrentPath);
 	}
 
 	void UIAssetsFoldersTree::OnContextCreateScriptPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		o2EditorAssets.CreateScriptAsset(mCurrentPath);
 	}
 
 	void UIAssetsFoldersTree::OnContextCreateAnimationPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		o2EditorAssets.CreateAnimationAsset(mCurrentPath);
 	}
 
 	void UIAssetsFoldersTree::OnContextExpandPressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		auto selectedObjects = mFoldersTree->GetSelectedObjects();
 
 		for (auto obj : selectedObjects)
@@ -301,9 +268,6 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextCollapsePressed()
 	{
-		if (!mFoldersTree->IsFocused())
-			return;
-
 		auto selectedObjects = mFoldersTree->GetSelectedObjects();
 
 		for (auto obj : selectedObjects)

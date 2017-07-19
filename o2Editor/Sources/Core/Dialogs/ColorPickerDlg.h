@@ -37,7 +37,8 @@ namespace Editor
 		ColorPickerDlg();
 		~ColorPickerDlg();
 
-		static void Show(const Color4& color, Function<void(const Color4&)> onChanged, Function<void()> onCompleted = Function<void()>());
+		static void Show(const Color4& color, Function<void(const Color4&)> onChanged, 
+						 Function<void()> onCompleted = Function<void()>());
 
 	protected:
 		Function<void(const Color4&)> mOnChangedCallback;
@@ -89,6 +90,7 @@ namespace Editor
 
 
 	protected:
+		void OnHide();
 		void InitializeControls();
 		void InitializeColorPreview();
 		void InitializePickArea();

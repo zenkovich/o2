@@ -23,9 +23,9 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &BorderFProperty::Revert);
+			mRevertBtn->onClick = Func(this, &BorderFProperty::Revert);
 
-		mLeftEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderFProperty::OnLeftEdited);
+		mLeftEditBox->onChangeCompleted = Func(this, &BorderFProperty::OnLeftEdited);
 		mLeftEditBox->text = "--";
 		mLeftEditBox->SetFilterFloat();
 
@@ -40,7 +40,7 @@ namespace Editor
 			mLeftDragHangle.onCursorReleased = Func(this, &BorderFProperty::OnLeftMoveHandleReleased);
 		}
 
-		mBottomEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderFProperty::OnBottomEdited);
+		mBottomEditBox->onChangeCompleted = Func(this, &BorderFProperty::OnBottomEdited);
 		mBottomEditBox->text = "--";
 		mBottomEditBox->SetFilterFloat();
 
@@ -55,7 +55,7 @@ namespace Editor
 			mBottomDragHangle.onCursorReleased = Func(this, &BorderFProperty::OnBottomMoveHandleReleased);
 		}
 
-		mRightEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderFProperty::OnRightEdited);
+		mRightEditBox->onChangeCompleted = Func(this, &BorderFProperty::OnRightEdited);
 		mRightEditBox->text = "--";
 		mRightEditBox->SetFilterFloat();
 
@@ -70,7 +70,7 @@ namespace Editor
 			mRightDragHangle.onCursorReleased = Func(this, &BorderFProperty::OnRightMoveHandleReleased);
 		}
 
-		mTopEditBox->onChangeCompleted = Function<void(const WString&)>(this, &BorderFProperty::OnTopEdited);
+		mTopEditBox->onChangeCompleted = Func(this, &BorderFProperty::OnTopEdited);
 		mTopEditBox->text = "--";
 		mTopEditBox->SetFilterFloat();
 

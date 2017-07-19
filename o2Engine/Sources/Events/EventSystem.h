@@ -16,6 +16,7 @@ namespace o2
 	class CursorEventsListener;
 	class DragableObject;
 	class KeyboardEventsListener;
+	class ShortcutKeysListenersManager;
 
 	// -----------------------
 	// Event processing system
@@ -132,6 +133,8 @@ namespace o2
 		DragEventsListenersVec       mDragListeners;                         // Drag events listeners
 		KeybEventsListenersVec       mKeyboardListeners;                     // Keyboard events listeners
 		AppEventsListenersVec        mApplicationListeners;                  // Application events listeners
+
+		ShortcutKeysListenersManager* mShortcutEventsManager;                // Shortcut events manager
 
 	protected:
 		// Registering cursor area events listener

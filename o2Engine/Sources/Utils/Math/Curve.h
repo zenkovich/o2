@@ -36,6 +36,12 @@ namespace o2
 		// Copy-constructor
 		Curve(const Curve& other);
 
+		// Is equals operator
+		bool operator==(const Curve& other) const;
+
+		// Is not equals operator
+		bool operator!=(const Curve& other) const;
+
 		// Assign operator
 		Curve& operator=(const Curve& other);
 
@@ -150,6 +156,9 @@ namespace o2
 		// Returns true if curve is empty
 		bool IsEmpty() const;
 
+		// Returns bounding approximated keys rectangle
+		RectF GetRect() const;
+
 		// Key access operator by position
 		Key operator[](float position);
 
@@ -210,6 +219,9 @@ namespace o2
 
 			// Check equals operator
 			bool operator==(const Key& other) const;
+
+			// Check not equals operator
+			bool operator!=(const Key& other) const;
 
 			// Returns approximated points
 			const Vec2F* GetApproximatedPoints() const;

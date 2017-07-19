@@ -18,12 +18,12 @@ namespace Editor
 		if (!mEditBox)
 			mEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget);
 
-		mEditBox->onChangeCompleted = Function<void(const WString&)>(this, &StringProperty::OnEdited);
+		mEditBox->onChangeCompleted = Func(this, &StringProperty::OnEdited);
 		mEditBox->text = "--";
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &StringProperty::Revert);
+			mRevertBtn->onClick = Func(this, &StringProperty::Revert);
 	}
 
 	StringProperty::~StringProperty()

@@ -3,6 +3,7 @@
 #include "Assets/ImageAsset.h"
 #include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
+#include "Events/ShortcutKeysListener.h"
 #include "UI/ScrollArea.h"
 #include "Utils/Delegates.h"
 #include "Utils/ShortcutKeys.h"
@@ -16,12 +17,11 @@ namespace o2
 	// -----------------
 	// Context menu item
 	// -----------------
-	class UIContextMenuItem: public UIWidget
+	class UIContextMenuItem: public UIWidget, private ShortcutKeysListener
 	{
 	public:
 		Function<void()>     onClick;   // Click function
 		Function<void(bool)> onChecked; // Checked function, calls when check was changed and item is checkable
-		ShortcutKeys         shortcut;  // Shortcut keys
 
 		// Default constructor
 		UIContextMenuItem();
@@ -50,6 +50,9 @@ namespace o2
 		// Returns is menu item can be checked
 		bool IsCheckable() const;
 
+		// Sets shortcut keys 
+		void SetShortcut(const ShortcutKeys& shortcut);
+
 		SERIALIZABLE(UIContextMenuItem);
 
 	protected:
@@ -60,6 +63,9 @@ namespace o2
 	protected:
 		// Calls when child widget was added
 		void OnChildAdded(UIWidget* child);
+
+		// This event calling when shortcut hit and this listener has max priority. Calls click callback
+		void OnShortcutPressed();
 
 		friend class UIContextMenu;
 	};
@@ -194,6 +200,12 @@ namespace o2
 
 		// Sets maximum visible items count
 		void SetMaxItemsVisible(int count);
+
+		// Sets context menu items shortcut maximum priority
+		void SetItemsMaxPriority();
+
+		// Sets context menu items shortcut minimum priority
+		void SetItemsMinPriority();
 
 		// Returns is listener scrollable
 		bool IsScrollable() const;

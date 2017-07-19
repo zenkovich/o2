@@ -28,7 +28,7 @@ namespace Editor
 		InitializeDockFrameAppearanceAnim();
 
 		if (mVisibleState)
-			mVisibleState->onStateFullyFalse += Function<void()>(this, &UIDockableWindow::Undock);
+			mVisibleState->onStateFullyFalse += Func(this, &UIDockableWindow::Undock);
 
 		RetargetStatesAnimations();
 	}
@@ -45,7 +45,7 @@ namespace Editor
 		mDockingFrameSample = other.mDockingFrameSample->Clone();
 
 		if (mVisibleState)
-			mVisibleState->onStateFullyFalse += Function<void()>(this, &UIDockableWindow::Undock);
+			mVisibleState->onStateFullyFalse += Func(this, &UIDockableWindow::Undock);
 
 		return *this;
 	}
@@ -111,9 +111,9 @@ namespace Editor
 
 	void UIDockableWindow::InitializeDragHandles()
 	{
-		mHeadDragHandle.onMoved          = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoved);
-		mHeadDragHandle.onCursorPressed  = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoveBegin);
-		mHeadDragHandle.onCursorReleased = Function<void(const Input::Cursor&)>(this, &UIDockableWindow::OnMoveCompleted);
+		mHeadDragHandle.onMoved          = Func(this, &UIDockableWindow::OnMoved);
+		mHeadDragHandle.onCursorPressed  = Func(this, &UIDockableWindow::OnMoveBegin);
+		mHeadDragHandle.onCursorReleased = Func(this, &UIDockableWindow::OnMoveCompleted);
 	}
 
 	void UIDockableWindow::OnMoved(const Input::Cursor& cursor)

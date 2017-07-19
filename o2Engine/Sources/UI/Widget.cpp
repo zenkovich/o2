@@ -773,6 +773,11 @@ namespace o2
 			if (updateLayout)
 				UpdateLayout();
 
+			if (mResVisible)
+				onShow();
+			else
+				onHide();
+
 			OnVisibleChanged();
 		}
 	}
@@ -1017,6 +1022,8 @@ CLASS_META(o2::UIWidget)
 	PUBLIC_FIELD(onLayoutChanged);
 	PUBLIC_FIELD(onFocused);
 	PUBLIC_FIELD(onUnfocused);
+	PUBLIC_FIELD(onShow);
+	PUBLIC_FIELD(onHide);
 	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mLayers).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();

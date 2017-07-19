@@ -214,7 +214,7 @@ namespace Editor
 		nameLabel = atlasPropertyPair.second->FindChild<UILabel>();
 		nameLabel->text = "Atlas";
 		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasPropertyPair.first;
-		mAtlasProperty->onChanged = Function<void()>(this, &ImageAssetPropertiesViewer::OnAtlasPropertyChanged);
+		mAtlasProperty->onChanged = Func(this, &ImageAssetPropertiesViewer::OnAtlasPropertyChanged);
 		mContent->AddChild(atlasPropertyPair.second);
 
 		auto windowsPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));

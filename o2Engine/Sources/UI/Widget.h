@@ -40,8 +40,10 @@ namespace o2
 
 		UIWidgetLayout                          layout;          // Widget's layout @SERIALIZABLE
 		Function<void()>                        onLayoutChanged; // Layout change event
-		Function<void()>                        onFocused;       // On widget focused event
-		Function<void()>                        onUnfocused;     // On widget unfocused event
+		Function<void()>                        onFocused;       // Widget focused event
+		Function<void()>                        onUnfocused;     // Widget unfocused event
+		Function<void()>                        onShow;          // Widget showing vent
+		Function<void()>                        onHide;          // Widget hiding event
 
 		// Default constructor
 		UIWidget();

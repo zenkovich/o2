@@ -21,8 +21,8 @@ namespace Editor
 			mEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget);
 
 		mEditBox->onFocused = [&]() { UpdateContextData(""); };
-		mEditBox->onChangeCompleted = Function<void(const WString&)>(this, &TagsProperty::OnEditBoxChangeCompleted);
-		mEditBox->onChanged = Function<void(const WString&)>(this, &TagsProperty::OnEditBoxChanged);
+		mEditBox->onChangeCompleted = Func(this, &TagsProperty::OnEditBoxChangeCompleted);
+		mEditBox->onChanged = Func(this, &TagsProperty::OnEditBoxChanged);
 
 		mTagsContext = o2UI.CreateWidget<UIContextMenu>();
 		mTagsContext->SetMaxItemsVisible(10);
@@ -32,7 +32,7 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &TagsProperty::Revert);
+			mRevertBtn->onClick = Func(this, &TagsProperty::Revert);
 	}
 
 	TagsProperty::~TagsProperty()

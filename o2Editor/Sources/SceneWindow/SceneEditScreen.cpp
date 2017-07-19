@@ -264,8 +264,7 @@ namespace Editor
 	{
 		mActorsTree = o2EditorWindows.GetWindow<TreeWindow>()->GetActorsTree();
 
-		mActorsTree->onObjectsSelectionChanged +=
-			Function<void(Vector<Actor*>)>(this, &SceneEditScreen::OnTreeSelectionChanged);
+		mActorsTree->onObjectsSelectionChanged += Func(this, &SceneEditScreen::OnTreeSelectionChanged);
 
 		o2Scene.onChanged += Function<void(ActorsVec)>(this, &SceneEditScreen::OnSceneChanged);
 	}

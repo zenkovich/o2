@@ -133,7 +133,7 @@ namespace o2
 		mCurrentRenderTarget = TextureRef();
 
 		if (IS_DEV_MODE)
-			o2Assets.onAssetsRebuilded += Function<void(const Vector<UID>&)>(this, &Render::OnAssetsRebuilded);
+			o2Assets.onAssetsRebuilded += Func(this, &Render::OnAssetsRebuilded);
 
 		mReady = true;
 	}
@@ -161,7 +161,7 @@ namespace o2
 			return;
 
 		if (IS_DEV_MODE)
-			o2Assets.onAssetsRebuilded -= Function<void(const Vector<UID>&)>(this, &Render::OnAssetsRebuilded);
+			o2Assets.onAssetsRebuilded -= Func(this, &Render::OnAssetsRebuilded);
 
 		if (mGLContext)
 		{
@@ -230,6 +230,9 @@ namespace o2
 		SetupViewMatrix(mResolution);
 
 		UpdateCameraTransforms();
+
+		preRender();
+		preRender.Clear();
 	}
 
 	void Render::DrawPrimitives()
@@ -263,6 +266,9 @@ namespace o2
 	{
 		if (!mReady)
 			return;
+
+		postRender();
+		postRender.Clear();
 
 		DrawPrimitives();
 		SwapBuffers(mHDC);

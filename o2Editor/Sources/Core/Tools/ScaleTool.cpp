@@ -26,20 +26,20 @@ namespace Editor
 		mVerDragHandle.enabled = false;
 		mBothDragHandle.enabled = false;
 
-		mHorDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &ScaleTool::OnHorDragHandleMoved);
-		mVerDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &ScaleTool::OnVerDragHandleMoved);
-		mBothDragHandle.onChangedPos = Function<void(const Vec2F&)>(this, &ScaleTool::OnBothDragHandleMoved);
+		mHorDragHandle.onChangedPos = Func(this, &ScaleTool::OnHorDragHandleMoved);
+		mVerDragHandle.onChangedPos = Func(this, &ScaleTool::OnVerDragHandleMoved);
+		mBothDragHandle.onChangedPos = Func(this, &ScaleTool::OnBothDragHandleMoved);
 
-		mHorDragHandle.onPressed = Function<void()>(this, &ScaleTool::HandlePressed);
-		mVerDragHandle.onPressed = Function<void()>(this, &ScaleTool::HandlePressed);
-		mBothDragHandle.onPressed = Function<void()>(this, &ScaleTool::HandlePressed);
+		mHorDragHandle.onPressed = Func(this, &ScaleTool::HandlePressed);
+		mVerDragHandle.onPressed = Func(this, &ScaleTool::HandlePressed);
+		mBothDragHandle.onPressed = Func(this, &ScaleTool::HandlePressed);
 
-		mHorDragHandle.onReleased = Function<void()>(this, &ScaleTool::UpdateHandlesPosition);
-		mVerDragHandle.onReleased = Function<void()>(this, &ScaleTool::UpdateHandlesPosition);
+		mHorDragHandle.onReleased = Func(this, &ScaleTool::UpdateHandlesPosition);
+		mVerDragHandle.onReleased = Func(this, &ScaleTool::UpdateHandlesPosition);
 
-		mHorDragHandle.onReleased += Function<void()>(this, &ScaleTool::HandleReleased);
-		mVerDragHandle.onReleased += Function<void()>(this, &ScaleTool::HandleReleased);
-		mBothDragHandle.onReleased += Function<void()>(this, &ScaleTool::HandleReleased);
+		mHorDragHandle.onReleased += Func(this, &ScaleTool::HandleReleased);
+		mVerDragHandle.onReleased += Func(this, &ScaleTool::HandleReleased);
+		mBothDragHandle.onReleased += Func(this, &ScaleTool::HandleReleased);
 	}
 
 	ScaleTool::~ScaleTool()

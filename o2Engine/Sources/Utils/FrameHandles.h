@@ -12,7 +12,10 @@ namespace o2
 	class FrameHandles: public CursorAreaEventsListener
 	{
 	public:
-		Function<void(const Basis&)> onTransformed; // Basis transformed event
+		Function<void(const Basis&)> onTransformed;     // Basis transformed event
+		Function<void()>             onPressed;         // Some handle pressed event
+		Function<void()>             onReleased;        // Some handle released event
+		Function<void()>             onChangeCompleted; // Basis changing completed, all handles released and transform was changed
 
 		// Default constructor. Initializes handles
 		FrameHandles();
@@ -134,6 +137,9 @@ namespace o2
 		// Calls when one of handles was pressed, stores frame basis
 		void OnHandlePressed();
 
+		// Calls when one of handles was released, calls event
+		void OnHandleReleased();
+
 		// Sets all handles enable
 		void SetHandlesEnable(bool enable);
 
@@ -142,5 +148,8 @@ namespace o2
 
 		// Calls when frame transformed or moved
 		void OnTransformed(const Basis& transform);
+
+		// Calls when handle change completed, calling basis change completed event
+		void OnChangeCompleted();
 	};
 }

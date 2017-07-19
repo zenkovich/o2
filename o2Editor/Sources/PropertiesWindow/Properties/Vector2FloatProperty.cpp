@@ -18,12 +18,12 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Function<void()>(this, &Vec2FProperty::Revert);
+			mRevertBtn->onClick = Func(this, &Vec2FProperty::Revert);
 
 		mXEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/x edit"));
 		mYEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/y edit"));
 
-		mXEditBox->onChangeCompleted = Function<void(const WString&)>(this, &Vec2FProperty::OnXEdited);
+		mXEditBox->onChangeCompleted = Func(this, &Vec2FProperty::OnXEdited);
 		mXEditBox->text = "--";
 		mXEditBox->SetFilterFloat();
 
@@ -38,7 +38,7 @@ namespace Editor
 			mXDragHangle.onCursorReleased =  Func(this, &Vec2FProperty::OnXMoveHandleReleased);
 		}
 
-		mYEditBox->onChangeCompleted = Function<void(const WString&)>(this, &Vec2FProperty::OnYEdited);
+		mYEditBox->onChangeCompleted = Func(this, &Vec2FProperty::OnYEdited);
 		mYEditBox->text = "--";
 		mYEditBox->SetFilterFloat();
 

@@ -38,7 +38,7 @@ namespace o2
 		mLog = mnew LogStream("UI");
 		o2Debug.GetLog()->BindStream(mLog);
 
-		o2Application.onResizingEvent += Function<void()>(this, &UIManager::UpdateRootSize);
+		o2Application.onResizingEvent += Func(this, &UIManager::UpdateRootSize);
 
 		InitializeProperties();
 	}

@@ -23,18 +23,18 @@ namespace o2
 	DrawableCursorEventsListener::~DrawableCursorEventsListener()
 	{
 		if (mEventHandleDrawable)
-			mEventHandleDrawable->onDraw -= Function<void()>(this, &DrawableCursorEventsListener::OnDrawn);
+			mEventHandleDrawable->onDraw -= Func(this, &DrawableCursorEventsListener::OnDrawn);
 	}
 
 	void DrawableCursorEventsListener::SetEventHandleDrawable(IDrawable* drawable)
 	{
 		if (mEventHandleDrawable)
-			mEventHandleDrawable->onDraw -= Function<void()>(this, &DrawableCursorEventsListener::OnDrawn);
+			mEventHandleDrawable->onDraw -= Func(this, &DrawableCursorEventsListener::OnDrawn);
 
 		mEventHandleDrawable = drawable;
 
 		if (mEventHandleDrawable)
-			mEventHandleDrawable->onDraw += Function<void()>(this, &DrawableCursorEventsListener::OnDrawn);
+			mEventHandleDrawable->onDraw += Func(this, &DrawableCursorEventsListener::OnDrawn);
 	}
 
 	IDrawable* DrawableCursorEventsListener::GetEventHandleDrawable() const
