@@ -177,7 +177,7 @@ namespace o2
 		Sprite mSprite; // @SERIALIZABLE @EDITOR_IGNORE
 
 	protected:
-		// Calls when actor's transform was changed
+		// It is called when actor's transform was changed
 		void OnTransformChanged();
 
 		// Sets owner actor

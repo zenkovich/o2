@@ -63,7 +63,7 @@ namespace Editor
 		// Initializes head widget
 		void InitializeHeadWidget();
 
-		// Calls when asset name edit box was changed
+		// It is called when asset name edit box was changed
 		void OnNameTextEditChanged(const WString& value);
 	};
 }

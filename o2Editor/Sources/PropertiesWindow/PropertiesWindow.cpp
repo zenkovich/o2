@@ -106,8 +106,6 @@ namespace Editor
 		if (mTargetsChanged)
 			mOnTargetsChangedDelegate();
 
-		Timer timer;
-
 		IObjectPropertiesViewer* objectViewer = nullptr;
 		if (!targets.IsEmpty())
 		{
@@ -141,8 +139,6 @@ namespace Editor
 
 		mOnTargetsChangedDelegate = targetsChangedDelegate;
 		mTargetsChanged = false;
-
-		o2Debug.Log("Set targets time: %f sec", timer.GetTime());
 	}
 
 	Vector<IObject*> PropertiesWindow::GetTargets() const

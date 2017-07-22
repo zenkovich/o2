@@ -75,6 +75,7 @@ private:                                               \
     friend class o2::DataNode;                         \
                                                        \
 public:                                                \
+	typedef CLASS thisclass;                           \
 	CLASS* Clone() const { return mnew CLASS(*this); } \
 	const o2::Type& GetType() const { return *type; }; \
     o2::DataNode Serialize() const                     \

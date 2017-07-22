@@ -209,10 +209,10 @@ namespace Editor
 		ActionsVec              mRedoActions;                   // Actions that can be redo
 
 	protected:
-		// Calls when visible was changed. Sets context menu items priority
+		// It is called when visible was changed. Sets context menu items priority
 		void OnVisibleChanged();
 
-		// Calls when scrolling
+		// It is called when scrolling
 		void OnScrolled(float scroll);
 
 		// Searches curve by id
@@ -254,13 +254,13 @@ namespace Editor
 		// Removes curve key handles
 		void RemoveCurveKeyHandles(CurveInfo* info, int keyId);
 
-		// Calls when one of main curve key handles was moved. Updates graphics and handles
+		// It is called when one of main curve key handles was moved. Updates graphics and handles
 		void OnCurveKeyMainHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
 
-		// Calls when one of left support curve key handles was moved. Updates graphics and handles
+		// It is called when one of left support curve key handles was moved. Updates graphics and handles
 		void OnCurveKeyLeftSupportHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
 
-		// Calls when one of right support curve key handles was moved. Updates graphics and handles
+		// It is called when one of right support curve key handles was moved. Updates graphics and handles
 		void OnCurveKeyRightSupportHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
 
 		// Checks left support handle constrains and returns filtered position
@@ -269,25 +269,25 @@ namespace Editor
 		// Checks right support handle constrains and returns filtered position
 		Vec2F CheckRightSupportHandlePosition(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
 
-		// Calls when cursor double clicked, adds new point in curve
+		// It is called when cursor double clicked, adds new point in curve
 		void OnCursorDblClicked(const Input::Cursor& cursor);
 
 		// Smooths key support points and updates handles
 		void SmoothKey(CurveInfo* info, int idx);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when right mouse button stay down on this, overriding from scroll view to call context menu
+		// It is called when right mouse button stay down on this, overriding from scroll view to call context menu
 		void OnCursorRightMouseStayDown(const Input::Cursor& cursor);
 
-		// Calls when right mouse button was released (only when right mouse button pressed this at previous time), overriding from scroll view to call context menu
+		// It is called when right mouse button was released (only when right mouse button pressed this at previous time), overriding from scroll view to call context menu
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
 
 		// Checks supports handles visibility
@@ -299,34 +299,34 @@ namespace Editor
 		// Returns is transform frame visible. it will be visible when 2 or more main handles was selected
 		bool IsTransformFrameVisible() const;
 
-		// Calls when selectable draggable handle was released
+		// It is called when selectable draggable handle was released
 		void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);
 
-		// Calls when selectable handle was began to drag
+		// It is called when selectable handle was began to drag
 		void OnHandleBeganDragging(SelectableDragHandle* handle);
 
-		// Calls when selectable handle moved, moves all selected handles position
+		// It is called when selectable handle moved, moves all selected handles position
 		void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
 
-		// Calls when selectable handle completed changing
+		// It is called when selectable handle completed changing
 		void OnHandleCompletedChange(SelectableDragHandle* handle);
 
 		// Sets all selected keys supports type
 		void SetSelectedKeysSupportsType(Curve::Key::Type type);
 
-		// Calls when transform frame was transformed
+		// It is called when transform frame was transformed
 		void OnTransformFrameTransformed(const Basis& basis);
 
-		// Calls when beginning transforming some handles. Stores selected keys before changing
+		// It is called when beginning transforming some handles. Stores selected keys before changing
 		void OnTransformBegin();
 
-		// Calls when transform completed. Checks that selected keys changed, creates action for undo/redo
+		// It is called when transform completed. Checks that selected keys changed, creates action for undo/redo
 		void OnTransformCompleted();
 
-		// Calls when edit key window position edit box was changed
+		// It is called when edit key window position edit box was changed
 		void OnEditKeyPositionChanged(const WString& str);
 
-		// Calls when edit key window value edit box was changed
+		// It is called when edit key window value edit box was changed
 		void OnEditKeyValueChanged(const WString& str);
 
 		// Stores undo action, clears redo actions

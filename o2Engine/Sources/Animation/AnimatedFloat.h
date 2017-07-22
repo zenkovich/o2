@@ -129,7 +129,7 @@ namespace o2
 		// Returns keys (for property)
 		KeysVec GetKeysNonContant();
 
-		// Calls when curve updated keys and calculated duration
+		// It is called when curve updated keys and calculated duration
 		void OnCurveChanged();
 
 		// Completion deserialization callback

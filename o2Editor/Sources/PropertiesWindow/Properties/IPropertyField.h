@@ -64,7 +64,7 @@ namespace Editor
 		// Checks value for reverting to prototype
 		virtual void CheckRevertableState() {}
 
-		// Calls when field value changed
+		// It is called when field value changed
 		virtual void OnChanged();
 
 		// Stores values to data

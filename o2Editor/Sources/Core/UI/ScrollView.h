@@ -109,19 +109,19 @@ namespace Editor
 		// Draws grid
 		virtual void DrawGrid();
 
-		// Calls when camera position was changed
+		// It is called when camera position was changed
 		virtual void OnCameraTransformChanged();
 
-		// Calls when scrolling
+		// It is called when scrolling
 		void OnScrolled(float scroll);
 
-		// Calls when right mouse button was pressed on this
+		// It is called when right mouse button was pressed on this
 		void OnCursorRightMousePressed(const Input::Cursor& cursor);
 
-		// Calls when right mouse button stay down on this
+		// It is called when right mouse button stay down on this
 		void OnCursorRightMouseStayDown(const Input::Cursor& cursor);
 
-		// Calls when right mouse button was released (only when right mouse button pressed this at previous time)
+		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
 	};
 }

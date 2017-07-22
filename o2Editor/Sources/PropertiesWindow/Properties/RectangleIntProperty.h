@@ -147,46 +147,46 @@ namespace Editor
 		// Top Edit box change event
 		void OnTopEdited(const WString& data);
 
-		// Calls when drag handle was moved and changes the property value
+		// It is called when drag handle was moved and changes the property value
 		void OnLeftDragHandleMoved(const Input::Cursor& cursor);
 
-		// Calls when drag handle was moved and changes the property value
+		// It is called when drag handle was moved and changes the property value
 		void OnRightDragHandleMoved(const Input::Cursor& cursor);
 
-		// Calls when drag handle was moved and changes the property value
+		// It is called when drag handle was moved and changes the property value
 		void OnTopDragHandleMoved(const Input::Cursor& cursor);
 
-		// Calls when drag handle was moved and changes the property value
+		// It is called when drag handle was moved and changes the property value
 		void OnBottomDragHandleMoved(const Input::Cursor& cursor);
 
-		// Calls when key was released and changes focused value
+		// It is called when key was released and changes focused value
 		void OnKeyReleased(const Input::Key& key);
 
-		// Calls when change left value move handle pressed, sets cursor infinite mode and stores value to data
+		// It is called when change left value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnLeftMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Calls when change left value move handle  released, turns off cursor infinite mode, 
+		// It is called when change left value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
 		void OnLeftMoveHandleReleased(const Input::Cursor& cursor);
 
-		// Calls when change right value move handle pressed, sets cursor infinite mode and stores value to data
+		// It is called when change right value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnRightMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Calls when change right value move handle  released, turns off cursor infinite mode, 
+		// It is called when change right value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
 		void OnRightMoveHandleReleased(const Input::Cursor& cursor);
 
-		// Calls when change top value move handle pressed, sets cursor infinite mode and stores value to data
+		// It is called when change top value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnTopMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Calls when change top value move handle  released, turns off cursor infinite mode, 
+		// It is called when change top value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
 		void OnTopMoveHandleReleased(const Input::Cursor& cursor);
 
-		// Calls when change bottom value move handle pressed, sets cursor infinite mode and stores value to data
+		// It is called when change bottom value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnBottomMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Calls when change bottom value move handle  released, turns off cursor infinite mode, 
+		// It is called when change bottom value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
 		void OnBottomMoveHandleReleased(const Input::Cursor& cursor);
 
@@ -202,28 +202,10 @@ namespace Editor
 		// Sets value, checks value changed, calls onChangeCompleted
 		void SetTopValueByUser(int value);
 
-		// Checks that left value was changed and calls onChangeCompleted
-		void CheckLeftValueChangeCompleted();
+		// Checks that value was changed and calls onChangeCompleted
+		void CheckValueChangeCompleted();
 
-		// Checks that right value was changed and calls onChangeCompleted
-		void CheckRightValueChangeCompleted();
-
-		// Checks that bottom value was changed and calls onChangeCompleted
-		void CheckBottomValueChangeCompleted();
-
-		// Checks that top value was changed and calls onChangeCompleted
-		void CheckTopValueChangeCompleted();
-
-		// Stores left values to data
-		void StoreLeftValues(Vector<DataNode>& data) const;
-
-		// Stores right values to data
-		void StoreRightValues(Vector<DataNode>& data) const;
-
-		// Stores top values to data
-		void StoreTopValues(Vector<DataNode>& data) const;
-
-		// Stores bottom values to data
-		void StoreBottomValues(Vector<DataNode>& data) const;
+		// Stores values to data
+		void StoreValues(Vector<DataNode>& data) const;
 	};
 }

@@ -60,10 +60,10 @@ namespace Editor
 		// Updates layout
 		void UpdateLayout(bool forcible = false, bool withChildren = true);
 
-		// Calls when cursor drag handle was moved
+		// It is called when cursor drag handle was moved
 		void OnDragHandleMinMoved(const Vec2F& delta);
 
-		// Calls when cursor drag handle was moved
+		// It is called when cursor drag handle was moved
 		void OnDragHandleMaxMoved(const Vec2F& delta);
 
 		// Checks interactable. If childs more than 0 this will be not interactable

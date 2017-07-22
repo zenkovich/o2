@@ -123,16 +123,16 @@ namespace o2
 		Function<void()>                    onNameChanged;           // Name changing event
 
 
-        // Calls when some changed in actor
+        // It is called when some changed in actor
 		void OnChanged();
 
-		// Calls when actor's locking was changed
+		// It is called when actor's locking was changed
 		void OnLockChanged();
 
-		// Calls when actor's name was changed
+		// It is called when actor's name was changed
 		void OnNameChanged();
 
-		// Calls when child changed
+		// It is called when child changed
 		void OnChildsChanged();
 #endif
 
@@ -369,7 +369,7 @@ namespace o2
 		// Not using prototype setter
 		void SetProtytypeDummy(ActorAssetRef asset);
 
-		// Calls when transformation was changed
+		// It is called when transformation was changed
 		void OnTransformChanged();
 
 		// Sets parent
@@ -414,7 +414,7 @@ namespace o2
 		// Applies including to scene for all components in hierarchy
 		void ComponentsIncludeToScene();
 
-		// Calls when parent changed
+		// It is called when parent changed
 		void OnParentChanged(Actor* oldParent);
 
 		// Separates children actors to linear array, removes child and parent links
@@ -561,7 +561,7 @@ namespace o2
 		// Resolves actors' pointers. Works when lock depth is 0
 		void ResolvePointers();
 
-		// Calls when new actor was created
+		// It is called when new actor was created
 		static void ActorCreated(Actor* actor);
 
 		friend class Actor;

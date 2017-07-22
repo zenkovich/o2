@@ -61,7 +61,7 @@ namespace o2
 		// Set listener maximal priority
 		void SetMaxPriority(const ShortcutKeys& shortcut, ShortcutKeysListener* listener);
 
-		// Calls when key was pressed, send event to most priority listener
+		// It is called when key was pressed, send event to most priority listener
 		void OnKeyPressed(const Input::Key& key);
 
 		friend class ShortcutKeysListener;

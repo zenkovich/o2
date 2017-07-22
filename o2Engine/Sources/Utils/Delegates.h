@@ -703,4 +703,6 @@ namespace o2
 	{
 		return Function<_res_type(_args ...)>(object, functionPtr);
 	}
+
+#define THIS_FUNC(NAME) Func(this, &thisclass::NAME)
 }

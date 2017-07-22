@@ -29,7 +29,7 @@ namespace o2
 		ParticlesEmitter mEmitter; // @SERIALIZABLE @EDITOR_PROPERTY
 
 	protected:
-		// Calls when actor's transform was changed
+		// It is called when actor's transform was changed
 		void OnTransformChanged();
 	};
 }

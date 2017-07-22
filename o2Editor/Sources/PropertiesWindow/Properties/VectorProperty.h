@@ -93,7 +93,7 @@ namespace Editor
 		// Frees element property
 		void FreeValueProperty(PropertyDef def);
 
-		// Calls when count property changing
+		// It is called when count property changing
 		void OnCountChanged();
 	};
 }

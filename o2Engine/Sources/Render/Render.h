@@ -242,7 +242,7 @@ namespace o2
 		// Don't copy
 		Render& operator=(const Render& other);
 
-		// Calls when target frame or window was resized
+		// It is called when target frame or window was resized
 		void OnFrameResized();
 
 		// Initializes free type library
@@ -269,7 +269,7 @@ namespace o2
 		// Checks font for unloading
 		void CheckFontsUnloading();
 
-		// Calls when assets was rebuilded
+		// It is called when assets was rebuilded
 		void OnAssetsRebuilded(const Vector<UID>& changedAssets);
 
 		// initializes properties

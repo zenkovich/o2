@@ -22,7 +22,7 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Func(this, &ColorProperty::Revert);
+			mRevertBtn->onClick = THIS_FUNC(Revert);
 
 		Color4 color1(1.0f, 1.0f, 1.0f, 1.0f), color2(0.7f, 0.7f, 0.7f, 1.0f);
 		Bitmap backLayerBitmap(Bitmap::Format::R8G8B8A8, Vec2I(20, 20));
@@ -98,6 +98,8 @@ namespace Editor
 		}
 		else if (!Math::Equals(lastCommonValue, newCommonValue) || lastDifferent)
 			SetCommonValue(newCommonValue);
+
+		CheckRevertableState();
 	}
 
 	void ColorProperty::Revert()
@@ -183,8 +185,8 @@ namespace Editor
 		StoreValues(mBeforeChangeValues);
 
 		ColorPickerDlg::Show(mCommonValue, 
-							 Func(this, &ColorProperty::SetValue), 
-							 Func(this, &ColorProperty::CheckValueChangeCompleted));
+							 THIS_FUNC(SetValue), 
+							 THIS_FUNC(CheckValueChangeCompleted));
 	}
 
 	void ColorProperty::CheckValueChangeCompleted()

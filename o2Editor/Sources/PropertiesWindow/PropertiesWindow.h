@@ -96,7 +96,7 @@ namespace Editor
 
 		PropertiesFieldsVec      mAvailablePropertiesFields;  // Available properties fields
 
-		Function<void()>         mOnTargetsChangedDelegate;   // Calls when targets array changing
+		Function<void()>         mOnTargetsChangedDelegate;   // It is called when targets array changing
 		bool                     mTargetsChanged = false;     // True when targets was changed    
 
 	protected:
@@ -109,7 +109,7 @@ namespace Editor
 		// Initializes available properties fields and pools
 		void InitializePropertiesFields();
 
-		// Calls when some property field was changed
+		// It is called when some property field was changed
 		void OnPropertyChanged(IPropertyField* field);
 	};
 }

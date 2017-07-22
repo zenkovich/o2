@@ -47,7 +47,7 @@ namespace Editor
 		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, type, mFieldProperties, "");
 		
 		for (auto prop : mFieldProperties.properties)
-			prop.Value()->onChangeCompleted = Func(this, &DefaultActorComponentViewer::OnPropertyChanged);
+			prop.Value()->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 
 		mSpoiler->name = "spoiler " + type->GetName();
 		mPropertiesLayout->name = "properties " + type->GetName();
@@ -64,8 +64,6 @@ namespace Editor
 														const Vector<DataNode>& prevValue, 
 														const Vector<DataNode>& newValue)
 	{
-		o2Debug.Log("Changed " + path);
-
 		ActorsPropertyChangeAction* action = new ActorsPropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedActors(), mComponentType, path, prevValue, newValue);
 

@@ -14,7 +14,7 @@ namespace o2
 		mExpandHeight = false;
 
 		mExpandState = AddState("expand", Animation::EaseInOut(this, &mExpandCoef, 0.0f, 1.0f, 0.2f));
-		mExpandState->animation.onUpdate = Func(this, &UISpoiler::UpdateExpanding);
+		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 		UpdateExpanding(0);
 	}
@@ -26,7 +26,7 @@ namespace o2
 		if (!mExpandState)
 			mExpandState = AddState("expand", Animation::EaseInOut(this, &mExpandCoef, 0.0f, 1.0f, 0.2f));
 
-		mExpandState->animation.onUpdate = Func(this, &UISpoiler::UpdateExpanding);
+		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 		UpdateExpanding(0);
 	}
@@ -39,7 +39,7 @@ namespace o2
 		if (!mExpandState)
 			mExpandState = AddState("expand", Animation::EaseInOut(this, &mExpandCoef, 0.0f, 1.0f, 0.2f));
 
-		mExpandState->animation.onUpdate = Func(this, &UISpoiler::UpdateExpanding);
+		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 		UpdateExpanding(0);
 

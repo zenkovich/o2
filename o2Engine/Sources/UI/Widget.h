@@ -249,10 +249,10 @@ namespace o2
 		// Draws debug frame by mAbsoluteRect
 		void DrawDebugFrame();
 
-		// Calls when widget was selected
+		// It is called when widget was selected
 		virtual void OnFocused();
 
-		// Calls when widget was deselected
+		// It is called when widget was deselected
 		virtual void OnUnfocused();
 
 		// Checks is this layout driven by parent and calls UpdateLayout in parent if needed
@@ -282,7 +282,7 @@ namespace o2
 		// Updates result visibility
 		virtual void UpdateVisibility(bool updateLayout = true);
 
-		// Calls when child widget was selected
+		// It is called when child widget was selected
 		virtual void OnChildFocused(UIWidget* child);
 
 		// Sets target for all states animations
@@ -312,22 +312,22 @@ namespace o2
 		// Returns dictionary of all children by names
 		Dictionary<String, UIWidget*> GetAllChilds();
 
-		// Calls when layer added and updates drawing sequence
+		// It is called when layer added and updates drawing sequence
 		virtual void OnLayerAdded(UIWidgetLayer* layer);
 
-		// Calls when widget state was added
+		// It is called when widget state was added
 		virtual void OnStateAdded(UIWidgetState* state);
 
-		// Calls when child widget was added
+		// It is called when child widget was added
 		virtual void OnChildAdded(UIWidget* child);
 
-		// Calls when child widget was removed
+		// It is called when child widget was removed
 		virtual void OnChildRemoved(UIWidget* child);
 
-		// Calls when deserialized
+		// It is called when deserialized
 		void OnDeserialized(const DataNode& node);
 
-		// Calls when visible was changed
+		// It is called when visible was changed
 		virtual void OnVisibleChanged();
 
 		// Initializes properties

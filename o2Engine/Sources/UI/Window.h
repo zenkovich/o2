@@ -129,7 +129,7 @@ namespace o2
 		// Updates transparency for this and children widgets
 		void UpdateTransparency();
 
-		// Calls when layer added and updates drawing sequence
+		// It is called when layer added and updates drawing sequence
 		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Initializes handles
@@ -141,19 +141,19 @@ namespace o2
 		// Binds all drag handles interactable parameter to window visibility
 		void BindHandlesInteractableToVisibility();
 
-		// Calls when widget was selected
+		// It is called when widget was selected
 		void OnFocused();
 
-		// Calls when child widget was selected
+		// It is called when child widget was selected
 		void OnChildFocused(UIWidget* child);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when widget state was added
+		// It is called when widget state was added
 		void OnStateAdded(UIWidgetState* state);
 
-		// Calls when visible was changed
+		// It is called when visible was changed
 		void OnVisibleChanged();
 
 		// Initializes properties

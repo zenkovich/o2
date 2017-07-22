@@ -56,7 +56,7 @@ namespace Editor
 		// Redo next action
 		void RedoAction();
 
-		// Calls when action was done
+		// It is called when action was done
 		void DoneAction(IAction* action);
 
 		// Resets undo and redo actions
@@ -90,6 +90,8 @@ namespace Editor
 		EditorActionsVec   mForwardActions; // Forward actions, what you can redo
 
 		String             mLoadedScene;    // Current loaded scene
+
+		int                mDrawCalls;      // Draw calls count, stored before beginning rendering
 
 	protected:
 		// Calling on updating

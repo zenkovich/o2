@@ -15,7 +15,7 @@ namespace o2
 	class IAnimatedValue: public IAnimation
 	{
 	public:
-		Function<void()> onKeysChanged; // Calls when keys was changed
+		Function<void()> onKeysChanged; // It is called when keys was changed
 
 		// Sets target changing delegate
 		virtual void SetTargetDelegate(const Function<void()>& changeEvent) {}

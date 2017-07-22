@@ -37,6 +37,7 @@ namespace Editor
 		FloatProperty* mDepthProperty = nullptr;
 
 	protected:
-		void Update();
+		// It is called when some property changed, stores action for undo
+		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
 	};
 }

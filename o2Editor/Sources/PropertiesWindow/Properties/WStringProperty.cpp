@@ -18,12 +18,12 @@ namespace Editor
 		if (!mEditBox)
 			mEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget);
 
-		mEditBox->onChangeCompleted = Func(this, &WStringProperty::OnEdited);
+		mEditBox->onChangeCompleted = THIS_FUNC(OnEdited);
 		mEditBox->text = "--";
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Func(this, &WStringProperty::Revert);
+			mRevertBtn->onClick = THIS_FUNC(Revert);
 	}
 
 	WStringProperty::~WStringProperty()
@@ -76,6 +76,8 @@ namespace Editor
 		}
 		else if (lastCommonValue != newCommonValue || lastDifferent)
 			SetCommonValue(newCommonValue);
+
+		CheckRevertableState();
 	}
 
 	void WStringProperty::Revert()

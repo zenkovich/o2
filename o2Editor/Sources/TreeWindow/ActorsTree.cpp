@@ -6,6 +6,7 @@
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/AssetsWindow.h"
 #include "AssetsWindow/UIAssetIcon.h"
+#include "Core/Actions/ActorsPropertyChange.h"
 #include "Core/Actions/EnableActors.h"
 #include "Core/Actions/LockActors.h"
 #include "Core/Actions/ReparentActors.h"
@@ -52,12 +53,12 @@ namespace Editor
 
 	void UIActorsTree::AttachToSceneEvents()
 	{
-		o2Scene.onChanged += Func(this, &UIActorsTree::OnActorsChanged);
+		o2Scene.onChanged += THIS_FUNC(OnActorsChanged);
 
-		o2Scene.onActorCreated    += Func(this, &UIActorsTree::OnActorCreated);
-		o2Scene.onActorDestroying += Func(this, &UIActorsTree::OnActorDestroyed);
+		o2Scene.onActorCreated    += THIS_FUNC(OnActorCreated);
+		o2Scene.onActorDestroying += THIS_FUNC(OnActorDestroyed);
 
-		auto updateActorTreeNode = Func(this, &UIActorsTree::OnActorChanged);
+		auto updateActorTreeNode = THIS_FUNC(OnActorChanged);
 		o2Scene.onActorEnableChanged          += updateActorTreeNode;
 		o2Scene.onActorLockChanged            += updateActorTreeNode;
 		o2Scene.onActorNameChanged            += updateActorTreeNode;
@@ -70,12 +71,12 @@ namespace Editor
 	{
 		if (Scene::IsSingletonInitialzed() && mAttackedToSceneEvents)
 		{
-			o2Scene.onChanged -= Func(this, &UIActorsTree::OnActorsChanged);
+			o2Scene.onChanged -= THIS_FUNC(OnActorsChanged);
 
-			o2Scene.onActorCreated    -= Func(this, &UIActorsTree::OnActorCreated);
-			o2Scene.onActorDestroying -= Func(this, &UIActorsTree::OnActorDestroyed);
+			o2Scene.onActorCreated    -= THIS_FUNC(OnActorCreated);
+			o2Scene.onActorDestroying -= THIS_FUNC(OnActorDestroyed);
 
-			auto updateActorTreeNode = Func(this, &UIActorsTree::OnActorChanged);
+			auto updateActorTreeNode = THIS_FUNC(OnActorChanged);
 			o2Scene.onActorEnableChanged          -= updateActorTreeNode;
 			o2Scene.onActorLockChanged            -= updateActorTreeNode;
 			o2Scene.onActorNameChanged            -= updateActorTreeNode;
@@ -105,9 +106,6 @@ namespace Editor
 
 	void UIActorsTree::SelectAndHightlightActor(Actor* object)
 	{
-		o2Debug.Log("%i: Hightligh actor:%s %i", o2Time.GetCurrentFrame(), object->GetName(),
-					mAllNodes.FindIdx([=](Node* x) { return x->object == object; }));
-
 		UITree::SelectAndHightlightObject((UnknownPtr)(void*)object);
 	}
 
@@ -134,10 +132,10 @@ namespace Editor
 	void UIActorsTree::Initialize()
 	{
 		mEnableActorsTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
-		mEnableActorsTogglesGroup->onReleased = Func(this, &UIActorsTree::EnableActorsGroupReleased);
+		mEnableActorsTogglesGroup->onReleased = THIS_FUNC(EnableActorsGroupReleased);
 
 		mLockActorsTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
-		mLockActorsTogglesGroup->onReleased = Func(this, &UIActorsTree::LockActorsGroupReleased);
+		mLockActorsTogglesGroup->onReleased = THIS_FUNC(LockActorsGroupReleased);
 
 		UIActorsTreeNode* actorNodeWidgetSample = (UIActorsTreeNode*)mNodeWidgetSample;
 		actorNodeWidgetSample->InitializeControls();
@@ -336,19 +334,13 @@ namespace Editor
 		mEditState    = GetStateObject("edit");
 
 		if (mLockToggle)
-			mLockToggle->onClick = Func(this, &UIActorsTreeNode::OnLockClicked);
+			mLockToggle->onClick = THIS_FUNC(OnLockClicked);
 
 		if (mEnableToggle)
-			mEnableToggle->onClick = Func(this, &UIActorsTreeNode::OnEnableCkicked);
+			mEnableToggle->onClick = THIS_FUNC(OnEnableCkicked);
 
 		if (mNameEditBox)
-		{
-			mNameEditBox->onChangeCompleted = [=](const WString& text) {
-				mTargetActor->SetName(text);
-				mEditState->SetState(false);
-				((UIActorsTree*)mOwnerTree)->OnActorChanged(mTargetActor);
-			};
-		}
+			mNameEditBox->onChangeCompleted = THIS_FUNC(OnActorNameChanged);
 	}
 
 	void UIActorsTreeNode::SetActor(Actor* actor)
@@ -370,10 +362,12 @@ namespace Editor
 		mLinkBtn->SetStateForcible("halfHide", !actor->GetPrototypeDirectly().IsValid());
 
 		if (actor->GetPrototype())
-			mLinkBtn->onClick = [=]() { 
-			auto proto = actor->GetPrototype();
-			o2EditorAssets.ShowAssetIcon(proto->GetPath());
-		};
+		{
+			mLinkBtn->onClick = [=]() {
+				auto proto = actor->GetPrototype();
+				o2EditorAssets.ShowAssetIcon(proto->GetPath());
+			};
+		}
 
 		mEnableToggle->SetValue(actor->IsEnabled());
 
@@ -400,6 +394,22 @@ namespace Editor
 	void UIActorsTreeNode::OnEnableCkicked()
 	{
 		mTargetActor->SetEnabled(mEnableToggle->GetValue());
+	}
+
+	void UIActorsTreeNode::OnActorNameChanged(const WString& text)
+	{
+		String prevName = mTargetActor->GetName();
+
+		mTargetActor->SetName(text);
+		mEditState->SetState(false);
+		((UIActorsTree*)mOwnerTree)->OnActorChanged(mTargetActor);
+
+
+		DataNode prevData; prevData = prevName;
+		DataNode newData; newData = mTargetActor->GetName();
+
+		auto action = mnew ActorsPropertyChangeAction({ mTargetActor }, nullptr, "name", { prevData }, { newData });
+		o2EditorApplication.DoneAction(action);
 	}
 
 }
@@ -466,5 +476,6 @@ CLASS_META(Editor::UIActorsTreeNode)
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnLockClicked);
 	PROTECTED_FUNCTION(void, OnEnableCkicked);
+	PROTECTED_FUNCTION(void, OnActorNameChanged, const WString&);
 }
 END_META;

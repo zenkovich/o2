@@ -20,12 +20,12 @@ namespace Editor
 			mToggle = dynamic_cast<UIToggle*>(mPropertyWidget);
 
 		mToggle->layout.minHeight = 10;
-		mToggle->onToggleByUser = Func(this, &BooleanProperty::SetValueByUser);
+		mToggle->onToggleByUser = THIS_FUNC(SetValueByUser);
 		mToggle->SetValueUnknown();
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Func(this, &BooleanProperty::Revert);
+			mRevertBtn->onClick = THIS_FUNC(Revert);
 	}
 
 	BooleanProperty::~BooleanProperty()
@@ -64,7 +64,7 @@ namespace Editor
 
 		for (int i = 1; i < mValuesPointers.Count(); i++)
 		{
-			if (newDifferent != mGetFunc(mValuesPointers[i].first))
+			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -78,6 +78,8 @@ namespace Editor
 		}
 		else if (lastCommonValue != newCommonValue || lastDifferent)
 			SetCommonValue(newCommonValue);
+
+		CheckRevertableState();
 	}
 
 	void BooleanProperty::Revert()

@@ -56,7 +56,7 @@ namespace Editor
 		mCountProperty = (IntegerProperty*)countPropertyWidget.first;
 		mPropertiesLayout->AddChild(countPropertyWidget.second);
 
-		mCountProperty->onChanged = Func(this, &VectorProperty::OnCountChanged);
+		mCountProperty->onChanged = THIS_FUNC(OnCountChanged);
 	}
 
 	VectorProperty::~VectorProperty()

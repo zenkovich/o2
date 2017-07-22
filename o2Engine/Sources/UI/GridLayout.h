@@ -115,10 +115,10 @@ namespace o2
 		bool         mFitByChildren = false;                  // Fitting by children @SERIALIZABLE
 
 	protected:
-		// Calls when child widget was added
+		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child);
 
-		// Calls when child widget was removed
+		// It is called when child widget was removed
 		void OnChildRemoved(UIWidget* child);
 
 		// Invokes required function for childs arranging

@@ -16,13 +16,13 @@ namespace Editor
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("singleline edit property");
 
 		mEditBox = mPropertyWidget->FindChild<UIEditBox>();
-		mEditBox->onChangeCompleted = Func(this, &FloatProperty::OnEdited);
+		mEditBox->onChangeCompleted = THIS_FUNC(OnEdited);
 		mEditBox->text = "--";
 		mEditBox->SetFilterFloat();
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Func(this, &FloatProperty::Revert);
+			mRevertBtn->onClick = THIS_FUNC(Revert);
 
 		auto handleLayer = mEditBox->GetLayer("arrows");
 
@@ -32,9 +32,9 @@ namespace Editor
 
 			mDragHangle.cursorType = CursorType::SizeNS;
 			mDragHangle.isUnderPoint = [=](const Vec2F& point) { return handleLayer->IsUnderPoint(point); };
-			mDragHangle.onMoved = Func(this, &FloatProperty::OnDragHandleMoved);
-			mDragHangle.onCursorPressed = Func(this, &FloatProperty::OnMoveHandlePressed);
-			mDragHangle.onCursorReleased = Func(this, &FloatProperty::OnMoveHandleReleased);
+			mDragHangle.onMoved = THIS_FUNC(OnDragHandleMoved);
+			mDragHangle.onCursorPressed = THIS_FUNC(OnMoveHandlePressed);
+			mDragHangle.onCursorReleased = THIS_FUNC(OnMoveHandleReleased);
 		}
 	}
 
@@ -88,6 +88,8 @@ namespace Editor
 		}
 		else if (!Math::Equals(lastCommonValue, newCommonValue) || lastDifferent)
 			SetCommonValue(newCommonValue);
+
+		CheckRevertableState();
 	}
 
 	void FloatProperty::Revert()

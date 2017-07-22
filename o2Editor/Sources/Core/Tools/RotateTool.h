@@ -62,16 +62,16 @@ namespace Editor
 		// Draws tool
 		void DrawScreen();
 
-		// Calls when tool was enabled
+		// It is called when tool was enabled
 		void OnEnabled();
 
-		// Calls when tool was disabled
+		// It is called when tool was disabled
 		void OnDisabled();
 
-		// Calls when scene actors was changed
+		// It is called when scene actors was changed
 		void OnSceneChanged(Vector<Actor*> changedActors);
 
-		// Calls when actors selection was changed
+		// It is called when actors selection was changed
 		void OnActorsSelectionChanged(Vector<Actor*> actors);
 
 		// Updates ring and angle meshes
@@ -80,28 +80,28 @@ namespace Editor
 		// Calculates rotate pivot in actors center
 		void CalcPivotByActorsCenter();
 
-		// Calls when pivot handle moved
+		// It is called when pivot handle moved
 		void OnPivotDragHandleMoved(const Vec2F& position);
 
 		// Returns is point inside rotate ring
 		bool IsPointInRotateRing(const Vec2F& point) const;
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when key was pressed
+		// It is called when key was pressed
 		void OnKeyPressed(const Input::Key& key);
 
-		// Calls when key stay down during frame
+		// It is called when key stay down during frame
 		void OnKeyStayDown(const Input::Key& key);
 
 		// Rotates actors on angle

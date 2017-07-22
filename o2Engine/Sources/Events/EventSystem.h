@@ -57,19 +57,19 @@ namespace o2
 		// Returns time between clicks for double click reaction
 		float GetDoubleClickTime() const;
 
-		// Calls when application was started
+		// It is called when application was started
 		void OnApplicationStarted();
 
-		// Calls when application closing
+		// It is called when application closing
 		void OnApplicationClosing();
 
-		// Calls when application activated
+		// It is called when application activated
 		void OnApplicationActivated();
 
-		// Calls when application deactivated
+		// It is called when application deactivated
 		void OnApplicationDeactivated();
 
-		// Calls when application frame was sized
+		// It is called when application frame was sized
 		void OnApplicationSized();
 
 		// processes cursor tracing for cursor

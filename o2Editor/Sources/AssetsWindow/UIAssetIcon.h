@@ -54,34 +54,34 @@ namespace Editor
 		// Sets is this selected
 		void SetSelected(bool selected);
 
-		// Calls when cursor double clicked
+		// It is called when cursor double clicked
 		void OnCursorDblClicked(const Input::Cursor& cursor);
 
-		// Calls when right mouse button was released (only when right mouse button pressed this at previous time)
+		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor enters this object, moving hover of tree to this
+		// It is called when cursor enters this object, moving hover of tree to this
 		void OnCursorEnter(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object, moving hover of tree to this
+		// It is called when cursor exits this object, moving hover of tree to this
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Calls when started dragging
+		// It is called when started dragging
 		void OnDragStart(const Input::Cursor& cursor);
 
-		// Calls when dragged
+		// It is called when dragged
 		void OnDragged(const Input::Cursor& cursor, DragDropArea* area);
 
-		// Calls when dragging completed
+		// It is called when dragging completed
 		void OnDragEnd(const Input::Cursor& cursor);
 
-		// Calls when this was selected
+		// It is called when this was selected
 		void OnSelected();
 
-		// Calls when this was unselected
+		// It is called when this was unselected
 		void OnDeselected();
 
-		// Calls when some selectable listeners was dropped to this
+		// It is called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group);
 
 		friend class UIAssetsIconsScrollArea;

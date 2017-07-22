@@ -78,7 +78,7 @@ namespace Editor
 		// Checks value for reverting to prototype
 		void CheckRevertableState();
 
-		// Calls when box pressed and shows color picking dialog
+		// It is called when box pressed and shows color picking dialog
 		void OnClicked();
 
 		// Checks that value was changed and calls onChangeCompleted

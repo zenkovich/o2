@@ -100,6 +100,7 @@ namespace Editor
 			viewer->Refresh();
 
 		mTransformViewer->Refresh();
+		mHeaderViewer->Refresh();
 	}
 
 	void ActorPropertiesViewer::SetTargets(const Vector<IObject*> targets)

@@ -290,7 +290,7 @@ namespace o2
 		// Updates mesh geometry
 		void UpdateMesh(); 
 		
-		// Calls when basis was changed, updates particles positions from last transform
+		// It is called when basis was changed, updates particles positions from last transform
 		void BasisChanged();
 
 		// Initialize properties

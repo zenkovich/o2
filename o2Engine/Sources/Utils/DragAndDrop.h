@@ -13,28 +13,28 @@ namespace o2
 	class DragDropArea: virtual public CursorAreaEventsListener
 	{
 	protected:
-		// Calls when some DragEventsListener was dropped to this
+		// It is called when some DragEventsListener was dropped to this
 		virtual void OnDropped(DragableObject* draggable);
 
-		// Calls when some selectable listeners was dropped to this
+		// It is called when some selectable listeners was dropped to this
 		virtual void OnDropped(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listener was entered to this area
+		// It is called when some drag listener was entered to this area
 		virtual void OnDragEnter(DragableObject* draggable);
 
-		// Calls when some drag listeners was entered to this area
+		// It is called when some drag listeners was entered to this area
 		virtual void OnDragEnter(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listener was dragged above this area
+		// It is called when some drag listener was dragged above this area
 		virtual void OnDraggedAbove(DragableObject* draggable);
 
-		// Calls when some drag listeners was dragged above this area
+		// It is called when some drag listeners was dragged above this area
 		virtual void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listener was exited from this area
+		// It is called when some drag listener was exited from this area
 		virtual void OnDragExit(DragableObject* draggable);
 
-		// Calls when some drag listeners was exited from this area
+		// It is called when some drag listeners was exited from this area
 		virtual void OnDragExit(ISelectableDragableObjectsGroup* group);
 
 		friend class DragableObject;
@@ -56,7 +56,7 @@ namespace o2
 		// Returns true if it's dragging
 		bool IsDragging() const;
 
-		// Calls when listener was drawn
+		// It is called when listener was drawn
 		virtual void OnDrawn();
 
 		// Returns last cursor pressed point
@@ -71,28 +71,28 @@ namespace o2
 		DragDropArea* mDragDropArea = nullptr;       // Drag drop area under this when dragging
 
 	protected:
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		virtual void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		virtual void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		virtual void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor moved on this (or moved outside when this was pressed)
+		// It is called when cursor moved on this (or moved outside when this was pressed)
 		virtual void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when started dragging
+		// It is called when started dragging
 		virtual void OnDragStart(const Input::Cursor& cursor);
 
-		// Calls when dragged
+		// It is called when dragged
 		virtual void OnDragged(const Input::Cursor& cursor, DragDropArea* area);
 
-		// Calls when dragging completed
+		// It is called when dragging completed
 		virtual void OnDragEnd(const Input::Cursor& cursor);
 
-		// Calls when this was dropped
+		// It is called when this was dropped
 		virtual void OnDropped(DragDropArea* area);
 
 		friend class EventSystem;
@@ -135,13 +135,13 @@ namespace o2
 		void SelectAll();
 
 	protected:
-		// Calls when selectable draggable object was pressed
+		// It is called when selectable draggable object was pressed
 		virtual void OnSelectableObjectCursorPressed(SelectableDragableObject* object, const Input::Cursor& cursor) {}
 
-		// Calls when selectable draggable object was released
+		// It is called when selectable draggable object was released
 		virtual void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) {}
 
-		// Calls when selectable object was began to drag
+		// It is called when selectable object was began to drag
 		virtual void OnSelectableObjectBeganDragging(SelectableDragableObject* object) {}
 
 		friend class SelectableDragableObject;
@@ -185,7 +185,7 @@ namespace o2
 		SelectDragObjectsVec mSelectedObjects; // Selected listeners in group
 
 	protected:
-		// Calls when selectable draggable object was pressed
+		// It is called when selectable draggable object was pressed
 		virtual void OnSelectableObjectCursorPressed(SelectableDragableObject* object, const Input::Cursor& cursor);
 
 		friend class SelectableDragableObject;
@@ -223,22 +223,22 @@ namespace o2
 		ISelectableDragableObjectsGroup* mSelectGroup = nullptr; // Selection group
 
 	protected:
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		virtual void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor moved on this (or moved outside when this was pressed)
+		// It is called when cursor moved on this (or moved outside when this was pressed)
 		virtual void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		virtual void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor released outside this(only when cursor pressed this at previous time)
+		// It is called when cursor released outside this(only when cursor pressed this at previous time)
 		virtual void OnCursorReleasedOutside(const Input::Cursor& cursor);
 
-		// Calls when this was selected
+		// It is called when this was selected
 		virtual void OnSelected();
 
-		// Calls when this was unselected
+		// It is called when this was unselected
 		virtual void OnDeselected();
 
 		friend class ISelectableDragableObjectsGroup;

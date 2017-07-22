@@ -23,12 +23,12 @@ namespace Editor
 		mFoldersTree->SetRearrangeType(UITree::RearrangeType::OnlyReparent);
 		mFoldersTree->SetMultipleSelectionAvailable(false);
 
-		mFoldersTree->getObjectParentDelegate = Func(this, &UIAssetsFoldersTree::GetFoldersTreeNodeParent);
-		mFoldersTree->getObjectChildrenDelegate = Func(this, &UIAssetsFoldersTree::GetFoldersTreeNodeChilds);
-		mFoldersTree->fillNodeDataByObjectDelegate = Func(this, &UIAssetsFoldersTree::SetupFoldersTreeNode);
-		mFoldersTree->onNodeDoubleClicked = Func(this, &UIAssetsFoldersTree::OnFoldersTreeNodeDblClick);
-		mFoldersTree->onObjectsSelectionChanged = Func(this, &UIAssetsFoldersTree::OnFoldersTreeSelect);
-		mFoldersTree->onNodeRightButtonClicked = Func(this, &UIAssetsFoldersTree::OnFoldersTreeRightClick);
+		mFoldersTree->getObjectParentDelegate = THIS_FUNC(GetFoldersTreeNodeParent);
+		mFoldersTree->getObjectChildrenDelegate = THIS_FUNC(GetFoldersTreeNodeChilds);
+		mFoldersTree->fillNodeDataByObjectDelegate = THIS_FUNC(SetupFoldersTreeNode);
+		mFoldersTree->onNodeDoubleClicked = THIS_FUNC(OnFoldersTreeNodeDblClick);
+		mFoldersTree->onObjectsSelectionChanged = THIS_FUNC(OnFoldersTreeSelect);
+		mFoldersTree->onNodeRightButtonClicked = THIS_FUNC(OnFoldersTreeRightClick);
 		mFoldersTree->UpdateNodesView();
 
 		AddChild(mFoldersTree);

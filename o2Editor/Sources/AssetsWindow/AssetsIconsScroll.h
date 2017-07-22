@@ -141,7 +141,7 @@ namespace Editor
 		bool               mChangePropertiesTargetsFromThis = false;
 
 	protected:
-		// Calls when assets selection was changed
+		// It is called when assets selection was changed
 		void OnAssetsSelected();
 
 		// Updates layout
@@ -150,22 +150,22 @@ namespace Editor
 		// Updates cutting assets
 		void UpdateCuttingAssets();
 
-		// Calls when widget was selected
+		// It is called when widget was selected
 		void OnFocused();
 
-		// Calls when widget was deselected
+		// It is called when widget was deselected
 		void OnUnfocused();
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
 		// Begins selecting icons
@@ -180,13 +180,13 @@ namespace Editor
 		// Registers actors creation undo action
 		void RegActorsCreationAction();
 
-		// Calls when cursor moved on this (or moved outside when this was pressed)
+		// It is called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor);
 
-		// Calls when right mouse button was released (only when right mouse button pressed this at previous time)
+		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
 
-		// Calls when key was released
+		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key);
 
 		// Initializes assets context menu
@@ -207,40 +207,40 @@ namespace Editor
 		// Updates assets grid size
 		void UpdateAssetsGridSize();
 
-		// Calls when asset icon double clicked
+		// It is called when asset icon double clicked
 		void OnIconDblClicked(UIAssetIcon* icon);
 
-		// Calls when context copy pressed
+		// It is called when context copy pressed
 		void OnContextCopyPressed();
 
-		// Calls when context cut pressed
+		// It is called when context cut pressed
 		void OnContextCutPressed();
 
-		// Calls when context paste pressed
+		// It is called when context paste pressed
 		void OnContextPastePressed();
 
-		// Calls when context delete pressed
+		// It is called when context delete pressed
 		void OnContextDeletePressed();
 
-		// Calls when context open pressed
+		// It is called when context open pressed
 		void OnContextOpenPressed();
 
-		// Calls when context show in explorer pressed
+		// It is called when context show in explorer pressed
 		void OnContextShowInExplorerPressed();
 
-		// Calls when context import pressed
+		// It is called when context import pressed
 		void OnContextImportPressed();
 
-		// Calls when context create folder pressed
+		// It is called when context create folder pressed
 		void OnContextCreateFolderPressed();
 
-		// Calls when context create prefab pressed
+		// It is called when context create prefab pressed
 		void OnContextCreatePrefabPressed();
 
-		// Calls when context create script pressed
+		// It is called when context create script pressed
 		void OnContextCreateScriptPressed();
 
-		// Calls when context create animation pressed
+		// It is called when context create animation pressed
 		void OnContextCreateAnimationPressed();
 
 		// Instantiates dragging assets
@@ -288,10 +288,10 @@ namespace Editor
 		// Removes selectable object from group
 		void RemoveSelectableObject(SelectableDragableObject* object);
 
-		// Calls when selectable draggable object was released
+		// It is called when selectable draggable object was released
 		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor);
 
-		// Calls when selectable object was began to drag
+		// It is called when selectable object was began to drag
 		void OnSelectableObjectBeganDragging(SelectableDragableObject* object);
 
 // DragDropArea implementation
@@ -305,22 +305,22 @@ namespace Editor
 		// Updates dragging graphics
 		void UpdateDraggingGraphics();
 
-		// Calls when some drag listeners was entered to this area
+		// It is called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listeners was dragged above this area
+		// It is called when some drag listeners was dragged above this area
 		void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listeners was exited from this area
+		// It is called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some selectable listeners was dropped to this
+		// It is called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group);
 
-		// Calls when dropped dragged assets icons selected and started dragging from this
+		// It is called when dropped dragged assets icons selected and started dragging from this
 		void OnDroppedFromThis();
 
-		// Calls when dropped dragged actors tree nodes selected and started dragging from actors tree
+		// It is called when dropped dragged actors tree nodes selected and started dragging from actors tree
 		void OnDroppedFromActorsTree(UIActorsTree* actorsTree);
 
 		friend class AssetsWindow;

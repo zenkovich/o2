@@ -44,25 +44,25 @@ namespace Editor
 		// Draws screen
 		void DrawScreen();
 
-		// Calls when tool was enabled
+		// It is called when tool was enabled
 		void OnEnabled();
 
-		// Calls when tool was disabled
+		// It is called when tool was disabled
 		void OnDisabled();
 
-		// Calls when scene actors was changed
+		// It is called when scene actors was changed
 		void OnSceneChanged(Vector<Actor*> changedActors);
 
-		// Calls when actors selection was changed
+		// It is called when actors selection was changed
 		void OnActorsSelectionChanged(Vector<Actor*> actors);
 
-		// Calls when horizontal drag handle was moved
+		// It is called when horizontal drag handle was moved
 		void OnHorDragHandleMoved(const Vec2F& position);
 
-		// Calls when horizontal drag handle was moved
+		// It is called when horizontal drag handle was moved
 		void OnVerDragHandleMoved(const Vec2F& position);
 
-		// Calls when horizontal drag handle was moved
+		// It is called when horizontal drag handle was moved
 		void OnBothDragHandleMoved(const Vec2F& position);
 
 		// Updates handles position
@@ -74,22 +74,22 @@ namespace Editor
 		// Updates handles position
 		void UpdateHandlesPositions();
 
-		// Calls when key was pressed
+		// It is called when key was pressed
 		void OnKeyPressed(const Input::Key& key);
 
-		// Calls when key stay down during frame
+		// It is called when key stay down during frame
 		void OnKeyStayDown(const Input::Key& key);
 
-		// Calls when key was pressed
+		// It is called when key was pressed
 		void OnKeyReleased(const Input::Key& key);
 
 		// Moves selected actors on delta
 		void ScaleSelectedActors(const Vec2F& scale);
 
-		// Calls when some handle was pressed, stores before transformations
+		// It is called when some handle was pressed, stores before transformations
 		void HandlePressed();
 
-		// Calls when handle was released, completes transformation action
+		// It is called when handle was released, completes transformation action
 		void HandleReleased();
 	};
 

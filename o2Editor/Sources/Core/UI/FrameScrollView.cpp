@@ -14,13 +14,13 @@ namespace Editor
 		mHorScrollbar = mnew UIHorizontalScrollBar();
 		mHorScrollbar->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
 		mHorScrollbar->SetParent(this);
-		mHorScrollbar->onUserChange = Func(this, &UIFrameScrollView::OnHorScrollScrolled);
+		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 		mChilds.Remove(mHorScrollbar);
 
 		mVerScrollbar = mnew UIVerticalScrollBar();
 		mVerScrollbar->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 0, 20);
 		mVerScrollbar->SetParent(this);
-		mVerScrollbar->onUserChange = Func(this, &UIFrameScrollView::OnVerScrollScrolled);
+		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 		mChilds.Remove(mVerScrollbar);
 
 		mReady = true;
@@ -32,11 +32,11 @@ namespace Editor
 		mReady = false;
 
 		mHorScrollbar->SetParent(this);
-		mHorScrollbar->onUserChange = Func(this, &UIFrameScrollView::OnHorScrollScrolled);
+		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 		mChilds.Remove(mHorScrollbar);
 
 		mVerScrollbar->SetParent(this);
-		mVerScrollbar->onUserChange = Func(this, &UIFrameScrollView::OnVerScrollScrolled);
+		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 		mChilds.Remove(mVerScrollbar);
 
 		RetargetStatesAnimations();
@@ -59,12 +59,12 @@ namespace Editor
 
 		mHorScrollbar = other.mHorScrollbar->Clone();
 		mHorScrollbar->SetParent(this);
-		mHorScrollbar->onUserChange = Func(this, &UIFrameScrollView::OnHorScrollScrolled);
+		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 		mChilds.Remove(mHorScrollbar);
 
 		mVerScrollbar = other.mVerScrollbar->Clone();
 		mVerScrollbar->SetParent(this);
-		mVerScrollbar->onUserChange = Func(this, &UIFrameScrollView::OnVerScrollScrolled);
+		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 		mChilds.Remove(mVerScrollbar);
 
 		return *this;
@@ -111,7 +111,7 @@ namespace Editor
 		mHorScrollbar = scrollbar;
 		AddChild(mHorScrollbar);
 		mChilds.Remove(mHorScrollbar);
-		mHorScrollbar->onUserChange = Func(this, &UIFrameScrollView::OnHorScrollScrolled);
+		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 
 		UpdateLayout();
 	}
@@ -122,7 +122,7 @@ namespace Editor
 		mVerScrollbar = scrollbar;
 		AddChild(mVerScrollbar);
 		mChilds.Remove(mVerScrollbar);
-		mVerScrollbar->onUserChange = Func(this, &UIFrameScrollView::OnVerScrollScrolled);
+		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 
 		UpdateLayout();
 	}

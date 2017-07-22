@@ -99,32 +99,32 @@ namespace o2
 		UIButtonGroup* mButtonGroup = nullptr; // Button group
 
 	protected:
-		// Calls when cursor pressed on this. Sets state "pressed" to true
+		// It is called when cursor pressed on this. Sets state "pressed" to true
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
-		// Calls onClicked if cursor is still above this
+		// It is called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
+		// It is called onClicked if cursor is still above this
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor enters this object. Sets state "select" to true
+		// It is called when cursor enters this object. Sets state "select" to true
 		void OnCursorEnter(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object. Sets state "select" to false
+		// It is called when cursor exits this object. Sets state "select" to false
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Calls when key was pressed
+		// It is called when key was pressed
 		void OnKeyPressed(const Input::Key& key);
 
-		// Calls when key was released
+		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key);
 
-		// Calls when layer added and updates drawing sequence
+		// It is called when layer added and updates drawing sequence
 		void OnLayerAdded(UIWidgetLayer* layer);
 
-		// Calls when visible was changed
+		// It is called when visible was changed
 		void OnVisibleChanged();
 
 		// Initializes properties

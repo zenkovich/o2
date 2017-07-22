@@ -61,7 +61,7 @@ namespace o2
 		bool           mCheckable = false; // Is menu item can be checked
 
 	protected:
-		// Calls when child widget was added
+		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child);
 
 		// This event calling when shortcut hit and this listener has max priority. Calls click callback
@@ -262,7 +262,7 @@ namespace o2
 		// Returns item info
 		Item GetItemDef(int idx) const;
 
-		// Calls when visible was changed
+		// It is called when visible was changed
 		void OnVisibleChanged();
 
 		// Returns item widget under point and stores index in idxPtr, if not null
@@ -271,22 +271,22 @@ namespace o2
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor moved on this (or moved outside when this was pressed)
+		// It is called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor);
 
-		// Calls when key was released
+		// It is called when key was released
 		void OnKeyPressed(const Input::Key& key);
 
 		// Hides context with his parent

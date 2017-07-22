@@ -110,10 +110,10 @@ namespace o2
 		// Returns layout width
 		float GetMinWidthWithChildren() const;
 
-		// Calls when child widget was added
+		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child);
 
-		// Calls when child widget was removed
+		// It is called when child widget was removed
 		void OnChildRemoved(UIWidget* child);
 
 		// Invokes reque function for childs arranging

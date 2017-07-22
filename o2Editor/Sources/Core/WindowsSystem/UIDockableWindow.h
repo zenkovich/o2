@@ -59,13 +59,13 @@ namespace Editor
 		// Initializes drag handles
 		void InitializeDragHandles();
 
-		// Calls when window was moved
+		// It is called when window was moved
 		void OnMoved(const Input::Cursor& cursor);
 
-		// Calls when window moving was completed
+		// It is called when window moving was completed
 		void OnMoveCompleted(const Input::Cursor&);
 
-		// Calls when window going to move
+		// It is called when window going to move
 		void OnMoveBegin(const Input::Cursor&);
 
 		// Searches dock place under cursor and returns parameters of them

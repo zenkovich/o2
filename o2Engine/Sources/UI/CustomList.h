@@ -179,31 +179,31 @@ namespace o2
 		// Updates mouse control
 		void UpdateControls(float dt);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor moved on this (or moved outside when this was pressed)
+		// It is called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object
+		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Calls when scrolling
+		// It is called when scrolling
 		void OnScrolled(float scroll);
 
 		// Returns item widget under point and stores index in idxPtr, if not null
 		UIWidget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
-		// Calls when object was deserialized and trying to reattach states animations target
+		// It is called when object was deserialized and trying to reattach states animations target
 		void OnDeserialized(const DataNode& node);
 
 		// Updates transparency for this and children widgets
@@ -215,10 +215,10 @@ namespace o2
 		// Returns selection sprite
 		Sprite* GetSelectionSprite();
 
-		// Calls when selected item index was changed
+		// It is called when selected item index was changed
 		virtual void OnSelectionChanged();
 
-		// Calls when visible was changed
+		// It is called when visible was changed
 		void OnVisibleChanged();
 
 		// Initializes properties

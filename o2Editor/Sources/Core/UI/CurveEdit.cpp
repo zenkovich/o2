@@ -31,9 +31,9 @@ namespace Editor
 
 		mTransformFrame.SetPivotEnabled(false);
 		mTransformFrame.SetRotationEnabled(false);
-		mTransformFrame.onTransformed = Func(this, &UICurveEditor::OnTransformFrameTransformed);
-		mTransformFrame.onPressed = Func(this, &UICurveEditor::OnTransformBegin);
-		mTransformFrame.onChangeCompleted = Func(this, &UICurveEditor::OnTransformCompleted);
+		mTransformFrame.onTransformed = THIS_FUNC(OnTransformFrameTransformed);
+		mTransformFrame.onPressed = THIS_FUNC(OnTransformBegin);
+		mTransformFrame.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
 		mTransformFrame.messageFallDownListener = this;
 
 		mBackColor = Color4(130, 130, 130, 255);
@@ -265,28 +265,28 @@ namespace Editor
 		mContextMenu = o2UI.CreateWidget<UIContextMenu>();
 
 		mContextMenu->AddItems({
-			UIContextMenu::Item("Edit", Func(this, &UICurveEditor::OnEditPressed), ImageAssetRef()),
+			UIContextMenu::Item("Edit", THIS_FUNC(OnEditPressed), ImageAssetRef()),
 
 			UIContextMenu::Item::Separator(),
 
-			UIContextMenu::Item("Auto smooth", false, Func(this, &UICurveEditor::OnAutoSmoothChecked)),
-			UIContextMenu::Item("Flat", false, Func(this, &UICurveEditor::OnFlatChecked)),
-			UIContextMenu::Item("Free", false, Func(this, &UICurveEditor::OnFreeChecked)),
-			UIContextMenu::Item("Broken", false, Func(this, &UICurveEditor::OnBrokenChecked)),
-			UIContextMenu::Item("Discrete", false, Func(this, &UICurveEditor::OnDiscreteChecked)),
+			UIContextMenu::Item("Auto smooth", false, THIS_FUNC(OnAutoSmoothChecked)),
+			UIContextMenu::Item("Flat", false, THIS_FUNC(OnFlatChecked)),
+			UIContextMenu::Item("Free", false, THIS_FUNC(OnFreeChecked)),
+			UIContextMenu::Item("Broken", false, THIS_FUNC(OnBrokenChecked)),
+			UIContextMenu::Item("Discrete", false, THIS_FUNC(OnDiscreteChecked)),
 
 			UIContextMenu::Item::Separator(),
 
-			UIContextMenu::Item("Copy keys", Func(this, &UICurveEditor::OnCopyPressed), ImageAssetRef(), ShortcutKeys('C', true)),
-			UIContextMenu::Item("Cut keys", Func(this, &UICurveEditor::OnCutPressed), ImageAssetRef(), ShortcutKeys('X', true)),
-			UIContextMenu::Item("Paste keys", Func(this, &UICurveEditor::OnPastePressed), ImageAssetRef(), ShortcutKeys('V', true)),
-			UIContextMenu::Item("Delete keys", Func(this, &UICurveEditor::OnDeletePressed), ImageAssetRef(), ShortcutKeys(VK_DELETE)),
-			UIContextMenu::Item("Insert key", Func(this, &UICurveEditor::OnInsertPressed), ImageAssetRef()),
+			UIContextMenu::Item("Copy keys", THIS_FUNC(OnCopyPressed), ImageAssetRef(), ShortcutKeys('C', true)),
+			UIContextMenu::Item("Cut keys", THIS_FUNC(OnCutPressed), ImageAssetRef(), ShortcutKeys('X', true)),
+			UIContextMenu::Item("Paste keys", THIS_FUNC(OnPastePressed), ImageAssetRef(), ShortcutKeys('V', true)),
+			UIContextMenu::Item("Delete keys", THIS_FUNC(OnDeletePressed), ImageAssetRef(), ShortcutKeys(VK_DELETE)),
+			UIContextMenu::Item("Insert key", THIS_FUNC(OnInsertPressed), ImageAssetRef()),
 
 			UIContextMenu::Item::Separator(),
 
-			UIContextMenu::Item("Undo", Func(this, &UICurveEditor::OnUndoPressed), ImageAssetRef(), ShortcutKeys('Z', true)),
-			UIContextMenu::Item("Redo", Func(this, &UICurveEditor::OnRedoPressed), ImageAssetRef(), ShortcutKeys('Z', true, true))
+			UIContextMenu::Item("Undo", THIS_FUNC(OnUndoPressed), ImageAssetRef(), ShortcutKeys('Z', true)),
+			UIContextMenu::Item("Redo", THIS_FUNC(OnRedoPressed), ImageAssetRef(), ShortcutKeys('Z', true, true))
 		});
 
 		onShow = [&]() { mContextMenu->SetItemsMaxPriority(); };
@@ -331,7 +331,7 @@ namespace Editor
 		positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
 
 		mEditValueWindowPosition = o2UI.CreateEditBox("singleline");
-		mEditValueWindowPosition->onChangeCompleted = Func(this, &UICurveEditor::OnEditKeyPositionChanged);
+		mEditValueWindowPosition->onChangeCompleted = THIS_FUNC(OnEditKeyPositionChanged);
 		positionVerLayout->AddChild(mEditValueWindowPosition);
 		horLayout->AddChild(positionVerLayout);
 
@@ -339,7 +339,7 @@ namespace Editor
 		valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
 
 		mEditValueWindowValue = o2UI.CreateEditBox("singleline");
-		mEditValueWindowValue->onChangeCompleted = Func(this, &UICurveEditor::OnEditKeyValueChanged);
+		mEditValueWindowValue->onChangeCompleted = THIS_FUNC(OnEditKeyValueChanged);
 		valueVerLayout->AddChild(mEditValueWindowValue);
 		horLayout->AddChild(valueVerLayout);
 
@@ -581,9 +581,9 @@ namespace Editor
 		keyHandles->mainHandle.onChangedPos = [=](const Vec2F& pos) { OnCurveKeyMainHandleDragged(info, keyHandles, pos); };
 		keyHandles->mainHandle.localToScreenTransformFunc = [&](const Vec2F& p) { return LocalToScreenPoint(p); };
 		keyHandles->mainHandle.screenToLocalTransformFunc = [&](const Vec2F& p) { return ScreenToLocalPoint(p); };
-		keyHandles->mainHandle.onRightButtonReleased = Func(this, &UICurveEditor::OnCursorRightMouseReleased);
-		keyHandles->mainHandle.onPressed = Func(this, &UICurveEditor::OnTransformBegin);
-		keyHandles->mainHandle.onChangeCompleted = Func(this, &UICurveEditor::OnTransformCompleted);
+		keyHandles->mainHandle.onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
+		keyHandles->mainHandle.onPressed = THIS_FUNC(OnTransformBegin);
+		keyHandles->mainHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
 
 
 		// left support handle
@@ -603,9 +603,9 @@ namespace Editor
 			[=](const Vec2F& pos) { return CheckLeftSupportHandlePosition(info, keyHandles, pos); };
 
 		keyHandles->leftSupportHandle.enabled = false;
-		keyHandles->leftSupportHandle.onRightButtonReleased = Func(this, &UICurveEditor::OnCursorRightMouseReleased);
-		keyHandles->leftSupportHandle.onPressed = Func(this, &UICurveEditor::OnTransformBegin);
-		keyHandles->leftSupportHandle.onChangeCompleted = Func(this, &UICurveEditor::OnTransformCompleted);
+		keyHandles->leftSupportHandle.onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
+		keyHandles->leftSupportHandle.onPressed = THIS_FUNC(OnTransformBegin);
+		keyHandles->leftSupportHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
 
 
 		// right support handle
@@ -625,9 +625,9 @@ namespace Editor
 			[=](const Vec2F& pos) { return CheckRightSupportHandlePosition(info, keyHandles, pos); };
 
 		keyHandles->rightSupportHandle.enabled = false;
-		keyHandles->rightSupportHandle.onRightButtonReleased = Func(this, &UICurveEditor::OnCursorRightMouseReleased);
-		keyHandles->rightSupportHandle.onPressed = Func(this, &UICurveEditor::OnTransformBegin);
-		keyHandles->rightSupportHandle.onChangeCompleted = Func(this, &UICurveEditor::OnTransformCompleted);
+		keyHandles->rightSupportHandle.onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
+		keyHandles->rightSupportHandle.onPressed = THIS_FUNC(OnTransformBegin);
+		keyHandles->rightSupportHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
 
 		for (int i = keyId; i < info->handles.Count(); i++)
 			info->handles[i]->curveKeyIdx++;

@@ -78,10 +78,10 @@ namespace Editor
 		// Updates context menu data with filter
 		void UpdateContextData(const WString& filter);
 
-		// Calls when edit box changed
+		// It is called when edit box changed
 		void OnEditBoxChanged(const WString& text);
 
-		// Calls when edit box changed
+		// It is called when edit box changed
 		void OnEditBoxChangeCompleted(const WString& text);
 
 		// Sets tags from string

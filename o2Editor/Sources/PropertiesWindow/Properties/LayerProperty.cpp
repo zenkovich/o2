@@ -23,12 +23,12 @@ namespace Editor
 		if (!mDropDown)
 			mDropDown = dynamic_cast<UIDropDown*>(mPropertyWidget);
 
-		mDropDown->onSelectedText = Func(this, &LayerProperty::SelectLayer);
+		mDropDown->onSelectedText = THIS_FUNC(SelectLayer);
 		mDropDown->SetState("undefined", true);
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Func(this, &LayerProperty::Revert);
+			mRevertBtn->onClick = THIS_FUNC(Revert);
 	}
 
 	LayerProperty::~LayerProperty()
@@ -81,6 +81,8 @@ namespace Editor
 		}
 		else if (newCommonValue != lastCommonValue || lastDifferent)
 			SetCommonValue(newCommonValue);
+
+		CheckRevertableState();
 	}
 
 	void LayerProperty::Revert()

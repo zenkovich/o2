@@ -123,13 +123,13 @@ namespace o2
 		// Sets owner widget for this and children
 		void SetOwnerWidget(UIWidget* owner);
 
-		// Calls when added new child layer, sets his owner same as this owner and calls UpdateLayersDrawingSequence in owner
+		// It is called when added new child layer, sets his owner same as this owner and calls UpdateLayersDrawingSequence in owner
 		void OnChildAdded(UIWidgetLayer* child);
 
 		// Updates drawable rect, calling when widget's layout was changed
 		void UpdateLayout();
 
-		// Calls when transparency was changed and updates children transparencies
+		// It is called when transparency was changed and updates children transparencies
 		void UpdateResTransparency();
 
 		// Returns dictionary with all child layers

@@ -21,6 +21,8 @@ namespace o2
 		mBackLayer = GetLayer("back");
 
 		RetargetStatesAnimations();
+
+		mValue = !other.mValue;
 		SetValue(other.mValue);
 
 		if (other.IsValueUnknown())
@@ -34,6 +36,8 @@ namespace o2
 		UIWidget::operator=(other);
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = GetLayer("back");
+
+		mValue = !other.mValue;
 		SetValue(other.mValue);
 
 		if (other.IsValueUnknown())
@@ -93,7 +97,7 @@ namespace o2
 
 	void UIToggle::SetValue(bool value)
 	{
-		if (mValue == value)
+		if (mValue == value && !mValueUnknown)
 			return;
 
 		mValue = value;

@@ -216,10 +216,10 @@ namespace o2
 		Basis  mNonSizedTransform; // Final transform basis without size
 
 	protected:
-		// Calls when basis changed
+		// It is called when basis changed
 		virtual void BasisChanged() {}
 
-		// Calls when object was deserialized
+		// It is called when object was deserialized
 		void OnDeserialized(const DataNode& node);
 
 		// Updates mTransform 

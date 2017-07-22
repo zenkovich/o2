@@ -49,9 +49,9 @@ namespace Editor
 		mList = o2UI.CreateWidget<UILongList>();
 		mList->layout = UIWidgetLayout::BothStretch(0, 18, 0, -1);
 		mList->SetViewLayout(Layout::BothStretch());
-		mList->getItemsCountFunc = Func(this, &LogWindow::GetVisibleMessagesCount);
-		mList->getItemsRangeFunc = Func(this, &LogWindow::GetVisibleMessagesRange);
-		mList->setupItemFunc = Func(this, &LogWindow::SetupListMessage);
+		mList->getItemsCountFunc = THIS_FUNC(GetVisibleMessagesCount);
+		mList->getItemsRangeFunc = THIS_FUNC(GetVisibleMessagesRange);
+		mList->setupItemFunc = THIS_FUNC(SetupListMessage);
 
 		UIWidget* listItemSample = mnew UIWidget();
 		listItemSample->layout.minHeight = 25;

@@ -24,7 +24,7 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Func(this, &CurveProperty::Revert);
+			mRevertBtn->onClick = THIS_FUNC(Revert);
 
 		mPreviewImage = mnew UICurvePreview();
 		mPreviewImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
@@ -86,6 +86,8 @@ namespace Editor
 		}
 		else if (!Math::Equals(lastCommonValue, newCommonValue) || lastDifferent)
 			SetCommonValue(newCommonValue);
+
+		CheckRevertableState();
 	}
 
 	void CurveProperty::Revert()
@@ -172,8 +174,8 @@ namespace Editor
 	{
 		StoreValues(mBeforeChangeValues);
 
-		CurveEditorDlg::Show(Func(this, &CurveProperty::OnValueChanged),
-							 Func(this, &CurveProperty::CheckValueChangeCompleted));
+		CurveEditorDlg::Show(THIS_FUNC(OnValueChanged),
+							 THIS_FUNC(CheckValueChangeCompleted));
 
 		CurveEditorDlg::RemoveAllEditingCurves();
 		CurveEditorDlg::AddEditingCurve("property", &mCommonValue);

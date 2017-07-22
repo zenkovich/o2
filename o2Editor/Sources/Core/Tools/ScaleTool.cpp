@@ -26,20 +26,20 @@ namespace Editor
 		mVerDragHandle.enabled = false;
 		mBothDragHandle.enabled = false;
 
-		mHorDragHandle.onChangedPos = Func(this, &ScaleTool::OnHorDragHandleMoved);
-		mVerDragHandle.onChangedPos = Func(this, &ScaleTool::OnVerDragHandleMoved);
-		mBothDragHandle.onChangedPos = Func(this, &ScaleTool::OnBothDragHandleMoved);
+		mHorDragHandle.onChangedPos = THIS_FUNC(OnHorDragHandleMoved);
+		mVerDragHandle.onChangedPos = THIS_FUNC(OnVerDragHandleMoved);
+		mBothDragHandle.onChangedPos = THIS_FUNC(OnBothDragHandleMoved);
 
-		mHorDragHandle.onPressed = Func(this, &ScaleTool::HandlePressed);
-		mVerDragHandle.onPressed = Func(this, &ScaleTool::HandlePressed);
-		mBothDragHandle.onPressed = Func(this, &ScaleTool::HandlePressed);
+		mHorDragHandle.onPressed = THIS_FUNC(HandlePressed);
+		mVerDragHandle.onPressed = THIS_FUNC(HandlePressed);
+		mBothDragHandle.onPressed = THIS_FUNC(HandlePressed);
 
-		mHorDragHandle.onReleased = Func(this, &ScaleTool::UpdateHandlesPosition);
-		mVerDragHandle.onReleased = Func(this, &ScaleTool::UpdateHandlesPosition);
+		mHorDragHandle.onReleased = THIS_FUNC(UpdateHandlesPosition);
+		mVerDragHandle.onReleased = THIS_FUNC(UpdateHandlesPosition);
 
-		mHorDragHandle.onReleased += Func(this, &ScaleTool::HandleReleased);
-		mVerDragHandle.onReleased += Func(this, &ScaleTool::HandleReleased);
-		mBothDragHandle.onReleased += Func(this, &ScaleTool::HandleReleased);
+		mHorDragHandle.onReleased += THIS_FUNC(HandleReleased);
+		mVerDragHandle.onReleased += THIS_FUNC(HandleReleased);
+		mBothDragHandle.onReleased += THIS_FUNC(HandleReleased);
 	}
 
 	ScaleTool::~ScaleTool()

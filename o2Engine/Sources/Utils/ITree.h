@@ -48,10 +48,10 @@ namespace o2
 		ChildsVec mChilds; // Children nodes @SERIALIZABLE
 
 	protected:
-		// Calls when added new child
+		// It is called when added new child
 		virtual void OnChildAdded(_type* child) {}
 
-		// Calls when child was removed
+		// It is called when child was removed
 		virtual void OnChildRemoved(_type* child) {}
 	};
 

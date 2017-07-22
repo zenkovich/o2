@@ -111,26 +111,26 @@ namespace Editor
 		// Y Edit box change event
 		void OnYEdited(const WString& data);
 
-		// Calls when key was released
+		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key);
 
-		// Calls when drag handle was moved and changes the property value
+		// It is called when drag handle was moved and changes the property value
 		void OnXDragHandleMoved(const Input::Cursor& cursor);
 
-		// Calls when drag handle was moved and changes the property value
+		// It is called when drag handle was moved and changes the property value
 		void OnYDragHandleMoved(const Input::Cursor& cursor);
 
-		// Calls when change value move handle pressed, sets cursor infinite mode and stores value to data
+		// It is called when change value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnXMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Calls when change value move handle pressed, sets cursor infinite mode and stores value to data
+		// It is called when change value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnYMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Calls when change value move handle  released, turns off cursor infinite mode, 
+		// It is called when change value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
 		void OnXMoveHandleReleased(const Input::Cursor& cursor);
 
-		// Calls when change value move handle  released, turns off cursor infinite mode, 
+		// It is called when change value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
 		void OnYMoveHandleReleased(const Input::Cursor& cursor);
 
@@ -141,15 +141,9 @@ namespace Editor
 		void SetYValueByUser(int value);
 
 		// Stores values to data
-		void StoreXValues(Vector<DataNode>& data) const;
-
-		// Stores values to data
-		void StoreYValues(Vector<DataNode>& data) const;
+		void StoreValues(Vector<DataNode>& data) const;
 
 		// Checks that value was changed and calls onChangeCompleted
-		void CheckXValueChangeCompleted();
-
-		// Checks that value was changed and calls onChangeCompleted
-		void CheckYValueChangeCompleted();
+		void CheckValueChangeCompleted();
 	};
 }

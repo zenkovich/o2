@@ -1,5 +1,7 @@
 #include "DefaultActorHeaderViewer.h"
 
+#include "Core/Actions/ActorsPropertyChange.h"
+#include "Core/EditorApplication.h"
 #include "PropertiesWindow/Properties/AssetProperty.h"
 #include "PropertiesWindow/Properties/BooleanProperty.h"
 #include "PropertiesWindow/Properties/LayerProperty.h"
@@ -24,14 +26,20 @@ namespace Editor
 
 		mEnableProperty = mnew BooleanProperty(o2UI.CreateWidget<UIToggle>("actor head enable"));
 		mEnableProperty->GetWidget()->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
+		mEnableProperty->SetValuePath("enabled");
+		mEnableProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mEnableProperty->GetWidget());
 
 		mNameProperty = mnew StringProperty(o2UI.CreateWidget<UIEditBox>("actor head name"));
 		mNameProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 15, 17, 2);
+		mNameProperty->SetValuePath("name");
+		mNameProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mNameProperty->GetWidget());
 
 		mLockProperty = mnew BooleanProperty(o2UI.CreateWidget<UIToggle>("actor head lock"));
 		mLockProperty->GetWidget()->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, -1));
+		mLockProperty->SetValuePath("locked");
+		mLockProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mLockProperty->GetWidget());
 
 		auto prototypeRoot = mDataView->AddChild(mnew UIWidget());
@@ -49,17 +57,17 @@ namespace Editor
 
 		mPrototypeApplyBtn = o2UI.CreateWidget<UIButton>("accept prototype");
 		mPrototypeApplyBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-40, -18));
-		mPrototypeApplyBtn->onClick = Func(this, &DefaultActorHeaderViewer::OnApplyPrototypePressed);
+		mPrototypeApplyBtn->onClick = THIS_FUNC(OnApplyPrototypePressed);
 		prototypeRoot->AddChild(mPrototypeApplyBtn);
 
 		mPrototypeRevertBtn = o2UI.CreateWidget<UIButton>("revert prototype");
 		mPrototypeRevertBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-20, -18));
-		mPrototypeRevertBtn->onClick = Func(this, &DefaultActorHeaderViewer::OnRevertPrototypePressed);
+		mPrototypeRevertBtn->onClick = THIS_FUNC(OnRevertPrototypePressed);
 		prototypeRoot->AddChild(mPrototypeRevertBtn);
 
 		mPrototypeBreakBtn = o2UI.CreateWidget<UIButton>("break prototype");
 		mPrototypeBreakBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(0, -18));
-		mPrototypeBreakBtn->onClick = Func(this, &DefaultActorHeaderViewer::OnBreakPrototypePressed);
+		mPrototypeBreakBtn->onClick = THIS_FUNC(OnBreakPrototypePressed);
 		prototypeRoot->AddChild(mPrototypeBreakBtn);
 
 		auto tagsImg = o2UI.CreateImage("ui/UI2_tag_big.png");
@@ -68,6 +76,8 @@ namespace Editor
 
 		mTagsProperty = mnew TagsProperty(o2UI.CreateWidget<UIEditBox>("actor head tags"));
 		mTagsProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 21, 129, 17, 3);
+		mTagsProperty->SetValuePath("tags");
+		mTagsProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mTagsProperty->GetWidget());
 
 		auto layerImg = o2UI.CreateImage("ui/UI2_layer_big.png");
@@ -76,6 +86,8 @@ namespace Editor
 
 		mLayerProperty = mnew LayerProperty(o2UI.CreateWidget<UIDropDown>("actor head layer"));
 		mLayerProperty->GetWidget()->layout = UIWidgetLayout::Based(BaseCorner::RightBottom, Vec2F(106, 17), Vec2F(-4, 3));
+		mLayerProperty->SetValuePath("layer");
+		mLayerProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mLayerProperty->GetWidget());
 
 		Animation protoStateAnim = Animation::EaseInOut(mDataView, &mDataView->layout.minHeight, 42.0f, 62.0f, 0.1f);
@@ -119,6 +131,17 @@ namespace Editor
 	UIWidget* DefaultActorHeaderViewer::GetWidget() const
 	{
 		return mDataView;
+	}
+
+	void DefaultActorHeaderViewer::Refresh()
+	{
+		mEnableProperty->Refresh();
+		mNameProperty->Refresh();
+		mLockProperty->Refresh();
+		mPrototypeProperty->Refresh();
+		mTagsProperty->Refresh();
+
+		*mDataView->state["prototype"] = mPrototypeProperty->GetCommonValue().IsValid();
 	}
 
 	void DefaultActorHeaderViewer::OnApplyPrototypePressed()
@@ -186,6 +209,14 @@ namespace Editor
 		return applyActors;
 	}
 
+	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
+	{
+		ActorsPropertyChangeAction* action = new ActorsPropertyChangeAction(
+			o2EditorSceneScreen.GetSelectedActors(), nullptr, path, prevValue, newValue);
+
+		o2EditorApplication.DoneAction(action);
+	}
+
 }
 
 CLASS_META(Editor::DefaultActorHeaderViewer)
@@ -207,9 +238,11 @@ CLASS_META(Editor::DefaultActorHeaderViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(void, Refresh);
 	PROTECTED_FUNCTION(void, OnApplyPrototypePressed);
 	PROTECTED_FUNCTION(void, OnRevertPrototypePressed);
 	PROTECTED_FUNCTION(void, OnBreakPrototypePressed);
 	PROTECTED_FUNCTION(Vector<Actor*>, GetRootApplyActors);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

@@ -60,55 +60,55 @@ namespace Editor
 		// Setups tree node by folder (for folders tree)
 		void SetupFoldersTreeNode(UITreeNode* node, UnknownPtr object);
 
-		// Calls when folder item double clicked (for folders tree)
+		// It is called when folder item double clicked (for folders tree)
 		void OnFoldersTreeNodeDblClick(UITreeNode* node);
 
-		// Calls when folder item clicked (for folders tree)
+		// It is called when folder item clicked (for folders tree)
 		void OnFoldersTreeSelect(Vector<UnknownPtr> nodes);
 
-		// Calls when folders tree clicked by right button
+		// It is called when folders tree clicked by right button
 		void OnFoldersTreeRightClick(UITreeNode* node);
 
-		// Calls when context copy pressed
+		// It is called when context copy pressed
 		void OnContextCopyPressed();
 
-		// Calls when context cut pressed
+		// It is called when context cut pressed
 		void OnContextCutPressed();
 
-		// Calls when context paste pressed
+		// It is called when context paste pressed
 		void OnContextPastePressed();
 
-		// Calls when context delete pressed
+		// It is called when context delete pressed
 		void OnContextDeletePressed();
 
-		// Calls when context open pressed
+		// It is called when context open pressed
 		void OnContextOpenPressed();
 
-		// Calls when context show in explorer pressed
+		// It is called when context show in explorer pressed
 		void OnContextShowInExplorerPressed();
 
-		// Calls when context import pressed
+		// It is called when context import pressed
 		void OnContextImportPressed();
 
-		// Calls when context create folder pressed
+		// It is called when context create folder pressed
 		void OnContextCreateFolderPressed();
 
-		// Calls when context create prefab pressed
+		// It is called when context create prefab pressed
 		void OnContextCreatePrefabPressed();
 
-		// Calls when context create script pressed
+		// It is called when context create script pressed
 		void OnContextCreateScriptPressed();
 
-		// Calls when context create animation pressed
+		// It is called when context create animation pressed
 		void OnContextCreateAnimationPressed();
 
-		// Calls when context expand pressed
+		// It is called when context expand pressed
 		void OnContextExpandPressed();
 
-		// Calls when context expand pressed
+		// It is called when context expand pressed
 		void OnContextCollapsePressed();
 
-		// Calls when key was released
+		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key);
 
 		friend class AssetsWindow;

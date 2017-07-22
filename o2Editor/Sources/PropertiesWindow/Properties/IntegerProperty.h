@@ -80,16 +80,16 @@ namespace Editor
 		// Edit box change event
 		void OnEdited(const WString& data);
 
-		// Calls when drag handle was moved and changes the property value
+		// It is called when drag handle was moved and changes the property value
 		void OnDragHandleMoved(const Input::Cursor& cursor);
 
-		// Calls when key was released
+		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key);
 
-		// Calls when change value move handle pressed, sets cursor infinite mode and stores value to data
+		// It is called when change value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnMoveHandlePressed(const Input::Cursor& cursor);
 
-		// Calls when change value move handle  released, turns off cursor infinite mode, 
+		// It is called when change value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
 		void OnMoveHandleReleased(const Input::Cursor& cursor);
 

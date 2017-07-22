@@ -62,16 +62,16 @@ namespace Editor
 		// Initializes window
 		void InitializeWindow();
 
-		// Calls when clear button pressed
+		// It is called when clear button pressed
 		void OnClearPressed();
 
-		// Calls when regular messages toggled
+		// It is called when regular messages toggled
 		void OnRegularMessagesToggled(bool value);
 
-		// Calls when warning messages toggled
+		// It is called when warning messages toggled
 		void OnWarningMessagesToggled(bool value);
 
-		// Calls when error messages toggled
+		// It is called when error messages toggled
 		void OnErrorMessagesToggled(bool value);
 
 		// Updates visible messages

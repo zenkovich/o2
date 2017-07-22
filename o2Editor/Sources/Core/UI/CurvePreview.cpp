@@ -36,12 +36,12 @@ namespace Editor
 	void UICurvePreview::SetCurve(Curve* curve)
 	{
 		if (mCurve)
-			mCurve->onKeysChanged -= Func(this, &UICurvePreview::OnCurveChanged);
+			mCurve->onKeysChanged -= THIS_FUNC(OnCurveChanged);
 
 		mCurve = curve;
 
 		if (mCurve)
-			mCurve->onKeysChanged += Func(this, &UICurvePreview::OnCurveChanged);
+			mCurve->onKeysChanged += THIS_FUNC(OnCurveChanged);
 	}
 
 	void UICurvePreview::Draw()

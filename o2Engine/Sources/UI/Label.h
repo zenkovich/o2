@@ -110,7 +110,7 @@ namespace o2
 		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
 
 	protected:
-		// Calls when layer added and updates drawing sequence
+		// It is called when layer added and updates drawing sequence
 		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Initializes properties

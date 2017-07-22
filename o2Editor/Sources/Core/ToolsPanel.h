@@ -76,7 +76,7 @@ namespace Editor
 		// Updates schemes list
 		void UpdateWndLayoutSchemas();
 
-		// Calls when selected scheme
+		// It is called when selected scheme
 		void OnSchemeSelected(const WString& name);
 
 		friend class EditorApplication;

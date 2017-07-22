@@ -137,10 +137,10 @@ namespace o2
 		float                  mLastVerScrollChangeTime = -1.0f;        // Last time when horizontal scroll bar was changed
 
 	protected:
-		// Calls when child widget was added
+		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child);
 
-		// Calls when child widget was removed
+		// It is called when child widget was removed
 		void OnChildRemoved(UIWidget* child);
 
 		// Updates mouse control
@@ -173,10 +173,10 @@ namespace o2
 		// Updates scroll parameters: clip area, scroll size
 		virtual void UpdateScrollParams();
 
-		// Calls when horizontal scroll bar value was changed
+		// It is called when horizontal scroll bar value was changed
 		void OnHorScrollChanged(float value);
 
-		// Calls when vertical scroll bar value was changed
+		// It is called when vertical scroll bar value was changed
 		void OnVerScrollChanged(float value);
 
 		// Beginning serialization callback

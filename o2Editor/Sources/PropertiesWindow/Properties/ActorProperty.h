@@ -85,43 +85,43 @@ namespace Editor
 		// Reverts target value to source
 		void RevertoToPrototype(void* target, void* source, IObject* targetOwner);
 
-		// Calls when cursor enters this object
+		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object
+		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when key was pressed
+		// It is called when key was pressed
 		void OnKeyPressed(const Input::Key& key);
 
-		// Calls when some selectable listeners was dropped to this
+		// It is called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listeners was entered to this area
+		// It is called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listeners was exited from this area
+		// It is called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group);
 
-		// Calls when actors tree nodes was dragged and dropped to this
+		// It is called when actors tree nodes was dragged and dropped to this
 		void OnDroppedFromActorsTree(UIActorsTree* actorsTree);
 
-		// Calls when actors tree nodes was dragged and entered to this
+		// It is called when actors tree nodes was dragged and entered to this
 		void OnDragEnterFromActorsTree(UIActorsTree* actorsTree);
 
-		// Calls when actors tree nodes was dragged and exited from this
+		// It is called when actors tree nodes was dragged and exited from this
 		void OnDragExitFromActorsTree(UIActorsTree* actorsTree);
 
-		// Calls when assets scroll icons was dragged and dropped to this
+		// It is called when assets scroll icons was dragged and dropped to this
 		void OnDroppedFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
 
-		// Calls when assets scroll icons was dragged and entered to this
+		// It is called when assets scroll icons was dragged and entered to this
 		void OnDragEnterFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
 
-		// Calls when assets scroll icons was dragged and exited from this
+		// It is called when assets scroll icons was dragged and exited from this
 		void OnDragExitFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
 
 		// Sets value actor, checks value changed, calls onChangeCompleted

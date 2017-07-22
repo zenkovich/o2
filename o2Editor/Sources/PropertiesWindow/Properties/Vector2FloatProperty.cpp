@@ -18,12 +18,12 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Func(this, &Vec2FProperty::Revert);
+			mRevertBtn->onClick = THIS_FUNC(Revert);
 
 		mXEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/x edit"));
 		mYEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/y edit"));
 
-		mXEditBox->onChangeCompleted = Func(this, &Vec2FProperty::OnXEdited);
+		mXEditBox->onChangeCompleted = THIS_FUNC(OnXEdited);
 		mXEditBox->text = "--";
 		mXEditBox->SetFilterFloat();
 
@@ -33,12 +33,12 @@ namespace Editor
 
 			mXDragHangle.cursorType = CursorType::SizeNS;
 			mXDragHangle.isUnderPoint = [=](const Vec2F& point) { return xHandleLayer->IsUnderPoint(point); };
-			mXDragHangle.onMoved = Func(this, &Vec2FProperty::OnXDragHandleMoved);
-			mXDragHangle.onCursorPressed =  Func(this, &Vec2FProperty::OnXMoveHandlePressed);
-			mXDragHangle.onCursorReleased =  Func(this, &Vec2FProperty::OnXMoveHandleReleased);
+			mXDragHangle.onMoved = THIS_FUNC(OnXDragHandleMoved);
+			mXDragHangle.onCursorPressed =  THIS_FUNC(OnXMoveHandlePressed);
+			mXDragHangle.onCursorReleased =  THIS_FUNC(OnXMoveHandleReleased);
 		}
 
-		mYEditBox->onChangeCompleted = Func(this, &Vec2FProperty::OnYEdited);
+		mYEditBox->onChangeCompleted = THIS_FUNC(OnYEdited);
 		mYEditBox->text = "--";
 		mYEditBox->SetFilterFloat();
 
@@ -48,9 +48,9 @@ namespace Editor
 
 			mYDragHangle.cursorType = CursorType::SizeNS;
 			mYDragHangle.isUnderPoint = [=](const Vec2F& point) { return yHandleLayer->IsUnderPoint(point); };
-			mYDragHangle.onMoved = Func(this, &Vec2FProperty::OnYDragHandleMoved);
-			mYDragHangle.onCursorPressed =  Func(this, &Vec2FProperty::OnYMoveHandlePressed);
-			mYDragHangle.onCursorReleased =  Func(this, &Vec2FProperty::OnYMoveHandleReleased);
+			mYDragHangle.onMoved = THIS_FUNC(OnYDragHandleMoved);
+			mYDragHangle.onCursorPressed =  THIS_FUNC(OnYMoveHandlePressed);
+			mYDragHangle.onCursorReleased =  THIS_FUNC(OnYMoveHandleReleased);
 		}
 	}
 
@@ -182,6 +182,8 @@ namespace Editor
 		}
 		else if (!Math::Equals(lastCommonValue.y, newCommonValue.y) || lastYDifferent)
 			SetCommonValueY(newCommonValue.y);
+
+		CheckRevertableState();
 	}
 
 	void Vec2FProperty::Revert()
@@ -331,80 +333,60 @@ namespace Editor
 
 	void Vec2FProperty::OnXMoveHandlePressed(const Input::Cursor& cursor)
 	{
-		StoreXValues(mBeforeChangeValues);
+		StoreValues(mBeforeChangeValues);
 		o2Application.SetCursorInfiniteMode(true);
 	}
 
 	void Vec2FProperty::OnYMoveHandlePressed(const Input::Cursor& cursor)
 	{
-		StoreYValues(mBeforeChangeValues);
+		StoreValues(mBeforeChangeValues);
 		o2Application.SetCursorInfiniteMode(true);
 	}
 
 	void Vec2FProperty::OnXMoveHandleReleased(const Input::Cursor& cursor)
 	{
 		o2Application.SetCursorInfiniteMode(false);
-		CheckXValueChangeCompleted();
+		CheckValueChangeCompleted();
 	}
 
 	void Vec2FProperty::OnYMoveHandleReleased(const Input::Cursor& cursor)
 	{
 		o2Application.SetCursorInfiniteMode(false);
-		CheckYValueChangeCompleted();
+		CheckValueChangeCompleted();
 	}
 
 	void Vec2FProperty::SetXValueByUser(float value)
 	{
-		StoreXValues(mBeforeChangeValues);
+		StoreValues(mBeforeChangeValues);
 		SetValueX(value);
-		CheckXValueChangeCompleted();
+		CheckValueChangeCompleted();
 	}
 
 	void Vec2FProperty::SetYValueByUser(float value)
 	{
-		StoreYValues(mBeforeChangeValues);
+		StoreValues(mBeforeChangeValues);
 		SetValueY(value);
-		CheckYValueChangeCompleted();
+		CheckValueChangeCompleted();
 	}
 
-	void Vec2FProperty::StoreXValues(Vector<DataNode>& data) const
+	void Vec2FProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
 		for (auto ptr : mValuesPointers)
 		{
 			data.Add(DataNode());
-			data.Last() = mXGetFunc(ptr.first);
+			data.Last() = mGetFunc(ptr.first);
 		}
 	}
 
-	void Vec2FProperty::StoreYValues(Vector<DataNode>& data) const
-	{
-		data.Clear();
-		for (auto ptr : mValuesPointers)
-		{
-			data.Add(DataNode());
-			data.Last() = mYGetFunc(ptr.first);
-		}
-	}
-
-	void Vec2FProperty::CheckXValueChangeCompleted()
+	void Vec2FProperty::CheckValueChangeCompleted()
 	{
 		Vector<DataNode> valuesData;
-		StoreXValues(valuesData);
+		StoreValues(valuesData);
 
 		if (mBeforeChangeValues != valuesData)
-			onChangeCompleted(mValuesPath + "/x", mBeforeChangeValues, valuesData);
+			onChangeCompleted(mValuesPath, mBeforeChangeValues, valuesData);
 	}
-
-	void Vec2FProperty::CheckYValueChangeCompleted()
-	{
-		Vector<DataNode> valuesData;
-		StoreYValues(valuesData);
-
-		if (mBeforeChangeValues != valuesData)
-			onChangeCompleted(mValuesPath + "/y", mBeforeChangeValues, valuesData);
-	}
-
 }
 
 CLASS_META(Editor::Vec2FProperty)
@@ -458,9 +440,7 @@ CLASS_META(Editor::Vec2FProperty)
 	PROTECTED_FUNCTION(void, OnYMoveHandleReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SetXValueByUser, float);
 	PROTECTED_FUNCTION(void, SetYValueByUser, float);
-	PROTECTED_FUNCTION(void, StoreXValues, Vector<DataNode>&);
-	PROTECTED_FUNCTION(void, StoreYValues, Vector<DataNode>&);
-	PROTECTED_FUNCTION(void, CheckXValueChangeCompleted);
-	PROTECTED_FUNCTION(void, CheckYValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 }
 END_META;

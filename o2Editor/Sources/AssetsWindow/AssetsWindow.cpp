@@ -36,7 +36,7 @@ namespace Editor
 
 	void AssetsWindow::InitializeWindow()
 	{
-		o2Assets.onAssetsRebuilded += Func(this, &AssetsWindow::OnAssetsRebuilded);
+		o2Assets.onAssetsRebuilded += THIS_FUNC(OnAssetsRebuilded);
 
 		mWindow->caption = "Assets";
 		mWindow->name = "assets window";
@@ -144,7 +144,7 @@ namespace Editor
 
 		auto showTreeBtn = o2UI.CreateWidget<UIButton>("menu tree");
 		showTreeBtn->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0));
-		showTreeBtn->onClick += Func(this, &AssetsWindow::OnShowTreePressed);
+		showTreeBtn->onClick += THIS_FUNC(OnShowTreePressed);
 		downPanel->AddChild(showTreeBtn);
 
 		mSelectedAssetPathLabel = o2UI.CreateWidget<UILabel>();
@@ -170,12 +170,12 @@ namespace Editor
 
 		mFilterButton = o2UI.CreateWidget<UIButton>("menu filter");
 		mFilterButton->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
-		mFilterButton->onClick += Func(this, &AssetsWindow::OnMenuFilterPressed);
+		mFilterButton->onClick += THIS_FUNC(OnMenuFilterPressed);
 		upPanel->AddChild(mFilterButton);
 
 		mSearchEditBox = o2UI.CreateWidget<UIEditBox>("backless");
 		mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
-		mSearchEditBox->onChanged += Func(this, &AssetsWindow::OnSearchEdited);
+		mSearchEditBox->onChanged += THIS_FUNC(OnSearchEdited);
 		upPanel->AddChild(mSearchEditBox);
 
 		mWindow->AddChild(upPanel);

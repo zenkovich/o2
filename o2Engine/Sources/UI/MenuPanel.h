@@ -130,7 +130,7 @@ namespace o2
 		// Returns item info
 		Item GetItemDef(int idx) const;
 
-		// Calls when visible was changed
+		// It is called when visible was changed
 		void OnVisibleChanged();
 
 		// Returns item widget under point and stores index in idxPtr, if not null
@@ -139,22 +139,22 @@ namespace o2
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor moved on this (or moved outside when this was pressed)
+		// It is called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object
+		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 	};
 }

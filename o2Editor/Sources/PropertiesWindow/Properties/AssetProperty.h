@@ -102,25 +102,25 @@ namespace Editor
 		// Checks value for reverting to prototype
 		void CheckRevertableState();
 
-		// Calls when cursor enters this object
+		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object
+		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when key was pressed
+		// It is called when key was pressed
 		void OnKeyPressed(const Input::Key& key);
 
-		// Calls when some selectable listeners was dropped to this
+		// It is called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listeners was entered to this area
+		// It is called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listeners was exited from this area
+		// It is called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group);
 
 		// Sets asset id, checks value changed, calls onChangeCompleted
@@ -153,7 +153,7 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Func(this, &AssetProperty<_type>::Revert);
+			mRevertBtn->onClick = THIS_FUNC(Revert);
 	}
 
 	template<typename _type>
@@ -206,6 +206,8 @@ namespace Editor
 		}
 		else if (lastCommonValue != newCommonValue || lastDifferent)
 			SetCommonAssetId(newCommonValue ? newCommonValue->GetAssetId() : 0);
+
+		CheckRevertableState();
 	}
 
 	template<typename _type>

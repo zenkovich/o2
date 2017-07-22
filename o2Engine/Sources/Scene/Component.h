@@ -88,22 +88,22 @@ namespace o2
 		bool   mResEnabled = true;           // Is component enabled in hierarchy
 
 	protected:
-		// Calls when actor changed layer
+		// It is called when actor changed layer
 		virtual void OnLayerChanged(Scene::Layer* oldLayer, Scene::Layer* newLayer) {}
 
 		// Updates component enable
 		virtual void UpdateEnabled();
 
-		// Calls when actor's transform was changed
+		// It is called when actor's transform was changed
 		virtual void OnTransformChanged() {}
 
 		// Sets owner actor
 		virtual void SetOwnerActor(Actor* actor);
 
-		// Calls when actor was excluded from scene
+		// It is called when actor was excluded from scene
 		virtual void OnExcludeFromScene() {}
 
-		// Calls when actor was included to scene
+		// It is called when actor was included to scene
 		virtual void OnIncludeToScene() {}
 
 		// Initializes properties

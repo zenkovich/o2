@@ -24,7 +24,7 @@ namespace o2
 		RectF mDrawingScissorRect; // Scissor rectangle at last drawing
 
 	protected:
-		// Calls when drawable was drawn
+		// It is called when drawable was drawn
 		virtual void OnDrawn();
 	};
 }

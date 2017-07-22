@@ -46,31 +46,31 @@ namespace Editor
 		// Updates tool
 		void Update(float dt);
 
-		// Calls when tool was enabled
+		// It is called when tool was enabled
 		void OnEnabled();
 
-		// Calls when tool was disabled
+		// It is called when tool was disabled
 		void OnDisabled();
 
-		// Calls when actors selection was changed
+		// It is called when actors selection was changed
 		void OnActorsSelectionChanged(Vector<Actor*> actors);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor moved on this (or moved outside when this was pressed)
+		// It is called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor);
 
-		// Calls when key was pressed
+		// It is called when key was pressed
 		void OnKeyPressed(const Input::Key& key);
 	};
 

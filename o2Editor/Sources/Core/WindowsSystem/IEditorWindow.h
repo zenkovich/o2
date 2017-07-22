@@ -48,7 +48,7 @@ namespace Editor
 		UIDockableWindow* mWindow; // Dockable UI window 
 
 	protected:
-		// Calls after that all windows was created
+		// It is called after that all windows was created
 		virtual void PostInitializeWindow() {}
 
 		friend class WindowsManager;

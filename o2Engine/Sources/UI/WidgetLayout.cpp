@@ -1,6 +1,7 @@
 #include "WidgetLayout.h"
 
 #include "UI/Widget.h"
+#include "Utils/Delegates.h"
 
 namespace o2
 {
@@ -408,7 +409,7 @@ namespace o2
 	void UIWidgetLayout::SetMinimalSize(const Vec2F& minSize)
 	{
 		mMinSize = minSize;
-		mCheckMinMaxFunc = Func(this, &UIWidgetLayout::CheckMinMax);
+		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -420,7 +421,7 @@ namespace o2
 	void UIWidgetLayout::SetMinimalWidth(float value)
 	{
 		mMinSize.x = value;
-		mCheckMinMaxFunc = Func(this, &UIWidgetLayout::CheckMinMax);
+		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -432,7 +433,7 @@ namespace o2
 	void UIWidgetLayout::SetMinimalHeight(float value)
 	{
 		mMinSize.y = value;
-		mCheckMinMaxFunc = Func(this, &UIWidgetLayout::CheckMinMax);
+		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -444,7 +445,7 @@ namespace o2
 	void UIWidgetLayout::SetMaximalSize(const Vec2F& maxSize)
 	{
 		mMaxSize = maxSize;
-		mCheckMinMaxFunc = Func(this, &UIWidgetLayout::CheckMinMax);
+		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -456,7 +457,7 @@ namespace o2
 	void UIWidgetLayout::SetMaximalWidth(float value)
 	{
 		mMaxSize.x = value;
-		mCheckMinMaxFunc = Func(this, &UIWidgetLayout::CheckMinMax);
+		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -468,7 +469,7 @@ namespace o2
 	void UIWidgetLayout::SetMaximalHeight(float value)
 	{
 		mMaxSize.y = value;
-		mCheckMinMaxFunc = Func(this, &UIWidgetLayout::CheckMinMax);
+		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
 		mOwner->UpdateLayout();
 	}
 
@@ -479,7 +480,7 @@ namespace o2
 
 	void UIWidgetLayout::DisableMinMaxSizes()
 	{
-		mCheckMinMaxFunc = Func(this, &UIWidgetLayout::DontCheckMinMax);
+		mCheckMinMaxFunc = THIS_FUNC(DontCheckMinMax);
 	}
 
 	void UIWidgetLayout::SetWeight(const Vec2F& weight)
@@ -677,7 +678,7 @@ namespace o2
 		mMaxSize   = other.mMaxSize;
 		mWeight    = other.mWeight;
 
-		mCheckMinMaxFunc = Func(this, &UIWidgetLayout::CheckMinMax);
+		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
 	}
 
 	void UIWidgetLayout::CheckMinMax()

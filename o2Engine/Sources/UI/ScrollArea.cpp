@@ -27,7 +27,7 @@ namespace o2
 			mHorScrollBar = other.mHorScrollBar->Clone();
 			mHorScrollBar->mParent = this;
 			mHorScrollBar->layout.mDrivenByParent = true;
-			mHorScrollBar->onSmoothChange += Func(this, &UIScrollArea::OnHorScrollChanged);
+			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
 		else  mHorScrollBar = nullptr;
 
@@ -36,7 +36,7 @@ namespace o2
 			mVerScrollBar = other.mVerScrollBar->Clone();
 			mVerScrollBar->mParent = this;
 			mVerScrollBar->layout.mDrivenByParent = true;
-			mVerScrollBar->onSmoothChange += Func(this, &UIScrollArea::OnVerScrollChanged);
+			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
 		else mVerScrollBar = nullptr;
 
@@ -51,7 +51,7 @@ namespace o2
 			if (mOwnHorScrollBar)
 				delete mHorScrollBar;
 			else
-				mHorScrollBar->onSmoothChange -= Func(this, &UIScrollArea::OnHorScrollChanged);
+				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
 		}
 
 		if (mVerScrollBar)
@@ -59,7 +59,7 @@ namespace o2
 			if (mOwnVerScrollBar)
 				delete mVerScrollBar;
 			else
-				mVerScrollBar->onSmoothChange -= Func(this, &UIScrollArea::OnVerScrollChanged);
+				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 		}
 	}
 
@@ -72,7 +72,7 @@ namespace o2
 			if (mOwnHorScrollBar)
 				delete mHorScrollBar;
 			else
-				mHorScrollBar->onSmoothChange -= Func(this, &UIScrollArea::OnHorScrollChanged);
+				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
 		}
 
 		if (mVerScrollBar)
@@ -80,7 +80,7 @@ namespace o2
 			if (mOwnVerScrollBar)
 				delete mVerScrollBar;
 			else
-				mVerScrollBar->onSmoothChange -= Func(this, &UIScrollArea::OnVerScrollChanged);
+				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 		}
 
 		mClipAreaLayout      = other.mClipAreaLayout;
@@ -96,7 +96,7 @@ namespace o2
 			mHorScrollBar = other.mHorScrollBar->Clone();
 			mHorScrollBar->mParent = this;
 			mHorScrollBar->layout.mDrivenByParent = true;
-			mHorScrollBar->onSmoothChange += Func(this, &UIScrollArea::OnHorScrollChanged);
+			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
 		else mHorScrollBar = nullptr;
 
@@ -105,7 +105,7 @@ namespace o2
 			mVerScrollBar = other.mVerScrollBar->Clone();
 			mVerScrollBar->mParent = this;
 			mVerScrollBar->layout.mDrivenByParent = true;
-			mVerScrollBar->onSmoothChange += Func(this, &UIScrollArea::OnVerScrollChanged);
+			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
 		else mVerScrollBar = nullptr;
 
@@ -288,7 +288,7 @@ namespace o2
 			if (mOwnHorScrollBar)
 				delete mHorScrollBar;
 			else
-				mHorScrollBar->onSmoothChange -= Func(this, &UIScrollArea::OnHorScrollChanged);
+				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
 		}
 
 		mHorScrollBar = scrollbar;
@@ -298,7 +298,7 @@ namespace o2
 		{
 			mHorScrollBar->mParent = this;
 			mHorScrollBar->layout.mDrivenByParent = true;
-			mHorScrollBar->onSmoothChange += Func(this, &UIScrollArea::OnHorScrollChanged);
+			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
 
 		UpdateScrollParams();
@@ -317,7 +317,7 @@ namespace o2
 			if (mOwnVerScrollBar)
 				delete mVerScrollBar;
 			else
-				mVerScrollBar->onSmoothChange -= Func(this, &UIScrollArea::OnVerScrollChanged);
+				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 		}
 
 		mVerScrollBar = scrollbar;
@@ -327,7 +327,7 @@ namespace o2
 		{
 			mVerScrollBar->mParent = this;
 			mVerScrollBar->layout.mDrivenByParent = true;
-			mVerScrollBar->onSmoothChange += Func(this, &UIScrollArea::OnVerScrollChanged);
+			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
 
 		UpdateScrollParams();
@@ -775,13 +775,13 @@ namespace o2
 		if (mHorScrollBar)
 		{
 			if (mOwnHorScrollBar) delete mHorScrollBar;
-			else                  mHorScrollBar->onSmoothChange -= Func(this, &UIScrollArea::OnHorScrollChanged);
+			else                  mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
 		}
 
 		if (mVerScrollBar)
 		{
 			if (mOwnVerScrollBar) delete mVerScrollBar;
-			else                  mVerScrollBar->onSmoothChange -= Func(this, &UIScrollArea::OnVerScrollChanged);
+			else                  mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 		}
 
 		auto horScrollNode = node.GetNode("mHorScrollBar");
@@ -790,7 +790,7 @@ namespace o2
 		{
 			mHorScrollBar = *horScrollNode;
 			mHorScrollBar->mParent = this;
-			mHorScrollBar->onSmoothChange += Func(this, &UIScrollArea::OnHorScrollChanged);
+			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
 		else mHorScrollBar = nullptr;
 
@@ -800,7 +800,7 @@ namespace o2
 		{
 			mVerScrollBar = *varScrollNode;
 			mVerScrollBar->mParent = this;
-			mVerScrollBar->onSmoothChange += Func(this, &UIScrollArea::OnVerScrollChanged);
+			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
 		else mVerScrollBar = nullptr;
 

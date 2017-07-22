@@ -64,7 +64,7 @@ namespace o2
 		SERIALIZABLE(UIList);
 
 	protected:
-		// Calls when selected item index was changed
+		// It is called when selected item index was changed
 		void OnSelectionChanged();
 
 		// Initializes properties

@@ -71,17 +71,17 @@ namespace Editor
 
 		UIButton* searchButton = o2UI.CreateWidget<UIButton>("search");
 		searchButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
-		searchButton->onClick += Func(this, &TreeWindow::OnSearchPressed);
+		searchButton->onClick += THIS_FUNC(OnSearchPressed);
 		upPanel->AddChild(searchButton);
 
 		mListTreeToggle = o2UI.CreateWidget<UIToggle>("list-tree");
 		mListTreeToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
-		mListTreeToggle->onToggle += Func(this, &TreeWindow::OnListTreeToggled);
+		mListTreeToggle->onToggle += THIS_FUNC(OnListTreeToggled);
 		upPanel->AddChild(mListTreeToggle);
 
 		mSearchEditBox = o2UI.CreateWidget<UIEditBox>("backless");
 		mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
-		mSearchEditBox->onChanged += Func(this, &TreeWindow::OnSearchEdited);
+		mSearchEditBox->onChanged += THIS_FUNC(OnSearchEdited);
 		upPanel->AddChild(mSearchEditBox);
 
 		mWindow->AddChild(upPanel);
@@ -90,7 +90,7 @@ namespace Editor
 		mActorsTree = o2UI.CreateWidget<UIActorsTree>("standard");
 		mActorsTree->layout = UIWidgetLayout::BothStretch(2, 0, 0, 18);
 
-		mActorsTree->onNodeRightButtonClicked = Func(this, &TreeWindow::OnTreeRBPressed);
+		mActorsTree->onNodeRightButtonClicked = THIS_FUNC(OnTreeRBPressed);
 
 		mWindow->AddChild(mActorsTree);
 

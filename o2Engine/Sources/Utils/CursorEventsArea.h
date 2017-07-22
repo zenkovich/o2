@@ -25,22 +25,22 @@ namespace o2
 		bool IsUnderPoint(const Vec2F& point);
 
 	protected:
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor enters this object
+		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object
+		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 	};
 }

@@ -41,6 +41,9 @@ namespace Editor
 		// Returns data widget
 		UIWidget* GetWidget() const;
 
+		// Updates properties values
+		void Refresh();
+
 		IOBJECT(DefaultActorHeaderViewer);
 
 	public:
@@ -58,16 +61,19 @@ namespace Editor
 		LayerProperty*                mLayerProperty;
 
 	protected:
-		// Calls when apply button pressed, and applies changes to prototype
+		// It is called when apply button pressed, and applies changes to prototype
 		void OnApplyPrototypePressed();
 
-		// Calls when revert button pressed and reverts actor to prototype
+		// It is called when revert button pressed and reverts actor to prototype
 		void OnRevertPrototypePressed();
 
-		// Calls when break prototype buttons pressed and break prototype link
+		// It is called when break prototype buttons pressed and break prototype link
 		void OnBreakPrototypePressed();
 
 		// Returns actor applying roots
 		Vector<Actor*> GetRootApplyActors();
+
+		// It is called when some property changed, stores action for undo
+		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
 	};
 }

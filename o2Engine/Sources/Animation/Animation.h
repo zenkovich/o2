@@ -202,7 +202,7 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node);
 
-		// Calls when animated value was added. Need to register value agent in animatable target
+		// It is called when animated value was added. Need to register value agent in animatable target
 		void OnAnimatedValueAdded(AnimatedValueDef& valueDef);
 
 		friend class Animatable;
@@ -406,7 +406,7 @@ namespace o2
 			AnimatedValueDef def;
 
 			def.mAnimatedValue = mnew AnimatedValue<_type>();
-			def.mAnimatedValue->onKeysChanged += Func(this, &Animation::RecalculateDuration);
+			def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Pointer)
 				def.mAnimatedValue->SetTargetPropertyVoid(target);
@@ -430,7 +430,7 @@ namespace o2
 	{
 		AnimatedValueDef def;
 		def.mAnimatedValue = mnew AnimatedValue<_type>();
-		def.mAnimatedValue->onKeysChanged += Func(this, &Animation::RecalculateDuration);
+		def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
 		if (mTarget)
 		{
@@ -474,7 +474,7 @@ namespace o2
 			AnimatedValueDef def;
 
 			def.mAnimatedValue = mnew AnimatedValue<_type>();
-			def.mAnimatedValue->onKeysChanged += Func(this, &Animation::RecalculateDuration);
+			def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
 				def.mAnimatedValue->SetTargetPropertyVoid(target);

@@ -211,6 +211,7 @@ namespace Editor
 	void UIScrollView::RedrawRenderTarget()
 	{
 		mNeedRedraw = false;
+		UpdateLocalScreenTransforms();
 		o2Render.SetRenderTexture(mRenderTarget);
 
 		o2Render.Clear(mBackColor);

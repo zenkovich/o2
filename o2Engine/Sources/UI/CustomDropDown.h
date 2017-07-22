@@ -124,32 +124,32 @@ namespace o2
 		int           mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
 
 	protected:
-		// Calls when cursor pressed on this. Sets state "pressed" to true
+		// It is called when cursor pressed on this. Sets state "pressed" to true
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
-		// Calls onClicked if cursor is still above this
+		// It is called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
+		// It is called onClicked if cursor is still above this
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor released outside this(only when cursor pressed this at previous time)
+		// It is called when cursor released outside this(only when cursor pressed this at previous time)
 		void OnCursorReleasedOutside(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor enters this object. Sets state "select" to true
+		// It is called when cursor enters this object. Sets state "select" to true
 		void OnCursorEnter(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object. Sets state "select" to false
+		// It is called when cursor exits this object. Sets state "select" to false
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Calls when visible was changed
+		// It is called when visible was changed
 		void OnVisibleChanged();
 
-		// Calls when item was selected in list
+		// It is called when item was selected in list
 		void OnItemSelected();
 
-		// Calls when selection was changed
+		// It is called when selection was changed
 		virtual void OnSelectionChanged();
 
 		// Initializes properties

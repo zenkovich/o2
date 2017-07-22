@@ -21,7 +21,7 @@ namespace o2
 		UInt         mIndexBufferSize = 6000*3; // Maximum size of index buffer
 		GLenum       mCurrentPrimitiveType;     // Type of drawing primitives for next DIP
 				     
-		Texture* mLastDrawTexture;          // Stored texture ptr from last DIP
+		Texture*     mLastDrawTexture;          // Stored texture ptr from last DIP
 		UInt         mLastDrawVertex;           // Last vertex idx for next DIP
 		UInt         mLastDrawIdx;              // Last vertex index for next DIP
 		UInt         mTrianglesCount;           // Triangles count for next DIP

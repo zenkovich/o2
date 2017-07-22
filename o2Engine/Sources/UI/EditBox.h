@@ -180,52 +180,52 @@ namespace o2
 		// Updates mouse control
 		void UpdateControls(float dt);
 
-		// Calls when visible was changed
+		// It is called when visible was changed
 		void OnVisibleChanged();
 
-		// Calls when widget was selected
+		// It is called when widget was selected
 		void OnFocused();
 
-		// Calls when widget was deselected
+		// It is called when widget was deselected
 		void OnUnfocused();
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor enters this object
+		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object
+		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Calls when right mouse button was pressed on this
+		// It is called when right mouse button was pressed on this
 		void OnCursorRightMousePressed(const Input::Cursor& cursor);
 
-		// Calls when right mouse button stay down on this
+		// It is called when right mouse button stay down on this
 		void OnCursorRightMouseStillDown(const Input::Cursor& cursor);
 
-		// Calls when right mouse button was released (only when right mouse button pressed this at previous time)
+		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
 
-		// Calls when scrolling
+		// It is called when scrolling
 		void OnScrolled(float scroll);
 
-		// Calls when key was pressed
+		// It is called when key was pressed
 		void OnKeyPressed(const Input::Key& key);
 
-		// Calls when key was released
+		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key);
 
-		// Calls when key stay down during frame
+		// It is called when key stay down during frame
 		void OnKeyStayDown(const Input::Key& key);
 
 		// Returns text filtered by available characters set

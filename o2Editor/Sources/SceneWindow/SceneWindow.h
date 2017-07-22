@@ -32,7 +32,7 @@ namespace Editor
 		void InitializeWindow();
 		void InitializeLayersView();
 
-		// Calls after that all windows was created
+		// It is called after that all windows was created
 		void PostInitializeWindow();
 	};
 }

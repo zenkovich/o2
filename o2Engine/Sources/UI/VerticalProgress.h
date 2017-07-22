@@ -96,37 +96,37 @@ namespace o2
 		// Updates bar, back and handle layers layout by value
 		void UpdateProgressLayersLayouts();
 
-		// Calls when new layer was added. Here searching bar, back and handle layers
+		// It is called when new layer was added. Here searching bar, back and handle layers
 		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Gets value from cursor position, depends on orientation
 		void GetValueFromCursor(const Input::Cursor& cursor);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor moved on this (or moved outside when this was pressed)
+		// It is called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor enters this object
+		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object
+		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Calls when scrolling
+		// It is called when scrolling
 		void OnScrolled(float scroll);
 
-		// Calls when deserialized
+		// It is called when deserialized
 		void OnDeserialized(const DataNode& node);
 
-		// Calls when visible was changed
+		// It is called when visible was changed
 		void OnVisibleChanged();
 
 		// Initializes properties

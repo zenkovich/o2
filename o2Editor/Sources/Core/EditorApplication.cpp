@@ -222,13 +222,15 @@ namespace Editor
 		mRender->End();
 
 		mInput->Update(dt);
+
+		mDrawCalls = mRender->GetDrawCallsCount();
 	}
 
 	void EditorApplication::OnUpdate(float dt)
 	{
 		mWindowsManager->Update(dt);
 		o2Application.windowCaption = String::Format("o2 Editor. FPS: %i DC: %i (%vi)", (int)o2Time.GetFPS(),
-													 o2Render.GetDrawCallsCount(), (Vec2I)o2Input.GetCursorPos());
+													 mDrawCalls, (Vec2I)o2Input.GetCursorPos());
 
 		if (o2Input.IsKeyPressed('K'))
 			o2Memory.DumpInfo();

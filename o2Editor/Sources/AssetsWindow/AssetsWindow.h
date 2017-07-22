@@ -98,19 +98,19 @@ namespace Editor
 		// Removes assets in clipboard
 		void DeleteAssets(const Vector<String>& assetsPaths);
 
-		// Calls when context import pressed
+		// It is called when context import pressed
 		void ImportAssets(const String& targetPath);
 
-		// Calls when context create folder pressed
+		// It is called when context create folder pressed
 		void CreateFolderAsset(const String& targetPath);
 
-		// Calls when context create prefab pressed
+		// It is called when context create prefab pressed
 		void CreatePrefabAsset(const String& targetPath);
 
-		// Calls when context create script pressed
+		// It is called when context create script pressed
 		void CreateScriptAsset(const String& targetPath);
 
-		// Calls when context create animation pressed
+		// It is called when context create animation pressed
 		void CreateAnimationAsset(const String& targetPath);
 
 		// Creates and returns icon sprite for asset
@@ -159,16 +159,16 @@ namespace Editor
 		// Initializes up search panel
 		void InitializeUpPanel();
 
-		// Calls when search edit box text was changed
+		// It is called when search edit box text was changed
 		void OnSearchEdited(const WString& search);
 
-		// Calls when menu filter button was pressed
+		// It is called when menu filter button was pressed
 		void OnMenuFilterPressed();
 
-		// Calls when show folders tree button pressed
+		// It is called when show folders tree button pressed
 		void OnShowTreePressed();
 
-		// Calls when assets was rebuilded
+		// It is called when assets was rebuilded
 		void OnAssetsRebuilded(const Vector<UID>& changedAssets);
 
 		// Copies asset folder recursively

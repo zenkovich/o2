@@ -100,7 +100,7 @@ namespace Editor
 		// Sets common value for atlas property
 		void SetupAtlasProperty();
 
-		// Calls when atlas property was changed
+		// It is called when atlas property was changed
 		void OnAtlasPropertyChanged();
 
 		// Creates grid sprite

@@ -38,7 +38,7 @@ namespace Editor
 
 		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
 		if (mRevertBtn)
-			mRevertBtn->onClick = Func(this, &ComponentProperty::Revert);
+			mRevertBtn->onClick = THIS_FUNC(Revert);
 
 		mComponentType = &TypeOf(Component);
 	}
@@ -93,6 +93,8 @@ namespace Editor
 		}
 		else if (lastCommonValue != newCommonValue || lastDifferent)
 			SetCommonValue(newCommonValue);
+
+		CheckRevertableState();
 	}
 
 	void ComponentProperty::Revert()

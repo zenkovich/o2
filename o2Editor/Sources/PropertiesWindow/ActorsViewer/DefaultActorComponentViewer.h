@@ -38,6 +38,7 @@ namespace Editor
 		const Type*         mComponentType = nullptr; // Target component type
 
 	protected:
+		// It is called when some property changed, stores action for undo
 		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
 	};
 }

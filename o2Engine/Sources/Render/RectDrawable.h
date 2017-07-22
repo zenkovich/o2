@@ -62,10 +62,10 @@ namespace o2
 		bool   mEnabled; // True, when drawable enabled and needs to draw @SERIALIZABLE
 
 	protected:
-		// Calls when color was changed
+		// It is called when color was changed
 		virtual void ColorChanged() {}
 
-		// Calls when enabling changed
+		// It is called when enabling changed
 		virtual void EnableChanged() {}
 
 		// Initializing properties

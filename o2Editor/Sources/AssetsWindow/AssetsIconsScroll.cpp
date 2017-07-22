@@ -38,7 +38,7 @@ namespace Editor
 		mGrid->spacing = 5;
 		mGrid->arrangeAxis = TwoDirection::Horizontal;
 		mGrid->arrangeAxisMaxCells = 5;
-		onLayoutChanged += Func(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
+		onLayoutChanged += THIS_FUNC(UpdateAssetsGridSize);
 		AddChild(mGrid);
 
 		mDragIcon = mnew UIAssetIcon();
@@ -65,10 +65,10 @@ namespace Editor
 		mGrid->spacing = 5;
 		mGrid->arrangeAxis = TwoDirection::Horizontal;
 		mGrid->arrangeAxisMaxCells = 5;
-		onLayoutChanged += Func(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
+		onLayoutChanged += THIS_FUNC(UpdateAssetsGridSize);
 		AddChild(mGrid);
 
-		onLayoutChanged += Func(this, &UIAssetsIconsScrollArea::UpdateAssetsGridSize);
+		onLayoutChanged += THIS_FUNC(UpdateAssetsGridSize);
 
 		mDragIcon = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -398,7 +398,7 @@ namespace Editor
 				targets = mSelectedPreloadedAssets.Cast<IObject*>();
 
 			if (!targets.IsEmpty())
-				o2EditorProperties.SetTargets(targets, Func(this, &UIAssetsIconsScrollArea::CheckPreloadedAssetsSaving));
+				o2EditorProperties.SetTargets(targets, THIS_FUNC(CheckPreloadedAssetsSaving));
 
 			mChangePropertiesTargetsFromThis = false;
 		}

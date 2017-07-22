@@ -64,13 +64,13 @@ namespace o2
 			// Unregisters drawable component
 			void UnregDrawableComponent(DrawableComponent* component);
 
-			// Calls when drawable component depth was changed and sorts all drawable component
+			// It is called when drawable component depth was changed and sorts all drawable component
 			void ComponentDepthChanged(DrawableComponent* component);
 
-			// Calls when component was enabled
+			// It is called when component was enabled
 			void ComponentEnabled(DrawableComponent* component);
 
-			// Calls when component was enabled
+			// It is called when component was enabled
 			void ComponentDisabled(DrawableComponent* component);
 
 			friend class DrawableComponent;
@@ -175,7 +175,7 @@ namespace o2
 		void Update(float dt);
 
 #if IS_EDITOR	  
-		// Calls when actor was changed
+		// It is called when actor was changed
 		void OnActorChanged(Actor* actor);   
 
 		// Checks is any actors was changed and calls OnChanged() if changed
@@ -187,13 +187,13 @@ namespace o2
 		// Returns cache of linked to prototypes actors
 		ActorsCacheDict& GetPrototypesLinksCache();
 
-		// Calls when created actor with prototype, updates cache
+		// It is called when created actor with prototype, updates cache
 		void OnActorWithPrototypeCreated(Actor* actor);
 
-		// Calls when some actor created and linked to prototype, updates linked actors cache
+		// It is called when some actor created and linked to prototype, updates linked actors cache
 		void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
 
-		// Calls when actor destroying or prototype link broken, updates cache
+		// It is called when actor destroying or prototype link broken, updates cache
 		void OnActorPrototypeBreaked(Actor* actor);
 #endif       
 

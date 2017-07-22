@@ -169,7 +169,7 @@ namespace o2
 		// Updates mTime and mInDurationTime
 		void UpdateTime();
 
-		// Calls for updating animated object, after updating time
+		// It is called for updating animated object, after updating time
 		virtual void Evaluate();
 
 		// Initializes properties

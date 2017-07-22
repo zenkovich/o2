@@ -58,13 +58,13 @@ namespace Editor
 		UICurveEditor* mEditorWidget;
 
 	protected:
-		// Calls when hiding, calls completed callback
+		// It is called when hiding, calls completed callback
 		void OnHide();
 
 		// Initialize controls
 		void InitializeControls();
 
-		// Calls when cursor was pressed outside, closed dialog
+		// It is called when cursor was pressed outside, closed dialog
 		void OnCursorPressedOutside();
 	};
 	 

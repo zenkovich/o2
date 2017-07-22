@@ -465,7 +465,6 @@ namespace o2
     o2::Type* NAME::type = o2::Reflection::InitializeType<NAME>(#NAME); \
     void NAME::InitializeType(o2::Type* type)                           \
 	{                                                                   \
-	    typedef NAME thisclass;                                         \
 	    thisclass::type = type;                                         \
 	    thisclass* __this = 0;      
 
@@ -475,7 +474,6 @@ namespace o2
 #define CLASS_TEMPLATE_META(NAME)                                       \
     void NAME::InitializeType(o2::Type* type)                           \
 	{                                                                   \
-	    typedef NAME thisclass;                                         \
 	    thisclass::type = type;                                         \
 	    thisclass* __this = 0;
 

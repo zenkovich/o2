@@ -130,28 +130,28 @@ namespace o2
 		// Converts point from local to screen space
 		virtual Vec2F LocalToScreen(const Vec2F& point);
 
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor pressing was broken (when scrolled scroll area or some other)
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor);
 
-		// Calls when cursor stay down during frame
+		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor enters this object
+		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor);
 
-		// Calls when cursor exits this object
+		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor);
 
-		// Calls when right mouse button was pressed on this, calls onRightButtonPressed event
+		// It is called when right mouse button was pressed on this, calls onRightButtonPressed event
 		void OnCursorRightMousePressed(const Input::Cursor& cursor);
 
-		// Calls when right mouse button was released (only when right mouse button pressed this at previous time), calls onRightButtonReleased event
+		// It is called when right mouse button was released (only when right mouse button pressed this at previous time), calls onRightButtonReleased event
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
 
 		// Updates screen position from position with localToScreenTransformFunc
@@ -197,19 +197,19 @@ namespace o2
 		void SelectAll();
 
 	protected:
-		// Calls when selectable draggable handle was pressed
+		// It is called when selectable draggable handle was pressed
 		virtual void OnHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
 
-		// Calls when selectable draggable handle was released
+		// It is called when selectable draggable handle was released
 		virtual void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
 
-		// Calls when selectable handle was began to drag
+		// It is called when selectable handle was began to drag
 		virtual void OnHandleBeganDragging(SelectableDragHandle* handle) {}
 
-		// Calls when selectable handle moved, moves all selected handles position
+		// It is called when selectable handle moved, moves all selected handles position
 		virtual void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
 
-		// Calls when selectable handle completed changing
+		// It is called when selectable handle completed changing
 		virtual void OnHandleCompletedChange(SelectableDragHandle* handle) {}
 
 		// Sets handle selected state without adding to selected handles array
@@ -254,16 +254,16 @@ namespace o2
 		SelectableDragHandlesVec mHandles;
 
 	protected:
-		// Calls when selectable draggable handle was pressed
+		// It is called when selectable draggable handle was pressed
 		void OnHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor);
 
-		// Calls when selectable draggable handle was released
+		// It is called when selectable draggable handle was released
 		void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);
 
-		// Calls when selectable handle was began to drag
+		// It is called when selectable handle was began to drag
 		void OnHandleBeganDragging(SelectableDragHandle* handle);
 
-		// Calls when selectable handle moved, moves all selected handles position
+		// It is called when selectable handle moved, moves all selected handles position
 		void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
 
 		friend class SelectableDragHandle;
@@ -327,22 +327,22 @@ namespace o2
 		Vec2F                        mPressedCursorPos;             // Cursor pressed position
 
 	protected:
-		// Calls when cursor pressed on this
+		// It is called when cursor pressed on this
 		virtual void OnCursorPressed(const Input::Cursor& cursor);
 
-		// Calls when cursor moved on this (or moved outside when this was pressed)
+		// It is called when cursor moved on this (or moved outside when this was pressed)
 		virtual void OnCursorStillDown(const Input::Cursor& cursor);
 
-		// Calls when cursor released (only when cursor pressed this at previous time)
+		// It is called when cursor released (only when cursor pressed this at previous time)
 		virtual void OnCursorReleased(const Input::Cursor& cursor);
 
-		// Calls when cursor released outside this(only when cursor pressed this at previous time)
+		// It is called when cursor released outside this(only when cursor pressed this at previous time)
 		virtual void OnCursorReleasedOutside(const Input::Cursor& cursor);
 
-		// Calls when this was selected
+		// It is called when this was selected
 		virtual void OnSelected();
 
-		// Calls when this was unselected
+		// It is called when this was unselected
 		virtual void OnDeselected();
 
 		friend class ISelectableDragHandlesGroup;

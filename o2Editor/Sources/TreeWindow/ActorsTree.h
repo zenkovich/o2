@@ -99,49 +99,49 @@ namespace Editor
 		// Sets nodeWidget data by object
 		void FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object);
 
-		// Calls when tree node was double clicked
+		// It is called when tree node was double clicked
 		void OnNodeDblClick(UITreeNode* nodeWidget);
 
-		// Calls when objects was dragged in new parent in position next of prevObject
+		// It is called when objects was dragged in new parent in position next of prevObject
 		void OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject);
 
-		// Calls when actor was created
+		// It is called when actor was created
 		void OnActorCreated(Actor* actor);
 
-		// Calls when actor was destroyed
+		// It is called when actor was destroyed
 		void OnActorDestroyed(Actor* actor);
 
-		// Calls when some actors were changed
+		// It is called when some actors were changed
 		void OnActorsChanged(const ActorsVec& actors);
 
-		// Calls when actor was changed
+		// It is called when actor was changed
 		void OnActorChanged(Actor* actor);
 
-		// Calls when enable actors toggle group pressed
+		// It is called when enable actors toggle group pressed
 		void EnableActorsGroupPressed(bool value);
 
-		// Calls when enable actors toggle group released
+		// It is called when enable actors toggle group released
 		void EnableActorsGroupReleased(bool value);
 
-		// Calls when lock actors toggle group pressed
+		// It is called when lock actors toggle group pressed
 		void LockActorsGroupPressed(bool value);
 
-		// Calls when lock actors toggle group released
+		// It is called when lock actors toggle group released
 		void LockActorsGroupReleased(bool value);
 
-		// Calls when list of selected objects was changed
+		// It is called when list of selected objects was changed
 		void OnNodesSelectionChanged(UnknownPtrsVec objects);
 
-		// Calls when some drag listeners was entered to this area
+		// It is called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listeners was exited from this area
+		// It is called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some drag listeners was dragged above this area
+		// It is called when some drag listeners was dragged above this area
 		void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
 
-		// Calls when some selectable listeners was dropped to this
+		// It is called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group);
 
 		friend class UIActorsTreeNode;
@@ -184,11 +184,14 @@ namespace Editor
 		// initializes controls and widgets
 		void InitializeControls();
 
-		// Calls when lock toggle was clicked and changes target actor's lock state
+		// It is called when lock toggle was clicked and changes target actor's lock state
 		void OnLockClicked();
 
-		// Calls when enable toggle was clicked and changes target actor's enable state
+		// It is called when enable toggle was clicked and changes target actor's enable state
 		void OnEnableCkicked();
+
+		// It is called when actor name edit box changed
+		void OnActorNameChanged(const WString& text);
 
 		friend class UIActorsTree;
 	};
