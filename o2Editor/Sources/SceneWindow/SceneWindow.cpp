@@ -64,6 +64,7 @@ namespace Editor
 	{
 		o2EditorSceneScreen.BindActorsTree();
 	}
+
 }
 
 CLASS_META(Editor::SceneWindow)

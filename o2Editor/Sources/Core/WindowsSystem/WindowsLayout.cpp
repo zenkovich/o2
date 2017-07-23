@@ -23,7 +23,7 @@ namespace Editor
 					childs.Add(WindowDockPlace());
 					childs[childs.Count() - 1].RetrieveLayout(child);
 				}
-				else if (child->GetType() == TypeOf(UIDockableWindow))
+				else if (child->GetType() == TypeOf(UIDockableWindow) && child->IsVisible())
 				{
 					windows.Add(child->name);
 				}
@@ -49,7 +49,7 @@ namespace Editor
 			dockWidget->interactable = false;
 
 			UIDockWindowPlace* newDock = mnew UIDockWindowPlace();
-			newDock->name = "dockPlace";
+			newDock->name = "dock place";
 			dockWidget->AddChild(newDock);
 
 			newDock->layout = UIWidgetLayout::BothStretch();
@@ -67,11 +67,11 @@ namespace Editor
 				(child.anchors.right < 1.0f && child.anchors.right > 0.0f))
 			{
 				UIDockWindowPlace* neighborMin = childDockWidgets.FindMatch([&](UIDockWindowPlace* x) {
-					return Math::Equals(x->layout.GetAnchorRight(), newDock->layout.GetAnchorLeft());
+					return Math::Equals(x->layout.GetAnchorRight(), newDock->layout.GetAnchorLeft()) && x != newDock;
 				});
 
 				UIDockWindowPlace* neighborMax = childDockWidgets.FindMatch([&](UIDockWindowPlace* x) {
-					return Math::Equals(x->layout.GetAnchorLeft(), newDock->layout.GetAnchorRight());
+					return Math::Equals(x->layout.GetAnchorLeft(), newDock->layout.GetAnchorRight()) && x != newDock;
 				});
 
 				newDock->SetResizibleDir(TwoDirection::Horizontal, 1.5f, neighborMin, neighborMax);
@@ -80,18 +80,18 @@ namespace Editor
 					neighborMin->SetResizibleDir(TwoDirection::Horizontal, 1.5f, neighborMin->mNeighborMin, newDock);
 
 				if (neighborMax)
-					neighborMax->SetResizibleDir(TwoDirection::Horizontal, 1.5f, newDock, newDock->mNeighborMax);
+					neighborMax->SetResizibleDir(TwoDirection::Horizontal, 1.5f, newDock, neighborMax->mNeighborMax);
 			}
 
 			if ((child.anchors.top < 1.0f && child.anchors.top > 0.0f) ||
 				(child.anchors.bottom < 1.0f && child.anchors.bottom > 0.0f))
 			{
 				UIDockWindowPlace* neighborMin = childDockWidgets.FindMatch([&](UIDockWindowPlace* x) {
-					return Math::Equals(x->layout.GetAnchorTop(), newDock->layout.GetAnchorBottom());
+					return Math::Equals(x->layout.GetAnchorTop(), newDock->layout.GetAnchorBottom()) && x != newDock;
 				});
 
 				UIDockWindowPlace* neighborMax = childDockWidgets.FindMatch([&](UIDockWindowPlace* x) {
-					return Math::Equals(x->layout.GetAnchorBottom(), newDock->layout.GetAnchorTop());
+					return Math::Equals(x->layout.GetAnchorBottom(), newDock->layout.GetAnchorTop()) && x != newDock;
 				});
 
 				newDock->SetResizibleDir(TwoDirection::Vertical, 1.5f, neighborMin, neighborMax);
@@ -124,6 +124,7 @@ namespace Editor
 				dockWidget->AddChild(dockWnd);
 				dockWnd->layout = UIWidgetLayout::BothStretch();
 				dockWnd->SetDocked(true);
+				dockWnd->Show();
 			}
 		}
 	}

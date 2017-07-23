@@ -94,6 +94,9 @@ namespace Editor
 		Basis      mScreenToLocalTransform;                 // Screen to local transformation
 
 	protected:
+		// Updates transparency for this and children widgets
+		void UpdateTransparency();
+
 		// Updates camera
 		void UpdateCamera(float dt);
 

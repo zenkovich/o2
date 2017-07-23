@@ -18,6 +18,8 @@
 #include "UI/VerticalLayout.h"
 #include "UIStyle/EditorUIStyle.h"
 #include "Utils/Math/Curve.h"
+#include "AssetsWindow/AssetsWindow.h"
+#include "PropertiesWindow/PropertiesWindow.h"
 
 DECLARE_SINGLETON(Editor::MenuPanel);
 
@@ -255,12 +257,16 @@ namespace Editor
 
 	void MenuPanel::OnShowAssetsPressed()
 	{
-
+		auto sceneWindow = o2EditorWindows.GetWindow<AssetsWindow>();
+		if (sceneWindow)
+			sceneWindow->Show();
 	}
 
 	void MenuPanel::OnShowPropertiesPressed()
 	{
-
+		auto sceneWindow = o2EditorWindows.GetWindow<PropertiesWindow>();
+		if (sceneWindow)
+			sceneWindow->Show();
 	}
 
 	void MenuPanel::OnShowAnimationPressed()

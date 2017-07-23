@@ -134,15 +134,33 @@ namespace Editor
 	{
 		for (auto wnd : layout.windows)
 		{
-			UIDockableWindow* dockWnd = (UIDockableWindow*)o2EditorWindows.mEditorWindows.FindMatch([&](IEditorWindow* x) {
+			IEditorWindow* editorWindow = o2EditorWindows.mEditorWindows.FindMatch([&](IEditorWindow* x) {
 				return x->mWindow->GetName() == wnd.Key();
-			})->mWindow;
+			});
 
-			if (dockWnd)
+			if (!editorWindow)
+			{
+				o2Debug.Log("Can't restore window with name:" + wnd.Key());
+				continue;
+			}
+
+			if (UIDockableWindow* dockWnd = editorWindow->mWindow)
+			{
+				editorWindow->Show();
 				dockWnd->layout = wnd.Value();
+			}
 		}
 
 		layout.RestoreDock(&layout.mainDock, o2EditorWindows.mMainDockPlace);
+
+		for (auto wnd : o2EditorWindows.mEditorWindows)
+		{
+			bool hide = !layout.windows.ContainsKey(wnd->mWindow->GetName()) && 
+				wnd->mWindow->GetParent()->GetType() != TypeOf(UIDockWindowPlace);
+
+			if (hide)
+				wnd->Hide();
+		}
 	}
 
 	void WindowsManager::SetWindowsLayout(const String& name)

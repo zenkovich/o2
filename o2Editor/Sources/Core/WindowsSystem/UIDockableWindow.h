@@ -53,11 +53,17 @@ namespace Editor
 		Vec2F       mDragOffset;                     // Offset from cursor to dragging anchor point
 
 	protected:
+		// It is called when visible was changed, undocks when hiding
+		void OnVisibleChanged();
+
 		//Initialize animation for frame appearance
 		void InitializeDockFrameAppearanceAnim();
 
 		// Initializes drag handles
 		void InitializeDragHandles();
+
+		// It is called when head handle double clicked, trying to dock window
+		void OnHeadDblCKicked(const Input::Cursor& cursor);
 
 		// It is called when window was moved
 		void OnMoved(const Input::Cursor& cursor);
@@ -70,6 +76,9 @@ namespace Editor
 
 		// Searches dock place under cursor and returns parameters of them
 		bool TraceDock(UIDockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect);
+
+		// Places this into empty dock
+		void PlaceDock(UIDockWindowPlace* targetDock);
 
 		// Places this into target dock as non line arranged
 		void PlaceNonLineDock(UIDockWindowPlace* targetDock, Side dockPosition);

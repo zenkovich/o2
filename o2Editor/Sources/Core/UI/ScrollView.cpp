@@ -122,6 +122,12 @@ namespace Editor
 		return true;
 	}
 
+	void UIScrollView::UpdateTransparency()
+	{
+		UIWidget::UpdateTransparency();
+		mRenderTargetSprite->SetTransparency(mResTransparency);
+	}
+
 	void UIScrollView::UpdateCamera(float dt)
 	{
 		bool transformed = false;
@@ -340,6 +346,7 @@ CLASS_META(Editor::UIScrollView)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
+	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateCamera, float);
 	PROTECTED_FUNCTION(void, UpdateLocalScreenTransforms);
 	PROTECTED_FUNCTION(void, RedrawRenderTarget);

@@ -54,4 +54,9 @@ namespace o2
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 
+	void CursorEventsArea::OnCursorDblClicked(const Input::Cursor& cursor)
+	{
+		onDblClicked(cursor);
+	}
+
 }

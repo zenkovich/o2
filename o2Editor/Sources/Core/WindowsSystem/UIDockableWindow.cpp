@@ -97,6 +97,14 @@ namespace Editor
 		return mDockingFrameSample;
 	}
 
+	void UIDockableWindow::OnVisibleChanged()
+	{
+		UIWindow::OnVisibleChanged();
+
+		if (!mResVisible)
+			Undock();
+	}
+
 	void UIDockableWindow::InitializeDockFrameAppearanceAnim()
 	{
 		mDockingFrameAppearance.SetTarget(this);
@@ -112,8 +120,26 @@ namespace Editor
 	void UIDockableWindow::InitializeDragHandles()
 	{
 		mHeadDragHandle.onMoved          = THIS_FUNC(OnMoved);
+		mHeadDragHandle.onDblClicked     = THIS_FUNC(OnHeadDblCKicked);
 		mHeadDragHandle.onCursorPressed  = THIS_FUNC(OnMoveBegin);
 		mHeadDragHandle.onCursorReleased = THIS_FUNC(OnMoveCompleted);
+	}
+
+	void UIDockableWindow::OnHeadDblCKicked(const Input::Cursor& cursor)
+	{
+		if (IsDocked())
+			Undock();
+		else
+		{
+			Vec2F cursorPos = o2Input.cursorPos;
+			auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
+			auto dockPlaceListener = listenersUnderCursor.FindMatch([](CursorAreaEventsListener* x) {
+				return dynamic_cast<UIDockWindowPlace*>(x) != nullptr;
+			});
+
+			if (dockPlaceListener)
+				PlaceDock(dynamic_cast<UIDockWindowPlace*>(dockPlaceListener));
+		}
 	}
 
 	void UIDockableWindow::OnMoved(const Input::Cursor& cursor)
@@ -227,7 +253,19 @@ namespace Editor
 			}
 		}
 
-		return dockPlaceListener != nullptr;
+		return targetDock != nullptr;
+	}
+
+	void UIDockableWindow::PlaceDock(UIDockWindowPlace* targetDock)
+	{
+		mNonDockSize = layout.size;
+
+		targetDock->AddChild(this);
+		layout = UIWidgetLayout::BothStretch();
+		SetDocked(true);
+
+		mDockingFrameAppearance.PlayBack();
+		mDockingFrameTarget = layout.GetAbsoluteRect();
 	}
 
 	void UIDockableWindow::PlaceNonLineDock(UIDockWindowPlace* targetDock, Side dockPosition)
@@ -236,11 +274,11 @@ namespace Editor
 		RectF dockPlaceRect = targetDock->layout.GetAbsoluteRect();
 
 		UIDockWindowPlace* windowDock = mnew UIDockWindowPlace();
-		windowDock->name = "window";
+		windowDock->name = "window dock";
 		windowDock->layout = UIWidgetLayout::BothStretch();
 
 		UIDockWindowPlace* windowNeighborDock = mnew UIDockWindowPlace();
-		windowNeighborDock->name = "empty";
+		windowNeighborDock->name = "empty dock";
 		windowNeighborDock->layout = UIWidgetLayout::BothStretch();
 
 		for (auto child : targetDock->GetChilds())
@@ -292,7 +330,7 @@ namespace Editor
 		RectF dockPlaceRect = targetDock->layout.GetAbsoluteRect();
 
 		UIDockWindowPlace* windowDock = mnew UIDockWindowPlace();
-		windowDock->name = "window";
+		windowDock->name = "window dock";
 		windowDock->layout = UIWidgetLayout::BothStretch();
 
 		UIDockWindowPlace* windowNeighborDock = targetDock;
@@ -381,8 +419,19 @@ namespace Editor
 		if (!IsDocked())
 			return;
 
-		auto topDock = (UIDockWindowPlace*)mParent->GetParent();
-		auto parent = (UIDockWindowPlace*)mParent;
+		auto topDock = dynamic_cast<UIDockWindowPlace*>(mParent->GetParent());
+
+		if (topDock)
+		{
+			o2UI.AddWidget(this); 
+			SetDocked(false);
+			layout.absLeftTop = o2Input.GetCursorPos() + Vec2F(-30, 10);
+			layout.absRightBottom = layout.absLeftTop + mNonDockSize.InvertedY();
+
+			return;
+		}
+
+		auto parent = dynamic_cast<UIDockWindowPlace*>(mParent);
 		auto parentNeighbors = topDock->GetChilds().FindAll([&](auto x) { return x != parent; })
 			.Select<UIDockWindowPlace*>([](auto x) { return (UIDockWindowPlace*)x; });
 
@@ -471,12 +520,15 @@ CLASS_META(Editor::UIDockableWindow)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsDocked);
 	PUBLIC_FUNCTION(Sprite*, GetDockingFrameSample);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, InitializeDockFrameAppearanceAnim);
 	PROTECTED_FUNCTION(void, InitializeDragHandles);
+	PROTECTED_FUNCTION(void, OnHeadDblCKicked, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnMoveCompleted, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnMoveBegin, const Input::Cursor&);
 	PROTECTED_FUNCTION(bool, TraceDock, UIDockWindowPlace*&, Side&, RectF&);
+	PROTECTED_FUNCTION(void, PlaceDock, UIDockWindowPlace*);
 	PROTECTED_FUNCTION(void, PlaceNonLineDock, UIDockWindowPlace*, Side);
 	PROTECTED_FUNCTION(void, PlaceLineDock, UIDockWindowPlace*, Side, RectF);
 	PROTECTED_FUNCTION(void, Undock);

@@ -125,7 +125,7 @@ namespace Editor
 		ToolsVec       mTools;									              // Available tools
 		IEditTool*     mEnabledTool = nullptr;					              // Current enabled tool
 
-		DragHandlesVec                         mDragHandles; 			      // Dragging handles array
+		DragHandlesVec mDragHandles; 			                              // Dragging handles array
 		
 	protected:
 		// Initializes tools
