@@ -6,9 +6,16 @@
 #include "Events/CursorEventsListener.h"
 #include "Events/EventSystem.h"
 #include "UI/UIManager.h"
+#include "Render/Render.h"
 
 namespace Editor
 {
+	const char* UIDockableWindow::mTabLayerPath = "tab/main";
+	const char* UIDockableWindow::mTabIconLayerPath = "tab/main/icon";
+	const char* UIDockableWindow::mTabCaptionLayerPath = "tab/main/caption";
+	const char* UIDockableWindow::mIconLayerPath = "back/icon";
+	const char* UIDockableWindow::mCaptionLayerPath = "back/caption";
+
 	UIDockableWindow::UIDockableWindow():
 		UIWindow()
 	{
@@ -65,7 +72,54 @@ namespace Editor
 
 	void UIDockableWindow::Draw()
 	{
-		UIWindow::Draw();
+		if (mFullyDisabled)
+			return;
+
+		mBackCursorArea.OnDrawn();
+
+		if (mFullyDisabled || mIsClipped)
+			return;
+
+		for (auto layer : mDrawingLayers)
+			layer->Draw();
+
+		UIScrollArea::OnDrawn();
+
+		if (!mTabState || mTabActive)
+		{
+			o2Render.EnableScissorTest(mAbsoluteClipArea);
+
+			for (auto child : mChilds)
+				child->Draw();
+
+			o2Render.DisableScissorTest();
+
+			for (auto layer : mTopDrawingLayers)
+				layer->Draw();
+
+			if (mOwnHorScrollBar)
+				mHorScrollBar->Draw();
+
+			if (mOwnVerScrollBar)
+				mVerScrollBar->Draw();
+
+			mTopDragHandle.OnDrawn();
+			mBottomDragHandle.OnDrawn();
+			mLeftDragHandle.OnDrawn();
+			mRightDragHandle.OnDrawn();
+			mLeftTopDragHandle.OnDrawn();
+			mRightTopDragHandle.OnDrawn();
+			mLeftBottomDragHandle.OnDrawn();
+			mRightBottomDragHandle.OnDrawn();
+		}
+
+		mHeadDragHandle.OnDrawn();
+
+		DrawDebugFrame();
+
+		for (auto elem : mWindowElements)
+			elem->Draw();
+
 		mDockingFrameSample->Draw();
 	}
 
@@ -87,6 +141,23 @@ namespace Editor
 		mRightBottomDragHandle.interactable = !docked;
 	}
 
+	void UIDockableWindow::RecalculateTabWidth()
+	{
+		float width = 0;
+		float expand = 15;
+		if (auto textLayer = GetLayer(mTabCaptionLayerPath))
+		{
+			if (auto textDrawable = dynamic_cast<Text*>(textLayer->drawable))
+			{
+				Text::SymbolsSet symbolsSet;
+				symbolsSet.Initialize(textDrawable->GetFont(), textDrawable->GetText(), textDrawable->GetHeight(),
+									  Vec2F(), Vec2F(), HorAlign::Left, VerAlign::Bottom, false, false, 1.0f, 1.0f);
+
+				SetTabWidth(symbolsSet.mRealSize.x + textLayer->layout.offsetMin.x - textLayer->layout.offsetMax.x + expand);
+			}
+		}
+	}
+
 	bool UIDockableWindow::IsDocked() const
 	{
 		return mDocked;
@@ -97,12 +168,149 @@ namespace Editor
 		return mDockingFrameSample;
 	}
 
+	void UIDockableWindow::SetIcon(Sprite* icon)
+	{
+		auto iconLayer = GetLayer(mIconLayerPath);
+		if (iconLayer)
+		{
+			if (iconLayer->drawable)
+				delete iconLayer->drawable;
+
+			iconLayer->drawable = icon;
+		}
+
+		auto tabIconLayer = GetLayer(mTabIconLayerPath);
+		if (tabIconLayer)
+		{
+			if (tabIconLayer->drawable)
+				delete tabIconLayer->drawable;
+
+			tabIconLayer->drawable = icon->Clone();
+		}
+	}
+
+	Sprite* UIDockableWindow::GetIcon() const
+	{
+		auto iconLayer = GetLayer(mIconLayerPath);
+		if (iconLayer)
+		{
+			if (iconLayer->drawable)
+				delete iconLayer->drawable;
+
+			return dynamic_cast<Sprite*>(iconLayer->drawable);
+		}
+
+		return nullptr;
+	}
+
+	void UIDockableWindow::SetIconLayout(const Layout& layout)
+	{
+		auto iconLayer = GetLayer(mIconLayerPath);
+		if (iconLayer)
+			iconLayer->layout = layout;
+
+		auto tabIconLayer = GetLayer(mTabIconLayerPath);
+		if (tabIconLayer)
+			tabIconLayer->layout = layout;
+	}
+
+	Layout UIDockableWindow::GetIconLayout() const
+	{
+		auto iconLayer = GetLayer(mIconLayerPath);
+		if (iconLayer)
+			return iconLayer->layout;
+
+		return Layout();
+	}
+
+	void UIDockableWindow::SetCaption(const WString& caption)
+	{
+		auto captionLayer = GetLayer(mCaptionLayerPath);
+		if (captionLayer)
+		{
+			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->drawable))
+				textDrawable->SetText(caption);
+		}
+
+		auto tabCaptionLayer = GetLayer(mTabCaptionLayerPath);
+		if (tabCaptionLayer)
+		{
+			if (auto textDrawable = dynamic_cast<Text*>(tabCaptionLayer->drawable))
+				textDrawable->SetText(caption);
+		}
+
+		if (mAutoCalculateTabWidth)
+			RecalculateTabWidth();
+	}
+
+	WString UIDockableWindow::GetCaption() const
+	{
+		auto captionLayer = GetLayer(mCaptionLayerPath);
+		if (captionLayer)
+		{
+			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->drawable))
+				return textDrawable->GetText();
+		}
+
+		return WString();
+	}
+
+	void UIDockableWindow::SetTabWidth(float width)
+	{
+		mTabWidth = width;
+
+		if (auto tabLayer = GetLayer(mTabLayerPath))
+			tabLayer->layout.offsetMax.x = tabLayer->layout.offsetMin.x + width;
+	}
+
+	float UIDockableWindow::GetTabWidth() const
+	{
+		return mTabWidth;
+	}
+
+	void UIDockableWindow::SetAutoCalcuclatingTabWidth(bool enable)
+	{
+		mAutoCalculateTabWidth = enable;
+
+		if (mAutoCalculateTabWidth)
+			RecalculateTabWidth();
+	}
+
+	bool UIDockableWindow::IsAutoCalcuclatingTabWidth() const
+	{
+		return mAutoCalculateTabWidth;
+	}
+
+	void UIDockableWindow::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	{
+		UIWindow::UpdateLayout(forcible, withChildren);
+
+		if (auto tabLayer = GetLayer(mTabLayerPath))
+			mHeadDragAreaRect = mHeadDragAreaLayout.Calculate(tabLayer->GetRect());
+	}
+
+	bool UIDockableWindow::IsUnderPoint(const Vec2F& point)
+	{
+		return !mTabState && UIWidget::IsUnderPoint(point);
+	}
+
 	void UIDockableWindow::OnVisibleChanged()
 	{
 		UIWindow::OnVisibleChanged();
 
 		if (!mResVisible)
 			Undock();
+	}
+
+	void UIDockableWindow::OnFocused()
+	{
+		onFocused();
+
+		if (mTabState)
+		{
+			if (auto parentDock = dynamic_cast<UIDockWindowPlace*>(mParent))
+				parentDock->SetActiveTab(this);
+		}
 	}
 
 	void UIDockableWindow::InitializeDockFrameAppearanceAnim()
@@ -128,7 +336,18 @@ namespace Editor
 	void UIDockableWindow::OnHeadDblCKicked(const Input::Cursor& cursor)
 	{
 		if (IsDocked())
+		{
 			Undock();
+
+			Vec2F size = layout.GetSize();
+
+			if (auto headLayer = GetLayer(mTabLayerPath))
+				layout.absLeftTop = o2Input.GetCursorPos() - headLayer->GetRect().Size().InvertedY()*0.5f;
+			else
+				layout.absLeftTop = o2Input.GetCursorPos();
+
+			layout.absRightBottom = layout.absLeftTop + size.InvertedY();
+		}
 		else
 		{
 			Vec2F cursorPos = o2Input.cursorPos;
@@ -147,7 +366,20 @@ namespace Editor
 		if (mDocked)
 		{
 			if (!layout.GetAbsoluteRect().IsInside(cursor.position))
+			{
 				Undock();
+
+				UpdateLayout(true);
+
+				Vec2F anchor = (layout.absRect->LeftTop() + layout.absRect->RightTop())*0.5f;
+
+				if (auto headLayer = GetLayer(mTabLayerPath))
+					anchor.y -= headLayer->GetRect().Height()*0.5f;
+
+				layout.absPosition += o2Input.GetCursorPos() - anchor;
+
+				mDragOffset = Vec2F();
+			}
 
 			return;
 		}
@@ -158,10 +390,9 @@ namespace Editor
 		Side dockPosition = Side::None;
 		RectF dockZoneRect;
 
-		if (!TraceDock(targetDock, dockPosition, dockZoneRect))
-			return;
+		bool tracedDock = TraceDock(targetDock, dockPosition, dockZoneRect);
 
-		if (dockPosition != Side::None)
+		if (dockPosition != Side::None && tracedDock)
 		{
 			mDockingFrameAppearance.PlayForward();
 			mDockingFrameTarget = dockZoneRect;
@@ -173,8 +404,11 @@ namespace Editor
 		}
 	}
 
-	void UIDockableWindow::OnMoveCompleted(const Input::Cursor& cursro)
+	void UIDockableWindow::OnMoveCompleted(const Input::Cursor& cursor)
 	{
+		if (mDocked)
+			return;
+
 		UIDockWindowPlace* targetDock = nullptr;
 		Side dockPosition = Side::None;
 		RectF dockZoneRect;
@@ -260,12 +494,17 @@ namespace Editor
 	{
 		mNonDockSize = layout.size;
 
+		mTabPosition = targetDock->mChilds.Count();
+
 		targetDock->AddChild(this);
 		layout = UIWidgetLayout::BothStretch();
 		SetDocked(true);
 
 		mDockingFrameAppearance.PlayBack();
 		mDockingFrameTarget = layout.GetAbsoluteRect();
+
+		targetDock->ArrangeChildWindows();
+		targetDock->UpdateLayout();
 	}
 
 	void UIDockableWindow::PlaceNonLineDock(UIDockWindowPlace* targetDock, Side dockPosition)
@@ -414,6 +653,60 @@ namespace Editor
 		mDockingFrameTarget = layout.GetAbsoluteRect();
 	}
 
+	void UIDockableWindow::SetTabState(float offset, int position, bool isFirst)
+	{
+		SetStateForcible("tab", true);
+
+		if (mAutoCalculateTabWidth)
+			RecalculateTabWidth();
+
+		if (auto tabFirstState = GetStateObject("tabFirst"))
+			tabFirstState->SetState(isFirst);
+
+		mTabPosition = position;
+
+		if (auto tabMainLayer = GetLayer(mTabLayerPath))
+		{
+			tabMainLayer->layout.offsetMin.x = offset;
+			tabMainLayer->layout.offsetMax.x = offset + mTabWidth;
+			tabMainLayer->layout.anchorMin.x = 0;
+			tabMainLayer->layout.anchorMax.x = 0;
+		}
+
+		mTabState = true;
+	}
+
+	void UIDockableWindow::SetNonTabState()
+	{
+		SetStateForcible("tab", false);
+
+		mTabActive = false;
+
+		if (auto state = GetStateObject("tabActive"))
+			state->SetState(false);
+
+		if (auto tabMainLayer = GetLayer(mTabLayerPath))
+		{
+			tabMainLayer->layout.offsetMin.x = 0;
+			tabMainLayer->layout.offsetMax.x = 0;
+			tabMainLayer->layout.anchorMin.x = 0;
+			tabMainLayer->layout.anchorMax.x = 1;
+		}
+
+		mTabState = false;
+	}
+
+	void UIDockableWindow::SetActiveTab()
+	{
+		if (!mTabState)
+			return;
+
+		mTabActive = true;
+
+		if (auto state = GetStateObject("tabActive"))
+			state->SetState(true);
+	}
+
 	void UIDockableWindow::Undock()
 	{
 		if (!IsDocked())
@@ -421,82 +714,91 @@ namespace Editor
 
 		auto topDock = dynamic_cast<UIDockWindowPlace*>(mParent->GetParent());
 
-		if (topDock)
+		if (!topDock)
 		{
-			o2UI.AddWidget(this); 
-			SetDocked(false);
-			layout.absLeftTop = o2Input.GetCursorPos() + Vec2F(-30, 10);
-			layout.absRightBottom = layout.absLeftTop + mNonDockSize.InvertedY();
-
-			return;
+			o2UI.AddWidget(this);
 		}
-
-		auto parent = dynamic_cast<UIDockWindowPlace*>(mParent);
-		auto parentNeighbors = topDock->GetChilds().FindAll([&](auto x) { return x != parent; })
-			.Select<UIDockWindowPlace*>([](auto x) { return (UIDockWindowPlace*)x; });
-
-		o2UI.AddWidget(this);
-
-		if (parent->mNeighborMin)
+		else
 		{
-			parent->mNeighborMin->SetResizibleDir(parent->mNeighborMin->mResizibleDir, mDockBorder,
-												  parent->mNeighborMin->mNeighborMin, parent->mNeighborMax);
-		}
+			auto parent = dynamic_cast<UIDockWindowPlace*>(mParent);
+			auto parentNeighbors = topDock->GetChilds().FindAll([&](auto x) { return x != parent; })
+				.Select<UIDockWindowPlace*>([](auto x) { return (UIDockWindowPlace*)x; });
 
-		if (parent->mNeighborMax)
-		{
-			parent->mNeighborMax->SetResizibleDir(parent->mNeighborMax->mResizibleDir, mDockBorder,
-												  parent->mNeighborMin, parent->mNeighborMax->mNeighborMax);
-		}
+			o2UI.AddWidget(this);
 
-		if (parent->mResizibleDir == TwoDirection::Horizontal)
-		{
-			if (parent->mNeighborMin && parent->mNeighborMax)
+			if (!parent->GetChilds().IsEmpty())
 			{
-				float anchor = (parent->mNeighborMin->layout.anchorRight + parent->mNeighborMax->layout.anchorLeft) / 2.0f;
-				parent->mNeighborMin->layout.anchorRight = anchor;
-				parent->mNeighborMax->layout.anchorLeft = anchor;
+				parent->ArrangeChildWindows();
+				parent->UpdateLayout(true);
 			}
-			else if (parent->mNeighborMin && !parent->mNeighborMax)
-				parent->mNeighborMin->layout.anchorRight = 1.0f;
-			else if (!parent->mNeighborMin && parent->mNeighborMax)
-				parent->mNeighborMax->layout.anchorLeft = 0.0f;
-		}
-
-		if (parent->mResizibleDir == TwoDirection::Vertical)
-		{
-			if (parent->mNeighborMin && parent->mNeighborMax)
+			else
 			{
-				float anchor = (parent->mNeighborMin->layout.anchorTop + parent->mNeighborMax->layout.anchorBottom) / 2.0f;
-				parent->mNeighborMin->layout.anchorTop = anchor;
-				parent->mNeighborMax->layout.anchorBottom = anchor;
+				if (parent->mNeighborMin)
+				{
+					parent->mNeighborMin->SetResizibleDir(parent->mNeighborMin->mResizibleDir, mDockBorder,
+														  parent->mNeighborMin->mNeighborMin, parent->mNeighborMax);
+				}
+
+				if (parent->mNeighborMax)
+				{
+					parent->mNeighborMax->SetResizibleDir(parent->mNeighborMax->mResizibleDir, mDockBorder,
+														  parent->mNeighborMin, parent->mNeighborMax->mNeighborMax);
+				}
+
+				if (parent->mResizibleDir == TwoDirection::Horizontal)
+				{
+					if (parent->mNeighborMin && parent->mNeighborMax)
+					{
+						float anchor = (parent->mNeighborMin->layout.anchorRight + parent->mNeighborMax->layout.anchorLeft) / 2.0f;
+						parent->mNeighborMin->layout.anchorRight = anchor;
+						parent->mNeighborMax->layout.anchorLeft = anchor;
+					}
+					else if (parent->mNeighborMin && !parent->mNeighborMax)
+						parent->mNeighborMin->layout.anchorRight = 1.0f;
+					else if (!parent->mNeighborMin && parent->mNeighborMax)
+						parent->mNeighborMax->layout.anchorLeft = 0.0f;
+				}
+
+				if (parent->mResizibleDir == TwoDirection::Vertical)
+				{
+					if (parent->mNeighborMin && parent->mNeighborMax)
+					{
+						float anchor = (parent->mNeighborMin->layout.anchorTop + parent->mNeighborMax->layout.anchorBottom) / 2.0f;
+						parent->mNeighborMin->layout.anchorTop = anchor;
+						parent->mNeighborMax->layout.anchorBottom = anchor;
+					}
+					else if (parent->mNeighborMin && !parent->mNeighborMax)
+						parent->mNeighborMin->layout.anchorTop = 1.0f;
+					else if (!parent->mNeighborMin && parent->mNeighborMax)
+						parent->mNeighborMax->layout.anchorBottom = 0.0f;
+				}
+
+				topDock->RemoveChild(parent);
+
+				if (parentNeighbors.Count() == 1)
+				{
+					for (auto child : parentNeighbors[0]->GetChilds())
+						topDock->AddChild(child);
+
+					topDock->RemoveChild(parentNeighbors[0]);
+				}
+
+				// 
+				// 	for (auto child : parentNeighbor->GetChilds())
+				// 		topDock->AddChild(child);
+				// 
+				// 	topDock->RemoveChild(parent);
+				// 	topDock->RemoveChild(parentNeighbor);
+				topDock->CheckInteractable();
 			}
-			else if (parent->mNeighborMin && !parent->mNeighborMax)
-				parent->mNeighborMin->layout.anchorTop = 1.0f;
-			else if (!parent->mNeighborMin && parent->mNeighborMax)
-				parent->mNeighborMax->layout.anchorBottom = 0.0f;
 		}
-
-		topDock->RemoveChild(parent);
-
-		if (parentNeighbors.Count() == 1)
-		{
-			for (auto child : parentNeighbors[0]->GetChilds())
-				topDock->AddChild(child);
-
-			topDock->RemoveChild(parentNeighbors[0]);
-		}
-
-		// 
-		// 	for (auto child : parentNeighbor->GetChilds())
-		// 		topDock->AddChild(child);
-		// 
-		// 	topDock->RemoveChild(parent);
-		// 	topDock->RemoveChild(parentNeighbor);
-		topDock->CheckInteractable();
 
 		SetDocked(false);
-		layout.absLeftTop = o2Input.GetCursorPos() + Vec2F(-30, 10);
+		SetNonTabState();
+
+		Vec2F leftTop = layout.absLeftTop;
+		layout.anchorMin = Vec2F(); layout.anchorMax = Vec2F();
+		layout.absLeftTop = leftTop;
 		layout.absRightBottom = layout.absLeftTop + mNonDockSize.InvertedY();
 	}
 
@@ -515,12 +817,32 @@ CLASS_META(Editor::UIDockableWindow)
 	PROTECTED_FIELD(mDockingFrameTarget);
 	PROTECTED_FIELD(mNonDockSize);
 	PROTECTED_FIELD(mDragOffset);
+	PROTECTED_FIELD(mTabState);
+	PROTECTED_FIELD(mTabPosition);
+	PROTECTED_FIELD(mTabActive);
+	PROTECTED_FIELD(mTabWidth);
+	PROTECTED_FIELD(mAutoCalculateTabWidth);
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsDocked);
 	PUBLIC_FUNCTION(Sprite*, GetDockingFrameSample);
+	PUBLIC_FUNCTION(void, SetIcon, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetIcon);
+	PUBLIC_FUNCTION(void, SetIconLayout, const Layout&);
+	PUBLIC_FUNCTION(Layout, GetIconLayout);
+	PUBLIC_FUNCTION(void, SetCaption, const WString&);
+	PUBLIC_FUNCTION(WString, GetCaption);
+	PUBLIC_FUNCTION(void, SetTabWidth, float);
+	PUBLIC_FUNCTION(float, GetTabWidth);
+	PUBLIC_FUNCTION(void, SetAutoCalcuclatingTabWidth, bool);
+	PUBLIC_FUNCTION(bool, IsAutoCalcuclatingTabWidth);
+	PUBLIC_FUNCTION(void, PlaceDock, UIDockWindowPlace*);
+	PUBLIC_FUNCTION(void, Undock);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, InitializeDockFrameAppearanceAnim);
 	PROTECTED_FUNCTION(void, InitializeDragHandles);
 	PROTECTED_FUNCTION(void, OnHeadDblCKicked, const Input::Cursor&);
@@ -528,10 +850,12 @@ CLASS_META(Editor::UIDockableWindow)
 	PROTECTED_FUNCTION(void, OnMoveCompleted, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnMoveBegin, const Input::Cursor&);
 	PROTECTED_FUNCTION(bool, TraceDock, UIDockWindowPlace*&, Side&, RectF&);
-	PROTECTED_FUNCTION(void, PlaceDock, UIDockWindowPlace*);
 	PROTECTED_FUNCTION(void, PlaceNonLineDock, UIDockWindowPlace*, Side);
 	PROTECTED_FUNCTION(void, PlaceLineDock, UIDockWindowPlace*, Side, RectF);
-	PROTECTED_FUNCTION(void, Undock);
+	PROTECTED_FUNCTION(void, SetTabState, float, int, bool);
+	PROTECTED_FUNCTION(void, SetNonTabState);
+	PROTECTED_FUNCTION(void, SetActiveTab);
 	PROTECTED_FUNCTION(void, SetDocked, bool);
+	PROTECTED_FUNCTION(void, RecalculateTabWidth);
 }
 END_META;

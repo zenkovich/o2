@@ -80,7 +80,7 @@ namespace Editor
 		else
 		{
 			mGlobalConfig = GlobalConfig();
-			mGlobalConfig.mLastOpenedProjectpath = PROJECT_PATH;
+			mGlobalConfig.mLastOpenedProjectpath = GetProjectPath();
 		}
 	}
 

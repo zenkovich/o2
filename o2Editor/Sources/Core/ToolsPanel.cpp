@@ -8,6 +8,7 @@
 #include "Core/Tools/ScaleTool.h"
 #include "Core/Tools/SelectionTool.h"
 #include "Core/WindowsSystem/WindowsManager.h"
+#include "Dialogs/EditNameDlg.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "UI/Button.h"
 #include "UI/DropDown.h"
@@ -192,10 +193,10 @@ namespace Editor
 	{
 		if (name == mSaveAsSchemeName)
 		{
-			String newName = String::Format("Scheme #%i", o2EditorWindows.mAvailableLayouts.Count() + 1);
-			o2EditorWindows.mAvailableLayouts.Add(newName, o2EditorWindows.GetWindowsLayout());
-
-			UpdateWndLayoutSchemas();
+			NameEditDlg::Show("New layout", [&](const String& name) {
+				o2EditorWindows.mAvailableLayouts.Add(name, o2EditorWindows.GetWindowsLayout());
+				UpdateWndLayoutSchemas();
+			});
 		}
 
 		if (name == mDefaultSchemeName)

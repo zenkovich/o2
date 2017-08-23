@@ -1,5 +1,7 @@
 #include "UIDockWindowPlace.h"
-#include "Render\Render.h"
+
+#include "Render/Render.h"
+#include "Core/WindowsSystem/UIDockableWindow.h"
 
 namespace Editor
 {
@@ -116,6 +118,72 @@ namespace Editor
 		return mResizibleDir;
 	}
 
+	void UIDockWindowPlace::ArrangeChildWindows()
+	{
+		Vector<UIDockableWindow*> windows;
+		for (auto child : mChilds)
+		{
+			if (child->GetType() == TypeOf(UIDockableWindow))
+				windows.Add(dynamic_cast<UIDockableWindow*>(child));
+		}
+
+		windows.Sort([](UIDockableWindow* a, UIDockableWindow* b) { return a->mTabPosition < b->mTabPosition; });
+
+		if (windows.Count() == 1)
+		{
+			windows[0]->SetNonTabState();
+		}
+		else
+		{
+			float offset = 0;
+			int pos = 0;
+			for (auto window : windows)
+			{
+				window->SetTabState(offset, pos, window == mChilds[0]);
+				offset += window->GetTabWidth();
+
+				pos++;
+			}
+
+			if (!windows.IsEmpty())
+			{
+				if (!windows.Any([&](UIDockableWindow* x) { return x->mTabActive; }))
+					SetActiveTab(windows[0]);
+			}
+		}
+	}
+
+	void UIDockWindowPlace::SetActiveTab(UIDockableWindow* window)
+	{
+		Vector<UIDockableWindow*> windows;
+		for (auto child : mChilds)
+		{
+			if (child->GetType() == TypeOf(UIDockableWindow))
+				windows.Add(dynamic_cast<UIDockableWindow*>(child));
+		}
+
+		for (auto window : windows)
+		{
+			if (window->mTabActive)
+			{
+				window->mTabActive = false;
+
+				if (auto state = window->GetStateObject("tabActive"))
+					state->SetState(false);
+
+				break;
+			}
+		}
+
+		if (window)
+		{
+			window->mTabActive = true;
+
+			if (auto state = window->GetStateObject("tabActive"))
+				state->SetState(true);
+		}
+	}
+
 	void UIDockWindowPlace::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
 		UIWidget::UpdateLayout(forcible, withChildren);
@@ -198,6 +266,8 @@ CLASS_META(Editor::UIDockWindowPlace)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetResizibleDir, TwoDirection, float, UIDockWindowPlace*, UIDockWindowPlace*);
 	PUBLIC_FUNCTION(TwoDirection, GetResizibleDir);
+	PUBLIC_FUNCTION(void, ArrangeChildWindows);
+	PUBLIC_FUNCTION(void, SetActiveTab, UIDockableWindow*);
 	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, OnDragHandleMinMoved, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnDragHandleMaxMoved, const Vec2F&);

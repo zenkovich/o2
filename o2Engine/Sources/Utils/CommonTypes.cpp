@@ -101,3 +101,12 @@ ENUM_META_(o2::ProtectSection, ProtectSection)
 	ENUM_ENTRY(Public);
 }
 END_ENUM_META;
+
+ENUM_META_(o2::Platform, Platform)
+{
+	ENUM_ENTRY(Android);
+	ENUM_ENTRY(MacOSX);
+	ENUM_ENTRY(Windows);
+	ENUM_ENTRY(iOS);
+}
+END_ENUM_META;

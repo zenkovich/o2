@@ -170,7 +170,7 @@ namespace o2
 
 	void UIWidgetLayout::SetAbsolutePosition(const Vec2F& absPosition)
 	{
-		Vec2F delta = position - GetAbsolutePosition();
+		Vec2F delta = absPosition - GetAbsolutePosition();
 		mOffsetMin += delta;
 		mOffsetMax += delta;
 		mOwner->UpdateLayout();

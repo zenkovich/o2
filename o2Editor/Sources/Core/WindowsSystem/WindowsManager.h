@@ -10,6 +10,7 @@ using namespace o2;
 namespace o2
 {
 	class UIMenuPanel;
+	class UIWindow;
 }
 
 // Editor windows accessor macros
@@ -17,10 +18,11 @@ namespace o2
 
 namespace Editor
 {
-	class IEditorWindow;
-	class UIDockWindowPlace;
 	class ColorPickerDlg;
 	class CurveEditorDlg;
+	class IEditorWindow;
+	class NameEditDlg;
+	class UIDockWindowPlace;
 
 	// ----------------------
 	// Editor windows manager
@@ -57,12 +59,13 @@ namespace Editor
 	protected:
 		const bool mNeedRebuildWndStyle = true; // Is need to rebuild dockable windows style
 
-		EditorWindowsVec   mEditorWindows;    // Editors windows list
-		UIDockWindowPlace* mMainDockPlace;    // Main windows dock place
-		WndLayoutsDict     mAvailableLayouts; // Available layouts
+		EditorWindowsVec   mEditorWindows;      // Editors windows list
+		UIDockWindowPlace* mMainDockPlace;      // Main windows dock place
+		WndLayoutsDict     mAvailableLayouts;   // Available layouts
 
-		ColorPickerDlg*    mColorPickerDlg;   // Shared color picker dialog
-		CurveEditorDlg*    mCurveEditorDlg;   // Shared curves editing dialog
+		ColorPickerDlg*    mColorPickerDlg;     // Shared color picker dialog
+		CurveEditorDlg*    mCurveEditorDlg;     // Shared curves editing dialog
+		NameEditDlg*       mNameEditDlg;        // Name editing dialog
 
 	protected:
 		// Default constructor

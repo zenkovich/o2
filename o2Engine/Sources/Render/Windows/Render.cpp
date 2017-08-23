@@ -132,7 +132,7 @@ namespace o2
 
 		mCurrentRenderTarget = TextureRef();
 
-		if (IS_DEV_MODE)
+		if (IsDevMode())
 			o2Assets.onAssetsRebuilded += Func(this, &Render::OnAssetsRebuilded);
 
 		mReady = true;
@@ -160,7 +160,7 @@ namespace o2
 		if (!mReady)
 			return;
 
-		if (IS_DEV_MODE)
+		if (IsDevMode())
 			o2Assets.onAssetsRebuilded -= Func(this, &Render::OnAssetsRebuilded);
 
 		if (mGLContext)

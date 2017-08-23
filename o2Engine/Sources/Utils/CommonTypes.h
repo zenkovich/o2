@@ -36,4 +36,6 @@ namespace o2
 	enum class HorAlign { Left, Middle, Right, Both };
 
 	enum class ProtectSection { Public, Private, Protected };
+
+	enum class Platform { Windows, MacOSX, iOS, Android };
 }

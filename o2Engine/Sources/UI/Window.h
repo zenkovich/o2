@@ -49,16 +49,22 @@ namespace o2
 		void RemoveAllWindowElements();
 
 		// Sets icon sprite
-		void SetIcon(Sprite* icon);
+		virtual void SetIcon(Sprite* icon);
 
 		// Returns icon sprite
-		Sprite* GetIcon() const;
+		virtual Sprite* GetIcon() const;
+
+		// Sets icon layer layout
+		virtual void SetIconLayout(const Layout& layout);
+
+		// Returns icon layer layout
+		virtual Layout GetIconLayout() const;
 
 		// Sets caption text
-		void SetCaption(const WString& caption);
+		virtual void SetCaption(const WString& caption);
 
 		// Returns caption text
-		WString GetCaption() const;
+		virtual WString GetCaption() const;
 
 		// Sets drag handle areas layouts
 		void SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout& bottom, const Layout& left,
@@ -83,8 +89,9 @@ namespace o2
 		SERIALIZABLE(UIWindow);
 
 	protected:
-		Sprite*              mIconDrawable = nullptr;    // Icon drawable from layer "icon"
-		Text*                mCaptionDrawable = nullptr; // text caption from layer "caption"
+		const char* mIconLayerPath = "icon";
+		const char* mCaptionLayerPath = "caption";
+
 		WidgetsVec           mWindowElements;            // Windows elements widgets @SERIALIZABLE
 
 		CursorEventsArea     mBackCursorArea;            // Cursor area listener at back of window, for catching events
@@ -128,9 +135,6 @@ namespace o2
 	protected:
 		// Updates transparency for this and children widgets
 		void UpdateTransparency();
-
-		// It is called when layer added and updates drawing sequence
-		void OnLayerAdded(UIWidgetLayer* layer);
 
 		// Initializes handles
 		void InitializeHandles();

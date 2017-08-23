@@ -9,7 +9,7 @@ namespace o2
 
 	Input::Input()
 	{
-		if (PLATFORM == ProjectConfig::Platform::Windows)
+		if (GetEnginePlatform() == Platform::Windows)
 		{
 			mCursors.Add(Cursor());
 			mCursors.Last().isPressed = false;
@@ -276,7 +276,7 @@ namespace o2
 				id++;
 		}
 
-		if (id == 0 && o2Config.GetPlatform() == ProjectConfig::Platform::Windows)
+		if (id == 0 && o2Config.GetPlatform() == Platform::Windows)
 		{
 			mCursors[0].position = pos;
 			mCursors[0].isPressed = true;
@@ -296,7 +296,7 @@ namespace o2
 			{
 				releasedCuros = cursor;
 
-				if (id == 0 && o2Config.GetPlatform() == ProjectConfig::Platform::Windows)
+				if (id == 0 && o2Config.GetPlatform() == Platform::Windows)
 					cursor.isPressed = false;
 				else
 					mCursors.Remove(cursor);

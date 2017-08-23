@@ -1,24 +1,5 @@
 #pragma once
-
-// TODO: Need to make this configuration fully automatic and depending with project configuration
-
-// Current working platform
-#define PLATFORM ProjectConfig::Platform::Windows
-
-// Project location path. Relative from executable
-#define PROJECT_PATH "../../../"
-
-// Project config file path. Relative from project path
-#define PROJECT_SETTINGS_FILE_LOCAL_PATH "ProjectSettings.xml"
-
-// Enables stopping on log errors
-#define ENABLE_STOPPING_ON_LOG_ERRORS false
-
-// Enables render debugging
-#define RENDER_DEBUG true
-
-// Enables debug ui rectangles drawing
-#define UI_DEBUG false
+#include "Utils/CommonTypes.h"
 
 // Enables memory managing
 #define ENALBE_MEMORY_MANAGE false
@@ -26,21 +7,42 @@
 // Describes that engine running as editor
 #define IS_EDITOR true
 
+// Enables render debugging
+#define RENDER_DEBUG true
+
+// Current working platform
+o2::Platform GetEnginePlatform();
+
+// Project location path. Relative from executable
+const char* GetProjectPath();
+
+// Project config file path. Relative from project path
+const char* GetProjectSettingFileLocalPath();
+
+// Enables stopping on log errors
+bool IsStoppingOnLogErrors();
+
+// Enables debug ui rectangles drawing
+bool IsUIDebugEnabled();
+
 // Is development mode
-#define IS_DEV_MODE true
+bool IsDevMode();
+
+// Is build release
+bool IsReleaseBuild();
 
 // ----------------------------
 // Assets configuration section
 // ----------------------------
 
 // Building assets before launching app
-#define ASSETS_PREBUILDING_ENABLE true
+bool IsAssetsPrebuildEnabled();
 
 // Assets path. Relative from project path
-#define ASSETS_PATH "Assets/"
+const char* GetAssetsPath();
 
-// Data path with builded assets. Relative from executable
-#define DATA_PATH "../Data/"
+// Data path with built assets. Relative from executable
+const char* GetDataPath();
 
 // Basic atlas path (from assets path)
-#define BASIC_ATLAS_PATH "BasicAtlas.atlas"
+const char* GetBasicAtlasPath();

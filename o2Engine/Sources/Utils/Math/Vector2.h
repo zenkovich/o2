@@ -337,7 +337,7 @@ namespace o2
 	}
 
 	template<typename T>
-	Vec2<T> Vec2<T>::Inverted(bool bx = true, bool by = true)  const
+	Vec2<T> Vec2<T>::Inverted(bool bx /*= true*/, bool by /*= true*/)  const
 	{
 		Vec2 r = *this;
 		if (bx) r.x = -r.x;

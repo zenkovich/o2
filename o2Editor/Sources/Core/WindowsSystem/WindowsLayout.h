@@ -43,6 +43,9 @@ namespace Editor
 		// Restores dock recursively
 		void RestoreDock(WindowDockPlace* dockDef, UIDockWindowPlace* dockWidget);
 
+		// Removes all children empty dock places
+		void CleanEmptyDocks(UIDockWindowPlace* dockPlace);
+
 		friend class WindowsManager;
 	};
 

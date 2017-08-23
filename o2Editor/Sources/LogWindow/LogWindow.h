@@ -41,11 +41,14 @@ namespace Editor
 		Text*       mMessagesCountLabel;
 		Text*       mWarningsCountLabel;
 		Text*       mErrorsCountLabel;
+
 		MessagesVec mAllMessages;
 		MessagesVec mVisibleMessages;
+
 		bool        mRegularMessagesEnabled;
 		bool        mWarningMessagesEnabled;
 		bool        mErrorMessagesEnabled;
+
 		int         mRegularMessagesCount;
 		int         mWarningMessagesCount;
 		int         mErrorMessagesCount;

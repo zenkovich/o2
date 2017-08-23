@@ -8,10 +8,10 @@ namespace o2
 	DECLARE_SINGLETON(ProjectConfig);
 
 	ProjectConfig::ProjectConfig():
-		mPlatform(PLATFORM)
+		mPlatform(GetEnginePlatform())
 	{
 		InitializeProperties();
-		SetProjectPath(PROJECT_PATH);
+		SetProjectPath(::GetProjectPath());
 	}
 
 	ProjectConfig::~ProjectConfig()
@@ -27,7 +27,7 @@ namespace o2
 		mProjectName = name;
 	}
 
-	ProjectConfig::Platform ProjectConfig::GetPlatform() const
+	Platform ProjectConfig::GetPlatform() const
 	{
 		return mPlatform;
 	}
@@ -44,7 +44,7 @@ namespace o2
 
 	void ProjectConfig::SetProjectPath(const String& path)
 	{
-		String cfgFilePath = path + PROJECT_SETTINGS_FILE_LOCAL_PATH;
+		String cfgFilePath = path + GetProjectSettingFileLocalPath();
 
 		DataNode data;
 		if (!data.LoadFromFile(cfgFilePath))
@@ -95,12 +95,3 @@ CLASS_META(o2::ProjectConfig)
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
-
-ENUM_META_(o2::ProjectConfig::Platform, Platform)
-{
-	ENUM_ENTRY(Android);
-	ENUM_ENTRY(MacOSX);
-	ENUM_ENTRY(Windows);
-	ENUM_ENTRY(iOS);
-}
-END_ENUM_META;

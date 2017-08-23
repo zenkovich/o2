@@ -87,12 +87,12 @@ namespace o2
 
 	void AssetsBuilder::CheckBasicAtlas()
 	{
-		String basicAtlasFullPath = mSourceAssetsPath + BASIC_ATLAS_PATH;
+		String basicAtlasFullPath = mSourceAssetsPath + GetBasicAtlasPath();
 
 		if (!o2FileSystem.IsFileExist(basicAtlasFullPath))
 		{
 			AtlasAssetRef basicAtlas;
-			basicAtlas->Save(BASIC_ATLAS_PATH, false);
+			basicAtlas->Save(GetBasicAtlasPath(), false);
 		}
 	}
 

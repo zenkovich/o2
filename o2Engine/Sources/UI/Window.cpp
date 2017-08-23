@@ -30,9 +30,6 @@ namespace o2
 		mLeftBottomDragAreaLayout(other.mLeftBottomDragAreaLayout),
 		mRightBottomDragAreaLayout(other.mRightBottomDragAreaLayout)
 	{
-		mIconDrawable = GetLayerDrawable<Sprite>("icon");
-		mCaptionDrawable = GetLayerDrawable<Text>("caption");
-
 		for (auto elem : other.mWindowElements)
 		{
 			auto newElem = elem->Clone();
@@ -65,9 +62,6 @@ namespace o2
 			delete elem;
 
 		UIScrollArea::operator=(other);
-
-		mIconDrawable = GetLayerDrawable<Sprite>("icon");
-		mCaptionDrawable = GetLayerDrawable<Text>("caption");
 
 		for (auto elem : other.mWindowElements)
 		{
@@ -176,29 +170,61 @@ namespace o2
 
 	void UIWindow::SetIcon(Sprite* icon)
 	{
-		if (mIconDrawable)
+		auto iconLayer = GetLayer(mIconLayerPath);
+		if (iconLayer)
 		{
-			delete mIconDrawable;
-			mIconDrawable = icon;
+			if (iconLayer->drawable)
+				delete iconLayer->drawable;
+
+			iconLayer->drawable = icon;
 		}
 	}
 
 	Sprite* UIWindow::GetIcon() const
 	{
-		return mIconDrawable;
+		auto iconLayer = GetLayer(mIconLayerPath);
+		if (iconLayer)
+			return dynamic_cast<Sprite*>(iconLayer->drawable);
+		
+		return nullptr;
+	}
+
+	void UIWindow::SetIconLayout(const Layout& layout)
+	{
+		auto iconLayer = GetLayer(mIconLayerPath);
+		if (iconLayer)
+			iconLayer->layout = layout;
+	}
+
+	Layout UIWindow::GetIconLayout() const
+	{
+		auto iconLayer = GetLayer(mIconLayerPath);
+		if (iconLayer)
+			return iconLayer->layout;
+
+		return Layout();
 	}
 
 	void UIWindow::SetCaption(const WString& caption)
 	{
-		if (mCaptionDrawable)
+		auto captionLayer = GetLayer(mCaptionLayerPath);
+		if (captionLayer)
 		{
-			mCaptionDrawable->SetText(caption);
+			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->drawable))
+				textDrawable->SetText(caption);
 		}
 	}
 
 	WString UIWindow::GetCaption() const
 	{
-		return mCaptionDrawable->GetText();
+		auto captionLayer = GetLayer(mCaptionLayerPath);
+		if (captionLayer)
+		{
+			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->drawable))
+				return textDrawable->GetText();
+		}
+
+		return WString();
 	}
 
 	void UIWindow::SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout&bottom, const Layout&left,
@@ -265,15 +291,6 @@ namespace o2
 
 		for (auto elem : mWindowElements)
 			elem->UpdateTransparency();
-	}
-
-	void UIWindow::OnLayerAdded(UIWidgetLayer* layer)
-	{
-		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == TypeOf(Sprite))
-			mIconDrawable = (Sprite*)layer->drawable;
-
-		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == TypeOf(Text))
-			mCaptionDrawable = (Text*)layer->drawable;
 	}
 
 	void UIWindow::InitializeHandles()
@@ -398,8 +415,8 @@ CLASS_META(o2::UIWindow)
 
 	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(icon);
-	PROTECTED_FIELD(mIconDrawable);
-	PROTECTED_FIELD(mCaptionDrawable);
+	PROTECTED_FIELD(mIconLayerPath);
+	PROTECTED_FIELD(mCaptionLayerPath);
 	PROTECTED_FIELD(mWindowElements).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mBackCursorArea);
 	PROTECTED_FIELD(mHeadDragHandle);
@@ -438,6 +455,8 @@ CLASS_META(o2::UIWindow)
 	PUBLIC_FUNCTION(void, RemoveAllWindowElements);
 	PUBLIC_FUNCTION(void, SetIcon, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetIcon);
+	PUBLIC_FUNCTION(void, SetIconLayout, const Layout&);
+	PUBLIC_FUNCTION(Layout, GetIconLayout);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(void, SetDragAreaLayouts, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&);
@@ -447,7 +466,6 @@ CLASS_META(o2::UIWindow)
 	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PUBLIC_FUNCTION(CursorEventsArea&, GetBackCursorListener);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, InitializeHandles);
 	PROTECTED_FUNCTION(void, SetHandlesInteractable, bool);
 	PROTECTED_FUNCTION(void, BindHandlesInteractableToVisibility);

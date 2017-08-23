@@ -478,13 +478,13 @@ namespace o2
 
 		float u0 = mTextureSrcRect.left*invTexSize.x;
 		float u3 = mTextureSrcRect.right*invTexSize.x;
-		float u1 = Math::Lerp(u0, u3, mSlices.left*invTexSrcSize.x);
-		float u2 = Math::Lerp(u0, u3, (texSrcSize.x - mSlices.right)*invTexSrcSize.x);
+		float u1 = Math::Lerp(u0, u3, (float)mSlices.left*invTexSrcSize.x);
+		float u2 = Math::Lerp(u0, u3, (texSrcSize.x - (float)mSlices.right)*invTexSrcSize.x);
 
 		float v0 = 1.0f - mTextureSrcRect.top*invTexSize.y;
 		float v3 = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
-		float v1 = Math::Lerp(v0, v3, mSlices.top*invTexSrcSize.y);
-		float v2 = Math::Lerp(v0, v3, (texSrcSize.y - mSlices.bottom)*invTexSrcSize.y);
+		float v1 = Math::Lerp(v0, v3, (float)mSlices.bottom*invTexSrcSize.y);
+		float v2 = Math::Lerp(v0, v3, (texSrcSize.y - (float)mSlices.top)*invTexSrcSize.y);
 
 		Vec2F xv = mTransform.xv/sz.x;
 		Vec2F yv = mTransform.yv/sz.y;

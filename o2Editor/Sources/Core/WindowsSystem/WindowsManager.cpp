@@ -2,6 +2,7 @@
 
 #include "Core/Dialogs/ColorPickerDlg.h"
 #include "Core/Dialogs/CurveEditorDlg.h"
+#include "Core/Dialogs/EditNameDlg.h"
 #include "Core/EditorConfig.h"
 #include "Core/UIStyle/EditorUIStyle.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
@@ -25,6 +26,7 @@ namespace Editor
 
 		mColorPickerDlg = mnew ColorPickerDlg();
 		mCurveEditorDlg = mnew CurveEditorDlg();
+		mNameEditDlg = mnew NameEditDlg();
 
 		InitializeDock();
 		InitializeWindows();
@@ -41,6 +43,7 @@ namespace Editor
 
 		delete mColorPickerDlg;
 		delete mCurveEditorDlg;
+		delete mNameEditDlg;
 	}
 
 	void WindowsManager::InitializeWindows()

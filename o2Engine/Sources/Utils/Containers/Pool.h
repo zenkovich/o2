@@ -38,7 +38,7 @@ namespace o2
 
 
 	template<typename _type>
-	Pool<_type>::Pool(int initialCount = 5, int chunkSize = 5):
+	Pool<_type>::Pool(int initialCount /*= 5*/, int chunkSize /*= 5*/):
 		mChunkSize(chunkSize)
 	{
 		CreateObjects(initialCount);

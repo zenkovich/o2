@@ -537,7 +537,7 @@ namespace o2
 		sample->SetEnableScrollsHiding(true);
 		sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		Sprite* selection = mnew Sprite("ui/UI_ListBox_selection_regular.png");
+		Sprite* selection = mnew Sprite("ui/UI_Context_menu_select.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
@@ -582,7 +582,7 @@ namespace o2
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
 
-		Sprite* selection = mnew Sprite("ui/UI_ListBox_selection_regular.png");
+		Sprite* selection = mnew Sprite("ui/UI_Context_menu_select.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
@@ -631,7 +631,7 @@ namespace o2
 		sample->SetEnableScrollsHiding(true);
 		sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		Sprite* selection = mnew Sprite("ui/UI_ListBox_selection_regular.png");
+		Sprite* selection = mnew Sprite("ui/UI_Context_menu_select.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
@@ -944,7 +944,7 @@ namespace o2
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
 
-		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_ListBox_selection_regular.png"),
+		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
 		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_hover.png"),

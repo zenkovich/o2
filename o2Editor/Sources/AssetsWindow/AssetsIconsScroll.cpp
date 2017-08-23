@@ -151,7 +151,7 @@ namespace Editor
 		if (mIsDraggingIcons && mInstSceneDragActors.Count() == 0)
 			o2UI.DrawWidgetAtTop(mDragIcon);
 
-		if (UI_DEBUG || o2Input.IsKeyDown(VK_F1))
+		if (IsUIDebugEnabled() || o2Input.IsKeyDown(VK_F1))
 			DrawDebugFrame();
 	}
 

@@ -171,6 +171,40 @@
 
     </Expand>
   </Type>
+  
+  <Type Name="o2::UIWidgetLayer">
+    <DisplayString>name={ name } rect=({ (int)mAbsolutePosition.left }, { (int)mAbsolutePosition.bottom }, { (int)mAbsolutePosition.right }, { (int)mAbsolutePosition.top })</DisplayString>
+    <Expand>
+      <Item Name="name" ExcludeView="simple">name</Item>
+      <Item Name="drawable" ExcludeView="simple">drawable</Item>
+      <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
+      <Item Name="res alpha" ExcludeView="simple">mResTransparency</Item>
+      <Item Name="depth" ExcludeView="simple">mDepth</Item>
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
+      <Item Name="widget" ExcludeView="simple">mOwnerWidget</Item>
+      <Synthetic Name="layout">
+        <DisplayString>({ (int)mAbsolutePosition.left }, { (int)mAbsolutePosition.bottom }, { (int)mAbsolutePosition.right }, { (int)mAbsolutePosition.top })</DisplayString>
+        <Expand>
+          <ExpandedItem>layout</ExpandedItem>
+        </Expand>
+      </Synthetic>
+      
+      <Synthetic Name="interactableLayout">
+        <DisplayString>({ (int)mInteractableArea.left }, { (int)mInteractableArea.bottom }, { (int)mInteractableArea.right }, { (int)mInteractableArea.top })</DisplayString>
+        <Expand>
+          <ExpandedItem>interactableLayout</ExpandedItem>
+        </Expand>
+      </Synthetic>
+      
+      <Item Name="rect" ExcludeView="simple">mAbsolutePosition</Item>
+
+      <ArrayItems>
+        <Size>mChilds.mCount</Size>
+        <ValuePointer>mChilds.mValues</ValuePointer>
+      </ArrayItems>
+
+    </Expand>
+  </Type>
 
   <Type Name="o2::Actor">
     <DisplayString>{ mName }:{ mId }</DisplayString>

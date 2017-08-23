@@ -10,6 +10,8 @@ using namespace o2;
 
 namespace Editor
 {
+	class UIDockableWindow;
+
 	// ------------------------------------
 	// Dockable windows place for attaching
 	// ------------------------------------
@@ -40,6 +42,12 @@ namespace Editor
 
 		// Returns resizible side
 		TwoDirection GetResizibleDir() const;
+
+		// Arranging child windows as tabs
+		void ArrangeChildWindows();
+
+		// Sets target window as active tab
+		void SetActiveTab(UIDockableWindow* window);
 
 		SERIALIZABLE(UIDockWindowPlace);
 

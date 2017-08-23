@@ -295,7 +295,7 @@ namespace o2
 	{
 		auto res = CreateWidget<UIButton>(style);
 		res->caption = caption;
-		res->name = "button";
+		res->name = caption + " button";
 		res->onClick = onClick;
 		return res;
 	}
@@ -304,7 +304,7 @@ namespace o2
 	{
 		auto res = CreateWidget<UIWindow>(style);
 		res->caption = caption;
-		res->name = "window";
+		res->name = caption + " window";
 		return res;
 	}
 
@@ -312,7 +312,7 @@ namespace o2
 	{
 		auto res = CreateWidget<UILabel>(style);
 		res->text = text;
-		res->name = "label";
+		res->name = text + " label";
 		res->horOverflow = UILabel::HorOverflow::Dots;
 		return res;
 	}
@@ -407,7 +407,7 @@ namespace o2
 	{
 		auto res = CreateWidget<UIToggle>(style);
 		res->caption = caption;
-		res->name = "toggle";
+		res->name = caption + " toggle";
 		return res;
 	}
 

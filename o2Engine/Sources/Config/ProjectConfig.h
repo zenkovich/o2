@@ -19,9 +19,6 @@ namespace o2
 	class ProjectConfig: public ISerializable, public Singleton<ProjectConfig>
 	{
 	public:
-		enum class Platform { Windows, MacOSX, iOS, Android };
-
-	public:
 		Property<String>   projectName;     // Project name property
 		Property<Platform> currentPlatform; // Project platform property
 		Getter<String>     projectPath;     // Project path location

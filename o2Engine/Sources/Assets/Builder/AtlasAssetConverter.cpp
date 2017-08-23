@@ -88,7 +88,7 @@ namespace o2
 				availableAtlasesIds.Add(assetInfo->meta->ID());
 			}
 
-			if (assetInfo->path == BASIC_ATLAS_PATH)
+			if (assetInfo->path == GetBasicAtlasPath())
 				basicAtlasInfo = assetInfo;
 		}
 

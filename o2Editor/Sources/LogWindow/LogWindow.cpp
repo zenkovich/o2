@@ -12,14 +12,6 @@ namespace Editor
 {
 	void LogWindow::Update(float dt)
 	{
-		if (o2Input.IsKeyDown('G'))
-			o2Debug.Log(String::Format("Regular message at %i", o2Time.GetCurrentFrame()));
-
-		if (o2Input.IsKeyDown('H'))
-			o2Debug.LogWarning(String::Format("Warning message at %i", o2Time.GetCurrentFrame()));
-
-		if (o2Input.IsKeyDown('J'))
-			o2Debug.LogError(String::Format("Error message at %i", o2Time.GetCurrentFrame()));
 	}
 
 	LogWindow::LogWindow():
@@ -37,12 +29,8 @@ namespace Editor
 	{
 		mWindow->caption = "Log";
 		mWindow->name = "log window";
-		if (auto iconLayer = mWindow->GetLayer("icon"))
-		{
-			*((Sprite*)iconLayer->drawable) = Sprite("ui/UI_list_icon.png");
-			iconLayer->layout = Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 1));
-		}
-
+		mWindow->SetIcon(mnew Sprite("ui/UI_list_icon.png"));
+		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
 

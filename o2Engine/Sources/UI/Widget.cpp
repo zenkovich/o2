@@ -159,7 +159,7 @@ namespace o2
 
 	void UIWidget::DrawDebugFrame()
 	{
-		if (!UI_DEBUG && !o2Input.IsKeyDown(VK_F2))
+		if (!IsUIDebugEnabled() && !o2Input.IsKeyDown(VK_F2))
 			return;
 
 		static int colr = 0;

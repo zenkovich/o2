@@ -127,6 +127,25 @@ namespace Editor
 				dockWnd->Show();
 			}
 		}
+
+		dockWidget->ArrangeChildWindows();
+
+		CleanEmptyDocks(dockWidget);
+	}
+
+	void WindowsLayout::CleanEmptyDocks(UIDockWindowPlace* dockPlace)
+	{
+		auto childs = dockPlace->GetChilds();
+		for (auto child : childs)
+		{
+			if (auto dockChild = dynamic_cast<UIDockWindowPlace*>(child))
+			{
+				CleanEmptyDocks(dockChild);
+
+				if (dockChild->GetChilds().IsEmpty())
+					dockPlace->RemoveChild(child);
+			}
+		}
 	}
 
 }
@@ -139,6 +158,7 @@ CLASS_META(Editor::WindowsLayout)
 	PUBLIC_FIELD(windows).SERIALIZABLE_ATTRIBUTE();
 
 	PROTECTED_FUNCTION(void, RestoreDock, WindowDockPlace*, UIDockWindowPlace*);
+	PROTECTED_FUNCTION(void, CleanEmptyDocks, UIDockWindowPlace*);
 }
 END_META;
 

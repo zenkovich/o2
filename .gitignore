@@ -239,3 +239,12 @@ pip-log.txt
 /o2Editor/Sources/CodeToolCache.xml
 /o2Engine/Windows/o2Engine.VC.db
 /o2Editor/Platforms/Windows/Data
+/o2Editor/Platforms/Windows/.vs/o2Editor/v15/Browse.VC.db
+/o2Editor/Platforms/Windows/.vs/o2Editor/v15/Browse.VC.opendb
+/o2Editor/Platforms/Windows/.vs/o2Editor/v15/Solution.VC.db
+/o2Editor/Platforms/Windows/.vs/o2Editor/v15/Solution.VC.db-shm
+/o2Editor/Platforms/Windows/.vs/o2Editor/v15/Solution.VC.db-wal
+/o2Engine/dependencies/vs2015/.vs/Dependencies/v15/Browse.VC.db
+/o2Engine/dependencies/vs2015/.vs/Dependencies/v15/Solution.VC.db
+/o2Engine/dependencies/vs2015/.vs/Dependencies/v15/Solution.VC.db-shm
+/o2Engine/dependencies/vs2015/.vs/Dependencies/v15/Solution.VC.db-wal

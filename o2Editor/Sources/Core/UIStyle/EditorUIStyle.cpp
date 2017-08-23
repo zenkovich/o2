@@ -37,32 +37,64 @@ namespace Editor
 	void EditorUIStyleBuilder::EditorUIStyleBuilder::RebuildDockableWndStyle()
 	{
 		UIDockableWindow* sample = mnew UIDockableWindow();
-
 		sample->layout.minSize = Vec2F(100, 50);
+		sample->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 17));
+		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
+		sample->SetEnableScrollsHiding(true);
 
 		*sample->GetDockingFrameSample() = Sprite("ui/UI_Window_place.png");
 
-		auto regularBackLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_window_frame_regular.png"),
-												 Layout::BothStretch(-13, -13, -13, -11));
+		// not tab back
+		auto backLayer = sample->AddLayer("back", nullptr);
 
-		auto dockedBackLayer = sample->AddLayer("dockedBack", mnew Sprite("ui/UI_window_frame_docked.png"),
-												Layout::BothStretch(-13, -13, -13, -11));
+		auto regularBackLayer = backLayer->AddChildLayer("regularBack", mnew Sprite("ui/UI_window_frame_regular.png"),
+														 Layout::BothStretch(-13, -13, -13, -11));
 
-		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_o2_sign.png"),
-										  Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, -1)));
+		auto dockedBackLayer = backLayer->AddChildLayer("dockedBack", mnew Sprite("ui/UI_window_frame_docked.png"),
+														Layout::BothStretch(-13, -13, -13, -11));
+
+		auto iconLayer = backLayer->AddChildLayer("icon", mnew Sprite("ui/UI_o2_sign.png"),
+												  Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, -1)));
 
 		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Window";
 		captionText->horAlign = HorAlign::Left;
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
-		auto textLayer = sample->AddLayer("caption", captionText,
-										  Layout::HorStretch(VerAlign::Top, 20, 35, 20, -2));
+		auto textLayer = backLayer->AddChildLayer("caption", captionText,
+												  Layout::HorStretch(VerAlign::Top, 20, 35, 20, -2));
 
-		sample->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 17));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
-		sample->SetEnableScrollsHiding(true);
+ // tab head
+		auto tabBackLayer = sample->AddLayer("tab", nullptr);
 
+		auto tabBackDown = tabBackLayer->AddChildLayer("back", mnew Sprite("ui/UI_window_frame_docked_tab.png"),
+											  Layout::BothStretch(-13, -13, -13, -11));
+
+		auto tabBack = tabBackLayer->AddChildLayer("tabBack", mnew Sprite("ui/UI_window_frame_docked_tab_back.png"),
+											  Layout::HorStretch(VerAlign::Top, -13, -13, 40, -11));
+
+		auto tabMain = tabBackLayer->AddChildLayer("main", nullptr,
+											  Layout::HorStretch(VerAlign::Top, 0, 0, 19));
+
+		auto tabMainInactiveBack = tabMain->AddChildLayer("inactive", mnew Sprite("ui/UI_window_frame_docked_tab_inactive.png"),
+														  Layout::HorStretch(VerAlign::Top, -13, -11, 40, -11));
+
+		auto tabMainActiveBack = tabMain->AddChildLayer("active", mnew Sprite("ui/UI_window_frame_docked_tab_active_back copy.png"),
+														Layout::HorStretch(VerAlign::Top, -13, -11, 40, -11));
+
+		auto tabIconLayer = tabMain->AddChildLayer("icon", mnew Sprite("ui/UI_o2_sign.png"),
+												   Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, -1)));
+
+		Text* tabCaptionText = mnew Text("stdFont.ttf");
+		tabCaptionText->text = "Window";
+		tabCaptionText->horAlign = HorAlign::Left;
+		tabCaptionText->verAlign = VerAlign::Middle;
+		tabCaptionText->dotsEngings = true;
+		auto tabTextLayer = tabMain->AddChildLayer("caption", tabCaptionText,
+												   Layout::HorStretch(VerAlign::Top, 20, 10, 20, -2));
+
+
+		   // scroll bars
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout.anchorMin = Vec2F(0, 0);
 		horScrollBar->layout.anchorMax = Vec2F(1, 0);
@@ -77,6 +109,7 @@ namespace Editor
 		verScrollBar->layout.offsetMax = Vec2F(0, -20);
 		sample->SetVerticalScrollBar(verScrollBar);
 
+		//states
 		Animation dockedStateAnim;
 		dockedStateAnim.SetTarget(sample);
 		*dockedStateAnim.AddAnimationValue<float>(&dockedBackLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
@@ -84,9 +117,31 @@ namespace Editor
 
 		auto dockedState = sample->AddState("docked", dockedStateAnim);
 
+
+		Animation tabStateAnim;
+		tabStateAnim.SetTarget(sample);
+		*tabStateAnim.AddAnimationValue<float>(&tabBackLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*tabStateAnim.AddAnimationValue<float>(&backLayer->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
+
+		auto tabbedState = sample->AddState("tab", tabStateAnim);
+
+
+		Animation tabActiveStateAnim;
+		tabActiveStateAnim.SetTarget(sample);
+		*tabActiveStateAnim.AddAnimationValue<float>(&tabMainActiveBack->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*tabActiveStateAnim.AddAnimationValue<float>(&tabMainInactiveBack->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
+		*tabActiveStateAnim.AddAnimationValue<float>(&tabBackDown->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+
+		auto tabActiveState = sample->AddState("tabActive", tabActiveStateAnim);
+
+
+		sample->AddState("tabFirst", Animation::EaseInOut(sample, &tabBack->transparency, 0.0f, 1.0f, 0.2f));
+
+
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 2.0f;
 
+		// additional elements
 		UIButton* closeBtn = o2UI.CreateWidget<UIButton>("close");
 		closeBtn->name = "closeButton";
 		closeBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 2));
@@ -97,6 +152,7 @@ namespace Editor
 		optionsBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-16, 2));
 		sample->AddWindowElement(optionsBtn);
 
+		// drag handles
 		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head
 								   Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -2), Vec2F(-5, 5)),      // top
 								   Layout(Vec2F(0, 0), Vec2F(1, 0), Vec2F(5, -5), Vec2F(-5, 5)),      // bottom
@@ -637,7 +693,7 @@ namespace Editor
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
 
-		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_ListBox_selection_regular.png"),
+		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
 		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_pressed.png"),
@@ -1061,7 +1117,7 @@ namespace Editor
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
 
-		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_ListBox_selection_regular.png"),
+		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
 		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_pressed.png"),
@@ -1176,7 +1232,7 @@ namespace Editor
 		// selection layer
 		auto itemSelectionLayer = sample->AddLayer("select", nullptr);
 
-		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_ListBox_selection_regular.png"),
+		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
 		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_pressed.png"),
@@ -1412,7 +1468,7 @@ namespace Editor
 		auto selectLayer = dropdown->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto pressedLayer = dropdown->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto arrowLayer = dropdown->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
-										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
+											 Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
 
 		dropdown->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
 
@@ -1593,13 +1649,13 @@ namespace Editor
 		box->SetFocusable(true);
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI2_round_field_gray.png"),
-										  Layout::BothStretch(-4, -4, -5, -4));
+									   Layout::BothStretch(-4, -4, -5, -4));
 
 		auto selectLayer = box->AddLayer("hover", mnew Sprite("ui/UI2_round_field_gray_select.png"),
-											Layout::BothStretch(-4, -4, -5, -4));
+										 Layout::BothStretch(-4, -4, -5, -4));
 
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI2_round_field_focused.png"),
-										   Layout::BothStretch(-4, -4, -5, -4));
+										Layout::BothStretch(-4, -4, -5, -4));
 
 		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
@@ -1919,7 +1975,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildBooleanProperty()
 	{
 		UIWidget* sample = mnew UIWidget();
-		
+
 		UIToggle* toggle = o2UI.CreateWidget<UIToggle>("without caption");
 		toggle->layout = UIWidgetLayout::BothStretch();
 
@@ -2020,13 +2076,13 @@ namespace Editor
 		box->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
-										  Layout::BothStretch(-9, -9, -9, -9));
+									   Layout::BothStretch(-9, -9, -9, -9));
 
 		auto selectLayer = box->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"),
-											Layout::BothStretch(-9, -9, -9, -9));
+										 Layout::BothStretch(-9, -9, -9, -9));
 
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"),
-										   Layout::BothStretch(-9, -9, -9, -9));
+										Layout::BothStretch(-9, -9, -9, -9));
 
 		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
@@ -2045,7 +2101,7 @@ namespace Editor
 
 		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
 		linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
-		
+
 		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
 		revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
@@ -2073,7 +2129,7 @@ namespace Editor
 		revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
-										  Layout::BothStretch(-9, -9, -9, -9));
+									   Layout::BothStretch(-9, -9, -9, -9));
 
 		sample->AddChild(box);
 		sample->AddChild(revertBtn);
@@ -2147,13 +2203,13 @@ namespace Editor
 		box->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
-										  Layout::BothStretch(-9, -9, -9, -9));
+									   Layout::BothStretch(-9, -9, -9, -9));
 
 		auto selectLayer = box->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"),
-											Layout::BothStretch(-9, -9, -9, -9));
+										 Layout::BothStretch(-9, -9, -9, -9));
 
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"),
-										   Layout::BothStretch(-9, -9, -9, -9));
+										Layout::BothStretch(-9, -9, -9, -9));
 
 		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
@@ -2205,7 +2261,7 @@ namespace Editor
 		auto yEdit = o2UI.CreateWidget<UIEditBox>("singleline with arrows");
 		yEdit->name = "y edit";
 		yEdit->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(20, 0), Vec2F());
-		
+
 		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
 		revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
@@ -2310,7 +2366,7 @@ namespace Editor
 		auto topEdit = o2UI.CreateWidget<UIEditBox>("singleline with arrows");
 		topEdit->name = "top edit";
 		topEdit->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(15, 0), Vec2F());
-		
+
 		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
 		revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 

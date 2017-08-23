@@ -17,8 +17,8 @@ namespace o2
 	{
 		InitializeProperties();
 
-		mAssetsFolderPath = ASSETS_PATH;
-		mDataFolderPath = DATA_PATH;
+		mAssetsFolderPath = ::GetAssetsPath();
+		mDataFolderPath = ::GetDataPath();
 
 		mLog = mnew LogStream("Assets");
 		o2Debug.GetLog()->BindStream(mLog);
@@ -27,7 +27,7 @@ namespace o2
 
 		LoadAssetTypes();
 
-		if (ASSETS_PREBUILDING_ENABLE && false)
+		if (::IsAssetsPrebuildEnabled() && !::IsReleaseBuild())
 			RebuildAssets();
 		else
 			LoadAssetsTree();
@@ -340,7 +340,7 @@ namespace o2
 		ClearAssetsCache();
 
 		auto changedAssetsIds = mAssetsBuilder->BuildAssets(GetAssetsPath(), GetDataPath());
-		mAssetsTree.BuildTree(DATA_PATH);
+		mAssetsTree.BuildTree(::GetDataPath());
 
 		onAssetsRebuilded(changedAssetsIds);
 	}
@@ -389,7 +389,7 @@ namespace o2
 
 	void Assets::LoadAssetsTree()
 	{
-		mAssetsTree.BuildTree(DATA_PATH);
+		mAssetsTree.BuildTree(::GetDataPath());
 	}
 
 	void Assets::LoadAssetTypes()
