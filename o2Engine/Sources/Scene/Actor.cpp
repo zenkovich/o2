@@ -8,7 +8,7 @@
 namespace o2
 {
 	Actor::Actor(ActorCreateMode mode /*= CreateMode::InScene*/):
-		mName("unnamed"), Animatable(), mId(Math::Random()), mAssetId(0), mIsOnScene(false)
+		mName("unnamed"), mId(Math::Random()), mAssetId(0), mIsOnScene(false)
 	{
 		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
 		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
@@ -37,7 +37,7 @@ namespace o2
 
 	Actor::Actor(const Actor& other):
 		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mLocked(other.mLocked),
-		mResLocked(other.mResLocked), Animatable(other), transform(other.transform), mLayer(other.mLayer),
+		mResLocked(other.mResLocked), transform(other.transform), mLayer(other.mLayer),
 		mId(Math::Random()), mAssetId(other.mAssetId), mIsOnScene(true)
 	{
 		transform.SetOwner(this);
@@ -78,9 +78,9 @@ namespace o2
 	Actor::Actor(const ActorAssetRef& prototype, ActorCreateMode mode /*= CreateMode::InScene*/):
 		mName(prototype->GetActor()->mName), mEnabled(prototype->GetActor()->mEnabled),
 		mResEnabled(prototype->GetActor()->mEnabled), mLocked(prototype->GetActor()->mLocked),
-		mResLocked(prototype->GetActor()->mResLocked), Animatable(*prototype->GetActor()),
-		transform(prototype->GetActor()->transform), mLayer(prototype->GetActor()->mLayer), mId(Math::Random()),
-		mAssetId(), mIsOnScene(mode == ActorCreateMode::InScene)
+		mResLocked(prototype->GetActor()->mResLocked), transform(prototype->GetActor()->transform),
+		mLayer(prototype->GetActor()->mLayer), mId(Math::Random()), mAssetId(), 
+		mIsOnScene(mode == ActorCreateMode::InScene)
 	{
 		transform.SetOwner(this);
 
@@ -176,8 +176,6 @@ namespace o2
 
 	void Actor::Update(float dt)
 	{
-		Animatable::Update(dt);
-
 		for (auto comp : mComponents)
 			comp->Update(dt);
 	}
@@ -1417,8 +1415,6 @@ namespace o2
 					}
 				}
 
-				protoChild->Animatable::operator=(*child);
-
 				if (child->mParent && child->mParent->mPrototypeLink)
 				{
 					Actor* newParent = allProtoChildren.FindMatch([&](Actor* x) { return child->mParent->IsLinkedToActor(x); });
@@ -1524,8 +1520,6 @@ namespace o2
 
 			newProtoChild->SetParent(childParentProtoLink);
 
-			newProtoChild->Animatable::operator=(*child);
-
 			newProtoChild->mName     = child->mName;
 			newProtoChild->mEnabled  = child->mEnabled;
 			newProtoChild->transform = child->transform;
@@ -1565,8 +1559,6 @@ namespace o2
 				Actor* newChildParent = info.allChildren.FindMatch([&](Actor* x) { return x->IsLinkedToActor(childParentProtoLink); });
 
 				newChild->SetParent(newChildParent);
-
-				newChild->Animatable::operator=(*child);
 
 				newChild->mName     = child->mName;
 				newChild->mEnabled  = child->mEnabled;
@@ -1622,8 +1614,6 @@ namespace o2
 							   Dictionary<const Component*, Component*>& componentsMap,
 							   bool isSourcePrototype)
 	{
-		dest->Animatable::operator=(*source);
-
 		dest->mName = source->mName;
 		dest->mEnabled = source->mEnabled;
 		dest->transform = source->transform;
@@ -1685,8 +1675,6 @@ namespace o2
 									   Dictionary<const Component*, Component*>& componentsMap,
 									   bool isInsidePrototype)
 	{
-		dest->Animatable::operator=(*source);
-
 		dest->mName = source->mName;
 		dest->mEnabled = source->mEnabled;
 		dest->transform = source->transform;
@@ -1729,8 +1717,6 @@ namespace o2
 								 Dictionary<const Component*, Component*>& componentsMap,
 								 Vector<ISerializable*>& serializableObjects)
 	{
-		dest->Animatable::operator=(*source);
-
 		dest->mName = source->mName;
 		dest->mEnabled = source->mEnabled;
 		dest->transform = source->transform;
@@ -2297,7 +2283,7 @@ END_META;
 
 CLASS_META(o2::Actor)
 {
-	BASE_CLASS(o2::Animatable);
+	BASE_CLASS(o2::ISerializable);
 
 	PUBLIC_FIELD(tags);
 	PUBLIC_FIELD(prototype);

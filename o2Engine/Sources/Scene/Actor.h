@@ -88,7 +88,7 @@ namespace o2
 	// -----------
 	// Scene actor
 	// -----------
-	class Actor: public Animatable
+	class Actor: public ISerializable
 	{
 	public:
 		typedef Vector<Actor*> ActorsVec;
