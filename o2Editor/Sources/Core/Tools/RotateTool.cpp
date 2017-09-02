@@ -182,7 +182,7 @@ namespace Editor
 	{
 		auto selectedActors = o2EditorSceneScreen.GetSelectedActors();
 		mScenePivot =
-			selectedActors.Sum<Vec2F>([](auto x) { return x->transform.GetWorldPosition(); }) /
+			selectedActors.Sum<Vec2F>([](auto x) { return x->transform->GetWorldPosition(); }) /
 			(float)selectedActors.Count();
 
 		mPivotDragHandle.position = mScenePivot;
@@ -211,7 +211,7 @@ namespace Editor
 			mSnapAngleAccumulated = 0.0f;
 
 			mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-				[](Actor* x) { return x->transform; });
+				[](Actor* x) { return *x->transform; });
 		}
 		else SelectionTool::OnCursorPressed(cursor);
 	}
@@ -326,20 +326,20 @@ namespace Editor
 		Basis transform = Basis::Translated(mScenePivot*-1.0f)*Basis::Rotated(-angleDelta)*Basis::Translated(mScenePivot);
 		for (auto actor : o2EditorSceneScreen.GetTopSelectedActors())
 		{
-			actor->transform.SetWorldNonSizedBasis(actor->transform.GetWorldNonSizedBasis()*transform);
+			actor->transform->SetWorldNonSizedBasis(actor->transform->GetWorldNonSizedBasis()*transform);
 		}
 	}
 
 	void RotateTool::RotateActorsSeparated(float angleDelta)
 	{
 		for (auto actor : o2EditorSceneScreen.GetTopSelectedActors())
-			actor->transform.angle -= angleDelta;
+			actor->transform->angle -= angleDelta;
 	}
 
 	void RotateTool::RotateActorsWithAction(float angleDelta)
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return x->transform; });
+			[](Actor* x) { return *x->transform; });
 
 		RotateActors(angleDelta);
 
@@ -350,7 +350,7 @@ namespace Editor
 	void RotateTool::RotateActorsSeparatedWithAction(float angleDelta)
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return x->transform; });
+			[](Actor* x) { return *x->transform; });
 
 		RotateActorsSeparated(angleDelta);
 

@@ -301,7 +301,7 @@ namespace o2
 		{
 			ActorDef def;
 			def.actor = actor;
-			def.transform = actor->transform.GetWorldNonSizedBasis();
+			def.transform = actor->transform->GetWorldNonSizedBasis();
 			def.idx = o2Scene.GetActorHierarchyIdx(def.actor);
 			actorsDefs.Add(def);
 
@@ -318,7 +318,7 @@ namespace o2
 			for (auto def : actorsDefs)
 			{
 				newParent->AddChild(def.actor, insertIdx++);
-				def.actor->transform.SetWorldNonSizedBasis(def.transform);
+				def.actor->transform->SetWorldNonSizedBasis(def.transform);
 			}
 		}
 		else
@@ -338,7 +338,7 @@ namespace o2
 			for (auto def : actorsDefs)
 			{
 				mRootActors.Insert(def.actor, insertIdx++);
-				def.actor->transform.SetWorldNonSizedBasis(def.transform);
+				def.actor->transform->SetWorldNonSizedBasis(def.transform);
 			}
 		}
 

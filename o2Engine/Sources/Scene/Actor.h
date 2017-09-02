@@ -111,7 +111,8 @@ namespace o2
 		Accessor<Actor*, const String&>     child;                   // Children accessor
 		Getter<ComponentsVec>               components;              // Components array getter
 		Accessor<Component*, const String&> component;               // Component accessor by type name
-		ActorTransform                      transform;               // Transformation 
+
+		ActorTransform* const               transform;               // Transformation 
 
 		Function<void(bool)>                onEnableChanged;         // Enable changing event
 
@@ -341,31 +342,36 @@ namespace o2
 	protected:
 		typedef Vector<ActorRef*> ActorRefsVec;
 
-		ActorAssetRef mPrototype;               // Prototype asset
-		ActorRef      mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
+		ActorAssetRef   mPrototype;               // Prototype asset
+		ActorRef        mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
 
-		UInt64        mId;                      // Unique actor id
-		String        mName;                    // Name of actor
+		UInt64          mId;                      // Unique actor id
+		String          mName;                    // Name of actor
 
-		Actor*        mParent = nullptr;        // Parent actor
-		ActorsVec     mChilds;                  // Children actors 
-		ComponentsVec mComponents;              // Components vector 
-		Scene::Layer* mLayer = nullptr;         // Scene layer
+		Actor*          mParent = nullptr;        // Parent actor
+		ActorsVec       mChilds;                  // Children actors 
+		ComponentsVec   mComponents;              // Components vector 
+		Scene::Layer*   mLayer = nullptr;         // Scene layer
 
-		bool          mEnabled = true;          // Is actor enabled
-		bool          mResEnabled = true;       // Is actor enabled in hierarchy
+		bool            mEnabled = true;          // Is actor enabled
+		bool            mResEnabled = true;       // Is actor enabled in hierarchy
 
-		bool          mLocked = false;          // Is actor locked
-		bool          mResLocked = false;       // Is actor locked in hierarchy
+		bool            mLocked = false;          // Is actor locked
+		bool            mResLocked = false;       // Is actor locked in hierarchy
 
-		bool          mIsOnScene = true;        // Is actor on scene
+		bool            mIsOnScene = true;        // Is actor on scene
 
-		bool          mIsAsset = false;         // Is this actor cached asset
-		UID           mAssetId;                 // Source asset id
+		bool            mIsAsset = false;         // Is this actor cached asset
+		UID             mAssetId;                 // Source asset id
 
-		ActorRefsVec  mReferences;              // References to this actor
+		ActorRefsVec    mReferences;              // References to this actor
 
 	protected:
+		// Base actor constructor with transform
+		Actor(ActorTransform* transform, const String& name = "unnamed", bool enabled = true, 
+			  bool resEnabled = true, bool locked = false, bool resLocked = false, 
+			  Scene::Layer* layer = nullptr, UInt64 id = Math::Random(), UID assetId = 0, bool isOnScene = true);
+
 		// Not using prototype setter
 		void SetProtytypeDummy(ActorAssetRef asset);
 

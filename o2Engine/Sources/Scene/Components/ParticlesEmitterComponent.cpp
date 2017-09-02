@@ -40,7 +40,7 @@ namespace o2
 
 	void ParticlesEmitterComponent::OnTransformChanged()
 	{
-		mEmitter.basis = mOwner->transform.GetWorldBasis();
+		mEmitter.basis = mOwner->transform->GetWorldBasis();
 	}
 
 }

@@ -95,11 +95,11 @@ namespace Editor
 			return mTargetActors.Select<Pair<void*, void*>>([&](Actor* x) { return getTargetsPair(x, getter); });
 		};
 
-		mPositionProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform.position; }), true);
-		mPivotProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform.pivot; }), true);
-		mScaleProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform.scale; }), true);
-		mSizeProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform.size; }), true);
-		mRotationProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform.angleDegree; }), true);
+		mPositionProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->position; }), true);
+		mPivotProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->pivot; }), true);
+		mScaleProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->scale; }), true);
+		mSizeProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->size; }), true);
+		mRotationProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->angleDegree; }), true);
 
 		Vector<Pair<void*, void*>> depthTargets;
 		for (auto actor : mTargetActors)

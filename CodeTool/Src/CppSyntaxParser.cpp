@@ -339,7 +339,13 @@ SyntaxVariable* CppSyntaxParser::ParseVariable(const string& data, SyntaxProtect
 		res->mType.mName += " (" + bracesFirst + "*)(" + nextBraces + ")";
 	}
 	else
-		res->mName = ReadWord(data, caret, " \n\r(){}[]");
+	{
+		string nextWord = ReadWord(data, caret, " \n\r(){}[]");
+		if (nextWord == "const")
+			res->mName = ReadWord(data, caret, " \n\r(){}[]");
+		else
+			res->mName = nextWord;
+	}
 
 	return res;
 }

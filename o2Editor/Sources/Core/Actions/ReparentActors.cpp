@@ -23,7 +23,7 @@ namespace Editor
 			info->actorHierarchyIdx = o2Scene.GetActorHierarchyIdx(actor);
 			info->lastParentId = parent ? parent->GetID() : 0;
 			info->lastPrevActorId = actorIdx > 0 ? parentChilds[actorIdx - 1]->GetID() : 0;
-			info->transform = actor->transform.GetWorldNonSizedBasis();
+			info->transform = actor->transform->GetWorldNonSizedBasis();
 
 			actorsInfos.Add(info);
 		}
@@ -63,7 +63,7 @@ namespace Editor
 
 				actor->SetParent(nullptr);
 				parent->AddChild(actor, insertIdx++);
-				actor->transform.SetWorldNonSizedBasis(info->transform);
+				actor->transform->SetWorldNonSizedBasis(info->transform);
 			}
 		}
 		else
@@ -76,7 +76,7 @@ namespace Editor
 
 				actor->SetParent(nullptr);
 				actor->SetPositionIndexInParent(insertIdx++);
-				actor->transform.SetWorldNonSizedBasis(info->transform);
+				actor->transform->SetWorldNonSizedBasis(info->transform);
 			}
 		}
 
@@ -97,13 +97,13 @@ namespace Editor
 			{
 				int idx = parent->GetChilds().Find(prevActor) + 1;
 				parent->AddChild(actor, idx);
-				actor->transform.SetWorldNonSizedBasis(info->transform);
+				actor->transform->SetWorldNonSizedBasis(info->transform);
 			}
 			else
 			{
 				int idx = o2Scene.GetRootActors().Find(prevActor) + 1;
 				actor->SetPositionIndexInParent(idx);
-				actor->transform.SetWorldNonSizedBasis(info->transform);
+				actor->transform->SetWorldNonSizedBasis(info->transform);
 			}
 		}
 

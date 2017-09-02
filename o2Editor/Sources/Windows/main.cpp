@@ -16,8 +16,6 @@ int main()
 {
 	INITIALIZE_O2;
 
-	auto t = TypeOf(RectF);
-
 	EditorApplication* app = mnew EditorApplication();
 	app->Launch();
 	delete app;

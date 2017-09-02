@@ -152,8 +152,8 @@ namespace Editor
 													  mnew EditorTestComponent(),
 					                                  mnew ParticlesEmitterComponent() });
 					childActor2->name = String::Format("%i %i Sub Child actor #%i", i + 1, j + 1, k + 1);
-					//childActor2->transform.position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
-					childActor2->transform.position = Vec2F(k*100, (i*2 + j)*100);
+					//childActor2->transform->position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
+					childActor2->transform->position = Vec2F(k*100, (i*2 + j)*100);
 					childActor->AddChild(childActor2);
 				}
 			}
@@ -247,7 +247,7 @@ namespace Editor
 
 		Actor* newActor = mnew Actor({ mnew ImageComponent() });
 		newActor->name = "Sprite";
-		newActor->transform.size = Vec2F(10, 10);
+		newActor->transform->size = Vec2F(10, 10);
 		CreateActor(newActor);
 	}
 

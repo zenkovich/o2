@@ -253,13 +253,13 @@ namespace o2
 
 	void ImageComponent::OnTransformChanged()
 	{
-		mSprite.SetBasis(mOwner->transform.GetWorldBasis());
+		mSprite.SetBasis(mOwner->transform->GetWorldBasis());
 	}
 
 	void ImageComponent::SetOwnerActor(Actor* actor)
 	{
 		if (actor)
-			actor->transform.SetSize(mSprite.GetSize());
+			actor->transform->SetSize(mSprite.GetSize());
 
 		DrawableComponent::SetOwnerActor(actor);
 	}

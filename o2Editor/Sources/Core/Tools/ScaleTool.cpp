@@ -126,13 +126,13 @@ namespace Editor
 	{
 		auto selectedActors = o2EditorSceneScreen.GetSelectedActors();
 		mSceneHandlesPos =
-			selectedActors.Sum<Vec2F>([](auto x) { return x->transform.GetWorldPosition(); }) /
+			selectedActors.Sum<Vec2F>([](auto x) { return x->transform->GetWorldPosition(); }) /
 			(float)selectedActors.Count();
 
 		if (selectedActors.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
 		{
 			Actor* lastSelectedActor = selectedActors.Last();
-			UpdateHandlesAngleAndPositions(-lastSelectedActor->transform.right->Angle(Vec2F::Right()));
+			UpdateHandlesAngleAndPositions(-lastSelectedActor->transform->right->Angle(Vec2F::Right()));
 		}
 		else UpdateHandlesAngleAndPositions(0.0f);
 	}
@@ -188,7 +188,7 @@ namespace Editor
 			if (selectedActors.Count() > 0)
 			{
 				Actor* lastSelectedActor = selectedActors.Last();
-				UpdateHandlesAngleAndPositions(-lastSelectedActor->transform.right->Angle(Vec2F::Right()));
+				UpdateHandlesAngleAndPositions(-lastSelectedActor->transform->right->Angle(Vec2F::Right()));
 			}
 		}
 	}
@@ -203,13 +203,13 @@ namespace Editor
 			Basis::Translated(mSceneHandlesPos);
 
 		for (auto actor : o2EditorSceneScreen.GetTopSelectedActors())
-			actor->transform.SetWorldNonSizedBasis(actor->transform.GetWorldNonSizedBasis()*transform);
+			actor->transform->SetWorldNonSizedBasis(actor->transform->GetWorldNonSizedBasis()*transform);
 	}
 
 	void ScaleTool::HandlePressed()
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return x->transform; });
+			[](Actor* x) { return *x->transform; });
 	}
 
 	void ScaleTool::HandleReleased()

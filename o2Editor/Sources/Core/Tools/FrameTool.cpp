@@ -197,10 +197,10 @@ namespace Editor
 	{
 		for (auto actor : o2EditorSceneScreen.GetTopSelectedActors())
 		{
-			if (actor->transform.size != Vec2F())
-				actor->transform.SetWorldBasis(actor->transform.GetWorldBasis()*transform);
+			if (actor->transform->size != Vec2F())
+				actor->transform->SetWorldBasis(actor->transform->GetWorldBasis()*transform);
 			else
-				actor->transform.SetWorldNonSizedBasis(actor->transform.GetWorldNonSizedBasis()*transform);
+				actor->transform->SetWorldNonSizedBasis(actor->transform->GetWorldNonSizedBasis()*transform);
 		}
 
 		mFrame = mFrame*transform;
@@ -212,7 +212,7 @@ namespace Editor
 	void FrameTool::TransformActorsWithAction(const Basis& transform)
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return x->transform; });
+			[](Actor* x) { return *x->transform; });
 
 		TransformActors(transform);
 
@@ -228,12 +228,12 @@ namespace Editor
 
 		if (selectedActors.Count() == 1)
 		{
-			mFrame = selectedActors[0]->transform.GetWorldBasis();
-			mPivotHandle.position = selectedActors[0]->transform.GetWorldPivot();
+			mFrame = selectedActors[0]->transform->GetWorldBasis();
+			mPivotHandle.position = selectedActors[0]->transform->GetWorldPivot();
 		}
 		else if (selectedActors.Count() > 0)
 		{
-			Basis frameBasis = selectedActors.Last()->transform.GetWorldNonSizedBasis();
+			Basis frameBasis = selectedActors.Last()->transform->GetWorldNonSizedBasis();
 			Vec2F frameOrigin = frameBasis.offs;
 			Vec2F xAxis = frameBasis.xv.Normalized();
 			Vec2F yAxis = frameBasis.yv.Normalized();
@@ -242,7 +242,7 @@ namespace Editor
 			const Vec2F cp[4] ={ Vec2F(0, 0), Vec2F(0, 1), Vec2F(1, 0), Vec2F(1, 1) };
 			for (auto actor : selectedActors)
 			{
-				Basis actorTransform = actor->transform.GetWorldBasis();
+				Basis actorTransform = actor->transform->GetWorldBasis();
 				for (int i = 0; i < 4; i++)
 				{
 					Vec2F wp = cp[i] * actorTransform;
@@ -386,7 +386,7 @@ namespace Editor
 		auto selectedActors = o2EditorSceneScreen.GetSelectedActors();
 		if (selectedActors.Count() == 1)
 		{
-			selectedActors[0]->transform.SetWorldPivot(position);
+			selectedActors[0]->transform->SetWorldPivot(position);
 		}
 	}
 
@@ -527,7 +527,7 @@ namespace Editor
 	void FrameTool::HandlePressed()
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return x->transform; });
+			[](Actor* x) { return *x->transform; });
 
 		mBeginDraggingFrame = mFrame;
 	}
@@ -966,7 +966,7 @@ namespace Editor
 			if (o2EditorSceneScreen.GetSelectedActors().Contains(actor))
 				continue;
 
-			Basis actorBasis = actor->transform.GetWorldBasis();
+			Basis actorBasis = actor->transform->GetWorldBasis();
 
 			for (auto snapLine : snapLines)
 			{

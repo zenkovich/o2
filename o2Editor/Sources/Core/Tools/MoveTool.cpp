@@ -108,7 +108,7 @@ namespace Editor
 	void MoveTool::HandlePressed()
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return x->transform; });
+			[](Actor* x) { return *x->transform; });
 	}
 
 	void MoveTool::HandleReleased()
@@ -152,7 +152,7 @@ namespace Editor
 	{
 		auto selectedActors = o2EditorSceneScreen.GetSelectedActors();
 		mLastSceneHandlesPos =
-			selectedActors.Sum<Vec2F>([](auto x) { return x->transform.GetWorldPosition(); }) /
+			selectedActors.Sum<Vec2F>([](auto x) { return x->transform->GetWorldPosition(); }) /
 			(float)selectedActors.Count();
 
 		mVerDragHandle.position = mLastSceneHandlesPos;
@@ -162,7 +162,7 @@ namespace Editor
 		if (selectedActors.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
 		{
 			Actor* lastSelectedActor = selectedActors.Last();
-			mHandlesAngle = -lastSelectedActor->transform.right->Angle(Vec2F::Right());
+			mHandlesAngle = -lastSelectedActor->transform->right->Angle(Vec2F::Right());
 
 			mVerDragHandle.angle = mHandlesAngle;
 			mHorDragHandle.angle = mHandlesAngle;
@@ -238,7 +238,7 @@ namespace Editor
 			if (selectedActors.Count() > 0)
 			{
 				Actor* lastSelectedActor = selectedActors.Last();
-				mHandlesAngle = -lastSelectedActor->transform.right->Angle(Vec2F::Right());
+				mHandlesAngle = -lastSelectedActor->transform->right->Angle(Vec2F::Right());
 
 				mVerDragHandle.angle = mHandlesAngle;
 				mHorDragHandle.angle = mHandlesAngle;
@@ -251,13 +251,13 @@ namespace Editor
 	{
 		auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
 		for (auto actor : selectedActors)
-			actor->transform.SetWorldPosition(actor->transform.GetWorldPosition() + delta);
+			actor->transform->SetWorldPosition(actor->transform->GetWorldPosition() + delta);
 	}
 
 	void MoveTool::MoveSelectedActorsWithAction(const Vec2F& delta)
 	{
 		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return x->transform; });
+			[](Actor* x) { return *x->transform; });
 
 		MoveSelectedActors(delta);
 

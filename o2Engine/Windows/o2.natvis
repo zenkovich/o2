@@ -232,7 +232,7 @@
       </Synthetic>
       
       <Synthetic Name="transform">
-        <DisplayString>(positon={ transform.mPosition }, size={ transform.mSize }, scale={ transform.mScale }, pivot={ transform.mPivot }, angle={ transform.mAngle })</DisplayString>
+        <DisplayString>(positon={ transform->mPosition }, size={ transform->mSize }, scale={ transform->mScale }, pivot={ transform->mPivot }, angle={ transform->mAngle })</DisplayString>
         <Expand>
           <ExpandedItem>transform</ExpandedItem>
         </Expand>

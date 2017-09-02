@@ -70,7 +70,7 @@ namespace Editor
 				for (auto actor : layer->GetEnabledActors())
 				{
 					if (!actor->IsLockedInHierarchy() && actor->IsOnScene() && 
-						actor->transform.IsPointInside(sceneSpaceCursor))
+						actor->transform->IsPointInside(sceneSpaceCursor))
 					{
 						mBeforeSelectingActors = o2EditorSceneScreen.GetSelectedActors();
 
@@ -125,7 +125,7 @@ namespace Editor
 			mCurrentSelectingActors.Clear();
 			for (auto actor : currentSelectedActors)
 			{
-				if (actor->transform.GetWorldRect().IsIntersects(selectionRect))
+				if (actor->transform->GetWorldRect().IsIntersects(selectionRect))
 					mCurrentSelectingActors.Add(actor);
 			}
 
@@ -137,7 +137,7 @@ namespace Editor
 						continue;
 
 					if (!actor->IsLockedInHierarchy() && actor->IsOnScene()
-						&& actor->transform.GetWorldRect().IsIntersects(selectionRect))
+						&& actor->transform->GetWorldRect().IsIntersects(selectionRect))
 					{
 						mCurrentSelectingActors.Add(actor);
 					}

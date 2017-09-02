@@ -13,7 +13,7 @@ namespace Editor
 		beforeTransforms(beforeTransforms)
 	{
 		actorsIds = actors.Select<UInt64>([](Actor* x) { return x->GetID(); });
-		doneTransforms = actors.Select<ActorTransform>([](Actor* x) { return x->transform; });
+		doneTransforms = actors.Select<ActorTransform>([](Actor* x) { return *x->transform; });
 	}
 
 	String ActorsTransformAction::GetName() const
@@ -27,7 +27,7 @@ namespace Editor
 		{
 			Actor* actor = o2Scene.GetActorByID(actorsIds[i]);
 			if (actor)
-				actor->transform = doneTransforms[i];
+				*actor->transform = doneTransforms[i];
 		}
 	}
 
@@ -37,7 +37,7 @@ namespace Editor
 		{
 			Actor* actor = o2Scene.GetActorByID(actorsIds[i]);
 			if (actor)
-				actor->transform = beforeTransforms[i];
+				*actor->transform = beforeTransforms[i];
 		}
 	}
 

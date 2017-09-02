@@ -163,17 +163,17 @@ namespace Editor
 	void SceneEditScreen::DrawActorSelection(Actor* actor, const Color4& color)
 	{
 		float camScale = mViewCamera.GetScale().x;
-		Vec2F screenSize = actor->transform.GetWorldAxisAlignedRect().Size() / camScale;
+		Vec2F screenSize = actor->transform->GetWorldAxisAlignedRect().Size() / camScale;
 		if (screenSize.SqrLength() < mActorMinimalSelectionSize*mActorMinimalSelectionSize)
 		{
-			Vec2F wpos = actor->transform.GetWorldPosition();
+			Vec2F wpos = actor->transform->GetWorldPosition();
 			float sz = mActorMinimalSelectionSize*0.5f*camScale;
 			o2Render.DrawCircle(wpos, sz, color);
-			o2Render.DrawLine(wpos, wpos + actor->transform.GetUp()*sz, color);
+			o2Render.DrawLine(wpos, wpos + actor->transform->GetUp()*sz, color);
 		}
-		else o2Render.DrawBasis(actor->transform.GetWorldBasis(), color, color, color);
+		else o2Render.DrawBasis(actor->transform->GetWorldBasis(), color, color, color);
 		// 
-		// 	auto bs = actor->transform.GetWorldNonSizedBasis();
+		// 	auto bs = actor->transform->GetWorldNonSizedBasis();
 		// 	o2Render.DrawLine(bs.offs, bs.offs + bs.xv*100.0f);
 		// 	o2Render.DrawLine(bs.offs, bs.offs + bs.yv*100.0f);
 	}
@@ -413,7 +413,7 @@ namespace Editor
 			return;
 
 		for (auto actor : assetsScroll->mInstSceneDragActors)
-			actor->transform.position = ScreenToScenePoint(o2Input.cursorPos);
+			actor->transform->position = ScreenToScenePoint(o2Input.cursorPos);
 	}
 
 	void SceneEditScreen::OnDragExit(ISelectableDragableObjectsGroup* group)

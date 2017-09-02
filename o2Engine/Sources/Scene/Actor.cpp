@@ -7,13 +7,24 @@
 
 namespace o2
 {
-	Actor::Actor(ActorCreateMode mode /*= CreateMode::InScene*/):
-		mName("unnamed"), mId(Math::Random()), mAssetId(0), mIsOnScene(false)
+	Actor::Actor(ActorTransform* transform, const String& name, bool enabled, bool resEnabled, 
+				 bool locked, bool resLocked, Scene::Layer* layer, UInt64 id, UID assetId, bool isOnScene):
+		transform(transform), mName(name), mEnabled(enabled), mResEnabled(resEnabled),
+		mLocked(locked), mResLocked(resLocked), mLayer(layer), mId(id), mAssetId(assetId), mIsOnScene(isOnScene)
 	{
+
+	}
+
+
+	Actor::Actor(ActorCreateMode mode /*= CreateMode::InScene*/):
+		Actor(mnew ActorTransform())
+	{
+		mIsOnScene = false;
+
 		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
 		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
 
-		transform.SetOwner(this);
+		transform->SetOwner(this);
 		InitializeProperties();
 
 		if (Scene::IsSingletonInitialzed())
@@ -36,11 +47,10 @@ namespace o2
 	}
 
 	Actor::Actor(const Actor& other):
-		mName(other.mName), mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mLocked(other.mLocked),
-		mResLocked(other.mResLocked), transform(other.transform), mLayer(other.mLayer),
-		mId(Math::Random()), mAssetId(other.mAssetId), mIsOnScene(true)
+		Actor(mnew ActorTransform(*other.transform), other.mName, other.mEnabled, other.mEnabled, other.mLocked,
+			  other.mLocked, other.mLayer, Math::Random(), other.mAssetId, true)
 	{
-		transform.SetOwner(this);
+		transform->SetOwner(this);
 
 		if (other.mIsAsset)
 			SetPrototype(ActorAssetRef(other.GetAssetId()));
@@ -54,7 +64,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
-		transform.UpdateTransform();
+		transform->UpdateTransform();
 
 		InitializeProperties();
 
@@ -76,13 +86,12 @@ namespace o2
 	}
 
 	Actor::Actor(const ActorAssetRef& prototype, ActorCreateMode mode /*= CreateMode::InScene*/):
-		mName(prototype->GetActor()->mName), mEnabled(prototype->GetActor()->mEnabled),
-		mResEnabled(prototype->GetActor()->mEnabled), mLocked(prototype->GetActor()->mLocked),
-		mResLocked(prototype->GetActor()->mResLocked), transform(prototype->GetActor()->transform),
-		mLayer(prototype->GetActor()->mLayer), mId(Math::Random()), mAssetId(), 
-		mIsOnScene(mode == ActorCreateMode::InScene)
+		Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype->GetActor()->mName, 
+			  prototype->GetActor()->mEnabled, prototype->GetActor()->mEnabled, prototype->GetActor()->mLocked,
+			  prototype->GetActor()->mLocked, prototype->GetActor()->mLayer, Math::Random(), 
+			  0, mode == ActorCreateMode::InScene)
 	{
-		transform.SetOwner(this);
+		transform->SetOwner(this);
 
 		SetPrototype(prototype);
 
@@ -95,7 +104,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
-		transform.UpdateTransform();
+		transform->UpdateTransform();
 
 		InitializeProperties();
 
@@ -166,7 +175,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
-		transform.UpdateTransform();
+		transform->UpdateTransform();
 
 		OnChanged();
 
@@ -257,7 +266,7 @@ namespace o2
 			serializable->OnDeserialized(DataNode());
 
 		UpdateEnabled();
-		transform.UpdateTransform();
+		transform->UpdateTransform();
 
 		OnChanged();
 	}
@@ -282,7 +291,7 @@ namespace o2
 		SetPrototype(prototypeAsset);
 
 		prototype->UpdateEnabled();
-		prototype->transform.UpdateTransform();
+		prototype->transform->UpdateTransform();
 		prototype->OnChanged();
 
 		return prototypeAsset;
@@ -508,7 +517,7 @@ namespace o2
 		if ((actor && actor->mChilds.Contains(this)) || actor == this || actor == mParent)
 			return;
 
-		Basis lastParentBasis = transform.GetWorldBasis();
+		Basis lastParentBasis = transform->GetWorldBasis();
 		auto oldParent = mParent;
 
 		if (mParent)
@@ -524,9 +533,9 @@ namespace o2
 			o2Scene.mRootActors.Add(this);
 
 		if (worldPositionStays)
-			transform.SetWorldBasis(lastParentBasis);
+			transform->SetWorldBasis(lastParentBasis);
 		else
-			transform.UpdateTransform();
+			transform->UpdateTransform();
 
 		UpdateEnabled();
 
@@ -553,7 +562,7 @@ namespace o2
 		mChilds.Add(actor);
 		actor->mParent = this;
 
-		actor->transform.UpdateTransform();
+		actor->transform->UpdateTransform();
 		actor->UpdateEnabled();
 
 		actor->OnParentChanged(oldParent);
@@ -576,7 +585,7 @@ namespace o2
 		mChilds.Insert(actor, index);
 		actor->mParent = this;
 
-		actor->transform.UpdateTransform();
+		actor->transform->UpdateTransform();
 		actor->UpdateEnabled();
 
 		actor->OnParentChanged(oldParent);
@@ -638,7 +647,7 @@ namespace o2
 		}
 		else
 		{
-			actor->transform.UpdateTransform();
+			actor->transform->UpdateTransform();
 			actor->UpdateEnabled();
 
 			actor->OnParentChanged(oldParent);
@@ -816,7 +825,7 @@ namespace o2
 			comp->OnTransformChanged();
 
 		for (auto child : mChilds)
-			child->transform.UpdateTransform();
+			child->transform->UpdateTransform();
 
 		OnChanged();
 	}
@@ -944,7 +953,7 @@ namespace o2
 		else
 			SetLayer(o2Scene.GetDefaultLayer());
 
-		node.GetNode("Transform")->GetValue(transform);
+		node.GetNode("Transform")->GetValue(*transform);
 
 		if (auto componentsNode = node.GetNode("Components"))
 		{
@@ -1001,23 +1010,23 @@ namespace o2
 		// Transform data
 		auto transformNode = node.AddNode("Transform");
 
-		if (transform.mPosition != proto->transform.mPosition)
-			(*transformNode)["Position"] = transform.mPosition;
+		if (transform->mData->mPosition != proto->transform->mData->mPosition)
+			(*transformNode)["Position"] = transform->mData->mPosition;
 
-		if (transform.mSize != proto->transform.mSize)
-			(*transformNode)["Size"] = transform.mSize;
+		if (transform->mData->mSize != proto->transform->mData->mSize)
+			(*transformNode)["Size"] = transform->mData->mSize;
 
-		if (transform.mScale != proto->transform.mScale)
-			(*transformNode)["Scale"] = transform.mScale;
+		if (transform->mData->mScale != proto->transform->mData->mScale)
+			(*transformNode)["Scale"] = transform->mData->mScale;
 
-		if (transform.mPivot != proto->transform.mPivot)
-			(*transformNode)["Pivot"] = transform.mPivot;
+		if (transform->mData->mPivot != proto->transform->mData->mPivot)
+			(*transformNode)["Pivot"] = transform->mData->mPivot;
 
-		if (!Math::Equals(transform.mAngle, proto->transform.mAngle))
-			(*transformNode)["Angle"] = transform.mAngle;
+		if (!Math::Equals(transform->mData->mAngle, proto->transform->mData->mAngle))
+			(*transformNode)["Angle"] = transform->mData->mAngle;
 
-		if (!Math::Equals(transform.mShear, proto->transform.mShear))
-			(*transformNode)["Shear"] = transform.mShear;
+		if (!Math::Equals(transform->mData->mShear, proto->transform->mData->mShear))
+			(*transformNode)["Shear"] = transform->mData->mShear;
 
 		// Children data
 		auto childsNode = node.AddNode("Childs");
@@ -1114,34 +1123,34 @@ namespace o2
 		if (auto transformNode = node.GetNode("Transform"))
 		{
 			if (auto subNode = transformNode->GetNode("Position"))
-				transform.mPosition = *subNode;
+				transform->mData->mPosition = *subNode;
 			else
-				transform.mPosition = proto->transform.mPosition;
+				transform->mData->mPosition = proto->transform->mData->mPosition;
 
 			if (auto subNode = transformNode->GetNode("Size"))
-				transform.mSize = *subNode;
+				transform->mData->mSize = *subNode;
 			else
-				transform.mSize = proto->transform.mSize;
+				transform->mData->mSize = proto->transform->mData->mSize;
 
 			if (auto subNode = transformNode->GetNode("Scale"))
-				transform.mScale = *subNode;
+				transform->mData->mScale = *subNode;
 			else
-				transform.mScale = proto->transform.mScale;
+				transform->mData->mScale = proto->transform->mData->mScale;
 
 			if (auto subNode = transformNode->GetNode("Pivot"))
-				transform.mPivot = *subNode;
+				transform->mData->mPivot = *subNode;
 			else
-				transform.mPivot = proto->transform.mPivot;
+				transform->mData->mPivot = proto->transform->mData->mPivot;
 
 			if (auto subNode = transformNode->GetNode("Angle"))
-				transform.mAngle = *subNode;
+				transform->mData->mAngle = *subNode;
 			else
-				transform.mAngle = proto->transform.mAngle;
+				transform->mData->mAngle = proto->transform->mData->mAngle;
 
 			if (auto subNode = transformNode->GetNode("Shear"))
-				transform.mShear = *subNode;
+				transform->mData->mShear = *subNode;
 			else
-				transform.mShear = proto->transform.mShear;
+				transform->mData->mShear = proto->transform->mData->mShear;
 		}
 
 		// children
@@ -1209,7 +1218,7 @@ namespace o2
 			}
 		}
 
-		transform.UpdateTransform();
+		transform->UpdateTransform();
 
 		ActorDataNodeConverter::Instance().UnlockPointersResolving();
 		ActorDataNodeConverter::Instance().ResolvePointers();
@@ -1423,7 +1432,7 @@ namespace o2
 
 				protoChild->mName = child->mName;
 				protoChild->mEnabled = child->mEnabled;
-				protoChild->transform = child->transform;
+				*protoChild->transform = *child->transform;
 				protoChild->mAssetId = child->mAssetId;
 				protoChild->SetLayer(child->mLayer);
 
@@ -1522,7 +1531,7 @@ namespace o2
 
 			newProtoChild->mName     = child->mName;
 			newProtoChild->mEnabled  = child->mEnabled;
-			newProtoChild->transform = child->transform;
+			*newProtoChild->transform = *child->transform;
 			newProtoChild->mAssetId  = child->mAssetId;
 			newProtoChild->SetLayer(child->mLayer);
 
@@ -1562,7 +1571,7 @@ namespace o2
 
 				newChild->mName     = child->mName;
 				newChild->mEnabled  = child->mEnabled;
-				newChild->transform = child->transform;
+				*newChild->transform = *child->transform;
 				newChild->mAssetId  = child->mAssetId;
 				newChild->SetLayer(child->mLayer);
 
@@ -1599,10 +1608,10 @@ namespace o2
 			serializable->OnDeserialized(DataNode());
 
 		// update transformation
-		transform.UpdateTransform();
+		transform->UpdateTransform();
 
 		for (auto& info : applyActorsInfos)
-			info.actor->transform.UpdateTransform();
+			info.actor->transform->UpdateTransform();
 
 		OnChanged();
 
@@ -1616,7 +1625,7 @@ namespace o2
 	{
 		dest->mName = source->mName;
 		dest->mEnabled = source->mEnabled;
-		dest->transform = source->transform;
+		*dest->transform = *source->transform;
 		dest->mAssetId = source->mAssetId;
 
 		if (!dest->mPrototype && source->mPrototype)
@@ -1677,7 +1686,7 @@ namespace o2
 	{
 		dest->mName = source->mName;
 		dest->mEnabled = source->mEnabled;
-		dest->transform = source->transform;
+		*dest->transform = *source->transform;
 		dest->mAssetId = source->mAssetId;
 
 		if (!isInsidePrototype && !source->mPrototype && source->mPrototypeLink)
@@ -1719,7 +1728,7 @@ namespace o2
 	{
 		dest->mName = source->mName;
 		dest->mEnabled = source->mEnabled;
-		dest->transform = source->transform;
+		*dest->transform = *source->transform;
 		dest->mAssetId = source->mAssetId;
 
 		actorsMap.Add(source, dest);
@@ -1922,40 +1931,40 @@ namespace o2
 		// transform
 		if (withTransform)
 		{
-			if (source->transform.mPosition != changed->transform.mPosition &&
-				dest->transform.mPosition == source->transform.mPosition)
+			if (source->transform->mData->mPosition != changed->transform->mData->mPosition &&
+				dest->transform->mData->mPosition == source->transform->mData->mPosition)
 			{
-				dest->transform.mPosition = changed->transform.mPosition;
+				dest->transform->mData->mPosition = changed->transform->mData->mPosition;
 			}
 
-			if (source->transform.mScale != changed->transform.mScale &&
-				dest->transform.mScale == source->transform.mScale)
+			if (source->transform->mData->mScale != changed->transform->mData->mScale &&
+				dest->transform->mData->mScale == source->transform->mData->mScale)
 			{
-				dest->transform.mScale = changed->transform.mScale;
+				dest->transform->mData->mScale = changed->transform->mData->mScale;
 			}
 
-			if (source->transform.mSize != changed->transform.mSize &&
-				dest->transform.mSize == source->transform.mSize)
+			if (source->transform->mData->mSize != changed->transform->mData->mSize &&
+				dest->transform->mData->mSize == source->transform->mData->mSize)
 			{
-				dest->transform.mSize = changed->transform.mSize;
+				dest->transform->mData->mSize = changed->transform->mData->mSize;
 			}
 
-			if (source->transform.mPivot != changed->transform.mPivot &&
-				dest->transform.mPivot == source->transform.mPivot)
+			if (source->transform->mData->mPivot != changed->transform->mData->mPivot &&
+				dest->transform->mData->mPivot == source->transform->mData->mPivot)
 			{
-				dest->transform.mPivot = changed->transform.mPivot;
+				dest->transform->mData->mPivot = changed->transform->mData->mPivot;
 			}
 
-			if (!Math::Equals(source->transform.mAngle, changed->transform.mAngle) &&
-				Math::Equals(dest->transform.mAngle, source->transform.mAngle))
+			if (!Math::Equals(source->transform->mData->mAngle, changed->transform->mData->mAngle) &&
+				Math::Equals(dest->transform->mData->mAngle, source->transform->mData->mAngle))
 			{
-				dest->transform.mAngle = changed->transform.mAngle;
+				dest->transform->mData->mAngle = changed->transform->mData->mAngle;
 			}
 
-			if (!Math::Equals(source->transform.mShear, changed->transform.mShear) &&
-				Math::Equals(dest->transform.mShear, source->transform.mShear))
+			if (!Math::Equals(source->transform->mData->mShear, changed->transform->mData->mShear) &&
+				Math::Equals(dest->transform->mData->mShear, source->transform->mData->mShear))
 			{
-				dest->transform.mShear = changed->transform.mShear;
+				dest->transform->mData->mShear = changed->transform->mData->mShear;
 			}
 		}
 	}
