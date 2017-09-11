@@ -64,7 +64,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
-		transform->UpdateTransform();
+		transform->OnChanged();
 
 		InitializeProperties();
 
@@ -104,7 +104,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
-		transform->UpdateTransform();
+		transform->OnChanged();
 
 		InitializeProperties();
 
@@ -175,7 +175,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
-		transform->UpdateTransform();
+		transform->OnChanged();
 
 		OnChanged();
 
@@ -266,7 +266,7 @@ namespace o2
 			serializable->OnDeserialized(DataNode());
 
 		UpdateEnabled();
-		transform->UpdateTransform();
+		transform->OnChanged();
 
 		OnChanged();
 	}
@@ -291,7 +291,7 @@ namespace o2
 		SetPrototype(prototypeAsset);
 
 		prototype->UpdateEnabled();
-		prototype->transform->UpdateTransform();
+		prototype->transform->OnChanged();
 		prototype->OnChanged();
 
 		return prototypeAsset;
@@ -535,7 +535,7 @@ namespace o2
 		if (worldPositionStays)
 			transform->SetWorldBasis(lastParentBasis);
 		else
-			transform->UpdateTransform();
+			transform->OnChanged();
 
 		UpdateEnabled();
 
@@ -562,7 +562,7 @@ namespace o2
 		mChilds.Add(actor);
 		actor->mParent = this;
 
-		actor->transform->UpdateTransform();
+		actor->transform->OnChanged();
 		actor->UpdateEnabled();
 
 		actor->OnParentChanged(oldParent);
@@ -585,7 +585,7 @@ namespace o2
 		mChilds.Insert(actor, index);
 		actor->mParent = this;
 
-		actor->transform->UpdateTransform();
+		actor->transform->OnChanged();
 		actor->UpdateEnabled();
 
 		actor->OnParentChanged(oldParent);
@@ -647,7 +647,7 @@ namespace o2
 		}
 		else
 		{
-			actor->transform->UpdateTransform();
+			actor->transform->OnChanged();
 			actor->UpdateEnabled();
 
 			actor->OnParentChanged(oldParent);
@@ -825,7 +825,7 @@ namespace o2
 			comp->OnTransformChanged();
 
 		for (auto child : mChilds)
-			child->transform->UpdateTransform();
+			child->transform->OnChanged();
 
 		OnChanged();
 	}
@@ -1010,23 +1010,23 @@ namespace o2
 		// Transform data
 		auto transformNode = node.AddNode("Transform");
 
-		if (transform->mData->mPosition != proto->transform->mData->mPosition)
-			(*transformNode)["Position"] = transform->mData->mPosition;
+		if (transform->mData->position != proto->transform->mData->position)
+			(*transformNode)["Position"] = transform->mData->position;
 
-		if (transform->mData->mSize != proto->transform->mData->mSize)
-			(*transformNode)["Size"] = transform->mData->mSize;
+		if (transform->mData->size != proto->transform->mData->size)
+			(*transformNode)["Size"] = transform->mData->size;
 
-		if (transform->mData->mScale != proto->transform->mData->mScale)
-			(*transformNode)["Scale"] = transform->mData->mScale;
+		if (transform->mData->scale != proto->transform->mData->scale)
+			(*transformNode)["Scale"] = transform->mData->scale;
 
-		if (transform->mData->mPivot != proto->transform->mData->mPivot)
-			(*transformNode)["Pivot"] = transform->mData->mPivot;
+		if (transform->mData->pivot != proto->transform->mData->pivot)
+			(*transformNode)["Pivot"] = transform->mData->pivot;
 
-		if (!Math::Equals(transform->mData->mAngle, proto->transform->mData->mAngle))
-			(*transformNode)["Angle"] = transform->mData->mAngle;
+		if (!Math::Equals(transform->mData->angle, proto->transform->mData->angle))
+			(*transformNode)["Angle"] = transform->mData->angle;
 
-		if (!Math::Equals(transform->mData->mShear, proto->transform->mData->mShear))
-			(*transformNode)["Shear"] = transform->mData->mShear;
+		if (!Math::Equals(transform->mData->shear, proto->transform->mData->shear))
+			(*transformNode)["Shear"] = transform->mData->shear;
 
 		// Children data
 		auto childsNode = node.AddNode("Childs");
@@ -1123,34 +1123,34 @@ namespace o2
 		if (auto transformNode = node.GetNode("Transform"))
 		{
 			if (auto subNode = transformNode->GetNode("Position"))
-				transform->mData->mPosition = *subNode;
+				transform->mData->position = *subNode;
 			else
-				transform->mData->mPosition = proto->transform->mData->mPosition;
+				transform->mData->position = proto->transform->mData->position;
 
 			if (auto subNode = transformNode->GetNode("Size"))
-				transform->mData->mSize = *subNode;
+				transform->mData->size = *subNode;
 			else
-				transform->mData->mSize = proto->transform->mData->mSize;
+				transform->mData->size = proto->transform->mData->size;
 
 			if (auto subNode = transformNode->GetNode("Scale"))
-				transform->mData->mScale = *subNode;
+				transform->mData->scale = *subNode;
 			else
-				transform->mData->mScale = proto->transform->mData->mScale;
+				transform->mData->scale = proto->transform->mData->scale;
 
 			if (auto subNode = transformNode->GetNode("Pivot"))
-				transform->mData->mPivot = *subNode;
+				transform->mData->pivot = *subNode;
 			else
-				transform->mData->mPivot = proto->transform->mData->mPivot;
+				transform->mData->pivot = proto->transform->mData->pivot;
 
 			if (auto subNode = transformNode->GetNode("Angle"))
-				transform->mData->mAngle = *subNode;
+				transform->mData->angle = *subNode;
 			else
-				transform->mData->mAngle = proto->transform->mData->mAngle;
+				transform->mData->angle = proto->transform->mData->angle;
 
 			if (auto subNode = transformNode->GetNode("Shear"))
-				transform->mData->mShear = *subNode;
+				transform->mData->shear = *subNode;
 			else
-				transform->mData->mShear = proto->transform->mData->mShear;
+				transform->mData->shear = proto->transform->mData->shear;
 		}
 
 		// children
@@ -1218,7 +1218,7 @@ namespace o2
 			}
 		}
 
-		transform->UpdateTransform();
+		transform->OnChanged();
 
 		ActorDataNodeConverter::Instance().UnlockPointersResolving();
 		ActorDataNodeConverter::Instance().ResolvePointers();
@@ -1608,7 +1608,7 @@ namespace o2
 			serializable->OnDeserialized(DataNode());
 
 		// update transformation
-		transform->UpdateTransform();
+		transform->OnChanged();
 
 		for (auto& info : applyActorsInfos)
 			info.actor->transform->UpdateTransform();
@@ -1931,40 +1931,40 @@ namespace o2
 		// transform
 		if (withTransform)
 		{
-			if (source->transform->mData->mPosition != changed->transform->mData->mPosition &&
-				dest->transform->mData->mPosition == source->transform->mData->mPosition)
+			if (source->transform->mData->position != changed->transform->mData->position &&
+				dest->transform->mData->position == source->transform->mData->position)
 			{
-				dest->transform->mData->mPosition = changed->transform->mData->mPosition;
+				dest->transform->mData->position = changed->transform->mData->position;
 			}
 
-			if (source->transform->mData->mScale != changed->transform->mData->mScale &&
-				dest->transform->mData->mScale == source->transform->mData->mScale)
+			if (source->transform->mData->scale != changed->transform->mData->scale &&
+				dest->transform->mData->scale == source->transform->mData->scale)
 			{
-				dest->transform->mData->mScale = changed->transform->mData->mScale;
+				dest->transform->mData->scale = changed->transform->mData->scale;
 			}
 
-			if (source->transform->mData->mSize != changed->transform->mData->mSize &&
-				dest->transform->mData->mSize == source->transform->mData->mSize)
+			if (source->transform->mData->size != changed->transform->mData->size &&
+				dest->transform->mData->size == source->transform->mData->size)
 			{
-				dest->transform->mData->mSize = changed->transform->mData->mSize;
+				dest->transform->mData->size = changed->transform->mData->size;
 			}
 
-			if (source->transform->mData->mPivot != changed->transform->mData->mPivot &&
-				dest->transform->mData->mPivot == source->transform->mData->mPivot)
+			if (source->transform->mData->pivot != changed->transform->mData->pivot &&
+				dest->transform->mData->pivot == source->transform->mData->pivot)
 			{
-				dest->transform->mData->mPivot = changed->transform->mData->mPivot;
+				dest->transform->mData->pivot = changed->transform->mData->pivot;
 			}
 
-			if (!Math::Equals(source->transform->mData->mAngle, changed->transform->mData->mAngle) &&
-				Math::Equals(dest->transform->mData->mAngle, source->transform->mData->mAngle))
+			if (!Math::Equals(source->transform->mData->angle, changed->transform->mData->angle) &&
+				Math::Equals(dest->transform->mData->angle, source->transform->mData->angle))
 			{
-				dest->transform->mData->mAngle = changed->transform->mData->mAngle;
+				dest->transform->mData->angle = changed->transform->mData->angle;
 			}
 
-			if (!Math::Equals(source->transform->mData->mShear, changed->transform->mData->mShear) &&
-				Math::Equals(dest->transform->mData->mShear, source->transform->mData->mShear))
+			if (!Math::Equals(source->transform->mData->shear, changed->transform->mData->shear) &&
+				Math::Equals(dest->transform->mData->shear, source->transform->mData->shear))
 			{
-				dest->transform->mData->mShear = changed->transform->mData->mShear;
+				dest->transform->mData->shear = changed->transform->mData->shear;
 			}
 		}
 	}

@@ -1,29 +1,24 @@
 #pragma once
 
-#include "Render/Text.h"
-#include "UI/WidgetLayer.h"
-#include "UI/WidgetLayout.h"
-#include "UI/WidgetState.h"
-#include "Utils/Containers/Vector.h"
-#include "Utils/ITree.h"
-#include "Utils/Math/Layout.h"
-#include "Utils/Property.h"
-#include "Utils/Serializable.h"
+#include "Scene/Actor.h"
+#include "Render/IDrawable.h"
 
 namespace o2
 {
-	class ImageAsset;
-	class VectorFontAsset;
-	class BitmapFontAsset;
+	class UIWidgetLayer;
+	class UIWidgetState;
+	class UIWidgetLayout;
 
 	// ------------------------------------------------------
 	// Basic UI Widget. Its a simple and basic element of UI, 
 	// everything other UI's are based on this
 	// ------------------------------------------------------
-	class UIWidget: public ISerializable, public IDrawable
+	class UIWidget: public Actor, public IDrawable
 	{
 	public:
 		typedef Vector<UIWidget*> WidgetsVec;
+		typedef Vector<UIWidgetLayer*>  LayersVec;
+		typedef Vector<UIWidgetState*>  StatesVec;
 
 	public:
 		Property<String>                        name;            // Name of widget property
@@ -38,7 +33,8 @@ namespace o2
 		Accessor<UIWidgetLayer*, const String&> layer;           // Widget layer accessor by name
 		Accessor<UIWidgetState*, const String&> state;           // Widget state accessor by name
 
-		UIWidgetLayout                          layout;          // Widget's layout @SERIALIZABLE
+		UIWidgetLayout* const                   layout;          // Widget's layout
+
 		Function<void()>                        onLayoutChanged; // Layout change event
 		Function<void()>                        onFocused;       // Widget focused event
 		Function<void()>                        onUnfocused;     // Widget unfocused event

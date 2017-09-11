@@ -6,31 +6,54 @@
 namespace o2
 {
 	UIWidgetLayout::UIWidgetLayout():
-		mOwner(nullptr)
+		ActorTransform(mnew Data())
 	{
+		mData = (Data*)ActorTransform::mData;
+		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
+
 		InitializeProperties();
 	}
 
 	UIWidgetLayout::UIWidgetLayout(const UIWidgetLayout& other):
-		mPivot(other.mPivot), mAnchorMin(other.mAnchorMin), mAnchorMax(other.mAnchorMax),
-		mOffsetMin(other.mOffsetMin), mOffsetMax(other.mOffsetMax), mMinSize(other.mMinSize), mMaxSize(other.mMaxSize),
-		mWeight(other.mWeight), mOwner(nullptr)
+		ActorTransform(mnew Data())
 	{
+		mData = (Data*)ActorTransform::mData;
+
+		CopyFrom(other);
+		mCheckMinMaxFunc = other.mCheckMinMaxFunc;
+
 		InitializeProperties();
 	}
 
 	UIWidgetLayout::UIWidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax,
 								   const Vec2F& offsetMin, const Vec2F& offsetMax):
-		mAnchorMin(anchorMin), mAnchorMax(anchorMax), mOffsetMin(offsetMin), mOffsetMax(offsetMax)
+		ActorTransform(mnew Data())
 	{
+		mData = (Data*)ActorTransform::mData;
+
+		mData->anchorMin = anchorMin;
+		mData->anchorMax = anchorMax;
+		mData->offsetMin = offsetMin;
+		mData->offsetMax = offsetMax;
+
+		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
+
 		InitializeProperties();
 	}
 
 	UIWidgetLayout::UIWidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
 								   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom):
-		mAnchorMin(anchorLeft, anchorBottom), mAnchorMax(anchorRight, anchorTop),
-		mOffsetMin(offsetLeft, offsetBottom), mOffsetMax(offsetRight, offsetTop)
+		ActorTransform(mnew Data())
 	{
+		mData = (Data*)ActorTransform::mData;
+
+		mData->anchorMin.Set(anchorLeft, anchorBottom);
+		mData->anchorMax.Set(anchorRight, anchorTop);
+		mData->offsetMin.Set(offsetLeft, offsetBottom);
+		mData->offsetMax.Set(offsetRight, offsetTop);
+
+		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
+
 		InitializeProperties();
 	}
 
@@ -38,491 +61,313 @@ namespace o2
 	{
 		CopyFrom(other);
 
-		if (mOwner)
-			mOwner->UpdateLayout();
+		if (mData->owner)
+			mData->owner->UpdateLayout();
 
 		return *this;
 	}
 
 	bool UIWidgetLayout::operator==(const UIWidgetLayout& other) const
 	{
-		return mAnchorMin == other.mAnchorMin && mAnchorMax == other.mAnchorMax && mOffsetMin == other.mOffsetMin &&
-			mOffsetMax == other.mOffsetMax;
+		return mData->anchorMin == other.mData->anchorMin && 
+			mData->anchorMax == other.mData->anchorMax && 
+			mData->offsetMin == other.mData->offsetMin &&
+			mData->offsetMax == other.mData->offsetMax;
 	}
 
 	void UIWidgetLayout::SetPosition(const Vec2F& position)
 	{
 		Vec2F delta = position - GetPosition();
-		mOffsetMin += delta;
-		mOffsetMax += delta;
-		mOwner->UpdateLayout();
-	}
-
-	bool UIWidgetLayout::IsUnderPoint(const Vec2F& point) const
-	{
-		return mAbsoluteRect.IsInside(point);
-	}
-
-	Vec2F UIWidgetLayout::GetPosition()
-	{
-		Vec2F parentPivot;
-
-// 		if (mOwner->mParent)
-// 			parentPivot = mOwner->mParent->layout.mLocalRect.Size()*mOwner->mParent->layout.mPivot;
-
-		return mLocalRect.LeftBottom() + mLocalRect.Size()*mPivot - parentPivot;
+		mData->offsetMin += delta;
+		mData->offsetMax += delta;
+		mData->owner->UpdateLayout();
 	}
 
 	void UIWidgetLayout::SetSize(const Vec2F& size)
 	{
 		Vec2F szDelta = size - GetSize();
-		mOffsetMax += szDelta*(Vec2F::One() - mPivot);
-		mOffsetMin -= szDelta*mPivot;
-		mOwner->UpdateLayout();
-	}
-
-	Vec2F UIWidgetLayout::GetSize() const
-	{
-		return mAbsoluteRect.Size();
-	}
-
-	void UIWidgetLayout::SetWidth(float width)
-	{
-		float delta = width - GetWidth();
-		mOffsetMax.x += delta*(1.0f - mPivot.x);
-		mOffsetMin.x -= delta*mPivot.x;
-		mOwner->UpdateLayout();
-	}
-
-	float UIWidgetLayout::GetWidth() const
-	{
-		return mAbsoluteRect.Width();
-	}
-
-	void UIWidgetLayout::SetHeight(float height)
-	{
-		float delta = height - GetHeight();
-		mOffsetMax.y += delta*(1.0f - mPivot.y);
-		mOffsetMin.y -= delta*mPivot.y;
-		mOwner->UpdateLayout();
-	}
-
-	float UIWidgetLayout::GetHeight() const
-	{
-		return mAbsoluteRect.Height();
+		mData->offsetMax += szDelta*(Vec2F::One() - mData->pivot);
+		mData->offsetMin -= szDelta*mData->pivot;
+		mData->owner->UpdateLayout();
 	}
 
 	void UIWidgetLayout::SetRect(const RectF& rect)
 	{
-		mOffsetMin += rect.LeftBottom() - mLocalRect.LeftBottom();
-		mOffsetMax += rect.RightTop() - mLocalRect.RightTop();
-		mOwner->UpdateLayout();
+		mData->offsetMin += rect.LeftBottom() - GetLeftBottom();
+		mData->offsetMax += rect.RightTop() - GetRightTop();
+		mData->owner->UpdateLayout();
 	}
 
-	RectF UIWidgetLayout::GetRect() const
+	void UIWidgetLayout::SetAxisAlignedRect(const RectF& rect)
 	{
-		return mLocalRect;
-	}
 
-	void UIWidgetLayout::SetAbsoluteLeft(float value)
-	{
-		mOffsetMin.x += value - mAbsoluteRect.left;
-		mOwner->UpdateLayout();
-	}
-
-	float UIWidgetLayout::GetAbsoluteLeft() const
-	{
-		return mAbsoluteRect.left;
-	}
-
-	void UIWidgetLayout::SetAbsoluteRight(float value)
-	{
-		mOffsetMax.x += value - mAbsoluteRect.right;
-		mOwner->UpdateLayout();
-	}
-
-	float UIWidgetLayout::GetAbsoluteRight() const
-	{
-		return mAbsoluteRect.right;
-	}
-
-	void UIWidgetLayout::SetAbsoluteBottom(float value)
-	{
-		mOffsetMin.y += value - mAbsoluteRect.bottom;
-		mOwner->UpdateLayout();
-	}
-
-	float UIWidgetLayout::GetAbsoluteBottom() const
-	{
-		return mAbsoluteRect.bottom;
-	}
-
-	void UIWidgetLayout::SetAbsoluteTop(float value)
-	{
-		mOffsetMax.y += value - mAbsoluteRect.top;
-		mOwner->UpdateLayout();
-	}
-
-	float UIWidgetLayout::GetAbsoluteTop() const
-	{
-		return mAbsoluteRect.top;
-	}
-
-	void UIWidgetLayout::SetAbsolutePosition(const Vec2F& absPosition)
-	{
-		Vec2F delta = absPosition - GetAbsolutePosition();
-		mOffsetMin += delta;
-		mOffsetMax += delta;
-		mOwner->UpdateLayout();
-	}
-
-	Vec2F UIWidgetLayout::GetAbsolutePosition() const
-	{
-		return mAbsoluteRect.LeftBottom() + mAbsoluteRect.Size()*mPivot;
-	}
-
-	void UIWidgetLayout::SetAbsoluteLeftTop(const Vec2F& absPosition)
-	{
-		mOffsetMin.x += absPosition.x - mAbsoluteRect.left;
-		mOffsetMax.y += absPosition.y - mAbsoluteRect.top;
-		mOwner->UpdateLayout();
-	}
-
-	Vec2F UIWidgetLayout::GetAbsoluteLeftTop() const
-	{
-		return mAbsoluteRect.LeftTop();
-	}
-
-	void UIWidgetLayout::SetAbsoluteLeftBottom(const Vec2F& absPosition)
-	{
-		mOffsetMin.x += absPosition.x - mAbsoluteRect.left;
-		mOffsetMin.y += absPosition.y - mAbsoluteRect.bottom;
-		mOwner->UpdateLayout();
-	}
-
-	Vec2F UIWidgetLayout::GetAbsoluteLeftBottom() const
-	{
-		return mAbsoluteRect.LeftBottom();
-	}
-
-	void UIWidgetLayout::SetAbsoluteRightTop(const Vec2F& absPosition)
-	{
-		mOffsetMax.x += absPosition.x - mAbsoluteRect.right;
-		mOffsetMax.y += absPosition.y - mAbsoluteRect.top;
-		mOwner->UpdateLayout();
-	}
-
-	Vec2F UIWidgetLayout::GetAbsoluteRightTop() const
-	{
-		return mAbsoluteRect.RightTop();
-	}
-
-	void UIWidgetLayout::SetAbsoluteRightBottom(const Vec2F& absPosition)
-	{
-		mOffsetMax.x += absPosition.x - mAbsoluteRect.right;
-		mOffsetMin.y += absPosition.y - mAbsoluteRect.bottom;
-		mOwner->UpdateLayout();
-	}
-
-	Vec2F UIWidgetLayout::GetAbsoluteRightBottom() const
-	{
-		return mAbsoluteRect.RightBottom();
-	}
-
-	void UIWidgetLayout::SetAbsoluteRect(const RectF& rect)
-	{
-		mOffsetMin += rect.LeftBottom() - mAbsoluteRect.LeftBottom();
-		mOffsetMax += rect.RightTop() - mAbsoluteRect.RightTop();
-		mOwner->UpdateLayout();
-	}
-
-	RectF UIWidgetLayout::GetAbsoluteRect() const
-	{
-		return mAbsoluteRect;
 	}
 
 	void UIWidgetLayout::SetPivot(const Vec2F& pivot)
 	{
-		mPivot = pivot;
-		mOwner->UpdateLayout();
+		mData->pivot = pivot;
+		mData->owner->UpdateLayout();
 	}
 
-	Vec2F UIWidgetLayout::GetPivot() const
+	void UIWidgetLayout::SetBasis(const Basis& basis)
 	{
-		return mPivot;
+
 	}
 
-	void UIWidgetLayout::SetPivotX(float x)
+	void UIWidgetLayout::SetNonSizedBasis(const Basis& basis)
 	{
-		mPivot.x = x;
-		mOwner->UpdateLayout();
-	}
 
-	float UIWidgetLayout::GetPivotX() const
-	{
-		return mPivot.x;
-	}
-
-	void UIWidgetLayout::SetPivotY(float y)
-	{
-		mPivot.y = y;
-		mOwner->UpdateLayout();
-	}
-
-	float UIWidgetLayout::GetPivotY() const
-	{
-		return mPivot.y;
 	}
 
 	void UIWidgetLayout::SetAnchorMin(const Vec2F& min)
 	{
-		mAnchorMin = min;
-		mOwner->UpdateLayout();
+		mData->anchorMin = min;
+		mData->owner->UpdateLayout();
 	}
 
 	Vec2F UIWidgetLayout::GetAnchorMin() const
 	{
-		return mAnchorMin;
+		return mData->anchorMin;
 	}
 
 	void UIWidgetLayout::SetAnchorMax(const Vec2F& max)
 	{
-		mAnchorMax = max;
-		mOwner->UpdateLayout();
+		mData->anchorMax = max;
+		mData->owner->UpdateLayout();
 	}
 
 	Vec2F UIWidgetLayout::GetAnchorMax() const
 	{
-		return mAnchorMax;
+		return mData->anchorMax;
 	}
 
 	void UIWidgetLayout::SetAnchorLeft(float value)
 	{
-		mAnchorMin.x = value;
-		mOwner->UpdateLayout();
+		mData->anchorMin.x = value;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetAnchorLeft() const
 	{
-		return mAnchorMin.x;
+		return mData->anchorMin.x;
 	}
 
 	void UIWidgetLayout::SetAnchorRight(float value)
 	{
-		mAnchorMax.x = value;
-		mOwner->UpdateLayout();
+		mData->anchorMax.x = value;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetAnchorRight() const
 	{
-		return mAnchorMax.x;
+		return mData->anchorMax.x;
 	}
 
 	void UIWidgetLayout::SetAnchorBottom(float value)
 	{
-		mAnchorMin.y = value;
-		mOwner->UpdateLayout();
+		mData->anchorMin.y = value;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetAnchorBottom() const
 	{
-		return mAnchorMin.y;
+		return mData->anchorMin.y;
 	}
 
 	void UIWidgetLayout::SetAnchorTop(float value)
 	{
-		mAnchorMax.y = value;
-		mOwner->UpdateLayout();
+		mData->anchorMax.y = value;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetAnchorTop() const
 	{
-		return mAnchorMax.y;
+		return mData->anchorMax.y;
 	}
 
 	void UIWidgetLayout::SetOffsetMin(const Vec2F& min)
 	{
-		mOffsetMin = min;
-		mOwner->UpdateLayout();
+		mData->offsetMin = min;
+		mData->owner->UpdateLayout();
 	}
 
 	Vec2F UIWidgetLayout::GetOffsetMin() const
 	{
-		return mOffsetMin;
+		return mData->offsetMin;
 	}
 
 	void UIWidgetLayout::SetOffsetMax(const Vec2F& max)
 	{
-		mOffsetMax = max;
-		mOwner->UpdateLayout();
+		mData->offsetMax = max;
+		mData->owner->UpdateLayout();
 	}
 
 	Vec2F UIWidgetLayout::GetOffsetMax() const
 	{
-		return mOffsetMax;
+		return mData->offsetMax;
 	}
 
 	void UIWidgetLayout::SetOffsetLeft(float value)
 	{
-		mOffsetMin.x = value;
-		mOwner->UpdateLayout();
+		mData->offsetMin.x = value;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetOffsetLeft() const
 	{
-		return mOffsetMin.x;
+		return mData->offsetMin.x;
 	}
 
 	void UIWidgetLayout::SetOffsetRight(float value)
 	{
-		mOffsetMax.x = value;
-		mOwner->UpdateLayout();
+		mData->offsetMax.x = value;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetOffsetRight() const
 	{
-		return mOffsetMax.x;
+		return mData->offsetMax.x;
 	}
 
 	void UIWidgetLayout::SetOffsetBottom(float value)
 	{
-		mOffsetMin.y = value;
-		mOwner->UpdateLayout();
+		mData->offsetMin.y = value;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetOffsetBottom() const
 	{
-		return mOffsetMin.y;
+		return mData->offsetMin.y;
 	}
 
 	void UIWidgetLayout::SetOffsetTop(float value)
 	{
-		mOffsetMax.y = value;
-		mOwner->UpdateLayout();
+		mData->offsetMax.y = value;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetOffsetTop() const
 	{
-		return mOffsetMax.y;
+		return mData->offsetMax.y;
 	}
 
 	void UIWidgetLayout::SetMinimalSize(const Vec2F& minSize)
 	{
-		mMinSize = minSize;
-		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
-		mOwner->UpdateLayout();
+		mData->minSize = minSize;
+		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mData->owner->UpdateLayout();
 	}
 
 	Vec2F UIWidgetLayout::GetMinimalSize() const
 	{
-		return mMinSize;
+		return mData->minSize;
 	}
 
 	void UIWidgetLayout::SetMinimalWidth(float value)
 	{
-		mMinSize.x = value;
-		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
-		mOwner->UpdateLayout();
+		mData->minSize.x = value;
+		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetMinimalWidth() const
 	{
-		return mMinSize.x;
+		return mData->minSize.x;
 	}
 
 	void UIWidgetLayout::SetMinimalHeight(float value)
 	{
-		mMinSize.y = value;
-		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
-		mOwner->UpdateLayout();
+		mData->minSize.y = value;
+		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetMinimalHeight() const
 	{
-		return mMinSize.y;
+		return mData->minSize.y;
 	}
 
 	void UIWidgetLayout::SetMaximalSize(const Vec2F& maxSize)
 	{
-		mMaxSize = maxSize;
-		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
-		mOwner->UpdateLayout();
+		mData->maxSize = maxSize;
+		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mData->owner->UpdateLayout();
 	}
 
 	Vec2F UIWidgetLayout::GetMaximalSize() const
 	{
-		return mMaxSize;
+		return mData->maxSize;
 	}
 
 	void UIWidgetLayout::SetMaximalWidth(float value)
 	{
-		mMaxSize.x = value;
-		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
-		mOwner->UpdateLayout();
+		mData->maxSize.x = value;
+		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetMaximalWidth() const
 	{
-		return mMaxSize.x;
+		return mData->maxSize.x;
 	}
 
 	void UIWidgetLayout::SetMaximalHeight(float value)
 	{
-		mMaxSize.y = value;
-		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
-		mOwner->UpdateLayout();
+		mData->maxSize.y = value;
+		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetMaximalHeight() const
 	{
-		return mMaxSize.y;
+		return mData->maxSize.y;
 	}
 
 	void UIWidgetLayout::DisableMinMaxSizes()
 	{
-		mCheckMinMaxFunc = THIS_FUNC(DontCheckMinMax);
+		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
 	}
 
 	void UIWidgetLayout::SetWeight(const Vec2F& weight)
 	{
-		mWeight = weight;
-		mOwner->UpdateLayout();
+		mData->weight = weight;
+		mData->owner->UpdateLayout();
 	}
 
 	Vec2F UIWidgetLayout::GetWeight() const
 	{
-		return mWeight;
+		return mData->weight;
 	}
 
 	void UIWidgetLayout::SetWidthWeight(float widthWeigth)
 	{
-		mWeight.x = widthWeigth;
-		mOwner->UpdateLayout();
+		mData->weight.x = widthWeigth;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetWidthWeight()
 	{
-		return mWeight.x;
+		return mData->weight.x;
 	}
 
 	void UIWidgetLayout::SetHeightWeight(float heigthWeigth)
 	{
-		mWeight.y = heigthWeigth;
-		mOwner->UpdateLayout();
+		mData->weight.y = heigthWeigth;
+		mData->owner->UpdateLayout();
 	}
 
 	float UIWidgetLayout::GetHeightWeight()
 	{
-		return mWeight.y;
+		return mData->weight.y;
 	}
 
 	UIWidgetLayout UIWidgetLayout::BothStretch(float borderLeft, float borderBottom, float borderRight, float borderTop)
 	{
 		UIWidgetLayout res;
-		res.mAnchorMin = Vec2F(0, 0);
-		res.mAnchorMax = Vec2F(1, 1);
-		res.mOffsetMin = Vec2F(borderLeft, borderBottom);
-		res.mOffsetMax = Vec2F(-borderRight, -borderTop);
+		res.mData->anchorMin = Vec2F(0, 0);
+		res.mData->anchorMax = Vec2F(1, 1);
+		res.mData->offsetMin = Vec2F(borderLeft, borderBottom);
+		res.mData->offsetMax = Vec2F(-borderRight, -borderTop);
 		return res;
 	}
 
@@ -532,65 +377,65 @@ namespace o2
 		switch (corner)
 		{
 		case BaseCorner::Left:
-		res.mAnchorMin = Vec2F(0.0f, 0.5f);
-		res.mAnchorMax = Vec2F(0.0f, 0.5f);
-		res.mOffsetMin = Vec2F(0.0f, -size.y*0.5f) + offset;
-		res.mOffsetMax = Vec2F(size.x, size.y*0.5f) + offset;
+		res.mData->anchorMin = Vec2F(0.0f, 0.5f);
+		res.mData->anchorMax = Vec2F(0.0f, 0.5f);
+		res.mData->offsetMin = Vec2F(0.0f, -size.y*0.5f) + offset;
+		res.mData->offsetMax = Vec2F(size.x, size.y*0.5f) + offset;
 		break;
 
 		case BaseCorner::Right:
-		res.mAnchorMin = Vec2F(1.0f, 0.5f);
-		res.mAnchorMax = Vec2F(1.0f, 0.5f);
-		res.mOffsetMin = Vec2F(-size.x, -size.y*0.5f) + offset;
-		res.mOffsetMax = Vec2F(0.0f, size.y*0.5f) + offset;
+		res.mData->anchorMin = Vec2F(1.0f, 0.5f);
+		res.mData->anchorMax = Vec2F(1.0f, 0.5f);
+		res.mData->offsetMin = Vec2F(-size.x, -size.y*0.5f) + offset;
+		res.mData->offsetMax = Vec2F(0.0f, size.y*0.5f) + offset;
 		break;
 		case BaseCorner::Top:
-		res.mAnchorMin = Vec2F(0.5f, 1.0f);
-		res.mAnchorMax = Vec2F(0.5f, 1.0f);
-		res.mOffsetMin = Vec2F(-size.x*0.5f, -size.y) + offset;
-		res.mOffsetMax = Vec2F(size.x*0.5f, 0.0f) + offset;
+		res.mData->anchorMin = Vec2F(0.5f, 1.0f);
+		res.mData->anchorMax = Vec2F(0.5f, 1.0f);
+		res.mData->offsetMin = Vec2F(-size.x*0.5f, -size.y) + offset;
+		res.mData->offsetMax = Vec2F(size.x*0.5f, 0.0f) + offset;
 		break;
 
 		case BaseCorner::Bottom:
-		res.mAnchorMin = Vec2F(0.5f, 0.0f);
-		res.mAnchorMax = Vec2F(0.5f, 0.0f);
-		res.mOffsetMin = Vec2F(-size.x*0.5f, 0.0f) + offset;
-		res.mOffsetMax = Vec2F(size.x*0.5f, size.y) + offset;
+		res.mData->anchorMin = Vec2F(0.5f, 0.0f);
+		res.mData->anchorMax = Vec2F(0.5f, 0.0f);
+		res.mData->offsetMin = Vec2F(-size.x*0.5f, 0.0f) + offset;
+		res.mData->offsetMax = Vec2F(size.x*0.5f, size.y) + offset;
 		break;
 
 		case BaseCorner::Center:
-		res.mAnchorMin = Vec2F(0.5f, 0.5f);
-		res.mAnchorMax = Vec2F(0.5f, 0.5f);
-		res.mOffsetMin = Vec2F(-size.x*0.5f, -size.y*0.5f) + offset;
-		res.mOffsetMax = Vec2F(size.x*0.5f, size.y*0.5f) + offset;
+		res.mData->anchorMin = Vec2F(0.5f, 0.5f);
+		res.mData->anchorMax = Vec2F(0.5f, 0.5f);
+		res.mData->offsetMin = Vec2F(-size.x*0.5f, -size.y*0.5f) + offset;
+		res.mData->offsetMax = Vec2F(size.x*0.5f, size.y*0.5f) + offset;
 		break;
 
 		case BaseCorner::LeftBottom:
-		res.mAnchorMin = Vec2F(0.0f, 0.0f);
-		res.mAnchorMax = Vec2F(0.0f, 0.0f);
-		res.mOffsetMin = Vec2F(0.0f, 0.0f) + offset;
-		res.mOffsetMax = Vec2F(size.x, size.y) + offset;
+		res.mData->anchorMin = Vec2F(0.0f, 0.0f);
+		res.mData->anchorMax = Vec2F(0.0f, 0.0f);
+		res.mData->offsetMin = Vec2F(0.0f, 0.0f) + offset;
+		res.mData->offsetMax = Vec2F(size.x, size.y) + offset;
 		break;
 
 		case BaseCorner::LeftTop:
-		res.mAnchorMin = Vec2F(0.0f, 1.0f);
-		res.mAnchorMax = Vec2F(0.0f, 1.0f);
-		res.mOffsetMin = Vec2F(0.0f, -size.y) + offset;
-		res.mOffsetMax = Vec2F(size.x, 0.0f) + offset;
+		res.mData->anchorMin = Vec2F(0.0f, 1.0f);
+		res.mData->anchorMax = Vec2F(0.0f, 1.0f);
+		res.mData->offsetMin = Vec2F(0.0f, -size.y) + offset;
+		res.mData->offsetMax = Vec2F(size.x, 0.0f) + offset;
 		break;
 
 		case BaseCorner::RightBottom:
-		res.mAnchorMin = Vec2F(1.0f, 0.0f);
-		res.mAnchorMax = Vec2F(1.0f, 0.0f);
-		res.mOffsetMin = Vec2F(-size.x, 0.0f) + offset;
-		res.mOffsetMax = Vec2F(0.0f, size.y) + offset;
+		res.mData->anchorMin = Vec2F(1.0f, 0.0f);
+		res.mData->anchorMax = Vec2F(1.0f, 0.0f);
+		res.mData->offsetMin = Vec2F(-size.x, 0.0f) + offset;
+		res.mData->offsetMax = Vec2F(0.0f, size.y) + offset;
 		break;
 
 		case BaseCorner::RightTop:
-		res.mAnchorMin = Vec2F(1.0f, 1.0f);
-		res.mAnchorMax = Vec2F(1.0f, 1.0f);
-		res.mOffsetMin = Vec2F(-size.x, -size.y) + offset;
-		res.mOffsetMax = Vec2F(0.0f, 0.0f) + offset;
+		res.mData->anchorMin = Vec2F(1.0f, 1.0f);
+		res.mData->anchorMax = Vec2F(1.0f, 1.0f);
+		res.mData->offsetMin = Vec2F(-size.x, -size.y) + offset;
+		res.mData->offsetMax = Vec2F(0.0f, 0.0f) + offset;
 		break;
 		}
 
@@ -600,32 +445,32 @@ namespace o2
 	UIWidgetLayout UIWidgetLayout::VerStretch(HorAlign align, float top, float bottom, float width, float offsX)
 	{
 		UIWidgetLayout res;
-		res.mAnchorMin.y = 0.0f;
-		res.mAnchorMax.y = 1.0f;
-		res.mOffsetMin.y = bottom;
-		res.mOffsetMax.y = -top;
+		res.mData->anchorMin.y = 0.0f;
+		res.mData->anchorMax.y = 1.0f;
+		res.mData->offsetMin.y = bottom;
+		res.mData->offsetMax.y = -top;
 
 		switch (align)
 		{
 		case HorAlign::Left:
-		res.mAnchorMin.x = 0.0f;
-		res.mAnchorMax.x = 0.0f;
-		res.mOffsetMin.x = offsX;
-		res.mOffsetMax.x = offsX + width;
+		res.mData->anchorMin.x = 0.0f;
+		res.mData->anchorMax.x = 0.0f;
+		res.mData->offsetMin.x = offsX;
+		res.mData->offsetMax.x = offsX + width;
 		break;
 
 		case HorAlign::Middle:
-		res.mAnchorMin.x = 0.5f;
-		res.mAnchorMax.x = 0.5f;
-		res.mOffsetMin.x = offsX - width*0.5f;
-		res.mOffsetMax.x = offsX + width*0.5f;
+		res.mData->anchorMin.x = 0.5f;
+		res.mData->anchorMax.x = 0.5f;
+		res.mData->offsetMin.x = offsX - width*0.5f;
+		res.mData->offsetMax.x = offsX + width*0.5f;
 		break;
 
 		case HorAlign::Right:
-		res.mAnchorMin.x = 1.0f;
-		res.mAnchorMax.x = 1.0f;
-		res.mOffsetMin.x = -offsX - width;
-		res.mOffsetMax.x = -offsX;
+		res.mData->anchorMin.x = 1.0f;
+		res.mData->anchorMax.x = 1.0f;
+		res.mData->offsetMin.x = -offsX - width;
+		res.mData->offsetMax.x = -offsX;
 		break;
 		}
 
@@ -635,66 +480,72 @@ namespace o2
 	UIWidgetLayout UIWidgetLayout::HorStretch(VerAlign align, float left, float right, float height, float offsY)
 	{
 		UIWidgetLayout res;
-		res.mAnchorMin.x = 0.0f;
-		res.mAnchorMax.x = 1.0f;
-		res.mOffsetMin.x = left;
-		res.mOffsetMax.x = -right;
+		res.mData->anchorMin.x = 0.0f;
+		res.mData->anchorMax.x = 1.0f;
+		res.mData->offsetMin.x = left;
+		res.mData->offsetMax.x = -right;
 
 		switch (align)
 		{
 		case VerAlign::Top:
-		res.mAnchorMin.y = 1.0f;
-		res.mAnchorMax.y = 1.0f;
-		res.mOffsetMin.y = -offsY - height;
-		res.mOffsetMax.y = -offsY;
+		res.mData->anchorMin.y = 1.0f;
+		res.mData->anchorMax.y = 1.0f;
+		res.mData->offsetMin.y = -offsY - height;
+		res.mData->offsetMax.y = -offsY;
 		break;
 
 		case VerAlign::Middle:
-		res.mAnchorMin.y = 0.5f;
-		res.mAnchorMax.y = 0.5f;
-		res.mOffsetMin.y = offsY - height*0.5f;
-		res.mOffsetMax.y = offsY + height*0.5f;
+		res.mData->anchorMin.y = 0.5f;
+		res.mData->anchorMax.y = 0.5f;
+		res.mData->offsetMin.y = offsY - height*0.5f;
+		res.mData->offsetMax.y = offsY + height*0.5f;
 		break;
 
 		case VerAlign::Bottom:
-		res.mAnchorMin.y = 0.0f;
-		res.mAnchorMax.y = 0.0f;
-		res.mOffsetMin.y = offsY;
-		res.mOffsetMax.y = offsY + height;
+		res.mData->anchorMin.y = 0.0f;
+		res.mData->anchorMax.y = 0.0f;
+		res.mData->offsetMin.y = offsY;
+		res.mData->offsetMax.y = offsY + height;
 		break;
 		}
 
 		return res;
 	}
 
+	void UIWidgetLayout::SetOwner(Actor* actor)
+	{
+
+	}
+
 	void UIWidgetLayout::CopyFrom(const UIWidgetLayout& other)
 	{
-		mPivot     = other.mPivot;
-		mAnchorMin = other.mAnchorMin;
-		mAnchorMax = other.mAnchorMax;
-		mOffsetMin = other.mOffsetMin;
-		mOffsetMax = other.mOffsetMax;
-		mMinSize   = other.mMinSize;
-		mMaxSize   = other.mMaxSize;
-		mWeight    = other.mWeight;
+		mData->size = other.mData->size;
+		mData->position = other.mData->position;
+		mData->angle = other.mData->angle;
+		mData->scale = other.mData->scale;
+		mData->pivot = other.mData->pivot;
+		mData->shear = other.mData->shear;
 
-		mCheckMinMaxFunc = THIS_FUNC(CheckMinMax);
+		mData->anchorMin = other.mData->anchorMin;
+		mData->anchorMax = other.mData->anchorMax;
+		mData->offsetMin = other.mData->offsetMin;
+		mData->offsetMax = other.mData->offsetMax;
+		mData->minSize = other.mData->minSize;
+		mData->maxSize = other.mData->maxSize;
+		mData->weight = other.mData->weight;
+
+		mCheckMinMaxFunc = other.mCheckMinMaxFunc;
 	}
 
 	void UIWidgetLayout::CheckMinMax()
 	{
-		Vec2F resSize = mLocalRect.Size();
-		Vec2F clampSize(Math::Clamp(resSize.x, mMinSize.x, mMaxSize.x),
-						Math::Clamp(resSize.y, mMinSize.y, mMaxSize.y));
+		Vec2F resSize = mData->size;
+		Vec2F clampSize(Math::Clamp(resSize.x, mData->minSize.x, mData->maxSize.x),
+						Math::Clamp(resSize.y, mData->minSize.y, mData->maxSize.y));
 		Vec2F szDelta = clampSize - resSize;
 
 		if (szDelta != Vec2F())
-		{
-			mLocalRect.left   -= szDelta.x*mPivot.x;
-			mLocalRect.right  += szDelta.x*(1.0f - mPivot.x);
-			mLocalRect.bottom -= szDelta.y*mPivot.y;
-			mLocalRect.top    += szDelta.y*(1.0f - mPivot.y);
-		}
+			mData->size += szDelta;
 	}
 
 	void UIWidgetLayout::DontCheckMinMax()
@@ -785,12 +636,12 @@ CLASS_META(o2::UIWidgetLayout)
 	PUBLIC_FIELD(weight);
 	PUBLIC_FIELD(widthWeight);
 	PUBLIC_FIELD(heigthWeight);
-	PROTECTED_FIELD(mOwner);
-	PROTECTED_FIELD(mPivot).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAnchorMin).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAnchorMax).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mOffsetMin).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mOffsetMax).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mData->owner);
+	PROTECTED_FIELD(mData->pivot).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mData->anchorMin).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mData->anchorMax).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mData->offsetMin).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mData->offsetMax).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMinSize).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMaxSize).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mAbsoluteRect);

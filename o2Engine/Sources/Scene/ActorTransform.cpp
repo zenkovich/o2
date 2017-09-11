@@ -4,50 +4,47 @@
 
 namespace o2
 {
+	ActorTransform::ActorTransform(Data* data):
+		mData(data)
+	{}
+
 	ActorTransform::ActorTransform(const Vec2F& size /*= Vec2F()*/, const Vec2F& position /*= Vec2F()*/,
 								   float angle /*= 0.0f*/, const Vec2F& scale /*= Vec2F(1.0f, 1.0f)*/,
-								   const Vec2F& pivot /*= Vec2F(0.5f, 0.5f)*/)
+								   const Vec2F& pivot /*= Vec2F(0.5f, 0.5f)*/):
+		ActorTransform(mnew Data())
 	{
-		mData = mnew Data();
-
-		mData->mSize = size;
-		mData->mPosition = position;
-		mData->mAngle = angle;
-		mData->mScale = scale;
-		mData->mPivot = pivot;
-		mData->mShear = 0;
-
-		mData->mOwner = nullptr;
+		mData->size = size;
+		mData->position = position;
+		mData->angle = angle;
+		mData->scale = scale;
+		mData->pivot = pivot;
 
 		InitializeProperties();
 	}
 
-	ActorTransform::ActorTransform(const ActorTransform& other)
+	ActorTransform::ActorTransform(const ActorTransform& other):
+		ActorTransform(mnew Data())
 	{
-		mData = mnew Data();
-
-		mData->mSize = other.mData->mSize;
-		mData->mPosition = other.mData->mPosition;
-		mData->mAngle = other.mData->mAngle;
-		mData->mScale = other.mData->mScale;
-		mData->mPivot = other.mData->mPivot;
-		mData->mShear = other.mData->mShear;
-
-		mData->mOwner = nullptr;
+		mData->size = other.mData->size;
+		mData->position = other.mData->position;
+		mData->angle = other.mData->angle;
+		mData->scale = other.mData->scale;
+		mData->pivot = other.mData->pivot;
+		mData->shear = other.mData->shear;
 
 		InitializeProperties();
 	}
 
 	ActorTransform& ActorTransform::operator=(const ActorTransform& other)
 	{
-		mData->mSize = other.mData->mSize;
-		mData->mPosition = other.mData->mPosition;
-		mData->mAngle = other.mData->mAngle;
-		mData->mScale = other.mData->mScale;
-		mData->mPivot = other.mData->mPivot;
-		mData->mShear = other.mData->mShear;
+		mData->size = other.mData->size;
+		mData->position = other.mData->position;
+		mData->angle = other.mData->angle;
+		mData->scale = other.mData->scale;
+		mData->pivot = other.mData->pivot;
+		mData->shear = other.mData->shear;
 
-		UpdateTransform();
+		OnChanged();
 
 		return *this;
 	}
@@ -60,117 +57,139 @@ namespace o2
 
 	bool ActorTransform::operator==(const ActorTransform& other) const
 	{
-		return Math::Equals(mData->mSize, other.mData->mSize) &&
-			Math::Equals(mData->mPosition, other.mData->mPosition) &&
-			Math::Equals(mData->mAngle, other.mData->mAngle) &&
-			Math::Equals(mData->mScale, other.mData->mScale) &&
-			Math::Equals(mData->mPivot, other.mData->mPivot) &&
-			Math::Equals(mData->mShear, other.mData->mShear);
+		return Math::Equals(mData->size, other.mData->size) &&
+			Math::Equals(mData->position, other.mData->position) &&
+			Math::Equals(mData->angle, other.mData->angle) &&
+			Math::Equals(mData->scale, other.mData->scale) &&
+			Math::Equals(mData->pivot, other.mData->pivot) &&
+			Math::Equals(mData->shear, other.mData->shear);
 	}
 
 	void ActorTransform::OnDeserialized(const DataNode& node)
 	{
-		UpdateTransform();
+		OnChanged();
 	}
 
 	void ActorTransform::SetPosition(const Vec2F& position)
 	{
-		mData->mPosition = position;
-		UpdateTransform();
+		mData->position = position;
+		OnChanged();
 	}
 
 	Vec2F ActorTransform::GetPosition() const
 	{
-		return mData->mPosition;
+		return mData->position;
 	}
 
 	void ActorTransform::SetSize(const Vec2F& size)
 	{
-		mData->mSize = size;
-		UpdateTransform();
+		mData->size = size;
+		OnChanged();
 	}
 
 	Vec2F ActorTransform::GetSize() const
 	{
-		return mData->mSize;
+		return mData->size;
+	}
+
+	void ActorTransform::SetWidth(float value)
+	{
+		mData->size.x = value;
+		OnChanged();
+	}
+
+	float ActorTransform::GetWidht() const
+	{
+		return mData->size.x;
+	}
+
+	void ActorTransform::SetHeight(float value)
+	{
+		mData->size.y = value;
+		OnChanged();
+	}
+
+	float ActorTransform::GetHeight() const
+	{
+		return mData->size.y;
 	}
 
 	void ActorTransform::SetPivot(const Vec2F& pivot)
 	{
-		mData->mPivot = pivot;
-		UpdateTransform();
+		mData->pivot = pivot;
+		OnChanged();
 	}
 
 	Vec2F ActorTransform::GetPivot() const
 	{
-		return mData->mPivot;
+		return mData->pivot;
 	}
 
 	void ActorTransform::SetSizePivot(const Vec2F& relPivot)
 	{
-		SetPivot(relPivot / mData->mSize);
+		SetPivot(relPivot / mData->size);
 	}
 
 	Vec2F ActorTransform::GetSizePivot() const
 	{
-		return mData->mPivot*mData->mSize;
+		return mData->pivot*mData->size;
 	}
 
 	void ActorTransform::SetRect(const RectF& rect)
 	{
-		mData->mSize = rect.Size();
-		mData->mPosition = rect.LeftBottom() + Vec2F(mData->mSize.x*mData->mScale.x, mData->mSize.y*mData->mScale.y)*mData->mPivot;
+		mData->size = rect.Size();
+		mData->position = rect.LeftBottom() + Vec2F(mData->size.x*mData->scale.x, mData->size.y*mData->scale.y)*mData->pivot;
 
-		UpdateTransform();
+		OnChanged();
 	}
 
 	RectF ActorTransform::GetRect() const
 	{
-		return RectF(mData->mTransform.offs, mData->mTransform.offs + mData->mTransform.xv + mData->mTransform.yv);
+		return RectF(mData->transform.offs, mData->transform.offs + mData->transform.xv + mData->transform.yv);
 	}
 
 	void ActorTransform::SetScale(const Vec2F& scale)
 	{
-		mData->mScale = scale;
-		UpdateTransform();
+		mData->scale = scale;
+		OnChanged();
 	}
 
 	Vec2F ActorTransform::GetScale() const
 	{
-		return mData->mScale;
+		return mData->scale;
 	}
 
 	void ActorTransform::SetAngle(float rad)
 	{
-		mData->mAngle = rad;
-		UpdateTransform();
+		mData->angle = rad;
+		OnChanged();
 	}
 
 	float ActorTransform::GetAngle() const
 	{
-		return mData->mAngle;
+		return mData->angle;
 	}
 
 	void ActorTransform::SetAngleDegrees(float deg)
 	{
-		mData->mAngle = Math::Deg2rad(deg);
-		UpdateTransform();
+		mData->angle = Math::Deg2rad(deg);
+		OnChanged();
 	}
 
 	float ActorTransform::GetAngleDegrees() const
 	{
-		return Math::Rad2deg(mData->mAngle);
+		return Math::Rad2deg(mData->angle);
 	}
 
 	void ActorTransform::SetShear(float shear)
 	{
-		mData->mShear = shear;
-		UpdateTransform();
+		mData->shear = shear;
+		OnChanged();
 	}
 
 	float ActorTransform::GetShear() const
 	{
-		return mData->mShear;
+		return mData->shear;
 	}
 
 	void ActorTransform::SetBasis(const Basis& basis)
@@ -179,17 +198,17 @@ namespace o2
 		float angle, shear;
 		basis.Decompose(&offset, &angle, &scale, &shear);
 
-		mData->mAngle = angle;
-		mData->mSize = scale / mData->mScale;
-		mData->mShear = shear;
+		mData->angle = angle;
+		mData->size = scale / mData->scale;
+		mData->shear = shear;
 
-		mData->mPosition = basis.offs + basis.xv*mData->mPivot.x + basis.yv*mData->mPivot.y;
-		UpdateTransform();
+		mData->position = basis.offs + basis.xv*mData->pivot.x + basis.yv*mData->pivot.y;
+		OnChanged();
 	}
 
 	Basis ActorTransform::GetBasis() const
 	{
-		return mData->mTransform;
+		return mData->transform;
 	}
 
 	void ActorTransform::SetNonSizedBasis(const Basis& basis)
@@ -198,41 +217,40 @@ namespace o2
 		float angle, shear;
 		basis.Decompose(&offset, &angle, &scale, &shear);
 
-		mData->mAngle = angle;
-		mData->mScale = scale;
-		mData->mShear = shear;
+		mData->angle = angle;
+		mData->scale = scale;
+		mData->shear = shear;
 
-		mData->mPosition = basis.offs + basis.xv*mData->mPivot.x*mData->mSize.x + basis.yv*mData->mPivot.y*mData->mSize.y;
-		UpdateTransform();
+		mData->position = basis.offs + basis.xv*mData->pivot.x*mData->size.x + basis.yv*mData->pivot.y*mData->size.y;
+		OnChanged();
 	}
 
 	Basis ActorTransform::GetNonSizedBasis() const
 	{
-		return mData->mNonSizedTransform;
+		return mData->nonSizedTransform;
 	}
 
 	void ActorTransform::SetAxisAlignedRect(const RectF& rect)
 	{
 		RectF curRect = GetAxisAlignedRect();
-
 		Basis curRectBasis(curRect.LeftBottom(), Vec2F::Right()*curRect.Width(), Vec2F::Up()*curRect.Height());
 		Basis rectBasis(rect.LeftBottom(), Vec2F::Right()*rect.Width(), Vec2F::Up()*rect.Height());
 
-		SetBasis(mData->mTransform*curRectBasis.Inverted()*rectBasis);
+		SetBasis(mData->transform*curRectBasis.Inverted()*rectBasis);
 	}
 
 	RectF ActorTransform::GetAxisAlignedRect() const
 	{
-		return mData->mTransform.AABB();
+		return mData->transform.AABB();
 	}
 
 	void ActorTransform::SetLeftTop(const Vec2F& position)
 	{
-		Basis transformed = mData->mTransform;
-		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mData->mTransform;
+		Basis transformed = mData->transform;
+		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mData->transform;
 		Vec2F delta = position - lastHandleCoords;
-		Vec2F frameDeltaX = delta.Project(mData->mTransform.xv);
-		Vec2F frameDeltaY = delta.Project(mData->mTransform.yv);
+		Vec2F frameDeltaX = delta.Project(mData->transform.xv);
+		Vec2F frameDeltaY = delta.Project(mData->transform.yv);
 
 		transformed.offs += frameDeltaX;
 		transformed.xv -= frameDeltaX;
@@ -243,16 +261,16 @@ namespace o2
 
 	Vec2F ActorTransform::GetLeftTop() const
 	{
-		return mData->mTransform.offs + mData->mTransform.yv;
+		return mData->transform.offs + mData->transform.yv;
 	}
 
 	void ActorTransform::SetRightTop(const Vec2F& position)
 	{
-		Basis transformed = mData->mTransform;
-		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mData->mTransform;
+		Basis transformed = mData->transform;
+		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mData->transform;
 		Vec2F delta = position - lastHandleCoords;
-		Vec2F frameDeltaX = delta.Project(mData->mTransform.xv);
-		Vec2F frameDeltaY = delta.Project(mData->mTransform.yv);
+		Vec2F frameDeltaX = delta.Project(mData->transform.xv);
+		Vec2F frameDeltaY = delta.Project(mData->transform.yv);
 
 		transformed.xv += frameDeltaX;
 		transformed.yv += frameDeltaY;
@@ -262,16 +280,16 @@ namespace o2
 
 	Vec2F ActorTransform::GetRightTop() const
 	{
-		return mData->mTransform.offs + mData->mTransform.yv + mData->mTransform.xv;
+		return mData->transform.offs + mData->transform.yv + mData->transform.xv;
 	}
 
 	void ActorTransform::SetLeftBottom(const Vec2F& position)
 	{
-		Basis transformed = mData->mTransform;
-		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mData->mTransform;
+		Basis transformed = mData->transform;
+		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mData->transform;
 		Vec2F delta = position - lastHandleCoords;
-		Vec2F frameDeltaX = delta.Project(mData->mTransform.xv);
-		Vec2F frameDeltaY = delta.Project(mData->mTransform.yv);
+		Vec2F frameDeltaX = delta.Project(mData->transform.xv);
+		Vec2F frameDeltaY = delta.Project(mData->transform.yv);
 
 		transformed.offs += frameDeltaX + frameDeltaY;
 		transformed.xv -= frameDeltaX;
@@ -282,16 +300,16 @@ namespace o2
 
 	Vec2F ActorTransform::GetLeftBottom() const
 	{
-		return mData->mTransform.offs;
+		return mData->transform.offs;
 	}
 
 	void ActorTransform::SetRightBottom(const Vec2F& position)
 	{
-		Basis transformed = mData->mTransform;
-		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mData->mTransform;
+		Basis transformed = mData->transform;
+		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mData->transform;
 		Vec2F delta = position - lastHandleCoords;
-		Vec2F frameDeltaX = delta.Project(mData->mTransform.xv);
-		Vec2F frameDeltaY = delta.Project(mData->mTransform.yv);
+		Vec2F frameDeltaX = delta.Project(mData->transform.xv);
+		Vec2F frameDeltaY = delta.Project(mData->transform.yv);
 
 		transformed.offs += frameDeltaY;
 		transformed.xv += frameDeltaX;
@@ -302,113 +320,207 @@ namespace o2
 
 	Vec2F ActorTransform::GetRightBottom() const
 	{
-		return mData->mTransform.offs + mData->mTransform.xv;
+		return mData->transform.offs + mData->transform.xv;
 	}
 
 	void ActorTransform::SetCenter(const Vec2F& position)
 	{
 		Vec2F translate = position - GetCenter();
-		SetBasis(mData->mTransform*Basis::Translated(translate));
+		SetBasis(mData->transform*Basis::Translated(translate));
 	}
 
 	Vec2F ActorTransform::GetCenter() const
 	{
-		return mData->mTransform.offs + (mData->mTransform.xv + mData->mTransform.yv)*0.5f;
+		return mData->transform.offs + (mData->transform.xv + mData->transform.yv)*0.5f;
+	}
+
+	void ActorTransform::SetRightDir(const Vec2F& dir)
+	{
+		Basis transf = Basis::Rotated(GetRightDir().SignedAngle(dir));
+		SetWorldBasis(mData->transform*transf);
+	}
+
+	Vec2F ActorTransform::GetRightDir() const
+	{
+		return mData->nonSizedTransform.xv;
+	}
+
+	void ActorTransform::SetLeftDir(const Vec2F& dir)
+	{
+		Basis transf = Basis::Rotated(GetLeftDir().SignedAngle(dir));
+		SetWorldBasis(mData->transform*transf);
+	}
+
+	Vec2F ActorTransform::GetLeftDir() const
+	{
+		return mData->nonSizedTransform.xv.Inverted();
+	}
+
+	void ActorTransform::SetUpDir(const Vec2F& dir)
+	{
+		Basis transf = Basis::Rotated(GetUpDir().SignedAngle(dir));
+		SetWorldBasis(mData->transform*transf);
+	}
+
+	Vec2F ActorTransform::GetUpDir() const
+	{
+		return mData->nonSizedTransform.yv;
+	}
+
+	void ActorTransform::SetDownDir(const Vec2F& dir)
+	{
+		Basis transf = Basis::Rotated(GetDownDir().SignedAngle(dir));
+		SetWorldBasis(mData->transform*transf);
+	}
+
+	Vec2F ActorTransform::GetDownDir() const
+	{
+		return mData->nonSizedTransform.yv.Inverted();
+	}
+
+	void ActorTransform::SetRight(float value)
+	{
+		SetRightTop(Vec2F(value, GetTop()));
+	}
+
+	float ActorTransform::GetRight() const
+	{
+		return GetRightTop().x;
+	}
+
+	void ActorTransform::SetLeft(float value)
+	{
+		SetLeftTop(Vec2F(value, GetTop()));
+	}
+
+	float ActorTransform::GetLeft() const
+	{
+		return GetLeftTop().x;
+	}
+
+	void ActorTransform::SetTop(float value)
+	{
+		SetLeftTop(Vec2F(GetLeft(), value));
+	}
+
+	float ActorTransform::GetTop() const
+	{
+		return GetLeftTop().y;
+	}
+
+	void ActorTransform::SetBottom(float value)
+	{
+		SetLeftBottom(Vec2F(GetLeft(), value));
+	}
+
+	float ActorTransform::GetBottom() const
+	{
+		return GetLeftBottom().y;
 	}
 
 	Actor* ActorTransform::GetOwnerActor() const
 	{
-		return mData->mOwner;
+		return mData->owner;
 	}
 
 	void ActorTransform::SetWorldPivot(const Vec2F& pivot)
 	{
-		Basis trasform = mData->mWorldTransform;
+		Basis trasform = mData->worldTransform;
 		SetSizePivot(World2LocalPoint(pivot));
 		SetWorldBasis(trasform);
 	}
 
 	Vec2F ActorTransform::GetWorldPivot() const
 	{
-		return Local2WorldPoint(mData->mPivot*mData->mSize);
+		return Local2WorldPoint(mData->pivot*mData->size);
 	}
 
 	void ActorTransform::SetWorldPosition(const Vec2F& position)
 	{
 		CheckParentInvTransform();
-		SetPosition(position*mData->mParentInvertedTransform);
+		SetPosition(position*mData->parentInvertedTransform);
 	}
 
 	Vec2F ActorTransform::GetWorldPosition() const
 	{
-		return mData->mPosition*mData->mParentTransform;
+		return mData->position*mData->parentTransform;
 	}
 
 	void ActorTransform::SetWorldRect(const RectF& rect)
 	{
 		CheckParentInvTransform();
-		SetRect(RectF(rect.LeftBottom()*mData->mParentInvertedTransform, rect.RightTop()*mData->mParentInvertedTransform));
+		SetRect(RectF(rect.LeftBottom()*mData->parentInvertedTransform, rect.RightTop()*mData->parentInvertedTransform));
 	}
 
 	RectF ActorTransform::GetWorldRect() const
 	{
 		RectF localRect = GetRect();
-		RectF worldRect(localRect.LeftBottom()*mData->mParentTransform, localRect.RightTop()*mData->mParentTransform);
+		RectF worldRect(localRect.LeftBottom()*mData->parentTransform, localRect.RightTop()*mData->parentTransform);
 		return worldRect;
 	}
 
 	void ActorTransform::SetWorldAngle(float rad)
 	{
-		SetAngle(rad - mData->mParentTransform.GetAngle());
+		SetAngle(rad - mData->parentTransform.GetAngle());
 	}
 
 	float ActorTransform::GetWorldAngle() const
 	{
-		return mData->mWorldTransform.GetAngle();
+		return mData->worldTransform.GetAngle();
+	}
+
+	void ActorTransform::SetWorldAngleDegree(float deg)
+	{
+		SetWorldAngle(Math::Deg2rad(deg));
+	}
+
+	float ActorTransform::GetWorldAngleDegree() const
+	{
+		return Math::Rad2deg(GetWorldAngle());
 	}
 
 	void ActorTransform::SetWorldBasis(const Basis& basis)
 	{
 		CheckParentInvTransform();
-		SetBasis(basis*mData->mParentInvertedTransform);
+		SetBasis(basis*mData->parentInvertedTransform);
 	}
 
 	Basis ActorTransform::GetWorldBasis() const
 	{
-		return mData->mWorldTransform;
+		return mData->worldTransform;
 	}
 
 	void ActorTransform::SetWorldNonSizedBasis(const Basis& basis)
 	{
 		CheckParentInvTransform();
-		SetNonSizedBasis(basis*mData->mParentInvertedTransform);
+		SetNonSizedBasis(basis*mData->parentInvertedTransform);
 	}
 
 	Basis ActorTransform::GetWorldNonSizedBasis() const
 	{
-		return mData->mWorldNonSizedTransform;
+		return mData->worldNonSizedTransform;
 	}
 
 	void ActorTransform::SetWorldAxisAlignedRect(const RectF& rect)
 	{
 		CheckParentInvTransform();
-		SetAxisAlignedRect(RectF(rect.LeftBottom()*mData->mParentInvertedTransform, rect.RightTop()*mData->mParentInvertedTransform));
+		SetAxisAlignedRect(RectF(rect.LeftBottom()*mData->parentInvertedTransform, rect.RightTop()*mData->parentInvertedTransform));
 	}
 
 	RectF ActorTransform::GetWorldAxisAlignedRect() const
 	{
 		RectF localAARect = GetRect();
-		RectF worldAARect(localAARect.LeftBottom()*mData->mParentTransform, localAARect.RightTop()*mData->mParentTransform);
+		RectF worldAARect(localAARect.LeftBottom()*mData->parentTransform, localAARect.RightTop()*mData->parentTransform);
 		return worldAARect;
 	}
 
 	void ActorTransform::SetWorldLeftTop(const Vec2F& position)
 	{
-		Basis transformed = mData->mWorldTransform;
-		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mData->mWorldTransform;
+		Basis transformed = mData->worldTransform;
+		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mData->worldTransform;
 		Vec2F delta = position - lastHandleCoords;
-		Vec2F frameDeltaX = delta.Project(mData->mWorldTransform.xv);
-		Vec2F frameDeltaY = delta.Project(mData->mWorldTransform.yv);
+		Vec2F frameDeltaX = delta.Project(mData->worldTransform.xv);
+		Vec2F frameDeltaY = delta.Project(mData->worldTransform.yv);
 
 		transformed.offs += frameDeltaX;
 		transformed.xv -= frameDeltaX;
@@ -419,16 +531,16 @@ namespace o2
 
 	Vec2F ActorTransform::GetWorldLeftTop() const
 	{
-		return mData->mWorldTransform.offs + mData->mWorldTransform.yv;
+		return mData->worldTransform.offs + mData->worldTransform.yv;
 	}
 
 	void ActorTransform::SetWorldRightTop(const Vec2F& position)
 	{
-		Basis transformed = mData->mWorldTransform;
-		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mData->mWorldTransform;
+		Basis transformed = mData->worldTransform;
+		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mData->worldTransform;
 		Vec2F delta = position - lastHandleCoords;
-		Vec2F frameDeltaX = delta.Project(mData->mWorldTransform.xv);
-		Vec2F frameDeltaY = delta.Project(mData->mWorldTransform.yv);
+		Vec2F frameDeltaX = delta.Project(mData->worldTransform.xv);
+		Vec2F frameDeltaY = delta.Project(mData->worldTransform.yv);
 
 		transformed.xv += frameDeltaX;
 		transformed.yv += frameDeltaY;
@@ -438,16 +550,16 @@ namespace o2
 
 	Vec2F ActorTransform::GetWorldRightTop() const
 	{
-		return mData->mWorldTransform.offs + mData->mWorldTransform.yv + mData->mWorldTransform.xv;
+		return mData->worldTransform.offs + mData->worldTransform.yv + mData->worldTransform.xv;
 	}
 
 	void ActorTransform::SetWorldLeftBottom(const Vec2F& position)
 	{
-		Basis transformed = mData->mWorldTransform;
-		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mData->mWorldTransform;
+		Basis transformed = mData->worldTransform;
+		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mData->worldTransform;
 		Vec2F delta = position - lastHandleCoords;
-		Vec2F frameDeltaX = delta.Project(mData->mWorldTransform.xv);
-		Vec2F frameDeltaY = delta.Project(mData->mWorldTransform.yv);
+		Vec2F frameDeltaX = delta.Project(mData->worldTransform.xv);
+		Vec2F frameDeltaY = delta.Project(mData->worldTransform.yv);
 
 		transformed.offs += frameDeltaX + frameDeltaY;
 		transformed.xv -= frameDeltaX;
@@ -458,16 +570,16 @@ namespace o2
 
 	Vec2F ActorTransform::GetWorldLeftBottom() const
 	{
-		return mData->mWorldTransform.offs;
+		return mData->worldTransform.offs;
 	}
 
 	void ActorTransform::SetWorldRightBottom(const Vec2F& position)
 	{
-		Basis transformed = mData->mWorldTransform;
-		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mData->mWorldTransform;
+		Basis transformed = mData->worldTransform;
+		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mData->worldTransform;
 		Vec2F delta = position - lastHandleCoords;
-		Vec2F frameDeltaX = delta.Project(mData->mWorldTransform.xv);
-		Vec2F frameDeltaY = delta.Project(mData->mWorldTransform.yv);
+		Vec2F frameDeltaX = delta.Project(mData->worldTransform.xv);
+		Vec2F frameDeltaY = delta.Project(mData->worldTransform.yv);
 
 		transformed.offs += frameDeltaY;
 		transformed.xv += frameDeltaX;
@@ -478,85 +590,119 @@ namespace o2
 
 	Vec2F ActorTransform::GetWorldRightBottom() const
 	{
-		return mData->mWorldTransform.offs + mData->mWorldTransform.xv;
+		return mData->worldTransform.offs + mData->worldTransform.xv;
 	}
 
 	void ActorTransform::SetWorldCenter(const Vec2F& position)
 	{
 		Vec2F translate = position - GetWorldCenter();
-		SetWorldBasis(mData->mWorldTransform*Basis::Translated(translate));
+		SetWorldBasis(mData->worldTransform*Basis::Translated(translate));
 	}
 
 	Vec2F ActorTransform::GetWorldCenter() const
 	{
-		return mData->mWorldTransform.offs + (mData->mWorldTransform.xv + mData->mWorldTransform.yv)*0.5f;
+		return mData->worldTransform.offs + (mData->worldTransform.xv + mData->worldTransform.yv)*0.5f;
 	}
 
-	void ActorTransform::SetRight(const Vec2F& dir)
+	void ActorTransform::SetWorldRightDir(const Vec2F& dir)
 	{
-		Basis transf = Basis::Rotated(GetRight().SignedAngle(dir));
-		SetWorldBasis(mData->mWorldTransform*transf);
+		Basis transf = Basis::Rotated(GetRightDir().SignedAngle(dir));
+		SetWorldBasis(mData->worldTransform*transf);
 	}
 
-	Vec2F ActorTransform::GetRight() const
+	Vec2F ActorTransform::GetWorldRightDir() const
 	{
-		return mData->mWorldNonSizedTransform.xv;
+		return mData->worldNonSizedTransform.xv;
 	}
 
-	void ActorTransform::SetLeft(const Vec2F& dir)
+	void ActorTransform::SetWorldLeftDir(const Vec2F& dir)
 	{
-		Basis transf = Basis::Rotated(GetLeft().SignedAngle(dir));
-		SetWorldBasis(mData->mWorldTransform*transf);
+		Basis transf = Basis::Rotated(GetLeftDir().SignedAngle(dir));
+		SetWorldBasis(mData->worldTransform*transf);
 	}
 
-	Vec2F ActorTransform::GetLeft() const
+	Vec2F ActorTransform::GetWorldLeftDir() const
 	{
-		return mData->mWorldNonSizedTransform.xv.Inverted();
+		return mData->worldNonSizedTransform.xv.Inverted();
 	}
 
-	void ActorTransform::SetUp(const Vec2F& dir)
+	void ActorTransform::SetWorldUpDir(const Vec2F& dir)
 	{
-		Basis transf = Basis::Rotated(GetUp().SignedAngle(dir));
-		SetWorldBasis(mData->mWorldTransform*transf);
+		Basis transf = Basis::Rotated(GetUpDir().SignedAngle(dir));
+		SetWorldBasis(mData->worldTransform*transf);
 	}
 
-	Vec2F ActorTransform::GetUp() const
+	Vec2F ActorTransform::GetWorldUpDir() const
 	{
-		return mData->mWorldNonSizedTransform.yv;
+		return mData->worldNonSizedTransform.yv;
 	}
 
-	void ActorTransform::SetDown(const Vec2F& dir)
+	void ActorTransform::SetWorldDownDir(const Vec2F& dir)
 	{
-		Basis transf = Basis::Rotated(GetDown().SignedAngle(dir));
-		SetWorldBasis(mData->mWorldTransform*transf);
+		Basis transf = Basis::Rotated(GetDownDir().SignedAngle(dir));
+		SetWorldBasis(mData->worldTransform*transf);
 	}
 
-	Vec2F ActorTransform::GetDown() const
+	Vec2F ActorTransform::GetWorldDownDir() const
 	{
-		return mData->mWorldNonSizedTransform.yv.Inverted();
+		return mData->worldNonSizedTransform.yv.Inverted();
 	}
 
-	void ActorTransform::LookAt(const Vec2F& worldPoint)
+	void ActorTransform::SetWorldRight(float value)
 	{
-		SetUp((worldPoint - mData->mPosition).Normalized());
+
+	}
+
+	float ActorTransform::GetWorldRight() const
+	{
+		return 0;
+	}
+
+	void ActorTransform::SetWorldLeft(float value)
+	{
+	}
+
+	float ActorTransform::GetWorldLeft() const
+	{
+		return 0;
+	}
+
+	void ActorTransform::SetWorldTop(float value)
+	{
+
+	}
+
+	float ActorTransform::GetWorldTop() const
+	{
+		return 0;
+	}
+
+	void ActorTransform::SetWorldBottom(float value)
+	{
+
+	}
+
+	float ActorTransform::GetWorldBottom() const
+	{
+		return 0;
 	}
 
 	Vec2F ActorTransform::World2LocalPoint(const Vec2F& worldPoint) const
 	{
-		Vec2F nx = mData->mWorldTransform.xv, ny = mData->mWorldTransform.yv, offs = mData->mWorldTransform.offs, w = worldPoint;
+		Vec2F nx = mData->worldTransform.xv, ny = mData->worldTransform.yv, offs = mData->worldTransform.offs, w = worldPoint;
 		float lx = (w.x*ny.y - offs.x*ny.y - w.y*ny.x + offs.y*ny.x) / (nx.x*ny.y - ny.x*nx.y);
 		float ly = (w.y - offs.y - nx.y*lx) / ny.y;
-		return Vec2F(lx, ly)*mData->mSize;
+		return Vec2F(lx, ly)*mData->size;
 	}
 
 	Vec2F ActorTransform::Local2WorldPoint(const Vec2F& localPoint) const
 	{
-		return mData->mWorldTransform*(localPoint / mData->mSize);
+		return mData->worldTransform*(localPoint / mData->size);
 	}
 
 	Vec2F ActorTransform::World2LocalDir(const Vec2F& worldDir) const
 	{
-		Vec2F nx = mData->mWorldTransform.xv / (mData->mSize.x*mData->mScale.x), ny = mData->mWorldTransform.yv / (mData->mSize.y*mData->mScale.y), wd = worldDir;
+		Vec2F nx = mData->worldTransform.xv / (mData->size.x*mData->scale.x), ny = mData->worldTransform.yv / (mData->size.y*mData->scale.y), wd = worldDir;
 		float ldy = (wd.x*nx.y - wd.y*nx.x) / (nx.y*ny.x - ny.y*nx.x);
 		float ldx = (wd.x - ny.x*ldy) / nx.x;
 		return Vec2F(ldx, ldy);
@@ -564,15 +710,15 @@ namespace o2
 
 	Vec2F ActorTransform::Local2WorldDir(const Vec2F& localDir) const
 	{
-		Vec2F nx = mData->mWorldTransform.xv / (mData->mSize.x*mData->mScale.x), ny = mData->mWorldTransform.yv / (mData->mSize.y*mData->mScale.y);
+		Vec2F nx = mData->worldTransform.xv / (mData->size.x*mData->scale.x), ny = mData->worldTransform.yv / (mData->size.y*mData->scale.y);
 		return nx*localDir.x + ny*localDir.y;
 	}
 
 	bool ActorTransform::IsPointInside(const Vec2F& point) const
 	{
-		Vec2F rs = mData->mScale*mData->mSize;
-		Vec2F nx = mData->mWorldTransform.xv / rs.x, ny = mData->mWorldTransform.yv / rs.y;
-		Vec2F lp = point - mData->mWorldTransform.offs;
+		Vec2F rs = mData->scale*mData->size;
+		Vec2F nx = mData->worldTransform.xv / rs.x, ny = mData->worldTransform.yv / rs.y;
+		Vec2F lp = point - mData->worldTransform.offs;
 
 		float dx = lp.Dot(nx);
 		float dy = lp.Dot(ny);
@@ -582,78 +728,106 @@ namespace o2
 
 	void ActorTransform::SetOwner(Actor* actor)
 	{
-		mData->mOwner = actor;
-		UpdateTransform();
+		mData->owner = actor;
+		OnChanged();
 	}
 
-	void ActorTransform::UpdateTransform()
+	void ActorTransform::OnChanged()
 	{
-		mData->mNonSizedTransform = Basis::Build(mData->mPosition, mData->mScale, mData->mAngle, mData->mShear);
-		mData->mTransform.Set(mData->mNonSizedTransform.offs, mData->mNonSizedTransform.xv * mData->mSize.x, mData->mNonSizedTransform.yv * mData->mSize.y);
-		mData->mTransform.offs = mData->mTransform.offs - mData->mTransform.xv*mData->mPivot.x - mData->mTransform.yv*mData->mPivot.y;
-		mData->mNonSizedTransform.offs = mData->mTransform.offs;
+		Vec2F leftBottom = mData->position - mData->size*mData->pivot;
+		Vec2F rightTop = leftBottom + mData->size;
+		mData->rectangle.left = leftBottom.x;
+		mData->rectangle.right = rightTop.x;
+		mData->rectangle.bottom = leftBottom.y;
+		mData->rectangle.top = rightTop.y;
 
-		if (mData->mOwner && mData->mOwner->mParent)
+		mData->nonSizedTransform = Basis::Build(mData->position, mData->scale, mData->angle, mData->shear);
+		mData->transform.Set(mData->nonSizedTransform.offs, mData->nonSizedTransform.xv * mData->size.x, mData->nonSizedTransform.yv * mData->size.y);
+		mData->transform.offs = mData->transform.offs - mData->transform.xv*mData->pivot.x - mData->transform.yv*mData->pivot.y;
+		mData->nonSizedTransform.offs = mData->transform.offs;
+
+		if (mData->owner && mData->owner->mParent)
 		{
-			mData->mParentTransform = mData->mOwner->mParent->transform->mData->mWorldNonSizedTransform;
-			mData->mWorldTransform = mData->mTransform*mData->mParentTransform;
-			mData->mWorldNonSizedTransform = mData->mNonSizedTransform*mData->mParentTransform;
+			mData->parentTransform = mData->owner->mParent->transform->mData->worldNonSizedTransform;
+			mData->worldTransform = mData->transform*mData->parentTransform;
+			mData->worldNonSizedTransform = mData->nonSizedTransform*mData->parentTransform;
 		}
 		else
 		{
-			mData->mWorldNonSizedTransform = mData->mNonSizedTransform;
-			mData->mWorldTransform = mData->mTransform;
+			mData->worldNonSizedTransform = mData->nonSizedTransform;
+			mData->worldTransform = mData->transform;
 		}
 
-		mData->mIsParentInvTransformActual = false;
+		mData->isParentInvTransformActual = false;
 
-		if (mData->mOwner)
-			mData->mOwner->OnTransformChanged();
+		if (mData->owner)
+			mData->owner->OnTransformChanged();
 	}
 
 	void ActorTransform::CheckParentInvTransform()
 	{
-		if (mData->mIsParentInvTransformActual)
+		if (mData->isParentInvTransformActual)
 			return;
 
-		mData->mIsParentInvTransformActual = true;
+		mData->isParentInvTransformActual = true;
 
-		if (mData->mOwner && mData->mOwner->mParent)
-			mData->mParentInvertedTransform = mData->mOwner->mParent->transform->mData->mWorldNonSizedTransform.Inverted();
+		if (mData->owner && mData->owner->mParent)
+			mData->parentInvertedTransform = mData->owner->mParent->transform->mData->worldNonSizedTransform.Inverted();
 		else
-			mData->mParentInvertedTransform = Basis::Identity();
+			mData->parentInvertedTransform = Basis::Identity();
 	}
 
 	void ActorTransform::InitializeProperties()
 	{
+		INITIALIZE_GETTER(ActorTransform, actor, GetOwnerActor);
+
 		INITIALIZE_PROPERTY(ActorTransform, position, SetPosition, GetPosition);
 		INITIALIZE_PROPERTY(ActorTransform, size, SetSize, GetSize);
+		INITIALIZE_PROPERTY(ActorTransform, width, SetWidth, GetWidht);
+		INITIALIZE_PROPERTY(ActorTransform, height, SetHeight, GetHeight);
 		INITIALIZE_PROPERTY(ActorTransform, scale, SetScale, GetScale);
 		INITIALIZE_PROPERTY(ActorTransform, pivot, SetPivot, GetPivot);
-		INITIALIZE_PROPERTY(ActorTransform, worldPivot, SetWorldPivot, GetWorldPivot);
 		INITIALIZE_PROPERTY(ActorTransform, szPivot, SetSizePivot, GetSizePivot);
-		INITIALIZE_PROPERTY(ActorTransform, rect, SetRect, GetRect);
 		INITIALIZE_PROPERTY(ActorTransform, angle, SetAngle, GetAngle);
 		INITIALIZE_PROPERTY(ActorTransform, angleDegree, SetAngleDegrees, GetAngleDegrees);
 		INITIALIZE_PROPERTY(ActorTransform, shear, SetShear, GetShear);
 		INITIALIZE_PROPERTY(ActorTransform, basis, SetBasis, GetBasis);
 		INITIALIZE_PROPERTY(ActorTransform, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis);
 		INITIALIZE_PROPERTY(ActorTransform, AABB, SetAxisAlignedRect, GetAxisAlignedRect);
+		INITIALIZE_PROPERTY(ActorTransform, rect, SetRect, GetRect);
+		INITIALIZE_PROPERTY(ActorTransform, leftTop, SetLeftTop, GetLeftTop);
+		INITIALIZE_PROPERTY(ActorTransform, leftBottom, SetLeftBottom, GetLeftBottom);
+		INITIALIZE_PROPERTY(ActorTransform, rightTop, SetRightTop, GetRightTop);
+		INITIALIZE_PROPERTY(ActorTransform, rightBottom, SetRightBottom, GetRightBottom);
+		INITIALIZE_PROPERTY(ActorTransform, center, SetCenter, GetCenter);
+		INITIALIZE_PROPERTY(ActorTransform, rightDir, SetRightDir, GetRightDir);
+		INITIALIZE_PROPERTY(ActorTransform, leftDir, SetLeftDir, GetLeftDir);
+		INITIALIZE_PROPERTY(ActorTransform, upDir, SetUpDir, GetUpDir);
+		INITIALIZE_PROPERTY(ActorTransform, downDir, SetDownDir, GetDownDir);
 		INITIALIZE_PROPERTY(ActorTransform, right, SetRight, GetRight);
 		INITIALIZE_PROPERTY(ActorTransform, left, SetLeft, GetLeft);
-		INITIALIZE_PROPERTY(ActorTransform, up, SetUp, GetUp);
-		INITIALIZE_PROPERTY(ActorTransform, down, SetDown, GetDown);
-		INITIALIZE_PROPERTY(ActorTransform, leftTop, SetLeftTop, GetLeftTop);
-		INITIALIZE_PROPERTY(ActorTransform, rightTop, SetRightTop, GetRightTop);
-		INITIALIZE_PROPERTY(ActorTransform, leftBottom, SetLeftBottom, GetLeftBottom);
-		INITIALIZE_PROPERTY(ActorTransform, rightBottom, SetRightBottom, GetRightBottom);
-		INITIALIZE_SETTER(ActorTransform, lookAtPoint, LookAt);
-		INITIALIZE_GETTER(ActorTransform, actor, GetOwnerActor);
+		INITIALIZE_PROPERTY(ActorTransform, top, SetTop, GetTop);
+		INITIALIZE_PROPERTY(ActorTransform, bottom, SetBottom, GetBottom);
 		INITIALIZE_PROPERTY(ActorTransform, worldPosition, SetWorldPosition, GetWorldPosition);
-		INITIALIZE_PROPERTY(ActorTransform, worldRect, SetWorldRect, GetWorldRect);
+		INITIALIZE_PROPERTY(ActorTransform, worldPivot, SetWorldPivot, GetWorldPivot);
 		INITIALIZE_PROPERTY(ActorTransform, worldAngle, SetWorldAngle, GetWorldAngle);
+		INITIALIZE_PROPERTY(ActorTransform, worldAngleDegree, SetWorldAngleDegree, GetWorldAngleDegree);
 		INITIALIZE_PROPERTY(ActorTransform, worldBasis, SetWorldBasis, GetWorldBasis);
 		INITIALIZE_PROPERTY(ActorTransform, worldNonSizedBasis, SetWorldNonSizedBasis, GetWorldNonSizedBasis);
+		INITIALIZE_PROPERTY(ActorTransform, worldLeftTop, SetWorldLeftTop, GetWorldLeftTop);
+		INITIALIZE_PROPERTY(ActorTransform, worldLeftBottom, SetWorldLeftBottom, GetWorldLeftBottom);
+		INITIALIZE_PROPERTY(ActorTransform, worldRightTop, SetWorldRightTop, GetWorldRightTop);
+		INITIALIZE_PROPERTY(ActorTransform, worldRightBottom, SetWorldRightBottom, GetWorldRightBottom);
+		INITIALIZE_PROPERTY(ActorTransform, worldCenter, SetWorldCenter, GetWorldCenter);
+		INITIALIZE_PROPERTY(ActorTransform, worldRightDir, SetWorldRightDir, GetWorldRightDir);
+		INITIALIZE_PROPERTY(ActorTransform, worldLeftDir, SetWorldLeftDir, GetWorldLeftDir);
+		INITIALIZE_PROPERTY(ActorTransform, worldUpDir, SetWorldUpDir, GetWorldUpDir);
+		INITIALIZE_PROPERTY(ActorTransform, worldDownDir, SetWorldDownDir, GetWorldDownDir);
+		INITIALIZE_PROPERTY(ActorTransform, worldRight, SetWorldRight, GetWorldRight);
+		INITIALIZE_PROPERTY(ActorTransform, worldLeft, SetWorldLeft, GetWorldLeft);
+		INITIALIZE_PROPERTY(ActorTransform, worldTop, SetWorldTop, GetWorldTop);
+		INITIALIZE_PROPERTY(ActorTransform, worldBottom, SetWorldBottom, GetWorldBottom);
+		INITIALIZE_PROPERTY(ActorTransform, worldRect, SetWorldRect, GetWorldRect);
 		INITIALIZE_PROPERTY(ActorTransform, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect);
 	}
 
@@ -661,7 +835,7 @@ namespace o2
 
 CLASS_META(o2::ActorTransform)
 {
-	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(ISerializable);
 
 	PUBLIC_FIELD(position);
 	PUBLIC_FIELD(size);
@@ -768,30 +942,30 @@ CLASS_META(o2::ActorTransform)
 	PUBLIC_FUNCTION(void, SetWorldCenter, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetWorldCenter);
 	PROTECTED_FUNCTION(void, SetOwner, Actor*);
-	PROTECTED_FUNCTION(void, UpdateTransform);
+	PROTECTED_FUNCTION(void, OnChanged);
 	PROTECTED_FUNCTION(void, CheckParentInvTransform);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 
-CLASS_META(o2::ActorTransform::Data)
+CLASS_META(ActorTransform::Data)
 {
-	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(ISerializable);
 
-	PUBLIC_FIELD(mPosition).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mSize).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mScale).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mPivot).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mAngle).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mShear).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mTransform);
-	PUBLIC_FIELD(mNonSizedTransform);
-	PUBLIC_FIELD(mWorldNonSizedTransform);
-	PUBLIC_FIELD(mWorldTransform);
-	PUBLIC_FIELD(mParentInvertedTransform);
-	PUBLIC_FIELD(mParentTransform);
-	PUBLIC_FIELD(mIsParentInvTransformActual);
-	PUBLIC_FIELD(mOwner);
+	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(size).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(scale).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(pivot).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(angle).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(shear).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(transform);
+	PUBLIC_FIELD(nonSizedTransform);
+	PUBLIC_FIELD(worldNonSizedTransform);
+	PUBLIC_FIELD(worldTransform);
+	PUBLIC_FIELD(parentInvertedTransform);
+	PUBLIC_FIELD(parentTransform);
+	PUBLIC_FIELD(isParentInvTransformActual);
+	PUBLIC_FIELD(owner);
 }
 END_META;

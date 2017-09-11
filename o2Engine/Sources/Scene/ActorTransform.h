@@ -6,65 +6,76 @@ namespace o2
 {
 	class Actor;
 
-	// ---------------
-	// Actor transform
-	// ---------------
+	// -------------------------------------------------------------------------------------------
+	// Actor transform. Represents the position of actor relative to his parent (the local space),
+	// and calculates the position relative to world (the world space).
+	// Position shows the pivot point, and pivot shows where is the rectangle of actor.
+	// Also this rectangle has angle, scale, size and shear.
+	//
+	// Note: the rectangle of transform here means the rectangle without angle, scale and shear.
+	// So, the final transform is rotated, scaled and sheared rectangle.
+	// -------------------------------------------------------------------------------------------
 	class ActorTransform: public ISerializable
 	{
 	public:
-		class Data: public ISerializable
-		{
-		public:
-			Vec2F  mPosition;                   // Position @SERIALIZABLE
-			Vec2F  mSize;                       // Size @SERIALIZABLE
-			Vec2F  mScale;                      // Scale, (1; 1) is default @SERIALIZABLE
-			Vec2F  mPivot;                      // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
-			float  mAngle;                      // Rotation angle in radians @SERIALIZABLE
-			float  mShear;                      // Shear @SERIALIZABLE
-									            
-			Basis  mTransform;                  // Final transform basis
-			Basis  mNonSizedTransform;          // Final transform basis without size
+		Getter<Actor*>   actor;              // Owner actor getter
 
-			Basis  mWorldNonSizedTransform;     // World transform without size
-			Basis  mWorldTransform;             // Result world basis
-			Basis  mParentInvertedTransform;    // Parent world transform inverted
-			Basis  mParentTransform;            // Parent world transform
-			bool   mIsParentInvTransformActual; // Is mParentInvertedTransform is actual
-			Actor* mOwner;                      // Owner actor
-
-			SERIALIZABLE(Data);
-		};
-
-	public:
 		Property<Vec2F>  position;           // Position property
 		Property<Vec2F>  size;               // Size property
+		Property<float>  width;              // Width property
+		Property<float>  height;             // Width property
 		Property<Vec2F>  scale;              // Scale property
 		Property<Vec2F>  pivot;              // Pivot property, in local space
-		Property<Vec2F>  worldPivot;         // Pivot property, in world space
 		Property<Vec2F>  szPivot;            // Pivot in size space property
-		Property<RectF>  rect;               // Rectangle property. Sets the position and size
 		Property<float>  angle;              // Rotation angle in radians
 		Property<float>  angleDegree;        // Rotation angle in degrees
 		Property<float>  shear;              // Shear property
+
 		Property<Basis>  basis;              // Transformation basis property
 		Property<Basis>  nonSizedBasis;      // Non sizes transformation basis property
+
 		Property<RectF>  AABB;               // Axis aligned rectangle
+		Property<RectF>  rect;               // Rectangle property. Rectangle - transform without angle, scale and shear. 
+		                                     // Sets the position and size
+
 		Property<Vec2F>  leftTop;            // Left top corner property
 		Property<Vec2F>  leftBottom;         // Left bottom corner property
-		Property<Vec2F>  rightTop;           // Left top corner property
-		Property<Vec2F>  rightBottom;        // Left top corner property
-		Property<Vec2F>  right;              // X Axis direction property
-		Property<Vec2F>  left;               // Negative X Axis direction property
-		Property<Vec2F>  up;                 // Y Axis direction property
-		Property<Vec2F>  down;               // Negative Y Axis direction property
-		Setter<Vec2F>    lookAtPoint;        // Look at point setter
-		Getter<Actor*>   actor;              // Owner actor getter
+		Property<Vec2F>  rightTop;           // Right top corner property
+		Property<Vec2F>  rightBottom;        // Right bottom corner property
+		Property<Vec2F>  center;             // Center position property
+		Property<Vec2F>  rightDir;           // X axis direction property
+		Property<Vec2F>  leftDir;            // Negative X axis direction property
+		Property<Vec2F>  upDir;              // Y axis direction property
+		Property<Vec2F>  downDir;            // Negative Y axis direction property
+		Property<float>  right;              // Right border position property
+		Property<float>  left;               // Left border position property
+		Property<float>  top;                // Top border position property
+		Property<float>  bottom;             // Bottom border position property
+
 		Property<Vec2F>  worldPosition;      // World position property
-		Property<RectF>  worldRect;          // World rectangle property. Sets the position and size
+		Property<Vec2F>  worldPivot;         // Pivot property, in world space
 		Property<float>  worldAngle;         // World rotation angle in radians
+		Property<float>  worldAngleDegree;   // World rotation angle in degree
 		Property<Basis>  worldBasis;         // World transformation basis
 		Property<Basis>  worldNonSizedBasis; // World transformation basis without size
-		Property<RectF>  worldAABB;          // World axis aligned rectangle
+
+		Property<Vec2F>  worldLeftTop;       // World Left top corner property
+		Property<Vec2F>  worldLeftBottom;    // World Left bottom corner property
+		Property<Vec2F>  worldRightTop;      // World Right top corner property
+		Property<Vec2F>  worldRightBottom;   // World Right bottom corner property
+		Property<Vec2F>  worldCenter;        // World center property
+		Property<Vec2F>  worldRightDir;      // World X axis direction property
+		Property<Vec2F>  worldLeftDir;       // World Negative X axis direction property
+		Property<Vec2F>  worldUpDir;         // World Y axis direction property
+		Property<Vec2F>  worldDownDir;       // World Negative Y axis direction property
+
+		Property<float>  worldRight;         // World Right border position property
+		Property<float>  worldLeft;          // World Left border position property
+		Property<float>  worldTop;           // World Top border position property
+		Property<float>  worldBottom;        // World Bottom border position property
+
+		Property<RectF>  worldRect;          // World rectangle property. Sets the position and size
+		Property<RectF>  worldAABB;          // World direction aligned rectangle
 
 		ActorTransform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
 					   const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F(0.5f, 0.5f));
@@ -81,41 +92,44 @@ namespace o2
 		// Check EqualSid operator
 		bool operator==(const ActorTransform& other) const;
 
+		// Returns owner actor
+		Actor* GetOwnerActor() const;
+
 		// Sets position
-		void SetPosition(const Vec2F& position);
+		virtual void SetPosition(const Vec2F& position);
 
 		// Returns position
 		Vec2F GetPosition() const;
 
 		// Sets size
-		void SetSize(const Vec2F& size);
+		virtual void SetSize(const Vec2F& size);
 
 		// Return size
 		Vec2F GetSize() const;
 
+		// Sets width
+		void SetWidth(float value);
+
+		// Return width
+		float GetWidht() const;
+
+		// Sets height
+		void SetHeight(float value);
+
+		// Return height
+		float GetHeight() const;
+
 		// Sets pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
-		void SetPivot(const Vec2F& pivot);
+		virtual void SetPivot(const Vec2F& pivot);
 
 		// Return pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
 		Vec2F GetPivot() const;
 
-		// Sets pivot by world coordinates
-		void SetWorldPivot(const Vec2F& pivot);
-
-		// Returns pivot position in world coordinates
-		Vec2F GetWorldPivot() const;
-
-		// Sets size pivot, in local space, where (0, 0) - left down corner, (mSize.x, mSize.y) - right top
+		// Sets size pivot, in local space, where (0, 0) - left down corner, (size.x, size.y) - right top
 		void SetSizePivot(const Vec2F& relPivot);
 
-		// Returns size pivot, in local space, where (0, 0) - left down corner, (mSize.x, mSize.y) - right top
+		// Returns size pivot, in local space, where (0, 0) - left down corner, (size.x, size.y) - right top
 		Vec2F GetSizePivot() const;
-
-		// Sets rect
-		void SetRect(const RectF& rect);
-
-		// Returns rect
-		RectF GetRect() const;
 
 		// Sets scale
 		void SetScale(const Vec2F& scale);
@@ -142,21 +156,27 @@ namespace o2
 		float GetShear() const;
 
 		// Sets basis
-		void SetBasis(const Basis& basis);
+		virtual void SetBasis(const Basis& basis);
 
 		// Returns basis
 		Basis GetBasis() const;
 
 		// Sets basis without size
-		void SetNonSizedBasis(const Basis& basis);
+		virtual void SetNonSizedBasis(const Basis& basis);
 
 		// Returns basis without size
 		Basis GetNonSizedBasis() const;
 
-		// Sets axis aligned rectangle transformation
-		void SetAxisAlignedRect(const RectF& rect);
+		// Sets rect
+		virtual void SetRect(const RectF& rect);
 
-		// Returns axis aligned rectangle transformation
+		// Returns rect
+		RectF GetRect() const;
+
+		// Sets direction aligned rectangle transformation
+		virtual void SetAxisAlignedRect(const RectF& rect);
+
+		// Returns direction aligned rectangle transformation
 		RectF GetAxisAlignedRect() const;
 
 		// Sets left top corner position
@@ -189,32 +209,53 @@ namespace o2
 		// Returns center position
 		Vec2F GetCenter() const;
 
-		// Set local x axis direction
-		void SetRight(const Vec2F& dir);
+		// Set local right direction
+		void SetRightDir(const Vec2F& dir);
 
-		// Returns local x axis direction
-		Vec2F GetRight() const;
+		// Returns local right direction
+		Vec2F GetRightDir() const;
 
-		// Set negative local x axis direction
-		void SetLeft(const Vec2F& dir);
+		// Set local left direction
+		void SetLeftDir(const Vec2F& dir);
 
-		// Returns negative local x axis direction
-		Vec2F GetLeft() const;
+		// Returns local left direction
+		Vec2F GetLeftDir() const;
 
-		// Set local y axis direction
-		void SetUp(const Vec2F& dir);
+		// Set local up direction
+		void SetUpDir(const Vec2F& dir);
 
-		// Returns local y axis direction
-		Vec2F GetUp() const;
+		// Returns local up direction
+		Vec2F GetUpDir() const;
 
-		// Set negative local y axis direction
-		void SetDown(const Vec2F& dir);
+		// Set local down direction
+		void SetDownDir(const Vec2F& dir);
 
-		// Returns negative local y axis direction
-		Vec2F GetDown() const;
+		// Returns local down direction
+		Vec2F GetDownDir() const;
 
-		// Sets x axis directed to worldPoint
-		void LookAt(const Vec2F& worldPoint);
+		// Set local right border position
+		void SetRight(float value);
+
+		// Returns local right border position
+		float GetRight() const;
+
+		// Set local left border position
+		void SetLeft(float value);
+
+		// Returns local left border position
+		float GetLeft() const;
+
+		// Set local top border position
+		void SetTop(float value);
+
+		// Returns local top border position
+		float GetTop() const;
+
+		// Set local down border position
+		void SetBottom(float value);
+
+		// Returns local down border position
+		float GetBottom() const;
 
 		// Transforms point from world space into local
 		Vec2F World2LocalPoint(const Vec2F& worldPoint) const;
@@ -231,26 +272,29 @@ namespace o2
 		// Returns true when point inside this
 		bool IsPointInside(const Vec2F& point) const;
 
-		// Returns owner actor
-		Actor* GetOwnerActor() const;
-
 		// Sets world position
 		void SetWorldPosition(const Vec2F& position);
 
 		// Returns world position
 		Vec2F GetWorldPosition() const;
 
-		// Sets world rect
-		void SetWorldRect(const RectF& rect);
+		// Sets pivot by world coordinates
+		void SetWorldPivot(const Vec2F& pivot);
 
-		// Returns world rect
-		RectF GetWorldRect() const;
+		// Returns pivot position in world coordinates
+		Vec2F GetWorldPivot() const;
 
 		// Sets world rotation angle, in radians
 		void SetWorldAngle(float rad);
 
 		// Returns world rotation angle in radians
 		float GetWorldAngle() const;
+
+		// Sets world rotation angle, in degrees
+		void SetWorldAngleDegree(float deg);
+
+		// Returns world rotation angle in degrees
+		float GetWorldAngleDegree() const;
 
 		// Sets world basis
 		void SetWorldBasis(const Basis& basis);
@@ -264,10 +308,16 @@ namespace o2
 		// Returns world basis without size
 		Basis GetWorldNonSizedBasis() const;
 
-		// Sets world axis aligned rectangle transformation
+		// Sets world rect
+		void SetWorldRect(const RectF& rect);
+
+		// Returns world rect
+		RectF GetWorldRect() const;
+
+		// Sets world direction aligned rectangle transformation
 		void SetWorldAxisAlignedRect(const RectF& rect);
 
-		// Returns world axis aligned rectangle transformation
+		// Returns world direction aligned rectangle transformation
 		RectF GetWorldAxisAlignedRect() const;
 
 		// Sets world left top corner position
@@ -300,19 +350,104 @@ namespace o2
 		// Returns world center position
 		Vec2F GetWorldCenter() const;
 
+		// Sets World center position
+		void SetWorldCenter(const Vec2F& position);
+
+		// Returns World center position
+		Vec2F GetWorldCenter() const;
+
+		// Set World right direction
+		void SetWorldRightDir(const Vec2F& dir);
+
+		// Returns World right direction
+		Vec2F GetWorldRightDir() const;
+
+		// Set World left direction
+		void SetWorldLeftDir(const Vec2F& dir);
+
+		// Returns World left direction
+		Vec2F GetWorldLeftDir() const;
+
+		// Set World up direction
+		void SetWorldUpDir(const Vec2F& dir);
+
+		// Returns World up direction
+		Vec2F GetWorldUpDir() const;
+
+		// Set World down direction
+		void SetWorldDownDir(const Vec2F& dir);
+
+		// Returns World down direction
+		Vec2F GetWorldDownDir() const;
+
+		// Set World right border position
+		void SetWorldRight(float value);
+
+		// Returns World right border position
+		float GetWorldRight() const;
+
+		// Set World left border position
+		void SetWorldLeft(float value);
+
+		// Returns World left border position
+		float GetWorldLeft() const;
+
+		// Set World top border position
+		void SetWorldTop(float value);
+
+		// Returns World top border position
+		float GetWorldTop() const;
+
+		// Set World down border position
+		void SetWorldBottom(float value);
+
+		// Returns World down border position
+		float GetWorldBottom() const;
+
 		SERIALIZABLE(ActorTransform);
+
+	public:
+		class Data: public ISerializable
+		{
+		public:
+			Actor* owner = nullptr;                    // Owner actor
+
+			Vec2F  position;                           // Position @SERIALIZABLE
+			Vec2F  size;                               // Size @SERIALIZABLE
+			Vec2F  scale;                              // Scale, (1; 1) is default @SERIALIZABLE
+			Vec2F  pivot;                              // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
+			float  angle = 0;                          // Rotation angle in radians @SERIALIZABLE
+			float  shear = 0;                          // Shear @SERIALIZABLE
+
+			RectF  rectangle;                          // The rectangle in local space
+
+			Basis  transform;                          // Final transform basis
+			Basis  nonSizedTransform;                  // Final transform basis without size
+
+			Basis  worldNonSizedTransform;             // World transform without size
+			Basis  worldTransform;                     // Result world basis
+
+			Basis  parentInvertedTransform;            // Parent world transform inverted
+			Basis  parentTransform;                    // Parent world transform
+			bool   isParentInvTransformActual = false; // Is mParentInvertedTransform is actual
+
+			SERIALIZABLE(Data);
+		};
 
 	protected:
 		Data* mData; // @SERIALIZABLE
 
 	protected:
+		// Actor transform constructor with specified data
+		ActorTransform(Data* data);
+
 		// Sets owner and updates transform
-		void SetOwner(Actor* actor);
+		virtual void SetOwner(Actor* actor);
 
-		// Updates mTransform 
-		void UpdateTransform();
+		// It is called when transform is changing 
+		void OnChanged();
 
-		// Check mParentInvertedTransform for actual
+		// Check parentInvertedTransform for actual
 		void CheckParentInvTransform();
 
 		// It is called when object was deserialized
