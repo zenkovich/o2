@@ -1,61 +1,38 @@
 #pragma once
 
 #include "Scene/Component.h"
+#include "Scene/Drawable.h"
 
 namespace o2
 {
 	// ------------------
 	// Drawable component
 	// ------------------
-	class DrawableComponent: public Component
+	class DrawableComponent: public Component, public SceneDrawable
 	{
-	public:
-		Property<float> drawDepth; // Drawing depth property. Components with higher depth will be drawn later
+		using Component::mOwner;
 
-		// Default constructor. Registers in scene as drawable
+	public:
+		// Default constructor. Registers in scene as drawable object
 		DrawableComponent();
 
-		// Copy-constructor. Registers in scene as drawable
+		// Copy-constructor. Registers in scene as drawable object
 		DrawableComponent(const DrawableComponent& other);
-
-		// Destructor. Removes itself from scene drawables list
-		~DrawableComponent();
 
 		// Copy operator
 		DrawableComponent& operator=(const DrawableComponent& other);
 
-		// Draws component content
-		virtual void Draw();
-
 		// Sets drawing depth. Components with higher depth will be drawn later
-		void SetDrawingDepth(float depth);
-
-		// Returns drawing depth
-		float GetDrawingDepth() const;
+		void SetDrawingDepth(float depth) override;
 
 		SERIALIZABLE(DrawableComponent);
 
 	protected:
-		float mDrawingDepth; // Drawing depth. Components with higher depth will be drawn later @SERIALIZABLE
-
-	protected:
-		// It is called when actor changed layer
-		void OnLayerChanged(Scene::Layer* oldLayer, Scene::Layer* newLayer);
-
 		// Updates component enable
 		void UpdateEnabled();
 
 		// Sets owner actor
-		void SetOwnerActor(Actor* actor);
-
-		// It is called when actor was excluded from scene
-		void OnExcludeFromScene();
-
-		// It is called when actor was included to scene
-		void OnIncludeToScene();
-
-		// Initializes property
-		void InitializeProperties();
+		void SetOwnerActor(Actor* actor) override;
 
 		friend class Scene;
 	};

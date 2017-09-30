@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils/Math/Transform.h"
+#include "Utils/Math/Vector2.h"
 
 namespace o2
 {
@@ -420,6 +421,9 @@ namespace o2
 			float  shear = 0;                          // Shear @SERIALIZABLE
 
 			RectF  rectangle;                          // The rectangle in local space
+			RectF  parentRectangle;                    // The parent rectangle
+			Vec2F  parentRectangePosition;             // The parent rectangle pivot position
+			RectF  worldRectangle;                     // The rectangle in world space
 
 			Basis  transform;                          // Final transform basis
 			Basis  nonSizedTransform;                  // Final transform basis without size
@@ -445,7 +449,10 @@ namespace o2
 		virtual void SetOwner(Actor* actor);
 
 		// It is called when transform is changing 
-		void OnChanged();
+		virtual void OnChanged();
+
+		// Updates transformation
+		void UpdateTransform();
 
 		// Check parentInvertedTransform for actual
 		void CheckParentInvTransform();

@@ -39,7 +39,7 @@ namespace o2
 		DataAssetRef mDataAsset;                   // @SERIALIZABLE
 		Actor* mActor = nullptr;                   // @SERIALIZABLE
 		TagGroup mTags;                            // @SERIALIZABLE
-		Scene::Layer* mLayer;                      // @SERIALIZABLE
+		SceneLayer* mLayer;                      // @SERIALIZABLE
 		Component* mComponent = nullptr;           // @SERIALIZABLE
 		ImageComponent* mImageComponent = nullptr; // @SERIALIZABLE
 		Color4 mColor;					           // @SERIALIZABLE

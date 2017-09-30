@@ -197,8 +197,10 @@
     <ClInclude Include="..\Sources\Scene\Components\EditorTestComponent.h" />
     <ClInclude Include="..\Sources\Scene\Components\ImageComponent.h" />
     <ClInclude Include="..\Sources\Scene\Components\ParticlesEmitterComponent.h" />
+    <ClInclude Include="..\Sources\Scene\Drawable.h" />
     <ClInclude Include="..\Sources\Scene\DrawableComponent.h" />
     <ClInclude Include="..\Sources\Scene\Scene.h" />
+    <ClInclude Include="..\Sources\Scene\SceneLayer.h" />
     <ClInclude Include="..\Sources\Scene\Tags.h" />
     <ClInclude Include="..\Sources\UI\Button.h" />
     <ClInclude Include="..\Sources\UI\ContextMenu.h" />
@@ -362,8 +364,10 @@
     <ClCompile Include="..\Sources\Scene\Components\EditorTestComponent.cpp" />
     <ClCompile Include="..\Sources\Scene\Components\ImageComponent.cpp" />
     <ClCompile Include="..\Sources\Scene\Components\ParticlesEmitterComponent.cpp" />
+    <ClCompile Include="..\Sources\Scene\Drawable.cpp" />
     <ClCompile Include="..\Sources\Scene\DrawableComponent.cpp" />
     <ClCompile Include="..\Sources\Scene\Scene.cpp" />
+    <ClCompile Include="..\Sources\Scene\SceneLayer.cpp" />
     <ClCompile Include="..\Sources\Scene\Tags.cpp" />
     <ClCompile Include="..\Sources\UI\Button.cpp" />
     <ClCompile Include="..\Sources\UI\ContextMenu.cpp" />

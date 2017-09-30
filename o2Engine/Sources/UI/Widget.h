@@ -1,48 +1,62 @@
 #pragma once
 
 #include "Scene/Actor.h"
-#include "Render/IDrawable.h"
+#include "Scene/Drawable.h"
+#include "Utils/Math/Layout.h"
 
 namespace o2
 {
+	class IRectDrawable;
 	class UIWidgetLayer;
-	class UIWidgetState;
 	class UIWidgetLayout;
+	class UIWidgetState;
 
 	// ------------------------------------------------------
 	// Basic UI Widget. Its a simple and basic element of UI, 
 	// everything other UI's are based on this
 	// ------------------------------------------------------
-	class UIWidget: public Actor, public IDrawable
+	class UIWidget: public Actor, public SceneDrawable
 	{
 	public:
 		typedef Vector<UIWidget*> WidgetsVec;
-		typedef Vector<UIWidgetLayer*>  LayersVec;
-		typedef Vector<UIWidgetState*>  StatesVec;
+		typedef Vector<UIWidgetLayer*> LayersVec;
+		typedef Vector<UIWidgetState*> StatesVec;
 
 	public:
-		Property<String>                        name;            // Name of widget property
-		Property<UIWidget*>                     parent;          // Parent widget property
-		Getter<WidgetsVec>                      childs;          // Widget children getter
+		UIWidgetLayout* const layout;          // Widget's layout
+
+		Property<bool>        visible;         // Is widget visible property
+
+		Property<float>       transparency;    // Transparency property
+		Getter<float>         resTransparency; // Result transparency getter, depends on parent transparency
+
+		Property<UIWidget*>   parentWidget;    // Parent widget property
+
+		Getter<WidgetsVec>                      childrenWidgets; // Widget children getter
+		Accessor<UIWidget*, const String&>      childWidget;     // Widget child accessor by name
+
 		Getter<LayersVec>                       layers;          // Layers getter
-		Getter<StatesVec>                       states;          // States getter
-		Property<float>                         transparency;    // Transparency property
-		Getter<float>                           resTransparency; // Result transparency getter, depends on parent transparency
-		Property<bool>                          visible;         // Is widget visible property
-		Accessor<UIWidget*, const String&>      child;           // Widget child accessor by name
 		Accessor<UIWidgetLayer*, const String&> layer;           // Widget layer accessor by name
+
+		Getter<StatesVec>                       states;          // States getter
 		Accessor<UIWidgetState*, const String&> state;           // Widget state accessor by name
 
-		UIWidgetLayout* const                   layout;          // Widget's layout
 
-		Function<void()>                        onLayoutChanged; // Layout change event
-		Function<void()>                        onFocused;       // Widget focused event
-		Function<void()>                        onUnfocused;     // Widget unfocused event
-		Function<void()>                        onShow;          // Widget showing vent
-		Function<void()>                        onHide;          // Widget hiding event
+		Function<void()> onLayoutChanged; // Layout change event
+		Function<void()> onFocused;       // Widget focused event
+		Function<void()> onUnfocused;     // Widget unfocused event
+		Function<void()> onShow;          // Widget showing vent
+		Function<void()> onHide;          // Widget hiding event
 
+	public:
 		// Default constructor
-		UIWidget();
+		UIWidget(ActorCreateMode mode = ActorCreateMode::InScene);
+
+		// Widget constructor from prototype
+		UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
+
+		// Constructor with components
+		UIWidget(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::InScene);
 
 		// Copy-constructor
 		UIWidget(const UIWidget& other);
@@ -53,11 +67,11 @@ namespace o2
 		// Copy-operator
 		UIWidget& operator=(const UIWidget& other);
 
-		// Updates drawables, states and widget
-		virtual void Update(float dt);
+		// Updates layers, states and widget
+		void Update(float dt) override;
 
 		// Draws widget
-		virtual void Draw();
+		void Draw() override;
 
 		// Forcible drawing in area
 		void ForceDraw(const RectF& area, float transparency);
@@ -69,7 +83,7 @@ namespace o2
 		virtual String GetName() const;
 
 		// Returns parent widget
-		virtual UIWidget* GetParent() const;
+		virtual UIWidget* GetParentWidget() const;
 
 		// Sets widget parent
 		virtual void SetParent(UIWidget* parent);
@@ -165,6 +179,12 @@ namespace o2
 		// Returns all states
 		const StatesVec& GetStates() const;
 
+		// Sets depth overriding
+		void SetDepthOverride(bool overrideDepth);
+
+		// Is sorting depth overriden
+		bool IsDepthOverriden() const;
+
 		// Sets widget's transparency
 		void SetTransparency(float transparency);
 
@@ -223,6 +243,7 @@ namespace o2
 		RectF          mChildsAbsRect;          // Absolute rectangle for children arranging
 		RectF          mLastChildsAbsRect;      // Absolute rectangle for children arranging from last layout updating
 					   						    
+		bool           mOverrideDepth = false;  // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
 		float          mTransparency = 1.0f;	// Widget transparency @SERIALIZABLE
 		float          mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
 		LayersVec      mDrawingLayers;          // Layers ordered by depth, which drawing before children (depth < 1000)
@@ -320,11 +341,11 @@ namespace o2
 		// It is called when child widget was removed
 		virtual void OnChildRemoved(UIWidget* child);
 
-		// It is called when deserialized
-		void OnDeserialized(const DataNode& node);
-
 		// It is called when visible was changed
 		virtual void OnVisibleChanged();
+
+		// It is called when deserialized
+		void OnDeserialized(const DataNode& node);
 
 		// Initializes properties
 		void InitializeProperties();

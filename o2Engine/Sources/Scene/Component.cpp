@@ -153,7 +153,7 @@ namespace o2
 			{
 				if (ownerActor->IsAsset())
 				{
-					*data.AddNode("AssetId") = ownerActor->GetAssetId();
+					*data.AddNode("AssetId") = ownerActor->GetAssetID();
 					*data.AddNode("ComponentId") = value->GetID();
 				}
 				else if (ownerActor->IsOnScene())
@@ -233,7 +233,7 @@ CLASS_META(o2::Component)
 	PUBLIC_FUNCTION(bool, IsLinkedToComponent, Component*);
 	PUBLIC_FUNCTION(Actor*, GetOwnerActor);
 	PUBLIC_FUNCTION(String, GetName);
-	PROTECTED_FUNCTION(void, OnLayerChanged, Scene::Layer*, Scene::Layer*);
+	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*, SceneLayer*);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
 	PROTECTED_FUNCTION(void, OnTransformChanged);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);

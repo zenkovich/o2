@@ -1,23 +1,18 @@
 #include "Actor.h"
 
-#include "Scene/Scene.h"
-#include "Utils/Math/Basis.h"
-#include "Utils/Reflection/Reflection.h"
-#include "Utils/Timer.h"
+#include "Scene/Component.h"
+#include "Scene/SceneLayer.h"
 
 namespace o2
 {
-	Actor::Actor(ActorTransform* transform, const String& name, bool enabled, bool resEnabled, 
-				 bool locked, bool resLocked, Scene::Layer* layer, UInt64 id, UID assetId, bool isOnScene):
+	Actor::Actor(ActorTransform* transform, bool isOnScene, const String& name, bool enabled, bool resEnabled,
+				 bool locked, bool resLocked, SceneLayer* layer, UInt64 id, UID assetId):
 		transform(transform), mName(name), mEnabled(enabled), mResEnabled(resEnabled),
 		mLocked(locked), mResLocked(resLocked), mLayer(layer), mId(id), mAssetId(assetId), mIsOnScene(isOnScene)
-	{
+	{}
 
-	}
-
-
-	Actor::Actor(ActorCreateMode mode /*= CreateMode::InScene*/):
-		Actor(mnew ActorTransform())
+	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::InScene*/) :
+		Actor(mnew ActorTransform(), mode == ActorCreateMode::InScene)
 	{
 		mIsOnScene = false;
 
@@ -46,50 +41,10 @@ namespace o2
 		ActorDataNodeConverter::ActorCreated(this);
 	}
 
-	Actor::Actor(const Actor& other):
-		Actor(mnew ActorTransform(*other.transform), other.mName, other.mEnabled, other.mEnabled, other.mLocked,
-			  other.mLocked, other.mLayer, Math::Random(), other.mAssetId, true)
-	{
-		transform->SetOwner(this);
-
-		if (other.mIsAsset)
-			SetPrototype(ActorAssetRef(other.GetAssetId()));
-
-		Vector<Actor**> actorPointersFields;
-		Vector<Component**> componentPointersFields;
-		Dictionary<const Actor*, Actor*> actorsMap;
-		Dictionary<const Component*, Component*> componentsMap;
-
-		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
-		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
-
-		UpdateEnabled();
-		transform->OnChanged();
-
-		InitializeProperties();
-
-		if (Scene::IsSingletonInitialzed())
-		{
-			o2Scene.mRootActors.Add(this);
-			o2Scene.mAllActors.Add(this);
-			o2Scene.onActorCreated(this);
-		}
-
-		ActorDataNodeConverter::ActorCreated(this);
-	}
-
-	Actor::Actor(ComponentsVec components):
-		Actor()
-	{
-		for (auto comp : components)
-			AddComponent(comp);
-	}
-
-	Actor::Actor(const ActorAssetRef& prototype, ActorCreateMode mode /*= CreateMode::InScene*/):
-		Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype->GetActor()->mName, 
+	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
+		Actor(transform, mode == ActorCreateMode::InScene, prototype->GetActor()->mName,
 			  prototype->GetActor()->mEnabled, prototype->GetActor()->mEnabled, prototype->GetActor()->mLocked,
-			  prototype->GetActor()->mLocked, prototype->GetActor()->mLayer, Math::Random(), 
-			  0, mode == ActorCreateMode::InScene)
+			  prototype->GetActor()->mLocked, prototype->GetActor()->mLayer, Math::Random(), 0)
 	{
 		transform->SetOwner(this);
 
@@ -117,6 +72,61 @@ namespace o2
 
 		ActorDataNodeConverter::ActorCreated(this);
 	}
+
+	Actor::Actor(ActorTransform* transform, ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
+		Actor(transform, ActorCreateMode::InScene)
+	{
+		for (auto comp : components)
+			AddComponent(comp);
+	}
+
+	Actor::Actor(ActorTransform* transform, const Actor& other):
+		Actor(transform, true, other.mName, other.mEnabled, other.mEnabled, other.mLocked,
+			  other.mLocked, other.mLayer, Math::Random(), other.mAssetId)
+	{
+		transform->SetOwner(this);
+
+		if (other.mIsAsset)
+			SetPrototype(ActorAssetRef(other.GetAssetID()));
+
+		Vector<Actor**> actorPointersFields;
+		Vector<Component**> componentPointersFields;
+		Dictionary<const Actor*, Actor*> actorsMap;
+		Dictionary<const Component*, Component*> componentsMap;
+
+		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
+		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
+
+		UpdateEnabled();
+		transform->OnChanged();
+
+		InitializeProperties();
+
+		if (Scene::IsSingletonInitialzed())
+		{
+			o2Scene.mRootActors.Add(this);
+			o2Scene.mAllActors.Add(this);
+			o2Scene.onActorCreated(this);
+		}
+
+		ActorDataNodeConverter::ActorCreated(this);
+	}
+
+	Actor::Actor(ActorCreateMode mode /*= CreateMode::InScene*/):
+		Actor(mnew ActorTransform(), mode)
+	{}
+
+	Actor::Actor(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::InScene*/) :
+		Actor(mnew ActorTransform(), components)
+	{}
+
+	Actor::Actor(const ActorAssetRef& prototype, ActorCreateMode mode /*= CreateMode::InScene*/) :
+		Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype)
+	{}
+
+	Actor::Actor(const Actor& other) :
+		Actor(mnew ActorTransform(*other.transform), other)
+	{}
 
 	Actor::~Actor()
 	{
@@ -181,7 +191,6 @@ namespace o2
 
 		return *this;
 	}
-
 
 	void Actor::Update(float dt)
 	{
@@ -352,12 +361,12 @@ namespace o2
 		return mId;
 	}
 
-	void Actor::SetId(UInt64 id)
+	void Actor::SetID(UInt64 id)
 	{
 		mId = id;
 	}
 
-	UID Actor::GetAssetId() const
+	UID Actor::GetAssetID() const
 	{
 		return mAssetId;
 	}
@@ -370,14 +379,14 @@ namespace o2
 		return mIsAsset;
 	}
 
-	void Actor::GenNewId(bool childs /*= true*/)
+	void Actor::GenerateNewID(bool childs /*= true*/)
 	{
 		mId = Math::Random();
 
 		if (childs)
 		{
 			for (auto child : mChilds)
-				child->GenNewId(childs);
+				child->GenerateNewID(childs);
 		}
 	}
 
@@ -542,7 +551,7 @@ namespace o2
 		OnParentChanged(oldParent);
 	}
 
-	Actor* Actor::GetParent() const
+	Actor* Actor::GetParentWidget() const
 	{
 		return mParent;
 	}
@@ -733,9 +742,9 @@ namespace o2
 		return mComponents;
 	}
 
-	void Actor::SetLayer(Scene::Layer* layer)
+	void Actor::SetLayer(SceneLayer* layer)
 	{
-		Scene::Layer* lastLayer = mLayer;
+		SceneLayer* lastLayer = mLayer;
 
 		if (layer == nullptr)
 			layer = o2Scene.GetDefaultLayer();
@@ -766,7 +775,7 @@ namespace o2
 		SetLayer(o2Scene.GetLayer(layerName));
 	}
 
-	Scene::Layer* Actor::GetLayer() const
+	SceneLayer* Actor::GetLayer() const
 	{
 		return mLayer;
 	}
@@ -2052,8 +2061,8 @@ namespace o2
 		INITIALIZE_GETTER(Actor, enabledInHierarchy, IsEnabledInHierarchy);
 		INITIALIZE_PROPERTY(Actor, locked, SetLocked, IsLocked);
 		INITIALIZE_GETTER(Actor, lockedInHierarchy, IsLockedInHierarchy);
-		INITIALIZE_PROPERTY(Actor, parent, SetParentProp, GetParent);
-		INITIALIZE_GETTER(Actor, childs, GetChilds);
+		INITIALIZE_PROPERTY(Actor, parent, SetParentProp, GetParentWidget);
+		INITIALIZE_GETTER(Actor, children, GetChilds);
 		INITIALIZE_ACCESSOR(Actor, child, GetChild);
 		INITIALIZE_GETTER(Actor, components, GetComponents);
 		INITIALIZE_ACCESSOR(Actor, component, GetComponent);
@@ -2073,7 +2082,7 @@ namespace o2
 		if (value)
 		{
 			if (value->mIsAsset)
-				*data.AddNode("AssetId") = value->GetAssetId();
+				*data.AddNode("AssetId") = value->GetAssetID();
 			else if (value->IsOnScene() || value->IsAsset())
 				*data.AddNode("ID") = value->GetID();
 			else
@@ -2185,9 +2194,9 @@ namespace o2
 		mActor->mReferences.Add(this);
 	}
 
-	ActorRef::ActorRef(Vector<Component*> components)
+	ActorRef::ActorRef(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::InScene*/)
 	{
-		Actor* newActor = mnew Actor(components);
+		Actor* newActor = mnew Actor(components, mode);
 		mActor = newActor;
 		mActor->mReferences.Add(this);
 	}
@@ -2274,7 +2283,7 @@ namespace o2
 		return mWasDeleted;
 	}
 
-		}
+}
 
 CLASS_META(o2::ActorRef)
 {
@@ -2305,7 +2314,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FIELD(parent);
 	PUBLIC_FIELD(layer);
 	PUBLIC_FIELD(layerName);
-	PUBLIC_FIELD(childs);
+	PUBLIC_FIELD(children);
 	PUBLIC_FIELD(child);
 	PUBLIC_FIELD(components);
 	PUBLIC_FIELD(component);
@@ -2353,10 +2362,10 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, SetName, const String&);
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(UInt64, GetID);
-	PUBLIC_FUNCTION(void, SetId, UInt64);
-	PUBLIC_FUNCTION(UID, GetAssetId);
+	PUBLIC_FUNCTION(void, SetID, UInt64);
+	PUBLIC_FUNCTION(UID, GetAssetID);
 	PUBLIC_FUNCTION(bool, IsAsset);
-	PUBLIC_FUNCTION(void, GenNewId, bool);
+	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(void, ExcludeFromScene);
 	PUBLIC_FUNCTION(void, IncludeInScene);
 	PUBLIC_FUNCTION(bool, IsOnScene);
@@ -2372,7 +2381,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(bool, IsLockedInHierarchy);
 	PUBLIC_FUNCTION(void, SetPositionIndexInParent, int);
 	PUBLIC_FUNCTION(void, SetParent, Actor*, bool);
-	PUBLIC_FUNCTION(Actor*, GetParent);
+	PUBLIC_FUNCTION(Actor*, GetParentWidget);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
@@ -2386,9 +2395,9 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(Component*, GetComponent, const Type*);
 	PUBLIC_FUNCTION(Component*, GetComponent, UInt64);
 	PUBLIC_FUNCTION(ComponentsVec, GetComponents);
-	PUBLIC_FUNCTION(void, SetLayer, Scene::Layer*);
+	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
 	PUBLIC_FUNCTION(void, SetLayer, const String&);
-	PUBLIC_FUNCTION(Scene::Layer*, GetLayer);
+	PUBLIC_FUNCTION(SceneLayer*, GetLayer);
 	PUBLIC_FUNCTION(String, GetLayerName);
 	PUBLIC_FUNCTION(Actor*, FindLinkedActor, Actor*);
 	PUBLIC_FUNCTION(Actor*, FindLinkedActor, UInt64);

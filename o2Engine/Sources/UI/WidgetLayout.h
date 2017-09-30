@@ -254,7 +254,13 @@ namespace o2
 
 	protected:
 		// Sets owner and updates transform
-		void SetOwner(Actor* actor);
+		void SetOwner(Actor* actor) override;
+
+		// It is called when transform is changing 
+		void OnChanged() override;
+
+		// Updates offsets to match existing rectangle to offsets and anchors rectange
+		void UpdateOffsetsByCurrentTransform();
 
 		// Copies data parameters from other layout
 		void CopyFrom(const UIWidgetLayout& other);

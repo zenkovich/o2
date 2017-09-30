@@ -1,9 +1,7 @@
 #pragma once
 
-#include "Animation/Animatable.h"
 #include "Assets/ActorAsset.h"
 #include "Scene/ActorTransform.h"
-#include "Scene/Component.h"
 #include "Scene/Scene.h"
 #include "Scene/Tags.h"
 #include "Utils/Containers/Vector.h"
@@ -13,7 +11,9 @@
 
 namespace o2
 {
+	class Component;
 	class Actor;
+
 	enum class ActorCreateMode { InScene, NotInScene };
 
 	// --------------------------------------------------------------
@@ -32,7 +32,7 @@ namespace o2
 		ActorRef(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
 
 		// Creates actor with components and returns reference to it
-		ActorRef(Vector<Component*> components);
+		ActorRef(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::InScene);
 
 		// Creates copy actor and returns reference to it
 		ActorRef(const Actor& other);
@@ -96,47 +96,36 @@ namespace o2
 		typedef Vector<String> StringsVec;
 		
 	public:
-		TagGroup                            tags;                    // Tags group
-		Property<ActorAssetRef>             prototype;               // Prototype asset reference property
-		Getter<UInt64>                      id;                      // Actor's unique id
-		Property<String>                    name;                    // Actor name property
-		Property<bool>                      enabled;                 // Is actor enabled property
-		Getter<bool>                        enabledInHierarchy;      // Is actor enabled in hierarchy getter
-		Property<bool>                      locked;                  // Is actor locked property
-		Getter<bool>                        lockedInHierarchy;       // Is actor locked in hierarchy getter
-		Property<Actor*>                    parent;                  // Parent actor property
-		Property<Scene::Layer*>             layer;                   // Layer property
-		Property<String>                    layerName;               // Layer name property
-		Getter<ActorsVec>                   childs;                  // Children array getter
-		Accessor<Actor*, const String&>     child;                   // Children accessor
-		Getter<ComponentsVec>               components;              // Components array getter
-		Accessor<Component*, const String&> component;               // Component accessor by type name
+		Property<ActorAssetRef> prototype; // Prototype asset reference property
 
-		ActorTransform* const               transform;               // Transformation 
+		ActorTransform* const   transform; // Transformation 
 
-		Function<void(bool)>                onEnableChanged;         // Enable changing event
+		Property<Actor*>        parent;    // Parent actor property
 
-#if IS_EDITOR
-		Function<void()>                    onChanged;               // Something in actor change event
-		Function<void(Actor*)>              onParentChanged;         // Actor reparent event
-		Function<void()>                    onChildHierarchyChanged; // Actor childs hierarchy change event
-		Function<void(bool)>                onLockChanged;           // Locking changing event
-		Function<void()>                    onNameChanged;           // Name changing event
+		Getter<UInt64>          id;        // Actor's unique id
+		Property<String>        name;      // Actor name property
+
+		TagGroup                tags;      // Tags group
+
+		Property<SceneLayer*>   layer;     // Layer property
+		Property<String>        layerName; // Layer name property
+
+		Property<bool>          enabled;            // Is actor enabled property
+		Getter<bool>            enabledInHierarchy; // Is actor enabled in hierarchy getter
+
+		Property<bool>          locked;             // Is actor locked property
+		Getter<bool>            lockedInHierarchy;  // Is actor locked in hierarchy getter
+
+		Getter<ActorsVec>                   children;   // Children array getter
+		Accessor<Actor*, const String&>     child;      // Children accessor
+
+		Getter<ComponentsVec>               components; // Components array getter
+		Accessor<Component*, const String&> component;  // Component accessor by type name
 
 
-        // It is called when some changed in actor
-		void OnChanged();
+		Function<void(bool)> onEnableChanged; // Enable changing event
 
-		// It is called when actor's locking was changed
-		void OnLockChanged();
-
-		// It is called when actor's name was changed
-		void OnNameChanged();
-
-		// It is called when child changed
-		void OnChildsChanged();
-#endif
-
+	public:
 		// Default constructor
 		Actor(ActorCreateMode mode = ActorCreateMode::InScene);
 
@@ -144,22 +133,22 @@ namespace o2
 		Actor(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
 
 		// Constructor with components
-		Actor(ComponentsVec components);
+		Actor(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::InScene);
 
 		// Copy-constructor
 		Actor(const Actor& other);
 
 		// Destructor
-		~Actor();
+		virtual ~Actor();
 
 		// Assign operator
 		Actor& operator=(const Actor& other);
 
 		// Updates actor and components
-		void Update(float dt);
+		virtual void Update(float dt);
 
 		// Updates childs
-		void UpdateChilds(float dt);
+		virtual void UpdateChilds(float dt);
 
 		// Returns prototype from this or this parent
 		ActorAssetRef GetPrototype() const;
@@ -198,16 +187,16 @@ namespace o2
 		UInt64 GetID() const;
 
 		// Sets id. Be carefully! Ids must be unique! Don't recommending to change this
-		void SetId(UInt64 id);
+		void SetID(UInt64 id);
+
+		// Generates new random id 
+		void GenerateNewID(bool childs = true);
 
 		// Returns asset id
-		UID GetAssetId() const;
+		UID GetAssetID() const;
 
 		// Is this from asset
 		bool IsAsset() const;
-
-		// Generates new random id 
-		void GenNewId(bool childs = true);
 
 		// Excludes from scene and will not be update and draw automatically from scene
 		void ExcludeFromScene();
@@ -255,7 +244,7 @@ namespace o2
 		void SetParent(Actor* actor, bool worldPositionStays = true);
 
 		// Returns parent
-		Actor* GetParent() const;
+		Actor* GetParentWidget() const;
 
 		// Add child actor
 		Actor* AddChild(Actor* actor);
@@ -317,13 +306,13 @@ namespace o2
 		ComponentsVec GetComponents() const;
 
 		// Sets layer
-		void SetLayer(Scene::Layer* layer);
+		void SetLayer(SceneLayer* layer);
 
 		// Sets layer by name
 		void SetLayer(const String& layerName);
 
 		// Returns layer
-		Scene::Layer* GetLayer() const;
+		SceneLayer* GetLayer() const;
 
 		// Returns layer name
 		String GetLayerName() const;
@@ -339,6 +328,26 @@ namespace o2
 
 		SERIALIZABLE(Actor);
 
+#if IS_EDITOR
+		Function<void()>       onChanged;               // Something in actor change event
+		Function<void(Actor*)> onParentChanged;         // Actor reparent event
+		Function<void()>       onChildHierarchyChanged; // Actor childs hierarchy change event
+		Function<void(bool)>   onLockChanged;           // Locking changing event
+		Function<void()>       onNameChanged;           // Name changing event
+
+        // It is called when some changed in actor
+		void OnChanged();
+
+		// It is called when actor's locking was changed
+		void OnLockChanged();
+
+		// It is called when actor's name was changed
+		void OnNameChanged();
+
+		// It is called when child changed
+		void OnChildsChanged();
+#endif
+
 	protected:
 		typedef Vector<ActorRef*> ActorRefsVec;
 
@@ -351,7 +360,7 @@ namespace o2
 		Actor*          mParent = nullptr;        // Parent actor
 		ActorsVec       mChilds;                  // Children actors 
 		ComponentsVec   mComponents;              // Components vector 
-		Scene::Layer*   mLayer = nullptr;         // Scene layer
+		SceneLayer*     mLayer = nullptr;         // Scene layer
 
 		bool            mEnabled = true;          // Is actor enabled
 		bool            mResEnabled = true;       // Is actor enabled in hierarchy
@@ -368,9 +377,21 @@ namespace o2
 
 	protected:
 		// Base actor constructor with transform
-		Actor(ActorTransform* transform, const String& name = "unnamed", bool enabled = true, 
+		Actor(ActorTransform* transform, bool isOnScene = true, const String& name = "unnamed", bool enabled = true,
 			  bool resEnabled = true, bool locked = false, bool resLocked = false, 
-			  Scene::Layer* layer = nullptr, UInt64 id = Math::Random(), UID assetId = 0, bool isOnScene = true);
+			  SceneLayer* layer = nullptr, UInt64 id = Math::Random(), UID assetId = 0);
+
+		// Default constructor with transform
+		Actor(ActorTransform* transform, ActorCreateMode mode = ActorCreateMode::InScene);
+
+		// Actor constructor from prototype with transform
+		Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
+
+		// Constructor with components with transform
+		Actor(ActorTransform* transform, ComponentsVec components, ActorCreateMode mode = ActorCreateMode::InScene);
+
+		// Copy-constructor with transform
+		Actor(ActorTransform* transform, const Actor& other);
 
 		// Not using prototype setter
 		void SetProtytypeDummy(ActorAssetRef asset);
@@ -506,7 +527,9 @@ namespace o2
 		friend class ActorTransform;
 		friend class Component;
 		friend class DrawableComponent;
+		friend class SceneDrawable;
 		friend class Scene;
+		friend class SceneLayer;
 		friend class Tag;
 	};
 

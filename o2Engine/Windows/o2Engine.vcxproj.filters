@@ -532,6 +532,12 @@
     <ClInclude Include="..\Sources\Utils\UnknownPtr.h">
       <Filter>Sources\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Scene\SceneLayer.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Scene\Drawable.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Animation\Animatable.cpp">
@@ -929,6 +935,12 @@
     </ClCompile>
     <ClCompile Include="..\Sources\EngineSettings.cpp">
       <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Scene\SceneLayer.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Scene\Drawable.cpp">
+      <Filter>Sources\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

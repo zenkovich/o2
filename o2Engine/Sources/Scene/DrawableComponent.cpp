@@ -2,65 +2,32 @@
 
 #include "Scene/Actor.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneLayer.h"
 
 namespace o2
 {
 	DrawableComponent::DrawableComponent():
-		Component(), mDrawingDepth(0)
-	{
-		InitializeProperties();
-	}
+		Component(), SceneDrawable()
+	{}
 
-	DrawableComponent::DrawableComponent(const DrawableComponent& other):
-		Component(other), mDrawingDepth(other.mDrawingDepth)
-	{
-		InitializeProperties();
-	}
-
-	DrawableComponent::~DrawableComponent()
-	{
-		if (mOwner && mOwner->mLayer)
-			mOwner->mLayer->UnregDrawableComponent(this);
-	}
+	DrawableComponent::DrawableComponent(const DrawableComponent& other) :
+		Component(other), SceneDrawable(other)
+	{}
 
 	DrawableComponent& DrawableComponent::operator=(const DrawableComponent& other)
 	{
 		Component::operator=(other);
-
-		mDrawingDepth = other.mDrawingDepth;
-
-		if (mOwner)
-			mOwner->mLayer->ComponentDepthChanged(this);
+		SceneDrawable::operator=(other);
 
 		return *this;
 	}
 
-	void DrawableComponent::Draw()
-	{}
-
 	void DrawableComponent::SetDrawingDepth(float depth)
 	{
-		mDrawingDepth = depth;
+		SceneDrawable::SetDrawingDepth(depth);
 
 		if (mOwner)
-		{
-			mOwner->mLayer->ComponentDepthChanged(this);
 			mOwner->OnChanged();
-		}
-	}
-
-	float DrawableComponent::GetDrawingDepth() const
-	{
-		return mDrawingDepth;
-	}
-
-	void DrawableComponent::OnLayerChanged(Scene::Layer* oldLayer, Scene::Layer* newLayer)
-	{
-		if (oldLayer)
-			oldLayer->UnregDrawableComponent(this);
-
-		if (newLayer)
-			newLayer->RegDrawableComponent(this);
 	}
 
 	void DrawableComponent::UpdateEnabled()
@@ -72,53 +39,25 @@ namespace o2
 		else
 			mResEnabled = mEnabled;
 
-		if (lastResEnabled != mResEnabled && mOwner)
+		if (lastResEnabled != mResEnabled && mLayer)
 		{
 			if (mResEnabled)
-				mOwner->mLayer->ComponentEnabled(this);
+				mLayer->DrawableEnabled(this);
 			else
-				mOwner->mLayer->ComponentDisabled(this);
+				mLayer->DrawableDisabled(this);
 		}
 	}
 
 	void DrawableComponent::SetOwnerActor(Actor* actor)
 	{
-		if (mOwner)
-		{
-			mOwner->mComponents.Remove(this);
-
-			if (mOwner->mIsOnScene)
-				mOwner->mLayer->UnregDrawableComponent(this);
-		}
-
-		mOwner = actor;
+		SceneDrawable::SetLayer(actor->mLayer);
+		Component::SetOwnerActor(actor);
 
 		if (mOwner)
 		{
 			mOwner->mComponents.Add(this);
-
-			if (mOwner->mIsOnScene)
-				mOwner->mLayer->RegDrawableComponent(this);
-
 			OnTransformChanged();
 		}
-	}
-
-	void DrawableComponent::OnExcludeFromScene()
-	{
-		if (mOwner)
-			mOwner->mLayer->UnregDrawableComponent(this);
-	}
-
-	void DrawableComponent::OnIncludeToScene()
-	{
-		if (mOwner)
-			mOwner->mLayer->RegDrawableComponent(this);
-	}
-
-	void DrawableComponent::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(DrawableComponent, drawDepth, SetDrawingDepth, GetDrawingDepth);
 	}
 }
 
@@ -131,7 +70,7 @@ CLASS_META(o2::DrawableComponent)
 
 	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
 	PUBLIC_FUNCTION(float, GetDrawingDepth);
-	PROTECTED_FUNCTION(void, OnLayerChanged, Scene::Layer*, Scene::Layer*);
+	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*, SceneLayer*);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);

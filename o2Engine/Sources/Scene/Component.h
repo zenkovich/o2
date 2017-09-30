@@ -89,7 +89,7 @@ namespace o2
 
 	protected:
 		// It is called when actor changed layer
-		virtual void OnLayerChanged(Scene::Layer* oldLayer, Scene::Layer* newLayer) {}
+		virtual void OnLayerChanged(SceneLayer* oldLayer, SceneLayer* newLayer) {}
 
 		// Updates component enable
 		virtual void UpdateEnabled();
