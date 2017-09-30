@@ -248,3 +248,5 @@ pip-log.txt
 /o2Engine/dependencies/vs2015/.vs/Dependencies/v15/Solution.VC.db
 /o2Engine/dependencies/vs2015/.vs/Dependencies/v15/Solution.VC.db-shm
 /o2Engine/dependencies/vs2015/.vs/Dependencies/v15/Solution.VC.db-wal
+o2TestProject/Platforms/Windows/o2Test.VC.db
+o2TestProject/Platforms/Windows/o2Test.VC.VC.opendb
