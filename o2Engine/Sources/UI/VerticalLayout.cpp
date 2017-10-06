@@ -169,8 +169,8 @@ namespace o2
 		if (!mFitByChildren)
 			return UIWidget::GetMinHeightWithChildren();
 
-		float res = mBorder.top + mBorder.bottom + Math::Max(mChilds.Count() - 1, 0)*mSpacing;
-		for (auto child : mChilds)
+		float res = mBorder.top + mBorder.bottom + Math::Max(mChildren.Count() - 1, 0)*mSpacing;
+		for (auto child : mChildren)
 		{
 			if (!child->mFullyDisabled)
 				res += child->GetMinHeightWithChildren();
@@ -216,8 +216,8 @@ namespace o2
 
 	void UIVerticalLayout::UpdateLayoutParametres()
 	{
-		layout.mWeight.y = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetHeightWeight(); });
-		layout.mMinSize.y = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalHeight(); });
+		layout.mWeight.y = mChildren.Sum<float>([&](UIWidget* child) { return child->layout.GetHeightWeight(); });
+		layout.mMinSize.y = mChildren.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalHeight(); });
 		layout.mMinSize.y += mBorder.bottom + mBorder.top;
 	}
 
@@ -225,13 +225,13 @@ namespace o2
 	{
 		if (mExpandHeight)
 		{
-			float availableHeight = mChildsAbsRect.Height() - mBorder.bottom - mBorder.top;
+			float availableHeight = mChildrenWorldRect.Height() - mBorder.bottom - mBorder.top;
 			float totalHeight = availableHeight;
 			float position = -totalHeight*0.5f;
 			auto heights = CalculateExpandedHeights();
 
 			int i = 0;
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 			{
 				child->layout.mOffsetMin.y = position;
 				position += heights[i++];
@@ -245,10 +245,10 @@ namespace o2
 		}
 		else
 		{
-			float totalHeight = mChilds.Sum<float>([&](UIWidget* child) { return child->GetMinHeightWithChildren(); });
-			totalHeight += (mChilds.Count() - 1)*mSpacing;
+			float totalHeight = mChildren.Sum<float>([&](UIWidget* child) { return child->GetMinHeightWithChildren(); });
+			totalHeight += (mChildren.Count() - 1)*mSpacing;
 			float position = -totalHeight*0.5f;
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 			{
 				child->layout.mOffsetMin.y = position;
 				position += Math::Abs(Math::Max(child->layout.mMinSize.y, child->GetMinHeightWithChildren()));
@@ -270,7 +270,7 @@ namespace o2
 			auto heights = CalculateExpandedHeights();
 
 			int i = 0;
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 			{
 				child->layout.mOffsetMin.y = position;
 				position += heights[i++];
@@ -285,7 +285,7 @@ namespace o2
 		else
 		{
 			float position = mBorder.bottom;
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 			{
 				child->layout.mOffsetMin.y = position;
 				position += Math::Abs(Math::Max(child->layout.mMinSize.y, child->GetMinHeightWithChildren()));
@@ -307,7 +307,7 @@ namespace o2
 			auto heights = CalculateExpandedHeights();
 
 			int i = 0;
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 			{
 				child->layout.mOffsetMax.y = -position;
 				position += heights[i++];
@@ -322,7 +322,7 @@ namespace o2
 		else
 		{
 			float position = mBorder.top;
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 			{
 				child->layout.mOffsetMax.y = -position;
 				position += Math::Abs(Math::Max(child->layout.mMinSize.y, child->GetMinHeightWithChildren()));
@@ -404,14 +404,14 @@ namespace o2
 
 	Vector<float> UIVerticalLayout::CalculateExpandedHeights()
 	{
-		int ichildCount = mChilds.Count();
+		int ichildCount = mChildren.Count();
 		float childCount = (float)ichildCount;
-		float availableHeight = mChildsAbsRect.Height() - mBorder.bottom - mBorder.top;
-		float minHeightSum = mChilds.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalHeight(); });
+		float availableHeight = mChildrenWorldRect.Height() - mBorder.bottom - mBorder.top;
+		float minHeightSum = mChildren.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalHeight(); });
 		float expandValue = Math::Max(availableHeight - minHeightSum - (childCount - 1.0f)*mSpacing, 0.0f);
 
 		Vector<float> heights(ichildCount + 1);
-		mChilds.ForEach([&](auto child) { heights.Add(child->layout.GetMinimalHeight()); });
+		mChildren.ForEach([&](auto child) { heights.Add(child->layout.GetMinimalHeight()); });
 
 		while (expandValue > 0)
 		{
@@ -425,7 +425,7 @@ namespace o2
 				float h = heights[i];
 				if (Math::Equals(h, minSz))
 				{
-					float wweight = mChilds[i]->layout.GetHeightWeight();
+					float wweight = mChildren[i]->layout.GetHeightWeight();
 					maxSzWeight = Math::Max(maxSzWeight, wweight);
 					minSzWeightsSum += wweight;
 					minSzChilds.Add(i);
@@ -436,7 +436,7 @@ namespace o2
 					minSz = h;
 					minSzChilds.Clear();
 					minSzChilds.Add(i);
-					float wweight = mChilds[i]->layout.GetHeightWeight();
+					float wweight = mChildren[i]->layout.GetHeightWeight();
 					maxSzWeight = wweight;
 					minSzWeightsSum = wweight;
 				}
@@ -462,7 +462,7 @@ namespace o2
 			}
 
 			float expValueByWeight = needsDelta/minSzWeightsSum;
-			minSzChilds.ForEach([&](int idx) { heights[idx] += expValueByWeight*mChilds[idx]->layout.GetHeightWeight(); });
+			minSzChilds.ForEach([&](int idx) { heights[idx] += expValueByWeight*mChildren[idx]->layout.GetHeightWeight(); });
 
 			expandValue -= needsDelta;
 		}

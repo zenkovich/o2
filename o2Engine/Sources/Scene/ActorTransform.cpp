@@ -44,7 +44,7 @@ namespace o2
 		mData->pivot = other.mData->pivot;
 		mData->shear = other.mData->shear;
 
-		OnChanged();
+		SetDirty();
 
 		return *this;
 	}
@@ -67,13 +67,13 @@ namespace o2
 
 	void ActorTransform::OnDeserialized(const DataNode& node)
 	{
-		OnChanged();
+		SetDirty();
 	}
 
 	void ActorTransform::SetPosition(const Vec2F& position)
 	{
 		mData->position = position;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F ActorTransform::GetPosition() const
@@ -84,7 +84,7 @@ namespace o2
 	void ActorTransform::SetSize(const Vec2F& size)
 	{
 		mData->size = size;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F ActorTransform::GetSize() const
@@ -95,7 +95,7 @@ namespace o2
 	void ActorTransform::SetWidth(float value)
 	{
 		mData->size.x = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float ActorTransform::GetWidht() const
@@ -106,7 +106,7 @@ namespace o2
 	void ActorTransform::SetHeight(float value)
 	{
 		mData->size.y = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float ActorTransform::GetHeight() const
@@ -117,7 +117,7 @@ namespace o2
 	void ActorTransform::SetPivot(const Vec2F& pivot)
 	{
 		mData->pivot = pivot;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F ActorTransform::GetPivot() const
@@ -140,7 +140,7 @@ namespace o2
 		mData->size = rect.Size();
 		mData->position = rect.LeftBottom() + mData->size*mData->pivot;
 
-		OnChanged();
+		SetDirty();
 	}
 
 	RectF ActorTransform::GetRect() const
@@ -152,7 +152,7 @@ namespace o2
 	void ActorTransform::SetScale(const Vec2F& scale)
 	{
 		mData->scale = scale;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F ActorTransform::GetScale() const
@@ -163,7 +163,7 @@ namespace o2
 	void ActorTransform::SetAngle(float rad)
 	{
 		mData->angle = rad;
-		OnChanged();
+		SetDirty();
 	}
 
 	float ActorTransform::GetAngle() const
@@ -174,7 +174,7 @@ namespace o2
 	void ActorTransform::SetAngleDegrees(float deg)
 	{
 		mData->angle = Math::Deg2rad(deg);
-		OnChanged();
+		SetDirty();
 	}
 
 	float ActorTransform::GetAngleDegrees() const
@@ -185,7 +185,7 @@ namespace o2
 	void ActorTransform::SetShear(float shear)
 	{
 		mData->shear = shear;
-		OnChanged();
+		SetDirty();
 	}
 
 	float ActorTransform::GetShear() const
@@ -204,7 +204,7 @@ namespace o2
 		mData->shear = shear;
 
 		mData->position = basis.offs + basis.xv*mData->pivot.x + basis.yv*mData->pivot.y;
-		OnChanged();
+		SetDirty();
 	}
 
 	Basis ActorTransform::GetBasis() const
@@ -223,7 +223,7 @@ namespace o2
 		mData->shear = shear;
 
 		mData->position = basis.offs + basis.xv*mData->pivot.x*mData->size.x + basis.yv*mData->pivot.y*mData->size.y;
-		OnChanged();
+		SetDirty();
 	}
 
 	Basis ActorTransform::GetNonSizedBasis() const
@@ -251,7 +251,7 @@ namespace o2
 		mData->position.Set(position.x + mData->size.x*mData->pivot.x,
 							position.y - mData->size.y + mData->size.y*mData->pivot.y);
 
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F ActorTransform::GetLeftTop() const
@@ -265,7 +265,7 @@ namespace o2
 		mData->position.Set(position.x - mData->size.x + mData->size.x*mData->pivot.x,
 							position.y - mData->size.y + mData->size.y*mData->pivot.y);
 
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F ActorTransform::GetRightTop() const
@@ -279,7 +279,7 @@ namespace o2
 		mData->position.Set(position.x + mData->size.x*mData->pivot.x,
 							position.y + mData->size.y*mData->pivot.y);
 
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F ActorTransform::GetLeftBottom() const
@@ -293,7 +293,7 @@ namespace o2
 		mData->position.Set(position.x - mData->size.x + mData->size.x*mData->pivot.x,
 							position.y + mData->size.y*mData->pivot.y);
 
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F ActorTransform::GetRightBottom() const
@@ -361,7 +361,7 @@ namespace o2
 		mData->size.x = value - GetLeft();
 		mData->position.x = value - mData->size.x + mData->size.x*mData->pivot.x;
 
-		OnChanged();
+		SetDirty();
 	}
 
 	float ActorTransform::GetRight() const
@@ -374,7 +374,7 @@ namespace o2
 		mData->size.x = GetRight() - value;
 		mData->position.x = value + mData->size.x*mData->pivot.x;
 
-		OnChanged();
+		SetDirty();
 	}
 
 	float ActorTransform::GetLeft() const
@@ -387,7 +387,7 @@ namespace o2
 		mData->size.y = value - GetBottom();
 		mData->position.y = value - mData->size.y + mData->size.y*mData->pivot.y;
 
-		OnChanged();
+		SetDirty();
 	}
 
 	float ActorTransform::GetTop() const
@@ -400,7 +400,7 @@ namespace o2
 		mData->size.y = GetTop() - value;
 		mData->position.y = value + mData->size.y*mData->pivot.y;
 
-		OnChanged();
+		SetDirty();
 	}
 
 	float ActorTransform::GetBottom() const
@@ -411,6 +411,16 @@ namespace o2
 	Actor* ActorTransform::GetOwnerActor() const
 	{
 		return mData->owner;
+	}
+
+	void ActorTransform::SetDirty()
+	{
+		mData->isDirty = true;
+	}
+
+	bool ActorTransform::IsDirty() const
+	{
+		return mData->isDirty;
 	}
 
 	void ActorTransform::SetWorldPivot(const Vec2F& pivot)
@@ -681,10 +691,31 @@ namespace o2
 	void ActorTransform::SetOwner(Actor* actor)
 	{
 		mData->owner = actor;
-		OnChanged();
+		SetDirty();
 	}
 
-	void ActorTransform::OnChanged()
+	void ActorTransform::SetDirty()
+	{
+		mData->isDirty = true;
+
+		if (mData->owner)
+			mData->owner->OnChanged();
+	}
+
+	void ActorTransform::Update()
+	{
+		UpdateRectangle();
+		UpdateTransform();
+		UpdateWorldRectangleAndTransform();
+
+		mData->isParentInvTransformActual = false;
+		mData->isDirty = false;
+
+		if (mData->owner)
+			mData->owner->OnTransformUpdated();
+	}
+
+	void ActorTransform::UpdateRectangle()
 	{
 		Vec2F leftBottom = mData->position - mData->size*mData->pivot;
 		Vec2F rightTop = leftBottom + mData->size;
@@ -692,20 +723,26 @@ namespace o2
 		mData->rectangle.right = rightTop.x;
 		mData->rectangle.bottom = leftBottom.y;
 		mData->rectangle.top = rightTop.y;
+	}
 
+	void ActorTransform::UpdateTransform()
+	{
 		mData->nonSizedTransform = Basis::Build(mData->position, mData->scale, mData->angle, mData->shear);
 		mData->transform.Set(mData->nonSizedTransform.offs, mData->nonSizedTransform.xv * mData->size.x, mData->nonSizedTransform.yv * mData->size.y);
 		mData->transform.offs = mData->transform.offs - mData->transform.xv*mData->pivot.x - mData->transform.yv*mData->pivot.y;
+	}
 
+	void ActorTransform::UpdateWorldRectangleAndTransform()
+	{
 		if (mData->owner && mData->owner->mParent)
 		{
 			auto parentData = mData->owner->mParent->transform->mData;
 			mData->parentRectangle = parentData->worldRectangle;
 			mData->parentRectangePosition = mData->parentRectangle.LeftBottom() + parentData->size*parentData->pivot;
-			mData->worldRectangle.left = mData->parentRectangePosition.x + mData->rectangle.left;
-			mData->worldRectangle.right = mData->parentRectangePosition.x + mData->rectangle.right;
+			mData->worldRectangle.left   = mData->parentRectangePosition.x + mData->rectangle.left;
+			mData->worldRectangle.right  = mData->parentRectangePosition.x + mData->rectangle.right;
 			mData->worldRectangle.bottom = mData->parentRectangePosition.y + mData->rectangle.bottom;
-			mData->worldRectangle.top = mData->parentRectangePosition.y + mData->rectangle.top;
+			mData->worldRectangle.top    = mData->parentRectangePosition.y + mData->rectangle.top;
 
 			mData->parentTransform = mData->owner->mParent->transform->mData->worldNonSizedTransform;
 			mData->worldTransform = mData->transform*mData->parentTransform;
@@ -724,16 +761,6 @@ namespace o2
 			mData->worldNonSizedTransform = mData->nonSizedTransform;
 			mData->worldTransform = mData->transform;
 		}
-
-		mData->isParentInvTransformActual = false;
-
-		if (mData->owner)
-			mData->owner->OnTransformChanged();
-	}
-
-	void ActorTransform::UpdateTransform()
-	{
-
 	}
 
 	void ActorTransform::CheckParentInvTransform()
@@ -914,7 +941,7 @@ CLASS_META(o2::ActorTransform)
 	PUBLIC_FUNCTION(void, SetWorldCenter, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetWorldCenter);
 	PROTECTED_FUNCTION(void, SetOwner, Actor*);
-	PROTECTED_FUNCTION(void, OnChanged);
+	PROTECTED_FUNCTION(void, SetDirty);
 	PROTECTED_FUNCTION(void, CheckParentInvTransform);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeProperties);

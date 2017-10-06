@@ -56,7 +56,7 @@ namespace o2
 		if (mOwner)
 		{
 			mOwner->mComponents.Add(this);
-			OnTransformChanged();
+			OnTransformUpdated();
 		}
 	}
 }

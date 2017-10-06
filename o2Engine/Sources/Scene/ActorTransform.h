@@ -96,6 +96,15 @@ namespace o2
 		// Returns owner actor
 		Actor* GetOwnerActor() const;
 
+		// Sets transform dirty and needed to update
+		virtual void SetDirty();
+
+		// Returns is transform dirty
+		bool IsDirty() const;
+
+		// Updates transformation
+		virtual void Update();
+
 		// Sets position
 		virtual void SetPosition(const Vec2F& position);
 
@@ -435,6 +444,8 @@ namespace o2
 			Basis  parentTransform;                    // Parent world transform
 			bool   isParentInvTransformActual = false; // Is mParentInvertedTransform is actual
 
+			bool   isDirty = false;                    // Is some value was changed
+
 			SERIALIZABLE(Data);
 		};
 
@@ -448,11 +459,14 @@ namespace o2
 		// Sets owner and updates transform
 		virtual void SetOwner(Actor* actor);
 
-		// It is called when transform is changing 
-		virtual void OnChanged();
+		// Updates world rectangle and transform relative to parent or origin
+		void UpdateWorldRectangleAndTransform();
 
-		// Updates transformation
+		// Updates local transformation
 		void UpdateTransform();
+
+		// Updates local rectangle
+		void UpdateRectangle();
 
 		// Check parentInvertedTransform for actual
 		void CheckParentInvTransform();

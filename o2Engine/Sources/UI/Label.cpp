@@ -72,7 +72,7 @@ namespace o2
 
 		OnDrawn();
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->Draw();
 
 		for (auto layer : mTopDrawingLayers)

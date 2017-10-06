@@ -30,6 +30,6 @@ namespace o2
 
 	protected:
 		// It is called when actor's transform was changed
-		void OnTransformChanged();
+		void OnTransformUpdated();
 	};
 }

@@ -62,7 +62,7 @@ namespace o2
 	int UIDropDown::FindItem(const WString& text)
 	{
 		int i = 0;
-		for (auto child : mItemsList->mVerLayout->mChilds)
+		for (auto child : mItemsList->mVerLayout->mChildren)
 		{
 			if (((UILabel*)child)->GetText() == text)
 				return i;
@@ -85,7 +85,7 @@ namespace o2
 	Vector<WString> UIDropDown::GetAllItemsText() const
 	{
 		Vector<WString> res;
-		for (auto child : mItemsList->mVerLayout->mChilds)
+		for (auto child : mItemsList->mVerLayout->mChildren)
 			res.Add(((UILabel*)child)->GetText());
 
 		return res;

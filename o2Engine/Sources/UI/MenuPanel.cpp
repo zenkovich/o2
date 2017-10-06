@@ -87,9 +87,9 @@ namespace o2
 
 					if (mSelectedItem >= 0)
 					{
-						if (auto contextMenu = mLayout->mChilds[mSelectedItem]->FindChild<UIContextMenu>())
+						if (auto contextMenu = mLayout->mChildren[mSelectedItem]->FindChild<UIContextMenu>())
 						{
-							contextMenu->Show(mLayout->mChilds[mSelectedItem]->layout.absLeftBottom);
+							contextMenu->Show(mLayout->mChildren[mSelectedItem]->layout.absLeftBottom);
 							mOpenedContext = contextMenu;
 						}
 					}
@@ -108,7 +108,7 @@ namespace o2
 
 		IDrawable::OnDrawn();
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->Draw();
 
 		mSelectionDrawable->Draw();
@@ -138,7 +138,7 @@ namespace o2
 
 		WString subMenu = path.SubStr(0, slashPos);
 
-		UIWidget* subChild = mLayout->mChilds.FindMatch([&](auto x) {
+		UIWidget* subChild = mLayout->mChildren.FindMatch([&](auto x) {
 			if (auto text = x->GetLayerDrawable<Text>("text"))
 				return text->text == subMenu;
 
@@ -189,7 +189,7 @@ namespace o2
 
 	UIMenuPanel::Item UIMenuPanel::GetItem(int position)
 	{
-		if (position > 0 && position < mLayout->GetChilds().Count())
+		if (position > 0 && position < mLayout->GetChildren().Count())
 			return GetItemDef(position);
 
 		return Item();
@@ -198,7 +198,7 @@ namespace o2
 	Vector<UIMenuPanel::Item> UIMenuPanel::GetItems() const
 	{
 		Vector<Item> res;
-		for (int i = 0; i < mLayout->GetChilds().Count(); i++)
+		for (int i = 0; i < mLayout->GetChildren().Count(); i++)
 			res.Add(GetItemDef(i));
 
 		return res;
@@ -206,8 +206,8 @@ namespace o2
 
 	void UIMenuPanel::RemoveItem(int position)
 	{
-		if (position > 0 && position < mLayout->GetChilds().Count())
-			mLayout->RemoveChild(mLayout->GetChilds()[position]);
+		if (position > 0 && position < mLayout->GetChildren().Count())
+			mLayout->RemoveChild(mLayout->GetChildren()[position]);
 	}
 
 	void UIMenuPanel::RemoveItem(const WString& path)
@@ -215,7 +215,7 @@ namespace o2
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
 		{
-			UIWidget* removingItem = mLayout->mChilds.FindMatch([&](auto x) {
+			UIWidget* removingItem = mLayout->mChildren.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("text"))
 					return text->text == path;
 
@@ -235,7 +235,7 @@ namespace o2
 
 		WString subMenu = path.SubStr(0, slashPos);
 
-		UIWidget* subChild = mLayout->mChilds.FindMatch([&](auto x) {
+		UIWidget* subChild = mLayout->mChildren.FindMatch([&](auto x) {
 			if (auto text = x->GetLayerDrawable<Text>("text"))
 				return text->text == subMenu;
 
@@ -315,7 +315,7 @@ namespace o2
 	UIMenuPanel::Item UIMenuPanel::GetItemDef(int idx) const
 	{
 		Item res;
-		auto item = mLayout->mChilds[idx];
+		auto item = mLayout->mChildren[idx];
 
 		if (auto textLayer = item->GetLayerDrawable<Text>("text"))
 			res.text = textLayer->text;
@@ -339,7 +339,7 @@ namespace o2
 			return nullptr;
 
 		int idx = 0;
-		for (auto child : mLayout->mChilds)
+		for (auto child : mLayout->mChildren)
 		{
 			if (child->layout.mAbsoluteRect.IsInside(point))
 			{

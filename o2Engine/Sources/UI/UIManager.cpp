@@ -203,7 +203,7 @@ namespace o2
 
 	const UIManager::WidgetsVec& UIManager::GetAllWidgets() const
 	{
-		return mScreenWidget->GetChilds();
+		return mScreenWidget->GetChildren();
 	}
 
 	UIWidget* UIManager::GetScreenWidget() const
@@ -459,7 +459,7 @@ namespace o2
 
 	UIWidget* UIManager::SearchSelectableWidget(UIWidget* widget, bool& foundCurrentSelected)
 	{
-		for (auto child : widget->mChilds)
+		for (auto child : widget->mChildren)
 		{
 			if (!foundCurrentSelected)
 			{
@@ -473,7 +473,7 @@ namespace o2
 			}
 		}
 
-		for (auto child : widget->mChilds)
+		for (auto child : widget->mChildren)
 		{
 			auto res = SearchSelectableWidget(child, foundCurrentSelected);
 			if (res)

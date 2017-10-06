@@ -150,7 +150,7 @@ namespace o2
 
 		for (auto child : mChilds)
 		{
-			auto res = child->FindLayer<_type>();
+			auto res = child->GetLayerDrawableByType<_type>();
 			if (res)
 				return res;
 		}

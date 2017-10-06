@@ -12,7 +12,7 @@ namespace o2
 	// Scene drawable object. Has virtual draw function and sorting depth
 	// Depth shows how later object will be drawn
 	// ------------------------------------------------------------------
-	class SceneDrawable: public ISerializable, public IDrawable
+	class SceneDrawable: virtual public ISerializable, public IDrawable
 	{
 	public:
 		Property<float> drawDepth; // Drawing depth property. Objects with higher depth will be drawn later
@@ -39,6 +39,9 @@ namespace o2
 		// Returns drawing depth
 		float GetDrawingDepth() const;
 
+		// Sets layer
+		void SetLayer(SceneLayer* layer);
+
 		SERIALIZABLE(SceneDrawable);
 
 	protected:
@@ -46,9 +49,6 @@ namespace o2
 		float       mDrawingDepth = 0.0f; // Drawing depth. Objects with higher depth will be drawn later @SERIALIZABLE
 
 	protected:
-		// It is called when changed layer
-		void SetLayer(SceneLayer* newLayer);
-
 		// It is called when actor was excluded from scene
 		void OnExcludeFromScene();
 

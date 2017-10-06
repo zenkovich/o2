@@ -287,7 +287,7 @@ namespace o2
 		RecalculateAbsRect();
 		UpdateLayersLayouts();
 
-		mChildsAbsRect = layout.mAbsoluteRect;
+		mChildrenWorldRect = layout.mAbsoluteRect;
 		mAbsoluteClip = mClipLayout.Calculate(layout.mAbsoluteRect);
 
 		if (withChildren)

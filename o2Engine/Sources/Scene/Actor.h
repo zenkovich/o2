@@ -88,7 +88,7 @@ namespace o2
 	// -----------
 	// Scene actor
 	// -----------
-	class Actor: public ISerializable
+	class Actor: virtual public ISerializable
 	{
 	public:
 		typedef Vector<Actor*> ActorsVec;
@@ -244,7 +244,7 @@ namespace o2
 		void SetParent(Actor* actor, bool worldPositionStays = true);
 
 		// Returns parent
-		Actor* GetParentWidget() const;
+		Actor* GetParent() const;
 
 		// Add child actor
 		Actor* AddChild(Actor* actor);
@@ -255,8 +255,12 @@ namespace o2
 		// Returns child actor by path (ex "root/some node/other node/target node")
 		Actor* GetChild(const String& path) const;
 
+		// Searches child with specified type
+		template<typename _type, typename _check = std::enable_if<std::is_base_of<Actor, _type>::value>::value>
+		_type* GetChildByType();
+
 		// Returns children array
-		ActorsVec GetChilds() const;
+		ActorsVec GetChildren() const;
 
 		// Removes child and destroys him if needed
 		void RemoveChild(Actor* actor, bool release = true);
@@ -357,10 +361,12 @@ namespace o2
 		UInt64          mId;                      // Unique actor id
 		String          mName;                    // Name of actor
 
-		Actor*          mParent = nullptr;        // Parent actor
-		ActorsVec       mChilds;                  // Children actors 
-		ComponentsVec   mComponents;              // Components vector 
 		SceneLayer*     mLayer = nullptr;         // Scene layer
+
+		Actor*          mParent = nullptr;        // Parent actor
+		ActorsVec       mChildren;                // Children actors 
+
+		ComponentsVec   mComponents;              // Components vector 
 
 		bool            mEnabled = true;          // Is actor enabled
 		bool            mResEnabled = true;       // Is actor enabled in hierarchy
@@ -395,9 +401,6 @@ namespace o2
 
 		// Not using prototype setter
 		void SetProtytypeDummy(ActorAssetRef asset);
-
-		// It is called when transformation was changed
-		void OnTransformChanged();
 
 		// Sets parent
 		void SetParentProp(Actor* actor);
@@ -436,13 +439,25 @@ namespace o2
 		Dictionary<String, Component*> GetAllComponents();
 
 		// Applies excluding from scene for all components in hierarchy
-		void ComponentsExcludeFromScene();
+		void ExcludeComponentsFromScene();
 
 		// Applies including to scene for all components in hierarchy
-		void ComponentsIncludeToScene();
+		void IncludeComponentsToScene();
+
+		// It is called when transformation was changed and updated
+		virtual void OnTransformUpdated();
 
 		// It is called when parent changed
-		void OnParentChanged(Actor* oldParent);
+		virtual void OnParentChanged(Actor* oldParent);
+
+		// It is called when child actor was added
+		virtual void OnChildAdded(Actor* child);
+
+		// It is called when child actor was removed
+		virtual void OnChildRemoved(Actor* child);
+
+		// It is called when layer was changed
+		virtual void OnLayerChanged(SceneLayer* oldLayer);
 
 		// Separates children actors to linear array, removes child and parent links
 		void SeparateActors(Vector<Actor*>& separatedActors);
@@ -597,12 +612,26 @@ namespace o2
 		friend class Scene;
 	};
 
+	template<typename _type, typename _check>
+	_type* Actor::GetChildByType()
+	{
+		for (auto child : mChildren)
+			if (child->GetType() == TypeOf(_type))
+				return (_type*)child;
+
+		for (auto child : mChildren)
+			if (auto res = child->GetChildByType<_type>())
+				return res;
+
+		return nullptr;
+	}
+
 	template<typename _type>
 	Vector<_type>* Actor::GetComponentsInChildren() const
 	{
 		Vector < _type >> res = GetComponents < _type*();
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			res.Add(child->GetComponentsInChildren<_type>());
 
 		return res;
@@ -616,7 +645,7 @@ namespace o2
 		if (res)
 			return res;
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			res = child->GetComponentInChildren<_type>();
 			if (res)

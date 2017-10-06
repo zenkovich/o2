@@ -13,7 +13,7 @@ namespace o2
 	// -----------------------------
 	// Serializable object interface
 	// -----------------------------
-	class ISerializable: public IObject
+	class ISerializable: virtual public IObject
 	{
 	public:
 		// Serializing object into data node

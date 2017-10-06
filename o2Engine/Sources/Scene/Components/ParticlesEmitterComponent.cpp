@@ -38,7 +38,7 @@ namespace o2
 		return "Particles";
 	}
 
-	void ParticlesEmitterComponent::OnTransformChanged()
+	void ParticlesEmitterComponent::OnTransformUpdated()
 	{
 		mEmitter.basis = mOwner->transform->GetWorldBasis();
 	}
@@ -54,6 +54,6 @@ CLASS_META(o2::ParticlesEmitterComponent)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(String, GetName);
-	PROTECTED_FUNCTION(void, OnTransformChanged);
+	PROTECTED_FUNCTION(void, OnTransformUpdated);
 }
 END_META;

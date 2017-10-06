@@ -94,7 +94,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->Draw();
 
 		mSelectionDrawable->Draw();
@@ -237,12 +237,12 @@ namespace o2
 		mScrollPos += delta;
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
+		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		UpdateVisibleItems();
 
 		Vec2F widgetsMove(-delta.x, delta.y);
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			MoveWidgetAndCheckClipping(child, widgetsMove);
 
 		UpdateScrollParams();
@@ -274,15 +274,15 @@ namespace o2
 				continue;
 
 			if (i < mMinVisibleItemIdx || i > mMaxVisibleItemIdx)
-				removingItems.Add(mChilds[i - lastMinItemIdx]);
+				removingItems.Add(mChildren[i - lastMinItemIdx]);
 			else
-				itemsWidgets[i - mMinVisibleItemIdx] = mChilds[i - lastMinItemIdx];
+				itemsWidgets[i - mMinVisibleItemIdx] = mChildren[i - lastMinItemIdx];
 		}
 
 		for (auto item : removingItems)
 			mItemsPool.Add(item);
 
-		mChilds.Clear();
+		mChildren.Clear();
 
 		for (int i = mMinVisibleItemIdx; i <= mMaxVisibleItemIdx; i++)
 		{
@@ -305,7 +305,7 @@ namespace o2
 			newItem->mParent = this;
 		}
 
-		mChilds.Add(itemsWidgets);
+		mChildren.Add(itemsWidgets);
 	}
 
 	void UILongList::OnCursorPressed(const Input::Cursor& cursor)
@@ -379,7 +379,7 @@ namespace o2
 	UIWidget* UILongList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
 	{
 		int idx = mMinVisibleItemIdx;
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			if (child->layout.mAbsoluteRect.IsInside(point))
 			{
@@ -457,7 +457,7 @@ namespace o2
 		mSelectedItem = position;
 		UIWidget* item = nullptr;
 		if (position < mMaxVisibleItemIdx && position >= mMinVisibleItemIdx)
-			item = mChilds[position - mMinVisibleItemIdx];
+			item = mChildren[position - mMinVisibleItemIdx];
 
 		if (position < 0 || item == nullptr)
 		{

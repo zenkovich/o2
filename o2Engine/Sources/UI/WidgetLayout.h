@@ -62,6 +62,9 @@ namespace o2
 		// Equals operator
 		bool operator==(const UIWidgetLayout& other) const;
 
+		// Updates layout and transformation
+		void Update() override;
+
 		// Sets position
 		void SetPosition(const Vec2F& position) override;
 
@@ -256,10 +259,13 @@ namespace o2
 		// Sets owner and updates transform
 		void SetOwner(Actor* actor) override;
 
-		// It is called when transform is changing 
-		void OnChanged() override;
+		// Sets transform dirty and needed to update. Checks is driven by parent and marks parent as dirty too
+		void SetDirty() override;
 
-		// Updates offsets to match existing rectangle to offsets and anchors rectange
+		// Floors all local rectangle properties
+		void FloorRectangle();
+
+		// Updates offsets to match existing rectangle to offsets and anchors rectangle
 		void UpdateOffsetsByCurrentTransform();
 
 		// Copies data parameters from other layout

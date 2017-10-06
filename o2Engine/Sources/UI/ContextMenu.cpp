@@ -227,7 +227,7 @@ namespace o2
 
 			WString subMenu = targetPath.SubStr(0, slashPos);
 
-			UIWidget* subChild = targetContext->mItemsLayout->mChilds.FindMatch([&](auto x) {
+			UIWidget* subChild = targetContext->mItemsLayout->mChildren.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("caption"))
 					return text->text == subMenu;
 
@@ -298,7 +298,7 @@ namespace o2
 
 	UIContextMenu::Item UIContextMenu::GetItem(int position)
 	{
-		if (position > 0 && position < mItemsLayout->GetChilds().Count())
+		if (position > 0 && position < mItemsLayout->GetChildren().Count())
 			return GetItemDef(position);
 
 		return Item();
@@ -306,10 +306,10 @@ namespace o2
 
 	void UIContextMenu::SetItem(int position, const Item& item)
 	{
-		if (position < 0 || position >= mItemsLayout->mChilds.Count())
+		if (position < 0 || position >= mItemsLayout->mChildren.Count())
 			return;
 
-		UIContextMenuItem* itemWidget = (UIContextMenuItem*)(mItemsLayout->mChilds[position]);
+		UIContextMenuItem* itemWidget = (UIContextMenuItem*)(mItemsLayout->mChildren[position]);
 		SetupItem(itemWidget, item);
 	}
 
@@ -323,7 +323,7 @@ namespace o2
 		if (!mItemsLayout)
 			return nullptr;
 
-		for (auto child : mItemsLayout->mChilds)
+		for (auto child : mItemsLayout->mChildren)
 		{
 			if (child->layout.mAbsoluteRect.IsInside(point) && child->GetType() == TypeOf(UIContextMenuItem))
 				return (UIContextMenuItem*)child;
@@ -459,7 +459,7 @@ namespace o2
 	Vector<UIContextMenu::Item> UIContextMenu::GetItems() const
 	{
 		Vector<Item> res;
-		for (int i = 0; i < mItemsLayout->GetChilds().Count(); i++)
+		for (int i = 0; i < mItemsLayout->GetChildren().Count(); i++)
 			res.Add(GetItemDef(i));
 
 		return res;
@@ -467,8 +467,8 @@ namespace o2
 
 	void UIContextMenu::RemoveItem(int position)
 	{
-		if (position > 0 && position < mItemsLayout->GetChilds().Count())
-			mItemsLayout->RemoveChild(mItemsLayout->GetChilds()[position]);
+		if (position > 0 && position < mItemsLayout->GetChildren().Count())
+			mItemsLayout->RemoveChild(mItemsLayout->GetChildren()[position]);
 	}
 
 	void UIContextMenu::RemoveItem(const WString& path)
@@ -484,7 +484,7 @@ namespace o2
 
 			WString subMenu = targetPath.SubStr(0, slashPos);
 
-			UIWidget* subChild = targetContext->mItemsLayout->mChilds.FindMatch([&](auto x) {
+			UIWidget* subChild = targetContext->mItemsLayout->mChildren.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("caption"))
 					return text->text == subMenu;
 
@@ -508,7 +508,7 @@ namespace o2
 			targetPath = targetPath.SubStr(slashPos + 1);
 		}
 
-		UIWidget* removingItem = targetContext->mItemsLayout->mChilds.FindMatch([&](auto x) {
+		UIWidget* removingItem = targetContext->mItemsLayout->mChildren.FindMatch([&](auto x) {
 			if (auto text = x->GetLayerDrawable<Text>("caption"))
 				return text->text == targetPath;
 
@@ -532,20 +532,20 @@ namespace o2
 
 	void UIContextMenu::SetItemChecked(int position, bool checked)
 	{
-		if (position < 0 || position >= mItemsLayout->mChilds.Count())
+		if (position < 0 || position >= mItemsLayout->mChildren.Count())
 			return;
 
-		UIContextMenuItem* item = (UIContextMenuItem*)mItemsLayout->mChilds[position];
+		UIContextMenuItem* item = (UIContextMenuItem*)mItemsLayout->mChildren[position];
 		if (item->IsCheckable())
 			item->SetChecked(checked);
 	}
 
 	bool UIContextMenu::IsItemChecked(int position) const
 	{
-		if (position < 0 || position >= mItemsLayout->mChilds.Count())
+		if (position < 0 || position >= mItemsLayout->mChildren.Count())
 			return false;
 
-		UIContextMenuItem* item = (UIContextMenuItem*)mItemsLayout->mChilds[position];
+		UIContextMenuItem* item = (UIContextMenuItem*)mItemsLayout->mChildren[position];
 		return item->IsChecked();
 	}
 
@@ -591,7 +591,7 @@ namespace o2
 
 	void UIContextMenu::SetItemsMaxPriority()
 	{
-		for (auto child : mItemsLayout->mChilds)
+		for (auto child : mItemsLayout->mChildren)
 		{
 			UIContextMenuItem* item = dynamic_cast<UIContextMenuItem*>(child);
 			if (item)
@@ -601,7 +601,7 @@ namespace o2
 
 	void UIContextMenu::SetItemsMinPriority()
 	{
-		for (auto child : mItemsLayout->mChilds)
+		for (auto child : mItemsLayout->mChildren)
 		{
 			UIContextMenuItem* item = dynamic_cast<UIContextMenuItem*>(child);
 			if (item)
@@ -630,15 +630,15 @@ namespace o2
 		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout.mAbsoluteRect);
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 
-		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
+		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		if (withChildren)
 			UpdateChildrenLayouts(true);
 
 		UpdateScrollParams();
 
-		RectF _mChildsAbsRect = mChildsAbsRect;
-		mChildsAbsRect = layout.mAbsoluteRect;
+		RectF _mChildsAbsRect = mChildrenWorldRect;
+		mChildrenWorldRect = layout.mAbsoluteRect;
 
 		if (mOwnHorScrollBar)
 			mHorScrollBar->UpdateLayout(true);
@@ -646,7 +646,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->UpdateLayout(true);
 
-		mChildsAbsRect = _mChildsAbsRect;
+		mChildrenWorldRect = _mChildsAbsRect;
 	}
 
 	void UIContextMenu::CheckClipping(const RectF& clipArea)
@@ -655,7 +655,7 @@ namespace o2
 
 		Vec2F resolution = o2Render.GetCurrentResolution();
 		RectF fullScreenRect(resolution*0.5f, resolution*(-0.5f));
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->CheckClipping(fullScreenRect);
 	}
 
@@ -666,7 +666,7 @@ namespace o2
 		float maxShortcut = 0.0f;
 
 		int i = 0;
-		for (auto child : mItemsLayout->GetChilds())
+		for (auto child : mItemsLayout->GetChildren())
 		{
 			if (auto childCaption = child->GetLayerDrawable<Text>("caption"))
 				maxCaption = Math::Max(childCaption->GetRealSize().x, maxCaption);
@@ -730,7 +730,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->Draw();
 
 		mSelectionDrawable->Draw();
@@ -819,7 +819,7 @@ namespace o2
 	UIContextMenu::Item UIContextMenu::GetItemDef(int idx) const
 	{
 		Item res;
-		auto item = mItemsLayout->mChilds[idx];
+		auto item = mItemsLayout->mChildren[idx];
 
 		if (item->name == "Separator")
 		{

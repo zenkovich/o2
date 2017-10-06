@@ -261,13 +261,13 @@ namespace o2
 	{
 		UIScrollArea::UpdateLayout(forcible, withChildren);
 
-		RectF _mChildsAbsRect = mChildsAbsRect;
-		mChildsAbsRect = layout.mAbsoluteRect;
+		RectF _mChildsAbsRect = mChildrenWorldRect;
+		mChildrenWorldRect = layout.mAbsoluteRect;
 
 		for (auto elem : mWindowElements)
 			elem->UpdateLayout(true);
 
-		mChildsAbsRect = _mChildsAbsRect;
+		mChildrenWorldRect = _mChildsAbsRect;
 
 		mHeadDragAreaRect        = mHeadDragAreaLayout.Calculate(layout.mAbsoluteRect);
 		mTopDragAreaRect         = mTopDragAreaLayout.Calculate(layout.mAbsoluteRect);
@@ -371,8 +371,8 @@ namespace o2
 	{
 		if (mParent)
 		{
-			mParent->mChilds.Remove(this);
-			mParent->mChilds.Add(this);
+			mParent->mChildren.Remove(this);
+			mParent->mChildren.Add(this);
 		}
 
 		onFocused();

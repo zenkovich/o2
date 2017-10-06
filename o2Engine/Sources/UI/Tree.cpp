@@ -227,7 +227,7 @@ namespace o2
 
 		if (mExpandingNodeState == ExpandState::None)
 		{
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 				child->Draw();
 		}
 		else
@@ -761,7 +761,7 @@ namespace o2
 		{
 			UpdateNodeExpanding(mExpandNodeTime);
 
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 				child->UpdateLayout();
 		}
 
@@ -785,7 +785,7 @@ namespace o2
 
 		mAllNodes.Clear();
 		mVisibleNodes.Clear();
-		mChilds.Clear();
+		mChildren.Clear();
 		mSelectedNodes.Clear();
 		mMinVisibleNodeIdx = 0;
 		mMaxVisibleNodeIdx = -1;
@@ -917,7 +917,7 @@ namespace o2
 				if (node->widget)
 				{
 					mNodeWidgetsBuf.Add(node->widget);
-					mChilds.Remove(node->widget);
+					mChildren.Remove(node->widget);
 					node->widget->mParent = nullptr;
 					node->widget->mNodeDef = nullptr;
 					node->widget = nullptr;
@@ -979,7 +979,7 @@ namespace o2
 		widget->mNodeDef = node;
 		node->widget = widget;
 		widget->mParent = this;
-		mChilds.Add(widget);
+		mChildren.Add(widget);
 	}
 
 	void UITree::UpdateNodeView(Node* node, UITreeNode* widget, int idx)
@@ -1093,7 +1093,7 @@ namespace o2
 
 					nodeWidget->mParent = this;
 					mVisibleNodes.Add(node);
-					mChilds.Add(nodeWidget);
+					mChildren.Add(nodeWidget);
 
 					idx++;
 				}
@@ -1176,7 +1176,7 @@ namespace o2
 					if (node->widget)
 					{
 						mNodeWidgetsBuf.Add(node->widget);
-						mChilds.Remove(node->widget);
+						mChildren.Remove(node->widget);
 						node->widget->mParent = nullptr;
 						node->widget->mNodeDef = nullptr;
 						node->widget = nullptr;
@@ -1346,7 +1346,7 @@ namespace o2
 
 		if (mSelectedNodes.Count() > 1)
 		{
-			if (auto nameLayer = mFakeDragNode->FindLayer<Text>())
+			if (auto nameLayer = mFakeDragNode->GetLayerDrawableByType<Text>())
 				nameLayer->text = String::Format("%i items", mSelectedNodes.Count());
 		}
 

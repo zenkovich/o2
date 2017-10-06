@@ -131,7 +131,7 @@ namespace o2
 		if (mOwner)
 		{
 			mOwner->mComponents.Add(this);
-			OnTransformChanged();
+			OnTransformUpdated();
 			mOwner->OnChanged();
 		}
 	}
@@ -235,7 +235,7 @@ CLASS_META(o2::Component)
 	PUBLIC_FUNCTION(String, GetName);
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*, SceneLayer*);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
-	PROTECTED_FUNCTION(void, OnTransformChanged);
+	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(void, OnIncludeToScene);

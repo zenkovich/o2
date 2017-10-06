@@ -60,7 +60,7 @@ namespace o2
 	UIWidgetLayout& UIWidgetLayout::operator=(const UIWidgetLayout& other)
 	{
 		CopyFrom(other);
-		OnChanged();
+		SetDirty();
 
 		return *this;
 	}
@@ -79,7 +79,7 @@ namespace o2
 		mData->offsetMin += delta;
 		mData->offsetMax += delta;
 
-		OnChanged();
+		SetDirty();
 	}
 
 	void UIWidgetLayout::SetSize(const Vec2F& size)
@@ -88,7 +88,7 @@ namespace o2
 		mData->offsetMax += szDelta*(Vec2F::One() - mData->pivot);
 		mData->offsetMin -= szDelta*mData->pivot;
 
-		OnChanged();
+		SetDirty();
 	}
 
 	void UIWidgetLayout::SetRect(const RectF& rect)
@@ -99,7 +99,7 @@ namespace o2
 		mData->offsetMin = rect.LeftBottom() - parentAnchoredRect.LeftBottom();
 		mData->offsetMax = rect.RightTop() - parentAnchoredRect.RightTop();
 
-		OnChanged();
+		SetDirty();
 	}
 
 	void UIWidgetLayout::SetAxisAlignedRect(const RectF& rect)
@@ -111,7 +111,7 @@ namespace o2
 	void UIWidgetLayout::SetPivot(const Vec2F& pivot)
 	{
 		mData->pivot = pivot;
-		OnChanged();
+		SetDirty();
 	}
 
 	void UIWidgetLayout::SetBasis(const Basis& basis)
@@ -129,7 +129,7 @@ namespace o2
 	void UIWidgetLayout::SetAnchorMin(const Vec2F& min)
 	{
 		mData->anchorMin = min;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F UIWidgetLayout::GetAnchorMin() const
@@ -140,7 +140,7 @@ namespace o2
 	void UIWidgetLayout::SetAnchorMax(const Vec2F& max)
 	{
 		mData->anchorMax = max;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F UIWidgetLayout::GetAnchorMax() const
@@ -151,7 +151,7 @@ namespace o2
 	void UIWidgetLayout::SetAnchorLeft(float value)
 	{
 		mData->anchorMin.x = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetAnchorLeft() const
@@ -162,7 +162,7 @@ namespace o2
 	void UIWidgetLayout::SetAnchorRight(float value)
 	{
 		mData->anchorMax.x = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetAnchorRight() const
@@ -173,7 +173,7 @@ namespace o2
 	void UIWidgetLayout::SetAnchorBottom(float value)
 	{
 		mData->anchorMin.y = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetAnchorBottom() const
@@ -184,7 +184,7 @@ namespace o2
 	void UIWidgetLayout::SetAnchorTop(float value)
 	{
 		mData->anchorMax.y = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetAnchorTop() const
@@ -195,7 +195,7 @@ namespace o2
 	void UIWidgetLayout::SetOffsetMin(const Vec2F& min)
 	{
 		mData->offsetMin = min;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F UIWidgetLayout::GetOffsetMin() const
@@ -206,7 +206,7 @@ namespace o2
 	void UIWidgetLayout::SetOffsetMax(const Vec2F& max)
 	{
 		mData->offsetMax = max;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F UIWidgetLayout::GetOffsetMax() const
@@ -217,7 +217,7 @@ namespace o2
 	void UIWidgetLayout::SetOffsetLeft(float value)
 	{
 		mData->offsetMin.x = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetOffsetLeft() const
@@ -228,7 +228,7 @@ namespace o2
 	void UIWidgetLayout::SetOffsetRight(float value)
 	{
 		mData->offsetMax.x = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetOffsetRight() const
@@ -239,7 +239,7 @@ namespace o2
 	void UIWidgetLayout::SetOffsetBottom(float value)
 	{
 		mData->offsetMin.y = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetOffsetBottom() const
@@ -250,7 +250,7 @@ namespace o2
 	void UIWidgetLayout::SetOffsetTop(float value)
 	{
 		mData->offsetMax.y = value;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetOffsetTop() const
@@ -262,7 +262,7 @@ namespace o2
 	{
 		mData->minSize = minSize;
 		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F UIWidgetLayout::GetMinimalSize() const
@@ -274,7 +274,7 @@ namespace o2
 	{
 		mData->minSize.x = value;
 		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetMinimalWidth() const
@@ -286,7 +286,7 @@ namespace o2
 	{
 		mData->minSize.y = value;
 		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetMinimalHeight() const
@@ -298,7 +298,7 @@ namespace o2
 	{
 		mData->maxSize = maxSize;
 		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F UIWidgetLayout::GetMaximalSize() const
@@ -310,7 +310,7 @@ namespace o2
 	{
 		mData->maxSize.x = value;
 		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetMaximalWidth() const
@@ -322,7 +322,7 @@ namespace o2
 	{
 		mData->maxSize.y = value;
 		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetMaximalHeight() const
@@ -333,13 +333,13 @@ namespace o2
 	void UIWidgetLayout::DisableMinMaxSizes()
 	{
 		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
-		OnChanged();
+		SetDirty();
 	}
 
 	void UIWidgetLayout::SetWeight(const Vec2F& weight)
 	{
 		mData->weight = weight;
-		OnChanged();
+		SetDirty();
 	}
 
 	Vec2F UIWidgetLayout::GetWeight() const
@@ -350,7 +350,7 @@ namespace o2
 	void UIWidgetLayout::SetWidthWeight(float widthWeigth)
 	{
 		mData->weight.x = widthWeigth;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetWidthWeight()
@@ -361,7 +361,7 @@ namespace o2
 	void UIWidgetLayout::SetHeightWeight(float heigthWeigth)
 	{
 		mData->weight.y = heigthWeigth;
-		OnChanged();
+		SetDirty();
 	}
 
 	float UIWidgetLayout::GetHeightWeight()
@@ -524,12 +524,54 @@ namespace o2
 	{
 		ActorTransform::SetOwner(actor);
 		mData->owner = (UIWidget*)actor;
+		SetDirty();
 	}
 
-	void UIWidgetLayout::OnChanged()
+	void UIWidgetLayout::SetDirty()
 	{
+		if (mData->drivenByParent && mData->owner && mData->owner->mParent)
+			mData->owner->mParent->transform->SetDirty();
+
+		ActorTransform::SetDirty();
+	}
+
+	void UIWidgetLayout::Update()
+	{
+		RectF lastWorldRect = mData->worldRectangle;
+
+		RectF parentRect;
+		if (mData->owner->mParentWidget)
+			parentRect = mData->owner->mParentWidget->mChildrenWorldRect;
+
+		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
+						mData->offsetMax + mData->anchorMax*parentRect.Size());
+
+		mData->size = rectangle.Size();
+		mData->position = rectangle.LeftBottom() + mData->size*mData->pivot;
+
+		(this->*mCheckMinMaxFunc)();
+
+		UpdateRectangle();
+		FloorRectangle();
+		UpdateTransform();
+		UpdateWorldRectangleAndTransform();
+
+		mData->isParentInvTransformActual = false;
+		mData->isDirty = false;
+
 		if (mData->owner)
-			mData->owner->UpdateLayout();
+		{
+			mData->owner->mChildrenWorldRect = mData->worldRectangle;
+			mData->owner->OnTransformUpdated();
+		}
+	}
+
+	void UIWidgetLayout::FloorRectangle()
+	{
+		mData->rectangle.left   = Math::Floor(mData->rectangle.left);
+		mData->rectangle.right  = Math::Floor(mData->rectangle.right);
+		mData->rectangle.bottom = Math::Floor(mData->rectangle.bottom);
+		mData->rectangle.top    = Math::Floor(mData->rectangle.top);
 	}
 
 	void UIWidgetLayout::UpdateOffsetsByCurrentTransform()
@@ -555,6 +597,8 @@ namespace o2
 		mData->weight = other.mData->weight;
 
 		mCheckMinMaxFunc = other.mCheckMinMaxFunc;
+
+		SetDirty();
 	}
 
 	void UIWidgetLayout::CheckMinMax()

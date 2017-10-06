@@ -95,7 +95,7 @@ namespace o2
 		virtual void UpdateEnabled();
 
 		// It is called when actor's transform was changed
-		virtual void OnTransformChanged() {}
+		virtual void OnTransformUpdated() {}
 
 		// Sets owner actor
 		virtual void SetOwnerActor(Actor* actor);

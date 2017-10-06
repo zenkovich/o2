@@ -99,7 +99,7 @@ namespace o2
 		if (mIsFocused)
 			mCaretDrawable->Draw();
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->Draw();
 
 		o2Render.DisableScissorTest();
@@ -639,7 +639,7 @@ namespace o2
 
 		mScrollArea = RectF(0.0f, 0.0f, localViewArea.Width(), localViewArea.Height());
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			mScrollArea.left = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
 			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout.mLocalRect.bottom);
@@ -743,15 +743,15 @@ namespace o2
 
 		mTextDrawable->SetRect(mAbsoluteViewArea + roundedScrollPos);
 
-		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
+		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		if (withChildren)
 			UpdateChildrenLayouts();
 
 		UpdateScrollParams();
 
-		RectF _mChildsAbsRect = mChildsAbsRect;
-		mChildsAbsRect = layout.mAbsoluteRect;
+		RectF _mChildsAbsRect = mChildrenWorldRect;
+		mChildrenWorldRect = layout.mAbsoluteRect;
 
 		if (mOwnHorScrollBar)
 			mHorScrollBar->UpdateLayout(true);
@@ -759,7 +759,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->UpdateLayout(true);
 
-		mChildsAbsRect = _mChildsAbsRect;
+		mChildrenWorldRect = _mChildsAbsRect;
 
 		UpdateSelectionAndCaret();
 	}

@@ -42,7 +42,7 @@ namespace o2
 		Accessor<UIWidgetState*, const String&> state;           // Widget state accessor by name
 
 
-		Function<void()> onLayoutChanged; // Layout change event
+		Function<void()> onLayoutUpdated; // Layout change event
 		Function<void()> onFocused;       // Widget focused event
 		Function<void()> onUnfocused;     // Widget unfocused event
 		Function<void()> onShow;          // Widget showing vent
@@ -55,7 +55,7 @@ namespace o2
 		// Widget constructor from prototype
 		UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
 
-		// Constructor with components
+		// Widget constructor with components
 		UIWidget(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::InScene);
 
 		// Copy-constructor
@@ -70,55 +70,21 @@ namespace o2
 		// Updates layers, states and widget
 		void Update(float dt) override;
 
-		// Draws widget
+		// Draws widget and child widgets with not overridden depth
 		void Draw() override;
 
-		// Forcible drawing in area
+		// Forcible drawing in area with transparency
 		void ForceDraw(const RectF& area, float transparency);
 
-		// Sets widget name
-		virtual void SetName(const String& name);
-
-		// Returns widget name
-		virtual String GetName() const;
-
 		// Returns parent widget
-		virtual UIWidget* GetParentWidget() const;
-
-		// Sets widget parent
-		virtual void SetParent(UIWidget* parent);
-
-		// Adds child widget
-		virtual UIWidget* AddChild(UIWidget* widget, bool updateNow = true);
-
-		// Adds child widgets
-		virtual void AddChilds(const WidgetsVec& widgets);
-
-		// Adds child widget at index
-		virtual UIWidget* AddChild(UIWidget* widget, int index);
-
-		// Removes child by path
-		virtual bool RemoveChild(const String& path);
-
-		// Removes child widget
-		virtual bool RemoveChild(UIWidget* widget, bool release = true, bool updateLayout = true);
-
-		// Returns child by path. Returns nullptr if isn't exist
-		virtual UIWidget* GetChild(const String& path);
-
-		// Searches child with specified type
-		template<typename _type>
-		_type* FindChild();
+		UIWidget* GetParentWidget() const;
 
 		// Searches layer with drawable with specified type
 		template<typename _type>
-		_type* FindLayer();
-
-		// Removes all child widgets
-		virtual void RemoveAllChilds(bool release = true, bool updateLayout = true);
+		_type* GetLayerDrawableByType();
 
 		// Returns constant children widgets vector
-		virtual const WidgetsVec& GetChilds() const;
+		const WidgetsVec& GetChildWidgets() const;
 
 		// Adds layer
 		UIWidgetLayer* AddLayer(UIWidgetLayer* layer);
@@ -126,13 +92,6 @@ namespace o2
 		// Adds layer
 		UIWidgetLayer* AddLayer(const String& name, IRectDrawable* drawable,
 								const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
-
-		// Returns layer by path. Returns null if layer isn't exist
-		UIWidgetLayer* GetLayer(const String& path) const;
-
-		// Returns layer by path. Returns null if layer isn't exist or layer drawable has different type
-		template<typename _type>
-		_type* GetLayerDrawable(const String& path) const;
 
 		// Removes layer
 		bool RemoveLayer(UIWidgetLayer* layer);
@@ -143,8 +102,15 @@ namespace o2
 		// Removes all layers
 		void RemoveAllLayers();
 
+		// Returns layer by path. Returns null if layer isn't exist
+		UIWidgetLayer* GetLayer(const String& path) const;
+
 		// Returns all layers
 		const LayersVec& GetLayers() const;
+
+		// Returns layer by path. Returns null if layer isn't exist or layer drawable has different type
+		template<typename _type>
+		_type* GetLayerDrawable(const String& path) const;
 
 		// Adds new state with name
 		UIWidgetState* AddState(const String& name);
@@ -180,9 +146,9 @@ namespace o2
 		const StatesVec& GetStates() const;
 
 		// Sets depth overriding
-		void SetDepthOverride(bool overrideDepth);
+		void SetDepthOverridden(bool overrideDepth);
 
-		// Is sorting depth overriden
+		// Is sorting depth overridden
 		bool IsDepthOverriden() const;
 
 		// Sets widget's transparency
@@ -228,24 +194,32 @@ namespace o2
 		bool IsUnderPoint(const Vec2F& point);
 
 		// Updates layout
-		virtual void UpdateLayout(bool forcible = false, bool withChildren = true);
+		virtual void UpdateLayout(bool withChildren = true);
+
+		// Updates children layouts
+		virtual void UpdateChildrenLayouts();
 
 		SERIALIZABLE(UIWidget);
 
 	protected:
+		using Actor::mLayer;
+
 		String         mName;                   // Name @SERIALIZABLE
 					   						    
 		LayersVec      mLayers;                 // Layers array @SERIALIZABLE
 		StatesVec      mStates;                 // States array @SERIALIZABLE
 					   						    
-		UIWidget*      mParent = nullptr;       // Parent widget
-		WidgetsVec     mChilds;                 // Children widgets @SERIALIZABLE
-		RectF          mChildsAbsRect;          // Absolute rectangle for children arranging
-		RectF          mLastChildsAbsRect;      // Absolute rectangle for children arranging from last layout updating
+		UIWidget*      mParentWidget;           // Parent widget. When parent is not widget, this field will be null
+		WidgetsVec     mChildWidgets;           // Children widgets, a part of all children
+		WidgetsVec     mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
+
+		RectF          mChildrenWorldRect;      // World rectangle for children arranging
 					   						    
 		bool           mOverrideDepth = false;  // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
+
 		float          mTransparency = 1.0f;	// Widget transparency @SERIALIZABLE
 		float          mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
+
 		LayersVec      mDrawingLayers;          // Layers ordered by depth, which drawing before children (depth < 1000)
 		LayersVec      mTopDrawingLayers;       // Layers ordered by depth, which drawing after children (depth > 1000)
 					   						    
@@ -256,6 +230,7 @@ namespace o2
 		UIWidgetState* mVisibleState = nullptr; // Widget visibility state
 		bool           mVisible = true;         // Visibility of widget. Uses state 'visible' @SERIALIZABLE
 		bool           mResVisible = true;      // Result visibility of widget. Depends on this visibility and parent result visibility
+
 		bool           mFullyDisabled = false;  // True, if widget is not visible and visible state is fully false
 		bool           mIsClipped = false;      // Is widget fully clipped by some scissors
 
@@ -266,23 +241,32 @@ namespace o2
 		// Draws debug frame by mAbsoluteRect
 		void DrawDebugFrame();
 
+		// It is called when transformation was changed and updated
+		void OnTransformUpdated() override;
+
+		// It is called when parent changed
+		void OnParentChanged(Actor* oldParent) override;
+
+		// It is called when child actor was added
+		void OnChildAdded(Actor* child) override;
+
+		// It is called when child actor was removed
+		void OnChildRemoved(Actor* child) override;
+
+		// It is called when layer was changed
+		void OnLayerChanged(SceneLayer* oldLayer) override;
+
 		// It is called when widget was selected
 		virtual void OnFocused();
 
 		// It is called when widget was deselected
 		virtual void OnUnfocused();
 
-		// Checks is this layout driven by parent and calls UpdateLayout in parent if needed
-		virtual bool CheckIsLayoutDrivenByParent(bool forcibleLayout);
-
 		// Returns layout width
 		virtual float GetMinWidthWithChildren() const;
 
 		// Returns layout height
 		virtual float GetMinHeightWithChildren() const;
-
-		// Updates children layouts
-		virtual void UpdateChildrenLayouts(bool forcible = false);
 
 		// Updates bounds by drawing layers
 		virtual void UpdateBounds();
@@ -302,11 +286,17 @@ namespace o2
 		// It is called when child widget was selected
 		virtual void OnChildFocused(UIWidget* child);
 
-		// Sets target for all states animations
-		void RetargetStatesAnimations();
+		// It is called when layer added and updates drawing sequence
+		virtual void OnLayerAdded(UIWidgetLayer* layer);
 
-		// Recalculates absolute and local rectangles
-		void RecalculateAbsRect();
+		// It is called when widget state was added
+		virtual void OnStateAdded(UIWidgetState* state);
+
+		// It is called when visible was changed
+		virtual void OnVisibleChanged();
+
+		// Sets new target for all states animations
+		void RetargetStatesAnimations();
 
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts();
@@ -315,7 +305,7 @@ namespace o2
 		void UpdateLayersDrawingSequence();
 
 		// Returns children widgets (for property)
-		WidgetsVec GetChildsNonConst();
+		WidgetsVec GetChildrenNonConst();
 
 		// Returns layers (for property)
 		LayersVec GetLayersNonConst();
@@ -329,23 +319,8 @@ namespace o2
 		// Returns dictionary of all children by names
 		Dictionary<String, UIWidget*> GetAllChilds();
 
-		// It is called when layer added and updates drawing sequence
-		virtual void OnLayerAdded(UIWidgetLayer* layer);
-
-		// It is called when widget state was added
-		virtual void OnStateAdded(UIWidgetState* state);
-
-		// It is called when child widget was added
-		virtual void OnChildAdded(UIWidget* child);
-
-		// It is called when child widget was removed
-		virtual void OnChildRemoved(UIWidget* child);
-
-		// It is called when visible was changed
-		virtual void OnVisibleChanged();
-
 		// It is called when deserialized
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		// Initializes properties
 		void InitializeProperties();
@@ -377,21 +352,7 @@ namespace o2
 	};
 
 	template<typename _type>
-	_type* UIWidget::FindChild()
-	{
-		for (auto child : mChilds)
-			if (child->GetType() == TypeOf(_type))
-				return (_type*)child;
-
-		for (auto child : mChilds)
-			if (auto res = child->FindChild<_type>())
-				return res;
-
-		return nullptr;
-	}
-
-	template<typename _type>
-	_type* UIWidget::FindLayer()
+	_type* UIWidget::GetLayerDrawableByType()
 	{
 		for (auto layer : mLayers)
 		{
@@ -401,7 +362,7 @@ namespace o2
 
 		for (auto layer : mLayers)
 		{
-			auto res = layer->FindLayer<_type>();
+			auto res = layer->GetLayerDrawableByType<_type>();
 			if (res)
 				return res;
 		}

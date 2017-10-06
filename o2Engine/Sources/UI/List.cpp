@@ -62,7 +62,7 @@ namespace o2
 	int UIList::FindItem(const WString& text)
 	{
 		int i = 0;
-		for (auto child : mVerLayout->mChilds)
+		for (auto child : mVerLayout->mChildren)
 		{
 			if (((UILabel*)child)->GetText() == text)
 				return i;
@@ -85,7 +85,7 @@ namespace o2
 	Vector<WString> UIList::GetAllItemsText() const
 	{
 		Vector<WString> res;
-		for (auto child : mVerLayout->mChilds)
+		for (auto child : mVerLayout->mChildren)
 			res.Add(((UILabel*)child)->GetText());
 
 		return res;

@@ -5,6 +5,7 @@
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
+#include "UIManager.h"
 
 namespace o2
 {
@@ -12,7 +13,6 @@ namespace o2
 		Actor(mnew UIWidgetLayout(), mode), layout((UIWidgetLayout*)transform)
 	{
 		layout->SetOwner(this);
-		UpdateLayout();
 		InitializeProperties();
 	}
 
@@ -20,7 +20,6 @@ namespace o2
 		Actor(mnew UIWidgetLayout(), prototype, mode), layout((UIWidgetLayout*)transform)
 	{
 		layout->SetOwner(this);
-		UpdateLayout();
 		InitializeProperties();
 	}
 
@@ -28,7 +27,6 @@ namespace o2
 		Actor(mnew UIWidgetLayout(), components, mode), layout((UIWidgetLayout*)transform)
 	{
 		layout->SetOwner(this);
-		UpdateLayout();
 		InitializeProperties();
 	}
 
@@ -37,7 +35,6 @@ namespace o2
 		mTransparency(other.mTransparency), mVisible(other.mVisible), mFullyDisabled(!other.mVisible)
 	{
 		layout->SetOwner(this);
-		InitializeProperties();
 
 		for (auto layer : other.mLayers)
 		{
@@ -53,10 +50,8 @@ namespace o2
 			AddState(newState);
 		}
 
+		InitializeProperties();
 		UpdateLayersDrawingSequence();
-		UpdateTransparency();
-		UpdateVisibility();
-		UpdateLayout();
 		RetargetStatesAnimations();
 	}
 
@@ -104,9 +99,6 @@ namespace o2
 		}
 
 		UpdateLayersDrawingSequence();
-		UpdateTransparency();
-		UpdateVisibility();
-		UpdateLayout();
 		RetargetStatesAnimations();
 
 		return *this;
@@ -134,6 +126,9 @@ namespace o2
 
 		OnDrawn();
 
+		for (auto child : mDrawingChildren)
+			child->Draw();
+
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
 
@@ -156,6 +151,13 @@ namespace o2
 		o2Render.DrawRectFrame(layout->GetWorldRect(), Color4::SomeColor(colr++));
 	}
 
+	void UIWidget::OnTransformUpdated()
+	{
+		Actor::OnTransformUpdated();
+		UpdateLayersLayouts();
+		onLayoutUpdated();
+	}
+
 	void UIWidget::OnFocused()
 	{
 		onFocused();
@@ -166,198 +168,14 @@ namespace o2
 		onUnfocused();
 	}
 
-	void UIWidget::SetName(const String& name)
-	{
-		mName = name;
-	}
-
-	String UIWidget::GetName() const
-	{
-		return mName;
-	}
-
 	UIWidget* UIWidget::GetParentWidget() const
 	{
-		return mParent;
+		return mParentWidget;
 	}
 
-	void UIWidget::SetParent(UIWidget* parent)
+	const UIWidget::WidgetsVec& UIWidget::GetChildWidgets() const
 	{
-		if ((parent && parent->mChilds.Contains(this)) || parent == this)
-			return;
-
-		if (mParent)
-		{
-			mParent->RemoveChild(this, false);
-			mParent->UpdateLayout();
-		}
-
-		mParent = parent;
-
-		if (mParent)
-		{
-			mParent->mChilds.Add(this);
-			mParent->UpdateLayout();
-		}
-
-		UpdateTransparency();
-		UpdateVisibility();
-	}
-
-	UIWidget* UIWidget::AddChild(UIWidget* widget, bool updateNow /*= true*/)
-	{
-		if (mChilds.Contains(widget) || widget == this)
-			return widget;
-
-		if (widget->mParent)
-			widget->mParent->RemoveChild(widget, false);
-
-		mChilds.Add(widget);
-		widget->mParent = this;
-
-		if (updateNow)
-		{
-			UpdateLayout();
-			UpdateTransparency();
-			UpdateVisibility();
-		}
-
-		OnChildAdded(widget);
-
-		return widget;
-	}
-
-	void UIWidget::AddChilds(const WidgetsVec& widgets)
-	{
-		for (auto widget : widgets)
-		{
-			if (mChilds.Contains(widget) || widget == this)
-				continue;
-
-			if (widget->mParent)
-				widget->mParent->RemoveChild(widget, false);
-
-			mChilds.Add(widget);
-			widget->mParent = this;
-
-			OnChildAdded(widget);
-		}
-
-		UpdateLayout();
-		UpdateTransparency();
-		UpdateVisibility();
-	}
-
-	UIWidget* UIWidget::AddChild(UIWidget* widget, int index)
-	{
-		if (mChilds.Contains(widget) || widget == this)
-			return widget;
-
-		if (widget->mParent)
-			widget->mParent->RemoveChild(widget, false);
-
-		mChilds.Insert(widget, index);
-		widget->mParent = this;
-
-		UpdateLayout();
-		UpdateTransparency();
-		UpdateVisibility();
-
-		OnChildAdded(widget);
-
-		return widget;
-	}
-
-	bool UIWidget::RemoveChild(const String& path)
-	{
-		auto child = GetChild(path);
-		if (!child)
-			return false;
-
-		bool res = child->mParent->RemoveChild(child);
-		child->mParent->UpdateLayout();
-		child->UpdateTransparency();
-		child->UpdateVisibility();
-
-		return res;
-	}
-
-	bool UIWidget::RemoveChild(UIWidget* widget, bool release /*= true*/, bool updateLayout /*= true*/)
-	{
-		if (!mChilds.Contains(widget))
-			return false;
-
-		widget->mParent = nullptr;
-		mChilds.Remove(widget);
-		
-		if (updateLayout)
-			UpdateLayout();
-
-		OnChildRemoved(widget);
-
-		if (release)
-			delete widget;
-		else
-		{
-			widget->UpdateTransparency();
-			widget->UpdateVisibility();
-		}
-
-		return true;
-	}
-
-	UIWidget* UIWidget::GetChild(const String& path)
-	{
-		int delPos = path.Find("/");
-		WString pathPart = path.SubStr(0, delPos);
-
-		if (pathPart == "..")
-		{
-			if (mParent)
-			{
-				if (delPos == -1)
-					return mParent;
-				else
-					return mParent->GetChild(path.SubStr(delPos + 1));
-			}
-
-			return nullptr;
-		}
-
-		for (auto child : mChilds)
-		{
-			if (child->mName == pathPart)
-			{
-				if (delPos == -1)
-					return child;
-				else
-					return child->GetChild(path.SubStr(delPos + 1));
-			}
-		}
-
-		return nullptr;
-	}
-
-	void UIWidget::RemoveAllChilds(bool release /*= true*/, bool updateLayout /*= true*/)
-	{
-		for (auto child : mChilds)
-		{
-			child->mParent = nullptr;
-			OnChildRemoved(child);
-
-			if (release)
-				delete child;
-		}
-
-		mChilds.Clear();
-		
-		if (updateLayout)
-			UpdateLayout();
-	}
-
-	const UIWidget::WidgetsVec& UIWidget::GetChilds() const
-	{
-		return mChilds;
+		return mChildWidgets;
 	}
 
 	UIWidgetLayer* UIWidget::AddLayer(UIWidgetLayer* layer)
@@ -411,6 +229,7 @@ namespace o2
 		bool res = mLayers.Remove(layer);
 		delete layer;
 		UpdateLayersDrawingSequence();
+
 		return res;
 	}
 
@@ -573,9 +392,13 @@ namespace o2
 		return mStates;
 	}
 
-	void UIWidget::SetDepthOverride(bool overrideDepth)
+	void UIWidget::SetDepthOverridden(bool overrideDepth)
 	{
 		mOverrideDepth = overrideDepth;
+
+		if (mLayer)
+		{
+		}
 	}
 
 	bool UIWidget::IsDepthOverriden() const
@@ -664,83 +487,63 @@ namespace o2
 
 	bool UIWidget::IsUnderPoint(const Vec2F& point)
 	{
-		return mDrawingScissorRect.IsInside(point) && layout->mAbsoluteRect.IsInside(point);
+		return mDrawingScissorRect.IsInside(point) && layout->IsPointInside(point);
 	}
 
-	bool UIWidget::CheckIsLayoutDrivenByParent(bool forcibleLayout)
+	void UIWidget::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (layout->mDrivenByParent && !forcibleLayout)
-		{
-			if (mParent)
-				mParent->UpdateLayout();
-
-			return true;
-		}
-
-		return false;
-	}
-
-	void UIWidget::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
-	{
-		if (mFullyDisabled && !forcible)
-			return;
-
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
-		RecalculateAbsRect();
-		UpdateLayersLayouts();
+		layout->Update();
 
 		if (withChildren)
-			UpdateChildrenLayouts(true);
+			UpdateChildrenLayouts();
 	}
 
 	float UIWidget::GetMinWidthWithChildren() const
 	{
-		return layout->mMinSize.x;
+		return layout->mData->minSize.x;
 	}
 
 	float UIWidget::GetMinHeightWithChildren() const
 	{
-		return layout->mMinSize.y;
+		return layout->mData->minSize.y;
 	}
 
-	void UIWidget::UpdateChildrenLayouts(bool forcible /*= false*/)
+	void UIWidget::UpdateChildrenLayouts()
 	{
-		for (auto child : mChilds)
-			child->UpdateLayout(forcible);
+		for (auto child : mChildWidgets)
+			child->UpdateLayout();
 	}
 
 	void UIWidget::UpdateBoundsWithChilds()
 	{
 		mBoundsWithChilds = mBounds;
 
-		for (auto child : mChilds)
+		for (auto child : mChildWidgets)
 			mBoundsWithChilds.Expand(child->mBoundsWithChilds);
 
-		if (mParent)
-			mParent->UpdateBoundsWithChilds();
+		if (mParentWidget)
+			mParentWidget->UpdateBoundsWithChilds();
 	}
 
 	void UIWidget::CheckClipping(const RectF& clipArea)
 	{
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 
-		for (auto child : mChilds)
+		for (auto child : mChildWidgets)
 			child->CheckClipping(clipArea);
 	}
 
 	void UIWidget::UpdateTransparency()
 	{
-		if (mParent)
-			mResTransparency = mTransparency*mParent->mResTransparency;
+		if (mParentWidget)
+			mResTransparency = mTransparency*mParentWidget->mResTransparency;
 		else
 			mResTransparency = mTransparency;
 
 		for (auto layer : mLayers)
 			layer->UpdateResTransparency();
 
-		for (auto child : mChilds)
+		for (auto child : mChildWidgets)
 			child->UpdateTransparency();
 	}
 
@@ -748,12 +551,12 @@ namespace o2
 	{
 		bool lastResVisible = mResVisible;
 
-		if (mParent)
-			mResVisible = mVisible && mParent->mResVisible;
+		if (mParentWidget)
+			mResVisible = mVisible && mParentWidget->mResVisible;
 		else
 			mResVisible = mVisible;
 
-		for (auto child : mChilds)
+		for (auto child : mChildWidgets)
 			child->UpdateVisibility(false);
 
 		if (mResVisible != lastResVisible)
@@ -777,8 +580,8 @@ namespace o2
 
 	void UIWidget::OnChildFocused(UIWidget* child)
 	{
-		if (mParent)
-			mParent->OnChildFocused(child);
+		if (mParentWidget)
+			mParentWidget->OnChildFocused(child);
 	}
 
 	void UIWidget::RetargetStatesAnimations()
@@ -788,54 +591,6 @@ namespace o2
 			state->animation.SetTarget(this, false);
 			state->animation.relTime = state->GetState() ? 1.0f : 0.0f;
 		}
-	}
-
-	void UIWidget::RecalculateAbsRect()
-	{
-// 		if (UI_DEBUG || o2Input.IsKeyDown(VK_F2))
-// 		{
-// 			static int frame = 0;
-// 			static int counter = 0;
-// 			int curFrame = o2Time.GetCurrentFrame();
-// 
-// 			printf("-- %s\n", mName.Data());
-// 			if (curFrame != frame)
-// 			{
-// 				printf("----------------%i widget layouts recalculates\n", counter);
-// 				counter = 0;
-// 				frame = curFrame;
-// 			}
-// 
-// 			counter++;
-// 		}
-
-		RectF lastAbsRect = layout->mAbsoluteRect;
-
-		Vec2F parentSize, parentPos;
-		if (mParent)
-		{
-			parentSize = mParent->mChildsAbsRect.Size();
-			parentPos = mParent->mChildsAbsRect.LeftBottom();
-		}
-
-		layout->mLocalRect.left   = parentSize.x*layout->mAnchorMin.x + layout->mOffsetMin.x;
-		layout->mLocalRect.right  = parentSize.x*layout->mAnchorMax.x + layout->mOffsetMax.x;
-		layout->mLocalRect.bottom = parentSize.y*layout->mAnchorMin.y + layout->mOffsetMin.y;
-		layout->mLocalRect.top    = parentSize.y*layout->mAnchorMax.y + layout->mOffsetMax.y;
-
-		layout->mCheckMinMaxFunc();
-
-		layout->mLocalRect.left   = Math::Floor(layout->mLocalRect.left);
-		layout->mLocalRect.right  = Math::Floor(layout->mLocalRect.right);
-		layout->mLocalRect.bottom = Math::Floor(layout->mLocalRect.bottom);
-		layout->mLocalRect.top    = Math::Floor(layout->mLocalRect.top);
-
-		layout->mAbsoluteRect = layout->mLocalRect + parentPos;
-		mLastChildsAbsRect = mChildsAbsRect;
-		mChildsAbsRect = layout->mAbsoluteRect;
-
-		if (lastAbsRect != layout->mAbsoluteRect)
-			onLayoutChanged();
 	}
 
 	void UIWidget::UpdateLayersLayouts()
@@ -848,17 +603,19 @@ namespace o2
 
 	void UIWidget::UpdateBounds()
 	{
-		mBounds = layout->mAbsoluteRect;
+		mBounds = layout->mData->worldRectangle;
 
 		for (auto layer : mDrawingLayers)
 			mBounds.Expand(layer->GetRect());
 
-		if (mChilds.IsEmpty())
+		if (mChildren.IsEmpty())
 			UpdateBoundsWithChilds();
 	}
 
 	void UIWidget::UpdateLayersDrawingSequence()
 	{
+		const float topLayersDepth = 1000.0f;
+
 		mDrawingLayers.Clear();
 		mTopDrawingLayers.Clear();
 
@@ -866,7 +623,7 @@ namespace o2
 		{
 			if (layer->drawable)
 			{
-				if (layer->mDepth < 1000.0f)
+				if (layer->mDepth < topLayersDepth)
 					mDrawingLayers.Add(layer);
 				else
 					mTopDrawingLayers.Add(layer);
@@ -877,7 +634,7 @@ namespace o2
 			{
 				if (childLayer->drawable)
 				{
-					if (childLayer->mDepth < 1000.0f)
+					if (childLayer->mDepth < topLayersDepth)
 						mDrawingLayers.Add(childLayer);
 					else
 						mTopDrawingLayers.Add(childLayer);
@@ -889,9 +646,9 @@ namespace o2
 		mTopDrawingLayers.Sort([](auto a, auto b) { return a->mDepth < b->mDepth; });
 	}
 
-	UIWidget::WidgetsVec UIWidget::GetChildsNonConst()
+	UIWidget::WidgetsVec UIWidget::GetChildrenNonConst()
 	{
-		return mChilds;
+		return mChildWidgets;
 	}
 
 	LayersVec UIWidget::GetLayersNonConst()
@@ -916,7 +673,7 @@ namespace o2
 	Dictionary<String, UIWidget*> UIWidget::GetAllChilds()
 	{
 		Dictionary<String, UIWidget*> res;
-		for (auto child : mChilds)
+		for (auto child : mChildWidgets)
 			res.Add(child->GetName(), child);
 
 		return res;
@@ -928,11 +685,25 @@ namespace o2
 	void UIWidget::OnStateAdded(UIWidgetState* state)
 	{}
 
-	void UIWidget::OnChildAdded(UIWidget* child)
-	{}
+	void UIWidget::OnParentChanged(Actor* oldParent)
+	{
+		layout->SetDirty();
+	}
 
-	void UIWidget::OnChildRemoved(UIWidget* child)
-	{}
+	void UIWidget::OnChildAdded(Actor* child)
+	{
+		layout->SetDirty();
+	}
+
+	void UIWidget::OnChildRemoved(Actor* child)
+	{
+		layout->SetDirty();
+	}
+
+	void UIWidget::OnLayerChanged(SceneLayer* oldLayer)
+	{
+		SceneDrawable::SetLayer(mLayer);
+	}
 
 	void UIWidget::OnDeserialized(const DataNode& node)
 	{
@@ -946,14 +717,14 @@ namespace o2
 
 	void UIWidget::ForceDraw(const RectF& area, float transparency)
 	{
-		Vec2F oldLayoutOffsetMin = layout->mOffsetMin;
-		Vec2F oldLayoutOffsetMax = layout->mOffsetMax;
+		Vec2F oldLayoutOffsetMin = layout->mData->offsetMin;
+		Vec2F oldLayoutOffsetMax = layout->mData->offsetMax;
 		float oldTransparency = mTransparency;
 		auto oldParent = mParent;
 		bool oldClipped= mIsClipped;
 
-		layout->mOffsetMin = area.LeftBottom();
-		layout->mOffsetMax = area.RightTop();
+		layout->mData->offsetMin = area.LeftBottom();
+		layout->mData->offsetMax = area.RightTop();
 		mTransparency = transparency;
 		mParent = nullptr;
 		mIsClipped = false;
@@ -963,8 +734,8 @@ namespace o2
 
 		Draw();
 
-		layout->mOffsetMin = oldLayoutOffsetMin;
-		layout->mOffsetMax = oldLayoutOffsetMax;
+		layout->mData->offsetMin = oldLayoutOffsetMin;
+		layout->mData->offsetMax = oldLayoutOffsetMax;
 		mTransparency = oldTransparency;
 		mParent = oldParent;
 		mIsClipped = oldClipped;
@@ -978,12 +749,11 @@ namespace o2
 
 	void UIWidget::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(UIWidget, name, SetName, GetName);
-		INITIALIZE_PROPERTY(UIWidget, parent, SetParent, GetParentWidget);
+		INITIALIZE_PROPERTY(UIWidget, parentWidget, SetParent, GetParentWidget);
 		INITIALIZE_PROPERTY(UIWidget, transparency, SetTransparency, GetTransparency);
 		INITIALIZE_GETTER(UIWidget, resTransparency, GetResTransparency);
 		INITIALIZE_PROPERTY(UIWidget, visible, SetVisible, IsVisible);
-		INITIALIZE_GETTER(UIWidget, childs, GetChildsNonConst);
+		INITIALIZE_GETTER(UIWidget, childs, GetChildrenNonConst);
 		INITIALIZE_GETTER(UIWidget, layers, GetLayersNonConst);
 		INITIALIZE_GETTER(UIWidget, states, GetStatesNonConst);
 		INITIALIZE_ACCESSOR(UIWidget, child, GetChild);
@@ -1012,7 +782,7 @@ CLASS_META(o2::UIWidget)
 	PUBLIC_FIELD(layer);
 	PUBLIC_FIELD(state);
 	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(onLayoutChanged);
+	PUBLIC_FIELD(onLayoutUpdated);
 	PUBLIC_FIELD(onFocused);
 	PUBLIC_FIELD(onUnfocused);
 	PUBLIC_FIELD(onShow);
@@ -1021,8 +791,8 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FIELD(mLayers).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mParent);
-	PROTECTED_FIELD(mChilds).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mChildsAbsRect);
+	PROTECTED_FIELD(mChildren).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mChildrenWorldRect);
 	PROTECTED_FIELD(mLastChildsAbsRect);
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);
@@ -1055,7 +825,7 @@ CLASS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, RemoveChild, UIWidget*, bool, bool);
 	PUBLIC_FUNCTION(UIWidget*, GetChild, const String&);
 	PUBLIC_FUNCTION(void, RemoveAllChilds, bool, bool);
-	PUBLIC_FUNCTION(const WidgetsVec&, GetChilds);
+	PUBLIC_FUNCTION(const WidgetsVec&, GetChildren);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, UIWidgetLayer*);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, const String&, IRectDrawable*, const Layout&, float);
 	PUBLIC_FUNCTION(UIWidgetLayer*, GetLayer, const String&);
@@ -1106,7 +876,7 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, RecalculateAbsRect);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);
-	PROTECTED_FUNCTION(WidgetsVec, GetChildsNonConst);
+	PROTECTED_FUNCTION(WidgetsVec, GetChildrenNonConst);
 	PROTECTED_FUNCTION(LayersVec, GetLayersNonConst);
 	PROTECTED_FUNCTION(StatesVec, GetStatesNonConst);
 	PROTECTED_FUNCTION(_tmp1, GetAllLayers);

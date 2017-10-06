@@ -313,7 +313,7 @@ namespace o2
 
 		if (newParent)
 		{
-			int insertIdx = newParent->GetChilds().Find(prevActor) + 1;
+			int insertIdx = newParent->GetChildren().Find(prevActor) + 1;
 
 			for (auto def : actorsDefs)
 			{

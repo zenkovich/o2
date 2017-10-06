@@ -128,7 +128,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->Draw();
 
 		o2Render.DisableScissorTest();
@@ -546,7 +546,7 @@ namespace o2
 		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout.mAbsoluteRect);
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
+		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		if (withChildren)
 			UpdateChildrenLayouts(true);
@@ -561,10 +561,10 @@ namespace o2
 		mScrollPos += delta;
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildsAbsRect = mAbsoluteViewArea + roundedScrollPos;
+		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		Vec2F widgetsMove(-delta.x, delta.y);
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			MoveWidgetAndCheckClipping(child, widgetsMove);
 
 		UpdateScrollParams();
@@ -579,14 +579,14 @@ namespace o2
 		if (!widget->mIsClipped)
 			widget->UpdateLayout(true, false);
 
-		for (auto child : widget->mChilds)
+		for (auto child : widget->mChildren)
 			MoveWidgetAndCheckClipping(child, delta);
 	}
 
 	void UIScrollArea::UpdateScrollBarsLayout()
 	{
-		RectF tmpChildsAbsRect = mChildsAbsRect;
-		mChildsAbsRect = layout.mAbsoluteRect;
+		RectF tmpChildsAbsRect = mChildrenWorldRect;
+		mChildrenWorldRect = layout.mAbsoluteRect;
 
 		if (mOwnHorScrollBar)
 			mHorScrollBar->UpdateLayout(true);
@@ -594,12 +594,12 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->UpdateLayout(true);
 
-		mChildsAbsRect = tmpChildsAbsRect;
+		mChildrenWorldRect = tmpChildsAbsRect;
 	}
 
 	void UIScrollArea::CheckChildrenClipping()
 	{
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->CheckClipping(mAbsoluteClipArea);
 	}
 
@@ -609,7 +609,7 @@ namespace o2
 
 		RectF newClipArea = clipArea.GetIntersection(mAbsoluteClipArea);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->CheckClipping(newClipArea);
 	}
 
@@ -628,7 +628,7 @@ namespace o2
 	{
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			if (child->mFullyDisabled || child->GetType() == TypeOf(UIContextMenu))
 				continue;
@@ -804,7 +804,7 @@ namespace o2
 		}
 		else mVerScrollBar = nullptr;
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->layout.mDrivenByParent = true;
 
 		UIWidget::OnDeserialized(node);

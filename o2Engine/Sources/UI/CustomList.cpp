@@ -111,7 +111,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->Draw();
 
 		for (auto& sel : mSelectedItems)
@@ -162,7 +162,7 @@ namespace o2
 	{
 		position = Math::Max(0, position);
 
-		for (int i = mVerLayout->GetChilds().Count(); i < position; i++)
+		for (int i = mVerLayout->GetChildren().Count(); i < position; i++)
 			AddItem();
 
 		return mVerLayout->AddChild(mItemSample->Clone(), position);
@@ -175,25 +175,25 @@ namespace o2
 
 	void UICustomList::RemoveItem(int position)
 	{
-		if (position < 0 || position >= mVerLayout->GetChilds().Count())
+		if (position < 0 || position >= mVerLayout->GetChildren().Count())
 		{
-			o2Debug.LogWarning("Failed to remove item at %i: out of range (%i)", position, mVerLayout->GetChilds().Count());
+			o2Debug.LogWarning("Failed to remove item at %i: out of range (%i)", position, mVerLayout->GetChildren().Count());
 			return;
 		}
 
-		mVerLayout->RemoveChild(mVerLayout->GetChilds().Get(position));
+		mVerLayout->RemoveChild(mVerLayout->GetChildren().Get(position));
 	}
 
 	void UICustomList::MoveItem(int position, int newPosition)
 	{
-		if (position < 0 || position >= mVerLayout->GetChilds().Count())
+		if (position < 0 || position >= mVerLayout->GetChildren().Count())
 		{
 			o2Debug.LogWarning("Failed to move item from %i to %i: out of range (%i)", position, newPosition,
-							   mVerLayout->GetChilds().Count());
+							   mVerLayout->GetChildren().Count());
 			return;
 		}
 
-		UIWidget* item = mVerLayout->GetChilds().Get(position);
+		UIWidget* item = mVerLayout->GetChildren().Get(position);
 		mVerLayout->RemoveChild(item, false);
 		mVerLayout->AddChild(item, newPosition);
 	}
@@ -207,7 +207,7 @@ namespace o2
 	int UICustomList::GetItemPosition(UIWidget* item)
 	{
 		int i = 0;
-		for (auto child : mVerLayout->GetChilds())
+		for (auto child : mVerLayout->GetChildren())
 		{
 			if (child == item)
 				return i;
@@ -220,10 +220,10 @@ namespace o2
 
 	UIWidget* UICustomList::GetItem(int position) const
 	{
-		if (position < 0 || position >= mVerLayout->GetChilds().Count())
+		if (position < 0 || position >= mVerLayout->GetChildren().Count())
 			return nullptr;
 
-		return mVerLayout->GetChilds().Get(position);
+		return mVerLayout->GetChildren().Get(position);
 	}
 
 	void UICustomList::RemoveAllItems()
@@ -233,12 +233,12 @@ namespace o2
 
 	void UICustomList::SortItems(const Function<bool(UIWidget*, UIWidget*)>& sortFunc)
 	{
-		mVerLayout->mChilds.Sort(sortFunc);
+		mVerLayout->mChildren.Sort(sortFunc);
 	}
 
 	int UICustomList::GetItemsCount() const
 	{
-		return mVerLayout->GetChilds().Count();
+		return mVerLayout->GetChildren().Count();
 	}
 
 	void UICustomList::SelectItem(UIWidget* item)
@@ -267,7 +267,7 @@ namespace o2
 		if (!mMultiSelection)
 			ClearSelection();
 
-		if (position >= mVerLayout->GetChilds().Count())
+		if (position >= mVerLayout->GetChildren().Count())
 		{
 			o2Debug.LogWarning("Can't select item at %i: out of range (%i)", position, GetItemsCount());
 			return;
@@ -477,7 +477,7 @@ namespace o2
 			return nullptr;
 
 		int idx = 0;
-		for (auto child : mVerLayout->mChilds)
+		for (auto child : mVerLayout->mChildren)
 		{
 			if (child->layout.mAbsoluteRect.IsInside(point))
 			{

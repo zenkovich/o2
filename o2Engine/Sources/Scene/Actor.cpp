@@ -59,7 +59,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
-		transform->OnChanged();
+		transform->SetDirty();
 
 		InitializeProperties();
 
@@ -98,7 +98,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
-		transform->OnChanged();
+		transform->SetDirty();
 
 		InitializeProperties();
 
@@ -185,7 +185,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		UpdateEnabled();
-		transform->OnChanged();
+		transform->SetDirty();
 
 		OnChanged();
 
@@ -194,16 +194,19 @@ namespace o2
 
 	void Actor::Update(float dt)
 	{
+		if (transform->mData->isDirty)
+			transform->Update();
+
 		for (auto comp : mComponents)
 			comp->Update(dt);
 	}
 
 	void Actor::UpdateChilds(float dt)
 	{
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->Update(dt);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->UpdateChilds(dt);
 	}
 
@@ -232,7 +235,7 @@ namespace o2
 
 		// remove from cache
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->BreakPrototypeLink();
 
 		for (auto component : mComponents)
@@ -275,7 +278,7 @@ namespace o2
 			serializable->OnDeserialized(DataNode());
 
 		UpdateEnabled();
-		transform->OnChanged();
+		transform->SetDirty();
 
 		OnChanged();
 	}
@@ -300,7 +303,7 @@ namespace o2
 		SetPrototype(prototypeAsset);
 
 		prototype->UpdateEnabled();
-		prototype->transform->OnChanged();
+		prototype->transform->SetDirty();
 		prototype->OnChanged();
 
 		return prototypeAsset;
@@ -385,7 +388,7 @@ namespace o2
 
 		if (childs)
 		{
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 				child->GenerateNewID(childs);
 		}
 	}
@@ -403,10 +406,10 @@ namespace o2
 
 		o2Scene.mRootActors.Remove(this);
 		o2Scene.mAllActors.Remove(this);
-		ComponentsExcludeFromScene();
+		ExcludeComponentsFromScene();
 		mIsOnScene = false;
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->ExcludeFromScene();
 	}
 
@@ -420,9 +423,9 @@ namespace o2
 
 		o2Scene.mAllActors.Add(this);
 		mIsOnScene = true;
-		ComponentsIncludeToScene();
+		IncludeComponentsToScene();
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->IncludeInScene();
 	}
 
@@ -497,13 +500,13 @@ namespace o2
 	{
 		if (mParent)
 		{
-			int lastIdx = mParent->mChilds.Find(this);
-			mParent->mChilds.Insert(this, index);
+			int lastIdx = mParent->mChildren.Find(this);
+			mParent->mChildren.Insert(this, index);
 
 			if (index <= lastIdx)
 				lastIdx++;
 
-			mParent->mChilds.RemoveAt(lastIdx);
+			mParent->mChildren.RemoveAt(lastIdx);
 			mParent->OnChildsChanged();
 		}
 		else
@@ -523,7 +526,7 @@ namespace o2
 
 	void Actor::SetParent(Actor* actor, bool worldPositionStays /*= true*/)
 	{
-		if ((actor && actor->mChilds.Contains(this)) || actor == this || actor == mParent)
+		if ((actor && actor->mChildren.Contains(this)) || actor == this || actor == mParent)
 			return;
 
 		Basis lastParentBasis = transform->GetWorldBasis();
@@ -537,28 +540,28 @@ namespace o2
 		mParent = actor;
 
 		if (mParent)
-			mParent->mChilds.Add(this);
+			mParent->mChildren.Add(this);
 		else
 			o2Scene.mRootActors.Add(this);
 
 		if (worldPositionStays)
 			transform->SetWorldBasis(lastParentBasis);
 		else
-			transform->OnChanged();
+			transform->SetDirty();
 
 		UpdateEnabled();
 
 		OnParentChanged(oldParent);
 	}
 
-	Actor* Actor::GetParentWidget() const
+	Actor* Actor::GetParent() const
 	{
 		return mParent;
 	}
 
 	Actor* Actor::AddChild(Actor* actor)
 	{
-		if (mChilds.Contains(actor) || actor == this)
+		if (mChildren.Contains(actor) || actor == this)
 			return actor;
 
 		auto oldParent = actor->mParent;
@@ -568,12 +571,14 @@ namespace o2
 		else
 			o2Scene.mRootActors.Remove(actor);
 
-		mChilds.Add(actor);
+		mChildren.Add(actor);
 		actor->mParent = this;
 
-		actor->transform->OnChanged();
+		actor->transform->SetDirty();
 		actor->UpdateEnabled();
 
+		OnChildAdded(actor);
+		OnChildsChanged();
 		actor->OnParentChanged(oldParent);
 
 		return actor;
@@ -581,7 +586,7 @@ namespace o2
 
 	Actor* Actor::AddChild(Actor* actor, int index)
 	{
-		if (mChilds.Contains(actor) || actor == this)
+		if (mChildren.Contains(actor) || actor == this)
 			return actor;
 
 		auto oldParent = actor->mParent;
@@ -591,12 +596,14 @@ namespace o2
 		else
 			o2Scene.mRootActors.Remove(actor);
 
-		mChilds.Insert(actor, index);
+		mChildren.Insert(actor, index);
 		actor->mParent = this;
 
-		actor->transform->OnChanged();
+		actor->transform->SetDirty();
 		actor->UpdateEnabled();
 
+		OnChildAdded(actor);
+		OnChildsChanged();
 		actor->OnParentChanged(oldParent);
 
 		return actor;
@@ -620,7 +627,7 @@ namespace o2
 			return nullptr;
 		}
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			if (child->mName == pathPart)
 			{
@@ -634,57 +641,56 @@ namespace o2
 		return nullptr;
 	}
 
-	Actor::ActorsVec Actor::GetChilds() const
+	Actor::ActorsVec Actor::GetChildren() const
 	{
-		return mChilds;
+		return mChildren;
 	}
 
 	void Actor::RemoveChild(Actor* actor, bool release /*= true*/)
 	{
-		if (!mChilds.Contains(actor))
+		if (!mChildren.Contains(actor))
 			return;
 
 		auto oldParent = actor->mParent;
 
 		actor->mParent = nullptr;
-		mChilds.Remove(actor);
+		mChildren.Remove(actor);
 
 		if (release)
 		{
-			delete actor;
+			actor->OnParentChanged(oldParent);
+			OnChildRemoved(actor);
 			OnChildsChanged();
+
+			delete actor;
 		}
 		else
 		{
-			actor->transform->OnChanged();
-			actor->UpdateEnabled();
-
 			actor->OnParentChanged(oldParent);
+			actor->transform->SetDirty();
+			actor->UpdateEnabled();
 		}
 	}
 
 	void Actor::RemoveAllChilds()
 	{
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			child->mParent = nullptr;
+			OnChildRemoved(child);
+			child->OnParentChanged(this);
 			delete child;
 		}
 
-		mChilds.Clear();
+		mChildren.Clear();
 
 		OnChildsChanged();
 	}
 
 	Component* Actor::AddComponent(Component* component)
 	{
-// 		if (GetComponent(component->GetType().Name()) != nullptr)
-// 			return nullptr;
-
 		component->SetOwnerActor(this);
-
 		OnChanged();
-
 		return component;
 	}
 
@@ -764,6 +770,8 @@ namespace o2
 			layer->mEnabledActors.Add(this);
 		}
 
+		OnLayerChanged(lastLayer);
+
 		for (auto comp : mComponents)
 			comp->OnLayerChanged(lastLayer, layer);
 
@@ -790,7 +798,7 @@ namespace o2
 		if (GetPrototypeLink() == linkActor)
 			return this;
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			if (auto res = child->FindLinkedActor(linkActor))
 				return res;
@@ -804,7 +812,7 @@ namespace o2
 		if (IsLinkedToActor(id))
 			return this;
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			if (auto res = child->FindLinkedActor(id))
 				return res;
@@ -818,7 +826,7 @@ namespace o2
 		if (mId == id)
 			return this;
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			if (auto res = child->FindActorById(id))
 				return res;
 
@@ -828,15 +836,10 @@ namespace o2
 	void Actor::SetProtytypeDummy(ActorAssetRef asset)
 	{}
 
-	void Actor::OnTransformChanged()
+	void Actor::OnTransformUpdated()
 	{
 		for (auto comp : mComponents)
-			comp->OnTransformChanged();
-
-		for (auto child : mChilds)
-			child->transform->OnChanged();
-
-		OnChanged();
+			comp->OnTransformUpdated();
 	}
 
 	void Actor::SetParentProp(Actor* actor)
@@ -885,7 +888,7 @@ namespace o2
 		for (auto comp : mComponents)
 			comp->UpdateEnabled();
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->UpdateEnabled();
 	}
 
@@ -901,7 +904,7 @@ namespace o2
 		if (lastResLocked != mResLocked)
 			OnLockChanged();
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->UpdateLocking();
 	}
 
@@ -934,7 +937,7 @@ namespace o2
 			node["LayerName"] = mLayer->name;
 
 		auto childsNode = node.AddNode("Childs");
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			*childsNode->AddNode("Child") = child->Serialize();
 
 		auto componentsNode = node.AddNode("Components");
@@ -982,7 +985,7 @@ namespace o2
 				child->Deserialize(*childNode);
 				o2Scene.mRootActors.Remove(child);
 				child->mParent = this;
-				mChilds.Add(child);
+				mChildren.Add(child);
 			}
 		}
 
@@ -1039,7 +1042,7 @@ namespace o2
 
 		// Children data
 		auto childsNode = node.AddNode("Childs");
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			*childsNode->AddNode("Child") = child->Serialize();
 
 		// Components data
@@ -1168,7 +1171,7 @@ namespace o2
 			for (auto childNode : *childsNode)
 			{
 				Actor* child = mnew Actor(mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
-				mChilds.Add(child);
+				mChildren.Add(child);
 				child->mParent = this;
 
 				child->Deserialize(*childNode);
@@ -1227,7 +1230,7 @@ namespace o2
 			}
 		}
 
-		transform->OnChanged();
+		transform->SetDirty();
 
 		ActorDataNodeConverter::Instance().UnlockPointersResolving();
 		ActorDataNodeConverter::Instance().ResolvePointers();
@@ -1236,7 +1239,7 @@ namespace o2
 	Dictionary<String, Actor*> Actor::GetAllChilds()
 	{
 		Dictionary<String, Actor*> res;
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			res.Add(child->GetName(), child);
 
 		return res;
@@ -1251,13 +1254,13 @@ namespace o2
 		return res;
 	}
 
-	void Actor::ComponentsExcludeFromScene()
+	void Actor::ExcludeComponentsFromScene()
 	{
 		for (auto comp : mComponents)
 			comp->OnExcludeFromScene();
 	}
 
-	void Actor::ComponentsIncludeToScene()
+	void Actor::IncludeComponentsToScene()
 	{
 		for (auto comp : mComponents)
 			comp->OnIncludeToScene();
@@ -1325,9 +1328,18 @@ namespace o2
 		}
 	}
 
+	void Actor::OnChildAdded(Actor* child)
+	{}
+
+	void Actor::OnChildRemoved(Actor* child)
+	{}
+
+	void Actor::OnLayerChanged(SceneLayer* oldLayer)
+	{}
+
 	void Actor::SeparateActors(Vector<Actor*>& separatedActors)
 	{
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			child->mParent = nullptr;
 			separatedActors.Add(child);
@@ -1335,14 +1347,14 @@ namespace o2
 			child->SeparateActors(separatedActors);
 		}
 
-		mChilds.Clear();
+		mChildren.Clear();
 	}
 
 	void Actor::GetAllChildrenActors(Vector<Actor*>& actors)
 	{
-		actors.Add(mChilds);
+		actors.Add(mChildren);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->GetAllChildrenActors(actors);
 	}
 
@@ -1617,7 +1629,7 @@ namespace o2
 			serializable->OnDeserialized(DataNode());
 
 		// update transformation
-		transform->OnChanged();
+		transform->SetDirty();
 
 		for (auto& info : applyActorsInfos)
 			info.actor->transform->UpdateTransform();
@@ -1659,7 +1671,7 @@ namespace o2
 
 		actorsMap.Add(source, dest);
 
-		for (auto child : source->mChilds)
+		for (auto child : source->mChildren)
 		{
 			Actor* newChild = mnew Actor(dest->mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
 			dest->AddChild(newChild);
@@ -1708,7 +1720,7 @@ namespace o2
 
 		actorsMap.Add(source, dest);
 
-		for (auto child : source->mChilds)
+		for (auto child : source->mChildren)
 		{
 			Actor* newChild = mnew Actor(dest->mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
 			dest->AddChild(newChild);
@@ -1742,7 +1754,7 @@ namespace o2
 
 		actorsMap.Add(source, dest);
 
-		for (auto child : source->mChilds)
+		for (auto child : source->mChildren)
 		{
 			Actor* newChild = nullptr;
 
@@ -2061,8 +2073,8 @@ namespace o2
 		INITIALIZE_GETTER(Actor, enabledInHierarchy, IsEnabledInHierarchy);
 		INITIALIZE_PROPERTY(Actor, locked, SetLocked, IsLocked);
 		INITIALIZE_GETTER(Actor, lockedInHierarchy, IsLockedInHierarchy);
-		INITIALIZE_PROPERTY(Actor, parent, SetParentProp, GetParentWidget);
-		INITIALIZE_GETTER(Actor, children, GetChilds);
+		INITIALIZE_PROPERTY(Actor, parent, SetParentProp, GetParent);
+		INITIALIZE_GETTER(Actor, children, GetChildren);
 		INITIALIZE_ACCESSOR(Actor, child, GetChild);
 		INITIALIZE_GETTER(Actor, components, GetComponents);
 		INITIALIZE_ACCESSOR(Actor, component, GetComponent);
@@ -2283,7 +2295,7 @@ namespace o2
 		return mWasDeleted;
 	}
 
-}
+		}
 
 CLASS_META(o2::ActorRef)
 {
@@ -2325,7 +2337,7 @@ CLASS_META(o2::Actor)
 	PROTECTED_FIELD(mId);
 	PROTECTED_FIELD(mName);
 	PROTECTED_FIELD(mParent);
-	PROTECTED_FIELD(mChilds);
+	PROTECTED_FIELD(mChildren);
 	PROTECTED_FIELD(mComponents);
 	PROTECTED_FIELD(mLayer);
 	PROTECTED_FIELD(mEnabled);
@@ -2385,7 +2397,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
-	PUBLIC_FUNCTION(ActorsVec, GetChilds);
+	PUBLIC_FUNCTION(ActorsVec, GetChildren);
 	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllChilds);
 	PUBLIC_FUNCTION(Component*, AddComponent, Component*);
@@ -2403,7 +2415,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, FindLinkedActor, UInt64);
 	PUBLIC_FUNCTION(Actor*, FindActorById, UInt64);
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
-	PROTECTED_FUNCTION(void, OnTransformChanged);
+	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
 	PROTECTED_FUNCTION(void, SetPrototype, ActorAssetRef);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
@@ -2416,8 +2428,8 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataNode&);
 	PROTECTED_FUNCTION(_tmp1, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp2, GetAllComponents);
-	PROTECTED_FUNCTION(void, ComponentsExcludeFromScene);
-	PROTECTED_FUNCTION(void, ComponentsIncludeToScene);
+	PROTECTED_FUNCTION(void, ExcludeComponentsFromScene);
+	PROTECTED_FUNCTION(void, IncludeComponentsToScene);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, SeparateActors, Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);

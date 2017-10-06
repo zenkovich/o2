@@ -198,7 +198,7 @@ namespace o2
 	void ImageComponent::LoadFromImage(const ImageAssetRef& image)
 	{
 		mSprite.LoadFromImage(image);
-		OnTransformChanged();
+		OnTransformUpdated();
 	}
 
 	void ImageComponent::LoadFromImage(const String& imagePath)
@@ -251,7 +251,7 @@ namespace o2
 		return "Image";
 	}
 
-	void ImageComponent::OnTransformChanged()
+	void ImageComponent::OnTransformUpdated()
 	{
 		mSprite.SetBasis(mOwner->transform->GetWorldBasis());
 	}
@@ -345,7 +345,7 @@ CLASS_META(o2::ImageComponent)
 	PUBLIC_FUNCTION(void, NormalizeAspectByHeight);
 	PUBLIC_FUNCTION(void, NormalizeAspect);
 	PUBLIC_FUNCTION(String, GetName);
-	PROTECTED_FUNCTION(void, OnTransformChanged);
+	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeProperties);

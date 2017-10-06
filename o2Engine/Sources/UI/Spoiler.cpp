@@ -85,7 +85,7 @@ namespace o2
 			if (clipping)
 				o2Render.EnableScissorTest(mBounds);
 
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 				child->Draw();
 
 			if (clipping)
