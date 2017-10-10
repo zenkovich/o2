@@ -228,7 +228,7 @@ namespace o2
 
 	void UICustomList::RemoveAllItems()
 	{
-		mVerLayout->RemoveAllChilds();
+		mVerLayout->RemoveAllChildren();
 	}
 
 	void UICustomList::SortItems(const Function<bool(UIWidget*, UIWidget*)>& sortFunc)

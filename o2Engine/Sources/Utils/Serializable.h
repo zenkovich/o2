@@ -13,7 +13,7 @@ namespace o2
 	// -----------------------------
 	// Serializable object interface
 	// -----------------------------
-	class ISerializable: virtual public IObject
+	class ISerializable: public IObject
 	{
 	public:
 		// Serializing object into data node
@@ -54,50 +54,50 @@ namespace o2
 	};
 
 	// Serialization implementation macros
-#define SERIALIZABLE(CLASS)                            \
-private:                                               \
-	static o2::Type* type;       					   \
-                                                       \
-    template<typename _type, typename _getter>         \
-	friend const o2::Type& o2::GetTypeOf();            \
-                                                       \
-	template<typename T>                               \
-	friend struct o2::RegularTypeGetter;               \
-                                                       \
-	template<typename T, typename X>                   \
-	friend struct o2::GetTypeHelper;                   \
-                                                       \
-    template<typename _type>                           \
-    friend struct o2::TypeSampleCreator;               \
-                                                       \
-    friend class o2::TypeInitializer;                  \
-    friend class o2::Reflection;                       \
-    friend class o2::DataNode;                         \
-                                                       \
-public:                                                \
-	typedef CLASS thisclass;                           \
-	CLASS* Clone() const { return mnew CLASS(*this); } \
-	const o2::Type& GetType() const { return *type; }; \
-    o2::DataNode Serialize() const                     \
-    {												   \
-        o2::DataNode res;                              \
-        SerializeBasic(this, res);                     \
-        return res;                                    \
-	}												   \
-    void Deserialize(const o2::DataNode& node)         \
-    {												   \
-        DeserializeBasic(this, node);                  \
-	}												   \
-	CLASS& operator=(const o2::DataNode& node) 		   \
-	{												   \
-		Deserialize(node); return *this; 			   \
-	} 												   \
-	operator o2::DataNode() 						   \
-	{ 												   \
-		return Serialize(); 						   \
-	}            									   \
-                                                       \
-private:                                               \
+#define SERIALIZABLE(CLASS)                              \
+private:                                                 \
+	static o2::Type* type;       					     \
+                                                         \
+    template<typename _type, typename _getter>           \
+	friend const o2::Type& o2::GetTypeOf();              \
+                                                         \
+	template<typename T>                                 \
+	friend struct o2::RegularTypeGetter;                 \
+                                                         \
+	template<typename T, typename X>                     \
+	friend struct o2::GetTypeHelper;                     \
+                                                         \
+    template<typename _type>                             \
+    friend struct o2::TypeSampleCreator;                 \
+                                                         \
+    friend class o2::TypeInitializer;                    \
+    friend class o2::Reflection;                         \
+    friend class o2::DataNode;                           \
+                                                         \
+public:                                                  \
+	typedef CLASS thisclass;                             \
+	IObject* Clone() const { return mnew CLASS(*this); } \
+	const o2::Type& GetType() const { return *type; };   \
+    o2::DataNode Serialize() const                       \
+    {												     \
+        o2::DataNode res;                                \
+        SerializeBasic(this, res);                       \
+        return res;                                      \
+	}												     \
+    void Deserialize(const o2::DataNode& node)           \
+    {												     \
+        DeserializeBasic(this, node);                    \
+	}												     \
+	CLASS& operator=(const o2::DataNode& node) 		     \
+	{												     \
+		Deserialize(node); return *this; 			     \
+	} 												     \
+	operator o2::DataNode() 						     \
+	{ 												     \
+		return Serialize(); 						     \
+	}            									     \
+                                                         \
+private:                                                 \
 	static void InitializeType(o2::Type* type)    
 
 #define SERIALIZABLE_ATTRIBUTE() \

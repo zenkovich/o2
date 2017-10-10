@@ -22,7 +22,7 @@
     <ProjectGuid>{F0C3F9F6-349D-4D58-9175-0AE646039318}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>o2Test</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -148,7 +148,7 @@ namespace o2
 		virtual void Update(float dt);
 
 		// Updates childs
-		virtual void UpdateChilds(float dt);
+		virtual void UpdateChildren(float dt);
 
 		// Returns prototype from this or this parent
 		ActorAssetRef GetPrototype() const;
@@ -266,7 +266,7 @@ namespace o2
 		void RemoveChild(Actor* actor, bool release = true);
 
 		// Removes and destroys all childs
-		void RemoveAllChilds();
+		void RemoveAllChildren();
 
 		// And new component
 		template<typename _type>

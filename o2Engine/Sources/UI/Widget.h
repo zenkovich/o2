@@ -329,6 +329,9 @@ namespace o2
 		// Returns dictionary of all children by names
 		Dictionary<String, UIWidget*> GetAllChilds();
 
+		// Beginning serialization callback
+		void OnSerialize(DataNode& node) const override;
+
 		// It is called when deserialized
 		void OnDeserialized(const DataNode& node) override;
 

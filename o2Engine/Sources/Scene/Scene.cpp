@@ -28,7 +28,7 @@ namespace o2
 			actor->Update(dt);
 
 		for (auto actor : mRootActors)
-			actor->UpdateChilds(dt);
+			actor->UpdateChildren(dt);
 	}
 
 	void Scene::Draw()

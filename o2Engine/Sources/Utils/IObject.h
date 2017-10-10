@@ -75,7 +75,7 @@ private:                                               \
                                                        \
 public:                                                \
 	typedef CLASS thisclass;                           \
-	CLASS* Clone() const { return mnew CLASS(*this); } \
+	IObject* Clone() const { return mnew CLASS(*this); } \
 	const o2::Type& GetType() const { return *type; }; \
                                                        \
 private:                                               \

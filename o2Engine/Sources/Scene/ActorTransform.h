@@ -360,9 +360,6 @@ namespace o2
 		// Returns world center position
 		Vec2F GetWorldCenter() const;
 
-		// Returns World center position
-		Vec2F GetWorldCenter() const;
-
 		// Set World right direction
 		void SetWorldRightDir(const Vec2F& dir);
 

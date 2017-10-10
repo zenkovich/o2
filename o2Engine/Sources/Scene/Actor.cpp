@@ -155,7 +155,7 @@ namespace o2
 			o2Scene.OnActorPrototypeBreaked(this);
 		}
 
-		RemoveAllChilds();
+		RemoveAllChildren();
 		RemoveAllComponents();
 
 		if (mLayer)
@@ -171,7 +171,7 @@ namespace o2
 
 	Actor& Actor::operator=(const Actor& other)
 	{
-		RemoveAllChilds();
+		RemoveAllChildren();
 		RemoveAllComponents();
 
 		SetPrototype(other.mPrototype);
@@ -206,13 +206,13 @@ namespace o2
 			comp->Update(dt);
 	}
 
-	void Actor::UpdateChilds(float dt)
+	void Actor::UpdateChildren(float dt)
 	{
 		for (auto child : mChildren)
 			child->Update(dt);
 
 		for (auto child : mChildren)
-			child->UpdateChilds(dt);
+			child->UpdateChildren(dt);
 	}
 
 	ActorAssetRef Actor::GetPrototype() const
@@ -294,7 +294,7 @@ namespace o2
 		Actor* prototype = prototypeAsset->GetActor();
 		prototype->ExcludeFromScene();
 
-		prototype->RemoveAllChilds();
+		prototype->RemoveAllChildren();
 		prototype->RemoveAllComponents();
 
 		Vector<Actor**> actorPointersFields;
@@ -695,7 +695,7 @@ namespace o2
 		}
 	}
 
-	void Actor::RemoveAllChilds()
+	void Actor::RemoveAllChildren()
 	{
 		for (auto child : mChildren)
 		{
@@ -1091,7 +1091,7 @@ namespace o2
 		ActorDataNodeConverter::Instance().LockPointersResolving();
 		ActorDataNodeConverter::Instance().ActorCreated(this);
 
-		RemoveAllChilds();
+		RemoveAllChildren();
 		RemoveAllComponents();
 
 		if (auto prototypeNode = node.GetNode("Prototype"))
@@ -2384,7 +2384,7 @@ CLASS_META(o2::Actor)
 	typedef const Dictionary<const Component*, Component*>& _tmp10;
 
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, UpdateChilds, float);
+	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(ActorAssetRef, GetPrototype);
 	PUBLIC_FUNCTION(ActorAssetRef, GetPrototypeDirectly);
 	PUBLIC_FUNCTION(void, BreakPrototypeLink);
@@ -2422,7 +2422,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
 	PUBLIC_FUNCTION(ActorsVec, GetChildren);
 	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
-	PUBLIC_FUNCTION(void, RemoveAllChilds);
+	PUBLIC_FUNCTION(void, RemoveAllChildren);
 	PUBLIC_FUNCTION(Component*, AddComponent, Component*);
 	PUBLIC_FUNCTION(void, RemoveComponent, Component*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllComponents);

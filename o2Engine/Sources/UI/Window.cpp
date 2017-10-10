@@ -13,10 +13,10 @@ namespace o2
 	UIWindow::UIWindow():
 		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
-		layout.mAnchorMin = Vec2F(0.5f, 0.5f);
-		layout.mAnchorMax = Vec2F(0.5f, 0.5f);
-		layout.mOffsetMin = Vec2F(-100, -100);
-		layout.mOffsetMax = Vec2F(100, 100);
+		layout->anchorMin = Vec2F(0.5f, 0.5f);
+		layout->anchorMax = Vec2F(0.5f, 0.5f);
+		layout->offsetMin = Vec2F(-100, -100);
+		layout->offsetMax = Vec2F(100, 100);
 
 		InitializeHandles();
 		InitializeProperties();

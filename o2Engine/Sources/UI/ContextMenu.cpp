@@ -526,7 +526,7 @@ namespace o2
 
 	void UIContextMenu::RemoveAllItems()
 	{
-		mItemsLayout->RemoveAllChilds();
+		mItemsLayout->RemoveAllChildren();
 		mSelectedItem = nullptr;
 	}
 
@@ -805,7 +805,7 @@ namespace o2
 		widget->SetCheckable(item.checkable);
 		widget->onChecked = item.onChecked;
 
-		widget->RemoveAllChilds();
+		widget->RemoveAllChildren();
 		if (item.subItems.Count() > 0)
 		{
 			UIContextMenu* subMenu = mnew UIContextMenu(*this);

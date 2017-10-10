@@ -108,7 +108,7 @@ namespace Editor
 		mTargetActors = targets.Select<Actor*>([](auto x) { return (Actor*)x; });
 
 		// clear 
-		mViewersLayout->RemoveAllChilds(false);
+		mViewersLayout->RemoveAllChildren(false);
 
 		for (auto viewer : mComponentsViewers)
 			mComponentViewersPool[viewer->GetComponentType()].Add(viewer);

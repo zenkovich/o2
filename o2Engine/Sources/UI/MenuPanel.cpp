@@ -260,7 +260,7 @@ namespace o2
 
 	void UIMenuPanel::RemoveAllItems()
 	{
-		mLayout->RemoveAllChilds();
+		mLayout->RemoveAllChildren();
 	}
 
 	UIHorizontalLayout* UIMenuPanel::GetItemsLayout() const

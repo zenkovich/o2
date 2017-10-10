@@ -969,8 +969,6 @@ CLASS_META(o2::ActorTransform)
 	PUBLIC_FUNCTION(Vec2F, GetWorldRightBottom);
 	PUBLIC_FUNCTION(void, SetWorldCenter, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetWorldCenter);
-	PUBLIC_FUNCTION(void, SetWorldCenter, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetWorldCenter);
 	PUBLIC_FUNCTION(void, SetWorldRightDir, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetWorldRightDir);
 	PUBLIC_FUNCTION(void, SetWorldLeftDir, const Vec2F&);

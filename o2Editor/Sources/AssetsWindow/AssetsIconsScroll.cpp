@@ -54,7 +54,7 @@ namespace Editor
 		mHightlightSprite(other.mHightlightSprite->Clone()), mHightlightLayout(other.mHightlightLayout),
 		mHightlightAnim(other.mHightlightAnim), mSelectionSprite(other.mSelectionSprite->Clone())
 	{
-		RemoveAllChilds();
+		RemoveAllChildren();
 
 		mGrid = mnew UIGridLayout();
 		mGrid->layout = UIWidgetLayout::BothStretch();
@@ -206,7 +206,7 @@ namespace Editor
 
 		auto prevIcons = mGrid->GetChilds().Select<UIAssetIcon*>([](auto x) { return (UIAssetIcon*)x; });
 		prevIcons.ForEach([&](auto x) { FreeAssetIconToPool(x); });
-		mGrid->RemoveAllChilds(false);
+		mGrid->RemoveAllChildren(false);
 
 		AssetInfosVec folderAssetsInfos;
 		if (mCurrentPath != "")

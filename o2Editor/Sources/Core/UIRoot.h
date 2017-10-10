@@ -34,7 +34,7 @@ namespace Editor
 		UIWidget* GetRootWidget();
 
 	private:
-		UIWidget* mRootWidget;
+		UIWidget* mRootWidget = nullptr;
 
 	private:
 		// Default constructor, creates root widget

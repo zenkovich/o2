@@ -751,6 +751,11 @@ namespace o2
 		return res;
 	}
 
+	void UIWidget::OnSerialize(DataNode& node) const
+	{
+		Actor::OnSerialize(node);
+	}
+
 	void UIWidget::OnLayerAdded(UIWidgetLayer* layer)
 	{}
 
@@ -971,6 +976,7 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(StatesVec, GetStatesNonConst);
 	PROTECTED_FUNCTION(_tmp1, GetAllLayers);
 	PROTECTED_FUNCTION(_tmp2, GetAllChilds);
+	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
