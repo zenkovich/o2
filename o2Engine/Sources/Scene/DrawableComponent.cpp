@@ -64,17 +64,12 @@ namespace o2
 CLASS_META(o2::DrawableComponent)
 {
 	BASE_CLASS(o2::Component);
+	BASE_CLASS(o2::SceneDrawable);
 
-	PUBLIC_FIELD(drawDepth);
-	PROTECTED_FIELD(mDrawingDepth).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD();
 
 	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
-	PUBLIC_FUNCTION(float, GetDrawingDepth);
-	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*, SceneLayer*);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
-	PROTECTED_FUNCTION(void, OnExcludeFromScene);
-	PROTECTED_FUNCTION(void, OnIncludeToScene);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

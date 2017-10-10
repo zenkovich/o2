@@ -16,7 +16,7 @@
 #include "UI/MenuPanel.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
-#include "UIStyle/EditorUIStyle.h"
+#include "UIManager/EditorUIManager.h"
 #include "Utils/Math/Curve.h"
 #include "AssetsWindow/AssetsWindow.h"
 #include "PropertiesWindow/PropertiesWindow.h"
@@ -87,9 +87,9 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/Curve editor test", [&]() { OnCurveEditorTestPressed(); });
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
 		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
-		mMenuPanel->AddItem("Debug/RebuildEditorUIStyle", [&]() {
-			EditorUIStyleBuilder builder;
-			builder.RebuildEditorUIStyle();
+		mMenuPanel->AddItem("Debug/RebuildEditorUIManager", [&]() {
+			EditorUIManagerBuilder builder;
+			builder.RebuildEditorUIManager();
 		});
 	}
 

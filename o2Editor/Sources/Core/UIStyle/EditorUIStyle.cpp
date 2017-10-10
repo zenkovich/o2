@@ -1,11 +1,11 @@
-#include "EditorUIStyle.h"
+#include "EditorUIManager.h"
 
 #include "Animation/Animate.h"
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/UIAssetIcon.h"
-#include "Core/UIStyle/BasicUIStyle.h"
+#include "Core/UIManager/BasicUIManager.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
@@ -34,7 +34,7 @@ using namespace o2;
 
 namespace Editor
 {
-	void EditorUIStyleBuilder::EditorUIStyleBuilder::RebuildDockableWndStyle()
+	void EditorUIManagerBuilder::EditorUIManagerBuilder::RebuildDockableWndStyle()
 	{
 		UIDockableWindow* sample = mnew UIDockableWindow();
 		sample->layout.minSize = Vec2F(100, 50);
@@ -166,7 +166,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void EditorUIStyleBuilder::RebuildExpandButton()
+	void EditorUIManagerBuilder::RebuildExpandButton()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -206,7 +206,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "expand");
 	}
 
-	void EditorUIStyleBuilder::RebuildPlayStopButtonStyle()
+	void EditorUIManagerBuilder::RebuildPlayStopButtonStyle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto playRootIconLayer = sample->AddLayer("playRootIcon", nullptr);
@@ -251,7 +251,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "play-stop");
 	}
 
-	void EditorUIStyleBuilder::RebuildPauseButtonStyle()
+	void EditorUIManagerBuilder::RebuildPauseButtonStyle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto pauseIconRootLayer = sample->AddLayer("regular", nullptr);
@@ -280,7 +280,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "pause");
 	}
 
-	void EditorUIStyleBuilder::RebuildStepButtonStyle()
+	void EditorUIManagerBuilder::RebuildStepButtonStyle()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->name = "step button";
@@ -307,7 +307,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "step");
 	}
 
-	void EditorUIStyleBuilder::RebuildRoundDropDown()
+	void EditorUIManagerBuilder::RebuildRoundDropDown()
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -358,7 +358,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "round");
 	}
 
-	void EditorUIStyleBuilder::RebuildArrowToggle()
+	void EditorUIManagerBuilder::RebuildArrowToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -383,7 +383,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "arrow");
 	}
 
-	void EditorUIStyleBuilder::RebuildBrushToggle()
+	void EditorUIManagerBuilder::RebuildBrushToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -408,7 +408,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "brush");
 	}
 
-	void EditorUIStyleBuilder::RebuildMoveToggle()
+	void EditorUIManagerBuilder::RebuildMoveToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -433,7 +433,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "move");
 	}
 
-	void EditorUIStyleBuilder::RebuildRotateToggle()
+	void EditorUIManagerBuilder::RebuildRotateToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -458,7 +458,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "rotate");
 	}
 
-	void EditorUIStyleBuilder::RebuildScaleToggle()
+	void EditorUIManagerBuilder::RebuildScaleToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -483,7 +483,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "scale");
 	}
 
-	void EditorUIStyleBuilder::RebuildFrameToggle()
+	void EditorUIManagerBuilder::RebuildFrameToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -508,7 +508,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "frame");
 	}
 
-	void EditorUIStyleBuilder::RebuildSearchButton()
+	void EditorUIManagerBuilder::RebuildSearchButton()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -535,7 +535,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "search");
 	}
 
-	void EditorUIStyleBuilder::RebuildListTreeToggle()
+	void EditorUIManagerBuilder::RebuildListTreeToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -575,7 +575,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "list-tree");
 	}
 
-	void EditorUIStyleBuilder::RebuildRevertBtn()
+	void EditorUIManagerBuilder::RebuildRevertBtn()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -598,7 +598,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "revert");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorsTreeNodeEnableToggle()
+	void EditorUIManagerBuilder::RebuildActorsTreeNodeEnableToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 
@@ -621,7 +621,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor node enable");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorsTreeLockToggle()
+	void EditorUIManagerBuilder::RebuildActorsTreeLockToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 
@@ -644,7 +644,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor node lock");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorsTreeLinkBtn()
+	void EditorUIManagerBuilder::RebuildActorsTreeLinkBtn()
 	{
 		UIButton* sample = mnew UIButton();
 
@@ -663,7 +663,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor node link");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorsTree()
+	void EditorUIManagerBuilder::RebuildActorsTree()
 	{
 		// basics
 		UIActorsTree* sample = mnew UIActorsTree();
@@ -814,7 +814,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void EditorUIStyleBuilder::RebuildPanelDownButton()
+	void EditorUIManagerBuilder::RebuildPanelDownButton()
 	{
 		UIButton* sample = mnew UIButton();
 
@@ -855,7 +855,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "panel down");
 	}
 
-	void EditorUIStyleBuilder::RebuildTrashDownPanelButton()
+	void EditorUIManagerBuilder::RebuildTrashDownPanelButton()
 	{
 		auto sample = mnew UIButton();
 
@@ -887,7 +887,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "down panel trash");
 	}
 
-	void EditorUIStyleBuilder::RebuildMessagesDownPanelToggle()
+	void EditorUIManagerBuilder::RebuildMessagesDownPanelToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -933,7 +933,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "log messages");
 	}
 
-	void EditorUIStyleBuilder::RebuildWarningsDownPanelToggle()
+	void EditorUIManagerBuilder::RebuildWarningsDownPanelToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -979,7 +979,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "log warnings");
 	}
 
-	void EditorUIStyleBuilder::RebuildErrorsDownPanelToggle()
+	void EditorUIManagerBuilder::RebuildErrorsDownPanelToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -1025,7 +1025,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "log errors");
 	}
 
-	void EditorUIStyleBuilder::RebuildFilterMenuButton()
+	void EditorUIManagerBuilder::RebuildFilterMenuButton()
 	{
 		UIButton* sample = mnew UIButton();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -1056,7 +1056,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "menu filter");
 	}
 
-	void EditorUIStyleBuilder::RebuildTreeMenuButton()
+	void EditorUIManagerBuilder::RebuildTreeMenuButton()
 	{
 		UIButton* sample = mnew UIButton();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
@@ -1087,7 +1087,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "menu tree");
 	}
 
-	void EditorUIStyleBuilder::RebuildFoldersTree()
+	void EditorUIManagerBuilder::RebuildFoldersTree()
 	{
 		// basics
 		UITree* sample = mnew UITree();
@@ -1225,7 +1225,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "folders");
 	}
 
-	void EditorUIStyleBuilder::RebuildRegularAssetIcon()
+	void EditorUIManagerBuilder::RebuildRegularAssetIcon()
 	{
 		UIAssetIcon* sample = mnew UIAssetIcon();
 
@@ -1296,7 +1296,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void EditorUIStyleBuilder::RebuildFolderAssetIcon()
+	void EditorUIManagerBuilder::RebuildFolderAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1306,7 +1306,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "folder");
 	}
 
-	void EditorUIStyleBuilder::RebuildPrototypeAssetIcon()
+	void EditorUIManagerBuilder::RebuildPrototypeAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1316,7 +1316,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "prototype");
 	}
 
-	void EditorUIStyleBuilder::RebuildPrefabPreviewAssetIcon()
+	void EditorUIManagerBuilder::RebuildPrefabPreviewAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1329,7 +1329,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "prototype preview");
 	}
 
-	void EditorUIStyleBuilder::RebuildImagePreviewAssetIcon()
+	void EditorUIManagerBuilder::RebuildImagePreviewAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1340,7 +1340,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "image preview");
 	}
 
-	void EditorUIStyleBuilder::RebuildTextAssetIcon()
+	void EditorUIManagerBuilder::RebuildTextAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1350,7 +1350,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "text");
 	}
 
-	void EditorUIStyleBuilder::RebuildAnimationAssetIcon()
+	void EditorUIManagerBuilder::RebuildAnimationAssetIcon()
 	{
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -1360,7 +1360,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "animation");
 	}
 
-	void EditorUIStyleBuilder::RebuildAssetsGridScroll()
+	void EditorUIManagerBuilder::RebuildAssetsGridScroll()
 	{
 		UIAssetsIconsScrollArea* sample = mnew UIAssetsIconsScrollArea();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -1402,7 +1402,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void EditorUIStyleBuilder::RebuildLinkBtn()
+	void EditorUIManagerBuilder::RebuildLinkBtn()
 	{
 		UIButton* sample = mnew UIButton();
 
@@ -1421,7 +1421,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "asset link");
 	}
 
-	void EditorUIStyleBuilder::RebuildSinglelineEditBoxWithArrows()
+	void EditorUIManagerBuilder::RebuildSinglelineEditBoxWithArrows()
 	{
 		UIWidget* sample = mnew UIWidget();
 
@@ -1446,7 +1446,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "singleline edit property");
 	}
 
-	void EditorUIStyleBuilder::RebuildSinglelineEditboxProperty()
+	void EditorUIManagerBuilder::RebuildSinglelineEditboxProperty()
 	{
 		UIEditBox* sample = o2UI.CreateWidget<UIEditBox>("singleline");
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
@@ -1458,7 +1458,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "singleline with arrows");
 	}
 
-	void EditorUIStyleBuilder::RebuildEditorDropdown()
+	void EditorUIManagerBuilder::RebuildEditorDropdown()
 	{
 		auto sample = mnew UIWidget();
 
@@ -1520,7 +1520,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "enum property");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorHeadEnableToggle()
+	void EditorUIManagerBuilder::RebuildActorHeadEnableToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -1563,7 +1563,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor head enable");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorHeadName()
+	void EditorUIManagerBuilder::RebuildActorHeadName()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(5, 0, 5, 0));
@@ -1603,7 +1603,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor head name");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorHeadLockToggle()
+	void EditorUIManagerBuilder::RebuildActorHeadLockToggle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -1639,7 +1639,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor head lock");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorHeadActorAssetProperty()
+	void EditorUIManagerBuilder::RebuildActorHeadActorAssetProperty()
 	{
 		auto sample = mnew UIWidget();
 
@@ -1679,7 +1679,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor head asset property");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorHeadTagsProperty()
+	void EditorUIManagerBuilder::RebuildActorHeadTagsProperty()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(5, 0, 5, 0));
@@ -1719,7 +1719,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor head tags");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorHeadLayerProperty()
+	void EditorUIManagerBuilder::RebuildActorHeadLayerProperty()
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -1776,7 +1776,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor head layer");
 	}
 
-	void EditorUIStyleBuilder::RebuildAcceptPrototypeBtn()
+	void EditorUIManagerBuilder::RebuildAcceptPrototypeBtn()
 	{
 		UIButton* sample = mnew UIButton();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_accept_prefab.png"),
@@ -1798,7 +1798,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "accept prototype");
 	}
 
-	void EditorUIStyleBuilder::RebuildRevertPrototypeBtn()
+	void EditorUIManagerBuilder::RebuildRevertPrototypeBtn()
 	{
 		UIButton* sample = mnew UIButton();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_revert_prefab.png"),
@@ -1820,7 +1820,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "revert prototype");
 	}
 
-	void EditorUIStyleBuilder::RebuildBreakPrototypeBtn()
+	void EditorUIManagerBuilder::RebuildBreakPrototypeBtn()
 	{
 		UIButton* sample = mnew UIButton();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_break_prefab.png"),
@@ -1842,7 +1842,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "break prototype");
 	}
 
-	void EditorUIStyleBuilder::RebuildComponentOptionsBtn()
+	void EditorUIManagerBuilder::RebuildComponentOptionsBtn()
 	{
 		UIButton* sample = mnew UIButton();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_gray_options.png"),
@@ -1864,7 +1864,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "component options");
 	}
 
-	void EditorUIStyleBuilder::RebuildComponentSaveBtn()
+	void EditorUIManagerBuilder::RebuildComponentSaveBtn()
 	{
 		UIButton* sample = mnew UIButton();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_save_gray.png"),
@@ -1886,7 +1886,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "component save");
 	}
 
-	void EditorUIStyleBuilder::RebuildHorWideScrollbar()
+	void EditorUIManagerBuilder::RebuildHorWideScrollbar()
 	{
 		UIHorizontalScrollBar* sample = mnew UIHorizontalScrollBar();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -1909,7 +1909,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "wide");
 	}
 
-	void EditorUIStyleBuilder::RebuildVerWideScrollbar()
+	void EditorUIManagerBuilder::RebuildVerWideScrollbar()
 	{
 		UIVerticalScrollBar* sample = mnew UIVerticalScrollBar();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -1932,7 +1932,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "wide");
 	}
 
-	void EditorUIStyleBuilder::RebuildHorWideProgressbar()
+	void EditorUIManagerBuilder::RebuildHorWideProgressbar()
 	{
 		UIHorizontalProgress* sample = mnew UIHorizontalProgress();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -1952,7 +1952,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "wide");
 	}
 
-	void EditorUIStyleBuilder::RebuildVerWideProgressbar()
+	void EditorUIManagerBuilder::RebuildVerWideProgressbar()
 	{
 		UIVerticalProgress* sample = mnew UIVerticalProgress();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -1972,7 +1972,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "wide");
 	}
 
-	void EditorUIStyleBuilder::RebuildBooleanProperty()
+	void EditorUIManagerBuilder::RebuildBooleanProperty()
 	{
 		UIWidget* sample = mnew UIWidget();
 
@@ -1992,7 +1992,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "boolean property");
 	}
 
-	void EditorUIStyleBuilder::RebuildRedEditBoxStyle()
+	void EditorUIManagerBuilder::RebuildRedEditBoxStyle()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
@@ -2029,7 +2029,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "red singleline");
 	}
 
-	void EditorUIStyleBuilder::RebuildGreenEditBoxStyle()
+	void EditorUIManagerBuilder::RebuildGreenEditBoxStyle()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
@@ -2066,7 +2066,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "green singleline");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorPropety()
+	void EditorUIManagerBuilder::RebuildActorPropety()
 	{
 		auto sample = mnew UIWidget();
 
@@ -2117,7 +2117,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "actor property");
 	}
 
-	void EditorUIStyleBuilder::RebuildColorPropety()
+	void EditorUIManagerBuilder::RebuildColorPropety()
 	{
 		auto sample = mnew UIWidget();
 
@@ -2142,7 +2142,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "color property");
 	}
 
-	void EditorUIStyleBuilder::RebuildAssetPropety()
+	void EditorUIManagerBuilder::RebuildAssetPropety()
 	{
 		auto sample = mnew UIWidget();
 
@@ -2193,7 +2193,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "asset property");
 	}
 
-	void EditorUIStyleBuilder::RebuildComponentProperty()
+	void EditorUIManagerBuilder::RebuildComponentProperty()
 	{
 		auto sample = mnew UIWidget();
 
@@ -2237,7 +2237,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "component property");
 	}
 
-	void EditorUIStyleBuilder::RebuildVector2Property()
+	void EditorUIManagerBuilder::RebuildVector2Property()
 	{
 		auto sample = mnew UIWidget();
 
@@ -2280,7 +2280,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "vector2 property");
 	}
 
-	void EditorUIStyleBuilder::RebuildColoredVector2Property()
+	void EditorUIManagerBuilder::RebuildColoredVector2Property()
 	{
 		auto sample = mnew UIWidget();
 
@@ -2323,7 +2323,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "colored vector2 property");
 	}
 
-	void EditorUIStyleBuilder::RebuildRectProperty()
+	void EditorUIManagerBuilder::RebuildRectProperty()
 	{
 		auto sample = mnew UIWidget();
 
@@ -2389,7 +2389,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "rectangle property");
 	}
 
-	void EditorUIStyleBuilder::RebuildNewRectProperty()
+	void EditorUIManagerBuilder::RebuildNewRectProperty()
 	{
 		auto sample = mnew UIWidget();
 
@@ -2410,14 +2410,14 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "new rectangle property");
 	}
 
-	void EditorUIStyleBuilder::RebuildEditorUIStyle()
+	void EditorUIManagerBuilder::RebuildEditorUIManager()
 	{
 		o2UI.ClearStyle();
 
 		auto funcs = GetType().GetFunctionsWithBaseClasses();
 		for (auto func : funcs)
 		{
-			if (func->GetName() == "RebuildBasicUIStyle" || func->GetName() == "RebuildEditorUIStyle")
+			if (func->GetName() == "RebuildBasicUIManager" || func->GetName() == "RebuildEditorUIManager")
 				continue;
 
 			func->Invoke<void>(this);
@@ -2427,9 +2427,9 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::EditorUIStyleBuilder)
+CLASS_META(Editor::EditorUIManagerBuilder)
 {
-	BASE_CLASS(o2::BasicUIStyleBuilder);
+	BASE_CLASS(o2::BasicUIManagerBuilder);
 
 
 	PUBLIC_FUNCTION(void, RebuildExpandButton);
@@ -2497,6 +2497,6 @@ CLASS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildHorWideProgressbar);
 	PUBLIC_FUNCTION(void, RebuildVerWideProgressbar);
 	PUBLIC_FUNCTION(void, RebuildBooleanProperty);
-	PUBLIC_FUNCTION(void, RebuildEditorUIStyle);
+	PUBLIC_FUNCTION(void, RebuildEditorUIManager);
 }
 END_META;

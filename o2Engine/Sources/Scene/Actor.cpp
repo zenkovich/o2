@@ -195,7 +195,12 @@ namespace o2
 	void Actor::Update(float dt)
 	{
 		if (transform->mData->isDirty)
+		{
+			for (auto child : mChildren)
+				child->transform->SetDirty();
+
 			transform->Update();
+		}
 
 		for (auto comp : mComponents)
 			comp->Update(dt);
@@ -551,6 +556,12 @@ namespace o2
 
 		UpdateEnabled();
 
+		if (actor->mIsOnScene && !mIsOnScene)
+			ExcludeFromScene();
+
+		if (!actor->mIsOnScene && mIsOnScene)
+			IncludeInScene();
+
 		OnParentChanged(oldParent);
 	}
 
@@ -581,6 +592,12 @@ namespace o2
 		OnChildsChanged();
 		actor->OnParentChanged(oldParent);
 
+		if (actor->mIsOnScene && !mIsOnScene)
+			ExcludeFromScene();
+
+		if (!actor->mIsOnScene && mIsOnScene)
+			IncludeInScene();
+
 		return actor;
 	}
 
@@ -605,6 +622,12 @@ namespace o2
 		OnChildAdded(actor);
 		OnChildsChanged();
 		actor->OnParentChanged(oldParent);
+
+		if (actor->mIsOnScene && !mIsOnScene)
+			ExcludeFromScene();
+
+		if (!actor->mIsOnScene && mIsOnScene)
+			IncludeInScene();
 
 		return actor;
 	}
@@ -2315,31 +2338,31 @@ CLASS_META(o2::Actor)
 {
 	BASE_CLASS(o2::ISerializable);
 
-	PUBLIC_FIELD(tags);
 	PUBLIC_FIELD(prototype);
+	PUBLIC_FIELD(transform);
+	PUBLIC_FIELD(parent);
 	PUBLIC_FIELD(id);
 	PUBLIC_FIELD(name);
+	PUBLIC_FIELD(tags);
+	PUBLIC_FIELD(layer);
+	PUBLIC_FIELD(layerName);
 	PUBLIC_FIELD(enabled);
 	PUBLIC_FIELD(enabledInHierarchy);
 	PUBLIC_FIELD(locked);
 	PUBLIC_FIELD(lockedInHierarchy);
-	PUBLIC_FIELD(parent);
-	PUBLIC_FIELD(layer);
-	PUBLIC_FIELD(layerName);
 	PUBLIC_FIELD(children);
-	PUBLIC_FIELD(child);
 	PUBLIC_FIELD(components);
+	PUBLIC_FIELD(child);
 	PUBLIC_FIELD(component);
-	PUBLIC_FIELD(transform);
 	PUBLIC_FIELD(onEnableChanged);
 	PROTECTED_FIELD(mPrototype);
 	PROTECTED_FIELD(mPrototypeLink);
 	PROTECTED_FIELD(mId);
 	PROTECTED_FIELD(mName);
+	PROTECTED_FIELD(mLayer);
 	PROTECTED_FIELD(mParent);
 	PROTECTED_FIELD(mChildren);
 	PROTECTED_FIELD(mComponents);
-	PROTECTED_FIELD(mLayer);
 	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mResEnabled);
 	PROTECTED_FIELD(mLocked);
@@ -2375,9 +2398,9 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(UInt64, GetID);
 	PUBLIC_FUNCTION(void, SetID, UInt64);
+	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(UID, GetAssetID);
 	PUBLIC_FUNCTION(bool, IsAsset);
-	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(void, ExcludeFromScene);
 	PUBLIC_FUNCTION(void, IncludeInScene);
 	PUBLIC_FUNCTION(bool, IsOnScene);
@@ -2393,7 +2416,7 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(bool, IsLockedInHierarchy);
 	PUBLIC_FUNCTION(void, SetPositionIndexInParent, int);
 	PUBLIC_FUNCTION(void, SetParent, Actor*, bool);
-	PUBLIC_FUNCTION(Actor*, GetParentWidget);
+	PUBLIC_FUNCTION(Actor*, GetParent);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
@@ -2415,7 +2438,6 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, FindLinkedActor, UInt64);
 	PUBLIC_FUNCTION(Actor*, FindActorById, UInt64);
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
-	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
 	PROTECTED_FUNCTION(void, SetPrototype, ActorAssetRef);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
@@ -2430,8 +2452,11 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(_tmp2, GetAllComponents);
 	PROTECTED_FUNCTION(void, ExcludeComponentsFromScene);
 	PROTECTED_FUNCTION(void, IncludeComponentsToScene);
+	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
-	PROTECTED_FUNCTION(void, SeparateActors, Vector<Actor*>&);
+	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
+	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
 	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 	PROTECTED_FUNCTION(void, ProcessCopying, Actor*, const Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp3, _tmp4, bool);
@@ -2441,6 +2466,7 @@ CLASS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
 	PROTECTED_FUNCTION(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
 	PROTECTED_FUNCTION(void, GetComponentFields, Component*, Vector<FieldInfo*>&);
+	PROTECTED_FUNCTION(void, SeparateActors, Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp7, _tmp8, Vector<ISerializable*>&);
 	PROTECTED_FUNCTION(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp9, _tmp10);
 }

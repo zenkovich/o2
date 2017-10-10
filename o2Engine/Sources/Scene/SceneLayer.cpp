@@ -87,3 +87,25 @@ namespace o2
 		mEnabledDrawables.Remove(drawable);
 	}
 }
+
+CLASS_META(o2::SceneLayer)
+{
+	BASE_CLASS(o2::ISerializable);
+
+	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mActors);
+	PROTECTED_FIELD(mEnabledActors);
+	PROTECTED_FIELD(mDrawables);
+	PROTECTED_FIELD(mEnabledDrawables);
+
+	PUBLIC_FUNCTION(const ActorsVec&, GetActors);
+	PUBLIC_FUNCTION(const ActorsVec&, GetEnabledActors);
+	PUBLIC_FUNCTION(const DrawablesVec&, GetDrawables);
+	PUBLIC_FUNCTION(const DrawablesVec&, GetEnabledDrawables);
+	PROTECTED_FUNCTION(void, RegisterDrawable, SceneDrawable*);
+	PROTECTED_FUNCTION(void, UnregisterDrawable, SceneDrawable*);
+	PROTECTED_FUNCTION(void, DrawableDepthChanged, SceneDrawable*);
+	PROTECTED_FUNCTION(void, DrawableEnabled, SceneDrawable*);
+	PROTECTED_FUNCTION(void, DrawableDisabled, SceneDrawable*);
+}
+END_META;

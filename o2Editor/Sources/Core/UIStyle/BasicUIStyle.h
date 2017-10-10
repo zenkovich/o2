@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	class BasicUIStyleBuilder: public IObject
+	class BasicUIManagerBuilder: public IObject
 	{
 	public:
 		void RebuildButtonStyle();
@@ -35,8 +35,8 @@ namespace o2
 		void RebuildSinglelineEditbox();
 		void RebuildBacklessScrollarea();
 
-		void RebuildBasicUIStyle();
+		void RebuildBasicUIManager();
 
-		IOBJECT(BasicUIStyleBuilder);
+		IOBJECT(BasicUIManagerBuilder);
 	};
 }

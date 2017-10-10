@@ -660,25 +660,8 @@ namespace o2
 
 CLASS_META(o2::UIWidgetLayout)
 {
-	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::ActorTransform);
 
-	PUBLIC_FIELD(pivot);
-	PUBLIC_FIELD(position);
-	PUBLIC_FIELD(size);
-	PUBLIC_FIELD(width);
-	PUBLIC_FIELD(height);
-	PUBLIC_FIELD(absPosition);
-	PUBLIC_FIELD(absLeftTop);
-	PUBLIC_FIELD(absLeftBottom);
-	PUBLIC_FIELD(absRightTop);
-	PUBLIC_FIELD(absRightBottom);
-	PUBLIC_FIELD(absRect);
-	PUBLIC_FIELD(absLeft);
-	PUBLIC_FIELD(absRight);
-	PUBLIC_FIELD(absBottom);
-	PUBLIC_FIELD(absTop);
-	PUBLIC_FIELD(pivotX);
-	PUBLIC_FIELD(pivotY);
 	PUBLIC_FIELD(anchorMin);
 	PUBLIC_FIELD(anchorMax);
 	PUBLIC_FIELD(offsetMin);
@@ -700,57 +683,17 @@ CLASS_META(o2::UIWidgetLayout)
 	PUBLIC_FIELD(weight);
 	PUBLIC_FIELD(widthWeight);
 	PUBLIC_FIELD(heigthWeight);
-	PROTECTED_FIELD(mData->owner);
-	PROTECTED_FIELD(mData->pivot).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mData->anchorMin).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mData->anchorMax).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mData->offsetMin).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mData->offsetMax).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mMinSize).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mMaxSize).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAbsoluteRect);
-	PROTECTED_FIELD(mLocalRect);
-	PROTECTED_FIELD(mWeight).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mDrivenByParent);
 	PROTECTED_FIELD(mCheckMinMaxFunc);
+	PROTECTED_FIELD(mData);
 
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(void, Update);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetPosition);
 	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetSize);
-	PUBLIC_FUNCTION(void, SetWidth, float);
-	PUBLIC_FUNCTION(float, GetWidth);
-	PUBLIC_FUNCTION(void, SetHeight, float);
-	PUBLIC_FUNCTION(float, GetHeight);
-	PUBLIC_FUNCTION(void, SetRect, const RectF&);
-	PUBLIC_FUNCTION(RectF, GetRect);
-	PUBLIC_FUNCTION(void, SetAbsoluteLeft, float);
-	PUBLIC_FUNCTION(float, GetAbsoluteLeft);
-	PUBLIC_FUNCTION(void, SetAbsoluteRight, float);
-	PUBLIC_FUNCTION(float, GetAbsoluteRight);
-	PUBLIC_FUNCTION(void, SetAbsoluteBottom, float);
-	PUBLIC_FUNCTION(float, GetAbsoluteBottom);
-	PUBLIC_FUNCTION(void, SetAbsoluteTop, float);
-	PUBLIC_FUNCTION(float, GetAbsoluteTop);
-	PUBLIC_FUNCTION(void, SetAbsolutePosition, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetAbsolutePosition);
-	PUBLIC_FUNCTION(void, SetAbsoluteLeftTop, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetAbsoluteLeftTop);
-	PUBLIC_FUNCTION(void, SetAbsoluteLeftBottom, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetAbsoluteLeftBottom);
-	PUBLIC_FUNCTION(void, SetAbsoluteRightTop, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetAbsoluteRightTop);
-	PUBLIC_FUNCTION(void, SetAbsoluteRightBottom, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetAbsoluteRightBottom);
-	PUBLIC_FUNCTION(void, SetAbsoluteRect, const RectF&);
-	PUBLIC_FUNCTION(RectF, GetAbsoluteRect);
 	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetPivot);
-	PUBLIC_FUNCTION(void, SetPivotX, float);
-	PUBLIC_FUNCTION(float, GetPivotX);
-	PUBLIC_FUNCTION(void, SetPivotY, float);
-	PUBLIC_FUNCTION(float, GetPivotY);
+	PUBLIC_FUNCTION(void, SetBasis, const Basis&);
+	PUBLIC_FUNCTION(void, SetNonSizedBasis, const Basis&);
+	PUBLIC_FUNCTION(void, SetRect, const RectF&);
+	PUBLIC_FUNCTION(void, SetAxisAlignedRect, const RectF&);
 	PUBLIC_FUNCTION(void, SetAnchorMin, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetAnchorMin);
 	PUBLIC_FUNCTION(void, SetAnchorMax, const Vec2F&);
@@ -794,9 +737,29 @@ CLASS_META(o2::UIWidgetLayout)
 	PUBLIC_FUNCTION(float, GetWidthWeight);
 	PUBLIC_FUNCTION(void, SetHeightWeight, float);
 	PUBLIC_FUNCTION(float, GetHeightWeight);
+	PROTECTED_FUNCTION(void, SetOwner, Actor*);
+	PROTECTED_FUNCTION(void, SetDirty);
+	PROTECTED_FUNCTION(void, FloorRectangle);
+	PROTECTED_FUNCTION(void, UpdateOffsetsByCurrentTransform);
 	PROTECTED_FUNCTION(void, CopyFrom, const UIWidgetLayout&);
 	PROTECTED_FUNCTION(void, CheckMinMax);
 	PROTECTED_FUNCTION(void, DontCheckMinMax);
 	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_META(o2::UIWidgetLayout::Data)
+{
+	BASE_CLASS(o2::ActorTransform::Data);
+
+	PUBLIC_FIELD(anchorMin).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(anchorMax).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offsetMin).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offsetMax).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(minSize).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(maxSize).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(weight).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(drivenByParent);
+	PUBLIC_FIELD(owner);
 }
 END_META;

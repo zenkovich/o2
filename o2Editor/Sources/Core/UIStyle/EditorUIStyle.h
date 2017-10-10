@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Core/UIStyle/BasicUIStyle.h"
+#include "Core/UIManager/BasicUIManager.h"
 
 using namespace o2;
 
 namespace Editor
 {
-	class EditorUIStyleBuilder: public BasicUIStyleBuilder
+	class EditorUIManagerBuilder: public BasicUIManagerBuilder
 	{
 	public:
 		void RebuildExpandButton();
@@ -75,8 +75,8 @@ namespace Editor
 		void RebuildVerWideProgressbar();
 		void RebuildBooleanProperty();
 
-		void RebuildEditorUIStyle();
+		void RebuildEditorUIManager();
 
-		IOBJECT(EditorUIStyleBuilder);
+		IOBJECT(EditorUIManagerBuilder);
 	};
 }

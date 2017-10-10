@@ -41,8 +41,6 @@ namespace o2
 		typedef Vector<UIWidget*> WidgetsVec;
 
 	public:
-		Accessor<UIWidget*, const String&> widget; // Root widget accessor
-
 		// Loads widgets style
 		void LoadStyle(const String& path);
 
@@ -62,71 +60,6 @@ namespace o2
 		// Removes widget style
 		template<typename _type>
 		void RemoveWidgetStyle(const String& style);
-
-		// Adds widget as root
-		UIWidget* AddWidget();
-
-		// Adds widget as root
-		UIWidget* AddWidget(UIWidget* widget);
-
-		// Adds widget from style
-		template<typename _type>
-		_type* AddWidget(const String& style = "standard");
-
-		// Adds button from style
-		UIButton* AddButton(const WString& caption, const String& style = "standard");
-
-		// Adds button from style
-		UIButton* AddButton(const WString& caption, const Function<void()>& onClick = Function<void()>(),
-							const String& style = "standard");
-
-		// Adds window from style
-		UIWindow* AddWindow(const WString& caption, const String& style = "standard");
-
-		// Adds label from style
-		UILabel* AddLabel(const WString& text, const String& style = "standard");
-
-		// Adds horizontal layout
-		UIHorizontalLayout* AddHorLayout();
-
-		// Adds vertical layout
-		UIVerticalLayout* AddVerLayout();
-
-		// Adds horizontal progress bar
-		UIHorizontalProgress* AddHorProgress(const String& style = "standard");
-
-		// Adds vertical progress bar
-		UIVerticalProgress* AddVerProgress(const String& style = "standard");
-
-		// Adds horizontal scroll bar
-		UIHorizontalScrollBar* AddHorScrollBar(const String& style = "standard");
-
-		// Adds vertical scroll bar
-		UIVerticalScrollBar* AddVerScrollBar(const String& style = "standard");
-
-		// Adds scroll area
-		UIScrollArea* AddScrollArea(const String& style = "standard");
-
-		// Adds edit box
-		UIEditBox* AddEditBox(const String& style = "standard");
-
-		// Adds custom list
-		UICustomList* AddCustomList(const String& style = "standard");
-
-		// Adds text list
-		UIList* AddList(const String& style = "standard");
-
-		// Adds custom dropdown
-		UICustomDropDown* AddCustomDropdown(const String& style = "standard");
-
-		// Adds text dropdown
-		UIDropDown* AddDropdown(const String& style = "standard");
-
-		// Adds toggle
-		UIToggle* AddToggle(const WString& caption, const String& style = "standard");
-
-		// Adds image
-		UIImage* AddImage(const String& name);
 
 		// Creates widget by style
 		template<typename _type>
@@ -184,24 +117,6 @@ namespace o2
 		// Creates image
 		UIImage* CreateImage(const String& name);
 
-		// Removes widget by path
-		bool RemoveWidget(const String& path);
-
-		// Removes widget
-		bool RemoveWidget(UIWidget* widget, bool release = true);
-
-		// Removes all widgets
-		void RemoveAllWidgets();
-
-		// Returns widget by path
-		UIWidget* GetWidget(const String& path);
-
-		// Returns all widgets
-		const WidgetsVec& GetAllWidgets() const;
-
-		// Returns main screen widget
-		UIWidget* GetScreenWidget() const;
-
 		// Sets widget as focused
 		void FocusWidget(UIWidget* widget);
 
@@ -211,22 +126,19 @@ namespace o2
 		// Sets next widget focused
 		void FocusNextWidget();
 
-		// Updates widgets
-		void Update(float dt);
-
-		// Draws widgets
+		// Draws context menus and top drawing widgets
 		void Draw();
 
-		// Registering widget for draing at top of all regular widgets
+		// Registering widget for drawing at top of all regular widgets
 		void DrawWidgetAtTop(UIWidget* widget);
 
 	protected:
-		LogStream* mLog;            // UI Log stream
-		UIWidget*  mScreenWidget;   // Root screen widget
-		UIWidget*  mSelectedWidget; // Current selected widget
-		WidgetsVec mTopWidgets;     // Top widgets, drawing after mScreenWidget 
+		LogStream* mLog = nullptr;           // UI Log stream
+		UIWidget*  mFocusedWidget = nullptr; // Current selected widget
+		WidgetsVec mFocusableWidgets;        // List of selectable widgets
+		WidgetsVec mTopWidgets;              // Top widgets, drawing after mScreenWidget 
 
-		WidgetsVec mStyleSamples;   // Style widgets
+		WidgetsVec mStyleSamples;            // Style widgets
 
 	protected:
 		// Default constructor
@@ -235,34 +147,15 @@ namespace o2
 		// Destructor
 		~UIManager();
 
-		// Updates root widget size
-		void UpdateRootSize();
-
 		// Tries to load style "ui_style.xml"
 		void TryLoadStyle();
-
-		// Recursively searches selectable widget
-		UIWidget* SearchSelectableWidget(UIWidget* widget, bool& foundCurrentSelected);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Application;
 		friend class BaseApplication;
 		friend class UICustomDropDown;
 		friend class UITree;
-
-		template<typename _type>
-		friend class ITemplPtr;
+		friend class UIWidget;
 	};
-
-	template<typename _type>
-	_type* UIManager::AddWidget(const String& style /*= "standard"*/)
-	{
-		auto res = CreateWidget<_type>(style);
-		mScreenWidget->AddChild((UIWidget*)res);
-		return res;
-	}
 
 	template<typename _type>
 	_type* UIManager::GetWidgetStyle(const String& style /*= "standard"*/)

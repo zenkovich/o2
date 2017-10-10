@@ -24,22 +24,23 @@ namespace o2
 
 	public:
 		UIWidgetLayout* const layout;          // Widget's layout
-
+							  
 		Property<bool>        visible;         // Is widget visible property
-
+							  
 		Property<float>       transparency;    // Transparency property
 		Getter<float>         resTransparency; // Result transparency getter, depends on parent transparency
-
+							  
 		Property<UIWidget*>   parentWidget;    // Parent widget property
+							  
+		Getter<WidgetsVec>    childrenWidgets; // Widget children getter
+							  
+		Getter<LayersVec>     layers;          // Layers getter
+							  
+		Getter<StatesVec>     states;          // States getter
 
-		Getter<WidgetsVec>                      childrenWidgets; // Widget children getter
-		Accessor<UIWidget*, const String&>      childWidget;     // Widget child accessor by name
-
-		Getter<LayersVec>                       layers;          // Layers getter
-		Accessor<UIWidgetLayer*, const String&> layer;           // Widget layer accessor by name
-
-		Getter<StatesVec>                       states;          // States getter
-		Accessor<UIWidgetState*, const String&> state;           // Widget state accessor by name
+		Accessor<UIWidget*, const String&>      childWidget; // Widget child accessor by path like "child/subchild/somechild"
+		Accessor<UIWidgetLayer*, const String&> layer;       // Widget layer accessor by path like "layer/sublayer/target"
+		Accessor<UIWidgetState*, const String&> state;       // Widget state accessor by name
 
 
 		Function<void()> onLayoutUpdated; // Layout change event
@@ -70,6 +71,12 @@ namespace o2
 		// Updates layers, states and widget
 		void Update(float dt) override;
 
+		// Updates layout
+		virtual void UpdateLayout(bool withChildren = true);
+
+		// Updates children layouts
+		virtual void UpdateChildrenLayouts();
+
 		// Draws widget and child widgets with not overridden depth
 		void Draw() override;
 
@@ -79,9 +86,8 @@ namespace o2
 		// Returns parent widget
 		UIWidget* GetParentWidget() const;
 
-		// Searches layer with drawable with specified type
-		template<typename _type>
-		_type* GetLayerDrawableByType();
+		// Returns child widget by path (like "root/some node/other node/target node")
+		UIWidget* GetChildWidget(const String& path) const;
 
 		// Returns constant children widgets vector
 		const WidgetsVec& GetChildWidgets() const;
@@ -105,12 +111,16 @@ namespace o2
 		// Returns layer by path. Returns null if layer isn't exist
 		UIWidgetLayer* GetLayer(const String& path) const;
 
-		// Returns all layers
-		const LayersVec& GetLayers() const;
+		// Searches layer with drawable with specified type
+		template<typename _type>
+		_type* GetLayerDrawableByType();
 
 		// Returns layer by path. Returns null if layer isn't exist or layer drawable has different type
 		template<typename _type>
 		_type* GetLayerDrawable(const String& path) const;
+
+		// Returns all layers
+		const LayersVec& GetLayers() const;
 
 		// Adds new state with name
 		UIWidgetState* AddState(const String& name);
@@ -192,12 +202,6 @@ namespace o2
 
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point);
-
-		// Updates layout
-		virtual void UpdateLayout(bool withChildren = true);
-
-		// Updates children layouts
-		virtual void UpdateChildrenLayouts();
 
 		SERIALIZABLE(UIWidget);
 
@@ -301,8 +305,14 @@ namespace o2
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts();
 
+		// Updates drawing children widgets list
+		void UpdateDrawingChildren();
+
 		// Updates layers drawing sequence
 		void UpdateLayersDrawingSequence();
+
+		// Sets parent widget, used for property
+		void SetParentWidget(UIWidget* widget);
 
 		// Returns children widgets (for property)
 		WidgetsVec GetChildrenNonConst();

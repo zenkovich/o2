@@ -279,6 +279,9 @@
     <ClInclude Include="..\..\Sources\Core\Dialogs\EditNameDlg.h">
       <Filter>Sources\Core\Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UIRoot.h">
+      <Filter>Sources\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp">
@@ -529,6 +532,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Dialogs\EditNameDlg.cpp">
       <Filter>Sources\Core\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UIRoot.cpp">
+      <Filter>Sources\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@
 #include "Core/Dialogs/CurveEditorDlg.h"
 #include "Core/Dialogs/EditNameDlg.h"
 #include "Core/EditorConfig.h"
-#include "Core/UIStyle/EditorUIStyle.h"
+#include "Core/UIManager/EditorUIManager.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
 #include "Core/WindowsSystem/UIDockWindowPlace.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
@@ -18,8 +18,8 @@ namespace Editor
 	{
 		if (mNeedRebuildWndStyle)
 		{
-			EditorUIStyleBuilder builder;
-			builder.RebuildEditorUIStyle();
+			EditorUIManagerBuilder builder;
+			builder.RebuildEditorUIManager();
 		}
 
 		o2UI.LoadStyle("editor_ui_style.xml");

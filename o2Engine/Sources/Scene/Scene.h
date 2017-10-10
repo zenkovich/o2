@@ -19,6 +19,7 @@ namespace o2
 	typedef Vector<SceneLayer*> SceneLayersVec;
 	
 	class Tag;
+	typedef Vector<Tag*> TagsVec;
 
 	// -------------------------------------------------------
 	// Actors scene. Contains and manages actors, tags, layers

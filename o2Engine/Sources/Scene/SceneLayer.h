@@ -60,6 +60,7 @@ namespace o2
 		friend class DrawableComponent;
 		friend class Scene;
 		friend class SceneDrawable;
+		friend class UIWidget;
 	};
 
 	typedef Vector<SceneLayer*> LayersVec;

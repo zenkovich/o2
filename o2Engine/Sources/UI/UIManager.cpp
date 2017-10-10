@@ -21,6 +21,8 @@
 #include "UI/VerticalProgress.h"
 #include "UI/VerticalScrollBar.h"
 #include "UI/Widget.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 #include "UI/Window.h"
 #include "Utils/Debug.h"
 #include "Utils/Log/LogStream.h"
@@ -31,225 +33,74 @@ namespace o2
 {
 	DECLARE_SINGLETON(UIManager);
 
-	UIManager::UIManager():
-		mSelectedWidget(nullptr)
+	UIManager::UIManager()
 	{
-		mScreenWidget = mnew UIWidget();
 		mLog = mnew LogStream("UI");
 		o2Debug.GetLog()->BindStream(mLog);
-
-		o2Application.onResizingEvent += Func(this, &UIManager::UpdateRootSize);
-
-		InitializeProperties();
 	}
 
 	UIManager::~UIManager()
 	{
-		delete mScreenWidget;
 		ClearStyle();
-	}
-
-	UIWidget* UIManager::AddWidget(UIWidget* widget)
-	{
-		return mScreenWidget->AddChild(widget);
-	}
-
-	UIWidget* UIManager::AddWidget()
-	{
-		UIWidget* res = mnew UIWidget();
-		AddWidget(res);
-		return res;
-	}
-
-	UIButton* UIManager::AddButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/,
-								   const String& style /*= "standard"*/)
-	{
-		UIButton* res = CreateButton(caption, onClick, style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIWindow* UIManager::AddWindow(const WString& caption, const String& style /*= "standard"*/)
-	{
-		UIWindow* res = CreateWindow(caption, style);
-		AddWidget(res);
-		return res;
-	}
-
-	UILabel* UIManager::AddLabel(const WString& text, const String& style /*= "standard"*/)
-	{
-		UILabel* res = CreateLabel(text, style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIHorizontalLayout* UIManager::AddHorLayout()
-	{
-		UIHorizontalLayout* res = mnew UIHorizontalLayout();
-		AddWidget(res);
-		return res;
-	}
-
-	UIVerticalLayout* UIManager::AddVerLayout()
-	{
-		UIVerticalLayout* res = mnew UIVerticalLayout();
-		AddWidget(res);
-		return res;
-	}
-
-	UIHorizontalProgress* UIManager::AddHorProgress(const String& style /*= "standard"*/)
-	{
-		UIHorizontalProgress* res = CreateHorProgress(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIVerticalProgress* UIManager::AddVerProgress(const String& style /*= "standard"*/)
-	{
-		UIVerticalProgress* res = CreateVerProgress(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIHorizontalScrollBar* UIManager::AddHorScrollBar(const String& style /*= "standard"*/)
-	{
-		UIHorizontalScrollBar* res = CreateHorScrollBar(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIVerticalScrollBar* UIManager::AddVerScrollBar(const String& style /*= "standard"*/)
-	{
-		UIVerticalScrollBar* res = CreateVerScrollBar(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIScrollArea* UIManager::AddScrollArea(const String& style /*= "standard"*/)
-	{
-		UIScrollArea* res = CreateScrollArea(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIEditBox* UIManager::AddEditBox(const String& style /*= "standard"*/)
-	{
-		UIEditBox* res = CreateEditBox(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UICustomList* UIManager::AddCustomList(const String& style /*= "standard"*/)
-	{
-		UICustomList* res = CreateCustomList(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIList* UIManager::AddList(const String& style /*= "standard"*/)
-	{
-		UIList* res = CreateList(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UICustomDropDown* UIManager::AddCustomDropdown(const String& style /*= "standard"*/)
-	{
-		UICustomDropDown* res = CreateCustomDropdown(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIDropDown* UIManager::AddDropdown(const String& style /*= "standard"*/)
-	{
-		UIDropDown* res = CreateDropdown(style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIToggle* UIManager::AddToggle(const WString& caption, const String& style /*= "standard"*/)
-	{
-		UIToggle* res = CreateToggle(caption, style);
-		AddWidget(res);
-		return res;
-	}
-
-	UIImage* UIManager::AddImage(const String& name)
-	{
-		UIImage* res = CreateImage(name);
-		AddWidget(res);
-		return res;
-	}
-
-	bool UIManager::RemoveWidget(const String& path)
-	{
-		return mScreenWidget->RemoveChild(path);
-	}
-
-	bool UIManager::RemoveWidget(UIWidget* widget, bool release /*= true*/)
-	{
-		return mScreenWidget->RemoveChild(widget, release);
-	}
-
-	UIWidget* UIManager::GetWidget(const String& path)
-	{
-		return mScreenWidget->GetChild(path);
-	}
-
-	void UIManager::RemoveAllWidgets()
-	{
-		mScreenWidget->RemoveAllChilds();
-	}
-
-	const UIManager::WidgetsVec& UIManager::GetAllWidgets() const
-	{
-		return mScreenWidget->GetChildren();
-	}
-
-	UIWidget* UIManager::GetScreenWidget() const
-	{
-		return mScreenWidget;
 	}
 
 	void UIManager::FocusWidget(UIWidget* widget)
 	{
-		if (widget == mSelectedWidget || (widget && !widget->IsFocusable()))
+		if (widget == mFocusedWidget || (widget && !widget->IsFocusable()))
 			return;
 
-		if (mSelectedWidget)
+		if (mFocusedWidget)
 		{
-			mSelectedWidget->mIsFocused = false;
-			mSelectedWidget->OnUnfocused();
+			mFocusedWidget->mIsFocused = false;
+			mFocusedWidget->OnUnfocused();
 
-			if (mSelectedWidget->mFocusedState)
-				mSelectedWidget->mFocusedState->SetState(false);
+			if (mFocusedWidget->mFocusedState)
+				mFocusedWidget->mFocusedState->SetState(false);
 		}
 
-		mSelectedWidget = widget;
+		mFocusedWidget = widget;
 
-		if (mSelectedWidget)
+		if (mFocusedWidget)
 		{
-			mSelectedWidget->mIsFocused = true;
+			mFocusedWidget->mIsFocused = true;
 
-			mSelectedWidget->OnFocused();
+			mFocusedWidget->OnFocused();
 
-			if (mSelectedWidget->mParent)
-				mSelectedWidget->mParent->OnChildFocused(mSelectedWidget);
+			if (mFocusedWidget->mParentWidget)
+				mFocusedWidget->mParentWidget->OnChildFocused(mFocusedWidget);
 
-			if (mSelectedWidget->mFocusedState)
-				mSelectedWidget->mFocusedState->SetState(true);
+			if (mFocusedWidget->mFocusedState)
+				mFocusedWidget->mFocusedState->SetState(true);
 		}
 	}
 
 	UIWidget* UIManager::GetFocusedWidget() const
 	{
-		return mSelectedWidget;
+		return mFocusedWidget;
 	}
 
 	void UIManager::FocusNextWidget()
 	{
-		bool fnd = mSelectedWidget == nullptr;
-		FocusWidget(SearchSelectableWidget(mScreenWidget, fnd));
+		bool fnd = mFocusedWidget == nullptr;
+		UIWidget* nextFocusingWidget = nullptr;
+		for (auto widget : mFocusableWidgets)
+		{
+			if (!fnd)
+			{
+				if (widget == mFocusedWidget)
+					fnd = true;
+			}
+			else
+			{
+				if (widget->IsFocusable())
+				{
+					nextFocusingWidget = widget;
+					break;
+				}
+			}
+		}
+
+		FocusWidget(nextFocusingWidget);
 	}
 
 	void UIManager::LoadStyle(const String& path)
@@ -320,44 +171,44 @@ namespace o2
 	UIHorizontalLayout* UIManager::CreateHorLayout()
 	{
 		auto res = mnew UIHorizontalLayout();
-		res->name = "hor layout";
-		res->layout = UIWidgetLayout::BothStretch();
+		res->name = "horizontal layout";
+		*res->layout = UIWidgetLayout::BothStretch();
 		return res;
 	}
 
 	UIVerticalLayout* UIManager::CreateVerLayout()
 	{
 		auto res = mnew UIVerticalLayout();
-		res->name = "ver layout";
-		res->layout = UIWidgetLayout::BothStretch();
+		res->name = "vertical layout";
+		*res->layout = UIWidgetLayout::BothStretch();
 		return res;
 	}
 
 	UIHorizontalProgress* UIManager::CreateHorProgress(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIHorizontalProgress>(style);
-		res->name = "hor progress";
+		res->name = "horizontal progress";
 		return res;
 	}
 
 	UIVerticalProgress* UIManager::CreateVerProgress(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIVerticalProgress>(style);
-		res->name = "ver progress";
+		res->name = "vertical progress";
 		return res;
 	}
 
 	UIHorizontalScrollBar* UIManager::CreateHorScrollBar(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIHorizontalScrollBar>(style);
-		res->name = "hot scroll bar";
+		res->name = "horizontal scroll bar";
 		return res;
 	}
 
 	UIVerticalScrollBar* UIManager::CreateVerScrollBar(const String& style /*= "standard"*/)
 	{
 		auto res = CreateWidget<UIVerticalScrollBar>(style);
-		res->name = "ver scroll bar";
+		res->name = "vertical scroll bar";
 		return res;
 	}
 
@@ -419,18 +270,8 @@ namespace o2
 		return res;
 	}
 
-	void UIManager::Update(float dt)
-	{
-		mScreenWidget->Update(dt);
-
-		if (o2Input.IsKeyPressed(VK_TAB))
-			FocusNextWidget();
-	}
-
 	void UIManager::Draw()
 	{
-		mScreenWidget->Draw();
-
 		for (auto widget : mTopWidgets)
 			widget->Draw();
 
@@ -438,12 +279,6 @@ namespace o2
 
 		if (UIContextMenu::mVisibleContextMenu)
 			UIContextMenu::mVisibleContextMenu->SpecialDraw();
-	}
-
-	void UIManager::UpdateRootSize()
-	{
-		Vec2I resolution = o2Render.GetResolution();
-		mScreenWidget->layout = UIWidgetLayout::Based(BaseCorner::Center, resolution);
 	}
 
 	void UIManager::DrawWidgetAtTop(UIWidget* widget)
@@ -455,36 +290,5 @@ namespace o2
 	{
 		if (o2Assets.IsAssetExist("ui_style.xml"))
 			LoadStyle("ui_style.xml");
-	}
-
-	UIWidget* UIManager::SearchSelectableWidget(UIWidget* widget, bool& foundCurrentSelected)
-	{
-		for (auto child : widget->mChildren)
-		{
-			if (!foundCurrentSelected)
-			{
-				if (child == mSelectedWidget)
-					foundCurrentSelected = true;
-			}
-			else
-			{
-				if (child->IsFocusable())
-					return child;
-			}
-		}
-
-		for (auto child : widget->mChildren)
-		{
-			auto res = SearchSelectableWidget(child, foundCurrentSelected);
-			if (res)
-				return res;
-		}
-
-		return nullptr;
-	}
-
-	void UIManager::InitializeProperties()
-	{
-		INITIALIZE_ACCESSOR(UIManager, widget, GetWidget);
 	}
 }

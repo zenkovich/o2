@@ -298,9 +298,6 @@
     <ClInclude Include="..\Sources\UI\Tree.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\UIManager.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\UI\VerticalLayout.h">
       <Filter>Sources\UI</Filter>
     </ClInclude>
@@ -537,6 +534,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Scene\Drawable.h">
       <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\UI\UIManager.h">
+      <Filter>Sources\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -792,9 +792,6 @@
     <ClCompile Include="..\Sources\UI\Tree.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\UIManager.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Sources\UI\VerticalLayout.cpp">
       <Filter>Sources\UI</Filter>
     </ClCompile>
@@ -941,6 +938,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\Scene\Drawable.cpp">
       <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\UI\UIManager.cpp">
+      <Filter>Sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

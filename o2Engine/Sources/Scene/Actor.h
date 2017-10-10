@@ -96,19 +96,19 @@ namespace o2
 		typedef Vector<String> StringsVec;
 		
 	public:
-		Property<ActorAssetRef> prototype; // Prototype asset reference property
-
-		ActorTransform* const   transform; // Transformation 
-
-		Property<Actor*>        parent;    // Parent actor property
-
-		Getter<UInt64>          id;        // Actor's unique id
-		Property<String>        name;      // Actor name property
-
-		TagGroup                tags;      // Tags group
-
-		Property<SceneLayer*>   layer;     // Layer property
-		Property<String>        layerName; // Layer name property
+		Property<ActorAssetRef> prototype;          // Prototype asset reference property
+										            
+		ActorTransform* const   transform;          // Transformation 
+										            
+		Property<Actor*>        parent;             // Parent actor property
+										            
+		Getter<UInt64>          id;                 // Actor's unique id
+		Property<String>        name;               // Actor name property
+										            
+		TagGroup                tags;               // Tags group
+										            
+		Property<SceneLayer*>   layer;              // Layer property
+		Property<String>        layerName;          // Layer name property
 
 		Property<bool>          enabled;            // Is actor enabled property
 		Getter<bool>            enabledInHierarchy; // Is actor enabled in hierarchy getter
@@ -116,10 +116,10 @@ namespace o2
 		Property<bool>          locked;             // Is actor locked property
 		Getter<bool>            lockedInHierarchy;  // Is actor locked in hierarchy getter
 
-		Getter<ActorsVec>                   children;   // Children array getter
-		Accessor<Actor*, const String&>     child;      // Children accessor
+		Getter<ActorsVec>       children;           // Children array getter
+		Getter<ComponentsVec>   components;         // Components array getter
 
-		Getter<ComponentsVec>               components; // Components array getter
+		Accessor<Actor*, const String&>     child;      // Children accessor
 		Accessor<Component*, const String&> component;  // Component accessor by type name
 
 
@@ -459,9 +459,6 @@ namespace o2
 		// It is called when layer was changed
 		virtual void OnLayerChanged(SceneLayer* oldLayer);
 
-		// Separates children actors to linear array, removes child and parent links
-		void SeparateActors(Vector<Actor*>& separatedActors);
-
 		// Returns all children actors with their children
 		void GetAllChildrenActors(Vector<Actor*>& actors);
 
@@ -522,6 +519,9 @@ namespace o2
 
 		// Collects component field, except Component class fields
 		void GetComponentFields(Component* component, Vector<FieldInfo*>& fields);
+
+		// Separates children actors to linear array, removes child and parent links
+		void SeparateActors(Vector<Actor*>& separatedActors);
 
 		// Processes reverting actor
 		void ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,

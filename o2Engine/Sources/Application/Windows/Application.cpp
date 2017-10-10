@@ -239,7 +239,7 @@ namespace o2
 		mLog->Out("Application launched!");
 
 		OnStarted();
-		onStartedEvent.Invoke();
+		onStarted.Invoke();
 		o2Events.OnApplicationStarted();
 
 		MSG msg;
@@ -262,7 +262,7 @@ namespace o2
 
 		o2Events.OnApplicationClosing();
 		OnClosing();
-		onClosingEvent.Invoke();
+		onClosing.Invoke();
 	}
 
 	void Application::Shutdown()
@@ -346,14 +346,14 @@ namespace o2
 			{
 				app->mActive = true;
 				app->OnActivated();
-				app->onActivatedEvent.Invoke();
+				app->onActivated.Invoke();
 				o2Events.OnApplicationActivated();
 			}
 			else
 			{
 				app->mActive = false;
 				app->OnDeactivated();
-				app->onDeactivatedEvent.Invoke();
+				app->onDeactivated.Invoke();
 				o2Events.OnApplicationDeactivated();
 			}
 			break;
@@ -366,7 +366,7 @@ namespace o2
 			{
 				app->mWindowedSize = size;
 				app->mRender->OnFrameResized();
-				app->onResizingEvent.Invoke();
+				app->onResizing.Invoke();
 				app->OnResizing();
 				o2Events.OnApplicationSized();
 			}
@@ -382,7 +382,7 @@ namespace o2
 			{
 				app->mWindowedPos = pos;
 				app->OnMoved();
-				app->onMovingEvent.Invoke();
+				app->onMoving.Invoke();
 			}
 			break;
 
@@ -516,7 +516,7 @@ namespace o2
 		SetFullscreen(!mWindowed);
 
 		mRender->OnFrameResized();
-		onResizingEvent();
+		onResizing();
 	}
 
 	Vec2I Application::GetContentSize() const

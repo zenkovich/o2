@@ -360,9 +360,6 @@ namespace o2
 		// Returns world center position
 		Vec2F GetWorldCenter() const;
 
-		// Sets World center position
-		void SetWorldCenter(const Vec2F& position);
-
 		// Returns World center position
 		Vec2F GetWorldCenter() const;
 
@@ -422,6 +419,8 @@ namespace o2
 		public:
 			Actor* owner = nullptr;                    // Owner actor
 
+			bool   isDirty = false;                    // Is some value was changed
+
 			Vec2F  position;                           // Position @SERIALIZABLE
 			Vec2F  size;                               // Size @SERIALIZABLE
 			Vec2F  scale;                              // Scale, (1; 1) is default @SERIALIZABLE
@@ -443,8 +442,6 @@ namespace o2
 			Basis  parentInvertedTransform;            // Parent world transform inverted
 			Basis  parentTransform;                    // Parent world transform
 			bool   isParentInvTransformActual = false; // Is mParentInvertedTransform is actual
-
-			bool   isDirty = false;                    // Is some value was changed
 
 			SERIALIZABLE(Data);
 		};

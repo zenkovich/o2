@@ -2,6 +2,7 @@
 
 #include "Application/Input.h"
 #include "Render/Render.h"
+#include "Scene/SceneLayer.h"
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
@@ -12,6 +13,12 @@ namespace o2
 	UIWidget::UIWidget(ActorCreateMode mode /*= ActorCreateMode::InScene*/):
 		Actor(mnew UIWidgetLayout(), mode), layout((UIWidgetLayout*)transform)
 	{
+		if (mode == ActorCreateMode::InScene && mLayer)
+			mLayer->RegisterDrawable(this);
+
+		if (IsFocusable() && UIManager::IsSingletonInitialzed())
+			o2UI.mFocusableWidgets.Add(this);
+
 		layout->SetOwner(this);
 		InitializeProperties();
 	}
@@ -19,6 +26,12 @@ namespace o2
 	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
 		Actor(mnew UIWidgetLayout(), prototype, mode), layout((UIWidgetLayout*)transform)
 	{
+		if (mode == ActorCreateMode::InScene && mLayer && !mOverrideDepth)
+			mLayer->RegisterDrawable(this);
+
+		if (IsFocusable() && UIManager::IsSingletonInitialzed())
+			o2UI.mFocusableWidgets.Add(this);
+
 		layout->SetOwner(this);
 		InitializeProperties();
 	}
@@ -26,6 +39,12 @@ namespace o2
 	UIWidget::UIWidget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
 		Actor(mnew UIWidgetLayout(), components, mode), layout((UIWidgetLayout*)transform)
 	{
+		if (mode == ActorCreateMode::InScene && mLayer)
+			mLayer->RegisterDrawable(this);
+
+		if (IsFocusable() && UIManager::IsSingletonInitialzed())
+			o2UI.mFocusableWidgets.Add(this);
+
 		layout->SetOwner(this);
 		InitializeProperties();
 	}
@@ -50,6 +69,12 @@ namespace o2
 			AddState(newState);
 		}
 
+		if (mLayer)
+			mLayer->RegisterDrawable(this);
+
+		if (IsFocusable() && UIManager::IsSingletonInitialzed())
+			o2UI.mFocusableWidgets.Add(this);
+
 		InitializeProperties();
 		UpdateLayersDrawingSequence();
 		RetargetStatesAnimations();
@@ -62,6 +87,12 @@ namespace o2
 
 		for (auto state : mStates)
 			delete state;
+
+		if (mLayer && mIsOnScene)
+			mLayer->UnregisterDrawable(this);
+
+		if (UIManager::IsSingletonInitialzed())
+			o2UI.mFocusableWidgets.Remove(this);
 	}
 
 	UIWidget& UIWidget::operator=(const UIWidget& other)
@@ -108,6 +139,8 @@ namespace o2
 	{
 		if (mFullyDisabled || mIsClipped)
 			return;
+
+		Actor::Update(dt);
 
 		for (auto layer : mLayers)
 			layer->Update(dt);
@@ -394,10 +427,27 @@ namespace o2
 
 	void UIWidget::SetDepthOverridden(bool overrideDepth)
 	{
+		if (mOverrideDepth == overrideDepth)
+			return;
+
 		mOverrideDepth = overrideDepth;
 
 		if (mLayer)
 		{
+			if (mOverrideDepth)
+			{
+				mLayer->RegisterDrawable(this);
+				
+				if (mParentWidget)
+					mParentWidget->mDrawingChildren.Remove(this);
+			}
+			else
+			{
+				mLayer->UnregisterDrawable(this);
+
+				if (mParentWidget)
+					mParentWidget->mDrawingChildren.Add(this);
+			}
 		}
 	}
 
@@ -601,6 +651,17 @@ namespace o2
 		UpdateBounds();
 	}
 
+	void UIWidget::UpdateDrawingChildren()
+	{
+		mDrawingChildren.Clear();
+
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mOverrideDepth)
+				mDrawingChildren.Add(child);
+		}
+	}
+
 	void UIWidget::UpdateBounds()
 	{
 		mBounds = layout->mData->worldRectangle;
@@ -646,6 +707,17 @@ namespace o2
 		mTopDrawingLayers.Sort([](auto a, auto b) { return a->mDepth < b->mDepth; });
 	}
 
+	void UIWidget::SetParentWidget(UIWidget* widget)
+	{
+		SetParent(widget);
+	}
+
+	UIWidget* UIWidget::GetChildWidget(const String& path) const
+	{
+		Actor* actor = GetChild(path);
+		return dynamic_cast<UIWidget*>(actor);
+	}
+
 	UIWidget::WidgetsVec UIWidget::GetChildrenNonConst()
 	{
 		return mChildWidgets;
@@ -688,16 +760,32 @@ namespace o2
 	void UIWidget::OnParentChanged(Actor* oldParent)
 	{
 		layout->SetDirty();
+
+		mParentWidget = dynamic_cast<UIWidget*>(mParent);
 	}
 
 	void UIWidget::OnChildAdded(Actor* child)
 	{
 		layout->SetDirty();
+
+		UIWidget* widget = dynamic_cast<UIWidget*>(child);
+		if (widget)
+		{
+			mChildWidgets.Add(widget);
+			UpdateDrawingChildren();
+		}
 	}
 
 	void UIWidget::OnChildRemoved(Actor* child)
 	{
 		layout->SetDirty();
+
+		UIWidget* widget = dynamic_cast<UIWidget*>(child);
+		if (widget)
+		{
+			mChildWidgets.Remove(widget);
+			UpdateDrawingChildren();
+		}
 	}
 
 	void UIWidget::OnLayerChanged(SceneLayer* oldLayer)
@@ -749,51 +837,52 @@ namespace o2
 
 	void UIWidget::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(UIWidget, parentWidget, SetParent, GetParentWidget);
+		INITIALIZE_PROPERTY(UIWidget, visible, SetVisible, IsVisible);
 		INITIALIZE_PROPERTY(UIWidget, transparency, SetTransparency, GetTransparency);
 		INITIALIZE_GETTER(UIWidget, resTransparency, GetResTransparency);
-		INITIALIZE_PROPERTY(UIWidget, visible, SetVisible, IsVisible);
-		INITIALIZE_GETTER(UIWidget, childs, GetChildrenNonConst);
+		INITIALIZE_PROPERTY(UIWidget, parentWidget, SetParentWidget, GetParentWidget);
+		INITIALIZE_GETTER(UIWidget, childrenWidgets, GetChildrenNonConst);
 		INITIALIZE_GETTER(UIWidget, layers, GetLayersNonConst);
 		INITIALIZE_GETTER(UIWidget, states, GetStatesNonConst);
-		INITIALIZE_ACCESSOR(UIWidget, child, GetChild);
+		INITIALIZE_ACCESSOR(UIWidget, childWidget, GetChildWidget);
 		INITIALIZE_ACCESSOR(UIWidget, layer, GetLayer);
 		INITIALIZE_ACCESSOR(UIWidget, state, GetStateObject);
 
 		layer.SetAllAccessFunc(this, &UIWidget::GetAllLayers);
-		child.SetAllAccessFunc(this, &UIWidget::GetAllChilds);
+		childWidget.SetAllAccessFunc(this, &UIWidget::GetAllChilds);
 	}
 }
 
 CLASS_META(o2::UIWidget)
 {
-	BASE_CLASS(o2::ISerializable);
-	BASE_CLASS(o2::IDrawable);
+	BASE_CLASS(o2::Actor);
+	BASE_CLASS(o2::SceneDrawable);
 
-	PUBLIC_FIELD(name);
-	PUBLIC_FIELD(parent);
-	PUBLIC_FIELD(childs);
-	PUBLIC_FIELD(layers);
-	PUBLIC_FIELD(states);
+	PUBLIC_FIELD(layout);
+	PUBLIC_FIELD(visible);
 	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(resTransparency);
-	PUBLIC_FIELD(visible);
-	PUBLIC_FIELD(child);
+	PUBLIC_FIELD(parentWidget);
+	PUBLIC_FIELD(childrenWidgets);
+	PUBLIC_FIELD(layers);
+	PUBLIC_FIELD(states);
+	PUBLIC_FIELD(childWidget);
 	PUBLIC_FIELD(layer);
 	PUBLIC_FIELD(state);
-	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(onLayoutUpdated);
 	PUBLIC_FIELD(onFocused);
 	PUBLIC_FIELD(onUnfocused);
 	PUBLIC_FIELD(onShow);
 	PUBLIC_FIELD(onHide);
+	PROTECTED_FIELD();
 	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mLayers).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mParent);
-	PROTECTED_FIELD(mChildren).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mParentWidget);
+	PROTECTED_FIELD(mChildWidgets);
+	PROTECTED_FIELD(mDrawingChildren);
 	PROTECTED_FIELD(mChildrenWorldRect);
-	PROTECTED_FIELD(mLastChildsAbsRect);
+	PROTECTED_FIELD(mOverrideDepth).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);
 	PROTECTED_FIELD(mDrawingLayers);
@@ -812,26 +901,19 @@ CLASS_META(o2::UIWidget)
 	typedef Dictionary<String, UIWidget*> _tmp2;
 
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateChildrenLayouts);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);
-	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(UIWidget*, GetParentWidget);
-	PUBLIC_FUNCTION(void, SetParent, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, AddChild, UIWidget*, bool);
-	PUBLIC_FUNCTION(void, AddChilds, const WidgetsVec&);
-	PUBLIC_FUNCTION(UIWidget*, AddChild, UIWidget*, int);
-	PUBLIC_FUNCTION(bool, RemoveChild, const String&);
-	PUBLIC_FUNCTION(bool, RemoveChild, UIWidget*, bool, bool);
-	PUBLIC_FUNCTION(UIWidget*, GetChild, const String&);
-	PUBLIC_FUNCTION(void, RemoveAllChilds, bool, bool);
-	PUBLIC_FUNCTION(const WidgetsVec&, GetChildren);
+	PUBLIC_FUNCTION(UIWidget*, GetChildWidget, const String&);
+	PUBLIC_FUNCTION(const WidgetsVec&, GetChildWidgets);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, UIWidgetLayer*);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, const String&, IRectDrawable*, const Layout&, float);
-	PUBLIC_FUNCTION(UIWidgetLayer*, GetLayer, const String&);
 	PUBLIC_FUNCTION(bool, RemoveLayer, UIWidgetLayer*);
 	PUBLIC_FUNCTION(bool, RemoveLayer, const String&);
 	PUBLIC_FUNCTION(void, RemoveAllLayers);
+	PUBLIC_FUNCTION(UIWidgetLayer*, GetLayer, const String&);
 	PUBLIC_FUNCTION(const LayersVec&, GetLayers);
 	PUBLIC_FUNCTION(UIWidgetState*, AddState, const String&);
 	PUBLIC_FUNCTION(UIWidgetState*, AddState, const String&, const Animation&);
@@ -844,6 +926,8 @@ CLASS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, GetState, const String&);
 	PUBLIC_FUNCTION(UIWidgetState*, GetStateObject, const String&);
 	PUBLIC_FUNCTION(const StatesVec&, GetStates);
+	PUBLIC_FUNCTION(void, SetDepthOverridden, bool);
+	PUBLIC_FUNCTION(bool, IsDepthOverriden);
 	PUBLIC_FUNCTION(void, SetTransparency, float);
 	PUBLIC_FUNCTION(float, GetTransparency);
 	PUBLIC_FUNCTION(float, GetResTransparency);
@@ -858,35 +942,36 @@ CLASS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
 	PROTECTED_FUNCTION(void, DrawDebugFrame);
+	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
+	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
+	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
-	PROTECTED_FUNCTION(bool, CheckIsLayoutDrivenByParent, bool);
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
-	PROTECTED_FUNCTION(void, UpdateChildrenLayouts, bool);
 	PROTECTED_FUNCTION(void, UpdateBounds);
 	PROTECTED_FUNCTION(void, UpdateBoundsWithChilds);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateVisibility, bool);
 	PROTECTED_FUNCTION(void, OnChildFocused, UIWidget*);
+	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, RetargetStatesAnimations);
-	PROTECTED_FUNCTION(void, RecalculateAbsRect);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
+	PROTECTED_FUNCTION(void, UpdateDrawingChildren);
 	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);
+	PROTECTED_FUNCTION(void, SetParentWidget, UIWidget*);
 	PROTECTED_FUNCTION(WidgetsVec, GetChildrenNonConst);
 	PROTECTED_FUNCTION(LayersVec, GetLayersNonConst);
 	PROTECTED_FUNCTION(StatesVec, GetStatesNonConst);
 	PROTECTED_FUNCTION(_tmp1, GetAllLayers);
 	PROTECTED_FUNCTION(_tmp2, GetAllChilds);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
-	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

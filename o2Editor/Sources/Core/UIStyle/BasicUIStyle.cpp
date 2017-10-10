@@ -1,4 +1,4 @@
-#include "BasicUIStyle.h"
+#include "BasicUIManager.h"
 
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
@@ -27,7 +27,7 @@
 
 namespace o2
 {
-	void BasicUIStyleBuilder::RebuildButtonStyle()
+	void BasicUIManagerBuilder::RebuildButtonStyle()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -67,7 +67,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildCloseButtonStyle()
+	void BasicUIManagerBuilder::RebuildCloseButtonStyle()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -94,7 +94,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "close");
 	}
 
-	void BasicUIStyleBuilder::RebuildArrowButtonStyle()
+	void BasicUIManagerBuilder::RebuildArrowButtonStyle()
 	{
 		UIButton* sample = mnew UIButton();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -121,7 +121,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "arrow");
 	}
 
-	void BasicUIStyleBuilder::RebuildHorProgressBarStyle()
+	void BasicUIManagerBuilder::RebuildHorProgressBarStyle()
 	{
 		UIHorizontalProgress* sample = mnew UIHorizontalProgress();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -160,7 +160,7 @@ namespace o2
 	}
 
 
-	void BasicUIStyleBuilder::RebuildVerProgressBarStyle()
+	void BasicUIManagerBuilder::RebuildVerProgressBarStyle()
 	{
 		UIVerticalProgress* sample = mnew UIVerticalProgress();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -196,7 +196,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildHorScrollBarStyle()
+	void BasicUIManagerBuilder::RebuildHorScrollBarStyle()
 	{
 		UIHorizontalScrollBar* sample = mnew UIHorizontalScrollBar();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -235,7 +235,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildVerScrollBarStyle()
+	void BasicUIManagerBuilder::RebuildVerScrollBarStyle()
 	{
 		UIVerticalScrollBar* sample = mnew UIVerticalScrollBar();
 		sample->layout.minSize = Vec2F(5, 5);
@@ -275,7 +275,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildCheckboxStyle()
+	void BasicUIManagerBuilder::RebuildCheckboxStyle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -325,7 +325,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildCheckboxWithoutCaptionStyle()
+	void BasicUIManagerBuilder::RebuildCheckboxWithoutCaptionStyle()
 	{
 		UIToggle* sample = mnew UIToggle();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -368,7 +368,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "without caption");
 	}
 
-	void BasicUIStyleBuilder::RebuildScrollAreaStraightBarsStyle()
+	void BasicUIManagerBuilder::RebuildScrollAreaStraightBarsStyle()
 	{
 		UIScrollArea* sample = mnew UIScrollArea();
 		sample->layout.minSize = Vec2F(30, 30);
@@ -415,7 +415,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "straight bars");
 	}
 
-	void BasicUIStyleBuilder::RebuildScrollAreaStyle()
+	void BasicUIManagerBuilder::RebuildScrollAreaStyle()
 	{
 		UIScrollArea* sample = mnew UIScrollArea();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -444,7 +444,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildLabelStyle()
+	void BasicUIManagerBuilder::RebuildLabelStyle()
 	{
 		UILabel* sample = mnew UILabel();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -463,7 +463,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildEditBoxStyle()
+	void BasicUIManagerBuilder::RebuildEditBoxStyle()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
@@ -528,7 +528,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildCustomListStyle()
+	void BasicUIManagerBuilder::RebuildCustomListStyle()
 	{
 		UICustomList* sample = mnew UICustomList();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -574,7 +574,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildLongListStyle()
+	void BasicUIManagerBuilder::RebuildLongListStyle()
 	{
 		UILongList* sample = mnew UILongList();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -622,7 +622,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildListStyle()
+	void BasicUIManagerBuilder::RebuildListStyle()
 	{
 		UIList* sample = mnew UIList();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -677,7 +677,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildCustomDropDownStyle()
+	void BasicUIManagerBuilder::RebuildCustomDropDownStyle()
 	{
 		UICustomDropDown* sample = mnew UICustomDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -718,7 +718,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildDropDownStyle()
+	void BasicUIManagerBuilder::RebuildDropDownStyle()
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -765,7 +765,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildWindowStyle()
+	void BasicUIManagerBuilder::RebuildWindowStyle()
 	{
 		UIWindow* sample = mnew UIWindow();
 
@@ -835,7 +835,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildContextMenuStyle()
+	void BasicUIManagerBuilder::RebuildContextMenuStyle()
 	{
 		UIContextMenu* sample = mnew UIContextMenu();
 
@@ -906,7 +906,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildMenuPanelStyle()
+	void BasicUIManagerBuilder::RebuildMenuPanelStyle()
 	{
 		UIMenuPanel* sample = mnew UIMenuPanel();
 
@@ -929,7 +929,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildTreeStyle()
+	void BasicUIManagerBuilder::RebuildTreeStyle()
 	{
 		UITree* sample = mnew UITree();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -1030,7 +1030,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void BasicUIStyleBuilder::RebuildBacklessDropdown()
+	void BasicUIManagerBuilder::RebuildBacklessDropdown()
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout.minSize = Vec2F(20, 20);
@@ -1066,7 +1066,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "backless");
 	}
 
-	void BasicUIStyleBuilder::RebuildBacklessEditbox()
+	void BasicUIManagerBuilder::RebuildBacklessEditbox()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
@@ -1092,7 +1092,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "backless");
 	}
 
-	void BasicUIStyleBuilder::RebuildSinglelineEditbox()
+	void BasicUIManagerBuilder::RebuildSinglelineEditbox()
 	{
 		UIEditBox* sample = mnew UIEditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
@@ -1127,7 +1127,7 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "singleline");
 	}
 
-	void BasicUIStyleBuilder::RebuildBacklessScrollarea()
+	void BasicUIManagerBuilder::RebuildBacklessScrollarea()
 	{
 		UIScrollArea* sample = mnew UIScrollArea();
 		sample->layout.minSize = Vec2F(10, 10);
@@ -1155,13 +1155,13 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "backless");
 	}
 
-	void BasicUIStyleBuilder::RebuildBasicUIStyle()
+	void BasicUIManagerBuilder::RebuildBasicUIManager()
 	{
 		o2UI.ClearStyle();
 
 		for (auto func : GetType().GetFunctions())
 		{
-			if (func->GetName() == "RebuildBasicUIStyle")
+			if (func->GetName() == "RebuildBasicUIManager")
 				continue;
 
 			func->Invoke<void>(this);
@@ -1171,7 +1171,7 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::BasicUIStyleBuilder)
+CLASS_META(o2::BasicUIManagerBuilder)
 {
 	BASE_CLASS(o2::IObject);
 
@@ -1202,6 +1202,6 @@ CLASS_META(o2::BasicUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildBacklessEditbox);
 	PUBLIC_FUNCTION(void, RebuildSinglelineEditbox);
 	PUBLIC_FUNCTION(void, RebuildBacklessScrollarea);
-	PUBLIC_FUNCTION(void, RebuildBasicUIStyle);
+	PUBLIC_FUNCTION(void, RebuildBasicUIManager);
 }
 END_META;
