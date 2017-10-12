@@ -6,6 +6,8 @@
 #include "Render/Text.h"
 #include "UI/Button.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
 #include "Utils/Debug.h"
 
 namespace o2
@@ -32,7 +34,7 @@ namespace o2
 	{
 		for (auto elem : other.mWindowElements)
 		{
-			auto newElem = elem->Clone();
+			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
 			newElem->mParent = this;
 			mWindowElements.Add(newElem);
 		}
@@ -65,7 +67,7 @@ namespace o2
 
 		for (auto elem : other.mWindowElements)
 		{
-			auto newElem = elem->Clone();
+			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
 			newElem->mParent = this;
 			mWindowElements.Add(newElem);
 		}

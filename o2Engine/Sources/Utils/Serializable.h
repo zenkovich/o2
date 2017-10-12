@@ -23,10 +23,10 @@ namespace o2
 		virtual void Deserialize(const DataNode& node) {};
 
 		// DataNode converting operator
-		virtual operator DataNode() { return Serialize(); };
+		operator DataNode() { return Serialize(); };
 
 		// Assign operator from data node
-		virtual ISerializable& operator=(const DataNode& node) { return *this; };
+		ISerializable& operator=(const DataNode& node) { return *this; };
 
 		// Beginning serialization callback
 		virtual void OnSerialize(DataNode& node) const {}
