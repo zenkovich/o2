@@ -15,14 +15,19 @@ namespace o2
 		enum class VerOverflow { Cut, None, Expand };
 
 	public:
-		Property<FontRef>     font;                // Font pointer property
 		Property<WString>     text;                // Text property, wstring
+
+		Property<FontRef>     font;                // Font pointer property
 		Property<int>         height;              // Text height property
+
 		Property<VerAlign>    verAlign;            // vertical align property
 		Property<HorAlign>    horAlign;            // Horizontal align property
+
 		Property<HorOverflow> horOverflow;		   // Horizontal text overflow logic property
 		Property<VerOverflow> verOverflow;		   // Vertical text overflow logic property
+
 		Property<Vec2F>       expandBorder;        // Overflow expanding border size property
+
 		Property<float>       symbolsDistanceCoef; // Characters distance coef, 1 is standard
 		Property<float>       linesDistanceCoef;   // Lines distance coef, 1 is standard
 
@@ -36,7 +41,7 @@ namespace o2
 		UILabel& operator=(const UILabel& other);
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Sets using font
 		void SetFont(FontRef font);
@@ -99,7 +104,7 @@ namespace o2
 		int GetHeight() const;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true);
 
 		SERIALIZABLE(UILabel);
 
@@ -111,7 +116,7 @@ namespace o2
 
 	protected:
 		// It is called when layer added and updates drawing sequence
-		void OnLayerAdded(UIWidgetLayer* layer);
+		void OnLayerAdded(UIWidgetLayer* layer) override;
 
 		// Initializes properties
 		void InitializeProperties();

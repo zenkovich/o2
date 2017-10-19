@@ -1,9 +1,10 @@
 #include "CurvePreview.h"
 
-#include "Render/Sprite.h"
-#include "Utils/Math/Curve.h"
-#include "Render/Render.h"
 #include "Render/Camera.h"
+#include "Render/Render.h"
+#include "Render/Sprite.h"
+#include "UI/WidgetLayout.h"
+#include "Utils/Math/Curve.h"
 
 namespace Editor
 {
@@ -83,9 +84,9 @@ namespace Editor
 	void UICurvePreview::Redraw()
 	{
 		TextureRef texture = mSprite->GetTexture();
-		if (!texture || texture->GetSize() != layout.GetSize())
+		if (!texture || texture->GetSize() != layout->GetSize())
 		{
-			texture = TextureRef(layout.GetSize(), Texture::Format::Default, Texture::Usage::RenderTarget);
+			texture = TextureRef(layout->GetSize(), Texture::Format::Default, Texture::Usage::RenderTarget);
 			mSprite->SetTexture(texture);
 			mSprite->SetTextureSrcRect(RectI(Vec2I(), texture->GetSize()));
 		}

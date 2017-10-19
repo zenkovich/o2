@@ -5,28 +5,30 @@
 #include "UI/HorizontalScrollBar.h"
 #include "UI/VerticalLayout.h"
 #include "UI/VerticalScrollBar.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 #include "Utils/Debug.h"
 
 namespace o2
 {
 	UICustomList::UICustomList():
-		UIScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()),
-		mSelectionLayout(Layout::BothStretch())
+		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
 		mItemSample        = mnew UIWidget();
 		mSelectionDrawable = mnew Sprite();
 		mHoverDrawable     = mnew Sprite();
 
-		mVerLayout                   = mnew UIVerticalLayout();
-		mVerLayout->baseCorner       = BaseCorner::LeftTop;
-		mVerLayout->name             = "layout";
-		mVerLayout->expandHeight     = false;
-		mVerLayout->expandWidth      = true;
-		mVerLayout->layout.anchorMin = Vec2F(0, 0);
-		mVerLayout->layout.anchorMax = Vec2F(1, 1);
-		mVerLayout->layout.offsetMin = Vec2F();
-		mVerLayout->layout.offsetMax = Vec2F();
-		mVerLayout->fitByChildren    = true;
+		mVerLayout                    = mnew UIVerticalLayout();
+		mVerLayout->baseCorner        = BaseCorner::LeftTop;
+		mVerLayout->name              = "layout";
+		mVerLayout->expandHeight      = false;
+		mVerLayout->expandWidth       = true;
+		mVerLayout->layout->anchorMin = Vec2F(0, 0);
+		mVerLayout->layout->anchorMax = Vec2F(1, 1);
+		mVerLayout->layout->offsetMin = Vec2F();
+		mVerLayout->layout->offsetMax = Vec2F();
+		mVerLayout->fitByChildren     = true;
 
 		AddChild(mVerLayout);
 
@@ -37,13 +39,13 @@ namespace o2
 		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
 		mSelectionLayout(other.mSelectionLayout)
 	{
-		mVerLayout = FindChild<UIVerticalLayout>();
+		mVerLayout = GetChildByType<UIVerticalLayout>();
 
-		mItemSample = other.mItemSample->Clone();
+		mItemSample = other.mItemSample->CloneAs<UIWidget>();
 		mItemSample->UpdateLayout(true);
 
-		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mHoverDrawable = other.mHoverDrawable->Clone();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -65,17 +67,17 @@ namespace o2
 		delete mHoverDrawable;
 		mVerLayout = nullptr;
 
-		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mHoverDrawable = other.mHoverDrawable->Clone();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 
 		mSelectionLayout = other.mSelectionLayout;
 		mHoverLayout = other.mHoverLayout;
 
 		UIScrollArea::operator=(other);
 
-		mVerLayout = FindChild<UIVerticalLayout>();
-		mItemSample = other.mItemSample->Clone();
-		mItemSample->UpdateLayout(true);
+		mVerLayout = GetChildByType<UIVerticalLayout>();
+		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample->UpdateLayout();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -111,7 +113,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChildren)
+		for (auto child : mDrawingChildren)
 			child->Draw();
 
 		for (auto& sel : mSelectedItems)
@@ -155,7 +157,7 @@ namespace o2
 
 	UIWidget* UICustomList::AddItem()
 	{
-		return mVerLayout->AddChild(mItemSample->Clone());
+		return mVerLayout->AddChildWidget(mItemSample->CloneAs<UIWidget>());
 	}
 
 	UIWidget* UICustomList::AddItem(int position)
@@ -165,7 +167,7 @@ namespace o2
 		for (int i = mVerLayout->GetChildren().Count(); i < position; i++)
 			AddItem();
 
-		return mVerLayout->AddChild(mItemSample->Clone(), position);
+		return mVerLayout->AddChildWidget(mItemSample->CloneAs<UIWidget>(), position);
 	}
 
 	void UICustomList::RemoveItem(UIWidget* item)
@@ -193,7 +195,7 @@ namespace o2
 			return;
 		}
 
-		UIWidget* item = mVerLayout->GetChildren().Get(position);
+		UIWidget* item = mVerLayout->GetChildWidgets().Get(position);
 		mVerLayout->RemoveChild(item, false);
 		mVerLayout->AddChild(item, newPosition);
 	}
@@ -207,7 +209,7 @@ namespace o2
 	int UICustomList::GetItemPosition(UIWidget* item)
 	{
 		int i = 0;
-		for (auto child : mVerLayout->GetChildren())
+		for (auto child : mVerLayout->GetChildWidgets())
 		{
 			if (child == item)
 				return i;
@@ -220,10 +222,10 @@ namespace o2
 
 	UIWidget* UICustomList::GetItem(int position) const
 	{
-		if (position < 0 || position >= mVerLayout->GetChildren().Count())
+		if (position < 0 || position >= mVerLayout->GetChildWidgets().Count())
 			return nullptr;
 
-		return mVerLayout->GetChildren().Get(position);
+		return mVerLayout->GetChildWidgets().Get(position);
 	}
 
 	void UICustomList::RemoveAllItems()
@@ -267,7 +269,7 @@ namespace o2
 		if (!mMultiSelection)
 			ClearSelection();
 
-		if (position >= mVerLayout->GetChildren().Count())
+		if (position >= mVerLayout->GetChildWidgets().Count())
 		{
 			o2Debug.LogWarning("Can't select item at %i: out of range (%i)", position, GetItemsCount());
 			return;
@@ -390,12 +392,9 @@ namespace o2
 	void UICustomList::UpdateControls(float dt)
 	{}
 
-	void UICustomList::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UICustomList::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
-		UIScrollArea::UpdateLayout(forcible, withChildren);
+		UIScrollArea::UpdateLayout(withChildren);
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);
@@ -411,7 +410,7 @@ namespace o2
 		for (auto& sel : mSelectedItems)
 		{
 			UIWidget* item = GetItem(sel.idx);
-			sel.selection->SetRect(mSelectionLayout.Calculate(item->layout.GetAbsoluteRect()));
+			sel.selection->SetRect(mSelectionLayout.Calculate(item->layout->worldRect));
 		}
 	}
 
@@ -477,9 +476,9 @@ namespace o2
 			return nullptr;
 
 		int idx = 0;
-		for (auto child : mVerLayout->mChildren)
+		for (auto child : mVerLayout->mChildWidgets)
 		{
-			if (child->layout.mAbsoluteRect.IsInside(point))
+			if (child->layout->IsPointInside(point))
 			{
 				if (idxPtr)
 					*idxPtr = idx;
@@ -536,7 +535,7 @@ namespace o2
 		}
 		else
 		{
-			mTargetHoverRect = mHoverLayout.Calculate(itemUnderCursor->layout.mAbsoluteRect);
+			mTargetHoverRect = mHoverLayout.Calculate(itemUnderCursor->layout->worldRect);
 
 			auto hoverState = state["hover"];
 			if (hoverState)
@@ -554,7 +553,7 @@ namespace o2
 		{
 			const int poolStep = 5;
 			for (int i = 0; i < poolStep; i++)
-				mSelectionSpritesPool.Add(mSelectionDrawable->Clone());
+				mSelectionSpritesPool.Add(mSelectionDrawable->CloneAs<Sprite>());
 		}
 
 		return mSelectionSpritesPool.PopBack();
@@ -605,12 +604,12 @@ CLASS_META(o2::UICustomList)
 	PUBLIC_FIELD(onSelectedItem);
 	PROTECTED_FIELD(mVerLayout);
 	PROTECTED_FIELD(mItemSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMultiSelection).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectedItems);
 	PROTECTED_FIELD(mSelectionDrawable).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHoverDrawable).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSelectionLayout).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHoverLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mMultiSelection).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectedItems);
 	PROTECTED_FIELD(mCurrentHoverRect);
 	PROTECTED_FIELD(mTargetHoverRect);
 	PROTECTED_FIELD(mLastHoverCheckCursor);
@@ -651,10 +650,14 @@ CLASS_META(o2::UICustomList)
 	PUBLIC_FUNCTION(void, SetHoverDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
 	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, UpdateTransparency);
+	PROTECTED_FUNCTION(void, UpdateControls, float);
+	PROTECTED_FUNCTION(void, OnSelectionChanged);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateSelectionSprites);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
@@ -663,12 +666,8 @@ CLASS_META(o2::UICustomList)
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(Sprite*, GetSelectionSprite);
-	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

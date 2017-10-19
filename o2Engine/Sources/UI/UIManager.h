@@ -197,7 +197,7 @@ namespace o2
 
 		if (sample)
 		{
-			res = (_type*)sample->Clone();
+			res = dynamic_cast<_type*>(sample->Clone());
 		}
 		else
 		{

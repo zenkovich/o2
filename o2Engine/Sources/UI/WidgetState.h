@@ -18,6 +18,7 @@ namespace o2
 		String           name;                          // State name @SERIALIZABLE
 		Animation        animation;                     // UIWidget animation @SERIALIZABLE
 		float            offStateAnimationSpeed = 1.0f; // False state transition animation speed @SERIALIZABLE
+
 		Function<void()> onStateFullyTrue;		        // This event calls when state is completely true (at the end of animation)
 		Function<void()> onStateFullyFalse;		        // This event calls when state is completely false (at the end of animation)
 		Function<void()> onStateBecomesTrue;	        // This event calls when state becomes to true

@@ -244,7 +244,7 @@ namespace o2
 								res.Add(srcAssetInfo->id);
 								buildedAssetInfo->time = srcAssetInfo->time;
 								delete buildedAssetInfo->meta;
-								buildedAssetInfo->meta = static_cast<Asset::IMetaInfo*>(srcAssetInfo->meta->Clone());
+								buildedAssetInfo->meta = srcAssetInfo->meta->CloneAs<Asset::IMetaInfo>();
 
 								mModifiedAssets.Add(buildedAssetInfo);
 
@@ -263,7 +263,7 @@ namespace o2
 								buildedAssetInfo->path = srcAssetInfo->path;
 								buildedAssetInfo->time = srcAssetInfo->time;
 								delete buildedAssetInfo->meta;
-								buildedAssetInfo->meta = static_cast<Asset::IMetaInfo*>(srcAssetInfo->meta->Clone());
+								buildedAssetInfo->meta = srcAssetInfo->meta->CloneAs<Asset::IMetaInfo>();
 								buildedAssetInfo->id = buildedAssetInfo->meta->ID();
 
 								GetAssetConverter(srcAssetInfo->assetType)->ConvertAsset(*srcAssetInfo);
@@ -286,7 +286,7 @@ namespace o2
 								buildedAssetInfo->path = srcAssetInfo->path;
 								buildedAssetInfo->time = srcAssetInfo->time;
 								delete buildedAssetInfo->meta;
-								buildedAssetInfo->meta = static_cast<Asset::IMetaInfo*>(srcAssetInfo->meta->Clone());
+								buildedAssetInfo->meta = srcAssetInfo->meta->CloneAs<Asset::IMetaInfo>();
 
 								mBuildedAssetsTree.AddAsset(buildedAssetInfo);
 							}
@@ -341,7 +341,7 @@ namespace o2
 				newBuildedAsset->path = (*srcAssetInfoIt)->path;
 				newBuildedAsset->assetType = (*srcAssetInfoIt)->assetType;
 				newBuildedAsset->time = (*srcAssetInfoIt)->time;
-				newBuildedAsset->meta = static_cast<Asset::IMetaInfo*>((*srcAssetInfoIt)->meta->Clone());
+				newBuildedAsset->meta = (*srcAssetInfoIt)->meta->CloneAs<Asset::IMetaInfo>();
 				newBuildedAsset->id   = newBuildedAsset->meta->ID();
 
 				mBuildedAssetsTree.AddAsset(newBuildedAsset);

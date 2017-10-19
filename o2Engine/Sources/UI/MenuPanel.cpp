@@ -1,8 +1,12 @@
 #include "MenuPanel.h"
 
 #include "Render/Sprite.h"
+#include "Render/Text.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace o2
 {
@@ -22,16 +26,16 @@ namespace o2
 		mLayout->expandWidth   = false;
 		mLayout->baseCorner    = BaseCorner::LeftTop;
 		mLayout->fitByChildren = true;
-		mLayout->layout        = UIWidgetLayout::BothStretch();
+		*mLayout->layout       = UIWidgetLayout::BothStretch();
 	}
 
 	UIMenuPanel::UIMenuPanel(const UIMenuPanel& other):
 		UIWidget(other), DrawableCursorEventsListener(this)
 	{
-		mItemSample        = other.mItemSample->Clone();
-		mSelectionDrawable = other.mSelectionDrawable->Clone();
+		mItemSample        = other.mItemSample->CloneAs<UIWidget>();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
-		mLayout            = FindChild<UIHorizontalLayout>();
+		mLayout            = GetChildByType<UIHorizontalLayout>();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -50,10 +54,10 @@ namespace o2
 		delete mItemSample;
 		delete mSelectionDrawable;
 
-		mItemSample        = other.mItemSample->Clone();
-		mSelectionDrawable = other.mSelectionDrawable->Clone();
+		mItemSample        = other.mItemSample->CloneAs<UIWidget>();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
-		mLayout            = FindChild<UIHorizontalLayout>();
+		mLayout            = GetChildByType<UIHorizontalLayout>();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -87,9 +91,9 @@ namespace o2
 
 					if (mSelectedItem >= 0)
 					{
-						if (auto contextMenu = mLayout->mChildren[mSelectedItem]->FindChild<UIContextMenu>())
+						if (auto contextMenu = mLayout->mChildWidgets[mSelectedItem]->GetChildByType<UIContextMenu>())
 						{
-							contextMenu->Show(mLayout->mChildren[mSelectedItem]->layout.absLeftBottom);
+							contextMenu->Show(mLayout->mChildWidgets[mSelectedItem]->layout->worldLeftBottom);
 							mOpenedContext = contextMenu;
 						}
 					}
@@ -108,7 +112,7 @@ namespace o2
 
 		IDrawable::OnDrawn();
 
-		for (auto child : mChildren)
+		for (auto child : mDrawingChildren)
 			child->Draw();
 
 		mSelectionDrawable->Draw();
@@ -129,7 +133,7 @@ namespace o2
 	}
 
 	UIWidget* UIMenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
-								   const ImageAssetRef& icon /*= ImageAssetRef()*/, 
+								   const ImageAssetRef& icon /*= ImageAssetRef()*/,
 								   const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		int slashPos = path.Find("/");
@@ -138,7 +142,7 @@ namespace o2
 
 		WString subMenu = path.SubStr(0, slashPos);
 
-		UIWidget* subChild = mLayout->mChildren.FindMatch([&](auto x) {
+		UIWidget* subChild = mLayout->mChildWidgets.FindMatch([&](auto x) {
 			if (auto text = x->GetLayerDrawable<Text>("text"))
 				return text->text == subMenu;
 
@@ -148,7 +152,7 @@ namespace o2
 		if (!subChild)
 			subChild = AddItem(subMenu);
 
-		UIContextMenu* subContext = subChild->FindChild<UIContextMenu>();
+		UIContextMenu* subContext = subChild->GetChildByType<UIContextMenu>();
 		if (!subContext)
 		{
 			subContext = o2UI.CreateWidget<UIContextMenu>();
@@ -164,9 +168,13 @@ namespace o2
 		mLayout->AddChild(newItem, position);
 
 		if (item.subItems.Count() > 0)
-			mClickFunctions.Insert([=]() { newItem->FindChild<UIContextMenu>()->Show(newItem->layout.absRightBottom); }, position);
-		else
-			mClickFunctions.Insert(item.onClick, position);
+		{
+			mClickFunctions.Insert([=]()
+			{
+				newItem->GetChildByType<UIContextMenu>()->Show(newItem->layout->worldRightBottom);
+			}, position);
+		}
+		else mClickFunctions.Insert(item.onClick, position);
 
 		return newItem;
 	}
@@ -215,7 +223,7 @@ namespace o2
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
 		{
-			UIWidget* removingItem = mLayout->mChildren.FindMatch([&](auto x) {
+			UIWidget* removingItem = mLayout->mChildWidgets.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("text"))
 					return text->text == path;
 
@@ -235,7 +243,7 @@ namespace o2
 
 		WString subMenu = path.SubStr(0, slashPos);
 
-		UIWidget* subChild = mLayout->mChildren.FindMatch([&](auto x) {
+		UIWidget* subChild = mLayout->mChildWidgets.FindMatch([&](auto x) {
 			if (auto text = x->GetLayerDrawable<Text>("text"))
 				return text->text == subMenu;
 
@@ -248,7 +256,7 @@ namespace o2
 			return;
 		}
 
-		UIContextMenu* subContext = subChild->FindChild<UIContextMenu>();
+		UIContextMenu* subContext = subChild->GetChildByType<UIContextMenu>();
 		if (!subContext)
 		{
 			o2Debug.LogError("Failed to remove menu item %s", path);
@@ -296,7 +304,7 @@ namespace o2
 
 	UIWidget* UIMenuPanel::CreateItem(const Item& item)
 	{
-		UIWidget* newItem = mItemSample->Clone();
+		UIWidget* newItem = mItemSample->CloneAs<UIWidget>();
 		newItem->name = (WString)"Menu Item:" + item.text;
 
 		if (auto textLayer = newItem->GetLayerDrawable<Text>("text"))
@@ -315,12 +323,12 @@ namespace o2
 	UIMenuPanel::Item UIMenuPanel::GetItemDef(int idx) const
 	{
 		Item res;
-		auto item = mLayout->mChildren[idx];
+		auto item = mLayout->mChildWidgets[idx];
 
 		if (auto textLayer = item->GetLayerDrawable<Text>("text"))
 			res.text = textLayer->text;
 
-		if (auto subMenu = item->FindChild<UIContextMenu>())
+		if (auto subMenu = item->GetChildByType<UIContextMenu>())
 			res.subItems = subMenu->GetItems();
 
 		res.onClick = mClickFunctions[idx];
@@ -339,9 +347,9 @@ namespace o2
 			return nullptr;
 
 		int idx = 0;
-		for (auto child : mLayout->mChildren)
+		for (auto child : mLayout->mChildWidgets)
 		{
-			if (child->layout.mAbsoluteRect.IsInside(point))
+			if (child->layout->IsPointInside(point))
 			{
 				if (idxPtr)
 					*idxPtr = idx;
@@ -378,7 +386,7 @@ namespace o2
 		}
 		else
 		{
-			mTargetSelectionRect = mSelectionLayout.Calculate(itemUnderCursor->layout.mAbsoluteRect);
+			mTargetSelectionRect = mSelectionLayout.Calculate(itemUnderCursor->layout->worldRect);
 
 			auto hoverState = state["hover"];
 			if (hoverState)
@@ -415,9 +423,9 @@ namespace o2
 			if (mOpenedContext)
 				mOpenedContext->HideWithChild();
 
-			if (auto context = itemUnderCursor->FindChild<UIContextMenu>())
+			if (auto context = itemUnderCursor->GetChildByType<UIContextMenu>())
 			{
-				context->Show(itemUnderCursor->layout.absLeftBottom);
+				context->Show(itemUnderCursor->layout->worldLeftBottom);
 				mOpenedContext = context;
 			}
 		}
@@ -494,9 +502,9 @@ CLASS_META(o2::UIMenuPanel)
 	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
 	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(UIWidget*, CreateItem, const Item&);
 	PROTECTED_FUNCTION(Item, GetItemDef, int);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

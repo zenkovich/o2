@@ -22,19 +22,19 @@ namespace o2
 	class ActorRef: public ISerializable
 	{
 	public:
-		// Default constructor, nothing to ref
+		// Default constructor, no reference
 		ActorRef();
 
-		// Constructor for referencing on actor
+		// Constructor with referencing on actor
 		ActorRef(Actor* actor);
 
-		// Creates actor by prototype and returns reference to it
+		// Creates actor by prototype and returns reference on it
 		ActorRef(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
 
-		// Creates actor with components and returns reference to it
+		// Creates actor with components and returns reference on it
 		ActorRef(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::InScene);
 
-		// Creates copy actor and returns reference to it
+		// Creates a copy of actor and returns reference on it
 		ActorRef(const Actor& other);
 
 		// Destructor
@@ -85,24 +85,25 @@ namespace o2
 		friend class Actor;
 	};
 
-	// -----------
-	// Scene actor
-	// -----------
+	// ---------------------------------------------------------------------------------------------
+	// Scene actor. This is a basic scene object. All other scene object types is derived from this.
+	// It has an unique id, name, tags, scene layer, transformation, components and children actors.
+	// Can be created from prototype of other actor. 
+	// ---------------------------------------------------------------------------------------------
 	class Actor: virtual public ISerializable
 	{
 	public:
 		typedef Vector<Actor*> ActorsVec;
 		typedef Vector<Component*> ComponentsVec;
-		typedef Vector<String> StringsVec;
 		
 	public:
 		Property<ActorAssetRef> prototype;          // Prototype asset reference property
 										            
-		ActorTransform* const   transform;          // Transformation 
+		ActorTransform* const   transform;          // Transformation of actor
 										            
 		Property<Actor*>        parent;             // Parent actor property
 										            
-		Getter<UInt64>          id;                 // Actor's unique id
+		Getter<UInt64>          id;                 // Actor unique id
 		Property<String>        name;               // Actor name property
 										            
 		TagGroup                tags;               // Tags group
@@ -156,7 +157,7 @@ namespace o2
 		// Returns prototype directly from only this
 		ActorAssetRef GetPrototypeDirectly() const;
 
-		// Breaks link to prototype, sets actor as actor without prototype
+		// Breaks link to prototype
 		void BreakPrototypeLink();
 
 		// Applies all changes to prototype and saves it
@@ -256,7 +257,7 @@ namespace o2
 		Actor* GetChild(const String& path) const;
 
 		// Searches child with specified type
-		template<typename _type, typename _check = std::enable_if<std::is_base_of<Actor, _type>::value>::value>
+		template<typename _type>
 		_type* GetChildByType();
 
 		// Returns children array
@@ -612,7 +613,7 @@ namespace o2
 		friend class Scene;
 	};
 
-	template<typename _type, typename _check>
+	template<typename _type>
 	_type* Actor::GetChildByType()
 	{
 		for (auto child : mChildren)

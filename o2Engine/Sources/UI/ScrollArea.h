@@ -31,10 +31,10 @@ namespace o2
 		UIScrollArea& operator=(const UIScrollArea& other);
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Updates widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Sets scroll position
 		void SetScroll(const Vec2F& scroll);
@@ -100,7 +100,7 @@ namespace o2
 		Layout GetViewLayout() const;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true);
 
 		SERIALIZABLE(UIScrollArea);
 
@@ -137,20 +137,38 @@ namespace o2
 		float                  mLastVerScrollChangeTime = -1.0f;        // Last time when horizontal scroll bar was changed
 
 	protected:
+		// Beginning serialization callback
+		void OnSerialize(DataNode& node) const override;
+
+		// Completion deserialization callback
+		void OnDeserialized(const DataNode& node) override;
+
 		// It is called when child widget was added
-		void OnChildAdded(UIWidget* child);
+		void OnChildAdded(UIWidget* child) override;
 
 		// It is called when child widget was removed
-		void OnChildRemoved(UIWidget* child);
+		void OnChildRemoved(UIWidget* child) override;
+
+		// Checks widget clipping by area
+		void CheckClipping(const RectF& clipArea) override;
+
+		// Updates transparency for this and children widgets
+		void UpdateTransparency() override;
 
 		// Updates mouse control
 		virtual void UpdateControls(float dt);
 
-		// Check scroll bars showing
-		void CheckScrollBarsVisibility();
-
 		// Moves scroll position and updates children widgets clipping and layout
 		virtual void MoveScrollPosition(const Vec2F& delta);
+
+		// Calculates scroll area
+		virtual void CalculateScrollArea();
+
+		// Updates scroll parameters: clip area, scroll size
+		virtual void UpdateScrollParams();
+
+		// Check scroll bars showing
+		void CheckScrollBarsVisibility();
 
 		// Moves widget's to delta and checks for clipping
 		void MoveWidgetAndCheckClipping(UIWidget* widget, const Vec2F& delta);
@@ -161,29 +179,11 @@ namespace o2
 		// Checks children clippings
 		void CheckChildrenClipping();
 
-		// Checks widget clipping by area
-		void CheckClipping(const RectF& clipArea);
-
-		// Updates transparency for this and children widgets
-		void UpdateTransparency();
-
-		// Calculates scroll area
-		virtual void CalculateScrollArea();
-
-		// Updates scroll parameters: clip area, scroll size
-		virtual void UpdateScrollParams();
-
 		// It is called when horizontal scroll bar value was changed
 		void OnHorScrollChanged(float value);
 
 		// It is called when vertical scroll bar value was changed
 		void OnVerScrollChanged(float value);
-
-		// Beginning serialization callback
-		void OnSerialize(DataNode& node) const;
-
-		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node);
 
 		//Calls when widget was scrolled
 		virtual void OnScrolled();

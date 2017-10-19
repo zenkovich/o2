@@ -60,10 +60,10 @@ namespace o2
 		void OnObjectsChanged(const UnknownPtrsVec& objects);
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Updates widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Rebuilds all tree
 		void UpdateNodesView(bool immediately = true);
@@ -150,16 +150,16 @@ namespace o2
 		float GetChildsNodesOffset() const;
 
 		// Returns is listener scrollable
-		bool IsScrollable() const;
+		bool IsScrollable() const override;
 
 		// Returns is this widget can be selected
-		bool IsFocusable() const;
+		bool IsFocusable() const override;
 
 		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		SERIALIZABLE(UITree);
 
@@ -215,7 +215,7 @@ namespace o2
 		bool           mMultiSelectAvailable = true;            // Is multi selection available @SERIALIZABLE
 
 		UITreeNode*    mNodeWidgetSample = nullptr;             // Item sample @SERIALIZABLE
-		float          mChildsOffset = 10.0f;                   // Children nodes offset from parent @SERIALIZABLE
+		float          mChildrenOffset = 10.0f;                 // Children nodes offset from parent @SERIALIZABLE
 
 		bool           mIsNeedUpdateView = false;               // Is tree needs to be rebuild
 		bool           mIsNeedUdateLayout = false;              // Is layout needs to rebuild
@@ -276,6 +276,12 @@ namespace o2
 		VisibleWidgetsDefsVec mVisibleWidgetsCache;             // Visible widgets cache
 
 	protected:
+		// It is called when widget was selected
+		void OnFocused() override;
+
+		// It is called when widget was deselected
+		void OnUnfocused() override;
+
 		// Returns object's parent
 		virtual UnknownPtr GetObjectParent(UnknownPtr object);
 
@@ -303,31 +309,31 @@ namespace o2
 // ISelectableDragableObjectsGroup implementation
 
 		// Returns selected objects in group
-		SelectDragObjectsVec GetSelectedDragObjects() const;
+		SelectDragObjectsVec GetSelectedDragObjects() const override;
 
 		// Returns all objects in group 
-		SelectDragObjectsVec GetAllObjects() const;
+		SelectDragObjectsVec GetAllObjects() const override;
 
 		// Selects object
-		void Select(SelectableDragableObject* object);
+		void Select(SelectableDragableObject* object) override;
 
 		// Selects object
-		void Select(SelectableDragableObject* object, bool sendOnSelectionChanged);
+		void Select(SelectableDragableObject* object, bool sendOnSelectionChanged) override;
 
 		// Deselects object
-		void Deselect(SelectableDragableObject* object);
+		void Deselect(SelectableDragableObject* object) override;
 
 		// Adds selectable object to group
-		void AddSelectableObject(SelectableDragableObject* object);
+		void AddSelectableObject(SelectableDragableObject* object) override;
 
 		// Removes selectable object from group
-		void RemoveSelectableObject(SelectableDragableObject* object);
+		void RemoveSelectableObject(SelectableDragableObject* object) override;
 
 		// It is called when selectable draggable object was released
-		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor);
+		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) override;
 
 		// It is called when selectable object was began to drag
-		void OnSelectableObjectBeganDragging(SelectableDragableObject* object);
+		void OnSelectableObjectBeganDragging(SelectableDragableObject* object) override;
 
 // -------------
 
@@ -351,12 +357,6 @@ namespace o2
 
 		// Creates node from object with parent
 		Node* CreateNode(UnknownPtr object, Node* parent);
-
-		// It is called when widget was selected
-		void OnFocused();
-
-		// It is called when widget was deselected
-		void OnUnfocused();
 
 		// Updates visible nodes (calculates range and initializes nodes)
 		void UpdateVisibleNodes();
@@ -395,22 +395,22 @@ namespace o2
 		void MoveScrollPosition(const Vec2F& delta);
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor);
+		void OnCursorMoved(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// Updates hover target rect and visibility
 		void UpdateHover(UITreeNode* itemUnderCursor);
@@ -436,21 +436,21 @@ namespace o2
 		void UpdateDraggingInsertionAnim(float dt);
 
 		// It is called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group);
+		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
+		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group);
+		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group);
+		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 // ------------
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		friend class UITreeNode;
 	};
@@ -489,7 +489,7 @@ namespace o2
 		UnknownPtr GetObject() const;
 
 		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		SERIALIZABLE(UITreeNode);
 
@@ -503,22 +503,22 @@ namespace o2
 		void UpdateTreeLayout(float dt);
 
 		// It is called when cursor double clicked
-		void OnCursorDblClicked(const Input::Cursor& cursor);
+		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
 		// It is called when cursor enters this object, moving hover of tree to this
-		void OnCursorEnter(const Input::Cursor& cursor);
+		void OnCursorEnter(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object, moving hover of tree to this
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when started dragging
-		void OnDragStart(const Input::Cursor& cursor);
+		void OnDragStart(const Input::Cursor& cursor) override;
 
 		// It is called when dragged
-		void OnDragged(const Input::Cursor& cursor, DragDropArea* area);
+		void OnDragged(const Input::Cursor& cursor, DragDropArea* area) override;
 
 		// It is called when dragging completed
-		void OnDragEnd(const Input::Cursor& cursor);
+		void OnDragEnd(const Input::Cursor& cursor) override;
 
 		// It is called when this was selected
 		void OnSelected();

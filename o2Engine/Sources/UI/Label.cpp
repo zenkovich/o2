@@ -1,7 +1,9 @@
 #include "Label.h"
 
-#include "Render/Render.h"
 #include "Application/Input.h"
+#include "Render/Render.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
 
 namespace o2
 {
@@ -51,14 +53,14 @@ namespace o2
 
 			if (mHorOverflow == HorOverflow::Cut)
 			{
-				cutRect.left = (int)layout.absLeft;
-				cutRect.right = (int)layout.absRight;
+				cutRect.left = (int)layout->worldLeft;
+				cutRect.right = (int)layout->worldRight;
 			}
 
 			if (mVerOverflow == VerOverflow::Cut)
 			{
-				cutRect.top = (int)layout.absTop;
-				cutRect.bottom = (int)layout.absBottom;
+				cutRect.top = (int)layout->worldTop;
+				cutRect.bottom = (int)layout->worldBottom;
 			}
 
 			o2Render.EnableScissorTest(cutRect);
@@ -72,7 +74,7 @@ namespace o2
 
 		OnDrawn();
 
-		for (auto child : mChildren)
+		for (auto child : mDrawingChildren)
 			child->Draw();
 
 		for (auto layer : mTopDrawingLayers)
@@ -232,69 +234,65 @@ namespace o2
 		return 0;
 	}
 
-	void UILabel::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UILabel::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
 		if (mTextLayer)
 		{
 			if (mHorOverflow == HorOverflow::Expand)
 			{
-				RecalculateAbsRect();
+				layout->Update();
 
 				float realSize = mTextLayer->GetRealSize().x + mExpandBorder.x*2.0f;
-				float thisSize = layout.width;
+				float thisSize = layout->width;
 				float sizeDelta = realSize - thisSize;
-				layout.mMinSize.x = realSize;
+				layout->mData->minSize.x = realSize;
 
 				switch (mTextLayer->GetHorAlign())
 				{
-				case HorAlign::Left:
-				layout.mOffsetMax.x += sizeDelta;
-				break;
+					case HorAlign::Left:
+					layout->mData->offsetMax.x += sizeDelta;
+					break;
 
-				case HorAlign::Middle:
-				case HorAlign::Both:
-				layout.mOffsetMax.x += sizeDelta*0.5f;
-				layout.mOffsetMin.x -= sizeDelta*0.5f;
-				break;
+					case HorAlign::Middle:
+					case HorAlign::Both:
+					layout->mData->offsetMax.x += sizeDelta*0.5f;
+					layout->mData->offsetMin.x -= sizeDelta*0.5f;
+					break;
 
-				case HorAlign::Right:
-				layout.mOffsetMin.x -= sizeDelta;
-				break;
+					case HorAlign::Right:
+					layout->mData->offsetMin.x -= sizeDelta;
+					break;
 				}
 			}
 
 			if (mVerOverflow == VerOverflow::Expand)
 			{
-				RecalculateAbsRect();
+				layout->Update();
 
 				float realSize = mTextLayer->GetRealSize().y + mExpandBorder.y*2.0f;
-				float thisSize = layout.height;
+				float thisSize = layout->height;
 				float sizeDelta = realSize - thisSize;
 
 				switch (mTextLayer->GetVerAlign())
 				{
-				case VerAlign::Top:
-				layout.mOffsetMin.y -= sizeDelta;
-				break;
+					case VerAlign::Top:
+					layout->mData->offsetMin.y -= sizeDelta;
+					break;
 
-				case VerAlign::Middle:
-				case VerAlign::Both:
-				layout.mOffsetMax.y += sizeDelta*0.5f;
-				layout.mOffsetMin.y -= sizeDelta*0.5f;
-				break;
+					case VerAlign::Middle:
+					case VerAlign::Both:
+					layout->mData->offsetMax.y += sizeDelta*0.5f;
+					layout->mData->offsetMin.y -= sizeDelta*0.5f;
+					break;
 
-				case VerAlign::Bottom:
-				layout.mOffsetMax.y += sizeDelta;
-				break;
+					case VerAlign::Bottom:
+					layout->mData->offsetMax.y += sizeDelta;
+					break;
 				}
 			}
 		}
 
-		RecalculateAbsRect();
-		UpdateLayersLayouts();
+		layout->Update();
 
 		if (withChildren)
 			UpdateChildrenLayouts();
@@ -325,8 +323,8 @@ CLASS_META(o2::UILabel)
 {
 	BASE_CLASS(o2::UIWidget);
 
-	PUBLIC_FIELD(font);
 	PUBLIC_FIELD(text);
+	PUBLIC_FIELD(font);
 	PUBLIC_FIELD(height);
 	PUBLIC_FIELD(verAlign);
 	PUBLIC_FIELD(horAlign);
@@ -361,7 +359,7 @@ CLASS_META(o2::UILabel)
 	PUBLIC_FUNCTION(Vec2F, GetExpandBorder);
 	PUBLIC_FUNCTION(void, SetHeight, int);
 	PUBLIC_FUNCTION(int, GetHeight);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }

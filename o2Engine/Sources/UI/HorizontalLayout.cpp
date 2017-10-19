@@ -1,5 +1,7 @@
 #include "HorizontalLayout.h"
 
+#include "UI/WidgetLayout.h"
+
 namespace o2
 {
 	UIHorizontalLayout::UIHorizontalLayout(): UIWidget()
@@ -146,16 +148,12 @@ namespace o2
 		return mFitByChildren;
 	}
 
-	void UIHorizontalLayout::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIHorizontalLayout::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
 		if (mFitByChildren)
 			ExpandSizeByChilds();
 
-		RecalculateAbsRect();
-		UpdateLayersLayouts();
+		layout->Update();
 
 		if (withChildren)
 			RearrangeChilds();
@@ -166,8 +164,8 @@ namespace o2
 		if (!mFitByChildren)
 			return UIWidget::GetMinWidthWithChildren();
 
-		float res = mBorder.left + mBorder.right + Math::Max(mChildren.Count() - 1, 0)*mSpacing;
-		for (auto child : mChildren)
+		float res = mBorder.left + mBorder.right + Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
+		for (auto child : mChildWidgets)
 		{
 			if (!child->mFullyDisabled)
 				res += child->GetMinWidthWithChildren();
@@ -178,12 +176,12 @@ namespace o2
 
 	void UIHorizontalLayout::OnChildAdded(UIWidget* child)
 	{
-		child->layout.mDrivenByParent = true;
+		child->layout->mData->drivenByParent = true;
 	}
 
 	void UIHorizontalLayout::OnChildRemoved(UIWidget* child)
 	{
-		child->layout.mDrivenByParent = false;
+		child->layout->mData->drivenByParent = false;
 	}
 
 	void UIHorizontalLayout::RearrangeChilds()
@@ -215,9 +213,9 @@ namespace o2
 
 	void UIHorizontalLayout::UpdateLayoutParametres()
 	{
-		layout.mWeight.x = mChildren.Sum<float>([&](UIWidget* child) { return child->layout.GetWidthWeight(); });
-		layout.mMinSize.x = mChildren.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalWidth(); });
-		layout.mMinSize.x += mBorder.left + mBorder.right;
+		layout->mData->weight.x = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->layout->GetWidthWeight(); });
+		layout->mData->minSize.x = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->layout->GetMinimalWidth(); });
+		layout->mData->minSize.x += mBorder.left + mBorder.right;
 	}
 
 	void UIHorizontalLayout::ArrangeFromCenter()
@@ -230,33 +228,33 @@ namespace o2
 			auto widths = CalculateExpandedWidths();
 
 			int i = 0;
-			for (auto child : mChildren)
+			for (auto child : mChildWidgets)
 			{
-				child->layout.mOffsetMin.x = position;
+				child->layout->mData->offsetMin.x = position;
 				position += widths[i++];
 
-				child->layout.mOffsetMax.x = position;
+				child->layout->mData->offsetMax.x = position;
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.5f);
-				child->UpdateLayout(true);
+				child->UpdateLayout();
 			}
 		}
 		else
 		{
-			float totalWidth = mChildren.Sum<float>([&](UIWidget* child) { return child->GetMinWidthWithChildren(); });
-			totalWidth += (mChildren.Count() - 1)*mSpacing;
+			float totalWidth = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->GetMinWidthWithChildren(); });
+			totalWidth += (mChildWidgets.Count() - 1)*mSpacing;
 			float position = -totalWidth*0.5f;
-			for (auto child : mChildren)
+			for (auto child : mChildWidgets)
 			{
-				child->layout.mOffsetMin.x = position;
-				position += Math::Abs(Math::Max(child->layout.mMinSize.x, child->GetMinWidthWithChildren()));
+				child->layout->mData->offsetMin.x = position;
+				position += Math::Abs(Math::Max(child->layout->mData->minSize.x, child->GetMinWidthWithChildren()));
 
-				child->layout.mOffsetMax.x = position;
+				child->layout->mData->offsetMax.x = position;
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.5f);
-				child->UpdateLayout(true);
+				child->UpdateLayout();
 			}
 		}
 	}
@@ -269,31 +267,31 @@ namespace o2
 			auto widths = CalculateExpandedWidths();
 
 			int i = 0;
-			for (auto child : mChildren)
+			for (auto child : mChildWidgets)
 			{
-				child->layout.mOffsetMin.x = position;
+				child->layout->mData->offsetMin.x = position;
 				position += widths[i++];
 
-				child->layout.mOffsetMax.x = position;
+				child->layout->mData->offsetMax.x = position;
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.0f);
-				child->UpdateLayout(true);
+				child->UpdateLayout();
 			}
 		}
 		else
 		{
 			float position = mBorder.left;
-			for (auto child : mChildren)
+			for (auto child : mChildWidgets)
 			{
-				child->layout.mOffsetMin.x = position;
-				position += Math::Abs(Math::Max(child->layout.mMinSize.x, child->GetMinWidthWithChildren()));
+				child->layout->mData->offsetMin.x = position;
+				position += Math::Abs(Math::Max(child->layout->mData->minSize.x, child->GetMinWidthWithChildren()));
 
-				child->layout.mOffsetMax.x = position;
+				child->layout->mData->offsetMax.x = position;
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.0f);
-				child->UpdateLayout(true);
+				child->UpdateLayout();
 			}
 		}
 	}
@@ -306,31 +304,31 @@ namespace o2
 			auto widths = CalculateExpandedWidths();
 
 			int i = 0;
-			for (auto child : mChildren)
+			for (auto child : mChildWidgets)
 			{
-				child->layout.mOffsetMax.x = -position;
+				child->layout->mData->offsetMax.x = -position;
 				position += widths[i++];
 
-				child->layout.mOffsetMin.x = -position;
+				child->layout->mData->offsetMin.x = -position;
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 1.0f);
-				child->UpdateLayout(true);
+				child->UpdateLayout();
 			}
 		}
 		else
 		{
 			float position = mBorder.right;
-			for (auto child : mChildren)
+			for (auto child : mChildWidgets)
 			{
-				child->layout.mOffsetMax.x = -position;
-				position += Math::Abs(Math::Max(child->layout.mMinSize.x, child->GetMinWidthWithChildren()));
+				child->layout->mData->offsetMax.x = -position;
+				position += Math::Abs(Math::Max(child->layout->mData->minSize.x, child->GetMinWidthWithChildren()));
 
-				child->layout.mOffsetMin.x = -position;
+				child->layout->mData->offsetMin.x = -position;
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 1.0f);
-				child->UpdateLayout(true);
+				child->UpdateLayout();
 			}
 		}
 	}
@@ -339,34 +337,34 @@ namespace o2
 	{
 		if (mExpandHeight)
 		{
-			child->layout.mAnchorMin = Vec2F(widthAnchor, 0);
-			child->layout.mAnchorMax = Vec2F(widthAnchor, 1);
-			child->layout.mOffsetMin.y = mBorder.bottom;
-			child->layout.mOffsetMax.y = -mBorder.top;
+			child->layout->mData->anchorMin = Vec2F(widthAnchor, 0);
+			child->layout->mData->anchorMax = Vec2F(widthAnchor, 1);
+			child->layout->mData->offsetMin.y = mBorder.bottom;
+			child->layout->mData->offsetMax.y = -mBorder.top;
 		}
 		else
 		{
-			float height = child->layout.GetHeight();
+			float height = child->layout->height;
 			if (mBaseCorner == BaseCorner::Bottom || mBaseCorner == BaseCorner::LeftBottom || mBaseCorner == BaseCorner::RightBottom)
 			{
-				child->layout.mAnchorMin = Vec2F(widthAnchor, 0);
-				child->layout.mAnchorMax = Vec2F(widthAnchor, 0);
-				child->layout.mOffsetMin.y = mBorder.bottom;
-				child->layout.mOffsetMax.y = mBorder.bottom + height;
+				child->layout->mData->anchorMin = Vec2F(widthAnchor, 0);
+				child->layout->mData->anchorMax = Vec2F(widthAnchor, 0);
+				child->layout->mData->offsetMin.y = mBorder.bottom;
+				child->layout->mData->offsetMax.y = mBorder.bottom + height;
 			}
 			if (mBaseCorner == BaseCorner::Center || mBaseCorner == BaseCorner::Left || mBaseCorner == BaseCorner::Right)
 			{
-				child->layout.mAnchorMin = Vec2F(widthAnchor, 0.5f);
-				child->layout.mAnchorMax = Vec2F(widthAnchor, 0.5f);
-				child->layout.mOffsetMin.y = -height*0.5f;
-				child->layout.mOffsetMax.y = height*0.5f;
+				child->layout->mData->anchorMin = Vec2F(widthAnchor, 0.5f);
+				child->layout->mData->anchorMax = Vec2F(widthAnchor, 0.5f);
+				child->layout->mData->offsetMin.y = -height*0.5f;
+				child->layout->mData->offsetMax.y = height*0.5f;
 			}
 			if (mBaseCorner == BaseCorner::Top || mBaseCorner == BaseCorner::LeftTop || mBaseCorner == BaseCorner::RightTop)
 			{
-				child->layout.mAnchorMin = Vec2F(widthAnchor, 1);
-				child->layout.mAnchorMax = Vec2F(widthAnchor, 1);
-				child->layout.mOffsetMin.y = -mBorder.top - height;
-				child->layout.mOffsetMax.y = -mBorder.top;
+				child->layout->mData->anchorMin = Vec2F(widthAnchor, 1);
+				child->layout->mData->anchorMax = Vec2F(widthAnchor, 1);
+				child->layout->mData->offsetMin.y = -mBorder.top - height;
+				child->layout->mData->offsetMax.y = -mBorder.top;
 			}
 		}
 	}
@@ -388,8 +386,8 @@ namespace o2
 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
 		Vec2F size(GetMinWidthWithChildren(), GetMinHeightWithChildren());
 
-		Vec2F parentSize = mParent ? mParent->layout.mAbsoluteRect.Size() : Vec2F();
-		Vec2F szDelta = size - (layout.mOffsetMax - layout.mOffsetMin + (layout.mAnchorMax - layout.mAnchorMin)*parentSize);
+		Vec2F parentSize = mParent ? mParent->transform->size : Vec2F();
+		Vec2F szDelta = size - (layout->mData->offsetMax - layout->mData->offsetMin + (layout->mData->anchorMax - layout->mData->anchorMin)*parentSize);
 
 		if (mExpandWidth)
 			szDelta.x = 0;
@@ -397,20 +395,20 @@ namespace o2
 		if (mExpandHeight)
 			szDelta.y = 0;
 
-		layout.mOffsetMax += szDelta*(Vec2F::One() - relativePivot);
-		layout.mOffsetMin -= szDelta*relativePivot;
+		layout->mData->offsetMax += szDelta*(Vec2F::One() - relativePivot);
+		layout->mData->offsetMin -= szDelta*relativePivot;
 	}
 
 	Vector<float> UIHorizontalLayout::CalculateExpandedWidths()
 	{
-		int ichildCount = mChildren.Count();
+		int ichildCount = mChildWidgets.Count();
 		float childCount = (float)ichildCount;
 		float availableWidth = mChildrenWorldRect.Width() - mBorder.left - mBorder.right;
-		float minWidthSum = mChildren.Sum<float>([&](UIWidget* child) { return child->layout.GetMinimalWidth(); });
+		float minWidthSum = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->layout->GetMinimalWidth(); });
 		float expandValue = Math::Max(availableWidth - minWidthSum - (childCount - 1.0f)*mSpacing, 0.0f);
 
 		Vector<float> widths(ichildCount + 1);
-		mChildren.ForEach([&](auto child) { widths.Add(child->layout.GetMinimalWidth()); });
+		mChildWidgets.ForEach([&](auto child) { widths.Add(child->layout->GetMinimalWidth()); });
 
 		while (expandValue > 0)
 		{
@@ -424,7 +422,7 @@ namespace o2
 				float w = widths[i];
 				if (Math::Equals(w, minSz))
 				{
-					float wweight = mChildren[i]->layout.GetWidthWeight();
+					float wweight = mChildWidgets[i]->layout->GetWidthWeight();
 					maxSzWeight = Math::Max(maxSzWeight, wweight);
 					minSzWeightsSum += wweight;
 					minSzChilds.Add(i);
@@ -435,7 +433,7 @@ namespace o2
 					minSz = w;
 					minSzChilds.Clear();
 					minSzChilds.Add(i);
-					float wweight = mChildren[i]->layout.GetWidthWeight();
+					float wweight = mChildWidgets[i]->layout->GetWidthWeight();
 					maxSzWeight = wweight;
 					minSzWeightsSum = wweight;
 				}
@@ -461,7 +459,7 @@ namespace o2
 			}
 
 			float expValueByWeight = needsDelta/minSzWeightsSum;
-			minSzChilds.ForEach([&](int idx) { widths[idx] += expValueByWeight*mChildren[idx]->layout.GetWidthWeight(); });
+			minSzChilds.ForEach([&](int idx) { widths[idx] += expValueByWeight*mChildWidgets[idx]->layout->GetWidthWeight(); });
 
 			expandValue -= needsDelta;
 		}
@@ -525,7 +523,7 @@ CLASS_META(o2::UIHorizontalLayout)
 	PUBLIC_FUNCTION(bool, IsHeightExpand);
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);

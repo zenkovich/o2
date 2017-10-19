@@ -121,7 +121,7 @@ namespace Editor
 	void UIDockWindowPlace::ArrangeChildWindows()
 	{
 		Vector<UIDockableWindow*> windows;
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			if (child->GetType() == TypeOf(UIDockableWindow))
 				windows.Add(dynamic_cast<UIDockableWindow*>(child));
@@ -139,7 +139,7 @@ namespace Editor
 			int pos = 0;
 			for (auto window : windows)
 			{
-				window->SetTabState(offset, pos, window == mChilds[0]);
+				window->SetTabState(offset, pos, window == mChildren[0]);
 				offset += window->GetTabWidth();
 
 				pos++;
@@ -156,7 +156,7 @@ namespace Editor
 	void UIDockWindowPlace::SetActiveTab(UIDockableWindow* window)
 	{
 		Vector<UIDockableWindow*> windows;
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			if (child->GetType() == TypeOf(UIDockableWindow))
 				windows.Add(dynamic_cast<UIDockableWindow*>(child));
@@ -227,9 +227,9 @@ namespace Editor
 
 	void UIDockWindowPlace::CheckInteractable()
 	{
-		interactable = mChilds.CountMatch([](auto x) { return x->GetType() == TypeOf(UIDockWindowPlace); }) == 0;
+		interactable = mChildren.CountMatch([](auto x) { return x->GetType() == TypeOf(UIDockWindowPlace); }) == 0;
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			if (child->GetType() == TypeOf(UIDockWindowPlace))
 				((UIDockWindowPlace*)child)->CheckInteractable();

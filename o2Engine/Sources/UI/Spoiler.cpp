@@ -1,7 +1,10 @@
 #include "Spoiler.h"
 
-#include "Animation\AnimatedFloat.h"
-#include "Render\Render.h"
+#include "Animation/AnimatedFloat.h"
+#include "Render/Render.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace o2
 {
@@ -85,7 +88,7 @@ namespace o2
 			if (clipping)
 				o2Render.EnableScissorTest(mBounds);
 
-			for (auto child : mChildren)
+			for (auto child : mDrawingChildren)
 				child->Draw();
 
 			if (clipping)
@@ -103,15 +106,12 @@ namespace o2
 		UpdateLayout();
 	}
 
-	void UISpoiler::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UISpoiler::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
 		UpdateLayoutParametres();
 		ExpandSizeByChilds();
-		RecalculateAbsRect();
-		UpdateLayersLayouts();
+
+		layout->Update();
 
 		if (withChildren)
 			RearrangeChilds();
@@ -137,7 +137,7 @@ namespace o2
 // 		};
 // 
 // 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
-// 		Vec2F size(Math::Max(GetLayoutWidth(), layout.mMinSize.x), Math::Max(GetLayoutHeight(), layout.mMinSize.y));
+// 		Vec2F size(Math::Max(GetLayoutWidth(), layout->mData->minSize.x), Math::Max(GetLayoutHeight(), layout->mData->minSize.y));
 // 
 // 		Vec2F szDelta = size - layout.mLocalRect.Size();
 // 
@@ -147,8 +147,8 @@ namespace o2
 // 		if (mExpandHeight)
 // 			szDelta.y = 0;
 // 
-// 		layout.mOffsetMax += szDelta*(Vec2F::One() - relativePivot);
-// 		layout.mOffsetMin -= szDelta*relativePivot;
+// 		layout->mData->offsetMax += szDelta*(Vec2F::One() - relativePivot);
+// 		layout->mData->offsetMin -= szDelta*relativePivot;
 // 	}
 
 	void UISpoiler::UpdateLayoutParametres()
@@ -157,8 +157,8 @@ namespace o2
 			UIVerticalLayout::UpdateLayoutParametres();
 		else
 		{
-			layout.mWeight.y = 1;
-			layout.mMinSize.y = 0;
+			layout->mData->weight.y = 1;
+			layout->mData->minSize.y = 0;
 		}
 	}
 
@@ -192,7 +192,7 @@ CLASS_META(o2::UISpoiler)
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
 	PUBLIC_FUNCTION(bool, IsExpanded);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PROTECTED_FUNCTION(void, UpdateExpanding, float);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);

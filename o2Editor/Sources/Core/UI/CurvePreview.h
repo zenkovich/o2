@@ -31,7 +31,7 @@ namespace Editor
 		void SetCurve(Curve* curve);
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Sets back color of image
 		void SetBackColor(const Color4& color);
@@ -57,7 +57,7 @@ namespace Editor
 
 	protected:
 		// Updates layers layouts, calls after updating widget layout
-		void UpdateLayersLayouts();
+		void UpdateLayersLayouts() override;
 
 		// Redraws image texture
 		void Redraw();

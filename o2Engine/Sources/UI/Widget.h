@@ -89,6 +89,12 @@ namespace o2
 		// Returns child widget by path (like "root/some node/other node/target node")
 		UIWidget* GetChildWidget(const String& path) const;
 
+		// Adds child widget and returns them
+		UIWidget* AddChildWidget(UIWidget* widget);
+
+		// Adds child widget at position and returns them
+		UIWidget* AddChildWidget(UIWidget* widget, int position);
+
 		// Returns constant children widgets vector
 		const WidgetsVec& GetChildWidgets() const;
 
@@ -260,6 +266,12 @@ namespace o2
 		// It is called when layer was changed
 		void OnLayerChanged(SceneLayer* oldLayer) override;
 
+		// It is called when child widget was added
+		virtual void OnChildAdded(UIWidget* child);
+
+		// It is called when child widget was removed
+		virtual void OnChildRemoved(UIWidget* child);
+
 		// It is called when widget was selected
 		virtual void OnFocused();
 
@@ -287,6 +299,15 @@ namespace o2
 		// Updates result visibility
 		virtual void UpdateVisibility(bool updateLayout = true);
 
+		// Updates layers layouts, calls after updating widget layout
+		virtual void UpdateLayersLayouts();
+
+		// Updates drawing children widgets list
+		void UpdateDrawingChildren();
+
+		// Updates layers drawing sequence
+		void UpdateLayersDrawingSequence();
+
 		// It is called when child widget was selected
 		virtual void OnChildFocused(UIWidget* child);
 
@@ -301,15 +322,6 @@ namespace o2
 
 		// Sets new target for all states animations
 		void RetargetStatesAnimations();
-
-		// Updates layers layouts, calls after updating widget layout
-		void UpdateLayersLayouts();
-
-		// Updates drawing children widgets list
-		void UpdateDrawingChildren();
-
-		// Updates layers drawing sequence
-		void UpdateLayersDrawingSequence();
 
 		// Sets parent widget, used for property
 		void SetParentWidget(UIWidget* widget);

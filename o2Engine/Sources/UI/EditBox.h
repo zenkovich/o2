@@ -17,9 +17,12 @@ namespace o2
 	{
 	public:
 		Property<WString>              text;			  // Text property
+
 		Property<int>                  caret;		      // Caret position property
+
 		Property<int>                  selectionBegin;    // Selection begin index property
 		Property<int>                  selectionEnd;	  // Selection end index property
+
 		Function<void(const WString&)> onChanged;         // Text changed event
 		Function<void(const WString&)> onChangeCompleted; // Text changing completed event
 
@@ -36,10 +39,10 @@ namespace o2
 		UIEditBox& operator=(const UIEditBox& other);
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Updates widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Sets text
 		void SetText(const WString& text);
@@ -135,107 +138,108 @@ namespace o2
 		float GetCaretBlinkingDelay() const;
 
 		// Returns is listener scrollable
-		bool IsScrollable() const;
+		bool IsScrollable() const override;
 
 		// Returns is this widget can be selected
-		bool IsFocusable() const;
+		bool IsFocusable() const override;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		// Returns true if point is under drawable
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		SERIALIZABLE(UIEditBox);
 
 	protected:
-		WString mLastText;                                        // Last text
-		WString mText;                                            // Current text @SERIALIZABLE
-		WString mAvailableSymbols;                                // Available symbols @SERIALIZABLE
-
-		Text*   mTextDrawable = nullptr;                          // Text drawable @SERIALIZABLE
-		Mesh*   mSelectionMesh = nullptr;                         // Selection mesh
-		Sprite* mCaretDrawable = nullptr;                         // Caret drawable @SERIALIZABLE
-
-		float   mCaretBlinkDelay = 1.0f;                          // Caret blinking delay @SERIALIZABLE
-		float   mCaretBlinkTime = 0.0f;                           // Caret blinking timer
-
-		int     mSelectionBegin = 0;                              // Selection begin index
-		int     mSelectionEnd = 0;	                              // Selection end index
 		Color4  mSelectionColor = Color4(0.1f, 0.2f, 0.6f, 0.3f); // Text selection color @SERIALIZABLE
-		bool    mSelectingByWords = false;                        // Selection works by solid words
-		int     mSelWordBegin = 0;                                // Selection by words begin index
-		int     mSelWordEnd = 0;                                  // Selection by words end index
 
-		bool    mMultiLine = true;		                          // True if text is multiline @SERIALIZABLE
-		bool    mWordWrap = false;		                          // True if text words wrapping @SERIALIZABLE
-		int     mMaxLineChars = INT_MAX;	                      // Count of maximum characters in line @SERIALIZABLE
-		int     mMaxLinesCount = INT_MAX;	                      // Count of maximum lines count @SERIALIZABLE
-
-		bool    mJustSelected = false;                            // Is edit box selected at current frame
-		float   mLastClickTime = -1.0f;                           // Time of last clicking
-		Vec2F   mLastCursorPos;                                   // Last pressed cursor position
+		WString mLastText;                 // Last text
+		WString mText;                     // Current text @SERIALIZABLE
+		WString mAvailableSymbols;         // Available symbols @SERIALIZABLE
+										   
+		Text*   mTextDrawable = nullptr;   // Text drawable @SERIALIZABLE
+		Mesh*   mSelectionMesh = nullptr;  // Selection mesh
+		Sprite* mCaretDrawable = nullptr;  // Caret drawable @SERIALIZABLE
+										   
+		float   mCaretBlinkDelay = 1.0f;   // Caret blinking delay @SERIALIZABLE
+		float   mCaretBlinkTime = 0.0f;    // Caret blinking timer
+										   
+		int     mSelectionBegin = 0;       // Selection begin index
+		int     mSelectionEnd = 0;	       // Selection end index
+		bool    mSelectingByWords = false; // Selection works by solid words
+		int     mSelWordBegin = 0;         // Selection by words begin index
+		int     mSelWordEnd = 0;           // Selection by words end index
+										   
+		bool    mMultiLine = true;		   // True if text is multiline @SERIALIZABLE
+		bool    mWordWrap = false;		   // True if text words wrapping @SERIALIZABLE
+		int     mMaxLineChars = INT_MAX;   // Count of maximum characters in line @SERIALIZABLE
+		int     mMaxLinesCount = INT_MAX;  // Count of maximum lines count @SERIALIZABLE
+										   
+		bool    mJustSelected = false;     // Is edit box selected at current frame
+		float   mLastClickTime = -1.0f;    // Time of last clicking
+		Vec2F   mLastCursorPos;            // Last pressed cursor position
 
 	protected:
-		// Updates mouse control
-		void UpdateControls(float dt);
+		// Updates transparency for this and children widgets
+		void UpdateTransparency() override;
 
 		// It is called when visible was changed
-		void OnVisibleChanged();
+		void OnVisibleChanged() override;
 
 		// It is called when widget was selected
-		void OnFocused();
+		void OnFocused() override;
 
 		// It is called when widget was deselected
-		void OnUnfocused();
+		void OnUnfocused() override;
+
+		// Updates mouse control
+		void UpdateControls(float dt) override;
+
+		// Updates scroll parameters: clip area, scroll size
+		void UpdateScrollParams() override;
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor);
+		void OnCursorEnter(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was pressed on this
-		void OnCursorRightMousePressed(const Input::Cursor& cursor);
+		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button stay down on this
-		void OnCursorRightMouseStillDown(const Input::Cursor& cursor);
+		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
 		// It is called when scrolling
-		void OnScrolled(float scroll);
+		void OnScrolled(float scroll) override;
 
 		// It is called when key was pressed
-		void OnKeyPressed(const Input::Key& key);
+		void OnKeyPressed(const Input::Key& key) override;
 
 		// It is called when key was released
-		void OnKeyReleased(const Input::Key& key);
+		void OnKeyReleased(const Input::Key& key) override;
 
 		// It is called when key stay down during frame
-		void OnKeyStayDown(const Input::Key& key);
+		void OnKeyStayDown(const Input::Key& key) override;
 
 		// Returns text filtered by available characters set
 		WString GetFilteredText(const WString& text);
-
-		// Updates scroll parameters: clip area, scroll size
-		void UpdateScrollParams();
-
-		// Updates transparency for this and children widgets
-		void UpdateTransparency();
 
 		// Checks text for maximal characters in line and lines count
 		void CheckCharactersAndLinesBounds();

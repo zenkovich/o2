@@ -1,6 +1,7 @@
 #include "Image.h"
 
 #include "Render/Sprite.h"
+#include "UI/WidgetLayer.h"
 
 namespace o2
 {

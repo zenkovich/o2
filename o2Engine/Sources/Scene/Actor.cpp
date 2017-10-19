@@ -1538,7 +1538,7 @@ namespace o2
 					else
 					{
 						// new component
-						Component* newProtoComponent = protoChild->AddComponent(component->Clone());
+						Component* newProtoComponent = protoChild->AddComponent(component->CloneAs<Component>());
 						componentsMap.Add(component, newProtoComponent);
 
 						component->mPrototypeLink = newProtoComponent;
@@ -1550,7 +1550,7 @@ namespace o2
 							if (!info.matchingChild)
 								continue;
 
-							Component* newComponent = info.matchingChild->AddComponent(component->Clone());
+							Component* newComponent = info.matchingChild->AddComponent(component->CloneAs<Component>());
 							newComponent->mPrototypeLink = newProtoComponent;
 							info.componentsMap.Add(component, newComponent);
 
@@ -1592,7 +1592,7 @@ namespace o2
 			// copy components
 			for (auto component : child->mComponents)
 			{
-				Component* newProtoComponent = newProtoChild->AddComponent(component->Clone());
+				Component* newProtoComponent = newProtoChild->AddComponent(component->CloneAs<Component>());
 				componentsMap.Add(component, newProtoComponent);
 
 				if (isChildProtoLinked)
@@ -1626,7 +1626,7 @@ namespace o2
 
 				for (auto component : child->mComponents)
 				{
-					Component* newComponent = newChild->AddComponent(component->Clone());
+					Component* newComponent = newChild->AddComponent(CloneAs<Component>());
 					info.componentsMap.Add(component, newComponent);
 					newComponent->mPrototypeLink = component->mPrototypeLink;
 					CollectFixingFields(newComponent, info.componentPointersFields, info.actorPointersFields);
@@ -1704,7 +1704,7 @@ namespace o2
 
 		for (auto component : source->mComponents)
 		{
-			Component* newComponent = dest->AddComponent(component->Clone());
+			Component* newComponent = dest->AddComponent(CloneAs<Component>());
 
 			componentsMap.Add(component, newComponent);
 
@@ -1754,7 +1754,7 @@ namespace o2
 
 		for (auto component : source->mComponents)
 		{
-			Component* newComponent = dest->AddComponent(component->Clone());
+			Component* newComponent = dest->AddComponent(CloneAs<Component>());
 			componentsMap.Add(component, newComponent);
 			newComponent->mPrototypeLink = component->mPrototypeLink;
 			component->mPrototypeLink = newComponent;
@@ -1817,7 +1817,7 @@ namespace o2
 				continue;
 			}
 
-			Component* newComponent = dest->AddComponent(component->Clone());
+			Component* newComponent = dest->AddComponent(CloneAs<Component>());
 			componentsMap.Add(component, newComponent);
 
 			CollectFixingFields(newComponent, componentsPointers, actorsPointers);

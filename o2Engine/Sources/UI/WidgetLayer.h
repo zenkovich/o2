@@ -19,16 +19,20 @@ namespace o2
 	class UIWidgetLayer: public ISerializable
 	{
 	public:
-		typedef Vector<UIWidgetLayer*> ChildsVec;
+		typedef Vector<UIWidgetLayer*> ChildrenVec;
 
 	public:
-		Layout                                  layout;             // Drawable layout @SERIALIZABLE
-		Layout                                  interactableLayout; // Interactable area layout @SERIALIZABLE
-		String                                  name;               // Name of layer @SERIALIZABLE
-		Property<float>                         depth;              // Drawing depth (higher depths will draw later)
-		Property<float>                         transparency;       // Drawable transparency property
-		IRectDrawable*                          drawable;           // Drawable @SERIALIZABLE
-		Accessor<UIWidgetLayer*, const String&> child;              // Child layer accessor
+		String          name;               // Name of layer @SERIALIZABLE
+		Property<float> depth;              // Drawing depth (higher depths will draw later)
+					    
+		Layout          layout;             // Drawable layout @SERIALIZABLE
+		Layout          interactableLayout; // Interactable area layout @SERIALIZABLE
+					    
+		Property<float> transparency;       // Drawable transparency property
+		IRectDrawable*  drawable;           // Drawable @SERIALIZABLE
+
+		Accessor<UIWidgetLayer*, const String&> child; // Child layer accessor
+
 
 		// Default constructor
 		UIWidgetLayer();
@@ -64,10 +68,10 @@ namespace o2
 		UIWidgetLayer* GetParent() const;
 
 		// Return child layers
-		ChildsVec& GetChilds();
+		ChildrenVec& GetChilds();
 
 		// Returns constant child layers
-		const ChildsVec& GetChilds() const;
+		const ChildrenVec& GetChilds() const;
 
 		// Adds child layer
 		UIWidgetLayer* AddChildLayer(const String& name, IRectDrawable* drawable, const Layout& layout = Layout::BothStretch(),
@@ -114,7 +118,7 @@ namespace o2
 		RectF          mInteractableArea;       // Interactable area, depends on interactableLayout
 		UIWidget*      mOwnerWidget = nullptr;  // Owner widget pointer
 		UIWidgetLayer* mParent = nullptr;       // Pointer to parent layer
-		ChildsVec      mChilds;                 // Children layers @SERIALIZABLE
+		ChildrenVec      mChildren;                 // Children layers @SERIALIZABLE
 
 	protected:
 		// Completion deserialization callback
@@ -144,11 +148,11 @@ namespace o2
 	template<typename _type>
 	_type* UIWidgetLayer::FindLayer() const
 	{
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			if (child->drawable && child->drawable->GetType() == TypeOf(_type))
 				return (_type*)(child->drawable);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			auto res = child->GetLayerDrawableByType<_type>();
 			if (res)

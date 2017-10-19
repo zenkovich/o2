@@ -65,7 +65,7 @@ namespace o2
 
 		for (auto state : other.mStates)
 		{
-			UIWidgetState* newState = state->Clone();
+			UIWidgetState* newState = dynamic_cast<UIWidgetState*>(state->Clone());
 			AddState(newState);
 		}
 
@@ -125,7 +125,7 @@ namespace o2
 
 		for (auto state : other.mStates)
 		{
-			UIWidgetState* newState = state->Clone();
+			UIWidgetState* newState = dynamic_cast<UIWidgetState*>(state->Clone());
 			AddState(newState);
 		}
 
@@ -717,6 +717,16 @@ namespace o2
 		Actor* actor = GetChild(path);
 		return dynamic_cast<UIWidget*>(actor);
 	}
+	
+	UIWidget* UIWidget::AddChildWidget(UIWidget* widget)
+	{
+		return dynamic_cast<UIWidget*>(AddChild(widget));
+	}
+
+	UIWidget* UIWidget::AddChildWidget(UIWidget* widget, int position)
+	{
+		return dynamic_cast<UIWidget*>(AddChild(widget, position));
+	}
 
 	UIWidget::WidgetsVec UIWidget::GetChildrenNonConst()
 	{
@@ -778,7 +788,13 @@ namespace o2
 		{
 			mChildWidgets.Add(widget);
 			UpdateDrawingChildren();
+
+			OnChildAdded(widget);
 		}
+	}
+
+	void UIWidget::OnChildAdded(UIWidget* child)
+	{
 	}
 
 	void UIWidget::OnChildRemoved(Actor* child)
@@ -790,7 +806,13 @@ namespace o2
 		{
 			mChildWidgets.Remove(widget);
 			UpdateDrawingChildren();
+
+			OnChildRemoved(widget);
 		}
+	}
+
+	void UIWidget::OnChildRemoved(UIWidget* child)
+	{
 	}
 
 	void UIWidget::OnLayerChanged(SceneLayer* oldLayer)
@@ -912,6 +934,8 @@ CLASS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);
 	PUBLIC_FUNCTION(UIWidget*, GetParentWidget);
 	PUBLIC_FUNCTION(UIWidget*, GetChildWidget, const String&);
+	PUBLIC_FUNCTION(UIWidget*, AddChildWidget, UIWidget*);
+	PUBLIC_FUNCTION(UIWidget*, AddChildWidget, UIWidget*, int);
 	PUBLIC_FUNCTION(const WidgetsVec&, GetChildWidgets);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, UIWidgetLayer*);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, const String&, IRectDrawable*, const Layout&, float);
@@ -953,6 +977,8 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
+	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
@@ -962,14 +988,14 @@ CLASS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateVisibility, bool);
+	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
+	PROTECTED_FUNCTION(void, UpdateDrawingChildren);
+	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);
 	PROTECTED_FUNCTION(void, OnChildFocused, UIWidget*);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, RetargetStatesAnimations);
-	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, UpdateDrawingChildren);
-	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);
 	PROTECTED_FUNCTION(void, SetParentWidget, UIWidget*);
 	PROTECTED_FUNCTION(WidgetsVec, GetChildrenNonConst);
 	PROTECTED_FUNCTION(LayersVec, GetLayersNonConst);

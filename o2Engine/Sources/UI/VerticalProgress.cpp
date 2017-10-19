@@ -1,5 +1,9 @@
 #include "UI/VerticalProgress.h"
 
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
+
 namespace o2
 {
 	UIVerticalProgress::UIVerticalProgress():
@@ -184,13 +188,13 @@ namespace o2
 
 	void UIVerticalProgress::GetValueFromCursor(const Input::Cursor &cursor)
 	{
-		float height = layout.mAbsoluteRect.Height();
+		float height = layout->height;
 		float d = mMaxValue - mMinValue;
 		if (mOrientation == UIVerticalProgress::Orientation::Up)
 
-			SetValue((cursor.position.y - layout.mAbsoluteRect.bottom)/height*d + mMinValue);
+			SetValue((cursor.position.y - layout->worldBottom)/height*d + mMinValue);
 		else
-			SetValue((height - (cursor.position.y - layout.mAbsoluteRect.bottom))/height*d + mMinValue);
+			SetValue((height - (cursor.position.y - layout->worldBottom))/height*d + mMinValue);
 	}
 
 	void UIVerticalProgress::OnCursorEnter(const Input::Cursor& cursor)
@@ -225,17 +229,10 @@ namespace o2
 		interactable = mResVisible;
 	}
 
-	void UIVerticalProgress::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIVerticalProgress::UpdateLayersLayouts()
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
-		RecalculateAbsRect();
+		UIWidget::UpdateLayersLayouts();
 		UpdateProgressLayersLayouts();
-		UpdateLayersLayouts();
-
-		if (withChildren)
-			UpdateChildrenLayouts();
 	}
 
 	void UIVerticalProgress::UpdateProgressLayersLayouts()
@@ -316,9 +313,11 @@ CLASS_META(o2::UIVerticalProgress)
 	PUBLIC_FUNCTION(Orientation, GetOrientation);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
-	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
+	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
 	PROTECTED_FUNCTION(void, GetValueFromCursor, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
@@ -327,8 +326,6 @@ CLASS_META(o2::UIVerticalProgress)
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

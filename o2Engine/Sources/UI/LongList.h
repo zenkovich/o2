@@ -16,8 +16,10 @@ namespace o2
 		typedef Vector<UnknownType*> UnknownsVec;
 
 	public:
-		Property<int>                           selectedItemPos;   // Selected item position property								 				   
-		Function<void(int)>                     onFocused;        // Select item position event
+		Property<int>                           selectedItemPos;   // Selected item position property	
+
+		Function<void(int)>                     onFocused;         // Select item position event
+
 		Function<int()>                         getItemsCountFunc; // Items count getting function
 		Function<UnknownsVec(int, int)>         getItemsRangeFunc; // Items getting in range function
 		Function<void(UIWidget*, UnknownType*)> setupItemFunc;     // Setup item widget function
@@ -35,10 +37,10 @@ namespace o2
 		UILongList& operator=(const UILongList& other);
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Sets item sample widget. WARNING: Removing all old items!
 		void SetItemSample(UIWidget* sample);
@@ -71,18 +73,16 @@ namespace o2
 		Layout GetHoverDrawableLayout() const;
 
 		// Returns is listener scrollable
-		bool IsScrollable() const;
-
-		// Updates items
-		void OnItemsUpdated(bool itemsRearranged = false);
+		bool IsScrollable() const override;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		SERIALIZABLE(UILongList);
 
 	protected:
 		UIWidget*         mItemSample = nullptr;                    // Item sample widget @SERIALIZABLE
+
 		Sprite*           mSelectionDrawable = nullptr;             // Selection sprite @SERIALIZABLE
 		Sprite*           mHoverDrawable = nullptr;                 // Item hover drawable @SERIALIZABLE
 		Layout            mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
@@ -103,47 +103,50 @@ namespace o2
 		WidgetsVec        mItemsPool;                               // Items pool
 
 	protected:
+		// It is called when object was deserialized and trying to reattach states animations target
+		void OnDeserialized(const DataNode& node) override;
+
+		// It is called when visible was changed
+		void OnVisibleChanged() override;
+
+		// Updates transparency for this and children widgets
+		void UpdateTransparency() override;
+
 		// Calculates scroll area
-		void CalculateScrollArea();
+		void CalculateScrollArea() override;
 
 		// Updates mouse control
-		void UpdateControls(float dt);
+		void UpdateControls(float dt) override;
 
 		// Moves scroll position and updates children widgets clipping and layout
-		void MoveScrollPosition(const Vec2F& delta);
+		void MoveScrollPosition(const Vec2F& delta) override;
 
 		// Updates visible items
 		void UpdateVisibleItems();
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor);
+		void OnCursorMoved(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when scrolling
-		void OnScrolled(float scroll);
+		void OnScrolled(float scroll) override;
 
 		// Returns item widget under point and stores index in idxPtr, if not null
 		UIWidget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
-
-		// It is called when object was deserialized and trying to reattach states animations target
-		void OnDeserialized(const DataNode& node);
-
-		// Updates transparency for this and children widgets
-		void UpdateTransparency();
 
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
@@ -152,10 +155,10 @@ namespace o2
 		void UpdateSelection(int position);
 
 		// It is called when selected item index was changed
-		virtual void OnSelectionChanged();
+		void OnSelectionChanged();
 
-		// It is called when visible was changed
-		void OnVisibleChanged();
+		// Updates items
+		void OnItemsUpdated(bool itemsRearranged = false);
 
 		// Initializes properties
 		void InitializeProperties();

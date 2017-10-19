@@ -1,5 +1,8 @@
 #include "HorizontalScrollBar.h"
 
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 #include "Utils/Time.h"
 
 namespace o2
@@ -242,12 +245,12 @@ namespace o2
 		if (Math::Equals(range, 0.0f))
 			return mValue;
 
-		float width = Math::Max(layout.mAbsoluteRect.Width(), 1.0f);
+		float width = Math::Max(layout->GetWidth(), 1.0f);
 		float minScrollhandleSize = Math::Max(mScrollhandleMinPxSize/width*range, mScrollHandleSize);
 		float rangleWithHandle = range + minScrollhandleSize;
 		float szCoef = minScrollhandleSize/rangleWithHandle;
 
-		return (cursor.position.x - layout.mAbsoluteRect.left)/width*range/(1.0f - szCoef) + mMinValue;
+		return (cursor.position.x - layout->worldLeft)/width*range/(1.0f - szCoef) + mMinValue;
 	}
 
 	void UIHorizontalScrollBar::SetValueFromUser(float value)
@@ -288,23 +291,16 @@ namespace o2
 		interactable = mResVisible;
 	}
 
+	void UIHorizontalScrollBar::UpdateLayersLayouts()
+	{
+		UIWidget::UpdateLayersLayouts();
+		UpdateProgressLayersLayouts();
+	}
+
 	void UIHorizontalScrollBar::SetMinimalScrollHandleSize(float pixelSize)
 	{
 		mScrollhandleMinPxSize = pixelSize;
 		UpdateProgressLayersLayouts();
-	}
-
-	void UIHorizontalScrollBar::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
-	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
-		RecalculateAbsRect();
-		UpdateProgressLayersLayouts();
-		UpdateLayersLayouts();
-
-		if (withChildren)
-			UpdateChildrenLayouts();
 	}
 
 	void UIHorizontalScrollBar::UpdateProgressLayersLayouts()
@@ -312,7 +308,7 @@ namespace o2
 		if (mHandleLayer)
 		{
 			float range = mMaxValue - mMinValue;
-			float width = Math::Max(layout.mAbsoluteRect.Width(), 1.0f);
+			float width = Math::Max(layout->GetWidth(), 1.0f);
 			float minScrollhandleSize = Math::Max(mScrollhandleMinPxSize/width*range, mScrollHandleSize);
 			float rangeWithHandle = range + minScrollhandleSize;
 			float szCoef = minScrollhandleSize/rangeWithHandle;
@@ -334,11 +330,6 @@ namespace o2
 			mBackLayer->layout = Layout::BothStretch();
 
 		UpdateLayersLayouts();
-	}
-
-	void UIHorizontalScrollBar::OnLayoutUpdated()
-	{
-		UpdateProgressLayersLayouts();
 	}
 
 	void UIHorizontalScrollBar::OnLayerAdded(UIWidgetLayer* layer)
@@ -402,10 +393,11 @@ CLASS_META(o2::UIHorizontalScrollBar)
 	PUBLIC_FUNCTION(void, SetMinimalScrollHandleSize, float);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
-	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
-	PROTECTED_FUNCTION(void, OnLayoutUpdated);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
 	PROTECTED_FUNCTION(float, GetValueFromCursor, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SetValueFromUser, float);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
@@ -415,8 +407,6 @@ CLASS_META(o2::UIHorizontalScrollBar)
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

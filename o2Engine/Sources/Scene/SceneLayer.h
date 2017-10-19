@@ -63,5 +63,5 @@ namespace o2
 		friend class UIWidget;
 	};
 
-	typedef Vector<SceneLayer*> LayersVec;
+	typedef Vector<SceneLayer*> SceneLayersVec;
 }

@@ -5,6 +5,9 @@
 #include "UI/ContextMenu.h"
 #include "UI/HorizontalScrollBar.h"
 #include "UI/VerticalScrollBar.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 #include "Utils/Debug.h"
 #include "Utils/Time.h"
 
@@ -24,18 +27,18 @@ namespace o2
 
 		if (mOwnHorScrollBar)
 		{
-			mHorScrollBar = other.mHorScrollBar->Clone();
+			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
 			mHorScrollBar->mParent = this;
-			mHorScrollBar->layout.mDrivenByParent = true;
+			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
 		else  mHorScrollBar = nullptr;
 
 		if (mOwnVerScrollBar)
 		{
-			mVerScrollBar = other.mVerScrollBar->Clone();
+			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
 			mVerScrollBar->mParent = this;
-			mVerScrollBar->layout.mDrivenByParent = true;
+			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
 		else mVerScrollBar = nullptr;
@@ -93,18 +96,18 @@ namespace o2
 
 		if (mOwnHorScrollBar)
 		{
-			mHorScrollBar = other.mHorScrollBar->Clone();
+			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
 			mHorScrollBar->mParent = this;
-			mHorScrollBar->layout.mDrivenByParent = true;
+			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
 		else mHorScrollBar = nullptr;
 
 		if (mOwnVerScrollBar)
 		{
-			mVerScrollBar = other.mVerScrollBar->Clone();
+			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
 			mVerScrollBar->mParent = this;
-			mVerScrollBar->layout.mDrivenByParent = true;
+			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
 		else mVerScrollBar = nullptr;
@@ -128,7 +131,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChildren)
+		for (auto child : mDrawingChildren)
 			child->Draw();
 
 		o2Render.DisableScissorTest();
@@ -297,7 +300,7 @@ namespace o2
 		if (mHorScrollBar)
 		{
 			mHorScrollBar->mParent = this;
-			mHorScrollBar->layout.mDrivenByParent = true;
+			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
 
@@ -326,7 +329,7 @@ namespace o2
 		if (mVerScrollBar)
 		{
 			mVerScrollBar->mParent = this;
-			mVerScrollBar->layout.mDrivenByParent = true;
+			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
 
@@ -383,18 +386,18 @@ namespace o2
 
 	void UIScrollArea::OnChildAdded(UIWidget* child)
 	{
-		child->layout.mDrivenByParent = true;
+		child->layout->mData->drivenByParent = true;
 	}
 
 	void UIScrollArea::OnChildRemoved(UIWidget* child)
 	{
-		child->layout.mDrivenByParent = false;
+		child->layout->mData->drivenByParent = false;
 	}
 
 	void UIScrollArea::UpdateControls(float dt)
 	{
 		auto cursor = o2Input.GetCursor(0);
-		bool underCursorAtFrame = layout.mAbsoluteRect.IsInside(cursor->position);
+		bool underCursorAtFrame = layout->IsPointInside(cursor->position);
 		bool underClippingArea = mAbsoluteClipArea.IsInside(cursor->position);
 		bool underScrollbars =
 			((mHorScrollBar && mOwnHorScrollBar) ? mHorScrollBar->IsUnderPoint(cursor->position) : false) ||
@@ -418,7 +421,8 @@ namespace o2
 				*selectState = false;
 		}
 
-		if (cursor->isPressed && Math::Equals(cursor->pressedTime, 0.0f) && underClippingArea && !mPressedCursor && !underScrollbars)
+		if (cursor->isPressed && Math::Equals(cursor->pressedTime, 0.0f) && underClippingArea && !mPressedCursor && 
+			!underScrollbars)
 		{
 			mPressedCursor = true;
 			auto selectState = state["pressed"];
@@ -534,22 +538,18 @@ namespace o2
 		}
 	}
 
-	void UIScrollArea::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIScrollArea::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
+		layout->Update();
 
-		RecalculateAbsRect();
-		UpdateLayersLayouts();
-
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
-		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout.mAbsoluteRect);
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
+		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout->mData->worldRectangle);
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		if (withChildren)
-			UpdateChildrenLayouts(true);
+			UpdateChildrenLayouts();
 
 		CheckChildrenClipping();
 		UpdateScrollParams();
@@ -564,7 +564,7 @@ namespace o2
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		Vec2F widgetsMove(-delta.x, delta.y);
-		for (auto child : mChildren)
+		for (auto child : mChildWidgets)
 			MoveWidgetAndCheckClipping(child, widgetsMove);
 
 		UpdateScrollParams();
@@ -577,16 +577,16 @@ namespace o2
 		widget->mIsClipped = !widget->mBoundsWithChilds.IsIntersects(mAbsoluteClipArea);
 
 		if (!widget->mIsClipped)
-			widget->UpdateLayout(true, false);
+			widget->UpdateLayout(false);
 
-		for (auto child : widget->mChildren)
+		for (auto child : widget->mChildWidgets)
 			MoveWidgetAndCheckClipping(child, delta);
 	}
 
 	void UIScrollArea::UpdateScrollBarsLayout()
 	{
 		RectF tmpChildsAbsRect = mChildrenWorldRect;
-		mChildrenWorldRect = layout.mAbsoluteRect;
+		mChildrenWorldRect = layout->mData->worldRectangle;
 
 		if (mOwnHorScrollBar)
 			mHorScrollBar->UpdateLayout(true);
@@ -599,7 +599,7 @@ namespace o2
 
 	void UIScrollArea::CheckChildrenClipping()
 	{
-		for (auto child : mChildren)
+		for (auto child : mChildWidgets)
 			child->CheckClipping(mAbsoluteClipArea);
 	}
 
@@ -609,7 +609,7 @@ namespace o2
 
 		RectF newClipArea = clipArea.GetIntersection(mAbsoluteClipArea);
 
-		for (auto child : mChildren)
+		for (auto child : mChildWidgets)
 			child->CheckClipping(newClipArea);
 	}
 
@@ -628,21 +628,21 @@ namespace o2
 	{
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
-		for (auto child : mChildren)
+		for (auto child : mChildWidgets)
 		{
 			if (child->mFullyDisabled || child->GetType() == TypeOf(UIContextMenu))
 				continue;
 
-			mScrollArea.left   = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
-			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout.mLocalRect.bottom);
-			mScrollArea.right  = Math::Max(mScrollArea.right, child->layout.mLocalRect.right);
-			mScrollArea.top    = Math::Max(mScrollArea.top, child->layout.mLocalRect.top);
+			mScrollArea.left   = Math::Min(mScrollArea.left, child->layout->mData->rectangle.left);
+			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout->mData->rectangle.bottom);
+			mScrollArea.right  = Math::Max(mScrollArea.right, child->layout->mData->rectangle.right);
+			mScrollArea.top    = Math::Max(mScrollArea.top, child->layout->mData->rectangle.top);
 		}
 	}
 
 	void UIScrollArea::UpdateScrollParams()
 	{
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
 		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
 		CalculateScrollArea();
@@ -804,8 +804,8 @@ namespace o2
 		}
 		else mVerScrollBar = nullptr;
 
-		for (auto child : mChildren)
-			child->layout.mDrivenByParent = true;
+		for (auto child : mChildWidgets)
+			child->layout->mData->drivenByParent = true;
 
 		UIWidget::OnDeserialized(node);
 	}
@@ -877,23 +877,23 @@ CLASS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetViewLayout);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
+	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
+	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
-	PROTECTED_FUNCTION(void, CheckScrollBarsVisibility);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
+	PROTECTED_FUNCTION(void, CalculateScrollArea);
+	PROTECTED_FUNCTION(void, UpdateScrollParams);
+	PROTECTED_FUNCTION(void, CheckScrollBarsVisibility);
 	PROTECTED_FUNCTION(void, MoveWidgetAndCheckClipping, UIWidget*, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateScrollBarsLayout);
 	PROTECTED_FUNCTION(void, CheckChildrenClipping);
-	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, CalculateScrollArea);
-	PROTECTED_FUNCTION(void, UpdateScrollParams);
 	PROTECTED_FUNCTION(void, OnHorScrollChanged, float);
 	PROTECTED_FUNCTION(void, OnVerScrollChanged, float);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnScrolled);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }

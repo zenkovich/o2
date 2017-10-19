@@ -83,11 +83,14 @@ namespace o2
 		{
 		public:
 			WString              text;	    // @SERIALIZABLE
-			ShortcutKeys         shortcut;  // @SERIALIZABLE
 			ImageAssetRef        icon;	    // @SERIALIZABLE
+			ShortcutKeys         shortcut;  // @SERIALIZABLE
+
 			Vector<Item>         subItems;  // @SERIALIZABLE
+
 			bool                 checked;   // @SERIALIZABLE
 			bool                 checkable; // @SERIALIZABLE
+
 			Function<void()>     onClick;   // On click event	
 			Function<void(bool)> onChecked; // On checked event	
 
@@ -126,10 +129,10 @@ namespace o2
 		UIContextMenu& operator=(const UIContextMenu& other);
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Show from parent context
 		void Show(UIContextMenu* parent, const Vec2F& position = o2Input.GetCursorPos());
@@ -208,10 +211,10 @@ namespace o2
 		void SetItemsMinPriority();
 
 		// Returns is listener scrollable
-		bool IsScrollable() const;
+		bool IsScrollable() const override;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		SERIALIZABLE(UIContextMenu);
 
@@ -242,13 +245,22 @@ namespace o2
 
 	protected:
 		// Checks widget clipping by area
-		void CheckClipping(const RectF& clipArea);
+		void CheckClipping(const RectF& clipArea) override;
+
+		// It is called when visible was changed
+		void OnVisibleChanged() override;
 
 		// Fits size by items
 		void FitSize();
 
 		// Fits position in screen
 		void FitPosition();
+
+		// Hides context with his parent
+		void HideWithParent();
+
+		// Hides context with his child
+		void HideWithChild();
 
 		// Special drawing for contexts
 		void SpecialDraw();
@@ -262,9 +274,6 @@ namespace o2
 		// Returns item info
 		Item GetItemDef(int idx) const;
 
-		// It is called when visible was changed
-		void OnVisibleChanged();
-
 		// Returns item widget under point and stores index in idxPtr, if not null
 		UIContextMenuItem* GetItemUnderPoint(const Vec2F& point);
 
@@ -272,28 +281,22 @@ namespace o2
 		void UpdateHover(const Vec2F& point);
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor);
+		void OnCursorMoved(const Input::Cursor& cursor) override;
 
 		// It is called when key was released
-		void OnKeyPressed(const Input::Key& key);
-
-		// Hides context with his parent
-		void HideWithParent();
-
-		// Hides context with his child
-		void HideWithChild();
+		void OnKeyPressed(const Input::Key& key) override;
 
 		friend class UIManager;
 		friend class UIMenuPanel;

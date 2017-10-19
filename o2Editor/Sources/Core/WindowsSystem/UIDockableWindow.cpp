@@ -89,7 +89,7 @@ namespace Editor
 		{
 			o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-			for (auto child : mChilds)
+			for (auto child : mChildren)
 				child->Draw();
 
 			o2Render.DisableScissorTest();
@@ -494,7 +494,7 @@ namespace Editor
 	{
 		mNonDockSize = layout.size;
 
-		mTabPosition = targetDock->mChilds.Count();
+		mTabPosition = targetDock->mChildren.Count();
 
 		targetDock->AddChild(this);
 		layout = UIWidgetLayout::BothStretch();

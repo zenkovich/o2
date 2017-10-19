@@ -1,5 +1,8 @@
 #include "VerticalScrollBar.h"
 
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 #include "Utils/Time.h"
 
 namespace o2
@@ -170,7 +173,6 @@ namespace o2
 
 	void UIVerticalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
-
 		if (mHandleLayer && mHandleLayer->IsUnderPoint(cursor.position))
 		{
 			mHandlePressed = true;
@@ -236,12 +238,12 @@ namespace o2
 		if (Math::Equals(range, 0.0f))
 			return mValue;
 
-		float height = layout.mAbsoluteRect.Height();
+		float height = layout->worldRect->Height();
 		float minScrollhandleSize = Math::Max(mScrollhandleMinPxSize/height*range, mScrollHandleSize);
 		float rangleWithHandle = range + minScrollhandleSize;
 		float szCoef = minScrollhandleSize/rangleWithHandle;
 
-		return (height - (cursor.position.y - layout.mAbsoluteRect.bottom))/height*range/(1.0f - szCoef) + mMinValue;
+		return (height - (cursor.position.y - layout->worldRect->bottom))/height*range/(1.0f - szCoef) + mMinValue;
 	}
 
 	void UIVerticalScrollBar::SetValueFromUser(float value)
@@ -288,14 +290,9 @@ namespace o2
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIVerticalScrollBar::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIVerticalScrollBar::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
-		RecalculateAbsRect();
-		UpdateProgressLayersLayouts();
-		UpdateLayersLayouts();
+		layout->Update();
 
 		if (withChildren)
 			UpdateChildrenLayouts();
@@ -306,7 +303,7 @@ namespace o2
 		if (mHandleLayer)
 		{
 			float range = mMaxValue - mMinValue;
-			float height = Math::Max(layout.mAbsoluteRect.Height(), 1.0f);
+			float height = Math::Max(layout->worldRect->Height(), 1.0f);
 			float minScrollhandleSize = Math::Max(mScrollhandleMinPxSize/height*range, mScrollHandleSize);
 			float rangleWithHandle = range + minScrollhandleSize;
 			float szCoef = minScrollhandleSize/rangleWithHandle;
@@ -330,8 +327,9 @@ namespace o2
 		UpdateLayersLayouts();
 	}
 
-	void UIVerticalScrollBar::OnLayoutUpdated()
+	void UIVerticalScrollBar::UpdateLayersLayouts()
 	{
+		UIWidget::UpdateLayersLayouts();
 		UpdateProgressLayersLayouts();
 	}
 
@@ -401,10 +399,12 @@ CLASS_META(o2::UIVerticalScrollBar)
 	PUBLIC_FUNCTION(void, SetMinimalScrollHandleSize, float);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
-	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
-	PROTECTED_FUNCTION(void, OnLayoutUpdated);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
 	PROTECTED_FUNCTION(float, GetValueFromCursor, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SetValueFromUser, float);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
@@ -414,8 +414,6 @@ CLASS_META(o2::UIVerticalScrollBar)
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

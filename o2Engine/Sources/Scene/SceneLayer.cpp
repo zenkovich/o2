@@ -29,9 +29,7 @@ namespace o2
 	void SceneLayer::RegisterDrawable(SceneDrawable* drawable)
 	{
 		mDrawables.Add(drawable);
-
-		if (drawable->mOwner && drawable->mOwner->mIsOnScene)
-			DrawableEnabled(drawable);
+		DrawableEnabled(drawable);
 	}
 
 	void SceneLayer::UnregisterDrawable(SceneDrawable* drawable)

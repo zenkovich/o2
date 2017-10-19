@@ -60,13 +60,15 @@ namespace o2
 	class UIToggle: public UIWidget, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		Property<WString>        caption;        // Caption property. Searches text layer with name "caption" or creates them if he's not exist
 		Property<bool>           value;          // Current state value property
+		Property<WString>        caption;        // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+		ShortcutKeys             shortcut;       // Shortcut keys
+
 		Property<UIToggleGroup*> toggleGroup;    // Toggle group property
+
 		Function<void()>         onClick;        // Click event
 		Function<void(bool)>     onToggle;       // Toggle event
 		Function<void(bool)>     onToggleByUser; // Toggle by user event 
-		ShortcutKeys             shortcut;       // Shortcut keys
 
 		// Default constructor
 		UIToggle();
@@ -81,7 +83,7 @@ namespace o2
 		~UIToggle();
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Sets caption of button. Searches text layer with name "caption". If can't find this layer, creates them
 		void SetCaption(const WString& text);
@@ -101,52 +103,52 @@ namespace o2
 		// Returns current value
 		bool GetValue() const;
 
-		// Returns is this widget can be selected
-		bool IsFocusable() const;
-
 		// Sets toggle group
 		void SetToggleGroup(UIToggleGroup* toggleGroup);
 
 		// Returns toggle group
 		UIToggleGroup* GetToggleGroup() const;
 
+		// Returns is this widget can be selected
+		bool IsFocusable() const override;
+
 		SERIALIZABLE(UIToggle);
 
 	protected:
-		bool           mValue;        // Current value @SERIALIZABLE
-		bool           mValueUnknown; // Is value unknown @SERIALIZABLE
-		Text*          mCaptionText;  // Caption layer text
-		UIWidgetLayer* mBackLayer;    // Background layer
-		UIToggleGroup* mToggleGroup;  // Toggle group
+		bool           mValue = false;          // Current value @SERIALIZABLE
+		bool           mValueUnknown = false;   // Is value unknown @SERIALIZABLE
+		Text*          mCaptionText = nullptr;  // Caption layer text
+		UIWidgetLayer* mBackLayer = nullptr;    // Background layer
+		UIToggleGroup* mToggleGroup = nullptr;  // Toggle group
 
 	protected:
+		// It is called when layer added and updates drawing sequence
+		void OnLayerAdded(UIWidgetLayer* layer) override;
+
+		// It is called when visible was changed
+		void OnVisibleChanged() override;
+
 		// It is called when cursor pressed on this. Sets state "pressed" to true
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
 		// It is called onClicked if cursor is still above this
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor enters this object. Sets state "select" to true
-		void OnCursorEnter(const Input::Cursor& cursor);
+		void OnCursorEnter(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object. Sets state "select" to false
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when key was pressed
-		void OnKeyPressed(const Input::Key& key);
+		void OnKeyPressed(const Input::Key& key) override;
 
 		// It is called when key was released
-		void OnKeyReleased(const Input::Key& key);
-
-		// It is called when layer added and updates drawing sequence
-		void OnLayerAdded(UIWidgetLayer* layer);
-
-		// It is called when visible was changed
-		void OnVisibleChanged();
+		void OnKeyReleased(const Input::Key& key) override;
 
 		// Initializes properties
 		void InitializeProperties();

@@ -8,6 +8,9 @@
 #include "UI/HorizontalScrollBar.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalScrollBar.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 #include "Utils/Clipboard.h"
 #include "Utils/Debug.h"
 #include "Utils/Time.h"
@@ -30,8 +33,8 @@ namespace o2
 		mCaretBlinkDelay(other.mCaretBlinkDelay), DrawableCursorEventsListener(this)
 	{
 		mSelectionMesh = mnew Mesh();
-		mTextDrawable  = other.mTextDrawable->Clone();
-		mCaretDrawable = other.mCaretDrawable->Clone();
+		mTextDrawable  = other.mTextDrawable->CloneAs<Text>();
+		mCaretDrawable = other.mCaretDrawable->CloneAs<Sprite>();
 
 		mTextDrawable->SetText(mText);
 
@@ -68,8 +71,8 @@ namespace o2
 		mMaxLinesCount    = other.mMaxLinesCount;
 		mSelectionColor   = other.mSelectionColor;
 		mCaretBlinkDelay  = other.mCaretBlinkDelay;
-		mTextDrawable     = other.mTextDrawable->Clone();
-		mCaretDrawable    = other.mCaretDrawable->Clone();
+		mTextDrawable     = other.mTextDrawable->CloneAs<Text>();
+		mCaretDrawable    = other.mCaretDrawable->CloneAs<Sprite>();
 
 		mTextDrawable->SetText(mText);
 
@@ -99,7 +102,7 @@ namespace o2
 		if (mIsFocused)
 			mCaretDrawable->Draw();
 
-		for (auto child : mChildren)
+		for (auto child : mDrawingChildren)
 			child->Draw();
 
 		o2Render.DisableScissorTest();
@@ -531,19 +534,13 @@ namespace o2
 	}
 
 	void UIEditBox::OnCursorRightMousePressed(const Input::Cursor& cursor)
-	{
+	{}
 
-	}
-
-	void UIEditBox::OnCursorRightMouseStillDown(const Input::Cursor& cursor)
-	{
-
-	}
+	void UIEditBox::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
+	{}
 
 	void UIEditBox::OnCursorRightMouseReleased(const Input::Cursor& cursor)
-	{
-
-	}
+	{}
 
 	void UIEditBox::OnScrolled(float scroll)
 	{
@@ -634,17 +631,17 @@ namespace o2
 		if (mTextDrawable->GetFont())
 			mTextDrawable->GetFont()->CheckCharacters(" ", mTextDrawable->GetHeight());
 
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->worldRect);
 		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
 		mScrollArea = RectF(0.0f, 0.0f, localViewArea.Width(), localViewArea.Height());
 
-		for (auto child : mChildren)
+		for (auto child : mChildWidgets)
 		{
-			mScrollArea.left = Math::Min(mScrollArea.left, child->layout.mLocalRect.left);
-			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout.mLocalRect.bottom);
-			mScrollArea.right = Math::Max(mScrollArea.right, child->layout.mLocalRect.right);
-			mScrollArea.top = Math::Max(mScrollArea.top, child->layout.mLocalRect.top);
+			mScrollArea.left   = Math::Min(mScrollArea.left, child->layout->GetLeft());
+			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout->GetBottom());
+			mScrollArea.right  = Math::Max(mScrollArea.right, child->layout->GetRight());
+			mScrollArea.top    = Math::Max(mScrollArea.top, child->layout->GetTop());
 		}
 
 		RectF localTextLayout = localViewArea;
@@ -652,10 +649,10 @@ namespace o2
 		RectF textArea(localTextLayout.left, localTextLayout.top - textRealSize.y,
 					   localTextLayout.left + textRealSize.x, localTextLayout.top);
 
-		mScrollArea.left = Math::Min(mScrollArea.left, textArea.left);
+		mScrollArea.left   = Math::Min(mScrollArea.left, textArea.left);
 		mScrollArea.bottom = Math::Min(mScrollArea.bottom, textArea.bottom);
-		mScrollArea.right = Math::Max(mScrollArea.right, textArea.right);
-		mScrollArea.top = Math::Max(mScrollArea.top, textArea.top);
+		mScrollArea.right  = Math::Max(mScrollArea.right, textArea.right);
+		mScrollArea.top    = Math::Max(mScrollArea.top, textArea.top);
 
 		mScrollRange = RectF(mScrollArea.left - localViewArea.left,
 							 localViewArea.Height() - mScrollArea.top + localViewArea.bottom,
@@ -729,16 +726,12 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIEditBox::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
+		layout->Update();
 
-		RecalculateAbsRect();
-		UpdateLayersLayouts();
-
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout.mAbsoluteRect);
-		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout.mAbsoluteRect);
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
+		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout->mData->worldRectangle);
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 
 		mTextDrawable->SetRect(mAbsoluteViewArea + roundedScrollPos);
@@ -750,8 +743,8 @@ namespace o2
 
 		UpdateScrollParams();
 
-		RectF _mChildsAbsRect = mChildrenWorldRect;
-		mChildrenWorldRect = layout.mAbsoluteRect;
+		RectF _mChildrenAbsRect = mChildrenWorldRect;
+		mChildrenWorldRect = layout->mData->worldRectangle;
 
 		if (mOwnHorScrollBar)
 			mHorScrollBar->UpdateLayout(true);
@@ -759,7 +752,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->UpdateLayout(true);
 
-		mChildrenWorldRect = _mChildsAbsRect;
+		mChildrenWorldRect = _mChildrenAbsRect;
 
 		UpdateSelectionAndCaret();
 	}
@@ -1346,6 +1339,7 @@ CLASS_META(o2::UIEditBox)
 	PUBLIC_FIELD(selectionEnd);
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onChangeCompleted);
+	PROTECTED_FIELD(mSelectionColor).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mLastText);
 	PROTECTED_FIELD(mText).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mAvailableSymbols).SERIALIZABLE_ATTRIBUTE();
@@ -1356,7 +1350,6 @@ CLASS_META(o2::UIEditBox)
 	PROTECTED_FIELD(mCaretBlinkTime);
 	PROTECTED_FIELD(mSelectionBegin);
 	PROTECTED_FIELD(mSelectionEnd);
-	PROTECTED_FIELD(mSelectionColor).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSelectingByWords);
 	PROTECTED_FIELD(mSelWordBegin);
 	PROTECTED_FIELD(mSelWordEnd);
@@ -1403,12 +1396,14 @@ CLASS_META(o2::UIEditBox)
 	PUBLIC_FUNCTION(float, GetCaretBlinkingDelay);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
+	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
+	PROTECTED_FUNCTION(void, UpdateControls, float);
+	PROTECTED_FUNCTION(void, UpdateScrollParams);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
@@ -1416,15 +1411,13 @@ CLASS_META(o2::UIEditBox)
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorRightMouseStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
 	PROTECTED_FUNCTION(WString, GetFilteredText, const WString&);
-	PROTECTED_FUNCTION(void, UpdateScrollParams);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, CheckCharactersAndLinesBounds);
 	PROTECTED_FUNCTION(void, UpdateSelectionAndCaret);
 	PROTECTED_FUNCTION(Vec2F, GetTextCaretPosition, int);

@@ -31,10 +31,10 @@ namespace o2
 		UIWindow& operator=(const UIWindow& other);
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Shows window as modal
 		void ShowModal();
@@ -81,7 +81,7 @@ namespace o2
 		bool IsModal() const;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true);
 
 		// Returns back cursor events listener
 		CursorEventsArea& GetBackCursorListener();
@@ -134,7 +134,16 @@ namespace o2
 
 	protected:
 		// Updates transparency for this and children widgets
-		void UpdateTransparency();
+		void UpdateTransparency() override;
+
+		// It is called when widget was selected
+		void OnFocused() override;
+
+		// It is called when widget state was added
+		void OnStateAdded(UIWidgetState* state) override;
+
+		// It is called when visible was changed
+		void OnVisibleChanged() override;
 
 		// Initializes handles
 		void InitializeHandles();
@@ -145,20 +154,11 @@ namespace o2
 		// Binds all drag handles interactable parameter to window visibility
 		void BindHandlesInteractableToVisibility();
 
-		// It is called when widget was selected
-		void OnFocused();
-
 		// It is called when child widget was selected
-		void OnChildFocused(UIWidget* child);
+		void OnChildFocused(UIWidget* child) override;
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
-
-		// It is called when widget state was added
-		void OnStateAdded(UIWidgetState* state);
-
-		// It is called when visible was changed
-		void OnVisibleChanged();
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// Initializes properties
 		void InitializeProperties();

@@ -121,7 +121,7 @@ namespace o2
 		void SetWidth(float value);
 
 		// Return width
-		float GetWidht() const;
+		float GetWidth() const;
 
 		// Sets height
 		void SetHeight(float value);

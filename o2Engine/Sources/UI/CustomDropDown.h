@@ -13,6 +13,7 @@ namespace o2
 	public:
 		Property<UIWidget*>       selectedItem;    // Selected item widget property
 		Property<int>             selectedItemPos; // Selected item position property
+
 		Accessor<UIWidget*, int>  item;            // Items by position accessor
 		Getter<int>               itemsCount;      // All items count getter
 
@@ -32,10 +33,10 @@ namespace o2
 		UICustomDropDown& operator=(const UICustomDropDown& other);
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Expand list
 		void Expand();
@@ -113,7 +114,7 @@ namespace o2
 		Layout GetClippingLayout();
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		SERIALIZABLE(UICustomDropDown);
 
@@ -125,26 +126,26 @@ namespace o2
 
 	protected:
 		// It is called when cursor pressed on this. Sets state "pressed" to true
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time). Sets state "pressed" to false.
 		// It is called onClicked if cursor is still above this
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released outside this(only when cursor pressed this at previous time)
-		void OnCursorReleasedOutside(const Input::Cursor& cursor);
+		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor enters this object. Sets state "select" to true
-		void OnCursorEnter(const Input::Cursor& cursor);
+		void OnCursorEnter(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object. Sets state "select" to false
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when visible was changed
-		void OnVisibleChanged();
+		void OnVisibleChanged() override;
 
 		// It is called when item was selected in list
 		void OnItemSelected();

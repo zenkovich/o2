@@ -1,5 +1,7 @@
 #include "GridLayout.h"
 
+#include "UI/WidgetLayout.h"
+
 namespace o2
 {
 	UIGridLayout::UIGridLayout(): UIWidget()
@@ -159,13 +161,9 @@ namespace o2
 		return mFitByChildren;
 	}
 
-	void UIGridLayout::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIGridLayout::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
-		RecalculateAbsRect();
-		UpdateLayersLayouts();
+		layout->Update();
 
 		if (withChildren)
 			RearrangeChilds();
@@ -176,12 +174,12 @@ namespace o2
 
 	void UIGridLayout::OnChildAdded(UIWidget* child)
 	{
-		child->layout.mDrivenByParent = true;
+		child->layout->mData->drivenByParent = true;
 	}
 
 	void UIGridLayout::OnChildRemoved(UIWidget* child)
 	{
-		child->layout.mDrivenByParent = false;
+		child->layout->mData->drivenByParent = false;
 	}
 
 	void UIGridLayout::RearrangeChilds()
@@ -214,7 +212,7 @@ namespace o2
 			int rowIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -223,11 +221,11 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
-				child->UpdateLayout(true);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->UpdateLayout();
 
 				cellPos.x += mCellSize.x + mSpacing;
 
@@ -242,7 +240,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -251,10 +249,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 				child->UpdateLayout(true);
 
 				cellPos.y -= mCellSize.y + mSpacing;
@@ -280,7 +278,7 @@ namespace o2
 			int rowIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -290,10 +288,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 				child->UpdateLayout(true);
 
 				cellPos.x += mCellSize.x + mSpacing;
@@ -318,7 +316,7 @@ namespace o2
 			int colIdx = upColCells > 0 ? mArrangeAxisMaxCells - upColCells : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -327,10 +325,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 				child->UpdateLayout(true);
 
 				cellPos.y -= mCellSize.y + mSpacing;
@@ -354,7 +352,7 @@ namespace o2
 			int rowIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -363,10 +361,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = cellPos - mCellSize;
-				child->layout.mOffsetMax = cellPos;
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = cellPos - mCellSize;
+				child->layout->mData->offsetMax = cellPos;
 				child->UpdateLayout(true);
 
 				cellPos.x -= mCellSize.x + mSpacing;
@@ -382,7 +380,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -391,10 +389,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = cellPos - mCellSize;
-				child->layout.mOffsetMax = cellPos;
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = cellPos - mCellSize;
+				child->layout->mData->offsetMax = cellPos;
 				child->UpdateLayout(true);
 
 				cellPos.y -= mCellSize.y + mSpacing;
@@ -427,7 +425,7 @@ namespace o2
 			int rowIdx = upRowCells > 0 ? mArrangeAxisMaxCells - upRowCells : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -436,10 +434,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 				child->UpdateLayout(true);
 
 				cellPos.x += mCellSize.x + mSpacing;
@@ -460,7 +458,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -471,10 +469,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 				child->UpdateLayout(true);
 
 				cellPos.y -= mCellSize.y + mSpacing;
@@ -515,7 +513,7 @@ namespace o2
 
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -525,10 +523,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 				child->UpdateLayout(true);
 
 				cellPos.x += mCellSize.x + mSpacing;
@@ -561,7 +559,7 @@ namespace o2
 
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -571,10 +569,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 				child->UpdateLayout(true);
 
 				cellPos.y -= mCellSize.y + mSpacing;
@@ -607,7 +605,7 @@ namespace o2
 			int rowIdx = upRowCells > 0 ? mArrangeAxisMaxCells - upRowCells : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -616,10 +614,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = cellPos - mCellSize;
-				child->layout.mOffsetMax = cellPos;
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = cellPos - mCellSize;
+				child->layout->mData->offsetMax = cellPos;
 				child->UpdateLayout(true);
 
 				cellPos.x -= mCellSize.x + mSpacing;
@@ -640,7 +638,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -651,10 +649,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = cellPos - mCellSize;
-				child->layout.mOffsetMax = cellPos;
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = cellPos - mCellSize;
+				child->layout->mData->offsetMax = cellPos;
 				child->UpdateLayout(true);
 
 				cellPos.y -= mCellSize.y + mSpacing;
@@ -681,7 +679,7 @@ namespace o2
 			int rowIdx = rem != 0 ? mArrangeAxisMaxCells - rem : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -690,10 +688,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 				child->UpdateLayout(true);
 
 				cellPos.x += mCellSize.x + mSpacing;
@@ -709,7 +707,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -718,10 +716,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = cellPos;
-				child->layout.mOffsetMax = cellPos + mCellSize;
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = cellPos;
+				child->layout->mData->offsetMax = cellPos + mCellSize;
 				child->UpdateLayout(true);
 
 				cellPos.y += mCellSize.y + mSpacing;
@@ -757,7 +755,7 @@ namespace o2
 
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -767,10 +765,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 				child->UpdateLayout(true);
 
 				cellPos.x += mCellSize.x + mSpacing;
@@ -796,7 +794,7 @@ namespace o2
 			int colIdx = upColCells > 0 ? mArrangeAxisMaxCells - upColCells : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -806,10 +804,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = cellPos;
-				child->layout.mOffsetMax = cellPos + mCellSize;
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = cellPos;
+				child->layout->mData->offsetMax = cellPos + mCellSize;
 				child->UpdateLayout(true);
 
 				cellPos.y += mCellSize.y + mSpacing;
@@ -836,7 +834,7 @@ namespace o2
 			int rowIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -845,10 +843,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x - mCellSize.x, cellPos.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x, cellPos.y + mCellSize.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x - mCellSize.x, cellPos.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x, cellPos.y + mCellSize.y);
 				child->UpdateLayout(true);
 
 				cellPos.x -= mCellSize.x + mSpacing;
@@ -864,7 +862,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildren[i];
+				UIWidget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -873,10 +871,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout.mAnchorMin = anchor;
-				child->layout.mAnchorMax = anchor;
-				child->layout.mOffsetMin = Vec2F(cellPos.x - mCellSize.x, cellPos.y);
-				child->layout.mOffsetMax = Vec2F(cellPos.x, cellPos.y + mCellSize.y);
+				child->layout->mData->anchorMin = anchor;
+				child->layout->mData->anchorMax = anchor;
+				child->layout->mData->offsetMin = Vec2F(cellPos.x - mCellSize.x, cellPos.y);
+				child->layout->mData->offsetMax = Vec2F(cellPos.x, cellPos.y + mCellSize.y);
 				child->UpdateLayout(true);
 
 				cellPos.y += mCellSize.y + mSpacing;
@@ -903,23 +901,23 @@ namespace o2
 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
 
 		RectF childrenRect;
-		if (mChildren.Count() > 0)
-			childrenRect = mChildren[0]->layout.mLocalRect;
+		if (mChildWidgets.Count() > 0)
+			childrenRect = mChildWidgets[0]->layout->mData->rectangle;
 
-		for (auto child : mChildren)
+		for (auto child : mChildWidgets)
 		{
-			childrenRect.left = Math::Min(childrenRect.left, child->layout.mLocalRect.left);
-			childrenRect.right = Math::Max(childrenRect.right, child->layout.mLocalRect.right);
-			childrenRect.bottom = Math::Min(childrenRect.bottom, child->layout.mLocalRect.bottom);
-			childrenRect.top = Math::Max(childrenRect.top, child->layout.mLocalRect.top);
+			childrenRect.left   = Math::Min(childrenRect.left, child->layout->mData->rectangle.left);
+			childrenRect.right  = Math::Max(childrenRect.right, child->layout->mData->rectangle.right);
+			childrenRect.bottom = Math::Min(childrenRect.bottom, child->layout->mData->rectangle.bottom);
+			childrenRect.top    = Math::Max(childrenRect.top, child->layout->mData->rectangle.top);
 		}
 
 		Vec2F szDelta = (childrenRect.Size() + mBorder.LeftBottom() + mBorder.RightTop()) - mChildrenWorldRect.Size();
 
 		if (szDelta != Vec2F())
 		{
-			layout.mOffsetMax += szDelta*(Vec2F::One() - relativePivot);
-			layout.mOffsetMin -= szDelta*relativePivot;
+			layout->mData->offsetMax += szDelta*(Vec2F::One() - relativePivot);
+			layout->mData->offsetMin -= szDelta*relativePivot;
 
 			UpdateLayout();
 		}
@@ -986,7 +984,7 @@ CLASS_META(o2::UIGridLayout)
 	PUBLIC_FUNCTION(int, GetArrangeAxisMaxCells);
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);

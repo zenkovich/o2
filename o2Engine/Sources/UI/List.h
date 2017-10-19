@@ -65,7 +65,7 @@ namespace o2
 
 	protected:
 		// It is called when selected item index was changed
-		void OnSelectionChanged();
+		void OnSelectionChanged() override;
 
 		// Initializes properties
 		void initializeProperties();

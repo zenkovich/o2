@@ -3,6 +3,7 @@
 #include "Assets/ActorAsset.h"
 #include "Scene/Actor.h"
 #include "Scene/DrawableComponent.h"
+#include "Scene/SceneLayer.h"
 #include "Scene/Tags.h"
 
 namespace o2
@@ -120,7 +121,7 @@ namespace o2
 		RemoveTag(GetTag(name));
 	}
 
-	Scene::LayersVec& Scene::GetLayers()
+	SceneLayersVec& Scene::GetLayers()
 	{
 		return mLayers;
 	}
@@ -130,22 +131,22 @@ namespace o2
 		return mTags;
 	}
 
-	const Scene::ActorsVec& Scene::GetRootActors() const
+	const ActorsVec& Scene::GetRootActors() const
 	{
 		return mRootActors;
 	}
 
-	Scene::ActorsVec& Scene::GetRootActors()
+	ActorsVec& Scene::GetRootActors()
 	{
 		return mRootActors;
 	}
 
-	const Scene::ActorsVec& Scene::GetAllActors() const
+	const ActorsVec& Scene::GetAllActors() const
 	{
 		return mAllActors;
 	}
 
-	Scene::ActorsVec& Scene::GetAllActors()
+	ActorsVec& Scene::GetAllActors()
 	{
 		return mAllActors;
 	}
@@ -277,9 +278,9 @@ namespace o2
 
 	int Scene::GetActorHierarchyIdx(Actor* actor) const
 	{
-		if (actor->GetParentWidget())
+		if (actor->GetParent())
 		{
-			return actor->GetParentWidget()->GetChilds().Find(actor) + GetActorHierarchyIdx(actor->GetParentWidget());
+			return actor->GetParent()->GetChildren().Find(actor) + GetActorHierarchyIdx(actor->GetParent());
 		}
 
 		return mRootActors.Find(actor);
@@ -365,7 +366,7 @@ namespace o2
 		}
 	}
 
-	const Scene::ActorsVec& Scene::GetChangedActors() const
+	const ActorsVec& Scene::GetChangedActors() const
 	{
 		return mChangedActors;
 	}

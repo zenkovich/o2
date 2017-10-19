@@ -33,6 +33,10 @@ namespace o2
 		// Cloning interface
 		virtual IObject* Clone() const = 0;
 
+		// Cloning as type
+		template<typename Type>
+		Type* CloneAs() const { return dynamic_cast<Type*>(Clone()); }
+
 		// Returns type
 		virtual const Type& GetType() const = 0;
 
@@ -53,31 +57,31 @@ namespace o2
 	};
 
 	// IObject header definition
-#define IOBJECT(CLASS)  							   \
-private:                                               \
-	static o2::Type* type;							   \
-                                                       \
-    template<typename _type, typename _getter>         \
-	friend const o2::Type& o2::GetTypeOf();            \
-                                                       \
-	template<typename T>                               \
-	friend struct o2::RegularTypeGetter;               \
-                                                       \
-	template<typename T, typename X>                   \
-	friend struct o2::GetTypeHelper;                   \
-                                                       \
-    template<typename _type>                           \
-    friend struct o2::TypeSampleCreator;               \
-                                                       \
-    friend class o2::TypeInitializer;                  \
-    friend class o2::Reflection;                       \
-    friend class o2::DataNode;                         \
-                                                       \
-public:                                                \
-	typedef CLASS thisclass;                           \
+#define IOBJECT(CLASS)  							     \
+private:                                                 \
+	static o2::Type* type;							     \
+                                                         \
+    template<typename _type, typename _getter>           \
+	friend const o2::Type& o2::GetTypeOf();              \
+                                                         \
+	template<typename T>                                 \
+	friend struct o2::RegularTypeGetter;                 \
+                                                         \
+	template<typename T, typename X>                     \
+	friend struct o2::GetTypeHelper;                     \
+                                                         \
+    template<typename _type>                             \
+    friend struct o2::TypeSampleCreator;                 \
+                                                         \
+    friend class o2::TypeInitializer;                    \
+    friend class o2::Reflection;                         \
+    friend class o2::DataNode;                           \
+                                                         \
+public:                                                  \
+	typedef CLASS thisclass;                             \
 	IObject* Clone() const { return mnew CLASS(*this); } \
-	const o2::Type& GetType() const { return *type; }; \
-                                                       \
-private:                                               \
+	const o2::Type& GetType() const { return *type; };   \
+                                                         \
+private:                                                 \
 	static void InitializeType(o2::Type* type)                       
 }

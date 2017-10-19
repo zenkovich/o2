@@ -1,6 +1,9 @@
 #include "LongList.h"
 
 #include "Render/Render.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace o2
 {
@@ -19,10 +22,11 @@ namespace o2
 		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
 		mSelectionLayout(other.mSelectionLayout)
 	{
-		mItemSample = other.mItemSample->Clone();
-		mItemSample->UpdateLayout(true);
-		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mHoverDrawable = other.mHoverDrawable->Clone();
+		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+
+		mItemSample->UpdateLayout();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -43,15 +47,15 @@ namespace o2
 		delete mSelectionDrawable;
 		delete mHoverDrawable;
 
-		mSelectionDrawable = other.mSelectionDrawable->Clone();
-		mHoverDrawable = other.mHoverDrawable->Clone();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 
 		mSelectionLayout = other.mSelectionLayout;
 		mHoverLayout = other.mHoverLayout;
 
 		UIScrollArea::operator=(other);
 
-		mItemSample = other.mItemSample->Clone();
+		mItemSample = other.mItemSample->CloneAs<UIWidget>();
 		mItemSample->UpdateLayout(true);
 
 		RetargetStatesAnimations();
@@ -94,7 +98,7 @@ namespace o2
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChildren)
+		for (auto child : mDrawingChildren)
 			child->Draw();
 
 		mSelectionDrawable->Draw();
@@ -205,20 +209,17 @@ namespace o2
 	{
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 		mScrollArea.bottom = Math::Min(mScrollArea.bottom,
-									   mScrollArea.top - (float)getItemsCountFunc()*mItemSample->layout.GetHeight());
+									   mScrollArea.top - (float)getItemsCountFunc()*mItemSample->layout->GetHeight());
 	}
 
 	void UILongList::UpdateControls(float dt)
 	{}
 
-	void UILongList::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UILongList::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
-
 		UpdateVisibleItems();
 
-		UIScrollArea::UpdateLayout(forcible, withChildren);
+		UIScrollArea::UpdateLayout(withChildren);
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);
@@ -242,7 +243,7 @@ namespace o2
 		UpdateVisibleItems();
 
 		Vec2F widgetsMove(-delta.x, delta.y);
-		for (auto child : mChildren)
+		for (auto child : mChildWidgets)
 			MoveWidgetAndCheckClipping(child, widgetsMove);
 
 		UpdateScrollParams();
@@ -254,7 +255,7 @@ namespace o2
 		int lastMinItemIdx = mMinVisibleItemIdx;
 		int lastMaxItemIdx = mMaxVisibleItemIdx;
 
-		float itemHeight = mItemSample->layout.height;
+		float itemHeight = mItemSample->layout->height;
 
 		if (itemHeight < FLT_EPSILON)
 			return;
@@ -274,15 +275,15 @@ namespace o2
 				continue;
 
 			if (i < mMinVisibleItemIdx || i > mMaxVisibleItemIdx)
-				removingItems.Add(mChildren[i - lastMinItemIdx]);
+				removingItems.Add(mChildWidgets[i - lastMinItemIdx]);
 			else
-				itemsWidgets[i - mMinVisibleItemIdx] = mChildren[i - lastMinItemIdx];
+				itemsWidgets[i - mMinVisibleItemIdx] = mChildWidgets[i - lastMinItemIdx];
 		}
 
 		for (auto item : removingItems)
 			mItemsPool.Add(item);
 
-		mChildren.Clear();
+		mChildWidgets.Clear();
 
 		for (int i = mMinVisibleItemIdx; i <= mMaxVisibleItemIdx; i++)
 		{
@@ -295,17 +296,17 @@ namespace o2
 			if (mItemsPool.Count() == 0)
 			{
 				for (int j = 0; j < 10; j++)
-					mItemsPool.Add(mItemSample->Clone());
+					mItemsPool.Add(mItemSample->CloneAs<UIWidget>());
 			}
 
 			UIWidget* newItem = mItemsPool.PopBack();
 			setupItemFunc(newItem, itemsInRange[i - mMinVisibleItemIdx]);
-			newItem->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, itemHeight, itemHeight*(float)i);
+			*newItem->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, itemHeight, itemHeight*(float)i);
 			itemsWidgets[i - mMinVisibleItemIdx] = newItem;
 			newItem->mParent = this;
 		}
 
-		mChildren.Add(itemsWidgets);
+		mChildWidgets.Add(itemsWidgets);
 	}
 
 	void UILongList::OnCursorPressed(const Input::Cursor& cursor)
@@ -379,9 +380,9 @@ namespace o2
 	UIWidget* UILongList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
 	{
 		int idx = mMinVisibleItemIdx;
-		for (auto child : mChildren)
+		for (auto child : mChildWidgets)
 		{
-			if (child->layout.mAbsoluteRect.IsInside(point))
+			if (child->layout->IsPointInside(point))
 			{
 				if (idxPtr)
 					*idxPtr = idx;
@@ -439,7 +440,7 @@ namespace o2
 		}
 		else
 		{
-			mTargetHoverRect = mHoverLayout.Calculate(itemUnderCursor->layout.mAbsoluteRect);
+			mTargetHoverRect = mHoverLayout.Calculate(itemUnderCursor->layout->worldRect);
 
 			auto hoverState = state["hover"];
 			if (hoverState)
@@ -457,7 +458,7 @@ namespace o2
 		mSelectedItem = position;
 		UIWidget* item = nullptr;
 		if (position < mMaxVisibleItemIdx && position >= mMinVisibleItemIdx)
-			item = mChildren[position - mMinVisibleItemIdx];
+			item = mChildWidgets[position - mMinVisibleItemIdx];
 
 		if (position < 0 || item == nullptr)
 		{
@@ -475,7 +476,7 @@ namespace o2
 		}
 		else
 		{
-			mTargetSelectionRect = mHoverLayout.Calculate(item->layout.mAbsoluteRect);
+			mTargetSelectionRect = mHoverLayout.Calculate(item->layout->worldRect);
 
 			auto selectedState = state["focused"];
 			if (selectedState)
@@ -546,8 +547,10 @@ CLASS_META(o2::UILongList)
 	PUBLIC_FUNCTION(void, SetHoverDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
 	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, CalculateScrollArea);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
@@ -560,12 +563,10 @@ CLASS_META(o2::UILongList)
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateSelection, int);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, OnItemsUpdated, bool);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

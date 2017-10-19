@@ -12,10 +12,13 @@ namespace o2
 	{
 	public:
 		Property<float>       value;          // Current value property
+
 		Property<float>       minValue;       // Minimal value property
 		Property<float>       maxValue;       // Maximal value property
+
 		Property<float>       scrollSense;    // Scroll sense coefficient
 		Property<float>       scrollSize;     // Scroll handle size
+
 		Function<void(float)> onChange;       // On Value changing event
 		Function<void(float)> onUserChange;   // On Value changing from user event
 		Function<void(float)> onSmoothChange; // On smooth value changing event
@@ -33,7 +36,7 @@ namespace o2
 		UIHorizontalScrollBar& operator=(const UIHorizontalScrollBar& other);
 
 		// Updates widget and smooth value changing
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Sets value
 		void SetValue(float value);
@@ -78,13 +81,10 @@ namespace o2
 		void SetMinimalScrollHandleSize(float pixelSize);
 
 		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Returns is listener scrollable
-		bool IsScrollable() const;
-
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		bool IsScrollable() const override;
 
 		SERIALIZABLE(UIHorizontalScrollBar);
 
@@ -102,14 +102,20 @@ namespace o2
 		UIWidgetLayer* mBackLayer = nullptr;          // Background layer
 
 	protected:
-		// Updates bar, back and handle layers layout by value
-		void UpdateProgressLayersLayouts();
+		// It is called when deserialized
+		void OnDeserialized(const DataNode& node) override;
 
-		// It is called when layout was updated
-		void OnLayoutUpdated();
+		// It is called when visible was changed
+		void OnVisibleChanged() override;
+
+		// Updates layers layouts, calls after updating widget layout
+		void UpdateLayersLayouts() override;
 
 		// It is called when new layer was added. Here searching bar, back and handle layers
-		void OnLayerAdded(UIWidgetLayer* layer);
+		void OnLayerAdded(UIWidgetLayer* layer) override;
+
+		// Updates bar, back and handle layers layout by value
+		void UpdateProgressLayersLayouts();
 
 		// Gets value from cursor position, depends on orientation
 		float GetValueFromCursor(const Input::Cursor& cursor);
@@ -118,31 +124,25 @@ namespace o2
 		void SetValueFromUser(float value);
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor);
+		void OnCursorEnter(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when scrolling
-		void OnScrolled(float scroll);
-
-		// It is called when deserialized
-		void OnDeserialized(const DataNode& node);
-
-		// It is called when visible was changed
-		void OnVisibleChanged();
+		void OnScrolled(float scroll) override;
 
 		// Initializes properties
 		void InitializeProperties();

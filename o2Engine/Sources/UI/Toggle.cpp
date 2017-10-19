@@ -4,12 +4,14 @@
 #include "Render/Text.h"
 #include "UI/EditBox.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace o2
 {
 	UIToggle::UIToggle():
-		UIWidget(), DrawableCursorEventsListener(this), mValue(false), mToggleGroup(nullptr), mCaptionText(nullptr), 
-		mBackLayer(nullptr), mValueUnknown(false)
+		UIWidget(), DrawableCursorEventsListener(this)
 	{
 		InitializeProperties();
 	}
@@ -63,13 +65,13 @@ namespace o2
 		if (mToggleGroup && mToggleGroup->mPressed && mToggleGroup->mPressedValue != mValue &&
 			(mToggleGroup->mType == UIToggleGroup::Type::VerOneClick || mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
 		{
-			float cursory = o2Input.GetCursorPos().y;
+			Vec2F cursor = o2Input.GetCursorPos();
 			bool underPoint = false;
 
 			if (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick)
-				underPoint = cursory > layout.mAbsoluteRect.bottom && cursory < layout.mAbsoluteRect.top;
+				underPoint = cursor.y > layout->worldBottom && cursor.y < layout->worldTop;
 			else
-				underPoint = cursory > layout.mAbsoluteRect.bottom && cursory < layout.mAbsoluteRect.top;
+				underPoint = cursor.x > layout->worldLeft && cursor.x < layout->worldRight;
 		
 			if (underPoint)
 			{
@@ -374,13 +376,13 @@ CLASS_META(o2::UIToggle)
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 
-	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(value);
+	PUBLIC_FIELD(caption);
+	PUBLIC_FIELD(shortcut);
 	PUBLIC_FIELD(toggleGroup);
 	PUBLIC_FIELD(onClick);
 	PUBLIC_FIELD(onToggle);
 	PUBLIC_FIELD(onToggleByUser);
-	PUBLIC_FIELD(shortcut);
 	PROTECTED_FIELD(mValue).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValueUnknown).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mCaptionText);
@@ -394,9 +396,11 @@ CLASS_META(o2::UIToggle)
 	PUBLIC_FUNCTION(void, SetValueUnknown);
 	PUBLIC_FUNCTION(bool, IsValueUnknown);
 	PUBLIC_FUNCTION(bool, GetValue);
-	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetToggleGroup, UIToggleGroup*);
 	PUBLIC_FUNCTION(UIToggleGroup*, GetToggleGroup);
+	PUBLIC_FUNCTION(bool, IsFocusable);
+	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
@@ -404,8 +408,6 @@ CLASS_META(o2::UIToggle)
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

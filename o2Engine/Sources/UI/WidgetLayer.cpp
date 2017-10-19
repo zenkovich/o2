@@ -1,6 +1,7 @@
 #include "WidgetLayer.h"
 
 #include "UI/Widget.h"
+#include "UI/WidgetLayout.h"
 
 namespace o2
 {
@@ -17,10 +18,10 @@ namespace o2
 		drawable(nullptr)
 	{
 		if (other.drawable)
-			drawable = other.drawable->Clone();
+			drawable = other.drawable->CloneAs<IRectDrawable>();
 
-		for (auto child : other.mChilds)
-			AddChild(child->Clone());
+		for (auto child : other.mChildren)
+			AddChild(child->CloneAs<UIWidgetLayer>());
 
 		InitializeProperties();
 	}
@@ -33,20 +34,20 @@ namespace o2
 	UIWidgetLayer& UIWidgetLayer::operator=(const UIWidgetLayer& other)
 	{
 		delete drawable;
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			delete child;
 
-		mChilds.Clear();
+		mChildren.Clear();
 		drawable = nullptr;
 
 		mDepth = other.mDepth;
 		name = other.name;
 
 		if (other.drawable)
-			drawable = other.drawable->Clone();
+			drawable = other.drawable->CloneAs<IRectDrawable>();
 
-		for (auto child : other.mChilds)
-			AddChild(child->Clone());
+		for (auto child : other.mChildren)
+			AddChild(child->CloneAs<UIWidgetLayer>());
 
 		SetTransparency(other.mTransparency);
 
@@ -72,7 +73,7 @@ namespace o2
 
 		node->mParent = this;
 
-		mChilds.Add(node);
+		mChildren.Add(node);
 
 		OnChildAdded(node);
 
@@ -83,7 +84,7 @@ namespace o2
 	{
 		node->mParent = nullptr;
 
-		if (!mChilds.Remove(node))
+		if (!mChildren.Remove(node))
 			return false;
 
 		if (release && node)
@@ -94,11 +95,11 @@ namespace o2
 	
 	void UIWidgetLayer::RemoveAllChilds()
 	{
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			if (child)
 				delete child;
 
-		mChilds.Clear();
+		mChildren.Clear();
 	}
 	
 	void UIWidgetLayer::SetParent(UIWidgetLayer* parent)
@@ -121,14 +122,14 @@ namespace o2
 		return mParent;
 	}
 	
-	UIWidgetLayer::ChildsVec& UIWidgetLayer::GetChilds()
+	UIWidgetLayer::ChildrenVec& UIWidgetLayer::GetChilds()
 	{
-		return mChilds;
+		return mChildren;
 	}
 	
-	const UIWidgetLayer::ChildsVec& o2::UIWidgetLayer::GetChilds() const
+	const UIWidgetLayer::ChildrenVec& o2::UIWidgetLayer::GetChilds() const
 	{
-		return mChilds;
+		return mChildren;
 	}
 
 	UIWidgetLayer* UIWidgetLayer::AddChildLayer(const String& name, IRectDrawable* drawable,
@@ -164,7 +165,7 @@ namespace o2
 			return nullptr;
 		}
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 		{
 			if (child->name == pathPart)
 			{
@@ -180,8 +181,8 @@ namespace o2
 
 	LayersVec UIWidgetLayer::GetAllChilds() const
 	{
-		LayersVec res = mChilds;
-		for (auto child : mChilds)
+		LayersVec res = mChildren;
+		for (auto child : mChildren)
 		{
 			res.Add(child->GetAllChilds());
 		}
@@ -229,7 +230,7 @@ namespace o2
 
 	void UIWidgetLayer::OnDeserialized(const DataNode& node)
 	{
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->mParent = this;
 	}
 
@@ -237,7 +238,7 @@ namespace o2
 	{
 		mOwnerWidget = owner;
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->SetOwnerWidget(owner);
 
 		UpdateResTransparency();
@@ -259,14 +260,14 @@ namespace o2
 		if (mParent)
 			mAbsolutePosition = layout.Calculate(mParent->mAbsolutePosition);
 		else
-			mAbsolutePosition = layout.Calculate(mOwnerWidget->layout.mAbsoluteRect);
+			mAbsolutePosition = layout.Calculate(mOwnerWidget->layout->GetWorldRect());
 
 		mInteractableArea = interactableLayout.Calculate(mAbsolutePosition);
 
 		if (drawable)
 			drawable->SetRect(mAbsolutePosition);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->UpdateLayout();
 	}
 
@@ -280,14 +281,14 @@ namespace o2
 		if (drawable)
 			drawable->SetTransparency(mResTransparency);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->UpdateResTransparency();
 	}
 
 	Dictionary<String, UIWidgetLayer*> UIWidgetLayer::GetAllChildLayers()
 	{
 		Dictionary<String, UIWidgetLayer*> res;
-		for (auto layer : mChilds)
+		for (auto layer : mChildren)
 			res.Add(layer->name, layer);
 
 		return res;
@@ -308,10 +309,10 @@ CLASS_META(o2::UIWidgetLayer)
 {
 	BASE_CLASS(o2::ISerializable);
 
-	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(interactableLayout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(depth);
+	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(interactableLayout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(drawable).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(child);
@@ -322,7 +323,7 @@ CLASS_META(o2::UIWidgetLayer)
 	PROTECTED_FIELD(mInteractableArea);
 	PROTECTED_FIELD(mOwnerWidget);
 	PROTECTED_FIELD(mParent);
-	PROTECTED_FIELD(mChilds).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mChildren).SERIALIZABLE_ATTRIBUTE();
 
 	typedef Dictionary<String, UIWidgetLayer*> _tmp1;
 
@@ -333,8 +334,8 @@ CLASS_META(o2::UIWidgetLayer)
 	PUBLIC_FUNCTION(void, RemoveAllChilds);
 	PUBLIC_FUNCTION(void, SetParent, UIWidgetLayer*);
 	PUBLIC_FUNCTION(UIWidgetLayer*, GetParent);
-	PUBLIC_FUNCTION(ChildsVec&, GetChilds);
-	PUBLIC_FUNCTION(const ChildsVec&, GetChilds);
+	PUBLIC_FUNCTION(ChildrenVec&, GetChilds);
+	PUBLIC_FUNCTION(const ChildrenVec&, GetChilds);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddChildLayer, const String&, IRectDrawable*, const Layout&, float);
 	PUBLIC_FUNCTION(UIWidgetLayer*, GetChild, const String&);
 	PUBLIC_FUNCTION(LayersVec, GetAllChilds);

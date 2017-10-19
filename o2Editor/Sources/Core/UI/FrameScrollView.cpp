@@ -2,6 +2,7 @@
 
 #include "UI/HorizontalScrollBar.h"
 #include "UI/VerticalScrollBar.h"
+#include "UI/WidgetLayout.h"
 
 namespace Editor
 {
@@ -12,32 +13,34 @@ namespace Editor
 		mReady = false;
 
 		mHorScrollbar = mnew UIHorizontalScrollBar();
-		mHorScrollbar->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
+		*mHorScrollbar->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
 		mHorScrollbar->SetParent(this);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
-		mChilds.Remove(mHorScrollbar);
+		mChildren.Remove(mHorScrollbar);
 
 		mVerScrollbar = mnew UIVerticalScrollBar();
-		mVerScrollbar->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 0, 20);
+		*mVerScrollbar->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 0, 20);
 		mVerScrollbar->SetParent(this);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
-		mChilds.Remove(mVerScrollbar);
+		mChildren.Remove(mVerScrollbar);
 
 		mReady = true;
 	}
 
 	UIFrameScrollView::UIFrameScrollView(const UIFrameScrollView& other):
-		UIScrollView(other), mHorScrollbar(other.mHorScrollbar->Clone()), mVerScrollbar(other.mVerScrollbar->Clone())
+		UIScrollView(other), 
+		mHorScrollbar(other.mHorScrollbar->CloneAs<UIHorizontalScrollBar>()), 
+		mVerScrollbar(other.mVerScrollbar->CloneAs<UIVerticalScrollBar>())
 	{
 		mReady = false;
 
 		mHorScrollbar->SetParent(this);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
-		mChilds.Remove(mHorScrollbar);
+		mChildren.Remove(mHorScrollbar);
 
 		mVerScrollbar->SetParent(this);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
-		mChilds.Remove(mVerScrollbar);
+		mChildren.Remove(mVerScrollbar);
 
 		RetargetStatesAnimations();
 
@@ -57,15 +60,15 @@ namespace Editor
 		delete mHorScrollbar;
 		delete mVerScrollbar;
 
-		mHorScrollbar = other.mHorScrollbar->Clone();
+		mHorScrollbar = other.mHorScrollbar->CloneAs<UIHorizontalScrollBar>();
 		mHorScrollbar->SetParent(this);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
-		mChilds.Remove(mHorScrollbar);
+		mChildren.Remove(mHorScrollbar);
 
-		mVerScrollbar = other.mVerScrollbar->Clone();
+		mVerScrollbar = other.mVerScrollbar->CloneAs<UIVerticalScrollBar>();
 		mVerScrollbar->SetParent(this);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
-		mChilds.Remove(mVerScrollbar);
+		mChildren.Remove(mVerScrollbar);
 
 		return *this;
 	}
@@ -94,15 +97,15 @@ namespace Editor
 		mVerScrollbar->Update(dt);
 	}
 
-	void UIFrameScrollView::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIFrameScrollView::UpdateLayout(bool withChildren /*= true*/)
 	{
-		UIScrollView::UpdateLayout(forcible, withChildren);
+		UIScrollView::UpdateLayout(withChildren);
 
 		if (!mReady)
 			return;
 
-		mHorScrollbar->UpdateLayout(forcible, withChildren);
-		mVerScrollbar->UpdateLayout(forcible, withChildren);
+		mHorScrollbar->UpdateLayout(withChildren);
+		mVerScrollbar->UpdateLayout(withChildren);
 	}
 
 	void UIFrameScrollView::SetHorScrollbar(UIHorizontalScrollBar* scrollbar)
@@ -110,7 +113,7 @@ namespace Editor
 		delete mHorScrollbar;
 		mHorScrollbar = scrollbar;
 		AddChild(mHorScrollbar);
-		mChilds.Remove(mHorScrollbar);
+		mChildren.Remove(mHorScrollbar);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 
 		UpdateLayout();
@@ -121,7 +124,7 @@ namespace Editor
 		delete mVerScrollbar;
 		mVerScrollbar = scrollbar;
 		AddChild(mVerScrollbar);
-		mChilds.Remove(mVerScrollbar);
+		mChildren.Remove(mVerScrollbar);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 
 		UpdateLayout();
@@ -193,7 +196,7 @@ CLASS_META(Editor::UIFrameScrollView)
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PUBLIC_FUNCTION(void, SetHorScrollbar, UIHorizontalScrollBar*);
 	PUBLIC_FUNCTION(void, SetVerScrollbar, UIVerticalScrollBar*);
 	PUBLIC_FUNCTION(void, SetViewArea, const RectF&);

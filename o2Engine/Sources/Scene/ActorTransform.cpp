@@ -98,7 +98,7 @@ namespace o2
 		SetDirty();
 	}
 
-	float ActorTransform::GetWidht() const
+	float ActorTransform::GetWidth() const
 	{
 		return mData->size.x;
 	}
@@ -775,7 +775,7 @@ namespace o2
 
 		INITIALIZE_PROPERTY(ActorTransform, position, SetPosition, GetPosition);
 		INITIALIZE_PROPERTY(ActorTransform, size, SetSize, GetSize);
-		INITIALIZE_PROPERTY(ActorTransform, width, SetWidth, GetWidht);
+		INITIALIZE_PROPERTY(ActorTransform, width, SetWidth, GetWidth);
 		INITIALIZE_PROPERTY(ActorTransform, height, SetHeight, GetHeight);
 		INITIALIZE_PROPERTY(ActorTransform, scale, SetScale, GetScale);
 		INITIALIZE_PROPERTY(ActorTransform, pivot, SetPivot, GetPivot);
@@ -889,7 +889,7 @@ CLASS_META(o2::ActorTransform)
 	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetSize);
 	PUBLIC_FUNCTION(void, SetWidth, float);
-	PUBLIC_FUNCTION(float, GetWidht);
+	PUBLIC_FUNCTION(float, GetWidth);
 	PUBLIC_FUNCTION(void, SetHeight, float);
 	PUBLIC_FUNCTION(float, GetHeight);
 	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);

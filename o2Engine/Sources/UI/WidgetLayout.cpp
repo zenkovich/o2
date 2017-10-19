@@ -617,23 +617,6 @@ namespace o2
 
 	void UIWidgetLayout::InitializeProperties()
 	{
-		INITIALIZE_PROPERTY(UIWidgetLayout, pivot, SetPivot, GetPivot);
-		INITIALIZE_PROPERTY(UIWidgetLayout, position, SetPosition, GetPosition);
-		INITIALIZE_PROPERTY(UIWidgetLayout, size, SetSize, GetSize);
-		INITIALIZE_PROPERTY(UIWidgetLayout, width, SetWidth, GetWidth);
-		INITIALIZE_PROPERTY(UIWidgetLayout, height, SetHeight, GetHeight);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absPosition, SetAbsolutePosition, GetAbsolutePosition);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absRect, SetAbsoluteRect, GetAbsoluteRect);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absLeftTop, SetAbsoluteLeftTop, GetAbsoluteLeftTop);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absLeftBottom, SetAbsoluteLeftBottom, GetAbsoluteLeftBottom);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absRightBottom, SetAbsoluteRightBottom, GetAbsoluteRightBottom);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absRightTop, SetAbsoluteRightTop, GetAbsoluteRightTop);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absLeft, SetAbsoluteLeft, GetAbsoluteLeft);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absRight, SetAbsoluteRight, GetAbsoluteRight);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absBottom, SetAbsoluteBottom, GetAbsoluteBottom);
-		INITIALIZE_PROPERTY(UIWidgetLayout, absTop, SetAbsoluteTop, GetAbsoluteTop);
-		INITIALIZE_PROPERTY(UIWidgetLayout, pivotX, SetPivotX, GetPivotX);
-		INITIALIZE_PROPERTY(UIWidgetLayout, pivotY, SetPivotY, GetPivotY);
 		INITIALIZE_PROPERTY(UIWidgetLayout, anchorMin, SetAnchorMin, GetAnchorMin);
 		INITIALIZE_PROPERTY(UIWidgetLayout, anchorMax, SetAnchorMax, GetAnchorMax);
 		INITIALIZE_PROPERTY(UIWidgetLayout, offsetMin, SetOffsetMin, GetOffsetMin);

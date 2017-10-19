@@ -100,10 +100,13 @@ namespace o2
 		
 	protected:
 		RectF mScissorRect;                  // Scissor rect at drawing moment
+
 		bool  mInteractable = true;          // True when listener is interactable
+
 		bool  mIsPressed = false;            // True when was pressed by cursor
 		bool  mIsRightMousePressed = false;  // True when was pressed by right mouse button
 		bool  mIsMiddleMousePressed = false; // True when was pressed by middle mouse button
+
 		float mLastPressedTime = -1.0f;      // Last cursor pressed time
 
 	protected:

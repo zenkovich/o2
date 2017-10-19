@@ -25,8 +25,9 @@ namespace o2
 	}
 
 	ParticlesEmitter::ParticlesEmitter(const ParticlesEmitter& other):
-		IRectDrawable(other), mImageAsset(other.mImageAsset), mShape(other.mShape->Clone()), mParticlesNumLimit(other.mParticlesNumLimit),
-		mPlaying(other.mPlaying), mEmittingCoefficient(other.mEmittingCoefficient), mIsLooped(other.mIsLooped),
+		IRectDrawable(other), mImageAsset(other.mImageAsset), mShape(other.mShape->CloneAs<ParticlesEmitterShape>()), 
+		mParticlesNumLimit(other.mParticlesNumLimit), mPlaying(other.mPlaying), 
+		mEmittingCoefficient(other.mEmittingCoefficient), mIsLooped(other.mIsLooped),
 		mIsParticlesRelative(other.mIsParticlesRelative), mDuration(other.mDuration),
 		mParticlesLifetime(other.mParticlesLifetime), mEmitParticlesPerSecond(other.mEmitParticlesPerSecond),
 		mEmitParticlesAngle(other.mEmitParticlesAngle), mEmitParticlesAngleRange(other.mEmitParticlesAngleRange),
@@ -38,7 +39,7 @@ namespace o2
 		mParticlesMesh = mnew Mesh(NoTexture(), mParticlesNumLimit*4, mParticlesNumLimit*2);
 
 		for (auto effect : other.mEffects)
-			AddEffect(effect->Clone());
+			AddEffect(effect->CloneAs<ParticlesEffect>());
 
 		mLastTransform = mTransform;
 
@@ -66,13 +67,13 @@ namespace o2
 		IRectDrawable::operator=(other);
 
 		for (auto effect : other.mEffects)
-			AddEffect(effect->Clone());
+			AddEffect(effect->CloneAs<ParticlesEffect>());
 
 		mImageAsset = other.mImageAsset;
-		mShape = other.mShape->Clone();
+		mShape = other.mShape->CloneAs<ParticlesEmitterShape>();
 
 		for (auto effect : other.mEffects)
-			AddEffect(effect->Clone());
+			AddEffect(effect->CloneAs<ParticlesEffect>());
 
 		mParticlesNumLimit = other.mParticlesNumLimit;
 

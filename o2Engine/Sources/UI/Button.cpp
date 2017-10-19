@@ -3,6 +3,8 @@
 #include "Render/Sprite.h"
 #include "Render/Text.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetState.h"
 
 namespace o2
 {
@@ -67,40 +69,6 @@ namespace o2
 		return nullptr;
 	}
 
-	void UIButton::SetButtonGroup(UIButtonGroup* group)
-	{
-		if (mButtonGroup)
-		{
-			if (mButtonGroup->mOwner == this)
-			{
-				if (mButtonGroup->mButtons.Count() == 1)
-				{
-					mButtonGroup->mButtons.Clear();
-					delete mButtonGroup;
-				}
-				else
-				{
-					mButtonGroup->mButtons.Remove(this);
-					mButtonGroup->mOwner = mButtonGroup->mButtons[0];
-				}
-			}
-			else mButtonGroup->mButtons.Remove(this);
-		}
-
-		mButtonGroup = group;
-		mButtonGroup->mButtons.Add(this);
-
-		if (!mButtonGroup->mOwner)
-		{
-			mButtonGroup->mOwner = this;
-		}
-	}
-
-	UIButtonGroup* UIButton::GetButtonGroup() const
-	{
-		return mButtonGroup;
-	}
-
 	bool UIButton::IsFocusable() const
 	{
 		return true;
@@ -118,12 +86,6 @@ namespace o2
 			*pressedState = true;
 
 		o2UI.FocusWidget(this);
-
-		if (mButtonGroup)
-		{
-			mButtonGroup->mPressed = true;
-			onClick();
-		}
 	}
 
 	void UIButton::OnCursorReleased(const Input::Cursor& cursor)
@@ -132,11 +94,8 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (UIWidget::IsUnderPoint(cursor.position) && !mButtonGroup)
+		if (UIWidget::IsUnderPoint(cursor.position))
 			onClick();
-
-		if (mButtonGroup && mButtonGroup->mPressed)
-			mButtonGroup->mPressed = false;
 	}
 
 	void UIButton::OnCursorPressBreak(const Input::Cursor& cursor)
@@ -144,9 +103,6 @@ namespace o2
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
-
-		if (mButtonGroup && mButtonGroup->mPressed)
-			mButtonGroup->mPressed = false;
 	}
 
 	void UIButton::OnCursorEnter(const Input::Cursor& cursor)
@@ -154,9 +110,6 @@ namespace o2
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
-
-		if (mButtonGroup && mButtonGroup->mPressed)
-			onClick();
 	}
 
 	void UIButton::OnCursorExit(const Input::Cursor& cursor)
@@ -209,34 +162,6 @@ namespace o2
 	{
 		INITIALIZE_PROPERTY(UIButton, caption, SetCaption, GetCaption);
 		INITIALIZE_PROPERTY(UIButton, icon, SetIcon, GetIcon);
-		INITIALIZE_PROPERTY(UIButton, buttonsGroup, SetButtonGroup, GetButtonGroup);
-	}
-
-	UIButtonGroup::UIButtonGroup():
-		mPressed(false), mOwner(nullptr)
-	{}
-
-	UIButtonGroup::~UIButtonGroup()
-	{
-		for (auto btn : mButtons)
-			btn->mButtonGroup = nullptr;
-	}
-
-	void UIButtonGroup::AddButton(UIButton* toggle)
-	{
-		mButtons.Add(toggle);
-		toggle->mButtonGroup = this;
-	}
-
-	void UIButtonGroup::RemoveButton(UIButton* toggle)
-	{
-		mButtons.Remove(toggle);
-		toggle->mButtonGroup = nullptr;
-	}
-
-	const UIButtonGroup::ButtonsVec& UIButtonGroup::GetButtons() const
-	{
-		return mButtons;
 	}
 }
 
@@ -248,20 +173,16 @@ CLASS_META(o2::UIButton)
 
 	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(icon);
-	PUBLIC_FIELD(buttonsGroup);
 	PUBLIC_FIELD(onClick);
 	PUBLIC_FIELD(shortcut);
 	PROTECTED_FIELD(mCaptionText);
 	PROTECTED_FIELD(mIconSprite);
-	PROTECTED_FIELD(mButtonGroup);
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(void, SetIcon, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetIcon);
-	PUBLIC_FUNCTION(void, SetButtonGroup, UIButtonGroup*);
-	PUBLIC_FUNCTION(UIButtonGroup*, GetButtonGroup);
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

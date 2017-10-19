@@ -1,8 +1,9 @@
 #include "ScrollView.h"
 
+#include "Application/Application.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
-#include "Application/Application.h"
+#include "UI/WidgetLayout.h"
 
 namespace Editor
 {
@@ -88,20 +89,20 @@ namespace Editor
 		mGridColor = color;
 	}
 
-	void UIScrollView::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIScrollView::UpdateLayout(bool withChildren /*= true*/)
 	{
-		UIWidget::UpdateLayout(forcible, withChildren);
+		UIWidget::UpdateLayout(withChildren);
 
 		if (!mReady)
 			return;
 
-		Vec2I size = layout.GetAbsoluteRect().Size();
+		Vec2I size = layout->size.Get();
 		size.x = Math::Max(size.x, 32);
 		size.y = Math::Max(size.y, 32);
 
 		mRenderTarget = TextureRef(size, Texture::Format::Default, Texture::Usage::RenderTarget);
 		*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
-		mRenderTargetSprite->SetRect(layout.GetAbsoluteRect());
+		mRenderTargetSprite->SetRect(layout->worldRect);
 		mNeedRedraw = true;
 
 		mViewCamera.size = size;
@@ -188,7 +189,7 @@ namespace Editor
 
 	void UIScrollView::UpdateLocalScreenTransforms()
 	{
-		RectF rectangle = layout.GetAbsoluteRect();
+		RectF rectangle = layout->worldRect;
 		Basis identityCamTransform = Transform(rectangle.Size()).basis;
 		Basis cameraTransform = mViewCamera.basis;
 
@@ -342,7 +343,7 @@ CLASS_META(Editor::UIScrollView)
 	PUBLIC_FUNCTION(const Camera&, GetCamera);
 	PUBLIC_FUNCTION(void, SetBackColor, const Color4&);
 	PUBLIC_FUNCTION(void, SetGridColor, const Color4&);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);

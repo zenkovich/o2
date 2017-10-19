@@ -32,13 +32,13 @@ namespace o2
 	DragHandle::DragHandle(const DragHandle& other)
 	{
 		if (other.mRegularSprite)
-			mRegularSprite = static_cast<Sprite*>(other.mRegularSprite->Clone());
+			mRegularSprite = other.mRegularSprite->CloneAs<Sprite>();
 
 		if (other.mHoverSprite)
-			mHoverSprite = static_cast<Sprite*>(other.mHoverSprite->Clone());
+			mHoverSprite = other.mHoverSprite->CloneAs<Sprite>();
 
 		if (other.mPressedSprite)
-			mPressedSprite = static_cast<Sprite*>(other.mPressedSprite->Clone());
+			mPressedSprite = other.mPressedSprite->CloneAs<Sprite>();
 
 		onChangedPos = other.onChangedPos;
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
@@ -65,13 +65,13 @@ namespace o2
 		delete mPressedSprite;
 
 		if (other.mRegularSprite)
-			mRegularSprite = static_cast<Sprite*>(other.mRegularSprite->Clone());
+			mRegularSprite = other.mRegularSprite->CloneAs<Sprite>();
 
 		if (other.mHoverSprite)
-			mHoverSprite = static_cast<Sprite*>(other.mHoverSprite->Clone());
+			mHoverSprite = other.mHoverSprite->CloneAs<Sprite>();
 
 		if (other.mPressedSprite)
-			mPressedSprite = static_cast<Sprite*>(other.mPressedSprite->Clone());
+			mPressedSprite = other.mPressedSprite->CloneAs<Sprite>();
 
 		onChangedPos = other.onChangedPos;
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
@@ -347,7 +347,7 @@ namespace o2
 		DragHandle(other)
 	{
 		if (other.mSelectedSprite)
-			mSelectedSprite = static_cast<Sprite*>(other.mSelectedSprite->Clone());
+			mSelectedSprite = other.mSelectedSprite->CloneAs<Sprite>();
 	}
 
 	SelectableDragHandle::~SelectableDragHandle()
@@ -370,7 +370,7 @@ namespace o2
 		}
 
 		if (other.mSelectedSprite)
-			mSelectedSprite = static_cast<Sprite*>(other.mSelectedSprite->Clone());
+			mSelectedSprite = other.mSelectedSprite->CloneAs<Sprite>();
 
 		return *this;
 	}

@@ -29,13 +29,13 @@ namespace Editor
 		UIFrameScrollView& operator=(const UIFrameScrollView& other);
 
 		// Draws widget, updates render target 
-		void Draw();
+		void Draw() override;
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		// Sets horizontal scrollbar
 		void SetHorScrollbar(UIHorizontalScrollBar* scrollbar);
@@ -67,6 +67,6 @@ namespace Editor
 		void OnVerScrollScrolled(float value);
 
 		// It is called when camera position was changed
-		void OnCameraTransformChanged();
+		void OnCameraTransformChanged() override;
 	};
 }

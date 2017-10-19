@@ -128,7 +128,7 @@ namespace Editor
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			child->Draw();
 
 		if (mSelecting)
@@ -406,11 +406,11 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
 	{
-		Vec2F localPressPoint = mPressedPoint - mChildsAbsRect.LeftBottom();
+		Vec2F localPressPoint = mPressedPoint - mChildrenAbsRect.LeftBottom();
 
 		UIScrollArea::UpdateLayout(forcible);
 
-		mPressedPoint = localPressPoint + mChildsAbsRect.LeftBottom();
+		mPressedPoint = localPressPoint + mChildrenAbsRect.LeftBottom();
 
 		if (mSelecting)
 			UpdateSelection(*o2Input.GetCursor(0));

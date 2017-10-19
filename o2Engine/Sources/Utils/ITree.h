@@ -12,7 +12,7 @@ namespace o2
 	class ITreeNode
 	{
 	public:
-		typedef Vector<_type*> ChildsVec;
+		typedef Vector<_type*> ChildrenVec;
 
 	public:
 		// Default constructor
@@ -37,15 +37,15 @@ namespace o2
 		virtual _type* GetParent() const;
 
 		// Return child nodes
-		virtual ChildsVec& GetChilds();
+		virtual ChildrenVec& GetChilds();
 
 		// Returns constant child nodes
-		virtual const ChildsVec& GetChilds() const;
+		virtual const ChildrenVec& GetChilds() const;
 
 	protected:
 		_type*    _this;    // Template this pointer
 		_type*    mParent; // Pointer to parent node
-		ChildsVec mChilds; // Children nodes @SERIALIZABLE
+		ChildrenVec mChildren; // Children nodes @SERIALIZABLE
 
 	protected:
 		// It is called when added new child
@@ -77,7 +77,7 @@ namespace o2
 
 		node->mParent = _this;
 
-		mChilds.Add(node);
+		mChildren.Add(node);
 
 		OnChildAdded(node);
 
@@ -89,7 +89,7 @@ namespace o2
 	{
 		node->mParent = nullptr;
 
-		if (!mChilds.Remove(node))
+		if (!mChildren.Remove(node))
 			return false;
 
 		OnChildRemoved(node);
@@ -103,14 +103,14 @@ namespace o2
 	template<typename _type>
 	void ITreeNode<_type>::RemoveAllChilds()
 	{
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			OnChildRemoved(child);
 
-		for (auto child : mChilds)
+		for (auto child : mChildren)
 			if (child)
 				delete child;
 
-		mChilds.Clear();
+		mChildren.Clear();
 	}
 
 	template<typename _type>
@@ -136,14 +136,14 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename ITreeNode<_type>::ChildsVec& ITreeNode<_type>::GetChilds()
+	typename ITreeNode<_type>::ChildrenVec& ITreeNode<_type>::GetChilds()
 	{
-		return mChilds;
+		return mChildren;
 	}
 
 	template<typename _type>
-	typename const ITreeNode<_type>::ChildsVec& o2::ITreeNode<_type>::GetChilds() const
+	typename const ITreeNode<_type>::ChildrenVec& o2::ITreeNode<_type>::GetChilds() const
 	{
-		return mChilds;
+		return mChildren;
 	}
 }

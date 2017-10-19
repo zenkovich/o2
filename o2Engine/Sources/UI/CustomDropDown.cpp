@@ -1,7 +1,11 @@
 #include "CustomDropDown.h"
 
 #include "Render/Render.h"
-#include "UIManager.h"
+#include "UI/CustomList.h"
+#include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace o2
 {
@@ -17,9 +21,10 @@ namespace o2
 	}
 
 	UICustomDropDown::UICustomDropDown(const UICustomDropDown& other):
-		UIWidget(other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout), mMaxListItems(other.mMaxListItems)
+		UIWidget(other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout), 
+		mMaxListItems(other.mMaxListItems)
 	{
-		mItemsList = other.mItemsList->Clone();
+		mItemsList = other.mItemsList->CloneAs<UICustomList>();
 		mItemsList->mParent = this;
 		mItemsList->Hide(true);
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
@@ -40,7 +45,7 @@ namespace o2
 
 		UIWidget::operator=(other);
 
-		mItemsList = other.mItemsList->Clone();
+		mItemsList = other.mItemsList->CloneAs<UICustomList>();
 		mItemsList->mParent = this;
 		mItemsList->Hide(true);
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
@@ -84,15 +89,15 @@ namespace o2
 
 	void UICustomDropDown::Expand()
 	{
-		float itemHeight   = mItemsList->GetItemSample()->layout.minHeight;
+		float itemHeight   = mItemsList->GetItemSample()->layout->minHeight;
 		int itemsVisible   = Math::Min(mMaxListItems, mItemsList->GetItemsCount());
 		RectF listViewArea = mItemsList->mAbsoluteViewArea;
-		RectF listAbsRect  = mItemsList->layout.mAbsoluteRect;
+		RectF listAbsRect  = mItemsList->layout->worldRect;
 
 		RectF border(listViewArea.left - listAbsRect.left, listViewArea.bottom - listAbsRect.bottom,
 					 listAbsRect.right - listViewArea.right, listAbsRect.top - listViewArea.top);
 
-		mItemsList->layout.height = itemHeight*(float)itemsVisible + border.bottom + border.top;
+		mItemsList->layout->height = itemHeight*(float)itemsVisible + border.bottom + border.top;
 
 		auto openedState = state["opened"];
 		if (openedState)
@@ -249,7 +254,7 @@ namespace o2
 
 	void UICustomDropDown::OnCursorReleasedOutside(const Input::Cursor& cursor)
 	{
-		if (!mItemsList->layout.mAbsoluteRect.IsInside(o2Input.GetCursorPos()) && IsExpanded())
+		if (!mItemsList->layout->IsPointInside(o2Input.GetCursorPos()) && IsExpanded())
 			Collapse();
 	}
 
@@ -279,16 +284,12 @@ namespace o2
 		interactable = mResVisible;
 	}
 
-	void UICustomDropDown::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UICustomDropDown::UpdateLayout(bool withChildren /*= true*/)
 	{
-		if (CheckIsLayoutDrivenByParent(forcible))
-			return;
+		layout->Update();
 
-		RecalculateAbsRect();
-		UpdateLayersLayouts();
-
-		mChildrenWorldRect = layout.mAbsoluteRect;
-		mAbsoluteClip = mClipLayout.Calculate(layout.mAbsoluteRect);
+		mChildrenWorldRect = layout->mData->worldRectangle;
+		mAbsoluteClip = mClipLayout.Calculate(layout->mData->worldRectangle);
 
 		if (withChildren)
 			UpdateChildrenLayouts();
@@ -366,7 +367,7 @@ CLASS_META(o2::UICustomDropDown)
 	PUBLIC_FUNCTION(void, SetMaxListSizeInItems, int);
 	PUBLIC_FUNCTION(void, SetClippingLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);

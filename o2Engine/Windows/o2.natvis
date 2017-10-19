@@ -165,8 +165,8 @@
       </Synthetic>
 
       <ArrayItems>
-        <Size>mChilds.mCount</Size>
-        <ValuePointer>mChilds.mValues</ValuePointer>
+        <Size>mChildren.mCount</Size>
+        <ValuePointer>mChildren.mValues</ValuePointer>
       </ArrayItems>
 
     </Expand>
@@ -199,8 +199,8 @@
       <Item Name="rect" ExcludeView="simple">mAbsolutePosition</Item>
 
       <ArrayItems>
-        <Size>mChilds.mCount</Size>
-        <ValuePointer>mChilds.mValues</ValuePointer>
+        <Size>mChildren.mCount</Size>
+        <ValuePointer>mChildren.mValues</ValuePointer>
       </ArrayItems>
 
     </Expand>
@@ -249,11 +249,11 @@
       </Synthetic>
 
       <Synthetic Name="children">
-        <DisplayString>count={mChilds.mCount}</DisplayString>
+        <DisplayString>count={mChildren.mCount}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mChilds.mCount</Size>
-            <ValuePointer>mChilds.mValues</ValuePointer>
+            <Size>mChildren.mCount</Size>
+            <ValuePointer>mChildren.mValues</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>

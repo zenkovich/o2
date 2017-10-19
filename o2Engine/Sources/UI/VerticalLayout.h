@@ -11,14 +11,18 @@ namespace o2
 	{
 	public:
 		Property<BaseCorner> baseCorner;    // Base corder property
+
 		Property<float>      spacing;       // Space between widgets property
+
 		Property<RectF>      border;        // Border property
 		Property<float>      borderLeft;    // Left border property
 		Property<float>      borderRight;   // Right border property
 		Property<float>      borderTop;     // Top border property
 		Property<float>      borderBottom;  // Bottom border property
+
 		Property<bool>       expandWidth;   // Expand children by width property
 		Property<bool>       expandHeight;  // Expand children by height property
+
 		Property<bool>       fitByChildren; // Fitting size by children property
 
 		// Default constructor
@@ -94,7 +98,7 @@ namespace o2
 		bool IsFittingByChildren() const;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		SERIALIZABLE(UIVerticalLayout);
 
@@ -108,13 +112,13 @@ namespace o2
 
 	protected:
 		// Returns layout height
-		float GetMinHeightWithChildren() const;
+		float GetMinHeightWithChildren() const override;
 
 		// It is called when child widget was added
-		void OnChildAdded(UIWidget* child);
+		void OnChildAdded(UIWidget* child) override;
 
 		// It is called when child widget was removed
-		void OnChildRemoved(UIWidget* child);
+		void OnChildRemoved(UIWidget* child) override;
 
 		// Invokes required function for childs arranging
 		void RearrangeChilds();

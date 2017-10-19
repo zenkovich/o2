@@ -32,10 +32,10 @@ namespace o2
 		bool IsExpanded() const;
 
 		// Draws spoiler
-		void Draw();
+		void Draw() override;
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		SERIALIZABLE(UISpoiler);
 
@@ -49,7 +49,7 @@ namespace o2
 		void UpdateExpanding(float dt);
 
 		// Returns layout height
-		float GetMinHeightWithChildren() const;
+		float GetMinHeightWithChildren() const override;
 
 		// Expands size by children
 		//virtual void ExpandSizeByChilds();

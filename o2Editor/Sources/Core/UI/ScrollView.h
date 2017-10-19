@@ -32,10 +32,10 @@ namespace Editor
 		UIScrollView& operator=(const UIScrollView& other);
 
 		// Draws widget, updates render target 
-		void Draw();
+		void Draw() override;
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Transforms point from screen space to local space
 		Vec2F ScreenToLocalPoint(const Vec2F& point);
@@ -53,20 +53,18 @@ namespace Editor
 		void SetGridColor(const Color4& color);
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Returns is listener scrollable
-		bool IsScrollable() const;
+		bool IsScrollable() const override;
 
 		// Returns is this widget can be focused
-		bool IsFocusable() const;
+		bool IsFocusable() const override;
 
 		SERIALIZABLE(UIScrollView);
-
-	protected:
 
 	protected:
 		bool       mReady = false;                         // Is widget initialized and ready to use
@@ -95,7 +93,7 @@ namespace Editor
 
 	protected:
 		// Updates transparency for this and children widgets
-		void UpdateTransparency();
+		void UpdateTransparency() override;
 
 		// Updates camera
 		void UpdateCamera(float dt);
@@ -116,15 +114,15 @@ namespace Editor
 		virtual void OnCameraTransformChanged();
 
 		// It is called when scrolling
-		void OnScrolled(float scroll);
+		void OnScrolled(float scroll) override;
 
 		// It is called when right mouse button was pressed on this
-		void OnCursorRightMousePressed(const Input::Cursor& cursor);
+		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button stay down on this
-		void OnCursorRightMouseStayDown(const Input::Cursor& cursor);
+		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 	};
 }
