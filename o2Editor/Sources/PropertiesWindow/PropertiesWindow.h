@@ -49,10 +49,10 @@ namespace Editor
 		Vector<IObject*> GetTargets() const;
 
 		// Updates window: check next viewer and targets and updates current viewer
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Draws current viewer
-		void Draw();
+		void Draw() override;
 
 		// Returns were targets changed
 		bool IsTargetsChanged() const;

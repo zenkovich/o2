@@ -18,6 +18,7 @@
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
+#include "UI/WidgetLayout.h"
 #include "Utils/EditorPropertyAttribute.h"
 #include "Utils/Timer.h"
 
@@ -122,7 +123,7 @@ namespace Editor
 			if (mCurrentViewer)
 			{
 				mCurrentViewer->mContentWidget->SetParent(mWindow);
-				mCurrentViewer->mContentWidget->layout = UIWidgetLayout::BothStretch();
+				*mCurrentViewer->mContentWidget->layout = UIWidgetLayout::BothStretch();
 				mCurrentViewer->mContentWidget->Show(true);
 				mCurrentViewer->OnEnabled();
 			}
@@ -183,7 +184,7 @@ namespace Editor
 			fieldWidgetPair.first->SetValuePath(path + fieldInfo->GetName());
 			fieldWidgetPair.first->SpecializeType(fieldType);
 
-			auto nameLabel = fieldWidgetPair.second->FindChild<UILabel>();
+			auto nameLabel = fieldWidgetPair.second->GetChildByType<UILabel>();
 			nameLabel->text = MakeSmartFieldName(fieldInfo->GetName());
 
 			layout->AddChild(fieldWidgetPair.second, false);
@@ -299,18 +300,18 @@ namespace Editor
 		horLayout->expandWidth = true;
 		horLayout->fitByChildren = true;
 		horLayout->baseCorner = BaseCorner::Left;
-		horLayout->layout = UIWidgetLayout::BothStretch();
-		horLayout->layout.minHeight = 20;
+		*horLayout->layout = UIWidgetLayout::BothStretch();
+		horLayout->layout->minHeight = 20;
 
 		UILabel* label = o2UI.CreateWidget<UILabel>();
 		label->horAlign = HorAlign::Left;
-		label->layout.widthWeight = 3.0f;
+		label->layout->widthWeight = 3.0f;
 		label->horOverflow = UILabel::HorOverflow::Dots;
 		label->text = MakeSmartFieldName(name);
 
 		IPropertyField* fieldProperty = (IPropertyField*)fieldPropertyType->CreateSample();
 		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
-		fieldProperty->GetWidget()->layout.minWidth = 200.0f;
+		fieldProperty->GetWidget()->layout->minWidth = 200.0f;
 
 		horLayout->AddChild(label, false);
 		horLayout->AddChild(fieldProperty->GetWidget(), false);

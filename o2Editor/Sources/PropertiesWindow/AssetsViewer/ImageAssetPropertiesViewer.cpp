@@ -11,8 +11,9 @@
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
-#include "Utils/Reflection/Reflection.h"
+#include "UI/WidgetLayout.h"
 #include "Utils/Bitmap.h"
+#include "Utils/Reflection/Reflection.h"
 
 namespace Editor
 {
@@ -29,7 +30,7 @@ namespace Editor
 		InitializeImagePreview();
 		InitializeProperties();
 
-		mContent->UpdateLayout(true);
+		mContent->UpdateLayout();
 	}
 
 	ImageAssetPropertiesViewer::~ImageAssetPropertiesViewer()
@@ -79,19 +80,19 @@ namespace Editor
 	void ImageAssetPropertiesViewer::InitializeImagePreview()
 	{
 		mPreviewImageContent = mnew UIWidget();
-		mPreviewImageContent->layout.minHeight = 200;
+		mPreviewImageContent->layout->minHeight = 200;
 
 		auto separatorImg = o2UI.CreateImage("ui/UI_Separator.png");
-		separatorImg->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, -6, -15, 5, -4);
+		*separatorImg->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, -6, -15, 5, -4);
 		mPreviewImageContent->AddChild(separatorImg);
 
 		mPreviewImageBack = mnew UIImage();
 		mPreviewImageBack->SetImage(CreateGridSprite());
-		mPreviewImageBack->layout = UIWidgetLayout::BothStretch();
+		*mPreviewImageBack->layout = UIWidgetLayout::BothStretch();
 		mPreviewImageContent->AddChild(mPreviewImageBack);
 
 		mPreviewImage = mnew UIImage();
-		mPreviewImage->layout = UIWidgetLayout::BothStretch();
+		*mPreviewImage->layout = UIWidgetLayout::BothStretch();
 		mPreviewImageContent->AddChild(mPreviewImage);
 
 		InitializeLeftHandle();
@@ -111,13 +112,13 @@ namespace Editor
 		mBorderLeftHandle.cursorType = CursorType::SizeWE;
 		mBorderLeftHandleWidget->onDraw += [&]() { mBorderLeftHandle.OnDrawn(); };
 		mBorderLeftHandle.isUnderPoint = [&](const Vec2F& p) {
-			auto rt = mBorderLeftHandleWidget->layout.GetAbsoluteRect();
+			auto rt = mBorderLeftHandleWidget->layout->GetWorldRect();
 			rt.left -= 2; rt.right += 2;
 			return rt.IsInside(p);
 		};
 
 		mBorderLeftHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float px = mPreviewImage->layout.GetWidth()/mPreviewImage->GetImage()->GetOriginalSize().x;
+			float px = mPreviewImage->layout->GetWidth()/mPreviewImage->GetImage()->GetOriginalSize().x;
 			mBordersSmoothValue.left += cursor.delta.x/px;
 
 			if (mBorderProperty->GetCommonValue().left != (int)Math::Round(mBordersSmoothValue.left))
@@ -134,13 +135,13 @@ namespace Editor
 		mBorderRightHandle.cursorType = CursorType::SizeWE;
 		mBorderRightHandleWidget->onDraw += [&]() { mBorderRightHandle.OnDrawn(); };
 		mBorderRightHandle.isUnderPoint = [&](const Vec2F& p) {
-			auto rt = mBorderRightHandleWidget->layout.GetAbsoluteRect();
+			auto rt = mBorderRightHandleWidget->layout->GetWorldRect();
 			rt.left -= 2; rt.right += 2;
 			return rt.IsInside(p);
 		};
 
 		mBorderRightHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float px = mPreviewImage->layout.GetWidth()/mPreviewImage->GetImage()->GetOriginalSize().x;
+			float px = mPreviewImage->layout->GetWidth()/mPreviewImage->GetImage()->GetOriginalSize().x;
 			mBordersSmoothValue.right -= cursor.delta.x/px;
 
 			if (mBorderProperty->GetCommonValue().right != (int)Math::Round(mBordersSmoothValue.right))
@@ -157,13 +158,13 @@ namespace Editor
 		mBorderTopHandle.cursorType = CursorType::SizeNS;
 		mBorderTopHandleWidget->onDraw += [&]() { mBorderTopHandle.OnDrawn(); };
 		mBorderTopHandle.isUnderPoint = [&](const Vec2F& p) {
-			auto rt = mBorderBottomHandleWidget->layout.GetAbsoluteRect();
+			auto rt = mBorderBottomHandleWidget->layout->GetWorldRect();
 			rt.bottom -= 2; rt.top += 2;
 			return rt.IsInside(p);
 		};
 
 		mBorderTopHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float px = mPreviewImage->layout.GetHeight()/mPreviewImage->GetImage()->GetOriginalSize().y;
+			float px = mPreviewImage->layout->GetHeight()/mPreviewImage->GetImage()->GetOriginalSize().y;
 			mBordersSmoothValue.top += cursor.delta.y/px;
 
 			if (mBorderProperty->GetCommonValue().top != (int)Math::Round(mBordersSmoothValue.top))
@@ -180,13 +181,13 @@ namespace Editor
 		mBorderBottomHandle.cursorType = CursorType::SizeNS;
 		mBorderBottomHandleWidget->onDraw += [&]() { mBorderBottomHandle.OnDrawn(); };
 		mBorderBottomHandle.isUnderPoint = [&](const Vec2F& p) {
-			auto rt = mBorderTopHandleWidget->layout.GetAbsoluteRect();
+			auto rt = mBorderTopHandleWidget->layout->GetWorldRect();
 			rt.bottom -= 2; rt.top += 2;
 			return rt.IsInside(p);
 		};
 
 		mBorderBottomHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float px = mPreviewImage->layout.GetHeight()/mPreviewImage->GetImage()->GetOriginalSize().y;
+			float px = mPreviewImage->layout->GetHeight()/mPreviewImage->GetImage()->GetOriginalSize().y;
 			mBordersSmoothValue.bottom -= cursor.delta.y/px;
 
 			if (mBorderProperty->GetCommonValue().bottom != (int)Math::Round(mBordersSmoothValue.bottom))
@@ -197,49 +198,49 @@ namespace Editor
 	void ImageAssetPropertiesViewer::InitializeProperties()
 	{
 		auto borderPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(RectI));
-		auto nameLabel = borderPropertyPair.second->FindChild<UILabel>();
+		auto nameLabel = borderPropertyPair.second->GetChildByType<UILabel>();
 		nameLabel->text = "Slice border";
 		mBorderProperty = (BorderIProperty*)borderPropertyPair.first;
 		mBorderProperty->onChanged += [&]() { UpdateBordersAnchors(); /*mBordersSmoothValue = mBorderProperty->GetCommonValue();*/ };
 		mContent->AddChild(borderPropertyPair.second);
 
 		auto modePropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(SpriteMode));
-		nameLabel = modePropertyPair.second->FindChild<UILabel>();
+		nameLabel = modePropertyPair.second->GetChildByType<UILabel>();
 		nameLabel->text = "Default mode";
 		mDefaultTypeProperty = (EnumProperty*)modePropertyPair.first;
 		mDefaultTypeProperty->SpecializeType(&TypeOf(SpriteMode));
 		mContent->AddChild(modePropertyPair.second);
 
 		auto atlasPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAssetRef));
-		nameLabel = atlasPropertyPair.second->FindChild<UILabel>();
+		nameLabel = atlasPropertyPair.second->GetChildByType<UILabel>();
 		nameLabel->text = "Atlas";
 		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasPropertyPair.first;
 		mAtlasProperty->onChanged = THIS_FUNC(OnAtlasPropertyChanged);
 		mContent->AddChild(atlasPropertyPair.second);
 
 		auto windowsPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = windowsPropertyPair.second->FindChild<UILabel>();
+		nameLabel = windowsPropertyPair.second->GetChildByType<UILabel>();
 		nameLabel->text = "Windows";
 		mWindowsProperties = (ObjectProperty*)windowsPropertyPair.first;
 		mWindowsProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(windowsPropertyPair.second);
 
 		auto osxPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = osxPropertyPair.second->FindChild<UILabel>();
+		nameLabel = osxPropertyPair.second->GetChildByType<UILabel>();
 		nameLabel->text = "OSX";
 		mOSXProperties = (ObjectProperty*)osxPropertyPair.first;
 		mOSXProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(osxPropertyPair.second);
 
 		auto androidPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = androidPropertyPair.second->FindChild<UILabel>();
+		nameLabel = androidPropertyPair.second->GetChildByType<UILabel>();
 		nameLabel->text = "Android";
 		mAndroidProperties = (ObjectProperty*)androidPropertyPair.first;
 		mAndroidProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(androidPropertyPair.second);
 
 		auto iosPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = iosPropertyPair.second->FindChild<UILabel>();
+		nameLabel = iosPropertyPair.second->GetChildByType<UILabel>();
 		nameLabel->text = "iOS";
 		mIOSProperties = (ObjectProperty*)iosPropertyPair.first;
 		mIOSProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
@@ -248,7 +249,7 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::FitImage()
 	{
-		Vec2F maxSize = mPreviewImageContent->layout.size;
+		Vec2F maxSize = mPreviewImageContent->layout->size;
 		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 
 		float heightFitScale = maxSize.y/imageSize.y;
@@ -271,15 +272,15 @@ namespace Editor
 		if (fitByHeight)
 		{
 			float d = imageSizeAspect*0.5f/contentAspect;
-			mPreviewImage->layout = UIWidgetLayout(Vec2F(0.5f - d, 0.0f), Vec2F(0.5f + d, 1.0f), Vec2F(), Vec2F());
+			*mPreviewImage->layout = UIWidgetLayout(Vec2F(0.5f - d, 0.0f), Vec2F(0.5f + d, 1.0f), Vec2F(), Vec2F());
 		}
 		else
 		{
 			float d = 1.0f/imageSizeAspect*0.5f*contentAspect;
-			mPreviewImage->layout = UIWidgetLayout(Vec2F(0.0f, 0.5f - d), Vec2F(1.0f, 0.5f + d), Vec2F(), Vec2F());
+			*mPreviewImage->layout = UIWidgetLayout(Vec2F(0.0f, 0.5f - d), Vec2F(1.0f, 0.5f + d), Vec2F(), Vec2F());
 		}
 
-		mPreviewImageBack->layout = mPreviewImage->layout;
+		*mPreviewImageBack->layout = *mPreviewImage->layout;
 
 		UpdateBordersAnchors();
 		mBordersSmoothValue = mBorderProperty->GetCommonValue();
@@ -292,10 +293,10 @@ namespace Editor
 		BorderF bordersAnchors((float)borders.left/imageSize.x, (float)borders.top/imageSize.y,
 							 1.0f - (float)borders.right/imageSize.x, 1.0f - (float)borders.bottom/imageSize.y);
 
-		mBorderLeftHandleWidget->layout = UIWidgetLayout(Vec2F(bordersAnchors.left, 0.0f), Vec2F(bordersAnchors.left, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
-		mBorderRightHandleWidget->layout = UIWidgetLayout(Vec2F(bordersAnchors.right, 0.0f), Vec2F(bordersAnchors.right, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
-		mBorderTopHandleWidget->layout = UIWidgetLayout(Vec2F(0.0f, bordersAnchors.top), Vec2F(1.0f, bordersAnchors.top), Vec2F(0, 0), Vec2F(0, 1));
-		mBorderBottomHandleWidget->layout = UIWidgetLayout(Vec2F(0.0f, bordersAnchors.bottom), Vec2F(1.0f, bordersAnchors.bottom), Vec2F(0, 0), Vec2F(0, 1));
+		*mBorderLeftHandleWidget->layout = UIWidgetLayout(Vec2F(bordersAnchors.left, 0.0f), Vec2F(bordersAnchors.left, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
+		*mBorderRightHandleWidget->layout = UIWidgetLayout(Vec2F(bordersAnchors.right, 0.0f), Vec2F(bordersAnchors.right, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
+		*mBorderTopHandleWidget->layout = UIWidgetLayout(Vec2F(0.0f, bordersAnchors.top), Vec2F(1.0f, bordersAnchors.top), Vec2F(0, 0), Vec2F(0, 1));
+		*mBorderBottomHandleWidget->layout = UIWidgetLayout(Vec2F(0.0f, bordersAnchors.bottom), Vec2F(1.0f, bordersAnchors.bottom), Vec2F(0, 0), Vec2F(0, 1));
 	}
 
 	void ImageAssetPropertiesViewer::UpdateBordersValue()

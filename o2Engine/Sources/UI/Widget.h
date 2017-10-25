@@ -387,7 +387,7 @@ namespace o2
 
 		for (auto layer : mLayers)
 		{
-			auto res = layer->GetLayerDrawableByType<_type>();
+			auto res = layer->FindLayer<_type>();
 			if (res)
 				return res;
 		}

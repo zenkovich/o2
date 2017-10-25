@@ -4,6 +4,7 @@
 #include "Core/EditorApplication.h"
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
+#include "Scene/SceneLayer.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "TreeWindow/TreeWindow.h"
 

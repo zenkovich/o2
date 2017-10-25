@@ -11,7 +11,7 @@
 namespace o2
 {
 	UIWidget::UIWidget(ActorCreateMode mode /*= ActorCreateMode::InScene*/):
-		Actor(mnew UIWidgetLayout(), mode), layout((UIWidgetLayout*)transform)
+		Actor(mnew UIWidgetLayout(), mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		if (mode == ActorCreateMode::InScene && mLayer)
 			mLayer->RegisterDrawable(this);
@@ -24,7 +24,7 @@ namespace o2
 	}
 
 	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
-		Actor(mnew UIWidgetLayout(), prototype, mode), layout((UIWidgetLayout*)transform)
+		Actor(mnew UIWidgetLayout(), prototype, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		if (mode == ActorCreateMode::InScene && mLayer && !mOverrideDepth)
 			mLayer->RegisterDrawable(this);
@@ -37,7 +37,7 @@ namespace o2
 	}
 
 	UIWidget::UIWidget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
-		Actor(mnew UIWidgetLayout(), components, mode), layout((UIWidgetLayout*)transform)
+		Actor(mnew UIWidgetLayout(), components, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		if (mode == ActorCreateMode::InScene && mLayer)
 			mLayer->RegisterDrawable(this);
@@ -50,7 +50,7 @@ namespace o2
 	}
 
 	UIWidget::UIWidget(const UIWidget& other):
-		Actor(mnew UIWidgetLayout(*other.layout), other), layout((UIWidgetLayout*)transform), 
+		Actor(mnew UIWidgetLayout(*other.layout), other), layout(dynamic_cast<UIWidgetLayout*>(transform)),
 		mTransparency(other.mTransparency), mVisible(other.mVisible), mFullyDisabled(!other.mVisible)
 	{
 		layout->SetOwner(this);
@@ -901,7 +901,6 @@ CLASS_META(o2::UIWidget)
 	PUBLIC_FIELD(onUnfocused);
 	PUBLIC_FIELD(onShow);
 	PUBLIC_FIELD(onHide);
-	PROTECTED_FIELD();
 	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mLayers).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();

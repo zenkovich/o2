@@ -27,10 +27,10 @@ namespace Editor
 		UIDockableWindow& operator=(const UIDockableWindow& other);
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Returns is window docked
 		bool IsDocked() const;
@@ -75,10 +75,10 @@ namespace Editor
 		void Undock();
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		// Returns true if point is under drawable
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		SERIALIZABLE(UIDockableWindow);
 
@@ -108,10 +108,10 @@ namespace Editor
 
 	protected:
 		// It is called when visible was changed, undocks when hiding
-		void OnVisibleChanged();
+		void OnVisibleChanged() override;
 
 		// It is called when widget was selected, enables active tab
-		void OnFocused();
+		void OnFocused() override;
 
 		//Initialize animation for frame appearance
 		void InitializeDockFrameAppearanceAnim();

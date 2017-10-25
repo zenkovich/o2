@@ -7,6 +7,7 @@
 #include "Core/Tools/RotateTool.h"
 #include "Core/Tools/ScaleTool.h"
 #include "Core/Tools/SelectionTool.h"
+#include "Core/UIRoot.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "Dialogs/EditNameDlg.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -40,16 +41,16 @@ namespace Editor
 		mPanelRoot = mnew UIWidget();
 		mPanelRoot->AddLayer("back", mnew Sprite("ui/UI_ToolsPanel_bk.png"), Layout::BothStretch(-2, -3, -2, -2));
 
-		mPanelRoot->layout.anchorMin = Vec2F(0, 1);
-		mPanelRoot->layout.anchorMax = Vec2F(1, 1);
-		mPanelRoot->layout.offsetMin = Vec2F(0, -45);
-		mPanelRoot->layout.offsetMax = Vec2F(0, -20);
+		mPanelRoot->layout->anchorMin = Vec2F(0, 1);
+		mPanelRoot->layout->anchorMax = Vec2F(1, 1);
+		mPanelRoot->layout->offsetMin = Vec2F(0, -45);
+		mPanelRoot->layout->offsetMax = Vec2F(0, -20);
 
 		InitializePlayPanel();
 		InitializeLayoutSchemesPanel();
 		InitializeToolsPanel();
 
-		o2UI.AddWidget(mPanelRoot);
+		EditorUIRoot.AddWidget(mPanelRoot);
 	}
 
 	ToolsPanel::~ToolsPanel()
@@ -60,26 +61,26 @@ namespace Editor
 		mPlayPanel = mnew UIWidget();
 		mPlayPanel->name = "play panel";
 		mPlayPanel->AddLayer("back", mnew Sprite("ui/UI_play_panel_bk.png"), Layout::BothStretch(-7, -5, -5, -5));
-		mPlayPanel->layout = UIWidgetLayout::VerStretch(HorAlign::Left, 3, 2, 200, 10);
+		*mPlayPanel->layout = UIWidgetLayout::VerStretch(HorAlign::Left, 3, 2, 200, 10);
 		mPanelRoot->AddChild(mPlayPanel);
 
 		mPlayToggle = o2UI.CreateWidget<UIToggle>("play-stop");
-		mPlayToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(5, 1));
+		*mPlayToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(5, 1));
 		mPlayPanel->AddChild(mPlayToggle);
 
 		mPauseToggle = o2UI.CreateWidget<UIToggle>("pause");
-		mPauseToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(22, 1));
+		*mPauseToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(22, 1));
 		mPauseToggle->shortcut = ShortcutKeys(VK_F11);
 		mPlayPanel->AddChild(mPauseToggle);
 
 		mStepButton = o2UI.CreateWidget<UIButton>("step");
-		mStepButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(39, 1));
+		*mStepButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(39, 1));
 		mStepButton->shortcut = ShortcutKeys(VK_F10);
 		mPlayPanel->AddChild(mStepButton);
 
 		mDevicesList = o2UI.CreateDropdown("backless");
 		mDevicesList->name = "devices list";
-		mDevicesList->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(115, 20), Vec2F(-3, 1));
+		*mDevicesList->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(115, 20), Vec2F(-3, 1));
 		mPlayPanel->AddChild(mDevicesList);
 
 		mDevicesList->AddItems({ "iPhone", "Editor", "Simulator" });
@@ -88,7 +89,7 @@ namespace Editor
 		Animation playPanelPlayStateAnim;
 		playPanelPlayStateAnim.SetTarget(mPlayPanel);
 
-		*playPanelPlayStateAnim.AddAnimationValue(&mPlayPanel->layout.offsetRight) =
+		*playPanelPlayStateAnim.AddAnimationValue(&mPlayPanel->layout->offsetRight) =
 			AnimatedValue<float>::EaseInOut(149.0f, 183.0f, 0.3f);
 
 		auto visiblePauseBtnAnim = playPanelPlayStateAnim.AddAnimationValue(&mPauseToggle->visible);
@@ -113,7 +114,7 @@ namespace Editor
 	void ToolsPanel::InitializeLayoutSchemesPanel()
 	{
 		mLayoutSchemesList = o2UI.CreateDropdown("round");
-		mLayoutSchemesList->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 3, 2, 150, 10);
+		*mLayoutSchemesList->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 3, 2, 150, 10);
 		mPanelRoot->AddChild(mLayoutSchemesList);
 		UpdateWndLayoutSchemas();
 		mLayoutSchemesList->onSelectedText = Func(this, &ToolsPanel::OnSchemeSelected);
@@ -124,7 +125,7 @@ namespace Editor
 		mEditToolsPanel = mnew UIHorizontalLayout();
 		mEditToolsPanel->name = "edit tools";
 		mEditToolsPanel->AddLayer("back", mnew Sprite("ui/UI_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
-		mEditToolsPanel->layout = UIWidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
+		*mEditToolsPanel->layout = UIWidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
 		mEditToolsPanel->expandHeight = true;
 		mEditToolsPanel->expandWidth = false;
 		mEditToolsPanel->fitByChildren = true;

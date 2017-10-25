@@ -8,6 +8,7 @@
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
+#include "UI/WidgetLayout.h"
 
 namespace Editor
 {
@@ -20,7 +21,7 @@ namespace Editor
 		mDataView->expandWidth = true;
 		mDataView->fitByChildren = true;
 		mDataView->baseCorner = BaseCorner::RightTop;
-		mDataView->layout = UIWidgetLayout::BothStretch();
+		*mDataView->layout = UIWidgetLayout::BothStretch();
 
 		mSpoiler = mnew UISpoiler();
 		mSpoiler->name = "spoiler";
@@ -28,37 +29,37 @@ namespace Editor
 
 		UIWidget* componentHead = mnew UIWidget();
 		componentHead->name = "head";
-		componentHead->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 18);
-		componentHead->layout.minHeight = 18;
+		*componentHead->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 18);
+		componentHead->layout->minHeight = 18;
 		componentHead->AddLayer("back", mnew Sprite("ui/UI2_component_head.png"),
 								Layout::BothStretch(-2, -2, -2, -2));
 		mDataView->AddChild(componentHead);
 
 		auto separatorImg = o2UI.CreateImage("ui/UI_Separator.png");
-		separatorImg->layout = UIWidgetLayout::HorStretch(VerAlign::Top, -1, -1, 5, -2);
+		*separatorImg->layout = UIWidgetLayout::HorStretch(VerAlign::Top, -1, -1, 5, -2);
 		componentHead->AddChild(separatorImg);
 
 		mExpandBtn = o2UI.CreateWidget<UIButton>("expand");
-		mExpandBtn->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(15, 15), Vec2F(0, 0));
+		*mExpandBtn->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(15, 15), Vec2F(0, 0));
 		mExpandBtn->onClick = [&]() { if (mSpoiler->IsExpanded()) Collapse(); else Expand(); };
 		componentHead->AddChild(mExpandBtn);
 		mExpandBtn->SetState("expanded", true);
 
 		auto icon = o2UI.CreateImage("ui/UI2_big_file_icon.png");
-		icon->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(12, 0));
+		*icon->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(12, 0));
 		componentHead->AddChild(icon);
 
 		mNameCaption = o2UI.CreateLabel("Unknown");
-		mNameCaption->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 30, 30, 15, 0);
+		*mNameCaption->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 30, 30, 15, 0);
 		mNameCaption->horAlign = HorAlign::Left;
 		componentHead->AddChild(mNameCaption);
 
 		mSaveBtn = o2UI.CreateWidget<UIButton>("component save");
-		mSaveBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-15, 0));
+		*mSaveBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-15, 0));
 		componentHead->AddChild(mSaveBtn);
 
 		mOptionsBtn = o2UI.CreateWidget<UIButton>("component options");
-		mOptionsBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
+		*mOptionsBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
 		componentHead->AddChild(mOptionsBtn);
 
 		mPropertiesLayout = mnew UIVerticalLayout();
@@ -69,7 +70,7 @@ namespace Editor
 		mPropertiesLayout->expandWidth = true;
 		mPropertiesLayout->fitByChildren = true;
 		mPropertiesLayout->baseCorner = BaseCorner::Top;
-		mPropertiesLayout->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 0);
+		*mPropertiesLayout->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 0);
 		mSpoiler->AddChild(mPropertiesLayout);
 
 		mDataView->AddChild(mSpoiler);

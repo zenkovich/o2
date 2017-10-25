@@ -823,6 +823,14 @@ void CppSyntaxParser::ParseUsing(SyntaxSection& section, int& caret,
 	int begin = caret;
 	caret += (int)strlen("using");
 
+	int tmpCaret = caret;
+	string allWord = ReadWord(section.mData, tmpCaret, ";");
+	if (allWord.find(':') != string::npos)
+	{
+		caret = tmpCaret + 1;
+		return;
+	}
+
 	ReadWord(section.mData, caret);
 	string name = Trim(ReadWord(section.mData, caret), " \r\n;");
 

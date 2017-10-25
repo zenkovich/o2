@@ -28,7 +28,7 @@ namespace Editor
 		~AssetsPropertiesViewer();
 
 		// Returns viewing object type
-		const Type* GetViewingObjectType() const;
+		const Type* GetViewingObjectType() const override;
 
 		void AddAssetViewer(IAssetPropertiesViewer* viewer);
 

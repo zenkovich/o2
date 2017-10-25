@@ -3,13 +3,13 @@
 #include "Events/ApplicationEventsListener.h"
 #include "Events/CursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
+#include "Events/ShortcutKeysListener.h"
 #include "Render/Render.h"
 #include "UI/Widget.h"
+#include "UI/WidgetLayout.h"
 #include "Utils/Debug.h"
 #include "Utils/DragAndDrop.h"
 #include "Utils/Time.h"
-
-#include "Events/ShortcutKeysListener.h"
 
 namespace o2
 {
@@ -103,7 +103,7 @@ namespace o2
 				if (auto widget = dynamic_cast<UIWidget*>(listener))
 				{
 					name = widget->name;
-					o2Debug.DrawRect(widget->layout.GetAbsoluteRect(), Color4::Red());
+					o2Debug.DrawRect(widget->layout->GetWorldRect(), Color4::Red());
 				}
 
 				o2Debug.DrawText(Vec2F(-o2Render.GetResolution().x*0.5f, o2Render.GetResolution().y*0.5f - (float)line), name);

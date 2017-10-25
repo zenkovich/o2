@@ -8,10 +8,8 @@ namespace o2
 	// ------------------
 	// Drawable component
 	// ------------------
-	class DrawableComponent: public Component, public SceneDrawable
+	class DrawableComponent: public Component, virtual public SceneDrawable
 	{
-		using Component::mOwner;
-
 	public:
 		// Default constructor. Registers in scene as drawable object
 		DrawableComponent();
@@ -28,6 +26,8 @@ namespace o2
 		SERIALIZABLE(DrawableComponent);
 
 	protected:
+		using Component::mOwner;
+
 		// Updates component enable
 		void UpdateEnabled();
 

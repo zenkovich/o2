@@ -318,7 +318,7 @@ namespace o2
 		void Select(SelectableDragableObject* object) override;
 
 		// Selects object
-		void Select(SelectableDragableObject* object, bool sendOnSelectionChanged) override;
+		void Select(SelectableDragableObject* object, bool sendOnSelectionChanged);
 
 		// Deselects object
 		void Deselect(SelectableDragableObject* object) override;

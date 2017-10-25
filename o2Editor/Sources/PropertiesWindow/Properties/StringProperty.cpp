@@ -4,6 +4,9 @@
 #include "UI/Button.h"
 #include "UI/EditBox.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -14,14 +17,14 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("singleline edit property");
 
-		mEditBox = mPropertyWidget->FindChild<UIEditBox>();
+		mEditBox = mPropertyWidget->GetChildByType<UIEditBox>();
 		if (!mEditBox)
 			mEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget);
 
 		mEditBox->onChangeCompleted = THIS_FUNC(OnEdited);
 		mEditBox->text = "--";
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 	}

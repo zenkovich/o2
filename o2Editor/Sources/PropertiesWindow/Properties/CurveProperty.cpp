@@ -9,6 +9,9 @@
 #include "UI/EditBox.h"
 #include "UI/Image.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -19,15 +22,15 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("color property");
 
-		mEditBox = mPropertyWidget->GetChild("box");
-		mEditBox->layout.minHeight = 10;
+		mEditBox = mPropertyWidget->GetChildWidget("box");
+		mEditBox->layout->minHeight = 10;
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 
 		mPreviewImage = mnew UICurvePreview();
-		mPreviewImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
+		*mPreviewImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
 		mPreviewImage->SetCurve(&mCommonValue);
 		mEditBox->AddChild(mPreviewImage);
 

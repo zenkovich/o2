@@ -21,6 +21,7 @@ namespace Editor
 	class IAction;
 	class MenuPanel;
 	class ToolsPanel;
+	class UIRoot;
 	class WindowsManager;
 
 	// ------------------
@@ -81,6 +82,7 @@ namespace Editor
 		Sprite*            mBackground;     // Background sprite
 		Sprite*            mBackSign;       // Background o2 signature
 
+		UIRoot*            mUIRoot;         // Root editor UI
 		WindowsManager*    mWindowsManager; // Windows manager
 		EditorConfig*      mConfig;         // Application configuration
 		ToolsPanel*        mToolsPanel;     // Tools panel

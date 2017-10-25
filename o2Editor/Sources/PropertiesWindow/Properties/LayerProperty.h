@@ -2,6 +2,7 @@
 
 #include "PropertiesWindow/Properties/IPropertyField.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneLayer.h"
 
 namespace o2
 {
@@ -25,40 +26,40 @@ namespace Editor
 		~LayerProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
 
 		// Updates and checks value
-		void Refresh();
+		void Refresh() override;
 
 		// Reverts value to prototype value
-		void Revert();
+		void Revert() override;
 
 		// Returns root widget
-		UIWidget* GetWidget() const;
+		UIWidget* GetWidget() const override;
 
 		// Returns value
-		Scene::Layer* GetCommonValue() const;
+		SceneLayer* GetCommonValue() const;
 
 		// Returns is values different
 		bool IsValuesDifferent() const;
 
 		// Sets value
-		void SetValue(Scene::Layer* value);
+		void SetValue(SceneLayer* value);
 
 		// Sets value as unknown
 		void SetUnknownValue();
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const;
+		const Type* GetFieldType() const override;
 
 		IOBJECT(LayerProperty);
 
 	protected:
-		Function<void(void*, Scene::Layer*)> mAssignFunc; // Value assign function
-		Function<Scene::Layer*(void*)>       mGetFunc;    // Get value function
+		Function<void(void*, SceneLayer*)> mAssignFunc; // Value assign function
+		Function<SceneLayer*(void*)>       mGetFunc;    // Get value function
 
 		TargetsVec     mValuesPointers;           // Fields' pointers
-		Scene::Layer*  mCommonValue = nullptr;    // Common field value (if not different)
+		SceneLayer*    mCommonValue = nullptr;    // Common field value (if not different)
 		bool           mValuesDifferent = true;   // Are values different
 
 		UIWidget*      mPropertyWidget = nullptr; // Property widget
@@ -68,10 +69,10 @@ namespace Editor
 
 	protected:
 		// Sets common value
-		void SetCommonValue(Scene::Layer* value);
+		void SetCommonValue(SceneLayer* value);
 
 		// Checks value for reverting to prototype
-		void CheckRevertableState();
+		void CheckRevertableState() override;
 
 		// Updates layer list to actual list of layers on scene
 		void UpdateLayersList();
@@ -80,7 +81,7 @@ namespace Editor
 		void SelectLayer(const WString& name);
 
 		// Sets value, checks value changed, calls onChangeCompleted
-		void SetValueByUser(Scene::Layer* value);
+		void SetValueByUser(SceneLayer* value);
 
 		// Checks that value was changed and calls onChangeCompleted
 		void CheckValueChangeCompleted();

@@ -8,7 +8,7 @@ namespace o2
 	UIWidgetLayout::UIWidgetLayout():
 		ActorTransform(mnew Data())
 	{
-		mData = (Data*)ActorTransform::mData;
+		mData = static_cast<Data*>(ActorTransform::mData);
 		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
 
 		InitializeProperties();
@@ -616,7 +616,9 @@ namespace o2
 	{}
 
 	void UIWidgetLayout::InitializeProperties()
-	{
+	{ 
+		ActorTransform::InitializeProperties();
+
 		INITIALIZE_PROPERTY(UIWidgetLayout, anchorMin, SetAnchorMin, GetAnchorMin);
 		INITIALIZE_PROPERTY(UIWidgetLayout, anchorMax, SetAnchorMax, GetAnchorMax);
 		INITIALIZE_PROPERTY(UIWidgetLayout, offsetMin, SetOffsetMin, GetOffsetMin);

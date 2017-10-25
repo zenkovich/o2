@@ -53,13 +53,13 @@ namespace Editor
 		~SceneEditScreen();
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Returns is listener scrollable
-		bool IsScrollable() const;
+		bool IsScrollable() const override;
 
 		// Transforms point from screen space to scene space
 		Vec2F ScreenToScenePoint(const Vec2F& point);
@@ -108,7 +108,7 @@ namespace Editor
 		void OnSceneChanged();
 
 		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		IOBJECT(SceneEditScreen);
 
@@ -135,55 +135,55 @@ namespace Editor
 		bool IsHandleWorking(const Input::Cursor& cursor) const;
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor);
+		void OnCursorMoved(const Input::Cursor& cursor) override;
 
 		// It is called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor);
+		void OnCursorEnter(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was pressed on this
-		void OnCursorRightMousePressed(const Input::Cursor& cursor);
+		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button stay down on this
-		void OnCursorRightMouseStayDown(const Input::Cursor& cursor);
+		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
 		// It is called when middle mouse button was pressed on this
-		void OnCursorMiddleMousePressed(const Input::Cursor& cursor);
+		void OnCursorMiddleMousePressed(const Input::Cursor& cursor) override;
 
 		// It is called when middle mouse button stay down on this
-		void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor);
+		void OnCursorMiddleMouseStayDown(const Input::Cursor& cursor) override;
 
 		// It is called when middle mouse button was released (only when middle mouse button pressed this at previous time)
-		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor);
+		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
 
 		// It is called when scrolling
-		void OnScrolled(float scroll);
+		void OnScrolled(float scroll) override;
 
 		// It is called when key was pressed
-		void OnKeyPressed(const Input::Key& key);
+		void OnKeyPressed(const Input::Key& key) override;
 
 		// It is called when key was released
-		void OnKeyReleased(const Input::Key& key);
+		void OnKeyReleased(const Input::Key& key) override;
 
 		// It is called when key stay down during frame
-		void OnKeyStayDown(const Input::Key& key);
+		void OnKeyStayDown(const Input::Key& key) override;
 
 		// It is called when changed selected actors from this
 		void OnActorsSelectedFromThis();
@@ -222,16 +222,16 @@ namespace Editor
 		void SelectActorWithoutAction(Actor* actor, bool additive = true);
 
 		// It is called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group);
+		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group);
+		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
+		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group);
+		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
 		friend class DeleteActorsAction;
 		friend class SelectActorsAction;

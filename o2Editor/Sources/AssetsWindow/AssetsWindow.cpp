@@ -5,22 +5,24 @@
 #include "Assets/AnimationAsset.h"
 #include "Assets/Assets.h"
 #include "Assets/AssetsTree.h"
+#include "Assets/DataAsset.h"
 #include "Assets/FolderAsset.h"
 #include "Assets/ImageAsset.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/FoldersTree.h"
 #include "AssetsWindow/UIAssetIcon.h"
+#include "Core/EditorConfig.h"
 #include "UI/Button.h"
 #include "UI/EditBox.h"
 #include "UI/GridLayout.h"
 #include "UI/Label.h"
 #include "UI/Tree.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
 #include "Utils/Clipboard.h"
 #include "Utils/Delegates.h"
 #include "Utils/FileSystem/FileSystem.h"
-#include "Core/EditorConfig.h"
-#include "Assets/DataAsset.h"
 
 DECLARE_SINGLETON(Editor::AssetsWindow);
 
@@ -69,16 +71,16 @@ namespace Editor
 		if (mSeparatorCoef < FLT_EPSILON)
 			mSeparatorCoef = 0.5f;
 
-		mFoldersTree->layout.anchorRight = mSeparatorCoef;
-		mAssetsGridScroll->layout.anchorLeft = mSeparatorCoef;
+		mFoldersTree->layout->anchorRight = mSeparatorCoef;
+		mAssetsGridScroll->layout->anchorLeft = mSeparatorCoef;
 
 		mSeparatorHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float anchorDelta = cursor.delta.x / mWindow->layout.width;
-			mFoldersTree->layout.anchorRight += anchorDelta;
-			mAssetsGridScroll->layout.anchorLeft += anchorDelta;
+			float anchorDelta = cursor.delta.x / mWindow->layout->width;
+			mFoldersTree->layout->anchorRight += anchorDelta;
+			mAssetsGridScroll->layout->anchorLeft += anchorDelta;
 
 			auto& userData = o2EditorConfig.GetProjectUserData();
-			userData["layout/assetsWindow/separator_coef"].SetValue(mFoldersTree->layout.GetAnchorRight());
+			userData["layout/assetsWindow/separator_coef"].SetValue(mFoldersTree->layout->GetAnchorRight());
 		};
 
 		mAssetsGridScroll->onDraw += [&]() { mSeparatorHandle.OnDrawn(); };
@@ -96,8 +98,8 @@ namespace Editor
 			AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
 
 		mFoldersTreeShowAnim.onUpdate = [&](float dt) {
-			mFoldersTree->layout.anchorRight = mSeparatorCoef*mFoldersTreeShowCoef;
-			mAssetsGridScroll->layout.anchorLeft = mSeparatorCoef*mFoldersTreeShowCoef;
+			mFoldersTree->layout->anchorRight = mSeparatorCoef*mFoldersTreeShowCoef;
+			mAssetsGridScroll->layout->anchorLeft = mSeparatorCoef*mFoldersTreeShowCoef;
 
 			float disableCoef = 0.2f;
 			if (mFoldersTreeShowCoef < disableCoef && mFoldersTree->IsVisible())
@@ -111,7 +113,7 @@ namespace Editor
 	void AssetsWindow::InitializeFoldersTree()
 	{
 		mFoldersTree = mnew UIAssetsFoldersTree();
-		mFoldersTree->layout = UIWidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
+		*mFoldersTree->layout = UIWidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
 
 		auto separatorLayer = mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI_Ver_separator.png"),
 													 Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
@@ -120,7 +122,7 @@ namespace Editor
 
 		// assets scroll & grid
 		mAssetsGridScroll = o2UI.CreateWidget<UIAssetsIconsScrollArea>();
-		mAssetsGridScroll->layout = UIWidgetLayout(0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
+		*mAssetsGridScroll->layout = UIWidgetLayout(0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
 		mWindow->AddChild(mAssetsGridScroll);
 
 		mAssetsGridScroll->onAssetsSelected = [&](const Vector<String>& assetsPaths) {
@@ -136,15 +138,15 @@ namespace Editor
 		UIWidget* downPanel = mnew UIWidget();
 		downPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_down_back.png"),
 							Layout::BothStretch(-4, -5, -4, -5));
-		downPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
+		*downPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
 
 		auto showTreeBtn = o2UI.CreateWidget<UIButton>("menu tree");
-		showTreeBtn->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0));
+		*showTreeBtn->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0));
 		showTreeBtn->onClick += THIS_FUNC(OnShowTreePressed);
 		downPanel->AddChild(showTreeBtn);
 
 		mSelectedAssetPathLabel = o2UI.CreateWidget<UILabel>();
-		mSelectedAssetPathLabel->layout = UIWidgetLayout::BothStretch(20, 0, 0, 0);
+		*mSelectedAssetPathLabel->layout = UIWidgetLayout::BothStretch(20, 0, 0, 0);
 		mSelectedAssetPathLabel->text = "Assets/Folder/Image.png";
 		mSelectedAssetPathLabel->horOverflow = UILabel::HorOverflow::Dots;
 		mSelectedAssetPathLabel->horAlign = HorAlign::Left;
@@ -157,20 +159,20 @@ namespace Editor
 	{
 		UIWidget* upPanel = mnew UIWidget();
 		upPanel->name = "up panel";
-		upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		*upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
 		upPanel->AddLayer("back", mnew Sprite("ui/UI_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		UIButton* searchButton = o2UI.CreateWidget<UIButton>("search");
-		searchButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
+		*searchButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
 		upPanel->AddChild(searchButton);
 
 		mFilterButton = o2UI.CreateWidget<UIButton>("menu filter");
-		mFilterButton->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
+		*mFilterButton->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
 		mFilterButton->onClick += THIS_FUNC(OnMenuFilterPressed);
 		upPanel->AddChild(mFilterButton);
 
 		mSearchEditBox = o2UI.CreateWidget<UIEditBox>("backless");
-		mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
+		*mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
 		mSearchEditBox->onChanged += THIS_FUNC(OnSearchEdited);
 		upPanel->AddChild(mSearchEditBox);
 

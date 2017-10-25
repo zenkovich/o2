@@ -4,7 +4,8 @@
 #include "Core/Dialogs/CurveEditorDlg.h"
 #include "Core/Dialogs/EditNameDlg.h"
 #include "Core/EditorConfig.h"
-#include "Core/UIManager/EditorUIManager.h"
+#include "Core/UIRoot.h"
+#include "Core/UIStyle/EditorUIStyle.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
 #include "Core/WindowsSystem/UIDockWindowPlace.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
@@ -18,7 +19,7 @@ namespace Editor
 	{
 		if (mNeedRebuildWndStyle)
 		{
-			EditorUIManagerBuilder builder;
+			EditorUIStyleBuilder builder;
 			builder.RebuildEditorUIManager();
 		}
 
@@ -64,9 +65,9 @@ namespace Editor
 	{
 		mMainDockPlace = mnew UIDockWindowPlace();
 		mMainDockPlace->name = "main dock";
-		mMainDockPlace->layout = UIWidgetLayout::BothStretch(0, 0, 0, 48);
+		*mMainDockPlace->layout = UIWidgetLayout::BothStretch(0, 0, 0, 48);
 		mMainDockPlace->SetResizibleDir(TwoDirection::Horizontal, 0, nullptr, nullptr);
-		o2UI.AddWidget(mMainDockPlace);
+		EditorUIRoot.AddWidget(mMainDockPlace);
 	}
 
 	void WindowsManager::Update(float dt)
@@ -90,13 +91,13 @@ namespace Editor
 			hierarchy += (String)(bool)((UIDockWindowPlace*)widget)->interactable;
 			hierarchy += " ";
 			hierarchy += sideNames[(int)((UIDockWindowPlace*)widget)->GetResizibleDir()];
-			RectF rt = widget->layout.GetAbsoluteRect();
+			RectF rt = widget->layout->GetWorldRect();
 			hierarchy += (String)rt.left + " " + (String)rt.bottom + " " + (String)rt.right + " " + (String)rt.top;
 		}
 
 		hierarchy += '\n';
 
-		for (auto child : widget->GetChilds())
+		for (auto child : widget->GetChildWidgets())
 			ProcHierarchy(hierarchy, child, level + 1);
 	}
 
@@ -109,7 +110,7 @@ namespace Editor
 
 		return;
 		String hierarchy;
-		ProcHierarchy(hierarchy, o2UI.GetScreenWidget(), 0);
+		ProcHierarchy(hierarchy, EditorUIRoot.GetRootWidget(), 0);
 		o2Debug.DrawText((Vec2F)(o2Render.GetResolution().InvertedX())*0.5f, hierarchy);
 	}
 
@@ -124,10 +125,10 @@ namespace Editor
 
 		res.mainDock.RetrieveLayout(o2EditorWindows.mMainDockPlace);
 
-		for (auto widget : o2UI.GetAllWidgets())
+		for (auto widget : EditorUIRoot.GetRootWidget()->GetChildWidgets())
 		{
 			if (widget->GetType() == TypeOf(UIDockableWindow))
-				res.windows.Add(widget->name, widget->layout);
+				res.windows.Add(widget->name, *widget->layout);
 		}
 
 		return res;
@@ -150,7 +151,7 @@ namespace Editor
 			if (UIDockableWindow* dockWnd = editorWindow->mWindow)
 			{
 				editorWindow->Show();
-				dockWnd->layout = wnd.Value();
+				*dockWnd->layout = wnd.Value();
 			}
 		}
 

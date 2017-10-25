@@ -1,10 +1,13 @@
 #include "EditNameDlg.h"
 
+#include "Core/UIRoot.h"
 #include "UI/Button.h"
 #include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
 #include "UI/Window.h"
 
 DECLARE_SINGLETON(Editor::NameEditDlg);
@@ -13,12 +16,12 @@ namespace Editor
 {
 	NameEditDlg::NameEditDlg()
 	{
-		mWindow = o2UI.AddWindow("Enter name");
+		mWindow = dynamic_cast<UIWindow*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Enter name")));
 
 		InitializeControls();
 
 		mWindow->Hide(true);
-		mWindow->layout.size = Vec2F(300, 100);
+		mWindow->layout->size = Vec2F(300, 100);
 
 		mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
 		mWindow->onHide = Func(this, &NameEditDlg::OnHide);

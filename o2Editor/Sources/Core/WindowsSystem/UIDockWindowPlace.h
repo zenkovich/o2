@@ -31,10 +31,7 @@ namespace Editor
 		UIDockWindowPlace& operator=(const UIDockWindowPlace& other);
 
 		// Draws widget
-		void Draw();
-
-		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+		void Draw() override;
 
 		// Sets resizible side and configures drag handle when draggable is true
 		void SetResizibleDir(TwoDirection dir, float border,
@@ -48,6 +45,12 @@ namespace Editor
 
 		// Sets target window as active tab
 		void SetActiveTab(UIDockableWindow* window);
+
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point) override;
+
+		// Updates layout
+		void UpdateLayout(bool withChildren = true) override;
 
 		SERIALIZABLE(UIDockWindowPlace);
 
@@ -65,9 +68,6 @@ namespace Editor
 		RectF              mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 
 	protected:
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
-
 		// It is called when cursor drag handle was moved
 		void OnDragHandleMinMoved(const Vec2F& delta);
 

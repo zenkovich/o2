@@ -13,6 +13,7 @@
 #include "Scene/Actor.h"
 #include "Scene/DrawableComponent.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneLayer.h"
 #include "SceneWindow/SceneDragHandle.h"
 #include "TreeWindow/ActorsTree.h"
 #include "TreeWindow/TreeWindow.h"
@@ -143,7 +144,7 @@ namespace Editor
 	void SceneEditScreen::DrawActors()
 	{
 		for (auto layer : o2Scene.GetLayers())
-			for (auto drw : layer->GetEnabledDrawableComponents())
+			for (auto drw : layer->GetDrawables())
 				drw->Draw();
 	}
 
@@ -169,7 +170,7 @@ namespace Editor
 			Vec2F wpos = actor->transform->GetWorldPosition();
 			float sz = mActorMinimalSelectionSize*0.5f*camScale;
 			o2Render.DrawCircle(wpos, sz, color);
-			o2Render.DrawLine(wpos, wpos + actor->transform->GetUp()*sz, color);
+			o2Render.DrawLine(wpos, wpos + actor->transform->GetUpDir()*sz, color);
 		}
 		else o2Render.DrawBasis(actor->transform->GetWorldBasis(), color, color, color);
 		// 
@@ -302,7 +303,7 @@ namespace Editor
 	{
 		if (actor->GetParent())
 		{
-			return actor->GetParent()->GetChilds().Find(actor) + GetActorIdx(actor->GetParent());
+			return actor->GetParent()->GetChildren().Find(actor) + GetActorIdx(actor->GetParent());
 		}
 
 		return o2Scene.GetRootActors().Find(actor);

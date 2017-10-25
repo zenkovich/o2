@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene/Scene.h"
+#include "Scene/SceneLayer.h"
 #include "Utils/Serializable.h"
 
 namespace o2
@@ -10,7 +10,7 @@ namespace o2
 	// ---------------------------
 	// Actor's component interface
 	// ---------------------------
-	class Component: public ISerializable
+	class Component: virtual public ISerializable
 	{
 	public:
 		Getter<Actor*> actor;              // Owner actor getter

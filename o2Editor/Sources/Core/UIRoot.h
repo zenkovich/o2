@@ -11,7 +11,7 @@ namespace o2
 }
 
 // Editor UI root accessor macros
-#define o2EditorUIRoot UIRoot::Instance()
+#define EditorUIRoot UIRoot::Instance()
 
 namespace Editor
 {
@@ -22,7 +22,7 @@ namespace Editor
 	{
 	public:
 		// Adds widget to root
-		void AddWidget(UIWidget* widget);
+		UIWidget* AddWidget(UIWidget* widget);
 
 		// Removes widget from root
 		void RemoveWidget(UIWidget* widget);
@@ -51,5 +51,7 @@ namespace Editor
 
 		// It is called when application frame was resized, updates root size
 		void OnApplicationSized() override;
+
+		friend class EditorApplication;
 	};
 }

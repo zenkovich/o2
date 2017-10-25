@@ -1,5 +1,6 @@
 #include "CurveEdit.h"
 
+#include "../UIRoot.h"
 #include "Application/Application.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
@@ -11,6 +12,9 @@
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/VerticalScrollBar.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 #include "UI/Window.h"
 #include "Utils/Clipboard.h"
 
@@ -42,11 +46,11 @@ namespace Editor
 	}
 
 	UICurveEditor::UICurveEditor(const UICurveEditor& other):
-		UIFrameScrollView(other), mSelectionSprite(other.mSelectionSprite->Clone()), mTextFont(other.mTextFont)
+		UIFrameScrollView(other), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>()), mTextFont(other.mTextFont)
 	{
 		mReady = false;
 
-		mContextMenu = FindChild<UIContextMenu>();
+		mContextMenu = GetChildByType<UIContextMenu>();
 		if (mContextMenu)
 			delete mContextMenu;
 
@@ -83,7 +87,7 @@ namespace Editor
 		delete mTextTop;
 		delete mTextBottom;
 
-		mSelectionSprite = other.mSelectionSprite->Clone();
+		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
 		mTextFont        = other.mTextFont;
 
 		mMainHandleSample = other.mMainHandleSample;
@@ -196,9 +200,9 @@ namespace Editor
 
 	}
 
-	void UICurveEditor::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UICurveEditor::UpdateLayout(bool withChildren /*= true*/)
 	{
-		UIFrameScrollView::UpdateLayout(forcible, withChildren);
+		UIFrameScrollView::UpdateLayout(withChildren);
 
 		UpdateLocalScreenTransforms();
 		OnCameraTransformChanged();
@@ -322,7 +326,7 @@ namespace Editor
 
 	void UICurveEditor::InitializeEditValueWindow()
 	{
-		mEditValueWindow = o2UI.AddWindow("Edit key");
+		mEditValueWindow = dynamic_cast<UIWindow*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
 
 		auto horLayout = o2UI.CreateHorLayout();
 		horLayout->spacing = 10;
@@ -344,7 +348,7 @@ namespace Editor
 		horLayout->AddChild(valueVerLayout);
 
 		mEditValueWindow->AddChild(horLayout);
-		mEditValueWindow->layout.size = Vec2F(200, 80);
+		mEditValueWindow->layout->size = Vec2F(200, 80);
 		mEditValueWindow->Hide(true);
 	}
 
@@ -560,7 +564,7 @@ namespace Editor
 		{
 			Vec2F left = mTransformFrame.GetCurrentBasis().offs;
 			Vec2F right = mTransformFrame.GetCurrentBasis().offs + mTransformFrame.GetCurrentBasis().xv;
-			RectF rect = layout.GetAbsoluteRect();
+			RectF rect = layout->worldRect;
 
 			o2Render.DrawLine(Vec2F(right.x, rect.bottom), Vec2F(right.x, rect.top), mTransformFrame.GetFrameColor());
 			o2Render.DrawLine(Vec2F(left.x, rect.bottom), Vec2F(left.x, rect.top), mTransformFrame.GetFrameColor());
@@ -2182,7 +2186,7 @@ CLASS_META(Editor::UICurveEditor)
 	PUBLIC_FUNCTION(void, SetTextFont, const FontRef&);
 	PUBLIC_FUNCTION(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(Curve*, FindCurve, const String&);
@@ -2203,8 +2207,8 @@ CLASS_META(Editor::UICurveEditor)
 	PROTECTED_FUNCTION(void, OnCurveKeyRightSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckLeftSupportHandlePosition, CurveInfo*, KeyHandles*, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckRightSupportHandlePosition, CurveInfo*, KeyHandles*, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SmoothKey, CurveInfo*, int);
+	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);

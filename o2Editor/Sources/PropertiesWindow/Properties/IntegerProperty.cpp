@@ -5,6 +5,9 @@
 #include "UI/Button.h"
 #include "UI/EditBox.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -15,12 +18,12 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("singleline edit property");
 
-		mEditBox = mPropertyWidget->FindChild<UIEditBox>();
+		mEditBox = mPropertyWidget->GetChildByType<UIEditBox>();
 		mEditBox->onChangeCompleted = THIS_FUNC(OnEdited);
 		mEditBox->text = "--";
 		mEditBox->SetFilterInteger();
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 

@@ -235,12 +235,12 @@ namespace o2
 
 	void UICustomList::SortItems(const Function<bool(UIWidget*, UIWidget*)>& sortFunc)
 	{
-		mVerLayout->mChildren.Sort(sortFunc);
+		mVerLayout->mChildWidgets.Sort(sortFunc);
 	}
 
 	int UICustomList::GetItemsCount() const
 	{
-		return mVerLayout->GetChildren().Count();
+		return mVerLayout->GetChildWidgets().Count();
 	}
 
 	void UICustomList::SelectItem(UIWidget* item)

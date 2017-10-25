@@ -83,7 +83,6 @@ namespace o2
 
 		o2Debug.InitializeFont();
 		o2UI.TryLoadStyle();
-		o2UI.UpdateRootSize();
 
 		mReady = true;
 	}
@@ -156,8 +155,6 @@ namespace o2
 		mScene->Update(dt);
 
 		OnUpdate(dt);
-
-		mUIManager->Update(dt);
 
 		mRender->Begin();
 		OnDraw();

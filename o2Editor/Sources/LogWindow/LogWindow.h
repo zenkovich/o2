@@ -33,7 +33,7 @@ namespace Editor
 		typedef Vector<LogMessage> MessagesVec;
 
 		// Updates window logic
-		void Update(float dt);
+		void Update(float dt) override;
 
 	protected:
 		UILongList* mList;
@@ -61,7 +61,6 @@ namespace Editor
 		~LogWindow();
 
 	protected:
-
 		// Initializes window
 		void InitializeWindow();
 

@@ -250,6 +250,9 @@ namespace o2
 		// Add child actor
 		Actor* AddChild(Actor* actor);
 
+		// Add children actors
+		Vector<Actor*> AddChildren(Vector<Actor*> actors);
+
 		// Add child actor
 		Actor* AddChild(Actor* actor, int index);
 
@@ -267,7 +270,7 @@ namespace o2
 		void RemoveChild(Actor* actor, bool release = true);
 
 		// Removes and destroys all childs
-		void RemoveAllChildren();
+		void RemoveAllChildren(bool release = true);
 
 		// And new component
 		template<typename _type>
@@ -331,8 +334,6 @@ namespace o2
 		// Searches actor with id in this and this children
 		Actor* FindActorById(UInt64 id);
 
-		SERIALIZABLE(Actor);
-
 #if IS_EDITOR
 		Function<void()>       onChanged;               // Something in actor change event
 		Function<void(Actor*)> onParentChanged;         // Actor reparent event
@@ -352,6 +353,8 @@ namespace o2
 		// It is called when child changed
 		void OnChildsChanged();
 #endif
+
+		SERIALIZABLE(Actor);
 
 	protected:
 		typedef Vector<ActorRef*> ActorRefsVec;

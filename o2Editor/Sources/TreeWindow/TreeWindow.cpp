@@ -21,6 +21,8 @@
 #include "UI/Toggle.h"
 #include "UI/Tree.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 #include "Utils/Clipboard.h"
 
 DECLARE_SINGLETON(Editor::TreeWindow);
@@ -62,21 +64,21 @@ namespace Editor
 		// up panel
 		UIWidget* upPanel = mnew UIWidget();
 		upPanel->name = "up panel";
-		upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		*upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
 		upPanel->AddLayer("back", mnew Sprite("ui/UI_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		UIButton* searchButton = o2UI.CreateWidget<UIButton>("search");
-		searchButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
+		*searchButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
 		searchButton->onClick += THIS_FUNC(OnSearchPressed);
 		upPanel->AddChild(searchButton);
 
 		mListTreeToggle = o2UI.CreateWidget<UIToggle>("list-tree");
-		mListTreeToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
+		*mListTreeToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
 		mListTreeToggle->onToggle += THIS_FUNC(OnListTreeToggled);
 		upPanel->AddChild(mListTreeToggle);
 
 		mSearchEditBox = o2UI.CreateWidget<UIEditBox>("backless");
-		mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
+		*mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
 		mSearchEditBox->onChanged += THIS_FUNC(OnSearchEdited);
 		upPanel->AddChild(mSearchEditBox);
 
@@ -84,7 +86,7 @@ namespace Editor
 
 		// actors tree
 		mActorsTree = o2UI.CreateWidget<UIActorsTree>("standard");
-		mActorsTree->layout = UIWidgetLayout::BothStretch(2, 0, 0, 18);
+		*mActorsTree->layout = UIWidgetLayout::BothStretch(2, 0, 0, 18);
 
 		mActorsTree->onNodeRightButtonClicked = THIS_FUNC(OnTreeRBPressed);
 
@@ -193,7 +195,7 @@ namespace Editor
 		if (actor->GetName().CountOf(searchStr) > 0)
 			mSearchActors.Add(actor);
 
-		for (auto child : actor->GetChilds())
+		for (auto child : actor->GetChildren())
 			SearchActorsRecursive(child, searchStr);
 	}
 
@@ -214,7 +216,7 @@ namespace Editor
 			Actor* parentActor = obj;
 			parentActor->AddChild(newActor);
 
-			auto parentChilds = parentActor->GetChilds();
+			auto parentChilds = parentActor->GetChildren();
 			auto action = mnew CreateActorsAction({ newActor }, parentActor,
 												  parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
 			o2EditorApplication.DoneAction(action);
@@ -289,7 +291,7 @@ namespace Editor
 		auto selectedActors = mActorsTree->GetSelectedActors();
 
 		Actor* parent = selectedActors.Count() > 0 ? selectedActors.Last() : nullptr;
-		auto parentChilds = parent ? parent->GetChilds() : o2Scene.GetRootActors();
+		auto parentChilds = parent ? parent->GetChildren() : o2Scene.GetRootActors();
 		Actor* prevActor = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
 
 		WString clipboardData = Clipboard::GetText();
@@ -300,7 +302,7 @@ namespace Editor
 		data.GetValueRaw(actors);
 
 		for (auto actor : actors)
-			actor->GenNewId();
+			actor->GenerateNewID();
 
 		for (auto actor : actors)
 			actor->SetParent(parent);
@@ -341,7 +343,7 @@ namespace Editor
 
 		for (auto actor : selectedActors)
 		{
-			Actor* copy = actor->Clone();
+			Actor* copy = actor->CloneAs<Actor>();
 			copy->SetParent(actor->GetParent());
 		}
 

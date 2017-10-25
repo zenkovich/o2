@@ -8,6 +8,9 @@
 #include "UI/Button.h"
 #include "UI/DropDown.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -19,14 +22,14 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("enum property");
 
-		mDropDown = mPropertyWidget->FindChild<UIDropDown>();
+		mDropDown = mPropertyWidget->GetChildByType<UIDropDown>();
 		if (!mDropDown)
 			mDropDown = dynamic_cast<UIDropDown*>(mPropertyWidget);
 
 		mDropDown->onSelectedText = THIS_FUNC(SelectLayer);
 		mDropDown->SetState("undefined", true);
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 	}
@@ -40,13 +43,13 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, Scene::Layer* value) { *((Property<Scene::Layer*>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<Scene::Layer*>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, SceneLayer* value) { *((Property<SceneLayer*>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((Property<SceneLayer*>*)(ptr))->Get(); };
 		}
 		else
 		{
-			mAssignFunc = [](void* ptr, Scene::Layer* value) { *((Scene::Layer**)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((Scene::Layer**)(ptr)); };
+			mAssignFunc = [](void* ptr, SceneLayer* value) { *((SceneLayer**)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return *((SceneLayer**)(ptr)); };
 		}
 
 		mValuesPointers = targets;
@@ -103,7 +106,7 @@ namespace Editor
 		return mPropertyWidget;
 	}
 
-	Scene::Layer* LayerProperty::GetCommonValue() const
+	SceneLayer* LayerProperty::GetCommonValue() const
 	{
 		return mCommonValue;
 	}
@@ -113,7 +116,7 @@ namespace Editor
 		return mValuesDifferent;
 	}
 
-	void LayerProperty::SetValue(Scene::Layer* value)
+	void LayerProperty::SetValue(SceneLayer* value)
 	{
 		for (auto ptr : mValuesPointers)
 			mAssignFunc(ptr.first, value);
@@ -137,10 +140,10 @@ namespace Editor
 
 	const Type* LayerProperty::GetFieldType() const
 	{
-		return &TypeOf(Scene::Layer*);
+		return &TypeOf(SceneLayer*);
 	}
 
-	void LayerProperty::SetCommonValue(Scene::Layer* value)
+	void LayerProperty::SetCommonValue(SceneLayer* value)
 	{
 		mCommonValue = value;
 		mValuesDifferent = false;
@@ -184,7 +187,7 @@ namespace Editor
 		auto dropdownLayers = mDropDown->GetAllItemsText();
 		for (auto itemName : dropdownLayers)
 		{
-			if (!layers.ContainsPred([&](Scene::Layer* x) { return x->name == itemName; }))
+			if (!layers.ContainsPred([&](SceneLayer* x) { return x->name == itemName; }))
 				mDropDown->RemoveItem(itemName);
 		}
 
@@ -203,7 +206,7 @@ namespace Editor
 		SetValueByUser(o2Scene.GetLayer(name));
 	}
 
-	void LayerProperty::SetValueByUser(Scene::Layer* value)
+	void LayerProperty::SetValueByUser(SceneLayer* value)
 	{
 		StoreValues(mBeforeChangeValues);
 		SetValue(value);
@@ -249,16 +252,16 @@ CLASS_META(Editor::LayerProperty)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
-	PUBLIC_FUNCTION(Scene::Layer*, GetCommonValue);
+	PUBLIC_FUNCTION(SceneLayer*, GetCommonValue);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
-	PUBLIC_FUNCTION(void, SetValue, Scene::Layer*);
+	PUBLIC_FUNCTION(void, SetValue, SceneLayer*);
 	PUBLIC_FUNCTION(void, SetUnknownValue);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);
-	PROTECTED_FUNCTION(void, SetCommonValue, Scene::Layer*);
+	PROTECTED_FUNCTION(void, SetCommonValue, SceneLayer*);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, UpdateLayersList);
 	PROTECTED_FUNCTION(void, SelectLayer, const WString&);
-	PROTECTED_FUNCTION(void, SetValueByUser, Scene::Layer*);
+	PROTECTED_FUNCTION(void, SetValueByUser, SceneLayer*);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 }

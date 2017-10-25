@@ -6,6 +6,9 @@
 #include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -21,7 +24,7 @@ namespace Editor
 		mRightEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/right edit"));
 		mTopEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget->GetChild("layout/top edit"));
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 

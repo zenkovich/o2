@@ -33,16 +33,16 @@ namespace Editor
 		~CurveProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
 
 		// Updates and checks value
-		void Refresh();
+		void Refresh() override;
 
 		// Reverts value to prototype value
-		void Revert();
+		void Revert() override;
 
 		// Returns root widget
-		UIWidget* GetWidget() const;
+		UIWidget* GetWidget() const override;
 
 		// Returns value
 		const Curve& GetCommonValue() const;
@@ -57,7 +57,7 @@ namespace Editor
 		void SetUnknownValue(const Curve& defaultValue = Curve());
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const;
+		const Type* GetFieldType() const override;
 
 		IOBJECT(CurveProperty);
 
@@ -83,7 +83,7 @@ namespace Editor
 		void SetCommonValue(const Curve& value);
 
 		// Checks value for reverting to prototype
-		void CheckRevertableState();
+		void CheckRevertableState() override;
 
 		// It is called when box pressed and shows color picking dialog
 		void OnClicked();

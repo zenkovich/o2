@@ -3,9 +3,12 @@
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "UI/Button.h"
 #include "UI/Label.h"
+#include "UI/Spoiler.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
-#include "UI/Spoiler.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 using namespace o2;
 
@@ -20,19 +23,19 @@ namespace Editor
 		mLayout->expandWidth = true;
 		mLayout->fitByChildren = true;
 		mLayout->baseCorner = BaseCorner::RightTop;
-		mLayout->layout = UIWidgetLayout::BothStretch();
+		*mLayout->layout = UIWidgetLayout::BothStretch();
 
 		auto header = mnew UIWidget();
-		header->layout = UIWidgetLayout::BothStretch();
-		header->layout.minHeight = 20;
+		*header->layout = UIWidgetLayout::BothStretch();
+		header->layout->minHeight = 20;
 
 		mExpandButton = o2UI.CreateWidget<UIButton>("expand");
-		mExpandButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-7, 0));
+		*mExpandButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-7, 0));
 		mExpandButton->onClick = [&]() { SetExpanded(!IsExpanded()); };
 		header->AddChild(mExpandButton, false);
 
 		mNameLabel = o2UI.CreateWidget<UILabel>();
-		mNameLabel->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 10, 0, 20, 0);
+		*mNameLabel->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 10, 0, 20, 0);
 		mNameLabel->horAlign = HorAlign::Left;
 		header->AddChild(mNameLabel, false);
 
@@ -44,7 +47,7 @@ namespace Editor
 		mPropertiesLayout->expandWidth = true;
 		mPropertiesLayout->fitByChildren = true;
 		mPropertiesLayout->baseCorner = BaseCorner::RightTop;
-		mPropertiesLayout->layout = UIWidgetLayout::BothStretch();
+		*mPropertiesLayout->layout = UIWidgetLayout::BothStretch();
 		mSpoiler->AddChild(mPropertiesLayout);
 
 		mLayout->AddChild(header, false);

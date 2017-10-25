@@ -6,6 +6,9 @@
 #include "UI/EditBox.h"
 #include "UI/HorizontalLayout.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -16,7 +19,7 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("vector2 property");
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 

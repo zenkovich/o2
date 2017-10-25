@@ -5,8 +5,13 @@
 #include "Core/WindowsSystem/UIDockWindowPlace.h"
 #include "Events/CursorEventsListener.h"
 #include "Events/EventSystem.h"
-#include "UI/UIManager.h"
 #include "Render/Render.h"
+#include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
+#include "Render/Text.h"
+#include "../UIRoot.h"
 
 namespace Editor
 {
@@ -31,7 +36,7 @@ namespace Editor
 	{
 		InitializeDragHandles();
 		SetDocked(false);
-		mDockingFrameSample = other.mDockingFrameSample->Clone();
+		mDockingFrameSample = other.mDockingFrameSample->CloneAs<Sprite>();
 		InitializeDockFrameAppearanceAnim();
 
 		if (mVisibleState)
@@ -49,7 +54,7 @@ namespace Editor
 	{
 		UIWindow::operator=(other);
 
-		mDockingFrameSample = other.mDockingFrameSample->Clone();
+		mDockingFrameSample = other.mDockingFrameSample->CloneAs<Sprite>();
 
 		if (mVisibleState)
 			mVisibleState->onStateFullyFalse += THIS_FUNC(Undock);
@@ -89,7 +94,7 @@ namespace Editor
 		{
 			o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-			for (auto child : mChildren)
+			for (auto child : mDrawingChildren)
 				child->Draw();
 
 			o2Render.DisableScissorTest();
@@ -185,7 +190,7 @@ namespace Editor
 			if (tabIconLayer->drawable)
 				delete tabIconLayer->drawable;
 
-			tabIconLayer->drawable = icon->Clone();
+			tabIconLayer->drawable = icon->CloneAs<Sprite>();
 		}
 	}
 
@@ -281,9 +286,9 @@ namespace Editor
 		return mAutoCalculateTabWidth;
 	}
 
-	void UIDockableWindow::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIDockableWindow::UpdateLayout(bool withChildren /*= true*/)
 	{
-		UIWindow::UpdateLayout(forcible, withChildren);
+		UIWindow::UpdateLayout(withChildren);
 
 		if (auto tabLayer = GetLayer(mTabLayerPath))
 			mHeadDragAreaRect = mHeadDragAreaLayout.Calculate(tabLayer->GetRect());
@@ -339,14 +344,14 @@ namespace Editor
 		{
 			Undock();
 
-			Vec2F size = layout.GetSize();
+			Vec2F size = layout->GetSize();
 
 			if (auto headLayer = GetLayer(mTabLayerPath))
-				layout.absLeftTop = o2Input.GetCursorPos() - headLayer->GetRect().Size().InvertedY()*0.5f;
+				layout->worldLeftTop = o2Input.GetCursorPos() - headLayer->GetRect().Size().InvertedY()*0.5f;
 			else
-				layout.absLeftTop = o2Input.GetCursorPos();
+				layout->worldLeftTop = o2Input.GetCursorPos();
 
-			layout.absRightBottom = layout.absLeftTop + size.InvertedY();
+			layout->worldRightBottom = layout->worldLeftTop + size.InvertedY();
 		}
 		else
 		{
@@ -365,18 +370,18 @@ namespace Editor
 	{
 		if (mDocked)
 		{
-			if (!layout.GetAbsoluteRect().IsInside(cursor.position))
+			if (!layout->IsPointInside(cursor.position))
 			{
 				Undock();
 
 				UpdateLayout(true);
 
-				Vec2F anchor = (layout.absRect->LeftTop() + layout.absRect->RightTop())*0.5f;
+				Vec2F anchor = (layout->worldLeftTop + layout->worldRightTop)*0.5f;
 
 				if (auto headLayer = GetLayer(mTabLayerPath))
 					anchor.y -= headLayer->GetRect().Height()*0.5f;
 
-				layout.absPosition += o2Input.GetCursorPos() - anchor;
+				layout->worldPosition += o2Input.GetCursorPos() - anchor;
 
 				mDragOffset = Vec2F();
 			}
@@ -384,7 +389,7 @@ namespace Editor
 			return;
 		}
 
-		layout.position += cursor.delta;
+		layout->worldPosition += cursor.delta;
 
 		UIDockWindowPlace* targetDock;
 		Side dockPosition = Side::None;
@@ -400,7 +405,7 @@ namespace Editor
 		else
 		{
 			mDockingFrameAppearance.PlayBack();
-			mDockingFrameTarget = layout.GetAbsoluteRect();
+			mDockingFrameTarget = layout->worldRect;
 		}
 	}
 
@@ -416,7 +421,7 @@ namespace Editor
 		if (!TraceDock(targetDock, dockPosition, dockZoneRect) || targetDock == nullptr)
 			return;
 
-		bool allOnLine = targetDock->mParent && targetDock->mParent->GetChilds().All([&](auto x) {
+		bool allOnLine = targetDock->mParent && targetDock->mParentWidget->GetChildWidgets().All([&](auto x) {
 
 			if (x->GetType() != TypeOf(UIDockWindowPlace))
 				return false;
@@ -441,7 +446,7 @@ namespace Editor
 		OnFocused();
 
 		if (mDocked)
-			mDragOffset = (Vec2F)o2Input.cursorPos - layout.absLeftTop;
+			mDragOffset = (Vec2F)o2Input.cursorPos - layout->worldLeftTop;
 	}
 
 	bool UIDockableWindow::TraceDock(UIDockWindowPlace*& targetDock, Side& dockPosition, RectF& dockZoneRect)
@@ -456,7 +461,7 @@ namespace Editor
 		{
 			auto dockPlace = dynamic_cast<UIDockWindowPlace*>(dockPlaceListener);
 
-			RectF dockPlaceRect = dockPlace->layout.GetAbsoluteRect();
+			RectF dockPlaceRect = dockPlace->layout->worldRect;
 
 			RectF leftZone(dockPlaceRect.left, dockPlaceRect.bottom,
 						   Math::Lerp(dockPlaceRect.left, dockPlaceRect.right, mDockSizeCoef), dockPlaceRect.top);
@@ -492,16 +497,16 @@ namespace Editor
 
 	void UIDockableWindow::PlaceDock(UIDockWindowPlace* targetDock)
 	{
-		mNonDockSize = layout.size;
+		mNonDockSize = layout->size;
 
 		mTabPosition = targetDock->mChildren.Count();
 
 		targetDock->AddChild(this);
-		layout = UIWidgetLayout::BothStretch();
+		*layout = UIWidgetLayout::BothStretch();
 		SetDocked(true);
 
 		mDockingFrameAppearance.PlayBack();
-		mDockingFrameTarget = layout.GetAbsoluteRect();
+		mDockingFrameTarget = layout->GetWorldRect();
 
 		targetDock->ArrangeChildWindows();
 		targetDock->UpdateLayout();
@@ -509,18 +514,18 @@ namespace Editor
 
 	void UIDockableWindow::PlaceNonLineDock(UIDockWindowPlace* targetDock, Side dockPosition)
 	{
-		mNonDockSize = layout.size;
-		RectF dockPlaceRect = targetDock->layout.GetAbsoluteRect();
+		mNonDockSize = layout->size;
+		RectF dockPlaceRect = targetDock->layout->GetWorldRect();
 
 		UIDockWindowPlace* windowDock = mnew UIDockWindowPlace();
 		windowDock->name = "window dock";
-		windowDock->layout = UIWidgetLayout::BothStretch();
+		*windowDock->layout = UIWidgetLayout::BothStretch();
 
 		UIDockWindowPlace* windowNeighborDock = mnew UIDockWindowPlace();
 		windowNeighborDock->name = "empty dock";
-		windowNeighborDock->layout = UIWidgetLayout::BothStretch();
+		*windowNeighborDock->layout = UIWidgetLayout::BothStretch();
 
-		for (auto child : targetDock->GetChilds())
+		for (auto child : targetDock->GetChildWidgets())
 			windowNeighborDock->AddChild(child);
 
 		targetDock->AddChild(windowNeighborDock);
@@ -529,60 +534,60 @@ namespace Editor
 
 		if (dockPosition == Side::Bottom)
 		{
-			windowNeighborDock->layout.anchorBottom = mDockSizeCoef;
-			windowDock->layout.anchorTop = mDockSizeCoef;
-			windowDock->layout.offsetTop = -mDockBorder;
+			windowNeighborDock->layout->anchorBottom = mDockSizeCoef;
+			windowDock->layout->anchorTop = mDockSizeCoef;
+			windowDock->layout->offsetTop = -mDockBorder;
 
 			windowDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, nullptr, windowNeighborDock);
 			windowNeighborDock->SetResizibleDir(TwoDirection::Vertical, mDockBorder, windowDock, nullptr);
 		}
 		else if (dockPosition == Side::Right)
 		{
-			windowNeighborDock->layout.anchorRight = 1.0f - mDockSizeCoef;
-			windowDock->layout.anchorLeft = 1.0f - mDockSizeCoef;
-			windowDock->layout.offsetLeft = mDockBorder;
+			windowNeighborDock->layout->anchorRight = 1.0f - mDockSizeCoef;
+			windowDock->layout->anchorLeft = 1.0f - mDockSizeCoef;
+			windowDock->layout->offsetLeft = mDockBorder;
 
 			windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowNeighborDock, nullptr);
 			windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nullptr, windowDock);
 		}
 		else if (dockPosition == Side::Left)
 		{
-			windowNeighborDock->layout.anchorLeft = mDockSizeCoef;
-			windowDock->layout.anchorRight = mDockSizeCoef;
-			windowDock->layout.offsetRight = -mDockBorder;
+			windowNeighborDock->layout->anchorLeft = mDockSizeCoef;
+			windowDock->layout->anchorRight = mDockSizeCoef;
+			windowDock->layout->offsetRight = -mDockBorder;
 
 			windowDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, nullptr, windowNeighborDock);
 			windowNeighborDock->SetResizibleDir(TwoDirection::Horizontal, mDockBorder, windowDock, nullptr);
 		}
 
 		windowDock->AddChild(this);
-		layout = UIWidgetLayout::BothStretch();
+		*layout = UIWidgetLayout::BothStretch();
 		SetDocked(true);
 
 		mDockingFrameAppearance.PlayBack();
-		mDockingFrameTarget = layout.GetAbsoluteRect();
+		mDockingFrameTarget = layout->GetWorldRect();
 	}
 
 	void UIDockableWindow::PlaceLineDock(UIDockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect)
 	{
-		mNonDockSize = layout.size;
-		RectF dockPlaceRect = targetDock->layout.GetAbsoluteRect();
+		mNonDockSize = layout->size;
+		RectF dockPlaceRect = targetDock->layout->GetWorldRect();
 
 		UIDockWindowPlace* windowDock = mnew UIDockWindowPlace();
 		windowDock->name = "window dock";
-		windowDock->layout = UIWidgetLayout::BothStretch();
+		*windowDock->layout = UIWidgetLayout::BothStretch();
 
 		UIDockWindowPlace* windowNeighborDock = targetDock;
 		targetDock->mParent->AddChild(windowDock);
 
 		if (dockPosition == Side::Bottom)
 		{
-			windowDock->layout.anchorBottom = windowNeighborDock->layout.anchorBottom;
+			windowDock->layout->anchorBottom = windowNeighborDock->layout->anchorBottom;
 
-			windowNeighborDock->layout.anchorBottom +=
-				windowNeighborDock->layout.height*mDockSizeCoef / windowNeighborDock->mParent->layout.height;
+			windowNeighborDock->layout->anchorBottom +=
+				windowNeighborDock->layout->height*mDockSizeCoef / windowNeighborDock->mParentWidget->layout->height;
 
-			windowDock->layout.anchorTop = windowNeighborDock->layout.anchorBottom;
+			windowDock->layout->anchorTop = windowNeighborDock->layout->anchorBottom;
 
 			if (targetDock->mNeighborMin)
 			{
@@ -600,12 +605,12 @@ namespace Editor
 		}
 		else if (dockPosition == Side::Right)
 		{
-			windowDock->layout.anchorRight = windowNeighborDock->layout.anchorRight;
+			windowDock->layout->anchorRight = windowNeighborDock->layout->anchorRight;
 
-			windowNeighborDock->layout.anchorRight -=
-				windowNeighborDock->layout.width*mDockSizeCoef / windowNeighborDock->mParent->layout.width;
+			windowNeighborDock->layout->anchorRight -=
+				windowNeighborDock->layout->width*mDockSizeCoef / windowNeighborDock->mParentWidget->layout->width;
 
-			windowDock->layout.anchorLeft = windowNeighborDock->layout.anchorRight;
+			windowDock->layout->anchorLeft = windowNeighborDock->layout->anchorRight;
 
 			if (targetDock->mNeighborMax)
 			{
@@ -623,12 +628,12 @@ namespace Editor
 		}
 		else if (dockPosition == Side::Left)
 		{
-			windowDock->layout.anchorLeft = windowNeighborDock->layout.anchorLeft;
+			windowDock->layout->anchorLeft = windowNeighborDock->layout->anchorLeft;
 
-			windowNeighborDock->layout.anchorLeft +=
-				windowNeighborDock->layout.width*mDockSizeCoef / windowNeighborDock->mParent->layout.width;
+			windowNeighborDock->layout->anchorLeft +=
+				windowNeighborDock->layout->width*mDockSizeCoef / windowNeighborDock->mParentWidget->layout->width;
 
-			windowDock->layout.anchorRight = windowNeighborDock->layout.anchorLeft;
+			windowDock->layout->anchorRight = windowNeighborDock->layout->anchorLeft;
 
 			if (targetDock->mNeighborMin)
 			{
@@ -646,11 +651,11 @@ namespace Editor
 		}
 
 		windowDock->AddChild(this);
-		layout = UIWidgetLayout::BothStretch();
+		*layout = UIWidgetLayout::BothStretch();
 		SetDocked(true);
 
 		mDockingFrameAppearance.PlayBack();
-		mDockingFrameTarget = layout.GetAbsoluteRect();
+		mDockingFrameTarget = layout->GetWorldRect();
 	}
 
 	void UIDockableWindow::SetTabState(float offset, int position, bool isFirst)
@@ -716,17 +721,17 @@ namespace Editor
 
 		if (!topDock)
 		{
-			o2UI.AddWidget(this);
+			EditorUIRoot.AddWidget(this);
 		}
 		else
 		{
 			auto parent = dynamic_cast<UIDockWindowPlace*>(mParent);
-			auto parentNeighbors = topDock->GetChilds().FindAll([&](auto x) { return x != parent; })
+			auto parentNeighbors = topDock->GetChildWidgets().FindAll([&](auto x) { return x != parent; })
 				.Select<UIDockWindowPlace*>([](auto x) { return (UIDockWindowPlace*)x; });
 
-			o2UI.AddWidget(this);
+			EditorUIRoot.AddWidget(this);
 
-			if (!parent->GetChilds().IsEmpty())
+			if (!parent->GetChildWidgets().IsEmpty())
 			{
 				parent->ArrangeChildWindows();
 				parent->UpdateLayout(true);
@@ -749,35 +754,35 @@ namespace Editor
 				{
 					if (parent->mNeighborMin && parent->mNeighborMax)
 					{
-						float anchor = (parent->mNeighborMin->layout.anchorRight + parent->mNeighborMax->layout.anchorLeft) / 2.0f;
-						parent->mNeighborMin->layout.anchorRight = anchor;
-						parent->mNeighborMax->layout.anchorLeft = anchor;
+						float anchor = (parent->mNeighborMin->layout->anchorRight + parent->mNeighborMax->layout->anchorLeft) / 2.0f;
+						parent->mNeighborMin->layout->anchorRight = anchor;
+						parent->mNeighborMax->layout->anchorLeft = anchor;
 					}
 					else if (parent->mNeighborMin && !parent->mNeighborMax)
-						parent->mNeighborMin->layout.anchorRight = 1.0f;
+						parent->mNeighborMin->layout->anchorRight = 1.0f;
 					else if (!parent->mNeighborMin && parent->mNeighborMax)
-						parent->mNeighborMax->layout.anchorLeft = 0.0f;
+						parent->mNeighborMax->layout->anchorLeft = 0.0f;
 				}
 
 				if (parent->mResizibleDir == TwoDirection::Vertical)
 				{
 					if (parent->mNeighborMin && parent->mNeighborMax)
 					{
-						float anchor = (parent->mNeighborMin->layout.anchorTop + parent->mNeighborMax->layout.anchorBottom) / 2.0f;
-						parent->mNeighborMin->layout.anchorTop = anchor;
-						parent->mNeighborMax->layout.anchorBottom = anchor;
+						float anchor = (parent->mNeighborMin->layout->anchorTop + parent->mNeighborMax->layout->anchorBottom) / 2.0f;
+						parent->mNeighborMin->layout->anchorTop = anchor;
+						parent->mNeighborMax->layout->anchorBottom = anchor;
 					}
 					else if (parent->mNeighborMin && !parent->mNeighborMax)
-						parent->mNeighborMin->layout.anchorTop = 1.0f;
+						parent->mNeighborMin->layout->anchorTop = 1.0f;
 					else if (!parent->mNeighborMin && parent->mNeighborMax)
-						parent->mNeighborMax->layout.anchorBottom = 0.0f;
+						parent->mNeighborMax->layout->anchorBottom = 0.0f;
 				}
 
 				topDock->RemoveChild(parent);
 
 				if (parentNeighbors.Count() == 1)
 				{
-					for (auto child : parentNeighbors[0]->GetChilds())
+					for (auto child : parentNeighbors[0]->GetChildWidgets())
 						topDock->AddChild(child);
 
 					topDock->RemoveChild(parentNeighbors[0]);
@@ -796,10 +801,10 @@ namespace Editor
 		SetDocked(false);
 		SetNonTabState();
 
-		Vec2F leftTop = layout.absLeftTop;
-		layout.anchorMin = Vec2F(); layout.anchorMax = Vec2F();
-		layout.absLeftTop = leftTop;
-		layout.absRightBottom = layout.absLeftTop + mNonDockSize.InvertedY();
+		Vec2F leftTop = layout->worldLeftTop;
+		layout->anchorMin = Vec2F(); layout->anchorMax = Vec2F();
+		layout->worldLeftTop = leftTop;
+		layout->worldRightBottom = layout->worldLeftTop + mNonDockSize.InvertedY();
 	}
 
 }
@@ -839,7 +844,7 @@ CLASS_META(Editor::UIDockableWindow)
 	PUBLIC_FUNCTION(bool, IsAutoCalcuclatingTabWidth);
 	PUBLIC_FUNCTION(void, PlaceDock, UIDockWindowPlace*);
 	PUBLIC_FUNCTION(void, Undock);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool, bool);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnFocused);

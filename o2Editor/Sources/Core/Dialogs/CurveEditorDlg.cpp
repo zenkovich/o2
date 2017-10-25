@@ -1,7 +1,10 @@
 #include "CurveEditorDlg.h"
 
 #include "Core/UI/CurveEdit.h"
+#include "Core/UIRoot.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
 #include "UI/Window.h"
 
 DECLARE_SINGLETON(Editor::CurveEditorDlg);
@@ -10,12 +13,12 @@ namespace Editor
 {
 	CurveEditorDlg::CurveEditorDlg()
 	{
-		mWindow = o2UI.AddWindow("Curve editor");
+		mWindow = dynamic_cast<UIWindow*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
 
 		InitializeControls();
 
 		mWindow->Hide(true);
-		mWindow->layout.size = Vec2F(600, 500);
+		mWindow->layout->size = Vec2F(600, 500);
 
 		mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
 		mWindow->onHide = Func(this, &CurveEditorDlg::OnHide);
@@ -35,14 +38,14 @@ namespace Editor
 	void CurveEditorDlg::InitializeControls()
 	{
 		mEditorWidget = mnew UICurveEditor();
-		mEditorWidget->layout = UIWidgetLayout::BothStretch(0, 5, 5, 0);
+		*mEditorWidget->layout = UIWidgetLayout::BothStretch(0, 5, 5, 0);
 
 		auto horScroll = o2UI.CreateHorScrollBar();
-		horScroll->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 10, -10);
+		*horScroll->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 10, -10);
 		mEditorWidget->SetHorScrollbar(horScroll);
 
 		auto verScroll = o2UI.CreateVerScrollBar();
-		verScroll->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 0, 10, -10);
+		*verScroll->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 0, 10, -10);
 		mEditorWidget->SetVerScrollbar(verScroll);
 
 		mEditorWidget->SetMainHandleImages(ImageAssetRef("ui/CurveHandle.png"),

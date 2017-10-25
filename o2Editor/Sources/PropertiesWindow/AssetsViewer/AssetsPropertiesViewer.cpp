@@ -12,6 +12,7 @@
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
+#include "UI/WidgetLayout.h"
 #include "Utils/FileSystem/FileSystem.h"
 
 namespace Editor
@@ -89,7 +90,7 @@ namespace Editor
 		if (viewer != mCurrentViewer)
 		{
 			if (mCurrentViewer)
-				mContentWidget->RemoveChild(mCurrentViewer->GetWidget(), false, false);
+				mContentWidget->RemoveChild(mCurrentViewer->GetWidget(), false);
 
 			mCurrentViewer = viewer;
 
@@ -127,7 +128,7 @@ namespace Editor
 		contentWidget->expandWidth   = true;
 		contentWidget->fitByChildren = true;
 		contentWidget->baseCorner    = BaseCorner::Top;
-		contentWidget->layout        = UIWidgetLayout::BothStretch();
+		*contentWidget->layout       = UIWidgetLayout::BothStretch();
 		mContentWidget = contentWidget;
 	}
 

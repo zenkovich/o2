@@ -30,16 +30,16 @@ namespace Editor
 		~RectFProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
 
 		// Updates and checks value
-		void Refresh();
+		void Refresh() override;
 
 		// Reverts value to prototype value
-		void Revert();
+		void Revert() override;
 
 		// Returns root widget
-		UIWidget* GetWidget() const;
+		UIWidget* GetWidget() const override;
 
 		// Sets value
 		void SetValue(const RectF& value);
@@ -78,7 +78,7 @@ namespace Editor
 		bool IsValuesDifferent() const;
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const;
+		const Type* GetFieldType() const override;
 
 		IOBJECT(RectFProperty);
 

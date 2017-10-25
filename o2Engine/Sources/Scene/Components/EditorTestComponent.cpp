@@ -2,6 +2,8 @@
 
 #include "Scene/Actor.h"
 
+#include "Scene/SceneLayer.h"
+
 CLASS_META(o2::EditorTestComponent)
 {
 	BASE_CLASS(o2::Component);

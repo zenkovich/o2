@@ -16,7 +16,7 @@ namespace Editor
 		{
 			ActorInfo* info = mnew ActorInfo();
 			Actor* parent = actor->GetParent();
-			Vector<Actor*> parentChilds = parent ? parent->GetChilds() : o2Scene.GetRootActors();
+			Vector<Actor*> parentChilds = parent ? parent->GetChildren() : o2Scene.GetRootActors();
 			int actorIdx = parentChilds.Find(actor);
 
 			info->actorId = actor->GetID();
@@ -55,7 +55,7 @@ namespace Editor
 
 		if (parent)
 		{
-			int insertIdx = parent->GetChilds().Find(prevActor) + 1;
+			int insertIdx = parent->GetChildren().Find(prevActor) + 1;
 
 			for (auto info : actorsInfos)
 			{
@@ -95,7 +95,7 @@ namespace Editor
 
 			if (parent)
 			{
-				int idx = parent->GetChilds().Find(prevActor) + 1;
+				int idx = parent->GetChildren().Find(prevActor) + 1;
 				parent->AddChild(actor, idx);
 				actor->transform->SetWorldNonSizedBasis(info->transform);
 			}

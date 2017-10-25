@@ -19,7 +19,7 @@ namespace o2
 		for (auto& val : other.mAnimatedValues)
 		{
 			AnimatedValueDef def(val);
-			def.mAnimatedValue = val.mAnimatedValue->Clone();
+			def.mAnimatedValue = val.mAnimatedValue->CloneAs<IAnimatedValue>();
 			mAnimatedValues.Add(def);
 
 			OnAnimatedValueAdded(def);
@@ -42,7 +42,7 @@ namespace o2
 		for (auto& val : other.mAnimatedValues)
 		{
 			AnimatedValueDef def(val);
-			def.mAnimatedValue = val.mAnimatedValue->Clone();
+			def.mAnimatedValue = val.mAnimatedValue->CloneAs<IAnimatedValue>();
 			def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
 			if (mTarget)

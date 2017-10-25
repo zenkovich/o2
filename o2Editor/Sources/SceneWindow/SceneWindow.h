@@ -28,7 +28,6 @@ namespace Editor
 		~SceneWindow();
 
 	protected:
-
 		void InitializeWindow();
 		void InitializeLayersView();
 

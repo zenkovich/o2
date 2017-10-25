@@ -4,6 +4,9 @@
 #include "UI/Button.h"
 #include "UI/Toggle.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -14,16 +17,16 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("boolean property");
 
-		mToggle = mPropertyWidget->FindChild<UIToggle>();
+		mToggle = mPropertyWidget->GetChildByType<UIToggle>();
 
 		if (!mToggle)
 			mToggle = dynamic_cast<UIToggle*>(mPropertyWidget);
 
-		mToggle->layout.minHeight = 10;
+		mToggle->layout->minHeight = 10;
 		mToggle->onToggleByUser = THIS_FUNC(SetValueByUser);
 		mToggle->SetValueUnknown();
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 	}

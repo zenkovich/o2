@@ -5,17 +5,22 @@
 #include "Animation/Animation.h"
 #include "Application/Application.h"
 #include "Assets/Assets.h"
+#include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/AssetsWindow.h"
+#include "PropertiesWindow/PropertiesWindow.h"
 #include "Render/Sprite.h"
+#include "Render/Text.h"
 #include "Scene/Actor.h"
+#include "Scene/Component.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "TreeWindow/ActorsTree.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/Button.h"
 #include "UI/UIManager.h"
 #include "UI/Widget.h"
-#include "AssetsWindow/AssetsIconsScroll.h"
-#include "../PropertiesWindow.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -26,7 +31,7 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("component property");
 
-		mBox = mPropertyWidget->GetChild("box");
+		mBox = mPropertyWidget->GetChildWidget("box");
 		if (!mBox)
 			mBox = mPropertyWidget;
 
@@ -36,7 +41,7 @@ namespace Editor
 		mNameText = mBox->GetLayerDrawable<Text>("caption");
 		mNameText->text = "--";
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 
@@ -274,7 +279,7 @@ namespace Editor
 			if (ownerActor)
 			{
 				if (ownerActor->IsAsset())
-					o2EditorAssets.ShowAssetIcon(o2Assets.GetAssetPath(ownerActor->GetAssetId()));
+					o2EditorAssets.ShowAssetIcon(o2Assets.GetAssetPath(ownerActor->GetAssetID()));
 				else if (ownerActor->IsOnScene())
 					o2EditorTree.HightlightActorsTreeNode(ownerActor);
 			}

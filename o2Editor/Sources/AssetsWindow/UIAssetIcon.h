@@ -40,7 +40,7 @@ namespace Editor
 		const AssetInfo& GetAssetInfo() const;
 
 		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		SERIALIZABLE(UIAssetIcon);
 
@@ -55,34 +55,34 @@ namespace Editor
 		void SetSelected(bool selected);
 
 		// It is called when cursor double clicked
-		void OnCursorDblClicked(const Input::Cursor& cursor);
+		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor enters this object, moving hover of tree to this
-		void OnCursorEnter(const Input::Cursor& cursor);
+		void OnCursorEnter(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object, moving hover of tree to this
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when started dragging
-		void OnDragStart(const Input::Cursor& cursor);
+		void OnDragStart(const Input::Cursor& cursor) override;
 
 		// It is called when dragged
-		void OnDragged(const Input::Cursor& cursor, DragDropArea* area);
+		void OnDragged(const Input::Cursor& cursor, DragDropArea* area) override;
 
 		// It is called when dragging completed
-		void OnDragEnd(const Input::Cursor& cursor);
+		void OnDragEnd(const Input::Cursor& cursor) override;
 
 		// It is called when this was selected
-		void OnSelected();
+		void OnSelected() override;
 
 		// It is called when this was unselected
-		void OnDeselected();
+		void OnDeselected() override;
 
 		// It is called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group);
+		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 		friend class UIAssetsIconsScrollArea;
 	};

@@ -72,6 +72,9 @@ namespace o2
 		// Returns hover drawable layout
 		Layout GetHoverDrawableLayout() const;
 
+		// Updates items
+		void OnItemsUpdated(bool itemsRearranged = false);
+
 		// Returns is listener scrollable
 		bool IsScrollable() const override;
 
@@ -156,9 +159,6 @@ namespace o2
 
 		// It is called when selected item index was changed
 		void OnSelectionChanged();
-
-		// Updates items
-		void OnItemsUpdated(bool itemsRearranged = false);
 
 		// Initializes properties
 		void InitializeProperties();

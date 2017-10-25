@@ -4,6 +4,8 @@
 #include "UI/Widget.h"
 #include "UI/WidgetLayout.h"
 
+DECLARE_SINGLETON(Editor::UIRoot);
+
 namespace Editor
 {
 	UIRoot::UIRoot()
@@ -16,9 +18,10 @@ namespace Editor
 		delete mRootWidget;
 	}
 
-	void UIRoot::AddWidget(UIWidget* widget)
+	UIWidget* UIRoot::AddWidget(UIWidget* widget)
 	{
 		mRootWidget->AddChild(widget);
+		return widget;
 	}
 
 	void UIRoot::RemoveWidget(UIWidget* widget)

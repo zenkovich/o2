@@ -49,10 +49,10 @@ namespace Editor
 		UIAssetsIconsScrollArea& operator=(const UIAssetsIconsScrollArea& other);
 
 		// Draws widget
-		void Draw();
+		void Draw() override;
 
 		// Updates widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Sets current assets viewing path
 		void SetViewingPath(const String& path);
@@ -94,7 +94,10 @@ namespace Editor
 		Sprite* GetSelectingDrawable() const;
 
 		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
+
+		// Updates layout
+		void UpdateLayout(bool withChildren = true) override;
 
 		SERIALIZABLE(UIAssetsIconsScrollArea);
 
@@ -141,32 +144,38 @@ namespace Editor
 		bool               mChangePropertiesTargetsFromThis = false;
 
 	protected:
+		// It is called when widget was selected
+		void OnFocused() override;
+
+		// It is called when widget was deselected
+		void OnUnfocused() override;
+
+		// It is called when cursor pressed on this
+		void OnCursorPressed(const Input::Cursor& cursor) override;
+
+		// It is called when cursor released (only when cursor pressed this at previous time)
+		void OnCursorReleased(const Input::Cursor& cursor) override;
+
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
+
+		// It is called when cursor stay down during frame
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
+
+		// It is called when cursor moved on this (or moved outside when this was pressed)
+		void OnCursorMoved(const Input::Cursor& cursor) override;
+
+		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+
+		// It is called when key was released
+		void OnKeyReleased(const Input::Key& key) override;
+
 		// It is called when assets selection was changed
 		void OnAssetsSelected();
 
-		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
-
 		// Updates cutting assets
 		void UpdateCuttingAssets();
-
-		// It is called when widget was selected
-		void OnFocused();
-
-		// It is called when widget was deselected
-		void OnUnfocused();
-
-		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
-
-		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
-
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
-
-		// It is called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor);
 
 		// Begins selecting icons
 		void BeginSelecting();
@@ -179,15 +188,6 @@ namespace Editor
 
 		// Registers actors creation undo action
 		void RegActorsCreationAction();
-
-		// It is called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor);
-
-		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
-
-		// It is called when key was released
-		void OnKeyReleased(const Input::Key& key);
 
 		// Initializes assets context menu
 		void InitializeContext();
@@ -268,33 +268,50 @@ namespace Editor
 // ISelectableDragableObjectsGroup implementation
 
 		// Returns selected objects in group
-		SelectDragObjectsVec GetSelectedDragObjects() const;
+		SelectDragObjectsVec GetSelectedDragObjects() const override;
 
 		// Returns all objects in group 
-		SelectDragObjectsVec GetAllObjects() const;
+		SelectDragObjectsVec GetAllObjects() const override;
 
 		// Selects object
-		void Select(SelectableDragableObject* object);
+		void Select(SelectableDragableObject* object) override;
 
 		// Selects object
 		void Select(SelectableDragableObject* object, bool sendOnSelectionChanged);
 
 		// Deselects object
-		void Deselect(SelectableDragableObject* object);
+		void Deselect(SelectableDragableObject* object) override;
 
 		// Adds selectable object to group
-		void AddSelectableObject(SelectableDragableObject* object);
+		void AddSelectableObject(SelectableDragableObject* object) override;
 
 		// Removes selectable object from group
-		void RemoveSelectableObject(SelectableDragableObject* object);
+		void RemoveSelectableObject(SelectableDragableObject* object) override;
 
 		// It is called when selectable draggable object was released
-		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor);
+		void OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor) override;
 
 		// It is called when selectable object was began to drag
-		void OnSelectableObjectBeganDragging(SelectableDragableObject* object);
+		void OnSelectableObjectBeganDragging(SelectableDragableObject* object) override;
 
 // DragDropArea implementation
+		// It is called when some drag listeners was entered to this area
+		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
+
+		// It is called when some drag listeners was dragged above this area
+		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
+
+		// It is called when some drag listeners was exited from this area
+		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+
+		// It is called when some selectable listeners was dropped to this
+		void OnDropped(ISelectableDragableObjectsGroup* group) override;
+
+		// It is called when dropped dragged actors tree nodes selected and started dragging from actors tree
+		void OnDroppedFromActorsTree(UIActorsTree* actorsTree);
+
+		// It is called when dropped dragged assets icons selected and started dragging from this
+		void OnDroppedFromThis();
 
 		// Begins dragging selected items
 		void BeginDragging(UIAssetIcon* icon);
@@ -304,24 +321,6 @@ namespace Editor
 
 		// Updates dragging graphics
 		void UpdateDraggingGraphics();
-
-		// It is called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group);
-
-		// It is called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
-
-		// It is called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group);
-
-		// It is called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group);
-
-		// It is called when dropped dragged assets icons selected and started dragging from this
-		void OnDroppedFromThis();
-
-		// It is called when dropped dragged actors tree nodes selected and started dragging from actors tree
-		void OnDroppedFromActorsTree(UIActorsTree* actorsTree);
 
 		friend class AssetsWindow;
 		friend class SceneEditScreen;

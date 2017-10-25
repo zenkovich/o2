@@ -7,6 +7,9 @@
 #include "UI/EditBox.h"
 #include "UI/Image.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -17,10 +20,10 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("color property");
 
-		mEditBox = mPropertyWidget->GetChild("box");
-		mEditBox->layout.minHeight = 10;
+		mEditBox = mPropertyWidget->GetChildWidget("box");
+		mEditBox->layout->minHeight = 10;
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 
@@ -33,14 +36,14 @@ namespace Editor
 		UIImage* backImage = mnew UIImage();
 		backImage->image = mnew Sprite(&backLayerBitmap);
 		backImage->GetImage()->mode = SpriteMode::Tiled;
-		backImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
+		*backImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
 		mEditBox->AddChild(backImage);
 
 		Bitmap colorLayerBitmap(Bitmap::Format::R8G8B8A8, Vec2I(20, 20));
 		colorLayerBitmap.Fill(color1);
 		mColorSprite = mnew UIImage();
 		mColorSprite->image = mnew Sprite(&colorLayerBitmap);
-		mColorSprite->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
+		*mColorSprite->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
 		mEditBox->AddChild(mColorSprite);
 
 		mEditBox->onDraw += [&]() { mClickArea.OnDrawn(); };

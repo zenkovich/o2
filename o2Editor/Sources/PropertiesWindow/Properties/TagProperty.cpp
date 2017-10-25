@@ -6,6 +6,9 @@
 #include "UI/ContextMenu.h"
 #include "UI/EditBox.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -16,7 +19,7 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("singleline edit property");
 
-		mEditBox = mPropertyWidget->FindChild<UIEditBox>();
+		mEditBox = mPropertyWidget->GetChildByType<UIEditBox>();
 		if (!mEditBox)
 			mEditBox = dynamic_cast<UIEditBox*>(mPropertyWidget);
 
@@ -30,7 +33,7 @@ namespace Editor
 
 		mEditBox->text = "--";
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 	}
@@ -65,7 +68,7 @@ namespace Editor
 
 		mTagsContext->RemoveAllItems();
 
-		mTagsContext->Show(mEditBox->layout.GetAbsoluteLeftBottom());
+		mTagsContext->Show(mEditBox->layout->GetWorldLeftBottom());
 
 		for (auto tag : o2Scene.GetTags())
 		{

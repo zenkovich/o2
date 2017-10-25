@@ -426,25 +426,3 @@ namespace o2
 	}
 
 }
-
-CLASS_META(o2::SceneLayer)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mActors);
-	PROTECTED_FIELD(mEnabledActors);
-	PROTECTED_FIELD(mDrawables);
-	PROTECTED_FIELD(mEnabledDrawables);
-
-	PUBLIC_FUNCTION(const ActorsVec&, GetActors);
-	PUBLIC_FUNCTION(const ActorsVec&, GetEnabledActors);
-	PUBLIC_FUNCTION(const DrawCompsVec&, GetDrawableComponents);
-	PUBLIC_FUNCTION(const DrawCompsVec&, GetEnabledDrawableComponents);
-	PROTECTED_FUNCTION(void, RegDrawableComponent, DrawableComponent*);
-	PROTECTED_FUNCTION(void, UnregDrawableComponent, DrawableComponent*);
-	PROTECTED_FUNCTION(void, ComponentDepthChanged, DrawableComponent*);
-	PROTECTED_FUNCTION(void, ComponentEnabled, DrawableComponent*);
-	PROTECTED_FUNCTION(void, ComponentDisabled, DrawableComponent*);
-}
-END_META;

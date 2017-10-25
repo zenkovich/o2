@@ -24,7 +24,7 @@ namespace Editor
 				auto parent = actor->GetParent();
 				info.parentId = parent->GetID();
 
-				auto parentChilds = parent->GetChilds();
+				auto parentChilds = parent->GetChildren();
 				info.prevActorId = 0;
 
 				for (auto child : parentChilds)
@@ -86,7 +86,7 @@ namespace Editor
 			if (parent)
 			{
 				UInt64 prevId = info.prevActorId;
-				int idx = parent->GetChilds().FindIdx([=](Actor* x) { return x->GetID() == prevId; }) + 1;
+				int idx = parent->GetChildren().FindIdx([=](Actor* x) { return x->GetID() == prevId; }) + 1;
 
 				Actor* newActor;
 				info.actorData.GetValueRaw(newActor);
@@ -118,7 +118,7 @@ namespace Editor
 	{
 		if (actor->GetParent())
 		{
-			return actor->GetParent()->GetChilds().Find(actor) + GetActorIdx(actor->GetParent());
+			return actor->GetParent()->GetChildren().Find(actor) + GetActorIdx(actor->GetParent());
 		}
 
 		return o2Scene.GetRootActors().Find(actor);

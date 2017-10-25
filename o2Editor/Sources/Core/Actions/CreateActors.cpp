@@ -31,7 +31,7 @@ namespace Editor
 
 		if (parent)
 		{
-			int insertIdx = parent->GetChilds().Find(prevActor) + 1;
+			int insertIdx = parent->GetChildren().Find(prevActor) + 1;
 
 			actorsData.GetValueRaw(actors);
 

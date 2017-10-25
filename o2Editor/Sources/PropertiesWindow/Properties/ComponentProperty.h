@@ -32,16 +32,16 @@ namespace Editor
 		~ComponentProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
 
 		// Updates and checks value
-		void Refresh();
+		void Refresh() override;
 
 		// Reverts value to prototype value
-		void Revert();
+		void Revert() override;
 
 		// Returns root widget
-		UIWidget* GetWidget() const;
+		UIWidget* GetWidget() const override;
 
 		// Returns value
 		Component* GetCommonValue() const;
@@ -50,7 +50,7 @@ namespace Editor
 		bool IsValuesDifferent() const;
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const;
+		const Type* GetFieldType() const override;
 
 		// Specializes field type
 		void SpecializeType(const Type* type);
@@ -65,7 +65,7 @@ namespace Editor
 		void SetUnknownValue();
 
 		// Returns true if point is in this object
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		IOBJECT(ComponentProperty);
 
@@ -91,28 +91,28 @@ namespace Editor
 		void SetCommonValue(Component* value);
 
 		// Checks value for reverting to prototype
-		void CheckRevertableState();
+		void CheckRevertableState() override;
 
 		// It is called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor);
+		void OnCursorEnter(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when key was pressed
-		void OnKeyPressed(const Input::Key& key);
+		void OnKeyPressed(const Input::Key& key) override;
 
 		// It is called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group);
+		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group);
+		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group);
+		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when actors tree nodes was dragged and dropped to this
 		void OnDroppedFromActorsTree(UIActorsTree* actorsTree);

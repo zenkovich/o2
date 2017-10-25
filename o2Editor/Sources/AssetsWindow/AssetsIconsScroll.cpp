@@ -20,17 +20,17 @@
 #include "UI/GridLayout.h"
 #include "UI/Label.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
 #include "UIAssetIcon.h"
 #include "Utils/FileSystem/FileSystem.h"
 
 namespace Editor
 {
-
 	UIAssetsIconsScrollArea::UIAssetsIconsScrollArea():
 		UIScrollArea()
 	{
 		mGrid = mnew UIGridLayout();
-		mGrid->layout = UIWidgetLayout::BothStretch();
+		*mGrid->layout = UIWidgetLayout::BothStretch();
 		mGrid->baseCorner = BaseCorner::LeftTop;
 		mGrid->fitByChildren = true;
 		mGrid->cellSize = mAssetIconSize;
@@ -38,7 +38,6 @@ namespace Editor
 		mGrid->spacing = 5;
 		mGrid->arrangeAxis = TwoDirection::Horizontal;
 		mGrid->arrangeAxisMaxCells = 5;
-		onLayoutChanged += THIS_FUNC(UpdateAssetsGridSize);
 		AddChild(mGrid);
 
 		mDragIcon = mnew UIAssetIcon();
@@ -51,13 +50,13 @@ namespace Editor
 
 	UIAssetsIconsScrollArea::UIAssetsIconsScrollArea(const UIAssetsIconsScrollArea& other):
 		UIScrollArea(other),
-		mHightlightSprite(other.mHightlightSprite->Clone()), mHightlightLayout(other.mHightlightLayout),
-		mHightlightAnim(other.mHightlightAnim), mSelectionSprite(other.mSelectionSprite->Clone())
+		mHightlightSprite(other.mHightlightSprite->CloneAs<Sprite>()), mHightlightLayout(other.mHightlightLayout),
+		mHightlightAnim(other.mHightlightAnim), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>())
 	{
 		RemoveAllChildren();
 
 		mGrid = mnew UIGridLayout();
-		mGrid->layout = UIWidgetLayout::BothStretch();
+		*mGrid->layout = UIWidgetLayout::BothStretch();
 		mGrid->baseCorner = BaseCorner::LeftTop;
 		mGrid->fitByChildren = true;
 		mGrid->cellSize = mAssetIconSize;
@@ -65,10 +64,7 @@ namespace Editor
 		mGrid->spacing = 5;
 		mGrid->arrangeAxis = TwoDirection::Horizontal;
 		mGrid->arrangeAxisMaxCells = 5;
-		onLayoutChanged += THIS_FUNC(UpdateAssetsGridSize);
 		AddChild(mGrid);
-
-		onLayoutChanged += THIS_FUNC(UpdateAssetsGridSize);
 
 		mDragIcon = o2UI.CreateWidget<UIAssetIcon>();
 
@@ -98,16 +94,16 @@ namespace Editor
 
 		UIScrollArea::operator=(other);
 
-		mDragIcon = other.mDragIcon->Clone();
+		mDragIcon = other.mDragIcon->CloneAs<UIAssetIcon>();
 
-		mGrid = FindChild<UIGridLayout>();
-		mContextMenu = FindChild<UIContextMenu>();
+		mGrid = GetChildByType<UIGridLayout>();
+		mContextMenu = GetChildByType<UIContextMenu>();
 
 		mHightlightLayout = other.mHightlightLayout;
-		mHightlightSprite = other.mHightlightSprite->Clone();
+		mHightlightSprite = other.mHightlightSprite->CloneAs<Sprite>();
 		mHightlightAnim.SetTarget(mHightlightSprite);
 
-		mSelectionSprite = other.mSelectionSprite->Clone();
+		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
 
 		RetargetStatesAnimations();
 		UpdateLayout();
@@ -128,7 +124,7 @@ namespace Editor
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
-		for (auto child : mChildren)
+		for (auto child : mDrawingChildren)
 			child->Draw();
 
 		if (mSelecting)
@@ -164,7 +160,7 @@ namespace Editor
 			if (mHightlightIcon)
 			{
 				mHightlightSprite->SetScale(Vec2F(1.0f, 1.0f));
-				mHightlightSprite->SetRect(mHightlightLayout.Calculate(mHightlightIcon->layout.absRect));
+				mHightlightSprite->SetRect(mHightlightLayout.Calculate(mHightlightIcon->layout->worldRect));
 			}
 
 			mHightlightAnim.Update(dt);
@@ -204,7 +200,7 @@ namespace Editor
 
 		DeselectAllAssets();
 
-		auto prevIcons = mGrid->GetChilds().Select<UIAssetIcon*>([](auto x) { return (UIAssetIcon*)x; });
+		auto prevIcons = mGrid->GetChildWidgets().Select<UIAssetIcon*>([](auto x) { return (UIAssetIcon*)x; });
 		prevIcons.ForEach([&](auto x) { FreeAssetIconToPool(x); });
 		mGrid->RemoveAllChildren(false);
 
@@ -282,7 +278,7 @@ namespace Editor
 			addingIcons.Add(assetIcon);
 		}
 
-		mGrid->AddChilds(addingIcons);
+		mGrid->AddChildren(addingIcons.Cast<Actor*>());
 
 		UpdateCuttingAssets();
 	}
@@ -299,13 +295,13 @@ namespace Editor
 
 		SetViewingPath(assetFolder);
 
-		UIAssetIcon* icon = (UIAssetIcon*)(mGrid->GetChilds().FindMatch([=](UIWidget* x) {
+		UIAssetIcon* icon = (UIAssetIcon*)(mGrid->GetChildWidgets().FindMatch([=](UIWidget* x) {
 			return ((UIAssetIcon*)x)->GetAssetInfo().id == id; }));
 
 		if (!icon)
 			return;
 
-		SetScroll(Vec2F(0.0f, -icon->layout.absTop + layout.absTop + GetScroll().y));
+		SetScroll(Vec2F(0.0f, -icon->layout->worldTop + layout->worldTop + GetScroll().y));
 
 		mHightlightIcon = icon;
 		mHightlightAnim.RewindAndPlay();
@@ -320,7 +316,7 @@ namespace Editor
 
 		SetViewingPath(assetFolder);
 
-		UIAssetIcon* icon = (UIAssetIcon*)(mGrid->GetChilds().FindMatch([=](UIWidget* x) {
+		UIAssetIcon* icon = (UIAssetIcon*)(mGrid->GetChildWidgets().FindMatch([=](UIWidget* x) {
 			return ((UIAssetIcon*)x)->GetAssetInfo().id == id; }));
 
 		if (!icon)
@@ -335,7 +331,7 @@ namespace Editor
 		}
 
 		if (scroll)
-			SetScroll(Vec2F(0.0f, -icon->layout.absTop + layout.absTop + GetScroll().y));
+			SetScroll(Vec2F(0.0f, -icon->layout->worldTop + layout->worldTop + GetScroll().y));
 
 		if (selectionChanged)
 			OnAssetsSelected();
@@ -404,21 +400,23 @@ namespace Editor
 		}
 	}
 
-	void UIAssetsIconsScrollArea::UpdateLayout(bool forcible /*= false*/, bool withChildren /*= true*/)
+	void UIAssetsIconsScrollArea::UpdateLayout(bool withChildren /*= true*/)
 	{
-		Vec2F localPressPoint = mPressedPoint - mChildrenAbsRect.LeftBottom();
+		Vec2F localPressPoint = mPressedPoint - mChildrenWorldRect.LeftBottom();
 
-		UIScrollArea::UpdateLayout(forcible);
+		UIScrollArea::UpdateLayout(withChildren);
 
-		mPressedPoint = localPressPoint + mChildrenAbsRect.LeftBottom();
+		mPressedPoint = localPressPoint + mChildrenWorldRect.LeftBottom();
 
 		if (mSelecting)
 			UpdateSelection(*o2Input.GetCursor(0));
+
+		UpdateAssetsGridSize();
 	}
 
 	void UIAssetsIconsScrollArea::UpdateCuttingAssets()
 	{
-		for (auto child : mGrid->GetChilds())
+		for (auto child : mGrid->GetChildWidgets())
 		{
 			UIAssetIcon* icon = (UIAssetIcon*)child;
 			icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.ContainsPred([=](auto x) {
@@ -428,7 +426,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnFocused()
 	{
-		for (auto icon : mGrid->GetChilds())
+		for (auto icon : mGrid->GetChildWidgets())
 			icon->SetState("focused", true);
 
 		UIWidget::OnFocused();
@@ -436,7 +434,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnUnfocused()
 	{
-		for (auto icon : mGrid->GetChilds())
+		for (auto icon : mGrid->GetChildWidgets())
 			icon->SetState("focused", false);
 
 		UIWidget::OnFocused();
@@ -501,10 +499,10 @@ namespace Editor
 		*mDragIcon = *mSelectedAssetsIcons.Last();
 		mDragIcon->DragDropArea::SetInteractable(false);
 		mDragIcon->CursorAreaEventsListener::SetInteractable(false);
-		mDragOffset = icon->layout.absRect->Center() - o2Input.GetCursorPos();
+		mDragOffset = icon->layout->worldCenter - o2Input.GetCursorPos();
 
 		if (mSelectedAssetsIcons.Count() > 1)
-			mDragIcon->FindChild<UILabel>()->text = (String)mSelectedAssetsIcons.Count() + " items";
+			mDragIcon->GetLayerDrawableByType<UILabel>()->text = (String)mSelectedAssetsIcons.Count() + " items";
 	}
 
 	void UIAssetsIconsScrollArea::EndDragging(bool droppedToThis /*= false*/)
@@ -518,7 +516,7 @@ namespace Editor
 	void UIAssetsIconsScrollArea::UpdateDraggingGraphics()
 	{
 		mDragIcon->SetParent(nullptr);
-		mDragIcon->layout.SetRect(RectF(o2Input.GetCursorPos() - mAssetIconSize*0.5f + mDragOffset,
+		mDragIcon->layout->SetRect(RectF(o2Input.GetCursorPos() - mAssetIconSize*0.5f + mDragOffset,
 								  o2Input.GetCursorPos() + mAssetIconSize*0.5f + mDragOffset));
 	}
 
@@ -586,7 +584,7 @@ namespace Editor
 	{
 		auto firstInstActor = mInstSceneDragActors[0];
 		auto parent = firstInstActor->GetParent();
-		auto parentChilds = parent ? parent->GetChilds() : o2Scene.GetRootActors();
+		auto parentChilds = parent ? parent->GetChildren() : o2Scene.GetRootActors();
 		int idx = parentChilds.Find(firstInstActor);
 		auto prevActor = idx > 0 ? parentChilds[idx - 1] : nullptr;
 
@@ -630,9 +628,9 @@ namespace Editor
 
 		mCurrentSelectingIcons.Clear();
 
-		for (auto child : mGrid->GetChilds())
+		for (auto child : mGrid->GetChildWidgets())
 		{
-			if (child->layout.GetAbsoluteRect().IsIntersects(selectionRect))
+			if (child->layout->GetWorldRect().IsIntersects(selectionRect))
 			{
 				UIAssetIcon* icon = (UIAssetIcon*)child;
 				icon->SetSelected(true);
@@ -780,7 +778,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::UpdateAssetsGridSize()
 	{
-		float availableWidth = layout.GetWidth() - mGrid->GetBorderLeft() - mGrid->GetBorderRight();
+		float availableWidth = layout->GetWidth() - mGrid->GetBorderLeft() - mGrid->GetBorderRight();
 		int preCalcCellsCount = Math::Max(1, Math::FloorToInt(availableWidth/mAssetIconSize.x));
 		availableWidth -= preCalcCellsCount*mGrid->GetSpacing();
 
@@ -790,7 +788,7 @@ namespace Editor
 	void UIAssetsIconsScrollArea::OnIconDblClicked(UIAssetIcon* icon)
 	{
 		AssetInfo iconAssetInfo = icon->GetAssetInfo();
-		auto assetNameLabel = icon->GetChild("nameLabel");
+		auto assetNameLabel = icon->GetChildWidget("nameLabel");
 		if (assetNameLabel && assetNameLabel->IsUnderPoint(o2Input.cursorPos))
 		{
 			icon->SetState("edit", true);
@@ -825,9 +823,9 @@ namespace Editor
 
 	UIAssetIcon* UIAssetsIconsScrollArea::GetIconUnderPoint(const Vec2F& point) const
 	{
-		for (auto child : mGrid->GetChilds())
+		for (auto child : mGrid->GetChildWidgets())
 		{
-			if (child->layout.IsUnderPoint(point))
+			if (child->layout->IsPointInside(point))
 			{
 				UIAssetIcon* icon = (UIAssetIcon*)child;
 				return icon;
@@ -1027,7 +1025,7 @@ namespace Editor
 
 	ISelectableDragableObjectsGroup::SelectDragObjectsVec UIAssetsIconsScrollArea::GetAllObjects() const
 	{
-		return mGrid->GetChilds().Cast<SelectableDragableObject*>();
+		return mGrid->GetChildWidgets().Cast<SelectableDragableObject*>();
 	}
 
 	void UIAssetsIconsScrollArea::Select(SelectableDragableObject* object)
@@ -1084,22 +1082,22 @@ CLASS_META(Editor::UIAssetsIconsScrollArea)
 	PUBLIC_FUNCTION(void, SetHightlightLayout, const Layout&);
 	PUBLIC_FUNCTION(Sprite*, GetSelectingDrawable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnAssetsSelected);
-	PROTECTED_FUNCTION(void, UpdateLayout, bool, bool);
-	PROTECTED_FUNCTION(void, UpdateCuttingAssets);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnAssetsSelected);
+	PROTECTED_FUNCTION(void, UpdateCuttingAssets);
 	PROTECTED_FUNCTION(void, BeginSelecting);
 	PROTECTED_FUNCTION(void, UpdateSelection, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CompleteSelecting);
 	PROTECTED_FUNCTION(void, RegActorsCreationAction);
-	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, InitializeContext);
 	PROTECTED_FUNCTION(void, PrepareIconsPools);
 	PROTECTED_FUNCTION(UIAssetIcon*, GetAssetIconFromPool, const String&);
@@ -1133,14 +1131,14 @@ CLASS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, RemoveSelectableObject, SelectableDragableObject*);
 	PROTECTED_FUNCTION(void, OnSelectableObjectCursorReleased, SelectableDragableObject*, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnSelectableObjectBeganDragging, SelectableDragableObject*);
-	PROTECTED_FUNCTION(void, BeginDragging, UIAssetIcon*);
-	PROTECTED_FUNCTION(void, EndDragging, bool);
-	PROTECTED_FUNCTION(void, UpdateDraggingGraphics);
 	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
-	PROTECTED_FUNCTION(void, OnDroppedFromThis);
 	PROTECTED_FUNCTION(void, OnDroppedFromActorsTree, UIActorsTree*);
+	PROTECTED_FUNCTION(void, OnDroppedFromThis);
+	PROTECTED_FUNCTION(void, BeginDragging, UIAssetIcon*);
+	PROTECTED_FUNCTION(void, EndDragging, bool);
+	PROTECTED_FUNCTION(void, UpdateDraggingGraphics);
 }
 END_META;

@@ -56,7 +56,6 @@ namespace Editor
 		~TreeWindow();
 
 	protected:
-
 		// Initializes window
 		void InitializeWindow();
 

@@ -11,70 +11,71 @@
 #include "UI/Label.h"
 #include "UI/UIManager.h"
 #include "UI/Widget.h"
+#include "UI/WidgetLayout.h"
 
 namespace Editor
 {
 	DefaultActorTransformViewer::DefaultActorTransformViewer()
 	{
 		mNameCaption->text = "Transform";
-		mPropertiesLayout->layout.minHeight = 130;
+		mPropertiesLayout->layout->minHeight = 130;
 
 		auto positionIcon = o2UI.CreateImage("ui/UI2_position_icon.png");
-		positionIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -5));
+		*positionIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -5));
 		mPropertiesLayout->AddChild(positionIcon);
 
 		mPositionProperty = mnew Vec2FProperty(o2UI.CreateWidget<UIWidget>("colored vector2 property"));
-		mPositionProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 5, 20, 5);
+		*mPositionProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 5, 20, 5);
 		mPositionProperty->SetValuePath("transform/position");
 		mPositionProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mPropertiesLayout->AddChild(mPositionProperty->GetWidget());
 
 		auto pivotIcon = o2UI.CreateImage("ui/UI2_pivot_icon.png");
-		pivotIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -30));
+		*pivotIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -30));
 		mPropertiesLayout->AddChild(pivotIcon);
 
 		mPivotProperty = mnew Vec2FProperty(o2UI.CreateWidget<UIWidget>("colored vector2 property"));
-		mPivotProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 5, 20, 30);
+		*mPivotProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 5, 20, 30);
 		mPivotProperty->SetValuePath("transform/pivot");
 		mPivotProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mPropertiesLayout->AddChild(mPivotProperty->GetWidget());
 
 		auto sizeIcon = o2UI.CreateImage("ui/UI2_scale_icon.png");
-		sizeIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -55));
+		*sizeIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -55));
 		mPropertiesLayout->AddChild(sizeIcon);
 
 		mSizeProperty = mnew Vec2FProperty(o2UI.CreateWidget<UIWidget>("colored vector2 property"));
-		mSizeProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 5, 20, 55);
+		*mSizeProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 5, 20, 55);
 		mSizeProperty->SetValuePath("transform/size");
 		mSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mPropertiesLayout->AddChild(mSizeProperty->GetWidget());
 
 		auto scaleIcon = o2UI.CreateImage("ui/UI2_scale_icon.png");
-		scaleIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -80));
+		*scaleIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -80));
 		mPropertiesLayout->AddChild(scaleIcon);
 
 		mScaleProperty = mnew Vec2FProperty(o2UI.CreateWidget<UIWidget>("colored vector2 property"));
-		mScaleProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 5, 20, 80);
+		*mScaleProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 5, 20, 80);
 		mScaleProperty->SetValuePath("transform/scale");
 		mScaleProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mPropertiesLayout->AddChild(mScaleProperty->GetWidget());
 
 		auto rotateIcon = o2UI.CreateImage("ui/UI2_rotate_icon.png");
-		rotateIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -105));
+		*rotateIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(5, -105));
 		mPropertiesLayout->AddChild(rotateIcon);
 
 		mRotationProperty = mnew FloatProperty();
-		mRotationProperty->GetWidget()->layout = UIWidgetLayout(Vec2F(0, 1), Vec2F(0.5f, 1), Vec2F(40, -125), Vec2F(4, -105));
+		*mRotationProperty->GetWidget()->layout = UIWidgetLayout(Vec2F(0, 1), Vec2F(0.5f, 1), Vec2F(40, -125), Vec2F(4, -105));
 		mRotationProperty->SetValuePath("transform/angleDegree");
 		mRotationProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mPropertiesLayout->AddChild(mRotationProperty->GetWidget());
 
 		auto depthIcon = o2UI.CreateImage("ui/UI2_layer_icon_t.png");
-		depthIcon->layout = UIWidgetLayout::Based(BaseCorner::Top, Vec2F(20, 20), Vec2F(15, -105));
+		*depthIcon->layout = UIWidgetLayout::Based(BaseCorner::Top, Vec2F(20, 20), Vec2F(15, -105));
 		mPropertiesLayout->AddChild(depthIcon);
 
 		mDepthProperty = mnew FloatProperty();
-		mDepthProperty->GetWidget()->layout = UIWidgetLayout(Vec2F(0.5f, 1), Vec2F(1, 1), Vec2F(23, -125), Vec2F(-5, -105));
+		*mDepthProperty->GetWidget()->layout = UIWidgetLayout(Vec2F(0.5f, 1), Vec2F(1, 1), Vec2F(23, -125), Vec2F(-5, -105));
 		mDepthProperty->SetValuePath("drawDepth");
 		mDepthProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mPropertiesLayout->AddChild(mDepthProperty->GetWidget());

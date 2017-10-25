@@ -26,16 +26,16 @@ namespace Editor
 		~TagsProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
 
 		// Updates and checks value
-		void Refresh();
+		void Refresh() override;
 
 		// Reverts value to prototype value
-		void Revert();
+		void Revert() override;
 
 		// Returns root widget
-		UIWidget* GetWidget() const;
+		UIWidget* GetWidget() const override;
 
 		// Returns value
 		const TagGroup& GetCommonValue() const;
@@ -50,7 +50,7 @@ namespace Editor
 		void SetUnknownValue();
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const;
+		const Type* GetFieldType() const override;
 
 		IOBJECT(TagsProperty);
 
@@ -73,7 +73,7 @@ namespace Editor
 		void SetCommonValue(const TagGroup& value);
 
 		// Checks value for reverting to prototype
-		void CheckRevertableState();
+		void CheckRevertableState() override;
 
 		// Updates context menu data with filter
 		void UpdateContextData(const WString& filter);

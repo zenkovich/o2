@@ -9,9 +9,11 @@
 #include "PropertiesWindow/ActorsViewer/IActorHeaderViewer.h"
 #include "PropertiesWindow/ActorsViewer/IActorTransformViewer.h"
 #include "Scene/Actor.h"
+#include "Scene/Component.h"
 #include "UI/ScrollArea.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
+#include "UI/WidgetLayout.h"
 
 namespace Editor
 {
@@ -40,7 +42,7 @@ namespace Editor
 		mViewersLayout->expandWidth   = true;
 		mViewersLayout->fitByChildren = true;
 		mViewersLayout->baseCorner    = BaseCorner::Top;
-		mViewersLayout->layout        = UIWidgetLayout::BothStretch();
+		*mViewersLayout->layout       = UIWidgetLayout::BothStretch();
 		mContentWidget->AddChild(mViewersLayout);
 
 		o2Scene.onChanged += [&](Vector<Actor*>) { Refresh(); };
@@ -105,7 +107,7 @@ namespace Editor
 
 	void ActorPropertiesViewer::SetTargets(const Vector<IObject*> targets)
 	{
-		mTargetActors = targets.Select<Actor*>([](auto x) { return (Actor*)x; });
+		mTargetActors = targets.Select<Actor*>([](auto x) { return dynamic_cast<Actor*>(x); });
 
 		// clear 
 		mViewersLayout->RemoveAllChildren(false);
@@ -178,7 +180,7 @@ namespace Editor
 				mTargetActors.Select<Component*>([&](Actor* x) { return x->GetComponent(type); }));
 		}
 
-		mViewersLayout->AddChilds(viewersWidgets);
+		mViewersLayout->AddChildren(viewersWidgets.Cast<Actor*>());
 	}
 
 	void ActorPropertiesViewer::OnEnabled()

@@ -109,7 +109,7 @@ namespace Editor
 		void OnContextCollapsePressed();
 
 		// It is called when key was released
-		void OnKeyReleased(const Input::Key& key);
+		void OnKeyReleased(const Input::Key& key) override;
 
 		friend class AssetsWindow;
 	};

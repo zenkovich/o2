@@ -42,7 +42,7 @@ namespace Editor
 		~AssetsWindow();
 
 		// Updates window logic
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Selects asset with id
 		void SelectAsset(UID id);

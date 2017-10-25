@@ -3,6 +3,7 @@
 #include "Render/Camera.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
+#include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
 #include "Utils/Math/Curve.h"
 

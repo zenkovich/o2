@@ -20,6 +20,9 @@
 #include "UI/EditBox.h"
 #include "UI/Toggle.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -28,7 +31,7 @@ namespace Editor
 	{
 		delete mNodeWidgetSample;
 		mNodeWidgetSample = mnew UIActorsTreeNode();
-		mNodeWidgetSample->layout.minHeight = 20;
+		mNodeWidgetSample->layout->minHeight = 20;
 		mNodeWidgetSample->AddLayer("caption", nullptr);
 
 		Initialize();
@@ -152,7 +155,7 @@ namespace Editor
 		if (object)
 		{
 			Actor* parent = object;
-			return parent->GetChilds().Cast<UnknownPtr>();
+			return parent->GetChildren().Cast<UnknownPtr>();
 		}
 
 		return o2Scene.GetRootActors().Cast<UnknownPtr>();

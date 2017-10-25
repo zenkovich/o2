@@ -8,6 +8,9 @@
 #include "UI/Button.h"
 #include "UI/DropDown.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -18,11 +21,11 @@ namespace Editor
 		else
 			mPropertyWidget = o2UI.CreateWidget<UIWidget>("enum property");
 
-		mDropDown = mPropertyWidget->FindChild<UIDropDown>();
+		mDropDown = mPropertyWidget->GetChildByType<UIDropDown>();
 		mDropDown->onSelectedText = THIS_FUNC(OnSelectedItem);
 		mDropDown->SetState("undefined", true);
 
-		mRevertBtn = mPropertyWidget->FindChild<UIButton>();
+		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 	}

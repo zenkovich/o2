@@ -12,7 +12,7 @@ namespace o2
 	{}
 
 	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::InScene*/) :
-		Actor(mnew ActorTransform(), mode == ActorCreateMode::InScene)
+		Actor(transform, mode == ActorCreateMode::InScene)
 	{
 		mIsOnScene = false;
 
@@ -632,6 +632,14 @@ namespace o2
 		return actor;
 	}
 
+	Vector<Actor*> Actor::AddChildren(Vector<Actor*> actors)
+	{
+		for (auto actor : actors)
+			AddChild(actor);
+
+		return actors;
+	}
+
 	Actor* Actor::GetChild(const String& path) const
 	{
 		int delPos = path.Find("/");
@@ -695,14 +703,16 @@ namespace o2
 		}
 	}
 
-	void Actor::RemoveAllChildren()
+	void Actor::RemoveAllChildren(bool release /*= true*/)
 	{
 		for (auto child : mChildren)
 		{
 			child->mParent = nullptr;
 			OnChildRemoved(child);
 			child->OnParentChanged(this);
-			delete child;
+
+			if (release)
+				delete child;
 		}
 
 		mChildren.Clear();
@@ -2418,11 +2428,12 @@ CLASS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, SetParent, Actor*, bool);
 	PUBLIC_FUNCTION(Actor*, GetParent);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*);
+	PUBLIC_FUNCTION(Vector<Actor*>, AddChildren, Vector<Actor*>);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
 	PUBLIC_FUNCTION(ActorsVec, GetChildren);
 	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
-	PUBLIC_FUNCTION(void, RemoveAllChildren);
+	PUBLIC_FUNCTION(void, RemoveAllChildren, bool);
 	PUBLIC_FUNCTION(Component*, AddComponent, Component*);
 	PUBLIC_FUNCTION(void, RemoveComponent, Component*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllComponents);

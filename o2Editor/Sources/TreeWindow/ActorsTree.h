@@ -7,6 +7,7 @@ namespace o2
 	class Actor;
 	class UIButton;
 	class UIEditBox;
+	class UIToggle;
 	class UIToggleGroup;
 }
 

@@ -3,6 +3,7 @@
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "Render/Text.h"
 #include "UI/Label.h"
+#include "UI/WidgetState.h"
 #include "Utils/FileSystem/FileSystem.h"
 
 namespace Editor
@@ -17,7 +18,7 @@ namespace Editor
 	UIAssetIcon::UIAssetIcon(const UIAssetIcon& other):
 		UIWidget(other)
 	{
-		mNameText = FindChild<UILabel>();
+		mNameText = GetChildByType<UILabel>();
 
 		onDraw += [&]() { CursorAreaEventsListener::OnDrawn(); };
 		RetargetStatesAnimations();
@@ -30,7 +31,7 @@ namespace Editor
 	UIAssetIcon& UIAssetIcon::operator=(const UIAssetIcon& other)
 	{
 		UIWidget::operator=(other);
-		mNameText = FindChild<UILabel>();
+		mNameText = GetChildByType<UILabel>();
 
 		return *this;
 	}

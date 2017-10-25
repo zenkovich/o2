@@ -29,19 +29,19 @@ namespace Editor
 		~ObjectPtrProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
 
 		// Updates and checks value
-		void Refresh();
+		void Refresh() override;
 
 		// Returns root widget
-		UIWidget* GetWidget() const;
+		UIWidget* GetWidget() const override;
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const;
+		const Type* GetFieldType() const override;
 
 		// Specializes field type
-		void SpecializeType(const Type* type);
+		void SpecializeType(const Type* type) override;
 
 		// Expands property fields
 		void Expand();

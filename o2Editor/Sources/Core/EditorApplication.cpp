@@ -7,6 +7,7 @@
 #include "Core/Actions/IAction.h"
 #include "Core/MenuPanel.h"
 #include "Core/ToolsPanel.h"
+#include "Core/UIRoot.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "Events/EventSystem.h"
 #include "Render/Render.h"
@@ -131,6 +132,8 @@ namespace Editor
 	{
 		o2Application.SetWindowCaption("o2 Editor");
 
+		mUIRoot = mnew UIRoot();
+
 		mBackground = mnew Sprite("ui/UI_Background.png");
 		mBackSign = mnew Sprite("ui/UI_o2_sign.png");
 
@@ -164,6 +167,7 @@ namespace Editor
 		delete mBackSign;
 		delete mToolsPanel;
 		delete mMenuPanel;
+		delete mUIRoot;
 	}
 
 	void EditorApplication::OnResizing()
@@ -172,6 +176,7 @@ namespace Editor
 		mBackSign->position = (Vec2F)(o2Render.GetResolution()).InvertedX()*0.5f + Vec2F(40.0f, -85.0f);
 
 		mConfig->OnWindowChange();
+		mUIRoot->OnApplicationSized();
 	}
 
 	void EditorApplication::OnMoved()
@@ -210,12 +215,13 @@ namespace Editor
 		OnDraw();
 		OnUpdate(dt);
 
-		mUIManager->Update(dt);
+		mUIRoot->Update(dt);
 		mEventSystem->PostUpdate();
 		mScene->Update(dt);
 
 
 		OnDraw();
+		mUIRoot->Draw();
 		mUIManager->Draw();
 		o2Debug.Draw();
 

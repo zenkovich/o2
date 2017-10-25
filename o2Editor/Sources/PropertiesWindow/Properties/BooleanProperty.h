@@ -27,16 +27,16 @@ namespace Editor
 		~BooleanProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty);
+		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
 
 		// Updates and checks value
-		void Refresh();
+		void Refresh() override;
 
 		// Reverts value to prototype value
-		void Revert();
+		void Revert() override;
 
 		// Returns root widget
-		UIWidget* GetWidget() const;
+		UIWidget* GetWidget() const override;
 
 		// Returns value
 		bool GetCommonValue() const;
@@ -51,7 +51,7 @@ namespace Editor
 		void SetUnknownValue(bool defaultValue = false);
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const;
+		const Type* GetFieldType() const override;
 
 		IOBJECT(BooleanProperty);
 
@@ -72,7 +72,7 @@ namespace Editor
 		void SetCommonValue(bool value);
 
 		// Checks value for reverting to prototype
-		void CheckRevertableState();
+		void CheckRevertableState() override;
 
 		// Sets value, checks value changed, calls onChangeCompleted
 		void SetValueByUser(bool value);

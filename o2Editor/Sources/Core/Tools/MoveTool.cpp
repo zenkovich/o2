@@ -162,7 +162,7 @@ namespace Editor
 		if (selectedActors.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
 		{
 			Actor* lastSelectedActor = selectedActors.Last();
-			mHandlesAngle = -lastSelectedActor->transform->right->Angle(Vec2F::Right());
+			mHandlesAngle = -lastSelectedActor->transform->rightDir->Angle(Vec2F::Right());
 
 			mVerDragHandle.angle = mHandlesAngle;
 			mHorDragHandle.angle = mHandlesAngle;
@@ -238,7 +238,7 @@ namespace Editor
 			if (selectedActors.Count() > 0)
 			{
 				Actor* lastSelectedActor = selectedActors.Last();
-				mHandlesAngle = -lastSelectedActor->transform->right->Angle(Vec2F::Right());
+				mHandlesAngle = -lastSelectedActor->transform->rightDir->Angle(Vec2F::Right());
 
 				mVerDragHandle.angle = mHandlesAngle;
 				mHorDragHandle.angle = mHandlesAngle;

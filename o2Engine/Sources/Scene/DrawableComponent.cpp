@@ -66,7 +66,6 @@ CLASS_META(o2::DrawableComponent)
 	BASE_CLASS(o2::Component);
 	BASE_CLASS(o2::SceneDrawable);
 
-	PUBLIC_FIELD();
 
 	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
 	PROTECTED_FUNCTION(void, UpdateEnabled);

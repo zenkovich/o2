@@ -40,10 +40,10 @@ namespace Editor
 		UICurveEditor& operator=(const UICurveEditor& other);
 
 		// Draws widget, updates render target 
-		void Draw();
+		void Draw() override;
 
 		// Updates drawables, states and widget
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Adds editing curve with color. If color is default it will be randomized
 		void AddEditingCurve(const String& id, Curve* curve, const Color4& color = Color4::Green());
@@ -84,7 +84,7 @@ namespace Editor
 									const ImageAssetRef& selected);
 
 		// Updates layout
-		void UpdateLayout(bool forcible = false, bool withChildren = true);
+		void UpdateLayout(bool withChildren = true) override;
 
 		SERIALIZABLE(UICurveEditor);
 
@@ -210,10 +210,10 @@ namespace Editor
 
 	protected:
 		// It is called when visible was changed. Sets context menu items priority
-		void OnVisibleChanged();
+		void OnVisibleChanged() override;
 
 		// It is called when scrolling
-		void OnScrolled(float scroll);
+		void OnScrolled(float scroll) override;
 
 		// Searches curve by id
 		Curve* FindCurve(const String& id);
@@ -269,26 +269,26 @@ namespace Editor
 		// Checks right support handle constrains and returns filtered position
 		Vec2F CheckRightSupportHandlePosition(CurveInfo* info, KeyHandles* handles, const Vec2F& position);
 
-		// It is called when cursor double clicked, adds new point in curve
-		void OnCursorDblClicked(const Input::Cursor& cursor);
-
 		// Smooths key support points and updates handles
 		void SmoothKey(CurveInfo* info, int idx);
 
+		// It is called when cursor double clicked, adds new point in curve
+		void OnCursorDblClicked(const Input::Cursor& cursor) override;
+
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button stay down on this, overriding from scroll view to call context menu
-		void OnCursorRightMouseStayDown(const Input::Cursor& cursor);
+		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time), overriding from scroll view to call context menu
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
 		// Checks supports handles visibility
 		void CheckHandlesVisible();

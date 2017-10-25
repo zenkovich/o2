@@ -156,7 +156,7 @@ namespace o2
 			for (auto eff : GetMeta()->mEffects)
 			{
 				if (eff)
-					vectorFont->AddEffect(eff->Clone());
+					vectorFont->AddEffect(eff->CloneAs<VectorFont::Effect>());
 			}
 		}
 	}

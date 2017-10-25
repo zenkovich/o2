@@ -10,6 +10,8 @@
 #include "UI/EditBox.h"
 #include "UI/Tree.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
 #include "Utils/FileSystem/FileSystem.h"
 
 namespace Editor
@@ -18,7 +20,7 @@ namespace Editor
 		UIWidget()
 	{
 		mFoldersTree = o2UI.CreateWidget<UITree>("folders");
-		mFoldersTree->layout = UIWidgetLayout::BothStretch();
+		*mFoldersTree->layout = UIWidgetLayout::BothStretch();
 
 		mFoldersTree->SetRearrangeType(UITree::RearrangeType::OnlyReparent);
 		mFoldersTree->SetMultipleSelectionAvailable(false);
@@ -39,8 +41,8 @@ namespace Editor
 	UIAssetsFoldersTree::UIAssetsFoldersTree(const UIAssetsFoldersTree& other):
 		UIWidget(other)
 	{
-		mFoldersTree = FindChild<UITree>();
-		RemoveChild(FindChild<UIContextMenu>());
+		mFoldersTree = GetChildByType<UITree>();
+		RemoveChild(GetChildByType<UIContextMenu>());
 
 		InitializeContext();
 
@@ -55,8 +57,8 @@ namespace Editor
 	{
 		UIWidget::operator=(other);
 
-		mFoldersTree = FindChild<UITree>();
-		RemoveChild(FindChild<UIContextMenu>());
+		mFoldersTree = GetChildByType<UITree>();
+		RemoveChild(GetChildByType<UIContextMenu>());
 
 		InitializeContext();
 

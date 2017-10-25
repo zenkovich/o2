@@ -546,6 +546,7 @@ CLASS_META(o2::UILongList)
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
 	PUBLIC_FUNCTION(void, SetHoverDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
+	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
@@ -566,7 +567,6 @@ CLASS_META(o2::UILongList)
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateSelection, int);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, OnItemsUpdated, bool);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

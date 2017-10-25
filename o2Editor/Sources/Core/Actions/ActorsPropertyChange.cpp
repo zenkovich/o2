@@ -1,11 +1,11 @@
 #include "ActorsPropertyChange.h"
 
 #include "Scene/Actor.h"
+#include "Scene/Component.h"
 #include "Scene/Scene.h"
 
 namespace Editor
 {
-
 	ActorsPropertyChangeAction::ActorsPropertyChangeAction()
 	{}
 

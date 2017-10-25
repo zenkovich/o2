@@ -7,12 +7,13 @@
 #include "UI/LongList.h"
 #include "UI/Toggle.h"
 #include "UI/UIManager.h"
+#include "UI/WidgetLayer.h"
+#include "UI/WidgetLayout.h"
 
 namespace Editor
 {
 	void LogWindow::Update(float dt)
-	{
-	}
+	{}
 
 	LogWindow::LogWindow():
 		mRegularMessagesEnabled(true), mWarningMessagesEnabled(true), mErrorMessagesEnabled(true), mRegularMessagesCount(0),
@@ -35,14 +36,14 @@ namespace Editor
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
 
 		mList = o2UI.CreateWidget<UILongList>();
-		mList->layout = UIWidgetLayout::BothStretch(0, 18, 0, -1);
+		*mList->layout = UIWidgetLayout::BothStretch(0, 18, 0, -1);
 		mList->SetViewLayout(Layout::BothStretch());
 		mList->getItemsCountFunc = THIS_FUNC(GetVisibleMessagesCount);
 		mList->getItemsRangeFunc = THIS_FUNC(GetVisibleMessagesRange);
 		mList->setupItemFunc = THIS_FUNC(SetupListMessage);
 
 		UIWidget* listItemSample = mnew UIWidget();
-		listItemSample->layout.minHeight = 25;
+		listItemSample->layout->minHeight = 25;
 		listItemSample->AddLayer("back", mnew Sprite(Color4(212, 216, 224, 255)));
 		listItemSample->AddLayer("warning", mnew Sprite(Color4(239, 196, 25, 255)),
 								 Layout::VerStretch(HorAlign::Left, 0, 0, 10, 0));
@@ -63,16 +64,16 @@ namespace Editor
 		UIWidget* downPanel = mnew UIWidget();
 		downPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_down_back.png"),
 							Layout::BothStretch(-4, -5, -4, -5));
-		downPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
+		*downPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
 		mWindow->AddChild(downPanel);
 
 		auto clearBtn = o2UI.CreateWidget<UIButton>("down panel trash");
-		clearBtn->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0));
+		*clearBtn->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0));
 		clearBtn->onClick = [&]() { OnClearPressed(); };
 		downPanel->AddChild(clearBtn);
 
 		auto messagesToggle = o2UI.CreateWidget<UIToggle>("log messages");
-		messagesToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(60, 20), Vec2F(20, 0));
+		*messagesToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(60, 20), Vec2F(20, 0));
 		mMessagesCountLabel = messagesToggle->GetLayerDrawable<Text>("caption");
 		mMessagesCountLabel->text = "0";
 		messagesToggle->value = true;
@@ -80,7 +81,7 @@ namespace Editor
 		downPanel->AddChild(messagesToggle);
 
 		auto warningsToggle = o2UI.CreateWidget<UIToggle>("log warnings");
-		warningsToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(60, 20), Vec2F(80, 0));
+		*warningsToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(60, 20), Vec2F(80, 0));
 		mWarningsCountLabel = warningsToggle->GetLayerDrawable<Text>("caption");
 		mWarningsCountLabel->text = "0";
 		warningsToggle->value = true;
@@ -88,15 +89,15 @@ namespace Editor
 		downPanel->AddChild(warningsToggle);
 
 		auto errorsToggle = o2UI.CreateWidget<UIToggle>("log errors");
-		errorsToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(60, 20), Vec2F(140, 0));
+		*errorsToggle->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(60, 20), Vec2F(140, 0));
 		mErrorsCountLabel = errorsToggle->GetLayerDrawable<Text>("caption");
 		mErrorsCountLabel->text = "0";
 		errorsToggle->value = true;
 		errorsToggle->onToggle = [&](bool value) { OnErrorMessagesToggled(value); };
 		downPanel->AddChild(errorsToggle);
 
-		mLastMessageView = listItemSample->Clone();
-		mLastMessageView->layout = UIWidgetLayout::BothStretch(200, 1, 0, 1);
+		mLastMessageView = listItemSample->CloneAs<UIWidget>();
+		*mLastMessageView->layout = UIWidgetLayout::BothStretch(200, 1, 0, 1);
 		downPanel->AddChild(mLastMessageView);
 		mLastMessageView->Hide(true);
 	}

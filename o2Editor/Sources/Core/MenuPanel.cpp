@@ -2,11 +2,14 @@
 
 #include "Application/Application.h"
 #include "Assets/Assets.h"
+#include "AssetsWindow/AssetsWindow.h"
 #include "Core/EditorApplication.h"
 #include "Core/EditorConfig.h"
+#include "Core/UIRoot.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "Dialogs/CurveEditorDlg.h"
 #include "LogWindow/LogWindow.h"
+#include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Scene.h"
 #include "SceneWindow/SceneWindow.h"
 #include "TreeWindow/TreeWindow.h"
@@ -16,10 +19,8 @@
 #include "UI/MenuPanel.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
-#include "UIManager/EditorUIManager.h"
+#include "UIStyle/EditorUIStyle.h"
 #include "Utils/Math/Curve.h"
-#include "AssetsWindow/AssetsWindow.h"
-#include "PropertiesWindow/PropertiesWindow.h"
 
 DECLARE_SINGLETON(Editor::MenuPanel);
 
@@ -28,8 +29,8 @@ namespace Editor
 	MenuPanel::MenuPanel()
 	{
 		mMenuPanel = o2UI.CreateWidget<UIMenuPanel>();
-		mMenuPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-		o2UI.AddWidget(mMenuPanel);
+		*mMenuPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		EditorUIRoot.AddWidget(mMenuPanel);
 
 		// FILE
 		mMenuPanel->AddItem("File/New scene", [&]() { OnNewScenePressed(); }, ImageAssetRef(), ShortcutKeys('N', true));
@@ -88,7 +89,7 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
 		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
 		mMenuPanel->AddItem("Debug/RebuildEditorUIManager", [&]() {
-			EditorUIManagerBuilder builder;
+			EditorUIStyleBuilder builder;
 			builder.RebuildEditorUIManager();
 		});
 	}
@@ -155,12 +156,12 @@ namespace Editor
 	{
 		if (o2EditorApplication.IsSceneChanged())
 		{
-			auto wnd = o2UI.AddWindow("Save scene?");
-			wnd->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(300, 200));
+			auto wnd = EditorUIRoot.AddWidget(o2UI.CreateWindow("Save scene?"));
+			*wnd->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(300, 200));
 
 			auto verLayout = o2UI.CreateVerLayout();
 			wnd->AddChild(verLayout);
-			verLayout->layout = UIWidgetLayout::BothStretch();
+			*verLayout->layout = UIWidgetLayout::BothStretch();
 			verLayout->baseCorner = BaseCorner::Top;
 
 			auto text = o2UI.CreateLabel("Current scene was modified and not saved. Do you want to save it?");
@@ -170,7 +171,7 @@ namespace Editor
 			auto horLayout = o2UI.CreateHorLayout();
 			verLayout->AddChild(horLayout);
 
-			horLayout->layout = UIWidgetLayout::BothStretch();
+			*horLayout->layout = UIWidgetLayout::BothStretch();
 			horLayout->border = RectF(20, 20, 20, 20);
 			horLayout->spacing = 20;
 			horLayout->AddChild(o2UI.CreateButton("Save"));

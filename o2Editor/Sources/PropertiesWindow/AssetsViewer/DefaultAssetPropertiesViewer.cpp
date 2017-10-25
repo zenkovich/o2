@@ -1,7 +1,8 @@
 #include "DefaultAssetPropertiesViewer.h"
 
+#include "PropertiesWindow/PropertiesWindow.h"
 #include "UI/VerticalLayout.h"
-#include "../PropertiesWindow.h"
+#include "UI/WidgetLayout.h"
 
 namespace Editor
 {
@@ -15,7 +16,7 @@ namespace Editor
 		mPropertiesLayout->expandWidth = true;
 		mPropertiesLayout->fitByChildren = true;
 		mPropertiesLayout->baseCorner = BaseCorner::Top;
-		mPropertiesLayout->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 10);
+		*mPropertiesLayout->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 10);
 	}
 
 	DefaultAssetPropertiesViewer::~DefaultAssetPropertiesViewer()
