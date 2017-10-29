@@ -146,6 +146,9 @@ protected:
 	// Updates reflection for classes in source
 	void UpdateSourceReflection(SyntaxFile* file);
 
+	// Returns class declaration meta
+	string GetClassDeclaration(SyntaxClass* cls);
+
 	// Returns class reflection meta
 	string GetClassMeta(SyntaxClass* cls);
 

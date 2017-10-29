@@ -139,14 +139,14 @@ namespace o2
 		struct Dummy { static Type* type; };
 
 	protected:
-		TypeId                mId;            // Id of type
-		String                mName;          // Name of object type
-		BaseTypesVec          mBaseTypes;     // Base types ids with offset 
-		FieldInfosVec         mFields;        // Fields information
-		FunctionsInfosVec     mFunctions;     // Functions informations
-		ITypeSampleCreator*   mSampleCreator; // Template type agent
-		mutable Type*         mPtrType;       // Pointer type from this
-		int                   mSize;          // Size of type in bytes
+		TypeId              mId;            // Id of type
+		String              mName;          // Name of object type
+		BaseTypesVec        mBaseTypes;     // Base types ids with offset 
+		FieldInfosVec       mFields;        // Fields information
+		FunctionsInfosVec   mFunctions;     // Functions informations
+		ITypeSampleCreator* mSampleCreator; // Template type agent
+		mutable Type*       mPtrType;       // Pointer type from this
+		int                 mSize;          // Size of type in bytes
 
 		void(*mInitializeFunc)(Type*);    // Type initializing function
 
@@ -174,9 +174,6 @@ namespace o2
 	public:
 		// Default constructor
 		FundamentalType(const String& name);
-
-		// Initialize type function
-		static void InitializeType(Type* type);
 	};
 
 	// ------------
@@ -408,6 +405,10 @@ namespace o2
 		friend struct o2::GetTypeHelper;
 
 		friend class Reflection;
+
+	public:
+		template<typedef _processor_type>
+		static void InitializeType(_type* object, _processor_type& processor);
 	};
 
 	// --------------------------
@@ -458,49 +459,74 @@ namespace o2
 	};
 }
 
-	// -------------------------------
-	// Types meta information macroses
-	// -------------------------------
-	// 
-#define CLASS_META(NAME)                                                \
-    o2::Type* NAME::type = o2::Reflection::InitializeType<NAME>(#NAME); \
-    void NAME::InitializeType(o2::Type* type)                           \
-	{                                                                   \
-	    thisclass::type = type;                                         \
-	    thisclass* __this = new thisclass();      
+class ITypeProcessor
+{
+public:
+	template<typename _object_type>
+	void Start(_object_type* object) {}
 
+	template<typename _object_type>
+	void StartBases(_object_type* object) {}
+
+	template<typename _object_type>
+	void StartFields(_object_type* object) {}
+
+	template<typename _object_type>
+	void StartMethods(_object_type* object) {}
+
+	template<typename _object_type, typename _base_type>
+	void BaseType(_object_type* object, Type* type, const char* name) {}
+
+	template<typename _object_type, typename _field_type>
+	void Field(_object_type* object, Type* type, const char* name, _field_type& field, ProtectSection protection) {}
+
+	template<typename _object_type, typename _res_type, typename ... _args>
+	void Method(_object_type* object, Type* type, const char* name, _res_type(_class_type::*pointer)(_args ...), ProtectSection protection) {}
+
+	template<typename _object_type, typename _res_type, typename ... _args>
+	void Method(_object_type* object, Type* type, const char* name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection protection) {}
+};
+
+#define DECLARE_CLASS(CLASS)                                                                                   \
+    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
+
+#define CLASS_BASES_META(CLASS)                                                                                \
+    template<typename _type_processor> void CLASS::ProcessBaseTypes(CLASS* object, _type_processor& processor) \
+	{                                                                                                          \
+		processor.StartBases<CLASS>(object, type);
+
+#define CLASS_FIELDS_META(CLASS)                                                                               \
+    template<typename _type_processor> void CLASS::ProcessFields(CLASS* object, _type_processor& processor)    \
+	{                                                                                                          \
+		processor.StartFields<CLASS>(object, type);															   
+
+#define CLASS_METHODS_META(CLASS)                                                                              \
+    template<typename _type_processor> void CLASS::ProcessMethods(CLASS* object, _type_processor& processor)   \
+	{                                                                                                          \
+		processor.StartMethods<CLASS>(object, type);
+	 
 #define META_TEMPLATES(...) \
     template<__VA_ARGS__>
 
-#define CLASS_TEMPLATE_META(NAME)                                       \
-    void NAME::InitializeType(o2::Type* type)                           \
-	{                                                                   \
-	    thisclass::type = type;                                         \
-	    thisclass* __this = new thisclass();
+#define FUNDAMENTAL_META(NAME)                                                                                                       \
+    template<typename _type_processor> void FundamentalTypeContainer<NAME>::InitializeType(NAME* object, _type_processor& processor) \
+	{                                                                                                                                \
+		processor.StartFields<NAME>(object, type);
 
-#define FUNDAMENTAL_META(NAME)                                          \
-    void FundamentalType<NAME>::InitializeType(o2::Type* type)          \
-	{                                                                   \
-	    typedef NAME thisclass;                                         \
-	    thisclass* __this = new thisclass();
-
-#define BASE_CLASS(NAME) \
-    o2::TypeInitializer::AddBaseType<NAME>(type, (size_t)dynamic_cast<NAME*>(__this) - (size_t)__this)
+#define BASE_CLASS(CLASS) \
+    processor.BaseType<thisclass, CLASS>(object, type, #CLASS)
 
 #define FIELD(NAME, PROTECT_SECTION) \
-    o2::TypeInitializer::RegField(type, #NAME, (size_t)&__this->NAME - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::PROTECT_SECTION)
+    processor.Field<thisclass, decltype<object->NAME>>(object, type, #NAME, object->NAME, ProtectSection::PROTECT_SECTION)
 
 #define PUBLIC_FIELD(NAME) \
-    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME) - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::Public)
+    processor.Field<thisclass, decltype<object->NAME>>(object, type, #NAME, object->NAME, ProtectSection::Public)
 
 #define PRIVATE_FIELD(NAME) \
-    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME) - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::Private)
+    processor.Field<thisclass, decltype<object->NAME>>(object, type, #NAME, object->NAME, ProtectSection::Private)
 
 #define PROTECTED_FIELD(NAME) \
-    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME) - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::Protected)
-
-#define FUNDAMENTAL_FIELD(NAME) \
-    o2::TypeInitializer::RegField(type, #NAME, (size_t)(&__this->NAME) - (size_t)(__this), __this->NAME, ProtectSection::Public)
+    processor.Field<thisclass, decltype<object->NAME>>(object, type, #NAME, object->NAME, ProtectSection::Protected)
 
 
 #define ATTRIBUTE(NAME) \
@@ -513,20 +539,18 @@ namespace o2
 #define ATTRIBUTE_SHORT_DEFINITION(X)
 
 #define FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
-    o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
+    processor.Method<thisclass, RETURN_TYPE, __VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
 
 #define PUBLIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Public)
+    processor.Method<thisclass, RETURN_TYPE, __VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Public)
 
 #define PRIVATE_FUNCTION(RETURN_TYPE, NAME, ...) \
-    o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Private)
+    processor.Method<thisclass, RETURN_TYPE, __VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Private)
 
 #define PROTECTED_FUNCTION(RETURN_TYPE, NAME, ...) \
-    o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Protected)
+    processor.Method<thisclass, RETURN_TYPE, __VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Protected)
 
-#define END_META   \
-    delete __this; \
-}
+#define END_META }
 
 #include "Utils/Property.h"
 #include "Utils/Reflection/FieldInfo.h"
@@ -789,7 +813,6 @@ namespace o2
 	// ------------------------------
 	// TypeInitializer implementation
 	// ------------------------------
-
 
 	template<typename _type, typename X>
 	void TypeInitializer::AddBaseType(Type*& type, int offset)

@@ -566,6 +566,10 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 		return;
 
 	RemoveMetas(hSource, "META_TEMPLATES(", "END_META;");
+	RemoveMetas(hSource, "CLASS_BASES_META(", "END_META;");
+	RemoveMetas(hSource, "CLASS_FIELDS_META(", "END_META;");
+	RemoveMetas(hSource, "CLASS_METHODS_META(", "END_META;");
+	RemoveMetas(hSource, "DECLARE_CLASS(", ");");
 
 	string cppSourcePath = file->GetPath().substr(0, file->GetPath().rfind('.')) + ".cpp";
 
@@ -583,6 +587,10 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 				RemoveMetas(cppSource, "ENUM_META_(", "END_ENUM_META;");
 				RemoveMetas(cppSource, "CLASS_META(", "END_META;");
 				RemoveMetas(cppSource, "CLASS_TEMPLATE_META(", "END_META;");
+				RemoveMetas(cppSource, "CLASS_BASES_META(", "END_META;");
+				RemoveMetas(cppSource, "CLASS_FIELDS_META(", "END_META;");
+				RemoveMetas(cppSource, "CLASS_METHODS_META(", "END_META;");
+				RemoveMetas(cppSource, "DECLARE_CLASS(", ");");
 			}
 			else cppSource = "#include \"" + GetPathWithoutDirectories(file->GetPath()) + "\"\n\n";
 
@@ -599,9 +607,10 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 		if (!cls->IsTemplate())
 		{
 			checkCppLoad();
-			cppSource += GetClassMeta(cls);
+			cppSource += GetClassDeclaration(cls);
 		}
-		else hSource += GetClassMeta(cls);
+		
+		hSource += GetClassMeta(cls);
 
 		VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
 	}
@@ -639,6 +648,20 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	VerboseLog("Reflection generated for %s\n", file->GetPath().c_str());
 }
 
+string CodeToolApplication::GetClassDeclaration(SyntaxClass* cls)
+{
+	string res = "\n";
+
+	string nspace;
+	int nspaceDelimer = (int)cls->GetFullName().rfind("::");
+	if (nspaceDelimer != cls->GetFullName().npos)
+		nspace = cls->GetFullName().substr(0, nspaceDelimer);
+
+	res += "DECLARE_CLASS(" + GetClassNormalizedTemplates(cls->GetFullName(), nspace) + ");\n";
+
+	return res;
+}
+
 string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 {
 	string res = "\n";
@@ -649,28 +672,24 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	if (nspaceDelimer != cls->GetFullName().npos)
 		nspace = cls->GetFullName().substr(0, nspaceDelimer);
 
+	string classDef;
+
 	if (!cls->IsTemplate())
-	{
-		res += "CLASS_META(" + GetClassNormalizedTemplates(cls->GetFullName(), nspace) + ")\n{\n";
-	}
+		classDef = GetClassNormalizedTemplates(cls->GetFullName(), nspace);
 	else
-	{
-		string fullName;
-		AggregateTemplates(cls, res, fullName);
-		res += "CLASS_TEMPLATE_META(" + fullName + ")\n{\n";
-	}
+		AggregateTemplates(cls, res, classDef);
 
 	// base classes
+	res += "CLASS_BASES_META(" + classDef + ")\n{\n";
 	for (auto x : cls->GetBaseClasses())
 	{
 		auto classInfo = mCache.FindSection(x.GetClassName(), nspace);
 		res += string("\tBASE_CLASS(") + (classInfo ? classInfo->GetFullName() : x.GetClassName()) +  +");\n";
 	}
-
-	if (!cls->GetBaseClasses().empty())
-		res += "\n";
+	res += "}\nEND_META;\n";
 
 	// fields
+	res += "CLASS_FIELDS_META(" + classDef + ")\n{\n";
 	for (auto x : cls->GetVariables())
 	{
 		if (x->IsStatic())
@@ -763,8 +782,11 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
 		res += attributes + ";\n";
 	}
+	res += "}\nEND_META;\n";
 
 	// functions
+	res += "CLASS_METHODS_META(" + classDef + ")\n{\n";
+
 	int supportingTypedefsPos = (int)res.length();
 	vector<string> supportingTypedefs;
 
