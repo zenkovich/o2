@@ -44,16 +44,16 @@ namespace Editor
 		const Color4        mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
 		const Color4        mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
 
-		Mesh*               mRotateRingFillMesh;		  // Rotate ring mesh
-		Mesh*               mAngleMesh;					  // Rotation angle mesh
-		Vec2F               mScenePivot;				  // Rotation pivot in scene space
-
-		SceneDragHandle     mPivotDragHandle;			  // Pivot drag handle
-		float               mPressAngle;				  // Angle at cursor pressing
-		float               mCurrentRotateAngle;		  // Current rotation angle
-		bool                mRingPressed = false;		  // Is rotate ring was pressed
-		float               mSnapAngleAccumulated = 0.0f; // Snapping angle accumulated
-		ActorsTransformsVec mBeforeTransforms;  		  // Array of actors' transformations before changing
+		Mesh*               mRotateRingFillMesh = nullptr; // Rotate ring mesh
+		Mesh*               mAngleMesh = nullptr;          // Rotation angle mesh
+		Vec2F               mScenePivot;				   // Rotation pivot in scene space
+														   
+		SceneDragHandle     mPivotDragHandle;			   // Pivot drag handle
+		float               mPressAngle;				   // Angle at cursor pressing
+		float               mCurrentRotateAngle;		   // Current rotation angle
+		bool                mRingPressed = false;		   // Is rotate ring was pressed
+		float               mSnapAngleAccumulated = 0.0f;  // Snapping angle accumulated
+		ActorsTransformsVec mBeforeTransforms;  		   // Array of actors' transformations before changing
 
 	public:
 		// Updates tool

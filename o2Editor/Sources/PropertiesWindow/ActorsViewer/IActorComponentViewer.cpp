@@ -14,6 +14,8 @@ namespace Editor
 {
 	IActorComponentViewer::IActorComponentViewer()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mDataView = mnew UIVerticalLayout();
 		mDataView->spacing = 0.0f;
 		mDataView->border = RectF(0, 0, 0, 0);
@@ -78,7 +80,8 @@ namespace Editor
 
 	IActorComponentViewer::~IActorComponentViewer()
 	{
-		delete mDataView;
+		if (mDataView)
+			delete mDataView;
 	}
 
 	UIWidget* IActorComponentViewer::GetWidget() const
@@ -106,6 +109,10 @@ namespace Editor
 CLASS_META(Editor::IActorComponentViewer)
 {
 	BASE_CLASS(o2::IObject);
+
+	auto fucker = [](thisclass* object, UIVerticalLayout* value) { object->mDataView = value; };
+
+	fucker(__this, 0);
 
 	PROTECTED_FIELD(mDataView);
 	PROTECTED_FIELD(mPropertiesLayout);

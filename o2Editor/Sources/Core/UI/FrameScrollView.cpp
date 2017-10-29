@@ -10,6 +10,8 @@ namespace Editor
 	UIFrameScrollView::UIFrameScrollView():
 		UIScrollView()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mReady = false;
 
 		mHorScrollbar = mnew UIHorizontalScrollBar();
@@ -49,8 +51,11 @@ namespace Editor
 
 	UIFrameScrollView::~UIFrameScrollView()
 	{
-		delete mHorScrollbar;
-		delete mVerScrollbar;
+		if (mHorScrollbar)
+			delete mHorScrollbar;
+
+		if (mVerScrollbar)
+			delete mVerScrollbar;
 	}
 
 	UIFrameScrollView& UIFrameScrollView::operator=(const UIFrameScrollView& other)

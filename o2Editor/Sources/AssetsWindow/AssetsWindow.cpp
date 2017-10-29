@@ -30,7 +30,8 @@ namespace Editor
 {
 	AssetsWindow::AssetsWindow()
 	{
-		InitializeWindow();
+		if (Application::IsReady())
+			InitializeWindow();
 	}
 
 	AssetsWindow::~AssetsWindow()

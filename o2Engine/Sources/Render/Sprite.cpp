@@ -20,7 +20,8 @@ namespace o2
 		UpdateMesh();
 		InitializeProperties();
 
-		o2Render.mSprites.Add(this);
+		if (Render::IsSingletonInitialzed())
+			o2Render.mSprites.Add(this);
 	}
 
 	Sprite::Sprite(const ImageAssetRef& image):
@@ -116,7 +117,9 @@ namespace o2
 
 	Sprite::~Sprite()
 	{
-		o2Render.mSprites.Remove(this);
+		if (Render::IsSingletonInitialzed())
+			o2Render.mSprites.Remove(this);
+
 		delete mMesh;
 	}
 

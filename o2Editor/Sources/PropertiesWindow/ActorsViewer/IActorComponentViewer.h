@@ -54,13 +54,13 @@ namespace Editor
 		IOBJECT(IActorComponentViewer);
 
 	protected:
-		UIVerticalLayout* mDataView;         // Data view widget
-		UIVerticalLayout* mPropertiesLayout; // Properties layout
-		UIButton*         mExpandBtn;        // Expand spoiler button
-		UISpoiler*        mSpoiler;          // Spoiler, containing properties layout
-		UILabel*          mNameCaption;      // Component name caption label
-		UIButton*         mOptionsBtn;       // Component option button
-		UIButton*         mSaveBtn;          // Save prototype button
-		UIImage*          mIcon;             // Component icon
+		UIVerticalLayout* mDataView = nullptr;         // Data view widget
+		UIVerticalLayout* mPropertiesLayout = nullptr; // Properties layout
+		UIButton*         mExpandBtn = nullptr;        // Expand spoiler button
+		UISpoiler*        mSpoiler = nullptr;          // Spoiler, containing properties layout
+		UILabel*          mNameCaption = nullptr;      // Component name caption label
+		UIButton*         mOptionsBtn = nullptr;       // Component option button
+		UIButton*         mSaveBtn = nullptr;          // Save prototype button
+		UIImage*          mIcon = nullptr;             // Component icon
 	};
 }

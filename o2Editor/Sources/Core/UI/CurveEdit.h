@@ -113,7 +113,7 @@ namespace Editor
 		struct CurveInfo
 		{
 			String         curveId;
-			Curve*         curve;
+			Curve*         curve = nullptr;
 			KeyHandlesVec  handles;
 			PointsVec      approximatedPoints;
 			Color4         color;
@@ -139,8 +139,8 @@ namespace Editor
 
 		struct RangeInfo
 		{
-			CurveInfo* curveA;
-			CurveInfo* curveB;
+			CurveInfo* curveA = nullptr;
+			CurveInfo* curveB = nullptr;
 			Color4     color;
 			Mesh*      mesh;
 
@@ -173,40 +173,40 @@ namespace Editor
 		typedef Vector<CurveKeysInfo> CurveKeysInfosVec;
 
 	protected:
-		UIContextMenu*          mContextMenu;                   // Context menu for editing keys properties, copying, pasting and other
+		UIContextMenu*          mContextMenu = nullptr;             // Context menu for editing keys properties, copying, pasting and other
+							    								    
+		SelectableDragHandle    mMainHandleSample;                  // Main handle sample, uses to copy sprites @SERIALIZABLE
+		SelectableDragHandle    mSupportHandleSample;               // Support handle sample, uses to copy sprites @SERIALIZABLE
+							    								    
+		CurveInfosVec           mCurves;                            // Editing curves infos list 
+		RangeInfosVec           mRanges;                            // Curves ranges list
+							    								    
+		SelectableHandlesVec    mSupportHandles;                    // Support points handles list
+		SelectableHandlesVec    mSelectingHandlesBuf;               // Potentially selecting handles while selecting
+							    								    
+		Sprite*                 mSelectionSprite = nullptr;         // Selection sprite @SERIALIZABLE
+		FontRef                 mTextFont;                          // Captions text font @SERIALIZABLE
+		Text*                   mTextLeft = nullptr;                // Captions text drawable at left border
+		Text*                   mTextRight = nullptr;               // Captions text drawable at right border
+		Text*                   mTextTop = nullptr;                 // Captions text drawable at top border
+		Text*                   mTextBottom = nullptr;              // Captions text drawable at bottom border
+							    								    
+		Vec2F                   mSelectingPressedPoint;             // Point, where cursor was pressed, selection starts here, in local space
+							    								    
+		FrameHandles            mTransformFrame;                    // Keys transformation frame
+		bool                    mTransformFrameVisible = false;     // Is transform frame visible. it visible when 2 or more main handles was selected
+		Basis                   mTransformFrameBasis;               // Basis of transform frame in local space
+								 							   	    
+		bool                    mIsViewScrolling = false;           // Is scrolling view at this time
 							    
-		SelectableDragHandle    mMainHandleSample;              // Main handle sample, uses to copy sprites @SERIALIZABLE
-		SelectableDragHandle    mSupportHandleSample;           // Support handle sample, uses to copy sprites @SERIALIZABLE
+		UIWindow*               mEditValueWindow = nullptr;         // Key position and value editing window
+		UIEditBox*              mEditValueWindowValue = nullptr;    // Key value editing box
+		UIEditBox*              mEditValueWindowPosition = nullptr; // Key position editing box
 							    
-		CurveInfosVec           mCurves;                        // Editing curves infos list 
-		RangeInfosVec           mRanges;                        // Curves ranges list
-							    
-		SelectableHandlesVec    mSupportHandles;                // Support points handles list
-		SelectableHandlesVec    mSelectingHandlesBuf;           // Potentially selecting handles while selecting
-							    
-		Sprite*                 mSelectionSprite = nullptr;     // Selection sprite @SERIALIZABLE
-		FontRef                 mTextFont;                      // Captions text font @SERIALIZABLE
-		Text*                   mTextLeft = nullptr;            // Captions text drawable at left border
-		Text*                   mTextRight = nullptr;           // Captions text drawable at right border
-		Text*                   mTextTop = nullptr;             // Captions text drawable at top border
-		Text*                   mTextBottom = nullptr;          // Captions text drawable at bottom border
-							    
-		Vec2F                   mSelectingPressedPoint;         // Point, where cursor was pressed, selection starts here, in local space
-							    
-		FrameHandles            mTransformFrame;                // Keys transformation frame
-		bool                    mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
-		Basis                   mTransformFrameBasis;           // Basis of transform frame in local space
-								 							   
-		bool                    mIsViewScrolling = false;       // Is scrolling view at this time
-							    
-		UIWindow*               mEditValueWindow;               // Key position and value editing window
-		UIEditBox*              mEditValueWindowValue;          // Key value editing box
-		UIEditBox*              mEditValueWindowPosition;       // Key position editing box
-							    
-		CurveKeysInfosVec       mBeforeTransformKeys;           // Stored selected keys before handles transformed
-
-		ActionsVec              mUndoActions;                   // Actions that can be undo
-		ActionsVec              mRedoActions;                   // Actions that can be redo
+		CurveKeysInfosVec       mBeforeTransformKeys;               // Stored selected keys before handles transformed
+															       
+		ActionsVec              mUndoActions;                       // Actions that can be undo
+		ActionsVec              mRedoActions;                       // Actions that can be redo
 
 	protected:
 		// It is called when visible was changed. Sets context menu items priority

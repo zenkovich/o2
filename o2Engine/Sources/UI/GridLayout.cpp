@@ -919,7 +919,7 @@ namespace o2
 			layout->mData->offsetMax += szDelta*(Vec2F::One() - relativePivot);
 			layout->mData->offsetMin -= szDelta*relativePivot;
 
-			UpdateLayout();
+			layout->SetDirty();
 		}
 	}
 

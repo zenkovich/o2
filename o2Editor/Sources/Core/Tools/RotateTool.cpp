@@ -12,11 +12,14 @@
 
 namespace Editor
 {
-	RotateTool::RotateTool():
-		mPivotDragHandle(mnew Sprite("ui/UI2_pivot.png"),
-						 mnew Sprite("ui/UI2_pivot_select.png"),
-						 mnew Sprite("ui/UI2_pivot_pressed.png"))
+	RotateTool::RotateTool()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
+		mPivotDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_pivot.png"),
+										   mnew Sprite("ui/UI2_pivot_select.png"),
+										   mnew Sprite("ui/UI2_pivot_pressed.png"));
+
 		mRotateRingFillMesh = new Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
 		mAngleMesh = new Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
 
@@ -26,8 +29,11 @@ namespace Editor
 
 	RotateTool::~RotateTool()
 	{
-		delete mRotateRingFillMesh;
-		delete mAngleMesh;
+		if (mRotateRingFillMesh)
+			delete mRotateRingFillMesh;
+
+		if (mAngleMesh)
+			delete mAngleMesh;
 	}
 
 	void RotateTool::Update(float dt)

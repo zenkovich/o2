@@ -11,6 +11,8 @@ namespace Editor
 		UIWidget(), DrawableCursorEventsListener(this), mDragHandleLayoutMin(Vec2F(), Vec2F(), Vec2F(), Vec2F()),
 		mDragHandleLayoutMax(Vec2F(), Vec2F(), Vec2F(), Vec2F()), mNeighborMax(nullptr), mNeighborMin(nullptr)
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		InitializeDragHandle();
 		RetargetStatesAnimations();
 		UpdateLayout();

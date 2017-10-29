@@ -23,6 +23,8 @@ namespace Editor
 	UICurveEditor::UICurveEditor():
 		UIFrameScrollView()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mReady = false;
 
 		mSelectionSprite = mnew Sprite();
@@ -67,12 +69,23 @@ namespace Editor
 		for (auto curve : mCurves)
 			delete curve;
 
-		delete mEditValueWindow;
-		delete mSelectionSprite;
-		delete mTextLeft;
-		delete mTextRight;
-		delete mTextTop;
-		delete mTextBottom;
+		if (mEditValueWindow)
+			delete mEditValueWindow;
+
+		if (mSelectionSprite)
+			delete mSelectionSprite;
+
+		if (mTextLeft)
+			delete mTextLeft;
+
+		if (mTextRight)
+			delete mTextRight;
+
+		if (mTextTop)
+			delete mTextTop;
+
+		if (mTextBottom)
+			delete mTextBottom;
 	}
 
 	Editor::UICurveEditor& UICurveEditor::operator=(const UICurveEditor& other)

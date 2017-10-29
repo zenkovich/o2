@@ -43,6 +43,8 @@ namespace o2
 			if (type->mInitializeFunc)
 				type->mInitializeFunc(type);
 		}
+
+		mInstance->mTypesInitialized = true;
 	}
 
 	const Vector<Type*>& Reflection::GetTypes()
@@ -87,6 +89,11 @@ namespace o2
 		}
 
 		return nullptr;
+	}
+
+	bool Reflection::IsTypesInitialized()
+	{
+		return mInstance->mTypesInitialized;
 	}
 
 	void Reflection::InitializeFundamentalTypes()

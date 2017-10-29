@@ -17,6 +17,8 @@ namespace Editor
 {
 	DefaultActorTransformViewer::DefaultActorTransformViewer()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mNameCaption->text = "Transform";
 		mPropertiesLayout->layout->minHeight = 130;
 
@@ -82,7 +84,25 @@ namespace Editor
 	}
 
 	DefaultActorTransformViewer::~DefaultActorTransformViewer()
-	{}
+	{
+		if (mPositionProperty)
+			delete mPositionProperty;
+
+		if (mPivotProperty)
+			delete mPivotProperty;
+
+		if (mScaleProperty)
+			delete mScaleProperty;
+
+		if (mSizeProperty)
+			delete mSizeProperty;
+
+		if (mRotationProperty)
+			delete mRotationProperty;
+
+		if (mDepthProperty)
+			delete mDepthProperty;
+	}
 
 	void DefaultActorTransformViewer::SetTargetActors(const Vector<Actor*>& actors)
 	{

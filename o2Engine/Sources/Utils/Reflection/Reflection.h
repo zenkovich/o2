@@ -54,6 +54,9 @@ namespace o2
 		template<typename _type>
 		static String GetEnumName(_type value);
 
+		// Returns is types was initialized
+		static bool IsTypesInitialized();
+
 	public:
 		template<typename _type>
 		static Type* InitializeType(const char* name);
@@ -87,6 +90,8 @@ namespace o2
 	protected:
 		static Reflection* mInstance;        // Reflection instance
 
+		bool               mTypesInitialized = false;
+
 		Vector<Type*>      mTypes;           // All registered types
 		UInt               mLastGivenTypeId; // Last given type index
 
@@ -103,6 +108,8 @@ namespace o2
 		friend class Type;
 	};
 }
+
+#define BREAK_ON_REFLECTION_STAGE if (!Reflection::IsTypesInitialized()) return
 
 #define REG_TYPE(CLASS) \
 	o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)

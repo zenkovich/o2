@@ -7,13 +7,16 @@ namespace Editor
 {
 	IActorAnimationViewer::IActorAnimationViewer()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mDataView = mnew UIWidget();
 		mDataView->name = "animation viewer";
 	}
 
 	IActorAnimationViewer::~IActorAnimationViewer()
 	{
-		delete mDataView;
+		if (mDataView)
+			delete mDataView;
 	}
 
 	UIWidget* IActorAnimationViewer::GetWidget() const

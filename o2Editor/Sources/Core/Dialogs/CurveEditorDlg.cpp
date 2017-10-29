@@ -13,6 +13,8 @@ namespace Editor
 {
 	CurveEditorDlg::CurveEditorDlg()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mWindow = dynamic_cast<UIWindow*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
 
 		InitializeControls();
@@ -26,7 +28,8 @@ namespace Editor
 
 	CurveEditorDlg::~CurveEditorDlg()
 	{
-		delete mWindow;
+		if (mWindow)
+			delete mWindow;
 	}
 
 	void CurveEditorDlg::OnHide()

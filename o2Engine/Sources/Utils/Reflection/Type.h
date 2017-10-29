@@ -62,6 +62,7 @@ namespace o2
 		typedef Vector<FieldInfo*> FieldInfosVec;
 		typedef Vector<FunctionInfo*> FunctionsInfosVec;
 		typedef Vector<Type*> TypesVec;
+		typedef Dictionary<Type*, int> BaseTypesVec;
 
 	public:
 		// Default constructor
@@ -95,7 +96,7 @@ namespace o2
 		virtual Usage GetUsage() const;
 
 		// Returns vector of base types
-		const TypesVec& GetBaseTypes() const;
+		const BaseTypesVec& GetBaseTypes() const;
 
 		// Returns fields informations array
 		const FieldInfosVec& GetFields() const;
@@ -140,7 +141,7 @@ namespace o2
 	protected:
 		TypeId                mId;            // Id of type
 		String                mName;          // Name of object type
-		TypesVec              mBaseTypes;     // Base types ids
+		BaseTypesVec          mBaseTypes;     // Base types ids with offset 
 		FieldInfosVec         mFields;        // Fields information
 		FunctionsInfosVec     mFunctions;     // Functions informations
 		ITypeSampleCreator*   mSampleCreator; // Template type agent
@@ -441,7 +442,7 @@ namespace o2
 	public:
 		// Adds basic type
 		template<typename _type, typename X = std::conditional<std::is_base_of<IObject, _type>::value, _type, Type::Dummy>::type>
-		static void AddBaseType(Type*& type);
+		static void AddBaseType(Type*& type, int offset);
 
 		// Registers field in type
 		template<typename _type>
@@ -466,7 +467,7 @@ namespace o2
     void NAME::InitializeType(o2::Type* type)                           \
 	{                                                                   \
 	    thisclass::type = type;                                         \
-	    thisclass* __this = 0;      
+	    thisclass* __this = new thisclass();      
 
 #define META_TEMPLATES(...) \
     template<__VA_ARGS__>
@@ -475,16 +476,16 @@ namespace o2
     void NAME::InitializeType(o2::Type* type)                           \
 	{                                                                   \
 	    thisclass::type = type;                                         \
-	    thisclass* __this = 0;
+	    thisclass* __this = new thisclass();
 
 #define FUNDAMENTAL_META(NAME)                                          \
     void FundamentalType<NAME>::InitializeType(o2::Type* type)          \
 	{                                                                   \
 	    typedef NAME thisclass;                                         \
-	    thisclass* __this = 0;
+	    thisclass* __this = new thisclass();
 
 #define BASE_CLASS(NAME) \
-    o2::TypeInitializer::AddBaseType<NAME>(type)
+    o2::TypeInitializer::AddBaseType<NAME>(type, (size_t)dynamic_cast<NAME*>(__this) - (size_t)__this)
 
 #define FIELD(NAME, PROTECT_SECTION) \
     o2::TypeInitializer::RegField(type, #NAME, (size_t)&__this->NAME - (size_t)(&((IObject&)*__this)), __this->NAME, ProtectSection::PROTECT_SECTION)
@@ -523,7 +524,9 @@ namespace o2
 #define PROTECTED_FUNCTION(RETURN_TYPE, NAME, ...) \
     o2::TypeInitializer::RegFunction<thisclass, RETURN_TYPE, __VA_ARGS__>(type, #NAME, &thisclass::NAME, ProtectSection::Protected)
 
-#define END_META }
+#define END_META   \
+    delete __this; \
+}
 
 #include "Utils/Property.h"
 #include "Utils/Reflection/FieldInfo.h"
@@ -787,15 +790,16 @@ namespace o2
 	// TypeInitializer implementation
 	// ------------------------------
 
+
 	template<typename _type, typename X>
-	void TypeInitializer::AddBaseType(Type*& type)
+	void TypeInitializer::AddBaseType(Type*& type, int offset)
 	{
 		if (std::is_same<X, Type::Dummy>::value)
 			return;
 
 		Type*& baseType = X::type;
 
-		type->mBaseTypes.Add(baseType);
+		type->mBaseTypes.Add(baseType, offset);
 	}
 
 	template<typename _type>

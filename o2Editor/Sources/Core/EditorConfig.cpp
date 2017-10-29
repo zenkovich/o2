@@ -19,8 +19,11 @@ namespace Editor
 
 	EditorConfig::~EditorConfig()
 	{
-		SaveProjectConfigs();
-		SaveGlobalConfigs();
+		if (mConfigsLoaded)
+		{
+			SaveProjectConfigs();
+			SaveGlobalConfigs();
+		}
 	}
 
 	DataNode& EditorConfig::GetGlobalUserData()
@@ -57,6 +60,8 @@ namespace Editor
 	{
 		LoadGlobalConfig();
 		LoadProjectConfig();
+
+		mConfigsLoaded = true;
 	}
 
 	void EditorConfig::LoadProjectConfig()
@@ -100,6 +105,7 @@ CLASS_META(Editor::EditorConfig)
 
 	PROTECTED_FIELD(mConfigPath);
 	PROTECTED_FIELD(mGlobalConfigPath);
+	PROTECTED_FIELD(mConfigsLoaded);
 	PROTECTED_FIELD(mProjectConfig);
 	PROTECTED_FIELD(mGlobalConfig);
 

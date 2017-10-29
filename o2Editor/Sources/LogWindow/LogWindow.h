@@ -36,11 +36,11 @@ namespace Editor
 		void Update(float dt) override;
 
 	protected:
-		UILongList* mList;
-		UIWidget*   mLastMessageView;
-		Text*       mMessagesCountLabel;
-		Text*       mWarningsCountLabel;
-		Text*       mErrorsCountLabel;
+		UILongList* mList = nullptr;
+		UIWidget*   mLastMessageView = nullptr;
+		Text*       mMessagesCountLabel = nullptr;
+		Text*       mWarningsCountLabel = nullptr;
+		Text*       mErrorsCountLabel = nullptr;
 
 		MessagesVec mAllMessages;
 		MessagesVec mVisibleMessages;

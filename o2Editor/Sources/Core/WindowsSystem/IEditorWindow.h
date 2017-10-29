@@ -45,7 +45,7 @@ namespace Editor
 		IOBJECT(IEditorWindow);
 
 	protected:
-		UIDockableWindow* mWindow; // Dockable UI window 
+		UIDockableWindow* mWindow = nullptr; // Dockable UI window 
 
 	protected:
 		// It is called after that all windows was created

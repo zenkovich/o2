@@ -580,7 +580,10 @@ namespace o2
 		if (actor->mParent)
 			actor->mParent->RemoveChild(actor, false);
 		else
-			o2Scene.mRootActors.Remove(actor);
+		{
+			if (Scene::IsSingletonInitialzed())
+				o2Scene.mRootActors.Remove(actor);
+		}
 
 		mChildren.Add(actor);
 		actor->mParent = this;
@@ -2054,8 +2057,8 @@ namespace o2
 
 				for (auto baseType : type->GetBaseTypes())
 				{
-					if (*baseType != TypeOf(Component))
-						GetFields(baseType, fields);
+					if (*baseType.Key() != TypeOf(Component))
+						GetFields(baseType.Key(), fields);
 				}
 			}
 		};

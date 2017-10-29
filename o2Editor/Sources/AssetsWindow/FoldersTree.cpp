@@ -19,6 +19,9 @@ namespace Editor
 	UIAssetsFoldersTree::UIAssetsFoldersTree():
 		UIWidget()
 	{
+		if (!UIManager::IsSingletonInitialzed())
+			return;
+
 		mFoldersTree = o2UI.CreateWidget<UITree>("folders");
 		*mFoldersTree->layout = UIWidgetLayout::BothStretch();
 

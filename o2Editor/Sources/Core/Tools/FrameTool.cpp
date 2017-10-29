@@ -13,6 +13,8 @@ namespace Editor
 {
 	FrameTool::FrameTool()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		Vec2F rotateHandleSize = Vec2F(mHandlesRotateSize, mHandlesRotateSize);
 		Vec2F frameHandleSize = Vec2F(mFrameHandlesSize, mFrameHandlesSize);
 		mLeftTopRotateHandle.SetRegularSprite(mnew Sprite("ui/UI3_rotate_regular.png"));

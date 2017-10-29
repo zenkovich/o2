@@ -49,16 +49,16 @@ namespace Editor
 	public:
 		Vector<Actor*>                mActors;
 
-		UIWidget*                     mDataView;
-		BooleanProperty*              mEnableProperty;
-		StringProperty*               mNameProperty;
-		BooleanProperty*              mLockProperty;
-		AssetProperty<ActorAssetRef>* mPrototypeProperty;
-		UIButton*                     mPrototypeApplyBtn;
-		UIButton*                     mPrototypeRevertBtn;
-		UIButton*                     mPrototypeBreakBtn;
-		TagsProperty*                 mTagsProperty;
-		LayerProperty*                mLayerProperty;
+		UIWidget*                     mDataView = nullptr;
+		BooleanProperty*              mEnableProperty = nullptr;
+		StringProperty*               mNameProperty = nullptr;
+		BooleanProperty*              mLockProperty = nullptr;
+		AssetProperty<ActorAssetRef>* mPrototypeProperty = nullptr;
+		UIButton*                     mPrototypeApplyBtn = nullptr;
+		UIButton*                     mPrototypeRevertBtn = nullptr;
+		UIButton*                     mPrototypeBreakBtn = nullptr;
+		TagsProperty*                 mTagsProperty = nullptr;
+		LayerProperty*                mLayerProperty = nullptr;
 
 	protected:
 		// It is called when apply button pressed, and applies changes to prototype

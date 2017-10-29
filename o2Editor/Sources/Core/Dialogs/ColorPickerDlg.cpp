@@ -20,6 +20,8 @@ namespace Editor
 {
 	ColorPickerDlg::ColorPickerDlg()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mWindow = dynamic_cast<UIWindow*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
 
 		InitializeControls();
@@ -33,7 +35,8 @@ namespace Editor
 
 	ColorPickerDlg::~ColorPickerDlg()
 	{
-		delete mWindow;
+		if (mWindow)
+			delete mWindow;
 	}
 
 	void ColorPickerDlg::Show(const Color4& color, Function<void(const Color4&)> onChanged,

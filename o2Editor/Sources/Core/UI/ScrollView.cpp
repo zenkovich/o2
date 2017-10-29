@@ -9,6 +9,8 @@ namespace Editor
 {
 	UIScrollView::UIScrollView()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mRenderTarget = TextureRef(Vec2I(256, 256), Texture::Format::Default, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
 
@@ -31,7 +33,8 @@ namespace Editor
 
 	UIScrollView::~UIScrollView()
 	{
-		delete mRenderTargetSprite;
+		if (mRenderTargetSprite)
+			delete mRenderTargetSprite;
 	}
 
 	UIScrollView& UIScrollView::operator=(const UIScrollView& other)

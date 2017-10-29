@@ -219,7 +219,7 @@ namespace o2
 		LayersVec      mLayers;                 // Layers array @SERIALIZABLE
 		StatesVec      mStates;                 // States array @SERIALIZABLE
 					   						    
-		UIWidget*      mParentWidget;           // Parent widget. When parent is not widget, this field will be null
+		UIWidget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null
 		WidgetsVec     mChildWidgets;           // Children widgets, a part of all children
 		WidgetsVec     mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
 

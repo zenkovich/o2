@@ -70,8 +70,9 @@ namespace Editor
 		const String mConfigPath = "EditorConfig.xml";
 		const String mGlobalConfigPath = "Config.xml";
 
-		ProjectConfig mProjectConfig; // Project editor config
-		GlobalConfig  mGlobalConfig;  // Global editor config for all projects
+		bool          mConfigsLoaded = false; // True if configurations were loaded
+		ProjectConfig mProjectConfig;         // Project editor config
+		GlobalConfig  mGlobalConfig;          // Global editor config for all projects
 
 	protected:
 		// Saves global configs

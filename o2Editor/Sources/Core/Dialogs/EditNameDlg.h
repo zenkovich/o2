@@ -41,8 +41,8 @@ namespace Editor
 		Function<void()>              mOnCancelledCallback;
 
 
-		UIWindow*  mWindow;
-		UIEditBox* mNameEditBox;
+		UIWindow*  mWindow = nullptr;
+		UIEditBox* mNameEditBox = nullptr;
 
 	protected:
 		// Calls when hiding dialog

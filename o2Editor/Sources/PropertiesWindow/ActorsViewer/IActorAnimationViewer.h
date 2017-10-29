@@ -42,6 +42,6 @@ namespace Editor
 		IOBJECT(IActorAnimationViewer);
 
 	protected:
-		UIWidget* mDataView; // Data view widget
+		UIWidget* mDataView = nullptr; // Data view widget
 	};
 }

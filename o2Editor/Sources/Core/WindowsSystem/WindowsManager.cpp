@@ -17,6 +17,8 @@ namespace Editor
 {
 	WindowsManager::WindowsManager()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		if (mNeedRebuildWndStyle)
 		{
 			EditorUIStyleBuilder builder;
@@ -42,9 +44,14 @@ namespace Editor
 		for (auto wnd : mEditorWindows)
 			delete wnd;
 
-		delete mColorPickerDlg;
-		delete mCurveEditorDlg;
-		delete mNameEditDlg;
+		if (mColorPickerDlg)
+			delete mColorPickerDlg;
+
+		if (mCurveEditorDlg)
+			delete mCurveEditorDlg;
+
+		if (mNameEditDlg)
+			delete mNameEditDlg;
 	}
 
 	void WindowsManager::InitializeWindows()

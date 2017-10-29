@@ -19,6 +19,8 @@ namespace Editor
 {
 	ActorPropertiesViewer::ActorPropertiesViewer()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mHeaderViewer = mnew DefaultActorHeaderViewer();
 		mTransformViewer = mnew DefaultActorTransformViewer();
 		mAnimationViewer = mnew DefaultActorAnimationViewer();
@@ -59,10 +61,17 @@ namespace Editor
 		for (auto x : mAvailableComponentsViewers)
 			delete x;
 
-		delete mDefaultComponentViewer;
-		delete mHeaderViewer;
-		delete mTransformViewer;
-		delete mAnimationViewer;
+		if (mDefaultComponentViewer)
+			delete mDefaultComponentViewer;
+
+		if (mHeaderViewer)
+			delete mHeaderViewer;
+
+		if (mTransformViewer)
+			delete mTransformViewer;
+
+		if (mAnimationViewer)
+			delete mAnimationViewer;
 	}
 
 	const Type* ActorPropertiesViewer::GetViewingObjectType() const

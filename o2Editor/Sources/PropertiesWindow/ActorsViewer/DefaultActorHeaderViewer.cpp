@@ -22,6 +22,8 @@ namespace Editor
 {
 	DefaultActorHeaderViewer::DefaultActorHeaderViewer()
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		mDataView = mnew UIWidget();
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 42;
@@ -99,8 +101,26 @@ namespace Editor
 
 	DefaultActorHeaderViewer::~DefaultActorHeaderViewer()
 	{
-		delete mEnableProperty;
-		delete mDataView;
+		if (mEnableProperty)
+			delete mEnableProperty;
+
+		if (mDataView)
+			delete mDataView;
+
+		if (mNameProperty)
+			delete mNameProperty;
+
+		if (mLockProperty)
+			delete mLockProperty;
+
+		if (mPrototypeProperty)
+			delete mPrototypeProperty;
+
+		if (mTagsProperty)
+			delete mTagsProperty;
+
+		if (mLayerProperty)
+			delete mLayerProperty;
 	}
 
 	void DefaultActorHeaderViewer::SetTargetActors(const Vector<Actor*>& actors)

@@ -19,6 +19,8 @@ namespace Editor
 		mRegularMessagesEnabled(true), mWarningMessagesEnabled(true), mErrorMessagesEnabled(true), mRegularMessagesCount(0),
 		mWarningMessagesCount(0), mErrorMessagesCount(0)
 	{
+		BREAK_ON_REFLECTION_STAGE;
+
 		InitializeWindow();
 		BindStream(o2Debug.GetLog());
 	}

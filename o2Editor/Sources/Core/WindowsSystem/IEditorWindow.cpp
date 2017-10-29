@@ -10,12 +10,11 @@ namespace Editor
 {
 	IEditorWindow::IEditorWindow()
 	{
-		if (Application::IsReady())
-		{
-			mWindow = o2UI.CreateWidget<UIDockableWindow>();
-			mWindow->layout->size = Vec2F(200, 200);
-			EditorUIRoot.AddWidget(mWindow);
-		}
+		BREAK_ON_REFLECTION_STAGE;
+
+		mWindow = o2UI.CreateWidget<UIDockableWindow>();
+		mWindow->layout->size = Vec2F(200, 200);
+		EditorUIRoot.AddWidget(mWindow);
 	}
 
 	IEditorWindow::IEditorWindow(const IEditorWindow& other):
@@ -27,7 +26,8 @@ namespace Editor
 
 	IEditorWindow::~IEditorWindow()
 	{
-		delete mWindow;
+		if (mWindow)
+			delete mWindow;
 	}
 
 	void IEditorWindow::Show()

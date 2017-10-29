@@ -30,11 +30,11 @@ namespace Editor
 		IOBJECT(SelectionTool);
 
 	protected:
-		Sprite*   mSelectionSprite;			// Selection frame sprite
-		ActorsVec mCurrentSelectingActors;	// Current selecting actors (when cursor pressed, but not released yet)
-		ActorsVec mBeforeSelectingActors;	// Before selection actors array
-		Vec2F     mPressPoint;				// Press point before selecting
-		bool      mSelectingActors = false;	// Is selecting actors now
+		Sprite*   mSelectionSprite = nullptr; // Selection frame sprite
+		ActorsVec mCurrentSelectingActors;	  // Current selecting actors (when cursor pressed, but not released yet)
+		ActorsVec mBeforeSelectingActors;	  // Before selection actors array
+		Vec2F     mPressPoint;				  // Press point before selecting
+		bool      mSelectingActors = false;	  // Is selecting actors now
 
 	protected:
 		// Draws tool
