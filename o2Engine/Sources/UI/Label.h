@@ -122,3 +122,56 @@ namespace o2
 		void InitializeProperties();
 	};
 }
+
+CLASS_BASES_META(o2::UILabel)
+{
+	BASE_CLASS(o2::UIWidget);
+}
+END_META;
+CLASS_FIELDS_META(o2::UILabel)
+{
+	PUBLIC_FIELD(text);
+	PUBLIC_FIELD(font);
+	PUBLIC_FIELD(height);
+	PUBLIC_FIELD(verAlign);
+	PUBLIC_FIELD(horAlign);
+	PUBLIC_FIELD(horOverflow);
+	PUBLIC_FIELD(verOverflow);
+	PUBLIC_FIELD(expandBorder);
+	PUBLIC_FIELD(symbolsDistanceCoef);
+	PUBLIC_FIELD(linesDistanceCoef);
+	PROTECTED_FIELD(mTextLayer);
+	PROTECTED_FIELD(mHorOverflow).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mVerOverflow).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mExpandBorder).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::UILabel)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, SetFont, FontRef);
+	PUBLIC_FUNCTION(FontRef, GetFont);
+	PUBLIC_FUNCTION(void, SetText, const WString&);
+	PUBLIC_FUNCTION(WString, GetText);
+	PUBLIC_FUNCTION(void, SetHorAlign, HorAlign);
+	PUBLIC_FUNCTION(HorAlign, GetHorAlign);
+	PUBLIC_FUNCTION(void, SetVerAlign, VerAlign);
+	PUBLIC_FUNCTION(VerAlign, GetVerAlign);
+	PUBLIC_FUNCTION(void, SetHorOverflow, HorOverflow);
+	PUBLIC_FUNCTION(HorOverflow, GetHorOverflow);
+	PUBLIC_FUNCTION(void, SetVerOverflow, VerOverflow);
+	PUBLIC_FUNCTION(VerOverflow, GetVerOverflow);
+	PUBLIC_FUNCTION(void, SetSymbolsDistanceCoef, float);
+	PUBLIC_FUNCTION(float, GetSymbolsDistanceCoef);
+	PUBLIC_FUNCTION(void, SetLinesDistanceCoef, float);
+	PUBLIC_FUNCTION(float, GetLinesDistanceCoef);
+	PUBLIC_FUNCTION(void, SetExpandBorder, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetExpandBorder);
+	PUBLIC_FUNCTION(void, SetHeight, int);
+	PUBLIC_FUNCTION(int, GetHeight);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

@@ -349,3 +349,110 @@ namespace o2
 		friend class SelectableDragHandlesGroup;
 	};
 }
+
+CLASS_BASES_META(o2::DragHandle)
+{
+	BASE_CLASS(o2::IDrawable);
+	BASE_CLASS(o2::CursorAreaEventsListener);
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::DragHandle)
+{
+	PUBLIC_FIELD(angle);
+	PUBLIC_FIELD(cursorType);
+	PUBLIC_FIELD(position);
+	PUBLIC_FIELD(enabled);
+	PUBLIC_FIELD(pixelPerfect);
+	PUBLIC_FIELD(onChangedPos);
+	PUBLIC_FIELD(onPressed);
+	PUBLIC_FIELD(onReleased);
+	PUBLIC_FIELD(onChangeCompleted);
+	PUBLIC_FIELD(screenToLocalTransformFunc);
+	PUBLIC_FIELD(localToScreenTransformFunc);
+	PUBLIC_FIELD(checkPositionFunc);
+	PUBLIC_FIELD(onRightButtonPressed);
+	PUBLIC_FIELD(onRightButtonReleased);
+	PROTECTED_FIELD(mEnabled);
+	PROTECTED_FIELD(mRegularSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHoverSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mPressedSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mPosition);
+	PROTECTED_FIELD(mScreenPosition);
+	PROTECTED_FIELD(mAngle);
+	PROTECTED_FIELD(mDragOffset);
+	PROTECTED_FIELD(mDragPosition);
+	PROTECTED_FIELD(mDragBeginPosition);
+	PROTECTED_FIELD(mPressedCursorId);
+	PROTECTED_FIELD(mIsDragging);
+	PROTECTED_FIELD(mIsHovered);
+}
+END_META;
+CLASS_METHODS_META(o2::DragHandle)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
+	PUBLIC_FUNCTION(const Vec2F&, GetScreenPosition);
+	PUBLIC_FUNCTION(void, SetDragPosition, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetPosition);
+	PUBLIC_FUNCTION(Vec2F, GetDraggingOffset);
+	PUBLIC_FUNCTION(Vec2F, GetDraggingBeginPosition);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(bool, IsEnabled);
+	PUBLIC_FUNCTION(void, SetAngle, float);
+	PUBLIC_FUNCTION(float, GetAngle);
+	PUBLIC_FUNCTION(void, SetRegularSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetRegularSprite);
+	PUBLIC_FUNCTION(void, SetHoverSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetHoverSprite);
+	PUBLIC_FUNCTION(void, SetPressedSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetPressedSprite);
+	PROTECTED_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, UpdateScreenPosition);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_BASES_META(o2::SelectableDragHandle)
+{
+	BASE_CLASS(o2::DragHandle);
+}
+END_META;
+CLASS_FIELDS_META(o2::SelectableDragHandle)
+{
+	PROTECTED_FIELD(mSelectedSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mIsSelected);
+	PROTECTED_FIELD(mSelectGroup);
+	PROTECTED_FIELD(mDragDistanceThreshold);
+	PROTECTED_FIELD(mPressedCursorPos);
+}
+END_META;
+CLASS_METHODS_META(o2::SelectableDragHandle)
+{
+
+	PUBLIC_FUNCTION(bool, IsSelected);
+	PUBLIC_FUNCTION(void, SetSelected, bool);
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Deselect);
+	PUBLIC_FUNCTION(void, SetSelectionGroup, ISelectableDragHandlesGroup*);
+	PUBLIC_FUNCTION(ISelectableDragHandlesGroup*, GetSelectionGroup);
+	PUBLIC_FUNCTION(void, SetAngle, float);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnSelected);
+	PROTECTED_FUNCTION(void, OnDeselected);
+}
+END_META;

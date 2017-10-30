@@ -123,3 +123,21 @@ namespace o2
 		return (_eff_type*)AddEffect(mnew _eff_type(args ...));
 	}
 }
+
+CLASS_BASES_META(o2::VectorFont::Effect)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::VectorFont::Effect)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::VectorFont::Effect)
+{
+
+	PUBLIC_FUNCTION(void, Process, Bitmap*);
+	PUBLIC_FUNCTION(Vec2I, GetSizeExtend);
+	PUBLIC_FUNCTION(bool, IsEqual, Effect*);
+}
+END_META;

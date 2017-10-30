@@ -10,8 +10,6 @@ namespace Editor
 	UIFrameScrollView::UIFrameScrollView():
 		UIScrollView()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mReady = false;
 
 		mHorScrollbar = mnew UIHorizontalScrollBar();

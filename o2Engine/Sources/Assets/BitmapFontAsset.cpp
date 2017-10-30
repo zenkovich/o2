@@ -107,36 +107,8 @@ namespace o2
 
 }
 
-CLASS_META(o2::BitmapFontAsset)
-{
-	BASE_CLASS(o2::Asset);
+DECLARE_CLASS(o2::BitmapFontAsset);
 
-	PUBLIC_FIELD(meta);
-	PUBLIC_FIELD(font);
-	PROTECTED_FIELD(mFont);
+DECLARE_CLASS(o2::BitmapFontAssetRef);
 
-	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
-	PUBLIC_FUNCTION(FontRef, GetFont);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
-
-CLASS_META(o2::BitmapFontAssetRef)
-{
-	BASE_CLASS(o2::AssetRef);
-
-
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-}
-END_META;
-
-CLASS_META(o2::BitmapFontAsset::MetaInfo)
-{
-	BASE_CLASS(o2::Asset::IMetaInfo);
-
-
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-}
-END_META;
+DECLARE_CLASS(o2::BitmapFontAsset::MetaInfo);

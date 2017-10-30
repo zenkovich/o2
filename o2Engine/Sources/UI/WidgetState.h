@@ -61,3 +61,31 @@ namespace o2
 	};
 	typedef Vector<UIWidgetState*>  StatesVec;
 }
+
+CLASS_BASES_META(o2::UIWidgetState)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIWidgetState)
+{
+	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(animation).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offStateAnimationSpeed).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(onStateFullyTrue);
+	PUBLIC_FIELD(onStateFullyFalse);
+	PUBLIC_FIELD(onStateBecomesTrue);
+	PUBLIC_FIELD(onStateBecomesFalse);
+	PROTECTED_FIELD(mState).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mOwner);
+}
+END_META;
+CLASS_METHODS_META(o2::UIWidgetState)
+{
+
+	PUBLIC_FUNCTION(void, SetState, bool);
+	PUBLIC_FUNCTION(void, SetStateForcible, bool);
+	PUBLIC_FUNCTION(bool, GetState);
+	PUBLIC_FUNCTION(void, Update, float);
+}
+END_META;

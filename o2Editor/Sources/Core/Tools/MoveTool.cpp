@@ -12,8 +12,6 @@ namespace Editor
 {
 	MoveTool::MoveTool()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mHorDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_right_move_arrow.png"),
 										 mnew Sprite("ui/UI2_right_move_arrow_select.png"),
 										 mnew Sprite("ui/UI2_right_move_arrow_pressed.png"));

@@ -139,3 +139,57 @@ namespace o2
 		AnimationAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }
+
+CLASS_BASES_META(o2::AnimationAsset)
+{
+	BASE_CLASS(o2::Asset);
+}
+END_META;
+CLASS_FIELDS_META(o2::AnimationAsset)
+{
+	PUBLIC_FIELD(animation);
+	PUBLIC_FIELD(meta);
+}
+END_META;
+CLASS_METHODS_META(o2::AnimationAsset)
+{
+
+	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
+	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+	PROTECTED_FUNCTION(void, SaveData, const String&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_BASES_META(o2::AnimationAssetRef)
+{
+	BASE_CLASS(o2::AssetRef);
+}
+END_META;
+CLASS_FIELDS_META(o2::AnimationAssetRef)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::AnimationAssetRef)
+{
+
+	PUBLIC_FUNCTION(const Type&, GetAssetType);
+}
+END_META;
+
+CLASS_BASES_META(o2::AnimationAsset::MetaInfo)
+{
+	BASE_CLASS(o2::Asset::IMetaInfo);
+}
+END_META;
+CLASS_FIELDS_META(o2::AnimationAsset::MetaInfo)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::AnimationAsset::MetaInfo)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetAssetType);
+}
+END_META;

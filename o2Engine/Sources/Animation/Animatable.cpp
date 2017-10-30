@@ -233,33 +233,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::Animatable)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mValues);
-	PROTECTED_FIELD(mBlend);
-	PROTECTED_FIELD(test).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(AnimationState*, AddState, AnimationState*);
-	PUBLIC_FUNCTION(AnimationState*, AddState, const String&, const Animation&, const AnimationMask&, float);
-	PUBLIC_FUNCTION(AnimationState*, AddState, const String&);
-	PUBLIC_FUNCTION(void, RemoveState, AnimationState*);
-	PUBLIC_FUNCTION(void, RemoveState, const String&);
-	PUBLIC_FUNCTION(void, RemoveAllStates);
-	PUBLIC_FUNCTION(AnimationState*, GetState, const String&);
-	PUBLIC_FUNCTION(const AnimationStatesVec&, GetStates);
-	PUBLIC_FUNCTION(AnimationState*, Play, const Animation&, const String&);
-	PUBLIC_FUNCTION(AnimationState*, Play, const Animation&);
-	PUBLIC_FUNCTION(AnimationState*, Play, const String&);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, const Animation&, const String&, float);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, const Animation&, float);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, const String&, float);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, AnimationState*, float);
-	PUBLIC_FUNCTION(void, Stop, const String&);
-	PUBLIC_FUNCTION(void, StopAll);
-	PROTECTED_FUNCTION(void, UnregAnimatedValue, IAnimatedValue*, const String&);
-}
-END_META;
+DECLARE_CLASS(o2::Animatable);

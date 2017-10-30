@@ -14,8 +14,6 @@ namespace Editor
 {
 	IActorComponentViewer::IActorComponentViewer()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mDataView = mnew UIVerticalLayout();
 		mDataView->spacing = 0.0f;
 		mDataView->border = RectF(0, 0, 0, 0);

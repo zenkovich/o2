@@ -21,23 +21,10 @@ namespace o2
 	}
 }
 
-REG_TYPE(o2::AnimatedValue<bool>);
-REG_TYPE(o2::AnimatedValue<bool>::Key);
+DECLARE_CLASS(o2::AnimatedValue<bool>);
+DECLARE_CLASS(o2::AnimatedValue<bool>::Key);
 
-REG_TYPE(o2::AnimatedValue<o2::Color4>);
-REG_TYPE(o2::AnimatedValue<o2::Color4>::Key);
+DECLARE_CLASS(o2::AnimatedValue<o2::Color4>);
+DECLARE_CLASS(o2::AnimatedValue<o2::Color4>::Key);
 
-CLASS_META(o2::IAnimatedValue)
-{
-	BASE_CLASS(o2::IAnimation);
-
-	PUBLIC_FIELD(onKeysChanged);
-
-	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
-	PROTECTED_FUNCTION(void, SetTargetVoid, void*);
-	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
-	PROTECTED_FUNCTION(void, SetTargetPropertyVoid, void*);
-	PROTECTED_FUNCTION(void, RegInAnimatable, AnimationState*, const String&);
-	PROTECTED_FUNCTION(void, ForceSetTime, float, float);
-}
-END_META;
+DECLARE_CLASS(o2::IAnimatedValue);

@@ -19,8 +19,6 @@ namespace Editor
 {
 	ActorPropertiesViewer::ActorPropertiesViewer()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mHeaderViewer = mnew DefaultActorHeaderViewer();
 		mTransformViewer = mnew DefaultActorTransformViewer();
 		mAnimationViewer = mnew DefaultActorAnimationViewer();

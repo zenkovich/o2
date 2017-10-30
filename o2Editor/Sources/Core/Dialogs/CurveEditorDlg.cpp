@@ -13,8 +13,6 @@ namespace Editor
 {
 	CurveEditorDlg::CurveEditorDlg()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mWindow = dynamic_cast<UIWindow*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
 
 		InitializeControls();

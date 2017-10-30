@@ -7,8 +7,6 @@ namespace Editor
 {
 	IActorAnimationViewer::IActorAnimationViewer()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mDataView = mnew UIWidget();
 		mDataView->name = "animation viewer";
 	}

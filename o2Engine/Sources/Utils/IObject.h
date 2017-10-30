@@ -34,8 +34,8 @@ namespace o2
 		virtual IObject* Clone() const = 0;
 
 		// Cloning as type
-		template<typename Type>
-		Type* CloneAs() const { return dynamic_cast<Type*>(Clone()); }
+		template<typename _cast_type>
+		_cast_type* CloneAs() const { return dynamic_cast<_cast_type*>(Clone()); }
 
 		// Returns type
 		virtual const Type& GetType() const = 0;
@@ -86,30 +86,9 @@ public:                                                                         
 	IObject* Clone() const { return mnew CLASS(*this); }                                                        \
 	const o2::Type& GetType() const { return *type; };                                                          \
                                                                                                                 \
-    template<typename _type_processor> void ProcessType(_type_processor& processor)                             \
-    {                                                                                                           \
-        ProcessType<_type_processor>(this, processor);                                                          \
-    }                                                                                                           \
-                                                                                                                \
-    template<typename _type_processor> void ProcessBaseTypes(_type_processor& processor)                        \
-    {                                                                                                           \
-        ProcessBaseTypes<_type_processor>(this, processor);                                                     \
-    }                                                                                                           \
-                                                                                                                \
-    template<typename _type_processor> void ProcessFields(_type_processor& processor)                           \
-    {                                                                                                           \
-        ProcessFields<_type_processor>(this, processor);                                                        \
-    }                                                                                                           \
-                                                                                                                \
-    template<typename _type_processor> void ProcessMethods(_type_processor& processor)                          \
-    {                                                                                                           \
-        ProcessMethods<_type_processor>(this, processor);                                                       \
-    }                                                                                                           \
-                                                                                                                \
-private:                                                                                                        \
     template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \
 	{                                                                                                           \
-		processor.Start<CLASS>(object);                                                                         \
+		processor.Start<CLASS>(object, type);                                                                         \
 		ProcessBaseTypes<_type_processor>(object, processor);                                                   \
 		ProcessFields<_type_processor>(object, processor);                                                      \
 		ProcessMethods<_type_processor>(object, processor);                                                     \

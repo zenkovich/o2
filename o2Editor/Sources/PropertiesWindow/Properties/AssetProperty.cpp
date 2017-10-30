@@ -10,15 +10,15 @@
 #include "Assets/ImageAsset.h"
 #include "Assets/VectorFontAsset.h"
 
-REG_TYPE(Editor::AssetProperty<o2::ActorAssetRef>);
-REG_TYPE(Editor::AssetProperty<o2::AnimationAssetRef>);
-REG_TYPE(Editor::AssetProperty<o2::AtlasAssetRef>);
-REG_TYPE(Editor::AssetProperty<o2::BinaryAssetRef>);
-REG_TYPE(Editor::AssetProperty<o2::BitmapFontAssetRef>);
-REG_TYPE(Editor::AssetProperty<o2::DataAssetRef>);
-REG_TYPE(Editor::AssetProperty<o2::FolderAssetRef>);
-REG_TYPE(Editor::AssetProperty<o2::ImageAssetRef>);
-REG_TYPE(Editor::AssetProperty<o2::VectorFontAssetRef>);
+DECLARE_CLASS(Editor::AssetProperty<o2::ActorAssetRef>);
+DECLARE_CLASS(Editor::AssetProperty<o2::AnimationAssetRef>);
+DECLARE_CLASS(Editor::AssetProperty<o2::AtlasAssetRef>);
+DECLARE_CLASS(Editor::AssetProperty<o2::BinaryAssetRef>);
+DECLARE_CLASS(Editor::AssetProperty<o2::BitmapFontAssetRef>);
+DECLARE_CLASS(Editor::AssetProperty<o2::DataAssetRef>);
+DECLARE_CLASS(Editor::AssetProperty<o2::FolderAssetRef>);
+DECLARE_CLASS(Editor::AssetProperty<o2::ImageAssetRef>);
+DECLARE_CLASS(Editor::AssetProperty<o2::VectorFontAssetRef>);
 
 CLASS_META(Editor::IAssetProperty)
 {

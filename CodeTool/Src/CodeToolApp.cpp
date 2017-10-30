@@ -569,7 +569,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	RemoveMetas(hSource, "CLASS_BASES_META(", "END_META;");
 	RemoveMetas(hSource, "CLASS_FIELDS_META(", "END_META;");
 	RemoveMetas(hSource, "CLASS_METHODS_META(", "END_META;");
-	RemoveMetas(hSource, "DECLARE_CLASS(", ");");
+	RemoveMetas(hSource, "DECLARE_CLASS(", ");", false);
 
 	string cppSourcePath = file->GetPath().substr(0, file->GetPath().rfind('.')) + ".cpp";
 
@@ -590,7 +590,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 				RemoveMetas(cppSource, "CLASS_BASES_META(", "END_META;");
 				RemoveMetas(cppSource, "CLASS_FIELDS_META(", "END_META;");
 				RemoveMetas(cppSource, "CLASS_METHODS_META(", "END_META;");
-				RemoveMetas(cppSource, "DECLARE_CLASS(", ");");
+				RemoveMetas(cppSource, "DECLARE_CLASS(", ");", false);
 			}
 			else cppSource = "#include \"" + GetPathWithoutDirectories(file->GetPath()) + "\"\n\n";
 
@@ -952,7 +952,8 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 	return fullName;
 }
 
-void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const char* endword)
+void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const char* endword, 
+									  bool allowMultiline /*= true*/)
 {
 	auto isSkipingChar = [](char x) { return x == '\n' || x == '\r' || x == '\t' || x == '\0' || x == ' '; };
 
@@ -968,6 +969,13 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 
 		if (caret > 0 && isSkipingChar(data[caret]))
 			caret--;
+
+		if (!allowMultiline)
+		{
+			auto newLinePos = data.find("\n", caret + strlen(keyword));
+			if (newLinePos != string::npos && newLinePos < end)
+				return;
+		}
 
 		data.erase(caret + 1, end + strlen(endword) - caret - 1);
 		caret = data.find(keyword);

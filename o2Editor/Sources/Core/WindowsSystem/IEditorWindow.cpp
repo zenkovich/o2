@@ -10,8 +10,6 @@ namespace Editor
 {
 	IEditorWindow::IEditorWindow()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mWindow = o2UI.CreateWidget<UIDockableWindow>();
 		mWindow->layout->size = Vec2F(200, 200);
 		EditorUIRoot.AddWidget(mWindow);

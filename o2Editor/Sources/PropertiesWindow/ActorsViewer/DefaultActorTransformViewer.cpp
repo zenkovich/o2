@@ -17,8 +17,6 @@ namespace Editor
 {
 	DefaultActorTransformViewer::DefaultActorTransformViewer()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mNameCaption->text = "Transform";
 		mPropertiesLayout->layout->minHeight = 130;
 

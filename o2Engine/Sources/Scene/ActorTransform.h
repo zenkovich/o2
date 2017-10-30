@@ -474,3 +474,213 @@ namespace o2
 		friend class Actor;
 	};
 }
+
+CLASS_BASES_META(o2::ActorTransform)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::ActorTransform)
+{
+	PUBLIC_FIELD(actor);
+	PUBLIC_FIELD(position);
+	PUBLIC_FIELD(size);
+	PUBLIC_FIELD(width);
+	PUBLIC_FIELD(height);
+	PUBLIC_FIELD(scale);
+	PUBLIC_FIELD(pivot);
+	PUBLIC_FIELD(szPivot);
+	PUBLIC_FIELD(angle);
+	PUBLIC_FIELD(angleDegree);
+	PUBLIC_FIELD(shear);
+	PUBLIC_FIELD(basis);
+	PUBLIC_FIELD(nonSizedBasis);
+	PUBLIC_FIELD(AABB);
+	PUBLIC_FIELD(rect);
+	PUBLIC_FIELD(leftTop);
+	PUBLIC_FIELD(leftBottom);
+	PUBLIC_FIELD(rightTop);
+	PUBLIC_FIELD(rightBottom);
+	PUBLIC_FIELD(center);
+	PUBLIC_FIELD(rightDir);
+	PUBLIC_FIELD(leftDir);
+	PUBLIC_FIELD(upDir);
+	PUBLIC_FIELD(downDir);
+	PUBLIC_FIELD(right);
+	PUBLIC_FIELD(left);
+	PUBLIC_FIELD(top);
+	PUBLIC_FIELD(bottom);
+	PUBLIC_FIELD(worldPosition);
+	PUBLIC_FIELD(worldPivot);
+	PUBLIC_FIELD(worldAngle);
+	PUBLIC_FIELD(worldAngleDegree);
+	PUBLIC_FIELD(worldBasis);
+	PUBLIC_FIELD(worldNonSizedBasis);
+	PUBLIC_FIELD(worldLeftTop);
+	PUBLIC_FIELD(worldLeftBottom);
+	PUBLIC_FIELD(worldRightTop);
+	PUBLIC_FIELD(worldRightBottom);
+	PUBLIC_FIELD(worldCenter);
+	PUBLIC_FIELD(worldRightDir);
+	PUBLIC_FIELD(worldLeftDir);
+	PUBLIC_FIELD(worldUpDir);
+	PUBLIC_FIELD(worldDownDir);
+	PUBLIC_FIELD(worldRight);
+	PUBLIC_FIELD(worldLeft);
+	PUBLIC_FIELD(worldTop);
+	PUBLIC_FIELD(worldBottom);
+	PUBLIC_FIELD(worldRect);
+	PUBLIC_FIELD(worldAABB);
+	PROTECTED_FIELD(mData).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::ActorTransform)
+{
+
+	PUBLIC_FUNCTION(Actor*, GetOwnerActor);
+	PUBLIC_FUNCTION(void, SetDirty);
+	PUBLIC_FUNCTION(bool, IsDirty);
+	PUBLIC_FUNCTION(void, Update);
+	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetPosition);
+	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetSize);
+	PUBLIC_FUNCTION(void, SetWidth, float);
+	PUBLIC_FUNCTION(float, GetWidth);
+	PUBLIC_FUNCTION(void, SetHeight, float);
+	PUBLIC_FUNCTION(float, GetHeight);
+	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetPivot);
+	PUBLIC_FUNCTION(void, SetSizePivot, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetSizePivot);
+	PUBLIC_FUNCTION(void, SetScale, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetScale);
+	PUBLIC_FUNCTION(void, SetAngle, float);
+	PUBLIC_FUNCTION(float, GetAngle);
+	PUBLIC_FUNCTION(void, SetAngleDegrees, float);
+	PUBLIC_FUNCTION(float, GetAngleDegrees);
+	PUBLIC_FUNCTION(void, SetShear, float);
+	PUBLIC_FUNCTION(float, GetShear);
+	PUBLIC_FUNCTION(void, SetBasis, const Basis&);
+	PUBLIC_FUNCTION(Basis, GetBasis);
+	PUBLIC_FUNCTION(void, SetNonSizedBasis, const Basis&);
+	PUBLIC_FUNCTION(Basis, GetNonSizedBasis);
+	PUBLIC_FUNCTION(void, SetRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetRect);
+	PUBLIC_FUNCTION(void, SetAxisAlignedRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetAxisAlignedRect);
+	PUBLIC_FUNCTION(void, SetLeftTop, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetLeftTop);
+	PUBLIC_FUNCTION(void, SetRightTop, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetRightTop);
+	PUBLIC_FUNCTION(void, SetLeftBottom, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetLeftBottom);
+	PUBLIC_FUNCTION(void, SetRightBottom, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetRightBottom);
+	PUBLIC_FUNCTION(void, SetCenter, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetCenter);
+	PUBLIC_FUNCTION(void, SetRightDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetRightDir);
+	PUBLIC_FUNCTION(void, SetLeftDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetLeftDir);
+	PUBLIC_FUNCTION(void, SetUpDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetUpDir);
+	PUBLIC_FUNCTION(void, SetDownDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetDownDir);
+	PUBLIC_FUNCTION(void, SetRight, float);
+	PUBLIC_FUNCTION(float, GetRight);
+	PUBLIC_FUNCTION(void, SetLeft, float);
+	PUBLIC_FUNCTION(float, GetLeft);
+	PUBLIC_FUNCTION(void, SetTop, float);
+	PUBLIC_FUNCTION(float, GetTop);
+	PUBLIC_FUNCTION(void, SetBottom, float);
+	PUBLIC_FUNCTION(float, GetBottom);
+	PUBLIC_FUNCTION(Vec2F, World2LocalPoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, Local2WorldPoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, World2LocalDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, Local2WorldDir, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsPointInside, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetWorldPosition, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldPosition);
+	PUBLIC_FUNCTION(void, SetWorldPivot, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldPivot);
+	PUBLIC_FUNCTION(void, SetWorldAngle, float);
+	PUBLIC_FUNCTION(float, GetWorldAngle);
+	PUBLIC_FUNCTION(void, SetWorldAngleDegree, float);
+	PUBLIC_FUNCTION(float, GetWorldAngleDegree);
+	PUBLIC_FUNCTION(void, SetWorldBasis, const Basis&);
+	PUBLIC_FUNCTION(Basis, GetWorldBasis);
+	PUBLIC_FUNCTION(void, SetWorldNonSizedBasis, const Basis&);
+	PUBLIC_FUNCTION(Basis, GetWorldNonSizedBasis);
+	PUBLIC_FUNCTION(void, SetWorldRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetWorldRect);
+	PUBLIC_FUNCTION(void, SetWorldAxisAlignedRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetWorldAxisAlignedRect);
+	PUBLIC_FUNCTION(void, SetWorldLeftTop, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldLeftTop);
+	PUBLIC_FUNCTION(void, SetWorldRightTop, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldRightTop);
+	PUBLIC_FUNCTION(void, SetWorldLeftBottom, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldLeftBottom);
+	PUBLIC_FUNCTION(void, SetWorldRightBottom, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldRightBottom);
+	PUBLIC_FUNCTION(void, SetWorldCenter, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldCenter);
+	PUBLIC_FUNCTION(void, SetWorldRightDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldRightDir);
+	PUBLIC_FUNCTION(void, SetWorldLeftDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldLeftDir);
+	PUBLIC_FUNCTION(void, SetWorldUpDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldUpDir);
+	PUBLIC_FUNCTION(void, SetWorldDownDir, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWorldDownDir);
+	PUBLIC_FUNCTION(void, SetWorldRight, float);
+	PUBLIC_FUNCTION(float, GetWorldRight);
+	PUBLIC_FUNCTION(void, SetWorldLeft, float);
+	PUBLIC_FUNCTION(float, GetWorldLeft);
+	PUBLIC_FUNCTION(void, SetWorldTop, float);
+	PUBLIC_FUNCTION(float, GetWorldTop);
+	PUBLIC_FUNCTION(void, SetWorldBottom, float);
+	PUBLIC_FUNCTION(float, GetWorldBottom);
+	PROTECTED_FUNCTION(void, SetOwner, Actor*);
+	PROTECTED_FUNCTION(void, UpdateWorldRectangleAndTransform);
+	PROTECTED_FUNCTION(void, UpdateTransform);
+	PROTECTED_FUNCTION(void, UpdateRectangle);
+	PROTECTED_FUNCTION(void, CheckParentInvTransform);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_BASES_META(o2::ActorTransform::Data)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::ActorTransform::Data)
+{
+	PUBLIC_FIELD(owner);
+	PUBLIC_FIELD(isDirty);
+	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(size).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(scale).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(pivot).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(angle).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(shear).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rectangle);
+	PUBLIC_FIELD(parentRectangle);
+	PUBLIC_FIELD(parentRectangePosition);
+	PUBLIC_FIELD(worldRectangle);
+	PUBLIC_FIELD(transform);
+	PUBLIC_FIELD(nonSizedTransform);
+	PUBLIC_FIELD(worldNonSizedTransform);
+	PUBLIC_FIELD(worldTransform);
+	PUBLIC_FIELD(parentInvertedTransform);
+	PUBLIC_FIELD(parentTransform);
+	PUBLIC_FIELD(isParentInvTransformActual);
+}
+END_META;
+CLASS_METHODS_META(o2::ActorTransform::Data)
+{
+}
+END_META;

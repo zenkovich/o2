@@ -13,16 +13,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::ISerializable)
-{
-	BASE_CLASS(o2::IObject);
-
-
-	PUBLIC_FUNCTION(DataNode, Serialize);
-	PUBLIC_FUNCTION(void, Deserialize, const DataNode&);
-	PUBLIC_FUNCTION(void, OnSerialize, DataNode&);
-	PUBLIC_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, SerializeBasic, const IObject*, DataNode&);
-	PROTECTED_FUNCTION(void, DeserializeBasic, IObject*, const DataNode&);
-}
-END_META;
+DECLARE_CLASS(o2::ISerializable);

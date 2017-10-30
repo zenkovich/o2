@@ -22,8 +22,6 @@ namespace Editor
 {
 	DefaultActorHeaderViewer::DefaultActorHeaderViewer()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mDataView = mnew UIWidget();
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 42;

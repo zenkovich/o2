@@ -16,8 +16,6 @@ namespace Editor
 {
 	NameEditDlg::NameEditDlg()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mWindow = dynamic_cast<UIWindow*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Enter name")));
 
 		InitializeControls();

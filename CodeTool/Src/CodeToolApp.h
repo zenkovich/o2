@@ -162,7 +162,7 @@ protected:
 	string GetClassNormalizedTemplates(const string& name, const string& nspace);
 
 	// Removes class metas from source
-	void RemoveMetas(string& data, const char* keyword, const char* endword);
+	void RemoveMetas(string& data, const char* keyword, const char* endword, bool allowMultiline = true);
 
 	// Returns is function reflectable
 	bool IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const;

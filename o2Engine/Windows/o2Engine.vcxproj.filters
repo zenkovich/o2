@@ -1,949 +1,949 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Filter Include="Sources\Animation" />
-    <Filter Include="Sources\Application" />
-    <Filter Include="Sources\Application\Windows" />
-    <Filter Include="Sources\Assets" />
-    <Filter Include="Sources\Assets\Builder" />
-    <Filter Include="Sources\Config" />
-    <Filter Include="Sources" />
-    <Filter Include="Sources\Events" />
-    <Filter Include="Sources\Render" />
-    <Filter Include="Sources\Render\Windows" />
-    <Filter Include="Sources\Scene" />
-    <Filter Include="Sources\Scene\Components" />
-    <Filter Include="Sources\UI" />
-    <Filter Include="Sources\Utils" />
-    <Filter Include="Sources\Utils\Containers" />
-    <Filter Include="Sources\Utils\Data" />
-    <Filter Include="Sources\Utils\FileSystem" />
-    <Filter Include="Sources\Utils\ImageFormats" />
-    <Filter Include="Sources\Utils\Log" />
-    <Filter Include="Sources\Utils\Math" />
-    <Filter Include="Sources\Utils\Memory" />
-    <Filter Include="Sources\Utils\Reflection" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Sources\Animation\Animatable.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Animation\Animate.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Animation\AnimatedFloat.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Animation\AnimatedValue.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Animation\AnimatedVector.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Animation\Animation.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Animation\AnimationMask.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Animation\AnimationState.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Animation\IAnimation.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Animation\TweenValue.h">
-      <Filter>Sources\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Application\Application.h">
-      <Filter>Sources\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Application\Input.h">
-      <Filter>Sources\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Application\Windows\ApplicationBase.h">
-      <Filter>Sources\Application\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\ActorAsset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\AnimationAsset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Asset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\AssetInfo.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Assets.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\AssetsTree.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\AtlasAsset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\BinaryAsset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\BitmapFontAsset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Builder\AssetsBuilder.h">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Builder\AtlasAssetConverter.h">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Builder\FolderAssetConverter.h">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Builder\IAssetConverter.h">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Builder\ImageAssetConverter.h">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\Builder\StdAssetConverter.h">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\DataAsset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\FolderAsset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\ImageAsset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Assets\VectorFontAsset.h">
-      <Filter>Sources\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Config\ProjectConfig.h">
-      <Filter>Sources\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\EngineSettings.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Events\ApplicationEventsListener.h">
-      <Filter>Sources\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Events\CursorEventsListener.h">
-      <Filter>Sources\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Events\DrawableCursorEventsListener.h">
-      <Filter>Sources\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Events\EventSystem.h">
-      <Filter>Sources\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Events\KeyboardEventsListener.h">
-      <Filter>Sources\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Events\ShortcutKeysListener.h">
-      <Filter>Sources\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\O2.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\BitmapFont.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Camera.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\DrawPolyLine.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Font.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\FontRef.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\IDrawable.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Mesh.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Particle.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\ParticlesEffects.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\ParticlesEmitter.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\ParticlesEmitterShapes.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\RectDrawable.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Render.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Sprite.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Text.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Texture.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\TextureRef.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\VectorFont.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\VectorFontEffects.h">
-      <Filter>Sources\Render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Windows\OpenGL.h">
-      <Filter>Sources\Render\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Windows\RenderBase.h">
-      <Filter>Sources\Render\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Render\Windows\TextureBase.h">
-      <Filter>Sources\Render\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\Actor.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\ActorTransform.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\Component.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\Components\EditorTestComponent.h">
-      <Filter>Sources\Scene\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\Components\ImageComponent.h">
-      <Filter>Sources\Scene\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\Components\ParticlesEmitterComponent.h">
-      <Filter>Sources\Scene\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\DrawableComponent.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\Scene.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\Tags.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\Button.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\ContextMenu.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\CustomDropDown.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\CustomList.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\DropDown.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\EditBox.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\GridLayout.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\HorizontalLayout.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\HorizontalProgress.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\HorizontalScrollBar.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\Image.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\Label.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\List.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\LongList.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\MenuPanel.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\ScrollArea.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\Spoiler.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\Toggle.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\Tree.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\VerticalLayout.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\VerticalProgress.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\VerticalScrollBar.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\Widget.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\WidgetLayer.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\WidgetLayout.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\WidgetState.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\Window.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\AnimationTask.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Assert.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Bitmap.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Clipboard.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\CommonTypes.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Containers\Dictionary.h">
-      <Filter>Sources\Utils\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Containers\IArray.h">
-      <Filter>Sources\Utils\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Containers\IDictionary.h">
-      <Filter>Sources\Utils\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Containers\Pair.h">
-      <Filter>Sources\Utils\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Containers\Pool.h">
-      <Filter>Sources\Utils\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Containers\Vector.h">
-      <Filter>Sources\Utils\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\CursorEventsArea.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Data\DataNode.h">
-      <Filter>Sources\Utils\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h">
-      <Filter>Sources\Utils\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Debug.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Delegates.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\DragAndDrop.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\DragHandle.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\EditorPropertyAttribute.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\FileSystem\File.h">
-      <Filter>Sources\Utils\FileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h">
-      <Filter>Sources\Utils\FileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h">
-      <Filter>Sources\Utils\FileSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\FrameHandles.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\IDynamic.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\IObject.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\ITree.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\ImageFormats\PngFormat.h">
-      <Filter>Sources\Utils\ImageFormats</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h">
-      <Filter>Sources\Utils\Log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Log\FileLogStream.h">
-      <Filter>Sources\Utils\Log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Log\LogStream.h">
-      <Filter>Sources\Utils\Log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Basis.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Border.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Color.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Curve.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Interpolation.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Intersection.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Layout.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Math.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\OBB.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\PolyLine.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Ray.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Rect.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Transform.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Vector2.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Vertex2.h">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h">
-      <Filter>Sources\Utils\Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Property.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\RectPacker.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection\Attribute.h">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection\FieldInfo.h">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection\Type.h">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection\TypeTraits.h">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Serializable.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\ShortcutKeys.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Singleton.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\SmartPointers.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\StackTrace.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\String.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\StringDef.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\StringImpl.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Task.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\TaskManager.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Time.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\TimeStamp.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Timer.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\UID.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\UnknownPtr.h">
-      <Filter>Sources\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\SceneLayer.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Scene\Drawable.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\UI\UIManager.h">
-      <Filter>Sources\UI</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Sources\Animation\Animatable.cpp">
-      <Filter>Sources\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Animation\Animate.cpp">
-      <Filter>Sources\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Animation\AnimatedFloat.cpp">
-      <Filter>Sources\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Animation\AnimatedValue.cpp">
-      <Filter>Sources\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Animation\AnimatedVector.cpp">
-      <Filter>Sources\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Animation\Animation.cpp">
-      <Filter>Sources\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Animation\AnimationMask.cpp">
-      <Filter>Sources\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Animation\AnimationState.cpp">
-      <Filter>Sources\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Animation\IAnimation.cpp">
-      <Filter>Sources\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Application\Input.cpp">
-      <Filter>Sources\Application</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Application\Windows\Application.cpp">
-      <Filter>Sources\Application\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\ActorAsset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\AnimationAsset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Asset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\AssetInfo.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Assets.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\AssetsTree.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\AtlasAsset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\BinaryAsset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\BitmapFontAsset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Builder\AssetsBuilder.cpp">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Builder\AtlasAssetConverter.cpp">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Builder\FolderAssetConverter.cpp">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Builder\IAssetConverter.cpp">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Builder\ImageAssetConverter.cpp">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\Builder\StdAssetConverter.cpp">
-      <Filter>Sources\Assets\Builder</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\DataAsset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\FolderAsset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\ImageAsset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Assets\VectorFontAsset.cpp">
-      <Filter>Sources\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Config\ProjectConfig.cpp">
-      <Filter>Sources\Config</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Events\ApplicationEventsListener.cpp">
-      <Filter>Sources\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Events\CursorEventsListener.cpp">
-      <Filter>Sources\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Events\DrawableCursorEventsListener.cpp">
-      <Filter>Sources\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Events\EventSystem.cpp">
-      <Filter>Sources\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Events\KeyboardEventsListener.cpp">
-      <Filter>Sources\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Events\ShortcutKeysListener.cpp">
-      <Filter>Sources\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\BitmapFont.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\Camera.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\Font.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\FontRef.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\IDrawable.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\Mesh.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\ParticlesEffects.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\ParticlesEmitter.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\ParticlesEmitterShapes.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\RectDrawable.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\Sprite.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\Text.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\Texture.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\TextureRef.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\VectorFont.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\VectorFontEffects.cpp">
-      <Filter>Sources\Render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp">
-      <Filter>Sources\Render\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\Windows\Render.cpp">
-      <Filter>Sources\Render\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Render\Windows\TextureImpl.cpp">
-      <Filter>Sources\Render\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\Actor.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\ActorTransform.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\Component.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\Components\EditorTestComponent.cpp">
-      <Filter>Sources\Scene\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\Components\ImageComponent.cpp">
-      <Filter>Sources\Scene\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\Components\ParticlesEmitterComponent.cpp">
-      <Filter>Sources\Scene\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\DrawableComponent.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\Scene.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\Tags.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Button.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\ContextMenu.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\CustomDropDown.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\CustomList.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\DropDown.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\EditBox.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\GridLayout.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\HorizontalLayout.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\HorizontalProgress.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\HorizontalScrollBar.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Image.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Label.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\List.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\LongList.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\MenuPanel.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\ScrollArea.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Spoiler.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Toggle.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Tree.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\VerticalLayout.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\VerticalProgress.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\VerticalScrollBar.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Widget.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\WidgetLayer.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\WidgetLayout.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\WidgetState.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\Window.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\AnimationTask.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Assert.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Bitmap.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Clipboard.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\CommonTypes.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\CursorEventsArea.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Data\DataNode.cpp">
-      <Filter>Sources\Utils\Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp">
-      <Filter>Sources\Utils\Data</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Debug.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\DragAndDrop.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\DragHandle.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp">
-      <Filter>Sources\Utils\FileSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp">
-      <Filter>Sources\Utils\FileSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp">
-      <Filter>Sources\Utils\FileSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\FrameHandles.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\ImageFormats\PngFormat.cpp">
-      <Filter>Sources\Utils\ImageFormats</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp">
-      <Filter>Sources\Utils\Log</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp">
-      <Filter>Sources\Utils\Log</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Log\LogStream.cpp">
-      <Filter>Sources\Utils\Log</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Math\Color.cpp">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Math\Curve.cpp">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Math\Layout.cpp">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Math\Math.cpp">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Math\Transform.cpp">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp">
-      <Filter>Sources\Utils\Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\RectPacker.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Reflection\FieldInfo.cpp">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Reflection\FunctionInfo.cpp">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Reflection\Reflection.cpp">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Reflection\Type.cpp">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Serializable.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\ShortcutKeys.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\StackTrace.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Task.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\TaskManager.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Time.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\TimeStamp.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Timer.cpp">
-      <Filter>Sources\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\EngineSettings.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\SceneLayer.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Scene\Drawable.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\UI\UIManager.cpp">
-      <Filter>Sources\UI</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Natvis Include="o2.natvis" />
-  </ItemGroup>
+	<ItemGroup>
+		<Filter Include="Sources\Animation" />
+		<Filter Include="Sources\Application" />
+		<Filter Include="Sources\Application\Windows" />
+		<Filter Include="Sources\Assets" />
+		<Filter Include="Sources\Assets\Builder" />
+		<Filter Include="Sources\Config" />
+		<Filter Include="Sources" />
+		<Filter Include="Sources\Events" />
+		<Filter Include="Sources\Render" />
+		<Filter Include="Sources\Render\Windows" />
+		<Filter Include="Sources\Scene" />
+		<Filter Include="Sources\Scene\Components" />
+		<Filter Include="Sources\UI" />
+		<Filter Include="Sources\Utils" />
+		<Filter Include="Sources\Utils\Containers" />
+		<Filter Include="Sources\Utils\Data" />
+		<Filter Include="Sources\Utils\FileSystem" />
+		<Filter Include="Sources\Utils\ImageFormats" />
+		<Filter Include="Sources\Utils\Log" />
+		<Filter Include="Sources\Utils\Math" />
+		<Filter Include="Sources\Utils\Memory" />
+		<Filter Include="Sources\Utils\Reflection" />
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\Sources\Animation\Animatable.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Animation\Animate.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Animation\AnimatedFloat.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Animation\AnimatedValue.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Animation\AnimatedVector.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Animation\Animation.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Animation\AnimationMask.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Animation\AnimationState.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Animation\IAnimation.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Animation\TweenValue.h">
+			<Filter>Sources\Animation</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Application\Application.h">
+			<Filter>Sources\Application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Application\Input.h">
+			<Filter>Sources\Application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Application\Windows\ApplicationBase.h">
+			<Filter>Sources\Application\Windows</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\ActorAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\AnimationAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\Asset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\AssetInfo.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\Assets.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\AssetsTree.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\AtlasAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\BinaryAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\BitmapFontAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\Builder\AssetsBuilder.h">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\Builder\AtlasAssetConverter.h">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\Builder\FolderAssetConverter.h">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\Builder\IAssetConverter.h">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\Builder\ImageAssetConverter.h">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\Builder\StdAssetConverter.h">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\DataAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\FolderAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\ImageAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\VectorFontAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Config\ProjectConfig.h">
+			<Filter>Sources\Config</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\EngineSettings.h">
+			<Filter>Sources</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Events\ApplicationEventsListener.h">
+			<Filter>Sources\Events</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Events\CursorEventsListener.h">
+			<Filter>Sources\Events</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Events\DrawableCursorEventsListener.h">
+			<Filter>Sources\Events</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Events\EventSystem.h">
+			<Filter>Sources\Events</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Events\KeyboardEventsListener.h">
+			<Filter>Sources\Events</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Events\ShortcutKeysListener.h">
+			<Filter>Sources\Events</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\O2.h">
+			<Filter>Sources</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\BitmapFont.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Camera.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\DrawPolyLine.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Font.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\FontRef.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\IDrawable.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Mesh.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Particle.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\ParticlesEffects.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\ParticlesEmitter.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\ParticlesEmitterShapes.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\RectDrawable.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Render.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Sprite.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Text.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Texture.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\TextureRef.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\VectorFont.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\VectorFontEffects.h">
+			<Filter>Sources\Render</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Windows\OpenGL.h">
+			<Filter>Sources\Render\Windows</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Windows\RenderBase.h">
+			<Filter>Sources\Render\Windows</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Render\Windows\TextureBase.h">
+			<Filter>Sources\Render\Windows</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\Actor.h">
+			<Filter>Sources\Scene</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\ActorTransform.h">
+			<Filter>Sources\Scene</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\Component.h">
+			<Filter>Sources\Scene</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\Components\EditorTestComponent.h">
+			<Filter>Sources\Scene\Components</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\Components\ImageComponent.h">
+			<Filter>Sources\Scene\Components</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\Components\ParticlesEmitterComponent.h">
+			<Filter>Sources\Scene\Components</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\Drawable.h">
+			<Filter>Sources\Scene</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\DrawableComponent.h">
+			<Filter>Sources\Scene</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\Scene.h">
+			<Filter>Sources\Scene</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\SceneLayer.h">
+			<Filter>Sources\Scene</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Scene\Tags.h">
+			<Filter>Sources\Scene</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\Button.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\ContextMenu.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\CustomDropDown.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\CustomList.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\DropDown.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\EditBox.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\GridLayout.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\HorizontalLayout.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\HorizontalProgress.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\HorizontalScrollBar.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\Image.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\Label.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\List.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\LongList.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\MenuPanel.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\ScrollArea.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\Spoiler.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\Toggle.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\Tree.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\UIManager.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\VerticalLayout.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\VerticalProgress.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\VerticalScrollBar.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\Widget.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\WidgetLayer.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\WidgetLayout.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\WidgetState.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\UI\Window.h">
+			<Filter>Sources\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\AnimationTask.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Assert.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Bitmap.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Clipboard.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\CommonTypes.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Containers\Dictionary.h">
+			<Filter>Sources\Utils\Containers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Containers\IArray.h">
+			<Filter>Sources\Utils\Containers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Containers\IDictionary.h">
+			<Filter>Sources\Utils\Containers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Containers\Pair.h">
+			<Filter>Sources\Utils\Containers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Containers\Pool.h">
+			<Filter>Sources\Utils\Containers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Containers\Vector.h">
+			<Filter>Sources\Utils\Containers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\CursorEventsArea.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Data\DataNode.h">
+			<Filter>Sources\Utils\Data</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Data\XmlDataFormat.h">
+			<Filter>Sources\Utils\Data</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Debug.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Delegates.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\DragAndDrop.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\DragHandle.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\EditorPropertyAttribute.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\FileSystem\File.h">
+			<Filter>Sources\Utils\FileSystem</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h">
+			<Filter>Sources\Utils\FileSystem</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h">
+			<Filter>Sources\Utils\FileSystem</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\FrameHandles.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\IDynamic.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\IObject.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\ITree.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\ImageFormats\PngFormat.h">
+			<Filter>Sources\Utils\ImageFormats</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Log\ConsoleLogStream.h">
+			<Filter>Sources\Utils\Log</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Log\FileLogStream.h">
+			<Filter>Sources\Utils\Log</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Log\LogStream.h">
+			<Filter>Sources\Utils\Log</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Basis.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Border.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Color.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Curve.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Interpolation.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Intersection.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Layout.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Math.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\OBB.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\PolyLine.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Ray.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Rect.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Transform.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Vector2.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Math\Vertex2.h">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h">
+			<Filter>Sources\Utils\Memory</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Property.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\RectPacker.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Reflection\Attribute.h">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Reflection\FieldInfo.h">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Reflection\Reflection.h">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Reflection\Type.h">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Reflection\TypeTraits.h">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Serializable.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\ShortcutKeys.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Singleton.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\SmartPointers.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\StackTrace.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\String.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\StringDef.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\StringImpl.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Task.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\TaskManager.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Time.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\TimeStamp.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Timer.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\UID.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\UnknownPtr.h">
+			<Filter>Sources\Utils</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\Sources\Animation\Animatable.cpp">
+			<Filter>Sources\Animation</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Animation\Animate.cpp">
+			<Filter>Sources\Animation</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Animation\AnimatedFloat.cpp">
+			<Filter>Sources\Animation</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Animation\AnimatedValue.cpp">
+			<Filter>Sources\Animation</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Animation\AnimatedVector.cpp">
+			<Filter>Sources\Animation</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Animation\Animation.cpp">
+			<Filter>Sources\Animation</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Animation\AnimationMask.cpp">
+			<Filter>Sources\Animation</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Animation\AnimationState.cpp">
+			<Filter>Sources\Animation</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Animation\IAnimation.cpp">
+			<Filter>Sources\Animation</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Application\Input.cpp">
+			<Filter>Sources\Application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Application\Windows\Application.cpp">
+			<Filter>Sources\Application\Windows</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\ActorAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\AnimationAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\Asset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\AssetInfo.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\Assets.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\AssetsTree.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\AtlasAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\BinaryAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\BitmapFontAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\Builder\AssetsBuilder.cpp">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\Builder\AtlasAssetConverter.cpp">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\Builder\FolderAssetConverter.cpp">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\Builder\IAssetConverter.cpp">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\Builder\ImageAssetConverter.cpp">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\Builder\StdAssetConverter.cpp">
+			<Filter>Sources\Assets\Builder</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\DataAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\FolderAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\ImageAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\VectorFontAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Config\ProjectConfig.cpp">
+			<Filter>Sources\Config</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\EngineSettings.cpp">
+			<Filter>Sources</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Events\ApplicationEventsListener.cpp">
+			<Filter>Sources\Events</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Events\CursorEventsListener.cpp">
+			<Filter>Sources\Events</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Events\DrawableCursorEventsListener.cpp">
+			<Filter>Sources\Events</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Events\EventSystem.cpp">
+			<Filter>Sources\Events</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Events\KeyboardEventsListener.cpp">
+			<Filter>Sources\Events</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Events\ShortcutKeysListener.cpp">
+			<Filter>Sources\Events</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\BitmapFont.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Camera.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Font.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\FontRef.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\IDrawable.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Mesh.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\ParticlesEffects.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\ParticlesEmitter.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\ParticlesEmitterShapes.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\RectDrawable.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Sprite.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Text.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Texture.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\TextureRef.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\VectorFont.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\VectorFontEffects.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp">
+			<Filter>Sources\Render\Windows</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Windows\Render.cpp">
+			<Filter>Sources\Render\Windows</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Windows\TextureImpl.cpp">
+			<Filter>Sources\Render\Windows</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\Actor.cpp">
+			<Filter>Sources\Scene</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\ActorTransform.cpp">
+			<Filter>Sources\Scene</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\Component.cpp">
+			<Filter>Sources\Scene</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\Components\EditorTestComponent.cpp">
+			<Filter>Sources\Scene\Components</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\Components\ImageComponent.cpp">
+			<Filter>Sources\Scene\Components</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\Components\ParticlesEmitterComponent.cpp">
+			<Filter>Sources\Scene\Components</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\Drawable.cpp">
+			<Filter>Sources\Scene</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\DrawableComponent.cpp">
+			<Filter>Sources\Scene</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\Scene.cpp">
+			<Filter>Sources\Scene</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\SceneLayer.cpp">
+			<Filter>Sources\Scene</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Scene\Tags.cpp">
+			<Filter>Sources\Scene</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\Button.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\ContextMenu.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\CustomDropDown.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\CustomList.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\DropDown.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\EditBox.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\GridLayout.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\HorizontalLayout.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\HorizontalProgress.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\HorizontalScrollBar.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\Image.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\Label.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\List.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\LongList.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\MenuPanel.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\ScrollArea.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\Spoiler.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\Toggle.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\Tree.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\UIManager.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\VerticalLayout.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\VerticalProgress.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\VerticalScrollBar.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\Widget.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\WidgetLayer.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\WidgetLayout.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\WidgetState.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\UI\Window.cpp">
+			<Filter>Sources\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\AnimationTask.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Assert.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Bitmap.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Clipboard.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\CommonTypes.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\CursorEventsArea.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Data\DataNode.cpp">
+			<Filter>Sources\Utils\Data</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Data\XmlDataFormat.cpp">
+			<Filter>Sources\Utils\Data</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Debug.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\DragAndDrop.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\DragHandle.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\FileSystem\File.cpp">
+			<Filter>Sources\Utils\FileSystem</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp">
+			<Filter>Sources\Utils\FileSystem</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp">
+			<Filter>Sources\Utils\FileSystem</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\FrameHandles.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\ImageFormats\PngFormat.cpp">
+			<Filter>Sources\Utils\ImageFormats</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Log\ConsoleLogStream.cpp">
+			<Filter>Sources\Utils\Log</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Log\FileLogStream.cpp">
+			<Filter>Sources\Utils\Log</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Log\LogStream.cpp">
+			<Filter>Sources\Utils\Log</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Math\Color.cpp">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Math\Curve.cpp">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Math\Layout.cpp">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Math\Math.cpp">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Math\Transform.cpp">
+			<Filter>Sources\Utils\Math</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Memory\MemoryManager.cpp">
+			<Filter>Sources\Utils\Memory</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\RectPacker.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Reflection\FieldInfo.cpp">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Reflection\FunctionInfo.cpp">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Reflection\Reflection.cpp">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Reflection\Type.cpp">
+			<Filter>Sources\Utils\Reflection</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Serializable.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\ShortcutKeys.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\StackTrace.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Task.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\TaskManager.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Time.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\TimeStamp.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\Timer.cpp">
+			<Filter>Sources\Utils</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Natvis Include="o2.natvis" />
+	</ItemGroup>
 </Project>

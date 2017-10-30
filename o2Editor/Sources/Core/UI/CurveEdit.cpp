@@ -23,8 +23,6 @@ namespace Editor
 	UICurveEditor::UICurveEditor():
 		UIFrameScrollView()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mReady = false;
 
 		mSelectionSprite = mnew Sprite();

@@ -382,68 +382,8 @@ namespace o2
 
 }
 
-CLASS_META(o2::Asset)
-{
-	BASE_CLASS(o2::ISerializable);
+DECLARE_CLASS(o2::Asset);
 
-	PUBLIC_FIELD(path);
-	PUBLIC_FIELD(fullPath);
-	PUBLIC_FIELD(id);
-	PUBLIC_FIELD(meta);
-	PROTECTED_FIELD(mPath);
-	PROTECTED_FIELD(mMeta).EDITOR_PROPERTY_ATTRIBUTE();
+DECLARE_CLASS(o2::AssetRef);
 
-	PUBLIC_FUNCTION(AssetInfo, GetAssetInfo);
-	PUBLIC_FUNCTION(String, GetPath);
-	PUBLIC_FUNCTION(void, SetPath, const String&);
-	PUBLIC_FUNCTION(String, GetFullPath);
-	PUBLIC_FUNCTION(String, GetDataFullPath);
-	PUBLIC_FUNCTION(UID, GetAssetId);
-	PUBLIC_FUNCTION(IMetaInfo*, GetMeta);
-	PUBLIC_FUNCTION(void, Load);
-	PUBLIC_FUNCTION(void, Load, const String&);
-	PUBLIC_FUNCTION(void, Load, UID);
-	PUBLIC_FUNCTION(void, Load, const AssetInfo&);
-	PUBLIC_FUNCTION(void, Save, const String&, bool);
-	PUBLIC_FUNCTION(void, Save, bool);
-	PUBLIC_FUNCTION(void, Save, const AssetInfo&, bool);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, LoadMeta, const String&);
-	PROTECTED_FUNCTION(void, SaveMeta, const String&);
-	PROTECTED_FUNCTION(String, GetMetaFullPath);
-	PROTECTED_FUNCTION(UID&, IdRef);
-	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
-
-CLASS_META(o2::AssetRef)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PROTECTED_FIELD(mRefCounter);
-	PROTECTED_FIELD(mAssetPtr);
-
-	PUBLIC_FUNCTION(bool, IsValid);
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-}
-END_META;
-
-CLASS_META(o2::Asset::IMetaInfo)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(mId).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(bool, IsEqual, IMetaInfo*);
-	PUBLIC_FUNCTION(UID, ID);
-	PUBLIC_FUNCTION(void, r);
-}
-END_META;
+DECLARE_CLASS(o2::Asset::IMetaInfo);

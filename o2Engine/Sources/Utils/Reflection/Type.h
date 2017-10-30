@@ -1,3 +1,5 @@
+//@CODETOOLIGNORE
+
 #pragma once
 
 #include "Utils/Containers/Vector.h"
@@ -62,7 +64,6 @@ namespace o2
 		typedef Vector<FieldInfo*> FieldInfosVec;
 		typedef Vector<FunctionInfo*> FunctionsInfosVec;
 		typedef Vector<Type*> TypesVec;
-		typedef Dictionary<Type*, int> BaseTypesVec;
 
 	public:
 		// Default constructor
@@ -96,7 +97,7 @@ namespace o2
 		virtual Usage GetUsage() const;
 
 		// Returns vector of base types
-		const BaseTypesVec& GetBaseTypes() const;
+		const TypesVec& GetBaseTypes() const;
 
 		// Returns fields informations array
 		const FieldInfosVec& GetFields() const;
@@ -141,14 +142,12 @@ namespace o2
 	protected:
 		TypeId              mId;            // Id of type
 		String              mName;          // Name of object type
-		BaseTypesVec        mBaseTypes;     // Base types ids with offset 
+		TypesVec            mBaseTypes;     // Base types ids with offset 
 		FieldInfosVec       mFields;        // Fields information
 		FunctionsInfosVec   mFunctions;     // Functions informations
 		ITypeSampleCreator* mSampleCreator; // Template type agent
 		mutable Type*       mPtrType;       // Pointer type from this
 		int                 mSize;          // Size of type in bytes
-
-		void(*mInitializeFunc)(Type*);    // Type initializing function
 
 	protected:
 		// Searches field recursively by pointer
@@ -407,7 +406,7 @@ namespace o2
 		friend class Reflection;
 
 	public:
-		template<typedef _processor_type>
+		template<typename _processor_type>
 		static void InitializeType(_type* object, _processor_type& processor);
 	};
 
@@ -443,7 +442,7 @@ namespace o2
 	public:
 		// Adds basic type
 		template<typename _type, typename X = std::conditional<std::is_base_of<IObject, _type>::value, _type, Type::Dummy>::type>
-		static void AddBaseType(Type*& type, int offset);
+		static void AddBaseType(Type*& type);
 
 		// Registers field in type
 		template<typename _type>
@@ -457,35 +456,40 @@ namespace o2
 		template<typename _class_type, typename _res_type, typename ... _args>
 		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section);
 	};
+
+	// Here is the sample of type processing class
+	class ITypeProcessor
+	{
+	public:
+		class FieldInfo {};
+		class MethodInfo {};
+
+		template<typename _object_type>
+		void Start(_object_type* object, Type* type) {}
+
+		template<typename _object_type>
+		void StartBases(_object_type* object, Type* type) {}
+
+		template<typename _object_type>
+		void StartFields(_object_type* object, Type* type) {}
+
+		template<typename _object_type>
+		void StartMethods(_object_type* object, Type* type) {}
+
+		template<typename _object_type, typename _base_type>
+		void BaseType(_object_type* object, Type* type, const char* name) {}
+
+		template<typename _object_type, typename _field_type>
+		FieldInfo& Field(_object_type* object, Type* type, const char* name, _field_type& field, ProtectSection protection) {}
+
+		template<typename _object_type, typename _res_type, typename ... _args>
+		MethodInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...), ProtectSection protection) {}
+
+		template<typename _object_type, typename _res_type, typename ... _args>
+		MethodInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...) const, ProtectSection protection) {}
+	};
 }
 
-class ITypeProcessor
-{
-public:
-	template<typename _object_type>
-	void Start(_object_type* object) {}
-
-	template<typename _object_type>
-	void StartBases(_object_type* object) {}
-
-	template<typename _object_type>
-	void StartFields(_object_type* object) {}
-
-	template<typename _object_type>
-	void StartMethods(_object_type* object) {}
-
-	template<typename _object_type, typename _base_type>
-	void BaseType(_object_type* object, Type* type, const char* name) {}
-
-	template<typename _object_type, typename _field_type>
-	void Field(_object_type* object, Type* type, const char* name, _field_type& field, ProtectSection protection) {}
-
-	template<typename _object_type, typename _res_type, typename ... _args>
-	void Method(_object_type* object, Type* type, const char* name, _res_type(_class_type::*pointer)(_args ...), ProtectSection protection) {}
-
-	template<typename _object_type, typename _res_type, typename ... _args>
-	void Method(_object_type* object, Type* type, const char* name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection protection) {}
-};
 
 #define DECLARE_CLASS(CLASS)                                                                                   \
     o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
@@ -517,16 +521,16 @@ public:
     processor.BaseType<thisclass, CLASS>(object, type, #CLASS)
 
 #define FIELD(NAME, PROTECT_SECTION) \
-    processor.Field<thisclass, decltype<object->NAME>>(object, type, #NAME, object->NAME, ProtectSection::PROTECT_SECTION)
+    processor.Field<thisclass, decltype(object->NAME)>(object, type, #NAME, object->NAME, ProtectSection::PROTECT_SECTION)
 
 #define PUBLIC_FIELD(NAME) \
-    processor.Field<thisclass, decltype<object->NAME>>(object, type, #NAME, object->NAME, ProtectSection::Public)
+    processor.Field<thisclass, decltype(object->NAME)>(object, type, #NAME, object->NAME, ProtectSection::Public)
 
 #define PRIVATE_FIELD(NAME) \
-    processor.Field<thisclass, decltype<object->NAME>>(object, type, #NAME, object->NAME, ProtectSection::Private)
+    processor.Field<thisclass, decltype(object->NAME)>(object, type, #NAME, object->NAME, ProtectSection::Private)
 
 #define PROTECTED_FIELD(NAME) \
-    processor.Field<thisclass, decltype<object->NAME>>(object, type, #NAME, object->NAME, ProtectSection::Protected)
+    processor.Field<thisclass, decltype(object->NAME)>(object, type, #NAME, object->NAME, ProtectSection::Protected)
 
 
 #define ATTRIBUTE(NAME) \
@@ -582,10 +586,6 @@ namespace o2
 	template<typename _type>
 	FundamentalType<_type>::FundamentalType(const String& name):
 		Type(name, new TypeSampleCreator<_type>(), sizeof(_type))
-	{}
-
-	template<typename _type>
-	void FundamentalType<_type>::InitializeType(Type* type)
 	{}
 
 	// ------------------------------
@@ -815,14 +815,14 @@ namespace o2
 	// ------------------------------
 
 	template<typename _type, typename X>
-	void TypeInitializer::AddBaseType(Type*& type, int offset)
+	void TypeInitializer::AddBaseType(Type*& type)
 	{
 		if (std::is_same<X, Type::Dummy>::value)
 			return;
 
 		Type*& baseType = X::type;
 
-		type->mBaseTypes.Add(baseType, offset);
+		type->mBaseTypes.Add(baseType);
 	}
 
 	template<typename _type>
@@ -871,4 +871,66 @@ namespace o2
 
 		return funcInfo;
 	}
+
+	template<typename _type_processor> 
+	void FundamentalTypeContainer<RectF>::InitializeType(RectF* object, _type_processor& processor)
+	{
+		processor.StartFields<RectF>(object, type);
+		{
+			PUBLIC_FIELD(left);
+			PUBLIC_FIELD(right);
+			PUBLIC_FIELD(top);
+			PUBLIC_FIELD(bottom);
+		}
+	};
+
+	FUNDAMENTAL_META(RectI)
+	{
+		PUBLIC_FIELD(left);
+		PUBLIC_FIELD(right);
+		PUBLIC_FIELD(top);
+		PUBLIC_FIELD(bottom);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(BorderF)
+	{
+		PUBLIC_FIELD(left);
+		PUBLIC_FIELD(right);
+		PUBLIC_FIELD(top);
+		PUBLIC_FIELD(bottom);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(BorderI)
+	{
+		PUBLIC_FIELD(left);
+		PUBLIC_FIELD(right);
+		PUBLIC_FIELD(top);
+		PUBLIC_FIELD(bottom);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(Vec2F)
+	{
+		PUBLIC_FIELD(x);
+		PUBLIC_FIELD(y);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(Vec2I)
+	{
+		PUBLIC_FIELD(x);
+		PUBLIC_FIELD(y);
+	}
+	END_META;
+
+	FUNDAMENTAL_META(Color4)
+	{
+		PUBLIC_FIELD(r);
+		PUBLIC_FIELD(g);
+		PUBLIC_FIELD(b);
+		PUBLIC_FIELD(a);
+	}
+	END_META;
 }

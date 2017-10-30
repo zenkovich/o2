@@ -13,8 +13,6 @@ namespace Editor
 {
 	ScaleTool::ScaleTool()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mHorDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_right_scale_arrow.png"),
 										 mnew Sprite("ui/UI2_right_scale_arrow_select.png"),
 										 mnew Sprite("ui/UI2_right_scale_arrow_pressed.png"));

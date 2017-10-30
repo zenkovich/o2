@@ -14,8 +14,6 @@ namespace Editor
 {
 	RotateTool::RotateTool()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mPivotDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_pivot.png"),
 										   mnew Sprite("ui/UI2_pivot_select.png"),
 										   mnew Sprite("ui/UI2_pivot_pressed.png"));

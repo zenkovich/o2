@@ -72,7 +72,7 @@
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_dbg</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -124,7 +124,7 @@
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
     <PreBuildEvent>
-      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml"</Command>
+      <Command>$(O2)\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(O2)\o2Engine\Sources\CodeToolCache.xml" -r</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generating reflection</Message>

@@ -17,8 +17,6 @@ namespace Editor
 {
 	WindowsManager::WindowsManager()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		if (mNeedRebuildWndStyle)
 		{
 			EditorUIStyleBuilder builder;

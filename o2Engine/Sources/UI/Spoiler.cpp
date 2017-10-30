@@ -179,24 +179,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UISpoiler)
-{
-	BASE_CLASS(o2::UIVerticalLayout);
-
-	PROTECTED_FIELD(mExpandState);
-	PROTECTED_FIELD(mExpandCoef);
-	PROTECTED_FIELD(mTargetHeight);
-
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-	PUBLIC_FUNCTION(void, SetExpanded, bool);
-	PUBLIC_FUNCTION(bool, IsExpanded);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PROTECTED_FUNCTION(void, UpdateExpanding, float);
-	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
-	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
-	PROTECTED_FUNCTION(bool, IsFullyExpanded);
-	PROTECTED_FUNCTION(bool, IsFullyCollapsed);
-}
-END_META;
+DECLARE_CLASS(o2::UISpoiler);

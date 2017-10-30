@@ -467,61 +467,6 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIMenuPanel)
-{
-	BASE_CLASS(o2::UIWidget);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
+DECLARE_CLASS(o2::UIMenuPanel);
 
-	PROTECTED_FIELD(mLayout);
-	PROTECTED_FIELD(mItemSample).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mClickFunctions);
-	PROTECTED_FIELD(mSelectionDrawable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectionLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mCurrentSelectionRect);
-	PROTECTED_FIELD(mTargetSelectionRect);
-	PROTECTED_FIELD(mLastSelectCheckCursor);
-	PROTECTED_FIELD(mSelectedItem);
-	PROTECTED_FIELD(mSelectSubContextTime);
-	PROTECTED_FIELD(mOpenedContext);
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, const Item&);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(UIWidget*, InsertItem, const Item&, int);
-	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
-	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
-	PUBLIC_FUNCTION(Item, GetItem, int);
-	PUBLIC_FUNCTION(Vector<Item>, GetItems);
-	PUBLIC_FUNCTION(void, RemoveItem, int);
-	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
-	PUBLIC_FUNCTION(void, RemoveAllItems);
-	PUBLIC_FUNCTION(UIHorizontalLayout*, GetItemsLayout);
-	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
-	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
-	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
-	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
-	PROTECTED_FUNCTION(UIWidget*, CreateItem, const Item&);
-	PROTECTED_FUNCTION(Item, GetItemDef, int);
-	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
-	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-}
-END_META;
-
-CLASS_META(o2::UIMenuPanel::Item)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(text).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(subItems).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(onClick);
-}
-END_META;
+DECLARE_CLASS(o2::UIMenuPanel::Item);

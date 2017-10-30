@@ -37,13 +37,13 @@ namespace o2
 	{
 		InitializeFundamentalTypes();
 
-		auto types = mInstance->mTypes;
-		for (auto type : types)
+		ReflectionInitializationTypeProcessor processor;
+		for (auto func : mInstance->mInitializingFunctions)
 		{
-			if (type->mInitializeFunc)
-				type->mInitializeFunc(type);
+			func(0, processor);
 		}
 
+		mInstance->mInitializingFunctions.Clear();
 		mInstance->mTypesInitialized = true;
 	}
 
@@ -127,91 +127,32 @@ namespace o2
 	Type* IObject::type = new Type("IObject", nullptr, 0);
 	Type* Type::Dummy::type = new Type("Unknown", nullptr, 0);
 
-	REG_FUNDAMENTAL_TYPE(int);
-	REG_FUNDAMENTAL_TYPE(bool);
-	REG_FUNDAMENTAL_TYPE(char);
-	REG_FUNDAMENTAL_TYPE(wchar_t);
-	REG_FUNDAMENTAL_TYPE(short int);
-	REG_FUNDAMENTAL_TYPE(long int);
-	REG_FUNDAMENTAL_TYPE(long long int);
-	REG_FUNDAMENTAL_TYPE(unsigned char);
-	REG_FUNDAMENTAL_TYPE(unsigned short int);
-	REG_FUNDAMENTAL_TYPE(unsigned int);
-	REG_FUNDAMENTAL_TYPE(unsigned long int);
-	REG_FUNDAMENTAL_TYPE(unsigned long long int);
-	REG_FUNDAMENTAL_TYPE(float);
-	REG_FUNDAMENTAL_TYPE(double);
-	REG_FUNDAMENTAL_TYPE(long double);
-	REG_FUNDAMENTAL_TYPE(Basis);
-	REG_FUNDAMENTAL_TYPE(Color4);
-	REG_FUNDAMENTAL_TYPE(RectF);
-	REG_FUNDAMENTAL_TYPE(RectI);
-	REG_FUNDAMENTAL_TYPE(BorderF);
-	REG_FUNDAMENTAL_TYPE(BorderI);
-	REG_FUNDAMENTAL_TYPE(Vec2F);
-	REG_FUNDAMENTAL_TYPE(Vec2I);
-	REG_FUNDAMENTAL_TYPE(Vertex2);
-	REG_FUNDAMENTAL_TYPE(String);
-	REG_FUNDAMENTAL_TYPE(WString);
-	REG_FUNDAMENTAL_TYPE(DataNode);
-	REG_FUNDAMENTAL_TYPE(UID);
-
-	FUNDAMENTAL_META(RectF)
-	{
-		FUNDAMENTAL_FIELD(left);
-		FUNDAMENTAL_FIELD(right);
-		FUNDAMENTAL_FIELD(top);
-		FUNDAMENTAL_FIELD(bottom);
-	}
-	END_META;
-
-	FUNDAMENTAL_META(RectI)
-	{
-		FUNDAMENTAL_FIELD(left);
-		FUNDAMENTAL_FIELD(right);
-		FUNDAMENTAL_FIELD(top);
-		FUNDAMENTAL_FIELD(bottom);
-	}
-	END_META;
-
-	FUNDAMENTAL_META(BorderF)
-	{
-		FUNDAMENTAL_FIELD(left);
-		FUNDAMENTAL_FIELD(right);
-		FUNDAMENTAL_FIELD(top);
-		FUNDAMENTAL_FIELD(bottom);
-	}
-	END_META;
-
-	FUNDAMENTAL_META(BorderI)
-	{
-		FUNDAMENTAL_FIELD(left);
-		FUNDAMENTAL_FIELD(right);
-		FUNDAMENTAL_FIELD(top);
-		FUNDAMENTAL_FIELD(bottom);
-	}
-	END_META;
-
-	FUNDAMENTAL_META(Vec2F)
-	{
-		FUNDAMENTAL_FIELD(x);
-		FUNDAMENTAL_FIELD(y);
-	}
-	END_META;
-
-	FUNDAMENTAL_META(Vec2I)
-	{
-		FUNDAMENTAL_FIELD(x);
-		FUNDAMENTAL_FIELD(y);
-	}
-	END_META;
-
-	FUNDAMENTAL_META(Color4)
-	{
-		FUNDAMENTAL_FIELD(r);
-		FUNDAMENTAL_FIELD(g);
-		FUNDAMENTAL_FIELD(b);
-		FUNDAMENTAL_FIELD(a);
-	}
-	END_META;
+	DECLARE_FUNDAMENTAL_TYPE(int);
+	DECLARE_FUNDAMENTAL_TYPE(bool);
+	DECLARE_FUNDAMENTAL_TYPE(char);
+	DECLARE_FUNDAMENTAL_TYPE(wchar_t);
+	DECLARE_FUNDAMENTAL_TYPE(short int);
+	DECLARE_FUNDAMENTAL_TYPE(long int);
+	DECLARE_FUNDAMENTAL_TYPE(long long int);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned char);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned short int);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned int);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned long int);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned long long int);
+	DECLARE_FUNDAMENTAL_TYPE(float);
+	DECLARE_FUNDAMENTAL_TYPE(double);
+	DECLARE_FUNDAMENTAL_TYPE(long double);
+	DECLARE_FUNDAMENTAL_TYPE(Basis);
+	DECLARE_FUNDAMENTAL_TYPE(Color4);
+	DECLARE_FUNDAMENTAL_TYPE(RectF);
+	DECLARE_FUNDAMENTAL_TYPE(RectI);
+	DECLARE_FUNDAMENTAL_TYPE(BorderF);
+	DECLARE_FUNDAMENTAL_TYPE(BorderI);
+	DECLARE_FUNDAMENTAL_TYPE(Vec2F);
+	DECLARE_FUNDAMENTAL_TYPE(Vec2I);
+	DECLARE_FUNDAMENTAL_TYPE(Vertex2);
+	DECLARE_FUNDAMENTAL_TYPE(String);
+	DECLARE_FUNDAMENTAL_TYPE(WString);
+	DECLARE_FUNDAMENTAL_TYPE(DataNode);
+	DECLARE_FUNDAMENTAL_TYPE(UID);
 }

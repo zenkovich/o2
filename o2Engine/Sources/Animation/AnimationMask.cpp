@@ -11,12 +11,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::AnimationMask)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(weights).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(float, GetNodeWeight, const String&);
-}
-END_META;
+DECLARE_CLASS(o2::AnimationMask);

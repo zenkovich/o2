@@ -49,10 +49,10 @@ namespace o2
 
 		for (auto type : mBaseTypes)
 		{
-			if (type.Key()->mId == mId)
+			if (type->mId == mId)
 				return true;
 
-			if (type.Key()->IsBasedOn(other))
+			if (type->IsBasedOn(other))
 				return true;
 		}
 
@@ -72,7 +72,7 @@ namespace o2
 		return Usage::Regular;
 	}
 
-	const Type::BaseTypesVec& Type::GetBaseTypes() const
+	const Type::TypesVec& Type::GetBaseTypes() const
 	{
 		return mBaseTypes;
 	}
@@ -87,7 +87,7 @@ namespace o2
 		FieldInfosVec res;
 
 		for (auto baseType : mBaseTypes)
-			res += baseType.Key()->GetFieldsWithBaseClasses();
+			res += baseType->GetFieldsWithBaseClasses();
 
 		res += mFields;
 
@@ -104,7 +104,7 @@ namespace o2
 		FunctionsInfosVec res;
 
 		for (auto baseType : mBaseTypes)
-			res += baseType.Key()->GetFunctionsWithBaseClasses();
+			res += baseType->GetFunctionsWithBaseClasses();
 
 		res += mFunctions;
 
@@ -118,7 +118,7 @@ namespace o2
 				return field;
 
 		for (auto baseType : mBaseTypes)
-			if (auto res = baseType.Key()->GetField(name))
+			if (auto res = baseType->GetField(name))
 				return res;
 
 		return nullptr;
@@ -141,7 +141,7 @@ namespace o2
 			auto baseTypes = type->GetBaseTypes();
 			for (auto btype : baseTypes)
 			{
-				if (btype.Key()->mId == mId)
+				if (btype->mId == mId)
 					res.Add(type);
 			}
 		}
@@ -162,7 +162,7 @@ namespace o2
 
 		for (auto baseType : mBaseTypes)
 		{
-			auto baseRes = baseType.Key()->GetFieldPath((char*)sourceObject + baseType.Value(), targetObject, fieldInfo);
+			auto baseRes = baseType->GetFieldPath(sourceObject, targetObject, fieldInfo);
 			if (fieldInfo)
 				return baseRes;
 		}
@@ -232,7 +232,7 @@ namespace o2
 
 		for (auto baseType : mBaseTypes)
 		{
-			if (auto res = baseType.Key()->GetFieldPtr((char*)object + baseType.Value(), path, fieldInfo))
+			if (auto res = baseType->GetFieldPtr(object, path, fieldInfo))
 				return res;
 		}
 

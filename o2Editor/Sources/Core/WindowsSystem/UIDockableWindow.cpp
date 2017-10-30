@@ -24,8 +24,6 @@ namespace Editor
 	UIDockableWindow::UIDockableWindow():
 		UIWindow()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		InitializeDragHandles();
 		SetDocked(false);
 		mDockingFrameSample = mnew Sprite();

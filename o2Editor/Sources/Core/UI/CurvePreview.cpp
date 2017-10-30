@@ -11,8 +11,6 @@ namespace Editor
 {
 	UICurvePreview::UICurvePreview()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mSprite = mnew Sprite();
 		AddLayer("image", mSprite);
 	}

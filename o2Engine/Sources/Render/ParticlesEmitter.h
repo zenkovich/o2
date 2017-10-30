@@ -305,3 +305,133 @@ namespace o2
 		AddEffect(mnew _type(args ...));
 	}
 }
+
+CLASS_BASES_META(o2::ParticlesEmitter)
+{
+	BASE_CLASS(o2::IRectDrawable);
+}
+END_META;
+CLASS_FIELDS_META(o2::ParticlesEmitter)
+{
+	PUBLIC_FIELD(playing);
+	PUBLIC_FIELD(emittingCoefficient);
+	PUBLIC_FIELD(particlesRelative);
+	PUBLIC_FIELD(looped);
+	PUBLIC_FIELD(maxParticles);
+	PUBLIC_FIELD(duration);
+	PUBLIC_FIELD(particlesLifetime);
+	PUBLIC_FIELD(emitParticlesPerSecond);
+	PUBLIC_FIELD(emitParticlesAngle);
+	PUBLIC_FIELD(emitParticlesAngleRange);
+	PUBLIC_FIELD(emitParticlesSize);
+	PUBLIC_FIELD(emitParticlesSizeRange);
+	PUBLIC_FIELD(emitParticlesSpeed);
+	PUBLIC_FIELD(emitParticlesAngleSpeedRange);
+	PUBLIC_FIELD(emitParticlesAngleSpeed);
+	PUBLIC_FIELD(emitParticlesSpeedRange);
+	PUBLIC_FIELD(emitParticlesMoveDir);
+	PUBLIC_FIELD(emitParticlesMoveDirRange);
+	PUBLIC_FIELD(emitParticlesColorA);
+	PUBLIC_FIELD(emitParticlesColorB);
+	PUBLIC_FIELD(image);
+	PUBLIC_FIELD(shape);
+	PROTECTED_FIELD(mImageAsset).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mShape).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEffects).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mParticlesNumLimit).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mPlaying).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmittingCoefficient).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mIsParticlesRelative).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mIsLooped).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mDuration).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mParticlesLifetime).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesPerSecond).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesAngle).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesAngleRange).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesSize).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesSizeRange).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesSpeed).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesSpeedRangle).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesMoveDirection).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesMoveDirectionRange).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesAngleSpeed);
+	PROTECTED_FIELD(mEmitParticlesAngleSpeedRange);
+	PROTECTED_FIELD(mEmitParticlesColorA).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitParticlesColorB).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mCurrentTime);
+	PROTECTED_FIELD(mEmitTimeBuffer);
+	PROTECTED_FIELD(mParticlesMesh);
+	PROTECTED_FIELD(mParticles);
+	PROTECTED_FIELD(mDeadParticles);
+	PROTECTED_FIELD(mNumAliveParticles);
+	PROTECTED_FIELD(mLastTransform);
+}
+END_META;
+CLASS_METHODS_META(o2::ParticlesEmitter)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, SetPlaying, bool);
+	PUBLIC_FUNCTION(bool, IsPlaying);
+	PUBLIC_FUNCTION(void, Play);
+	PUBLIC_FUNCTION(void, Stop);
+	PUBLIC_FUNCTION(void, SetEmittingCoef, float);
+	PUBLIC_FUNCTION(float, GetEmittingCoef);
+	PUBLIC_FUNCTION(void, SetImage, const ImageAssetRef&);
+	PUBLIC_FUNCTION(ImageAssetRef, GetImage);
+	PUBLIC_FUNCTION(void, SetShape, ParticlesEmitterShape*);
+	PUBLIC_FUNCTION(ParticlesEmitterShape*, GetShape);
+	PUBLIC_FUNCTION(void, AddEffect, ParticlesEffect*);
+	PUBLIC_FUNCTION(const ParticleEffectsVec&, GetEffects);
+	PUBLIC_FUNCTION(void, RemoveEffect, ParticlesEffect*);
+	PUBLIC_FUNCTION(void, RemoveAllEffects);
+	PUBLIC_FUNCTION(void, SetMaxParticles, int);
+	PUBLIC_FUNCTION(int, GetMaxParticles);
+	PUBLIC_FUNCTION(int, GetParticlesCount);
+	PUBLIC_FUNCTION(bool, IsAliveParticles);
+	PUBLIC_FUNCTION(const ParticlesVec&, GetParticles);
+	PUBLIC_FUNCTION(void, SetParticlesRelativity, bool);
+	PUBLIC_FUNCTION(bool, IsParticlesRelative);
+	PUBLIC_FUNCTION(void, SetLoop, bool);
+	PUBLIC_FUNCTION(bool, IsLooped);
+	PUBLIC_FUNCTION(void, SetDuration, float);
+	PUBLIC_FUNCTION(float, GetDuration);
+	PUBLIC_FUNCTION(void, SetParticlesLifetime, float);
+	PUBLIC_FUNCTION(float, GetParticlesLifetime);
+	PUBLIC_FUNCTION(void, SetEmitParticlesPerSecond, float);
+	PUBLIC_FUNCTION(float, GetEmitParticlesPerSecond);
+	PUBLIC_FUNCTION(void, SetEmitParticlesAngle, float);
+	PUBLIC_FUNCTION(float, GetEmitParticlesAngle);
+	PUBLIC_FUNCTION(void, SetEmitParticlesAngleRange, float);
+	PUBLIC_FUNCTION(float, GetEmitParticlesAngleRange);
+	PUBLIC_FUNCTION(void, SetEmitParticlesSize, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetEmitParticlesSize);
+	PUBLIC_FUNCTION(void, SetEmitParticlesSizeRange, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetEmitParticlesSizeRange);
+	PUBLIC_FUNCTION(void, SetEmitParticlesAngleSpeed, float);
+	PUBLIC_FUNCTION(float, GetEmitParticlesAngleSpeed);
+	PUBLIC_FUNCTION(void, SetEmitParticlesAngleSpeedRange, float);
+	PUBLIC_FUNCTION(float, GetEmitParticlesAngleSpeedRange);
+	PUBLIC_FUNCTION(void, SetEmitParticlesSpeed, float);
+	PUBLIC_FUNCTION(float, GetEmitParticlesSpeed);
+	PUBLIC_FUNCTION(void, SetEmitParticlesSpeedRange, float);
+	PUBLIC_FUNCTION(float, GetEmitParticlesSpeedRange);
+	PUBLIC_FUNCTION(void, SetEmitParticlesMoveDirection, float);
+	PUBLIC_FUNCTION(float, GetEmitParticlesMoveDirection);
+	PUBLIC_FUNCTION(void, SetEmitParticlesMoveDirectionRange, float);
+	PUBLIC_FUNCTION(float, GetEmitParticlesMoveDirectionRange);
+	PUBLIC_FUNCTION(void, SetEmitParticlesColorA, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetEmitParticlesColorA);
+	PUBLIC_FUNCTION(void, SetEmitParticlesColorB, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetEmitParticlesColorB);
+	PUBLIC_FUNCTION(void, SetEmitParticlesColor, const Color4&);
+	PUBLIC_FUNCTION(void, SetEmitParticlesColor, const Color4&, const Color4&);
+	PROTECTED_FUNCTION(void, UpdateEmitting, float);
+	PROTECTED_FUNCTION(void, UpdateEffects, float);
+	PROTECTED_FUNCTION(void, UpdateParticles, float);
+	PROTECTED_FUNCTION(void, UpdateMesh);
+	PROTECTED_FUNCTION(void, BasisChanged);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

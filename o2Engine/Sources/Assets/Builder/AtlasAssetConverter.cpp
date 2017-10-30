@@ -328,31 +328,6 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::AtlasAssetConverter)
-{
-	BASE_CLASS(o2::IAssetConverter);
+DECLARE_CLASS(o2::AtlasAssetConverter);
 
-
-	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetTree::AssetNode&, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(Vector<UID>, AssetsPostProcess);
-	PUBLIC_FUNCTION(void, Reset);
-	PROTECTED_FUNCTION(void, CheckBasicAtlas);
-	PROTECTED_FUNCTION(Vector<UID>, CheckRebuildingAtlases);
-	PROTECTED_FUNCTION(bool, CheckAtlasRebuilding, AssetTree::AssetNode*);
-	PROTECTED_FUNCTION(bool, IsAtlasNeedRebuild, ImagesVec&, ImagesVec&);
-	PROTECTED_FUNCTION(void, RebuildAtlas, AssetTree::AssetNode*, ImagesVec&);
-	PROTECTED_FUNCTION(void, SaveImageAsset, ImagePackDef&);
-}
-END_META;
-
-CLASS_META(o2::AtlasAssetConverter::Image)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(id).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(time).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
+DECLARE_CLASS(o2::AtlasAssetConverter::Image);

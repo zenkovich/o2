@@ -12,8 +12,6 @@ namespace Editor
 {
 	SelectionTool::SelectionTool()
 	{
-		BREAK_ON_REFLECTION_STAGE;
-
 		mSelectionSprite = mnew Sprite("ui/UI_Window_place.png");
 	}
 

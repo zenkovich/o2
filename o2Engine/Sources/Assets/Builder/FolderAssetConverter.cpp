@@ -62,17 +62,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::FolderAssetConverter)
-{
-	BASE_CLASS(o2::IAssetConverter);
-
-	PROTECTED_FIELD(mRemovedFolders);
-
-	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetTree::AssetNode&, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(Vector<UID>, AssetsPostProcess);
-	PUBLIC_FUNCTION(void, Reset);
-}
-END_META;
+DECLARE_CLASS(o2::FolderAssetConverter);
