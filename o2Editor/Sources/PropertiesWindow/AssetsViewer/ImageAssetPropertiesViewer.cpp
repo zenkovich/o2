@@ -359,46 +359,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::ImageAssetPropertiesViewer)
-{
-	BASE_CLASS(Editor::IAssetPropertiesViewer);
-
-	PROTECTED_FIELD(mTargetAssets);
-	PROTECTED_FIELD(mContent);
-	PROTECTED_FIELD(mPreviewImageContent);
-	PROTECTED_FIELD(mPreviewImage);
-	PROTECTED_FIELD(mPreviewImageBack);
-	PROTECTED_FIELD(mBorderLeftHandleWidget);
-	PROTECTED_FIELD(mBorderRightHandleWidget);
-	PROTECTED_FIELD(mBorderTopHandleWidget);
-	PROTECTED_FIELD(mBorderBottomHandleWidget);
-	PROTECTED_FIELD(mBorderLeftHandle);
-	PROTECTED_FIELD(mBorderRightHandle);
-	PROTECTED_FIELD(mBorderTopHandle);
-	PROTECTED_FIELD(mBorderBottomHandle);
-	PROTECTED_FIELD(mBordersSmoothValue);
-	PROTECTED_FIELD(mBorderProperty);
-	PROTECTED_FIELD(mDefaultTypeProperty);
-	PROTECTED_FIELD(mAtlasProperty);
-	PROTECTED_FIELD(mWindowsProperties);
-	PROTECTED_FIELD(mOSXProperties);
-	PROTECTED_FIELD(mAndroidProperties);
-	PROTECTED_FIELD(mIOSProperties);
-
-	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
-	PROTECTED_FUNCTION(void, InitializeImagePreview);
-	PROTECTED_FUNCTION(void, InitializeLeftHandle);
-	PROTECTED_FUNCTION(void, InitializeRightHandle);
-	PROTECTED_FUNCTION(void, InitializeTopHandle);
-	PROTECTED_FUNCTION(void, InitializeBottomHandle);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-	PROTECTED_FUNCTION(void, FitImage);
-	PROTECTED_FUNCTION(void, UpdateBordersAnchors);
-	PROTECTED_FUNCTION(void, UpdateBordersValue);
-	PROTECTED_FUNCTION(void, SetupAtlasProperty);
-	PROTECTED_FUNCTION(void, OnAtlasPropertyChanged);
-	PROTECTED_FUNCTION(Sprite*, CreateGridSprite);
-}
-END_META;
+DECLARE_CLASS(Editor::ImageAssetPropertiesViewer);

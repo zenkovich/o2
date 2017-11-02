@@ -55,3 +55,27 @@ namespace Editor
 		friend class WindowsLayout;
 	};
 }
+
+CLASS_BASES_META(Editor::IEditorWindow)
+{
+	BASE_CLASS(o2::IObject);
+}
+END_META;
+CLASS_FIELDS_META(Editor::IEditorWindow)
+{
+	PUBLIC_FIELD(visible);
+	PROTECTED_FIELD(mWindow);
+}
+END_META;
+CLASS_METHODS_META(Editor::IEditorWindow)
+{
+
+	PUBLIC_FUNCTION(void, SetVisible, bool);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(bool, IsVisible);
+	PUBLIC_FUNCTION(void, Show);
+	PUBLIC_FUNCTION(void, Hide);
+	PROTECTED_FUNCTION(void, PostInitializeWindow);
+}
+END_META;

@@ -75,3 +75,34 @@ namespace Editor
 		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
 	};
 }
+
+CLASS_BASES_META(Editor::IPropertyField)
+{
+	BASE_CLASS(o2::IObject);
+}
+END_META;
+CLASS_FIELDS_META(Editor::IPropertyField)
+{
+	PUBLIC_FIELD(onChanged);
+	PUBLIC_FIELD(onChangeCompleted);
+	PROTECTED_FIELD(mValuesPath);
+	PROTECTED_FIELD(mBeforeChangeValues);
+}
+END_META;
+CLASS_METHODS_META(Editor::IPropertyField)
+{
+
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValuePtr, const Vector<void*>&, bool);
+	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
+	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PUBLIC_FUNCTION(void, SetValuePath, const String&);
+	PUBLIC_FUNCTION(const String&, GetValuePath);
+	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PROTECTED_FUNCTION(void, CheckRevertableState);
+	PROTECTED_FUNCTION(void, OnChanged);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
+}
+END_META;

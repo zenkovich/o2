@@ -156,7 +156,7 @@ protected:
 	string GetEnumMeta(SyntaxEnum* enm);
 
 	// Builds meta templates parameters for template classes
-	void AggregateTemplates(SyntaxSection* sec, string& res, string& fullName);
+	void AggregateTemplates(SyntaxSection* sec, string& templates, string& fullName);
 
 	// Returns class full name with template parameters in global space
 	string GetClassNormalizedTemplates(const string& name, const string& nspace);

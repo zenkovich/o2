@@ -63,17 +63,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::CreateActorsAction)
-{
-	BASE_CLASS(Editor::IAction);
-
-	PUBLIC_FIELD(actorsData);
-	PUBLIC_FIELD(actorsIds);
-	PUBLIC_FIELD(insertParentId);
-	PUBLIC_FIELD(insertPrevActorId);
-
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-}
-END_META;
+DECLARE_CLASS(Editor::CreateActorsAction);

@@ -206,30 +206,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::ActorPropertiesViewer)
-{
-	BASE_CLASS(Editor::IObjectPropertiesViewer);
-
-	PROTECTED_FIELD(mTargetActors);
-	PROTECTED_FIELD(mHeaderViewer);
-	PROTECTED_FIELD(mTransformViewer);
-	PROTECTED_FIELD(mAnimationViewer);
-	PROTECTED_FIELD(mComponentsViewers);
-	PROTECTED_FIELD(mDefaultComponentViewer);
-	PROTECTED_FIELD(mAvailableComponentsViewers);
-	PROTECTED_FIELD(mComponentViewersPool);
-	PROTECTED_FIELD(mViewersLayout);
-
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_FUNCTION(void, SetActorHeaderViewer, IActorHeaderViewer*);
-	PUBLIC_FUNCTION(void, SetActorTransformViewer, IActorTransformViewer*);
-	PUBLIC_FUNCTION(void, SetActorAnimationViewer, IActorAnimationViewer*);
-	PUBLIC_FUNCTION(void, AddComponentViewerType, IActorComponentViewer*);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, Draw);
-}
-END_META;
+DECLARE_CLASS(Editor::ActorPropertiesViewer);

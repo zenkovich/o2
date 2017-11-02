@@ -197,3 +197,83 @@ namespace Editor
 		friend class UIActorsTree;
 	};
 }
+
+CLASS_BASES_META(Editor::UIActorsTree)
+{
+	BASE_CLASS(o2::UITree);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UIActorsTree)
+{
+	PUBLIC_FIELD(onObjectsSelectionChanged);
+	PROTECTED_FIELD(mEnableActorsTogglesGroup);
+	PROTECTED_FIELD(mLockActorsTogglesGroup);
+	PROTECTED_FIELD(mAttackedToSceneEvents);
+	PROTECTED_FIELD(mDragActorPropertyField);
+	PROTECTED_FIELD(mDragComponentPropertyField);
+}
+END_META;
+CLASS_METHODS_META(Editor::UIActorsTree)
+{
+
+	PUBLIC_FUNCTION(void, AttachToSceneEvents);
+	PUBLIC_FUNCTION(void, DeattachFromSceneEvents);
+	PUBLIC_FUNCTION(UITreeNode*, GetNode, Actor*);
+	PUBLIC_FUNCTION(ActorsVec, GetSelectedActors);
+	PUBLIC_FUNCTION(void, SetSelectedActors, const ActorsVec&);
+	PUBLIC_FUNCTION(void, SelectActor, Actor*);
+	PUBLIC_FUNCTION(void, SelectAndHightlightActor, Actor*);
+	PUBLIC_FUNCTION(void, ScrollToAndHightlight, Actor*);
+	PUBLIC_FUNCTION(void, DeselectActor, Actor*);
+	PUBLIC_FUNCTION(void, DeselectAllActors);
+	PUBLIC_FUNCTION(void, ScrollTo, Actor*);
+	PROTECTED_FUNCTION(void, Initialize);
+	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
+	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
+	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
+	PROTECTED_FUNCTION(void, FillNodeDataByObject, UITreeNode*, UnknownPtr);
+	PROTECTED_FUNCTION(void, OnNodeDblClick, UITreeNode*);
+	PROTECTED_FUNCTION(void, OnDraggedObjects, UnknownPtrsVec, UnknownPtr, UnknownPtr);
+	PROTECTED_FUNCTION(void, OnActorCreated, Actor*);
+	PROTECTED_FUNCTION(void, OnActorDestroyed, Actor*);
+	PROTECTED_FUNCTION(void, OnActorsChanged, const ActorsVec&);
+	PROTECTED_FUNCTION(void, OnActorChanged, Actor*);
+	PROTECTED_FUNCTION(void, EnableActorsGroupPressed, bool);
+	PROTECTED_FUNCTION(void, EnableActorsGroupReleased, bool);
+	PROTECTED_FUNCTION(void, LockActorsGroupPressed, bool);
+	PROTECTED_FUNCTION(void, LockActorsGroupReleased, bool);
+	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
+	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
+}
+END_META;
+
+CLASS_BASES_META(Editor::UIActorsTreeNode)
+{
+	BASE_CLASS(o2::UITreeNode);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UIActorsTreeNode)
+{
+	PROTECTED_FIELD(mTargetActor);
+	PROTECTED_FIELD(mNameDrawable);
+	PROTECTED_FIELD(mLockToggle);
+	PROTECTED_FIELD(mEnableToggle);
+	PROTECTED_FIELD(mLinkBtn);
+	PROTECTED_FIELD(mNameEditBox);
+	PROTECTED_FIELD(mEditState);
+}
+END_META;
+CLASS_METHODS_META(Editor::UIActorsTreeNode)
+{
+
+	PUBLIC_FUNCTION(void, SetActor, Actor*);
+	PUBLIC_FUNCTION(void, EnableEditName);
+	PROTECTED_FUNCTION(void, InitializeControls);
+	PROTECTED_FUNCTION(void, OnLockClicked);
+	PROTECTED_FUNCTION(void, OnEnableCkicked);
+	PROTECTED_FUNCTION(void, OnActorNameChanged, const WString&);
+}
+END_META;

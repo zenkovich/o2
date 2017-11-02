@@ -75,3 +75,35 @@ namespace Editor
 	};
 
 }
+
+CLASS_BASES_META(Editor::SelectionTool)
+{
+	BASE_CLASS(Editor::IEditTool);
+}
+END_META;
+CLASS_FIELDS_META(Editor::SelectionTool)
+{
+	PROTECTED_FIELD(mSelectionSprite);
+	PROTECTED_FIELD(mCurrentSelectingActors);
+	PROTECTED_FIELD(mBeforeSelectingActors);
+	PROTECTED_FIELD(mPressPoint);
+	PROTECTED_FIELD(mSelectingActors);
+}
+END_META;
+CLASS_METHODS_META(Editor::SelectionTool)
+{
+
+	PROTECTED_FUNCTION(void, DrawScene);
+	PROTECTED_FUNCTION(void, DrawScreen);
+	PROTECTED_FUNCTION(void, Update, float);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
+	PROTECTED_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
+}
+END_META;

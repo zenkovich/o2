@@ -125,30 +125,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::UIAssetIcon)
-{
-	BASE_CLASS(o2::UIWidget);
-	BASE_CLASS(o2::SelectableDragableObject);
-	BASE_CLASS(o2::DragDropArea);
-
-	PROTECTED_FIELD(mNameText);
-	PROTECTED_FIELD(mAssetInfo);
-	PROTECTED_FIELD(mSelectedState);
-	PROTECTED_FIELD(mOwner);
-
-	PUBLIC_FUNCTION(void, SetAssetInfo, const AssetInfo&);
-	PUBLIC_FUNCTION(const AssetInfo&, GetAssetInfo);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, SetSelected, bool);
-	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnDragStart, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnDragged, const Input::Cursor&, DragDropArea*);
-	PROTECTED_FUNCTION(void, OnDragEnd, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnSelected);
-	PROTECTED_FUNCTION(void, OnDeselected);
-	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
-}
-END_META;
+DECLARE_CLASS(Editor::UIAssetIcon);

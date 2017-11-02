@@ -1,7 +1,6 @@
 #include "ParticlesEmitterComponent.h"
 
 #include "Scene/Actor.h"
-#include "Utils/EditorPropertyAttribute.h"
 
 namespace o2
 {

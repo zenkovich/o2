@@ -70,3 +70,32 @@ namespace Editor
 		void OnCameraTransformChanged() override;
 	};
 }
+
+CLASS_BASES_META(Editor::UIFrameScrollView)
+{
+	BASE_CLASS(Editor::UIScrollView);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UIFrameScrollView)
+{
+	PROTECTED_FIELD(mHorScrollbar).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mVerScrollbar).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAvailableArea).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(Editor::UIFrameScrollView)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, SetHorScrollbar, UIHorizontalScrollBar*);
+	PUBLIC_FUNCTION(void, SetVerScrollbar, UIVerticalScrollBar*);
+	PUBLIC_FUNCTION(void, SetViewArea, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetViewArea);
+	PROTECTED_FUNCTION(void, UpdateCameraLimits, float);
+	PROTECTED_FUNCTION(void, OnHorScrollScrolled, float);
+	PROTECTED_FUNCTION(void, OnVerScrollScrolled, float);
+	PROTECTED_FUNCTION(void, OnCameraTransformChanged);
+}
+END_META;

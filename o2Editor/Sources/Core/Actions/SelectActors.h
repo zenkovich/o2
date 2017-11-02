@@ -30,3 +30,23 @@ namespace Editor
 		SERIALIZABLE(SelectActorsAction);
 	};
 }
+
+CLASS_BASES_META(Editor::SelectActorsAction)
+{
+	BASE_CLASS(Editor::IAction);
+}
+END_META;
+CLASS_FIELDS_META(Editor::SelectActorsAction)
+{
+	PUBLIC_FIELD(selectedActorsIds);
+	PUBLIC_FIELD(prevSelectedActorsIds);
+}
+END_META;
+CLASS_METHODS_META(Editor::SelectActorsAction)
+{
+
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, Redo);
+	PUBLIC_FUNCTION(void, Undo);
+}
+END_META;

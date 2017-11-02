@@ -34,15 +34,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::IActorAnimationViewer)
-{
-	BASE_CLASS(o2::IObject);
-
-	PROTECTED_FIELD(mDataView);
-
-	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-}
-END_META;
+DECLARE_CLASS(Editor::IActorAnimationViewer);

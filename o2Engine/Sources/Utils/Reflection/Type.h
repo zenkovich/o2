@@ -265,8 +265,8 @@ namespace o2
 	protected:
 		// Searches field recursively by pointer
 		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<void*>& passedObjects) const; 
-		
+										   Vector<void*>& passedObjects) const;
+
 		template<typename _element_type>
 		friend struct VectorCountFieldSerializer;
 	};
@@ -491,30 +491,35 @@ namespace o2
 }
 
 
-#define DECLARE_CLASS(CLASS)                                                                                   \
-    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
+#define DECLARE_CLASS(CLASS)                                                                                            \
+    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)									            
+																											            
+#define CLASS_BASES_META(CLASS)                                                                                         \
+    template<typename _type_processor> void CLASS::ProcessBaseTypes(typename CLASS* object, _type_processor& processor) \
+	{                                                                                                                   \
+        typedef CLASS thisclass;                                                                                        \
+		processor.StartBases<CLASS>(object, type);															            
 
-#define CLASS_BASES_META(CLASS)                                                                                \
-    template<typename _type_processor> void CLASS::ProcessBaseTypes(CLASS* object, _type_processor& processor) \
-	{                                                                                                          \
-		processor.StartBases<CLASS>(object, type);
-
-#define CLASS_FIELDS_META(CLASS)                                                                               \
-    template<typename _type_processor> void CLASS::ProcessFields(CLASS* object, _type_processor& processor)    \
-	{                                                                                                          \
-		processor.StartFields<CLASS>(object, type);															   
-
-#define CLASS_METHODS_META(CLASS)                                                                              \
-    template<typename _type_processor> void CLASS::ProcessMethods(CLASS* object, _type_processor& processor)   \
-	{                                                                                                          \
+#define CLASS_FIELDS_META(CLASS)                                                                                        \
+    template<typename _type_processor> void CLASS::ProcessFields(typename CLASS* object, _type_processor& processor)    \
+	{                                                                                                                   \
+        typedef CLASS thisclass;                                                                                        \
+		processor.StartFields<CLASS>(object, type);															            
+																											            
+#define CLASS_METHODS_META(CLASS)                                                                                       \
+    template<typename _type_processor> void CLASS::ProcessMethods(typename CLASS* object, _type_processor& processor)   \
+	{                                                                                                                   \
+        typedef CLASS thisclass;                                                                                        \
 		processor.StartMethods<CLASS>(object, type);
-	 
+
 #define META_TEMPLATES(...) \
     template<__VA_ARGS__>
 
-#define FUNDAMENTAL_META(NAME)                                                                                                       \
-    template<typename _type_processor> void FundamentalTypeContainer<NAME>::InitializeType(NAME* object, _type_processor& processor) \
-	{                                                                                                                                \
+#define FUNDAMENTAL_META(NAME) \
+    template<>                                                                                                                                \
+    template<typename _type_processor> void FundamentalTypeContainer<NAME>::InitializeType(typename NAME* object, _type_processor& processor) \
+	{                                                                                                                                         \
+        typedef NAME thisclass;                                                                                                               \
 		processor.StartFields<NAME>(object, type);
 
 #define BASE_CLASS(CLASS) \
@@ -872,17 +877,15 @@ namespace o2
 		return funcInfo;
 	}
 
-	template<typename _type_processor> 
-	void FundamentalTypeContainer<RectF>::InitializeType(RectF* object, _type_processor& processor)
+
+	FUNDAMENTAL_META(RectF)
 	{
-		processor.StartFields<RectF>(object, type);
-		{
-			PUBLIC_FIELD(left);
-			PUBLIC_FIELD(right);
-			PUBLIC_FIELD(top);
-			PUBLIC_FIELD(bottom);
-		}
-	};
+		PUBLIC_FIELD(left);
+		PUBLIC_FIELD(right);
+		PUBLIC_FIELD(top);
+		PUBLIC_FIELD(bottom);
+	}
+	END_META;
 
 	FUNDAMENTAL_META(RectI)
 	{

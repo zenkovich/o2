@@ -673,13 +673,15 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		nspace = cls->GetFullName().substr(0, nspaceDelimer);
 
 	string classDef;
+	string templates;
 
 	if (!cls->IsTemplate())
 		classDef = GetClassNormalizedTemplates(cls->GetFullName(), nspace);
 	else
-		AggregateTemplates(cls, res, classDef);
+		AggregateTemplates(cls, templates, classDef);
 
 	// base classes
+	res += templates;
 	res += "CLASS_BASES_META(" + classDef + ")\n{\n";
 	for (auto x : cls->GetBaseClasses())
 	{
@@ -689,6 +691,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	res += "}\nEND_META;\n";
 
 	// fields
+	res += templates;
 	res += "CLASS_FIELDS_META(" + classDef + ")\n{\n";
 	for (auto x : cls->GetVariables())
 	{
@@ -785,6 +788,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	res += "}\nEND_META;\n";
 
 	// functions
+	res += templates;
 	res += "CLASS_METHODS_META(" + classDef + ")\n{\n";
 
 	int supportingTypedefsPos = (int)res.length();
@@ -869,10 +873,10 @@ string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)
 	return res;
 }
 
-void CodeToolApplication::AggregateTemplates(SyntaxSection* sec, string& res, string& fullName)
+void CodeToolApplication::AggregateTemplates(SyntaxSection* sec, string& templates, string& fullName)
 {
 	if (sec->GetParentSection())
-		AggregateTemplates(sec->GetParentSection(), res, fullName);
+		AggregateTemplates(sec->GetParentSection(), templates, fullName);
 
 	if (fullName.empty())
 		fullName = sec->GetName();
@@ -884,7 +888,7 @@ void CodeToolApplication::AggregateTemplates(SyntaxSection* sec, string& res, st
 		SyntaxClass* cls = dynamic_cast<SyntaxClass*>(sec);
 		if (!cls->GetTemplateParameters().empty())
 		{
-			res += "META_TEMPLATES(" + cls->GetTemplateParameters() + ")\n";
+			templates += "META_TEMPLATES(" + cls->GetTemplateParameters() + ")\n";
 			fullName += "<" + cls->GetTemplateParameters() + ">";
 		}
 	}

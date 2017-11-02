@@ -50,3 +50,41 @@ namespace Editor
 	};
 
 }
+
+CLASS_BASES_META(Editor::WindowsLayout)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(Editor::WindowsLayout)
+{
+	PUBLIC_FIELD(mainDock).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(windows).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(Editor::WindowsLayout)
+{
+
+	PROTECTED_FUNCTION(void, RestoreDock, WindowDockPlace*, UIDockWindowPlace*);
+	PROTECTED_FUNCTION(void, CleanEmptyDocks, UIDockWindowPlace*);
+}
+END_META;
+
+CLASS_BASES_META(Editor::WindowsLayout::WindowDockPlace)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(Editor::WindowsLayout::WindowDockPlace)
+{
+	PUBLIC_FIELD(anchors).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(windows).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(childs).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(Editor::WindowsLayout::WindowDockPlace)
+{
+
+	PUBLIC_FUNCTION(void, RetrieveLayout, UIWidget*);
+}
+END_META;

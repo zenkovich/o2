@@ -98,47 +98,8 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::EditorConfig)
-{
-	BASE_CLASS(o2::ISerializable);
-	BASE_CLASS(o2::Singleton<EditorConfig>);
+DECLARE_CLASS(Editor::EditorConfig);
 
-	PROTECTED_FIELD(mConfigPath);
-	PROTECTED_FIELD(mGlobalConfigPath);
-	PROTECTED_FIELD(mConfigsLoaded);
-	PROTECTED_FIELD(mProjectConfig);
-	PROTECTED_FIELD(mGlobalConfig);
+DECLARE_CLASS(Editor::EditorConfig::GlobalConfig);
 
-	PUBLIC_FUNCTION(DataNode&, GetGlobalUserData);
-	PUBLIC_FUNCTION(DataNode&, GetProjectUserData);
-	PROTECTED_FUNCTION(void, SaveGlobalConfigs);
-	PROTECTED_FUNCTION(void, SaveProjectConfigs);
-	PROTECTED_FUNCTION(void, LoadConfigs);
-	PROTECTED_FUNCTION(void, LoadProjectConfig);
-	PROTECTED_FUNCTION(void, LoadGlobalConfig);
-	PROTECTED_FUNCTION(void, OnWindowChange);
-}
-END_META;
-
-CLASS_META(Editor::EditorConfig::GlobalConfig)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(mLastOpenedProjectpath).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mDefaultLayout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mAvailableLayouts).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mUserData).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
-
-CLASS_META(Editor::EditorConfig::ProjectConfig)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(mWindowSize).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mWindowPosition).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mMaximized).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mLayout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mUserData).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
+DECLARE_CLASS(Editor::EditorConfig::ProjectConfig);

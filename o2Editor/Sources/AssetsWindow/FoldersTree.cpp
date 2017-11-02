@@ -297,38 +297,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::UIAssetsFoldersTree)
-{
-	BASE_CLASS(o2::UIWidget);
-	BASE_CLASS(o2::KeyboardEventsListener);
-
-	PROTECTED_FIELD(mFoldersTree);
-	PROTECTED_FIELD(mContextMenu);
-	PROTECTED_FIELD(mCurrentPath);
-	PROTECTED_FIELD(mOpengingFolderFromThis);
-
-	PROTECTED_FUNCTION(void, SelectAndExpandFolder, const String&);
-	PROTECTED_FUNCTION(void, UpdateView);
-	PROTECTED_FUNCTION(void, InitializeContext);
-	PROTECTED_FUNCTION(UnknownPtr, GetFoldersTreeNodeParent, UnknownPtr);
-	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetFoldersTreeNodeChilds, UnknownPtr);
-	PROTECTED_FUNCTION(void, SetupFoldersTreeNode, UITreeNode*, UnknownPtr);
-	PROTECTED_FUNCTION(void, OnFoldersTreeNodeDblClick, UITreeNode*);
-	PROTECTED_FUNCTION(void, OnFoldersTreeSelect, Vector<UnknownPtr>);
-	PROTECTED_FUNCTION(void, OnFoldersTreeRightClick, UITreeNode*);
-	PROTECTED_FUNCTION(void, OnContextCopyPressed);
-	PROTECTED_FUNCTION(void, OnContextCutPressed);
-	PROTECTED_FUNCTION(void, OnContextPastePressed);
-	PROTECTED_FUNCTION(void, OnContextDeletePressed);
-	PROTECTED_FUNCTION(void, OnContextOpenPressed);
-	PROTECTED_FUNCTION(void, OnContextShowInExplorerPressed);
-	PROTECTED_FUNCTION(void, OnContextImportPressed);
-	PROTECTED_FUNCTION(void, OnContextCreateFolderPressed);
-	PROTECTED_FUNCTION(void, OnContextCreatePrefabPressed);
-	PROTECTED_FUNCTION(void, OnContextCreateScriptPressed);
-	PROTECTED_FUNCTION(void, OnContextCreateAnimationPressed);
-	PROTECTED_FUNCTION(void, OnContextExpandPressed);
-	PROTECTED_FUNCTION(void, OnContextCollapsePressed);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-}
-END_META;
+DECLARE_CLASS(Editor::UIAssetsFoldersTree);

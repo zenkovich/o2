@@ -67,19 +67,4 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::ActorsPropertyChangeAction)
-{
-	BASE_CLASS(Editor::IAction);
-
-	PUBLIC_FIELD(actorsIds);
-	PUBLIC_FIELD(componentType);
-	PUBLIC_FIELD(propertyPath);
-	PUBLIC_FIELD(beforeValues);
-	PUBLIC_FIELD(afterValues);
-
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-	PROTECTED_FUNCTION(void, SetProperties, Vector<DataNode>&);
-}
-END_META;
+DECLARE_CLASS(Editor::ActorsPropertyChangeAction);

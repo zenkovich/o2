@@ -153,20 +153,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::DefaultActorTransformViewer)
-{
-	BASE_CLASS(Editor::IActorTransformViewer);
-
-	PROTECTED_FIELD(mTargetActors);
-	PROTECTED_FIELD(mPositionProperty);
-	PROTECTED_FIELD(mPivotProperty);
-	PROTECTED_FIELD(mScaleProperty);
-	PROTECTED_FIELD(mSizeProperty);
-	PROTECTED_FIELD(mRotationProperty);
-	PROTECTED_FIELD(mDepthProperty);
-
-	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
-}
-END_META;
+DECLARE_CLASS(Editor::DefaultActorTransformViewer);

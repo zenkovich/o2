@@ -32,3 +32,25 @@ namespace Editor
 	};
 
 }
+
+CLASS_BASES_META(Editor::CreateActorsAction)
+{
+	BASE_CLASS(Editor::IAction);
+}
+END_META;
+CLASS_FIELDS_META(Editor::CreateActorsAction)
+{
+	PUBLIC_FIELD(actorsData);
+	PUBLIC_FIELD(actorsIds);
+	PUBLIC_FIELD(insertParentId);
+	PUBLIC_FIELD(insertPrevActorId);
+}
+END_META;
+CLASS_METHODS_META(Editor::CreateActorsAction)
+{
+
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, Redo);
+	PUBLIC_FUNCTION(void, Undo);
+}
+END_META;

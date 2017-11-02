@@ -122,24 +122,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::UICurvePreview)
-{
-	BASE_CLASS(o2::UIWidget);
-
-	PROTECTED_FIELD(mCurve);
-	PROTECTED_FIELD(mNeedRedraw);
-	PROTECTED_FIELD(mSprite);
-	PROTECTED_FIELD(mBackColor);
-	PROTECTED_FIELD(mCurveColor);
-
-	PUBLIC_FUNCTION(void, SetCurve, Curve*);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetBackColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetBackColor);
-	PUBLIC_FUNCTION(void, SetCurveColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetCurveColor);
-	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, Redraw);
-	PROTECTED_FUNCTION(void, OnCurveChanged);
-}
-END_META;
+DECLARE_CLASS(Editor::UICurvePreview);

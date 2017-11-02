@@ -72,18 +72,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::DefaultActorComponentViewer)
-{
-	BASE_CLASS(Editor::IActorComponentViewer);
-
-	PROTECTED_FIELD(mTargetComponents);
-	PROTECTED_FIELD(mFieldProperties);
-	PROTECTED_FIELD(mComponentType);
-
-	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
-	PUBLIC_FUNCTION(const Type*, GetComponentType);
-	PUBLIC_FUNCTION(void, SepcializeComponentType, const Type*);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
-}
-END_META;
+DECLARE_CLASS(Editor::DefaultActorComponentViewer);

@@ -90,3 +90,43 @@ namespace Editor
 		void StoreValues(Vector<DataNode>& data) const;
 	};
 }
+
+CLASS_BASES_META(Editor::LayerProperty)
+{
+	BASE_CLASS(Editor::IPropertyField);
+}
+END_META;
+CLASS_FIELDS_META(Editor::LayerProperty)
+{
+	PROTECTED_FIELD(mAssignFunc);
+	PROTECTED_FIELD(mGetFunc);
+	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mCommonValue);
+	PROTECTED_FIELD(mValuesDifferent);
+	PROTECTED_FIELD(mPropertyWidget);
+	PROTECTED_FIELD(mRevertBtn);
+	PROTECTED_FIELD(mDropDown);
+	PROTECTED_FIELD(mUpdatingValue);
+}
+END_META;
+CLASS_METHODS_META(Editor::LayerProperty)
+{
+
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
+	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(SceneLayer*, GetCommonValue);
+	PUBLIC_FUNCTION(bool, IsValuesDifferent);
+	PUBLIC_FUNCTION(void, SetValue, SceneLayer*);
+	PUBLIC_FUNCTION(void, SetUnknownValue);
+	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PROTECTED_FUNCTION(void, SetCommonValue, SceneLayer*);
+	PROTECTED_FUNCTION(void, CheckRevertableState);
+	PROTECTED_FUNCTION(void, UpdateLayersList);
+	PROTECTED_FUNCTION(void, SelectLayer, const WString&);
+	PROTECTED_FUNCTION(void, SetValueByUser, SceneLayer*);
+	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
+}
+END_META;

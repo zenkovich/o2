@@ -422,13 +422,30 @@ namespace Editor
 	}
 }
 
+CLASS_BASES_META(Editor::IAssetProperty)
+{
+	BASE_CLASS(Editor::IPropertyField);
+	BASE_CLASS(o2::DragDropArea);
+	BASE_CLASS(o2::KeyboardEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(Editor::IAssetProperty)
+{
+}
+END_META;
+CLASS_METHODS_META(Editor::IAssetProperty)
+{
+
+	PUBLIC_FUNCTION(void, SetAssetId, UID);
+}
+END_META;
+
 META_TEMPLATES(typename _type)
 CLASS_BASES_META(Editor::AssetProperty<typename _type>)
 {
 	BASE_CLASS(Editor::IAssetProperty);
 }
 END_META;
-
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(Editor::AssetProperty<typename _type>)
 {
@@ -443,10 +460,10 @@ CLASS_FIELDS_META(Editor::AssetProperty<typename _type>)
 	PROTECTED_FIELD(mNameText);
 }
 END_META;
-
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(Editor::AssetProperty<typename _type>)
 {
+
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);

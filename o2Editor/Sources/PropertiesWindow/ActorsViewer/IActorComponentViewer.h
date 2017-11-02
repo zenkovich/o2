@@ -70,7 +70,6 @@ CLASS_BASES_META(Editor::IActorComponentViewer)
 	BASE_CLASS(o2::IObject);
 }
 END_META;
-
 CLASS_FIELDS_META(Editor::IActorComponentViewer)
 {
 	PROTECTED_FIELD(mDataView);
@@ -83,9 +82,9 @@ CLASS_FIELDS_META(Editor::IActorComponentViewer)
 	PROTECTED_FIELD(mIcon);
 }
 END_META;
-
 CLASS_METHODS_META(Editor::IActorComponentViewer)
 {
+
 	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
 	PUBLIC_FUNCTION(const Type*, GetComponentType);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

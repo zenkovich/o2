@@ -36,3 +36,27 @@ namespace Editor
 		void SetProperties(Vector<DataNode>& value);
 	};
 }
+
+CLASS_BASES_META(Editor::ActorsPropertyChangeAction)
+{
+	BASE_CLASS(Editor::IAction);
+}
+END_META;
+CLASS_FIELDS_META(Editor::ActorsPropertyChangeAction)
+{
+	PUBLIC_FIELD(actorsIds);
+	PUBLIC_FIELD(componentType);
+	PUBLIC_FIELD(propertyPath);
+	PUBLIC_FIELD(beforeValues);
+	PUBLIC_FIELD(afterValues);
+}
+END_META;
+CLASS_METHODS_META(Editor::ActorsPropertyChangeAction)
+{
+
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, Redo);
+	PUBLIC_FUNCTION(void, Undo);
+	PROTECTED_FUNCTION(void, SetProperties, Vector<DataNode>&);
+}
+END_META;

@@ -101,3 +101,46 @@ namespace Editor
 		void UpdateLastMessageView();
 	};
 }
+
+CLASS_BASES_META(Editor::LogWindow)
+{
+	BASE_CLASS(Editor::IEditorWindow);
+	BASE_CLASS(o2::LogStream);
+}
+END_META;
+CLASS_FIELDS_META(Editor::LogWindow)
+{
+	PROTECTED_FIELD(mList);
+	PROTECTED_FIELD(mLastMessageView);
+	PROTECTED_FIELD(mMessagesCountLabel);
+	PROTECTED_FIELD(mWarningsCountLabel);
+	PROTECTED_FIELD(mErrorsCountLabel);
+	PROTECTED_FIELD(mAllMessages);
+	PROTECTED_FIELD(mVisibleMessages);
+	PROTECTED_FIELD(mRegularMessagesEnabled);
+	PROTECTED_FIELD(mWarningMessagesEnabled);
+	PROTECTED_FIELD(mErrorMessagesEnabled);
+	PROTECTED_FIELD(mRegularMessagesCount);
+	PROTECTED_FIELD(mWarningMessagesCount);
+	PROTECTED_FIELD(mErrorMessagesCount);
+}
+END_META;
+CLASS_METHODS_META(Editor::LogWindow)
+{
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, OnClearPressed);
+	PROTECTED_FUNCTION(void, OnRegularMessagesToggled, bool);
+	PROTECTED_FUNCTION(void, OnWarningMessagesToggled, bool);
+	PROTECTED_FUNCTION(void, OnErrorMessagesToggled, bool);
+	PROTECTED_FUNCTION(void, UpdateVisibleMessages);
+	PROTECTED_FUNCTION(int, GetVisibleMessagesCount);
+	PROTECTED_FUNCTION(Vector<UnknownType*>, GetVisibleMessagesRange, int, int);
+	PROTECTED_FUNCTION(void, SetupListMessage, UIWidget*, UnknownType*);
+	PROTECTED_FUNCTION(void, OutStrEx, const WString&);
+	PROTECTED_FUNCTION(void, OutErrorEx, const WString&);
+	PROTECTED_FUNCTION(void, OutWarningEx, const WString&);
+	PROTECTED_FUNCTION(void, UpdateLastMessageView);
+}
+END_META;

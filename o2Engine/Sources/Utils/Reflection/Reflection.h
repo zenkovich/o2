@@ -214,7 +214,7 @@ namespace o2
 	{
 		Type* res = new FundamentalType<_type>(name);
 
-		mInstance->mInitializingFunctions.Add(&FundamentalTypeContainer<_type>::InitializeType);
+		mInstance->mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::InitializeType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
 

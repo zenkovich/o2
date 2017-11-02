@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/AssetInfo.h"
+#include "Utils/EditorPropertyAttribute.h"
 #include "Utils/FileSystem/FileInfo.h"
 #include "Utils/Property.h"
 #include "Utils/Serializable.h"

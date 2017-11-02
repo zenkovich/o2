@@ -77,3 +77,38 @@ namespace Editor
 		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
 	};
 }
+
+CLASS_BASES_META(Editor::DefaultActorHeaderViewer)
+{
+	BASE_CLASS(Editor::IActorHeaderViewer);
+	BASE_CLASS(o2::KeyboardEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)
+{
+	PUBLIC_FIELD(mActors);
+	PUBLIC_FIELD(mDataView);
+	PUBLIC_FIELD(mEnableProperty);
+	PUBLIC_FIELD(mNameProperty);
+	PUBLIC_FIELD(mLockProperty);
+	PUBLIC_FIELD(mPrototypeProperty);
+	PUBLIC_FIELD(mPrototypeApplyBtn);
+	PUBLIC_FIELD(mPrototypeRevertBtn);
+	PUBLIC_FIELD(mPrototypeBreakBtn);
+	PUBLIC_FIELD(mTagsProperty);
+	PUBLIC_FIELD(mLayerProperty);
+}
+END_META;
+CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
+{
+
+	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
+	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(void, Refresh);
+	PROTECTED_FUNCTION(void, OnApplyPrototypePressed);
+	PROTECTED_FUNCTION(void, OnRevertPrototypePressed);
+	PROTECTED_FUNCTION(void, OnBreakPrototypePressed);
+	PROTECTED_FUNCTION(Vector<Actor*>, GetRootApplyActors);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
+}
+END_META;

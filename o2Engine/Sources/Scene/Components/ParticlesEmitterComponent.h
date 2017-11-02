@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Scene/DrawableComponent.h"
 #include "Render/ParticlesEmitter.h"
+#include "Scene/DrawableComponent.h"
+#include "Utils/EditorPropertyAttribute.h"
 
 namespace o2
 {

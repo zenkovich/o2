@@ -127,3 +127,60 @@ namespace Editor
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 	};
 }
+
+CLASS_BASES_META(Editor::UIScrollView)
+{
+	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::CursorAreaEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UIScrollView)
+{
+	PROTECTED_FIELD(mReady);
+	PROTECTED_FIELD(mRenderTargetSprite);
+	PROTECTED_FIELD(mRenderTarget);
+	PROTECTED_FIELD(mNeedRedraw);
+	PROTECTED_FIELD(mBackColor).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mGridColor).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mViewArea);
+	PROTECTED_FIELD(mViewCamera);
+	PROTECTED_FIELD(mViewCameraTargetScale);
+	PROTECTED_FIELD(mViewCameraScaleSence);
+	PROTECTED_FIELD(mViewCameraScaleElasticyCoef);
+	PROTECTED_FIELD(mViewCameraTargetPos);
+	PROTECTED_FIELD(mViewCameraVelocity);
+	PROTECTED_FIELD(mViewCameraPosElasticyCoef);
+	PROTECTED_FIELD(mViewCameraVelocityDampingCoef);
+	PROTECTED_FIELD(mViewCameraMinScale);
+	PROTECTED_FIELD(mViewCameraMaxScale);
+	PROTECTED_FIELD(mLocalToScreenTransform);
+	PROTECTED_FIELD(mScreenToLocalTransform);
+}
+END_META;
+CLASS_METHODS_META(Editor::UIScrollView)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(Vec2F, ScreenToLocalPoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, LocalToScreenPoint, const Vec2F&);
+	PUBLIC_FUNCTION(const Camera&, GetCamera);
+	PUBLIC_FUNCTION(void, SetBackColor, const Color4&);
+	PUBLIC_FUNCTION(void, SetGridColor, const Color4&);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(bool, IsFocusable);
+	PROTECTED_FUNCTION(void, UpdateTransparency);
+	PROTECTED_FUNCTION(void, UpdateCamera, float);
+	PROTECTED_FUNCTION(void, UpdateLocalScreenTransforms);
+	PROTECTED_FUNCTION(void, RedrawRenderTarget);
+	PROTECTED_FUNCTION(void, RedrawContent);
+	PROTECTED_FUNCTION(void, DrawGrid);
+	PROTECTED_FUNCTION(void, OnCameraTransformChanged);
+	PROTECTED_FUNCTION(void, OnScrolled, float);
+	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+}
+END_META;

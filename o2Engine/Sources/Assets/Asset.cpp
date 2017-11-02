@@ -2,7 +2,6 @@
 
 #include "Assets/Assets.h"
 #include "Utils/Debug.h"
-#include "Utils/EditorPropertyAttribute.h"
 #include "Utils/Log/LogStream.h"
 
 namespace o2

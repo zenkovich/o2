@@ -41,15 +41,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::EnableActorsAction)
-{
-	BASE_CLASS(Editor::IAction);
-
-	PUBLIC_FIELD(actorsIds);
-	PUBLIC_FIELD(enable);
-
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-}
-END_META;
+DECLARE_CLASS(Editor::EnableActorsAction);
