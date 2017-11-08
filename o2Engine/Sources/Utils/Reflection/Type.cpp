@@ -6,9 +6,8 @@
 
 namespace o2
 {
-	Type::Type(const String& name, ITypeSampleCreator* creator, int size):
-		mId(0), mPtrType(nullptr), mName(name),
-		mSampleCreator(creator), mSize(size)
+	Type::Type(const String& name, ITypeSampleCreator* creator, int size, void*(*castFunc)(void*)):
+		mId(0), mPtrType(nullptr), mName(name), mSampleCreator(creator), mSize(size), mCastFunc(castFunc)
 	{}
 
 	Type::~Type()
@@ -47,12 +46,12 @@ namespace o2
 		if (mId == other.mId)
 			return true;
 
-		for (auto type : mBaseTypes)
+		for (auto typeInfo : mBaseTypes)
 		{
-			if (type->mId == mId)
+			if (typeInfo.type->mId == mId)
 				return true;
 
-			if (type->IsBasedOn(other))
+			if (typeInfo.type->IsBasedOn(other))
 				return true;
 		}
 
@@ -72,7 +71,7 @@ namespace o2
 		return Usage::Regular;
 	}
 
-	const Type::TypesVec& Type::GetBaseTypes() const
+	const Type::BaseTypesVec& Type::GetBaseTypes() const
 	{
 		return mBaseTypes;
 	}
@@ -87,7 +86,7 @@ namespace o2
 		FieldInfosVec res;
 
 		for (auto baseType : mBaseTypes)
-			res += baseType->GetFieldsWithBaseClasses();
+			res += baseType.type->GetFieldsWithBaseClasses();
 
 		res += mFields;
 
@@ -104,7 +103,7 @@ namespace o2
 		FunctionsInfosVec res;
 
 		for (auto baseType : mBaseTypes)
-			res += baseType->GetFunctionsWithBaseClasses();
+			res += baseType.type->GetFunctionsWithBaseClasses();
 
 		res += mFunctions;
 
@@ -118,7 +117,7 @@ namespace o2
 				return field;
 
 		for (auto baseType : mBaseTypes)
-			if (auto res = baseType->GetField(name))
+			if (auto res = baseType.type->GetField(name))
 				return res;
 
 		return nullptr;
@@ -139,9 +138,9 @@ namespace o2
 		for (auto type : Reflection::GetTypes())
 		{
 			auto baseTypes = type->GetBaseTypes();
-			for (auto btype : baseTypes)
+			for (auto baseType : baseTypes)
 			{
-				if (btype->mId == mId)
+				if (baseType.type->mId == mId)
 					res.Add(type);
 			}
 		}
@@ -153,23 +152,23 @@ namespace o2
 		return mSampleCreator->CreateSample();
 	}
 
-	String Type::GetFieldPath(void* sourceObject, void *targetObject, FieldInfo*& fieldInfo) const
+	String Type::GetFieldPath(void* object, void *targetObject, FieldInfo*& fieldInfo) const
 	{
-		if (sourceObject == targetObject)
+		if (object == targetObject)
 			return "";
 
 		String res;
 
 		for (auto baseType : mBaseTypes)
 		{
-			auto baseRes = baseType->GetFieldPath(sourceObject, targetObject, fieldInfo);
+			auto baseRes = baseType.type->GetFieldPath((*baseType.dynamicCastFunc)(object), targetObject, fieldInfo);
 			if (fieldInfo)
 				return baseRes;
 		}
 
 		for (auto field : mFields)
 		{
-			void* fieldObject = field->GetValuePtr(sourceObject);
+			void* fieldObject = field->GetValuePtr(object);
 
 			if (fieldObject == nullptr)
 				continue;
@@ -180,9 +179,9 @@ namespace o2
 				return field->mName;
 			}
 
-			Vector<void*> passedObjects;
-			passedObjects.Add(sourceObject);
-			passedObjects.Add(fieldObject);
+			Vector<SearchPassedObject> passedObjects;
+			passedObjects.Add(SearchPassedObject(object, this));
+			passedObjects.Add(SearchPassedObject(fieldObject, field->GetType()));
 
 			FieldInfo* info = field->SearchFieldPath(fieldObject, targetObject, field->mName, res, passedObjects);
 			if (info)
@@ -195,21 +194,32 @@ namespace o2
 		return res;
 	}
 
-	FieldInfo* Type::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-									 Vector<void*>& passedObjects) const
+	void* Type::DynamicCastFromIObject(IObject* object) const
 	{
-		auto allFields = GetFieldsWithBaseClasses();
-		for (auto field : allFields)
+		return (*mCastFunc)(object);
+	}
+
+	FieldInfo* Type::SearchFieldPath(void* obj, void* target, const String& path, String& res,
+									 Vector<SearchPassedObject>& passedObjects) const
+	{
+		for (auto baseType : mBaseTypes)
+		{
+			auto baseRes = baseType.type->SearchFieldPath((*baseType.dynamicCastFunc)(obj), target, path, res, passedObjects);
+			if (baseRes)
+				return baseRes;
+		}
+
+		for (auto field : mFields)
 		{
 			void* fieldObj = field->GetValuePtr(obj);
 
 			if (fieldObj == nullptr)
 				continue;
 
-			if (passedObjects.Contains(fieldObj))
+			if (passedObjects.Contains(SearchPassedObject(fieldObj, field->GetType())))
 				continue;
 
-			passedObjects.Add(fieldObj);
+			passedObjects.Add(SearchPassedObject(fieldObj, field->GetType()));
 
 			if (fieldObj == target)
 			{
@@ -232,7 +242,7 @@ namespace o2
 
 		for (auto baseType : mBaseTypes)
 		{
-			if (auto res = baseType->GetFieldPtr(object, path, fieldInfo))
+			if (auto res = baseType.type->GetFieldPtr((*baseType.dynamicCastFunc)(object), path, fieldInfo))
 				return res;
 		}
 
@@ -261,7 +271,7 @@ namespace o2
 	}
 
 	VectorType::VectorType(const String& name, ITypeSampleCreator* creator, int size):
-		Type(name, creator, size)
+		Type(name, creator, size, &Reflection::NoCastFunc)
 	{}
 
 	Type::Usage VectorType::GetUsage() const
@@ -311,7 +321,7 @@ namespace o2
 	}
 
 	FieldInfo* VectorType::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<void*>& passedObjects) const
+										   Vector<SearchPassedObject>& passedObjects) const
 	{
 		int count = GetObjectVectorSize(obj);
 
@@ -326,10 +336,10 @@ namespace o2
 				if (fieldObj == nullptr)
 					continue;
 
-				if (passedObjects.Contains(fieldObj))
+				if (passedObjects.Contains(SearchPassedObject(fieldObj, field->GetType())))
 					continue;
 
-				passedObjects.Add(fieldObj);
+				passedObjects.Add(SearchPassedObject(fieldObj, field->GetType()));
 
 				String newPath = path + "/" + (String)i + "/" + field->GetName();
 				if (fieldObj == target)
@@ -399,13 +409,13 @@ namespace o2
 	}
 
 	FieldInfo* DictionaryType::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-											   Vector<void*>& passedObjects) const
+											   Vector<SearchPassedObject>& passedObjects) const
 	{
 		return nullptr;
 	}
 
 	EnumType::EnumType(const String& name, ITypeSampleCreator* creator, int size):
-		Type(name, creator, size)
+		Type(name, creator, size, &Reflection::NoCastFunc)
 	{}
 
 	Type::Usage EnumType::GetUsage() const
@@ -419,7 +429,8 @@ namespace o2
 	}
 
 	PointerType::PointerType(const Type* unptrType):
-		Type(unptrType->GetName() + "*", new TypeSampleCreator<void*>(), sizeof(void*)), mUnptrType(unptrType)
+		Type(unptrType->GetName() + "*", new TypeSampleCreator<void*>(), sizeof(void*), &Reflection::NoCastFunc), 
+		mUnptrType(unptrType)
 	{}
 
 	Type::Usage PointerType::GetUsage() const
@@ -433,7 +444,7 @@ namespace o2
 	}
 
 	PropertyType::PropertyType(const String& name, ITypeSampleCreator* creator, int size):
-		Type(name, creator, size)
+		Type(name, creator, size, &Reflection::NoCastFunc)
 	{}
 
 	Type::Usage PropertyType::GetUsage() const

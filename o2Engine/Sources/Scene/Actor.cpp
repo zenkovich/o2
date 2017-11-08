@@ -2057,8 +2057,8 @@ namespace o2
 
 				for (auto baseType : type->GetBaseTypes())
 				{
-					if (*baseType != TypeOf(Component))
-						GetFields(baseType, fields);
+					if (*baseType.type != TypeOf(Component))
+						GetFields(baseType.type, fields);
 				}
 			}
 		};

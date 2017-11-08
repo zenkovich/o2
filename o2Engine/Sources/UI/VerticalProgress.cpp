@@ -231,8 +231,8 @@ namespace o2
 
 	void UIVerticalProgress::UpdateLayersLayouts()
 	{
-		UIWidget::UpdateLayersLayouts();
 		UpdateProgressLayersLayouts();
+		UIWidget::UpdateLayersLayouts();
 	}
 
 	void UIVerticalProgress::UpdateProgressLayersLayouts()
@@ -256,8 +256,6 @@ namespace o2
 
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
-
-		UpdateLayersLayouts();
 	}
 
 	void UIVerticalProgress::OnLayerAdded(UIWidgetLayer* layer)

@@ -293,8 +293,8 @@ namespace o2
 
 	void UIHorizontalScrollBar::UpdateLayersLayouts()
 	{
-		UIWidget::UpdateLayersLayouts();
 		UpdateProgressLayersLayouts();
+		UIWidget::UpdateLayersLayouts();
 	}
 
 	void UIHorizontalScrollBar::SetMinimalScrollHandleSize(float pixelSize)
@@ -328,8 +328,6 @@ namespace o2
 
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
-
-		UpdateLayersLayouts();
 	}
 
 	void UIHorizontalScrollBar::OnLayerAdded(UIWidgetLayer* layer)

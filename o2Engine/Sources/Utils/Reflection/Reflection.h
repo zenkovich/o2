@@ -24,6 +24,8 @@ namespace o2
 	class FieldInfo;
 	class FunctionInfo;
 
+	class IObject;
+
 	typedef UInt TypeId;
 
 	// ------------------------------
@@ -91,6 +93,13 @@ namespace o2
 		template<typename _return_type>
 		static const StringPointerAccessorType<_return_type>* InitializeAccessorType();
 
+		// Type dynamic casting function template
+		template<typename _source_type, typename _target_type>
+		static void* CastFunc(void* obj) { return dynamic_cast<_target_type*>((_source_type*)obj); }
+
+		// Fake type casting function
+		static void* NoCastFunc(void* obj) { return obj; }
+
 	protected:
 		typedef void(*TypeInitializingFunc)(void*, ReflectionInitializationTypeProcessor&);
 		typedef Vector<TypeInitializingFunc> TypeInitializingFuncsVec;
@@ -136,7 +145,7 @@ namespace o2
 		void BaseType(_object_type* object, Type* type, const char* name);
 
 		template<typename _object_type, typename _field_type>
-		FieldInfo& Field(_object_type* object, Type* type, const char* name, _field_type& field, ProtectSection protection);
+		FieldInfo& Field(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*), _field_type& field, ProtectSection protection);
 
 		template<typename _object_type, typename _res_type, typename ... _args>
 		FunctionInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...), ProtectSection protection);
@@ -197,9 +206,9 @@ namespace o2
 	template<typename _type>
 	Type* Reflection::InitializeType(const char* name)
 	{
-		Type* res = new Type(name, new TypeSampleCreator<_type>(), sizeof(_type));
+		Type* res = new Type(name, new TypeSampleCreator<_type>(), sizeof(_type), &CastFunc<IObject, _type>);
 
-		mInstance->mInitializingFunctions.Add((TypeInitializingFunc)&_type::ProcessType<ReflectionInitializationTypeProcessor>);
+		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::ProcessType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 
 		Reflection::Instance().mTypes.Add(res);
@@ -214,7 +223,7 @@ namespace o2
 	{
 		Type* res = new FundamentalType<_type>(name);
 
-		mInstance->mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::InitializeType<ReflectionInitializationTypeProcessor>);
+		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::InitializeType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
 
@@ -319,13 +328,13 @@ namespace o2
 	template<typename _object_type, typename _base_type>
 	void ReflectionInitializationTypeProcessor::BaseType(_object_type* object, Type* type, const char* name)
 	{
-		TypeInitializer::AddBaseType<_base_type>(type);
+		TypeInitializer::AddBaseType<_object_type, _base_type>(type);
 	}
 
 	template<typename _object_type, typename _field_type>
-	FieldInfo& ReflectionInitializationTypeProcessor::Field(_object_type* object, Type* type, const char* name, _field_type& field, ProtectSection protection)
+	FieldInfo& ReflectionInitializationTypeProcessor::Field(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*), _field_type& field, ProtectSection protection)
 	{
-		return TypeInitializer::RegField(type, name, (size_t)&field - (size_t)object, field, protection);
+		return TypeInitializer::RegField(type, name, pointerGetter, field, protection);
 	}
 
 	template<typename _object_type, typename _res_type, typename ... _args>

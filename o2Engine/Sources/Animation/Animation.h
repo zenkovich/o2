@@ -395,7 +395,8 @@ namespace o2
 		if (mTarget)
 		{
 			FieldInfo* fieldInfo = nullptr;
-			String path = mTarget->GetType().GetFieldPath(mTarget, target, fieldInfo);
+			void* castedTarget = mTarget->GetType().DynamicCastFromIObject(mTarget);
+			String path = mTarget->GetType().GetFieldPath(castedTarget, target, fieldInfo);
 
 			if (!fieldInfo)
 			{
@@ -435,7 +436,8 @@ namespace o2
 		if (mTarget)
 		{
 			FieldInfo* fieldInfo = nullptr;
-			def.mTargetPtr = (_type*)mTarget->GetType().GetFieldPtr(mTarget, path, fieldInfo);
+			void* castedTarget = mTarget->GetType().DynamicCastFromIObject(mTarget);
+			def.mTargetPtr = (_type*)mTarget->GetType().GetFieldPtr(castedTarget, path, fieldInfo);
 
 			if (!fieldInfo)
 			{
@@ -463,7 +465,8 @@ namespace o2
 		if (mTarget)
 		{
 			FieldInfo* fieldInfo = nullptr;
-			String path = mTarget->GetType().GetFieldPath(mTarget, target, fieldInfo);
+			void* castedTarget = mTarget->GetType().DynamicCastFromIObject(mTarget);
+			String path = mTarget->GetType().GetFieldPath(castedTarget, target, fieldInfo);
 
 			if (!fieldInfo)
 			{

@@ -257,8 +257,6 @@ namespace o2
 
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
-
-		UpdateLayersLayouts();
 	}
 
 	void UIHorizontalProgress::OnLayerAdded(UIWidgetLayer* layer)
