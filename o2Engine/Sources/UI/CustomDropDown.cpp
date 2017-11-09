@@ -41,20 +41,7 @@ namespace o2
 
 	UICustomDropDown& UICustomDropDown::operator=(const UICustomDropDown& other)
 	{
-		delete mItemsList;
-
-		UIWidget::operator=(other);
-
-		mItemsList = other.mItemsList->CloneAs<UICustomList>();
-		mItemsList->mParent = this;
-		mItemsList->Hide(true);
-		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
-		mItemsList->SetMultiselectionAvailable(false);
-
-		mClipLayout = other.mClipLayout;
-		mMaxListItems = other.mMaxListItems;
-
-		RetargetStatesAnimations();
+		CopyData(other);
 		return *this;
 	}
 
@@ -230,6 +217,26 @@ namespace o2
 	Layout UICustomDropDown::GetClippingLayout()
 	{
 		return mClipLayout;
+	}
+
+	void UICustomDropDown::CopyData(const Actor& otherActor)
+	{
+		const UICustomDropDown& other = dynamic_cast<const UICustomDropDown&>(otherActor);
+
+		delete mItemsList;
+
+		UIWidget::operator=(other);
+
+		mItemsList = other.mItemsList->CloneAs<UICustomList>();
+		mItemsList->mParent = this;
+		mItemsList->Hide(true);
+		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
+		mItemsList->SetMultiselectionAvailable(false);
+
+		mClipLayout = other.mClipLayout;
+		mMaxListItems = other.mMaxListItems;
+
+		RetargetStatesAnimations();
 	}
 
 	void UICustomDropDown::OnCursorPressed(const Input::Cursor& cursor)

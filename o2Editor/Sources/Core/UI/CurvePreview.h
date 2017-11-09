@@ -56,6 +56,9 @@ namespace Editor
 		Color4  mCurveColor = Color4(0, 255, 0, 255);
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts() override;
 
@@ -90,6 +93,7 @@ CLASS_METHODS_META(Editor::UICurvePreview)
 	PUBLIC_FUNCTION(Color4, GetBackColor);
 	PUBLIC_FUNCTION(void, SetCurveColor, const Color4&);
 	PUBLIC_FUNCTION(Color4, GetCurveColor);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, Redraw);
 	PROTECTED_FUNCTION(void, OnCurveChanged);

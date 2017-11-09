@@ -118,6 +118,9 @@ namespace o2
 		bool         mFitByChildren = false;                  // Fitting by children @SERIALIZABLE
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child) override;
 
@@ -215,6 +218,7 @@ CLASS_METHODS_META(o2::UIGridLayout)
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);

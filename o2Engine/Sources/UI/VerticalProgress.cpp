@@ -28,19 +28,7 @@ namespace o2
 
 	UIVerticalProgress& UIVerticalProgress::operator=(const UIVerticalProgress& other)
 	{
-		UIWidget::operator=(other);
-
-		mValue       = other.mValue;
-		mMinValue    = other.mMinValue;
-		mMaxValue    = other.mMaxValue;
-		mOrientation = other.mOrientation;
-		mScrollSense = other.mScrollSense;
-		mBarLayer    = GetLayer("bar");
-		mBackLayer   = GetLayer("back");
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -256,6 +244,24 @@ namespace o2
 
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
+	}
+
+	void UIVerticalProgress::CopyData(const Actor& otherActor)
+	{
+		const UIVerticalProgress& other = dynamic_cast<const UIVerticalProgress&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mValue       = other.mValue;
+		mMinValue    = other.mMinValue;
+		mMaxValue    = other.mMaxValue;
+		mOrientation = other.mOrientation;
+		mScrollSense = other.mScrollSense;
+		mBarLayer    = GetLayer("bar");
+		mBackLayer   = GetLayer("back");
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UIVerticalProgress::OnLayerAdded(UIWidgetLayer* layer)

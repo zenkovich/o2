@@ -24,12 +24,7 @@ namespace o2
 
 	UIImage& UIImage::operator=(const UIImage& other)
 	{
-		UIWidget::operator=(other);
-
-		mImage = GetLayerDrawable<Sprite>("image");
-		if (!mImage)
-			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -77,6 +72,17 @@ namespace o2
 	String UIImage::GetImageName() const
 	{
 		return GetImageAsset()->GetPath();
+	}
+
+	void UIImage::CopyData(const Actor& otherActor)
+	{
+		const UIImage& other = dynamic_cast<const UIImage&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mImage = GetLayerDrawable<Sprite>("image");
+		if (!mImage)
+			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
 	}
 
 	void UIImage::InitializeProperties()

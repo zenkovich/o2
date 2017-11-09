@@ -43,24 +43,7 @@ namespace o2
 
 	UILongList& UILongList::operator=(const UILongList& other)
 	{
-		delete mItemSample;
-		delete mSelectionDrawable;
-		delete mHoverDrawable;
-
-		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
-
-		mSelectionLayout = other.mSelectionLayout;
-		mHoverLayout = other.mHoverLayout;
-
-		UIScrollArea::operator=(other);
-
-		mItemSample = other.mItemSample->CloneAs<UIWidget>();
-		mItemSample->UpdateLayout(true);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -397,6 +380,29 @@ namespace o2
 			*idxPtr = -1;
 
 		return nullptr;
+	}
+
+	void UILongList::CopyData(const Actor& otherActor)
+	{
+		const UILongList& other = dynamic_cast<const UILongList&>(otherActor);
+
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mHoverDrawable;
+
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+
+		mSelectionLayout = other.mSelectionLayout;
+		mHoverLayout = other.mHoverLayout;
+
+		UIScrollArea::CopyData(other);
+
+		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample->UpdateLayout(true);
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UILongList::OnDeserialized(const DataNode& node)

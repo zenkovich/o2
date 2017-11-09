@@ -25,18 +25,7 @@ namespace o2
 
 	UIGridLayout& UIGridLayout::operator=(const UIGridLayout& other)
 	{
-		mBaseCorner          = other.mBaseCorner;
-		mSpacing             = other.mSpacing;
-		mBorder              = other.mBorder;
-		mCellSize            = other.mCellSize;
-		mArrangeAxis         = other.mArrangeAxis;
-		mArrangeAxisMaxCells = other.mArrangeAxisMaxCells;
-
-		UIWidget::operator=(other);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -170,6 +159,24 @@ namespace o2
 
 		if (mFitByChildren && withChildren)
 			ExpandSizeByChilds();
+	}
+
+	void UIGridLayout::CopyData(const Actor& otherActor)
+	{
+		const UIGridLayout& other = dynamic_cast<const UIGridLayout&>(otherActor);
+
+		mBaseCorner          = other.mBaseCorner;
+		mSpacing             = other.mSpacing;
+		mBorder              = other.mBorder;
+		mCellSize            = other.mCellSize;
+		mArrangeAxis         = other.mArrangeAxis;
+		mArrangeAxisMaxCells = other.mArrangeAxisMaxCells;
+
+		UIWidget::CopyData(other);
+
+		RetargetStatesAnimations();
+		UpdateLayout();
+
 	}
 
 	void UIGridLayout::OnChildAdded(UIWidget* child)

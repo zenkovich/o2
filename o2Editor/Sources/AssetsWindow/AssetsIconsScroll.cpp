@@ -88,26 +88,7 @@ namespace Editor
 
 	UIAssetsIconsScrollArea& UIAssetsIconsScrollArea::operator=(const UIAssetsIconsScrollArea& other)
 	{
-		delete mDragIcon;
-		delete mHightlightSprite;
-		delete mSelectionSprite;
-
-		UIScrollArea::operator=(other);
-
-		mDragIcon = other.mDragIcon->CloneAs<UIAssetIcon>();
-
-		mGrid = GetChildByType<UIGridLayout>();
-		mContextMenu = GetChildByType<UIContextMenu>();
-
-		mHightlightLayout = other.mHightlightLayout;
-		mHightlightSprite = other.mHightlightSprite->CloneAs<Sprite>();
-		mHightlightAnim.SetTarget(mHightlightSprite);
-
-		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -422,6 +403,31 @@ namespace Editor
 			icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.ContainsPred([=](auto x) {
 				return x.first == icon->GetAssetInfo().id; }));
 		}
+	}
+
+	void UIAssetsIconsScrollArea::CopyData(const Actor& otherActor)
+	{
+		const UIAssetsIconsScrollArea& other = dynamic_cast<const UIAssetsIconsScrollArea&>(otherActor);
+
+		delete mDragIcon;
+		delete mHightlightSprite;
+		delete mSelectionSprite;
+
+		UIScrollArea::CopyData(other);
+
+		mDragIcon = other.mDragIcon->CloneAs<UIAssetIcon>();
+
+		mGrid = GetChildByType<UIGridLayout>();
+		mContextMenu = GetChildByType<UIContextMenu>();
+
+		mHightlightLayout = other.mHightlightLayout;
+		mHightlightSprite = other.mHightlightSprite->CloneAs<Sprite>();
+		mHightlightAnim.SetTarget(mHightlightSprite);
+
+		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UIAssetsIconsScrollArea::OnFocused()

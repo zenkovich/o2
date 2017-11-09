@@ -57,6 +57,9 @@ namespace o2
 		SERIALIZABLE(UIDropDown);
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when selected item index was changed
 		void OnSelectionChanged() override;
 
@@ -89,6 +92,7 @@ CLASS_METHODS_META(o2::UIDropDown)
 	PUBLIC_FUNCTION(Vector<WString>, GetAllItemsText);
 	PUBLIC_FUNCTION(WString, GetSelectedItemText);
 	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }

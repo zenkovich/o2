@@ -29,20 +29,7 @@ namespace o2
 
 	UIHorizontalProgress& UIHorizontalProgress::operator=(const UIHorizontalProgress& other)
 	{
-		UIWidget::operator=(other);
-
-		mValue       = other.mValue;
-		mMinValue    = other.mMinValue;
-		mMaxValue    = other.mMaxValue;
-		mOrientation = other.mOrientation;
-		mScrollSense = other.mScrollSense;
-
-		mBarLayer    = GetLayer("bar");
-		mBackLayer   = GetLayer("back");
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -257,6 +244,25 @@ namespace o2
 
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
+	}
+
+	void UIHorizontalProgress::CopyData(const Actor& otherActor)
+	{
+		const UIHorizontalProgress& other = dynamic_cast<const UIHorizontalProgress&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mValue       = other.mValue;
+		mMinValue    = other.mMinValue;
+		mMaxValue    = other.mMaxValue;
+		mOrientation = other.mOrientation;
+		mScrollSense = other.mScrollSense;
+
+		mBarLayer    = GetLayer("bar");
+		mBackLayer   = GetLayer("back");
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UIHorizontalProgress::OnLayerAdded(UIWidgetLayer* layer)

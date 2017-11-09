@@ -35,17 +35,7 @@ namespace o2
 
 	UIToggle& UIToggle::operator=(const UIToggle& other)
 	{
-		UIWidget::operator=(other);
-		mCaptionText = GetLayerDrawable<Text>("caption");
-		mBackLayer = GetLayer("back");
-
-		mValue = !other.mValue;
-		SetValue(other.mValue);
-
-		if (other.IsValueUnknown())
-			SetValueUnknown();
-
-		RetargetStatesAnimations();
+		CopyData(other);
 		return *this;
 	}
 
@@ -291,6 +281,24 @@ namespace o2
 			onToggleByUser(mValue);
 		}
 
+	}
+
+	void UIToggle::CopyData(const Actor& otherActor)
+	{
+		const UIToggle& other = dynamic_cast<const UIToggle&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mCaptionText = GetLayerDrawable<Text>("caption");
+		mBackLayer = GetLayer("back");
+
+		mValue = !other.mValue;
+		SetValue(other.mValue);
+
+		if (other.IsValueUnknown())
+			SetValueUnknown();
+
+		RetargetStatesAnimations();
 	}
 
 	void UIToggle::OnLayerAdded(UIWidgetLayer* layer)

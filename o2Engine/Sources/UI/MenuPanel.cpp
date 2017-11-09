@@ -49,19 +49,7 @@ namespace o2
 
 	UIMenuPanel& UIMenuPanel::operator=(const UIMenuPanel& other)
 	{
-		UIWidget::operator=(other);
-
-		delete mItemSample;
-		delete mSelectionDrawable;
-
-		mItemSample        = other.mItemSample->CloneAs<UIWidget>();
-		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mSelectionLayout   = other.mSelectionLayout;
-		mLayout            = GetChildByType<UIHorizontalLayout>();
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -334,6 +322,24 @@ namespace o2
 		res.onClick = mClickFunctions[idx];
 
 		return res;
+	}
+
+	void UIMenuPanel::CopyData(const Actor& otherActor)
+	{
+		const UIMenuPanel& other = dynamic_cast<const UIMenuPanel&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		delete mItemSample;
+		delete mSelectionDrawable;
+
+		mItemSample        = other.mItemSample->CloneAs<UIWidget>();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mSelectionLayout   = other.mSelectionLayout;
+		mLayout            = GetChildByType<UIHorizontalLayout>();
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UIMenuPanel::OnVisibleChanged()

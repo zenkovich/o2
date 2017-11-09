@@ -50,6 +50,9 @@ namespace o2
 		Sprite* mImage = nullptr; // Image layer drawable
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Initializes properties
 		void InitializeProperties();
 
@@ -79,6 +82,7 @@ CLASS_METHODS_META(o2::UIImage)
 	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
 	PUBLIC_FUNCTION(void, SetImageName, const String&);
 	PUBLIC_FUNCTION(String, GetImageName);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

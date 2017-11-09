@@ -111,6 +111,9 @@ namespace o2
 		bool       mFitByChildren = false;         // Fitting by children @SERIALIZABLE
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Returns layout width
 		float GetMinWidthWithChildren() const override;
 
@@ -198,6 +201,7 @@ CLASS_METHODS_META(o2::UIHorizontalLayout)
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);

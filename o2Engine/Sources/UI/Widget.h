@@ -248,6 +248,9 @@ namespace o2
 		RectF          mBoundsWithChilds;       // Widget with childs bounds
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Draws debug frame by mAbsoluteRect
 		void DrawDebugFrame();
 
@@ -503,6 +506,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, DrawDebugFrame);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);

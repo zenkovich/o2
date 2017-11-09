@@ -31,22 +31,7 @@ namespace o2
 
 	UIVerticalScrollBar& UIVerticalScrollBar::operator=(const UIVerticalScrollBar& other)
 	{
-		UIWidget::operator=(other);
-
-		mValue                 = other.mValue;
-		mMinValue              = other.mMinValue;
-		mMaxValue              = other.mMaxValue;
-		mScrollSense           = other.mScrollSense;
-		mScrollHandleSize      = other.mScrollHandleSize;
-		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
-		mSmoothValue           = mValue;
-		mHandlePressed         = false;
-		mHandleLayer           = GetLayer("handle");
-		mBackLayer             = GetLayer("back");
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -323,6 +308,27 @@ namespace o2
 
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
+	}
+
+	void UIVerticalScrollBar::CopyData(const Actor& otherActor)
+	{
+		const UIVerticalScrollBar& other = dynamic_cast<const UIVerticalScrollBar&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mValue                 = other.mValue;
+		mMinValue              = other.mMinValue;
+		mMaxValue              = other.mMaxValue;
+		mScrollSense           = other.mScrollSense;
+		mScrollHandleSize      = other.mScrollHandleSize;
+		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
+		mSmoothValue           = mValue;
+		mHandlePressed         = false;
+		mHandleLayer           = GetLayer("handle");
+		mBackLayer             = GetLayer("back");
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UIVerticalScrollBar::UpdateLayersLayouts()

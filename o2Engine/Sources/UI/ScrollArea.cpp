@@ -68,54 +68,7 @@ namespace o2
 
 	UIScrollArea& UIScrollArea::operator=(const UIScrollArea& other)
 	{
-		UIWidget::operator=(other);
-
-		if (mHorScrollBar)
-		{
-			if (mOwnHorScrollBar)
-				delete mHorScrollBar;
-			else
-				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
-		}
-
-		if (mVerScrollBar)
-		{
-			if (mOwnVerScrollBar)
-				delete mVerScrollBar;
-			else
-				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
-		}
-
-		mClipAreaLayout      = other.mClipAreaLayout;
-		mViewAreaLayout      = other.mViewAreaLayout;
-		mScrollPos           = other.mScrollPos;
-		mOwnHorScrollBar     = other.mOwnHorScrollBar;
-		mOwnVerScrollBar     = other.mOwnVerScrollBar;
-		mScrollSpeedDamp     = other.mScrollSpeedDamp;
-		mEnableScrollsHiding = other.mEnableScrollsHiding;
-
-		if (mOwnHorScrollBar)
-		{
-			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
-			mHorScrollBar->mParent = this;
-			mHorScrollBar->layout->mData->drivenByParent = true;
-			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
-		}
-		else mHorScrollBar = nullptr;
-
-		if (mOwnVerScrollBar)
-		{
-			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
-			mVerScrollBar->mParent = this;
-			mVerScrollBar->layout->mData->drivenByParent = true;
-			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
-		}
-		else mVerScrollBar = nullptr;
-
-		RetargetStatesAnimations();
-		UpdateScrollParams();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -759,6 +712,59 @@ namespace o2
 
 		onScrolled(mScrollPos);
 		OnScrolled();
+	}
+
+	void UIScrollArea::CopyData(const Actor& otherActor)
+	{
+		const UIScrollArea& other = dynamic_cast<const UIScrollArea&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		if (mHorScrollBar)
+		{
+			if (mOwnHorScrollBar)
+				delete mHorScrollBar;
+			else
+				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
+		}
+
+		if (mVerScrollBar)
+		{
+			if (mOwnVerScrollBar)
+				delete mVerScrollBar;
+			else
+				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
+		}
+
+		mClipAreaLayout      = other.mClipAreaLayout;
+		mViewAreaLayout      = other.mViewAreaLayout;
+		mScrollPos           = other.mScrollPos;
+		mOwnHorScrollBar     = other.mOwnHorScrollBar;
+		mOwnVerScrollBar     = other.mOwnVerScrollBar;
+		mScrollSpeedDamp     = other.mScrollSpeedDamp;
+		mEnableScrollsHiding = other.mEnableScrollsHiding;
+
+		if (mOwnHorScrollBar)
+		{
+			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
+			mHorScrollBar->mParent = this;
+			mHorScrollBar->layout->mData->drivenByParent = true;
+			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
+		}
+		else mHorScrollBar = nullptr;
+
+		if (mOwnVerScrollBar)
+		{
+			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
+			mVerScrollBar->mParent = this;
+			mVerScrollBar->layout->mData->drivenByParent = true;
+			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
+		}
+		else mVerScrollBar = nullptr;
+
+		RetargetStatesAnimations();
+		UpdateScrollParams();
+		UpdateLayout();
 	}
 
 	void UIScrollArea::OnSerialize(DataNode& node) const

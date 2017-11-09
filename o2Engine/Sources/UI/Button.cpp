@@ -26,12 +26,7 @@ namespace o2
 
 	UIButton& UIButton::operator=(const UIButton& other)
 	{
-		UIWidget::operator=(other);
-
-		mCaptionText = GetLayerDrawable<Text>("caption");
-		mIconSprite = GetLayerDrawable<Sprite>("icon");
-		RetargetStatesAnimations();
-
+		CopyData(other);
 		return *this;
 	} 
 
@@ -77,6 +72,17 @@ namespace o2
 	bool UIButton::IsUnderPoint(const Vec2F& point)
 	{
 		return UIWidget::IsUnderPoint(point);
+	}
+
+	void UIButton::CopyData(const Actor& otherActor)
+	{
+		const UIButton& other = dynamic_cast<const UIButton&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mCaptionText = GetLayerDrawable<Text>("caption");
+		mIconSprite = GetLayerDrawable<Sprite>("icon");
+		RetargetStatesAnimations();
 	}
 
 	void UIButton::OnCursorPressed(const Input::Cursor& cursor)

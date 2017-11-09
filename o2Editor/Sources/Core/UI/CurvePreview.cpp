@@ -24,14 +24,7 @@ namespace Editor
 
 	UICurvePreview& UICurvePreview::operator=(const UICurvePreview& other)
 	{
-		mBackColor = other.mBackColor;
-		mCurveColor = other.mCurveColor;
-
-		mSprite = GetLayerDrawable<Sprite>("image");
-		RetargetStatesAnimations();
-
-		mNeedRedraw = true;
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -74,6 +67,21 @@ namespace Editor
 	Color4 UICurvePreview::GetCurveColor() const
 	{
 		return mCurveColor;
+	}
+
+	void UICurvePreview::CopyData(const Actor& otherActor)
+	{
+		const UICurvePreview& other = dynamic_cast<const UICurvePreview&>(otherActor);
+
+		UIWidget::operator=(other);
+
+		mBackColor = other.mBackColor;
+		mCurveColor = other.mCurveColor;
+
+		mSprite = GetLayerDrawable<Sprite>("image");
+		RetargetStatesAnimations();
+
+		mNeedRedraw = true;
 	}
 
 	void UICurvePreview::UpdateLayersLayouts()

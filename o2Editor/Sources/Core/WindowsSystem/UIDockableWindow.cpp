@@ -53,13 +53,7 @@ namespace Editor
 
 	UIDockableWindow& UIDockableWindow::operator=(const UIDockableWindow& other)
 	{
-		UIWindow::operator=(other);
-
-		mDockingFrameSample = other.mDockingFrameSample->CloneAs<Sprite>();
-
-		if (mVisibleState)
-			mVisibleState->onStateFullyFalse += THIS_FUNC(Undock);
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -298,6 +292,18 @@ namespace Editor
 	bool UIDockableWindow::IsUnderPoint(const Vec2F& point)
 	{
 		return !mTabState && UIWidget::IsUnderPoint(point);
+	}
+
+	void UIDockableWindow::CopyData(const Actor& otherActor)
+	{
+		const UIDockableWindow& other = dynamic_cast<const UIDockableWindow&>(otherActor);
+
+		UIWindow::CopyData(other);
+
+		mDockingFrameSample = other.mDockingFrameSample->CloneAs<Sprite>();
+
+		if (mVisibleState)
+			mVisibleState->onStateFullyFalse += THIS_FUNC(Undock);
 	}
 
 	void UIDockableWindow::OnVisibleChanged()

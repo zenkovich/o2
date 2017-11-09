@@ -125,6 +125,9 @@ namespace o2
 		int           mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when cursor pressed on this. Sets state "pressed" to true
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
@@ -211,6 +214,7 @@ CLASS_METHODS_META(o2::UICustomDropDown)
 	PUBLIC_FUNCTION(void, SetClippingLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);

@@ -31,23 +31,7 @@ namespace o2
 
 	UIHorizontalScrollBar& UIHorizontalScrollBar::operator=(const UIHorizontalScrollBar& other)
 	{
-		UIWidget::operator=(other);
-
-		mValue                 = other.mValue;
-		mMinValue              = other.mMinValue;
-		mMaxValue              = other.mMaxValue;
-		mScrollSense           = other.mScrollSense;
-		mScrollHandleSize      = other.mScrollHandleSize;
-		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
-		mSmoothValue           = mValue;
-		mHandlePressed         = false;
-
-		mHandleLayer = GetLayer("handle");
-		mBackLayer = GetLayer("back");
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -276,6 +260,28 @@ namespace o2
 	void UIHorizontalScrollBar::OnScrolled(float scroll)
 	{
 		SetValue(mValue - scroll*mScrollSense);
+	}
+
+	void UIHorizontalScrollBar::CopyData(const Actor& otherActor)
+	{
+		const UIHorizontalScrollBar& other = dynamic_cast<const UIHorizontalScrollBar&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mValue                 = other.mValue;
+		mMinValue              = other.mMinValue;
+		mMaxValue              = other.mMaxValue;
+		mScrollSense           = other.mScrollSense;
+		mScrollHandleSize      = other.mScrollHandleSize;
+		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
+		mSmoothValue           = mValue;
+		mHandlePressed         = false;
+
+		mHandleLayer = GetLayer("handle");
+		mBackLayer = GetLayer("back");
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UIHorizontalScrollBar::OnDeserialized(const DataNode& node)

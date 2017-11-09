@@ -40,13 +40,7 @@ namespace o2
 
 	UITreeNode& UITreeNode::operator=(const UITreeNode& other)
 	{
-		UIWidget::operator=(other);
-
-		SetSelectionGroup(other.GetSelectionGroup());
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -85,6 +79,18 @@ namespace o2
 	bool UITreeNode::IsUnderPoint(const Vec2F& point)
 	{
 		return UIWidget::IsUnderPoint(point);
+	}
+
+	void UITreeNode::CopyData(const Actor& otherActor)
+	{
+		const UITreeNode& other = dynamic_cast<const UITreeNode&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		SetSelectionGroup(other.GetSelectionGroup());
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UITreeNode::UpdateTreeLayout(float dt)
@@ -186,29 +192,7 @@ namespace o2
 
 	UITree& UITree::operator=(const UITree& other)
 	{
-		UIScrollArea::operator=(other);
-
-		delete mNodeWidgetSample;
-		delete mHoverDrawable;
-		delete mFakeDragNode;
-		delete mHightlightSprite;
-
-		mRearrangeType        = other.mRearrangeType;
-		mMultiSelectAvailable = other.mMultiSelectAvailable;
-		mNodeWidgetSample     = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mFakeDragNode         = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mHoverDrawable        = other.mHoverDrawable->CloneAs<Sprite>();
-		mHightlightSprite     = other.mHightlightSprite->CloneAs<Sprite>();
-
-		mHightlightAnim.SetTarget(mHightlightSprite);
-
-		mHoverLayout          = other.mHoverLayout;
-		mHightlightLayout     = other.mHightlightLayout;
-		mHightlightAnim       = other.mHightlightAnim;
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -864,6 +848,34 @@ namespace o2
 			mSelectedNodes.Add(node);
 
 		return node;
+	}
+
+	void UITree::CopyData(const Actor& otherActor)
+	{
+		const UITree& other = dynamic_cast<const UITree&>(otherActor);
+
+		UIScrollArea::CopyData(other);
+
+		delete mNodeWidgetSample;
+		delete mHoverDrawable;
+		delete mFakeDragNode;
+		delete mHightlightSprite;
+
+		mRearrangeType        = other.mRearrangeType;
+		mMultiSelectAvailable = other.mMultiSelectAvailable;
+		mNodeWidgetSample     = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mFakeDragNode         = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mHoverDrawable        = other.mHoverDrawable->CloneAs<Sprite>();
+		mHightlightSprite     = other.mHightlightSprite->CloneAs<Sprite>();
+
+		mHightlightAnim.SetTarget(mHightlightSprite);
+
+		mHoverLayout          = other.mHoverLayout;
+		mHightlightLayout     = other.mHightlightLayout;
+		mHightlightAnim       = other.mHightlightAnim;
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UITree::OnFocused()

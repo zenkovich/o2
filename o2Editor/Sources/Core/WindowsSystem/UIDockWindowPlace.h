@@ -68,6 +68,9 @@ namespace Editor
 		RectF              mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when cursor drag handle was moved
 		void OnDragHandleMinMoved(const Vec2F& delta);
 
@@ -114,6 +117,7 @@ CLASS_METHODS_META(Editor::UIDockWindowPlace)
 	PUBLIC_FUNCTION(void, SetActiveTab, UIDockableWindow*);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDragHandleMinMoved, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnDragHandleMaxMoved, const Vec2F&);
 	PROTECTED_FUNCTION(void, CheckInteractable);

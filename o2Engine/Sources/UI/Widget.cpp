@@ -97,41 +97,7 @@ namespace o2
 
 	UIWidget& UIWidget::operator=(const UIWidget& other)
 	{
-		Actor::operator=(other);
-
-		for (auto layer : mLayers)
-			delete layer;
-
-		for (auto state : mStates)
-			delete state;
-
-		mLayers.Clear();
-		mStates.Clear();
-		mVisibleState = nullptr;
-		mFocusedState = nullptr;
-
-		mName = other.mName;
-		layout->CopyFrom(*other.layout);
-		mTransparency = other.mTransparency;
-		mIsFocusable = other.mIsFocusable;
-
-		for (auto layer : other.mLayers)
-		{
-			auto newLayer = mnew UIWidgetLayer(*layer);
-			newLayer->mOwnerWidget = this;
-			mLayers.Add(newLayer);
-			OnLayerAdded(newLayer);
-		}
-
-		for (auto state : other.mStates)
-		{
-			UIWidgetState* newState = dynamic_cast<UIWidgetState*>(state->Clone());
-			AddState(newState);
-		}
-
-		UpdateLayersDrawingSequence();
-		RetargetStatesAnimations();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -878,6 +844,47 @@ namespace o2
 		layer.SetAllAccessFunc(this, &UIWidget::GetAllLayers);
 		childWidget.SetAllAccessFunc(this, &UIWidget::GetAllChilds);
 	}
+
+	void UIWidget::CopyData(const Actor& otherActor)
+	{
+		const UIWidget& other = dynamic_cast<const UIWidget&>(otherActor);
+
+		Actor::CopyData(other);
+
+		for (auto layer : mLayers)
+			delete layer;
+
+		for (auto state : mStates)
+			delete state;
+
+		mLayers.Clear();
+		mStates.Clear();
+		mVisibleState = nullptr;
+		mFocusedState = nullptr;
+
+		mName = other.mName;
+		layout->CopyFrom(*other.layout);
+		mTransparency = other.mTransparency;
+		mIsFocusable = other.mIsFocusable;
+
+		for (auto layer : other.mLayers)
+		{
+			auto newLayer = mnew UIWidgetLayer(*layer);
+			newLayer->mOwnerWidget = this;
+			mLayers.Add(newLayer);
+			OnLayerAdded(newLayer);
+		}
+
+		for (auto state : other.mStates)
+		{
+			UIWidgetState* newState = dynamic_cast<UIWidgetState*>(state->Clone());
+			AddState(newState);
+		}
+
+		UpdateLayersDrawingSequence();
+		RetargetStatesAnimations();
+	}
+
 }
 
 DECLARE_CLASS(o2::UIWidget);

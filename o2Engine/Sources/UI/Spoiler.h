@@ -45,6 +45,9 @@ namespace o2
 		float          mTargetHeight = 0.0f;   // target expanding height
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Updates expanding
 		void UpdateExpanding(float dt);
 
@@ -86,6 +89,7 @@ CLASS_METHODS_META(o2::UISpoiler)
 	PUBLIC_FUNCTION(bool, IsExpanded);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateExpanding, float);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);

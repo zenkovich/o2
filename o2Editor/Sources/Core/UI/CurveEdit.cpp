@@ -88,28 +88,7 @@ namespace Editor
 
 	Editor::UICurveEditor& UICurveEditor::operator=(const UICurveEditor& other)
 	{
-		UIFrameScrollView::operator=(other);
-
-		mReady = false;
-
-		delete mSelectionSprite;
-		delete mTextLeft;
-		delete mTextRight;
-		delete mTextTop;
-		delete mTextBottom;
-
-		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
-		mTextFont        = other.mTextFont;
-
-		mMainHandleSample = other.mMainHandleSample;
-		mSupportHandleSample = other.mSupportHandleSample;
-
-		InitializeTextDrawables();
-		InitializeEditValueWindow();
-		RetargetStatesAnimations();
-
-		mReady = true;
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -244,6 +223,33 @@ namespace Editor
 	{
 		mSupportHandleSample = SelectableDragHandle(mnew Sprite(regular), mnew Sprite(hover),
 													mnew Sprite(pressed), mnew Sprite(selected));
+	}
+
+	void UICurveEditor::CopyData(const Actor& otherActor)
+	{
+		const UICurveEditor& other = dynamic_cast<const UICurveEditor&>(otherActor);
+
+		UIFrameScrollView::CopyData(other);
+
+		mReady = false;
+
+		delete mSelectionSprite;
+		delete mTextLeft;
+		delete mTextRight;
+		delete mTextTop;
+		delete mTextBottom;
+
+		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
+		mTextFont        = other.mTextFont;
+
+		mMainHandleSample = other.mMainHandleSample;
+		mSupportHandleSample = other.mSupportHandleSample;
+
+		InitializeTextDrawables();
+		InitializeEditValueWindow();
+		RetargetStatesAnimations();
+
+		mReady = true;
 	}
 
 	void UICurveEditor::OnVisibleChanged()

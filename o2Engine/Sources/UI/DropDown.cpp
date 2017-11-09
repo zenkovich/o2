@@ -26,9 +26,7 @@ namespace o2
 
 	UIDropDown& UIDropDown::operator=(const UIDropDown& other)
 	{
-		UICustomDropDown::operator=(other);
-		RetargetStatesAnimations();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -110,6 +108,13 @@ namespace o2
 	{
 		int idx = FindItem(text);
 		mItemsList->SelectItemAt(idx);
+	}
+
+	void UIDropDown::CopyData(const Actor& otherActor)
+	{
+		const UIDropDown& other = dynamic_cast<const UIDropDown&>(otherActor);
+		UICustomDropDown::CopyData(other);
+		RetargetStatesAnimations();
 	}
 
 	void UIDropDown::OnSelectionChanged()

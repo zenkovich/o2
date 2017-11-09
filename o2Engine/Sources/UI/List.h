@@ -64,6 +64,9 @@ namespace o2
 		SERIALIZABLE(UIList);
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when selected item index was changed
 		void OnSelectionChanged() override;
 
@@ -99,6 +102,7 @@ CLASS_METHODS_META(o2::UIList)
 	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
 	PUBLIC_FUNCTION(void, SetSelectedItems, const Vector<WString>&);
 	PUBLIC_FUNCTION(Vector<WString>, GetSelectedItemsText);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
 	PROTECTED_FUNCTION(void, initializeProperties);
 }

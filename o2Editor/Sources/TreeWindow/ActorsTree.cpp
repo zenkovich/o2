@@ -321,10 +321,16 @@ namespace Editor
 
 	Editor::UIActorsTreeNode& UIActorsTreeNode::operator=(const UIActorsTreeNode& other)
 	{
-		UITreeNode::operator=(other);
-		InitializeControls();
-
+		CopyData(other);
 		return *this;
+	}
+
+	void UIActorsTreeNode::CopyData(const Actor& otherActor)
+	{
+		const UIActorsTreeNode& other = dynamic_cast<const UIActorsTreeNode&>(otherActor);
+
+		UITreeNode::CopyData(other);
+		InitializeControls();
 	}
 
 	void UIActorsTreeNode::InitializeControls()

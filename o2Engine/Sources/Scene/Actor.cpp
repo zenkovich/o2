@@ -1674,16 +1674,21 @@ namespace o2
 
 		mPrototype->Save();
 	}
+	
+	void Actor::CopyData(const Actor& otherActor)
+	{
+		mName = otherActor.mName;
+		mEnabled = otherActor.mEnabled;
+		*transform = *otherActor.transform;
+		mAssetId = otherActor.mAssetId;
+	}
 
 	void Actor::ProcessCopying(Actor* dest, const Actor* source, Vector<Actor**>& actorsPointers,
 							   Vector<Component**>& componentsPointers, Dictionary<const Actor*, Actor*>& actorsMap,
 							   Dictionary<const Component*, Component*>& componentsMap,
 							   bool isSourcePrototype)
 	{
-		dest->mName = source->mName;
-		dest->mEnabled = source->mEnabled;
-		*dest->transform = *source->transform;
-		dest->mAssetId = source->mAssetId;
+		dest->CopyData(*source);
 
 		if (!dest->mPrototype && source->mPrototype)
 		{
@@ -1709,7 +1714,10 @@ namespace o2
 
 		for (auto child : source->mChildren)
 		{
-			Actor* newChild = mnew Actor(dest->mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
+			Actor* newChild = dynamic_cast<Actor*>((IObject*)child->GetType().CreateSample());
+			if (!dest->mIsOnScene)
+				newChild->ExcludeFromScene();
+
 			dest->AddChild(newChild);
 
 			ProcessCopying(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap, isSourcePrototype);

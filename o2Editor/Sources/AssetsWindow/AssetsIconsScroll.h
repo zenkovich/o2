@@ -144,6 +144,9 @@ namespace Editor
 		bool               mChangePropertiesTargetsFromThis = false;
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when widget was selected
 		void OnFocused() override;
 
@@ -391,6 +394,7 @@ CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
 	PUBLIC_FUNCTION(Sprite*, GetSelectingDrawable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

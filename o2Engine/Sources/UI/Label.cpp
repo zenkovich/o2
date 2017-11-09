@@ -25,16 +25,7 @@ namespace o2
 
 	UILabel& UILabel::operator=(const UILabel& other)
 	{
-		UIWidget::operator=(other);
-
-		mTextLayer    = GetLayerDrawable<Text>("text");
-		mHorOverflow  = other.mHorOverflow;
-		mVerOverflow  = other.mVerOverflow;
-		mExpandBorder = other.mExpandBorder;
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -296,6 +287,21 @@ namespace o2
 
 		if (withChildren)
 			UpdateChildrenLayouts();
+	}
+
+	void UILabel::CopyData(const Actor& otherActor)
+	{
+		const UILabel& other = dynamic_cast<const UILabel&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mTextLayer    = GetLayerDrawable<Text>("text");
+		mHorOverflow  = other.mHorOverflow;
+		mVerOverflow  = other.mVerOverflow;
+		mExpandBorder = other.mExpandBorder;
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	void UILabel::OnLayerAdded(UIWidgetLayer* layer)

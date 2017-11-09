@@ -58,7 +58,15 @@ namespace Editor
 
 	UIAssetsFoldersTree& UIAssetsFoldersTree::operator=(const UIAssetsFoldersTree& other)
 	{
-		UIWidget::operator=(other);
+		CopyData(other);
+		return *this;
+	}
+
+	void UIAssetsFoldersTree::CopyData(const Actor& otherActor)
+	{
+		const UIAssetsFoldersTree& other = dynamic_cast<const UIAssetsFoldersTree&>(otherActor);
+
+		UIWidget::CopyData(other);
 
 		mFoldersTree = GetChildByType<UITree>();
 		RemoveChild(GetChildByType<UIContextMenu>());
@@ -67,8 +75,6 @@ namespace Editor
 
 		RetargetStatesAnimations();
 		UpdateLayout();
-
-		return *this;
 	}
 
 	void UIAssetsFoldersTree::SelectAndExpandFolder(const String& path)

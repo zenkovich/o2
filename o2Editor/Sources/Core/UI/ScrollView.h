@@ -93,6 +93,9 @@ namespace Editor
 		Basis      mScreenToLocalTransform;                 // Screen to local transformation
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Updates transparency for this and children widgets
 		void UpdateTransparency() override;
 
@@ -171,6 +174,7 @@ CLASS_METHODS_META(Editor::UIScrollView)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateCamera, float);
 	PROTECTED_FUNCTION(void, UpdateLocalScreenTransforms);

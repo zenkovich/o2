@@ -487,6 +487,9 @@ namespace o2
 			bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
 		};
 
+		// Copies data of actor from other to this
+		virtual void CopyData(const Actor& otherActor);
+
 		// Processes copying actor
 		void ProcessCopying(Actor* dest, const Actor* source,
 							Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
@@ -851,6 +854,7 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
 	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, InitializeProperties);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, ProcessCopying, Actor*, const Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp3, _tmp4, bool);
 	PROTECTED_FUNCTION(void, ProcessPrototypeMaking, Actor*, Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6, bool);
 	PROTECTED_FUNCTION(void, CopyFields, Vector<FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);

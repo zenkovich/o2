@@ -25,18 +25,7 @@ namespace o2
 
 	UIVerticalLayout& UIVerticalLayout::operator=(const UIVerticalLayout& other)
 	{
-		mBaseCorner    = other.mBaseCorner;
-		mSpacing       = other.mSpacing;
-		mBorder        = other.mBorder;
-		mExpandWidth   = other.mExpandWidth;
-		mExpandHeight  = other.mExpandHeight;
-		mFitByChildren = other.mFitByChildren;
-
-		UIWidget::operator=(other);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -161,6 +150,23 @@ namespace o2
 
 		if (withChildren)
 			RearrangeChilds();
+	}
+
+	void UIVerticalLayout::CopyData(const Actor& otherActor)
+	{
+		const UIVerticalLayout& other = dynamic_cast<const UIVerticalLayout&>(otherActor);
+
+		mBaseCorner    = other.mBaseCorner;
+		mSpacing       = other.mSpacing;
+		mBorder        = other.mBorder;
+		mExpandWidth   = other.mExpandWidth;
+		mExpandHeight  = other.mExpandHeight;
+		mFitByChildren = other.mFitByChildren;
+
+		UIWidget::CopyData(other);
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	float UIVerticalLayout::GetMinHeightWithChildren() const

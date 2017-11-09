@@ -29,8 +29,7 @@ namespace Editor
 
 	UIDockWindowPlace& UIDockWindowPlace::operator=(const UIDockWindowPlace& other)
 	{
-		UIWidget::operator=(other);
-		mDragHandleLayoutMin = other.mDragHandleLayoutMin;
+		CopyData(other);
 		return *this;
 	}
 
@@ -191,6 +190,14 @@ namespace Editor
 		UIWidget::UpdateLayout(withChildren);
 		mDragHandleAreaMin = mDragHandleLayoutMin.Calculate(layout->GetWorldRect());
 		mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout->GetWorldRect());
+	}
+
+	void UIDockWindowPlace::CopyData(const Actor& otherActor)
+	{
+		const UIDockWindowPlace& other = dynamic_cast<const UIDockWindowPlace&>(otherActor);
+
+		UIWidget::CopyData(other);
+		mDragHandleLayoutMin = other.mDragHandleLayoutMin;
 	}
 
 	void UIDockWindowPlace::OnDragHandleMinMoved(const Vec2F& delta)

@@ -27,8 +27,7 @@ namespace o2
 
 	UIList& UIList::operator=(const UIList& other)
 	{
-		UICustomList::operator=(other);
-		RetargetStatesAnimations();
+		CopyData(other);
 		return *this;
 	}
 
@@ -115,6 +114,13 @@ namespace o2
 	Vector<WString> UIList::GetSelectedItemsText() const
 	{
 		return mSelectedItems.Select<WString>([&](auto x) { return GetItemText(x.idx); });
+	}
+
+	void UIList::CopyData(const Actor& otherActor)
+	{
+		const UIList& other = dynamic_cast<const UIList&>(otherActor);
+		UICustomList::CopyData(other);
+		RetargetStatesAnimations();
 	}
 
 	void UIList::OnSelectionChanged()

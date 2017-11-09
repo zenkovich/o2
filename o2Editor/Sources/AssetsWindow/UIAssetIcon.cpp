@@ -30,9 +30,7 @@ namespace Editor
 
 	UIAssetIcon& UIAssetIcon::operator=(const UIAssetIcon& other)
 	{
-		UIWidget::operator=(other);
-		mNameText = GetChildByType<UILabel>();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -52,6 +50,14 @@ namespace Editor
 	bool UIAssetIcon::IsUnderPoint(const Vec2F& point)
 	{
 		return UIWidget::IsUnderPoint(point);
+	}
+
+	void UIAssetIcon::CopyData(const Actor& otherActor)
+	{
+		const UIAssetIcon& other = dynamic_cast<const UIAssetIcon&>(otherActor);
+
+		UIWidget::CopyData(other);
+		mNameText = GetChildByType<UILabel>();
 	}
 
 	void UIAssetIcon::SetSelected(bool selected)

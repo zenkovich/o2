@@ -53,34 +53,7 @@ namespace o2
 
 	UIEditBox& UIEditBox::operator=(const UIEditBox& other)
 	{
-		UIScrollArea::operator=(other);
-
-		delete mTextDrawable;
-		delete mCaretDrawable;
-
-		mText             = other.mText;
-		mLastText         = mText;
-		mAvailableSymbols = other.mAvailableSymbols;
-		mSelectionBegin   = 0;
-		mSelectionEnd     = 0;
-		mCaretBlinkTime   = 0;
-		mLastClickTime    = -10.0f;
-		mMultiLine        = other.mMultiLine;
-		mWordWrap         = other.mWordWrap;
-		mMaxLineChars     = other.mMaxLineChars;
-		mMaxLinesCount    = other.mMaxLinesCount;
-		mSelectionColor   = other.mSelectionColor;
-		mCaretBlinkDelay  = other.mCaretBlinkDelay;
-		mTextDrawable     = other.mTextDrawable->CloneAs<Text>();
-		mCaretDrawable    = other.mCaretDrawable->CloneAs<Sprite>();
-
-		mTextDrawable->SetText(mText);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
-		onChanged(mText);
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -760,6 +733,39 @@ namespace o2
 	bool UIEditBox::IsUnderPoint(const Vec2F& point)
 	{
 		return mDrawingScissorRect.IsInside(point) && mAbsoluteViewArea.IsInside(point);
+	}
+
+	void UIEditBox::CopyData(const Actor& otherActor)
+	{
+		const UIEditBox& other = dynamic_cast<const UIEditBox&>(otherActor);
+
+		UIScrollArea::CopyData(other);
+
+		delete mTextDrawable;
+		delete mCaretDrawable;
+
+		mText             = other.mText;
+		mLastText         = mText;
+		mAvailableSymbols = other.mAvailableSymbols;
+		mSelectionBegin   = 0;
+		mSelectionEnd     = 0;
+		mCaretBlinkTime   = 0;
+		mLastClickTime    = -10.0f;
+		mMultiLine        = other.mMultiLine;
+		mWordWrap         = other.mWordWrap;
+		mMaxLineChars     = other.mMaxLineChars;
+		mMaxLinesCount    = other.mMaxLinesCount;
+		mSelectionColor   = other.mSelectionColor;
+		mCaretBlinkDelay  = other.mCaretBlinkDelay;
+		mTextDrawable     = other.mTextDrawable->CloneAs<Text>();
+		mCaretDrawable    = other.mCaretDrawable->CloneAs<Sprite>();
+
+		mTextDrawable->SetText(mText);
+
+		RetargetStatesAnimations();
+		UpdateLayout();
+
+		onChanged(mText);
 	}
 
 	void UIEditBox::UpdateTransparency()

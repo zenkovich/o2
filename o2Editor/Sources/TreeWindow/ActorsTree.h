@@ -182,6 +182,9 @@ namespace Editor
 		UIWidgetState* mEditState = nullptr;    // Actor's name edit state
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// initializes controls and widgets
 		void InitializeControls();
 
@@ -271,6 +274,7 @@ CLASS_METHODS_META(Editor::UIActorsTreeNode)
 
 	PUBLIC_FUNCTION(void, SetActor, Actor*);
 	PUBLIC_FUNCTION(void, EnableEditName);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnLockClicked);
 	PROTECTED_FUNCTION(void, OnEnableCkicked);

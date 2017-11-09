@@ -106,6 +106,9 @@ namespace o2
 		WidgetsVec        mItemsPool;                               // Items pool
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when object was deserialized and trying to reattach states animations target
 		void OnDeserialized(const DataNode& node) override;
 
@@ -216,6 +219,7 @@ CLASS_METHODS_META(o2::UILongList)
 	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, UpdateTransparency);

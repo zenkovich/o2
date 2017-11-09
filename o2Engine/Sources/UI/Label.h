@@ -115,6 +115,9 @@ namespace o2
 		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when layer added and updates drawing sequence
 		void OnLayerAdded(UIWidgetLayer* layer) override;
 
@@ -171,6 +174,7 @@ CLASS_METHODS_META(o2::UILabel)
 	PUBLIC_FUNCTION(void, SetHeight, int);
 	PUBLIC_FUNCTION(int, GetHeight);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }

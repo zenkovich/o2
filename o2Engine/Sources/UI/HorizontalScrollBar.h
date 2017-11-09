@@ -102,6 +102,9 @@ namespace o2
 		UIWidgetLayer* mBackLayer = nullptr;          // Background layer
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when deserialized
 		void OnDeserialized(const DataNode& node) override;
 
@@ -205,6 +208,7 @@ CLASS_METHODS_META(o2::UIHorizontalScrollBar)
 	PUBLIC_FUNCTION(void, SetMinimalScrollHandleSize, float);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);

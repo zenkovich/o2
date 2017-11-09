@@ -133,6 +133,9 @@ namespace o2
 		RectF                mRightBottomDragAreaRect;   //	Right Bottom drag handle rect
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Updates transparency for this and children widgets
 		void UpdateTransparency() override;
 
@@ -229,6 +232,7 @@ CLASS_METHODS_META(o2::UIWindow)
 	PUBLIC_FUNCTION(bool, IsModal);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PUBLIC_FUNCTION(CursorEventsArea&, GetBackCursorListener);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);

@@ -121,6 +121,9 @@ namespace o2
 		UIContextMenu*           mOpenedContext = nullptr;      // Last opened context in menu
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when visible was changed
 		void OnVisibleChanged() override;
 
@@ -198,6 +201,7 @@ CLASS_METHODS_META(o2::UIMenuPanel)
 	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
 	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(UIWidget*, CreateItem, const Item&);
 	PROTECTED_FUNCTION(Item, GetItemDef, int);

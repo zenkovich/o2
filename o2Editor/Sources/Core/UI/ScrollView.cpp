@@ -37,21 +37,7 @@ namespace Editor
 
 	UIScrollView& UIScrollView::operator=(const UIScrollView& other)
 	{
-		UIWidget::operator=(other);
-
-		mReady = false;
-
-		delete mRenderTargetSprite;
-
-		mBackColor          = other.mBackColor;
-		mGridColor          = other.mGridColor;
-		mRenderTarget       = TextureRef(Vec2I(256, 256), Texture::Format::Default, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
-
-		RetargetStatesAnimations();
-
-		mReady = true;
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -122,6 +108,26 @@ namespace Editor
 	bool UIScrollView::IsFocusable() const
 	{
 		return true;
+	}
+
+	void UIScrollView::CopyData(const Actor& otherActor)
+	{
+		const UIScrollView& other = dynamic_cast<const UIScrollView&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mReady = false;
+
+		delete mRenderTargetSprite;
+
+		mBackColor          = other.mBackColor;
+		mGridColor          = other.mGridColor;
+		mRenderTarget       = TextureRef(Vec2I(256, 256), Texture::Format::Default, Texture::Usage::RenderTarget);
+		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+
+		RetargetStatesAnimations();
+
+		mReady = true;
 	}
 
 	void UIScrollView::UpdateTransparency()

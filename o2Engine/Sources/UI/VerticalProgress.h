@@ -93,6 +93,9 @@ namespace o2
 		UIWidgetLayer* mBackLayer = nullptr;             // Background layer
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when new layer was added. Here searching bar, back and handle layers
 		void OnLayerAdded(UIWidgetLayer* layer) override;
 
@@ -178,6 +181,7 @@ CLASS_METHODS_META(o2::UIVerticalProgress)
 	PUBLIC_FUNCTION(Orientation, GetOrientation);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);

@@ -209,6 +209,9 @@ namespace Editor
 		ActionsVec              mRedoActions;                       // Actions that can be redo
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when visible was changed. Sets context menu items priority
 		void OnVisibleChanged() override;
 
@@ -490,6 +493,7 @@ CLASS_METHODS_META(Editor::UICurveEditor)
 	PUBLIC_FUNCTION(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(Curve*, FindCurve, const String&);

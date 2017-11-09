@@ -57,6 +57,9 @@ namespace Editor
 		RectF                  mAvailableArea;          // Available viewing area @SERIALIZABLE
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Updates camera limits
 		void UpdateCameraLimits(float dt);
 
@@ -93,6 +96,7 @@ CLASS_METHODS_META(Editor::UIFrameScrollView)
 	PUBLIC_FUNCTION(void, SetVerScrollbar, UIVerticalScrollBar*);
 	PUBLIC_FUNCTION(void, SetViewArea, const RectF&);
 	PUBLIC_FUNCTION(RectF, GetViewArea);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateCameraLimits, float);
 	PROTECTED_FUNCTION(void, OnHorScrollScrolled, float);
 	PROTECTED_FUNCTION(void, OnVerScrollScrolled, float);

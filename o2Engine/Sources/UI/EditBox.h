@@ -181,6 +181,9 @@ namespace o2
 		Vec2F   mLastCursorPos;            // Last pressed cursor position
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Updates transparency for this and children widgets
 		void UpdateTransparency() override;
 
@@ -363,6 +366,7 @@ CLASS_METHODS_META(o2::UIEditBox)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnFocused);

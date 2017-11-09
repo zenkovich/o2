@@ -100,24 +100,7 @@ namespace o2
 
 	UIContextMenu& UIContextMenu::operator=(const UIContextMenu& other)
 	{
-		UIScrollArea::operator=(other);
-
-		delete mItemSample;
-		delete mSelectionDrawable;
-		delete mSeparatorSample;
-
-		mItemSample        = other.mItemSample->CloneAs<UIContextMenuItem>();
-		mSeparatorSample   = other.mSeparatorSample->CloneAs<UIWidget>();
-		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mSelectionLayout   = other.mSelectionLayout;
-		mItemsLayout       = GetChildByType<UIVerticalLayout>();
-		mMaxVisibleItems   = other.mMaxVisibleItems;
-
-		mFitSizeMin = other.mFitSizeMin;
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -646,6 +629,29 @@ namespace o2
 		mChildrenWorldRect = _mChildrenAbsRect;
 	}
 
+	void UIContextMenu::CopyData(const Actor& otherActor)
+	{
+		const UIContextMenu& other = dynamic_cast<const UIContextMenu&>(otherActor);
+
+		UIScrollArea::CopyData(other);
+
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mSeparatorSample;
+
+		mItemSample        = other.mItemSample->CloneAs<UIContextMenuItem>();
+		mSeparatorSample   = other.mSeparatorSample->CloneAs<UIWidget>();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mSelectionLayout   = other.mSelectionLayout;
+		mItemsLayout       = GetChildByType<UIVerticalLayout>();
+		mMaxVisibleItems   = other.mMaxVisibleItems;
+
+		mFitSizeMin = other.mFitSizeMin;
+
+		RetargetStatesAnimations();
+		UpdateLayout();
+	}
+
 	void UIContextMenu::CheckClipping(const RectF& clipArea)
 	{
 		mIsClipped = false;
@@ -864,10 +870,7 @@ namespace o2
 
 	UIContextMenuItem& UIContextMenuItem::operator=(const UIContextMenuItem& other)
 	{
-		UIWidget::operator =(other);
-		mSubMenu = GetChildByType<UIContextMenu>();
-		if (mSubMenu) mSubMenu->Hide(true);
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -904,6 +907,17 @@ namespace o2
 		ShortcutKeysListener::SetShortcut(shortcut);
 	}
 
+	void UIContextMenuItem::CopyData(const Actor& otherActor)
+	{
+		const UIContextMenuItem& other = dynamic_cast<const UIContextMenuItem&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mSubMenu = GetChildByType<UIContextMenu>();
+		if (mSubMenu)
+			mSubMenu->Hide(true);
+	}
+
 	void UIContextMenuItem::OnChildAdded(UIWidget* child)
 	{
 		if (child->GetType() == TypeOf(UIContextMenu))
@@ -914,7 +928,6 @@ namespace o2
 	{
 		onClick();
 	}
-
 }
 
 DECLARE_CLASS(o2::UIContextMenuItem);

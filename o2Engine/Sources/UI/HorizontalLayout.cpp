@@ -24,17 +24,7 @@ namespace o2
 
 	UIHorizontalLayout& UIHorizontalLayout::operator=(const UIHorizontalLayout& other)
 	{
-		mBaseCorner   = other.mBaseCorner;
-		mSpacing      = other.mSpacing;
-		mBorder       = other.mBorder;
-		mExpandWidth  = other.mExpandWidth;
-		mExpandHeight = other.mExpandHeight;
-
-		UIWidget::operator=(other);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -157,6 +147,22 @@ namespace o2
 
 		if (withChildren)
 			RearrangeChilds();
+	}
+
+	void UIHorizontalLayout::CopyData(const Actor& otherActor)
+	{
+		const UIHorizontalLayout& other = dynamic_cast<const UIHorizontalLayout&>(otherActor);
+
+		mBaseCorner   = other.mBaseCorner;
+		mSpacing      = other.mSpacing;
+		mBorder       = other.mBorder;
+		mExpandWidth  = other.mExpandWidth;
+		mExpandHeight = other.mExpandHeight;
+
+		UIWidget::CopyData(other);
+
+		RetargetStatesAnimations();
+		UpdateLayout();
 	}
 
 	float UIHorizontalLayout::GetMinWidthWithChildren() const

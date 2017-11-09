@@ -36,16 +36,7 @@ namespace o2
 
 	UISpoiler& UISpoiler::operator=(const UISpoiler& other)
 	{
-		UIVerticalLayout::operator=(other);
-
-		mExpandState = GetStateObject("expand");
-		if (!mExpandState)
-			mExpandState = AddState("expand", Animation::EaseInOut(this, &mExpandCoef, 0.0f, 1.0f, 0.2f));
-
-		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
-		mExpandState->SetState(false);
-		UpdateExpanding(0);
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -99,6 +90,21 @@ namespace o2
 			layer->Draw();
 
 		DrawDebugFrame();
+	}
+
+	void UISpoiler::CopyData(const Actor& otherActor)
+	{
+		const UISpoiler& other = dynamic_cast<const UISpoiler&>(otherActor);
+
+		UIVerticalLayout::CopyData(other);
+
+		mExpandState = GetStateObject("expand");
+		if (!mExpandState)
+			mExpandState = AddState("expand", Animation::EaseInOut(this, &mExpandCoef, 0.0f, 1.0f, 0.2f));
+
+		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
+		mExpandState->SetState(false);
+		UpdateExpanding(0);
 	}
 
 	void UISpoiler::UpdateExpanding(float dt)

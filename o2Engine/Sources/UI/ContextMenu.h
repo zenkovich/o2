@@ -61,6 +61,9 @@ namespace o2
 		bool           mCheckable = false; // Is menu item can be checked
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child);
 
@@ -244,6 +247,9 @@ namespace o2
 		bool                  mShownAtFrame = false;         // Is context was shown at current frame
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Checks widget clipping by area
 		void CheckClipping(const RectF& clipArea) override;
 
@@ -327,6 +333,7 @@ CLASS_METHODS_META(o2::UIContextMenuItem)
 	PUBLIC_FUNCTION(void, SetCheckable, bool);
 	PUBLIC_FUNCTION(bool, IsCheckable);
 	PUBLIC_FUNCTION(void, SetShortcut, const ShortcutKeys&);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnShortcutPressed);
 }
@@ -391,6 +398,7 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(void, SetItemsMinPriority);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, FitSize);

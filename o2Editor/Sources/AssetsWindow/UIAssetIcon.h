@@ -51,6 +51,9 @@ namespace Editor
 		UIAssetsIconsScrollArea* mOwner = nullptr;         // Owner assets scroll area
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Sets is this selected
 		void SetSelected(bool selected);
 
@@ -109,6 +112,7 @@ CLASS_METHODS_META(Editor::UIAssetIcon)
 	PUBLIC_FUNCTION(void, SetAssetInfo, const AssetInfo&);
 	PUBLIC_FUNCTION(const AssetInfo&, GetAssetInfo);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, SetSelected, bool);
 	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);

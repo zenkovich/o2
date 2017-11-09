@@ -137,6 +137,9 @@ namespace o2
 		float                  mLastVerScrollChangeTime = -1.0f;        // Last time when horizontal scroll bar was changed
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Beginning serialization callback
 		void OnSerialize(DataNode& node) const override;
 
@@ -259,6 +262,7 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetViewLayout);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);

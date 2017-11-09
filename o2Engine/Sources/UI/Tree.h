@@ -276,6 +276,9 @@ namespace o2
 		VisibleWidgetsDefsVec mVisibleWidgetsCache;             // Visible widgets cache
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when widget was selected
 		void OnFocused() override;
 
@@ -499,6 +502,9 @@ namespace o2
 		UIButton*     mExpandBtn = nullptr;     // Node expanding button
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Updates expanding
 		void UpdateTreeLayout(float dt);
 
@@ -637,6 +643,7 @@ CLASS_METHODS_META(o2::UITree)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
@@ -718,6 +725,7 @@ CLASS_METHODS_META(o2::UITreeNode)
 	PUBLIC_FUNCTION(void, Collapse, bool);
 	PUBLIC_FUNCTION(UnknownPtr, GetObject);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTreeLayout, float);
 	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);

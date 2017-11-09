@@ -42,6 +42,9 @@ namespace Editor
 		bool           mOpengingFolderFromThis = false;
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Selects and expands folder
 		void SelectAndExpandFolder(const String& path);
 
@@ -132,6 +135,7 @@ END_META;
 CLASS_METHODS_META(Editor::UIAssetsFoldersTree)
 {
 
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, SelectAndExpandFolder, const String&);
 	PROTECTED_FUNCTION(void, UpdateView);
 	PROTECTED_FUNCTION(void, InitializeContext);
