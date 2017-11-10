@@ -206,7 +206,8 @@ namespace o2
 	template<typename _type>
 	Type* Reflection::InitializeType(const char* name)
 	{
-		Type* res = new Type(name, new TypeSampleCreator<_type>(), sizeof(_type), &CastFunc<IObject, _type>);
+		Type* res = new ObjectType(name, new TypeSampleCreator<_type>(), sizeof(_type), &CastFunc<IObject, _type>,
+								   &CastFunc<_type, IObject>);
 
 		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::ProcessType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;

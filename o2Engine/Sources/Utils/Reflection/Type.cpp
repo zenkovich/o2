@@ -6,8 +6,8 @@
 
 namespace o2
 {
-	Type::Type(const String& name, ITypeSampleCreator* creator, int size, void*(*castFunc)(void*)):
-		mId(0), mPtrType(nullptr), mName(name), mSampleCreator(creator), mSize(size), mCastFunc(castFunc)
+	Type::Type(const String& name, ITypeSampleCreator* creator, int size):
+		mId(0), mPtrType(nullptr), mName(name), mSampleCreator(creator), mSize(size)
 	{}
 
 	Type::~Type()
@@ -194,11 +194,6 @@ namespace o2
 		return res;
 	}
 
-	void* Type::DynamicCastFromIObject(IObject* object) const
-	{
-		return (*mCastFunc)(object);
-	}
-
 	FieldInfo* Type::SearchFieldPath(void* obj, void* target, const String& path, String& res,
 									 Vector<SearchPassedObject>& passedObjects) const
 	{
@@ -271,7 +266,7 @@ namespace o2
 	}
 
 	VectorType::VectorType(const String& name, ITypeSampleCreator* creator, int size):
-		Type(name, creator, size, &Reflection::NoCastFunc)
+		Type(name, creator, size)
 	{}
 
 	Type::Usage VectorType::GetUsage() const
@@ -415,7 +410,7 @@ namespace o2
 	}
 
 	EnumType::EnumType(const String& name, ITypeSampleCreator* creator, int size):
-		Type(name, creator, size, &Reflection::NoCastFunc)
+		Type(name, creator, size)
 	{}
 
 	Type::Usage EnumType::GetUsage() const
@@ -429,7 +424,7 @@ namespace o2
 	}
 
 	PointerType::PointerType(const Type* unptrType):
-		Type(unptrType->GetName() + "*", new TypeSampleCreator<void*>(), sizeof(void*), &Reflection::NoCastFunc), 
+		Type(unptrType->GetName() + "*", new TypeSampleCreator<void*>(), sizeof(void*)), 
 		mUnptrType(unptrType)
 	{}
 
@@ -444,7 +439,7 @@ namespace o2
 	}
 
 	PropertyType::PropertyType(const String& name, ITypeSampleCreator* creator, int size):
-		Type(name, creator, size, &Reflection::NoCastFunc)
+		Type(name, creator, size)
 	{}
 
 	Type::Usage PropertyType::GetUsage() const
@@ -457,6 +452,26 @@ namespace o2
 		return mValueType;
 	}
 
+	ObjectType::ObjectType(const String& name, ITypeSampleCreator* creator, int size, 
+						   void*(*castFromFunc)(void*), void*(*castToFunc)(void*)):
+		Type(name, creator, size), mCastToFunc(castToFunc), mCastFromFunc(castFromFunc)
+	{
+	}
+
+	Type::Usage ObjectType::GetUsage() const
+	{
+		return Usage::Regular;
+	}
+
+	void* ObjectType::DynamicCastFromIObject(IObject* object) const
+	{
+		return (*mCastFromFunc)(object);
+	}
+
+	IObject* ObjectType::DynamicCastToIObject(void* object) const
+	{
+		return (IObject*)(*mCastToFunc)(object);
+	}
 }
 
 ENUM_META_(o2::Type::Usage, Usage)

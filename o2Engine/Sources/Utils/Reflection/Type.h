@@ -77,7 +77,7 @@ namespace o2
 
 	public:
 		// Default constructor
-		Type(const String& name, ITypeSampleCreator* creator, int size, void*(*castFunc)(void*));
+		Type(const String& name, ITypeSampleCreator* creator, int size);
 
 		// Destructor
 		virtual ~Type();
@@ -143,9 +143,6 @@ namespace o2
 		// Returns field path by pointer from source object
 		String GetFieldPath(void* object, void *targetObject, FieldInfo*& fieldInfo) const;
 
-		// Dynamically casts from IObject* to type pointer
-		void* DynamicCastFromIObject(IObject* object) const;
-
 	public:
 		// --------------------
 		// Dummy type container
@@ -162,8 +159,6 @@ namespace o2
 		mutable Type*         mPtrType = nullptr;         // Pointer type from this
 		int                   mSize;                      // Size of type in bytes
 
-		void*(*mCastFunc)(void*);                         // Dynamic cast function from IObject
-
 	protected:
 		// Searches field recursively by pointer
 		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
@@ -177,6 +172,28 @@ namespace o2
 
 		template<typename _type>
 		friend class StringPointerAccessorType;
+	};
+
+	// -------------------------------------
+	// Type of objects, derived from IObject. Can be casted to/from
+	class ObjectType: public Type
+	{
+	public:
+		ObjectType(const String& name, ITypeSampleCreator* creator, int size, 
+				   void*(*castFromFunc)(void*), void*(*castToFunc)(void*));
+
+		// Returns type usage
+		Usage GetUsage() const override;
+
+		// Dynamically casts from IObject* to type pointer
+		void* DynamicCastFromIObject(IObject* object) const;
+
+		// Dynamically casts from IObject* to type pointer
+		IObject* DynamicCastToIObject(void* object) const;
+
+	protected:
+		void*(*mCastFromFunc)(void*); // Dynamic cast function from IObject
+		void*(*mCastToFunc)(void*); // Dynamic cast function from IObject
 	};
 
 	// ----------------
@@ -609,7 +626,7 @@ namespace o2
 
 	template<typename _type>
 	FundamentalType<_type>::FundamentalType(const String& name):
-		Type(name, new TypeSampleCreator<_type>(), sizeof(_type), &Reflection::NoCastFunc)
+		Type(name, new TypeSampleCreator<_type>(), sizeof(_type))
 	{}
 
 	// ------------------------------
@@ -742,8 +759,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	DictionaryType::DictionaryType(_key_type* x, _value_type* y):
 		Type((String)"o2::Dictionary<" + GetTypeOf<_key_type>().GetName() + ", " + GetTypeOf<_value_type>().GetName() + ">",
-			 new TypeSampleCreator<Dictionary<_key_type, _value_type>>, sizeof(Dictionary<_key_type, _value_type>), 
-			 &Reflection::NoCastFunc)
+			 new TypeSampleCreator<Dictionary<_key_type, _value_type>>, sizeof(Dictionary<_key_type, _value_type>))
 	{
 		mKeyType = &GetTypeOf<_key_type>();
 		mValueType = &GetTypeOf<_value_type>();
@@ -768,7 +784,7 @@ namespace o2
 	StringPointerAccessorType<_return_type>::StringPointerAccessorType():
 		Type((String)"Accessor<" + GetTypeOf<_return_type>().GetName() + "*, const o2::String&>",
 			 new TypeSampleCreator<Accessor<_return_type*, const String&>>(),
-			 sizeof(Accessor<_return_type*, const String&>), &Reflection::NoCastFunc)
+			 sizeof(Accessor<_return_type*, const String&>))
 	{
 		mReturnType = &GetTypeOf<_return_type>();
 	}

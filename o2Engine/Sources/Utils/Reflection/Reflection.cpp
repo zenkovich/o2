@@ -123,9 +123,9 @@ namespace o2
 	
 	Reflection* Reflection::mInstance;
 
-	Type* FundamentalTypeContainer<void>::type = new Type("void", nullptr, 0, &Reflection::NoCastFunc);
-	Type* IObject::type = new Type("IObject", nullptr, 0, &Reflection::NoCastFunc);
-	Type* Type::Dummy::type = new Type("Unknown", nullptr, 0, &Reflection::NoCastFunc);
+	Type* FundamentalTypeContainer<void>::type = new Type("void", nullptr, 0);
+	Type* IObject::type = new Type("IObject", nullptr, 0);
+	Type* Type::Dummy::type = new Type("Unknown", nullptr, 0);
 
 	DECLARE_FUNDAMENTAL_TYPE(int);
 	DECLARE_FUNDAMENTAL_TYPE(bool);

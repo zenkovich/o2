@@ -51,8 +51,9 @@ namespace o2
 				if (targetObj)
 				{
 					FieldInfo* fieldInfo = nullptr;
-					void* castedTarget = mTarget->GetType().DynamicCastFromIObject(mTarget);
-					def.mTargetPtr = targetObj->GetType().GetFieldPtr(castedTarget, def.mTargetPath, fieldInfo);
+					const ObjectType* type = dynamic_cast<const ObjectType*>(&targetObj->GetType());
+					void* castedTarget = type->DynamicCastFromIObject(targetObj);
+					def.mTargetPtr = type->GetFieldPtr(castedTarget, def.mTargetPath, fieldInfo);
 
 					if (!fieldInfo)
 						o2Debug.LogWarning("Can't find object %s for animating", def.mTargetPath);
@@ -85,8 +86,9 @@ namespace o2
 			for (auto& val : mAnimatedValues)
 			{
 				FieldInfo* fieldInfo = nullptr;
-				void* castedTarget = mTarget->GetType().DynamicCastFromIObject(mTarget);
-				val.mTargetPtr = mTarget->GetType().GetFieldPtr(castedTarget, val.mTargetPath, fieldInfo);
+				const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
+				void* castedTarget = type->DynamicCastFromIObject(mTarget);
+				val.mTargetPtr = type->GetFieldPtr(castedTarget, val.mTargetPath, fieldInfo);
 
 				if (!fieldInfo)
 				{

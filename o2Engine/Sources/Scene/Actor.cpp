@@ -1714,7 +1714,9 @@ namespace o2
 
 		for (auto child : source->mChildren)
 		{
-			Actor* newChild = dynamic_cast<Actor*>((IObject*)child->GetType().CreateSample());
+			const ObjectType* type = dynamic_cast<const ObjectType*>(&child->GetType());
+
+			Actor* newChild = dynamic_cast<Actor*>(type->DynamicCastToIObject(child->GetType().CreateSample()));
 			if (!dest->mIsOnScene)
 				newChild->ExcludeFromScene();
 
