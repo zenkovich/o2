@@ -50,7 +50,7 @@ namespace Editor
 		InitializeContext();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIAssetsFoldersTree::~UIAssetsFoldersTree()
@@ -74,7 +74,7 @@ namespace Editor
 		InitializeContext();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIAssetsFoldersTree::SelectAndExpandFolder(const String& path)

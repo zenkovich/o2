@@ -109,7 +109,7 @@ namespace o2
 
 	void UISpoiler::UpdateExpanding(float dt)
 	{
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UISpoiler::UpdateLayout(bool withChildren /*= true*/)

@@ -19,7 +19,7 @@ namespace o2
 	class ActorTransform: public ISerializable
 	{
 	public:
-		Getter<Actor*>   actor;              // Owner actor getter
+		Getter<Actor*>   actor;              // Owner actor getter @EXCLUDE_POINTER_SEARCH
 
 		Property<Vec2F>  position;           // Position property
 		Property<Vec2F>  size;               // Size property
@@ -438,7 +438,7 @@ namespace o2
 			Basis  parentTransform;                    // Parent world transform
 			bool   isParentInvTransformActual = false; // Is mParentInvertedTransform is actual
 
-			Actor* owner = nullptr;                    // Owner actor
+			Actor* owner = nullptr;                    // Owner actor @EXCLUDE_POINTER_SEARCH
 
 			SERIALIZABLE(Data);
 		};
@@ -482,7 +482,7 @@ CLASS_BASES_META(o2::ActorTransform)
 END_META;
 CLASS_FIELDS_META(o2::ActorTransform)
 {
-	PUBLIC_FIELD(actor);
+	PUBLIC_FIELD(actor).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PUBLIC_FIELD(position);
 	PUBLIC_FIELD(size);
 	PUBLIC_FIELD(width);
@@ -677,7 +677,7 @@ CLASS_FIELDS_META(o2::ActorTransform::Data)
 	PUBLIC_FIELD(parentInvertedTransform);
 	PUBLIC_FIELD(parentTransform);
 	PUBLIC_FIELD(isParentInvTransformActual);
-	PUBLIC_FIELD(owner);
+	PUBLIC_FIELD(owner).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::ActorTransform::Data)

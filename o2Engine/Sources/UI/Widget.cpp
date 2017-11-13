@@ -115,6 +115,11 @@ namespace o2
 			state->Update(dt);
 	}
 
+	void UIWidget::SetLayoutDirty()
+	{
+		layout->SetDirty();
+	}
+
 	void UIWidget::Draw()
 	{
 		if (mFullyDisabled || mIsClipped)
@@ -583,7 +588,7 @@ namespace o2
 				mFullyDisabled = !mResVisible;
 
 			if (updateLayout)
-				UpdateLayout();
+				SetLayoutDirty();
 
 			if (mResVisible)
 				onShow();
@@ -790,6 +795,14 @@ namespace o2
 	{
 		for (auto layer : mLayers)
 			layer->mOwnerWidget = this;
+
+		mChildWidgets.Clear();
+		for (auto child : mChildren)
+		{
+			UIWidget* childWidget = dynamic_cast<UIWidget*>(child);
+			if (childWidget)
+				mChildWidgets.Add(childWidget);
+		}
 
 		RetargetStatesAnimations();
 		SetVisibleForcible(mVisible);

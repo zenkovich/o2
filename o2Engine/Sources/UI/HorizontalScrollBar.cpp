@@ -281,7 +281,7 @@ namespace o2
 		mBackLayer = GetLayer("back");
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIHorizontalScrollBar::OnDeserialized(const DataNode& node)

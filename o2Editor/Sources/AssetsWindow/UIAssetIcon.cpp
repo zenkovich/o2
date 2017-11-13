@@ -22,7 +22,7 @@ namespace Editor
 
 		onDraw += [&]() { CursorAreaEventsListener::OnDrawn(); };
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIAssetIcon::~UIAssetIcon()

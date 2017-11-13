@@ -71,7 +71,7 @@ namespace Editor
 		mHightlightAnim.SetTarget(mHightlightSprite);
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 		InitializeContext();
 	}
 
@@ -427,7 +427,7 @@ namespace Editor
 		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIAssetsIconsScrollArea::OnFocused()

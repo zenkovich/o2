@@ -55,7 +55,7 @@ namespace o2
 
 	protected:
 		bool      mState = false; // Current state @SERIALIZABLE
-		UIWidget* mOwner = nullptr; // Owner widget pointer
+		UIWidget* mOwner = nullptr; // Owner widget pointer @EXCLUDE_POINTER_SEARCH
 
 		friend class UIWidget;
 	};
@@ -77,7 +77,7 @@ CLASS_FIELDS_META(o2::UIWidgetState)
 	PUBLIC_FIELD(onStateBecomesTrue);
 	PUBLIC_FIELD(onStateBecomesFalse);
 	PROTECTED_FIELD(mState).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mOwner);
+	PROTECTED_FIELD(mOwner).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::UIWidgetState)

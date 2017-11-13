@@ -44,7 +44,7 @@ namespace o2
 		else mVerScrollBar = nullptr;
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIScrollArea::~UIScrollArea()
@@ -258,7 +258,7 @@ namespace o2
 		}
 
 		UpdateScrollParams();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIHorizontalScrollBar* UIScrollArea::GetHorizontalScrollbar() const
@@ -287,7 +287,7 @@ namespace o2
 		}
 
 		UpdateScrollParams();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIVerticalScrollBar* UIScrollArea::GetVerticalScrollbar() const
@@ -318,7 +318,7 @@ namespace o2
 	void UIScrollArea::SetClippingLayout(const Layout& clipLayout)
 	{
 		mClipAreaLayout = clipLayout;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	Layout UIScrollArea::GetClippingLayout() const
@@ -329,7 +329,7 @@ namespace o2
 	void UIScrollArea::SetViewLayout(const Layout& viewLayout)
 	{
 		mViewAreaLayout = viewLayout;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	Layout UIScrollArea::GetViewLayout() const
@@ -764,7 +764,7 @@ namespace o2
 
 		RetargetStatesAnimations();
 		UpdateScrollParams();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIScrollArea::OnSerialize(DataNode& node) const

@@ -116,9 +116,9 @@ namespace o2
 		float          mDepth = 0.0f;           // Depth of drawable @SERIALIZABLE
 		RectF          mAbsolutePosition;       // Result absolute drawable position
 		RectF          mInteractableArea;       // Interactable area, depends on interactableLayout
-		UIWidget*      mOwnerWidget = nullptr;  // Owner widget pointer
+		UIWidget*      mOwnerWidget = nullptr;  // Owner widget pointer @EXCLUDE_POINTER_SEARCH
 		UIWidgetLayer* mParent = nullptr;       // Pointer to parent layer
-		ChildrenVec      mChildren;                 // Children layers @SERIALIZABLE
+		ChildrenVec    mChildren;                 // Children layers @SERIALIZABLE
 
 	protected:
 		// Completion deserialization callback
@@ -182,7 +182,7 @@ CLASS_FIELDS_META(o2::UIWidgetLayer)
 	PROTECTED_FIELD(mDepth).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mAbsolutePosition);
 	PROTECTED_FIELD(mInteractableArea);
-	PROTECTED_FIELD(mOwnerWidget);
+	PROTECTED_FIELD(mOwnerWidget).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mParent);
 	PROTECTED_FIELD(mChildren).SERIALIZABLE_ATTRIBUTE();
 }

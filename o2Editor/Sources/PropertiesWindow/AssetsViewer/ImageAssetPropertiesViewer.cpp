@@ -30,7 +30,7 @@ namespace Editor
 		InitializeImagePreview();
 		InitializeProperties();
 
-		mContent->UpdateLayout();
+		mContent->SetLayoutDirty();
 	}
 
 	ImageAssetPropertiesViewer::~ImageAssetPropertiesViewer()

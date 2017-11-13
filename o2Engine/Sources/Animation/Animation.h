@@ -541,15 +541,6 @@ namespace o2
 
 		return nullptr;
 	}
-
-	template<typename _type>
-	class AnimAttribute: public IAttribute
-	{
-	public:
-		IAttribute* Clone() const { return new AnimAttribute(*this); }
-	};
-
-#define ANIMATABLE(TYPE) .AddAttribute<AnimAttribute<TYPE>>()
 }
 
 CLASS_BASES_META(o2::Animation)

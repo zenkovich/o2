@@ -48,7 +48,7 @@ namespace o2
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		InitializeProperties();
 	}
@@ -123,7 +123,7 @@ namespace o2
 		delete mItemSample;
 		mItemSample = sample;
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIWidget* UICustomList::GetItemSample() const
@@ -242,7 +242,7 @@ namespace o2
 		onSelectedPos(itemPos);
 		onSelectedItem(item);
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UICustomList::SelectItemAt(int position)
@@ -271,7 +271,7 @@ namespace o2
 		}
 
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UICustomList::SetSelectedItems(const Vector<int>& items)
@@ -495,10 +495,10 @@ namespace o2
 
 		mVerLayout = GetChildByType<UIVerticalLayout>();
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
-		mItemSample->UpdateLayout();
+		mItemSample->SetLayoutDirty();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UICustomList::OnDeserialized(const DataNode& node)

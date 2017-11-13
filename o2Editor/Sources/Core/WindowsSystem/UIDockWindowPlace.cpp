@@ -13,7 +13,7 @@ namespace Editor
 	{
 		InitializeDragHandle();
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIDockWindowPlace::UIDockWindowPlace(const UIDockWindowPlace& other):
@@ -21,7 +21,7 @@ namespace Editor
 	{
 		InitializeDragHandle();
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIDockWindowPlace::~UIDockWindowPlace()

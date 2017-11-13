@@ -20,9 +20,9 @@ namespace o2
 		state->mOwner->RegAnimatedValue<Color4>(this, path, state);
 	}
 }
-
-DECLARE_CLASS(o2::IAnimatedValue);
 DECLARE_CLASS_MANUAL(o2::AnimatedValue<bool>);
 DECLARE_CLASS_MANUAL(o2::AnimatedValue<bool>::Key);
 DECLARE_CLASS_MANUAL(o2::AnimatedValue<o2::Color4>);
 DECLARE_CLASS_MANUAL(o2::AnimatedValue<o2::Color4>::Key);
+
+DECLARE_CLASS(o2::IAnimatedValue);

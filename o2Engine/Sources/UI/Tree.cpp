@@ -32,7 +32,7 @@ namespace o2
 		SetSelectionGroup(other.GetSelectionGroup());
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UITreeNode::~UITreeNode()
@@ -90,7 +90,7 @@ namespace o2
 		SetSelectionGroup(other.GetSelectionGroup());
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITreeNode::UpdateTreeLayout(float dt)
@@ -169,7 +169,7 @@ namespace o2
 		mHightlightAnim       = other.mHightlightAnim;
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		const int widgetsBufferInitialSize = 20;
 		TreeNodesVec widgets;
@@ -291,7 +291,7 @@ namespace o2
 			UpdateNodesStructure();
 
 		if (mIsNeedUdateLayout)
-			UpdateLayout();
+			SetLayoutDirty();
 
 		if (mIsNeedUpdateVisibleNodes)
 			UpdateVisibleNodes();
@@ -584,7 +584,7 @@ namespace o2
 		mSelectedObjects.Add(objects);
 
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::SelectObject(UnknownPtr object)
@@ -611,7 +611,7 @@ namespace o2
 		mSelectedObjects.Add(node->object);
 
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::SelectAndHightlightObject(UnknownPtr object)
@@ -632,7 +632,7 @@ namespace o2
 		mSelectedNodes.RemoveAt(idx);
 
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::DeselectAllObjects()
@@ -714,7 +714,7 @@ namespace o2
 		}
 
 		UpdateNodeExpanding(mExpandNodeTime);
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::OnObjectCreated(UnknownPtr object, UnknownPtr parent)
@@ -749,7 +749,7 @@ namespace o2
 			UpdateNodeExpanding(mExpandNodeTime);
 
 			for (auto child : mChildWidgets)
-				child->UpdateLayout();
+				child->SetLayoutDirty();
 		}
 
 		Vector<UnknownPtr> rootObjects = GetObjectChilds(UnknownPtr());
@@ -790,7 +790,7 @@ namespace o2
 			position += InsertNodes(node, position);
 		}
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	int UITree::InsertNodes(Node* parentNode, int position, NodesVec* newNodes /*= nullptr*/)
@@ -875,7 +875,7 @@ namespace o2
 		mHightlightAnim       = other.mHightlightAnim;
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::OnFocused()
@@ -1259,7 +1259,7 @@ namespace o2
 	void UITree::MoveScrollPosition(const Vec2F& delta)
 	{
 		mScrollPos += delta;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::OnCursorPressed(const Input::Cursor& cursor)
@@ -1299,7 +1299,7 @@ namespace o2
 				if (CheckMultipleSelection(cursor.position))
 				{
 					OnSelectionChanged();
-					UpdateLayout();
+					SetLayoutDirty();
 				}
 			}
 			else if (!o2Input.IsKeyDown(VK_CONTROL) && !isCursorUnderNode)
@@ -1407,7 +1407,7 @@ namespace o2
 			{
 				node->widget->SetInteractable(true);
 				UpdateNodeWidgetLayout(node, idx);
-				node->widget->UpdateLayout();
+				node->widget->SetLayoutDirty();
 			}
 
 			idx++;
@@ -1481,7 +1481,7 @@ namespace o2
 			if (node->widget && changed)
 			{
 				UpdateNodeWidgetLayout(node, mAllNodes.Find(node));
-				node->widget->UpdateLayout();
+				node->widget->SetLayoutDirty();
 			}
 		}
 	}
@@ -1704,7 +1704,7 @@ namespace o2
 	void UITree::SetChildsNodesOffset(float offset)
 	{
 		mChildrenOffset = offset;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	float UITree::GetChildsNodesOffset() const

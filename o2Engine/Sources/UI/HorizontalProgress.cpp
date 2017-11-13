@@ -262,7 +262,7 @@ namespace o2
 		mBackLayer   = GetLayer("back");
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIHorizontalProgress::OnLayerAdded(UIWidgetLayer* layer)

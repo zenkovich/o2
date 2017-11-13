@@ -7,7 +7,7 @@ namespace o2
 	UIHorizontalLayout::UIHorizontalLayout(): UIWidget()
 	{
 		InitializeProperties();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIHorizontalLayout::UIHorizontalLayout(const UIHorizontalLayout& other):
@@ -15,7 +15,7 @@ namespace o2
 		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren)
 	{
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 		InitializeProperties();
 	}
 
@@ -162,7 +162,7 @@ namespace o2
 		UIWidget::CopyData(other);
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	float UIHorizontalLayout::GetMinWidthWithChildren() const

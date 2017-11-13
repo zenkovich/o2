@@ -20,7 +20,7 @@ namespace o2
 		RetargetStatesAnimations();
 		InitializeProperties();
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UILabel& UILabel::operator=(const UILabel& other)
@@ -79,7 +79,7 @@ namespace o2
 		if (mTextLayer)
 			mTextLayer->SetFont(font);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	FontRef UILabel::GetFont() const
@@ -96,7 +96,7 @@ namespace o2
 			mTextLayer->SetText(text);
 
 		if (mHorOverflow == HorOverflow::Expand || mVerOverflow == VerOverflow::Expand)
-			UpdateLayout();
+			SetLayoutDirty();
 	}
 
 	WString UILabel::GetText() const
@@ -112,7 +112,7 @@ namespace o2
 		if (mTextLayer)
 			mTextLayer->SetHorAlign(align);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	HorAlign UILabel::GetHorAlign() const
@@ -128,7 +128,7 @@ namespace o2
 		if (mTextLayer)
 			mTextLayer->SetVerAlign(align);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	VerAlign UILabel::GetVerAlign() const
@@ -149,7 +149,7 @@ namespace o2
 			mTextLayer->dotsEngings = mHorOverflow == HorOverflow::Dots;
 		}
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UILabel::HorOverflow UILabel::GetHorOverflow()
@@ -160,7 +160,7 @@ namespace o2
 	void UILabel::SetVerOverflow(VerOverflow overflow)
 	{
 		mVerOverflow = overflow;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UILabel::VerOverflow UILabel::GetVerOverflow()
@@ -173,7 +173,7 @@ namespace o2
 		if (mTextLayer)
 			mTextLayer->SetSymbolsDistanceCoef(coef);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	float UILabel::GetSymbolsDistanceCoef() const
@@ -189,7 +189,7 @@ namespace o2
 		if (mTextLayer)
 			mTextLayer->SetLinesDistanceCoef(coef);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	float UILabel::GetLinesDistanceCoef() const
@@ -203,7 +203,7 @@ namespace o2
 	void UILabel::SetExpandBorder(const Vec2F& border)
 	{
 		mExpandBorder = border;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	Vec2F UILabel::GetExpandBorder() const
@@ -301,7 +301,7 @@ namespace o2
 		mExpandBorder = other.mExpandBorder;
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UILabel::OnLayerAdded(UIWidgetLayer* layer)

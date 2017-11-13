@@ -29,7 +29,7 @@ namespace o2
 		mItemSample->UpdateLayout();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		InitializeProperties();
 	}
@@ -106,7 +106,7 @@ namespace o2
 		delete mItemSample;
 		mItemSample = sample;
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIWidget* UILongList::GetItemSample() const
@@ -181,11 +181,11 @@ namespace o2
 		{
 			auto countFunc = getItemsCountFunc;
 			getItemsCountFunc = []() { return 0; };
-			UpdateLayout();
+			SetLayoutDirty();
 			getItemsCountFunc = countFunc;
 		}
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UILongList::CalculateScrollArea()
@@ -402,7 +402,7 @@ namespace o2
 		mItemSample->UpdateLayout(true);
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UILongList::OnDeserialized(const DataNode& node)

@@ -7,7 +7,7 @@ namespace o2
 	UIGridLayout::UIGridLayout(): UIWidget()
 	{
 		InitializeProperties();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIGridLayout::UIGridLayout(const UIGridLayout& other):
@@ -16,7 +16,7 @@ namespace o2
 		mArrangeAxisMaxCells(other.mArrangeAxisMaxCells)
 	{
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 		InitializeProperties();
 	}
 
@@ -109,7 +109,7 @@ namespace o2
 	void UIGridLayout::SetCellSize(const Vec2F& size)
 	{
 		mCellSize = size;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	Vec2F UIGridLayout::GetCellSize() const
@@ -120,7 +120,7 @@ namespace o2
 	void UIGridLayout::SetArrangeAxis(TwoDirection type)
 	{
 		mArrangeAxis = type;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	TwoDirection UIGridLayout::GetArrangeAxis() const
@@ -131,7 +131,7 @@ namespace o2
 	void UIGridLayout::SetArrangeAxisMaxCells(int count)
 	{
 		mArrangeAxisMaxCells = count;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	int UIGridLayout::GetArrangeAxisMaxCells() const
@@ -175,7 +175,7 @@ namespace o2
 		UIWidget::CopyData(other);
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 	}
 

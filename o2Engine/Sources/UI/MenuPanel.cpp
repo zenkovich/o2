@@ -339,7 +339,7 @@ namespace o2
 		mLayout            = GetChildByType<UIHorizontalLayout>();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIMenuPanel::OnVisibleChanged()

@@ -39,7 +39,7 @@ namespace o2
 		mTextDrawable->SetText(mText);
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		InitializeProperties();
 	}
@@ -224,7 +224,7 @@ namespace o2
 			mText = GetFilteredText(mText);
 			mTextDrawable->SetText(mText);
 
-			UpdateLayout();
+			SetLayoutDirty();
 		}
 
 		onChanged(mText);
@@ -271,7 +271,7 @@ namespace o2
 		mTextDrawable->SetText(filteredText);
 		onChanged(mText);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIEditBox::SetMaxLineCharactersCount(int count)
@@ -316,7 +316,7 @@ namespace o2
 			mLastText = mText;
 			mTextDrawable->SetText(filteredText);
 
-			UpdateLayout();
+			SetLayoutDirty();
 		}
 
 		onChanged(mText);
@@ -763,7 +763,7 @@ namespace o2
 		mTextDrawable->SetText(mText);
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		onChanged(mText);
 	}
@@ -1004,7 +1004,7 @@ namespace o2
 			else
 			{
 				mScrollPos.x = Math::Clamp(mScrollPos.x + horOffs, mScrollRange.left, mScrollRange.right);
-				UpdateLayout();
+				SetLayoutDirty();
 			}
 		}
 
@@ -1019,7 +1019,7 @@ namespace o2
 				else
 				{
 					mScrollPos.y = Math::Clamp(mScrollPos.y + verOffs, mScrollRange.bottom, mScrollRange.top);
-					UpdateLayout();
+					SetLayoutDirty();
 				}
 			}
 		}
@@ -1154,7 +1154,7 @@ namespace o2
 
 			mCaretBlinkTime = 0;
 
-			UpdateLayout();
+			SetLayoutDirty();
 			CheckScrollingToCaret();
 
 			onChanged(mText);
@@ -1177,7 +1177,7 @@ namespace o2
 
 			mTextDrawable->SetText(mText);
 			onChanged(mText);
-			UpdateLayout();
+			SetLayoutDirty();
 
 			if (mSelectionEnd == mSelectionBegin)
 				MoveCaret(mSelectionEnd - 1, false);
@@ -1196,7 +1196,7 @@ namespace o2
 
 				mTextDrawable->SetText(mText);
 				onChanged(mText);
-				UpdateLayout();
+				SetLayoutDirty();
 
 				MoveCaret(Math::Min(mSelectionEnd, mSelectionBegin), false);
 			}
@@ -1288,7 +1288,7 @@ namespace o2
 
 			mTextDrawable->SetText(mText);
 			onChanged(mText);
-			UpdateLayout();
+			SetLayoutDirty();
 			CheckScrollingToCaret();
 		}
 
@@ -1308,7 +1308,7 @@ namespace o2
 
 			mTextDrawable->SetText(mText);
 			onChanged(mText);
-			UpdateLayout();
+			SetLayoutDirty();
 			CheckScrollingToCaret();
 		}
 	}

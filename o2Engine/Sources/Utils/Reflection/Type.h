@@ -8,6 +8,7 @@
 #include "Utils/Delegates.h"
 #include "Utils/Reflection/SearchPassedObject.h"
 #include "Utils/StringDef.h"
+#include "Attribute.h"
 
 #define TypeOf(TYPE) GetTypeOf<TYPE>()
 
@@ -166,6 +167,7 @@ namespace o2
 
 		friend class FieldInfo;
 		friend class FunctionInfo;
+		friend class PointerType;
 		friend class Reflection;
 		friend class TypeInitializer;
 		friend class VectorType;
@@ -179,7 +181,7 @@ namespace o2
 	class ObjectType: public Type
 	{
 	public:
-		ObjectType(const String& name, ITypeSampleCreator* creator, int size, 
+		ObjectType(const String& name, ITypeSampleCreator* creator, int size,
 				   void*(*castFromFunc)(void*), void*(*castToFunc)(void*));
 
 		// Returns type usage
@@ -222,8 +224,16 @@ namespace o2
 		// Returns unpointed type
 		const Type* GetUnpointedType() const;
 
+		// Returns filed pointer by path
+		void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const override;
+
 	protected:
 		const Type* mUnptrType;
+
+	protected:
+		// Searches field recursively by pointer
+		FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
+								   Vector<SearchPassedObject>& passedObjects) const override;
 	};
 
 	// ---------------
@@ -529,7 +539,7 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 
 #define DECLARE_CLASS_MANUAL(CLASS)                                                                                            \
     o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)											            
-																											            
+
 #define CLASS_BASES_META(CLASS)                                                                                         \
     template<typename _type_processor> void CLASS::ProcessBaseTypes(typename CLASS* object, _type_processor& processor) \
 	{                                                                                                                   \
@@ -541,7 +551,7 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 	{                                                                                                                   \
         typedef CLASS thisclass;                                                                                        \
 		processor.StartFields<CLASS>(object, type);															            
-																											            
+
 #define CLASS_METHODS_META(CLASS)                                                                                       \
     template<typename _type_processor> void CLASS::ProcessMethods(typename CLASS* object, _type_processor& processor)   \
 	{                                                                                                                   \
@@ -635,7 +645,7 @@ namespace o2
 
 	template<typename _value_type>
 	TPropertyType<_value_type>::TPropertyType():
-		PropertyType((String)"o2::Property<" + GetTypeOf<_value_type>().GetName() + ">", 
+		PropertyType((String)"o2::Property<" + GetTypeOf<_value_type>().GetName() + ">",
 					 new TypeSampleCreator<_value_type>(), sizeof(_value_type))
 	{
 		mValueType = &GetTypeOf<_value_type>();
@@ -681,7 +691,7 @@ namespace o2
 
 	template<typename _element_type>
 	TVectorType<_element_type>::TVectorType():
-		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">", 
+		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">",
 				   new TypeSampleCreator<Vector<_element_type>>(), sizeof(Vector<_element_type>))
 	{
 		mElementType = &GetTypeOf<_element_type>();
@@ -814,45 +824,18 @@ namespace o2
 	}
 
 	template<typename _return_type>
-	FieldInfo* StringPointerAccessorType<_return_type>::SearchFieldPath(void* obj, void* target, const String& path, 
+	FieldInfo* StringPointerAccessorType<_return_type>::SearchFieldPath(void* obj, void* target, const String& path,
 																		String& res, Vector<SearchPassedObject>& passedObjects) const
 	{
 		Accessor<_return_type*, const String&>* accessor = ((Accessor<_return_type*, const String&>*)obj);
 
 		auto allFromAccessor = accessor->GetAll();
-		auto allFields = mReturnType->GetFieldsWithBaseClasses();
 		for (auto kv : allFromAccessor)
 		{
-			for (auto baseType : mReturnType->mBaseTypes)
-			{
-				auto baseRes = baseType.type->SearchFieldPath((*baseType.dynamicCastFunc)(kv.Value()), target, path, res, passedObjects);
-				if (baseRes)
-					return baseRes;
-			}
-
-			for (auto field : mReturnType->mFields)
-			{
-				void* fieldObj = field->GetValuePtr(kv.Value());
-
-				if (fieldObj == nullptr)
-					continue;
-
-				if (passedObjects.Contains(SearchPassedObject(fieldObj, field->GetType())))
-					continue;
-
-				passedObjects.Add(SearchPassedObject(fieldObj, field->GetType()));
-
-				String newPath = path + "/" + kv.Key() + "/" + field->mName;
-				if (fieldObj == target)
-				{
-					res = newPath;
-					return field;
-				}
-
-				FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res, passedObjects);
-				if (childField)
-					return childField;
-			}
+			String newPath = path + "/" + kv.Key();
+			FieldInfo* fieldInfo = mReturnType->SearchFieldPath(kv.Value(), target, newPath, res, passedObjects);
+			if (fieldInfo)
+				return fieldInfo;
 		}
 
 		return nullptr;

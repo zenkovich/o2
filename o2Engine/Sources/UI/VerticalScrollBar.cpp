@@ -23,7 +23,7 @@ namespace o2
 
 		RetargetStatesAnimations();
 		InitializeProperties();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIVerticalScrollBar::~UIVerticalScrollBar()
@@ -328,7 +328,7 @@ namespace o2
 		mBackLayer             = GetLayer("back");
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIVerticalScrollBar::UpdateLayersLayouts()

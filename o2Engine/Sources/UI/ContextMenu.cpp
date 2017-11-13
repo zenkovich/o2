@@ -194,7 +194,7 @@ namespace o2
 
 		FitSize();
 		FitPosition();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		return newItem;
 	}
@@ -261,7 +261,7 @@ namespace o2
 
 		FitSize();
 		FitPosition();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		return newItem;
 	}
@@ -649,7 +649,7 @@ namespace o2
 		mFitSizeMin = other.mFitSizeMin;
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIContextMenu::CheckClipping(const RectF& clipArea)

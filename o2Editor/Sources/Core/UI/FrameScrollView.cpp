@@ -105,7 +105,7 @@ namespace Editor
 		mChildren.Remove(mHorScrollbar);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIFrameScrollView::SetVerScrollbar(UIVerticalScrollBar* scrollbar)
@@ -116,7 +116,7 @@ namespace Editor
 		mChildren.Remove(mVerScrollbar);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIFrameScrollView::SetViewArea(const RectF& area)

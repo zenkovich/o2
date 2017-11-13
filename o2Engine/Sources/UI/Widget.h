@@ -71,6 +71,9 @@ namespace o2
 		// Updates layers, states and widget
 		void Update(float dt) override;
 
+		// Sets layout dirty, and update it in update loop
+		void SetLayoutDirty();
+
 		// Updates layout
 		virtual void UpdateLayout(bool withChildren = true);
 
@@ -219,7 +222,7 @@ namespace o2
 		LayersVec      mLayers;                 // Layers array @SERIALIZABLE
 		StatesVec      mStates;                 // States array @SERIALIZABLE
 					   						    
-		UIWidget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null
+		UIWidget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null  @EXCLUDE_POINTER_SEARCH
 		WidgetsVec     mChildWidgets;           // Children widgets, a part of all children
 		WidgetsVec     mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
 
@@ -436,7 +439,7 @@ CLASS_FIELDS_META(o2::UIWidget)
 	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mLayers).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mParentWidget);
+	PROTECTED_FIELD(mParentWidget).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mChildWidgets);
 	PROTECTED_FIELD(mDrawingChildren);
 	PROTECTED_FIELD(mChildrenWorldRect);
@@ -463,6 +466,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	typedef Dictionary<String, UIWidget*> _tmp2;
 
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, SetLayoutDirty);
 	PUBLIC_FUNCTION(void, UpdateLayout, bool);
 	PUBLIC_FUNCTION(void, UpdateChildrenLayouts);
 	PUBLIC_FUNCTION(void, Draw);

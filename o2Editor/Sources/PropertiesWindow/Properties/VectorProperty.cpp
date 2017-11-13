@@ -167,7 +167,7 @@ namespace Editor
 				FreeValueProperty(mValueProperties[i]);
 			}
 
-			mPropertiesLayout->UpdateLayout();
+			mPropertiesLayout->SetLayoutDirty();
 
 			onChanged();
 			o2EditorSceneScreen.OnSceneChanged();

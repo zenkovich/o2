@@ -91,7 +91,7 @@ namespace o2
 			*openedState = true;
 
 		mItemsList->SetVisible(true);
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UICustomDropDown::Collapse()
@@ -211,7 +211,7 @@ namespace o2
 	void UICustomDropDown::SetClippingLayout(const Layout& layout)
 	{
 		mClipLayout = layout;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	Layout UICustomDropDown::GetClippingLayout()

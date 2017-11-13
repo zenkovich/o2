@@ -8,7 +8,7 @@ namespace o2
 	UIVerticalLayout::UIVerticalLayout(): UIWidget()
 	{
 		InitializeProperties();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIVerticalLayout::UIVerticalLayout(const UIVerticalLayout& other):
@@ -16,7 +16,7 @@ namespace o2
 		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren)
 	{
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 		InitializeProperties();
 	}
 
@@ -166,7 +166,7 @@ namespace o2
 		UIWidget::CopyData(other);
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	float UIVerticalLayout::GetMinHeightWithChildren() const

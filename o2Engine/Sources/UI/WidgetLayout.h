@@ -43,7 +43,7 @@ namespace o2
 		Property<float> widthWeight;  // Width layout weight property
 		Property<float> heigthWeight; // Height layout weight property
 
-		// Default constructor, creates both stretching layout
+		// Default constructor, creates both stretching layout  
 		UIWidgetLayout();
 
 		// Constructor with parameters
@@ -247,7 +247,7 @@ namespace o2
 
 			bool  drivenByParent = false;          // Is layout controlling by parent
 
-			UIWidget* owner = nullptr;             // owner widget pointer
+			UIWidget* owner = nullptr;             // owner widget pointer @EXCLUDE_POINTER_SEARCH
 
 			SERIALIZABLE(Data);
 		};
@@ -417,7 +417,7 @@ CLASS_FIELDS_META(o2::UIWidgetLayout::Data)
 	PUBLIC_FIELD(maxSize).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(weight).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(drivenByParent);
-	PUBLIC_FIELD(owner);
+	PUBLIC_FIELD(owner).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::UIWidgetLayout::Data)

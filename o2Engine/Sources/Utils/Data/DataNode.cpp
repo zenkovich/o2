@@ -185,83 +185,122 @@ namespace o2
 
 	DataNode& DataNode::SetValueRaw(const IObject& object)
 	{
+		struct helper
+		{
+			static void WriteObject(void* object, const ObjectType& type, DataNode& node)
+			{
+				for (auto baseType : type.GetBaseTypes())
+				{
+					const ObjectType* baseObjectType = dynamic_cast<const ObjectType*>(baseType.type);
+					if (!baseObjectType)
+						continue;
+
+					void* baseObject = (*baseType.dynamicCastFunc)(object);
+					WriteObject(baseObject, *baseObjectType, node);
+				}
+
+				for (auto field : type.GetFields())
+				{
+					auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
+					if (srlzAttribute)
+						field->SerializeFromObject(object, *node.AddNode(field->GetName()));
+				}
+			}
+		};
+
 		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
 			((const ISerializable&)object).OnSerialize(*this);
 
-		char* objectPtr = (char*)&object;
-		auto fields = object.GetType().GetFieldsWithBaseClasses();
-		for (auto field : fields)
-		{
-			auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
-			if (srlzAttribute)
-				field->SerializeFromObject(objectPtr, *AddNode(field->GetName()));
-		}
+		const ObjectType& type = dynamic_cast<const ObjectType&>(object.GetType());
+		void* objectPtr = type.DynamicCastFromIObject(const_cast<IObject*>(&object));
+
+		helper::WriteObject(objectPtr, type, *this);
 
 		return *this;
 	}
 
 	DataNode& DataNode::SetValueDelta(const IObject& object, const IObject& source)
 	{
+		struct helper
+		{
+			static void WriteObject(void* object, void* source, const ObjectType& type, DataNode& node)
+			{
+				for (auto baseType : type.GetBaseTypes())
+				{
+					const ObjectType* baseObjectType = dynamic_cast<const ObjectType*>(baseType.type);
+					if (!baseObjectType)
+						continue;
+
+					void* baseObject = (*baseType.dynamicCastFunc)(object);
+					void* baseSourceObject = (*baseType.dynamicCastFunc)(source);
+					WriteObject(baseObject, baseSourceObject, *baseObjectType, node);
+				}
+
+				for (auto field : type.GetFields())
+				{
+					if (!field->GetAttribute<SerializableAttribute>())
+						continue;
+
+					if (field->GetType()->IsBasedOn(TypeOf(IObject)))
+					{
+						bool usedConverter = false;
+						for (auto conv : mDataConverters)
+						{
+							if (conv->IsConvertsType(&type))
+							{
+								if (!field->IsValueEquals(object, source))
+									conv->ToData(&object, *node.AddNode(field->GetName()));
+
+								usedConverter = true;
+
+								break;
+							}
+						}
+
+						if (usedConverter)
+							continue;
+
+						DataNode* newFieldNode = mnew DataNode();
+						newFieldNode->SetName(field->GetName());
+
+						newFieldNode->SetValueDelta(*(IObject*)field->GetValuePtr(object),
+													*(IObject*)field->GetValuePtr(source));
+
+						if (!newFieldNode->IsEmpty())
+							node.AddNode(newFieldNode);
+						else
+							delete newFieldNode;
+
+						continue;
+					}
+
+					if (!field->IsValueEquals(object, source))
+					{
+						DataNode* newFieldNode = mnew DataNode();
+						newFieldNode->SetName(field->GetName());
+
+						field->SerializeFromObject(object, *newFieldNode);
+
+						if (!newFieldNode->IsEmpty())
+							node.AddNode(newFieldNode);
+						else
+							delete newFieldNode;
+					}
+				}
+			}
+		};
+
 		if (!object.GetType().IsBasedOn(source.GetType()) && !source.GetType().IsBasedOn(object.GetType()))
 			return SetValue(object);
 
 		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
 			((ISerializable&)object).OnSerialize(*this);
 
-		char* objectPtr = (char*)&object;
-		char* sourcePtr = (char*)&source;
-		auto fields = object.GetType().GetFieldsWithBaseClasses();
-		for (auto field : fields)
-		{
-			if (!field->GetAttribute<SerializableAttribute>())
-				continue;
+		const ObjectType& type = dynamic_cast<const ObjectType&>(object.GetType());
+		void* objectPtr = type.DynamicCastFromIObject(const_cast<IObject*>(&object));
+		void* sourcePtr = type.DynamicCastFromIObject(const_cast<IObject*>(&source));
 
-			if (field->GetType()->IsBasedOn(TypeOf(IObject)))
-			{
-				bool usedConverter = false;
-				for (auto conv : mDataConverters)
-				{
-					if (conv->IsConvertsType(&object.GetType()))
-					{
-						if (!field->IsValueEquals(objectPtr, sourcePtr))
-							conv->ToData(&object, *AddNode(field->GetName()));
-
-						usedConverter = true;
-
-						break;
-					}
-				}
-
-				if (usedConverter)
-					continue;
-
-				DataNode* newFieldNode = mnew DataNode();
-				newFieldNode->SetName(field->GetName());
-
-				newFieldNode->SetValueDelta(*(IObject*)field->GetValuePtr(objectPtr), 
-								      		*(IObject*)field->GetValuePtr(sourcePtr));
-
-				if (!newFieldNode->IsEmpty())
-					AddNode(newFieldNode);
-				else
-					delete newFieldNode;                 
-
-				continue;
-			}
-
-			if (!field->IsValueEquals(objectPtr, sourcePtr))
-			{
-				DataNode* newFieldNode = mnew DataNode();
-				newFieldNode->SetName(field->GetName());
-
-				field->SerializeFromObject(objectPtr, *newFieldNode); 
-				
-				if (!newFieldNode->IsEmpty())
-					AddNode(newFieldNode);
-				else
-					delete newFieldNode;
-			}
-		}
+		helper::WriteObject(objectPtr, sourcePtr, type, *this);
 
 		return *this;
 	}
@@ -393,46 +432,65 @@ namespace o2
 
 	void DataNode::GetValueDelta(IObject& object, const IObject& source) const
 	{
+		struct helper
+		{
+			static void ReadObject(void* object, void* source, const ObjectType& type, const DataNode& node)
+			{
+				for (auto baseType : type.GetBaseTypes())
+				{
+					const ObjectType* baseObjectType = dynamic_cast<const ObjectType*>(baseType.type);
+					if (!baseObjectType)
+						continue;
+
+					void* baseObject = (*baseType.dynamicCastFunc)(object);
+					void* baseSourceObject = (*baseType.dynamicCastFunc)(source);
+					ReadObject(baseObject, baseSourceObject, *baseObjectType, node);
+				}
+
+				for (auto field : type.GetFields())
+				{
+					if (!field->GetAttribute<SerializableAttribute>())
+						continue;
+
+					auto fldNode = node.GetNode(field->GetName());
+					if (fldNode)
+					{
+						if (field->GetType()->IsBasedOn(TypeOf(IObject)))
+						{
+							bool usedConverter = false;
+							for (auto conv : mDataConverters)
+							{
+								if (conv->IsConvertsType(field->GetType()))
+								{
+									conv->FromData(field->GetValuePtr(object), node);
+									usedConverter = true;
+									break;
+								}
+							}
+
+							if (usedConverter)
+								continue;
+
+							fldNode->GetValueDelta(*(IObject*)field->GetValuePtr(object),
+												   *(IObject*)field->GetValuePtr(source));
+						}
+						else field->DeserializeFromObject(object, *fldNode);
+					}
+					else field->CopyValue(object, source);
+				}
+			}
+		};
+
 		if (!object.GetType().IsBasedOn(source.GetType()) && !source.GetType().IsBasedOn(object.GetType()))
 		{
 			GetValue(object);
 			return;
 		}
 
-		char* objectPtr = (char*)&object;
-		char* sourcePtr = (char*)&source;
-		auto fields = object.GetType().GetFieldsWithBaseClasses();
-		for (auto field : fields)
-		{
-			if (!field->GetAttribute<SerializableAttribute>())
-				continue;
-
-			auto fldNode = GetNode(field->GetName());
-			if (fldNode)
-			{
-				if (field->GetType()->IsBasedOn(TypeOf(IObject)))
-				{
-					bool usedConverter = false;
-					for (auto conv : mDataConverters)
-					{
-						if (conv->IsConvertsType(field->GetType()))
-						{
-							conv->FromData(field->GetValuePtr(objectPtr), *this);
-							usedConverter = true;
-							break;
-						}
-					}
-
-					if (usedConverter)
-						continue;
-
-					fldNode->GetValueDelta(*(IObject*)field->GetValuePtr(objectPtr),
-										   *(IObject*)field->GetValuePtr(sourcePtr));
-				}
-				else field->DeserializeFromObject(objectPtr, *fldNode);
-			}
-			else field->CopyValue(objectPtr, sourcePtr);
-		}
+		const ObjectType& type = dynamic_cast<const ObjectType&>(object.GetType());
+		void* objectPtr = type.DynamicCastFromIObject(const_cast<IObject*>(&object));
+		void* sourcePtr = type.DynamicCastFromIObject(const_cast<IObject*>(&source));
+		helper::ReadObject(objectPtr, sourcePtr, type, *this);
 
 		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
 			((ISerializable&)object).OnDeserialized(*this);
@@ -440,18 +498,37 @@ namespace o2
 
 	void DataNode::GetValueRaw(IObject& object) const
 	{
-		char* thisPtr = (char*)&object;
-		auto fields = object.GetType().GetFieldsWithBaseClasses();
-		for (auto field : fields)
+
+		struct helper
 		{
-			auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
-			if (srlzAttribute)
+			static void ReadObject(void* object, const ObjectType& type, const DataNode& node)
 			{
-				auto fldNode = GetNode(field->GetName());
-				if (fldNode)
-					field->DeserializeFromObject(thisPtr, *fldNode);
+				for (auto baseType : type.GetBaseTypes())
+				{
+					const ObjectType* baseObjectType = dynamic_cast<const ObjectType*>(baseType.type);
+					if (!baseObjectType)
+						continue;
+
+					void* baseObject = (*baseType.dynamicCastFunc)(object);
+					ReadObject(baseObject, *baseObjectType, node);
+				}
+
+				for (auto field : type.GetFields())
+				{
+					auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
+					if (srlzAttribute)
+					{
+						auto fldNode = node.GetNode(field->GetName());
+						if (fldNode)
+							field->DeserializeFromObject(object, *fldNode);
+					}
+				}
 			}
-		}
+		};
+
+		const ObjectType& type = dynamic_cast<const ObjectType&>(object.GetType());
+		void* objectPtr = type.DynamicCastFromIObject(const_cast<IObject*>(&object));
+		helper::ReadObject(objectPtr, type, *this);
 
 		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
 			((ISerializable&)object).OnDeserialized(*this);

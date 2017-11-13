@@ -381,7 +381,7 @@ namespace Editor
 			{
 				Undock();
 
-				UpdateLayout(true);
+				SetLayoutDirty();
 
 				Vec2F anchor = (layout->worldLeftTop + layout->worldRightTop)*0.5f;
 
@@ -516,7 +516,7 @@ namespace Editor
 		mDockingFrameTarget = layout->GetWorldRect();
 
 		targetDock->ArrangeChildWindows();
-		targetDock->UpdateLayout();
+		targetDock->SetLayoutDirty();
 	}
 
 	void UIDockableWindow::PlaceNonLineDock(UIDockWindowPlace* targetDock, Side dockPosition)
@@ -741,7 +741,7 @@ namespace Editor
 			if (!parent->GetChildWidgets().IsEmpty())
 			{
 				parent->ArrangeChildWindows();
-				parent->UpdateLayout(true);
+				parent->SetLayoutDirty();
 			}
 			else
 			{

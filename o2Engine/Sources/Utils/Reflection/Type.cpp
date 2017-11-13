@@ -3,6 +3,7 @@
 #include "Utils/Data/DataNode.h"
 #include "Utils/IObject.h"
 #include "Utils/Reflection/Reflection.h"
+#include "Animation/Animation.h"
 
 namespace o2
 {
@@ -159,15 +160,11 @@ namespace o2
 
 		String res;
 
-		for (auto baseType : mBaseTypes)
-		{
-			auto baseRes = baseType.type->GetFieldPath((*baseType.dynamicCastFunc)(object), targetObject, fieldInfo);
-			if (fieldInfo)
-				return baseRes;
-		}
-
 		for (auto field : mFields)
 		{
+			if (field->HasAttribute<ExcludePointerSearchAttribute>())
+				continue;
+
 			void* fieldObject = field->GetValuePtr(object);
 
 			if (fieldObject == nullptr)
@@ -191,21 +188,24 @@ namespace o2
 			}
 		}
 
+		for (auto baseType : mBaseTypes)
+		{
+			auto baseRes = baseType.type->GetFieldPath((*baseType.dynamicCastFunc)(object), targetObject, fieldInfo);
+			if (fieldInfo)
+				return baseRes;
+		}
+
 		return res;
 	}
 
 	FieldInfo* Type::SearchFieldPath(void* obj, void* target, const String& path, String& res,
 									 Vector<SearchPassedObject>& passedObjects) const
 	{
-		for (auto baseType : mBaseTypes)
-		{
-			auto baseRes = baseType.type->SearchFieldPath((*baseType.dynamicCastFunc)(obj), target, path, res, passedObjects);
-			if (baseRes)
-				return baseRes;
-		}
-
 		for (auto field : mFields)
 		{
+			if (field->HasAttribute<ExcludePointerSearchAttribute>())
+				continue;
+
 			void* fieldObj = field->GetValuePtr(obj);
 
 			if (fieldObj == nullptr)
@@ -227,6 +227,13 @@ namespace o2
 				return childField;
 		}
 
+		for (auto baseType : mBaseTypes)
+		{
+			auto baseRes = baseType.type->SearchFieldPath((*baseType.dynamicCastFunc)(obj), target, path, res, passedObjects);
+			if (baseRes)
+				return baseRes;
+		}
+
 		return nullptr;
 	}
 
@@ -234,12 +241,6 @@ namespace o2
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
-
-		for (auto baseType : mBaseTypes)
-		{
-			if (auto res = baseType.type->GetFieldPtr((*baseType.dynamicCastFunc)(object), path, fieldInfo))
-				return res;
-		}
 
 		for (auto field : mFields)
 		{
@@ -260,6 +261,12 @@ namespace o2
 					return field->SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo);
 				}
 			}
+		}
+
+		for (auto baseType : mBaseTypes)
+		{
+			if (auto res = baseType.type->GetFieldPtr((*baseType.dynamicCastFunc)(object), path, fieldInfo))
+				return res;
 		}
 
 		return nullptr;
@@ -320,33 +327,12 @@ namespace o2
 	{
 		int count = GetObjectVectorSize(obj);
 
-		auto allFields = mElementType->GetFieldsWithBaseClasses();
 		for (int i = 0; i < count; i++)
 		{
 			void* elementPtr = GetObjectVectorElementPtr(obj, i);
-			for (auto field : allFields)
-			{
-				void* fieldObj = field->GetValuePtr(elementPtr);
-
-				if (fieldObj == nullptr)
-					continue;
-
-				if (passedObjects.Contains(SearchPassedObject(fieldObj, field->GetType())))
-					continue;
-
-				passedObjects.Add(SearchPassedObject(fieldObj, field->GetType()));
-
-				String newPath = path + "/" + (String)i + "/" + field->GetName();
-				if (fieldObj == target)
-				{
-					res = newPath;
-					return field;
-				}
-
-				FieldInfo* childField = field->SearchFieldPath(fieldObj, target, newPath, res, passedObjects);
-				if (childField)
-					return childField;
-			}
+			FieldInfo* fieldInfo = mElementType->SearchFieldPath(elementPtr, target, path + "/" + (String)i, res, passedObjects);
+			if (fieldInfo)
+				return fieldInfo;
 		}
 
 		return nullptr;
@@ -436,6 +422,17 @@ namespace o2
 	const Type* PointerType::GetUnpointedType() const
 	{
 		return mUnptrType;
+	}
+
+	FieldInfo* PointerType::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+											Vector<SearchPassedObject>& passedObjects) const
+	{
+		return mUnptrType->SearchFieldPath(*(void**)obj, target, path, res, passedObjects);
+	}
+
+	void* PointerType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	{
+		return mUnptrType->GetFieldPtr(*(void**)object, path, fieldInfo);
 	}
 
 	PropertyType::PropertyType(const String& name, ITypeSampleCreator* creator, int size):

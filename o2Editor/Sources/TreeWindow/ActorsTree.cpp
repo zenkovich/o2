@@ -235,7 +235,7 @@ namespace Editor
 			if (!assetsScroll->mInstSceneDragActors.IsEmpty())
 			{
 				UpdateNodesView(true);
-				UpdateLayout(true);
+				SetLayoutDirty();
 
 				for (auto instActor : assetsScroll->mInstSceneDragActors)
 				{

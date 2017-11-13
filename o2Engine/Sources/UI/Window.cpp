@@ -47,7 +47,7 @@ namespace o2
 			closeBtn->onClick += [&]() { Hide(); };
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		InitializeHandles();
 		InitializeProperties();
@@ -120,7 +120,7 @@ namespace o2
 	{
 		widget->mParent = this;
 		mWindowElements.Add(widget);
-		UpdateLayout();
+		SetLayoutDirty();
 
 		return widget;
 	}
@@ -129,7 +129,7 @@ namespace o2
 	{
 		mWindowElements.Remove(widget);
 		delete widget;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIWindow::RemoveAllWindowElements()
@@ -137,7 +137,7 @@ namespace o2
 		for (auto elem : mWindowElements)
 			delete elem;
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIWindow::SetIcon(Sprite* icon)
@@ -291,7 +291,7 @@ namespace o2
 
 		RetargetStatesAnimations();
 		BindHandlesInteractableToVisibility();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIWindow::UpdateTransparency()
