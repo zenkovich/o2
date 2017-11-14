@@ -11,17 +11,20 @@
 
 namespace Editor
 {
-	ScaleTool::ScaleTool():
-		mHorDragHandle(mnew Sprite("ui/UI2_right_scale_arrow.png"),
-					   mnew Sprite("ui/UI2_right_scale_arrow_select.png"),
-					   mnew Sprite("ui/UI2_right_scale_arrow_pressed.png")),
-		mVerDragHandle(mnew Sprite("ui/UI2_up_scale_arrow.png"),
-					   mnew Sprite("ui/UI2_up_scale_arrow_select.png"),
-					   mnew Sprite("ui/UI2_up_scale_arrow_pressed.png")),
-		mBothDragHandle(mnew Sprite("ui/UI2_scale_both.png"),
-						mnew Sprite("ui/UI2_scale_both_select.png"),
-						mnew Sprite("ui/UI2_scale_both_pressed.png"))
+	ScaleTool::ScaleTool()
 	{
+		mHorDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_right_scale_arrow.png"),
+										 mnew Sprite("ui/UI2_right_scale_arrow_select.png"),
+										 mnew Sprite("ui/UI2_right_scale_arrow_pressed.png"));
+
+		mVerDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_up_scale_arrow.png"),
+										 mnew Sprite("ui/UI2_up_scale_arrow_select.png"),
+										 mnew Sprite("ui/UI2_up_scale_arrow_pressed.png"));
+
+		mBothDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_scale_both.png"),
+										  mnew Sprite("ui/UI2_scale_both_select.png"),
+										  mnew Sprite("ui/UI2_scale_both_pressed.png"));
+
 		mHorDragHandle.enabled = false;
 		mVerDragHandle.enabled = false;
 		mBothDragHandle.enabled = false;
@@ -220,39 +223,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::ScaleTool)
-{
-	BASE_CLASS(Editor::SelectionTool);
-
-	PUBLIC_FIELD(bothScaleSence);
-	PROTECTED_FIELD(mHorDragHandle);
-	PROTECTED_FIELD(mVerDragHandle);
-	PROTECTED_FIELD(mBothDragHandle);
-	PROTECTED_FIELD(mHandlesAngle);
-	PROTECTED_FIELD(mSceneHandlesPos);
-	PROTECTED_FIELD(mHandlesSize);
-	PROTECTED_FIELD(mLastHorHandlePos);
-	PROTECTED_FIELD(mLastVerHandlePos);
-	PROTECTED_FIELD(mLastBothHandlePos);
-	PROTECTED_FIELD(mBeforeTransforms);
-
-	PROTECTED_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, DrawScreen);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
-	PROTECTED_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
-	PROTECTED_FUNCTION(void, OnHorDragHandleMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnVerDragHandleMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnBothDragHandleMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateHandlesPosition);
-	PROTECTED_FUNCTION(void, UpdateHandlesAngleAndPositions, float);
-	PROTECTED_FUNCTION(void, UpdateHandlesPositions);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, ScaleSelectedActors, const Vec2F&);
-	PROTECTED_FUNCTION(void, HandlePressed);
-	PROTECTED_FUNCTION(void, HandleReleased);
-}
-END_META;
+DECLARE_CLASS(Editor::ScaleTool);

@@ -125,6 +125,9 @@ namespace o2
 		int           mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when cursor pressed on this. Sets state "pressed" to true
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
@@ -157,3 +160,70 @@ namespace o2
 		void InitializeProperties();
 	};
 }
+
+CLASS_BASES_META(o2::UICustomDropDown)
+{
+	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::DrawableCursorEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(o2::UICustomDropDown)
+{
+	PUBLIC_FIELD(selectedItem);
+	PUBLIC_FIELD(selectedItemPos);
+	PUBLIC_FIELD(item);
+	PUBLIC_FIELD(itemsCount);
+	PUBLIC_FIELD(onSelectedPos);
+	PUBLIC_FIELD(onSelectedItem);
+	PROTECTED_FIELD(mItemsList).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mClipLayout).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAbsoluteClip);
+	PROTECTED_FIELD(mMaxListItems).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::UICustomDropDown)
+{
+
+	typedef const Function<bool(UIWidget*, UIWidget*)>& _tmp1;
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Expand);
+	PUBLIC_FUNCTION(void, Collapse);
+	PUBLIC_FUNCTION(bool, IsExpanded);
+	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
+	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
+	PUBLIC_FUNCTION(UIVerticalLayout*, GetLayout);
+	PUBLIC_FUNCTION(UIWidget*, AddItem);
+	PUBLIC_FUNCTION(UIWidget*, AddItem, int);
+	PUBLIC_FUNCTION(void, RemoveItem, UIWidget*);
+	PUBLIC_FUNCTION(void, RemoveItem, int);
+	PUBLIC_FUNCTION(void, MoveItem, int, int);
+	PUBLIC_FUNCTION(void, MoveItem, UIWidget*, int);
+	PUBLIC_FUNCTION(int, GetItemPosition, UIWidget*);
+	PUBLIC_FUNCTION(UIWidget*, GetItem, int);
+	PUBLIC_FUNCTION(void, RemoveAllItems);
+	PUBLIC_FUNCTION(void, SortItems, _tmp1);
+	PUBLIC_FUNCTION(int, GetItemsCount);
+	PUBLIC_FUNCTION(void, SelectItem, UIWidget*);
+	PUBLIC_FUNCTION(void, SelectItemAt, int);
+	PUBLIC_FUNCTION(UIWidget*, GetSelectedItem);
+	PUBLIC_FUNCTION(int, GetSelectedItemPosition);
+	PUBLIC_FUNCTION(UICustomList*, GetListView);
+	PUBLIC_FUNCTION(void, SetMaxListSizeInItems, int);
+	PUBLIC_FUNCTION(void, SetClippingLayout, const Layout&);
+	PUBLIC_FUNCTION(Layout, GetClippingLayout);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, OnItemSelected);
+	PROTECTED_FUNCTION(void, OnSelectionChanged);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

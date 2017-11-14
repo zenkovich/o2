@@ -225,12 +225,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::AssetTree::AssetNode)
-{
-	BASE_CLASS(o2::ITreeNode<AssetNode>);
-	BASE_CLASS(o2::AssetInfo);
-
-	PUBLIC_FIELD(meta);
-	PUBLIC_FIELD(time);
-}
-END_META;
+DECLARE_CLASS(o2::AssetTree::AssetNode);

@@ -106,36 +106,8 @@ namespace o2
 
 }
 
-CLASS_META(o2::FolderAsset)
-{
-	BASE_CLASS(o2::Asset);
+DECLARE_CLASS(o2::FolderAsset);
 
-	PUBLIC_FIELD(meta);
-	PUBLIC_FIELD(insideAssets);
-	PROTECTED_FIELD(mContainingAssetsInfos);
+DECLARE_CLASS(o2::FolderAssetRef);
 
-	PUBLIC_FUNCTION(AssetInfosVec, GetContainingAssetsInfos);
-	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
-
-CLASS_META(o2::FolderAssetRef)
-{
-	BASE_CLASS(o2::AssetRef);
-
-
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-}
-END_META;
-
-CLASS_META(o2::FolderAsset::MetaInfo)
-{
-	BASE_CLASS(o2::Asset::IMetaInfo);
-
-
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-}
-END_META;
+DECLARE_CLASS(o2::FolderAsset::MetaInfo);

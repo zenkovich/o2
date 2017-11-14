@@ -80,21 +80,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::SceneDrawable)
-{
-	BASE_CLASS(o2::ISerializable);
-	BASE_CLASS(o2::IDrawable);
-
-	PUBLIC_FIELD(drawDepth);
-	PROTECTED_FIELD(mLayer);
-	PROTECTED_FIELD(mDrawingDepth).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
-	PUBLIC_FUNCTION(float, GetDrawingDepth);
-	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
-	PROTECTED_FUNCTION(void, OnExcludeFromScene);
-	PROTECTED_FUNCTION(void, OnIncludeToScene);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::SceneDrawable);

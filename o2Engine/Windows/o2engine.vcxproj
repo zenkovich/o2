@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -49,7 +49,7 @@
     <OutDir>$(SolutionDir)Tmp\</OutDir>
     <IntDir>$(SolutionDir)Tmp\$(Configuration)\Engine\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -61,8 +61,8 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <MinimalRebuild>true</MinimalRebuild>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
     </ClCompile>
     <Link>
@@ -282,6 +282,7 @@
     <ClInclude Include="..\Sources\Utils\Reflection\FieldInfo.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\SearchPassedObject.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Type.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\TypeTraits.h" />
     <ClInclude Include="..\Sources\Utils\Serializable.h" />

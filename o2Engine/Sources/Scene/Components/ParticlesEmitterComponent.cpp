@@ -1,7 +1,6 @@
 #include "ParticlesEmitterComponent.h"
 
 #include "Scene/Actor.h"
-#include "Utils/EditorPropertyAttribute.h"
 
 namespace o2
 {
@@ -45,15 +44,4 @@ namespace o2
 
 }
 
-CLASS_META(o2::ParticlesEmitterComponent)
-{
-	BASE_CLASS(o2::DrawableComponent);
-
-	PROTECTED_FIELD(mEmitter).EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(String, GetName);
-	PROTECTED_FUNCTION(void, OnTransformUpdated);
-}
-END_META;
+DECLARE_CLASS(o2::ParticlesEmitterComponent);

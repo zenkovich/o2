@@ -150,26 +150,6 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::WindowsLayout)
-{
-	BASE_CLASS(o2::ISerializable);
+DECLARE_CLASS(Editor::WindowsLayout);
 
-	PUBLIC_FIELD(mainDock).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(windows).SERIALIZABLE_ATTRIBUTE();
-
-	PROTECTED_FUNCTION(void, RestoreDock, WindowDockPlace*, UIDockWindowPlace*);
-	PROTECTED_FUNCTION(void, CleanEmptyDocks, UIDockWindowPlace*);
-}
-END_META;
-
-CLASS_META(Editor::WindowsLayout::WindowDockPlace)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(anchors).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(windows).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(childs).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, RetrieveLayout, UIWidget*);
-}
-END_META;
+DECLARE_CLASS(Editor::WindowsLayout::WindowDockPlace);

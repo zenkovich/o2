@@ -35,3 +35,24 @@ namespace Editor
 		void PostInitializeWindow();
 	};
 }
+
+CLASS_BASES_META(Editor::SceneWindow)
+{
+	BASE_CLASS(Editor::IEditorWindow);
+}
+END_META;
+CLASS_FIELDS_META(Editor::SceneWindow)
+{
+	PROTECTED_FIELD(mEditWidget);
+	PROTECTED_FIELD(mLayersView);
+	PROTECTED_FIELD(mGizomsView);
+}
+END_META;
+CLASS_METHODS_META(Editor::SceneWindow)
+{
+
+	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, InitializeLayersView);
+	PROTECTED_FUNCTION(void, PostInitializeWindow);
+}
+END_META;

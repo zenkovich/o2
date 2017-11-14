@@ -51,7 +51,9 @@ namespace o2
 				if (targetObj)
 				{
 					FieldInfo* fieldInfo = nullptr;
-					def.mTargetPtr = targetObj->GetType().GetFieldPtr(mTarget, def.mTargetPath, fieldInfo);
+					const ObjectType* type = dynamic_cast<const ObjectType*>(&targetObj->GetType());
+					void* castedTarget = type->DynamicCastFromIObject(targetObj);
+					def.mTargetPtr = type->GetFieldPtr(castedTarget, def.mTargetPath, fieldInfo);
 
 					if (!fieldInfo)
 						o2Debug.LogWarning("Can't find object %s for animating", def.mTargetPath);
@@ -84,7 +86,9 @@ namespace o2
 			for (auto& val : mAnimatedValues)
 			{
 				FieldInfo* fieldInfo = nullptr;
-				val.mTargetPtr = mTarget->GetType().GetFieldPtr(mTarget, val.mTargetPath, fieldInfo);
+				const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
+				void* castedTarget = type->DynamicCastFromIObject(mTarget);
+				val.mTargetPtr = type->GetFieldPtr(castedTarget, val.mTargetPath, fieldInfo);
 
 				if (!fieldInfo)
 				{
@@ -187,33 +191,6 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::Animation)
-{
-	BASE_CLASS(o2::IAnimation);
+DECLARE_CLASS(o2::Animation);
 
-	PROTECTED_FIELD(mAnimatedValues).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mTarget);
-	PROTECTED_FIELD(mAnimationState);
-
-	PUBLIC_FUNCTION(void, SetTarget, IObject*, bool);
-	PUBLIC_FUNCTION(IObject*, GetTarget);
-	PUBLIC_FUNCTION(void, Clear);
-	PUBLIC_FUNCTION(AnimatedValuesVec&, GetAnimationsValues);
-	PUBLIC_FUNCTION(const AnimatedValuesVec&, GetAnimationsValues);
-	PUBLIC_FUNCTION(bool, RemoveAnimationValue, const String&);
-	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(void, RecalculateDuration);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnAnimatedValueAdded, AnimatedValueDef&);
-}
-END_META;
-
-CLASS_META(o2::Animation::AnimatedValueDef)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(mTargetPath).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mTargetPtr);
-	PUBLIC_FIELD(mAnimatedValue).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
+DECLARE_CLASS(o2::Animation::AnimatedValueDef);

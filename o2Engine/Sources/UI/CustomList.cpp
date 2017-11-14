@@ -48,7 +48,7 @@ namespace o2
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		InitializeProperties();
 	}
@@ -62,26 +62,7 @@ namespace o2
 
 	UICustomList& UICustomList::operator=(const UICustomList& other)
 	{
-		delete mItemSample;
-		delete mSelectionDrawable;
-		delete mHoverDrawable;
-		mVerLayout = nullptr;
-
-		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
-
-		mSelectionLayout = other.mSelectionLayout;
-		mHoverLayout = other.mHoverLayout;
-
-		UIScrollArea::operator=(other);
-
-		mVerLayout = GetChildByType<UIVerticalLayout>();
-		mItemSample = other.mItemSample->CloneAs<UIWidget>();
-		mItemSample->UpdateLayout();
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -142,7 +123,7 @@ namespace o2
 		delete mItemSample;
 		mItemSample = sample;
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIWidget* UICustomList::GetItemSample() const
@@ -261,7 +242,7 @@ namespace o2
 		onSelectedPos(itemPos);
 		onSelectedItem(item);
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UICustomList::SelectItemAt(int position)
@@ -290,7 +271,7 @@ namespace o2
 		}
 
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UICustomList::SetSelectedItems(const Vector<int>& items)
@@ -495,6 +476,31 @@ namespace o2
 		return nullptr;
 	}
 
+	void UICustomList::CopyData(const Actor& otherActor)
+	{
+		const UICustomList& other = dynamic_cast<const UICustomList&>(otherActor);
+
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mHoverDrawable;
+		mVerLayout = nullptr;
+
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+
+		mSelectionLayout = other.mSelectionLayout;
+		mHoverLayout = other.mHoverLayout;
+
+		UIScrollArea::CopyData(other);
+
+		mVerLayout = GetChildByType<UIVerticalLayout>();
+		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample->SetLayoutDirty();
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+	}
+
 	void UICustomList::OnDeserialized(const DataNode& node)
 	{
 		UIScrollArea::OnDeserialized(node);
@@ -590,84 +596,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UICustomList)
-{
-	BASE_CLASS(o2::UIScrollArea);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
-
-	PUBLIC_FIELD(selectedItems);
-	PUBLIC_FIELD(selectedItem);
-	PUBLIC_FIELD(selectedItemPos);
-	PUBLIC_FIELD(item);
-	PUBLIC_FIELD(itemsCount);
-	PUBLIC_FIELD(onSelectedPos);
-	PUBLIC_FIELD(onSelectedItem);
-	PROTECTED_FIELD(mVerLayout);
-	PROTECTED_FIELD(mItemSample).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mMultiSelection).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectedItems);
-	PROTECTED_FIELD(mSelectionDrawable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHoverDrawable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectionLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHoverLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mCurrentHoverRect);
-	PROTECTED_FIELD(mTargetHoverRect);
-	PROTECTED_FIELD(mLastHoverCheckCursor);
-	PROTECTED_FIELD(mLastSelectCheckCursor);
-	PROTECTED_FIELD(mSelectionSpritesPool);
-
-	typedef const Function<bool(UIWidget*, UIWidget*)>& _tmp1;
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
-	PUBLIC_FUNCTION(UIVerticalLayout*, GetLayout);
-	PUBLIC_FUNCTION(UIWidget*, AddItem);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, int);
-	PUBLIC_FUNCTION(void, RemoveItem, UIWidget*);
-	PUBLIC_FUNCTION(void, RemoveItem, int);
-	PUBLIC_FUNCTION(void, MoveItem, int, int);
-	PUBLIC_FUNCTION(void, MoveItem, UIWidget*, int);
-	PUBLIC_FUNCTION(int, GetItemPosition, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, GetItem, int);
-	PUBLIC_FUNCTION(void, RemoveAllItems);
-	PUBLIC_FUNCTION(void, SortItems, _tmp1);
-	PUBLIC_FUNCTION(int, GetItemsCount);
-	PUBLIC_FUNCTION(void, SelectItem, UIWidget*);
-	PUBLIC_FUNCTION(void, SelectItemAt, int);
-	PUBLIC_FUNCTION(void, SetSelectedItems, const Vector<int>&);
-	PUBLIC_FUNCTION(void, ClearSelection);
-	PUBLIC_FUNCTION(Vector<int>, GetSelectedItems);
-	PUBLIC_FUNCTION(int, GetSelectedItemPos);
-	PUBLIC_FUNCTION(UIWidget*, GetSelectedItem);
-	PUBLIC_FUNCTION(void, SetMultiselectionAvailable, bool);
-	PUBLIC_FUNCTION(bool, IsMultiselectionAvailable);
-	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
-	PUBLIC_FUNCTION(Sprite*, GetHoverDrawable);
-	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
-	PUBLIC_FUNCTION(void, SetHoverDrawableLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
-	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
-	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateSelectionSprites);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
-	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
-	PROTECTED_FUNCTION(Sprite*, GetSelectionSprite);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UICustomList);

@@ -27,8 +27,7 @@ namespace o2
 
 	UIList& UIList::operator=(const UIList& other)
 	{
-		UICustomList::operator=(other);
-		RetargetStatesAnimations();
+		CopyData(other);
 		return *this;
 	}
 
@@ -117,6 +116,13 @@ namespace o2
 		return mSelectedItems.Select<WString>([&](auto x) { return GetItemText(x.idx); });
 	}
 
+	void UIList::CopyData(const Actor& otherActor)
+	{
+		const UIList& other = dynamic_cast<const UIList&>(otherActor);
+		UICustomList::CopyData(other);
+		RetargetStatesAnimations();
+	}
+
 	void UIList::OnSelectionChanged()
 	{
 		onSelectedText(GetSelectedItemText());
@@ -130,27 +136,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIList)
-{
-	BASE_CLASS(o2::UICustomList);
-
-	PUBLIC_FIELD(value);
-	PUBLIC_FIELD(values);
-	PUBLIC_FIELD(textItem);
-	PUBLIC_FIELD(onSelectedText);
-
-	PUBLIC_FUNCTION(int, AddItem, const WString&);
-	PUBLIC_FUNCTION(int, AddItem, const WString&, int);
-	PUBLIC_FUNCTION(void, AddItems, const Vector<WString>&);
-	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
-	PUBLIC_FUNCTION(int, FindItem, const WString&);
-	PUBLIC_FUNCTION(WString, GetItemText, int);
-	PUBLIC_FUNCTION(Vector<WString>, GetAllItemsText);
-	PUBLIC_FUNCTION(WString, GetSelectedItemText);
-	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
-	PUBLIC_FUNCTION(void, SetSelectedItems, const Vector<WString>&);
-	PUBLIC_FUNCTION(Vector<WString>, GetSelectedItemsText);
-	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, initializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIList);

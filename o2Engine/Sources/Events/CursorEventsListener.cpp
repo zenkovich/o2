@@ -18,7 +18,8 @@ namespace o2
 
 	CursorAreaEventsListener::~CursorAreaEventsListener()
 	{
-		o2Events.UnregCursorAreaListener(this);
+		if (EventSystem::IsSingletonInitialzed())
+			o2Events.UnregCursorAreaListener(this);
 	}
 
 	bool CursorAreaEventsListener::IsUnderPoint(const Vec2F& point)

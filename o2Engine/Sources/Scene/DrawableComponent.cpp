@@ -61,14 +61,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::DrawableComponent)
-{
-	BASE_CLASS(o2::Component);
-	BASE_CLASS(o2::SceneDrawable);
-
-
-	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
-	PROTECTED_FUNCTION(void, UpdateEnabled);
-	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
-}
-END_META;
+DECLARE_CLASS(o2::DrawableComponent);

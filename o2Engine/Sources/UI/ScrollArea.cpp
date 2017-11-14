@@ -44,7 +44,7 @@ namespace o2
 		else mVerScrollBar = nullptr;
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIScrollArea::~UIScrollArea()
@@ -68,54 +68,7 @@ namespace o2
 
 	UIScrollArea& UIScrollArea::operator=(const UIScrollArea& other)
 	{
-		UIWidget::operator=(other);
-
-		if (mHorScrollBar)
-		{
-			if (mOwnHorScrollBar)
-				delete mHorScrollBar;
-			else
-				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
-		}
-
-		if (mVerScrollBar)
-		{
-			if (mOwnVerScrollBar)
-				delete mVerScrollBar;
-			else
-				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
-		}
-
-		mClipAreaLayout      = other.mClipAreaLayout;
-		mViewAreaLayout      = other.mViewAreaLayout;
-		mScrollPos           = other.mScrollPos;
-		mOwnHorScrollBar     = other.mOwnHorScrollBar;
-		mOwnVerScrollBar     = other.mOwnVerScrollBar;
-		mScrollSpeedDamp     = other.mScrollSpeedDamp;
-		mEnableScrollsHiding = other.mEnableScrollsHiding;
-
-		if (mOwnHorScrollBar)
-		{
-			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
-			mHorScrollBar->mParent = this;
-			mHorScrollBar->layout->mData->drivenByParent = true;
-			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
-		}
-		else mHorScrollBar = nullptr;
-
-		if (mOwnVerScrollBar)
-		{
-			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
-			mVerScrollBar->mParent = this;
-			mVerScrollBar->layout->mData->drivenByParent = true;
-			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
-		}
-		else mVerScrollBar = nullptr;
-
-		RetargetStatesAnimations();
-		UpdateScrollParams();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -305,7 +258,7 @@ namespace o2
 		}
 
 		UpdateScrollParams();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIHorizontalScrollBar* UIScrollArea::GetHorizontalScrollbar() const
@@ -334,7 +287,7 @@ namespace o2
 		}
 
 		UpdateScrollParams();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIVerticalScrollBar* UIScrollArea::GetVerticalScrollbar() const
@@ -365,7 +318,7 @@ namespace o2
 	void UIScrollArea::SetClippingLayout(const Layout& clipLayout)
 	{
 		mClipAreaLayout = clipLayout;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	Layout UIScrollArea::GetClippingLayout() const
@@ -376,7 +329,7 @@ namespace o2
 	void UIScrollArea::SetViewLayout(const Layout& viewLayout)
 	{
 		mViewAreaLayout = viewLayout;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	Layout UIScrollArea::GetViewLayout() const
@@ -761,6 +714,59 @@ namespace o2
 		OnScrolled();
 	}
 
+	void UIScrollArea::CopyData(const Actor& otherActor)
+	{
+		const UIScrollArea& other = dynamic_cast<const UIScrollArea&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		if (mHorScrollBar)
+		{
+			if (mOwnHorScrollBar)
+				delete mHorScrollBar;
+			else
+				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
+		}
+
+		if (mVerScrollBar)
+		{
+			if (mOwnVerScrollBar)
+				delete mVerScrollBar;
+			else
+				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
+		}
+
+		mClipAreaLayout      = other.mClipAreaLayout;
+		mViewAreaLayout      = other.mViewAreaLayout;
+		mScrollPos           = other.mScrollPos;
+		mOwnHorScrollBar     = other.mOwnHorScrollBar;
+		mOwnVerScrollBar     = other.mOwnVerScrollBar;
+		mScrollSpeedDamp     = other.mScrollSpeedDamp;
+		mEnableScrollsHiding = other.mEnableScrollsHiding;
+
+		if (mOwnHorScrollBar)
+		{
+			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
+			mHorScrollBar->mParent = this;
+			mHorScrollBar->layout->mData->drivenByParent = true;
+			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
+		}
+		else mHorScrollBar = nullptr;
+
+		if (mOwnVerScrollBar)
+		{
+			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
+			mVerScrollBar->mParent = this;
+			mVerScrollBar->layout->mData->drivenByParent = true;
+			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
+		}
+		else mVerScrollBar = nullptr;
+
+		RetargetStatesAnimations();
+		UpdateScrollParams();
+		SetLayoutDirty();
+	}
+
 	void UIScrollArea::OnSerialize(DataNode& node) const
 	{
 		if (mOwnHorScrollBar)
@@ -821,80 +827,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIScrollArea)
-{
-	BASE_CLASS(o2::UIWidget);
-
-	PUBLIC_FIELD(scroll);
-	PUBLIC_FIELD(horScroll);
-	PUBLIC_FIELD(verScroll);
-	PUBLIC_FIELD(onScrolled);
-	PROTECTED_FIELD(mHorScrollBar);
-	PROTECTED_FIELD(mVerScrollBar);
-	PROTECTED_FIELD(mOwnHorScrollBar);
-	PROTECTED_FIELD(mOwnVerScrollBar);
-	PROTECTED_FIELD(mViewAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAbsoluteViewArea);
-	PROTECTED_FIELD(mClipAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAbsoluteClipArea);
-	PROTECTED_FIELD(mScrollPos).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mScrollSpeed);
-	PROTECTED_FIELD(mScrollSpeedDamp).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mScrollArea);
-	PROTECTED_FIELD(mScrollRange);
-	PROTECTED_FIELD(mEnableHorScroll);
-	PROTECTED_FIELD(mEnableVerScroll);
-	PROTECTED_FIELD(mUnderCursor);
-	PROTECTED_FIELD(mPressedCursor);
-	PROTECTED_FIELD(mPressedScroll);
-	PROTECTED_FIELD(mPressedCursorPos);
-	PROTECTED_FIELD(mSpeedUpdTime);
-	PROTECTED_FIELD(mEnableScrollsHiding).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mShowScrollBarsByCursor).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mLastHorScrollChangeTime);
-	PROTECTED_FIELD(mLastVerScrollChangeTime);
-
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetScroll, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetScrollForcible, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetScroll);
-	PUBLIC_FUNCTION(RectF, GetScrollRange);
-	PUBLIC_FUNCTION(void, ResetScroll);
-	PUBLIC_FUNCTION(void, SetHorizontalScroll, float);
-	PUBLIC_FUNCTION(float, GetHorizontalScroll);
-	PUBLIC_FUNCTION(void, SetVerticalScroll, float);
-	PUBLIC_FUNCTION(float, GetVerticalScroll);
-	PUBLIC_FUNCTION(void, SetHorizontalScrollBar, UIHorizontalScrollBar*, bool);
-	PUBLIC_FUNCTION(UIHorizontalScrollBar*, GetHorizontalScrollbar);
-	PUBLIC_FUNCTION(void, SetVerticalScrollBar, UIVerticalScrollBar*, bool);
-	PUBLIC_FUNCTION(UIVerticalScrollBar*, GetVerticalScrollbar);
-	PUBLIC_FUNCTION(void, SetEnableScrollsHiding, bool);
-	PUBLIC_FUNCTION(bool, IsScrollsHiding);
-	PUBLIC_FUNCTION(void, SetScrollBarsShowingByCursor, bool);
-	PUBLIC_FUNCTION(bool, IsScrollBarsShowingByCursor);
-	PUBLIC_FUNCTION(void, SetClippingLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetClippingLayout);
-	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetViewLayout);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
-	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
-	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
-	PROTECTED_FUNCTION(void, CalculateScrollArea);
-	PROTECTED_FUNCTION(void, UpdateScrollParams);
-	PROTECTED_FUNCTION(void, CheckScrollBarsVisibility);
-	PROTECTED_FUNCTION(void, MoveWidgetAndCheckClipping, UIWidget*, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateScrollBarsLayout);
-	PROTECTED_FUNCTION(void, CheckChildrenClipping);
-	PROTECTED_FUNCTION(void, OnHorScrollChanged, float);
-	PROTECTED_FUNCTION(void, OnVerScrollChanged, float);
-	PROTECTED_FUNCTION(void, OnScrolled);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIScrollArea);

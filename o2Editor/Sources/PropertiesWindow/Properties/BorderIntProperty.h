@@ -209,3 +209,90 @@ namespace Editor
 		void StoreValues(Vector<DataNode>& data) const;
 	};
 }
+
+CLASS_BASES_META(Editor::BorderIProperty)
+{
+	BASE_CLASS(Editor::IPropertyField);
+}
+END_META;
+CLASS_FIELDS_META(Editor::BorderIProperty)
+{
+	PROTECTED_FIELD(mAssignFunc);
+	PROTECTED_FIELD(mGetFunc);
+	PROTECTED_FIELD(mLeftAssignFunc);
+	PROTECTED_FIELD(mLeftGetFunc);
+	PROTECTED_FIELD(mRightAssignFunc);
+	PROTECTED_FIELD(mRightGetFunc);
+	PROTECTED_FIELD(mTopAssignFunc);
+	PROTECTED_FIELD(mTopGetFunc);
+	PROTECTED_FIELD(mBottomAssignFunc);
+	PROTECTED_FIELD(mBottomGetFunc);
+	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mCommonValue);
+	PROTECTED_FIELD(mLeftValuesDifferent);
+	PROTECTED_FIELD(mBottomValuesDifferent);
+	PROTECTED_FIELD(mRightValuesDifferent);
+	PROTECTED_FIELD(mTopValuesDifferent);
+	PROTECTED_FIELD(mPropertyWidget);
+	PROTECTED_FIELD(mRevertBtn);
+	PROTECTED_FIELD(mLeftEditBox);
+	PROTECTED_FIELD(mBottomEditBox);
+	PROTECTED_FIELD(mRightEditBox);
+	PROTECTED_FIELD(mTopEditBox);
+	PROTECTED_FIELD(mLeftDragHangle);
+	PROTECTED_FIELD(mRightDragHangle);
+	PROTECTED_FIELD(mTopDragHangle);
+	PROTECTED_FIELD(mBottomDragHangle);
+}
+END_META;
+CLASS_METHODS_META(Editor::BorderIProperty)
+{
+
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
+	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(void, SetValue, const BorderI&);
+	PUBLIC_FUNCTION(void, SetValueLeft, int);
+	PUBLIC_FUNCTION(void, SetValueRight, int);
+	PUBLIC_FUNCTION(void, SetValueTop, int);
+	PUBLIC_FUNCTION(void, SetValueBottom, int);
+	PUBLIC_FUNCTION(void, SetUnknownValue, const BorderI&);
+	PUBLIC_FUNCTION(void, SetLeftUnknownValue, int);
+	PUBLIC_FUNCTION(void, SetRightUnknownValue, int);
+	PUBLIC_FUNCTION(void, SetTopUnknownValue, int);
+	PUBLIC_FUNCTION(void, SetBottomUnknownValue, int);
+	PUBLIC_FUNCTION(void, CheckRevertableState);
+	PUBLIC_FUNCTION(BorderI, GetCommonValue);
+	PUBLIC_FUNCTION(bool, IsValuesDifferent);
+	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PROTECTED_FUNCTION(void, SetCommonValue, const BorderI&);
+	PROTECTED_FUNCTION(void, SetCommonValueLeft, int);
+	PROTECTED_FUNCTION(void, SetCommonValueRight, int);
+	PROTECTED_FUNCTION(void, SetCommonValueTop, int);
+	PROTECTED_FUNCTION(void, SetCommonValueBottom, int);
+	PROTECTED_FUNCTION(void, OnLeftEdited, const WString&);
+	PROTECTED_FUNCTION(void, OnBottomEdited, const WString&);
+	PROTECTED_FUNCTION(void, OnRightEdited, const WString&);
+	PROTECTED_FUNCTION(void, OnTopEdited, const WString&);
+	PROTECTED_FUNCTION(void, OnLeftDragHandleMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnRightDragHandleMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnTopDragHandleMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnBottomDragHandleMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnLeftMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnLeftMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnRightMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnRightMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnTopMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnTopMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnBottomMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnBottomMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, SetLeftValueByUser, int);
+	PROTECTED_FUNCTION(void, SetRightValueByUser, int);
+	PROTECTED_FUNCTION(void, SetBottomValueByUser, int);
+	PROTECTED_FUNCTION(void, SetTopValueByUser, int);
+	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
+}
+END_META;

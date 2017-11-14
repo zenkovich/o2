@@ -207,35 +207,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::CurveProperty)
-{
-	BASE_CLASS(Editor::IPropertyField);
-
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
-	PROTECTED_FIELD(mCommonValue);
-	PROTECTED_FIELD(mValuesDifferent);
-	PROTECTED_FIELD(mPropertyWidget);
-	PROTECTED_FIELD(mEditBox);
-	PROTECTED_FIELD(mPreviewImage);
-	PROTECTED_FIELD(mRevertBtn);
-	PROTECTED_FIELD(mClickArea);
-
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, Revert);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
-	PUBLIC_FUNCTION(const Curve&, GetCommonValue);
-	PUBLIC_FUNCTION(bool, IsValuesDifferent);
-	PUBLIC_FUNCTION(void, SetValue, const Curve&);
-	PUBLIC_FUNCTION(void, SetUnknownValue, const Curve&);
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
-	PROTECTED_FUNCTION(void, OnValueChanged);
-	PROTECTED_FUNCTION(void, SetCommonValue, const Curve&);
-	PROTECTED_FUNCTION(void, CheckRevertableState);
-	PROTECTED_FUNCTION(void, OnClicked);
-	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
-	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
-}
-END_META;
+DECLARE_CLASS(Editor::CurveProperty);

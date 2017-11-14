@@ -116,9 +116,9 @@ namespace o2
 		float          mDepth = 0.0f;           // Depth of drawable @SERIALIZABLE
 		RectF          mAbsolutePosition;       // Result absolute drawable position
 		RectF          mInteractableArea;       // Interactable area, depends on interactableLayout
-		UIWidget*      mOwnerWidget = nullptr;  // Owner widget pointer
+		UIWidget*      mOwnerWidget = nullptr;  // Owner widget pointer @EXCLUDE_POINTER_SEARCH
 		UIWidgetLayer* mParent = nullptr;       // Pointer to parent layer
-		ChildrenVec      mChildren;                 // Children layers @SERIALIZABLE
+		ChildrenVec    mChildren;                 // Children layers @SERIALIZABLE
 
 	protected:
 		// Completion deserialization callback
@@ -162,3 +162,61 @@ namespace o2
 		return nullptr;
 	}
 }
+
+CLASS_BASES_META(o2::UIWidgetLayer)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIWidgetLayer)
+{
+	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(depth);
+	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(interactableLayout).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(transparency);
+	PUBLIC_FIELD(drawable).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(child);
+	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mResTransparency);
+	PROTECTED_FIELD(mDepth).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAbsolutePosition);
+	PROTECTED_FIELD(mInteractableArea);
+	PROTECTED_FIELD(mOwnerWidget).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
+	PROTECTED_FIELD(mParent);
+	PROTECTED_FIELD(mChildren).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::UIWidgetLayer)
+{
+
+	typedef Dictionary<String, UIWidgetLayer*> _tmp1;
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(UIWidgetLayer*, AddChild, UIWidgetLayer*);
+	PUBLIC_FUNCTION(bool, RemoveChild, UIWidgetLayer*, bool);
+	PUBLIC_FUNCTION(void, RemoveAllChilds);
+	PUBLIC_FUNCTION(void, SetParent, UIWidgetLayer*);
+	PUBLIC_FUNCTION(UIWidgetLayer*, GetParent);
+	PUBLIC_FUNCTION(ChildrenVec&, GetChilds);
+	PUBLIC_FUNCTION(const ChildrenVec&, GetChilds);
+	PUBLIC_FUNCTION(UIWidgetLayer*, AddChildLayer, const String&, IRectDrawable*, const Layout&, float);
+	PUBLIC_FUNCTION(UIWidgetLayer*, GetChild, const String&);
+	PUBLIC_FUNCTION(LayersVec, GetAllChilds);
+	PUBLIC_FUNCTION(void, SetDepth, float);
+	PUBLIC_FUNCTION(float, GetDepth);
+	PUBLIC_FUNCTION(void, SetTransparency, float);
+	PUBLIC_FUNCTION(float, GetTransparency);
+	PUBLIC_FUNCTION(float, GetResTransparency);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(const RectF&, GetRect);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, SetOwnerWidget, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, UpdateLayout);
+	PROTECTED_FUNCTION(void, UpdateResTransparency);
+	PROTECTED_FUNCTION(_tmp1, GetAllChildLayers);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

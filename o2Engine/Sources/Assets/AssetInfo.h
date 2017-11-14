@@ -37,3 +37,23 @@ namespace o2
 	};
 	typedef Vector<AssetInfo> AssetInfosVec;
 }
+
+CLASS_BASES_META(o2::AssetInfo)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::AssetInfo)
+{
+	PUBLIC_FIELD(assetType);
+	PUBLIC_FIELD(path).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(id).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::AssetInfo)
+{
+
+	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+}
+END_META;

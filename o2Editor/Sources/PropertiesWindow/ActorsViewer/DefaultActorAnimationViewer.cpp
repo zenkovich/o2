@@ -18,11 +18,4 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::DefaultActorAnimationViewer)
-{
-	BASE_CLASS(Editor::IActorAnimationViewer);
-
-
-	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
-}
-END_META;
+DECLARE_CLASS(Editor::DefaultActorAnimationViewer);

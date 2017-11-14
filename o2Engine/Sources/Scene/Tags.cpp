@@ -222,37 +222,6 @@ namespace o2
 
 }
 
-CLASS_META(o2::Tag)
-{
-	BASE_CLASS(o2::ISerializable);
+DECLARE_CLASS(o2::Tag);
 
-	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mActors);
-
-	PUBLIC_FUNCTION(const String&, GetName);
-	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(void, AddActor, Actor*);
-	PUBLIC_FUNCTION(void, RemoveActor, Actor*);
-	PUBLIC_FUNCTION(void, Clear);
-}
-END_META;
-
-CLASS_META(o2::TagGroup)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(onTagAdded);
-	PUBLIC_FIELD(onTagRemoved);
-	PRIVATE_FIELD(mTags).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, AddTag, const String&);
-	PUBLIC_FUNCTION(void, AddTag, Tag*);
-	PUBLIC_FUNCTION(void, RemoveTag, const String&);
-	PUBLIC_FUNCTION(void, RemoveTag, Tag*);
-	PUBLIC_FUNCTION(void, Clear);
-	PUBLIC_FUNCTION(bool, IsHaveTag, const String&);
-	PUBLIC_FUNCTION(bool, IsHaveTag, Tag*);
-	PUBLIC_FUNCTION(const TagsVec&, GetTags);
-	PUBLIC_FUNCTION(StringsVec, GetTagsNames);
-}
-END_META;
+DECLARE_CLASS(o2::TagGroup);

@@ -74,13 +74,4 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::SceneDragHandle)
-{
-	BASE_CLASS(o2::DragHandle);
-
-
-	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PROTECTED_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
-	PROTECTED_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
-}
-END_META;
+DECLARE_CLASS(Editor::SceneDragHandle);

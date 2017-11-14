@@ -50,18 +50,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::DefaultAssetPropertiesViewer)
-{
-	BASE_CLASS(Editor::IAssetPropertiesViewer);
-
-	PROTECTED_FIELD(mPropertiesLayout);
-	PROTECTED_FIELD(mTargetAssets);
-	PROTECTED_FIELD(mFieldProperties);
-	PROTECTED_FIELD(mAssetType);
-
-	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
-	PUBLIC_FUNCTION(void, SpecializeAssetType, const Type*);
-}
-END_META;
+DECLARE_CLASS(Editor::DefaultAssetPropertiesViewer);

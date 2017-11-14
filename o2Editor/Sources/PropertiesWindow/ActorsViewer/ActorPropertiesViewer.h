@@ -52,19 +52,19 @@ namespace Editor
 	protected:
 		typedef Dictionary<const Type*, Vector<IActorComponentViewer*>> TypeCompViewersDict;
 
-		Vector<Actor*>                 mTargetActors;               // Current target actors
+		Vector<Actor*>                 mTargetActors;                     // Current target actors
 
-		IActorHeaderViewer*            mHeaderViewer;               // Actor header viewer
-		IActorTransformViewer*         mTransformViewer;            // Actor transform viewer
-		IActorAnimationViewer*         mAnimationViewer;            // Actor animation viewer
-		Vector<IActorComponentViewer*> mComponentsViewers;          // Components viewers
+		IActorHeaderViewer*            mHeaderViewer = nullptr;           // Actor header viewer
+		IActorTransformViewer*         mTransformViewer = nullptr;        // Actor transform viewer
+		IActorAnimationViewer*         mAnimationViewer = nullptr;        // Actor animation viewer
+		Vector<IActorComponentViewer*> mComponentsViewers;                // Components viewers
 
-		DefaultActorComponentViewer*   mDefaultComponentViewer;     // Default component viewer sample
-		Vector<IActorComponentViewer*> mAvailableComponentsViewers; // Available components' viewers
-
-		TypeCompViewersDict            mComponentViewersPool;       // Components viewers pool
+		DefaultActorComponentViewer*   mDefaultComponentViewer = nullptr; // Default component viewer sample
+		Vector<IActorComponentViewer*> mAvailableComponentsViewers;       // Available components' viewers
+																	      
+		TypeCompViewersDict            mComponentViewersPool;             // Components viewers pool
 									   
-		UIVerticalLayout*              mViewersLayout;              // Viewers layout
+		UIVerticalLayout*              mViewersLayout = nullptr;          // Viewers layout
 
 	protected:
 		// Sets target objects
@@ -84,3 +84,38 @@ namespace Editor
 	};
 
 }
+
+CLASS_BASES_META(Editor::ActorPropertiesViewer)
+{
+	BASE_CLASS(Editor::IObjectPropertiesViewer);
+}
+END_META;
+CLASS_FIELDS_META(Editor::ActorPropertiesViewer)
+{
+	PROTECTED_FIELD(mTargetActors);
+	PROTECTED_FIELD(mHeaderViewer);
+	PROTECTED_FIELD(mTransformViewer);
+	PROTECTED_FIELD(mAnimationViewer);
+	PROTECTED_FIELD(mComponentsViewers);
+	PROTECTED_FIELD(mDefaultComponentViewer);
+	PROTECTED_FIELD(mAvailableComponentsViewers);
+	PROTECTED_FIELD(mComponentViewersPool);
+	PROTECTED_FIELD(mViewersLayout);
+}
+END_META;
+CLASS_METHODS_META(Editor::ActorPropertiesViewer)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PUBLIC_FUNCTION(void, SetActorHeaderViewer, IActorHeaderViewer*);
+	PUBLIC_FUNCTION(void, SetActorTransformViewer, IActorTransformViewer*);
+	PUBLIC_FUNCTION(void, SetActorAnimationViewer, IActorAnimationViewer*);
+	PUBLIC_FUNCTION(void, AddComponentViewerType, IActorComponentViewer*);
+	PUBLIC_FUNCTION(void, Refresh);
+	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
+	PROTECTED_FUNCTION(void, Update, float);
+	PROTECTED_FUNCTION(void, Draw);
+}
+END_META;

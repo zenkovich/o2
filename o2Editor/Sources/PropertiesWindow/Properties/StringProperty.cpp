@@ -195,33 +195,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::StringProperty)
-{
-	BASE_CLASS(Editor::IPropertyField);
-
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
-	PROTECTED_FIELD(mCommonValue);
-	PROTECTED_FIELD(mValuesDifferent);
-	PROTECTED_FIELD(mPropertyWidget);
-	PROTECTED_FIELD(mEditBox);
-	PROTECTED_FIELD(mRevertBtn);
-
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, Revert);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
-	PUBLIC_FUNCTION(String, GetCommonValue);
-	PUBLIC_FUNCTION(bool, IsValuesDifferent);
-	PUBLIC_FUNCTION(void, SetValue, const String&);
-	PUBLIC_FUNCTION(void, SetUnknownValue);
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
-	PROTECTED_FUNCTION(void, SetCommonValue, const String&);
-	PROTECTED_FUNCTION(void, CheckRevertableState);
-	PROTECTED_FUNCTION(void, OnEdited, const WString&);
-	PROTECTED_FUNCTION(void, SetValueByUser, const String&);
-	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
-	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
-}
-END_META;
+DECLARE_CLASS(Editor::StringProperty);

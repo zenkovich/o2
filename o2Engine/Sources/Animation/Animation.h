@@ -395,7 +395,10 @@ namespace o2
 		if (mTarget)
 		{
 			FieldInfo* fieldInfo = nullptr;
-			String path = mTarget->GetType().GetFieldPath(mTarget, target, fieldInfo);
+
+			const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
+			void* castedTarget = type->DynamicCastFromIObject(mTarget);
+			String path = mTarget->GetType().GetFieldPath(castedTarget, target, fieldInfo);
 
 			if (!fieldInfo)
 			{
@@ -435,7 +438,9 @@ namespace o2
 		if (mTarget)
 		{
 			FieldInfo* fieldInfo = nullptr;
-			def.mTargetPtr = (_type*)mTarget->GetType().GetFieldPtr(mTarget, path, fieldInfo);
+			const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
+			void* castedTarget = type->DynamicCastFromIObject(mTarget);
+			def.mTargetPtr = (_type*)mTarget->GetType().GetFieldPtr(castedTarget, path, fieldInfo);
 
 			if (!fieldInfo)
 			{
@@ -463,7 +468,9 @@ namespace o2
 		if (mTarget)
 		{
 			FieldInfo* fieldInfo = nullptr;
-			String path = mTarget->GetType().GetFieldPath(mTarget, target, fieldInfo);
+			const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
+			void* castedTarget = type->DynamicCastFromIObject(mTarget);
+			String path = mTarget->GetType().GetFieldPath(castedTarget, target, fieldInfo);
 
 			if (!fieldInfo)
 			{
@@ -534,13 +541,49 @@ namespace o2
 
 		return nullptr;
 	}
-
-	template<typename _type>
-	class AnimAttribute: public IAttribute
-	{
-	public:
-		IAttribute* Clone() const { return new AnimAttribute(*this); }
-	};
-
-#define ANIMATABLE(TYPE) .AddAttribute<AnimAttribute<TYPE>>()
 }
+
+CLASS_BASES_META(o2::Animation)
+{
+	BASE_CLASS(o2::IAnimation);
+}
+END_META;
+CLASS_FIELDS_META(o2::Animation)
+{
+	PROTECTED_FIELD(mAnimatedValues).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mTarget);
+	PROTECTED_FIELD(mAnimationState);
+}
+END_META;
+CLASS_METHODS_META(o2::Animation)
+{
+
+	PUBLIC_FUNCTION(void, SetTarget, IObject*, bool);
+	PUBLIC_FUNCTION(IObject*, GetTarget);
+	PUBLIC_FUNCTION(void, Clear);
+	PUBLIC_FUNCTION(AnimatedValuesVec&, GetAnimationsValues);
+	PUBLIC_FUNCTION(const AnimatedValuesVec&, GetAnimationsValues);
+	PUBLIC_FUNCTION(bool, RemoveAnimationValue, const String&);
+	PROTECTED_FUNCTION(void, Evaluate);
+	PROTECTED_FUNCTION(void, RecalculateDuration);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnAnimatedValueAdded, AnimatedValueDef&);
+}
+END_META;
+
+CLASS_BASES_META(o2::Animation::AnimatedValueDef)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::Animation::AnimatedValueDef)
+{
+	PUBLIC_FIELD(mTargetPath).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mTargetPtr);
+	PUBLIC_FIELD(mAnimatedValue).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::Animation::AnimatedValueDef)
+{
+}
+END_META;

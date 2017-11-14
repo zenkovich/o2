@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -104,8 +104,8 @@
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
       <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
     </ClCompile>
     <Link>
@@ -231,11 +231,11 @@
     <ClInclude Include="..\..\Sources\Core\Tools\ScaleTool.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\SelectionTool.h" />
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
-    <ClInclude Include="..\..\Sources\Core\UIRoot.h" />
     <ClInclude Include="..\..\Sources\Core\UI\CurveEdit.h" />
     <ClInclude Include="..\..\Sources\Core\UI\CurvePreview.h" />
     <ClInclude Include="..\..\Sources\Core\UI\FrameScrollView.h" />
     <ClInclude Include="..\..\Sources\Core\UI\ScrollView.h" />
+    <ClInclude Include="..\..\Sources\Core\UIRoot.h" />
     <ClInclude Include="..\..\Sources\Core\UIStyle\BasicUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h" />
@@ -318,11 +318,11 @@
     <ClCompile Include="..\..\Sources\Core\Tools\ScaleTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\SelectionTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
-    <ClCompile Include="..\..\Sources\Core\UIRoot.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\CurveEdit.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\CurvePreview.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\FrameScrollView.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\ScrollView.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UIRoot.cpp" />
     <ClCompile Include="..\..\Sources\Core\UIStyle\BasicUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />

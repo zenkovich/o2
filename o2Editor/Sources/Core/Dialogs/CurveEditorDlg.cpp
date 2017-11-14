@@ -26,7 +26,8 @@ namespace Editor
 
 	CurveEditorDlg::~CurveEditorDlg()
 	{
-		delete mWindow;
+		if (mWindow)
+			delete mWindow;
 	}
 
 	void CurveEditorDlg::OnHide()

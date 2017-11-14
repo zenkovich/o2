@@ -42,6 +42,9 @@ namespace Editor
 		bool           mOpengingFolderFromThis = false;
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Selects and expands folder
 		void SelectAndExpandFolder(const String& path);
 
@@ -114,3 +117,47 @@ namespace Editor
 		friend class AssetsWindow;
 	};
 }
+
+CLASS_BASES_META(Editor::UIAssetsFoldersTree)
+{
+	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::KeyboardEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UIAssetsFoldersTree)
+{
+	PROTECTED_FIELD(mFoldersTree);
+	PROTECTED_FIELD(mContextMenu);
+	PROTECTED_FIELD(mCurrentPath);
+	PROTECTED_FIELD(mOpengingFolderFromThis);
+}
+END_META;
+CLASS_METHODS_META(Editor::UIAssetsFoldersTree)
+{
+
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, SelectAndExpandFolder, const String&);
+	PROTECTED_FUNCTION(void, UpdateView);
+	PROTECTED_FUNCTION(void, InitializeContext);
+	PROTECTED_FUNCTION(UnknownPtr, GetFoldersTreeNodeParent, UnknownPtr);
+	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetFoldersTreeNodeChilds, UnknownPtr);
+	PROTECTED_FUNCTION(void, SetupFoldersTreeNode, UITreeNode*, UnknownPtr);
+	PROTECTED_FUNCTION(void, OnFoldersTreeNodeDblClick, UITreeNode*);
+	PROTECTED_FUNCTION(void, OnFoldersTreeSelect, Vector<UnknownPtr>);
+	PROTECTED_FUNCTION(void, OnFoldersTreeRightClick, UITreeNode*);
+	PROTECTED_FUNCTION(void, OnContextCopyPressed);
+	PROTECTED_FUNCTION(void, OnContextCutPressed);
+	PROTECTED_FUNCTION(void, OnContextPastePressed);
+	PROTECTED_FUNCTION(void, OnContextDeletePressed);
+	PROTECTED_FUNCTION(void, OnContextOpenPressed);
+	PROTECTED_FUNCTION(void, OnContextShowInExplorerPressed);
+	PROTECTED_FUNCTION(void, OnContextImportPressed);
+	PROTECTED_FUNCTION(void, OnContextCreateFolderPressed);
+	PROTECTED_FUNCTION(void, OnContextCreatePrefabPressed);
+	PROTECTED_FUNCTION(void, OnContextCreateScriptPressed);
+	PROTECTED_FUNCTION(void, OnContextCreateAnimationPressed);
+	PROTECTED_FUNCTION(void, OnContextExpandPressed);
+	PROTECTED_FUNCTION(void, OnContextCollapsePressed);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+}
+END_META;

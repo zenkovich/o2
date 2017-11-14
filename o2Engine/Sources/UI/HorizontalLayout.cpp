@@ -7,7 +7,7 @@ namespace o2
 	UIHorizontalLayout::UIHorizontalLayout(): UIWidget()
 	{
 		InitializeProperties();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIHorizontalLayout::UIHorizontalLayout(const UIHorizontalLayout& other):
@@ -15,7 +15,7 @@ namespace o2
 		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren)
 	{
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 		InitializeProperties();
 	}
 
@@ -24,17 +24,7 @@ namespace o2
 
 	UIHorizontalLayout& UIHorizontalLayout::operator=(const UIHorizontalLayout& other)
 	{
-		mBaseCorner   = other.mBaseCorner;
-		mSpacing      = other.mSpacing;
-		mBorder       = other.mBorder;
-		mExpandWidth  = other.mExpandWidth;
-		mExpandHeight = other.mExpandHeight;
-
-		UIWidget::operator=(other);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -157,6 +147,22 @@ namespace o2
 
 		if (withChildren)
 			RearrangeChilds();
+	}
+
+	void UIHorizontalLayout::CopyData(const Actor& otherActor)
+	{
+		const UIHorizontalLayout& other = dynamic_cast<const UIHorizontalLayout&>(otherActor);
+
+		mBaseCorner   = other.mBaseCorner;
+		mSpacing      = other.mSpacing;
+		mBorder       = other.mBorder;
+		mExpandWidth  = other.mExpandWidth;
+		mExpandHeight = other.mExpandHeight;
+
+		UIWidget::CopyData(other);
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
 	}
 
 	float UIHorizontalLayout::GetMinWidthWithChildren() const
@@ -482,59 +488,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIHorizontalLayout)
-{
-	BASE_CLASS(o2::UIWidget);
-
-	PUBLIC_FIELD(baseCorner);
-	PUBLIC_FIELD(spacing);
-	PUBLIC_FIELD(border);
-	PUBLIC_FIELD(borderLeft);
-	PUBLIC_FIELD(borderRight);
-	PUBLIC_FIELD(borderTop);
-	PUBLIC_FIELD(borderBottom);
-	PUBLIC_FIELD(expandWidth);
-	PUBLIC_FIELD(expandHeight);
-	PUBLIC_FIELD(fitByChildren);
-	PROTECTED_FIELD(mBaseCorner).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSpacing).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mBorder).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mExpandWidth).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mExpandHeight).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mFitByChildren).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
-	PUBLIC_FUNCTION(BaseCorner, GetBaseCorner);
-	PUBLIC_FUNCTION(void, SetSpacing, float);
-	PUBLIC_FUNCTION(float, GetSpacing);
-	PUBLIC_FUNCTION(void, SetBorder, const RectF&);
-	PUBLIC_FUNCTION(RectF, GetBorder);
-	PUBLIC_FUNCTION(void, SetBorderLeft, float);
-	PUBLIC_FUNCTION(float, GetBorderLeft);
-	PUBLIC_FUNCTION(void, SetBorderRight, float);
-	PUBLIC_FUNCTION(float, GetBorderRight);
-	PUBLIC_FUNCTION(void, SetBorderTop, float);
-	PUBLIC_FUNCTION(float, GetBorderTop);
-	PUBLIC_FUNCTION(void, SetBorderBottom, float);
-	PUBLIC_FUNCTION(float, GetBorderBottom);
-	PUBLIC_FUNCTION(void, SetWidthExpand, bool);
-	PUBLIC_FUNCTION(bool, IsWidthExpand);
-	PUBLIC_FUNCTION(void, SetHeightExpand, bool);
-	PUBLIC_FUNCTION(bool, IsHeightExpand);
-	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
-	PUBLIC_FUNCTION(bool, IsFittingByChildren);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
-	PROTECTED_FUNCTION(void, RearrangeChilds);
-	PROTECTED_FUNCTION(void, ArrangeFromLeftToRight);
-	PROTECTED_FUNCTION(void, ArrangeFromRightToLeft);
-	PROTECTED_FUNCTION(void, ArrangeFromCenter);
-	PROTECTED_FUNCTION(void, ExpandSizeByChilds);
-	PROTECTED_FUNCTION(Vector<float>, CalculateExpandedWidths);
-	PROTECTED_FUNCTION(void, AlignWidgetByHeight, UIWidget*, float);
-	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIHorizontalLayout);

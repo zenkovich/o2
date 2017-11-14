@@ -141,3 +141,58 @@ namespace o2
 		BitmapFontAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }
+
+CLASS_BASES_META(o2::BitmapFontAsset)
+{
+	BASE_CLASS(o2::Asset);
+}
+END_META;
+CLASS_FIELDS_META(o2::BitmapFontAsset)
+{
+	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(font);
+	PROTECTED_FIELD(mFont);
+}
+END_META;
+CLASS_METHODS_META(o2::BitmapFontAsset)
+{
+
+	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
+	PUBLIC_FUNCTION(FontRef, GetFont);
+	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_BASES_META(o2::BitmapFontAssetRef)
+{
+	BASE_CLASS(o2::AssetRef);
+}
+END_META;
+CLASS_FIELDS_META(o2::BitmapFontAssetRef)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::BitmapFontAssetRef)
+{
+
+	PUBLIC_FUNCTION(const Type&, GetAssetType);
+}
+END_META;
+
+CLASS_BASES_META(o2::BitmapFontAsset::MetaInfo)
+{
+	BASE_CLASS(o2::Asset::IMetaInfo);
+}
+END_META;
+CLASS_FIELDS_META(o2::BitmapFontAsset::MetaInfo)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::BitmapFontAsset::MetaInfo)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetAssetType);
+}
+END_META;

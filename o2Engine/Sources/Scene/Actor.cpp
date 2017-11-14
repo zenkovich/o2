@@ -580,7 +580,10 @@ namespace o2
 		if (actor->mParent)
 			actor->mParent->RemoveChild(actor, false);
 		else
-			o2Scene.mRootActors.Remove(actor);
+		{
+			if (Scene::IsSingletonInitialzed())
+				o2Scene.mRootActors.Remove(actor);
+		}
 
 		mChildren.Add(actor);
 		actor->mParent = this;
@@ -1671,16 +1674,21 @@ namespace o2
 
 		mPrototype->Save();
 	}
+	
+	void Actor::CopyData(const Actor& otherActor)
+	{
+		mName = otherActor.mName;
+		mEnabled = otherActor.mEnabled;
+		*transform = *otherActor.transform;
+		mAssetId = otherActor.mAssetId;
+	}
 
 	void Actor::ProcessCopying(Actor* dest, const Actor* source, Vector<Actor**>& actorsPointers,
 							   Vector<Component**>& componentsPointers, Dictionary<const Actor*, Actor*>& actorsMap,
 							   Dictionary<const Component*, Component*>& componentsMap,
 							   bool isSourcePrototype)
 	{
-		dest->mName = source->mName;
-		dest->mEnabled = source->mEnabled;
-		*dest->transform = *source->transform;
-		dest->mAssetId = source->mAssetId;
+		dest->CopyData(*source);
 
 		if (!dest->mPrototype && source->mPrototype)
 		{
@@ -1706,7 +1714,12 @@ namespace o2
 
 		for (auto child : source->mChildren)
 		{
-			Actor* newChild = mnew Actor(dest->mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
+			const ObjectType* type = dynamic_cast<const ObjectType*>(&child->GetType());
+
+			Actor* newChild = dynamic_cast<Actor*>(type->DynamicCastToIObject(child->GetType().CreateSample()));
+			if (!dest->mIsOnScene)
+				newChild->ExcludeFromScene();
+
 			dest->AddChild(newChild);
 
 			ProcessCopying(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap, isSourcePrototype);
@@ -2054,8 +2067,8 @@ namespace o2
 
 				for (auto baseType : type->GetBaseTypes())
 				{
-					if (*baseType != TypeOf(Component))
-						GetFields(baseType, fields);
+					if (*baseType.type != TypeOf(Component))
+						GetFields(baseType.type, fields);
 				}
 			}
 		};
@@ -2330,158 +2343,9 @@ namespace o2
 
 		}
 
-CLASS_META(o2::ActorRef)
-{
-	BASE_CLASS(o2::ISerializable);
+DECLARE_CLASS(o2::ActorRef);
 
-	PROTECTED_FIELD(mActor);
-	PROTECTED_FIELD(mWasDeleted);
-
-	PUBLIC_FUNCTION(Actor*, Get);
-	PUBLIC_FUNCTION(const Actor*, Get);
-	PUBLIC_FUNCTION(bool, IsValid);
-	PUBLIC_FUNCTION(bool, IsWasDeleted);
-}
-END_META;
-
-CLASS_META(o2::Actor)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(prototype);
-	PUBLIC_FIELD(transform);
-	PUBLIC_FIELD(parent);
-	PUBLIC_FIELD(id);
-	PUBLIC_FIELD(name);
-	PUBLIC_FIELD(tags);
-	PUBLIC_FIELD(layer);
-	PUBLIC_FIELD(layerName);
-	PUBLIC_FIELD(enabled);
-	PUBLIC_FIELD(enabledInHierarchy);
-	PUBLIC_FIELD(locked);
-	PUBLIC_FIELD(lockedInHierarchy);
-	PUBLIC_FIELD(children);
-	PUBLIC_FIELD(components);
-	PUBLIC_FIELD(child);
-	PUBLIC_FIELD(component);
-	PUBLIC_FIELD(onEnableChanged);
-	PROTECTED_FIELD(mPrototype);
-	PROTECTED_FIELD(mPrototypeLink);
-	PROTECTED_FIELD(mId);
-	PROTECTED_FIELD(mName);
-	PROTECTED_FIELD(mLayer);
-	PROTECTED_FIELD(mParent);
-	PROTECTED_FIELD(mChildren);
-	PROTECTED_FIELD(mComponents);
-	PROTECTED_FIELD(mEnabled);
-	PROTECTED_FIELD(mResEnabled);
-	PROTECTED_FIELD(mLocked);
-	PROTECTED_FIELD(mResLocked);
-	PROTECTED_FIELD(mIsOnScene);
-	PROTECTED_FIELD(mIsAsset);
-	PROTECTED_FIELD(mAssetId);
-	PROTECTED_FIELD(mReferences);
-
-	typedef Dictionary<String, Actor*> _tmp1;
-	typedef Dictionary<String, Component*> _tmp2;
-	typedef Dictionary<const Actor*, Actor*>& _tmp3;
-	typedef Dictionary<const Component*, Component*>& _tmp4;
-	typedef Dictionary<const Actor*, Actor*>& _tmp5;
-	typedef Dictionary<const Component*, Component*>& _tmp6;
-	typedef Dictionary<const Actor*, Actor*>& _tmp7;
-	typedef Dictionary<const Component*, Component*>& _tmp8;
-	typedef const Dictionary<const Actor*, Actor*>& _tmp9;
-	typedef const Dictionary<const Component*, Component*>& _tmp10;
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, UpdateChildren, float);
-	PUBLIC_FUNCTION(ActorAssetRef, GetPrototype);
-	PUBLIC_FUNCTION(ActorAssetRef, GetPrototypeDirectly);
-	PUBLIC_FUNCTION(void, BreakPrototypeLink);
-	PUBLIC_FUNCTION(void, ApplyChangesToPrototype);
-	PUBLIC_FUNCTION(void, RevertToPrototype);
-	PUBLIC_FUNCTION(ActorAssetRef, MakePrototype);
-	PUBLIC_FUNCTION(ActorRef, GetPrototypeLink);
-	PUBLIC_FUNCTION(bool, IsLinkedToActor, Actor*);
-	PUBLIC_FUNCTION(bool, IsLinkedToActor, UInt64);
-	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(UInt64, GetID);
-	PUBLIC_FUNCTION(void, SetID, UInt64);
-	PUBLIC_FUNCTION(void, GenerateNewID, bool);
-	PUBLIC_FUNCTION(UID, GetAssetID);
-	PUBLIC_FUNCTION(bool, IsAsset);
-	PUBLIC_FUNCTION(void, ExcludeFromScene);
-	PUBLIC_FUNCTION(void, IncludeInScene);
-	PUBLIC_FUNCTION(bool, IsOnScene);
-	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PUBLIC_FUNCTION(void, Enable);
-	PUBLIC_FUNCTION(void, Disable);
-	PUBLIC_FUNCTION(bool, IsEnabled);
-	PUBLIC_FUNCTION(bool, IsEnabledInHierarchy);
-	PUBLIC_FUNCTION(void, SetLocked, bool);
-	PUBLIC_FUNCTION(void, Lock);
-	PUBLIC_FUNCTION(void, Unlock);
-	PUBLIC_FUNCTION(bool, IsLocked);
-	PUBLIC_FUNCTION(bool, IsLockedInHierarchy);
-	PUBLIC_FUNCTION(void, SetPositionIndexInParent, int);
-	PUBLIC_FUNCTION(void, SetParent, Actor*, bool);
-	PUBLIC_FUNCTION(Actor*, GetParent);
-	PUBLIC_FUNCTION(Actor*, AddChild, Actor*);
-	PUBLIC_FUNCTION(Vector<Actor*>, AddChildren, Vector<Actor*>);
-	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
-	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
-	PUBLIC_FUNCTION(ActorsVec, GetChildren);
-	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
-	PUBLIC_FUNCTION(void, RemoveAllChildren, bool);
-	PUBLIC_FUNCTION(Component*, AddComponent, Component*);
-	PUBLIC_FUNCTION(void, RemoveComponent, Component*, bool);
-	PUBLIC_FUNCTION(void, RemoveAllComponents);
-	PUBLIC_FUNCTION(Component*, GetComponent, const String&);
-	PUBLIC_FUNCTION(Component*, GetComponent, const Type*);
-	PUBLIC_FUNCTION(Component*, GetComponent, UInt64);
-	PUBLIC_FUNCTION(ComponentsVec, GetComponents);
-	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
-	PUBLIC_FUNCTION(void, SetLayer, const String&);
-	PUBLIC_FUNCTION(SceneLayer*, GetLayer);
-	PUBLIC_FUNCTION(String, GetLayerName);
-	PUBLIC_FUNCTION(Actor*, FindLinkedActor, Actor*);
-	PUBLIC_FUNCTION(Actor*, FindLinkedActor, UInt64);
-	PUBLIC_FUNCTION(Actor*, FindActorById, UInt64);
-	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
-	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
-	PROTECTED_FUNCTION(void, SetPrototype, ActorAssetRef);
-	PROTECTED_FUNCTION(void, UpdateEnabled);
-	PROTECTED_FUNCTION(void, UpdateLocking);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, SerializeRaw, DataNode&);
-	PROTECTED_FUNCTION(void, DeserializeRaw, const DataNode&);
-	PROTECTED_FUNCTION(void, SerializeWithProto, DataNode&);
-	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataNode&);
-	PROTECTED_FUNCTION(_tmp1, GetAllChilds);
-	PROTECTED_FUNCTION(_tmp2, GetAllComponents);
-	PROTECTED_FUNCTION(void, ExcludeComponentsFromScene);
-	PROTECTED_FUNCTION(void, IncludeComponentsToScene);
-	PROTECTED_FUNCTION(void, OnTransformUpdated);
-	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
-	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
-	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
-	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-	PROTECTED_FUNCTION(void, ProcessCopying, Actor*, const Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp3, _tmp4, bool);
-	PROTECTED_FUNCTION(void, ProcessPrototypeMaking, Actor*, Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6, bool);
-	PROTECTED_FUNCTION(void, CopyFields, Vector<FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
-	PROTECTED_FUNCTION(void, CopyChangedFields, Vector<FieldInfo*>&, IObject*, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
-	PROTECTED_FUNCTION(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
-	PROTECTED_FUNCTION(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
-	PROTECTED_FUNCTION(void, GetComponentFields, Component*, Vector<FieldInfo*>&);
-	PROTECTED_FUNCTION(void, SeparateActors, Vector<Actor*>&);
-	PROTECTED_FUNCTION(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp7, _tmp8, Vector<ISerializable*>&);
-	PROTECTED_FUNCTION(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp9, _tmp10);
-}
-END_META;
+DECLARE_CLASS(o2::Actor);
 
 ENUM_META_(o2::ActorCreateMode, ActorCreateMode)
 {

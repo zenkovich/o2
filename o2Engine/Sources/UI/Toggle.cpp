@@ -35,17 +35,7 @@ namespace o2
 
 	UIToggle& UIToggle::operator=(const UIToggle& other)
 	{
-		UIWidget::operator=(other);
-		mCaptionText = GetLayerDrawable<Text>("caption");
-		mBackLayer = GetLayer("back");
-
-		mValue = !other.mValue;
-		SetValue(other.mValue);
-
-		if (other.IsValueUnknown())
-			SetValueUnknown();
-
-		RetargetStatesAnimations();
+		CopyData(other);
 		return *this;
 	}
 
@@ -293,6 +283,24 @@ namespace o2
 
 	}
 
+	void UIToggle::CopyData(const Actor& otherActor)
+	{
+		const UIToggle& other = dynamic_cast<const UIToggle&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mCaptionText = GetLayerDrawable<Text>("caption");
+		mBackLayer = GetLayer("back");
+
+		mValue = !other.mValue;
+		SetValue(other.mValue);
+
+		if (other.IsValueUnknown())
+			SetValueUnknown();
+
+		RetargetStatesAnimations();
+	}
+
 	void UIToggle::OnLayerAdded(UIWidgetLayer* layer)
 	{
 		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == TypeOf(Text))
@@ -370,47 +378,7 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIToggle)
-{
-	BASE_CLASS(o2::UIWidget);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
-	BASE_CLASS(o2::KeyboardEventsListener);
-
-	PUBLIC_FIELD(value);
-	PUBLIC_FIELD(caption);
-	PUBLIC_FIELD(shortcut);
-	PUBLIC_FIELD(toggleGroup);
-	PUBLIC_FIELD(onClick);
-	PUBLIC_FIELD(onToggle);
-	PUBLIC_FIELD(onToggleByUser);
-	PROTECTED_FIELD(mValue).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mValueUnknown).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mCaptionText);
-	PROTECTED_FIELD(mBackLayer);
-	PROTECTED_FIELD(mToggleGroup);
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(WString, GetCaption);
-	PUBLIC_FUNCTION(void, SetValue, bool);
-	PUBLIC_FUNCTION(void, SetValueUnknown);
-	PUBLIC_FUNCTION(bool, IsValueUnknown);
-	PUBLIC_FUNCTION(bool, GetValue);
-	PUBLIC_FUNCTION(void, SetToggleGroup, UIToggleGroup*);
-	PUBLIC_FUNCTION(UIToggleGroup*, GetToggleGroup);
-	PUBLIC_FUNCTION(bool, IsFocusable);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIToggle);
 
 ENUM_META_(o2::UIToggleGroup::Type, Type)
 {

@@ -43,3 +43,25 @@ namespace Editor
 		SERIALIZABLE(ReparentActorsAction);
 	};
 }
+
+CLASS_BASES_META(Editor::ReparentActorsAction)
+{
+	BASE_CLASS(Editor::IAction);
+}
+END_META;
+CLASS_FIELDS_META(Editor::ReparentActorsAction)
+{
+	PUBLIC_FIELD(actorsInfos);
+	PUBLIC_FIELD(newParentId);
+	PUBLIC_FIELD(newPrevActorId);
+}
+END_META;
+CLASS_METHODS_META(Editor::ReparentActorsAction)
+{
+
+	PUBLIC_FUNCTION(void, ActorsReparented, Actor*, Actor*);
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, Redo);
+	PUBLIC_FUNCTION(void, Undo);
+}
+END_META;

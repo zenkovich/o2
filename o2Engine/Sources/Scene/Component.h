@@ -165,3 +165,44 @@ namespace o2
 	}
 
 }
+
+CLASS_BASES_META(o2::Component)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::Component)
+{
+	PUBLIC_FIELD(actor);
+	PUBLIC_FIELD(enabled);
+	PUBLIC_FIELD(enabledInHierarchy);
+	PROTECTED_FIELD(mPrototypeLink);
+	PROTECTED_FIELD(mId).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mOwner);
+	PROTECTED_FIELD(mEnabled).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mResEnabled);
+}
+END_META;
+CLASS_METHODS_META(o2::Component)
+{
+
+	PUBLIC_FUNCTION(UInt64, GetID);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(void, Enable);
+	PUBLIC_FUNCTION(void, Disable);
+	PUBLIC_FUNCTION(bool, IsEnabled);
+	PUBLIC_FUNCTION(bool, IsEnabledInHierarchy);
+	PUBLIC_FUNCTION(Component*, GetPrototypeLink);
+	PUBLIC_FUNCTION(bool, IsLinkedToComponent, Component*);
+	PUBLIC_FUNCTION(Actor*, GetOwnerActor);
+	PUBLIC_FUNCTION(String, GetName);
+	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*, SceneLayer*);
+	PROTECTED_FUNCTION(void, UpdateEnabled);
+	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
+	PROTECTED_FUNCTION(void, OnExcludeFromScene);
+	PROTECTED_FUNCTION(void, OnIncludeToScene);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

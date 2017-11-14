@@ -32,7 +32,7 @@ namespace o2
 		SetSelectionGroup(other.GetSelectionGroup());
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UITreeNode::~UITreeNode()
@@ -40,13 +40,7 @@ namespace o2
 
 	UITreeNode& UITreeNode::operator=(const UITreeNode& other)
 	{
-		UIWidget::operator=(other);
-
-		SetSelectionGroup(other.GetSelectionGroup());
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -85,6 +79,18 @@ namespace o2
 	bool UITreeNode::IsUnderPoint(const Vec2F& point)
 	{
 		return UIWidget::IsUnderPoint(point);
+	}
+
+	void UITreeNode::CopyData(const Actor& otherActor)
+	{
+		const UITreeNode& other = dynamic_cast<const UITreeNode&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		SetSelectionGroup(other.GetSelectionGroup());
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
 	}
 
 	void UITreeNode::UpdateTreeLayout(float dt)
@@ -163,7 +169,7 @@ namespace o2
 		mHightlightAnim       = other.mHightlightAnim;
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		const int widgetsBufferInitialSize = 20;
 		TreeNodesVec widgets;
@@ -186,29 +192,7 @@ namespace o2
 
 	UITree& UITree::operator=(const UITree& other)
 	{
-		UIScrollArea::operator=(other);
-
-		delete mNodeWidgetSample;
-		delete mHoverDrawable;
-		delete mFakeDragNode;
-		delete mHightlightSprite;
-
-		mRearrangeType        = other.mRearrangeType;
-		mMultiSelectAvailable = other.mMultiSelectAvailable;
-		mNodeWidgetSample     = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mFakeDragNode         = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mHoverDrawable        = other.mHoverDrawable->CloneAs<Sprite>();
-		mHightlightSprite     = other.mHightlightSprite->CloneAs<Sprite>();
-
-		mHightlightAnim.SetTarget(mHightlightSprite);
-
-		mHoverLayout          = other.mHoverLayout;
-		mHightlightLayout     = other.mHightlightLayout;
-		mHightlightAnim       = other.mHightlightAnim;
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -307,7 +291,7 @@ namespace o2
 			UpdateNodesStructure();
 
 		if (mIsNeedUdateLayout)
-			UpdateLayout();
+			SetLayoutDirty();
 
 		if (mIsNeedUpdateVisibleNodes)
 			UpdateVisibleNodes();
@@ -600,7 +584,7 @@ namespace o2
 		mSelectedObjects.Add(objects);
 
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::SelectObject(UnknownPtr object)
@@ -627,7 +611,7 @@ namespace o2
 		mSelectedObjects.Add(node->object);
 
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::SelectAndHightlightObject(UnknownPtr object)
@@ -648,7 +632,7 @@ namespace o2
 		mSelectedNodes.RemoveAt(idx);
 
 		OnSelectionChanged();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::DeselectAllObjects()
@@ -730,7 +714,7 @@ namespace o2
 		}
 
 		UpdateNodeExpanding(mExpandNodeTime);
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::OnObjectCreated(UnknownPtr object, UnknownPtr parent)
@@ -765,7 +749,7 @@ namespace o2
 			UpdateNodeExpanding(mExpandNodeTime);
 
 			for (auto child : mChildWidgets)
-				child->UpdateLayout();
+				child->SetLayoutDirty();
 		}
 
 		Vector<UnknownPtr> rootObjects = GetObjectChilds(UnknownPtr());
@@ -806,7 +790,7 @@ namespace o2
 			position += InsertNodes(node, position);
 		}
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	int UITree::InsertNodes(Node* parentNode, int position, NodesVec* newNodes /*= nullptr*/)
@@ -864,6 +848,34 @@ namespace o2
 			mSelectedNodes.Add(node);
 
 		return node;
+	}
+
+	void UITree::CopyData(const Actor& otherActor)
+	{
+		const UITree& other = dynamic_cast<const UITree&>(otherActor);
+
+		UIScrollArea::CopyData(other);
+
+		delete mNodeWidgetSample;
+		delete mHoverDrawable;
+		delete mFakeDragNode;
+		delete mHightlightSprite;
+
+		mRearrangeType        = other.mRearrangeType;
+		mMultiSelectAvailable = other.mMultiSelectAvailable;
+		mNodeWidgetSample     = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mFakeDragNode         = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mHoverDrawable        = other.mHoverDrawable->CloneAs<Sprite>();
+		mHightlightSprite     = other.mHightlightSprite->CloneAs<Sprite>();
+
+		mHightlightAnim.SetTarget(mHightlightSprite);
+
+		mHoverLayout          = other.mHoverLayout;
+		mHightlightLayout     = other.mHightlightLayout;
+		mHightlightAnim       = other.mHightlightAnim;
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
 	}
 
 	void UITree::OnFocused()
@@ -1247,7 +1259,7 @@ namespace o2
 	void UITree::MoveScrollPosition(const Vec2F& delta)
 	{
 		mScrollPos += delta;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UITree::OnCursorPressed(const Input::Cursor& cursor)
@@ -1287,7 +1299,7 @@ namespace o2
 				if (CheckMultipleSelection(cursor.position))
 				{
 					OnSelectionChanged();
-					UpdateLayout();
+					SetLayoutDirty();
 				}
 			}
 			else if (!o2Input.IsKeyDown(VK_CONTROL) && !isCursorUnderNode)
@@ -1395,7 +1407,7 @@ namespace o2
 			{
 				node->widget->SetInteractable(true);
 				UpdateNodeWidgetLayout(node, idx);
-				node->widget->UpdateLayout();
+				node->widget->SetLayoutDirty();
 			}
 
 			idx++;
@@ -1469,7 +1481,7 @@ namespace o2
 			if (node->widget && changed)
 			{
 				UpdateNodeWidgetLayout(node, mAllNodes.Find(node));
-				node->widget->UpdateLayout();
+				node->widget->SetLayoutDirty();
 			}
 		}
 	}
@@ -1692,7 +1704,7 @@ namespace o2
 	void UITree::SetChildsNodesOffset(float offset)
 	{
 		mChildrenOffset = offset;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	float UITree::GetChildsNodesOffset() const
@@ -1748,191 +1760,9 @@ namespace o2
 
 }
 
-CLASS_META(o2::UITree)
-{
-	BASE_CLASS(o2::UIScrollArea);
-	BASE_CLASS(o2::DragDropArea);
-	BASE_CLASS(o2::ISelectableDragableObjectsGroup);
+DECLARE_CLASS(o2::UITree);
 
-	PUBLIC_FIELD(getObjectParentDelegate);
-	PUBLIC_FIELD(getObjectChildrenDelegate);
-	PUBLIC_FIELD(fillNodeDataByObjectDelegate);
-	PUBLIC_FIELD(getDebugForObject);
-	PUBLIC_FIELD(onNodeDoubleClicked);
-	PUBLIC_FIELD(onNodeRightButtonClicked);
-	PUBLIC_FIELD(onObjectsSelectionChanged);
-	PUBLIC_FIELD(onDraggedObjects);
-	PROTECTED_FIELD(mRearrangeType).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mMultiSelectAvailable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mNodeWidgetSample).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mChildrenOffset).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mIsNeedUpdateView);
-	PROTECTED_FIELD(mIsNeedUdateLayout);
-	PROTECTED_FIELD(mIsNeedUpdateVisibleNodes);
-	PROTECTED_FIELD(mAllNodes);
-	PROTECTED_FIELD(mSelectedObjects);
-	PROTECTED_FIELD(mSelectedNodes);
-	PROTECTED_FIELD(mNodeWidgetsBuf);
-	PROTECTED_FIELD(mNodesBuf);
-	PROTECTED_FIELD(mVisibleNodes);
-	PROTECTED_FIELD(mMinVisibleNodeIdx);
-	PROTECTED_FIELD(mMaxVisibleNodeIdx);
-	PROTECTED_FIELD(mLastClickPos);
-	PROTECTED_FIELD(mHoveredItem);
-	PROTECTED_FIELD(mHoverDrawable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHoverLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mCurrentHoverRect);
-	PROTECTED_FIELD(mTargetHoverRect);
-	PROTECTED_FIELD(mIsDraggingNodes);
-	PROTECTED_FIELD(mFakeDragNode);
-	PROTECTED_FIELD(mDragOffset);
-	PROTECTED_FIELD(mInsertNodeCandidate);
-	PROTECTED_FIELD(mBeforeDragSelectedItems);
-	PROTECTED_FIELD(mDragEnded);
-	PROTECTED_FIELD(mExpandedObjects);
-	PROTECTED_FIELD(mExpandingNodeState);
-	PROTECTED_FIELD(mExpandingNodeIdx);
-	PROTECTED_FIELD(mExpandingNodeChildsCount);
-	PROTECTED_FIELD(mExpandingNodePosition);
-	PROTECTED_FIELD(mExpandingNodeBottomPosition);
-	PROTECTED_FIELD(mExpandingNodeCurrCoef);
-	PROTECTED_FIELD(mExpandingNodeCurrHeight);
-	PROTECTED_FIELD(mExpandingNodeTargetHeight);
-	PROTECTED_FIELD(mExpandNodeTime);
-	PROTECTED_FIELD(mExpandingNodeFunc);
-	PROTECTED_FIELD(mExpandNodeCandidate);
-	PROTECTED_FIELD(mExpandInsertTime);
-	PROTECTED_FIELD(mPressedTime);
-	PROTECTED_FIELD(mNodeExpandTime).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mNodeDragIntoZone).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlightAnim).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlightSprite).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlightLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlighNode);
-	PROTECTED_FIELD(mVisibleWidgetsCache);
-
-	PUBLIC_FUNCTION(void, OnObjectCreated, UnknownPtr, UnknownPtr);
-	PUBLIC_FUNCTION(void, OnObjectRemoved, UnknownPtr);
-	PUBLIC_FUNCTION(void, OnObjectsChanged, const UnknownPtrsVec&);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, UpdateNodesView, bool);
-	PUBLIC_FUNCTION(UITreeNode*, GetNode, UnknownPtr);
-	PUBLIC_FUNCTION(void, ExpandAll);
-	PUBLIC_FUNCTION(void, CollapseAll);
-	PUBLIC_FUNCTION(Vector<UnknownPtr>, GetSelectedObjects);
-	PUBLIC_FUNCTION(void, SetSelectedObjects, const UnknownPtrsVec&);
-	PUBLIC_FUNCTION(void, SelectObject, UnknownPtr);
-	PUBLIC_FUNCTION(void, SelectAndHightlightObject, UnknownPtr);
-	PUBLIC_FUNCTION(void, DeselectObject, UnknownPtr);
-	PUBLIC_FUNCTION(void, DeselectAllObjects);
-	PUBLIC_FUNCTION(void, ScrollTo, UnknownPtr);
-	PUBLIC_FUNCTION(void, ScrollToAndHightlight, UnknownPtr);
-	PUBLIC_FUNCTION(void, ExpandParentObjects, UnknownPtr);
-	PUBLIC_FUNCTION(UITreeNode*, GetTreeNodeUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetRearrangeType, RearrangeType);
-	PUBLIC_FUNCTION(RearrangeType, GetRearrangeType);
-	PUBLIC_FUNCTION(void, SetMultipleSelectionAvailable, bool);
-	PUBLIC_FUNCTION(bool, IsMultiSelectionAvailable);
-	PUBLIC_FUNCTION(UITreeNode*, GetNodeSample);
-	PUBLIC_FUNCTION(Sprite*, GetHoverDrawable);
-	PUBLIC_FUNCTION(void, SetHoverLayout, const Layout&);
-	PUBLIC_FUNCTION(Sprite*, GetHightlightDrawable);
-	PUBLIC_FUNCTION(void, SetHightlightAnimation, const Animation&);
-	PUBLIC_FUNCTION(void, SetHightlightLayout, const Layout&);
-	PUBLIC_FUNCTION(void, SetNodeExpandTimer, float);
-	PUBLIC_FUNCTION(float, GetNodeExpandTimer);
-	PUBLIC_FUNCTION(void, SetChildsNodesOffset, float);
-	PUBLIC_FUNCTION(float, GetChildsNodesOffset);
-	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PROTECTED_FUNCTION(void, OnFocused);
-	PROTECTED_FUNCTION(void, OnUnfocused);
-	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
-	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
-	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
-	PROTECTED_FUNCTION(void, FillNodeDataByObject, UITreeNode*, UnknownPtr);
-	PROTECTED_FUNCTION(void, OnNodeDblClick, UITreeNode*);
-	PROTECTED_FUNCTION(void, OnNodeRBClick, UITreeNode*);
-	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
-	PROTECTED_FUNCTION(void, OnDraggedObjects, UnknownPtrsVec, UnknownPtr, UnknownPtr);
-	PROTECTED_FUNCTION(SelectDragObjectsVec, GetSelectedDragObjects);
-	PROTECTED_FUNCTION(SelectDragObjectsVec, GetAllObjects);
-	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*);
-	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*, bool);
-	PROTECTED_FUNCTION(void, Deselect, SelectableDragableObject*);
-	PROTECTED_FUNCTION(void, AddSelectableObject, SelectableDragableObject*);
-	PROTECTED_FUNCTION(void, RemoveSelectableObject, SelectableDragableObject*);
-	PROTECTED_FUNCTION(void, OnSelectableObjectCursorReleased, SelectableDragableObject*, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnSelectableObjectBeganDragging, SelectableDragableObject*);
-	PROTECTED_FUNCTION(bool, CheckMultipleSelection, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, UpdatePressedNodeExpand, float);
-	PROTECTED_FUNCTION(void, UpdateNodesStructure);
-	PROTECTED_FUNCTION(int, InsertNodes, Node*, int, NodesVec*);
-	PROTECTED_FUNCTION(void, RemoveNodes, Node*);
-	PROTECTED_FUNCTION(Node*, CreateNode, UnknownPtr, Node*);
-	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
-	PROTECTED_FUNCTION(void, CreateVisibleNodeWidget, Node*, int);
-	PROTECTED_FUNCTION(void, UpdateNodeView, Node*, UITreeNode*, int);
-	PROTECTED_FUNCTION(void, UpdateNodeWidgetLayout, Node*, int);
-	PROTECTED_FUNCTION(int, GetNodeIndex, float);
-	PROTECTED_FUNCTION(float, GetNodePosition, int);
-	PROTECTED_FUNCTION(void, ExpandNode, Node*);
-	PROTECTED_FUNCTION(void, CollapseNode, Node*);
-	PROTECTED_FUNCTION(void, StartExpandingAnimation, ExpandState, Node*, int);
-	PROTECTED_FUNCTION(void, UpdateNodeExpanding, float);
-	PROTECTED_FUNCTION(void, CalculateScrollArea);
-	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, UpdateHover, UITreeNode*);
-	PROTECTED_FUNCTION(UITreeNode*, CreateTreeNodeWidget);
-	PROTECTED_FUNCTION(void, BeginDragging, UITreeNode*);
-	PROTECTED_FUNCTION(void, EndDragging, bool);
-	PROTECTED_FUNCTION(void, UpdateDraggingGraphics);
-	PROTECTED_FUNCTION(void, UpdateDraggingInsertion);
-	PROTECTED_FUNCTION(void, UpdateDraggingInsertionAnim, float);
-	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
-	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
-	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
-	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-}
-END_META;
-
-CLASS_META(o2::UITreeNode)
-{
-	BASE_CLASS(o2::UIWidget);
-	BASE_CLASS(o2::SelectableDragableObject);
-
-	PROTECTED_FIELD(mNodeDef);
-	PROTECTED_FIELD(mOwnerTree);
-	PROTECTED_FIELD(mExpandBtn);
-
-	PUBLIC_FUNCTION(void, SetExpanded, bool, bool);
-	PUBLIC_FUNCTION(bool, IsExpanded);
-	PUBLIC_FUNCTION(void, Expand, bool);
-	PUBLIC_FUNCTION(void, Collapse, bool);
-	PUBLIC_FUNCTION(UnknownPtr, GetObject);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateTreeLayout, float);
-	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnDragStart, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnDragged, const Input::Cursor&, DragDropArea*);
-	PROTECTED_FUNCTION(void, OnDragEnd, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnSelected);
-	PROTECTED_FUNCTION(void, OnDeselected);
-}
-END_META;
+DECLARE_CLASS(o2::UITreeNode);
 
 ENUM_META_(o2::UITree::RearrangeType, RearrangeType)
 {

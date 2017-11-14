@@ -171,41 +171,8 @@ namespace o2
 
 }
 
-CLASS_META(o2::BinaryAsset)
-{
-	BASE_CLASS(o2::Asset);
+DECLARE_CLASS(o2::BinaryAsset);
 
-	PUBLIC_FIELD(data);
-	PUBLIC_FIELD(dataSize);
-	PUBLIC_FIELD(meta);
-	PROTECTED_FIELD(mData);
-	PROTECTED_FIELD(mDataSize);
+DECLARE_CLASS(o2::BinaryAssetRef);
 
-	PUBLIC_FUNCTION(char*, GetData);
-	PUBLIC_FUNCTION(UInt, GetDataSize);
-	PUBLIC_FUNCTION(void, SetData, char*, UInt);
-	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
-
-CLASS_META(o2::BinaryAssetRef)
-{
-	BASE_CLASS(o2::AssetRef);
-
-
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-}
-END_META;
-
-CLASS_META(o2::BinaryAsset::MetaInfo)
-{
-	BASE_CLASS(o2::Asset::IMetaInfo);
-
-
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-}
-END_META;
+DECLARE_CLASS(o2::BinaryAsset::MetaInfo);

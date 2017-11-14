@@ -41,3 +41,28 @@ namespace Editor
 		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
 	};
 }
+
+CLASS_BASES_META(Editor::DefaultActorTransformViewer)
+{
+	BASE_CLASS(Editor::IActorTransformViewer);
+}
+END_META;
+CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
+{
+	PROTECTED_FIELD(mTargetActors);
+	PROTECTED_FIELD(mPositionProperty);
+	PROTECTED_FIELD(mPivotProperty);
+	PROTECTED_FIELD(mScaleProperty);
+	PROTECTED_FIELD(mSizeProperty);
+	PROTECTED_FIELD(mRotationProperty);
+	PROTECTED_FIELD(mDepthProperty);
+}
+END_META;
+CLASS_METHODS_META(Editor::DefaultActorTransformViewer)
+{
+
+	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
+	PUBLIC_FUNCTION(void, Refresh);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
+}
+END_META;

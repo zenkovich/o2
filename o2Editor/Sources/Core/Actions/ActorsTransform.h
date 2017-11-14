@@ -31,3 +31,24 @@ namespace Editor
 		SERIALIZABLE(ActorsTransformAction);
 	};
 }
+
+CLASS_BASES_META(Editor::ActorsTransformAction)
+{
+	BASE_CLASS(Editor::IAction);
+}
+END_META;
+CLASS_FIELDS_META(Editor::ActorsTransformAction)
+{
+	PUBLIC_FIELD(actorsIds);
+	PUBLIC_FIELD(beforeTransforms);
+	PUBLIC_FIELD(doneTransforms);
+}
+END_META;
+CLASS_METHODS_META(Editor::ActorsTransformAction)
+{
+
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, Redo);
+	PUBLIC_FUNCTION(void, Undo);
+}
+END_META;

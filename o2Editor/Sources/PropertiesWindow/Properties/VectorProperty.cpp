@@ -167,7 +167,7 @@ namespace Editor
 				FreeValueProperty(mValueProperties[i]);
 			}
 
-			mPropertiesLayout->UpdateLayout();
+			mPropertiesLayout->SetLayoutDirty();
 
 			onChanged();
 			o2EditorSceneScreen.OnSceneChanged();
@@ -294,35 +294,4 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::VectorProperty)
-{
-	BASE_CLASS(Editor::IPropertyField);
-
-	PROTECTED_FIELD(mType);
-	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mLayout);
-	PROTECTED_FIELD(mNameLabel);
-	PROTECTED_FIELD(mExpandButton);
-	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mPropertiesLayout);
-	PROTECTED_FIELD(mValueProperties);
-	PROTECTED_FIELD(mValuePropertiesPool);
-	PROTECTED_FIELD(mCountProperty);
-	PROTECTED_FIELD(mCountDifferents);
-	PROTECTED_FIELD(mCountOfElements);
-	PROTECTED_FIELD(mIsRefreshing);
-
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
-	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-	PUBLIC_FUNCTION(void, SetExpanded, bool);
-	PUBLIC_FUNCTION(bool, IsExpanded);
-	PROTECTED_FUNCTION(PropertyDef, GetFreeValueProperty);
-	PROTECTED_FUNCTION(void, FreeValueProperty, PropertyDef);
-	PROTECTED_FUNCTION(void, OnCountChanged);
-}
-END_META;
+DECLARE_CLASS(Editor::VectorProperty);

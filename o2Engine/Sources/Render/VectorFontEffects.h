@@ -101,3 +101,87 @@ namespace o2
 		SERIALIZABLE(FontShadowEffect);
 	};
 }
+
+CLASS_BASES_META(o2::FontStrokeEffect)
+{
+	BASE_CLASS(o2::VectorFont::Effect);
+}
+END_META;
+CLASS_FIELDS_META(o2::FontStrokeEffect)
+{
+	PUBLIC_FIELD(radius).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(alphaThreshold).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(color).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::FontStrokeEffect)
+{
+
+	PUBLIC_FUNCTION(void, Process, Bitmap*);
+	PUBLIC_FUNCTION(Vec2I, GetSizeExtend);
+	PUBLIC_FUNCTION(bool, IsEqual, VectorFont::Effect*);
+}
+END_META;
+
+CLASS_BASES_META(o2::FontGradientEffect)
+{
+	BASE_CLASS(o2::VectorFont::Effect);
+}
+END_META;
+CLASS_FIELDS_META(o2::FontGradientEffect)
+{
+	PUBLIC_FIELD(color1).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(color2).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(angle).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(length).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(origin).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::FontGradientEffect)
+{
+
+	PUBLIC_FUNCTION(void, Process, Bitmap*);
+	PUBLIC_FUNCTION(Vec2I, GetSizeExtend);
+	PUBLIC_FUNCTION(bool, IsEqual, VectorFont::Effect*);
+}
+END_META;
+
+CLASS_BASES_META(o2::FontColorEffect)
+{
+	BASE_CLASS(o2::VectorFont::Effect);
+}
+END_META;
+CLASS_FIELDS_META(o2::FontColorEffect)
+{
+	PUBLIC_FIELD(color).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::FontColorEffect)
+{
+
+	PUBLIC_FUNCTION(void, Process, Bitmap*);
+	PUBLIC_FUNCTION(Vec2I, GetSizeExtend);
+	PUBLIC_FUNCTION(bool, IsEqual, VectorFont::Effect*);
+}
+END_META;
+
+CLASS_BASES_META(o2::FontShadowEffect)
+{
+	BASE_CLASS(o2::VectorFont::Effect);
+}
+END_META;
+CLASS_FIELDS_META(o2::FontShadowEffect)
+{
+	PUBLIC_FIELD(blurRadius).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offset).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(color).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::FontShadowEffect)
+{
+
+	PUBLIC_FUNCTION(void, Process, Bitmap*);
+	PUBLIC_FUNCTION(Vec2I, GetSizeExtend);
+	PUBLIC_FUNCTION(bool, IsEqual, VectorFont::Effect*);
+}
+END_META;

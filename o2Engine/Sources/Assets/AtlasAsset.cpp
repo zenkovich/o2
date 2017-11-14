@@ -229,80 +229,12 @@ namespace o2
 
 }
 
-CLASS_META(o2::AtlasAsset)
-{
-	BASE_CLASS(o2::Asset);
+DECLARE_CLASS(o2::AtlasAsset);
 
-	PUBLIC_FIELD(meta);
-	PUBLIC_FIELD(imagesInfos);
-	PUBLIC_FIELD(images);
-	PUBLIC_FIELD(pages);
-	PROTECTED_FIELD(mImagesAssetsInfos);
-	PROTECTED_FIELD(mPages);
+DECLARE_CLASS(o2::AtlasAssetRef);
 
-	PUBLIC_FUNCTION(AssetInfosVec, GetImages);
-	PUBLIC_FUNCTION(Vector<AssetRef>, GetImagesAssets);
-	PUBLIC_FUNCTION(PagesVec, GetPages);
-	PUBLIC_FUNCTION(bool, ContainsImage, const ImageAssetRef&);
-	PUBLIC_FUNCTION(bool, ContainsImage, const AssetInfo&);
-	PUBLIC_FUNCTION(bool, ContainsImage, UID);
-	PUBLIC_FUNCTION(bool, ContainsImage, const String&);
-	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::AtlasAsset::PlatformMeta);
 
-CLASS_META(o2::AtlasAssetRef)
-{
-	BASE_CLASS(o2::AssetRef);
+DECLARE_CLASS(o2::AtlasAsset::MetaInfo);
 
-
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-}
-END_META;
-
-CLASS_META(o2::AtlasAsset::PlatformMeta)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(mMaxSize).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mFormat).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
-
-CLASS_META(o2::AtlasAsset::MetaInfo)
-{
-	BASE_CLASS(o2::Asset::IMetaInfo);
-
-	PUBLIC_FIELD(mIOS).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mAndroid).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mMacOS).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mWindows).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mBorder).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(bool, IsEqual, IMetaInfo*);
-}
-END_META;
-
-CLASS_META(o2::AtlasAsset::Page)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(mId).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mSize).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mImagesRects).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mOwner);
-
-	typedef const Dictionary<UID, RectI>& _tmp1;
-
-	PUBLIC_FUNCTION(UInt, ID);
-	PUBLIC_FUNCTION(Vec2I, Size);
-	PUBLIC_FUNCTION(TextureRef, GetTextureRef);
-	PUBLIC_FUNCTION(String, GetTextureFileName);
-	PUBLIC_FUNCTION(_tmp1, ImagesRects);
-}
-END_META;
+DECLARE_CLASS(o2::AtlasAsset::Page);

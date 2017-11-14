@@ -42,6 +42,26 @@ namespace Editor
 		IOBJECT(IActorAnimationViewer);
 
 	protected:
-		UIWidget* mDataView; // Data view widget
+		UIWidget* mDataView = nullptr; // Data view widget
 	};
 }
+
+CLASS_BASES_META(Editor::IActorAnimationViewer)
+{
+	BASE_CLASS(o2::IObject);
+}
+END_META;
+CLASS_FIELDS_META(Editor::IActorAnimationViewer)
+{
+	PROTECTED_FIELD(mDataView);
+}
+END_META;
+CLASS_METHODS_META(Editor::IActorAnimationViewer)
+{
+
+	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
+	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(void, Expand);
+	PUBLIC_FUNCTION(void, Collapse);
+}
+END_META;

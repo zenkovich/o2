@@ -43,16 +43,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::ActorsTransformAction)
-{
-	BASE_CLASS(Editor::IAction);
-
-	PUBLIC_FIELD(actorsIds);
-	PUBLIC_FIELD(beforeTransforms);
-	PUBLIC_FIELD(doneTransforms);
-
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-}
-END_META;
+DECLARE_CLASS(Editor::ActorsTransformAction);

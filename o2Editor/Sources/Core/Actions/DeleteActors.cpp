@@ -125,26 +125,6 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::DeleteActorsAction)
-{
-	BASE_CLASS(Editor::IAction);
+DECLARE_CLASS(Editor::DeleteActorsAction);
 
-	PUBLIC_FIELD(actorsInfos);
-
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-	PROTECTED_FUNCTION(int, GetActorIdx, Actor*);
-}
-END_META;
-
-CLASS_META(Editor::DeleteActorsAction::ActorInfo)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(actorData).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(parentId).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(prevActorId).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(idx).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
+DECLARE_CLASS(Editor::DeleteActorsAction::ActorInfo);

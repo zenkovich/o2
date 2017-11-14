@@ -726,11 +726,37 @@ namespace o2
 	}
 };
 
+CLASS_BASES_META(o2::IAnimatedValue)
+{
+	BASE_CLASS(o2::IAnimation);
+}
+END_META;
+CLASS_FIELDS_META(o2::IAnimatedValue)
+{
+	PUBLIC_FIELD(onKeysChanged);
+}
+END_META;
+CLASS_METHODS_META(o2::IAnimatedValue)
+{
+
+	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
+	PROTECTED_FUNCTION(void, SetTargetVoid, void*);
+	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
+	PROTECTED_FUNCTION(void, SetTargetPropertyVoid, void*);
+	PROTECTED_FUNCTION(void, RegInAnimatable, AnimationState*, const String&);
+	PROTECTED_FUNCTION(void, ForceSetTime, float, float);
+}
+END_META;
+
 META_TEMPLATES(typename _type)
-CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>)
+CLASS_BASES_META(o2::AnimatedValue<typename _type>)
 {
 	BASE_CLASS(o2::IAnimatedValue);
-
+}
+END_META;
+META_TEMPLATES(typename _type)
+CLASS_FIELDS_META(o2::AnimatedValue<typename _type>)
+{
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(target);
 	PUBLIC_FIELD(targetDelegate);
@@ -742,6 +768,11 @@ CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>)
 	PROTECTED_FIELD(mTarget);
 	PROTECTED_FIELD(mTargetDelegate);
 	PROTECTED_FIELD(mTargetProperty);
+}
+END_META;
+META_TEMPLATES(typename _type)
+CLASS_METHODS_META(o2::AnimatedValue<typename _type>)
+{
 
 	PUBLIC_FUNCTION(void, SetTarget, _type*);
 	PUBLIC_FUNCTION(void, SetTarget, _type*, const Function<void()>&);
@@ -776,10 +807,14 @@ CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>)
 END_META;
 
 META_TEMPLATES(typename _type)
-CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>::Key)
+CLASS_BASES_META(o2::AnimatedValue<typename _type>::Key)
 {
 	BASE_CLASS(o2::ISerializable);
-
+}
+END_META;
+META_TEMPLATES(typename _type)
+CLASS_FIELDS_META(o2::AnimatedValue<typename _type>::Key)
+{
 	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(curvePrevCoef).SERIALIZABLE_ATTRIBUTE();
@@ -787,5 +822,10 @@ CLASS_TEMPLATE_META(o2::AnimatedValue<typename _type>::Key)
 	PUBLIC_FIELD(curveNextCoef).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(curveNextCoefPos).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mCurveApproxValues);
+}
+END_META;
+META_TEMPLATES(typename _type)
+CLASS_METHODS_META(o2::AnimatedValue<typename _type>::Key)
+{
 }
 END_META;

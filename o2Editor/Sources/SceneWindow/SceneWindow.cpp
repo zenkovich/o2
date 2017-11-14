@@ -64,16 +64,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::SceneWindow)
-{
-	BASE_CLASS(Editor::IEditorWindow);
-
-	PROTECTED_FIELD(mEditWidget);
-	PROTECTED_FIELD(mLayersView);
-	PROTECTED_FIELD(mGizomsView);
-
-	PROTECTED_FUNCTION(void, InitializeWindow);
-	PROTECTED_FUNCTION(void, InitializeLayersView);
-	PROTECTED_FUNCTION(void, PostInitializeWindow);
-}
-END_META;
+DECLARE_CLASS(Editor::SceneWindow);

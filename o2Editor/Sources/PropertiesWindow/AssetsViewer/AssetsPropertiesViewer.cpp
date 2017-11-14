@@ -146,22 +146,4 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::AssetsPropertiesViewer)
-{
-	BASE_CLASS(Editor::IObjectPropertiesViewer);
-
-	PROTECTED_FIELD(mTargetAssets);
-	PROTECTED_FIELD(mCurrentViewer);
-	PROTECTED_FIELD(mAvailableAssetViewers);
-
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_FUNCTION(void, AddAssetViewer, IAssetPropertiesViewer*);
-	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, Draw);
-	PROTECTED_FUNCTION(void, InitializeHeadWidget);
-	PROTECTED_FUNCTION(void, OnNameTextEditChanged, const WString&);
-}
-END_META;
+DECLARE_CLASS(Editor::AssetsPropertiesViewer);

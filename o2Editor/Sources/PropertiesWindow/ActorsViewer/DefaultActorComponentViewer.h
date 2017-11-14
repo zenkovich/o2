@@ -42,3 +42,26 @@ namespace Editor
 		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
 	};
 }
+
+CLASS_BASES_META(Editor::DefaultActorComponentViewer)
+{
+	BASE_CLASS(Editor::IActorComponentViewer);
+}
+END_META;
+CLASS_FIELDS_META(Editor::DefaultActorComponentViewer)
+{
+	PROTECTED_FIELD(mTargetComponents);
+	PROTECTED_FIELD(mFieldProperties);
+	PROTECTED_FIELD(mComponentType);
+}
+END_META;
+CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
+{
+
+	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
+	PUBLIC_FUNCTION(const Type*, GetComponentType);
+	PUBLIC_FUNCTION(void, SepcializeComponentType, const Type*);
+	PUBLIC_FUNCTION(void, Refresh);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
+}
+END_META;

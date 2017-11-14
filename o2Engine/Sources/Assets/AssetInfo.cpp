@@ -28,15 +28,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::AssetInfo)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(assetType);
-	PUBLIC_FIELD(path).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(id).SERIALIZABLE_ATTRIBUTE();
-
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-}
-END_META;
+DECLARE_CLASS(o2::AssetInfo);

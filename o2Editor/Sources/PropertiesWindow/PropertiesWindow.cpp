@@ -341,44 +341,4 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::PropertiesWindow)
-{
-	BASE_CLASS(Editor::IEditorWindow);
-	BASE_CLASS(o2::Singleton<PropertiesWindow>);
-
-	PUBLIC_FIELD(onFieldChanged);
-	PUBLIC_FIELD(onTargetsChanged);
-	PROTECTED_FIELD(mPropertyFieldsPoolStep);
-	PROTECTED_FIELD(mTargets);
-	PROTECTED_FIELD(mCurrentViewer);
-	PROTECTED_FIELD(mViewers);
-	PROTECTED_FIELD(mAvailablePropertiesFields);
-	PROTECTED_FIELD(mOnTargetsChangedDelegate);
-	PROTECTED_FIELD(mTargetsChanged);
-
-	typedef Pair<IPropertyField*, UIWidget*> _tmp1;
-	typedef Pair<IPropertyField*, UIWidget*> _tmp2;
-	typedef Pair<IPropertyField*, UIWidget*> _tmp3;
-	typedef Pair<IPropertyField*, UIWidget*> _tmp4;
-	typedef Pair<IPropertyField*, UIWidget*> _tmp5;
-
-	PUBLIC_FUNCTION(void, ResetTargets);
-	PUBLIC_FUNCTION(void, SetTarget, IObject*);
-	PUBLIC_FUNCTION(void, SetTargets, const Vector<IObject*>, const Function<void()>&);
-	PUBLIC_FUNCTION(Vector<IObject*>, GetTargets);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(bool, IsTargetsChanged);
-	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, const Type*, FieldPropertiesInfo&, const String&);
-	PUBLIC_FUNCTION(_tmp1, CreateFieldProperty, const Type*);
-	PUBLIC_FUNCTION(IPropertyField*, GetFieldPropertyPrototype, const Type*);
-	PUBLIC_FUNCTION(_tmp2, CreateRegularField, const Type*, const String&);
-	PUBLIC_FUNCTION(_tmp3, CreateObjectField, const Type*);
-	PUBLIC_FUNCTION(_tmp4, CreateObjectPtrField, const Type*);
-	PUBLIC_FUNCTION(_tmp5, CreateVectorField, const Type*);
-	PROTECTED_FUNCTION(void, InitializeWindow);
-	PROTECTED_FUNCTION(void, InitializeViewers);
-	PROTECTED_FUNCTION(void, InitializePropertiesFields);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
-}
-END_META;
+DECLARE_CLASS(Editor::PropertiesWindow);

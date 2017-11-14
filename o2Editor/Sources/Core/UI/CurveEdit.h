@@ -113,7 +113,7 @@ namespace Editor
 		struct CurveInfo
 		{
 			String         curveId;
-			Curve*         curve;
+			Curve*         curve = nullptr;
 			KeyHandlesVec  handles;
 			PointsVec      approximatedPoints;
 			Color4         color;
@@ -139,8 +139,8 @@ namespace Editor
 
 		struct RangeInfo
 		{
-			CurveInfo* curveA;
-			CurveInfo* curveB;
+			CurveInfo* curveA = nullptr;
+			CurveInfo* curveB = nullptr;
 			Color4     color;
 			Mesh*      mesh;
 
@@ -173,42 +173,45 @@ namespace Editor
 		typedef Vector<CurveKeysInfo> CurveKeysInfosVec;
 
 	protected:
-		UIContextMenu*          mContextMenu;                   // Context menu for editing keys properties, copying, pasting and other
+		UIContextMenu*          mContextMenu = nullptr;             // Context menu for editing keys properties, copying, pasting and other
+							    								    
+		SelectableDragHandle    mMainHandleSample;                  // Main handle sample, uses to copy sprites @SERIALIZABLE
+		SelectableDragHandle    mSupportHandleSample;               // Support handle sample, uses to copy sprites @SERIALIZABLE
+							    								    
+		CurveInfosVec           mCurves;                            // Editing curves infos list 
+		RangeInfosVec           mRanges;                            // Curves ranges list
+							    								    
+		SelectableHandlesVec    mSupportHandles;                    // Support points handles list
+		SelectableHandlesVec    mSelectingHandlesBuf;               // Potentially selecting handles while selecting
+							    								    
+		Sprite*                 mSelectionSprite = nullptr;         // Selection sprite @SERIALIZABLE
+		FontRef                 mTextFont;                          // Captions text font @SERIALIZABLE
+		Text*                   mTextLeft = nullptr;                // Captions text drawable at left border
+		Text*                   mTextRight = nullptr;               // Captions text drawable at right border
+		Text*                   mTextTop = nullptr;                 // Captions text drawable at top border
+		Text*                   mTextBottom = nullptr;              // Captions text drawable at bottom border
+							    								    
+		Vec2F                   mSelectingPressedPoint;             // Point, where cursor was pressed, selection starts here, in local space
+							    								    
+		FrameHandles            mTransformFrame;                    // Keys transformation frame
+		bool                    mTransformFrameVisible = false;     // Is transform frame visible. it visible when 2 or more main handles was selected
+		Basis                   mTransformFrameBasis;               // Basis of transform frame in local space
+								 							   	    
+		bool                    mIsViewScrolling = false;           // Is scrolling view at this time
 							    
-		SelectableDragHandle    mMainHandleSample;              // Main handle sample, uses to copy sprites @SERIALIZABLE
-		SelectableDragHandle    mSupportHandleSample;           // Support handle sample, uses to copy sprites @SERIALIZABLE
+		UIWindow*               mEditValueWindow = nullptr;         // Key position and value editing window
+		UIEditBox*              mEditValueWindowValue = nullptr;    // Key value editing box
+		UIEditBox*              mEditValueWindowPosition = nullptr; // Key position editing box
 							    
-		CurveInfosVec           mCurves;                        // Editing curves infos list 
-		RangeInfosVec           mRanges;                        // Curves ranges list
-							    
-		SelectableHandlesVec    mSupportHandles;                // Support points handles list
-		SelectableHandlesVec    mSelectingHandlesBuf;           // Potentially selecting handles while selecting
-							    
-		Sprite*                 mSelectionSprite = nullptr;     // Selection sprite @SERIALIZABLE
-		FontRef                 mTextFont;                      // Captions text font @SERIALIZABLE
-		Text*                   mTextLeft = nullptr;            // Captions text drawable at left border
-		Text*                   mTextRight = nullptr;           // Captions text drawable at right border
-		Text*                   mTextTop = nullptr;             // Captions text drawable at top border
-		Text*                   mTextBottom = nullptr;          // Captions text drawable at bottom border
-							    
-		Vec2F                   mSelectingPressedPoint;         // Point, where cursor was pressed, selection starts here, in local space
-							    
-		FrameHandles            mTransformFrame;                // Keys transformation frame
-		bool                    mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
-		Basis                   mTransformFrameBasis;           // Basis of transform frame in local space
-								 							   
-		bool                    mIsViewScrolling = false;       // Is scrolling view at this time
-							    
-		UIWindow*               mEditValueWindow;               // Key position and value editing window
-		UIEditBox*              mEditValueWindowValue;          // Key value editing box
-		UIEditBox*              mEditValueWindowPosition;       // Key position editing box
-							    
-		CurveKeysInfosVec       mBeforeTransformKeys;           // Stored selected keys before handles transformed
-
-		ActionsVec              mUndoActions;                   // Actions that can be undo
-		ActionsVec              mRedoActions;                   // Actions that can be redo
+		CurveKeysInfosVec       mBeforeTransformKeys;               // Stored selected keys before handles transformed
+															       
+		ActionsVec              mUndoActions;                       // Actions that can be undo
+		ActionsVec              mRedoActions;                       // Actions that can be redo
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when visible was changed. Sets context menu items priority
 		void OnVisibleChanged() override;
 
@@ -437,3 +440,189 @@ namespace Editor
 		};
 	};
 }
+
+CLASS_BASES_META(Editor::UICurveEditor)
+{
+	BASE_CLASS(Editor::UIFrameScrollView);
+	BASE_CLASS(o2::SelectableDragHandlesGroup);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UICurveEditor)
+{
+	PROTECTED_FIELD(mContextMenu);
+	PROTECTED_FIELD(mMainHandleSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSupportHandleSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mCurves);
+	PROTECTED_FIELD(mRanges);
+	PROTECTED_FIELD(mSupportHandles);
+	PROTECTED_FIELD(mSelectingHandlesBuf);
+	PROTECTED_FIELD(mSelectionSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mTextFont).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mTextLeft);
+	PROTECTED_FIELD(mTextRight);
+	PROTECTED_FIELD(mTextTop);
+	PROTECTED_FIELD(mTextBottom);
+	PROTECTED_FIELD(mSelectingPressedPoint);
+	PROTECTED_FIELD(mTransformFrame);
+	PROTECTED_FIELD(mTransformFrameVisible);
+	PROTECTED_FIELD(mTransformFrameBasis);
+	PROTECTED_FIELD(mIsViewScrolling);
+	PROTECTED_FIELD(mEditValueWindow);
+	PROTECTED_FIELD(mEditValueWindowValue);
+	PROTECTED_FIELD(mEditValueWindowPosition);
+	PROTECTED_FIELD(mBeforeTransformKeys);
+	PROTECTED_FIELD(mUndoActions);
+	PROTECTED_FIELD(mRedoActions);
+}
+END_META;
+CLASS_METHODS_META(Editor::UICurveEditor)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, AddEditingCurve, const String&, Curve*, const Color4&);
+	PUBLIC_FUNCTION(void, RemoveEditingCurve, Curve*);
+	PUBLIC_FUNCTION(void, RemoveEditingCurve, const String&);
+	PUBLIC_FUNCTION(void, RemoveAllEditingCurves);
+	PUBLIC_FUNCTION(void, AddCurvesRange, Curve*, Curve*, const Color4&);
+	PUBLIC_FUNCTION(void, RemoveCurvesRange, Curve*, Curve*);
+	PUBLIC_FUNCTION(void, AddCurvesRange, const String&, const String&, const Color4&);
+	PUBLIC_FUNCTION(void, RemoveCurvesRange, const String&, const String&);
+	PUBLIC_FUNCTION(void, SetSelectionSpriteImage, const ImageAssetRef&);
+	PUBLIC_FUNCTION(void, SetTextFont, const FontRef&);
+	PUBLIC_FUNCTION(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
+	PUBLIC_FUNCTION(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, OnScrolled, float);
+	PROTECTED_FUNCTION(Curve*, FindCurve, const String&);
+	PROTECTED_FUNCTION(void, InitializeContextMenu);
+	PROTECTED_FUNCTION(void, InitializeTextDrawables);
+	PROTECTED_FUNCTION(void, InitializeEditValueWindow);
+	PROTECTED_FUNCTION(void, RecalculateViewArea);
+	PROTECTED_FUNCTION(void, RedrawContent);
+	PROTECTED_FUNCTION(void, DrawGrid);
+	PROTECTED_FUNCTION(void, DrawCurves);
+	PROTECTED_FUNCTION(void, DrawHandles);
+	PROTECTED_FUNCTION(void, DrawSelection);
+	PROTECTED_FUNCTION(void, DrawTransformFrame);
+	PROTECTED_FUNCTION(void, AddCurveKeyHandles, CurveInfo*, int);
+	PROTECTED_FUNCTION(void, RemoveCurveKeyHandles, CurveInfo*, int);
+	PROTECTED_FUNCTION(void, OnCurveKeyMainHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnCurveKeyLeftSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnCurveKeyRightSupportHandleDragged, CurveInfo*, KeyHandles*, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CheckLeftSupportHandlePosition, CurveInfo*, KeyHandles*, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CheckRightSupportHandlePosition, CurveInfo*, KeyHandles*, const Vec2F&);
+	PROTECTED_FUNCTION(void, SmoothKey, CurveInfo*, int);
+	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, CheckHandlesVisible);
+	PROTECTED_FUNCTION(void, UpdateTransformFrame);
+	PROTECTED_FUNCTION(bool, IsTransformFrameVisible);
+	PROTECTED_FUNCTION(void, OnHandleCursorReleased, SelectableDragHandle*, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnHandleBeganDragging, SelectableDragHandle*);
+	PROTECTED_FUNCTION(void, OnHandleMoved, SelectableDragHandle*, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnHandleCompletedChange, SelectableDragHandle*);
+	PROTECTED_FUNCTION(void, SetSelectedKeysSupportsType, Curve::Key::Type);
+	PROTECTED_FUNCTION(void, OnTransformFrameTransformed, const Basis&);
+	PROTECTED_FUNCTION(void, OnTransformBegin);
+	PROTECTED_FUNCTION(void, OnTransformCompleted);
+	PROTECTED_FUNCTION(void, OnEditKeyPositionChanged, const WString&);
+	PROTECTED_FUNCTION(void, OnEditKeyValueChanged, const WString&);
+	PROTECTED_FUNCTION(void, DoneAction, IAction*);
+	PROTECTED_FUNCTION(void, OnEditPressed);
+	PROTECTED_FUNCTION(void, OnAutoSmoothChecked, bool);
+	PROTECTED_FUNCTION(void, OnFlatChecked, bool);
+	PROTECTED_FUNCTION(void, OnFreeChecked, bool);
+	PROTECTED_FUNCTION(void, OnBrokenChecked, bool);
+	PROTECTED_FUNCTION(void, OnDiscreteChecked, bool);
+	PROTECTED_FUNCTION(void, OnCopyPressed);
+	PROTECTED_FUNCTION(void, OnCutPressed);
+	PROTECTED_FUNCTION(void, OnPastePressed);
+	PROTECTED_FUNCTION(void, OnDeletePressed);
+	PROTECTED_FUNCTION(void, OnInsertPressed);
+	PROTECTED_FUNCTION(void, OnUndoPressed);
+	PROTECTED_FUNCTION(void, OnRedoPressed);
+}
+END_META;
+
+CLASS_BASES_META(Editor::UICurveEditor::CurveCopyInfo)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UICurveEditor::CurveCopyInfo)
+{
+	PUBLIC_FIELD(curveId).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(keys).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(Editor::UICurveEditor::CurveCopyInfo)
+{
+}
+END_META;
+
+CLASS_BASES_META(Editor::UICurveEditor::AddKeysAction)
+{
+	BASE_CLASS(Editor::IAction);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UICurveEditor::AddKeysAction)
+{
+	PROTECTED_FIELD(mInfos);
+	PROTECTED_FIELD(mEditor);
+}
+END_META;
+CLASS_METHODS_META(Editor::UICurveEditor::AddKeysAction)
+{
+
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, Redo);
+	PUBLIC_FUNCTION(void, Undo);
+}
+END_META;
+
+CLASS_BASES_META(Editor::UICurveEditor::DeleteKeysAction)
+{
+	BASE_CLASS(Editor::IAction);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UICurveEditor::DeleteKeysAction)
+{
+	PROTECTED_FIELD(mInfos);
+	PROTECTED_FIELD(mEditor);
+}
+END_META;
+CLASS_METHODS_META(Editor::UICurveEditor::DeleteKeysAction)
+{
+
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, Redo);
+	PUBLIC_FUNCTION(void, Undo);
+}
+END_META;
+
+CLASS_BASES_META(Editor::UICurveEditor::KeysChangeAction)
+{
+	BASE_CLASS(Editor::IAction);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UICurveEditor::KeysChangeAction)
+{
+	PROTECTED_FIELD(mInfos);
+	PROTECTED_FIELD(mEditor);
+}
+END_META;
+CLASS_METHODS_META(Editor::UICurveEditor::KeysChangeAction)
+{
+
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, Redo);
+	PUBLIC_FUNCTION(void, Undo);
+}
+END_META;

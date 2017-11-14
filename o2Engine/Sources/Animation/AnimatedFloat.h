@@ -151,3 +151,56 @@ namespace o2
 		void InitializeProperties();
 	};
 }
+
+CLASS_BASES_META(o2::AnimatedValue<float>)
+{
+	BASE_CLASS(o2::IAnimatedValue);
+}
+END_META;
+CLASS_FIELDS_META(o2::AnimatedValue<float>)
+{
+	PUBLIC_FIELD(curve).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(value);
+	PUBLIC_FIELD(target);
+	PUBLIC_FIELD(targetDelegate);
+	PUBLIC_FIELD(targetProperty);
+	PUBLIC_FIELD(key);
+	PUBLIC_FIELD(keys);
+	PROTECTED_FIELD(mValue);
+	PROTECTED_FIELD(mTarget);
+	PROTECTED_FIELD(mTargetDelegate);
+	PROTECTED_FIELD(mTargetProperty);
+}
+END_META;
+CLASS_METHODS_META(o2::AnimatedValue<float>)
+{
+
+	PUBLIC_FUNCTION(void, SetTarget, float*);
+	PUBLIC_FUNCTION(void, SetTarget, float*, const Function<void()>&);
+	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
+	PUBLIC_FUNCTION(void, SetTargetProperty, Setter<float>*);
+	PUBLIC_FUNCTION(float, GetValue);
+	PUBLIC_FUNCTION(float, GetValue, float);
+	PUBLIC_FUNCTION(void, AddKeys, Vector<Vec2F>, float);
+	PUBLIC_FUNCTION(void, AddKey, const Key&);
+	PUBLIC_FUNCTION(void, AddKey, const Key&, float);
+	PUBLIC_FUNCTION(void, AddKey, float, float, float, float, float, float);
+	PUBLIC_FUNCTION(void, AddKey, float, float, float);
+	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(bool, RemoveKey, float);
+	PUBLIC_FUNCTION(void, RemoveAllKeys);
+	PUBLIC_FUNCTION(bool, ContainsKey, float);
+	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
+	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, SmoothKey, float, float);
+	PROTECTED_FUNCTION(void, Evaluate);
+	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
+	PROTECTED_FUNCTION(void, OnCurveChanged);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, SetTargetVoid, void*);
+	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
+	PROTECTED_FUNCTION(void, SetTargetPropertyVoid, void*);
+	PROTECTED_FUNCTION(void, RegInAnimatable, AnimationState*, const String&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

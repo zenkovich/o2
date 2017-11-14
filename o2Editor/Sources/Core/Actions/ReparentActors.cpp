@@ -111,17 +111,4 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::ReparentActorsAction)
-{
-	BASE_CLASS(Editor::IAction);
-
-	PUBLIC_FIELD(actorsInfos);
-	PUBLIC_FIELD(newParentId);
-	PUBLIC_FIELD(newPrevActorId);
-
-	PUBLIC_FUNCTION(void, ActorsReparented, Actor*, Actor*);
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-}
-END_META;
+DECLARE_CLASS(Editor::ReparentActorsAction);

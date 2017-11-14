@@ -19,31 +19,8 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::ParticlesEmitterShape)
-{
-	BASE_CLASS(o2::ISerializable);
+DECLARE_CLASS(o2::ParticlesEmitterShape);
 
+DECLARE_CLASS(o2::CircleParticlesEmitterShape);
 
-	PUBLIC_FUNCTION(Vec2F, GetEmittinPoint);
-}
-END_META;
-
-CLASS_META(o2::CircleParticlesEmitterShape)
-{
-	BASE_CLASS(o2::ParticlesEmitterShape);
-
-	PUBLIC_FIELD(radius);
-
-	PUBLIC_FUNCTION(Vec2F, GetEmittinPoint);
-}
-END_META;
-
-CLASS_META(o2::SquareParticlesEmitterShape)
-{
-	BASE_CLASS(o2::ParticlesEmitterShape);
-
-	PUBLIC_FIELD(size);
-
-	PUBLIC_FUNCTION(Vec2F, GetEmittinPoint);
-}
-END_META;
+DECLARE_CLASS(o2::SquareParticlesEmitterShape);

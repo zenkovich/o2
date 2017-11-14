@@ -51,6 +51,9 @@ namespace Editor
 		UIAssetsIconsScrollArea* mOwner = nullptr;         // Owner assets scroll area
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Sets is this selected
 		void SetSelected(bool selected);
 
@@ -87,3 +90,39 @@ namespace Editor
 		friend class UIAssetsIconsScrollArea;
 	};
 }
+
+CLASS_BASES_META(Editor::UIAssetIcon)
+{
+	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::SelectableDragableObject);
+	BASE_CLASS(o2::DragDropArea);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UIAssetIcon)
+{
+	PROTECTED_FIELD(mNameText);
+	PROTECTED_FIELD(mAssetInfo);
+	PROTECTED_FIELD(mSelectedState);
+	PROTECTED_FIELD(mOwner);
+}
+END_META;
+CLASS_METHODS_META(Editor::UIAssetIcon)
+{
+
+	PUBLIC_FUNCTION(void, SetAssetInfo, const AssetInfo&);
+	PUBLIC_FUNCTION(const AssetInfo&, GetAssetInfo);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, SetSelected, bool);
+	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnDragStart, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnDragged, const Input::Cursor&, DragDropArea*);
+	PROTECTED_FUNCTION(void, OnDragEnd, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnSelected);
+	PROTECTED_FUNCTION(void, OnDeselected);
+	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
+}
+END_META;

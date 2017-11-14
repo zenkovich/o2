@@ -61,6 +61,9 @@ namespace o2
 		bool           mCheckable = false; // Is menu item can be checked
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child);
 
@@ -244,6 +247,9 @@ namespace o2
 		bool                  mShownAtFrame = false;         // Is context was shown at current frame
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Checks widget clipping by area
 		void CheckClipping(const RectF& clipArea) override;
 
@@ -302,3 +308,136 @@ namespace o2
 		friend class UIMenuPanel;
 	};
 }
+
+CLASS_BASES_META(o2::UIContextMenuItem)
+{
+	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::ShortcutKeysListener);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIContextMenuItem)
+{
+	PUBLIC_FIELD(onClick);
+	PUBLIC_FIELD(onChecked);
+	PROTECTED_FIELD(mSubMenu);
+	PROTECTED_FIELD(mChecked);
+	PROTECTED_FIELD(mCheckable);
+}
+END_META;
+CLASS_METHODS_META(o2::UIContextMenuItem)
+{
+
+	PUBLIC_FUNCTION(UIContextMenu*, GetSubMenu);
+	PUBLIC_FUNCTION(void, SetChecked, bool);
+	PUBLIC_FUNCTION(bool, IsChecked);
+	PUBLIC_FUNCTION(void, SetCheckable, bool);
+	PUBLIC_FUNCTION(bool, IsCheckable);
+	PUBLIC_FUNCTION(void, SetShortcut, const ShortcutKeys&);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
+	PROTECTED_FUNCTION(void, OnShortcutPressed);
+}
+END_META;
+
+CLASS_BASES_META(o2::UIContextMenu)
+{
+	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::DrawableCursorEventsListener);
+	BASE_CLASS(o2::KeyboardEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIContextMenu)
+{
+	PROTECTED_FIELD(mOpenSubMenuDelay);
+	PROTECTED_FIELD(mFitSizeMin).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMaxVisibleItems).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mParentContextMenu);
+	PROTECTED_FIELD(mChildContextMenu);
+	PROTECTED_FIELD(mItemsLayout);
+	PROTECTED_FIELD(mItemSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSeparatorSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectionDrawable).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectionLayout).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mCurrentSelectionRect);
+	PROTECTED_FIELD(mTargetSelectionRect);
+	PROTECTED_FIELD(mLastSelectCheckCursor);
+	PROTECTED_FIELD(mSelectedItem);
+	PROTECTED_FIELD(mSelectSubContextTime);
+	PROTECTED_FIELD(mShownAtFrame);
+}
+END_META;
+CLASS_METHODS_META(o2::UIContextMenu)
+{
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Show, UIContextMenu*, const Vec2F&);
+	PUBLIC_FUNCTION(void, Show, const Vec2F&);
+	PUBLIC_FUNCTION(UIWidget*, AddItem, const Item&);
+	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(UIWidget*, InsertItem, const Item&, int);
+	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
+	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
+	PUBLIC_FUNCTION(Item, GetItem, int);
+	PUBLIC_FUNCTION(void, SetItem, int, const Item&);
+	PUBLIC_FUNCTION(Vector<Item>, GetItems);
+	PUBLIC_FUNCTION(void, RemoveItem, int);
+	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
+	PUBLIC_FUNCTION(void, RemoveAllItems);
+	PUBLIC_FUNCTION(void, SetItemChecked, int, bool);
+	PUBLIC_FUNCTION(bool, IsItemChecked, int);
+	PUBLIC_FUNCTION(UIVerticalLayout*, GetItemsLayout);
+	PUBLIC_FUNCTION(UIContextMenuItem*, GetItemSample);
+	PUBLIC_FUNCTION(UIWidget*, GetSeparatorSample);
+	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
+	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
+	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
+	PUBLIC_FUNCTION(void, SetMinFitSize, float);
+	PUBLIC_FUNCTION(void, SetMaxItemsVisible, int);
+	PUBLIC_FUNCTION(void, SetItemsMaxPriority);
+	PUBLIC_FUNCTION(void, SetItemsMinPriority);
+	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, FitSize);
+	PROTECTED_FUNCTION(void, FitPosition);
+	PROTECTED_FUNCTION(void, HideWithParent);
+	PROTECTED_FUNCTION(void, HideWithChild);
+	PROTECTED_FUNCTION(void, SpecialDraw);
+	PROTECTED_FUNCTION(UIContextMenuItem*, CreateItem, const Item&);
+	PROTECTED_FUNCTION(void, SetupItem, UIContextMenuItem*, const Item&);
+	PROTECTED_FUNCTION(Item, GetItemDef, int);
+	PROTECTED_FUNCTION(UIContextMenuItem*, GetItemUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
+}
+END_META;
+
+CLASS_BASES_META(o2::UIContextMenu::Item)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIContextMenu::Item)
+{
+	PUBLIC_FIELD(text).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(icon).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(shortcut).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(subItems).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(checked).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(checkable).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(onClick);
+	PUBLIC_FIELD(onChecked);
+}
+END_META;
+CLASS_METHODS_META(o2::UIContextMenu::Item)
+{
+}
+END_META;

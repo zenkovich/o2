@@ -1174,37 +1174,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::BasicUIStyleBuilder)
-{
-	BASE_CLASS(o2::IObject);
-
-
-	PUBLIC_FUNCTION(void, RebuildButtonStyle);
-	PUBLIC_FUNCTION(void, RebuildCloseButtonStyle);
-	PUBLIC_FUNCTION(void, RebuildArrowButtonStyle);
-	PUBLIC_FUNCTION(void, RebuildHorProgressBarStyle);
-	PUBLIC_FUNCTION(void, RebuildVerProgressBarStyle);
-	PUBLIC_FUNCTION(void, RebuildHorScrollBarStyle);
-	PUBLIC_FUNCTION(void, RebuildVerScrollBarStyle);
-	PUBLIC_FUNCTION(void, RebuildCheckboxStyle);
-	PUBLIC_FUNCTION(void, RebuildCheckboxWithoutCaptionStyle);
-	PUBLIC_FUNCTION(void, RebuildScrollAreaStyle);
-	PUBLIC_FUNCTION(void, RebuildScrollAreaStraightBarsStyle);
-	PUBLIC_FUNCTION(void, RebuildLabelStyle);
-	PUBLIC_FUNCTION(void, RebuildEditBoxStyle);
-	PUBLIC_FUNCTION(void, RebuildCustomListStyle);
-	PUBLIC_FUNCTION(void, RebuildLongListStyle);
-	PUBLIC_FUNCTION(void, RebuildListStyle);
-	PUBLIC_FUNCTION(void, RebuildCustomDropDownStyle);
-	PUBLIC_FUNCTION(void, RebuildDropDownStyle);
-	PUBLIC_FUNCTION(void, RebuildWindowStyle);
-	PUBLIC_FUNCTION(void, RebuildContextMenuStyle);
-	PUBLIC_FUNCTION(void, RebuildTreeStyle);
-	PUBLIC_FUNCTION(void, RebuildMenuPanelStyle);
-	PUBLIC_FUNCTION(void, RebuildBacklessDropdown);
-	PUBLIC_FUNCTION(void, RebuildBacklessEditbox);
-	PUBLIC_FUNCTION(void, RebuildSinglelineEditbox);
-	PUBLIC_FUNCTION(void, RebuildBacklessScrollarea);
-	PUBLIC_FUNCTION(void, RebuildBasicUIManager);
-}
-END_META;
+DECLARE_CLASS(o2::BasicUIStyleBuilder);

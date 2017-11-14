@@ -49,3 +49,25 @@ namespace Editor
 		friend class PropertiesWindow;
 	};
 }
+
+CLASS_BASES_META(Editor::IObjectPropertiesViewer)
+{
+	BASE_CLASS(o2::IObject);
+}
+END_META;
+CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
+{
+	PROTECTED_FIELD(mContentWidget);
+}
+END_META;
+CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
+	PROTECTED_FUNCTION(void, Update, float);
+	PROTECTED_FUNCTION(void, Draw);
+}
+END_META;

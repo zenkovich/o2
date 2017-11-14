@@ -26,9 +26,7 @@ namespace o2
 
 	UIDropDown& UIDropDown::operator=(const UIDropDown& other)
 	{
-		UICustomDropDown::operator=(other);
-		RetargetStatesAnimations();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -112,6 +110,13 @@ namespace o2
 		mItemsList->SelectItemAt(idx);
 	}
 
+	void UIDropDown::CopyData(const Actor& otherActor)
+	{
+		const UIDropDown& other = dynamic_cast<const UIDropDown&>(otherActor);
+		UICustomDropDown::CopyData(other);
+		RetargetStatesAnimations();
+	}
+
 	void UIDropDown::OnSelectionChanged()
 	{
 		onSelectedText(GetSelectedItemText());
@@ -124,24 +129,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIDropDown)
-{
-	BASE_CLASS(o2::UICustomDropDown);
-
-	PUBLIC_FIELD(value);
-	PUBLIC_FIELD(textItem);
-	PUBLIC_FIELD(onSelectedText);
-
-	PUBLIC_FUNCTION(int, AddItem, const WString&);
-	PUBLIC_FUNCTION(int, AddItem, const WString&, int);
-	PUBLIC_FUNCTION(void, AddItems, const Vector<WString>&);
-	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
-	PUBLIC_FUNCTION(int, FindItem, const WString&);
-	PUBLIC_FUNCTION(WString, GetItemText, int);
-	PUBLIC_FUNCTION(Vector<WString>, GetAllItemsText);
-	PUBLIC_FUNCTION(WString, GetSelectedItemText);
-	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
-	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIDropDown);

@@ -65,3 +65,33 @@ namespace o2
 		friend class Application;
 	};
 }
+
+CLASS_BASES_META(o2::ProjectConfig)
+{
+	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::Singleton<ProjectConfig>);
+}
+END_META;
+CLASS_FIELDS_META(o2::ProjectConfig)
+{
+	PUBLIC_FIELD(projectName);
+	PUBLIC_FIELD(currentPlatform);
+	PUBLIC_FIELD(projectPath);
+	PROTECTED_FIELD(mProjectName).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mPlatform);
+	PROTECTED_FIELD(mProjectPath);
+}
+END_META;
+CLASS_METHODS_META(o2::ProjectConfig)
+{
+
+	PUBLIC_FUNCTION(String, GetProjectName);
+	PUBLIC_FUNCTION(void, SetProjectName, const String&);
+	PUBLIC_FUNCTION(Platform, GetPlatform);
+	PUBLIC_FUNCTION(void, SetPlatform, Platform);
+	PUBLIC_FUNCTION(String, GetProjectPath);
+	PUBLIC_FUNCTION(void, SetProjectPath, const String&);
+	PROTECTED_FUNCTION(void, InitializeDefault, const String&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

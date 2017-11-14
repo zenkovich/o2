@@ -253,10 +253,14 @@ namespace o2
 }
 
 META_TEMPLATES(typename _type)
-CLASS_TEMPLATE_META(o2::TweenValue<typename _type>)
+CLASS_BASES_META(o2::TweenValue<typename _type>)
 {
 	BASE_CLASS(o2::IAnimation);
-
+}
+END_META;
+META_TEMPLATES(typename _type)
+CLASS_FIELDS_META(o2::TweenValue<typename _type>)
+{
 	PUBLIC_FIELD(leftValue);
 	PUBLIC_FIELD(rightValue);
 	PUBLIC_FIELD(transitionCurve);
@@ -270,6 +274,11 @@ CLASS_TEMPLATE_META(o2::TweenValue<typename _type>)
 	PROTECTED_FIELD(mBindValue);
 	PROTECTED_FIELD(mBindValueChangeEvent);
 	PROTECTED_FIELD(mBindProperty);
+}
+END_META;
+META_TEMPLATES(typename _type)
+CLASS_METHODS_META(o2::TweenValue<typename _type>)
+{
 
 	PUBLIC_FUNCTION(_type, GetValue);
 	PUBLIC_FUNCTION(void, SetTarget, _type*);

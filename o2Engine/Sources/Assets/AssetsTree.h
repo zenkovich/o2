@@ -85,3 +85,20 @@ namespace o2
 		AssetNode* LoadAsset(const String& path, AssetNode* parent, const TimeStamp& time);
 	};
 }
+
+CLASS_BASES_META(o2::AssetTree::AssetNode)
+{
+	BASE_CLASS(o2::ITreeNode<AssetNode>);
+	BASE_CLASS(o2::AssetInfo);
+}
+END_META;
+CLASS_FIELDS_META(o2::AssetTree::AssetNode)
+{
+	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(time);
+}
+END_META;
+CLASS_METHODS_META(o2::AssetTree::AssetNode)
+{
+}
+END_META;
