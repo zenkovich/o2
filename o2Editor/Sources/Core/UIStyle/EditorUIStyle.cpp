@@ -32,6 +32,7 @@
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
 #include "UI/Window.h"
+#include "Utils/Timer.h"
 
 using namespace o2;
 
@@ -2418,12 +2419,17 @@ namespace Editor
 		o2UI.ClearStyle();
 
 		auto funcs = GetType().GetFunctionsWithBaseClasses();
+
+		Timer timer;
 		for (auto func : funcs)
 		{
 			if (func->GetName() == "RebuildBasicUIManager" || func->GetName() == "RebuildEditorUIManager")
 				continue;
 
+			timer.Reset();
 			func->Invoke<void>(this);
+
+			o2Debug.Log(func->GetName() + " for " + (String)timer.GetDeltaTime() + " sec");
 		}
 
 		o2UI.SaveStyle("editor_ui_style.xml");

@@ -216,8 +216,6 @@ namespace o2
 
 	protected:
 		using Actor::mLayer;
-
-		String         mName;                   // Name @SERIALIZABLE
 					   						    
 		LayersVec      mLayers;                 // Layers array @SERIALIZABLE
 		StatesVec      mStates;                 // States array @SERIALIZABLE
@@ -436,7 +434,6 @@ CLASS_FIELDS_META(o2::UIWidget)
 	PUBLIC_FIELD(onUnfocused);
 	PUBLIC_FIELD(onShow);
 	PUBLIC_FIELD(onHide);
-	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mLayers).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mParentWidget).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();

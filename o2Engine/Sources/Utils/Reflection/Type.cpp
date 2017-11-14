@@ -159,40 +159,13 @@ namespace o2
 			return "";
 
 		String res;
+		Vector<SearchPassedObject> passedObjects;
 
-		for (auto field : mFields)
+		FieldInfo* info = SearchFieldPath(object, targetObject, "", res, passedObjects);
+		if (info)
 		{
-			if (field->HasAttribute<ExcludePointerSearchAttribute>())
-				continue;
-
-			void* fieldObject = field->GetValuePtr(object);
-
-			if (fieldObject == nullptr)
-				continue;
-
-			if (fieldObject == targetObject)
-			{
-				fieldInfo = field;
-				return field->mName;
-			}
-
-			Vector<SearchPassedObject> passedObjects;
-			passedObjects.Add(SearchPassedObject(object, this));
-			passedObjects.Add(SearchPassedObject(fieldObject, field->GetType()));
-
-			FieldInfo* info = field->SearchFieldPath(fieldObject, targetObject, field->mName, res, passedObjects);
-			if (info)
-			{
-				fieldInfo = info;
-				return res;
-			}
-		}
-
-		for (auto baseType : mBaseTypes)
-		{
-			auto baseRes = baseType.type->GetFieldPath((*baseType.dynamicCastFunc)(object), targetObject, fieldInfo);
-			if (fieldInfo)
-				return baseRes;
+			fieldInfo = info;
+			res.Erase(0, 1);
 		}
 
 		return res;
@@ -215,6 +188,7 @@ namespace o2
 				continue;
 
 			passedObjects.Add(SearchPassedObject(fieldObj, field->GetType()));
+			//printf((path + "/" + field->mName + "\n").Data());
 
 			if (fieldObj == target)
 			{
@@ -410,7 +384,7 @@ namespace o2
 	}
 
 	PointerType::PointerType(const Type* unptrType):
-		Type(unptrType->GetName() + "*", new TypeSampleCreator<void*>(), sizeof(void*)), 
+		Type(unptrType->GetName() + "*", new TypeSampleCreator<void*>(), sizeof(void*)),
 		mUnptrType(unptrType)
 	{}
 
@@ -424,7 +398,7 @@ namespace o2
 		return mUnptrType;
 	}
 
-	FieldInfo* PointerType::SearchFieldPath(void* obj, void* target, const String& path, String& res, 
+	FieldInfo* PointerType::SearchFieldPath(void* obj, void* target, const String& path, String& res,
 											Vector<SearchPassedObject>& passedObjects) const
 	{
 		return mUnptrType->SearchFieldPath(*(void**)obj, target, path, res, passedObjects);
@@ -449,11 +423,10 @@ namespace o2
 		return mValueType;
 	}
 
-	ObjectType::ObjectType(const String& name, ITypeSampleCreator* creator, int size, 
+	ObjectType::ObjectType(const String& name, ITypeSampleCreator* creator, int size,
 						   void*(*castFromFunc)(void*), void*(*castToFunc)(void*)):
 		Type(name, creator, size), mCastToFunc(castToFunc), mCastFromFunc(castFromFunc)
-	{
-	}
+	{}
 
 	Type::Usage ObjectType::GetUsage() const
 	{

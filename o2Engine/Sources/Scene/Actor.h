@@ -365,7 +365,7 @@ namespace o2
 		UInt64          mId;                      // Unique actor id
 		String          mName;                    // Name of actor
 
-		SceneLayer*     mLayer = nullptr;         // Scene layer
+		SceneLayer*     mLayer = nullptr;         // Scene layer @EXCLUDE_POINTER_SEARCH
 
 		Actor*          mParent = nullptr;        // Parent actor
 		ActorsVec       mChildren;                // Children actors 
@@ -749,7 +749,7 @@ CLASS_FIELDS_META(o2::Actor)
 	PROTECTED_FIELD(mPrototypeLink);
 	PROTECTED_FIELD(mId);
 	PROTECTED_FIELD(mName);
-	PROTECTED_FIELD(mLayer);
+	PROTECTED_FIELD(mLayer).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mParent);
 	PROTECTED_FIELD(mChildren);
 	PROTECTED_FIELD(mComponents);
