@@ -24,12 +24,7 @@ namespace o2
 
 	UIImage& UIImage::operator=(const UIImage& other)
 	{
-		UIWidget::operator=(other);
-
-		mImage = GetLayerDrawable<Sprite>("image");
-		if (!mImage)
-			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -79,6 +74,17 @@ namespace o2
 		return GetImageAsset()->GetPath();
 	}
 
+	void UIImage::CopyData(const Actor& otherActor)
+	{
+		const UIImage& other = dynamic_cast<const UIImage&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mImage = GetLayerDrawable<Sprite>("image");
+		if (!mImage)
+			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
+	}
+
 	void UIImage::InitializeProperties()
 	{
 		INITIALIZE_PROPERTY(UIImage, image, SetImage, GetImage);
@@ -87,21 +93,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIImage)
-{
-	BASE_CLASS(o2::UIWidget);
-
-	PUBLIC_FIELD(image);
-	PUBLIC_FIELD(imageAsset);
-	PUBLIC_FIELD(imageName);
-	PROTECTED_FIELD(mImage);
-
-	PUBLIC_FUNCTION(void, SetImage, Sprite*);
-	PUBLIC_FUNCTION(Sprite*, GetImage);
-	PUBLIC_FUNCTION(void, SetImageAsset, const ImageAssetRef&);
-	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
-	PUBLIC_FUNCTION(void, SetImageName, const String&);
-	PUBLIC_FUNCTION(String, GetImageName);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIImage);

@@ -10,12 +10,9 @@ namespace Editor
 {
 	IEditorWindow::IEditorWindow()
 	{
-		if (Application::IsReady())
-		{
-			mWindow = o2UI.CreateWidget<UIDockableWindow>();
-			mWindow->layout->size = Vec2F(200, 200);
-			EditorUIRoot.AddWidget(mWindow);
-		}
+		mWindow = o2UI.CreateWidget<UIDockableWindow>();
+		mWindow->layout->size = Vec2F(200, 200);
+		EditorUIRoot.AddWidget(mWindow);
 	}
 
 	IEditorWindow::IEditorWindow(const IEditorWindow& other):
@@ -27,7 +24,8 @@ namespace Editor
 
 	IEditorWindow::~IEditorWindow()
 	{
-		delete mWindow;
+		if (mWindow)
+			delete mWindow;
 	}
 
 	void IEditorWindow::Show()
@@ -58,19 +56,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::IEditorWindow)
-{
-	BASE_CLASS(o2::IObject);
-
-	PUBLIC_FIELD(visible);
-	PROTECTED_FIELD(mWindow);
-
-	PUBLIC_FUNCTION(void, SetVisible, bool);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(bool, IsVisible);
-	PUBLIC_FUNCTION(void, Show);
-	PUBLIC_FUNCTION(void, Hide);
-	PROTECTED_FUNCTION(void, PostInitializeWindow);
-}
-END_META;
+DECLARE_CLASS(Editor::IEditorWindow);

@@ -772,80 +772,9 @@ namespace o2
 
 }
 
-CLASS_META(o2::Curve)
-{
-	BASE_CLASS(o2::ISerializable);
+DECLARE_CLASS(o2::Curve);
 
-	PUBLIC_FIELD(value);
-	PUBLIC_FIELD(key);
-	PUBLIC_FIELD(keys);
-	PUBLIC_FIELD(length);
-	PUBLIC_FIELD(onKeysChanged);
-	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(float, Evaluate, float);
-	PUBLIC_FUNCTION(void, MoveKeys, float);
-	PUBLIC_FUNCTION(void, MoveKeysFrom, float, float);
-	PUBLIC_FUNCTION(void, AppendCurve, const Curve&);
-	PUBLIC_FUNCTION(void, PrependCurve, const Curve&);
-	PUBLIC_FUNCTION(void, InsertCurve, const Curve&, float);
-	PUBLIC_FUNCTION(void, AppendKeys, Vector<Vec2F>, bool);
-	PUBLIC_FUNCTION(void, AppendKeys, const KeysVec&);
-	PUBLIC_FUNCTION(void, PrependKeys, Vector<Vec2F>, bool);
-	PUBLIC_FUNCTION(void, PrependKeys, const KeysVec&);
-	PUBLIC_FUNCTION(void, InsertKeys, Vector<Vec2F>, float, bool);
-	PUBLIC_FUNCTION(void, InsertKeys, const KeysVec&, float);
-	PUBLIC_FUNCTION(int, InsertKey, const Key&);
-	PUBLIC_FUNCTION(int, InsertKey, float, float, float, float, float, float);
-	PUBLIC_FUNCTION(int, InsertKey, float, float, float);
-	PUBLIC_FUNCTION(int, InsertFlatKey, float, float);
-	PUBLIC_FUNCTION(int, AppendKey, float, float, float, float, float, float);
-	PUBLIC_FUNCTION(int, AppendKey, float, float, float);
-	PUBLIC_FUNCTION(int, AppendKey, float, float);
-	PUBLIC_FUNCTION(int, PrependKey, float, float, float, float, float, float);
-	PUBLIC_FUNCTION(int, PrependKey, float, float, float);
-	PUBLIC_FUNCTION(int, PrependKey, float, float);
-	PUBLIC_FUNCTION(Key, GetKey, float);
-	PUBLIC_FUNCTION(Key, GetKeyAt, int);
-	PUBLIC_FUNCTION(bool, RemoveKey, float);
-	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
-	PUBLIC_FUNCTION(void, RemoveAllKeys);
-	PUBLIC_FUNCTION(bool, ContainsKey, float);
-	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
-	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
-	PUBLIC_FUNCTION(void, SetKey, const Key&, int);
-	PUBLIC_FUNCTION(void, SmoothKey, float, float);
-	PUBLIC_FUNCTION(void, SmoothKeyAt, int, float);
-	PUBLIC_FUNCTION(float, Length);
-	PUBLIC_FUNCTION(bool, IsEmpty);
-	PUBLIC_FUNCTION(RectF, GetRect);
-	PROTECTED_FUNCTION(void, CheckSmoothKeys);
-	PROTECTED_FUNCTION(void, UpdateApproximation);
-	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, InternalSmoothKeyAt, int, float);
-	PROTECTED_FUNCTION(void, InternalSmoothKey, float, float);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
-
-CLASS_META(o2::Curve::Key)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(leftSupportValue).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(leftSupportPosition).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(rightSupportValue).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(rightSupportPosition).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(supportsType).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mApproxValues);
-
-	PUBLIC_FUNCTION(const Vec2F*, GetApproximatedPoints);
-	PUBLIC_FUNCTION(int, GetApproximatedPointsCount);
-}
-END_META;
+DECLARE_CLASS(o2::Curve::Key);
 
 ENUM_META_(o2::Curve::Key::Type, Type)
 {

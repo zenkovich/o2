@@ -47,14 +47,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::StdAssetConverter)
-{
-	BASE_CLASS(o2::IAssetConverter);
-
-
-	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetTree::AssetNode&, const AssetTree::AssetNode&);
-}
-END_META;
+DECLARE_CLASS(o2::StdAssetConverter);

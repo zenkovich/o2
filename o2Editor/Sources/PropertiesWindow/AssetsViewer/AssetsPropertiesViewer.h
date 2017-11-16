@@ -67,3 +67,30 @@ namespace Editor
 		void OnNameTextEditChanged(const WString& value);
 	};
 }
+
+CLASS_BASES_META(Editor::AssetsPropertiesViewer)
+{
+	BASE_CLASS(Editor::IObjectPropertiesViewer);
+}
+END_META;
+CLASS_FIELDS_META(Editor::AssetsPropertiesViewer)
+{
+	PROTECTED_FIELD(mTargetAssets);
+	PROTECTED_FIELD(mCurrentViewer);
+	PROTECTED_FIELD(mAvailableAssetViewers);
+}
+END_META;
+CLASS_METHODS_META(Editor::AssetsPropertiesViewer)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PUBLIC_FUNCTION(void, AddAssetViewer, IAssetPropertiesViewer*);
+	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
+	PROTECTED_FUNCTION(void, Update, float);
+	PROTECTED_FUNCTION(void, Draw);
+	PROTECTED_FUNCTION(void, InitializeHeadWidget);
+	PROTECTED_FUNCTION(void, OnNameTextEditChanged, const WString&);
+}
+END_META;

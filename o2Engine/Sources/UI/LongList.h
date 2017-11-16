@@ -106,6 +106,9 @@ namespace o2
 		WidgetsVec        mItemsPool;                               // Items pool
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when object was deserialized and trying to reattach states animations target
 		void OnDeserialized(const DataNode& node) override;
 
@@ -167,3 +170,74 @@ namespace o2
 		friend class UICustomDropDown;
 	};
 }
+
+CLASS_BASES_META(o2::UILongList)
+{
+	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::DrawableCursorEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(o2::UILongList)
+{
+	PUBLIC_FIELD(selectedItemPos);
+	PUBLIC_FIELD(onFocused);
+	PUBLIC_FIELD(getItemsCountFunc);
+	PUBLIC_FIELD(getItemsRangeFunc);
+	PUBLIC_FIELD(setupItemFunc);
+	PROTECTED_FIELD(mItemSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectionDrawable).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHoverDrawable).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectionLayout).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHoverLayout).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMinVisibleItemIdx);
+	PROTECTED_FIELD(mMaxVisibleItemIdx);
+	PROTECTED_FIELD(mSelectedItem);
+	PROTECTED_FIELD(mCurrentSelectionRect);
+	PROTECTED_FIELD(mTargetSelectionRect);
+	PROTECTED_FIELD(mCurrentHoverRect);
+	PROTECTED_FIELD(mTargetHoverRect);
+	PROTECTED_FIELD(mLastHoverCheckCursor);
+	PROTECTED_FIELD(mLastSelectCheckCursor);
+	PROTECTED_FIELD(mItemsPool);
+}
+END_META;
+CLASS_METHODS_META(o2::UILongList)
+{
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
+	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
+	PUBLIC_FUNCTION(void, SelectItemAt, int);
+	PUBLIC_FUNCTION(int, GetSelectedItemPosition);
+	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
+	PUBLIC_FUNCTION(Sprite*, GetHoverDrawable);
+	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
+	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
+	PUBLIC_FUNCTION(void, SetHoverDrawableLayout, const Layout&);
+	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
+	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
+	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, UpdateTransparency);
+	PROTECTED_FUNCTION(void, CalculateScrollArea);
+	PROTECTED_FUNCTION(void, UpdateControls, float);
+	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
+	PROTECTED_FUNCTION(void, UpdateVisibleItems);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnScrolled, float);
+	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
+	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
+	PROTECTED_FUNCTION(void, UpdateSelection, int);
+	PROTECTED_FUNCTION(void, OnSelectionChanged);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

@@ -68,6 +68,9 @@ namespace Editor
 		RectF              mDragHandleAreaMax;   // Separator drag handle area calculated from mDragHandleLayout
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// It is called when cursor drag handle was moved
 		void OnDragHandleMinMoved(const Vec2F& delta);
 
@@ -84,3 +87,40 @@ namespace Editor
 		friend class WindowsLayout;
 	};
 }
+
+CLASS_BASES_META(Editor::UIDockWindowPlace)
+{
+	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::DrawableCursorEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UIDockWindowPlace)
+{
+	PROTECTED_FIELD(mResizibleDir);
+	PROTECTED_FIELD(mNeighborMin);
+	PROTECTED_FIELD(mDragHandleMin);
+	PROTECTED_FIELD(mDragHandleLayoutMin);
+	PROTECTED_FIELD(mDragHandleAreaMin);
+	PROTECTED_FIELD(mNeighborMax);
+	PROTECTED_FIELD(mDragHandleMax);
+	PROTECTED_FIELD(mDragHandleLayoutMax);
+	PROTECTED_FIELD(mDragHandleAreaMax);
+}
+END_META;
+CLASS_METHODS_META(Editor::UIDockWindowPlace)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, SetResizibleDir, TwoDirection, float, UIDockWindowPlace*, UIDockWindowPlace*);
+	PUBLIC_FUNCTION(TwoDirection, GetResizibleDir);
+	PUBLIC_FUNCTION(void, ArrangeChildWindows);
+	PUBLIC_FUNCTION(void, SetActiveTab, UIDockableWindow*);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, OnDragHandleMinMoved, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnDragHandleMaxMoved, const Vec2F&);
+	PROTECTED_FUNCTION(void, CheckInteractable);
+	PROTECTED_FUNCTION(void, InitializeDragHandle);
+}
+END_META;

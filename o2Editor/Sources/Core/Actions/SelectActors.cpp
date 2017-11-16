@@ -44,15 +44,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::SelectActorsAction)
-{
-	BASE_CLASS(Editor::IAction);
-
-	PUBLIC_FIELD(selectedActorsIds);
-	PUBLIC_FIELD(prevSelectedActorsIds);
-
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-}
-END_META;
+DECLARE_CLASS(Editor::SelectActorsAction);

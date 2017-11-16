@@ -104,3 +104,47 @@ namespace Editor
 		void StoreValues(Vector<DataNode>& data) const;
 	};
 }
+
+CLASS_BASES_META(Editor::FloatProperty)
+{
+	BASE_CLASS(Editor::IPropertyField);
+	BASE_CLASS(o2::KeyboardEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(Editor::FloatProperty)
+{
+	PROTECTED_FIELD(mAssignFunc);
+	PROTECTED_FIELD(mGetFunc);
+	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mCommonValue);
+	PROTECTED_FIELD(mValuesDifferent);
+	PROTECTED_FIELD(mPropertyWidget);
+	PROTECTED_FIELD(mEditBox);
+	PROTECTED_FIELD(mRevertBtn);
+	PROTECTED_FIELD(mDragHangle);
+}
+END_META;
+CLASS_METHODS_META(Editor::FloatProperty)
+{
+
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
+	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(float, GetCommonValue);
+	PUBLIC_FUNCTION(bool, IsValuesDifferent);
+	PUBLIC_FUNCTION(void, SetValue, float);
+	PUBLIC_FUNCTION(void, SetUnknownValue, float);
+	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PROTECTED_FUNCTION(void, SetCommonValue, float);
+	PROTECTED_FUNCTION(void, CheckRevertableState);
+	PROTECTED_FUNCTION(void, OnEdited, const WString&);
+	PROTECTED_FUNCTION(void, OnDragHandleMoved, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	PROTECTED_FUNCTION(void, OnMoveHandlePressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnMoveHandleReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, SetValueByUser, float);
+	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
+}
+END_META;

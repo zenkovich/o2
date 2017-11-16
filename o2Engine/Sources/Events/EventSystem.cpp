@@ -407,7 +407,8 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		mInstance->mAreaCursorListeners.Add(listener);
+		if (mInstance)
+			mInstance->mAreaCursorListeners.Add(listener);
 	}
 
 	void EventSystem::UnregCursorAreaListener(CursorAreaEventsListener* listener)
@@ -430,7 +431,8 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		mInstance->mCursorListeners.Add(listener);
+		if (mInstance)
+			mInstance->mCursorListeners.Add(listener);
 	}
 
 	void EventSystem::UnregCursorListener(CursorEventsListener* listener)
@@ -438,7 +440,8 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		mInstance->mCursorListeners.Remove(listener);
+		if (mInstance)
+			mInstance->mCursorListeners.Remove(listener);
 	}
 
 	void EventSystem::RegDragListener(DragableObject* listener)
@@ -446,12 +449,14 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		mInstance->mDragListeners.Add(listener);
+		if (mInstance)
+			mInstance->mDragListeners.Add(listener);
 	}
 
 	void EventSystem::UnregDragListener(DragableObject* listener)
 	{
-		mInstance->mDragListeners.Remove(listener);
+		if (mInstance)
+			mInstance->mDragListeners.Remove(listener);
 	}
 
 	void EventSystem::RegKeyboardListener(KeyboardEventsListener* listener)
@@ -459,12 +464,14 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		mInstance->mKeyboardListeners.Add(listener);
+		if (mInstance)
+			mInstance->mKeyboardListeners.Add(listener);
 	}
 
 	void EventSystem::UnregKeyboardListener(KeyboardEventsListener* listener)
 	{
-		mInstance->mKeyboardListeners.Remove(listener);
+		if (mInstance)
+			mInstance->mKeyboardListeners.Remove(listener);
 	}
 
 	void EventSystem::RegApplicationListener(ApplicationEventsListener* listener)
@@ -472,11 +479,13 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		mInstance->mApplicationListeners.Add(listener);
+		if (mInstance)
+			mInstance->mApplicationListeners.Add(listener);
 	}
 
 	void EventSystem::UnregApplicationListener(ApplicationEventsListener* listener)
 	{
-		mInstance->mApplicationListeners.Remove(listener);
+		if (mInstance)
+			mInstance->mApplicationListeners.Remove(listener);
 	}
 }

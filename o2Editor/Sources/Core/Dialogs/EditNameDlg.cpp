@@ -29,7 +29,8 @@ namespace Editor
 
 	NameEditDlg::~NameEditDlg()
 	{
-		delete mWindow;
+		if (mWindow)
+			delete mWindow;
 	}
 
 	void NameEditDlg::Show(const String& name, Function<void(const String&)> onCompleted, 

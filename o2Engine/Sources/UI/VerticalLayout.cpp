@@ -8,7 +8,7 @@ namespace o2
 	UIVerticalLayout::UIVerticalLayout(): UIWidget()
 	{
 		InitializeProperties();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIVerticalLayout::UIVerticalLayout(const UIVerticalLayout& other):
@@ -16,7 +16,7 @@ namespace o2
 		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren)
 	{
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 		InitializeProperties();
 	}
 
@@ -25,18 +25,7 @@ namespace o2
 
 	UIVerticalLayout& UIVerticalLayout::operator=(const UIVerticalLayout& other)
 	{
-		mBaseCorner    = other.mBaseCorner;
-		mSpacing       = other.mSpacing;
-		mBorder        = other.mBorder;
-		mExpandWidth   = other.mExpandWidth;
-		mExpandHeight  = other.mExpandHeight;
-		mFitByChildren = other.mFitByChildren;
-
-		UIWidget::operator=(other);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -161,6 +150,23 @@ namespace o2
 
 		if (withChildren)
 			RearrangeChilds();
+	}
+
+	void UIVerticalLayout::CopyData(const Actor& otherActor)
+	{
+		const UIVerticalLayout& other = dynamic_cast<const UIVerticalLayout&>(otherActor);
+
+		mBaseCorner    = other.mBaseCorner;
+		mSpacing       = other.mSpacing;
+		mBorder        = other.mBorder;
+		mExpandWidth   = other.mExpandWidth;
+		mExpandHeight  = other.mExpandHeight;
+		mFitByChildren = other.mFitByChildren;
+
+		UIWidget::CopyData(other);
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
 	}
 
 	float UIVerticalLayout::GetMinHeightWithChildren() const
@@ -388,7 +394,7 @@ namespace o2
 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
 		Vec2F size(GetMinWidthWithChildren(), GetMinHeightWithChildren());
 
-		Vec2F parentSize = mParent ? mParentWidget->transform->size : Vec2F();		
+		Vec2F parentSize = mParentWidget ? mParentWidget->transform->size : Vec2F();		
 		Vec2F szDelta = size - (layout->mData->offsetMax - layout->mData->offsetMin + (layout->mData->anchorMax - layout->mData->anchorMin)*parentSize);
 
 		if (mExpandWidth)
@@ -484,59 +490,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIVerticalLayout)
-{
-	BASE_CLASS(o2::UIWidget);
-
-	PUBLIC_FIELD(baseCorner);
-	PUBLIC_FIELD(spacing);
-	PUBLIC_FIELD(border);
-	PUBLIC_FIELD(borderLeft);
-	PUBLIC_FIELD(borderRight);
-	PUBLIC_FIELD(borderTop);
-	PUBLIC_FIELD(borderBottom);
-	PUBLIC_FIELD(expandWidth);
-	PUBLIC_FIELD(expandHeight);
-	PUBLIC_FIELD(fitByChildren);
-	PROTECTED_FIELD(mBaseCorner).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSpacing).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mBorder).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mExpandWidth).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mExpandHeight).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mFitByChildren).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
-	PUBLIC_FUNCTION(BaseCorner, GetBaseCorner);
-	PUBLIC_FUNCTION(void, SetSpacing, float);
-	PUBLIC_FUNCTION(float, GetSpacing);
-	PUBLIC_FUNCTION(void, SetBorder, const RectF&);
-	PUBLIC_FUNCTION(RectF, GetBorder);
-	PUBLIC_FUNCTION(void, SetBorderLeft, float);
-	PUBLIC_FUNCTION(float, GetBorderLeft);
-	PUBLIC_FUNCTION(void, SetBorderRight, float);
-	PUBLIC_FUNCTION(float, GetBorderRight);
-	PUBLIC_FUNCTION(void, SetBorderTop, float);
-	PUBLIC_FUNCTION(float, GetBorderTop);
-	PUBLIC_FUNCTION(void, SetBorderBottom, float);
-	PUBLIC_FUNCTION(float, GetBorderBottom);
-	PUBLIC_FUNCTION(void, SetWidthExpand, bool);
-	PUBLIC_FUNCTION(bool, IsWidthExpand);
-	PUBLIC_FUNCTION(void, SetHeightExpand, bool);
-	PUBLIC_FUNCTION(bool, IsHeightExpand);
-	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
-	PUBLIC_FUNCTION(bool, IsFittingByChildren);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
-	PROTECTED_FUNCTION(void, RearrangeChilds);
-	PROTECTED_FUNCTION(void, ArrangeFromTopToBottom);
-	PROTECTED_FUNCTION(void, ArrangeFromBottomToTop);
-	PROTECTED_FUNCTION(void, ArrangeFromCenter);
-	PROTECTED_FUNCTION(void, ExpandSizeByChilds);
-	PROTECTED_FUNCTION(Vector<float>, CalculateExpandedHeights);
-	PROTECTED_FUNCTION(void, AlignWidgetByWidth, UIWidget*, float);
-	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIVerticalLayout);

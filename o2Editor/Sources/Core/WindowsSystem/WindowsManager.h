@@ -59,13 +59,13 @@ namespace Editor
 	protected:
 		const bool mNeedRebuildWndStyle = true; // Is need to rebuild dockable windows style
 
-		EditorWindowsVec   mEditorWindows;      // Editors windows list
-		UIDockWindowPlace* mMainDockPlace;      // Main windows dock place
-		WndLayoutsDict     mAvailableLayouts;   // Available layouts
+		EditorWindowsVec   mEditorWindows;            // Editors windows list
+		UIDockWindowPlace* mMainDockPlace = nullptr;  // Main windows dock place
+		WndLayoutsDict     mAvailableLayouts;         // Available layouts
 
-		ColorPickerDlg*    mColorPickerDlg;     // Shared color picker dialog
-		CurveEditorDlg*    mCurveEditorDlg;     // Shared curves editing dialog
-		NameEditDlg*       mNameEditDlg;        // Name editing dialog
+		ColorPickerDlg*    mColorPickerDlg = nullptr; // Shared color picker dialog
+		CurveEditorDlg*    mCurveEditorDlg = nullptr; // Shared curves editing dialog
+		NameEditDlg*       mNameEditDlg = nullptr;    // Name editing dialog
 
 	protected:
 		// Default constructor

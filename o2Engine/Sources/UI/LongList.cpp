@@ -29,7 +29,7 @@ namespace o2
 		mItemSample->UpdateLayout();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		InitializeProperties();
 	}
@@ -43,24 +43,7 @@ namespace o2
 
 	UILongList& UILongList::operator=(const UILongList& other)
 	{
-		delete mItemSample;
-		delete mSelectionDrawable;
-		delete mHoverDrawable;
-
-		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
-
-		mSelectionLayout = other.mSelectionLayout;
-		mHoverLayout = other.mHoverLayout;
-
-		UIScrollArea::operator=(other);
-
-		mItemSample = other.mItemSample->CloneAs<UIWidget>();
-		mItemSample->UpdateLayout(true);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -123,7 +106,7 @@ namespace o2
 		delete mItemSample;
 		mItemSample = sample;
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIWidget* UILongList::GetItemSample() const
@@ -198,11 +181,11 @@ namespace o2
 		{
 			auto countFunc = getItemsCountFunc;
 			getItemsCountFunc = []() { return 0; };
-			UpdateLayout();
+			SetLayoutDirty();
 			getItemsCountFunc = countFunc;
 		}
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UILongList::CalculateScrollArea()
@@ -399,6 +382,29 @@ namespace o2
 		return nullptr;
 	}
 
+	void UILongList::CopyData(const Actor& otherActor)
+	{
+		const UILongList& other = dynamic_cast<const UILongList&>(otherActor);
+
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mHoverDrawable;
+
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+
+		mSelectionLayout = other.mSelectionLayout;
+		mHoverLayout = other.mHoverLayout;
+
+		UIScrollArea::CopyData(other);
+
+		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample->UpdateLayout(true);
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+	}
+
 	void UILongList::OnDeserialized(const DataNode& node)
 	{
 		UIScrollArea::OnDeserialized(node);
@@ -508,65 +514,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UILongList)
-{
-	BASE_CLASS(o2::UIScrollArea);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
-
-	PUBLIC_FIELD(selectedItemPos);
-	PUBLIC_FIELD(onFocused);
-	PUBLIC_FIELD(getItemsCountFunc);
-	PUBLIC_FIELD(getItemsRangeFunc);
-	PUBLIC_FIELD(setupItemFunc);
-	PROTECTED_FIELD(mItemSample).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectionDrawable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHoverDrawable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectionLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHoverLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mMinVisibleItemIdx);
-	PROTECTED_FIELD(mMaxVisibleItemIdx);
-	PROTECTED_FIELD(mSelectedItem);
-	PROTECTED_FIELD(mCurrentSelectionRect);
-	PROTECTED_FIELD(mTargetSelectionRect);
-	PROTECTED_FIELD(mCurrentHoverRect);
-	PROTECTED_FIELD(mTargetHoverRect);
-	PROTECTED_FIELD(mLastHoverCheckCursor);
-	PROTECTED_FIELD(mLastSelectCheckCursor);
-	PROTECTED_FIELD(mItemsPool);
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
-	PUBLIC_FUNCTION(void, SelectItemAt, int);
-	PUBLIC_FUNCTION(int, GetSelectedItemPosition);
-	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
-	PUBLIC_FUNCTION(Sprite*, GetHoverDrawable);
-	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
-	PUBLIC_FUNCTION(void, SetHoverDrawableLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
-	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
-	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, CalculateScrollArea);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
-	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateVisibleItems);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
-	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateSelection, int);
-	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UILongList);

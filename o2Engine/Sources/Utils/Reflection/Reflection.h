@@ -20,6 +20,12 @@ namespace o2
 	template<typename _return_type>
 	class StringPointerAccessorType;
 
+	class ReflectionInitializationTypeProcessor;
+	class FieldInfo;
+	class FunctionInfo;
+
+	class IObject;
+
 	typedef UInt TypeId;
 
 	// ------------------------------
@@ -54,6 +60,9 @@ namespace o2
 		template<typename _type>
 		static String GetEnumName(_type value);
 
+		// Returns is types was initialized
+		static bool IsTypesInitialized();
+
 	public:
 		template<typename _type>
 		static Type* InitializeType(const char* name);
@@ -84,11 +93,25 @@ namespace o2
 		template<typename _return_type>
 		static const StringPointerAccessorType<_return_type>* InitializeAccessorType();
 
-	protected:
-		static Reflection* mInstance;        // Reflection instance
+		// Type dynamic casting function template
+		template<typename _source_type, typename _target_type>
+		static void* CastFunc(void* obj) { return dynamic_cast<_target_type*>((_source_type*)obj); }
 
-		Vector<Type*>      mTypes;           // All registered types
-		UInt               mLastGivenTypeId; // Last given type index
+		// Fake type casting function
+		static void* NoCastFunc(void* obj) { return obj; }
+
+	protected:
+		typedef void(*TypeInitializingFunc)(void*, ReflectionInitializationTypeProcessor&);
+		typedef Vector<TypeInitializingFunc> TypeInitializingFuncsVec;
+
+		static Reflection*       mInstance;              // Reflection instance
+						         
+		Vector<Type*>            mTypes;                 // All registered types
+		UInt                     mLastGivenTypeId;       // Last given type index
+
+		TypeInitializingFuncsVec mInitializingFunctions; // List of types initializations functions
+
+		bool                     mTypesInitialized = false;
 
 	protected:
 		// Constructor. Initializes dummy type
@@ -102,12 +125,37 @@ namespace o2
 
 		friend class Type;
 	};
+
+	class ReflectionInitializationTypeProcessor
+	{
+	public:
+		template<typename _object_type>
+		void Start(_object_type* object, Type* type);
+
+		template<typename _object_type>
+		void StartBases(_object_type* object, Type* type);
+
+		template<typename _object_type>
+		void StartFields(_object_type* object, Type* type);
+
+		template<typename _object_type>
+		void StartMethods(_object_type* object, Type* type);
+
+		template<typename _object_type, typename _base_type>
+		void BaseType(_object_type* object, Type* type, const char* name);
+
+		template<typename _object_type, typename _field_type>
+		FieldInfo& Field(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*), _field_type& field, ProtectSection protection);
+
+		template<typename _object_type, typename _res_type, typename ... _args>
+		FunctionInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...), ProtectSection protection);
+
+		template<typename _object_type, typename _res_type, typename ... _args>
+		FunctionInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...) const, ProtectSection protection);
+	};
 }
 
-#define REG_TYPE(CLASS) \
-	o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
-
-#define REG_FUNDAMENTAL_TYPE(TYPE) \
+#define DECLARE_FUNDAMENTAL_TYPE(TYPE) \
 	o2::Type* o2::FundamentalTypeContainer<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
 
 #define ENUM_META(NAME)                                                                                  \
@@ -158,9 +206,10 @@ namespace o2
 	template<typename _type>
 	Type* Reflection::InitializeType(const char* name)
 	{
-		Type* res = new Type(name, new TypeSampleCreator<_type>(), sizeof(_type));
+		Type* res = new ObjectType(name, new TypeSampleCreator<_type>(), sizeof(_type), &CastFunc<IObject, _type>,
+								   &CastFunc<_type, IObject>);
 
-		res->mInitializeFunc = &_type::InitializeType;
+		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::ProcessType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 
 		Reflection::Instance().mTypes.Add(res);
@@ -175,7 +224,7 @@ namespace o2
 	{
 		Type* res = new FundamentalType<_type>(name);
 
-		res->mInitializeFunc = &FundamentalType<_type>::InitializeType;
+		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::InitializeType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
 
@@ -187,7 +236,6 @@ namespace o2
 	{
 		EnumType* res = new EnumType(name, new TypeSampleCreator<_type>(), sizeof(_type));
 
-		res->mInitializeFunc = nullptr;
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
 		res->mEntries.Add(func());
@@ -262,4 +310,43 @@ namespace o2
 		return newType;
 	}
 
+	template<typename _object_type>
+	void ReflectionInitializationTypeProcessor::Start(_object_type* object, Type* type)
+	{}
+
+	template<typename _object_type>
+	void ReflectionInitializationTypeProcessor::StartBases(_object_type* object, Type* type)
+	{}
+
+	template<typename _object_type>
+	void ReflectionInitializationTypeProcessor::StartFields(_object_type* object, Type* type)
+	{}
+
+	template<typename _object_type>
+	void ReflectionInitializationTypeProcessor::StartMethods(_object_type* object, Type* type)
+	{}
+
+	template<typename _object_type, typename _base_type>
+	void ReflectionInitializationTypeProcessor::BaseType(_object_type* object, Type* type, const char* name)
+	{
+		TypeInitializer::AddBaseType<_object_type, _base_type>(type);
+	}
+
+	template<typename _object_type, typename _field_type>
+	FieldInfo& ReflectionInitializationTypeProcessor::Field(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*), _field_type& field, ProtectSection protection)
+	{
+		return TypeInitializer::RegField(type, name, pointerGetter, field, protection);
+	}
+
+	template<typename _object_type, typename _res_type, typename ... _args>
+	FunctionInfo* ReflectionInitializationTypeProcessor::Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...), ProtectSection protection)
+	{
+		return TypeInitializer::RegFunction<_object_type, _res_type, _args ...>(type, name, pointer, protection);
+	}
+
+	template<typename _object_type, typename _res_type, typename ... _args>
+	FunctionInfo* ReflectionInitializationTypeProcessor::Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...) const, ProtectSection protection)
+	{
+		return TypeInitializer::RegFunction<_object_type, _res_type, _args ...>(type, name, pointer, protection);
+	}
 }

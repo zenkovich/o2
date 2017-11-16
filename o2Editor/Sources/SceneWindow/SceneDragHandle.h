@@ -42,3 +42,21 @@ namespace Editor
 		friend class SceneEditScreen;
 	};
 }
+
+CLASS_BASES_META(Editor::SceneDragHandle)
+{
+	BASE_CLASS(o2::DragHandle);
+}
+END_META;
+CLASS_FIELDS_META(Editor::SceneDragHandle)
+{
+}
+END_META;
+CLASS_METHODS_META(Editor::SceneDragHandle)
+{
+
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PROTECTED_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
+}
+END_META;

@@ -178,3 +178,66 @@ namespace Editor
 		friend class UIAssetsIconsScrollArea;
 	};
 }
+
+CLASS_BASES_META(Editor::AssetsWindow)
+{
+	BASE_CLASS(Editor::IEditorWindow);
+	BASE_CLASS(o2::Singleton<AssetsWindow>);
+}
+END_META;
+CLASS_FIELDS_META(Editor::AssetsWindow)
+{
+	PROTECTED_FIELD(mFoldersTreeShowCoef);
+	PROTECTED_FIELD(mFilterButton);
+	PROTECTED_FIELD(mSearchEditBox);
+	PROTECTED_FIELD(mSelectedAssetPathLabel);
+	PROTECTED_FIELD(mFoldersTree);
+	PROTECTED_FIELD(mFoldersTreeShowAnim);
+	PROTECTED_FIELD(mFoldersTreeVisible);
+	PROTECTED_FIELD(mAssetsGridScroll);
+	PROTECTED_FIELD(mAssetsTree);
+	PROTECTED_FIELD(mSeparatorHandle);
+	PROTECTED_FIELD(mSeparatorCoef);
+	PROTECTED_FIELD(mCuttingAssets);
+}
+END_META;
+CLASS_METHODS_META(Editor::AssetsWindow)
+{
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, SelectAsset, UID);
+	PUBLIC_FUNCTION(void, SelectAsset, const String&);
+	PUBLIC_FUNCTION(void, SelectAsset, const Vector<UID>&);
+	PUBLIC_FUNCTION(void, SelectAssets, const Vector<String>&);
+	PUBLIC_FUNCTION(void, OpenAsset, UID);
+	PUBLIC_FUNCTION(void, OpenAsset, const String&);
+	PUBLIC_FUNCTION(void, OpenAndEditAsset, UID);
+	PUBLIC_FUNCTION(void, OpenAndEditAsset, const String&);
+	PUBLIC_FUNCTION(void, DeselectAssets);
+	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
+	PUBLIC_FUNCTION(String, GetOpenedFolderPath);
+	PUBLIC_FUNCTION(void, OpenFolder, const String&);
+	PUBLIC_FUNCTION(void, ShowAssetIcon, UID);
+	PUBLIC_FUNCTION(void, ShowAssetIcon, const String&);
+	PUBLIC_FUNCTION(void, CopyAssets, const Vector<String>&);
+	PUBLIC_FUNCTION(void, CutAssets, const Vector<String>&);
+	PUBLIC_FUNCTION(void, PasteAssets, const String&);
+	PUBLIC_FUNCTION(void, DeleteAssets, const Vector<String>&);
+	PUBLIC_FUNCTION(void, ImportAssets, const String&);
+	PUBLIC_FUNCTION(void, CreateFolderAsset, const String&);
+	PUBLIC_FUNCTION(void, CreatePrefabAsset, const String&);
+	PUBLIC_FUNCTION(void, CreateScriptAsset, const String&);
+	PUBLIC_FUNCTION(void, CreateAnimationAsset, const String&);
+	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, InitializeFoldersTreeSeparator);
+	PROTECTED_FUNCTION(void, InitializeFoldersTreeVisibleState);
+	PROTECTED_FUNCTION(void, InitializeFoldersTree);
+	PROTECTED_FUNCTION(void, InitializeDownPanel);
+	PROTECTED_FUNCTION(void, InitializeUpPanel);
+	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
+	PROTECTED_FUNCTION(void, OnMenuFilterPressed);
+	PROTECTED_FUNCTION(void, OnShowTreePressed);
+	PROTECTED_FUNCTION(void, OnAssetsRebuilded, const Vector<UID>&);
+	PROTECTED_FUNCTION(void, CopyAssetFolder, const String&, const String&);
+}
+END_META;

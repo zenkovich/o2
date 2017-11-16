@@ -4,7 +4,9 @@
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Containers/Vector.h"
 #include "Utils/Reflection/Attribute.h"
+#include "Utils/Reflection/SearchPassedObject.h"
 #include "Utils/String.h"
+#include <string>
 
 namespace o2
 {
@@ -46,12 +48,14 @@ namespace o2
 			IFieldSerializer* Clone() const;
 		};
 
+		typedef void*(*GetValuePointerFuncPtr)(void*);
+
 	public:
 		// Default constructor
 		FieldInfo();
 
 		// Constructor
-		FieldInfo(const String& name, UInt offset, const Type* type, ProtectSection sect,
+		FieldInfo(const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type, ProtectSection sect,
 				  IFieldSerializer* serializer);
 
 		// Destructor
@@ -123,17 +127,17 @@ namespace o2
 		void CopyValue(void* objectA, void* objectB) const;
 
 	protected:
-		ProtectSection    mProtectSection = ProtectSection::Public; // Protection section
-		String            mName;                                    // Name of field
-		UInt              mOffset = 0;                              // Offset of field in bytes from owner address
-		const Type*       mType = nullptr;                          // Field type
-		AttributesVec     mAttributes;                              // Attributes array
-		IFieldSerializer* mSerializer = nullptr;                    // field serializer
+		ProtectSection         mProtectSection = ProtectSection::Public; // Protection section
+		String                 mName;                                    // Name of field
+		const Type*            mType = nullptr;                          // Field type
+		AttributesVec          mAttributes;                              // Attributes array
+		IFieldSerializer*      mSerializer = nullptr;                    // field serializer
+		GetValuePointerFuncPtr mPointerGetter = nullptr;                 // Value pointer getter function
 
 	protected:
 		// Searches field recursively by pointer
 		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<void*>& passedObjects);
+										   Vector<SearchPassedObject>& passedObjects);
 
 		// Searches field recursively by path
 		virtual void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
@@ -181,13 +185,13 @@ namespace o2
 	template<typename _type>
 	void FieldInfo::SetValue(void* object, _type value) const
 	{
-		*(_type*)((char*)object + mOffset) = value;
+		*(_type*)GetValuePtrStrong(object) = value;
 	}
 
 	template<typename _type>
 	_type FieldInfo::GetValue(void* object) const
 	{
-		return *(_type*)((char*)object + mOffset);
+		return *(_type*)GetValuePtrStrong(object);
 	}
 
 	template<typename _attr_type, typename ... _args>
@@ -229,3 +233,15 @@ namespace o2
 		return mnew FieldSerializer();
 	}
 }
+
+#define ATTRIBUTE_COMMENT_DEFINITION(X)
+#define ATTRIBUTE_SHORT_DEFINITION(X)
+
+class ExcludePointerSearchAttribute: public o2::IAttribute
+{
+	ATTRIBUTE_COMMENT_DEFINITION("EXCLUDE_POINTER_SEARCH");
+	ATTRIBUTE_SHORT_DEFINITION("EXCLUDE_POINTER_SEARCH_ATTRIBUTE()");
+};
+
+#define EXCLUDE_POINTER_SEARCH_ATTRIBUTE() \
+    AddAttribute(new ExcludePointerSearchAttribute())

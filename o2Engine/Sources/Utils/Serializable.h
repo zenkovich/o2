@@ -54,52 +54,83 @@ namespace o2
 	};
 
 	// Serialization implementation macros
-#define SERIALIZABLE(CLASS)                              \
-private:                                                 \
-	static o2::Type* type;       					     \
-                                                         \
-    template<typename _type, typename _getter>           \
-	friend const o2::Type& o2::GetTypeOf();              \
-                                                         \
-	template<typename T>                                 \
-	friend struct o2::RegularTypeGetter;                 \
-                                                         \
-	template<typename T, typename X>                     \
-	friend struct o2::GetTypeHelper;                     \
-                                                         \
-    template<typename _type>                             \
-    friend struct o2::TypeSampleCreator;                 \
-                                                         \
-    friend class o2::TypeInitializer;                    \
-    friend class o2::Reflection;                         \
-    friend class o2::DataNode;                           \
-                                                         \
-public:                                                  \
-	typedef CLASS thisclass;                             \
-	IObject* Clone() const { return mnew CLASS(*this); } \
-	const o2::Type& GetType() const { return *type; };   \
-    o2::DataNode Serialize() const                       \
-    {												     \
-        o2::DataNode res;                                \
-        SerializeBasic(this, res);                       \
-        return res;                                      \
-	}												     \
-    void Deserialize(const o2::DataNode& node)           \
-    {												     \
-        DeserializeBasic(this, node);                    \
-	}												     \
-	CLASS& operator=(const o2::DataNode& node) 		     \
-	{												     \
-		Deserialize(node); return *this; 			     \
-	} 												     \
-	operator o2::DataNode() 						     \
-	{ 												     \
-		return Serialize(); 						     \
-	}            									     \
-                                                         \
-private:                                                 \
-	static void InitializeType(o2::Type* type)    
+#define SERIALIZABLE(CLASS)  							                                                            \
+private:                                                                                                        \
+	static o2::Type* type;							                                                            \
+                                                                                                                \
+    template<typename _type, typename _getter>                                                                  \
+	friend const o2::Type& o2::GetTypeOf();                                                                     \
+                                                                                                                \
+	template<typename T>                                                                                        \
+	friend struct o2::RegularTypeGetter;                                                                        \
+                                                                                                                \
+	template<typename T, typename X>                                                                            \
+	friend struct o2::GetTypeHelper;                                                                            \
+                                                                                                                \
+    template<typename _type>                                                                                    \
+    friend struct o2::TypeSampleCreator;                                                                        \
+                                                                                                                \
+    friend class o2::TypeInitializer;                                                                           \
+    friend class o2::Reflection;                                                                                \
+    friend class o2::DataNode;                                                                                  \
+                                                                                                                \
+public:                                                                                                         \
+	typedef CLASS thisclass;                                                                                    \
+	IObject* Clone() const { return mnew CLASS(*this); }                                                        \
+	const o2::Type& GetType() const { return *type; };                                                          \
+                                                                                                                \
+    template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \
+	{                                                                                                           \
+		processor.Start<CLASS>(object, type);                                                                         \
+		ProcessBaseTypes<_type_processor>(object, processor);                                                   \
+		ProcessFields<_type_processor>(object, processor);                                                      \
+		ProcessMethods<_type_processor>(object, processor);                                                     \
+	}                                                                                                           \
+		                                                                                                        \
+    template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
+    template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \
+    template<typename _type_processor> static void ProcessMethods(CLASS* object, _type_processor& processor);   \
+                                                                                                                \
+    o2::DataNode Serialize() const                                                                              \
+    {												                                                            \
+        o2::DataNode res;                                                                                       \
+        SerializeBasic(this, res);                                                                              \
+        return res;                                                                                             \
+	}												                                                            \
+    void Deserialize(const o2::DataNode& node)                                                                  \
+    {												                                                            \
+        DeserializeBasic(this, node);                                                                           \
+	}												                                                            \
+	CLASS& operator=(const o2::DataNode& node) 		                                                            \
+	{												                                                            \
+		Deserialize(node); return *this; 			                                                            \
+	} 												                                                            \
+	operator o2::DataNode() 						                                                            \
+	{ 												                                                            \
+		return Serialize(); 						                                                            \
+	}            									                                                            
 
 #define SERIALIZABLE_ATTRIBUTE() \
     AddAttribute(new SerializableAttribute())
 }
+
+CLASS_BASES_META(o2::ISerializable)
+{
+	BASE_CLASS(o2::IObject);
+}
+END_META;
+CLASS_FIELDS_META(o2::ISerializable)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::ISerializable)
+{
+
+	PUBLIC_FUNCTION(DataNode, Serialize);
+	PUBLIC_FUNCTION(void, Deserialize, const DataNode&);
+	PUBLIC_FUNCTION(void, OnSerialize, DataNode&);
+	PUBLIC_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, SerializeBasic, const IObject*, DataNode&);
+	PROTECTED_FUNCTION(void, DeserializeBasic, IObject*, const DataNode&);
+}
+END_META;

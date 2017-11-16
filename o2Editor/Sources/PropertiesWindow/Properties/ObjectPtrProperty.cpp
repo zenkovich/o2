@@ -156,28 +156,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::ObjectPtrProperty)
-{
-	BASE_CLASS(Editor::IPropertyField);
-
-	PROTECTED_FIELD(mObjectType);
-	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mFieldProperties);
-	PROTECTED_FIELD(mLayout);
-	PROTECTED_FIELD(mNameLabel);
-	PROTECTED_FIELD(mExpandButton);
-	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mPropertiesLayout);
-
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
-	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-	PUBLIC_FUNCTION(void, SetExpanded, bool);
-	PUBLIC_FUNCTION(bool, IsExpanded);
-	PUBLIC_FUNCTION(const FieldPropertiesInfo&, GetPropertiesInfo);
-}
-END_META;
+DECLARE_CLASS(Editor::ObjectPtrProperty);

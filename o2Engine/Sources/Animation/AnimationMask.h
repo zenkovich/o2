@@ -20,3 +20,20 @@ namespace o2
 		SERIALIZABLE(AnimationMask);
 	};
 }
+
+CLASS_BASES_META(o2::AnimationMask)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::AnimationMask)
+{
+	PUBLIC_FIELD(weights).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::AnimationMask)
+{
+
+	PUBLIC_FUNCTION(float, GetNodeWeight, const String&);
+}
+END_META;

@@ -50,9 +50,39 @@ namespace o2
 		Sprite* mImage = nullptr; // Image layer drawable
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Initializes properties
 		void InitializeProperties();
 
 		friend class UIButtonGroup;
 	};
 }
+
+CLASS_BASES_META(o2::UIImage)
+{
+	BASE_CLASS(o2::UIWidget);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIImage)
+{
+	PUBLIC_FIELD(image);
+	PUBLIC_FIELD(imageAsset);
+	PUBLIC_FIELD(imageName);
+	PROTECTED_FIELD(mImage);
+}
+END_META;
+CLASS_METHODS_META(o2::UIImage)
+{
+
+	PUBLIC_FUNCTION(void, SetImage, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetImage);
+	PUBLIC_FUNCTION(void, SetImageAsset, const ImageAssetRef&);
+	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
+	PUBLIC_FUNCTION(void, SetImageName, const String&);
+	PUBLIC_FUNCTION(String, GetImageName);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

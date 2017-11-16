@@ -325,73 +325,7 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::IAnimation)
-{
-	BASE_CLASS(o2::ISerializable);
-
-	PUBLIC_FIELD(playing);
-	PUBLIC_FIELD(reversed);
-	PUBLIC_FIELD(speed);
-	PUBLIC_FIELD(time);
-	PUBLIC_FIELD(relTime);
-	PUBLIC_FIELD(beginBound);
-	PUBLIC_FIELD(endBound);
-	PUBLIC_FIELD(loop);
-	PUBLIC_FIELD(duration);
-	PUBLIC_FIELD(onPlayEvent);
-	PUBLIC_FIELD(onStopEvent);
-	PUBLIC_FIELD(onPlayedEvent);
-	PUBLIC_FIELD(onUpdate);
-	PROTECTED_FIELD(mTime);
-	PROTECTED_FIELD(mInDurationTime);
-	PROTECTED_FIELD(mDuration).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mBeginTime);
-	PROTECTED_FIELD(mEndTime);
-	PROTECTED_FIELD(mDirection);
-	PROTECTED_FIELD(mSpeed);
-	PROTECTED_FIELD(mLoop).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mPlaying);
-	PROTECTED_FIELD(mTimeEvents);
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Play);
-	PUBLIC_FUNCTION(void, PlayInBounds, float, float);
-	PUBLIC_FUNCTION(void, PlayBackInBounds, float, float);
-	PUBLIC_FUNCTION(void, TogglePlay);
-	PUBLIC_FUNCTION(void, RewindAndPlay);
-	PUBLIC_FUNCTION(void, Stop);
-	PUBLIC_FUNCTION(void, SetBeginBound, float);
-	PUBLIC_FUNCTION(float, GetBeginBound);
-	PUBLIC_FUNCTION(void, SetEndBound, float);
-	PUBLIC_FUNCTION(float, GetEndBound);
-	PUBLIC_FUNCTION(void, SetBounds, float, float);
-	PUBLIC_FUNCTION(void, ResetBounds);
-	PUBLIC_FUNCTION(void, SetPlaying, bool);
-	PUBLIC_FUNCTION(bool, IsPlaying);
-	PUBLIC_FUNCTION(void, SetTime, float);
-	PUBLIC_FUNCTION(float, GetTime);
-	PUBLIC_FUNCTION(float, GetDuration);
-	PUBLIC_FUNCTION(void, SetRelTime, float);
-	PUBLIC_FUNCTION(float, GetRelTime);
-	PUBLIC_FUNCTION(void, GoToBegin);
-	PUBLIC_FUNCTION(void, GoToEnd);
-	PUBLIC_FUNCTION(void, PlayForward);
-	PUBLIC_FUNCTION(void, PlayBack);
-	PUBLIC_FUNCTION(void, SetReverse, bool);
-	PUBLIC_FUNCTION(bool, IsReversed);
-	PUBLIC_FUNCTION(void, SetSpeed, float);
-	PUBLIC_FUNCTION(float, GetSpeed);
-	PUBLIC_FUNCTION(void, SetLoop, Loop);
-	PUBLIC_FUNCTION(Loop, GetLoop);
-	PUBLIC_FUNCTION(void, AddTimeEvent, float, const Function<void()>);
-	PUBLIC_FUNCTION(void, RemoveTimeEvent, float);
-	PUBLIC_FUNCTION(void, RemoveTimeEvent, const Function<void()>);
-	PUBLIC_FUNCTION(void, RemoveAllTimeEvents);
-	PROTECTED_FUNCTION(void, UpdateTime);
-	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::IAnimation);
 
 ENUM_META_(o2::Loop, Loop)
 {

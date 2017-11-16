@@ -13,8 +13,8 @@ namespace o2
 	struct RegularTypeGetter;
 
 	template<typename T, typename X>
-	struct GetTypeHelper; 
-	
+	struct GetTypeHelper;
+
 	template<typename _type>
 	struct TypeSampleCreator;
 
@@ -34,8 +34,8 @@ namespace o2
 		virtual IObject* Clone() const = 0;
 
 		// Cloning as type
-		template<typename Type>
-		Type* CloneAs() const { return dynamic_cast<Type*>(Clone()); }
+		template<typename _cast_type>
+		_cast_type* CloneAs() const { return dynamic_cast<_cast_type*>(Clone()); }
 
 		// Returns type
 		virtual const Type& GetType() const = 0;
@@ -55,33 +55,45 @@ namespace o2
 		friend class TypeInitializer;
 		friend class Reflection;
 	};
-
-	// IObject header definition
-#define IOBJECT(CLASS)  							     \
-private:                                                 \
-	static o2::Type* type;							     \
-                                                         \
-    template<typename _type, typename _getter>           \
-	friend const o2::Type& o2::GetTypeOf();              \
-                                                         \
-	template<typename T>                                 \
-	friend struct o2::RegularTypeGetter;                 \
-                                                         \
-	template<typename T, typename X>                     \
-	friend struct o2::GetTypeHelper;                     \
-                                                         \
-    template<typename _type>                             \
-    friend struct o2::TypeSampleCreator;                 \
-                                                         \
-    friend class o2::TypeInitializer;                    \
-    friend class o2::Reflection;                         \
-    friend class o2::DataNode;                           \
-                                                         \
-public:                                                  \
-	typedef CLASS thisclass;                             \
-	IObject* Clone() const { return mnew CLASS(*this); } \
-	const o2::Type& GetType() const { return *type; };   \
-                                                         \
-private:                                                 \
-	static void InitializeType(o2::Type* type)                       
 }
+
+// -------------------------------
+// Types meta information macroses
+// -------------------------------
+
+#define IOBJECT(CLASS)  							                                                            \
+private:                                                                                                        \
+	static o2::Type* type;							                                                            \
+                                                                                                                \
+    template<typename _type, typename _getter>                                                                  \
+	friend const o2::Type& o2::GetTypeOf();                                                                     \
+                                                                                                                \
+	template<typename T>                                                                                        \
+	friend struct o2::RegularTypeGetter;                                                                        \
+                                                                                                                \
+	template<typename T, typename X>                                                                            \
+	friend struct o2::GetTypeHelper;                                                                            \
+                                                                                                                \
+    template<typename _type>                                                                                    \
+    friend struct o2::TypeSampleCreator;                                                                        \
+                                                                                                                \
+    friend class o2::TypeInitializer;                                                                           \
+    friend class o2::Reflection;                                                                                \
+    friend class o2::DataNode;                                                                                  \
+                                                                                                                \
+public:                                                                                                         \
+	typedef CLASS thisclass;                                                                                    \
+	IObject* Clone() const { return mnew CLASS(*this); }                                                        \
+	const o2::Type& GetType() const { return *type; };                                                          \
+                                                                                                                \
+    template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \
+	{                                                                                                           \
+		processor.Start<CLASS>(object, type);                                                                         \
+		ProcessBaseTypes<_type_processor>(object, processor);                                                   \
+		ProcessFields<_type_processor>(object, processor);                                                      \
+		ProcessMethods<_type_processor>(object, processor);                                                     \
+	}                                                                                                           \
+		                                                                                                        \
+    template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
+    template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \
+    template<typename _type_processor> static void ProcessMethods(CLASS* object, _type_processor& processor)

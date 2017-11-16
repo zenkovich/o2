@@ -47,45 +47,45 @@ namespace Editor
 		Color4                mColorValue;
 		ColorType             mColorType = ColorType::RGB;
 
-		UIWindow*             mWindow;
-		UIImage*              mColorSampleImage;
+		UIWindow*             mWindow = nullptr;
+		UIImage*              mColorSampleImage = nullptr;
 
 		TextureRef            mChessBackTexture;
 
-		UIImage*              mColorPickAreaHandle;
-		Bitmap*               mColorPickAreaBitmap;
-		UIWidgetLayer*        mColorPickAreaColor;
+		UIImage*              mColorPickAreaHandle = nullptr;
+		Bitmap*               mColorPickAreaBitmap = nullptr;
+		UIWidgetLayer*        mColorPickAreaColor = nullptr;
 		TextureRef            mColorPickAreaTexture;
 		CursorEventsArea      mColorPickHandle;
 
-		UIVerticalProgress*   mHUEBar;
-		Bitmap*               mHUEBarBitmap;
+		UIVerticalProgress*   mHUEBar = nullptr;
+		Bitmap*               mHUEBarBitmap = nullptr;
 		TextureRef            mHUEBarTexture;
 
-		UIDropDown*           mTypeDropdown;
+		UIDropDown*           mTypeDropdown = nullptr;
 
-		UILabel*              mColor1ParamName;
-		UIHorizontalProgress* mColor1ParamBar;
-		UIEditBox*            mColor1ParamEdit;
-		Bitmap*               mColor1ParamBarBitmap;
+		UILabel*              mColor1ParamName = nullptr;
+		UIHorizontalProgress* mColor1ParamBar = nullptr;
+		UIEditBox*            mColor1ParamEdit = nullptr;
+		Bitmap*               mColor1ParamBarBitmap = nullptr;
 		TextureRef            mColor1ParamBarTexture;
 
-		UILabel*              mColor2ParamName;
+		UILabel*              mColor2ParamName = nullptr;
 		UIHorizontalProgress* mColor2ParamBar;
-		UIEditBox*            mColor2ParamEdit;
-		Bitmap*               mColor2ParamBarBitmap;
+		UIEditBox*            mColor2ParamEdit = nullptr;
+		Bitmap*               mColor2ParamBarBitmap = nullptr;
 		TextureRef            mColor2ParamBarTexture;
 
-		UILabel*              mColor3ParamName;
+		UILabel*              mColor3ParamName = nullptr;
 		UIHorizontalProgress* mColor3ParamBar;
-		UIEditBox*            mColor3ParamEdit;
-		Bitmap*               mColor3ParamBarBitmap;
+		UIEditBox*            mColor3ParamEdit = nullptr;
+		Bitmap*               mColor3ParamBarBitmap = nullptr;
 		TextureRef            mColor3ParamBarTexture;
 
-		UILabel*              mColorAParamName;
+		UILabel*              mColorAParamName = nullptr;
 		UIHorizontalProgress* mColorAParamBar;
-		UIEditBox*            mColorAParamEdit;
-		Bitmap*               mColorAParamBarBitmap;
+		UIEditBox*            mColorAParamEdit = nullptr;
+		Bitmap*               mColorAParamBarBitmap = nullptr;
 		TextureRef            mColorAParamBarTexture;
 
 

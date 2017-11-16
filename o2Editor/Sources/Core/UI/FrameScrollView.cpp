@@ -49,27 +49,16 @@ namespace Editor
 
 	UIFrameScrollView::~UIFrameScrollView()
 	{
-		delete mHorScrollbar;
-		delete mVerScrollbar;
+		if (mHorScrollbar)
+			delete mHorScrollbar;
+
+		if (mVerScrollbar)
+			delete mVerScrollbar;
 	}
 
 	UIFrameScrollView& UIFrameScrollView::operator=(const UIFrameScrollView& other)
 	{
-		UIScrollView::operator=(other);
-
-		delete mHorScrollbar;
-		delete mVerScrollbar;
-
-		mHorScrollbar = other.mHorScrollbar->CloneAs<UIHorizontalScrollBar>();
-		mHorScrollbar->SetParent(this);
-		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
-		mChildren.Remove(mHorScrollbar);
-
-		mVerScrollbar = other.mVerScrollbar->CloneAs<UIVerticalScrollBar>();
-		mVerScrollbar->SetParent(this);
-		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
-		mChildren.Remove(mVerScrollbar);
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -116,7 +105,7 @@ namespace Editor
 		mChildren.Remove(mHorScrollbar);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIFrameScrollView::SetVerScrollbar(UIVerticalScrollBar* scrollbar)
@@ -127,7 +116,7 @@ namespace Editor
 		mChildren.Remove(mVerScrollbar);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIFrameScrollView::SetViewArea(const RectF& area)
@@ -138,6 +127,26 @@ namespace Editor
 	RectF UIFrameScrollView::GetViewArea() const
 	{
 		return mAvailableArea;
+	}
+
+	void UIFrameScrollView::CopyData(const Actor& otherActor)
+	{
+		const UIFrameScrollView& other = dynamic_cast<const UIFrameScrollView&>(otherActor);
+
+		UIScrollView::CopyData(other);
+
+		delete mHorScrollbar;
+		delete mVerScrollbar;
+
+		mHorScrollbar = other.mHorScrollbar->CloneAs<UIHorizontalScrollBar>();
+		mHorScrollbar->SetParent(this);
+		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
+		mChildren.Remove(mHorScrollbar);
+
+		mVerScrollbar = other.mVerScrollbar->CloneAs<UIVerticalScrollBar>();
+		mVerScrollbar->SetParent(this);
+		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
+		mChildren.Remove(mVerScrollbar);
 	}
 
 	void UIFrameScrollView::UpdateCameraLimits(float dt)
@@ -186,24 +195,4 @@ namespace Editor
 	}
 }
 
-CLASS_META(Editor::UIFrameScrollView)
-{
-	BASE_CLASS(Editor::UIScrollView);
-
-	PROTECTED_FIELD(mHorScrollbar).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mVerScrollbar).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAvailableArea).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PUBLIC_FUNCTION(void, SetHorScrollbar, UIHorizontalScrollBar*);
-	PUBLIC_FUNCTION(void, SetVerScrollbar, UIVerticalScrollBar*);
-	PUBLIC_FUNCTION(void, SetViewArea, const RectF&);
-	PUBLIC_FUNCTION(RectF, GetViewArea);
-	PROTECTED_FUNCTION(void, UpdateCameraLimits, float);
-	PROTECTED_FUNCTION(void, OnHorScrollScrolled, float);
-	PROTECTED_FUNCTION(void, OnVerScrollScrolled, float);
-	PROTECTED_FUNCTION(void, OnCameraTransformChanged);
-}
-END_META;
+DECLARE_CLASS(Editor::UIFrameScrollView);

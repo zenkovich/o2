@@ -109,6 +109,9 @@ namespace o2
 		UIWidgetLayer* mBackLayer = nullptr;          // Background layer
 
 	protected:
+		// Copies data of actor from other to this
+		void CopyData(const Actor& otherActor) override;
+
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts() override;
 
@@ -162,3 +165,72 @@ namespace o2
 		friend class UITree;
 	};
 }
+
+CLASS_BASES_META(o2::UIVerticalScrollBar)
+{
+	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::DrawableCursorEventsListener);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIVerticalScrollBar)
+{
+	PUBLIC_FIELD(value);
+	PUBLIC_FIELD(minValue);
+	PUBLIC_FIELD(maxValue);
+	PUBLIC_FIELD(scrollSense);
+	PUBLIC_FIELD(scrollSize);
+	PUBLIC_FIELD(onChange);
+	PUBLIC_FIELD(onUserChange);
+	PUBLIC_FIELD(onSmoothChange);
+	PROTECTED_FIELD(mValue).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSmoothValue);
+	PROTECTED_FIELD(mMinValue).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMaxValue).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mScrollSense).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mScrollHandleSize).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mScrollhandleMinPxSize).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mPressHandleOffset);
+	PROTECTED_FIELD(mHandlePressed);
+	PROTECTED_FIELD(mHandleLayer);
+	PROTECTED_FIELD(mBackLayer);
+}
+END_META;
+CLASS_METHODS_META(o2::UIVerticalScrollBar)
+{
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, SetValue, float);
+	PUBLIC_FUNCTION(void, SetValueForcible, float);
+	PUBLIC_FUNCTION(float, GetValue);
+	PUBLIC_FUNCTION(float, GetSmoothValue);
+	PUBLIC_FUNCTION(void, SetMinValue, float);
+	PUBLIC_FUNCTION(float, GetMinValue);
+	PUBLIC_FUNCTION(void, SetMaxValue, float);
+	PUBLIC_FUNCTION(float, GetMaxValue);
+	PUBLIC_FUNCTION(void, SetValueRange, float, float);
+	PUBLIC_FUNCTION(void, SetScrollSense, float);
+	PUBLIC_FUNCTION(float, GetScrollSense);
+	PUBLIC_FUNCTION(void, SetScrollHandleSize, float);
+	PUBLIC_FUNCTION(float, GetScrollHandleSize);
+	PUBLIC_FUNCTION(void, SetMinimalScrollHandleSize, float);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
+	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
+	PROTECTED_FUNCTION(float, GetValueFromCursor, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, SetValueFromUser, float);
+	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnScrolled, float);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

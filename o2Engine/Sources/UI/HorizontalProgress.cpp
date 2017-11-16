@@ -29,20 +29,7 @@ namespace o2
 
 	UIHorizontalProgress& UIHorizontalProgress::operator=(const UIHorizontalProgress& other)
 	{
-		UIWidget::operator=(other);
-
-		mValue       = other.mValue;
-		mMinValue    = other.mMinValue;
-		mMaxValue    = other.mMaxValue;
-		mOrientation = other.mOrientation;
-		mScrollSense = other.mScrollSense;
-
-		mBarLayer    = GetLayer("bar");
-		mBackLayer   = GetLayer("back");
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -257,8 +244,25 @@ namespace o2
 
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
+	}
 
-		UpdateLayersLayouts();
+	void UIHorizontalProgress::CopyData(const Actor& otherActor)
+	{
+		const UIHorizontalProgress& other = dynamic_cast<const UIHorizontalProgress&>(otherActor);
+
+		UIWidget::CopyData(other);
+
+		mValue       = other.mValue;
+		mMinValue    = other.mMinValue;
+		mMaxValue    = other.mMaxValue;
+		mOrientation = other.mOrientation;
+		mScrollSense = other.mScrollSense;
+
+		mBarLayer    = GetLayer("bar");
+		mBackLayer   = GetLayer("back");
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
 	}
 
 	void UIHorizontalProgress::OnLayerAdded(UIWidgetLayer* layer)
@@ -280,56 +284,7 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIHorizontalProgress)
-{
-	BASE_CLASS(o2::UIWidget);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
-
-	PUBLIC_FIELD(value);
-	PUBLIC_FIELD(minValue);
-	PUBLIC_FIELD(maxValue);
-	PUBLIC_FIELD(scrollSense);
-	PUBLIC_FIELD(onChange);
-	PROTECTED_FIELD(mValue).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSmoothValue);
-	PROTECTED_FIELD(mMinValue).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mMaxValue).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mScrollSense).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mOrientation).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mBarLayer);
-	PROTECTED_FIELD(mBackLayer);
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetValue, float);
-	PUBLIC_FUNCTION(void, SetValueForcible, float);
-	PUBLIC_FUNCTION(float, GetValue);
-	PUBLIC_FUNCTION(void, SetMinValue, float);
-	PUBLIC_FUNCTION(float, GetMinValue);
-	PUBLIC_FUNCTION(void, SetMaxValue, float);
-	PUBLIC_FUNCTION(float, GetMaxValue);
-	PUBLIC_FUNCTION(void, SetValueRange, float, float);
-	PUBLIC_FUNCTION(void, SetScrollSense, float);
-	PUBLIC_FUNCTION(float, GetScrollSense);
-	PUBLIC_FUNCTION(void, SetOrientation, Orientation);
-	PUBLIC_FUNCTION(Orientation, GetOrientation);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(bool, IsScrollable);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
-	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
-	PROTECTED_FUNCTION(void, GetValueFromCursor, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIHorizontalProgress);
 
 ENUM_META_(o2::UIHorizontalProgress::Orientation, Orientation)
 {

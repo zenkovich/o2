@@ -92,3 +92,45 @@ namespace Editor
 		void StoreValues(Vector<DataNode>& data) const;
 	};
 }
+
+CLASS_BASES_META(Editor::EnumProperty)
+{
+	BASE_CLASS(Editor::IPropertyField);
+}
+END_META;
+CLASS_FIELDS_META(Editor::EnumProperty)
+{
+	PROTECTED_FIELD(mAssignFunc);
+	PROTECTED_FIELD(mGetFunc);
+	PROTECTED_FIELD(mEnumType);
+	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mCommonValue);
+	PROTECTED_FIELD(mValuesDifferent);
+	PROTECTED_FIELD(mEntries);
+	PROTECTED_FIELD(mPropertyWidget);
+	PROTECTED_FIELD(mRevertBtn);
+	PROTECTED_FIELD(mDropDown);
+	PROTECTED_FIELD(mUpdatingValue);
+}
+END_META;
+CLASS_METHODS_META(Editor::EnumProperty)
+{
+
+	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Revert);
+	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(int, GetCommonValue);
+	PUBLIC_FUNCTION(bool, IsValuesDifferent);
+	PUBLIC_FUNCTION(void, SetValue, int);
+	PUBLIC_FUNCTION(void, SetUnknownValue);
+	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PROTECTED_FUNCTION(void, SetCommonValue, int);
+	PROTECTED_FUNCTION(void, CheckRevertableState);
+	PROTECTED_FUNCTION(void, OnSelectedItem, const WString&);
+	PROTECTED_FUNCTION(void, SetValueByUser, int);
+	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
+}
+END_META;

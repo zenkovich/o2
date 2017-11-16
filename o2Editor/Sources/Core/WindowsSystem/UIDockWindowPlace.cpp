@@ -13,7 +13,7 @@ namespace Editor
 	{
 		InitializeDragHandle();
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIDockWindowPlace::UIDockWindowPlace(const UIDockWindowPlace& other):
@@ -21,7 +21,7 @@ namespace Editor
 	{
 		InitializeDragHandle();
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIDockWindowPlace::~UIDockWindowPlace()
@@ -29,8 +29,7 @@ namespace Editor
 
 	UIDockWindowPlace& UIDockWindowPlace::operator=(const UIDockWindowPlace& other)
 	{
-		UIWidget::operator=(other);
-		mDragHandleLayoutMin = other.mDragHandleLayoutMin;
+		CopyData(other);
 		return *this;
 	}
 
@@ -193,6 +192,14 @@ namespace Editor
 		mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout->GetWorldRect());
 	}
 
+	void UIDockWindowPlace::CopyData(const Actor& otherActor)
+	{
+		const UIDockWindowPlace& other = dynamic_cast<const UIDockWindowPlace&>(otherActor);
+
+		UIWidget::CopyData(other);
+		mDragHandleLayoutMin = other.mDragHandleLayoutMin;
+	}
+
 	void UIDockWindowPlace::OnDragHandleMinMoved(const Vec2F& delta)
 	{
 		if (mResizibleDir == TwoDirection::Horizontal)
@@ -249,31 +256,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::UIDockWindowPlace)
-{
-	BASE_CLASS(o2::UIWidget);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
-
-	PROTECTED_FIELD(mResizibleDir);
-	PROTECTED_FIELD(mNeighborMin);
-	PROTECTED_FIELD(mDragHandleMin);
-	PROTECTED_FIELD(mDragHandleLayoutMin);
-	PROTECTED_FIELD(mDragHandleAreaMin);
-	PROTECTED_FIELD(mNeighborMax);
-	PROTECTED_FIELD(mDragHandleMax);
-	PROTECTED_FIELD(mDragHandleLayoutMax);
-	PROTECTED_FIELD(mDragHandleAreaMax);
-
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetResizibleDir, TwoDirection, float, UIDockWindowPlace*, UIDockWindowPlace*);
-	PUBLIC_FUNCTION(TwoDirection, GetResizibleDir);
-	PUBLIC_FUNCTION(void, ArrangeChildWindows);
-	PUBLIC_FUNCTION(void, SetActiveTab, UIDockableWindow*);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PROTECTED_FUNCTION(void, OnDragHandleMinMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnDragHandleMaxMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, CheckInteractable);
-	PROTECTED_FUNCTION(void, InitializeDragHandle);
-}
-END_META;
+DECLARE_CLASS(Editor::UIDockWindowPlace);

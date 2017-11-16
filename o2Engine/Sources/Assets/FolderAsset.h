@@ -138,3 +138,58 @@ namespace o2
 		FolderAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }
+
+CLASS_BASES_META(o2::FolderAsset)
+{
+	BASE_CLASS(o2::Asset);
+}
+END_META;
+CLASS_FIELDS_META(o2::FolderAsset)
+{
+	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(insideAssets);
+	PROTECTED_FIELD(mContainingAssetsInfos);
+}
+END_META;
+CLASS_METHODS_META(o2::FolderAsset)
+{
+
+	PUBLIC_FUNCTION(AssetInfosVec, GetContainingAssetsInfos);
+	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+	PROTECTED_FUNCTION(void, SaveData, const String&);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_BASES_META(o2::FolderAssetRef)
+{
+	BASE_CLASS(o2::AssetRef);
+}
+END_META;
+CLASS_FIELDS_META(o2::FolderAssetRef)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::FolderAssetRef)
+{
+
+	PUBLIC_FUNCTION(const Type&, GetAssetType);
+}
+END_META;
+
+CLASS_BASES_META(o2::FolderAsset::MetaInfo)
+{
+	BASE_CLASS(o2::Asset::IMetaInfo);
+}
+END_META;
+CLASS_FIELDS_META(o2::FolderAsset::MetaInfo)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::FolderAsset::MetaInfo)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetAssetType);
+}
+END_META;

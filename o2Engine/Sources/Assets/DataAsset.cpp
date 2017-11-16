@@ -109,35 +109,8 @@ namespace o2
 
 }
 
-CLASS_META(o2::DataAsset)
-{
-	BASE_CLASS(o2::Asset);
+DECLARE_CLASS(o2::DataAsset);
 
-	PUBLIC_FIELD(data);
-	PUBLIC_FIELD(meta);
+DECLARE_CLASS(o2::DataAssetRef);
 
-	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
-
-CLASS_META(o2::DataAssetRef)
-{
-	BASE_CLASS(o2::AssetRef);
-
-
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-}
-END_META;
-
-CLASS_META(o2::DataAsset::MetaInfo)
-{
-	BASE_CLASS(o2::Asset::IMetaInfo);
-
-
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-}
-END_META;
+DECLARE_CLASS(o2::DataAsset::MetaInfo);

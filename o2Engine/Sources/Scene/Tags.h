@@ -150,3 +150,52 @@ namespace o2
 		bool IsConvertsType(const Type* type) const;
 	};
 }
+
+CLASS_BASES_META(o2::Tag)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::Tag)
+{
+	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mActors);
+}
+END_META;
+CLASS_METHODS_META(o2::Tag)
+{
+
+	PUBLIC_FUNCTION(const String&, GetName);
+	PUBLIC_FUNCTION(void, SetName, const String&);
+	PUBLIC_FUNCTION(void, AddActor, Actor*);
+	PUBLIC_FUNCTION(void, RemoveActor, Actor*);
+	PUBLIC_FUNCTION(void, Clear);
+}
+END_META;
+
+CLASS_BASES_META(o2::TagGroup)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::TagGroup)
+{
+	PUBLIC_FIELD(onTagAdded);
+	PUBLIC_FIELD(onTagRemoved);
+	PRIVATE_FIELD(mTags).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::TagGroup)
+{
+
+	PUBLIC_FUNCTION(void, AddTag, const String&);
+	PUBLIC_FUNCTION(void, AddTag, Tag*);
+	PUBLIC_FUNCTION(void, RemoveTag, const String&);
+	PUBLIC_FUNCTION(void, RemoveTag, Tag*);
+	PUBLIC_FUNCTION(void, Clear);
+	PUBLIC_FUNCTION(bool, IsHaveTag, const String&);
+	PUBLIC_FUNCTION(bool, IsHaveTag, Tag*);
+	PUBLIC_FUNCTION(const TagsVec&, GetTags);
+	PUBLIC_FUNCTION(StringsVec, GetTagsNames);
+}
+END_META;

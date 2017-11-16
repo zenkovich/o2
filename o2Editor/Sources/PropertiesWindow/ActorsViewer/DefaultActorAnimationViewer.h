@@ -22,3 +22,19 @@ namespace Editor
 		IOBJECT(DefaultActorAnimationViewer);
 	};
 }
+
+CLASS_BASES_META(Editor::DefaultActorAnimationViewer)
+{
+	BASE_CLASS(Editor::IActorAnimationViewer);
+}
+END_META;
+CLASS_FIELDS_META(Editor::DefaultActorAnimationViewer)
+{
+}
+END_META;
+CLASS_METHODS_META(Editor::DefaultActorAnimationViewer)
+{
+
+	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
+}
+END_META;

@@ -33,7 +33,8 @@ namespace Editor
 
 	ColorPickerDlg::~ColorPickerDlg()
 	{
-		delete mWindow;
+		if (mWindow)
+			delete mWindow;
 	}
 
 	void ColorPickerDlg::Show(const Color4& color, Function<void(const Color4&)> onChanged,

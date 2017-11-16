@@ -7,7 +7,7 @@ namespace o2
 	UIGridLayout::UIGridLayout(): UIWidget()
 	{
 		InitializeProperties();
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	UIGridLayout::UIGridLayout(const UIGridLayout& other):
@@ -16,7 +16,7 @@ namespace o2
 		mArrangeAxisMaxCells(other.mArrangeAxisMaxCells)
 	{
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 		InitializeProperties();
 	}
 
@@ -25,18 +25,7 @@ namespace o2
 
 	UIGridLayout& UIGridLayout::operator=(const UIGridLayout& other)
 	{
-		mBaseCorner          = other.mBaseCorner;
-		mSpacing             = other.mSpacing;
-		mBorder              = other.mBorder;
-		mCellSize            = other.mCellSize;
-		mArrangeAxis         = other.mArrangeAxis;
-		mArrangeAxisMaxCells = other.mArrangeAxisMaxCells;
-
-		UIWidget::operator=(other);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -120,7 +109,7 @@ namespace o2
 	void UIGridLayout::SetCellSize(const Vec2F& size)
 	{
 		mCellSize = size;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	Vec2F UIGridLayout::GetCellSize() const
@@ -131,7 +120,7 @@ namespace o2
 	void UIGridLayout::SetArrangeAxis(TwoDirection type)
 	{
 		mArrangeAxis = type;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	TwoDirection UIGridLayout::GetArrangeAxis() const
@@ -142,7 +131,7 @@ namespace o2
 	void UIGridLayout::SetArrangeAxisMaxCells(int count)
 	{
 		mArrangeAxisMaxCells = count;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	int UIGridLayout::GetArrangeAxisMaxCells() const
@@ -170,6 +159,24 @@ namespace o2
 
 		if (mFitByChildren && withChildren)
 			ExpandSizeByChilds();
+	}
+
+	void UIGridLayout::CopyData(const Actor& otherActor)
+	{
+		const UIGridLayout& other = dynamic_cast<const UIGridLayout&>(otherActor);
+
+		mBaseCorner          = other.mBaseCorner;
+		mSpacing             = other.mSpacing;
+		mBorder              = other.mBorder;
+		mCellSize            = other.mCellSize;
+		mArrangeAxis         = other.mArrangeAxis;
+		mArrangeAxisMaxCells = other.mArrangeAxisMaxCells;
+
+		UIWidget::CopyData(other);
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 	}
 
 	void UIGridLayout::OnChildAdded(UIWidget* child)
@@ -919,7 +926,7 @@ namespace o2
 			layout->mData->offsetMax += szDelta*(Vec2F::One() - relativePivot);
 			layout->mData->offsetMin -= szDelta*relativePivot;
 
-			UpdateLayout();
+			layout->SetDirty();
 		}
 	}
 
@@ -939,65 +946,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIGridLayout)
-{
-	BASE_CLASS(o2::UIWidget);
-
-	PUBLIC_FIELD(baseCorner);
-	PUBLIC_FIELD(cellSize);
-	PUBLIC_FIELD(arrangeAxisMaxCells);
-	PUBLIC_FIELD(arrangeAxis);
-	PUBLIC_FIELD(spacing);
-	PUBLIC_FIELD(border);
-	PUBLIC_FIELD(borderLeft);
-	PUBLIC_FIELD(borderRight);
-	PUBLIC_FIELD(borderTop);
-	PUBLIC_FIELD(borderBottom);
-	PUBLIC_FIELD(fitByChildren);
-	PROTECTED_FIELD(mBaseCorner).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSpacing).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mCellSize).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mArrangeAxis).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mArrangeAxisMaxCells).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mBorder).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mFitByChildren).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
-	PUBLIC_FUNCTION(BaseCorner, GetBaseCorner);
-	PUBLIC_FUNCTION(void, SetSpacing, float);
-	PUBLIC_FUNCTION(float, GetSpacing);
-	PUBLIC_FUNCTION(void, SetBorder, const RectF&);
-	PUBLIC_FUNCTION(RectF, GetBorder);
-	PUBLIC_FUNCTION(void, SetBorderLeft, float);
-	PUBLIC_FUNCTION(float, GetBorderLeft);
-	PUBLIC_FUNCTION(void, SetBorderRight, float);
-	PUBLIC_FUNCTION(float, GetBorderRight);
-	PUBLIC_FUNCTION(void, SetBorderTop, float);
-	PUBLIC_FUNCTION(float, GetBorderTop);
-	PUBLIC_FUNCTION(void, SetBorderBottom, float);
-	PUBLIC_FUNCTION(float, GetBorderBottom);
-	PUBLIC_FUNCTION(void, SetCellSize, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetCellSize);
-	PUBLIC_FUNCTION(void, SetArrangeAxis, TwoDirection);
-	PUBLIC_FUNCTION(TwoDirection, GetArrangeAxis);
-	PUBLIC_FUNCTION(void, SetArrangeAxisMaxCells, int);
-	PUBLIC_FUNCTION(int, GetArrangeAxisMaxCells);
-	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
-	PUBLIC_FUNCTION(bool, IsFittingByChildren);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
-	PROTECTED_FUNCTION(void, RearrangeChilds);
-	PROTECTED_FUNCTION(void, ArrangeFromLeftTop);
-	PROTECTED_FUNCTION(void, ArrangeFromTop);
-	PROTECTED_FUNCTION(void, ArrangeFromRightTop);
-	PROTECTED_FUNCTION(void, ArrangeFromLeft);
-	PROTECTED_FUNCTION(void, ArrangeFromCenter);
-	PROTECTED_FUNCTION(void, ArrangeFromRight);
-	PROTECTED_FUNCTION(void, ArrangeFromLeftBottom);
-	PROTECTED_FUNCTION(void, ArrangeFromBottom);
-	PROTECTED_FUNCTION(void, ArrangeFromRightBottom);
-	PROTECTED_FUNCTION(void, ExpandSizeByChilds);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIGridLayout);

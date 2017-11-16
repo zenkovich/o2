@@ -7,9 +7,9 @@ namespace o2
 	FieldInfo::FieldInfo()
 	{}
 
-	FieldInfo::FieldInfo(const String& name, UInt offset, const Type* type, 
+	FieldInfo::FieldInfo(const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type,
 						 ProtectSection sect, IFieldSerializer* serializer):
-		mName(name), mOffset(offset), mType(type), mProtectSection(sect),
+		mName(name), mPointerGetter(pointerGetter), mType(type), mProtectSection(sect),
 		mSerializer(serializer)
 	{}
 
@@ -23,7 +23,7 @@ namespace o2
 
 	bool FieldInfo::operator==(const FieldInfo& other) const
 	{
-		return mName == other.mName && mOffset == other.mOffset && mAttributes == other.mAttributes && 
+		return mName == other.mName && mPointerGetter == other.mPointerGetter && mAttributes == other.mAttributes && 
 			mProtectSection == other.mProtectSection;
 	}
 
@@ -85,7 +85,7 @@ namespace o2
 	}
 
 	FieldInfo* FieldInfo::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										  Vector<void*>& passedObjects)
+										  Vector<SearchPassedObject>& passedObjects)
 	{
 		if (!mType)
 			return nullptr;
@@ -108,18 +108,18 @@ namespace o2
 	void* FieldInfo::GetValuePtr(void* object) const
 	{
 		if (mType->GetUsage() == Type::Usage::Pointer)
-			return *(void**)((char*)object + mOffset);
+			return *(void**)GetValuePtrStrong(object);
 
-		return (void*)((char*)object + mOffset);
+		return GetValuePtrStrong(object);
 	}
 
 	const void* FieldInfo::GetValuePtrStrong(const void* object) const
 	{
-		return (void*)((char*)object + mOffset);
+		return (*mPointerGetter)(const_cast<void*>(object));
 	}
 
 	void* FieldInfo::GetValuePtrStrong(void* object) const
 	{
-		return (void*)((char*)object + mOffset);
+		return (*mPointerGetter)(object);
 	}
 }

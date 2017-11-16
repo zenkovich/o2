@@ -39,7 +39,7 @@ namespace o2
 		mTextDrawable->SetText(mText);
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		InitializeProperties();
 	}
@@ -53,34 +53,7 @@ namespace o2
 
 	UIEditBox& UIEditBox::operator=(const UIEditBox& other)
 	{
-		UIScrollArea::operator=(other);
-
-		delete mTextDrawable;
-		delete mCaretDrawable;
-
-		mText             = other.mText;
-		mLastText         = mText;
-		mAvailableSymbols = other.mAvailableSymbols;
-		mSelectionBegin   = 0;
-		mSelectionEnd     = 0;
-		mCaretBlinkTime   = 0;
-		mLastClickTime    = -10.0f;
-		mMultiLine        = other.mMultiLine;
-		mWordWrap         = other.mWordWrap;
-		mMaxLineChars     = other.mMaxLineChars;
-		mMaxLinesCount    = other.mMaxLinesCount;
-		mSelectionColor   = other.mSelectionColor;
-		mCaretBlinkDelay  = other.mCaretBlinkDelay;
-		mTextDrawable     = other.mTextDrawable->CloneAs<Text>();
-		mCaretDrawable    = other.mCaretDrawable->CloneAs<Sprite>();
-
-		mTextDrawable->SetText(mText);
-
-		RetargetStatesAnimations();
-		UpdateLayout();
-
-		onChanged(mText);
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -251,7 +224,7 @@ namespace o2
 			mText = GetFilteredText(mText);
 			mTextDrawable->SetText(mText);
 
-			UpdateLayout();
+			SetLayoutDirty();
 		}
 
 		onChanged(mText);
@@ -298,7 +271,7 @@ namespace o2
 		mTextDrawable->SetText(filteredText);
 		onChanged(mText);
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIEditBox::SetMaxLineCharactersCount(int count)
@@ -343,7 +316,7 @@ namespace o2
 			mLastText = mText;
 			mTextDrawable->SetText(filteredText);
 
-			UpdateLayout();
+			SetLayoutDirty();
 		}
 
 		onChanged(mText);
@@ -762,6 +735,39 @@ namespace o2
 		return mDrawingScissorRect.IsInside(point) && mAbsoluteViewArea.IsInside(point);
 	}
 
+	void UIEditBox::CopyData(const Actor& otherActor)
+	{
+		const UIEditBox& other = dynamic_cast<const UIEditBox&>(otherActor);
+
+		UIScrollArea::CopyData(other);
+
+		delete mTextDrawable;
+		delete mCaretDrawable;
+
+		mText             = other.mText;
+		mLastText         = mText;
+		mAvailableSymbols = other.mAvailableSymbols;
+		mSelectionBegin   = 0;
+		mSelectionEnd     = 0;
+		mCaretBlinkTime   = 0;
+		mLastClickTime    = -10.0f;
+		mMultiLine        = other.mMultiLine;
+		mWordWrap         = other.mWordWrap;
+		mMaxLineChars     = other.mMaxLineChars;
+		mMaxLinesCount    = other.mMaxLinesCount;
+		mSelectionColor   = other.mSelectionColor;
+		mCaretBlinkDelay  = other.mCaretBlinkDelay;
+		mTextDrawable     = other.mTextDrawable->CloneAs<Text>();
+		mCaretDrawable    = other.mCaretDrawable->CloneAs<Sprite>();
+
+		mTextDrawable->SetText(mText);
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
+		onChanged(mText);
+	}
+
 	void UIEditBox::UpdateTransparency()
 	{
 		UIWidget::UpdateTransparency();
@@ -998,7 +1004,7 @@ namespace o2
 			else
 			{
 				mScrollPos.x = Math::Clamp(mScrollPos.x + horOffs, mScrollRange.left, mScrollRange.right);
-				UpdateLayout();
+				SetLayoutDirty();
 			}
 		}
 
@@ -1013,7 +1019,7 @@ namespace o2
 				else
 				{
 					mScrollPos.y = Math::Clamp(mScrollPos.y + verOffs, mScrollRange.bottom, mScrollRange.top);
-					UpdateLayout();
+					SetLayoutDirty();
 				}
 			}
 		}
@@ -1148,7 +1154,7 @@ namespace o2
 
 			mCaretBlinkTime = 0;
 
-			UpdateLayout();
+			SetLayoutDirty();
 			CheckScrollingToCaret();
 
 			onChanged(mText);
@@ -1171,7 +1177,7 @@ namespace o2
 
 			mTextDrawable->SetText(mText);
 			onChanged(mText);
-			UpdateLayout();
+			SetLayoutDirty();
 
 			if (mSelectionEnd == mSelectionBegin)
 				MoveCaret(mSelectionEnd - 1, false);
@@ -1190,7 +1196,7 @@ namespace o2
 
 				mTextDrawable->SetText(mText);
 				onChanged(mText);
-				UpdateLayout();
+				SetLayoutDirty();
 
 				MoveCaret(Math::Min(mSelectionEnd, mSelectionBegin), false);
 			}
@@ -1282,7 +1288,7 @@ namespace o2
 
 			mTextDrawable->SetText(mText);
 			onChanged(mText);
-			UpdateLayout();
+			SetLayoutDirty();
 			CheckScrollingToCaret();
 		}
 
@@ -1302,7 +1308,7 @@ namespace o2
 
 			mTextDrawable->SetText(mText);
 			onChanged(mText);
-			UpdateLayout();
+			SetLayoutDirty();
 			CheckScrollingToCaret();
 		}
 	}
@@ -1327,110 +1333,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIEditBox)
-{
-	BASE_CLASS(o2::UIScrollArea);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
-	BASE_CLASS(o2::KeyboardEventsListener);
-
-	PUBLIC_FIELD(text);
-	PUBLIC_FIELD(caret);
-	PUBLIC_FIELD(selectionBegin);
-	PUBLIC_FIELD(selectionEnd);
-	PUBLIC_FIELD(onChanged);
-	PUBLIC_FIELD(onChangeCompleted);
-	PROTECTED_FIELD(mSelectionColor).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mLastText);
-	PROTECTED_FIELD(mText).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAvailableSymbols).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mTextDrawable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectionMesh);
-	PROTECTED_FIELD(mCaretDrawable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mCaretBlinkDelay).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mCaretBlinkTime);
-	PROTECTED_FIELD(mSelectionBegin);
-	PROTECTED_FIELD(mSelectionEnd);
-	PROTECTED_FIELD(mSelectingByWords);
-	PROTECTED_FIELD(mSelWordBegin);
-	PROTECTED_FIELD(mSelWordEnd);
-	PROTECTED_FIELD(mMultiLine).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mWordWrap).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mMaxLineChars).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mMaxLinesCount).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mJustSelected);
-	PROTECTED_FIELD(mLastClickTime);
-	PROTECTED_FIELD(mLastCursorPos);
-
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetText, const WString&);
-	PUBLIC_FUNCTION(WString, GetText);
-	PUBLIC_FUNCTION(void, SetCaretPosition, int);
-	PUBLIC_FUNCTION(int, GetCaretPosition);
-	PUBLIC_FUNCTION(void, Select, int, int);
-	PUBLIC_FUNCTION(void, SetSelectionBegin, int);
-	PUBLIC_FUNCTION(int, GetSelectionBegin);
-	PUBLIC_FUNCTION(void, SetSelectionEnd, int);
-	PUBLIC_FUNCTION(int, GetSelectionEnd);
-	PUBLIC_FUNCTION(void, Deselect);
-	PUBLIC_FUNCTION(void, SelectAll);
-	PUBLIC_FUNCTION(Text*, GetTextDrawable);
-	PUBLIC_FUNCTION(Sprite*, GetCaretDrawable);
-	PUBLIC_FUNCTION(void, SetSelectionColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetSelectionColor);
-	PUBLIC_FUNCTION(void, SetFilterInteger);
-	PUBLIC_FUNCTION(void, SetFilterFloat);
-	PUBLIC_FUNCTION(void, SetFilterNames);
-	PUBLIC_FUNCTION(void, SetAvailableSymbols, const WString&);
-	PUBLIC_FUNCTION(WString, GetAvailableSymbols);
-	PUBLIC_FUNCTION(void, SetMaxSizes, int, int);
-	PUBLIC_FUNCTION(void, SetMaxLineCharactersCount, int);
-	PUBLIC_FUNCTION(int, GetMaxLineCharactersCount);
-	PUBLIC_FUNCTION(void, SetMaxLinesCount, int);
-	PUBLIC_FUNCTION(int, GetMaxLinesCount);
-	PUBLIC_FUNCTION(void, SetMultiLine, bool);
-	PUBLIC_FUNCTION(bool, IsMultiLine);
-	PUBLIC_FUNCTION(void, SetWordWrap, bool);
-	PUBLIC_FUNCTION(bool, IsWordWrap);
-	PUBLIC_FUNCTION(void, SetCaretBlinkingDelay, float);
-	PUBLIC_FUNCTION(float, GetCaretBlinkingDelay);
-	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
-	PROTECTED_FUNCTION(void, OnFocused);
-	PROTECTED_FUNCTION(void, OnUnfocused);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
-	PROTECTED_FUNCTION(void, UpdateScrollParams);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
-	PROTECTED_FUNCTION(WString, GetFilteredText, const WString&);
-	PROTECTED_FUNCTION(void, CheckCharactersAndLinesBounds);
-	PROTECTED_FUNCTION(void, UpdateSelectionAndCaret);
-	PROTECTED_FUNCTION(Vec2F, GetTextCaretPosition, int);
-	PROTECTED_FUNCTION(int, GetTextCaretPosition, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateCaretBlinking, float);
-	PROTECTED_FUNCTION(void, AddSelectionRect, const RectF&);
-	PROTECTED_FUNCTION(void, CheckScrollingToCaret);
-	PROTECTED_FUNCTION(void, JumpSelection, bool, bool);
-	PROTECTED_FUNCTION(void, CheckCharacterTyping, KeyboardKey);
-	PROTECTED_FUNCTION(void, CheckCharactersErasing, KeyboardKey);
-	PROTECTED_FUNCTION(void, CheckCaretMoving, KeyboardKey);
-	PROTECTED_FUNCTION(void, CheckClipboard, KeyboardKey);
-	PROTECTED_FUNCTION(void, MoveCaret, int, bool);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIEditBox);

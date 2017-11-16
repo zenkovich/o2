@@ -223,3 +223,108 @@ namespace o2
 		ImageAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }
+
+CLASS_BASES_META(o2::ImageAsset)
+{
+	BASE_CLASS(o2::Asset);
+}
+END_META;
+CLASS_FIELDS_META(o2::ImageAsset)
+{
+	PUBLIC_FIELD(bitmap);
+	PUBLIC_FIELD(atlasId);
+	PUBLIC_FIELD(atlas);
+	PUBLIC_FIELD(sliceBorder);
+	PUBLIC_FIELD(atlasPage);
+	PUBLIC_FIELD(atlasRect);
+	PUBLIC_FIELD(size);
+	PUBLIC_FIELD(width);
+	PUBLIC_FIELD(height);
+	PUBLIC_FIELD(meta);
+	PROTECTED_FIELD(mBitmap);
+	PROTECTED_FIELD(mAtlasPage);
+	PROTECTED_FIELD(mAtlasRect);
+}
+END_META;
+CLASS_METHODS_META(o2::ImageAsset)
+{
+
+	PUBLIC_FUNCTION(Bitmap*, GetBitmap);
+	PUBLIC_FUNCTION(void, SetBitmap, Bitmap*);
+	PUBLIC_FUNCTION(UID, GetAtlasId);
+	PUBLIC_FUNCTION(void, SetAtlasId, UID);
+	PUBLIC_FUNCTION(AtlasAssetRef, GetAtlas);
+	PUBLIC_FUNCTION(void, SetAtlas, const AtlasAssetRef&);
+	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
+	PUBLIC_FUNCTION(BorderI, GetSliceBorder);
+	PUBLIC_FUNCTION(UInt, GetAtlasPage);
+	PUBLIC_FUNCTION(RectI, GetAtlasRect);
+	PUBLIC_FUNCTION(Vec2F, GetSize);
+	PUBLIC_FUNCTION(float, GetWidth);
+	PUBLIC_FUNCTION(float, GetHeight);
+	PUBLIC_FUNCTION(TextureRef, GetAtlasTextureRef);
+	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
+	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+	PROTECTED_FUNCTION(void, SaveData, const String&);
+	PROTECTED_FUNCTION(void, LoadBitmap);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_BASES_META(o2::ImageAssetRef)
+{
+	BASE_CLASS(o2::AssetRef);
+}
+END_META;
+CLASS_FIELDS_META(o2::ImageAssetRef)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::ImageAssetRef)
+{
+
+	PUBLIC_FUNCTION(const Type&, GetAssetType);
+}
+END_META;
+
+CLASS_BASES_META(o2::ImageAsset::PlatformMeta)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::ImageAsset::PlatformMeta)
+{
+	PUBLIC_FIELD(mMaxSize).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mScale).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mFormat).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::ImageAsset::PlatformMeta)
+{
+}
+END_META;
+
+CLASS_BASES_META(o2::ImageAsset::MetaInfo)
+{
+	BASE_CLASS(o2::Asset::IMetaInfo);
+}
+END_META;
+CLASS_FIELDS_META(o2::ImageAsset::MetaInfo)
+{
+	PUBLIC_FIELD(mAtlasId).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mIOS).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mAndroid).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mMacOS).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mWindows).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mSliceBorder).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mDefaultMode).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::ImageAsset::MetaInfo)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetAssetType);
+	PUBLIC_FUNCTION(bool, IsEqual, IMetaInfo*);
+}
+END_META;

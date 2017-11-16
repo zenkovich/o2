@@ -61,3 +61,31 @@ namespace Editor
 		UIImage*          mIcon;             // Component icon
 	};
 }
+
+CLASS_BASES_META(Editor::IActorTransformViewer)
+{
+	BASE_CLASS(o2::IObject);
+}
+END_META;
+CLASS_FIELDS_META(Editor::IActorTransformViewer)
+{
+	PROTECTED_FIELD(mDataView);
+	PROTECTED_FIELD(mPropertiesLayout);
+	PROTECTED_FIELD(mExpandBtn);
+	PROTECTED_FIELD(mSpoiler);
+	PROTECTED_FIELD(mNameCaption);
+	PROTECTED_FIELD(mOptionsBtn);
+	PROTECTED_FIELD(mSaveBtn);
+	PROTECTED_FIELD(mIcon);
+}
+END_META;
+CLASS_METHODS_META(Editor::IActorTransformViewer)
+{
+
+	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
+	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(void, Expand);
+	PUBLIC_FUNCTION(void, Collapse);
+	PUBLIC_FUNCTION(void, Refresh);
+}
+END_META;

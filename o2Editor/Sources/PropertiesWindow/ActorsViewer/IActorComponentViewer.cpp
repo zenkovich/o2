@@ -78,7 +78,8 @@ namespace Editor
 
 	IActorComponentViewer::~IActorComponentViewer()
 	{
-		delete mDataView;
+		if (mDataView)
+			delete mDataView;
 	}
 
 	UIWidget* IActorComponentViewer::GetWidget() const
@@ -100,27 +101,6 @@ namespace Editor
 
 	void IActorComponentViewer::Refresh()
 	{}
-
 }
 
-CLASS_META(Editor::IActorComponentViewer)
-{
-	BASE_CLASS(o2::IObject);
-
-	PROTECTED_FIELD(mDataView);
-	PROTECTED_FIELD(mPropertiesLayout);
-	PROTECTED_FIELD(mExpandBtn);
-	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mNameCaption);
-	PROTECTED_FIELD(mOptionsBtn);
-	PROTECTED_FIELD(mSaveBtn);
-	PROTECTED_FIELD(mIcon);
-
-	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
-	PUBLIC_FUNCTION(const Type*, GetComponentType);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-	PUBLIC_FUNCTION(void, Refresh);
-}
-END_META;
+DECLARE_CLASS(Editor::IActorComponentViewer);

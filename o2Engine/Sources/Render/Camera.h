@@ -25,3 +25,17 @@ namespace o2
 		SERIALIZABLE(Camera);
 	};
 }
+
+CLASS_BASES_META(o2::Camera)
+{
+	BASE_CLASS(o2::Transform);
+}
+END_META;
+CLASS_FIELDS_META(o2::Camera)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::Camera)
+{
+}
+END_META;

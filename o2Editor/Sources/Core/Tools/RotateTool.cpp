@@ -12,11 +12,12 @@
 
 namespace Editor
 {
-	RotateTool::RotateTool():
-		mPivotDragHandle(mnew Sprite("ui/UI2_pivot.png"),
-						 mnew Sprite("ui/UI2_pivot_select.png"),
-						 mnew Sprite("ui/UI2_pivot_pressed.png"))
+	RotateTool::RotateTool()
 	{
+		mPivotDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_pivot.png"),
+										   mnew Sprite("ui/UI2_pivot_select.png"),
+										   mnew Sprite("ui/UI2_pivot_pressed.png"));
+
 		mRotateRingFillMesh = new Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
 		mAngleMesh = new Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
 
@@ -26,8 +27,11 @@ namespace Editor
 
 	RotateTool::~RotateTool()
 	{
-		delete mRotateRingFillMesh;
-		delete mAngleMesh;
+		if (mRotateRingFillMesh)
+			delete mRotateRingFillMesh;
+
+		if (mAngleMesh)
+			delete mAngleMesh;
 	}
 
 	void RotateTool::Update(float dt)
@@ -360,48 +364,4 @@ namespace Editor
 
 }
 
-CLASS_META(Editor::RotateTool)
-{
-	BASE_CLASS(Editor::SelectionTool);
-
-	PUBLIC_FIELD(angleSnapStep);
-	PROTECTED_FIELD(mRotateRingInsideRadius);
-	PROTECTED_FIELD(mRotateRingOutsideRadius);
-	PROTECTED_FIELD(mRotateRingSegs);
-	PROTECTED_FIELD(mRotateRingsColor);
-	PROTECTED_FIELD(mRotateRingsFillColor);
-	PROTECTED_FIELD(mRotateRingsFillColor2);
-	PROTECTED_FIELD(mRotateMeshClockwiseColor);
-	PROTECTED_FIELD(mRotateMeshCClockwiseColor);
-	PROTECTED_FIELD(mRotateRingFillMesh);
-	PROTECTED_FIELD(mAngleMesh);
-	PROTECTED_FIELD(mScenePivot);
-	PROTECTED_FIELD(mPivotDragHandle);
-	PROTECTED_FIELD(mPressAngle);
-	PROTECTED_FIELD(mCurrentRotateAngle);
-	PROTECTED_FIELD(mRingPressed);
-	PROTECTED_FIELD(mSnapAngleAccumulated);
-	PROTECTED_FIELD(mBeforeTransforms);
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, DrawScreen);
-	PUBLIC_FUNCTION(void, OnEnabled);
-	PUBLIC_FUNCTION(void, OnDisabled);
-	PUBLIC_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
-	PUBLIC_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
-	PUBLIC_FUNCTION(void, UpdateMeshes);
-	PUBLIC_FUNCTION(void, CalcPivotByActorsCenter);
-	PUBLIC_FUNCTION(void, OnPivotDragHandleMoved, const Vec2F&);
-	PUBLIC_FUNCTION(bool, IsPointInRotateRing, const Vec2F&);
-	PUBLIC_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PUBLIC_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PUBLIC_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PUBLIC_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PUBLIC_FUNCTION(void, OnKeyPressed, const Input::Key&);
-	PUBLIC_FUNCTION(void, OnKeyStayDown, const Input::Key&);
-	PUBLIC_FUNCTION(void, RotateActors, float);
-	PUBLIC_FUNCTION(void, RotateActorsSeparated, float);
-	PUBLIC_FUNCTION(void, RotateActorsWithAction, float);
-	PUBLIC_FUNCTION(void, RotateActorsSeparatedWithAction, float);
-}
-END_META;
+DECLARE_CLASS(Editor::RotateTool);

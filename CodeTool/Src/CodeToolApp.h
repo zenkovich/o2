@@ -146,6 +146,9 @@ protected:
 	// Updates reflection for classes in source
 	void UpdateSourceReflection(SyntaxFile* file);
 
+	// Returns class declaration meta
+	string GetClassDeclaration(SyntaxClass* cls);
+
 	// Returns class reflection meta
 	string GetClassMeta(SyntaxClass* cls);
 
@@ -153,13 +156,13 @@ protected:
 	string GetEnumMeta(SyntaxEnum* enm);
 
 	// Builds meta templates parameters for template classes
-	void AggregateTemplates(SyntaxSection* sec, string& res, string& fullName);
+	void AggregateTemplates(SyntaxSection* sec, string& templates, string& fullName);
 
 	// Returns class full name with template parameters in global space
 	string GetClassNormalizedTemplates(const string& name, const string& nspace);
 
 	// Removes class metas from source
-	void RemoveMetas(string& data, const char* keyword, const char* endword);
+	void RemoveMetas(string& data, const char* keyword, const char* endword, bool allowMultiline = true);
 
 	// Returns is function reflectable
 	bool IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const;

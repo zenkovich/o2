@@ -32,6 +32,7 @@
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
 #include "UI/Window.h"
+#include "Utils/Timer.h"
 
 using namespace o2;
 
@@ -2418,88 +2419,21 @@ namespace Editor
 		o2UI.ClearStyle();
 
 		auto funcs = GetType().GetFunctionsWithBaseClasses();
+
+		Timer timer;
 		for (auto func : funcs)
 		{
 			if (func->GetName() == "RebuildBasicUIManager" || func->GetName() == "RebuildEditorUIManager")
 				continue;
 
+			timer.Reset();
 			func->Invoke<void>(this);
+
+			o2Debug.Log(func->GetName() + " for " + (String)timer.GetDeltaTime() + " sec");
 		}
 
 		o2UI.SaveStyle("editor_ui_style.xml");
 	}
 }
 
-CLASS_META(Editor::EditorUIStyleBuilder)
-{
-	BASE_CLASS(o2::BasicUIStyleBuilder);
-
-
-	PUBLIC_FUNCTION(void, RebuildExpandButton);
-	PUBLIC_FUNCTION(void, RebuildDockableWndStyle);
-	PUBLIC_FUNCTION(void, RebuildPlayStopButtonStyle);
-	PUBLIC_FUNCTION(void, RebuildPauseButtonStyle);
-	PUBLIC_FUNCTION(void, RebuildStepButtonStyle);
-	PUBLIC_FUNCTION(void, RebuildRoundDropDown);
-	PUBLIC_FUNCTION(void, RebuildArrowToggle);
-	PUBLIC_FUNCTION(void, RebuildBrushToggle);
-	PUBLIC_FUNCTION(void, RebuildMoveToggle);
-	PUBLIC_FUNCTION(void, RebuildRotateToggle);
-	PUBLIC_FUNCTION(void, RebuildScaleToggle);
-	PUBLIC_FUNCTION(void, RebuildFrameToggle);
-	PUBLIC_FUNCTION(void, RebuildSearchButton);
-	PUBLIC_FUNCTION(void, RebuildListTreeToggle);
-	PUBLIC_FUNCTION(void, RebuildRevertBtn);
-	PUBLIC_FUNCTION(void, RebuildActorsTreeNodeEnableToggle);
-	PUBLIC_FUNCTION(void, RebuildActorsTreeLockToggle);
-	PUBLIC_FUNCTION(void, RebuildActorsTreeLinkBtn);
-	PUBLIC_FUNCTION(void, RebuildActorsTree);
-	PUBLIC_FUNCTION(void, RebuildPanelDownButton);
-	PUBLIC_FUNCTION(void, RebuildTrashDownPanelButton);
-	PUBLIC_FUNCTION(void, RebuildMessagesDownPanelToggle);
-	PUBLIC_FUNCTION(void, RebuildWarningsDownPanelToggle);
-	PUBLIC_FUNCTION(void, RebuildErrorsDownPanelToggle);
-	PUBLIC_FUNCTION(void, RebuildFilterMenuButton);
-	PUBLIC_FUNCTION(void, RebuildTreeMenuButton);
-	PUBLIC_FUNCTION(void, RebuildFoldersTree);
-	PUBLIC_FUNCTION(void, RebuildRegularAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildFolderAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildPrototypeAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildPrefabPreviewAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildImagePreviewAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildTextAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildAnimationAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildAssetsGridScroll);
-	PUBLIC_FUNCTION(void, RebuildLinkBtn);
-	PUBLIC_FUNCTION(void, RebuildSinglelineEditBoxWithArrows);
-	PUBLIC_FUNCTION(void, RebuildSinglelineEditboxProperty);
-	PUBLIC_FUNCTION(void, RebuildEditorDropdown);
-	PUBLIC_FUNCTION(void, RebuildActorPropety);
-	PUBLIC_FUNCTION(void, RebuildColorPropety);
-	PUBLIC_FUNCTION(void, RebuildAssetPropety);
-	PUBLIC_FUNCTION(void, RebuildComponentProperty);
-	PUBLIC_FUNCTION(void, RebuildVector2Property);
-	PUBLIC_FUNCTION(void, RebuildRedEditBoxStyle);
-	PUBLIC_FUNCTION(void, RebuildGreenEditBoxStyle);
-	PUBLIC_FUNCTION(void, RebuildColoredVector2Property);
-	PUBLIC_FUNCTION(void, RebuildRectProperty);
-	PUBLIC_FUNCTION(void, RebuildNewRectProperty);
-	PUBLIC_FUNCTION(void, RebuildActorHeadEnableToggle);
-	PUBLIC_FUNCTION(void, RebuildActorHeadName);
-	PUBLIC_FUNCTION(void, RebuildActorHeadLockToggle);
-	PUBLIC_FUNCTION(void, RebuildActorHeadActorAssetProperty);
-	PUBLIC_FUNCTION(void, RebuildActorHeadTagsProperty);
-	PUBLIC_FUNCTION(void, RebuildActorHeadLayerProperty);
-	PUBLIC_FUNCTION(void, RebuildAcceptPrototypeBtn);
-	PUBLIC_FUNCTION(void, RebuildRevertPrototypeBtn);
-	PUBLIC_FUNCTION(void, RebuildBreakPrototypeBtn);
-	PUBLIC_FUNCTION(void, RebuildComponentOptionsBtn);
-	PUBLIC_FUNCTION(void, RebuildComponentSaveBtn);
-	PUBLIC_FUNCTION(void, RebuildHorWideScrollbar);
-	PUBLIC_FUNCTION(void, RebuildVerWideScrollbar);
-	PUBLIC_FUNCTION(void, RebuildHorWideProgressbar);
-	PUBLIC_FUNCTION(void, RebuildVerWideProgressbar);
-	PUBLIC_FUNCTION(void, RebuildBooleanProperty);
-	PUBLIC_FUNCTION(void, RebuildEditorUIManager);
-}
-END_META;
+DECLARE_CLASS(Editor::EditorUIStyleBuilder);

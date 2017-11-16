@@ -54,8 +54,8 @@ namespace Editor
 		Function<void()> mOnChangedCallback;
 		Function<void()> mOnChangeCompletedCallback;
 
-		UIWindow*      mWindow;
-		UICurveEditor* mEditorWidget;
+		UIWindow*      mWindow = nullptr;
+		UICurveEditor* mEditorWidget = nullptr;
 
 	protected:
 		// It is called when hiding, calls completed callback

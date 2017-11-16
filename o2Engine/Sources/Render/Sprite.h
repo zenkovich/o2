@@ -237,3 +237,93 @@ namespace o2
 		friend class Render;
 	};
 }
+
+CLASS_BASES_META(o2::Sprite)
+{
+	BASE_CLASS(o2::IRectDrawable);
+}
+END_META;
+CLASS_FIELDS_META(o2::Sprite)
+{
+	PUBLIC_FIELD(texture);
+	PUBLIC_FIELD(textureSrcRect);
+	PUBLIC_FIELD(image);
+	PUBLIC_FIELD(imageName);
+	PUBLIC_FIELD(bitmap);
+	PUBLIC_FIELD(leftTopColor);
+	PUBLIC_FIELD(rightTopColor);
+	PUBLIC_FIELD(leftBottomColor);
+	PUBLIC_FIELD(rightBottomColor);
+	PUBLIC_FIELD(mode);
+	PUBLIC_FIELD(fill);
+	PUBLIC_FIELD(tileScale);
+	PUBLIC_FIELD(sliceBorder);
+	PROTECTED_FIELD(mTextureSrcRect);
+	PROTECTED_FIELD(mCornersColors);
+	PROTECTED_FIELD(mImageAsset).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMode).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSlices).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mFill).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mTileScale).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMesh);
+	PROTECTED_FIELD(mMeshBuildFunc);
+}
+END_META;
+CLASS_METHODS_META(o2::Sprite)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, SetTexture, TextureRef);
+	PUBLIC_FUNCTION(TextureRef, GetTexture);
+	PUBLIC_FUNCTION(void, SetTextureSrcRect, const RectI&);
+	PUBLIC_FUNCTION(RectI, GetTextureSrcRect);
+	PUBLIC_FUNCTION(Vec2I, GetOriginalSize);
+	PUBLIC_FUNCTION(void, SetCornerColor, Corner, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetCornerColor, Corner);
+	PUBLIC_FUNCTION(void, SetLeftTopColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetLeftTopCorner);
+	PUBLIC_FUNCTION(void, SetRightTopColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetRightTopCorner);
+	PUBLIC_FUNCTION(void, SetRightBottomColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetRightBottomCorner);
+	PUBLIC_FUNCTION(void, SetLeftBottomColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetLeftBottomCorner);
+	PUBLIC_FUNCTION(void, SetFill, float);
+	PUBLIC_FUNCTION(float, GetFill);
+	PUBLIC_FUNCTION(void, SetTileScale, float);
+	PUBLIC_FUNCTION(float, GetTileScale);
+	PUBLIC_FUNCTION(void, SetMode, SpriteMode);
+	PUBLIC_FUNCTION(SpriteMode, GetMode);
+	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
+	PUBLIC_FUNCTION(BorderI, GetSliceBorder);
+	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAssetRef&);
+	PUBLIC_FUNCTION(void, LoadFromImage, const String&);
+	PUBLIC_FUNCTION(void, LoadFromImage, UID);
+	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
+	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*);
+	PUBLIC_FUNCTION(void, SetImageAsset, const ImageAssetRef&);
+	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
+	PUBLIC_FUNCTION(String, GetImageName);
+	PUBLIC_FUNCTION(UID, GetAtlasAssetId);
+	PUBLIC_FUNCTION(void, NormalizeSize);
+	PUBLIC_FUNCTION(void, NormalizeAspectByWidth);
+	PUBLIC_FUNCTION(void, NormalizeAspectByHeight);
+	PUBLIC_FUNCTION(void, NormalizeAspect);
+	PUBLIC_FUNCTION(void, OnSerialize, DataNode&);
+	PUBLIC_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, BasisChanged);
+	PROTECTED_FUNCTION(void, ColorChanged);
+	PROTECTED_FUNCTION(void, UpdateMesh);
+	PROTECTED_FUNCTION(void, BuildDefaultMesh);
+	PROTECTED_FUNCTION(void, BuildSlicedMesh);
+	PROTECTED_FUNCTION(void, BuildTiledMesh);
+	PROTECTED_FUNCTION(void, BuildFillLeftToRightMesh);
+	PROTECTED_FUNCTION(void, BuildFillRightToLeftMesh);
+	PROTECTED_FUNCTION(void, BuildFillUpToDownMesh);
+	PROTECTED_FUNCTION(void, BuildFillDownToUpMesh);
+	PROTECTED_FUNCTION(void, BuildFill360CWMesh);
+	PROTECTED_FUNCTION(void, BuildFill360CCWMesh);
+	PROTECTED_FUNCTION(void, ReloadImage);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;

@@ -43,7 +43,7 @@ namespace o2
 		Property<float> widthWeight;  // Width layout weight property
 		Property<float> heigthWeight; // Height layout weight property
 
-		// Default constructor, creates both stretching layout
+		// Default constructor, creates both stretching layout  
 		UIWidgetLayout();
 
 		// Constructor with parameters
@@ -247,7 +247,7 @@ namespace o2
 
 			bool  drivenByParent = false;          // Is layout controlling by parent
 
-			UIWidget* owner = nullptr;             // owner widget pointer
+			UIWidget* owner = nullptr;             // owner widget pointer @EXCLUDE_POINTER_SEARCH
 
 			SERIALIZABLE(Data);
 		};
@@ -304,3 +304,123 @@ namespace o2
 		friend class UIWindow;
 	};
 }
+
+CLASS_BASES_META(o2::UIWidgetLayout)
+{
+	BASE_CLASS(o2::ActorTransform);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIWidgetLayout)
+{
+	PUBLIC_FIELD(anchorMin);
+	PUBLIC_FIELD(anchorMax);
+	PUBLIC_FIELD(offsetMin);
+	PUBLIC_FIELD(offsetMax);
+	PUBLIC_FIELD(anchorLeft);
+	PUBLIC_FIELD(anchorRight);
+	PUBLIC_FIELD(anchorBottom);
+	PUBLIC_FIELD(anchorTop);
+	PUBLIC_FIELD(offsetLeft);
+	PUBLIC_FIELD(offsetRight);
+	PUBLIC_FIELD(offsetBottom);
+	PUBLIC_FIELD(offsetTop);
+	PUBLIC_FIELD(minSize);
+	PUBLIC_FIELD(minWidth);
+	PUBLIC_FIELD(minHeight);
+	PUBLIC_FIELD(maxSize);
+	PUBLIC_FIELD(maxWidth);
+	PUBLIC_FIELD(maxHeight);
+	PUBLIC_FIELD(weight);
+	PUBLIC_FIELD(widthWeight);
+	PUBLIC_FIELD(heigthWeight);
+	PROTECTED_FIELD(mCheckMinMaxFunc);
+	PROTECTED_FIELD(mData);
+}
+END_META;
+CLASS_METHODS_META(o2::UIWidgetLayout)
+{
+
+	PUBLIC_FUNCTION(void, Update);
+	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetBasis, const Basis&);
+	PUBLIC_FUNCTION(void, SetNonSizedBasis, const Basis&);
+	PUBLIC_FUNCTION(void, SetRect, const RectF&);
+	PUBLIC_FUNCTION(void, SetAxisAlignedRect, const RectF&);
+	PUBLIC_FUNCTION(void, SetAnchorMin, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetAnchorMin);
+	PUBLIC_FUNCTION(void, SetAnchorMax, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetAnchorMax);
+	PUBLIC_FUNCTION(void, SetAnchorLeft, float);
+	PUBLIC_FUNCTION(float, GetAnchorLeft);
+	PUBLIC_FUNCTION(void, SetAnchorRight, float);
+	PUBLIC_FUNCTION(float, GetAnchorRight);
+	PUBLIC_FUNCTION(void, SetAnchorBottom, float);
+	PUBLIC_FUNCTION(float, GetAnchorBottom);
+	PUBLIC_FUNCTION(void, SetAnchorTop, float);
+	PUBLIC_FUNCTION(float, GetAnchorTop);
+	PUBLIC_FUNCTION(void, SetOffsetMin, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetOffsetMin);
+	PUBLIC_FUNCTION(void, SetOffsetMax, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetOffsetMax);
+	PUBLIC_FUNCTION(void, SetOffsetLeft, float);
+	PUBLIC_FUNCTION(float, GetOffsetLeft);
+	PUBLIC_FUNCTION(void, SetOffsetRight, float);
+	PUBLIC_FUNCTION(float, GetOffsetRight);
+	PUBLIC_FUNCTION(void, SetOffsetBottom, float);
+	PUBLIC_FUNCTION(float, GetOffsetBottom);
+	PUBLIC_FUNCTION(void, SetOffsetTop, float);
+	PUBLIC_FUNCTION(float, GetOffsetTop);
+	PUBLIC_FUNCTION(void, SetMinimalSize, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetMinimalSize);
+	PUBLIC_FUNCTION(void, SetMinimalWidth, float);
+	PUBLIC_FUNCTION(float, GetMinimalWidth);
+	PUBLIC_FUNCTION(void, SetMinimalHeight, float);
+	PUBLIC_FUNCTION(float, GetMinimalHeight);
+	PUBLIC_FUNCTION(void, SetMaximalSize, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetMaximalSize);
+	PUBLIC_FUNCTION(void, SetMaximalWidth, float);
+	PUBLIC_FUNCTION(float, GetMaximalWidth);
+	PUBLIC_FUNCTION(void, SetMaximalHeight, float);
+	PUBLIC_FUNCTION(float, GetMaximalHeight);
+	PUBLIC_FUNCTION(void, DisableMinMaxSizes);
+	PUBLIC_FUNCTION(void, SetWeight, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetWeight);
+	PUBLIC_FUNCTION(void, SetWidthWeight, float);
+	PUBLIC_FUNCTION(float, GetWidthWeight);
+	PUBLIC_FUNCTION(void, SetHeightWeight, float);
+	PUBLIC_FUNCTION(float, GetHeightWeight);
+	PROTECTED_FUNCTION(void, SetOwner, Actor*);
+	PROTECTED_FUNCTION(void, SetDirty);
+	PROTECTED_FUNCTION(void, FloorRectangle);
+	PROTECTED_FUNCTION(void, UpdateOffsetsByCurrentTransform);
+	PROTECTED_FUNCTION(void, CopyFrom, const UIWidgetLayout&);
+	PROTECTED_FUNCTION(void, CheckMinMax);
+	PROTECTED_FUNCTION(void, DontCheckMinMax);
+	PROTECTED_FUNCTION(void, InitializeProperties);
+}
+END_META;
+
+CLASS_BASES_META(o2::UIWidgetLayout::Data)
+{
+	BASE_CLASS(o2::ActorTransform::Data);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIWidgetLayout::Data)
+{
+	PUBLIC_FIELD(anchorMin).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(anchorMax).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offsetMin).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offsetMax).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(minSize).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(maxSize).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(weight).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(drivenByParent);
+	PUBLIC_FIELD(owner).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::UIWidgetLayout::Data)
+{
+}
+END_META;

@@ -76,27 +76,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::IRectDrawable)
-{
-	BASE_CLASS(o2::Transform);
-	BASE_CLASS(o2::IDrawable);
-
-	PUBLIC_FIELD(color);
-	PUBLIC_FIELD(transparency);
-	PUBLIC_FIELD(enabled);
-	PROTECTED_FIELD(mColor).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mEnabled).SERIALIZABLE_ATTRIBUTE();
-
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetColor);
-	PUBLIC_FUNCTION(void, SetTransparency, float);
-	PUBLIC_FUNCTION(float, GetTransparency);
-	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PUBLIC_FUNCTION(bool, IsEnabled);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, ColorChanged);
-	PROTECTED_FUNCTION(void, EnableChanged);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::IRectDrawable);

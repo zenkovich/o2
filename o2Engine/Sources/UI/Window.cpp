@@ -47,7 +47,7 @@ namespace o2
 			closeBtn->onClick += [&]() { Hide(); };
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		SetLayoutDirty();
 
 		InitializeHandles();
 		InitializeProperties();
@@ -61,38 +61,7 @@ namespace o2
 
 	UIWindow& UIWindow::operator=(const UIWindow& other)
 	{
-		for (auto elem : mWindowElements)
-			delete elem;
-
-		UIScrollArea::operator=(other);
-
-		for (auto elem : other.mWindowElements)
-		{
-			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
-			newElem->mParent = this;
-			mWindowElements.Add(newElem);
-		}
-
-		UIButton* closeBtn = (UIButton*)mWindowElements.FindMatch(
-			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); });
-
-		if (closeBtn)
-			closeBtn->onClick += [&]() { Hide(); };
-
-		mHeadDragAreaLayout        = other.mHeadDragAreaLayout;
-		mTopDragAreaLayout         = other.mTopDragAreaLayout;
-		mBottomDragAreaLayout      = other.mBottomDragAreaLayout;
-		mLeftDragAreaLayout        = other.mLeftDragAreaLayout;
-		mRightDragAreaLayout       = other.mRightDragAreaLayout;
-		mLeftTopDragAreaLayout     = other.mLeftTopDragAreaLayout;
-		mRightTopDragAreaLayout    = other.mRightTopDragAreaLayout;
-		mLeftBottomDragAreaLayout  = other.mLeftBottomDragAreaLayout;
-		mRightBottomDragAreaLayout = other.mRightBottomDragAreaLayout;
-
-		RetargetStatesAnimations();
-		BindHandlesInteractableToVisibility();
-		UpdateLayout();
-
+		CopyData(other);
 		return *this;
 	}
 
@@ -151,7 +120,7 @@ namespace o2
 	{
 		widget->mParent = this;
 		mWindowElements.Add(widget);
-		UpdateLayout();
+		SetLayoutDirty();
 
 		return widget;
 	}
@@ -160,7 +129,7 @@ namespace o2
 	{
 		mWindowElements.Remove(widget);
 		delete widget;
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIWindow::RemoveAllWindowElements()
@@ -168,7 +137,7 @@ namespace o2
 		for (auto elem : mWindowElements)
 			delete elem;
 
-		UpdateLayout();
+		SetLayoutDirty();
 	}
 
 	void UIWindow::SetIcon(Sprite* icon)
@@ -286,6 +255,43 @@ namespace o2
 	CursorEventsArea& UIWindow::GetBackCursorListener()
 	{
 		return mBackCursorArea;
+	}
+
+	void UIWindow::CopyData(const Actor& otherActor)
+	{
+		const UIWindow& other = dynamic_cast<const UIWindow&>(otherActor);
+
+		for (auto elem : mWindowElements)
+			delete elem;
+
+		UIScrollArea::CopyData(other);
+
+		for (auto elem : other.mWindowElements)
+		{
+			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
+			newElem->mParent = this;
+			mWindowElements.Add(newElem);
+		}
+
+		UIButton* closeBtn = (UIButton*)mWindowElements.FindMatch(
+			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); });
+
+		if (closeBtn)
+			closeBtn->onClick += [&]() { Hide(); };
+
+		mHeadDragAreaLayout        = other.mHeadDragAreaLayout;
+		mTopDragAreaLayout         = other.mTopDragAreaLayout;
+		mBottomDragAreaLayout      = other.mBottomDragAreaLayout;
+		mLeftDragAreaLayout        = other.mLeftDragAreaLayout;
+		mRightDragAreaLayout       = other.mRightDragAreaLayout;
+		mLeftTopDragAreaLayout     = other.mLeftTopDragAreaLayout;
+		mRightTopDragAreaLayout    = other.mRightTopDragAreaLayout;
+		mLeftBottomDragAreaLayout  = other.mLeftBottomDragAreaLayout;
+		mRightBottomDragAreaLayout = other.mRightBottomDragAreaLayout;
+
+		RetargetStatesAnimations();
+		BindHandlesInteractableToVisibility();
+		SetLayoutDirty();
 	}
 
 	void UIWindow::UpdateTransparency()
@@ -408,72 +414,4 @@ namespace o2
 	}
 }
 
-CLASS_META(o2::UIWindow)
-{
-	BASE_CLASS(o2::UIScrollArea);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
-
-	PUBLIC_FIELD(caption);
-	PUBLIC_FIELD(icon);
-	PROTECTED_FIELD(mIconLayerPath);
-	PROTECTED_FIELD(mCaptionLayerPath);
-	PROTECTED_FIELD(mWindowElements).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mBackCursorArea);
-	PROTECTED_FIELD(mHeadDragHandle);
-	PROTECTED_FIELD(mHeadDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHeadDragAreaRect);
-	PROTECTED_FIELD(mTopDragHandle);
-	PROTECTED_FIELD(mTopDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mTopDragAreaRect);
-	PROTECTED_FIELD(mBottomDragHandle);
-	PROTECTED_FIELD(mBottomDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mBottomDragAreaRect);
-	PROTECTED_FIELD(mLeftDragHandle);
-	PROTECTED_FIELD(mLeftDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mLeftDragAreaRect);
-	PROTECTED_FIELD(mRightDragHandle);
-	PROTECTED_FIELD(mRightDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mRightDragAreaRect);
-	PROTECTED_FIELD(mLeftTopDragHandle);
-	PROTECTED_FIELD(mLeftTopDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mLeftTopDragAreaRect);
-	PROTECTED_FIELD(mRightTopDragHandle);
-	PROTECTED_FIELD(mRightTopDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mRightTopDragAreaRect);
-	PROTECTED_FIELD(mLeftBottomDragHandle);
-	PROTECTED_FIELD(mLeftBottomDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mLeftBottomDragAreaRect);
-	PROTECTED_FIELD(mRightBottomDragHandle);
-	PROTECTED_FIELD(mRightBottomDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mRightBottomDragAreaRect);
-
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, ShowModal);
-	PUBLIC_FUNCTION(UIWidget*, AddWindowElement, UIWidget*);
-	PUBLIC_FUNCTION(void, RemoveWindowElement, UIWidget*);
-	PUBLIC_FUNCTION(void, RemoveAllWindowElements);
-	PUBLIC_FUNCTION(void, SetIcon, Sprite*);
-	PUBLIC_FUNCTION(Sprite*, GetIcon);
-	PUBLIC_FUNCTION(void, SetIconLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetIconLayout);
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(WString, GetCaption);
-	PUBLIC_FUNCTION(void, SetDragAreaLayouts, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&);
-	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(void, SetModal, bool);
-	PUBLIC_FUNCTION(bool, IsModal);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PUBLIC_FUNCTION(CursorEventsArea&, GetBackCursorListener);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, OnFocused);
-	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
-	PROTECTED_FUNCTION(void, InitializeHandles);
-	PROTECTED_FUNCTION(void, SetHandlesInteractable, bool);
-	PROTECTED_FUNCTION(void, BindHandlesInteractableToVisibility);
-	PROTECTED_FUNCTION(void, OnChildFocused, UIWidget*);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
-}
-END_META;
+DECLARE_CLASS(o2::UIWindow);
