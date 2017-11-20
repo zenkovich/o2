@@ -85,7 +85,13 @@ namespace o2
 	{
 		const UITreeNode& other = dynamic_cast<const UITreeNode&>(otherActor);
 
-		UIWidget::CopyData(other);
+		UIWidget::CopyData(other); 
+		
+		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
+
+		mExpandBtn = (UIButton*)GetChild("expandBtn");
+		if (mExpandBtn)
+			mExpandBtn->onClick = [&]() { if (IsExpanded()) Collapse(); else Expand(); o2UI.FocusWidget(mOwnerTree); };
 
 		SetSelectionGroup(other.GetSelectionGroup());
 

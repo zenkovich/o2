@@ -77,8 +77,11 @@ namespace o2
 		UIWidgetLayer* AddChildLayer(const String& name, IRectDrawable* drawable, const Layout& layout = Layout::BothStretch(),
 									 float depth = 0.0f);
 
-		// Returns child layer by path ()
+		// Returns child layer by path
 		UIWidgetLayer* GetChild(const String& path);
+
+		// Returns child layer by name
+		UIWidgetLayer* FindChild(const String& name);
 
 		// Returns all child layers
 		LayersVec GetAllChilds() const;
@@ -203,6 +206,7 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 	PUBLIC_FUNCTION(const ChildrenVec&, GetChilds);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddChildLayer, const String&, IRectDrawable*, const Layout&, float);
 	PUBLIC_FUNCTION(UIWidgetLayer*, GetChild, const String&);
+	PUBLIC_FUNCTION(UIWidgetLayer*, FindChild, const String&);
 	PUBLIC_FUNCTION(LayersVec, GetAllChilds);
 	PUBLIC_FUNCTION(void, SetDepth, float);
 	PUBLIC_FUNCTION(float, GetDepth);

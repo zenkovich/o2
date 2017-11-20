@@ -20,7 +20,7 @@ namespace o2
 		UIWidget(other), DrawableCursorEventsListener(this), mToggleGroup(nullptr)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
-		mBackLayer = GetLayer("back");
+		mBackLayer = FindLayer("back");
 
 		RetargetStatesAnimations();
 
@@ -283,6 +283,16 @@ namespace o2
 
 	}
 
+	void UIToggle::OnDeserialized(const DataNode& node)
+	{
+		UIWidget::OnDeserialized(node);
+
+		mCaptionText = GetLayerDrawable<Text>("caption");
+		mBackLayer = FindLayer("back");
+
+		RetargetStatesAnimations();
+	}
+
 	void UIToggle::CopyData(const Actor& otherActor)
 	{
 		const UIToggle& other = dynamic_cast<const UIToggle&>(otherActor);
@@ -290,7 +300,7 @@ namespace o2
 		UIWidget::CopyData(other);
 
 		mCaptionText = GetLayerDrawable<Text>("caption");
-		mBackLayer = GetLayer("back");
+		mBackLayer = FindLayer("back");
 
 		mValue = !other.mValue;
 		SetValue(other.mValue);

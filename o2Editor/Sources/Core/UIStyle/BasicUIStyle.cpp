@@ -859,14 +859,14 @@ namespace o2
 
 		UIWidget* itemSample = sample->GetItemSample();
 
-		UIWidgetLayer* captionLayer = itemSample->GetLayer("caption");
+		UIWidgetLayer* captionLayer = itemSample->FindLayer("caption");
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayer->drawable = captionLayerText;
 		captionLayer->layout = Layout::BothStretch(20, 1, 0, -1);
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
 
-		UIWidgetLayer* shortcutLayer = itemSample->GetLayer("shortcut");
+		UIWidgetLayer* shortcutLayer = itemSample->FindLayer("shortcut");
 		Text* shortcutLayerText = mnew Text("stdFont.ttf");
 		shortcutLayer->layout = Layout::BothStretch(20, 1, 10, -1);
 		shortcutLayer->drawable = shortcutLayerText;
@@ -874,7 +874,7 @@ namespace o2
 		shortcutLayerText->verAlign = VerAlign::Middle;
 		shortcutLayer->transparency = 0.7f;
 
-		UIWidgetLayer* subIconLayer = itemSample->GetLayer("subIcon");
+		UIWidgetLayer* subIconLayer = itemSample->FindLayer("subIcon");
 		subIconLayer->drawable = mnew Sprite("ui/UI_Right_icn.png");
 		subIconLayer->layout = Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-15, 10), Vec2F(5, -10));
 

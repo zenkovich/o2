@@ -5,14 +5,17 @@
 
 namespace o2
 {
+
+	ActorCreateMode Actor::mDefaultCreationMode = ActorCreateMode::InScene;
+
 	Actor::Actor(ActorTransform* transform, bool isOnScene, const String& name, bool enabled, bool resEnabled,
 				 bool locked, bool resLocked, SceneLayer* layer, UInt64 id, UID assetId):
 		transform(transform), mName(name), mEnabled(enabled), mResEnabled(resEnabled),
 		mLocked(locked), mResLocked(resLocked), mLayer(layer), mId(id), mAssetId(assetId), mIsOnScene(isOnScene)
 	{}
 
-	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::InScene*/) :
-		Actor(transform, mode == ActorCreateMode::InScene)
+	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+		Actor(transform, mode == ActorCreateMode::InScene || mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
 	{
 		mIsOnScene = false;
 
@@ -24,7 +27,8 @@ namespace o2
 
 		if (Scene::IsSingletonInitialzed())
 		{
-			if (mode == ActorCreateMode::InScene)
+			if (mode == ActorCreateMode::InScene || 
+				(mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
 			{
 				o2Scene.mRootActors.Add(this);
 				o2Scene.mAllActors.Add(this);
@@ -41,7 +45,7 @@ namespace o2
 		ActorDataNodeConverter::ActorCreated(this);
 	}
 
-	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
+	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(transform, mode == ActorCreateMode::InScene, prototype->GetActor()->mName,
 			  prototype->GetActor()->mEnabled, prototype->GetActor()->mEnabled, prototype->GetActor()->mLocked,
 			  prototype->GetActor()->mLocked, prototype->GetActor()->mLayer, Math::Random(), 0)
@@ -63,7 +67,8 @@ namespace o2
 
 		InitializeProperties();
 
-		if (Scene::IsSingletonInitialzed() && mode == ActorCreateMode::InScene)
+		if (Scene::IsSingletonInitialzed() && (mode == ActorCreateMode::InScene ||
+			(mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)))
 		{
 			o2Scene.mRootActors.Add(this);
 			o2Scene.mAllActors.Add(this);
@@ -73,8 +78,8 @@ namespace o2
 		ActorDataNodeConverter::ActorCreated(this);
 	}
 
-	Actor::Actor(ActorTransform* transform, ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
-		Actor(transform, ActorCreateMode::InScene)
+	Actor::Actor(ActorTransform* transform, ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/):
+		Actor(transform, mode)
 	{
 		for (auto comp : components)
 			AddComponent(comp);
@@ -102,7 +107,7 @@ namespace o2
 
 		InitializeProperties();
 
-		if (Scene::IsSingletonInitialzed())
+		if (Scene::IsSingletonInitialzed() && mDefaultCreationMode == ActorCreateMode::InScene)
 		{
 			o2Scene.mRootActors.Add(this);
 			o2Scene.mAllActors.Add(this);
@@ -112,16 +117,16 @@ namespace o2
 		ActorDataNodeConverter::ActorCreated(this);
 	}
 
-	Actor::Actor(ActorCreateMode mode /*= CreateMode::InScene*/):
+	Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/):
 		Actor(mnew ActorTransform(), mode)
 	{}
 
-	Actor::Actor(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::InScene*/) :
-		Actor(mnew ActorTransform(), components)
+	Actor::Actor(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+		Actor(mnew ActorTransform(), components, mode)
 	{}
 
-	Actor::Actor(const ActorAssetRef& prototype, ActorCreateMode mode /*= CreateMode::InScene*/) :
-		Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype)
+	Actor::Actor(const ActorAssetRef& prototype, ActorCreateMode mode /*= CreateMode::Default*/) :
+		Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
 	{}
 
 	Actor::Actor(const Actor& other) :
@@ -867,6 +872,19 @@ namespace o2
 				return res;
 
 		return nullptr;
+	}
+
+	void Actor::SetDefaultCreationMode(ActorCreateMode mode)
+	{
+		if (mode == ActorCreateMode::Default)
+			mode = ActorCreateMode::InScene;
+
+		mDefaultCreationMode = mode;
+	}
+
+	ActorCreateMode Actor::GetDefaultCreationMode()
+	{
+		return mDefaultCreationMode;
 	}
 
 	void Actor::SetProtytypeDummy(ActorAssetRef asset)
@@ -2375,6 +2393,7 @@ DECLARE_CLASS(o2::Actor);
 
 ENUM_META_(o2::ActorCreateMode, ActorCreateMode)
 {
+	ENUM_ENTRY(Default);
 	ENUM_ENTRY(InScene);
 	ENUM_ENTRY(NotInScene);
 }

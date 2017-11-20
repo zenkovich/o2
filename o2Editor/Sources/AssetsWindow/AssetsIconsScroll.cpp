@@ -177,8 +177,6 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::UpdateAssetsPath()
 	{
-		o2Debug.LogWarning("Update assets folder: %s", mCurrentPath);
-
 		DeselectAllAssets();
 
 		auto prevIcons = mGrid->GetChildWidgets().Select<UIAssetIcon*>([](auto x) { return (UIAssetIcon*)x; });

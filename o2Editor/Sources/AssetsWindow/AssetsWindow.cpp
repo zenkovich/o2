@@ -59,7 +59,7 @@ namespace Editor
 
 	void AssetsWindow::InitializeFoldersTreeSeparator()
 	{
-		auto separatorLayer = mFoldersTree->GetLayer("separator");
+		auto separatorLayer = mFoldersTree->FindLayer("separator");
 
 		mSeparatorHandle.isUnderPoint = [=](const Vec2F& point) {
 			RectF rt = separatorLayer->drawable->GetRect();

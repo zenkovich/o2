@@ -30,7 +30,7 @@ namespace Editor
 		mXEditBox->text = "--";
 		mXEditBox->SetFilterFloat();
 
-		if (auto xHandleLayer = mXEditBox->GetLayer("arrows"))
+		if (auto xHandleLayer = mXEditBox->FindLayer("arrows"))
 		{
 			mXEditBox->onDraw += [&]() { mXDragHangle.OnDrawn(); };
 
@@ -45,7 +45,7 @@ namespace Editor
 		mYEditBox->text = "--";
 		mYEditBox->SetFilterFloat();
 
-		if (auto yHandleLayer = mYEditBox->GetLayer("arrows"))
+		if (auto yHandleLayer = mYEditBox->FindLayer("arrows"))
 		{
 			mYEditBox->onDraw += [&]() { mYDragHangle.OnDrawn(); };
 

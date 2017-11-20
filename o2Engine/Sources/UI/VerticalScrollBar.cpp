@@ -18,8 +18,8 @@ namespace o2
 		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize), 
 		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue)
 	{
-		mHandleLayer = GetLayer("handle");
-		mBackLayer = GetLayer("back");
+		mHandleLayer = FindLayer("handle");
+		mBackLayer = FindLayer("back");
 
 		RetargetStatesAnimations();
 		InitializeProperties();
@@ -258,10 +258,12 @@ namespace o2
 
 	void UIVerticalScrollBar::OnDeserialized(const DataNode& node)
 	{
-		mHandleLayer = GetLayer("handle");
-		mBackLayer = GetLayer("back");
-
 		UIWidget::OnDeserialized(node);
+
+		mHandleLayer = FindLayer("handle");
+		mBackLayer = FindLayer("back");
+
+		RetargetStatesAnimations();
 	}
 
 	void UIVerticalScrollBar::OnVisibleChanged()
@@ -324,8 +326,8 @@ namespace o2
 		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
 		mSmoothValue           = mValue;
 		mHandlePressed         = false;
-		mHandleLayer           = GetLayer("handle");
-		mBackLayer             = GetLayer("back");
+		mHandleLayer           = FindLayer("handle");
+		mBackLayer             = FindLayer("back");
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();

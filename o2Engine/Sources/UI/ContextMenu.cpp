@@ -231,7 +231,7 @@ namespace o2
 
 				subChild->AddChild(subContext);
 
-				if (auto subIconLayer = subChild->GetLayer("subIcon"))
+				if (auto subIconLayer = subChild->FindLayer("subIcon"))
 					subIconLayer->transparency = 1.0f;
 			}
 
@@ -766,7 +766,7 @@ namespace o2
 	{
 		widget->name = (WString)"Context Item " + item.text;
 
-		if (auto iconLayer = widget->GetLayer("icon"))
+		if (auto iconLayer = widget->FindLayer("icon"))
 		{
 			if (item.icon)
 			{
@@ -798,7 +798,7 @@ namespace o2
 		if (auto shortcutLayer = widget->GetLayerDrawable<Text>("shortcut"))
 			shortcutLayer->text = item.shortcut.AsString();
 
-		if (auto subIconLayer = widget->GetLayer("subIcon"))
+		if (auto subIconLayer = widget->FindLayer("subIcon"))
 			subIconLayer->transparency = item.subItems.Count() > 0 ? 1.0f : 0.0f;
 
 		if (auto checkLayer = widget->GetLayerDrawable<Sprite>("check"))

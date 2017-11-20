@@ -32,7 +32,7 @@ namespace Editor
 		mLeftEditBox->text = "--";
 		mLeftEditBox->SetFilterFloat();
 
-		if (auto leftHandleLayer = mLeftEditBox->GetLayer("arrows"))
+		if (auto leftHandleLayer = mLeftEditBox->FindLayer("arrows"))
 		{
 			mLeftEditBox->onDraw += [&]() { mLeftDragHangle.OnDrawn(); };
 
@@ -47,7 +47,7 @@ namespace Editor
 		mBottomEditBox->text = "--";
 		mBottomEditBox->SetFilterFloat();
 
-		if (auto bottomHandleLayer = mBottomEditBox->GetLayer("arrows"))
+		if (auto bottomHandleLayer = mBottomEditBox->FindLayer("arrows"))
 		{
 			mBottomEditBox->onDraw += [&]() { mBottomDragHangle.OnDrawn(); };
 
@@ -62,7 +62,7 @@ namespace Editor
 		mRightEditBox->text = "--";
 		mRightEditBox->SetFilterFloat();
 
-		if (auto rightHandleLayer = mRightEditBox->GetLayer("arrows"))
+		if (auto rightHandleLayer = mRightEditBox->FindLayer("arrows"))
 		{
 			mRightEditBox->onDraw += [&]() { mRightDragHangle.OnDrawn(); };
 
@@ -77,7 +77,7 @@ namespace Editor
 		mTopEditBox->text = "--";
 		mTopEditBox->SetFilterFloat();
 
-		if (auto topHandleLayer = mTopEditBox->GetLayer("arrows"))
+		if (auto topHandleLayer = mTopEditBox->FindLayer("arrows"))
 		{
 			mTopEditBox->onDraw += [&]() { mTopDragHangle.OnDrawn(); };
 

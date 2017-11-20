@@ -316,6 +316,7 @@ namespace Editor
 	UIActorsTreeNode::UIActorsTreeNode(const UIActorsTreeNode& other) :
 		UITreeNode(other)
 	{
+		CopyData(other);
 		InitializeControls();
 	}
 
@@ -330,6 +331,13 @@ namespace Editor
 		const UIActorsTreeNode& other = dynamic_cast<const UIActorsTreeNode&>(otherActor);
 
 		UITreeNode::CopyData(other);
+
+		InitializeControls();
+	}
+
+	void UIActorsTreeNode::OnDeserialized(const DataNode& node)
+	{
+		UITreeNode::OnDeserialized(node);
 		InitializeControls();
 	}
 

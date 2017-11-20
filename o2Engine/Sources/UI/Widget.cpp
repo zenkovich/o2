@@ -10,7 +10,7 @@
 
 namespace o2
 {
-	UIWidget::UIWidget(ActorCreateMode mode /*= ActorCreateMode::InScene*/):
+	UIWidget::UIWidget(ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew UIWidgetLayout(), mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		if (mode == ActorCreateMode::InScene && mLayer)
@@ -23,7 +23,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
+	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew UIWidgetLayout(), prototype, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		if (mode == ActorCreateMode::InScene && mLayer && !mOverrideDepth)
@@ -36,11 +36,14 @@ namespace o2
 		InitializeProperties();
 	}
 
-	UIWidget::UIWidget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::InScene*/):
+	UIWidget::UIWidget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew UIWidgetLayout(), components, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
-		if (mode == ActorCreateMode::InScene && mLayer)
+		if ((mode == ActorCreateMode::InScene || mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
+			&& mLayer)
+		{
 			mLayer->RegisterDrawable(this);
+		}
 
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
@@ -236,6 +239,21 @@ namespace o2
 		return nullptr;
 	}
 
+	UIWidgetLayer* UIWidget::FindLayer(const String& name) const
+	{
+		for (auto childLayer : mLayers)
+		{
+			if (childLayer->name == name)
+				return childLayer;
+
+			UIWidgetLayer* layer = childLayer->FindChild(name);
+			if (layer)
+				return layer;
+		}
+
+		return nullptr;
+	}
+
 	bool UIWidget::RemoveLayer(UIWidgetLayer* layer)
 	{
 		bool res = mLayers.Remove(layer);
@@ -416,7 +434,7 @@ namespace o2
 			if (mOverrideDepth)
 			{
 				mLayer->RegisterDrawable(this);
-				
+
 				if (mParentWidget)
 					mParentWidget->mDrawingChildren.Remove(this);
 			}
@@ -696,7 +714,7 @@ namespace o2
 		Actor* actor = GetChild(path);
 		return dynamic_cast<UIWidget*>(actor);
 	}
-	
+
 	UIWidget* UIWidget::AddChildWidget(UIWidget* widget)
 	{
 		return dynamic_cast<UIWidget*>(AddChild(widget));
@@ -773,8 +791,7 @@ namespace o2
 	}
 
 	void UIWidget::OnChildAdded(UIWidget* child)
-	{
-	}
+	{}
 
 	void UIWidget::OnChildRemoved(Actor* child)
 	{
@@ -791,8 +808,7 @@ namespace o2
 	}
 
 	void UIWidget::OnChildRemoved(UIWidget* child)
-	{
-	}
+	{}
 
 	void UIWidget::OnLayerChanged(SceneLayer* oldLayer)
 	{

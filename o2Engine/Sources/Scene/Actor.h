@@ -14,7 +14,7 @@ namespace o2
 	class Component;
 	class Actor;
 
-	enum class ActorCreateMode { InScene, NotInScene };
+	enum class ActorCreateMode { InScene, NotInScene, Default };
 
 	// --------------------------------------------------------------
 	// Actor reference, automatically invalidates when actor deleting
@@ -29,10 +29,10 @@ namespace o2
 		ActorRef(Actor* actor);
 
 		// Creates actor by prototype and returns reference on it
-		ActorRef(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
+		ActorRef(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Creates actor with components and returns reference on it
-		ActorRef(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::InScene);
+		ActorRef(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Creates a copy of actor and returns reference on it
 		ActorRef(const Actor& other);
@@ -131,10 +131,10 @@ namespace o2
 		Actor(ActorCreateMode mode = ActorCreateMode::InScene);
 
 		// Actor constructor from prototype
-		Actor(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
+		Actor(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Constructor with components
-		Actor(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::InScene);
+		Actor(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Copy-constructor
 		Actor(const Actor& other);
@@ -334,6 +334,12 @@ namespace o2
 		// Searches actor with id in this and this children
 		Actor* FindActorById(UInt64 id);
 
+		// Sets default actores creation mode
+		static void SetDefaultCreationMode(ActorCreateMode mode);
+
+		// Return default actors creation mode
+		static ActorCreateMode GetDefaultCreationMode();
+
 #if IS_EDITOR
 		Function<void()>       onChanged;               // Something in actor change event
 		Function<void(Actor*)> onParentChanged;         // Actor reparent event
@@ -358,6 +364,8 @@ namespace o2
 
 	protected:
 		typedef Vector<ActorRef*> ActorRefsVec;
+
+		static ActorCreateMode mDefaultCreationMode; // Default mode creation
 
 		ActorAssetRef   mPrototype;               // Prototype asset
 		ActorRef        mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
@@ -392,13 +400,13 @@ namespace o2
 			  SceneLayer* layer = nullptr, UInt64 id = Math::Random(), UID assetId = 0);
 
 		// Default constructor with transform
-		Actor(ActorTransform* transform, ActorCreateMode mode = ActorCreateMode::InScene);
+		Actor(ActorTransform* transform, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Actor constructor from prototype with transform
-		Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
+		Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Constructor with components with transform
-		Actor(ActorTransform* transform, ComponentsVec components, ActorCreateMode mode = ActorCreateMode::InScene);
+		Actor(ActorTransform* transform, ComponentsVec components, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Copy-constructor with transform
 		Actor(ActorTransform* transform, const Actor& other);

@@ -33,7 +33,7 @@ namespace o2
 		if (mImage)
 			delete mImage;
 
-		if (auto layer = GetLayer("image"))
+		if (auto layer = FindLayer("image"))
 		{
 			layer->drawable = sprite;
 			mImage = sprite;

@@ -179,6 +179,21 @@ namespace o2
 		return nullptr;
 	}
 
+	UIWidgetLayer* UIWidgetLayer::FindChild(const String& name)
+	{
+		for (auto child : mChildren)
+		{
+			if (child->name == name)
+			{
+				UIWidgetLayer* layer = child->FindChild(name);
+				if (layer)
+					return layer;
+			}
+		}
+
+		return nullptr;
+	}
+
 	LayersVec UIWidgetLayer::GetAllChilds() const
 	{
 		LayersVec res = mChildren;

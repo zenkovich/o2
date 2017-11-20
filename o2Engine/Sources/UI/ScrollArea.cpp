@@ -780,6 +780,8 @@ namespace o2
 
 	void UIScrollArea::OnDeserialized(const DataNode& node)
 	{
+		UIWidget::OnDeserialized(node);
+
 		if (mHorScrollBar)
 		{
 			if (mOwnHorScrollBar) delete mHorScrollBar;
@@ -815,7 +817,7 @@ namespace o2
 		for (auto child : mChildWidgets)
 			child->layout->mData->drivenByParent = true;
 
-		UIWidget::OnDeserialized(node);
+		RetargetStatesAnimations();
 	}
 
 	void UIScrollArea::OnScrolled()

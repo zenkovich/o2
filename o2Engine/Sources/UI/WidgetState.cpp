@@ -8,10 +8,11 @@ namespace o2
 	{}
 
 	UIWidgetState::UIWidgetState(const UIWidgetState& state):
-		name(state.name), animation(state.animation), mState(state.mState), mOwner(state.mOwner),
+		name(state.name), mState(state.mState), mOwner(state.mOwner),
 		offStateAnimationSpeed(state.offStateAnimationSpeed)
 	{
-		animation.SetTarget(mOwner);
+		animation = state.animation;
+		animation.SetTarget(mOwner, false);
 		animation.relTime = mState ? 1.0f:0.0f;
 	}
 

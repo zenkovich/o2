@@ -51,13 +51,13 @@ namespace o2
 
 	public:
 		// Default constructor
-		UIWidget(ActorCreateMode mode = ActorCreateMode::InScene);
+		UIWidget(ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Widget constructor from prototype
-		UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::InScene);
+		UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Widget constructor with components
-		UIWidget(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::InScene);
+		UIWidget(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Copy-constructor
 		UIWidget(const UIWidget& other);
@@ -119,6 +119,9 @@ namespace o2
 
 		// Returns layer by path. Returns null if layer isn't exist
 		UIWidgetLayer* GetLayer(const String& path) const;
+
+		// Returns layer by name in layers hierarchy. Returns null if layer isn't exist
+		UIWidgetLayer* FindLayer(const String& name) const;
 
 		// Searches layer with drawable with specified type
 		template<typename _type>
@@ -479,6 +482,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, RemoveLayer, const String&);
 	PUBLIC_FUNCTION(void, RemoveAllLayers);
 	PUBLIC_FUNCTION(UIWidgetLayer*, GetLayer, const String&);
+	PUBLIC_FUNCTION(UIWidgetLayer*, FindLayer, const String&);
 	PUBLIC_FUNCTION(const LayersVec&, GetLayers);
 	PUBLIC_FUNCTION(UIWidgetState*, AddState, const String&);
 	PUBLIC_FUNCTION(UIWidgetState*, AddState, const String&, const Animation&);

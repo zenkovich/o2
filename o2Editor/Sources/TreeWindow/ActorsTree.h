@@ -185,6 +185,9 @@ namespace Editor
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
+		// It is called on deserialization, initializs controls
+		void OnDeserialized(const DataNode& node) override;
+
 		// initializes controls and widgets
 		void InitializeControls();
 
@@ -275,6 +278,7 @@ CLASS_METHODS_META(Editor::UIActorsTreeNode)
 	PUBLIC_FUNCTION(void, SetActor, Actor*);
 	PUBLIC_FUNCTION(void, EnableEditName);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnLockClicked);
 	PROTECTED_FUNCTION(void, OnEnableCkicked);

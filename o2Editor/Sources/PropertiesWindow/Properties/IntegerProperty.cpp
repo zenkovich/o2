@@ -27,7 +27,7 @@ namespace Editor
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 
-		auto handleLayer = mEditBox->GetLayer("arrows");
+		auto handleLayer = mEditBox->FindLayer("arrows");
 
 		if (handleLayer)
 		{

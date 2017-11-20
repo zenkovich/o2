@@ -131,6 +131,7 @@ namespace Editor
 	void EditorApplication::OnStarted()
 	{
 		o2Application.SetWindowCaption("o2 Editor");
+		Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
 
 		mUIRoot = mnew UIRoot();
 
@@ -157,6 +158,8 @@ namespace Editor
 		}
 
 		OnResizing();
+
+		Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
 	}
 
 	void EditorApplication::OnClosing()

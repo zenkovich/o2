@@ -16,8 +16,8 @@ namespace o2
 		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue), 
 		mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense)
 	{
-		mBarLayer = GetLayer("bar");
-		mBackLayer = GetLayer("back");
+		mBarLayer = FindLayer("bar");
+		mBackLayer = FindLayer("back");
 
 		RetargetStatesAnimations();
 
@@ -206,10 +206,12 @@ namespace o2
 
 	void UIHorizontalProgress::OnDeserialized(const DataNode& node)
 	{
-		mBarLayer = GetLayer("bar");
-		mBackLayer = GetLayer("back");
-
 		UIWidget::OnDeserialized(node);
+
+		mBarLayer = FindLayer("bar");
+		mBackLayer = FindLayer("back");
+
+		RetargetStatesAnimations();
 	}
 
 	void UIHorizontalProgress::OnVisibleChanged()
@@ -258,8 +260,8 @@ namespace o2
 		mOrientation = other.mOrientation;
 		mScrollSense = other.mScrollSense;
 
-		mBarLayer    = GetLayer("bar");
-		mBackLayer   = GetLayer("back");
+		mBarLayer    = FindLayer("bar");
+		mBackLayer   = FindLayer("back");
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();

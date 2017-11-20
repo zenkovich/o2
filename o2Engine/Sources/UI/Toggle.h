@@ -122,6 +122,9 @@ namespace o2
 		UIToggleGroup* mToggleGroup = nullptr;  // Toggle group
 
 	protected:
+		// It is called when deserialized
+		void OnDeserialized(const DataNode& node) override;
+
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
@@ -196,6 +199,7 @@ CLASS_METHODS_META(o2::UIToggle)
 	PUBLIC_FUNCTION(void, SetToggleGroup, UIToggleGroup*);
 	PUBLIC_FUNCTION(UIToggleGroup*, GetToggleGroup);
 	PUBLIC_FUNCTION(bool, IsFocusable);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
