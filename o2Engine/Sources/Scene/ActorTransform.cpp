@@ -738,8 +738,8 @@ namespace o2
 			mData->worldRectangle.top    = mData->parentRectangePosition.y + mData->rectangle.top;
 
 			mData->parentTransform = mData->owner->mParent->transform->mData->worldNonSizedTransform;
-			mData->worldTransform = mData->transform*mData->parentTransform;
 			mData->worldNonSizedTransform = mData->nonSizedTransform*mData->parentTransform;
+			mData->worldTransform = mData->transform*mData->parentTransform;
 		}
 		else
 		{
@@ -747,8 +747,10 @@ namespace o2
 			mData->parentRectangle.bottom = 0; mData->parentRectangle.top = 0;
 
 			mData->parentRectangePosition = Vec2F();
-			mData->worldRectangle.left = 0; mData->worldRectangle.right = 0;
-			mData->worldRectangle.bottom = 0; mData->worldRectangle.top = 0;
+			mData->worldRectangle.left   = mData->parentRectangePosition.x + mData->rectangle.left;
+			mData->worldRectangle.right  = mData->parentRectangePosition.x + mData->rectangle.right;
+			mData->worldRectangle.bottom = mData->parentRectangePosition.y + mData->rectangle.bottom;
+			mData->worldRectangle.top    = mData->parentRectangePosition.y + mData->rectangle.top;
 
 			mData->parentTransform = Basis::Identity();
 			mData->worldNonSizedTransform = mData->nonSizedTransform;

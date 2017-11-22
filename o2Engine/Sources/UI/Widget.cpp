@@ -13,8 +13,11 @@ namespace o2
 	UIWidget::UIWidget(ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew UIWidgetLayout(), mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
-		if (mode == ActorCreateMode::InScene && mLayer)
+		if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
+			&& mLayer)
+		{
 			mLayer->RegisterDrawable(this);
+		}
 
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
@@ -26,8 +29,11 @@ namespace o2
 	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew UIWidgetLayout(), prototype, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
-		if (mode == ActorCreateMode::InScene && mLayer && !mOverrideDepth)
+		if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
+			&& mLayer && !mOverrideDepth)
+		{
 			mLayer->RegisterDrawable(this);
+		}
 
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
@@ -80,7 +86,7 @@ namespace o2
 			AddState(newState);
 		}
 
-		if (mLayer)
+		if (mLayer && mDefaultCreationMode == ActorCreateMode::InScene)
 			mLayer->RegisterDrawable(this);
 
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())

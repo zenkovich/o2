@@ -418,7 +418,7 @@ namespace o2
 
 			Vec2F  position;                           // Position @SERIALIZABLE
 			Vec2F  size;                               // Size @SERIALIZABLE
-			Vec2F  scale;                              // Scale, (1; 1) is default @SERIALIZABLE
+			Vec2F  scale = Vec2F(1, 1);                // Scale, (1; 1) is default @SERIALIZABLE
 			Vec2F  pivot;                              // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
 			float  angle = 0;                          // Rotation angle in radians @SERIALIZABLE
 			float  shear = 0;                          // Shear @SERIALIZABLE
