@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "TreeWindow.h"
 
 #include "Animation/AnimatedFloat.h"

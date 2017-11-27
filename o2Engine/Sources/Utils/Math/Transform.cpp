@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Transform.h"
 
 namespace o2

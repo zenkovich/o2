@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CustomDropDown.h"
 
 #include "Render/Render.h"
@@ -292,7 +293,7 @@ namespace o2
 		interactable = mResVisible;
 	}
 
-	void UICustomDropDown::UpdateLayout(bool withChildren /*= true*/)
+	void UICustomDropDown::UpdateTransform(bool withChildren /*= true*/)
 	{
 		layout->Update();
 
@@ -300,9 +301,9 @@ namespace o2
 		mAbsoluteClip = mClipLayout.Calculate(layout->mData->worldRectangle);
 
 		if (withChildren)
-			UpdateChildrenLayouts();
+			UpdateChildrenTransforms();
 
-		mItemsList->UpdateLayout();
+		mItemsList->UpdateTransform();
 	}
 
 	void UICustomDropDown::OnItemSelected()

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AnimationAsset.h"
 
 #include "Assets/Assets.h"

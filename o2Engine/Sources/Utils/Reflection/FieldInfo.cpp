@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FieldInfo.h"
 
 #include "Utils/Reflection/Type.h"

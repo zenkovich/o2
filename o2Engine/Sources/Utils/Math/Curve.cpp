@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Curve.h"
 
 #include "Utils/Math/Interpolation.h"

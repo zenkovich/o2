@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Tree.h"
 
 #include "Animation/Animate.h"
@@ -902,9 +903,9 @@ namespace o2
 		onUnfocused();
 	}
 
-	void UITree::UpdateLayout(bool withChildren /*= true*/)
+	void UITree::UpdateTransform(bool withChildren /*= true*/)
 	{
-		UIScrollArea::UpdateLayout(false);
+		UIScrollArea::UpdateTransform(false);
 
 		if (withChildren)
 			UpdateVisibleNodes();
@@ -973,7 +974,7 @@ namespace o2
 		for (auto node : mVisibleNodes)
 		{
 			if (node->widget)
-				node->widget->UpdateLayout(true);
+				node->widget->UpdateTransform(true);
 		}
 
 		mNodeWidgetsBuf.Add(mVisibleWidgetsCache.FindAll([](const VisibleWidgetDef& x) { return x.widget != nullptr; })
@@ -1437,7 +1438,7 @@ namespace o2
 
 		dragNodeRect += mDragOffset;
 		mFakeDragNode->layout->worldRect = dragNodeRect;
-		mFakeDragNode->UIWidget::UpdateLayout();
+		mFakeDragNode->UIWidget::UpdateTransform();
 	}
 
 	void UITree::UpdateDraggingInsertion()

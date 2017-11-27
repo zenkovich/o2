@@ -84,7 +84,7 @@ namespace Editor
 									const ImageAssetRef& selected);
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true) override;
+		void UpdateTransform(bool withChildren = true) override;
 
 		SERIALIZABLE(UICurveEditor);
 
@@ -492,7 +492,7 @@ CLASS_METHODS_META(Editor::UICurveEditor)
 	PUBLIC_FUNCTION(void, SetTextFont, const FontRef&);
 	PUBLIC_FUNCTION(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnScrolled, float);

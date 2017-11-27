@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ColorProperty.h"
 
 #include "Application/Application.h"

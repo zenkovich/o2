@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FunctionInfo.h"
 
 namespace o2

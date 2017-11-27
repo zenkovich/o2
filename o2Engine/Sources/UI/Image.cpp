@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Image.h"
 
 #include "Render/Sprite.h"

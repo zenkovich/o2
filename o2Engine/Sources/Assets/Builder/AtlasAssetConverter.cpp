@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AtlasAssetConverter.h"
 
 #include "Assets/Assets.h"

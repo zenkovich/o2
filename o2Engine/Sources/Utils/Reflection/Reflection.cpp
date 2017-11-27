@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Reflection.h"
 
 #include "Utils/Data/DataNode.h"

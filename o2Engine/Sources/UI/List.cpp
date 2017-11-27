@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "List.h"
 
 #include "UI/Label.h"

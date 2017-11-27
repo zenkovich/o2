@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Render/Render.h"
 
 #include "Application/Application.h"

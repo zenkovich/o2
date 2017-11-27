@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Spoiler.h"
 
 #include "Animation/AnimatedFloat.h"
@@ -112,7 +113,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UISpoiler::UpdateLayout(bool withChildren /*= true*/)
+	void UISpoiler::UpdateTransform(bool withChildren /*= true*/)
 	{
 		UpdateLayoutParametres();
 		ExpandSizeByChilds();

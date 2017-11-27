@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ScaleTool.h"
 
 #include "Core/Actions/ActorsTransform.h"

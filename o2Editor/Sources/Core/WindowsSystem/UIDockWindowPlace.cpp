@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "UIDockWindowPlace.h"
 
 #include "Core/WindowsSystem/UIDockableWindow.h"
@@ -185,9 +186,9 @@ namespace Editor
 		}
 	}
 
-	void UIDockWindowPlace::UpdateLayout(bool withChildren /*= true*/)
+	void UIDockWindowPlace::UpdateTransform(bool withChildren /*= true*/)
 	{
-		UIWidget::UpdateLayout(withChildren);
+		UIWidget::UpdateTransform(withChildren);
 		mDragHandleAreaMin = mDragHandleLayoutMin.Calculate(layout->GetWorldRect());
 		mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout->GetWorldRect());
 	}

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AnimationMask.h"
 
 namespace o2

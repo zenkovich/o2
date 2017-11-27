@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FieldPropertiesInfo.h"
 
 #include "PropertiesWindow/Properties/IPropertyField.h"

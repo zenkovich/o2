@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AssetProperty.h"
 
 #include "Assets/ActorAsset.h"

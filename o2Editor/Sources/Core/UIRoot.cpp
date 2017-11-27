@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "UIRoot.h"
 
 #include "Application/Application.h"

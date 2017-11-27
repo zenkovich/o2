@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Color.h"
 
 #include "Utils/Reflection/Type.h"

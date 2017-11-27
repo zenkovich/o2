@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Layout.h"
 
 namespace o2

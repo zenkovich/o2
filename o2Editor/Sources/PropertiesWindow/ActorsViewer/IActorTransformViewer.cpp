@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IActorTransformViewer.h"
 
 #include "Render/Sprite.h"

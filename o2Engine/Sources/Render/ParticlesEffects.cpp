@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ParticlesEffects.h"
 
 #include "Render/ParticlesEmitter.h"

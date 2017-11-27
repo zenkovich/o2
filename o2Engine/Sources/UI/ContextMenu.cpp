@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ContextMenu.h"
 
 #include "Assets/ImageAsset.h"
@@ -86,7 +87,7 @@ namespace o2
 		mItemsLayout       = GetChildByType<UIVerticalLayout>();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		UpdateTransform();
 
 		SetVisibleForcible(false);
 	}
@@ -166,7 +167,7 @@ namespace o2
 
 		FitSize();
 		FitPosition();
-		UpdateLayout();
+		UpdateTransform();
 		UIWidget::Show();
 
 		mShownAtFrame = true;
@@ -602,7 +603,7 @@ namespace o2
 
 	UIContextMenu* UIContextMenu::mVisibleContextMenu = nullptr;
 
-	void UIContextMenu::UpdateLayout(bool withChildren /*= true*/)
+	void UIContextMenu::UpdateTransform(bool withChildren /*= true*/)
 	{
 		layout->Update();
 
@@ -613,7 +614,7 @@ namespace o2
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		if (withChildren)
-			UpdateChildrenLayouts();
+			UpdateChildrenTransforms();
 
 		UpdateScrollParams();
 
@@ -621,10 +622,10 @@ namespace o2
 		mChildrenWorldRect = layout->mData->worldRectangle;
 
 		if (mOwnHorScrollBar)
-			mHorScrollBar->UpdateLayout(true);
+			mHorScrollBar->UpdateTransform(true);
 
 		if (mOwnVerScrollBar)
-			mVerScrollBar->UpdateLayout(true);
+			mVerScrollBar->UpdateTransform(true);
 
 		mChildrenWorldRect = _mChildrenAbsRect;
 	}

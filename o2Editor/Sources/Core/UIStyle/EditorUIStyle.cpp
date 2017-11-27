@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "EditorUIStyle.h"
 
 #include "Animation/Animate.h"

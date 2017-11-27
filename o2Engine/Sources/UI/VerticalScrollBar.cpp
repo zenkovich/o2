@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "VerticalScrollBar.h"
 
 #include "UI/WidgetLayer.h"
@@ -277,12 +278,12 @@ namespace o2
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIVerticalScrollBar::UpdateLayout(bool withChildren /*= true*/)
+	void UIVerticalScrollBar::UpdateTransform(bool withChildren /*= true*/)
 	{
 		layout->Update();
 
 		if (withChildren)
-			UpdateChildrenLayouts();
+			UpdateChildrenTransforms();
 	}
 
 	void UIVerticalScrollBar::UpdateProgressLayersLayouts()

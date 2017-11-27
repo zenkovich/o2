@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "WidgetLayout.h"
 
 #include "UI/Widget.h"

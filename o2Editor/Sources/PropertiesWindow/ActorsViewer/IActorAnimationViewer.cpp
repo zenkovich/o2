@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "PropertiesWindow/ActorsViewer/IActorAnimationViewer.h"
 
 #include "Scene/Actor.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DropDown.h"
 
 #include "UI/Label.h"

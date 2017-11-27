@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Clipboard.h"
 
 #include <Windows.h>

@@ -94,7 +94,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader />
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -150,7 +150,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader />
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -288,6 +288,7 @@
     <ClInclude Include="..\..\Sources\SceneWindow\SceneDragHandle.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
+    <ClInclude Include="..\..\Sources\stdafx.h" />
     <ClInclude Include="..\..\Sources\TreeWindow\ActorsTree.h" />
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h" />
   </ItemGroup>
@@ -373,6 +374,10 @@
     <ClCompile Include="..\..\Sources\SceneWindow\SceneDragHandle.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
+    <ClCompile Include="..\..\Sources\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\TreeWindow\ActorsTree.cpp" />
     <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp" />
     <ClCompile Include="..\..\Sources\Windows\main.cpp" />

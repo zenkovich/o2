@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "EditBox.h"
 
 #include "Application/Application.h"
@@ -699,7 +700,7 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::UpdateLayout(bool withChildren /*= true*/)
+	void UIEditBox::UpdateTransform(bool withChildren /*= true*/)
 	{
 		layout->Update();
 
@@ -712,7 +713,7 @@ namespace o2
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		if (withChildren)
-			UpdateChildrenLayouts();
+			UpdateChildrenTransforms();
 
 		UpdateScrollParams();
 
@@ -720,10 +721,10 @@ namespace o2
 		mChildrenWorldRect = layout->mData->worldRectangle;
 
 		if (mOwnHorScrollBar)
-			mHorScrollBar->UpdateLayout(true);
+			mHorScrollBar->UpdateTransform(true);
 
 		if (mOwnVerScrollBar)
-			mVerScrollBar->UpdateLayout(true);
+			mVerScrollBar->UpdateTransform(true);
 
 		mChildrenWorldRect = _mChildrenAbsRect;
 

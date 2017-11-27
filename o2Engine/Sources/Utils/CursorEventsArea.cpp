@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CursorEventsArea.h"
 
 #include "Application/Application.h"

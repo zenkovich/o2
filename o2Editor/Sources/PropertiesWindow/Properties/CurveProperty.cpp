@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CurveProperty.h"
 
 #include "Application/Application.h"

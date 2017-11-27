@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FloatProperty.h"
 
 #include "Application/Application.h"

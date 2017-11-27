@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IAssetConverter.h"
 
 #include "Assets/Builder/AssetsBuilder.h"

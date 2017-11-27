@@ -87,7 +87,7 @@ namespace o2
 		bool IsScrollable() const override;
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true) override;
+		void UpdateTransform(bool withChildren = true) override;
 
 		SERIALIZABLE(UIVerticalScrollBar);
 
@@ -215,7 +215,7 @@ CLASS_METHODS_META(o2::UIVerticalScrollBar)
 	PUBLIC_FUNCTION(void, SetMinimalScrollHandleSize, float);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);

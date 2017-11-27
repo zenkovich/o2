@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IEditorTool.h"
 
 #include "Utils/Data/DataNode.h"

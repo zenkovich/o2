@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "SceneWindow.h"
 
 #include "SceneWindow/SceneEditScreen.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "TagProperty.h"
 
 #include "Scene/Scene.h"

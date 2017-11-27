@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "UI/VerticalProgress.h"
 
 #include "UI/WidgetLayer.h"

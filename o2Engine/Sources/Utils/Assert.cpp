@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Assert.h"
 
 #include <string>

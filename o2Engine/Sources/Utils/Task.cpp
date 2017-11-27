@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Task.h"
 
 #include "Utils/TaskManager.h"

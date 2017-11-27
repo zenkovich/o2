@@ -114,7 +114,7 @@ namespace o2
 		Layout GetClippingLayout();
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true) override;
+		void UpdateTransform(bool withChildren = true) override;
 
 		SERIALIZABLE(UICustomDropDown);
 
@@ -213,7 +213,7 @@ CLASS_METHODS_META(o2::UICustomDropDown)
 	PUBLIC_FUNCTION(void, SetMaxListSizeInItems, int);
 	PUBLIC_FUNCTION(void, SetClippingLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

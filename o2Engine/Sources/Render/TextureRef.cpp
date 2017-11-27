@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "TextureRef.h"
 
 #include "Assets/Assets.h"

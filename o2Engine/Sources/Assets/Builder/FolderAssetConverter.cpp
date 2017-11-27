@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FolderAssetConverter.h"
 
 #include "Assets/Assets.h"

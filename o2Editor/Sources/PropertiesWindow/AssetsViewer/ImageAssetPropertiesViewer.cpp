@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ImageAssetPropertiesViewer.h"
 
 #include "Assets/ImageAsset.h"

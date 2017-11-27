@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "EngineSettings.h"
 
 o2::Platform GetEnginePlatform()

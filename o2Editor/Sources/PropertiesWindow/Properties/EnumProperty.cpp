@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "EnumProperty.h"
 
 #include "Animation/AnimatedFloat.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CursorEventsListener.h"
 
 #include "Events/EventSystem.h"

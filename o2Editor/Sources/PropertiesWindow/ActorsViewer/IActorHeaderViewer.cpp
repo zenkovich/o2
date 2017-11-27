@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IActorHeaderViewer.h"
 
 #include "UI/Widget.h"

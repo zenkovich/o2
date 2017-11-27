@@ -54,7 +54,7 @@ namespace Editor
 		void SetGridColor(const Color4& color);
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true) override;
+		void UpdateTransform(bool withChildren = true) override;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -170,7 +170,7 @@ CLASS_METHODS_META(Editor::UIScrollView)
 	PUBLIC_FUNCTION(const Camera&, GetCamera);
 	PUBLIC_FUNCTION(void, SetBackColor, const Color4&);
 	PUBLIC_FUNCTION(void, SetGridColor, const Color4&);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);

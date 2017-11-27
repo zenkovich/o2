@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "BinaryAsset.h"
 
 #include "Assets/Assets.h"

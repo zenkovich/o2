@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Widget.h"
 
 #include "Application/Input.h"
@@ -543,14 +544,6 @@ namespace o2
 		return mDrawingScissorRect.IsInside(point) && layout->IsPointInside(point);
 	}
 
-	void UIWidget::UpdateLayout(bool withChildren /*= true*/)
-	{
-		layout->Update();
-
-		if (withChildren)
-			UpdateChildrenLayouts();
-	}
-
 	float UIWidget::GetMinWidthWithChildren() const
 	{
 		return layout->mData->minSize.x;
@@ -559,12 +552,6 @@ namespace o2
 	float UIWidget::GetMinHeightWithChildren() const
 	{
 		return layout->mData->minSize.y;
-	}
-
-	void UIWidget::UpdateChildrenLayouts()
-	{
-		for (auto child : mChildWidgets)
-			child->UpdateLayout();
 	}
 
 	void UIWidget::UpdateBoundsWithChilds()
@@ -855,7 +842,7 @@ namespace o2
 		mParent = nullptr;
 		mIsClipped = false;
 
-		UIWidget::UpdateLayout(true);
+		UIWidget::UpdateTransform(true);
 		UpdateTransparency();
 
 		Draw();
@@ -866,7 +853,7 @@ namespace o2
 		mParent = oldParent;
 		mIsClipped = oldClipped;
 
-		UpdateLayout(true);
+		UpdateTransform(true);
 		UpdateTransparency();
 	}
 

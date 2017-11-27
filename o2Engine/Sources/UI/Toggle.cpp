@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Toggle.h"
 
 #include "Render/Sprite.h"

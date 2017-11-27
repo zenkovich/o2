@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "BitmapFont.h"
 
 #include "Assets/ImageAsset.h"

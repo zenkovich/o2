@@ -97,7 +97,7 @@ namespace Editor
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true) override;
+		void UpdateTransform(bool withChildren = true) override;
 
 		SERIALIZABLE(UIAssetsIconsScrollArea);
 
@@ -393,7 +393,7 @@ CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
 	PUBLIC_FUNCTION(void, SetHightlightLayout, const Layout&);
 	PUBLIC_FUNCTION(Sprite*, GetSelectingDrawable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);

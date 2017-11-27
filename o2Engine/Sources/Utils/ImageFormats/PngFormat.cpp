@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "PngFormat.h"
 
 #include "Dependencies/LibPNG/png.h"

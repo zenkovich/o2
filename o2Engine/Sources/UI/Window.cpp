@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Window.h"
 
 #include "Application/Application.h"
@@ -229,15 +230,15 @@ namespace o2
 		return mBackCursorArea.IsInteractable();
 	}
 
-	void UIWindow::UpdateLayout(bool withChildren /*= true*/)
+	void UIWindow::UpdateTransform(bool withChildren /*= true*/)
 	{
-		UIScrollArea::UpdateLayout(withChildren);
+		UIScrollArea::UpdateTransform(withChildren);
 
 		RectF _mChildrenAbsRect = mChildrenWorldRect;
 		mChildrenWorldRect = layout->mData->worldRectangle;
 
 		for (auto elem : mWindowElements)
-			elem->UpdateLayout(true);
+			elem->UpdateTransform(true);
 
 		mChildrenWorldRect = _mChildrenAbsRect;
 

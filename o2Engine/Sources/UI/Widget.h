@@ -74,12 +74,6 @@ namespace o2
 		// Sets layout dirty, and update it in update loop
 		void SetLayoutDirty();
 
-		// Updates layout
-		virtual void UpdateLayout(bool withChildren = true);
-
-		// Updates children layouts
-		virtual void UpdateChildrenLayouts();
-
 		// Draws widget and child widgets with not overridden depth
 		void Draw() override;
 
@@ -467,8 +461,6 @@ CLASS_METHODS_META(o2::UIWidget)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetLayoutDirty);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
-	PUBLIC_FUNCTION(void, UpdateChildrenLayouts);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);
 	PUBLIC_FUNCTION(UIWidget*, GetParentWidget);

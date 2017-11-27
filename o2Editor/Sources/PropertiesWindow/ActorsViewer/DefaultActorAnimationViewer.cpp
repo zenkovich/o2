@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DefaultActorAnimationViewer.h"
 
 namespace Editor

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "HorizontalScrollBar.h"
 
 #include "UI/WidgetLayer.h"
@@ -23,7 +24,7 @@ namespace o2
 
 		RetargetStatesAnimations();
 		InitializeProperties();
-		UpdateLayout();
+		UpdateTransform();
 	}
 
 	UIHorizontalScrollBar::~UIHorizontalScrollBar()

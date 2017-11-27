@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FrameHandles.h"
 
 #include "Render/Render.h"

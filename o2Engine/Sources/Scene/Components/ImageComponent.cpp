@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ImageComponent.h"
 
 #include "Scene/Actor.h"

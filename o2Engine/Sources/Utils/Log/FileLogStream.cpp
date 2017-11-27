@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FileLogStream.h"
 
 #include <fstream>

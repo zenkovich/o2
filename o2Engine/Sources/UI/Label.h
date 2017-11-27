@@ -104,7 +104,7 @@ namespace o2
 		int GetHeight() const;
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true);
+		void UpdateTransform(bool withChildren = true);
 
 		SERIALIZABLE(UILabel);
 
@@ -173,7 +173,7 @@ CLASS_METHODS_META(o2::UILabel)
 	PUBLIC_FUNCTION(Vec2F, GetExpandBorder);
 	PUBLIC_FUNCTION(void, SetHeight, int);
 	PUBLIC_FUNCTION(int, GetHeight);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, InitializeProperties);

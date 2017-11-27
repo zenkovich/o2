@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Vector2FloatProperty.h"
 
 #include "Application/Application.h"

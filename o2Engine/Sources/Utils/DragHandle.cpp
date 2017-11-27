@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DragHandle.h"
 
 #include "Events/EventSystem.h"

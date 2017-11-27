@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Core/Dialogs/ColorPickerDlg.h"
 
 #include "Core/UIRoot.h"

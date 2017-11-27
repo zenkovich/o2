@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "UIDockableWindow.h"
 
 #include "Animation/AnimatedFloat.h"
@@ -281,9 +282,9 @@ namespace Editor
 		return mAutoCalculateTabWidth;
 	}
 
-	void UIDockableWindow::UpdateLayout(bool withChildren /*= true*/)
+	void UIDockableWindow::UpdateTransform(bool withChildren /*= true*/)
 	{
-		UIWindow::UpdateLayout(withChildren);
+		UIWindow::UpdateTransform(withChildren);
 
 		if (auto tabLayer = GetLayer(mTabLayerPath))
 			mHeadDragAreaRect = mHeadDragAreaLayout.Calculate(tabLayer->GetRect());

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "XmlDataFormat.h"
 
 namespace o2

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FoldersTree.h"
 
 #include "Assets/Assets.h"

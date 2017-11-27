@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CommonTypes.h"
 
 #include "Utils/Reflection/Reflection.h"

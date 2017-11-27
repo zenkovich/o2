@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "StringProperty.h"
 
 #include "SceneWindow/SceneEditScreen.h"

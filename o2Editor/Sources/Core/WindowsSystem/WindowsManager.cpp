@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "WindowsManager.h"
 
 #include "Core/Dialogs/ColorPickerDlg.h"

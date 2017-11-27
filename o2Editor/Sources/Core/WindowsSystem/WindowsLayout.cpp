@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "WindowsLayout.h"
 
 #include "Core/WindowsSystem/IEditorWindow.h"

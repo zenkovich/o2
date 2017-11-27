@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ConsoleLogStream.h"
 
 #include <iostream>

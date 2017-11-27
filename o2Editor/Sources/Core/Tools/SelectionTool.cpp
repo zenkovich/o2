@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "SelectionTool.h"
 
 #include "Core/Actions/SelectActors.h"

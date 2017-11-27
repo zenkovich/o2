@@ -75,7 +75,7 @@ namespace Editor
 		void Undock();
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true) override;
+		void UpdateTransform(bool withChildren = true) override;
 
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -205,7 +205,7 @@ CLASS_METHODS_META(Editor::UIDockableWindow)
 	PUBLIC_FUNCTION(bool, IsAutoCalcuclatingTabWidth);
 	PUBLIC_FUNCTION(void, PlaceDock, UIDockWindowPlace*);
 	PUBLIC_FUNCTION(void, Undock);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);

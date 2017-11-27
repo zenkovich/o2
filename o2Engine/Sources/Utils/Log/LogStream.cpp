@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Utils/Log/LogStream.h"
 
 #include <cstdarg>

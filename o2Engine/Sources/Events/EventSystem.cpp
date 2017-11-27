@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "EventSystem.h"
 
 #include "Events/ApplicationEventsListener.h"

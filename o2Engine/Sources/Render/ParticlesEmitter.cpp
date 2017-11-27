@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ParticlesEmitter.h"
 
 #include "Render/Mesh.h"

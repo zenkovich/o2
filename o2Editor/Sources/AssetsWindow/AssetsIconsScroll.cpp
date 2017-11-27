@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AssetsIconsScroll.h"
 
 #include "Animation/AnimatedFloat.h"
@@ -379,11 +380,11 @@ namespace Editor
 		}
 	}
 
-	void UIAssetsIconsScrollArea::UpdateLayout(bool withChildren /*= true*/)
+	void UIAssetsIconsScrollArea::UpdateTransform(bool withChildren /*= true*/)
 	{
 		Vec2F localPressPoint = mPressedPoint - mChildrenWorldRect.LeftBottom();
 
-		UIScrollArea::UpdateLayout(withChildren);
+		UIScrollArea::UpdateTransform(withChildren);
 
 		mPressedPoint = localPressPoint + mChildrenWorldRect.LeftBottom();
 

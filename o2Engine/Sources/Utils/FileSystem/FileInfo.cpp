@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FileInfo.h"
 
 #include "Utils/Math/Math.h"

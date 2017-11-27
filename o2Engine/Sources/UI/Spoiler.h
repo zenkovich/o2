@@ -35,7 +35,7 @@ namespace o2
 		void Draw() override;
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true) override;
+		void UpdateTransform(bool withChildren = true) override;
 
 		SERIALIZABLE(UISpoiler);
 
@@ -88,7 +88,7 @@ CLASS_METHODS_META(o2::UISpoiler)
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
 	PUBLIC_FUNCTION(bool, IsExpanded);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateExpanding, float);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);

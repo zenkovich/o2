@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CurveEdit.h"
 
 #include "../UIRoot.h"
@@ -190,9 +191,9 @@ namespace Editor
 
 	}
 
-	void UICurveEditor::UpdateLayout(bool withChildren /*= true*/)
+	void UICurveEditor::UpdateTransform(bool withChildren /*= true*/)
 	{
-		UIFrameScrollView::UpdateLayout(withChildren);
+		UIFrameScrollView::UpdateTransform(withChildren);
 
 		UpdateLocalScreenTransforms();
 		OnCameraTransformChanged();

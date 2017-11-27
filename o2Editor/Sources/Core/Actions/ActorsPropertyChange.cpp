@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ActorsPropertyChange.h"
 
 #include "Scene/Actor.h"

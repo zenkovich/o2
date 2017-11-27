@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IAnimation.h"
 
 #include "Utils/Math/Math.h"

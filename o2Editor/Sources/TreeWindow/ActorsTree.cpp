@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ActorsTree.h"
 
 #include "Assets/ActorAsset.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FrameScrollView.h"
 
 #include "UI/HorizontalScrollBar.h"
@@ -86,15 +87,15 @@ namespace Editor
 		mVerScrollbar->Update(dt);
 	}
 
-	void UIFrameScrollView::UpdateLayout(bool withChildren /*= true*/)
+	void UIFrameScrollView::UpdateTransform(bool withChildren /*= true*/)
 	{
-		UIScrollView::UpdateLayout(withChildren);
+		UIScrollView::UpdateTransform(withChildren);
 
 		if (!mReady)
 			return;
 
-		mHorScrollbar->UpdateLayout(withChildren);
-		mVerScrollbar->UpdateLayout(withChildren);
+		mHorScrollbar->UpdateTransform(withChildren);
+		mVerScrollbar->UpdateTransform(withChildren);
 	}
 
 	void UIFrameScrollView::SetHorScrollbar(UIHorizontalScrollBar* scrollbar)

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "LogWindow.h"
 
 #include "Render/Sprite.h"

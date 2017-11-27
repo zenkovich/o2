@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ShortcutKeysListener.h"
 
 namespace o2

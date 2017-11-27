@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CurveEditorDlg.h"
 
 #include "Core/UI/CurveEdit.h"

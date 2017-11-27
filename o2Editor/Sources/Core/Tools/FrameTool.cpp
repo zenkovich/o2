@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "FrameTool.h"
 
 #include "Core/Actions/ActorsTransform.h"

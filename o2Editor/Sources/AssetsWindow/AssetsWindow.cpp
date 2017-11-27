@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AssetsWindow.h"
 
 #include "Application/Application.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IDrawable.h"
 
 #include "Render.h"

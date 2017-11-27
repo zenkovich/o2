@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "PropertiesWindow.h"
 
 #include "Properties/EnumProperty.h"

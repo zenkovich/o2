@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ScrollArea.h"
 
 #include "Events/EventSystem.h"
@@ -491,7 +492,7 @@ namespace o2
 		}
 	}
 
-	void UIScrollArea::UpdateLayout(bool withChildren /*= true*/)
+	void UIScrollArea::UpdateTransform(bool withChildren /*= true*/)
 	{
 		layout->Update();
 
@@ -502,7 +503,7 @@ namespace o2
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		if (withChildren)
-			UpdateChildrenLayouts();
+			UpdateChildrenTransforms();
 
 		CheckChildrenClipping();
 		UpdateScrollParams();
@@ -530,7 +531,7 @@ namespace o2
 		widget->mIsClipped = !widget->mBoundsWithChilds.IsIntersects(mAbsoluteClipArea);
 
 		if (!widget->mIsClipped)
-			widget->UpdateLayout(false);
+			widget->UpdateTransform(false);
 
 		for (auto child : widget->mChildWidgets)
 			MoveWidgetAndCheckClipping(child, delta);
@@ -542,10 +543,10 @@ namespace o2
 		mChildrenWorldRect = layout->mData->worldRectangle;
 
 		if (mOwnHorScrollBar)
-			mHorScrollBar->UpdateLayout(true);
+			mHorScrollBar->UpdateTransform(true);
 
 		if (mOwnVerScrollBar)
-			mVerScrollBar->UpdateLayout(true);
+			mVerScrollBar->UpdateTransform(true);
 
 		mChildrenWorldRect = tmpChildsAbsRect;
 	}

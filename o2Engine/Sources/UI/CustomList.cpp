@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CustomList.h"
 
 #include "Render/Render.h"
@@ -42,7 +43,7 @@ namespace o2
 		mVerLayout = GetChildByType<UIVerticalLayout>();
 
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
-		mItemSample->UpdateLayout(true);
+		mItemSample->UpdateTransform(true);
 
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
@@ -373,9 +374,9 @@ namespace o2
 	void UICustomList::UpdateControls(float dt)
 	{}
 
-	void UICustomList::UpdateLayout(bool withChildren /*= true*/)
+	void UICustomList::UpdateTransform(bool withChildren /*= true*/)
 	{
-		UIScrollArea::UpdateLayout(withChildren);
+		UIScrollArea::UpdateTransform(withChildren);
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);

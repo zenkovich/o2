@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ActorProperty.h"
 
 #include "Animation/AnimatedFloat.h"

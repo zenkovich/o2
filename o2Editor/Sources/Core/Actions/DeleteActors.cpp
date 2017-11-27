@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DeleteActors.h"
 
 #include "Scene/Actor.h"

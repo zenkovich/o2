@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AnimationTask.h"
 
 namespace o2

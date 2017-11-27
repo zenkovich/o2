@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ParticlesEmitterComponent.h"
 
 #include "Scene/Actor.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ProjectConfig.h"
 
 #include "EngineSettings.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "UIManager.h"
 
 #include "Application/Application.h"

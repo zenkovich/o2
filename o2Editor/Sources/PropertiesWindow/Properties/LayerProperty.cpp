@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "LayerProperty.h"
 
 #include "Animation/AnimatedFloat.h"

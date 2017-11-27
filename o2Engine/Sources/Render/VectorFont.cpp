@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "VectorFont.h"
 
 #include "Render/Windows/OpenGL.h"

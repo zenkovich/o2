@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Animate.h"
 
 namespace o2

@@ -100,7 +100,7 @@ namespace o2
 		Layout GetViewLayout() const;
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true);
+		void UpdateTransform(bool withChildren = true);
 
 		SERIALIZABLE(UIScrollArea);
 
@@ -261,7 +261,7 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetViewLayout);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);

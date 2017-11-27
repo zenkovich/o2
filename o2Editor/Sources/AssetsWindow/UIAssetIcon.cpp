@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "UIAssetIcon.h"
 
 #include "AssetsWindow/AssetsIconsScroll.h"

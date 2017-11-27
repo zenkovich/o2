@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "StackTrace.h"
 
 namespace o2

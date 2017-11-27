@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "KeyboardEventsListener.h"
 
 #include "Events/EventSystem.h"

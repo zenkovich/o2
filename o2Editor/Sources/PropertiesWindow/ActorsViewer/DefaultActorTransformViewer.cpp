@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DefaultActorTransformViewer.h"
 
 #include "Core/Actions/ActorsPropertyChange.h"

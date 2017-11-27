@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "MenuPanel.h"
 
 #include "Application/Application.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "BasicUIStyle.h"
 
 #include "Animation/AnimatedFloat.h"

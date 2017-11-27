@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Mesh.h"
 
 #include "Render/Render.h"

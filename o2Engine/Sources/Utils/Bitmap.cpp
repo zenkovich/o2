@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Bitmap.h"
 
 #include "Utils/Debug.h"

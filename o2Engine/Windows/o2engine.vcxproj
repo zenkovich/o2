@@ -64,6 +64,7 @@
       <MinimalRebuild>true</MinimalRebuild>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -101,6 +102,7 @@
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -202,6 +204,7 @@
     <ClInclude Include="..\Sources\Scene\Scene.h" />
     <ClInclude Include="..\Sources\Scene\SceneLayer.h" />
     <ClInclude Include="..\Sources\Scene\Tags.h" />
+    <ClInclude Include="..\Sources\stdafx.h" />
     <ClInclude Include="..\Sources\UI\Button.h" />
     <ClInclude Include="..\Sources\UI\ContextMenu.h" />
     <ClInclude Include="..\Sources\UI\CustomDropDown.h" />
@@ -370,6 +373,10 @@
     <ClCompile Include="..\Sources\Scene\Scene.cpp" />
     <ClCompile Include="..\Sources\Scene\SceneLayer.cpp" />
     <ClCompile Include="..\Sources\Scene\Tags.cpp" />
+    <ClCompile Include="..\Sources\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\Sources\UI\Button.cpp" />
     <ClCompile Include="..\Sources\UI\ContextMenu.cpp" />
     <ClCompile Include="..\Sources\UI\CustomDropDown.cpp" />

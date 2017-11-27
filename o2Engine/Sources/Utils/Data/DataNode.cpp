@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DataNode.h"
 
 #include "Scene/Actor.h"

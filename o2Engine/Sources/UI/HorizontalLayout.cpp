@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "HorizontalLayout.h"
 
 #include "UI/WidgetLayout.h"
@@ -138,15 +139,16 @@ namespace o2
 		return mFitByChildren;
 	}
 
-	void UIHorizontalLayout::UpdateLayout(bool withChildren /*= true*/)
+	void UIHorizontalLayout::UpdateTransform(bool withChildren /*= true*/)
 	{
+		UpdateLayoutParametres();
+
 		if (mFitByChildren)
 			ExpandSizeByChilds();
 
-		layout->Update();
+		UIWidget::UpdateTransform(withChildren);
 
-		if (withChildren)
-			RearrangeChilds();
+		RearrangeChilds();
 	}
 
 	void UIHorizontalLayout::CopyData(const Actor& otherActor)
@@ -243,7 +245,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.5f);
-				child->UpdateLayout();
 			}
 		}
 		else
@@ -260,7 +261,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.5f);
-				child->UpdateLayout();
 			}
 		}
 	}
@@ -282,7 +282,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.0f);
-				child->UpdateLayout();
 			}
 		}
 		else
@@ -297,7 +296,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 0.0f);
-				child->UpdateLayout();
 			}
 		}
 	}
@@ -319,7 +317,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 1.0f);
-				child->UpdateLayout();
 			}
 		}
 		else
@@ -334,7 +331,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByHeight(child, 1.0f);
-				child->UpdateLayout();
 			}
 		}
 	}

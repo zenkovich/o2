@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ParticlesEmitterShapes.h"
 
 namespace o2

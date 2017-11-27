@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AssetInfo.h"
 
 namespace o2

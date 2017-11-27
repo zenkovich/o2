@@ -3,6 +3,8 @@
 #include "Utils/Singleton.h"
 #include "Utils/String.h"
 
+#undef CopyFile
+
 namespace o2
 {
 	class Clipboard

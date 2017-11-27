@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "LongList.h"
 
 #include "Render/Render.h"
@@ -26,7 +27,7 @@ namespace o2
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 
-		mItemSample->UpdateLayout();
+		mItemSample->UpdateTransform();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -198,11 +199,11 @@ namespace o2
 	void UILongList::UpdateControls(float dt)
 	{}
 
-	void UILongList::UpdateLayout(bool withChildren /*= true*/)
+	void UILongList::UpdateTransform(bool withChildren /*= true*/)
 	{
 		UpdateVisibleItems();
 
-		UIScrollArea::UpdateLayout(withChildren);
+		UIScrollArea::UpdateTransform(withChildren);
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);
@@ -399,7 +400,7 @@ namespace o2
 		UIScrollArea::CopyData(other);
 
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
-		mItemSample->UpdateLayout(true);
+		mItemSample->UpdateTransform(true);
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "MenuPanel.h"
 
 #include "Render/Sprite.h"
@@ -38,7 +39,7 @@ namespace o2
 		mLayout            = GetChildByType<UIHorizontalLayout>();
 
 		RetargetStatesAnimations();
-		UpdateLayout();
+		UpdateTransform();
 	}
 
 	UIMenuPanel::~UIMenuPanel()

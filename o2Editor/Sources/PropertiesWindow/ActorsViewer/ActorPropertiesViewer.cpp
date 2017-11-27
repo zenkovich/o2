@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ActorPropertiesViewer.h"
 
 #include "PropertiesWindow/ActorsViewer/DefaultActorAnimationViewer.h"

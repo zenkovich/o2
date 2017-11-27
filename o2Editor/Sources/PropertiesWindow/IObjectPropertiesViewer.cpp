@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IObjectPropertiesViewer.h"
 
 #include "UI/Widget.h"

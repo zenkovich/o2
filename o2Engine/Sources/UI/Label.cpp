@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Label.h"
 
 #include "Application/Input.h"
@@ -225,7 +226,7 @@ namespace o2
 		return 0;
 	}
 
-	void UILabel::UpdateLayout(bool withChildren /*= true*/)
+	void UILabel::UpdateTransform(bool withChildren /*= true*/)
 	{
 		if (mTextLayer)
 		{
@@ -286,7 +287,7 @@ namespace o2
 		layout->Update();
 
 		if (withChildren)
-			UpdateChildrenLayouts();
+			UpdateChildrenTransforms();
 	}
 
 	void UILabel::CopyData(const Actor& otherActor)

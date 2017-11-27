@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "VerticalLayout.h"
 
 #include "UI/WidgetLayer.h"
@@ -139,17 +140,16 @@ namespace o2
 		return mFitByChildren;
 	}
 
-	void UIVerticalLayout::UpdateLayout(bool withChildren /*= true*/)
+	void UIVerticalLayout::UpdateTransform(bool withChildren /*= true*/)
 	{
 		UpdateLayoutParametres();
 
 		if (mFitByChildren)
 			ExpandSizeByChilds();
 
-		layout->Update();
+		UIWidget::UpdateTransform(withChildren);
 
-		if (withChildren)
-			RearrangeChilds();
+		RearrangeChilds();
 	}
 
 	void UIVerticalLayout::CopyData(const Actor& otherActor)
@@ -245,7 +245,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 0.5f);
-				child->UpdateLayout();
 			}
 		}
 		else
@@ -262,7 +261,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 0.5f);
-				child->UpdateLayout();
 			}
 		}
 	}
@@ -284,7 +282,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 0.0f);
-				child->UpdateLayout();
 			}
 		}
 		else
@@ -299,7 +296,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 0.0f);
-				child->UpdateLayout();
 			}
 		}
 	}
@@ -321,7 +317,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 1.0f);
-				child->UpdateLayout();
 			}
 		}
 		else
@@ -336,7 +331,6 @@ namespace o2
 				position += mSpacing;
 
 				AlignWidgetByWidth(child, 1.0f);
-				child->UpdateLayout();
 			}
 		}
 	}

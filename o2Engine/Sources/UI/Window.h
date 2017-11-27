@@ -81,7 +81,7 @@ namespace o2
 		bool IsModal() const;
 
 		// Updates layout
-		void UpdateLayout(bool withChildren = true);
+		void UpdateTransform(bool withChildren = true);
 
 		// Returns back cursor events listener
 		CursorEventsArea& GetBackCursorListener();
@@ -230,7 +230,7 @@ CLASS_METHODS_META(o2::UIWindow)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetModal, bool);
 	PUBLIC_FUNCTION(bool, IsModal);
-	PUBLIC_FUNCTION(void, UpdateLayout, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PUBLIC_FUNCTION(CursorEventsArea&, GetBackCursorListener);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);

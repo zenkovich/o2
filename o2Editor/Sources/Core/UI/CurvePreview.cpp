@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "CurvePreview.h"
 
 #include "Render/Camera.h"

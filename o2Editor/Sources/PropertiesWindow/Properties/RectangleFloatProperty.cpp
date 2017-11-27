@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "RectangleFloatProperty.h"
 
 #include "Application/Application.h"

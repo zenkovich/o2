@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DragAndDrop.h"
 
 #include "Application/Input.h"

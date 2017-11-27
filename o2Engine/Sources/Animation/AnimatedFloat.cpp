@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "AnimatedFloat.h"
 
 #include "Animation/Animatable.h"

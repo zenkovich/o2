@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Vector2IntProperty.h"
 
 #include "Application/Application.h"

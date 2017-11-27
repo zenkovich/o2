@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ObjectProperty.h"
 
 #include "PropertiesWindow/PropertiesWindow.h"

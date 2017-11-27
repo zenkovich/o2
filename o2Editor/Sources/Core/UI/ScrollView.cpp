@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ScrollView.h"
 
 #include "Application/Application.h"
@@ -76,9 +77,9 @@ namespace Editor
 		mGridColor = color;
 	}
 
-	void UIScrollView::UpdateLayout(bool withChildren /*= true*/)
+	void UIScrollView::UpdateTransform(bool withChildren /*= true*/)
 	{
-		UIWidget::UpdateLayout(withChildren);
+		UIWidget::UpdateTransform(withChildren);
 
 		if (!mReady)
 			return;

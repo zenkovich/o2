@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "VectorFontEffects.h"
 
 #include "Utils/Bitmap.h"

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IEditorWindow.h"
 
 #include "Application/Application.h"

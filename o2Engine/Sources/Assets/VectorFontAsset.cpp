@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "VectorFontAsset.h"
 
 #include "Assets/Assets.h"

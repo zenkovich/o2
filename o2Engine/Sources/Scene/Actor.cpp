@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Actor.h"
 
 #include "Scene/Component.h"
@@ -27,7 +28,7 @@ namespace o2
 
 		if (Scene::IsSingletonInitialzed())
 		{
-			if (mode == ActorCreateMode::InScene || 
+			if (mode == ActorCreateMode::InScene ||
 				(mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
 			{
 				o2Scene.mRootActors.Add(this);
@@ -204,7 +205,7 @@ namespace o2
 			for (auto child : mChildren)
 				child->transform->SetDirty();
 
-			transform->Update();
+			UpdateTransform(false);
 		}
 
 		for (auto comp : mComponents)
@@ -218,6 +219,23 @@ namespace o2
 
 		for (auto child : mChildren)
 			child->UpdateChildren(dt);
+	}
+
+	void Actor::UpdateTransform(bool withChildren /*= true*/)
+	{
+		transform->Update();
+
+		if (withChildren)
+			UpdateChildrenTransforms();
+	}
+
+	void Actor::UpdateChildrenTransforms()
+	{
+		for (auto child : mChildren)
+			child->UpdateTransform(false);
+
+		for (auto child : mChildren)
+			child->UpdateChildrenTransforms();
 	}
 
 	ActorAssetRef Actor::GetPrototype() const
@@ -1025,6 +1043,8 @@ namespace o2
 
 		node.GetNode("Transform")->GetValue(*transform);
 
+		RemoveAllComponents();
+
 		if (auto componentsNode = node.GetNode("Components"))
 		{
 			for (auto componentNode : componentsNode->GetChildNodes())
@@ -1034,6 +1054,8 @@ namespace o2
 				component->SetOwnerActor(this);
 			}
 		}
+
+		RemoveAllChildren();
 
 		if (auto childsNode = node.GetNode("Childs"))
 		{
@@ -1236,6 +1258,8 @@ namespace o2
 				transform->mData->shear = proto->transform->mData->shear;
 		}
 
+		RemoveAllChildren();
+
 		// children
 		if (auto childsNode = node.GetNode("Childs"))
 		{
@@ -1257,6 +1281,8 @@ namespace o2
 				}
 			}
 		}
+
+		RemoveAllComponents();
 
 		// components
 		if (auto componentsNode = node.GetNode("Components"))
@@ -1718,7 +1744,7 @@ namespace o2
 
 		mPrototype->Save();
 	}
-	
+
 	void Actor::CopyData(const Actor& otherActor)
 	{
 		mName = otherActor.mName;
@@ -2385,7 +2411,7 @@ namespace o2
 		return mWasDeleted;
 	}
 
-		}
+}
 
 DECLARE_CLASS(o2::ActorRef);
 

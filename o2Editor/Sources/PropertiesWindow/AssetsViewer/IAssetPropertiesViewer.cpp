@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IAssetPropertiesViewer.h"
 
 #include "Utils/Reflection/Reflection.h"

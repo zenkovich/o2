@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DrawableCursorEventsListener.h"
 
 #include "Render/IDrawable.h"

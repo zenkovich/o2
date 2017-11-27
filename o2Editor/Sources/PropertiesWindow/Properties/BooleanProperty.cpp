@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "BooleanProperty.h"
 
 #include "SceneWindow/SceneEditScreen.h"

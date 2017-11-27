@@ -151,6 +151,12 @@ namespace o2
 		// Updates childs
 		virtual void UpdateChildren(float dt);
 
+		// Updates transform
+		virtual void UpdateTransform(bool withChildren = true);
+
+		// Updates children transforms
+		virtual void UpdateChildrenTransforms();
+
 		// Returns prototype from this or this parent
 		ActorAssetRef GetPrototype() const;
 
@@ -787,6 +793,8 @@ CLASS_METHODS_META(o2::Actor)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PUBLIC_FUNCTION(ActorAssetRef, GetPrototype);
 	PUBLIC_FUNCTION(ActorAssetRef, GetPrototypeDirectly);
 	PUBLIC_FUNCTION(void, BreakPrototypeLink);

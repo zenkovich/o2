@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "IntegerProperty.h"
 
 #include "Application/Application.h"
