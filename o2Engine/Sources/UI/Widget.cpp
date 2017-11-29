@@ -78,7 +78,10 @@ namespace o2
 		{
 			UIWidget* childWidget = dynamic_cast<UIWidget*>(child);
 			if (childWidget)
+			{
+				childWidget->mParentWidget = this;
 				mChildWidgets.Add(childWidget);
+			}
 		}
 
 		for (auto state : other.mStates)
@@ -94,6 +97,7 @@ namespace o2
 			o2UI.mFocusableWidgets.Add(this);
 
 		InitializeProperties();
+		UpdateDrawingChildren();
 		UpdateLayersDrawingSequence();
 		RetargetStatesAnimations();
 	}

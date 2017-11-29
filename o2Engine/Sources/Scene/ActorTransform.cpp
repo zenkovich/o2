@@ -36,7 +36,7 @@ namespace o2
 		InitializeProperties();
 	}
 
-	ActorTransform& ActorTransform::operator=(const ActorTransform& other)
+	void ActorTransform::CopyFrom(const ActorTransform& other)
 	{
 		mData->size = other.mData->size;
 		mData->position = other.mData->position;
@@ -46,7 +46,11 @@ namespace o2
 		mData->shear = other.mData->shear;
 
 		SetDirty();
+	}
 
+	ActorTransform& ActorTransform::operator=(const ActorTransform& other)
+	{
+		CopyFrom(other);
 		return *this;
 	}
 
@@ -64,11 +68,6 @@ namespace o2
 			Math::Equals(mData->scale, other.mData->scale) &&
 			Math::Equals(mData->pivot, other.mData->pivot) &&
 			Math::Equals(mData->shear, other.mData->shear);
-	}
-
-	void ActorTransform::OnDeserialized(const DataNode& node)
-	{
-		SetDirty();
 	}
 
 	void ActorTransform::SetPosition(const Vec2F& position)
@@ -770,6 +769,17 @@ namespace o2
 			mData->parentInvertedTransform = mData->owner->mParent->transform->mData->worldNonSizedTransform.Inverted();
 		else
 			mData->parentInvertedTransform = Basis::Identity();
+	}
+
+	void ActorTransform::OnSerialize(DataNode& node) const
+	{
+		node.SetValue(*mData);
+	}
+
+	void ActorTransform::OnDeserialized(const DataNode& node)
+	{
+		node.GetValue(*mData);
+		SetDirty();
 	}
 
 	void ActorTransform::InitializeProperties()

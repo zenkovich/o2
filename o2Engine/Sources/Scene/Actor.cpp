@@ -1003,7 +1003,7 @@ namespace o2
 		node["Enabled"] = mEnabled;
 		node["Locked"] = mLocked;
 
-		node["Transform"] = transform;
+		node["Transform"].SetValue(*transform);
 
 		if (mLayer)
 			node["LayerName"] = mLayer->name;
@@ -1035,6 +1035,9 @@ namespace o2
 		mName = *node.GetNode("Name");
 		mLocked = *node.GetNode("Locked");
 		mEnabled = *node.GetNode("Enabled");
+
+		if (GetType().GetName() == "o2::UIMenuPanel")
+			o2Debug.Log("asd");
 
 		if (auto layerNode = node.GetNode("LayerName"))
 			SetLayer(layerNode->Data());
@@ -1071,8 +1074,7 @@ namespace o2
 						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
 						child->Deserialize(*dataNode);
 						o2Scene.mRootActors.Remove(child);
-						child->mParent = this;
-						mChildren.Add(child);
+						AddChild(child);
 					}
 				}
 			}
@@ -1275,8 +1277,7 @@ namespace o2
 						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
 						child->Deserialize(*dataNode);
 						o2Scene.mRootActors.Remove(child);
-						child->mParent = this;
-						mChildren.Add(child);
+						AddChild(child);
 					}
 				}
 			}
@@ -1749,7 +1750,7 @@ namespace o2
 	{
 		mName = otherActor.mName;
 		mEnabled = otherActor.mEnabled;
-		*transform = *otherActor.transform;
+		transform->CopyFrom(*otherActor.transform);
 		mAssetId = otherActor.mAssetId;
 	}
 

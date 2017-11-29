@@ -269,7 +269,7 @@ namespace o2
 		void UpdateOffsetsByCurrentTransform();
 
 		// Copies data parameters from other layout
-		void CopyFrom(const UIWidgetLayout& other);
+		void CopyFrom(const ActorTransform& other);
 
 		// Checks minimum and maximum size
 		void CheckMinMax();
@@ -395,7 +395,7 @@ CLASS_METHODS_META(o2::UIWidgetLayout)
 	PROTECTED_FUNCTION(void, SetDirty);
 	PROTECTED_FUNCTION(void, FloorRectangle);
 	PROTECTED_FUNCTION(void, UpdateOffsetsByCurrentTransform);
-	PROTECTED_FUNCTION(void, CopyFrom, const UIWidgetLayout&);
+	PROTECTED_FUNCTION(void, CopyFrom, const ActorTransform&);
 	PROTECTED_FUNCTION(void, CheckMinMax);
 	PROTECTED_FUNCTION(void, DontCheckMinMax);
 	PROTECTED_FUNCTION(void, InitializeProperties);

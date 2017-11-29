@@ -580,26 +580,25 @@ namespace o2
 		SetRect(GetRect());
 	}
 
-	void UIWidgetLayout::CopyFrom(const UIWidgetLayout& other)
+	void UIWidgetLayout::CopyFrom(const ActorTransform& other)
 	{
-		mData->size = other.mData->size;
-		mData->position = other.mData->position;
-		mData->angle = other.mData->angle;
-		mData->scale = other.mData->scale;
-		mData->pivot = other.mData->pivot;
-		mData->shear = other.mData->shear;
+		const UIWidgetLayout* otherLayout = dynamic_cast<const UIWidgetLayout*>(&other);
 
-		mData->anchorMin = other.mData->anchorMin;
-		mData->anchorMax = other.mData->anchorMax;
-		mData->offsetMin = other.mData->offsetMin;
-		mData->offsetMax = other.mData->offsetMax;
-		mData->minSize = other.mData->minSize;
-		mData->maxSize = other.mData->maxSize;
-		mData->weight = other.mData->weight;
+		if (otherLayout)
+		{
 
-		mCheckMinMaxFunc = other.mCheckMinMaxFunc;
+			mData->anchorMin = otherLayout->mData->anchorMin;
+			mData->anchorMax = otherLayout->mData->anchorMax;
+			mData->offsetMin = otherLayout->mData->offsetMin;
+			mData->offsetMax = otherLayout->mData->offsetMax;
+			mData->minSize = otherLayout->mData->minSize;
+			mData->maxSize = otherLayout->mData->maxSize;
+			mData->weight = otherLayout->mData->weight;
 
-		SetDirty();
+			mCheckMinMaxFunc = otherLayout->mCheckMinMaxFunc;
+		}
+
+		ActorTransform::CopyFrom(other);
 	}
 
 	void UIWidgetLayout::CheckMinMax()

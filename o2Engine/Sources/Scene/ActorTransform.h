@@ -444,11 +444,14 @@ namespace o2
 		};
 
 	protected:
-		Data* mData; // @SERIALIZABLE
+		Data* mData;
 
 	protected:
 		// Actor transform constructor with specified data
 		ActorTransform(Data* data);
+
+		// Copies data parameters from other transform
+		virtual void CopyFrom(const ActorTransform& other);
 
 		// Sets owner and updates transform
 		virtual void SetOwner(Actor* actor);
@@ -465,8 +468,11 @@ namespace o2
 		// Check parentInvertedTransform for actual
 		void CheckParentInvTransform();
 
-		// It is called when object was deserialized
-		void OnDeserialized(const DataNode& node);
+		// Beginning serialization callback, writes data
+		void OnSerialize(DataNode& node) const override;
+
+		// It is called when object was deserialized, reads data
+		void OnDeserialized(const DataNode& node) override;
 
 		// Initializes properties
 		void InitializeProperties();
@@ -531,7 +537,7 @@ CLASS_FIELDS_META(o2::ActorTransform)
 	PUBLIC_FIELD(worldBottom);
 	PUBLIC_FIELD(worldRect);
 	PUBLIC_FIELD(worldAABB);
-	PROTECTED_FIELD(mData).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mData);
 }
 END_META;
 CLASS_METHODS_META(o2::ActorTransform)
@@ -642,11 +648,13 @@ CLASS_METHODS_META(o2::ActorTransform)
 	PUBLIC_FUNCTION(float, GetWorldTop);
 	PUBLIC_FUNCTION(void, SetWorldBottom, float);
 	PUBLIC_FUNCTION(float, GetWorldBottom);
+	PROTECTED_FUNCTION(void, CopyFrom, const ActorTransform&);
 	PROTECTED_FUNCTION(void, SetOwner, Actor*);
 	PROTECTED_FUNCTION(void, UpdateWorldRectangleAndTransform);
 	PROTECTED_FUNCTION(void, UpdateTransform);
 	PROTECTED_FUNCTION(void, UpdateRectangle);
 	PROTECTED_FUNCTION(void, CheckParentInvTransform);
+	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }
