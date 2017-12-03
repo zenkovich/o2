@@ -181,7 +181,7 @@ namespace o2
 		virtual void SetRect(const RectF& rect);
 
 		// Returns rect
-		RectF GetRect() const;
+		virtual RectF GetRect() const;
 
 		// Sets direction aligned rectangle transformation
 		virtual void SetAxisAlignedRect(const RectF& rect);
@@ -477,6 +477,12 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
+		// Returns parent world rect position - left bottom corner
+		Vec2F GetParentPosition() const;
+
+		// Returns parent rectange, or zero when no parent
+		RectF GetParentRectangle() const;
+
 		friend class Actor;
 	};
 }
@@ -657,6 +663,8 @@ CLASS_METHODS_META(o2::ActorTransform)
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeProperties);
+	PROTECTED_FUNCTION(Vec2F, GetParentPosition);
+	PROTECTED_FUNCTION(RectF, GetParentRectangle);
 }
 END_META;
 

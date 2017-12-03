@@ -247,69 +247,57 @@ namespace o2
 
 	void ActorTransform::SetLeftTop(const Vec2F& position)
 	{
-		mData->size.Set(GetRight() - position.x, position.y - GetBottom());
-		mData->position.Set(position.x + mData->size.x*mData->pivot.x,
-							position.y - mData->size.y + mData->size.y*mData->pivot.y);
-
-		SetDirty();
+		RectF rect = GetRect();
+		SetRect(RectF(position.x, rect.bottom, rect.right, position.y));
 	}
 
 	Vec2F ActorTransform::GetLeftTop() const
 	{
-		return Vec2F(GetLeft(), GetTop());
+		return GetRect().LeftTop();
 	}
 
 	void ActorTransform::SetRightTop(const Vec2F& position)
 	{
-		mData->size.Set(position.x - GetLeft(), position.y - GetBottom());
-		mData->position.Set(position.x - mData->size.x + mData->size.x*mData->pivot.x,
-							position.y - mData->size.y + mData->size.y*mData->pivot.y);
-
-		SetDirty();
+		RectF rect = GetRect();
+		SetRect(RectF(position.x, rect.bottom, rect.right, position.y));
 	}
 
 	Vec2F ActorTransform::GetRightTop() const
 	{
-		return Vec2F(GetRight(), GetTop());
+		return GetRect().RightTop();
 	}
 
 	void ActorTransform::SetLeftBottom(const Vec2F& position)
 	{
-		mData->size.Set(GetRight() - position.x, GetTop() - position.y);
-		mData->position.Set(position.x + mData->size.x*mData->pivot.x,
-							position.y + mData->size.y*mData->pivot.y);
-
-		SetDirty();
+		RectF rect = GetRect();
+		SetRect(RectF(position.x, position.y, rect.right, rect.top));
 	}
 
 	Vec2F ActorTransform::GetLeftBottom() const
 	{
-		return Vec2F(GetLeft(), GetBottom());
+		return GetRect().LeftBottom();
 	}
 
 	void ActorTransform::SetRightBottom(const Vec2F& position)
 	{
-		mData->size.Set(position.x - GetLeft(), GetTop() - position.y);
-		mData->position.Set(position.x - mData->size.x + mData->size.x*mData->pivot.x,
-							position.y + mData->size.y*mData->pivot.y);
-
-		SetDirty();
+		RectF rect = GetRect();
+		SetRect(RectF(rect.left, position.y, position.x, rect.top));
 	}
 
 	Vec2F ActorTransform::GetRightBottom() const
 	{
-		return Vec2F(GetRight(), GetBottom());
+		return GetRect().RightBottom();
 	}
 
 	void ActorTransform::SetCenter(const Vec2F& position)
 	{
-		Vec2F translate = position - GetCenter();
-		SetBasis(mData->transform*Basis::Translated(translate));
+		RectF rect = GetRect();
+		SetRect(rect + (position - rect.Center()));
 	}
 
 	Vec2F ActorTransform::GetCenter() const
 	{
-		return mData->transform.offs + (mData->transform.xv + mData->transform.yv)*0.5f;
+		return GetRect().Center();
 	}
 
 	void ActorTransform::SetRightDir(const Vec2F& dir)
@@ -358,54 +346,46 @@ namespace o2
 
 	void ActorTransform::SetRight(float value)
 	{
-		mData->size.x = value - GetLeft();
-		mData->position.x = value - mData->size.x + mData->size.x*mData->pivot.x;
-
-		SetDirty();
+		RectF rect = GetRect();
+		SetRect(RectF(rect.left, rect.bottom, value, rect.top));
 	}
 
 	float ActorTransform::GetRight() const
 	{
-		return mData->position.x - mData->size.x*(mData->pivot.x - 1.0f);
+		return GetRect().right;
 	}
 
 	void ActorTransform::SetLeft(float value)
 	{
-		mData->size.x = GetRight() - value;
-		mData->position.x = value + mData->size.x*mData->pivot.x;
-
-		SetDirty();
+		RectF rect = GetRect();
+		SetRect(RectF(value, rect.bottom, rect.right, rect.top));
 	}
 
 	float ActorTransform::GetLeft() const
 	{
-		return mData->position.x - mData->size.x*mData->pivot.x;
+		return GetRect().left;
 	}
 
 	void ActorTransform::SetTop(float value)
 	{
-		mData->size.y = value - GetBottom();
-		mData->position.y = value - mData->size.y + mData->size.y*mData->pivot.y;
-
-		SetDirty();
+		RectF rect = GetRect();
+		SetRect(RectF(rect.left, rect.bottom, rect.right, value));
 	}
 
 	float ActorTransform::GetTop() const
 	{
-		return mData->position.y - mData->size.y*(mData->pivot.y - 1.0f);
+		return GetRect().top;
 	}
 
 	void ActorTransform::SetBottom(float value)
 	{
-		mData->size.y = GetTop() - value;
-		mData->position.y = value + mData->size.y*mData->pivot.y;
-
-		SetDirty();
+		RectF rect = GetRect();
+		SetRect(RectF(rect.left, value, rect.right, rect.top));
 	}
 
 	float ActorTransform::GetBottom() const
 	{
-		return mData->position.y - mData->size.y*mData->pivot.y;
+		return GetRect().bottom;
 	}
 
 	Actor* ActorTransform::GetOwnerActor() const
@@ -511,7 +491,7 @@ namespace o2
 
 	void ActorTransform::SetWorldLeftTop(const Vec2F& position)
 	{
-		SetLeftTop(position - mData->parentRectangePosition);
+		SetLeftTop(position - GetParentPosition());
 	}
 
 	Vec2F ActorTransform::GetWorldLeftTop() const
@@ -521,7 +501,7 @@ namespace o2
 
 	void ActorTransform::SetWorldRightTop(const Vec2F& position)
 	{
-		SetRightTop(position - mData->parentRectangePosition);
+		SetRightTop(position - GetParentPosition());
 	}
 
 	Vec2F ActorTransform::GetWorldRightTop() const
@@ -531,7 +511,7 @@ namespace o2
 
 	void ActorTransform::SetWorldLeftBottom(const Vec2F& position)
 	{
-		SetLeftTop(position - mData->parentRectangePosition);
+		SetLeftTop(position - GetParentPosition());
 	}
 
 	Vec2F ActorTransform::GetWorldLeftBottom() const
@@ -541,7 +521,7 @@ namespace o2
 
 	void ActorTransform::SetWorldRightBottom(const Vec2F& position)
 	{
-		SetRightBottom(position - mData->parentRectangePosition);
+		SetRightBottom(position - GetParentPosition());
 	}
 
 	Vec2F ActorTransform::GetWorldRightBottom() const
@@ -606,42 +586,42 @@ namespace o2
 
 	void ActorTransform::SetWorldRight(float value)
 	{
-		SetRight(value - mData->parentRectangePosition.x);
+		SetRight(value - GetParentPosition().x);
 	}
 
 	float ActorTransform::GetWorldRight() const
 	{
-		return GetRight() + mData->parentRectangePosition.x;
+		return GetRight() + GetParentPosition().x;
 	}
 
 	void ActorTransform::SetWorldLeft(float value)
 	{
-		SetLeft(value - mData->parentRectangePosition.x);
+		SetLeft(value - GetParentPosition().x);
 	}
 
 	float ActorTransform::GetWorldLeft() const
 	{
-		return GetLeft() + mData->parentRectangePosition.x;
+		return GetLeft() + GetParentPosition().x;
 	}
 
 	void ActorTransform::SetWorldTop(float value)
 	{
-		SetTop(value - mData->parentRectangePosition.y);
+		SetTop(value - GetParentPosition().y);
 	}
 
 	float ActorTransform::GetWorldTop() const
 	{
-		return GetTop() + mData->parentRectangePosition.y;
+		return GetTop() + GetParentPosition().y;
 	}
 
 	void ActorTransform::SetWorldBottom(float value)
 	{
-		SetBottom(value - mData->parentRectangePosition.y);
+		SetBottom(value - GetParentPosition().y);
 	}
 
 	float ActorTransform::GetWorldBottom() const
 	{
-		return GetBottom() + mData->parentRectangePosition.y;
+		return GetBottom() + GetParentPosition().y;
 	}
 
 	Vec2F ActorTransform::World2LocalPoint(const Vec2F& worldPoint) const
@@ -780,6 +760,22 @@ namespace o2
 	{
 		node.GetValue(*mData);
 		SetDirty();
+	}
+
+	Vec2F ActorTransform::GetParentPosition() const
+	{
+		if (!mData->owner || !mData->owner->mParent)
+			return Vec2F();
+
+		return mData->owner->mParent->transform->mData->worldRectangle.LeftBottom();
+	}
+
+	RectF ActorTransform::GetParentRectangle() const
+	{
+		if (!mData->owner || !mData->owner->mParent)
+			return RectF();
+
+		return mData->owner->mParent->transform->mData->worldRectangle;
 	}
 
 	void ActorTransform::InitializeProperties()

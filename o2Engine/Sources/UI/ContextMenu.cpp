@@ -154,8 +154,7 @@ namespace o2
 		}
 		else mVisibleContextMenu = this;
 
-		layout->mData->offsetMin.x = Math::Round(position.x);
-		layout->mData->offsetMax.y = Math::Round(position.y);
+		layout->worldLeftTop = position;
 
 		auto hoverState = state["hover"];
 		if (hoverState)
@@ -691,8 +690,7 @@ namespace o2
 		size.x = Math::Min(size.x, (float)o2Render.resolution->x);
 		size.y = Math::Min(size.y, (float)o2Render.resolution->y);
 
-		layout->offsetMax = Vec2F(layout->offsetMin->x + size.x, layout->offsetMax->y);
-		layout->offsetMin = Vec2F(layout->offsetMin->x, layout->offsetMax->y + size.y);
+		layout->rect = RectF(layout->left, layout->top - size.y, layout->left + size.x, layout->top);
 	}
 
 	void UIContextMenu::FitPosition()

@@ -76,7 +76,11 @@ namespace o2
 
 	void UIWidgetLayout::SetPosition(const Vec2F& position)
 	{
-		Vec2F delta = position - mData->position;
+		RectF parentRect = GetParentRectangle();
+		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
+						mData->offsetMax + mData->anchorMax*parentRect.Size());
+
+		Vec2F delta = position - rectangle.LeftBottom() + rectangle.Size()*mData->pivot;
 		mData->offsetMin += delta;
 		mData->offsetMax += delta;
 
@@ -85,7 +89,11 @@ namespace o2
 
 	void UIWidgetLayout::SetSize(const Vec2F& size)
 	{
-		Vec2F szDelta = size - mData->size;
+		RectF parentRect = GetParentRectangle();
+		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
+						mData->offsetMax + mData->anchorMax*parentRect.Size());
+
+		Vec2F szDelta = size - rectangle.Size();
 		mData->offsetMax += szDelta*(Vec2F::One() - mData->pivot);
 		mData->offsetMin -= szDelta*mData->pivot;
 
@@ -125,6 +133,18 @@ namespace o2
 	{
 		ActorTransform::SetNonSizedBasis(basis);
 		UpdateOffsetsByCurrentTransform();
+	}
+
+	RectF UIWidgetLayout::GetRect() const
+	{
+		RectF parentRect;
+		if (mData->owner->mParentWidget)
+			parentRect = mData->owner->mParentWidget->mChildrenWorldRect;
+
+		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
+						mData->offsetMax + mData->anchorMax*parentRect.Size());
+
+		return rectangle;
 	}
 
 	void UIWidgetLayout::SetAnchorMin(const Vec2F& min)

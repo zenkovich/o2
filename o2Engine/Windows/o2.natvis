@@ -7,12 +7,12 @@
   </Type>
 
   <Type Name="o2::Rect&lt;*&gt;">
-    <DisplayString>{{ (L { left } T { top })-(R { right } B { bottom }) }}</DisplayString>
+    <DisplayString>{{ (L { left } B { bottom })-(R { right } T { top }) }}</DisplayString>
     <Expand>
       <Item Name="left" ExcludeView="simple">left</Item>
-      <Item Name="top" ExcludeView="simple">top</Item>
-      <Item Name="right" ExcludeView="simple">right</Item>
       <Item Name="bottom" ExcludeView="simple">bottom</Item>
+      <Item Name="right" ExcludeView="simple">right</Item>
+      <Item Name="top" ExcludeView="simple">top</Item>
       <Item Name="width" ExcludeView="simple">right - left</Item>
       <Item Name="height" ExcludeView="simple">top - bottom</Item>
     </Expand>
@@ -121,14 +121,21 @@
   </Type>
 
   <Type Name="o2::UIWidget">
-    <DisplayString>name={ mName } rect=({ (int)layout.mAbsoluteRect.left }, { (int)layout.mAbsoluteRect.bottom }, { (int)layout.mAbsoluteRect.right }, { (int)layout.mAbsoluteRect.top })</DisplayString>
+    <DisplayString>name={ mName } rect=({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
     <Expand>
       <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
+      <Item Name="res alpha" ExcludeView="simple">mResTransparency</Item>
       <Item Name="visible" ExcludeView="simple">mVisible</Item>
+      <Item Name="res visible" ExcludeView="simple">mResVisible</Item>
       <Item Name="parent" ExcludeView="simple">mParent</Item>
+      <Item Name="override depth" ExcludeView="simple">mOverrideDepth</Item>
+      <Item Name="fully disabled" ExcludeView="simple">mFullyDisabled</Item>
+      <Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
+      <Item Name="children rect" ExcludeView="simple">mChildrenWorldRect</Item>
+      
       <Synthetic Name="layout">
-        <DisplayString>({ (int)layout.mAbsoluteRect.left }, { (int)layout.mAbsoluteRect.bottom }, { (int)layout.mAbsoluteRect.right }, { (int)layout.mAbsoluteRect.top })</DisplayString>
+        <DisplayString>({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
         <Expand>
           <ExpandedItem>layout</ExpandedItem>
         </Expand>
@@ -164,9 +171,29 @@
         </Expand>
       </Synthetic>
 
+      <Synthetic Name="draw children">
+        <DisplayString>count={mDrawingChildren.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mDrawingChildren.mCount</Size>
+            <ValuePointer>mDrawingChildren.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="top draw layers">
+        <DisplayString>count={mTopDrawingLayers.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mTopDrawingLayers.mCount</Size>
+            <ValuePointer>mTopDrawingLayers.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
       <ArrayItems>
-        <Size>mChildren.mCount</Size>
-        <ValuePointer>mChildren.mValues</ValuePointer>
+        <Size>mChildWidgets.mCount</Size>
+        <ValuePointer>mChildWidgets.mValues</ValuePointer>
       </ArrayItems>
 
     </Expand>
@@ -185,7 +212,7 @@
       <Synthetic Name="layout">
         <DisplayString>({ (int)mAbsolutePosition.left }, { (int)mAbsolutePosition.bottom }, { (int)mAbsolutePosition.right }, { (int)mAbsolutePosition.top })</DisplayString>
         <Expand>
-          <ExpandedItem>layout</ExpandedItem>
+          <ExpandedItem>layout->mData</ExpandedItem>
         </Expand>
       </Synthetic>
       
@@ -232,9 +259,9 @@
       </Synthetic>
       
       <Synthetic Name="transform">
-        <DisplayString>(positon={ transform->mPosition }, size={ transform->mSize }, scale={ transform->mScale }, pivot={ transform->mPivot }, angle={ transform->mAngle })</DisplayString>
+        <DisplayString>(positon={ transform->mData->position }, size={ transform->mData->size }, scale={ transform->mData->scale }, pivot={ transform->mData->pivot }, angle={ transform->mData->angle })</DisplayString>
         <Expand>
-          <ExpandedItem>transform</ExpandedItem>
+          <ExpandedItem>transform->mData</ExpandedItem>
         </Expand>
       </Synthetic>
 
@@ -277,33 +304,59 @@
   </Type>
 
   <Type Name="o2::UIWidgetLayout">
-    <DisplayString>({ (int)mAbsoluteRect.left }, { (int)mAbsoluteRect.bottom }, { (int)mAbsoluteRect.right }, { (int)mAbsoluteRect.top })</DisplayString>
+    <DisplayString>({ (int)mData->worldRectangle.left }, { (int)mData->worldRectangle.bottom }, { (int)mData->worldRectangle.right }, { (int)mData->worldRectangle.top })</DisplayString>
     <Expand>
-      <Item Name="pivot" ExcludeView="simple">mPivot</Item>
-      <Item Name="anchor min" ExcludeView="simple">mAnchorMin</Item>
-      <Item Name="anchor max" ExcludeView="simple">mAnchorMax</Item>
-      <Item Name="offset min" ExcludeView="simple">mOffsetMin</Item>
-      <Item Name="offset max" ExcludeView="simple">mOffsetMax</Item>
-      <Item Name="min size" ExcludeView="simple">mMinSize</Item>
-      <Item Name="max size" ExcludeView="simple">mMaxSize</Item>
-      <Item Name="weight" ExcludeView="simple">mWeight</Item>
-      <Item Name="driven by parent" ExcludeView="simple">mDrivenByParent</Item>
-      <Item Name="abs rect" ExcludeView="simple">mAbsoluteRect</Item>
-      <Item Name="local rect" ExcludeView="simple">mLocalRect</Item>
+      <Item Name="pivot" ExcludeView="simple">mData->pivot</Item>
+      <Item Name="anchor min" ExcludeView="simple">mData->anchorMin</Item>
+      <Item Name="anchor max" ExcludeView="simple">mData->anchorMax</Item>
+      <Item Name="offset min" ExcludeView="simple">mData->offsetMin</Item>
+      <Item Name="offset max" ExcludeView="simple">mData->offsetMax</Item>
+      <Item Name="min size" ExcludeView="simple">mData->minSize</Item>
+      <Item Name="max size" ExcludeView="simple">mData->maxSize</Item>
+      <Item Name="weight" ExcludeView="simple">mData->weight</Item>
+      <Item Name="driven by parent" ExcludeView="simple">mData->drivenByParent</Item>      
+      <Item Name="position" ExcludeView="simple">mData->position</Item>
+      <Item Name="pivot" ExcludeView="simple">mData->pivot</Item>
+      <Item Name="size" ExcludeView="simple">mData->size</Item>
+      <Item Name="scale" ExcludeView="simple">mData->scale</Item>
+      <Item Name="angle" ExcludeView="simple">mData->angle</Item>
+      <Item Name="shear" ExcludeView="simple">mData->shear</Item>
+      <Item Name="rectangle" ExcludeView="simple">mData->rectangle</Item>
+      <Item Name="parent rectangle" ExcludeView="simple">mData->parentRectangle</Item>
+      <Item Name="parent rectange position" ExcludeView="simple">mData->parentRectangePosition</Item>
+      <Item Name="world rectangle" ExcludeView="simple">mData->worldRectangle</Item>
+      <Item Name="transform" ExcludeView="simple">mData->transform</Item>
+      <Item Name="non sized transform" ExcludeView="simple">mData->nonSizedTransform</Item>
+      <Item Name="world non sized transform" ExcludeView="simple">mData->worldNonSizedTransform</Item>
+      <Item Name="world transform" ExcludeView="simple">mData->worldTransform</Item>
+      <Item Name="parent inverted transform" ExcludeView="simple">mData->parentInvertedTransform</Item>
+      <Item Name="parent transform" ExcludeView="simple">mData->parentTransform</Item>
+      <Item Name="is parent inv transform actual" ExcludeView="simple">mData->isParentInvTransformActual</Item>
+      <Item Name="owner" ExcludeView="simple">mData->owner</Item>
     </Expand>
   </Type>
 
   <Type Name="o2::Transform">
-    <DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
+    <DisplayString>(positon={ mData->position }, size={ mData->size }, scale={ mData->scale }, pivot={ mData->pivot }, angle={ mData->angle })</DisplayString>
     <Expand>
-      <Item Name="position" ExcludeView="simple">mPosition</Item>
-      <Item Name="pivot" ExcludeView="simple">mPivot</Item>
-      <Item Name="size" ExcludeView="simple">mSize</Item>
-      <Item Name="scale" ExcludeView="simple">mScale</Item>
-      <Item Name="angle" ExcludeView="simple">mAngle</Item>
-      <Item Name="shear" ExcludeView="simple">mShear</Item>
-      <Item Name="transform" ExcludeView="simple">mTransform</Item>
-      <Item Name="no size transform" ExcludeView="simple">mNonSizedTransform</Item>
+      <Item Name="position" ExcludeView="simple">mData->position</Item>
+      <Item Name="pivot" ExcludeView="simple">mData->pivot</Item>
+      <Item Name="size" ExcludeView="simple">mData->size</Item>
+      <Item Name="scale" ExcludeView="simple">mData->scale</Item>
+      <Item Name="angle" ExcludeView="simple">mData->angle</Item>
+      <Item Name="shear" ExcludeView="simple">mData->shear</Item>
+      <Item Name="rectangle" ExcludeView="simple">mData->rectangle</Item>
+      <Item Name="parent rectangle" ExcludeView="simple">mData->parentRectangle</Item>
+      <Item Name="parent rectange position" ExcludeView="simple">mData->parentRectangePosition</Item>
+      <Item Name="world rectangle" ExcludeView="simple">mData->worldRectangle</Item>
+      <Item Name="transform" ExcludeView="simple">mData->transform</Item>
+      <Item Name="non sized transform" ExcludeView="simple">mData->nonSizedTransform</Item>
+      <Item Name="world non sized transform" ExcludeView="simple">mData->worldNonSizedTransform</Item>
+      <Item Name="world transform" ExcludeView="simple">mData->worldTransform</Item>
+      <Item Name="parent inverted transform" ExcludeView="simple">mData->parentInvertedTransform</Item>
+      <Item Name="parent transform" ExcludeView="simple">mData->parentTransform</Item>
+      <Item Name="is parent inv transform actual" ExcludeView="simple">mData->isParentInvTransformActual</Item>
+      <Item Name="owner" ExcludeView="simple">mData->owner</Item>
     </Expand>
   </Type>
 

@@ -80,6 +80,9 @@ namespace o2
 		// Sets basis without size
 		void SetNonSizedBasis(const Basis& basis) override;
 
+		// Returns rect
+		RectF GetRect() const override;
+
 		// Sets rect
 		void SetRect(const RectF& rect) override;
 
@@ -346,6 +349,7 @@ CLASS_METHODS_META(o2::UIWidgetLayout)
 	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetBasis, const Basis&);
 	PUBLIC_FUNCTION(void, SetNonSizedBasis, const Basis&);
+	PUBLIC_FUNCTION(RectF, GetRect);
 	PUBLIC_FUNCTION(void, SetRect, const RectF&);
 	PUBLIC_FUNCTION(void, SetAxisAlignedRect, const RectF&);
 	PUBLIC_FUNCTION(void, SetAnchorMin, const Vec2F&);
