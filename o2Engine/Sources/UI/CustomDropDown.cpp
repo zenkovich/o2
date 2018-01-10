@@ -49,7 +49,14 @@ namespace o2
 	void UICustomDropDown::Update(float dt)
 	{
 		UIWidget::Update(dt);
+	}
+
+	void UICustomDropDown::UpdateChildren(float dt)
+	{
+		UIWidget::UpdateChildren(dt);
+
 		mItemsList->Update(dt);
+		mItemsList->UpdateChildren(dt);
 	}
 
 	void UICustomDropDown::Draw()
@@ -299,8 +306,6 @@ namespace o2
 
 		if (withChildren)
 			UpdateChildrenTransforms();
-
-		mItemsList->UpdateTransform();
 	}
 
 	void UICustomDropDown::OnItemSelected()

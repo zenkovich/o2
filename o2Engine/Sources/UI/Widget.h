@@ -369,6 +369,7 @@ namespace o2
 		// Initializes properties
 		void InitializeProperties();
 
+		friend class Scene;
 		friend class UIContextMenu;
 		friend class UICustomDropDown;
 		friend class UICustomList;

@@ -35,6 +35,9 @@ namespace o2
 		// Updates drawables, states and widget
 		void Update(float dt) override;
 
+		// Updates childs and dropdown list
+		void UpdateChildren(float dt) override;
+
 		// Draws widget
 		void Draw() override;
 
@@ -187,6 +190,7 @@ CLASS_METHODS_META(o2::UICustomDropDown)
 	typedef const Function<bool(UIWidget*, UIWidget*)>& _tmp1;
 
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);

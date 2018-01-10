@@ -613,9 +613,6 @@ namespace o2
 
 		if (mParentWidget)
 			mParentWidget->UpdateBoundsWithChilds();
-
-		if (GetType() == TypeOf(UIButton))
-			o2Debug.Log((String)o2Time.GetCurrentFrame() + " Bounds " + mName + ":" + (String)mBoundsWithChilds + " " + (mIsClipped ? "clipped" : "not clipped"));
 	}
 
 	void UIWidget::CheckClipping(const RectF& clipArea)
@@ -1025,11 +1022,6 @@ namespace o2
 
 		mBoundsWithChilds += delta;
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
-
-		if (GetType() == TypeOf(UIButton))
-			o2Debug.Log((String)o2Time.GetCurrentFrame() + " Move " + mName + 
-						": from " + (String)last + " to " + (String)mBoundsWithChilds + 
-						" delta " + (String)delta + " " + (mIsClipped ? "clipped" : "not clipped"));
 
 		if (!mIsClipped)
 			UpdateTransform(false);

@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "Scene.h"
 
+#include "Application/Input.h"
 #include "Assets/ActorAsset.h"
 #include "Scene/Actor.h"
 #include "Scene/DrawableComponent.h"
 #include "Scene/SceneLayer.h"
 #include "Scene/Tags.h"
+#include "UI/WidgetLayout.h"
 
 namespace o2
 {
@@ -40,6 +42,61 @@ namespace o2
 			for (auto comp : layer->mEnabledDrawables)
 				comp->Draw();
 		}
+
+		DrawCursorDebugInfo();
+	}
+
+#undef DrawText
+
+	void Scene::DrawCursorDebugInfo()
+	{
+		if (!o2Input.IsKeyDown(VK_F4))
+			return;
+
+		struct helper
+		{
+			static void Process(String& debugInfo, Actor* actor)
+			{
+				if (actor->transform->IsPointInside(o2Input.GetCursorPos()))
+				{
+					auto parent = actor;
+					String path;
+					while (parent)
+					{
+						path = parent->GetName() + "/" + path;
+						parent = parent->parent;
+					}
+
+					debugInfo += " -- " + path + " - " + actor->GetType().GetName() + "\n";
+					debugInfo += "Rect: " + (String)actor->transform->worldRect + "\n";
+
+					UIWidget* widget = dynamic_cast<UIWidget*>(actor);
+					if (widget)
+					{
+						debugInfo += "layout - " +
+							(String)widget->layout->anchorMin + " "  +(String)widget->layout->offsetMin + " - " +
+							(String)widget->layout->anchorMax + " "  +(String)widget->layout->offsetMax + "\n";
+
+						debugInfo += (widget->mIsClipped ? (String)"clipped, " : (String)"not clipped, ") +
+							(widget->mVisible ? (String)"visible\n" : ((String)"hidden" + (widget->mFullyDisabled ? (String)" fully\n" : (String)"\n")));
+
+						debugInfo += "alpha: " + (String)widget->mTransparency +
+							", res alpha: " + (String)widget->mResTransparency + "\n";
+					}
+
+					debugInfo += "\n";
+				}
+
+				for (auto child : actor->mChildren)
+					Process(debugInfo, child);
+			}
+		};
+
+		String debugInfo;
+		for (auto actor : mAllActors)
+			helper::Process(debugInfo, actor);
+
+		o2Debug.DrawText(((Vec2F)o2Render.GetResolution().InvertedX())*0.5f, debugInfo);
 	}
 
 	SceneLayer* Scene::GetLayer(const String& name)

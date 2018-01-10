@@ -83,12 +83,12 @@ namespace o2
 
 		OnDrawn();
 
-		//o2Render.EnableScissorTest(mAbsoluteClipArea);
+		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
 		for (auto child : mDrawingChildren)
 			child->Draw();
 
-		//o2Render.DisableScissorTest();
+		o2Render.DisableScissorTest();
 
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();

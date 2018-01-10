@@ -171,6 +171,9 @@ namespace o2
 		// Draws scene drawable objects
 		void Draw();
 
+		// Drwas debug info for actor under cursor
+		void DrawCursorDebugInfo();
+
 		friend class Actor;
 		friend class Application;
 		friend class DrawableComponent;
