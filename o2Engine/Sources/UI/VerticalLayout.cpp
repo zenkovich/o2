@@ -169,6 +169,23 @@ namespace o2
 		SetLayoutDirty();
 	}
 
+	float UIVerticalLayout::GetMinWidthWithChildren() const
+	{
+		if (!mFitByChildren)
+			return UIWidget::GetMinWidthWithChildren();
+
+		float res = 0;
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mFullyDisabled)
+				res = Math::Max(res, child->GetMinWidthWithChildren() + mBorder.left + mBorder.right);
+		}
+
+		res = Math::Max(res, layout->mData->minSize.x);
+
+		return res;
+	}
+
 	float UIVerticalLayout::GetMinHeightWithChildren() const
 	{
 		if (!mFitByChildren)
@@ -179,6 +196,20 @@ namespace o2
 		{
 			if (!child->mFullyDisabled)
 				res += child->GetMinHeightWithChildren();
+		}
+
+		res = Math::Max(res, layout->mData->minSize.y);
+
+		return res;
+	}
+
+	float UIVerticalLayout::GetHeightWeightWithChildren() const
+	{
+		float res = 0;
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mFullyDisabled)
+				res += child->GetHeightWeightWithChildren();
 		}
 
 		return res;
@@ -221,9 +252,14 @@ namespace o2
 
 	void UIVerticalLayout::UpdateLayoutParametres()
 	{
-		layout->mData->weight.y = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->layout->GetHeightWeight(); });
-		layout->mData->minSize.y = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->layout->GetMinimalHeight(); });
-		layout->mData->minSize.y += mBorder.bottom + mBorder.top;
+		layout->mData->weight.y = 0;
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mFullyDisabled)
+				layout->mData->weight.y += child->GetHeightWeightWithChildren();
+		}
+
+		layout->mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
 	}
 
 	void UIVerticalLayout::ArrangeFromCenter()
@@ -388,7 +424,7 @@ namespace o2
 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
 		Vec2F size(GetMinWidthWithChildren(), GetMinHeightWithChildren());
 
-		Vec2F parentSize = mParentWidget ? mParentWidget->transform->size : Vec2F();		
+		Vec2F parentSize = mParentWidget ? mParentWidget->mChildrenWorldRect.Size() : Vec2F();		
 		Vec2F szDelta = size - (layout->mData->offsetMax - layout->mData->offsetMin + (layout->mData->anchorMax - layout->mData->anchorMin)*parentSize);
 
 		if (mExpandWidth)

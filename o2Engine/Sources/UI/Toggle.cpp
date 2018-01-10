@@ -48,10 +48,10 @@ namespace o2
 
 	void UIToggle::Update(float dt)
 	{
+		UIWidget::Update(dt);
+
 		if (mFullyDisabled || mIsClipped)
 			return;
-
-		UIWidget::Update(dt);
 
 		if (mToggleGroup && mToggleGroup->mPressed && mToggleGroup->mPressedValue != mValue &&
 			(mToggleGroup->mType == UIToggleGroup::Type::VerOneClick || mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))

@@ -117,6 +117,12 @@ namespace o2
 		// Returns layout width
 		float GetMinWidthWithChildren() const override;
 
+		// Returns layout height
+		float GetMinHeightWithChildren() const override;
+
+		// Returns layout width weight with children
+		float GetWidthWeightWithChildren() const override;
+
 		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child) override;
 
@@ -203,6 +209,8 @@ CLASS_METHODS_META(o2::UIHorizontalLayout)
 	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
+	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
+	PROTECTED_FUNCTION(float, GetWidthWeightWithChildren);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);

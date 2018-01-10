@@ -56,10 +56,10 @@ namespace o2
 
 	void UIMenuPanel::Update(float dt)
 	{
+		UIWidget::Update(dt);
+
 		if (mFullyDisabled || mIsClipped)
 			return;
-
-		UIWidget::Update(dt);
 
 		const float rectLerpCoef = 20.0f;
 		if (mCurrentSelectionRect != mTargetSelectionRect)

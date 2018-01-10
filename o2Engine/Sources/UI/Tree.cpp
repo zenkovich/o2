@@ -269,9 +269,6 @@ namespace o2
 
 	void UITree::Update(float dt)
 	{
-		if (mFullyDisabled || mIsClipped)
-			return;
-
 		if (mHightlightAnim.IsPlaying())
 		{
 			if (mHightlighNode && mHightlighNode->widget)
@@ -304,6 +301,9 @@ namespace o2
 			UpdateVisibleNodes();
 
 		UIScrollArea::Update(dt);
+
+		if (mFullyDisabled || mIsClipped)
+			return;
 
 		const float rectLerpCoef = 10.0f;
 		if (mCurrentHoverRect != mTargetHoverRect)

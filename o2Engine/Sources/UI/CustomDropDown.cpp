@@ -26,7 +26,7 @@ namespace o2
 		mMaxListItems(other.mMaxListItems)
 	{
 		mItemsList = other.mItemsList->CloneAs<UICustomList>();
-		mItemsList->mParent = this;
+		mItemsList->SetWeakParent(this, false);
 		mItemsList->Hide(true);
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
 		mItemsList->SetMultiselectionAvailable(false);
@@ -48,9 +48,6 @@ namespace o2
 
 	void UICustomDropDown::Update(float dt)
 	{
-		if (mFullyDisabled || mIsClipped)
-			return;
-
 		UIWidget::Update(dt);
 		mItemsList->Update(dt);
 	}
@@ -92,6 +89,7 @@ namespace o2
 			*openedState = true;
 
 		mItemsList->SetVisible(true);
+		mItemsList->UpdateTransform(true);
 		SetLayoutDirty();
 	}
 
@@ -229,8 +227,7 @@ namespace o2
 		UIWidget::CopyData(other);
 
 		mItemsList = other.mItemsList->CloneAs<UICustomList>();
-		mItemsList->mParent = this;
-		mItemsList->mParentWidget = this;
+		mItemsList->SetWeakParent(this, false);
 		mItemsList->Hide(true);
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
 		mItemsList->SetMultiselectionAvailable(false);

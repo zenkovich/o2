@@ -16,7 +16,12 @@
 void TestApplication::OnStarted()
 {
 	//CheckArialFontEffects();
+	Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
+
 	o2UI.LoadStyle("ui_style.xml");
+
+	Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
+
 	mTestScreens.Add(mnew TextTestScreen(this));
 	mTestScreens.Add(mnew UITestScreen(this));
 	mTestScreens.Add(mnew MainTestScreen(this));
@@ -28,8 +33,23 @@ void TestApplication::OnStarted()
 
 void TestApplication::OnUpdate(float dt)
 {
-	o2Application.windowCaption = String::Format("FPS: %i dt: %f (%vi) DC: %i", (int)o2Time.GetFPS(), o2Time.GetDeltaTime(),
-												 (Vec2I)o2Input.GetCursorPos(), o2Render.GetDrawCallsCount());
+	if (o2Input.IsKeyPressed(VK_CONTROL))
+		mRulerStartPoint = o2Input.GetCursorPos();
+
+	if (o2Input.IsKeyDown(VK_CONTROL))
+	{
+		o2Application.windowCaption = String::Format("FPS: %i (%vi)(%vi) dt: %f DC: %i", (int)o2Time.GetFPS(),
+													 (Vec2I)o2Input.GetCursorPos(), 
+													 (Vec2I)(mRulerStartPoint - o2Input.GetCursorPos()), 
+													 o2Time.GetDeltaTime(),
+													 o2Render.GetDrawCallsCount());
+	}
+	else
+	{
+		o2Application.windowCaption = String::Format("FPS: %i (%vi) dt: %f DC: %i", (int)o2Time.GetFPS(), 
+													 (Vec2I)o2Input.GetCursorPos(), o2Time.GetDeltaTime(),
+													 o2Render.GetDrawCallsCount());
+	}
 
 	/*if (o2Input.IsKeyPressed('Z'))
 	{
@@ -68,6 +88,5 @@ void TestApplication::GoToScreen(const String& id)
 }
 
 void TestApplication::CheckArialFontEffects()
-{
-}
+{}
 

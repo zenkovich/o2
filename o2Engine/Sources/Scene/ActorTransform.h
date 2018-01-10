@@ -97,7 +97,7 @@ namespace o2
 		Actor* GetOwnerActor() const;
 
 		// Sets transform dirty and needed to update
-		virtual void SetDirty();
+		virtual void SetDirty(bool fromParent = true);
 
 		// Returns is transform dirty
 		bool IsDirty() const;
@@ -414,7 +414,8 @@ namespace o2
 		class Data: public ISerializable
 		{
 		public:
-			bool   isDirty = false;                    // Is some value was changed
+			int    dirtyFrame;                         // Frame index, when layout was marked as dirty
+			int    updateFrame;                        // Frame index, when layout was updated
 
 			Vec2F  position;                           // Position @SERIALIZABLE
 			Vec2F  size;                               // Size @SERIALIZABLE
@@ -436,7 +437,7 @@ namespace o2
 
 			Basis  parentInvertedTransform;            // Parent world transform inverted
 			Basis  parentTransform;                    // Parent world transform
-			bool   isParentInvTransformActual = false; // Is mParentInvertedTransform is actual
+			int    parentInvTransformActualFrame;      // last mParentInvertedTransform actual frame index
 
 			Actor* owner = nullptr;                    // Owner actor @EXCLUDE_POINTER_SEARCH
 
@@ -484,6 +485,7 @@ namespace o2
 		RectF GetParentRectangle() const;
 
 		friend class Actor;
+		friend class UIWidgetLayout;
 	};
 }
 
@@ -550,7 +552,7 @@ CLASS_METHODS_META(o2::ActorTransform)
 {
 
 	PUBLIC_FUNCTION(Actor*, GetOwnerActor);
-	PUBLIC_FUNCTION(void, SetDirty);
+	PUBLIC_FUNCTION(void, SetDirty, bool);
 	PUBLIC_FUNCTION(bool, IsDirty);
 	PUBLIC_FUNCTION(void, Update);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
@@ -675,7 +677,8 @@ CLASS_BASES_META(o2::ActorTransform::Data)
 END_META;
 CLASS_FIELDS_META(o2::ActorTransform::Data)
 {
-	PUBLIC_FIELD(isDirty);
+	PUBLIC_FIELD(dirtyFrame);
+	PUBLIC_FIELD(updateFrame);
 	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(size).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(scale).SERIALIZABLE_ATTRIBUTE();
@@ -692,7 +695,7 @@ CLASS_FIELDS_META(o2::ActorTransform::Data)
 	PUBLIC_FIELD(worldTransform);
 	PUBLIC_FIELD(parentInvertedTransform);
 	PUBLIC_FIELD(parentTransform);
-	PUBLIC_FIELD(isParentInvTransformActual);
+	PUBLIC_FIELD(parentInvTransformActualFrame);
 	PUBLIC_FIELD(owner).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 }
 END_META;

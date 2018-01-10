@@ -3,7 +3,6 @@
 
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
-#include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
 #include "UI/Button.h"
@@ -794,17 +793,11 @@ namespace o2
 		sample->SetEnableScrollsHiding(true);
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		horScrollBar->layout->anchorMin = Vec2F(0, 0);
-		horScrollBar->layout->anchorMax = Vec2F(1, 0);
-		horScrollBar->layout->offsetMin = Vec2F(5, 0);
-		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+		*horScrollBar->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 5, 15, 15, -5);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
 		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		verScrollBar->layout->anchorMin = Vec2F(1, 0);
-		verScrollBar->layout->anchorMax = Vec2F(1, 1);
-		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
-		verScrollBar->layout->offsetMax = Vec2F(0, -20);
+		*verScrollBar->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 15, 15, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))

@@ -8,12 +8,15 @@
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
 #include "UIManager.h"
+#include "Button.h"
 
 namespace o2
 {
 	UIWidget::UIWidget(ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew UIWidgetLayout(), mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
+		SceneDrawable::mLayer = Actor::mLayer;
+
 		if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
 			&& mLayer)
 		{
@@ -30,6 +33,8 @@ namespace o2
 	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew UIWidgetLayout(), prototype, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
+		SceneDrawable::mLayer = Actor::mLayer;
+
 		if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
 			&& mLayer && !mOverrideDepth)
 		{
@@ -46,6 +51,8 @@ namespace o2
 	UIWidget::UIWidget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew UIWidgetLayout(), components, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
+		SceneDrawable::mLayer = Actor::mLayer;
+
 		if ((mode == ActorCreateMode::InScene || mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
 			&& mLayer)
 		{
@@ -63,6 +70,7 @@ namespace o2
 		Actor(mnew UIWidgetLayout(*other.layout), other), layout(dynamic_cast<UIWidgetLayout*>(transform)),
 		mTransparency(other.mTransparency), mVisible(other.mVisible), mFullyDisabled(!other.mVisible)
 	{
+		SceneDrawable::mLayer = Actor::mLayer;
 		layout->SetOwner(this);
 
 		for (auto layer : other.mLayers)
@@ -81,6 +89,11 @@ namespace o2
 			{
 				childWidget->mParentWidget = this;
 				mChildWidgets.Add(childWidget);
+
+				if (childWidget->mOverrideDepth)
+					childWidget->IncludeInScene();
+				else
+					childWidget->ExcludeFromScene();
 			}
 		}
 
@@ -125,16 +138,29 @@ namespace o2
 
 	void UIWidget::Update(float dt)
 	{
-		if (mFullyDisabled || mIsClipped)
-			return;
+		if (!mFullyDisabled)
+		{
+			auto frame = o2Time.GetCurrentFrame();
+			if (layout->mData->dirtyFrame == frame && layout->mData->updateFrame != frame)
+			{
+				for (auto child : mChildren)
+					child->transform->SetDirty(true);
 
-		Actor::Update(dt);
+				UpdateTransform(false);
+			}
 
-		for (auto layer : mLayers)
-			layer->Update(dt);
+			if (!mIsClipped)
+			{
+				for (auto layer : mLayers)
+					layer->Update(dt);
 
-		for (auto state : mStates)
-			state->Update(dt);
+				for (auto state : mStates)
+					state->Update(dt);
+			}
+
+			for (auto comp : mComponents)
+				comp->Update(dt);
+		}
 	}
 
 	void UIWidget::SetLayoutDirty()
@@ -144,8 +170,15 @@ namespace o2
 
 	void UIWidget::Draw()
 	{
+		DrawDebugFrame();
+
 		if (mFullyDisabled || mIsClipped)
+		{
+			for (auto child : mDrawingChildren)
+				child->Draw();
+
 			return;
+		}
 
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
@@ -174,7 +207,7 @@ namespace o2
 
 		lastFrame = o2Time.GetCurrentFrame();
 
-		o2Render.DrawRectFrame(layout->GetWorldRect(), Color4::SomeColor(colr++));
+		o2Render.DrawRectFrame(mBoundsWithChilds, Color4::SomeColor(colr++));
 	}
 
 	void UIWidget::OnTransformUpdated()
@@ -558,8 +591,21 @@ namespace o2
 		return layout->mData->minSize.y;
 	}
 
+	float UIWidget::GetWidthWeightWithChildren() const
+	{
+		return layout->mData->weight.x;
+	}
+
+	float UIWidget::GetHeightWeightWithChildren() const
+	{
+		return layout->mData->weight.y;
+	}
+
 	void UIWidget::UpdateBoundsWithChilds()
 	{
+		if ((mFullyDisabled || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
+			return;
+
 		mBoundsWithChilds = mBounds;
 
 		for (auto child : mChildWidgets)
@@ -567,6 +613,9 @@ namespace o2
 
 		if (mParentWidget)
 			mParentWidget->UpdateBoundsWithChilds();
+
+		if (GetType() == TypeOf(UIButton))
+			o2Debug.Log((String)o2Time.GetCurrentFrame() + " Bounds " + mName + ":" + (String)mBoundsWithChilds + " " + (mIsClipped ? "clipped" : "not clipped"));
 	}
 
 	void UIWidget::CheckClipping(const RectF& clipArea)
@@ -658,12 +707,25 @@ namespace o2
 
 	void UIWidget::UpdateBounds()
 	{
+		if ((mFullyDisabled || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
+			return;
+
 		mBounds = layout->mData->worldRectangle;
 
 		for (auto layer : mDrawingLayers)
 			mBounds.Expand(layer->GetRect());
 
-		if (mChildren.IsEmpty())
+		bool anyEnabled = false;
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mFullyDisabled)
+			{
+				anyEnabled = true;
+				break;
+			}
+		}
+
+		if (!anyEnabled)
 			UpdateBoundsWithChilds();
 	}
 
@@ -771,6 +833,15 @@ namespace o2
 		layout->SetDirty();
 
 		mParentWidget = dynamic_cast<UIWidget*>(mParent);
+
+		if (mParentWidget)
+		{
+			if (mOverrideDepth)
+				IncludeInScene();
+			else
+				ExcludeFromScene();
+		}
+		else IncludeInScene();
 	}
 
 	void UIWidget::OnChildAdded(Actor* child)
@@ -810,6 +881,16 @@ namespace o2
 	void UIWidget::OnLayerChanged(SceneLayer* oldLayer)
 	{
 		SceneDrawable::SetLayer(mLayer);
+	}
+
+	void UIWidget::OnExcludeFromScene()
+	{
+		SceneDrawable::OnExcludeFromScene();
+	}
+
+	void UIWidget::OnIncludeToScene()
+	{
+		SceneDrawable::OnIncludeToScene();
 	}
 
 	void UIWidget::OnDeserialized(const DataNode& node)
@@ -898,7 +979,8 @@ namespace o2
 		mVisibleState = nullptr;
 		mFocusedState = nullptr;
 
-		mName = other.mName;
+		SceneDrawable::mLayer = Actor::mLayer;
+
 		layout->CopyFrom(*other.layout);
 		mTransparency = other.mTransparency;
 		mIsFocusable = other.mIsFocusable;
@@ -927,6 +1009,33 @@ namespace o2
 
 		UpdateLayersDrawingSequence();
 		RetargetStatesAnimations();
+	}
+
+	void UIWidget::SetWeakParent(Actor* actor, bool worldPositionStays /*= true*/)
+	{
+		Actor::SetWeakParent(actor, worldPositionStays);
+
+		if (UIWidget* widget = dynamic_cast<UIWidget*>(actor))
+			widget->mChildWidgets.Remove(this);
+	}
+
+	void UIWidget::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
+	{
+		RectF last = mBoundsWithChilds;
+
+		mBoundsWithChilds += delta;
+		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
+
+		if (GetType() == TypeOf(UIButton))
+			o2Debug.Log((String)o2Time.GetCurrentFrame() + " Move " + mName + 
+						": from " + (String)last + " to " + (String)mBoundsWithChilds + 
+						" delta " + (String)delta + " " + (mIsClipped ? "clipped" : "not clipped"));
+
+		if (!mIsClipped)
+			UpdateTransform(false);
+
+		for (auto child : mChildWidgets)
+			child->MoveAndCheckClipping(delta, clipArea);
 	}
 
 }

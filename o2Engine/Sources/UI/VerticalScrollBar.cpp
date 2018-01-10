@@ -311,6 +311,8 @@ namespace o2
 
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
+
+		UIWidget::UpdateLayersLayouts();
 	}
 
 	void UIVerticalScrollBar::CopyData(const Actor& otherActor)
@@ -337,7 +339,6 @@ namespace o2
 	void UIVerticalScrollBar::UpdateLayersLayouts()
 	{
 		UpdateProgressLayersLayouts();
-		UIWidget::UpdateLayersLayouts();
 	}
 
 	void UIVerticalScrollBar::OnLayerAdded(UIWidgetLayer* layer)

@@ -179,6 +179,37 @@ namespace o2
 				res += child->GetMinWidthWithChildren();
 		}
 
+		res = Math::Max(res, layout->mData->minSize.x);
+
+		return res;
+	}
+
+	float UIHorizontalLayout::GetMinHeightWithChildren() const
+	{
+		if (!mFitByChildren)
+			return UIWidget::GetMinHeightWithChildren();
+
+		float res = 0;
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mFullyDisabled)
+				res = Math::Max(res, child->GetMinHeightWithChildren() + mBorder.left + mBorder.right);
+		}
+
+		res = Math::Max(res, layout->mData->minSize.y);
+
+		return res;
+	}
+
+	float UIHorizontalLayout::GetWidthWeightWithChildren() const
+	{
+		float res = 0;
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mFullyDisabled)
+				res += child->GetWidthWeightWithChildren();
+		}
+
 		return res;
 	}
 
@@ -221,9 +252,15 @@ namespace o2
 
 	void UIHorizontalLayout::UpdateLayoutParametres()
 	{
-		layout->mData->weight.x = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->layout->GetWidthWeight(); });
-		layout->mData->minSize.x = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->layout->GetMinimalWidth(); });
-		layout->mData->minSize.x += mBorder.left + mBorder.right;
+		layout->mData->weight.x = 0;
+
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mFullyDisabled)
+				layout->mData->weight.x += child->GetWidthWeightWithChildren();
+		}
+
+		layout->mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
 	}
 
 	void UIHorizontalLayout::ArrangeFromCenter()

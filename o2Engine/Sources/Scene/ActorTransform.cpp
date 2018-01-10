@@ -395,7 +395,8 @@ namespace o2
 
 	bool ActorTransform::IsDirty() const
 	{
-		return mData->isDirty;
+		auto frame = o2Time.GetCurrentFrame();
+		return mData->dirtyFrame == frame && mData->updateFrame != frame;
 	}
 
 	void ActorTransform::SetWorldPivot(const Vec2F& pivot)
@@ -429,9 +430,7 @@ namespace o2
 
 	RectF ActorTransform::GetWorldRect() const
 	{
-		RectF localRect = GetRect();
-		RectF worldRect(localRect.LeftBottom()*mData->parentTransform, localRect.RightTop()*mData->parentTransform);
-		return worldRect;
+		return mData->worldRectangle;
 	}
 
 	void ActorTransform::SetWorldAngle(float rad)
@@ -669,9 +668,9 @@ namespace o2
 		SetDirty();
 	}
 
-	void ActorTransform::SetDirty()
+	void ActorTransform::SetDirty(bool fromParent /*= true*/)
 	{
-		mData->isDirty = true;
+		mData->dirtyFrame = o2Time.GetCurrentFrame();
 
 		if (mData->owner)
 			mData->owner->OnChanged();
@@ -683,8 +682,8 @@ namespace o2
 		UpdateTransform();
 		UpdateWorldRectangleAndTransform();
 
-		mData->isParentInvTransformActual = false;
-		mData->isDirty = false;
+		mData->parentInvTransformActualFrame = o2Time.GetCurrentFrame();
+		mData->updateFrame = mData->dirtyFrame;
 		mData->owner->OnTransformUpdated();
 	}
 
@@ -696,6 +695,8 @@ namespace o2
 		mData->rectangle.right = rightTop.x;
 		mData->rectangle.bottom = leftBottom.y;
 		mData->rectangle.top = rightTop.y;
+
+		//o2Debug.Log("--" + mData->owner->mName + " " + (String)o2Time.GetCurrentFrame());
 	}
 
 	void ActorTransform::UpdateTransform()
@@ -740,10 +741,10 @@ namespace o2
 
 	void ActorTransform::CheckParentInvTransform()
 	{
-		if (mData->isParentInvTransformActual)
+		if (mData->parentInvTransformActualFrame == o2Time.GetCurrentFrame())
 			return;
 
-		mData->isParentInvTransformActual = true;
+		mData->parentInvTransformActualFrame = o2Time.GetCurrentFrame();
 
 		if (mData->owner && mData->owner->mParent)
 			mData->parentInvertedTransform = mData->owner->mParent->transform->mData->worldNonSizedTransform.Inverted();

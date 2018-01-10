@@ -26,5 +26,7 @@ protected:
 	ITestScreen*   mCurrentScreen;
 	ITestScreen*   mNextCurrentScreen;
 
+	Vec2F          mRulerStartPoint;
+
 	void CheckArialFontEffects();
 };

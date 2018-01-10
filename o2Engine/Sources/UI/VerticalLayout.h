@@ -114,8 +114,14 @@ namespace o2
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
+		// Returns layout width with children
+		float GetMinWidthWithChildren() const override;
+
 		// Returns layout height
 		float GetMinHeightWithChildren() const override;
+
+		// Returns layout height weight with children
+		float GetHeightWeightWithChildren() const override;
 
 		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child) override;
@@ -202,7 +208,9 @@ CLASS_METHODS_META(o2::UIVerticalLayout)
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
 	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
+	PROTECTED_FUNCTION(float, GetHeightWeightWithChildren);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);

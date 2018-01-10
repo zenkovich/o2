@@ -17,11 +17,6 @@ namespace o2
 	UIWindow::UIWindow():
 		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
-		layout->anchorMin = Vec2F(0.5f, 0.5f);
-		layout->anchorMax = Vec2F(0.5f, 0.5f);
-		layout->offsetMin = Vec2F(-100, -100);
-		layout->offsetMax = Vec2F(100, 100);
-
 		InitializeHandles();
 		InitializeProperties();
 	}
@@ -37,7 +32,7 @@ namespace o2
 		for (auto elem : other.mWindowElements)
 		{
 			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
-			newElem->mParent = this;
+			newElem->SetWeakParent(this, false);
 			mWindowElements.Add(newElem);
 		}
 
@@ -119,7 +114,7 @@ namespace o2
 
 	UIWidget* UIWindow::AddWindowElement(UIWidget* widget)
 	{
-		widget->mParent = this;
+		widget->SetWeakParent(this, false);
 		mWindowElements.Add(widget);
 		SetLayoutDirty();
 
@@ -238,7 +233,7 @@ namespace o2
 		mChildrenWorldRect = layout->mData->worldRectangle;
 
 		for (auto elem : mWindowElements)
-			elem->UpdateTransform(true);
+			elem->UpdateTransform();
 
 		mChildrenWorldRect = _mChildrenAbsRect;
 
@@ -270,7 +265,7 @@ namespace o2
 		for (auto elem : other.mWindowElements)
 		{
 			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
-			newElem->mParent = this;
+			newElem->SetWeakParent(this, false);
 			mWindowElements.Add(newElem);
 		}
 

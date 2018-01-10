@@ -473,7 +473,7 @@ namespace o2
 
 	void Text::PrepareMesh(int charactersCount)
 	{
-		int needPolygons = charactersCount*2 + 5; // 5 for dots endings
+		int needPolygons = charactersCount*2 + 15; // 15 for dots endings
 		for (auto mesh : mMeshes)
 			needPolygons -= mesh->GetMaxPolyCount();
 

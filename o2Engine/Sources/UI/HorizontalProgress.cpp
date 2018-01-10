@@ -36,10 +36,10 @@ namespace o2
 
 	void UIHorizontalProgress::Update(float dt)
 	{
+		UIWidget::Update(dt);
+
 		if (mFullyDisabled || mIsClipped)
 			return;
-
-		UIWidget::Update(dt);
 
 		const float threshold = 0.01f;
 		const float smoothCoef = 30.0f;
@@ -222,7 +222,6 @@ namespace o2
 
 	void UIHorizontalProgress::UpdateLayersLayouts()
 	{
-		UIWidget::UpdateLayersLayouts();
 		UpdateProgressLayersLayouts();
 	}
 
@@ -247,6 +246,8 @@ namespace o2
 
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
+
+		UIWidget::UpdateLayersLayouts();
 	}
 
 	void UIHorizontalProgress::CopyData(const Actor& otherActor)

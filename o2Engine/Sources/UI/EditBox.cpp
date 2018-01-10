@@ -95,10 +95,11 @@ namespace o2
 
 	void UIEditBox::Update(float dt)
 	{
+		UIScrollArea::Update(dt);
+
 		if (mFullyDisabled || mIsClipped)
 			return;
 
-		UIScrollArea::Update(dt);
 		UpdateCaretBlinking(dt);
 
 		if (mIsFocused && o2Input.IsCursorReleased() && !UIWidget::IsUnderPoint(o2Input.GetCursorPos()))

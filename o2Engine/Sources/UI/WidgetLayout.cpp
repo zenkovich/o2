@@ -102,8 +102,9 @@ namespace o2
 
 	void UIWidgetLayout::SetRect(const RectF& rect)
 	{
-		RectF parentAnchoredRect(mData->parentRectangle.LeftBottom()*mData->anchorMin,
-								 mData->parentRectangle.RightTop()*mData->anchorMax);
+		RectF parentRect = GetParentRectangle();
+		RectF parentAnchoredRect(parentRect.LeftBottom()*mData->anchorMin,
+								 parentRect.RightTop()*mData->anchorMax);
 
 		mData->offsetMin = rect.LeftBottom() - parentAnchoredRect.LeftBottom();
 		mData->offsetMax = rect.RightTop() - parentAnchoredRect.RightTop();
@@ -548,37 +549,51 @@ namespace o2
 		SetDirty();
 	}
 
-	void UIWidgetLayout::SetDirty()
+	void UIWidgetLayout::SetDirty(bool fromParent /*= true*/)
 	{
-		if (mData->drivenByParent && mData->owner && mData->owner->mParent)
+		if (!fromParent && mData->drivenByParent && mData->owner && mData->owner->mParent)
 			mData->owner->mParent->transform->SetDirty();
 
-		ActorTransform::SetDirty();
+		ActorTransform::SetDirty(fromParent);
 	}
 
 	void UIWidgetLayout::Update()
 	{
 		RectF lastWorldRect = mData->worldRectangle;
 
-		RectF parentRect;
+		RectF parentWorldRect; 
+		Vec2F parentWorldPosition;
+
 		if (mData->owner->mParentWidget)
-			parentRect = mData->owner->mParentWidget->mChildrenWorldRect;
+		{
+			parentWorldRect = mData->owner->mParentWidget->mChildrenWorldRect;
 
-		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
-						mData->offsetMax + mData->anchorMax*parentRect.Size());
+			RectF notWidgetWorldRect = mData->owner->mParentWidget->transform->mData->worldRectangle;
+			parentWorldPosition = notWidgetWorldRect.LeftBottom() +
+				mData->owner->mParentWidget->transform->mData->pivot*notWidgetWorldRect.Size();
+		}
+		else if (mData->owner->mParent)
+		{
+			parentWorldRect = mData->owner->mParent->transform->mData->worldRectangle;
 
-		mData->size = rectangle.Size();
-		mData->position = rectangle.LeftBottom() + mData->size*mData->pivot;
+			parentWorldPosition = parentWorldRect.LeftBottom() +
+				mData->owner->mParent->transform->mData->pivot*parentWorldRect.Size();
+		}
+
+		RectF worldRectangle(parentWorldRect.LeftBottom() + mData->offsetMin + mData->anchorMin*parentWorldRect.Size(),
+							 parentWorldRect.LeftBottom() + mData->offsetMax + mData->anchorMax*parentWorldRect.Size());
+
+		mData->size = worldRectangle.Size();
+		mData->position = worldRectangle.LeftBottom() - parentWorldPosition + mData->size*mData->pivot;
 
 		(this->*mCheckMinMaxFunc)();
 
-		UpdateRectangle();
 		FloorRectangle();
+		UpdateRectangle();
 		UpdateTransform();
 		UpdateWorldRectangleAndTransform();
 
-		mData->isParentInvTransformActual = false;
-		mData->isDirty = false;
+		mData->updateFrame = mData->dirtyFrame;
 
 		if (mData->owner)
 		{
@@ -589,10 +604,10 @@ namespace o2
 
 	void UIWidgetLayout::FloorRectangle()
 	{
-		mData->rectangle.left   = Math::Floor(mData->rectangle.left);
-		mData->rectangle.right  = Math::Floor(mData->rectangle.right);
-		mData->rectangle.bottom = Math::Floor(mData->rectangle.bottom);
-		mData->rectangle.top    = Math::Floor(mData->rectangle.top);
+		mData->size.x     = Math::Floor(mData->size.x);
+		mData->size.y     = Math::Floor(mData->size.y);
+		mData->position.x = Math::Floor(mData->position.x);
+		mData->position.y = Math::Floor(mData->position.y);
 	}
 
 	void UIWidgetLayout::UpdateOffsetsByCurrentTransform()
@@ -624,8 +639,11 @@ namespace o2
 	void UIWidgetLayout::CheckMinMax()
 	{
 		Vec2F resSize = mData->size;
-		Vec2F clampSize(Math::Clamp(resSize.x, mData->minSize.x, mData->maxSize.x),
-						Math::Clamp(resSize.y, mData->minSize.y, mData->maxSize.y));
+		Vec2F minSizeWithChildren(mData->owner->GetMinWidthWithChildren(), mData->owner->GetMinHeightWithChildren());
+
+		Vec2F clampSize(Math::Clamp(resSize.x, minSizeWithChildren.x, mData->maxSize.x),
+						Math::Clamp(resSize.y, minSizeWithChildren.y, mData->maxSize.y));
+
 		Vec2F szDelta = clampSize - resSize;
 
 		if (szDelta != Vec2F())
@@ -636,7 +654,7 @@ namespace o2
 	{}
 
 	void UIWidgetLayout::InitializeProperties()
-	{ 
+	{
 		ActorTransform::InitializeProperties();
 
 		INITIALIZE_PROPERTY(UIWidgetLayout, anchorMin, SetAnchorMin, GetAnchorMin);

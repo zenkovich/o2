@@ -200,10 +200,11 @@ namespace o2
 
 	void Actor::Update(float dt)
 	{
-		if (transform->mData->isDirty)
+		auto frame = o2Time.GetCurrentFrame();
+		if (transform->mData->dirtyFrame == frame && transform->mData->updateFrame != frame)
 		{
 			for (auto child : mChildren)
-				child->transform->SetDirty();
+				child->transform->SetDirty(true);
 
 			UpdateTransform(false);
 		}
@@ -426,14 +427,12 @@ namespace o2
 		if (!mIsOnScene)
 			return;
 
-		if (mParent && mParent->mIsOnScene)
-			SetParent(nullptr);
-
 		if (!Scene::IsSingletonInitialzed())
 			return;
 
 		o2Scene.mRootActors.Remove(this);
 		o2Scene.mAllActors.Remove(this);
+		OnExcludeFromScene();
 		ExcludeComponentsFromScene();
 		mIsOnScene = false;
 
@@ -451,6 +450,7 @@ namespace o2
 
 		o2Scene.mAllActors.Add(this);
 		mIsOnScene = true;
+		OnIncludeToScene();
 		IncludeComponentsToScene();
 
 		for (auto child : mChildren)
@@ -579,10 +579,10 @@ namespace o2
 
 		UpdateEnabled();
 
-		if (actor->mIsOnScene && !mIsOnScene)
+		if (actor && actor->mIsOnScene && !mIsOnScene)
 			ExcludeFromScene();
 
-		if (!actor->mIsOnScene && mIsOnScene)
+		if (actor && !actor->mIsOnScene && mIsOnScene)
 			IncludeInScene();
 
 		OnParentChanged(oldParent);
@@ -907,6 +907,12 @@ namespace o2
 
 	void Actor::SetProtytypeDummy(ActorAssetRef asset)
 	{}
+
+	void Actor::SetWeakParent(Actor* actor, bool worldPositionStays /*= true*/)
+	{
+		SetParent(actor, worldPositionStays);
+		actor->mChildren.Remove(this);
+	}
 
 	void Actor::OnTransformUpdated()
 	{
@@ -1360,6 +1366,12 @@ namespace o2
 
 		return res;
 	}
+
+	void Actor::OnExcludeFromScene()
+	{}
+
+	void Actor::OnIncludeToScene()
+	{}
 
 	void Actor::ExcludeComponentsFromScene()
 	{

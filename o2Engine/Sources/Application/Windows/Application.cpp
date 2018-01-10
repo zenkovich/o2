@@ -97,6 +97,8 @@ namespace o2
 	{
 		srand((UInt)time(NULL));
 
+		mTime = mnew Time();
+
 		mLog = mnew LogStream("Application");
 		o2Debug.GetLog()->BindStream(mLog);
 
@@ -109,8 +111,6 @@ namespace o2
 
 		mTimer = mnew Timer();
 		mTimer->Reset();
-
-		mTime = mnew Time();
 
 		mEventSystem = mnew EventSystem();
 
@@ -143,25 +143,37 @@ namespace o2
 		if (mCursorInfiniteModeEnabled)
 			CheckCursorInfiniteMode();
 
+		float maxFPS = 60.0f;
+		float maxFPSDeltaTime = 1.0f/maxFPS;
+
 		float realdDt = mTimer->GetDeltaTime();
+
+		if (realdDt < maxFPSDeltaTime)
+		{
+			Sleep((int)((maxFPSDeltaTime - realdDt)*1000.0f));
+			realdDt = maxFPSDeltaTime;
+		}
+
 		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
 
 		mTime->Update(realdDt);
 		o2Debug.Update(dt);
-
 		mTaskManager->Update(dt);
-
 		mEventSystem->Update(dt);
 
-		mScene->Update(dt);
+		mRender->Begin();
 
+		OnDraw();
 		OnUpdate(dt);
 
-		mRender->Begin();
+		mScene->Update(dt);
+		mEventSystem->PostUpdate();
+
 		OnDraw();
 		mScene->Draw();
-		o2Debug.Draw();
 		mUIManager->Draw();
+		o2Debug.Draw();
+
 		mRender->End();
 
 		mInput->Update(dt);

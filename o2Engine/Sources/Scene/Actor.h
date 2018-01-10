@@ -420,6 +420,9 @@ namespace o2
 		// Not using prototype setter
 		void SetProtytypeDummy(ActorAssetRef asset);
 
+		// Sets parent, but doesn't adds to parent's children
+		virtual void SetWeakParent(Actor* actor, bool worldPositionStays = true);
+
 		// Sets parent
 		void SetParentProp(Actor* actor);
 
@@ -455,6 +458,12 @@ namespace o2
 
 		// Returns dictionary of all components by type names
 		Dictionary<String, Component*> GetAllComponents();
+
+		// It is called when actor excluding from scene
+		virtual void OnExcludeFromScene();
+
+		// It is called when actor including from scene
+		virtual void OnIncludeToScene();
 
 		// Applies excluding from scene for all components in hierarchy
 		void ExcludeComponentsFromScene();
@@ -849,6 +858,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, FindLinkedActor, UInt64);
 	PUBLIC_FUNCTION(Actor*, FindActorById, UInt64);
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
+	PROTECTED_FUNCTION(void, SetWeakParent, Actor*, bool);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
 	PROTECTED_FUNCTION(void, SetPrototype, ActorAssetRef);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
@@ -861,6 +871,8 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataNode&);
 	PROTECTED_FUNCTION(_tmp1, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp2, GetAllComponents);
+	PROTECTED_FUNCTION(void, OnExcludeFromScene);
+	PROTECTED_FUNCTION(void, OnIncludeToScene);
 	PROTECTED_FUNCTION(void, ExcludeComponentsFromScene);
 	PROTECTED_FUNCTION(void, IncludeComponentsToScene);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);

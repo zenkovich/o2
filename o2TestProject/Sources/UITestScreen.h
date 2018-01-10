@@ -19,4 +19,3 @@ public:
 protected:
 	Sprite mBackground;
 };
-

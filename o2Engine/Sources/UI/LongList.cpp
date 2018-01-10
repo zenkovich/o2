@@ -50,10 +50,10 @@ namespace o2
 
 	void UILongList::Update(float dt)
 	{
+		UIScrollArea::Update(dt);
+
 		if (mFullyDisabled || mIsClipped)
 			return;
-
-		UIScrollArea::Update(dt);
 
 		const float rectLerpCoef = 20.0f;
 
@@ -228,7 +228,7 @@ namespace o2
 
 		Vec2F widgetsMove(-delta.x, delta.y);
 		for (auto child : mChildWidgets)
-			MoveWidgetAndCheckClipping(child, widgetsMove);
+			child->MoveAndCheckClipping(widgetsMove, mAbsoluteClipArea);
 
 		UpdateScrollParams();
 		UpdateScrollBarsLayout();

@@ -249,8 +249,8 @@ namespace o2
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
-		// Draws debug frame by mAbsoluteRect
-		void DrawDebugFrame();
+		// Sets parent, but doesn't adds to parent's children
+		void SetWeakParent(Actor* actor, bool worldPositionStays = true) override;
 
 		// It is called when transformation was changed and updated
 		void OnTransformUpdated() override;
@@ -267,6 +267,15 @@ namespace o2
 		// It is called when layer was changed
 		void OnLayerChanged(SceneLayer* oldLayer) override;
 
+		// It is called when actor excluding from scene, removes this from layer drawables
+		void OnExcludeFromScene() override;
+
+		// It is called when actor including from scene, including this to layer drawables
+		void OnIncludeToScene() override;
+
+		// Moves widget's to delta and checks for clipping
+		virtual void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea);
+
 		// It is called when child widget was added
 		virtual void OnChildAdded(UIWidget* child);
 
@@ -279,11 +288,17 @@ namespace o2
 		// It is called when widget was deselected
 		virtual void OnUnfocused();
 
-		// Returns layout width
+		// Returns layout width with children
 		virtual float GetMinWidthWithChildren() const;
 
-		// Returns layout height
+		// Returns layout height with childer
 		virtual float GetMinHeightWithChildren() const;
+
+		// Returns layout width weight with children
+		virtual float GetWidthWeightWithChildren() const;
+
+		// Returns layout height weight with children
+		virtual float GetHeightWeightWithChildren() const;
 
 		// Updates bounds by drawing layers
 		virtual void UpdateBounds();
@@ -303,12 +318,6 @@ namespace o2
 		// Updates layers layouts, calls after updating widget layout
 		virtual void UpdateLayersLayouts();
 
-		// Updates drawing children widgets list
-		void UpdateDrawingChildren();
-
-		// Updates layers drawing sequence
-		void UpdateLayersDrawingSequence();
-
 		// It is called when child widget was selected
 		virtual void OnChildFocused(UIWidget* child);
 
@@ -320,6 +329,15 @@ namespace o2
 
 		// It is called when visible was changed
 		virtual void OnVisibleChanged();
+
+		// Draws debug frame by mAbsoluteRect
+		void DrawDebugFrame();
+
+		// Updates drawing children widgets list
+		void UpdateDrawingChildren();
+
+		// Updates layers drawing sequence
+		void UpdateLayersDrawingSequence();
 
 		// Sets new target for all states animations
 		void RetargetStatesAnimations();
@@ -504,30 +522,36 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, DrawDebugFrame);
+	PROTECTED_FUNCTION(void, SetWeakParent, Actor*, bool);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
+	PROTECTED_FUNCTION(void, OnExcludeFromScene);
+	PROTECTED_FUNCTION(void, OnIncludeToScene);
+	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
+	PROTECTED_FUNCTION(float, GetWidthWeightWithChildren);
+	PROTECTED_FUNCTION(float, GetHeightWeightWithChildren);
 	PROTECTED_FUNCTION(void, UpdateBounds);
 	PROTECTED_FUNCTION(void, UpdateBoundsWithChilds);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateVisibility, bool);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, UpdateDrawingChildren);
-	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);
 	PROTECTED_FUNCTION(void, OnChildFocused, UIWidget*);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, DrawDebugFrame);
+	PROTECTED_FUNCTION(void, UpdateDrawingChildren);
+	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);
 	PROTECTED_FUNCTION(void, RetargetStatesAnimations);
 	PROTECTED_FUNCTION(void, SetParentWidget, UIWidget*);
 	PROTECTED_FUNCTION(WidgetsVec, GetChildrenNonConst);

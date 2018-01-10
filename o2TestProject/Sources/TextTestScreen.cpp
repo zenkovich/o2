@@ -25,14 +25,14 @@ void TextTestScreen::Load()
 	mText.text = "Hello, I'm text\nmulti line\nand many symbols\nha h a h ah\n1 2 3 4 5 6 7 8 9 0";
 	//mText.ctext = "abcdefghklmnopqrstuvxyz12345";
 
-	mHandleMin.regularSprite = mnew Sprite("ui/UI_Radio_bk.png");
-	mHandleMin.hoverSprite = mnew Sprite("ui/UI_Radio_bk_select.png");
-	mHandleMin.pressedSprite = mnew Sprite("ui/UI_Radio_bk_pressed.png");
+	mHandleMin.SetRegularSprite(mnew Sprite("ui/UI_Radio_bk.png"));
+	mHandleMin.SetHoverSprite(mnew Sprite("ui/UI_Radio_bk_select.png"));
+	mHandleMin.SetPressedSprite(mnew Sprite("ui/UI_Radio_bk_pressed.png"));
 	mHandleMin.onChangedPos += Function<void(const Vec2F&)>(this, &TextTestScreen::OnHandleMoved);
 
-	mHandleMax.regularSprite = mnew Sprite("ui/UI_Radio_bk.png");
-	mHandleMax.hoverSprite = mnew Sprite("ui/UI_Radio_bk_select.png");
-	mHandleMax.pressedSprite = mnew Sprite("ui/UI_Radio_bk_pressed.png");
+	mHandleMax.SetRegularSprite(mnew Sprite("ui/UI_Radio_bk.png"));
+	mHandleMax.SetHoverSprite(mnew Sprite("ui/UI_Radio_bk_select.png"));
+	mHandleMax.SetPressedSprite(mnew Sprite("ui/UI_Radio_bk_pressed.png"));
 	mHandleMax.onChangedPos += Function<void(const Vec2F&)>(this, &TextTestScreen::OnHandleMoved);
 
 	mHandleMin.position = Vec2F(-100, -100);

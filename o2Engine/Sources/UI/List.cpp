@@ -93,7 +93,7 @@ namespace o2
 
 	WString UIList::GetSelectedItemText()
 	{
-		auto selectedItem = (UILabel*)GetSelectedItemPos();
+		auto selectedItem = dynamic_cast<UILabel*>(GetSelectedItem());
 		if (selectedItem)
 			return selectedItem->GetText();
 

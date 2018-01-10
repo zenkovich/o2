@@ -30,3 +30,17 @@ protected:
 	TestApplication* mApplication;
 };
 typedef Vector<ITestScreen*> TestScreensVec;
+
+CLASS_BASES_META(Test)
+{
+	BASE_CLASS(IObject);
+}
+END_META;
+CLASS_FIELDS_META(Test)
+{
+}
+END_META;
+CLASS_METHODS_META(Test)
+{
+}
+END_META;

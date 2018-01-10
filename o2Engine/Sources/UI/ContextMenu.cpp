@@ -47,6 +47,7 @@ namespace o2
 		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
 		mItemSample = mnew UIContextMenuItem();
+		mItemSample->ExcludeFromScene();
 		mItemSample->layout->minHeight = 20.0f;
 		mItemSample->AddLayer("icon", nullptr, Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(10, 0), Vec2F(10, 0)));
 		mItemSample->AddLayer("subIcon", nullptr, Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-10, 0), Vec2F(-10, 0)));
@@ -54,6 +55,7 @@ namespace o2
 		mItemSample->AddLayer("shortcut", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
 
 		mSeparatorSample = mnew UIWidget();
+		mSeparatorSample->ExcludeFromScene();
 		mSeparatorSample->layout->minHeight = 3.0f;
 		mSeparatorSample->layout->height = 3.0f;
 
@@ -81,14 +83,16 @@ namespace o2
 		UIScrollArea(other), DrawableCursorEventsListener(this), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample        = other.mItemSample->CloneAs<UIContextMenuItem>();
+		mItemSample->ExcludeFromScene();
+
 		mSeparatorSample   = other.mSeparatorSample->CloneAs<UIWidget>();
+		mSeparatorSample->ExcludeFromScene();
+
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
 		mItemsLayout       = GetChildByType<UIVerticalLayout>();
 
 		RetargetStatesAnimations();
-		UpdateTransform();
-
 		SetVisibleForcible(false);
 	}
 
@@ -154,8 +158,6 @@ namespace o2
 		}
 		else mVisibleContextMenu = this;
 
-		layout->worldLeftTop = position;
-
 		auto hoverState = state["hover"];
 		if (hoverState)
 		{
@@ -164,8 +166,7 @@ namespace o2
 		}
 		else mSelectionDrawable->SetEnabled(false);
 
-		FitSize();
-		FitPosition();
+		FitSizeAndPosition(position);
 		UpdateTransform();
 		UIWidget::Show();
 
@@ -192,8 +193,7 @@ namespace o2
 		mItemsLayout->AddChild(newItem);
 		newItem->onClick = item.onClick;
 
-		FitSize();
-		FitPosition();
+		FitSizeAndPosition(layout->worldLeftTop);
 		SetLayoutDirty();
 
 		return newItem;
@@ -259,8 +259,7 @@ namespace o2
 		if (item.subItems.Count() == 0)
 			newItem->onClick = item.onClick;
 
-		FitSize();
-		FitPosition();
+		FitSizeAndPosition(layout->worldLeftTop);
 		SetLayoutDirty();
 
 		return newItem;
@@ -662,7 +661,7 @@ namespace o2
 			child->CheckClipping(fullScreenRect);
 	}
 
-	void UIContextMenu::FitSize()
+	void UIContextMenu::FitSizeAndPosition(const Vec2F& position)
 	{
 		Vec2F size;
 		float maxCaption = 0.0f;
@@ -685,39 +684,33 @@ namespace o2
 		}
 
 		size.x = mFitSizeMin + maxCaption + maxShortcut;
-		size.y += layout->height - mAbsoluteViewArea.Height();
+		size.y += mViewAreaLayout.offsetMin.y - mViewAreaLayout.offsetMax.y;
 
 		size.x = Math::Min(size.x, (float)o2Render.resolution->x);
 		size.y = Math::Min(size.y, (float)o2Render.resolution->y);
 
-		layout->rect = RectF(layout->left, layout->top - size.y, layout->left + size.x, layout->top);
-	}
-
-	void UIContextMenu::FitPosition()
-	{
-		RectF thisRect(layout->offsetMin, layout->offsetMax);
+		RectF thisRect(position.x, position.y, position.x + size.x, position.y - size.y);
 		RectF screenRect(-o2Render.resolution->x*0.5f, o2Render.resolution->y*0.5f,
 						 o2Render.resolution->x*0.5f, -o2Render.resolution->y*0.5f);
 
-		Vec2F offs;
-
 		if (thisRect.left < screenRect.left)
-			offs.x = screenRect.left - thisRect.left;
+			thisRect += Vec2F(screenRect.left - thisRect.left, 0);
 
 		if (thisRect.right > screenRect.right)
-			offs.x = screenRect.right - thisRect.right;
+			thisRect += Vec2F(screenRect.right - thisRect.right, 0);
 
 		if (thisRect.top > screenRect.top)
-			offs.y = screenRect.top - thisRect.top;
+			thisRect += Vec2F(0, screenRect.top - thisRect.top);
 
 		if (thisRect.bottom < screenRect.bottom)
-			offs.y = screenRect.bottom - thisRect.bottom;
+			thisRect += Vec2F(0, screenRect.bottom - thisRect.bottom);
 
-		offs.x = Math::Round(offs.x);
-		offs.y = Math::Round(offs.y);
+		thisRect.left = Math::Round(thisRect.left);
+		thisRect.right = Math::Round(thisRect.right);
+		thisRect.top = Math::Round(thisRect.top);
+		thisRect.bottom = Math::Round(thisRect.bottom);
 
-		layout->offsetMax += offs;
-		layout->offsetMin += offs;
+		layout->worldRect = thisRect;
 	}
 
 	void UIContextMenu::SpecialDraw()

@@ -331,7 +331,7 @@
       <Item Name="world transform" ExcludeView="simple">mData->worldTransform</Item>
       <Item Name="parent inverted transform" ExcludeView="simple">mData->parentInvertedTransform</Item>
       <Item Name="parent transform" ExcludeView="simple">mData->parentTransform</Item>
-      <Item Name="is parent inv transform actual" ExcludeView="simple">mData->isParentInvTransformActual</Item>
+      <Item Name="parent inv transform actual frame" ExcludeView="simple">mData->parentInvTransformActualFrame</Item>
       <Item Name="owner" ExcludeView="simple">mData->owner</Item>
     </Expand>
   </Type>

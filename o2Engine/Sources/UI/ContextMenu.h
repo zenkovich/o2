@@ -257,10 +257,7 @@ namespace o2
 		void OnVisibleChanged() override;
 
 		// Fits size by items
-		void FitSize();
-
-		// Fits position in screen
-		void FitPosition();
+		void FitSizeAndPosition(const Vec2F& position);
 
 		// Hides context with his parent
 		void HideWithParent();
@@ -401,8 +398,7 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
-	PROTECTED_FUNCTION(void, FitSize);
-	PROTECTED_FUNCTION(void, FitPosition);
+	PROTECTED_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, HideWithParent);
 	PROTECTED_FUNCTION(void, HideWithChild);
 	PROTECTED_FUNCTION(void, SpecialDraw);

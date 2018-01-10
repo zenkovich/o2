@@ -16,7 +16,9 @@ namespace o2
 	UICustomList::UICustomList():
 		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
-		mItemSample        = mnew UIWidget();
+		mItemSample = mnew UIWidget();
+		mItemSample->ExcludeFromScene();
+
 		mSelectionDrawable = mnew Sprite();
 		mHoverDrawable     = mnew Sprite();
 
@@ -43,6 +45,7 @@ namespace o2
 		mVerLayout = GetChildByType<UIVerticalLayout>();
 
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample->ExcludeFromScene();
 		mItemSample->UpdateTransform(true);
 
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
@@ -69,10 +72,10 @@ namespace o2
 
 	void UICustomList::Update(float dt)
 	{
+		UIScrollArea::Update(dt);
+
 		if (mFullyDisabled || mIsClipped)
 			return;
-
-		UIScrollArea::Update(dt);
 
 		const float rectLerpCoef = 20.0f;
 
@@ -93,7 +96,7 @@ namespace o2
 
 		IDrawable::OnDrawn();
 
-		o2Render.EnableScissorTest(mAbsoluteClipArea);
+		//o2Render.EnableScissorTest(mAbsoluteClipArea);
 
 		for (auto child : mDrawingChildren)
 			child->Draw();
@@ -103,7 +106,7 @@ namespace o2
 
 		mHoverDrawable->Draw();
 
-		o2Render.DisableScissorTest();
+		//o2Render.DisableScissorTest();
 
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
@@ -374,6 +377,12 @@ namespace o2
 	void UICustomList::UpdateControls(float dt)
 	{}
 
+	void UICustomList::OnTransformUpdated()
+	{
+		UIScrollArea::OnTransformUpdated();
+		UpdateSelectionSprites();
+	}
+
 	void UICustomList::UpdateTransform(bool withChildren /*= true*/)
 	{
 		UIScrollArea::UpdateTransform(withChildren);
@@ -383,8 +392,6 @@ namespace o2
 
 		mCurrentHoverRect = mTargetHoverRect;
 		mHoverDrawable->SetRect(mCurrentHoverRect);
-
-		UpdateSelectionSprites();
 	}
 
 	void UICustomList::UpdateSelectionSprites()
@@ -496,6 +503,7 @@ namespace o2
 
 		mVerLayout = GetChildByType<UIVerticalLayout>();
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample->ExcludeFromScene();
 		mItemSample->SetLayoutDirty();
 
 		RetargetStatesAnimations();
@@ -563,7 +571,10 @@ namespace o2
 				mSelectionSpritesPool.Add(mSelectionDrawable->CloneAs<Sprite>());
 		}
 
-		return mSelectionSpritesPool.PopBack();
+		auto sprite = mSelectionSpritesPool.PopBack();
+		sprite->SetTransparency(1.0f);
+
+		return sprite;
 	}
 
 	void UICustomList::OnScrolled(float scroll)

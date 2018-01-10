@@ -188,6 +188,9 @@ namespace o2
 		// Updates mouse control
 		void UpdateControls(float dt) override;
 
+		// It is called when transformation was changed and updated
+		void OnTransformUpdated() override;
+
 		// It is called when selected item index was changed
 		virtual void OnSelectionChanged();
 
@@ -308,6 +311,7 @@ CLASS_METHODS_META(o2::UICustomList)
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
+	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateSelectionSprites);

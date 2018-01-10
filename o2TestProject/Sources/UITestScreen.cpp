@@ -32,30 +32,34 @@ UITestScreen::~UITestScreen()
 
 void UITestScreen::Load()
 {
+	Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
 	BasicUIStyleBuilder uiBuilder;
-	uiBuilder.RebuildBasicUIStyle();
+	uiBuilder.RebuildBasicUIManager();
+	Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
 
 	mBackground.LoadFromImage("ui/UI_Background.png");
 	mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30);
-	o2Application.onResizingEvent += [&]() { mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30); };
+	o2Application.onResizing += [&]() { mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30); };
 
 	auto window = o2UI.CreateWindow("UI elements samples");
-	o2UI.AddWidget(window);
-	window->layout.size = Vec2F(300, 300);
+	*window->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(400, 400));
 	window->name = "UI elements window";
+	window->SetEnableScrollsHiding(false);
 
 	auto verLayout = o2UI.CreateVerLayout();
+	*verLayout->layout = UIWidgetLayout::BothStretch();
 	verLayout->baseCorner = BaseCorner::Top;
 	verLayout->expandHeight = false;
+	verLayout->expandWidth = true;
 	verLayout->fitByChildren = true;
 	verLayout->border = RectF(5, 5, 5, 5);
 	verLayout->spacing = 10;
-	verLayout->layout = UIWidgetLayout::BothStretch();
+	*verLayout->layout = UIWidgetLayout::BothStretch();
 	window->AddChild(verLayout);
 
 	//button
 	auto buttonContainer = o2UI.CreateVerLayout();
-	buttonContainer->layout.height = 50;
+	buttonContainer->layout->minHeight = 50;
 	auto button = o2UI.CreateButton("Click me!");
 	buttonContainer->AddChild(o2UI.CreateLabel("Button"));
 	buttonContainer->AddChild(button);
@@ -70,7 +74,7 @@ void UITestScreen::Load()
 
 	buttonContext->AddItem(
 		UIContextMenu::Item("Icon item", []() { o2Debug.Log("Pressed icon"); },
-							mnew ImageAsset("ui/UI_search_regular.png")));
+		ImageAssetRef("ui/UI_search_regular.png")));
 
 	UIContextMenu::Item itm("Sub items", {
 		UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }),
@@ -88,7 +92,7 @@ void UITestScreen::Load()
 
 	//check box
 	auto checkBoxContainer = o2UI.CreateVerLayout();
-	checkBoxContainer->layout.height = 50;
+	checkBoxContainer->layout->minHeight = 50;
 	checkBoxContainer->AddChild(o2UI.CreateLabel("Check box"));
 	checkBoxContainer->AddChild(o2UI.CreateToggle("Toggle me!"));
 	verLayout->AddChild(checkBoxContainer);
@@ -113,7 +117,7 @@ void UITestScreen::Load()
 	verProgressContainer->expandHeight = false;
 	verProgressContainer->AddChild(o2UI.CreateLabel("Vertical progress"));
 	auto verProgress = o2UI.CreateVerProgress();
-	verProgress->layout.height = 100;
+	verProgress->layout->minHeight = 100;
 	verProgressContainer->AddChild(verProgress);
 	verLayout->AddChild(verProgressContainer);
 
@@ -130,7 +134,7 @@ void UITestScreen::Load()
 	verScrollContainer->expandHeight = false;
 	verScrollContainer->AddChild(o2UI.CreateLabel("Vertical scroll bar"));
 	auto verScroll = o2UI.CreateVerScrollBar();
-	verScroll->layout.height = 100;
+	verScroll->layout->minHeight = 100;
 	verScrollContainer->AddChild(verScroll);
 	verLayout->AddChild(verScrollContainer);
 
@@ -142,7 +146,7 @@ void UITestScreen::Load()
 
 	auto list = o2UI.CreateList();
 	list->name = "test list";
-	list->layout.height = 100;
+	list->layout->minHeight = 100;
 	for (int i = 0; i < 10; i++)
 		list->AddItem(String::Format("List item #%i", i + 1));
 
@@ -155,6 +159,7 @@ void UITestScreen::Load()
 	dropdownContainer->AddChild(o2UI.CreateLabel("Drop down"));
 
 	auto dropdown = o2UI.CreateDropdown();
+	dropdown->layout->pivot = Vec2F();
 	for (int i = 0; i < 10; i++)
 		dropdown->AddItem(String::Format("Drop down item #%i", i + 1));
 	dropdown->SetMaxListSizeInItems(5);
@@ -162,16 +167,18 @@ void UITestScreen::Load()
 	dropdownContainer->AddChild(dropdown);
 	verLayout->AddChild(dropdownContainer);
 
+	return;
+
 	// label test window
 	auto labelTestWindow = o2UI.CreateWindow("Label test");
 	auto testLabel = o2UI.CreateLabel("Label text multi line Label text multi line\nLabel text multi line\nLabel text multi lineLabel text multi line\nLabel text multi line");
 	labelTestWindow->AddChild(testLabel);
-	testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0);
+	*testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0);
 
 	auto labelTestEdit = o2UI.CreateEditBox();
-	labelTestEdit->layout = UIWidgetLayout::BothStretch(0, 100, 0, 0);
-	labelTestEdit->layout.anchorTop = 0;
-	labelTestEdit->layout.offsetTop = 195;
+	*labelTestEdit->layout = UIWidgetLayout::BothStretch(0, 100, 0, 0);
+	labelTestEdit->layout->anchorTop = 0;
+	labelTestEdit->layout->offsetTop = 195;
 	labelTestWindow->AddChild(labelTestEdit);
 	labelTestEdit->onChanged += [=](const WString& text) { testLabel->text = text; };
 
@@ -181,9 +188,9 @@ void UITestScreen::Load()
 	auto overflowHorTestButtonsLayout = o2UI.CreateHorLayout();
 	auto overflowVerTestButtonsLayout = o2UI.CreateHorLayout();
 
-	testButtonslayout->layout = UIWidgetLayout::BothStretch();
-	testButtonslayout->layout.anchorTop = 0;
-	testButtonslayout->layout.offsetTop = 95;
+	*testButtonslayout->layout = UIWidgetLayout::BothStretch();
+	testButtonslayout->layout->anchorTop = 0;
+	testButtonslayout->layout->offsetTop = 95;
 	testButtonslayout->AddChild(alignHorTestButtonsLayout);
 	testButtonslayout->AddChild(alignVerTestButtonsLayout);
 	testButtonslayout->AddChild(overflowHorTestButtonsLayout);
@@ -191,53 +198,52 @@ void UITestScreen::Load()
 
 	testButtonslayout->spacing = 5;
 
-	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("|<-", [=]() { testLabel->horAlign = HorAlign::Left; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
-	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("->|<-", [=]() { testLabel->horAlign = HorAlign::Middle; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("|<-", [=]() { testLabel->horAlign = HorAlign::Left; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("->|<-", [=]() { testLabel->horAlign = HorAlign::Middle; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
 
 	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("->|", [=]() {
 		testLabel->horAlign = HorAlign::Right;
-		testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0);
+		*testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0);
 	}));
 
-	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("---", [=]() { testLabel->horAlign = HorAlign::Both; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	alignHorTestButtonsLayout->AddChild(o2UI.CreateButton("---", [=]() { testLabel->horAlign = HorAlign::Both; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
 	alignHorTestButtonsLayout->spacing = 5;
 
 	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("/\\", [=]() {
 		testLabel->verAlign = VerAlign::Top;
-		testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0);
+		*testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0);
 	}));
 
-	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("---", [=]() { testLabel->verAlign = VerAlign::Middle; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
-	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("\\/", [=]() { testLabel->verAlign = VerAlign::Bottom; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
-	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("-\n-\n-", [=]() { testLabel->verAlign = VerAlign::Both; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("---", [=]() { testLabel->verAlign = VerAlign::Middle; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("\\/", [=]() { testLabel->verAlign = VerAlign::Bottom; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	alignVerTestButtonsLayout->AddChild(o2UI.CreateButton("-\n-\n-", [=]() { testLabel->verAlign = VerAlign::Both; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
 	alignVerTestButtonsLayout->spacing = 5;
 
-	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("None", [=]() { testLabel->horOverflow = UILabel::HorOverflow::None; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
-	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Cut", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Cut; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
-	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Dots", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Dots; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
-	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Expand", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Expand; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
-	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Wrap", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Wrap; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("None", [=]() { testLabel->horOverflow = UILabel::HorOverflow::None; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Cut", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Cut; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Dots", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Dots; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Expand", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Expand; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	overflowHorTestButtonsLayout->AddChild(o2UI.CreateButton("Wrap", [=]() { testLabel->horOverflow = UILabel::HorOverflow::Wrap; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
 	overflowHorTestButtonsLayout->spacing = 5;
 
-	overflowVerTestButtonsLayout->AddChild(o2UI.CreateButton("None", [=]() { testLabel->verOverflow = UILabel::VerOverflow::None; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
-	overflowVerTestButtonsLayout->AddChild(o2UI.CreateButton("Cut", [=]() { testLabel->verOverflow = UILabel::VerOverflow::Cut; testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	overflowVerTestButtonsLayout->AddChild(o2UI.CreateButton("None", [=]() { testLabel->verOverflow = UILabel::VerOverflow::None; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
+	overflowVerTestButtonsLayout->AddChild(o2UI.CreateButton("Cut", [=]() { testLabel->verOverflow = UILabel::VerOverflow::Cut; *testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0); }));
 	overflowVerTestButtonsLayout->AddChild(o2UI.CreateButton("Expand", [=]() {
 		testLabel->verOverflow = UILabel::VerOverflow::Expand;
-		testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0);
+		*testLabel->layout = UIWidgetLayout::BothStretch(0, 200, 0, 0);
 	}));
 	overflowVerTestButtonsLayout->spacing = 5;
 
 	labelTestWindow->AddChild(testButtonslayout);
-	o2UI.AddWidget(labelTestWindow);
-	labelTestWindow->layout.size = Vec2F(300, 300);
+	labelTestWindow->layout->size = Vec2F(300, 300);
 
-	auto treeWnd = o2UI.AddWindow("Tree");
-	treeWnd->layout.size = Vec2F(300, 300);
+	auto treeWnd = o2UI.CreateWindow("Tree");
+	treeWnd->layout->size = Vec2F(300, 300);
 }
 
 void UITestScreen::Unload()
 {
-	o2UI.RemoveAllWidgets();
+	
 }
 
 void UITestScreen::Update(float dt)

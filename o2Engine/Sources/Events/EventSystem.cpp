@@ -103,7 +103,7 @@ namespace o2
 
 				if (auto widget = dynamic_cast<UIWidget*>(listener))
 				{
-					name = widget->name;
+					name = widget->name + " : " + widget->GetType().GetName();
 					o2Debug.DrawRect(widget->layout->GetWorldRect(), Color4::Red());
 				}
 
