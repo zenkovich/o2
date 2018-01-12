@@ -32,7 +32,7 @@ namespace o2
 		for (auto elem : other.mWindowElements)
 		{
 			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
-			newElem->SetWeakParent(this, false);
+			newElem->SetInternalParent(this, false);
 			mWindowElements.Add(newElem);
 		}
 
@@ -114,7 +114,7 @@ namespace o2
 
 	UIWidget* UIWindow::AddWindowElement(UIWidget* widget)
 	{
-		widget->SetWeakParent(this, false);
+		widget->SetInternalParent(this, false);
 		mWindowElements.Add(widget);
 		SetLayoutDirty();
 
@@ -232,9 +232,6 @@ namespace o2
 		RectF _mChildrenAbsRect = mChildrenWorldRect;
 		mChildrenWorldRect = layout->mData->worldRectangle;
 
-		for (auto elem : mWindowElements)
-			elem->UpdateTransform();
-
 		mChildrenWorldRect = _mChildrenAbsRect;
 
 		mHeadDragAreaRect        = mHeadDragAreaLayout.Calculate(layout->mData->worldRectangle);
@@ -257,15 +254,12 @@ namespace o2
 	{
 		const UIWindow& other = dynamic_cast<const UIWindow&>(otherActor);
 
-		for (auto elem : mWindowElements)
-			delete elem;
-
 		UIScrollArea::CopyData(other);
 
 		for (auto elem : other.mWindowElements)
 		{
 			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
-			newElem->SetWeakParent(this, false);
+			newElem->SetInternalParent(this, false);
 			mWindowElements.Add(newElem);
 		}
 
@@ -288,14 +282,6 @@ namespace o2
 		RetargetStatesAnimations();
 		BindHandlesInteractableToVisibility();
 		SetLayoutDirty();
-	}
-
-	void UIWindow::UpdateTransparency()
-	{
-		UIScrollArea::UpdateTransparency();
-
-		for (auto elem : mWindowElements)
-			elem->UpdateTransparency();
 	}
 
 	void UIWindow::InitializeHandles()

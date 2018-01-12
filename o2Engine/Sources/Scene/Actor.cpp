@@ -908,12 +908,6 @@ namespace o2
 	void Actor::SetProtytypeDummy(ActorAssetRef asset)
 	{}
 
-	void Actor::SetWeakParent(Actor* actor, bool worldPositionStays /*= true*/)
-	{
-		SetParent(actor, worldPositionStays);
-		actor->mChildren.Remove(this);
-	}
-
 	void Actor::OnTransformUpdated()
 	{
 		for (auto comp : mComponents)

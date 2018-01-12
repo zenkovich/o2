@@ -231,7 +231,6 @@ namespace o2
 			child->MoveAndCheckClipping(widgetsMove, mAbsoluteClipArea);
 
 		UpdateScrollParams();
-		UpdateScrollBarsLayout();
 	}
 
 	void UILongList::UpdateVisibleItems()

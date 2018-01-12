@@ -123,6 +123,9 @@ namespace o2
 		for (auto state : mStates)
 			delete state;
 
+		for (auto child : mInternalWidgets)
+			delete child;
+
 		if (mLayer && mIsOnScene)
 			mLayer->UnregisterDrawable(this);
 
@@ -146,6 +149,9 @@ namespace o2
 				for (auto child : mChildren)
 					child->transform->SetDirty(true);
 
+				for (auto child : mInternalWidgets)
+					child->transform->SetDirty(true);
+
 				UpdateTransform(false);
 			}
 
@@ -161,6 +167,32 @@ namespace o2
 			for (auto comp : mComponents)
 				comp->Update(dt);
 		}
+	}
+
+	void UIWidget::UpdateChildren(float dt)
+	{
+		for (auto child : mChildren)
+			child->Update(dt);
+
+		for (auto child : mInternalWidgets)
+			child->Update(dt);
+
+		for (auto child : mChildren)
+			child->UpdateChildren(dt);
+
+		for (auto child : mInternalWidgets)
+			child->UpdateChildren(dt);
+	}
+
+	void UIWidget::UpdateChildrenTransforms()
+	{
+		Actor::UpdateChildrenTransforms();
+
+		for (auto child : mInternalWidgets)
+			child->UpdateTransform(false);
+
+		for (auto child : mInternalWidgets)
+			child->UpdateChildrenTransforms();
 	}
 
 	void UIWidget::SetLayoutDirty()
@@ -635,6 +667,9 @@ namespace o2
 
 		for (auto child : mChildWidgets)
 			child->UpdateTransparency();
+
+		for (auto child : mInternalWidgets)
+			child->UpdateTransparency();
 	}
 
 	void UIWidget::UpdateVisibility(bool updateLayout /*= true*/)
@@ -647,6 +682,9 @@ namespace o2
 			mResVisible = mVisible;
 
 		for (auto child : mChildWidgets)
+			child->UpdateVisibility(false);
+
+		for (auto child : mInternalWidgets)
 			child->UpdateVisibility(false);
 
 		if (mResVisible != lastResVisible)
@@ -866,6 +904,7 @@ namespace o2
 		if (widget)
 		{
 			mChildWidgets.Remove(widget);
+			mInternalWidgets.Remove(widget);
 			UpdateDrawingChildren();
 
 			OnChildRemoved(widget);
@@ -971,6 +1010,10 @@ namespace o2
 		for (auto state : mStates)
 			delete state;
 
+		for (auto child : mInternalWidgets)
+			delete child;
+
+		mInternalWidgets.Clear();
 		mLayers.Clear();
 		mStates.Clear();
 		mVisibleState = nullptr;
@@ -1008,12 +1051,13 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIWidget::SetWeakParent(Actor* actor, bool worldPositionStays /*= true*/)
+	void UIWidget::SetInternalParent(UIWidget* parent, bool worldPositionStays /*= true*/)
 	{
-		Actor::SetWeakParent(actor, worldPositionStays);
+		SetParent(parent, worldPositionStays);
 
-		if (UIWidget* widget = dynamic_cast<UIWidget*>(actor))
-			widget->mChildWidgets.Remove(this);
+		parent->mChildren.Remove(this);
+		parent->mChildWidgets.Remove(this);
+		parent->mInternalWidgets.Add(this);
 	}
 
 	void UIWidget::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
@@ -1027,6 +1071,9 @@ namespace o2
 			UpdateTransform(false);
 
 		for (auto child : mChildWidgets)
+			child->MoveAndCheckClipping(delta, clipArea);
+
+		for (auto child : mInternalWidgets)
 			child->MoveAndCheckClipping(delta, clipArea);
 	}
 

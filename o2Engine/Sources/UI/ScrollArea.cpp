@@ -29,7 +29,7 @@ namespace o2
 		if (mOwnHorScrollBar)
 		{
 			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
-			mHorScrollBar->SetWeakParent(this, false);
+			mHorScrollBar->SetInternalParent(this, false);
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
@@ -38,7 +38,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 		{
 			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
-			mVerScrollBar->SetWeakParent(this, false);
+			mVerScrollBar->SetInternalParent(this, false);
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
@@ -52,17 +52,13 @@ namespace o2
 	{
 		if (mHorScrollBar)
 		{
-			if (mOwnHorScrollBar)
-				delete mHorScrollBar;
-			else
+			if (!mOwnHorScrollBar)
 				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
 		}
 
 		if (mVerScrollBar)
 		{
-			if (mOwnVerScrollBar)
-				delete mVerScrollBar;
-			else
+			if (!mOwnVerScrollBar)
 				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 		}
 	}
@@ -110,12 +106,6 @@ namespace o2
 
 		if (mFullyDisabled || mIsClipped)
 			return;
-
-		if (mOwnHorScrollBar)
-			mHorScrollBar->Update(dt);
-
-		if (mOwnVerScrollBar)
-			mVerScrollBar->Update(dt);
 
 		UpdateControls(dt);
 		CheckScrollBarsVisibility();
@@ -247,9 +237,7 @@ namespace o2
 	{
 		if (mHorScrollBar)
 		{
-			if (mOwnHorScrollBar)
-				delete mHorScrollBar;
-			else
+			if (!mOwnHorScrollBar)
 				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
 		}
 
@@ -258,7 +246,7 @@ namespace o2
 
 		if (mHorScrollBar)
 		{
-			mHorScrollBar->SetWeakParent(this, false);
+			mHorScrollBar->SetInternalParent(this, false);
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
@@ -276,9 +264,7 @@ namespace o2
 	{
 		if (mVerScrollBar)
 		{
-			if (mOwnVerScrollBar)
-				delete mVerScrollBar;
-			else
+			if (!mOwnVerScrollBar)
 				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 		}
 
@@ -287,7 +273,7 @@ namespace o2
 
 		if (mVerScrollBar)
 		{
-			mVerScrollBar->SetWeakParent(this, false);
+			mVerScrollBar->SetInternalParent(this, false);
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
@@ -572,7 +558,6 @@ namespace o2
 		mChildrenWorldRect = mAbsoluteViewArea;
 
 		UpdateScrollParams();
-		UpdateScrollBarsLayout();
 	}
 
 	void UIScrollArea::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
@@ -590,20 +575,9 @@ namespace o2
 			child->MoveAndCheckClipping(delta, clipArea);
 
 		mChildrenWorldRect = mAbsoluteViewArea;
-	}
 
-	void UIScrollArea::UpdateScrollBarsLayout()
-	{
-		RectF tmpChildsAbsRect = mChildrenWorldRect;
-		mChildrenWorldRect = mAbsoluteViewArea;
-
-		if (mOwnHorScrollBar)
-			mHorScrollBar->UpdateTransform();
-
-		if (mOwnVerScrollBar)
-			mVerScrollBar->UpdateTransform();
-
-		mChildrenWorldRect = tmpChildsAbsRect;
+		for (auto child : mInternalWidgets)
+			child->MoveAndCheckClipping(delta, clipArea);
 	}
 
 	void UIScrollArea::CheckChildrenClipping()
@@ -620,17 +594,6 @@ namespace o2
 
 		for (auto child : mChildWidgets)
 			child->CheckClipping(newClipArea);
-	}
-
-	void UIScrollArea::UpdateTransparency()
-	{
-		UIWidget::UpdateTransparency();
-
-		if (mHorScrollBar)
-			mHorScrollBar->UpdateTransparency();
-
-		if (mVerScrollBar)
-			mVerScrollBar->UpdateTransparency();
 	}
 
 	void UIScrollArea::CalculateScrollArea()
@@ -781,23 +744,19 @@ namespace o2
 	{
 		const UIScrollArea& other = dynamic_cast<const UIScrollArea&>(otherActor);
 
-		UIWidget::CopyData(other);
-
 		if (mHorScrollBar)
 		{
-			if (mOwnHorScrollBar)
-				delete mHorScrollBar;
-			else
+			if (!mOwnHorScrollBar)
 				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
 		}
 
 		if (mVerScrollBar)
 		{
-			if (mOwnVerScrollBar)
-				delete mVerScrollBar;
-			else
+			if (!mOwnVerScrollBar)
 				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 		}
+
+		UIWidget::CopyData(other);
 
 		mClipAreaLayout      = other.mClipAreaLayout;
 		mViewAreaLayout      = other.mViewAreaLayout;
@@ -810,7 +769,7 @@ namespace o2
 		if (mOwnHorScrollBar)
 		{
 			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
-			mHorScrollBar->SetWeakParent(this, false);
+			mHorScrollBar->SetInternalParent(this, false);
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
@@ -819,7 +778,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 		{
 			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
-			mVerScrollBar->SetWeakParent(this, false);
+			mVerScrollBar->SetInternalParent(this, false);
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
@@ -862,7 +821,7 @@ namespace o2
 		if (mOwnHorScrollBar)
 		{
 			mHorScrollBar = *horScrollNode;
-			mHorScrollBar->SetWeakParent(this, false);
+			mHorScrollBar->SetInternalParent(this, false);
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
 		else mHorScrollBar = nullptr;
@@ -872,7 +831,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 		{
 			mVerScrollBar = *varScrollNode;
-			mVerScrollBar->SetWeakParent(this, false);
+			mVerScrollBar->SetInternalParent(this, false);
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
 		else mVerScrollBar = nullptr;
@@ -881,12 +840,6 @@ namespace o2
 			child->layout->mData->drivenByParent = true;
 
 		RetargetStatesAnimations();
-	}
-
-	void UIScrollArea::OnTransformUpdated()
-	{
-		UIWidget::OnTransformUpdated();
-		UpdateScrollBarsLayout();
 	}
 
 	void UIScrollArea::OnScrolled()

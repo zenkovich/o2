@@ -14,7 +14,7 @@ namespace o2
 		UIWidget(), DrawableCursorEventsListener(this)
 	{
 		mItemsList = mnew UICustomList();
-		mItemsList->mParent = this;
+		mItemsList->SetInternalParent(this, false);
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
 		mItemsList->SetMultiselectionAvailable(false);
 
@@ -26,7 +26,7 @@ namespace o2
 		mMaxListItems(other.mMaxListItems)
 	{
 		mItemsList = other.mItemsList->CloneAs<UICustomList>();
-		mItemsList->SetWeakParent(this, false);
+		mItemsList->SetInternalParent(this, false);
 		mItemsList->Hide(true);
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
 		mItemsList->SetMultiselectionAvailable(false);
@@ -37,7 +37,6 @@ namespace o2
 
 	UICustomDropDown::~UICustomDropDown()
 	{
-		delete mItemsList;
 	}
 
 	UICustomDropDown& UICustomDropDown::operator=(const UICustomDropDown& other)
@@ -49,14 +48,6 @@ namespace o2
 	void UICustomDropDown::Update(float dt)
 	{
 		UIWidget::Update(dt);
-	}
-
-	void UICustomDropDown::UpdateChildren(float dt)
-	{
-		UIWidget::UpdateChildren(dt);
-
-		mItemsList->Update(dt);
-		mItemsList->UpdateChildren(dt);
 	}
 
 	void UICustomDropDown::Draw()
@@ -229,12 +220,10 @@ namespace o2
 	{
 		const UICustomDropDown& other = dynamic_cast<const UICustomDropDown&>(otherActor);
 
-		delete mItemsList;
-
 		UIWidget::CopyData(other);
 
 		mItemsList = other.mItemsList->CloneAs<UICustomList>();
-		mItemsList->SetWeakParent(this, false);
+		mItemsList->SetInternalParent(this, false);
 		mItemsList->Hide(true);
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
 		mItemsList->SetMultiselectionAvailable(false);

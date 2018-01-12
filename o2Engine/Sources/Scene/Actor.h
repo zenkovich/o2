@@ -420,9 +420,6 @@ namespace o2
 		// Not using prototype setter
 		void SetProtytypeDummy(ActorAssetRef asset);
 
-		// Sets parent, but doesn't adds to parent's children
-		virtual void SetWeakParent(Actor* actor, bool worldPositionStays = true);
-
 		// Sets parent
 		void SetParentProp(Actor* actor);
 
@@ -858,7 +855,6 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, FindLinkedActor, UInt64);
 	PUBLIC_FUNCTION(Actor*, FindActorById, UInt64);
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
-	PROTECTED_FUNCTION(void, SetWeakParent, Actor*, bool);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
 	PROTECTED_FUNCTION(void, SetPrototype, ActorAssetRef);
 	PROTECTED_FUNCTION(void, UpdateEnabled);

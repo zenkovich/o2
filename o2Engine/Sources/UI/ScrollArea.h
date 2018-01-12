@@ -36,6 +36,9 @@ namespace o2
 		// Updates widget
 		void Update(float dt) override;
 
+		// Updates childs and dropdown list
+		void UpdateChildren(float dt) override;
+
 		// Sets scroll position
 		void SetScroll(const Vec2F& scroll);
 
@@ -102,9 +105,6 @@ namespace o2
 		// Updates layout
 		void UpdateTransform(bool withChildren = true) override;
 
-		// Updates childs, calculates scroll rectangle and updates scrollbars
-		void UpdateChildren(float dt) override;
-
 		// Updates children transforms, calculates scroll rectangle and updates scrollbars
 		void UpdateChildrenTransforms() override;
 
@@ -154,9 +154,6 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node) override;
 
-		// It is called when transformation was changed and updated
-		void OnTransformUpdated() override;
-
 		// It is called when child widget was added
 		void OnChildAdded(UIWidget* child) override;
 
@@ -165,9 +162,6 @@ namespace o2
 
 		// Checks widget clipping by area
 		void CheckClipping(const RectF& clipArea) override;
-
-		// Updates transparency for this and children widgets
-		void UpdateTransparency() override;
 
 		// Moves widget's to delta and checks for clipping
 		void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea) override;
@@ -189,9 +183,6 @@ namespace o2
 
 		// Check scroll bars showing
 		void CheckScrollBarsVisibility();
-
-		// Updates scrollbars layouts
-		void UpdateScrollBarsLayout();
 
 		// Checks children clippings
 		void CheckChildrenClipping();
@@ -252,6 +243,7 @@ CLASS_METHODS_META(o2::UIScrollArea)
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, SetScroll, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetScrollForcible, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetScroll);
@@ -274,16 +266,13 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetViewLayout);
 	PUBLIC_FUNCTION(void, UpdateTransform, bool);
-	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
-	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
@@ -291,7 +280,6 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PROTECTED_FUNCTION(void, UpdateScrollParams);
 	PROTECTED_FUNCTION(void, OnScrolled);
 	PROTECTED_FUNCTION(void, CheckScrollBarsVisibility);
-	PROTECTED_FUNCTION(void, UpdateScrollBarsLayout);
 	PROTECTED_FUNCTION(void, CheckChildrenClipping);
 	PROTECTED_FUNCTION(void, OnHorScrollChanged, float);
 	PROTECTED_FUNCTION(void, OnVerScrollChanged, float);

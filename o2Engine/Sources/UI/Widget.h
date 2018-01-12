@@ -71,6 +71,12 @@ namespace o2
 		// Updates layers, states and widget
 		void Update(float dt) override;
 
+		// Updates childs
+		void UpdateChildren(float dt) override;
+
+		// Updates children and internal children transforms
+		void UpdateChildrenTransforms() override;
+
 		// Sets layout dirty, and update it in update loop
 		void SetLayoutDirty();
 
@@ -219,6 +225,7 @@ namespace o2
 					   						    
 		UIWidget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null  @EXCLUDE_POINTER_SEARCH
 		WidgetsVec     mChildWidgets;           // Children widgets, a part of all children
+		WidgetsVec     mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children
 		WidgetsVec     mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
 
 		RectF          mChildrenWorldRect;      // World rectangle for children arranging
@@ -249,8 +256,8 @@ namespace o2
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
-		// Sets parent, but doesn't adds to parent's children
-		void SetWeakParent(Actor* actor, bool worldPositionStays = true) override;
+		// Sets parent,  doesn't adds to parent's children but adds to internal children
+		void SetInternalParent(UIWidget* parent, bool worldPositionStays = true);
 
 		// It is called when transformation was changed and updated
 		void OnTransformUpdated() override;
@@ -454,6 +461,7 @@ CLASS_FIELDS_META(o2::UIWidget)
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mParentWidget).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mChildWidgets);
+	PROTECTED_FIELD(mInternalWidgets);
 	PROTECTED_FIELD(mDrawingChildren);
 	PROTECTED_FIELD(mChildrenWorldRect);
 	PROTECTED_FIELD(mOverrideDepth).SERIALIZABLE_ATTRIBUTE();
@@ -479,6 +487,8 @@ CLASS_METHODS_META(o2::UIWidget)
 	typedef Dictionary<String, UIWidget*> _tmp2;
 
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, UpdateChildren, float);
+	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PUBLIC_FUNCTION(void, SetLayoutDirty);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);
@@ -523,7 +533,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, SetWeakParent, Actor*, bool);
+	PROTECTED_FUNCTION(void, SetInternalParent, UIWidget*, bool);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
