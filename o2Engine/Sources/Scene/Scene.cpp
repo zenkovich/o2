@@ -85,6 +85,12 @@ namespace o2
 					}
 
 					debugInfo += "\n";
+
+					if (widget)
+					{
+						for (auto child : widget->mInternalWidgets)
+							Process(debugInfo, child);
+					}
 				}
 
 				for (auto child : actor->mChildren)

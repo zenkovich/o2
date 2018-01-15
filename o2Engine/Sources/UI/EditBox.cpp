@@ -717,18 +717,6 @@ namespace o2
 			UpdateChildrenTransforms();
 
 		UpdateScrollParams();
-
-		RectF _mChildrenAbsRect = mChildrenWorldRect;
-		mChildrenWorldRect = layout->mData->worldRectangle;
-
-		if (mOwnHorScrollBar)
-			mHorScrollBar->UpdateTransform(true);
-
-		if (mOwnVerScrollBar)
-			mVerScrollBar->UpdateTransform(true);
-
-		mChildrenWorldRect = _mChildrenAbsRect;
-
 		UpdateSelectionAndCaret();
 	}
 
@@ -772,7 +760,8 @@ namespace o2
 
 	void UIEditBox::UpdateTransparency()
 	{
-		UIWidget::UpdateTransparency();
+		UIScrollArea::UpdateTransparency();
+
 		mTextDrawable->transparency = mResTransparency;
 
 		Color4 sc = mSelectionColor;

@@ -32,6 +32,8 @@ namespace o2
 			mHorScrollBar->SetInternalParent(this, false);
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
+
+			mEnableHorScroll = mHorScrollBar->IsVisible();
 		}
 		else mHorScrollBar = nullptr;
 
@@ -41,6 +43,8 @@ namespace o2
 			mVerScrollBar->SetInternalParent(this, false);
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
+
+			mEnableVerScroll = mVerScrollBar->IsVisible();
 		}
 		else mVerScrollBar = nullptr;
 
@@ -520,9 +524,19 @@ namespace o2
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
-		UIWidget::UpdateChildren(dt);
+		for (auto child : mChildren)
+			child->Update(dt);
+
+		for (auto child : mChildren)
+			child->UpdateChildren(dt);
 
 		mChildrenWorldRect = mAbsoluteViewArea;
+
+		for (auto child : mInternalWidgets)
+			child->Update(dt);
+
+		for (auto child : mInternalWidgets)
+			child->UpdateChildren(dt);
 
 		if (mLayoutUpdated)
 		{
@@ -772,6 +786,8 @@ namespace o2
 			mHorScrollBar->SetInternalParent(this, false);
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
+
+			mEnableHorScroll = mHorScrollBar->IsVisible();
 		}
 		else mHorScrollBar = nullptr;
 
@@ -781,6 +797,8 @@ namespace o2
 			mVerScrollBar->SetInternalParent(this, false);
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
+
+			mEnableVerScroll = mVerScrollBar->IsVisible();
 		}
 		else mVerScrollBar = nullptr;
 
@@ -808,12 +826,16 @@ namespace o2
 		{
 			if (mOwnHorScrollBar) delete mHorScrollBar;
 			else                  mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
+
+			mEnableHorScroll = mHorScrollBar->IsVisible();
 		}
 
 		if (mVerScrollBar)
 		{
 			if (mOwnVerScrollBar) delete mVerScrollBar;
 			else                  mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
+
+			mEnableVerScroll = mVerScrollBar->IsVisible();
 		}
 
 		auto horScrollNode = node.GetNode("mHorScrollBar");

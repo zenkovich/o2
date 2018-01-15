@@ -143,8 +143,7 @@ namespace o2
 	{
 		if (!mFullyDisabled)
 		{
-			auto frame = o2Time.GetCurrentFrame();
-			if (layout->mData->dirtyFrame == frame && layout->mData->updateFrame != frame)
+			if (layout->mData->updateFrame == 0)
 			{
 				for (auto child : mChildren)
 					child->transform->SetDirty(true);
@@ -695,7 +694,10 @@ namespace o2
 				mFullyDisabled = !mResVisible;
 
 			if (updateLayout)
+			{
+				o2Debug.Log("Dirty: " + mName);
 				SetLayoutDirty();
+			}
 
 			if (mResVisible)
 				onShow();

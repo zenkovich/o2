@@ -395,8 +395,7 @@ namespace o2
 
 	bool ActorTransform::IsDirty() const
 	{
-		auto frame = o2Time.GetCurrentFrame();
-		return mData->dirtyFrame == frame && mData->updateFrame != frame;
+		return mData->updateFrame == 0;
 	}
 
 	void ActorTransform::SetWorldPivot(const Vec2F& pivot)
@@ -671,6 +670,7 @@ namespace o2
 	void ActorTransform::SetDirty(bool fromParent /*= true*/)
 	{
 		mData->dirtyFrame = o2Time.GetCurrentFrame();
+		mData->updateFrame = 0;
 
 		if (mData->owner)
 			mData->owner->OnChanged();

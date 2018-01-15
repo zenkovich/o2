@@ -200,8 +200,7 @@ namespace o2
 
 	void Actor::Update(float dt)
 	{
-		auto frame = o2Time.GetCurrentFrame();
-		if (transform->mData->dirtyFrame == frame && transform->mData->updateFrame != frame)
+		if (transform->mData->updateFrame == 0)
 		{
 			for (auto child : mChildren)
 				child->transform->SetDirty(true);

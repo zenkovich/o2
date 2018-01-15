@@ -44,7 +44,7 @@ void UITestScreen::Load()
 	auto window = o2UI.CreateWindow("UI elements samples");
 	*window->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(400, 400));
 	window->name = "UI elements window";
-	window->SetEnableScrollsHiding(false);
+	//window->SetEnableScrollsHiding(false);
 
 	auto verLayout = o2UI.CreateVerLayout();
 	*verLayout->layout = UIWidgetLayout::BothStretch();
