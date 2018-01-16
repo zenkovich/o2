@@ -32,9 +32,6 @@ namespace o2
 		// Copy operator
 		UICustomDropDown& operator=(const UICustomDropDown& other);
 
-		// Updates drawables, states and widget
-		void Update(float dt) override;
-
 		// Draws widget
 		void Draw() override;
 
@@ -128,6 +125,9 @@ namespace o2
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
+		// Moves widget's to delta and checks for clipping
+		void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea) override;
+
 		// It is called when cursor pressed on this. Sets state "pressed" to true
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
@@ -186,7 +186,6 @@ CLASS_METHODS_META(o2::UICustomDropDown)
 
 	typedef const Function<bool(UIWidget*, UIWidget*)>& _tmp1;
 
-	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
@@ -215,6 +214,7 @@ CLASS_METHODS_META(o2::UICustomDropDown)
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);

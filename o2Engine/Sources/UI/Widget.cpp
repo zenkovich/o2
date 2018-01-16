@@ -694,10 +694,7 @@ namespace o2
 				mFullyDisabled = !mResVisible;
 
 			if (updateLayout)
-			{
-				o2Debug.Log("Dirty: " + mName);
 				SetLayoutDirty();
-			}
 
 			if (mResVisible)
 				onShow();

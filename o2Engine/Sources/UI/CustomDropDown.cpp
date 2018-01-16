@@ -45,11 +45,6 @@ namespace o2
 		return *this;
 	}
 
-	void UICustomDropDown::Update(float dt)
-	{
-		UIWidget::Update(dt);
-	}
-
 	void UICustomDropDown::Draw()
 	{
 		if (mFullyDisabled)
@@ -88,6 +83,7 @@ namespace o2
 
 		mItemsList->SetVisible(true);
 		mItemsList->UpdateTransform(true);
+
 		SetLayoutDirty();
 	}
 
@@ -232,6 +228,23 @@ namespace o2
 		mMaxListItems = other.mMaxListItems;
 
 		RetargetStatesAnimations();
+	}
+
+	void UICustomDropDown::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
+	{
+		RectF last = mBoundsWithChilds;
+
+		mBoundsWithChilds += delta;
+		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
+
+		if (!mIsClipped)
+			UpdateTransform(false);
+
+		for (auto child : mChildWidgets)
+			child->MoveAndCheckClipping(delta, clipArea);
+
+		if (IsExpanded())
+			Collapse();
 	}
 
 	void UICustomDropDown::OnCursorPressed(const Input::Cursor& cursor)
