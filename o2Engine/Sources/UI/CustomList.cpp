@@ -371,6 +371,7 @@ namespace o2
 	void UICustomList::MoveScrollPosition(const Vec2F& delta)
 	{
 		UIScrollArea::MoveScrollPosition(delta);
+		UpdateHover(o2Input.GetCursorPos());
 		UpdateSelectionSprites();
 	}
 
@@ -380,6 +381,7 @@ namespace o2
 	void UICustomList::OnTransformUpdated()
 	{
 		UIScrollArea::OnTransformUpdated();
+		UpdateHover(o2Input.GetCursorPos());
 		UpdateSelectionSprites();
 	}
 
@@ -400,6 +402,7 @@ namespace o2
 		{
 			UIWidget* item = GetItem(sel.idx);
 			sel.selection->SetRect(mSelectionLayout.Calculate(item->layout->worldRect));
+			sel.selection->SetEnabled(!item->mFullyDisabled && !item->mIsClipped);
 		}
 	}
 
@@ -424,6 +427,9 @@ namespace o2
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
+
+		if (!mMultiSelection || !o2Input.IsKeyDown(VK_CONTROL))
+			ClearSelection();
 
 		int itemIdx = -1;
 		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);

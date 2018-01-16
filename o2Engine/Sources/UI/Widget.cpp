@@ -976,10 +976,13 @@ namespace o2
 		mTransparency = oldTransparency;
 		mParent = oldParent;
 		mParentWidget = oldParentWidget;
-		mIsClipped = oldClipped;
+		mIsClipped = false;
 		mFullyDisabled = oldDisabled;
 
-		UpdateTransform(true);
+		UIWidget::UpdateTransform(true);
+		layout->mData->dirtyFrame = o2Time.GetCurrentFrame();
+		UpdateBounds();
+		UpdateBoundsWithChilds();
 		UpdateTransparency();
 	}
 
