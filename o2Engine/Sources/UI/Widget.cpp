@@ -954,13 +954,17 @@ namespace o2
 		Vec2F oldLayoutOffsetMax = layout->mData->offsetMax;
 		float oldTransparency = mTransparency;
 		auto oldParent = mParent;
+		auto oldParentWidget = mParentWidget;
 		bool oldClipped= mIsClipped;
+		bool oldDisabled = mFullyDisabled;
 
 		layout->mData->offsetMin = area.LeftBottom();
 		layout->mData->offsetMax = area.RightTop();
 		mTransparency = transparency;
 		mParent = nullptr;
+		mParentWidget = nullptr;
 		mIsClipped = false;
+		mFullyDisabled = false;
 
 		UIWidget::UpdateTransform(true);
 		UpdateTransparency();
@@ -971,7 +975,9 @@ namespace o2
 		layout->mData->offsetMax = oldLayoutOffsetMax;
 		mTransparency = oldTransparency;
 		mParent = oldParent;
+		mParentWidget = oldParentWidget;
 		mIsClipped = oldClipped;
+		mFullyDisabled = oldDisabled;
 
 		UpdateTransform(true);
 		UpdateTransparency();
