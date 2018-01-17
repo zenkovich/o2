@@ -52,6 +52,12 @@ namespace o2
 		return mDrawingDepth;
 	}
 
+	void SceneDrawable::SetLastOnCurrentDepth()
+	{
+		if (mLayer)
+			mLayer->SetLastByDepth(this);
+	}
+
 	void SceneDrawable::SetLayer(SceneLayer* newLayer)
 	{
 		if (mLayer)

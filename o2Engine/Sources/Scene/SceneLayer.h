@@ -56,6 +56,9 @@ namespace o2
 		// It is called when object was enabled
 		void DrawableDisabled(SceneDrawable* drawable);
 
+		// Sets drawable order as last of all objects with same depth
+		void SetLastByDepth(SceneDrawable* drawable);
+
 		friend class Actor;
 		friend class DrawableComponent;
 		friend class Scene;
@@ -92,5 +95,6 @@ CLASS_METHODS_META(o2::SceneLayer)
 	PROTECTED_FUNCTION(void, DrawableDepthChanged, SceneDrawable*);
 	PROTECTED_FUNCTION(void, DrawableEnabled, SceneDrawable*);
 	PROTECTED_FUNCTION(void, DrawableDisabled, SceneDrawable*);
+	PROTECTED_FUNCTION(void, SetLastByDepth, SceneDrawable*);
 }
 END_META;

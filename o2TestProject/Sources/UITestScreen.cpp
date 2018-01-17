@@ -167,8 +167,6 @@ void UITestScreen::Load()
 	dropdownContainer->AddChild(dropdown);
 	verLayout->AddChild(dropdownContainer);
 
-	return;
-
 	// label test window
 	auto labelTestWindow = o2UI.CreateWindow("Label test");
 	auto testLabel = o2UI.CreateLabel("Label text multi line Label text multi line\nLabel text multi line\nLabel text multi lineLabel text multi line\nLabel text multi line");

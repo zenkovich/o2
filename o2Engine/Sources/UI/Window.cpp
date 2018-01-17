@@ -363,6 +363,8 @@ namespace o2
 		if (mParent)
 			mParent->SetPositionIndexInParent(mParent->GetChildren().Count() - 1);
 
+		SetLastOnCurrentDepth();
+
 		onFocused();
 	}
 

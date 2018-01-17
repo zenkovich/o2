@@ -39,6 +39,9 @@ namespace o2
 		// Returns drawing depth
 		float GetDrawingDepth() const;
 
+		// Sets this drawable as last drawing object in layer with same depth
+		void SetLastOnCurrentDepth();
+
 		// Sets layer
 		void SetLayer(SceneLayer* layer);
 
@@ -82,6 +85,7 @@ CLASS_METHODS_META(o2::SceneDrawable)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
 	PUBLIC_FUNCTION(float, GetDrawingDepth);
+	PUBLIC_FUNCTION(void, SetLastOnCurrentDepth);
 	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(void, OnIncludeToScene);

@@ -85,6 +85,23 @@ namespace o2
 	{
 		mEnabledDrawables.Remove(drawable);
 	}
+
+	void SceneLayer::SetLastByDepth(SceneDrawable* drawable)
+	{
+		DrawableDisabled(drawable);
+
+		for (int position = 0; position < mEnabledDrawables.Count(); position++)
+		{
+			if (mEnabledDrawables[position]->mDrawingDepth > drawable->mDrawingDepth)
+			{
+				mEnabledDrawables.Insert(drawable, position);
+				return;
+			}
+		}
+
+		mEnabledDrawables.Add(drawable);
+	}
+
 }
 
 DECLARE_CLASS(o2::SceneLayer);
