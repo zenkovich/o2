@@ -123,10 +123,13 @@ namespace o2
 			mSelectionDrawable->SetRect(mCurrentSelectionRect);
 		}
 
-		if (!mChildContextMenu && (o2Input.IsCursorPressed() || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
-			!layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && mVisible)
+		if (o2Input.IsCursorPressed())
 		{
-			HideWithParent();
+			if (!mChildContextMenu && (o2Input.IsCursorPressed() || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
+				!layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && mVisible)
+			{
+				HideWithParent();
+			}
 		}
 
 		if (mSelectSubContextTime >= 0.0f)
@@ -137,6 +140,8 @@ namespace o2
 			{
 				if (mChildContextMenu)
 					mChildContextMenu->HideWithChild();
+
+				mChildContextMenu = nullptr;
 
 				if (mSelectedItem && mSelectedItem->GetSubMenu())
 					mSelectedItem->GetSubMenu()->Show(this, mSelectedItem->layout->worldRightTop);
