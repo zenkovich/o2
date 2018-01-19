@@ -320,6 +320,20 @@ namespace o2
 		mPressedTime += dt;
 	}
 
+	void UITree::UpdateChildren(float dt)
+	{
+		UIScrollArea::UpdateChildren(dt);
+
+		if (mLayoutUpdated)
+			UpdateVisibleNodes();
+	}
+
+	void UITree::UpdateChildrenTransforms()
+	{
+		UIScrollArea::UpdateChildrenTransforms();
+		UpdateVisibleNodes();
+	}
+
 	UnknownPtr UITree::GetObjectParent(UnknownPtr object)
 	{
 		return getObjectParentDelegate(object);

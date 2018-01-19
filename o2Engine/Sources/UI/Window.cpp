@@ -51,8 +51,6 @@ namespace o2
 
 	UIWindow::~UIWindow()
 	{
-		for (auto elem : mWindowElements)
-			delete elem;
 	}
 
 	UIWindow& UIWindow::operator=(const UIWindow& other)

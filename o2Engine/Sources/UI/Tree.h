@@ -65,6 +65,12 @@ namespace o2
 		// Updates widget
 		void Update(float dt) override;
 
+		// Updates childs
+		void UpdateChildren(float dt) override;
+
+		// Updates children and internal children transforms
+		void UpdateChildrenTransforms() override;
+
 		// Rebuilds all tree
 		void UpdateNodesView(bool immediately = true);
 
@@ -611,6 +617,8 @@ CLASS_METHODS_META(o2::UITree)
 	PUBLIC_FUNCTION(void, OnObjectsChanged, const UnknownPtrsVec&);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, UpdateChildren, float);
+	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PUBLIC_FUNCTION(void, UpdateNodesView, bool);
 	PUBLIC_FUNCTION(UITreeNode*, GetNode, UnknownPtr);
 	PUBLIC_FUNCTION(void, ExpandAll);
