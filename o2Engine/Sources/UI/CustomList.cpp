@@ -124,7 +124,9 @@ namespace o2
 	{
 		RemoveAllItems();
 
-		delete mItemSample;
+		if (mItemSample)
+			delete mItemSample;
+
 		mItemSample = sample;
 
 		SetLayoutDirty();

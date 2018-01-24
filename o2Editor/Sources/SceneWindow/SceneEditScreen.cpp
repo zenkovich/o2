@@ -132,7 +132,7 @@ namespace Editor
 	void SceneEditScreen::RedrawContent()
 	{
 		DrawGrid();
-		DrawActors();
+ 		DrawActors();
 		DrawSelection();
 
 		if (mEnabledTool)
@@ -145,8 +145,12 @@ namespace Editor
 	void SceneEditScreen::DrawActors()
 	{
 		for (auto layer : o2Scene.GetLayers())
-			for (auto drw : layer->GetDrawables())
+		{
+			for (auto drw : layer->GetEnabledDrawables())
+			{
 				drw->Draw();
+			}
+		}
 	}
 
 	void SceneEditScreen::DrawSelection()

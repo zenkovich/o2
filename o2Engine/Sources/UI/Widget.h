@@ -219,6 +219,7 @@ namespace o2
 
 	protected:
 		using Actor::mLayer;
+		using Actor::mIsOnScene;
 					   						    
 		LayersVec      mLayers;                 // Layers array @SERIALIZABLE
 		StatesVec      mStates;                 // States array @SERIALIZABLE

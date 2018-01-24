@@ -28,17 +28,19 @@ namespace o2
 
 		if (Scene::IsSingletonInitialzed())
 		{
+			mLayer = o2Scene.GetDefaultLayer();
+
 			if (mode == ActorCreateMode::InScene ||
 				(mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
 			{
 				o2Scene.mRootActors.Add(this);
 				o2Scene.mAllActors.Add(this);
+				mLayer->mEnabledActors.Add(this);
+
 				mIsOnScene = true;
 			}
 
-			mLayer = o2Scene.GetDefaultLayer();
 			mLayer->mActors.Add(this);
-			mLayer->mEnabledActors.Add(this);
 
 			o2Scene.onActorCreated(this);
 		}
@@ -87,8 +89,8 @@ namespace o2
 	}
 
 	Actor::Actor(ActorTransform* transform, const Actor& other):
-		Actor(transform, true, other.mName, other.mEnabled, other.mEnabled, other.mLocked,
-			  other.mLocked, other.mLayer, Math::Random(), other.mAssetId)
+		Actor(transform, mDefaultCreationMode == ActorCreateMode::InScene, other.mName, other.mEnabled, 
+			  other.mEnabled, other.mLocked, other.mLocked, other.mLayer, Math::Random(), other.mAssetId)
 	{
 		transform->SetOwner(this);
 
@@ -167,7 +169,8 @@ namespace o2
 		if (mLayer)
 		{
 			mLayer->mActors.Remove(this);
-			if (mResEnabled)
+
+			if (mResEnabled && mIsOnScene)
 				mLayer->mEnabledActors.Remove(this);
 		}
 
@@ -429,10 +432,16 @@ namespace o2
 		if (!Scene::IsSingletonInitialzed())
 			return;
 
+		if (mLayer && mResEnabled)
+			mLayer->mEnabledActors.Remove(this);
+
 		o2Scene.mRootActors.Remove(this);
 		o2Scene.mAllActors.Remove(this);
+
 		OnExcludeFromScene();
+
 		ExcludeComponentsFromScene();
+
 		mIsOnScene = false;
 
 		for (auto child : mChildren)
@@ -447,9 +456,15 @@ namespace o2
 		if (!mParent)
 			o2Scene.mRootActors.Add(this);
 
+		if (mLayer && mResEnabled)
+			mLayer->mEnabledActors.Add(this);
+
 		o2Scene.mAllActors.Add(this);
+
 		mIsOnScene = true;
+
 		OnIncludeToScene();
+
 		IncludeComponentsToScene();
 
 		for (auto child : mChildren)
@@ -808,6 +823,9 @@ namespace o2
 
 	void Actor::SetLayer(SceneLayer* layer)
 	{
+		if (layer == mLayer)
+			return;
+
 		SceneLayer* lastLayer = mLayer;
 
 		if (layer == nullptr)
@@ -816,17 +834,17 @@ namespace o2
 		mLayer = layer;
 
 		if (lastLayer)
+		{
 			lastLayer->mActors.Remove(this);
+
+			if (mResEnabled && mIsOnScene)
+				lastLayer->mEnabledActors.Remove(this);
+		}
 
 		layer->mActors.Add(this);
 
-		if (mResEnabled)
-		{
-			if (lastLayer)
-				lastLayer->mEnabledActors.Remove(this);
-
+		if (mResEnabled && mIsOnScene)
 			layer->mEnabledActors.Add(this);
-		}
 
 		OnLayerChanged(lastLayer);
 

@@ -60,12 +60,15 @@ namespace o2
 
 	void SceneDrawable::SetLayer(SceneLayer* newLayer)
 	{
-		if (mLayer)
+		if (newLayer == mLayer)
+			return;
+
+		if (mLayer && mIsOnScene)
 			mLayer->UnregisterDrawable(this);
 
 		mLayer = newLayer;
 
-		if (mLayer)
+		if (mLayer && mIsOnScene)
 			mLayer->RegisterDrawable(this);
 	}
 
@@ -73,12 +76,16 @@ namespace o2
 	{
 		if (mLayer)
 			mLayer->UnregisterDrawable(this);
+
+		mIsOnScene = false;
 	}
 
 	void SceneDrawable::OnIncludeToScene()
 	{
 		if (mLayer)
 			mLayer->RegisterDrawable(this);
+
+		mIsOnScene = true;
 	}
 
 	void SceneDrawable::InitializeProperties()

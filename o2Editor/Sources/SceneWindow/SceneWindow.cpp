@@ -34,7 +34,7 @@ namespace Editor
 
 		mEditWidget = mnew SceneEditScreen();
 		*mEditWidget->layout = UIWidgetLayout::BothStretch(0, 0, 0, 19);
-		//mWindow->AddChild(mEditWidget);
+		mWindow->AddChild(mEditWidget);
 
 		UIWidget* upPanel = mnew UIWidget();
 		upPanel->name = "up panel";

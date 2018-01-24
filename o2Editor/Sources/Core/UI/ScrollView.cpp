@@ -80,20 +80,6 @@ namespace Editor
 	void UIScrollView::UpdateTransform(bool withChildren /*= true*/)
 	{
 		UIWidget::UpdateTransform(withChildren);
-
-		if (!mReady)
-			return;
-
-		Vec2I size = layout->size.Get();
-		size.x = Math::Max(size.x, 32);
-		size.y = Math::Max(size.y, 32);
-
-		mRenderTarget = TextureRef(size, Texture::Format::Default, Texture::Usage::RenderTarget);
-		*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
-		mRenderTargetSprite->SetRect(layout->worldRect);
-		mNeedRedraw = true;
-
-		mViewCamera.size = size;
 	}
 
 	bool UIScrollView::IsUnderPoint(const Vec2F& point)
@@ -129,6 +115,23 @@ namespace Editor
 		RetargetStatesAnimations();
 
 		mReady = true;
+	}
+
+	void UIScrollView::OnTransformUpdated()
+	{
+		if (!mReady)
+			return;
+
+		Vec2I size = layout->size.Get();
+		size.x = Math::Max(size.x, 32);
+		size.y = Math::Max(size.y, 32);
+
+		mRenderTarget = TextureRef(size, Texture::Format::Default, Texture::Usage::RenderTarget);
+		*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
+		mRenderTargetSprite->SetRect(layout->worldRect);
+		mNeedRedraw = true;
+
+		mViewCamera.size = size;
 	}
 
 	void UIScrollView::UpdateTransparency()
@@ -290,7 +293,8 @@ namespace Editor
 	}
 
 	void UIScrollView::OnCameraTransformChanged()
-	{}
+	{
+	}
 
 	void UIScrollView::OnScrolled(float scroll)
 	{

@@ -16,6 +16,7 @@ namespace o2
 		Actor(mnew UIWidgetLayout(), mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
+		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
 		if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
 			&& mLayer)
@@ -52,6 +53,7 @@ namespace o2
 		Actor(mnew UIWidgetLayout(), components, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
+		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
 		if ((mode == ActorCreateMode::InScene || mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
 			&& mLayer)
@@ -71,6 +73,7 @@ namespace o2
 		mTransparency(other.mTransparency), mVisible(other.mVisible), mFullyDisabled(!other.mVisible)
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
+		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 		layout->SetOwner(this);
 
 		for (auto layer : other.mLayers)
@@ -875,7 +878,7 @@ namespace o2
 			else
 				ExcludeFromScene();
 		}
-		else IncludeInScene();
+		else if (mParent && mParent->IsOnScene()) IncludeInScene();
 	}
 
 	void UIWidget::OnChildAdded(Actor* child)
@@ -931,6 +934,9 @@ namespace o2
 	void UIWidget::OnDeserialized(const DataNode& node)
 	{
 		Actor::OnDeserialized(node);
+
+		SceneDrawable::mLayer = Actor::mLayer;
+		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
 		for (auto layer : mLayers)
 			layer->mOwnerWidget = this;
@@ -1028,6 +1034,7 @@ namespace o2
 		mFocusedState = nullptr;
 
 		SceneDrawable::mLayer = Actor::mLayer;
+		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
 		layout->CopyFrom(*other.layout);
 		mTransparency = other.mTransparency;

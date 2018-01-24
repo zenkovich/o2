@@ -2427,8 +2427,16 @@ namespace Editor
 			if (func->GetName() == "RebuildBasicUIManager" || func->GetName() == "RebuildEditorUIManager")
 				continue;
 
+			auto oldEnabled = o2Scene.GetDefaultLayer()->GetEnabledDrawables().Count();
+
 			timer.Reset();
 			func->Invoke<void>(this);
+
+			if (oldEnabled != o2Scene.GetDefaultLayer()->GetEnabledDrawables().Count())
+			{
+				o2Debug.Log("!!!");
+				func->Invoke<void>(this);
+			}
 
 			o2Debug.Log(func->GetName() + " for " + (String)timer.GetDeltaTime() + " sec");
 		}

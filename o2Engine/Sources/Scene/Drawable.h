@@ -49,6 +49,7 @@ namespace o2
 
 	protected:
 		SceneLayer* mLayer = nullptr;     // Scene layer, where this will be drawn @EXCLUDE_POINTER_SEARCH
+		bool        mIsOnScene = false;   // Is drawable on scene
 		float       mDrawingDepth = 0.0f; // Drawing depth. Objects with higher depth will be drawn later @SERIALIZABLE
 
 	protected:
@@ -76,6 +77,7 @@ CLASS_FIELDS_META(o2::SceneDrawable)
 {
 	PUBLIC_FIELD(drawDepth);
 	PROTECTED_FIELD(mLayer).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
+	PROTECTED_FIELD(mIsOnScene);
 	PROTECTED_FIELD(mDrawingDepth).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
