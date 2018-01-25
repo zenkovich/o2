@@ -215,6 +215,9 @@ namespace o2
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point);
 
+		// Sets index position in parent or scene
+		void SetPositionIndexInParent(int index) override;
+
 		SERIALIZABLE(UIWidget);
 
 	protected:
@@ -533,6 +536,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetPositionIndexInParent, int);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, SetInternalParent, UIWidget*, bool);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);

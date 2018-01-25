@@ -128,7 +128,7 @@ namespace o2
 
 	public:
 		// Default constructor
-		Actor(ActorCreateMode mode = ActorCreateMode::InScene);
+		Actor(ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Actor constructor from prototype
 		Actor(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
@@ -245,7 +245,7 @@ namespace o2
 		bool IsLockedInHierarchy() const;
 
 		// Sets index position in parent or scene
-		void SetPositionIndexInParent(int index);
+		virtual void SetPositionIndexInParent(int index);
 
 		// Sets parent
 		void SetParent(Actor* actor, bool worldPositionStays = true);

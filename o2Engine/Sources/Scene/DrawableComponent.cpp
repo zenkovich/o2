@@ -52,11 +52,24 @@ namespace o2
 	void DrawableComponent::SetOwnerActor(Actor* actor)
 	{
 		SceneDrawable::SetLayer(actor->mLayer);
-		Component::SetOwnerActor(actor);
+
+		if (mOwner)
+		{
+			mOwner->mComponents.Remove(this);
+
+			if (mOwner->mIsOnScene)
+				mOwner->mLayer->UnregisterDrawable(this);
+		}
+
+		mOwner = actor;
 
 		if (mOwner)
 		{
 			mOwner->mComponents.Add(this);
+
+			if (mOwner->mIsOnScene)
+				mOwner->mLayer->RegisterDrawable(this);
+
 			OnTransformUpdated();
 		}
 	}

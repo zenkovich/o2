@@ -54,7 +54,7 @@ namespace o2
 
 	void SceneDrawable::SetLastOnCurrentDepth()
 	{
-		if (mLayer)
+		if (mLayer && mIsOnScene)
 			mLayer->SetLastByDepth(this);
 	}
 

@@ -615,6 +615,24 @@ namespace o2
 		return mDrawingScissorRect.IsInside(point) && layout->IsPointInside(point);
 	}
 
+	void UIWidget::SetPositionIndexInParent(int index)
+	{
+		Actor::SetPositionIndexInParent(index);
+
+		if (mParentWidget)
+		{
+			mParentWidget->mChildWidgets.Clear();
+			for (auto child : mParentWidget->mChildren)
+			{
+				UIWidget* widget = dynamic_cast<UIWidget*>(child);
+				if (widget)
+					mParentWidget->mChildWidgets.Add(widget);
+			}
+
+			mParentWidget->UpdateDrawingChildren();
+		}
+	}
+
 	float UIWidget::GetMinWidthWithChildren() const
 	{
 		return layout->mData->minSize.x;

@@ -317,7 +317,7 @@ namespace Editor
 
 	void UIDockableWindow::OnFocused()
 	{
-		onFocused();
+		UIWindow::OnFocused();
 
 		if (mTabState)
 		{
