@@ -50,6 +50,11 @@ namespace o2
 		return mType;
 	}
 
+	const Type* FieldInfo::GetOwnerType() const
+	{
+		return mOwnerType;
+	}
+
 	const FieldInfo::AttributesVec& FieldInfo::GetAttributes() const
 	{
 		return mAttributes;

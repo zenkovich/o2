@@ -80,6 +80,9 @@ namespace o2
 		// Returns type
 		const Type* GetType() const;
 
+		// Returns field owner type
+		const Type* GetOwnerType() const;
+
 		// Returns value of field in specified object
 		template<typename _type>
 		_type GetValue(void* object) const;
@@ -130,6 +133,7 @@ namespace o2
 		ProtectSection         mProtectSection = ProtectSection::Public; // Protection section
 		String                 mName;                                    // Name of field
 		const Type*            mType = nullptr;                          // Field type
+		Type*                  mOwnerType = nullptr;                     // Field owner type
 		AttributesVec          mAttributes;                              // Attributes array
 		IFieldSerializer*      mSerializer = nullptr;                    // field serializer
 		GetValuePointerFuncPtr mPointerGetter = nullptr;                 // Value pointer getter function

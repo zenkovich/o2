@@ -138,6 +138,9 @@ namespace o2
 		// Creates sample copy and returns him
 		void* CreateSample() const;
 
+		// Casts object from type to this type
+		void* DynamicCast(void* object, const Type& type) const;
+
 		// Returns filed pointer by path
 		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
 
@@ -867,8 +870,11 @@ namespace o2
 			FieldInfo::FieldSerializer<_type>,
 			FieldInfo::IFieldSerializer>::type serializerType;
 
-		type->mFields.Add(new FieldInfo(name, pointerGetter, valType, section, new serializerType()));
-		return *type->mFields.Last();
+		auto fieldInfo = new FieldInfo(name, pointerGetter, valType, section, new serializerType());
+		fieldInfo->mOwnerType = type;
+		type->mFields.Add(fieldInfo);
+
+		return *fieldInfo;
 	}
 
 	template<typename _class_type, typename _res_type, typename ... _args>

@@ -32,8 +32,9 @@ namespace Editor
 			Vector<Pair<void*, void*>> fieldPointers = targets.Select<Pair<void*, void*>>(
 				[&](const Pair<IObject*, IObject*>& x)
 			{
-				return Pair<void*, void*>(kv.Key()->GetValuePtrStrong(x.first),
-										  x.second ? kv.Key()->GetValuePtrStrong(x.second) : nullptr);
+				const Type& type = *kv.Key()->GetOwnerType();
+				return Pair<void*, void*>(type.DynamicCast(kv.Key()->GetValuePtrStrong(x.first), x.first->GetType()),
+										  x.second ? type.DynamicCast(kv.Key()->GetValuePtrStrong(x.second), x.second->GetType()) : nullptr);
 			});
 
 			kv.Value()->SetValueAndPrototypePtr(fieldPointers, kv.Key()->GetType()->GetUsage() == Type::Usage::Property);

@@ -154,6 +154,50 @@ namespace o2
 		return mSampleCreator->CreateSample();
 	}
 
+	void* Type::DynamicCast(void* object, const Type& type) const
+	{
+		struct helper
+		{
+			static void* CastDown(void* object, const Type& from, const Type& to)
+			{
+				for (auto baseType : from.GetBaseTypes())
+				{
+					if (*baseType.type != to)
+					{
+						if (void* result = CastDown((*baseType.dynamicCastFunc)(object), *baseType.type, to))
+							return result;
+					}
+
+					return (*baseType.dynamicCastFunc)(object);
+				}
+
+				return nullptr;
+			}
+
+			static void* CastUp(void* object, const Type& from, const Type& to)
+			{
+				for (auto baseType : to.GetBaseTypes())
+				{
+					if (*baseType.type != to)
+					{
+						if (void* result = CastUp((*baseType.dynamicCastFunc)(object), *baseType.type, to))
+							return result;
+					}
+
+					return (*baseType.dynamicCastFunc)(object);
+				}
+
+				return nullptr;
+			}
+		};
+
+		void* result = helper::CastDown(object, type, *this);
+		if (result != nullptr)
+			return result;
+
+		return helper::CastUp(object, type, *this);
+	}
+
 	String Type::GetFieldPath(void* object, void *targetObject, FieldInfo*& fieldInfo) const
 	{
 		if (object == targetObject)
