@@ -120,6 +120,11 @@ namespace o2
 
 	UIWidget::~UIWidget()
 	{
+		if (mParent)
+		{
+			mParent->OnChildRemoved(this);
+		}
+
 		for (auto layer : mLayers)
 			delete layer;
 
@@ -127,7 +132,12 @@ namespace o2
 			delete state;
 
 		for (auto child : mInternalWidgets)
+		{
+			child->mParent = nullptr;
+			child->mParentWidget = nullptr;
+
 			delete child;
+		}
 
 		if (mLayer && mIsOnScene)
 			mLayer->UnregisterDrawable(this);

@@ -191,6 +191,16 @@
         </Expand>
       </Synthetic>
 
+      <Synthetic Name="internal children">
+        <DisplayString>count={mInternalWidgets.mCount}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mInternalWidgets.mCount</Size>
+            <ValuePointer>mInternalWidgets.mValues</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
       <ArrayItems>
         <Size>mChildWidgets.mCount</Size>
         <ValuePointer>mChildWidgets.mValues</ValuePointer>

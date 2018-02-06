@@ -573,6 +573,7 @@ namespace o2
 		friend class Scene;
 		friend class SceneLayer;
 		friend class Tag;
+		friend class UIWidget;
 	};
 
 	// -------------------------

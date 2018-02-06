@@ -57,7 +57,7 @@ namespace Editor
 	void DefaultActorComponentViewer::Refresh()
 	{
 		mFieldProperties.Set(mTargetComponents.Select<Pair<IObject*, IObject*>>([](Component* x) {
-			return Pair<IObject*, IObject*>(x, x->GetPrototypeLink()); 
+			return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink())); 
 		}));
 	}
 

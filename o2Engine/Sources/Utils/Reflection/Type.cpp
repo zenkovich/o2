@@ -154,50 +154,6 @@ namespace o2
 		return mSampleCreator->CreateSample();
 	}
 
-	void* Type::DynamicCast(void* object, const Type& type) const
-	{
-		struct helper
-		{
-			static void* CastDown(void* object, const Type& from, const Type& to)
-			{
-				for (auto baseType : from.GetBaseTypes())
-				{
-					if (*baseType.type != to)
-					{
-						if (void* result = CastDown((*baseType.dynamicCastFunc)(object), *baseType.type, to))
-							return result;
-					}
-
-					return (*baseType.dynamicCastFunc)(object);
-				}
-
-				return nullptr;
-			}
-
-			static void* CastUp(void* object, const Type& from, const Type& to)
-			{
-				for (auto baseType : to.GetBaseTypes())
-				{
-					if (*baseType.type != to)
-					{
-						if (void* result = CastUp((*baseType.dynamicCastFunc)(object), *baseType.type, to))
-							return result;
-					}
-
-					return (*baseType.dynamicCastFunc)(object);
-				}
-
-				return nullptr;
-			}
-		};
-
-		void* result = helper::CastDown(object, type, *this);
-		if (result != nullptr)
-			return result;
-
-		return helper::CastUp(object, type, *this);
-	}
-
 	String Type::GetFieldPath(void* object, void *targetObject, FieldInfo*& fieldInfo) const
 	{
 		if (object == targetObject)
@@ -248,7 +204,7 @@ namespace o2
 
 		for (auto baseType : mBaseTypes)
 		{
-			auto baseRes = baseType.type->SearchFieldPath((*baseType.dynamicCastFunc)(obj), target, path, res, passedObjects);
+			auto baseRes = baseType.type->SearchFieldPath((*baseType.dynamicCastUpFunc)(obj), target, path, res, passedObjects);
 			if (baseRes)
 				return baseRes;
 		}
@@ -284,7 +240,7 @@ namespace o2
 
 		for (auto baseType : mBaseTypes)
 		{
-			if (auto res = baseType.type->GetFieldPtr((*baseType.dynamicCastFunc)(object), path, fieldInfo))
+			if (auto res = baseType.type->GetFieldPtr((*baseType.dynamicCastUpFunc)(object), path, fieldInfo))
 				return res;
 		}
 

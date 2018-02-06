@@ -15,15 +15,13 @@ namespace Editor
 
 		mHorScrollbar = mnew UIHorizontalScrollBar();
 		*mHorScrollbar->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
-		mHorScrollbar->SetParent(this);
+		mHorScrollbar->SetInternalParent(this);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
-		mChildren.Remove(mHorScrollbar);
 
 		mVerScrollbar = mnew UIVerticalScrollBar();
 		*mVerScrollbar->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 0, 20);
-		mVerScrollbar->SetParent(this);
+		mVerScrollbar->SetInternalParent(this);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
-		mChildren.Remove(mVerScrollbar);
 
 		mReady = true;
 	}
@@ -35,13 +33,11 @@ namespace Editor
 	{
 		mReady = false;
 
-		mHorScrollbar->SetParent(this);
+		mHorScrollbar->SetInternalParent(this);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
-		mChildren.Remove(mHorScrollbar);
 
-		mVerScrollbar->SetParent(this);
+		mVerScrollbar->SetInternalParent(this);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
-		mChildren.Remove(mVerScrollbar);
 
 		RetargetStatesAnimations();
 
@@ -102,8 +98,7 @@ namespace Editor
 	{
 		delete mHorScrollbar;
 		mHorScrollbar = scrollbar;
-		AddChild(mHorScrollbar);
-		mChildren.Remove(mHorScrollbar);
+		mHorScrollbar->SetInternalParent(this);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 
 		SetLayoutDirty();
@@ -113,8 +108,7 @@ namespace Editor
 	{
 		delete mVerScrollbar;
 		mVerScrollbar = scrollbar;
-		AddChild(mVerScrollbar);
-		mChildren.Remove(mVerScrollbar);
+		mVerScrollbar->SetInternalParent(this);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 
 		SetLayoutDirty();
@@ -140,14 +134,12 @@ namespace Editor
 		delete mVerScrollbar;
 
 		mHorScrollbar = other.mHorScrollbar->CloneAs<UIHorizontalScrollBar>();
-		mHorScrollbar->SetParent(this);
+		mHorScrollbar->SetInternalParent(this);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
-		mChildren.Remove(mHorScrollbar);
 
 		mVerScrollbar = other.mVerScrollbar->CloneAs<UIVerticalScrollBar>();
-		mVerScrollbar->SetParent(this);
+		mVerScrollbar->SetInternalParent(this);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
-		mChildren.Remove(mVerScrollbar);
 	}
 
 	void UIFrameScrollView::UpdateCameraLimits(float dt)

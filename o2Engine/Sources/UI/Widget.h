@@ -218,6 +218,9 @@ namespace o2
 		// Sets index position in parent or scene
 		void SetPositionIndexInParent(int index) override;
 
+		// Sets parent,  doesn't adds to parent's children but adds to internal children
+		void SetInternalParent(UIWidget* parent, bool worldPositionStays = true);
+
 		SERIALIZABLE(UIWidget);
 
 	protected:
@@ -259,9 +262,6 @@ namespace o2
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
-
-		// Sets parent,  doesn't adds to parent's children but adds to internal children
-		void SetInternalParent(UIWidget* parent, bool worldPositionStays = true);
 
 		// It is called when transformation was changed and updated
 		void OnTransformUpdated() override;
@@ -537,8 +537,8 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetPositionIndexInParent, int);
+	PUBLIC_FUNCTION(void, SetInternalParent, UIWidget*, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, SetInternalParent, UIWidget*, bool);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);

@@ -33,8 +33,22 @@ namespace Editor
 				[&](const Pair<IObject*, IObject*>& x)
 			{
 				const Type& type = *kv.Key()->GetOwnerType();
-				return Pair<void*, void*>(type.DynamicCast(kv.Key()->GetValuePtrStrong(x.first), x.first->GetType()),
-										  x.second ? type.DynamicCast(kv.Key()->GetValuePtrStrong(x.second), x.second->GetType()) : nullptr);
+				const ObjectType* objType = dynamic_cast<const ObjectType*>(&type);
+
+				if (objType == nullptr)
+					return Pair<void*, void*>(nullptr, nullptr);
+
+				void* firstObjectPtr = objType->DynamicCastFromIObject(x.first);
+				void* secondObjectPtr = nullptr;
+				if (x.second)
+					secondObjectPtr = objType->DynamicCastFromIObject(x.second);
+
+				void* firstValuePtr = kv.Key()->GetValuePtrStrong(firstObjectPtr);
+				void* secondValuePtr = nullptr;
+				if (x.second)
+					secondValuePtr = kv.Key()->GetValuePtrStrong(secondObjectPtr);
+
+				return Pair<void*, void*>(firstValuePtr, secondValuePtr);
 			});
 
 			kv.Value()->SetValueAndPrototypePtr(fieldPointers, kv.Key()->GetType()->GetUsage() == Type::Usage::Property);

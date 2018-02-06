@@ -196,7 +196,7 @@ namespace o2
 					if (!baseObjectType)
 						continue;
 
-					void* baseObject = (*baseType.dynamicCastFunc)(object);
+					void* baseObject = (*baseType.dynamicCastUpFunc)(object);
 					WriteObject(baseObject, *baseObjectType, node);
 				}
 
@@ -232,8 +232,8 @@ namespace o2
 					if (!baseObjectType)
 						continue;
 
-					void* baseObject = (*baseType.dynamicCastFunc)(object);
-					void* baseSourceObject = (*baseType.dynamicCastFunc)(source);
+					void* baseObject = (*baseType.dynamicCastUpFunc)(object);
+					void* baseSourceObject = (*baseType.dynamicCastUpFunc)(source);
 					WriteObject(baseObject, baseSourceObject, *baseObjectType, node);
 				}
 
@@ -443,8 +443,8 @@ namespace o2
 					if (!baseObjectType)
 						continue;
 
-					void* baseObject = (*baseType.dynamicCastFunc)(object);
-					void* baseSourceObject = (*baseType.dynamicCastFunc)(source);
+					void* baseObject = (*baseType.dynamicCastUpFunc)(object);
+					void* baseSourceObject = (*baseType.dynamicCastUpFunc)(source);
 					ReadObject(baseObject, baseSourceObject, *baseObjectType, node);
 				}
 
@@ -510,7 +510,7 @@ namespace o2
 					if (!baseObjectType)
 						continue;
 
-					void* baseObject = (*baseType.dynamicCastFunc)(object);
+					void* baseObject = (*baseType.dynamicCastUpFunc)(object);
 					ReadObject(baseObject, *baseObjectType, node);
 				}
 

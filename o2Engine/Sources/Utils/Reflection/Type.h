@@ -66,7 +66,8 @@ namespace o2
 		struct BaseType
 		{
 			const Type* type;
-			void*(*dynamicCastFunc)(void*);
+			void*(*dynamicCastUpFunc)(void*);
+			void*(*dynamicCastDownFunc)(void*);
 
 			bool operator==(const BaseType& other) const { return type == other.type; }
 		};
@@ -137,9 +138,6 @@ namespace o2
 
 		// Creates sample copy and returns him
 		void* CreateSample() const;
-
-		// Casts object from type to this type
-		void* DynamicCast(void* object, const Type& type) const;
 
 		// Returns filed pointer by path
 		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
@@ -856,7 +854,8 @@ namespace o2
 
 		Type::BaseType baseTypeInfo;
 		baseTypeInfo.type = X::type;
-		baseTypeInfo.dynamicCastFunc = &Reflection::CastFunc<_this_type, _base_type>;
+		baseTypeInfo.dynamicCastUpFunc = &Reflection::CastFunc<_this_type, _base_type>;
+		baseTypeInfo.dynamicCastDownFunc = &Reflection::CastFunc<_base_type, _this_type>;
 
 		type->mBaseTypes.Add(baseTypeInfo);
 	}

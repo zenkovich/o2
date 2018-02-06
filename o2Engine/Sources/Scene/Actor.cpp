@@ -575,14 +575,22 @@ namespace o2
 		auto oldParent = mParent;
 
 		if (mParent)
-			mParent->RemoveChild(this, false);
+		{
+			mParent->mChildren.Remove(this);
+			mParent->OnChildRemoved(this);
+			mParent->OnChildsChanged();
+		}
 		else
 			o2Scene.mRootActors.Remove(this);
 
 		mParent = actor;
 
 		if (mParent)
+		{
 			mParent->mChildren.Add(this);
+			mParent->OnChildAdded(this);
+			mParent->OnChildsChanged(); 
+		}
 		else
 			o2Scene.mRootActors.Add(this);
 
@@ -719,18 +727,15 @@ namespace o2
 
 	void Actor::RemoveChild(Actor* actor, bool release /*= true*/)
 	{
-		if (!mChildren.Contains(actor))
-			return;
-
 		auto oldParent = actor->mParent;
 
 		actor->mParent = nullptr;
 		mChildren.Remove(actor);
+		OnChildRemoved(actor);
 
 		if (release)
 		{
 			actor->OnParentChanged(oldParent);
-			OnChildRemoved(actor);
 			OnChildsChanged();
 
 			delete actor;
