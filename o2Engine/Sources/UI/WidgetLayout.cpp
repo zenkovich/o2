@@ -552,7 +552,7 @@ namespace o2
 	void UIWidgetLayout::SetDirty(bool fromParent /*= true*/)
 	{
 		if (!fromParent && mData->drivenByParent && mData->owner && mData->owner->mParent)
-			mData->owner->mParent->transform->SetDirty();
+			mData->owner->mParent->transform->SetDirty(fromParent);
 
 		ActorTransform::SetDirty(fromParent);
 	}

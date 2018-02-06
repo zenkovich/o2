@@ -193,7 +193,7 @@ namespace o2
 		for (auto child : mChildWidgets)
 		{
 			if (!child->mFullyDisabled)
-				res = Math::Max(res, child->GetMinHeightWithChildren() + mBorder.left + mBorder.right);
+				res = Math::Max(res, child->GetMinHeightWithChildren() + mBorder.top + mBorder.bottom);
 		}
 
 		res = Math::Max(res, layout->mData->minSize.y);

@@ -65,6 +65,7 @@ namespace Editor
 		componentHead->AddChild(mOptionsBtn);
 
 		mPropertiesLayout = mnew UIWidget();
+		*mPropertiesLayout->layout = UIWidgetLayout::BothStretch();
 		mPropertiesLayout->name = "properties";
 		mSpoiler->AddChild(mPropertiesLayout);
 
