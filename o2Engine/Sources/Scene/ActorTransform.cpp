@@ -2,6 +2,7 @@
 #include "ActorTransform.h"
 
 #include "Actor.h"
+#include "Application\Input.h"
 
 namespace o2
 {
@@ -14,6 +15,9 @@ namespace o2
 								   const Vec2F& pivot /*= Vec2F(0.5f, 0.5f)*/) :
 		ActorTransform(mnew Data())
 	{
+		mData->dirtyFrame = 1;
+		mData->updateFrame = 1;
+
 		mData->size = size;
 		mData->position = position;
 		mData->angle = angle;
@@ -26,6 +30,9 @@ namespace o2
 	ActorTransform::ActorTransform(const ActorTransform& other):
 		ActorTransform(mnew Data())
 	{
+		mData->dirtyFrame = 1;
+		mData->updateFrame = 1;
+
 		mData->size = other.mData->size;
 		mData->position = other.mData->position;
 		mData->angle = other.mData->angle;
@@ -696,7 +703,8 @@ namespace o2
 		mData->rectangle.bottom = leftBottom.y;
 		mData->rectangle.top = rightTop.y;
 
-		//o2Debug.Log("--" + mData->owner->mName + " " + (String)o2Time.GetCurrentFrame());
+		if (o2Input.IsKeyDown(VK_F5))
+			o2Debug.Log("--" + mData->owner->mName + " " + (String)o2Time.GetCurrentFrame());
 	}
 
 	void ActorTransform::UpdateTransform()

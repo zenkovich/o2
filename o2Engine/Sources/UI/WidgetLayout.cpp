@@ -604,10 +604,10 @@ namespace o2
 
 	void UIWidgetLayout::FloorRectangle()
 	{
-		mData->size.x     = Math::Floor(mData->size.x);
-		mData->size.y     = Math::Floor(mData->size.y);
-		mData->position.x = Math::Floor(mData->position.x);
-		mData->position.y = Math::Floor(mData->position.y);
+		mData->size.x     = Math::Round(mData->size.x);
+		mData->size.y     = Math::Round(mData->size.y);
+		mData->position.x = Math::Round(mData->position.x);
+		mData->position.y = Math::Round(mData->position.y);
 	}
 
 	void UIWidgetLayout::UpdateOffsetsByCurrentTransform()

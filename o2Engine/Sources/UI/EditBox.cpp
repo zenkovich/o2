@@ -603,8 +603,9 @@ namespace o2
 
 	void UIEditBox::UpdateScrollParams()
 	{
-		if (mTextDrawable->GetFont())
-			mTextDrawable->GetFont()->CheckCharacters(" ", mTextDrawable->GetHeight());
+		auto fontRef = mTextDrawable->GetFont();
+		if (fontRef)
+			fontRef->CheckCharacters(" ", mTextDrawable->GetHeight());
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->worldRect);
 		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
@@ -840,7 +841,9 @@ namespace o2
 		if (mText.Length() == 0)
 		{
 			fakeSymbols = true;
-			mTextDrawable->SetText("A");
+
+			if (mTextDrawable->GetText() != "A")
+				mTextDrawable->SetText("A");
 		}
 
 		auto& symbolsSet = mTextDrawable->GetSymbolsSet();

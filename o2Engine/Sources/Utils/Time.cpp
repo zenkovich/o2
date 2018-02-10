@@ -12,7 +12,7 @@ namespace o2
 	DECLARE_SINGLETON(Time);
 
 	Time::Time():
-		mApplicationTime(0), mLocalTime(0), mCurrentFrame(0), mDeltaTime(0), mFPS(0), mFPSSum(0),
+		mApplicationTime(0), mLocalTime(0), mCurrentFrame(1), mDeltaTime(0), mFPS(0), mFPSSum(0),
 		mFramesSum(0), mLastFPSCheckingTime(0)
 	{}
 

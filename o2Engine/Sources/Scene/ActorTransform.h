@@ -414,8 +414,8 @@ namespace o2
 		class Data: public ISerializable
 		{
 		public:
-			int    dirtyFrame;                         // Frame index, when layout was marked as dirty
-			int    updateFrame;                        // Frame index, when layout was updated
+			int    dirtyFrame = 1;                     // Frame index, when layout was marked as dirty
+			int    updateFrame = 1;                    // Frame index, when layout was updated
 
 			Vec2F  position;                           // Position @SERIALIZABLE
 			Vec2F  size;                               // Size @SERIALIZABLE

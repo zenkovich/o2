@@ -64,6 +64,7 @@ namespace o2
 		return mExpandState ? mExpandState->GetState() : false;
 	}
 
+#undef DrawText
 	void UISpoiler::Draw()
 	{
 		if (mFullyDisabled || mIsClipped)
@@ -89,6 +90,8 @@ namespace o2
 
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
+
+		o2Debug.DrawText(layout->GetWorldLeftTop(), (String)layout->GetSize());
 
 		DrawDebugFrame();
 	}
@@ -128,35 +131,6 @@ namespace o2
 	{
 		return UIVerticalLayout::GetMinHeightWithChildren()*Math::Clamp01(mExpandCoef);
 	}
-
-// 	void UISpoiler::ExpandSizeByChilds()
-// 	{
-// 		const static Vec2F relativePivots[] ={
-// 			Vec2F(0.0f, 0.5f), // Left
-// 			Vec2F(1.0f, 0.5f), // Right
-// 			Vec2F(0.5f, 1.0f), // Top
-// 			Vec2F(0.5f, 0.0f), // Bottom
-// 			Vec2F(0.5f, 0.5f), // Center
-// 			Vec2F(0.0f, 0.0f), // LeftBottom
-// 			Vec2F(0.0f, 1.0f), // LeftTop
-// 			Vec2F(1.0f, 0.0f), // RightBottom
-// 			Vec2F(1.0f, 1.0f)  // RightTop
-// 		};
-// 
-// 		Vec2F relativePivot = relativePivots[(int)mBaseCorner];
-// 		Vec2F size(Math::Max(GetLayoutWidth(), layout->mData->minSize.x), Math::Max(GetLayoutHeight(), layout->mData->minSize.y));
-// 
-// 		Vec2F szDelta = size - layout.mLocalRect.Size();
-// 
-// 		if (mExpandWidth)
-// 			szDelta.x = 0;
-// 
-// 		if (mExpandHeight)
-// 			szDelta.y = 0;
-// 
-// 		layout->mData->offsetMax += szDelta*(Vec2F::One() - relativePivot);
-// 		layout->mData->offsetMin -= szDelta*relativePivot;
-// 	}
 
 	void UISpoiler::UpdateLayoutParametres()
 	{
