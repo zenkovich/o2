@@ -185,8 +185,9 @@ namespace Editor
 			fieldWidgetPair.first->SetValuePath(path + fieldInfo->GetName());
 			fieldWidgetPair.first->SpecializeType(fieldType);
 
-			auto nameLabel = fieldWidgetPair.second->GetChildByType<UILabel>();
-			nameLabel->text = MakeSmartFieldName(fieldInfo->GetName());
+			auto nameLabel = dynamic_cast<UILabel*>(fieldWidgetPair.second->FindChild("propertyName"));
+			if (nameLabel)
+				nameLabel->text = MakeSmartFieldName(fieldInfo->GetName());
 
 			layout->AddChild(fieldWidgetPair.second, false);
 			propertiesInfo.properties.Add(fieldInfo, fieldWidgetPair.first);
@@ -305,6 +306,7 @@ namespace Editor
 		horLayout->layout->minHeight = 20;
 
 		UILabel* label = o2UI.CreateWidget<UILabel>();
+		label->name = "propertyName";
 		label->horAlign = HorAlign::Left;
 		label->layout->widthWeight = 3.0f;
 		label->horOverflow = UILabel::HorOverflow::Dots;

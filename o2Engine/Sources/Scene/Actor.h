@@ -265,6 +265,9 @@ namespace o2
 		// Returns child actor by path (ex "root/some node/other node/target node")
 		Actor* GetChild(const String& path) const;
 
+		// Returns child actor by name
+		Actor* FindChild(const String& name) const;
+
 		// Searches child with specified type
 		template<typename _type>
 		_type* GetChildByType();
@@ -838,6 +841,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Vector<Actor*>, AddChildren, Vector<Actor*>);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
+	PUBLIC_FUNCTION(Actor*, FindChild, const String&);
 	PUBLIC_FUNCTION(ActorsVec, GetChildren);
 	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllChildren, bool);

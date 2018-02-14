@@ -123,8 +123,8 @@ namespace o2
 
 	void Application::DeinitializeSystems()
 	{
-		delete mScene;
 		delete mUIManager;
+		delete mScene;
 		delete mRender;
 		delete mInput;
 		delete mTime;

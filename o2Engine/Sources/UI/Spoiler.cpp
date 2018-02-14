@@ -91,8 +91,6 @@ namespace o2
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
 
-		o2Debug.DrawText(layout->GetWorldLeftTop(), (String)layout->GetSize());
-
 		DrawDebugFrame();
 	}
 

@@ -103,9 +103,6 @@ namespace Editor
 		if (mEnableProperty)
 			delete mEnableProperty;
 
-		if (mDataView)
-			delete mDataView;
-
 		if (mNameProperty)
 			delete mNameProperty;
 
@@ -120,6 +117,9 @@ namespace Editor
 
 		if (mLayerProperty)
 			delete mLayerProperty;
+
+		if (mDataView)
+			delete mDataView;
 	}
 
 	void DefaultActorHeaderViewer::SetTargetActors(const Vector<Actor*>& actors)

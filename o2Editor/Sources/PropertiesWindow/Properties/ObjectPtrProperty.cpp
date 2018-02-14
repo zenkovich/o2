@@ -36,6 +36,7 @@ namespace Editor
 		header->AddChild(mExpandButton, false);
 
 		mNameLabel = o2UI.CreateWidget<UILabel>();
+		mNameLabel->name = "propertyName";
 		*mNameLabel->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 10, 0, 20, 0);
 		mNameLabel->horAlign = HorAlign::Left;
 		header->AddChild(mNameLabel, false);
@@ -51,8 +52,8 @@ namespace Editor
 		*mPropertiesLayout->layout = UIWidgetLayout::BothStretch();
 		mSpoiler->AddChild(mPropertiesLayout);
 
-		mLayout->AddChild(header, false);
-		mLayout->AddChild(mSpoiler, false);
+		mLayout->AddChild(header);
+		mLayout->AddChild(mSpoiler);
 	}
 
 	ObjectPtrProperty::~ObjectPtrProperty()

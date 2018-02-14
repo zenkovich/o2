@@ -720,6 +720,20 @@ namespace o2
 		return nullptr;
 	}
 
+	Actor* Actor::FindChild(const String& name) const
+	{
+		for (auto child : mChildren)
+		{
+			if (child->mName == name)
+				return child;
+
+			if (auto res = child->FindChild(name))
+				return res;
+		}
+
+		return nullptr;
+	}
+
 	Actor::ActorsVec Actor::GetChildren() const
 	{
 		return mChildren;
