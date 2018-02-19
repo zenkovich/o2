@@ -538,7 +538,7 @@ namespace o2
 		for (auto child : mInternalWidgets)
 			child->UpdateChildren(dt);
 
-		if (mLayoutUpdated)
+		if (mLayoutUpdated && !mFullyDisabled)
 		{
 			CheckChildrenClipping();
 			UpdateScrollParams();
@@ -641,7 +641,7 @@ namespace o2
 							 localViewArea.Height() - mScrollArea.top + localViewArea.bottom + roundedScrollPos.y,
 							 -(localViewArea.Width() - mScrollArea.right + localViewArea.left + roundedScrollPos.x),
 							 -mScrollArea.bottom + localViewArea.bottom + roundedScrollPos.y);
-// 
+
 // 		o2Debug.Log(mName + " area: " + (String)mScrollArea + ", range: " + (String)mScrollRange + 
 // 					", scroll: " + (String)mScrollPos);
 

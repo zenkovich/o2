@@ -10,11 +10,21 @@
 #include "UI/UIManager.h"
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
+#include "Utils/Time.h"
 
 namespace Editor
 {
 	void LogWindow::Update(float dt)
-	{}
+	{
+		if (o2Input.IsKeyDown('H'))
+			o2Debug.Log("Regular message " + (String)o2Time.GetLocalTime());
+
+		if (o2Input.IsKeyDown('J'))
+			o2Debug.LogWarning("Warning message " + (String)o2Time.GetLocalTime());
+
+		if (o2Input.IsKeyDown('K'))
+			o2Debug.LogError("Error message " + (String)o2Time.GetLocalTime());
+	}
 
 	LogWindow::LogWindow():
 		mRegularMessagesEnabled(true), mWarningMessagesEnabled(true), mErrorMessagesEnabled(true), mRegularMessagesCount(0),
@@ -208,8 +218,8 @@ namespace Editor
 
 		mList->OnItemsUpdated();
 
-		if (isScrollDown)
-			mList->SetScrollForcible(Vec2F(0, mList->GetScrollRange().top));
+// 		if (isScrollDown)
+// 			mList->SetScrollForcible(Vec2F(0, mList->GetScrollRange().top));
 
 		mRegularMessagesCount++;
 		mMessagesCountLabel->text = (String)mRegularMessagesCount;

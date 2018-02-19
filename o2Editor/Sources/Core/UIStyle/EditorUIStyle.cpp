@@ -34,6 +34,7 @@
 #include "UI/WidgetState.h"
 #include "UI/Window.h"
 #include "Utils/Timer.h"
+#include "Utils/FileSystem/FileSystem.h"
 
 using namespace o2;
 
@@ -2417,6 +2418,23 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildEditorUIManager()
 	{
+		String generateDateCachePath = "uiGeneratedDate.xml";
+
+		String thisSourcePath = "../../../Sources/Core/UIStyle/EditorUIStyle.cpp";
+		TimeStamp thisSourceEditedDate = o2FileSystem.GetFileInfo(thisSourcePath).mEditDate;
+
+		DataNode data;
+		if (data.LoadFromFile(generateDateCachePath))
+		{
+			TimeStamp cachedDate = data;
+
+			if (thisSourceEditedDate == cachedDate)
+				return;
+		}
+
+		data = thisSourceEditedDate;
+		data.SaveToFile(generateDateCachePath);
+
 		o2UI.ClearStyle();
 
 		auto funcs = GetType().GetFunctionsWithBaseClasses();

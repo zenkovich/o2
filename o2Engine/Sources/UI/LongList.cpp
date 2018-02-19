@@ -191,9 +191,17 @@ namespace o2
 
 	void UILongList::CalculateScrollArea()
 	{
+		Vec2F offset = mChildrenWorldRect.LeftBottom() - layout->mData->worldRectangle.LeftBottom() -
+			mChildrenWorldRect.Size()*layout->pivot;
+
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		float itemsHeight = (float)getItemsCountFunc()*mItemSample->layout->GetMinimalHeight();
+
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
+
+		mScrollArea.top = Math::Max(mScrollArea.top, roundedScrollPos.y - offset.y);
 		mScrollArea.bottom = Math::Min(mScrollArea.bottom,
-									   mScrollArea.top - (float)getItemsCountFunc()*mItemSample->layout->GetHeight());
+									   mAbsoluteViewArea.Height() + roundedScrollPos.y - itemsHeight - offset.y);
 	}
 
 	void UILongList::UpdateControls(float dt)
@@ -226,9 +234,22 @@ namespace o2
 
 		UpdateVisibleItems();
 
-		Vec2F widgetsMove(-delta.x, delta.y);
 		for (auto child : mChildWidgets)
-			child->MoveAndCheckClipping(widgetsMove, mAbsoluteClipArea);
+		{
+			child->UpdateTransform();
+			child->mIsClipped = false;
+		}
+
+		mChildrenWorldRect = mAbsoluteViewArea;
+
+		mTargetSelectionRect += delta;
+		mTargetHoverRect += delta;
+
+		mCurrentSelectionRect = mTargetSelectionRect;
+		mCurrentHoverRect = mTargetHoverRect;
+
+		mSelectionDrawable->SetRect(mCurrentSelectionRect);
+		mHoverDrawable->SetRect(mCurrentHoverRect);
 
 		UpdateScrollParams();
 	}
@@ -238,7 +259,7 @@ namespace o2
 		int lastMinItemIdx = mMinVisibleItemIdx;
 		int lastMaxItemIdx = mMaxVisibleItemIdx;
 
-		float itemHeight = mItemSample->layout->height;
+		float itemHeight = mItemSample->layout->minHeight;
 
 		if (itemHeight < FLT_EPSILON)
 			return;
@@ -266,7 +287,9 @@ namespace o2
 		for (auto item : removingItems)
 			mItemsPool.Add(item);
 
+		mChildren.Clear();
 		mChildWidgets.Clear();
+		mDrawingChildren.Clear();
 
 		for (int i = mMinVisibleItemIdx; i <= mMaxVisibleItemIdx; i++)
 		{
@@ -279,17 +302,28 @@ namespace o2
 			if (mItemsPool.Count() == 0)
 			{
 				for (int j = 0; j < 10; j++)
-					mItemsPool.Add(mItemSample->CloneAs<UIWidget>());
+				{
+					UIWidget* newItem = mItemSample->CloneAs<UIWidget>();
+					newItem->ExcludeFromScene();
+					mItemsPool.Add(newItem);
+				}
 			}
 
 			UIWidget* newItem = mItemsPool.PopBack();
+
 			setupItemFunc(newItem, itemsInRange[i - mMinVisibleItemIdx]);
+
 			*newItem->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, itemHeight, itemHeight*(float)i);
-			itemsWidgets[i - mMinVisibleItemIdx] = newItem;
+
 			newItem->mParent = this;
+			newItem->mParentWidget = this;
+
+			itemsWidgets[i - mMinVisibleItemIdx] = newItem;
 		}
 
+		mChildren.Add(itemsWidgets.Cast<Actor*>());
 		mChildWidgets.Add(itemsWidgets);
+		mDrawingChildren.Add(itemsWidgets);
 	}
 
 	void UILongList::OnCursorPressed(const Input::Cursor& cursor)
