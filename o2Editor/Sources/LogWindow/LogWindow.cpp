@@ -218,8 +218,8 @@ namespace Editor
 
 		mList->OnItemsUpdated();
 
-// 		if (isScrollDown)
-// 			mList->SetScrollForcible(Vec2F(0, mList->GetScrollRange().top));
+		if (isScrollDown)
+			mList->SetScrollForcible(Vec2F(0, mList->GetScrollRange().top));
 
 		mRegularMessagesCount++;
 		mMessagesCountLabel->text = (String)mRegularMessagesCount;

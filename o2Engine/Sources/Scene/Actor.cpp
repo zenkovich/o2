@@ -1840,7 +1840,7 @@ namespace o2
 
 		for (auto component : source->mComponents)
 		{
-			Component* newComponent = dest->AddComponent(CloneAs<Component>());
+			Component* newComponent = dest->AddComponent(component->CloneAs<Component>());
 
 			componentsMap.Add(component, newComponent);
 

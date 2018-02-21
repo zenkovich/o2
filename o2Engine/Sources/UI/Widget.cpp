@@ -711,6 +711,8 @@ namespace o2
 		else
 			mResVisible = mVisible;
 
+		mIsClipped = false;
+
 		for (auto child : mChildWidgets)
 			child->UpdateVisibility(false);
 
