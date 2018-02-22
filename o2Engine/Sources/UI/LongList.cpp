@@ -182,7 +182,7 @@ namespace o2
 		{
 			auto countFunc = getItemsCountFunc;
 			getItemsCountFunc = []() { return 0; };
-			SetLayoutDirty();
+			UpdateTransform();
 			getItemsCountFunc = countFunc;
 		}
 
@@ -199,7 +199,7 @@ namespace o2
 
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
-		mScrollArea.top = Math::Max(mScrollArea.top, roundedScrollPos.y - offset.y);
+		mScrollArea.top = mAbsoluteViewArea.Height() + roundedScrollPos.y - offset.y;
 		mScrollArea.bottom = Math::Min(mScrollArea.bottom,
 									   mAbsoluteViewArea.Height() + roundedScrollPos.y - itemsHeight - offset.y);
 	}

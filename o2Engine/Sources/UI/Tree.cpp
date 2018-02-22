@@ -1272,9 +1272,17 @@ namespace o2
 	{
 		const float bottomAdditionalSpace = 100;
 
+		Vec2F offset = mChildrenWorldRect.LeftBottom() - layout->mData->worldRectangle.LeftBottom() -
+			mChildrenWorldRect.Size()*layout->pivot;
+
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		float itemsHeight = (float)mAllNodes.Count()*mNodeWidgetSample->layout->minHeight + bottomAdditionalSpace;
+
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
+
+		mScrollArea.top = mAbsoluteViewArea.Height() + roundedScrollPos.y - offset.y;
 		mScrollArea.bottom = Math::Min(mScrollArea.bottom,
-									   mScrollArea.top - (float)mAllNodes.Count()*mNodeWidgetSample->layout->minHeight - bottomAdditionalSpace);
+									   mAbsoluteViewArea.Height() + roundedScrollPos.y - itemsHeight - offset.y);
 	}
 
 	void UITree::MoveScrollPosition(const Vec2F& delta)
