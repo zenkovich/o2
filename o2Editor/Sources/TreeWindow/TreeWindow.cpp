@@ -93,15 +93,50 @@ namespace Editor
 
 		mWindow->AddChild(mActorsTree);
 
+		InitializeContextMenu();
+
+		for (int i = 0; i < 10; i++)
+			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
+
+		// test actors
+		for (int i = 0; i < 2; i++)
+		{
+			Actor* actor = mnew Actor(ActorCreateMode::InScene);
+			actor->name = String::Format("Actor #%i", i + 1);
+			actor->layer = o2Scene.AddLayer(String::Format("Layer #%i", i + 1));
+
+			for (int j = 0; j < 1; j++)
+			{
+				Actor* childActor = mnew Actor(ActorCreateMode::InScene);
+				childActor->name = String::Format("%i Child actor #%i", i + 1, j + 1);
+				actor->AddChild(childActor);
+
+				for (int k = 0; k < 1; k++)
+				{
+					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png"),
+													  mnew EditorTestComponent(),
+													  mnew ParticlesEmitterComponent() }, ActorCreateMode::InScene);
+					childActor2->name = String::Format("%i %i Sub Child actor #%i", i + 1, j + 1, k + 1);
+					//childActor2->transform->position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
+					childActor2->transform->position = Vec2F(k*100, (i*2 + j)*100);
+					childActor->AddChild(childActor2);
+				}
+			}
+		}
+
+		mActorsTree->UpdateNodesView();
+	}
+
+	void TreeWindow::InitializeContextMenu()
+	{
+
+
 		// Context menu
 		mTreeContextMenu = o2UI.CreateWidget<UIContextMenu>("standard");
 		mTreeContextMenu->AddItems({
 			UIContextMenu::Item("Create new", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(), ShortcutKeys('N', true, true)),
 
-			UIContextMenu::Item("Create", {
-				UIContextMenu::Item("Sprite", [&]() { OnContextCreateSprite(); }),
-				UIContextMenu::Item("Button", [&]() { OnContextCreateButton(); })
-			}),
+			UIContextMenu::Item("Create", []() {}),
 
 			UIContextMenu::Item::Separator(),
 
@@ -128,41 +163,54 @@ namespace Editor
 			UIContextMenu::Item("Break link to prototype", [&]() { OnContextCopyPressed(); }),
 		});
 
+		InitializeCreateMenu();
+		CreateUICreateMenu();
+
 		mWindow->AddChild(mTreeContextMenu);
 
 		mActorsTree->onFocused = [&]() { mTreeContextMenu->SetItemsMaxPriority(); };
 		mActorsTree->onUnfocused = [&]() { mTreeContextMenu->SetItemsMinPriority(); };
+	}
 
-		for (int i = 0; i < 10; i++)
-			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
+	void TreeWindow::InitializeCreateMenu()
+	{
+		CreateActorSubtypesCreateMenu(&TypeOf(Actor));
+	}
 
-		// test actors
-		for (int i = 0; i < 2; i++)
+	void TreeWindow::CreateActorSubtypesCreateMenu(const Type* type)
+	{
+		auto subTypes = type->GetDerivedTypes();
+
+		for (auto subType : subTypes)
 		{
-			Actor* actor = mnew Actor(ActorCreateMode::InScene);
-			actor->name = String::Format("Actor #%i", i + 1);
-			actor->layer = o2Scene.AddLayer(String::Format("Layer #%i", i + 1));
+			o2Debug.Log("Menu for type " + subType->GetName());
 
-			for (int j = 0; j < 1; j++)
-			{
-				Actor* childActor = mnew Actor(ActorCreateMode::InScene);
-				childActor->name = String::Format("%i Child actor #%i", i + 1, j + 1);
-				actor->AddChild(childActor);
+			mTreeContextMenu->AddItem("Create/" + subType->GetName(), [=]() {
+				auto objectType = dynamic_cast<const ObjectType*>(subType);
+				Actor* newActor = dynamic_cast<Actor*>(objectType->DynamicCastToIObject(subType->CreateSample()));
+				newActor->name = subType->GetName();
+				CreateActor(newActor);
+			});
 
-				for (int k = 0; k < 1; k++)
-				{
-					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png"),
-													  mnew EditorTestComponent(),
-					                                  mnew ParticlesEmitterComponent() }, ActorCreateMode::InScene);
-					childActor2->name = String::Format("%i %i Sub Child actor #%i", i + 1, j + 1, k + 1);
-					//childActor2->transform->position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
-					childActor2->transform->position = Vec2F(k*100, (i*2 + j)*100);
-					childActor->AddChild(childActor2);
-				}
-			}
+			CreateActorSubtypesCreateMenu(subType);
 		}
+	}
 
-		mActorsTree->UpdateNodesView();
+	void TreeWindow::CreateUICreateMenu()
+	{
+		auto styleWidgets = o2UI.GetWidgetStyles();
+
+		for (auto styleWidget : styleWidgets)
+		{
+			o2Debug.Log("Menu for " + styleWidget->GetType().GetName() + " - " + styleWidget->GetName());
+
+			mTreeContextMenu->AddItem("Create UI/" + styleWidget->GetType().GetName() + " - " + styleWidget->GetName(),
+									  [=]() 
+			{
+				Actor* newActor = styleWidget->CloneAs<Actor>();
+				CreateActor(newActor);
+			});
+		}
 	}
 
 	void TreeWindow::PostInitializeWindow()

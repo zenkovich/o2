@@ -367,6 +367,9 @@ namespace o2
 
 		// It is called when child changed
 		void OnChildsChanged();
+
+		// Returns the path of create menu category
+		const String& GetCreateCategory() const; 
 #endif
 
 		SERIALIZABLE(Actor);

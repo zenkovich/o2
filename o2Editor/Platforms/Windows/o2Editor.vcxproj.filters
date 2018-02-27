@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Sources" />
@@ -150,9 +150,6 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ComponentsViewers\ImageComponentViewer.h">
       <Filter>Sources\PropertiesWindow\ActorsViewer\ComponentsViewers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.h">
-      <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
@@ -160,9 +157,6 @@
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h">
-      <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.h">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.h">
@@ -284,6 +278,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\stdafx.h">
       <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -407,9 +407,6 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.cpp">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.cpp">
-      <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClCompile>
@@ -417,9 +414,6 @@
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp">
-      <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.cpp">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp">
@@ -541,6 +535,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\stdafx.cpp">
       <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -164,12 +164,17 @@ namespace Editor
 	void PropertiesWindow::BuildObjectProperties(UIVerticalLayout* layout, const Type* type, 
 												 FieldPropertiesInfo& propertiesInfo, const String& path)
 	{
-		auto fields = type->GetFieldsWithBaseClasses();
+		BuildObjectProperties(layout, type->GetFieldsWithBaseClasses(), propertiesInfo, path);
+	}
+
+	void PropertiesWindow::BuildObjectProperties(UIVerticalLayout* layout, Vector<FieldInfo*> fields, 
+												 FieldPropertiesInfo& propertiesInfo, const String& path)
+	{
 		for (auto fieldInfo : fields)
 		{
 			const Type* fieldType = fieldInfo->GetType();
 
-			if (fieldInfo->GetProtectionSection() != ProtectSection::Public && 
+			if (fieldInfo->GetProtectionSection() != ProtectSection::Public &&
 				!fieldInfo->HasAttribute<EditorPropertyAttribute>())
 			{
 				continue;

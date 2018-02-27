@@ -256,6 +256,7 @@ namespace o2
 
 	void UIWidget::OnTransformUpdated()
 	{
+		mIsClipped = false;
 		Actor::OnTransformUpdated();
 		UpdateLayersLayouts();
 		onLayoutUpdated();

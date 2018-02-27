@@ -8,6 +8,7 @@
 namespace o2
 {
 	class Text;
+	class UIContextMenu;
 
 	// ----------------------------------------------------
 	// Window with caption, icon, options and close buttons
@@ -94,6 +95,8 @@ namespace o2
 
 		WidgetsVec           mWindowElements;            // Windows elements widgets @SERIALIZABLE
 
+		UIContextMenu*       mOptionsMenu;               // Window options context menu
+
 		CursorEventsArea     mBackCursorArea;            // Cursor area listener at back of window, for catching events
 
 		CursorEventsArea     mHeadDragHandle;			 // Head drag handle, for moving window
@@ -145,6 +148,15 @@ namespace o2
 		// It is called when visible was changed
 		void OnVisibleChanged() override;
 
+		// Initializes context menu and options button
+		void InitializeContextMenu();
+
+		// Initializes context menu items - close window
+		virtual void InitializeContextItems();
+
+		// Restores close button, options button and context menu from window elements
+		void RestoreControls();
+
 		// Initializes handles
 		void InitializeHandles();
 
@@ -178,6 +190,7 @@ CLASS_FIELDS_META(o2::UIWindow)
 	PROTECTED_FIELD(mIconLayerPath);
 	PROTECTED_FIELD(mCaptionLayerPath);
 	PROTECTED_FIELD(mWindowElements).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mOptionsMenu);
 	PROTECTED_FIELD(mBackCursorArea);
 	PROTECTED_FIELD(mHeadDragHandle);
 	PROTECTED_FIELD(mHeadDragAreaLayout).SERIALIZABLE_ATTRIBUTE();
@@ -233,6 +246,9 @@ CLASS_METHODS_META(o2::UIWindow)
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, InitializeContextMenu);
+	PROTECTED_FUNCTION(void, InitializeContextItems);
+	PROTECTED_FUNCTION(void, RestoreControls);
 	PROTECTED_FUNCTION(void, InitializeHandles);
 	PROTECTED_FUNCTION(void, SetHandlesInteractable, bool);
 	PROTECTED_FUNCTION(void, BindHandlesInteractableToVisibility);

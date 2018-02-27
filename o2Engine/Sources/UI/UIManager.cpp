@@ -112,6 +112,8 @@ namespace o2
 		for (auto st : mStyleSamples)
 			delete st;
 
+		mStyleSamples.Clear();
+
 		mStyleSamples = styleData;
 
 		for (auto styleSample : mStyleSamples)
@@ -285,6 +287,11 @@ namespace o2
 	void UIManager::DrawWidgetAtTop(UIWidget* widget)
 	{
 		mTopWidgets.Add(widget);
+	}
+
+	const UIManager::WidgetsVec& UIManager::GetWidgetStyles() const
+	{
+		return mStyleSamples;
 	}
 
 	void UIManager::TryLoadStyle()

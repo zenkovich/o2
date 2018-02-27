@@ -20,6 +20,8 @@ namespace o2
 	class UIContextMenuItem: public UIWidget, private ShortcutKeysListener
 	{
 	public:
+		Property<WString>    text;      // Text
+ 
 		Function<void()>     onClick;   // Click function
 		Function<void(bool)> onChecked; // Checked function, calls when check was changed and item is checkable
 
@@ -34,6 +36,12 @@ namespace o2
 
 		// Copy-operator
 		UIContextMenuItem& operator=(const UIContextMenuItem& other);
+
+		// Sets text
+		void SetText(const WString& text);
+
+		// Returns text
+		WString GetText() const;
 
 		// Returns sub context menu
 		UIContextMenu* GetSubMenu() const;
@@ -69,6 +77,9 @@ namespace o2
 
 		// This event calling when shortcut hit and this listener has max priority. Calls click callback
 		void OnShortcutPressed();
+
+		// Initializes properties
+		void InitializeProperties();
 
 		friend class UIContextMenu;
 	};
@@ -161,6 +172,9 @@ namespace o2
 
 		// Returns item at position
 		Item GetItem(int position);
+
+		// Returns index of item with text
+		int FindItem(const WString& text) const;
 
 		// Sets item at position
 		void SetItem(int position, const Item& item);
@@ -314,6 +328,7 @@ CLASS_BASES_META(o2::UIContextMenuItem)
 END_META;
 CLASS_FIELDS_META(o2::UIContextMenuItem)
 {
+	PUBLIC_FIELD(text);
 	PUBLIC_FIELD(onClick);
 	PUBLIC_FIELD(onChecked);
 	PROTECTED_FIELD(mSubMenu);
@@ -324,6 +339,8 @@ END_META;
 CLASS_METHODS_META(o2::UIContextMenuItem)
 {
 
+	PUBLIC_FUNCTION(void, SetText, const WString&);
+	PUBLIC_FUNCTION(WString, GetText);
 	PUBLIC_FUNCTION(UIContextMenu*, GetSubMenu);
 	PUBLIC_FUNCTION(void, SetChecked, bool);
 	PUBLIC_FUNCTION(bool, IsChecked);
@@ -333,6 +350,7 @@ CLASS_METHODS_META(o2::UIContextMenuItem)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnShortcutPressed);
+	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 
@@ -376,6 +394,7 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
 	PUBLIC_FUNCTION(Item, GetItem, int);
+	PUBLIC_FUNCTION(int, FindItem, const WString&);
 	PUBLIC_FUNCTION(void, SetItem, int, const Item&);
 	PUBLIC_FUNCTION(Vector<Item>, GetItems);
 	PUBLIC_FUNCTION(void, RemoveItem, int);

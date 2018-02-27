@@ -18,6 +18,7 @@ namespace o2
 		UIScrollArea(), DrawableCursorEventsListener(this)
 	{
 		InitializeHandles();
+		InitializeContextMenu();
 		InitializeProperties();
 	}
 
@@ -36,15 +37,9 @@ namespace o2
 			mWindowElements.Add(newElem);
 		}
 
-		UIButton* closeBtn = (UIButton*)mWindowElements.FindMatch(
-			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); });
-
-		if (closeBtn)
-			closeBtn->onClick += [&]() { Hide(); };
-
+		RestoreControls();
 		RetargetStatesAnimations();
 		SetLayoutDirty();
-
 		InitializeHandles();
 		InitializeProperties();
 	}
@@ -261,12 +256,6 @@ namespace o2
 			mWindowElements.Add(newElem);
 		}
 
-		UIButton* closeBtn = (UIButton*)mWindowElements.FindMatch(
-			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); });
-
-		if (closeBtn)
-			closeBtn->onClick += [&]() { Hide(); };
-
 		mHeadDragAreaLayout        = other.mHeadDragAreaLayout;
 		mTopDragAreaLayout         = other.mTopDragAreaLayout;
 		mBottomDragAreaLayout      = other.mBottomDragAreaLayout;
@@ -277,6 +266,7 @@ namespace o2
 		mLeftBottomDragAreaLayout  = other.mLeftBottomDragAreaLayout;
 		mRightBottomDragAreaLayout = other.mRightBottomDragAreaLayout;
 
+		RestoreControls();
 		RetargetStatesAnimations();
 		BindHandlesInteractableToVisibility();
 		SetLayoutDirty();
@@ -387,6 +377,50 @@ namespace o2
 		
 		if (mResVisible)
 			Focus();
+	}
+
+	void UIWindow::InitializeContextMenu()
+	{
+		mOptionsMenu = o2UI.CreateWidget<UIContextMenu>("standard");
+
+		if (!mOptionsMenu)
+			return;
+
+		mOptionsMenu->name = "options context";
+		InitializeContextItems();
+		AddWindowElement(mOptionsMenu);
+
+		UIButton* optionsBtn = dynamic_cast<UIButton*>(mWindowElements.FindMatch(
+			[](UIWidget* x) { return x->GetName() == "optionsButton" && x->GetType() == TypeOf(UIButton); }));
+
+		if (optionsBtn)
+			optionsBtn->onClick += [=]() { mOptionsMenu->Show(optionsBtn->transform->worldCenter); };
+	}
+
+	void UIWindow::InitializeContextItems()
+	{
+		mOptionsMenu->AddItem("Close", [&]() { Hide(); });
+	}
+
+	void UIWindow::RestoreControls()
+	{
+		UIButton* closeBtn = dynamic_cast<UIButton*>(mWindowElements.FindMatch(
+			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); }));
+
+		if (closeBtn)
+			closeBtn->onClick += [&]() { Hide(); };
+
+		for (auto element : mWindowElements)
+		{
+			if (element->GetName() == "options context" && element->GetType() == TypeOf(UIContextMenu))
+			{
+				mWindowElements.Remove(element);
+				delete element;
+				break;
+			}
+		}
+
+		InitializeContextMenu();
 	}
 
 	void UIWindow::InitializeProperties()

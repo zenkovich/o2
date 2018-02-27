@@ -59,6 +59,18 @@ namespace Editor
 		// Initializes window
 		void InitializeWindow();
 
+		// Initializes context menu 
+		void InitializeContextMenu();
+
+		// Gets all actor types and creates create sub menu
+		void InitializeCreateMenu();
+
+		// Creates creation menu items for subtypes of type
+		void CreateActorSubtypesCreateMenu(const Type* type);
+
+		// Creates creation menu items for UI style
+		void CreateUICreateMenu();
+
 		// It is called after that all windows was created
 		void PostInitializeWindow();
 
@@ -148,6 +160,10 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	PUBLIC_FUNCTION(UIActorsTree*, GetActorsTree);
 	PUBLIC_FUNCTION(void, HightlightActorsTreeNode, Actor*);
 	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, InitializeContextMenu);
+	PROTECTED_FUNCTION(void, InitializeCreateMenu);
+	PROTECTED_FUNCTION(void, CreateActorSubtypesCreateMenu, const Type*);
+	PROTECTED_FUNCTION(void, CreateUICreateMenu);
 	PROTECTED_FUNCTION(void, PostInitializeWindow);
 	PROTECTED_FUNCTION(void, OnSearchPressed);
 	PROTECTED_FUNCTION(void, OnListTreeToggled, bool);

@@ -132,6 +132,9 @@ namespace o2
 		// Registering widget for drawing at top of all regular widgets
 		void DrawWidgetAtTop(UIWidget* widget);
 
+		// Returns all styles widgets
+		const WidgetsVec& GetWidgetStyles() const;
+
 	protected:
 		LogStream* mLog = nullptr;           // UI Log stream
 		UIWidget*  mFocusedWidget = nullptr; // Current selected widget

@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "ActorPropertiesViewer.h"
 
-#include "PropertiesWindow/ActorsViewer/DefaultActorAnimationViewer.h"
+#include "PropertiesWindow/ActorsViewer/DefaultActorPropertiesViewer.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorTransformViewer.h"
-#include "PropertiesWindow/ActorsViewer/IActorAnimationViewer.h"
+#include "PropertiesWindow/ActorsViewer/IActorPropertiesViewer.h"
 #include "PropertiesWindow/ActorsViewer/IActorComponentViewer.h"
 #include "PropertiesWindow/ActorsViewer/IActorHeaderViewer.h"
 #include "PropertiesWindow/ActorsViewer/IActorTransformViewer.h"
@@ -22,12 +22,16 @@ namespace Editor
 	{
 		mHeaderViewer = mnew DefaultActorHeaderViewer();
 		mTransformViewer = mnew DefaultActorTransformViewer();
-		mAnimationViewer = mnew DefaultActorAnimationViewer();
 		mDefaultComponentViewer = mnew DefaultActorComponentViewer();
+		mDefaultActorPropertiesViewer=mnew DefaultActorPropertiesViewer();
 
 		auto componentsViewersTypes = TypeOf(IActorComponentViewer).GetDerivedTypes();
 		for (auto type : componentsViewersTypes)
 			mAvailableComponentsViewers.Add((IActorComponentViewer*)type->CreateSample());
+
+		auto actorPropertiessViewersTypes = TypeOf(IActorPropertiesViewer).GetDerivedTypes();
+		for (auto type : actorPropertiessViewersTypes)
+			mAvailableActorPropertiesViewers.Add((IActorPropertiesViewer*)type->CreateSample());
 
 		auto scrollArea = o2UI.CreateScrollArea("backless");
 		scrollArea->SetViewLayout(Layout::BothStretch());
@@ -63,14 +67,20 @@ namespace Editor
 		if (mDefaultComponentViewer)
 			delete mDefaultComponentViewer;
 
+		for (auto kv : mActorPropertiesViewersPool)
+			delete kv.Value();
+
+		for (auto x : mAvailableActorPropertiesViewers)
+			delete x;
+
+		if (mDefaultActorPropertiesViewer)
+			delete mDefaultActorPropertiesViewer;
+
 		if (mHeaderViewer)
 			delete mHeaderViewer;
 
 		if (mTransformViewer)
 			delete mTransformViewer;
-
-		if (mAnimationViewer)
-			delete mAnimationViewer;
 	}
 
 	const Type* ActorPropertiesViewer::GetViewingObjectType() const
@@ -90,15 +100,14 @@ namespace Editor
 		mTransformViewer = viewer;
 	}
 
-	void ActorPropertiesViewer::SetActorAnimationViewer(IActorAnimationViewer* viewer)
-	{
-		delete mAnimationViewer;
-		mAnimationViewer = viewer;
-	}
-
 	void ActorPropertiesViewer::AddComponentViewerType(IActorComponentViewer* viewer)
 	{
 		mAvailableComponentsViewers.Add(viewer);
+	}
+
+	void ActorPropertiesViewer::AddActorPropertiesViewerType(IActorPropertiesViewer* viewer)
+	{
+		mAvailableActorPropertiesViewers.Add(viewer);
 	}
 
 	void ActorPropertiesViewer::Refresh()
@@ -108,6 +117,9 @@ namespace Editor
 
 		for (auto viewer : mComponentsViewers)
 			viewer->Refresh();
+
+		if (mActorPropertiesViewer)
+			mActorPropertiesViewer->Refresh();
 
 		mTransformViewer->Refresh();
 		mHeaderViewer->Refresh();
@@ -133,10 +145,54 @@ namespace Editor
 		viewersWidgets.Add(mTransformViewer->GetWidget());
 		mTransformViewer->SetTargetActors(mTargetActors);
 
-		viewersWidgets.Add(mAnimationViewer->GetWidget());
-		mAnimationViewer->SetTargetActors(mTargetActors);
+		SetTargetsActorProperties(targets, viewersWidgets);
+		SetTargetsComponents(targets, viewersWidgets);		
 
-		// components
+		mViewersLayout->AddChildren(viewersWidgets.Cast<Actor*>());
+	}
+
+	void ActorPropertiesViewer::SetTargetsActorProperties(const Vector<IObject*> targets, Vector<UIWidget*>& viewersWidgets)
+	{
+		const Type* type = &mTargetActors[0]->GetType();
+		bool isAllSameType = mTargetActors.All([&](Actor* x) { return &x->GetType() == type; });
+
+		if (!isAllSameType)
+			return;
+
+		if (type == &TypeOf(Actor) || type == &TypeOf(UIWidget))
+			return;
+
+		bool usingDefaultViewer = false;
+
+		auto viewerSample = mAvailableActorPropertiesViewers.FindMatch([&](IActorPropertiesViewer* x) {
+			return x->GetActorType() == type; });
+
+		if (!viewerSample)
+		{
+			viewerSample = mDefaultActorPropertiesViewer;
+			usingDefaultViewer = true;
+		}
+
+		if (!mActorPropertiesViewersPool.ContainsKey(type))
+		{
+			auto newViewer = (IActorPropertiesViewer*)(viewerSample->GetType().CreateSample());
+
+			if (usingDefaultViewer)
+				((DefaultActorPropertiesViewer*)newViewer)->SpecializeActorType(type);
+
+			mActorPropertiesViewersPool.Add(type, newViewer);
+		}
+
+		auto propertiesViewer = mActorPropertiesViewersPool[type];
+
+		viewersWidgets.Add(propertiesViewer->GetWidget());
+		mActorPropertiesViewer = propertiesViewer;
+
+		propertiesViewer->SetTargetActors(mTargetActors);
+	}
+
+	void ActorPropertiesViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<UIWidget*>& viewersWidgets)
+	{
 		auto commonComponentsTypes = mTargetActors[0]->GetComponents().Select<const Type*>([](auto x) {
 			return &x->GetType(); });
 
@@ -187,8 +243,6 @@ namespace Editor
 			componentViewer->SetTargetComponents(
 				mTargetActors.Select<Component*>([&](Actor* x) { return x->GetComponent(type); }));
 		}
-
-		mViewersLayout->AddChildren(viewersWidgets.Cast<Actor*>());
 	}
 
 	void ActorPropertiesViewer::OnEnabled()

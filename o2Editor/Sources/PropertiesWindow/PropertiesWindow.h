@@ -58,9 +58,13 @@ namespace Editor
 		bool IsTargetsChanged() const;
 
 		// Builds layout viewer by type for objects
-		void BuildObjectProperties(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo, 
+		void BuildObjectProperties(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo,
 								   const String& path);
 
+		// Builds layout viewer by fields
+		void BuildObjectProperties(UIVerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo,
+								   const String& path);
+		
 		// Creates field property by type field info
 		Pair<IPropertyField*, UIWidget*> CreateFieldProperty(const Type* type);
 
@@ -150,6 +154,7 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsTargetsChanged);
 	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, const Type*, FieldPropertiesInfo&, const String&);
+	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, Vector<FieldInfo*>, FieldPropertiesInfo&, const String&);
 	PUBLIC_FUNCTION(_tmp1, CreateFieldProperty, const Type*);
 	PUBLIC_FUNCTION(IPropertyField*, GetFieldPropertyPrototype, const Type*);
 	PUBLIC_FUNCTION(_tmp2, CreateRegularField, const Type*, const String&);

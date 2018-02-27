@@ -1461,6 +1461,11 @@ namespace o2
 		}
 	}
 
+	const String& Actor::GetCreateCategory() const
+	{
+		return GetType().GetName();
+	}
+
 	void Actor::OnParentChanged(Actor* oldParent)
 	{
 		onParentChanged(oldParent);

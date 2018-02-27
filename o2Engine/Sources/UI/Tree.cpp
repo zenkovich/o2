@@ -988,7 +988,10 @@ namespace o2
 		for (auto node : mVisibleNodes)
 		{
 			if (node->widget)
+			{
 				node->widget->UpdateTransform(true);
+				node->widget->CheckClipping(mAbsoluteClipArea);
+			}
 		}
 
 		mNodeWidgetsBuf.Add(mVisibleWidgetsCache.FindAll([](const VisibleWidgetDef& x) { return x.widget != nullptr; })
@@ -1288,7 +1291,15 @@ namespace o2
 	void UITree::MoveScrollPosition(const Vec2F& delta)
 	{
 		mScrollPos += delta;
-		SetLayoutDirty();
+
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+
+		UpdateVisibleNodes();
+
+		mChildrenWorldRect = mAbsoluteViewArea;
+
+		UpdateScrollParams();
 	}
 
 	void UITree::OnCursorPressed(const Input::Cursor& cursor)
@@ -1381,6 +1392,7 @@ namespace o2
 		if (mNodeWidgetsBuf.IsEmpty())
 		{
 			res = mNodeWidgetSample->CloneAs<UITreeNode>();
+			res->ExcludeFromScene();
 			res->Show(true);
 			res->SetSelectionGroup(this);
 			res->messageFallDownListener = this;
@@ -1390,6 +1402,7 @@ namespace o2
 
 		res->SetInteractable(!mIsDraggingNodes);
 		res->mIsSelected = false;
+		res->mIsClipped = false;
 
 		return res;
 	}

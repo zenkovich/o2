@@ -294,6 +294,21 @@ namespace o2
 		return Item();
 	}
 
+	int UIContextMenu::FindItem(const WString& text) const
+	{
+		int idx = 0;
+		for (auto child : mItemsLayout->GetChildWidgets())
+		{
+			auto item = dynamic_cast<UIContextMenuItem*>(child);
+			if (item && item->GetText() == text)
+				return idx;
+
+			idx++;
+		}
+
+		return -1;
+	}
+
 	void UIContextMenu::SetItem(int position, const Item& item)
 	{
 		if (position < 0 || position >= mItemsLayout->mChildren.Count())
@@ -850,6 +865,7 @@ namespace o2
 	UIContextMenuItem::UIContextMenuItem():
 		UIWidget(), mSubMenu(nullptr)
 	{
+		InitializeProperties();
 		RetargetStatesAnimations();
 	}
 
@@ -857,13 +873,31 @@ namespace o2
 		UIWidget(other)
 	{
 		mSubMenu = GetChildByType<UIContextMenu>();
-		if (mSubMenu) mSubMenu->Hide(true);
+		if (mSubMenu) 
+			mSubMenu->Hide(true);
 
+		InitializeProperties();
 		RetargetStatesAnimations();
 	}
 
 	UIContextMenuItem::~UIContextMenuItem()
 	{}
+
+	void UIContextMenuItem::SetText(const WString& text)
+	{
+		auto textLayer = GetLayerDrawable<Text>("caption");
+		if (textLayer)
+			textLayer->text = text;
+	}
+
+	WString UIContextMenuItem::GetText() const
+	{
+		auto textLayer = GetLayerDrawable<Text>("caption");
+		if (textLayer)
+			return textLayer->text;
+
+		return "";
+	}
 
 	UIContextMenuItem& UIContextMenuItem::operator=(const UIContextMenuItem& other)
 	{
@@ -925,6 +959,12 @@ namespace o2
 	{
 		onClick();
 	}
+
+	void UIContextMenuItem::InitializeProperties()
+	{
+		INITIALIZE_PROPERTY(UIContextMenuItem, text, SetText, GetText);
+	}
+
 }
 
 DECLARE_CLASS(o2::UIContextMenuItem);

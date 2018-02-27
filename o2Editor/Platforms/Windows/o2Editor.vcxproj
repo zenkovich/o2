@@ -246,11 +246,11 @@
     <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ComponentsViewers\ImageComponentViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.h" />
@@ -333,11 +333,11 @@
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
     <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorAnimationViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorAnimationViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorHeaderViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp" />
