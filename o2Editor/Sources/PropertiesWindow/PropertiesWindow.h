@@ -54,8 +54,11 @@ namespace Editor
 		// Draws current viewer
 		void Draw() override;
 
-		// Returns were targets changed
+		// Returns is targets changed
 		bool IsTargetsChanged() const;
+
+		// Sets private field viewing state
+		void SetPrivateFieldsVisible(bool visible);
 
 		// Builds layout viewer by type for objects
 		void BuildObjectProperties(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo,
@@ -94,6 +97,8 @@ namespace Editor
 
 		int                      mPropertyFieldsPoolStep = 5; // Field properties pools resize step
 
+		bool                     mPrivateVisible = false;     // Is private fields visible
+
 		Vector<IObject*>         mTargets;                    // Target objects
 		IObjectPropertiesViewer* mCurrentViewer = nullptr;    // Current properties viewer
 		PropViewersVec           mViewers;                    // All available object types viewers
@@ -106,6 +111,9 @@ namespace Editor
 	protected:
 		// Initializes window
 		void InitializeWindow();
+
+		// Initializes window context menu
+		void InitializeWindowContext();
 
 		// Initializes viewers
 		void InitializeViewers();
@@ -129,6 +137,7 @@ CLASS_FIELDS_META(Editor::PropertiesWindow)
 	PUBLIC_FIELD(onFieldChanged);
 	PUBLIC_FIELD(onTargetsChanged);
 	PROTECTED_FIELD(mPropertyFieldsPoolStep);
+	PROTECTED_FIELD(mPrivateVisible);
 	PROTECTED_FIELD(mTargets);
 	PROTECTED_FIELD(mCurrentViewer);
 	PROTECTED_FIELD(mViewers);
@@ -153,6 +162,7 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsTargetsChanged);
+	PUBLIC_FUNCTION(void, SetPrivateFieldsVisible, bool);
 	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, const Type*, FieldPropertiesInfo&, const String&);
 	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, Vector<FieldInfo*>, FieldPropertiesInfo&, const String&);
 	PUBLIC_FUNCTION(_tmp1, CreateFieldProperty, const Type*);
@@ -162,6 +172,7 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 	PUBLIC_FUNCTION(_tmp4, CreateObjectPtrField, const Type*);
 	PUBLIC_FUNCTION(_tmp5, CreateVectorField, const Type*);
 	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, InitializeWindowContext);
 	PROTECTED_FUNCTION(void, InitializeViewers);
 	PROTECTED_FUNCTION(void, InitializePropertiesFields);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);

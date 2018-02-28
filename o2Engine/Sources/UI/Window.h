@@ -67,6 +67,9 @@ namespace o2
 		// Returns caption text
 		virtual WString GetCaption() const;
 
+		// Returns options context menu
+		UIContextMenu* GetOptionsMenu() const;
+
 		// Sets drag handle areas layouts
 		void SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout& bottom, const Layout& left,
 								const Layout& right, const Layout& leftTop, const Layout& rightTop, const Layout& leftBottom,
@@ -236,6 +239,7 @@ CLASS_METHODS_META(o2::UIWindow)
 	PUBLIC_FUNCTION(Layout, GetIconLayout);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
+	PUBLIC_FUNCTION(UIContextMenu*, GetOptionsMenu);
 	PUBLIC_FUNCTION(void, SetDragAreaLayouts, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&, const Layout&);
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetModal, bool);

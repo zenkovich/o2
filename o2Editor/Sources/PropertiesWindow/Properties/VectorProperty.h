@@ -62,9 +62,9 @@ namespace Editor
 	protected:
 		struct PropertyDef
 		{
-			IPropertyField* propertyField;
-			UILabel*        nameLabel;
-			UIWidget*       widget;
+			IPropertyField* propertyField = nullptr;
+			UILabel*        nameLabel = nullptr;
+			UIWidget*       widget = nullptr;
 
 			bool operator==(const PropertyDef& other) const { return propertyField == other.propertyField; }
 		};

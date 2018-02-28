@@ -62,39 +62,16 @@ namespace Editor
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(0, -2, 0, 18));
 
-		// up panel
-		UIWidget* upPanel = mnew UIWidget();
-		upPanel->name = "up panel";
-		*upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-		upPanel->AddLayer("back", mnew Sprite("ui/UI_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
-
-		UIButton* searchButton = o2UI.CreateWidget<UIButton>("search");
-		*searchButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
-		searchButton->onClick += THIS_FUNC(OnSearchPressed);
-		upPanel->AddChild(searchButton);
-
-		mListTreeToggle = o2UI.CreateWidget<UIToggle>("list-tree");
-		*mListTreeToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
-		mListTreeToggle->onToggle += THIS_FUNC(OnListTreeToggled);
-		upPanel->AddChild(mListTreeToggle);
-
-		mSearchEditBox = o2UI.CreateWidget<UIEditBox>("backless");
-		*mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
-		mSearchEditBox->onChanged += THIS_FUNC(OnSearchEdited);
-		upPanel->AddChild(mSearchEditBox);
-
-		mWindow->AddChild(upPanel);
-
-		// actors tree
-		mActorsTree = o2UI.CreateWidget<UIActorsTree>("standard");
-		*mActorsTree->layout = UIWidgetLayout::BothStretch(2, 0, 0, 18);
-
-		mActorsTree->onNodeRightButtonClicked = THIS_FUNC(OnTreeRBPressed);
-
-		mWindow->AddChild(mActorsTree);
-
+		InitializeTopPanel();
+		InitializeActorsTree();
 		InitializeContextMenu();
+		InitializeTestScene();
 
+		mActorsTree->UpdateNodesView();
+	}
+
+	void TreeWindow::InitializeTestScene()
+	{
 		for (int i = 0; i < 10; i++)
 			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
 
@@ -123,14 +100,20 @@ namespace Editor
 				}
 			}
 		}
+	}
 
-		mActorsTree->UpdateNodesView();
+	void TreeWindow::InitializeActorsTree()
+	{
+		mActorsTree = o2UI.CreateWidget<UIActorsTree>("standard");
+		*mActorsTree->layout = UIWidgetLayout::BothStretch(2, 0, 0, 18);
+
+		mActorsTree->onNodeRightButtonClicked = THIS_FUNC(OnTreeRBPressed);
+
+		mWindow->AddChild(mActorsTree);
 	}
 
 	void TreeWindow::InitializeContextMenu()
 	{
-
-
 		// Context menu
 		mTreeContextMenu = o2UI.CreateWidget<UIContextMenu>("standard");
 		mTreeContextMenu->AddItems({
@@ -482,6 +465,31 @@ namespace Editor
 	void TreeWindow::OnActorDestroyed(Actor* actor)
 	{
 		mActorsTree->UpdateNodesView();
+	}
+
+	void TreeWindow::InitializeTopPanel()
+	{
+		UIWidget* upPanel = mnew UIWidget();
+		upPanel->name = "up panel";
+		*upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		upPanel->AddLayer("back", mnew Sprite("ui/UI_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
+
+		UIButton* searchButton = o2UI.CreateWidget<UIButton>("search");
+		*searchButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
+		searchButton->onClick += THIS_FUNC(OnSearchPressed);
+		upPanel->AddChild(searchButton);
+
+		mListTreeToggle = o2UI.CreateWidget<UIToggle>("list-tree");
+		*mListTreeToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
+		mListTreeToggle->onToggle += THIS_FUNC(OnListTreeToggled);
+		upPanel->AddChild(mListTreeToggle);
+
+		mSearchEditBox = o2UI.CreateWidget<UIEditBox>("backless");
+		*mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
+		mSearchEditBox->onChanged += THIS_FUNC(OnSearchEdited);
+		upPanel->AddChild(mSearchEditBox);
+
+		mWindow->AddChild(upPanel);
 	}
 
 }

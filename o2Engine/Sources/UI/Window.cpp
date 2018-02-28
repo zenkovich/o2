@@ -188,6 +188,11 @@ namespace o2
 		return WString();
 	}
 
+	UIContextMenu* UIWindow::GetOptionsMenu() const
+	{
+		return mOptionsMenu;
+	}
+
 	void UIWindow::SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout&bottom, const Layout&left,
 									  const Layout& right, const Layout& leftTop, const Layout& rightTop,
 									  const Layout& leftBottom, const Layout& rightBottom)

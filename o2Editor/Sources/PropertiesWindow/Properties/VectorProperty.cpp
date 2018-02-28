@@ -246,6 +246,9 @@ namespace Editor
 		PropertyDef res;
 		auto fieldPropertySamplePair = o2EditorProperties.CreateFieldProperty(mType->GetElementType());
 
+		if (!fieldPropertySamplePair.first)
+			return res;
+
 		res.propertyField = fieldPropertySamplePair.first;
 		res.propertyField->onChanged = [&]() { onChanged(); };
 		res.widget = fieldPropertySamplePair.second;

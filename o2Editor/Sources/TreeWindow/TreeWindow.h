@@ -59,6 +59,15 @@ namespace Editor
 		// Initializes window
 		void InitializeWindow();
 
+		// Initializes test scene with test tags and actors
+		void InitializeTestScene();
+
+		// Initializes actors tree widget
+		void InitializeActorsTree();
+
+		// Initializes top panel with filter
+		void InitializeTopPanel();
+
 		// Initializes context menu 
 		void InitializeContextMenu();
 
@@ -160,6 +169,9 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	PUBLIC_FUNCTION(UIActorsTree*, GetActorsTree);
 	PUBLIC_FUNCTION(void, HightlightActorsTreeNode, Actor*);
 	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, InitializeTestScene);
+	PROTECTED_FUNCTION(void, InitializeActorsTree);
+	PROTECTED_FUNCTION(void, InitializeTopPanel);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
 	PROTECTED_FUNCTION(void, InitializeCreateMenu);
 	PROTECTED_FUNCTION(void, CreateActorSubtypesCreateMenu, const Type*);

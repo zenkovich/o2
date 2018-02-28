@@ -57,6 +57,21 @@ namespace Editor
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 2)));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 15));
+
+		InitializeWindowContext();
+	}
+
+	void PropertiesWindow::InitializeWindowContext()
+	{
+		auto context = mWindow->GetOptionsMenu();
+		if (!context)
+		{
+			o2Debug.LogError("Failed to initialize properties window context menu: not found menu on window");
+			return;
+		}
+
+		context->AddItem(UIContextMenu::Item::Separator());
+		context->AddItem(UIContextMenu::Item("Private visible", false, THIS_FUNC(SetPrivateFieldsVisible)));
 	}
 
 	void PropertiesWindow::InitializeViewers()
@@ -161,7 +176,13 @@ namespace Editor
 		return mTargetsChanged;
 	}
 
-	void PropertiesWindow::BuildObjectProperties(UIVerticalLayout* layout, const Type* type, 
+	void PropertiesWindow::SetPrivateFieldsVisible(bool visible)
+	{
+		mPrivateVisible = true;
+		SetTargets(mTargets, mOnTargetsChangedDelegate);
+	}
+
+	void PropertiesWindow::BuildObjectProperties(UIVerticalLayout* layout, const Type* type,
 												 FieldPropertiesInfo& propertiesInfo, const String& path)
 	{
 		BuildObjectProperties(layout, type->GetFieldsWithBaseClasses(), propertiesInfo, path);
@@ -174,13 +195,10 @@ namespace Editor
 		{
 			const Type* fieldType = fieldInfo->GetType();
 
-			if (fieldInfo->GetProtectionSection() != ProtectSection::Public &&
-				!fieldInfo->HasAttribute<EditorPropertyAttribute>())
-			{
-				continue;
-			}
+			bool fieldVisible = ((fieldInfo->GetProtectionSection() == ProtectSection::Public || mPrivateVisible) ||
+								 fieldInfo->HasAttribute<EditorPropertyAttribute>()) && !fieldInfo->HasAttribute<IgnoreEditorPropertyAttribute>();
 
-			if (fieldInfo->HasAttribute<IgnoreEditorPropertyAttribute>())
+			if (!fieldVisible)
 				continue;
 
 			auto fieldWidgetPair = CreateFieldProperty(fieldInfo->GetType());
@@ -343,6 +361,13 @@ namespace Editor
 
 	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateVectorField(const Type* type)
 	{
+		const VectorType* vectorType = dynamic_cast<const VectorType*>(type);
+		if (!vectorType)
+			return Pair<IPropertyField*, UIWidget*>(nullptr, nullptr);
+
+		if (!GetFieldPropertyPrototype(vectorType->GetElementType()))
+			return Pair<IPropertyField*, UIWidget*>(nullptr, nullptr);
+
 		IPropertyField* fieldProperty = mnew VectorProperty();
 		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
 		return Pair<IPropertyField*, UIWidget*>(fieldProperty, fieldProperty->GetWidget());

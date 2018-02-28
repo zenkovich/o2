@@ -2432,6 +2432,7 @@ namespace Editor
 				return;
 		}
 
+		data.Clear();
 		data = thisSourceEditedDate;
 		data.SaveToFile(generateDateCachePath);
 
