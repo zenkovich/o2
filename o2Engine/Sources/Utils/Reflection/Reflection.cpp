@@ -112,7 +112,7 @@ namespace o2
 		if (type->mPtrType)
 			return type->mPtrType;
 
-		PointerType* newType = new PointerType(type);
+		PointerType* newType = mnew PointerType(type);
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		type->mPtrType = newType;
@@ -124,9 +124,9 @@ namespace o2
 	
 	Reflection* Reflection::mInstance;
 
-	Type* FundamentalTypeContainer<void>::type = new Type("void", nullptr, 0);
-	Type* IObject::type = new Type("IObject", nullptr, 0);
-	Type* Type::Dummy::type = new Type("Unknown", nullptr, 0);
+	Type* FundamentalTypeContainer<void>::type = mnew Type("void", new TypeSampleCreator<char>(), 0);
+	Type* IObject::type = mnew Type("IObject", mnew TypeSampleCreator<IObject>(), 0);
+	Type* Type::Dummy::type = mnew Type("Unknown", mnew TypeSampleCreator<char>(), 0);
 
 	DECLARE_FUNDAMENTAL_TYPE(int);
 	DECLARE_FUNDAMENTAL_TYPE(bool);

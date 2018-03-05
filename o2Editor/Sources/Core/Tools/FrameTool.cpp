@@ -202,6 +202,8 @@ namespace Editor
 				actor->transform->SetWorldBasis(actor->transform->GetWorldBasis()*transform);
 			else
 				actor->transform->SetWorldNonSizedBasis(actor->transform->GetWorldNonSizedBasis()*transform);
+
+			actor->UpdateTransform();
 		}
 
 		mFrame = mFrame*transform;

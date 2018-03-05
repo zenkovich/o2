@@ -37,7 +37,7 @@ namespace o2
 		mSize = other.mSize;
 
 		UInt dataSize = mSize.x*mSize.y*bpp[(int)mFormat];
-		mData = new unsigned char[dataSize];
+		mData = mnew unsigned char[dataSize];
 		memcpy(mData, other.mData, dataSize);
 	}
 
@@ -58,7 +58,7 @@ namespace o2
 		mSize = other.mSize;
 
 		UInt dataSize = mSize.x*mSize.y*bpp[(int)mFormat];
-		mData = new unsigned char[dataSize];
+		mData = mnew unsigned char[dataSize];
 		memcpy(mData, other.mData, dataSize);
 
 		return *this;
@@ -66,7 +66,7 @@ namespace o2
 
 	Bitmap* Bitmap::Clone() const
 	{
-		return new Bitmap(*this);
+		return mnew Bitmap(*this);
 	}
 
 	void Bitmap::Create(Format format, const Vec2I& size)
@@ -79,7 +79,7 @@ namespace o2
 		mFormat = format;
 		mSize = size;
 
-		mData = new unsigned char[size.x*size.y*bpp[(int)format]];
+		mData = mnew unsigned char[size.x*size.y*bpp[(int)format]];
 	}
 
 	bool Bitmap::Load(const String& fileName, ImageType type)
@@ -287,10 +287,10 @@ namespace o2
 		int mapSize = Math::CeilToInt(radius);
 		int fullmapSize = mapSize * 2 + 1;
 
-		float** weightMap = new float*[fullmapSize];
+		float** weightMap = mnew float*[fullmapSize];
 		for (int i = 0; i < fullmapSize; i++)
 		{
-			weightMap[i] = new float[fullmapSize];
+			weightMap[i] = mnew float[fullmapSize];
 
 			for (int j = 0; j < fullmapSize; j++)
 			{
@@ -302,7 +302,7 @@ namespace o2
 
 		int bpp[] = { 0, 4 };
 		int curbpp = bpp[(int)mFormat];
-		UInt8* srcData = new UInt8[mSize.x*mSize.y*curbpp];
+		UInt8* srcData = mnew UInt8[mSize.x*mSize.y*curbpp];
 		memcpy(srcData, mData, mSize.x*mSize.y*curbpp);
 
 		for (int x = 0; x < mSize.x; x++)
@@ -352,7 +352,7 @@ namespace o2
 		int bpp[] = { 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 
-		UInt8* srcData = new UInt8[mSize.x*mSize.y*curbpp];
+		UInt8* srcData = mnew UInt8[mSize.x*mSize.y*curbpp];
 		memcpy(srcData, mData, mSize.x*mSize.y*curbpp);
 
 		for (int x = 0; x < mSize.x; x++)

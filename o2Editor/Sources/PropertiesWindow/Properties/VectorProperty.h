@@ -45,6 +45,12 @@ namespace Editor
 		// Specializes field type
 		void SpecializeType(const Type* type) override;
 
+		// Sets property caption
+		void SetCaption(const WString& text) override;
+
+		// Returns property caption
+		WString GetCaption() const override;
+
 		// Expands property fields
 		void Expand();
 
@@ -63,7 +69,6 @@ namespace Editor
 		struct PropertyDef
 		{
 			IPropertyField* propertyField = nullptr;
-			UILabel*        nameLabel = nullptr;
 			UIWidget*       widget = nullptr;
 
 			bool operator==(const PropertyDef& other) const { return propertyField == other.propertyField; }
@@ -72,11 +77,8 @@ namespace Editor
 
 		const VectorType* mType = nullptr;             // Vector type
 		TargetsVec        mTargetObjects;              // Target objects
-		UIVerticalLayout* mLayout = nullptr;           // Property layout
-		UILabel*          mNameLabel = nullptr;        // Name label
-		UIButton*         mExpandButton = nullptr;     // Spoiler expanding button
-		UISpoiler*        mSpoiler = nullptr;          // Properties spoiler
-		UIVerticalLayout* mPropertiesLayout = nullptr; // Properties vertical layout
+
+		UISpoiler*        mSpoiler;                    // Properties spoiler
 						 						    
 		PropertyFieldsVec mValueProperties;            // Values properties
 		PropertyFieldsVec mValuePropertiesPool;        // Unused value properties pool
@@ -95,6 +97,9 @@ namespace Editor
 
 		// It is called when count property changing
 		void OnCountChanged();
+
+		// It is called when expanding spoiler, refreshing array properties
+		void OnExpand();
 	};
 }
 
@@ -107,11 +112,7 @@ CLASS_FIELDS_META(Editor::VectorProperty)
 {
 	PROTECTED_FIELD(mType);
 	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mLayout);
-	PROTECTED_FIELD(mNameLabel);
-	PROTECTED_FIELD(mExpandButton);
 	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mPropertiesLayout);
 	PROTECTED_FIELD(mValueProperties);
 	PROTECTED_FIELD(mValuePropertiesPool);
 	PROTECTED_FIELD(mCountProperty);
@@ -128,6 +129,8 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PUBLIC_FUNCTION(void, SetCaption, const WString&);
+	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
@@ -135,5 +138,6 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PROTECTED_FUNCTION(PropertyDef, GetFreeValueProperty);
 	PROTECTED_FUNCTION(void, FreeValueProperty, PropertyDef);
 	PROTECTED_FUNCTION(void, OnCountChanged);
+	PROTECTED_FUNCTION(void, OnExpand);
 }
 END_META;

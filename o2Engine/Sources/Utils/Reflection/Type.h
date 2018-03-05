@@ -637,7 +637,7 @@ namespace o2
 
 	template<typename _type>
 	FundamentalType<_type>::FundamentalType(const String& name):
-		Type(name, new TypeSampleCreator<_type>(), sizeof(_type))
+		Type(name, mnew TypeSampleCreator<_type>(), sizeof(_type))
 	{}
 
 	// ------------------------------
@@ -647,7 +647,7 @@ namespace o2
 	template<typename _value_type>
 	TPropertyType<_value_type>::TPropertyType():
 		PropertyType((String)"o2::Property<" + GetTypeOf<_value_type>().GetName() + ">",
-					 new TypeSampleCreator<_value_type>(), sizeof(_value_type))
+					 mnew TypeSampleCreator<_value_type>(), sizeof(_value_type))
 	{
 		mValueType = &GetTypeOf<_value_type>();
 	}
@@ -693,7 +693,7 @@ namespace o2
 	template<typename _element_type>
 	TVectorType<_element_type>::TVectorType():
 		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">",
-				   new TypeSampleCreator<Vector<_element_type>>(), sizeof(Vector<_element_type>))
+				   mnew TypeSampleCreator<Vector<_element_type>>(), sizeof(Vector<_element_type>))
 	{
 		mElementType = &GetTypeOf<_element_type>();
 
@@ -701,8 +701,8 @@ namespace o2
 			FieldInfo::FieldSerializer<_element_type>,
 			FieldInfo::IFieldSerializer>::type serializerType;
 
-		mElementFieldInfo = new FieldInfo("element", 0, mElementType, ProtectSection::Private, new serializerType());
-		mCountFieldInfo = new FieldInfo("count", 0, &GetTypeOf<int>(), ProtectSection::Public, new VectorCountFieldSerializer<_element_type>());
+		mElementFieldInfo = mnew FieldInfo("element", 0, mElementType, ProtectSection::Private, mnew serializerType());
+		mCountFieldInfo = mnew FieldInfo("count", 0, &GetTypeOf<int>(), ProtectSection::Public, mnew VectorCountFieldSerializer<_element_type>());
 	}
 
 	template<typename _element_type>
@@ -770,7 +770,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	DictionaryType::DictionaryType(_key_type* x, _value_type* y):
 		Type((String)"o2::Dictionary<" + GetTypeOf<_key_type>().GetName() + ", " + GetTypeOf<_value_type>().GetName() + ">",
-			 new TypeSampleCreator<Dictionary<_key_type, _value_type>>, sizeof(Dictionary<_key_type, _value_type>))
+			 mnew TypeSampleCreator<Dictionary<_key_type, _value_type>>, sizeof(Dictionary<_key_type, _value_type>))
 	{
 		mKeyType = &GetTypeOf<_key_type>();
 		mValueType = &GetTypeOf<_value_type>();
@@ -794,7 +794,7 @@ namespace o2
 	template<typename _return_type>
 	StringPointerAccessorType<_return_type>::StringPointerAccessorType():
 		Type((String)"Accessor<" + GetTypeOf<_return_type>().GetName() + "*, const o2::String&>",
-			 new TypeSampleCreator<Accessor<_return_type*, const String&>>(),
+			 mnew TypeSampleCreator<Accessor<_return_type*, const String&>>(),
 			 sizeof(Accessor<_return_type*, const String&>))
 	{
 		mReturnType = &GetTypeOf<_return_type>();
@@ -869,7 +869,7 @@ namespace o2
 			FieldInfo::FieldSerializer<_type>,
 			FieldInfo::IFieldSerializer>::type serializerType;
 
-		auto fieldInfo = new FieldInfo(name, pointerGetter, valType, section, new serializerType());
+		auto fieldInfo = mnew FieldInfo(name, pointerGetter, valType, section, mnew serializerType());
 		fieldInfo->mOwnerType = type;
 		type->mFields.Add(fieldInfo);
 
@@ -881,7 +881,7 @@ namespace o2
 	{
 		auto retType = &TypeOf(_res_type);
 
-		auto funcInfo = new SpecFunctionInfo<_class_type, _res_type, _args ...>();
+		auto funcInfo = mnew SpecFunctionInfo<_class_type, _res_type, _args ...>();
 		funcInfo->mName = name;
 		funcInfo->mFunctionPtr = pointer;
 		funcInfo->mReturnType = retType;
@@ -898,7 +898,7 @@ namespace o2
 	{
 		auto retType = &TypeOf(_res_type);
 
-		auto funcInfo = new SpecConstFunctionInfo<_class_type, _res_type, _args ...>();
+		auto funcInfo = mnew SpecConstFunctionInfo<_class_type, _res_type, _args ...>();
 		funcInfo->mName = name;
 		funcInfo->mFunctionPtr = pointer;
 		funcInfo->mReturnType = retType;

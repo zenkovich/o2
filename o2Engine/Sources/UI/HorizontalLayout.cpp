@@ -51,13 +51,13 @@ namespace o2
 		return mSpacing;
 	}
 
-	void UIHorizontalLayout::SetBorder(const RectF& border)
+	void UIHorizontalLayout::SetBorder(const BorderF& border)
 	{
 		mBorder = border;
 		RearrangeChilds();
 	}
 
-	RectF UIHorizontalLayout::GetBorder() const
+	BorderF UIHorizontalLayout::GetBorder() const
 	{
 		return mBorder;
 	}

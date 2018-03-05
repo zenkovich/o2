@@ -12,7 +12,7 @@ namespace Editor
 		mPropertiesLayout = mnew UIVerticalLayout();
 		mPropertiesLayout->name = "properties";
 		mPropertiesLayout->spacing = 5.0f;
-		mPropertiesLayout->border = RectF(5, 5, 5, 5);
+		mPropertiesLayout->border = BorderF(5, 5, 5, 5);
 		mPropertiesLayout->expandHeight = false;
 		mPropertiesLayout->expandWidth = true;
 		mPropertiesLayout->fitByChildren = true;

@@ -52,13 +52,13 @@ namespace o2
 		return mSpacing;
 	}
 
-	void UIVerticalLayout::SetBorder(const RectF& border)
+	void UIVerticalLayout::SetBorder(const BorderF& border)
 	{
 		mBorder = border;
 		RearrangeChilds();
 	}
 
-	RectF UIVerticalLayout::GetBorder() const
+	BorderF UIVerticalLayout::GetBorder() const
 	{
 		return mBorder;
 	}

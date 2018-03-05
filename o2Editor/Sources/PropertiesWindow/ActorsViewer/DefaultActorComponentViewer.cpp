@@ -65,7 +65,7 @@ namespace Editor
 														const Vector<DataNode>& prevValue, 
 														const Vector<DataNode>& newValue)
 	{
-		ActorsPropertyChangeAction* action = new ActorsPropertyChangeAction(
+		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedActors(), mComponentType, path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);

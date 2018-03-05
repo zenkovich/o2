@@ -2,7 +2,7 @@
 #include "Utils/CommonTypes.h"
 
 // Enables memory managing
-#define ENALBE_MEMORY_MANAGE false
+#define ENALBE_MEMORY_MANAGE true
 
 // Describes that engine running as editor
 #define IS_EDITOR true

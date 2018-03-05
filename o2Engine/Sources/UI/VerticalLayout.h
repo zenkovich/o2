@@ -14,7 +14,7 @@ namespace o2
 
 		Property<float>      spacing;       // Space between widgets property
 
-		Property<RectF>      border;        // Border property
+		Property<BorderF>    border;        // Border property
 		Property<float>      borderLeft;    // Left border property
 		Property<float>      borderRight;   // Right border property
 		Property<float>      borderTop;     // Top border property
@@ -50,10 +50,10 @@ namespace o2
 		float GetSpacing() const;
 
 		// Sets border
-		void SetBorder(const RectF& border);
+		void SetBorder(const BorderF& border);
 
 		// Returns border
-		RectF GetBorder() const;
+		BorderF GetBorder() const;
 
 		// Sets left border
 		void SetBorderLeft(float value);
@@ -105,7 +105,7 @@ namespace o2
 	protected:
 		BaseCorner mBaseCorner = BaseCorner::Top;  // Base corner of widgets arranging @SERIALIZABLE
 		float      mSpacing = 0.0f;                // Space between widgets @SERIALIZABLE
-		RectF      mBorder;                        // Border @SERIALIZABLE
+		BorderF    mBorder;                        // Border @SERIALIZABLE
 		bool       mExpandWidth = true;            // Expanding by width @SERIALIZABLE
 		bool       mExpandHeight = true;           // Expanding by height @SERIALIZABLE
 		bool       mFitByChildren = false;         // Fitting by children @SERIALIZABLE
@@ -190,8 +190,8 @@ CLASS_METHODS_META(o2::UIVerticalLayout)
 	PUBLIC_FUNCTION(BaseCorner, GetBaseCorner);
 	PUBLIC_FUNCTION(void, SetSpacing, float);
 	PUBLIC_FUNCTION(float, GetSpacing);
-	PUBLIC_FUNCTION(void, SetBorder, const RectF&);
-	PUBLIC_FUNCTION(RectF, GetBorder);
+	PUBLIC_FUNCTION(void, SetBorder, const BorderF&);
+	PUBLIC_FUNCTION(BorderF, GetBorder);
 	PUBLIC_FUNCTION(void, SetBorderLeft, float);
 	PUBLIC_FUNCTION(float, GetBorderLeft);
 	PUBLIC_FUNCTION(void, SetBorderRight, float);

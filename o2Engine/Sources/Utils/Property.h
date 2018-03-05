@@ -68,7 +68,7 @@ namespace o2
 		void Initialize(_class_type* object, _type(_class_type::*getter)())
 		{
 			if (mGetter) delete mGetter;
-			mGetter = new ObjFunctionPtr<_class_type, _type>(object, getter);
+			mGetter = mnew ObjFunctionPtr<_class_type, _type>(object, getter);
 		}
 
 		// Initialize from constant object function
@@ -76,14 +76,14 @@ namespace o2
 		void Initialize(_class_type* object, _type(_class_type::*getter)() const)
 		{
 			if (mGetter) delete mGetter;
-			mGetter = new ObjConstFunctionPtr<_class_type, _type>(object, getter);
+			mGetter = mnew ObjConstFunctionPtr<_class_type, _type>(object, getter);
 		}
 
 		// Initialize by static getter function
 		void Initialize(_type(*getter)())
 		{
 			if (mGetter) delete mGetter;
-			mGetter = new FunctionPtr<_type()>(getter);
+			mGetter = mnew FunctionPtr<_type()>(getter);
 		}
 
 		// Getting value operator
@@ -183,7 +183,7 @@ namespace o2
 		void Initialize(_class_type* object, void(_class_type::*setter)(const _type&))
 		{
 			if (mSetter) delete mSetter;
-			mSetter = new ObjFunctionPtr<_class_type, void, const _type&>(object, setter);
+			mSetter = mnew ObjFunctionPtr<_class_type, void, const _type&>(object, setter);
 		}
 
 		// Initialize from object function with reference parameter
@@ -192,7 +192,7 @@ namespace o2
 		{
 			if (mSetter) delete mSetter;
 			auto lambda = [=](const _type& value) { (object->*setter)(const_cast<_type&>(value)); };
-			mSetter = new SharedLambda<void(const _type&)>(lambda);
+			mSetter = mnew SharedLambda<void(const _type&)>(lambda);
 		}
 
 		// Initialize from object function with regular parameter
@@ -201,14 +201,14 @@ namespace o2
 		{
 			if (mSetter) delete mSetter;
 			auto lambda = [=](const _type& value) { (object->*setter)(value); };
-			mSetter = new SharedLambda<void(const _type&)>(lambda);
+			mSetter = mnew SharedLambda<void(const _type&)>(lambda);
 		}
 
 		// Initialize by static function with constant reference parameter
 		void Initialize(void(*setter)(const _type&))
 		{
 			if (mSetter) delete mSetter;
-			mSetter = new FunctionPtr<void(const _type&)>(setter);
+			mSetter = mnew FunctionPtr<void(const _type&)>(setter);
 		}
 
 		// Initialize by static function with reference parameter
@@ -216,7 +216,7 @@ namespace o2
 		{
 			if (mSetter) delete mSetter;
 			auto lambda = [=](const _type& value) { setter(const_cast<_type&>(value)); };
-			mSetter = new SharedLambda<void(const _type&)>(lambda);
+			mSetter = mnew SharedLambda<void(const _type&)>(lambda);
 		}
 
 		// Initialize by static function with regular parameter
@@ -224,7 +224,7 @@ namespace o2
 		{
 			if (mSetter) delete mSetter;
 			auto lambda = [=](const _type& value) { setter(value); };
-			mSetter = new SharedLambda<void(const _type&)>(lambda);
+			mSetter = mnew SharedLambda<void(const _type&)>(lambda);
 		}
 
 		// Invokes set function
@@ -401,7 +401,7 @@ namespace o2
 		void Initialize(_class_type* object, _res_type(_class_type::*getter)(_key_type))
 		{
 			if (mAccessFunc) delete mAccessFunc;
-			mAccessFunc = new ObjFunctionPtr<_class_type, _res_type, _key_type>(object, getter);
+			mAccessFunc = mnew ObjFunctionPtr<_class_type, _res_type, _key_type>(object, getter);
 		}
 
 		// Initialize from constant object function
@@ -409,14 +409,14 @@ namespace o2
 		void Initialize(_class_type* object, _res_type(_class_type::*getter)(_key_type) const)
 		{
 			if (mAccessFunc) delete mAccessFunc;
-			mAccessFunc = new ObjConstFunctionPtr<_class_type, _res_type, _key_type>(object, getter);
+			mAccessFunc = mnew ObjConstFunctionPtr<_class_type, _res_type, _key_type>(object, getter);
 		}
 
 		// Initialize by static getter function
 		void Initialize(_res_type(*getter)(_key_type))
 		{
 			if (mAccessFunc) delete mAccessFunc;
-			mAccessFunc = new FunctionPtr<_res_type(_key_type)>(getter);
+			mAccessFunc = mnew FunctionPtr<_res_type(_key_type)>(getter);
 		}
 
 		// Access operator
@@ -430,7 +430,7 @@ namespace o2
 		void SetAllAccessFunc(_class_type* object, AllRes(_class_type::*getter)())
 		{
 			if (mAllAccessFunc) delete mAllAccessFunc;
-			mAllAccessFunc = new ObjFunctionPtr<_class_type, AllRes>(object, getter);
+			mAllAccessFunc = mnew ObjFunctionPtr<_class_type, AllRes>(object, getter);
 		}
 
 		Dictionary<String, _res_type> GetAll()

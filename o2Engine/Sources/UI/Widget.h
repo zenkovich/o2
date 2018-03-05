@@ -232,7 +232,7 @@ namespace o2
 					   						    
 		UIWidget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null  @EXCLUDE_POINTER_SEARCH
 		WidgetsVec     mChildWidgets;           // Children widgets, a part of all children
-		WidgetsVec     mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children
+		WidgetsVec     mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE
 		WidgetsVec     mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
 
 		RectF          mChildrenWorldRect;      // World rectangle for children arranging
@@ -465,7 +465,7 @@ CLASS_FIELDS_META(o2::UIWidget)
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mParentWidget).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mChildWidgets);
-	PROTECTED_FIELD(mInternalWidgets);
+	PROTECTED_FIELD(mInternalWidgets).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mDrawingChildren);
 	PROTECTED_FIELD(mChildrenWorldRect);
 	PROTECTED_FIELD(mOverrideDepth).SERIALIZABLE_ATTRIBUTE();

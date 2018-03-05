@@ -60,6 +60,12 @@ namespace Editor
 		// Sets private field viewing state
 		void SetPrivateFieldsVisible(bool visible);
 
+		// Returns is private fields visible
+		bool IsPrivateFieldsVisible() const;
+
+		// Checks that property with type can be created
+		bool IsFieldTypeSupported(const Type* type) const;
+
 		// Builds layout viewer by type for objects
 		void BuildObjectProperties(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo,
 								   const String& path);
@@ -67,24 +73,32 @@ namespace Editor
 		// Builds layout viewer by fields
 		void BuildObjectProperties(UIVerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo,
 								   const String& path);
-		
+
 		// Creates field property by type field info
-		Pair<IPropertyField*, UIWidget*> CreateFieldProperty(const Type* type);
+		Pair<IPropertyField*, UIWidget*> CreateFieldProperty(const Type* type, const String& name);
+
+		// Checks is property visible in properties window: 
+		// checking protection section, ignore and editor attributes
+		bool IsPropertyVisible(FieldInfo* info, bool allowPrivate) const;
+
+		// Checks is property visible in properties window using current private visibility state: 
+		// checking protection section, ignore and editor attributes
+		bool IsPropertyVisible(FieldInfo* info) const;
 
 		// Returns available field by type
-		IPropertyField* GetFieldPropertyPrototype(const Type* type);
+		IPropertyField* GetFieldPropertyPrototype(const Type* type) const;
 
 		// Creates regular primitive property field
 		Pair<IPropertyField*, UIWidget*> CreateRegularField(const Type* fieldPropertyType, const String& name);
 
 		// Creates object field
-		Pair<IPropertyField*, UIWidget*> CreateObjectField(const Type* type);
+		Pair<IPropertyField*, UIWidget*> CreateObjectField(const Type* type, const String& name);
 
 		// Creates object pointer field
-		Pair<IPropertyField*, UIWidget*> CreateObjectPtrField(const Type* type);
+		Pair<IPropertyField*, UIWidget*> CreateObjectPtrField(const Type* type, const String& name);
 
 		// Creates vector field
-		Pair<IPropertyField*, UIWidget*> CreateVectorField(const Type* type);
+		Pair<IPropertyField*, UIWidget*> CreateVectorField(const Type* type, const String& name);
 
 		// Makes smarter field name
 		static String MakeSmartFieldName(const String& fieldName);
@@ -121,7 +135,11 @@ namespace Editor
 		// Initializes available properties fields and pools
 		void InitializePropertiesFields();
 
-		// It is called when some property field was changed
+		// Builds layout viewer by fields without filtering
+		void BuildFields(UIVerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo,
+						 const String& path);
+
+        // It is called when some property field was changed
 		void OnPropertyChanged(IPropertyField* field);
 	};
 }
@@ -163,18 +181,23 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsTargetsChanged);
 	PUBLIC_FUNCTION(void, SetPrivateFieldsVisible, bool);
+	PUBLIC_FUNCTION(bool, IsPrivateFieldsVisible);
+	PUBLIC_FUNCTION(bool, IsFieldTypeSupported, const Type*);
 	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, const Type*, FieldPropertiesInfo&, const String&);
 	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, Vector<FieldInfo*>, FieldPropertiesInfo&, const String&);
-	PUBLIC_FUNCTION(_tmp1, CreateFieldProperty, const Type*);
+	PUBLIC_FUNCTION(_tmp1, CreateFieldProperty, const Type*, const String&);
+	PUBLIC_FUNCTION(bool, IsPropertyVisible, FieldInfo*, bool);
+	PUBLIC_FUNCTION(bool, IsPropertyVisible, FieldInfo*);
 	PUBLIC_FUNCTION(IPropertyField*, GetFieldPropertyPrototype, const Type*);
 	PUBLIC_FUNCTION(_tmp2, CreateRegularField, const Type*, const String&);
-	PUBLIC_FUNCTION(_tmp3, CreateObjectField, const Type*);
-	PUBLIC_FUNCTION(_tmp4, CreateObjectPtrField, const Type*);
-	PUBLIC_FUNCTION(_tmp5, CreateVectorField, const Type*);
+	PUBLIC_FUNCTION(_tmp3, CreateObjectField, const Type*, const String&);
+	PUBLIC_FUNCTION(_tmp4, CreateObjectPtrField, const Type*, const String&);
+	PUBLIC_FUNCTION(_tmp5, CreateVectorField, const Type*, const String&);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeWindowContext);
 	PROTECTED_FUNCTION(void, InitializeViewers);
 	PROTECTED_FUNCTION(void, InitializePropertiesFields);
+	PROTECTED_FUNCTION(void, BuildFields, UIVerticalLayout*, Vector<FieldInfo*>, FieldPropertiesInfo&, const String&);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;

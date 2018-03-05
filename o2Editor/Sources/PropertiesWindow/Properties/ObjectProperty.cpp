@@ -17,48 +17,13 @@ namespace Editor
 {
 	ObjectProperty::ObjectProperty()
 	{
-		mLayout = mnew UIVerticalLayout();
-		mLayout->spacing = 0.0f;
-		mLayout->border = RectF(0, 0, 0, 0);
-		mLayout->expandHeight = false;
-		mLayout->expandWidth = true;
-		mLayout->fitByChildren = true;
-		mLayout->baseCorner = BaseCorner::RightTop;
-		*mLayout->layout = UIWidgetLayout::BothStretch();
-
-		auto header = mnew UIWidget();
-		*header->layout = UIWidgetLayout::BothStretch();
-		header->layout->minHeight = 20;
-
-		mExpandButton = o2UI.CreateWidget<UIButton>("expand");
-		*mExpandButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-7, 0));
-		mExpandButton->onClick = [&]() { SetExpanded(!IsExpanded()); };
-		header->AddChild(mExpandButton, false);
-
-		mNameLabel = o2UI.CreateWidget<UILabel>();
-		mNameLabel->name = "propertyName";
-		*mNameLabel->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 10, 0, 20, 0);
-		mNameLabel->horAlign = HorAlign::Left;
-		header->AddChild(mNameLabel, false);
-
-		mSpoiler = mnew UISpoiler();
-		mPropertiesLayout = mnew UIVerticalLayout();
-		mPropertiesLayout->spacing = 5.0f;
-		mPropertiesLayout->borderLeft = 10;
-		mPropertiesLayout->expandHeight = false;
-		mPropertiesLayout->expandWidth = true;
-		mPropertiesLayout->fitByChildren = true;
-		mPropertiesLayout->baseCorner = BaseCorner::RightTop;
-		*mPropertiesLayout->layout = UIWidgetLayout::BothStretch();
-		mSpoiler->AddChild(mPropertiesLayout);
-
-		mLayout->AddChild(header);
-		mLayout->AddChild(mSpoiler);
+		mSpoiler = o2UI.CreateWidget<UISpoiler>("expand with caption");
+		mSpoiler->onExpand = THIS_FUNC(OnExpand);
 	}
 
 	ObjectProperty::~ObjectProperty()
 	{
-		delete mLayout;
+		delete mSpoiler;
 	}
 
 	void ObjectProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
@@ -83,7 +48,7 @@ namespace Editor
 
 	UIWidget* ObjectProperty::GetWidget() const
 	{
-		return mLayout;
+		return mSpoiler;
 	}
 
 	const Type* ObjectProperty::GetFieldType() const
@@ -94,22 +59,16 @@ namespace Editor
 	void ObjectProperty::SpecializeType(const Type* type)
 	{
 		mObjectType = type;
+	}
 
-		o2EditorProperties.BuildObjectProperties(mPropertiesLayout, mObjectType, mFieldProperties, "");
+	void ObjectProperty::SetCaption(const WString& text)
+	{
+		mSpoiler->SetCaption(text);
+	}
 
-		auto onChangedFunc = [&]() { onChanged(); };
-
-		auto onChangeCompletedFunc = 
-			[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after) 
-		{
-			onChangeCompleted(mValuesPath + "/" + path, before, after);
-		};
-
-		for (auto prop : mFieldProperties.properties)
-		{
-			prop.Value()->onChanged = onChangedFunc;
-			prop.Value()->onChangeCompleted = onChangeCompletedFunc;
-		}
+	WString ObjectProperty::GetCaption() const
+	{
+		return mSpoiler->GetCaption();
 	}
 
 	void ObjectProperty::Expand()
@@ -124,16 +83,7 @@ namespace Editor
 
 	void ObjectProperty::SetExpanded(bool expanded)
 	{
-		if (!expanded)
-		{
-			mSpoiler->Collapse();
-			mExpandButton->SetState("expanded", false);
-		}
-		else
-		{
-			mSpoiler->Expand();
-			mExpandButton->SetState("expanded", true);
-		}
+		mSpoiler->SetExpanded(expanded);
 	}
 
 	bool ObjectProperty::IsExpanded() const
@@ -144,6 +94,30 @@ namespace Editor
 	const FieldPropertiesInfo& ObjectProperty::GetPropertiesInfo() const
 	{
 		return mFieldProperties;
+	}
+
+	void ObjectProperty::OnExpand()
+	{
+		if (mPropertiesInitialized)
+			return;
+
+		o2EditorProperties.BuildObjectProperties(mSpoiler, mObjectType, mFieldProperties, "");
+
+		auto onChangedFunc = [&]() { onChanged(); };
+
+		auto onChangeCompletedFunc =
+			[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
+
+		for (auto prop : mFieldProperties.properties)
+		{
+			prop.Value()->onChanged = onChangedFunc;
+			prop.Value()->onChangeCompleted = onChangeCompletedFunc;
+		}
+
+		mPropertiesInitialized = true;
 	}
 
 }

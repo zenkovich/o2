@@ -124,7 +124,7 @@ namespace Editor
 		auto contentWidget = o2UI.CreateVerLayout();
 		contentWidget->name          = "asset viewer layout";
 		contentWidget->spacing       = 0.0f;
-		contentWidget->border        = RectF();
+		contentWidget->border        = BorderF();
 		contentWidget->expandHeight  = false;
 		contentWidget->expandWidth   = true;
 		contentWidget->fitByChildren = true;

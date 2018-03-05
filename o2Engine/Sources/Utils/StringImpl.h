@@ -573,7 +573,7 @@ namespace o2
 		splitted[2].Trim();
 		splitted[3].Trim();
 
-		return BorderF((float)splitted[0], (float)splitted[1], (float)splitted[2], (float)splitted[3]);
+		return BorderF((float)splitted[0], (float)splitted[3], (float)splitted[2], (float)splitted[1]);
 	}
 
 	template<typename T>
@@ -588,7 +588,7 @@ namespace o2
 		splitted[2].Trim();
 		splitted[3].Trim();
 
-		return BorderI((int)splitted[0], (int)splitted[1], (int)splitted[2], (int)splitted[3]);
+		return BorderI((int)splitted[0], (int)splitted[3], (int)splitted[2], (int)splitted[1]);
 	}
 
 	template<typename T>

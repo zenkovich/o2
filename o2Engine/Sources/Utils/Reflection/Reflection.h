@@ -206,7 +206,7 @@ namespace o2
 	template<typename _type>
 	Type* Reflection::InitializeType(const char* name)
 	{
-		Type* res = new ObjectType(name, new TypeSampleCreator<_type>(), sizeof(_type), &CastFunc<IObject, _type>,
+		Type* res = mnew ObjectType(name, mnew TypeSampleCreator<_type>(), sizeof(_type), &CastFunc<IObject, _type>,
 								   &CastFunc<_type, IObject>);
 
 		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::ProcessType<ReflectionInitializationTypeProcessor>);
@@ -222,7 +222,7 @@ namespace o2
 	template<typename _type>
 	Type* Reflection::InitializeFundamentalType(const char* name)
 	{
-		Type* res = new FundamentalType<_type>(name);
+		Type* res = mnew FundamentalType<_type>(name);
 
 		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::InitializeType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
@@ -234,7 +234,7 @@ namespace o2
 	template<typename _type>
 	EnumType* Reflection::InitializeEnum(const char* name, std::function<Dictionary<int, String>()> func)
 	{
-		EnumType* res = new EnumType(name, new TypeSampleCreator<_type>(), sizeof(_type));
+		EnumType* res = mnew EnumType(name, mnew TypeSampleCreator<_type>(), sizeof(_type));
 
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
@@ -251,7 +251,7 @@ namespace o2
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
 			return (PropertyType*)fnd;
 
-		TPropertyType<_value_type>* newType = new TPropertyType<_value_type>();
+		TPropertyType<_value_type>* newType = mnew TPropertyType<_value_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);
@@ -267,7 +267,7 @@ namespace o2
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
 			return (VectorType*)fnd;
 
-		TVectorType<_element_type>* newType = new TVectorType<_element_type>();
+		TVectorType<_element_type>* newType = mnew TVectorType<_element_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);
@@ -285,7 +285,7 @@ namespace o2
 
 		_key_type* x = nullptr;
 		_value_type* y = nullptr;
-		DictionaryType* newType = new DictionaryType(x, y);
+		DictionaryType* newType = mnew DictionaryType(x, y);
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);
@@ -302,7 +302,7 @@ namespace o2
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
 			return (StringPointerAccessorType<_return_type>*)fnd;
 
-		StringPointerAccessorType<_return_type>* newType = new StringPointerAccessorType<_return_type>();
+		StringPointerAccessorType<_return_type>* newType = mnew StringPointerAccessorType<_return_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);

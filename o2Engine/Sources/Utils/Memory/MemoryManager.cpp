@@ -12,7 +12,7 @@ void* operator new(size_t size, const char* location, int line)
 	void* memory = ::operator new(size);
 
 #if ENALBE_MEMORY_MANAGE == true
-o2::MemoryManager::mInstance->OnMemoryAllocate(memory, size, location, line);
+o2::MemoryManager::Instance().OnMemoryAllocate(memory, size, location, line);
 #endif
 
 	return memory;
@@ -21,7 +21,7 @@ o2::MemoryManager::mInstance->OnMemoryAllocate(memory, size, location, line);
 void operator delete(void* allocMemory)
 {
 #if ENALBE_MEMORY_MANAGE == true
-	o2::MemoryManager::mInstance->OnMemoryRelease(allocMemory);
+	o2::MemoryManager::Instance().OnMemoryRelease(allocMemory);
 #endif
 
 	free(allocMemory);
@@ -37,7 +37,7 @@ void* _mmalloc(size_t size, const char* location, int line)
 	void* memory = ::operator new(size);
 
 #if ENALBE_MEMORY_MANAGE == true
-	o2::MemoryManager::mInstance->OnMemoryAllocate(memory, size, location, line);
+	o2::MemoryManager::Instance().OnMemoryAllocate(memory, size, location, line);
 #endif
 
 	return memory;
@@ -46,7 +46,7 @@ void* _mmalloc(size_t size, const char* location, int line)
 void _mfree(void* allocMemory)
 {
 #if ENALBE_MEMORY_MANAGE == true
-	o2::MemoryManager::mInstance->OnMemoryRelease(allocMemory);
+	o2::MemoryManager::Instance().OnMemoryRelease(allocMemory);
 #endif
 
 	free(allocMemory);
@@ -65,6 +65,9 @@ namespace o2
 
 	MemoryManager& MemoryManager::Instance()
 	{
+		if (!mInstance)
+			mInstance = new MemoryManager();
+
 		return *mInstance;
 	}
 

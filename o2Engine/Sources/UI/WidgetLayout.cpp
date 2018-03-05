@@ -612,7 +612,7 @@ namespace o2
 
 	void UIWidgetLayout::UpdateOffsetsByCurrentTransform()
 	{
-		SetRect(GetRect());
+		SetRect(ActorTransform::GetRect());
 	}
 
 	void UIWidgetLayout::CopyFrom(const ActorTransform& other)

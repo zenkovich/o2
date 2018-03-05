@@ -31,14 +31,14 @@ namespace o2
 		virtual ~IObject() {}
 
 		// Cloning interface
-		virtual IObject* Clone() const = 0;
+		virtual IObject* Clone() const { return mnew IObject(); };
 
 		// Cloning as type
 		template<typename _cast_type>
 		_cast_type* CloneAs() const { return dynamic_cast<_cast_type*>(Clone()); }
 
 		// Returns type
-		virtual const Type& GetType() const = 0;
+		virtual const Type& GetType() const { return *type; }
 
 	private:
 		static Type* type;

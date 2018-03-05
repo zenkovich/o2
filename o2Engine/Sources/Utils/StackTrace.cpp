@@ -23,7 +23,7 @@ namespace o2
 
 	void o2StackWalker::Initialize()
 	{
-		mInstance = new o2StackWalker();
+		mInstance = mnew o2StackWalker();
 	}
 
 	o2::String o2StackWalker::GetStackTrace()

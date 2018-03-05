@@ -172,46 +172,6 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void EditorUIStyleBuilder::RebuildExpandButton()
-	{
-		UIButton* sample = mnew UIButton();
-		sample->layout->minSize = Vec2F(5, 5);
-		sample->name = "expandBtn";
-
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
-											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
-
-		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Right_icn_select.png"),
-											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
-
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
-											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
-
-
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
-			->offStateAnimationSpeed = 1.0f / 4.0f;
-
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
-
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
-
-		Animation expandedStateAnim(sample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
-			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-
-		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
-			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
-			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-
-		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
-
-		o2UI.AddWidgetStyle(sample, "expand");
-	}
-
 	void EditorUIStyleBuilder::RebuildPlayStopButtonStyle()
 	{
 		UIToggle* sample = mnew UIToggle();

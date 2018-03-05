@@ -232,7 +232,7 @@ namespace Editor
 
 	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
 	{
-		ActorsPropertyChangeAction* action = new ActorsPropertyChangeAction(
+		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedActors(), nullptr, path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);

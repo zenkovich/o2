@@ -9,7 +9,6 @@ namespace Editor
 	class EditorUIStyleBuilder: public BasicUIStyleBuilder
 	{
 	public:
-		void RebuildExpandButton();
 		void RebuildDockableWndStyle();
 		void RebuildPlayStopButtonStyle();
 		void RebuildPauseButtonStyle();
@@ -93,7 +92,6 @@ END_META;
 CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 {
 
-	PUBLIC_FUNCTION(void, RebuildExpandButton);
 	PUBLIC_FUNCTION(void, RebuildDockableWndStyle);
 	PUBLIC_FUNCTION(void, RebuildPlayStopButtonStyle);
 	PUBLIC_FUNCTION(void, RebuildPauseButtonStyle);

@@ -18,6 +18,7 @@
 #include "UI/LongList.h"
 #include "UI/MenuPanel.h"
 #include "UI/ScrollArea.h"
+#include "UI/Spoiler.h"
 #include "UI/Toggle.h"
 #include "UI/Tree.h"
 #include "UI/UIManager.h"
@@ -1150,6 +1151,73 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "backless");
+	}
+
+	void BasicUIStyleBuilder::RebuildExpandButton()
+	{
+		UIButton* sample = mnew UIButton();
+		sample->layout->minSize = Vec2F(5, 5);
+		sample->name = "expandBtn";
+
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Right_icn_select.png"),
+											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation expandedStateAnim(sample);
+		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+		o2UI.AddWidgetStyle(sample, "expand");
+	}
+
+	void BasicUIStyleBuilder::RebuildSpoiler()
+	{
+		UISpoiler* sample = mnew UISpoiler();
+		sample->spacing = 5.0f;
+		sample->borderLeft = 10;
+		sample->expandHeight = false;
+		sample->expandWidth = true;
+		sample->fitByChildren = true;
+		sample->baseCorner = BaseCorner::RightTop;
+
+		Text* captionText        = mnew Text("stdFont.ttf");
+		captionText->text        = "Button";
+		captionText->horAlign    = HorAlign::Left;
+		captionText->verAlign    = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		captionText->wordWrap    = true;
+		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 10, 0, 20));
+
+		auto expandBtn = o2UI.CreateWidget<UIButton>("expand");
+		*expandBtn->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-7, 0));
+		expandBtn->SetInternalParent(sample, false);
+
+		sample->SetHeadHeight(20);
+
+		o2UI.AddWidgetStyle(sample, "expand with caption");
 	}
 
 	void BasicUIStyleBuilder::RebuildBasicUIManager()

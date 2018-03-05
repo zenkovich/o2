@@ -43,6 +43,12 @@ namespace Editor
 		// Reverts value to prototype value
 		virtual void Revert() {}
 
+		// Sets property caption
+		virtual void SetCaption(const WString& text);
+
+		// Returns property caption
+		virtual WString GetCaption() const;
+
 		// Returns control widget
 		virtual UIWidget* GetWidget() const { return nullptr; }
 
@@ -54,6 +60,12 @@ namespace Editor
 
 		// Returns reflection path of target values
 		const String& GetValuePath() const;
+
+		// Sets caption
+		void SetCaptionLabel(UILabel* label);
+
+		// Returns caption
+		UILabel* GetCaptionLabel() const;
 
 		// Specializes field type
 		virtual void SpecializeType(const Type* type) {}
@@ -71,6 +83,8 @@ namespace Editor
 		virtual void StoreValues(Vector<DataNode>& data) const {}
 
 	protected:
+		UILabel*         mCaption = nullptr;  // Caption label, null by default   
+
 		String           mValuesPath;         // Reflection path of target values
 		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
 	};
@@ -85,6 +99,7 @@ CLASS_FIELDS_META(Editor::IPropertyField)
 {
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onChangeCompleted);
+	PROTECTED_FIELD(mCaption);
 	PROTECTED_FIELD(mValuesPath);
 	PROTECTED_FIELD(mBeforeChangeValues);
 }
@@ -96,10 +111,14 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SetValuePtr, const Vector<void*>&, bool);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
+	PUBLIC_FUNCTION(void, SetCaption, const WString&);
+	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);
 	PUBLIC_FUNCTION(void, SetValuePath, const String&);
 	PUBLIC_FUNCTION(const String&, GetValuePath);
+	PUBLIC_FUNCTION(void, SetCaptionLabel, UILabel*);
+	PUBLIC_FUNCTION(UILabel*, GetCaptionLabel);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, OnChanged);

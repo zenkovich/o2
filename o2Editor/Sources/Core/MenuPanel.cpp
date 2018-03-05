@@ -93,6 +93,7 @@ namespace Editor
 			EditorUIStyleBuilder builder;
 			builder.RebuildEditorUIManager();
 		});
+		mMenuPanel->AddItem("Debug/Dump memory", [&]() { o2Memory.DumpInfo(); });
 	}
 
 	MenuPanel::~MenuPanel()
@@ -173,7 +174,7 @@ namespace Editor
 			verLayout->AddChild(horLayout);
 
 			*horLayout->layout = UIWidgetLayout::BothStretch();
-			horLayout->border = RectF(20, 20, 20, 20);
+			horLayout->border = BorderF(20, 20, 20, 20);
 			horLayout->spacing = 20;
 			horLayout->AddChild(o2UI.CreateButton("Save"));
 			horLayout->AddChild(o2UI.CreateButton("Don't save"));

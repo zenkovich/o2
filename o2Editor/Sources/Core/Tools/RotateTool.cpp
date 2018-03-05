@@ -19,8 +19,8 @@ namespace Editor
 										   mnew Sprite("ui/UI2_pivot_select.png"),
 										   mnew Sprite("ui/UI2_pivot_pressed.png"));
 
-		mRotateRingFillMesh = new Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
-		mAngleMesh = new Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
+		mRotateRingFillMesh = mnew Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
+		mAngleMesh = mnew Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
 
 		mPivotDragHandle.onChangedPos += THIS_FUNC(OnPivotDragHandleMoved);
 		mPivotDragHandle.enabled = false;

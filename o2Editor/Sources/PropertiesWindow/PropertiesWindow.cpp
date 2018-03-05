@@ -98,6 +98,37 @@ namespace Editor
 		}
 	}
 
+	void PropertiesWindow::BuildFields(UIVerticalLayout* layout, Vector<FieldInfo*> fields, 
+									   FieldPropertiesInfo& propertiesInfo, const String& path)
+	{
+		Timer t;
+		Timer t2;
+		for (auto fieldInfo : fields)
+		{
+			const Type* fieldType = fieldInfo->GetType();
+
+			String propertyName;
+			if (fieldInfo->GetProtectionSection() == ProtectSection::Public)
+				propertyName = MakeSmartFieldName(fieldInfo->GetName());
+			else
+				propertyName = "[" + MakeSmartFieldName(fieldInfo->GetName()) + "]";
+
+			auto fieldWidgetPair = CreateFieldProperty(fieldInfo->GetType(), propertyName);
+			if (!fieldWidgetPair.first)
+				continue;
+
+			fieldWidgetPair.first->SetValuePath(path + fieldInfo->GetName());
+			fieldWidgetPair.first->SpecializeType(fieldType);
+
+			layout->AddChild(fieldWidgetPair.second, false);
+			propertiesInfo.properties.Add(fieldInfo, fieldWidgetPair.first);
+
+			o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)t.GetDeltaTime());
+		}
+
+		o2Debug.Log(">>> Fields created for " + (String)t2.GetDeltaTime());
+	}
+
 	void PropertiesWindow::OnPropertyChanged(IPropertyField* field)
 	{
 		onFieldChanged(field);
@@ -182,69 +213,122 @@ namespace Editor
 		SetTargets(mTargets, mOnTargetsChangedDelegate);
 	}
 
-	void PropertiesWindow::BuildObjectProperties(UIVerticalLayout* layout, const Type* type,
-												 FieldPropertiesInfo& propertiesInfo, const String& path)
+	bool PropertiesWindow::IsPrivateFieldsVisible() const
 	{
-		BuildObjectProperties(layout, type->GetFieldsWithBaseClasses(), propertiesInfo, path);
+		return mPrivateVisible;
 	}
 
-	void PropertiesWindow::BuildObjectProperties(UIVerticalLayout* layout, Vector<FieldInfo*> fields, 
-												 FieldPropertiesInfo& propertiesInfo, const String& path)
-	{
-		for (auto fieldInfo : fields)
-		{
-			const Type* fieldType = fieldInfo->GetType();
-
-			bool fieldVisible = ((fieldInfo->GetProtectionSection() == ProtectSection::Public || mPrivateVisible) ||
-								 fieldInfo->HasAttribute<EditorPropertyAttribute>()) && !fieldInfo->HasAttribute<IgnoreEditorPropertyAttribute>();
-
-			if (!fieldVisible)
-				continue;
-
-			auto fieldWidgetPair = CreateFieldProperty(fieldInfo->GetType());
-			if (!fieldWidgetPair.first)
-				continue;
-
-			fieldWidgetPair.first->SetValuePath(path + fieldInfo->GetName());
-			fieldWidgetPair.first->SpecializeType(fieldType);
-
-			auto nameLabel = dynamic_cast<UILabel*>(fieldWidgetPair.second->FindChild("propertyName"));
-			if (nameLabel)
-				nameLabel->text = MakeSmartFieldName(fieldInfo->GetName());
-
-			layout->AddChild(fieldWidgetPair.second, false);
-			propertiesInfo.properties.Add(fieldInfo, fieldWidgetPair.first);
-		}
-	}
-
-	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateFieldProperty(const Type* type)
+	bool PropertiesWindow::IsFieldTypeSupported(const Type* type) const
 	{
 		if (type->GetUsage() == Type::Usage::Vector)
-			return CreateVectorField(type);
+			return IsFieldTypeSupported(dynamic_cast<const VectorType*>(type)->GetElementType());
 
 		IPropertyField* fieldSample = GetFieldPropertyPrototype(type);
 		if (fieldSample)
-			return CreateRegularField(&fieldSample->GetType(), type->GetName());
+			return true;
 
 		if (type->IsBasedOn(TypeOf(IObject)))
-			return CreateObjectField(type);
+			return true;
 
 		if (type->GetUsage() == Type::Usage::Pointer && ((PointerType*)type)->GetUnpointedType()->IsBasedOn((TypeOf(IObject))))
-			return CreateObjectPtrField(type);
+			return true;
 
 		if (type->GetUsage() == Type::Usage::Enumeration)
-			return CreateRegularField(&TypeOf(EnumProperty), type->GetName());
+			return true;
 
 		if (type->GetUsage() == Type::Usage::Property)
 		{
 			auto valueType = ((const PropertyType*)type)->GetValueType();
 
 			if (valueType->GetUsage() == Type::Usage::Enumeration)
-				return CreateRegularField(&TypeOf(EnumProperty), valueType->GetName());
+				return true;
 
 			fieldSample = GetFieldPropertyPrototype(valueType);
 			if (fieldSample)
-				return CreateRegularField(&fieldSample->GetType(), valueType->GetName());
+				return true;
+		}
+
+		return false;
+	}	
+	
+	bool PropertiesWindow::IsPropertyVisible(FieldInfo* info, bool allowPrivate) const
+	{
+		if (info->HasAttribute<IgnoreEditorPropertyAttribute>())
+			return false;
+
+		if (info->GetProtectionSection() == ProtectSection::Public || allowPrivate)
+			return true;
+
+		if (info->HasAttribute<EditorPropertyAttribute>())
+			return true;
+
+		return false;
+	}
+
+	bool PropertiesWindow::IsPropertyVisible(FieldInfo* info) const
+	{
+		return IsPropertyVisible(info, mPrivateVisible);
+	}
+
+	void PropertiesWindow::BuildObjectProperties(UIVerticalLayout* layout, const Type* type,
+												 FieldPropertiesInfo& propertiesInfo, const String& path)
+	{
+		BuildObjectProperties(layout, type->GetFieldsWithBaseClasses(), propertiesInfo, path);
+	}
+
+	void PropertiesWindow::BuildObjectProperties(UIVerticalLayout* layout, Vector<FieldInfo*> fields,
+												 FieldPropertiesInfo& propertiesInfo, const String& path)
+	{
+		Vector<FieldInfo*> regularFields = fields.FindAll(
+			[&](FieldInfo* x) { return IsPropertyVisible(x, false); });
+
+		BuildFields(layout, regularFields, propertiesInfo, path);
+
+		if (mPrivateVisible)
+		{
+			Vector<FieldInfo*> privateFields = fields.FindAll(
+				[&](FieldInfo* x) { return IsPropertyVisible(x, true) && !regularFields.Contains(x); });
+
+			if (!privateFields.IsEmpty())
+			{
+				UISpoiler* privates = o2UI.CreateWidget<UISpoiler>("expand with caption");
+				privates->SetCaption("Private");
+
+				BuildFields(privates, privateFields, propertiesInfo, path);
+
+				layout->AddChild(privates);
+			}
+		}
+	}
+
+	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateFieldProperty(const Type* type, const String& name)
+	{
+		if (type->GetUsage() == Type::Usage::Vector)
+			return CreateVectorField(type, name);
+
+		IPropertyField* fieldSample = GetFieldPropertyPrototype(type);
+		if (fieldSample)
+			return CreateRegularField(&fieldSample->GetType(), name);
+
+		if (type->IsBasedOn(TypeOf(IObject)))
+			return CreateObjectField(type, name);
+
+		if (type->GetUsage() == Type::Usage::Pointer && ((PointerType*)type)->GetUnpointedType()->IsBasedOn((TypeOf(IObject))))
+			return CreateObjectPtrField(type, name);
+
+		if (type->GetUsage() == Type::Usage::Enumeration)
+			return CreateRegularField(&TypeOf(EnumProperty), name);
+
+		if (type->GetUsage() == Type::Usage::Property)
+		{
+			auto valueType = ((const PropertyType*)type)->GetValueType();
+
+			if (valueType->GetUsage() == Type::Usage::Enumeration)
+				return CreateRegularField(&TypeOf(EnumProperty), name);
+
+			fieldSample = GetFieldPropertyPrototype(valueType);
+			if (fieldSample)
+				return CreateRegularField(&fieldSample->GetType(), name);
 		}
 
 		return Pair<IPropertyField*, UIWidget*>(nullptr, nullptr);
@@ -262,6 +346,12 @@ namespace Editor
 			begn = fieldName.SubStr(1);
 		else
 			begn = fieldName;
+
+		if (begn.StartsWith("o2::"))
+			begn.Erase(0, 4);
+
+		if (begn.StartsWith("Editor::"))
+			begn.Erase(0, 9);
 
 		String res;
 		int len = begn.Length();
@@ -298,7 +388,7 @@ namespace Editor
 		return res;
 	}
 
-	IPropertyField* PropertiesWindow::GetFieldPropertyPrototype(const Type* type)
+	IPropertyField* PropertiesWindow::GetFieldPropertyPrototype(const Type* type) const
 	{
 		for (auto field : mAvailablePropertiesFields)
 		{
@@ -319,6 +409,7 @@ namespace Editor
 																		  const String& name)
 	{
 		UIHorizontalLayout* horLayout = mnew UIHorizontalLayout();
+		horLayout->name = name + " - " + fieldPropertyType->GetName();
 		horLayout->spacing = 5.0f;
 		horLayout->borderLeft = 10;
 		horLayout->expandHeight = true;
@@ -333,11 +424,12 @@ namespace Editor
 		label->horAlign = HorAlign::Left;
 		label->layout->widthWeight = 3.0f;
 		label->horOverflow = UILabel::HorOverflow::Dots;
-		label->text = MakeSmartFieldName(name);
+		label->text = name;
 
 		IPropertyField* fieldProperty = (IPropertyField*)fieldPropertyType->CreateSample();
 		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
 		fieldProperty->GetWidget()->layout->minWidth = 200.0f;
+		fieldProperty->SetCaptionLabel(label);
 
 		horLayout->AddChild(label, false);
 		horLayout->AddChild(fieldProperty->GetWidget(), false);
@@ -345,31 +437,33 @@ namespace Editor
 		return Pair<IPropertyField*, UIWidget*>(fieldProperty, horLayout);
 	}
 
-	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateObjectField(const Type* type)
+	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateObjectField(const Type* type, const String& name)
 	{
-		IPropertyField* fieldProperty = mnew ObjectProperty();
+		IPropertyField* fieldProperty = mnew ObjectProperty();		
 		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
+		fieldProperty->SetCaption(name);
+
 		return Pair<IPropertyField*, UIWidget*>(fieldProperty, fieldProperty->GetWidget());
 	}
 
-	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateObjectPtrField(const Type* type)
+	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateObjectPtrField(const Type* type, const String& name)
 	{
 		IPropertyField* fieldProperty = mnew ObjectPtrProperty();
 		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
+		fieldProperty->SetCaption(name);
+
 		return Pair<IPropertyField*, UIWidget*>(fieldProperty, fieldProperty->GetWidget());
 	}
 
-	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateVectorField(const Type* type)
+	Pair<IPropertyField*, UIWidget*> PropertiesWindow::CreateVectorField(const Type* type, const String& name)
 	{
-		const VectorType* vectorType = dynamic_cast<const VectorType*>(type);
-		if (!vectorType)
-			return Pair<IPropertyField*, UIWidget*>(nullptr, nullptr);
-
-		if (!GetFieldPropertyPrototype(vectorType->GetElementType()))
+		if (!IsFieldTypeSupported(type))
 			return Pair<IPropertyField*, UIWidget*>(nullptr, nullptr);
 
 		IPropertyField* fieldProperty = mnew VectorProperty();
 		fieldProperty->onChanged = [=]() { OnPropertyChanged(fieldProperty); };
+		fieldProperty->SetCaption(name);
+
 		return Pair<IPropertyField*, UIWidget*>(fieldProperty, fieldProperty->GetWidget());
 	}
 }

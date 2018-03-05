@@ -23,7 +23,7 @@ namespace Editor
 		mHeaderViewer = mnew DefaultActorHeaderViewer();
 		mTransformViewer = mnew DefaultActorTransformViewer();
 		mDefaultComponentViewer = mnew DefaultActorComponentViewer();
-		mDefaultActorPropertiesViewer=mnew DefaultActorPropertiesViewer();
+		mDefaultActorPropertiesViewer = mnew DefaultActorPropertiesViewer();
 
 		auto componentsViewersTypes = TypeOf(IActorComponentViewer).GetDerivedTypes();
 		for (auto type : componentsViewersTypes)
@@ -42,7 +42,7 @@ namespace Editor
 		mViewersLayout = o2UI.CreateVerLayout();
 		mViewersLayout->name          = "viewers layout";
 		mViewersLayout->spacing       = 0.0f;
-		mViewersLayout->border        = RectF();
+		mViewersLayout->border        = BorderF();
 		mViewersLayout->expandHeight  = false;
 		mViewersLayout->expandWidth   = true;
 		mViewersLayout->fitByChildren = true;
@@ -157,9 +157,6 @@ namespace Editor
 		bool isAllSameType = mTargetActors.All([&](Actor* x) { return &x->GetType() == type; });
 
 		if (!isAllSameType)
-			return;
-
-		if (type == &TypeOf(Actor) || type == &TypeOf(UIWidget))
 			return;
 
 		bool usingDefaultViewer = false;

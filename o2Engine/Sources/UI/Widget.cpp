@@ -100,6 +100,15 @@ namespace o2
 			}
 		}
 
+		for (auto child : other.mInternalWidgets)
+		{
+			auto newChild = child->CloneAs<UIWidget>();
+			newChild->ExcludeFromScene();
+			newChild->mParent = this;
+			newChild->mParentWidget = this;
+			mInternalWidgets.Add(newChild);
+		}
+
 		for (auto state : other.mStates)
 		{
 			UIWidgetState* newState = dynamic_cast<UIWidgetState*>(state->Clone());
@@ -954,6 +963,9 @@ namespace o2
 
 	void UIWidget::OnExcludeFromScene()
 	{
+		for (auto child : mInternalWidgets)
+			child->ExcludeFromScene();
+
 		SceneDrawable::OnExcludeFromScene();
 	}
 
@@ -978,6 +990,12 @@ namespace o2
 			UIWidget* childWidget = dynamic_cast<UIWidget*>(child);
 			if (childWidget)
 				mChildWidgets.Add(childWidget);
+		}
+
+		for (auto child : mInternalWidgets)
+		{
+			child->mParent = this;
+			child->mParentWidget = this;
 		}
 
 		RetargetStatesAnimations();
@@ -1085,6 +1103,14 @@ namespace o2
 			UIWidget* childWidget = dynamic_cast<UIWidget*>(child);
 			if (childWidget)
 				mChildWidgets.Add(childWidget);
+		}
+
+		for (auto child : other.mInternalWidgets)
+		{
+			auto newChild = child->CloneAs<UIWidget>();
+			newChild->mParent = this;
+			newChild->mParentWidget = this;
+			mInternalWidgets.Add(newChild);
 		}
 
 		for (auto state : other.mStates)

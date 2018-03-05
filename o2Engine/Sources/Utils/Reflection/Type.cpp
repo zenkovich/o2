@@ -385,7 +385,7 @@ namespace o2
 	}
 
 	PointerType::PointerType(const Type* unptrType):
-		Type(unptrType->GetName() + "*", new TypeSampleCreator<void*>(), sizeof(void*)),
+		Type(unptrType->GetName() + "*", mnew TypeSampleCreator<void*>(), sizeof(void*)),
 		mUnptrType(unptrType)
 	{}
 

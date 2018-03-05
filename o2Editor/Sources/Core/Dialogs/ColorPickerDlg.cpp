@@ -151,7 +151,7 @@ namespace Editor
 
 		auto colorParamsArea = mnew UIVerticalLayout();
 		*colorParamsArea->layout = UIWidgetLayout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 0.5f), Vec2F(0, 0), Vec2F(0, -20));
-		colorParamsArea->border = RectF(5, 5, 5, 5);
+		colorParamsArea->border = BorderF(5, 5, 5, 5);
 
 		colorParamsArea->AddChild(InitializeColorParameter(mColor1ParamName, mColor1ParamBar,
 								  mColor1ParamEdit, mColor1ParamBarBitmap, mColor1ParamBarTexture, 

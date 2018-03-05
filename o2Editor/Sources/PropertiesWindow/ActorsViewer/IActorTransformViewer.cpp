@@ -18,7 +18,7 @@ namespace Editor
 	{
 		mDataView = mnew UIVerticalLayout();
 		mDataView->spacing = 0.0f;
-		mDataView->border = RectF(0, 0, 0, 0);
+		mDataView->border = BorderF(0, 0, 0, 0);
 		mDataView->expandHeight = false;
 		mDataView->expandWidth = true;
 		mDataView->fitByChildren = true;

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <functional>
 #include <vector>
+#include "Utils/Memory/MemoryManager.h"
 
 namespace o2
 {
@@ -79,7 +80,7 @@ namespace o2
 		// Returns cloned copy of this
 		IFunction* Clone() const
 		{
-			return new FunctionPtr(*this);
+			return mnew FunctionPtr(*this);
 		}
 
 		// Invokes function with arguments as functor
@@ -142,7 +143,7 @@ namespace o2
 		// Returns cloned copy of this
 		IFunction* Clone() const
 		{
-			return new ObjFunctionPtr(*this);
+			return mnew ObjFunctionPtr(*this);
 		}
 
 		// Invokes function with arguments as functor
@@ -205,7 +206,7 @@ namespace o2
 		// Returns cloned copy of this
 		IFunction* Clone() const
 		{
-			return new ObjConstFunctionPtr(*this);
+			return mnew ObjConstFunctionPtr(*this);
 		}
 
 		// Invokes function with arguments as functor
@@ -333,7 +334,7 @@ namespace o2
 		// Returns cloned copy of this
 		IFunction* Clone() const
 		{
-			return new SharedLambda(*this);
+			return mnew SharedLambda(*this);
 		}
 
 		// Invokes function with arguments as functor
@@ -440,7 +441,7 @@ namespace o2
 		// Returns cloned copy of this
 		IFunction* Clone() const
 		{
-			return new Function(*this);
+			return mnew Function(*this);
 		}
 
 		// Removing all inside functions

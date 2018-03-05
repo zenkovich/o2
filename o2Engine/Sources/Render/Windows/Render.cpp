@@ -97,9 +97,9 @@ namespace o2
 		CheckCompatibles();
 
 		// Initialize buffers
-		mVertexData = new UInt8[mVertexBufferSize*sizeof(Vertex2)];
+		mVertexData = mnew UInt8[mVertexBufferSize*sizeof(Vertex2)];
 
-		mVertexIndexData = new UInt16[mIndexBufferSize];
+		mVertexIndexData = mnew UInt16[mIndexBufferSize];
 		mLastDrawVertex = 0;
 		mTrianglesCount = 0;
 		mCurrentPrimitiveType = GL_TRIANGLES;
@@ -397,7 +397,7 @@ namespace o2
 	{
 		ULong dcolor = color.ABGR();
 		int segCount = points.Count() - 1;
-		Vertex2* v = new Vertex2[segCount * 2];
+		Vertex2* v = mnew Vertex2[segCount * 2];
 		for (int i = 0; i < segCount; i++)
 		{
 			v[i * 2] = Vertex2(points[i], dcolor, 0, 0);
@@ -463,7 +463,7 @@ namespace o2
 	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/,
 							int segCount /*= 20*/)
 	{
-		Vertex2* v = new Vertex2[segCount * 2];
+		Vertex2* v = mnew Vertex2[segCount * 2];
 		ULong dcolor = color.ABGR();
 
 		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);

@@ -3,6 +3,7 @@
 
 #include "Animation/AnimatedFloat.h"
 #include "Render/Render.h"
+#include "UI/Button.h"
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
@@ -32,6 +33,9 @@ namespace o2
 
 		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
+
+		CheckExpandButton();
+		RetargetStatesAnimations();
 		UpdateExpanding(0);
 	}
 
@@ -55,6 +59,13 @@ namespace o2
 	{
 		if (mExpandState)
 			mExpandState->SetState(expand);
+
+		if (expand)
+			onExpand();
+
+		auto expandBtn = FindExpandButton();
+		if (expandBtn)
+			expandBtn->SetState("expanded", expand);
 
 		mTargetHeight = UIVerticalLayout::GetMinHeightWithChildren();
 	}
@@ -88,10 +99,39 @@ namespace o2
 				o2Render.DisableScissorTest();
 		}
 
+		for (auto child : mInternalWidgets)
+			child->Draw();
+
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
 
 		DrawDebugFrame();
+	}
+
+	void UISpoiler::SetCaption(const WString& caption)
+	{
+		auto textLayer = GetLayerDrawable<Text>("caption");
+		if (textLayer)
+			textLayer->text = caption;
+	}
+
+	WString UISpoiler::GetCaption() const
+	{
+		auto textLayer = GetLayerDrawable<Text>("caption");
+		if (textLayer)
+			return textLayer->text;
+
+		return "";
+	}
+
+	void UISpoiler::SetHeadHeight(float height)
+	{
+		SetBorderTop(height);
+	}
+
+	float UISpoiler::GetHeadHeight() const
+	{
+		return GetBorderTop();
 	}
 
 	void UISpoiler::CopyData(const Actor& otherActor)
@@ -106,6 +146,8 @@ namespace o2
 
 		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
+
+		CheckExpandButton();
 		UpdateExpanding(0);
 	}
 
@@ -114,20 +156,22 @@ namespace o2
 		layout->SetDirty(false);
 	}
 
-	void UISpoiler::UpdateTransform(bool withChildren /*= true*/)
-	{
-		UpdateLayoutParametres();
-		ExpandSizeByChilds();
-
-		layout->Update();
-
-		if (withChildren)
-			RearrangeChilds();
-	}
-
 	float UISpoiler::GetMinHeightWithChildren() const
 	{
-		return UIVerticalLayout::GetMinHeightWithChildren()*Math::Clamp01(mExpandCoef);
+		if (!mFitByChildren)
+			return UIWidget::GetMinHeightWithChildren();
+
+		float res = Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mFullyDisabled)
+				res += child->GetMinHeightWithChildren();
+		}
+
+		res = res*Math::Clamp01(mExpandCoef) + mBorder.top + mBorder.bottom;
+		res = Math::Max(res, layout->mData->minSize.y);
+
+		return res;
 	}
 
 	void UISpoiler::UpdateLayoutParametres()
@@ -139,6 +183,25 @@ namespace o2
 			layout->mData->weight.y = 1;
 			layout->mData->minSize.y = 0;
 		}
+	}
+
+	void UISpoiler::CheckExpandButton()
+	{
+		auto expandBtn = FindExpandButton();
+
+		if (expandBtn)
+			expandBtn->onClick = [&]() { SetExpanded(!IsExpanded()); };
+	}
+
+	UIButton* UISpoiler::FindExpandButton() const
+	{
+		auto expandBtn = mInternalWidgets.FindMatch(
+			[](UIWidget* x) { return x->GetName() == "expand" && x->GetType() == TypeOf(UIButton); });
+
+		if (expandBtn)
+			return dynamic_cast<UIButton*>(expandBtn);
+
+		return nullptr;
 	}
 
 	bool UISpoiler::IsFullyExpanded() const
@@ -156,6 +219,14 @@ namespace o2
 
 		return !mExpandState->GetState() && !mExpandState->animation.IsPlaying();
 	}
+
+	void UISpoiler::InitializeProperties()
+	{
+		INITIALIZE_PROPERTY(UISpoiler, caption, SetCaption, GetCaption);
+		INITIALIZE_PROPERTY(UISpoiler, headHeight, SetHeadHeight, GetHeadHeight);
+		INITIALIZE_PROPERTY(UISpoiler, expanded, SetExpanded, IsExpanded);
+	}
+
 }
 
 DECLARE_CLASS(o2::UISpoiler);

@@ -17,49 +17,14 @@ namespace Editor
 {
 	VectorProperty::VectorProperty()
 	{
-		mLayout = mnew UIVerticalLayout();
-		mLayout->spacing = 0.0f;
-		mLayout->border = RectF(0, 0, 0, 0);
-		mLayout->expandHeight = false;
-		mLayout->expandWidth = true;
-		mLayout->fitByChildren = true;
-		mLayout->baseCorner = BaseCorner::RightTop;
-		*mLayout->layout = UIWidgetLayout::BothStretch();
-
-		auto header = mnew UIWidget();
-		*header->layout = UIWidgetLayout::BothStretch();
-		header->layout->minHeight = 20;
-
-		mExpandButton = o2UI.CreateWidget<UIButton>("expand");
-		*mExpandButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-7, 0));
-		mExpandButton->onClick = [&]() { SetExpanded(!IsExpanded()); };
-		header->AddChild(mExpandButton, false);
-
-		mNameLabel = o2UI.CreateWidget<UILabel>();
-		mNameLabel->name = "propertyName";
-		*mNameLabel->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 10, 0, 20, 0);
-		mNameLabel->horAlign = HorAlign::Left;
-		header->AddChild(mNameLabel, false);
-
-		mSpoiler = mnew UISpoiler();
-		mPropertiesLayout = mnew UIVerticalLayout();
-		mPropertiesLayout->spacing = 5.0f;
-		mPropertiesLayout->borderLeft = 10;
-		mPropertiesLayout->expandHeight = false;
-		mPropertiesLayout->expandWidth = true;
-		mPropertiesLayout->fitByChildren = true;
-		mPropertiesLayout->baseCorner = BaseCorner::RightTop;
-		*mPropertiesLayout->layout = UIWidgetLayout::BothStretch();
-		mSpoiler->AddChild(mPropertiesLayout);
-
-		mLayout->AddChild(header);
-		mLayout->AddChild(mSpoiler);
+		mSpoiler = o2UI.CreateWidget<UISpoiler>("expand with caption");
+		mSpoiler->onExpand = THIS_FUNC(OnExpand);
 
 		auto countPropertyProto = o2EditorProperties.GetFieldPropertyPrototype(&TypeOf(int));
 		auto countPropertyWidget = o2EditorProperties.CreateRegularField(&countPropertyProto->GetType(), "Count");
 
 		mCountProperty = (IntegerProperty*)countPropertyWidget.first;
-		mPropertiesLayout->AddChild(countPropertyWidget.second);
+		mSpoiler->AddChild(countPropertyWidget.second);
 
 		mCountProperty->onChanged = THIS_FUNC(OnCountChanged);
 	}
@@ -73,7 +38,7 @@ namespace Editor
 		}
 
 		delete mCountProperty;
-		delete mLayout;
+		delete mSpoiler;
 	}
 
 	void VectorProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
@@ -91,6 +56,9 @@ namespace Editor
 	void VectorProperty::Refresh()
 	{
 		if (mTargetObjects.IsEmpty())
+			return;
+
+		if (!IsExpanded())
 			return;
 
 		mIsRefreshing = true;
@@ -119,7 +87,7 @@ namespace Editor
 
 				for (auto prop : mValueProperties)
 				{
-					mPropertiesLayout->RemoveChild(prop.widget, false);
+					mSpoiler->RemoveChild(prop.widget, false);
 					FreeValueProperty(prop);
 				}
 
@@ -152,8 +120,8 @@ namespace Editor
 					mValueProperties.Add(propertyDef);
 				}
 
-				mPropertiesLayout->AddChild(propertyDef.widget, false);
-				propertyDef.nameLabel->text = (String)"Element " + (String)i;
+				mSpoiler->AddChild(propertyDef.widget, false);
+				propertyDef.propertyField->SetCaption((String)"Element " + (String)i);
 				propertyDef.propertyField->SetValueAndPrototypePtr(itemTargetValues, false);
 				propertyDef.propertyField->SetValuePath((String)i);
 				propertyDef.propertyField->onChangeCompleted = 
@@ -165,11 +133,11 @@ namespace Editor
 
 			for (; i < mValueProperties.Count(); i++)
 			{
-				mPropertiesLayout->RemoveChild(mValueProperties[i].widget, false);
+				mSpoiler->RemoveChild(mValueProperties[i].widget, false);
 				FreeValueProperty(mValueProperties[i]);
 			}
 
-			mPropertiesLayout->SetLayoutDirty();
+			mSpoiler->SetLayoutDirty();
 
 			onChanged();
 			o2EditorSceneScreen.OnSceneChanged();
@@ -195,7 +163,7 @@ namespace Editor
 
 	UIWidget* VectorProperty::GetWidget() const
 	{
-		return mLayout;
+		return mSpoiler;
 	}
 
 	const Type* VectorProperty::GetFieldType() const
@@ -206,7 +174,16 @@ namespace Editor
 	void VectorProperty::SpecializeType(const Type* type)
 	{
 		mType = (VectorType*)type;
-		mNameLabel->text = type->GetName();
+	}
+
+	void VectorProperty::SetCaption(const WString& text)
+	{
+		mSpoiler->SetCaption(text);
+	}
+
+	WString VectorProperty::GetCaption() const
+	{
+		return mSpoiler->GetCaption();
 	}
 
 	void VectorProperty::Expand()
@@ -221,16 +198,7 @@ namespace Editor
 
 	void VectorProperty::SetExpanded(bool expanded)
 	{
-		if (!expanded)
-		{
-			mSpoiler->Collapse();
-			mExpandButton->SetState("expanded", false);
-		}
-		else
-		{
-			mSpoiler->Expand();
-			mExpandButton->SetState("expanded", true);
-		}
+		mSpoiler->SetExpanded(expanded);
 	}
 
 	bool VectorProperty::IsExpanded() const
@@ -244,7 +212,7 @@ namespace Editor
 			return mValuePropertiesPool.PopBack();
 
 		PropertyDef res;
-		auto fieldPropertySamplePair = o2EditorProperties.CreateFieldProperty(mType->GetElementType());
+		auto fieldPropertySamplePair = o2EditorProperties.CreateFieldProperty(mType->GetElementType(), "Element");
 
 		if (!fieldPropertySamplePair.first)
 			return res;
@@ -252,7 +220,6 @@ namespace Editor
 		res.propertyField = fieldPropertySamplePair.first;
 		res.propertyField->onChanged = [&]() { onChanged(); };
 		res.widget = fieldPropertySamplePair.second;
-		res.nameLabel = res.widget->GetChildByType<UILabel>();
 
 		res.propertyField->SpecializeType(mType->GetElementType());
 
@@ -297,6 +264,12 @@ namespace Editor
 		onChanged();
 		o2EditorSceneScreen.OnSceneChanged();
 	}
+
+	void VectorProperty::OnExpand()
+	{
+		Refresh();
+	}
+
 }
 
 DECLARE_CLASS(Editor::VectorProperty);

@@ -41,8 +41,11 @@ namespace Editor
 		{
 			static void GetFields(Vector<FieldInfo*>& fields, const Type* type)
 			{
-				if (type == &TypeOf(Actor) || type == &TypeOf(UIWidget))
+				if (!o2EditorProperties.IsPrivateFieldsVisible() &&
+					(type == &TypeOf(Actor) || type == &TypeOf(UIWidget)))
+				{
 					return;
+				}
 
 				fields.Add(type->GetFields());
 
@@ -54,9 +57,9 @@ namespace Editor
 		mDataView->name = "actor " + type->GetName();
 		mActorType = type;
 
-		Vector<FieldInfo*> fields;
-		helper::GetFields(fields, mActorType);
-		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, fields, mFieldProperties, "");
+		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, 
+												 mActorType->GetFieldsWithBaseClasses(),
+												 mFieldProperties, "");
 
 		for (auto prop : mFieldProperties.properties)
 			prop.Value()->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
@@ -76,7 +79,7 @@ namespace Editor
 														const Vector<DataNode>& prevValue,
 														const Vector<DataNode>& newValue)
 	{
-		ActorsPropertyChangeAction* action = new ActorsPropertyChangeAction(
+		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedActors(), mActorType, path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);

@@ -9,6 +9,7 @@
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "UI/Image.h"
 #include "UI/Label.h"
+#include "UI/Spoiler.h"
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
@@ -22,7 +23,7 @@ namespace Editor
 	{
 		mContent = mnew UIVerticalLayout();
 		mContent->spacing = 5.0f;
-		mContent->border = RectF(5, 5, 12, 5);
+		mContent->border = BorderF(5, 5, 12, 5);
 		mContent->expandHeight = false;
 		mContent->expandWidth = true;
 		mContent->fitByChildren = true;
@@ -198,51 +199,37 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::InitializeProperties()
 	{
-		auto borderPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(RectI));
-		auto nameLabel = borderPropertyPair.second->GetChildByType<UILabel>();
-		nameLabel->text = "Slice border";
+		auto borderPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(RectI), "Slice border");
 		mBorderProperty = (BorderIProperty*)borderPropertyPair.first;
 		mBorderProperty->onChanged += [&]() { UpdateBordersAnchors(); /*mBordersSmoothValue = mBorderProperty->GetCommonValue();*/ };
 		mContent->AddChild(borderPropertyPair.second);
 
-		auto modePropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(SpriteMode));
-		nameLabel = modePropertyPair.second->GetChildByType<UILabel>();
-		nameLabel->text = "Default mode";
+		auto modePropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(SpriteMode), "Default mode");
 		mDefaultTypeProperty = (EnumProperty*)modePropertyPair.first;
 		mDefaultTypeProperty->SpecializeType(&TypeOf(SpriteMode));
 		mContent->AddChild(modePropertyPair.second);
 
-		auto atlasPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAssetRef));
-		nameLabel = atlasPropertyPair.second->GetChildByType<UILabel>();
-		nameLabel->text = "Atlas";
+		auto atlasPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAssetRef), "Atlas");
 		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasPropertyPair.first;
 		mAtlasProperty->onChanged = THIS_FUNC(OnAtlasPropertyChanged);
 		mContent->AddChild(atlasPropertyPair.second);
 
-		auto windowsPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = windowsPropertyPair.second->GetChildByType<UILabel>();
-		nameLabel->text = "Windows";
+		auto windowsPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "Windows");
 		mWindowsProperties = (ObjectProperty*)windowsPropertyPair.first;
 		mWindowsProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(windowsPropertyPair.second);
 
-		auto osxPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = osxPropertyPair.second->GetChildByType<UILabel>();
-		nameLabel->text = "OSX";
+		auto osxPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "OSX");
 		mOSXProperties = (ObjectProperty*)osxPropertyPair.first;
 		mOSXProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(osxPropertyPair.second);
 
-		auto androidPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = androidPropertyPair.second->GetChildByType<UILabel>();
-		nameLabel->text = "Android";
+		auto androidPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "Android");
 		mAndroidProperties = (ObjectProperty*)androidPropertyPair.first;
 		mAndroidProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(androidPropertyPair.second);
 
-		auto iosPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta));
-		nameLabel = iosPropertyPair.second->GetChildByType<UILabel>();
-		nameLabel->text = "iOS";
+		auto iosPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "iOS");
 		mIOSProperties = (ObjectProperty*)iosPropertyPair.first;
 		mIOSProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(iosPropertyPair.second);

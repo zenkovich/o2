@@ -50,7 +50,7 @@ namespace o2
 		if (asset.mDataSize > 0)
 		{
 			mDataSize = asset.mDataSize;
-			mData = new char[mDataSize];
+			mData = mnew char[mDataSize];
 			memcpy(mData, asset.mData, mDataSize);
 		}
 		else
@@ -78,7 +78,7 @@ namespace o2
 		if (asset.mDataSize > 0)
 		{
 			mDataSize = asset.mDataSize;
-			mData = new char[mDataSize];
+			mData = mnew char[mDataSize];
 			memcpy(mData, asset.mData, mDataSize);
 		}
 		else
@@ -120,7 +120,7 @@ namespace o2
 		if (size > 0)
 		{
 			mDataSize = size;
-			mData = new char[mDataSize];
+			mData = mnew char[mDataSize];
 			memcpy(mData, data, mDataSize);
 		}
 		else
@@ -147,7 +147,7 @@ namespace o2
 			GetAssetsLogStream()->Error("Failed to load binary asset data: can't open file %s", path);
 
 		mDataSize = file.GetDataSize();
-		mData = new char[mDataSize];
+		mData = mnew char[mDataSize];
 		file.ReadFullData(mData);
 	}
 
