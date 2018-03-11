@@ -2,6 +2,7 @@
 
 #include "Utils/Containers/Dictionary.h"
 #include "Utils/Delegates.h"
+#include "Utils/ValueProxy.h"
 
 namespace o2
 {
@@ -10,6 +11,113 @@ namespace o2
 
 	typedef TString<wchar_t> WString;
 	typedef TString<char> String;
+
+	template<typename _type, typename _property_type>
+	class PropertyValueProxy: public IValueProxy<_type>
+	{
+		_property_type* mProperty;
+	public:
+		PropertyValueProxy() {}
+		PropertyValueProxy(_property_type* ptr):mProperty(ptr) {}
+
+		bool operator==(const PropertyValueProxy<_type, _property_type>& other) const { return mProperty == other.mProperty; }
+
+		void SetValue(const _type& value) override { mProperty->Set(value); }
+		_type GetValue() const override { return mProperty->Get(); }
+	};
+
+#define PROPERTY(CLASSNAME, TYPE, NAME, SETTER, GETTER)                                                                             \
+	class NAME##_PROPERTY																				                            \
+	{																									                            \
+		CLASSNAME* _this;																				                            \
+																										                            \
+	public:																								                            \
+        typedef TYPE valueType;                                                                                                     \
+		NAME##_PROPERTY(CLASSNAME* _this):_this(_this) {}												                            \
+																										                            \
+		operator TYPE() { return _this->GETTER(); }												                                    \
+		NAME##_PROPERTY& operator=(const TYPE& value) { _this->SETTER(const_cast<TYPE&>(value)); return *this; }	                \
+																										                            \
+		bool operator==(const TYPE& value) const { return _this->GETTER() == value; }                	                            \
+		bool operator!=(const TYPE& value) const { return _this->GETTER() != value; }                	                            \
+																										                            \
+		template<typename X = std::enable_if<SupportsPlus<TYPE>::value>::type>                                                      \
+		TYPE operator+(const TYPE& value) { return _this->GETTER() + value; }                	                                    \
+																										                            \
+		template<typename X = std::enable_if<SupportsMinus<TYPE>::value>::type>                                                     \
+		TYPE operator-(const TYPE& value) { return _this->GETTER() - value; }                	                                    \
+																										                            \
+		template<typename X = std::enable_if<SupportsDivide<TYPE>::value>::type>                                                    \
+		TYPE operator/(const TYPE& value) { return _this->GETTER() / value; }                	                                    \
+																										                            \
+		template<typename X = std::enable_if<SupportsMultiply<TYPE>::value>::type>                                                  \
+		TYPE operator*(const TYPE& value) { return _this->GETTER() * value; }                	                                    \
+																										                            \
+		template<typename X = std::enable_if<SupportsPlus<TYPE>::value>::type>                                                      \
+		NAME##_PROPERTY& operator+=(const TYPE& value) { _this->SETTER(_this->GETTER() + value); return *this; }                	\
+																										                            \
+		template<typename X = std::enable_if<SupportsMinus<TYPE>::value>::type>                                                     \
+		NAME##_PROPERTY& operator-=(const TYPE& value) { _this->SETTER(_this->GETTER() - value); return *this; }                	\
+																										                            \
+		template<typename X = std::enable_if<SupportsDivide<TYPE>::value>::type>                                                    \
+		NAME##_PROPERTY& operator/=(const TYPE& value) { _this->SETTER(_this->GETTER() / value); return *this; }                	\
+																										                            \
+		template<typename X = std::enable_if<SupportsMultiply<TYPE>::value>::type>                                                  \
+		NAME##_PROPERTY& operator*=(const TYPE& value) { _this->SETTER(_this->GETTER() * value); return *this; }                	\
+																										                            \
+	    TYPE Get() const { return _this->GETTER(); }                                                                                \
+		void Set(const valueType& value) { _this->SETTER(const_cast<valueType&>(value)); }                                          \
+																										                            \
+		PropertyValueProxy<TYPE, NAME##_PROPERTY> GetValueProxy() { return PropertyValueProxy<TYPE, NAME##_PROPERTY>(this); }       \
+																										                            \
+		bool IsProperty() const { return true; }                                                                                    \
+																										                            \
+        static const Type& GetType() { return GetTypeOf<TYPE>(); }                                                                  \
+	};																									                            \
+																										                            \
+	NAME##_PROPERTY NAME = NAME##_PROPERTY(this);
+
+#define GETTER(CLASSNAME, TYPE, NAME, GETTER)                                                            \
+	class NAME##_GET_PROPERTY																		     \
+	{																									 \
+		CLASSNAME* _this;																				 \
+																										 \
+	public:																								 \
+		NAME##_GET_PROPERTY(CLASSNAME* _this):_this(_this) {}										     \
+		operator TYPE() { return _this->GETTER(); }												         \
+		bool operator==(const TYPE& value) const { return _this->GETTER() == value; }                	 \
+		bool operator!=(const TYPE& value) const { return _this->GETTER() != value; }                	 \
+        TYPE Get() const { return _this->GETTER(); }                                                     \
+	};																									 \
+																										 \
+	NAME##_GET_PROPERTY NAME = NAME##_GET_PROPERTY(this);
+
+#define SETTER(CLASSNAME, TYPE, NAME, SETTER)                                                            \
+	class NAME##_SET_PROPERTY																		     \
+	{																									 \
+		CLASSNAME* _this;																				 \
+																										 \
+	public:																								 \
+		NAME##_SET_PROPERTY(CLASSNAME* _this):_this(_this) {}										     \
+		NAME##_SET_PROPERTY& operator=(const TYPE& value) { _this->SETTER(value); return *this; }	     \
+        void Set(const TYPE& value) { _this->SETTER(value); }                                            \
+	};																									 \
+																										 \
+	NAME##_SET_PROPERTY NAME = NAME##_SET_PROPERTY(this);	
+
+#define ACCESSOR(CLASSNAME, TYPE, NAME, KEY_TYPE, GETTER, GET_ALL)                                       \
+	class NAME##_ACCESSOR																		         \
+	{																									 \
+		CLASSNAME* _this;																				 \
+																										 \
+	public:																								 \
+		NAME##_ACCESSOR(CLASSNAME* _this):_this(_this) {}										         \
+        TYPE Get(const KEY_TYPE& key) const { return _this->GETTER(key); }                               \
+        Dictionary<KEY_TYPE, TYPE> GetAll() const { return _this->GET_ALL(); }                           \
+        TYPE operator[](const KEY_TYPE& key) const { return _this->GETTER(key); }                        \
+	};																									 \
+																										 \
+	NAME##_ACCESSOR NAME = NAME##_ACCESSOR(this);	
 
 	// -----------------------------
 	// Get function overriding class
@@ -24,12 +132,11 @@ namespace o2
 		// Default constructor
 		Getter():
 			mGetter(nullptr)
-		{
-		}
+		{}
 
 		// Constructor from constant object function
 		template<typename _class_type>
-		Getter(_class_type* object, _type(_class_type::*getter)() const):
+		Getter(_class_type* object, _type(_class_type::*getter)() const) :
 			Getter()
 		{
 			Initialize(object, getter);
@@ -118,12 +225,11 @@ namespace o2
 		// Default constructor
 		Setter():
 			mSetter(nullptr)
-		{
-		}
+		{}
 
 		// Constructor from object function with constant reference parameter
 		template<typename _class_type>
-		Setter(_class_type* object, void(_class_type::*setter)(const _type&)):
+		Setter(_class_type* object, void(_class_type::*setter)(const _type&)) :
 			Setter()
 		{
 			Initialize(object, setter);
@@ -169,8 +275,7 @@ namespace o2
 		// Constructor from function
 		Setter(IFunction<void(const _type&)>* setter):
 			mSetter(setter)
-		{
-		}
+		{}
 
 		// Destructor
 		virtual ~Setter()
@@ -353,12 +458,11 @@ namespace o2
 		// Default constructor
 		Accessor():
 			mAccessFunc(nullptr), mAllAccessFunc(nullptr)
-		{
-		}
+		{}
 
 		// Constructor from constant object function
 		template<typename _class_type>
-		Accessor(_class_type* object, _res_type(_class_type::*getter)(_key_type) const):
+		Accessor(_class_type* object, _res_type(_class_type::*getter)(_key_type) const) :
 			Accessor()
 		{
 			Initialize(object, getter);
@@ -446,23 +550,23 @@ namespace o2
 #define INITIALIZE_PROPERTY(_CLASS, _PROPERTY, _SET_FUNC, _GET_FUNC) \
 _PROPERTY.Initialize(this, &_CLASS::_SET_FUNC); _PROPERTY.Initialize(this, &_CLASS::_GET_FUNC)
 
-// Initialize property macros by static functions
+	// Initialize property macros by static functions
 #define INITIALIZE_STATIC_PROPERTY(_CLASS, _PROPERTY, _SET_FUNC, _GET_FUNC) \
 _PROPERTY.Initialize(&_CLASS::_SET_FUNC); _PROPERTY.Initialize(&_CLASS::_GET_FUNC)
 
-//Initialize setter macros 
+	//Initialize setter macros 
 #define INITIALIZE_SETTER(_CLASS, _SETTER, _SET_FUNC) \
 _SETTER.Initialize(this, &_CLASS::_SET_FUNC)
 
-//Initialize setter macros by static function
+	//Initialize setter macros by static function
 #define INITIALIZE_STATIC_SETTER(_CLASS, _SETTER, _SET_FUNC) \
 _SETTER.Initialize(&_CLASS::_SET_FUNC)
 
-//Initialize getter macros 
+	//Initialize getter macros 
 #define INITIALIZE_GETTER(_CLASS, _GETTER, _GET_FUNC) \
 _GETTER.Initialize(this, &_CLASS::_GET_FUNC)
 
-//Initialize getter macros by static function
+	//Initialize getter macros by static function
 #define INITIALIZE_STATIC_GETTER(_CLASS, _GETTER, _GET_FUNC) \
 _GETTER.Initialize(&_CLASS::_GET_FUNC)
 

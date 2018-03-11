@@ -143,7 +143,7 @@ namespace o2
 			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 			if (!isExistMetaForFolder)
 			{
-				auto assetType = TypeOf(FolderAsset);
+				auto& assetType = TypeOf(FolderAsset);
 				GenerateMeta(assetType, metaFullPath);
 			}
 

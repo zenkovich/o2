@@ -109,10 +109,8 @@ namespace o2
 		{
 			typedef Dictionary<AnimationState*, AnimatedValue<_type>*> AnimatedValuesDict;
 
-			AnimatedValuesDict animValues; // Animated values associated with animation states
-			void*              targetPtr;  // Target value pointer (field or setter)
-
-			void(ValueAgent<_type>::*assignFunc)(_type&); // Current assign function
+			AnimatedValuesDict  animValues; // Animated values associated with animation states
+			IValueProxy<_type>* target;     // Target value proxy
 
 			// Updates value and blend
 			void Update();
@@ -149,9 +147,6 @@ namespace o2
 		ValueAgentsVec     mValues; // Assigning value agents
 		BlendState         mBlend;  // Current blend parameters
 
-		ATTRIBUTES(SerializableAttribute);
-		int test;
-
 	protected:
 		// Removes animated value from agent by path
 		void UnregAnimatedValue(IAnimatedValue* value, const String& path);
@@ -168,7 +163,7 @@ namespace o2
 	};
 
 	template<typename _type>
-	void Animatable::RegAnimatedValue(AnimatedValue< _type >* value, const String& path, AnimationState* state)
+	void Animatable::RegAnimatedValue(AnimatedValue<_type>* value, const String& path, AnimationState* state)
 	{
 		for (auto val : mValues)
 		{
@@ -201,12 +196,7 @@ namespace o2
 			return;
 		}
 
-		newAgent->targetPtr = fieldPtr;
-
-		if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-			newAgent->assignFunc = &ValueAgent<_type>::AssignSetter;
-		else
-			newAgent->assignFunc = &ValueAgent<_type>::AssignField;
+		newAgent->target = dynamic_cast<IValueProxy<_type>*>(fieldInfo->GetType()->GetValueProxy(fieldPtr));
 	}
 
 	template<typename _type>
@@ -240,7 +230,7 @@ namespace o2
 		}
 
 		_type resValue = valueSum / weightsSum;
-		(this->*assignFunc)(resValue);
+		target->SetValue(resValue);
 	}
 
 	template<typename _type>
@@ -266,7 +256,6 @@ CLASS_FIELDS_META(o2::Animatable)
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValues);
 	PROTECTED_FIELD(mBlend);
-	PROTECTED_FIELD(test).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::Animatable)

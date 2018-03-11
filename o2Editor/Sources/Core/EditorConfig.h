@@ -67,8 +67,8 @@ namespace Editor
 		};
 	protected:
 
-		const String mConfigPath = "EditorConfig.xml";
-		const String mGlobalConfigPath = "Config.xml";
+		String mConfigPath = "EditorConfig.xml";
+		String mGlobalConfigPath = "Config.xml";
 
 		bool          mConfigsLoaded = false; // True if configurations were loaded
 		ProjectConfig mProjectConfig;         // Project editor config

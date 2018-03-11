@@ -18,12 +18,6 @@ namespace o2
 	template<class T> struct ExtractVectorElementType { typedef T type; };
 	template<class T> struct ExtractVectorElementType<Vector<T>> { typedef T type; };
 
-	template<class T> struct IsPropertyHelper: std::false_type {};
-	template<class T> struct IsPropertyHelper<Property<T>>: std::true_type {};
-	template<class T> struct IsProperty: IsPropertyHelper<typename std::remove_cv<T>::type> {};
-	template<class T> struct ExtractPropertyValueType { typedef T type; };
-	template<class T> struct ExtractPropertyValueType<Property<T>> { typedef T type; };
-
 	template<class T, class T2> struct IsDictionaryHelper: std::false_type {};
 	template<class T, class T2> struct IsDictionaryHelper<Dictionary<T, T2>, void>: std::true_type {};
 	template<class T> struct IsDictionary: IsDictionaryHelper<typename std::remove_cv<T>::type, void> {};
@@ -41,6 +35,46 @@ namespace o2
 	template<class T> struct IsStringAccessor: IsStringAccessorHelper<typename std::remove_cv<T>::type> {};
 	template<class T> struct ExtractStringAccessorType { typedef T type; };
 	template<class T> struct ExtractStringAccessorType<Accessor<T*, const String&>> { typedef T type; };
+
+	template <typename T>
+	class IsProperty
+	{
+		typedef char one;
+		typedef long two;
+
+		template <typename C> static one test(decltype(&C::IsProperty));
+		template <typename C> static two test(...);
+
+	public:
+		enum { value = sizeof(test<T>(0)) == sizeof(char) };
+	};
+
+	template<class...> struct voidify { using type = void; };
+	template<class... Ts> using void_t = typename voidify<Ts...>::type;
+
+	template<class T, class = void>
+	struct SupportsPlus: std::false_type {};
+
+	template<class T>
+	struct SupportsPlus<T, void_t<decltype(std::declval<T>() + std::declval<T>())>>: std::true_type {};
+
+	template<class T, class = void>
+	struct SupportsMinus: std::false_type {};
+
+	template<class T>
+	struct SupportsMinus<T, void_t<decltype(std::declval<T>() - std::declval<T>())>>: std::true_type {};
+
+	template<class T, class = void>
+	struct SupportsDivide: std::false_type {};
+
+	template<class T>
+	struct SupportsDivide<T, void_t<decltype(std::declval<T>() / std::declval<T>())>>: std::true_type {};
+
+	template<class T, class = void>
+	struct SupportsMultiply: std::false_type {};
+
+	template<class T>
+	struct SupportsMultiply<T, void_t<decltype(std::declval<T>() * std::declval<T>())>>: std::true_type {};
 
 	namespace EqualsTrait
 	{
@@ -104,7 +138,7 @@ namespace o2
 	template<typename T>
 	struct PropertyTypeGetter
 	{
-		static const Type& GetType() { return *Reflection::InitializePropertyType<ExtractPropertyValueType<T>::type>(); }
+		static const Type& GetType() { return *Reflection::InitializePropertyType<T::valueType, T>(); }
 	};
 
 	template<typename T>

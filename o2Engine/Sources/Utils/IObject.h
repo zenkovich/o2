@@ -15,9 +15,6 @@ namespace o2
 	template<typename T, typename X>
 	struct GetTypeHelper;
 
-	template<typename _type>
-	struct TypeSampleCreator;
-
 	class TypeInitializer;
 	class Reflection;
 
@@ -74,8 +71,11 @@ private:                                                                        
 	template<typename T, typename X>                                                                            \
 	friend struct o2::GetTypeHelper;                                                                            \
                                                                                                                 \
+	template<typename _type>                                                                                    \
+	friend class o2::TObjectType;                                                                               \
+                                                                                                                \
     template<typename _type>                                                                                    \
-    friend struct o2::TypeSampleCreator;                                                                        \
+	friend class PointerValueProxy;                                                                             \
                                                                                                                 \
     friend class o2::TypeInitializer;                                                                           \
     friend class o2::Reflection;                                                                                \
@@ -88,7 +88,7 @@ public:                                                                         
                                                                                                                 \
     template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \
 	{                                                                                                           \
-		processor.Start<CLASS>(object, type);                                                                         \
+		processor.Start<CLASS>(object, type);                                                                   \
 		ProcessBaseTypes<_type_processor>(object, processor);                                                   \
 		ProcessFields<_type_processor>(object, processor);                                                      \
 		ProcessMethods<_type_processor>(object, processor);                                                     \

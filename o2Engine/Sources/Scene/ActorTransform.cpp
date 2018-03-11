@@ -80,7 +80,7 @@ namespace o2
 	void ActorTransform::SetPosition(const Vec2F& position)
 	{
 		mData->position = position;
-		SetDirty();
+		//SetDirty();
 	}
 
 	Vec2F ActorTransform::GetPosition() const

@@ -16,11 +16,10 @@ namespace o2
 	class UIButton: public UIWidget, public CursorAreaEventsListener, public KeyboardEventsListener
 	{
 	public:
-		Property<WString>        caption;      // Caption property. Searches "caption" layer and sets text
-		Property<Sprite*>        icon;         // Icon image asset setter. Searches sprite layer with name "icon" and sets image
+		PROPERTY(UIButton, WString, caption, SetCaption, GetCaption); // Caption property. Searches "caption" layer and sets text
+		PROPERTY(UIButton, Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
 		Function<void()>         onClick;      // Click event
-
 		ShortcutKeys             shortcut;     // Shortcut keys
 
 		// Default constructor
@@ -37,7 +36,7 @@ namespace o2
 
 		// Sets caption of button. Searches text layer with name "caption". If can't find this layer, creates them
 		void SetCaption(const WString& text);
-		
+
 		// Returns caption text from text layer "caption". Returns no data if layer isn't exist
 		WString GetCaption() const;
 
@@ -90,9 +89,6 @@ namespace o2
 
 		// It is called when visible was changed
 		void OnVisibleChanged() override;
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -133,6 +129,5 @@ CLASS_METHODS_META(o2::UIButton)
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

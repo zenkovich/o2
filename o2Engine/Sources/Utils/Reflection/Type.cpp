@@ -8,8 +8,8 @@
 
 namespace o2
 {
-	Type::Type(const String& name, ITypeSampleCreator* creator, int size):
-		mId(0), mPtrType(nullptr), mName(name), mSampleCreator(creator), mSize(size)
+	Type::Type(const String& name, int size):
+		mId(0), mPtrType(nullptr), mName(name), mSize(size)
 	{}
 
 	Type::~Type()
@@ -149,11 +149,6 @@ namespace o2
 		return res;
 	}
 
-	void* Type::CreateSample() const
-	{
-		return mSampleCreator->CreateSample();
-	}
-
 	String Type::GetFieldPath(void* object, void *targetObject, FieldInfo*& fieldInfo) const
 	{
 		if (object == targetObject)
@@ -247,8 +242,8 @@ namespace o2
 		return nullptr;
 	}
 
-	VectorType::VectorType(const String& name, ITypeSampleCreator* creator, int size):
-		Type(name, creator, size)
+	VectorType::VectorType(const String& name, int size):
+		Type(name, size)
 	{}
 
 	Type::Usage VectorType::GetUsage() const
@@ -313,6 +308,11 @@ namespace o2
 		return nullptr;
 	}
 
+	DictionaryType::DictionaryType(const Type* keyType, const Type* valueType, int size):
+		Type((String)"o2::Dictionary<" + keyType->GetName() + ", " + valueType->GetName() + ">", size),
+		mKeyType(keyType), mValueType(valueType)
+	{}
+
 	Type::Usage DictionaryType::GetUsage() const
 	{
 		return Usage::Dictionary;
@@ -370,8 +370,8 @@ namespace o2
 		return nullptr;
 	}
 
-	EnumType::EnumType(const String& name, ITypeSampleCreator* creator, int size):
-		Type(name, creator, size)
+	EnumType::EnumType(const String& name, int size):
+		Type(name, size)
 	{}
 
 	Type::Usage EnumType::GetUsage() const
@@ -385,7 +385,7 @@ namespace o2
 	}
 
 	PointerType::PointerType(const Type* unptrType):
-		Type(unptrType->GetName() + "*", mnew TypeSampleCreator<void*>(), sizeof(void*)),
+		Type(unptrType->GetName() + "*", sizeof(void*)),
 		mUnptrType(unptrType)
 	{}
 
@@ -410,8 +410,18 @@ namespace o2
 		return mUnptrType->GetFieldPtr(*(void**)object, path, fieldInfo);
 	}
 
-	PropertyType::PropertyType(const String& name, ITypeSampleCreator* creator, int size):
-		Type(name, creator, size)
+	void* PointerType::CreateSample() const
+	{
+		return mnew void*;
+	}
+
+	IAbstractValueProxy* PointerType::GetValueProxy(void* object) const
+	{
+		return mnew PointerValueProxy<void*>((void**)object);
+	}
+
+	PropertyType::PropertyType(const String& name, int size):
+		Type(name, size)
 	{}
 
 	Type::Usage PropertyType::GetUsage() const
@@ -424,9 +434,9 @@ namespace o2
 		return mValueType;
 	}
 
-	ObjectType::ObjectType(const String& name, ITypeSampleCreator* creator, int size,
+	ObjectType::ObjectType(const String& name, int size,
 						   void*(*castFromFunc)(void*), void*(*castToFunc)(void*)):
-		Type(name, creator, size), mCastToFunc(castToFunc), mCastFromFunc(castFromFunc)
+		Type(name, size), mCastToFunc(castToFunc), mCastFromFunc(castFromFunc)
 	{}
 
 	Type::Usage ObjectType::GetUsage() const

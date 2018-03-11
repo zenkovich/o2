@@ -693,6 +693,20 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	// fields
 	res += templates;
 	res += "CLASS_FIELDS_META(" + classDef + ")\n{\n";
+
+	for (auto x : cls->GetFunctions())
+	{
+		if (x->GetName() == "PROPERTY")
+		{
+			if (x->GetClassSection() == SyntaxProtectionSection::Public)
+				res += "\tPUBLIC_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+			else if (x->GetClassSection() == SyntaxProtectionSection::Private)
+				res += "\tPRIVATE_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+			else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
+				res += "\tPROTECTED_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+		}
+	}
+
 	for (auto x : cls->GetVariables())
 	{
 		if (x->IsStatic())
@@ -995,7 +1009,7 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 
 bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const
 {
-	static vector<string> ignoringNames ={ "SERIALIZABLE", "IOBJECT", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
+	static vector<string> ignoringNames ={ "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
 
 	return !StartsWith(owner->GetName(), function->GetName()) &&
 		!StartsWith(function->GetName(), string("~") + owner->GetName()) &&

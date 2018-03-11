@@ -78,7 +78,7 @@ namespace o2
 		static const Type* InitializePointerType(const Type* type);
 
 		// Initializes property type 
-		template<typename _value_type>
+		template<typename _value_type, typename _property_type>
 		static const PropertyType* InitializePropertyType();
 
 		// Initializes vector type
@@ -105,7 +105,7 @@ namespace o2
 		typedef Vector<TypeInitializingFunc> TypeInitializingFuncsVec;
 
 		static Reflection*       mInstance;              // Reflection instance
-						         
+
 		Vector<Type*>            mTypes;                 // All registered types
 		UInt                     mLastGivenTypeId;       // Last given type index
 
@@ -206,8 +206,8 @@ namespace o2
 	template<typename _type>
 	Type* Reflection::InitializeType(const char* name)
 	{
-		Type* res = mnew ObjectType(name, mnew TypeSampleCreator<_type>(), sizeof(_type), &CastFunc<IObject, _type>,
-								   &CastFunc<_type, IObject>);
+		Type* res = mnew TObjectType<_type>(name, sizeof(_type), &CastFunc<IObject, _type>,
+											&CastFunc<_type, IObject>);
 
 		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::ProcessType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
@@ -234,7 +234,7 @@ namespace o2
 	template<typename _type>
 	EnumType* Reflection::InitializeEnum(const char* name, std::function<Dictionary<int, String>()> func)
 	{
-		EnumType* res = mnew EnumType(name, mnew TypeSampleCreator<_type>(), sizeof(_type));
+		EnumType* res = mnew TEnumType<_type>(name, sizeof(_type));
 
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
@@ -243,15 +243,15 @@ namespace o2
 		return res;
 	}
 
-	template<typename _value_type>
+	template<typename _value_type, typename _property_type>
 	const PropertyType* Reflection::InitializePropertyType()
 	{
-		String typeName = "o2::Property<" + TypeOf(_value_type).GetName() + ">";
+		String typeName = (String)typeid(_property_type).name + (String)"<" + TypeOf(_value_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
 			return (PropertyType*)fnd;
 
-		TPropertyType<_value_type>* newType = mnew TPropertyType<_value_type>();
+		TPropertyType<_value_type, _property_type>* newType = mnew TPropertyType<_value_type, _property_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);
@@ -283,9 +283,7 @@ namespace o2
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
 			return (DictionaryType*)fnd;
 
-		_key_type* x = nullptr;
-		_value_type* y = nullptr;
-		DictionaryType* newType = mnew DictionaryType(x, y);
+		auto newType = mnew TDictionaryType<_key_type, _value_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);

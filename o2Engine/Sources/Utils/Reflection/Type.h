@@ -14,10 +14,14 @@
 
 namespace o2
 {
-	class IObject;
 	class FieldInfo;
 	class FunctionInfo;
+	class IAbstractValueProxy;
+	class IObject;
 	class Type;
+
+	template<typename _type>
+	class IValueProxy;
 
 	template<typename _key_type, typename _value_type>
 	class Dictionary;
@@ -33,28 +37,9 @@ namespace o2
 
 	typedef UInt TypeId;
 
-	// -----------------------------
-	// Type sample creator interface
-	// -----------------------------
-	struct ITypeSampleCreator
-	{
-		// Returns new sample of type
-		virtual void* CreateSample() const = 0;
-	};
-
-	// -------------------------------
-	// Specialized type sample creator
-	// -------------------------------
-	template<typename _type>
-	struct TypeSampleCreator: public ITypeSampleCreator
-	{
-		// Returns new sample of type
-		void* CreateSample() const { return mnew _type(); }
-	};
-
-	// -----------
-	// Object type
-	// -----------
+	// ---------------
+	// Type of a value
+	// ---------------
 	class Type
 	{
 	public:
@@ -79,7 +64,7 @@ namespace o2
 
 	public:
 		// Default constructor
-		Type(const String& name, ITypeSampleCreator* creator, int size);
+		Type(const String& name, int size);
 
 		// Destructor
 		virtual ~Type();
@@ -137,13 +122,16 @@ namespace o2
 		Vector<const Type*> GetDerivedTypes() const;
 
 		// Creates sample copy and returns him
-		void* CreateSample() const;
+		virtual void* CreateSample() const = 0;
 
 		// Returns filed pointer by path
 		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
 
 		// Returns field path by pointer from source object
 		String GetFieldPath(void* object, void *targetObject, FieldInfo*& fieldInfo) const;
+
+		// Returns abstract value proxy for object value
+		virtual IAbstractValueProxy* GetValueProxy(void* object) const = 0;
 
 	public:
 		// --------------------
@@ -157,7 +145,6 @@ namespace o2
 		BaseTypesVec          mBaseTypes;                 // Base types ids with offset 
 		FieldInfosVec         mFields;                    // Fields information
 		FunctionsInfosVec     mFunctions;                 // Functions informations
-		ITypeSampleCreator*   mSampleCreator = nullptr;   // Template type agent
 		mutable Type*         mPtrType = nullptr;         // Pointer type from this
 		int                   mSize;                      // Size of type in bytes
 
@@ -177,13 +164,31 @@ namespace o2
 		friend class StringPointerAccessorType;
 	};
 
-	// -------------------------------------
-	// Type of objects, derived from IObject. Can be casted to/from
+	// -------------------
+	// Type specialization
+	// -------------------
+	template<typename _type>
+	class TType: public Type
+	{
+	public:
+		// Default constructor
+		TType(const String& name, int size);
+
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
+	};
+
+	// --------------------------------------------------------------------
+	// Type of objects, derived from IObject. Can be casted to/from IObject
+	// --------------------------------------------------------------------
 	class ObjectType: public Type
 	{
 	public:
-		ObjectType(const String& name, ITypeSampleCreator* creator, int size,
-				   void*(*castFromFunc)(void*), void*(*castToFunc)(void*));
+		// Constructor
+		ObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*));
 
 		// Returns type usage
 		Usage GetUsage() const override;
@@ -199,11 +204,28 @@ namespace o2
 		void*(*mCastToFunc)(void*); // Dynamic cast function from IObject
 	};
 
+	// -----------------------
+	// Specialized object type
+	// -----------------------
+	template<typename _type>
+	class TObjectType: public ObjectType
+	{
+	public:
+		// Default constructor
+		TObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*));
+
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
+	};
+
 	// ----------------
 	// Fundamental type
 	// ----------------
 	template<typename _type>
-	class FundamentalType: public Type
+	class FundamentalType: public TType<_type>
 	{
 	public:
 		// Default constructor
@@ -228,6 +250,12 @@ namespace o2
 		// Returns filed pointer by path
 		void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const override;
 
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
+
 	protected:
 		const Type* mUnptrType;
 
@@ -237,14 +265,31 @@ namespace o2
 								   Vector<SearchPassedObject>& passedObjects) const override;
 	};
 
-	// ---------------
-	// Property<> type
-	// ---------------
+	// ------------------------
+	// Specialized pointer type
+	// ------------------------
+	template<typename _type>
+	class TPointerType: public PointerType
+	{
+	public:
+		// Default constructor
+		TPointerType(const Type* unptrType);
+
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
+	};
+
+	// -------------
+	// Property type
+	// -------------
 	class PropertyType: public Type
 	{
 	public:
 		// Default constructor
-		PropertyType(const String& name, ITypeSampleCreator* creator, int size);
+		PropertyType(const String& name, int size);
 
 		// Returns type usage
 		Usage GetUsage() const;
@@ -256,15 +301,21 @@ namespace o2
 		const Type* mValueType;
 	};
 
-	// ---------------------------
-	// Specialized Property<> type
-	// ---------------------------
-	template<typename _value_type>
+	// -------------------------
+	// Specialized Property type
+	// -------------------------
+	template<typename _value_type, typename _property_type>
 	class TPropertyType: public PropertyType
 	{
 	public:
 		// Constructor
 		TPropertyType();
+
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
 	};
 
 	// ----------------------
@@ -274,7 +325,7 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		VectorType(const String& name, ITypeSampleCreator* creator, int size);
+		VectorType(const String& name, int size);
 
 		// Returns type usage
 		virtual Usage GetUsage() const;
@@ -332,7 +383,14 @@ namespace o2
 
 		// Returns element's pointer by index
 		void* GetObjectVectorElementPtr(void* object, int idx) const;
+
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
 	};
+
 
 	// --------------------------
 	// Type of Dictionary<> value
@@ -341,8 +399,7 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		template<typename _key_type, typename _value_type>
-		DictionaryType(_key_type* x, _value_type* y);
+		DictionaryType(const Type* keyType, const Type* valueType, int size);
 
 		// Returns type usage
 		virtual Usage GetUsage() const;
@@ -383,6 +440,20 @@ namespace o2
 										   Vector<SearchPassedObject>& passedObjects) const;
 	};
 
+	template<typename _key_type, typename _value_type>
+	class TDictionaryType: public DictionaryType
+	{
+	public:
+		// Default constructor
+		TDictionaryType();
+
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
+	};
+
 	// -------------------------------------------
 	// Accessor<_return_type*, const String&> type
 	// -------------------------------------------
@@ -397,6 +468,12 @@ namespace o2
 
 		// Returns filed pointer by path
 		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
 
 	protected:
 		const Type* mReturnType;
@@ -414,7 +491,7 @@ namespace o2
 	{
 	public:
 		// Constructor
-		EnumType(const String& name, ITypeSampleCreator* creator, int size);
+		EnumType(const String& name, int size);
 
 		// Returns type usage
 		Usage GetUsage() const;
@@ -426,6 +503,23 @@ namespace o2
 		Dictionary<int, String> mEntries;
 
 		friend class Reflection;
+	};
+
+	// ---------------------
+	// Specialized Enum type
+	// ---------------------
+	template<typename _type>
+	class TEnumType: public EnumType
+	{
+	public:
+		// Constructor
+		TEnumType(const String& name, int size);
+
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
 	};
 
 	// --------------------------
@@ -631,25 +725,97 @@ namespace o2
 		return _res_type();
 	}
 
-	// -----------------------------
+	// --------------------
+	// TType implementation
+	// --------------------
+
+	template<typename _type>
+	TType<_type>::TType(const String& name, int size):
+		Type(name, size)
+	{}
+
+	template<typename _type>
+	void* TType<_type>::CreateSample() const
+	{
+		return mnew _type();
+	}
+	template<typename _type>
+	IAbstractValueProxy* TType<_type>::GetValueProxy(void* object) const
+	{
+		return mnew PointerValueProxy<_type>((_type*)object);
+	}
+
+	// --------------------------
+	// TObjectType implementation
+	// --------------------------
+
+	template<typename _type>
+	TObjectType<_type>::TObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*)):
+		ObjectType(name, size, castFromFunc, castToFunc)
+	{}
+
+	template<typename _type>
+	void* TObjectType<_type>::CreateSample() const
+	{
+		return mnew _type();
+	}
+
+	template<typename _type>
+	IAbstractValueProxy* TObjectType<_type>::GetValueProxy(void* object) const
+	{
+		return mnew PointerValueProxy<_type>((_type*)object);
+	}
+
+	// ------------------------------
 	// FundamentalType implementation
-	// -----------------------------
+	// ------------------------------
 
 	template<typename _type>
 	FundamentalType<_type>::FundamentalType(const String& name):
-		Type(name, mnew TypeSampleCreator<_type>(), sizeof(_type))
+		TType<_type>(name, sizeof(_type))
 	{}
+
+	// -----------------------------
+	// TPointerType<> implementation
+	// -----------------------------
+
+	template<typename _type>
+	TPointerType<_type>::TPointerType(const Type* unptrType):
+		PointerType(unptrType)
+	{}
+
+	template<typename _type>
+	void* TPointerType<_type>::CreateSample() const
+	{
+		return mnew void*();
+	}
+
+	template<typename _type>
+	IAbstractValueProxy* TPointerType<_type>::GetValueProxy(void* object) const
+	{
+		return PointerValueProxy<void*>(object);
+	}
 
 	// ------------------------------
 	// TPropertyType<> implementation
 	// ------------------------------
 
-	template<typename _value_type>
-	TPropertyType<_value_type>::TPropertyType():
-		PropertyType((String)"o2::Property<" + GetTypeOf<_value_type>().GetName() + ">",
-					 mnew TypeSampleCreator<_value_type>(), sizeof(_value_type))
+	template<typename _value_type, typename _property_type>
+	TPropertyType<_value_type, _property_type>::TPropertyType():
+		PropertyType((String)"o2::Property<" + GetTypeOf<_value_type>().GetName() + ">", sizeof(_value_type))
 	{
 		mValueType = &GetTypeOf<_value_type>();
+	}
+
+	template<typename _value_type, typename _property_type>
+	void* TPropertyType<_value_type, _property_type>::CreateSample() const
+	{
+		return mnew _property_type(nullptr);
+	}
+	template<typename _value_type, typename _property_type>
+	IAbstractValueProxy* TPropertyType<_value_type, _property_type>::GetValueProxy(void* object) const
+	{
+		return mnew PropertyValueProxy<_value_type, _property_type>((_property_type*)object);
 	}
 
 	// --------------------------
@@ -685,6 +851,18 @@ namespace o2
 	}
 
 	template<typename _element_type>
+	void* TVectorType<_element_type>::CreateSample() const
+	{
+		return mnew Vector<_element_type>();
+	}
+
+	template<typename _element_type>
+	IAbstractValueProxy* TVectorType<_element_type>::GetValueProxy(void* object) const
+	{
+		return mnew PointerValueProxy<Vector<_element_type>>((Vector<_element_type>*)object);
+	}
+
+	template<typename _element_type>
 	int TVectorType<_element_type>::GetObjectVectorSize(void* object) const
 	{
 		return ((Vector<_element_type>*)object)->Count();
@@ -692,8 +870,7 @@ namespace o2
 
 	template<typename _element_type>
 	TVectorType<_element_type>::TVectorType():
-		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">",
-				   mnew TypeSampleCreator<Vector<_element_type>>(), sizeof(Vector<_element_type>))
+		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">", sizeof(Vector<_element_type>))
 	{
 		mElementType = &GetTypeOf<_element_type>();
 
@@ -763,18 +940,14 @@ namespace o2
 		return mnew VectorCountFieldSerializer();
 	}
 
-	// -----------------------------
-	// DictionaryType implementation
-	// ----------------------------- 
+	// ------------------------------
+	// TDictionaryType implementation
+	// ----------------------------- -
 
 	template<typename _key_type, typename _value_type>
-	DictionaryType::DictionaryType(_key_type* x, _value_type* y):
-		Type((String)"o2::Dictionary<" + GetTypeOf<_key_type>().GetName() + ", " + GetTypeOf<_value_type>().GetName() + ">",
-			 mnew TypeSampleCreator<Dictionary<_key_type, _value_type>>, sizeof(Dictionary<_key_type, _value_type>))
+	TDictionaryType<_key_type, _value_type>::TDictionaryType():
+		DictionaryType(&GetTypeOf<_key_type>(), &GetTypeOf<_value_type>(), sizeof(Dictionary<_key_type, _value_type>))
 	{
-		mKeyType = &GetTypeOf<_key_type>();
-		mValueType = &GetTypeOf<_value_type>();
-
 		mGetDictionaryObjectSizeFunc = [](void* obj) { return ((Dictionary<_key_type, _value_type>*)obj)->Count(); };
 		mSetDictionaryObjectSizeFunc = [](void* obj, int size) { ((Dictionary<_key_type, _value_type>*)obj)->Resize(size); };
 
@@ -787,6 +960,18 @@ namespace o2
 		};
 	}
 
+	template<typename _key_type, typename _value_type>
+	void* TDictionaryType<_key_type, _value_type>::CreateSample() const
+	{
+		return mnew Dictionary<_key_type, _value_type>();
+	}
+
+	template<typename _key_type, typename _value_type>
+	IAbstractValueProxy* TDictionaryType<_key_type, _value_type>::GetValueProxy(void* object) const
+	{
+		return mnew PointerValueProxy<Dictionary<_key_type, _value_type>>((Dictionary<_key_type, _value_type>*)object);
+	}
+
 	// ----------------------------------------
 	// StringPointerAccessorType implementation
 	// ----------------------------------------
@@ -794,7 +979,6 @@ namespace o2
 	template<typename _return_type>
 	StringPointerAccessorType<_return_type>::StringPointerAccessorType():
 		Type((String)"Accessor<" + GetTypeOf<_return_type>().GetName() + "*, const o2::String&>",
-			 mnew TypeSampleCreator<Accessor<_return_type*, const String&>>(),
 			 sizeof(Accessor<_return_type*, const String&>))
 	{
 		mReturnType = &GetTypeOf<_return_type>();
@@ -804,6 +988,18 @@ namespace o2
 	Type::Usage StringPointerAccessorType<_return_type>::GetUsage() const
 	{
 		return Usage::StringAccessor;
+	}
+
+	template<typename _return_type>
+	void* StringPointerAccessorType<_return_type>::CreateSample() const
+	{
+		return mnew Accessor<_return_type*, const String&>();
+	}
+
+	template<typename _return_type>
+	IAbstractValueProxy* StringPointerAccessorType<_return_type>::GetValueProxy(void* object) const
+	{
+		return mnew PointerValueProxy<Accessor<_return_type*, const String&>>((Accessor<_return_type*, const String&>*)object);
 	}
 
 	template<typename _return_type>
@@ -842,6 +1038,27 @@ namespace o2
 		return nullptr;
 	}
 
+	// ------------------------
+	// TEnumType implementation
+	// ------------------------
+
+	template<typename _type>
+	TEnumType<_type>::TEnumType(const String& name, int size):
+		EnumType(name, size)
+	{}
+
+	template<typename _type>
+	void* TEnumType<_type>::CreateSample() const
+	{
+		return mnew _type();
+	}
+
+	template<typename _type>
+	IAbstractValueProxy* TEnumType<_type>::GetValueProxy(void* object) const
+	{
+		return mnew PointerValueProxy<_type>((_type*)object);
+	}
+
 	// ------------------------------
 	// TypeInitializer implementation
 	// ------------------------------
@@ -861,7 +1078,8 @@ namespace o2
 	}
 
 	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, void*(*pointerGetter)(void*), _type& value, ProtectSection section)
+	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, void*(*pointerGetter)(void*), _type& value,
+										 ProtectSection section)
 	{
 		auto valType = &TypeOf(_type);
 
@@ -877,7 +1095,8 @@ namespace o2
 	}
 
 	template<typename _class_type, typename _res_type, typename ... _args>
-	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...), ProtectSection section)
+	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...),
+											   ProtectSection section)
 	{
 		auto retType = &TypeOf(_res_type);
 
@@ -894,7 +1113,8 @@ namespace o2
 	}
 
 	template<typename _class_type, typename _res_type, typename ... _args>
-	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section)
+	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name,
+											   _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section)
 	{
 		auto retType = &TypeOf(_res_type);
 

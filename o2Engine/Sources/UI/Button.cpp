@@ -164,12 +164,6 @@ namespace o2
 	{
 		interactable = mResVisible;
 	}
-
-	void UIButton::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIButton, caption, SetCaption, GetCaption);
-		INITIALIZE_PROPERTY(UIButton, icon, SetIcon, GetIcon);
-	}
 }
 
 DECLARE_CLASS(o2::UIButton);
