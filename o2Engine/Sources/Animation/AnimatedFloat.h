@@ -15,19 +15,24 @@ namespace o2
 		typedef Vector<Key> KeysVec;
 
 	public:
-		Curve                    curve;          // Animation curve @SERIALIZABLE
-		Getter<float>            value;			 // Current value getter
-		Setter<float*>           target;		 // Bind target setter
-		Setter<Function<void()>> targetDelegate; // Bind target change event setter
-		Setter<Setter<float>*>   targetProperty; // Bind property setter
-		Accessor<Key, float>     key;			 // Animation keys accessor
-		Property<KeysVec>        keys;			 // Keys property
+		GETTER(AnimatedValue<float>, float, value, GetValue);                               // Current value getter
+		SETTER(AnimatedValue<float>, float*, target, SetTarget);                            // Bind target setter
+		SETTER(AnimatedValue<float>, Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
+		SETTER(AnimatedValue<float>, IValueProxy<float>*, targetProxy, SetTargetProxy);     // Bind proxy setter
+		PROPERTY(AnimatedValue<float>, KeysVec, keys, GetKeysNonContant, SetKeys);          // Keys property
 
+	public:
+		Curve curve; // Animation curve @SERIALIZABLE
+
+	public:
 		// Default constructor
 		AnimatedValue();
 
 		// Copy-constructor
 		AnimatedValue(const AnimatedValue<float>& other);
+
+		// Destructor
+		~AnimatedValue();
 
 		// Assign operator
 		AnimatedValue<float>& operator=(const AnimatedValue<float>& other);
@@ -45,7 +50,7 @@ namespace o2
 		void SetTargetDelegate(const Function<void()>& changeEvent);
 
 		// Sets target property pointer
-		void SetTargetProperty(Setter<float>* setter);
+		void SetTargetProxy(IValueProxy<float>* proxy);
 
 		// Returns current value
 		float GetValue();
@@ -117,10 +122,10 @@ namespace o2
 		SERIALIZABLE(AnimatedValue<float>);
 
 	protected:
-		float            mValue;		  // Current animation value
-		float*           mTarget;		  // Animation target value pointer
-		Function<void()> mTargetDelegate; // Animation target value change event
-		Setter<float>*   mTargetProperty; // Animation target property pointer
+		float               mValue;		            // Current animation value
+		float*              mTarget = nullptr;		// Animation target value pointer
+		Function<void()>    mTargetDelegate;        // Animation target value change event
+		IValueProxy<float>* mTargetProxy = nullptr; // Animation target proxy pointer
 
 	protected:
 		// Evaluates value
@@ -142,13 +147,10 @@ namespace o2
 		void SetTargetVoid(void* target, const Function<void()>& changeEvent);
 
 		// Sets target property pointer
-		void SetTargetPropertyVoid(void* target);
+		void SetTargetProxyVoid(void* target);
 
 		// Registering this in animatable value agent
 		void RegInAnimatable(AnimationState* state, const String& path);
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -163,7 +165,7 @@ CLASS_FIELDS_META(o2::AnimatedValue<float>)
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(target);
 	PUBLIC_FIELD(targetDelegate);
-	PUBLIC_FIELD(targetProperty);
+	PUBLIC_FIELD(targetProxy);
 	PUBLIC_FIELD(key);
 	PUBLIC_FIELD(keys);
 	PROTECTED_FIELD(mValue);
@@ -199,7 +201,7 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
-	PROTECTED_FUNCTION(void, SetTargetPropertyVoid, void*);
+	PROTECTED_FUNCTION(void, SetTargetProxyVoid, void*);
 	PROTECTED_FUNCTION(void, RegInAnimatable, AnimationState*, const String&);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 }

@@ -9,18 +9,12 @@
 
 namespace o2
 {
-	AnimatedValue<Vec2F>::AnimatedValue():
-		mTarget(nullptr), mTargetProperty(nullptr)
-	{
-		InitializeProperties();
-	}
+	AnimatedValue<Vec2F>::AnimatedValue()
+	{}
 
 	AnimatedValue<Vec2F>::AnimatedValue(const AnimatedValue<Vec2F>& other):
-		mKeys(other.mKeys), mValue(other.mValue), mTarget(nullptr), mTargetDelegate(), mTargetProperty(nullptr), 
-		IAnimatedValue(other)
-	{
-		InitializeProperties();
-	}
+		mKeys(other.mKeys), mValue(other.mValue), IAnimatedValue(other)
+	{}
 
 	AnimatedValue<Vec2F>& AnimatedValue<Vec2F>::operator=(const AnimatedValue<Vec2F>& other)
 	{
@@ -41,14 +35,14 @@ namespace o2
 
 	void AnimatedValue<Vec2F>::SetTarget(Vec2F* value)
 	{
-		mTargetProperty = nullptr;
+		mTargetProxy = nullptr;
 		mTarget = value;
 		mTargetDelegate.Clear();
 	}
 
 	void AnimatedValue<Vec2F>::SetTarget(Vec2F* value, const Function<void()>& changeEvent)
 	{
-		mTargetProperty = nullptr;
+		mTargetProxy = nullptr;
 		mTarget = value;
 		mTargetDelegate = changeEvent;
 	}
@@ -58,11 +52,11 @@ namespace o2
 		mTargetDelegate = changeEvent;
 	}
 
-	void AnimatedValue<Vec2F>::SetTargetProperty(Setter<Vec2F>* setter)
+	void AnimatedValue<Vec2F>::SetTargetProxy(IValueProxy<Vec2F>* proxy)
 	{
 		mTarget = nullptr;
 		mTargetDelegate.Clear();
-		mTargetProperty = setter;
+		mTargetProxy = proxy;
 	}
 
 	Vec2F AnimatedValue<Vec2F>::GetValue()
@@ -248,8 +242,8 @@ namespace o2
 			*mTarget = mValue;
 			mTargetDelegate();
 		}
-		else if (mTargetProperty)
-			*mTargetProperty = mValue;
+		else if (mTargetProxy)
+			mTargetProxy->SetValue(mValue);
 	}
 
 	Vec2F AnimatedValue<Vec2F>::Evaluate(float position)
@@ -360,7 +354,7 @@ namespace o2
 
 				endKey.mCurveApproxValues[j] = Bezier(curvea, curveb, curvec, curved, coef);
 
-				Vec2F approxPoint = Bezier(beginKey.value, beginKey.nextSupportValue, 
+				Vec2F approxPoint = Bezier(beginKey.value, beginKey.nextSupportValue,
 										   endKey.prevSupportValue, endKey.value, coef);
 				float length = (lastApproxPoint - approxPoint).Length();
 
@@ -390,19 +384,19 @@ namespace o2
 		mEndTime = mDuration;
 	}
 
-	void AnimatedValue<Vec2F>::SetTargetVoid(void* target) 
+	void AnimatedValue<Vec2F>::SetTargetVoid(void* target)
 	{
 		SetTarget((Vec2F*)target);
 	}
 
-	void AnimatedValue<Vec2F>::SetTargetVoid(void* target, const Function<void()>& changeEvent) 
-	{ 
-		SetTarget((Vec2F*)target, changeEvent); 
+	void AnimatedValue<Vec2F>::SetTargetVoid(void* target, const Function<void()>& changeEvent)
+	{
+		SetTarget((Vec2F*)target, changeEvent);
 	}
 
-	void AnimatedValue<Vec2F>::SetTargetPropertyVoid(void* target)
+	void AnimatedValue<Vec2F>::SetTargetProxyVoid(void* target)
 	{
-		SetTargetProperty((Setter<Vec2F>*)target);
+		SetTargetProxy((IValueProxy<Vec2F>*)target);
 	}
 
 	void AnimatedValue<Vec2F>::RegInAnimatable(AnimationState* state, const String& path)
@@ -440,22 +434,12 @@ namespace o2
 		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, 1.0f);
 	}
 
-	void AnimatedValue<Vec2F>::InitializeProperties()
-	{
-		INITIALIZE_GETTER(AnimatedValue<Vec2F>, value, GetValue);
-		INITIALIZE_SETTER(AnimatedValue<Vec2F>, target, SetTarget);
-		INITIALIZE_SETTER(AnimatedValue<Vec2F>, targetDelegate, SetTargetDelegate);
-		INITIALIZE_SETTER(AnimatedValue<Vec2F>, targetProperty, SetTargetProperty);
-		INITIALIZE_ACCESSOR(AnimatedValue<Vec2F>, key, GetKey);
-		INITIALIZE_PROPERTY(AnimatedValue<Vec2F>, keys, SetKeys, GetKeysNonContant);
-	}
-
 	AnimatedValue<Vec2F>::Key::Key():
 		position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
 		mApproxTotalLength(0)
 	{}
 
-	AnimatedValue<Vec2F>::Key::Key(const Vec2F& value):
+	AnimatedValue<Vec2F>::Key::Key(const Vec2F& value) :
 		position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
 		mApproxTotalLength(0), value(value)
 	{}
@@ -476,11 +460,11 @@ namespace o2
 		value(value), prevSupportValue(value), nextSupportValue(value), mApproxTotalLength(0)
 	{}
 
-	AnimatedValue<Vec2F>::Key::Key(float position, const Vec2F& value, 
+	AnimatedValue<Vec2F>::Key::Key(float position, const Vec2F& value,
 								   const Vec2F& prevSupportValue, const Vec2F& nextSupportValue,
-								   float curvePrevCoef, float curvePrevCoefPos, 
-								   float curveNextCoef, float curveNextCoefPos):
-		position(position), curvePrevCoef(curvePrevCoef), curvePrevCoefPos(curvePrevCoefPos), 
+								   float curvePrevCoef, float curvePrevCoefPos,
+								   float curveNextCoef, float curveNextCoefPos) :
+		position(position), curvePrevCoef(curvePrevCoef), curvePrevCoefPos(curvePrevCoefPos),
 		curveNextCoef(curveNextCoef), curveNextCoefPos(curveNextCoefPos), value(value),
 		prevSupportValue(prevSupportValue), nextSupportValue(nextSupportValue), mApproxTotalLength(0)
 	{}

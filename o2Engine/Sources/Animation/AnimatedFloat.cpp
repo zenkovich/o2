@@ -6,19 +6,21 @@
 
 namespace o2
 {
-	AnimatedValue<float>::AnimatedValue():
-		mTarget(nullptr), mTargetProperty(nullptr)
+	AnimatedValue<float>::AnimatedValue()
 	{
 		curve.onKeysChanged.Add(this, &AnimatedValue<float>::OnCurveChanged);
-		InitializeProperties();
 	}
 
 	AnimatedValue<float>::AnimatedValue(const AnimatedValue<float>& other):
-		mTarget(nullptr), mTargetProperty(nullptr), mTargetDelegate(), curve(other.curve), mValue(other.mValue),
-		IAnimatedValue(other)
+		curve(other.curve), mValue(other.mValue), IAnimatedValue(other)
 	{
 		curve.onKeysChanged.Add(this, &AnimatedValue<float>::OnCurveChanged);
-		InitializeProperties();
+	}
+
+	AnimatedValue<float>::~AnimatedValue()
+	{
+		if (mTargetProxy)
+			delete mTargetProxy;
 	}
 
 	AnimatedValue<float>& AnimatedValue<float>::operator=(const AnimatedValue<float>& other)
@@ -40,14 +42,14 @@ namespace o2
 
 	void AnimatedValue<float>::SetTarget(float* value)
 	{
-		mTargetProperty = nullptr;
+		mTargetProxy = nullptr;
 		mTarget = value;
 		mTargetDelegate.Clear();
 	}
 
 	void AnimatedValue<float>::SetTarget(float* value, const Function<void()>& changeEvent)
 	{
-		mTargetProperty = nullptr;
+		mTargetProxy = nullptr;
 		mTarget = value;
 		mTargetDelegate = changeEvent;
 	}
@@ -57,11 +59,11 @@ namespace o2
 		mTargetDelegate = changeEvent;
 	}
 
-	void AnimatedValue<float>::SetTargetProperty(Setter<float>* setter)
+	void AnimatedValue<float>::SetTargetProxy(IValueProxy<float>* proxy)
 	{
 		mTarget = nullptr;
 		mTargetDelegate.Clear();
-		mTargetProperty = setter;
+		mTargetProxy = proxy;
 	}
 
 	float AnimatedValue<float>::GetValue()
@@ -86,8 +88,8 @@ namespace o2
 			*mTarget = mValue;
 			mTargetDelegate();
 		}
-		else if (mTargetProperty)
-			*mTargetProperty = mValue;
+		else if (mTargetProxy)
+			mTargetProxy->SetValue(mValue);
 	}
 
 	void AnimatedValue<float>::AddKeys(Vector<Vec2F> values, float smooth /*= 1.0f*/)
@@ -180,18 +182,18 @@ namespace o2
 	}
 
 	void AnimatedValue<float>::SetTargetVoid(void* target)
-	{ 
+	{
 		SetTarget((float*)target);
 	}
 
-	void AnimatedValue<float>::SetTargetVoid(void* target, const Function<void()>& changeEvent) 
+	void AnimatedValue<float>::SetTargetVoid(void* target, const Function<void()>& changeEvent)
 	{
 		SetTarget((float*)target, changeEvent);
 	}
 
-	void AnimatedValue<float>::SetTargetPropertyVoid(void* target)
+	void AnimatedValue<float>::SetTargetProxyVoid(void* target)
 	{
-		SetTargetProperty((Setter<float>*)target);
+		SetTargetProxy((IValueProxy<float>*)target);
 	}
 
 	void IAnimatedValue::ForceSetTime(float time, float duration)
@@ -301,16 +303,6 @@ namespace o2
 	AnimatedValue<float> AnimatedValue<float>::Linear(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/)
 	{
 		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, 1.0f);
-	}
-
-	void AnimatedValue<float>::InitializeProperties()
-	{
-		INITIALIZE_GETTER(AnimatedValue<float>, value, GetValue);
-		INITIALIZE_SETTER(AnimatedValue<float>, target, SetTarget);
-		INITIALIZE_SETTER(AnimatedValue<float>, targetDelegate, SetTargetDelegate);
-		INITIALIZE_SETTER(AnimatedValue<float>, targetProperty, SetTargetProperty);
-		INITIALIZE_ACCESSOR(AnimatedValue<float>, key, GetKey);
-		INITIALIZE_PROPERTY(AnimatedValue<float>, keys, SetKeys, GetKeysNonContant);
 	}
 }
 

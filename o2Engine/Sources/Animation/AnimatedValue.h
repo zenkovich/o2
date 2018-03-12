@@ -30,7 +30,7 @@ namespace o2
 		virtual void SetTargetVoid(void* target, const Function<void()>& changeEvent) {}
 
 		// Sets target property by void pointer
-		virtual void SetTargetPropertyVoid(void* target) {}
+		virtual void SetTargetProxyVoid(void* target) {}
 
 		// Registering this in animatable value agent
 		virtual void RegInAnimatable(AnimationState* state, const String& path) {}
@@ -54,18 +54,20 @@ namespace o2
 		typedef Vector<Key> KeysVec;
 
 	public:
-		Getter<_type>            value;          // Current value getter
-		Setter<_type*>           target;         // Bind target setter
-		Setter<Function<void()>> targetDelegate; // Bind target change event setter
-		Setter<Setter<_type>*>   targetProperty; // Bind property setter
-		Accessor<Key, float>     key;            // Animation keys accessor
-		Property<KeysVec>        keys;           // Keys property
+		GETTER(AnimatedValue<_type>, _type, value, GetValue);                               // Current value getter
+		SETTER(AnimatedValue<_type>, _type*, target, SetTarget);                            // Bind target setter
+		SETTER(AnimatedValue<_type>, Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
+		SETTER(AnimatedValue<_type>, IValueProxy<_type>*, targetProxy, SetTargetProxy);     // Bind proxy setter
+		PROPERTY(AnimatedValue<_type>, KeysVec, keys, GetKeysNonContant, SetKeys);          // Keys property
 
 		// Default constructor
 		AnimatedValue();
 
 		// Copy-constructor
 		AnimatedValue(const AnimatedValue<_type>& other);
+
+		// Destructor
+		~AnimatedValue();
 
 		// Assign operator
 		AnimatedValue<_type>& operator=(const AnimatedValue<_type>& other);
@@ -83,7 +85,7 @@ namespace o2
 		void SetTargetDelegate(const Function<void()>& changeEvent);
 
 		// Sets target property pointer
-		void SetTargetProperty(Setter<_type>* setter);
+		void SetTargetProxy(IValueProxy<_type>* proxy);
 
 		// Returns current value
 		_type GetValue();
@@ -138,10 +140,10 @@ namespace o2
 		// Sample: Parametric(someBegin, someEnd, 1.0f, 0.0f, 0.4f, 1.0f, 0.6f) 
 		// Works like css-bezier curves
 		static AnimatedValue<_type> Parametric(const _type& begin, const _type& end, float duration,
-												float beginCoef, float beginCoefPosition,
-												float endCoef, float endCoefPosition);
+											   float beginCoef, float beginCoefPosition,
+											   float endCoef, float endCoefPosition);
 
-		// Returns tweening animation from begin to end in duration with ease in
+	   // Returns tweening animation from begin to end in duration with ease in
 		static AnimatedValue<_type> EaseIn(const _type& begin, const _type& end, float duration = 1.0f);
 
 		// Returns tweening animation from begin to end in duration with ease out
@@ -159,7 +161,7 @@ namespace o2
 		// -------------
 		// Animation key
 		// -------------
-		class Key: public ISerializable 
+		class Key: public ISerializable
 		{
 		public:
 			float position;         // Position on time line, in seconds @SERIALIZABLE
@@ -206,11 +208,11 @@ namespace o2
 		};
 
 	protected:
-		KeysVec          mKeys;           // Animation keys @SERIALIZABLE
-		_type            mValue;          // Current animation value
-		_type*           mTarget;         // Animation target value pointer
-		Function<void()> mTargetDelegate; // Animation target value change event
-		Setter<_type>*   mTargetProperty; // Animation target property pointer
+		KeysVec             mKeys;                  // Animation keys @SERIALIZABLE
+		_type               mValue;                 // Current animation value
+		_type*              mTarget = nullptr;      // Animation target value pointer
+		Function<void()>    mTargetDelegate;        // Animation target value change event
+		IValueProxy<_type>* mTargetProxy = nullptr; // Animation target proxy pointer
 
 	protected:
 		// Evaluates value
@@ -235,28 +237,26 @@ namespace o2
 		void SetTargetVoid(void* target, const Function<void()>& changeEvent);
 
 		// Sets target property pointer
-		void SetTargetPropertyVoid(void* target);
+		void SetTargetProxyVoid(void* target);
 
 		// Registering this in animatable value agent
 		void RegInAnimatable(AnimationState* state, const String& path);
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 
 	template<typename _type>
-	AnimatedValue<_type>::AnimatedValue():
-		mTarget(nullptr), mTargetProperty(nullptr)
-	{
-		InitializeProperties();
-	}
+	AnimatedValue<_type>::AnimatedValue()
+	{}
 
 	template<typename _type>
 	AnimatedValue<_type>::AnimatedValue(const AnimatedValue<_type>& other):
-		mKeys(other.mKeys), mValue(other.mValue), mTarget(nullptr), mTargetDelegate(), mTargetProperty(nullptr), 
-		IAnimatedValue(other)
+		mKeys(other.mKeys), mValue(other.mValue), mTargetDelegate(), IAnimatedValue(other)
+	{}
+
+	template<typename _type>
+	AnimatedValue<_type>::~AnimatedValue()
 	{
-		InitializeProperties();
+		if (mTargetProxy)
+			delete mTargetProxy;
 	}
 
 	template<typename _type>
@@ -281,7 +281,7 @@ namespace o2
 	template<typename _type>
 	void AnimatedValue<_type>::SetTarget(_type* value)
 	{
-		mTargetProperty = nullptr;
+		mTargetProxy = nullptr;
 		mTarget = value;
 		mTargetDelegate.Clear();
 	}
@@ -289,7 +289,7 @@ namespace o2
 	template<typename _type>
 	void AnimatedValue<_type>::SetTarget(_type* value, const Function<void()>& changeEvent)
 	{
-		mTargetProperty = nullptr;
+		mTargetProxy = nullptr;
 		mTarget = value;
 		mTargetDelegate = changeEvent;
 	}
@@ -301,11 +301,11 @@ namespace o2
 	}
 
 	template<typename _type>
-	void AnimatedValue<_type>::SetTargetProperty(Setter<_type>* setter)
+	void AnimatedValue<_type>::SetTargetProxy(IValueProxy<_type>* proxy)
 	{
 		mTarget = nullptr;
 		mTargetDelegate.Clear();
-		mTargetProperty = setter;
+		mTargetProxy = proxy;
 	}
 
 	template<typename _type>
@@ -380,8 +380,8 @@ namespace o2
 
 	template<typename _type>
 	void AnimatedValue<_type>::AddKey(float position, const _type& value,
-									   float leftCoef, float leftCoefPosition,
-									   float rightCoef, float rightCoefPosition)
+									  float leftCoef, float leftCoefPosition,
+									  float rightCoef, float rightCoefPosition)
 	{
 		AddKey(Key(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition));
 	}
@@ -493,8 +493,8 @@ namespace o2
 			*mTarget = mValue;
 			mTargetDelegate();
 		}
-		else if (mTargetProperty)
-			*mTargetProperty = mValue;
+		else if (mTargetProxy)
+			mTargetProxy->SetValue(mValue);
 	}
 
 	template<typename _type>
@@ -607,15 +607,15 @@ namespace o2
 	}
 
 	template<typename _type>
-	void AnimatedValue<_type>::SetTargetPropertyVoid(void* target)
+	void AnimatedValue<_type>::SetTargetProxyVoid(void* target)
 	{
-		SetTargetProperty((Setter<_type>*)target);
+		SetTargetProperty((IValueProxy<_type>*)target);
 	}
 
 	template<typename _type>
 	AnimatedValue<_type> AnimatedValue<_type>::Parametric(const _type& begin, const _type& end, float duration,
-															float beginCoef, float beginCoefPosition,
-															float endCoef, float endCoefPosition)
+														  float beginCoef, float beginCoefPosition,
+														  float endCoef, float endCoefPosition)
 	{
 		AnimatedValue<_type> res;
 		res.AddKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef), beginCoefPosition*duration);
@@ -648,23 +648,12 @@ namespace o2
 	}
 
 	template<typename _type>
-	void AnimatedValue<_type>::InitializeProperties()
-	{
-		INITIALIZE_GETTER(AnimatedValue<_type>, value, GetValue);
-		INITIALIZE_SETTER(AnimatedValue<_type>, target, SetTarget);
-		INITIALIZE_SETTER(AnimatedValue<_type>, targetDelegate, SetTargetDelegate);
-		INITIALIZE_SETTER(AnimatedValue<_type>, targetProperty, SetTargetProperty);
-		INITIALIZE_ACCESSOR(AnimatedValue<_type>, key, GetKey);
-		INITIALIZE_PROPERTY(AnimatedValue<_type>, keys, SetKeys, GetKeysNonContant);
-	}
-
-	template<typename _type>
 	AnimatedValue<_type>::Key::Key():
 		position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f)
 	{}
 
 	template<typename _type>
-	AnimatedValue<_type>::Key::Key(const _type& value):
+	AnimatedValue<_type>::Key::Key(const _type& value) :
 		position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
 		value(value)
 	{}
@@ -690,8 +679,8 @@ namespace o2
 
 	template<typename _type>
 	AnimatedValue<_type>::Key::Key(float position, const _type& value,
-									float curvePrevCoef, float curvePrevCoefPos,
-									float curveNextCoef, float curveNextCoefPos):
+								   float curvePrevCoef, float curvePrevCoefPos,
+								   float curveNextCoef, float curveNextCoefPos):
 		position(position), curvePrevCoef(curvePrevCoef), curvePrevCoefPos(curvePrevCoefPos),
 		curveNextCoef(curveNextCoef), curveNextCoefPos(curveNextCoefPos), value(value)
 	{}
@@ -742,7 +731,7 @@ CLASS_METHODS_META(o2::IAnimatedValue)
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
-	PROTECTED_FUNCTION(void, SetTargetPropertyVoid, void*);
+	PROTECTED_FUNCTION(void, SetTargetProxyVoid, void*);
 	PROTECTED_FUNCTION(void, RegInAnimatable, AnimationState*, const String&);
 	PROTECTED_FUNCTION(void, ForceSetTime, float, float);
 }
@@ -826,6 +815,5 @@ CLASS_FIELDS_META(o2::AnimatedValue<typename _type>::Key)
 END_META;
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimatedValue<typename _type>::Key)
-{
-}
+{}
 END_META;

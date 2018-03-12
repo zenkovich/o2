@@ -411,8 +411,8 @@ namespace o2
 			def.mAnimatedValue = mnew AnimatedValue<_type>();
 			def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
-			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Pointer)
-				def.mAnimatedValue->SetTargetPropertyVoid(target);
+			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
+				def.mAnimatedValue->SetTargetProxyVoid(target);
 			else
 				def.mAnimatedValue->SetTargetVoid(target);
 
@@ -449,7 +449,7 @@ namespace o2
 			}
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-				def.mAnimatedValue->SetTargetPropertyVoid(def.mTargetPtr);
+				def.mAnimatedValue->SetTargetProxyVoid(def.mTargetPtr);
 			else
 				def.mAnimatedValue->SetTargetVoid(def.mTargetPtr);
 		}
@@ -484,7 +484,7 @@ namespace o2
 			def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-				def.mAnimatedValue->SetTargetPropertyVoid(target);
+				def.mAnimatedValue->SetTargetProxyVoid(target);
 			else
 				def.mAnimatedValue->SetTargetVoid(target);
 
