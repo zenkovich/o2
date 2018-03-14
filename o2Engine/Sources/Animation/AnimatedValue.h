@@ -58,7 +58,7 @@ namespace o2
 		SETTER(AnimatedValue<_type>, _type*, target, SetTarget);                            // Bind target setter
 		SETTER(AnimatedValue<_type>, Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
 		SETTER(AnimatedValue<_type>, IValueProxy<_type>*, targetProxy, SetTargetProxy);     // Bind proxy setter
-		PROPERTY(AnimatedValue<_type>, KeysVec, keys, GetKeysNonContant, SetKeys);          // Keys property
+		PROPERTY(AnimatedValue<_type>, KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
 
 		// Default constructor
 		AnimatedValue();
@@ -609,7 +609,7 @@ namespace o2
 	template<typename _type>
 	void AnimatedValue<_type>::SetTargetProxyVoid(void* target)
 	{
-		SetTargetProperty((IValueProxy<_type>*)target);
+		SetTargetProxyVoid((IValueProxy<_type>*)target);
 	}
 
 	template<typename _type>
@@ -749,14 +749,13 @@ CLASS_FIELDS_META(o2::AnimatedValue<typename _type>)
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(target);
 	PUBLIC_FIELD(targetDelegate);
-	PUBLIC_FIELD(targetProperty);
-	PUBLIC_FIELD(key);
+	PUBLIC_FIELD(targetProxy);
 	PUBLIC_FIELD(keys);
 	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValue);
 	PROTECTED_FIELD(mTarget);
 	PROTECTED_FIELD(mTargetDelegate);
-	PROTECTED_FIELD(mTargetProperty);
+	PROTECTED_FIELD(mTargetProxy);
 }
 END_META;
 META_TEMPLATES(typename _type)
@@ -766,7 +765,7 @@ CLASS_METHODS_META(o2::AnimatedValue<typename _type>)
 	PUBLIC_FUNCTION(void, SetTarget, _type*);
 	PUBLIC_FUNCTION(void, SetTarget, _type*, const Function<void()>&);
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProperty, Setter<_type>*);
+	PUBLIC_FUNCTION(void, SetTargetProxy, IValueProxy<_type>*);
 	PUBLIC_FUNCTION(_type, GetValue);
 	PUBLIC_FUNCTION(_type, GetValue, float);
 	PUBLIC_FUNCTION(void, AddKeys, Vector<Key>, float);
@@ -789,9 +788,8 @@ CLASS_METHODS_META(o2::AnimatedValue<typename _type>)
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
-	PROTECTED_FUNCTION(void, SetTargetPropertyVoid, void*);
+	PROTECTED_FUNCTION(void, SetTargetProxyVoid, void*);
 	PROTECTED_FUNCTION(void, RegInAnimatable, AnimationState*, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 
@@ -815,5 +813,6 @@ CLASS_FIELDS_META(o2::AnimatedValue<typename _type>::Key)
 END_META;
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimatedValue<typename _type>::Key)
-{}
+{
+}
 END_META;

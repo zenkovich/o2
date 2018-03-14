@@ -26,55 +26,55 @@ namespace o2
 		_type GetValue() const override { return mProperty->Get(); }
 	};
 
-#define PROPERTY(CLASSNAME, TYPE, NAME, SETTER, GETTER)                                                                             \
-	class NAME##_PROPERTY																				                            \
-	{																									                            \
-		CLASSNAME* _this;																				                            \
-																										                            \
-	public:																								                            \
-        typedef TYPE valueType;                                                                                                     \
-		NAME##_PROPERTY(CLASSNAME* _this):_this(_this) {}												                            \
-																										                            \
-		operator TYPE() { return _this->GETTER(); }												                                    \
-		NAME##_PROPERTY& operator=(const TYPE& value) { _this->SETTER(const_cast<TYPE&>(value)); return *this; }	                \
-																										                            \
-		bool operator==(const TYPE& value) const { return _this->GETTER() == value; }                	                            \
-		bool operator!=(const TYPE& value) const { return _this->GETTER() != value; }                	                            \
-																										                            \
-		template<typename X = std::enable_if<SupportsPlus<TYPE>::value>::type>                                                      \
-		TYPE operator+(const TYPE& value) { return _this->GETTER() + value; }                	                                    \
-																										                            \
-		template<typename X = std::enable_if<SupportsMinus<TYPE>::value>::type>                                                     \
-		TYPE operator-(const TYPE& value) { return _this->GETTER() - value; }                	                                    \
-																										                            \
-		template<typename X = std::enable_if<SupportsDivide<TYPE>::value>::type>                                                    \
-		TYPE operator/(const TYPE& value) { return _this->GETTER() / value; }                	                                    \
-																										                            \
-		template<typename X = std::enable_if<SupportsMultiply<TYPE>::value>::type>                                                  \
-		TYPE operator*(const TYPE& value) { return _this->GETTER() * value; }                	                                    \
-																										                            \
-		template<typename X = std::enable_if<SupportsPlus<TYPE>::value>::type>                                                      \
-		NAME##_PROPERTY& operator+=(const TYPE& value) { _this->SETTER(_this->GETTER() + value); return *this; }                	\
-																										                            \
-		template<typename X = std::enable_if<SupportsMinus<TYPE>::value>::type>                                                     \
-		NAME##_PROPERTY& operator-=(const TYPE& value) { _this->SETTER(_this->GETTER() - value); return *this; }                	\
-																										                            \
-		template<typename X = std::enable_if<SupportsDivide<TYPE>::value>::type>                                                    \
-		NAME##_PROPERTY& operator/=(const TYPE& value) { _this->SETTER(_this->GETTER() / value); return *this; }                	\
-																										                            \
-		template<typename X = std::enable_if<SupportsMultiply<TYPE>::value>::type>                                                  \
-		NAME##_PROPERTY& operator*=(const TYPE& value) { _this->SETTER(_this->GETTER() * value); return *this; }                	\
-																										                            \
-	    TYPE Get() const { return _this->GETTER(); }                                                                                \
-		void Set(const valueType& value) { _this->SETTER(const_cast<valueType&>(value)); }                                          \
-																										                            \
-		PropertyValueProxy<TYPE, NAME##_PROPERTY> GetValueProxy() { return PropertyValueProxy<TYPE, NAME##_PROPERTY>(this); }       \
-																										                            \
-		bool IsProperty() const { return true; }                                                                                    \
-																										                            \
-        static const Type& GetType() { return GetTypeOf<TYPE>(); }                                                                  \
-	};																									                            \
-																										                            \
+#define PROPERTY(CLASSNAME, TYPE, NAME, SETTER, GETTER)                                                                                 \
+	class NAME##_PROPERTY																				                                \
+	{																									                                \
+		CLASSNAME* _this;																				                                \
+																										                                \
+	public:																								                                \
+        typedef TYPE valueType;                                                                                                         \
+		NAME##_PROPERTY(CLASSNAME* _this):_this(_this) {}												                                \
+																										                                \
+		operator valueType() { return _this->GETTER(); }												                                \
+		NAME##_PROPERTY& operator=(const valueType& value) { _this->SETTER(const_cast<valueType&>(value)); return *this; }	            \
+																										                                \
+		bool operator==(const valueType& value) const { return _this->GETTER() == value; }                	                            \
+		bool operator!=(const valueType& value) const { return _this->GETTER() != value; }                	                            \
+																										                                \
+		template<typename X = std::enable_if<SupportsPlus<valueType>::value>::type>                                                     \
+		valueType operator+(const valueType& value) { return _this->GETTER() + value; }                	                                \
+																										                                \
+		template<typename X = std::enable_if<SupportsMinus<valueType>::value>::type>                                                    \
+		valueType operator-(const valueType& value) { return _this->GETTER() - value; }                	                                \
+																										                                \
+		template<typename X = std::enable_if<SupportsDivide<valueType>::value>::type>                                                   \
+		valueType operator/(const valueType& value) { return _this->GETTER() / value; }                	                                \
+																										                                \
+		template<typename X = std::enable_if<SupportsMultiply<valueType>::value>::type>                                                 \
+		valueType operator*(const valueType& value) { return _this->GETTER() * value; }                	                                \
+																										                                \
+		template<typename X = std::enable_if<SupportsPlus<valueType>::value>::type>                                                     \
+		NAME##_PROPERTY& operator+=(const valueType& value) { _this->SETTER(_this->GETTER() + value); return *this; }                   \
+																										                                \
+		template<typename X = std::enable_if<SupportsMinus<valueType>::value>::type>                                                    \
+		NAME##_PROPERTY& operator-=(const valueType& value) { _this->SETTER(_this->GETTER() - value); return *this; }             	    \
+																										                                \
+		template<typename X = std::enable_if<SupportsDivide<valueType>::value>::type>                                                   \
+		NAME##_PROPERTY& operator/=(const valueType& value) { _this->SETTER(_this->GETTER() / value); return *this; }                   \
+																										                                \
+		template<typename X = std::enable_if<SupportsMultiply<valueType>::value>::type>                                                 \
+		NAME##_PROPERTY& operator*=(const valueType& value) { _this->SETTER(_this->GETTER() * value); return *this; }                   \
+																										                                \
+	    valueType Get() const { return _this->GETTER(); }                                                                               \
+		void Set(const valueType& value) { _this->SETTER(const_cast<valueType&>(value)); }                                              \
+																										                                \
+		PropertyValueProxy<valueType, NAME##_PROPERTY> GetValueProxy() { return PropertyValueProxy<valueType, NAME##_PROPERTY>(this); } \
+																										                                \
+		bool IsProperty() const { return true; }                                                                                        \
+																										                                \
+        static const Type& GetType() { return GetTypeOf<valueType>(); }                                                                 \
+	};																									                                \
+																										                                \
 	NAME##_PROPERTY NAME = NAME##_PROPERTY(this);
 
 #define GETTER(CLASSNAME, TYPE, NAME, GETTER)                                                            \
@@ -83,10 +83,11 @@ namespace o2
 		CLASSNAME* _this;																				 \
 																										 \
 	public:																								 \
+        typedef TYPE valueType;                                                                          \
 		NAME##_GET_PROPERTY(CLASSNAME* _this):_this(_this) {}										     \
-		operator TYPE() { return _this->GETTER(); }												         \
-		bool operator==(const TYPE& value) const { return _this->GETTER() == value; }                	 \
-		bool operator!=(const TYPE& value) const { return _this->GETTER() != value; }                	 \
+		operator valueType() { return _this->GETTER(); }												 \
+		bool operator==(const valueType& value) const { return _this->GETTER() == value; }               \
+		bool operator!=(const valueType& value) const { return _this->GETTER() != value; }               \
         TYPE Get() const { return _this->GETTER(); }                                                     \
 	};																									 \
 																										 \
@@ -98,9 +99,10 @@ namespace o2
 		CLASSNAME* _this;																				 \
 																										 \
 	public:																								 \
+        typedef TYPE valueType;                                                                          \
 		NAME##_SET_PROPERTY(CLASSNAME* _this):_this(_this) {}										     \
-		NAME##_SET_PROPERTY& operator=(const TYPE& value) { _this->SETTER(value); return *this; }	     \
-        void Set(const TYPE& value) { _this->SETTER(value); }                                            \
+		NAME##_SET_PROPERTY& operator=(const valueType& value) { _this->SETTER(value); return *this; }	 \
+        void Set(const valueType& value) { _this->SETTER(const_cast<valueType&>(value)); }               \
 	};																									 \
 																										 \
 	NAME##_SET_PROPERTY NAME = NAME##_SET_PROPERTY(this);	
@@ -111,10 +113,11 @@ namespace o2
 		CLASSNAME* _this;																				 \
 																										 \
 	public:																								 \
+        typedef TYPE valueType;                                                                          \
 		NAME##_ACCESSOR(CLASSNAME* _this):_this(_this) {}										         \
-        TYPE Get(const KEY_TYPE& key) const { return _this->GETTER(key); }                               \
+        valueTypevalueType Get(const KEY_TYPE& key) const { return _this->GETTER(key); }                 \
         Dictionary<KEY_TYPE, TYPE> GetAll() const { return _this->GET_ALL(); }                           \
-        TYPE operator[](const KEY_TYPE& key) const { return _this->GETTER(key); }                        \
+        valueType operator[](const KEY_TYPE& key) const { return _this->GETTER(key); }                   \
 	};																									 \
 																										 \
 	NAME##_ACCESSOR NAME = NAME##_ACCESSOR(this);	

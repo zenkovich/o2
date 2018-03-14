@@ -15,11 +15,11 @@ namespace o2
 		typedef Vector<Key> KeysVec;
 
 	public:
-		GETTER(AnimatedValue<float>, float, value, GetValue);                               // Current value getter
+		GETTER(AnimatedValue<float>, float, value, GetValue);                               // Current value getter  g
 		SETTER(AnimatedValue<float>, float*, target, SetTarget);                            // Bind target setter
 		SETTER(AnimatedValue<float>, Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
 		SETTER(AnimatedValue<float>, IValueProxy<float>*, targetProxy, SetTargetProxy);     // Bind proxy setter
-		PROPERTY(AnimatedValue<float>, KeysVec, keys, GetKeysNonContant, SetKeys);          // Keys property
+		PROPERTY(AnimatedValue<float>, KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
 
 	public:
 		Curve curve; // Animation curve @SERIALIZABLE
@@ -161,17 +161,16 @@ CLASS_BASES_META(o2::AnimatedValue<float>)
 END_META;
 CLASS_FIELDS_META(o2::AnimatedValue<float>)
 {
-	PUBLIC_FIELD(curve).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(target);
 	PUBLIC_FIELD(targetDelegate);
 	PUBLIC_FIELD(targetProxy);
-	PUBLIC_FIELD(key);
 	PUBLIC_FIELD(keys);
+	PUBLIC_FIELD(curve).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValue);
 	PROTECTED_FIELD(mTarget);
 	PROTECTED_FIELD(mTargetDelegate);
-	PROTECTED_FIELD(mTargetProperty);
+	PROTECTED_FIELD(mTargetProxy);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimatedValue<float>)
@@ -180,7 +179,7 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PUBLIC_FUNCTION(void, SetTarget, float*);
 	PUBLIC_FUNCTION(void, SetTarget, float*, const Function<void()>&);
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProperty, Setter<float>*);
+	PUBLIC_FUNCTION(void, SetTargetProxy, IValueProxy<float>*);
 	PUBLIC_FUNCTION(float, GetValue);
 	PUBLIC_FUNCTION(float, GetValue, float);
 	PUBLIC_FUNCTION(void, AddKeys, Vector<Vec2F>, float);
@@ -203,6 +202,5 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
 	PROTECTED_FUNCTION(void, SetTargetProxyVoid, void*);
 	PROTECTED_FUNCTION(void, RegInAnimatable, AnimationState*, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

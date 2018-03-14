@@ -20,13 +20,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
@@ -81,7 +81,7 @@
       <AdditionalOptions>/WHOLEARCHIVE %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PreBuildEvent>
-      <Command>$(O2)/CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)"</Command>
+      <Command>$(O2)/CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)" -v</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Reflection generation</Message>
@@ -118,7 +118,7 @@
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
     <PreBuildEvent>
-      <Command>$(O2)/CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)"</Command>
+      <Command>$(O2)/CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)" -v</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Reflection generation</Message>

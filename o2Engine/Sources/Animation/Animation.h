@@ -63,21 +63,9 @@ namespace o2
 		template<typename _type>
 		AnimatedValue<_type>* GetAnimationValue(_type* target);
 
-		// Returns animation value for target (animating target must be setted)
-		template<typename _type>
-		AnimatedValue<_type>* GetAnimationValue(Setter<_type>* target);
-
 		// Adds animation value by target(animating target must be setted)
 		template<typename _type>
 		AnimatedValue<_type>* AddAnimationValue(_type* target);
-
-		// Adds animation value by target(animating target must be setted)
-		template<typename _type>
-		AnimatedValue<_type>* AddAnimationValue(Setter<_type>* target);
-
-		// Adds animation value by target(animating target must be setted)
-		template<typename _type>
-		AnimatedValue<_type>* AddAnimationValue(Property<_type>* target);
 
 		// Adds animation value with specified path
 		template<typename _type>
@@ -463,68 +451,12 @@ namespace o2
 	}
 
 	template<typename _type>
-	AnimatedValue<_type>* Animation::AddAnimationValue(Setter<_type>* target)
-	{
-		if (mTarget)
-		{
-			FieldInfo* fieldInfo = nullptr;
-			const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
-			void* castedTarget = type->DynamicCastFromIObject(mTarget);
-			String path = mTarget->GetType().GetFieldPath(castedTarget, target, fieldInfo);
-
-			if (!fieldInfo)
-			{
-				o2Debug.LogWarning("Can't create animated value: field info not found");
-				return nullptr;
-			}
-
-			AnimatedValueDef def;
-
-			def.mAnimatedValue = mnew AnimatedValue<_type>();
-			def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
-
-			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-				def.mAnimatedValue->SetTargetProxyVoid(target);
-			else
-				def.mAnimatedValue->SetTargetVoid(target);
-
-			def.mTargetPath = path;
-			def.mTargetPtr = target;
-			mAnimatedValues.Add(def);
-
-			OnAnimatedValueAdded(def);
-
-			return (AnimatedValue<_type>*)def.mAnimatedValue;
-		}
-
-		return nullptr;
-	}
-
-	template<typename _type>
-	AnimatedValue<_type>* Animation::AddAnimationValue(Property<_type>* target)
-	{
-		return AddAnimationValue(static_cast<Setter<_type>*>(target));
-	}
-
-	template<typename _type>
 	AnimatedValue<_type>* Animation::GetAnimationValue(_type* target)
 	{
 		for (auto& val : mAnimatedValues)
 		{
 			if (val.mTargetPtr == target)
 				return val.mAnimatedValue;
-		}
-
-		return nullptr;
-	}
-
-	template<typename _type>
-	AnimatedValue<_type>* Animation::GetAnimationValue(Setter<_type>* target)
-	{
-		for (auto& val : mAnimatedValues)
-		{
-			if (val.mTargetPtr == target)
-				return dynamic_cast<AnimatedValue<_type>*>(val.mAnimatedValue);
 		}
 
 		return nullptr;

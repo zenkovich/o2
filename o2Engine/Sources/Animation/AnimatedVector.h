@@ -20,7 +20,7 @@ namespace o2
 		SETTER(AnimatedValue<o2::Vec2F>, o2::Vec2F*, target, SetTarget);                        // Bind target setter
 		SETTER(AnimatedValue<o2::Vec2F>, Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
 		SETTER(AnimatedValue<o2::Vec2F>, IValueProxy<o2::Vec2F>*, targetProxy, SetTargetProxy); // Bind proxy setter
-		PROPERTY(AnimatedValue<o2::Vec2F>, KeysVec, keys, GetKeysNonContant, SetKeys);          // Keys property
+		PROPERTY(AnimatedValue<o2::Vec2F>, KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
 
         // Default constructor
 		AnimatedValue();
@@ -219,13 +219,12 @@ CLASS_FIELDS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_FIELD(target);
 	PUBLIC_FIELD(targetDelegate);
 	PUBLIC_FIELD(targetProxy);
-	PUBLIC_FIELD(key);
 	PUBLIC_FIELD(keys);
 	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValue);
 	PROTECTED_FIELD(mTarget);
 	PROTECTED_FIELD(mTargetDelegate);
-	PROTECTED_FIELD(mTargetProperty);
+	PROTECTED_FIELD(mTargetProxy);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
@@ -234,7 +233,7 @@ CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_FUNCTION(void, SetTarget, Vec2F*);
 	PUBLIC_FUNCTION(void, SetTarget, Vec2F*, const Function<void()>&);
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProperty, Setter<Vec2F>*);
+	PUBLIC_FUNCTION(void, SetTargetProxy, IValueProxy<Vec2F>*);
 	PUBLIC_FUNCTION(Vec2F, GetValue);
 	PUBLIC_FUNCTION(Vec2F, GetValue, float);
 	PUBLIC_FUNCTION(void, AddKeys, Vector<Key>, float);
@@ -259,7 +258,6 @@ CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
 	PROTECTED_FUNCTION(void, SetTargetProxyVoid, void*);
 	PROTECTED_FUNCTION(void, RegInAnimatable, AnimationState*, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

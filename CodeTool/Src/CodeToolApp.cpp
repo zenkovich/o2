@@ -696,7 +696,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
 	for (auto x : cls->GetFunctions())
 	{
-		if (x->GetName() == "PROPERTY")
+		if (x->GetName() == "PROPERTY" || x->GetName() == "SETTER" || x->GetName() == "GETTER")
 		{
 			if (x->GetClassSection() == SyntaxProtectionSection::Public)
 				res += "\tPUBLIC_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
@@ -1013,6 +1013,7 @@ bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, Syntax
 
 	return !StartsWith(owner->GetName(), function->GetName()) &&
 		!StartsWith(function->GetName(), string("~") + owner->GetName()) &&
+		function->GetName().find('~') == string::npos &&
 		function->GetName().find("operator") == function->GetName().npos &&
 		!function->IsTemplate() &&
 		!function->IsStatic() &&

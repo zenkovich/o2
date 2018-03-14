@@ -246,7 +246,7 @@ namespace o2
 	template<typename _value_type, typename _property_type>
 	const PropertyType* Reflection::InitializePropertyType()
 	{
-		String typeName = (String)typeid(_property_type).name + (String)"<" + TypeOf(_value_type).GetName() + ">";
+		String typeName = (String)(typeid(_property_type).name()) + (String)"<" + TypeOf(_value_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
 			return (PropertyType*)fnd;
