@@ -13,13 +13,12 @@ namespace o2
 	class UICustomList: public UIScrollArea, public DrawableCursorEventsListener
 	{
 	public:
-		PROPERTY(Vector<int>>     selectedItems;   // Selected item widget property
-		PROPERTY(UIWidget*>       selectedItem;    // Selected item widget
-		PROPERTY(int>             selectedItemPos; // Selected item position property
+		PROPERTIES(UICustomList);
+		PROPERTY(Vector<int>, selectedItems, SetSelectedItems, GetSelectedItems); // Selected item widget property
+		PROPERTY(UIWidget*, selectedItem, SelectItem, GetSelectedItem);           // Selected item widget
+		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPos);         // Selected item position property
+		GETTER(int, itemsCount, GetItemsCount);                                   // All items count getter
 
-		Accessor<UIWidget*, int>  item;            // Items by position accessor
-		GETTER(int>               itemsCount;      // All items count getter
-								  
 		Function<void(int)>       onSelectedPos;   // Select item position event
 		Function<void(UIWidget*)> onSelectedItem;  // Select item event
 
@@ -163,13 +162,13 @@ namespace o2
 
 		Layout            mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
 		Layout            mHoverLayout = Layout::BothStretch();     // Hover layout, result selection area depends on selected item @SERIALIZABLE
-						  							    
+
 		RectF             mCurrentHoverRect;                        // Current hover rectangle (for smoothing)
 		RectF             mTargetHoverRect;                         // Target hover rectangle (over selected item)
-						  							    
+
 		Vec2F             mLastHoverCheckCursor;                    // Last cursor position on hover check
 		Vec2F             mLastSelectCheckCursor;                   // Last cursor position on selection check
-													    
+
 		SpritesVec        mSelectionSpritesPool;                    // Selection sprites pool
 
 	protected:
@@ -229,9 +228,6 @@ namespace o2
 
 		// Returns selection sprite
 		Sprite* GetSelectionSprite();
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class UIDropDown;
 		friend class UICustomDropDown;

@@ -814,6 +814,5 @@ CLASS_FIELDS_META(o2::AnimatedValue<typename _type>::Key)
 END_META;
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimatedValue<typename _type>::Key)
-{
-}
+{}
 END_META;

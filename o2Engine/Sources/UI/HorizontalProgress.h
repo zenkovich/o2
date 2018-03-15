@@ -14,6 +14,7 @@ namespace o2
 		enum class Orientation { Right, Left };
 
 	public:
+		PROPERTIES(UIHorizontalLayout);
 		PROPERTY(float>       value;       // Current value property
 
 		PROPERTY(float>       minValue;    // Minimal value property

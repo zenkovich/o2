@@ -16,12 +16,12 @@ namespace o2
 	class UIEditBox: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		PROPERTY(WString>              text;			  // Text property
+		PROPERTIES(UIEditBox);
+		PROPERTY(WString, text, SetText, GetText);			      // Text property
+		PROPERTY(int, caret, SetCaretPosition, GetCaretPosition); // Caret position property
 
-		PROPERTY(int>                  caret;		      // Caret position property
-
-		PROPERTY(int>                  selectionBegin;    // Selection begin index property
-		PROPERTY(int>                  selectionEnd;	  // Selection end index property
+		PROPERTY(int, selectionBegin, SetSelectionBegin, GetSelectionBegin);  // Selection begin index property
+		PROPERTY(int, selectionEnd, SetSelectionEnd, GetSelectionEnd);	      // Selection end index property
 
 		Function<void(const WString&)> onChanged;         // Text changed event
 		Function<void(const WString&)> onChangeCompleted; // Text changing completed event
@@ -124,7 +124,7 @@ namespace o2
 
 		// Returns is text multiline
 		bool IsMultiLine() const;
-		 
+
 		// Sets word wrapping
 		void SetWordWrap(bool wordWrap);
 
@@ -157,25 +157,25 @@ namespace o2
 		WString mLastText;                 // Last text
 		WString mText;                     // Current text @SERIALIZABLE
 		WString mAvailableSymbols;         // Available symbols @SERIALIZABLE
-										   
+
 		Text*   mTextDrawable = nullptr;   // Text drawable @SERIALIZABLE
 		Mesh*   mSelectionMesh = nullptr;  // Selection mesh
 		Sprite* mCaretDrawable = nullptr;  // Caret drawable @SERIALIZABLE
-										   
+
 		float   mCaretBlinkDelay = 1.0f;   // Caret blinking delay @SERIALIZABLE
 		float   mCaretBlinkTime = 0.0f;    // Caret blinking timer
-										   
+
 		int     mSelectionBegin = 0;       // Selection begin index
 		int     mSelectionEnd = 0;	       // Selection end index
 		bool    mSelectingByWords = false; // Selection works by solid words
 		int     mSelWordBegin = 0;         // Selection by words begin index
 		int     mSelWordEnd = 0;           // Selection by words end index
-										   
+
 		bool    mMultiLine = true;		   // True if text is multiline @SERIALIZABLE
 		bool    mWordWrap = false;		   // True if text words wrapping @SERIALIZABLE
 		int     mMaxLineChars = INT_MAX;   // Count of maximum characters in line @SERIALIZABLE
 		int     mMaxLinesCount = INT_MAX;  // Count of maximum lines count @SERIALIZABLE
-										   
+
 		bool    mJustSelected = false;     // Is edit box selected at current frame
 		float   mLastClickTime = -1.0f;    // Time of last clicking
 		Vec2F   mLastCursorPos;            // Last pressed cursor position
@@ -282,9 +282,6 @@ namespace o2
 
 		// Moves mSelectionEnd position and mSelectionBegin, when selecting
 		void MoveCaret(int newPosition, bool selecting);
-
-		// initializes properties
-		void InitializeProperties();
 	};
 }
 

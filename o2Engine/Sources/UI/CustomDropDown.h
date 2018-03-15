@@ -11,11 +11,10 @@ namespace o2
 	class UICustomDropDown: public UIWidget, public DrawableCursorEventsListener
 	{
 	public:
-		PROPERTY(UIWidget*>       selectedItem;    // Selected item widget property
-		PROPERTY(int>             selectedItemPos; // Selected item position property
-
-		Accessor<UIWidget*, int>  item;            // Items by position accessor
-		GETTER(int>               itemsCount;      // All items count getter
+		PROPERTIES(UICustomDropDown);
+		PROPERTY(UIWidget*, selectedItem, SelectItem, GetSelectedItem);       // Selected item widget property
+		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property
+		GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
 
 		Function<void(int)>       onSelectedPos;   // Select item position event
 		Function<void(UIWidget*)> onSelectedItem;  // Select item event
@@ -155,9 +154,6 @@ namespace o2
 
 		// It is called when selection was changed
 		virtual void OnSelectionChanged();
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 

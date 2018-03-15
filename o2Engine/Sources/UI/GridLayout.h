@@ -10,20 +10,20 @@ namespace o2
 	class UIGridLayout: public UIWidget
 	{
 	public:
-		PROPERTY(BaseCorner>   baseCorner;          // Base corder property
-		PROPERTY(Vec2F>        cellSize;            // Grid cell size
-		PROPERTY(int>          arrangeAxisMaxCells; // Maximum cells at arranging axis
-		PROPERTY(TwoDirection> arrangeAxis;         // Arrange axis
+		PROPERTIES(UIGridLayout);
+		PROPERTY(BaseCorner, baseCorner, SetBaseCorner, GetBaseCorner);                     // Base corder property
+		PROPERTY(Vec2F, cellSize, SetCellSize, GetCellSize);                                // Grid cell size
+		PROPERTY(int, arrangeAxisMaxCells, SetArrangeAxisMaxCells, GetArrangeAxisMaxCells); // Maximum cells at arranging axis
+		PROPERTY(TwoDirection, arrangeAxis, SetArrangeAxis, GetArrangeAxis);                // Arrange axis
 
-		PROPERTY(float>        spacing;             // Space between widgets property
+		PROPERTY(float, spacing, SetSpacing, GetSpacing);                // Space between widgets property
+		PROPERTY(RectF, border, SetBorder, GetBorder);                   // Border property
+		PROPERTY(float, borderLeft, SetBorderLeft, GetBorderLeft);       // Left border property
+		PROPERTY(float, borderRight, SetBorderRight, GetBorderRight);    // Right border property
+		PROPERTY(float, borderTop, SetBorderTop, GetBorderTop);          // Top border property
+		PROPERTY(float, borderBottom, SetBorderBottom, GetBorderBottom); // Bottom border property
 
-		PROPERTY(RectF>        border;              // Border property
-		PROPERTY(float>        borderLeft;          // Left border property
-		PROPERTY(float>        borderRight;         // Right border property
-		PROPERTY(float>        borderTop;           // Top border property
-		PROPERTY(float>        borderBottom;        // Bottom border property
-
-		PROPERTY(bool>         fitByChildren;       // Fitting size by children property
+		PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
 
 		// Default constructor
 		UIGridLayout();
@@ -159,9 +159,6 @@ namespace o2
 
 		// Expands size by children
 		void ExpandSizeByChilds();
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 

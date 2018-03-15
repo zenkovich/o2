@@ -24,7 +24,6 @@ namespace o2
 		mSelectionMesh = mnew Mesh();
 		mTextDrawable  = mnew Text();
 		mCaretDrawable = mnew Sprite();
-		InitializeProperties();
 	}
 
 	UIEditBox::UIEditBox(const UIEditBox& other):
@@ -41,8 +40,6 @@ namespace o2
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
-
-		InitializeProperties();
 	}
 
 	UIEditBox::~UIEditBox()
@@ -1316,14 +1313,6 @@ namespace o2
 		UpdateSelectionAndCaret();
 		CheckScrollingToCaret();
 		mCaretBlinkTime = 0;
-	}
-
-	void UIEditBox::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIEditBox, text, SetText, GetText);
-		INITIALIZE_PROPERTY(UIEditBox, caret, SetCaretPosition, GetCaretPosition);
-		INITIALIZE_PROPERTY(UIEditBox, selectionBegin, SetSelectionBegin, GetSelectionBegin);
-		INITIALIZE_PROPERTY(UIEditBox, selectionEnd, SetSelectionEnd, GetSelectionEnd);
 	}
 }
 

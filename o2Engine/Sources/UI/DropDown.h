@@ -10,8 +10,8 @@ namespace o2
 	class UIDropDown: public UICustomDropDown
 	{
 	public:
-		PROPERTY(WString>      value;    // Current selected item text
-		Accessor<WString, int> textItem; // Text item accessor by position
+		PROPERTIES(UIDropDown);
+		PROPERTY(WString, value, SelectItemText, GetSelectedItemText); // Current selected item text
 
 		Function<void(const WString&)> onSelectedText; // Change text selected event
 
@@ -62,9 +62,6 @@ namespace o2
 
 		// It is called when selected item index was changed
 		void OnSelectionChanged() override;
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 

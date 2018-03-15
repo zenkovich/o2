@@ -16,8 +16,9 @@ namespace o2
 	class UIButton: public UIWidget, public CursorAreaEventsListener, public KeyboardEventsListener
 	{
 	public:
-		PROPERTY(UIButton, WString, caption, SetCaption, GetCaption); // Caption property. Searches "caption" layer and sets text
-		PROPERTY(UIButton, Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
+		PROPERTIES(UIButton);
+		PROPERTY(WString, caption, SetCaption, GetCaption); // Caption property. Searches "caption" layer and sets text
+		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
 		Function<void()>         onClick;      // Click event
 		ShortcutKeys             shortcut;     // Shortcut keys

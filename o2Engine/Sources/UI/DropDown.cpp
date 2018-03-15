@@ -11,15 +11,12 @@ namespace o2
 		UILabel* itemSample = mnew UILabel();
 		itemSample->horOverflow = UILabel::HorOverflow::Dots;
 		SetItemSample(itemSample);
-
-		InitializeProperties();
 	}
 
 	UIDropDown::UIDropDown(const UIDropDown& other):
 		UICustomDropDown(other)
 	{
 		RetargetStatesAnimations();
-		InitializeProperties();
 	}
 
 	UIDropDown::~UIDropDown()
@@ -121,12 +118,6 @@ namespace o2
 	void UIDropDown::OnSelectionChanged()
 	{
 		onSelectedText(GetSelectedItemText());
-	}
-
-	void UIDropDown::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIDropDown, value, SelectItemText, GetSelectedItemText);
-		INITIALIZE_ACCESSOR(UIDropDown, textItem, GetItemText);
 	}
 }
 

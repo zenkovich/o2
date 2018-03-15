@@ -34,8 +34,6 @@ namespace o2
 		mVerLayout->fitByChildren     = true;
 
 		AddChild(mVerLayout);
-
-		InitializeProperties();
 	}
 
 	UICustomList::UICustomList(const UICustomList& other):
@@ -53,8 +51,6 @@ namespace o2
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
-
-		InitializeProperties();
 	}
 
 	UICustomList::~UICustomList()
@@ -599,15 +595,6 @@ namespace o2
 	void UICustomList::OnVisibleChanged()
 	{
 		SetInteractable(mResVisible);
-	}
-
-	void UICustomList::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UICustomList, selectedItems, SetSelectedItems, GetSelectedItems);
-		INITIALIZE_PROPERTY(UICustomList, selectedItem, SelectItem, GetSelectedItem);
-		INITIALIZE_PROPERTY(UICustomList, selectedItemPos, SelectItemAt, GetSelectedItemPos);
-		INITIALIZE_ACCESSOR(UICustomList, item, GetItem);
-		INITIALIZE_GETTER(UICustomList, itemsCount, GetItemsCount);
 	}
 
 	bool UICustomList::Selection::operator==(const Selection& other) const

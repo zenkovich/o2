@@ -17,8 +17,6 @@ namespace o2
 		mItemsList->SetInternalParent(this, false);
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
 		mItemsList->SetMultiselectionAvailable(false);
-
-		InitializeProperties();
 	}
 
 	UICustomDropDown::UICustomDropDown(const UICustomDropDown& other):
@@ -32,7 +30,6 @@ namespace o2
 		mItemsList->SetMultiselectionAvailable(false);
 
 		RetargetStatesAnimations();
-		InitializeProperties();
 	}
 
 	UICustomDropDown::~UICustomDropDown()
@@ -325,14 +322,6 @@ namespace o2
 
 	void UICustomDropDown::OnSelectionChanged()
 	{}
-
-	void UICustomDropDown::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UICustomDropDown, selectedItem, SelectItem, GetSelectedItem);
-		INITIALIZE_PROPERTY(UICustomDropDown, selectedItemPos, SelectItemAt, GetSelectedItemPosition);
-		INITIALIZE_ACCESSOR(UICustomDropDown, item, GetItem);
-		INITIALIZE_GETTER(UICustomDropDown, itemsCount, GetItemsCount);
-	}
 }
 
 DECLARE_CLASS(o2::UICustomDropDown);

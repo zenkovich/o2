@@ -7,7 +7,6 @@ namespace o2
 {
 	UIGridLayout::UIGridLayout(): UIWidget()
 	{
-		InitializeProperties();
 		SetLayoutDirty();
 	}
 
@@ -18,7 +17,6 @@ namespace o2
 	{
 		RetargetStatesAnimations();
 		SetLayoutDirty();
-		InitializeProperties();
 	}
 
 	UIGridLayout::~UIGridLayout()
@@ -910,21 +908,6 @@ namespace o2
 
 			layout->SetDirty();
 		}
-	}
-
-	void UIGridLayout::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIGridLayout, baseCorner, SetBaseCorner, GetBaseCorner);
-		INITIALIZE_PROPERTY(UIGridLayout, spacing, SetSpacing, GetSpacing);
-		INITIALIZE_PROPERTY(UIGridLayout, cellSize, SetCellSize, GetCellSize);
-		INITIALIZE_PROPERTY(UIGridLayout, arrangeAxis, SetArrangeAxis, GetArrangeAxis);
-		INITIALIZE_PROPERTY(UIGridLayout, arrangeAxisMaxCells, SetArrangeAxisMaxCells, GetArrangeAxisMaxCells);
-		INITIALIZE_PROPERTY(UIGridLayout, border, SetBorder, GetBorder);
-		INITIALIZE_PROPERTY(UIGridLayout, borderLeft, SetBorderLeft, GetBorderLeft);
-		INITIALIZE_PROPERTY(UIGridLayout, borderRight, SetBorderRight, GetBorderRight);
-		INITIALIZE_PROPERTY(UIGridLayout, borderTop, SetBorderTop, GetBorderTop);
-		INITIALIZE_PROPERTY(UIGridLayout, borderBottom, SetBorderBottom, GetBorderBottom);
-		INITIALIZE_PROPERTY(UIGridLayout, fitByChildren, SetFitByChildren, IsFittingByChildren);
 	}
 }
 

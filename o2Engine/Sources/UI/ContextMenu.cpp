@@ -865,7 +865,6 @@ namespace o2
 	UIContextMenuItem::UIContextMenuItem():
 		UIWidget(), mSubMenu(nullptr)
 	{
-		InitializeProperties();
 		RetargetStatesAnimations();
 	}
 
@@ -876,7 +875,6 @@ namespace o2
 		if (mSubMenu) 
 			mSubMenu->Hide(true);
 
-		InitializeProperties();
 		RetargetStatesAnimations();
 	}
 
@@ -958,11 +956,6 @@ namespace o2
 	void UIContextMenuItem::OnShortcutPressed()
 	{
 		onClick();
-	}
-
-	void UIContextMenuItem::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIContextMenuItem, text, SetText, GetText);
 	}
 
 }
