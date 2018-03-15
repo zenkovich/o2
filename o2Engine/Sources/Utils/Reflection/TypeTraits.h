@@ -165,20 +165,20 @@ namespace o2
 	template<typename _type, typename _getter = 
 		std::conditional<
 		/* if */   std::is_pointer<_type>::value,
-		/* then */ PointerTypeGetter<_type>,
+		/* then */ PointerTypeGETTER(_type>,
 		/* else */ std::conditional<
 		           /* if */   IsVector<_type>::value,
-		           /* then */ VectorTypeGetter<_type>,
+		           /* then */ VectorTypeGETTER(_type>,
 		           /* else */ std::conditional<
 		                      /* if */   IsStringAccessor<_type>::value,
-		                      /* then */ AccessorTypeGetter<_type>,
+		                      /* then */ AccessorTypeGETTER(_type>,
 		                      /* else */ std::conditional<
 		                                 /* if */   IsDictionary<_type>::value,
-		                                 /* then */ DictionaryTypeGetter<_type>,
+		                                 /* then */ DictionaryTypeGETTER(_type>,
 		                                            std::conditional<
-		                                            /* if */   IsProperty<_type>::value,
-		                                            /* then */ PropertyTypeGetter<_type>,
-		                                            /* else */ RegularTypeGetter<_type>
+		                                            /* if */   IsPROPERTY(_type>::value,
+		                                            /* then */ PropertyTypeGETTER(_type>,
+		                                            /* else */ RegularTypeGETTER(_type>
 													>::type
 							             >::type
 				              >::type

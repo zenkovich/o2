@@ -24,10 +24,11 @@ namespace o2
 		enum class Usage { Default, RenderTarget };
 
 	public:
-		Getter<Vec2I>  size;     // Size of texture getter
-		Getter<Format> format;   // texture format getter
-		Getter<Usage>  usage;    // Texture usage getter
-		Getter<String> fileName; // Texture file name getter
+		PROPERTIES(Texture);
+		GETTER(Vec2I,  size, GetSize);         // Size of texture getter
+		GETTER(Format, format, GetFormat);     // texture format getter
+		GETTER(Usage,  usage, GetUsage);       // Texture usage getter
+		GETTER(String, fileName, GetFileName); // Texture file name getter
 
 		// Default constructor
 		Texture();
@@ -102,14 +103,10 @@ namespace o2
 		Format         mFormat;       // Texture format
 		Usage          mUsage;        // Texture usage
 		String         mFileName;     // Source file name
-		UID        mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture
+		UID            mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture
 		int            mAtlasPage;    // Atlas page
 		bool           mReady;        // Is texture ready to use
 		TextureRefsVec mRefs;         // Texture references
-
-	protected:
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Render;
 		friend class TextureRef;

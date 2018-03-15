@@ -17,7 +17,6 @@ namespace o2
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		InitializeProperties();
 	}
 
 	BitmapFontAsset::BitmapFontAsset(const String& path):
@@ -27,8 +26,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = o2Assets.GetAssetId(path);
 
-		InitializeProperties();
-
 		Load();
 	}
 
@@ -37,7 +34,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
 		mPath = o2Assets.GetAssetPath(id);
-		InitializeProperties();
 
 		Load();
 	}
@@ -48,7 +44,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
 		IdRef() = asset.GetAssetId();
-		InitializeProperties();
 	}
 
 	BitmapFontAsset::~BitmapFontAsset()
@@ -93,12 +88,6 @@ namespace o2
 
 		if (!mFont)
 			mFont = mnew BitmapFont(path);
-	}
-
-	void BitmapFontAsset::InitializeProperties()
-	{
-		INITIALIZE_GETTER(BitmapFontAsset, meta, GetMeta);
-		INITIALIZE_GETTER(BitmapFontAsset, font, GetFont);
 	}
 
 	BitmapFontAssetRef BitmapFontAssetRef::CreateAsset()

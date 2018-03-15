@@ -236,7 +236,7 @@ namespace o2
 	template<typename _type>
 	void Animatable::ValueAgent<_type>::AssignSetter(_type& value)
 	{
-		*(Setter<_type>*)targetPtr = value;
+		*(SETTER(_type>*)targetPtr = value;
 	}
 
 	template<typename _type>

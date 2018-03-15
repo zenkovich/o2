@@ -61,8 +61,8 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, const Color4& value) { *((Property<Color4>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<Color4>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, const Color4& value) { *((PROPERTY(Color4>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(Color4>*)(ptr))->Get(); };
 		}
 		else
 		{

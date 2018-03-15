@@ -23,8 +23,6 @@ namespace o2
 		mData->angle = angle;
 		mData->scale = scale;
 		mData->pivot = pivot;
-
-		InitializeProperties();
 	}
 
 	ActorTransform::ActorTransform(const ActorTransform& other):
@@ -39,8 +37,6 @@ namespace o2
 		mData->scale = other.mData->scale;
 		mData->pivot = other.mData->pivot;
 		mData->shear = other.mData->shear;
-
-		InitializeProperties();
 	}
 
 	void ActorTransform::CopyFrom(const ActorTransform& other)
@@ -786,61 +782,6 @@ namespace o2
 
 		return mData->owner->mParent->transform->mData->worldRectangle;
 	}
-
-	void ActorTransform::InitializeProperties()
-	{
-		INITIALIZE_GETTER(ActorTransform, actor, GetOwnerActor);
-
-		INITIALIZE_PROPERTY(ActorTransform, position, SetPosition, GetPosition);
-		INITIALIZE_PROPERTY(ActorTransform, size, SetSize, GetSize);
-		INITIALIZE_PROPERTY(ActorTransform, width, SetWidth, GetWidth);
-		INITIALIZE_PROPERTY(ActorTransform, height, SetHeight, GetHeight);
-		INITIALIZE_PROPERTY(ActorTransform, scale, SetScale, GetScale);
-		INITIALIZE_PROPERTY(ActorTransform, pivot, SetPivot, GetPivot);
-		INITIALIZE_PROPERTY(ActorTransform, szPivot, SetSizePivot, GetSizePivot);
-		INITIALIZE_PROPERTY(ActorTransform, angle, SetAngle, GetAngle);
-		INITIALIZE_PROPERTY(ActorTransform, angleDegree, SetAngleDegrees, GetAngleDegrees);
-		INITIALIZE_PROPERTY(ActorTransform, shear, SetShear, GetShear);
-		INITIALIZE_PROPERTY(ActorTransform, basis, SetBasis, GetBasis);
-		INITIALIZE_PROPERTY(ActorTransform, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis);
-		INITIALIZE_PROPERTY(ActorTransform, AABB, SetAxisAlignedRect, GetAxisAlignedRect);
-		INITIALIZE_PROPERTY(ActorTransform, rect, SetRect, GetRect);
-		INITIALIZE_PROPERTY(ActorTransform, leftTop, SetLeftTop, GetLeftTop);
-		INITIALIZE_PROPERTY(ActorTransform, leftBottom, SetLeftBottom, GetLeftBottom);
-		INITIALIZE_PROPERTY(ActorTransform, rightTop, SetRightTop, GetRightTop);
-		INITIALIZE_PROPERTY(ActorTransform, rightBottom, SetRightBottom, GetRightBottom);
-		INITIALIZE_PROPERTY(ActorTransform, center, SetCenter, GetCenter);
-		INITIALIZE_PROPERTY(ActorTransform, rightDir, SetRightDir, GetRightDir);
-		INITIALIZE_PROPERTY(ActorTransform, leftDir, SetLeftDir, GetLeftDir);
-		INITIALIZE_PROPERTY(ActorTransform, upDir, SetUpDir, GetUpDir);
-		INITIALIZE_PROPERTY(ActorTransform, downDir, SetDownDir, GetDownDir);
-		INITIALIZE_PROPERTY(ActorTransform, right, SetRight, GetRight);
-		INITIALIZE_PROPERTY(ActorTransform, left, SetLeft, GetLeft);
-		INITIALIZE_PROPERTY(ActorTransform, top, SetTop, GetTop);
-		INITIALIZE_PROPERTY(ActorTransform, bottom, SetBottom, GetBottom);
-		INITIALIZE_PROPERTY(ActorTransform, worldPosition, SetWorldPosition, GetWorldPosition);
-		INITIALIZE_PROPERTY(ActorTransform, worldPivot, SetWorldPivot, GetWorldPivot);
-		INITIALIZE_PROPERTY(ActorTransform, worldAngle, SetWorldAngle, GetWorldAngle);
-		INITIALIZE_PROPERTY(ActorTransform, worldAngleDegree, SetWorldAngleDegree, GetWorldAngleDegree);
-		INITIALIZE_PROPERTY(ActorTransform, worldBasis, SetWorldBasis, GetWorldBasis);
-		INITIALIZE_PROPERTY(ActorTransform, worldNonSizedBasis, SetWorldNonSizedBasis, GetWorldNonSizedBasis);
-		INITIALIZE_PROPERTY(ActorTransform, worldLeftTop, SetWorldLeftTop, GetWorldLeftTop);
-		INITIALIZE_PROPERTY(ActorTransform, worldLeftBottom, SetWorldLeftBottom, GetWorldLeftBottom);
-		INITIALIZE_PROPERTY(ActorTransform, worldRightTop, SetWorldRightTop, GetWorldRightTop);
-		INITIALIZE_PROPERTY(ActorTransform, worldRightBottom, SetWorldRightBottom, GetWorldRightBottom);
-		INITIALIZE_PROPERTY(ActorTransform, worldCenter, SetWorldCenter, GetWorldCenter);
-		INITIALIZE_PROPERTY(ActorTransform, worldRightDir, SetWorldRightDir, GetWorldRightDir);
-		INITIALIZE_PROPERTY(ActorTransform, worldLeftDir, SetWorldLeftDir, GetWorldLeftDir);
-		INITIALIZE_PROPERTY(ActorTransform, worldUpDir, SetWorldUpDir, GetWorldUpDir);
-		INITIALIZE_PROPERTY(ActorTransform, worldDownDir, SetWorldDownDir, GetWorldDownDir);
-		INITIALIZE_PROPERTY(ActorTransform, worldRight, SetWorldRight, GetWorldRight);
-		INITIALIZE_PROPERTY(ActorTransform, worldLeft, SetWorldLeft, GetWorldLeft);
-		INITIALIZE_PROPERTY(ActorTransform, worldTop, SetWorldTop, GetWorldTop);
-		INITIALIZE_PROPERTY(ActorTransform, worldBottom, SetWorldBottom, GetWorldBottom);
-		INITIALIZE_PROPERTY(ActorTransform, worldRect, SetWorldRect, GetWorldRect);
-		INITIALIZE_PROPERTY(ActorTransform, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect);
-	}
-
 }
 
 DECLARE_CLASS(o2::ActorTransform);

@@ -16,10 +16,10 @@ namespace o2
 	class DragHandle: public IDrawable, public CursorAreaEventsListener, public ISerializable
 	{
 	public:
-		Property<float>              angle;               // Handle angle in radians property
+		PROPERTY(float>              angle;               // Handle angle in radians property
 		CursorType                   cursorType;          // Cursor type when hovering and dragging
-		Property<Vec2F>              position;            // Current position property
-		Property<bool>               enabled;             // Is handle enabled property. Disabled handle don't drawn and interact
+		PROPERTY(Vec2F>              position;            // Current position property
+		PROPERTY(bool>               enabled;             // Is handle enabled property. Disabled handle don't drawn and interact
 		bool                         pixelPerfect = true; // Is handle draws pixel perfect
 
 		Function<void(const Vec2F&)> onChangedPos;        // On position changed event

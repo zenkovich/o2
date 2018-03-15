@@ -9,7 +9,6 @@ namespace o2
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		InitializeProperties();
 	}
 
 	AnimationAsset::AnimationAsset(const String& path):
@@ -18,7 +17,6 @@ namespace o2
 		mPath = path;
 		mMeta = mnew MetaInfo();
 		IdRef() = o2Assets.GetAssetId(path);
-		InitializeProperties();
 
 		Load();
 	}
@@ -29,7 +27,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
 		mPath = o2Assets.GetAssetPath(id);
-		InitializeProperties();
 
 		Load();
 	}
@@ -41,7 +38,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
 		IdRef() = asset.GetAssetId();
-		InitializeProperties();
 	}
 
 	AnimationAsset::~AnimationAsset()
@@ -89,11 +85,6 @@ namespace o2
 		DataNode data;
 		data = animation;
 		data.SaveToFile(path);
-	}
-
-	void AnimationAsset::InitializeProperties()
-	{
-		INITIALIZE_GETTER(AnimationAsset, meta, GetMeta);
 	}
 
 	const Type* AnimationAsset::MetaInfo::GetAssetType() const

@@ -8,13 +8,11 @@ namespace o2
 	Component::Component():
 		mId(Math::Random())
 	{
-		InitializeProperties();
 	}
 
 	Component::Component(const Component& other):
 		mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mId(Math::Random())
 	{
-		InitializeProperties();
 	}
 
 	Component::~Component()
@@ -135,13 +133,6 @@ namespace o2
 			OnTransformUpdated();
 			mOwner->OnChanged();
 		}
-	}
-
-	void Component::InitializeProperties()
-	{
-		INITIALIZE_GETTER(Component, actor, GetOwnerActor);
-		INITIALIZE_PROPERTY(Component, enabled, SetEnabled, IsEnabled);
-		INITIALIZE_GETTER(Component, enabledInHierarchy, IsEnabledInHierarchy);
 	}
 
 	void ComponentDataNodeConverter::ToData(void* object, DataNode& data)

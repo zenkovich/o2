@@ -10,7 +10,7 @@ namespace o2
 	class UIDropDown: public UICustomDropDown
 	{
 	public:
-		Property<WString>      value;    // Current selected item text
+		PROPERTY(WString>      value;    // Current selected item text
 		Accessor<WString, int> textItem; // Text item accessor by position
 
 		Function<void(const WString&)> onSelectedText; // Change text selected event

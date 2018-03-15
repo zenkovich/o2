@@ -20,8 +20,8 @@ namespace o2
 	public:
 		Accessor<float, float> value;         // Value accessor by position
 		Accessor<Key, float>   key;           // Key accessor by position
-		Property<KeysVec>      keys;          // Keys property
-		Getter<float>          length;        // Max position getter
+		PROPERTY(KeysVec>      keys;          // Keys property
+		GETTER(float>          length;        // Max position getter
 		Function<void()>       onKeysChanged; // Keys changed event
 
 		// Default constructor

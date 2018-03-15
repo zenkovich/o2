@@ -20,15 +20,15 @@ namespace o2
 	class IAnimation: public ISerializable
 	{
 	public:
-		Property<bool>  playing;    // Is animation playing property
-		Property<bool>  reversed;   // Is animation reversed property
-		Property<float> speed;      // Animation speed. 1.0 is default
-		Property<float> time;       // Animation time
-		Property<float> relTime;    // Animation relative time. 0 - is start of animation, 1 - time at duration
-		Property<float> beginBound; // Begin playing time bound property
-		Property<float> endBound;   // End playing time bound property
-		Property<Loop>  loop;       // Loop animation property
-		Getter<float>   duration;   // Animation duration property
+		PROPERTY(bool>  playing;    // Is animation playing property
+		PROPERTY(bool>  reversed;   // Is animation reversed property
+		PROPERTY(float> speed;      // Animation speed. 1.0 is default
+		PROPERTY(float> time;       // Animation time
+		PROPERTY(float> relTime;    // Animation relative time. 0 - is start of animation, 1 - time at duration
+		PROPERTY(float> beginBound; // Begin playing time bound property
+		PROPERTY(float> endBound;   // End playing time bound property
+		PROPERTY(Loop>  loop;       // Loop animation property
+		GETTER(float>   duration;   // Animation duration property
 
 		Function<void()>      onPlayEvent;   // Event calling when starting playing
 		Function<void()>      onStopEvent;   // Event calling when stopping playing

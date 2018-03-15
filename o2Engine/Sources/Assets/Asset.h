@@ -17,10 +17,11 @@ namespace o2
 		class IMetaInfo;
 
 	public:
-		Property<String>   path;     // Asset path property
-		Getter<String>     fullPath; // Full asset path getter (from binary path)
-		Getter<UID>        id;       // Asset id getter
-		Getter<IMetaInfo*> meta;     // Asset meta information pointer getter
+		PROPERTIES(Asset);
+		PROPERTY(String, path, SetPath, GetPath); // Asset path property
+		GETTER(String, fullPath, GetFullPath);    // Full asset path getter (from binary path)
+		GETTER(UID, id, GetAssetId);              // Asset id getter
+		GETTER(IMetaInfo*, meta, GetMeta);        // Asset meta information pointer getter
 
 		// Virtual destructor
 		virtual ~Asset();
@@ -143,9 +144,6 @@ namespace o2
 
 		// Returns assets log stream pointer
 		LogStream* GetAssetsLogStream() const;
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class AssetsBuilder;
 		friend class Assets;

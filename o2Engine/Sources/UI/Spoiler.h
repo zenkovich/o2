@@ -12,9 +12,9 @@ namespace o2
 	class UISpoiler: public UIVerticalLayout
 	{
 	public:
-		Property<WString> caption;    // Head caption property
-		Property<float>   headHeight; // Head height property
-		Property<bool>    expanded;   // Expanded state property
+		PROPERTY(WString> caption;    // Head caption property
+		PROPERTY(float>   headHeight; // Head height property
+		PROPERTY(bool>    expanded;   // Expanded state property
 
 		Function<void()> onExpand;    // Expand starting event
 

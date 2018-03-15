@@ -19,17 +19,18 @@ namespace o2
 	{
 	public:
 		struct SymbolsSet;
-		
+
 	public:
-		Property<FontRef>  font;                // Font pointer property
-		Property<WString>  text;                // Text property, wstring
-		Property<int>      height;              // Text height
-		Property<VerAlign> verAlign;            // vertical align property
-		Property<HorAlign> horAlign;            // Horizontal align property
-		Property<bool>     wordWrap;            // Words wrapping flag property
-		Property<bool>     dotsEngings;         // Dots engings when overflow property
-		Property<float>    symbolsDistanceCoef; // Characters distance coef, 1 is standard
-		Property<float>    linesDistanceCoef;   // Lines distance coef, 1 is standard
+		PROPERTIES(Text);
+		PROPERTY(FontRef, font, SetFont, GetFont);                                            // Font pointer property
+		PROPERTY(WString, text, SetText, GetText);                                            // Text property, wstring
+		PROPERTY(int, height, SetHeight, GetHeight);                                          // Text height
+		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign);                               // vertical align property
+		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign);                               // Horizontal align property
+		PROPERTY(bool, wordWrap, SetWordWrap, GetWordWrap);                                   // Words wrapping flag property
+		PROPERTY(bool, dotsEngings, SetDotsEngings, IsDotsEngings);                           // Dots engings when overflow property
+		PROPERTY(float, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef); // Characters distance coef, 1 is standard
+		PROPERTY(float, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);       // Lines distance coef, 1 is standard
 
 		// Default constructor
 		Text();
@@ -144,9 +145,9 @@ namespace o2
 
 		// Returns text size
 		static Vec2F GetTextSize(const WString& text, Font* font, int height = 11,
-								 const Vec2F& areaSize = Vec2F(), 
-								 HorAlign horAlign = HorAlign::Left, VerAlign verAlign = VerAlign::Top, 
-								 bool wordWrap = true, bool dotsEngings = false, float charsDistCoef = 1.0f, 
+								 const Vec2F& areaSize = Vec2F(),
+								 HorAlign horAlign = HorAlign::Left, VerAlign verAlign = VerAlign::Top,
+								 bool wordWrap = true, bool dotsEngings = false, float charsDistCoef = 1.0f,
 								 float linesDistCoef = 1.0f);
 
 		SERIALIZABLE(Text);
@@ -174,9 +175,9 @@ namespace o2
 
 				// Constructor
 				Symbol(const Vec2F& position, const Vec2F& size, const RectF& texSrc, UInt16 charId,
-						  const Vec2F& origin, float advance);
+					   const Vec2F& origin, float advance);
 
-				// Equals operator
+			 // Equals operator
 				bool operator==(const Symbol& other) const;
 			};
 			typedef Vector<Symbol> SymbolDefsVec;
@@ -220,8 +221,8 @@ namespace o2
 
 		public:
 			// Calculating characters layout by parameters
-			void Initialize(FontRef font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize, 
-							HorAlign horAlign, VerAlign verAlign, bool wordWrap, bool dotsEngings, float charsDistCoef, 
+			void Initialize(FontRef font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,
+							HorAlign horAlign, VerAlign verAlign, bool wordWrap, bool dotsEngings, float charsDistCoef,
 							float linesDistCoef);
 
 			// Moves symbols 
@@ -244,12 +245,12 @@ namespace o2
 		HorAlign   mHorAlign;          // Horizontal align @SERIALIZABLE
 		bool       mWordWrap;          // True, when words wrapping @SERIALIZABLE
 		bool       mDotsEndings;       // If true, text will end on '...' @SERIALIZABLE
-									   
+
 		MeshesVec  mMeshes;            // Meshes vector
 		Basis      mLastTransform;     // Last mesh update transformation
-									   
+
 		SymbolsSet mSymbolsSet;        // Symbols set definition
-									   
+
 		bool       mUpdatingMesh;      // True, when mesh is already updating
 
 	protected:
@@ -273,9 +274,6 @@ namespace o2
 
 		// Calling when deserializing
 		void OnDeserialized(const DataNode& node);
-
-		// Initializing properties
-		void InitializeProperties();
 	};
 }
 

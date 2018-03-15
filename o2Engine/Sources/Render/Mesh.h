@@ -15,15 +15,16 @@ namespace o2
 	class Mesh: public virtual IDrawable
 	{
 	public:
+		PROPERTIES(Mesh);
+		PROPERTY(TextureRef, texture, SetTexture, GetTexture);                // Texture property
+		PROPERTY(UInt, maxVertexCount, SetMaxVertexCount, GetMaxVertexCount); // Max vertex count property
+		PROPERTY(UInt, maxPolyCount, SetMaxPolyCount, GetMaxPolyCount);       // Max polygons count property
+
 		Vertex2*             vertices;       // Vertex buffer
 		UInt16*              indexes;        // Index buffer
-										     
+
 		UInt                 vertexCount;    // Current vertices count
 		UInt                 polyCount;      // Current polygons in mesh
-
-		Property<TextureRef> texture;        // Texture property
-		Property<UInt>       maxVertexCount; // Max vertex count property
-		Property<UInt>       maxPolyCount;   // Max polygons count property
 
 	public:
 		// Constructor
@@ -67,10 +68,6 @@ namespace o2
 
 		UInt       mMaxVertexCount; // Max size of vertex buffer
 		UInt       mMaxPolyCount;   // Max polygons count, mMaxPolyCount*3 - is index buffer max size
-
-	protected:
-		// Initializing properties
-		void InitializeProperties();
 
 		friend class Render;
 		friend class Sprite;

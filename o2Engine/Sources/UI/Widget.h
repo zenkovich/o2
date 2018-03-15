@@ -25,18 +25,18 @@ namespace o2
 	public:
 		UIWidgetLayout* const layout;          // Widget's layout
 							  
-		Property<bool>        visible;         // Is widget visible property
+		PROPERTY(bool>        visible;         // Is widget visible property
 							  
-		Property<float>       transparency;    // Transparency property
-		Getter<float>         resTransparency; // Result transparency getter, depends on parent transparency
+		PROPERTY(float>       transparency;    // Transparency property
+		GETTER(float>         resTransparency; // Result transparency getter, depends on parent transparency
 							  
-		Property<UIWidget*>   parentWidget;    // Parent widget property
+		PROPERTY(UIWidget*>   parentWidget;    // Parent widget property
 							  
-		Getter<WidgetsVec>    childrenWidgets; // Widget children getter
+		GETTER(WidgetsVec>    childrenWidgets; // Widget children getter
 							  
-		Getter<LayersVec>     layers;          // Layers getter
+		GETTER(LayersVec>     layers;          // Layers getter
 							  
-		Getter<StatesVec>     states;          // States getter
+		GETTER(StatesVec>     states;          // States getter
 
 		Accessor<UIWidget*, const String&>      childWidget; // Widget child accessor by path like "child/subchild/somechild"
 		Accessor<UIWidgetLayer*, const String&> layer;       // Widget layer accessor by path like "layer/sublayer/target"

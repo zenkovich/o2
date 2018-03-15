@@ -48,8 +48,8 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, const TagGroup& value) { *((Property<TagGroup>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<TagGroup>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, const TagGroup& value) { *((PROPERTY(TagGroup>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(TagGroup>*)(ptr))->Get(); };
 		}
 		else
 		{

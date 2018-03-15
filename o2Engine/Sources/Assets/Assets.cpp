@@ -16,8 +16,6 @@ namespace o2
 
 	Assets::Assets()
 	{
-		InitializeProperties();
-
 		mAssetsFolderPath = ::GetAssetsPath();
 		mDataFolderPath = ::GetDataPath();
 
@@ -419,11 +417,6 @@ namespace o2
 				mAssetsTypes.Add(ext, type);
 			}
 		}
-	}
-
-	void Assets::InitializeProperties()
-	{
-		INITIALIZE_GETTER(Assets, assetsPath, GetAssetsPath);
 	}
 
 	Assets::AssetCache* Assets::FindAssetCache(const String& path)

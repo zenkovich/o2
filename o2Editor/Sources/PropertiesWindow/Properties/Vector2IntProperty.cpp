@@ -122,14 +122,14 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, const Vec2I& value) { *((Property<Vec2I>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<Vec2I>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, const Vec2I& value) { *((PROPERTY(Vec2I>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(Vec2I>*)(ptr))->Get(); };
 
-			mXAssignFunc = [](void* ptr, int value) { auto p = ((Property<Vec2I>*)(ptr)); Vec2I v = p->Get(); v.x = value; p->Set(v); };
-			mXGetFunc = [](void* ptr) { return ((Property<Vec2I>*)(ptr))->Get().x; };
+			mXAssignFunc = [](void* ptr, int value) { auto p = ((PROPERTY(Vec2I>*)(ptr)); Vec2I v = p->Get(); v.x = value; p->Set(v); };
+			mXGetFunc = [](void* ptr) { return ((PROPERTY(Vec2I>*)(ptr))->Get().x; };
 
-			mYAssignFunc = [](void* ptr, int value) { auto p = ((Property<Vec2I>*)(ptr)); Vec2I v = p->Get(); v.y = value; p->Set(v); };
-			mYGetFunc = [](void* ptr) { return ((Property<Vec2I>*)(ptr))->Get().y; };
+			mYAssignFunc = [](void* ptr, int value) { auto p = ((PROPERTY(Vec2I>*)(ptr)); Vec2I v = p->Get(); v.y = value; p->Set(v); };
+			mYGetFunc = [](void* ptr) { return ((PROPERTY(Vec2I>*)(ptr))->Get().y; };
 		}
 		else
 		{

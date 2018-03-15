@@ -13,8 +13,6 @@ namespace o2
 		mShape = mnew CircleParticlesEmitterShape();
 		mParticlesMesh = mnew Mesh(NoTexture(), mParticlesNumLimit*4, mParticlesNumLimit*2);
 		mLastTransform = mTransform;
-
-		InitializeProperties();
 	}
 
 	ParticlesEmitter::~ParticlesEmitter()
@@ -43,8 +41,6 @@ namespace o2
 			AddEffect(effect->CloneAs<ParticlesEffect>());
 
 		mLastTransform = mTransform;
-
-		InitializeProperties();
 	}
 
 	ParticlesEmitter& ParticlesEmitter::operator=(const ParticlesEmitter& other)
@@ -593,34 +589,6 @@ namespace o2
 		mEmitParticlesColorA = colorA;
 		mEmitParticlesColorB = colorB;
 	}
-
-	void ParticlesEmitter::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(ParticlesEmitter, playing, SetPlaying, IsPlaying);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emittingCoefficient, SetEmittingCoef, GetEmittingCoef);
-		INITIALIZE_PROPERTY(ParticlesEmitter, particlesRelative, SetParticlesRelativity, IsParticlesRelative);
-		INITIALIZE_PROPERTY(ParticlesEmitter, looped, SetLoop, IsLooped);
-		INITIALIZE_PROPERTY(ParticlesEmitter, maxParticles, SetMaxParticles, GetMaxParticles);
-		INITIALIZE_PROPERTY(ParticlesEmitter, duration, SetDuration, GetDuration);
-		INITIALIZE_PROPERTY(ParticlesEmitter, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesPerSecond, SetEmitParticlesPerSecond, GetEmitParticlesPerSecond);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesAngle, SetEmitParticlesAngle, GetEmitParticlesAngle);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesAngleRange, SetEmitParticlesAngleRange, GetEmitParticlesAngleRange);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesSize, SetEmitParticlesSize, GetEmitParticlesSize);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesSizeRange, SetEmitParticlesSizeRange, GetEmitParticlesSizeRange);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesAngleSpeed, SetEmitParticlesAngleSpeed, GetEmitParticlesAngleSpeed);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesAngleSpeedRange, SetEmitParticlesAngleSpeedRange, GetEmitParticlesAngleSpeedRange);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesSpeed, SetEmitParticlesSpeed, GetEmitParticlesSpeed);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesSpeedRange, SetEmitParticlesSpeedRange, GetEmitParticlesSpeedRange);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesMoveDir, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesMoveDirRange, SetEmitParticlesMoveDirectionRange, GetEmitParticlesMoveDirectionRange);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesColorA, SetEmitParticlesColorA, GetEmitParticlesColorA);
-		INITIALIZE_PROPERTY(ParticlesEmitter, emitParticlesColorB, SetEmitParticlesColorB, GetEmitParticlesColorB);
-
-		INITIALIZE_PROPERTY(ParticlesEmitter, image, SetImage, GetImage);
-		INITIALIZE_PROPERTY(ParticlesEmitter, shape, SetShape, GetShape);
-	}
-
 }
 
 DECLARE_CLASS(o2::ParticlesEmitter);

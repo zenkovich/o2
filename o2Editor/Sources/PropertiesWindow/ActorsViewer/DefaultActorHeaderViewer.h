@@ -53,7 +53,7 @@ namespace Editor
 		BooleanProperty*              mEnableProperty = nullptr;
 		StringProperty*               mNameProperty = nullptr;
 		BooleanProperty*              mLockProperty = nullptr;
-		AssetProperty<ActorAssetRef>* mPrototypeProperty = nullptr;
+		AssetPROPERTY(ActorAssetRef>* mPrototypeProperty = nullptr;
 		UIButton*                     mPrototypeApplyBtn = nullptr;
 		UIButton*                     mPrototypeRevertBtn = nullptr;
 		UIButton*                     mPrototypeBreakBtn = nullptr;

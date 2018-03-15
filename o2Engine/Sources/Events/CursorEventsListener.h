@@ -14,7 +14,9 @@ namespace o2
 	class CursorAreaEventsListener
 	{
 	public:
-		Property<bool>            interactable;                      // Interactable flag property
+		PROPERTIES(CursorAreaEventsListener);
+		PROPERTY(bool, interactable, SetInteractable, IsInteractable); // Interactable flag property
+
 		CursorAreaEventsListener* messageFallDownListener = nullptr; // Messages fall down listener. 
 		                                                             // All messaged received in this object 
 		                                                             // will be delivered to messageFallDownListener

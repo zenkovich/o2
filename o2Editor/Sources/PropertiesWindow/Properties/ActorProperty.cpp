@@ -56,8 +56,8 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, Actor* value) { *((Property<Actor*>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<Actor*>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, Actor* value) { *((PROPERTY(Actor*>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(Actor*>*)(ptr))->Get(); };
 		}
 		else
 		{

@@ -23,29 +23,29 @@ namespace o2
 		typedef Vector<ParticlesEffect*> ParticleEffectsVec;
 
 	public:
-		Property<bool>   playing;                      // Is particles playing property
-		Property<float>  emittingCoefficient;          // Particles emitting coefficient property (0...1)
-		Property<bool>   particlesRelative;            // Is particles relative to emitter
-		Property<bool>   looped;                       // Is emitter looped property
-		Property<int>    maxParticles;                 // Number of maximum particles in emitter property
-		Property<float>  duration;                     // Working duration in seconds property
-		Property<float>  particlesLifetime;            // Particles lifetime in seconds property
-		Property<float>  emitParticlesPerSecond;       // Amount of particles emitting in one second property
-		Property<float>  emitParticlesAngle;           // Emitting particle angle property in degrees
-		Property<float>  emitParticlesAngleRange;      // Emitting particle angle range property in degrees
-		Property<Vec2F>  emitParticlesSize;            // Emitting particle size property
-		Property<Vec2F>  emitParticlesSizeRange;       // Emitting particle size range property
-		Property<float>  emitParticlesSpeed;           // Emitting particle angle speed property in degrees/sec
-		Property<float>  emitParticlesAngleSpeedRange; // Emitting particle angle speed range in degrees/sec
-		Property<float>  emitParticlesAngleSpeed;      // Emitting particle speed property
-		Property<float>  emitParticlesSpeedRange;      // Emitting particle speed range
-		Property<float>  emitParticlesMoveDir;         // Emitting particle moving direction in degrees property
-		Property<float>  emitParticlesMoveDirRange;    // Emitting particle moving direction range in degrees property
-		Property<Color4> emitParticlesColorA;          // Emitting particle color A property
-		Property<Color4> emitParticlesColorB;          // Emitting particle color B property
-													   
-		Property<ImageAssetRef>          image;        // Particle image property
-		Property<ParticlesEmitterShape*> shape;        // Emitting shape property
+		PROPERTIES(ParticlesEmitter);
+		PROPERTY(bool, playing, SetPlaying, IsPlaying);                                 // Is particles playing property
+		PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef);         // Particles emitting coefficient property (0...1)
+		PROPERTY(bool, particlesRelative, SetParticlesRelativity, IsParticlesRelative); // Is particles relative to emitter
+		PROPERTY(bool, looped, SetLoop, IsLooped);                                      // Is emitter looped property
+		PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles);                  // Number of maximum particles in emitter property
+		PROPERTY(float, duration, SetDuration, GetDuration);                            // Working duration in seconds property
+		PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);                   // Particles lifetime in seconds property
+		PROPERTY(float, emitParticlesPerSecond, SetEmitParticlesPerSecond, GetEmitParticlesPerSecond);    // Amount of particles emitting in one second property
+		PROPERTY(float, emitParticlesAngle, SetEmitParticlesAngle, GetEmitParticlesAngle);                // Emitting particle angle property in degrees
+		PROPERTY(float, emitParticlesAngleRange, SetEmitParticlesAngleRange, GetEmitParticlesAngleRange); // Emitting particle angle range property in degrees
+		PROPERTY(Vec2F, emitParticlesSize, SetEmitParticlesSize, GetEmitParticlesSize);                   // Emitting particle size property
+		PROPERTY(Vec2F, emitParticlesSizeRange, SetEmitParticlesSizeRange, GetEmitParticlesSizeRange);    // Emitting particle size range property
+		PROPERTY(float, emitParticlesSpeed, SetEmitParticlesSpeed, GetEmitParticlesSpeed);                // Emitting particle angle speed property in degrees/sec
+		PROPERTY(float, emitParticlesAngleSpeedRange, SetEmitParticlesSpeedRange, GetEmitParticlesSpeedRange);               // Emitting particle angle speed range in degrees/sec
+		PROPERTY(float, emitParticlesAngleSpeed, SetEmitParticlesAngleSpeed, GetEmitParticlesAngleSpeed);                    // Emitting particle speed property
+		PROPERTY(float, emitParticlesSpeedRange, SetEmitParticlesAngleSpeedRange, GetEmitParticlesAngleSpeedRange);          // Emitting particle speed range
+		PROPERTY(float, emitParticlesMoveDir, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);                 // Emitting particle moving direction in degrees property
+		PROPERTY(float, emitParticlesMoveDirRange, SetEmitParticlesMoveDirectionRange, GetEmitParticlesMoveDirectionRange); // Emitting particle moving direction range in degrees property
+		PROPERTY(Color4, emitParticlesColorA, SetEmitParticlesColorA, GetEmitParticlesColorA);            // Emitting particle color A property
+		PROPERTY(Color4, emitParticlesColorB, SetEmitParticlesColorB, GetEmitParticlesColorB);            // Emitting particle color B property													   
+		PROPERTY(ImageAssetRef, image, SetImage, GetImage);          // Particle image property
+		PROPERTY(ParticlesEmitterShape*, shape, SetShape, GetShape); // Emitting shape property
 
 		// Default constructor
 		ParticlesEmitter();
@@ -292,9 +292,6 @@ namespace o2
 		
 		// It is called when basis was changed, updates particles positions from last transform
 		void BasisChanged();
-
-		// Initialize properties
-		void InitializeProperties();
 
 		friend class ParticlesEffect;
 	};

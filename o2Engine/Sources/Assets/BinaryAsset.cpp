@@ -15,7 +15,6 @@ namespace o2
 		Asset(), mData(nullptr), mDataSize(0)
 	{
 		mMeta = mnew MetaInfo();
-		InitializeProperties();
 	}
 
 	BinaryAsset::BinaryAsset(const String& path):
@@ -24,7 +23,6 @@ namespace o2
 		mPath = path;
 		mMeta = mnew MetaInfo();
 		IdRef() = o2Assets.GetAssetId(path);
-		InitializeProperties();
 
 		Load();
 	}
@@ -35,7 +33,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
 		mPath = o2Assets.GetAssetPath(id);
-		InitializeProperties();
 
 		Load();
 	}
@@ -58,8 +55,6 @@ namespace o2
 			mDataSize = 0;
 			mData = nullptr;
 		}
-
-		InitializeProperties();
 	}
 
 	BinaryAsset::~BinaryAsset()
@@ -156,13 +151,6 @@ namespace o2
 		OutFile file(path);
 		if (mDataSize > 0 && mData)
 			file.WriteData(mData, mDataSize);
-	}
-
-	void BinaryAsset::InitializeProperties()
-	{
-		INITIALIZE_GETTER(BinaryAsset, data, GetData);
-		INITIALIZE_GETTER(BinaryAsset, dataSize, GetDataSize);
-		INITIALIZE_GETTER(BinaryAsset, meta, GetMeta);
 	}
 
 	BinaryAssetRef BinaryAssetRef::CreateAsset()

@@ -20,7 +20,7 @@ namespace o2
 	class UIContextMenuItem: public UIWidget, private ShortcutKeysListener
 	{
 	public:
-		Property<WString>    text;      // Text
+		PROPERTY(WString>    text;      // Text
  
 		Function<void()>     onClick;   // Click function
 		Function<void(bool)> onChecked; // Checked function, calls when check was changed and item is checkable

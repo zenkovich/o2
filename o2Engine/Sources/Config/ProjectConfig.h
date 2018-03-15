@@ -19,9 +19,10 @@ namespace o2
 	class ProjectConfig: public ISerializable, public Singleton<ProjectConfig>
 	{
 	public:
-		Property<String>   projectName;     // Project name property
-		Property<Platform> currentPlatform; // Project platform property
-		Getter<String>     projectPath;     // Project path location
+		PROPERTIES(ProjectConfig);
+		PROPERTY(String, projectName, SetProjectName, GetProjectName); // Project name property
+		PROPERTY(Platform, currentPlatform, SetPlatform, GetPlatform); // Project platform property
+		GETTER(String, projectPath, GetProjectPath);                   // Project path location
 
 		// Default constructor
 		ProjectConfig();
@@ -57,9 +58,6 @@ namespace o2
 	protected:
 		// Initializes config by default
 		void InitializeDefault(const String& configFilePath);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class AssetBuildSystem;
 		friend class Application;

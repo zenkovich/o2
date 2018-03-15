@@ -54,7 +54,7 @@ namespace Editor
 		*linkImg->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
 		prototypeRoot->AddChild(linkImg);
 
-		mPrototypeProperty = mnew AssetProperty<ActorAssetRef>(o2UI.CreateWidget<UIWidget>("actor head asset property"));
+		mPrototypeProperty = mnew AssetPROPERTY(ActorAssetRef>(o2UI.CreateWidget<UIWidget>("actor head asset property"));
 		*mPrototypeProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
 		prototypeRoot->AddChild(mPrototypeProperty->GetWidget());
 

@@ -21,8 +21,6 @@ namespace o2
 		mVertexBufferSize = USHRT_MAX;
 		mIndexBufferSize = USHRT_MAX;
 
-		InitializeProperties();
-
 		// Create log stream
 		mLog = mnew LogStream("Render");
 		o2Debug.GetLog()->BindStream(mLog);
@@ -907,16 +905,6 @@ namespace o2
 	const Render::ScissorInfosVec& Render::GetScissorInfos() const
 	{
 		return mScissorInfos;
-	}
-
-	void Render::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(Render, camera, SetCamera, GetCamera);
-		INITIALIZE_PROPERTY(Render, scissorRect, EnableScissorTest, GetScissorRect);
-		INITIALIZE_PROPERTY(Render, renderTexture, SetRenderTexture, GetRenderTexture);
-		INITIALIZE_GETTER(Render, resolution, GetResolution);
-		INITIALIZE_GETTER(Render, renderTextureAvailable, IsRenderTextureAvailable);
-		INITIALIZE_GETTER(Render, maxTextureSize, GetMaxTextureSize);
 	}
 
 	Render& Render::operator=(const Render& other)

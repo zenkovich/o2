@@ -9,14 +9,10 @@ namespace o2
 {
 	Asset::Asset():
 		mMeta(nullptr)
-	{
-		InitializeProperties();
-	}
+	{}
 
 	Asset::Asset(const Asset& asset)
-	{
-		InitializeProperties();
-	}
+	{}
 
 	Asset& Asset::operator=(const Asset& asset)
 	{
@@ -251,20 +247,11 @@ namespace o2
 		metaData.SaveToFile(path);
 	}
 
-	void Asset::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(Asset, path, SetPath, GetPath);
-		INITIALIZE_GETTER(Asset, id, GetAssetId);
-		INITIALIZE_GETTER(Asset, fullPath, GetFullPath);
-		INITIALIZE_GETTER(Asset, meta, GetMeta);
-	}
-
 	AssetRef::AssetRef():
 		mAssetPtr(nullptr), mRefCounter(nullptr)
-	{
-	}
+	{}
 
-	AssetRef::AssetRef(const AssetRef& other):
+	AssetRef::AssetRef(const AssetRef& other) :
 		mAssetPtr(other.mAssetPtr), mRefCounter(other.mRefCounter)
 	{
 		if (mAssetPtr)

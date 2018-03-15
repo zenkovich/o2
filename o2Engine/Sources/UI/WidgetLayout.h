@@ -15,33 +15,33 @@ namespace o2
 	class UIWidgetLayout: public ActorTransform
 	{
 	public:
-		Property<Vec2F> anchorMin;    // Left bottom anchor property
-		Property<Vec2F> anchorMax;    // Right top anchor property
+		PROPERTY(Vec2F> anchorMin;    // Left bottom anchor property
+		PROPERTY(Vec2F> anchorMax;    // Right top anchor property
 
-		Property<Vec2F> offsetMin;    // Left bottom corner offset property
-		Property<Vec2F> offsetMax;    // Right top corner offset property
+		PROPERTY(Vec2F> offsetMin;    // Left bottom corner offset property
+		PROPERTY(Vec2F> offsetMax;    // Right top corner offset property
 
-		Property<float> anchorLeft;   // Left anchor property
-		Property<float> anchorRight;  // Right anchor property
-		Property<float> anchorBottom; // Bottom anchor property
-		Property<float> anchorTop;    // Top anchor property
+		PROPERTY(float> anchorLeft;   // Left anchor property
+		PROPERTY(float> anchorRight;  // Right anchor property
+		PROPERTY(float> anchorBottom; // Bottom anchor property
+		PROPERTY(float> anchorTop;    // Top anchor property
 
-		Property<float> offsetLeft;   // Left offset property
-		Property<float> offsetRight;  // Right offset property
-		Property<float> offsetBottom; // Bottom offset property
-		Property<float> offsetTop;    // Top offset property
+		PROPERTY(float> offsetLeft;   // Left offset property
+		PROPERTY(float> offsetRight;  // Right offset property
+		PROPERTY(float> offsetBottom; // Bottom offset property
+		PROPERTY(float> offsetTop;    // Top offset property
 
-		Property<Vec2F> minSize;      // Minimal size property
-		Property<float> minWidth;     // Minimal width property
-		Property<float> minHeight;    // Minimal height property
+		PROPERTY(Vec2F> minSize;      // Minimal size property
+		PROPERTY(float> minWidth;     // Minimal width property
+		PROPERTY(float> minHeight;    // Minimal height property
 
-		Property<Vec2F> maxSize;      // Maximum size property
-		Property<float> maxWidth;     // Maximum width property
-		Property<float> maxHeight;    // Maximum height property
+		PROPERTY(Vec2F> maxSize;      // Maximum size property
+		PROPERTY(float> maxWidth;     // Maximum width property
+		PROPERTY(float> maxHeight;    // Maximum height property
 
-		Property<Vec2F> weight;       // Layout weight property
-		Property<float> widthWeight;  // Width layout weight property
-		Property<float> heigthWeight; // Height layout weight property
+		PROPERTY(Vec2F> weight;       // Layout weight property
+		PROPERTY(float> widthWeight;  // Width layout weight property
+		PROPERTY(float> heigthWeight; // Height layout weight property
 
 		// Default constructor, creates both stretching layout  
 		UIWidgetLayout();

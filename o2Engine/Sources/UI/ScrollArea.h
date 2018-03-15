@@ -12,9 +12,9 @@ namespace o2
 	class UIScrollArea: public UIWidget
 	{
 	public:
-		Property<Vec2F> scroll;     // Scroll position property
-		Property<float> horScroll;  // Horizontal scroll position property
-		Property<float> verScroll;  // Vertical scroll position property
+		PROPERTY(Vec2F> scroll;     // Scroll position property
+		PROPERTY(float> horScroll;  // Horizontal scroll position property
+		PROPERTY(float> verScroll;  // Vertical scroll position property
 
 		Function<void(const Vec2F&)> onScrolled; // Scrolling event. Scroll position is parameter
 

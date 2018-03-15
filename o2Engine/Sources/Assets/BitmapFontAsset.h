@@ -16,8 +16,9 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Getter<MetaInfo*> meta; // Meta information getter
-		Getter<FontRef>   font; // Font getter
+		PROPERTIES(BitmapFontAsset);
+		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
+		GETTER(FontRef, font, GetFont);   // Font getter
 
 		// Destructor
 		~BitmapFontAsset();
@@ -73,9 +74,6 @@ namespace o2
 
 		// Loads data
 		void LoadData(const String& path);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Assets;
 	};

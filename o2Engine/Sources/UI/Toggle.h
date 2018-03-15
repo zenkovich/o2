@@ -60,11 +60,11 @@ namespace o2
 	class UIToggle: public UIWidget, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		Property<bool>           value;          // Current state value property
-		Property<WString>        caption;        // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+		PROPERTY(bool>           value;          // Current state value property
+		PROPERTY(WString>        caption;        // Caption property. Searches text layer with name "caption" or creates them if he's not exist
 		ShortcutKeys             shortcut;       // Shortcut keys
 
-		Property<UIToggleGroup*> toggleGroup;    // Toggle group property
+		PROPERTY(UIToggleGroup*> toggleGroup;    // Toggle group property
 
 		Function<void()>         onClick;        // Click event
 		Function<void(bool)>     onToggle;       // Toggle event

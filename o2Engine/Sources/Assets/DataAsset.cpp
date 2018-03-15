@@ -10,7 +10,6 @@ namespace o2
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		InitializeProperties();
 	}
 
 	DataAsset::DataAsset(const String& path):
@@ -19,7 +18,6 @@ namespace o2
 		mPath = path;
 		mMeta = mnew MetaInfo();
 		IdRef() = o2Assets.GetAssetId(path);
-		InitializeProperties();
 
 		Load();
 	}
@@ -30,7 +28,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
 		mPath = o2Assets.GetAssetPath(id);
-		InitializeProperties();
 
 		Load();
 	}
@@ -43,8 +40,6 @@ namespace o2
 		IdRef() = asset.GetAssetId();
 
 		data = asset.data;
-
-		InitializeProperties();
 	}
 
 	DataAsset::~DataAsset()
@@ -91,11 +86,6 @@ namespace o2
 	void DataAsset::SaveData(const String& path)
 	{
 		data.SaveToFile(path);
-	}
-
-	void DataAsset::InitializeProperties()
-	{
-		INITIALIZE_GETTER(DataAsset, meta, GetMeta);
 	}
 
 	const Type* DataAsset::MetaInfo::GetAssetType() const

@@ -16,8 +16,8 @@ namespace o2
 	class UIWindow: public UIScrollArea, public DrawableCursorEventsListener
 	{
 	public:
-		Property<WString> caption; // Window caption property
-		Property<Sprite*> icon;    // Window icon sprite property
+		PROPERTY(WString> caption; // Window caption property
+		PROPERTY(Sprite*> icon;    // Window icon sprite property
 
 		// Default constructor
 		UIWindow();

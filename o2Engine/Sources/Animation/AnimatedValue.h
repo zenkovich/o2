@@ -54,11 +54,12 @@ namespace o2
 		typedef Vector<Key> KeysVec;
 
 	public:
-		GETTER(AnimatedValue<_type>, _type, value, GetValue);                               // Current value getter
-		SETTER(AnimatedValue<_type>, _type*, target, SetTarget);                            // Bind target setter
-		SETTER(AnimatedValue<_type>, Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
-		SETTER(AnimatedValue<_type>, IValueProxy<_type>*, targetProxy, SetTargetProxy);     // Bind proxy setter
-		PROPERTY(AnimatedValue<_type>, KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
+		PROPERTIES(AnimatedValue<_type>);
+		GETTER(_type, value, GetValue);                               // Current value getter
+		SETTER(_type*, target, SetTarget);                            // Bind target setter
+		SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
+		SETTER(IValueProxy<_type>*, targetProxy, SetTargetProxy);     // Bind proxy setter
+		PROPERTY(KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
 
 		// Default constructor
 		AnimatedValue();

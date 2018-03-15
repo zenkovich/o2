@@ -20,10 +20,11 @@ namespace o2
 		typedef Vector<Page> PagesVec;
 
 	public:
-		Getter<MetaInfo*>        meta;        // Meta information getter
-		Getter<AssetInfosVec>    imagesInfos; // Containing images infos getter
-		Getter<Vector<AssetRef>> images;      // Images assets getter
-		Getter<PagesVec>         pages;       // Pages getter
+		PROPERTIES(AtlasAsset);
+		GETTER(MetaInfo*, meta, GetMeta);                  // Meta information getter
+		GETTER(AssetInfosVec, imagesInfos, GetImages);     // Containing images infos getter
+		GETTER(Vector<AssetRef>, images, GetImagesAssets); // Images assets getter
+		GETTER(PagesVec, pages, GetPages);                 // Pages getter
 
 		// Destructor
 		~AtlasAsset();
@@ -173,9 +174,6 @@ namespace o2
 
 		// Saves data
 		void SaveData(const String& path);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Assets;
 	};

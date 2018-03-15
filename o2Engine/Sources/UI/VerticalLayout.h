@@ -10,20 +10,20 @@ namespace o2
 	class UIVerticalLayout: public UIWidget
 	{
 	public:
-		Property<BaseCorner> baseCorner;    // Base corder property
+		PROPERTY(BaseCorner> baseCorner;    // Base corder property
 
-		Property<float>      spacing;       // Space between widgets property
+		PROPERTY(float>      spacing;       // Space between widgets property
 
-		Property<BorderF>    border;        // Border property
-		Property<float>      borderLeft;    // Left border property
-		Property<float>      borderRight;   // Right border property
-		Property<float>      borderTop;     // Top border property
-		Property<float>      borderBottom;  // Bottom border property
+		PROPERTY(BorderF>    border;        // Border property
+		PROPERTY(float>      borderLeft;    // Left border property
+		PROPERTY(float>      borderRight;   // Right border property
+		PROPERTY(float>      borderTop;     // Top border property
+		PROPERTY(float>      borderBottom;  // Bottom border property
 
-		Property<bool>       expandWidth;   // Expand children by width property
-		Property<bool>       expandHeight;  // Expand children by height property
+		PROPERTY(bool>       expandWidth;   // Expand children by width property
+		PROPERTY(bool>       expandHeight;  // Expand children by height property
 
-		Property<bool>       fitByChildren; // Fitting size by children property
+		PROPERTY(bool>       fitByChildren; // Fitting size by children property
 
 		// Default constructor
 		UIVerticalLayout();

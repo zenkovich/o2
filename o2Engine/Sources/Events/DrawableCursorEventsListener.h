@@ -10,7 +10,8 @@ namespace o2
 	class DrawableCursorEventsListener: virtual public CursorAreaEventsListener
 	{
 	public:
-		Property<IDrawable*> eventHandleDrawable; // Target event handling drawable property
+		PROPERTIES(DrawableCursorEventsListener);
+		PROPERTY(IDrawable*, eventHandleDrawable, SetEventHandleDrawable, GetEventHandleDrawable); // Target event handling drawable property
 
 		// Default constructor
 		DrawableCursorEventsListener(IDrawable* drawable = nullptr);

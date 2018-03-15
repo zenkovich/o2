@@ -13,9 +13,10 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Getter<char*>     data;     // Data getter
-		Getter<UInt>      dataSize; // Data size getter
-		Getter<MetaInfo*> meta;     // Meta information getter
+		PROPERTIES(BinaryAsset);
+		GETTER(char*, data, GetData);        // Data getter
+		GETTER(UInt, dataSize, GetDataSize); // Data size getter
+		GETTER(MetaInfo*, meta, GetMeta);    // Meta information getter
 
 		// Destructor
 		~BinaryAsset();
@@ -81,9 +82,6 @@ namespace o2
 
 		// Saves data
 		void SaveData(const String& path);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Assets;
 	};

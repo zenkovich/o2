@@ -14,7 +14,6 @@ namespace o2
 		Asset(), mBitmap(nullptr), mAtlasPage(0)
 	{
 		mMeta = mnew MetaInfo();
-		InitializeProperties();
 	}
 
 	ImageAsset::ImageAsset(const String& path):
@@ -23,7 +22,6 @@ namespace o2
 		mPath = path;
 		mMeta = mnew MetaInfo();
 		IdRef() = o2Assets.GetAssetId(path);
-		InitializeProperties();
 
 		Load();
 	}
@@ -34,7 +32,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
 		mPath = o2Assets.GetAssetPath(id);
-		InitializeProperties();
 
 		Load();
 	}
@@ -53,8 +50,6 @@ namespace o2
 
 		mAtlasPage = asset.mAtlasPage;
 		mAtlasRect = asset.mAtlasRect;
-
-		InitializeProperties();
 	}
 
 	ImageAsset::~ImageAsset()
@@ -206,20 +201,6 @@ namespace o2
 	{
 		String assetFullPath = GetFullPath();
 		mBitmap->Load(assetFullPath);
-	}
-
-	void ImageAsset::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(ImageAsset, bitmap, SetBitmap, GetBitmap);
-		INITIALIZE_PROPERTY(ImageAsset, atlasId, SetAtlasId, GetAtlasId);
-		INITIALIZE_PROPERTY(ImageAsset, atlas, SetAtlas, GetAtlas);
-		INITIALIZE_PROPERTY(ImageAsset, sliceBorder, SetSliceBorder, GetSliceBorder);
-		INITIALIZE_GETTER(ImageAsset, atlasPage, GetAtlasPage);
-		INITIALIZE_GETTER(ImageAsset, atlasRect, GetAtlasRect);
-		INITIALIZE_GETTER(ImageAsset, meta, GetMeta);
-		INITIALIZE_GETTER(ImageAsset, size, GetSize);
-		INITIALIZE_GETTER(ImageAsset, width, GetWidth);
-		INITIALIZE_GETTER(ImageAsset, height, GetHeight);
 	}
 
 	bool ImageAsset::PlatformMeta::operator==(const PlatformMeta& other) const

@@ -16,11 +16,12 @@ namespace o2
 		typedef Vector<Key> KeysVec;
 
 	public:
-		GETTER(AnimatedValue<o2::Vec2F>, o2::Vec2F, value, GetValue);                           // Current value getter
-		SETTER(AnimatedValue<o2::Vec2F>, o2::Vec2F*, target, SetTarget);                        // Bind target setter
-		SETTER(AnimatedValue<o2::Vec2F>, Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
-		SETTER(AnimatedValue<o2::Vec2F>, IValueProxy<o2::Vec2F>*, targetProxy, SetTargetProxy); // Bind proxy setter
-		PROPERTY(AnimatedValue<o2::Vec2F>, KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
+		PROPERTIES(AnimatedValue<o2::Vec2F>);
+		GETTER(o2::Vec2F, value, GetValue);                           // Current value getter
+		SETTER(o2::Vec2F*, target, SetTarget);                        // Bind target setter
+		SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
+		SETTER(IValueProxy<o2::Vec2F>*, targetProxy, SetTargetProxy); // Bind proxy setter
+		PROPERTY(KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
 
         // Default constructor
 		AnimatedValue();

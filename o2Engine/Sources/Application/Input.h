@@ -25,17 +25,18 @@ namespace o2
 		typedef Vector<Key> KeysVec;
 
 	public:
-		Getter<bool>  cursorPressed;      // Is cursor pressed at current frame getter
-		Getter<bool>  cursorDown;         // Is cursor down at current frame getter
-		Getter<bool>  cursorReleased;     // Is cursor released at current frame getter
-		Getter<bool>  altCursorPressed;   // Is alt cursor pressed at current frame getter (right mouse button)
-		Getter<bool>  altCursorDown;      // Is alt cursor down at current frame getter (right mouse button)
-		Getter<bool>  altCursorReleased;  // Is alt cursor released at current frame getter (right mouse button)
-		Getter<bool>  alt2CursorPressed;  // Is alt2 cursor pressed at current frame getter (middle mouse button)
-		Getter<bool>  alt2CursorDown;	  // Is alt2 cursor down at current frame getter (middle mouse button)
-		Getter<bool>  alt2CursorReleased; // Is alt2 cursor released at current frame getter (middle mouse button)
-		Getter<Vec2F> cursorPos;          // Cursor position getter
-		Getter<Vec2F> cursorDelta;        // Cursor position delta getter
+		PROPERTIES(Input);
+		GETTER(bool, cursorPressed, IsCursorPressed);            // Is cursor pressed at current frame getter
+		GETTER(bool, cursorDown, IsCursorDown);                  // Is cursor down at current frame getter
+		GETTER(bool, cursorReleased, IsCursorReleased);          // Is cursor released at current frame getter
+		GETTER(bool, altCursorPressed, IsRightMousePressed);     // Is alt cursor pressed at current frame getter (right mouse button)
+		GETTER(bool, altCursorDown, IsRightMouseDown);           // Is alt cursor down at current frame getter (right mouse button)
+		GETTER(bool, altCursorReleased, IsRightMouseDown);       // Is alt cursor released at current frame getter (right mouse button)
+		GETTER(bool, alt2CursorPressed, IsMiddleMousePressed);   // Is alt2 cursor pressed at current frame getter (middle mouse button)
+		GETTER(bool, alt2CursorDown, IsMiddleMouseDown);	     // Is alt2 cursor down at current frame getter (middle mouse button)
+		GETTER(bool, alt2CursorReleased, IsMiddleMouseReleased); // Is alt2 cursor released at current frame getter (middle mouse button)
+		GETTER(Vec2F, cursorPos, GetCursorPos);                  // Cursor position getter
+		GETTER(Vec2F, cursorDelta, GetCursorDelta);              // Cursor position delta getter
 
 		// Default constructor
 		Input();
@@ -217,9 +218,6 @@ namespace o2
 
 		// Returns main cursor delta
 		Vec2F GetMainCursorDelta();
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Application;
 		friend class WndProcFunc;

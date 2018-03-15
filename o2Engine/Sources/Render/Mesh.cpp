@@ -10,7 +10,6 @@ namespace o2
 	{
 		SetTexture(texture);
 		Resize(vertexCount, polyCount);
-		InitializeProperties();
 	}
 
 	Mesh::Mesh(const Mesh& mesh):
@@ -24,8 +23,6 @@ namespace o2
 
 		memcpy(vertices, mesh.vertices, mesh.mMaxVertexCount*sizeof(Vertex2));
 		memcpy(indexes, mesh.indexes, mesh.mMaxPolyCount*3*sizeof(UInt16));
-
-		InitializeProperties();
 	}
 
 	Mesh::~Mesh()
@@ -103,12 +100,5 @@ namespace o2
 	UInt Mesh::GetMaxPolyCount() const
 	{
 		return mMaxPolyCount;
-	}
-
-	void Mesh::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(Mesh, texture, SetTexture, GetTexture);
-		INITIALIZE_PROPERTY(Mesh, maxVertexCount, SetMaxVertexCount, GetMaxVertexCount);
-		INITIALIZE_PROPERTY(Mesh, maxPolyCount, SetMaxPolyCount, GetMaxPolyCount);
 	}
 }

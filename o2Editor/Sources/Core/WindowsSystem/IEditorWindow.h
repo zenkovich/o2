@@ -13,7 +13,7 @@ namespace Editor
 	class IEditorWindow: public IObject
 	{
 	public:
-		Property<bool> visible; // Window visibility property
+		PROPERTY(bool> visible; // Window visibility property
 
 		// Default constructor
 		IEditorWindow();

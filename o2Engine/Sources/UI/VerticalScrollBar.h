@@ -11,13 +11,13 @@ namespace o2
 	class UIVerticalScrollBar: public UIWidget, public DrawableCursorEventsListener
 	{
 	public:
-		Property<float>       value;          // Current value property
+		PROPERTY(float>       value;          // Current value property
 
-		Property<float>       minValue;       // Minimal value property
-		Property<float>       maxValue;       // Maximal value property
+		PROPERTY(float>       minValue;       // Minimal value property
+		PROPERTY(float>       maxValue;       // Maximal value property
 
-		Property<float>       scrollSense;    // Scroll sense coefficient
-		Property<float>       scrollSize;     // Scroll handle size
+		PROPERTY(float>       scrollSense;    // Scroll sense coefficient
+		PROPERTY(float>       scrollSize;     // Scroll handle size
 
 		Function<void(float)> onChange;       // On value changing event
 		Function<void(float)> onUserChange;   // On Value changing from user event

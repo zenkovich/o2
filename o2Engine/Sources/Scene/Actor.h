@@ -95,34 +95,34 @@ namespace o2
 	public:
 		typedef Vector<Actor*> ActorsVec;
 		typedef Vector<Component*> ComponentsVec;
-		
+
 	public:
-		Property<ActorAssetRef> prototype;          // Prototype asset reference property
-										            
-		ActorTransform* const   transform;          // Transformation of actor
-										            
-		Property<Actor*>        parent;             // Parent actor property
-										            
-		Getter<UInt64>          id;                 // Actor unique id
-		Property<String>        name;               // Actor name property
-										            
-		TagGroup                tags;               // Tags group
-										            
-		Property<SceneLayer*>   layer;              // Layer property
-		Property<String>        layerName;          // Layer name property
+		PROPERTIES(Actor);
+		PROPERTY(ActorAssetRef, prototype, SetPrototype, GetPrototype); // Prototype asset reference property
 
-		Property<bool>          enabled;            // Is actor enabled property
-		Getter<bool>            enabledInHierarchy; // Is actor enabled in hierarchy getter
+		PROPERTY(Actor*, parent, SetParent, GetParent); // Parent actor property
 
-		Property<bool>          locked;             // Is actor locked property
-		Getter<bool>            lockedInHierarchy;  // Is actor locked in hierarchy getter
+		GETTER(UInt64, id, GetID);                // Actor unique id
+		PROPERTY(String, name, SetName, GetName); // Actor name property
 
-		Getter<ActorsVec>       children;           // Children array getter
-		Getter<ComponentsVec>   components;         // Components array getter
 
-		Accessor<Actor*, const String&>     child;      // Children accessor
-		Accessor<Component*, const String&> component;  // Component accessor by type name
+		PROPERTY(SceneLayer*, layer, SetLayer, GetLayer);    // Layer property
+		PROPERTY(String, layerName, SetLayer, GetLayerName); // Layer name property
 
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property
+		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is actor enabled in hierarchy getter
+
+		PROPERTY(bool, locked, SetLocked, IsLocked);           // Is actor locked property
+		GETTER(bool, lockedInHierarchy, IsLockedInHierarchy);  // Is actor locked in hierarchy getter
+
+		GETTER(ActorsVec, children, GetChildren);         // Children array getter
+		GETTER(ComponentsVec, components, GetComponents); // Components array getter
+
+		ACCESSOR(Actor*, child, const String&, GetChild, GetAllChilds);                 // Children accessor
+		ACCESSOR<Component*, component, const String&, GetComponent, GetAllComponents); // Component accessor by type name
+
+		TagGroup                tags;      // Tags group
+		ActorTransform* const   transform; // Transformation of actor
 
 		Function<void(bool)> onEnableChanged; // Enable changing event
 
@@ -356,7 +356,7 @@ namespace o2
 		Function<void(bool)>   onLockChanged;           // Locking changing event
 		Function<void()>       onNameChanged;           // Name changing event
 
-        // It is called when some changed in actor
+		// It is called when some changed in actor
 		void OnChanged();
 
 		// It is called when actor's locking was changed
@@ -369,7 +369,7 @@ namespace o2
 		void OnChildsChanged();
 
 		// Returns the path of create menu category
-		const String& GetCreateCategory() const; 
+		const String& GetCreateCategory() const;
 #endif
 
 		SERIALIZABLE(Actor);
@@ -408,7 +408,7 @@ namespace o2
 	protected:
 		// Base actor constructor with transform
 		Actor(ActorTransform* transform, bool isOnScene = true, const String& name = "unnamed", bool enabled = true,
-			  bool resEnabled = true, bool locked = false, bool resLocked = false, 
+			  bool resEnabled = true, bool locked = false, bool resLocked = false,
 			  SceneLayer* layer = nullptr, UInt64 id = Math::Random(), UID assetId = 0);
 
 		// Default constructor with transform
@@ -491,9 +491,6 @@ namespace o2
 
 		// Returns all children actors with their children
 		void GetAllChildrenActors(Vector<Actor*>& actors);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		// -----------------------------
 		// Actor prototype applying info

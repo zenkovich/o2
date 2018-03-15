@@ -63,7 +63,7 @@ namespace Editor
 								      
 		BorderIProperty*              mBorderProperty = nullptr;
 		EnumProperty*                 mDefaultTypeProperty = nullptr;
-		AssetProperty<AtlasAssetRef>* mAtlasProperty = nullptr;
+		AssetPROPERTY(AtlasAssetRef>* mAtlasProperty = nullptr;
 		ObjectProperty*               mWindowsProperties = nullptr;
 		ObjectProperty*               mOSXProperties = nullptr;
 		ObjectProperty*               mAndroidProperties = nullptr;

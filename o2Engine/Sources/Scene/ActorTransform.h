@@ -19,64 +19,65 @@ namespace o2
 	class ActorTransform: public ISerializable
 	{
 	public:
-		Getter<Actor*>   actor;              // Owner actor getter @EXCLUDE_POINTER_SEARCH
+		PROPERTIES(ActorTransform);
+		GETTER(Actor*, actor, GetOwnerActor); // Owner actor getter @EXCLUDE_POINTER_SEARCH
 
-		Property<Vec2F>  position;           // Position property
-		Property<Vec2F>  size;               // Size property
-		Property<float>  width;              // Width property
-		Property<float>  height;             // Width property
-		Property<Vec2F>  scale;              // Scale property
-		Property<Vec2F>  pivot;              // Pivot property, in local space
-		Property<Vec2F>  szPivot;            // Pivot in size space property
-		Property<float>  angle;              // Rotation angle in radians
-		Property<float>  angleDegree;        // Rotation angle in degrees
-		Property<float>  shear;              // Shear property
+		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property
+		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property
+		PROPERTY(float, width, SetWidth, GetWidth);                     // Width property
+		PROPERTY(float, height, SetHeight, GetHeight);                  // Width property
+		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property
+		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space
+		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property
+		PROPERTY(float, angle, SetAngle, GetAngle);                     // Rotation angle in radians
+		PROPERTY(float, angleDegree, SetAngleDegrees, GetAngleDegrees); // Rotation angle in degrees
+		PROPERTY(float, shear, SetShear, GetShear);                     // Shear property
 
-		Property<Basis>  basis;              // Transformation basis property
-		Property<Basis>  nonSizedBasis;      // Non sizes transformation basis property
+		PROPERTY(Basis, basis, SetBasis, GetBasis);                         // Transformation basis property
+		PROPERTY(Basis, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis); // Non sizes transformation basis property
 
-		Property<RectF>  AABB;               // Axis aligned rectangle
-		Property<RectF>  rect;               // Rectangle property. Rectangle - transform without angle, scale and shear. 
-		                                     // Sets the position and size
+		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle
+		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Rectangle - transform without angle, scale and shear. 
+											                           // Sets the position and size
 
-		Property<Vec2F>  leftTop;            // Left top corner property
-		Property<Vec2F>  leftBottom;         // Left bottom corner property
-		Property<Vec2F>  rightTop;           // Right top corner property
-		Property<Vec2F>  rightBottom;        // Right bottom corner property
-		Property<Vec2F>  center;             // Center position property
-		Property<Vec2F>  rightDir;           // X axis direction property
-		Property<Vec2F>  leftDir;            // Negative X axis direction property
-		Property<Vec2F>  upDir;              // Y axis direction property
-		Property<Vec2F>  downDir;            // Negative Y axis direction property
-		Property<float>  right;              // Right border position property
-		Property<float>  left;               // Left border position property
-		Property<float>  top;                // Top border position property
-		Property<float>  bottom;             // Bottom border position property
+		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property
+		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property
+		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Right top corner property
+		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Right bottom corner property
+		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center position property
+		PROPERTY(Vec2F, rightDir, SetRightDir, GetRightDir);          // X axis direction property
+		PROPERTY(Vec2F, leftDir, SetLeftDir, GetLeftDir);             // Negative X axis direction property
+		PROPERTY(Vec2F, upDir, SetUpDir, GetUpDir);                   // Y axis direction property
+		PROPERTY(Vec2F, downDir, SetDownDir, GetDownDir);             // Negative Y axis direction property
+		PROPERTY(float, right, SetRight, GetRight);                   // Right border position property
+		PROPERTY(float, left, SetLeft, GetLeft);                      // Left border position property
+		PROPERTY(float, top, SetTop, GetTop);                         // Top border position property
+		PROPERTY(float, bottom, SetBottom, GetBottom);                // Bottom border position property
 
-		Property<Vec2F>  worldPosition;      // World position property
-		Property<Vec2F>  worldPivot;         // Pivot property, in world space
-		Property<float>  worldAngle;         // World rotation angle in radians
-		Property<float>  worldAngleDegree;   // World rotation angle in degree
-		Property<Basis>  worldBasis;         // World transformation basis
-		Property<Basis>  worldNonSizedBasis; // World transformation basis without size
+		PROPERTY(Vec2F, worldPosition, SetWorldPosition, GetWorldPosition);                // World position property
+		PROPERTY(Vec2F, worldPivot, SetWorldPivot, GetWorldPivot);                         // Pivot property, in world space
+		PROPERTY(float, worldAngle, SetWorldAngle, GetWorldAngle);                         // World rotation angle in radians
+		PROPERTY(float, worldAngleDegree, SetWorldAngleDegree, GetWorldAngleDegree);       // World rotation angle in degree
+		PROPERTY(Basis, worldBasis, SetWorldBasis, GetWorldBasis);                         // World transformation basis
+		PROPERTY(Basis, worldNonSizedBasis, SetWorldNonSizedBasis, GetWorldNonSizedBasis); // World transformation basis without size
 
-		Property<Vec2F>  worldLeftTop;       // World Left top corner property
-		Property<Vec2F>  worldLeftBottom;    // World Left bottom corner property
-		Property<Vec2F>  worldRightTop;      // World Right top corner property
-		Property<Vec2F>  worldRightBottom;   // World Right bottom corner property
-		Property<Vec2F>  worldCenter;        // World center property
-		Property<Vec2F>  worldRightDir;      // World X axis direction property
-		Property<Vec2F>  worldLeftDir;       // World Negative X axis direction property
-		Property<Vec2F>  worldUpDir;         // World Y axis direction property
-		Property<Vec2F>  worldDownDir;       // World Negative Y axis direction property
+		PROPERTY(Vec2F, worldLeftTop, SetWorldLeftTop, GetWorldLeftTop);             // World Left top corner property
+		PROPERTY(Vec2F, worldLeftBottom, SetWorldLeftBottom, GetWorldLeftBottom);    // World Left bottom corner property
+		PROPERTY(Vec2F, worldRightTop, SetWorldRightTop, GetWorldRightTop);          // World Right top corner property
+		PROPERTY(Vec2F, worldRightBottom, SetWorldRightBottom, GetWorldRightBottom); // World Right bottom corner property
+		PROPERTY(Vec2F, worldCenter, SetWorldCenter, GetWorldCenter);                // World center property
+		PROPERTY(Vec2F, worldRightDir, SetWorldRightDir, GetWorldRightDir);          // World X axis direction property
+		PROPERTY(Vec2F, worldLeftDir, SetWorldLeftDir, GetWorldLeftDir);             // World Negative X axis direction property
+		PROPERTY(Vec2F, worldUpDir, SetWorldUpDir, GetWorldUpDir);                   // World Y axis direction property
+		PROPERTY(Vec2F, worldDownDir, SetWorldDownDir, GetWorldDownDir);             // World Negative Y axis direction property
 
-		Property<float>  worldRight;         // World Right border position property
-		Property<float>  worldLeft;          // World Left border position property
-		Property<float>  worldTop;           // World Top border position property
-		Property<float>  worldBottom;        // World Bottom border position property
+		PROPERTY(float, worldRight, SetWorldRight, GetWorldRight);    // World Right border position property
+		PROPERTY(float, worldLeft, SetWorldLeft, GetWorldLeft);       // World Left border position property
+		PROPERTY(float, worldTop, SetWorldTop, GetWorldTop);          // World Top border position property
+		PROPERTY(float, worldBottom, SetWorldBottom, GetWorldBottom); // World Bottom border position property
 
-		Property<RectF>  worldRect;          // World rectangle property. Sets the position and size
-		Property<RectF>  worldAABB;          // World direction aligned rectangle
+		PROPERTY(RectF, worldRect, SetWorldRect, GetWorldRect);                      // World rectangle property. Sets the position and size
+		PROPERTY(RectF, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect; // World direction aligned rectangle
 
 		ActorTransform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
 					   const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F(0.5f, 0.5f));
@@ -475,9 +476,6 @@ namespace o2
 		// It is called when object was deserialized, reads data
 		void OnDeserialized(const DataNode& node) override;
 
-		// Initializes properties
-		void InitializeProperties();
-
 		// Returns parent world rect position - left bottom corner
 		Vec2F GetParentPosition() const;
 
@@ -700,6 +698,5 @@ CLASS_FIELDS_META(o2::ActorTransform::Data)
 }
 END_META;
 CLASS_METHODS_META(o2::ActorTransform::Data)
-{
-}
+{}
 END_META;

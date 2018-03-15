@@ -16,12 +16,12 @@ namespace o2
 	class UIEditBox: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		Property<WString>              text;			  // Text property
+		PROPERTY(WString>              text;			  // Text property
 
-		Property<int>                  caret;		      // Caret position property
+		PROPERTY(int>                  caret;		      // Caret position property
 
-		Property<int>                  selectionBegin;    // Selection begin index property
-		Property<int>                  selectionEnd;	  // Selection end index property
+		PROPERTY(int>                  selectionBegin;    // Selection begin index property
+		PROPERTY(int>                  selectionEnd;	  // Selection end index property
 
 		Function<void(const WString&)> onChanged;         // Text changed event
 		Function<void(const WString&)> onChangeCompleted; // Text changing completed event

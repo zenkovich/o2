@@ -19,8 +19,9 @@ namespace o2
 		typedef Vector<VectorFont::Effect*> EffectsVec;
 
 	public:
-		Getter<MetaInfo*> meta; // Meta information getter
-		Getter<FontRef>   font; // Font getter
+		PROPERTIES(VectorFontAsset);
+		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
+		GETTER(FontRef, font, GetFont);   // Font getter
 
 		// Destructor
 		~VectorFontAsset();
@@ -103,9 +104,6 @@ namespace o2
 
 		// Loads data
 		void LoadData(const String& path);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Assets;
 	};

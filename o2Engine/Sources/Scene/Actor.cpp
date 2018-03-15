@@ -24,7 +24,6 @@ namespace o2
 		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
 
 		transform->SetOwner(this);
-		InitializeProperties();
 
 		if (Scene::IsSingletonInitialzed())
 		{
@@ -107,8 +106,6 @@ namespace o2
 
 		UpdateEnabled();
 		transform->SetDirty();
-
-		InitializeProperties();
 
 		if (Scene::IsSingletonInitialzed() && mDefaultCreationMode == ActorCreateMode::InScene)
 		{
@@ -2227,27 +2224,6 @@ namespace o2
 	void Actor::OnParentChanged(Actor* oldParent) {}
 
 #endif //IS_EDITOR
-
-	void Actor::InitializeProperties()
-	{
-		INITIALIZE_GETTER(Actor, id, GetID);
-		INITIALIZE_PROPERTY(Actor, prototype, GetPrototype, SetProtytypeDummy);
-		INITIALIZE_PROPERTY(Actor, name, SetName, GetName);
-		INITIALIZE_PROPERTY(Actor, enabled, SetEnabled, IsEnabled);
-		INITIALIZE_GETTER(Actor, enabledInHierarchy, IsEnabledInHierarchy);
-		INITIALIZE_PROPERTY(Actor, locked, SetLocked, IsLocked);
-		INITIALIZE_GETTER(Actor, lockedInHierarchy, IsLockedInHierarchy);
-		INITIALIZE_PROPERTY(Actor, parent, SetParentProp, GetParent);
-		INITIALIZE_GETTER(Actor, children, GetChildren);
-		INITIALIZE_ACCESSOR(Actor, child, GetChild);
-		INITIALIZE_GETTER(Actor, components, GetComponents);
-		INITIALIZE_ACCESSOR(Actor, component, GetComponent);
-		INITIALIZE_PROPERTY(Actor, layer, SetLayer, GetLayer);
-		INITIALIZE_PROPERTY(Actor, layerName, SetLayer, GetLayerName);
-
-		child.SetAllAccessFunc(this, &Actor::GetAllChilds);
-		component.SetAllAccessFunc(this, &Actor::GetAllComponents);
-	}
 
 	DECLARE_SINGLETON(ActorDataNodeConverter);
 

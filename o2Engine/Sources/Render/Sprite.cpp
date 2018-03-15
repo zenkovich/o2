@@ -19,7 +19,6 @@ namespace o2
 			mCornersColors[i] = Color4::White();
 
 		UpdateMesh();
-		InitializeProperties();
 
 		if (Render::IsSingletonInitialzed())
 			o2Render.mSprites.Add(this);
@@ -33,7 +32,6 @@ namespace o2
 			mCornersColors[i] = Color4::White();
 
 		LoadFromImage(image);
-		InitializeProperties();
 
 		o2Render.mSprites.Add(this);
 	}
@@ -46,7 +44,6 @@ namespace o2
 			mCornersColors[i] = Color4::White();
 
 		LoadFromImage(imagePath);
-		InitializeProperties();
 
 		o2Render.mSprites.Add(this);
 	}
@@ -59,7 +56,6 @@ namespace o2
 			mCornersColors[i] = Color4::White();
 
 		LoadFromImage(imageId);
-		InitializeProperties();
 
 		o2Render.mSprites.Add(this);
 	}
@@ -72,7 +68,6 @@ namespace o2
 			mCornersColors[i] = Color4::White();
 
 		UpdateMesh();
-		InitializeProperties();
 
 		o2Render.mSprites.Add(this);
 	}
@@ -85,7 +80,6 @@ namespace o2
 			mCornersColors[i] = Color4::White();
 
 		LoadMonoColor(color);
-		InitializeProperties();
 
 		o2Render.mSprites.Add(this);
 	}
@@ -98,7 +92,6 @@ namespace o2
 			mCornersColors[i] = Color4::White();
 
 		LoadFromBitmap(bitmap);
-		InitializeProperties();
 
 		o2Render.mSprites.Add(this);
 	}
@@ -110,8 +103,6 @@ namespace o2
 	{
 		for (int i = 0; i < 4; i++)
 			mCornersColors[i] = other.mCornersColors[i];
-
-		InitializeProperties();
 
 		o2Render.mSprites.Add(this);
 	}
@@ -1091,23 +1082,6 @@ namespace o2
 
 			UpdateMesh();
 		}
-	}
-
-	void Sprite::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(Sprite, texture, SetTexture, GetTexture);
-		INITIALIZE_PROPERTY(Sprite, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);
-		INITIALIZE_PROPERTY(Sprite, image, SetImageAsset, GetImageAsset);
-		INITIALIZE_PROPERTY(Sprite, imageName, LoadFromImage, GetImageName);
-		INITIALIZE_SETTER(Sprite, bitmap, LoadFromBitmap);
-		INITIALIZE_PROPERTY(Sprite, leftTopColor, SetLeftTopColor, GetLeftTopCorner);
-		INITIALIZE_PROPERTY(Sprite, rightTopColor, SetRightTopColor, GetRightTopCorner);
-		INITIALIZE_PROPERTY(Sprite, leftBottomColor, SetLeftBottomColor, GetLeftBottomCorner);
-		INITIALIZE_PROPERTY(Sprite, rightBottomColor, SetRightBottomColor, GetRightBottomCorner);
-		INITIALIZE_PROPERTY(Sprite, mode, SetMode, GetMode);
-		INITIALIZE_PROPERTY(Sprite, fill, SetFill, GetFill);
-		INITIALIZE_PROPERTY(Sprite, tileScale, SetTileScale, GetTileScale);
-		INITIALIZE_PROPERTY(Sprite, sliceBorder, SetSliceBorder, GetSliceBorder);
 	}
 }
 

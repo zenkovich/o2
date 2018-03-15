@@ -16,19 +16,20 @@ namespace o2
 	class Sprite: public IRectDrawable
 	{
 	public:
-		Property<TextureRef>    texture;          // Texture property
-		Property<RectI>         textureSrcRect;   // Texture source rectangle property
-		Property<ImageAssetRef> image;            // Sets image asset
-		Property<String>        imageName;        // Sets image asset path
-		Setter<Bitmap*>         bitmap;           // Sets image from bitmap
-		Property<Color4>        leftTopColor;	  // Color of left top corner property
-		Property<Color4>        rightTopColor;    // Color of right top corner property
-		Property<Color4>        leftBottomColor;  // Color of left bottom corner property
-		Property<Color4>        rightBottomColor; // Color of right bottom corner property
-		Property<SpriteMode>    mode;             // Sprite drawing mode property
-		Property<float>         fill;             // Sprite fill property
-		Property<float>         tileScale;        // Sprite tile scale property, 1.0f is default
-		Property<BorderI>       sliceBorder;      // Slice border property
+		PROPERTIES(Sprite);
+		PROPERTY(TextureRef, texture, SetTexture, GetTexture);                         // Texture property
+		PROPERTY(RectI, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);         // Texture source rectangle property
+		PROPERTY(ImageAssetRef, image, SetImageAsset, GetImageAsset);                  // Sets image asset
+		PROPERTY(String, imageName, LoadFromImage, GetImageName);                      // Sets image asset path
+		PROPERTY(Color4, leftTopColor, SetLeftTopColor, GetLeftTopCorner);	           // Color of left top corner property
+		PROPERTY(Color4, rightTopColor, SetRightTopColor, GetRightTopCorner);          // Color of right top corner property
+		PROPERTY(Color4, leftBottomColor, SetLeftBottomColor, GetLeftBottomCorner);    // Color of left bottom corner property
+		PROPERTY(Color4, rightBottomColor, SetRightBottomColor, GetRightBottomCorner); // Color of right bottom corner property
+		PROPERTY(SpriteMode, mode, SetMode, GetMode);                                  // Sprite drawing mode property
+		PROPERTY(float, fill, SetFill, GetFill);                                       // Sprite fill property
+		PROPERTY(float, tileScale, SetTileScale, GetTileScale);                        // Sprite tile scale property, 1.0f is default
+		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder);                // Slice border property
+		SETTER(Bitmap*, bitmap, LoadFromBitmap);                                       // Sets image from bitmap
 
 		// Default constructor
 		Sprite();
@@ -230,9 +231,6 @@ namespace o2
 
 		// It is called when assets was rebuilded
 		void ReloadImage();
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Render;
 	};

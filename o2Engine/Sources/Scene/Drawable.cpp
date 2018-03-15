@@ -8,15 +8,11 @@
 namespace o2
 {
 	SceneDrawable::SceneDrawable()
-	{
-		InitializeProperties();
-	}
+	{}
 
 	SceneDrawable::SceneDrawable(const SceneDrawable& other):
 		mDrawingDepth(other.mDrawingDepth)
-	{
-		InitializeProperties();
-	}
+	{}
 
 	SceneDrawable::~SceneDrawable()
 	{
@@ -86,11 +82,6 @@ namespace o2
 			mLayer->RegisterDrawable(this);
 
 		mIsOnScene = true;
-	}
-
-	void SceneDrawable::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(SceneDrawable, drawDepth, SetDrawingDepth, GetDrawingDepth);
 	}
 }
 

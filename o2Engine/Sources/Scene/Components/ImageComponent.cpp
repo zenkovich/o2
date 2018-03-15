@@ -8,61 +8,42 @@ namespace o2
 {
 	ImageComponent::ImageComponent():
 		DrawableComponent(), mSprite()
-	{
-		InitializeProperties();
-	}
+	{}
 
-	ImageComponent::ImageComponent(const ImageAssetRef& image):
+	ImageComponent::ImageComponent(const ImageAssetRef& image) :
 		DrawableComponent(), mSprite(image)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	ImageComponent::ImageComponent(const String& imagePath):
+	ImageComponent::ImageComponent(const String& imagePath) :
 		DrawableComponent(), mSprite(imagePath)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	ImageComponent::ImageComponent(UID imageId):
+	ImageComponent::ImageComponent(UID imageId) :
 		DrawableComponent(), mSprite(imageId)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	ImageComponent::ImageComponent(TextureRef texture, const RectI& srcRect):
+	ImageComponent::ImageComponent(TextureRef texture, const RectI& srcRect) :
 		DrawableComponent(), mSprite(texture, srcRect)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	ImageComponent::ImageComponent(const Color4& color):
+	ImageComponent::ImageComponent(const Color4& color) :
 		DrawableComponent(), mSprite(color)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	ImageComponent::ImageComponent(Bitmap* bitmap):
+	ImageComponent::ImageComponent(Bitmap* bitmap) :
 		DrawableComponent(), mSprite(bitmap)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	ImageComponent::ImageComponent(const Sprite& sprite):
+	ImageComponent::ImageComponent(const Sprite& sprite) :
 		DrawableComponent(), mSprite(sprite)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	ImageComponent::ImageComponent(const ImageComponent& other):
+	ImageComponent::ImageComponent(const ImageComponent& other) :
 		DrawableComponent(other), mSprite(other.mSprite)
-	{
-		InitializeProperties();
-	}
+	{}
 
 	ImageComponent::~ImageComponent()
-	{
-	}
+	{}
 
 	ImageComponent& ImageComponent::operator=(const ImageComponent& other)
 	{
@@ -268,24 +249,6 @@ namespace o2
 	void ImageComponent::OnDeserialized(const DataNode& node)
 	{
 		mSprite.OnDeserialized(node);
-	}
-
-	void ImageComponent::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(ImageComponent, texture, SetTexture, GetTexture);
-		INITIALIZE_PROPERTY(ImageComponent, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);
-		INITIALIZE_SETTER(ImageComponent, imageAssetPath, LoadFromImage);
-		INITIALIZE_PROPERTY(ImageComponent, imageAsset, LoadFromImage, GetImageAsset);
-		INITIALIZE_SETTER(ImageComponent, bitmap, LoadFromBitmap);
-		INITIALIZE_PROPERTY(ImageComponent, color, SetColor, GetColor);
-		INITIALIZE_PROPERTY(ImageComponent, leftTopColor, SetLeftTopColor, GetLeftTopCorner);
-		INITIALIZE_PROPERTY(ImageComponent, rightTopColor, SetRightTopColor, GetRightTopCorner);
-		INITIALIZE_PROPERTY(ImageComponent, leftBottomColor, SetLeftBottomColor, GetLeftBottomCorner);
-		INITIALIZE_PROPERTY(ImageComponent, rightBottomColor, SetRightBottomColor, GetRightBottomCorner);
-		INITIALIZE_PROPERTY(ImageComponent, mode, SetMode, GetMode);
-		INITIALIZE_PROPERTY(ImageComponent, fill, SetFill, GetFill);
-		INITIALIZE_PROPERTY(ImageComponent, tileScale, SetTileScale, GetTileScale);
-		INITIALIZE_PROPERTY(ImageComponent, sliceBorder, SetSliceBorder, GetSliceBorder);
 	}
 }
 

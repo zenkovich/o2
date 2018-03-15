@@ -16,7 +16,7 @@ namespace o2
 		typedef Vector<UnknownType*> UnknownsVec;
 
 	public:
-		Property<int>                           selectedItemPos;   // Selected item position property	
+		PROPERTY(int>                           selectedItemPos;   // Selected item position property	
 
 		Function<void(int)>                     onFocused;         // Select item position event
 

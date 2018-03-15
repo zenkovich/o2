@@ -79,7 +79,7 @@ namespace o2
 
 		// Changes specified parameter
 		template<typename T>
-		Animate& Change(Setter<T>* target, const T& value);
+		Animate& Change(SETTER(T>* target, const T& value);
 
 	protected:
 		// -----------------------
@@ -139,7 +139,7 @@ namespace o2
 
 		// Returns animated value for target, or creates it
 		template<typename T>
-		AnimatedValue<T>* GetAnimatedValue(Setter<T>* target)
+		AnimatedValue<T>* GetAnimatedValue(SETTER(T>* target)
 		{
 			auto res = mAnimation.GetAnimationValue(target);
 
@@ -182,7 +182,7 @@ namespace o2
 	}
 
 	template<typename T>
-	Animate& Animate::Change(Setter<T>* target, const T& value)
+	Animate& Animate::Change(SETTER(T>* target, const T& value)
 	{
 		CheckAppliedKeys();
 

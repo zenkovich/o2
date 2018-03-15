@@ -210,7 +210,7 @@ namespace Editor
 		mContent->AddChild(modePropertyPair.second);
 
 		auto atlasPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAssetRef), "Atlas");
-		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasPropertyPair.first;
+		mAtlasProperty = (AssetPROPERTY(AtlasAssetRef>*)atlasPropertyPair.first;
 		mAtlasProperty->onChanged = THIS_FUNC(OnAtlasPropertyChanged);
 		mContent->AddChild(atlasPropertyPair.second);
 

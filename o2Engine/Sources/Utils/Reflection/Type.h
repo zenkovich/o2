@@ -802,7 +802,7 @@ namespace o2
 
 	template<typename _value_type, typename _property_type>
 	TPropertyType<_value_type, _property_type>::TPropertyType():
-		PropertyType((String)"o2::Property<" + GetTypeOf<_value_type>().GetName() + ">", sizeof(_value_type))
+		PropertyType((String)"o2::PROPERTY(" + GetTypeOf<_value_type>().GetName() + ">", sizeof(_value_type))
 	{
 		mValueType = &GetTypeOf<_value_type>();
 	}

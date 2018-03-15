@@ -57,15 +57,16 @@ namespace o2
 		typedef Vector<ScissorStackItem> StackScissorVec;
 
 	public:
-		Getter<Vec2I>        resolution;             // Screen resolution getter
-		Property<Camera>     camera;                 // Current camera property
-		Property<RectI>      scissorRect;            // Scissor rect property
-		Property<TextureRef> renderTexture;          // Render target texture property
-		Getter<bool>         renderTextureAvailable; // Render textures available getter
-		Getter<Vec2I>        maxTextureSize;         // Maximal texture size getter
+		PROPERTIES(Render);
+		PROPERTY(Camera, camera, SetCamera, GetCamera);                          // Current camera property
+		PROPERTY(RectI, scissorRect, EnableScissorTest, GetScissorRect);         // Scissor rect property
+		PROPERTY(TextureRef, renderTexture, SetRenderTexture, GetRenderTexture); // Render target texture property
+		GETTER(Vec2I, resolution, GetResolution);                                // Screen resolution getter
+		GETTER(bool, renderTextureAvailable, IsRenderTextureAvailable);          // Render textures available getter
+		GETTER(Vec2I, maxTextureSize, GetMaxTextureSize);                        // Maximal texture size getter
 
-		Function<void()>     preRender;              // Pre rendering event. Call after beginning drawing. Clearing every fram
-		Function<void()>     postRender;             // Post rendering event. Call before ending drawing. Clearing every frame
+		Function<void()> preRender;  // Pre rendering event. Call after beginning drawing. Clearing every fram
+		Function<void()> postRender; // Post rendering event. Call before ending drawing. Clearing every frame
 
 		// Default constructor
 		Render();
@@ -271,9 +272,6 @@ namespace o2
 
 		// It is called when assets was rebuilded
 		void OnAssetsRebuilded(const Vector<UID>& changedAssets);
-
-		// initializes properties
-		void InitializeProperties();
 
 		friend class Application;
 		friend class BitmapFont;

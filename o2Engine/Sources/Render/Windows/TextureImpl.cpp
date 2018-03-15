@@ -13,7 +13,6 @@ namespace o2
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		o2Render.mTextures.Add(this);
-		InitializeProperties();
 	}
 
 	Texture::Texture(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/):
@@ -21,7 +20,6 @@ namespace o2
 	{
 		Create(size, format, usage);
 		o2Render.mTextures.Add(this);
-		InitializeProperties();
 	}
 
 	Texture::Texture(const String& fileName):
@@ -29,7 +27,6 @@ namespace o2
 	{
 		Create(fileName);
 		o2Render.mTextures.Add(this);
-		InitializeProperties();
 	}
 
 	Texture::Texture(Bitmap* bitmap):
@@ -37,7 +34,6 @@ namespace o2
 	{
 		Create(bitmap);
 		o2Render.mTextures.Add(this);
-		InitializeProperties();
 	}
 
 	Texture::Texture(UID atlasAssetId, int page):
@@ -45,7 +41,6 @@ namespace o2
 	{
 		Create(atlasAssetId, page);
 		o2Render.mTextures.Add(this);
-		InitializeProperties();
 	}
 
 	Texture::Texture(const String& atlasAssetName, int page):
@@ -53,7 +48,6 @@ namespace o2
 	{
 		Create(atlasAssetName, page);
 		o2Render.mTextures.Add(this);
-		InitializeProperties();
 	}
 
 	Texture::~Texture()
@@ -270,13 +264,5 @@ namespace o2
 	int Texture::GetAtlasPage() const
 	{
 		return mAtlasPage;
-	}
-
-	void Texture::InitializeProperties()
-	{
-		INITIALIZE_GETTER(Texture, size, GetSize);
-		INITIALIZE_GETTER(Texture, format, GetFormat);
-		INITIALIZE_GETTER(Texture, usage, GetUsage);
-		INITIALIZE_GETTER(Texture, fileName, GetFileName);
 	}
 }

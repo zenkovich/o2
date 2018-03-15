@@ -14,12 +14,12 @@ namespace o2
 		enum class Orientation { Down, Up };
 
 	public:
-		Property<float>       value;       // Current value property
+		PROPERTY(float>       value;       // Current value property
 
-		Property<float>       minValue;    // Minimal value property
-		Property<float>       maxValue;    // Maximal value property
+		PROPERTY(float>       minValue;    // Minimal value property
+		PROPERTY(float>       maxValue;    // Maximal value property
 
-		Property<float>       scrollSense; // Scroll sense coefficient
+		PROPERTY(float>       scrollSense; // Scroll sense coefficient
 
 		Function<void(float)> onChange;    // On Value changing event
 

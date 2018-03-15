@@ -23,12 +23,12 @@ namespace o2
 
 	public:
 		String          name;               // Name of layer @SERIALIZABLE
-		Property<float> depth;              // Drawing depth (higher depths will draw later)
+		PROPERTY(float> depth;              // Drawing depth (higher depths will draw later)
 					    
 		Layout          layout;             // Drawable layout @SERIALIZABLE
 		Layout          interactableLayout; // Interactable area layout @SERIALIZABLE
 					    
-		Property<float> transparency;       // Drawable transparency property
+		PROPERTY(float> transparency;       // Drawable transparency property
 		IRectDrawable*  drawable;           // Drawable @SERIALIZABLE
 
 		Accessor<UIWidgetLayer*, const String&> child; // Child layer accessor

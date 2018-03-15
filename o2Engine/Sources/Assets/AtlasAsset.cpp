@@ -55,7 +55,6 @@ namespace o2
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		InitializeProperties();
 	}
 
 	AtlasAsset::AtlasAsset(const String& path):
@@ -64,7 +63,6 @@ namespace o2
 		mPath = path;
 		mMeta = mnew MetaInfo();
 		IdRef() = o2Assets.GetAssetId(path);
-		InitializeProperties();
 
 		Load();
 	}
@@ -75,7 +73,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
 		mPath = o2Assets.GetAssetPath(id);
-		InitializeProperties();
 
 		Load();
 	}
@@ -91,8 +88,6 @@ namespace o2
 		mPages = asset.mPages;
 		for (auto& page : mPages)
 			page.mOwner = this;
-
-		InitializeProperties();
 	}
 
 	AtlasAsset::~AtlasAsset()
@@ -208,14 +203,6 @@ namespace o2
 	{
 		DataNode data;
 		data.SaveToFile(path);
-	}
-
-	void AtlasAsset::InitializeProperties()
-	{
-		INITIALIZE_GETTER(AtlasAsset, meta, GetMeta);
-		INITIALIZE_GETTER(AtlasAsset, imagesInfos, GetImages);
-		INITIALIZE_GETTER(AtlasAsset, images, GetImagesAssets);
-		INITIALIZE_GETTER(AtlasAsset, pages, GetPages);
 	}
 
 	bool AtlasAsset::PlatformMeta::operator==(const PlatformMeta& other) const

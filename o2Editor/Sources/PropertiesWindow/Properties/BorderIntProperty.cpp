@@ -192,20 +192,20 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, const BorderI& value) { *((Property<BorderI>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<BorderI>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, const BorderI& value) { *((PROPERTY(BorderI>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(BorderI>*)(ptr))->Get(); };
 
-			mLeftAssignFunc = [](void* ptr, int value) { auto p = ((Property<BorderI>*)(ptr)); BorderI v = p->Get(); v.left = value; p->Set(v); };
-			mLeftGetFunc = [](void* ptr) { return ((Property<BorderI>*)(ptr))->Get().left; };
+			mLeftAssignFunc = [](void* ptr, int value) { auto p = ((PROPERTY(BorderI>*)(ptr)); BorderI v = p->Get(); v.left = value; p->Set(v); };
+			mLeftGetFunc = [](void* ptr) { return ((PROPERTY(BorderI>*)(ptr))->Get().left; };
 
-			mRightAssignFunc = [](void* ptr, int value) { auto p = ((Property<BorderI>*)(ptr)); BorderI v = p->Get(); v.right = value; p->Set(v); };
-			mRightGetFunc = [](void* ptr) { return ((Property<BorderI>*)(ptr))->Get().right; };
+			mRightAssignFunc = [](void* ptr, int value) { auto p = ((PROPERTY(BorderI>*)(ptr)); BorderI v = p->Get(); v.right = value; p->Set(v); };
+			mRightGetFunc = [](void* ptr) { return ((PROPERTY(BorderI>*)(ptr))->Get().right; };
 
-			mTopAssignFunc = [](void* ptr, int value) { auto p = ((Property<BorderI>*)(ptr)); BorderI v = p->Get(); v.top = value; p->Set(v); };
-			mTopGetFunc = [](void* ptr) { return ((Property<BorderI>*)(ptr))->Get().top; };
+			mTopAssignFunc = [](void* ptr, int value) { auto p = ((PROPERTY(BorderI>*)(ptr)); BorderI v = p->Get(); v.top = value; p->Set(v); };
+			mTopGetFunc = [](void* ptr) { return ((PROPERTY(BorderI>*)(ptr))->Get().top; };
 
-			mBottomAssignFunc = [](void* ptr, int value) { auto p = ((Property<BorderI>*)(ptr)); BorderI v = p->Get(); v.bottom = value; p->Set(v); };
-			mBottomGetFunc = [](void* ptr) { return ((Property<BorderI>*)(ptr))->Get().bottom; };
+			mBottomAssignFunc = [](void* ptr, int value) { auto p = ((PROPERTY(BorderI>*)(ptr)); BorderI v = p->Get(); v.bottom = value; p->Set(v); };
+			mBottomGetFunc = [](void* ptr) { return ((PROPERTY(BorderI>*)(ptr))->Get().bottom; };
 		}
 		else
 		{

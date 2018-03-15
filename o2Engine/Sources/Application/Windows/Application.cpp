@@ -36,7 +36,6 @@ namespace o2
 	{
 		DataNode::RegBasicConverters();
 
-		InitializeProperties();
 		InitalizeSystems();
 
 		mWindowed = true;
@@ -582,16 +581,6 @@ namespace o2
 		TCHAR szFileName[MAX_PATH];
 		GetModuleFileName(NULL, szFileName, MAX_PATH);
 		return o2FileSystem.GetParentPath((String)szFileName);
-	}
-
-	void Application::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(Application, fullscreen, SetFullscreen, IsFullScreen);
-		INITIALIZE_PROPERTY(Application, resizible, SetResizible, IsResizible);
-		INITIALIZE_PROPERTY(Application, windowSize, SetWindowSize, GetWindowSize);
-		INITIALIZE_PROPERTY(Application, windowContentSize, SetContentSize, GetContentSize);
-		INITIALIZE_PROPERTY(Application, windowPosition, SetWindowPosition, GetWindowPosition);
-		INITIALIZE_PROPERTY(Application, windowCaption, SetWindowCaption, GetWindowCaption);
 	}
 
 	o2StackWalker* o2StackWalker::mInstance = new o2StackWalker();

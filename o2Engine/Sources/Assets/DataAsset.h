@@ -14,8 +14,10 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		DataNode          data; // Asset data
-		Getter<MetaInfo*> meta; // Meta information getter
+		PROPERTIES(DataAsset);
+		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
+
+		DataNode data; // Asset data
 
 		// Destructor
 		~DataAsset();
@@ -70,9 +72,6 @@ namespace o2
 
 		// Saves data
 		void SaveData(const String& path);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Assets;
 	};

@@ -40,8 +40,8 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, int value) { *((Property<int>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<int>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, int value) { *((PROPERTY(int>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(int>*)(ptr))->Get(); };
 		}
 		else
 		{

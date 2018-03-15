@@ -15,11 +15,12 @@ namespace o2
 		typedef Vector<Key> KeysVec;
 
 	public:
-		GETTER(AnimatedValue<float>, float, value, GetValue);                               // Current value getter  g
-		SETTER(AnimatedValue<float>, float*, target, SetTarget);                            // Bind target setter
-		SETTER(AnimatedValue<float>, Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
-		SETTER(AnimatedValue<float>, IValueProxy<float>*, targetProxy, SetTargetProxy);     // Bind proxy setter
-		PROPERTY(AnimatedValue<float>, KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
+		PROPERTIES(AnimatedValue<float>);
+		GETTER(float, value, GetValue);                               // Current value getter 
+		SETTER(float*, target, SetTarget);                            // Bind target setter
+		SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
+		SETTER(IValueProxy<float>*, targetProxy, SetTargetProxy);     // Bind proxy setter
+		PROPERTY(KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
 
 	public:
 		Curve curve; // Animation curve @SERIALIZABLE

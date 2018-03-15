@@ -31,19 +31,20 @@ namespace o2
 	class Application: public Singleton<Application>, public ApplicationBase
 	{
 	public:
+		PROPERTIES(Application);
+		PROPERTY(bool, fullscreen, SetFullscreen, IsFullScreen);               // Full screen/window changing property
+		PROPERTY(bool, resizible, SetResizible, IsResizible);                  // Resizible window property
+		PROPERTY(Vec2I, windowSize, SetWindowSize, GetWindowSize);             // Window frame size property
+		PROPERTY(Vec2I, windowContentSize, SetContentSize, GetContentSize);    // Window content frame size property
+		PROPERTY(Vec2I, windowPosition, SetWindowPosition, GetWindowPosition); // Window position on screen property
+		PROPERTY(String, windowCaption, SetWindowCaption, GetWindowCaption);   // Window caption property
+
 		Function<void()> onActivated;   // On Activated event callbacks
 		Function<void()> onDeactivated; // On deactivated event callbacks
 		Function<void()> onStarted;     // On started event callbacks
 		Function<void()> onClosing;     // On closing event callbacks
 		Function<void()> onResizing;    // On resized app window callbacks. Ignoring on mobiles/tables
 		Function<void()> onMoving;      // On moving app window callbacks. Ignoring on mobiles/tables
-
-		Property<bool>   fullscreen;         // Full screen/window changing property
-		Property<bool>   resizible;          // Resizible window property
-		Property<Vec2I>  windowSize;         // Window frame size property
-		Property<Vec2I>  windowContentSize;  // Window content frame size property
-		Property<Vec2I>  windowPosition;     // Window position on screen property
-		Property<String> windowCaption;      // Window caption property
 
 		// Default constructor
 		Application();
@@ -190,9 +191,6 @@ namespace o2
 
 		// Checks that cursor is near border and moves to opposite border if needs
 		void CheckCursorInfiniteMode();
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class WndProcFunc;
 	};

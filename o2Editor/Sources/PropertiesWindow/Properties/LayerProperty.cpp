@@ -44,8 +44,8 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, SceneLayer* value) { *((Property<SceneLayer*>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<SceneLayer*>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, SceneLayer* value) { *((PROPERTY(SceneLayer*>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(SceneLayer*>*)(ptr))->Get(); };
 		}
 		else
 		{

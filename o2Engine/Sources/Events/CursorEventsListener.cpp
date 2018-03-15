@@ -8,14 +8,10 @@
 namespace o2
 {
 	CursorAreaEventsListener::CursorAreaEventsListener()
-	{
-		INITIALIZE_PROPERTY(CursorAreaEventsListener, interactable, SetInteractable, IsInteractable);
-	}
+	{}
 
 	CursorAreaEventsListener::CursorAreaEventsListener(const CursorAreaEventsListener& other)
-	{
-		INITIALIZE_PROPERTY(CursorAreaEventsListener, interactable, SetInteractable, IsInteractable);
-	}
+	{}
 
 	CursorAreaEventsListener::~CursorAreaEventsListener()
 	{

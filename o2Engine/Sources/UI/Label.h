@@ -15,21 +15,21 @@ namespace o2
 		enum class VerOverflow { Cut, None, Expand };
 
 	public:
-		Property<WString>     text;                // Text property, wstring
+		PROPERTY(WString>     text;                // Text property, wstring
 
-		Property<FontRef>     font;                // Font pointer property
-		Property<int>         height;              // Text height property
+		PROPERTY(FontRef>     font;                // Font pointer property
+		PROPERTY(int>         height;              // Text height property
 
-		Property<VerAlign>    verAlign;            // vertical align property
-		Property<HorAlign>    horAlign;            // Horizontal align property
+		PROPERTY(VerAlign>    verAlign;            // vertical align property
+		PROPERTY(HorAlign>    horAlign;            // Horizontal align property
 
-		Property<HorOverflow> horOverflow;		   // Horizontal text overflow logic property
-		Property<VerOverflow> verOverflow;		   // Vertical text overflow logic property
+		PROPERTY(HorOverflow> horOverflow;		   // Horizontal text overflow logic property
+		PROPERTY(VerOverflow> verOverflow;		   // Vertical text overflow logic property
 
-		Property<Vec2F>       expandBorder;        // Overflow expanding border size property
+		PROPERTY(Vec2F>       expandBorder;        // Overflow expanding border size property
 
-		Property<float>       symbolsDistanceCoef; // Characters distance coef, 1 is standard
-		Property<float>       linesDistanceCoef;   // Lines distance coef, 1 is standard
+		PROPERTY(float>       symbolsDistanceCoef; // Characters distance coef, 1 is standard
+		PROPERTY(float>       linesDistanceCoef;   // Lines distance coef, 1 is standard
 
 		// Default constructor
 		UILabel();

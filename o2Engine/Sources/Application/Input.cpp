@@ -15,8 +15,6 @@ namespace o2
 			mCursors.Add(Cursor());
 			mCursors.Last().isPressed = false;
 		}
-
-		InitializeProperties();
 	}
 
 	bool Input::IsKeyPressed(KeyboardKey key) const
@@ -377,21 +375,6 @@ namespace o2
 	Vec2F Input::GetMainCursorDelta()
 	{
 		return GetCursorDelta();
-	}
-
-	void Input::InitializeProperties()
-	{
-		INITIALIZE_GETTER(Input, cursorPressed, IsMainCursorPressed);
-		INITIALIZE_GETTER(Input, cursorDown, IsMainCursorDown);
-		INITIALIZE_GETTER(Input, cursorReleased, IsMainCursorReleased);
-		INITIALIZE_GETTER(Input, altCursorPressed, IsRightMousePressed);
-		INITIALIZE_GETTER(Input, altCursorDown, IsRightMouseDown);
-		INITIALIZE_GETTER(Input, altCursorReleased, IsRightMouseReleased);
-		INITIALIZE_GETTER(Input, alt2CursorPressed, IsMiddleMousePressed);
-		INITIALIZE_GETTER(Input, alt2CursorDown, IsMiddleMouseDown);
-		INITIALIZE_GETTER(Input, alt2CursorReleased, IsMiddleMouseReleased);
-		INITIALIZE_GETTER(Input, cursorPos, GetMainCursorPos);
-		INITIALIZE_GETTER(Input, cursorDelta, GetMainCursorDelta);
 	}
 
 	void Input::AltCursorPressed(const Vec2F& pos)

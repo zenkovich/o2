@@ -49,8 +49,8 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, const Curve& value) { *((Property<Curve>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<Curve>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, const Curve& value) { *((PROPERTY(Curve>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(Curve>*)(ptr))->Get(); };
 		}
 		else
 		{

@@ -192,20 +192,20 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, const BorderF& value) { *((Property<BorderF>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<BorderF>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, const BorderF& value) { *((PROPERTY(BorderF>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get(); };
 
-			mLeftAssignFunc = [](void* ptr, float value) { auto p = ((Property<BorderF>*)(ptr)); BorderF v = p->Get(); v.left = value; p->Set(v); };
-			mLeftGetFunc = [](void* ptr) { return ((Property<BorderF>*)(ptr))->Get().left; };
+			mLeftAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(BorderF>*)(ptr)); BorderF v = p->Get(); v.left = value; p->Set(v); };
+			mLeftGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get().left; };
 
-			mRightAssignFunc = [](void* ptr, float value) { auto p = ((Property<BorderF>*)(ptr)); BorderF v = p->Get(); v.right = value; p->Set(v); };
-			mRightGetFunc = [](void* ptr) { return ((Property<BorderF>*)(ptr))->Get().right; };
+			mRightAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(BorderF>*)(ptr)); BorderF v = p->Get(); v.right = value; p->Set(v); };
+			mRightGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get().right; };
 
-			mTopAssignFunc = [](void* ptr, float value) { auto p = ((Property<BorderF>*)(ptr)); BorderF v = p->Get(); v.top = value; p->Set(v); };
-			mTopGetFunc = [](void* ptr) { return ((Property<BorderF>*)(ptr))->Get().top; };
+			mTopAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(BorderF>*)(ptr)); BorderF v = p->Get(); v.top = value; p->Set(v); };
+			mTopGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get().top; };
 
-			mBottomAssignFunc = [](void* ptr, float value) { auto p = ((Property<BorderF>*)(ptr)); BorderF v = p->Get(); v.bottom = value; p->Set(v); };
-			mBottomGetFunc = [](void* ptr) { return ((Property<BorderF>*)(ptr))->Get().bottom; };
+			mBottomAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(BorderF>*)(ptr)); BorderF v = p->Get(); v.bottom = value; p->Set(v); };
+			mBottomGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get().bottom; };
 		}
 		else
 		{

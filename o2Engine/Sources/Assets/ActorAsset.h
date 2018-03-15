@@ -15,7 +15,8 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Getter<MetaInfo*> meta;  // Meta information getter
+		PROPERTIES(ActorAsset);
+		GETTER(MetaInfo*, meta, GetMeta);  // Meta information getter
 
 		// Destructor
 		~ActorAsset();
@@ -74,9 +75,6 @@ namespace o2
 
 		// Saves data
 		void SaveData(const String& path);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Assets;
 	};

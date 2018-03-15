@@ -10,7 +10,6 @@ namespace o2
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		InitializeProperties();
 
 		mActor = mnew Actor(ActorCreateMode::NotInScene);
 		mActor->mIsAsset = true;
@@ -23,7 +22,6 @@ namespace o2
 		mPath = path;
 		mMeta = mnew MetaInfo();
 		IdRef() = o2Assets.GetAssetId(path);
-		InitializeProperties();
 
 		mActor = mnew Actor(ActorCreateMode::NotInScene);
 		mActor->mIsAsset = true;
@@ -38,7 +36,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
 		mPath = o2Assets.GetAssetPath(id);
-		InitializeProperties();
 
 		mActor = mnew Actor(ActorCreateMode::NotInScene);
 		mActor->mIsAsset = true;
@@ -58,8 +55,6 @@ namespace o2
 		mActor->mIsAsset = true;
 		mActor->mAssetId = IdRef();
 		*mActor = *asset.mActor;
-
-		InitializeProperties();
 	}
 
 	ActorAsset::~ActorAsset()
@@ -120,11 +115,6 @@ namespace o2
 		DataNode data;
 		data = mActor->Serialize();
 		data.SaveToFile(path);
-	}
-
-	void ActorAsset::InitializeProperties()
-	{
-		INITIALIZE_GETTER(ActorAsset, meta, GetMeta);
 	}
 
 	const Type* ActorAsset::MetaInfo::GetAssetType() const

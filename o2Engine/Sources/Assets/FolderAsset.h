@@ -13,8 +13,9 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Getter<MetaInfo*>     meta;         // Meta information getter
-		Getter<AssetInfosVec> insideAssets; // Inside assets infos getter
+		PROPERTIES(FolderAsset);
+		GETTER(MetaInfo*, meta, GetMeta);                              // Meta information getter
+		GETTER(AssetInfosVec, insideAssets, GetContainingAssetsInfos); // Inside assets infos getter
 
 		// Destructor
 		~FolderAsset();
@@ -70,9 +71,6 @@ namespace o2
 
 		// Saves asset data
 		void SaveData(const String& path);
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Assets;
 	};

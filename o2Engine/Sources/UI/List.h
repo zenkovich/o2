@@ -10,8 +10,8 @@ namespace o2
 	class UIList: public UICustomList
 	{
 	public:
-		Property<WString>              value;    // Current selected item text
-		Property<Vector<WString>>      values;   // Current selected items texts
+		PROPERTY(WString>              value;    // Current selected item text
+		PROPERTY(Vector<WString>>      values;   // Current selected items texts
 		Accessor<WString, int>         textItem; // Text item accessor by position
 
 		Function<void(const WString&)> onSelectedText; // Change text selected event

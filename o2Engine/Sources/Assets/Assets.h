@@ -26,7 +26,9 @@ namespace o2
 		typedef Dictionary<String, const Type*> TypesExtsDict;
 
 	public:
-		Getter<String>                     assetsPath;        // Assets path getter
+		PROPERTIES(Assets);
+		GETTER(String, assetsPath, GetAssetsPath); // Assets path getter
+
 		Function<void(const Vector<UID>&)> onAssetsRebuilded; // Assets rebuilding event
 
 		// Default constructor
@@ -171,9 +173,6 @@ namespace o2
 
 		// Initializes types extensions dictionary
 		void LoadAssetTypes();
-
-		// Initializes properties
-		void InitializeProperties();
 
 		// Returns asset cache by path
 		AssetCache* FindAssetCache(const String& path);

@@ -16,16 +16,17 @@ namespace o2
 		class MetaInfo;
 
 	public:
-		Property<Bitmap*>       bitmap;      // Bitmap data property
-		Property<UID>           atlasId;     // Atlas owner id property
-		Property<AtlasAssetRef> atlas;       // Atlas owner asset property
-		Property<BorderI>       sliceBorder; // Slice border
-		Getter<UInt>            atlasPage;   // Atlas page index getter
-		Getter<RectI>           atlasRect;   // Atlas source image rectangle getter
-		Getter<Vec2F>           size;        // Image size getter
-		Getter<float>           width;       // Image width getter
-		Getter<float>           height;      // Image height getter
-		Getter<MetaInfo*>       meta;        // Meta information getter
+		PROPERTIES(ImageAsset);
+		PROPERTY(Bitmap*, bitmap, SetBitmap, GetBitmap);                // Bitmap data property
+		PROPERTY(UID, atlasId, SetAtlasId, GetAtlasId);                 // Atlas owner id property
+		PROPERTY(AtlasAssetRef, atlas, SetAtlas, GetAtlas);             // Atlas owner asset property
+		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder); // Slice border
+		GETTER(UInt, atlasPage, GetAtlasPage);                          // Atlas page index getter
+		GETTER(RectI, atlasRect, GetAtlasRect);                         // Atlas source image rectangle getter
+		GETTER(Vec2F, size, GetSize);                                   // Image size getter
+		GETTER(float, width, GetWidth);                                 // Image width getter
+		GETTER(float, height, GetHeight);                               // Image height getter
+		GETTER(MetaInfo*, meta, GetMeta);                               // Meta information getter
 
 		// Destructor
 		~ImageAsset();
@@ -154,9 +155,6 @@ namespace o2
 
 		// Load bitmap
 		void LoadBitmap();
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class AtlasAsset;
 		friend class Assets;

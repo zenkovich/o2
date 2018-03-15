@@ -58,8 +58,8 @@ namespace Editor
 	{
 		if (isProperty)
 		{
-			mAssignFunc = [](void* ptr, Component* value) { *((Property<Component*>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((Property<Component*>*)(ptr))->Get(); };
+			mAssignFunc = [](void* ptr, Component* value) { *((PROPERTY(Component*>*)(ptr)) = value; };
+			mGetFunc = [](void* ptr) { return ((PROPERTY(Component*>*)(ptr))->Get(); };
 		}
 		else
 		{

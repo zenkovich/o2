@@ -13,12 +13,12 @@ namespace o2
 	class UICustomList: public UIScrollArea, public DrawableCursorEventsListener
 	{
 	public:
-		Property<Vector<int>>     selectedItems;   // Selected item widget property
-		Property<UIWidget*>       selectedItem;    // Selected item widget
-		Property<int>             selectedItemPos; // Selected item position property
+		PROPERTY(Vector<int>>     selectedItems;   // Selected item widget property
+		PROPERTY(UIWidget*>       selectedItem;    // Selected item widget
+		PROPERTY(int>             selectedItemPos; // Selected item position property
 
 		Accessor<UIWidget*, int>  item;            // Items by position accessor
-		Getter<int>               itemsCount;      // All items count getter
+		GETTER(int>               itemsCount;      // All items count getter
 								  
 		Function<void(int)>       onSelectedPos;   // Select item position event
 		Function<void(UIWidget*)> onSelectedItem;  // Select item event

@@ -48,7 +48,6 @@ namespace o2
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		InitializeProperties();
 	}
 
 	VectorFontAsset::VectorFontAsset(const String& path):
@@ -58,8 +57,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = o2Assets.GetAssetId(path);
 
-		InitializeProperties();
-
 		Load();
 	}
 
@@ -68,7 +65,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		IdRef() = id;
 		mPath = o2Assets.GetAssetPath(id);
-		InitializeProperties();
 
 		Load();
 	}
@@ -79,7 +75,6 @@ namespace o2
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
 		IdRef() = asset.GetAssetId();
-		InitializeProperties();
 	}
 
 	VectorFontAsset::~VectorFontAsset()
@@ -160,12 +155,6 @@ namespace o2
 					vectorFont->AddEffect(eff->CloneAs<VectorFont::Effect>());
 			}
 		}
-	}
-
-	void VectorFontAsset::InitializeProperties()
-	{
-		INITIALIZE_GETTER(VectorFontAsset, meta, GetMeta);
-		INITIALIZE_GETTER(VectorFontAsset, font, GetFont);
 	}
 
 	VectorFontAssetRef VectorFontAssetRef::CreateAsset()

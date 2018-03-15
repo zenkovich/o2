@@ -13,9 +13,10 @@ namespace o2
 	class Component: virtual public ISerializable
 	{
 	public:
-		Getter<Actor*> actor;              // Owner actor getter
-		Property<bool> enabled;            // Enabling property
-		Getter<bool>   enabledInHierarchy; // Is enabled in hierarchy property
+		PROPERTIES(Component);
+		GETTER(Actor*, actor, GetOwnerActor);                   // Owner actor getter
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Enabling property
+		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is enabled in hierarchy property
 
 		// Default constructor
 		Component();
@@ -105,9 +106,6 @@ namespace o2
 
 		// It is called when actor was included to scene
 		virtual void OnIncludeToScene() {}
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Actor;
 	};

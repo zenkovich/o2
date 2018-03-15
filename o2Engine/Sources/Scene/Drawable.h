@@ -15,7 +15,8 @@ namespace o2
 	class SceneDrawable: virtual public ISerializable, public IDrawable
 	{
 	public:
-		Property<float> drawDepth; // Drawing depth property. Objects with higher depth will be drawn later
+		PROPERTIES(SceneDrawable);
+		PROPERTY(float, drawDepth, SetDrawingDepth, GetDrawingDepth); // Drawing depth property. Objects with higher depth will be drawn later
 
 	public:
 		// Default constructor. Registers in scene as drawable
@@ -58,9 +59,6 @@ namespace o2
 
 		// It is called when actor was included to scene
 		void OnIncludeToScene();
-
-		// Initializes property
-		void InitializeProperties();
 
 		friend class Scene;
 		friend class SceneLayer;

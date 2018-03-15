@@ -11,7 +11,6 @@ namespace o2
 	ProjectConfig::ProjectConfig():
 		mPlatform(GetEnginePlatform())
 	{
-		InitializeProperties();
 		SetProjectPath(::GetProjectPath());
 	}
 
@@ -64,13 +63,6 @@ namespace o2
 		mProjectName = "Unnamed";
 		DataNode data = Serialize();
 		data.SaveToFile(configFilePath);
-	}
-
-	void ProjectConfig::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(ProjectConfig, projectName, SetProjectName, GetProjectName);
-		INITIALIZE_PROPERTY(ProjectConfig, currentPlatform, SetPlatform, GetPlatform);
-		INITIALIZE_GETTER(ProjectConfig, projectPath, GetProjectPath);
 	}
 }
 
