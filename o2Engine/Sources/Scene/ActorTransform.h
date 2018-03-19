@@ -76,8 +76,8 @@ namespace o2
 		PROPERTY(float, worldTop, SetWorldTop, GetWorldTop);          // World Top border position property
 		PROPERTY(float, worldBottom, SetWorldBottom, GetWorldBottom); // World Bottom border position property
 
-		PROPERTY(RectF, worldRect, SetWorldRect, GetWorldRect);                      // World rectangle property. Sets the position and size
-		PROPERTY(RectF, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect; // World direction aligned rectangle
+		PROPERTY(RectF, worldRect, SetWorldRect, GetWorldRect);                       // World rectangle property. Sets the position and size
+		PROPERTY(RectF, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect); // World direction aligned rectangle
 
 		ActorTransform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
 					   const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F(0.5f, 0.5f));
@@ -549,6 +549,7 @@ END_META;
 CLASS_METHODS_META(o2::ActorTransform)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, ActorTransform);
 	PUBLIC_FUNCTION(Actor*, GetOwnerActor);
 	PUBLIC_FUNCTION(void, SetDirty, bool);
 	PUBLIC_FUNCTION(bool, IsDirty);
@@ -662,7 +663,6 @@ CLASS_METHODS_META(o2::ActorTransform)
 	PROTECTED_FUNCTION(void, CheckParentInvTransform);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 	PROTECTED_FUNCTION(Vec2F, GetParentPosition);
 	PROTECTED_FUNCTION(RectF, GetParentRectangle);
 }
@@ -698,5 +698,6 @@ CLASS_FIELDS_META(o2::ActorTransform::Data)
 }
 END_META;
 CLASS_METHODS_META(o2::ActorTransform::Data)
-{}
+{
+}
 END_META;

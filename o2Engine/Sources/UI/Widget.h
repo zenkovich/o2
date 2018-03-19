@@ -23,25 +23,24 @@ namespace o2
 		typedef Vector<UIWidgetState*> StatesVec;
 
 	public:
+		PROPERTIES(UIWidget);
+		PROPERTY(bool, visible, SetVisible, IsVisible); // Is widget visible property
+
+		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
+		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency
+
+		PROPERTY(UIWidget*, parentWidget, SetParentWidget, GetParentWidget); // Parent widget property
+
+		GETTER(WidgetsVec, childrenWidgets, GetChildrenNonConst); // Widget children getter
+
+		GETTER(LayersVec, layers, GetLayers); // Layers getter
+		GETTER(StatesVec, states, GetStates); // States getter
+
+		ACCESSOR(UIWidget*, childWidget, const String&, GetChildWidget, GetAllChilds); // Widget child accessor by path like "child/subchild/somechild"
+		ACCESSOR(UIWidgetLayer*, layer, const String&, GetLayer, GetAllLayers);        // Widget layer accessor by path like "layer/sublayer/target"
+		ACCESSOR(UIWidgetState*, state, const String&, GetState, GetAllStates);        // Widget state accessor by name
+
 		UIWidgetLayout* const layout;          // Widget's layout
-							  
-		PROPERTY(bool>        visible;         // Is widget visible property
-							  
-		PROPERTY(float>       transparency;    // Transparency property
-		GETTER(float>         resTransparency; // Result transparency getter, depends on parent transparency
-							  
-		PROPERTY(UIWidget*>   parentWidget;    // Parent widget property
-							  
-		GETTER(WidgetsVec>    childrenWidgets; // Widget children getter
-							  
-		GETTER(LayersVec>     layers;          // Layers getter
-							  
-		GETTER(StatesVec>     states;          // States getter
-
-		Accessor<UIWidget*, const String&>      childWidget; // Widget child accessor by path like "child/subchild/somechild"
-		Accessor<UIWidgetLayer*, const String&> layer;       // Widget layer accessor by path like "layer/sublayer/target"
-		Accessor<UIWidgetState*, const String&> state;       // Widget state accessor by name
-
 
 		Function<void()> onLayoutUpdated; // Layout change event
 		Function<void()> onFocused;       // Widget focused event
@@ -226,17 +225,17 @@ namespace o2
 	protected:
 		using Actor::mLayer;
 		using Actor::mIsOnScene;
-					   						    
+
 		LayersVec      mLayers;                 // Layers array @SERIALIZABLE
 		StatesVec      mStates;                 // States array @SERIALIZABLE
-					   						    
+
 		UIWidget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null  @EXCLUDE_POINTER_SEARCH
 		WidgetsVec     mChildWidgets;           // Children widgets, a part of all children
 		WidgetsVec     mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE
 		WidgetsVec     mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
 
 		RectF          mChildrenWorldRect;      // World rectangle for children arranging
-					   						    
+
 		bool           mOverrideDepth = false;  // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
 
 		float          mTransparency = 1.0f;	// Widget transparency @SERIALIZABLE
@@ -244,11 +243,11 @@ namespace o2
 
 		LayersVec      mDrawingLayers;          // Layers ordered by depth, which drawing before children (depth < 1000)
 		LayersVec      mTopDrawingLayers;       // Layers ordered by depth, which drawing after children (depth > 1000)
-					   						    
+
 		UIWidgetState* mFocusedState = nullptr; // Focused widget state
 		bool           mIsFocused = false;      // Is widget focused
 		bool           mIsFocusable = false;    // Is widget can be focused @SERIALIZABLE
-					   						    
+
 		UIWidgetState* mVisibleState = nullptr; // Widget visibility state
 		bool           mVisible = true;         // Visibility of widget. Uses state 'visible' @SERIALIZABLE
 		bool           mResVisible = true;      // Result visibility of widget. Depends on this visibility and parent result visibility
@@ -371,14 +370,14 @@ namespace o2
 		// Returns dictionary of all children by names
 		Dictionary<String, UIWidget*> GetAllChilds();
 
+		// Returns dictionary of all states by names
+		Dictionary<String, UIWidgetState*> GetAllStates();
+
 		// Beginning serialization callback
 		void OnSerialize(DataNode& node) const override;
 
 		// It is called when deserialized
 		void OnDeserialized(const DataNode& node) override;
-
-		// Initializes properties
-		void InitializeProperties();
 
 		friend class Scene;
 		friend class UIContextMenu;
@@ -445,7 +444,6 @@ CLASS_BASES_META(o2::UIWidget)
 END_META;
 CLASS_FIELDS_META(o2::UIWidget)
 {
-	PUBLIC_FIELD(layout);
 	PUBLIC_FIELD(visible);
 	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(resTransparency);
@@ -456,6 +454,7 @@ CLASS_FIELDS_META(o2::UIWidget)
 	PUBLIC_FIELD(childWidget);
 	PUBLIC_FIELD(layer);
 	PUBLIC_FIELD(state);
+	PUBLIC_FIELD(layout);
 	PUBLIC_FIELD(onLayoutUpdated);
 	PUBLIC_FIELD(onFocused);
 	PUBLIC_FIELD(onUnfocused);
@@ -489,7 +488,9 @@ CLASS_METHODS_META(o2::UIWidget)
 
 	typedef Dictionary<String, UIWidgetLayer*> _tmp1;
 	typedef Dictionary<String, UIWidget*> _tmp2;
+	typedef Dictionary<String, UIWidgetState*> _tmp3;
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIWidget);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
@@ -575,8 +576,8 @@ CLASS_METHODS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(StatesVec, GetStatesNonConst);
 	PROTECTED_FUNCTION(_tmp1, GetAllLayers);
 	PROTECTED_FUNCTION(_tmp2, GetAllChilds);
+	PROTECTED_FUNCTION(_tmp3, GetAllStates);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

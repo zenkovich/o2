@@ -13,9 +13,10 @@ namespace o2
 	class UIImage: public UIWidget
 	{
 	public:
-		PROPERTY(Sprite*>       image;      // Image sprite
-		PROPERTY(ImageAssetRef> imageAsset; // Image asset
-		PROPERTY(String>        imageName;  // Image asset name
+		PROPERTIES(UIImage);
+		PROPERTY(Sprite*, image, SetImage, GetImage);                      // Image sprite
+		PROPERTY(ImageAssetRef, imageAsset, SetImageAsset, GetImageAsset); // Image asset
+		PROPERTY(String, imageName, SetImageName, GetImageName);           // Image asset name
 
 		// Default constructor
 		UIImage();
@@ -53,9 +54,6 @@ namespace o2
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
-		// Initializes properties
-		void InitializeProperties();
-
 		friend class UIButtonGroup;
 	};
 }
@@ -76,6 +74,7 @@ END_META;
 CLASS_METHODS_META(o2::UIImage)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIImage);
 	PUBLIC_FUNCTION(void, SetImage, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetImage);
 	PUBLIC_FUNCTION(void, SetImageAsset, const ImageAssetRef&);
@@ -83,6 +82,5 @@ CLASS_METHODS_META(o2::UIImage)
 	PUBLIC_FUNCTION(void, SetImageName, const String&);
 	PUBLIC_FUNCTION(String, GetImageName);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

@@ -83,6 +83,7 @@ END_META;
 CLASS_METHODS_META(o2::ProjectConfig)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, ProjectConfig);
 	PUBLIC_FUNCTION(String, GetProjectName);
 	PUBLIC_FUNCTION(void, SetProjectName, const String&);
 	PUBLIC_FUNCTION(Platform, GetPlatform);
@@ -90,6 +91,5 @@ CLASS_METHODS_META(o2::ProjectConfig)
 	PUBLIC_FUNCTION(String, GetProjectPath);
 	PUBLIC_FUNCTION(void, SetProjectPath, const String&);
 	PROTECTED_FUNCTION(void, InitializeDefault, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

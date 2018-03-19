@@ -15,17 +15,13 @@
 namespace o2
 {
 	UIScrollArea::UIScrollArea(): UIWidget()
-	{
-		InitializeProperties();
-	}
+	{}
 
 	UIScrollArea::UIScrollArea(const UIScrollArea& other) :
 		UIWidget(other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
 		mClipAreaLayout(other.mClipAreaLayout), mScrollPos(other.mScrollPos), mScrollSpeedDamp(other.mScrollSpeedDamp),
 		mViewAreaLayout(other.mViewAreaLayout), mEnableScrollsHiding(other.mEnableScrollsHiding)
 	{
-		InitializeProperties();
-
 		if (mOwnHorScrollBar)
 		{
 			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
@@ -391,7 +387,7 @@ namespace o2
 				*selectState = false;
 		}
 
-		if (cursor->isPressed && Math::Equals(cursor->pressedTime, 0.0f) && underClippingArea && !mPressedCursor && 
+		if (cursor->isPressed && Math::Equals(cursor->pressedTime, 0.0f) && underClippingArea && !mPressedCursor &&
 			!underScrollbars)
 		{
 			mPressedCursor = true;
@@ -614,7 +610,7 @@ namespace o2
 	{
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
-		Vec2F offset = mChildrenWorldRect.LeftBottom() - layout->mData->worldRectangle.LeftBottom() - 
+		Vec2F offset = mChildrenWorldRect.LeftBottom() - layout->mData->worldRectangle.LeftBottom() -
 			mChildrenWorldRect.Size()*layout->pivot;
 
 		for (auto child : mChildWidgets)
@@ -866,13 +862,6 @@ namespace o2
 
 	void UIScrollArea::OnScrolled()
 	{}
-
-	void UIScrollArea::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIScrollArea, scroll, SetScroll, GetScroll);
-		INITIALIZE_PROPERTY(UIScrollArea, horScroll, SetHorizontalScroll, GetHorizontalScroll);
-		INITIALIZE_PROPERTY(UIScrollArea, verScroll, SetVerticalScroll, GetVerticalScroll);
-	}
 }
 
 DECLARE_CLASS(o2::UIScrollArea);

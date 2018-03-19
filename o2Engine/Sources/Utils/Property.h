@@ -117,10 +117,13 @@ namespace o2
 																										 \
 	public:																								 \
         typedef TYPE valueType;                                                                          \
+        typedef KEY_TYPE keyType;                                                                        \
 		NAME##_ACCESSOR(_propertiesClassType* _this):_this(_this) {}									 \
-        valueTypevalueType Get(const KEY_TYPE& key) const { return _this->GETTER(key); }                 \
+        valueType Get(const KEY_TYPE& key) const { return _this->GETTER(key); }                 \
         Dictionary<KEY_TYPE, TYPE> GetAll() const { return _this->GET_ALL(); }                           \
         valueType operator[](const KEY_TYPE& key) const { return _this->GETTER(key); }                   \
+																										 \
+		bool IsAccessor() const { return true; }                                                         \
 	};																									 \
 																										 \
 	NAME##_ACCESSOR NAME = NAME##_ACCESSOR(this);	

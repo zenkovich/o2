@@ -192,6 +192,7 @@ END_META;
 CLASS_METHODS_META(o2::UIGridLayout)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIGridLayout);
 	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
 	PUBLIC_FUNCTION(BaseCorner, GetBaseCorner);
 	PUBLIC_FUNCTION(void, SetSpacing, float);
@@ -229,6 +230,5 @@ CLASS_METHODS_META(o2::UIGridLayout)
 	PROTECTED_FUNCTION(void, ArrangeFromBottom);
 	PROTECTED_FUNCTION(void, ArrangeFromRightBottom);
 	PROTECTED_FUNCTION(void, ExpandSizeByChilds);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

@@ -114,4 +114,12 @@ protected:
 	void ParseAttributeShortDef(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
 	void ParseAttributes(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
+	void ParseProperty(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
+	void ParseGetter(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
+	void ParseSetter(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
+	void ParseAccessor(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 };

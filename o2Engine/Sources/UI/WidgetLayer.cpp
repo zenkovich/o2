@@ -7,14 +7,12 @@
 namespace o2
 {
 	UIWidgetLayer::UIWidgetLayer():
-		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)), 
+		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)),
 		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), drawable(nullptr)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	UIWidgetLayer::UIWidgetLayer(const UIWidgetLayer& other):
-		mDepth(other.mDepth), name(other.name), layout(other.layout), mTransparency(other.mTransparency), 
+	UIWidgetLayer::UIWidgetLayer(const UIWidgetLayer& other) :
+		mDepth(other.mDepth), name(other.name), layout(other.layout), mTransparency(other.mTransparency),
 		mResTransparency(1.0f), interactableLayout(other.interactableLayout), mParent(nullptr), mOwnerWidget(nullptr),
 		drawable(nullptr)
 	{
@@ -23,8 +21,6 @@ namespace o2
 
 		for (auto child : other.mChildren)
 			AddChild(child->CloneAs<UIWidgetLayer>());
-
-		InitializeProperties();
 	}
 
 	UIWidgetLayer::~UIWidgetLayer()
@@ -64,9 +60,8 @@ namespace o2
 	}
 
 	void UIWidgetLayer::Update(float dt)
-	{
-	} 
-	
+	{}
+
 	UIWidgetLayer* UIWidgetLayer::AddChild(UIWidgetLayer* node)
 	{
 		if (node->GetParent())
@@ -80,7 +75,7 @@ namespace o2
 
 		return node;
 	}
-	
+
 	bool UIWidgetLayer::RemoveChild(UIWidgetLayer* node, bool release /*= true*/)
 	{
 		node->mParent = nullptr;
@@ -93,7 +88,7 @@ namespace o2
 
 		return true;
 	}
-	
+
 	void UIWidgetLayer::RemoveAllChilds()
 	{
 		for (auto child : mChildren)
@@ -102,7 +97,7 @@ namespace o2
 
 		mChildren.Clear();
 	}
-	
+
 	void UIWidgetLayer::SetParent(UIWidgetLayer* parent)
 	{
 		if (parent)
@@ -117,24 +112,24 @@ namespace o2
 			mParent = nullptr;
 		}
 	}
-	
+
 	UIWidgetLayer* UIWidgetLayer::GetParent() const
 	{
 		return mParent;
 	}
-	
+
 	UIWidgetLayer::ChildrenVec& UIWidgetLayer::GetChilds()
 	{
 		return mChildren;
 	}
-	
+
 	const UIWidgetLayer::ChildrenVec& o2::UIWidgetLayer::GetChilds() const
 	{
 		return mChildren;
 	}
 
 	UIWidgetLayer* UIWidgetLayer::AddChildLayer(const String& name, IRectDrawable* drawable,
-													const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+												const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		if (Math::Equals(depth, 0.0f))
 			depth = (float)mOwnerWidget->mDrawingLayers.Count();
@@ -238,7 +233,7 @@ namespace o2
 	{
 		return mInteractableArea.IsInside(point);
 	}
-	
+
 	const o2::RectF& UIWidgetLayer::GetRect() const
 	{
 		return mAbsolutePosition;

@@ -696,14 +696,17 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
 	for (auto x : cls->GetFunctions())
 	{
-		if (x->GetName() == "PROPERTY" || x->GetName() == "SETTER" || x->GetName() == "GETTER")
+		if (x->GetName() == "PROPERTY" || x->GetName() == "SETTER" || x->GetName() == "GETTER" || x->GetName() == "ACCESSOR")
 		{
-			if (x->GetClassSection() == SyntaxProtectionSection::Public)
-				res += "\tPUBLIC_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
-			else if (x->GetClassSection() == SyntaxProtectionSection::Private)
-				res += "\tPRIVATE_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
-			else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
-				res += "\tPROTECTED_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+			if (x->GetParameters().size() > 2)
+			{
+				if (x->GetClassSection() == SyntaxProtectionSection::Public)
+					res += "\tPUBLIC_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+				else if (x->GetClassSection() == SyntaxProtectionSection::Private)
+					res += "\tPRIVATE_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+				else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
+					res += "\tPROTECTED_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+			}
 		}
 	}
 

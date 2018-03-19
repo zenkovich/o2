@@ -89,6 +89,7 @@ END_META;
 CLASS_METHODS_META(o2::IRectDrawable)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, IRectDrawable);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetColor, const Color4&);
 	PUBLIC_FUNCTION(Color4, GetColor);
@@ -99,6 +100,5 @@ CLASS_METHODS_META(o2::IRectDrawable)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, ColorChanged);
 	PROTECTED_FUNCTION(void, EnableChanged);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

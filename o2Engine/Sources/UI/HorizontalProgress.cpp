@@ -9,20 +9,16 @@ namespace o2
 {
 	UIHorizontalProgress::UIHorizontalProgress():
 		UIWidget(), DrawableCursorEventsListener(this)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	UIHorizontalProgress::UIHorizontalProgress(const UIHorizontalProgress& other):
-		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue), 
+	UIHorizontalProgress::UIHorizontalProgress(const UIHorizontalProgress& other) :
+		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
 		mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense)
 	{
 		mBarLayer = FindLayer("bar");
 		mBackLayer = FindLayer("back");
 
 		RetargetStatesAnimations();
-
-		InitializeProperties();
 	}
 
 	UIHorizontalProgress::~UIHorizontalProgress()
@@ -277,14 +273,6 @@ namespace o2
 			mBarLayer = layer;
 
 		UpdateProgressLayersLayouts();
-	}
-
-	void UIHorizontalProgress::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIHorizontalProgress, value, SetValue, GetValue);
-		INITIALIZE_PROPERTY(UIHorizontalProgress, minValue, SetMinValue, GetMinValue);
-		INITIALIZE_PROPERTY(UIHorizontalProgress, maxValue, SetMaxValue, GetMaxValue);
-		INITIALIZE_PROPERTY(UIHorizontalProgress, scrollSense, SetScrollSense, GetScrollSense);
 	}
 }
 

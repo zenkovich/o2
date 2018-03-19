@@ -441,13 +441,13 @@ CLASS_METHODS_META(Editor::IAssetProperty)
 END_META;
 
 META_TEMPLATES(typename _type)
-CLASS_BASES_META(Editor::AssetPROPERTY(typename _type>)
+CLASS_BASES_META(Editor::AssetProperty<typename _type>)
 {
 	BASE_CLASS(Editor::IAssetProperty);
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_FIELDS_META(Editor::AssetPROPERTY(typename _type>)
+CLASS_FIELDS_META(Editor::AssetProperty<typename _type>)
 {
 	PROTECTED_FIELD(mAssignFunc);
 	PROTECTED_FIELD(mGetFunc);
@@ -461,7 +461,7 @@ CLASS_FIELDS_META(Editor::AssetPROPERTY(typename _type>)
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_METHODS_META(Editor::AssetPROPERTY(typename _type>)
+CLASS_METHODS_META(Editor::AssetProperty<typename _type>)
 {
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);

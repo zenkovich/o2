@@ -11,13 +11,14 @@ namespace o2
 	class UIHorizontalScrollBar: public UIWidget, public DrawableCursorEventsListener
 	{
 	public:
-		PROPERTY(float>       value;          // Current value property
+		PROPERTIES(UIHorizontalScrollBar);
+		PROPERTY(float, value, SetValue, GetValue);          // Current value property
 
-		PROPERTY(float>       minValue;       // Minimal value property
-		PROPERTY(float>       maxValue;       // Maximal value property
+		PROPERTY(float, minValue, SetMinValue, GetMinValue); // Minimal value property
+		PROPERTY(float, maxValue, SetMaxValue, GetMaxValue); // Maximal value property
 
-		PROPERTY(float>       scrollSense;    // Scroll sense coefficient
-		PROPERTY(float>       scrollSize;     // Scroll handle size
+		PROPERTY(float, scrollSense, SetScrollSense, GetScrollSense);          // Scroll sense coefficient
+		PROPERTY(float, scrollSize, SetScrollHandleSize, GetScrollHandleSize); // Scroll handle size
 
 		Function<void(float)> onChange;       // On Value changing event
 		Function<void(float)> onUserChange;   // On Value changing from user event
@@ -147,9 +148,6 @@ namespace o2
 		// It is called when scrolling
 		void OnScrolled(float scroll) override;
 
-		// Initializes properties
-		void InitializeProperties();
-
 		friend class UIContextMenu;
 		friend class UICustomList;
 		friend class UIEditBox;
@@ -191,6 +189,7 @@ END_META;
 CLASS_METHODS_META(o2::UIHorizontalScrollBar)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIHorizontalScrollBar);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetValue, float);
 	PUBLIC_FUNCTION(void, SetValueForcible, float);
@@ -223,6 +222,5 @@ CLASS_METHODS_META(o2::UIHorizontalScrollBar)
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

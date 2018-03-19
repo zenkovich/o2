@@ -180,10 +180,6 @@ namespace o2
 		template<typename _key, typename _value>
 		DataNode& SetValue(const Dictionary<_key, _value>& value);
 
-		// Sets value from getter
-		template<typename _type>
-		DataNode& SetValue(const GETTER(_type>& value);
-
 		// Sets value from enum class or IObject based value
 		template<typename _type,
 			typename _conv = std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, ObjectDataConverter<_type>>::type,
@@ -286,10 +282,6 @@ namespace o2
 		// Gets value as dictionary
 		template<typename _key, typename _value>
 		void GetValue(Dictionary<_key, _value>& value) const;
-
-		// Gets value to setter
-		template<typename _type>
-		void GetValue(SETTER(_type>& value) const;
 
 		// Gets value as enum class or IObject
 		template<typename _type,
@@ -420,9 +412,6 @@ namespace o2
 		template<typename T2, typename T3>
 		struct IsSupport<Dictionary<T2, T3>>: std::integral_constant<bool, IsSupport<T2>::value && IsSupport<T3>::value> {};
 
-		template<typename T2>
-		struct IsSupport<PROPERTY(T2>>: IsSupport<T2> {};
-
 	protected:
 		static Vector<IDataNodeTypeConverter*> mDataConverters; // Data converters
 
@@ -477,13 +466,6 @@ namespace o2
 		}
 
 		return *this;
-	}
-
-	template<typename _type>
-	DataNode& DataNode::SetValue(const GETTER(_type>& value)
-	{
-		_type gettedValue = value.Get();
-		return SetValue(gettedValue);
 	}
 
 	template<typename _type, typename X>
@@ -548,14 +530,6 @@ namespace o2
 		}
 
 		GetValueRaw<_type>(value);
-	}
-
-	template<typename _type>
-	void DataNode::GetValue(SETTER(_type>& value) const
-	{
-		_type res;
-		GetValue(res);
-		value.Set(res);
 	}
 
 	template<typename _type, typename X>

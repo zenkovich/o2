@@ -247,6 +247,7 @@ END_META;
 CLASS_METHODS_META(o2::ImageAsset)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, ImageAsset);
 	PUBLIC_FUNCTION(Bitmap*, GetBitmap);
 	PUBLIC_FUNCTION(void, SetBitmap, Bitmap*);
 	PUBLIC_FUNCTION(UID, GetAtlasId);
@@ -266,7 +267,6 @@ CLASS_METHODS_META(o2::ImageAsset)
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
 	PROTECTED_FUNCTION(void, LoadBitmap);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

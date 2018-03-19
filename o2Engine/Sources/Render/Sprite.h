@@ -247,7 +247,6 @@ CLASS_FIELDS_META(o2::Sprite)
 	PUBLIC_FIELD(textureSrcRect);
 	PUBLIC_FIELD(image);
 	PUBLIC_FIELD(imageName);
-	PUBLIC_FIELD(bitmap);
 	PUBLIC_FIELD(leftTopColor);
 	PUBLIC_FIELD(rightTopColor);
 	PUBLIC_FIELD(leftBottomColor);
@@ -256,6 +255,7 @@ CLASS_FIELDS_META(o2::Sprite)
 	PUBLIC_FIELD(fill);
 	PUBLIC_FIELD(tileScale);
 	PUBLIC_FIELD(sliceBorder);
+	PUBLIC_FIELD(bitmap);
 	PROTECTED_FIELD(mTextureSrcRect);
 	PROTECTED_FIELD(mCornersColors);
 	PROTECTED_FIELD(mImageAsset).SERIALIZABLE_ATTRIBUTE();
@@ -270,6 +270,7 @@ END_META;
 CLASS_METHODS_META(o2::Sprite)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, Sprite);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetTexture, TextureRef);
 	PUBLIC_FUNCTION(TextureRef, GetTexture);
@@ -322,6 +323,5 @@ CLASS_METHODS_META(o2::Sprite)
 	PROTECTED_FUNCTION(void, BuildFill360CWMesh);
 	PROTECTED_FUNCTION(void, BuildFill360CCWMesh);
 	PROTECTED_FUNCTION(void, ReloadImage);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

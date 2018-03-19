@@ -16,10 +16,12 @@ namespace o2
 	class DragHandle: public IDrawable, public CursorAreaEventsListener, public ISerializable
 	{
 	public:
-		PROPERTY(float>              angle;               // Handle angle in radians property
+		PROPERTIES(DragHandle);
+		PROPERTY(float, angle, SetAngle, GetAngle);          // Handle angle in radians property
+		PROPERTY(Vec2F, position, SetPosition, GetPosition); // Current position property
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);      // Is handle enabled property. Disabled handle don't drawn and interact
+
 		CursorType                   cursorType;          // Cursor type when hovering and dragging
-		PROPERTY(Vec2F>              position;            // Current position property
-		PROPERTY(bool>               enabled;             // Is handle enabled property. Disabled handle don't drawn and interact
 		bool                         pixelPerfect = true; // Is handle draws pixel perfect
 
 		Function<void(const Vec2F&)> onChangedPos;        // On position changed event
@@ -118,7 +120,7 @@ namespace o2
 		Vec2F  mDragOffset;                // Dragging offset from cursor in local space to center
 		Vec2F  mDragPosition;              // Current drag handle position
 		Vec2F  mDragBeginPosition;         // Position at beginning dragging
-			   						       
+
 		int    mPressedCursorId;           // Id of pressed cursor
 		bool   mIsDragging = false;        // Is handle in dragging mode
 		bool   mIsHovered = false;         // Is handle under cursor, used for hover sprite appearing
@@ -156,9 +158,6 @@ namespace o2
 
 		// Updates screen position from position with localToScreenTransformFunc
 		void UpdateScreenPosition();
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 
 	class SelectableDragHandle;
@@ -222,7 +221,7 @@ namespace o2
 	// ----------------------------------
 	// Selectable draggable handles group
 	// ----------------------------------
-	class SelectableDragHandlesGroup : public ISelectableDragHandlesGroup
+	class SelectableDragHandlesGroup: public ISelectableDragHandlesGroup
 	{
 	public:
 		typedef Vector<SelectableDragHandle*> SelectableDragHandlesVec;
@@ -279,7 +278,7 @@ namespace o2
 		SelectableDragHandle();
 
 		// Constructor with views
-		SelectableDragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr, 
+		SelectableDragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
 							 Sprite* selected = nullptr);
 
 		// Copy-constructor
@@ -319,7 +318,7 @@ namespace o2
 
 	protected:
 		Sprite*                      mSelectedSprite = nullptr; // Selected view sprite @SERIALIZABLE
-									 
+
 		bool                         mIsSelected  = false;      // Is this selected
 		ISelectableDragHandlesGroup* mSelectGroup = nullptr;    // Selection group
 
@@ -360,9 +359,9 @@ END_META;
 CLASS_FIELDS_META(o2::DragHandle)
 {
 	PUBLIC_FIELD(angle);
-	PUBLIC_FIELD(cursorType);
 	PUBLIC_FIELD(position);
 	PUBLIC_FIELD(enabled);
+	PUBLIC_FIELD(cursorType);
 	PUBLIC_FIELD(pixelPerfect);
 	PUBLIC_FIELD(onChangedPos);
 	PUBLIC_FIELD(onPressed);
@@ -391,6 +390,7 @@ END_META;
 CLASS_METHODS_META(o2::DragHandle)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, DragHandle);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
@@ -420,7 +420,6 @@ CLASS_METHODS_META(o2::DragHandle)
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, UpdateScreenPosition);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

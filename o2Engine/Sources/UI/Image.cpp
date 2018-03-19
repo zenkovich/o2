@@ -10,7 +10,6 @@ namespace o2
 		UIWidget()
 	{
 		mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
-		InitializeProperties();
 	}
 
 	UIImage::UIImage(const UIImage& other):
@@ -19,8 +18,6 @@ namespace o2
 		mImage = GetLayerDrawable<Sprite>("image");
 		if (!mImage)
 			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
-
-		InitializeProperties();
 	}
 
 	UIImage& UIImage::operator=(const UIImage& other)
@@ -84,13 +81,6 @@ namespace o2
 		mImage = GetLayerDrawable<Sprite>("image");
 		if (!mImage)
 			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
-	}
-
-	void UIImage::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIImage, image, SetImage, GetImage);
-		INITIALIZE_PROPERTY(UIImage, imageAsset, SetImageAsset, GetImageAsset);
-		INITIALIZE_PROPERTY(UIImage, imageName, SetImageName, GetImageName);
 	}
 }
 

@@ -10,20 +10,17 @@ namespace o2
 {
 	UIHorizontalScrollBar::UIHorizontalScrollBar():
 		UIWidget(), DrawableCursorEventsListener(this)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	UIHorizontalScrollBar::UIHorizontalScrollBar(const UIHorizontalScrollBar& other):
-		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue), 
-		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize), 
+	UIHorizontalScrollBar::UIHorizontalScrollBar(const UIHorizontalScrollBar& other) :
+		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize),
 		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue)
 	{
 		mHandleLayer = FindLayer("handle");
 		mBackLayer = FindLayer("back");
 
 		RetargetStatesAnimations();
-		InitializeProperties();
 		UpdateTransform();
 	}
 
@@ -348,14 +345,6 @@ namespace o2
 			mHandleLayer = layer;
 
 		UpdateProgressLayersLayouts();
-	}
-
-	void UIHorizontalScrollBar::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIHorizontalScrollBar, value, SetValue, GetValue);
-		INITIALIZE_PROPERTY(UIHorizontalScrollBar, minValue, SetMinValue, GetMinValue);
-		INITIALIZE_PROPERTY(UIHorizontalScrollBar, maxValue, SetMaxValue, GetMaxValue);
-		INITIALIZE_PROPERTY(UIHorizontalScrollBar, scrollSense, SetScrollSense, GetScrollSense);
 	}
 }
 

@@ -197,7 +197,6 @@ CLASS_FIELDS_META(o2::ImageComponent)
 {
 	PUBLIC_FIELD(texture);
 	PUBLIC_FIELD(textureSrcRect);
-	PUBLIC_FIELD(imageAssetId);
 	PUBLIC_FIELD(imageAssetPath);
 	PUBLIC_FIELD(imageAsset);
 	PUBLIC_FIELD(bitmap);
@@ -216,6 +215,7 @@ END_META;
 CLASS_METHODS_META(o2::ImageComponent)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, ImageComponent);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetTexture, TextureRef);
 	PUBLIC_FUNCTION(TextureRef, GetTexture);
@@ -255,6 +255,5 @@ CLASS_METHODS_META(o2::ImageComponent)
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

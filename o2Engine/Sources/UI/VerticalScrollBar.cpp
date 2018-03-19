@@ -10,20 +10,17 @@ namespace o2
 {
 	UIVerticalScrollBar::UIVerticalScrollBar():
 		UIWidget(), DrawableCursorEventsListener(this)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	UIVerticalScrollBar::UIVerticalScrollBar(const UIVerticalScrollBar& other):
-		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue), 
-		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize), 
+	UIVerticalScrollBar::UIVerticalScrollBar(const UIVerticalScrollBar& other) :
+		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize),
 		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue)
 	{
 		mHandleLayer = FindLayer("handle");
 		mBackLayer = FindLayer("back");
 
 		RetargetStatesAnimations();
-		InitializeProperties();
 		SetLayoutDirty();
 	}
 
@@ -349,14 +346,6 @@ namespace o2
 			mHandleLayer = layer;
 
 		UpdateProgressLayersLayouts();
-	}
-
-	void UIVerticalScrollBar::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIVerticalScrollBar, value, SetValue, GetValue);
-		INITIALIZE_PROPERTY(UIVerticalScrollBar, minValue, SetMinValue, GetMinValue);
-		INITIALIZE_PROPERTY(UIVerticalScrollBar, maxValue, SetMaxValue, GetMaxValue);
-		INITIALIZE_PROPERTY(UIVerticalScrollBar, scrollSense, SetScrollSense, GetScrollSense);
 	}
 
 	float UIVerticalScrollBar::GetSmoothValue() const

@@ -20,6 +20,16 @@ namespace o2
 			SetSize(o2Render.GetCurrentResolution());
 	}
 
+	bool Camera::operator==(const Camera& other) const
+	{
+		return Transform::operator==(other);
+	}
+
+	bool Camera::operator!=(const Camera& other) const
+	{
+		return !Transform::operator==(other);
+	}
+
 	Camera Camera::Default()
 	{
 		return Camera();

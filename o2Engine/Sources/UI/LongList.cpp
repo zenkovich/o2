@@ -15,8 +15,6 @@ namespace o2
 		mItemSample = mnew UIWidget();
 		mSelectionDrawable = mnew Sprite();
 		mHoverDrawable = mnew Sprite();
-
-		InitializeProperties();
 	}
 
 	UILongList::UILongList(const UILongList& other):
@@ -31,8 +29,6 @@ namespace o2
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
-
-		InitializeProperties();
 	}
 
 	UILongList::~UILongList()
@@ -540,11 +536,6 @@ namespace o2
 	void UILongList::OnVisibleChanged()
 	{
 		SetInteractable(mResVisible);
-	}
-
-	void UILongList::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UILongList, selectedItemPos, SelectItemAt, GetSelectedItemPosition);
 	}
 }
 

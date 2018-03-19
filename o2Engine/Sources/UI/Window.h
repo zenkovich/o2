@@ -16,8 +16,9 @@ namespace o2
 	class UIWindow: public UIScrollArea, public DrawableCursorEventsListener
 	{
 	public:
-		PROPERTY(WString> caption; // Window caption property
-		PROPERTY(Sprite*> icon;    // Window icon sprite property
+		PROPERTIES(UIWindow);
+		PROPERTY(WString, caption, SetCaption, GetCaption); // Window caption property
+		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Window icon sprite property
 
 		// Default constructor
 		UIWindow();
@@ -174,9 +175,6 @@ namespace o2
 
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -227,6 +225,7 @@ END_META;
 CLASS_METHODS_META(o2::UIWindow)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIWindow);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, ShowModal);
@@ -258,6 +257,5 @@ CLASS_METHODS_META(o2::UIWindow)
 	PROTECTED_FUNCTION(void, BindHandlesInteractableToVisibility);
 	PROTECTED_FUNCTION(void, OnChildFocused, UIWidget*);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

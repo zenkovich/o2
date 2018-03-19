@@ -12,9 +12,10 @@ namespace o2
 	class UIScrollArea: public UIWidget
 	{
 	public:
-		PROPERTY(Vec2F> scroll;     // Scroll position property
-		PROPERTY(float> horScroll;  // Horizontal scroll position property
-		PROPERTY(float> verScroll;  // Vertical scroll position property
+		PROPERTIES(UIScrollArea);
+		PROPERTY(Vec2F, scroll, SetScroll, GetScroll);                        // Scroll position property
+		PROPERTY(float, horScroll, SetHorizontalScroll, GetHorizontalScroll); // Horizontal scroll position property
+		PROPERTY(float, verScroll, SetVerticalScroll, GetVerticalScroll);     // Vertical scroll position property
 
 		Function<void(const Vec2F&)> onScrolled; // Scrolling event. Scroll position is parameter
 
@@ -193,9 +194,6 @@ namespace o2
 		// It is called when vertical scroll bar value was changed
 		void OnVerScrollChanged(float value);
 
-		// Initializes properties
-		void InitializeProperties();
-
 		friend class UICustomDropDown;
 	};
 }
@@ -241,6 +239,7 @@ END_META;
 CLASS_METHODS_META(o2::UIScrollArea)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIScrollArea);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
@@ -283,6 +282,5 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PROTECTED_FUNCTION(void, CheckChildrenClipping);
 	PROTECTED_FUNCTION(void, OnHorScrollChanged, float);
 	PROTECTED_FUNCTION(void, OnVerScrollChanged, float);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

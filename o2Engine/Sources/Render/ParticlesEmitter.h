@@ -367,6 +367,7 @@ END_META;
 CLASS_METHODS_META(o2::ParticlesEmitter)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, ParticlesEmitter);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetPlaying, bool);
@@ -429,6 +430,5 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
 	PROTECTED_FUNCTION(void, UpdateParticles, float);
 	PROTECTED_FUNCTION(void, UpdateMesh);
 	PROTECTED_FUNCTION(void, BasisChanged);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

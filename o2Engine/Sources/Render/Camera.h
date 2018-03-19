@@ -19,6 +19,12 @@ namespace o2
 		// Constructor
 		Camera(const Vec2F& position, const Vec2F& size = Vec2F(), float angle = 0.0f);
 
+		// Equals operator
+		bool operator==(const Camera& other) const;
+
+		// Not equals operator
+		bool operator!=(const Camera& other) const;
+
 		// Returns default camera
 		static Camera Default();
 

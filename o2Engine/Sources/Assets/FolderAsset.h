@@ -152,11 +152,11 @@ END_META;
 CLASS_METHODS_META(o2::FolderAsset)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, FolderAsset);
 	PUBLIC_FUNCTION(AssetInfosVec, GetContainingAssetsInfos);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

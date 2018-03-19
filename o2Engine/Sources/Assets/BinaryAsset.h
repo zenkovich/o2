@@ -165,6 +165,7 @@ END_META;
 CLASS_METHODS_META(o2::BinaryAsset)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, BinaryAsset);
 	PUBLIC_FUNCTION(char*, GetData);
 	PUBLIC_FUNCTION(UInt, GetDataSize);
 	PUBLIC_FUNCTION(void, SetData, char*, UInt);
@@ -172,7 +173,6 @@ CLASS_METHODS_META(o2::BinaryAsset)
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

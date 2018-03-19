@@ -29,7 +29,7 @@ namespace o2
 	{
 		CopyData(other);
 		return *this;
-	} 
+	}
 
 	void UIButton::Draw()
 	{

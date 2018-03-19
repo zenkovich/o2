@@ -131,11 +131,16 @@ CLASS_FIELDS_META(Editor::ImageAssetPropertiesViewer)
 	PROTECTED_FIELD(mBordersSmoothValue);
 	PROTECTED_FIELD(mBorderProperty);
 	PROTECTED_FIELD(mDefaultTypeProperty);
-	PROTECTED_FIELD(mAtlasProperty);
 	PROTECTED_FIELD(mWindowsProperties);
 	PROTECTED_FIELD(mOSXProperties);
 	PROTECTED_FIELD(mAndroidProperties);
 	PROTECTED_FIELD(mIOSProperties);
+	PROTECTED_FIELD(mageAssetPropertiesViewer);
+	PROTECTED_FIELD();
+	PROTECTED_FIELD(mageAssetPropertiesViewer);
+	PROTECTED_FIELD();
+	PROTECTED_FIELD(mageAssetPropertiesViewer);
+	PROTECTED_FIELD();
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageAssetPropertiesViewer)
@@ -144,6 +149,7 @@ CLASS_METHODS_META(Editor::ImageAssetPropertiesViewer)
 	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PROTECTED_FUNCTION(void, AssetPROPERTY, AtlasAssetRef>*);
 	PROTECTED_FUNCTION(void, InitializeImagePreview);
 	PROTECTED_FUNCTION(void, InitializeLeftHandle);
 	PROTECTED_FUNCTION(void, InitializeRightHandle);

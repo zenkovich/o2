@@ -8,7 +8,6 @@ namespace o2
 {
 	UIVerticalLayout::UIVerticalLayout(): UIWidget()
 	{
-		InitializeProperties();
 		SetLayoutDirty();
 	}
 
@@ -18,7 +17,6 @@ namespace o2
 	{
 		RetargetStatesAnimations();
 		SetLayoutDirty();
-		InitializeProperties();
 	}
 
 	UIVerticalLayout::~UIVerticalLayout()
@@ -503,20 +501,6 @@ namespace o2
 		}
 
 		return heights;
-	}
-
-	void UIVerticalLayout::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIVerticalLayout, baseCorner, SetBaseCorner, GetBaseCorner);
-		INITIALIZE_PROPERTY(UIVerticalLayout, spacing, SetSpacing, GetSpacing);
-		INITIALIZE_PROPERTY(UIVerticalLayout, border, SetBorder, GetBorder);
-		INITIALIZE_PROPERTY(UIVerticalLayout, borderLeft, SetBorderLeft, GetBorderLeft);
-		INITIALIZE_PROPERTY(UIVerticalLayout, borderRight, SetBorderRight, GetBorderRight);
-		INITIALIZE_PROPERTY(UIVerticalLayout, borderTop, SetBorderTop, GetBorderTop);
-		INITIALIZE_PROPERTY(UIVerticalLayout, borderBottom, SetBorderBottom, GetBorderBottom);
-		INITIALIZE_PROPERTY(UIVerticalLayout, expandWidth, SetWidthExpand, IsWidthExpand);
-		INITIALIZE_PROPERTY(UIVerticalLayout, expandHeight, SetHeightExpand, IsHeightExpand);
-		INITIALIZE_PROPERTY(UIVerticalLayout, fitByChildren, SetFitByChildren, IsFittingByChildren);
 	}
 }
 

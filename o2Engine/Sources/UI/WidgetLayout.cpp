@@ -11,8 +11,6 @@ namespace o2
 	{
 		mData = static_cast<Data*>(ActorTransform::mData);
 		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
-
-		InitializeProperties();
 	}
 
 	UIWidgetLayout::UIWidgetLayout(const UIWidgetLayout& other):
@@ -22,8 +20,6 @@ namespace o2
 
 		CopyFrom(other);
 		mCheckMinMaxFunc = other.mCheckMinMaxFunc;
-
-		InitializeProperties();
 	}
 
 	UIWidgetLayout::UIWidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax,
@@ -38,8 +34,6 @@ namespace o2
 		mData->offsetMax = offsetMax;
 
 		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
-
-		InitializeProperties();
 	}
 
 	UIWidgetLayout::UIWidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
@@ -54,8 +48,6 @@ namespace o2
 		mData->offsetMax.Set(offsetRight, offsetTop);
 
 		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
-
-		InitializeProperties();
 	}
 
 	UIWidgetLayout& UIWidgetLayout::operator=(const UIWidgetLayout& other)
@@ -652,33 +644,6 @@ namespace o2
 
 	void UIWidgetLayout::DontCheckMinMax()
 	{}
-
-	void UIWidgetLayout::InitializeProperties()
-	{
-		ActorTransform::InitializeProperties();
-
-		INITIALIZE_PROPERTY(UIWidgetLayout, anchorMin, SetAnchorMin, GetAnchorMin);
-		INITIALIZE_PROPERTY(UIWidgetLayout, anchorMax, SetAnchorMax, GetAnchorMax);
-		INITIALIZE_PROPERTY(UIWidgetLayout, offsetMin, SetOffsetMin, GetOffsetMin);
-		INITIALIZE_PROPERTY(UIWidgetLayout, offsetMax, SetOffsetMax, GetOffsetMax);
-		INITIALIZE_PROPERTY(UIWidgetLayout, anchorLeft, SetAnchorLeft, GetAnchorLeft);
-		INITIALIZE_PROPERTY(UIWidgetLayout, anchorRight, SetAnchorRight, GetAnchorRight);
-		INITIALIZE_PROPERTY(UIWidgetLayout, anchorBottom, SetAnchorBottom, GetAnchorBottom);
-		INITIALIZE_PROPERTY(UIWidgetLayout, anchorTop, SetAnchorTop, GetAnchorTop);
-		INITIALIZE_PROPERTY(UIWidgetLayout, offsetLeft, SetOffsetLeft, GetOffsetLeft);
-		INITIALIZE_PROPERTY(UIWidgetLayout, offsetRight, SetOffsetRight, GetOffsetRight);
-		INITIALIZE_PROPERTY(UIWidgetLayout, offsetBottom, SetOffsetBottom, GetOffsetBottom);
-		INITIALIZE_PROPERTY(UIWidgetLayout, offsetTop, SetOffsetTop, GetOffsetTop);
-		INITIALIZE_PROPERTY(UIWidgetLayout, minSize, SetMinimalSize, GetMinimalSize);
-		INITIALIZE_PROPERTY(UIWidgetLayout, minWidth, SetMinimalWidth, GetMinimalWidth);
-		INITIALIZE_PROPERTY(UIWidgetLayout, minHeight, SetMinimalHeight, GetMinimalHeight);
-		INITIALIZE_PROPERTY(UIWidgetLayout, maxSize, SetMaximalSize, GetMaximalSize);
-		INITIALIZE_PROPERTY(UIWidgetLayout, maxWidth, SetMaximalWidth, GetMaximalWidth);
-		INITIALIZE_PROPERTY(UIWidgetLayout, maxHeight, SetMaximalHeight, GetMaximalHeight);
-		INITIALIZE_PROPERTY(UIWidgetLayout, weight, SetWeight, GetWeight);
-		INITIALIZE_PROPERTY(UIWidgetLayout, widthWeight, SetWidthWeight, GetWidthWeight);
-		INITIALIZE_PROPERTY(UIWidgetLayout, heigthWeight, SetHeightWeight, GetHeightWeight);
-	}
 }
 
 DECLARE_CLASS(o2::UIWidgetLayout);

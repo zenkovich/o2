@@ -15,21 +15,22 @@ namespace o2
 		enum class VerOverflow { Cut, None, Expand };
 
 	public:
-		PROPERTY(WString>     text;                // Text property, wstring
+		PROPERTIES(UILabel);
+		PROPERTY(WString, text, SetText, GetText);   // Text property, wstring
 
-		PROPERTY(FontRef>     font;                // Font pointer property
-		PROPERTY(int>         height;              // Text height property
+		PROPERTY(FontRef, font, SetFont, GetFont);   // Font pointer property
+		PROPERTY(int, height, SetHeight, GetHeight); // Text height property
 
-		PROPERTY(VerAlign>    verAlign;            // vertical align property
-		PROPERTY(HorAlign>    horAlign;            // Horizontal align property
+		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign); // vertical align property
+		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign); // Horizontal align property
 
-		PROPERTY(HorOverflow> horOverflow;		   // Horizontal text overflow logic property
-		PROPERTY(VerOverflow> verOverflow;		   // Vertical text overflow logic property
+		PROPERTY(HorOverflow, horOverflow, SetHorOverflow, GetHorOverflow); // Horizontal text overflow logic property
+		PROPERTY(VerOverflow, verOverflow, SetVerOverflow, GetVerOverflow); // Vertical text overflow logic property
 
-		PROPERTY(Vec2F>       expandBorder;        // Overflow expanding border size property
+		PROPERTY(Vec2F, expandBorder, SetExpandBorder, GetExpandBorder); // Overflow expanding border size property
 
-		PROPERTY(float>       symbolsDistanceCoef; // Characters distance coef, 1 is standard
-		PROPERTY(float>       linesDistanceCoef;   // Lines distance coef, 1 is standard
+		PROPERTY(float, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef); // Characters distance coef, 1 is standard
+		PROPERTY(float, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);       // Lines distance coef, 1 is standard
 
 		// Default constructor
 		UILabel();
@@ -120,9 +121,6 @@ namespace o2
 
 		// It is called when layer added and updates drawing sequence
 		void OnLayerAdded(UIWidgetLayer* layer) override;
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -152,6 +150,7 @@ END_META;
 CLASS_METHODS_META(o2::UILabel)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UILabel);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetFont, FontRef);
 	PUBLIC_FUNCTION(FontRef, GetFont);
@@ -176,6 +175,5 @@ CLASS_METHODS_META(o2::UILabel)
 	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

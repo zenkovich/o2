@@ -145,18 +145,18 @@ CLASS_BASES_META(o2::DataAsset)
 END_META;
 CLASS_FIELDS_META(o2::DataAsset)
 {
-	PUBLIC_FIELD(data);
 	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(data);
 }
 END_META;
 CLASS_METHODS_META(o2::DataAsset)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, DataAsset);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

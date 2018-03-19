@@ -127,6 +127,10 @@ void CppSyntaxParser::InitializeParsers()
 	mParsers.push_back(new ExpressionParser("ATTRIBUTE_COMMENT_DEFINITION", &CppSyntaxParser::ParseAttributeCommentDef, true, false));
 	mParsers.push_back(new ExpressionParser("ATTRIBUTE_SHORT_DEFINITION", &CppSyntaxParser::ParseAttributeShortDef, true, false));
 	mParsers.push_back(new ExpressionParser("ATTRIBUTES", &CppSyntaxParser::ParseAttributes, true, false));
+	mParsers.push_back(new ExpressionParser("PROPERTY", &CppSyntaxParser::ParseProperty, true, false));
+	mParsers.push_back(new ExpressionParser("GETTER", &CppSyntaxParser::ParseGetter, true, false));
+	mParsers.push_back(new ExpressionParser("SETTER", &CppSyntaxParser::ParseSetter, true, false));
+	mParsers.push_back(new ExpressionParser("ACCESSOR", &CppSyntaxParser::ParseAccessor, true, false));
 }
 
 void CppSyntaxParser::ParseFile(SyntaxFile& file, const string& filePath, const TimeStamp& fileEditDate)
@@ -875,7 +879,7 @@ void CppSyntaxParser::ParseFriend(SyntaxSection& section, int& caret,
 	ReadWord(section.mData, caret, " \n\r\t");
 }
 
-void CppSyntaxParser::ParseAttributeCommentDef(SyntaxSection& section, int& caret, 
+void CppSyntaxParser::ParseAttributeCommentDef(SyntaxSection& section, int& caret,
 											   SyntaxProtectionSection& protectionSection)
 {
 	SyntaxClass* classSection = dynamic_cast<SyntaxClass*>(&section);
@@ -890,7 +894,7 @@ void CppSyntaxParser::ParseAttributeCommentDef(SyntaxSection& section, int& care
 	caret = (int)section.mData.find(';', caret) + 1;
 }
 
-void CppSyntaxParser::ParseAttributeShortDef(SyntaxSection& section, int& caret, 
+void CppSyntaxParser::ParseAttributeShortDef(SyntaxSection& section, int& caret,
 											 SyntaxProtectionSection& protectionSection)
 {
 	SyntaxClass* classSection = dynamic_cast<SyntaxClass*>(&section);
@@ -926,6 +930,102 @@ void CppSyntaxParser::ParseAttributes(SyntaxSection& section, int& caret, Syntax
 	attributes->mAttributesList = separated;
 
 	section.mAttributes.push_back(attributes);
+}
+
+void CppSyntaxParser::ParseProperty(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection)
+{
+	int begin = caret;
+
+	caret += (int)strlen("PROPERTY");
+	caret = (int)section.mData.find('(', caret);
+	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
+	caret = (int)section.mData.find(';', caret);
+
+	vector<string> separated = Split(braces, ',');
+	for (auto& x : separated)
+		Trim(x, " \n\r\t,");
+
+	SyntaxVariable* res = new SyntaxVariable();
+	res->mBegin      = begin;
+	res->mLength     = caret - begin;
+	res->mData       = section.mData.substr(begin, caret - caret);
+	res->mLine       = GetLineNumber(section.mData, caret);
+	res->mName       = separated[1];
+	res->mType.mName = separated[0];
+
+	section.mVariables.push_back(res);
+}
+
+void CppSyntaxParser::ParseGetter(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection)
+{
+	int begin = caret;
+
+	caret += (int)strlen("GETTER");
+	caret = (int)section.mData.find('(', caret);
+	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
+	caret = (int)section.mData.find(';', caret);
+
+	vector<string> separated = Split(braces, ',');
+	for (auto& x : separated)
+		Trim(x, " \n\r\t,");
+
+	SyntaxVariable* res = new SyntaxVariable();
+	res->mBegin      = begin;
+	res->mLength     = caret - begin;
+	res->mData       = section.mData.substr(begin, caret - caret);
+	res->mLine       = GetLineNumber(section.mData, caret);
+	res->mName       = separated[1];
+	res->mType.mName = separated[0];
+
+	section.mVariables.push_back(res);
+}
+
+void CppSyntaxParser::ParseSetter(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection)
+{
+	int begin = caret;
+
+	caret += (int)strlen("SETTER");
+	caret = (int)section.mData.find('(', caret);
+	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
+	caret = (int)section.mData.find(';', caret);
+
+	vector<string> separated = Split(braces, ',');
+	for (auto& x : separated)
+		Trim(x, " \n\r\t,");
+
+	SyntaxVariable* res = new SyntaxVariable();
+	res->mBegin      = begin;
+	res->mLength     = caret - begin;
+	res->mData       = section.mData.substr(begin, caret - caret);
+	res->mLine       = GetLineNumber(section.mData, caret);
+	res->mName       = separated[1];
+	res->mType.mName = separated[0];
+
+	section.mVariables.push_back(res);
+}
+
+void CppSyntaxParser::ParseAccessor(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection)
+{
+	int begin = caret;
+
+	caret += (int)strlen("ACCESSOR");
+	caret = (int)section.mData.find('(', caret);
+	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
+	caret = (int)section.mData.find(';', caret);
+
+	vector<string> separated = Split(braces, ',');
+	for (auto& x : separated)
+		Trim(x, " \n\r\t,");
+
+	SyntaxVariable* res = new SyntaxVariable();
+	res->mBegin      = begin;
+	res->mLength     = caret - begin;
+	res->mData       = section.mData.substr(begin, caret - caret);
+	res->mLine       = GetLineNumber(section.mData, caret);
+	res->mName       = separated[1];
+	res->mType.mName = separated[0];
+
+	section.mVariables.push_back(res);
 }
 
 string CppSyntaxParser::ReadWord(const string& data, int& caret,
@@ -982,17 +1082,17 @@ string CppSyntaxParser::ReadWord(const string& data, int& caret,
 
 		switch (s)
 		{
-		case '{': fgBraces++; break;
-		case '}': fgBraces--; if (fgBraces < 0) fgBraces = 0; break;
+			case '{': fgBraces++; break;
+			case '}': fgBraces--; if (fgBraces < 0) fgBraces = 0; break;
 
-		case ')': braces--; if (braces < 0) braces = 0; break;
-		case '(': braces++; break;
+			case ')': braces--; if (braces < 0) braces = 0; break;
+			case '(': braces++; break;
 
-		case '[': sqBraces++; break;
-		case ']': sqBraces--; if (sqBraces < 0) sqBraces = 0; break;
+			case '[': sqBraces++; break;
+			case ']': sqBraces--; if (sqBraces < 0) sqBraces = 0; break;
 
-		case '<': trBraces++; break;
-		case '>': trBraces--; if (trBraces < 0) trBraces = 0; break;
+			case '<': trBraces++; break;
+			case '>': trBraces--; if (trBraces < 0) trBraces = 0; break;
 		}
 
 		res += s;
@@ -1033,25 +1133,25 @@ string CppSyntaxParser::ReadBlock(const string& data, int& caret)
 
 		switch (data[caret])
 		{
-		case '{': fgBraces++; break;
-		case '}':
-		fgBraces--;
-		if (fgBraces == 0 && braces == 0 && sqBraces == 0)
-			complete = true;
-		break;
+			case '{': fgBraces++; break;
+			case '}':
+			fgBraces--;
+			if (fgBraces == 0 && braces == 0 && sqBraces == 0)
+				complete = true;
+			break;
 
-		case ')': braces--; break;
-		case '(': braces++; break;
+			case ')': braces--; break;
+			case '(': braces++; break;
 
-		case '[': sqBraces++; break;
-		case ']': sqBraces--; break;
+			case '[': sqBraces++; break;
+			case ']': sqBraces--; break;
 
-		case '<': trBraces++; break;
-		case '>': trBraces--; break;
+			case '<': trBraces++; break;
+			case '>': trBraces--; break;
 
-		case '"':
-		isInstring = true;
-		break;
+			case '"':
+			isInstring = true;
+			break;
 		}
 	}
 
@@ -1090,25 +1190,25 @@ string CppSyntaxParser::ReadBraces(const string& data, int& caret)
 
 		switch (data[caret])
 		{
-		case '}': fgBraces--; break;
-		case '{': fgBraces++; break;
+			case '}': fgBraces--; break;
+			case '{': fgBraces++; break;
 
-		case '[': sqBraces++; break;
-		case ']': sqBraces--; break;
+			case '[': sqBraces++; break;
+			case ']': sqBraces--; break;
 
-		case '<': trBraces++; break;
-		case '>': trBraces--; break;
+			case '<': trBraces++; break;
+			case '>': trBraces--; break;
 
-		case '(': braces++; break;
-		case ')':
-		braces--;
-		if (fgBraces == 0 && braces == 0 && sqBraces == 0 && trBraces == 0)
-			complete = true;
-		break;
+			case '(': braces++; break;
+			case ')':
+			braces--;
+			if (fgBraces == 0 && braces == 0 && sqBraces == 0 && trBraces == 0)
+				complete = true;
+			break;
 
-		case '"':
-		isInstring = true;
-		break;
+			case '"':
+			isInstring = true;
+			break;
 		}
 	}
 
@@ -1162,17 +1262,17 @@ vector<string> CppSyntaxParser::Split(const string& data, char splitSymbol)
 	{
 		switch (data[i])
 		{
-		case '{': fgBraces++; break;
-		case '}': fgBraces--; break;
+			case '{': fgBraces++; break;
+			case '}': fgBraces--; break;
 
-		case '(': braces++; break;
-		case ')': braces--; break;
+			case '(': braces++; break;
+			case ')': braces--; break;
 
-		case '<': trBraces++; break;
-		case '>': trBraces--; break;
+			case '<': trBraces++; break;
+			case '>': trBraces--; break;
 
-		case '[': sqBraces++; break;
-		case ']': sqBraces--; break;
+			case '[': sqBraces++; break;
+			case ']': sqBraces--; break;
 		}
 
 		if (braces == 0 && sqBraces == 0 && trBraces == 0 && fgBraces == 0 && data[i] == splitSymbol)

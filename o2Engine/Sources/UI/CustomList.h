@@ -245,7 +245,6 @@ CLASS_FIELDS_META(o2::UICustomList)
 	PUBLIC_FIELD(selectedItems);
 	PUBLIC_FIELD(selectedItem);
 	PUBLIC_FIELD(selectedItemPos);
-	PUBLIC_FIELD(item);
 	PUBLIC_FIELD(itemsCount);
 	PUBLIC_FIELD(onSelectedPos);
 	PUBLIC_FIELD(onSelectedItem);
@@ -269,6 +268,7 @@ CLASS_METHODS_META(o2::UICustomList)
 
 	typedef const Function<bool(UIWidget*, UIWidget*)>& _tmp1;
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UICustomList);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
@@ -321,6 +321,5 @@ CLASS_METHODS_META(o2::UICustomList)
 	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(Sprite*, GetSelectionSprite);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

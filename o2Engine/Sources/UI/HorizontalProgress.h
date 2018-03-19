@@ -10,17 +10,17 @@ namespace o2
 	// -----------------------
 	class UIHorizontalProgress: public UIWidget, public DrawableCursorEventsListener
 	{
-	public: 
+	public:
 		enum class Orientation { Right, Left };
 
 	public:
 		PROPERTIES(UIHorizontalLayout);
-		PROPERTY(float>       value;       // Current value property
+		PROPERTY(float, value, SetValue, GetValue);          // Current value property
 
-		PROPERTY(float>       minValue;    // Minimal value property
-		PROPERTY(float>       maxValue;    // Maximal value property
+		PROPERTY(float, minValue, SetMinValue, GetMinValue); // Minimal value property
+		PROPERTY(float, maxValue, SetMaxValue, GetMaxValue); // Maximal value property
 
-		PROPERTY(float>       scrollSense; // Scroll sense coefficient
+		PROPERTY(float, scrollSense, SetScrollSense, GetScrollSense); // Scroll sense coefficient
 
 		Function<void(float)> onChange;    // On Value changing event
 
@@ -65,7 +65,7 @@ namespace o2
 
 		// Sets scroll sense
 		void SetScrollSense(float coef);
-		
+
 		// Returns scroll sense
 		float GetScrollSense() const;
 
@@ -92,7 +92,7 @@ namespace o2
 		Orientation    mOrientation = Orientation::Right; // Bar orientation @SERIALIZABLE
 		UIWidgetLayer* mBarLayer = nullptr;               // Bar layer
 		UIWidgetLayer* mBackLayer = nullptr;              // background layer
- 
+
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
@@ -135,9 +135,6 @@ namespace o2
 
 		// It is called when scrolling
 		void OnScrolled(float scroll) override;
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -167,6 +164,7 @@ END_META;
 CLASS_METHODS_META(o2::UIHorizontalProgress)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIHorizontalLayout);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetValue, float);
 	PUBLIC_FUNCTION(void, SetValueForcible, float);
@@ -196,6 +194,5 @@ CLASS_METHODS_META(o2::UIHorizontalProgress)
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

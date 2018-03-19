@@ -60,11 +60,12 @@ namespace o2
 	class UIToggle: public UIWidget, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		PROPERTY(bool>           value;          // Current state value property
-		PROPERTY(WString>        caption;        // Caption property. Searches text layer with name "caption" or creates them if he's not exist
-		ShortcutKeys             shortcut;       // Shortcut keys
+		PROPERTIES(UIToggle);
+		PROPERTY(bool, value, SetValue, GetValue);                             // Current state value property
+		PROPERTY(WString, caption, SetCaption, GetCaption);                    // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+		PROPERTY(UIToggleGroup*, toggleGroup, SetToggleGroup, GetToggleGroup); // Toggle group property
 
-		PROPERTY(UIToggleGroup*> toggleGroup;    // Toggle group property
+		ShortcutKeys             shortcut;       // Shortcut keys
 
 		Function<void()>         onClick;        // Click event
 		Function<void(bool)>     onToggle;       // Toggle event
@@ -156,9 +157,6 @@ namespace o2
 		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
 
-		// Initializes properties
-		void InitializeProperties();
-
 		friend class UIToggleGroup;
 	};
 }
@@ -174,8 +172,8 @@ CLASS_FIELDS_META(o2::UIToggle)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(caption);
-	PUBLIC_FIELD(shortcut);
 	PUBLIC_FIELD(toggleGroup);
+	PUBLIC_FIELD(shortcut);
 	PUBLIC_FIELD(onClick);
 	PUBLIC_FIELD(onToggle);
 	PUBLIC_FIELD(onToggleByUser);
@@ -189,6 +187,7 @@ END_META;
 CLASS_METHODS_META(o2::UIToggle)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIToggle);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
@@ -210,6 +209,5 @@ CLASS_METHODS_META(o2::UIToggle)
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

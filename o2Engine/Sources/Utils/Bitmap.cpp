@@ -9,29 +9,23 @@ namespace o2
 {
 	Bitmap::Bitmap():
 		mFormat(Format::Default), mData(nullptr)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	Bitmap::Bitmap(Format format, const Vec2I& size):
+	Bitmap::Bitmap(Format format, const Vec2I& size) :
 		mFormat(format), mSize(size), mData(nullptr)
 	{
-		InitializeProperties();
 		Create(format, size);
 	}
 
 	Bitmap::Bitmap(const String& fileName, ImageType type /*= IT_AUTO*/):
 		mFormat(Format::Default), mData(nullptr)
 	{
-		InitializeProperties();
 		Load(fileName, type);
 	}
 
 	Bitmap::Bitmap(const Bitmap& other)
 	{
-		InitializeProperties();
-
-		short bpp[] = { 0, 4 };
+		short bpp[] ={ 0, 4 };
 
 		mFormat = other.mFormat;
 		mSize = other.mSize;
@@ -52,7 +46,7 @@ namespace o2
 		if (mData)
 			delete[] mData;
 
-		short bpp[] = { 0, 4 };
+		short bpp[] ={ 0, 4 };
 
 		mFormat = other.mFormat;
 		mSize = other.mSize;
@@ -74,7 +68,7 @@ namespace o2
 		if (mData)
 			delete[] mData;
 
-		short bpp[] = { 0, 4 };
+		short bpp[] ={ 0, 4 };
 
 		mFormat = format;
 		mSize = size;
@@ -153,7 +147,7 @@ namespace o2
 		if (imgSrcRect.Width() == 0)
 			imgSrcRect.Set(Vec2I(), img->GetSize());
 
-		int bpp[] = { 0, 4 };
+		int bpp[] ={ 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 		int pixelSize = curbpp;
 
@@ -185,7 +179,7 @@ namespace o2
 		if (imgSrcRect.Width() == 0)
 			imgSrcRect.Set(Vec2I(), img->GetSize());
 
-		int bpp[] = { 0, 4 };
+		int bpp[] ={ 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 		int pixelSize = curbpp;
 
@@ -216,7 +210,7 @@ namespace o2
 
 	void Bitmap::Colorise(const Color4& color)
 	{
-		int bpp[] = { 0, 4 };
+		int bpp[] ={ 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 
 		for (int x = 0; x < mSize.x*mSize.y; x++)
@@ -231,7 +225,7 @@ namespace o2
 	void Bitmap::GradientByAlpha(const Color4& color1, const Color4& color4, float angle /*= 0*/, float size /*= 0*/,
 								 Vec2F origin /*= Vec2F()*/)
 	{
-		int bpp[] = { 0, 4 };
+		int bpp[] ={ 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 
 		Vec2F dir = Vec2F::Rotated(Math::Deg2rad(angle + 90.0f));
@@ -262,7 +256,7 @@ namespace o2
 	void Bitmap::Fill(const Color4& color)
 	{
 		unsigned long colrDw = color.ARGB();
-		int bpp[] = { 0, 4 };
+		int bpp[] ={ 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 
 		for (int x = 0; x < mSize.x*mSize.y; x++)
@@ -300,7 +294,7 @@ namespace o2
 			}
 		}
 
-		int bpp[] = { 0, 4 };
+		int bpp[] ={ 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 		UInt8* srcData = mnew UInt8[mSize.x*mSize.y*curbpp];
 		memcpy(srcData, mData, mSize.x*mSize.y*curbpp);
@@ -349,7 +343,7 @@ namespace o2
 		int alphaThreshold = threshold;
 		int radiusSquare = Math::Sqr(Math::FloorToInt(radius));
 
-		int bpp[] = { 0, 4 };
+		int bpp[] ={ 0, 4 };
 		int curbpp = bpp[(int)mFormat];
 
 		UInt8* srcData = mnew UInt8[mSize.x*mSize.y*curbpp];
@@ -415,14 +409,6 @@ namespace o2
 
 		delete[] srcData;
 	}
-
-	void Bitmap::InitializeProperties()
-	{
-		INITIALIZE_GETTER(Bitmap, data, GetData);
-		INITIALIZE_GETTER(Bitmap, size, GetSize);
-		INITIALIZE_GETTER(Bitmap, format, GetFormat);
-	}
-
 }
 
 ENUM_META_(o2::Bitmap::Format, Format)

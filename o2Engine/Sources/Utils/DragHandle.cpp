@@ -14,8 +14,6 @@ namespace o2
 		screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToScreenTransformFunc = [](const Vec2F& point) { return point; };
 		checkPositionFunc = [](const Vec2F& point) { return point; };
-
-		InitializeProperties();
 	}
 
 	DragHandle::DragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/):
@@ -26,8 +24,6 @@ namespace o2
 		screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToScreenTransformFunc = [](const Vec2F& point) { return point; };
 		checkPositionFunc = [](const Vec2F& point) { return point; };
-
-		InitializeProperties();
 	}
 
 	DragHandle::DragHandle(const DragHandle& other)
@@ -49,7 +45,6 @@ namespace o2
 		pixelPerfect = other.pixelPerfect;
 
 		SetPosition(other.mPosition);
-		InitializeProperties();
 	}
 
 	DragHandle::~DragHandle()
@@ -207,7 +202,7 @@ namespace o2
 
 	void DragHandle::SetPosition(const Vec2F& position)
 	{
-		mPosition = checkPositionFunc(position); 
+		mPosition = checkPositionFunc(position);
 
 		UpdateScreenPosition();
 	}
@@ -324,13 +319,6 @@ namespace o2
 	Sprite* DragHandle::GetPressedSprite() const
 	{
 		return mPressedSprite;
-	}
-
-	void DragHandle::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(DragHandle, position, SetPosition, GetPosition);
-		INITIALIZE_PROPERTY(DragHandle, enabled, SetEnabled, IsEnabled);
-		INITIALIZE_PROPERTY(DragHandle, angle, SetAngle, GetAngle);
 	}
 
 	SelectableDragHandle::SelectableDragHandle():

@@ -23,7 +23,7 @@ namespace o2
 	{}
 
 	UIContextMenu::Item::Item(const WString& text, const Function<void()> onClick, const ImageAssetRef& icon /*= ImageAssetRef()*/,
-							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/):
+							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
 		text(text), onClick(onClick), shortcut(shortcut), icon(icon), checked(false), checkable(false)
 	{}
 
@@ -872,7 +872,7 @@ namespace o2
 		UIWidget(other)
 	{
 		mSubMenu = GetChildByType<UIContextMenu>();
-		if (mSubMenu) 
+		if (mSubMenu)
 			mSubMenu->Hide(true);
 
 		RetargetStatesAnimations();

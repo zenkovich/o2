@@ -113,6 +113,7 @@ END_META;
 CLASS_METHODS_META(o2::UIButton)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIButton);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);

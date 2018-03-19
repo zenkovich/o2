@@ -9,9 +9,7 @@
 namespace o2
 {
 	UILabel::UILabel()
-	{
-		InitializeProperties();
-	}
+	{}
 
 	UILabel::UILabel(const UILabel& other):
 		UIWidget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow),
@@ -19,7 +17,6 @@ namespace o2
 	{
 		mTextLayer = GetLayerDrawable<Text>("text");
 		RetargetStatesAnimations();
-		InitializeProperties();
 
 		SetLayoutDirty();
 	}
@@ -309,20 +306,6 @@ namespace o2
 	{
 		if (layer->name == "text" && layer->drawable && layer->drawable->GetType() == TypeOf(Text))
 			mTextLayer = (Text*)layer->drawable;
-	}
-
-	void UILabel::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UILabel, font, SetFont, GetFont);
-		INITIALIZE_PROPERTY(UILabel, text, SetText, GetText);
-		INITIALIZE_PROPERTY(UILabel, height, SetHeight, GetHeight);
-		INITIALIZE_PROPERTY(UILabel, verAlign, SetVerAlign, GetVerAlign);
-		INITIALIZE_PROPERTY(UILabel, horAlign, SetHorAlign, GetHorAlign);
-		INITIALIZE_PROPERTY(UILabel, verOverflow, SetVerOverflow, GetVerOverflow);
-		INITIALIZE_PROPERTY(UILabel, horOverflow, SetHorOverflow, GetHorOverflow);
-		INITIALIZE_PROPERTY(UILabel, expandBorder, SetExpandBorder, GetExpandBorder);
-		INITIALIZE_PROPERTY(UILabel, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef);
-		INITIALIZE_PROPERTY(UILabel, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);
 	}
 }
 

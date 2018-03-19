@@ -18,10 +18,12 @@ namespace o2
 		typedef Vector<Key> KeysVec;
 
 	public:
-		Accessor<float, float> value;         // Value accessor by position
-		Accessor<Key, float>   key;           // Key accessor by position
-		PROPERTY(KeysVec>      keys;          // Keys property
-		GETTER(float>          length;        // Max position getter
+		PROPERTIES(Curve);
+		PROPERTY(KeysVec, keys, SetKeys, GetKeys); // Keys property
+		GETTER(float, length, Length);             // Max position getter
+// 		Accessor<float, float> value;         // Value accessor by position
+// 		Accessor<Key, float>   key;           // Key accessor by position
+
 		Function<void()>       onKeysChanged; // Keys changed event
 
 		// Default constructor
@@ -272,8 +274,6 @@ CLASS_BASES_META(o2::Curve)
 END_META;
 CLASS_FIELDS_META(o2::Curve)
 {
-	PUBLIC_FIELD(value);
-	PUBLIC_FIELD(key);
 	PUBLIC_FIELD(keys);
 	PUBLIC_FIELD(length);
 	PUBLIC_FIELD(onKeysChanged);
@@ -283,6 +283,7 @@ END_META;
 CLASS_METHODS_META(o2::Curve)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, Curve);
 	PUBLIC_FUNCTION(float, Evaluate, float);
 	PUBLIC_FUNCTION(void, MoveKeys, float);
 	PUBLIC_FUNCTION(void, MoveKeysFrom, float, float);

@@ -313,6 +313,7 @@ END_META;
 CLASS_METHODS_META(o2::Text)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, Text);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetFont, FontRef);
 	PUBLIC_FUNCTION(FontRef, GetFont);
@@ -348,6 +349,5 @@ CLASS_METHODS_META(o2::Text)
 	PROTECTED_FUNCTION(void, ColorChanged);
 	PROTECTED_FUNCTION(void, BasisChanged);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

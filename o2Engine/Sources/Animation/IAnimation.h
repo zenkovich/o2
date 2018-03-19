@@ -8,7 +8,8 @@
 
 namespace o2
 {
-	enum class Loop { 
+	enum class Loop
+	{
 		None,    // No loop 
 		Repeat,  // Repeats from start to end
 		PingPong // Repeats from start to end, from end to start, to end ...
@@ -20,15 +21,16 @@ namespace o2
 	class IAnimation: public ISerializable
 	{
 	public:
-		PROPERTY(bool>  playing;    // Is animation playing property
-		PROPERTY(bool>  reversed;   // Is animation reversed property
-		PROPERTY(float> speed;      // Animation speed. 1.0 is default
-		PROPERTY(float> time;       // Animation time
-		PROPERTY(float> relTime;    // Animation relative time. 0 - is start of animation, 1 - time at duration
-		PROPERTY(float> beginBound; // Begin playing time bound property
-		PROPERTY(float> endBound;   // End playing time bound property
-		PROPERTY(Loop>  loop;       // Loop animation property
-		GETTER(float>   duration;   // Animation duration property
+		PROPERTIES(IAnimation);
+		PROPERTY(bool, playing, SetPlaying, IsPlaying);            // Is animation playing property
+		PROPERTY(bool, reversed, SetReverse, IsReversed);          // Is animation reversed property
+		PROPERTY(float, speed, SetSpeed, GetSpeed);                // Animation speed. 1.0 is default
+		PROPERTY(float, time, SetTime, GetTime);                   // Animation time
+		PROPERTY(float, relTime, SetRelTime, GetRelTime);          // Animation relative time. 0 - is start of animation, 1 - time at duration
+		PROPERTY(float, beginBound, SetBeginBound, GetBeginBound); // Begin playing time bound property
+		PROPERTY(float, endBound, SetEndBound, GetEndBound);       // End playing time bound property
+		PROPERTY(Loop, loop, SetLoop, GetLoop);                    // Loop animation property
+		GETTER(float, duration, GetDuration);                      // Animation duration property
 
 		Function<void()>      onPlayEvent;   // Event calling when starting playing
 		Function<void()>      onStopEvent;   // Event calling when stopping playing
@@ -171,9 +173,6 @@ namespace o2
 
 		// It is called for updating animated object, after updating time
 		virtual void Evaluate();
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -212,6 +211,7 @@ END_META;
 CLASS_METHODS_META(o2::IAnimation)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, IAnimation);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Play);
 	PUBLIC_FUNCTION(void, PlayInBounds, float, float);
@@ -248,6 +248,5 @@ CLASS_METHODS_META(o2::IAnimation)
 	PUBLIC_FUNCTION(void, RemoveAllTimeEvents);
 	PROTECTED_FUNCTION(void, UpdateTime);
 	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

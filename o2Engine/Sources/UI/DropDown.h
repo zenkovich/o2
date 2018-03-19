@@ -73,13 +73,13 @@ END_META;
 CLASS_FIELDS_META(o2::UIDropDown)
 {
 	PUBLIC_FIELD(value);
-	PUBLIC_FIELD(textItem);
 	PUBLIC_FIELD(onSelectedText);
 }
 END_META;
 CLASS_METHODS_META(o2::UIDropDown)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIDropDown);
 	PUBLIC_FUNCTION(int, AddItem, const WString&);
 	PUBLIC_FUNCTION(int, AddItem, const WString&, int);
 	PUBLIC_FUNCTION(void, AddItems, const Vector<WString>&);
@@ -91,6 +91,5 @@ CLASS_METHODS_META(o2::UIDropDown)
 	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

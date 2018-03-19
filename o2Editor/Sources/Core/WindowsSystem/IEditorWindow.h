@@ -13,8 +13,6 @@ namespace Editor
 	class IEditorWindow: public IObject
 	{
 	public:
-		PROPERTY(bool> visible; // Window visibility property
-
 		// Default constructor
 		IEditorWindow();
 
@@ -63,7 +61,6 @@ CLASS_BASES_META(Editor::IEditorWindow)
 END_META;
 CLASS_FIELDS_META(Editor::IEditorWindow)
 {
-	PUBLIC_FIELD(visible);
 	PROTECTED_FIELD(mWindow);
 }
 END_META;

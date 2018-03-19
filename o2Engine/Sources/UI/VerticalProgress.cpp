@@ -9,19 +9,16 @@ namespace o2
 {
 	UIVerticalProgress::UIVerticalProgress():
 		UIWidget(), DrawableCursorEventsListener(this)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	UIVerticalProgress::UIVerticalProgress(const UIVerticalProgress& other):
-		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue), 
+	UIVerticalProgress::UIVerticalProgress(const UIVerticalProgress& other) :
+		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
 		mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense)
 	{
 		mBarLayer = FindLayer("bar");
 		mBackLayer = FindLayer("back");
 
 		RetargetStatesAnimations();
-		InitializeProperties();
 	}
 
 	UIVerticalProgress::~UIVerticalProgress()
@@ -276,14 +273,6 @@ namespace o2
 			mBarLayer = layer;
 
 		UpdateProgressLayersLayouts();
-	}
-
-	void UIVerticalProgress::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIVerticalProgress, value, SetValue, GetValue);
-		INITIALIZE_PROPERTY(UIVerticalProgress, minValue, SetMinValue, GetMinValue);
-		INITIALIZE_PROPERTY(UIVerticalProgress, maxValue, SetMaxValue, GetMaxValue);
-		INITIALIZE_PROPERTY(UIVerticalProgress, scrollSense, SetScrollSense, GetScrollSense);
 	}
 }
 

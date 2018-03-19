@@ -763,6 +763,7 @@ META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimatedValue<typename _type>)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, AnimatedValue<_type>);
 	PUBLIC_FUNCTION(void, SetTarget, _type*);
 	PUBLIC_FUNCTION(void, SetTarget, _type*, const Function<void()>&);
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
@@ -814,5 +815,6 @@ CLASS_FIELDS_META(o2::AnimatedValue<typename _type>::Key)
 END_META;
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimatedValue<typename _type>::Key)
-{}
+{
+}
 END_META;

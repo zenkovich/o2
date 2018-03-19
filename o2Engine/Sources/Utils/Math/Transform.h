@@ -13,28 +13,34 @@ namespace o2
 	class Transform: public ISerializable
 	{
 	public:
-		PROPERTY(Vec2F>  position;      // Position property
-		PROPERTY(Vec2F>  size;          // Size property
-		PROPERTY(Vec2F>  scale;         // Scale property
-		PROPERTY(Vec2F>  pivot;         // Pivot property, in local space
-		PROPERTY(Vec2F>  worldPivot;    // Pivot property, in world space
-		PROPERTY(Vec2F>  szPivot;       // Pivot in size space property
-		PROPERTY(RectF>  rect;          // Rectangle property. Sets the position and size
-		PROPERTY(float>  angle;         // Rotation angle in radians
-		PROPERTY(float>  angleDegree;   // Rotation angle in degrees
-		PROPERTY(float>  shear;         // Shear property
-		PROPERTY(Basis>  basis;         // Transformation basis property
-		PROPERTY(Basis>  nonSizedBasis; // Non sizes transformation basis property
-		PROPERTY(RectF>  AABB;          // Axis aligned rectangle
-		PROPERTY(Vec2F>  leftTop;       // Left top corner property
-		PROPERTY(Vec2F>  leftBottom;    // Left bottom corner property
-		PROPERTY(Vec2F>  rightTop;      // Left top corner property
-		PROPERTY(Vec2F>  rightBottom;   // Left top corner property
-		PROPERTY(Vec2F>  right;         // X Axis direction property
-		PROPERTY(Vec2F>  left;          // Negative X Axis direction property
-		PROPERTY(Vec2F>  up;            // Y Axis direction property
-		PROPERTY(Vec2F>  down;          // Negative Y Axis direction property
-		SETTER(Vec2F>    lookAtPoint;   // Look at point setter
+		PROPERTIES(Transform);
+		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property
+		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property
+		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property
+		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space
+		PROPERTY(Vec2F, worldPivot, SetWorldPivot, GetWorldPivot);      // Pivot property, in world space
+		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property
+		PROPERTY(float, angle, SetAngle, GetAngle);                     // Rotation angle in radians
+		PROPERTY(float, angleDegree, SetAngleDegrees, GetAngleDegrees); // Rotation angle in degrees
+		PROPERTY(float, shear, SetShear, GetShear);                     // Shear property
+
+		PROPERTY(Basis, basis, SetBasis, GetBasis);                         // Transformation basis property
+		PROPERTY(Basis, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis); // Non sizes transformation basis property
+
+		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Sets the position and size
+		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle
+
+		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property
+		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property
+		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Left top corner property
+		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Left top corner property
+
+		PROPERTY(Vec2F, right, SetRight, GetRight); // X Axis direction property
+		PROPERTY(Vec2F, left, SetLeft, GetLeft);    // Negative X Axis direction property
+		PROPERTY(Vec2F, up, SetUp, GetUp);          // Y Axis direction property
+		PROPERTY(Vec2F, down, SetDown, GetDown);    // Negative Y Axis direction property
+
+		SETTER(Vec2F, lookAtPoint, LookAt); // Look at point setter
 
 									   // Constructor
 		Transform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
@@ -51,7 +57,7 @@ namespace o2
 
 		// Check equals operator
 		bool operator==(const Transform& other) const;
-		
+
 		// Sets position
 		virtual void SetPosition(const Vec2F& position);
 
@@ -211,7 +217,7 @@ namespace o2
 		Vec2F  mPivot;             // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
 		float  mAngle;             // Rotation angle in radians @SERIALIZABLE
 		float  mShear;             // Shear @SERIALIZABLE
-						           
+
 		Basis  mTransform;         // Final transform basis
 		Basis  mNonSizedTransform; // Final transform basis without size
 
@@ -224,9 +230,6 @@ namespace o2
 
 		// Updates mTransform 
 		virtual void UpdateTransform();
-
-		// Initializing properties
-		void InitializeProperties();
 	};
 }
 
@@ -243,12 +246,12 @@ CLASS_FIELDS_META(o2::Transform)
 	PUBLIC_FIELD(pivot);
 	PUBLIC_FIELD(worldPivot);
 	PUBLIC_FIELD(szPivot);
-	PUBLIC_FIELD(rect);
 	PUBLIC_FIELD(angle);
 	PUBLIC_FIELD(angleDegree);
 	PUBLIC_FIELD(shear);
 	PUBLIC_FIELD(basis);
 	PUBLIC_FIELD(nonSizedBasis);
+	PUBLIC_FIELD(rect);
 	PUBLIC_FIELD(AABB);
 	PUBLIC_FIELD(leftTop);
 	PUBLIC_FIELD(leftBottom);
@@ -272,6 +275,7 @@ END_META;
 CLASS_METHODS_META(o2::Transform)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, Transform);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetPosition);
 	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
@@ -325,6 +329,5 @@ CLASS_METHODS_META(o2::Transform)
 	PROTECTED_FUNCTION(void, BasisChanged);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, UpdateTransform);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

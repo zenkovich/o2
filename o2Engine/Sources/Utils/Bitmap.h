@@ -18,9 +18,10 @@ namespace o2
 		enum class ImageType { Auto = 0, Png };
 
 	public:
-		GETTER(UInt8*> data;       // Data getter
-		GETTER(Vec2I>  size;       // Image size getter
-		GETTER(Format> format; // Data format getter
+		PROPERTIES(Bitmap);
+		GETTER(UInt8*, data, GetData);     // Data getter
+		GETTER(Vec2I, size, GetSize);      // Image size getter
+		GETTER(Format, format, GetFormat); // Data format getter
 
 		// Default constructor
 		Bitmap();
@@ -80,7 +81,7 @@ namespace o2
 		void Colorise(const Color4& color);
 
 		// Sets image pixels by gradient
-		void GradientByAlpha(const Color4& color1, const Color4& color4, float angle = 0, float size = 0, 
+		void GradientByAlpha(const Color4& color1, const Color4& color4, float angle = 0, float size = 0,
 							 Vec2F origin = Vec2F());
 
 		// Fill image with color
@@ -100,9 +101,5 @@ namespace o2
 		UInt8* mData;     // Data array
 		Vec2I  mSize;     // Size of image, in pixels
 		String mFilename; // File name. Empty if no file
-
-	protected:
-		// Initializes properties
-		void InitializeProperties();
 	};
 }

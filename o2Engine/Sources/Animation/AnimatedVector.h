@@ -19,7 +19,7 @@ namespace o2
 		PROPERTIES(AnimatedValue<o2::Vec2F>);
 		GETTER(o2::Vec2F, value, GetValue);                           // Current value getter
 		SETTER(o2::Vec2F*, target, SetTarget);                        // Bind target setter
-		SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
+		SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter  
 		SETTER(IValueProxy<o2::Vec2F>*, targetProxy, SetTargetProxy); // Bind proxy setter
 		PROPERTY(KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
 
@@ -231,6 +231,7 @@ END_META;
 CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, AnimatedValue<o2::Vec2F>);
 	PUBLIC_FUNCTION(void, SetTarget, Vec2F*);
 	PUBLIC_FUNCTION(void, SetTarget, Vec2F*, const Function<void()>&);
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);

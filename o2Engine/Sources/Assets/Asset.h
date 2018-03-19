@@ -251,6 +251,7 @@ END_META;
 CLASS_METHODS_META(o2::Asset)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, Asset);
 	PUBLIC_FUNCTION(AssetInfo, GetAssetInfo);
 	PUBLIC_FUNCTION(String, GetPath);
 	PUBLIC_FUNCTION(void, SetPath, const String&);
@@ -275,7 +276,6 @@ CLASS_METHODS_META(o2::Asset)
 	PROTECTED_FUNCTION(String, GetMetaFullPath);
 	PROTECTED_FUNCTION(UID&, IdRef);
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

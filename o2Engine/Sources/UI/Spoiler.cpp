@@ -210,7 +210,7 @@ namespace o2
 			return true;
 
 		return mExpandState->GetState() && !mExpandState->animation.IsPlaying();
-	}	 
+	}
 
 	bool UISpoiler::IsFullyCollapsed() const
 	{
@@ -219,14 +219,6 @@ namespace o2
 
 		return !mExpandState->GetState() && !mExpandState->animation.IsPlaying();
 	}
-
-	void UISpoiler::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UISpoiler, caption, SetCaption, GetCaption);
-		INITIALIZE_PROPERTY(UISpoiler, headHeight, SetHeadHeight, GetHeadHeight);
-		INITIALIZE_PROPERTY(UISpoiler, expanded, SetExpanded, IsExpanded);
-	}
-
 }
 
 DECLARE_CLASS(o2::UISpoiler);

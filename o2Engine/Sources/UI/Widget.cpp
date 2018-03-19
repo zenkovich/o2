@@ -28,7 +28,6 @@ namespace o2
 			o2UI.mFocusableWidgets.Add(this);
 
 		layout->SetOwner(this);
-		InitializeProperties();
 	}
 
 	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
@@ -46,7 +45,6 @@ namespace o2
 			o2UI.mFocusableWidgets.Add(this);
 
 		layout->SetOwner(this);
-		InitializeProperties();
 	}
 
 	UIWidget::UIWidget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/):
@@ -65,7 +63,6 @@ namespace o2
 			o2UI.mFocusableWidgets.Add(this);
 
 		layout->SetOwner(this);
-		InitializeProperties();
 	}
 
 	UIWidget::UIWidget(const UIWidget& other):
@@ -121,7 +118,6 @@ namespace o2
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
 
-		InitializeProperties();
 		UpdateDrawingChildren();
 		UpdateLayersDrawingSequence();
 		RetargetStatesAnimations();
@@ -894,6 +890,15 @@ namespace o2
 		return res;
 	}
 
+	Dictionary<String, UIWidgetState*> UIWidget::GetAllStates()
+	{
+		Dictionary<String, UIWidgetState*> res;
+		for (auto state : mStates)
+			res.Add(state->name, state);
+
+		return res;
+	}
+
 	void UIWidget::OnSerialize(DataNode& node) const
 	{
 		Actor::OnSerialize(node);
@@ -1043,23 +1048,6 @@ namespace o2
 
 	void UIWidget::OnVisibleChanged()
 	{}
-
-	void UIWidget::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIWidget, visible, SetVisible, IsVisible);
-		INITIALIZE_PROPERTY(UIWidget, transparency, SetTransparency, GetTransparency);
-		INITIALIZE_GETTER(UIWidget, resTransparency, GetResTransparency);
-		INITIALIZE_PROPERTY(UIWidget, parentWidget, SetParentWidget, GetParentWidget);
-		INITIALIZE_GETTER(UIWidget, childrenWidgets, GetChildrenNonConst);
-		INITIALIZE_GETTER(UIWidget, layers, GetLayersNonConst);
-		INITIALIZE_GETTER(UIWidget, states, GetStatesNonConst);
-		INITIALIZE_ACCESSOR(UIWidget, childWidget, GetChildWidget);
-		INITIALIZE_ACCESSOR(UIWidget, layer, GetLayer);
-		INITIALIZE_ACCESSOR(UIWidget, state, GetStateObject);
-
-		layer.SetAllAccessFunc(this, &UIWidget::GetAllLayers);
-		childWidget.SetAllAccessFunc(this, &UIWidget::GetAllChilds);
-	}
 
 	void UIWidget::CopyData(const Actor& otherActor)
 	{

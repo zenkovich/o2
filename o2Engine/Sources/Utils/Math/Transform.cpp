@@ -9,7 +9,6 @@ namespace o2
 		mSize(size), mPosition(position), mAngle(angle), mScale(scale), mPivot(pivot), mShear(0)
 	{
 		UpdateTransform();
-		InitializeProperties();
 	}
 
 	Transform::Transform(const Transform& other):
@@ -17,7 +16,6 @@ namespace o2
 		mPivot(other.mPivot), mShear(other.mShear), mTransform(other.mTransform),
 		mNonSizedTransform(other.mNonSizedTransform)
 	{
-		InitializeProperties();
 	}
 
 	void Transform::OnDeserialized(const DataNode& node)
@@ -403,32 +401,6 @@ namespace o2
 		float dy = lp.Dot(ny);
 
 		return dx >= 0.0f && dx <= rs.x && dy >= 0.0f && dy < rs.y;
-	}
-
-	void Transform::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(Transform, position, SetPosition, GetPosition);
-		INITIALIZE_PROPERTY(Transform, size, SetSize, GetSize);
-		INITIALIZE_PROPERTY(Transform, scale, SetScale, GetScale);
-		INITIALIZE_PROPERTY(Transform, pivot, SetPivot, GetPivot);
-		INITIALIZE_PROPERTY(Transform, worldPivot, SetWorldPivot, GetWorldPivot);
-		INITIALIZE_PROPERTY(Transform, szPivot, SetSizePivot, GetSizePivot);
-		INITIALIZE_PROPERTY(Transform, rect, SetRect, GetRect);
-		INITIALIZE_PROPERTY(Transform, angle, SetAngle, GetAngle);
-		INITIALIZE_PROPERTY(Transform, angleDegree, SetAngleDegrees, GetAngleDegrees);
-		INITIALIZE_PROPERTY(Transform, shear, SetShear, GetShear);
-		INITIALIZE_PROPERTY(Transform, basis, SetBasis, GetBasis);
-		INITIALIZE_PROPERTY(Transform, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis);
-		INITIALIZE_PROPERTY(Transform, AABB, SetAxisAlignedRect, GetAxisAlignedRect);
-		INITIALIZE_PROPERTY(Transform, right, SetRight, GetRight);
-		INITIALIZE_PROPERTY(Transform, left, SetLeft, GetLeft);
-		INITIALIZE_PROPERTY(Transform, up, SetUp, GetUp);
-		INITIALIZE_PROPERTY(Transform, down, SetDown, GetDown);
-		INITIALIZE_PROPERTY(Transform, leftTop, SetLeftTop, GetLeftTop);
-		INITIALIZE_PROPERTY(Transform, rightTop, SetRightTop, GetRightTop);
-		INITIALIZE_PROPERTY(Transform, leftBottom, SetLeftBottom, GetLeftBottom);
-		INITIALIZE_PROPERTY(Transform, rightBottom, SetRightBottom, GetRightBottom);
-		INITIALIZE_SETTER(Transform, lookAtPoint, LookAt);
 	}
 }
 

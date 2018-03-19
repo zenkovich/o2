@@ -13,11 +13,9 @@ namespace o2
 {
 	UIToggle::UIToggle():
 		UIWidget(), DrawableCursorEventsListener(this)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	UIToggle::UIToggle(const UIToggle& other):
+	UIToggle::UIToggle(const UIToggle& other) :
 		UIWidget(other), DrawableCursorEventsListener(this), mToggleGroup(nullptr)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
@@ -30,8 +28,6 @@ namespace o2
 
 		if (other.IsValueUnknown())
 			SetValueUnknown();
-
-		InitializeProperties();
 	}
 
 	UIToggle& UIToggle::operator=(const UIToggle& other)
@@ -63,7 +59,7 @@ namespace o2
 				underPoint = cursor.y > layout->worldBottom && cursor.y < layout->worldTop;
 			else
 				underPoint = cursor.x > layout->worldLeft && cursor.x < layout->worldRight;
-		
+
 			if (underPoint)
 			{
 				SetValue(!mValue);
@@ -205,10 +201,10 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (UIWidget::IsUnderPoint(cursor.position) && 
-			!(mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick || 
-							   mToggleGroup->mType == UIToggleGroup::Type::HorOneClick) && 
-			  mToggleGroup->mPressed))
+		if (UIWidget::IsUnderPoint(cursor.position) &&
+			!(mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick ||
+			mToggleGroup->mType == UIToggleGroup::Type::HorOneClick) &&
+			mToggleGroup->mPressed))
 		{
 			SetValue(!mValue);
 			onClick();
@@ -216,7 +212,7 @@ namespace o2
 		}
 
 		if (mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick ||
-							 mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
+			mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
 		{
 			mToggleGroup->mPressed = false;
 			mToggleGroup->onReleased(mValue);
@@ -230,7 +226,7 @@ namespace o2
 			*pressedState = false;
 
 		if (mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick ||
-							 mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
+			mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
 		{
 			mToggleGroup->mPressed = false;
 			mToggleGroup->onReleased(mValue);
@@ -324,13 +320,6 @@ namespace o2
 	void UIToggle::OnVisibleChanged()
 	{
 		interactable = mResVisible;
-	}
-
-	void UIToggle::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIToggle, caption, SetCaption, GetCaption);
-		INITIALIZE_PROPERTY(UIToggle, value, SetValue, GetValue);
-		INITIALIZE_PROPERTY(UIToggle, toggleGroup, SetToggleGroup, GetToggleGroup);
 	}
 
 	UIToggleGroup::UIToggleGroup(Type type):

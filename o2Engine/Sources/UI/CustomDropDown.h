@@ -167,7 +167,6 @@ CLASS_FIELDS_META(o2::UICustomDropDown)
 {
 	PUBLIC_FIELD(selectedItem);
 	PUBLIC_FIELD(selectedItemPos);
-	PUBLIC_FIELD(item);
 	PUBLIC_FIELD(itemsCount);
 	PUBLIC_FIELD(onSelectedPos);
 	PUBLIC_FIELD(onSelectedItem);
@@ -182,6 +181,7 @@ CLASS_METHODS_META(o2::UICustomDropDown)
 
 	typedef const Function<bool(UIWidget*, UIWidget*)>& _tmp1;
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UICustomDropDown);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
@@ -220,6 +220,5 @@ CLASS_METHODS_META(o2::UICustomDropDown)
 	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, OnItemSelected);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

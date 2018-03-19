@@ -82,6 +82,7 @@ END_META;
 CLASS_METHODS_META(o2::SceneDrawable)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, SceneDrawable);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
 	PUBLIC_FUNCTION(float, GetDrawingDepth);
@@ -89,6 +90,5 @@ CLASS_METHODS_META(o2::SceneDrawable)
 	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(void, OnIncludeToScene);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

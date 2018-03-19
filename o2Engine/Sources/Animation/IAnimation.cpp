@@ -8,17 +8,13 @@ namespace o2
 	IAnimation::IAnimation():
 		mTime(0), mDuration(0), mBeginTime(0), mEndTime(0), mDirection(1.0f), mSpeed(1.0f), mLoop(Loop::None),
 		mPlaying(false), mInDurationTime(0)
-	{
-		InitializeProperties();
-	}
+	{}
 
-	IAnimation::IAnimation(const IAnimation& other):
+	IAnimation::IAnimation(const IAnimation& other) :
 		mTime(other.mTime), mDuration(other.mDuration), mBeginTime(other.mBeginTime), mEndTime(other.mEndTime),
 		mDirection(other.mDirection), mSpeed(other.mSpeed), mLoop(other.mLoop),
 		mPlaying(other.mPlaying), mInDurationTime(other.mInDurationTime)
-	{
-		InitializeProperties();
-	}
+	{}
 
 	IAnimation::~IAnimation()
 	{}
@@ -311,19 +307,6 @@ namespace o2
 
 	void IAnimation::Evaluate()
 	{}
-
-	void IAnimation::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(IAnimation, playing, SetPlaying, IsPlaying);
-		INITIALIZE_PROPERTY(IAnimation, reversed, SetReverse, IsReversed);
-		INITIALIZE_PROPERTY(IAnimation, speed, SetSpeed, GetSpeed);
-		INITIALIZE_PROPERTY(IAnimation, time, SetTime, GetTime);
-		INITIALIZE_PROPERTY(IAnimation, relTime, SetRelTime, GetRelTime);
-		INITIALIZE_PROPERTY(IAnimation, beginBound, SetBeginBound, GetBeginBound);
-		INITIALIZE_PROPERTY(IAnimation, endBound, SetEndBound, GetEndBound);
-		INITIALIZE_PROPERTY(IAnimation, loop, SetLoop, GetLoop);
-		INITIALIZE_GETTER(IAnimation, duration, GetDuration);
-	}
 }
 
 DECLARE_CLASS(o2::IAnimation);

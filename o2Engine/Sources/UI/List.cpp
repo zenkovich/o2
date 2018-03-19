@@ -12,15 +12,12 @@ namespace o2
 		UILabel* itemSample = mnew UILabel();
 		itemSample->horOverflow = UILabel::HorOverflow::Dots;
 		SetItemSample(itemSample);
-
-		InitializeProperties();
 	}
 
 	UIList::UIList(const UIList& other):
 		UICustomList(other)
 	{
 		RetargetStatesAnimations();
-		InitializeProperties();
 	}
 
 	UIList::~UIList()
@@ -127,13 +124,6 @@ namespace o2
 	void UIList::OnSelectionChanged()
 	{
 		onSelectedText(GetSelectedItemText());
-	}
-
-	void UIList::initializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIList, value, SelectItemText, GetSelectedItemText);
-		INITIALIZE_PROPERTY(UIList, values, SetSelectedItems, GetSelectedItemsText);
-		INITIALIZE_ACCESSOR(UIList, textItem, GetItemText);
 	}
 }
 

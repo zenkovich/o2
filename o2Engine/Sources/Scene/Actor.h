@@ -119,7 +119,7 @@ namespace o2
 		GETTER(ComponentsVec, components, GetComponents); // Components array getter
 
 		ACCESSOR(Actor*, child, const String&, GetChild, GetAllChilds);                 // Children accessor
-		ACCESSOR<Component*, component, const String&, GetComponent, GetAllComponents); // Component accessor by type name
+		ACCESSOR(Component*, component, const String&, GetComponent, GetAllComponents); // Component accessor by type name
 
 		TagGroup                tags;      // Tags group
 		ActorTransform* const   transform; // Transformation of actor
@@ -753,11 +753,9 @@ END_META;
 CLASS_FIELDS_META(o2::Actor)
 {
 	PUBLIC_FIELD(prototype);
-	PUBLIC_FIELD(transform);
 	PUBLIC_FIELD(parent);
 	PUBLIC_FIELD(id);
 	PUBLIC_FIELD(name);
-	PUBLIC_FIELD(tags);
 	PUBLIC_FIELD(layer);
 	PUBLIC_FIELD(layerName);
 	PUBLIC_FIELD(enabled);
@@ -768,6 +766,8 @@ CLASS_FIELDS_META(o2::Actor)
 	PUBLIC_FIELD(components);
 	PUBLIC_FIELD(child);
 	PUBLIC_FIELD(component);
+	PUBLIC_FIELD(tags);
+	PUBLIC_FIELD(transform);
 	PUBLIC_FIELD(onEnableChanged);
 	PROTECTED_FIELD(mPrototype);
 	PROTECTED_FIELD(mPrototypeLink);
@@ -801,6 +801,7 @@ CLASS_METHODS_META(o2::Actor)
 	typedef const Dictionary<const Actor*, Actor*>& _tmp9;
 	typedef const Dictionary<const Component*, Component*>& _tmp10;
 
+	PUBLIC_FUNCTION(void, PROPERTIES, Actor);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, UpdateTransform, bool);
@@ -882,7 +883,6 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
 	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, ProcessCopying, Actor*, const Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp3, _tmp4, bool);
 	PROTECTED_FUNCTION(void, ProcessPrototypeMaking, Actor*, Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6, bool);

@@ -258,6 +258,7 @@ END_META;
 CLASS_METHODS_META(o2::AtlasAsset)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, AtlasAsset);
 	PUBLIC_FUNCTION(AssetInfosVec, GetImages);
 	PUBLIC_FUNCTION(Vector<AssetRef>, GetImagesAssets);
 	PUBLIC_FUNCTION(PagesVec, GetPages);
@@ -269,7 +270,6 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

@@ -12,9 +12,10 @@ namespace o2
 	class UISpoiler: public UIVerticalLayout
 	{
 	public:
-		PROPERTY(WString> caption;    // Head caption property
-		PROPERTY(float>   headHeight; // Head height property
-		PROPERTY(bool>    expanded;   // Expanded state property
+		PROPERTIES(UISpoiler);
+		PROPERTY(WString, caption, SetCaption, GetCaption);        // Head caption property
+		PROPERTY(float, headHeight, SetHeadHeight, GetHeadHeight); // Head height property
+		PROPERTY(bool, expanded, SetExpanded, IsExpanded);         // Expanded state property
 
 		Function<void()> onExpand;    // Expand starting event
 
@@ -88,9 +89,6 @@ namespace o2
 
 		// Returns is spoiler fully collapsed and not animating
 		bool IsFullyCollapsed() const;
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -113,6 +111,7 @@ END_META;
 CLASS_METHODS_META(o2::UISpoiler)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UISpoiler);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
@@ -130,6 +129,5 @@ CLASS_METHODS_META(o2::UISpoiler)
 	PROTECTED_FUNCTION(UIButton*, FindExpandButton);
 	PROTECTED_FUNCTION(bool, IsFullyExpanded);
 	PROTECTED_FUNCTION(bool, IsFullyCollapsed);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

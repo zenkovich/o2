@@ -30,11 +30,34 @@ namespace o2
 	template<class T, class T2> struct DictionaryValueTypeGetterHelper<Dictionary<T, T2>, void> { typedef T2 type; };
 	template<class T> struct ExtractDictionaryValueType: DictionaryValueTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
 
-	template<class T> struct IsStringAccessorHelper: std::false_type {};
-	template<class T> struct IsStringAccessorHelper<Accessor<T*, const String&>>: std::true_type {};
+
+	template <typename T>
+	class IsAccessor
+	{
+		typedef char one;
+		typedef long two;
+
+		template <typename C> static one test(decltype(&C::IsAccessor));
+		template <typename C> static two test(...);
+
+	public:
+		enum { value = sizeof(test<T>(0)) == sizeof(char) };
+	};
+
+	template<class T> 
+	struct IsStringAccessorHelper
+	{
+		typedef char one;
+		typedef long two;
+
+		template <typename C> static one test(typename C::keyType*);
+		template <typename C> static two test(...);
+
+	public:
+		enum { value = sizeof(test<T>(0)) == sizeof(char) && IsAccessor<T>::value };
+	};
+
 	template<class T> struct IsStringAccessor: IsStringAccessorHelper<typename std::remove_cv<T>::type> {};
-	template<class T> struct ExtractStringAccessorType { typedef T type; };
-	template<class T> struct ExtractStringAccessorType<Accessor<T*, const String&>> { typedef T type; };
 
 	template <typename T>
 	class IsProperty
@@ -88,25 +111,28 @@ namespace o2
 		};
 	}
 
+	template<typename T>
+	struct IsFundamental: std::conditional<
+		std::is_fundamental<T>::value ||
+		std::is_same<T, Basis>::value ||
+		std::is_same<T, Color4>::value ||
+		std::is_same<T, RectI>::value ||
+		std::is_same<T, RectF>::value ||
+		std::is_same<T, BorderI>::value ||
+		std::is_same<T, BorderF>::value ||
+		std::is_same<T, Vec2I>::value ||
+		std::is_same<T, Vec2F>::value ||
+		std::is_same<T, Vertex2>::value ||
+		std::is_same<T, String>::value ||
+		std::is_same<T, WString>::value ||
+		std::is_same<T, UID>::value ||
+		std::is_same<T, DataNode>::value, std::true_type, std::false_type> {};
+
 	// type trait
 	template<typename T, typename X =
 	/* if */   std::conditional<std::is_base_of<IObject, T>::value,
 	/* then */ T,
-	/* else */ std::conditional<(
-	           /* if */   std::is_fundamental<T>::value ||
-		                  std::is_same<T, Basis>::value ||
-		                  std::is_same<T, Color4>::value ||
-		                  std::is_same<T, RectI>::value ||
-		                  std::is_same<T, RectF>::value ||
-		                  std::is_same<T, BorderI>::value ||
-		                  std::is_same<T, BorderF>::value ||
-		                  std::is_same<T, Vec2I>::value ||
-		                  std::is_same<T, Vec2F>::value ||
-		                  std::is_same<T, Vertex2>::value ||
-		                  std::is_same<T, String>::value ||
-		                  std::is_same<T, WString>::value ||
-		                  std::is_same<T, UID>::value ||
-		                  std::is_same<T, DataNode>::value) && !std::is_const<T>::value,
+	/* else */ std::conditional<IsFundamental<T>::value && !std::is_const<T>::value,
 		       /* then */ FundamentalTypeContainer<T>,
 		       /* else */ std::conditional<
 		                  /* if */   std::is_enum<T>::value,
@@ -158,27 +184,27 @@ namespace o2
 	template<typename T>
 	struct AccessorTypeGetter
 	{
-		static const Type& GetType() { return *Reflection::InitializeAccessorType<ExtractStringAccessorType<T>::type>(); }
+		static const Type& GetType() { return *Reflection::InitializeAccessorType<T::keyType>(); }
 	};
 
 	// Returns type of template parameter
 	template<typename _type, typename _getter = 
 		std::conditional<
 		/* if */   std::is_pointer<_type>::value,
-		/* then */ PointerTypeGETTER(_type>,
+		/* then */ PointerTypeGetter<_type>,
 		/* else */ std::conditional<
 		           /* if */   IsVector<_type>::value,
-		           /* then */ VectorTypeGETTER(_type>,
+		           /* then */ VectorTypeGetter<_type>,
 		           /* else */ std::conditional<
 		                      /* if */   IsStringAccessor<_type>::value,
-		                      /* then */ AccessorTypeGETTER(_type>,
+		                      /* then */ AccessorTypeGetter<_type>,
 		                      /* else */ std::conditional<
 		                                 /* if */   IsDictionary<_type>::value,
-		                                 /* then */ DictionaryTypeGETTER(_type>,
+		                                 /* then */ DictionaryTypeGetter<_type>,
 		                                            std::conditional<
-		                                            /* if */   IsPROPERTY(_type>::value,
-		                                            /* then */ PropertyTypeGETTER(_type>,
-		                                            /* else */ RegularTypeGETTER(_type>
+		                                            /* if */   IsProperty<_type>::value,
+		                                            /* then */ PropertyTypeGetter<_type>,
+		                                            /* else */ RegularTypeGetter<_type>
 													>::type
 							             >::type
 				              >::type

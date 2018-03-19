@@ -10,9 +10,9 @@ namespace o2
 	class UIList: public UICustomList
 	{
 	public:
-		PROPERTY(WString>              value;    // Current selected item text
-		PROPERTY(Vector<WString>>      values;   // Current selected items texts
-		Accessor<WString, int>         textItem; // Text item accessor by position
+		PROPERTIES(UIList);
+		PROPERTY(WString, value, SelectItemText, GetSelectedItemText);             // Current selected item text
+		PROPERTY(Vector<WString>, values, SetSelectedItems, GetSelectedItemsText); // Current selected items texts
 
 		Function<void(const WString&)> onSelectedText; // Change text selected event
 
@@ -84,13 +84,13 @@ CLASS_FIELDS_META(o2::UIList)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(values);
-	PUBLIC_FIELD(textItem);
 	PUBLIC_FIELD(onSelectedText);
 }
 END_META;
 CLASS_METHODS_META(o2::UIList)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIList);
 	PUBLIC_FUNCTION(int, AddItem, const WString&);
 	PUBLIC_FUNCTION(int, AddItem, const WString&, int);
 	PUBLIC_FUNCTION(void, AddItems, const Vector<WString>&);

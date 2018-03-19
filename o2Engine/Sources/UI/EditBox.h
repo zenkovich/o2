@@ -326,6 +326,7 @@ END_META;
 CLASS_METHODS_META(o2::UIEditBox)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIEditBox);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetText, const WString&);
@@ -397,6 +398,5 @@ CLASS_METHODS_META(o2::UIEditBox)
 	PROTECTED_FUNCTION(void, CheckCaretMoving, KeyboardKey);
 	PROTECTED_FUNCTION(void, CheckClipboard, KeyboardKey);
 	PROTECTED_FUNCTION(void, MoveCaret, int, bool);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

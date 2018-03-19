@@ -337,6 +337,7 @@ END_META;
 CLASS_METHODS_META(o2::UIContextMenuItem)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIContextMenuItem);
 	PUBLIC_FUNCTION(void, SetText, const WString&);
 	PUBLIC_FUNCTION(WString, GetText);
 	PUBLIC_FUNCTION(UIContextMenu*, GetSubMenu);
@@ -348,7 +349,6 @@ CLASS_METHODS_META(o2::UIContextMenuItem)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnShortcutPressed);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

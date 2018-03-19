@@ -252,44 +252,6 @@
 // 	}
 // }
 // 
-// META_TEMPLATES(typename _type)
-// CLASS_BASES_META(o2::TweenValue<typename _type>)
-// {
-// 	BASE_CLASS(o2::IAnimation);
-// }
-// END_META;
-// META_TEMPLATES(typename _type)
-// CLASS_FIELDS_META(o2::TweenValue<typename _type>)
-// {
-// 	PUBLIC_FIELD(leftValue);
-// 	PUBLIC_FIELD(rightValue);
-// 	PUBLIC_FIELD(transitionCurve);
-// 	PUBLIC_FIELD(duration);
-// 	PUBLIC_FIELD(state);
-// 	PUBLIC_FIELD(value);
-// 	PUBLIC_FIELD(targetValuePtr);
-// 	PUBLIC_FIELD(targetValueEvent);
-// 	PUBLIC_FIELD(targetProperty);
-// 	PROTECTED_FIELD(mValue);
-// 	PROTECTED_FIELD(mBindValue);
-// 	PROTECTED_FIELD(mBindValueChangeEvent);
-// 	PROTECTED_FIELD(mBindProperty);
-// }
-// END_META;
-// META_TEMPLATES(typename _type)
-// CLASS_METHODS_META(o2::TweenValue<typename _type>)
-// {
-// 
-// 	PUBLIC_FUNCTION(_type, GetValue);
-// 	PUBLIC_FUNCTION(void, SetTarget, _type*);
-// 	PUBLIC_FUNCTION(void, SetTarget, _type*, const Function<void()>&);
-// 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
-// 	PUBLIC_FUNCTION(void, SetTargetProperty, SETTER(_type>*);
-// 	PUBLIC_FUNCTION(void, SetDuration, float);
-// 	PUBLIC_FUNCTION(float, GetDuration);
-// 	PUBLIC_FUNCTION(void, SetState, bool);
-// 	PUBLIC_FUNCTION(bool, GetState);
-// 	PROTECTED_FUNCTION(void, Evaluate);
-// 	PROTECTED_FUNCTION(void, InitializeProperties);
-// }
-// END_META;
+//
+//
+//

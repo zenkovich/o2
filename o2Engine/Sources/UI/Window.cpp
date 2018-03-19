@@ -19,7 +19,6 @@ namespace o2
 	{
 		InitializeHandles();
 		InitializeContextMenu();
-		InitializeProperties();
 	}
 
 	UIWindow::UIWindow(const UIWindow& other):
@@ -41,12 +40,10 @@ namespace o2
 		RetargetStatesAnimations();
 		SetLayoutDirty();
 		InitializeHandles();
-		InitializeProperties();
 	}
 
 	UIWindow::~UIWindow()
-	{
-	}
+	{}
 
 	UIWindow& UIWindow::operator=(const UIWindow& other)
 	{
@@ -146,7 +143,7 @@ namespace o2
 		auto iconLayer = GetLayer(mIconLayerPath);
 		if (iconLayer)
 			return dynamic_cast<Sprite*>(iconLayer->drawable);
-		
+
 		return nullptr;
 	}
 
@@ -379,7 +376,7 @@ namespace o2
 	void UIWindow::OnVisibleChanged()
 	{
 		interactable = mResVisible;
-		
+
 		if (mResVisible)
 			Focus();
 	}
@@ -426,12 +423,6 @@ namespace o2
 		}
 
 		InitializeContextMenu();
-	}
-
-	void UIWindow::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIWindow, icon, SetIcon, GetIcon);
-		INITIALIZE_PROPERTY(UIWindow, caption, SetCaption, GetCaption);
 	}
 }
 

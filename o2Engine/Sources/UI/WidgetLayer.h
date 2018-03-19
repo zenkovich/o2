@@ -22,16 +22,18 @@ namespace o2
 		typedef Vector<UIWidgetLayer*> ChildrenVec;
 
 	public:
+		PROPERTIES(UIWidgetLayer);
+		PROPERTY(float, depth, SetDepth, GetDepth);                      // Drawing depth (higher depths will draw later)
+		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Drawable transparency property
+
+		ACCESSOR(UIWidgetLayer*, child, const String&, GetChild, GetAllChildLayers); // Child layer accessor
+
 		String          name;               // Name of layer @SERIALIZABLE
-		PROPERTY(float> depth;              // Drawing depth (higher depths will draw later)
 					    
 		Layout          layout;             // Drawable layout @SERIALIZABLE
 		Layout          interactableLayout; // Interactable area layout @SERIALIZABLE
 					    
-		PROPERTY(float> transparency;       // Drawable transparency property
 		IRectDrawable*  drawable;           // Drawable @SERIALIZABLE
-
-		Accessor<UIWidgetLayer*, const String&> child; // Child layer accessor
 
 
 		// Default constructor
@@ -173,13 +175,13 @@ CLASS_BASES_META(o2::UIWidgetLayer)
 END_META;
 CLASS_FIELDS_META(o2::UIWidgetLayer)
 {
-	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(depth);
+	PUBLIC_FIELD(transparency);
+	PUBLIC_FIELD(child);
+	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(interactableLayout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(drawable).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(child);
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);
 	PROTECTED_FIELD(mDepth).SERIALIZABLE_ATTRIBUTE();
@@ -195,6 +197,7 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 
 	typedef Dictionary<String, UIWidgetLayer*> _tmp1;
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIWidgetLayer);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddChild, UIWidgetLayer*);

@@ -16,7 +16,8 @@ namespace o2
 		typedef Vector<UnknownType*> UnknownsVec;
 
 	public:
-		PROPERTY(int>                           selectedItemPos;   // Selected item position property	
+		PROPERTIES(UILongList);
+		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property	
 
 		Function<void(int)>                     onFocused;         // Select item position event
 
@@ -163,9 +164,6 @@ namespace o2
 		// It is called when selected item index was changed
 		void OnSelectionChanged();
 
-		// Initializes properties
-		void InitializeProperties();
-
 		friend class UIDropDown;
 		friend class UICustomDropDown;
 	};
@@ -204,6 +202,7 @@ END_META;
 CLASS_METHODS_META(o2::UILongList)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UILongList);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
@@ -238,6 +237,5 @@ CLASS_METHODS_META(o2::UILongList)
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateSelection, int);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

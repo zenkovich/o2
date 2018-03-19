@@ -184,6 +184,7 @@ END_META;
 CLASS_METHODS_META(o2::Component)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, Component);
 	PUBLIC_FUNCTION(UInt64, GetID);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
@@ -201,6 +202,5 @@ CLASS_METHODS_META(o2::Component)
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(void, OnIncludeToScene);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

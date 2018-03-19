@@ -20,7 +20,7 @@ namespace o2
 	}
 
 	UICustomDropDown::UICustomDropDown(const UICustomDropDown& other):
-		UIWidget(other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout), 
+		UIWidget(other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout),
 		mMaxListItems(other.mMaxListItems)
 	{
 		mItemsList = other.mItemsList->CloneAs<UICustomList>();
@@ -33,8 +33,7 @@ namespace o2
 	}
 
 	UICustomDropDown::~UICustomDropDown()
-	{
-	}
+	{}
 
 	UICustomDropDown& UICustomDropDown::operator=(const UICustomDropDown& other)
 	{

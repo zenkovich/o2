@@ -15,33 +15,34 @@ namespace o2
 	class UIWidgetLayout: public ActorTransform
 	{
 	public:
-		PROPERTY(Vec2F> anchorMin;    // Left bottom anchor property
-		PROPERTY(Vec2F> anchorMax;    // Right top anchor property
+		PROPERTIES(UIWidgetLayout);
+		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin); // Left bottom anchor property
+		PROPERTY(Vec2F, anchorMax, SetAnchorMax,GetAnchorMax);  // Right top anchor property
 
-		PROPERTY(Vec2F> offsetMin;    // Left bottom corner offset property
-		PROPERTY(Vec2F> offsetMax;    // Right top corner offset property
+		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin); // Left bottom corner offset property
+		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax); // Right top corner offset property
 
-		PROPERTY(float> anchorLeft;   // Left anchor property
-		PROPERTY(float> anchorRight;  // Right anchor property
-		PROPERTY(float> anchorBottom; // Bottom anchor property
-		PROPERTY(float> anchorTop;    // Top anchor property
+		PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property
+		PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property
+		PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property
+		PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property
 
-		PROPERTY(float> offsetLeft;   // Left offset property
-		PROPERTY(float> offsetRight;  // Right offset property
-		PROPERTY(float> offsetBottom; // Bottom offset property
-		PROPERTY(float> offsetTop;    // Top offset property
+		PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property
+		PROPERTY(float, offsetRight, SetOffsetRight, GetOffsetRight);    // Right offset property
+		PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property
+		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property
 
-		PROPERTY(Vec2F> minSize;      // Minimal size property
-		PROPERTY(float> minWidth;     // Minimal width property
-		PROPERTY(float> minHeight;    // Minimal height property
+		PROPERTY(Vec2F, minSize, SetMinimalSize, GetMinimalSize);      // Minimal size property
+		PROPERTY(float, minWidth, SetMinimalWidth, GetMinimalWidth);   // Minimal width property
+		PROPERTY(float, minHeight,SetMinimalHeight, GetMinimalHeight); // Minimal height property
 
-		PROPERTY(Vec2F> maxSize;      // Maximum size property
-		PROPERTY(float> maxWidth;     // Maximum width property
-		PROPERTY(float> maxHeight;    // Maximum height property
+		PROPERTY(Vec2F, maxSize, SetMaximalSize, GetMaximalSize);       // Maximum size property
+		PROPERTY(float, maxWidth, SetMaximalWidth, GetMaximalWidth);    // Maximum width property
+		PROPERTY(float, maxHeight, SetMaximalHeight, GetMaximalHeight); // Maximum height property
 
-		PROPERTY(Vec2F> weight;       // Layout weight property
-		PROPERTY(float> widthWeight;  // Width layout weight property
-		PROPERTY(float> heigthWeight; // Height layout weight property
+		PROPERTY(Vec2F, weight, SetWeight, GetWeight);                   // Layout weight property
+		PROPERTY(float, widthWeight, SetWidthWeight, GetWidthWeight);    // Width layout weight property
+		PROPERTY(float, heigthWeight, SetHeightWeight, GetHeightWeight); // Height layout weight property
 
 		// Default constructor, creates both stretching layout  
 		UIWidgetLayout();
@@ -280,9 +281,6 @@ namespace o2
 		// Doesn't checks size, dummy function
 		void DontCheckMinMax();
 
-		// Initializes properties
-		void InitializeProperties();
-
 		friend class UIContextMenu;
 		friend class UICustomDropDown;
 		friend class UICustomList;
@@ -343,6 +341,7 @@ END_META;
 CLASS_METHODS_META(o2::UIWidgetLayout)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIWidgetLayout);
 	PUBLIC_FUNCTION(void, Update);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
@@ -402,7 +401,6 @@ CLASS_METHODS_META(o2::UIWidgetLayout)
 	PROTECTED_FUNCTION(void, CopyFrom, const ActorTransform&);
 	PROTECTED_FUNCTION(void, CheckMinMax);
 	PROTECTED_FUNCTION(void, DontCheckMinMax);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

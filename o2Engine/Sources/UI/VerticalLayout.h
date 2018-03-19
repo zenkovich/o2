@@ -10,20 +10,21 @@ namespace o2
 	class UIVerticalLayout: public UIWidget
 	{
 	public:
-		PROPERTY(BaseCorner> baseCorner;    // Base corder property
+		PROPERTIES(UIVerticalLayout);
+		PROPERTY(BaseCorner, baseCorner, SetBaseCorner, GetBaseCorner); // Base corder property
 
-		PROPERTY(float>      spacing;       // Space between widgets property
+		PROPERTY(float, spacing, SetSpacing, GetSpacing); // Space between widgets property
 
-		PROPERTY(BorderF>    border;        // Border property
-		PROPERTY(float>      borderLeft;    // Left border property
-		PROPERTY(float>      borderRight;   // Right border property
-		PROPERTY(float>      borderTop;     // Top border property
-		PROPERTY(float>      borderBottom;  // Bottom border property
+		PROPERTY(BorderF, border, SetBorder, GetBorder);                 // Border property
+		PROPERTY(float, borderLeft, SetBorderLeft, GetBorderLeft);       // Left border property
+		PROPERTY(float, borderRight, SetBorderRight, GetBorderRight);    // Right border property
+		PROPERTY(float, borderTop, SetBorderTop, GetBorderTop);          // Top border property
+		PROPERTY(float, borderBottom, SetBorderBottom, GetBorderBottom); // Bottom border property
 
-		PROPERTY(bool>       expandWidth;   // Expand children by width property
-		PROPERTY(bool>       expandHeight;  // Expand children by height property
+		PROPERTY(bool, expandWidth, SetWidthExpand, IsWidthExpand);    // Expand children by width property
+		PROPERTY(bool, expandHeight, SetHeightExpand, IsHeightExpand); // Expand children by height property
 
-		PROPERTY(bool>       fitByChildren; // Fitting size by children property
+		PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
 
 		// Default constructor
 		UIVerticalLayout();
@@ -152,9 +153,6 @@ namespace o2
 
 		// Updates layout's weight and minimal size
 		virtual void UpdateLayoutParametres();
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -186,6 +184,7 @@ END_META;
 CLASS_METHODS_META(o2::UIVerticalLayout)
 {
 
+	PUBLIC_FUNCTION(void, PROPERTIES, UIVerticalLayout);
 	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
 	PUBLIC_FUNCTION(BaseCorner, GetBaseCorner);
 	PUBLIC_FUNCTION(void, SetSpacing, float);
@@ -221,6 +220,5 @@ CLASS_METHODS_META(o2::UIVerticalLayout)
 	PROTECTED_FUNCTION(Vector<float>, CalculateExpandedHeights);
 	PROTECTED_FUNCTION(void, AlignWidgetByWidth, UIWidget*, float);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
