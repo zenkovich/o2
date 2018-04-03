@@ -14,7 +14,7 @@ namespace o2
 	}
 
 	UIDropDown::UIDropDown(const UIDropDown& other):
-		UICustomDropDown(other)
+		UICustomDropDown(other), value(this)
 	{
 		RetargetStatesAnimations();
 	}

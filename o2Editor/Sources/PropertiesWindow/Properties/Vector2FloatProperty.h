@@ -31,7 +31,7 @@ namespace Editor
 		~Vec2FProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -72,16 +72,7 @@ namespace Editor
 		IOBJECT(Vec2FProperty);
 
 	protected:
-		Function<void(void*, const Vec2F&)> mAssignFunc;  // Value assign function
-		Function<Vec2F(void*)>              mGetFunc;     // Get value function
-														  
-		Function<void(void*, float)>        mXAssignFunc; // X Value assign function
-		Function<float(void*)>              mXGetFunc;    // Get X value function
-														  
-		Function<void(void*, float)>        mYAssignFunc; // Y Value assign function
-		Function<float(void*)>              mYGetFunc;    // Get Y value function
-
-		TargetsVec mValuesPointers;           // Fields' pointers
+		TargetsVec mValuesProxies;            // Fields' pointers
 		Vec2F      mCommonValue;              // Common field value (if not different)
 		bool       mXValuesDifferent = true;  // Are left values different
 		bool       mYValuesDifferent = true;  // Are bottom values different\
@@ -161,13 +152,7 @@ CLASS_BASES_META(Editor::Vec2FProperty)
 END_META;
 CLASS_FIELDS_META(Editor::Vec2FProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mXAssignFunc);
-	PROTECTED_FIELD(mXGetFunc);
-	PROTECTED_FIELD(mYAssignFunc);
-	PROTECTED_FIELD(mYGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mXValuesDifferent);
 	PROTECTED_FIELD(mYValuesDifferent);
@@ -182,7 +167,7 @@ END_META;
 CLASS_METHODS_META(Editor::Vec2FProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

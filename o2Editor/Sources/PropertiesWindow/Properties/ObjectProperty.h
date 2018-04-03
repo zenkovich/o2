@@ -29,7 +29,7 @@ namespace Editor
 		~ObjectProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -78,6 +78,9 @@ namespace Editor
 	protected:
 		// It is called when expanding spoiler, initializes properties
 		void OnExpand();
+
+		// Returns object proxy pointer
+		IObject* GetProxyPtr(IAbstractValueProxy* proxy) const;
 	};
 }
 
@@ -98,7 +101,7 @@ END_META;
 CLASS_METHODS_META(Editor::ObjectProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);
@@ -111,5 +114,6 @@ CLASS_METHODS_META(Editor::ObjectProperty)
 	PUBLIC_FUNCTION(bool, IsExpanded);
 	PUBLIC_FUNCTION(const FieldPropertiesInfo&, GetPropertiesInfo);
 	PROTECTED_FUNCTION(void, OnExpand);
+	PROTECTED_FUNCTION(IObject*, GetProxyPtr, IAbstractValueProxy*);
 }
 END_META;

@@ -155,7 +155,6 @@ END_META;
 CLASS_METHODS_META(o2::BitmapFontAsset)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, BitmapFontAsset);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PUBLIC_FUNCTION(FontRef, GetFont);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);

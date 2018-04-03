@@ -152,7 +152,6 @@ END_META;
 CLASS_METHODS_META(o2::DataAsset)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, DataAsset);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PROTECTED_FUNCTION(void, LoadData, const String&);

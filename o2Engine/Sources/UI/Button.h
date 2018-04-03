@@ -20,8 +20,8 @@ namespace o2
 		PROPERTY(WString, caption, SetCaption, GetCaption); // Caption property. Searches "caption" layer and sets text
 		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
-		Function<void()>         onClick;      // Click event
-		ShortcutKeys             shortcut;     // Shortcut keys
+		Function<void()> onClick;      // Click event
+		ShortcutKeys     shortcut;     // Shortcut keys
 
 		// Default constructor
 		UIButton();
@@ -113,7 +113,6 @@ END_META;
 CLASS_METHODS_META(o2::UIButton)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIButton);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);

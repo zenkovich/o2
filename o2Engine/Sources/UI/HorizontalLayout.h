@@ -152,9 +152,6 @@ namespace o2
 
 		// Updates layout's weight and minimal size
 		void UpdateLayoutParametres();
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -186,7 +183,6 @@ END_META;
 CLASS_METHODS_META(o2::UIHorizontalLayout)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIHorizontalLayout);
 	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
 	PUBLIC_FUNCTION(BaseCorner, GetBaseCorner);
 	PUBLIC_FUNCTION(void, SetSpacing, float);
@@ -222,6 +218,5 @@ CLASS_METHODS_META(o2::UIHorizontalLayout)
 	PROTECTED_FUNCTION(Vector<float>, CalculateExpandedWidths);
 	PROTECTED_FUNCTION(void, AlignWidgetByHeight, UIWidget*, float);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

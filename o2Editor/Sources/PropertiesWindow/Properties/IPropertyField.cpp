@@ -7,9 +7,12 @@
 
 namespace Editor
 {
-	void IPropertyField::SetValuePtr(const Vector<void*>& targets, bool isProperty)
+	void IPropertyField::SetValueProxy(const Vector<IAbstractValueProxy*>& targets)
 	{
-		SetValueAndPrototypePtr(targets.Select<Pair<void*, void*>>([](void* x) { return Pair<void*, void*>(x, nullptr); }), isProperty);
+		auto protoTargets = targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+			[](IAbstractValueProxy* x) { return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(x, nullptr); });
+
+		SetValueAndPrototypeProxy(protoTargets);
 	}
 
 	void IPropertyField::SetCaption(const WString& text)

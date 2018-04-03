@@ -111,8 +111,20 @@ namespace o2
 		};
 	}
 
+	template<class T, class = void>
+	struct ExtractPropertyValueType
+	{
+		typedef T type;
+	};
+
+	template<class T>
+	struct ExtractPropertyValueType<T, void_t<decltype(std::declval<T>().IsProperty())>>
+	{
+		typedef typename T::valueType type;
+	};
+
 	template<typename T>
-	struct IsFundamental: std::conditional<
+	struct IsFundamental: public std::conditional<
 		std::is_fundamental<T>::value ||
 		std::is_same<T, Basis>::value ||
 		std::is_same<T, Color4>::value ||
@@ -126,7 +138,7 @@ namespace o2
 		std::is_same<T, String>::value ||
 		std::is_same<T, WString>::value ||
 		std::is_same<T, UID>::value ||
-		std::is_same<T, DataNode>::value, std::true_type, std::false_type> {};
+		std::is_same<T, DataNode>::value, std::true_type, std::false_type>::type {};
 
 	// type trait
 	template<typename T, typename X =
@@ -184,7 +196,7 @@ namespace o2
 	template<typename T>
 	struct AccessorTypeGetter
 	{
-		static const Type& GetType() { return *Reflection::InitializeAccessorType<T::keyType>(); }
+		static const Type& GetType() { return *Reflection::InitializeAccessorType<T::valueType, T>(); }
 	};
 
 	// Returns type of template parameter

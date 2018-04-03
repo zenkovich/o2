@@ -30,7 +30,7 @@ namespace Editor
 		~RectFProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -83,22 +83,7 @@ namespace Editor
 		IOBJECT(RectFProperty);
 
 	protected:
-		Function<void(void*, const RectF&)> mAssignFunc;      // Value assign function
-		Function<RectF(void*)>              mGetFunc;         // Get value function
-
-		Function<void(void*, float)>        mLeftAssignFunc;  // Left Value assign function
-		Function<float(void*)>              mLeftGetFunc;     // Get left value function
-
-		Function<void(void*, float)>        mRightAssignFunc; // Right Value assign function
-		Function<float(void*)>              mRightGetFunc;    // Get right value function
-
-		Function<void(void*, float)>        mTopAssignFunc;   // Top Value assign function
-		Function<float(void*)>              mTopGetFunc;      // Get top value function
-
-		Function<void(void*, float)>        mBottomAssignFunc; // Bottom Value assign function
-		Function<float(void*)>              mBottomGetFunc;    // Get bottom value function
-
-		TargetsVec mValuesPointers;               // Fields' pointers
+		TargetsVec mValuesProxies;                // Fields' pointers
 		RectF      mCommonValue;                  // Common field value (if not different)
 		bool       mLeftValuesDifferent = true;   // Are left values different
 		bool       mBottomValuesDifferent = true; // Are bottom values different
@@ -222,17 +207,7 @@ CLASS_BASES_META(Editor::RectFProperty)
 END_META;
 CLASS_FIELDS_META(Editor::RectFProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mLeftAssignFunc);
-	PROTECTED_FIELD(mLeftGetFunc);
-	PROTECTED_FIELD(mRightAssignFunc);
-	PROTECTED_FIELD(mRightGetFunc);
-	PROTECTED_FIELD(mTopAssignFunc);
-	PROTECTED_FIELD(mTopGetFunc);
-	PROTECTED_FIELD(mBottomAssignFunc);
-	PROTECTED_FIELD(mBottomGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mLeftValuesDifferent);
 	PROTECTED_FIELD(mBottomValuesDifferent);
@@ -253,7 +228,7 @@ END_META;
 CLASS_METHODS_META(Editor::RectFProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

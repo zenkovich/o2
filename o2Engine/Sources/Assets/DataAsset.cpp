@@ -33,7 +33,7 @@ namespace o2
 	}
 
 	DataAsset::DataAsset(const DataAsset& asset):
-		Asset(asset)
+		Asset(asset), meta(this)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;

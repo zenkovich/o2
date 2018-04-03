@@ -26,7 +26,8 @@ namespace o2
 		checkPositionFunc = [](const Vec2F& point) { return point; };
 	}
 
-	DragHandle::DragHandle(const DragHandle& other)
+	DragHandle::DragHandle(const DragHandle& other):
+		angle(this), position(this), enabled(this)
 	{
 		if (other.mRegularSprite)
 			mRegularSprite = other.mRegularSprite->CloneAs<Sprite>();

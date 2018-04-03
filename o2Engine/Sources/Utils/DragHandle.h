@@ -21,8 +21,8 @@ namespace o2
 		PROPERTY(Vec2F, position, SetPosition, GetPosition); // Current position property
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);      // Is handle enabled property. Disabled handle don't drawn and interact
 
-		CursorType                   cursorType;          // Cursor type when hovering and dragging
-		bool                         pixelPerfect = true; // Is handle draws pixel perfect
+		CursorType cursorType;          // Cursor type when hovering and dragging
+		bool       pixelPerfect = true; // Is handle draws pixel perfect
 
 		Function<void(const Vec2F&)> onChangedPos;        // On position changed event
 		Function<void()>             onPressed;           // Pressed cursor on handle event
@@ -390,7 +390,6 @@ END_META;
 CLASS_METHODS_META(o2::DragHandle)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, DragHandle);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);

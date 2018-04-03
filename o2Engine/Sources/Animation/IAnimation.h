@@ -211,7 +211,6 @@ END_META;
 CLASS_METHODS_META(o2::IAnimation)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, IAnimation);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Play);
 	PUBLIC_FUNCTION(void, PlayInBounds, float, float);

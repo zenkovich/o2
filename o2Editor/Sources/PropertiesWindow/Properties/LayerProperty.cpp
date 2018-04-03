@@ -40,38 +40,27 @@ namespace Editor
 		delete mPropertyWidget;
 	}
 
-	void LayerProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void LayerProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, SceneLayer* value) { *((PROPERTY(SceneLayer*>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(SceneLayer*>*)(ptr))->Get(); };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, SceneLayer* value) { *((SceneLayer**)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((SceneLayer**)(ptr)); };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	void LayerProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<SceneLayer*>(mValuesProxies[0].first);
 		auto newDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
+			if (newCommonValue != GetProxy<SceneLayer*>(mValuesProxies[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -91,11 +80,11 @@ namespace Editor
 
 	void LayerProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				SetProxy<SceneLayer*>(ptr.first, GetProxy<SceneLayer*>(ptr.second));
 			}
 		}
 
@@ -119,8 +108,8 @@ namespace Editor
 
 	void LayerProperty::SetValue(SceneLayer* value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<SceneLayer*>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -169,9 +158,9 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(GetProxy<SceneLayer*>(ptr.first), GetProxy<SceneLayer*>(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -226,10 +215,10 @@ namespace Editor
 	void LayerProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<SceneLayer*>(ptr.first);
 		}
 	}
 

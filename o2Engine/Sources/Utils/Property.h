@@ -74,8 +74,6 @@ namespace o2
 		PropertyValueProxy<valueType, NAME##_PROPERTY> GetValueProxy() { return PropertyValueProxy<valueType, NAME##_PROPERTY>(this); } \
 																										                                \
 		bool IsProperty() const { return true; }                                                                                        \
-																										                                \
-        static const Type& GetType() { return GetTypeOf<valueType>(); }                                                                 \
 	};																									                                \
 																										                                \
 	NAME##_PROPERTY NAME = NAME##_PROPERTY(this);
@@ -119,9 +117,9 @@ namespace o2
         typedef TYPE valueType;                                                                          \
         typedef KEY_TYPE keyType;                                                                        \
 		NAME##_ACCESSOR(_propertiesClassType* _this):_this(_this) {}									 \
-        valueType Get(const KEY_TYPE& key) const { return _this->GETTER(key); }                 \
-        Dictionary<KEY_TYPE, TYPE> GetAll() const { return _this->GET_ALL(); }                           \
-        valueType operator[](const KEY_TYPE& key) const { return _this->GETTER(key); }                   \
+        valueType Get(const keyType& key) const { return _this->GETTER(key); }                           \
+        Dictionary<keyType, TYPE> GetAll() const { return _this->GET_ALL(); }                            \
+        valueType operator[](const keyType& key) const { return _this->GETTER(key); }                    \
 																										 \
 		bool IsAccessor() const { return true; }                                                         \
 	};																									 \

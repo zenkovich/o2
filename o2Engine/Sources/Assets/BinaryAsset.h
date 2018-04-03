@@ -165,7 +165,6 @@ END_META;
 CLASS_METHODS_META(o2::BinaryAsset)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, BinaryAsset);
 	PUBLIC_FUNCTION(char*, GetData);
 	PUBLIC_FUNCTION(UInt, GetDataSize);
 	PUBLIC_FUNCTION(void, SetData, char*, UInt);

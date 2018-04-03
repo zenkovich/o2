@@ -65,24 +65,32 @@ namespace Editor
 
 	void Vec2IProperty::SetValue(const Vec2I& value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<Vec2I>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
 
 	void Vec2IProperty::SetValueX(int value)
 	{
-		for (auto ptr : mValuesPointers)
-			mXAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			Vec2I newValue = GetProxy<Vec2I>(ptr.first);
+			newValue.x = value;
+			SetProxy<Vec2I>(ptr.first, newValue);
+		}
 
 		SetCommonValueX(value);
 	}
 
 	void Vec2IProperty::SetValueY(int value)
 	{
-		for (auto ptr : mValuesPointers)
-			mYAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			Vec2I newValue = GetProxy<Vec2I>(ptr.first);
+			newValue.y = value;
+			SetProxy<Vec2I>(ptr.first, newValue);
+		}
 
 		SetCommonValueY(value);
 	}
@@ -118,52 +126,29 @@ namespace Editor
 		OnChanged();
 	}
 
-	void Vec2IProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void Vec2IProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, const Vec2I& value) { *((PROPERTY(Vec2I>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(Vec2I>*)(ptr))->Get(); };
-
-			mXAssignFunc = [](void* ptr, int value) { auto p = ((PROPERTY(Vec2I>*)(ptr)); Vec2I v = p->Get(); v.x = value; p->Set(v); };
-			mXGetFunc = [](void* ptr) { return ((PROPERTY(Vec2I>*)(ptr))->Get().x; };
-
-			mYAssignFunc = [](void* ptr, int value) { auto p = ((PROPERTY(Vec2I>*)(ptr)); Vec2I v = p->Get(); v.y = value; p->Set(v); };
-			mYGetFunc = [](void* ptr) { return ((PROPERTY(Vec2I>*)(ptr))->Get().y; };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, const Vec2I& value) { *((Vec2I*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((Vec2I*)(ptr)); };
-
-			mXAssignFunc = [](void* ptr, int value) { ((Vec2I*)(ptr))->x = value; };
-			mXGetFunc = [](void* ptr) { return ((Vec2I*)(ptr))->x; };
-
-			mYAssignFunc = [](void* ptr, int value) { ((Vec2I*)(ptr))->y = value; };
-			mYGetFunc = [](void* ptr) { return ((Vec2I*)(ptr))->y; };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	void Vec2IProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
 		auto lastXDifferent = mXValuesDifferent;
 		auto lastYDifferent = mYValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<Vec2I>(mValuesProxies[0].first);
 		auto newXValuesDifferent = false;
 		auto newYValuesDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			auto value = mGetFunc(mValuesPointers[i].first);
+			auto value = GetProxy<Vec2I>(mValuesProxies[i].first);
 			if (!Math::Equals(newCommonValue.x, value.x))
 				newXValuesDifferent = true;
 
@@ -192,11 +177,11 @@ namespace Editor
 
 	void Vec2IProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				SetProxy<Vec2I>(ptr.first, GetProxy<Vec2I>(ptr.second));
 			}
 		}
 
@@ -258,9 +243,9 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(GetProxy<Vec2I>(ptr.first), GetProxy<Vec2I>(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -371,10 +356,10 @@ namespace Editor
 	void Vec2IProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<Vec2I>(ptr.first);
 		}
 	}
 

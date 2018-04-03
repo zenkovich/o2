@@ -30,4 +30,17 @@ namespace o2
 		LARGE_INTEGER mFrequency;
 		LARGE_INTEGER mStartTime;
 	};
+
+	class ScopeTimer
+	{
+	public:
+		const char* id = "";
+		Timer timer;
+		
+		ScopeTimer() {}
+		ScopeTimer(const char* id):id(id) {}
+		~ScopeTimer() { Check(); }
+
+		void Check() { printf("%s - %.4f sec\n", id, timer.GetDeltaTime()); }
+	};
 }

@@ -26,14 +26,8 @@ namespace Editor
 		delete mSpoiler;
 	}
 
-	void ObjectPtrProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void ObjectPtrProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mTargetObjects.Clear();
-			return;
-		}
-
 		mTargetObjects = targets;
 
 		Refresh();
@@ -43,13 +37,15 @@ namespace Editor
 	{
 		for (auto targetObj : mTargetObjects)
 		{
-			if (*(IObject**)targetObj.first == nullptr)
-				*((IObject**)(targetObj.first)) = (IObject*)mObjectType->CreateSample();
+			if (GetProxy<IObject*>(targetObj.first) == nullptr)
+				SetProxy<IObject*>(targetObj.first, (IObject*)mObjectType->CreateSample());
 		}
 
-		mFieldProperties.Set(mTargetObjects.Select<Pair<IObject*, IObject*>>([](const Pair<void*, void*>& x) { 
-			return Pair<IObject*, IObject*>(*(IObject**)(x.first), 
-											x.second ? *(IObject**)(x.second) : nullptr);
+		mFieldProperties.Set(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+			[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x) 
+		{
+			return Pair<IObject*, IObject*>(GetProxy<IObject*>(x.first),
+											x.second ? GetProxy<IObject*>(x.second) : nullptr);
 		}));
 	}
 

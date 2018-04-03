@@ -29,7 +29,7 @@ namespace Editor
 		~BorderIProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -85,22 +85,7 @@ namespace Editor
 		IOBJECT(BorderIProperty);
 
 	protected:
-		Function<void(void*, const BorderI&)> mAssignFunc;      // Value assign function
-		Function<BorderI(void*)>              mGetFunc;         // Get value function
-
-		Function<void(void*, int)>            mLeftAssignFunc;  // Left Value assign function
-		Function<int(void*)>                  mLeftGetFunc;     // Get left value function
-
-		Function<void(void*, int)>            mRightAssignFunc; // Right Value assign function
-		Function<int(void*)>                  mRightGetFunc;    // Get right value function
-
-		Function<void(void*, int)>            mTopAssignFunc;   // Top Value assign function
-		Function<int(void*)>                  mTopGetFunc;      // Get top value function
-
-		Function<void(void*, int)>            mBottomAssignFunc; // Bottom Value assign function
-		Function<int(void*)>                  mBottomGetFunc;    // Get bottom value function
-
-		TargetsVec mValuesPointers;               // Fields' pointers
+		TargetsVec mValuesProxies;               // Fields' pointers
 		BorderI    mCommonValue;                  // Common field value (if not different)
 		bool       mLeftValuesDifferent = true;   // Are left values different
 		bool       mBottomValuesDifferent = true; // Are bottom values different
@@ -217,17 +202,7 @@ CLASS_BASES_META(Editor::BorderIProperty)
 END_META;
 CLASS_FIELDS_META(Editor::BorderIProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mLeftAssignFunc);
-	PROTECTED_FIELD(mLeftGetFunc);
-	PROTECTED_FIELD(mRightAssignFunc);
-	PROTECTED_FIELD(mRightGetFunc);
-	PROTECTED_FIELD(mTopAssignFunc);
-	PROTECTED_FIELD(mTopGetFunc);
-	PROTECTED_FIELD(mBottomAssignFunc);
-	PROTECTED_FIELD(mBottomGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mLeftValuesDifferent);
 	PROTECTED_FIELD(mBottomValuesDifferent);
@@ -248,7 +223,7 @@ END_META;
 CLASS_METHODS_META(Editor::BorderIProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

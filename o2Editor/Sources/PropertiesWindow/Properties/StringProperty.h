@@ -27,7 +27,7 @@ namespace Editor
 		~StringProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -56,10 +56,7 @@ namespace Editor
 		IOBJECT(StringProperty);
 
 	protected:
-		Function<void(void*, const String&)> mAssignFunc; // Value assign function
-		Function<String(void*)>              mGetFunc;    // Get value function
-
-		TargetsVec mValuesPointers;         // Fields' pointers
+		TargetsVec mValuesProxies;          // Fields' pointers
 		String     mCommonValue;            // Common field value (if not different)
 		bool       mValuesDifferent = true; // Are values different
 
@@ -95,9 +92,7 @@ CLASS_BASES_META(Editor::StringProperty)
 END_META;
 CLASS_FIELDS_META(Editor::StringProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mPropertyWidget);
@@ -108,7 +103,7 @@ END_META;
 CLASS_METHODS_META(Editor::StringProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

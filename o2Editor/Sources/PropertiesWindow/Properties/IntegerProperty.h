@@ -19,7 +19,7 @@ namespace Editor
 	// --------------------------------
 	// Editor integer property edit box
 	// --------------------------------
-	class IntegerProperty: public IPropertyField, public KeyboardEventsListener
+	class IntegerProperty: public IPropertyField
 	{
 	public:
 		// Default constructor
@@ -29,7 +29,7 @@ namespace Editor
 		~IntegerProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -53,15 +53,12 @@ namespace Editor
 		bool IsValuesDifferent() const;
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const override;
+		virtual const Type* GetFieldType() const;
 
 		IOBJECT(IntegerProperty);
 
 	protected:
-		Function<void(void*, const int&)> mAssignFunc; // Value assign function
-		Function<int(void*)>              mGetFunc;    // Get value function
-
-		TargetsVec       mValuesPointers;           // Fields' pointers
+		TargetsVec       mValuesProxies;            // Fields' pointers
 		int              mCommonValue = 0;          // Common field value (if not different)
 		bool             mValuesDifferent = true;   // Are values different
 
@@ -84,7 +81,7 @@ namespace Editor
 		void OnDragHandleMoved(const Input::Cursor& cursor);
 
 		// It is called when key was released
-		void OnKeyReleased(const Input::Key& key) override;
+		void OnKeyReleased(const Input::Key& key);
 
 		// It is called when change value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnMoveHandlePressed(const Input::Cursor& cursor);
@@ -107,14 +104,11 @@ namespace Editor
 CLASS_BASES_META(Editor::IntegerProperty)
 {
 	BASE_CLASS(Editor::IPropertyField);
-	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IntegerProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mPropertyWidget);
@@ -126,7 +120,7 @@ END_META;
 CLASS_METHODS_META(Editor::IntegerProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

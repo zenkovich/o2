@@ -118,25 +118,25 @@ namespace Editor
 		//states
 		Animation dockedStateAnim;
 		dockedStateAnim.SetTarget(sample);
-		*dockedStateAnim.AddAnimationValue<float>(&dockedBackLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
-		*dockedStateAnim.AddAnimationValue<float>(&regularBackLayer->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
+		*dockedStateAnim.AddAnimationValue(&dockedBackLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*dockedStateAnim.AddAnimationValue(&regularBackLayer->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
 
 		auto dockedState = sample->AddState("docked", dockedStateAnim);
 
 
 		Animation tabStateAnim;
 		tabStateAnim.SetTarget(sample);
-		*tabStateAnim.AddAnimationValue<float>(&tabBackLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
-		*tabStateAnim.AddAnimationValue<float>(&backLayer->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
+		*tabStateAnim.AddAnimationValue(&tabBackLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*tabStateAnim.AddAnimationValue(&backLayer->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
 
 		auto tabbedState = sample->AddState("tab", tabStateAnim);
 
 
 		Animation tabActiveStateAnim;
 		tabActiveStateAnim.SetTarget(sample);
-		*tabActiveStateAnim.AddAnimationValue<float>(&tabMainActiveBack->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
-		*tabActiveStateAnim.AddAnimationValue<float>(&tabMainInactiveBack->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
-		*tabActiveStateAnim.AddAnimationValue<float>(&tabBackDown->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*tabActiveStateAnim.AddAnimationValue(&tabMainActiveBack->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*tabActiveStateAnim.AddAnimationValue(&tabMainInactiveBack->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
+		*tabActiveStateAnim.AddAnimationValue(&tabBackDown->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
 
 		auto tabActiveState = sample->AddState("tabActive", tabActiveStateAnim);
 
@@ -2388,7 +2388,7 @@ namespace Editor
 		{
 			TimeStamp cachedDate = data;
 
-			if (thisSourceEditedDate == cachedDate)
+			if (thisSourceEditedDate == cachedDate && false)
 				return;
 		}
 

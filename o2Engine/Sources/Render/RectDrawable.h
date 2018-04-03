@@ -89,7 +89,6 @@ END_META;
 CLASS_METHODS_META(o2::IRectDrawable)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, IRectDrawable);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetColor, const Color4&);
 	PUBLIC_FUNCTION(Color4, GetColor);

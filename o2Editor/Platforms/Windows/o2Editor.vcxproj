@@ -246,13 +246,13 @@
     <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ComponentsViewers\ImageComponentViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\AssetsPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.h" />
@@ -288,9 +288,9 @@
     <ClInclude Include="..\..\Sources\SceneWindow\SceneDragHandle.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneEditScreen.h" />
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h" />
-    <ClInclude Include="..\..\Sources\stdafx.h" />
     <ClInclude Include="..\..\Sources\TreeWindow\ActorsTree.h" />
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h" />
+    <ClInclude Include="..\..\Sources\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp" />
@@ -333,13 +333,13 @@
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
     <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorHeaderViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\AssetsPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.cpp" />
@@ -374,12 +374,12 @@
     <ClCompile Include="..\..\Sources\SceneWindow\SceneDragHandle.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneEditScreen.cpp" />
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp" />
+    <ClCompile Include="..\..\Sources\TreeWindow\ActorsTree.cpp" />
+    <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp" />
+    <ClCompile Include="..\..\Sources\Windows\main.cpp" />
     <ClCompile Include="..\..\Sources\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\TreeWindow\ActorsTree.cpp" />
-    <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp" />
-    <ClCompile Include="..\..\Sources\Windows\main.cpp" />
   </ItemGroup>
 </Project>

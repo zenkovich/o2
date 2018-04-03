@@ -231,7 +231,6 @@ END_META;
 CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, AnimatedValue<o2::Vec2F>);
 	PUBLIC_FUNCTION(void, SetTarget, Vec2F*);
 	PUBLIC_FUNCTION(void, SetTarget, Vec2F*, const Function<void()>&);
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);

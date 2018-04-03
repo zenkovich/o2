@@ -47,38 +47,27 @@ namespace Editor
 		delete mPropertyWidget;
 	}
 
-	void FloatProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void FloatProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, const float& value) { *((PROPERTY(float>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(float>*)(ptr))->Get(); };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, const float& value) { *((float*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((float*)(ptr)); };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	void FloatProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<float>(mValuesProxies[0].first);
 		auto newDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
+			if (newCommonValue != GetProxy<float>(mValuesProxies[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -98,11 +87,11 @@ namespace Editor
 
 	void FloatProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				SetProxy<float>(ptr.first, GetProxy<float>(ptr.second));
 			}
 		}
 
@@ -126,8 +115,8 @@ namespace Editor
 
 	void FloatProperty::SetValue(float value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<float>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -159,9 +148,9 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(GetProxy<float>(ptr.first), GetProxy<float>(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -235,10 +224,10 @@ namespace Editor
 	void FloatProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<float>(ptr.first);
 		}
 	}
 

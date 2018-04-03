@@ -397,7 +397,7 @@ namespace o2
 
 		Animation enableHorScrollAnim;
 		enableHorScrollAnim.SetTarget(sample);
-		*enableHorScrollAnim.AddAnimationValue<float>(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
+		*enableHorScrollAnim.AddAnimationValue(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
 			AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
 		*enableHorScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMin") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
@@ -406,7 +406,7 @@ namespace o2
 
 		Animation enableVerScrollAnim;
 		enableVerScrollAnim.SetTarget(sample);
-		*enableVerScrollAnim.AddAnimationValue<float>(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
+		*enableVerScrollAnim.AddAnimationValue(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
 			AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
 		*enableVerScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMax") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
@@ -496,7 +496,7 @@ namespace o2
 
 		Animation enableHorScrollAnim;
 		enableHorScrollAnim.SetTarget(sample);
-		*enableHorScrollAnim.AddAnimationValue<float>(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
+		*enableHorScrollAnim.AddAnimationValue(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
 			AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
 		*enableHorScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMin") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
@@ -505,7 +505,7 @@ namespace o2
 
 		Animation enableVerScrollAnim;
 		enableVerScrollAnim.SetTarget(sample);
-		*enableVerScrollAnim.AddAnimationValue<float>(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
+		*enableVerScrollAnim.AddAnimationValue(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
 			AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
 		*enableVerScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMax") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);

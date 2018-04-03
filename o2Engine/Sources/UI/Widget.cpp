@@ -67,7 +67,9 @@ namespace o2
 
 	UIWidget::UIWidget(const UIWidget& other):
 		Actor(mnew UIWidgetLayout(*other.layout), other), layout(dynamic_cast<UIWidgetLayout*>(transform)),
-		mTransparency(other.mTransparency), mVisible(other.mVisible), mFullyDisabled(!other.mVisible)
+		mTransparency(other.mTransparency), mVisible(other.mVisible), mFullyDisabled(!other.mVisible),
+		visible(this), transparency(this), resTransparency(this), parentWidget(this), childrenWidgets(this),
+		layers(this), states(this), childWidget(this), layer(this), state(this)
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
 		SceneDrawable::mIsOnScene = Actor::mIsOnScene;

@@ -706,12 +706,12 @@ namespace o2
 		size.x = mFitSizeMin + maxCaption + maxShortcut;
 		size.y += mViewAreaLayout.offsetMin.y - mViewAreaLayout.offsetMax.y;
 
-		size.x = Math::Min(size.x, (float)o2Render.resolution->x);
-		size.y = Math::Min(size.y, (float)o2Render.resolution->y);
+		size.x = Math::Min(size.x, (float)o2Render.GetResolution().x);
+		size.y = Math::Min(size.y, (float)o2Render.GetResolution().y);
 
 		RectF thisRect(position.x, position.y, position.x + size.x, position.y - size.y);
-		RectF screenRect(-o2Render.resolution->x*0.5f, o2Render.resolution->y*0.5f,
-						 o2Render.resolution->x*0.5f, -o2Render.resolution->y*0.5f);
+		RectF screenRect(-o2Render.GetResolution().x*0.5f, o2Render.GetResolution().y*0.5f,
+						 o2Render.GetResolution().x*0.5f, -o2Render.GetResolution().y*0.5f);
 
 		if (thisRect.left < screenRect.left)
 			thisRect += Vec2F(screenRect.left - thisRect.left, 0);
@@ -869,7 +869,7 @@ namespace o2
 	}
 
 	UIContextMenuItem::UIContextMenuItem(const UIContextMenuItem& other):
-		UIWidget(other)
+		UIWidget(other), text(this)
 	{
 		mSubMenu = GetChildByType<UIContextMenu>();
 		if (mSubMenu)

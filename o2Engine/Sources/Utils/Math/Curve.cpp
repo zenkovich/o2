@@ -6,29 +6,23 @@
 namespace o2
 {
 	Curve::Curve()
-	{
-		InitializeProperties();
-	}
+	{}
 
 	Curve::Curve(float beginCoef, float beginCoefPosition, float endCoef, float endCoefPosition)
 	{
 		mKeys.Add(Key(0.0f, 0.0f, 0.0f, 0.0f, beginCoef, Math::Clamp01(beginCoefPosition)));
 		mKeys.Add(Key(1.0f, 1.0f, 1.0f - endCoef, -(1.0f - Math::Clamp01(endCoefPosition)), 0.0f, 0.0f));
 		UpdateApproximation();
-		InitializeProperties();
 	}
 
 	Curve::Curve(Vector<Vec2F> values, bool smooth /*= true*/)
 	{
 		AppendKeys(values, smooth);
-		InitializeProperties();
 	}
 
 	Curve::Curve(const Curve& other):
-		mKeys(other.mKeys)
-	{
-		InitializeProperties();
-	}
+		mKeys(other.mKeys), keys(this), length(this)
+	{}
 
 	bool Curve::operator!=(const Curve& other) const
 	{
@@ -349,7 +343,7 @@ namespace o2
 		return mKeys.Count() - 1;
 	}
 
-	int Curve::PrependKey(float offset, float value, float leftCoef, float leftCoefPosition, 
+	int Curve::PrependKey(float offset, float value, float leftCoef, float leftCoefPosition,
 						  float rightCoef, float rightCoefPosition)
 	{
 		float begin = mKeys.IsEmpty() ? 0.0f : mKeys[0].position;
@@ -689,14 +683,6 @@ namespace o2
 		InternalSmoothKeyAt(pos, smoothCoef);
 	}
 
-	void Curve::InitializeProperties()
-	{
-		INITIALIZE_ACCESSOR(Curve, value, Evaluate);
-		INITIALIZE_ACCESSOR(Curve, key, GetKey);
-		INITIALIZE_PROPERTY(Curve, keys, SetKeys, GetKeysNonContant);
-		INITIALIZE_GETTER(Curve, length, Length);
-	}
-
 	Curve::Key::Key():
 		value(0), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0), rightSupportPosition(0),
 		supportsType(Type::Smooth)
@@ -708,7 +694,7 @@ namespace o2
 		rightSupportValue(rightSupportValue), rightSupportPosition(rightSupportPosition), supportsType(Type::Broken)
 	{}
 
-	Curve::Key::Key(const Key& other):
+	Curve::Key::Key(const Key& other) :
 		value(other.value), position(other.position), leftSupportValue(other.leftSupportValue),
 		leftSupportPosition(other.leftSupportPosition), rightSupportValue(other.rightSupportValue),
 		rightSupportPosition(other.rightSupportPosition), supportsType(other.supportsType)
@@ -764,7 +750,7 @@ namespace o2
 	bool Curve::Key::operator==(const Key& other) const
 	{
 		return Math::Equals(position, other.position) && Math::Equals(value, other.value) &&
-			Math::Equals(leftSupportPosition, other.leftSupportPosition) && 
+			Math::Equals(leftSupportPosition, other.leftSupportPosition) &&
 			Math::Equals(leftSupportValue, other.leftSupportValue) &&
 			Math::Equals(rightSupportPosition, other.rightSupportPosition) &&
 			Math::Equals(rightSupportValue, other.rightSupportValue) &&

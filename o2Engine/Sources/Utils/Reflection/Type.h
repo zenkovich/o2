@@ -160,7 +160,7 @@ namespace o2
 		friend class TypeInitializer;
 		friend class VectorType;
 
-		template<typename _type>
+		template<typename _type, typename _accessor_type>
 		friend class StringPointerAccessorType;
 	};
 
@@ -342,6 +342,9 @@ namespace o2
 		// Returns element's pointer by index
 		virtual void* GetObjectVectorElementPtr(void* object, int idx) const = 0;
 
+		// Returns element's value proxy by index
+		virtual IAbstractValueProxy* GetObjectVectorElementProxy(void* object, int idx) const = 0;
+
 		// Returns filed pointer by path
 		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
 
@@ -383,6 +386,9 @@ namespace o2
 
 		// Returns element's pointer by index
 		void* GetObjectVectorElementPtr(void* object, int idx) const;
+
+		// Returns element's value proxy by index
+		IAbstractValueProxy* GetObjectVectorElementProxy(void* object, int idx) const;
 
 		// Creates sample copy and returns him
 		void* CreateSample() const override;
@@ -457,7 +463,7 @@ namespace o2
 	// -------------------------------------------
 	// Accessor<_return_type*, const String&> type
 	// -------------------------------------------
-	template<typename _return_type>
+	template<typename _return_type, typename _accessor_type>
 	class StringPointerAccessorType: public Type
 	{
 	public:
@@ -763,7 +769,7 @@ namespace o2
 	template<typename _type>
 	IAbstractValueProxy* TObjectType<_type>::GetValueProxy(void* object) const
 	{
-		return mnew PointerValueProxy<_type>((_type*)object);
+		return mnew IObjectPointerValueProxy<_type>((_type*)object);
 	}
 
 	// ------------------------------
@@ -802,7 +808,7 @@ namespace o2
 
 	template<typename _value_type, typename _property_type>
 	TPropertyType<_value_type, _property_type>::TPropertyType():
-		PropertyType((String)"o2::PROPERTY(" + GetTypeOf<_value_type>().GetName() + ">", sizeof(_value_type))
+		PropertyType((String)(typeid(_property_type).name()) + (String)"<" + TypeOf(_value_type).GetName() + ">", sizeof(_value_type))
 	{
 		mValueType = &GetTypeOf<_value_type>();
 	}
@@ -810,7 +816,7 @@ namespace o2
 	template<typename _value_type, typename _property_type>
 	void* TPropertyType<_value_type, _property_type>::CreateSample() const
 	{
-		return mnew _property_type(nullptr);
+		return nullptr;
 	}
 	template<typename _value_type, typename _property_type>
 	IAbstractValueProxy* TPropertyType<_value_type, _property_type>::GetValueProxy(void* object) const
@@ -837,6 +843,12 @@ namespace o2
 	void* TVectorType<_element_type>::GetObjectVectorElementPtr(void* object, int idx) const
 	{
 		return &((Vector<_element_type>*)object)->Get(idx);
+	}
+
+	template<typename _element_type>
+	IAbstractValueProxy* TVectorType<_element_type>::GetObjectVectorElementProxy(void* object, int idx) const
+	{
+		return mnew PointerValueProxy<_element_type>(&((Vector<_element_type>*)object)->Get(idx));
 	}
 
 	template<typename _element_type>
@@ -976,61 +988,65 @@ namespace o2
 	// StringPointerAccessorType implementation
 	// ----------------------------------------
 
-	template<typename _return_type>
-	StringPointerAccessorType<_return_type>::StringPointerAccessorType():
-		Type((String)"Accessor<" + GetTypeOf<_return_type>().GetName() + "*, const o2::String&>",
-			 sizeof(Accessor<_return_type*, const String&>))
+	template<typename _return_type, typename _accessor_type>
+	StringPointerAccessorType<_return_type, _accessor_type>::StringPointerAccessorType():
+		Type((String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">",
+			 sizeof(_accessor_type))
 	{
 		mReturnType = &GetTypeOf<_return_type>();
 	}
 
-	template<typename _return_type>
-	Type::Usage StringPointerAccessorType<_return_type>::GetUsage() const
+	template<typename _return_type, typename _accessor_type>
+	Type::Usage StringPointerAccessorType<_return_type, _accessor_type>::GetUsage() const
 	{
 		return Usage::StringAccessor;
 	}
 
-	template<typename _return_type>
-	void* StringPointerAccessorType<_return_type>::CreateSample() const
+	template<typename _return_type, typename _accessor_type>
+	void* StringPointerAccessorType<_return_type, _accessor_type>::CreateSample() const
 	{
-		return mnew Accessor<_return_type*, const String&>();
+		return nullptr;
 	}
 
-	template<typename _return_type>
-	IAbstractValueProxy* StringPointerAccessorType<_return_type>::GetValueProxy(void* object) const
+	template<typename _return_type, typename _accessor_type>
+	IAbstractValueProxy* StringPointerAccessorType<_return_type, _accessor_type>::GetValueProxy(void* object) const
 	{
-		return mnew PointerValueProxy<Accessor<_return_type*, const String&>>((Accessor<_return_type*, const String&>*)object);
+		return mnew PointerValueProxy<_accessor_type>((_accessor_type*)object);
 	}
 
-	template<typename _return_type>
-	void* StringPointerAccessorType<_return_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	template<typename _return_type, typename _accessor_type>
+	void* StringPointerAccessorType<_return_type, _accessor_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
 	{
 		int delPos = path.Find("/");
 		String pathPart = path.SubStr(0, delPos);
 
-		Accessor<_return_type*, const String&>* accessor = ((Accessor<_return_type*, const String&>*)object);
+		_accessor_type* accessor = (_accessor_type*)object;
 
 		auto allFromAccessor = accessor->GetAll();
 		for (auto kv : allFromAccessor)
 		{
 			if (kv.Key() == pathPart)
-				return mReturnType->GetFieldPtr(kv.Value(), path.SubStr(delPos + 1), fieldInfo);
+			{
+				_return_type value = kv.Value();
+				return mReturnType->GetFieldPtr(&value, path.SubStr(delPos + 1), fieldInfo);
+			}
 		}
 
 		return nullptr;
 	}
 
-	template<typename _return_type>
-	FieldInfo* StringPointerAccessorType<_return_type>::SearchFieldPath(void* obj, void* target, const String& path,
+	template<typename _return_type, typename _accessor_type>
+	FieldInfo* StringPointerAccessorType<_return_type, _accessor_type>::SearchFieldPath(void* obj, void* target, const String& path,
 																		String& res, Vector<SearchPassedObject>& passedObjects) const
 	{
-		Accessor<_return_type*, const String&>* accessor = ((Accessor<_return_type*, const String&>*)obj);
+		_accessor_type* accessor = (_accessor_type*)obj;
 
 		auto allFromAccessor = accessor->GetAll();
 		for (auto kv : allFromAccessor)
 		{
 			String newPath = path + "/" + kv.Key();
-			FieldInfo* fieldInfo = mReturnType->SearchFieldPath(kv.Value(), target, newPath, res, passedObjects);
+			_return_type value = kv.Value();
+			FieldInfo* fieldInfo = mReturnType->SearchFieldPath(&value, target, newPath, res, passedObjects);
 			if (fieldInfo)
 				return fieldInfo;
 		}

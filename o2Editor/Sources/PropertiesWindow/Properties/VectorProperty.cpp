@@ -41,14 +41,8 @@ namespace Editor
 		delete mSpoiler;
 	}
 
-	void VectorProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void VectorProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mTargetObjects.Clear();
-			return;
-		}
-
 		mTargetObjects = targets;
 		Refresh();
 	}
@@ -66,12 +60,12 @@ namespace Editor
 		auto lastCount = mCountOfElements;
 		auto lastDifferent = mCountDifferents;
 
-		mCountOfElements = mType->GetObjectVectorSize(mTargetObjects[0].first);
+		mCountOfElements = mType->GetObjectVectorSize(GetProxy<void*>(mTargetObjects[0].first));
 		mCountDifferents = false;
 
 		for (auto target : mTargetObjects)
 		{
-			int targetCount = mType->GetObjectVectorSize(target.first);
+			int targetCount = mType->GetObjectVectorSize(GetProxy<void*>(target.first));
 			if (targetCount != mCountOfElements)
 			{
 				mCountDifferents = true;
@@ -104,11 +98,12 @@ namespace Editor
 			int i = 0;
 			for (; i < mCountOfElements; i++)
 			{
-				Vector<Pair<void*, void*>> itemTargetValues = 
-					mTargetObjects.Select<Pair<void*,void*>>([&](const Pair<void*, void*>& x) 
+				auto itemTargetValues = mTargetObjects.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+					[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 				{
-					return Pair<void*, void*>(mType->GetObjectVectorElementPtr(x.first, i),
-											  x.second ? mType->GetObjectVectorElementPtr(x.second, i) : nullptr);
+					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+						mType->GetObjectVectorElementProxy(GetProxy<void*>(x.first), i),
+						x.second ? mType->GetObjectVectorElementProxy(GetProxy<void*>(x.second), i) : nullptr);
 				});
 
 				PropertyDef propertyDef;
@@ -122,9 +117,9 @@ namespace Editor
 
 				mSpoiler->AddChild(propertyDef.widget, false);
 				propertyDef.propertyField->SetCaption((String)"Element " + (String)i);
-				propertyDef.propertyField->SetValueAndPrototypePtr(itemTargetValues, false);
+				propertyDef.propertyField->SetValueAndPrototypeProxy(itemTargetValues);
 				propertyDef.propertyField->SetValuePath((String)i);
-				propertyDef.propertyField->onChangeCompleted = 
+				propertyDef.propertyField->onChangeCompleted =
 					[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
 				{
 					onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -146,15 +141,16 @@ namespace Editor
 		{
 			for (int i = 0; i < mCountOfElements; i++)
 			{
-				Vector<Pair<void*, void*>> itemTargetValues =
-					mTargetObjects.Select<Pair<void*, void*>>([&](const Pair<void*, void*>& x)
+				auto itemTargetValues = mTargetObjects.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+					[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 				{
-					return Pair<void*, void*>(mType->GetObjectVectorElementPtr(x.first, i),
-											  x.second ? mType->GetObjectVectorElementPtr(x.second, i) : nullptr);
+					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+						mType->GetObjectVectorElementProxy(GetProxy<void*>(x.first), i),
+						x.second ? mType->GetObjectVectorElementProxy(GetProxy<void*>(x.second), i) : nullptr);
 				});
 
 				PropertyDef propertyDef = mValueProperties[i];
-				propertyDef.propertyField->SetValueAndPrototypePtr(itemTargetValues, false);
+				propertyDef.propertyField->SetValueAndPrototypeProxy(itemTargetValues);
 			}
 		}
 

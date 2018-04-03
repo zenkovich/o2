@@ -202,7 +202,6 @@ END_META;
 CLASS_METHODS_META(o2::UILongList)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UILongList);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);

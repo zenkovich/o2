@@ -9,8 +9,7 @@ namespace o2
 	}
 
 	Timer::~Timer()
-	{
-	}
+	{}
 
 	void Timer::Reset()
 	{

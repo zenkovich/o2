@@ -13,7 +13,8 @@ namespace o2
 	}
 
 	Mesh::Mesh(const Mesh& mesh):
-		vertices(nullptr), indexes(nullptr), mMaxPolyCount(0), mMaxVertexCount(0), vertexCount(0), polyCount(0)
+		vertices(nullptr), indexes(nullptr), mMaxPolyCount(0), mMaxVertexCount(0), vertexCount(0), polyCount(0),
+		texture(this), maxPolyCount(this), maxVertexCount(this)
 	{
 		SetTexture(mesh.mTexture);
 		Resize(mesh.mMaxVertexCount, mesh.mMaxPolyCount);

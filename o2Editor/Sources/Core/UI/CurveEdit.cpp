@@ -429,8 +429,8 @@ namespace Editor
 
 	void UICurveEditor::DrawGrid()
 	{
-		float cameraMaxSize = Math::Max(mViewCamera.size->x*mViewCamera.scale->x,
-										mViewCamera.size->y*mViewCamera.scale->y);
+		float cameraMaxSize = Math::Max(mViewCamera.GetSize().x*mViewCamera.GetScale().x,
+										mViewCamera.GetSize().y*mViewCamera.GetScale().y);
 
 		float x = cameraMaxSize / 2.0f;
 		float minCellSize = 0.000001f;
@@ -445,12 +445,12 @@ namespace Editor
 			cellSize = next;
 		}
 
-		Vec2F gridOrigin(Math::Round(mViewCamera.position->x / cellSize)*cellSize,
-						 Math::Round(mViewCamera.position->y / cellSize)*cellSize);
+		Vec2F gridOrigin(Math::Round(mViewCamera.GetPosition().x / cellSize)*cellSize,
+						 Math::Round(mViewCamera.GetPosition().y / cellSize)*cellSize);
 
 		int cellsCount = Math::CeilToInt(cameraMaxSize / cellSize);
 		float tenCeilsSize = cellSize*10.0f;
-		float screenCellSize = cellSize / mViewCamera.scale->x;
+		float screenCellSize = cellSize / mViewCamera.GetScale().x;
 		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
 
 		mTextLeft->SetScale(mViewCamera.GetScale());
@@ -1477,7 +1477,7 @@ namespace Editor
 			if (mSupportHandles.Contains(handle))
 				continue;
 
-			handle->SetPosition(Vec2F((float)str, handle->position->y));
+			handle->SetPosition(Vec2F((float)str, handle->GetPosition().y));
 			handle->onChangedPos(handle->position);
 		}
 
@@ -1491,7 +1491,7 @@ namespace Editor
 			if (mSupportHandles.Contains(handle))
 				continue;
 
-			handle->SetPosition(Vec2F(handle->position->x, (float)str));
+			handle->SetPosition(Vec2F(handle->GetPosition().x, (float)str));
 			handle->onChangedPos(handle->position);
 		}
 

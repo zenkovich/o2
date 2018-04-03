@@ -45,38 +45,27 @@ namespace Editor
 		delete mPropertyWidget;
 	}
 
-	void CurveProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void CurveProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, const Curve& value) { *((PROPERTY(Curve>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(Curve>*)(ptr))->Get(); };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, const Curve& value) { *((Curve*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((Curve*)(ptr)); };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	void CurveProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<Curve>(mValuesProxies[0].first);
 		auto newDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
+			if (newCommonValue != GetProxy<Curve>(mValuesProxies[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -96,11 +85,11 @@ namespace Editor
 
 	void CurveProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				SetProxy<Curve>(ptr.first, GetProxy<Curve>(ptr.second));
 			}
 		}
 
@@ -124,8 +113,8 @@ namespace Editor
 
 	void CurveProperty::SetValue(const Curve& value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<Curve>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -145,8 +134,8 @@ namespace Editor
 
 	void CurveProperty::OnValueChanged()
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, mCommonValue);
+		for (auto ptr : mValuesProxies)
+			SetProxy<Curve>(ptr.first, mCommonValue);
 	}
 
 	void CurveProperty::SetCommonValue(const Curve& value)
@@ -161,9 +150,9 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(GetProxy<Curve>(ptr.first), GetProxy<Curve>(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -199,10 +188,10 @@ namespace Editor
 	void CurveProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<Curve>(ptr.first);
 		}
 	}
 

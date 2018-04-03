@@ -11,7 +11,8 @@ namespace o2
 	}
 
 	Component::Component(const Component& other):
-		mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mId(Math::Random())
+		mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mId(Math::Random()),
+		actor(this), enabled(this), enabledInHierarchy(this)
 	{
 	}
 

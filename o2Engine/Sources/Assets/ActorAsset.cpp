@@ -45,7 +45,7 @@ namespace o2
 	}
 
 	ActorAsset::ActorAsset(const ActorAsset& asset):
-		Asset(asset)
+		Asset(asset), meta(this)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;

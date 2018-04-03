@@ -69,9 +69,6 @@ namespace o2
 
 		// It is called when selected item index was changed
 		void OnSelectionChanged() override;
-
-		// Initializes properties
-		void initializeProperties();
 	};
 }
 
@@ -90,7 +87,6 @@ END_META;
 CLASS_METHODS_META(o2::UIList)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIList);
 	PUBLIC_FUNCTION(int, AddItem, const WString&);
 	PUBLIC_FUNCTION(int, AddItem, const WString&, int);
 	PUBLIC_FUNCTION(void, AddItems, const Vector<WString>&);
@@ -104,6 +100,5 @@ CLASS_METHODS_META(o2::UIList)
 	PUBLIC_FUNCTION(Vector<WString>, GetSelectedItemsText);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, initializeProperties);
 }
 END_META;

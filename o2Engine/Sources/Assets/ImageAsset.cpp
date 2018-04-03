@@ -37,7 +37,8 @@ namespace o2
 	}
 
 	ImageAsset::ImageAsset(const ImageAsset& asset):
-		Asset(asset)
+		Asset(asset), bitmap(this), atlasId(this), atlas(this), sliceBorder(this), atlasPage(this),
+		atlasRect(this), size(this), width(this), height(this), meta(this)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;

@@ -79,7 +79,6 @@ END_META;
 CLASS_METHODS_META(o2::UIDropDown)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIDropDown);
 	PUBLIC_FUNCTION(int, AddItem, const WString&);
 	PUBLIC_FUNCTION(int, AddItem, const WString&, int);
 	PUBLIC_FUNCTION(void, AddItems, const Vector<WString>&);

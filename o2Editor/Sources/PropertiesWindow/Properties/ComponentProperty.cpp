@@ -54,38 +54,27 @@ namespace Editor
 		delete mPropertyWidget;
 	}
 
-	void ComponentProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void ComponentProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, Component* value) { *((PROPERTY(Component*>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(Component*>*)(ptr))->Get(); };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, Component* value) { *((Component**)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((Component**)(ptr)); };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	void ComponentProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<Component*>(mValuesProxies[0].first);
 		auto newDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
+			if (newCommonValue != GetProxy<Component*>(mValuesProxies[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -107,8 +96,8 @@ namespace Editor
 	{
 		auto propertyObjects = o2EditorProperties.GetTargets();
 
-		for (int i = 0; i < mValuesPointers.Count() && i < propertyObjects.Count(); i++)
-			RevertoToPrototype(mValuesPointers[i].first, mValuesPointers[i].second, propertyObjects[i]);
+		for (int i = 0; i < mValuesProxies.Count() && i < propertyObjects.Count(); i++)
+			RevertoToPrototype(mValuesProxies[i].first, mValuesProxies[i].second, propertyObjects[i]);
 
 		Refresh();
 	}
@@ -148,8 +137,8 @@ namespace Editor
 
 	void ComponentProperty::SetValue(Component* value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<Component*>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -169,12 +158,12 @@ namespace Editor
 		return mBox->IsUnderPoint(point);
 	}
 
-	void ComponentProperty::RevertoToPrototype(void* target, void* source, IObject* targetOwner)
+	void ComponentProperty::RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner)
 	{
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
 			return;
 
-		Component* sourceComponent = mGetFunc(source);
+		Component* sourceComponent = GetProxy<Component*>(source);
 		Actor* topSourceActor = sourceComponent->GetOwnerActor();
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent();
@@ -196,14 +185,14 @@ namespace Editor
 
 				if (sameToProtoSourceComponent)
 				{
-					mAssignFunc(target, sameToProtoSourceComponent);
+					SetProxy<Component*>(target, sameToProtoSourceComponent);
 					return;
 				}
 			}
 		}
 
 		if (sourceComponent->GetOwnerActor()->IsOnScene())
-			mAssignFunc(target, sourceComponent);
+			SetProxy<Component*>(target, sourceComponent);
 	}
 
 	void ComponentProperty::SetCommonValue(Component* value)
@@ -229,12 +218,12 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				Component* value = mGetFunc(ptr.first);
-				Component* proto = mGetFunc(ptr.second);
+				Component* value = GetProxy<Component*>(ptr.first);
+				Component* proto = GetProxy<Component*>(ptr.second);
 
 				if (value && value->GetPrototypeLink())
 				{
@@ -401,10 +390,10 @@ namespace Editor
 	void ComponentProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<Component*>(ptr.first);
 		}
 	}
 

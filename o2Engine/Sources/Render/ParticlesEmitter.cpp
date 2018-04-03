@@ -33,7 +33,12 @@ namespace o2
 		mEmitParticlesSize(other.mEmitParticlesSize), mEmitParticlesSizeRange(other.mEmitParticlesSizeRange),
 		mEmitParticlesSpeed(other.mEmitParticlesSpeed), mEmitParticlesSpeedRangle(other.mEmitParticlesSpeedRangle),
 		mEmitParticlesMoveDirection(other.mEmitParticlesMoveDirection), mEmitParticlesMoveDirectionRange(other.mEmitParticlesMoveDirectionRange),
-		mEmitParticlesColorA(other.mEmitParticlesColorA), mEmitParticlesColorB(other.mEmitParticlesColorB)
+		mEmitParticlesColorA(other.mEmitParticlesColorA), mEmitParticlesColorB(other.mEmitParticlesColorB),
+		playing(this), emittingCoefficient(this), particlesRelative(this), looped(this), maxParticles(this),
+		duration(this), particlesLifetime(this), emitParticlesPerSecond(this), emitParticlesAngle(this), emitParticlesAngleRange(this),
+		emitParticlesSize(this), emitParticlesSizeRange(this), emitParticlesSpeed(this), emitParticlesAngleSpeedRange(this), emitParticlesAngleSpeed(this),
+		emitParticlesSpeedRange(this), emitParticlesMoveDir(this), emitParticlesMoveDirRange(this), emitParticlesColorA(this), emitParticlesColorB(this),
+		image(this), shape(this)
 	{
 		mParticlesMesh = mnew Mesh(NoTexture(), mParticlesNumLimit*4, mParticlesNumLimit*2);
 

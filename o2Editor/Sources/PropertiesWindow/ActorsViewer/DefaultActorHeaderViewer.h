@@ -53,7 +53,7 @@ namespace Editor
 		BooleanProperty*              mEnableProperty = nullptr;
 		StringProperty*               mNameProperty = nullptr;
 		BooleanProperty*              mLockProperty = nullptr;
-		AssetPROPERTY(ActorAssetRef>* mPrototypeProperty = nullptr;
+		AssetProperty<ActorAssetRef>* mPrototypeProperty = nullptr;
 		UIButton*                     mPrototypeApplyBtn = nullptr;
 		UIButton*                     mPrototypeRevertBtn = nullptr;
 		UIButton*                     mPrototypeBreakBtn = nullptr;
@@ -91,17 +91,12 @@ CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)
 	PUBLIC_FIELD(mEnableProperty);
 	PUBLIC_FIELD(mNameProperty);
 	PUBLIC_FIELD(mLockProperty);
+	PUBLIC_FIELD(mPrototypeProperty);
 	PUBLIC_FIELD(mPrototypeApplyBtn);
 	PUBLIC_FIELD(mPrototypeRevertBtn);
 	PUBLIC_FIELD(mPrototypeBreakBtn);
 	PUBLIC_FIELD(mTagsProperty);
 	PUBLIC_FIELD(mLayerProperty);
-	PROTECTED_FIELD(efaultActorHeaderViewer);
-	PROTECTED_FIELD();
-	PROTECTED_FIELD(efaultActorHeaderViewer);
-	PROTECTED_FIELD();
-	PROTECTED_FIELD(efaultActorHeaderViewer);
-	PROTECTED_FIELD();
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
@@ -110,7 +105,6 @@ CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, AssetPROPERTY, ActorAssetRef>*);
 	PROTECTED_FUNCTION(void, OnApplyPrototypePressed);
 	PROTECTED_FUNCTION(void, OnRevertPrototypePressed);
 	PROTECTED_FUNCTION(void, OnBreakPrototypePressed);

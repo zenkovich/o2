@@ -115,6 +115,8 @@ protected:
 
 	void ParseAttributes(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
+	void ParseProperties(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
 	void ParseProperty(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
 	void ParseGetter(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);

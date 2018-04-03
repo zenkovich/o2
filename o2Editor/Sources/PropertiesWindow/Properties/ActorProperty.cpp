@@ -52,38 +52,28 @@ namespace Editor
 		delete mPropertyWidget;
 	}
 
-	void ActorProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void ActorProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, Actor* value) { *((PROPERTY(Actor*>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(Actor*>*)(ptr))->Get(); };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, Actor* value) { *((Actor**)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((Actor**)(ptr)); };
-		}
-
-		mValuesPointers = targets;
-
+		mValuesProxies = targets;
 		Refresh();
 	}
 
 	void ActorProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		Actor* newCommonValue = GetProxy<Actor*>(mValuesProxies[0].first);
+
 		auto newDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
+			Actor* value; mValuesProxies[i].first->GetValuePtr(&value);
+			if (newCommonValue != value)
 			{
 				newDifferent = true;
 				break;
@@ -105,18 +95,19 @@ namespace Editor
 	{
 		auto propertyObjects = o2EditorProperties.GetTargets();
 
-		for (int i = 0; i < mValuesPointers.Count() && i < propertyObjects.Count(); i++)
-			RevertoToPrototype(mValuesPointers[i].first, mValuesPointers[i].second, propertyObjects[i]);
+		for (int i = 0; i < mValuesProxies.Count() && i < propertyObjects.Count(); i++)
+			RevertoToPrototype(mValuesProxies[i].first, mValuesProxies[i].second, propertyObjects[i]);
 
 		Refresh();
 	}
 
-	void ActorProperty::RevertoToPrototype(void* target, void* source, IObject* targetOwner)
+	void ActorProperty::RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, 
+										   IObject* targetOwner)
 	{
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
 			return;
 
-		Actor* sourceActor = mGetFunc(source);
+		Actor* sourceActor = GetProxy<Actor*>(source);
 		Actor* topSourceActor = sourceActor;
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent();
@@ -133,13 +124,13 @@ namespace Editor
 
 			if (sameToProtoSourceActor)
 			{
-				mAssignFunc(target, sameToProtoSourceActor);
+				SetProxy<Actor*>(target, sameToProtoSourceActor);
 				return;
 			}
 		}
 
 		if (sourceActor->IsOnScene())
-			mAssignFunc(target, sourceActor);
+			SetProxy<Actor*>(target, sourceActor);
 	}
 
 	UIWidget* ActorProperty::GetWidget() const
@@ -164,8 +155,8 @@ namespace Editor
 
 	void ActorProperty::SetValue(Actor* value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<Actor*>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -215,12 +206,12 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				Actor* value = mGetFunc(ptr.first);
-				Actor* proto = mGetFunc(ptr.second);
+				Actor* value = GetProxy<Actor*>(ptr.first);
+				Actor* proto = GetProxy<Actor*>(ptr.second);
 
 				if (value && value->GetPrototypeLink())
 				{
@@ -383,10 +374,10 @@ namespace Editor
 	void ActorProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<Actor*>(ptr.first);
 		}
 	}
 

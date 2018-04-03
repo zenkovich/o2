@@ -177,7 +177,6 @@ END_META;
 CLASS_METHODS_META(o2::AnimatedValue<float>)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, AnimatedValue<float>);
 	PUBLIC_FUNCTION(void, SetTarget, float*);
 	PUBLIC_FUNCTION(void, SetTarget, float*, const Function<void()>&);
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);

@@ -250,7 +250,8 @@ namespace o2
 
 	template<typename _type>
 	AnimatedValue<_type>::AnimatedValue(const AnimatedValue<_type>& other):
-		mKeys(other.mKeys), mValue(other.mValue), mTargetDelegate(), IAnimatedValue(other)
+		mKeys(other.mKeys), mValue(other.mValue), mTargetDelegate(), IAnimatedValue(other),
+		value(this), target(this), targetDelegate(this), targetProxy(this), keys(this)
 	{}
 
 	template<typename _type>
@@ -610,7 +611,7 @@ namespace o2
 	template<typename _type>
 	void AnimatedValue<_type>::SetTargetProxyVoid(void* target)
 	{
-		SetTargetProxyVoid((IValueProxy<_type>*)target);
+		SetTargetProxy((IValueProxy<_type>*)target);
 	}
 
 	template<typename _type>
@@ -763,7 +764,6 @@ META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimatedValue<typename _type>)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, AnimatedValue<_type>);
 	PUBLIC_FUNCTION(void, SetTarget, _type*);
 	PUBLIC_FUNCTION(void, SetTarget, _type*, const Function<void()>&);
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);

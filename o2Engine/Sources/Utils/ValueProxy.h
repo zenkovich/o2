@@ -23,6 +23,7 @@ namespace o2
 	template<typename _type>
 	class PointerValueProxy: public IValueProxy<_type>
 	{
+	protected:
 		_type* mValuePtr = nullptr;
 
 	public:
@@ -31,5 +32,21 @@ namespace o2
 
 		void SetValue(const _type& value) override { *mValuePtr = value; }
 		_type GetValue() const override { return *mValuePtr; }
+	};
+
+	class IIObjectPointerValueProxy
+	{
+	public:
+		virtual IObject* GetObjectPtr() const = 0;
+	};
+
+	template<typename _type>
+	class IObjectPointerValueProxy: public PointerValueProxy<_type>, public IIObjectPointerValueProxy
+	{
+	public:
+		IObjectPointerValueProxy():PointerValueProxy<_type>() {}
+		IObjectPointerValueProxy(_type* valuePtr):PointerValueProxy<_type>(valuePtr) {}
+
+		IObject* GetObjectPtr() const override { return dynamic_cast<IObject*>(mValuePtr); }
 	};
 }

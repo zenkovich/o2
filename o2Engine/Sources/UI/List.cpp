@@ -15,7 +15,7 @@ namespace o2
 	}
 
 	UIList::UIList(const UIList& other):
-		UICustomList(other)
+		UICustomList(other), value(this), values(this)
 	{
 		RetargetStatesAnimations();
 	}

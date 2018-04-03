@@ -341,7 +341,6 @@ END_META;
 CLASS_METHODS_META(o2::UIWidgetLayout)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIWidgetLayout);
 	PUBLIC_FUNCTION(void, Update);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);

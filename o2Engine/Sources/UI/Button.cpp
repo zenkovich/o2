@@ -11,18 +11,15 @@ namespace o2
 {
 	UIButton::UIButton():
 		UIWidget(), CursorAreaEventsListener()
-	{
-		InitializeProperties();
-	}
+	{}
 
-	UIButton::UIButton(const UIButton& other):
-		UIWidget(other)
+	UIButton::UIButton(const UIButton& other) :
+		UIWidget(other), caption(this), icon(this)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
 
 		RetargetStatesAnimations();
-		InitializeProperties();
 	}
 
 	UIButton& UIButton::operator=(const UIButton& other)

@@ -225,7 +225,6 @@ END_META;
 CLASS_METHODS_META(o2::UIWindow)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIWindow);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, ShowModal);

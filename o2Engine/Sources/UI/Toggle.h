@@ -187,7 +187,6 @@ END_META;
 CLASS_METHODS_META(o2::UIToggle)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIToggle);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);

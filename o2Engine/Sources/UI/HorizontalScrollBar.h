@@ -189,7 +189,6 @@ END_META;
 CLASS_METHODS_META(o2::UIHorizontalScrollBar)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIHorizontalScrollBar);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetValue, float);
 	PUBLIC_FUNCTION(void, SetValueForcible, float);

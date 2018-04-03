@@ -38,7 +38,8 @@ namespace o2
 
 	UICustomList::UICustomList(const UICustomList& other):
 		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
-		mSelectionLayout(other.mSelectionLayout)
+		mSelectionLayout(other.mSelectionLayout), selectedItem(this), selectedItems(this),
+		selectedItemPos(this), itemsCount(this)
 	{
 		mVerLayout = GetChildByType<UIVerticalLayout>();
 

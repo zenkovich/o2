@@ -118,8 +118,8 @@ namespace o2
 		GETTER(ActorsVec, children, GetChildren);         // Children array getter
 		GETTER(ComponentsVec, components, GetComponents); // Components array getter
 
-		ACCESSOR(Actor*, child, const String&, GetChild, GetAllChilds);                 // Children accessor
-		ACCESSOR(Component*, component, const String&, GetComponent, GetAllComponents); // Component accessor by type name
+		ACCESSOR(Actor*, child, String, GetChild, GetAllChilds);                 // Children accessor
+		ACCESSOR(Component*, component, String, GetComponent, GetAllComponents); // Component accessor by type name
 
 		TagGroup                tags;      // Tags group
 		ActorTransform* const   transform; // Transformation of actor
@@ -801,7 +801,6 @@ CLASS_METHODS_META(o2::Actor)
 	typedef const Dictionary<const Actor*, Actor*>& _tmp9;
 	typedef const Dictionary<const Component*, Component*>& _tmp10;
 
-	PUBLIC_FUNCTION(void, PROPERTIES, Actor);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, UpdateTransform, bool);

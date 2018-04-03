@@ -12,7 +12,8 @@ namespace o2
 	}
 
 	AnimatedValue<float>::AnimatedValue(const AnimatedValue<float>& other):
-		curve(other.curve), mValue(other.mValue), IAnimatedValue(other)
+		curve(other.curve), mValue(other.mValue), IAnimatedValue(other),
+		value(this), target(this), targetDelegate(this), targetProxy(this), keys(this)
 	{
 		curve.onKeysChanged.Add(this, &AnimatedValue<float>::OnCurveChanged);
 	}

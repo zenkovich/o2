@@ -38,7 +38,7 @@ namespace o2
 	}
 
 	BinaryAsset::BinaryAsset(const BinaryAsset& asset):
-		Asset(asset)
+		Asset(asset), data(this), dataSize(this), meta(this)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;

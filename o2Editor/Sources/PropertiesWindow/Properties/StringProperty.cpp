@@ -35,38 +35,27 @@ namespace Editor
 		delete mPropertyWidget;
 	}
 
-	void StringProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void StringProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, const String& value) { *((PROPERTY(String>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(String>*)(ptr))->Get(); };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, const String& value) { *((String*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((String*)(ptr)); };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	void StringProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<String>(mValuesProxies[0].first);
 		auto newDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
+			if (newCommonValue != GetProxy<String>(mValuesProxies[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -86,11 +75,11 @@ namespace Editor
 
 	void StringProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				SetProxy<String>(ptr.first, GetProxy<String>(ptr.second));
 			}
 		}
 
@@ -114,8 +103,8 @@ namespace Editor
 
 	void StringProperty::SetValue(const String& value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<String>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -147,9 +136,9 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(GetProxy<String>(ptr.first), GetProxy<String>(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -187,10 +176,10 @@ namespace Editor
 	void StringProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<String>(ptr.first);
 		}
 	}
 

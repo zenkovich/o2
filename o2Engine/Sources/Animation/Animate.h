@@ -77,10 +77,6 @@ namespace o2
 		template<typename T>
 		Animate& Change(T* target, const T& value);
 
-		// Changes specified parameter
-		template<typename T>
-		Animate& Change(SETTER(T>* target, const T& value);
-
 	protected:
 		// -----------------------
 		// Key container interface
@@ -137,18 +133,6 @@ namespace o2
 			return res;
 		}
 
-		// Returns animated value for target, or creates it
-		template<typename T>
-		AnimatedValue<T>* GetAnimatedValue(SETTER(T>* target)
-		{
-			auto res = mAnimation.GetAnimationValue(target);
-
-			if (!res)
-				res = mAnimation.AddAnimationValue(target);
-
-			return res;
-		}
-
 		// Checks color animated value: creates them if needed
 		void CheckColorAnimatedValue();
 
@@ -170,19 +154,6 @@ namespace o2
 
 	template<typename T>
 	Animate& Animate::Change(T* target, const T& value)
-	{
-		CheckAppliedKeys();
-
-		KeyContainer<T>* container = mnew KeyContainer<T>();
-		container->animatedValue = GetAnimatedValue(target);
-		container->key.value = value;
-		mKeyContainers.Add(container);
-
-		return *this;
-	}
-
-	template<typename T>
-	Animate& Animate::Change(SETTER(T>* target, const T& value)
 	{
 		CheckAppliedKeys();
 

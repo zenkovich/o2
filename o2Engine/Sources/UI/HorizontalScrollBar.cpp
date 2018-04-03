@@ -15,7 +15,8 @@ namespace o2
 	UIHorizontalScrollBar::UIHorizontalScrollBar(const UIHorizontalScrollBar& other) :
 		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
 		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize),
-		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue)
+		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue), 
+		value(this), minValue(this), maxValue(this), scrollSense(this), scrollSize(this)
 	{
 		mHandleLayer = FindLayer("handle");
 		mBackLayer = FindLayer("back");

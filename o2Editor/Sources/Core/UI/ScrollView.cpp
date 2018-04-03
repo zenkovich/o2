@@ -167,8 +167,8 @@ namespace Editor
 														  dt*mViewCameraScaleElasticyCoef);
 		}
 
-		if (!Math::Equals<float>(mViewCamera.scale->x, mViewCameraTargetScale.x) ||
-			!Math::Equals<float>(mViewCamera.scale->y, mViewCameraTargetScale.y))
+		if (!Math::Equals<float>(mViewCamera.GetScale().x, mViewCameraTargetScale.x) ||
+			!Math::Equals<float>(mViewCamera.GetScale().y, mViewCameraTargetScale.y))
 		{
 			mViewCamera.scale = Math::Lerpc<Vec2F>(mViewCamera.scale, mViewCameraTargetScale,
 												   dt*mViewCameraScaleElasticyCoef);
@@ -248,8 +248,8 @@ namespace Editor
 
 	void UIScrollView::DrawGrid()
 	{
-		float cameraMaxSize = Math::Max(mViewCamera.size->x*mViewCamera.scale->x,
-										mViewCamera.size->y*mViewCamera.scale->y);
+		float cameraMaxSize = Math::Max(mViewCamera.GetSize().x*mViewCamera.GetScale().x,
+										mViewCamera.GetSize().y*mViewCamera.GetScale().y);
 
 		float x = cameraMaxSize / 4.0f;
 		float minCellSize = 0.000001f;
@@ -264,12 +264,12 @@ namespace Editor
 			cellSize = next;
 		}
 
-		Vec2F gridOrigin(Math::Round(mViewCamera.position->x / cellSize)*cellSize,
-						 Math::Round(mViewCamera.position->y / cellSize)*cellSize);
+		Vec2F gridOrigin(Math::Round(mViewCamera.GetPosition().x / cellSize)*cellSize,
+						 Math::Round(mViewCamera.GetPosition().y / cellSize)*cellSize);
 
 		int cellsCount = Math::CeilToInt(cameraMaxSize / cellSize);
 		float tenCeilsSize = cellSize*10.0f;
-		float screenCellSize = cellSize / mViewCamera.scale->x;
+		float screenCellSize = cellSize / mViewCamera.GetScale().x;
 		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
 
 		for (int i = -cellsCount / 2; i < cellsCount / 2; i++)

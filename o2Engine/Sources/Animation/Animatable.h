@@ -123,9 +123,6 @@ namespace o2
 
 			// Assigns value as field
 			void AssignField(_type& value);
-
-			// Assigns value as setter
-			void AssignSetter(_type& value);
 		};
 
 		// ----------------------
@@ -234,14 +231,45 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Animatable::ValueAgent<_type>::AssignSetter(_type& value)
-	{
-		*(SETTER(_type>*)targetPtr = value;
-	}
-
-	template<typename _type>
 	void Animatable::ValueAgent<_type>::AssignField(_type& value)
 	{
 		*(_type*)targetPtr = value;
 	}
 }
+
+CLASS_BASES_META(o2::Animatable)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::Animatable)
+{
+	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mValues);
+	PROTECTED_FIELD(mBlend);
+}
+END_META;
+CLASS_METHODS_META(o2::Animatable)
+{
+
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(AnimationState*, AddState, AnimationState*);
+	PUBLIC_FUNCTION(AnimationState*, AddState, const String&, const Animation&, const AnimationMask&, float);
+	PUBLIC_FUNCTION(AnimationState*, AddState, const String&);
+	PUBLIC_FUNCTION(void, RemoveState, AnimationState*);
+	PUBLIC_FUNCTION(void, RemoveState, const String&);
+	PUBLIC_FUNCTION(void, RemoveAllStates);
+	PUBLIC_FUNCTION(AnimationState*, GetState, const String&);
+	PUBLIC_FUNCTION(const AnimationStatesVec&, GetStates);
+	PUBLIC_FUNCTION(AnimationState*, Play, const Animation&, const String&);
+	PUBLIC_FUNCTION(AnimationState*, Play, const Animation&);
+	PUBLIC_FUNCTION(AnimationState*, Play, const String&);
+	PUBLIC_FUNCTION(AnimationState*, BlendTo, const Animation&, const String&, float);
+	PUBLIC_FUNCTION(AnimationState*, BlendTo, const Animation&, float);
+	PUBLIC_FUNCTION(AnimationState*, BlendTo, const String&, float);
+	PUBLIC_FUNCTION(AnimationState*, BlendTo, AnimationState*, float);
+	PUBLIC_FUNCTION(void, Stop, const String&);
+	PUBLIC_FUNCTION(void, StopAll);
+	PROTECTED_FUNCTION(void, UnregAnimatedValue, IAnimatedValue*, const String&);
+}
+END_META;

@@ -19,7 +19,7 @@ namespace o2
 
 	UILongList::UILongList(const UILongList& other):
 		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
-		mSelectionLayout(other.mSelectionLayout)
+		mSelectionLayout(other.mSelectionLayout), selectedItemPos(this)
 	{
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();

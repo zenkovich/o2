@@ -26,7 +26,7 @@ namespace Editor
 		~TagsProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -55,10 +55,7 @@ namespace Editor
 		IOBJECT(TagsProperty);
 
 	protected:
-		Function<void(void*, const TagGroup&)> mAssignFunc; // Value assign function
-		Function<TagGroup(void*)>              mGetFunc;    // Get value function
-
-		TargetsVec mValuesPointers;         // Fields' pointers
+		TargetsVec mValuesProxies;          // Fields' pointers
 		TagGroup   mCommonValue;            // Common field value (if not different)
 		bool       mValuesDifferent = true; // Are values different
 
@@ -108,9 +105,7 @@ CLASS_BASES_META(Editor::TagsProperty)
 END_META;
 CLASS_FIELDS_META(Editor::TagsProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mPropertyWidget);
@@ -123,7 +118,7 @@ END_META;
 CLASS_METHODS_META(Editor::TagsProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

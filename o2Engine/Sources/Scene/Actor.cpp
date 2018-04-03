@@ -67,8 +67,6 @@ namespace o2
 		UpdateEnabled();
 		transform->SetDirty();
 
-		InitializeProperties();
-
 		if (Scene::IsSingletonInitialzed() && (mode == ActorCreateMode::InScene ||
 			(mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)))
 		{

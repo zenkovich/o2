@@ -4,6 +4,7 @@
 #include "Utils/Data/DataNode.h"
 #include "Utils/IObject.h"
 #include "Utils/Reflection/Reflection.h"
+#include "Utils/ValueProxy.h"
 
 using namespace o2;
 
@@ -20,8 +21,8 @@ namespace Editor
 	class IPropertyField: public IObject
 	{
 	public:
-		typedef Pair<void*, const void*> TargetPair;
-		typedef Vector<Pair<void*, void*>> TargetsVec;
+		typedef Pair<IAbstractValueProxy*, const IAbstractValueProxy*> TargetPair;
+		typedef Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> TargetsVec;
 
 	public:
 		Function<void()> onChanged; // Immediate change value by user event
@@ -32,10 +33,10 @@ namespace Editor
 		virtual ~IPropertyField() {}
 
 		// Sets targets pointers
-		virtual void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) {}
+		virtual void SetValueAndPrototypeProxy(const TargetsVec& targets) {}
 
-		// Sets targets pointers
-		virtual void SetValuePtr(const Vector<void*>& targets, bool isProperty);
+		// Sets targets proxies
+		virtual void SetValueProxy(const Vector<IAbstractValueProxy*>& targets);
 
 		// Checks common value and fill fields
 		virtual void Refresh() {}
@@ -69,6 +70,35 @@ namespace Editor
 
 		// Specializes field type
 		virtual void SpecializeType(const Type* type) {}
+		
+		// Sets targets pointers
+		template<typename _type>
+		void SetValuePointers(const Vector<_type*>& targets);
+
+		// Sets targets pointers
+		template<typename _property_type>
+		void SetValuePropertyPointers(const Vector<_property_type*>& targets);
+
+		// Sets targets pointers
+		template<typename _type, typename _object_type>
+		void SelectValuesPointers(const Vector<_object_type*>& targets, std::function<_type*(_object_type*)> getter);
+
+		// Sets targets properties
+		template<typename _object_type, typename _property_type>
+		void SelectValuesProperties(const Vector<_object_type*>& targets,
+									std::function<_property_type*(_object_type*)> getter);
+
+		// Sets targets pointers
+		template<typename _type, typename _object_type>
+		void SelectValueAndPrototypePointers(const Vector<_object_type*>& targets,
+											 const Vector<_object_type*>& prototypes,
+											 std::function<_type*(_object_type*)> getter);
+
+		// Sets targets properties
+		template<typename _object_type, typename _property_type>
+		void SelectValueAndPrototypeProperties(const Vector<_object_type*>& targets,
+											   const Vector<_object_type*>& prototypes,
+											   std::function<_property_type*(_object_type*)> getter);
 
 		IOBJECT(IPropertyField);
 
@@ -87,7 +117,118 @@ namespace Editor
 
 		String           mValuesPath;         // Reflection path of target values
 		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
+
+	protected:
+		// Sets value via proxy
+		template<typename T>
+		void SetProxy(IAbstractValueProxy* proxy, const T& value) const;
+
+		// Returns value from proxy
+		template<typename T>
+		T GetProxy(IAbstractValueProxy* proxy) const;
 	};
+
+	// -----------------------------
+	// IPropertyField implementation
+	// -----------------------------
+
+	template<typename T>
+	T Editor::IPropertyField::GetProxy(IAbstractValueProxy* proxy) const
+	{
+		T res;
+		proxy->GetValuePtr(&res);
+		return res;
+	}
+
+	template<typename T>
+	void Editor::IPropertyField::SetProxy(IAbstractValueProxy* proxy, const T& value) const
+	{
+		proxy->SetValuePtr(&const_cast<T&>(value));
+	}
+
+
+	// ----------------------------------
+	// SelectPropertyMixin implementation
+	// ----------------------------------
+
+	template<typename _type>
+	void IPropertyField::SetValuePointers(const Vector<_type*>& targets)
+	{
+		SetValueAndPrototypeProxy(targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_type* target)
+		{
+			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(mnew PointerValueProxy<_type>(target), nullptr);
+		}));
+	}
+
+	template<typename _property_type>
+	void IPropertyField::SetValuePropertyPointers(const Vector<_property_type*>& targets)
+	{
+		SetValueAndPrototypeProxy(targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_property_type* target)
+		{
+			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+				mnew PropertyValueProxy<_property_type::valueType, _property_type>(target), nullptr);
+		}));
+	}
+
+	template<typename _type, typename _object_type>
+	void IPropertyField::SelectValuesPointers(const Vector<_object_type*>& targets, std::function<_type*(_object_type*)> getter)
+	{
+		SetValueAndPrototypeProxy(targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+			[&](_object_type* target)
+		{
+			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+				mnew PointerValueProxy<_type>(getter(target)), nullptr);
+		}));
+	}
+
+	template<typename _object_type, typename _property_type>
+	void IPropertyField::SelectValuesProperties(const Vector<_object_type*>& targets,
+												std::function<_property_type*(_object_type*)> getter)
+	{
+		SetValueAndPrototypeProxy(targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+			[&](_object_type* target)
+		{
+			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+				mnew PropertyValueProxy<_property_type::valueType, _property_type>(getter(target)), nullptr);
+		}));
+	}
+
+	template<typename _type, typename _object_type>
+	void IPropertyField::SelectValueAndPrototypePointers(const Vector<_object_type*>& targets,
+														 const Vector<_object_type*>& prototypes, 
+														 std::function<_type*(_object_type*)> getter)
+	{
+		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs(targets.Count());
+
+		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
+		{
+			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+				mnew PointerValueProxy<_type>(getter(targets[i])),
+				prototypes[i] ? mnew PointerValueProxy<_type>(getter(prototypes[i])) : nullptr
+			));
+		}
+
+		SetValueAndPrototypeProxy(targetPairs);
+	}
+
+	template<typename _object_type, typename _property_type>
+	void IPropertyField::SelectValueAndPrototypeProperties(const Vector<_object_type*>& targets,
+														   const Vector<_object_type*>& prototypes, 
+														   std::function<_property_type*(_object_type*)> getter)
+	{
+		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs(targets.Count());
+
+		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
+		{
+			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+				mnew PropertyValueProxy<_property_type::valueType, _property_type>(getter(targets[i])),
+				prototypes[i] ? mnew PropertyValueProxy<_property_type::valueType, _property_type>(getter(prototypes[i])) : nullptr
+			));
+		}
+
+		SetValueAndPrototypeProxy(targetPairs);
+	}
+
 }
 
 CLASS_BASES_META(Editor::IPropertyField)
@@ -107,8 +248,8 @@ END_META;
 CLASS_METHODS_META(Editor::IPropertyField)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
-	PUBLIC_FUNCTION(void, SetValuePtr, const Vector<void*>&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
+	PUBLIC_FUNCTION(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);

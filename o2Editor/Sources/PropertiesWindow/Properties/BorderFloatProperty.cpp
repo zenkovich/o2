@@ -97,40 +97,56 @@ namespace Editor
 
 	void BorderFProperty::SetValue(const BorderF& value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<BorderF>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
 
 	void BorderFProperty::SetValueLeft(float value)
 	{
-		for (auto ptr : mValuesPointers)
-			mLeftAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			BorderF newValue = GetProxy<BorderF>(ptr.first);
+			newValue.left = value;
+			SetProxy<BorderF>(ptr.first, newValue);
+		}
 
 		SetCommonValueLeft(value);
 	}
 
 	void BorderFProperty::SetValueRight(float value)
 	{
-		for (auto ptr : mValuesPointers)
-			mRightAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			BorderF newValue = GetProxy<BorderF>(ptr.first);
+			newValue.right = value;
+			SetProxy<BorderF>(ptr.first, newValue);
+		}
 
 		SetCommonValueRight(value);
 	}
 
 	void BorderFProperty::SetValueTop(float value)
 	{
-		for (auto ptr : mValuesPointers)
-			mTopAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			BorderF newValue = GetProxy<BorderF>(ptr.first);
+			newValue.top = value;
+			SetProxy<BorderF>(ptr.first, newValue);
+		}
 
 		SetCommonValueTop(value);
 	}
 
 	void BorderFProperty::SetValueBottom(float value)
 	{
-		for (auto ptr : mValuesPointers)
-			mBottomAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			BorderF newValue = GetProxy<BorderF>(ptr.first);
+			newValue.bottom = value;
+			SetProxy<BorderF>(ptr.first, newValue);
+		}
 
 		SetCommonValueBottom(value);
 	}
@@ -188,51 +204,16 @@ namespace Editor
 		OnChanged();
 	}
 
-	void BorderFProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void BorderFProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, const BorderF& value) { *((PROPERTY(BorderF>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get(); };
-
-			mLeftAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(BorderF>*)(ptr)); BorderF v = p->Get(); v.left = value; p->Set(v); };
-			mLeftGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get().left; };
-
-			mRightAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(BorderF>*)(ptr)); BorderF v = p->Get(); v.right = value; p->Set(v); };
-			mRightGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get().right; };
-
-			mTopAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(BorderF>*)(ptr)); BorderF v = p->Get(); v.top = value; p->Set(v); };
-			mTopGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get().top; };
-
-			mBottomAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(BorderF>*)(ptr)); BorderF v = p->Get(); v.bottom = value; p->Set(v); };
-			mBottomGetFunc = [](void* ptr) { return ((PROPERTY(BorderF>*)(ptr))->Get().bottom; };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, const BorderF& value) { *((BorderF*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((BorderF*)(ptr)); };
-
-			mLeftAssignFunc = [](void* ptr, float value) { ((BorderF*)(ptr))->left = value; };
-			mLeftGetFunc = [](void* ptr) { return ((BorderF*)(ptr))->left; };
-
-			mRightAssignFunc = [](void* ptr, float value) { ((BorderF*)(ptr))->right = value; };
-			mRightGetFunc = [](void* ptr) { return ((BorderF*)(ptr))->right; };
-
-			mTopAssignFunc = [](void* ptr, float value) { ((BorderF*)(ptr))->top = value; };
-			mTopGetFunc = [](void* ptr) { return ((BorderF*)(ptr))->top; };
-
-			mBottomAssignFunc = [](void* ptr, float value) { ((BorderF*)(ptr))->bottom = value; };
-			mBottomGetFunc = [](void* ptr) { return ((BorderF*)(ptr))->bottom; };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	void BorderFProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
@@ -241,15 +222,15 @@ namespace Editor
 		auto lastTopDifferent = mTopValuesDifferent;
 		auto lastBottomDifferent = mBottomValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<BorderF>(mValuesProxies[0].first);
 		auto newLeftValuesDifferent = false;
 		auto newBottomValuesDifferent = false;
 		auto newRightValuesDifferent = false;
 		auto newTopValuesDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			auto value = mGetFunc(mValuesPointers[i].first);
+			auto value = GetProxy<BorderF>(mValuesProxies[i].first);
 			if (!Math::Equals(newCommonValue.left, value.left))
 				newLeftValuesDifferent = true;
 
@@ -300,11 +281,11 @@ namespace Editor
 
 	void BorderFProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				SetProxy<BorderF>(ptr.first, GetProxy<BorderF>(ptr.second));
 			}
 		}
 
@@ -388,9 +369,9 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(GetProxy<BorderF>(ptr.first), GetProxy<BorderF>(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -572,10 +553,10 @@ namespace Editor
 	void BorderFProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<BorderF>(ptr.first);
 		}
 	}
 

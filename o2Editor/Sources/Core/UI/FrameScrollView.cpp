@@ -162,7 +162,7 @@ namespace Editor
 
 	void UIFrameScrollView::OnHorScrollScrolled(float value)
 	{
-		mViewCamera.SetPosition(Vec2F(value, mViewCamera.position->y));
+		mViewCamera.SetPosition(Vec2F(value, mViewCamera.GetPosition().y));
 		mViewCameraTargetPos = mViewCamera.GetPosition();
 		mNeedRedraw = true;
 	}
@@ -173,18 +173,18 @@ namespace Editor
 		float max = mVerScrollbar->GetMaxValue();
 
 		float invertedValue = min + (max - min - (value - min));
-		mViewCamera.SetPosition(Vec2F(mViewCamera.position->x, invertedValue));
+		mViewCamera.SetPosition(Vec2F(mViewCamera.GetPosition().x, invertedValue));
 		mViewCameraTargetPos = mViewCamera.GetPosition();
 		mNeedRedraw = true;
 	}
 
 	void UIFrameScrollView::OnCameraTransformChanged()
 	{
-		mHorScrollbar->SetValue(mViewCamera.position->x);
+		mHorScrollbar->SetValue(mViewCamera.GetPosition().x);
 
 		float min = mVerScrollbar->GetMinValue();
 		float max = mVerScrollbar->GetMaxValue();
-		mVerScrollbar->SetValue(min + (max - min - (mViewCamera.position->y - min)));
+		mVerScrollbar->SetValue(min + (max - min - (mViewCamera.GetPosition().y - min)));
 	}
 }
 

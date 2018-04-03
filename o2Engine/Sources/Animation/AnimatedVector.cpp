@@ -13,7 +13,8 @@ namespace o2
 	{}
 
 	AnimatedValue<Vec2F>::AnimatedValue(const AnimatedValue<Vec2F>& other):
-		mKeys(other.mKeys), mValue(other.mValue), IAnimatedValue(other)
+		mKeys(other.mKeys), mValue(other.mValue), IAnimatedValue(other),
+		value(this), target(this), targetDelegate(this), targetProxy(this), keys(this)
 	{}
 
 	AnimatedValue<Vec2F>& AnimatedValue<Vec2F>::operator=(const AnimatedValue<Vec2F>& other)

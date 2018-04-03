@@ -31,7 +31,7 @@ namespace Editor
 		~VectorProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -124,7 +124,7 @@ END_META;
 CLASS_METHODS_META(Editor::VectorProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);

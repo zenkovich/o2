@@ -258,7 +258,6 @@ END_META;
 CLASS_METHODS_META(o2::AtlasAsset)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, AtlasAsset);
 	PUBLIC_FUNCTION(AssetInfosVec, GetImages);
 	PUBLIC_FUNCTION(Vector<AssetRef>, GetImagesAssets);
 	PUBLIC_FUNCTION(PagesVec, GetPages);

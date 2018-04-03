@@ -107,31 +107,36 @@ namespace Editor
 	{
 		mTargetActors = actors;
 
-		auto getTargetsPair = [&](Actor* x, auto getter) {
-			return Pair<void*, void*>(getter(x), x->GetPrototypeLink() ? getter(x->GetPrototypeLink().Get()) : nullptr);
-		};
+		auto prototypes = actors.Select<Actor*>([](Actor* x) { return x->GetPrototypeLink().Get(); });
 
-		auto getTargets = [&](auto getter) {
-			return mTargetActors.Select<Pair<void*, void*>>([&](Actor* x) { return getTargetsPair(x, getter); });
-		};
+		mPositionProperty->SelectValueAndPrototypeProperties<Actor, decltype(ActorTransform::position)>(
+			actors, prototypes, [](Actor* x) { return &x->transform->position; });
 
-		mPositionProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->position; }), true);
-		mPivotProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->pivot; }), true);
-		mScaleProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->scale; }), true);
-		mSizeProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->size; }), true);
-		mRotationProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->transform->angleDegree; }), true);
+		mPivotProperty->SelectValueAndPrototypeProperties<Actor, decltype(ActorTransform::pivot)>(
+			actors, prototypes, [](Actor* x) { return &x->transform->pivot; });
 
-		Vector<Pair<void*, void*>> depthTargets;
+		mScaleProperty->SelectValueAndPrototypeProperties<Actor, decltype(ActorTransform::scale)>(
+			actors, prototypes, [](Actor* x) { return &x->transform->scale; });
+
+		mSizeProperty->SelectValueAndPrototypeProperties<Actor, decltype(ActorTransform::size)>(
+			actors, prototypes, [](Actor* x) { return &x->transform->size; });
+
+		mRotationProperty->SelectValueAndPrototypeProperties<Actor, decltype(ActorTransform::angleDegree)>(
+			actors, prototypes, [](Actor* x) { return &x->transform->angleDegree; });
+
+		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> depthTargets;
 		for (auto actor : mTargetActors)
 		{
 			if (auto comp = actor->GetComponent<DrawableComponent>())
 			{
 				DrawableComponent* proto = dynamic_cast<DrawableComponent*>(comp->GetPrototypeLink());
-				depthTargets.Add(Pair<void*, void*>(&comp->drawDepth, proto ? &proto->drawDepth : nullptr));
+				depthTargets.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+					mnew PropertyValueProxy<float, decltype(comp->drawDepth)>(&comp->drawDepth),
+					proto ? mnew PropertyValueProxy<float, decltype(comp->drawDepth)>(&proto->drawDepth) : nullptr));
 			}
 		}
 
-		mDepthProperty->SetValueAndPrototypePtr(depthTargets, true);
+		mDepthProperty->SetValueAndPrototypeProxy(depthTargets);
 	}
 
 	void DefaultActorTransformViewer::Refresh()

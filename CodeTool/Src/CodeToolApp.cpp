@@ -601,7 +601,9 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	auto classes = file->GetGlobalNamespace()->GetAllClasses();
 	for (auto cls : classes)
 	{
-		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || cls == baseObjectClass)
+		bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(), [](SyntaxFunction* x) { return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE"; }) != cls->GetFunctions().end();
+
+		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass() && !hasIObject) || cls == baseObjectClass)
 			continue;
 
 		if (!cls->IsTemplate())
@@ -683,10 +685,24 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	// base classes
 	res += templates;
 	res += "CLASS_BASES_META(" + classDef + ")\n{\n";
+
+	int typedefs = 0;
 	for (auto x : cls->GetBaseClasses())
 	{
 		auto classInfo = mCache.FindSection(x.GetClassName(), nspace);
-		res += string("\tBASE_CLASS(") + (classInfo ? classInfo->GetFullName() : x.GetClassName()) +  +");\n";
+		auto className = classInfo ? classInfo->GetFullName() : x.GetClassName();
+		if (className.find(',') != string::npos)
+		{
+			typedefs++;
+			char buf[256];
+			_itoa(typedefs, buf, 10);
+
+			auto newClassName = string("_tmp") + buf;
+			res += string("\ttypedef ") + className + ' ' + newClassName + ";\n";
+			className = newClassName;
+		}
+		
+		res += string("\tBASE_CLASS(") + className +  +");\n";
 	}
 	res += "}\nEND_META;\n";
 

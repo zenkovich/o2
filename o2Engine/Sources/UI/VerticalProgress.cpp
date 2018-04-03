@@ -13,7 +13,8 @@ namespace o2
 
 	UIVerticalProgress::UIVerticalProgress(const UIVerticalProgress& other) :
 		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
-		mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense)
+		mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense), value(this),
+		minValue(this), maxValue(this), scrollSense(this)
 	{
 		mBarLayer = FindLayer("bar");
 		mBackLayer = FindLayer("back");

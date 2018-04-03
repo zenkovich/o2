@@ -21,7 +21,7 @@ namespace o2
 
 	UICustomDropDown::UICustomDropDown(const UICustomDropDown& other):
 		UIWidget(other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout),
-		mMaxListItems(other.mMaxListItems)
+		mMaxListItems(other.mMaxListItems), selectedItem(this), selectedItemPos(this), itemsCount(this)
 	{
 		mItemsList = other.mItemsList->CloneAs<UICustomList>();
 		mItemsList->SetInternalParent(this, false);

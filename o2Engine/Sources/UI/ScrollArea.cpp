@@ -20,7 +20,8 @@ namespace o2
 	UIScrollArea::UIScrollArea(const UIScrollArea& other) :
 		UIWidget(other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
 		mClipAreaLayout(other.mClipAreaLayout), mScrollPos(other.mScrollPos), mScrollSpeedDamp(other.mScrollSpeedDamp),
-		mViewAreaLayout(other.mViewAreaLayout), mEnableScrollsHiding(other.mEnableScrollsHiding)
+		mViewAreaLayout(other.mViewAreaLayout), mEnableScrollsHiding(other.mEnableScrollsHiding), scroll(this),
+		horScroll(this), verScroll(this)
 	{
 		if (mOwnHorScrollBar)
 		{

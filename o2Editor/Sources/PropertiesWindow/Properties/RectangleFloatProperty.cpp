@@ -97,40 +97,56 @@ namespace Editor
 
 	void RectFProperty::SetValue(const RectF& value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<RectF>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
 
 	void RectFProperty::SetValueLeft(float value)
 	{
-		for (auto ptr : mValuesPointers)
-			mLeftAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			RectF newValue = GetProxy<RectF>(ptr.first);
+			newValue.left = value;
+			SetProxy<RectF>(ptr.first, newValue);
+		}
 
 		SetCommonValueLeft(value);
 	}
 
 	void RectFProperty::SetValueRight(float value)
 	{
-		for (auto ptr : mValuesPointers)
-			mRightAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			RectF newValue = GetProxy<RectF>(ptr.first);
+			newValue.right = value;
+			SetProxy<RectF>(ptr.first, newValue);
+		}
 
 		SetCommonValueRight(value);
 	}
 
 	void RectFProperty::SetValueTop(float value)
 	{
-		for (auto ptr : mValuesPointers)
-			mTopAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			RectF newValue = GetProxy<RectF>(ptr.first);
+			newValue.top = value;
+			SetProxy<RectF>(ptr.first, newValue);
+		}
 
 		SetCommonValueTop(value);
 	}
 
 	void RectFProperty::SetValueBottom(float value)
 	{
-		for (auto ptr : mValuesPointers)
-			mBottomAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+		{
+			RectF newValue = GetProxy<RectF>(ptr.first);
+			newValue.bottom = value;
+			SetProxy<RectF>(ptr.first, newValue);
+		}
 
 		SetCommonValueBottom(value);
 	}
@@ -188,51 +204,16 @@ namespace Editor
 		OnChanged();
 	}
 
-	void RectFProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void RectFProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, const RectF& value) { *((PROPERTY(RectF>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(RectF>*)(ptr))->Get(); };
-
-			mLeftAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(RectF>*)(ptr)); RectF v = p->Get(); v.left = value; p->Set(v); };
-			mLeftGetFunc = [](void* ptr) { return ((PROPERTY(RectF>*)(ptr))->Get().left; };
-
-			mRightAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(RectF>*)(ptr)); RectF v = p->Get(); v.right = value; p->Set(v); };
-			mRightGetFunc = [](void* ptr) { return ((PROPERTY(RectF>*)(ptr))->Get().right; };
-
-			mTopAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(RectF>*)(ptr)); RectF v = p->Get(); v.top = value; p->Set(v); };
-			mTopGetFunc = [](void* ptr) { return ((PROPERTY(RectF>*)(ptr))->Get().top; };
-
-			mBottomAssignFunc = [](void* ptr, float value) { auto p = ((PROPERTY(RectF>*)(ptr)); RectF v = p->Get(); v.bottom = value; p->Set(v); };
-			mBottomGetFunc = [](void* ptr) { return ((PROPERTY(RectF>*)(ptr))->Get().bottom; };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, const RectF& value) { *((RectF*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((RectF*)(ptr)); };
-
-			mLeftAssignFunc = [](void* ptr, float value) { ((RectF*)(ptr))->left = value; };
-			mLeftGetFunc = [](void* ptr) { return ((RectF*)(ptr))->left; };
-
-			mRightAssignFunc = [](void* ptr, float value) { ((RectF*)(ptr))->right = value; };
-			mRightGetFunc = [](void* ptr) { return ((RectF*)(ptr))->right; };
-
-			mTopAssignFunc = [](void* ptr, float value) { ((RectF*)(ptr))->top = value; };
-			mTopGetFunc = [](void* ptr) { return ((RectF*)(ptr))->top; };
-
-			mBottomAssignFunc = [](void* ptr, float value) { ((RectF*)(ptr))->bottom = value; };
-			mBottomGetFunc = [](void* ptr) { return ((RectF*)(ptr))->bottom; };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	void RectFProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
@@ -241,15 +222,15 @@ namespace Editor
 		auto lastTopDifferent = mTopValuesDifferent;
 		auto lastBottomDifferent = mBottomValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<RectF>(mValuesProxies[0].first);
 		auto newLeftValuesDifferent = false;
 		auto newBottomValuesDifferent = false;
 		auto newRightValuesDifferent = false;
 		auto newTopValuesDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			auto value = mGetFunc(mValuesPointers[i].first);
+			auto value = GetProxy<RectF>(mValuesProxies[i].first);
 			if (!Math::Equals(newCommonValue.left, value.left))
 				newLeftValuesDifferent = true;
 
@@ -300,11 +281,11 @@ namespace Editor
 
 	void RectFProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				SetProxy<RectF>(ptr.first, GetProxy<RectF>(ptr.second));
 			}
 		}
 
@@ -388,9 +369,9 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(GetProxy<RectF>(ptr.first), GetProxy<RectF>(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -572,10 +553,10 @@ namespace Editor
 	void RectFProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<RectF>(ptr.first);
 		}
 	}
 

@@ -13,7 +13,8 @@ namespace o2
 
 	UILabel::UILabel(const UILabel& other):
 		UIWidget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow),
-		mExpandBorder(other.mExpandBorder)
+		mExpandBorder(other.mExpandBorder), text(this), font(this), height(this), verAlign(this), horAlign(this),
+		horOverflow(this), verOverflow(this), expandBorder(this), symbolsDistanceCoef(this), linesDistanceCoef(this)
 	{
 		mTextLayer = GetLayerDrawable<Text>("text");
 		RetargetStatesAnimations();

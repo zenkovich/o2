@@ -111,7 +111,6 @@ END_META;
 CLASS_METHODS_META(o2::UISpoiler)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UISpoiler);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);

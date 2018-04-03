@@ -61,7 +61,7 @@ namespace o2
 					else
 					{
 						if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-							def.mAnimatedValue->SetTargetProxyVoid(def.mTargetPtr);
+							def.mAnimatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(def.mTargetPtr));
 						else
 							def.mAnimatedValue->SetTargetVoid(def.mTargetPtr);
 					}
@@ -99,7 +99,7 @@ namespace o2
 				else
 				{
 					if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-						val.mAnimatedValue->SetTargetProxyVoid(val.mTargetPtr);
+						val.mAnimatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(val.mTargetPtr));
 					else
 						val.mAnimatedValue->SetTargetVoid(val.mTargetPtr);
 				}

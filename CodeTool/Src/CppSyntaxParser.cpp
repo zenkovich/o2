@@ -127,6 +127,7 @@ void CppSyntaxParser::InitializeParsers()
 	mParsers.push_back(new ExpressionParser("ATTRIBUTE_COMMENT_DEFINITION", &CppSyntaxParser::ParseAttributeCommentDef, true, false));
 	mParsers.push_back(new ExpressionParser("ATTRIBUTE_SHORT_DEFINITION", &CppSyntaxParser::ParseAttributeShortDef, true, false));
 	mParsers.push_back(new ExpressionParser("ATTRIBUTES", &CppSyntaxParser::ParseAttributes, true, false));
+	mParsers.push_back(new ExpressionParser("PROPERTIES", &CppSyntaxParser::ParseProperties, true, false));
 	mParsers.push_back(new ExpressionParser("PROPERTY", &CppSyntaxParser::ParseProperty, true, false));
 	mParsers.push_back(new ExpressionParser("GETTER", &CppSyntaxParser::ParseGetter, true, false));
 	mParsers.push_back(new ExpressionParser("SETTER", &CppSyntaxParser::ParseSetter, true, false));
@@ -930,6 +931,16 @@ void CppSyntaxParser::ParseAttributes(SyntaxSection& section, int& caret, Syntax
 	attributes->mAttributesList = separated;
 
 	section.mAttributes.push_back(attributes);
+}
+
+void CppSyntaxParser::ParseProperties(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection)
+{
+	int begin = caret;
+
+	caret += (int)strlen("PROPERTIES");
+	caret = (int)section.mData.find('(', caret);
+	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
+	caret = (int)section.mData.find(';', caret);
 }
 
 void CppSyntaxParser::ParseProperty(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection)

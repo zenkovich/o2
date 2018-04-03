@@ -37,7 +37,7 @@ namespace o2
 	}
 
 	FolderAsset::FolderAsset(const FolderAsset& asset):
-		Asset(asset), mContainingAssetsInfos(asset.mContainingAssetsInfos)
+		Asset(asset), mContainingAssetsInfos(asset.mContainingAssetsInfos), meta(this), insideAssets(this)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;

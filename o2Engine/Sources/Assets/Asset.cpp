@@ -11,7 +11,8 @@ namespace o2
 		mMeta(nullptr)
 	{}
 
-	Asset::Asset(const Asset& asset)
+	Asset::Asset(const Asset& asset):
+		path(this), fullPath(this), id(this), meta(this)
 	{}
 
 	Asset& Asset::operator=(const Asset& asset)

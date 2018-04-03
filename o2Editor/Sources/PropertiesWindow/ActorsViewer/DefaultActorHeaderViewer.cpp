@@ -45,16 +45,20 @@ namespace Editor
 		mLockProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mLockProperty->GetWidget());
 
+
 		auto prototypeRoot = mDataView->AddChildWidget(mnew UIWidget());
 		prototypeRoot->name = "prototype";
 		*prototypeRoot->layout = UIWidgetLayout::BothStretch();
+
+		ExtractPropertyValueType<UIWidget::transparency_PROPERTY>::type vv = 6;
+
 		prototypeRoot->AddState("visible", Animation::EaseInOut(prototypeRoot, &prototypeRoot->transparency, 0.0f, 1.0f, 0.1f));
 
 		auto linkImg = o2UI.CreateImage("ui/UI2_prefab_link_big.png");
 		*linkImg->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
 		prototypeRoot->AddChild(linkImg);
 
-		mPrototypeProperty = mnew AssetPROPERTY(ActorAssetRef>(o2UI.CreateWidget<UIWidget>("actor head asset property"));
+		mPrototypeProperty = mnew AssetProperty<ActorAssetRef>(o2UI.CreateWidget<UIWidget>("actor head asset property"));
 		*mPrototypeProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
 		prototypeRoot->AddChild(mPrototypeProperty->GetWidget());
 
@@ -126,24 +130,24 @@ namespace Editor
 	{
 		mActors = actors;
 
-		auto getTargetsPair = [&](Actor* x, auto getter) { 
-			return Pair<void*, void*>(getter(x), x->GetPrototypeLink() ? getter(x->GetPrototypeLink().Get()) : nullptr);
-		};
+		auto prototypes = actors.Select<Actor*>([](Actor* x) { return x->GetPrototypeLink().Get(); });
+				
+		mEnableProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::enabled)>(
+			actors, prototypes, [](Actor* x) { return &x->enabled; });
 
-		auto getTargets = [&](auto getter) {
-			return actors.Select<Pair<void*, void*>>([&](Actor* x) { return getTargetsPair(x, getter); });
-		};
-		
-		mEnableProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->enabled; }), true);
-		mNameProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->name; }), true);
-		mLockProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->locked; }), true);
+		mNameProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::name)>(
+			actors, prototypes, [](Actor* x) { return &x->name; });
 
- 		Vector<void*> prototypeTargets = actors.Select<void*>([](Actor* x) { return &x->prototype; });
- 		mPrototypeProperty->SetValuePtr(prototypeTargets, true);
+		mLockProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::locked)>(
+			actors, prototypes, [](Actor* x) { return &x->locked; });
+
+		mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
+			actors, [](Actor* x) { return &x->prototype; });
 
 		*mDataView->state["prototype"] = mPrototypeProperty->GetCommonValue().IsValid();
 
-		mTagsProperty->SetValueAndPrototypePtr(getTargets([](Actor* x) { return &x->tags; }), false);
+		mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
+			actors, prototypes, [](Actor* x) { return &x->tags; });
 
 		Vector<void*> layersTargets = actors.Select<void*>([](Actor* x) { return &x->layer; });
 		//mLayerProperty->Setup(tagsTargets, true);

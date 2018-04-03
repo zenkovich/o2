@@ -11,7 +11,7 @@ namespace o2
 	{}
 
 	SceneDrawable::SceneDrawable(const SceneDrawable& other):
-		mDrawingDepth(other.mDrawingDepth)
+		mDrawingDepth(other.mDrawingDepth), drawDepth(this)
 	{}
 
 	SceneDrawable::~SceneDrawable()

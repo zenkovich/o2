@@ -196,7 +196,6 @@ END_META;
 CLASS_METHODS_META(o2::UIVerticalScrollBar)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIVerticalScrollBar);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetValue, float);
 	PUBLIC_FUNCTION(void, SetValueForcible, float);

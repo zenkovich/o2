@@ -14,9 +14,12 @@ namespace o2
 	Transform::Transform(const Transform& other):
 		mSize(other.mSize), mPosition(other.mPosition), mAngle(other.mAngle), mScale(other.mScale),
 		mPivot(other.mPivot), mShear(other.mShear), mTransform(other.mTransform),
-		mNonSizedTransform(other.mNonSizedTransform)
-	{
-	}
+		mNonSizedTransform(other.mNonSizedTransform), position(this), size(this), scale(this),
+		pivot(this), worldPivot(this), szPivot(this), angle(this), angleDegree(this), shear(this),
+		basis(this), nonSizedBasis(this), rect(this), AABB(this), leftTop(this), leftBottom(this),
+		rightTop(this), rightBottom(this), right(this), left(this), up(this), down(this),
+		lookAtPoint(this)
+	{}
 
 	void Transform::OnDeserialized(const DataNode& node)
 	{

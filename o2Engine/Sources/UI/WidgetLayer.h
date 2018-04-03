@@ -26,7 +26,7 @@ namespace o2
 		PROPERTY(float, depth, SetDepth, GetDepth);                      // Drawing depth (higher depths will draw later)
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Drawable transparency property
 
-		ACCESSOR(UIWidgetLayer*, child, const String&, GetChild, GetAllChildLayers); // Child layer accessor
+		ACCESSOR(UIWidgetLayer*, child, String, GetChild, GetAllChildLayers); // Child layer accessor
 
 		String          name;               // Name of layer @SERIALIZABLE
 					    
@@ -144,9 +144,6 @@ namespace o2
 		// Returns dictionary with all child layers
 		Dictionary<String, UIWidgetLayer*> GetAllChildLayers();
 
-		// Initializes properties
-		void InitializeProperties();
-
 		friend class UIWidget;
 	};
 
@@ -197,7 +194,6 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 
 	typedef Dictionary<String, UIWidgetLayer*> _tmp1;
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIWidgetLayer);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddChild, UIWidgetLayer*);
@@ -224,6 +220,5 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 	PROTECTED_FUNCTION(void, UpdateLayout);
 	PROTECTED_FUNCTION(void, UpdateResTransparency);
 	PROTECTED_FUNCTION(_tmp1, GetAllChildLayers);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;

@@ -191,7 +191,6 @@ END_META;
 CLASS_METHODS_META(o2::VectorFontAsset)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, VectorFontAsset);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PUBLIC_FUNCTION(FontRef, GetFont);
 	PUBLIC_FUNCTION(const EffectsVec&, GetEffects);

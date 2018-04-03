@@ -44,23 +44,29 @@ namespace Editor
 	{
 		mTargetAssets = assets.Cast<ImageAssetRef*>();
 
-		auto borderTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mSliceBorder); });
-		mBorderProperty->SetValuePtr(borderTargets, false);
+		mBorderProperty->SelectValuesPointers<BorderI, ImageAssetRef>(
+			mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mSliceBorder); });
 
-		auto modeTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mDefaultMode); });
-		mDefaultTypeProperty->SetValuePtr(modeTargets, false);
+		mDefaultTypeProperty->SelectValuesPointers<int, ImageAssetRef>(
+			mTargetAssets,
+			[](const ImageAssetRef* x) { return (int*)&((*x)->GetMeta()->mDefaultMode); });
 
-		auto windowsTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mWindows); });
-		mWindowsProperties->SetValuePtr(windowsTargets, false);
+		mWindowsProperties->SelectValuesPointers<ImageAsset::PlatformMeta, ImageAssetRef>(
+			mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mWindows); });
 
-		auto osxTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mMacOS); });
-		mOSXProperties->SetValuePtr(osxTargets, false);
+		mOSXProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(
+			mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mMacOS); });
 
-		auto androidTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mAndroid); });
-		mAndroidProperties->SetValuePtr(androidTargets, false);
+		mAndroidProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(
+			mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mAndroid); });
 
-		auto iosTargets = mTargetAssets.Select<void*>([](const ImageAssetRef* x) { return &((*x)->GetMeta()->mIOS); });
-		mIOSProperties->SetValuePtr(iosTargets, false);
+		mIOSProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(
+			mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mIOS); });
 
 		mPreviewImage->imageAsset = *mTargetAssets.Last();
 		mPreviewImage->GetImage()->mode = SpriteMode::Default;
@@ -210,7 +216,7 @@ namespace Editor
 		mContent->AddChild(modePropertyPair.second);
 
 		auto atlasPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAssetRef), "Atlas");
-		mAtlasProperty = (AssetPROPERTY(AtlasAssetRef>*)atlasPropertyPair.first;
+		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasPropertyPair.first;
 		mAtlasProperty->onChanged = THIS_FUNC(OnAtlasPropertyChanged);
 		mContent->AddChild(atlasPropertyPair.second);
 
@@ -279,7 +285,7 @@ namespace Editor
 		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 		BorderI borders = mBorderProperty->GetCommonValue();
 		BorderF bordersAnchors((float)borders.left/imageSize.x, (float)borders.top/imageSize.y,
-							 1.0f - (float)borders.right/imageSize.x, 1.0f - (float)borders.bottom/imageSize.y);
+							   1.0f - (float)borders.right/imageSize.x, 1.0f - (float)borders.bottom/imageSize.y);
 
 		*mBorderLeftHandleWidget->layout = UIWidgetLayout(Vec2F(bordersAnchors.left, 0.0f), Vec2F(bordersAnchors.left, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
 		*mBorderRightHandleWidget->layout = UIWidgetLayout(Vec2F(bordersAnchors.right, 0.0f), Vec2F(bordersAnchors.right, 1.0f), Vec2F(0, 0), Vec2F(1, 0));

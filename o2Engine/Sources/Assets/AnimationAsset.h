@@ -153,7 +153,6 @@ END_META;
 CLASS_METHODS_META(o2::AnimationAsset)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, AnimationAsset);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PROTECTED_FUNCTION(void, LoadData, const String&);

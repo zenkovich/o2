@@ -30,6 +30,7 @@ namespace o2
 		PROPERTY(bool, looped, SetLoop, IsLooped);                                      // Is emitter looped property
 		PROPERTY(int, maxParticles, SetMaxParticles, GetMaxParticles);                  // Number of maximum particles in emitter property
 		PROPERTY(float, duration, SetDuration, GetDuration);                            // Working duration in seconds property
+
 		PROPERTY(float, particlesLifetime, SetParticlesLifetime, GetParticlesLifetime);                   // Particles lifetime in seconds property
 		PROPERTY(float, emitParticlesPerSecond, SetEmitParticlesPerSecond, GetEmitParticlesPerSecond);    // Amount of particles emitting in one second property
 		PROPERTY(float, emitParticlesAngle, SetEmitParticlesAngle, GetEmitParticlesAngle);                // Emitting particle angle property in degrees
@@ -37,13 +38,16 @@ namespace o2
 		PROPERTY(Vec2F, emitParticlesSize, SetEmitParticlesSize, GetEmitParticlesSize);                   // Emitting particle size property
 		PROPERTY(Vec2F, emitParticlesSizeRange, SetEmitParticlesSizeRange, GetEmitParticlesSizeRange);    // Emitting particle size range property
 		PROPERTY(float, emitParticlesSpeed, SetEmitParticlesSpeed, GetEmitParticlesSpeed);                // Emitting particle angle speed property in degrees/sec
+
 		PROPERTY(float, emitParticlesAngleSpeedRange, SetEmitParticlesSpeedRange, GetEmitParticlesSpeedRange);               // Emitting particle angle speed range in degrees/sec
 		PROPERTY(float, emitParticlesAngleSpeed, SetEmitParticlesAngleSpeed, GetEmitParticlesAngleSpeed);                    // Emitting particle speed property
 		PROPERTY(float, emitParticlesSpeedRange, SetEmitParticlesAngleSpeedRange, GetEmitParticlesAngleSpeedRange);          // Emitting particle speed range
 		PROPERTY(float, emitParticlesMoveDir, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);                 // Emitting particle moving direction in degrees property
 		PROPERTY(float, emitParticlesMoveDirRange, SetEmitParticlesMoveDirectionRange, GetEmitParticlesMoveDirectionRange); // Emitting particle moving direction range in degrees property
+
 		PROPERTY(Color4, emitParticlesColorA, SetEmitParticlesColorA, GetEmitParticlesColorA);            // Emitting particle color A property
 		PROPERTY(Color4, emitParticlesColorB, SetEmitParticlesColorB, GetEmitParticlesColorB);            // Emitting particle color B property													   
+
 		PROPERTY(ImageAssetRef, image, SetImage, GetImage);          // Particle image property
 		PROPERTY(ParticlesEmitterShape*, shape, SetShape, GetShape); // Emitting shape property
 
@@ -367,7 +371,6 @@ END_META;
 CLASS_METHODS_META(o2::ParticlesEmitter)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, ParticlesEmitter);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetPlaying, bool);

@@ -13,7 +13,9 @@ namespace o2
 
 	UIVerticalLayout::UIVerticalLayout(const UIVerticalLayout& other):
 		mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
-		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren)
+		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren), baseCorner(this),
+		spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
+		borderTop(this), borderBottom(this), fitByChildren(this)
 	{
 		RetargetStatesAnimations();
 		SetLayoutDirty();

@@ -15,7 +15,8 @@ namespace o2
 	UIVerticalScrollBar::UIVerticalScrollBar(const UIVerticalScrollBar& other) :
 		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
 		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize),
-		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue)
+		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue),
+		value(this), minValue(this), maxValue(this), scrollSense(this), scrollSize(this)
 	{
 		mHandleLayer = FindLayer("handle");
 		mBackLayer = FindLayer("back");
@@ -221,12 +222,12 @@ namespace o2
 		if (Math::Equals(range, 0.0f))
 			return mValue;
 
-		float height = layout->worldRect->Height();
+		float height = layout->GetWorldRect().Height();
 		float minScrollhandleSize = Math::Max(mScrollhandleMinPxSize/height*range, mScrollHandleSize);
 		float rangleWithHandle = range + minScrollhandleSize;
 		float szCoef = minScrollhandleSize/rangleWithHandle;
 
-		return (height - (cursor.position.y - layout->worldRect->bottom))/height*range/(1.0f - szCoef) + mMinValue;
+		return (height - (cursor.position.y - layout->GetWorldRect().bottom))/height*range/(1.0f - szCoef) + mMinValue;
 	}
 
 	void UIVerticalScrollBar::SetValueFromUser(float value)
@@ -288,7 +289,7 @@ namespace o2
 		if (mHandleLayer)
 		{
 			float range = mMaxValue - mMinValue;
-			float height = Math::Max(layout->worldRect->Height(), 1.0f);
+			float height = Math::Max(layout->GetWorldRect().Height(), 1.0f);
 			float minScrollhandleSize = Math::Max(mScrollhandleMinPxSize/height*range, mScrollHandleSize);
 			float rangleWithHandle = range + minScrollhandleSize;
 			float szCoef = minScrollhandleSize/rangleWithHandle;

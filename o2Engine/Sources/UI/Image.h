@@ -74,7 +74,6 @@ END_META;
 CLASS_METHODS_META(o2::UIImage)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIImage);
 	PUBLIC_FUNCTION(void, SetImage, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetImage);
 	PUBLIC_FUNCTION(void, SetImageAsset, const ImageAssetRef&);

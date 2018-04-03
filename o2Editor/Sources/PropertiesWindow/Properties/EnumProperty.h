@@ -25,7 +25,7 @@ namespace Editor
 		~EnumProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -56,12 +56,9 @@ namespace Editor
 
 		IOBJECT(EnumProperty);
 
-	protected:
-		Function<void(void*, int)> mAssignFunc; // Value assign function
-		Function<int(void*)>       mGetFunc;    // Get value function
-								       						      
+	protected:				       						      
 		const EnumType* mEnumType;               // Type of enumeration
-		TargetsVec      mValuesPointers;         // Fields' pointers
+		TargetsVec      mValuesProxies;          // Fields' pointers
 		int             mCommonValue = 0;        // Common field value (if not different)
 		bool            mValuesDifferent = true; // Are values different
 															      
@@ -100,10 +97,8 @@ CLASS_BASES_META(Editor::EnumProperty)
 END_META;
 CLASS_FIELDS_META(Editor::EnumProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
 	PROTECTED_FIELD(mEnumType);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mEntries);
@@ -116,7 +111,7 @@ END_META;
 CLASS_METHODS_META(Editor::EnumProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

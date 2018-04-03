@@ -270,7 +270,6 @@ END_META;
 CLASS_METHODS_META(o2::Sprite)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, Sprite);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetTexture, TextureRef);
 	PUBLIC_FUNCTION(TextureRef, GetTexture);

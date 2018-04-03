@@ -32,7 +32,7 @@ namespace Editor
 		~ComponentProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -70,10 +70,7 @@ namespace Editor
 		IOBJECT(ComponentProperty);
 
 	protected:
-		Function<void(void*, Component*)> mAssignFunc; // Value assign function
-		Function<Component*(void*)>       mGetFunc;    // Get value function
-
-		TargetsVec  mValuesPointers;           // Fields' pointers
+		TargetsVec  mValuesProxies;           // Fields' pointers
 		Component*  mCommonValue = nullptr;    // Common field value (if not different)
 		bool        mValuesDifferent = true;   // Are values different
 		const Type* mComponentType = nullptr;  // Component value type
@@ -85,7 +82,7 @@ namespace Editor
 
 	protected:
 		// Reverts target value to source
-		void RevertoToPrototype(void* target, void* source, IObject* targetOwner);
+		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
 
 		// Sets common value actor
 		void SetCommonValue(Component* value);
@@ -152,9 +149,7 @@ CLASS_BASES_META(Editor::ComponentProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ComponentProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mComponentType);
@@ -167,7 +162,7 @@ END_META;
 CLASS_METHODS_META(Editor::ComponentProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
@@ -179,7 +174,7 @@ CLASS_METHODS_META(Editor::ComponentProperty)
 	PUBLIC_FUNCTION(void, SetValue, Component*);
 	PUBLIC_FUNCTION(void, SetUnknownValue);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, RevertoToPrototype, void*, void*, IObject*);
+	PROTECTED_FUNCTION(void, RevertoToPrototype, IAbstractValueProxy*, IAbstractValueProxy*, IObject*);
 	PROTECTED_FUNCTION(void, SetCommonValue, Component*);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);

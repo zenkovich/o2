@@ -1485,7 +1485,7 @@ namespace o2
 			if (!node->widget)
 				return;
 
-			float y = node->widget->layout->worldCenter->y;
+			float y = node->widget->layout->GetWorldCenter().y;
 			float h = node->widget->layout->height;
 			float cy = first ? y : (y > ycursor ? y + h*mNodeDragIntoZone : y - h*mNodeDragIntoZone);
 			first = false;
@@ -1549,7 +1549,7 @@ namespace o2
 			if (!node->widget)
 				continue;
 
-			float dst = cursor.position.y - node->widget->layout->worldCenter->y;
+			float dst = cursor.position.y - node->widget->layout->GetWorldCenter().y;
 			if (!first)
 				dst += node->widget->layout->height*mNodeDragIntoZone;
 

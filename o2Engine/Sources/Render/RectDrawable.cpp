@@ -11,7 +11,7 @@ namespace o2
 
 	IRectDrawable::IRectDrawable(const IRectDrawable& other) :
 		Transform(other.mSize, other.mPosition, other.mAngle, other.mScale, other.mPivot),
-		mColor(other.mColor), mEnabled(other.mEnabled)
+		mColor(other.mColor), mEnabled(other.mEnabled), color(this), transparency(this), enabled(this)
 	{}
 
 	IRectDrawable& IRectDrawable::operator=(const IRectDrawable& other)

@@ -261,9 +261,6 @@ namespace o2
 
 		// Smooths key at position and doesn't updates approximation
 		void InternalSmoothKey(float position, float smoothCoef = 1.0f);
-
-		// Initializes properties
-		void InitializeProperties();
 	};
 }
 
@@ -283,7 +280,6 @@ END_META;
 CLASS_METHODS_META(o2::Curve)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, Curve);
 	PUBLIC_FUNCTION(float, Evaluate, float);
 	PUBLIC_FUNCTION(void, MoveKeys, float);
 	PUBLIC_FUNCTION(void, MoveKeysFrom, float, float);
@@ -326,7 +322,6 @@ CLASS_METHODS_META(o2::Curve)
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InternalSmoothKeyAt, int, float);
 	PROTECTED_FUNCTION(void, InternalSmoothKey, float, float);
-	PROTECTED_FUNCTION(void, InitializeProperties);
 }
 END_META;
 

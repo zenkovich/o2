@@ -37,38 +37,27 @@ namespace Editor
 		delete mPropertyWidget;
 	}
 
-	void BooleanProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void BooleanProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, const bool& value) { *((PROPERTY(bool>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(bool>*)(ptr))->Get(); };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, const bool& value) { *((bool*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((bool*)(ptr)); };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	void BooleanProperty::Refresh()
 	{
-		if (mValuesPointers.IsEmpty())
+		if (mValuesProxies.IsEmpty())
 			return;
 
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<bool>(mValuesProxies[0].first);
 		auto newDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
+			if (newCommonValue != GetProxy<bool>(mValuesProxies[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -88,11 +77,11 @@ namespace Editor
 
 	void BooleanProperty::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				SetProxy<bool>(ptr.first, GetProxy<bool>(ptr.second));
 			}
 		}
 
@@ -116,8 +105,8 @@ namespace Editor
 
 	void BooleanProperty::SetValue(bool value)
 	{
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, value);
+		for (auto ptr : mValuesProxies)
+			SetProxy<bool>(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -150,9 +139,9 @@ namespace Editor
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(GetProxy<bool>(ptr.first), GetProxy<bool>(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -182,10 +171,10 @@ namespace Editor
 	void BooleanProperty::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<bool>(ptr.first);
 		}
 	}
 

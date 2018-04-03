@@ -26,8 +26,8 @@ namespace o2
 		mTopDragAreaLayout(other.mTopDragAreaLayout), mBottomDragAreaLayout(other.mBottomDragAreaLayout),
 		mLeftDragAreaLayout(other.mLeftDragAreaLayout), mRightDragAreaLayout(other.mRightDragAreaLayout),
 		mLeftTopDragAreaLayout(other.mLeftTopDragAreaLayout), mRightTopDragAreaLayout(other.mRightTopDragAreaLayout),
-		mLeftBottomDragAreaLayout(other.mLeftBottomDragAreaLayout),
-		mRightBottomDragAreaLayout(other.mRightBottomDragAreaLayout)
+		mLeftBottomDragAreaLayout(other.mLeftBottomDragAreaLayout), mRightBottomDragAreaLayout(other.mRightBottomDragAreaLayout),
+		caption(this), icon(this)
 	{
 		for (auto elem : other.mWindowElements)
 		{

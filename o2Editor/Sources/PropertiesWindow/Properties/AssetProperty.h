@@ -47,6 +47,9 @@ namespace Editor
 	class AssetProperty: public IAssetProperty
 	{
 	public:
+		typedef Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> TargetsVec;
+
+	public:
 		// Default constructor
 		AssetProperty(UIWidget* widget = nullptr);
 
@@ -54,7 +57,7 @@ namespace Editor
 		~AssetProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -86,10 +89,7 @@ namespace Editor
 		IOBJECT(AssetProperty);
 
 	protected:
-		Function<void(void*, const _type&)> mAssignFunc; // Value assign function
-		Function<_type(void*)>              mGetFunc;    // Get value function
-
-		TargetsVec mValuesPointers;           // Fields' pointers
+		TargetsVec mValuesProxies;            // Fields' pointers
 		_type      mCommonValue;              // Common field value (if not different)
 		bool       mValuesDifferent = true;   // Are values different
 
@@ -137,7 +137,7 @@ namespace Editor
 	};
 
 	template<typename _type>
-	AssetPROPERTY(_type>::AssetProperty(UIWidget* widget /*= nullptr*/)
+	AssetProperty<_type>::AssetProperty(UIWidget* widget /*= nullptr*/)
 	{
 		if (widget)
 			mPropertyWidget = widget;
@@ -160,42 +160,31 @@ namespace Editor
 	}
 
 	template<typename _type>
-	AssetPROPERTY(_type>::~AssetProperty()
+	AssetProperty<_type>::~AssetProperty()
 	{
 		delete mPropertyWidget;
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void AssetProperty<_type>::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mAssignFunc = [](void* ptr, const _type& value) { *((PROPERTY(_type>*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return ((PROPERTY(_type>*)(ptr))->Get(); };
-		}
-		else
-		{
-			mAssignFunc = [](void* ptr, const _type& value) { *((_type*)(ptr)) = value; };
-			mGetFunc = [](void* ptr) { return *((_type*)(ptr)); };
-		}
-
-		mValuesPointers = targets;
+		mValuesProxies = targets;
 
 		Refresh();
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::Refresh()
+	void AssetProperty<_type>::Refresh()
 	{
 		auto lastCommonValue = mCommonValue;
 		auto lastDifferent = mValuesDifferent;
 
-		auto newCommonValue = mGetFunc(mValuesPointers[0].first);
+		auto newCommonValue = GetProxy<_type>(mValuesProxies[0].first);
 		auto newDifferent = false;
 
-		for (int i = 1; i < mValuesPointers.Count(); i++)
+		for (int i = 1; i < mValuesProxies.Count(); i++)
 		{
-			if (newCommonValue != mGetFunc(mValuesPointers[i].first))
+			if (newCommonValue != GetProxy<_type>(mValuesProxies[i].first))
 			{
 				newDifferent = true;
 				break;
@@ -214,13 +203,13 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::Revert()
+	void AssetProperty<_type>::Revert()
 	{
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
 			{
-				mAssignFunc(ptr.first, mGetFunc(ptr.second));
+				SetProxy<_type>(ptr.first, GetProxy<_type>(ptr.second));
 			}
 		}
 
@@ -228,42 +217,42 @@ namespace Editor
 	}
 
 	template<typename _type>
-	UIWidget* AssetPROPERTY(_type>::GetWidget() const
+	UIWidget* AssetProperty<_type>::GetWidget() const
 	{
 		return mPropertyWidget;
 	}
 
 	template<typename _type>
-	const _type& AssetPROPERTY(_type>::GetCommonValue() const
+	const _type& AssetProperty<_type>::GetCommonValue() const
 	{
 		return mCommonValue;
 	}
 
 	template<typename _type>
-	bool AssetPROPERTY(_type>::IsValuesDifferent() const
+	bool AssetProperty<_type>::IsValuesDifferent() const
 	{
 		return mValuesDifferent;
 	}
 
 	template<typename _type>
-	const Type* AssetPROPERTY(_type>::GetFieldType() const
+	const Type* AssetProperty<_type>::GetFieldType() const
 	{
 		return &TypeOf(_type);
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::SetAssetId(UID id)
+	void AssetProperty<_type>::SetAssetId(UID id)
 	{
 		mCommonValue = id == 0 ? _type() : _type(id);
 
-		for (auto ptr : mValuesPointers)
-			mAssignFunc(ptr.first, mCommonValue);
+		for (auto ptr : mValuesProxies)
+			SetProxy<_type>(ptr.first, mCommonValue);
 
 		SetCommonAssetId(id);
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::SetCommonAssetId(UID id)
+	void AssetProperty<_type>::SetCommonAssetId(UID id)
 	{
 		mCommonValue = id == 0 ? _type() : _type(id);
 		mValuesDifferent = false;
@@ -289,7 +278,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::SetUnknownValue()
+	void AssetProperty<_type>::SetUnknownValue()
 	{
 		mValuesDifferent = true;
 		mCommonValue = _type();
@@ -303,13 +292,13 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::CheckRevertableState()
+	void AssetProperty<_type>::CheckRevertableState()
 	{
 		bool revertable = false;
 
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
-			if (ptr.second && !Math::Equals(mGetFunc(ptr.first), mGetFunc(ptr.second)))
+			if (ptr.second && !Math::Equals(GetProxy<_type>(ptr.first), GetProxy<_type>(ptr.second)))
 			{
 				revertable = true;
 				break;
@@ -321,7 +310,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::OnCursorPressed(const Input::Cursor& cursor)
+	void AssetProperty<_type>::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.FocusWidget(mBox);
 		if (mCommonValue)
@@ -329,39 +318,39 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::OnCursorExit(const Input::Cursor& cursor)
+	void AssetProperty<_type>::OnCursorExit(const Input::Cursor& cursor)
 	{
 		mBox->SetState("select", false);
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::OnCursorEnter(const Input::Cursor& cursor)
+	void AssetProperty<_type>::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		mBox->SetState("select", true);
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::OnKeyPressed(const Input::Key& key)
+	void AssetProperty<_type>::OnKeyPressed(const Input::Key& key)
 	{
 		if (mBox->IsFocused() && (key == VK_DELETE || key == VK_BACK))
 			SetAssetIdByUser(0);
 	}
 
 	template<typename _type>
-	bool AssetPROPERTY(_type>::IsUnderPoint(const Vec2F& point)
+	bool AssetProperty<_type>::IsUnderPoint(const Vec2F& point)
 	{
 		return mBox->IsUnderPoint(point);
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void AssetProperty<_type>::OnDragExit(ISelectableDragableObjectsGroup* group)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void AssetProperty<_type>::OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
 		auto assetIconsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
 		if (!assetIconsScroll)
@@ -376,7 +365,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::OnDropped(ISelectableDragableObjectsGroup* group)
+	void AssetProperty<_type>::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
 		auto assetIconsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
 		if (!assetIconsScroll)
@@ -393,7 +382,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::CheckValueChangeCompleted()
+	void AssetProperty<_type>::CheckValueChangeCompleted()
 	{
 		Vector<DataNode> valuesData;
 		StoreValues(valuesData);
@@ -403,7 +392,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::SetAssetIdByUser(UID id)
+	void AssetProperty<_type>::SetAssetIdByUser(UID id)
 	{
 		StoreValues(mBeforeChangeValues);
 		SetAssetId(id);
@@ -411,13 +400,13 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetPROPERTY(_type>::StoreValues(Vector<DataNode>& data) const
+	void AssetProperty<_type>::StoreValues(Vector<DataNode>& data) const
 	{
 		data.Clear();
-		for (auto ptr : mValuesPointers)
+		for (auto ptr : mValuesProxies)
 		{
 			data.Add(DataNode());
-			data.Last() = mGetFunc(ptr.first);
+			data.Last() = GetProxy<_type>(ptr.first);
 		}
 	}
 }
@@ -449,9 +438,7 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(Editor::AssetProperty<typename _type>)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mPropertyWidget);
@@ -464,7 +451,7 @@ META_TEMPLATES(typename _type)
 CLASS_METHODS_META(Editor::AssetProperty<typename _type>)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

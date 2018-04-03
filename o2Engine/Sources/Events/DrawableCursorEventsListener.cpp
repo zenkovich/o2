@@ -11,14 +11,12 @@ namespace o2
 		mEventHandleDrawable(nullptr)
 	{
 		SetEventHandleDrawable(drawable);
-		INITIALIZE_PROPERTY(DrawableCursorEventsListener, eventHandleDrawable, SetEventHandleDrawable, GetEventHandleDrawable);
 	}
 
 	DrawableCursorEventsListener::DrawableCursorEventsListener(const DrawableCursorEventsListener& other):
-		CursorAreaEventsListener(other), mEventHandleDrawable(nullptr)
+		CursorAreaEventsListener(other), mEventHandleDrawable(nullptr), eventHandleDrawable(this)
 	{
 		SetEventHandleDrawable(other.mEventHandleDrawable);
-		INITIALIZE_PROPERTY(DrawableCursorEventsListener, eventHandleDrawable, SetEventHandleDrawable, GetEventHandleDrawable);
 	}
 
 	DrawableCursorEventsListener::~DrawableCursorEventsListener()

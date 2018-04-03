@@ -7,17 +7,17 @@ namespace o2
 {
 	UIHorizontalLayout::UIHorizontalLayout(): UIWidget()
 	{
-		InitializeProperties();
 		SetLayoutDirty();
 	}
 
 	UIHorizontalLayout::UIHorizontalLayout(const UIHorizontalLayout& other):
 		mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
-		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren)
+		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren), baseCorner(this), 
+		spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
+		borderTop(this), borderBottom(this), fitByChildren(this)
 	{
 		RetargetStatesAnimations();
 		SetLayoutDirty();
-		InitializeProperties();
 	}
 
 	UIHorizontalLayout::~UIHorizontalLayout()
@@ -504,20 +504,6 @@ namespace o2
 		}
 
 		return widths;
-	}
-
-	void UIHorizontalLayout::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIHorizontalLayout, baseCorner, SetBaseCorner, GetBaseCorner);
-		INITIALIZE_PROPERTY(UIHorizontalLayout, spacing, SetSpacing, GetSpacing);
-		INITIALIZE_PROPERTY(UIHorizontalLayout, border, SetBorder, GetBorder);
-		INITIALIZE_PROPERTY(UIHorizontalLayout, borderLeft, SetBorderLeft, GetBorderLeft);
-		INITIALIZE_PROPERTY(UIHorizontalLayout, borderRight, SetBorderRight, GetBorderRight);
-		INITIALIZE_PROPERTY(UIHorizontalLayout, borderTop, SetBorderTop, GetBorderTop);
-		INITIALIZE_PROPERTY(UIHorizontalLayout, borderBottom, SetBorderBottom, GetBorderBottom);
-		INITIALIZE_PROPERTY(UIHorizontalLayout, expandWidth, SetWidthExpand, IsWidthExpand);
-		INITIALIZE_PROPERTY(UIHorizontalLayout, expandHeight, SetHeightExpand, IsHeightExpand);
-		INITIALIZE_PROPERTY(UIHorizontalLayout, fitByChildren, SetFitByChildren, IsFittingByChildren);
 	}
 }
 

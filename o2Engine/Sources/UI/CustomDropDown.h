@@ -181,7 +181,6 @@ CLASS_METHODS_META(o2::UICustomDropDown)
 
 	typedef const Function<bool(UIWidget*, UIWidget*)>& _tmp1;
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UICustomDropDown);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);

@@ -102,12 +102,15 @@ namespace Editor
 									   FieldPropertiesInfo& propertiesInfo, const String& path)
 	{
 		Timer t;
-		Timer t2;
+		Timer t2, t3, t4;
 		for (auto fieldInfo : fields)
 		{
+			t3.Reset();
+
 			const Type* fieldType = fieldInfo->GetType();
 
 			String propertyName;
+
 			if (fieldInfo->GetProtectionSection() == ProtectSection::Public)
 				propertyName = MakeSmartFieldName(fieldInfo->GetName());
 			else
@@ -121,9 +124,11 @@ namespace Editor
 			fieldWidgetPair.first->SpecializeType(fieldType);
 
 			layout->AddChild(fieldWidgetPair.second, false);
+
 			propertiesInfo.properties.Add(fieldInfo, fieldWidgetPair.first);
 
-			o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)t.GetDeltaTime());
+			o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)t.GetDeltaTime() + 
+			" - " + (String)t3.GetDeltaTime());
 		}
 
 		o2Debug.Log(">>> Fields created for " + (String)t2.GetDeltaTime());

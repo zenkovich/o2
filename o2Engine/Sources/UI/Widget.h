@@ -36,9 +36,9 @@ namespace o2
 		GETTER(LayersVec, layers, GetLayers); // Layers getter
 		GETTER(StatesVec, states, GetStates); // States getter
 
-		ACCESSOR(UIWidget*, childWidget, const String&, GetChildWidget, GetAllChilds); // Widget child accessor by path like "child/subchild/somechild"
-		ACCESSOR(UIWidgetLayer*, layer, const String&, GetLayer, GetAllLayers);        // Widget layer accessor by path like "layer/sublayer/target"
-		ACCESSOR(UIWidgetState*, state, const String&, GetState, GetAllStates);        // Widget state accessor by name
+		ACCESSOR(UIWidget*, childWidget, String, GetChildWidget, GetAllChilds); // Widget child accessor by path like "child/subchild/somechild"
+		ACCESSOR(UIWidgetLayer*, layer, String, GetLayer, GetAllLayers);        // Widget layer accessor by path like "layer/sublayer/target"
+		ACCESSOR(UIWidgetState*, state, String, GetStateObject, GetAllStates);  // Widget state accessor by name
 
 		UIWidgetLayout* const layout;          // Widget's layout
 
@@ -490,7 +490,6 @@ CLASS_METHODS_META(o2::UIWidget)
 	typedef Dictionary<String, UIWidget*> _tmp2;
 	typedef Dictionary<String, UIWidgetState*> _tmp3;
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIWidget);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);

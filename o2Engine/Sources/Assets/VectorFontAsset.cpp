@@ -70,7 +70,7 @@ namespace o2
 	}
 
 	VectorFontAsset::VectorFontAsset(const VectorFontAsset& asset):
-		Asset(asset), mFont(asset.mFont)
+		Asset(asset), mFont(asset.mFont), meta(this), font(this)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;

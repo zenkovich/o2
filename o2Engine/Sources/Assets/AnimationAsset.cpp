@@ -32,7 +32,7 @@ namespace o2
 	}
 
 	AnimationAsset::AnimationAsset(const AnimationAsset& asset):
-		Asset(asset)
+		Asset(asset), meta(this)
 	{
 		animation = asset.animation;
 		mMeta = mnew MetaInfo();

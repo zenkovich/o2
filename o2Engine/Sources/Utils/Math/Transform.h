@@ -275,7 +275,6 @@ END_META;
 CLASS_METHODS_META(o2::Transform)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, Transform);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetPosition);
 	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);

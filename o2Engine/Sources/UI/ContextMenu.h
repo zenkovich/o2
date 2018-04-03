@@ -337,7 +337,6 @@ END_META;
 CLASS_METHODS_META(o2::UIContextMenuItem)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIContextMenuItem);
 	PUBLIC_FUNCTION(void, SetText, const WString&);
 	PUBLIC_FUNCTION(WString, GetText);
 	PUBLIC_FUNCTION(UIContextMenu*, GetSubMenu);

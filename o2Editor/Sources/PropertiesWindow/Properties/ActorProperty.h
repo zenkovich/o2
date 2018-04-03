@@ -11,6 +11,7 @@ namespace o2
 	class Text;
 	class UIButton;
 	class UIWidget;
+	class IAbstractValueProxy;
 }
 
 namespace Editor
@@ -31,7 +32,7 @@ namespace Editor
 		~ActorProperty();
 
 		// Sets target fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -63,10 +64,7 @@ namespace Editor
 		IOBJECT(ActorProperty);
 
 	protected:
-		Function<void(void*, Actor*)> mAssignFunc; // Value assign function
-		Function<Actor*(void*)>       mGetFunc;    // Get value function
-
-		TargetsVec mValuesPointers;           // Fields' pointers
+		TargetsVec mValuesProxies;            // Fields' pointers
 		Actor*     mCommonValue = nullptr;    // Common field value (if not different)
 		bool       mValuesDifferent = true;   // Are values different
 
@@ -83,7 +81,7 @@ namespace Editor
 		void CheckRevertableState();
 
 		// Reverts target value to source
-		void RevertoToPrototype(void* target, void* source, IObject* targetOwner);
+		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
 
 		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
@@ -144,9 +142,7 @@ CLASS_BASES_META(Editor::ActorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ActorProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mPropertyWidget);
@@ -158,7 +154,7 @@ END_META;
 CLASS_METHODS_META(Editor::ActorProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
@@ -170,7 +166,7 @@ CLASS_METHODS_META(Editor::ActorProperty)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, SetCommonValue, Actor*);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
-	PROTECTED_FUNCTION(void, RevertoToPrototype, void*, void*, IObject*);
+	PROTECTED_FUNCTION(void, RevertoToPrototype, IAbstractValueProxy*, IAbstractValueProxy*, IObject*);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

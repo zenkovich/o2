@@ -78,7 +78,7 @@ namespace o2
 	}
 
 	AtlasAsset::AtlasAsset(const AtlasAsset& asset):
-		Asset(asset)
+		Asset(asset), meta(this), imagesInfos(this), images(this), pages(this)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;

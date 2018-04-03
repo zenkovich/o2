@@ -549,7 +549,6 @@ END_META;
 CLASS_METHODS_META(o2::ActorTransform)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, ActorTransform);
 	PUBLIC_FUNCTION(Actor*, GetOwnerActor);
 	PUBLIC_FUNCTION(void, SetDirty, bool);
 	PUBLIC_FUNCTION(bool, IsDirty);

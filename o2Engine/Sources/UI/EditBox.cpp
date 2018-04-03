@@ -30,7 +30,8 @@ namespace o2
 		UIScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
 		mMaxLinesCount(other.mMaxLinesCount), mText(other.mText), mLastText(other.mText),
 		mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
-		mCaretBlinkDelay(other.mCaretBlinkDelay), DrawableCursorEventsListener(this)
+		mCaretBlinkDelay(other.mCaretBlinkDelay), DrawableCursorEventsListener(this), text(this), caret(this),
+		selectionBegin(this), selectionEnd(this)
 	{
 		mSelectionMesh = mnew Mesh();
 		mTextDrawable  = other.mTextDrawable->CloneAs<Text>();

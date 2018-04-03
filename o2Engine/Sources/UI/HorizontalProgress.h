@@ -14,7 +14,7 @@ namespace o2
 		enum class Orientation { Right, Left };
 
 	public:
-		PROPERTIES(UIHorizontalLayout);
+		PROPERTIES(UIHorizontalProgress);
 		PROPERTY(float, value, SetValue, GetValue);          // Current value property
 
 		PROPERTY(float, minValue, SetMinValue, GetMinValue); // Minimal value property
@@ -164,7 +164,6 @@ END_META;
 CLASS_METHODS_META(o2::UIHorizontalProgress)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIHorizontalLayout);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetValue, float);
 	PUBLIC_FUNCTION(void, SetValueForcible, float);

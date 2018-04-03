@@ -13,7 +13,7 @@ namespace o2
 	}
 
 	UIImage::UIImage(const UIImage& other):
-		UIWidget(other)
+		UIWidget(other), image(this), imageAsset(this), imageName(this)
 	{
 		mImage = GetLayerDrawable<Sprite>("image");
 		if (!mImage)

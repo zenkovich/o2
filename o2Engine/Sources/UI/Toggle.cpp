@@ -16,7 +16,8 @@ namespace o2
 	{}
 
 	UIToggle::UIToggle(const UIToggle& other) :
-		UIWidget(other), DrawableCursorEventsListener(this), mToggleGroup(nullptr)
+		UIWidget(other), DrawableCursorEventsListener(this), mToggleGroup(nullptr), value(this), caption(this),
+		toggleGroup(this)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = FindLayer("back");

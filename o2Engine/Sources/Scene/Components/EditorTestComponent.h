@@ -39,7 +39,7 @@ namespace o2
 		DataAssetRef mDataAsset;                   // @SERIALIZABLE
 		Actor* mActor = nullptr;                   // @SERIALIZABLE
 		TagGroup mTags;                            // @SERIALIZABLE
-		SceneLayer* mLayer;                      // @SERIALIZABLE
+		SceneLayer* mLayer;                        // @SERIALIZABLE
 		Component* mComponent = nullptr;           // @SERIALIZABLE
 		ImageComponent* mImageComponent = nullptr; // @SERIALIZABLE
 		Color4 mColor;					           // @SERIALIZABLE
@@ -50,7 +50,7 @@ namespace o2
 		RectI mRectI;					           // @SERIALIZABLE
 		BorderF mBorderF;					       // @SERIALIZABLE
 		BorderI mBorderI;					       // @SERIALIZABLE
-		Curve mCurve = Curve::EaseInOut();                              // @SERIALIZABLE
+		Curve mCurve = Curve::EaseInOut();         // @SERIALIZABLE
 		TestInside mTestInside;                    // @SERIALIZABLE
 		TestEnum mTestEnum;                        // @SERIALIZABLE
 		TestInside* mTestInsidePtr = nullptr;      // @SERIALIZABLE

@@ -26,7 +26,8 @@ namespace o2
 	}
 
 	Text::Text(const Text& text):
-		IRectDrawable(text), mUpdatingMesh(false)
+		IRectDrawable(text), mUpdatingMesh(false), font(this), text(this), height(this), verAlign(this),
+		horAlign(this), wordWrap(this), dotsEngings(this), symbolsDistanceCoef(this), linesDistanceCoef(this)
 	{
 		mText = text.mText;
 		mFont = text.mFont;
@@ -66,7 +67,6 @@ namespace o2
 		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mDotsEndings(false), mHeight(11),
 		mUpdatingMesh(false)
 	{
-		InitializeProperties();
 		SetFontAsset(fontAssetId);
 	}
 

@@ -27,7 +27,7 @@ namespace Editor
 		~BooleanProperty();
 
 		// Sets fields
-		void SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty) override;
+		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
 
 		// Updates and checks value
 		void Refresh() override;
@@ -56,10 +56,7 @@ namespace Editor
 		IOBJECT(BooleanProperty);
 
 	protected:
-		Function<void(void*, const bool&)> mAssignFunc; // Value assign function
-		Function<bool(void*)>              mGetFunc;    // Get value function
-
-		TargetsVec mValuesPointers;           // Fields' pointers
+		TargetsVec mValuesProxies;            // Fields' pointers
 		bool       mCommonValue = false;      // Common field value (if not different)
 		bool       mValuesDifferent = true;   // Are values different
 
@@ -92,9 +89,7 @@ CLASS_BASES_META(Editor::BooleanProperty)
 END_META;
 CLASS_FIELDS_META(Editor::BooleanProperty)
 {
-	PROTECTED_FIELD(mAssignFunc);
-	PROTECTED_FIELD(mGetFunc);
-	PROTECTED_FIELD(mValuesPointers);
+	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mCommonValue);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mPropertyWidget);
@@ -105,7 +100,7 @@ END_META;
 CLASS_METHODS_META(Editor::BooleanProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypePtr, const TargetsVec&, bool);
+	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);

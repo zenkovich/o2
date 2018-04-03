@@ -26,23 +26,19 @@ namespace Editor
 		delete mSpoiler;
 	}
 
-	void ObjectProperty::SetValueAndPrototypePtr(const TargetsVec& targets, bool isProperty)
+	void ObjectProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		if (isProperty)
-		{
-			mTargetObjects.Clear();
-			return;
-		}
-
 		mTargetObjects = targets;
 		Refresh();
 	}
 
 	void ObjectProperty::Refresh()
 	{
-		mFieldProperties.Set(mTargetObjects.Select<Pair<IObject*, IObject*>>([](const Pair<void*, void*>& x) {
-			return Pair<IObject*, IObject*>((IObject*)(x.first), 
-											x.second ? (IObject*)(x.second) : nullptr);
+		mFieldProperties.Set(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+			[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x) 
+		{
+			return Pair<IObject*, IObject*>(GetProxyPtr(x.first),
+											x.second ? GetProxyPtr(x.second) : nullptr);
 		}));
 	}
 
@@ -118,6 +114,12 @@ namespace Editor
 		}
 
 		mPropertiesInitialized = true;
+	}
+
+	IObject* ObjectProperty::GetProxyPtr(IAbstractValueProxy* proxy) const
+	{
+		IIObjectPointerValueProxy* objProxy = dynamic_cast<IIObjectPointerValueProxy*>(proxy);
+		return objProxy->GetObjectPtr();
 	}
 
 }

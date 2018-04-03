@@ -247,7 +247,6 @@ END_META;
 CLASS_METHODS_META(o2::ImageAsset)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, ImageAsset);
 	PUBLIC_FUNCTION(Bitmap*, GetBitmap);
 	PUBLIC_FUNCTION(void, SetBitmap, Bitmap*);
 	PUBLIC_FUNCTION(UID, GetAtlasId);

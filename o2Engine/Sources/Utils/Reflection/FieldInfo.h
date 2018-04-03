@@ -158,7 +158,7 @@ namespace o2
 		friend class VectorType;
 		friend class TypeInitializer;
 
-		template<typename _type>
+		template<typename _type, typename _accessor_type>
 		friend class StringPointerAccessorType;
 	};
 

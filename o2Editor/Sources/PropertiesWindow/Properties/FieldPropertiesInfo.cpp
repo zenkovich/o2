@@ -15,10 +15,14 @@ namespace Editor
 
 		for (auto kv : properties)
 		{
-			Vector<void*> fieldPointers = targets.Select<void*>(
-				[&](IObject* x) { return kv.Key()->GetValuePtrStrong(x); });
+			Vector<IAbstractValueProxy*> fieldPointers = targets.Select<IAbstractValueProxy*>([&](IObject* x) 
+			{ 
+				auto fieldInfo = kv.Key();
+				auto type = fieldInfo->GetType();
+				return type->GetValueProxy(fieldInfo->GetValuePtrStrong(x)); 
+			});
 
-			kv.Value()->SetValuePtr(fieldPointers, kv.Key()->GetType()->GetUsage() == Type::Usage::Property);
+			kv.Value()->SetValueProxy(fieldPointers);
 		}
 	}
 
@@ -29,29 +33,30 @@ namespace Editor
 
 		for (auto kv : properties)
 		{
-			Vector<Pair<void*, void*>> fieldPointers = targets.Select<Pair<void*, void*>>(
+			auto fieldPointers = targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 				[&](const Pair<IObject*, IObject*>& x)
 			{
-				const Type& type = *kv.Key()->GetOwnerType();
+				auto fieldInfo = kv.Key();
+				const Type& type = *fieldInfo->GetOwnerType();
 				const ObjectType* objType = dynamic_cast<const ObjectType*>(&type);
 
 				if (objType == nullptr)
-					return Pair<void*, void*>(nullptr, nullptr);
+					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(nullptr, nullptr);
 
 				void* firstObjectPtr = objType->DynamicCastFromIObject(x.first);
 				void* secondObjectPtr = nullptr;
 				if (x.second)
 					secondObjectPtr = objType->DynamicCastFromIObject(x.second);
 
-				void* firstValuePtr = kv.Key()->GetValuePtrStrong(firstObjectPtr);
-				void* secondValuePtr = nullptr;
+				IAbstractValueProxy* firstValuePtr = fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(firstObjectPtr));
+				IAbstractValueProxy* secondValuePtr = nullptr;
 				if (x.second)
-					secondValuePtr = kv.Key()->GetValuePtrStrong(secondObjectPtr);
+					secondValuePtr = fieldInfo->GetType()->GetValueProxy(fieldInfo->GetValuePtrStrong(secondObjectPtr));
 
-				return Pair<void*, void*>(firstValuePtr, secondValuePtr);
+				return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(firstValuePtr, secondValuePtr);
 			});
 
-			kv.Value()->SetValueAndPrototypePtr(fieldPointers, kv.Key()->GetType()->GetUsage() == Type::Usage::Property);
+			kv.Value()->SetValueAndPrototypeProxy(fieldPointers);
 		}
 	}
 

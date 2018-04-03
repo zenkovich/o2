@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "Type.h"
 
+#include "Animation/Animation.h"
 #include "Utils/Data/DataNode.h"
 #include "Utils/IObject.h"
 #include "Utils/Reflection/Reflection.h"
-#include "Animation/Animation.h"
+#include "Utils/Timer.h"
 
 namespace o2
 {
@@ -157,6 +158,8 @@ namespace o2
 		String res;
 		Vector<SearchPassedObject> passedObjects;
 
+		Timer t;
+
 		FieldInfo* info = SearchFieldPath(object, targetObject, "", res, passedObjects);
 		if (info)
 		{
@@ -170,6 +173,15 @@ namespace o2
 	FieldInfo* Type::SearchFieldPath(void* obj, void* target, const String& path, String& res,
 									 Vector<SearchPassedObject>& passedObjects) const
 	{
+		if (!mFields.IsEmpty() && IsBasedOn(TypeOf(IObject)))
+		{
+			auto thisSearchObject = SearchPassedObject(obj, this);
+			if (passedObjects.Contains(thisSearchObject))
+				return nullptr;
+
+			passedObjects.Add(thisSearchObject);
+		}
+
 		for (auto field : mFields)
 		{
 			if (field->HasAttribute<ExcludePointerSearchAttribute>())
@@ -179,12 +191,6 @@ namespace o2
 
 			if (fieldObj == nullptr)
 				continue;
-
-			if (passedObjects.Contains(SearchPassedObject(fieldObj, field->GetType())))
-				continue;
-
-			passedObjects.Add(SearchPassedObject(fieldObj, field->GetType()));
-			//printf((path + "/" + field->mName + "\n").Data());
 
 			if (fieldObj == target)
 			{

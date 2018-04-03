@@ -313,7 +313,6 @@ END_META;
 CLASS_METHODS_META(o2::Text)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, Text);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetFont, FontRef);
 	PUBLIC_FUNCTION(FontRef, GetFont);

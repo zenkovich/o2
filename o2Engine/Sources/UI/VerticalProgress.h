@@ -164,7 +164,6 @@ END_META;
 CLASS_METHODS_META(o2::UIVerticalProgress)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIVerticalProgress);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetValue, float);
 	PUBLIC_FUNCTION(void, SetValueForcible, float);

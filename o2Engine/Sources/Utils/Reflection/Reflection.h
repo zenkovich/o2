@@ -17,7 +17,7 @@ namespace o2
 	class VectorType;
 	class DictionaryType;
 
-	template<typename _return_type>
+	template<typename _return_type, typename _accessor_type>
 	class StringPointerAccessorType;
 
 	class ReflectionInitializationTypeProcessor;
@@ -90,8 +90,8 @@ namespace o2
 		static const DictionaryType* InitializeDictionaryType();
 
 		// Initializes accessor type
-		template<typename _return_type>
-		static const StringPointerAccessorType<_return_type>* InitializeAccessorType();
+		template<typename _return_type, typename _accessor_type>
+		static const StringPointerAccessorType<_return_type, _accessor_type>* InitializeAccessorType();
 
 		// Type dynamic casting function template
 		template<typename _source_type, typename _target_type>
@@ -249,7 +249,7 @@ namespace o2
 		String typeName = (String)(typeid(_property_type).name()) + (String)"<" + TypeOf(_value_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return (PropertyType*)fnd;
+			return dynamic_cast<PropertyType*>(fnd);
 
 		TPropertyType<_value_type, _property_type>* newType = mnew TPropertyType<_value_type, _property_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
@@ -265,7 +265,7 @@ namespace o2
 		String typeName = "o2::Vector<" + TypeOf(_element_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return (VectorType*)fnd;
+			return dynamic_cast<VectorType*>(fnd);
 
 		TVectorType<_element_type>* newType = mnew TVectorType<_element_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
@@ -281,7 +281,7 @@ namespace o2
 		String typeName = "o2::Dictionary<" + TypeOf(_key_type).GetName() + ", " + TypeOf(_value_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return (DictionaryType*)fnd;
+			return dynamic_cast<DictionaryType*>(fnd);
 
 		auto newType = mnew TDictionaryType<_key_type, _value_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
@@ -291,16 +291,16 @@ namespace o2
 		return newType;
 	}
 
-	template<typename _return_type>
-	const StringPointerAccessorType<_return_type>* Reflection::InitializeAccessorType()
+	template<typename _return_type, typename _accessor_type>
+	const StringPointerAccessorType<_return_type, _accessor_type>* Reflection::InitializeAccessorType()
 	{
 		const Type* type = &TypeOf(_return_type);
-		String typeName = "o2::Accessor<" + type->mName + "*, const o2::String&>";
+		String typeName = (String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return (StringPointerAccessorType<_return_type>*)fnd;
+			return dynamic_cast<StringPointerAccessorType<_return_type, _accessor_type>*>(fnd);
 
-		StringPointerAccessorType<_return_type>* newType = mnew StringPointerAccessorType<_return_type>();
+		StringPointerAccessorType<_return_type, _accessor_type>* newType = mnew StringPointerAccessorType<_return_type, _accessor_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);

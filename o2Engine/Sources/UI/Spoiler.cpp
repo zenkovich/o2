@@ -25,7 +25,7 @@ namespace o2
 	}
 
 	UISpoiler::UISpoiler(const UISpoiler& other):
-		UIVerticalLayout(other)
+		UIVerticalLayout(other), caption(this), headHeight(this), expanded(this)
 	{
 		mExpandState = GetStateObject("expand");
 		if (!mExpandState)

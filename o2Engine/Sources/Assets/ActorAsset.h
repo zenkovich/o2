@@ -155,7 +155,6 @@ END_META;
 CLASS_METHODS_META(o2::ActorAsset)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, ActorAsset);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_FUNCTION(Actor*, GetActor);

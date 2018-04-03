@@ -39,7 +39,9 @@ namespace o2
 	{}
 
 	ImageComponent::ImageComponent(const ImageComponent& other) :
-		DrawableComponent(other), mSprite(other.mSprite)
+		DrawableComponent(other), mSprite(other.mSprite), texture(this), textureSrcRect(this), imageAssetPath(this),
+		imageAsset(this), bitmap(this), color(this), leftTopColor(this), rightTopColor(this), leftBottomColor(this),
+		rightBottomColor(this), mode(this), fill(this), tileScale(this), sliceBorder(this)
 	{}
 
 	ImageComponent::~ImageComponent()

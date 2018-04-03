@@ -60,12 +60,12 @@ namespace o2
 		AnimatedValue<_type>* GetAnimationValue(const String& path);
 
 		// Returns animation value for target (animating target must be setted)
-		template<typename _type>
-		AnimatedValue<_type>* GetAnimationValue(_type* target);
+		template<typename _type, typename _anim_val_type = ExtractPropertyValueType<_type>::type>
+		AnimatedValue<_anim_val_type>* GetAnimationValue(_type* target);
 
 		// Adds animation value by target(animating target must be setted)
-		template<typename _type>
-		AnimatedValue<_type>* AddAnimationValue(_type* target);
+		template<typename _type, typename _anim_val_type = ExtractPropertyValueType<_type>::type>
+		AnimatedValue<_anim_val_type>* AddAnimationValue(_type* target);
 
 		// Adds animation value with specified path
 		template<typename _type>
@@ -268,7 +268,8 @@ namespace o2
 								   const _type& begin, const _type& end, float duration /*= 1.0f*/)
 	{
 		Animation res(target);
-		*res.AddAnimationValue<_type>(animatingValue) = AnimatedValue<_type>::EaseInOut(begin, end, duration);
+		auto animValue = res.AddAnimationValue(animatingValue);
+		*animValue = AnimatedValue<_type>::EaseInOut(begin, end, duration);
 		return res;
 	}
 
@@ -377,8 +378,8 @@ namespace o2
 		return false;
 	}
 
-	template<typename _type>
-	AnimatedValue<_type>* Animation::AddAnimationValue(_type* target)
+	template<typename _type, typename _anim_val_type>
+	AnimatedValue<_anim_val_type>* Animation::AddAnimationValue(_type* target)
 	{
 		if (mTarget)
 		{
@@ -396,11 +397,11 @@ namespace o2
 
 			AnimatedValueDef def;
 
-			def.mAnimatedValue = mnew AnimatedValue<_type>();
+			def.mAnimatedValue = mnew AnimatedValue<_anim_val_type>();
 			def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-				def.mAnimatedValue->SetTargetProxyVoid(target);
+				def.mAnimatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(target));
 			else
 				def.mAnimatedValue->SetTargetVoid(target);
 
@@ -410,7 +411,7 @@ namespace o2
 
 			OnAnimatedValueAdded(def);
 
-			return (AnimatedValue<_type>*)def.mAnimatedValue;
+			return (AnimatedValue<_anim_val_type>*)def.mAnimatedValue;
 		}
 
 		return nullptr;
@@ -437,7 +438,7 @@ namespace o2
 			}
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-				def.mAnimatedValue->SetTargetProxyVoid(def.mTargetPtr);
+				def.mAnimatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(def.mTargetPtr));
 			else
 				def.mAnimatedValue->SetTargetVoid(def.mTargetPtr);
 		}
@@ -450,8 +451,8 @@ namespace o2
 		return (AnimatedValue<_type>*)def.mAnimatedValue;
 	}
 
-	template<typename _type>
-	AnimatedValue<_type>* Animation::GetAnimationValue(_type* target)
+	template<typename _type, typename _anim_val_type>
+	AnimatedValue<_anim_val_type>* Animation::GetAnimationValue(_type* target)
 	{
 		for (auto& val : mAnimatedValues)
 		{

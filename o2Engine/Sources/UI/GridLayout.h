@@ -192,7 +192,6 @@ END_META;
 CLASS_METHODS_META(o2::UIGridLayout)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIGridLayout);
 	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
 	PUBLIC_FUNCTION(BaseCorner, GetBaseCorner);
 	PUBLIC_FUNCTION(void, SetSpacing, float);

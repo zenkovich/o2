@@ -136,7 +136,7 @@ namespace Editor
 		if (selectedActors.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
 		{
 			Actor* lastSelectedActor = selectedActors.Last();
-			UpdateHandlesAngleAndPositions(-lastSelectedActor->transform->rightDir->Angle(Vec2F::Right()));
+			UpdateHandlesAngleAndPositions(-lastSelectedActor->transform->GetRightDir().Angle(Vec2F::Right()));
 		}
 		else UpdateHandlesAngleAndPositions(0.0f);
 	}
@@ -192,7 +192,7 @@ namespace Editor
 			if (selectedActors.Count() > 0)
 			{
 				Actor* lastSelectedActor = selectedActors.Last();
-				UpdateHandlesAngleAndPositions(-lastSelectedActor->transform->rightDir->Angle(Vec2F::Right()));
+				UpdateHandlesAngleAndPositions(-lastSelectedActor->transform->GetRightDir().Angle(Vec2F::Right()));
 			}
 		}
 	}

@@ -14,7 +14,7 @@ namespace o2
 	UIWidgetLayer::UIWidgetLayer(const UIWidgetLayer& other) :
 		mDepth(other.mDepth), name(other.name), layout(other.layout), mTransparency(other.mTransparency),
 		mResTransparency(1.0f), interactableLayout(other.interactableLayout), mParent(nullptr), mOwnerWidget(nullptr),
-		drawable(nullptr)
+		drawable(nullptr), depth(this), transparency(this)
 	{
 		if (other.drawable)
 			drawable = other.drawable->CloneAs<IRectDrawable>();
@@ -303,15 +303,6 @@ namespace o2
 			res.Add(layer->name, layer);
 
 		return res;
-	}
-
-	void UIWidgetLayer::InitializeProperties()
-	{
-		INITIALIZE_PROPERTY(UIWidgetLayer, depth, SetDepth, GetDepth);
-		INITIALIZE_PROPERTY(UIWidgetLayer, transparency, SetTransparency, GetTransparency);
-		INITIALIZE_ACCESSOR(UIWidgetLayer, child, GetChild);
-
-		child.SetAllAccessFunc(this, &UIWidgetLayer::GetAllChildLayers);
 	}
 
 }

@@ -184,7 +184,6 @@ END_META;
 CLASS_METHODS_META(o2::UIVerticalLayout)
 {
 
-	PUBLIC_FUNCTION(void, PROPERTIES, UIVerticalLayout);
 	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
 	PUBLIC_FUNCTION(BaseCorner, GetBaseCorner);
 	PUBLIC_FUNCTION(void, SetSpacing, float);
