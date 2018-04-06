@@ -89,6 +89,9 @@ namespace Editor
 		bool              mIsRefreshing = false;       // Is currently refreshing content. Need to prevent cycled size changing
 
 	protected:
+		// Returns value pointer from proxy when proxy is pointer proxy
+		void* GetProxyValuePointer(IAbstractValueProxy* proxy) const;
+
 		// Returns free element property
 		PropertyDef GetFreeValueProperty();
 
@@ -135,6 +138,7 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
 	PUBLIC_FUNCTION(bool, IsExpanded);
+	PROTECTED_FUNCTION(void*, GetProxyValuePointer, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(PropertyDef, GetFreeValueProperty);
 	PROTECTED_FUNCTION(void, FreeValueProperty, PropertyDef);
 	PROTECTED_FUNCTION(void, OnCountChanged);

@@ -20,8 +20,14 @@ namespace o2
 		void GetValuePtr(void* value) const { *(_type*)value = GetValue(); }
 	};
 
+	class IPointerValueProxy
+	{
+	public:
+		virtual void* GetValueVoidPointer() const = 0;
+	};
+
 	template<typename _type>
-	class PointerValueProxy: public IValueProxy<_type>
+	class PointerValueProxy: public IValueProxy<_type>, public IPointerValueProxy
 	{
 	protected:
 		_type* mValuePtr = nullptr;
@@ -32,6 +38,9 @@ namespace o2
 
 		void SetValue(const _type& value) override { *mValuePtr = value; }
 		_type GetValue() const override { return *mValuePtr; }
+
+		_type* GetValuePointer() const { return mValuePtr; }
+		void* GetValueVoidPointer() const override { return (void*)mValuePtr; }
 	};
 
 	class IIObjectPointerValueProxy

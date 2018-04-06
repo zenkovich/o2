@@ -60,12 +60,12 @@ namespace Editor
 		auto lastCount = mCountOfElements;
 		auto lastDifferent = mCountDifferents;
 
-		mCountOfElements = mType->GetObjectVectorSize(GetProxy<void*>(mTargetObjects[0].first));
+		mCountOfElements = mType->GetObjectVectorSize(GetProxyValuePointer(mTargetObjects[0].first));
 		mCountDifferents = false;
 
 		for (auto target : mTargetObjects)
 		{
-			int targetCount = mType->GetObjectVectorSize(GetProxy<void*>(target.first));
+			int targetCount = mType->GetObjectVectorSize(GetProxyValuePointer(target.first));
 			if (targetCount != mCountOfElements)
 			{
 				mCountDifferents = true;
@@ -102,8 +102,8 @@ namespace Editor
 					[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 				{
 					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-						mType->GetObjectVectorElementProxy(GetProxy<void*>(x.first), i),
-						x.second ? mType->GetObjectVectorElementProxy(GetProxy<void*>(x.second), i) : nullptr);
+						mType->GetObjectVectorElementProxy(GetProxyValuePointer(x.first), i),
+						x.second ? mType->GetObjectVectorElementProxy(GetProxyValuePointer(x.second), i) : nullptr);
 				});
 
 				PropertyDef propertyDef;
@@ -145,8 +145,8 @@ namespace Editor
 					[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 				{
 					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-						mType->GetObjectVectorElementProxy(GetProxy<void*>(x.first), i),
-						x.second ? mType->GetObjectVectorElementProxy(GetProxy<void*>(x.second), i) : nullptr);
+						mType->GetObjectVectorElementProxy(GetProxyValuePointer(x.first), i),
+						x.second ? mType->GetObjectVectorElementProxy(GetProxyValuePointer(x.second), i) : nullptr);
 				});
 
 				PropertyDef propertyDef = mValueProperties[i];
@@ -200,6 +200,15 @@ namespace Editor
 	bool VectorProperty::IsExpanded() const
 	{
 		return mSpoiler->IsExpanded();
+	}
+
+	void* VectorProperty::GetProxyValuePointer(IAbstractValueProxy* proxy) const
+	{
+		IPointerValueProxy* pointerProxy = dynamic_cast<IPointerValueProxy*>(proxy);
+		if (pointerProxy)
+			return pointerProxy->GetValueVoidPointer();
+
+		return nullptr;
 	}
 
 	VectorProperty::PropertyDef VectorProperty::GetFreeValueProperty()
