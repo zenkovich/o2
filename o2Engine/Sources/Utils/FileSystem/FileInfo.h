@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Utils/CommonTypes.h"
 #include "Utils/FileSystem/File.h"
-#include "Utils/Serializable.h"
-#include "Utils/Time.h"
+#include "Utils/Serialization/Serializable.h"
+#include "Utils/System/Time/Time.h"
+#include "Utils/Types/CommonTypes.h"
 
 namespace o2
 {

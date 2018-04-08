@@ -2,9 +2,9 @@
 #include "AssetsTree.h"
 
 #include "Assets/FolderAsset.h"
-#include "Utils/Debug.h"
+#include "Utils/Debug/Debug.h"
 #include "Utils/FileSystem/FileSystem.h"
-#include "Utils/Log/LogStream.h"
+#include "Utils/Debug/Log/LogStream.h"
 
 namespace o2
 {

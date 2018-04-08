@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Utils/Containers/Dictionary.h"
-#include "Utils/Containers/Vector.h"
+#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Vector.h"
 #include "Utils/FileSystem/FileInfo.h"
 
 #include "Utils/Singleton.h"
-#include "Utils/String.h"
+#include "Utils/Types/String.h"
 
 
 namespace o2

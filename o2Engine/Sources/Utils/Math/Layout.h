@@ -3,7 +3,7 @@
 #include "Utils/Math/Border.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Serializable.h"
+#include "Utils/Serialization/Serializable.h"
 
 namespace o2
 {

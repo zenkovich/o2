@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Events/CursorEventsListener.h"
-#include "Utils/CursorEventsArea.h"
+#include "Events/CursorEventsArea.h"
 #include "Utils/Delegates.h"
 #include "Utils/Math/Curve.h"
 #include "Utils/Singleton.h"

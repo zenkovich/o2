@@ -3,10 +3,10 @@
 #include "Assets/Asset.h"
 #include "Assets/AssetInfo.h"
 #include "Assets/AssetsTree.h"
-#include "Utils/Containers/Vector.h"
+#include "Utils/Types/Containers/Vector.h"
 #include "Utils/FileSystem/FileInfo.h"
 #include "Utils/Property.h"
-#include "Utils/Serializable.h"
+#include "Utils/Serialization/Serializable.h"
 #include "Utils/Singleton.h"
 
 // Assets system access macros

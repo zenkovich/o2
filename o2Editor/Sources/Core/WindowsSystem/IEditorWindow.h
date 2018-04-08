@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UIDockableWindow.h"
-#include "Utils/Serializable.h"
+#include "Utils/Serialization/Serializable.h"
 
 using namespace o2;
 

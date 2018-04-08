@@ -7,10 +7,10 @@
 #include "Assets/Builder/FolderAssetConverter.h"
 #include "Assets/Builder/ImageAssetConverter.h"
 #include "Assets/FolderAsset.h"
-#include "Utils/Debug.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Debug/Log/LogStream.h"
 #include "Utils/FileSystem/FileSystem.h"
-#include "Utils/Log/LogStream.h"
-#include "Utils/Timer.h"
+#include "Utils/System/Time/Timer.h"
 
 namespace o2
 {

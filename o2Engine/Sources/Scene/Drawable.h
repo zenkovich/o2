@@ -2,7 +2,7 @@
 
 #include "Render/IDrawable.h"
 #include "Utils/Property.h"
-#include "Utils/Serializable.h"
+#include "Utils/Serialization/Serializable.h"
 
 namespace o2
 {

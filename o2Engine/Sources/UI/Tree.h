@@ -2,9 +2,9 @@
 
 #include "UI/ScrollArea.h"
 #include "UI/VerticalLayout.h"
-#include "Utils/DragAndDrop.h"
+#include "Utils/Editor/DragAndDrop.h"
 #include "Utils/Math/Curve.h"
-#include "Utils/UnknownPtr.h"
+#include "Utils/Types/UnknownPtr.h"
 
 namespace o2
 {

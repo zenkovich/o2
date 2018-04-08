@@ -3,9 +3,9 @@
 
 #include <algorithm>
 
-#include "Utils/Assert.h"
-#include "Utils/Log/ConsoleLogStream.h"
-#include "Utils/Log/FileLogStream.h"
+#include "Utils/Debug/Assert.h"
+#include "Utils/Debug/Log/ConsoleLogStream.h"
+#include "Utils/Debug/Log/FileLogStream.h"
 
 void* operator new(size_t size, const char* location, int line)
 {

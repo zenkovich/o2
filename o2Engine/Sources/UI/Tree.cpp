@@ -12,7 +12,7 @@
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
-#include "Utils/TaskManager.h"
+#include "Utils/Tasks/TaskManager.h"
 
 namespace o2
 {

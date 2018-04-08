@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/WindowsSystem/IEditorWindow.h"
-#include "Utils/Log/LogStream.h"
+#include "Utils/Debug/Log/LogStream.h"
 
 using namespace o2;
 

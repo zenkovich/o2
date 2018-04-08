@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Application/Input.h"
-#include "Utils/Containers/Dictionary.h"
-#include "Utils/Containers/Vector.h"
+#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Vector.h"
 
 #include "Utils/Singleton.h"
 

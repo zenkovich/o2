@@ -6,8 +6,8 @@
 #include "Render/Camera.h"
 #include "Render/FontRef.h"
 #include "Render/Mesh.h"
-#include "Utils/DragHandle.h"
-#include "Utils/FrameHandles.h"
+#include "Utils/Editor/DragHandle.h"
+#include "Utils/Editor/FrameHandles.h"
 #include "Utils/Math/Curve.h"
 
 using namespace o2;

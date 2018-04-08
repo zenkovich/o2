@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Utils/Containers/Vector.h"
-#include "Utils/Data/DataNode.h"
-#include "Utils/IObject.h"
+#include "Utils/Types/Containers/Vector.h"
+#include "Utils/Serialization/DataNode.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
 #include "Utils/ValueProxy.h"
 

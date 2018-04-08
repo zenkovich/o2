@@ -4,10 +4,10 @@
 #include FT_FREETYPE_H
 
 #include "Render/Font.h"
-#include "Utils/Containers/Dictionary.h"
 #include "Utils/Property.h"
-#include "Utils/RectPacker.h"
-#include "Utils/Serializable.h"
+#include "Utils/Serialization/Serializable.h"
+#include "Utils/Tools/RectPacker.h"
+#include "Utils/Types/Containers/Dictionary.h"
 
 namespace o2
 {

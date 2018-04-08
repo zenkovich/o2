@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Serializable.h"
+#include "Utils/Serialization/Serializable.h"
 #include "Render/Particle.h"
 
 namespace o2

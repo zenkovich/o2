@@ -12,9 +12,9 @@
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
-#include "Utils/Clipboard.h"
-#include "Utils/Debug.h"
-#include "Utils/Time.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/System/Clipboard.h"
+#include "Utils/System/Time/Time.h"
 
 namespace o2
 {

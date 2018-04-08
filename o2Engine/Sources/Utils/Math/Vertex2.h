@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/Math/Vector2.h"
-#include "Utils/CommonTypes.h"
+#include "Utils/Types/CommonTypes.h"
 
 namespace o2
 {

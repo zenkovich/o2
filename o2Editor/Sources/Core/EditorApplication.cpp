@@ -18,10 +18,10 @@
 #include "UI/MenuPanel.h"
 #include "UI/MenuPanel.h"
 #include "UI/UIManager.h"
-#include "Utils/Debug.h"
-#include "Utils/TaskManager.h"
-#include "Utils/Time.h"
-#include "Utils/Timer.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/System/Time/Time.h"
+#include "Utils/System/Time/Timer.h"
+#include "Utils/Tasks/TaskManager.h"
 
 namespace Editor
 {

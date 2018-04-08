@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "VectorFontEffects.h"
 
-#include "Utils/Bitmap.h"
+#include "Utils/Bitmap/Bitmap.h"
 
 namespace o2
 {

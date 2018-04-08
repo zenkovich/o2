@@ -2,8 +2,8 @@
 
 #include "Animation/Animation.h"
 
-#include "Utils/Serializable.h"
-#include "Utils/String.h"
+#include "Utils/Serialization/Serializable.h"
+#include "Utils/Types/String.h"
 
 namespace o2
 {

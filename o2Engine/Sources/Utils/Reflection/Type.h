@@ -2,13 +2,13 @@
 
 #pragma once
 
-#include "Utils/CommonTypes.h"
-#include "Utils/Containers/Dictionary.h"
-#include "Utils/Containers/Vector.h"
 #include "Utils/Delegates.h"
+#include "Utils/Reflection/Attribute.h"
 #include "Utils/Reflection/SearchPassedObject.h"
-#include "Utils/StringDef.h"
-#include "Attribute.h"
+#include "Utils/Types/CommonTypes.h"
+#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Vector.h"
+#include "Utils/Types/StringDef.h"
 
 #define TypeOf(TYPE) GetTypeOf<TYPE>()
 
@@ -712,8 +712,8 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #include "Utils/Reflection/FieldInfo.h"
 #include "Utils/Reflection/FunctionInfo.h"
 #include "Utils/Reflection/TypeTraits.h"
-#include "Utils/StringImpl.h"
-#include "Utils/UID.h"
+#include "Utils/Types/StringImpl.h"
+#include "Utils/Types/UID.h"
 
 namespace o2
 {

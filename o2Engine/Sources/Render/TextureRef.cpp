@@ -3,7 +3,7 @@
 
 #include "Assets/Assets.h"
 #include "Render/Render.h"
-#include "Utils/Log/LogStream.h"
+#include "Utils/Debug/Log/LogStream.h"
 
 namespace o2
 {

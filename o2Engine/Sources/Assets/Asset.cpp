@@ -2,8 +2,8 @@
 #include "Asset.h"
 
 #include "Assets/Assets.h"
-#include "Utils/Debug.h"
-#include "Utils/Log/LogStream.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Debug/Log/LogStream.h"
 
 namespace o2
 {

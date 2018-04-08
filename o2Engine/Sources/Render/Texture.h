@@ -3,8 +3,8 @@
 #include "Render/Windows/TextureBase.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Property.h"
-#include "Utils/String.h"
-#include "Utils/UID.h"
+#include "Utils/Types/String.h"
+#include "Utils/Types/UID.h"
 
 namespace o2
 {

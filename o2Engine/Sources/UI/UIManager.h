@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UI/ContextMenu.h"
-#include "Utils/Log/LogStream.h"
+#include "Utils/Debug/Log/LogStream.h"
 #include "Utils/Property.h"
 #include "Utils/Reflection/Type.h"
 #include "Utils/Singleton.h"

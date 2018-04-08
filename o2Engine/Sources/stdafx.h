@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/CommonTypes.h"
+#include "Utils/Types/CommonTypes.h"
 
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
@@ -10,12 +10,9 @@
 #include "Scene/Actor.h"
 #include "Scene/Component.h"
 #include "UI/Widget.h"
-#include "Utils/Containers/Dictionary.h"
-#include "Utils/Containers/Vector.h"
-#include "Utils/Data/DataNode.h"
-#include "Utils/Debug.h"
+#include "Utils/Basic/IObject.h"
+#include "Utils/Debug/Debug.h"
 #include "Utils/Delegates.h"
-#include "Utils/IObject.h"
 #include "Utils/Math/Basis.h"
 #include "Utils/Math/Border.h"
 #include "Utils/Math/Color.h"
@@ -32,5 +29,8 @@
 #include "Utils/Reflection/Reflection.h"
 #include "Utils/Reflection/Type.h"
 #include "Utils/Reflection/TypeTraits.h"
-#include "Utils/Serializable.h"
-#include "Utils/String.h"
+#include "Utils/Serialization/DataNode.h"
+#include "Utils/Serialization/Serializable.h"
+#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Vector.h"
+#include "Utils/Types/String.h"

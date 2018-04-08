@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/Math/Math.h"
-#include "Utils/IObject.h"
+#include "Utils/Basic/IObject.h"
 
 namespace o2
 {

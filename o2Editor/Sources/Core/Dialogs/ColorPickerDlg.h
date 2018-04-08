@@ -2,7 +2,7 @@
 
 #include "Events/CursorEventsListener.h"
 #include "Render/TextureRef.h"
-#include "Utils/CursorEventsArea.h"
+#include "Events/CursorEventsArea.h"
 #include "Utils/Delegates.h"
 #include "Utils/Math/Color.h"
 #include "Utils/Singleton.h"

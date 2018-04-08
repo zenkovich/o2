@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils/String.h"
-#include "Utils/Serializable.h"
+#include "Utils/Types/String.h"
+#include "Utils/Serialization/Serializable.h"
 
 namespace o2
 {

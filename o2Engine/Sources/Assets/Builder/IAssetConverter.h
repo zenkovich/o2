@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Assets/AssetsTree.h"
-#include "Utils/IObject.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Memory/MemoryManager.h"
 
 #include "Utils/Reflection/Type.h"

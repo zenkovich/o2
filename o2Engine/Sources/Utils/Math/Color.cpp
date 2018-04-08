@@ -3,7 +3,7 @@
 
 #include "Utils/Reflection/Type.h"
 #include "Utils/Reflection/Reflection.h"
-#include "Utils/Data/DataNode.h"
+#include "Utils/Serialization/DataNode.h"
 
 namespace o2
 {

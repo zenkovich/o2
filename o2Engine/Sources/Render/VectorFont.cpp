@@ -5,10 +5,10 @@
 
 #include "Application/Application.h"
 #include "Render/Render.h"
-#include "Utils/Bitmap.h"
-#include "Utils/Debug.h"
-#include "Utils/Log/LogStream.h"
-#include "Utils/Timer.h"
+#include "Utils/Bitmap/Bitmap.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Debug/Log/LogStream.h"
+#include "Utils/System/Time/Timer.h"
 
 namespace o2
 {

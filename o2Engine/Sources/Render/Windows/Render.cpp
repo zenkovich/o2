@@ -7,8 +7,8 @@
 #include "Render/Mesh.h"
 #include "Render/Sprite.h"
 #include "Render/Texture.h"
-#include "Utils/Debug.h"
-#include "Utils/Log/LogStream.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Debug/Log/LogStream.h"
 #include "Utils/Math/Interpolation.h"
 
 namespace o2

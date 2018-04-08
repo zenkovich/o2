@@ -2,7 +2,7 @@
 
 #include "IAssetConverter.h"
 #include "Assets/Builder/AssetsBuilder.h"
-#include "Utils/RectPacker.h"
+#include "Utils/Tools/RectPacker.h"
 
 namespace o2
 {

@@ -3,8 +3,8 @@
 
 #include "Assets/Assets.h"
 #include "Assets/AtlasAsset.h"
-#include "Utils/Bitmap.h"
-#include "Utils/Log/LogStream.h"
+#include "Utils/Bitmap/Bitmap.h"
+#include "Utils/Debug/Log/LogStream.h"
 
 //#undef LoadBitmap
 

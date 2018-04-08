@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Utils/Containers/Vector.h"
+#include "Utils/Types/Containers/Vector.h"
 #include "Utils/Math/Math.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Property.h"
-#include "Utils/Serializable.h"
+#include "Utils/Serialization/Serializable.h"
 
 namespace o2
 {

@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 #include "Utils/Math/Vector2.h"
-#include "Utils/String.h"
+#include "Utils/Types/String.h"
 
 namespace o2
 {

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Utils/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Dictionary.h"
 #include "Utils/Delegates.h"
-#include "Utils/IObject.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Property.h"
-#include "Utils/Serializable.h"
+#include "Utils/Serialization/Serializable.h"
 
 namespace o2
 {

@@ -3,8 +3,8 @@
 
 #include "Animation/Animatable.h"
 #include "Animation/AnimatedValue.h"
-#include "Utils/Debug.h"
-#include "Utils/IObject.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Basic/IObject.h"
 
 namespace o2
 {

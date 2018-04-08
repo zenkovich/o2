@@ -6,8 +6,8 @@
 #include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "UI/ScrollArea.h"
-#include "Utils/Containers/Pair.h"
-#include "Utils/DragAndDrop.h"
+#include "Utils/Types/Containers/Pair.h"
+#include "Utils/Editor/DragAndDrop.h"
 
 using namespace o2;
 

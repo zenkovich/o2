@@ -5,7 +5,7 @@
 #include "Assets/VectorFontAsset.h"
 #include "Render/FontRef.h"
 #include "Render/RectDrawable.h"
-#include "Utils/String.h"
+#include "Utils/Types/String.h"
 
 namespace o2
 {

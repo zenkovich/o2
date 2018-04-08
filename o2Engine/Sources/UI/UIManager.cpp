@@ -25,8 +25,8 @@
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
 #include "UI/Window.h"
-#include "Utils/Debug.h"
-#include "Utils/Log/LogStream.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Debug/Log/LogStream.h"
 
 #undef CreateWindow
 

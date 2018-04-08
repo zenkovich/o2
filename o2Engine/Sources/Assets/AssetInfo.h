@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Utils/ITree.h"
-#include "Utils/Serializable.h"
-#include "Utils/UID.h"
+#include "Utils/Basic/ITree.h"
+#include "Utils/Serialization/Serializable.h"
+#include "Utils/Types/UID.h"
 
 namespace o2
 {

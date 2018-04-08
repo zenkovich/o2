@@ -2,7 +2,7 @@
 
 #include "Render/ParticlesEmitter.h"
 #include "Scene/DrawableComponent.h"
-#include "Utils/EditorPropertyAttribute.h"
+#include "Utils/Editor/EditorPropertyAttribute.h"
 
 namespace o2
 {

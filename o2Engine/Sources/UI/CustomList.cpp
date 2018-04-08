@@ -9,7 +9,7 @@
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
-#include "Utils/Debug.h"
+#include "Utils/Debug/Debug.h"
 
 namespace o2
 {

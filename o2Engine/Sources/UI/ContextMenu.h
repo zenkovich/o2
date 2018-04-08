@@ -6,7 +6,7 @@
 #include "Events/ShortcutKeysListener.h"
 #include "UI/ScrollArea.h"
 #include "Utils/Delegates.h"
-#include "Utils/ShortcutKeys.h"
+#include "Utils/System/ShortcutKeys.h"
 
 namespace o2
 {

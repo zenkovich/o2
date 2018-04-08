@@ -4,7 +4,7 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
-#include "Utils/String.h"
+#include "Utils/Types/String.h"
 #include "Application/Windows/ApplicationBase.h"
 
 // Application access macros

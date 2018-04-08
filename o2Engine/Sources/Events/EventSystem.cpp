@@ -8,9 +8,9 @@
 #include "Render/Render.h"
 #include "UI/Widget.h"
 #include "UI/WidgetLayout.h"
-#include "Utils/Debug.h"
-#include "Utils/DragAndDrop.h"
-#include "Utils/Time.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Editor/DragAndDrop.h"
+#include "Utils/System/Time/Time.h"
 
 namespace o2
 {

@@ -4,7 +4,7 @@
 #include "Assets/ImageAsset.h"
 #include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 #include "PropertiesWindow/Properties/AssetProperty.h"
-#include "Utils/CursorEventsArea.h"
+#include "Events/CursorEventsArea.h"
 
 using namespace o2;
 

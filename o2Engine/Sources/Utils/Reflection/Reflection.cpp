@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "Reflection.h"
 
-#include "Utils/Data/DataNode.h"
-#include "Utils/IObject.h"
+#include "Utils/Serialization/DataNode.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Math/Basis.h"
 #include "Utils/Math/Border.h"
 #include "Utils/Math/Color.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"
-#include "Utils/String.h"
-#include "Utils/UID.h"
+#include "Utils/Types/String.h"
+#include "Utils/Types/UID.h"
 
 namespace o2
 {

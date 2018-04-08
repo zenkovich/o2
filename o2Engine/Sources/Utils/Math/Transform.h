@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Animation/Animation.h"
-#include "Utils/IObject.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Math/Basis.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Property.h"
-#include "Utils/Serializable.h"
+#include "Utils/Serialization/Serializable.h"
 
 namespace o2
 {

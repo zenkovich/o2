@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Utils/Containers/Dictionary.h"
-#include "Utils/Containers/Vector.h"
-#include "Utils/Containers/Pair.h"
+#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Vector.h"
+#include "Utils/Types/Containers/Pair.h"
 
 using namespace o2;
 

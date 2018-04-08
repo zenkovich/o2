@@ -8,15 +8,15 @@
 #include "Render/Render.h"
 #include "Scene/Scene.h"
 #include "UI/UIManager.h"
-#include "Utils/Debug.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Debug/Log/ConsoleLogStream.h"
+#include "Utils/Debug/Log/FileLogStream.h"
+#include "Utils/Debug/Log/LogStream.h"
+#include "Utils/Debug/StackTrace.h"
 #include "Utils/FileSystem/FileSystem.h"
-#include "Utils/Log/ConsoleLogStream.h"
-#include "Utils/Log/FileLogStream.h"
-#include "Utils/Log/LogStream.h"
-#include "Utils/StackTrace.h"
-#include "Utils/TaskManager.h"
-#include "Utils/Time.h"
-#include "Utils/Timer.h"
+#include "Utils/System/Time/Time.h"
+#include "Utils/System/Time/Timer.h"
+#include "Utils/Tasks/TaskManager.h"
 #include <time.h>
 
 namespace o2

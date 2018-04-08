@@ -3,8 +3,8 @@
 
 #include <Windows.h>
 #include "Application/Application.h"
-#include "Utils/Debug.h"
-#include "Utils/Log/LogStream.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Debug/Log/LogStream.h"
 
 namespace o2
 {

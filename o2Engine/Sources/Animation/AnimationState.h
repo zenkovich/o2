@@ -2,8 +2,8 @@
 
 #include "Animation/Animation.h"
 #include "Animation/AnimationMask.h"
-#include "Utils/Containers/Vector.h"
-#include "Utils/Serializable.h"
+#include "Utils/Types/Containers/Vector.h"
+#include "Utils/Serialization/Serializable.h"
 
 namespace o2
 {

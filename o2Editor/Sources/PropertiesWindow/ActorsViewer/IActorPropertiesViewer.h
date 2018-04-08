@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils/Containers/Vector.h"
-#include "Utils/IObject.h"
+#include "Utils/Types/Containers/Vector.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
 #include "Utils/Reflection/Type.h"
 

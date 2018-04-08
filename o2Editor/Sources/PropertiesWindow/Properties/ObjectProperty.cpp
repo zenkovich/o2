@@ -37,8 +37,9 @@ namespace Editor
 		mFieldProperties.Set(mTargetObjects.Select<Pair<IObject*, IObject*>>(
 			[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x) 
 		{
-			return Pair<IObject*, IObject*>(GetProxyPtr(x.first),
-											x.second ? GetProxyPtr(x.second) : nullptr);
+			auto target = GetProxyPtr(x.first);
+			auto prototype = x.second ? GetProxyPtr(x.second) : nullptr;
+			return Pair<IObject*, IObject*>(target, prototype);
 		}));
 	}
 
@@ -119,7 +120,11 @@ namespace Editor
 	IObject* ObjectProperty::GetProxyPtr(IAbstractValueProxy* proxy) const
 	{
 		IIObjectPointerValueProxy* objProxy = dynamic_cast<IIObjectPointerValueProxy*>(proxy);
-		return objProxy->GetObjectPtr();
+
+		if (objProxy)
+			return objProxy->GetObjectPtr();
+
+		return nullptr;
 	}
 
 }

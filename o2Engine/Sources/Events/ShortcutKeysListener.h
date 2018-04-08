@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/ShortcutKeys.h"
+#include "Utils/System/ShortcutKeys.h"
 #include "Events/KeyboardEventsListener.h"
 
 namespace o2

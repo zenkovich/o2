@@ -2,10 +2,10 @@
 #include "Type.h"
 
 #include "Animation/Animation.h"
-#include "Utils/Data/DataNode.h"
-#include "Utils/IObject.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
-#include "Utils/Timer.h"
+#include "Utils/Serialization/DataNode.h"
+#include "Utils/System/Time/Timer.h"
 
 namespace o2
 {

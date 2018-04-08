@@ -1,10 +1,10 @@
 #pragma once
 
 #include <functional>
-#include "Utils/Containers/Pair.h"
-#include "Utils/Containers/Vector.h"
-#include "Utils/Containers/Dictionary.h"
-#include "Utils/StringDef.h"
+#include "Utils/Types/Containers/Pair.h"
+#include "Utils/Types/Containers/Vector.h"
+#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/StringDef.h"
 
 // Reflection access macros
 #define o2Reflection Reflection::Instance()

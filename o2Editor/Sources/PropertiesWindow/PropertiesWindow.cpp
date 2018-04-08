@@ -20,8 +20,8 @@
 #include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
 #include "UI/WidgetLayout.h"
-#include "Utils/EditorPropertyAttribute.h"
-#include "Utils/Timer.h"
+#include "Utils/Editor/EditorPropertyAttribute.h"
+#include "Utils/System/Time/Timer.h"
 
 DECLARE_SINGLETON(Editor::PropertiesWindow);
 

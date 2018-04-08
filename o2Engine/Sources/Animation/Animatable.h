@@ -2,7 +2,7 @@
 
 #include "Animation/Animation.h"
 #include "Animation/AnimationState.h"
-#include "Utils/Debug.h"
+#include "Utils/Debug/Debug.h"
 
 namespace o2
 {

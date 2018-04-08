@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Render/Windows/OpenGL.h"
-#include "Utils/CommonTypes.h"
+#include "Utils/Types/CommonTypes.h"
 #include "Utils/Math/Vector2.h"
 
 

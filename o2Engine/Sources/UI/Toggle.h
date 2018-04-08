@@ -3,7 +3,7 @@
 #include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "UI/Widget.h"
-#include "Utils/ShortcutKeys.h"
+#include "Utils/System/ShortcutKeys.h"
 
 namespace o2
 {

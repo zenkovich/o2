@@ -4,12 +4,12 @@
 #include FT_FREETYPE_H
 
 #include "Render/TextureRef.h"
-#include "Utils/CommonTypes.h"
-#include "Utils/Containers/Vector.h"
+#include "Utils/Types/CommonTypes.h"
+#include "Utils/Types/Containers/Vector.h"
 #include "Utils/Delegates.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/String.h"
+#include "Utils/Types/String.h"
 
 namespace o2
 {

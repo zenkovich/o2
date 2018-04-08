@@ -4,10 +4,10 @@
 #include "Scene/ActorTransform.h"
 #include "Scene/Scene.h"
 #include "Scene/Tags.h"
-#include "Utils/Containers/Vector.h"
+#include "Utils/Types/Containers/Vector.h"
 #include "Utils/Singleton.h"
-#include "Utils/String.h"
-#include "Utils/UID.h"
+#include "Utils/Types/String.h"
+#include "Utils/Types/UID.h"
 
 namespace o2
 {

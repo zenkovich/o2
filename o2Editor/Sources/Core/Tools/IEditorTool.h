@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Application/Input.h"
-#include "Utils/Data/DataNode.h"
-#include "Utils/IObject.h"
+#include "Utils/Serialization/DataNode.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Type.h"
 
 using namespace o2;

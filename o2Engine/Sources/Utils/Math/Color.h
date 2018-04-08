@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/CommonTypes.h"
+#include "Utils/Types/CommonTypes.h"
 #include "Utils/Math/Math.h"
 
 namespace o2

@@ -2,7 +2,7 @@
 
 #include "Events/KeyboardEventsListener.h"
 #include "PropertiesWindow/Properties/IPropertyField.h"
-#include "Utils/CursorEventsArea.h"
+#include "Events/CursorEventsArea.h"
 #include "Utils/Property.h"
 
 using namespace o2;

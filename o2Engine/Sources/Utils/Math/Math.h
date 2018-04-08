@@ -3,7 +3,7 @@
 #include <float.h>
 #include <math.h>
 #include <stdlib.h>
-#include "Utils/CommonTypes.h"
+#include "Utils/Types/CommonTypes.h"
 
 namespace o2
 {

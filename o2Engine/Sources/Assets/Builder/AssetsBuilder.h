@@ -3,7 +3,7 @@
 #include "Assets/Asset.h"
 #include "Assets/AssetsTree.h"
 #include "Assets/Builder/StdAssetConverter.h"
-#include "Utils/String.h"
+#include "Utils/Types/String.h"
 
 namespace o2
 {

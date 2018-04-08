@@ -14,7 +14,7 @@
 #include "UI/VerticalLayout.h"
 #include "UI/Widget.h"
 #include "UI/WidgetLayout.h"
-#include "Utils/Bitmap.h"
+#include "Utils/Bitmap/Bitmap.h"
 #include "Utils/Reflection/Reflection.h"
 
 namespace Editor

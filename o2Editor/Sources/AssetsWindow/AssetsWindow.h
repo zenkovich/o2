@@ -2,8 +2,8 @@
 
 #include "Application/Input.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
-#include "Utils/Containers/Pair.h"
-#include "Utils/CursorEventsArea.h"
+#include "Utils/Types/Containers/Pair.h"
+#include "Events/CursorEventsArea.h"
 #include "Utils/Singleton.h"
 
 using namespace o2;

@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/CommonTypes.h"
+#include "Utils/Types/CommonTypes.h"
 
 // Enables memory managing
 #define ENALBE_MEMORY_MANAGE true

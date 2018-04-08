@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Utils/Singleton.h"
-#include "Utils/String.h"
+#include "Utils/Types/String.h"
 
 using namespace o2;
 

@@ -2,7 +2,7 @@
 #include "ProjectConfig.h"
 
 #include "EngineSettings.h"
-#include "Utils/Debug.h"
+#include "Utils/Debug/Debug.h"
 
 namespace o2
 {

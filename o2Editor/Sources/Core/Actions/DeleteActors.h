@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/Actions/IAction.h"
-#include "Utils/Containers/Vector.h"
-#include "Utils/Data/DataNode.h"
+#include "Utils/Types/Containers/Vector.h"
+#include "Utils/Serialization/DataNode.h"
 
 using namespace o2;
 

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Animation/IAnimation.h"
-#include "Utils/Debug.h"
+#include "Utils/Debug/Debug.h"
 #include "Utils/Property.h"
 #include "Utils/Reflection/Attribute.h"
-#include "Utils/String.h"
+#include "Utils/Types/String.h"
 
 namespace o2
 {

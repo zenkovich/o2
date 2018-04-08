@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Utils/CommonTypes.h"
-#include "Utils/Containers/Dictionary.h"
-#include "Utils/Containers/Vector.h"
+#include "Utils/Types/CommonTypes.h"
+#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Vector.h"
 #include "Utils/Reflection/Attribute.h"
 #include "Utils/Reflection/SearchPassedObject.h"
-#include "Utils/String.h"
+#include "Utils/Types/String.h"
 #include <string>
 
 namespace o2

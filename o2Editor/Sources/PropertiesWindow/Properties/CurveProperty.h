@@ -2,7 +2,7 @@
 
 #include "PropertiesWindow/Properties/IPropertyField.h"
 #include "Render/TextureRef.h"
-#include "Utils/CursorEventsArea.h"
+#include "Events/CursorEventsArea.h"
 #include "Utils/Math/Curve.h"
 #include "Utils/Property.h"
 

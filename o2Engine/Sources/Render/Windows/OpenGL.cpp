@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "OpenGL.h"
 
-#include "Utils/Log/LogStream.h"
+#include "Utils/Debug/Log/LogStream.h"
 
 // Returns address of function
 PROC GetSafeWGLProcAddress(const char* id, o2::LogStream* log)

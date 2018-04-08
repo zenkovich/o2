@@ -3,7 +3,7 @@
 #include "Assets/Asset.h"
 #include "Assets/AtlasAsset.h"
 #include "Render/TextureRef.h"
-#include "Utils/Bitmap.h"
+#include "Utils/Bitmap/Bitmap.h"
 
 namespace o2
 {

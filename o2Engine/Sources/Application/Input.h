@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils/CommonTypes.h"
-#include "Utils/Containers/Vector.h"
+#include "Utils/Types/CommonTypes.h"
+#include "Utils/Types/Containers/Vector.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"

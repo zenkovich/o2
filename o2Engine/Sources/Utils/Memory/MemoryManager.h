@@ -4,7 +4,7 @@
 #include <map>
 
 #include "EngineSettings.h"
-#include "Utils/CommonTypes.h"
+#include "Utils/Types/CommonTypes.h"
 
 // Memory manager access macros
 #define o2Memory MemoryManager::Instance()

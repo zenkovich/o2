@@ -4,7 +4,7 @@
 #include "Render/Sprite.h"
 #include "Render/TextureRef.h"
 #include "Scene/DrawableComponent.h"
-#include "Utils/UID.h"
+#include "Utils/Types/UID.h"
 
 namespace o2
 {

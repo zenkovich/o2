@@ -7,7 +7,7 @@
 #include "Assets/ImageAsset.h"
 #include "Render/Mesh.h"
 #include "Render/Render.h"
-#include "Utils/Debug.h"
+#include "Utils/Debug/Debug.h"
 
 namespace o2
 {

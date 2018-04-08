@@ -1,14 +1,13 @@
 #pragma once
 
-#include "Utils/IObject.h"
-#include "Utils/UID.h"
-#include "Utils/Property.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Math/Basis.h"
+#include "Utils/Math/Color.h"
+#include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"
-#include "Utils/Math/Rect.h"
-#include "Utils/Math/Color.h"
-#include "Utils/UID.h"
+#include "Utils/Property.h"
+#include "Utils/Types/UID.h"
 
 namespace o2
 {

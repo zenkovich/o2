@@ -3,7 +3,7 @@
 
 #include "Animation/Animatable.h"
 #include "Animation/AnimationState.h"
-#include "Utils/Debug.h"
+#include "Utils/Debug/Debug.h"
 #include "Utils/Math/Interpolation.h"
 #include "Utils/Math/Vector2.h"
 
