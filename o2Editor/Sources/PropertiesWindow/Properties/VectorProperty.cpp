@@ -115,7 +115,7 @@ namespace Editor
 					mValueProperties.Add(propertyDef);
 				}
 
-				mSpoiler->AddChild(propertyDef.widget, false);
+				mSpoiler->AddChild(propertyDef.widget);
 				propertyDef.propertyField->SetCaption((String)"Element " + (String)i);
 				propertyDef.propertyField->SetValueAndPrototypeProxy(itemTargetValues);
 				propertyDef.propertyField->SetValuePath((String)i);
@@ -247,18 +247,23 @@ namespace Editor
 		auto countFI = mType->GetElementFieldInfo();
 		for (auto target : mTargetObjects)
 		{
+			void* targetPtr = GetProxyValuePointer(target.first);
+
 			prevValues.Add(DataNode());
-			prevValues.Last()["Size"].SetValue(mType->GetObjectVectorSize(target.first));
+			prevValues.Last()["Size"].SetValue(mType->GetObjectVectorSize(targetPtr));
 			DataNode& elementsData = prevValues.Last()["Elements"];
 
-			int lastCount = mType->GetObjectVectorSize(target.first);
+			int lastCount = mType->GetObjectVectorSize(targetPtr);
 			for (int i = newCount; i < lastCount; i++)
-				countFI->Serialize(mType->GetObjectVectorElementPtr(target.first, i), *elementsData.AddNode("Element" + (String)i));
+			{
+				countFI->Serialize(mType->GetObjectVectorElementPtr(targetPtr, i),
+								   *elementsData.AddNode("Element" + (String)i));
+			}
 
 			newValues.Add(DataNode());
 			newValues.Last()["Size"].SetValue(newCount);
 
-			mType->SetObjectVectorSize(target.first, newCount);
+			mType->SetObjectVectorSize(targetPtr, newCount);
 		}
 
 		Refresh();

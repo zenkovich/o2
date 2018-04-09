@@ -166,8 +166,6 @@ namespace Editor
 
 		for (auto subType : subTypes)
 		{
-			o2Debug.Log("Menu for type " + subType->GetName());
-
 			mTreeContextMenu->AddItem("Create/" + subType->GetName(), [=]() {
 				auto objectType = dynamic_cast<const ObjectType*>(subType);
 				Actor* newActor = dynamic_cast<Actor*>(objectType->DynamicCastToIObject(subType->CreateSample()));
@@ -185,13 +183,12 @@ namespace Editor
 
 		for (auto styleWidget : styleWidgets)
 		{
-			o2Debug.Log("Menu for " + styleWidget->GetType().GetName() + " - " + styleWidget->GetName());
-
 			mTreeContextMenu->AddItem("Create UI/" + styleWidget->GetType().GetName() + " - " + styleWidget->GetName(),
 									  [=]() 
 			{
-				Actor* newActor = styleWidget->CloneAs<Actor>();
-				CreateActor(newActor);
+				UIWidget* newWidget = styleWidget->CloneAs<UIWidget>();
+				newWidget->SetVisibleForcible(true);
+				CreateActor(newWidget);
 			});
 		}
 	}

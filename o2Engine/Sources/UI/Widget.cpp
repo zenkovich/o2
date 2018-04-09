@@ -67,7 +67,7 @@ namespace o2
 
 	UIWidget::UIWidget(const UIWidget& other):
 		Actor(mnew UIWidgetLayout(*other.layout), other), layout(dynamic_cast<UIWidgetLayout*>(transform)),
-		mTransparency(other.mTransparency), mVisible(other.mVisible), mFullyDisabled(!other.mVisible),
+		mTransparency(other.mTransparency), mVisible(other.mVisible), mFullyDisabled(!other.mVisible), mResVisible(other.mVisible),
 		visible(this), transparency(this), resTransparency(this), parentWidget(this), childrenWidgets(this),
 		layers(this), states(this), childWidget(this), layer(this), state(this)
 	{
@@ -216,7 +216,7 @@ namespace o2
 
 	void UIWidget::SetLayoutDirty()
 	{
-		layout->SetDirty();
+		layout->SetDirty(false);
 	}
 
 	void UIWidget::Draw()

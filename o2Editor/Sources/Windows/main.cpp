@@ -14,28 +14,9 @@ DECLARE_SINGLETON(WindowsManager);
 DECLARE_SINGLETON(EditorConfig);
 DECLARE_SINGLETON(ToolsPanel);
 
-struct A
-{
-	virtual void foo() const { printf("A \n"); }
-};
-
-template<typename _type>
-struct B: public A
-{
-	virtual void foo() const { printf("B \n"); }
-};
-
-struct C: public B<int>
-{
-	virtual void foo() const { printf("C \n"); }
-};
-
 int main()
 {
 	INITIALIZE_O2;
-
-	C c;
-	c.foo();
 
 	EditorApplication* app = mnew EditorApplication();
 	app->Launch();
