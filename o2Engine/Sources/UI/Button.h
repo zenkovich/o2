@@ -89,7 +89,7 @@ namespace o2
 		void OnLayerAdded(UIWidgetLayer* layer) override;
 
 		// It is called when visible was changed
-		void OnVisibleChanged() override;
+		void OnResEnableInHierarchyChanged() override;
 	};
 }
 
@@ -129,6 +129,6 @@ CLASS_METHODS_META(o2::UIButton)
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 }
 END_META;

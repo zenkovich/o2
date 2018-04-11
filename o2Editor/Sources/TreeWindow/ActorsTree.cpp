@@ -376,7 +376,7 @@ namespace Editor
 			mLinkBtn->SetTransparency(alpha);
 		}
 
-		mLinkBtn->SetVisible(actor->GetPrototype());
+		mLinkBtn->SetEnabled(actor->GetPrototype());
 		mLinkBtn->SetStateForcible("halfHide", !actor->GetPrototypeDirectly().IsValid());
 
 		if (actor->GetPrototype())

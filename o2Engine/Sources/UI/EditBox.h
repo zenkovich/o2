@@ -188,7 +188,7 @@ namespace o2
 		void UpdateTransparency() override;
 
 		// It is called when visible was changed
-		void OnVisibleChanged() override;
+		void OnResEnableInHierarchyChanged() override;
 
 		// It is called when widget was selected
 		void OnFocused() override;
@@ -365,7 +365,7 @@ CLASS_METHODS_META(o2::UIEditBox)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(void, UpdateControls, float);

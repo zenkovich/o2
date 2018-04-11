@@ -24,7 +24,7 @@ namespace o2
 
 	public:
 		PROPERTIES(UIWidget);
-		PROPERTY(bool, visible, SetVisible, IsVisible); // Is widget visible property
+		PROPERTY(bool, visible, SetEnabled, IsVisible); // Is widget visible property
 
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency
@@ -76,11 +76,11 @@ namespace o2
 		// Updates children and internal children transforms
 		void UpdateChildrenTransforms() override;
 
-		// Sets layout dirty, and update it in update loop
-		void SetLayoutDirty();
-
 		// Draws widget and child widgets with not overridden depth
 		void Draw() override;
+
+		// Sets layout dirty, and update it in update loop
+		void SetLayoutDirty();
 
 		// Forcible drawing in area with transparency
 		void ForceDraw(const RectF& area, float transparency);
@@ -182,10 +182,7 @@ namespace o2
 		float GetResTransparency() const;
 
 		// Sets visibility
-		void SetVisible(bool visible);
-
-		// Sets visibility
-		void SetVisibleForcible(bool visible);
+		void SetEnableForcible(bool visible);
 
 		// Sets visibility to true
 		void Show(bool forcible = false);
@@ -249,16 +246,19 @@ namespace o2
 		bool           mIsFocusable = false;    // Is widget can be focused @SERIALIZABLE
 
 		UIWidgetState* mVisibleState = nullptr; // Widget visibility state
-		bool           mVisible = true;         // Visibility of widget. Uses state 'visible' @SERIALIZABLE
-		bool           mResVisible = true;      // Result visibility of widget. Depends on this visibility and parent result visibility
-
-		bool           mFullyDisabled = false;  // True, if widget is not visible and visible state is fully false
+		
 		bool           mIsClipped = false;      // Is widget fully clipped by some scissors
 
 		RectF          mBounds;                 // Widget bounds by drawing layers
 		RectF          mBoundsWithChilds;       // Widget with childs bounds
 
 	protected:
+		// Updates result read enable flag
+		void UpdateResEnabled() override;
+
+		// Updates enabling
+		void UpdateResEnabledInHierarchy() override;
+
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
@@ -336,9 +336,6 @@ namespace o2
 
 		// It is called when widget state was added
 		virtual void OnStateAdded(UIWidgetState* state);
-
-		// It is called when visible was changed
-		virtual void OnVisibleChanged();
 
 		// Draws debug frame by mAbsoluteRect
 		void DrawDebugFrame();
@@ -475,9 +472,6 @@ CLASS_FIELDS_META(o2::UIWidget)
 	PROTECTED_FIELD(mIsFocused);
 	PROTECTED_FIELD(mIsFocusable).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mVisibleState);
-	PROTECTED_FIELD(mVisible).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mResVisible);
-	PROTECTED_FIELD(mFullyDisabled);
 	PROTECTED_FIELD(mIsClipped);
 	PROTECTED_FIELD(mBounds);
 	PROTECTED_FIELD(mBoundsWithChilds);
@@ -493,8 +487,8 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
-	PUBLIC_FUNCTION(void, SetLayoutDirty);
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, SetLayoutDirty);
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);
 	PUBLIC_FUNCTION(UIWidget*, GetParentWidget);
 	PUBLIC_FUNCTION(UIWidget*, GetChildWidget, const String&);
@@ -525,8 +519,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, SetTransparency, float);
 	PUBLIC_FUNCTION(float, GetTransparency);
 	PUBLIC_FUNCTION(float, GetResTransparency);
-	PUBLIC_FUNCTION(void, SetVisible, bool);
-	PUBLIC_FUNCTION(void, SetVisibleForcible, bool);
+	PUBLIC_FUNCTION(void, SetEnableForcible, bool);
 	PUBLIC_FUNCTION(void, Show, bool);
 	PUBLIC_FUNCTION(void, Hide, bool);
 	PUBLIC_FUNCTION(bool, IsVisible);
@@ -538,6 +531,8 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetPositionIndexInParent, int);
 	PUBLIC_FUNCTION(void, SetInternalParent, UIWidget*, bool);
+	PROTECTED_FUNCTION(void, UpdateResEnabled);
+	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
@@ -564,7 +559,6 @@ CLASS_METHODS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, OnChildFocused, UIWidget*);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
 	PROTECTED_FUNCTION(void, DrawDebugFrame);
 	PROTECTED_FUNCTION(void, UpdateDrawingChildren);
 	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);

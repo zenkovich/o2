@@ -206,9 +206,9 @@ namespace Editor
 			actor->UpdateTransform();
 		}
 
-		mFrame = mFrame*transform;
-		mPivotHandle.position = mPivotHandle.position*transform;
 		mChangedFromThis = true;
+
+		UpdateSelectionFrame();
 		UpdateHandlesTransform();
 	}
 

@@ -53,7 +53,7 @@ namespace o2
 
 	void UIWindow::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (!mResEnabledInHierarchy)
 			return;
 
 		UIScrollArea::Update(dt);
@@ -64,7 +64,7 @@ namespace o2
 
 	void UIWindow::Draw()
 	{
-		if (mFullyDisabled)
+		if (!mResEnabledInHierarchy)
 			return;
 
 		mBackCursorArea.OnDrawn();
@@ -373,11 +373,11 @@ namespace o2
 		BindHandlesInteractableToVisibility();
 	}
 
-	void UIWindow::OnVisibleChanged()
+	void UIWindow::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 
-		if (mResVisible)
+		if (mResEnabled)
 			Focus();
 	}
 

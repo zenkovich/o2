@@ -175,7 +175,7 @@ namespace o2
 		float res = mBorder.left + mBorder.right + Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
 		for (auto child : mChildWidgets)
 		{
-			if (!child->mFullyDisabled)
+			if (child->mResEnabledInHierarchy)
 				res += child->GetMinWidthWithChildren();
 		}
 
@@ -192,7 +192,7 @@ namespace o2
 		float res = 0;
 		for (auto child : mChildWidgets)
 		{
-			if (!child->mFullyDisabled)
+			if (child->mResEnabledInHierarchy)
 				res = Math::Max(res, child->GetMinHeightWithChildren() + mBorder.top + mBorder.bottom);
 		}
 
@@ -206,7 +206,7 @@ namespace o2
 		float res = 0;
 		for (auto child : mChildWidgets)
 		{
-			if (!child->mFullyDisabled)
+			if (child->mResEnabledInHierarchy)
 				res += child->GetWidthWeightWithChildren();
 		}
 
@@ -256,7 +256,7 @@ namespace o2
 
 		for (auto child : mChildWidgets)
 		{
-			if (!child->mFullyDisabled)
+			if (child->mResEnabledInHierarchy)
 				layout->mData->weight.x += child->GetWidthWeightWithChildren();
 		}
 

@@ -767,6 +767,8 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
+
+		
 	}
 
 	void BasicUIStyleBuilder::RebuildWindowStyle()

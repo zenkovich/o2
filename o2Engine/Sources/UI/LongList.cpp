@@ -48,7 +48,7 @@ namespace o2
 	{
 		UIScrollArea::Update(dt);
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		const float rectLerpCoef = 20.0f;
@@ -68,7 +68,7 @@ namespace o2
 
 	void UILongList::Draw()
 	{
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -533,9 +533,9 @@ namespace o2
 	void UILongList::OnSelectionChanged()
 	{}
 
-	void UILongList::OnVisibleChanged()
+	void UILongList::OnResEnableInHierarchyChanged()
 	{
-		SetInteractable(mResVisible);
+		SetInteractable(mResEnabled);
 	}
 }
 

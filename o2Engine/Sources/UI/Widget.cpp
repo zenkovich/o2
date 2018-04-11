@@ -67,9 +67,8 @@ namespace o2
 
 	UIWidget::UIWidget(const UIWidget& other):
 		Actor(mnew UIWidgetLayout(*other.layout), other), layout(dynamic_cast<UIWidgetLayout*>(transform)),
-		mTransparency(other.mTransparency), mVisible(other.mVisible), mFullyDisabled(!other.mVisible), mResVisible(other.mVisible),
-		visible(this), transparency(this), resTransparency(this), parentWidget(this), childrenWidgets(this),
-		layers(this), states(this), childWidget(this), layer(this), state(this)
+		mTransparency(other.mTransparency), visible(this), transparency(this), resTransparency(this), parentWidget(this),
+		childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
 		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
@@ -161,7 +160,7 @@ namespace o2
 
 	void UIWidget::Update(float dt)
 	{
-		if (!mFullyDisabled)
+		if (mResEnabledInHierarchy)
 		{
 			if (layout->mData->updateFrame == 0)
 			{
@@ -223,7 +222,7 @@ namespace o2
 	{
 		DrawDebugFrame();
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 		{
 			for (auto child : mDrawingChildren)
 				child->Draw();
@@ -417,14 +416,18 @@ namespace o2
 		if (state->name == "visible")
 		{
 			mVisibleState = state;
-			mVisibleState->SetStateForcible(mVisible);
+			mVisibleState->SetStateForcible(mEnabled);
 
-			mVisibleState->onStateBecomesTrue += [&]() {
-				mFullyDisabled = false;
+			mVisibleState->onStateBecomesTrue += [&]()
+			{
+				mResEnabled = true;
+				UpdateResEnabledInHierarchy();
 			};
 
-			mVisibleState->onStateFullyFalse += [&]() {
-				mFullyDisabled = true;
+			mVisibleState->onStateFullyFalse += [&]()
+			{
+				mResEnabled = false;
+				UpdateResEnabledInHierarchy();
 			};
 		}
 
@@ -565,42 +568,34 @@ namespace o2
 		return mResTransparency;
 	}
 
-	void UIWidget::SetVisible(bool visible)
-	{
-		mVisible = visible;
-		UpdateVisibility();
-	}
-
-	void UIWidget::SetVisibleForcible(bool visible)
+	void UIWidget::SetEnableForcible(bool visible)
 	{
 		if (mVisibleState)
 			mVisibleState->SetStateForcible(visible);
 
-		mVisible = visible;
-		mFullyDisabled = !visible;
-
-		UpdateVisibility();
+		mEnabled = visible;
+		UIWidget::UpdateResEnabled();
 	}
 
 	void UIWidget::Show(bool forcible /*= false*/)
 	{
 		if (forcible)
-			SetVisibleForcible(true);
+			SetEnableForcible(true);
 		else
-			SetVisible(true);
+			SetEnabled(true);
 	}
 
 	void UIWidget::Hide(bool forcible /*= false*/)
 	{
 		if (forcible)
-			SetVisibleForcible(false);
+			SetEnableForcible(false);
 		else
-			SetVisible(false);
+			SetEnabled(false);
 	}
 
 	bool UIWidget::IsVisible() const
 	{
-		return mVisible;
+		return mEnabled;
 	}
 
 	void UIWidget::Focus()
@@ -673,7 +668,7 @@ namespace o2
 
 	void UIWidget::UpdateBoundsWithChilds()
 	{
-		if ((mFullyDisabled || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
+		if ((!mResEnabledInHierarchy || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
 			return;
 
 		mBoundsWithChilds = mBounds;
@@ -712,38 +707,6 @@ namespace o2
 
 	void UIWidget::UpdateVisibility(bool updateLayout /*= true*/)
 	{
-		bool lastResVisible = mResVisible;
-
-		if (mParentWidget)
-			mResVisible = mVisible && mParentWidget->mResVisible;
-		else
-			mResVisible = mVisible;
-
-		mIsClipped = false;
-
-		for (auto child : mChildWidgets)
-			child->UpdateVisibility(false);
-
-		for (auto child : mInternalWidgets)
-			child->UpdateVisibility(false);
-
-		if (mResVisible != lastResVisible)
-		{
-			if (mVisibleState)
-				mVisibleState->SetState(mResVisible);
-			else
-				mFullyDisabled = !mResVisible;
-
-			if (updateLayout)
-				SetLayoutDirty();
-
-			if (mResVisible)
-				onShow();
-			else
-				onHide();
-
-			OnVisibleChanged();
-		}
 	}
 
 	void UIWidget::OnChildFocused(UIWidget* child)
@@ -782,7 +745,7 @@ namespace o2
 
 	void UIWidget::UpdateBounds()
 	{
-		if ((mFullyDisabled || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
+		if ((!mResEnabledInHierarchy || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
 			return;
 
 		mBounds = layout->mData->worldRectangle;
@@ -793,7 +756,7 @@ namespace o2
 		bool anyEnabled = false;
 		for (auto child : mChildWidgets)
 		{
-			if (!child->mFullyDisabled)
+			if (child->mResEnabledInHierarchy)
 			{
 				anyEnabled = true;
 				break;
@@ -1006,7 +969,7 @@ namespace o2
 		}
 
 		RetargetStatesAnimations();
-		SetVisibleForcible(mVisible);
+		SetEnableForcible(mEnabled);
 		UpdateLayersDrawingSequence();
 	}
 
@@ -1018,7 +981,7 @@ namespace o2
 		auto oldParent = mParent;
 		auto oldParentWidget = mParentWidget;
 		bool oldClipped= mIsClipped;
-		bool oldDisabled = mFullyDisabled;
+		bool oldResEnabledInHierarchy = mResEnabledInHierarchy;
 
 		layout->mData->offsetMin = area.LeftBottom();
 		layout->mData->offsetMax = area.RightTop();
@@ -1026,7 +989,7 @@ namespace o2
 		mParent = nullptr;
 		mParentWidget = nullptr;
 		mIsClipped = false;
-		mFullyDisabled = false;
+		mResEnabledInHierarchy = true;
 
 		UIWidget::UpdateTransform(true);
 		UpdateTransparency();
@@ -1039,7 +1002,7 @@ namespace o2
 		mParent = oldParent;
 		mParentWidget = oldParentWidget;
 		mIsClipped = false;
-		mFullyDisabled = oldDisabled;
+		mResEnabledInHierarchy = oldResEnabledInHierarchy;
 
 		UIWidget::UpdateTransform(true);
 		layout->mData->dirtyFrame = o2Time.GetCurrentFrame();
@@ -1048,8 +1011,55 @@ namespace o2
 		UpdateTransparency();
 	}
 
-	void UIWidget::OnVisibleChanged()
-	{}
+	void UIWidget::UpdateResEnabled()
+	{
+		if (mVisibleState)
+			mVisibleState->SetState(mEnabled);
+		else
+			Actor::UpdateResEnabled();
+	}
+
+	void UIWidget::UpdateResEnabledInHierarchy()
+	{
+		bool lastResEnabledInHierarchy = mResEnabledInHierarchy;
+
+		if (mParent)
+			mResEnabledInHierarchy = mResEnabled && mParent->mResEnabledInHierarchy;
+		else
+			mResEnabledInHierarchy = mResEnabled;
+
+		mIsClipped = false;
+
+		if (lastResEnabledInHierarchy != mResEnabledInHierarchy)
+		{
+			if (mResEnabledInHierarchy)
+			{
+				onShow();
+				mLayer->mEnabledActors.Add(this);
+			}
+			else
+			{
+				onHide();
+				mLayer->mEnabledActors.Remove(this);
+			}
+
+			layout->SetDirty(true);
+
+			o2Scene.onActorEnableChanged(this);
+
+			OnResEnableInHierarchyChanged();
+			OnChanged();
+		}
+
+		for (auto comp : mComponents)
+			comp->UpdateEnabled();
+
+		for (auto child : mChildren)
+			child->UpdateResEnabledInHierarchy();
+
+		for (auto child : mInternalWidgets)
+			child->UpdateResEnabledInHierarchy();
+	}
 
 	void UIWidget::CopyData(const Actor& otherActor)
 	{

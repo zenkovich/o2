@@ -36,7 +36,7 @@ namespace o2
 		bool lastResEnabled = mResEnabled;
 
 		if (mOwner)
-			mResEnabled = mEnabled && mOwner->mResEnabled;
+			mResEnabled = mEnabled && mOwner->mResEnabledInHierarchy;
 		else
 			mResEnabled = mEnabled;
 

@@ -41,7 +41,7 @@ namespace Editor
 
 	void IEditorWindow::SetVisible(bool visible)
 	{
-		mWindow->SetVisible(visible);
+		mWindow->SetEnabled(visible);
 	}
 
 	void IEditorWindow::Update(float dt)

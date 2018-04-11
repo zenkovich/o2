@@ -47,7 +47,7 @@ namespace o2
 	{
 		UIWidget::Update(dt);
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		if (mToggleGroup && mToggleGroup->mPressed && mToggleGroup->mPressedValue != mValue &&
@@ -318,9 +318,9 @@ namespace o2
 			mBackLayer = layer;
 	}
 
-	void UIToggle::OnVisibleChanged()
+	void UIToggle::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 	}
 
 	UIToggleGroup::UIToggleGroup(Type type):

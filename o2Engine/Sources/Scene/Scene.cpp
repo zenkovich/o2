@@ -78,7 +78,7 @@ namespace o2
 							(String)widget->layout->anchorMax + " "  +(String)widget->layout->offsetMax + "\n";
 
 						debugInfo += (widget->mIsClipped ? (String)"clipped, " : (String)"not clipped, ") +
-							(widget->mVisible ? (String)"visible\n" : ((String)"hidden" + (widget->mFullyDisabled ? (String)" fully\n" : (String)"\n")));
+							(widget->mEnabled ? (String)"visible\n" : ((String)"hidden" + (!widget->mResEnabledInHierarchy ? (String)" fully\n" : (String)"\n")));
 
 						debugInfo += "alpha: " + (String)widget->mTransparency +
 							", res alpha: " + (String)widget->mResTransparency + "\n";

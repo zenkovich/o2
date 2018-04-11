@@ -293,9 +293,9 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIHorizontalScrollBar::OnVisibleChanged()
+	void UIHorizontalScrollBar::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 	}
 
 	void UIHorizontalScrollBar::UpdateLayersLayouts()

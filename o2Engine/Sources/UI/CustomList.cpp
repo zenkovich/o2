@@ -71,7 +71,7 @@ namespace o2
 	{
 		UIScrollArea::Update(dt);
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		const float rectLerpCoef = 20.0f;
@@ -85,7 +85,7 @@ namespace o2
 
 	void UICustomList::Draw()
 	{
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -401,7 +401,7 @@ namespace o2
 		{
 			UIWidget* item = GetItem(sel.idx);
 			sel.selection->SetRect(mSelectionLayout.Calculate(item->layout->worldRect));
-			sel.selection->SetEnabled(!item->mFullyDisabled && !item->mIsClipped);
+			sel.selection->SetEnabled(item->mResEnabledInHierarchy && !item->mIsClipped);
 		}
 	}
 
@@ -593,9 +593,9 @@ namespace o2
 	void UICustomList::OnSelectionChanged()
 	{}
 
-	void UICustomList::OnVisibleChanged()
+	void UICustomList::OnResEnableInHierarchyChanged()
 	{
-		SetInteractable(mResVisible);
+		SetInteractable(mResEnabled);
 	}
 
 	bool UICustomList::Selection::operator==(const Selection& other) const

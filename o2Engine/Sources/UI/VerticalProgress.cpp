@@ -35,7 +35,7 @@ namespace o2
 	{
 		UIWidget::Update(dt);
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		const float threshold = 0.01f;
@@ -213,9 +213,9 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIVerticalProgress::OnVisibleChanged()
+	void UIVerticalProgress::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 	}
 
 	void UIVerticalProgress::UpdateLayersLayouts()

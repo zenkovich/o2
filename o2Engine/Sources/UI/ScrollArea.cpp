@@ -72,7 +72,7 @@ namespace o2
 
 	void UIScrollArea::Draw()
 	{
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -105,7 +105,7 @@ namespace o2
 
 		UIWidget::Update(dt);
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		UpdateControls(dt);
@@ -535,7 +535,7 @@ namespace o2
 		for (auto child : mInternalWidgets)
 			child->UpdateChildren(dt);
 
-		if (mLayoutUpdated && !mFullyDisabled)
+		if (mLayoutUpdated && !!mResEnabledInHierarchy)
 		{
 			CheckChildrenClipping();
 			UpdateScrollParams();
@@ -616,7 +616,7 @@ namespace o2
 
 		for (auto child : mChildWidgets)
 		{
-			if (child->mFullyDisabled || child->GetType() == TypeOf(UIContextMenu))
+			if (!child->mResEnabledInHierarchy || child->GetType() == TypeOf(UIContextMenu))
 				continue;
 
 			mScrollArea.left   = Math::Min(mScrollArea.left, child->layout->mData->rectangle.left - offset.x);

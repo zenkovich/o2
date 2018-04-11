@@ -150,7 +150,7 @@ namespace o2
 		void OnStateAdded(UIWidgetState* state) override;
 
 		// It is called when visible was changed
-		void OnVisibleChanged() override;
+		void OnResEnableInHierarchyChanged() override;
 
 		// Initializes context menu and options button
 		void InitializeContextMenu();
@@ -247,7 +247,7 @@ CLASS_METHODS_META(o2::UIWindow)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
 	PROTECTED_FUNCTION(void, InitializeContextItems);
 	PROTECTED_FUNCTION(void, RestoreControls);

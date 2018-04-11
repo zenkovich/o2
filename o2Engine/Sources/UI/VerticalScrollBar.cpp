@@ -265,9 +265,9 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIVerticalScrollBar::OnVisibleChanged()
+	void UIVerticalScrollBar::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 	}
 
 	void UIVerticalScrollBar::SetMinimalScrollHandleSize(float pixelSize)

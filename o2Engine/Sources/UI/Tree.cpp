@@ -205,7 +205,7 @@ namespace o2
 
 	void UITree::Draw()
 	{
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		if (mIsDraggingNodes)
@@ -302,7 +302,7 @@ namespace o2
 
 		UIScrollArea::Update(dt);
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		const float rectLerpCoef = 10.0f;

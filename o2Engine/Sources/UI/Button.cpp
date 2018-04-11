@@ -157,9 +157,9 @@ namespace o2
 			mIconSprite = (Sprite*)layer->drawable;
 	}
 
-	void UIButton::OnVisibleChanged()
+	void UIButton::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 	}
 }
 

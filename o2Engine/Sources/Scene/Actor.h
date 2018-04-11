@@ -215,7 +215,7 @@ namespace o2
 		bool IsOnScene() const;
 
 		// Sets actor enabling
-		void SetEnabled(bool active);
+		virtual void SetEnabled(bool active);
 
 		// Enables actor
 		void Enable();
@@ -225,6 +225,9 @@ namespace o2
 
 		// Returns is actor enabled
 		bool IsEnabled() const;
+
+		// Returns is really enabled
+		bool IsResEnabled() const;
 
 		// Returns is actor enabled in hierarchy
 		bool IsEnabledInHierarchy() const;
@@ -377,33 +380,34 @@ namespace o2
 	protected:
 		typedef Vector<ActorRef*> ActorRefsVec;
 
-		static ActorCreateMode mDefaultCreationMode; // Default mode creation
+		static ActorCreateMode mDefaultCreationMode;   // Default mode creation
 
-		ActorAssetRef   mPrototype;               // Prototype asset
-		ActorRef        mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
+		ActorAssetRef   mPrototype;                    // Prototype asset
+		ActorRef        mPrototypeLink = nullptr;      // Prototype link actor. Links to source actor from prototype
+												       
+		UInt64          mId;                           // Unique actor id
+		String          mName;                         // Name of actor
+												       
+		SceneLayer*     mLayer = nullptr;              // Scene layer @EXCLUDE_POINTER_SEARCH
+												       
+		Actor*          mParent = nullptr;             // Parent actor
+		ActorsVec       mChildren;                     // Children actors 
+												       
+		ComponentsVec   mComponents;                   // Components vector 
 
-		UInt64          mId;                      // Unique actor id
-		String          mName;                    // Name of actor
+		bool            mEnabled = true;               // Is actor enabled
+		bool            mResEnabled = true;            // Is actor really enabled. 
+		bool            mResEnabledInHierarchy = true; // Is actor enabled in hierarchy
 
-		SceneLayer*     mLayer = nullptr;         // Scene layer @EXCLUDE_POINTER_SEARCH
+		bool            mLocked = false;               // Is actor locked
+		bool            mResLocked = false;            // Is actor locked in hierarchy
 
-		Actor*          mParent = nullptr;        // Parent actor
-		ActorsVec       mChildren;                // Children actors 
+		bool            mIsOnScene = true;             // Is actor on scene
 
-		ComponentsVec   mComponents;              // Components vector 
+		bool            mIsAsset = false;              // Is this actor cached asset
+		UID             mAssetId;                      // Source asset id
 
-		bool            mEnabled = true;          // Is actor enabled
-		bool            mResEnabled = true;       // Is actor enabled in hierarchy
-
-		bool            mLocked = false;          // Is actor locked
-		bool            mResLocked = false;       // Is actor locked in hierarchy
-
-		bool            mIsOnScene = true;        // Is actor on scene
-
-		bool            mIsAsset = false;         // Is this actor cached asset
-		UID             mAssetId;                 // Source asset id
-
-		ActorRefsVec    mReferences;              // References to this actor
+		ActorRefsVec    mReferences;                   // References to this actor
 
 	protected:
 		// Base actor constructor with transform
@@ -432,8 +436,11 @@ namespace o2
 		// Sets prototype and links actor to them
 		void SetPrototype(ActorAssetRef asset);
 
+		// Updates result read enable flag
+		virtual void UpdateResEnabled();
+
 		// Updates enabling
-		void UpdateEnabled();
+		virtual void UpdateResEnabledInHierarchy();
 
 		// Updates locking
 		void UpdateLocking();
@@ -473,6 +480,9 @@ namespace o2
 
 		// Applies including to scene for all components in hierarchy
 		void IncludeComponentsToScene();
+
+		// It is called when result enable was changed
+		virtual void OnResEnableInHierarchyChanged();
 
 		// It is called when transformation was changed and updated
 		virtual void OnTransformUpdated();
@@ -779,6 +789,7 @@ CLASS_FIELDS_META(o2::Actor)
 	PROTECTED_FIELD(mComponents);
 	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mResEnabled);
+	PROTECTED_FIELD(mResEnabledInHierarchy);
 	PROTECTED_FIELD(mLocked);
 	PROTECTED_FIELD(mResLocked);
 	PROTECTED_FIELD(mIsOnScene);
@@ -828,6 +839,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, Enable);
 	PUBLIC_FUNCTION(void, Disable);
 	PUBLIC_FUNCTION(bool, IsEnabled);
+	PUBLIC_FUNCTION(bool, IsResEnabled);
 	PUBLIC_FUNCTION(bool, IsEnabledInHierarchy);
 	PUBLIC_FUNCTION(void, SetLocked, bool);
 	PUBLIC_FUNCTION(void, Lock);
@@ -862,7 +874,8 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
 	PROTECTED_FUNCTION(void, SetPrototype, ActorAssetRef);
-	PROTECTED_FUNCTION(void, UpdateEnabled);
+	PROTECTED_FUNCTION(void, UpdateResEnabled);
+	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
 	PROTECTED_FUNCTION(void, UpdateLocking);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
@@ -876,6 +889,7 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnIncludeToScene);
 	PROTECTED_FUNCTION(void, ExcludeComponentsFromScene);
 	PROTECTED_FUNCTION(void, IncludeComponentsToScene);
+	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);

@@ -11,12 +11,13 @@ namespace o2
 
 	Actor::Actor(ActorTransform* transform, bool isOnScene, const String& name, bool enabled, bool resEnabled,
 				 bool locked, bool resLocked, SceneLayer* layer, UInt64 id, UID assetId):
-		transform(transform), mName(name), mEnabled(enabled), mResEnabled(resEnabled),
+		transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(resEnabled),
 		mLocked(locked), mResLocked(resLocked), mLayer(layer), mId(id), mAssetId(assetId), mIsOnScene(isOnScene)
 	{}
 
 	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, mode == ActorCreateMode::InScene || mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
+		Actor(transform, mode == ActorCreateMode::InScene || mode == ActorCreateMode::Default &&
+			  mDefaultCreationMode == ActorCreateMode::InScene)
 	{
 		mIsOnScene = false;
 
@@ -64,7 +65,7 @@ namespace o2
 		ProcessCopying(this, prototype->GetActor(), actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
-		UpdateEnabled();
+		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
 		if (Scene::IsSingletonInitialzed() && (mode == ActorCreateMode::InScene ||
@@ -86,7 +87,7 @@ namespace o2
 	}
 
 	Actor::Actor(ActorTransform* transform, const Actor& other):
-		Actor(transform, mDefaultCreationMode == ActorCreateMode::InScene, other.mName, other.mEnabled, 
+		Actor(transform, mDefaultCreationMode == ActorCreateMode::InScene, other.mName, other.mEnabled,
 			  other.mEnabled, other.mLocked, other.mLocked, other.mLayer, Math::Random(), other.mAssetId)
 	{
 		transform->SetOwner(this);
@@ -102,7 +103,7 @@ namespace o2
 		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
-		UpdateEnabled();
+		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
 		if (Scene::IsSingletonInitialzed() && mDefaultCreationMode == ActorCreateMode::InScene)
@@ -165,7 +166,7 @@ namespace o2
 		{
 			mLayer->mActors.Remove(this);
 
-			if (mResEnabled && mIsOnScene)
+			if (mResEnabledInHierarchy && mIsOnScene)
 				mLayer->mEnabledActors.Remove(this);
 		}
 
@@ -188,7 +189,7 @@ namespace o2
 		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, false);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
-		UpdateEnabled();
+		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
 		OnChanged();
@@ -303,7 +304,7 @@ namespace o2
 		for (auto serializable : serializableObjects)
 			serializable->OnDeserialized(DataNode());
 
-		UpdateEnabled();
+		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
 		OnChanged();
@@ -328,7 +329,7 @@ namespace o2
 
 		SetPrototype(prototypeAsset);
 
-		prototype->UpdateEnabled();
+		prototype->UpdateResEnabledInHierarchy();
 		prototype->transform->SetDirty();
 		prototype->OnChanged();
 
@@ -427,7 +428,7 @@ namespace o2
 		if (!Scene::IsSingletonInitialzed())
 			return;
 
-		if (mLayer && mResEnabled)
+		if (mLayer && mResEnabledInHierarchy)
 			mLayer->mEnabledActors.Remove(this);
 
 		o2Scene.mRootActors.Remove(this);
@@ -451,7 +452,7 @@ namespace o2
 		if (!mParent)
 			o2Scene.mRootActors.Add(this);
 
-		if (mLayer && mResEnabled)
+		if (mLayer && mResEnabledInHierarchy)
 			mLayer->mEnabledActors.Add(this);
 
 		o2Scene.mAllActors.Add(this);
@@ -477,7 +478,7 @@ namespace o2
 			return;
 
 		mEnabled = active;
-		UpdateEnabled();
+		UpdateResEnabled();
 
 		onEnableChanged(mEnabled);
 		o2Scene.onActorEnableChanged(this);
@@ -500,9 +501,14 @@ namespace o2
 		return mEnabled;
 	}
 
-	bool Actor::IsEnabledInHierarchy() const
+	bool Actor::IsResEnabled() const
 	{
 		return mResEnabled;
+	}
+
+	bool Actor::IsEnabledInHierarchy() const
+	{
+		return mResEnabledInHierarchy;
 	}
 
 	void Actor::SetLocked(bool locked)
@@ -584,7 +590,7 @@ namespace o2
 		{
 			mParent->mChildren.Add(this);
 			mParent->OnChildAdded(this);
-			mParent->OnChildsChanged(); 
+			mParent->OnChildsChanged();
 		}
 		else
 			o2Scene.mRootActors.Add(this);
@@ -594,7 +600,7 @@ namespace o2
 		else
 			transform->SetDirty();
 
-		UpdateEnabled();
+		UpdateResEnabledInHierarchy();
 
 		if (actor && actor->mIsOnScene && !mIsOnScene)
 			ExcludeFromScene();
@@ -629,7 +635,7 @@ namespace o2
 		actor->mParent = this;
 
 		actor->transform->SetDirty();
-		actor->UpdateEnabled();
+		actor->UpdateResEnabledInHierarchy();
 
 		OnChildAdded(actor);
 		OnChildsChanged();
@@ -660,7 +666,7 @@ namespace o2
 		actor->mParent = this;
 
 		actor->transform->SetDirty();
-		actor->UpdateEnabled();
+		actor->UpdateResEnabledInHierarchy();
 
 		OnChildAdded(actor);
 		OnChildsChanged();
@@ -753,7 +759,7 @@ namespace o2
 		{
 			actor->OnParentChanged(oldParent);
 			actor->transform->SetDirty();
-			actor->UpdateEnabled();
+			actor->UpdateResEnabledInHierarchy();
 		}
 	}
 
@@ -851,13 +857,13 @@ namespace o2
 		{
 			lastLayer->mActors.Remove(this);
 
-			if (mResEnabled && mIsOnScene)
+			if (mResEnabledInHierarchy && mIsOnScene)
 				lastLayer->mEnabledActors.Remove(this);
 		}
 
 		layer->mActors.Add(this);
 
-		if (mResEnabled && mIsOnScene)
+		if (mResEnabledInHierarchy && mIsOnScene)
 			layer->mEnabledActors.Add(this);
 
 		OnLayerChanged(lastLayer);
@@ -968,23 +974,30 @@ namespace o2
 			mPrototypeLink = nullptr;
 	}
 
-	void Actor::UpdateEnabled()
+	void Actor::UpdateResEnabled()
 	{
-		bool lastResEnabled = mResEnabled;
+		mResEnabled = mEnabled;
+		UpdateResEnabledInHierarchy();
+	}
+
+	void Actor::UpdateResEnabledInHierarchy()
+	{
+		bool lastResEnabledInHierarchy = mResEnabledInHierarchy;
 
 		if (mParent)
-			mResEnabled = mEnabled && mParent->mResEnabled;
+			mResEnabledInHierarchy = mResEnabled && mParent->mResEnabledInHierarchy;
 		else
-			mResEnabled = mEnabled;
+			mResEnabledInHierarchy = mResEnabled;
 
-		if (lastResEnabled != mResEnabled)
+		if (lastResEnabledInHierarchy != mResEnabledInHierarchy)
 		{
-			if (mResEnabled)
+			if (mResEnabledInHierarchy)
 				mLayer->mEnabledActors.Add(this);
 			else
 				mLayer->mEnabledActors.Remove(this);
 
 			o2Scene.onActorEnableChanged(this);
+			OnResEnableInHierarchyChanged();
 			OnChanged();
 		}
 
@@ -992,7 +1005,7 @@ namespace o2
 			comp->UpdateEnabled();
 
 		for (auto child : mChildren)
-			child->UpdateEnabled();
+			child->UpdateResEnabledInHierarchy();
 	}
 
 	void Actor::UpdateLocking()
@@ -1409,6 +1422,9 @@ namespace o2
 		for (auto comp : mComponents)
 			comp->OnIncludeToScene();
 	}
+
+	void Actor::OnResEnableInHierarchyChanged()
+	{}
 
 #ifdef IS_EDITOR
 

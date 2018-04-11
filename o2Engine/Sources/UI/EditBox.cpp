@@ -58,7 +58,7 @@ namespace o2
 
 	void UIEditBox::Draw()
 	{
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -95,7 +95,7 @@ namespace o2
 	{
 		UIScrollArea::Update(dt);
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		UpdateCaretBlinking(dt);
@@ -361,9 +361,9 @@ namespace o2
 	void UIEditBox::UpdateControls(float dt)
 	{}
 
-	void UIEditBox::OnVisibleChanged()
+	void UIEditBox::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 	}
 
 	void UIEditBox::OnFocused()

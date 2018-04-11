@@ -110,7 +110,7 @@ namespace o2
 		void OnDeserialized(const DataNode& node) override;
 
 		// It is called when visible was changed
-		void OnVisibleChanged() override;
+		void OnResEnableInHierarchyChanged() override;
 
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts() override;
@@ -208,7 +208,7 @@ CLASS_METHODS_META(o2::UIHorizontalScrollBar)
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);

@@ -70,7 +70,7 @@ namespace o2
 		mItemsLayout->fitByChildren = true;
 		*mItemsLayout->layout       = UIWidgetLayout::BothStretch();
 
-		SetVisibleForcible(false);
+		SetEnableForcible(false);
 	}
 
 	UIContextMenu::UIContextMenu(Vector<Item> items):
@@ -93,7 +93,7 @@ namespace o2
 		mItemsLayout       = GetChildByType<UIVerticalLayout>();
 
 		RetargetStatesAnimations();
-		SetVisibleForcible(false);
+		SetEnableForcible(false);
 	}
 
 	UIContextMenu::~UIContextMenu()
@@ -111,7 +111,7 @@ namespace o2
 
 	void UIContextMenu::Update(float dt)
 	{
-		if (mFullyDisabled)
+		if (!mResEnabledInHierarchy)
 			return;
 
 		UIScrollArea::Update(dt);
@@ -126,7 +126,7 @@ namespace o2
 		if (o2Input.IsCursorPressed())
 		{
 			if (!mChildContextMenu && (o2Input.IsCursorPressed() || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
-				!layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && mVisible)
+				!layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && mEnabled)
 			{
 				HideWithParent();
 			}
@@ -318,9 +318,9 @@ namespace o2
 		SetupItem(itemWidget, item);
 	}
 
-	void UIContextMenu::OnVisibleChanged()
+	void UIContextMenu::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 	}
 
 	UIContextMenuItem* UIContextMenu::GetItemUnderPoint(const Vec2F& point)
@@ -735,7 +735,7 @@ namespace o2
 
 	void UIContextMenu::SpecialDraw()
 	{
-		if (mFullyDisabled)
+		if (!mResEnabledInHierarchy)
 			return;
 
 		for (auto layer : mDrawingLayers)

@@ -30,7 +30,7 @@ namespace o2
 
 	void UILabel::Draw()
 	{
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		bool enabledClipping = false;

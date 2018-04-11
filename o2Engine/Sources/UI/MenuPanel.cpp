@@ -58,7 +58,7 @@ namespace o2
 	{
 		UIWidget::Update(dt);
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		const float rectLerpCoef = 20.0f;
@@ -93,7 +93,7 @@ namespace o2
 
 	void UIMenuPanel::Draw()
 	{
-		if (mFullyDisabled)
+		if (!mResEnabledInHierarchy)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -343,9 +343,9 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UIMenuPanel::OnVisibleChanged()
+	void UIMenuPanel::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 	}
 
 	UIWidget* UIMenuPanel::GetItemUnderPoint(const Vec2F& point, int* idxPtr)

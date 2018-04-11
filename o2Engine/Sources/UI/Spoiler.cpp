@@ -78,7 +78,7 @@ namespace o2
 #undef DrawText
 	void UISpoiler::Draw()
 	{
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -164,7 +164,7 @@ namespace o2
 		float res = Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
 		for (auto child : mChildWidgets)
 		{
-			if (!child->mFullyDisabled)
+			if (child->mResEnabledInHierarchy)
 				res += child->GetMinHeightWithChildren();
 		}
 

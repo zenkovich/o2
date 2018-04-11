@@ -209,7 +209,7 @@ namespace o2
 		}
 
 		if (TypeOf(_type) != TypeOf(UIContextMenu))
-			res->SetVisibleForcible(true);
+			res->SetEnableForcible(true);
 
 		return res;
 	}

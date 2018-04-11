@@ -253,9 +253,9 @@ namespace Editor
 		mReady = true;
 	}
 
-	void UICurveEditor::OnVisibleChanged()
+	void UICurveEditor::OnResEnableInHierarchyChanged()
 	{
-		if (mResVisible)
+		if (mResEnabled)
 			mContextMenu->SetItemsMaxPriority();
 		else
 			mContextMenu->SetItemsMinPriority();

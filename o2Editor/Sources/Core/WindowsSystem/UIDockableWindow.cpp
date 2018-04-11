@@ -73,12 +73,12 @@ namespace Editor
 
 	void UIDockableWindow::Draw()
 	{
-		if (mFullyDisabled)
+		if (!mResEnabledInHierarchy)
 			return;
 
 		mBackCursorArea.OnDrawn();
 
-		if (mFullyDisabled || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		for (auto layer : mDrawingLayers)
@@ -307,11 +307,11 @@ namespace Editor
 			mVisibleState->onStateFullyFalse += THIS_FUNC(Undock);
 	}
 
-	void UIDockableWindow::OnVisibleChanged()
+	void UIDockableWindow::OnResEnableInHierarchyChanged()
 	{
-		UIWindow::OnVisibleChanged();
+		UIWindow::OnResEnableInHierarchyChanged();
 
-		if (!mResVisible)
+		if (!mResEnabled)
 			Undock();
 	}
 

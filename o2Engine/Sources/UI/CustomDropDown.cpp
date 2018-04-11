@@ -43,7 +43,7 @@ namespace o2
 
 	void UICustomDropDown::Draw()
 	{
-		if (mFullyDisabled)
+		if (!mResEnabledInHierarchy)
 			return;
 
 		UIWidget::Draw();
@@ -77,7 +77,7 @@ namespace o2
 		if (openedState)
 			*openedState = true;
 
-		mItemsList->SetVisible(true);
+		mItemsList->SetEnabled(true);
 		mItemsList->UpdateTransform(true);
 
 		SetLayoutDirty();
@@ -89,7 +89,7 @@ namespace o2
 		if (openedState)
 			*openedState = false;
 
-		mItemsList->SetVisible(false);
+		mItemsList->SetEnabled(false);
 	}
 
 	bool UICustomDropDown::IsExpanded() const
@@ -290,9 +290,9 @@ namespace o2
 			*selectState = false;
 	}
 
-	void UICustomDropDown::OnVisibleChanged()
+	void UICustomDropDown::OnResEnableInHierarchyChanged()
 	{
-		interactable = mResVisible;
+		interactable = mResEnabled;
 	}
 
 	void UICustomDropDown::UpdateTransform(bool withChildren /*= true*/)

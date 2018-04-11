@@ -95,7 +95,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::Draw()
 	{
-		if (mFullyDisabled)
+		if (!mResEnabledInHierarchy)
 			return;
 
 		for (auto layer : mDrawingLayers)

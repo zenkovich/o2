@@ -125,7 +125,7 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when visible was changed
-		void OnVisibleChanged() override;
+		void OnResEnableInHierarchyChanged() override;
 
 		// Creates item widget
 		UIWidget* CreateItem(const Item& item);
@@ -202,7 +202,7 @@ CLASS_METHODS_META(o2::UIMenuPanel)
 	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnVisibleChanged);
+	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(UIWidget*, CreateItem, const Item&);
 	PROTECTED_FUNCTION(Item, GetItemDef, int);
 	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);

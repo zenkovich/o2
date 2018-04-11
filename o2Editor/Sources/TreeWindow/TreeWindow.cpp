@@ -187,7 +187,7 @@ namespace Editor
 									  [=]() 
 			{
 				UIWidget* newWidget = styleWidget->CloneAs<UIWidget>();
-				newWidget->SetVisibleForcible(true);
+				newWidget->SetEnableForcible(true);
 				CreateActor(newWidget);
 			});
 		}
