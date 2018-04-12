@@ -1808,6 +1808,8 @@ namespace o2
 	{
 		mName = otherActor.mName;
 		mEnabled = otherActor.mEnabled;
+		mResEnabled = mEnabled;
+		mResEnabledInHierarchy = mEnabled;
 		transform->CopyFrom(*otherActor.transform);
 		mAssetId = otherActor.mAssetId;
 	}
