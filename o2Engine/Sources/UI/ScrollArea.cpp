@@ -30,7 +30,7 @@ namespace o2
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 
-			mEnableHorScroll = mHorScrollBar->IsVisible();
+			mEnableHorScroll = mHorScrollBar->IsEnabled();
 		}
 		else mHorScrollBar = nullptr;
 
@@ -41,7 +41,7 @@ namespace o2
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 
-			mEnableVerScroll = mVerScrollBar->IsVisible();
+			mEnableVerScroll = mVerScrollBar->IsEnabled();
 		}
 		else mVerScrollBar = nullptr;
 
@@ -129,7 +129,7 @@ namespace o2
 			const float barsHideDelay = 2;
 			float curTime = o2Time.GetApplicationTime();
 
-			if (curTime - mLastHorScrollChangeTime > barsHideDelay && mHorScrollBar && mHorScrollBar->IsVisible() &&
+			if (curTime - mLastHorScrollChangeTime > barsHideDelay && mHorScrollBar && mHorScrollBar->IsEnabled() &&
 				mEnableHorScroll)
 			{
 				auto enableHorBarState = state["enableHorBar"];
@@ -139,7 +139,7 @@ namespace o2
 				mHorScrollBar->Hide();
 			}
 
-			if (curTime - mLastVerScrollChangeTime > barsHideDelay && mVerScrollBar && mVerScrollBar->IsVisible() &&
+			if (curTime - mLastVerScrollChangeTime > barsHideDelay && mVerScrollBar && mVerScrollBar->IsEnabled() &&
 				mEnableVerScroll)
 			{
 				auto enableVerBarState = state["enableVerBar"];
@@ -294,7 +294,7 @@ namespace o2
 
 		if (!mEnableScrollsHiding)
 		{
-			if (mHorScrollBar && !mHorScrollBar->IsVisible())
+			if (mHorScrollBar && !mHorScrollBar->IsEnabled())
 			{
 				auto enableHorBarState = state["enableHorBar"];
 				if (enableHorBarState)
@@ -303,7 +303,7 @@ namespace o2
 				mHorScrollBar->Show(true);
 			}
 
-			if (mVerScrollBar && !mVerScrollBar->IsVisible())
+			if (mVerScrollBar && !mVerScrollBar->IsEnabled())
 			{
 				auto enableHorBarState = state["enableHorBar"];
 				if (enableHorBarState)
@@ -479,7 +479,7 @@ namespace o2
 			{
 				mLastHorScrollChangeTime = o2Time.GetApplicationTime();
 
-				if (!mHorScrollBar->IsVisible())
+				if (!mHorScrollBar->IsEnabled())
 				{
 					auto enableHorBarState = state["enableHorBar"];
 					if (enableHorBarState)
@@ -493,7 +493,7 @@ namespace o2
 			{
 				mLastVerScrollChangeTime = o2Time.GetApplicationTime();
 
-				if (!mVerScrollBar->IsVisible())
+				if (!mVerScrollBar->IsEnabled())
 				{
 					auto enableVerBarState = state["enableVerBar"];
 					if (enableVerBarState)
@@ -646,7 +646,7 @@ namespace o2
 		{
 			if (Math::Equals(mScrollRange.left, mScrollRange.right, 1.2f))
 			{
-				if (mHorScrollBar->IsVisible())
+				if (mHorScrollBar->IsEnabled())
 				{
 					auto enableHorBarState = state["enableHorBar"];
 					if (enableHorBarState)
@@ -680,7 +680,7 @@ namespace o2
 		{
 			if (Math::Equals(mScrollRange.bottom, mScrollRange.top, 1.2f))
 			{
-				if (mVerScrollBar->IsVisible())
+				if (mVerScrollBar->IsEnabled())
 				{
 					auto enableVerBarState = state["enableVerBar"];
 					if (enableVerBarState)
@@ -713,7 +713,7 @@ namespace o2
 
 	void UIScrollArea::OnHorScrollChanged(float value)
 	{
-		if (!mHorScrollBar->IsVisible() && mEnableHorScroll)
+		if (!mHorScrollBar->IsEnabled() && mEnableHorScroll)
 		{
 			auto enableHorBarState = state["enableHorBar"];
 			if (enableHorBarState)
@@ -733,7 +733,7 @@ namespace o2
 
 	void UIScrollArea::OnVerScrollChanged(float value)
 	{
-		if (!mVerScrollBar->IsVisible() && mEnableVerScroll)
+		if (!mVerScrollBar->IsEnabled() && mEnableVerScroll)
 		{
 			auto enableVerBarState = state["enableVerBar"];
 			if (enableVerBarState)
@@ -784,7 +784,7 @@ namespace o2
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 
-			mEnableHorScroll = mHorScrollBar->IsVisible();
+			mEnableHorScroll = mHorScrollBar->IsEnabled();
 		}
 		else mHorScrollBar = nullptr;
 
@@ -795,7 +795,7 @@ namespace o2
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 
-			mEnableVerScroll = mVerScrollBar->IsVisible();
+			mEnableVerScroll = mVerScrollBar->IsEnabled();
 		}
 		else mVerScrollBar = nullptr;
 
@@ -824,7 +824,7 @@ namespace o2
 			if (mOwnHorScrollBar) delete mHorScrollBar;
 			else                  mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
 
-			mEnableHorScroll = mHorScrollBar->IsVisible();
+			mEnableHorScroll = mHorScrollBar->IsEnabled();
 		}
 
 		if (mVerScrollBar)
@@ -832,7 +832,7 @@ namespace o2
 			if (mOwnVerScrollBar) delete mVerScrollBar;
 			else                  mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 
-			mEnableVerScroll = mVerScrollBar->IsVisible();
+			mEnableVerScroll = mVerScrollBar->IsEnabled();
 		}
 
 		auto horScrollNode = node.GetNode("mHorScrollBar");

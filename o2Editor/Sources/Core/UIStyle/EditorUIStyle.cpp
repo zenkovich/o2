@@ -696,7 +696,7 @@ namespace Editor
 		itemSample->AddChild(actorNodeEditBox);
 
 		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, &nameLayer->transparency, 1.0f, 0.0f, 0.15f);
-		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->visible) = AnimatedValue<bool>::Linear(false, true, 0.15f);
+		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->enabled) = AnimatedValue<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
@@ -1107,7 +1107,7 @@ namespace Editor
 		itemSample->AddChild(actorNodeEditBox);
 
 		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, &nameLayer->transparency, 1.0f, 0.0f, 0.15f);
-		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->visible) = AnimatedValue<bool>::Linear(false, true, 0.15f);
+		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->enabled) = AnimatedValue<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
@@ -1246,8 +1246,8 @@ namespace Editor
 		sample->AddChild(nameEditBox);
 
 		// edit state
-		Animation itemEditStateAnim = Animation::EaseInOut(sample, &nameLabel->visible, true, false, 0.15f);
-		*itemEditStateAnim.AddAnimationValue(&nameEditBox->visible) = AnimatedValue<bool>::Linear(false, true, 0.15f);
+		Animation itemEditStateAnim = Animation::EaseInOut(sample, &nameLabel->enabled, true, false, 0.15f);
+		*itemEditStateAnim.AddAnimationValue(&nameEditBox->enabled) = AnimatedValue<bool>::Linear(false, true, 0.15f);
 		sample->AddState("edit", itemEditStateAnim);
 
 		// focused state
@@ -1406,7 +1406,7 @@ namespace Editor
 		sample->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "singleline edit property");
@@ -1480,7 +1480,7 @@ namespace Editor
 		sample->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &dropdown->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "enum property");
@@ -1952,7 +1952,7 @@ namespace Editor
 		sample->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &toggle->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "boolean property");
@@ -2075,7 +2075,7 @@ namespace Editor
 		sample->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		box->AddChild(linkBtn);
@@ -2101,7 +2101,7 @@ namespace Editor
 		sample->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 
@@ -2151,7 +2151,7 @@ namespace Editor
 		sample->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		box->AddChild(linkBtn);
@@ -2197,7 +2197,7 @@ namespace Editor
 		sample->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "component property");
@@ -2235,7 +2235,7 @@ namespace Editor
 		sample->AddChild(layout);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &layout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		layout->AddChild(xLabel);
@@ -2278,7 +2278,7 @@ namespace Editor
 		sample->AddChild(layout);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &layout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		layout->AddChild(xLabel);
@@ -2340,7 +2340,7 @@ namespace Editor
 		sample->AddChild(layout);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &layout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		layout->AddChild(leftLabel);
@@ -2370,7 +2370,7 @@ namespace Editor
 		sample->AddChild(layout);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &layout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->visible) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "new rectangle property");

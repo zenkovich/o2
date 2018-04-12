@@ -94,7 +94,7 @@ namespace o2
 
 	bool UICustomDropDown::IsExpanded() const
 	{
-		return mItemsList->IsVisible();
+		return mItemsList->IsEnabled();
 	}
 
 	void UICustomDropDown::SetItemSample(UIWidget* sample)

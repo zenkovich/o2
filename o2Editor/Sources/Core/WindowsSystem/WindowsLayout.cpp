@@ -24,7 +24,7 @@ namespace Editor
 					childs.Add(WindowDockPlace());
 					childs[childs.Count() - 1].RetrieveLayout(child);
 				}
-				else if (child->GetType() == TypeOf(UIDockableWindow) && child->IsVisible())
+				else if (child->GetType() == TypeOf(UIDockableWindow) && child->IsEnabled())
 				{
 					windows.Add(child->name);
 				}

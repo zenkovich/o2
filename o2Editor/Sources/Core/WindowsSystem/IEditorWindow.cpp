@@ -52,7 +52,7 @@ namespace Editor
 
 	bool IEditorWindow::IsVisible()
 	{
-		return mWindow->IsVisible();
+		return mWindow->IsEnabled();
 	}
 
 }

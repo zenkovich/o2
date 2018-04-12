@@ -104,10 +104,10 @@ namespace Editor
 			mAssetsGridScroll->layout->anchorLeft = mSeparatorCoef*mFoldersTreeShowCoef;
 
 			float disableCoef = 0.2f;
-			if (mFoldersTreeShowCoef < disableCoef && mFoldersTree->IsVisible())
+			if (mFoldersTreeShowCoef < disableCoef && mFoldersTree->IsEnabled())
 				mFoldersTree->Hide();
 
-			if (mFoldersTreeShowCoef >= disableCoef && !mFoldersTree->IsVisible())
+			if (mFoldersTreeShowCoef >= disableCoef && !mFoldersTree->IsEnabled())
 				mFoldersTree->Show();
 		};
 	}

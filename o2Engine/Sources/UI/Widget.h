@@ -24,14 +24,12 @@ namespace o2
 
 	public:
 		PROPERTIES(UIWidget);
-		PROPERTY(bool, visible, SetEnabled, IsVisible); // Is widget visible property
 
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency
 
 		PROPERTY(UIWidget*, parentWidget, SetParentWidget, GetParentWidget); // Parent widget property
-
-		GETTER(WidgetsVec, childrenWidgets, GetChildrenNonConst); // Widget children getter
+		GETTER(WidgetsVec, childrenWidgets, GetChildrenNonConst);            // Widget children getter
 
 		GETTER(LayersVec, layers, GetLayers); // Layers getter
 		GETTER(StatesVec, states, GetStates); // States getter
@@ -40,7 +38,7 @@ namespace o2
 		ACCESSOR(UIWidgetLayer*, layer, String, GetLayer, GetAllLayers);        // Widget layer accessor by path like "layer/sublayer/target"
 		ACCESSOR(UIWidgetState*, state, String, GetStateObject, GetAllStates);  // Widget state accessor by name
 
-		UIWidgetLayout* const layout;          // Widget's layout
+		UIWidgetLayout* const layout;     // Widget layout
 
 		Function<void()> onLayoutUpdated; // Layout change event
 		Function<void()> onFocused;       // Widget focused event
@@ -189,9 +187,6 @@ namespace o2
 
 		// Sets visibility to false
 		void Hide(bool forcible = false);
-
-		// Returns visibility
-		bool IsVisible() const;
 
 		// Focus this widget
 		void Focus();
@@ -441,7 +436,6 @@ CLASS_BASES_META(o2::UIWidget)
 END_META;
 CLASS_FIELDS_META(o2::UIWidget)
 {
-	PUBLIC_FIELD(visible);
 	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(resTransparency);
 	PUBLIC_FIELD(parentWidget);
@@ -522,7 +516,6 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, SetEnableForcible, bool);
 	PUBLIC_FUNCTION(void, Show, bool);
 	PUBLIC_FUNCTION(void, Hide, bool);
-	PUBLIC_FUNCTION(bool, IsVisible);
 	PUBLIC_FUNCTION(void, Focus);
 	PUBLIC_FUNCTION(void, Unfocus);
 	PUBLIC_FUNCTION(bool, IsFocused);

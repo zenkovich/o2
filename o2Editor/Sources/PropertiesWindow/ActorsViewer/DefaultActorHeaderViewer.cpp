@@ -98,7 +98,7 @@ namespace Editor
 		mDataView->AddChild(mLayerProperty->GetWidget());
 
 		Animation protoStateAnim = Animation::EaseInOut(mDataView, &mDataView->layout->minHeight, 42.0f, 62.0f, 0.1f);
-		*protoStateAnim.AddAnimationValue(&prototypeRoot->visible) = AnimatedValue<bool>::Linear(false, true, 0.1f);
+		*protoStateAnim.AddAnimationValue(&prototypeRoot->enabled) = AnimatedValue<bool>::Linear(false, true, 0.1f);
 		mDataView->AddState("prototype", protoStateAnim);
 	}
 
