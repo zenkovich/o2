@@ -236,6 +236,8 @@ namespace o2
 						  
 		bool              mReady;                  // True, if render system initialized
 
+		TextureRef        mSolidLineTexture;       // Solid line texture
+
 	protected:
 		// Don't copy
 		Render(const Render& other);
@@ -245,6 +247,9 @@ namespace o2
 
 		// It is called when target frame or window was resized
 		void OnFrameResized();
+
+		// Initializeslines textures
+		void InitializeLinesTextures();
 
 		// Initializes free type library
 		void InitializeFreeType();

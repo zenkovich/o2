@@ -9,7 +9,9 @@
 #include "Render/Texture.h"
 #include "Utils/Debug/Debug.h"
 #include "Utils/Debug/Log/LogStream.h"
+#include "Utils/Math/Geometry.h"
 #include "Utils/Math/Interpolation.h"
+#include "Application/Input.h"
 
 namespace o2
 {
@@ -128,6 +130,7 @@ namespace o2
 		ReleaseDC(0, dc);
 
 		InitializeFreeType();
+		InitializeLinesTextures();
 
 		mCurrentRenderTarget = TextureRef();
 
@@ -140,6 +143,17 @@ namespace o2
 	void Render::OnFrameResized()
 	{
 		mResolution = o2Application.GetContentSize();
+	}
+
+	void Render::InitializeLinesTextures()
+	{
+		Bitmap bitmap(Bitmap::Format::R8G8B8A8, Vec2I(8, 8));
+		bitmap.Fill(Color4(255, 255, 255, 0));
+		bitmap.FillRect(0, 7, 8, 6, Color4(255, 255, 255, 10));
+		bitmap.FillRect(0, 6, 8, 1, Color4(255, 255, 255, 255));
+		bitmap.FillRect(0, 2, 8, 1, Color4(255, 255, 255, 10));
+
+		mSolidLineTexture = new Texture(&bitmap);
 	}
 
 	void Render::InitializeFreeType()
@@ -161,6 +175,8 @@ namespace o2
 
 		if (IsDevMode())
 			o2Assets.onAssetsRebuilded -= Func(this, &Render::OnAssetsRebuilded);
+
+		mSolidLineTexture = TextureRef::Null();
 
 		if (mGLContext)
 		{
@@ -265,6 +281,8 @@ namespace o2
 	{
 		if (!mReady)
 			return;
+
+		DrawLine({ Vec2F(0, 0), Vec2F(100, 100), o2Input.GetCursorPos() }, Color4::Red());
 
 		postRender();
 		postRender.Clear();
@@ -388,20 +406,17 @@ namespace o2
 	{
 		ULong dcolor = color.ABGR();
 		Vertex2 v[] = { Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0) };
-		DrawLines(v, 1);
+		DrawLines(v, 2);
 	}
 
 	void Render::DrawLine(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/)
 	{
 		ULong dcolor = color.ABGR();
-		int segCount = points.Count() - 1;
-		Vertex2* v = mnew Vertex2[segCount * 2];
-		for (int i = 0; i < segCount; i++)
-		{
-			v[i * 2] = Vertex2(points[i], dcolor, 0, 0);
-			v[i * 2 + 1] = Vertex2(points[i + 1], dcolor, 0, 0);
-		}
-		DrawLines(v, segCount);
+		Vertex2* v = mnew Vertex2[points.Count()];
+		for (int i = 0; i < points.Count(); i++)
+			v[i] = Vertex2(points[i], dcolor, 0, 0);
+
+		DrawLines(v, points.Count());
 		delete[] v;
 	}
 
@@ -416,7 +431,7 @@ namespace o2
 			Vertex2(a, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
 			Vertex2(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
 			Vertex2(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0) };
-		DrawLines(v, 3);
+		DrawLines(v, 6);
 	}
 
 	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/)
@@ -428,7 +443,7 @@ namespace o2
 			Vertex2(maxp.x, maxp.y, dcolor, 0, 0), Vertex2(minp.x, maxp.y, dcolor, 0, 0),
 			Vertex2(minp.x, maxp.y, dcolor, 0, 0), Vertex2(minp.x, minp.y, dcolor, 0, 0)
 		};
-		DrawLines(v, 4);
+		DrawLines(v, 8);
 	}
 
 	void Render::DrawRectFrame(const RectF& rect, const Color4& color /*= Color4::White()*/)
@@ -446,7 +461,7 @@ namespace o2
 			Vertex2(basis.offs + basis.xv, color.ABGR(), 0, 0), Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0),
 			Vertex2(basis.offs + basis.yv, color.ABGR(), 0, 0), Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0)
 		};
-		DrawLines(v, 4);
+		DrawLines(v, 8);
 	}
 
 	void Render::DrawCross(const Vec2F& pos, float size /*= 5*/, const Color4& color /*= Color4::White()*/)
@@ -455,7 +470,7 @@ namespace o2
 		Vertex2 v[] = {
 			Vertex2(pos.x - size, pos.y, dcolor, 0, 0), Vertex2(pos.x + size, pos.y, dcolor, 0, 0),
 			Vertex2(pos.x, pos.y - size, dcolor, 0, 0), Vertex2(pos.x, pos.y + size, dcolor, 0, 0) };
-		DrawLines(v, 2);
+		DrawLines(v, 4);
 	}
 
 	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/,
@@ -468,8 +483,7 @@ namespace o2
 		for (int i = 0; i < segCount; i++)
 		{
 			float a = (float)i*angleSeg;
-			v[i * 2] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
-			v[i * 2 + 1] = Vertex2(Vec2F::Rotated(a + angleSeg)*radius + pos, dcolor, 0, 0);
+			v[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
 		}
 
 		DrawLines(v, segCount);
@@ -489,8 +503,7 @@ namespace o2
 			float coef = (float)(i + 1) / (float)segCount;
 			Vec2F p = Bezier(p1, p2, p3, p4, coef);
 
-			v[i * 2] = Vertex2(lastp, dcolor, 0, 0);
-			v[i * 2 + 1] = Vertex2(p, dcolor, 0, 0);
+			v[i] = Vertex2(lastp, dcolor, 0, 0);
 
 			lastp = p;
 		}
@@ -512,8 +525,7 @@ namespace o2
 			float coef = (float)(i + 1) / (float)segCount;
 			Vec2F p = Bezier(p1, p2, p3, p4, coef);
 
-			v[i * 2] = Vertex2(lastp, dcolor, 0, 0);
-			v[i * 2 + 1] = Vertex2(p, dcolor, 0, 0);
+			v[i] = Vertex2(lastp, dcolor, 0, 0);
 
 			dir = p - lastp;
 			lastp = p;
@@ -522,12 +534,12 @@ namespace o2
 		dir.Normalize();
 		Vec2F ndir = dir.Perpendicular();
 
-		v[segCount * 2 + 0] = Vertex2(p4, dcolor, 0, 0);
-		v[segCount * 2 + 1] = Vertex2(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0);
-		v[segCount * 2 + 2] = Vertex2(p4, dcolor, 0, 0);
-		v[segCount * 2 + 3] = Vertex2(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0);
+		v[segCount + 0] = Vertex2(p4, dcolor, 0, 0);
+		v[segCount + 1] = Vertex2(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0);
+		v[segCount + 2] = Vertex2(p4, dcolor, 0, 0);
+		v[segCount + 3] = Vertex2(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0);
 
-		DrawLines(v, segCount + 2);
+		DrawLines(v, segCount + 4);
 	}
 
 	void Render::BeginRenderToStencilBuffer()
@@ -724,7 +736,8 @@ namespace o2
 			DrawPrimitives();
 
 			mLastDrawTexture = mesh->mTexture.mTexture;
-			mCurrentPrimitiveType = GL_TRIANGLES;
+			mCurrentPrimitiveType = GL_TRIANGLES; 
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			if (mLastDrawTexture)
 			{
@@ -733,19 +746,13 @@ namespace o2
 
 				GL_CHECK_ERROR(mLog);
 			}
-			else
-			{
-				glDisable(GL_TEXTURE_2D);
-			}
+			else glDisable(GL_TEXTURE_2D);
 		}
 
-		// Copy data
 		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], mesh->vertices, sizeof(Vertex2)*mesh->vertexCount);
 
 		for (UInt i = mLastDrawIdx, j = 0; j < mesh->polyCount * 3; i++, j++)
-		{
 			mVertexIndexData[i] = mLastDrawVertex + mesh->indexes[j];
-		}
 
 		mTrianglesCount += mesh->polyCount;
 		mLastDrawVertex += mesh->vertexCount;
@@ -783,29 +790,54 @@ namespace o2
 		if (!mReady)
 			return false;
 
+		mDrawingDepth += 1.0f;
+
+		if (mClippingEverything)
+			return true;
+
+		static Vertex2* vertexBuf = nullptr;
+		static int vertexBufCount = 0;
+		static int vertexBufSize = 0;
+
+		static UInt16* indexesBuf = nullptr;
+		static int indexesBufCount = 0;
+		static int indexesBufSize = 0;
+
+		Geometry::CreatePolyLineMesh(verticies, count,
+									 vertexBuf, vertexBufCount, vertexBufSize,
+									 indexesBuf, indexesBufCount, indexesBufSize,
+									 1.0f, 2, 2, mSolidLineTexture->GetSize());
+
 		// Check difference
-		if (mCurrentPrimitiveType == GL_TRIANGLES ||
-			mLastDrawVertex + count * 2 >= mVertexBufferSize ||
-			mLastDrawIdx + count * 2 >= mIndexBufferSize)
+		if (mLastDrawTexture != mSolidLineTexture.mTexture ||
+			mLastDrawVertex + vertexBufCount >= mVertexBufferSize ||
+			mLastDrawIdx + indexesBufCount * 3 >= mIndexBufferSize ||
+			mCurrentPrimitiveType == GL_LINES)
 		{
 			DrawPrimitives();
 
-			mLastDrawTexture = NULL;
-			mCurrentPrimitiveType = GL_LINES;
-			glDisable(GL_TEXTURE_2D);
+			mLastDrawTexture = mSolidLineTexture.mTexture;
+			mCurrentPrimitiveType = GL_TRIANGLES;
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+			if (mLastDrawTexture)
+			{
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, mLastDrawTexture->mHandle);
+
+				GL_CHECK_ERROR(mLog);
+			}
+			else glDisable(GL_TEXTURE_2D);
 		}
 
-		// Copy data
-		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], verticies, sizeof(Vertex2)*count * 2);
+		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], vertexBuf, sizeof(Vertex2)*vertexBufCount);
 
-		for (UInt i = mLastDrawIdx, j = 0; j < (UInt)count * 2; i++, j++)
-		{
-			mVertexIndexData[i] = mLastDrawVertex + j;
-		}
+		for (UInt i = mLastDrawIdx, j = 0; j < indexesBufCount * 3; i++, j++)
+			mVertexIndexData[i] = mLastDrawVertex + indexesBuf[j];
 
-		mTrianglesCount += count;
-		mLastDrawVertex += count * 2;
-		mLastDrawIdx += count * 2;
+		mTrianglesCount += indexesBufCount;
+		mLastDrawVertex += vertexBufCount;
+		mLastDrawIdx += indexesBufCount * 3;
 
 		return true;
 	}

@@ -256,6 +256,7 @@
     <ClInclude Include="..\Sources\Utils\Math\Border.h" />
     <ClInclude Include="..\Sources\Utils\Math\Color.h" />
     <ClInclude Include="..\Sources\Utils\Math\Curve.h" />
+    <ClInclude Include="..\Sources\Utils\Math\Geometry.h" />
     <ClInclude Include="..\Sources\Utils\Math\Interpolation.h" />
     <ClInclude Include="..\Sources\Utils\Math\Intersection.h" />
     <ClInclude Include="..\Sources\Utils\Math\Layout.h" />
@@ -419,6 +420,8 @@
     <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Color.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Curve.cpp" />
+    <ClCompile Include="..\Sources\Utils\Math\Geometry.cpp" />
+    <ClCompile Include="..\Sources\Utils\Math\Intersection.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Layout.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Math.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Transform.cpp" />

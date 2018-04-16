@@ -272,7 +272,7 @@ namespace o2
 
 		for (int x = Math::Max(rtLeft, 0); x < Math::Min(mSize.x, rtRight); x++)
 		{
-			for (int y = Math::Max(rtTop, 0); y < Math::Min(mSize.y, rtBottom); y++)
+			for (int y = Math::Max(rtBottom, 0); y < Math::Min(mSize.y, rtTop); y++)
 				memcpy(&mData[(y*mSize.x + x)*curbpp], &colrDw, curbpp);
 		}
 	}
