@@ -45,7 +45,8 @@ namespace o2
 			offs.Set(0.5f, 0.5f);
 
 		int vertex = 0; int poly = 0;
-		float length = 0;
+		float u = 0;
+
 		for (int i = 0; i < pointsCount; i++)
 		{
 			Vec2F point = (Vec2F)points[i] + offs;
@@ -57,10 +58,15 @@ namespace o2
 				Vec2F dir = ((Vec2F)points[i + 1] + offs - point).Normalized();
 				Vec2F norm = dir.Perpendicular();
 
-				verticies[vertex++].Set(point + norm*halfWidth, color, 0, upTexV);
-				verticies[vertex++].Set(point + norm*halfWidhtBorderTop, zeroAlphaColor, 0, 1);
-				verticies[vertex++].Set(point - norm*halfWidth, color, 0, downTexV);
-				verticies[vertex++].Set(point - norm*halfWidhtBorderBottom, zeroAlphaColor, 0, 0);
+				Vec2F upBorder = point + norm*halfWidhtBorderBottom;
+				Vec2F up = point + norm*halfWidth;
+				Vec2F down = point - norm*halfWidth;
+				Vec2F downBorder = point - norm*halfWidhtBorderTop;
+
+				verticies[vertex++].Set(up, color, 0, upTexV);
+				verticies[vertex++].Set(upBorder, zeroAlphaColor, 0, 1);
+				verticies[vertex++].Set(down, color, 0, downTexV);
+				verticies[vertex++].Set(downBorder, zeroAlphaColor, 0, 0);
 			}
 			else if (i == pointsCount - 1)
 			{
@@ -69,14 +75,20 @@ namespace o2
 				dir /= segLength;
 				Vec2F norm = dir.Perpendicular();
 
-				length += segLength;
-				float u = length*invTexSize.x;
-				u = 1;
+				Vec2F upBorder = point + norm*halfWidhtBorderBottom;
+				Vec2F up = point + norm*halfWidth;
+				Vec2F down = point - norm*halfWidth;
+				Vec2F downBorder = point - norm*halfWidhtBorderTop;
 
-				verticies[vertex++].Set(point + norm*halfWidth, color, u, upTexV);
-				verticies[vertex++].Set(point + norm*halfWidhtBorderBottom, zeroAlphaColor, u, 1);
-				verticies[vertex++].Set(point - norm*halfWidth, color, u, downTexV);
-				verticies[vertex++].Set(point - norm*halfWidhtBorderTop, zeroAlphaColor, u, 0);
+				if (i%2 == 0)
+					u -= segLength*invTexSize.x;
+				else
+					u += segLength*invTexSize.x;
+
+				verticies[vertex++].Set(up, color, u, upTexV);
+				verticies[vertex++].Set(upBorder, zeroAlphaColor, u, 1);
+				verticies[vertex++].Set(down, color, u, downTexV);
+				verticies[vertex++].Set(downBorder, zeroAlphaColor, u, 0);
 			}
 			else
 			{
@@ -92,21 +104,26 @@ namespace o2
 				Vec2F prevNorm = prevDir.Perpendicular().Inverted();
 				Vec2F nextNorm = nextDir.Perpendicular();
 
-				length += segLength;
-				float u = length*invTexSize.x;
-				u = 1;
+				Vec2F upBorder = Intersection::Lines(point - prevNorm*halfWidhtBorderTop, prevDir,
+													 point - nextNorm*halfWidhtBorderTop, nextDir);
 
-				verticies[vertex++].Set(Intersection::Lines(point - prevNorm*halfWidth, prevDir,
-										point - nextNorm*halfWidth, nextDir), color, u, upTexV);
+				Vec2F up = Intersection::Lines(point - prevNorm*halfWidth, prevDir,
+											   point - nextNorm*halfWidth, nextDir);
 
-				verticies[vertex++].Set(Intersection::Lines(point - prevNorm*halfWidhtBorderTop, prevDir,
-										point - nextNorm*halfWidhtBorderTop, nextDir), zeroAlphaColor, u, 1);
+				Vec2F down = Intersection::Lines(point + prevNorm*halfWidth, prevDir,
+												 point + nextNorm*halfWidth, nextDir);
 
-				verticies[vertex++].Set(Intersection::Lines(point + prevNorm*halfWidth, prevDir,
-										point + nextNorm*halfWidth, nextDir), color, u, downTexV);
+				Vec2F downBorder = Intersection::Lines(point + prevNorm*halfWidhtBorderBottom, prevDir,
+													   point + nextNorm*halfWidhtBorderBottom, nextDir);
 
-				verticies[vertex++].Set(Intersection::Lines(point + prevNorm*halfWidhtBorderBottom, prevDir,
-										point + nextNorm*halfWidhtBorderBottom, nextDir), zeroAlphaColor, u, 0.0f);
+				float segSign = i%2 == 0 ? -1.0f : 1.0f;
+
+				u += segLength*invTexSize.x*segSign;
+
+				verticies[vertex++].Set(up, color, u + prevDir.Dot(up - point)*invTexSize.x*segSign, upTexV);
+				verticies[vertex++].Set(upBorder, zeroAlphaColor, u + prevDir.Dot(upBorder - point)*invTexSize.x*segSign, 1);
+				verticies[vertex++].Set(down, color, u + prevDir.Dot(down - point)*invTexSize.x*segSign, downTexV);
+				verticies[vertex++].Set(downBorder, zeroAlphaColor, u + prevDir.Dot(downBorder - point)*invTexSize.x*segSign, 0.0f);
 			}
 
 #define POLYGON(A, B, C) \

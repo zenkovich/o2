@@ -102,7 +102,7 @@ namespace o2
 		mVertexIndexData = mnew UInt16[mIndexBufferSize];
 		mLastDrawVertex = 0;
 		mTrianglesCount = 0;
-		mCurrentPrimitiveType = GL_TRIANGLES;
+		mCurrentPrimitiveType = PrimitiveType::Polygon;
 
 		// Configure OpenGL
 		glEnableClientState(GL_COLOR_ARRAY);
@@ -205,7 +205,7 @@ namespace o2
 	void Render::CheckCompatibles()
 	{
 		//check render targets available
-		char* extensions[] = { "GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
+		char* extensions[] ={ "GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
 			"GL_EXT_packed_depth_stencil" };
 
 		mRenderTargetsAvailable = true;
@@ -232,7 +232,7 @@ namespace o2
 		mTrianglesCount = 0;
 		mFrameTrianglesCount = 0;
 		mDIPCount = 0;
-		mCurrentPrimitiveType = GL_TRIANGLES;
+		mCurrentPrimitiveType = PrimitiveType::Polygon;
 
 		mDrawingDepth = 0.0f;
 
@@ -255,7 +255,9 @@ namespace o2
 		if (mLastDrawVertex < 1)
 			return;
 
-		glDrawElements(mCurrentPrimitiveType, mLastDrawIdx, GL_UNSIGNED_SHORT, mVertexIndexData);
+		static const GLenum primitiveType[3]{ GL_TRIANGLES, GL_TRIANGLES, GL_LINES };
+
+		glDrawElements(primitiveType[(int)mCurrentPrimitiveType], mLastDrawIdx, GL_UNSIGNED_SHORT, mVertexIndexData);
 
 		GL_CHECK_ERROR(mLog);
 
@@ -282,7 +284,7 @@ namespace o2
 		if (!mReady)
 			return;
 
-		DrawLine({ Vec2F(0, 0), Vec2F(100, 0), o2Input.GetCursorPos() }, Color4::Red());
+		DrawLine({ Vec2F(0, 0), Vec2F(120, 0), o2Input.GetCursorPos() }, Color4::Red(), 1, LineType::Dash);
 
 		postRender();
 		postRender.Clear();
@@ -406,8 +408,8 @@ namespace o2
 						  float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] = { Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0) };
-		DrawLines(v, 2, width, lineType);
+		Vertex2 v[] ={ Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0) };
+		DrawSmoothLine(v, 2, width, lineType);
 	}
 
 	void Render::DrawLine(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/,
@@ -418,7 +420,7 @@ namespace o2
 		for (int i = 0; i < points.Count(); i++)
 			v[i] = Vertex2(points[i], dcolor, 0, 0);
 
-		DrawLines(v, points.Count(), width, lineType);
+		DrawSmoothLine(v, points.Count(), width, lineType);
 		delete[] v;
 	}
 
@@ -430,26 +432,26 @@ namespace o2
 		Vec2F dir = (b - a).Normalized();
 		Vec2F ndir = dir.Perpendicular();
 
-		Vertex2 v[] = {
+		Vertex2 v[] ={
 			Vertex2(a, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
 			Vertex2(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
 			Vertex2(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0) };
 
-		DrawLines(v, 6, width, lineType);
+		DrawSmoothLine(v, 6, width, lineType);
 	}
 
 	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/,
 							   float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] = {
+		Vertex2 v[] ={
 			Vertex2(minp.x, minp.y, dcolor, 0, 0),
 			Vertex2(maxp.x, minp.y, dcolor, 0, 0),
 			Vertex2(maxp.x, maxp.y, dcolor, 0, 0),
 			Vertex2(minp.x, maxp.y, dcolor, 0, 0),
 			Vertex2(minp.x, minp.y, dcolor, 0, 0)
 		};
-		DrawLines(v, 5, width, lineType);
+		DrawSmoothLine(v, 5, width, lineType);
 	}
 
 	void Render::DrawRectFrame(const RectF& rect, const Color4& color /*= Color4::White()*/,
@@ -470,18 +472,18 @@ namespace o2
 			Vertex2(basis.offs + basis.yv, color.ABGR(), 0, 0), Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0)
 		};
 
-		DrawLines(v, 8, width, lineType);
+		DrawSmoothLine(v, 8, width, lineType);
 	}
 
 	void Render::DrawCross(const Vec2F& pos, float size /*= 5*/, const Color4& color /*= Color4::White()*/,
 						   float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		ULong dcolor = color.ABGR();
-		Vertex2 v[] = {
+		Vertex2 v[] ={
 			Vertex2(pos.x - size, pos.y, dcolor, 0, 0), Vertex2(pos.x + size, pos.y, dcolor, 0, 0),
 			Vertex2(pos.x, pos.y - size, dcolor, 0, 0), Vertex2(pos.x, pos.y + size, dcolor, 0, 0) };
 
-		DrawLines(v, 4, width, lineType);
+		DrawSmoothLine(v, 4, width, lineType);
 	}
 
 	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/,
@@ -498,7 +500,7 @@ namespace o2
 			v[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
 		}
 
-		DrawLines(v, segCount, width, lineType);
+		DrawSmoothLine(v, segCount, width, lineType);
 		delete[] v;
 	}
 
@@ -521,7 +523,7 @@ namespace o2
 			lastp = p;
 		}
 
-		DrawLines(v, segCount, width, lineType);
+		DrawSmoothLine(v, segCount, width, lineType);
 	}
 
 	void Render::DrawBezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
@@ -553,7 +555,7 @@ namespace o2
 		v[segCount + 2] = Vertex2(p4, dcolor, 0, 0);
 		v[segCount + 3] = Vertex2(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0);
 
-		DrawLines(v, segCount + 4, width, lineType);
+		DrawSmoothLine(v, segCount + 4, width, lineType);
 	}
 
 	void Render::BeginRenderToStencilBuffer()
@@ -632,7 +634,7 @@ namespace o2
 	{
 		if (mStackScissors.IsEmpty())
 			return RectI(-(int)(mCurrentResolution.x*0.5f), -(int)(mCurrentResolution.y*0.5f),
-						 (int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
+			(int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
 
 		return (RectI)(mStackScissors.Last().mScrissorRect);
 	}
@@ -641,7 +643,7 @@ namespace o2
 	{
 		if (mStackScissors.IsEmpty())
 			return RectI(-(int)(mCurrentResolution.x*0.5f), -(int)(mCurrentResolution.y*0.5f),
-						 (int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
+			(int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
 
 		return (RectI)(mStackScissors.Last().mSummaryScissorRect);
 	}
@@ -672,9 +674,9 @@ namespace o2
 		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
 		mStackScissors.Add(ScissorStackItem(rect, summaryScissorRect));
 
-		glScissor((int)(summaryScissorRect.left + mCurrentResolution.x*0.5f), 
-				  (int)(summaryScissorRect.bottom + mCurrentResolution.y*0.5f),
-				  (int)summaryScissorRect.Width(), 
+		glScissor((int)(summaryScissorRect.left + mCurrentResolution.x*0.5f),
+			(int)(summaryScissorRect.bottom + mCurrentResolution.y*0.5f),
+				  (int)summaryScissorRect.Width(),
 				  (int)summaryScissorRect.Height());
 	}
 
@@ -714,8 +716,8 @@ namespace o2
 				mStackScissors.PopBack();
 				RectI lastClipRect = mStackScissors.Last().mSummaryScissorRect;
 				glScissor((int)(lastClipRect.left + mCurrentResolution.x*0.5f),
-						  (int)(lastClipRect.bottom + mCurrentResolution.y*0.5f),
-						  (int)lastClipRect.Width(), 
+					(int)(lastClipRect.bottom + mCurrentResolution.y*0.5f),
+						  (int)lastClipRect.Width(),
 						  (int)lastClipRect.Height());
 
 				mScissorInfos.Last().mEndDepth = mDrawingDepth;
@@ -733,6 +735,13 @@ namespace o2
 
 	void Render::DrawMesh(Mesh* mesh)
 	{
+		DrawBuffer(PrimitiveType::Polygon, mesh->vertices, mesh->vertexCount,
+				   mesh->indexes, mesh->polyCount, mesh->mTexture);
+	}
+
+	void Render::DrawBuffer(PrimitiveType primitiveType, Vertex2* vertices, UInt verticesCount, 
+							UInt16* indexes, UInt elementsCount, const TextureRef& texture)
+	{
 		if (!mReady)
 			return;
 
@@ -741,17 +750,27 @@ namespace o2
 		if (mClippingEverything)
 			return;
 
+		UInt indexesCount;
+		if (primitiveType == PrimitiveType::Line)
+			indexesCount = elementsCount*2;
+		else
+			indexesCount = elementsCount*3;
+
 		// Check difference
-		if (mLastDrawTexture != mesh->mTexture.mTexture ||
-			mLastDrawVertex + mesh->vertexCount >= mVertexBufferSize ||
-			mLastDrawIdx + mesh->polyCount * 3 >= mIndexBufferSize ||
-			mCurrentPrimitiveType == GL_LINES)
+		if (mLastDrawTexture != texture.mTexture ||
+			mLastDrawVertex + verticesCount >= mVertexBufferSize ||
+			mLastDrawIdx + indexesCount >= mIndexBufferSize ||
+			mCurrentPrimitiveType != primitiveType)
 		{
 			DrawPrimitives();
 
-			mLastDrawTexture = mesh->mTexture.mTexture;
-			mCurrentPrimitiveType = GL_TRIANGLES; 
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			mLastDrawTexture = texture.mTexture;
+			mCurrentPrimitiveType = primitiveType;
+
+			if (primitiveType == PrimitiveType::PolygonWire)
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			else
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			if (mLastDrawTexture)
 			{
@@ -763,14 +782,16 @@ namespace o2
 			else glDisable(GL_TEXTURE_2D);
 		}
 
-		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], mesh->vertices, sizeof(Vertex2)*mesh->vertexCount);
+		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], vertices, sizeof(Vertex2)*verticesCount);
 
-		for (UInt i = mLastDrawIdx, j = 0; j < mesh->polyCount * 3; i++, j++)
-			mVertexIndexData[i] = mLastDrawVertex + mesh->indexes[j];
+		for (UInt i = mLastDrawIdx, j = 0; j < indexesCount; i++, j++)
+			mVertexIndexData[i] = mLastDrawVertex + indexes[j];
 
-		mTrianglesCount += mesh->polyCount;
-		mLastDrawVertex += mesh->vertexCount;
-		mLastDrawIdx += mesh->polyCount * 3;
+		if (primitiveType != PrimitiveType::Line)
+			mTrianglesCount += elementsCount;
+
+		mLastDrawVertex += verticesCount;
+		mLastDrawIdx += indexesCount;
 	}
 
 	void Render::DrawMeshWire(Mesh* mesh, const Color4& color /*= Color4::White()*/)
@@ -791,21 +812,23 @@ namespace o2
 		for (UInt i = 0; i < mesh->polyCount * 6; i++)
 			vertices[i].color = dcolor;
 
-		DrawLines(vertices, mesh->polyCount * 3);
+		DrawSmoothLine(vertices, mesh->polyCount * 3);
 		delete[] vertices;
 	}
 
-	void Render::DrawLines(Vertex2* verticies, int count, float width /*= 1.0f*/,
-						   LineType lineType /*= LineType::Solid*/)
+	void Render::DrawSmoothLine(Vertex2* verticies, int count, float width /*= 1.0f*/,
+								LineType lineType /*= LineType::Solid*/)
 	{
 		static Mesh mesh(mSolidLineTexture, 1024, 1024);
+
+		TextureRef texture = lineType == LineType::Solid ? mSolidLineTexture : mDashLineTexture;
+		Vec2I texSize = lineType == LineType::Solid ? Vec2I(1, 1) : mDashLineTexture->GetSize();
 
 		Geometry::CreatePolyLineMesh(verticies, count,
 									 mesh.vertices, mesh.vertexCount, mesh.mMaxVertexCount,
 									 mesh.indexes, mesh.polyCount, mesh.mMaxPolyCount,
-									 width - 0.5f, 0.4f, 0.4f, Vec2F(1, 1));
-
-		mesh.SetTexture(lineType == LineType::Solid ? mSolidLineTexture : mDashLineTexture);
+									 width - 0.5f, 0.5f, 0.5f, texSize);
+		mesh.SetTexture(texture);
 		mesh.Draw();
 	}
 
@@ -873,9 +896,9 @@ namespace o2
 
 			auto clipRect = mStackScissors.Last().mSummaryScissorRect;
 
-			glScissor((int)(clipRect.left + mCurrentResolution.x*0.5f), 
-					  (int)(clipRect.bottom + mCurrentResolution.y*0.5f),
-					  (int)clipRect.Width(), 
+			glScissor((int)(clipRect.left + mCurrentResolution.x*0.5f),
+				(int)(clipRect.bottom + mCurrentResolution.y*0.5f),
+					  (int)clipRect.Width(),
 					  (int)clipRect.Height());
 		}
 	}

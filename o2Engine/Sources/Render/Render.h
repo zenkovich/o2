@@ -184,11 +184,15 @@ namespace o2
 		// Drawing mesh
 		void DrawMesh(Mesh* mesh);
 
+		// Draws data from buffer with specified texture and primitive type
+		void DrawBuffer(PrimitiveType primitiveType, Vertex2* vertices, UInt verticesCount,
+						UInt16* indexes, UInt elementsCount, const TextureRef& texture);
+
 		// Drawing mesh wire
 		void DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
 
 		// Drawing lines
-		void DrawLines(Vertex2* verticies, int count, float width = 1.0f, LineType lineType = LineType::Solid);
+		void DrawSmoothLine(Vertex2* verticies, int count, float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Binding render target
 		void SetRenderTexture(TextureRef renderTarget);

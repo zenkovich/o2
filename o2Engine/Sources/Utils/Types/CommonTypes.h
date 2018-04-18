@@ -40,4 +40,6 @@ namespace o2
 	enum class Platform { Windows, MacOSX, iOS, Android };
 
 	enum class LineType { Solid, Dash };
+
+	enum class PrimitiveType { Polygon, PolygonWire, Line };
 }

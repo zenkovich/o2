@@ -118,3 +118,11 @@ ENUM_META_(o2::LineType, LineType)
 	ENUM_ENTRY(Solid);
 }
 END_ENUM_META;
+
+ENUM_META_(o2::PrimitiveType, PrimitiveType)
+{
+	ENUM_ENTRY(Line);
+	ENUM_ENTRY(Polygon);
+	ENUM_ENTRY(PolygonWire);
+}
+END_ENUM_META;
