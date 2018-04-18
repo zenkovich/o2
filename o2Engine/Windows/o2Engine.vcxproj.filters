@@ -411,6 +411,9 @@
     <ClInclude Include="..\Sources\Utils\Math\Curve.h">
       <Filter>Sources\Utils\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Math\Geometry.h">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Math\Interpolation.h">
       <Filter>Sources\Utils\Math</Filter>
     </ClInclude>
@@ -554,9 +557,6 @@
     </ClInclude>
     <ClInclude Include="..\Sources\stdafx.h">
       <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Math\Geometry.h">
-      <Filter>Sources\Utils\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -899,6 +899,12 @@
     <ClCompile Include="..\Sources\Utils\Math\Curve.cpp">
       <Filter>Sources\Utils\Math</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Math\Geometry.cpp">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\Utils\Math\Intersection.cpp">
+      <Filter>Sources\Utils\Math</Filter>
+    </ClCompile>
     <ClCompile Include="..\Sources\Utils\Math\Layout.cpp">
       <Filter>Sources\Utils\Math</Filter>
     </ClCompile>
@@ -964,12 +970,6 @@
     </ClCompile>
     <ClCompile Include="..\Sources\stdafx.cpp">
       <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Math\Geometry.cpp">
-      <Filter>Sources\Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Utils\Math\Intersection.cpp">
-      <Filter>Sources\Utils\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

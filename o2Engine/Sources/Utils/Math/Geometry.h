@@ -9,8 +9,8 @@ namespace o2
 	namespace Geometry
 	{
 		void CreatePolyLineMesh(const Vertex2* points, int pointsCount, 
-								Vertex2*& verticies, int& vertexCount, int& vertexSize,
-								UInt16*& indexes, int& polyCount, int& polySize,
+								Vertex2*& verticies, UInt& vertexCount, UInt& vertexSize,
+								UInt16*& indexes, UInt& polyCount, UInt& polySize,
 								float width, float texBorderTop, float texBorderBottom, const Vec2F& texSize);
 	}
 }

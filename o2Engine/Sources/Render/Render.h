@@ -102,38 +102,48 @@ namespace o2
 		Camera GetCamera() const;
 
 		// Draw single line with color
-		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White());
+		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White(),
+					  float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Draw single line with color
 		void DrawArrow(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White(), 
-					   const Vec2F& arrowSize = Vec2F(10, 10));
+					   const Vec2F& arrowSize = Vec2F(10, 10),
+					   float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Draw single line with color
-		void DrawLine(const Vector<Vec2F>& points, const Color4& color = Color4::White());
+		void DrawLine(const Vector<Vec2F>& points, const Color4& color = Color4::White(),
+					  float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Draw rect frame with color
-		void DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color = Color4::White());
+		void DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color = Color4::White(),
+						   float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Draw rect frame with color
-		void DrawRectFrame(const RectF& rect, const Color4& color = Color4::White());
+		void DrawRectFrame(const RectF& rect, const Color4& color = Color4::White(),
+						   float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Draw basis frame
 		void DrawBasis(const Basis& basis, const Color4& xcolor = Color4::Red(), const Color4& ycolor = Color4::Blue(),
-					   const Color4& color = Color4::White());
+					   const Color4& color = Color4::White(),
+					   float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Draw cross with color
-		void DrawCross(const Vec2F& pos, float size = 5, const Color4& color = Color4::White());
+		void DrawCross(const Vec2F& pos, float size = 5, const Color4& color = Color4::White(),
+					   float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Draw circle with color
-		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White(), int segCount = 20);
+		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White(), int segCount = 20,
+						float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Draws bezier curve with color
 		void DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
-							 const Color4& color = Color4::White());
+							 const Color4& color = Color4::White(), 
+							 float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Draws bezier curve with color
 		void DrawBezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
-								  const Color4& color = Color4::White(), const Vec2F& arrowSize = Vec2F(10, 10));
+								  const Color4& color = Color4::White(), const Vec2F& arrowSize = Vec2F(10, 10), 
+								  float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Beginning render to stencil buffer
 		void BeginRenderToStencilBuffer();
@@ -172,13 +182,13 @@ namespace o2
 		bool IsScissorTestEnabled() const;
 
 		// Drawing mesh
-		bool DrawMesh(Mesh* mesh);
+		void DrawMesh(Mesh* mesh);
 
 		// Drawing mesh wire
-		bool DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
+		void DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
 
 		// Drawing lines
-		bool DrawLines(Vertex2* verticies, int count);
+		void DrawLines(Vertex2* verticies, int count, float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Binding render target
 		void SetRenderTexture(TextureRef renderTarget);
@@ -237,6 +247,7 @@ namespace o2
 		bool              mReady;                  // True, if render system initialized
 
 		TextureRef        mSolidLineTexture;       // Solid line texture
+		TextureRef        mDashLineTexture;        // Dash line texture
 
 	protected:
 		// Don't copy

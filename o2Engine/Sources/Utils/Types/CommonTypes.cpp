@@ -111,3 +111,10 @@ ENUM_META_(o2::Platform, Platform)
 	ENUM_ENTRY(iOS);
 }
 END_ENUM_META;
+
+ENUM_META_(o2::LineType, LineType)
+{
+	ENUM_ENTRY(Dash);
+	ENUM_ENTRY(Solid);
+}
+END_ENUM_META;

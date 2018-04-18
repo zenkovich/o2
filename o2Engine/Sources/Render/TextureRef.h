@@ -62,6 +62,7 @@ namespace o2
 		Texture* mTexture;
 
 		friend class Render;
+		friend class Texture;
 	};
 
 	// Returns reference to null texture

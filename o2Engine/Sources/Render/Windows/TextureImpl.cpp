@@ -54,6 +54,9 @@ namespace o2
 	{
 		o2Render.mTextures.Remove(this);
 
+		for (auto texRef : mRefs)
+			texRef->mTexture = nullptr;
+
 		if (!mReady)
 			return;
 
