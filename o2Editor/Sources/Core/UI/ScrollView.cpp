@@ -247,6 +247,7 @@ namespace Editor
 	}
 
 	void UIScrollView::DrawGrid()
+
 	{
 		float cameraMaxSize = Math::Max(mViewCamera.GetSize().x*mViewCamera.GetScale().x,
 										mViewCamera.GetSize().y*mViewCamera.GetScale().y);

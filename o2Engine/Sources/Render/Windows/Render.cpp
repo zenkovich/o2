@@ -130,6 +130,7 @@ namespace o2
 		ReleaseDC(0, dc);
 
 		InitializeFreeType();
+		InitializeLinesIndexBuffer();
 		InitializeLinesTextures();
 
 		mCurrentRenderTarget = TextureRef();
@@ -143,6 +144,17 @@ namespace o2
 	void Render::OnFrameResized()
 	{
 		mResolution = o2Application.GetContentSize();
+	}
+
+	void Render::InitializeLinesIndexBuffer()
+	{
+		mHardLinesIndexData = mnew UInt16[mIndexBufferSize];
+
+		for (int i = 0; i < mIndexBufferSize/2; i++)
+		{
+			mHardLinesIndexData[i*2] = i;
+			mHardLinesIndexData[i*2 + 1] = i + 1;
+		}
 	}
 
 	void Render::InitializeLinesTextures()
@@ -284,7 +296,39 @@ namespace o2
 		if (!mReady)
 			return;
 
-		DrawLine({ Vec2F(0, 0), Vec2F(120, 0), o2Input.GetCursorPos() }, Color4::Red(), 1, LineType::Dash);
+		if (o2Input.IsKeyDown('T'))
+			DrawAALine({ Vec2F(0, 0), Vec2F(120, 0), o2Input.GetCursorPos() }, Color4::Red(), 1, LineType::Dash);
+		else if (o2Input.IsKeyDown('U'))
+			DrawAAArrow(Vec2F(0, 0), o2Input.GetCursorPos());
+		else if (o2Input.IsKeyDown('I'))
+			DrawAARectFrame(RectF(Vec2F(0, 0), o2Input.GetCursorPos()));
+		else if (o2Input.IsKeyDown('O'))
+			DrawAABasis(Basis::Scaled(o2Input.GetCursorPos()));
+		else if (o2Input.IsKeyDown('P'))
+			DrawAACross(o2Input.GetCursorPos());
+		else if (o2Input.IsKeyDown('R'))
+			DrawAACircle(o2Input.GetCursorPos(), 100.0f);
+		else if (o2Input.IsKeyDown('Y'))
+			DrawAABezierCurve(Vec2F(0, 0), Vec2F(100, 100), Vec2F(200, 100), o2Input.GetCursorPos());
+		else if (o2Input.IsKeyDown('E'))
+			DrawAABezierCurveArrow(Vec2F(0, 0), Vec2F(100, 100), Vec2F(200, 100), o2Input.GetCursorPos());
+
+		if (o2Input.IsKeyDown('D'))
+			DrawLine({ Vec2F(0, 0), Vec2F(120, 0), o2Input.GetCursorPos() }, Color4::Red());
+		else if (o2Input.IsKeyDown('F'))
+			DrawArrow(Vec2F(0, 0), o2Input.GetCursorPos());
+		else if (o2Input.IsKeyDown('G'))
+			DrawRectFrame(RectF(Vec2F(0, 0), o2Input.GetCursorPos()));
+		else if (o2Input.IsKeyDown('H'))
+			DrawBasis(Basis::Scaled(o2Input.GetCursorPos()));
+		else if (o2Input.IsKeyDown('J'))
+			DrawCross(o2Input.GetCursorPos());
+		else if (o2Input.IsKeyDown('K'))
+			DrawCircle(o2Input.GetCursorPos(), 100.0f);
+		else if (o2Input.IsKeyDown('L'))
+			DrawBezierCurve(Vec2F(0, 0), Vec2F(100, 100), Vec2F(200, 100), o2Input.GetCursorPos());
+		else if (o2Input.IsKeyDown('S'))
+			DrawBezierCurveArrow(Vec2F(0, 0), Vec2F(100, 100), Vec2F(200, 100), o2Input.GetCursorPos());
 
 		postRender();
 		postRender.Clear();
@@ -356,6 +400,8 @@ namespace o2
 
 		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F::Right()*resf.x, Vec2F().Up()*resf.y);
 		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
+		mViewScale = camTransf.xv.Length();
+		mInvViewScale = 1.0f/mViewScale;
 
 		float camTransfMatr[16] =
 		{
@@ -404,15 +450,15 @@ namespace o2
 		}
 	}
 
-	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/,
+	void Render::DrawAALine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/,
 						  float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		ULong dcolor = color.ABGR();
 		Vertex2 v[] ={ Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0) };
-		DrawSmoothLine(v, 2, width, lineType);
+		DrawAAPolyLine(v, 2, width, lineType);
 	}
 
-	void Render::DrawLine(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/,
+	void Render::DrawAALine(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/,
 						  float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		ULong dcolor = color.ABGR();
@@ -420,11 +466,11 @@ namespace o2
 		for (int i = 0; i < points.Count(); i++)
 			v[i] = Vertex2(points[i], dcolor, 0, 0);
 
-		DrawSmoothLine(v, points.Count(), width, lineType);
+		DrawAAPolyLine(v, points.Count(), width, lineType);
 		delete[] v;
 	}
 
-	void Render::DrawArrow(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/,
+	void Render::DrawAAArrow(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/,
 						   const Vec2F& arrowSize /*= Vec2F(10, 10)*/,
 						   float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
@@ -437,10 +483,10 @@ namespace o2
 			Vertex2(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
 			Vertex2(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0) };
 
-		DrawSmoothLine(v, 6, width, lineType);
+		DrawAAPolyLine(v, 6, width, lineType);
 	}
 
-	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/,
+	void Render::DrawAARectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/,
 							   float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		ULong dcolor = color.ABGR();
@@ -451,111 +497,245 @@ namespace o2
 			Vertex2(minp.x, maxp.y, dcolor, 0, 0),
 			Vertex2(minp.x, minp.y, dcolor, 0, 0)
 		};
-		DrawSmoothLine(v, 5, width, lineType);
+		DrawAAPolyLine(v, 5, width, lineType);
 	}
 
-	void Render::DrawRectFrame(const RectF& rect, const Color4& color /*= Color4::White()*/,
+	void Render::DrawAARectFrame(const RectF& rect, const Color4& color /*= Color4::White()*/,
 							   float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
-		DrawRectFrame(rect.LeftBottom(), rect.RightTop(), color, width, lineType);
+		DrawAARectFrame(rect.LeftBottom(), rect.RightTop(), color, width, lineType);
 	}
 
-	void Render::DrawBasis(const Basis& basis, const Color4& xcolor /*= Color4::Red()*/,
+	void Render::DrawAABasis(const Basis& basis, const Color4& xcolor /*= Color4::Red()*/,
 						   const Color4& ycolor /*= Color4::Blue()*/, const Color4& color /*= Color4::White()*/,
 						   float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
+		DrawAALine(basis.offs, basis.offs + basis.xv, xcolor, width, lineType);
+		DrawAALine(basis.offs, basis.offs + basis.yv, ycolor, width, lineType);
+
 		Vertex2 v[] =
 		{
-			Vertex2(basis.offs, xcolor.ABGR(), 0, 0), Vertex2(basis.offs + basis.xv, xcolor.ABGR(), 0, 0),
-			Vertex2(basis.offs, ycolor.ABGR(), 0, 0), Vertex2(basis.offs + basis.yv, ycolor.ABGR(), 0, 0),
-			Vertex2(basis.offs + basis.xv, color.ABGR(), 0, 0), Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0),
-			Vertex2(basis.offs + basis.yv, color.ABGR(), 0, 0), Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0)
+			Vertex2(basis.offs + basis.xv, color.ABGR(), 0, 0),
+			Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0),
+			Vertex2(basis.offs + basis.yv, color.ABGR(), 0, 0)
 		};
 
-		DrawSmoothLine(v, 8, width, lineType);
+		DrawAAPolyLine(v, 3, width, lineType);
 	}
 
-	void Render::DrawCross(const Vec2F& pos, float size /*= 5*/, const Color4& color /*= Color4::White()*/,
+	void Render::DrawAACross(const Vec2F& pos, float size /*= 5*/, const Color4& color /*= Color4::White()*/,
 						   float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
-		ULong dcolor = color.ABGR();
-		Vertex2 v[] ={
-			Vertex2(pos.x - size, pos.y, dcolor, 0, 0), Vertex2(pos.x + size, pos.y, dcolor, 0, 0),
-			Vertex2(pos.x, pos.y - size, dcolor, 0, 0), Vertex2(pos.x, pos.y + size, dcolor, 0, 0) };
-
-		DrawSmoothLine(v, 4, width, lineType);
+		DrawAALine(Vec2F(pos.x - size, pos.y), Vec2F(pos.x + size, pos.y), color, width, lineType);
+		DrawAALine(Vec2F(pos.x, pos.y - size), Vec2F(pos.x, pos.y + size), color, width, lineType);
 	}
 
-	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/,
+	void Render::DrawAACircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/,
 							int segCount /*= 20*/,
 							float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
-		Vertex2* v = mnew Vertex2[segCount * 2];
+		Vertex2* v = mnew Vertex2[segCount + 1];
 		ULong dcolor = color.ABGR();
 
 		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
-		for (int i = 0; i < segCount; i++)
+		for (int i = 0; i < segCount + 1; i++)
 		{
 			float a = (float)i*angleSeg;
 			v[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
 		}
 
-		DrawSmoothLine(v, segCount, width, lineType);
+		DrawAAPolyLine(v, segCount + 1, width, lineType);
 		delete[] v;
 	}
 
-	void Render::DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
+	void Render::DrawAABezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
 								 const Color4& color /*= Color4::White()*/,
 								 float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		const int segCount = 20;
-		Vertex2 v[segCount * 2];
+		Vertex2 v[segCount + 1];
 		ULong dcolor = color.ABGR();
 
-		Vec2F lastp = p1;
-		for (int i = 0; i < segCount; i++)
+		for (int i = 0; i < segCount + 1; i++)
 		{
-			float coef = (float)(i + 1) / (float)segCount;
+			float coef = (float)i / (float)segCount;
 			Vec2F p = Bezier(p1, p2, p3, p4, coef);
-
-			v[i] = Vertex2(lastp, dcolor, 0, 0);
-
-			lastp = p;
+			v[i] = Vertex2(p, dcolor, 0, 0);
 		}
 
-		DrawSmoothLine(v, segCount, width, lineType);
+		DrawAAPolyLine(v, segCount + 1, width, lineType);
 	}
 
-	void Render::DrawBezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
+	void Render::DrawAABezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
 									  const Color4& color /*= Color4::White()*/, const Vec2F& arrowSize /*= Vec2F(10, 10)*/,
 									  float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
 		const int segCount = 20;
-		Vertex2 v[segCount * 2 + 4];
+		Vertex2 v[segCount + 1];
 		ULong dcolor = color.ABGR();
 
 		Vec2F lastp = p1;
 		Vec2F dir;
-		for (int i = 0; i < segCount; i++)
+		for (int i = 0; i < segCount + 1; i++)
 		{
-			float coef = (float)(i + 1) / (float)segCount;
+			float coef = (float)i / (float)segCount;
 			Vec2F p = Bezier(p1, p2, p3, p4, coef);
-
-			v[i] = Vertex2(lastp, dcolor, 0, 0);
-
+			v[i] = Vertex2(p, dcolor, 0, 0);
 			dir = p - lastp;
 			lastp = p;
 		}
 
+		DrawAAPolyLine(v, segCount + 1, width, lineType);
+
 		dir.Normalize();
 		Vec2F ndir = dir.Perpendicular();
 
-		v[segCount + 0] = Vertex2(p4, dcolor, 0, 0);
-		v[segCount + 1] = Vertex2(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0);
-		v[segCount + 2] = Vertex2(p4, dcolor, 0, 0);
-		v[segCount + 3] = Vertex2(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0);
+		Vertex2 va[] =
+		{
+			Vertex2(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0),
+			Vertex2(p4, dcolor, 0, 0),
+			Vertex2(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0)
+		};
+		DrawAAPolyLine(va, 3, width, lineType);
+	}
 
-		DrawSmoothLine(v, segCount + 4, width, lineType);
+	void Render::DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/)
+	{
+		ULong dcolor = color.ABGR();
+		Vertex2 v[] ={ Vertex2(a.x, a.y, dcolor, 0, 0), Vertex2(b.x, b.y, dcolor, 0, 0) };
+		DrawPolyLine(v, 2);
+	}
+
+	void Render::DrawLine(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/)
+	{
+		ULong dcolor = color.ABGR();
+		Vertex2* v = mnew Vertex2[points.Count()];
+		for (int i = 0; i < points.Count(); i++)
+			v[i] = Vertex2(points[i], dcolor, 0, 0);
+
+		DrawPolyLine(v, points.Count());
+		delete[] v;
+	}
+
+	void Render::DrawArrow(const Vec2F& a, const Vec2F& b, const Color4& color /*= Color4::White()*/,
+							 const Vec2F& arrowSize /*= Vec2F(10, 10)*/)
+	{
+		ULong dcolor = color.ABGR();
+		Vec2F dir = (b - a).Normalized();
+		Vec2F ndir = dir.Perpendicular();
+
+		Vertex2 v[] ={
+			Vertex2(a, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
+			Vertex2(b - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0),
+			Vertex2(b - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0), Vertex2(b, dcolor, 0, 0) };
+
+		DrawPolyLine(v, 6);
+	}
+
+	void Render::DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color /*= Color4::White()*/)
+	{
+		ULong dcolor = color.ABGR();
+		Vertex2 v[] ={
+			Vertex2(minp.x, minp.y, dcolor, 0, 0),
+			Vertex2(maxp.x, minp.y, dcolor, 0, 0),
+			Vertex2(maxp.x, maxp.y, dcolor, 0, 0),
+			Vertex2(minp.x, maxp.y, dcolor, 0, 0),
+			Vertex2(minp.x, minp.y, dcolor, 0, 0)
+		};
+		DrawPolyLine(v, 5);
+	}
+
+	void Render::DrawRectFrame(const RectF& rect, const Color4& color /*= Color4::White()*/)
+	{
+		DrawRectFrame(rect.LeftBottom(), rect.RightTop(), color);
+	}
+
+	void Render::DrawBasis(const Basis& basis, const Color4& xcolor /*= Color4::Red()*/,
+							 const Color4& ycolor /*= Color4::Blue()*/, const Color4& color /*= Color4::White()*/)
+	{
+		DrawLine(basis.offs, basis.offs + basis.xv, xcolor);
+		DrawLine(basis.offs, basis.offs + basis.yv, ycolor);
+
+		Vertex2 v[] =
+		{
+			Vertex2(basis.offs + basis.xv, color.ABGR(), 0, 0),
+			Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0),
+			Vertex2(basis.offs + basis.yv, color.ABGR(), 0, 0)
+		};
+
+		DrawPolyLine(v, 3);
+	}
+
+	void Render::DrawCross(const Vec2F& pos, float size /*= 5*/, const Color4& color /*= Color4::White()*/)
+	{
+		DrawLine(Vec2F(pos.x - size, pos.y), Vec2F(pos.x + size, pos.y), color);
+		DrawLine(Vec2F(pos.x, pos.y - size), Vec2F(pos.x, pos.y + size), color);
+	}
+
+	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/,
+							  int segCount /*= 20*/)
+	{
+		Vertex2* v = mnew Vertex2[segCount + 1];
+		ULong dcolor = color.ABGR();
+
+		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
+		for (int i = 0; i < segCount + 1; i++)
+		{
+			float a = (float)i*angleSeg;
+			v[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+		}
+
+		DrawPolyLine(v, segCount + 1);
+		delete[] v;
+	}
+
+	void Render::DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
+								   const Color4& color /*= Color4::White()*/)
+	{
+		const int segCount = 20;
+		Vertex2 v[segCount + 1];
+		ULong dcolor = color.ABGR();
+
+		for (int i = 0; i < segCount + 1; i++)
+		{
+			float coef = (float)i / (float)segCount;
+			Vec2F p = Bezier(p1, p2, p3, p4, coef);
+			v[i] = Vertex2(p, dcolor, 0, 0);
+		}
+
+		DrawPolyLine(v, segCount + 1);
+	}
+
+	void Render::DrawBezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
+										const Color4& color /*= Color4::White()*/, const Vec2F& arrowSize /*= Vec2F(10, 10)*/)
+	{
+		const int segCount = 20;
+		Vertex2 v[segCount + 1];
+		ULong dcolor = color.ABGR();
+
+		Vec2F lastp = p1;
+		Vec2F dir;
+		for (int i = 0; i < segCount + 1; i++)
+		{
+			float coef = (float)i / (float)segCount;
+			Vec2F p = Bezier(p1, p2, p3, p4, coef);
+			v[i] = Vertex2(p, dcolor, 0, 0);
+			dir = p - lastp;
+			lastp = p;
+		}
+
+		DrawPolyLine(v, segCount + 1);
+
+		dir.Normalize();
+		Vec2F ndir = dir.Perpendicular();
+
+		Vertex2 va[] =
+		{
+			Vertex2(p4 - dir*arrowSize.x + ndir*arrowSize.y, dcolor, 0, 0),
+			Vertex2(p4, dcolor, 0, 0),
+			Vertex2(p4 - dir*arrowSize.x - ndir*arrowSize.y, dcolor, 0, 0)
+		};
+		DrawPolyLine(va, 3);
 	}
 
 	void Render::BeginRenderToStencilBuffer()
@@ -739,7 +919,7 @@ namespace o2
 				   mesh->indexes, mesh->polyCount, mesh->mTexture);
 	}
 
-	void Render::DrawBuffer(PrimitiveType primitiveType, Vertex2* vertices, UInt verticesCount, 
+	void Render::DrawBuffer(PrimitiveType primitiveType, Vertex2* vertices, UInt verticesCount,
 							UInt16* indexes, UInt elementsCount, const TextureRef& texture)
 	{
 		if (!mReady)
@@ -756,7 +936,6 @@ namespace o2
 		else
 			indexesCount = elementsCount*3;
 
-		// Check difference
 		if (mLastDrawTexture != texture.mTexture ||
 			mLastDrawVertex + verticesCount >= mVertexBufferSize ||
 			mLastDrawIdx + indexesCount >= mIndexBufferSize ||
@@ -796,38 +975,54 @@ namespace o2
 
 	void Render::DrawMeshWire(Mesh* mesh, const Color4& color /*= Color4::White()*/)
 	{
-		Vertex2* vertices = new Vertex2[mesh->polyCount * 6];
 		auto dcolor = color.ABGR();
 
 		for (UInt i = 0; i < mesh->polyCount; i++)
 		{
-			vertices[i * 6] = mesh->vertices[mesh->indexes[i * 3]];
-			vertices[i * 6 + 1] = mesh->vertices[mesh->indexes[i * 3 + 1]];
-			vertices[i * 6 + 2] = mesh->vertices[mesh->indexes[i * 3 + 1]];
-			vertices[i * 6 + 3] = mesh->vertices[mesh->indexes[i * 3 + 2]];
-			vertices[i * 6 + 4] = mesh->vertices[mesh->indexes[i * 3 + 2]];
-			vertices[i * 6 + 5] = mesh->vertices[mesh->indexes[i * 3]];
+			Vertex2 v[] =
+			{
+				mesh->vertices[mesh->indexes[i*3]],
+				mesh->vertices[mesh->indexes[i*3 + 1]],
+				mesh->vertices[mesh->indexes[i*3 + 2]]
+			};
+
+			v[0].color = dcolor;
+			v[1].color = dcolor;
+			v[2].color = dcolor;
+
+			DrawPolyLine(v, 3);
 		}
-
-		for (UInt i = 0; i < mesh->polyCount * 6; i++)
-			vertices[i].color = dcolor;
-
-		DrawSmoothLine(vertices, mesh->polyCount * 3);
-		delete[] vertices;
 	}
 
-	void Render::DrawSmoothLine(Vertex2* verticies, int count, float width /*= 1.0f*/,
-								LineType lineType /*= LineType::Solid*/)
+	void Render::DrawPolyLine(Vertex2* vertices, int count, float width /*= 1.0f*/)
+	{
+		DrawBuffer(PrimitiveType::Line, vertices, count, mHardLinesIndexData, count - 1, mSolidLineTexture);
+	}
+
+	void Render::DrawAAPolyLine(Vertex2* vertices, int count, float width /*= 1.0f*/,
+									LineType lineType /*= LineType::Solid*/,
+									bool scaleToScreenSpace /*= true*/)
 	{
 		static Mesh mesh(mSolidLineTexture, 1024, 1024);
 
 		TextureRef texture = lineType == LineType::Solid ? mSolidLineTexture : mDashLineTexture;
 		Vec2I texSize = lineType == LineType::Solid ? Vec2I(1, 1) : mDashLineTexture->GetSize();
 
-		Geometry::CreatePolyLineMesh(verticies, count,
-									 mesh.vertices, mesh.vertexCount, mesh.mMaxVertexCount,
-									 mesh.indexes, mesh.polyCount, mesh.mMaxPolyCount,
-									 width - 0.5f, 0.5f, 0.5f, texSize);
+		if (scaleToScreenSpace)
+		{
+			Geometry::CreatePolyLineMesh(vertices, count,
+										 mesh.vertices, mesh.vertexCount, mesh.mMaxVertexCount,
+										 mesh.indexes, mesh.polyCount, mesh.mMaxPolyCount,
+										 width - 0.5f, 0.5f, 0.5f, texSize, mInvViewScale, mInvViewScale);
+		}
+		else
+		{
+			Geometry::CreatePolyLineMesh(vertices, count,
+										 mesh.vertices, mesh.vertexCount, mesh.mMaxVertexCount,
+										 mesh.indexes, mesh.polyCount, mesh.mMaxPolyCount,
+										 width, 0.5f, 0.5f, texSize, 1.0f, mInvViewScale);
+		}
+
 		mesh.SetTexture(texture);
 		mesh.Draw();
 	}

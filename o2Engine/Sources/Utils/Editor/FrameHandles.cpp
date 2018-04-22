@@ -125,7 +125,7 @@ namespace o2
 
 	void FrameHandles::Draw()
 	{
-		o2Render.DrawBasis(mFrame, mFrameColor, mFrameColor, mFrameColor);
+		o2Render.DrawAABasis(mFrame, mFrameColor, mFrameColor, mFrameColor);
 		CursorAreaEventsListener::OnDrawn();
 
 		if (mIsRotationAvailable)

@@ -48,8 +48,8 @@ namespace Editor
 				mAngleMesh->Draw();
 
 			Vec2F screenPos = o2EditorSceneScreen.SceneToScreenPoint(mScenePivot);
-			o2Render.DrawCircle(screenPos, mRotateRingInsideRadius, mRotateRingsColor, mRotateRingSegs);
-			o2Render.DrawCircle(screenPos, mRotateRingOutsideRadius, mRotateRingsColor, mRotateRingSegs);
+			o2Render.DrawAACircle(screenPos, mRotateRingInsideRadius, mRotateRingsColor, mRotateRingSegs);
+			o2Render.DrawAACircle(screenPos, mRotateRingOutsideRadius, mRotateRingsColor, mRotateRingSegs);
 		}
 
 		SelectionTool::DrawScreen();

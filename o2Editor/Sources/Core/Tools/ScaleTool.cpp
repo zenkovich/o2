@@ -62,8 +62,8 @@ namespace Editor
 		Vec2F screenHandlesPos = o2EditorSceneScreen.SceneToScreenPoint(mSceneHandlesPos);
 		Vec2F screenHorHandlePos = o2EditorSceneScreen.SceneToScreenPoint(mHorDragHandle.GetPosition());
 		Vec2F screenVerHandlePos = o2EditorSceneScreen.SceneToScreenPoint(mVerDragHandle.GetPosition());
-		o2Render.DrawLine(screenHandlesPos, screenHorHandlePos, Color4::Green());
-		o2Render.DrawLine(screenHandlesPos, screenVerHandlePos, Color4::Red());
+		o2Render.DrawAALine(screenHandlesPos, screenHorHandlePos, Color4::Green());
+		o2Render.DrawAALine(screenHandlesPos, screenVerHandlePos, Color4::Red());
 	}
 
 	void ScaleTool::OnEnabled()

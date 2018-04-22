@@ -101,49 +101,83 @@ namespace o2
 		// Returns current camera
 		Camera GetCamera() const;
 
-		// Draw single line with color
-		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White(),
-					  float width = 1.0f, LineType lineType = LineType::Solid);
+		// Draws single line with color
+		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White());
 
-		// Draw single line with color
-		void DrawArrow(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White(), 
-					   const Vec2F& arrowSize = Vec2F(10, 10),
-					   float width = 1.0f, LineType lineType = LineType::Solid);
+		// Draws single line with color
+		void DrawArrow(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White(),
+					   const Vec2F& arrowSize = Vec2F(10, 10));
 
-		// Draw single line with color
-		void DrawLine(const Vector<Vec2F>& points, const Color4& color = Color4::White(),
-					  float width = 1.0f, LineType lineType = LineType::Solid);
+		// Draws single line with color
+		void DrawLine(const Vector<Vec2F>& points, const Color4& color = Color4::White());
 
-		// Draw rect frame with color
-		void DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color = Color4::White(),
-						   float width = 1.0f, LineType lineType = LineType::Solid);
+		// Draws rect frame with color
+		void DrawRectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color = Color4::White());
 
-		// Draw rect frame with color
-		void DrawRectFrame(const RectF& rect, const Color4& color = Color4::White(),
-						   float width = 1.0f, LineType lineType = LineType::Solid);
+		// Draws rect frame with color
+		void DrawRectFrame(const RectF& rect, const Color4& color = Color4::White());
 
-		// Draw basis frame
+		// Draws basis frame
 		void DrawBasis(const Basis& basis, const Color4& xcolor = Color4::Red(), const Color4& ycolor = Color4::Blue(),
-					   const Color4& color = Color4::White(),
-					   float width = 1.0f, LineType lineType = LineType::Solid);
+					   const Color4& color = Color4::White());
 
-		// Draw cross with color
-		void DrawCross(const Vec2F& pos, float size = 5, const Color4& color = Color4::White(),
-					   float width = 1.0f, LineType lineType = LineType::Solid);
+		// Draws cross with color
+		void DrawCross(const Vec2F& pos, float size = 5, const Color4& color = Color4::White());
 
-		// Draw circle with color
-		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White(), int segCount = 20,
-						float width = 1.0f, LineType lineType = LineType::Solid);
+		// Draws circle with color
+		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White(), int segCount = 20);
 
 		// Draws bezier curve with color
 		void DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
-							 const Color4& color = Color4::White(), 
-							 float width = 1.0f, LineType lineType = LineType::Solid);
+							 const Color4& color = Color4::White());
 
 		// Draws bezier curve with color
 		void DrawBezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
-								  const Color4& color = Color4::White(), const Vec2F& arrowSize = Vec2F(10, 10), 
-								  float width = 1.0f, LineType lineType = LineType::Solid);
+								  const Color4& color = Color4::White(), const Vec2F& arrowSize = Vec2F(10, 10));
+
+		// Draws anti-aliased single line with color
+		void DrawAALine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White(),
+						float width = 1.0f, LineType lineType = LineType::Solid);
+
+		// Draws anti-aliased single line with color
+		void DrawAAArrow(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White(),
+						 const Vec2F& arrowSize = Vec2F(10, 10),
+						 float width = 1.0f, LineType lineType = LineType::Solid);
+
+		// Draws anti-aliased single line with color
+		void DrawAALine(const Vector<Vec2F>& points, const Color4& color = Color4::White(),
+						float width = 1.0f, LineType lineType = LineType::Solid);
+
+		// Draws anti-aliased rect frame with color
+		void DrawAARectFrame(const Vec2F& minp, const Vec2F& maxp, const Color4& color = Color4::White(),
+							 float width = 1.0f, LineType lineType = LineType::Solid);
+
+		// Draws anti-aliased rect frame with color
+		void DrawAARectFrame(const RectF& rect, const Color4& color = Color4::White(),
+							 float width = 1.0f, LineType lineType = LineType::Solid);
+
+		// Draws anti-aliased basis frame
+		void DrawAABasis(const Basis& basis, const Color4& xcolor = Color4::Red(), const Color4& ycolor = Color4::Blue(),
+						 const Color4& color = Color4::White(),
+						 float width = 1.0f, LineType lineType = LineType::Solid);
+
+		// Draws anti-aliased cross with color
+		void DrawAACross(const Vec2F& pos, float size = 5, const Color4& color = Color4::White(),
+						 float width = 1.0f, LineType lineType = LineType::Solid);
+
+		// Draws anti-aliased circle with color
+		void DrawAACircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White(), int segCount = 20,
+						  float width = 1.0f, LineType lineType = LineType::Solid);
+
+		// Draws anti-aliased bezier curve with color
+		void DrawAABezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
+							   const Color4& color = Color4::White(),
+							   float width = 1.0f, LineType lineType = LineType::Solid);
+
+		// Draws anti-aliased bezier curve with color
+		void DrawAABezierCurveArrow(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,
+									const Color4& color = Color4::White(), const Vec2F& arrowSize = Vec2F(10, 10),
+									float width = 1.0f, LineType lineType = LineType::Solid);
 
 		// Beginning render to stencil buffer
 		void BeginRenderToStencilBuffer();
@@ -181,20 +215,24 @@ namespace o2
 		// Returns true, if scissor test enabled
 		bool IsScissorTestEnabled() const;
 
-		// Drawing mesh
+		// Draws mesh
 		void DrawMesh(Mesh* mesh);
 
 		// Draws data from buffer with specified texture and primitive type
 		void DrawBuffer(PrimitiveType primitiveType, Vertex2* vertices, UInt verticesCount,
 						UInt16* indexes, UInt elementsCount, const TextureRef& texture);
 
-		// Drawing mesh wire
+		// Draws mesh wire
 		void DrawMeshWire(Mesh* mesh, const Color4& color = Color4::White());
 
-		// Drawing lines
-		void DrawSmoothLine(Vertex2* verticies, int count, float width = 1.0f, LineType lineType = LineType::Solid);
+		// Draws hard poly line. Vertices - buffer of vertex pairs for each line
+		void DrawPolyLine(Vertex2* vertices, int count, float width = 1.0f);
 
-		// Binding render target
+		// Draws anti-aliased lines
+		void DrawAAPolyLine(Vertex2* vertices, int count, float width = 1.0f, LineType lineType = LineType::Solid,
+							bool scaleToScreenSpace = true);
+
+	// Binding render target
 		void SetRenderTexture(TextureRef renderTarget);
 
 		// Unbinding render target
@@ -220,38 +258,54 @@ namespace o2
 		typedef Vector<Font*> FontsVec;
 		typedef Vector<Sprite*> SpritesVec;
 
-		LogStream*        mLog;                    // Render log stream
-						  
-		TexturesVec       mTextures;               // Loaded textures
-		FontsVec          mFonts;                  // Loaded fonts
-						  
-		Camera            mCamera;                 // Camera transformation
-		Vec2I             mResolution;             // Primary back buffer size
-		Vec2I             mCurrentResolution;      // Current back buffer size
-		Vec2I             mDPI;                    // Current device screen DPI
-						  
-		bool              mRenderTargetsAvailable; // True, if render targets is available
-		Vec2I             mMaxTextureSize;         // Max texture size
-						  
-		bool              mStencilDrawing;         // True, if drawing in stencil buffer
-		bool              mStencilTest;            // True, if drawing with stencil test
-						  
-		ScissorInfosVec   mScissorInfos;           // Scissor clipping depth infos vector
-		StackScissorVec   mStackScissors;          // Stack of scissors clippings
-		bool              mClippingEverything;     // Is everything clipped
-						  
-		TextureRef        mCurrentRenderTarget;    // Current render target. NULL if rendering in back buffer
-						  
-		float             mDrawingDepth;           // Current drawing depth, increments after each drawing drawables
-						  
-		FT_Library        mFreeTypeLib;            // FreeType library, for rendering fonts
+		UInt8*            mVertexData;               // Vertex data buffer
+		UInt16*           mVertexIndexData;          // Index data buffer
+		UInt              mVertexBufferSize = 6000;  // Maximum size of vertex buffer
+		UInt              mIndexBufferSize = 6000*3; // Maximum size of index buffer
+		PrimitiveType     mCurrentPrimitiveType;     // Type of drawing primitives for next DIP
 
-		SpritesVec        mSprites;                // All sprites
-						  
-		bool              mReady;                  // True, if render system initialized
+		Texture*          mLastDrawTexture;          // Stored texture ptr from last DIP
+		UInt              mLastDrawVertex;           // Last vertex idx for next DIP
+		UInt              mLastDrawIdx;              // Last vertex index for next DIP
+		UInt              mTrianglesCount;           // Triangles count for next DIP
+		UInt              mFrameTrianglesCount;      // Total triangles at current frame
+		UInt              mDIPCount;                 // DrawIndexedPrimitives calls count
 
-		TextureRef        mSolidLineTexture;       // Solid line texture
-		TextureRef        mDashLineTexture;        // Dash line texture
+		LogStream*        mLog;                      // Render log stream
+
+		TexturesVec       mTextures;                 // Loaded textures
+		FontsVec          mFonts;                    // Loaded fonts
+
+		Camera            mCamera;                   // Camera transformation
+		Vec2I             mResolution;               // Primary back buffer size
+		Vec2I             mCurrentResolution;        // Current back buffer size
+		float             mViewScale;                // Current view scale, depends on camera
+		float             mInvViewScale;             // Inverted mViewScale
+		Vec2I             mDPI;                      // Current device screen DPI
+
+		bool              mRenderTargetsAvailable;   // True, if render targets is available
+		Vec2I             mMaxTextureSize;           // Max texture size
+
+		bool              mStencilDrawing;           // True, if drawing in stencil buffer
+		bool              mStencilTest;              // True, if drawing with stencil test
+
+		ScissorInfosVec   mScissorInfos;             // Scissor clipping depth infos vector
+		StackScissorVec   mStackScissors;            // Stack of scissors clippings
+		bool              mClippingEverything;       // Is everything clipped
+
+		TextureRef        mCurrentRenderTarget;      // Current render target. NULL if rendering in back buffer
+
+		float             mDrawingDepth;             // Current drawing depth, increments after each drawing drawables
+
+		FT_Library        mFreeTypeLib;              // FreeType library, for rendering fonts
+
+		SpritesVec        mSprites;                  // All sprites
+
+		bool              mReady;                    // True, if render system initialized
+
+		UInt16*           mHardLinesIndexData;       // Index data buffer
+		TextureRef        mSolidLineTexture;         // Solid line texture
+		TextureRef        mDashLineTexture;          // Dash line texture
 
 	protected:
 		// Don't copy
@@ -262,6 +316,9 @@ namespace o2
 
 		// It is called when target frame or window was resized
 		void OnFrameResized();
+
+		// Initializes index buffer for drawing lines - pairs of lines beginnings and ends
+		void InitializeLinesIndexBuffer();
 
 		// Initializeslines textures
 		void InitializeLinesTextures();

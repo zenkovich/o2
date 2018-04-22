@@ -117,7 +117,7 @@ namespace Editor
 		{
 			auto points = key.GetApproximatedPoints();
 			for (int i = 1; i < key.GetApproximatedPointsCount(); i++)
-				o2Render.DrawLine(points[i - 1], points[i], curveColor);
+				o2Render.DrawAALine(points[i - 1], points[i], curveColor);
 		}
 
 		o2Render.UnbindRenderTexture();

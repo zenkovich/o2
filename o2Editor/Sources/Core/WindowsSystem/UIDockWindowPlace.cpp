@@ -44,17 +44,17 @@ namespace Editor
 		if (o2Input.IsKeyDown(VK_F1))
 		{
 			if (mDragHandleMin.IsInteractable())
-				o2Render.DrawRectFrame(mDragHandleAreaMin, Color4::Blue());
+				o2Render.DrawAARectFrame(mDragHandleAreaMin, Color4::Blue());
 
 			if (mDragHandleMax.IsInteractable())
-				o2Render.DrawRectFrame(mDragHandleAreaMax, Color4::Red());
+				o2Render.DrawAARectFrame(mDragHandleAreaMax, Color4::Red());
 
 			if (mNeighborMin)
 			{
 				Vec2F c1 = layout->GetWorldRect().Center();
 				Vec2F c2 = mNeighborMin->layout->GetWorldRect().Center();
 				Vec2F n = (c2 - c1).Normalized().Perpendicular()*30.0f;
-				o2Render.DrawBezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Blue());
+				o2Render.DrawAABezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Blue());
 			}
 
 			if (mNeighborMax)
@@ -62,7 +62,7 @@ namespace Editor
 				Vec2F c1 = layout->GetWorldRect().Center();
 				Vec2F c2 = mNeighborMax->layout->GetWorldRect().Center();
 				Vec2F n = (c2 - c1).Normalized().Perpendicular()*30.0f;
-				o2Render.DrawBezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Red());
+				o2Render.DrawAABezierCurveArrow(c1, c1 + n, c2 + n, c2, Color4::Red());
 			}
 		}
 	}

@@ -215,7 +215,7 @@ namespace o2
 
 	void Debug::DbgLine::Draw()
 	{
-		o2Render.DrawLine(begin, end, color);
+		o2Render.DrawAALine(begin, end, color);
 	}
 
 	Debug::DbgCircle::DbgCircle():
@@ -228,7 +228,7 @@ namespace o2
 
 	void Debug::DbgCircle::Draw()
 	{
-		o2Render.DrawCircle(origin, radius, color);
+		o2Render.DrawAACircle(origin, radius, color);
 	}
 
 	Debug::DbgRect::DbgRect()
@@ -240,7 +240,7 @@ namespace o2
 
 	void Debug::DbgRect::Draw()
 	{
-		o2Render.DrawRectFrame(rect, color);
+		o2Render.DrawAARectFrame(rect, color);
 	}
 
 	Debug::DbgPolyLine::DbgPolyLine()
@@ -252,7 +252,7 @@ namespace o2
 
 	void Debug::DbgPolyLine::Draw()
 	{
-		o2Render.DrawLine(points, color);
+		o2Render.DrawAALine(points, color);
 	}
 
 	Debug::DbgText::DbgText():

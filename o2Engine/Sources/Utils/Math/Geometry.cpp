@@ -8,7 +8,8 @@ namespace o2
 	void Geometry::CreatePolyLineMesh(const Vertex2* points, int pointsCount,
 									  Vertex2*& verticies, UInt& vertexCount, UInt& vertexSize,
 									  UInt16*& indexes, UInt& polyCount, UInt& polySize,
-									  float width, float texBorderTop, float texBorderBottom, const Vec2F& texSize)
+									  float width, float texBorderTop, float texBorderBottom, const Vec2F& texSize,
+									  float widthCoef /*= 1.0f*/, float borderCoef /*= 1.0f*/)
 	{
 		int newVertexCount = pointsCount*4;
 		int newPolyCount = (pointsCount - 1)*6;
@@ -31,9 +32,9 @@ namespace o2
 			polySize = newPolyCount;
 		}
 
-		float halfWidth = width*0.5f;
-		float halfWidhtBorderTop = halfWidth + texBorderTop;
-		float halfWidhtBorderBottom = halfWidth + texBorderBottom;
+		float halfWidth = width*0.5f*widthCoef;
+		float halfWidhtBorderTop = halfWidth + texBorderTop*borderCoef;
+		float halfWidhtBorderBottom = halfWidth + texBorderBottom*borderCoef;
 
 		Vec2F invTexSize(1.0f/texSize.x, 1.0f/texSize.y);
 
@@ -51,7 +52,7 @@ namespace o2
 		{
 			Vec2F point = (Vec2F)points[i] + offs;
 			ULong color = points[i].color;
-			ULong zeroAlphaColor = color << 8 >> 8; 
+			ULong zeroAlphaColor = color << 8 >> 8;
 
 			if (i == 0)
 			{
@@ -81,9 +82,9 @@ namespace o2
 				Vec2F downBorder = point - norm*halfWidhtBorderTop;
 
 				if (i%2 == 0)
-					u -= segLength*invTexSize.x;
+					u -= segLength/widthCoef*invTexSize.x;
 				else
-					u += segLength*invTexSize.x;
+					u += segLength/widthCoef*invTexSize.x;
 
 				verticies[vertex++].Set(up, color, u, upTexV);
 				verticies[vertex++].Set(upBorder, zeroAlphaColor, u, 1);
@@ -104,21 +105,21 @@ namespace o2
 				Vec2F prevNorm = prevDir.Perpendicular().Inverted();
 				Vec2F nextNorm = nextDir.Perpendicular();
 
-				Vec2F upBorder = Intersection::Lines(point - prevNorm*halfWidhtBorderTop, prevDir,
-													 point - nextNorm*halfWidhtBorderTop, nextDir);
+				Vec2F upBorder = Intersection::LinesNoChek(point - prevNorm*halfWidhtBorderTop, prevDir,
+														   point - nextNorm*halfWidhtBorderTop, nextDir);
 
-				Vec2F up = Intersection::Lines(point - prevNorm*halfWidth, prevDir,
-											   point - nextNorm*halfWidth, nextDir);
+				Vec2F up = Intersection::LinesNoChek(point - prevNorm*halfWidth, prevDir,
+													 point - nextNorm*halfWidth, nextDir);
 
-				Vec2F down = Intersection::Lines(point + prevNorm*halfWidth, prevDir,
-												 point + nextNorm*halfWidth, nextDir);
+				Vec2F down = Intersection::LinesNoChek(point + prevNorm*halfWidth, prevDir,
+													   point + nextNorm*halfWidth, nextDir);
 
-				Vec2F downBorder = Intersection::Lines(point + prevNorm*halfWidhtBorderBottom, prevDir,
-													   point + nextNorm*halfWidhtBorderBottom, nextDir);
+				Vec2F downBorder = Intersection::LinesNoChek(point + prevNorm*halfWidhtBorderBottom, prevDir,
+															 point + nextNorm*halfWidhtBorderBottom, nextDir);
 
 				float segSign = i%2 == 0 ? -1.0f : 1.0f;
 
-				u += segLength*invTexSize.x*segSign;
+				u += segLength/widthCoef*invTexSize.x*segSign;
 
 				verticies[vertex++].Set(up, color, u + prevDir.Dot(up - point)*invTexSize.x*segSign, upTexV);
 				verticies[vertex++].Set(upBorder, zeroAlphaColor, u + prevDir.Dot(upBorder - point)*invTexSize.x*segSign, 1);

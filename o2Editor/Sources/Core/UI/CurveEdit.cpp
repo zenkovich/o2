@@ -475,8 +475,8 @@ namespace Editor
 			Vec2F yBegin = Vec2F(d, -cameraMaxSize) + gridOrigin;
 			Vec2F yEnd = Vec2F(d, cameraMaxSize) + gridOrigin;
 
-			o2Render.DrawLine(xBegin, xEnd, yTen ? mGridColor : cellColorSmoothed);
-			o2Render.DrawLine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
+			o2Render.DrawAALine(xBegin, xEnd, yTen ? mGridColor : cellColorSmoothed);
+			o2Render.DrawAALine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
 		}
 
 		char buf[255];
@@ -531,7 +531,7 @@ namespace Editor
 				if (a.x > cameraRightPos)
 					break;
 
-				o2Render.DrawLine(a, b, curve->color);
+				o2Render.DrawAALine(a, b, curve->color);
 			}
 
 // 			int idx = 0;
@@ -584,8 +584,8 @@ namespace Editor
 			Vec2F right = mTransformFrame.GetCurrentBasis().offs + mTransformFrame.GetCurrentBasis().xv;
 			RectF rect = layout->worldRect;
 
-			o2Render.DrawLine(Vec2F(right.x, rect.bottom), Vec2F(right.x, rect.top), mTransformFrame.GetFrameColor());
-			o2Render.DrawLine(Vec2F(left.x, rect.bottom), Vec2F(left.x, rect.top), mTransformFrame.GetFrameColor());
+			o2Render.DrawAALine(Vec2F(right.x, rect.bottom), Vec2F(right.x, rect.top), mTransformFrame.GetFrameColor());
+			o2Render.DrawAALine(Vec2F(left.x, rect.bottom), Vec2F(left.x, rect.top), mTransformFrame.GetFrameColor());
 		}
 	}
 
@@ -1878,13 +1878,13 @@ namespace Editor
 		if (leftSupportHandle.enabled)
 		{
 			Vec2F leftSupportHandleScreenPos = curveEditor->LocalToScreenPoint(leftSupportHandle.GetPosition());
-			o2Render.DrawLine(mainHandleScreenPos, leftSupportHandleScreenPos, curveEditor->mGridColor);
+			o2Render.DrawAALine(mainHandleScreenPos, leftSupportHandleScreenPos, curveEditor->mGridColor);
 		}
 
 		if (rightSupportHandle.enabled)
 		{
 			Vec2F rightSupportHandleScreenPos = curveEditor->LocalToScreenPoint(rightSupportHandle.GetPosition());
-			o2Render.DrawLine(mainHandleScreenPos, rightSupportHandleScreenPos, curveEditor->mGridColor);
+			o2Render.DrawAALine(mainHandleScreenPos, rightSupportHandleScreenPos, curveEditor->mGridColor);
 		}
 
 		if (camRect.IsInside(mainHandle.GetPosition()))

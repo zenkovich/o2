@@ -113,7 +113,7 @@ namespace Editor
 		SelectionTool::DrawScene();
 
 		if (o2EditorSceneScreen.GetSelectedActors().Count() > 0)
-			o2Render.DrawBasis(mFrame, mFrameColor, mFrameColor, mFrameColor);
+			o2Render.DrawAABasis(mFrame, mFrameColor, mFrameColor, mFrameColor);
 
 		DrawSnapLines();
 	}
@@ -121,7 +121,7 @@ namespace Editor
 	void FrameTool::DrawSnapLines()
 	{
 		for (auto& line : mSnapLines)
-			o2Render.DrawLine(line.begin, line.end, line.color);
+			o2Render.DrawAALine(line.begin, line.end, line.color);
 	}
 
 	void FrameTool::OnEnabled()

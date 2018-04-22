@@ -174,10 +174,10 @@ namespace Editor
 		{
 			Vec2F wpos = actor->transform->GetWorldPosition();
 			float sz = mActorMinimalSelectionSize*0.5f*camScale;
-			o2Render.DrawCircle(wpos, sz, color);
-			o2Render.DrawLine(wpos, wpos + actor->transform->GetUpDir()*sz, color);
+			o2Render.DrawAACircle(wpos, sz, color);
+			o2Render.DrawAALine(wpos, wpos + actor->transform->GetUpDir()*sz, color);
 		}
-		else o2Render.DrawBasis(actor->transform->GetWorldBasis(), color, color, color);
+		else o2Render.DrawAABasis(actor->transform->GetWorldBasis(), color, color, color);
 		// 
 		// 	auto bs = actor->transform->GetWorldNonSizedBasis();
 		// 	o2Render.DrawLine(bs.offs, bs.offs + bs.xv*100.0f);
