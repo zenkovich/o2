@@ -453,6 +453,12 @@ namespace o2
 			mFunctions.clear();
 		}
 
+		// Returns true when function is empty
+		bool IsEmpty() const
+		{
+			return mFunctions.size() == 0;
+		}
+
 		// Add delegate to inside list
 		template<typename _class_type>
 		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))

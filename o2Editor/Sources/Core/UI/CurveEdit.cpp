@@ -572,7 +572,7 @@ namespace Editor
 
 		Vec2F borders(10, 10);
 
-		mTransformFrame.SetBasis(Basis(LocalToScreenPoint(mTransformFrameBasis.offs) - borders,
+		mTransformFrame.SetBasis(Basis(LocalToScreenPoint(mTransformFrameBasis.origin) - borders,
 								 mTransformFrameBasis.xv/mViewCamera.GetScale() + Vec2F(borders.x*2.0f, 0),
 								 mTransformFrameBasis.yv/mViewCamera.GetScale() + Vec2F(0, borders.y*2.0f)));
 
@@ -580,8 +580,8 @@ namespace Editor
 
 		if (o2Input.IsKeyDown(VK_CONTROL))
 		{
-			Vec2F left = mTransformFrame.GetCurrentBasis().offs;
-			Vec2F right = mTransformFrame.GetCurrentBasis().offs + mTransformFrame.GetCurrentBasis().xv;
+			Vec2F left = mTransformFrame.GetCurrentBasis().origin;
+			Vec2F right = mTransformFrame.GetCurrentBasis().origin + mTransformFrame.GetCurrentBasis().xv;
 			RectF rect = layout->worldRect;
 
 			o2Render.DrawAALine(Vec2F(right.x, rect.bottom), Vec2F(right.x, rect.top), mTransformFrame.GetFrameColor());
@@ -1336,14 +1336,14 @@ namespace Editor
 	void UICurveEditor::OnTransformFrameTransformed(const Basis& basis)
 	{
 		Vec2F border(10, 10);
-		Basis localBasis(ScreenToLocalPoint(basis.offs + border),
+		Basis localBasis(ScreenToLocalPoint(basis.origin + border),
 			(basis.xv - Vec2F(border.x*2.0f, 0))*mViewCamera.GetScale(),
 						 (basis.yv - Vec2F(0, border.y*2.0f))*mViewCamera.GetScale());
 
 		Basis lastTransformBasis = mTransformFrameBasis;
 		Basis delta = mTransformFrameBasis.Inverted()*localBasis;
 
-		if (delta.offs.Length() > 0.01f || delta.xv != Vec2F(1, 0) || delta.yv != Vec2F(0, 1))
+		if (delta.origin.Length() > 0.01f || delta.xv != Vec2F(1, 0) || delta.yv != Vec2F(0, 1))
 		{
 			for (auto handle : mSelectedHandles)
 			{
@@ -1356,11 +1356,11 @@ namespace Editor
 
 			if (o2Input.IsKeyDown(VK_CONTROL))
 			{
-				float right = lastTransformBasis.offs.x + lastTransformBasis.xv.x;
-				float left = lastTransformBasis.offs.x;
+				float right = lastTransformBasis.origin.x + lastTransformBasis.xv.x;
+				float left = lastTransformBasis.origin.x;
 
-				float rightOffset = localBasis.offs.x + localBasis.xv.x - right;
-				float leftOffset = localBasis.offs.x - left;
+				float rightOffset = localBasis.origin.x + localBasis.xv.x - right;
+				float leftOffset = localBasis.origin.x - left;
 
 				bool rightChanged = !Math::Equals(rightOffset, 0.0f);
 				bool leftChanged = !Math::Equals(leftOffset, 0.0f);

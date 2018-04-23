@@ -10,11 +10,11 @@ namespace o2
 	// -------------------------
 	struct Basis
 	{
-		Vec2F xv, yv, offs;
+		Vec2F xv, yv, origin;
 
 		inline Basis();
-		inline Basis(const Vec2F& offsvec, const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
-		inline Basis(const Vec2F& offsvec, float angle);
+		inline Basis(const Vec2F& origin, const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
+		inline Basis(const Vec2F& origin, float angle);
 
 		inline bool operator==(const Basis& cbasis) const;
 		inline bool operator!=(const Basis& cbasis) const;
@@ -22,15 +22,15 @@ namespace o2
 		inline Basis operator*(const Basis& cbasis) const;
 		inline Vec2F operator*(const Vec2F& vec) const;
 
-		inline void Set(const Vec2F& offsvec = Vec2F(0, 0), const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
-		inline void Set(const Vec2F& offsvec, float angle);
+		inline void Set(const Vec2F& origin = Vec2F(0, 0), const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
+		inline void Set(const Vec2F& origin, float angle);
 
 		inline float GetAngle() const;
 		inline Vec2F GetScale() const;
 		inline float GetShift() const;
 		inline float GetShiftFast(const Vec2F& scale) const;
 
-		inline void Decompose(Vec2F* offset, float* angle, Vec2F* scale, float* shift) const;
+		inline void Decompose(Vec2F* origin, float* angle, Vec2F* scale, float* shift) const;
 
 		inline Basis Inverted() const;
 		inline void  Inverse();
@@ -78,18 +78,18 @@ namespace o2
 	}
 
 	Basis::Basis():
-		xv(1, 0), yv(0, 1), offs()
+		xv(1, 0), yv(0, 1), origin()
 	{
 	}
 
-	Basis::Basis(const Vec2F& offsvec, const Vec2F& xvec /*= vec2f(1, 0)*/, const Vec2F& yvec /*= vec2f(0, 1)*/):
-		xv(xvec), yv(yvec), offs(offsvec)
+	Basis::Basis(const Vec2F& origin, const Vec2F& xvec /*= vec2f(1, 0)*/, const Vec2F& yvec /*= vec2f(0, 1)*/):
+		xv(xvec), yv(yvec), origin(origin)
 	{
 	}
 
-	Basis::Basis(const Vec2F& offsvec, float angle)
+	Basis::Basis(const Vec2F& origin, float angle):
+		origin(origin)
 	{
-		offs = offsvec;
 		float cs = cosf(angle), sn = sinf(angle);
 		xv.Set(cs, sn);
 		yv.Set(-sn, cs);
@@ -97,40 +97,40 @@ namespace o2
 
 	bool Basis::operator==(const Basis& cbasis) const
 	{
-		return xv == cbasis.xv && yv == cbasis.yv && offs == cbasis.offs;
+		return xv == cbasis.xv && yv == cbasis.yv && origin == cbasis.origin;
 	}
 
 	bool Basis::operator!=(const Basis& cbasis) const
 	{
-		return xv != cbasis.xv || yv != cbasis.yv || offs != cbasis.offs;
+		return xv != cbasis.xv || yv != cbasis.yv || origin != cbasis.origin;
 	}
 
 	Basis Basis::operator*(const Basis& cbasis) const
 	{
 		Basis res;
-		res.xv.x = xv.x*cbasis.xv.x + xv.y*cbasis.yv.x;                       res.xv.y = xv.x*cbasis.xv.y + xv.y*cbasis.yv.y;
-		res.yv.x = yv.x*cbasis.xv.x + yv.y*cbasis.yv.x;                       res.yv.y = yv.x*cbasis.xv.y + yv.y*cbasis.yv.y;
-		res.offs.x = offs.x*cbasis.xv.x + offs.y*cbasis.yv.x + cbasis.offs.x; res.offs.y = offs.x*cbasis.xv.y + offs.y*cbasis.yv.y + cbasis.offs.y;
+		res.xv.x = xv.x*cbasis.xv.x + xv.y*cbasis.yv.x;                               res.xv.y = xv.x*cbasis.xv.y + xv.y*cbasis.yv.y;
+		res.yv.x = yv.x*cbasis.xv.x + yv.y*cbasis.yv.x;                               res.yv.y = yv.x*cbasis.xv.y + yv.y*cbasis.yv.y;
+		res.origin.x = origin.x*cbasis.xv.x + origin.y*cbasis.yv.x + cbasis.origin.x; res.origin.y = origin.x*cbasis.xv.y + origin.y*cbasis.yv.y + cbasis.origin.y;
 		return res;
 	}
 
 	Vec2F Basis::operator*(const Vec2F& vec) const
 	{
 		Vec2F ret;
-		ret.x = xv.x*vec.x + yv.x*vec.y + offs.x;
-		ret.y = xv.y*vec.x + yv.y*vec.y + offs.y;
+		ret.x = xv.x*vec.x + yv.x*vec.y + origin.x;
+		ret.y = xv.y*vec.x + yv.y*vec.y + origin.y;
 		return ret;
 	}
 
-	void Basis::Set(const Vec2F& offsvec /*= vec2f(0, 0)*/, const Vec2F& xvec /*= vec2f(1, 0)*/, const Vec2F& yvec /*= vec2f(0, 1)*/)
+	void Basis::Set(const Vec2F& origin /*= vec2f(0, 0)*/, const Vec2F& xvec /*= vec2f(1, 0)*/, const Vec2F& yvec /*= vec2f(0, 1)*/)
 	{
 		xv = xvec; yv = yvec;
-		offs = offsvec;
+		this->origin = origin;
 	}
 
-	void Basis::Set(const Vec2F& offsvec, float angle)
+	void Basis::Set(const Vec2F& origin, float angle)
 	{
-		offs = offsvec;
+		this->origin = origin;
 		float cs = cosf(angle), sn = sinf(angle);
 		xv.Set(cs, sn);
 		yv.Set(-sn, cs);
@@ -162,9 +162,9 @@ namespace o2
 		return proj/scale.y;
 	}
 
-	void Basis::Decompose(Vec2F* offset, float* angle, Vec2F* scale, float* shift) const
+	void Basis::Decompose(Vec2F* origin, float* angle, Vec2F* scale, float* shift) const
 	{
-		*offset = offs;
+		*origin = this->origin;
 		*angle = GetAngle();
 		*scale = GetScale();
 		*shift = GetShiftFast(*scale);
@@ -175,13 +175,13 @@ namespace o2
 		float invdet = 1.0f/(xv.x*yv.y - yv.x*xv.y);
 		Basis res;
 
-		res.xv.x=     yv.y*invdet;
-		res.yv.x=    -yv.x*invdet;
-		res.offs.x=  (yv.x*offs.y - offs.x*yv.y)*invdet;
+		res.xv.x=      yv.y*invdet;
+		res.yv.x=     -yv.x*invdet;
+		res.origin.x=  (yv.x*origin.y - origin.x*yv.y)*invdet;
 
-		res.xv.y=    -xv.y*invdet;
-		res.yv.y=     xv.x*invdet;
-		res.offs.y= -(xv.x*offs.y - offs.x*xv.y)*invdet;
+		res.xv.y=     -xv.y*invdet;
+		res.yv.y=      xv.x*invdet;
+		res.origin.y= -(xv.x*origin.y - origin.x*xv.y)*invdet;
 
 		return res;
 	}
@@ -193,7 +193,7 @@ namespace o2
 
 	void Basis::Translate(const Vec2F& voffs)
 	{
-		offs += voffs;
+		origin += voffs;
 	}
 
 	void Basis::Scale(const Vec2F& scalev)
@@ -215,20 +215,20 @@ namespace o2
 	void Basis::Transform(float& x, float& y) const
 	{
 		float lx = x, ly = y;
-		x = xv.x*lx + yv.x*ly + offs.x;
-		y = xv.y*lx + yv.y*ly + offs.y;
+		x = xv.x*lx + yv.x*ly + origin.x;
+		y = xv.y*lx + yv.y*ly + origin.y;
 	}
 
 	Vec2F Basis::Transform(const Vec2F& vec) const
 	{
-		return Vec2F(xv.x*vec.x + yv.x*vec.y + offs.x, xv.y*vec.x + yv.y*vec.y + offs.y);
+		return Vec2F(xv.x*vec.x + yv.x*vec.y + origin.x, xv.y*vec.x + yv.y*vec.y + origin.y);
 	}
 
 	RectF Basis::AABB() const
 	{
 		Vec2F points[4] =
 		{
-			offs, offs + xv, offs + yv, offs + xv + yv
+			origin, origin + xv, origin + yv, origin + xv + yv
 		};
 
 		return RectF::Bound(points, 4);
@@ -238,7 +238,7 @@ namespace o2
 	{
 		Vec2F rs(xv.Length(), yv.Length());
 		Vec2F nx = xv / rs.x, ny = yv / rs.y;
-		Vec2F lp = point - offs;
+		Vec2F lp = point - origin;
 
 		float dx = lp.Dot(nx);
 		float dy = lp.Dot(ny);

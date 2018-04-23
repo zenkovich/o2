@@ -352,7 +352,7 @@ namespace o2
 
 	RectF Text::GetRealRect()
 	{
-		return RectF(mTransform.offs, mTransform.offs + mSymbolsSet.mRealSize);
+		return RectF(mTransform.origin, mTransform.origin + mSymbolsSet.mRealSize);
 	}
 
 	Vec2F Text::GetTextSize(const WString& text, Font* font, int height /*= 11*/, const Vec2F& areaSize /*= Vec2F()*/,
@@ -406,7 +406,7 @@ namespace o2
 		int currentMeshIdx = 0;
 		Mesh* currentMesh = mMeshes[0];
 
-		mSymbolsSet.Initialize(mFont, mText, mHeight, mTransform.offs, mSize, mHorAlign, mVerAlign, mWordWrap, mDotsEndings,
+		mSymbolsSet.Initialize(mFont, mText, mHeight, mTransform.origin, mSize, mHorAlign, mVerAlign, mWordWrap, mDotsEndings,
 							   mSymbolsDistCoef, mLinesDistanceCoef);
 
 		Basis transf = CalculateTextBasis();
@@ -513,8 +513,8 @@ namespace o2
 			Basis transform = CalculateTextBasis();
 			Basis meshTransform = mLastTransform.Inverted()*transform;
 
-			meshTransform.offs.x = Math::Round(meshTransform.offs.x);
-			meshTransform.offs.y = Math::Round(meshTransform.offs.y);
+			meshTransform.origin.x = Math::Round(meshTransform.origin.x);
+			meshTransform.origin.y = Math::Round(meshTransform.origin.y);
 
 			TransformMesh(mLastTransform.Inverted()*transform);
 			mLastTransform = transform;
@@ -540,7 +540,7 @@ namespace o2
 			}
 		}
 
-		mSymbolsSet.Move(bas.offs);
+		mSymbolsSet.Move(bas.origin);
 	}
 
 	void Text::SymbolsSet::Initialize(FontRef font, const WString& text, int height, const Vec2F& position, const Vec2F& areaSize,

@@ -14,8 +14,6 @@ namespace Editor
 {
 	FrameTool::FrameTool()
 	{
-		Vec2F rotateHandleSize = Vec2F(mHandlesRotateSize, mHandlesRotateSize);
-		Vec2F frameHandleSize = Vec2F(mFrameHandlesSize, mFrameHandlesSize);
 		mLeftTopRotateHandle.SetRegularSprite(mnew Sprite("ui/UI3_rotate_regular.png"));
 		mLeftTopRotateHandle.SetHoverSprite(mnew Sprite("ui/UI3_rotate_hover.png"));
 		mLeftTopRotateHandle.SetPressedSprite(mnew Sprite("ui/UI3_rotate_pressed.png"));
@@ -101,6 +99,50 @@ namespace Editor
 		mLeftBottomHandle.checkPositionFunc = THIS_FUNC(CheckLeftBottomSnapping);
 		mRightTopHandle.checkPositionFunc = THIS_FUNC(CheckRightTopSnapping);
 		mRightBottomHandle.checkPositionFunc = THIS_FUNC(CheckRightBottomSnapping);
+
+		mTopHandle.isPointInside = [&](const Vec2F& point)
+		{
+			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x;
+			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
+			Basis b(mFrame.origin + mFrame.yv + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
+					mFrame.xv - transformNonScaled.xv*spriteSize,
+					transformNonScaled.yv*spriteSize);
+
+			return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
+		};
+
+		mBottomHandle.isPointInside = [&](const Vec2F& point)
+		{
+			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x;
+			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
+			Basis b(mFrame.origin + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
+					mFrame.xv - transformNonScaled.xv*spriteSize,
+					transformNonScaled.yv*spriteSize);
+
+			return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
+		};
+
+		mLeftHandle.isPointInside = [&](const Vec2F& point)
+		{
+			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x;
+			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
+			Basis b(mFrame.origin - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
+					transformNonScaled.xv*spriteSize,
+					mFrame.yv - transformNonScaled.yv*spriteSize);
+
+			return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
+		};
+
+		mRightHandle.isPointInside = [&](const Vec2F& point)
+		{
+			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x;
+			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
+			Basis b(mFrame.origin + mFrame.xv - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
+					transformNonScaled.xv*spriteSize,
+					mFrame.yv - transformNonScaled.yv*spriteSize);
+
+			return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
+		};
 
 		SetHandlesEnable(false);
 	}
@@ -237,7 +279,7 @@ namespace Editor
 		else if (selectedActors.Count() > 0)
 		{
 			Basis frameBasis = selectedActors.Last()->transform->GetWorldNonSizedBasis();
-			Vec2F frameOrigin = frameBasis.offs;
+			Vec2F frameOrigin = frameBasis.origin;
 			Vec2F xAxis = frameBasis.xv.Normalized();
 			Vec2F yAxis = frameBasis.yv.Normalized();
 			Vec2F sx, sy;
@@ -260,7 +302,7 @@ namespace Editor
 			}
 
 			mFrame.Set(frameOrigin + xAxis*sx.x + yAxis*sy.x, xAxis*(sx.y - sx.x), yAxis*(sy.y - sy.x));
-			mPivotHandle.position = mFrame.offs + mFrame.xv*0.5f + mFrame.yv*0.5f;
+			mPivotHandle.position = mFrame.origin + mFrame.xv*0.5f + mFrame.yv*0.5f;
 		}
 		else
 		{
@@ -279,7 +321,7 @@ namespace Editor
 			{
 				mIsDragging = true;
 				mBeginDraggingFrame = mFrame;
-				mBeginDraggingOffset = o2EditorSceneScreen.ScreenToLocalPoint(cursor.position) - mFrame.offs;
+				mBeginDraggingOffset = o2EditorSceneScreen.ScreenToLocalPoint(cursor.position) - mFrame.origin;
 
 				SetHandlesEnable(false);
 				HandlePressed();
@@ -333,10 +375,10 @@ namespace Editor
 
 			if (o2Input.IsKeyDown(VK_SHIFT))
 			{
-				if (Math::Abs(transformed.offs.x - mBeginDraggingFrame.offs.x) > Math::Abs(transformed.offs.y - mBeginDraggingFrame.offs.y))
-					transformed.offs.y = mBeginDraggingFrame.offs.y;
+				if (Math::Abs(transformed.origin.x - mBeginDraggingFrame.origin.x) > Math::Abs(transformed.origin.y - mBeginDraggingFrame.origin.y))
+					transformed.origin.y = mBeginDraggingFrame.origin.y;
 				else
-					transformed.offs.x = mBeginDraggingFrame.offs.x;
+					transformed.origin.x = mBeginDraggingFrame.origin.x;
 			}
 
 			TransformActors(mFrame.Inverted()*transformed);
@@ -551,7 +593,7 @@ namespace Editor
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
-		transformedFrame.offs += frameDeltaX;
+		transformedFrame.origin += frameDeltaX;
 		transformedFrame.xv -= frameDeltaX;
 		transformedFrame.yv += frameDeltaY;
 
@@ -564,7 +606,7 @@ namespace Editor
 				Vec2F xd = transformedFrame.xv.Normalized()*
 					(transformedFrame.yv.Length()*aspect - transformedFrame.xv.Length());
 
-				transformedFrame.offs -= xd;
+				transformedFrame.origin -= xd;
 				transformedFrame.xv += xd;
 			}
 			else transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
@@ -580,7 +622,7 @@ namespace Editor
 		Vec2F delta = position - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 
-		transformedFrame.offs += frameDeltaX;
+		transformedFrame.origin += frameDeltaX;
 		transformedFrame.xv -= frameDeltaX;
 
 		if (o2Input.IsKeyDown(VK_SHIFT))
@@ -600,7 +642,7 @@ namespace Editor
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
-		transformedFrame.offs += frameDeltaX + frameDeltaY;
+		transformedFrame.origin += frameDeltaX + frameDeltaY;
 		transformedFrame.xv -= frameDeltaX;
 		transformedFrame.yv -= frameDeltaY;
 
@@ -613,7 +655,7 @@ namespace Editor
 				Vec2F xd = transformedFrame.xv.Normalized()*
 					(transformedFrame.yv.Length()*aspect - transformedFrame.xv.Length());
 
-				transformedFrame.offs -= xd;
+				transformedFrame.origin -= xd;
 				transformedFrame.xv += xd;
 			}
 			else
@@ -621,7 +663,7 @@ namespace Editor
 				Vec2F yd = transformedFrame.yv.Normalized()*
 					(transformedFrame.xv.Length()/aspect - transformedFrame.yv.Length());
 
-				transformedFrame.offs -= yd;
+				transformedFrame.origin -= yd;
 				transformedFrame.yv += yd;
 			}
 		}
@@ -654,7 +696,7 @@ namespace Editor
 		Vec2F delta = position - lastHandleCoords;
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
-		transformedFrame.offs += frameDeltaY;
+		transformedFrame.origin += frameDeltaY;
 		transformedFrame.yv -= frameDeltaY;
 
 		if (o2Input.IsKeyDown(VK_SHIFT))
@@ -716,7 +758,7 @@ namespace Editor
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
-		transformedFrame.offs += frameDeltaY;
+		transformedFrame.origin += frameDeltaY;
 		transformedFrame.xv += frameDeltaX;
 		transformedFrame.yv -= frameDeltaY;
 
@@ -731,7 +773,7 @@ namespace Editor
 				Vec2F yd = transformedFrame.yv.Normalized()*
 					(transformedFrame.xv.Length()/aspect - transformedFrame.yv.Length());
 
-				transformedFrame.offs -= yd;
+				transformedFrame.origin -= yd;
 				transformedFrame.yv += yd;
 			}
 		}

@@ -29,9 +29,9 @@ namespace o2
 	void Transform::UpdateTransform()
 	{
 		mNonSizedTransform = Basis::Build(mPosition, mScale, mAngle, mShear);
-		mTransform.Set(mNonSizedTransform.offs, mNonSizedTransform.xv * mSize.x, mNonSizedTransform.yv * mSize.y);
-		mTransform.offs = mTransform.offs - mTransform.xv*mPivot.x - mTransform.yv*mPivot.y;
-		mNonSizedTransform.offs = mTransform.offs;
+		mTransform.Set(mNonSizedTransform.origin, mNonSizedTransform.xv * mSize.x, mNonSizedTransform.yv * mSize.y);
+		mTransform.origin = mTransform.origin - mTransform.xv*mPivot.x - mTransform.yv*mPivot.y;
+		mNonSizedTransform.origin = mTransform.origin;
 
 		BasisChanged();
 	}
@@ -128,7 +128,7 @@ namespace o2
 
 	RectF Transform::GetRect() const
 	{
-		return RectF(mTransform.offs, mTransform.offs + mTransform.xv + mTransform.yv);
+		return RectF(mTransform.origin, mTransform.origin + mTransform.xv + mTransform.yv);
 	}
 
 	void Transform::SetScale(const Vec2F& scale)
@@ -185,7 +185,7 @@ namespace o2
 		mSize = scale / mScale;
 		mShear = shear;
 
-		mPosition = basis.offs + basis.xv*mPivot.x + basis.yv*mPivot.y;
+		mPosition = basis.origin + basis.xv*mPivot.x + basis.yv*mPivot.y;
 		UpdateTransform();
 	}
 
@@ -204,7 +204,7 @@ namespace o2
 		mScale = scale;
 		mShear = shear;
 
-		mPosition = basis.offs + basis.xv*mPivot.x*mSize.x + basis.yv*mPivot.y*mSize.y;
+		mPosition = basis.origin + basis.xv*mPivot.x*mSize.x + basis.yv*mPivot.y*mSize.y;
 		UpdateTransform();
 	}
 
@@ -236,7 +236,7 @@ namespace o2
 		Vec2F frameDeltaX = delta.Project(mTransform.xv);
 		Vec2F frameDeltaY = delta.Project(mTransform.yv);
 
-		transformed.offs += frameDeltaX;
+		transformed.origin += frameDeltaX;
 		transformed.xv -= frameDeltaX;
 		transformed.yv += frameDeltaY;
 
@@ -245,7 +245,7 @@ namespace o2
 
 	Vec2F Transform::GetLeftTop() const
 	{
-		return mTransform.offs + mTransform.yv;
+		return mTransform.origin + mTransform.yv;
 	}
 
 	void Transform::SetRightTop(const Vec2F& position)
@@ -264,7 +264,7 @@ namespace o2
 
 	Vec2F Transform::GetRightTop() const
 	{
-		return mTransform.offs + mTransform.yv + mTransform.xv;
+		return mTransform.origin + mTransform.yv + mTransform.xv;
 	}
 
 	void Transform::SetLeftBottom(const Vec2F& position)
@@ -275,7 +275,7 @@ namespace o2
 		Vec2F frameDeltaX = delta.Project(mTransform.xv);
 		Vec2F frameDeltaY = delta.Project(mTransform.yv);
 
-		transformed.offs += frameDeltaX + frameDeltaY;
+		transformed.origin += frameDeltaX + frameDeltaY;
 		transformed.xv -= frameDeltaX;
 		transformed.yv -= frameDeltaY;
 
@@ -284,7 +284,7 @@ namespace o2
 
 	Vec2F Transform::GetLeftBottom() const
 	{
-		return mTransform.offs;
+		return mTransform.origin;
 	}
 
 	void Transform::SetRightBottom(const Vec2F& position)
@@ -295,7 +295,7 @@ namespace o2
 		Vec2F frameDeltaX = delta.Project(mTransform.xv);
 		Vec2F frameDeltaY = delta.Project(mTransform.yv);
 
-		transformed.offs += frameDeltaY;
+		transformed.origin += frameDeltaY;
 		transformed.xv += frameDeltaX;
 		transformed.yv -= frameDeltaY;
 
@@ -304,7 +304,7 @@ namespace o2
 
 	Vec2F Transform::GetRightBottom() const
 	{
-		return mTransform.offs + mTransform.xv;
+		return mTransform.origin + mTransform.xv;
 	}
 
 	void Transform::SetCenter(const Vec2F& position)
@@ -315,7 +315,7 @@ namespace o2
 
 	Vec2F Transform::GetCenter() const
 	{
-		return mTransform.offs + (mTransform.xv + mTransform.yv)*0.5f;
+		return mTransform.origin + (mTransform.xv + mTransform.yv)*0.5f;
 	}
 
 	void Transform::SetRight(const Vec2F& dir)
@@ -369,7 +369,7 @@ namespace o2
 
 	Vec2F Transform::World2LocalPoint(const Vec2F& worldPoint) const
 	{
-		Vec2F nx = mTransform.xv, ny = mTransform.yv, offs = mTransform.offs, w = worldPoint;
+		Vec2F nx = mTransform.xv, ny = mTransform.yv, offs = mTransform.origin, w = worldPoint;
 		float lx = (w.x*ny.y - offs.x*ny.y - w.y*ny.x + offs.y*ny.x) / (nx.x*ny.y - ny.x*nx.y);
 		float ly = (w.y - offs.y - nx.y*lx) / ny.y;
 		return Vec2F(lx, ly)*mSize;
@@ -398,7 +398,7 @@ namespace o2
 	{
 		Vec2F rs = mScale*mSize;
 		Vec2F nx = mTransform.xv / rs.x, ny = mTransform.yv / rs.y;
-		Vec2F lp = point - mTransform.offs;
+		Vec2F lp = point - mTransform.origin;
 
 		float dx = lp.Dot(nx);
 		float dy = lp.Dot(ny);

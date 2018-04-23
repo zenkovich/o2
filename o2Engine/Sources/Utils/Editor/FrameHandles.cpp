@@ -185,7 +185,7 @@ namespace o2
 		{
 			mIsDragging = true;
 			mBeginDraggingFrame = mFrame;
-			mBeginDraggingOffset = cursor.position - mFrame.offs;
+			mBeginDraggingOffset = cursor.position - mFrame.origin;
 
 			SetHandlesEnable(false);
 
@@ -226,10 +226,10 @@ namespace o2
 
 			if (o2Input.IsKeyDown(VK_SHIFT))
 			{
-				if (Math::Abs(transformed.offs.x - mBeginDraggingFrame.offs.x) > Math::Abs(transformed.offs.y - mBeginDraggingFrame.offs.y))
-					transformed.offs.y = mBeginDraggingFrame.offs.y;
+				if (Math::Abs(transformed.origin.x - mBeginDraggingFrame.origin.x) > Math::Abs(transformed.origin.y - mBeginDraggingFrame.origin.y))
+					transformed.origin.y = mBeginDraggingFrame.origin.y;
 				else
-					transformed.offs.x = mBeginDraggingFrame.offs.x;
+					transformed.origin.x = mBeginDraggingFrame.origin.x;
 			}
 
 			OnTransformed(mFrame.Inverted()*transformed);
@@ -244,7 +244,7 @@ namespace o2
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
-		transformedFrame.offs += frameDeltaX;
+		transformedFrame.origin += frameDeltaX;
 		transformedFrame.xv -= frameDeltaX;
 		transformedFrame.yv += frameDeltaY;
 
@@ -257,7 +257,7 @@ namespace o2
 				Vec2F xd = transformedFrame.xv.Normalized()*
 					(transformedFrame.yv.Length()*aspect - transformedFrame.xv.Length());
 
-				transformedFrame.offs -= xd;
+				transformedFrame.origin -= xd;
 				transformedFrame.xv += xd;
 			}
 			else transformedFrame.yv = transformedFrame.yv.Normalized()*transformedFrame.xv.Length()/aspect;
@@ -273,7 +273,7 @@ namespace o2
 		Vec2F delta = position - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 
-		transformedFrame.offs += frameDeltaX;
+		transformedFrame.origin += frameDeltaX;
 		transformedFrame.xv -= frameDeltaX;
 
 		if (o2Input.IsKeyDown(VK_SHIFT))
@@ -293,7 +293,7 @@ namespace o2
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
-		transformedFrame.offs += frameDeltaX + frameDeltaY;
+		transformedFrame.origin += frameDeltaX + frameDeltaY;
 		transformedFrame.xv -= frameDeltaX;
 		transformedFrame.yv -= frameDeltaY;
 
@@ -306,7 +306,7 @@ namespace o2
 				Vec2F xd = transformedFrame.xv.Normalized()*
 					(transformedFrame.yv.Length()*aspect - transformedFrame.xv.Length());
 
-				transformedFrame.offs -= xd;
+				transformedFrame.origin -= xd;
 				transformedFrame.xv += xd;
 			}
 			else
@@ -314,7 +314,7 @@ namespace o2
 				Vec2F yd = transformedFrame.yv.Normalized()*
 					(transformedFrame.xv.Length()/aspect - transformedFrame.yv.Length());
 
-				transformedFrame.offs -= yd;
+				transformedFrame.origin -= yd;
 				transformedFrame.yv += yd;
 			}
 		}
@@ -347,7 +347,7 @@ namespace o2
 		Vec2F delta = position - lastHandleCoords;
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
-		transformedFrame.offs += frameDeltaY;
+		transformedFrame.origin += frameDeltaY;
 		transformedFrame.yv -= frameDeltaY;
 
 		if (o2Input.IsKeyDown(VK_SHIFT))
@@ -409,7 +409,7 @@ namespace o2
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
-		transformedFrame.offs += frameDeltaY;
+		transformedFrame.origin += frameDeltaY;
 		transformedFrame.xv += frameDeltaX;
 		transformedFrame.yv -= frameDeltaY;
 
@@ -424,7 +424,7 @@ namespace o2
 				Vec2F yd = transformedFrame.yv.Normalized()*
 					(transformedFrame.xv.Length()/aspect - transformedFrame.yv.Length());
 
-				transformedFrame.offs -= yd;
+				transformedFrame.origin -= yd;
 				transformedFrame.yv += yd;
 			}
 		}

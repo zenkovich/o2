@@ -116,6 +116,9 @@ namespace o2
 
 	bool DragHandle::IsUnderPoint(const Vec2F& point)
 	{
+		if (!isPointInside.IsEmpty())
+			return mDrawingScissorRect.IsInside(point) && isPointInside(point);
+
 		if (mRegularSprite)
 			return mDrawingScissorRect.IsInside(point) && mRegularSprite->IsPointInside(point);
 

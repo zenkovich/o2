@@ -408,7 +408,7 @@ namespace o2
 			camTransf.xv.x,   camTransf.xv.y,   0, 0,
 			camTransf.yv.x,   camTransf.yv.y,   0, 0,
 			0,                0,                0, 0,
-			camTransf.offs.x, camTransf.offs.y, 0, 1
+			camTransf.origin.x, camTransf.origin.y, 0, 1
 		};
 
 		glMultMatrixf(camTransfMatr);
@@ -510,14 +510,14 @@ namespace o2
 						   const Color4& ycolor /*= Color4::Blue()*/, const Color4& color /*= Color4::White()*/,
 						   float width /*= 1.0f*/, LineType lineType /*= LineType::Solid*/)
 	{
-		DrawAALine(basis.offs, basis.offs + basis.xv, xcolor, width, lineType);
-		DrawAALine(basis.offs, basis.offs + basis.yv, ycolor, width, lineType);
+		DrawAALine(basis.origin, basis.origin + basis.xv, xcolor, width, lineType);
+		DrawAALine(basis.origin, basis.origin + basis.yv, ycolor, width, lineType);
 
 		Vertex2 v[] =
 		{
-			Vertex2(basis.offs + basis.xv, color.ABGR(), 0, 0),
-			Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0),
-			Vertex2(basis.offs + basis.yv, color.ABGR(), 0, 0)
+			Vertex2(basis.origin + basis.xv, color.ABGR(), 0, 0),
+			Vertex2(basis.origin + basis.yv + basis.xv, color.ABGR(), 0, 0),
+			Vertex2(basis.origin + basis.yv, color.ABGR(), 0, 0)
 		};
 
 		DrawAAPolyLine(v, 3, width, lineType);
@@ -653,14 +653,14 @@ namespace o2
 	void Render::DrawBasis(const Basis& basis, const Color4& xcolor /*= Color4::Red()*/,
 							 const Color4& ycolor /*= Color4::Blue()*/, const Color4& color /*= Color4::White()*/)
 	{
-		DrawLine(basis.offs, basis.offs + basis.xv, xcolor);
-		DrawLine(basis.offs, basis.offs + basis.yv, ycolor);
+		DrawLine(basis.origin, basis.origin + basis.xv, xcolor);
+		DrawLine(basis.origin, basis.origin + basis.yv, ycolor);
 
 		Vertex2 v[] =
 		{
-			Vertex2(basis.offs + basis.xv, color.ABGR(), 0, 0),
-			Vertex2(basis.offs + basis.yv + basis.xv, color.ABGR(), 0, 0),
-			Vertex2(basis.offs + basis.yv, color.ABGR(), 0, 0)
+			Vertex2(basis.origin + basis.xv, color.ABGR(), 0, 0),
+			Vertex2(basis.origin + basis.yv + basis.xv, color.ABGR(), 0, 0),
+			Vertex2(basis.origin + basis.yv, color.ABGR(), 0, 0)
 		};
 
 		DrawPolyLine(v, 3);

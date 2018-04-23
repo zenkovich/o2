@@ -49,8 +49,6 @@ namespace Editor
 
 	protected:
 		const Color4        mFrameColor = Color4(220, 220, 220, 255); // Regular handle color
-		const float         mFrameHandlesSize = 9.0f;	// Frame corners handles size
-		const float         mHandlesRotateSize = 17.0f;	// Rotation frame handles size
 
 		SceneDragHandle     mLeftTopRotateHandle;		// Left top rotation handle
 		SceneDragHandle     mLeftBottomRotateHandle;	// Left bottom rotation handle
@@ -246,8 +244,6 @@ END_META;
 CLASS_FIELDS_META(Editor::FrameTool)
 {
 	PROTECTED_FIELD(mFrameColor);
-	PROTECTED_FIELD(mFrameHandlesSize);
-	PROTECTED_FIELD(mHandlesRotateSize);
 	PROTECTED_FIELD(mLeftTopRotateHandle);
 	PROTECTED_FIELD(mLeftBottomRotateHandle);
 	PROTECTED_FIELD(mRightTopRotateHandle);

@@ -437,10 +437,10 @@ namespace o2
 		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3].Set(mTransform.offs, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.origin + mTransform.yv, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.origin + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.origin + mTransform.xv, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.origin, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -487,7 +487,7 @@ namespace o2
 		Vec2F xv = mTransform.xv/sz.x;
 		Vec2F yv = mTransform.yv/sz.y;
 
-		Vec2F o = mTransform.offs;
+		Vec2F o = mTransform.origin;
 
 		Vec2F r1 = xv*(float)mSlices.left;
 		Vec2F r2 = xv*(sz.x - (float)mSlices.right);
@@ -576,7 +576,7 @@ namespace o2
 		Vec2F xv = mTransform.xv/sz.x;
 		Vec2F yv = mTransform.yv/sz.y;
 
-		Vec2F o = mTransform.offs;
+		Vec2F o = mTransform.origin;
 
 		int vi = 0, pi = 0;
 
@@ -645,10 +645,10 @@ namespace o2
 		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv + mTransform.xv*coef, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv*coef, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3].Set(mTransform.offs, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.origin + mTransform.yv, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.origin + mTransform.yv + mTransform.xv*coef, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.origin + mTransform.xv*coef, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.origin, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -679,10 +679,10 @@ namespace o2
 		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv + mTransform.xv*invCoef, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3].Set(mTransform.offs + mTransform.xv*invCoef, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.origin + mTransform.yv + mTransform.xv*invCoef, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.origin + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.origin + mTransform.xv, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.origin + mTransform.xv*invCoef, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -713,10 +713,10 @@ namespace o2
 		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float uvDown = 1.0f - Math::Lerp((float)mTextureSrcRect.bottom, (float)mTextureSrcRect.top, coef)*invTexSize.y;
 
-		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv + mTransform.yv*invCoef, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3].Set(mTransform.offs + mTransform.yv*invCoef, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.origin + mTransform.yv, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.origin + mTransform.yv + mTransform.xv, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.origin + mTransform.xv + mTransform.yv*invCoef, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.origin + mTransform.yv*invCoef, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -746,10 +746,10 @@ namespace o2
 		float uvUp = 1.0f - Math::Lerp((float)mTextureSrcRect.top, (float)mTextureSrcRect.bottom, coef)*invTexSize.y;
 		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		mMesh->vertices[0].Set(mTransform.offs + mTransform.yv*coef, rcc[0], uvLeft, uvUp);
-		mMesh->vertices[1].Set(mTransform.offs + mTransform.yv*coef + mTransform.xv, rcc[1], uvRight, uvUp);
-		mMesh->vertices[2].Set(mTransform.offs + mTransform.xv, rcc[2], uvRight, uvDown);
-		mMesh->vertices[3].Set(mTransform.offs, rcc[3], uvLeft, uvDown);
+		mMesh->vertices[0].Set(mTransform.origin + mTransform.yv*coef, rcc[0], uvLeft, uvUp);
+		mMesh->vertices[1].Set(mTransform.origin + mTransform.yv*coef + mTransform.xv, rcc[1], uvRight, uvUp);
+		mMesh->vertices[2].Set(mTransform.origin + mTransform.xv, rcc[2], uvRight, uvDown);
+		mMesh->vertices[3].Set(mTransform.origin, rcc[3], uvLeft, uvDown);
 
 		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
 
@@ -776,8 +776,8 @@ namespace o2
 		float vUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float vDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		Vec2F zeroPos    = mTransform.offs + mTransform.xv*0.5f + mTransform.yv;
-		Vec2F centerPos  = mTransform.offs + mTransform.xv*0.5f + mTransform.yv*0.5f;
+		Vec2F zeroPos    = mTransform.origin + mTransform.xv*0.5f + mTransform.yv;
+		Vec2F centerPos  = mTransform.origin + mTransform.xv*0.5f + mTransform.yv*0.5f;
 
 		ULong centerResColr = (mColor*((mCornersColors[0] + mCornersColors[1] + mCornersColors[2] + mCornersColors[3])*0.25f)).ABGR();
 		ULong zeroResColor = (mColor*((mCornersColors[0] + mCornersColors[1])*0.5f)).ABGR();
@@ -789,7 +789,7 @@ namespace o2
 		if (angle < 45.0f)
 		{
 			float dirCoef = 0.5f + dir.x/dir.y*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef + mTransform.yv;
+			Vec2F dirPoint = mTransform.origin + mTransform.xv*dirCoef + mTransform.yv;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[1], dirCoef)).ABGR();
 			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
 
@@ -806,11 +806,11 @@ namespace o2
 		else if (angle < 135.0f)
 		{
 			float dirCoef = 0.5f + dir.y/dir.x*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.xv + mTransform.yv*dirCoef;
+			Vec2F dirPoint = mTransform.origin + mTransform.xv + mTransform.yv*dirCoef;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[2], mCornersColors[1], dirCoef)).ABGR();
 			float vDir = Math::Lerp(vDown, vUp, dirCoef);
 
-			Vec2F cornerPos1 = mTransform.offs + mTransform.yv + mTransform.xv;
+			Vec2F cornerPos1 = mTransform.origin + mTransform.yv + mTransform.xv;
 
 			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
 			mMesh->vertices[1].Set(cornerPos1, cornerResColr[1], uRight, vUp);
@@ -826,12 +826,12 @@ namespace o2
 		else if (angle < 225.0f)
 		{
 			float dirCoef = 0.5f - dir.x/dir.y*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef;
+			Vec2F dirPoint = mTransform.origin + mTransform.xv*dirCoef;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[3], mCornersColors[2], dirCoef)).ABGR();
 			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
 
-			Vec2F cornerPos1 = mTransform.offs + mTransform.yv + mTransform.xv;
-			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
+			Vec2F cornerPos1 = mTransform.origin + mTransform.yv + mTransform.xv;
+			Vec2F cornerPos2 = mTransform.origin + mTransform.xv;
 
 			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
 			mMesh->vertices[1].Set(cornerPos1, cornerResColr[1], uRight, vUp);
@@ -848,13 +848,13 @@ namespace o2
 		else if (angle < 315.0f)
 		{
 			float dirCoef = 0.5f - dir.y/dir.x*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.yv*dirCoef;
+			Vec2F dirPoint = mTransform.origin + mTransform.yv*dirCoef;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[3], mCornersColors[0], dirCoef)).ABGR();
 			float vDir = Math::Lerp(vDown, vUp, dirCoef);
 
-			Vec2F cornerPos1 = mTransform.offs + mTransform.yv + mTransform.xv;
-			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
-			Vec2F cornerPos3 = mTransform.offs;
+			Vec2F cornerPos1 = mTransform.origin + mTransform.yv + mTransform.xv;
+			Vec2F cornerPos2 = mTransform.origin + mTransform.xv;
+			Vec2F cornerPos3 = mTransform.origin;
 
 			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
 			mMesh->vertices[1].Set(cornerPos1, cornerResColr[1], uRight, vUp);
@@ -872,14 +872,14 @@ namespace o2
 		else
 		{
 			float dirCoef = 0.5f + dir.x/dir.y*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef + mTransform.yv;
+			Vec2F dirPoint = mTransform.origin + mTransform.xv*dirCoef + mTransform.yv;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[1], dirCoef)).ABGR();
 			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
 
-			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
-			Vec2F cornerPos1 = mTransform.offs + mTransform.yv + mTransform.xv;
-			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
-			Vec2F cornerPos3 = mTransform.offs;
+			Vec2F cornerPos0 = mTransform.origin + mTransform.yv;
+			Vec2F cornerPos1 = mTransform.origin + mTransform.yv + mTransform.xv;
+			Vec2F cornerPos2 = mTransform.origin + mTransform.xv;
+			Vec2F cornerPos3 = mTransform.origin;
 
 			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
 			mMesh->vertices[1].Set(cornerPos1, cornerResColr[0], uRight, vUp);
@@ -916,8 +916,8 @@ namespace o2
 		float vUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
 		float vDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
 
-		Vec2F zeroPos   = mTransform.offs + mTransform.xv*0.5f + mTransform.yv;
-		Vec2F centerPos = mTransform.offs + mTransform.xv*0.5f + mTransform.yv*0.5f;
+		Vec2F zeroPos   = mTransform.origin + mTransform.xv*0.5f + mTransform.yv;
+		Vec2F centerPos = mTransform.origin + mTransform.xv*0.5f + mTransform.yv*0.5f;
 
 		ULong centerResColr = (mColor*((mCornersColors[0] + mCornersColors[1] + mCornersColors[2] + mCornersColors[3])*0.25f)).ABGR();
 		ULong zeroResColor = (mColor*((mCornersColors[0] + mCornersColors[1])*0.5f)).ABGR();
@@ -929,7 +929,7 @@ namespace o2
 		if (angle < 45.0f)
 		{
 			float dirCoef = 0.5f + dir.x/dir.y*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef + mTransform.yv;
+			Vec2F dirPoint = mTransform.origin + mTransform.xv*dirCoef + mTransform.yv;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[1], dirCoef)).ABGR();
 			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
 
@@ -946,11 +946,11 @@ namespace o2
 		else if (angle < 135.0f)
 		{
 			float dirCoef = 0.5f - dir.y/dir.x*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.yv*dirCoef;
+			Vec2F dirPoint = mTransform.origin + mTransform.yv*dirCoef;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[2], mCornersColors[1], dirCoef)).ABGR();
 			float vDir = Math::Lerp(vDown, vUp, dirCoef);
 
-			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
+			Vec2F cornerPos0 = mTransform.origin + mTransform.yv;
 
 			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
 			mMesh->vertices[1].Set(cornerPos0, cornerResColr[0], uLeft, vUp);
@@ -966,12 +966,12 @@ namespace o2
 		else if (angle < 225.0f)
 		{
 			float dirCoef = 0.5f - dir.x/dir.y*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef;
+			Vec2F dirPoint = mTransform.origin + mTransform.xv*dirCoef;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[3], mCornersColors[2], dirCoef)).ABGR();
 			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
 
-			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
-			Vec2F cornerPos3 = mTransform.offs;
+			Vec2F cornerPos0 = mTransform.origin + mTransform.yv;
+			Vec2F cornerPos3 = mTransform.origin;
 
 			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
 			mMesh->vertices[1].Set(cornerPos0, cornerResColr[0], uLeft, vUp);
@@ -988,13 +988,13 @@ namespace o2
 		else if (angle < 315.0f)
 		{
 			float dirCoef = 0.5f + dir.y/dir.x*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.yv*dirCoef + mTransform.xv;
+			Vec2F dirPoint = mTransform.origin + mTransform.yv*dirCoef + mTransform.xv;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[3], mCornersColors[0], dirCoef)).ABGR();
 			float vDir = Math::Lerp(vDown, vUp, dirCoef);
 
-			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
-			Vec2F cornerPos3 = mTransform.offs;
-			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
+			Vec2F cornerPos0 = mTransform.origin + mTransform.yv;
+			Vec2F cornerPos3 = mTransform.origin;
+			Vec2F cornerPos2 = mTransform.origin + mTransform.xv;
 
 			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
 			mMesh->vertices[1].Set(cornerPos0, cornerResColr[0], uLeft, vUp);
@@ -1012,14 +1012,14 @@ namespace o2
 		else
 		{
 			float dirCoef = 0.5f + dir.x/dir.y*0.5f;
-			Vec2F dirPoint = mTransform.offs + mTransform.xv*dirCoef + mTransform.yv;
+			Vec2F dirPoint = mTransform.origin + mTransform.xv*dirCoef + mTransform.yv;
 			ULong dirColor = (mColor*Math::Lerp(mCornersColors[0], mCornersColors[1], dirCoef)).ABGR();
 			float uDir = Math::Lerp(uLeft, uRight, dirCoef);
 
-			Vec2F cornerPos0 = mTransform.offs + mTransform.yv;
-			Vec2F cornerPos3 = mTransform.offs;
-			Vec2F cornerPos2 = mTransform.offs + mTransform.xv;
-			Vec2F cornerPos1 = mTransform.offs + mTransform.yv + mTransform.xv;
+			Vec2F cornerPos0 = mTransform.origin + mTransform.yv;
+			Vec2F cornerPos3 = mTransform.origin;
+			Vec2F cornerPos2 = mTransform.origin + mTransform.xv;
+			Vec2F cornerPos1 = mTransform.origin + mTransform.yv + mTransform.xv;
 
 			mMesh->vertices[0].Set(zeroPos, zeroResColor, uZero, vUp);
 			mMesh->vertices[1].Set(cornerPos0, cornerResColr[0], uLeft, vUp);

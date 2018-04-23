@@ -206,7 +206,7 @@ namespace o2
 		mData->size = scale / mData->scale;
 		mData->shear = shear;
 
-		mData->position = basis.offs + basis.xv*mData->pivot.x + basis.yv*mData->pivot.y;
+		mData->position = basis.origin + basis.xv*mData->pivot.x + basis.yv*mData->pivot.y;
 		SetDirty();
 	}
 
@@ -225,7 +225,7 @@ namespace o2
 		mData->scale = scale;
 		mData->shear = shear;
 
-		mData->position = basis.offs + basis.xv*mData->pivot.x*mData->size.x + basis.yv*mData->pivot.y*mData->size.y;
+		mData->position = basis.origin + basis.xv*mData->pivot.x*mData->size.x + basis.yv*mData->pivot.y*mData->size.y;
 		SetDirty();
 	}
 
@@ -538,7 +538,7 @@ namespace o2
 
 	Vec2F ActorTransform::GetWorldCenter() const
 	{
-		return mData->worldTransform.offs + (mData->worldTransform.xv + mData->worldTransform.yv)*0.5f;
+		return mData->worldTransform.origin + (mData->worldTransform.xv + mData->worldTransform.yv)*0.5f;
 	}
 
 	void ActorTransform::SetWorldRightDir(const Vec2F& dir)
@@ -627,7 +627,7 @@ namespace o2
 
 	Vec2F ActorTransform::World2LocalPoint(const Vec2F& worldPoint) const
 	{
-		Vec2F nx = mData->worldTransform.xv, ny = mData->worldTransform.yv, offs = mData->worldTransform.offs, w = worldPoint;
+		Vec2F nx = mData->worldTransform.xv, ny = mData->worldTransform.yv, offs = mData->worldTransform.origin, w = worldPoint;
 		float lx = (w.x*ny.y - offs.x*ny.y - w.y*ny.x + offs.y*ny.x) / (nx.x*ny.y - ny.x*nx.y);
 		float ly = (w.y - offs.y - nx.y*lx) / ny.y;
 		return Vec2F(lx, ly)*mData->size;
@@ -656,7 +656,7 @@ namespace o2
 	{
 		Vec2F rs = mData->scale*mData->size;
 		Vec2F nx = mData->worldTransform.xv / rs.x, ny = mData->worldTransform.yv / rs.y;
-		Vec2F lp = point - mData->worldTransform.offs;
+		Vec2F lp = point - mData->worldTransform.origin;
 
 		float dx = lp.Dot(nx);
 		float dy = lp.Dot(ny);
@@ -706,8 +706,8 @@ namespace o2
 	void ActorTransform::UpdateTransform()
 	{
 		mData->nonSizedTransform = Basis::Build(mData->position, mData->scale, mData->angle, mData->shear);
-		mData->transform.Set(mData->nonSizedTransform.offs, mData->nonSizedTransform.xv * mData->size.x, mData->nonSizedTransform.yv * mData->size.y);
-		mData->transform.offs = mData->transform.offs - mData->transform.xv*mData->pivot.x - mData->transform.yv*mData->pivot.y;
+		mData->transform.Set(mData->nonSizedTransform.origin, mData->nonSizedTransform.xv * mData->size.x, mData->nonSizedTransform.yv * mData->size.y);
+		mData->transform.origin = mData->transform.origin - mData->transform.xv*mData->pivot.x - mData->transform.yv*mData->pivot.y;
 	}
 
 	void ActorTransform::UpdateWorldRectangleAndTransform()
