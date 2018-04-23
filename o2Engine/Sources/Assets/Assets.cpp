@@ -26,7 +26,7 @@ namespace o2
 
 		LoadAssetTypes();
 
-		if (::IsAssetsPrebuildEnabled() && !::IsReleaseBuild())
+		if (::IsAssetsPrebuildEnabled())
 			RebuildAssets();
 		else
 			LoadAssetsTree();

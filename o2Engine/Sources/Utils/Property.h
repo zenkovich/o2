@@ -40,6 +40,8 @@ namespace o2
 																										                                \
 		operator valueType() { return _this->GETTER(); }												                                \
 		NAME##_PROPERTY& operator=(const valueType& value) { _this->SETTER(const_cast<valueType&>(value)); return *this; }	            \
+                                                                                                                                        \
+		NAME##_PROPERTY& operator=(const NAME##_PROPERTY& value) { _this->SETTER(value.Get()); return *this; }	                        \
 																										                                \
 		bool operator==(const valueType& value) const { return _this->GETTER() == value; }                	                            \
 		bool operator!=(const valueType& value) const { return _this->GETTER() != value; }                	                            \
