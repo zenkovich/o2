@@ -76,7 +76,7 @@ namespace o2
 	void ActorTransform::SetPosition(const Vec2F& position)
 	{
 		mData->position = position;
-		//SetDirty();
+		SetDirty();
 	}
 
 	Vec2F ActorTransform::GetPosition() const
@@ -225,7 +225,7 @@ namespace o2
 		mData->scale = scale;
 		mData->shear = shear;
 
-		mData->position = basis.origin + basis.xv*mData->pivot.x*mData->size.x + basis.yv*mData->pivot.y*mData->size.y;
+		mData->position = basis.origin;
 		SetDirty();
 	}
 

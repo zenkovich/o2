@@ -102,7 +102,8 @@ namespace Editor
 
 		mTopHandle.isPointInside = [&](const Vec2F& point)
 		{
-			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x;
+			float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
+			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
 			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 			Basis b(mFrame.origin + mFrame.yv + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
 					mFrame.xv - transformNonScaled.xv*spriteSize,
@@ -113,7 +114,8 @@ namespace Editor
 
 		mBottomHandle.isPointInside = [&](const Vec2F& point)
 		{
-			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x;
+			float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
+			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
 			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 			Basis b(mFrame.origin + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
 					mFrame.xv - transformNonScaled.xv*spriteSize,
@@ -124,7 +126,8 @@ namespace Editor
 
 		mLeftHandle.isPointInside = [&](const Vec2F& point)
 		{
-			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x;
+			float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
+			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
 			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 			Basis b(mFrame.origin - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
 					transformNonScaled.xv*spriteSize,
@@ -135,7 +138,8 @@ namespace Editor
 
 		mRightHandle.isPointInside = [&](const Vec2F& point)
 		{
-			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x;
+			float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
+			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
 			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 			Basis b(mFrame.origin + mFrame.xv - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
 					transformNonScaled.xv*spriteSize,
