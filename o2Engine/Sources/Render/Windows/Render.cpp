@@ -400,8 +400,8 @@ namespace o2
 
 		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F::Right()*resf.x, Vec2F().Up()*resf.y);
 		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
-		mViewScale = camTransf.xv.Length();
-		mInvViewScale = 1.0f/mViewScale;
+		mViewScale = Vec2F(camTransf.xv.Length(), camTransf.yv.Length());
+		mInvViewScale = Vec2F(1.0f/mViewScale.x, 1.0f/mViewScale.y);
 
 		float camTransfMatr[16] =
 		{
@@ -1020,7 +1020,7 @@ namespace o2
 			Geometry::CreatePolyLineMesh(vertices, count,
 										 mesh.vertices, mesh.vertexCount, mesh.mMaxVertexCount,
 										 mesh.indexes, mesh.polyCount, mesh.mMaxPolyCount,
-										 width, 0.5f, 0.5f, texSize, 1.0f, mInvViewScale);
+										 width, 0.5f, 0.5f, texSize, Vec2F(1, 1), mInvViewScale);
 		}
 
 		mesh.SetTexture(texture);

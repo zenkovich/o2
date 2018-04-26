@@ -27,6 +27,7 @@ namespace o2
 		inline void SetUV(float u, float v);
 		inline void SetUV(const Vec2F& uv);
 
+		inline bool operator==(const Vertex2& other) const;
 		inline Vertex2 operator=(const Vec2F& vec);
 		inline operator Vec2F() const;
 	};
@@ -85,6 +86,12 @@ namespace o2
 	void Vertex2::SetUV(const Vec2F& uv)
 	{
 		tu = uv.x; tv = uv.y;
+	}
+
+	bool Vertex2::operator==(const Vertex2& other) const
+	{
+		return Math::Equals(x, other.x) && Math::Equals(y, other.y) && color == other.color &&
+			Math::Equals(tu, other.tu) && Math::Equals(tv, other.tv);
 	}
 
 	Vertex2 Vertex2::operator=(const Vec2F& vec)

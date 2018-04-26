@@ -279,8 +279,8 @@ namespace o2
 		Camera            mCamera;                   // Camera transformation
 		Vec2I             mResolution;               // Primary back buffer size
 		Vec2I             mCurrentResolution;        // Current back buffer size
-		float             mViewScale;                // Current view scale, depends on camera
-		float             mInvViewScale;             // Inverted mViewScale
+		Vec2F             mViewScale;                // Current view scale, depends on camera
+		Vec2F             mInvViewScale;             // Inverted mViewScale
 		Vec2I             mDPI;                      // Current device screen DPI
 
 		bool              mRenderTargetsAvailable;   // True, if render targets is available

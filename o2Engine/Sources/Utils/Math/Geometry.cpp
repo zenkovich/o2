@@ -9,7 +9,7 @@ namespace o2
 									  Vertex2*& verticies, UInt& vertexCount, UInt& vertexSize,
 									  UInt16*& indexes, UInt& polyCount, UInt& polySize,
 									  float width, float texBorderTop, float texBorderBottom, const Vec2F& texSize,
-									  float widthCoef /*= 1.0f*/, float borderCoef /*= 1.0f*/)
+									  const Vec2F& widthCoef /*= Vec2F(1, 1)*/, const Vec2F& borderCoef /*= Vec2F(1, 1)*/)
 	{
 		int newVertexCount = pointsCount*4;
 		int newPolyCount = (pointsCount - 1)*6;
@@ -32,9 +32,9 @@ namespace o2
 			polySize = newPolyCount;
 		}
 
-		float halfWidth = width*0.5f*widthCoef;
-		float halfWidhtBorderTop = halfWidth + texBorderTop*borderCoef;
-		float halfWidhtBorderBottom = halfWidth + texBorderBottom*borderCoef;
+		float halfWidth = width*0.5f;
+		float halfWidhtBorderTop = halfWidth + texBorderTop;
+		float halfWidhtBorderBottom = halfWidth + texBorderBottom;
 
 		Vec2F invTexSize(1.0f/texSize.x, 1.0f/texSize.y);
 
@@ -59,10 +59,10 @@ namespace o2
 				Vec2F dir = ((Vec2F)points[i + 1] + offs - point).Normalized();
 				Vec2F norm = dir.Perpendicular();
 
-				Vec2F upBorder = point + norm*halfWidhtBorderBottom;
-				Vec2F up = point + norm*halfWidth;
+				Vec2F up = point + norm*widthCoef*halfWidth;
+				Vec2F upBorder = ((point + norm*halfWidhtBorderBottom) - up)*borderCoef + up;
 				Vec2F down = point - norm*halfWidth;
-				Vec2F downBorder = point - norm*halfWidhtBorderTop;
+				Vec2F downBorder = ((point - norm*halfWidhtBorderTop) - down)*borderCoef + down;;
 
 				verticies[vertex++].Set(up, color, 0, upTexV);
 				verticies[vertex++].Set(upBorder, zeroAlphaColor, 0, 1);
@@ -76,15 +76,15 @@ namespace o2
 				dir /= segLength;
 				Vec2F norm = dir.Perpendicular();
 
-				Vec2F upBorder = point + norm*halfWidhtBorderBottom;
-				Vec2F up = point + norm*halfWidth;
+				Vec2F up = point + norm*widthCoef*halfWidth;
+				Vec2F upBorder = ((point + norm*halfWidhtBorderBottom) - up)*borderCoef + up;
 				Vec2F down = point - norm*halfWidth;
-				Vec2F downBorder = point - norm*halfWidhtBorderTop;
+				Vec2F downBorder = ((point - norm*halfWidhtBorderTop) - down)*borderCoef + down;;
 
 				if (i%2 == 0)
-					u -= segLength/widthCoef*invTexSize.x;
+					u -= segLength/widthCoef.x*invTexSize.x;
 				else
-					u += segLength/widthCoef*invTexSize.x;
+					u += segLength/widthCoef.x*invTexSize.x;
 
 				verticies[vertex++].Set(up, color, u, upTexV);
 				verticies[vertex++].Set(upBorder, zeroAlphaColor, u, 1);
@@ -108,6 +108,7 @@ namespace o2
 				Vec2F upBorder = Intersection::LinesNoChek(point - prevNorm*halfWidhtBorderTop, prevDir,
 														   point - nextNorm*halfWidhtBorderTop, nextDir);
 
+
 				Vec2F up = Intersection::LinesNoChek(point - prevNorm*halfWidth, prevDir,
 													 point - nextNorm*halfWidth, nextDir);
 
@@ -117,9 +118,14 @@ namespace o2
 				Vec2F downBorder = Intersection::LinesNoChek(point + prevNorm*halfWidhtBorderBottom, prevDir,
 															 point + nextNorm*halfWidhtBorderBottom, nextDir);
 
+				upBorder = (upBorder - up)*borderCoef + up;
+				downBorder = (downBorder - down)*borderCoef + down;
+				up = (up - point)*widthCoef + point;
+				down = (down - point)*widthCoef + point;
+
 				float segSign = i%2 == 0 ? -1.0f : 1.0f;
 
-				u += segLength/widthCoef*invTexSize.x*segSign;
+				u += segLength/widthCoef.x*invTexSize.x*segSign;
 
 				verticies[vertex++].Set(up, color, u + prevDir.Dot(up - point)*invTexSize.x*segSign, upTexV);
 				verticies[vertex++].Set(upBorder, zeroAlphaColor, u + prevDir.Dot(upBorder - point)*invTexSize.x*segSign, 1);
