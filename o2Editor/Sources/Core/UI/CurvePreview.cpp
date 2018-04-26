@@ -113,18 +113,20 @@ namespace Editor
 		o2Render.Clear(backColor);
 
 		static Vector<Vertex2> buffer;
+		buffer.Clear();
 
 		auto curveColorHex = curveColor.ARGB();
 
 		auto& keys = mCurve->GetKeys();
 		for (auto& key : keys)
 		{
-			buffer.Clear();
+			buffer.Add(Vertex2(key.position, key.value, curveColorHex, 0, 0));
+
 			auto points = key.GetApproximatedPoints();
 			for (int i = 0; i < key.GetApproximatedPointsCount(); i++)
 				buffer.Add(Vertex2(points[i], curveColorHex, 0, 0));
 
-			o2Render.DrawAAPolyLine(buffer.Data(), buffer.Count(), 1);
+			o2Render.DrawAAPolyLine(buffer.Data(), buffer.Count(), 2);
 		}
 
 		o2Render.UnbindRenderTexture();

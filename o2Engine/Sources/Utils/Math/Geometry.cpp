@@ -9,7 +9,7 @@ namespace o2
 									  Vertex2*& verticies, UInt& vertexCount, UInt& vertexSize,
 									  UInt16*& indexes, UInt& polyCount, UInt& polySize,
 									  float width, float texBorderTop, float texBorderBottom, const Vec2F& texSize,
-									  const Vec2F& widthCoef /*= Vec2F(1, 1)*/, const Vec2F& borderCoef /*= Vec2F(1, 1)*/)
+									  const Vec2F& invCameraScale /*= Vec2F(1, 1)*/)
 	{
 		int newVertexCount = pointsCount*4;
 		int newPolyCount = (pointsCount - 1)*6;
@@ -41,9 +41,7 @@ namespace o2
 		float upTexV = 1.0f - texBorderTop*invTexSize.y;
 		float downTexV = texBorderBottom*invTexSize.y;
 
-		Vec2F offs;
-		if (width < 1.0001f)
-			offs.Set(0.5f, 0.5f);
+		Vec2F offs = Vec2F(0.5f, 0.5f)*invCameraScale;
 
 		int vertex = 0; int poly = 0;
 		float u = 0;
@@ -59,10 +57,10 @@ namespace o2
 				Vec2F dir = ((Vec2F)points[i + 1] + offs - point).Normalized();
 				Vec2F norm = dir.Perpendicular();
 
-				Vec2F up = point + norm*widthCoef*halfWidth;
-				Vec2F upBorder = ((point + norm*halfWidhtBorderBottom) - up)*borderCoef + up;
-				Vec2F down = point - norm*halfWidth;
-				Vec2F downBorder = ((point - norm*halfWidhtBorderTop) - down)*borderCoef + down;;
+				Vec2F upBorder = point + norm*invCameraScale*halfWidhtBorderBottom;
+				Vec2F up = point + norm*invCameraScale*halfWidth;
+				Vec2F down = point - norm*invCameraScale*halfWidth;
+				Vec2F downBorder = point - norm*invCameraScale*halfWidhtBorderTop;
 
 				verticies[vertex++].Set(up, color, 0, upTexV);
 				verticies[vertex++].Set(upBorder, zeroAlphaColor, 0, 1);
@@ -76,15 +74,15 @@ namespace o2
 				dir /= segLength;
 				Vec2F norm = dir.Perpendicular();
 
-				Vec2F up = point + norm*widthCoef*halfWidth;
-				Vec2F upBorder = ((point + norm*halfWidhtBorderBottom) - up)*borderCoef + up;
-				Vec2F down = point - norm*halfWidth;
-				Vec2F downBorder = ((point - norm*halfWidhtBorderTop) - down)*borderCoef + down;;
+				Vec2F upBorder = point + norm*invCameraScale*halfWidhtBorderBottom;
+				Vec2F up = point + norm*invCameraScale*halfWidth;
+				Vec2F down = point - norm*invCameraScale*halfWidth;
+				Vec2F downBorder = point - norm*invCameraScale*halfWidhtBorderTop;
 
 				if (i%2 == 0)
-					u -= segLength/widthCoef.x*invTexSize.x;
+					u -= segLength/invCameraScale.x*invTexSize.x;
 				else
-					u += segLength/widthCoef.x*invTexSize.x;
+					u += segLength/invCameraScale.x*invTexSize.x;
 
 				verticies[vertex++].Set(up, color, u, upTexV);
 				verticies[vertex++].Set(upBorder, zeroAlphaColor, u, 1);
@@ -118,14 +116,14 @@ namespace o2
 				Vec2F downBorder = Intersection::LinesNoChek(point + prevNorm*halfWidhtBorderBottom, prevDir,
 															 point + nextNorm*halfWidhtBorderBottom, nextDir);
 
-				upBorder = (upBorder - up)*borderCoef + up;
-				downBorder = (downBorder - down)*borderCoef + down;
-				up = (up - point)*widthCoef + point;
-				down = (down - point)*widthCoef + point;
+				up = (up - point)*invCameraScale + point;
+				down = (down - point)*invCameraScale + point;
+				upBorder = (upBorder - point)*invCameraScale + point;
+				downBorder = (downBorder - point)*invCameraScale + point;
 
 				float segSign = i%2 == 0 ? -1.0f : 1.0f;
 
-				u += segLength/widthCoef.x*invTexSize.x*segSign;
+				u += segLength/invCameraScale.x*invTexSize.x*segSign;
 
 				verticies[vertex++].Set(up, color, u + prevDir.Dot(up - point)*invTexSize.x*segSign, upTexV);
 				verticies[vertex++].Set(upBorder, zeroAlphaColor, u + prevDir.Dot(upBorder - point)*invTexSize.x*segSign, 1);

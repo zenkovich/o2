@@ -1013,14 +1013,14 @@ namespace o2
 			Geometry::CreatePolyLineMesh(vertices, count,
 										 mesh.vertices, mesh.vertexCount, mesh.mMaxVertexCount,
 										 mesh.indexes, mesh.polyCount, mesh.mMaxPolyCount,
-										 width - 0.5f, 0.5f, 0.5f, texSize, mInvViewScale, mInvViewScale);
+										 width - 0.5f, 0.5f, 0.5f, texSize, mInvViewScale);
 		}
 		else
 		{
 			Geometry::CreatePolyLineMesh(vertices, count,
 										 mesh.vertices, mesh.vertexCount, mesh.mMaxVertexCount,
 										 mesh.indexes, mesh.polyCount, mesh.mMaxPolyCount,
-										 width, 0.5f, 0.5f, texSize, Vec2F(1, 1), mInvViewScale);
+										 width, 0.5f, 0.5f, texSize, Vec2F(1, 1));
 		}
 
 		mesh.SetTexture(texture);

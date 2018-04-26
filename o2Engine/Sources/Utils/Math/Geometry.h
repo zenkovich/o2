@@ -12,6 +12,6 @@ namespace o2
 								Vertex2*& verticies, UInt& vertexCount, UInt& vertexSize,
 								UInt16*& indexes, UInt& polyCount, UInt& polySize,
 								float width, float texBorderTop, float texBorderBottom, const Vec2F& texSize,
-								const Vec2F& widthCoef = Vec2F(1, 1), const Vec2F& borderCoef = Vec2F(1, 1));
+								const Vec2F& invCameraScale = Vec2F(1, 1));
 	}
 }
