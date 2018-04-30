@@ -50,30 +50,39 @@ namespace Editor
 	protected:
 		const Color4        mFrameColor = Color4(220, 220, 220, 255); // Regular handle color
 
-		SceneDragHandle     mLeftTopRotateHandle;		// Left top rotation handle
-		SceneDragHandle     mLeftBottomRotateHandle;	// Left bottom rotation handle
-		SceneDragHandle     mRightTopRotateHandle;		// Right top rotation handle
-		SceneDragHandle     mRightBottomRotateHandle;	// Right bottom rotation handle
-		SceneDragHandle     mLeftTopHandle;				// Left top corner frame handle
-		SceneDragHandle     mLeftHandle;				// Left corner frame handle
-		SceneDragHandle     mLeftBottomHandle;			// Left bottom corner frame handle
-		SceneDragHandle     mTopHandle;					// Top corner frame handle
-		SceneDragHandle     mBottomHandle;				// Bottom corner frame handle
-		SceneDragHandle     mRightTopHandle;			// Right top corner frame handle
-		SceneDragHandle     mRightHandle;				// Right corner frame handle
-		SceneDragHandle     mRightBottomHandle;			// Right bottom corner frame handle
-		SceneDragHandle     mPivotHandle;				// Frame or actor pivot handle
+		SceneDragHandle     mLeftTopRotateHandle;		  // Left top rotation handle
+		SceneDragHandle     mLeftBottomRotateHandle;	  // Left bottom rotation handle
+		SceneDragHandle     mRightTopRotateHandle;		  // Right top rotation handle
+		SceneDragHandle     mRightBottomRotateHandle;	  // Right bottom rotation handle
+		SceneDragHandle     mLeftTopHandle;				  // Left top corner frame handle
+		SceneDragHandle     mLeftHandle;				  // Left corner frame handle
+		SceneDragHandle     mLeftBottomHandle;			  // Left bottom corner frame handle
+		SceneDragHandle     mTopHandle;					  // Top corner frame handle
+		SceneDragHandle     mBottomHandle;				  // Bottom corner frame handle
+		SceneDragHandle     mRightTopHandle;			  // Right top corner frame handle
+		SceneDragHandle     mRightHandle;				  // Right corner frame handle
+		SceneDragHandle     mRightBottomHandle;			  // Right bottom corner frame handle
+		SceneDragHandle     mPivotHandle;				  // Frame or actor pivot handle
+														  
+		SceneDragHandle     mAnchorsLeftTopHandle;		  // Anchors Left top corner frame handle
+		SceneDragHandle     mAnchorsLeftBottomHandle;	  // Anchors Left bottom corner frame handle
+		SceneDragHandle     mAnchorsRightTopHandle;		  // Anchors Right top corner frame handle
+		SceneDragHandle     mAnchorsRightBottomHandle;	  // Anchors Right bottom corner frame handle
+														  
+		Basis               mFrame;						  // Frame basis
+														  
+		Basis               mAnchorsFrame;                // Anchors frame basis
+		bool                mAnchorsFrameEnabled = false; // Is selected some UI widgets and anchors frame enabled
 
-		Basis               mFrame;						// Frame basis
-		Basis               mBeginDraggingFrame;        // Frame before dragging any handle
-		Vec2F               mBeginDraggingOffset;       // Offset at beginning dragging from frame origin to cursor
+		Basis               mBeginDraggingFrame;          // Frame before dragging any handle
+		Vec2F               mBeginDraggingOffset;         // Offset at beginning dragging from frame origin to cursor
 
-		bool                mIsDragging = false;		// Is frame dragging
-		bool                mChangedFromThis = false;	// Is actors changed from this, needs to break circular updating
+		bool                mIsDragging = false;		  // Is frame dragging
+		bool                mChangedFromThis = false;	  // Is actors changed from this, needs to break circular updating
 
-		ActorsTransformsVec mBeforeTransforms;   		// Array of actors transformations before changing
+		ActorsTransformsVec mBeforeTransforms;   		  // Array of actors transformations before changing
 
-		LinesVec            mSnapLines;                 // Immediate drawing lines, used for drawing snapping
+		LinesVec            mSnapLines;                   // Immediate drawing lines, used for drawing snapping
 
 	protected:
 	    // Draws tool
@@ -108,6 +117,9 @@ namespace Editor
 
 		// Transforms top selected actors
 		void TransformActorsWithAction(const Basis& transform);
+
+		// Transforms top selected actors anchors
+		void TransformAnchorsActors(const Basis& transform);
 
 		// Updates selection frame and handles
 		void UpdateSelectionFrame();
@@ -147,6 +159,18 @@ namespace Editor
 
 		// Right bottom handle moved
 		void OnRightBottomHandle(const Vec2F& position);
+
+		// Left top anchor handle moved
+		void OnAnchorLeftTopHandle(const Vec2F& position);
+
+		// Left bottom anchor handle moved
+		void OnAnchorLeftBottomHandle(const Vec2F& position);
+
+		// Right top anchor handle moved
+		void OnAnchorRightTopHandle(const Vec2F& position);
+
+		// Right bottom anchor handle moved
+		void OnAnchorRightBottomHandle(const Vec2F& position);
 
 		// Pivot handle moved
 		void OnPivotHandle(const Vec2F& position);
@@ -202,6 +226,18 @@ namespace Editor
 		// Return transformed basis when Right bottom handle moved
 		Basis GetRightBottomHandleTransformed(const Vec2F& position);
 
+		// Return transformed anchor basis when Left top handle moved
+		Basis GetLeftTopAnchorHandleTransformed(const Vec2F& position);
+
+		// Return transformed anchor basis when Left bottom handle moved
+		Basis GetLeftBottomAnchorHandleTransformed(const Vec2F& position);
+
+		// Return transformed anchor basis when Right top handle moved
+		Basis GetRightTopAnchorHandleTransformed(const Vec2F& position);
+
+		// Return transformed anchor basis when Right bottom handle moved
+		Basis GetRightBottomAnchorHandleTransformed(const Vec2F& position);
+
 		// Checks pivot handle position snapping to center and corners
 		Vec2F CheckPivotSnapping(const Vec2F& point);
 
@@ -228,6 +264,18 @@ namespace Editor
 
 		// Checks right bottom handle position snapping to other objects
 		Vec2F CheckRightBottomSnapping(const Vec2F& point);
+
+		// Checks is point in area of top handle
+		bool IsPointInTopHandle(const Vec2F& point);
+
+		// Checks is point in area of left handle
+		bool IsPointInLeftHandle(const Vec2F& point);
+
+		// Checks is point in area of right handle
+		bool IsPointInRightHandle(const Vec2F& point);
+
+		// Checks is point in area of bottom handle
+		bool IsPointInBottomHandle(const Vec2F& point);
 
 		// Calculates snapping offset for point by parallels lines, offset is on normal
 		Vec2F CalculateSnapOffset(const Vec2F& point, const Basis& frame, 
@@ -257,7 +305,13 @@ CLASS_FIELDS_META(Editor::FrameTool)
 	PROTECTED_FIELD(mRightHandle);
 	PROTECTED_FIELD(mRightBottomHandle);
 	PROTECTED_FIELD(mPivotHandle);
+	PROTECTED_FIELD(mAnchorsLeftTopHandle);
+	PROTECTED_FIELD(mAnchorsLeftBottomHandle);
+	PROTECTED_FIELD(mAnchorsRightTopHandle);
+	PROTECTED_FIELD(mAnchorsRightBottomHandle);
 	PROTECTED_FIELD(mFrame);
+	PROTECTED_FIELD(mAnchorsFrame);
+	PROTECTED_FIELD(mAnchorsFrameEnabled);
 	PROTECTED_FIELD(mBeginDraggingFrame);
 	PROTECTED_FIELD(mBeginDraggingOffset);
 	PROTECTED_FIELD(mIsDragging);
@@ -280,6 +334,7 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, TransformActors, const Basis&);
 	PROTECTED_FUNCTION(void, TransformActorsWithAction, const Basis&);
+	PROTECTED_FUNCTION(void, TransformAnchorsActors, const Basis&);
 	PROTECTED_FUNCTION(void, UpdateSelectionFrame);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
@@ -293,6 +348,10 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(void, OnRightTopHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnRightHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnRightBottomHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnAnchorLeftTopHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnAnchorLeftBottomHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnAnchorRightTopHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnAnchorRightBottomHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnPivotHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnLeftTopRotateHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnLeftBottomRotateHandle, const Vec2F&);
@@ -311,6 +370,10 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(Basis, GetRightTopHandleTransformed, const Vec2F&);
 	PROTECTED_FUNCTION(Basis, GetRightHandleTransformed, const Vec2F&);
 	PROTECTED_FUNCTION(Basis, GetRightBottomHandleTransformed, const Vec2F&);
+	PROTECTED_FUNCTION(Basis, GetLeftTopAnchorHandleTransformed, const Vec2F&);
+	PROTECTED_FUNCTION(Basis, GetLeftBottomAnchorHandleTransformed, const Vec2F&);
+	PROTECTED_FUNCTION(Basis, GetRightTopAnchorHandleTransformed, const Vec2F&);
+	PROTECTED_FUNCTION(Basis, GetRightBottomAnchorHandleTransformed, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckPivotSnapping, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckTopSnapping, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckBottomSnapping, const Vec2F&);
@@ -320,6 +383,10 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(Vec2F, CheckLeftBottomSnapping, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckRightTopSnapping, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckRightBottomSnapping, const Vec2F&);
+	PROTECTED_FUNCTION(bool, IsPointInTopHandle, const Vec2F&);
+	PROTECTED_FUNCTION(bool, IsPointInLeftHandle, const Vec2F&);
+	PROTECTED_FUNCTION(bool, IsPointInRightHandle, const Vec2F&);
+	PROTECTED_FUNCTION(bool, IsPointInBottomHandle, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&);
 }
 END_META;

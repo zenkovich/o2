@@ -283,6 +283,11 @@ namespace o2
 		return mParentWidget;
 	}
 
+	RectF UIWidget::GetChildrenRect() const
+	{
+		return mChildrenWorldRect;
+	}
+
 	const UIWidget::WidgetsVec& UIWidget::GetChildWidgets() const
 	{
 		return mChildWidgets;

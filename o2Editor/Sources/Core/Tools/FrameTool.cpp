@@ -49,6 +49,17 @@ namespace Editor
 		mPivotHandle.SetPressedSprite(mnew Sprite("ui/UI2_pivot_pressed.png"));
 		mPivotHandle.checkPositionFunc = THIS_FUNC(CheckPivotSnapping);
 
+		mAnchorsLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI3_anchor_regular.png"));
+		mAnchorsLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI3_anchor_hover.png"));
+		mAnchorsLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI3_anchor_pressed.png"));
+		mAnchorsLeftTopHandle.GetRegularSprite()->pivot = Vec2F(1, 0);
+		mAnchorsLeftTopHandle.GetHoverSprite()->pivot = Vec2F(1, 0);
+		mAnchorsLeftTopHandle.GetPressedSprite()->pivot = Vec2F(1, 0);
+
+		mAnchorsRightBottomHandle = mAnchorsLeftTopHandle;
+		mAnchorsLeftBottomHandle = mAnchorsLeftTopHandle;
+		mAnchorsRightTopHandle = mAnchorsLeftTopHandle;
+
 		mLeftTopHandle.onChangedPos = THIS_FUNC(OnLeftTopHandle);
 		mLeftHandle.onChangedPos = THIS_FUNC(OnLeftHandle);
 		mLeftBottomHandle.onChangedPos = THIS_FUNC(OnLeftBottomHandle);
@@ -62,6 +73,10 @@ namespace Editor
 		mLeftBottomRotateHandle.onChangedPos = THIS_FUNC(OnLeftBottomRotateHandle);
 		mRightTopRotateHandle.onChangedPos = THIS_FUNC(OnRightTopRotateHandle);
 		mRightBottomRotateHandle.onChangedPos = THIS_FUNC(OnRightBottomRotateHandle);
+		mAnchorsLeftTopHandle.onChangedPos = THIS_FUNC(OnAnchorLeftTopHandle);
+		mAnchorsRightBottomHandle.onChangedPos = THIS_FUNC(OnAnchorRightBottomHandle);
+		mAnchorsLeftBottomHandle.onChangedPos = THIS_FUNC(OnAnchorLeftBottomHandle);
+		mAnchorsRightTopHandle.onChangedPos = THIS_FUNC(OnAnchorRightTopHandle);
 
 		mLeftTopHandle.onPressed = THIS_FUNC(HandlePressed);
 		mLeftHandle.onPressed = THIS_FUNC(HandlePressed);
@@ -76,6 +91,10 @@ namespace Editor
 		mLeftBottomRotateHandle.onPressed = THIS_FUNC(HandlePressed);
 		mRightTopRotateHandle.onPressed = THIS_FUNC(HandlePressed);
 		mRightBottomRotateHandle.onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsLeftTopHandle.onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsRightBottomHandle.onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsLeftBottomHandle.onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsRightTopHandle.onPressed = THIS_FUNC(HandlePressed);
 
 		mLeftTopHandle.onReleased = THIS_FUNC(HandleReleased);
 		mLeftHandle.onReleased = THIS_FUNC(HandleReleased);
@@ -90,6 +109,10 @@ namespace Editor
 		mLeftBottomRotateHandle.onReleased = THIS_FUNC(HandleReleased);
 		mRightTopRotateHandle.onReleased = THIS_FUNC(HandleReleased);
 		mRightBottomRotateHandle.onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsLeftTopHandle.onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsRightBottomHandle.onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsLeftBottomHandle.onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsRightTopHandle.onReleased = THIS_FUNC(HandleReleased);
 
 		mTopHandle.checkPositionFunc = THIS_FUNC(CheckTopSnapping);
 		mLeftHandle.checkPositionFunc = THIS_FUNC(CheckLeftSnapping);
@@ -100,53 +123,10 @@ namespace Editor
 		mRightTopHandle.checkPositionFunc = THIS_FUNC(CheckRightTopSnapping);
 		mRightBottomHandle.checkPositionFunc = THIS_FUNC(CheckRightBottomSnapping);
 
-		mTopHandle.isPointInside = [&](const Vec2F& point)
-		{
-			float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
-			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
-			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
-			Basis b(mFrame.origin + mFrame.yv + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
-					mFrame.xv - transformNonScaled.xv*spriteSize,
-					transformNonScaled.yv*spriteSize);
-
-			return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
-		};
-
-		mBottomHandle.isPointInside = [&](const Vec2F& point)
-		{
-			float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
-			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
-			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
-			Basis b(mFrame.origin + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
-					mFrame.xv - transformNonScaled.xv*spriteSize,
-					transformNonScaled.yv*spriteSize);
-
-			return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
-		};
-
-		mLeftHandle.isPointInside = [&](const Vec2F& point)
-		{
-			float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
-			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
-			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
-			Basis b(mFrame.origin - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
-					transformNonScaled.xv*spriteSize,
-					mFrame.yv - transformNonScaled.yv*spriteSize);
-
-			return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
-		};
-
-		mRightHandle.isPointInside = [&](const Vec2F& point)
-		{
-			float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
-			float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
-			Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
-			Basis b(mFrame.origin + mFrame.xv - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
-					transformNonScaled.xv*spriteSize,
-					mFrame.yv - transformNonScaled.yv*spriteSize);
-
-			return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
-		};
+		mTopHandle.isPointInside = THIS_FUNC(IsPointInTopHandle);
+		mBottomHandle.isPointInside = THIS_FUNC(IsPointInBottomHandle);
+		mLeftHandle.isPointInside = THIS_FUNC(IsPointInLeftHandle);
+		mRightHandle.isPointInside = THIS_FUNC(IsPointInRightHandle);
 
 		SetHandlesEnable(false);
 	}
@@ -159,7 +139,15 @@ namespace Editor
 		SelectionTool::DrawScene();
 
 		if (o2EditorSceneScreen.GetSelectedActors().Count() > 0)
+		{
 			o2Render.DrawAABasis(mFrame, mFrameColor, mFrameColor, mFrameColor);
+
+			if (mAnchorsFrameEnabled)
+			{
+				o2Render.DrawAABasis(mAnchorsFrame, mFrameColor, mFrameColor, mFrameColor, 1.0f,
+									 LineType::Dash);
+			}
+		}
 
 		DrawSnapLines();
 	}
@@ -185,10 +173,9 @@ namespace Editor
 	{
 		mNeedRedraw = true;
 		if (mChangedFromThis)
-		{
 			mChangedFromThis = false;
-		}
-		else UpdateSelectionFrame();
+		else
+			UpdateSelectionFrame();
 	}
 
 	void FrameTool::OnActorsSelectionChanged(Vector<Actor*> actors)
@@ -269,16 +256,74 @@ namespace Editor
 		o2EditorApplication.DoneAction(action);
 	}
 
+	void FrameTool::TransformAnchorsActors(const Basis& transform)
+	{
+		RectF anchorsFrame(transform.origin, transform.origin + Vec2F(transform.xv.Length(), transform.yv.Length()));
+
+		for (auto actor : o2EditorSceneScreen.GetTopSelectedActors())
+		{
+			auto widget = dynamic_cast<UIWidget*>(actor);
+			if (widget)
+			{
+				auto parent = widget->GetParent();
+				auto parentWidget = dynamic_cast<UIWidget*>(parent);
+
+				if (parent)
+				{
+					RectF parentWorldRect;
+
+					if (parentWidget)
+						parentWorldRect = parentWidget->GetChildrenRect();
+					else
+						parentWorldRect = parent->transform->GetWorldRect();
+
+					widget->layout->SetAnchorMin((anchorsFrame.LeftBottom() - parentWorldRect.LeftBottom())/parentWorldRect.Size());
+					widget->layout->SetAnchorMax((anchorsFrame.RightTop() - parentWorldRect.LeftBottom())/parentWorldRect.Size());
+
+					actor->UpdateTransform();
+				}
+			}
+		}
+
+		mChangedFromThis = true;
+
+		UpdateSelectionFrame();
+		UpdateHandlesTransform();
+	}
+
 	void FrameTool::UpdateSelectionFrame()
 	{
 		auto selectedActors = o2EditorSceneScreen.GetSelectedActors();
 
-		SetHandlesEnable(true);
+		mAnchorsFrameEnabled = false;
 
 		if (selectedActors.Count() == 1)
 		{
 			mFrame = selectedActors[0]->transform->GetWorldBasis();
 			mPivotHandle.position = selectedActors[0]->transform->GetWorldPivot();
+
+			UIWidget* widget = dynamic_cast<UIWidget*>(selectedActors[0]);
+			mAnchorsFrameEnabled = widget != nullptr && widget->GetParent() != nullptr;
+
+			if (mAnchorsFrameEnabled)
+			{
+				auto parent = widget->GetParent();
+				auto parentWidget = dynamic_cast<UIWidget*>(parent);
+
+				RectF parentWorldRect;
+
+				if (parentWidget)
+					parentWorldRect = parentWidget->GetChildrenRect();
+				else
+					parentWorldRect = parent->transform->GetWorldRect();
+
+				RectF worldRectangle(parentWorldRect.LeftBottom() + widget->layout->GetAnchorMin()*parentWorldRect.Size(),
+									 parentWorldRect.LeftBottom() + widget->layout->GetAnchorMax()*parentWorldRect.Size());
+
+				mAnchorsFrame.origin = worldRectangle.LeftBottom();
+				mAnchorsFrame.xv = Vec2F(Math::Max(worldRectangle.Width(), 0.001f), 0);
+				mAnchorsFrame.yv = Vec2F(0, Math::Max(worldRectangle.Height(), 0.001f));
+			}
 		}
 		else if (selectedActors.Count() > 0)
 		{
@@ -314,6 +359,7 @@ namespace Editor
 			return;
 		}
 
+		SetHandlesEnable(true);
 		UpdateHandlesTransform();
 	}
 
@@ -369,7 +415,7 @@ namespace Editor
 			{
 				Basis preTransformed(cursorPos - mBeginDraggingOffset, mBeginDraggingFrame.xv, mBeginDraggingFrame.yv);
 
-				cursorPos = CalculateSnapOffset(cursorPos, preTransformed, 
+				cursorPos = CalculateSnapOffset(cursorPos, preTransformed,
 				{ Vec2F(0, 0), Vec2F(0, 1), Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(1, 0), Vec2F(1, 1) }, preTransformed.xv.Normalized(),
 				{ Vec2F(0, 0), Vec2F(1, 0), Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, 1), Vec2F(1, 1) }, preTransformed.yv.Normalized());
 			}
@@ -428,6 +474,26 @@ namespace Editor
 	void FrameTool::OnRightBottomHandle(const Vec2F& position)
 	{
 		TransformActors(mFrame.Inverted()*GetRightBottomHandleTransformed(position));
+	}
+
+	void FrameTool::OnAnchorLeftTopHandle(const Vec2F& position)
+	{
+		TransformAnchorsActors(GetLeftTopAnchorHandleTransformed(position));
+	}
+
+	void FrameTool::OnAnchorLeftBottomHandle(const Vec2F& position)
+	{
+		TransformAnchorsActors(GetLeftBottomAnchorHandleTransformed(position));
+	}
+
+	void FrameTool::OnAnchorRightTopHandle(const Vec2F& position)
+	{
+		TransformAnchorsActors(GetRightTopAnchorHandleTransformed(position));
+	}
+
+	void FrameTool::OnAnchorRightBottomHandle(const Vec2F& position)
+	{
+		TransformAnchorsActors(GetRightBottomAnchorHandleTransformed(position));
 	}
 
 	void FrameTool::OnPivotHandle(const Vec2F& position)
@@ -501,6 +567,11 @@ namespace Editor
 		mRightTopHandle.enabled = enable;
 		mRightHandle.enabled = enable;
 		mRightBottomHandle.enabled = enable;
+
+		mAnchorsLeftBottomHandle.enabled = enable && mAnchorsFrameEnabled;
+		mAnchorsLeftTopHandle.enabled = enable && mAnchorsFrameEnabled;
+		mAnchorsRightTopHandle.enabled = enable && mAnchorsFrameEnabled;
+		mAnchorsRightBottomHandle.enabled = enable && mAnchorsFrameEnabled;
 	}
 
 	void FrameTool::UpdateHandlesTransform()
@@ -540,8 +611,6 @@ namespace Editor
 		mRightHandle.position = Vec2F(1.0f, 0.5f)*mFrame;
 		mRightBottomHandle.position = Vec2F(1.0f, 0.0f)*mFrame;
 
-		//mTopHandle.regularSprite->size = Vec2F(mTopHandle.regularSprite->size->x, frameSize.x);
-
 		mLeftTopHandle.cursorType = getHandleType(mLeftTopHandle.GetPosition());
 		mLeftHandle.cursorType = getHandleType(mLeftHandle.GetPosition());
 		mLeftBottomHandle.cursorType = getHandleType(mLeftBottomHandle.GetPosition());
@@ -569,6 +638,19 @@ namespace Editor
 		mLeftBottomRotateHandle.angle = handlesAngle + Math::PI();
 		mRightTopRotateHandle.angle = handlesAngle;
 		mRightBottomRotateHandle.angle = handlesAngle + Math::PI()*1.5f;
+
+		if (mAnchorsFrameEnabled)
+		{
+			mAnchorsLeftTopHandle.position = Vec2F(0.0f, 1.0f)*mAnchorsFrame;
+			mAnchorsLeftBottomHandle.position = Vec2F(0.0f, 0.0f)*mAnchorsFrame;
+			mAnchorsRightTopHandle.position = Vec2F(1.0f, 1.0f)*mAnchorsFrame;
+			mAnchorsRightBottomHandle.position = Vec2F(1.0f, 0.0f)*mAnchorsFrame;
+
+			mAnchorsLeftTopHandle.angle = handlesAngle;
+			mAnchorsLeftBottomHandle.angle = handlesAngle + Math::PI()*0.5f;
+			mAnchorsRightTopHandle.angle = handlesAngle + Math::PI()*1.5f;
+			mAnchorsRightBottomHandle.angle = handlesAngle + Math::PI();
+		}
 
 		mNeedRedraw = true;
 	}
@@ -785,6 +867,65 @@ namespace Editor
 		return transformedFrame;
 	}
 
+	Basis FrameTool::GetLeftTopAnchorHandleTransformed(const Vec2F& position)
+	{
+		Basis transformedFrame = mAnchorsFrame;
+		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mAnchorsFrame;
+		Vec2F delta = position - lastHandleCoords;
+		Vec2F frameDeltaX = delta.Project(mAnchorsFrame.xv);
+		Vec2F frameDeltaY = delta.Project(mAnchorsFrame.yv);
+
+		transformedFrame.origin += frameDeltaX;
+		transformedFrame.xv -= frameDeltaX;
+		transformedFrame.yv += frameDeltaY;
+
+		return transformedFrame;
+	}
+
+	Basis FrameTool::GetLeftBottomAnchorHandleTransformed(const Vec2F& position)
+	{
+		Basis transformedFrame = mAnchorsFrame;
+		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mAnchorsFrame;
+		Vec2F delta = position - lastHandleCoords;
+		Vec2F frameDeltaX = delta.Project(mAnchorsFrame.xv);
+		Vec2F frameDeltaY = delta.Project(mAnchorsFrame.yv);
+
+		transformedFrame.origin += frameDeltaX + frameDeltaY;
+		transformedFrame.xv -= frameDeltaX;
+		transformedFrame.yv -= frameDeltaY;
+
+		return transformedFrame;
+	}
+
+	Basis FrameTool::GetRightTopAnchorHandleTransformed(const Vec2F& position)
+	{
+		Basis transformedFrame = mAnchorsFrame;
+		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mAnchorsFrame;
+		Vec2F delta = position - lastHandleCoords;
+		Vec2F frameDeltaX = delta.Project(mAnchorsFrame.xv);
+		Vec2F frameDeltaY = delta.Project(mAnchorsFrame.yv);
+
+		transformedFrame.xv += frameDeltaX;
+		transformedFrame.yv += frameDeltaY;
+
+		return transformedFrame;
+	}
+
+	Basis FrameTool::GetRightBottomAnchorHandleTransformed(const Vec2F& position)
+	{
+		Basis transformedFrame = mAnchorsFrame;
+		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mAnchorsFrame;
+		Vec2F delta = position - lastHandleCoords;
+		Vec2F frameDeltaX = delta.Project(mAnchorsFrame.xv);
+		Vec2F frameDeltaY = delta.Project(mAnchorsFrame.yv);
+
+		transformedFrame.origin += frameDeltaY;
+		transformedFrame.xv += frameDeltaX;
+		transformedFrame.yv -= frameDeltaY;
+
+		return transformedFrame;
+	}
+
 	Vec2F FrameTool::CheckPivotSnapping(const Vec2F& point)
 	{
 		if (mPivotHandle.IsPressed())
@@ -795,14 +936,14 @@ namespace Editor
 		if (!o2Input.IsKeyDown(VK_CONTROL))
 			return point;
 
-		Vector<Vec2F> snapPoints =
+		static Vector<Vec2F> snapPoints =
 		{
 			Vec2F(0.0f, 0.0f), Vec2F(0.0f, 0.5f), Vec2F(0.0f, 1.0f),
 			Vec2F(0.5f, 0.0f), Vec2F(0.5f, 0.5f), Vec2F(0.5f, 1.0f),
 			Vec2F(1.0f, 0.0f), Vec2F(1.0f, 0.5f), Vec2F(1.0f, 1.0f)
 		};
 
-		Vector<Vector<Vector<Vec2F>>> snapPointsLines =
+		static Vector<Vector<Vector<Vec2F>>> snapPointsLines =
 		{
 			{ { Vec2F(0.0f, 0.0f), Vec2F(0.5f, 0.0f) },{ Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.0f) } },
 			{ { Vec2F(0.0f, 0.25f), Vec2F(0.0f, 0.75f) },{ Vec2F(0.0f, 0.5f), Vec2F(0.25f, 0.5f) } },
@@ -851,7 +992,7 @@ namespace Editor
 
 		Basis transformedFrame = GetTopHandleTransformed(point);
 
-		Vec2F snapped = CalculateSnapOffset(point, transformedFrame, 
+		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 		{}, transformedFrame.xv.Normalized(),
 		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized());
 
@@ -991,7 +1132,55 @@ namespace Editor
 		return snapped;
 	}
 
-	Vec2F FrameTool::CalculateSnapOffset(const Vec2F& point, const Basis& frame, 
+	bool FrameTool::IsPointInTopHandle(const Vec2F& point)
+	{
+		float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
+		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
+		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
+		Basis b(mFrame.origin + mFrame.yv + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
+				mFrame.xv - transformNonScaled.xv*spriteSize,
+				transformNonScaled.yv*spriteSize);
+
+		return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
+	}
+
+	bool FrameTool::IsPointInLeftHandle(const Vec2F& point)
+	{
+		float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
+		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
+		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
+		Basis b(mFrame.origin - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
+				transformNonScaled.xv*spriteSize,
+				mFrame.yv - transformNonScaled.yv*spriteSize);
+
+		return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
+	}
+
+	bool FrameTool::IsPointInRightHandle(const Vec2F& point)
+	{
+		float camScale = o2EditorSceneScreen.LocalToScreenPoint(Vec2F(1, 0)).x;
+		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
+		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
+		Basis b(mFrame.origin + mFrame.xv - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
+				transformNonScaled.xv*spriteSize,
+				mFrame.yv - transformNonScaled.yv*spriteSize);
+
+		return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
+	}
+
+	bool FrameTool::IsPointInBottomHandle(const Vec2F& point)
+	{
+		float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
+		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
+		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
+		Basis b(mFrame.origin + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
+				mFrame.xv - transformNonScaled.xv*spriteSize,
+				transformNonScaled.yv*spriteSize);
+
+		return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
+	}
+
+	Vec2F FrameTool::CalculateSnapOffset(const Vec2F& point, const Basis& frame,
 										 const Vector<Vec2F>& xLines, const Vec2F& xNormal,
 										 const Vector<Vec2F>& yLines, const Vec2F& yNormal)
 	{

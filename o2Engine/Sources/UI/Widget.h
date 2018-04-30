@@ -86,6 +86,9 @@ namespace o2
 		// Returns parent widget
 		UIWidget* GetParentWidget() const;
 
+		// Returns children rectangle layout
+		RectF GetChildrenRect() const;
+
 		// Returns child widget by path (like "root/some node/other node/target node")
 		UIWidget* GetChildWidget(const String& path) const;
 
@@ -485,6 +488,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, SetLayoutDirty);
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);
 	PUBLIC_FUNCTION(UIWidget*, GetParentWidget);
+	PUBLIC_FUNCTION(RectF, GetChildrenRect);
 	PUBLIC_FUNCTION(UIWidget*, GetChildWidget, const String&);
 	PUBLIC_FUNCTION(UIWidget*, AddChildWidget, UIWidget*);
 	PUBLIC_FUNCTION(UIWidget*, AddChildWidget, UIWidget*, int);
