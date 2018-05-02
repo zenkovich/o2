@@ -99,8 +99,8 @@ namespace o2
 	void UIWidgetLayout::SetRect(const RectF& rect)
 	{
 		RectF parentRect = GetParentRectangle();
-		RectF parentAnchoredRect(parentRect.LeftBottom()*mData->anchorMin,
-								 parentRect.RightTop()*mData->anchorMax);
+		RectF parentAnchoredRect(parentRect.Size()*mData->anchorMin,
+								 parentRect.Size()*mData->anchorMax);
 
 		mData->offsetMin = rect.LeftBottom() - parentAnchoredRect.LeftBottom();
 		mData->offsetMax = rect.RightTop() - parentAnchoredRect.RightTop();
@@ -551,6 +551,16 @@ namespace o2
 			mData->owner->mParent->transform->SetDirty(fromParent);
 
 		ActorTransform::SetDirty(fromParent);
+	}
+
+	RectF UIWidgetLayout::GetParentRectangle() const
+	{
+		if (mData->owner->mParentWidget)
+			return mData->owner->mParentWidget->mChildrenWorldRect;
+		else if (mData->owner->mParent)
+			return mData->owner->mParent->transform->mData->worldRectangle;
+
+		return RectF();
 	}
 
 	void UIWidgetLayout::Update()

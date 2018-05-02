@@ -369,8 +369,10 @@ namespace o2
 
 			if (itemUnderCursor != mSelectedItem)
 			{
-				mSelectSubContextTime = mOpenSubMenuDelay;
 				mSelectedItem = itemUnderCursor;
+
+				if (mSelectedItem && mSelectedItem->GetSubMenu())
+					mSelectSubContextTime = mOpenSubMenuDelay;
 			}
 		}
 	}

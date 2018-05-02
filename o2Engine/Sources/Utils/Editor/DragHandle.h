@@ -21,8 +21,9 @@ namespace o2
 		PROPERTY(Vec2F, position, SetPosition, GetPosition); // Current position property
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);      // Is handle enabled property. Disabled handle don't drawn and interact
 
-		CursorType cursorType;          // Cursor type when hovering and dragging
-		bool       pixelPerfect = true; // Is handle draws pixel perfect
+		CursorType  cursorType;               // Cursor type when hovering and dragging
+		bool        pixelPerfect = true;      // Is handle draws pixel perfect
+		KeyboardKey snappingKey = VK_CONTROL; // Snapping key, when it pressed handle uses checkSnappingFunc to correct position
 
 		Function<void(const Vec2F&)> onChangedPos;        // On position changed event
 		Function<void()>             onPressed;           // Pressed cursor on handle event
@@ -34,6 +35,7 @@ namespace o2
 		Function<Vec2F(const Vec2F&)> screenToLocalTransformFunc;  // Screen position to local transformation function
 		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc;  // Local position to screen transformation function
 		Function<Vec2F(const Vec2F&)> checkPositionFunc;           // Position constraints checking function
+		Function<Vec2F(const Vec2F&)> checkSnappingFunc;           // Checking snapping positiong when dragging with pressed snapping key
 
 		Function<void(const Input::Cursor&)> onRightButtonPressed;  // Right mouse button pressed event
 		Function<void(const Input::Cursor&)> onRightButtonReleased; // Right mouse button released event
@@ -62,7 +64,7 @@ namespace o2
 		// Sets position
 		void SetPosition(const Vec2F& position);
 
-		// Reuturns handle screen position, transformed from position with localToScreenTransformFunc
+		// Returns handle screen position, transformed from position with localToScreenTransformFunc
 		const Vec2F& GetScreenPosition() const;
 
 		// Sets drag position of handle, updates handle final position after position checking
@@ -365,6 +367,7 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PUBLIC_FIELD(enabled);
 	PUBLIC_FIELD(cursorType);
 	PUBLIC_FIELD(pixelPerfect);
+	PUBLIC_FIELD(snappingKey);
 	PUBLIC_FIELD(onChangedPos);
 	PUBLIC_FIELD(onPressed);
 	PUBLIC_FIELD(onReleased);
@@ -373,6 +376,7 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PUBLIC_FIELD(screenToLocalTransformFunc);
 	PUBLIC_FIELD(localToScreenTransformFunc);
 	PUBLIC_FIELD(checkPositionFunc);
+	PUBLIC_FIELD(checkSnappingFunc);
 	PUBLIC_FIELD(onRightButtonPressed);
 	PUBLIC_FIELD(onRightButtonReleased);
 	PROTECTED_FIELD(mEnabled);

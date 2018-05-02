@@ -47,11 +47,11 @@ namespace Editor
 		mPivotHandle.SetRegularSprite(mnew Sprite("ui/UI2_pivot.png"));
 		mPivotHandle.SetHoverSprite(mnew Sprite("ui/UI2_pivot_select.png"));
 		mPivotHandle.SetPressedSprite(mnew Sprite("ui/UI2_pivot_pressed.png"));
-		mPivotHandle.checkPositionFunc = THIS_FUNC(CheckPivotSnapping);
+		mPivotHandle.checkSnappingFunc = THIS_FUNC(CheckPivotSnapping);
 
-		mAnchorsLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI3_anchor_regular.png"));
+		mAnchorsLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI3_anchor_pressed.png"));
 		mAnchorsLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI3_anchor_hover.png"));
-		mAnchorsLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI3_anchor_pressed.png"));
+		mAnchorsLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI3_anchor_regular.png"));
 		mAnchorsLeftTopHandle.GetRegularSprite()->pivot = Vec2F(1, 0);
 		mAnchorsLeftTopHandle.GetHoverSprite()->pivot = Vec2F(1, 0);
 		mAnchorsLeftTopHandle.GetPressedSprite()->pivot = Vec2F(1, 0);
@@ -59,6 +59,12 @@ namespace Editor
 		mAnchorsRightBottomHandle = mAnchorsLeftTopHandle;
 		mAnchorsLeftBottomHandle = mAnchorsLeftTopHandle;
 		mAnchorsRightTopHandle = mAnchorsLeftTopHandle;
+
+		auto centerAnchorsRegularSprite = mnew Sprite();
+		centerAnchorsRegularSprite->SetSize(Vec2F(0, 0));
+		mAnchorsCenter.SetRegularSprite(centerAnchorsRegularSprite);
+		mAnchorsCenter.SetHoverSprite(mnew Sprite("ui/UI3_anchors_hover.png"));
+		mAnchorsCenter.SetPressedSprite(mnew Sprite("ui/UI3_anchors_pressed.png"));
 
 		mLeftTopHandle.onChangedPos = THIS_FUNC(OnLeftTopHandle);
 		mLeftHandle.onChangedPos = THIS_FUNC(OnLeftHandle);
@@ -77,6 +83,7 @@ namespace Editor
 		mAnchorsRightBottomHandle.onChangedPos = THIS_FUNC(OnAnchorRightBottomHandle);
 		mAnchorsLeftBottomHandle.onChangedPos = THIS_FUNC(OnAnchorLeftBottomHandle);
 		mAnchorsRightTopHandle.onChangedPos = THIS_FUNC(OnAnchorRightTopHandle);
+		mAnchorsCenter.onChangedPos = THIS_FUNC(OnCenterAnchorHandle);
 
 		mLeftTopHandle.onPressed = THIS_FUNC(HandlePressed);
 		mLeftHandle.onPressed = THIS_FUNC(HandlePressed);
@@ -95,6 +102,7 @@ namespace Editor
 		mAnchorsRightBottomHandle.onPressed = THIS_FUNC(HandlePressed);
 		mAnchorsLeftBottomHandle.onPressed = THIS_FUNC(HandlePressed);
 		mAnchorsRightTopHandle.onPressed = THIS_FUNC(HandlePressed);
+		mAnchorsCenter.onPressed = THIS_FUNC(HandlePressed);
 
 		mLeftTopHandle.onReleased = THIS_FUNC(HandleReleased);
 		mLeftHandle.onReleased = THIS_FUNC(HandleReleased);
@@ -113,20 +121,28 @@ namespace Editor
 		mAnchorsRightBottomHandle.onReleased = THIS_FUNC(HandleReleased);
 		mAnchorsLeftBottomHandle.onReleased = THIS_FUNC(HandleReleased);
 		mAnchorsRightTopHandle.onReleased = THIS_FUNC(HandleReleased);
+		mAnchorsCenter.onReleased = THIS_FUNC(HandleReleased);
 
-		mTopHandle.checkPositionFunc = THIS_FUNC(CheckTopSnapping);
-		mLeftHandle.checkPositionFunc = THIS_FUNC(CheckLeftSnapping);
-		mBottomHandle.checkPositionFunc = THIS_FUNC(CheckBottomSnapping);
-		mRightHandle.checkPositionFunc = THIS_FUNC(CheckRightSnapping);
-		mLeftTopHandle.checkPositionFunc = THIS_FUNC(CheckLeftTopSnapping);
-		mLeftBottomHandle.checkPositionFunc = THIS_FUNC(CheckLeftBottomSnapping);
-		mRightTopHandle.checkPositionFunc = THIS_FUNC(CheckRightTopSnapping);
-		mRightBottomHandle.checkPositionFunc = THIS_FUNC(CheckRightBottomSnapping);
+		mTopHandle.checkSnappingFunc = THIS_FUNC(CheckTopSnapping);
+		mLeftHandle.checkSnappingFunc = THIS_FUNC(CheckLeftSnapping);
+		mBottomHandle.checkSnappingFunc = THIS_FUNC(CheckBottomSnapping);
+		mRightHandle.checkSnappingFunc = THIS_FUNC(CheckRightSnapping);
+		mLeftTopHandle.checkSnappingFunc = THIS_FUNC(CheckLeftTopSnapping);
+		mLeftBottomHandle.checkSnappingFunc = THIS_FUNC(CheckLeftBottomSnapping);
+		mRightTopHandle.checkSnappingFunc = THIS_FUNC(CheckRightTopSnapping);
+		mRightBottomHandle.checkSnappingFunc = THIS_FUNC(CheckRightBottomSnapping);
+
+		mAnchorsRightBottomHandle.checkSnappingFunc = THIS_FUNC(CheckAnchorRightBottomSnapping);
+		mAnchorsLeftBottomHandle.checkSnappingFunc = THIS_FUNC(CheckAnchorLeftBottomSnapping);
+		mAnchorsRightTopHandle.checkSnappingFunc = THIS_FUNC(CheckAnchorRightTopSnapping);
+		mAnchorsLeftTopHandle.checkSnappingFunc = THIS_FUNC(CheckAnchorLeftTopSnapping);
+		mAnchorsCenter.checkSnappingFunc = THIS_FUNC(CheckAnchorCenterSnapping);
 
 		mTopHandle.isPointInside = THIS_FUNC(IsPointInTopHandle);
 		mBottomHandle.isPointInside = THIS_FUNC(IsPointInBottomHandle);
 		mLeftHandle.isPointInside = THIS_FUNC(IsPointInLeftHandle);
 		mRightHandle.isPointInside = THIS_FUNC(IsPointInRightHandle);
+		mAnchorsCenter.isPointInside = THIS_FUNC(IsPointInAnchorsCenterHandle);
 
 		SetHandlesEnable(false);
 	}
@@ -140,11 +156,20 @@ namespace Editor
 
 		if (o2EditorSceneScreen.GetSelectedActors().Count() > 0)
 		{
+			for (auto actor : o2EditorSceneScreen.GetSelectedActors())
+				o2Render.DrawAABasis(actor->transform->GetWorldBasis(), mActorColor, mActorColor, mActorColor);
+
 			o2Render.DrawAABasis(mFrame, mFrameColor, mFrameColor, mFrameColor);
 
 			if (mAnchorsFrameEnabled)
 			{
-				o2Render.DrawAABasis(mAnchorsFrame, mFrameColor, mFrameColor, mFrameColor, 1.0f,
+				for (auto actor : o2EditorSceneScreen.GetSelectedActors())
+				{
+					if (actor->GetParent())
+						o2Render.DrawAABasis(actor->GetParent()->transform->GetWorldBasis(), mParentColor, mParentColor, mParentColor);
+				}
+
+				o2Render.DrawAABasis(mAnchorsFrame, mAnchorsFrameColor, mAnchorsFrameColor, mAnchorsFrameColor, 1.0f,
 									 LineType::Dash);
 			}
 		}
@@ -160,7 +185,6 @@ namespace Editor
 
 	void FrameTool::OnEnabled()
 	{
-		SetHandlesEnable(true);
 		UpdateSelectionFrame();
 	}
 
@@ -277,8 +301,10 @@ namespace Editor
 					else
 						parentWorldRect = parent->transform->GetWorldRect();
 
+					RectF prevWorldRect = widget->layout->GetWorldRect();
 					widget->layout->SetAnchorMin((anchorsFrame.LeftBottom() - parentWorldRect.LeftBottom())/parentWorldRect.Size());
 					widget->layout->SetAnchorMax((anchorsFrame.RightTop() - parentWorldRect.LeftBottom())/parentWorldRect.Size());
+					widget->layout->SetWorldRect(prevWorldRect);
 
 					actor->UpdateTransform();
 				}
@@ -417,7 +443,8 @@ namespace Editor
 
 				cursorPos = CalculateSnapOffset(cursorPos, preTransformed,
 				{ Vec2F(0, 0), Vec2F(0, 1), Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(1, 0), Vec2F(1, 1) }, preTransformed.xv.Normalized(),
-				{ Vec2F(0, 0), Vec2F(1, 0), Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, 1), Vec2F(1, 1) }, preTransformed.yv.Normalized());
+				{ Vec2F(0, 0), Vec2F(1, 0), Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, 1), Vec2F(1, 1) }, preTransformed.yv.Normalized(),
+												o2Scene.GetAllActors());
 			}
 
 			Vec2F delta = cursorPos - mBeginDraggingOffset;
@@ -496,6 +523,11 @@ namespace Editor
 		TransformAnchorsActors(GetRightBottomAnchorHandleTransformed(position));
 	}
 
+	void FrameTool::OnCenterAnchorHandle(const Vec2F& position)
+	{
+		TransformAnchorsActors(GetAnchorsCenterHandleTransformed(position));
+	}
+
 	void FrameTool::OnPivotHandle(const Vec2F& position)
 	{
 		auto selectedActors = o2EditorSceneScreen.GetSelectedActors();
@@ -572,6 +604,8 @@ namespace Editor
 		mAnchorsLeftTopHandle.enabled = enable && mAnchorsFrameEnabled;
 		mAnchorsRightTopHandle.enabled = enable && mAnchorsFrameEnabled;
 		mAnchorsRightBottomHandle.enabled = enable && mAnchorsFrameEnabled;
+
+		CheckAnchorsCenterEnabled();
 	}
 
 	void FrameTool::UpdateHandlesTransform()
@@ -645,11 +679,14 @@ namespace Editor
 			mAnchorsLeftBottomHandle.position = Vec2F(0.0f, 0.0f)*mAnchorsFrame;
 			mAnchorsRightTopHandle.position = Vec2F(1.0f, 1.0f)*mAnchorsFrame;
 			mAnchorsRightBottomHandle.position = Vec2F(1.0f, 0.0f)*mAnchorsFrame;
+			mAnchorsCenter.position = mAnchorsFrame.origin;
 
 			mAnchorsLeftTopHandle.angle = handlesAngle;
 			mAnchorsLeftBottomHandle.angle = handlesAngle + Math::PI()*0.5f;
 			mAnchorsRightTopHandle.angle = handlesAngle + Math::PI()*1.5f;
 			mAnchorsRightBottomHandle.angle = handlesAngle + Math::PI();
+
+			CheckAnchorsCenterEnabled();
 		}
 
 		mNeedRedraw = true;
@@ -673,9 +710,16 @@ namespace Editor
 
 	Basis FrameTool::GetLeftTopHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mFrame.origin + mFrame.xv;
+		Vec2F xn = mFrame.xv.Normalized();
+		Vec2F yn = mFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			- xn*Math::Max(0.0f, xn.Dot(position - correctOrigin) + mFrameMinimalSize)
+			+ yn*Math::Max(0.0f, -yn.Dot(position - correctOrigin) + mFrameMinimalSize);
+
 		Basis transformedFrame = mFrame;
 		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
@@ -703,9 +747,14 @@ namespace Editor
 
 	Basis FrameTool::GetLeftHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mFrame.origin + mFrame.xv;
+		Vec2F xn = mFrame.xv.Normalized();
+		Vec2F correctedPos = position
+			- xn*Math::Max(0.0f, xn.Dot(position - correctOrigin) + mFrameMinimalSize);
+
 		Basis transformedFrame = mFrame;
 		Vec2F lastHandleCoords = Vec2F(0.0f, 0.5f)*mFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 
 		transformedFrame.origin += frameDeltaX;
@@ -722,9 +771,16 @@ namespace Editor
 
 	Basis FrameTool::GetLeftBottomHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mFrame.origin + mFrame.xv + mFrame.yv;
+		Vec2F xn = mFrame.xv.Normalized();
+		Vec2F yn = mFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			- xn*Math::Max(0.0f, xn.Dot(position - correctOrigin) + mFrameMinimalSize)
+			- yn*Math::Max(0.0f, yn.Dot(position - correctOrigin) + mFrameMinimalSize);
+
 		Basis transformedFrame = mFrame;
 		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
@@ -759,9 +815,14 @@ namespace Editor
 
 	Basis FrameTool::GetTopHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mFrame.origin;
+		Vec2F yn = mFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			+ yn*Math::Max(0.0f, -yn.Dot(position - correctOrigin) + mFrameMinimalSize);
+
 		Basis transformedFrame = mFrame;
 		Vec2F lastHandleCoords = Vec2F(0.5f, 1.0f)*mFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
 		transformedFrame.yv += frameDeltaY;
@@ -777,9 +838,14 @@ namespace Editor
 
 	Basis FrameTool::GetBottomHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mFrame.origin + mFrame.yv;
+		Vec2F yn = mFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			- yn*Math::Max(0.0f, yn.Dot(position - correctOrigin) + mFrameMinimalSize);
+
 		Basis transformedFrame = mFrame;
 		Vec2F lastHandleCoords = Vec2F(0.5f, 0.0f)*mFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
 		transformedFrame.origin += frameDeltaY;
@@ -796,9 +862,16 @@ namespace Editor
 
 	Basis FrameTool::GetRightTopHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mFrame.origin;
+		Vec2F xn = mFrame.xv.Normalized();
+		Vec2F yn = mFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			+ xn*Math::Max(0.0f, -xn.Dot(position - correctOrigin) + mFrameMinimalSize)
+			+ yn*Math::Max(0.0f, -yn.Dot(position - correctOrigin) + mFrameMinimalSize);
+
 		Basis transformedFrame = mFrame;
 		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
@@ -820,9 +893,14 @@ namespace Editor
 
 	Basis FrameTool::GetRightHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mFrame.origin;
+		Vec2F xn = mFrame.xv.Normalized();
+		Vec2F correctedPos = position
+			+ xn*Math::Max(0.0f, -xn.Dot(position - correctOrigin) + mFrameMinimalSize);
+
 		Basis transformedFrame = mFrame;
 		Vec2F lastHandleCoords = Vec2F(1.0f, 0.5f)*mFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 
 		transformedFrame.xv += frameDeltaX;
@@ -838,9 +916,16 @@ namespace Editor
 
 	Basis FrameTool::GetRightBottomHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mFrame.origin + mFrame.yv;
+		Vec2F xn = mFrame.xv.Normalized();
+		Vec2F yn = mFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			+ xn*Math::Max(0.0f, -xn.Dot(position - correctOrigin) + mFrameMinimalSize)
+			- yn*Math::Max(0.0f, yn.Dot(position - correctOrigin) + mFrameMinimalSize);
+
 		Basis transformedFrame = mFrame;
 		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mFrame.yv);
 
@@ -869,9 +954,16 @@ namespace Editor
 
 	Basis FrameTool::GetLeftTopAnchorHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mAnchorsFrame.origin + mAnchorsFrame.xv;
+		Vec2F xn = mAnchorsFrame.xv.Normalized();
+		Vec2F yn = mAnchorsFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			- xn*Math::Max(0.0f, xn.Dot(position - correctOrigin))
+			+ yn*Math::Max(0.0f, -yn.Dot(position - correctOrigin));
+
 		Basis transformedFrame = mAnchorsFrame;
 		Vec2F lastHandleCoords = Vec2F(0.0f, 1.0f)*mAnchorsFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mAnchorsFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mAnchorsFrame.yv);
 
@@ -884,9 +976,16 @@ namespace Editor
 
 	Basis FrameTool::GetLeftBottomAnchorHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mAnchorsFrame.origin + mAnchorsFrame.xv + mAnchorsFrame.yv;
+		Vec2F xn = mAnchorsFrame.xv.Normalized();
+		Vec2F yn = mAnchorsFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			- xn*Math::Max(0.0f, xn.Dot(position - correctOrigin))
+			- yn*Math::Max(0.0f, yn.Dot(position - correctOrigin));
+
 		Basis transformedFrame = mAnchorsFrame;
 		Vec2F lastHandleCoords = Vec2F(0.0f, 0.0f)*mAnchorsFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mAnchorsFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mAnchorsFrame.yv);
 
@@ -899,9 +998,16 @@ namespace Editor
 
 	Basis FrameTool::GetRightTopAnchorHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mAnchorsFrame.origin;
+		Vec2F xn = mAnchorsFrame.xv.Normalized();
+		Vec2F yn = mAnchorsFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			+ xn*Math::Max(0.0f, -xn.Dot(position - correctOrigin))
+			+ yn*Math::Max(0.0f, -yn.Dot(position - correctOrigin));
+
 		Basis transformedFrame = mAnchorsFrame;
 		Vec2F lastHandleCoords = Vec2F(1.0f, 1.0f)*mAnchorsFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mAnchorsFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mAnchorsFrame.yv);
 
@@ -913,9 +1019,16 @@ namespace Editor
 
 	Basis FrameTool::GetRightBottomAnchorHandleTransformed(const Vec2F& position)
 	{
+		Vec2F correctOrigin = mAnchorsFrame.origin + mAnchorsFrame.yv;
+		Vec2F xn = mAnchorsFrame.xv.Normalized();
+		Vec2F yn = mAnchorsFrame.yv.Normalized();
+		Vec2F correctedPos = position
+			+ xn*Math::Max(0.0f, -xn.Dot(position - correctOrigin))
+			- yn*Math::Max(0.0f, yn.Dot(position - correctOrigin));
+
 		Basis transformedFrame = mAnchorsFrame;
 		Vec2F lastHandleCoords = Vec2F(1.0f, 0.0f)*mAnchorsFrame;
-		Vec2F delta = position - lastHandleCoords;
+		Vec2F delta = correctedPos - lastHandleCoords;
 		Vec2F frameDeltaX = delta.Project(mAnchorsFrame.xv);
 		Vec2F frameDeltaY = delta.Project(mAnchorsFrame.yv);
 
@@ -926,15 +1039,17 @@ namespace Editor
 		return transformedFrame;
 	}
 
-	Vec2F FrameTool::CheckPivotSnapping(const Vec2F& point)
+	Basis FrameTool::GetAnchorsCenterHandleTransformed(const Vec2F& position)
 	{
-		if (mPivotHandle.IsPressed())
-			mSnapLines.Clear();
-		else
-			return point;
+		Basis transformedFrame = mAnchorsFrame;
+		transformedFrame.origin = position;
 
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			return point;
+		return transformedFrame;
+	}
+
+	Vec2F FrameTool::CheckFrameSnapping(const Vec2F& point, const Basis& frame)
+	{
+		mSnapLines.Clear();
 
 		static Vector<Vec2F> snapPoints =
 		{
@@ -964,12 +1079,12 @@ namespace Editor
 		int i = 0;
 		for (auto snapPoint : snapPoints)
 		{
-			Vec2F framePoint = o2EditorSceneScreen.LocalToScreenPoint(snapPoint*mFrame);
+			Vec2F framePoint = o2EditorSceneScreen.LocalToScreenPoint(snapPoint*frame);
 
 			if ((screenpoint - framePoint).Length() < snapThresholdPx)
 			{
-				mSnapLines.Add(SnapLine(snapPointsLines[i][0][0]*mFrame, snapPointsLines[i][0][1]*mFrame, Color4::Red()));
-				mSnapLines.Add(SnapLine(snapPointsLines[i][1][0]*mFrame, snapPointsLines[i][1][1]*mFrame, Color4::Red()));
+				mSnapLines.Add(SnapLine(snapPointsLines[i][0][0]*frame, snapPointsLines[i][0][1]*frame, mSnapLinesColor));
+				mSnapLines.Add(SnapLine(snapPointsLines[i][1][0]*frame, snapPointsLines[i][1][1]*frame, mSnapLinesColor));
 
 				return o2EditorSceneScreen.ScreenToLocalPoint(framePoint);
 			}
@@ -980,162 +1095,205 @@ namespace Editor
 		return point;
 	}
 
+	Vec2F FrameTool::CheckPivotSnapping(const Vec2F& point)
+	{
+		return CheckFrameSnapping(point, mFrame);
+	}
+
+	Vec2F FrameTool::CheckAnchorCenterSnapping(const Vec2F& point)
+	{
+		auto actors = o2EditorSceneScreen.GetTopSelectedActors();
+
+		if (actors.Count() > 0 && actors[0]->GetParent())
+			return CheckFrameSnapping(point, actors[0]->GetParent()->transform->GetWorldBasis());
+
+		return point;
+	}
+
+	Vec2F FrameTool::CheckAnchorLeftTopSnapping(const Vec2F& point)
+	{
+		mSnapLines.Clear();
+
+		auto actors = o2EditorSceneScreen.GetTopSelectedActors();
+		if (actors.Count() > 0 && actors[0]->GetParent())
+		{
+			Basis transformedFrame = GetLeftTopAnchorHandleTransformed(point);
+
+			Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+			{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
+			{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(), { actors[0]->GetParent() });
+
+			return snapped;
+		}
+
+		return point;
+	}
+
+	Vec2F FrameTool::CheckAnchorLeftBottomSnapping(const Vec2F& point)
+	{
+		mSnapLines.Clear();
+
+		auto actors = o2EditorSceneScreen.GetTopSelectedActors();
+		if (actors.Count() > 0 && actors[0]->GetParent())
+		{
+			Basis transformedFrame = GetLeftBottomAnchorHandleTransformed(point);
+
+			Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+			{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
+			{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(), { actors[0]->GetParent() });
+
+			return snapped;
+		}
+
+		return point;
+	}
+
+	Vec2F FrameTool::CheckAnchorRightTopSnapping(const Vec2F& point)
+	{
+		mSnapLines.Clear();
+
+		auto actors = o2EditorSceneScreen.GetTopSelectedActors();
+		if (actors.Count() > 0 && actors[0]->GetParent())
+		{
+			Basis transformedFrame = GetRightTopAnchorHandleTransformed(point);
+
+			Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+			{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
+			{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(), { actors[0]->GetParent() });
+
+			return snapped;
+		}
+
+		return point;
+	}
+
+	Vec2F FrameTool::CheckAnchorRightBottomSnapping(const Vec2F& point)
+	{
+		mSnapLines.Clear();
+
+		auto actors = o2EditorSceneScreen.GetTopSelectedActors();
+		if (actors.Count() > 0 && actors[0]->GetParent())
+		{
+			Basis transformedFrame = GetRightBottomAnchorHandleTransformed(point);
+
+			Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
+			{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
+			{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(), { actors[0]->GetParent() });
+
+			return snapped;
+		}
+
+		return point;
+	}
+
 	Vec2F FrameTool::CheckTopSnapping(const Vec2F& point)
 	{
-		if (mTopHandle.IsPressed())
-			mSnapLines.Clear();
-		else
-			return point;
-
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			return point;
+		mSnapLines.Clear();
 
 		Basis transformedFrame = GetTopHandleTransformed(point);
 
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 		{}, transformedFrame.xv.Normalized(),
-		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized());
+		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(), o2Scene.GetAllActors());
 
 		return snapped;
 	}
 
 	Vec2F FrameTool::CheckBottomSnapping(const Vec2F& point)
 	{
-		if (mBottomHandle.IsPressed())
-			mSnapLines.Clear();
-		else
-			return point;
-
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			return point;
+		mSnapLines.Clear();
 
 		Basis transformedFrame = GetBottomHandleTransformed(point);
 
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 		{}, transformedFrame.xv.Normalized(),
-		{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized());
+		{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(), o2Scene.GetAllActors());
 
 		return snapped;
 	}
 
 	Vec2F FrameTool::CheckLeftSnapping(const Vec2F& point)
 	{
-		if (mLeftHandle.IsPressed())
-			mSnapLines.Clear();
-		else
-			return point;
-
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			return point;
+		mSnapLines.Clear();
 
 		Basis transformedFrame = GetLeftHandleTransformed(point);
 
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 		{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
-		{}, transformedFrame.yv.Normalized());
+		{}, transformedFrame.yv.Normalized(), o2Scene.GetAllActors());
 
 		return snapped;
 	}
 
 	Vec2F FrameTool::CheckRightSnapping(const Vec2F& point)
 	{
-		if (mRightHandle.IsPressed())
-			mSnapLines.Clear();
-		else
-			return point;
-
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			return point;
+		mSnapLines.Clear();
 
 		Basis transformedFrame = GetRightHandleTransformed(point);
 
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 		{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
-		{}, transformedFrame.yv.Normalized());
+		{}, transformedFrame.yv.Normalized(), o2Scene.GetAllActors());
 
 		return snapped;
 	}
 
 	Vec2F FrameTool::CheckLeftTopSnapping(const Vec2F& point)
 	{
-		if (mLeftTopHandle.IsPressed())
-			mSnapLines.Clear();
-		else
-			return point;
-
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			return point;
+		mSnapLines.Clear();
 
 		Basis transformedFrame = GetLeftTopHandleTransformed(point);
 
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 		{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
-		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized());
+		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(), o2Scene.GetAllActors());
 
 		return snapped;
 	}
 
 	Vec2F FrameTool::CheckLeftBottomSnapping(const Vec2F& point)
 	{
-		if (mLeftBottomHandle.IsPressed())
-			mSnapLines.Clear();
-		else
-			return point;
-
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			return point;
+		mSnapLines.Clear();
 
 		Basis transformedFrame = GetLeftBottomHandleTransformed(point);
 
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 		{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
-		{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized());
+		{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(), o2Scene.GetAllActors());
 
 		return snapped;
 	}
 
 	Vec2F FrameTool::CheckRightTopSnapping(const Vec2F& point)
 	{
-		if (mRightTopHandle.IsPressed())
-			mSnapLines.Clear();
-		else
-			return point;
-
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			return point;
+		mSnapLines.Clear();
 
 		Basis transformedFrame = GetRightTopHandleTransformed(point);
 
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 		{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
-		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized());
+		{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(), o2Scene.GetAllActors());
 
 		return snapped;
 	}
 
 	Vec2F FrameTool::CheckRightBottomSnapping(const Vec2F& point)
 	{
-		if (mRightBottomHandle.IsPressed())
-			mSnapLines.Clear();
-		else
-			return point;
-
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			return point;
+		mSnapLines.Clear();
 
 		Basis transformedFrame = GetRightBottomHandleTransformed(point);
 
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 		{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
-		{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized());
+		{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(), o2Scene.GetAllActors());
 
 		return snapped;
 	}
 
 	bool FrameTool::IsPointInTopHandle(const Vec2F& point)
 	{
-		float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
-		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
+		float camScale = o2EditorSceneScreen.GetCameraScale().x;
+		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin + mFrame.yv + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
 				mFrame.xv - transformNonScaled.xv*spriteSize,
@@ -1146,8 +1304,8 @@ namespace Editor
 
 	bool FrameTool::IsPointInLeftHandle(const Vec2F& point)
 	{
-		float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
-		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
+		float camScale = o2EditorSceneScreen.GetCameraScale().x;
+		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
 				transformNonScaled.xv*spriteSize,
@@ -1158,8 +1316,8 @@ namespace Editor
 
 	bool FrameTool::IsPointInRightHandle(const Vec2F& point)
 	{
-		float camScale = o2EditorSceneScreen.LocalToScreenPoint(Vec2F(1, 0)).x;
-		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
+		float camScale = o2EditorSceneScreen.GetCameraScale().x;
+		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin + mFrame.xv - transformNonScaled.xv*spriteSize*0.5f + transformNonScaled.yv*spriteSize*0.5f,
 				transformNonScaled.xv*spriteSize,
@@ -1170,8 +1328,8 @@ namespace Editor
 
 	bool FrameTool::IsPointInBottomHandle(const Vec2F& point)
 	{
-		float camScale = o2EditorSceneScreen.ScreenToLocalPoint(Vec2F(1, 0)).x;
-		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x/camScale;
+		float camScale = o2EditorSceneScreen.GetCameraScale().x;
+		float spriteSize = mLeftTopHandle.GetRegularSprite()->GetSize().x*camScale;
 		Basis transformNonScaled(mFrame.origin, mFrame.xv.Normalized(), mFrame.yv.Normalized());
 		Basis b(mFrame.origin + transformNonScaled.xv*spriteSize*0.5f - transformNonScaled.yv*spriteSize*0.5f,
 				mFrame.xv - transformNonScaled.xv*spriteSize,
@@ -1180,9 +1338,25 @@ namespace Editor
 		return b.IsPointInside(o2EditorSceneScreen.ScreenToLocalPoint(point));
 	}
 
+	bool FrameTool::IsPointInAnchorsCenterHandle(const Vec2F& point)
+	{
+		float camScale = o2EditorSceneScreen.GetCameraScale().x;
+		float handleSize = 10.0f;
+		return (o2EditorSceneScreen.ScreenToLocalPoint(point) - mAnchorsFrame.origin).Length() < handleSize*camScale;
+	}
+
+	void FrameTool::CheckAnchorsCenterEnabled()
+	{
+		float lengthThreshold = 0.1f;
+		bool enabled = mAnchorsFrame.xv.Length() < lengthThreshold && mAnchorsFrame.yv.Length() < lengthThreshold;
+		mAnchorsCenter.enabled = false;
+		mAnchorsCenter.enabled = enabled && mAnchorsFrameEnabled;
+	}
+
 	Vec2F FrameTool::CalculateSnapOffset(const Vec2F& point, const Basis& frame,
 										 const Vector<Vec2F>& xLines, const Vec2F& xNormal,
-										 const Vector<Vec2F>& yLines, const Vec2F& yNormal)
+										 const Vector<Vec2F>& yLines, const Vec2F& yNormal,
+										 const Vector<Actor*>& actors)
 	{
 		const float pxThreshold = 5.0f;
 		const float sameSnapDistanceThreshold = 0.01f;
@@ -1199,7 +1373,7 @@ namespace Editor
 		};
 
 		Vector<Vec2F> worldSnapLines;
-		for (auto actor : o2Scene.GetAllActors())
+		for (auto actor : actors)
 		{
 			if (o2EditorSceneScreen.GetSelectedActors().Contains(actor))
 				continue;
@@ -1287,7 +1461,7 @@ namespace Editor
 
 					if (projDistance < sameSnapDistanceThreshold)
 					{
-						mSnapLines.Add(SnapLine(actorLineBegin, actorLineEnd, Color4::Red()));
+						mSnapLines.Add(SnapLine(actorLineBegin, actorLineEnd, mSnapLinesColor));
 
 						found = true;
 					}
@@ -1307,7 +1481,7 @@ namespace Editor
 		frameWithOffset.Translate(offset);
 
 		for (int i = 0; i < localSnapLines.Count(); i += 2)
-			mSnapLines.Add(SnapLine(localSnapLines[i]*frameWithOffset, localSnapLines[i + 1]*frameWithOffset, Color4::Red()));
+			mSnapLines.Add(SnapLine(localSnapLines[i]*frameWithOffset, localSnapLines[i + 1]*frameWithOffset, mSnapLinesColor));
 
 		return point + offset;
 	}

@@ -48,7 +48,13 @@ namespace Editor
 		typedef Vector<SnapLine> LinesVec;
 
 	protected:
-		const Color4        mFrameColor = Color4(220, 220, 220, 255); // Regular handle color
+		const Color4        mFrameColor = Color4(220, 220, 220, 255);        // Actors frame color
+		const Color4        mActorColor = Color4(220, 220, 220, 150);        // Actors frame color
+		const Color4        mParentColor = Color4(220, 220, 220, 100);       // Actors frame color
+		const Color4        mAnchorsFrameColor = Color4(100, 100, 255, 255); // Widgets anchors frame color
+		const Color4        mSnapLinesColor = Color4(100, 255, 100, 255);    // Widgets anchors frame color
+
+		const float         mFrameMinimalSize = 0.001f;   // Minimal size of transforming frame
 
 		SceneDragHandle     mLeftTopRotateHandle;		  // Left top rotation handle
 		SceneDragHandle     mLeftBottomRotateHandle;	  // Left bottom rotation handle
@@ -68,6 +74,7 @@ namespace Editor
 		SceneDragHandle     mAnchorsLeftBottomHandle;	  // Anchors Left bottom corner frame handle
 		SceneDragHandle     mAnchorsRightTopHandle;		  // Anchors Right top corner frame handle
 		SceneDragHandle     mAnchorsRightBottomHandle;	  // Anchors Right bottom corner frame handle
+		SceneDragHandle     mAnchorsCenter;               // Anchors center, enables when all anchors in one point and drags all of them
 														  
 		Basis               mFrame;						  // Frame basis
 														  
@@ -172,6 +179,9 @@ namespace Editor
 		// Right bottom anchor handle moved
 		void OnAnchorRightBottomHandle(const Vec2F& position);
 
+		// Center anchor handle moved
+		void OnCenterAnchorHandle(const Vec2F& position);
+
 		// Pivot handle moved
 		void OnPivotHandle(const Vec2F& position);
 
@@ -238,8 +248,29 @@ namespace Editor
 		// Return transformed anchor basis when Right bottom handle moved
 		Basis GetRightBottomAnchorHandleTransformed(const Vec2F& position);
 
+		// Return transformed anchor basis when center anchor moved
+		Basis GetAnchorsCenterHandleTransformed(const Vec2F& position);
+
+		// Checks handle position snapping to center and corners of frame
+		Vec2F CheckFrameSnapping(const Vec2F& point, const Basis& frame);
+
 		// Checks pivot handle position snapping to center and corners
 		Vec2F CheckPivotSnapping(const Vec2F& point);
+
+		// Checks anchor handle position snapping to center and corners of parent
+		Vec2F CheckAnchorCenterSnapping(const Vec2F& point);
+
+		// Checks anchor handle position snapping to center and corners of parent
+		Vec2F CheckAnchorLeftTopSnapping(const Vec2F& point);
+
+		// Checks anchor handle position snapping to center and corners of parent
+		Vec2F CheckAnchorLeftBottomSnapping(const Vec2F& point);
+
+		// Checks anchor handle position snapping to center and corners of parent
+		Vec2F CheckAnchorRightTopSnapping(const Vec2F& point);
+
+		// Checks anchor handle position snapping to center and corners of parent
+		Vec2F CheckAnchorRightBottomSnapping(const Vec2F& point);
 
 		// Checks top handle position snapping to other objects
 		Vec2F CheckTopSnapping(const Vec2F& point);
@@ -277,10 +308,17 @@ namespace Editor
 		// Checks is point in area of bottom handle
 		bool IsPointInBottomHandle(const Vec2F& point);
 
+		// Checks is point in area of center anchors handle
+		bool IsPointInAnchorsCenterHandle(const Vec2F& point);
+
+		// Checks is all anchor handles in same point and enables center anchors handle
+		void CheckAnchorsCenterEnabled();
+
 		// Calculates snapping offset for point by parallels lines, offset is on normal
 		Vec2F CalculateSnapOffset(const Vec2F& point, const Basis& frame, 
 								  const Vector<Vec2F>& xLines, const Vec2F& xNormal,
-								  const Vector<Vec2F>& yLines, const Vec2F& yNormal);
+								  const Vector<Vec2F>& yLines, const Vec2F& yNormal,
+								  const Vector<Actor*>& actors);
 	};
 }
 
@@ -292,6 +330,11 @@ END_META;
 CLASS_FIELDS_META(Editor::FrameTool)
 {
 	PROTECTED_FIELD(mFrameColor);
+	PROTECTED_FIELD(mActorColor);
+	PROTECTED_FIELD(mParentColor);
+	PROTECTED_FIELD(mAnchorsFrameColor);
+	PROTECTED_FIELD(mSnapLinesColor);
+	PROTECTED_FIELD(mFrameMinimalSize);
 	PROTECTED_FIELD(mLeftTopRotateHandle);
 	PROTECTED_FIELD(mLeftBottomRotateHandle);
 	PROTECTED_FIELD(mRightTopRotateHandle);
@@ -309,6 +352,7 @@ CLASS_FIELDS_META(Editor::FrameTool)
 	PROTECTED_FIELD(mAnchorsLeftBottomHandle);
 	PROTECTED_FIELD(mAnchorsRightTopHandle);
 	PROTECTED_FIELD(mAnchorsRightBottomHandle);
+	PROTECTED_FIELD(mAnchorsCenter);
 	PROTECTED_FIELD(mFrame);
 	PROTECTED_FIELD(mAnchorsFrame);
 	PROTECTED_FIELD(mAnchorsFrameEnabled);
@@ -352,6 +396,7 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(void, OnAnchorLeftBottomHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnAnchorRightTopHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnAnchorRightBottomHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnCenterAnchorHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnPivotHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnLeftTopRotateHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnLeftBottomRotateHandle, const Vec2F&);
@@ -374,7 +419,14 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(Basis, GetLeftBottomAnchorHandleTransformed, const Vec2F&);
 	PROTECTED_FUNCTION(Basis, GetRightTopAnchorHandleTransformed, const Vec2F&);
 	PROTECTED_FUNCTION(Basis, GetRightBottomAnchorHandleTransformed, const Vec2F&);
+	PROTECTED_FUNCTION(Basis, GetAnchorsCenterHandleTransformed, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CheckFrameSnapping, const Vec2F&, const Basis&);
 	PROTECTED_FUNCTION(Vec2F, CheckPivotSnapping, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CheckAnchorCenterSnapping, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CheckAnchorLeftTopSnapping, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CheckAnchorLeftBottomSnapping, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CheckAnchorRightTopSnapping, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CheckAnchorRightBottomSnapping, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckTopSnapping, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckBottomSnapping, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, CheckLeftSnapping, const Vec2F&);
@@ -387,6 +439,8 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(bool, IsPointInLeftHandle, const Vec2F&);
 	PROTECTED_FUNCTION(bool, IsPointInRightHandle, const Vec2F&);
 	PROTECTED_FUNCTION(bool, IsPointInBottomHandle, const Vec2F&);
-	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&);
+	PROTECTED_FUNCTION(bool, IsPointInAnchorsCenterHandle, const Vec2F&);
+	PROTECTED_FUNCTION(void, CheckAnchorsCenterEnabled);
+	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&, const Vector<Actor*>&);
 }
 END_META;

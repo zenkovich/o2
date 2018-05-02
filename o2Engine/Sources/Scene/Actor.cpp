@@ -165,9 +165,7 @@ namespace o2
 		if (mLayer)
 		{
 			mLayer->mActors.Remove(this);
-
-			if (mResEnabledInHierarchy && mIsOnScene)
-				mLayer->mEnabledActors.Remove(this);
+			mLayer->mEnabledActors.Remove(this);
 		}
 
 		if (Scene::IsSingletonInitialzed())
@@ -1079,9 +1077,6 @@ namespace o2
 		mName = *node.GetNode("Name");
 		mLocked = *node.GetNode("Locked");
 		mEnabled = *node.GetNode("Enabled");
-
-		if (GetType().GetName() == "o2::UIMenuPanel")
-			o2Debug.Log("asd");
 
 		if (auto layerNode = node.GetNode("LayerName"))
 			SetLayer(layerNode->Data());

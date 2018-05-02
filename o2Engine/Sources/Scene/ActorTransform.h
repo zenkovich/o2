@@ -458,6 +458,9 @@ namespace o2
 		// Sets owner and updates transform
 		virtual void SetOwner(Actor* actor);
 
+		// Returns parent rectange, or zero when no parent
+		virtual RectF GetParentRectangle() const;
+
 		// Updates world rectangle and transform relative to parent or origin
 		void UpdateWorldRectangleAndTransform();
 
@@ -478,9 +481,6 @@ namespace o2
 
 		// Returns parent world rect position - left bottom corner
 		Vec2F GetParentPosition() const;
-
-		// Returns parent rectange, or zero when no parent
-		RectF GetParentRectangle() const;
 
 		friend class Actor;
 		friend class UIWidgetLayout;
@@ -656,6 +656,7 @@ CLASS_METHODS_META(o2::ActorTransform)
 	PUBLIC_FUNCTION(float, GetWorldBottom);
 	PROTECTED_FUNCTION(void, CopyFrom, const ActorTransform&);
 	PROTECTED_FUNCTION(void, SetOwner, Actor*);
+	PROTECTED_FUNCTION(RectF, GetParentRectangle);
 	PROTECTED_FUNCTION(void, UpdateWorldRectangleAndTransform);
 	PROTECTED_FUNCTION(void, UpdateTransform);
 	PROTECTED_FUNCTION(void, UpdateRectangle);
@@ -663,7 +664,6 @@ CLASS_METHODS_META(o2::ActorTransform)
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(Vec2F, GetParentPosition);
-	PROTECTED_FUNCTION(RectF, GetParentRectangle);
 }
 END_META;
 

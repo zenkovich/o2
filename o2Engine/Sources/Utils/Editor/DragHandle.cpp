@@ -14,6 +14,7 @@ namespace o2
 		screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToScreenTransformFunc = [](const Vec2F& point) { return point; };
 		checkPositionFunc = [](const Vec2F& point) { return point; };
+		checkSnappingFunc = [](const Vec2F& point) { return point; };
 	}
 
 	DragHandle::DragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/):
@@ -24,6 +25,7 @@ namespace o2
 		screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToScreenTransformFunc = [](const Vec2F& point) { return point; };
 		checkPositionFunc = [](const Vec2F& point) { return point; };
+		checkSnappingFunc = [](const Vec2F& point) { return point; };
 	}
 
 	DragHandle::DragHandle(const DragHandle& other):
@@ -42,7 +44,9 @@ namespace o2
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
 		localToScreenTransformFunc = other.localToScreenTransformFunc;
 		checkPositionFunc = other.checkPositionFunc;
+		checkSnappingFunc = other.checkSnappingFunc;
 		cursorType = other.cursorType;
+		snappingKey = other.snappingKey;
 		pixelPerfect = other.pixelPerfect;
 
 		SetPosition(other.mPosition);
@@ -74,7 +78,9 @@ namespace o2
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
 		localToScreenTransformFunc = other.localToScreenTransformFunc;
 		checkPositionFunc = other.checkPositionFunc;
+		checkSnappingFunc = other.checkSnappingFunc;
 		cursorType = other.cursorType;
+		snappingKey = other.snappingKey;
 		pixelPerfect = other.pixelPerfect;
 
 		SetPosition(other.mPosition);
@@ -207,6 +213,9 @@ namespace o2
 	void DragHandle::SetPosition(const Vec2F& position)
 	{
 		mPosition = checkPositionFunc(position);
+
+		if (mIsDragging && o2Input.IsKeyDown(snappingKey))
+			mPosition = checkSnappingFunc(mPosition);
 
 		UpdateScreenPosition();
 	}

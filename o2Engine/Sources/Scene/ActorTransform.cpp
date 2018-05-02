@@ -780,7 +780,7 @@ namespace o2
 		if (!mData->owner || !mData->owner->mParent)
 			return RectF();
 
-		return mData->owner->mParent->transform->mData->worldRectangle;
+		return mData->owner->mParent->transform->GetWorldRect();
 	}
 }
 

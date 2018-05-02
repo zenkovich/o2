@@ -168,7 +168,8 @@ namespace Editor
 		mScaleToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<ScaleTool>(); };
 		mFrameToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<FrameTool>(); };
 
-		mArrowToolToggle->SetValue(true);
+		mFrameToolToggle->SetValue(true);
+		o2EditorSceneScreen.SelectTool<FrameTool>();
 	}
 
 	void ToolsPanel::UpdateWndLayoutSchemas()

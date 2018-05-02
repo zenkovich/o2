@@ -266,6 +266,9 @@ namespace o2
 		// Sets transform dirty and needed to update. Checks is driven by parent and marks parent as dirty too
 		void SetDirty(bool fromParent = true) override;
 
+		// Returns parent rectange, or zero when no parent
+		RectF GetParentRectangle() const override;
+
 		// Floors all local rectangle properties
 		void FloorRectangle();
 
@@ -395,6 +398,7 @@ CLASS_METHODS_META(o2::UIWidgetLayout)
 	PUBLIC_FUNCTION(float, GetHeightWeight);
 	PROTECTED_FUNCTION(void, SetOwner, Actor*);
 	PROTECTED_FUNCTION(void, SetDirty, bool);
+	PROTECTED_FUNCTION(RectF, GetParentRectangle);
 	PROTECTED_FUNCTION(void, FloorRectangle);
 	PROTECTED_FUNCTION(void, UpdateOffsetsByCurrentTransform);
 	PROTECTED_FUNCTION(void, CopyFrom, const ActorTransform&);

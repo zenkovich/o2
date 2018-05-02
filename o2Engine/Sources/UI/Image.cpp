@@ -69,7 +69,11 @@ namespace o2
 
 	String UIImage::GetImageName() const
 	{
-		return GetImageAsset()->GetPath();
+		auto imageAsset = GetImageAsset();
+		if (imageAsset.IsValid())
+			return imageAsset->GetPath();
+
+		return "";
 	}
 
 	void UIImage::CopyData(const Actor& otherActor)

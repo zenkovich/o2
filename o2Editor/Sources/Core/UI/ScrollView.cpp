@@ -221,6 +221,11 @@ namespace Editor
 		return point*mLocalToScreenTransform;
 	}
 
+	Vec2F UIScrollView::GetCameraScale() const
+	{
+		return Vec2F(mScreenToLocalTransform.xv.Length(), mScreenToLocalTransform.yv.Length());
+	}
+
 	const Camera& UIScrollView::GetCamera() const
 	{
 		return mViewCamera;

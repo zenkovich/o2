@@ -44,6 +44,9 @@ namespace Editor
 		// Transforms point from local space to screen space
 		Vec2F LocalToScreenPoint(const Vec2F& point);
 
+		// Returns camera scale
+		Vec2F GetCameraScale() const;
+
 		// Returns view camera
 		const Camera& GetCamera() const;
 
@@ -170,6 +173,7 @@ CLASS_METHODS_META(Editor::UIScrollView)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(Vec2F, ScreenToLocalPoint, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, LocalToScreenPoint, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetCameraScale);
 	PUBLIC_FUNCTION(const Camera&, GetCamera);
 	PUBLIC_FUNCTION(void, SetBackColor, const Color4&);
 	PUBLIC_FUNCTION(void, SetGridColor, const Color4&);
