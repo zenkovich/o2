@@ -20,6 +20,7 @@ namespace o2
 
 		PROPERTY(FontRef, font, SetFont, GetFont);   // Font pointer property
 		PROPERTY(int, height, SetHeight, GetHeight); // Text height property
+		PROPERTY(Color4, color, SetColor, GetColor); // Text color property
 
 		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign); // vertical align property
 		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign); // Horizontal align property
@@ -55,6 +56,12 @@ namespace o2
 
 		// Returns text
 		WString GetText() const;
+
+		// Sets text color
+		void SetColor(const Color4& color);
+
+		// Returns color of text
+		Color4 GetColor() const;
 
 		// Sets horizontal align
 		void SetHorAlign(HorAlign align);
@@ -134,6 +141,7 @@ CLASS_FIELDS_META(o2::UILabel)
 	PUBLIC_FIELD(text);
 	PUBLIC_FIELD(font);
 	PUBLIC_FIELD(height);
+	PUBLIC_FIELD(color);
 	PUBLIC_FIELD(verAlign);
 	PUBLIC_FIELD(horAlign);
 	PUBLIC_FIELD(horOverflow);
@@ -155,6 +163,8 @@ CLASS_METHODS_META(o2::UILabel)
 	PUBLIC_FUNCTION(FontRef, GetFont);
 	PUBLIC_FUNCTION(void, SetText, const WString&);
 	PUBLIC_FUNCTION(WString, GetText);
+	PUBLIC_FUNCTION(void, SetColor, const Color4&);
+	PUBLIC_FUNCTION(Color4, GetColor);
 	PUBLIC_FUNCTION(void, SetHorAlign, HorAlign);
 	PUBLIC_FUNCTION(HorAlign, GetHorAlign);
 	PUBLIC_FUNCTION(void, SetVerAlign, VerAlign);

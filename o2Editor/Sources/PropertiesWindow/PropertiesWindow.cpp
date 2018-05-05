@@ -358,33 +358,44 @@ namespace Editor
 		if (begn.StartsWith("Editor::"))
 			begn.Erase(0, 9);
 
+		if (begn.StartsWith("UI"))
+			begn = begn;
+
 		String res;
 		int len = begn.Length();
 		bool newWord = true;
+		bool lastUpper = false;
 		for (int i = 0; i < len; i++)
 		{
 			if (begn[i] == '_')
 			{
 				res += ' ';
 				newWord = true;
+				lastUpper = false;
 			}
 			else if (newWord && begn[i] >= 'a' && begn[i] <= 'z')
 			{
 				res += begn[i] + ('A' - 'a');
+				lastUpper = true;
 			}
 			else if (!newWord && begn[i] >= 'A' && begn[i] <= 'Z')
 			{
-				res += ' ';
+				if (!lastUpper)
+					res += ' ';
+
 				res += begn[i];
+				lastUpper = begn[i] >= 'A' && begn[i] <= 'Z';
 			}
 			else if (i < len - 1 && begn[i] == ':' && begn[i + 1] == ':')
 			{
 				res += ": ";
+				lastUpper = false;
 				i++;
 			}
 			else
 			{
 				res += begn[i];
+				lastUpper = begn[i] >= 'A' && begn[i] <= 'Z';
 			}
 
 			newWord = begn[i] >= '0' && begn[i] <= '9';

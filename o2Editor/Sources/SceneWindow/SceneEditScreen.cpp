@@ -21,6 +21,7 @@
 #include "UI/Tree.h"
 #include "UI/UIManager.h"
 #include "Utils/Math/Math.h"
+#include "Core/UIRoot.h"
 
 DECLARE_SINGLETON(Editor::SceneEditScreen);
 
@@ -151,6 +152,13 @@ namespace Editor
 				drw->Draw();
 			}
 		}
+// 		static bool drawing = false;
+// 		if (drawing)
+// 			return;
+// 
+// 		drawing = true;
+// 		EditorUIRoot.GetRootWidget()->Draw();
+// 		drawing = false;
 	}
 
 	void SceneEditScreen::DrawSelection()

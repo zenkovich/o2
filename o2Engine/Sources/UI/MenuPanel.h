@@ -21,7 +21,7 @@ namespace o2
 			WString                     text;     // @SERIALIZABLE
 			Vector<UIContextMenu::Item> subItems; // @SERIALIZABLE
 
-			Function<void()>            onClick;  
+			Function<void()>            onClick;
 
 			Item();
 			Item(const WString& text, Vector<UIContextMenu::Item> subItems);
@@ -55,10 +55,18 @@ namespace o2
 		UIWidget* AddItem(const Item& item);
 
 		// Adds item by path ("node/sub node/target")
-		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(), 
-						  const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
+		UIWidget* AddItem(const WString& path, const Function<void()>& 
+						  clickFunc = Function<void()>(),
+						  const ImageAssetRef& icon = ImageAssetRef(), 
+						  const ShortcutKeys& shortcut = ShortcutKeys());
 
-		// Inserts item at position
+		// Adds toggle item by path ("node/sub node/target")
+		UIWidget* AddToggleItem(const WString& path, bool value, 
+								const Function<void(bool)>& clickFunc = Function<void(bool)>(),
+								const ImageAssetRef& icon = ImageAssetRef(), 
+								const ShortcutKeys& shortcut = ShortcutKeys());
+
+			  // Inserts item at position
 		UIWidget* InsertItem(const Item& item, int position);
 
 		// Adds array of items
@@ -127,6 +135,9 @@ namespace o2
 		// It is called when visible was changed
 		void OnResEnableInHierarchyChanged() override;
 
+		// Creates sub context menus by path
+		UIContextMenu* CreateSubContext(WString& path);
+
 		// Creates item widget
 		UIWidget* CreateItem(const Item& item);
 
@@ -187,6 +198,7 @@ CLASS_METHODS_META(o2::UIMenuPanel)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(UIWidget*, AddItem, const Item&);
 	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(UIWidget*, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
 	PUBLIC_FUNCTION(UIWidget*, InsertItem, const Item&, int);
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
@@ -203,6 +215,7 @@ CLASS_METHODS_META(o2::UIMenuPanel)
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(UIContextMenu*, CreateSubContext, WString&);
 	PROTECTED_FUNCTION(UIWidget*, CreateItem, const Item&);
 	PROTECTED_FUNCTION(Item, GetItemDef, int);
 	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);

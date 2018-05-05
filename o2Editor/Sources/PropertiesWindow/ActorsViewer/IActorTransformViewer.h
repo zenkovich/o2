@@ -52,7 +52,7 @@ namespace Editor
 
 	protected:
 		UIVerticalLayout* mDataView;         // Data view widget
-		UIWidget*         mPropertiesLayout; // Properties layout
+		UIVerticalLayout* mPropertiesLayout; // Properties layout
 		UIButton*         mExpandBtn;        // Expand spoiler button
 		UISpoiler*        mSpoiler;          // Spoiler, containing properties layout
 		UILabel*          mNameCaption;      // Component name caption label

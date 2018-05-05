@@ -74,6 +74,9 @@ namespace Editor
 		// Scrolls view to actor's tree node
 		void ScrollTo(Actor* object);
 
+		// Sets wathing editor UI state
+		void SetEditorWatching(bool watching);
+
 		SERIALIZABLE(UIActorsTree);
 
 	protected:
@@ -83,6 +86,8 @@ namespace Editor
 						    						    
 		ActorProperty*     mDragActorPropertyField;     // Actor property field under cursor when dragging actor
 		ComponentProperty* mDragComponentPropertyField; // Component property field under cursor when dragging actor
+
+		bool               mWatchEditor = true;
 
 	protected:
 		// Initializes widget logic
@@ -217,6 +222,7 @@ CLASS_FIELDS_META(Editor::UIActorsTree)
 	PROTECTED_FIELD(mAttackedToSceneEvents);
 	PROTECTED_FIELD(mDragActorPropertyField);
 	PROTECTED_FIELD(mDragComponentPropertyField);
+	PROTECTED_FIELD(mWatchEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::UIActorsTree)
@@ -233,6 +239,7 @@ CLASS_METHODS_META(Editor::UIActorsTree)
 	PUBLIC_FUNCTION(void, DeselectActor, Actor*);
 	PUBLIC_FUNCTION(void, DeselectAllActors);
 	PUBLIC_FUNCTION(void, ScrollTo, Actor*);
+	PUBLIC_FUNCTION(void, SetEditorWatching, bool);
 	PROTECTED_FUNCTION(void, Initialize);
 	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);

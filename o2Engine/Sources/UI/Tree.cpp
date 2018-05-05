@@ -291,7 +291,7 @@ namespace o2
 		if (mIsDraggingNodes)
 			UpdateDraggingInsertionAnim(dt);
 
-		if (mIsNeedUpdateView)
+		if (mIsNeedUpdateView || o2Input.IsKeyPressed('B'))
 			UpdateNodesStructure();
 
 		if (mIsNeedUdateLayout)
@@ -931,6 +931,9 @@ namespace o2
 	{
 		mIsNeedUpdateVisibleNodes = false;
 
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+
 		int lastMinVisible = mMinVisibleNodeIdx;
 		int lastMaxVisible = mMaxVisibleNodeIdx;
 
@@ -1000,6 +1003,8 @@ namespace o2
 
 		if (mIsDraggingNodes)
 			OnDraggedAbove(this);
+
+		mChildrenWorldRect = mAbsoluteViewArea;
 	}
 
 	void UITree::CreateVisibleNodeWidget(Node* node, int i)

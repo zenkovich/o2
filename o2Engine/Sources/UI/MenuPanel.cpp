@@ -121,13 +121,11 @@ namespace o2
 		return newItem;
 	}
 
-	UIWidget* UIMenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
-								   const ImageAssetRef& icon /*= ImageAssetRef()*/,
-								   const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+	UIContextMenu* UIMenuPanel::CreateSubContext(WString& path)
 	{
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
-			return AddItem(Item(path, clickFunc));
+			return nullptr;
 
 		WString subMenu = path.SubStr(0, slashPos);
 
@@ -148,7 +146,35 @@ namespace o2
 			subChild->AddChild(subContext);
 		}
 
-		return subContext->AddItem(path.SubStr(slashPos + 1), clickFunc, icon, shortcut);
+		path = path.SubStr(slashPos + 1);
+
+		return subContext;
+	}
+
+	UIWidget* UIMenuPanel::AddItem(const WString& path, 
+								   const Function<void()>& clickFunc /*= Function<void()>()*/,
+								   const ImageAssetRef& icon /*= ImageAssetRef()*/,
+								   const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+	{
+		WString itemPath = path;
+		UIContextMenu* subContext = CreateSubContext(itemPath);
+		if (!subContext)
+			return AddItem(Item(path, clickFunc));
+
+		return subContext->AddItem(itemPath, clickFunc, icon, shortcut);
+	}
+
+	UIWidget* UIMenuPanel::AddToggleItem(const WString& path, bool value,
+										 const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/, 
+										 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
+										 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+	{
+		WString itemPath = path;
+		UIContextMenu* subContext = CreateSubContext(itemPath);
+		if (!subContext)
+			return nullptr;
+
+		return subContext->AddToggleItem(itemPath, value, clickFunc, icon, shortcut);
 	}
 
 	UIWidget* UIMenuPanel::InsertItem(const Item& item, int position)

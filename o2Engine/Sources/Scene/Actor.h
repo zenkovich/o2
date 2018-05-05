@@ -271,6 +271,14 @@ namespace o2
 		// Returns child actor by name
 		Actor* FindChild(const String& name) const;
 
+		// Returns child actor by path (ex "root/some node/other node/target node")
+		template<typename _type>
+		_type* GetChildByType(const String& path) const;
+
+		// Returns child actor by name
+		template<typename _type>
+		_type* FindChildByType(const String& name) const;
+
 		// Searches child with specified type
 		template<typename _type>
 		_type* GetChildByType();
@@ -665,6 +673,18 @@ namespace o2
 				return res;
 
 		return nullptr;
+	}
+
+	template<typename _type>
+	_type* Actor::GetChildByType(const String& path) const
+	{
+		return dynamic_cast<_type*>(GetChild(path));
+	}
+
+	template<typename _type>
+	_type* Actor::FindChildByType(const String& name) const
+	{
+		return dynamic_cast<_type*>(FindChild(name));
 	}
 
 	template<typename _type>

@@ -17,6 +17,7 @@ namespace Editor
 	IActorTransformViewer::IActorTransformViewer()
 	{
 		mDataView = mnew UIVerticalLayout();
+		mDataView->name = "Transform";
 		mDataView->spacing = 0.0f;
 		mDataView->border = BorderF(0, 0, 0, 0);
 		mDataView->expandHeight = false;
@@ -64,7 +65,7 @@ namespace Editor
 		*mOptionsBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
 		componentHead->AddChild(mOptionsBtn);
 
-		mPropertiesLayout = mnew UIWidget();
+		mPropertiesLayout = mnew UIVerticalLayout();
 		*mPropertiesLayout->layout = UIWidgetLayout::BothStretch();
 		mPropertiesLayout->name = "properties";
 		mSpoiler->AddChild(mPropertiesLayout);

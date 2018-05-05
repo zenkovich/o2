@@ -1095,6 +1095,8 @@ namespace o2
 				(int)(clipRect.bottom + mCurrentResolution.y*0.5f),
 					  (int)clipRect.Width(),
 					  (int)clipRect.Height());
+
+			mClippingEverything = clipRect == RectI();
 		}
 	}
 

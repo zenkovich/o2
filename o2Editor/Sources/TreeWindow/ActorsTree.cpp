@@ -12,6 +12,7 @@
 #include "Core/Actions/LockActors.h"
 #include "Core/Actions/ReparentActors.h"
 #include "Core/EditorApplication.h"
+#include "Core/UIRoot.h"
 #include "Events/EventSystem.h"
 #include "PropertiesWindow/Properties/ActorProperty.h"
 #include "PropertiesWindow/Properties/ComponentProperty.h"
@@ -133,6 +134,13 @@ namespace Editor
 		UITree::ScrollTo((UnknownPtr)(void*)object);
 	}
 
+	void UIActorsTree::SetEditorWatching(bool watching)
+	{
+		mWatchEditor = watching;
+
+		UpdateNodesView();
+	}
+
 	void UIActorsTree::Initialize()
 	{
 		mEnableActorsTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
@@ -159,6 +167,9 @@ namespace Editor
 			return parent->GetChildren().Cast<UnknownPtr>();
 		}
 
+		if (mWatchEditor)
+			return EditorUIRoot.GetRootWidget()->GetChildWidgets().Cast<UnknownPtr>();
+		
 		return o2Scene.GetRootActors().Cast<UnknownPtr>();
 	}
 

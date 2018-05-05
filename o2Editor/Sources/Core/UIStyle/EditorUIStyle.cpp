@@ -2256,16 +2256,19 @@ namespace Editor
 
 		auto xLabel = o2UI.CreateLabel("X");
 		*xLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
+		xLabel->name = "x";
 		xLabel->horOverflow = UILabel::HorOverflow::None;
+		xLabel->color = Color4(211, 87, 40, 255);
 
 		auto xEdit = o2UI.CreateWidget<UIEditBox>("red singleline");
 		xEdit->name = "x edit";
 		*xEdit->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F());
 
 		auto yLabel = o2UI.CreateLabel("Y");
-		yLabel->layout->maxWidth = 15;
 		*yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
+		yLabel->name = "y";
 		yLabel->horOverflow = UILabel::HorOverflow::None;
+		yLabel->color = Color4(33, 174, 94, 255);
 
 		auto yEdit = o2UI.CreateWidget<UIEditBox>("green singleline");
 		yEdit->name = "y edit";

@@ -12,9 +12,10 @@ namespace o2
 	{}
 
 	UILabel::UILabel(const UILabel& other):
-		UIWidget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow),
+		UIWidget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow), 
 		mExpandBorder(other.mExpandBorder), text(this), font(this), height(this), verAlign(this), horAlign(this),
-		horOverflow(this), verOverflow(this), expandBorder(this), symbolsDistanceCoef(this), linesDistanceCoef(this)
+		horOverflow(this), verOverflow(this), expandBorder(this), symbolsDistanceCoef(this), linesDistanceCoef(this),
+		color(this)
 	{
 		mTextLayer = GetLayerDrawable<Text>("text");
 		RetargetStatesAnimations();
@@ -104,6 +105,20 @@ namespace o2
 			return mTextLayer->GetText();
 
 		return WString();
+	}
+
+	void UILabel::SetColor(const Color4& color)
+	{
+		if (mTextLayer)
+			mTextLayer->SetColor(color);
+	}
+
+	Color4 UILabel::GetColor() const
+	{
+		if (mTextLayer)
+			return mTextLayer->GetColor();
+
+		return Color4();
 	}
 
 	void UILabel::SetHorAlign(HorAlign align)

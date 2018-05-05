@@ -22,17 +22,22 @@ namespace o2
 		checked(false), checkable(false)
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, const Function<void()> onClick, const ImageAssetRef& icon /*= ImageAssetRef()*/,
+	UIContextMenu::Item::Item(const WString& text, const Function<void()> onClick, 
+							  const ImageAssetRef& icon /*= ImageAssetRef()*/,
 							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
 		text(text), onClick(onClick), shortcut(shortcut), icon(icon), checked(false), checkable(false)
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, Vector<Item> subItems, const ImageAssetRef& icon /*= ImageAssetRef()*/) :
+	UIContextMenu::Item::Item(const WString& text, Vector<Item> subItems, 
+							  const ImageAssetRef& icon /*= ImageAssetRef()*/) :
 		text(text), subItems(subItems), icon(icon), checked(false), checkable(false)
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, bool checked, Function<void(bool)> onChecked /*= Function<void(bool)>()*/) :
-		text(text), checked(checked), onChecked(onChecked), checkable(true)
+	UIContextMenu::Item::Item(const WString& text, bool checked, 
+							  Function<void(bool)> onChecked /*= Function<void(bool)>()*/, 
+							  const ImageAssetRef& icon /*= ImageAssetRef()*/,
+							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
+		text(text), checked(checked), onChecked(onChecked), checkable(true), shortcut(shortcut), icon(icon)
 	{}
 
 	UIContextMenu::Item::~Item()
@@ -204,21 +209,39 @@ namespace o2
 		return newItem;
 	}
 
-	UIWidget* UIContextMenu::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
-									 const ImageAssetRef& icon /*= ImageAssetRef()*/, const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+	UIWidget* UIContextMenu::AddItem(const WString& path, 
+									 const Function<void()>& clickFunc /*= Function<void()>()*/,
+									 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
+									 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
-		UIContextMenu* targetContext = this;
 		WString targetPath = path;
+		UIContextMenu* targetContext = CreateItemsByPath(targetPath);
+		return targetContext->AddItem(Item(targetPath, clickFunc, icon, shortcut));
+	}
+
+	UIWidget* UIContextMenu::AddToggleItem(const WString& path, bool value,
+										  const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
+										  const ImageAssetRef& icon /*= ImageAssetRef()*/, 
+										  const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+	{
+		WString targetPath = path;
+		UIContextMenu* targetContext = CreateItemsByPath(targetPath);
+		return targetContext->AddItem(Item(targetPath, value, clickFunc, icon, shortcut));
+	}
+
+	UIContextMenu* UIContextMenu::CreateItemsByPath(WString& path)
+	{
+		UIContextMenu* resultContext = this;
 
 		while (true)
 		{
-			int slashPos = targetPath.Find("/");
+			int slashPos = path.Find("/");
 			if (slashPos < 0)
 				break;
 
-			WString subMenu = targetPath.SubStr(0, slashPos);
+			WString subMenu = path.SubStr(0, slashPos);
 
-			UIWidget* subChild = targetContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
+			UIWidget* subChild = resultContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
 				if (auto text = x->GetLayerDrawable<Text>("caption"))
 					return text->text == subMenu;
 
@@ -240,11 +263,11 @@ namespace o2
 					subIconLayer->transparency = 1.0f;
 			}
 
-			targetContext = subContext;
-			targetPath = targetPath.SubStr(slashPos + 1);
+			resultContext = subContext;
+			path = path.SubStr(slashPos + 1);
 		}
 
-		return targetContext->AddItem(Item(targetPath, clickFunc, icon, shortcut));
+		return resultContext;
 	}
 
 	UIWidget* UIContextMenu::InsertItem(const Item& item, int position)

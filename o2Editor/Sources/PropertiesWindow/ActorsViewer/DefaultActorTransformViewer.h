@@ -36,6 +36,16 @@ namespace Editor
 		FloatProperty* mRotationProperty = nullptr;
 		FloatProperty* mDepthProperty = nullptr;
 
+		bool           mLayoutEnabled = false;
+		UISpoiler*     mLayoutSpoiler = nullptr;
+		Vec2FProperty* mAnchorRightTopProperty = nullptr;
+		Vec2FProperty* mAnchorLeftBottomProperty = nullptr;
+		Vec2FProperty* mOffsetRightTopProperty = nullptr;
+		Vec2FProperty* mOffsetLeftBottomProperty = nullptr;
+		Vec2FProperty* mMinSizeProperty = nullptr;
+		Vec2FProperty* mMaxSizeProperty = nullptr;
+		Vec2FProperty* mWeightProperty = nullptr;
+
 	protected:
 		// It is called when some property changed, stores action for undo
 		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
@@ -56,6 +66,15 @@ CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
 	PROTECTED_FIELD(mSizeProperty);
 	PROTECTED_FIELD(mRotationProperty);
 	PROTECTED_FIELD(mDepthProperty);
+	PROTECTED_FIELD(mLayoutEnabled);
+	PROTECTED_FIELD(mLayoutSpoiler);
+	PROTECTED_FIELD(mAnchorRightTopProperty);
+	PROTECTED_FIELD(mAnchorLeftBottomProperty);
+	PROTECTED_FIELD(mOffsetRightTopProperty);
+	PROTECTED_FIELD(mOffsetLeftBottomProperty);
+	PROTECTED_FIELD(mMinSizeProperty);
+	PROTECTED_FIELD(mMaxSizeProperty);
+	PROTECTED_FIELD(mWeightProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorTransformViewer)

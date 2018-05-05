@@ -22,7 +22,7 @@ namespace o2
 	public:
 		PROPERTIES(UIContextMenuItem);
 		PROPERTY(WString, text, SetText, GetText); // Text
- 
+
 		Function<void()>     onClick;   // Click function
 		Function<void(bool)> onChecked; // Checked function, calls when check was changed and item is checkable
 
@@ -113,7 +113,8 @@ namespace o2
 			Item(const WString& text, const Function<void()> onClick, const ImageAssetRef& icon = ImageAssetRef(),
 				 const ShortcutKeys& shortcut = ShortcutKeys());
 
-			Item(const WString& text, bool checked, Function<void(bool)> onChecked = Function<void(bool)>());
+			Item(const WString& text, bool checked, Function<void(bool)> onChecked = Function<void(bool)>(), 
+				 const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 			~Item();
 
@@ -159,7 +160,13 @@ namespace o2
 		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
 						  const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
 
-		// Inserts item at position
+		// Adds item by path ("node/sub node/target")
+		UIWidget* AddToggleItem(const WString& path, bool value, 
+								const Function<void(bool)>& clickFunc = Function<void(bool)>(),
+								const ImageAssetRef& icon = ImageAssetRef(), 
+								const ShortcutKeys& shortcut = ShortcutKeys());
+
+        // Inserts item at position
 		UIWidget* InsertItem(const Item& item, int position);
 
 		// Adds array of items
@@ -267,6 +274,9 @@ namespace o2
 
 		// It is called when visible was changed
 		void OnResEnableInHierarchyChanged() override;
+
+		// Creates context items by path ("node/sub node/target")
+		UIContextMenu* CreateItemsByPath(WString& path);
 
 		// Fits size by items
 		void FitSizeAndPosition(const Vec2F& position);
@@ -387,6 +397,7 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(void, Show, const Vec2F&);
 	PUBLIC_FUNCTION(UIWidget*, AddItem, const Item&);
 	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(UIWidget*, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
 	PUBLIC_FUNCTION(UIWidget*, InsertItem, const Item&, int);
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
@@ -414,6 +425,7 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(UIContextMenu*, CreateItemsByPath, WString&);
 	PROTECTED_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, HideWithParent);
 	PROTECTED_FUNCTION(void, HideWithChild);
