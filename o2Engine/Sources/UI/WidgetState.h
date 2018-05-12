@@ -19,6 +19,9 @@ namespace o2
 		Animation animation;                     // UIWidget animation @SERIALIZABLE
 		float     offStateAnimationSpeed = 1.0f; // False state transition animation speed @SERIALIZABLE
 
+		PROPERTIES(UIWidgetState);
+		PROPERTY(bool, state, SetState, GetState); // State flag property
+
 		Function<void()> onStateFullyTrue;	  // This event calls when state is completely true (at the end of animation)
 		Function<void()> onStateFullyFalse;   // This event calls when state is completely false (at the end of animation)
 		Function<void()> onStateBecomesTrue;  // This event calls when state becomes to true
@@ -72,6 +75,7 @@ CLASS_FIELDS_META(o2::UIWidgetState)
 	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(animation).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(offStateAnimationSpeed).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(state);
 	PUBLIC_FIELD(onStateFullyTrue);
 	PUBLIC_FIELD(onStateFullyFalse);
 	PUBLIC_FIELD(onStateBecomesTrue);

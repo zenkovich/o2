@@ -102,6 +102,10 @@ namespace Editor
 
 	void IActorComponentViewer::Refresh()
 	{}
+
+	void IActorComponentViewer::Rebuild()
+	{}
+
 }
 
 DECLARE_CLASS(Editor::IActorComponentViewer);

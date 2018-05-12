@@ -19,16 +19,22 @@ namespace Editor
 		~DefaultActorPropertiesViewer();
 
 		// Sets target actors
-		void SetTargetActors(const Vector<Actor*>& actors);
+		void SetTargetActors(const Vector<Actor*>& actors) override;
 
 		// Returns viewing actor type 
-		const Type* GetActorType() const;
+		const Type* GetActorType() const override;
 
 		// Specialize viewing actor type. Creates all using properties
 		void SpecializeActorType(const Type* type);
 
 		// Updates all actor values
-		void Refresh();
+		void Refresh() override;
+
+		// Rebuilds properties layout
+		void Rebuild() override;
+
+		// Returns is there no properties
+		bool IsEmpty() const override;
 
 		IOBJECT(DefaultActorPropertiesViewer);
 
@@ -62,6 +68,8 @@ CLASS_METHODS_META(Editor::DefaultActorPropertiesViewer)
 	PUBLIC_FUNCTION(const Type*, GetActorType);
 	PUBLIC_FUNCTION(void, SpecializeActorType, const Type*);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Rebuild);
+	PUBLIC_FUNCTION(bool, IsEmpty);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

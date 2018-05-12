@@ -97,41 +97,45 @@ namespace Editor
 			mAvailablePropertiesFields.Add(sample);
 		}
 	}
+	
+	void PropertiesWindow::ClearViewers()
+	{
+
+	}
+
+	void PropertiesWindow::BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo,
+									  FieldPropertiesInfo& propertiesInfo, const String& path)
+	{
+		Timer t;
+
+		const Type* fieldType = fieldInfo->GetType();
+
+		String propertyName;
+
+		propertyName = MakeSmartFieldName(fieldInfo->GetName());
+
+		auto fieldWidgetPair = CreateFieldProperty(fieldInfo->GetType(), propertyName);
+		if (!fieldWidgetPair.first)
+			return;
+
+		fieldWidgetPair.first->SetValuePath(path + fieldInfo->GetName());
+		fieldWidgetPair.first->SpecializeType(fieldType);
+
+		layout->AddChild(fieldWidgetPair.second, false);
+
+		propertiesInfo.properties.Add(fieldInfo, fieldWidgetPair.first);
+
+		o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)t.GetDeltaTime());
+	}
 
 	void PropertiesWindow::BuildFields(UIVerticalLayout* layout, Vector<FieldInfo*> fields, 
 									   FieldPropertiesInfo& propertiesInfo, const String& path)
 	{
 		Timer t;
-		Timer t2, t3, t4;
 		for (auto fieldInfo : fields)
-		{
-			t3.Reset();
+			BuildField(layout, fieldInfo, propertiesInfo, path);
 
-			const Type* fieldType = fieldInfo->GetType();
-
-			String propertyName;
-
-			if (fieldInfo->GetProtectionSection() == ProtectSection::Public)
-				propertyName = MakeSmartFieldName(fieldInfo->GetName());
-			else
-				propertyName = "[" + MakeSmartFieldName(fieldInfo->GetName()) + "]";
-
-			auto fieldWidgetPair = CreateFieldProperty(fieldInfo->GetType(), propertyName);
-			if (!fieldWidgetPair.first)
-				continue;
-
-			fieldWidgetPair.first->SetValuePath(path + fieldInfo->GetName());
-			fieldWidgetPair.first->SpecializeType(fieldType);
-
-			layout->AddChild(fieldWidgetPair.second, false);
-
-			propertiesInfo.properties.Add(fieldInfo, fieldWidgetPair.first);
-
-			o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)t.GetDeltaTime() + 
-			" - " + (String)t3.GetDeltaTime());
-		}
-
-		o2Debug.Log(">>> Fields created for " + (String)t2.GetDeltaTime());
+		o2Debug.Log(">>> Fields created for " + (String)t.GetDeltaTime());
 	}
 
 	void PropertiesWindow::OnPropertyChanged(IPropertyField* field)
@@ -256,6 +260,11 @@ namespace Editor
 		return false;
 	}	
 	
+	void PropertiesWindow::FreeProperties(FieldPropertiesInfo& propertiesInfo)
+	{
+
+	}
+
 	bool PropertiesWindow::IsPropertyVisible(FieldInfo* info, bool allowPrivate) const
 	{
 		if (info->HasAttribute<IgnoreEditorPropertyAttribute>())

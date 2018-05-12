@@ -50,11 +50,13 @@ namespace Editor
 		*mViewersLayout->layout       = UIWidgetLayout::BothStretch();
 		mContentWidget->AddChild(mViewersLayout);
 
-		o2Scene.onChanged += [&](Vector<Actor*>) { Refresh(); };
+		o2Scene.onChanged += THIS_FUNC(OnSceneActorsChanged);
 	}
 
 	ActorPropertiesViewer::~ActorPropertiesViewer()
 	{
+		o2Scene.onChanged -= THIS_FUNC(OnSceneActorsChanged);
+
 		for (auto kv : mComponentViewersPool)
 		{
 			for (auto x : kv.Value())
@@ -125,6 +127,11 @@ namespace Editor
 		mHeaderViewer->Refresh();
 	}
 
+	void ActorPropertiesViewer::OnSceneActorsChanged(const Vector<Actor*>& actors)
+	{
+		Refresh();
+	}
+
 	void ActorPropertiesViewer::SetTargets(const Vector<IObject*> targets)
 	{
 		mTargetActors = targets.Select<Actor*>([](auto x) { return dynamic_cast<Actor*>(x); });
@@ -172,20 +179,26 @@ namespace Editor
 
 		if (!mActorPropertiesViewersPool.ContainsKey(type))
 		{
+			Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
+
 			auto newViewer = (IActorPropertiesViewer*)(viewerSample->GetType().CreateSample());
 
 			if (usingDefaultViewer)
 				((DefaultActorPropertiesViewer*)newViewer)->SpecializeActorType(type);
 
 			mActorPropertiesViewersPool.Add(type, newViewer);
+
+			Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
 		}
 
 		auto propertiesViewer = mActorPropertiesViewersPool[type];
 
-		viewersWidgets.Add(propertiesViewer->GetWidget());
-		mActorPropertiesViewer = propertiesViewer;
-
 		propertiesViewer->SetTargetActors(mTargetActors);
+
+		if (!propertiesViewer->IsEmpty())
+			viewersWidgets.Add(propertiesViewer->GetWidget());
+
+		mActorPropertiesViewer = propertiesViewer;
 	}
 
 	void ActorPropertiesViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<UIWidget*>& viewersWidgets)

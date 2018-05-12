@@ -51,6 +51,12 @@ namespace Editor
 		// Updates all actor values
 		virtual void Refresh();
 
+		// Rebuilds properties layout
+		virtual void Rebuild();
+
+		// Returns is there no properties
+		virtual bool IsEmpty() const;
+
 		IOBJECT(IActorPropertiesViewer);
 
 	protected:
@@ -91,5 +97,7 @@ CLASS_METHODS_META(Editor::IActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Rebuild);
+	PUBLIC_FUNCTION(bool, IsEmpty);
 }
 END_META;

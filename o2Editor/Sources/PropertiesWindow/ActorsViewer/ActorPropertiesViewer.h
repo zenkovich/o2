@@ -72,6 +72,9 @@ namespace Editor
 		UIVerticalLayout*               mViewersLayout = nullptr;          // Viewers layout
 
 	protected:
+		// It is called when some actors on scene were changed
+		void OnSceneActorsChanged(const Vector<Actor*>& actors);
+
 		// Sets target objects
 		void SetTargets(const Vector<IObject*> targets);
 
@@ -126,6 +129,7 @@ CLASS_METHODS_META(Editor::ActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, AddComponentViewerType, IActorComponentViewer*);
 	PUBLIC_FUNCTION(void, AddActorPropertiesViewerType, IActorPropertiesViewer*);
 	PUBLIC_FUNCTION(void, Refresh);
+	PROTECTED_FUNCTION(void, OnSceneActorsChanged, const Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
 	PROTECTED_FUNCTION(void, SetTargetsActorProperties, const Vector<IObject*>, Vector<UIWidget*>&);
 	PROTECTED_FUNCTION(void, SetTargetsComponents, const Vector<IObject*>, Vector<UIWidget*>&);

@@ -57,15 +57,10 @@ namespace Editor
 		mDataView->name = "actor " + type->GetName();
 		mActorType = type;
 
-		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, 
-												 mActorType->GetFieldsWithBaseClasses(),
-												 mFieldProperties, "");
-
-		for (auto prop : mFieldProperties.properties)
-			prop.Value()->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-
 		mSpoiler->name = "spoiler " + type->GetName();
 		mPropertiesLayout->name = "properties " + type->GetName();
+
+		Rebuild();
 	}
 
 	void DefaultActorPropertiesViewer::Refresh()
@@ -75,9 +70,47 @@ namespace Editor
 		}));
 	}
 
+	void DefaultActorPropertiesViewer::Rebuild()
+	{
+		static Vector<String> hiddenFields ={
+			"prototype", "parent", "name", "layer", "layerName", "enabled", "locked", "tags", "transform",
+			"parentWidget", "layout", "drawDepth"
+		};
+
+		static Vector<String> additionalFields ={
+			"mLayers", "mStates"
+		};
+
+		auto fields = mActorType->GetFieldsWithBaseClasses();
+		if (!o2EditorProperties.IsPrivateFieldsVisible())
+		{
+			fields.RemoveAll([&](FieldInfo* x) { return hiddenFields.Contains(x->GetName()); });
+
+			for (auto fieldName : additionalFields)
+			{
+				if (auto fieldInfo = fields.FindMatch([&](FieldInfo* x) { return x->GetName() == fieldName; }))
+				{
+					o2EditorProperties.BuildField((UIVerticalLayout*)mPropertiesLayout,
+												  fieldInfo, mFieldProperties, "");
+				}
+			}
+		}
+
+		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout,
+												 fields, mFieldProperties, "");
+
+		for (auto prop : mFieldProperties.properties)
+			prop.Value()->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+	}
+
+	bool DefaultActorPropertiesViewer::IsEmpty() const
+	{
+		return mPropertiesLayout->GetChildren().Count() == 0;
+	}
+
 	void DefaultActorPropertiesViewer::OnPropertyChanged(const String& path,
-														const Vector<DataNode>& prevValue,
-														const Vector<DataNode>& newValue)
+														 const Vector<DataNode>& prevValue,
+														 const Vector<DataNode>& newValue)
 	{
 		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedActors(), mActorType, path, prevValue, newValue);

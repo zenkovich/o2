@@ -60,6 +60,7 @@ namespace Editor
 		TagsProperty*                 mTagsProperty = nullptr;
 		LayerProperty*                mLayerProperty = nullptr;
 
+
 	protected:
 		// It is called when apply button pressed, and applies changes to prototype
 		void OnApplyPrototypePressed();

@@ -66,6 +66,9 @@ namespace Editor
 		// Checks that property with type can be created
 		bool IsFieldTypeSupported(const Type* type) const;
 
+		// Free properties and putin cache
+		void FreeProperties(FieldPropertiesInfo& propertiesInfo);
+
 		// Builds layout viewer by type for objects
 		void BuildObjectProperties(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo,
 								   const String& path);
@@ -74,7 +77,11 @@ namespace Editor
 		void BuildObjectProperties(UIVerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo,
 								   const String& path);
 
-		// Creates field property by type field info
+		// Build layout viewer for field
+		void BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo,
+						const String& path);
+
+	    // Creates field property by type field info
 		Pair<IPropertyField*, UIWidget*> CreateFieldProperty(const Type* type, const String& name);
 
 		// Checks is property visible in properties window: 
@@ -135,11 +142,14 @@ namespace Editor
 		// Initializes available properties fields and pools
 		void InitializePropertiesFields();
 
+		// Removes all cached viewers
+		void ClearViewers();
+
 		// Builds layout viewer by fields without filtering
 		void BuildFields(UIVerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo,
 						 const String& path);
 
-        // It is called when some property field was changed
+		// It is called when some property field was changed
 		void OnPropertyChanged(IPropertyField* field);
 	};
 }
@@ -183,8 +193,10 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 	PUBLIC_FUNCTION(void, SetPrivateFieldsVisible, bool);
 	PUBLIC_FUNCTION(bool, IsPrivateFieldsVisible);
 	PUBLIC_FUNCTION(bool, IsFieldTypeSupported, const Type*);
+	PUBLIC_FUNCTION(void, FreeProperties, FieldPropertiesInfo&);
 	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, const Type*, FieldPropertiesInfo&, const String&);
 	PUBLIC_FUNCTION(void, BuildObjectProperties, UIVerticalLayout*, Vector<FieldInfo*>, FieldPropertiesInfo&, const String&);
+	PUBLIC_FUNCTION(void, BuildField, UIVerticalLayout*, FieldInfo*, FieldPropertiesInfo&, const String&);
 	PUBLIC_FUNCTION(_tmp1, CreateFieldProperty, const Type*, const String&);
 	PUBLIC_FUNCTION(bool, IsPropertyVisible, FieldInfo*, bool);
 	PUBLIC_FUNCTION(bool, IsPropertyVisible, FieldInfo*);
@@ -197,6 +209,7 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 	PROTECTED_FUNCTION(void, InitializeWindowContext);
 	PROTECTED_FUNCTION(void, InitializeViewers);
 	PROTECTED_FUNCTION(void, InitializePropertiesFields);
+	PROTECTED_FUNCTION(void, ClearViewers);
 	PROTECTED_FUNCTION(void, BuildFields, UIVerticalLayout*, Vector<FieldInfo*>, FieldPropertiesInfo&, const String&);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
 }

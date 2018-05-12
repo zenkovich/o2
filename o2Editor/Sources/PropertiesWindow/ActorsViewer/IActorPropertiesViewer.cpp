@@ -33,7 +33,7 @@ namespace Editor
 		*spoilerHead->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 18);
 		spoilerHead->layout->minHeight = 18;
 		spoilerHead->AddLayer("back", mnew Sprite("ui/UI2_component_head.png"),
-								Layout::BothStretch(-2, -2, -2, -2));
+							  Layout::BothStretch(-2, -2, -2, -2));
 		mDataView->AddChild(spoilerHead);
 
 		auto separatorImg = o2UI.CreateImage("ui/UI_Separator.png");
@@ -102,6 +102,15 @@ namespace Editor
 
 	void IActorPropertiesViewer::Refresh()
 	{}
+
+	void IActorPropertiesViewer::Rebuild()
+	{}
+
+	bool IActorPropertiesViewer::IsEmpty() const
+	{
+		return true;
+	}
+
 }
 
 DECLARE_CLASS(Editor::IActorPropertiesViewer);

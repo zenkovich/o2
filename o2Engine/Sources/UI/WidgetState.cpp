@@ -10,7 +10,7 @@ namespace o2
 
 	UIWidgetState::UIWidgetState(const UIWidgetState& state):
 		name(state.name), mState(state.mState), mOwner(state.mOwner),
-		offStateAnimationSpeed(state.offStateAnimationSpeed)
+		offStateAnimationSpeed(state.offStateAnimationSpeed), state(this)
 	{
 		animation = state.animation;
 		animation.SetTarget(mOwner, false);

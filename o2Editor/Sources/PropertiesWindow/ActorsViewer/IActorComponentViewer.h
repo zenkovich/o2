@@ -51,6 +51,9 @@ namespace Editor
 		// Updates all component values
 		virtual void Refresh();
 
+		// Rebuilds properties layout
+		virtual void Rebuild();
+
 		IOBJECT(IActorComponentViewer);
 
 	protected:
@@ -91,5 +94,6 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Rebuild);
 }
 END_META;
