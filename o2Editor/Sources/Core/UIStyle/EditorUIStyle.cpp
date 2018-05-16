@@ -2379,6 +2379,46 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "new rectangle property");
 	}
 
+	void EditorUIStyleBuilder::RebuildActorPropetyWithCaption()
+	{
+
+	}
+
+	void EditorUIStyleBuilder::RebuildColorPropetyWithCaption()
+	{
+
+	}
+
+	void EditorUIStyleBuilder::RebuildAssetPropetyWithCaption()
+	{
+
+	}
+
+	void EditorUIStyleBuilder::RebuildComponentPropertyWithCaption()
+	{
+
+	}
+
+	void EditorUIStyleBuilder::RebuildVector2PropertyWithCaption()
+	{
+
+	}
+
+	void EditorUIStyleBuilder::RebuildColoredVector2PropertyWithCaption()
+	{
+
+	}
+
+	void EditorUIStyleBuilder::RebuildRectPropertyWithCaption()
+	{
+
+	}
+
+	void EditorUIStyleBuilder::RebuildNewRectPropertyWithCaption()
+	{
+
+	}
+
 	void EditorUIStyleBuilder::RebuildEditorUIManager()
 	{
 		String generateDateCachePath = "uiGeneratedDate.xml";
@@ -2406,8 +2446,11 @@ namespace Editor
 		Timer timer;
 		for (auto func : funcs)
 		{
-			if (func->GetName() == "RebuildBasicUIManager" || func->GetName() == "RebuildEditorUIManager")
+			if (func->GetName() == "RebuildBasicUIManager" || func->GetName() == "RebuildEditorUIManager" ||
+				func->GetProtectionSection() != ProtectSection::Public)
+			{
 				continue;
+			}
 
 			timer.Reset();
 			func->Invoke<void>(this);

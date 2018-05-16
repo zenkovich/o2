@@ -25,37 +25,18 @@
 
 namespace Editor
 {
-	ActorProperty::ActorProperty(UIWidget* widget /*= nullptr*/)
+	ActorProperty::ActorProperty()
 	{
-		if (widget)
-			mPropertyWidget = widget;
-		else
-			mPropertyWidget = o2UI.CreateWidget<UIWidget>("actor property");
-
-		mBox = mPropertyWidget->GetChildWidget("box");
-		if (!mBox)
-			mBox = mPropertyWidget;
-
-		mBox->onDraw += [&]() { OnDrawn(); };
+		mBox = GetChildWidget("box");
 		mBox->SetFocusable(true);
+		mBox->onDraw += THIS_FUNC(DragDropArea::OnDrawn);
 
 		mNameText = mBox->GetLayerDrawable<Text>("caption");
 		mNameText->text = "--";
 
-		mRevertBtn = mPropertyWidget->GetChildByType<UIButton>();
+		mRevertBtn = GetChildByType<UIButton>();
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
-	}
-
-	ActorProperty::~ActorProperty()
-	{
-		delete mPropertyWidget;
-	}
-
-	void ActorProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
-	{
-		mValuesProxies = targets;
-		Refresh();
 	}
 
 	void ActorProperty::Refresh()
@@ -133,19 +114,9 @@ namespace Editor
 			SetProxy<Actor*>(target, sourceActor);
 	}
 
-	UIWidget* ActorProperty::GetWidget() const
-	{
-		return mPropertyWidget;
-	}
-
 	Actor* ActorProperty::GetCommonValue() const
 	{
 		return mCommonValue;
-	}
-
-	bool ActorProperty::IsValuesDifferent() const
-	{
-		return mValuesDifferent;
 	}
 
 	const Type* ActorProperty::GetFieldType() const
@@ -180,29 +151,7 @@ namespace Editor
 		return mBox->IsUnderPoint(point);
 	}
 
-	void ActorProperty::SetCommonValue(Actor* value)
-	{
-		mCommonValue = value;
-		mValuesDifferent = false;
-
-		if (!mCommonValue)
-		{
-			mNameText->text = "Null:Actor";
-			mBox->layer["caption"]->transparency = 0.5f;
-		}
-		else
-		{
-			mNameText->text = mCommonValue->GetName();
-			mBox->layer["caption"]->transparency = 1.0f;
-		}
-
-		CheckRevertableState();
-
-		onChanged();
-		o2EditorSceneScreen.OnSceneChanged();
-	}
-
-	void ActorProperty::CheckRevertableState()
+	bool ActorProperty::IsRevertable() const
 	{
 		bool revertable = false;
 
@@ -232,8 +181,29 @@ namespace Editor
 			}
 		}
 
-		if (auto state = mPropertyWidget->state["revert"])
-			*state = revertable;
+		return revertable;
+	}
+
+	void ActorProperty::SetCommonValue(Actor* value)
+	{
+		mCommonValue = value;
+		mValuesDifferent = false;
+
+		if (!mCommonValue)
+		{
+			mNameText->text = "Null:Actor";
+			mBox->layer["caption"]->transparency = 0.5f;
+		}
+		else
+		{
+			mNameText->text = mCommonValue->GetName();
+			mBox->layer["caption"]->transparency = 1.0f;
+		}
+
+		CheckRevertableState();
+
+		onChanged();
+		o2EditorSceneScreen.OnSceneChanged();
 	}
 
 	void ActorProperty::OnCursorEnter(const Input::Cursor& cursor)

@@ -39,6 +39,11 @@ namespace o2
 		return mParameters;
 	}
 
+	ProtectSection FunctionInfo::GetProtectionSection() const
+	{
+		return mProtectSection;
+	}
+
 	bool FunctionInfo::Parameter::operator==(const Parameter& other) const
 	{
 		return name == other.name && type == other.type && isConstant == other.isConstant && isPointer == other.isPointer &&

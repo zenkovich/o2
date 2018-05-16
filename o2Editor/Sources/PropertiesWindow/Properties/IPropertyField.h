@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Utils/Types/Containers/Vector.h"
-#include "Utils/Serialization/DataNode.h"
+#include "UI/HorizontalLayout.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
+#include "Utils/Serialization/DataNode.h"
+#include "Utils/Types/Containers/Vector.h"
 #include "Utils/ValueProxy.h"
 
 using namespace o2;
@@ -18,7 +19,7 @@ namespace Editor
 	// -------------------------------
 	// Editor property field interface
 	// -------------------------------
-	class IPropertyField: public IObject
+	class IPropertyField: public UIHorizontalLayout
 	{
 	public:
 		typedef Pair<IAbstractValueProxy*, const IAbstractValueProxy*> TargetPair;
@@ -29,11 +30,14 @@ namespace Editor
 
 		Function<void(const String&, const Vector<DataNode>&, const Vector<DataNode>&)> onChangeCompleted; // Change completed by user event
 
+		// Default constructor. Searches revert button and sets click action
+		IPropertyField();
+
 		// Virtual destructor
 		virtual ~IPropertyField() {}
 
 		// Sets targets pointers
-		virtual void SetValueAndPrototypeProxy(const TargetsVec& targets) {}
+		virtual void SetValueAndPrototypeProxy(const TargetsVec& targets);
 
 		// Sets targets proxies
 		virtual void SetValueProxy(const Vector<IAbstractValueProxy*>& targets);
@@ -50,11 +54,11 @@ namespace Editor
 		// Returns property caption
 		virtual WString GetCaption() const;
 
-		// Returns control widget
-		virtual UIWidget* GetWidget() const { return nullptr; }
-
 		// Returns editing by this field type
 		virtual const Type* GetFieldType() const { return &TypeOf(void); }
+
+		// Returns is values different
+		bool IsValuesDifferent() const;
 
 		// Sets reflection path f target values
 		void SetValuePath(const String& path);
@@ -103,8 +107,11 @@ namespace Editor
 		IOBJECT(IPropertyField);
 
 	protected:
-		// Checks value for reverting to prototype
-		virtual void CheckRevertableState() {}
+		// Checks is value can be reverted
+		virtual bool IsRevertable() const;
+
+		// Checks value for reverting to prototype and sets widget state "revert"
+		virtual void CheckRevertableState();
 
 		// It is called when field value changed
 		virtual void OnChanged();
@@ -113,10 +120,14 @@ namespace Editor
 		virtual void StoreValues(Vector<DataNode>& data) const {}
 
 	protected:
-		UILabel*         mCaption = nullptr;  // Caption label, null by default   
+		TargetsVec       mValuesProxies;          // Target values proxies
+		bool             mValuesDifferent = true; // Are values different
 
-		String           mValuesPath;         // Reflection path of target values
-		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
+		UIButton*        mRevertBtn = nullptr;    // Revert to source prototype button
+		UILabel*         mCaption = nullptr;      // Caption label, null by default   
+											      
+		String           mValuesPath;             // Reflection path of target values
+		Vector<DataNode> mBeforeChangeValues;     // Serialized value data before changes started
 
 	protected:
 		// Sets value via proxy

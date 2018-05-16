@@ -47,16 +47,27 @@ namespace Editor
 		void RebuildSinglelineEditBoxWithArrows();
 		void RebuildSinglelineEditboxProperty();
 		void RebuildEditorDropdown();
+		void RebuildRedEditBoxStyle();
+		void RebuildGreenEditBoxStyle();
+
 		void RebuildActorPropety();
 		void RebuildColorPropety();
 		void RebuildAssetPropety();
 		void RebuildComponentProperty();
 		void RebuildVector2Property();
-		void RebuildRedEditBoxStyle();
-		void RebuildGreenEditBoxStyle();
 		void RebuildColoredVector2Property();
 		void RebuildRectProperty();
 		void RebuildNewRectProperty();
+
+		void RebuildActorPropetyWithCaption();
+		void RebuildColorPropetyWithCaption();
+		void RebuildAssetPropetyWithCaption();
+		void RebuildComponentPropertyWithCaption();
+		void RebuildVector2PropertyWithCaption();
+		void RebuildColoredVector2PropertyWithCaption();
+		void RebuildRectPropertyWithCaption();
+		void RebuildNewRectPropertyWithCaption();
+
 		void RebuildActorHeadEnableToggle();
 		void RebuildActorHeadName();
 		void RebuildActorHeadLockToggle();
@@ -77,7 +88,28 @@ namespace Editor
 		void RebuildEditorUIManager();
 
 		IOBJECT(EditorUIStyleBuilder);
+
+	private: 
+		template<typename _property_type>
+		void BuildPropertyWithCaption(const String& propertyStyle, const String& propertyWithCaptionStyle);
 	};
+
+	template<typename _property_type>
+	void EditorUIStyleBuilder::BuildPropertyWithCaption(const String& propertyStyle, const String& propertyWithCaptionStyle)
+	{
+		_property_type* property = o2UI.CreateWidget<_property_type>(propertyStyle);
+
+		UILabel* label = o2UI.CreateWidget<UILabel>();
+		label->name = "propertyName";
+		label->horAlign = HorAlign::Left;
+		label->layout->widthWeight = 3.0f;
+		label->horOverflow = UILabel::HorOverflow::Dots;
+		label->text = name;
+
+		property->AddChild(label, 0);
+
+		o2UI.AddWidgetStyle(property, propertyWithCaptionStyle);
+	}
 }
 
 CLASS_BASES_META(Editor::EditorUIStyleBuilder)

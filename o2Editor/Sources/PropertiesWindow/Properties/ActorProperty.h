@@ -26,28 +26,13 @@ namespace Editor
 	{
 	public:
 		// Default constructor
-		ActorProperty(UIWidget* widget = nullptr);
-
-		// Destructor
-		~ActorProperty();
-
-		// Sets target fields
-		void SetValueAndPrototypeProxy(const TargetsVec& targets) override;
+		ActorProperty();
 
 		// Updates and checks value
 		void Refresh() override;
 
 		// Reverts value to prototype value
 		void Revert() override;
-
-		// Returns root widget
-		UIWidget* GetWidget() const override;
-
-		// Returns value
-		Actor* GetCommonValue() const;
-
-		// Returns is values different
-		bool IsValuesDifferent() const;
 
 		// Returns editing by this field type
 		const Type* GetFieldType() const override;
@@ -58,27 +43,26 @@ namespace Editor
 		// Sets value as unknown
 		void SetUnknownValue();
 
+		// Returns value
+		Actor* GetCommonValue() const;
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		IOBJECT(ActorProperty);
 
 	protected:
-		TargetsVec mValuesProxies;            // Fields' pointers
 		Actor*     mCommonValue = nullptr;    // Common field value (if not different)
-		bool       mValuesDifferent = true;   // Are values different
 
-		UIWidget*  mPropertyWidget = nullptr; // Property widget
-		UIButton*  mRevertBtn = nullptr;      // Revert to source prototype button
 		UIWidget*  mBox = nullptr;            // Property edit box
 		Text*      mNameText = nullptr;       // Asset name text
 
 	protected:
+		// Checks is value can be reverted
+		bool IsRevertable() const override;
+
 		// Sets common value actor
 		void SetCommonValue(Actor* value);
-
-		// Checks value for reverting to prototype
-		void CheckRevertableState();
 
 		// Reverts target value to source
 		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);

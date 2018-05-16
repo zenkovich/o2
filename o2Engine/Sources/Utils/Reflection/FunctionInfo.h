@@ -48,6 +48,9 @@ namespace o2
 		// Returns function's parameters
 		const ParametersVec& GetParameters() const;
 
+		// Returns protection section of function
+		ProtectSection GetProtectionSection() const;
+
 		// Invokes function with parameters
 		template<typename _res_type, typename ... _args>
 		_res_type Invoke(void* object, _args ... args) const;
