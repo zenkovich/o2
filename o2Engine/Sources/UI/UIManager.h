@@ -35,7 +35,7 @@ namespace o2
 	// ------------------------------------------------
 	// UI manager, contains all root widgets and styles
 	// ------------------------------------------------
-	class UIManager: public Singleton<UIManager>
+	class UIManager : public Singleton<UIManager>
 	{
 	public:
 		typedef Vector<UIWidget*> WidgetsVec;
@@ -53,6 +53,12 @@ namespace o2
 		// Adds widget style
 		void AddWidgetStyle(UIWidget* widget, const String& style);
 
+		// Creates widget by style
+		UIWidget* CreateWidget(const Type& type, const String& style = "standard");
+
+		// Returns widget style by name
+		UIWidget* GetWidgetStyle(const Type& type, const String& style);
+
 		// Returns widget style by name
 		template<typename _type>
 		_type* GetWidgetStyle(const String& style);
@@ -67,7 +73,7 @@ namespace o2
 
 		// Creates button by style
 		UIButton* CreateButton(const WString& caption, const Function<void()>& onClick = Function<void()>(),
-								const String& style = "standard");
+							   const String& style = "standard");
 
 		// Creates button by style
 		UIWindow* CreateWindow(const WString& caption, const String& style = "standard");
@@ -136,7 +142,7 @@ namespace o2
 		const WidgetsVec& GetWidgetStyles() const;
 
 	protected:
-		LogStream* mLog = nullptr;           // UI Log stream
+		LogStream * mLog = nullptr;           // UI Log stream
 		UIWidget*  mFocusedWidget = nullptr; // Current selected widget
 		WidgetsVec mFocusableWidgets;        // List of selectable widgets
 		WidgetsVec mTopWidgets;              // Top widgets, drawing after mScreenWidget 
@@ -163,22 +169,16 @@ namespace o2
 	template<typename _type>
 	_type* UIManager::GetWidgetStyle(const String& style /*= "standard"*/)
 	{
-		_type* sample = nullptr;
 		for (auto styleWidget : mStyleSamples)
 		{
-			if (TypeOf(_type)== styleWidget->GetType())
+			if (TypeOf(_type) == styleWidget->GetType())
 			{
 				if (style == styleWidget->GetName())
-				{
-					sample = (_type*)styleWidget;
-					break;
-				}
-				else if (!sample)
-					sample = (_type*)styleWidget;
+					return dynamic_cast<_type*>(styleWidget);
 			}
 		}
 
-		return sample;
+		return nullptr;
 	}
 
 	template<typename _type>
@@ -196,17 +196,15 @@ namespace o2
 	_type* UIManager::CreateWidget(const String& style /*= "standard"*/)
 	{
 		_type* sample = GetWidgetStyle<_type>(style);
-		_type* res;
+		if (!sample)
+			sample = GetWidgetStyle<_type>("standard");
 
+		_type* res = nullptr;
+		
 		if (sample)
-		{
-			res = dynamic_cast<_type*>(sample->Clone());
-		}
+			res = sample->CloneAs<_type>();
 		else
-		{
-			mLog->Warning("Can't find style %s for %s", style, TypeOf(_type).GetName());
 			res = mnew _type();
-		}
 
 		if (TypeOf(_type) != TypeOf(UIContextMenu))
 			res->SetEnableForcible(true);

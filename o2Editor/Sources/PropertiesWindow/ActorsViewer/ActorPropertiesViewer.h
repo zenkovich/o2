@@ -22,7 +22,7 @@ namespace Editor
 	// ------------------------
 	// Actors properties viewer
 	// ------------------------
-	class ActorPropertiesViewer: IObjectPropertiesViewer
+	class ActorPropertiesViewer: public IObjectPropertiesViewer
 	{
 	public:
 		ActorPropertiesViewer();

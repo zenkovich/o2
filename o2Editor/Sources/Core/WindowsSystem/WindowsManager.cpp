@@ -18,14 +18,6 @@ namespace Editor
 {
 	WindowsManager::WindowsManager()
 	{
-		if (mNeedRebuildWndStyle)
-		{
-			EditorUIStyleBuilder builder;
-			builder.RebuildEditorUIManager();
-		}
-
-		o2UI.LoadStyle("editor_ui_style.xml");
-
 		mColorPickerDlg = mnew ColorPickerDlg();
 		mCurveEditorDlg = mnew CurveEditorDlg();
 		mNameEditDlg = mnew NameEditDlg();

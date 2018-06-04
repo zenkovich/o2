@@ -119,7 +119,7 @@ namespace o2
 		_res_type Invoke(const String& name, void* object, _args ... args);
 
 		// Returns derived types
-		Vector<const Type*> GetDerivedTypes() const;
+		Vector<const Type*> GetDerivedTypes(bool deep = true) const;
 
 		// Creates sample copy and returns him
 		virtual void* CreateSample() const = 0;

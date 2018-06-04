@@ -36,7 +36,7 @@ namespace o2
 		mItemSample        = other.mItemSample->CloneAs<UIWidget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
-		mLayout            = GetChildByType<UIHorizontalLayout>();
+		mLayout            = FindChildByType<UIHorizontalLayout>();
 
 		RetargetStatesAnimations();
 		UpdateTransform();
@@ -80,7 +80,7 @@ namespace o2
 
 					if (mSelectedItem >= 0)
 					{
-						if (auto contextMenu = mLayout->mChildWidgets[mSelectedItem]->GetChildByType<UIContextMenu>())
+						if (auto contextMenu = mLayout->mChildWidgets[mSelectedItem]->FindChildByType<UIContextMenu>())
 						{
 							contextMenu->Show(mLayout->mChildWidgets[mSelectedItem]->layout->worldLeftBottom);
 							mOpenedContext = contextMenu;
@@ -139,7 +139,7 @@ namespace o2
 		if (!subChild)
 			subChild = AddItem(subMenu);
 
-		UIContextMenu* subContext = subChild->GetChildByType<UIContextMenu>();
+		UIContextMenu* subContext = subChild->FindChildByType<UIContextMenu>();
 		if (!subContext)
 		{
 			subContext = o2UI.CreateWidget<UIContextMenu>();
@@ -186,7 +186,7 @@ namespace o2
 		{
 			mClickFunctions.Insert([=]()
 			{
-				newItem->GetChildByType<UIContextMenu>()->Show(newItem->layout->worldRightBottom);
+				newItem->FindChildByType<UIContextMenu>()->Show(newItem->layout->worldRightBottom);
 			}, position);
 		}
 		else mClickFunctions.Insert(item.onClick, position);
@@ -271,7 +271,7 @@ namespace o2
 			return;
 		}
 
-		UIContextMenu* subContext = subChild->GetChildByType<UIContextMenu>();
+		UIContextMenu* subContext = subChild->FindChildByType<UIContextMenu>();
 		if (!subContext)
 		{
 			o2Debug.LogError("Failed to remove menu item %s", path);
@@ -343,7 +343,7 @@ namespace o2
 		if (auto textLayer = item->GetLayerDrawable<Text>("text"))
 			res.text = textLayer->text;
 
-		if (auto subMenu = item->GetChildByType<UIContextMenu>())
+		if (auto subMenu = item->FindChildByType<UIContextMenu>())
 			res.subItems = subMenu->GetItems();
 
 		res.onClick = mClickFunctions[idx];
@@ -363,7 +363,7 @@ namespace o2
 		mItemSample        = other.mItemSample->CloneAs<UIWidget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
-		mLayout            = GetChildByType<UIHorizontalLayout>();
+		mLayout            = FindChildByType<UIHorizontalLayout>();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -456,7 +456,7 @@ namespace o2
 			if (mOpenedContext)
 				mOpenedContext->HideWithChild();
 
-			if (auto context = itemUnderCursor->GetChildByType<UIContextMenu>())
+			if (auto context = itemUnderCursor->FindChildByType<UIContextMenu>())
 			{
 				context->Show(itemUnderCursor->layout->worldLeftBottom);
 				mOpenedContext = context;

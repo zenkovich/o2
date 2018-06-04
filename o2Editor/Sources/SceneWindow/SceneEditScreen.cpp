@@ -127,7 +127,7 @@ namespace Editor
 			mEnabledTool->OnActorsSelectionChanged(mSelectedActors);
 
 		onSelectionChanged(mSelectedActors);
-		o2EditorProperties.SetTargets(mSelectedActors.Select<IObject*>([](auto x) { return (IObject*)x; }));
+		o2EditorPropertiesWindow.SetTargets(mSelectedActors.Select<IObject*>([](auto x) { return (IObject*)x; }));
 	}
 
 	void SceneEditScreen::RedrawContent()
@@ -302,13 +302,13 @@ namespace Editor
 			mEnabledTool->OnActorsSelectionChanged(mSelectedActors);
 
 		if (mSelectedActors != prevSelectedActors || 
-			mSelectedActors.Cast<IObject*>() != o2EditorProperties.GetTargets())
+			mSelectedActors.Cast<IObject*>() != o2EditorPropertiesWindow.GetTargets())
 		{
 			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
 			o2EditorApplication.DoneAction(selectionAction);
 
 			onSelectionChanged(mSelectedActors);
-			o2EditorProperties.SetTargets(mSelectedActors.Select<IObject*>([](auto x) { return (IObject*)x; }));
+			o2EditorPropertiesWindow.SetTargets(mSelectedActors.Select<IObject*>([](auto x) { return (IObject*)x; }));
 		}
 	}
 

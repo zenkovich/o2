@@ -66,7 +66,7 @@ namespace o2
 			while (FindNextFile(h, &f));
 		}
 		else
-			mInstance->mLog->Error("Failed GetPathInfo: Error opening directory %s", path.Data());
+			mInstance->mLog->Error("Failed GetPathInfo: Error opening directory %s", path);
 
 		FindClose(h);
 

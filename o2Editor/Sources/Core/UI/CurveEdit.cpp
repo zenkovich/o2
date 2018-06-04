@@ -51,7 +51,7 @@ namespace Editor
 	{
 		mReady = false;
 
-		mContextMenu = GetChildByType<UIContextMenu>();
+		mContextMenu = FindChildByType<UIContextMenu>();
 		if (mContextMenu)
 			delete mContextMenu;
 

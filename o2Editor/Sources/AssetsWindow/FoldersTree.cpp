@@ -45,8 +45,8 @@ namespace Editor
 	UIAssetsFoldersTree::UIAssetsFoldersTree(const UIAssetsFoldersTree& other):
 		UIWidget(other)
 	{
-		mFoldersTree = GetChildByType<UITree>();
-		RemoveChild(GetChildByType<UIContextMenu>());
+		mFoldersTree = FindChildByType<UITree>();
+		RemoveChild(FindChildByType<UIContextMenu>());
 
 		InitializeContext();
 
@@ -69,8 +69,8 @@ namespace Editor
 
 		UIWidget::CopyData(other);
 
-		mFoldersTree = GetChildByType<UITree>();
-		RemoveChild(GetChildByType<UIContextMenu>());
+		mFoldersTree = FindChildByType<UITree>();
+		RemoveChild(FindChildByType<UIContextMenu>());
 
 		InitializeContext();
 

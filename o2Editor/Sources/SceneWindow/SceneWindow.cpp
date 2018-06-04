@@ -9,13 +9,13 @@
 
 namespace Editor
 {
-	SceneWindow::SceneWindow():
+	SceneWindow::SceneWindow() :
 		IEditorWindow()
 	{
 		InitializeWindow();
 	}
 
-	SceneWindow::SceneWindow(const SceneWindow& other):
+	SceneWindow::SceneWindow(const SceneWindow& other) :
 		IEditorWindow(other)
 	{
 		InitializeWindow();
@@ -54,9 +54,7 @@ namespace Editor
 	}
 
 	void SceneWindow::InitializeLayersView()
-	{
-
-	}
+	{}
 
 	void SceneWindow::PostInitializeWindow()
 	{

@@ -12,10 +12,10 @@
 #include "Core/Actions/LockActors.h"
 #include "Core/Actions/ReparentActors.h"
 #include "Core/EditorApplication.h"
+#include "Core/Properties/Widgets/ActorProperty.h"
+#include "Core/Properties/Widgets/ComponentProperty.h"
 #include "Core/UIRoot.h"
 #include "Events/EventSystem.h"
-#include "PropertiesWindow/Properties/ActorProperty.h"
-#include "PropertiesWindow/Properties/ComponentProperty.h"
 #include "Scene/Actor.h"
 #include "Scene/Scene.h"
 #include "UI/Button.h"
@@ -437,7 +437,7 @@ namespace Editor
 		DataNode prevData; prevData = prevName;
 		DataNode newData; newData = mTargetActor->GetName();
 
-		auto action = mnew ActorsPropertyChangeAction({ mTargetActor }, nullptr, "name", { prevData }, { newData });
+		auto action = mnew ActorsPropertyChangeAction({ mTargetActor }, "name", { prevData }, { newData });
 		o2EditorApplication.DoneAction(action);
 	}
 

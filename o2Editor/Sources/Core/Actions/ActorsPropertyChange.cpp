@@ -11,12 +11,11 @@ namespace Editor
 	{}
 
 	ActorsPropertyChangeAction::ActorsPropertyChangeAction(const Vector<Actor*>& actors,
-														   const Type* componentType,
 														   const String& propertyPath,
 														   const Vector<DataNode>& beforeValues,
-														   const Vector<DataNode>& afterValues):
+														   const Vector<DataNode>& afterValues) :
 		actorsIds(actors.Select<UInt64>([](const Actor* x) { return x->GetID(); })), propertyPath(propertyPath),
-		beforeValues(beforeValues), afterValues(afterValues), componentType(componentType)
+		beforeValues(beforeValues), afterValues(afterValues)
 	{}
 
 	String ActorsPropertyChangeAction::GetName() const
@@ -38,6 +37,18 @@ namespace Editor
 	{
 		Vector<Actor*> actors = actorsIds.Select<Actor*>([](UInt64 id) { return o2Scene.GetActorByID(id); });
 
+		const Type* componentType = nullptr;
+		String finalPropertyPath = propertyPath;
+		if (propertyPath.StartsWith("component:"))
+		{
+			int c = ((String)"component:").Length();
+			String typeName = propertyPath.SubStr(c, propertyPath.Find('/', c));
+			componentType = o2Reflection.GetType(typeName);
+
+			if (componentType)
+				finalPropertyPath.Erase(0, c);
+		}
+
 		int i = 0;
 		for (auto actor : actors)
 		{
@@ -48,13 +59,13 @@ namespace Editor
 
 				if (componentType)
 				{
-					Component* comp = actor->GetComponent(componentType);
-					if (comp)
-						ptr = comp->GetType().GetFieldPtr(comp, propertyPath, fi);
+					Component* component = actor->GetComponent(componentType);
+					if (component)
+						ptr = component->GetType().GetFieldPtr(component, finalPropertyPath, fi);
 				}
 				else
 				{
-					ptr = actor->GetType().GetFieldPtr(actor, propertyPath, fi);
+					ptr = actor->GetType().GetFieldPtr(actor, finalPropertyPath, fi);
 				}
 
 				if (fi && ptr)

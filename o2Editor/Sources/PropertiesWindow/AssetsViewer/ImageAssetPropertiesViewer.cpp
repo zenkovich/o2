@@ -2,11 +2,11 @@
 #include "ImageAssetPropertiesViewer.h"
 
 #include "Assets/ImageAsset.h"
-#include "PropertiesWindow/Properties/BorderIntProperty.h"
-#include "PropertiesWindow/Properties/EnumProperty.h"
-#include "PropertiesWindow/Properties/ObjectProperty.h"
-#include "PropertiesWindow/Properties/RectangleIntProperty.h"
-#include "PropertiesWindow/PropertiesWindow.h"
+#include "Core/Properties/Properties.h"
+#include "Core/Properties/Widgets/BorderIntProperty.h"
+#include "Core/Properties/Widgets/EnumProperty.h"
+#include "Core/Properties/Widgets/ObjectProperty.h"
+#include "Core/Properties/Widgets/RectangleIntProperty.h"
 #include "UI/Image.h"
 #include "UI/Label.h"
 #include "UI/Spoiler.h"
@@ -205,40 +205,40 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::InitializeProperties()
 	{
-		auto borderPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(RectI), "Slice border");
-		mBorderProperty = (BorderIProperty*)borderPropertyPair.first;
-		mBorderProperty->onChanged += [&]() { UpdateBordersAnchors(); /*mBordersSmoothValue = mBorderProperty->GetCommonValue();*/ };
-		mContent->AddChild(borderPropertyPair.second);
+		auto borderProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(RectI), "Slice border");
+		mBorderProperty = (BorderIProperty*)borderProperty;
+		mBorderProperty->onChanged += [&](auto x) { UpdateBordersAnchors(); /*mBordersSmoothValue = mBorderProperty->GetCommonValue();*/ };
+		mContent->AddChild(borderProperty);
 
-		auto modePropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(SpriteMode), "Default mode");
-		mDefaultTypeProperty = (EnumProperty*)modePropertyPair.first;
+		auto modeProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(SpriteMode), "Default mode");
+		mDefaultTypeProperty = (EnumProperty*)modeProperty;
 		mDefaultTypeProperty->SpecializeType(&TypeOf(SpriteMode));
-		mContent->AddChild(modePropertyPair.second);
+		mContent->AddChild(modeProperty);
 
-		auto atlasPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAssetRef), "Atlas");
-		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasPropertyPair.first;
+		auto atlasProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(AtlasAssetRef), "Atlas");
+		mAtlasProperty = (AssetProperty<AtlasAssetRef>*)atlasProperty;
 		mAtlasProperty->onChanged = THIS_FUNC(OnAtlasPropertyChanged);
-		mContent->AddChild(atlasPropertyPair.second);
+		mContent->AddChild(atlasProperty);
 
-		auto windowsPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "Windows");
-		mWindowsProperties = (ObjectProperty*)windowsPropertyPair.first;
+		auto windowsProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "Windows");
+		mWindowsProperties = (ObjectProperty*)windowsProperty;
 		mWindowsProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
-		mContent->AddChild(windowsPropertyPair.second);
+		mContent->AddChild(windowsProperty);
 
-		auto osxPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "OSX");
-		mOSXProperties = (ObjectProperty*)osxPropertyPair.first;
+		auto osxProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "OSX");
+		mOSXProperties = (ObjectProperty*)osxProperty;
 		mOSXProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
-		mContent->AddChild(osxPropertyPair.second);
+		mContent->AddChild(osxProperty);
 
-		auto androidPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "Android");
-		mAndroidProperties = (ObjectProperty*)androidPropertyPair.first;
+		auto androidProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "Android");
+		mAndroidProperties = (ObjectProperty*)androidProperty;
 		mAndroidProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
-		mContent->AddChild(androidPropertyPair.second);
+		mContent->AddChild(androidProperty);
 
-		auto iosPropertyPair = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "iOS");
-		mIOSProperties = (ObjectProperty*)iosPropertyPair.first;
+		auto iosProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "iOS");
+		mIOSProperties = (ObjectProperty*)iosProperty;
 		mIOSProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
-		mContent->AddChild(iosPropertyPair.second);
+		mContent->AddChild(iosProperty);
 	}
 
 	void ImageAssetPropertiesViewer::FitImage()
@@ -327,7 +327,7 @@ namespace Editor
 			mAtlasProperty->SetAssetId(commonValue);
 	}
 
-	void ImageAssetPropertiesViewer::OnAtlasPropertyChanged()
+	void ImageAssetPropertiesViewer::OnAtlasPropertyChanged(IPropertyField* field)
 	{
 		UID id = mAtlasProperty->GetCommonValue()->GetAssetId();
 

@@ -144,6 +144,39 @@ namespace o2
 		mStyleSamples.Add(widget);
 	}
 
+	UIWidget* UIManager::CreateWidget(const Type& type, const String& style /*= "standard"*/)
+	{
+		UIWidget* sample = GetWidgetStyle(type, style);
+		if (!sample)
+			sample = GetWidgetStyle(type, "standard");
+
+		UIWidget* res = nullptr;
+
+		if (sample)
+			res = sample->CloneAs<UIWidget>();
+		else
+			res = (UIWidget*)type.CreateSample();
+
+		if (type != TypeOf(UIContextMenu))
+			res->SetEnableForcible(true);
+
+		return res;
+	}
+
+	UIWidget* UIManager::GetWidgetStyle(const Type& type, const String& style)
+	{
+		for (auto styleWidget : mStyleSamples)
+		{
+			if (type == styleWidget->GetType())
+			{
+				if (style == styleWidget->GetName())
+					return styleWidget;
+			}
+		}
+
+		return nullptr;
+	}
+
 	UIButton* UIManager::CreateButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/,
 									  const String& style /*= "standard"*/)
 	{

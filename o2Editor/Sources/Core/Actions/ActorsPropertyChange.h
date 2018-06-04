@@ -15,14 +15,13 @@ namespace Editor
 	{
 	public:
 		Vector<UInt64>   actorsIds;
-		const Type*      componentType;
 		String           propertyPath;
 		Vector<DataNode> beforeValues;
 		Vector<DataNode> afterValues;
 
 	public:
 		ActorsPropertyChangeAction();
-		ActorsPropertyChangeAction(const Vector<Actor*>& actors, const Type* componentType,
+		ActorsPropertyChangeAction(const Vector<Actor*>& actors,
 								   const String& propertyPath, const Vector<DataNode>& beforeValues,
 								   const Vector<DataNode>& afterValues);
 
@@ -45,7 +44,6 @@ END_META;
 CLASS_FIELDS_META(Editor::ActorsPropertyChangeAction)
 {
 	PUBLIC_FIELD(actorsIds);
-	PUBLIC_FIELD(componentType);
 	PUBLIC_FIELD(propertyPath);
 	PUBLIC_FIELD(beforeValues);
 	PUBLIC_FIELD(afterValues);

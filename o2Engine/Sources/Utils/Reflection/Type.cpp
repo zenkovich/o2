@@ -135,7 +135,7 @@ namespace o2
 		return nullptr;
 	}
 
-	Vector<const Type*> Type::GetDerivedTypes() const
+	Vector<const Type*> Type::GetDerivedTypes(bool deep /*= true*/) const
 	{
 		Vector<const Type*> res;
 		for (auto type : Reflection::GetTypes())
@@ -147,6 +147,14 @@ namespace o2
 					res.Add(type);
 			}
 		}
+
+		if (deep)
+		{
+			auto resCopy = res;
+			for (auto type : resCopy)
+				res += type->GetDerivedTypes(true);
+		}
+
 		return res;
 	}
 

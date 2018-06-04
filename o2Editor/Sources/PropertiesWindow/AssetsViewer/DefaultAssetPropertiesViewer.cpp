@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DefaultAssetPropertiesViewer.h"
 
-#include "PropertiesWindow/PropertiesWindow.h"
+#include "Core/Properties/Properties.h"
 #include "UI/VerticalLayout.h"
 #include "UI/WidgetLayout.h"
 

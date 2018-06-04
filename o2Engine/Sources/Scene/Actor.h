@@ -281,7 +281,7 @@ namespace o2
 
 		// Searches child with specified type
 		template<typename _type>
-		_type* GetChildByType();
+		_type* FindChildByType(bool searchInChildren = true);
 
 		// Returns children array
 		ActorsVec GetChildren() const;
@@ -662,15 +662,18 @@ namespace o2
 	};
 
 	template<typename _type>
-	_type* Actor::GetChildByType()
+	_type* Actor::FindChildByType(bool searchInChildren /*= true*/)
 	{
 		for (auto child : mChildren)
 			if (child->GetType() == TypeOf(_type))
 				return (_type*)child;
 
-		for (auto child : mChildren)
-			if (auto res = child->GetChildByType<_type>())
-				return res;
+		if (searchInChildren)
+		{
+			for (auto child : mChildren)
+				if (auto res = child->FindChildByType<_type>())
+					return res;
+		}
 
 		return nullptr;
 	}

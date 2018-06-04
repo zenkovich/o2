@@ -375,9 +375,12 @@ namespace o2
 	template<typename _res_type, typename ... _args>
 	class Function <_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
 	{
-		typedef std::vector<IFunction*> FunctionsVec;
+		typedef std::vector<IFunction<_res_type(_args ...)>*> FunctionsVec;
 
 		FunctionsVec mFunctions; // Vector of functors
+
+	public:
+		static const Function<_res_type(_args ...)> empty;
 
 	public:
 		// Constructor
@@ -704,6 +707,9 @@ namespace o2
 			return *this;
 		}
 	};
+
+	template<typename _res_type, typename ... _args>
+	const Function<_res_type(_args ...)> Function<_res_type(_args ...)>::empty;
 
 	template<typename _class_type, typename _res_type, typename ... _args>
 	Function<_res_type(_args ...)> Func(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))

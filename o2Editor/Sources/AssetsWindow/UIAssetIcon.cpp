@@ -19,7 +19,7 @@ namespace Editor
 	UIAssetIcon::UIAssetIcon(const UIAssetIcon& other):
 		UIWidget(other)
 	{
-		mNameText = GetChildByType<UILabel>();
+		mNameText = FindChildByType<UILabel>();
 
 		onDraw += [&]() { CursorAreaEventsListener::OnDrawn(); };
 		RetargetStatesAnimations();
@@ -58,7 +58,7 @@ namespace Editor
 		const UIAssetIcon& other = dynamic_cast<const UIAssetIcon&>(otherActor);
 
 		UIWidget::CopyData(other);
-		mNameText = GetChildByType<UILabel>();
+		mNameText = FindChildByType<UILabel>();
 	}
 
 	void UIAssetIcon::SetSelected(bool selected)

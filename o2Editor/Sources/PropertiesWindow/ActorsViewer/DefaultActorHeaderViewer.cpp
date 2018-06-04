@@ -3,13 +3,14 @@
 
 #include "Core/Actions/ActorsPropertyChange.h"
 #include "Core/EditorApplication.h"
-#include "PropertiesWindow/Properties/AssetProperty.h"
-#include "PropertiesWindow/Properties/BooleanProperty.h"
-#include "PropertiesWindow/Properties/LayerProperty.h"
-#include "PropertiesWindow/Properties/StringProperty.h"
-#include "PropertiesWindow/Properties/TagProperty.h"
+#include "Core/Properties/Widgets/AssetProperty.h"
+#include "Core/Properties/Widgets/BooleanProperty.h"
+#include "Core/Properties/Widgets/LayerProperty.h"
+#include "Core/Properties/Widgets/StringProperty.h"
+#include "Core/Properties/Widgets/TagProperty.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Actor.h"
+#include "SceneWindow/SceneEditScreen.h"
 #include "UI/Button.h"
 #include "UI/DropDown.h"
 #include "UI/EditBox.h"
@@ -18,6 +19,7 @@
 #include "UI/UIManager.h"
 #include "UI/Widget.h"
 #include "UI/WidgetLayout.h"
+#include "UI/WidgetState.h"
 
 namespace Editor
 {
@@ -27,30 +29,28 @@ namespace Editor
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 42;
 
-		mEnableProperty = mnew BooleanProperty(o2UI.CreateWidget<UIToggle>("actor head enable"));
-		*mEnableProperty->GetWidget()->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
+		mEnableProperty = o2UI.CreateWidget<BooleanProperty>("actor head enable");
+		*mEnableProperty->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
 		mEnableProperty->SetValuePath("enabled");
 		mEnableProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mEnableProperty->GetWidget());
+		mDataView->AddChild(mEnableProperty);
 
-		mNameProperty = mnew StringProperty(o2UI.CreateWidget<UIEditBox>("actor head name"));
-		*mNameProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 15, 17, 2);
+		mNameProperty = o2UI.CreateWidget<StringProperty>("actor head name");
+		*mNameProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 15, 17, 2);
 		mNameProperty->SetValuePath("name");
 		mNameProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mNameProperty->GetWidget());
+		mDataView->AddChild(mNameProperty);
 
-		mLockProperty = mnew BooleanProperty(o2UI.CreateWidget<UIToggle>("actor head lock"));
-		*mLockProperty->GetWidget()->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, -1));
+		mLockProperty = o2UI.CreateWidget<BooleanProperty>("actor head lock");
+		*mLockProperty->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, -1));
 		mLockProperty->SetValuePath("locked");
 		mLockProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mLockProperty->GetWidget());
+		mDataView->AddChild(mLockProperty);
 
 
 		auto prototypeRoot = mDataView->AddChildWidget(mnew UIWidget());
 		prototypeRoot->name = "prototype";
 		*prototypeRoot->layout = UIWidgetLayout::BothStretch();
-
-		ExtractPropertyValueType<UIWidget::transparency_PROPERTY>::type vv = 6;
 
 		prototypeRoot->AddState("visible", Animation::EaseInOut(prototypeRoot, &prototypeRoot->transparency, 0.0f, 1.0f, 0.1f));
 
@@ -58,9 +58,9 @@ namespace Editor
 		*linkImg->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
 		prototypeRoot->AddChild(linkImg);
 
-		mPrototypeProperty = mnew AssetProperty<ActorAssetRef>(o2UI.CreateWidget<UIWidget>("actor head asset property"));
-		*mPrototypeProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
-		prototypeRoot->AddChild(mPrototypeProperty->GetWidget());
+		mPrototypeProperty = o2UI.CreateWidget<AssetProperty<ActorAssetRef>>("actor head asset property");
+		*mPrototypeProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
+		prototypeRoot->AddChild(mPrototypeProperty);
 
 		mPrototypeApplyBtn = o2UI.CreateWidget<UIButton>("accept prototype");
 		*mPrototypeApplyBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-40, -18));
@@ -81,21 +81,21 @@ namespace Editor
 		*tagsImg->layout = UIWidgetLayout::Based(BaseCorner::LeftBottom, Vec2F(20, 20), Vec2F(1, 1));
 		mDataView->AddChild(tagsImg);
 
-		mTagsProperty = mnew TagsProperty(o2UI.CreateWidget<UIEditBox>("actor head tags"));
-		*mTagsProperty->GetWidget()->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 21, 129, 17, 3);
+		mTagsProperty = o2UI.CreateWidget<TagsProperty>("actor head tags");
+		*mTagsProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 21, 129, 17, 3);
 		mTagsProperty->SetValuePath("tags");
 		mTagsProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mTagsProperty->GetWidget());
+		mDataView->AddChild(mTagsProperty);
 
 		auto layerImg = o2UI.CreateImage("ui/UI2_layer_big.png");
 		*layerImg->layout = UIWidgetLayout::Based(BaseCorner::RightBottom, Vec2F(20, 20), Vec2F(-109, 1));
 		mDataView->AddChild(layerImg);
 
-		mLayerProperty = mnew LayerProperty(o2UI.CreateWidget<UIDropDown>("actor head layer"));
-		*mLayerProperty->GetWidget()->layout = UIWidgetLayout::Based(BaseCorner::RightBottom, Vec2F(106, 17), Vec2F(-4, 3));
+		mLayerProperty = o2UI.CreateWidget<LayerProperty>("actor head layer");
+		*mLayerProperty->layout = UIWidgetLayout::Based(BaseCorner::RightBottom, Vec2F(106, 17), Vec2F(-4, 3));
 		mLayerProperty->SetValuePath("layer");
 		mLayerProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
-		mDataView->AddChild(mLayerProperty->GetWidget());
+		mDataView->AddChild(mLayerProperty);
 
 		Animation protoStateAnim = Animation::EaseInOut(mDataView, &mDataView->layout->minHeight, 42.0f, 62.0f, 0.1f);
 		*protoStateAnim.AddAnimationValue(&prototypeRoot->enabled) = AnimatedValue<bool>::Linear(false, true, 0.1f);
@@ -144,7 +144,7 @@ namespace Editor
 		mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
 			actors, [](Actor* x) { return &x->prototype; });
 
-		*mDataView->state["prototype"] = mPrototypeProperty->GetCommonValue().IsValid();
+		mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
 
 		mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
 			actors, prototypes, [](Actor* x) { return &x->tags; });
@@ -180,7 +180,7 @@ namespace Editor
 	void DefaultActorHeaderViewer::OnRevertPrototypePressed()
 	{
 		bool areViewActorsAssets = mActors[0]->IsAsset();
-		o2EditorProperties.SetTarget(nullptr);
+		o2EditorPropertiesWindow.SetTarget(nullptr);
 
 		Vector<Actor*> revertingActors = GetRootApplyActors();
 
@@ -201,7 +201,7 @@ namespace Editor
 				mActors.Add(o2Scene.GetActorByID(id));
 		}
 
-		o2EditorProperties.SetTargets(mActors.Cast<IObject*>());
+		o2EditorPropertiesWindow.SetTargets(mActors.Cast<IObject*>());
 	}
 
 	void DefaultActorHeaderViewer::OnBreakPrototypePressed()
@@ -237,7 +237,7 @@ namespace Editor
 	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
 	{
 		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedActors(), nullptr, path, prevValue, newValue);
+			o2EditorSceneScreen.GetSelectedActors(), path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);
 	}

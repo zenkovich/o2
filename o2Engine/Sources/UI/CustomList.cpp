@@ -41,7 +41,7 @@ namespace o2
 		mSelectionLayout(other.mSelectionLayout), selectedItem(this), selectedItems(this),
 		selectedItemPos(this), itemsCount(this)
 	{
-		mVerLayout = GetChildByType<UIVerticalLayout>();
+		mVerLayout = FindChildByType<UIVerticalLayout>();
 
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
 		mItemSample->ExcludeFromScene();
@@ -506,7 +506,7 @@ namespace o2
 
 		UIScrollArea::CopyData(other);
 
-		mVerLayout = GetChildByType<UIVerticalLayout>();
+		mVerLayout = FindChildByType<UIVerticalLayout>();
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
 		mItemSample->ExcludeFromScene();
 		mItemSample->SetLayoutDirty();

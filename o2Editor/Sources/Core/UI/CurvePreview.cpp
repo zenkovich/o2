@@ -74,7 +74,7 @@ namespace Editor
 	{
 		const UICurvePreview& other = dynamic_cast<const UICurvePreview&>(otherActor);
 
-		UIWidget::operator=(other);
+		UIWidget::CopyData(otherActor);
 
 		mBackColor = other.mBackColor;
 		mCurveColor = other.mCurveColor;
@@ -93,6 +93,9 @@ namespace Editor
 
 	void UICurvePreview::Redraw()
 	{
+		if (!mCurve)
+			return;
+
 		TextureRef texture = mSprite->GetTexture();
 		if (!texture || texture->GetSize() != layout->GetSize())
 		{

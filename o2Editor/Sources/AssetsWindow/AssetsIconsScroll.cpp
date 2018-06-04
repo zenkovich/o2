@@ -374,7 +374,7 @@ namespace Editor
 				targets = mSelectedPreloadedAssets.Cast<IObject*>();
 
 			if (!targets.IsEmpty())
-				o2EditorProperties.SetTargets(targets, THIS_FUNC(CheckPreloadedAssetsSaving));
+				o2EditorPropertiesWindow.SetTargets(targets, THIS_FUNC(CheckPreloadedAssetsSaving));
 
 			mChangePropertiesTargetsFromThis = false;
 		}
@@ -416,8 +416,8 @@ namespace Editor
 
 		mDragIcon = other.mDragIcon->CloneAs<UIAssetIcon>();
 
-		mGrid = GetChildByType<UIGridLayout>();
-		mContextMenu = GetChildByType<UIContextMenu>();
+		mGrid = FindChildByType<UIGridLayout>();
+		mContextMenu = FindChildByType<UIContextMenu>();
 
 		mHightlightLayout = other.mHightlightLayout;
 		mHightlightSprite = other.mHightlightSprite->CloneAs<Sprite>();

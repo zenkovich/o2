@@ -1814,8 +1814,6 @@ namespace o2
 							   Dictionary<const Component*, Component*>& componentsMap,
 							   bool isSourcePrototype)
 	{
-		dest->CopyData(*source);
-
 		if (!dest->mPrototype && source->mPrototype)
 		{
 			dest->mPrototype = source->mPrototype;
@@ -1869,6 +1867,7 @@ namespace o2
 		}
 
 		dest->SetLayer(source->mLayer);
+		dest->CopyData(*source);
 	}
 
 	void Actor::ProcessPrototypeMaking(Actor* dest, Actor* source, Vector<Actor**>& actorsPointers,

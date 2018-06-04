@@ -2,9 +2,9 @@
 
 #include "Assets/AtlasAsset.h"
 #include "Assets/ImageAsset.h"
-#include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
-#include "PropertiesWindow/Properties/AssetProperty.h"
+#include "Core/Properties/Widgets/AssetProperty.h"
 #include "Events/CursorEventsArea.h"
+#include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 
 using namespace o2;
 
@@ -101,7 +101,7 @@ namespace Editor
 		void SetupAtlasProperty();
 
 		// It is called when atlas property was changed
-		void OnAtlasPropertyChanged();
+		void OnAtlasPropertyChanged(IPropertyField* field);
 
 		// Creates grid sprite
 		Sprite* CreateGridSprite();
@@ -154,7 +154,7 @@ CLASS_METHODS_META(Editor::ImageAssetPropertiesViewer)
 	PROTECTED_FUNCTION(void, UpdateBordersAnchors);
 	PROTECTED_FUNCTION(void, UpdateBordersValue);
 	PROTECTED_FUNCTION(void, SetupAtlasProperty);
-	PROTECTED_FUNCTION(void, OnAtlasPropertyChanged);
+	PROTECTED_FUNCTION(void, OnAtlasPropertyChanged, IPropertyField*);
 	PROTECTED_FUNCTION(Sprite*, CreateGridSprite);
 }
 END_META;

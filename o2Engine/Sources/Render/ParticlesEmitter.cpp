@@ -230,7 +230,7 @@ namespace o2
 
 	void ParticlesEmitter::UpdateMesh()
 	{
-		if (mParticlesMesh->GetMaxVertexCount() < mParticlesNumLimit*4)
+		if (mParticlesMesh->GetMaxVertexCount() < (UInt)mParticlesNumLimit*4)
 			mParticlesMesh->Resize(mParticlesNumLimit*4, mParticlesNumLimit*2);
 
 		mParticlesMesh->vertexCount = 0;

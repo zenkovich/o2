@@ -95,7 +95,7 @@ namespace o2
 
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
-		mItemsLayout       = GetChildByType<UIVerticalLayout>();
+		mItemsLayout       = FindChildByType<UIVerticalLayout>();
 
 		RetargetStatesAnimations();
 		SetEnableForcible(false);
@@ -251,7 +251,7 @@ namespace o2
 			if (!subChild)
 				subChild = AddItem(subMenu);
 
-			UIContextMenu* subContext = subChild->GetChildByType<UIContextMenu>();
+			UIContextMenu* subContext = subChild->FindChildByType<UIContextMenu>();
 			if (!subContext)
 			{
 				subContext = CloneAs<UIContextMenu>();
@@ -421,7 +421,7 @@ namespace o2
 			}
 		}
 
-		if (itemUnderCursor && itemUnderCursor->GetChildByType<UIContextMenu>() == nullptr)
+		if (itemUnderCursor && itemUnderCursor->FindChildByType<UIContextMenu>() == nullptr)
 		{
 			HideWithParent();
 			HideWithChild();
@@ -527,7 +527,7 @@ namespace o2
 				return;
 			}
 
-			UIContextMenu* subContext = subChild->GetChildByType<UIContextMenu>();
+			UIContextMenu* subContext = subChild->FindChildByType<UIContextMenu>();
 			if (!subContext)
 			{
 				o2Debug.LogError("Failed to remove context item %s", path);
@@ -687,7 +687,7 @@ namespace o2
 		mSeparatorSample   = other.mSeparatorSample->CloneAs<UIWidget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
-		mItemsLayout       = GetChildByType<UIVerticalLayout>();
+		mItemsLayout       = FindChildByType<UIVerticalLayout>();
 		mMaxVisibleItems   = other.mMaxVisibleItems;
 
 		mFitSizeMin = other.mFitSizeMin;
@@ -877,7 +877,7 @@ namespace o2
 			if (auto shortcutLayer = contextItem->GetLayerDrawable<Text>("shortcut"))
 				res.shortcut = contextItem->GetShortcut();
 
-			if (auto subMenu = contextItem->GetChildByType<UIContextMenu>())
+			if (auto subMenu = contextItem->FindChildByType<UIContextMenu>())
 				res.subItems = subMenu->GetItems();
 
 			res.checked = contextItem->IsChecked();
@@ -896,7 +896,7 @@ namespace o2
 	UIContextMenuItem::UIContextMenuItem(const UIContextMenuItem& other):
 		UIWidget(other), text(this)
 	{
-		mSubMenu = GetChildByType<UIContextMenu>();
+		mSubMenu = FindChildByType<UIContextMenu>();
 		if (mSubMenu)
 			mSubMenu->Hide(true);
 
@@ -967,7 +967,7 @@ namespace o2
 
 		UIWidget::CopyData(other);
 
-		mSubMenu = GetChildByType<UIContextMenu>();
+		mSubMenu = FindChildByType<UIContextMenu>();
 		if (mSubMenu)
 			mSubMenu->Hide(true);
 	}

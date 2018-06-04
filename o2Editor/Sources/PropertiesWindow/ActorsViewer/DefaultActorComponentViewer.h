@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/IPropertyField.h"
 #include "PropertiesWindow/ActorsViewer/IActorComponentViewer.h"
-#include "PropertiesWindow/Properties/FieldPropertiesInfo.h"
-#include "PropertiesWindow/Properties/IPropertyField.h"
 
 namespace Editor
 {
@@ -36,10 +36,6 @@ namespace Editor
 		Vector<Component*>  mTargetComponents;        // Target components
 		FieldPropertiesInfo mFieldProperties;         // Field properties information
 		const Type*         mComponentType = nullptr; // Target component type
-
-	protected:
-		// It is called when some property changed, stores action for undo
-		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
 	};
 }
 
@@ -62,6 +58,5 @@ CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 	PUBLIC_FUNCTION(const Type*, GetComponentType);
 	PUBLIC_FUNCTION(void, SepcializeComponentType, const Type*);
 	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

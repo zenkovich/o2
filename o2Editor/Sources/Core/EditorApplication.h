@@ -20,6 +20,7 @@ namespace Editor
 	class EditorConfig;
 	class IAction;
 	class MenuPanel;
+	class Properties;
 	class ToolsPanel;
 	class UIRoot;
 	class WindowsManager;
@@ -60,6 +61,9 @@ namespace Editor
 		// It is called when action was done
 		void DoneAction(IAction* action);
 
+		// It is called when some property changed, stores action for undo
+		void DoneActorPropertyChangeAction(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
+
 		// Resets undo and redo actions
 		void ResetUndoActions();
 
@@ -79,6 +83,8 @@ namespace Editor
 		bool IsSceneChanged() const;
 
 	protected:
+		const bool mNeedRebuildWndStyle = true; // Is need to rebuild dockable windows style
+
 		Sprite*            mBackground;     // Background sprite
 		Sprite*            mBackSign;       // Background o2 signature
 
@@ -88,6 +94,8 @@ namespace Editor
 		ToolsPanel*        mToolsPanel;     // Tools panel
 		MenuPanel*         mMenuPanel;      // Menu panel
 
+		Properties*        mProperties;     // Properties manager
+
 		EditorActionsVec   mActions;        // Done actions
 		EditorActionsVec   mForwardActions; // Forward actions, what you can redo
 
@@ -96,6 +104,9 @@ namespace Editor
 		int                mDrawCalls;      // Draw calls count, stored before beginning rendering
 
 	protected:
+		// Check style rebuilding and loads editor UI style
+		void LoadUIStyle();
+
 		// Calling on updating
 		void OnUpdate(float dt);
 

@@ -259,6 +259,9 @@ namespace o2
 				layout->mData->weight.y += child->GetHeightWeightWithChildren();
 		}
 
+		if (layout->mData->weight.y < FLT_EPSILON)
+			layout->mData->weight.y = 1.0f;
+
 		layout->mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
 	}
 

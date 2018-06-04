@@ -44,36 +44,53 @@ namespace Editor
 		void RebuildAnimationAssetIcon();
 		void RebuildAssetsGridScroll();
 		void RebuildLinkBtn();
-		void RebuildSinglelineEditBoxWithArrows();
 		void RebuildSinglelineEditboxProperty();
 		void RebuildEditorDropdown();
 		void RebuildRedEditBoxStyle();
 		void RebuildGreenEditBoxStyle();
 
+		void RebuildFloatProperty();
+		void RebuildRedFloatProperty();
+		void RebuildGreenFloatProperty();
+		void RebuildIntegerProperty();
 		void RebuildActorPropety();
+		void RebuildAssetsPropeties();
+		void RebuildBoolPropety();
+		void RebuildBorderFProperty();
+		void RebuildBorderIProperty();
 		void RebuildColorPropety();
-		void RebuildAssetPropety();
 		void RebuildComponentProperty();
-		void RebuildVector2Property();
+		void RebuildCurveProperty();
+		void RebuildEnumProperty();
+		void RebuildLayerProperty();
+		void RebuildRectFProperty();
+		void RebuildRectIProperty();
+		void RebuildStringProperty();
+		void RebuildWStringProperty();
+		void RebuildTagProperty();
+		void RebuildVector2FProperty();
+		void RebuildVector2IProperty();
 		void RebuildColoredVector2Property();
-		void RebuildRectProperty();
-		void RebuildNewRectProperty();
 
-		void RebuildActorPropetyWithCaption();
-		void RebuildColorPropetyWithCaption();
-		void RebuildAssetPropetyWithCaption();
-		void RebuildComponentPropertyWithCaption();
-		void RebuildVector2PropertyWithCaption();
-		void RebuildColoredVector2PropertyWithCaption();
-		void RebuildRectPropertyWithCaption();
-		void RebuildNewRectPropertyWithCaption();
+		void RebuildPropertiesWithCaptins();
 
 		void RebuildActorHeadEnableToggle();
+		void RebuildActorHeadEnableProperty();
+
 		void RebuildActorHeadName();
+		void RebuildActorHeadNameProperty();
+
 		void RebuildActorHeadLockToggle();
+		void RebuildActorHeadLockProperty();
+
 		void RebuildActorHeadActorAssetProperty();
+
+		void RebuildActorHeadTags();
 		void RebuildActorHeadTagsProperty();
+
+		void RebuildActorHeadLayer();
 		void RebuildActorHeadLayerProperty();
+
 		void RebuildAcceptPrototypeBtn();
 		void RebuildRevertPrototypeBtn();
 		void RebuildBreakPrototypeBtn();
@@ -83,7 +100,6 @@ namespace Editor
 		void RebuildVerWideScrollbar();
 		void RebuildHorWideProgressbar();
 		void RebuildVerWideProgressbar();
-		void RebuildBooleanProperty();
 
 		void RebuildEditorUIManager();
 
@@ -92,6 +108,9 @@ namespace Editor
 	private: 
 		template<typename _property_type>
 		void BuildPropertyWithCaption(const String& propertyStyle, const String& propertyWithCaptionStyle);
+
+		template<typename _type>
+		void RebuildAssetPropety();
 	};
 
 	template<typename _property_type>
@@ -102,14 +121,73 @@ namespace Editor
 		UILabel* label = o2UI.CreateWidget<UILabel>();
 		label->name = "propertyName";
 		label->horAlign = HorAlign::Left;
-		label->layout->widthWeight = 3.0f;
+		label->layout->widthWeight = 0.3f;
 		label->horOverflow = UILabel::HorOverflow::Dots;
-		label->text = name;
 
 		property->AddChild(label, 0);
 
 		o2UI.AddWidgetStyle(property, propertyWithCaptionStyle);
 	}
+
+	template<typename _type>
+	void EditorUIStyleBuilder::RebuildAssetPropety()
+	{
+		auto sample = mnew AssetProperty<_type>();
+		sample->layout->minHeight = 20;
+		sample->expandHeight = true;
+		sample->expandWidth = true;
+		sample->fitByChildren = false;
+
+		auto layout = mnew UIWidget();
+		layout->name = "layout";
+		sample->AddChild(layout);
+
+		auto box = mnew UIWidget();
+		box->name = "box";
+		box->SetFocusable(true);
+		*box->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+
+		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
+									   Layout::BothStretch(-9, -9, -9, -9));
+
+		auto selectLayer = box->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"),
+										 Layout::BothStretch(-9, -9, -9, -9));
+
+		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"),
+										Layout::BothStretch(-9, -9, -9, -9));
+
+		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		box->AddState("hover", Animation::EaseInOut(box, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		auto nameText = mnew Text("stdFont.ttf");
+		nameText->text = "--";
+		nameText->horAlign = HorAlign::Left;
+		nameText->verAlign = VerAlign::Middle;
+		nameText->dotsEngings = true;
+		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
+
+		box->SetFocusable(true);
+
+		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
+		*linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
+		box->AddChild(linkBtn);
+
+		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
+		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+
+		layout->AddChild(box);
+		layout->AddChild(revertBtn);
+
+		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		sample->AddState("revert", revertStateAnim);
+
+		o2UI.AddWidgetStyle(sample, "standard");
+	}
+
 }
 
 CLASS_BASES_META(Editor::EditorUIStyleBuilder)
@@ -159,24 +237,43 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildAnimationAssetIcon);
 	PUBLIC_FUNCTION(void, RebuildAssetsGridScroll);
 	PUBLIC_FUNCTION(void, RebuildLinkBtn);
-	PUBLIC_FUNCTION(void, RebuildSinglelineEditBoxWithArrows);
 	PUBLIC_FUNCTION(void, RebuildSinglelineEditboxProperty);
 	PUBLIC_FUNCTION(void, RebuildEditorDropdown);
-	PUBLIC_FUNCTION(void, RebuildActorPropety);
-	PUBLIC_FUNCTION(void, RebuildColorPropety);
-	PUBLIC_FUNCTION(void, RebuildAssetPropety);
-	PUBLIC_FUNCTION(void, RebuildComponentProperty);
-	PUBLIC_FUNCTION(void, RebuildVector2Property);
 	PUBLIC_FUNCTION(void, RebuildRedEditBoxStyle);
 	PUBLIC_FUNCTION(void, RebuildGreenEditBoxStyle);
+	PUBLIC_FUNCTION(void, RebuildFloatProperty);
+	PUBLIC_FUNCTION(void, RebuildRedFloatProperty);
+	PUBLIC_FUNCTION(void, RebuildGreenFloatProperty);
+	PUBLIC_FUNCTION(void, RebuildIntegerProperty);
+	PUBLIC_FUNCTION(void, RebuildActorPropety);
+	PUBLIC_FUNCTION(void, RebuildAssetsPropeties);
+	PUBLIC_FUNCTION(void, RebuildBoolPropety);
+	PUBLIC_FUNCTION(void, RebuildBorderFProperty);
+	PUBLIC_FUNCTION(void, RebuildBorderIProperty);
+	PUBLIC_FUNCTION(void, RebuildColorPropety);
+	PUBLIC_FUNCTION(void, RebuildComponentProperty);
+	PUBLIC_FUNCTION(void, RebuildCurveProperty);
+	PUBLIC_FUNCTION(void, RebuildEnumProperty);
+	PUBLIC_FUNCTION(void, RebuildLayerProperty);
+	PUBLIC_FUNCTION(void, RebuildRectFProperty);
+	PUBLIC_FUNCTION(void, RebuildRectIProperty);
+	PUBLIC_FUNCTION(void, RebuildStringProperty);
+	PUBLIC_FUNCTION(void, RebuildWStringProperty);
+	PUBLIC_FUNCTION(void, RebuildTagProperty);
+	PUBLIC_FUNCTION(void, RebuildVector2FProperty);
+	PUBLIC_FUNCTION(void, RebuildVector2IProperty);
 	PUBLIC_FUNCTION(void, RebuildColoredVector2Property);
-	PUBLIC_FUNCTION(void, RebuildRectProperty);
-	PUBLIC_FUNCTION(void, RebuildNewRectProperty);
+	PUBLIC_FUNCTION(void, RebuildPropertiesWithCaptins);
 	PUBLIC_FUNCTION(void, RebuildActorHeadEnableToggle);
+	PUBLIC_FUNCTION(void, RebuildActorHeadEnableProperty);
 	PUBLIC_FUNCTION(void, RebuildActorHeadName);
+	PUBLIC_FUNCTION(void, RebuildActorHeadNameProperty);
 	PUBLIC_FUNCTION(void, RebuildActorHeadLockToggle);
+	PUBLIC_FUNCTION(void, RebuildActorHeadLockProperty);
 	PUBLIC_FUNCTION(void, RebuildActorHeadActorAssetProperty);
+	PUBLIC_FUNCTION(void, RebuildActorHeadTags);
 	PUBLIC_FUNCTION(void, RebuildActorHeadTagsProperty);
+	PUBLIC_FUNCTION(void, RebuildActorHeadLayer);
 	PUBLIC_FUNCTION(void, RebuildActorHeadLayerProperty);
 	PUBLIC_FUNCTION(void, RebuildAcceptPrototypeBtn);
 	PUBLIC_FUNCTION(void, RebuildRevertPrototypeBtn);
@@ -187,7 +284,6 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildVerWideScrollbar);
 	PUBLIC_FUNCTION(void, RebuildHorWideProgressbar);
 	PUBLIC_FUNCTION(void, RebuildVerWideProgressbar);
-	PUBLIC_FUNCTION(void, RebuildBooleanProperty);
 	PUBLIC_FUNCTION(void, RebuildEditorUIManager);
 }
 END_META;

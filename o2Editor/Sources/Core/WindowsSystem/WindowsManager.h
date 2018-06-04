@@ -57,8 +57,6 @@ namespace Editor
 		void SaveCurrentWindowsLayout(const String& name);
 
 	protected:
-		const bool mNeedRebuildWndStyle = true; // Is need to rebuild dockable windows style
-
 		EditorWindowsVec   mEditorWindows;            // Editors windows list
 		UIDockWindowPlace* mMainDockPlace = nullptr;  // Main windows dock place
 		WndLayoutsDict     mAvailableLayouts;         // Available layouts

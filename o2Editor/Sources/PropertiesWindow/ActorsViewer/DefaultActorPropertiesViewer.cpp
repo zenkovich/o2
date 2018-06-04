@@ -3,9 +3,9 @@
 
 #include "Core/Actions/ActorsPropertyChange.h"
 #include "Core/EditorApplication.h"
-#include "PropertiesWindow/Properties/ObjectProperty.h"
-#include "PropertiesWindow/Properties/ObjectPtrProperty.h"
-#include "PropertiesWindow/PropertiesWindow.h"
+#include "Core/Properties/Properties.h"
+#include "Core/Properties/Widgets/ObjectProperty.h"
+#include "Core/Properties/Widgets/ObjectPtrProperty.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "UI/Label.h"
@@ -98,26 +98,12 @@ namespace Editor
 
 		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout,
 												 fields, mFieldProperties, "");
-
-		for (auto prop : mFieldProperties.properties)
-			prop.Value()->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 	}
 
 	bool DefaultActorPropertiesViewer::IsEmpty() const
 	{
 		return mPropertiesLayout->GetChildren().Count() == 0;
 	}
-
-	void DefaultActorPropertiesViewer::OnPropertyChanged(const String& path,
-														 const Vector<DataNode>& prevValue,
-														 const Vector<DataNode>& newValue)
-	{
-		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedActors(), mActorType, path, prevValue, newValue);
-
-		o2EditorApplication.DoneAction(action);
-	}
-
 }
 
 DECLARE_CLASS(Editor::DefaultActorPropertiesViewer);

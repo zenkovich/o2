@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "EditorApplication.h"
 
+#include "Actions/ActorsPropertyChange.h"
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
 #include "Application/Input.h"
 #include "Assets/Assets.h"
 #include "Core/Actions/IAction.h"
 #include "Core/MenuPanel.h"
+#include "Core/Properties/Properties.h"
 #include "Core/ToolsPanel.h"
 #include "Core/UIRoot.h"
 #include "Core/WindowsSystem/WindowsManager.h"
@@ -14,6 +16,7 @@
 #include "Render/Render.h"
 #include "Scene/Actor.h"
 #include "Scene/Components/ImageComponent.h"
+#include "SceneWindow/SceneEditScreen.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/MenuPanel.h"
 #include "UI/MenuPanel.h"
@@ -22,6 +25,7 @@
 #include "Utils/System/Time/Time.h"
 #include "Utils/System/Time/Timer.h"
 #include "Utils/Tasks/TaskManager.h"
+#include "UIStyle/EditorUIStyle.h"
 
 namespace Editor
 {
@@ -85,6 +89,14 @@ namespace Editor
 		mForwardActions.Clear();
 	}
 
+	void EditorApplication::DoneActorPropertyChangeAction(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
+	{
+		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
+			o2EditorSceneScreen.GetSelectedActors(), path, prevValue, newValue);
+
+		o2EditorApplication.DoneAction(action);
+	}
+
 	void EditorApplication::ResetUndoActions()
 	{
 		for (auto x : mActions)
@@ -142,6 +154,9 @@ namespace Editor
 		mConfig = mnew EditorConfig();
 		mConfig->LoadConfigs();
 
+		LoadUIStyle();
+
+		mProperties = mnew Properties();
 		mWindowsManager = mnew WindowsManager();
 		mMenuPanel = mnew MenuPanel();
 		mToolsPanel = mnew ToolsPanel();
@@ -234,6 +249,17 @@ namespace Editor
 		mInput->Update(dt);
 
 		mDrawCalls = mRender->GetDrawCallsCount();
+	}
+
+	void EditorApplication::LoadUIStyle()
+	{
+		if (mNeedRebuildWndStyle)
+		{
+			EditorUIStyleBuilder builder;
+			builder.RebuildEditorUIManager();
+		}
+
+		o2UI.LoadStyle("editor_ui_style.xml");
 	}
 
 	void EditorApplication::OnUpdate(float dt)

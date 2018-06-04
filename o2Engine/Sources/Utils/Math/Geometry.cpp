@@ -14,7 +14,7 @@ namespace o2
 		int newVertexCount = pointsCount*4;
 		int newPolyCount = (pointsCount - 1)*6;
 
-		if (newVertexCount > vertexSize)
+		if (newVertexCount > (int)vertexSize)
 		{
 			if (verticies)
 				delete[] verticies;
@@ -23,7 +23,7 @@ namespace o2
 			vertexSize = newVertexCount;
 		}
 
-		if (newPolyCount > polySize)
+		if (newPolyCount > (int)polySize)
 		{
 			if (indexes)
 				delete[] indexes;

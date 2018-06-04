@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/IPropertyField.h"
 #include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
-#include "PropertiesWindow/Properties/FieldPropertiesInfo.h"
-#include "PropertiesWindow/Properties/IPropertyField.h"
 
 namespace o2
 {

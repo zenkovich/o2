@@ -150,7 +150,7 @@ namespace o2
 	{
 		mHardLinesIndexData = mnew UInt16[mIndexBufferSize];
 
-		for (int i = 0; i < mIndexBufferSize/2; i++)
+		for (UInt i = 0; i < mIndexBufferSize/2; i++)
 		{
 			mHardLinesIndexData[i*2] = i;
 			mHardLinesIndexData[i*2 + 1] = i + 1;
