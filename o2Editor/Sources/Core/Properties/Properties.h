@@ -43,6 +43,9 @@ namespace Editor
 		// Free properties and put in cache
 		void FreeProperties(FieldPropertiesInfo& propertiesInfo);
 
+		// Free property field and put in cache
+		void FreeProperty(IPropertyField* field);
+
 		// Builds layout viewer by type for objects
 		void BuildObjectProperties(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo, const String& path, 
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
@@ -102,11 +105,14 @@ namespace Editor
 
 	protected:
 		typedef Vector<IPropertyField*> PropertiesFieldsVec;
+		typedef Dictionary<const Type*, PropertiesFieldsVec> TypePropertyDict;
 
 		int  mPropertyFieldsPoolStep = 5; // Field properties pools resize step						    
 		bool mPrivateVisible = false;     // Is private fields visible
 
 		PropertiesFieldsVec mAvailablePropertiesFields;  // Available properties fields
+
+		TypePropertyDict mPropertiesPool; // Pool of properties, grouped by property type
 
 		static IPropertyField::OnChangeCompletedFunc mOnPropertyCompletedChangingUndoCreateDelegate;
 

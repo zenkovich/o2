@@ -42,7 +42,7 @@ namespace Editor
 		}
 
 		if (mSpoiler)
-			mSpoiler->onExpand = THIS_FUNC(OnExpand);
+			mSpoiler->onExpand = THIS_FUNC(RebuildProperties);
 
 		expandHeight = true;
 		expandWidth = true;
@@ -63,6 +63,13 @@ namespace Editor
 				SetProxy<IObject*>(targetObj.first, (IObject*)mObjectType->CreateSample());
 		}
 
+		if (!mTargetObjects.IsEmpty())
+		{
+			const Type* objectType = GetProxy<IObject*>(mTargetObjects[0].first)->GetType().GetPointerType();
+			if (objectType != mObjectPtrType)
+				SpecializeTypeInternal(objectType);
+		}
+
 		mFieldProperties.Set(mTargetObjects.Select<Pair<IObject*, IObject*>>(
 			[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 		{
@@ -81,7 +88,36 @@ namespace Editor
 		if (type->GetUsage() != Type::Usage::Pointer)
 			return;
 
+		mObjectPtrType = type;
 		mObjectType = ((PointerType*)type)->GetUnpointedType();
+	}
+
+	void ObjectPtrProperty::SpecializeTypeInternal(const Type* type)
+	{
+		if (type->GetUsage() != Type::Usage::Pointer)
+			return;
+
+		mObjectPtrType = type;
+		mObjectType = ((PointerType*)type)->GetUnpointedType();
+
+		WString caption = GetCaption();
+		int sep = caption.Find(" [");
+		if (sep >= 0)
+			caption.Erase(sep);
+
+		caption += (WString)" [" + type->GetName() + "]";
+		SetCaption(caption);
+
+		o2EditorProperties.FreeProperties(mFieldProperties);
+		mPropertiesInitialized = false;
+
+		if (mSpoiler->IsExpanded())
+			RebuildProperties();
+	}
+
+	const Type* ObjectPtrProperty::GetSpecializedType() const
+	{
+		return mObjectPtrType;
 	}
 
 	void ObjectPtrProperty::SetCaption(const WString& text)
@@ -119,7 +155,7 @@ namespace Editor
 		return mFieldProperties;
 	}
 
-	void ObjectPtrProperty::OnExpand()
+	void ObjectPtrProperty::RebuildProperties()
 	{
 		if (mPropertiesInitialized)
 			return;

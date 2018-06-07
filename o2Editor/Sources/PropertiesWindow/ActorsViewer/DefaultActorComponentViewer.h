@@ -25,10 +25,13 @@ namespace Editor
 		const Type* GetComponentType() const;
 
 		// Specialize viewing component type. Creates all using properties
-		void SepcializeComponentType(const Type* type);
+		void SpecializeComponentType(const Type* type);
 
 		// Updates all component values
-		void Refresh();
+		void Refresh() override;
+
+		// Rebuilds properties layout
+		void Rebuild() override;
 
 		IOBJECT(DefaultActorComponentViewer);
 
@@ -56,7 +59,8 @@ CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
 	PUBLIC_FUNCTION(const Type*, GetComponentType);
-	PUBLIC_FUNCTION(void, SepcializeComponentType, const Type*);
+	PUBLIC_FUNCTION(void, SpecializeComponentType, const Type*);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, Rebuild);
 }
 END_META;

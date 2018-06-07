@@ -76,6 +76,11 @@ namespace Editor
 		mObjectType = type;
 	}
 
+	const Type* ObjectProperty::GetSpecializedType() const
+	{
+		return mObjectType;
+	}
+
 	void ObjectProperty::SetCaption(const WString& text)
 	{
 		mSpoiler->SetCaption(text);

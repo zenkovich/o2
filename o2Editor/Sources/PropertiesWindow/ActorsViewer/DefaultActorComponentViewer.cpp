@@ -42,16 +42,13 @@ namespace Editor
 		return mComponentType;
 	}
 
-	void DefaultActorComponentViewer::SepcializeComponentType(const Type* type)
+	void DefaultActorComponentViewer::SpecializeComponentType(const Type* type)
 	{
-		mDataView->name = "component " + type->GetName();
+		if (mComponentType == type)
+			return;
+
 		mComponentType = type;
-
-		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, type, mFieldProperties, 
-			(String)"component:" + type->GetName() + "/");
-
-		mSpoiler->name = "spoiler " + type->GetName();
-		mPropertiesLayout->name = "properties " + type->GetName();
+		Rebuild();
 	}
 
 	void DefaultActorComponentViewer::Refresh()
@@ -59,6 +56,18 @@ namespace Editor
 		mFieldProperties.Set(mTargetComponents.Select<Pair<IObject*, IObject*>>([](Component* x) {
 			return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink())); 
 		}));
+	}
+
+	void DefaultActorComponentViewer::Rebuild()
+	{
+		mDataView->name = "component " + mComponentType->GetName();
+
+		o2EditorProperties.FreeProperties(mFieldProperties);
+		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, mComponentType, mFieldProperties,
+			(String)"component:" + mComponentType->GetName() + "/");
+
+		mSpoiler->name = "spoiler " + mComponentType->GetName();
+		mPropertiesLayout->name = "properties " + mComponentType->GetName();
 	}
 
 }

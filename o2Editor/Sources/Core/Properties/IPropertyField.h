@@ -87,6 +87,9 @@ namespace Editor
 		// Specializes field type
 		virtual void SpecializeType(const Type* type) {}
 
+		// Returns specialized type
+		virtual const Type* GetSpecializedType() const { return nullptr; }
+
 		// Sets targets pointers
 		template<typename _type>
 		void SetValuePointers(const Vector<_type*>& targets);
@@ -481,6 +484,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SetRevertable, bool);
 	PUBLIC_FUNCTION(bool, IsRevertable);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 	PROTECTED_FUNCTION(void, CheckRevertableState);

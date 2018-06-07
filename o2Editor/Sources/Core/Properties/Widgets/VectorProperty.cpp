@@ -197,6 +197,11 @@ namespace Editor
 		mType = (VectorType*)type;
 	}
 
+	const Type* VectorProperty::GetSpecializedType() const
+	{
+		return mType;
+	}
+
 	void VectorProperty::SetCaption(const WString& text)
 	{
 		mSpoiler->SetCaption(text);

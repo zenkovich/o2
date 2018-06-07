@@ -240,7 +240,7 @@ namespace Editor
 				auto newViewer = (IActorComponentViewer*)(viewerSample->GetType().CreateSample());
 
 				if (usingDefaultComponentViewer)
-					((DefaultActorComponentViewer*)newViewer)->SepcializeComponentType(type);
+					((DefaultActorComponentViewer*)newViewer)->SpecializeComponentType(type);
 
 				mComponentViewersPool[type].Add(newViewer);
 			}

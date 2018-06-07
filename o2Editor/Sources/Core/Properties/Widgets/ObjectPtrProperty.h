@@ -37,8 +37,11 @@ namespace Editor
 		// Returns editing by this field type
 		const Type* GetFieldType() const override;
 
-		// Specializes field type
+		// Specializes field type. Just storing type, but not creating fields
 		void SpecializeType(const Type* type) override;
+
+		// Returns specialized type
+		const Type* GetSpecializedType() const override;
 
 		// Sets property caption
 		void SetCaption(const WString& text) override;
@@ -65,6 +68,7 @@ namespace Editor
 
 	protected:
 		const Type*         mObjectType = nullptr;          // Type of target objects
+		const Type*         mObjectPtrType = nullptr;       // Type of target object pointer
 
 		bool                mPropertiesInitialized = false; // True when properties were built and initialized
 		TargetsVec          mTargetObjects;                 // Target objects
@@ -79,8 +83,11 @@ namespace Editor
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
-		// It is called when expanding spoiler, initializes properties
-		void OnExpand();
+		// Specializes field type and creates fields
+		void SpecializeTypeInternal(const Type* type);
+
+		// Rebuilds properties list
+		void RebuildProperties();
 	};
 }
 
@@ -92,6 +99,7 @@ END_META;
 CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 {
 	PROTECTED_FIELD(mObjectType);
+	PROTECTED_FIELD(mObjectPtrType);
 	PROTECTED_FIELD(mPropertiesInitialized);
 	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mFieldProperties);
@@ -105,6 +113,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(void, Expand);
@@ -114,6 +123,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PUBLIC_FUNCTION(const FieldPropertiesInfo&, GetPropertiesInfo);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, OnExpand);
+	PROTECTED_FUNCTION(void, SpecializeTypeInternal, const Type*);
+	PROTECTED_FUNCTION(void, RebuildProperties);
 }
 END_META;

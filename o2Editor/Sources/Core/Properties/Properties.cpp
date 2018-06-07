@@ -135,7 +135,19 @@ namespace Editor
 
 	void Properties::FreeProperties(FieldPropertiesInfo& propertiesInfo)
 	{
+		for (auto prop : propertiesInfo.properties)
+			FreeProperty(prop.Value());
 
+		propertiesInfo.properties.Clear();
+	}
+
+	void Properties::FreeProperty(IPropertyField* field)
+	{
+		if (!mPropertiesPool.ContainsKey(&field->GetType()))
+			mPropertiesPool.Add(&field->GetType(), PropertiesFieldsVec());
+
+		mPropertiesPool[&field->GetType()].Add(field);
+		field->SetParent(nullptr, false);
 	}
 
 	bool Properties::IsPropertyVisible(FieldInfo* info, bool allowPrivate) const
@@ -231,7 +243,13 @@ namespace Editor
 												   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 												   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		IPropertyField* fieldProperty = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldPropertyType, "with caption"));
+		IPropertyField* fieldProperty = nullptr;
+
+		if (mPropertiesPool.ContainsKey(fieldPropertyType) && mPropertiesPool[fieldPropertyType].Count() > 0)
+			fieldProperty = mPropertiesPool[fieldPropertyType].PopBack();
+		else
+			fieldProperty = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldPropertyType, "with caption"));
+
 		fieldProperty->onChanged = onChanged;
 		fieldProperty->onChangeCompleted = onChangeCompleted;
 		fieldProperty->SetCaption(name);
@@ -243,7 +261,23 @@ namespace Editor
 												  const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 												  const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		IPropertyField* fieldProperty = mnew ObjectProperty();
+		IPropertyField* fieldProperty = nullptr;
+
+		const Type* objectPropertyType = &TypeOf(ObjectProperty);
+		if (mPropertiesPool.ContainsKey(objectPropertyType) && mPropertiesPool[objectPropertyType].Count() > 0)
+		{
+			IPropertyField* sameTypeProperty = mPropertiesPool[objectPropertyType].
+				FindMatch([=](IPropertyField* fld) { return fld->GetSpecializedType() == type; });
+
+			if (sameTypeProperty)
+			{
+				fieldProperty = sameTypeProperty;
+				mPropertiesPool[objectPropertyType].Remove(fieldProperty);
+			}
+			else fieldProperty = mPropertiesPool[objectPropertyType].PopBack();
+		}
+		else fieldProperty = mnew ObjectProperty();
+
 		fieldProperty->onChanged = onChanged;
 		fieldProperty->onChangeCompleted = onChangeCompleted;
 		fieldProperty->SetCaption(name);
@@ -255,7 +289,23 @@ namespace Editor
 													 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 													 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		IPropertyField* fieldProperty = mnew ObjectPtrProperty();
+		IPropertyField* fieldProperty = nullptr;
+
+		const Type* objectPropertyType = &TypeOf(ObjectPtrProperty);
+		if (mPropertiesPool.ContainsKey(objectPropertyType) && mPropertiesPool[objectPropertyType].Count() > 0)
+		{
+			IPropertyField* sameTypeProperty = mPropertiesPool[objectPropertyType].
+				FindMatch([=](IPropertyField* fld) { return fld->GetSpecializedType() == type; });
+
+			if (sameTypeProperty)
+			{
+				fieldProperty = sameTypeProperty;
+				mPropertiesPool[objectPropertyType].Remove(fieldProperty);
+			}
+			else fieldProperty = mPropertiesPool[objectPropertyType].PopBack();
+		}
+		else fieldProperty = mnew ObjectPtrProperty();
+
 		fieldProperty->onChanged = onChanged;
 		fieldProperty->onChangeCompleted = onChangeCompleted;
 		fieldProperty->SetCaption(name);
@@ -270,7 +320,23 @@ namespace Editor
 		if (!IsFieldTypeSupported(type))
 			return nullptr;
 
-		IPropertyField* fieldProperty = mnew VectorProperty();
+		IPropertyField* fieldProperty = nullptr;
+
+		const Type* objectPropertyType = &TypeOf(VectorProperty);
+		if (mPropertiesPool.ContainsKey(objectPropertyType) && mPropertiesPool[objectPropertyType].Count() > 0)
+		{
+			IPropertyField* sameTypeProperty = mPropertiesPool[objectPropertyType].
+				FindMatch([=](IPropertyField* fld) { return fld->GetSpecializedType() == type; });
+
+			if (sameTypeProperty)
+			{
+				fieldProperty = sameTypeProperty;
+				mPropertiesPool[objectPropertyType].Remove(fieldProperty);
+			}
+			else fieldProperty = mPropertiesPool[objectPropertyType].PopBack();
+		}
+		else fieldProperty = mnew VectorProperty();
+
 		fieldProperty->onChanged = onChanged;
 		fieldProperty->onChangeCompleted = onChangeCompleted;
 		fieldProperty->SetCaption(name);
