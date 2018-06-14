@@ -121,7 +121,7 @@ namespace Editor
 		UILabel* label = o2UI.CreateWidget<UILabel>();
 		label->name = "propertyName";
 		label->horAlign = HorAlign::Left;
-		label->layout->widthWeight = 0.3f;
+		label->layout->widthWeight = 1.0f;
 		label->horOverflow = UILabel::HorOverflow::Dots;
 
 		property->AddChild(label, 0);

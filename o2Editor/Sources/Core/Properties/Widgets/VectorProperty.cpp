@@ -267,7 +267,11 @@ namespace Editor
 		Vector<DataNode> prevValues, newValues;
 
 		int newCount = mCountProperty->GetCommonValue();
-		auto countFI = mType->GetElementFieldInfo();
+		auto elementFieldInfo = mType->GetElementFieldInfo();
+
+		auto availableTypes = elementFieldInfo->GetType()->GetDerivedTypes();
+		auto elementCreateType = availableTypes.IsEmpty() ? elementFieldInfo->GetType() : availableTypes.First();
+
 		for (auto target : mValuesProxies)
 		{
 			void* targetPtr = GetProxyValuePointer(target.first);
@@ -279,7 +283,7 @@ namespace Editor
 			int lastCount = mType->GetObjectVectorSize(targetPtr);
 			for (int i = newCount; i < lastCount; i++)
 			{
-				countFI->Serialize(mType->GetObjectVectorElementPtr(targetPtr, i),
+				elementFieldInfo->Serialize(mType->GetObjectVectorElementPtr(targetPtr, i),
 								   *elementsData.AddNode("Element" + (String)i));
 			}
 
@@ -287,6 +291,12 @@ namespace Editor
 			newValues.Last()["Size"].SetValue(newCount);
 
 			mType->SetObjectVectorSize(targetPtr, newCount);
+
+			if (lastCount < newCount)
+			{
+				for (int i = lastCount; i < newCount; i++)
+					*((void**)mType->GetObjectVectorElementPtr(targetPtr, i)) = elementCreateType->CreateSample();
+			}
 		}
 
 		Refresh();

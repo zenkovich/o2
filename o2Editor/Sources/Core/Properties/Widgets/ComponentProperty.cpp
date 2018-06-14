@@ -198,7 +198,7 @@ namespace Editor
 
 	void ComponentProperty::OnKeyPressed(const Input::Key& key)
 	{
-		if (mBox && mBox->IsFocused() && key == VK_DELETE || key == VK_BACK)
+		if (mBox && mBox->IsFocused() && (key == VK_DELETE || key == VK_BACK))
 			SetValueByUser(nullptr);
 	}
 

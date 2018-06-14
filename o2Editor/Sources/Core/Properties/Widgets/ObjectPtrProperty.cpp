@@ -2,8 +2,11 @@
 #include "ObjectPtrProperty.h"
 
 #include "Core/Properties/Properties.h"
+#include "UI/Button.h"
+#include "UI/Label.h"
 #include "UI/Spoiler.h"
 #include "UI/UIManager.h"
+#include "UI/ContextMenu.h"
 
 using namespace o2;
 
@@ -42,7 +45,23 @@ namespace Editor
 		}
 
 		if (mSpoiler)
-			mSpoiler->onExpand = THIS_FUNC(RebuildProperties);
+			mSpoiler->onExpand = THIS_FUNC(Refresh);
+
+		auto typeContainer = mnew UIWidget();
+		typeContainer->layout->minHeight = 20;
+		mSpoiler->AddChild(typeContainer);
+
+		mTypeCaption = o2UI.CreateLabel("nullptr");
+		*mTypeCaption->layout = UIWidgetLayout(0, 1, 0.7f, 0, 0, 0, 0, 0);
+		typeContainer->AddChild(mTypeCaption);
+
+		mCreateDeleteButton = o2UI.CreateButton("Create");
+		*mCreateDeleteButton->layout = UIWidgetLayout(0.7f, 1, 1, 0, 0, 0, 0, 0);
+		mCreateDeleteButton->onClick = THIS_FUNC(OnCreateOrDeletePressed);
+		typeContainer->AddChild(mCreateDeleteButton);
+
+		mCreateMenu = o2UI.CreateWidget<UIContextMenu>();
+		mCreateDeleteButton->AddChild(mCreateMenu);
 
 		expandHeight = true;
 		expandWidth = true;
@@ -57,25 +76,64 @@ namespace Editor
 
 	void ObjectPtrProperty::Refresh()
 	{
-		for (auto targetObj : mTargetObjects)
-		{
-			if (GetProxy<IObject*>(targetObj.first) == nullptr)
-				SetProxy<IObject*>(targetObj.first, (IObject*)mObjectType->CreateSample());
-		}
+		if (!mSpoiler->IsExpanded())
+			return;
 
+		const Type* objectPtrType = nullptr;
 		if (!mTargetObjects.IsEmpty())
 		{
-			const Type* objectType = GetProxy<IObject*>(mTargetObjects[0].first)->GetType().GetPointerType();
-			if (objectType != mObjectPtrType)
-				SpecializeTypeInternal(objectType);
+			auto object = GetProxy<IObject*>(mTargetObjects[0].first);
+			if (object)
+				objectPtrType = object->GetType().GetPointerType();
 		}
 
-		mFieldProperties.Set(mTargetObjects.Select<Pair<IObject*, IObject*>>(
-			[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+		if (objectPtrType != mObjectPtrType)
 		{
-			return Pair<IObject*, IObject*>(GetProxy<IObject*>(x.first),
-											x.second ? GetProxy<IObject*>(x.second) : nullptr);
-		}));
+			if (!mTargetObjects.IsEmpty())
+			{
+				auto object = GetProxy<IObject*>(mTargetObjects[0].first);
+
+				if (object)
+				{
+					mTypeCaption->text = object->GetType().GetName();
+					mCreateDeleteButton->caption = "Delete";
+				}
+				else
+				{
+					mTypeCaption->text = "nullptr";
+					mCreateDeleteButton->caption = "Create";
+				}
+			}
+
+			mObjectPtrType = objectPtrType;
+
+			o2EditorProperties.FreeProperties(mFieldProperties);
+
+			if (mObjectPtrType)
+			{
+				mObjectType = ((PointerType*)mObjectPtrType)->GetUnpointedType();
+
+				auto onChangeCompletedFunc =
+					[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+				{
+					onChangeCompleted(mValuesPath + "/" + path, before, after);
+				};
+
+				o2EditorProperties.BuildObjectProperties(mSpoiler, mObjectType, mFieldProperties, "", onChangeCompleted, onChanged);
+			}
+
+			mPropertiesInitialized = true;
+		}
+
+		if (mObjectPtrType)
+		{
+			mFieldProperties.Set(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+			{
+				return Pair<IObject*, IObject*>(GetProxy<IObject*>(x.first),
+												x.second ? GetProxy<IObject*>(x.second) : nullptr);
+			}));
+		}
 	}
 
 	const Type* ObjectPtrProperty::GetFieldType() const
@@ -88,31 +146,8 @@ namespace Editor
 		if (type->GetUsage() != Type::Usage::Pointer)
 			return;
 
-		mObjectPtrType = type;
 		mObjectType = ((PointerType*)type)->GetUnpointedType();
-	}
-
-	void ObjectPtrProperty::SpecializeTypeInternal(const Type* type)
-	{
-		if (type->GetUsage() != Type::Usage::Pointer)
-			return;
-
-		mObjectPtrType = type;
-		mObjectType = ((PointerType*)type)->GetUnpointedType();
-
-		WString caption = GetCaption();
-		int sep = caption.Find(" [");
-		if (sep >= 0)
-			caption.Erase(sep);
-
-		caption += (WString)" [" + type->GetName() + "]";
-		SetCaption(caption);
-
-		o2EditorProperties.FreeProperties(mFieldProperties);
-		mPropertiesInitialized = false;
-
-		if (mSpoiler->IsExpanded())
-			RebuildProperties();
+		mContextInitialized = false;
 	}
 
 	const Type* ObjectPtrProperty::GetSpecializedType() const
@@ -155,22 +190,62 @@ namespace Editor
 		return mFieldProperties;
 	}
 
-	void ObjectPtrProperty::RebuildProperties()
+	void ObjectPtrProperty::OnCreateOrDeletePressed()
 	{
-		if (mPropertiesInitialized)
-			return;
-
-		auto onChangeCompletedFunc =
-			[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		bool hasObject = !mTargetObjects.IsEmpty() && GetProxy<IObject*>(mTargetObjects[0].first) != nullptr;
+		if (hasObject)
 		{
-			onChangeCompleted(mValuesPath + "/" + path, before, after);
-		};
+			for (auto targetObj : mTargetObjects)
+			{
+				IObject* object = GetProxy<IObject*>(targetObj.first);
 
-		o2EditorProperties.BuildObjectProperties(mSpoiler, mObjectType, mFieldProperties, "", onChangeCompleted, onChanged);
+				if (object != nullptr)
+				{
+					delete object;
+					SetProxy<IObject*>(targetObj.first, nullptr);
+				}
+			}
 
-		mPropertiesInitialized = true;
+			Refresh();
+			mSpoiler->SetLayoutDirty();
+		}
+		else
+		{
+			if (!mContextInitialized)
+			{
+				mCreateMenu->RemoveAllItems();
+
+				auto availableTypes = mObjectType->GetDerivedTypes();
+				availableTypes.Insert(mObjectType, 0);
+
+				mImmediateCreateObject = availableTypes.Count() == 1;
+
+				mCreateMenu->AddItems(availableTypes.Select<UIContextMenu::Item>([&](const Type* type)
+				{
+					return UIContextMenu::Item(type->GetName(), [=]() { CreateObject(type); });
+				}));
+
+				mContextInitialized = true;
+			}
+
+			if (mImmediateCreateObject)
+				CreateObject(mObjectType);
+			else
+				mCreateMenu->Show();
+		}
 	}
 
+	void ObjectPtrProperty::CreateObject(const Type* type)
+	{
+		for (auto targetObj : mTargetObjects)
+		{
+			if (GetProxy<IObject*>(targetObj.first) == nullptr)
+				SetProxy<IObject*>(targetObj.first, (IObject*)type->CreateSample());
+		}
+
+		Refresh();
+		mSpoiler->SetLayoutDirty();
+	}
 }
 
 DECLARE_CLASS(Editor::ObjectPtrProperty);

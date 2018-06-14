@@ -426,7 +426,7 @@ namespace o2
 
 	void* PointerType::CreateSample() const
 	{
-		return mnew void*;
+		return mUnptrType->CreateSample();
 	}
 
 	IAbstractValueProxy* PointerType::GetValueProxy(void* object) const
