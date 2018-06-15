@@ -37,23 +37,6 @@ namespace Editor
 
 	void DefaultActorPropertiesViewer::SpecializeActorType(const Type* type)
 	{
-		struct helper
-		{
-			static void GetFields(Vector<FieldInfo*>& fields, const Type* type)
-			{
-				if (!o2EditorProperties.IsPrivateFieldsVisible() &&
-					(type == &TypeOf(Actor) || type == &TypeOf(UIWidget)))
-				{
-					return;
-				}
-
-				fields.Add(type->GetFields());
-
-				for (auto baseType : type->GetBaseTypes())
-					GetFields(fields, baseType.type);
-			}
-		};
-
 		mDataView->name = "actor " + type->GetName();
 		mActorType = type;
 
@@ -81,6 +64,8 @@ namespace Editor
 			"mLayers", "mStates"
 		};
 
+		o2EditorProperties.FreeProperties(mFieldProperties);
+
 		auto fields = mActorType->GetFieldsWithBaseClasses();
 		if (!o2EditorProperties.IsPrivateFieldsVisible())
 		{
@@ -98,12 +83,20 @@ namespace Editor
 
 		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout,
 												 fields, mFieldProperties, "");
+
+		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
 	}
 
 	bool DefaultActorPropertiesViewer::IsEmpty() const
 	{
 		return mPropertiesLayout->GetChildren().Count() == 0;
 	}
+
+	bool DefaultActorPropertiesViewer::IsBuiltWithEmpty() const
+	{
+		return mBuiltWithHidden;
+	}
+
 }
 
 DECLARE_CLASS(Editor::DefaultActorPropertiesViewer);

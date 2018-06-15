@@ -111,6 +111,11 @@ namespace Editor
 		return true;
 	}
 
+	bool IActorPropertiesViewer::IsBuiltWithEmpty() const
+	{
+		return false;
+	}
+
 }
 
 DECLARE_CLASS(Editor::IActorPropertiesViewer);

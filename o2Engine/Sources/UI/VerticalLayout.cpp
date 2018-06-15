@@ -277,6 +277,9 @@ namespace o2
 			int i = 0;
 			for (auto child : mChildWidgets)
 			{
+				if (!child->mResEnabledInHierarchy)
+					continue;
+
 				child->layout->mData->offsetMin.y = position;
 				position += heights[i++];
 
@@ -293,6 +296,9 @@ namespace o2
 			float position = -totalHeight*0.5f;
 			for (auto child : mChildWidgets)
 			{
+				if (!child->mResEnabledInHierarchy)
+					continue;
+
 				child->layout->mData->offsetMin.y = position;
 				position += Math::Abs(Math::Max(child->layout->mData->minSize.y, child->GetMinHeightWithChildren()));
 
@@ -314,6 +320,9 @@ namespace o2
 			int i = 0;
 			for (auto child : mChildWidgets)
 			{
+				if (!child->mResEnabledInHierarchy)
+					continue;
+
 				child->layout->mData->offsetMin.y = position;
 				position += heights[i++];
 
@@ -328,6 +337,9 @@ namespace o2
 			float position = mBorder.bottom;
 			for (auto child : mChildWidgets)
 			{
+				if (!child->mResEnabledInHierarchy)
+					continue;
+
 				child->layout->mData->offsetMin.y = position;
 				position += Math::Abs(Math::Max(child->layout->mData->minSize.y, child->GetMinHeightWithChildren()));
 
@@ -349,6 +361,9 @@ namespace o2
 			int i = 0;
 			for (auto child : mChildWidgets)
 			{
+				if (!child->mResEnabledInHierarchy)
+					continue;
+
 				child->layout->mData->offsetMax.y = -position;
 				position += heights[i++];
 
@@ -363,6 +378,9 @@ namespace o2
 			float position = mBorder.top;
 			for (auto child : mChildWidgets)
 			{
+				if (!child->mResEnabledInHierarchy)
+					continue;
+
 				child->layout->mData->offsetMax.y = -position;
 				position += Math::Abs(Math::Max(child->layout->mData->minSize.y, child->GetMinHeightWithChildren()));
 

@@ -57,6 +57,9 @@ namespace Editor
 		// Returns is there no properties
 		virtual bool IsEmpty() const;
 
+		// Returns true when properties was built with hidden fields
+		virtual bool IsBuiltWithEmpty() const;
+
 		IOBJECT(IActorPropertiesViewer);
 
 	protected:
@@ -99,5 +102,6 @@ CLASS_METHODS_META(Editor::IActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(bool, IsEmpty);
+	PUBLIC_FUNCTION(bool, IsBuiltWithEmpty);
 }
 END_META;

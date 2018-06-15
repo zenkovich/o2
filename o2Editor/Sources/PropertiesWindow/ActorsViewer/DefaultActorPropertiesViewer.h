@@ -36,11 +36,15 @@ namespace Editor
 		// Returns is there no properties
 		bool IsEmpty() const override;
 
+		// Returns true when properties was built with hidden fields
+		bool IsBuiltWithEmpty() const override;
+
 		IOBJECT(DefaultActorPropertiesViewer);
 
 	protected:
 		Vector<Actor*>      mTargetActors;        // Target actors
 		FieldPropertiesInfo mFieldProperties;     // Field properties information
+		bool                mBuiltWithHidden;     // True when properties was built with hidden fields
 		const Type*         mActorType = nullptr; // Target actor type
 	};
 }
@@ -54,6 +58,7 @@ CLASS_FIELDS_META(Editor::DefaultActorPropertiesViewer)
 {
 	PROTECTED_FIELD(mTargetActors);
 	PROTECTED_FIELD(mFieldProperties);
+	PROTECTED_FIELD(mBuiltWithHidden);
 	PROTECTED_FIELD(mActorType);
 }
 END_META;
@@ -66,5 +71,6 @@ CLASS_METHODS_META(Editor::DefaultActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(bool, IsEmpty);
+	PUBLIC_FUNCTION(bool, IsBuiltWithEmpty);
 }
 END_META;

@@ -106,6 +106,11 @@ namespace Editor
 	void IActorComponentViewer::Rebuild()
 	{}
 
+	bool IActorComponentViewer::IsBuiltWithEmpty() const
+	{
+		return false;
+	}
+
 }
 
 DECLARE_CLASS(Editor::IActorComponentViewer);

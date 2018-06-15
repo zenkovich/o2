@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "ActorPropertiesViewer.h"
 
-#include "PropertiesWindow/ActorsViewer/DefaultActorPropertiesViewer.h"
+#include "Core/Properties/Properties.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h"
+#include "PropertiesWindow/ActorsViewer/DefaultActorPropertiesViewer.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorTransformViewer.h"
-#include "PropertiesWindow/ActorsViewer/IActorPropertiesViewer.h"
 #include "PropertiesWindow/ActorsViewer/IActorComponentViewer.h"
 #include "PropertiesWindow/ActorsViewer/IActorHeaderViewer.h"
+#include "PropertiesWindow/ActorsViewer/IActorPropertiesViewer.h"
 #include "PropertiesWindow/ActorsViewer/IActorTransformViewer.h"
 #include "Scene/Actor.h"
 #include "Scene/Component.h"
@@ -193,6 +194,9 @@ namespace Editor
 
 		auto propertiesViewer = mActorPropertiesViewersPool[type];
 
+		if (propertiesViewer->IsBuiltWithEmpty() != o2EditorProperties.IsPrivateFieldsVisible())
+			propertiesViewer->Rebuild();
+
 		propertiesViewer->SetTargetActors(mTargetActors);
 
 		if (!propertiesViewer->IsEmpty())
@@ -246,6 +250,9 @@ namespace Editor
 			}
 
 			auto componentViewer = mComponentViewersPool[type].PopBack();
+
+			if (componentViewer->IsBuiltWithEmpty() != o2EditorProperties.IsPrivateFieldsVisible())
+				componentViewer->Rebuild();
 
 			viewersWidgets.Add(componentViewer->GetWidget());
 			mComponentsViewers.Add(componentViewer);

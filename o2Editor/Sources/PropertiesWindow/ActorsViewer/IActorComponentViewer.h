@@ -54,6 +54,9 @@ namespace Editor
 		// Rebuilds properties layout
 		virtual void Rebuild();
 
+		// Returns true when properties was built with hidden fields
+		virtual bool IsBuiltWithEmpty() const;
+
 		IOBJECT(IActorComponentViewer);
 
 	protected:
@@ -95,5 +98,6 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Rebuild);
+	PUBLIC_FUNCTION(bool, IsBuiltWithEmpty);
 }
 END_META;

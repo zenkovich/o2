@@ -51,7 +51,7 @@ namespace Editor
 		}
 
 		context->AddItem(UIContextMenu::Item::Separator());
-		context->AddItem(UIContextMenu::Item("Private visible", false, [](bool x) { o2EditorProperties.SetPrivateFieldsVisible(x); }));
+		context->AddItem(UIContextMenu::Item("Private visible", false, THIS_FUNC(OnPrivateFieldsVisibleChanged)));
 	}
 
 	void PropertiesWindow::InitializeViewers()
@@ -61,10 +61,13 @@ namespace Editor
 		for (auto type : viewersTypes)
 			mViewers.Add((IObjectPropertiesViewer*)type->CreateSample());
 	}
-	
-	void PropertiesWindow::ClearViewers()
-	{
 
+	void PropertiesWindow::OnPrivateFieldsVisibleChanged(bool visible)
+	{
+		o2EditorProperties.SetPrivateFieldsVisible(visible);
+
+		if (mCurrentViewer)
+			mCurrentViewer->SetTargets(mTargets);
 	}
 
 	void PropertiesWindow::OnPropertyChanged(IPropertyField* field)

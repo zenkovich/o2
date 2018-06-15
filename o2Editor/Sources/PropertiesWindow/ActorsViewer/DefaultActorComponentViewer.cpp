@@ -66,8 +66,15 @@ namespace Editor
 		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, mComponentType, mFieldProperties,
 			(String)"component:" + mComponentType->GetName() + "/");
 
+		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
+
 		mSpoiler->name = "spoiler " + mComponentType->GetName();
 		mPropertiesLayout->name = "properties " + mComponentType->GetName();
+	}
+
+	bool DefaultActorComponentViewer::IsBuiltWithEmpty() const
+	{
+		return mBuiltWithHidden;
 	}
 
 }

@@ -92,7 +92,7 @@ namespace Editor
 
 	void Properties::SetPrivateFieldsVisible(bool visible)
 	{
-		mPrivateVisible = true;
+		mPrivateVisible = visible;
 	}
 
 	bool Properties::IsPrivateFieldsVisible() const
@@ -194,13 +194,27 @@ namespace Editor
 
 			if (!privateFields.IsEmpty())
 			{
-				UISpoiler* privates = o2UI.CreateWidget<UISpoiler>("expand with caption");
-				privates->SetCaption("Private");
+				UISpoiler* privates = propertiesInfo.privatePropertiesSpoiler;
+				
+				if (!privates)
+					privates = layout->GetChildByType<UISpoiler>("privates");
 
+				if (!privates)
+				{
+					privates = o2UI.CreateWidget<UISpoiler>("expand with caption");
+					privates->name = "privates";
+					privates->SetCaption("Private");
+					layout->AddChild(privates);
+				}
+				else privates->SetPositionIndexInParent(layout->GetChildren().Count() - 1);
+
+				propertiesInfo.privatePropertiesSpoiler = privates;
 				BuildFields(privates, privateFields, propertiesInfo, path, onChangeCompleted, onChanged);
-
-				layout->AddChild(privates);
 			}
+		}
+		else if (propertiesInfo.privatePropertiesSpoiler)
+		{
+			propertiesInfo.privatePropertiesSpoiler->SetEnabled(false);
 		}
 	}
 

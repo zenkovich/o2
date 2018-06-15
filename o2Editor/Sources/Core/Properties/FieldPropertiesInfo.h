@@ -10,6 +10,7 @@ namespace o2
 {
 	class FieldInfo;
 	class IObject;
+	class UISpoiler;
 }
 
 namespace Editor
@@ -19,6 +20,7 @@ namespace Editor
 	struct FieldPropertiesInfo
 	{
 		Dictionary<const FieldInfo*, IPropertyField*> properties;
+		UISpoiler* privatePropertiesSpoiler = nullptr;
 
 		void Set(const Vector<IObject*>& targets);
 		void Set(const Vector<Pair<IObject*, IObject*>>& targets);

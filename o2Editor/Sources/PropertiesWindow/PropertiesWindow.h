@@ -76,8 +76,8 @@ namespace Editor
 		// Initializes viewers
 		void InitializeViewers();
 
-		// Removes all cached viewers
-		void ClearViewers();
+		// It is called when private fields visibility changed
+		void OnPrivateFieldsVisibleChanged(bool visible);
 
 		// It is called when some property field was changed
 		void OnPropertyChanged(IPropertyField* field);
@@ -112,7 +112,7 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeWindowContext);
 	PROTECTED_FUNCTION(void, InitializeViewers);
-	PROTECTED_FUNCTION(void, ClearViewers);
+	PROTECTED_FUNCTION(void, OnPrivateFieldsVisibleChanged, bool);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;
