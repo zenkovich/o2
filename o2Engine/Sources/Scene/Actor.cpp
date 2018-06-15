@@ -579,7 +579,7 @@ namespace o2
 			mParent->OnChildRemoved(this);
 			mParent->OnChildsChanged();
 		}
-		else
+		else if (mIsOnScene)
 			o2Scene.mRootActors.Remove(this);
 
 		mParent = actor;
@@ -590,7 +590,7 @@ namespace o2
 			mParent->OnChildAdded(this);
 			mParent->OnChildsChanged();
 		}
-		else
+		else if (mIsOnScene)
 			o2Scene.mRootActors.Add(this);
 
 		if (worldPositionStays)
