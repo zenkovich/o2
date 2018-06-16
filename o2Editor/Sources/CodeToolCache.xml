@@ -2629,36 +2629,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Widgets/ObjectPtrProperty.h">
-		<date year="2018" month="6" day="11" hour="23" minute="5" second="14" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ObjectPtrProperty" fullname="Editor::ObjectPtrProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h">
 		<date year="2018" month="6" day="14" hour="23" minute="20" second="17" />
 		<globalNamespace name="" fullname="">
@@ -2814,6 +2784,36 @@
 							<typedefs />
 							<usings />
 							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Widgets/ObjectPtrProperty.h">
+		<date year="2018" month="6" day="16" hour="11" minute="37" second="43" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ObjectPtrProperty" fullname="Editor::ObjectPtrProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+							</baseClasses>
 						</section>
 					</sections>
 					<typedefs />

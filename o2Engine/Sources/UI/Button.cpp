@@ -69,7 +69,10 @@ namespace o2
 
 	bool UIButton::IsUnderPoint(const Vec2F& point)
 	{
-		return UIWidget::IsUnderPoint(point);
+		if (isPointInside.IsEmpty())
+			return UIWidget::IsUnderPoint(point);
+		
+		return mDrawingScissorRect.IsInside(point) && isPointInside(point);
 	}
 
 	void UIButton::CopyData(const Actor& otherActor)
@@ -98,7 +101,7 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (UIWidget::IsUnderPoint(cursor.position))
+		if (IsUnderPoint(cursor.position))
 			onClick();
 	}
 

@@ -34,7 +34,7 @@ namespace o2
 		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 
-		CheckExpandButton();
+		InitializeControls();
 		RetargetStatesAnimations();
 		UpdateExpanding(0);
 	}
@@ -147,7 +147,7 @@ namespace o2
 		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 
-		CheckExpandButton();
+		InitializeControls();
 		UpdateExpanding(0);
 	}
 
@@ -185,12 +185,18 @@ namespace o2
 		}
 	}
 
-	void UISpoiler::CheckExpandButton()
+	void UISpoiler::InitializeControls()
 	{
+		auto textLayer = GetLayerDrawable<Text>("caption");
 		auto expandBtn = FindExpandButton();
 
 		if (expandBtn)
+		{
 			expandBtn->onClick = [&]() { SetExpanded(!IsExpanded()); };
+			expandBtn->isPointInside = [=](const Vec2F& point) {
+				return expandBtn->layout->IsPointInside(point) || (textLayer && textLayer->IsPointInside(point));
+			};
+		}
 	}
 
 	UIButton* UISpoiler::FindExpandButton() const

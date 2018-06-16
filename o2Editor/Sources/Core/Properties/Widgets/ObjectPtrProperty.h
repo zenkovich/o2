@@ -12,6 +12,7 @@ namespace o2
 	class UIContextMenu;
 	class UILabel;
 	class UISpoiler;
+	class UIWidget;
 }
 
 namespace Editor
@@ -76,6 +77,7 @@ namespace Editor
 		TargetsVec          mTargetObjects;   // Target objects
 		FieldPropertiesInfo mFieldProperties; // Field properties information
 
+		UIWidget*      mTypeContainer = nullptr;      // Type caption and create/delete button container widget, placed on spoiler head
 		UISpoiler*     mSpoiler = nullptr;            // Properties spoiler
 		UILabel*       mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
 		UIButton*      mCreateDeleteButton = nullptr; // CReate and delete button. Create - when value is nullptr, delete - when not
@@ -116,6 +118,7 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FIELD(mObjectPtrType);
 	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mFieldProperties);
+	PROTECTED_FIELD(mTypeContainer);
 	PROTECTED_FIELD(mSpoiler);
 	PROTECTED_FIELD(mTypeCaption);
 	PROTECTED_FIELD(mCreateDeleteButton);

@@ -1129,6 +1129,7 @@ namespace o2
 
 		parent->mChildren.Remove(this);
 		parent->mChildWidgets.Remove(this);
+		parent->mDrawingChildren.Remove(this);
 		parent->mInternalWidgets.Add(this);
 	}
 

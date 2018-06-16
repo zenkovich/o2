@@ -47,18 +47,23 @@ namespace Editor
 		if (mSpoiler)
 			mSpoiler->onExpand = THIS_FUNC(Refresh);
 
-		auto typeContainer = mnew UIWidget();
-		typeContainer->layout->minHeight = 20;
-		mSpoiler->AddChild(typeContainer);
+		mTypeContainer = mnew UIWidget();
+		*mTypeContainer->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 100, 0, 17, 0);
+		mTypeContainer->SetInternalParent(mSpoiler, false);
 
 		mTypeCaption = o2UI.CreateLabel("nullptr");
-		*mTypeCaption->layout = UIWidgetLayout(0, 1, 0.7f, 0, 0, 0, 0, 0);
-		typeContainer->AddChild(mTypeCaption);
+		*mTypeCaption->layout = UIWidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
+		mTypeCaption->horOverflow = UILabel::HorOverflow::Dots;
+		mTypeCaption->horAlign = HorAlign::Left;
+		mTypeCaption->verAlign = VerAlign::Bottom;
+		mTypeCaption->height = 8;
+		mTypeCaption->transparency = 0.6f;
+		mTypeContainer->AddChild(mTypeCaption);
 
 		mCreateDeleteButton = o2UI.CreateButton("Create");
-		*mCreateDeleteButton->layout = UIWidgetLayout(0.7f, 1, 1, 0, 0, 0, 0, 0);
+		*mCreateDeleteButton->layout = UIWidgetLayout(1, 1, 1, 0, -75, 0, 0, 0);
 		mCreateDeleteButton->onClick = THIS_FUNC(OnCreateOrDeletePressed);
-		typeContainer->AddChild(mCreateDeleteButton);
+		mTypeContainer->AddChild(mCreateDeleteButton);
 
 		mCreateMenu = o2UI.CreateWidget<UIContextMenu>();
 		mCreateDeleteButton->AddChild(mCreateMenu);
@@ -76,6 +81,22 @@ namespace Editor
 
 	void ObjectPtrProperty::Refresh()
 	{
+		if (!mTargetObjects.IsEmpty())
+		{
+			auto object = GetProxy<IObject*>(mTargetObjects[0].first);
+
+			if (object)
+			{
+				mTypeCaption->text = object->GetType().GetName();
+				mCreateDeleteButton->caption = "Delete";
+			}
+			else
+			{
+				mTypeCaption->text = "nullptr";
+				mCreateDeleteButton->caption = "Create";
+			}
+		}
+
 		if (!mSpoiler->IsExpanded())
 			return;
 
@@ -89,22 +110,6 @@ namespace Editor
 
 		if (objectPtrType != mObjectPtrType)
 		{
-			if (!mTargetObjects.IsEmpty())
-			{
-				auto object = GetProxy<IObject*>(mTargetObjects[0].first);
-
-				if (object)
-				{
-					mTypeCaption->text = object->GetType().GetName();
-					mCreateDeleteButton->caption = "Delete";
-				}
-				else
-				{
-					mTypeCaption->text = "nullptr";
-					mCreateDeleteButton->caption = "Create";
-				}
-			}
-
 			mObjectPtrType = objectPtrType;
 
 			o2EditorProperties.FreeProperties(mFieldProperties);
@@ -158,6 +163,13 @@ namespace Editor
 	void ObjectPtrProperty::SetCaption(const WString& text)
 	{
 		mSpoiler->SetCaption(text);
+
+		Text* spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
+		if (spoilerCaptionLayer)
+		{
+			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetHeight());
+			*mTypeContainer->layout = UIWidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
+		}
 	}
 
 	WString ObjectPtrProperty::GetCaption() const
@@ -208,6 +220,7 @@ namespace Editor
 
 			Refresh();
 			mSpoiler->SetLayoutDirty();
+			mSpoiler->Collapse();
 		}
 		else
 		{

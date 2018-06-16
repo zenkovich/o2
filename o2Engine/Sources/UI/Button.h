@@ -20,8 +20,10 @@ namespace o2
 		PROPERTY(WString, caption, SetCaption, GetCaption); // Caption property. Searches "caption" layer and sets text
 		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
-		Function<void()> onClick;      // Click event
-		ShortcutKeys     shortcut;     // Shortcut keys
+		Function<void()>             onClick;       // Click event
+		Function<bool(const Vec2F&)> isPointInside; // Checking pointer function. When this empty using default widget pointer check
+
+		ShortcutKeys shortcut; // Shortcut keys
 
 		// Default constructor
 		UIButton();
@@ -105,6 +107,7 @@ CLASS_FIELDS_META(o2::UIButton)
 	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(icon);
 	PUBLIC_FIELD(onClick);
+	PUBLIC_FIELD(isPointInside);
 	PUBLIC_FIELD(shortcut);
 	PROTECTED_FIELD(mCaptionText);
 	PROTECTED_FIELD(mIconSprite);
