@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DefaultActorPropertiesViewer.h"
 
-#include "Core/Actions/ActorsPropertyChange.h"
+#include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
 #include "Core/Properties/Properties.h"
 #include "Core/Properties/Widgets/ObjectProperty.h"

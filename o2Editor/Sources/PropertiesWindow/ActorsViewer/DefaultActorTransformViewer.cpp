@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DefaultActorTransformViewer.h"
 
-#include "Core/Actions/ActorsPropertyChange.h"
+#include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
 #include "Core/Properties/Widgets/FloatProperty.h"
 #include "Core/Properties/Widgets/Vector2FloatProperty.h"
@@ -378,8 +378,8 @@ namespace Editor
 
 	void DefaultActorTransformViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
 	{
-		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedActors(), path, prevValue, newValue);
+		PropertyChangeAction* action = mnew PropertyChangeAction(
+			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);
 	}

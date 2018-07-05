@@ -125,6 +125,7 @@ namespace Editor
 		label->horOverflow = UILabel::HorOverflow::Dots;
 
 		property->AddChild(label, 0);
+		property->borderLeft = 10;
 
 		o2UI.AddWidgetStyle(property, propertyWithCaptionStyle);
 	}

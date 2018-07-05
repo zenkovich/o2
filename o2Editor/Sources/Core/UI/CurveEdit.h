@@ -127,7 +127,7 @@ namespace Editor
 		};
 		typedef Vector<CurveInfo*> CurveInfosVec;
 
-		class CurveCopyInfo: ISerializable
+		class CurveCopyInfo: public ISerializable
 		{
 		public:
 			String             curveId; // @SERIALIZABLE

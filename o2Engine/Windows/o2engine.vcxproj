@@ -196,6 +196,9 @@
     <ClInclude Include="..\Sources\Render\Windows\RenderBase.h" />
     <ClInclude Include="..\Sources\Render\Windows\TextureBase.h" />
     <ClInclude Include="..\Sources\Scene\Actor.h" />
+    <ClInclude Include="..\Sources\Scene\ActorCreationMode.h" />
+    <ClInclude Include="..\Sources\Scene\ActorDataNodeConverter.h" />
+    <ClInclude Include="..\Sources\Scene\ActorRef.h" />
     <ClInclude Include="..\Sources\Scene\ActorTransform.h" />
     <ClInclude Include="..\Sources\Scene\Component.h" />
     <ClInclude Include="..\Sources\Scene\Components\EditorTestComponent.h" />
@@ -250,6 +253,7 @@
     <ClInclude Include="..\Sources\Utils\Editor\DragHandle.h" />
     <ClInclude Include="..\Sources\Utils\Editor\EditorPropertyAttribute.h" />
     <ClInclude Include="..\Sources\Utils\Editor\FrameHandles.h" />
+    <ClInclude Include="..\Sources\Utils\Editor\SceneEditableObject.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\File.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\Sources\Utils\FileSystem\FileSystem.h" />
@@ -367,6 +371,10 @@
     <ClCompile Include="..\Sources\Render\Windows\Render.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\TextureImpl.cpp" />
     <ClCompile Include="..\Sources\Scene\Actor.cpp" />
+    <ClCompile Include="..\Sources\Scene\ActorCreationMode.cpp" />
+    <ClCompile Include="..\Sources\Scene\ActorDataNodeConverter.cpp" />
+    <ClCompile Include="..\Sources\Scene\ActorEditor.cpp" />
+    <ClCompile Include="..\Sources\Scene\ActorRef.cpp" />
     <ClCompile Include="..\Sources\Scene\ActorTransform.cpp" />
     <ClCompile Include="..\Sources\Scene\Component.cpp" />
     <ClCompile Include="..\Sources\Scene\Components\EditorTestComponent.cpp" />
@@ -416,6 +424,7 @@
     <ClCompile Include="..\Sources\Utils\Editor\DragAndDrop.cpp" />
     <ClCompile Include="..\Sources\Utils\Editor\DragHandle.cpp" />
     <ClCompile Include="..\Sources\Utils\Editor\FrameHandles.cpp" />
+    <ClCompile Include="..\Sources\Utils\Editor\SceneEditableObject.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp" />

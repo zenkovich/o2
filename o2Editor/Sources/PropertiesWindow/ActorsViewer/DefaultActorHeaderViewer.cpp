@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DefaultActorHeaderViewer.h"
 
-#include "Core/Actions/ActorsPropertyChange.h"
+#include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
 #include "Core/Properties/Widgets/AssetProperty.h"
 #include "Core/Properties/Widgets/BooleanProperty.h"
@@ -236,8 +236,8 @@ namespace Editor
 
 	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
 	{
-		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedActors(), path, prevValue, newValue);
+		PropertyChangeAction* action = mnew PropertyChangeAction(
+			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);
 	}

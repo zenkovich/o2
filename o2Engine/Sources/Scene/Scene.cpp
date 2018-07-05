@@ -4,6 +4,7 @@
 #include "Application/Input.h"
 #include "Assets/ActorAsset.h"
 #include "Scene/Actor.h"
+#include "Scene/ActorDataNodeConverter.h"
 #include "Scene/DrawableComponent.h"
 #include "Scene/SceneLayer.h"
 #include "Scene/Tags.h"
@@ -74,8 +75,8 @@ namespace o2
 					if (widget)
 					{
 						debugInfo += "layout - " +
-							(String)widget->layout->anchorMin + " "  +(String)widget->layout->offsetMin + " - " +
-							(String)widget->layout->anchorMax + " "  +(String)widget->layout->offsetMax + "\n";
+							(String)widget->layout->anchorMin + " " + (String)widget->layout->offsetMin + " - " +
+							(String)widget->layout->anchorMax + " " + (String)widget->layout->offsetMax + "\n";
 
 						debugInfo += (widget->mIsClipped ? (String)"clipped, " : (String)"not clipped, ") +
 							(widget->mEnabled ? (String)"visible\n" : ((String)"hidden" + (!widget->mResEnabledInHierarchy ? (String)" fully\n" : (String)"\n")));
@@ -215,7 +216,7 @@ namespace o2
 		return mAllActors;
 	}
 
-	Actor* Scene::GetActorByID(UInt64 id) const
+	Actor* Scene::GetActorByID(SceneUID id) const
 	{
 		return mAllActors.FindMatch([=](Actor* x) { return x->mId == id; });
 	}
@@ -340,59 +341,75 @@ namespace o2
 		data.SaveToFile(path);
 	}
 
-	int Scene::GetActorHierarchyIdx(Actor* actor) const
+#if IS_EDITOR
+	Vector<SceneEditableObject*> Scene::GetRootEditableObjects()
 	{
-		if (actor->GetParent())
-		{
-			return actor->GetParent()->GetChildren().Find(actor) + GetActorHierarchyIdx(actor->GetParent());
-		}
-
-		return mRootActors.Find(actor);
+		return mRootActors.Select<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	void Scene::ReparentActors(const ActorsVec& actors, Actor* newParent, Actor* prevActor)
+	Vector<SceneEditableObject*> Scene::GetAllEditableObjects()
 	{
-		struct ActorDef
+		return mEditableObjects;
+	}
+
+	SceneEditableObject* Scene::GetEditableObjectByID(SceneUID id) const
+	{
+		return mEditableObjects.FindMatch([=](SceneEditableObject* x) { return x->GetID() == id; });
+	}
+
+	int Scene::GetObjectHierarchyIdx(SceneEditableObject* object) const
+	{
+		if (object->GetEditableParent())
 		{
-			Actor* actor;
-			int    idx;
-			Basis  transform;
-
-			bool operator==(const ActorDef& other) const { return actor == other.actor; }
-		};
-		Vector<ActorDef> actorsDefs;
-
-		for (auto actor : actors)
-		{
-			ActorDef def;
-			def.actor = actor;
-			def.transform = actor->transform->GetWorldNonSizedBasis();
-			def.idx = o2Scene.GetActorHierarchyIdx(def.actor);
-			actorsDefs.Add(def);
-
-			actor->SetParent(nullptr);
-			mRootActors.Remove(actor);
+			return object->GetEditableParent()->GetEditablesChildren().Find(object) + GetObjectHierarchyIdx(object->GetEditableParent());
 		}
 
-		actorsDefs.Sort([](auto& a, auto& b) { return a.idx < b.idx; });
+		return mRootActors.FindIdx([=](Actor* x) { return dynamic_cast<SceneEditableObject*>(x) == object; });
+	}
+
+	void Scene::ReparentEditableObjects(const Vector<SceneEditableObject*>& objects,
+										SceneEditableObject* newParent, SceneEditableObject* prevObject)
+	{
+		struct Object
+		{
+			SceneEditableObject* object;
+			int                  idx;
+			Basis                transform;
+
+			bool operator==(const Object& other) const { return object == other.object; }
+		};
+		Vector<Object> objectsDefs;
+
+		for (auto object : objects)
+		{
+			Object def;
+			def.object = object;
+			def.transform = object->GetTransform();
+			def.idx = o2Scene.GetObjectHierarchyIdx(object);
+			objectsDefs.Add(def);
+
+			object->SetEditableParent(nullptr);
+		}
+
+		objectsDefs.Sort([](auto& a, auto& b) { return a.idx < b.idx; });
 
 		if (newParent)
 		{
-			int insertIdx = newParent->GetChildren().Find(prevActor) + 1;
+			int insertIdx = newParent->GetEditablesChildren().Find(prevObject) + 1;
 
-			for (auto def : actorsDefs)
+			for (auto def : objectsDefs)
 			{
-				newParent->AddChild(def.actor, insertIdx++);
-				def.actor->transform->SetWorldNonSizedBasis(def.transform);
+				newParent->AddChild(def.object, insertIdx++);
+				def.object->SetTransform(def.transform);
 			}
 		}
 		else
 		{
 			int insertIdx = 0;
-			
-			if (prevActor)
+
+			if (prevObject)
 			{
-				insertIdx = mRootActors.Find(prevActor);
+				insertIdx = mRootActors.FindIdx([=](Actor* x) { return dynamic_cast<SceneEditableObject*>(x) == prevObject; });
 
 				if (insertIdx < 0)
 					insertIdx = mRootActors.Count();
@@ -400,39 +417,42 @@ namespace o2
 					insertIdx++;
 			}
 
-			for (auto def : actorsDefs)
+			for (auto def : objectsDefs)
 			{
-				mRootActors.Insert(def.actor, insertIdx++);
-				def.actor->transform->SetWorldNonSizedBasis(def.transform);
+				auto actorEditableObject = dynamic_cast<Actor*>(def.object);
+				if (actorEditableObject)
+				{
+					mRootActors.Insert(actorEditableObject, insertIdx++);
+					def.object->SetTransform(def.transform);
+				}
 			}
 		}
 
 		if (newParent)
-			OnActorChanged(newParent);
+			OnObjectChanged(newParent);
 
-		if (prevActor)
-			OnActorChanged(prevActor);
+		if (prevObject)
+			OnObjectChanged(prevObject);
 	}
 
-#if IS_EDITOR
-	void Scene::OnActorChanged(Actor* actor)
+	void Scene::OnObjectChanged(SceneEditableObject* object)
 	{
-		if (!mChangedActors.Contains(actor))
-			mChangedActors.Add(actor);
+		if (!mChangedObjects.Contains(object))
+			mChangedObjects.Add(object);
 	}
 
-	void Scene::CheckChangedActors()
+	void Scene::CheckChangedObjects()
 	{
-		if (mChangedActors.Count() > 0)
+		if (mChangedObjects.Count() > 0)
 		{
-			onChanged(mChangedActors);
-			mChangedActors.Clear();
+			onObjectsChanged(mChangedObjects);
+			mChangedObjects.Clear();
 		}
 	}
 
-	const ActorsVec& Scene::GetChangedActors() const
+	const SceneEditableObjectsVec& Scene::GetChangedObjects() const
 	{
-		return mChangedActors;
+		return mChangedObjects;
 	}
 
 	Scene::ActorsCacheDict& Scene::GetPrototypesLinksCache()
@@ -468,25 +488,4 @@ namespace o2
 	}
 
 #endif
-
-	void LayerDataNodeConverter::ToData(void* object, DataNode& data)
-	{
-		if (object)
-		{
-			SceneLayer* value = (SceneLayer*)object;
-			data = value->name;
-		}
-	}
-
-	void LayerDataNodeConverter::FromData(void* object, const DataNode& data)
-	{
-		SceneLayer*& value = *(SceneLayer**)object;
-		value = o2Scene.GetLayer(data);
-	}
-
-	bool LayerDataNodeConverter::IsConvertsType(const Type* type) const
-	{
-		return type->IsBasedOn(*TypeOf(SceneLayer).GetPointerType());
-	}
-
 }

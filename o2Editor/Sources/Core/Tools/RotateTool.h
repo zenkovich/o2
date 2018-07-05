@@ -1,25 +1,29 @@
 #pragma once
 
 #include "Core/Tools/SelectionTool.h"
-#include "Scene/ActorTransform.h"
 #include "SceneWindow/SceneDragHandle.h"
+#include "Utils/Editor/SceneEditableObject.h"
+#include "Utils/Math/Basis.h"
 
 using namespace o2;
 
 namespace o2
 {
 	class Mesh;
+	class SceneEditableObject;
 }
 
 namespace Editor
 {
-	// ------------------
-	// Rotate actors tool
-	// ------------------
+	class TransformAction;
+
+	// -------------------
+	// Rotate objects tool
+	// -------------------
 	class RotateTool: public SelectionTool
 	{
 	public:
-		typedef Vector<ActorTransform> ActorsTransformsVec;
+		typedef Vector<Basis> BasisVec;
 
 	public:
 		float angleSnapStep = 15.0f; // Rotation angle step in degree
@@ -35,25 +39,27 @@ namespace Editor
 		IOBJECT(RotateTool);
 
 	protected:
-		const float         mRotateRingInsideRadius = 60;						   // Rotate ring inside radius in pixels
-		const float         mRotateRingOutsideRadius = 100;						   // Rotate ring outside radius in pixels
-		const int           mRotateRingSegs = 50;								   // Rotate ring segments
-		const Color4        mRotateRingsColor = Color4(220, 220, 220, 255);		   // Rotate ring border color
-		const Color4        mRotateRingsFillColor = Color4(220, 220, 220, 50);	   // Rotate ring color 1
-		const Color4        mRotateRingsFillColor2 = Color4(220, 220, 220, 100);   // Rotate ring color 2
-		const Color4        mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
-		const Color4        mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
-
-		Mesh*               mRotateRingFillMesh = nullptr; // Rotate ring mesh
-		Mesh*               mAngleMesh = nullptr;          // Rotation angle mesh
-		Vec2F               mScenePivot;				   // Rotation pivot in scene space
-														   
-		SceneDragHandle     mPivotDragHandle;			   // Pivot drag handle
-		float               mPressAngle;				   // Angle at cursor pressing
-		float               mCurrentRotateAngle;		   // Current rotation angle
-		bool                mRingPressed = false;		   // Is rotate ring was pressed
-		float               mSnapAngleAccumulated = 0.0f;  // Snapping angle accumulated
-		ActorsTransformsVec mBeforeTransforms;  		   // Array of actors' transformations before changing
+		const float      mRotateRingInsideRadius = 60;						   // Rotate ring inside radius in pixels
+		const float      mRotateRingOutsideRadius = 100;						   // Rotate ring outside radius in pixels
+		const int        mRotateRingSegs = 50;								   // Rotate ring segments
+		const Color4     mRotateRingsColor = Color4(220, 220, 220, 255);		   // Rotate ring border color
+		const Color4     mRotateRingsFillColor = Color4(220, 220, 220, 50);	   // Rotate ring color 1
+		const Color4     mRotateRingsFillColor2 = Color4(220, 220, 220, 100);   // Rotate ring color 2
+		const Color4     mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
+		const Color4     mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
+						 
+		Mesh*            mRotateRingFillMesh = nullptr; // Rotate ring mesh
+		Mesh*            mAngleMesh = nullptr;          // Rotation angle mesh
+		Vec2F            mScenePivot;				    // Rotation pivot in scene space
+						 							   
+		SceneDragHandle  mPivotDragHandle;			    // Pivot drag handle
+		float            mPressAngle;				    // Angle at cursor pressing
+		float            mCurrentRotateAngle;		    // Current rotation angle
+		bool             mRingPressed = false;		    // Is rotate ring was pressed
+		float            mSnapAngleAccumulated = 0.0f;  // Snapping angle accumulated
+						 
+		BasisVec         mBeforeTransforms;  		    // Array of objects' transformations before changing
+		TransformAction* mTransformAction = nullptr;    // Current transform action. Creates when transform started
 
 	public:
 		// Updates tool
@@ -68,17 +74,17 @@ namespace Editor
 		// It is called when tool was disabled
 		void OnDisabled();
 
-		// It is called when scene actors was changed
-		void OnSceneChanged(Vector<Actor*> changedActors);
+		// It is called when scene objects was changed
+		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects);
 
-		// It is called when actors selection was changed
-		void OnActorsSelectionChanged(Vector<Actor*> actors);
+		// It is called when objects selection was changed
+		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects);
 
 		// Updates ring and angle meshes
 		void UpdateMeshes();
 
-		// Calculates rotate pivot in actors center
-		void CalcPivotByActorsCenter();
+		// Calculates rotate pivot in objects center
+		void CalcPivotByObjectsCenter();
 
 		// It is called when pivot handle moved
 		void OnPivotDragHandleMoved(const Vec2F& position);
@@ -104,17 +110,17 @@ namespace Editor
 		// It is called when key stay down during frame
 		void OnKeyStayDown(const Input::Key& key);
 
-		// Rotates actors on angle
-		void RotateActors(float angleDelta);
+		// Rotates objects on angle
+		void RotateObjects(float angleDelta);
 
-		// Rotates actors on angle separated
-		void RotateActorsSeparated(float angleDelta);
+		// Rotates objects on angle separated
+		void RotateObjectsSeparated(float angleDelta);
 
-		// Rotates actors on angle
-		void RotateActorsWithAction(float angleDelta);
+		// Rotates objects on angle
+		void RotateObjectsWithAction(float angleDelta);
 
-		// Rotates actors on angle separated
-		void RotateActorsSeparatedWithAction(float angleDelta);
+		// Rotates objects on angle separated
+		void RotateObjectsSeparatedWithAction(float angleDelta);
 	};
 }
 
@@ -143,6 +149,7 @@ CLASS_FIELDS_META(Editor::RotateTool)
 	PROTECTED_FIELD(mRingPressed);
 	PROTECTED_FIELD(mSnapAngleAccumulated);
 	PROTECTED_FIELD(mBeforeTransforms);
+	PROTECTED_FIELD(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::RotateTool)
@@ -152,10 +159,10 @@ CLASS_METHODS_META(Editor::RotateTool)
 	PUBLIC_FUNCTION(void, DrawScreen);
 	PUBLIC_FUNCTION(void, OnEnabled);
 	PUBLIC_FUNCTION(void, OnDisabled);
-	PUBLIC_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
-	PUBLIC_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PUBLIC_FUNCTION(void, OnSceneChanged, Vector<SceneEditableObject*>);
+	PUBLIC_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
 	PUBLIC_FUNCTION(void, UpdateMeshes);
-	PUBLIC_FUNCTION(void, CalcPivotByActorsCenter);
+	PUBLIC_FUNCTION(void, CalcPivotByObjectsCenter);
 	PUBLIC_FUNCTION(void, OnPivotDragHandleMoved, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsPointInRotateRing, const Vec2F&);
 	PUBLIC_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
@@ -164,9 +171,9 @@ CLASS_METHODS_META(Editor::RotateTool)
 	PUBLIC_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PUBLIC_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PUBLIC_FUNCTION(void, OnKeyStayDown, const Input::Key&);
-	PUBLIC_FUNCTION(void, RotateActors, float);
-	PUBLIC_FUNCTION(void, RotateActorsSeparated, float);
-	PUBLIC_FUNCTION(void, RotateActorsWithAction, float);
-	PUBLIC_FUNCTION(void, RotateActorsSeparatedWithAction, float);
+	PUBLIC_FUNCTION(void, RotateObjects, float);
+	PUBLIC_FUNCTION(void, RotateObjectsSeparated, float);
+	PUBLIC_FUNCTION(void, RotateObjectsWithAction, float);
+	PUBLIC_FUNCTION(void, RotateObjectsSeparatedWithAction, float);
 }
 END_META;

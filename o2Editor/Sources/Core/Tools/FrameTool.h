@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/Tools/SelectionTool.h"
-#include "Scene/ActorTransform.h"
 #include "SceneWindow/SceneDragHandle.h"
 #include "Utils/Math/Basis.h"
 
@@ -14,13 +13,15 @@ namespace o2
 
 namespace Editor
 {
+	class TransformAction;
+
 	// ----------------------------------
 	// Editor frame and pivot moving tool
 	// ----------------------------------
 	class FrameTool: public SelectionTool
 	{
 	public:
-		typedef Vector<ActorTransform> ActorsTransformsVec;
+		typedef Vector<Basis> BasisVec;
 
 	public:
 		// Default constructor
@@ -48,9 +49,9 @@ namespace Editor
 		typedef Vector<SnapLine> LinesVec;
 
 	protected:
-		const Color4        mFrameColor = Color4(220, 220, 220, 255);        // Actors frame color
-		const Color4        mActorColor = Color4(220, 220, 220, 150);        // Actors frame color
-		const Color4        mParentColor = Color4(220, 220, 220, 100);       // Actors frame color
+		const Color4        mFrameColor = Color4(220, 220, 220, 255);        // Objects frame color
+		const Color4        mObjectColor = Color4(220, 220, 220, 150);       // Object color
+		const Color4        mParentColor = Color4(220, 220, 220, 100);       // Object parent color
 		const Color4        mAnchorsFrameColor = Color4(100, 100, 255, 255); // Widgets anchors frame color
 		const Color4        mSnapLinesColor = Color4(100, 255, 100, 255);    // Widgets anchors frame color
 
@@ -68,7 +69,7 @@ namespace Editor
 		SceneDragHandle     mRightTopHandle;			  // Right top corner frame handle
 		SceneDragHandle     mRightHandle;				  // Right corner frame handle
 		SceneDragHandle     mRightBottomHandle;			  // Right bottom corner frame handle
-		SceneDragHandle     mPivotHandle;				  // Frame or actor pivot handle
+		SceneDragHandle     mPivotHandle;				  // Frame or object pivot handle
 														  
 		SceneDragHandle     mAnchorsLeftTopHandle;		  // Anchors Left top corner frame handle
 		SceneDragHandle     mAnchorsLeftBottomHandle;	  // Anchors Left bottom corner frame handle
@@ -85,9 +86,10 @@ namespace Editor
 		Vec2F               mBeginDraggingOffset;         // Offset at beginning dragging from frame origin to cursor
 
 		bool                mIsDragging = false;		  // Is frame dragging
-		bool                mChangedFromThis = false;	  // Is actors changed from this, needs to break circular updating
+		bool                mChangedFromThis = false;	  // Is objects changed from this, needs to break circular updating
 
-		ActorsTransformsVec mBeforeTransforms;   		  // Array of actors transformations before changing
+		BasisVec            mBeforeTransforms;   		  // Array of objects transformations before changing
+		TransformAction*    mTransformAction = nullptr;   // Current transform action. Creates when transform started
 
 		LinesVec            mSnapLines;                   // Immediate drawing lines, used for drawing snapping
 
@@ -104,11 +106,11 @@ namespace Editor
 		// It is called when tool was disabled
 		void OnDisabled();
 
-		// It is called when scene actors was changed
-		void OnSceneChanged(Vector<Actor*> changedActors);
+		// It is called when scene objects was changed
+		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects);
 
-		// It is called when actors selection was changed
-		void OnActorsSelectionChanged(Vector<Actor*> actors);
+		// It is called when objects selection was changed
+		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects);
 
 		// It is called when key was pressed
 		void OnKeyPressed(const Input::Key& key);
@@ -119,14 +121,14 @@ namespace Editor
 		// It is called when key was pressed
 		void OnKeyReleased(const Input::Key& key);
 
-		// Transforms top selected actors
-		void TransformActors(const Basis& transform);
+		// Transforms top selected objects
+		void TransformObjects(const Basis& transform);
 
-		// Transforms top selected actors
-		void TransformActorsWithAction(const Basis& transform);
+		// Transforms top selected objects
+		void TransformObjectsWithAction(const Basis& transform);
 
-		// Transforms top selected actors anchors
-		void TransformAnchorsActors(const Basis& transform);
+		// Transforms top selected objects anchors
+		void TransformAnchorsObjects(const Basis& transform);
 
 		// Updates selection frame and handles
 		void UpdateSelectionFrame();
@@ -318,7 +320,7 @@ namespace Editor
 		Vec2F CalculateSnapOffset(const Vec2F& point, const Basis& frame, 
 								  const Vector<Vec2F>& xLines, const Vec2F& xNormal,
 								  const Vector<Vec2F>& yLines, const Vec2F& yNormal,
-								  const Vector<Actor*>& actors);
+								  const Vector<SceneEditableObject*>& objects);
 	};
 }
 
@@ -330,7 +332,7 @@ END_META;
 CLASS_FIELDS_META(Editor::FrameTool)
 {
 	PROTECTED_FIELD(mFrameColor);
-	PROTECTED_FIELD(mActorColor);
+	PROTECTED_FIELD(mObjectColor);
 	PROTECTED_FIELD(mParentColor);
 	PROTECTED_FIELD(mAnchorsFrameColor);
 	PROTECTED_FIELD(mSnapLinesColor);
@@ -361,6 +363,7 @@ CLASS_FIELDS_META(Editor::FrameTool)
 	PROTECTED_FIELD(mIsDragging);
 	PROTECTED_FIELD(mChangedFromThis);
 	PROTECTED_FIELD(mBeforeTransforms);
+	PROTECTED_FIELD(mTransformAction);
 	PROTECTED_FIELD(mSnapLines);
 }
 END_META;
@@ -371,14 +374,14 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(void, DrawSnapLines);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
-	PROTECTED_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<SceneEditableObject*>);
+	PROTECTED_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, TransformActors, const Basis&);
-	PROTECTED_FUNCTION(void, TransformActorsWithAction, const Basis&);
-	PROTECTED_FUNCTION(void, TransformAnchorsActors, const Basis&);
+	PROTECTED_FUNCTION(void, TransformObjects, const Basis&);
+	PROTECTED_FUNCTION(void, TransformObjectsWithAction, const Basis&);
+	PROTECTED_FUNCTION(void, TransformAnchorsObjects, const Basis&);
 	PROTECTED_FUNCTION(void, UpdateSelectionFrame);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
@@ -441,6 +444,6 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(bool, IsPointInBottomHandle, const Vec2F&);
 	PROTECTED_FUNCTION(bool, IsPointInAnchorsCenterHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, CheckAnchorsCenterEnabled);
-	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&, const Vector<Actor*>&);
+	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&, const Vector<SceneEditableObject*>&);
 }
 END_META;

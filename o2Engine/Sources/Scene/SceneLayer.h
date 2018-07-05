@@ -67,6 +67,22 @@ namespace o2
 	};
 
 	typedef Vector<SceneLayer*> SceneLayersVec;
+
+	// -------------------------
+	// Layer data node converter
+	// -------------------------
+	class LayerDataNodeConverter : public IDataNodeTypeConverter
+	{
+	public:
+		// Converts layer pointer to data 
+		void ToData(void* object, DataNode& data);
+
+		// Gets layer pointer from data
+		void FromData(void* object, const DataNode& data);
+
+		// Checks that type is layer's type
+		bool IsConvertsType(const Type* type) const;
+	};
 }
 
 CLASS_BASES_META(o2::SceneLayer)

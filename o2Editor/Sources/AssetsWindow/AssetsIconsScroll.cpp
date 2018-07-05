@@ -9,14 +9,14 @@
 #include "Assets/DataAsset.h"
 #include "Assets/FolderAsset.h"
 #include "AssetsWindow.h"
-#include "Core/Actions/CreateActors.h"
+#include "Core/Actions/Create.h"
 #include "Core/EditorApplication.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
 #include "Scene/Components/ImageComponent.h"
-#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/SceneTree.h"
 #include "UI/EditBox.h"
 #include "UI/GridLayout.h"
 #include "UI/Label.h"
@@ -126,7 +126,7 @@ namespace Editor
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
 
-		if (mIsDraggingIcons && mInstSceneDragActors.Count() == 0)
+		if (mIsDraggingIcons && mInstSceneDragObjects.Count() == 0)
 			o2UI.DrawWidgetAtTop(mDragIcon);
 
 		if (IsUIDebugEnabled() || o2Input.IsKeyDown(VK_F1))
@@ -520,7 +520,7 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::UpdateDraggingGraphics()
 	{
-		mDragIcon->SetParent(nullptr);
+		mDragIcon->SetEditableParent(nullptr);
 		mDragIcon->layout->SetRect(RectF(o2Input.GetCursorPos() - mAssetIconSize*0.5f + mDragOffset,
 								  o2Input.GetCursorPos() + mAssetIconSize*0.5f + mDragOffset));
 	}
@@ -538,8 +538,8 @@ namespace Editor
 	{
 		if (dynamic_cast<UIAssetsIconsScrollArea*>(group))
 			OnDroppedFromThis();
-		else if (auto actorsTree = dynamic_cast<UIActorsTree*>(group))
-			OnDroppedFromActorsTree(actorsTree);
+		else if (auto sceneTree = dynamic_cast<UISceneTree*>(group))
+			OnDroppedFromSceneTree(sceneTree);
 	}
 
 	void UIAssetsIconsScrollArea::OnDroppedFromThis()
@@ -558,7 +558,7 @@ namespace Editor
 			sel->Show();
 	}
 
-	void UIAssetsIconsScrollArea::OnDroppedFromActorsTree(UIActorsTree* actorsTree)
+	void UIAssetsIconsScrollArea::OnDroppedFromSceneTree(UISceneTree* sceneTree)
 	{
 		String destPath = mCurrentPath;
 
@@ -567,16 +567,19 @@ namespace Editor
 			destPath = iconUnderCursor->GetAssetInfo().path;
 
 		Vector<String> newAssets;
-		for (auto actor : actorsTree->GetSelectedActors())
+		for (auto object : sceneTree->GetSelectedObjects())
 		{
-			ActorAssetRef newAsset = actor->MakePrototype();
-			String path = destPath.IsEmpty() ? newAsset->GetActor()->name + ".proto" : destPath + "/" + 
-				          newAsset->GetActor()->name + ".proto";
+			if (Actor* actor = dynamic_cast<Actor*>(object))
+			{
+				ActorAssetRef newAsset = actor->MakePrototype();
+				String path = destPath.IsEmpty() ? newAsset->GetActor()->name + ".proto" : destPath + "/" +
+					newAsset->GetActor()->name + ".proto";
 
-			String uniquePath = o2Assets.MakeUniqueAssetName(path);
-			newAsset->Save(uniquePath, false);
+				String uniquePath = o2Assets.MakeUniqueAssetName(path);
+				newAsset->Save(uniquePath, false);
 
-			newAssets.Add(uniquePath);
+				newAssets.Add(uniquePath);
+			}
 		}
 
 		o2Assets.RebuildAssets();
@@ -585,15 +588,15 @@ namespace Editor
 		o2EditorAssets.SelectAssets(newAssets);
 	}
 
-	void UIAssetsIconsScrollArea::RegActorsCreationAction()
+	void UIAssetsIconsScrollArea::RegObjectssCreationAction()
 	{
-		auto firstInstActor = mInstSceneDragActors[0];
-		auto parent = firstInstActor->GetParent();
-		auto parentChilds = parent ? parent->GetChildren() : o2Scene.GetRootActors();
-		int idx = parentChilds.Find(firstInstActor);
+		auto firstInstObject = mInstSceneDragObjects[0];
+		auto parent = firstInstObject->GetEditableParent();
+		auto parentChilds = parent ? parent->GetEditablesChildren() : o2Scene.GetRootEditableObjects();
+		int idx = parentChilds.Find(firstInstObject);
 		auto prevActor = idx > 0 ? parentChilds[idx - 1] : nullptr;
 
-		auto createAction = mnew CreateActorsAction(mInstSceneDragActors, parent, prevActor);
+		auto createAction = mnew CreateAction(mInstSceneDragObjects, parent, prevActor);
 
 		o2EditorApplication.DoneAction(createAction);
 	}
@@ -607,17 +610,17 @@ namespace Editor
 			if (actor)
 			{
 				actor->name = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(info.path));
-				mInstSceneDragActors.Add(actor);
+				mInstSceneDragObjects.Add(actor);
 			}
 		}
 	}
 
 	void UIAssetsIconsScrollArea::ClearInstantiatedDraggingAssets()
 	{
-		for (auto actor : mInstSceneDragActors)
+		for (auto actor : mInstSceneDragObjects)
 			delete actor;
 
-		mInstSceneDragActors.Clear();
+		mInstSceneDragObjects.Clear();
 	}
 
 	void UIAssetsIconsScrollArea::OnCursorPressBreak(const Input::Cursor& cursor)

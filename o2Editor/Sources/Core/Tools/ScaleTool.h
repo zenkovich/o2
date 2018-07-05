@@ -1,18 +1,20 @@
 #pragma once
 
 #include "Core/Tools/SelectionTool.h"
-#include "Scene/ActorTransform.h"
 #include "SceneWindow/SceneDragHandle.h"
+#include "Utils/Math/Basis.h"
 
 namespace Editor
 {
-	// ------------------------
-	// Scale actors editor tool
-	// ------------------------
+	class TransformAction;
+
+	// -------------------------
+	// Scale objects editor tool
+	// -------------------------
 	class ScaleTool: public SelectionTool
 	{
 	public:
-		typedef Vector<ActorTransform> ActorsTransformsVec;
+		typedef Vector<Basis> BasisVec;
 
 	public:
 		float bothScaleSence = 0.01f;
@@ -26,16 +28,20 @@ namespace Editor
 		IOBJECT(ScaleTool);
 
 	protected:
-		SceneDragHandle     mHorDragHandle;					// Horizontal scale drag handle
-		SceneDragHandle     mVerDragHandle;					// Vertical scale drag handle
-		SceneDragHandle     mBothDragHandle;				// Bot axis scale drag handle
-		float               mHandlesAngle = 0.0f;			// Handles angle in radians
-		Vec2F               mSceneHandlesPos;				// Scene space handles position
-		Vec2F               mHandlesSize = Vec2F(100, 100);	// Handles size in screen space
-		Vec2F               mLastHorHandlePos;				// Last horizontal handle position
-		Vec2F               mLastVerHandlePos;				// Last vertical handle position
-		Vec2F               mLastBothHandlePos;				// Last both axis handle position
-		ActorsTransformsVec mBeforeTransforms;				// Array of actors' transformations before changing
+		SceneDragHandle  mHorDragHandle;					// Horizontal scale drag handle
+		SceneDragHandle  mVerDragHandle;					// Vertical scale drag handle
+		SceneDragHandle  mBothDragHandle;				    // Bot axis scale drag handle
+
+		float            mHandlesAngle = 0.0f;			    // Handles angle in radians
+		Vec2F            mSceneHandlesPos;				    // Scene space handles position
+		Vec2F            mHandlesSize = Vec2F(100, 100);	// Handles size in screen space
+
+		Vec2F            mLastHorHandlePos;				    // Last horizontal handle position
+		Vec2F            mLastVerHandlePos;				    // Last vertical handle position
+		Vec2F            mLastBothHandlePos;				// Last both axis handle position
+
+		BasisVec         mBeforeTransforms;				    // Array of objects' transformations before changing
+		TransformAction* mTransformAction = nullptr;        // Current transform action. Creates when transform started
 
 	protected:
 		// Updates tool
@@ -50,11 +56,11 @@ namespace Editor
 		// It is called when tool was disabled
 		void OnDisabled();
 
-		// It is called when scene actors was changed
-		void OnSceneChanged(Vector<Actor*> changedActors);
+		// It is called when scene objects was changed
+		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects);
 
-		// It is called when actors selection was changed
-		void OnActorsSelectionChanged(Vector<Actor*> actors);
+		// It is called when objects selection was changed
+		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects);
 
 		// It is called when horizontal drag handle was moved
 		void OnHorDragHandleMoved(const Vec2F& position);
@@ -83,8 +89,8 @@ namespace Editor
 		// It is called when key was pressed
 		void OnKeyReleased(const Input::Key& key);
 
-		// Moves selected actors on delta
-		void ScaleSelectedActors(const Vec2F& scale);
+		// Moves selected objects on delta
+		void ScaleSelectedObjects(const Vec2F& scale);
 
 		// It is called when some handle was pressed, stores before transformations
 		void HandlePressed();
@@ -113,6 +119,7 @@ CLASS_FIELDS_META(Editor::ScaleTool)
 	PROTECTED_FIELD(mLastVerHandlePos);
 	PROTECTED_FIELD(mLastBothHandlePos);
 	PROTECTED_FIELD(mBeforeTransforms);
+	PROTECTED_FIELD(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::ScaleTool)
@@ -122,8 +129,8 @@ CLASS_METHODS_META(Editor::ScaleTool)
 	PROTECTED_FUNCTION(void, DrawScreen);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
-	PROTECTED_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<SceneEditableObject*>);
+	PROTECTED_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
 	PROTECTED_FUNCTION(void, OnHorDragHandleMoved, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnVerDragHandleMoved, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnBothDragHandleMoved, const Vec2F&);
@@ -133,7 +140,7 @@ CLASS_METHODS_META(Editor::ScaleTool)
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, ScaleSelectedActors, const Vec2F&);
+	PROTECTED_FUNCTION(void, ScaleSelectedObjects, const Vec2F&);
 	PROTECTED_FUNCTION(void, HandlePressed);
 	PROTECTED_FUNCTION(void, HandleReleased);
 }

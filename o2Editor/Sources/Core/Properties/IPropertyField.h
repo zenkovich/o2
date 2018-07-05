@@ -147,7 +147,7 @@ namespace Editor
 		virtual bool IsValueRevertable() const;
 
 		// It is called when field value changed
-		virtual void OnChanged();
+		virtual void OnValueChanged();
 
 		// It is called when user began to change value and we need to store initial value data
 		void BeginUserChanging();
@@ -276,7 +276,7 @@ namespace Editor
 		mValuesDifferent = false;
 
 		UpdateValueView();
-		OnChanged();
+		OnValueChanged();
 	}
 
 	template<typename _type>
@@ -315,7 +315,7 @@ namespace Editor
 		mValuesDifferent = true;
 
 		UpdateValueView();
-		OnChanged();
+		OnValueChanged();
 	}
 
 	template<typename _type>
@@ -489,7 +489,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
-	PROTECTED_FUNCTION(void, OnChanged);
+	PROTECTED_FUNCTION(void, OnValueChanged);
 	PROTECTED_FUNCTION(void, BeginUserChanging);
 	PROTECTED_FUNCTION(void, EndUserChanging);
 }

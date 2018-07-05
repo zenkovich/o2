@@ -206,7 +206,7 @@ namespace Editor
 					privates->SetCaption("Private");
 					layout->AddChild(privates);
 				}
-				else privates->SetPositionIndexInParent(layout->GetChildren().Count() - 1);
+				else privates->SetIndexInSiblings(layout->GetChildren().Count() - 1);
 
 				propertiesInfo.privatePropertiesSpoiler = privates;
 				BuildFields(privates, privateFields, propertiesInfo, path, onChangeCompleted, onChanged);

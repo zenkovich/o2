@@ -175,7 +175,7 @@ namespace Editor
 
 		UpdateValueView();
 		CheckRevertableState();
-		OnChanged();
+		OnValueChanged();
 	}
 
 	template<typename _type>

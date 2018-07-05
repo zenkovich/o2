@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "SelectionTool.h"
 
-#include "Core/Actions/SelectActors.h"
+#include "Core/Actions/Select.h"
 #include "Core/EditorApplication.h"
 #include "Render/Sprite.h"
-#include "Scene/Actor.h"
 #include "Scene/SceneLayer.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "TreeWindow/TreeWindow.h"
+#include "Utils/Editor/SceneEditableObject.h"
 
 namespace Editor
 {
@@ -24,13 +24,13 @@ namespace Editor
 
 	void SelectionTool::DrawScene()
 	{
-		for (auto actor : mCurrentSelectingActors)
-			o2EditorSceneScreen.DrawActorSelection(actor, o2EditorSceneScreen.GetManyActorsSelectionColor());
+		for (auto object : mCurrentSelectingObjects)
+			o2EditorSceneScreen.DrawObjectSelection(object, o2EditorSceneScreen.GetManyObjectsSelectionColor());
 	}
 
 	void SelectionTool::DrawScreen()
 	{
-		if (mSelectingActors)
+		if (mSelectingObjects)
 			mSelectionSprite->Draw();
 	}
 
@@ -42,10 +42,10 @@ namespace Editor
 
 	void SelectionTool::OnDisabled()
 	{
-		mSelectingActors = false;
+		mSelectingObjects = false;
 	}
 
-	void SelectionTool::OnActorsSelectionChanged(Vector<Actor*> actors)
+	void SelectionTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
 	{}
 
 	void SelectionTool::OnCursorPressed(const Input::Cursor& cursor)
@@ -55,13 +55,13 @@ namespace Editor
 
 	void SelectionTool::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		if (mSelectingActors)
+		if (mSelectingObjects)
 		{
-			o2EditorSceneScreen.SelectActorsWithoutAction(mCurrentSelectingActors, true);
-			mCurrentSelectingActors.Clear();
-			mSelectingActors = false;
+			o2EditorSceneScreen.SelectObjectsWithoutAction(mCurrentSelectingObjects, true);
+			mCurrentSelectingObjects.Clear();
+			mSelectingObjects = false;
 
-			auto selectionAction = mnew SelectActorsAction(o2EditorSceneScreen.GetSelectedActors(), mBeforeSelectingActors);
+			auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(), mBeforeSelectingObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 		else
@@ -70,22 +70,22 @@ namespace Editor
 			Vec2F sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
 			for (auto layer : o2Scene.GetLayers())
 			{
-				for (auto actor : layer->GetEnabledActors())
+				for (auto object : layer->GetEnabledActors())
 				{
-					if (!actor->IsLockedInHierarchy() && actor->IsOnScene() && 
-						actor->transform->IsPointInside(sceneSpaceCursor))
+					if (!object->IsLockedInHierarchy() && object->IsOnScene() && 
+						object->transform->IsPointInside(sceneSpaceCursor))
 					{
-						mBeforeSelectingActors = o2EditorSceneScreen.GetSelectedActors();
+						mBeforeSelectingObjects = o2EditorSceneScreen.GetSelectedObjects();
 
 						if (!o2Input.IsKeyDown(VK_CONTROL))
 							o2EditorSceneScreen.ClearSelectionWithoutAction(false);
 
-						o2EditorSceneScreen.SelectActorWithoutAction(actor);
-						o2EditorTree.HightlightActorsTreeNode(actor);
+						o2EditorSceneScreen.SelectObjectWithoutAction(object);
+						o2EditorTree.HightlightObjectTreeNode(object);
 						selected = true;
 
-						auto selectionAction = mnew SelectActorsAction(o2EditorSceneScreen.GetSelectedActors(),
-																		  mBeforeSelectingActors);
+						auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(),
+																		  mBeforeSelectingObjects);
 						o2EditorApplication.DoneAction(selectionAction);
 						break;
 					}
@@ -99,50 +99,50 @@ namespace Editor
 
 	void SelectionTool::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
-		if (mSelectingActors)
+		if (mSelectingObjects)
 		{
-			mSelectingActors = false;
-			mCurrentSelectingActors.Clear();
+			mSelectingObjects = false;
+			mCurrentSelectingObjects.Clear();
 		}
 	}
 
 	void SelectionTool::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		if (!mSelectingActors && (mPressPoint - cursor.position).Length() > 5.0f)
+		if (!mSelectingObjects && (mPressPoint - cursor.position).Length() > 5.0f)
 		{
-			mSelectingActors = true;
+			mSelectingObjects = true;
 
-			mBeforeSelectingActors = o2EditorSceneScreen.GetSelectedActors();
+			mBeforeSelectingObjects = o2EditorSceneScreen.GetSelectedObjects();
 
 			if (!o2Input.IsKeyDown(VK_CONTROL))
 				o2EditorSceneScreen.ClearSelectionWithoutAction();
 		}
 
-		if (mSelectingActors && cursor.delta.Length() > 0.1f)
+		if (mSelectingObjects && cursor.delta.Length() > 0.1f)
 		{
 			mSelectionSprite->SetRect(RectF(mPressPoint, cursor.position));
 			RectF selectionRect(o2EditorSceneScreen.ScreenToScenePoint(cursor.position),
 								o2EditorSceneScreen.ScreenToScenePoint(mPressPoint));
 
-			auto currentSelectedActors = mCurrentSelectingActors;
-			mCurrentSelectingActors.Clear();
-			for (auto actor : currentSelectedActors)
+			auto currentSelectedObjects = mCurrentSelectingObjects;
+			mCurrentSelectingObjects.Clear();
+			for (auto object : currentSelectedObjects)
 			{
-				if (actor->transform->GetWorldRect().IsIntersects(selectionRect))
-					mCurrentSelectingActors.Add(actor);
+				if (object->GetTransform().AABB().IsIntersects(selectionRect))
+					mCurrentSelectingObjects.Add(object);
 			}
 
 			for (auto layer : o2Scene.GetLayers())
 			{
-				for (auto actor : layer->GetEnabledActors())
+				for (auto object : layer->GetEnabledActors())
 				{
-					if (mCurrentSelectingActors.Contains(actor))
+					if (mCurrentSelectingObjects.Contains(object))
 						continue;
 
-					if (!actor->IsLockedInHierarchy() && actor->IsOnScene()
-						&& actor->transform->GetWorldRect().IsIntersects(selectionRect))
+					if (!object->IsLockedInHierarchy() && object->IsOnScene()
+						&& object->transform->GetWorldRect().IsIntersects(selectionRect))
 					{
-						mCurrentSelectingActors.Add(actor);
+						mCurrentSelectingObjects.Add(object);
 					}
 				}
 			}
@@ -160,7 +160,7 @@ namespace Editor
 			o2EditorSceneScreen.ClearSelection();
 
 		if (key == 'A' && o2Input.IsKeyDown(VK_CONTROL))
-			o2EditorSceneScreen.SelectAllActors();
+			o2EditorSceneScreen.SelectAllObjects();
 	}
 
 }

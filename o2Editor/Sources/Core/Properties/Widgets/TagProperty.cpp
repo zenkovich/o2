@@ -80,7 +80,7 @@ namespace Editor
 		mEditBox->text = res;
 		mPushingTag = false;
 
-		OnChanged();
+		OnValueChanged();
 	}
 
 	void TagsProperty::OnEditBoxChanged(const WString& text)

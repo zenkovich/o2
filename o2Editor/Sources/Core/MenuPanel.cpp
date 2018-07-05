@@ -13,7 +13,7 @@
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Scene.h"
 #include "SceneWindow/SceneWindow.h"
-#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/SceneTree.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/Button.h"
 #include "UI/HorizontalLayout.h"
@@ -70,7 +70,7 @@ namespace Editor
 		mMenuPanel->AddItem("Edit/---");
 
 		mMenuPanel->AddToggleItem("Edit/Options/View editor UI tree", true,
-								  [&](bool x) { o2EditorTree.GetActorsTree()->SetEditorWatching(x); });
+								  [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
 
 		// VIEW
 		mMenuPanel->AddItem("View/Show Tree", [&]() { OnShowTreePressed(); });

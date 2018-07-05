@@ -14,7 +14,7 @@ namespace o2
 
 namespace Editor
 {
-	class UIActorsTree;
+	class UISceneTree;
 	class UIAssetsIconsScrollArea;
 
 	// ---------------------
@@ -82,13 +82,13 @@ namespace Editor
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when actors tree nodes was dragged and dropped to this
-		void OnDroppedFromActorsTree(UIActorsTree* actorsTree);
+		void OnDroppedFromActorsTree(UISceneTree* actorsTree);
 
 		// It is called when actors tree nodes was dragged and entered to this
-		void OnDragEnterFromActorsTree(UIActorsTree* actorsTree);
+		void OnDragEnterFromActorsTree(UISceneTree* actorsTree);
 
 		// It is called when actors tree nodes was dragged and exited from this
-		void OnDragExitFromActorsTree(UIActorsTree* actorsTree);
+		void OnDragExitFromActorsTree(UISceneTree* actorsTree);
 
 		// It is called when assets scroll icons was dragged and dropped to this
 		void OnDroppedFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
@@ -131,9 +131,9 @@ CLASS_METHODS_META(Editor::ActorProperty)
 	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
-	PROTECTED_FUNCTION(void, OnDroppedFromActorsTree, UIActorsTree*);
-	PROTECTED_FUNCTION(void, OnDragEnterFromActorsTree, UIActorsTree*);
-	PROTECTED_FUNCTION(void, OnDragExitFromActorsTree, UIActorsTree*);
+	PROTECTED_FUNCTION(void, OnDroppedFromActorsTree, UISceneTree*);
+	PROTECTED_FUNCTION(void, OnDragEnterFromActorsTree, UISceneTree*);
+	PROTECTED_FUNCTION(void, OnDragExitFromActorsTree, UISceneTree*);
 	PROTECTED_FUNCTION(void, OnDroppedFromAssetsScroll, UIAssetsIconsScrollArea*);
 	PROTECTED_FUNCTION(void, OnDragEnterFromAssetsScroll, UIAssetsIconsScrollArea*);
 	PROTECTED_FUNCTION(void, OnDragExitFromAssetsScroll, UIAssetsIconsScrollArea*);

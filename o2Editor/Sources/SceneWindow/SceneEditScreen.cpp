@@ -2,11 +2,12 @@
 #include "SceneEditScreen.h"
 
 #include "AssetsWindow/AssetsIconsScroll.h"
-#include "Core/Actions/SelectActors.h"
+#include "Core/Actions/Select.h"
 #include "Core/EditorApplication.h"
 #include "Core/Tools/IEditorTool.h"
 #include "Core/Tools/MoveTool.h"
 #include "Core/Tools/SelectionTool.h"
+#include "Core/UIRoot.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Render/Render.h"
@@ -16,12 +17,11 @@
 #include "Scene/Scene.h"
 #include "Scene/SceneLayer.h"
 #include "SceneWindow/SceneDragHandle.h"
-#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/SceneTree.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/Tree.h"
 #include "UI/UIManager.h"
 #include "Utils/Math/Math.h"
-#include "Core/UIRoot.h"
 
 DECLARE_SINGLETON(Editor::SceneEditScreen);
 
@@ -72,7 +72,7 @@ namespace Editor
 		UIWidget::Update(dt);
 
 		UpdateCamera(dt);
-		o2Scene.CheckChangedActors();
+		o2Scene.CheckChangedObjects();
 
 		if (mEnabledTool)
 			mEnabledTool->Update(dt);
@@ -118,22 +118,22 @@ namespace Editor
 		return false;
 	}
 
-	void SceneEditScreen::OnActorsSelectedFromThis()
+	void SceneEditScreen::OnObjectsSelectedFromThis()
 	{
 		mSelectedFromThis = true;
-		mActorsTree->SetSelectedActors(mSelectedActors);
+		mSceneTree->SetSelectedObjects(mSelectedObjects);
 
 		if (mEnabledTool)
-			mEnabledTool->OnActorsSelectionChanged(mSelectedActors);
+			mEnabledTool->OnObjectsSelectionChanged(mSelectedObjects);
 
-		onSelectionChanged(mSelectedActors);
-		o2EditorPropertiesWindow.SetTargets(mSelectedActors.Select<IObject*>([](auto x) { return (IObject*)x; }));
+		onSelectionChanged(mSelectedObjects);
+		o2EditorPropertiesWindow.SetTargets(mSelectedObjects.Select<IObject*>([](auto x) { return (IObject*)x; }));
 	}
 
 	void SceneEditScreen::RedrawContent()
 	{
 		DrawGrid();
- 		DrawActors();
+ 		DrawObjects();
 		DrawSelection();
 
 		if (mEnabledTool)
@@ -143,7 +143,7 @@ namespace Editor
 		}
 	}
 
-	void SceneEditScreen::DrawActors()
+	void SceneEditScreen::DrawObjects()
 	{
 		for (auto layer : o2Scene.GetLayers())
 		{
@@ -163,110 +163,105 @@ namespace Editor
 
 	void SceneEditScreen::DrawSelection()
 	{
-		if (mSelectedActors.Count() == 1)
+		if (mSelectedObjects.Count() == 1)
 		{
-			DrawActorSelection(mSelectedActors[0], mSelectedActorColor);
+			DrawObjectSelection(mSelectedObjects[0], mSelectedObjectColor);
 		}
 		else
 		{
-			for (auto actor : mSelectedActors)
-				DrawActorSelection(actor, mMultiSelectedActorColor);
+			for (auto object : mSelectedObjects)
+				DrawObjectSelection(object, mMultiSelectedObjectColor);
 		}
 	}
 
-	void SceneEditScreen::DrawActorSelection(Actor* actor, const Color4& color)
+	void SceneEditScreen::DrawObjectSelection(SceneEditableObject* object, const Color4& color)
 	{
-		float camScale = mViewCamera.GetScale().x;
-		Vec2F screenSize = actor->transform->GetWorldAxisAlignedRect().Size() / camScale;
-		if (screenSize.SqrLength() < mActorMinimalSelectionSize*mActorMinimalSelectionSize)
-		{
-			Vec2F wpos = actor->transform->GetWorldPosition();
-			float sz = mActorMinimalSelectionSize*0.5f*camScale;
-			o2Render.DrawAACircle(wpos, sz, color);
-			o2Render.DrawAALine(wpos, wpos + actor->transform->GetUpDir()*sz, color);
-		}
-		else o2Render.DrawAABasis(actor->transform->GetWorldBasis(), color, color, color);
+		o2Render.DrawAABasis(object->GetTransform(), color, color, color);
 		// 
 		// 	auto bs = actor->transform->GetWorldNonSizedBasis();
 		// 	o2Render.DrawLine(bs.offs, bs.offs + bs.xv*100.0f);
 		// 	o2Render.DrawLine(bs.offs, bs.offs + bs.yv*100.0f);
 	}
 
-	void SceneEditScreen::SelectActors(ActorsVec actors, bool additive /*= true*/)
+	void SceneEditScreen::SelectObjects(SceneEditableObjectsVec objects, bool additive /*= true*/)
 	{
-		auto prevSelectedActors = mSelectedActors;
+		auto prevSelectedObjects = mSelectedObjects;
 
-		SelectActorsWithoutAction(actors, additive);
+		SelectObjectsWithoutAction(objects, additive);
 
-		if (mSelectedActors != prevSelectedActors)
+		if (mSelectedObjects != prevSelectedObjects)
 		{
-			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
 
-	void SceneEditScreen::SelectActor(Actor* actor, bool additive /*= true*/)
+	void SceneEditScreen::SelectObject(SceneEditableObject* actor, bool additive /*= true*/)
 	{
-		auto prevSelectedActors = mSelectedActors;
+		auto prevSelectedObjects = mSelectedObjects;
 
-		SelectActorWithoutAction(actor, additive);
+		SelectObjectWithoutAction(actor, additive);
 
-		if (mSelectedActors != prevSelectedActors)
+		if (mSelectedObjects != prevSelectedObjects)
 		{
-			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
 
-	void SceneEditScreen::SelectAllActors()
+	void SceneEditScreen::SelectAllObjects()
 	{
-		auto prevSelectedActors = mSelectedActors;
+		auto prevSelectedObjects = mSelectedObjects;
 
-		mSelectedActors.Clear();
+		mSelectedObjects.Clear();
 		for (auto layer : o2Scene.GetLayers())
-			mSelectedActors.Add(layer->GetEnabledActors().FindAll([](auto x) { return !x->IsLockedInHierarchy(); }));
+		{
+			mSelectedObjects.Add(layer->GetEnabledActors().
+								 FindAll([](auto x) { return !x->IsLockedInHierarchy(); }).
+								 Select<SceneEditableObject*>([](auto x) { return dynamic_cast<SceneEditableObject*>(x); }));
+		}
 
 		mNeedRedraw = true;
-		OnActorsSelectedFromThis();
+		OnObjectsSelectedFromThis();
 
-		if (mSelectedActors != prevSelectedActors)
+		if (mSelectedObjects != prevSelectedObjects)
 		{
-			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
 
 	void SceneEditScreen::ClearSelection()
 	{
-		auto prevSelectedActors = mSelectedActors;
+		auto prevSelectedObjects = mSelectedObjects;
 
 		ClearSelectionWithoutAction();
 
-		if (mSelectedActors != prevSelectedActors)
+		if (mSelectedObjects != prevSelectedObjects)
 		{
-			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
 	}
 
-	const SceneEditScreen::ActorsVec& SceneEditScreen::GetSelectedActors() const
+	const SceneEditScreen::SceneEditableObjectsVec& SceneEditScreen::GetSelectedObjects() const
 	{
-		return mSelectedActors;
+		return mSelectedObjects;
 	}
 
-	const SceneEditScreen::ActorsVec& SceneEditScreen::GetTopSelectedActors() const
+	const SceneEditScreen::SceneEditableObjectsVec& SceneEditScreen::GetTopSelectedObjects() const
 	{
-		return mTopSelectedActors;
+		return mTopSelectedObjects;
 	}
 
-	const Color4& SceneEditScreen::GetSingleActorSelectionColor() const
+	const Color4& SceneEditScreen::GetSingleObjectSelectionColor() const
 	{
-		return mSelectedActorColor;
+		return mSelectedObjectColor;
 	}
 
-	const Color4& SceneEditScreen::GetManyActorsSelectionColor() const
+	const Color4& SceneEditScreen::GetManyObjectsSelectionColor() const
 	{
-		return mMultiSelectedActorColor;
+		return mMultiSelectedObjectColor;
 	}
 
 	bool SceneEditScreen::IsUnderPoint(const Vec2F& point)
@@ -274,16 +269,16 @@ namespace Editor
 		return UIWidget::IsUnderPoint(point);
 	}
 
-	void SceneEditScreen::BindActorsTree()
+	void SceneEditScreen::BindSceneTree()
 	{
-		mActorsTree = o2EditorWindows.GetWindow<TreeWindow>()->GetActorsTree();
+		mSceneTree = o2EditorWindows.GetWindow<TreeWindow>()->GetSceneTree();
 
-		mActorsTree->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);
+		mSceneTree->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);
 
-		o2Scene.onChanged += Function<void(ActorsVec)>(this, &SceneEditScreen::OnSceneChanged);
+		o2Scene.onObjectsChanged += Function<void(SceneEditableObjectsVec)>(this, &SceneEditScreen::OnSceneChanged);
 	}
 
-	void SceneEditScreen::OnTreeSelectionChanged(Vector<Actor*> selectedActors)
+	void SceneEditScreen::OnTreeSelectionChanged(SceneEditableObjectsVec selectedObjects)
 	{
 		if (mSelectedFromThis)
 		{
@@ -291,62 +286,54 @@ namespace Editor
 			return;
 		}
 
-		auto prevSelectedActors = mSelectedActors;
+		auto prevSelectedObjects = mSelectedObjects;
 
-		mSelectedActors = selectedActors;
+		mSelectedObjects = selectedObjects;
 		mNeedRedraw = true;
 
-		UpdateTopSelectedActors();
+		UpdateTopSelectedObjects();
 
 		if (mEnabledTool)
-			mEnabledTool->OnActorsSelectionChanged(mSelectedActors);
+			mEnabledTool->OnObjectsSelectionChanged(mSelectedObjects);
 
-		if (mSelectedActors != prevSelectedActors || 
-			mSelectedActors.Cast<IObject*>() != o2EditorPropertiesWindow.GetTargets())
+		auto selectedIObjects = mSelectedObjects.Select<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); });
+
+		if (mSelectedObjects != prevSelectedObjects || 
+			selectedIObjects != o2EditorPropertiesWindow.GetTargets())
 		{
-			auto selectionAction = mnew SelectActorsAction(mSelectedActors, prevSelectedActors);
+			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 
-			onSelectionChanged(mSelectedActors);
-			o2EditorPropertiesWindow.SetTargets(mSelectedActors.Select<IObject*>([](auto x) { return (IObject*)x; }));
+			onSelectionChanged(mSelectedObjects);
+			o2EditorPropertiesWindow.SetTargets(selectedIObjects);
 		}
 	}
 
-	int SceneEditScreen::GetActorIdx(Actor* actor)
+	void SceneEditScreen::UpdateTopSelectedObjects()
 	{
-		if (actor->GetParent())
-		{
-			return actor->GetParent()->GetChildren().Find(actor) + GetActorIdx(actor->GetParent());
-		}
-
-		return o2Scene.GetRootActors().Find(actor);
-	}
-
-	void SceneEditScreen::UpdateTopSelectedActors()
-	{
-		mTopSelectedActors.Clear();
-		for (auto actor : mSelectedActors)
+		mTopSelectedObjects.Clear();
+		for (auto object : mSelectedObjects)
 		{
 			bool processing = true;
 
-			Actor* parent = actor->GetParent();
+			SceneEditableObject* parent = object->GetEditableParent();
 			while (parent)
 			{
-				if (mSelectedActors.ContainsPred([&](auto x) { return parent == x; }))
+				if (mSelectedObjects.ContainsPred([&](auto x) { return parent == x; }))
 				{
 					processing = false;
 					break;
 				}
 
-				parent = parent->GetParent();
+				parent = parent->GetEditableParent();
 			}
 
 			if (processing)
-				mTopSelectedActors.Add(actor);
+				mTopSelectedObjects.Add(object);
 		}
 	}
 
-	void SceneEditScreen::OnSceneChanged(ActorsVec actors)
+	void SceneEditScreen::OnSceneChanged(SceneEditableObjectsVec actors)
 	{
 		mNeedRedraw = true;
 
@@ -361,36 +348,36 @@ namespace Editor
 
 	void SceneEditScreen::ClearSelectionWithoutAction(bool sendSelectedMessage /*= true*/)
 	{
-		mSelectedActors.Clear();
-		mTopSelectedActors.Clear();
+		mSelectedObjects.Clear();
+		mTopSelectedObjects.Clear();
 		mNeedRedraw = true;
 
 		if (sendSelectedMessage)
-			OnActorsSelectedFromThis();
+			OnObjectsSelectedFromThis();
 	}
 
-	void SceneEditScreen::SelectActorsWithoutAction(ActorsVec actors, bool additive /*= true*/)
+	void SceneEditScreen::SelectObjectsWithoutAction(SceneEditableObjectsVec objects, bool additive /*= true*/)
 	{
 		if (!additive)
-			mSelectedActors.Clear();
+			mSelectedObjects.Clear();
 
-		mSelectedActors.Add(actors);
+		mSelectedObjects.Add(objects);
 		mNeedRedraw = true;
 
-		UpdateTopSelectedActors();
-		OnActorsSelectedFromThis();
+		UpdateTopSelectedObjects();
+		OnObjectsSelectedFromThis();
 	}
 
-	void SceneEditScreen::SelectActorWithoutAction(Actor* actor, bool additive /*= true*/)
+	void SceneEditScreen::SelectObjectWithoutAction(SceneEditableObject* object, bool additive /*= true*/)
 	{
 		if (!additive)
-			mSelectedActors.Clear();
+			mSelectedObjects.Clear();
 
-		mSelectedActors.Add(actor);
+		mSelectedObjects.Add(object);
 		mNeedRedraw = true;
 
-		UpdateTopSelectedActors();
-		OnActorsSelectedFromThis();
+		UpdateTopSelectedObjects();
+		OnObjectsSelectedFromThis();
 	}
 
 	void SceneEditScreen::OnDropped(ISelectableDragableObjectsGroup* group)
@@ -399,12 +386,12 @@ namespace Editor
 		if (!assetsScroll)
 			return;
 
-		assetsScroll->RegActorsCreationAction();
+		assetsScroll->RegObjectssCreationAction();
 		
-		o2UI.FocusWidget(o2EditorTree.GetActorsTree());
-		o2EditorTree.GetActorsTree()->SetSelectedActors(assetsScroll->mInstSceneDragActors);
+		o2UI.FocusWidget(o2EditorTree.GetSceneTree());
+		o2EditorTree.GetSceneTree()->SetSelectedObjects(assetsScroll->mInstSceneDragObjects);
 		
-		assetsScroll->mInstSceneDragActors.Clear();
+		assetsScroll->mInstSceneDragObjects.Clear();
 
 		o2Application.SetCursor(CursorType::Arrow);
 	}
@@ -416,7 +403,7 @@ namespace Editor
 			return;
 
 		assetsScroll->InstantiateDraggingAssets();
-		if (assetsScroll->mInstSceneDragActors.Count() > 0)
+		if (assetsScroll->mInstSceneDragObjects.Count() > 0)
 			o2Application.SetCursor(CursorType::Hand);
 	}
 
@@ -426,8 +413,12 @@ namespace Editor
 		if (!assetsScroll)
 			return;
 
-		for (auto actor : assetsScroll->mInstSceneDragActors)
-			actor->transform->position = ScreenToScenePoint(o2Input.cursorPos);
+		for (auto object : assetsScroll->mInstSceneDragObjects)
+		{
+			Basis transform = object->GetTransform();
+			transform.origin += ScreenToScenePoint(o2Input.cursorPos) - (transform.xv + transform.yv)*0.5f;
+			object->SetTransform(transform);
+		}
 	}
 
 	void SceneEditScreen::OnDragExit(ISelectableDragableObjectsGroup* group)
@@ -470,7 +461,7 @@ namespace Editor
 
 	void SceneEditScreen::OnCursorPressed(const Input::Cursor& cursor)
 	{
-		o2UI.FocusWidget(mActorsTree);
+		o2UI.FocusWidget(mSceneTree);
 
 		if (mEnabledTool && !IsHandleWorking(cursor))
 			mEnabledTool->OnCursorPressed(cursor);
@@ -514,7 +505,7 @@ namespace Editor
 
 	void SceneEditScreen::OnCursorRightMousePressed(const Input::Cursor& cursor)
 	{
-		o2UI.FocusWidget(mActorsTree);
+		o2UI.FocusWidget(mSceneTree);
 
 		if (mEnabledTool && !IsHandleWorking(cursor))
 			mEnabledTool->OnCursorRightMousePressed(cursor);

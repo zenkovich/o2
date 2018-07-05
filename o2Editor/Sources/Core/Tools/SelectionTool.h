@@ -7,7 +7,7 @@ using namespace o2;
 namespace o2
 {
 	class Sprite;
-	class Actor;
+	class SceneEditableObject;
 }
 
 namespace Editor
@@ -18,7 +18,7 @@ namespace Editor
 	class SelectionTool: public IEditTool
 	{
 	public:
-		typedef Vector<Actor*> ActorsVec;
+		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
 
 	public:
 		// Default constructor
@@ -31,10 +31,12 @@ namespace Editor
 
 	protected:
 		Sprite*   mSelectionSprite = nullptr; // Selection frame sprite
-		ActorsVec mCurrentSelectingActors;	  // Current selecting actors (when cursor pressed, but not released yet)
-		ActorsVec mBeforeSelectingActors;	  // Before selection actors array
+
+		SceneEditableObjectsVec mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
+		SceneEditableObjectsVec mBeforeSelectingObjects;  // Before selection objects array
+
 		Vec2F     mPressPoint;				  // Press point before selecting
-		bool      mSelectingActors = false;	  // Is selecting actors now
+		bool      mSelectingObjects = false;  // Is selecting objects now
 
 	protected:
 		// Draws tool
@@ -52,8 +54,8 @@ namespace Editor
 		// It is called when tool was disabled
 		void OnDisabled();
 
-		// It is called when actors selection was changed
-		void OnActorsSelectionChanged(Vector<Actor*> actors);
+		// It is called when objects selection was changed
+		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects);
 
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor);
@@ -84,10 +86,10 @@ END_META;
 CLASS_FIELDS_META(Editor::SelectionTool)
 {
 	PROTECTED_FIELD(mSelectionSprite);
-	PROTECTED_FIELD(mCurrentSelectingActors);
-	PROTECTED_FIELD(mBeforeSelectingActors);
+	PROTECTED_FIELD(mCurrentSelectingObjects);
+	PROTECTED_FIELD(mBeforeSelectingObjects);
 	PROTECTED_FIELD(mPressPoint);
-	PROTECTED_FIELD(mSelectingActors);
+	PROTECTED_FIELD(mSelectingObjects);
 }
 END_META;
 CLASS_METHODS_META(Editor::SelectionTool)
@@ -98,7 +100,7 @@ CLASS_METHODS_META(Editor::SelectionTool)
 	PROTECTED_FUNCTION(void, Update, float);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);

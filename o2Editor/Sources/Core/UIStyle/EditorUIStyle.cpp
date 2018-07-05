@@ -33,7 +33,7 @@
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
-#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/SceneTree.h"
 #include "UI/Button.h"
 #include "UI/ContextMenu.h"
 #include "UI/CustomDropDown.h"
@@ -655,7 +655,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildActorsTree()
 	{
 		// basics
-		UIActorsTree* sample = mnew UIActorsTree();
+		UISceneTree* sample = mnew UISceneTree();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 0, 1));
 		sample->SetViewLayout(Layout::BothStretch(0, 0, 1, 0));

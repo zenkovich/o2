@@ -128,7 +128,7 @@ namespace Editor
 			*revertState = IsValueRevertable();
 	}
 
-	void IPropertyField::OnChanged()
+	void IPropertyField::OnValueChanged()
 	{
 		CheckRevertableState();
 		onChanged(this);

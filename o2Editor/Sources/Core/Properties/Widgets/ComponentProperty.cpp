@@ -7,7 +7,7 @@
 #include "AssetsWindow/AssetsWindow.h"
 #include "Core/Properties/Properties.h"
 #include "PropertiesWindow/PropertiesWindow.h"
-#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/SceneTree.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/UIManager.h"
 #include "UI/Widget.h"
@@ -191,7 +191,7 @@ namespace Editor
 				if (ownerActor->IsAsset())
 					o2EditorAssets.ShowAssetIcon(o2Assets.GetAssetPath(ownerActor->GetAssetID()));
 				else if (ownerActor->IsOnScene())
-					o2EditorTree.HightlightActorsTreeNode(ownerActor);
+					o2EditorTree.HightlightObjectTreeNode(ownerActor);
 			}
 		}
 	}
@@ -204,7 +204,7 @@ namespace Editor
 
 	void ComponentProperty::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<UIActorsTree*>(group))
+		if (auto* actorsTree = dynamic_cast<UISceneTree*>(group))
 			OnDroppedFromActorsTree(actorsTree);
 		else if (auto* assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group))
 			OnDroppedFromAssetsScroll(assetsScroll);
@@ -212,7 +212,7 @@ namespace Editor
 
 	void ComponentProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<UIActorsTree*>(group))
+		if (auto* actorsTree = dynamic_cast<UISceneTree*>(group))
 			OnDragEnterFromActorsTree(actorsTree);
 		else if (auto* assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group))
 			OnDragEnterFromAssetsScroll(assetsScroll);
@@ -220,36 +220,43 @@ namespace Editor
 
 	void ComponentProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<UIActorsTree*>(group))
+		if (auto* actorsTree = dynamic_cast<UISceneTree*>(group))
 			OnDragExitFromActorsTree(actorsTree);
 		else if (auto* assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group))
 			OnDragExitFromAssetsScroll(assetsScroll);
 	}
 
-	void ComponentProperty::OnDroppedFromActorsTree(UIActorsTree* actorsTree)
+	void ComponentProperty::OnDroppedFromActorsTree(UISceneTree* actorsTree)
 	{
-		if (actorsTree->GetSelectedActors().Count() > 1)
+		if (actorsTree->GetSelectedObjects().Count() > 1)
 			return;
 
-		SetValueByUser(actorsTree->GetSelectedActors()[0]->GetComponent(mComponentType));
+		if (Actor* actor = dynamic_cast<Actor*>(actorsTree->GetSelectedObjects()[0]))
+			SetValueByUser(actor->GetComponent(mComponentType));
+		else
+			return;
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();
 	}
 
-	void ComponentProperty::OnDragEnterFromActorsTree(UIActorsTree* actorsTree)
+	void ComponentProperty::OnDragEnterFromActorsTree(UISceneTree* actorsTree)
 	{
-		if (actorsTree->GetSelectedActors().Count() > 1 &&
-			actorsTree->GetSelectedActors()[0]->GetComponent(mComponentType))
-		{
+		if (actorsTree->GetSelectedObjects().Count() != 1)
 			return;
-		}
+
+		Actor* actor = dynamic_cast<Actor*>(actorsTree->GetSelectedObjects()[0]);
+		if (!actor)
+			return;
+
+		if (!actor->GetComponent(mComponentType))
+			return;
 
 		o2Application.SetCursor(CursorType::Hand);
 		mBox->SetState("focused", true);
 	}
 
-	void ComponentProperty::OnDragExitFromActorsTree(UIActorsTree* actorsTree)
+	void ComponentProperty::OnDragExitFromActorsTree(UISceneTree* actorsTree)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);

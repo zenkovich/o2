@@ -9,7 +9,7 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
+	class SceneEditableObject;
 }
 
 namespace Editor
@@ -35,7 +35,7 @@ namespace Editor
 		virtual void DrawScreen() {}
 
 		// It is called when scene actors was changed
-		virtual void OnSceneChanged(Vector<Actor*> changedActors) {}
+		virtual void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) {}
 
 		// Updates tool
 		virtual void Update(float dt) {}
@@ -46,8 +46,8 @@ namespace Editor
 		// It is called when tool was disabled
 		virtual void OnDisabled() {}
 
-		// It is called when actors selection was changed
-		virtual void OnActorsSelectionChanged(Vector<Actor*> actors) {}
+		// It is called when objects selection was changed
+		virtual void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) {}
 
 		// It is called when cursor pressed on this
 		virtual void OnCursorPressed(const Input::Cursor& cursor) {}
@@ -119,11 +119,11 @@ CLASS_METHODS_META(Editor::IEditTool)
 
 	PROTECTED_FUNCTION(void, DrawScene);
 	PROTECTED_FUNCTION(void, DrawScreen);
-	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<SceneEditableObject*>);
 	PROTECTED_FUNCTION(void, Update, float);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);

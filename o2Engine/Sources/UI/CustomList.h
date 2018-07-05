@@ -47,7 +47,7 @@ namespace o2
 		UIWidget* GetItemSample() const;
 
 		// Returns layout of items
-		UIVerticalLayout* GetLayout() const;
+		UIVerticalLayout* GetItemsLayout() const;
 
 		// Adds new item and returns it
 		UIWidget* AddItem();
@@ -272,7 +272,7 @@ CLASS_METHODS_META(o2::UICustomList)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
 	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
-	PUBLIC_FUNCTION(UIVerticalLayout*, GetLayout);
+	PUBLIC_FUNCTION(UIVerticalLayout*, GetItemsLayout);
 	PUBLIC_FUNCTION(UIWidget*, AddItem);
 	PUBLIC_FUNCTION(UIWidget*, AddItem, int);
 	PUBLIC_FUNCTION(void, RemoveItem, UIWidget*);

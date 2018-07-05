@@ -15,6 +15,8 @@ namespace o2
 
 	typedef char               UnknownType;
 
+	typedef UInt64             SceneUID;
+
 	enum class BaseCorner { Left, Right, Top, Bottom, Center, LeftBottom, LeftTop, RightBottom, RightTop };
 
 	enum class CursorType

@@ -107,9 +107,9 @@ namespace o2
 		return mItemsList->GetItemSample();
 	}
 
-	UIVerticalLayout* UICustomDropDown::GetLayout() const
+	UIVerticalLayout* UICustomDropDown::GetItemsLayout() const
 	{
-		return mItemsList->GetLayout();
+		return mItemsList->GetItemsLayout();
 	}
 
 	UIWidget* UICustomDropDown::AddItem()

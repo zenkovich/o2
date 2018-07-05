@@ -6,7 +6,6 @@
 
 namespace o2
 {
-
 	const SceneLayer::ActorsVec& SceneLayer::GetActors() const
 	{
 		return mActors;
@@ -102,6 +101,26 @@ namespace o2
 		mEnabledDrawables.Add(drawable);
 	}
 
+
+	void LayerDataNodeConverter::ToData(void* object, DataNode& data)
+	{
+		if (object)
+		{
+			SceneLayer* value = (SceneLayer*)object;
+			data = value->name;
+		}
+	}
+
+	void LayerDataNodeConverter::FromData(void* object, const DataNode& data)
+	{
+		SceneLayer*& value = *(SceneLayer**)object;
+		value = o2Scene.GetLayer(data);
+	}
+
+	bool LayerDataNodeConverter::IsConvertsType(const Type* type) const
+	{
+		return type->IsBasedOn(*TypeOf(SceneLayer).GetPointerType());
+	}
 }
 
 DECLARE_CLASS(o2::SceneLayer);

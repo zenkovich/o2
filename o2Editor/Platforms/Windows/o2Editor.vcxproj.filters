@@ -40,31 +40,7 @@
     <ClInclude Include="..\..\Sources\AssetsWindow\UIAssetIcon.h">
       <Filter>Sources\AssetsWindow</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\ActorsPropertyChange.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\ActorsTransform.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\CreateActors.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\DeleteActors.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\EnableActors.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Actions\IAction.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\LockActors.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\ReparentActors.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\SelectActors.h">
       <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.h">
@@ -277,9 +253,6 @@
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h">
       <Filter>Sources\SceneWindow</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\TreeWindow\ActorsTree.h">
-      <Filter>Sources\TreeWindow</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h">
       <Filter>Sources\TreeWindow</Filter>
     </ClInclude>
@@ -288,6 +261,33 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Properties\Properties.h">
       <Filter>Sources\Core\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\TreeWindow\SceneTree.h">
+      <Filter>Sources\TreeWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Reparent.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\PropertyChange.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Transform.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Create.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Delete.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Enable.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Lock.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Select.h">
+      <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -303,31 +303,7 @@
     <ClCompile Include="..\..\Sources\AssetsWindow\UIAssetIcon.cpp">
       <Filter>Sources\AssetsWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\ActorsPropertyChange.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\ActorsTransform.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\CreateActors.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\DeleteActors.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\EnableActors.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Actions\IAction.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\LockActors.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\ReparentActors.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\SelectActors.cpp">
       <Filter>Sources\Core\Actions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.cpp">
@@ -534,9 +510,6 @@
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp">
       <Filter>Sources\SceneWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\TreeWindow\ActorsTree.cpp">
-      <Filter>Sources\TreeWindow</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp">
       <Filter>Sources\TreeWindow</Filter>
     </ClCompile>
@@ -548,6 +521,33 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Properties\Properties.cpp">
       <Filter>Sources\Core\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\TreeWindow\SceneTree.cpp">
+      <Filter>Sources\TreeWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Reparent.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\PropertyChange.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Transform.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Create.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Delete.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Enable.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Lock.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Select.cpp">
+      <Filter>Sources\Core\Actions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

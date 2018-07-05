@@ -351,7 +351,7 @@ namespace o2
 	void UIWindow::OnFocused()
 	{
 		if (mParent)
-			SetPositionIndexInParent(mParent->GetChildren().Count() - 1);
+			SetIndexInSiblings(mParent->GetChildren().Count() - 1);
 
 		SetLastOnCurrentDepth();
 

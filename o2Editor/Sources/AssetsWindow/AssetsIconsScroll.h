@@ -13,7 +13,7 @@ using namespace o2;
 
 namespace o2
 {
-	class Actor;
+	class SceneEditableObject;
 	class Sprite;
 	class UIContextMenu;
 	class UIGridLayout;
@@ -24,7 +24,7 @@ namespace Editor
 	class ActorProperty;
 	class ComponentProperty;
 	class IAssetProperty;
-	class UIActorsTree;
+	class UISceneTree;
 	class UIAssetIcon;
 
 	// ------------------------
@@ -106,42 +106,42 @@ namespace Editor
 		typedef Vector<Sprite*> SpritesVec;
 		typedef Dictionary<String, AssetsIconsVec> IconArrsDict;
 		typedef Vector<Pair<UID, String>> AssetIdPathVec;
-		typedef Vector<Actor*> ActorsVec;
+		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
 		typedef Vector<AssetRef*> AssetsVec;
 
-		const Vec2F        mAssetIconSize = Vec2F(50, 60);
+		const Vec2F             mAssetIconSize = Vec2F(50, 60);
+						        
+		String                  mCurrentPath = "_";          // Current viewing path
+						        
+		UIGridLayout*           mGrid = nullptr;             // Assets icons grid
+		UIContextMenu*          mContextMenu = nullptr;      // Assets Context menu
+						        
+		AssetsIconsVec          mSelectedAssetsIcons;        // Selected assets icons
+		AssetsVec               mSelectedPreloadedAssets;    // Preloaded selected assets
+						        
+		UIAssetIcon*            mHightlightIcon = nullptr;  // Current hightlighting asset icon
+		Animation               mHightlightAnim;             // Icon hightlight animation @SERIALIZABLE
+		Sprite*                 mHightlightSprite = nullptr; // Icon hightlight sprite @SERIALIZABLE
+		Layout                  mHightlightLayout;           // Icon hightlight sprite layout @SERIALIZABLE
+						        
+		IconArrsDict            mIconsPool;                  // Assets icons pool
+						        
+		Sprite*                 mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
+		bool                    mSelecting = false;          // Is selecting icons 
+		Vec2F                   mPressedPoint;               // Pressed point
+		AssetsIconsVec          mCurrentSelectingIcons;      // Selecting icons at current selection
+						        
+		bool                    mIsDraggingIcons = false;    // Is dragging icons
+		bool                    mDragEnded = false;          // Is dragging ended
+		UIAssetIcon*            mDragIcon = nullptr;         // Dragging icon
+		Vec2F                   mDragOffset;                 // Dragging offset from cursor to icon center
+		SceneEditableObjectsVec mInstSceneDragObjects;       // Instantiated objects when dragging asset above scene
 
-		String             mCurrentPath = "_";          // Current viewing path
-
-		UIGridLayout*      mGrid = nullptr;             // Assets icons grid
-		UIContextMenu*     mContextMenu = nullptr;      // Assets Context menu
-
-		AssetsIconsVec     mSelectedAssetsIcons;        // Selected assets icons
-		AssetsVec          mSelectedPreloadedAssets;    // Preloaded selected assets
-
-		UIAssetIcon*       mHightlightIcon = nullptr;  // Current hightlighting asset icon
-		Animation          mHightlightAnim;             // Icon hightlight animation @SERIALIZABLE
-		Sprite*            mHightlightSprite = nullptr; // Icon hightlight sprite @SERIALIZABLE
-		Layout             mHightlightLayout;           // Icon hightlight sprite layout @SERIALIZABLE
-
-		IconArrsDict       mIconsPool;                  // Assets icons pool
-
-		Sprite*            mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
-		bool               mSelecting = false;          // Is selecting icons 
-		Vec2F              mPressedPoint;               // Pressed point
-		AssetsIconsVec     mCurrentSelectingIcons;      // Selecting icons at current selection
-
-		bool               mIsDraggingIcons = false;    // Is dragging icons
-		bool               mDragEnded = false;          // Is dragging ended
-		UIAssetIcon*       mDragIcon = nullptr;         // Dragging icon
-		Vec2F              mDragOffset;                 // Dragging offset from cursor to icon center
-		ActorsVec          mInstSceneDragActors;        // Instantiated actors when dragging asset above scene
-
-		AssetIdPathVec     mCuttingAssets;              // Current cutted assets
-						   
-		bool               mNeedRebuildAssets = false;  // Is assets needs to rebuild
-
-		bool               mChangePropertiesTargetsFromThis = false;
+		AssetIdPathVec          mCuttingAssets;              // Current cutted assets
+						        
+		bool                    mNeedRebuildAssets = false;  // Is assets needs to rebuild
+						        
+		bool                    mChangePropertiesTargetsFromThis = false;
 
 	protected:
 		// Copies data of actor from other to this
@@ -189,8 +189,8 @@ namespace Editor
 		// Completes selecting
 		void CompleteSelecting();
 
-		// Registers actors creation undo action
-		void RegActorsCreationAction();
+		// Registers objects creation undo action
+		void RegObjectssCreationAction();
 
 		// Initializes assets context menu
 		void InitializeContext();
@@ -310,8 +310,8 @@ namespace Editor
 		// It is called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when dropped dragged actors tree nodes selected and started dragging from actors tree
-		void OnDroppedFromActorsTree(UIActorsTree* actorsTree);
+		// It is called when dropped dragged scene tree nodes selected and started dragging from scene tree
+		void OnDroppedFromSceneTree(UISceneTree* sceneTree);
 
 		// It is called when dropped dragged assets icons selected and started dragging from this
 		void OnDroppedFromThis();
@@ -327,7 +327,7 @@ namespace Editor
 
 		friend class AssetsWindow;
 		friend class SceneEditScreen;
-		friend class UIActorsTree;
+		friend class UISceneTree;
 		friend class UIAssetIcon;
 	};
 
@@ -368,7 +368,7 @@ CLASS_FIELDS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FIELD(mDragEnded);
 	PROTECTED_FIELD(mDragIcon);
 	PROTECTED_FIELD(mDragOffset);
-	PROTECTED_FIELD(mInstSceneDragActors);
+	PROTECTED_FIELD(mInstSceneDragObjects);
 	PROTECTED_FIELD(mCuttingAssets);
 	PROTECTED_FIELD(mNeedRebuildAssets);
 	PROTECTED_FIELD(mChangePropertiesTargetsFromThis);
@@ -409,7 +409,7 @@ CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, BeginSelecting);
 	PROTECTED_FUNCTION(void, UpdateSelection, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CompleteSelecting);
-	PROTECTED_FUNCTION(void, RegActorsCreationAction);
+	PROTECTED_FUNCTION(void, RegObjectssCreationAction);
 	PROTECTED_FUNCTION(void, InitializeContext);
 	PROTECTED_FUNCTION(void, PrepareIconsPools);
 	PROTECTED_FUNCTION(UIAssetIcon*, GetAssetIconFromPool, const String&);
@@ -447,7 +447,7 @@ CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
-	PROTECTED_FUNCTION(void, OnDroppedFromActorsTree, UIActorsTree*);
+	PROTECTED_FUNCTION(void, OnDroppedFromSceneTree, UISceneTree*);
 	PROTECTED_FUNCTION(void, OnDroppedFromThis);
 	PROTECTED_FUNCTION(void, BeginDragging, UIAssetIcon*);
 	PROTECTED_FUNCTION(void, EndDragging, bool);

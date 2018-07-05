@@ -5,12 +5,12 @@
 
 namespace o2
 {
-	class UIToggle;
-	class UIEditBox;
+	class SceneEditableObject;
 	class UIButtonGroup;
-	class UIToggleGroup;
 	class UIContextMenu;
-	class Actor;
+	class UIEditBox;
+	class UIToggle;
+	class UIToggleGroup;
 }
 
 using namespace o2;
@@ -20,7 +20,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class UIActorsTree;
+	class UISceneTree;
 
 	// ------------------
 	// Actors tree window
@@ -31,19 +31,19 @@ namespace Editor
 
 	public:
 		// Returns actors tree widget
-		UIActorsTree* GetActorsTree() const;
+		UISceneTree* GetSceneTree() const;
 
 		// Expands all actor's parents nodes in tree and hightlights actor
-		void HightlightActorsTreeNode(Actor* targetActor);
+		void HightlightObjectTreeNode(SceneEditableObject* targetObject);
 
 	protected:
 		UIToggle*      mListTreeToggle;		// TOggle between list and tree views
 		UIEditBox*     mSearchEditBox;		// Search actors edit box
-		UIActorsTree*  mActorsTree;			// Main actors tree
+		UISceneTree*   mSceneTree;			// Main actors tree
 		UIContextMenu* mTreeContextMenu;	// Context menu
 
-		bool           mInSearch = false;	// True when searching actors (mSearchEditBox isn't empty)
-		Vector<Actor*> mSearchActors;		// Array of searched actors
+		Vector<SceneEditableObject*> mSearchObjects;    // Array of searched objects
+		bool                         mInSearch = false;	// True when searching objects (mSearchEditBox isn't empty)
 
 	public:
 		// Default constructor
@@ -63,7 +63,7 @@ namespace Editor
 		void InitializeTestScene();
 
 		// Initializes actors tree widget
-		void InitializeActorsTree();
+		void InitializeSceneTree();
 
 		// Initializes top panel with filter
 		void InitializeTopPanel();
@@ -93,7 +93,7 @@ namespace Editor
 		void OnSearchEdited(const WString& searchStr);
 
 		// Searches actors
-		void SearchActorsRecursive(Actor* actor, const String& searchStr);
+		void SearchObjectsRecursive(SceneEditableObject* object, const String& searchStr);
 
 		// It is called when tree node clicked by right button (For tree widget)
 		void OnTreeRBPressed(UITreeNode* node);
@@ -138,10 +138,10 @@ namespace Editor
 		void OnContextEnablePressed();
 
 		// It is called when actor was created
-		void OnActorCreated(Actor* actor);
+		void OnActorCreated(SceneEditableObject* object);
 
 		// It is called when actor was destroyed
-		void OnActorDestroyed(Actor* actor);
+		void OnActorDestroyed(SceneEditableObject* object);
 
 		friend class SceneEditWidget;
 	};
@@ -157,20 +157,20 @@ CLASS_FIELDS_META(Editor::TreeWindow)
 {
 	PROTECTED_FIELD(mListTreeToggle);
 	PROTECTED_FIELD(mSearchEditBox);
-	PROTECTED_FIELD(mActorsTree);
+	PROTECTED_FIELD(mSceneTree);
 	PROTECTED_FIELD(mTreeContextMenu);
+	PROTECTED_FIELD(mSearchObjects);
 	PROTECTED_FIELD(mInSearch);
-	PROTECTED_FIELD(mSearchActors);
 }
 END_META;
 CLASS_METHODS_META(Editor::TreeWindow)
 {
 
-	PUBLIC_FUNCTION(UIActorsTree*, GetActorsTree);
-	PUBLIC_FUNCTION(void, HightlightActorsTreeNode, Actor*);
+	PUBLIC_FUNCTION(UISceneTree*, GetSceneTree);
+	PUBLIC_FUNCTION(void, HightlightObjectTreeNode, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeTestScene);
-	PROTECTED_FUNCTION(void, InitializeActorsTree);
+	PROTECTED_FUNCTION(void, InitializeSceneTree);
 	PROTECTED_FUNCTION(void, InitializeTopPanel);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
 	PROTECTED_FUNCTION(void, InitializeCreateMenu);
@@ -180,7 +180,7 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	PROTECTED_FUNCTION(void, OnSearchPressed);
 	PROTECTED_FUNCTION(void, OnListTreeToggled, bool);
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
-	PROTECTED_FUNCTION(void, SearchActorsRecursive, Actor*, const String&);
+	PROTECTED_FUNCTION(void, SearchObjectsRecursive, SceneEditableObject*, const String&);
 	PROTECTED_FUNCTION(void, OnTreeRBPressed, UITreeNode*);
 	PROTECTED_FUNCTION(void, CreateActor, Actor*);
 	PROTECTED_FUNCTION(void, OnContextCreateNewPressed);
@@ -195,7 +195,7 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	PROTECTED_FUNCTION(void, OnContextCollapseAllPressed);
 	PROTECTED_FUNCTION(void, OnContextLockPressed);
 	PROTECTED_FUNCTION(void, OnContextEnablePressed);
-	PROTECTED_FUNCTION(void, OnActorCreated, Actor*);
-	PROTECTED_FUNCTION(void, OnActorDestroyed, Actor*);
+	PROTECTED_FUNCTION(void, OnActorCreated, SceneEditableObject*);
+	PROTECTED_FUNCTION(void, OnActorDestroyed, SceneEditableObject*);
 }
 END_META;

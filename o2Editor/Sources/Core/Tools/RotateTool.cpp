@@ -1,15 +1,15 @@
 #include "stdafx.h"
 #include "RotateTool.h"
 
-#include "Core/Actions/ActorsTransform.h"
+#include "Core/Actions/Transform.h"
 #include "Core/EditorApplication.h"
 #include "Render/Mesh.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
-#include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/SceneTree.h"
 #include "TreeWindow/TreeWindow.h"
+#include "Utils/Editor/SceneEditableObject.h"
 
 namespace Editor
 {
@@ -40,7 +40,7 @@ namespace Editor
 
 	void RotateTool::DrawScreen()
 	{
-		if (o2EditorSceneScreen.GetSelectedActors().Count() > 0)
+		if (o2EditorSceneScreen.GetSelectedObjects().Count() > 0)
 		{
 			UpdateMeshes();
 			mRotateRingFillMesh->Draw();
@@ -57,7 +57,7 @@ namespace Editor
 
 	void RotateTool::OnEnabled()
 	{
-		CalcPivotByActorsCenter();
+		CalcPivotByObjectsCenter();
 		mPivotDragHandle.enabled = true;
 	}
 
@@ -66,12 +66,12 @@ namespace Editor
 		mPivotDragHandle.enabled = false;
 	}
 
-	void RotateTool::OnSceneChanged(Vector<Actor*> changedActors)
+	void RotateTool::OnSceneChanged(Vector<SceneEditableObject*> changedObjects)
 	{}
 
-	void RotateTool::OnActorsSelectionChanged(Vector<Actor*> actors)
+	void RotateTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
 	{
-		CalcPivotByActorsCenter();
+		CalcPivotByObjectsCenter();
 	}
 
 	void RotateTool::UpdateMeshes()
@@ -183,12 +183,12 @@ namespace Editor
 		}
 	}
 
-	void RotateTool::CalcPivotByActorsCenter()
+	void RotateTool::CalcPivotByObjectsCenter()
 	{
-		auto selectedActors = o2EditorSceneScreen.GetSelectedActors();
+		auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
 		mScenePivot =
-			selectedActors.Sum<Vec2F>([](auto x) { return x->transform->GetWorldPosition(); }) /
-			(float)selectedActors.Count();
+			selectedObjects.Sum<Vec2F>([](auto x) { return x->GetTransform().origin; }) /
+			(float)selectedObjects.Count();
 
 		mPivotDragHandle.position = mScenePivot;
 	}
@@ -215,8 +215,10 @@ namespace Editor
 			mCurrentRotateAngle = mPressAngle;
 			mSnapAngleAccumulated = 0.0f;
 
-			mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-				[](Actor* x) { return *x->transform; });
+			mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+				[](SceneEditableObject* x) { return x->GetTransform(); });
+
+			mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
 		}
 		else SelectionTool::OnCursorPressed(cursor);
 	}
@@ -227,8 +229,9 @@ namespace Editor
 		{
 			mRingPressed = false;
 
-			auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
-			o2EditorApplication.DoneAction(action);
+			mTransformAction->Completed();
+			o2EditorApplication.DoneAction(mTransformAction);
+			mTransformAction = nullptr;
 		}
 		else SelectionTool::OnCursorReleased(cursor);
 	}
@@ -239,15 +242,16 @@ namespace Editor
 		{
 			mRingPressed = false;
 
-			auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
-			o2EditorApplication.DoneAction(action);
+			mTransformAction->Completed();
+			o2EditorApplication.DoneAction(mTransformAction);
+			mTransformAction = nullptr;
 		}
 		else SelectionTool::OnCursorPressBreak(cursor);
 	}
 
 	void RotateTool::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		if (!o2EditorTree.GetActorsTree()->IsFocused())
+		if (!o2EditorTree.GetSceneTree()->IsFocused())
 			return;
 
 		if (mRingPressed)
@@ -268,14 +272,14 @@ namespace Editor
 					{
 						mSnapAngleAccumulated -= dir*angleStepRad;
 
-						if (o2Input.IsKeyDown(VK_CONTROL)) RotateActorsSeparated(angleStepRad*dir);
-						else RotateActors(angleStepRad*dir);
+						if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparated(angleStepRad*dir);
+						else RotateObjects(angleStepRad*dir);
 					}
 				}
 				else
 				{
-					if (o2Input.IsKeyDown(VK_CONTROL)) RotateActorsSeparated(angleDelta);
-					else RotateActors(angleDelta);
+					if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparated(angleDelta);
+					else RotateObjects(angleDelta);
 				}
 
 				mCurrentRotateAngle += angleDelta;
@@ -286,21 +290,21 @@ namespace Editor
 
 	void RotateTool::OnKeyPressed(const Input::Key& key)
 	{
-		if (!o2EditorTree.GetActorsTree()->IsFocused())
+		if (!o2EditorTree.GetSceneTree()->IsFocused())
 			return;
 
 		float angle = o2Input.IsKeyDown(VK_SHIFT) ? angleSnapStep : 1.0f;
 
 		if (key == VK_LEFT || key == VK_DOWN)
 		{
-			if (o2Input.IsKeyDown(VK_CONTROL)) RotateActorsSeparatedWithAction(Math::Deg2rad(-angle));
-			else RotateActorsWithAction(Math::Deg2rad(-angle));
+			if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparatedWithAction(Math::Deg2rad(-angle));
+			else RotateObjectsWithAction(Math::Deg2rad(-angle));
 		}
 
 		if (key == VK_RIGHT || key == VK_UP)
 		{
-			if (o2Input.IsKeyDown(VK_CONTROL)) RotateActorsSeparatedWithAction(Math::Deg2rad(-angle));
-			else RotateActorsWithAction(Math::Deg2rad(angle));
+			if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparatedWithAction(Math::Deg2rad(-angle));
+			else RotateObjectsWithAction(Math::Deg2rad(angle));
 		}
 
 		SelectionTool::OnKeyPressed(key);
@@ -315,52 +319,59 @@ namespace Editor
 
 		if (key == VK_LEFT || key == VK_DOWN)
 		{
-			if (o2Input.IsKeyDown(VK_CONTROL)) RotateActorsSeparatedWithAction(Math::Deg2rad(-angle));
-			else RotateActorsWithAction(Math::Deg2rad(-angle));
+			if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparatedWithAction(Math::Deg2rad(-angle));
+			else RotateObjectsWithAction(Math::Deg2rad(-angle));
 		}
 
 		if (key == VK_RIGHT || key == VK_UP)
 		{
-			if (o2Input.IsKeyDown(VK_CONTROL)) RotateActorsSeparatedWithAction(Math::Deg2rad(-angle));
-			else RotateActorsWithAction(Math::Deg2rad(angle));
+			if (o2Input.IsKeyDown(VK_CONTROL)) RotateObjectsSeparatedWithAction(Math::Deg2rad(-angle));
+			else RotateObjectsWithAction(Math::Deg2rad(angle));
 		}
 	}
 
-	void RotateTool::RotateActors(float angleDelta)
+	void RotateTool::RotateObjects(float angleDelta)
 	{
 		Basis transform = Basis::Translated(mScenePivot*-1.0f)*Basis::Rotated(-angleDelta)*Basis::Translated(mScenePivot);
-		for (auto actor : o2EditorSceneScreen.GetTopSelectedActors())
+		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
-			actor->transform->SetWorldNonSizedBasis(actor->transform->GetWorldNonSizedBasis()*transform);
+			object->SetTransform(object->GetTransform()*transform);
 		}
 	}
 
-	void RotateTool::RotateActorsSeparated(float angleDelta)
+	void RotateTool::RotateObjectsSeparated(float angleDelta)
 	{
-		for (auto actor : o2EditorSceneScreen.GetTopSelectedActors())
-			actor->transform->angle -= angleDelta;
+		Basis transform = Basis::Rotated(-angleDelta);
+		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+			object->SetTransform(object->GetTransform()*transform);
 	}
 
-	void RotateTool::RotateActorsWithAction(float angleDelta)
+	void RotateTool::RotateObjectsWithAction(float angleDelta)
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return *x->transform; });
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+			[](SceneEditableObject* x) { return x->GetTransform(); });
 
-		RotateActors(angleDelta);
+		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
 
-		auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
-		o2EditorApplication.DoneAction(action);
+		RotateObjects(angleDelta);
+
+		mTransformAction->Completed();
+		o2EditorApplication.DoneAction(mTransformAction);
+		mTransformAction = nullptr;
 	}
 
-	void RotateTool::RotateActorsSeparatedWithAction(float angleDelta)
+	void RotateTool::RotateObjectsSeparatedWithAction(float angleDelta)
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return *x->transform; });
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+			[](SceneEditableObject* x) { return x->GetTransform(); });
 
-		RotateActorsSeparated(angleDelta);
+		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
 
-		auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
-		o2EditorApplication.DoneAction(action);
+		RotateObjectsSeparated(angleDelta);
+
+		mTransformAction->Completed();
+		o2EditorApplication.DoneAction(mTransformAction);
+		mTransformAction = nullptr;
 	}
 
 }

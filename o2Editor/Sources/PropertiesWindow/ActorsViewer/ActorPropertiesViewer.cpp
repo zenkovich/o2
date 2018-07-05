@@ -51,12 +51,12 @@ namespace Editor
 		*mViewersLayout->layout       = UIWidgetLayout::BothStretch();
 		mContentWidget->AddChild(mViewersLayout);
 
-		o2Scene.onChanged += THIS_FUNC(OnSceneActorsChanged);
+		o2Scene.onObjectsChanged += THIS_FUNC(OnSceneObjectsChanged);
 	}
 
 	ActorPropertiesViewer::~ActorPropertiesViewer()
 	{
-		o2Scene.onChanged -= THIS_FUNC(OnSceneActorsChanged);
+		o2Scene.onObjectsChanged -= THIS_FUNC(OnSceneObjectsChanged);
 
 		for (auto kv : mComponentViewersPool)
 		{
@@ -128,7 +128,7 @@ namespace Editor
 		mHeaderViewer->Refresh();
 	}
 
-	void ActorPropertiesViewer::OnSceneActorsChanged(const Vector<Actor*>& actors)
+	void ActorPropertiesViewer::OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects)
 	{
 		Refresh();
 	}

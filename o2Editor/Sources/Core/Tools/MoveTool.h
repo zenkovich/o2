@@ -1,18 +1,25 @@
 #pragma once
 
 #include "Core/Tools/SelectionTool.h"
-#include "Scene/ActorTransform.h"
 #include "SceneWindow/SceneDragHandle.h"
+#include "Utils/Math/Basis.h"
+
+namespace o2
+{
+	class SceneEditableObject;
+}
 
 namespace Editor
 {
-	// -----------------------
-	// Move actors editor tool
-	// -----------------------
+	class TransformAction;
+
+	// ------------------------
+	// Move objects editor tool
+	// ------------------------
 	class MoveTool: public SelectionTool
 	{
 	public:
-		typedef Vector<ActorTransform> ActorsTransformsVec;
+		typedef Vector<Basis> BasisVec;
 
 	public:
 		float snapStep = 10.0f; // Moving snap step
@@ -26,13 +33,16 @@ namespace Editor
 		IOBJECT(MoveTool);
 
 	protected:
-		SceneDragHandle     mHorDragHandle;       // Horizontal arrow handle
-		SceneDragHandle     mVerDragHandle;       // Vertical arrow handle
-		SceneDragHandle     mBothDragHandle;      // Both arrow handle
-		Vec2F               mLastSceneHandlesPos; // Last scene handles position 
-		Vec2F               mSnapPosition;        // Snapping handles position
-		float               mHandlesAngle = 0.0f; // Handles angle, in radians
-		ActorsTransformsVec mBeforeTransforms;    // Before transformation transforms
+		SceneDragHandle  mHorDragHandle;       // Horizontal arrow handle
+		SceneDragHandle  mVerDragHandle;       // Vertical arrow handle
+		SceneDragHandle  mBothDragHandle;      // Both arrow handle
+						 
+		Vec2F            mLastSceneHandlesPos; // Last scene handles position 
+		Vec2F            mSnapPosition;        // Snapping handles position
+		float            mHandlesAngle = 0.0f; // Handles angle, in radians
+						 
+		BasisVec         mBeforeTransforms;          // Before transformation transforms
+		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
 
 	protected:
 		// Updates tool
@@ -44,11 +54,11 @@ namespace Editor
 		// It is called when tool was disabled
 		void OnDisabled();
 
-		// It is called when scene actors was changed
-		void OnSceneChanged(Vector<Actor*> changedActors);
+		// It is called when scene objects was changed
+		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects);
 
-		// It is called when actors selection was changed
-		void OnActorsSelectionChanged(Vector<Actor*> actors);
+		// It is called when objects selection was changed
+		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects);
 
 		// It is called when horizontal drag handle was moved
 		void OnHorDragHandleMoved(const Vec2F& position);
@@ -80,11 +90,11 @@ namespace Editor
 		// It is called when key was pressed
 		void OnKeyReleased(const Input::Key& key);
 
-		// Moves selected actors on delta
-		void MoveSelectedActors(const Vec2F& delta);
+		// Moves selected objects on delta
+		void MoveSelectedObjects(const Vec2F& delta);
 
-		// Moves selected actors on delta
-		void MoveSelectedActorsWithAction(const Vec2F& delta);
+		// Moves selected objects on delta
+		void MoveSelectedObjectsWithAction(const Vec2F& delta);
 	};
 }
 
@@ -103,6 +113,7 @@ CLASS_FIELDS_META(Editor::MoveTool)
 	PROTECTED_FIELD(mSnapPosition);
 	PROTECTED_FIELD(mHandlesAngle);
 	PROTECTED_FIELD(mBeforeTransforms);
+	PROTECTED_FIELD(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::MoveTool)
@@ -111,8 +122,8 @@ CLASS_METHODS_META(Editor::MoveTool)
 	PROTECTED_FUNCTION(void, Update, float);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<Actor*>);
-	PROTECTED_FUNCTION(void, OnActorsSelectionChanged, Vector<Actor*>);
+	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<SceneEditableObject*>);
+	PROTECTED_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
 	PROTECTED_FUNCTION(void, OnHorDragHandleMoved, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnVerDragHandleMoved, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnBothDragHandleMoved, const Vec2F&);
@@ -123,7 +134,7 @@ CLASS_METHODS_META(Editor::MoveTool)
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, MoveSelectedActors, const Vec2F&);
-	PROTECTED_FUNCTION(void, MoveSelectedActorsWithAction, const Vec2F&);
+	PROTECTED_FUNCTION(void, MoveSelectedObjects, const Vec2F&);
+	PROTECTED_FUNCTION(void, MoveSelectedObjectsWithAction, const Vec2F&);
 }
 END_META;

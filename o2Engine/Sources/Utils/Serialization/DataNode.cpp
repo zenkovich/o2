@@ -2,6 +2,7 @@
 #include "DataNode.h"
 
 #include "Scene/Actor.h"
+#include "Scene/ActorDataNodeConverter.h"
 #include "Scene/Component.h"
 #include "Scene/Scene.h"
 #include "Utils/FileSystem/File.h"

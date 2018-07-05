@@ -58,7 +58,7 @@ namespace Editor
 
 	void SceneWindow::PostInitializeWindow()
 	{
-		o2EditorSceneScreen.BindActorsTree();
+		o2EditorSceneScreen.BindSceneTree();
 	}
 
 }

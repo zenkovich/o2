@@ -210,7 +210,7 @@ namespace o2
 		bool IsUnderPoint(const Vec2F& point);
 
 		// Sets index position in parent or scene
-		void SetPositionIndexInParent(int index) override;
+		void SetIndexInSiblings(int index) override;
 
 		// Sets parent,  doesn't adds to parent's children but adds to internal children
 		void SetInternalParent(UIWidget* parent, bool worldPositionStays = true);
@@ -526,7 +526,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetPositionIndexInParent, int);
+	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(void, SetInternalParent, UIWidget*, bool);
 	PROTECTED_FUNCTION(void, UpdateResEnabled);
 	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);

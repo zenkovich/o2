@@ -628,9 +628,9 @@ namespace o2
 		return mDrawingScissorRect.IsInside(point) && layout->IsPointInside(point);
 	}
 
-	void UIWidget::SetPositionIndexInParent(int index)
+	void UIWidget::SetIndexInSiblings(int index)
 	{
-		Actor::SetPositionIndexInParent(index);
+		Actor::SetIndexInSiblings(index);
 
 		if (mParentWidget)
 		{
@@ -1045,7 +1045,7 @@ namespace o2
 
 			layout->SetDirty(true);
 
-			o2Scene.onActorEnableChanged(this);
+			o2Scene.onEnableChanged(this);
 
 			OnResEnableInHierarchyChanged();
 			OnChanged();

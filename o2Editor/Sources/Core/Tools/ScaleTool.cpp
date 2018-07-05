@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "ScaleTool.h"
 
-#include "Core/Actions/ActorsTransform.h"
+#include "Core/Actions/Transform.h"
 #include "Core/EditorApplication.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
-#include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/SceneTree.h"
 #include "TreeWindow/TreeWindow.h"
+#include "Utils/Editor/SceneEditableObject.h"
 
 namespace Editor
 {
@@ -81,10 +81,10 @@ namespace Editor
 		mBothDragHandle.enabled = false;
 	}
 
-	void ScaleTool::OnSceneChanged(Vector<Actor*> changedActors)
+	void ScaleTool::OnSceneChanged(Vector<SceneEditableObject*> changedObjects)
 	{}
 
-	void ScaleTool::OnActorsSelectionChanged(Vector<Actor*> actors)
+	void ScaleTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
 	{
 		UpdateHandlesPosition();
 	}
@@ -98,7 +98,7 @@ namespace Editor
 		mLastHorHandlePos = handlePos;
 		mHorDragHandle.position = handlePos;
 
-		ScaleSelectedActors(Vec2F(scale, 1.0f));
+		ScaleSelectedObjects(Vec2F(scale, 1.0f));
 	}
 
 	void ScaleTool::OnVerDragHandleMoved(const Vec2F& position)
@@ -110,7 +110,7 @@ namespace Editor
 		mLastVerHandlePos = handlePos;
 		mVerDragHandle.position = handlePos;
 
-		ScaleSelectedActors(Vec2F(1.0f, scale));
+		ScaleSelectedObjects(Vec2F(1.0f, scale));
 	}
 
 	void ScaleTool::OnBothDragHandleMoved(const Vec2F& position)
@@ -123,20 +123,20 @@ namespace Editor
 
 		mBothDragHandle.position = mSceneHandlesPos;
 
-		ScaleSelectedActors(Vec2F(scale, scale));
+		ScaleSelectedObjects(Vec2F(scale, scale));
 	}
 
 	void ScaleTool::UpdateHandlesPosition()
 	{
-		auto selectedActors = o2EditorSceneScreen.GetSelectedActors();
+		auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
 		mSceneHandlesPos =
-			selectedActors.Sum<Vec2F>([](auto x) { return x->transform->GetWorldPosition(); }) /
-			(float)selectedActors.Count();
+			selectedObjects.Sum<Vec2F>([](auto x) { return x->GetTransform().origin; }) /
+			(float)selectedObjects.Count();
 
-		if (selectedActors.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
+		if (selectedObjects.Count() > 0 && !o2Input.IsKeyDown(VK_CONTROL))
 		{
-			Actor* lastSelectedActor = selectedActors.Last();
-			UpdateHandlesAngleAndPositions(-lastSelectedActor->transform->GetRightDir().Angle(Vec2F::Right()));
+			SceneEditableObject* lastSelectedObject = selectedObjects.Last();
+			UpdateHandlesAngleAndPositions(-lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right()));
 		}
 		else UpdateHandlesAngleAndPositions(0.0f);
 	}
@@ -169,7 +169,7 @@ namespace Editor
 
 	void ScaleTool::OnKeyPressed(const Input::Key& key)
 	{
-		if (!o2EditorTree.GetActorsTree()->IsFocused())
+		if (!o2EditorTree.GetSceneTree()->IsFocused())
 			return;
 
 		if (key == VK_CONTROL)
@@ -183,21 +183,21 @@ namespace Editor
 
 	void ScaleTool::OnKeyReleased(const Input::Key& key)
 	{
-		if (!o2EditorTree.GetActorsTree()->IsFocused())
+		if (!o2EditorTree.GetSceneTree()->IsFocused())
 			return;
 
 		if (key == VK_CONTROL)
 		{
-			auto selectedActors = o2EditorSceneScreen.GetSelectedActors();
-			if (selectedActors.Count() > 0)
+			auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
+			if (selectedObjects.Count() > 0)
 			{
-				Actor* lastSelectedActor = selectedActors.Last();
-				UpdateHandlesAngleAndPositions(-lastSelectedActor->transform->GetRightDir().Angle(Vec2F::Right()));
+				SceneEditableObject* lastSelectedObject = selectedObjects.Last();
+				UpdateHandlesAngleAndPositions(-lastSelectedObject->GetTransform().xv.Normalized().Angle(Vec2F::Right()));
 			}
 		}
 	}
 
-	void ScaleTool::ScaleSelectedActors(const Vec2F& scale)
+	void ScaleTool::ScaleSelectedObjects(const Vec2F& scale)
 	{
 		Basis transform =
 			Basis::Translated(mSceneHandlesPos*-1.0f)*
@@ -206,20 +206,23 @@ namespace Editor
 			Basis::Rotated(mHandlesAngle)*
 			Basis::Translated(mSceneHandlesPos);
 
-		for (auto actor : o2EditorSceneScreen.GetTopSelectedActors())
-			actor->transform->SetWorldNonSizedBasis(actor->transform->GetWorldNonSizedBasis()*transform);
+		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
+			object->SetTransform(object->GetTransform()*transform);
 	}
 
 	void ScaleTool::HandlePressed()
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedActors().Select<ActorTransform>(
-			[](Actor* x) { return *x->transform; });
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+			[](SceneEditableObject* x) { return x->GetTransform(); });
+
+		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
 	}
 
 	void ScaleTool::HandleReleased()
 	{
-		auto action = mnew ActorsTransformAction(o2EditorSceneScreen.GetTopSelectedActors(), mBeforeTransforms);
-		o2EditorApplication.DoneAction(action);
+		mTransformAction->Completed();
+		o2EditorApplication.DoneAction(mTransformAction);
+		mTransformAction = nullptr;
 	}
 
 }

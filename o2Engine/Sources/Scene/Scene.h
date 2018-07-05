@@ -21,6 +21,11 @@ namespace o2
 	class Tag;
 	typedef Vector<Tag*> TagsVec;
 
+#if IS_EDITOR
+	class SceneEditableObject;
+	typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
+#endif
+
 	// -------------------------------------------------------
 	// Actors scene. Contains and manages actors, tags, layers
 	// -------------------------------------------------------
@@ -28,18 +33,18 @@ namespace o2
 	{
 	public:
 		typedef Vector<ActorAssetRef> ActorsAssetsVec;
+		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
 		typedef Dictionary<ActorAssetRef, ActorsVec> ActorsCacheDict;
 
 	public:
-		Function<void(Actor*)> onActorCreated;       // Actor creation event
-		Function<void(Actor*)> onActorDestroying;    // Actor destroying event
-		Function<void(Actor*)> onActorEnableChanged; // Actor enable changing
-
 #if IS_EDITOR
-		Function<void(ActorsVec)> onChanged;                     // Actors some change event
-		Function<void(Actor*)>    onActorLockChanged;			 // Actor locking change
-		Function<void(Actor*)>    onActorNameChanged;			 // Actor name changing event
-		Function<void(Actor*)>    onActorChildsHierarchyChanged; // Actor childs hierarchy change event
+		Function<void(SceneEditableObject*)>    onCreated;                  // Actor creation event
+		Function<void(SceneEditableObject*)>    onDestroying;               // Actor destroying event
+		Function<void(SceneEditableObjectsVec)> onObjectsChanged;           // Actors some change event
+		Function<void(SceneEditableObject*)>    onEnableChanged;            // Actor enable changing
+		Function<void(SceneEditableObject*)>    onLockChanged;			    // Actor locking change
+		Function<void(SceneEditableObject*)>    onNameChanged;			    // Actor name changing event
+		Function<void(SceneEditableObject*)>    onChildrenHierarchyChanged; // Actor childs hierarchy change event
 #endif
 
 		// Returns layer by name
@@ -88,7 +93,7 @@ namespace o2
 		ActorsVec& GetAllActors();
 
 		// Returns actor by id
-		Actor* GetActorByID(UInt64 id) const;
+		Actor* GetActorByID(SceneUID id) const;
 
 		// Returns asset actor by asset id. Tries to find in cache
 		Actor* GetAssetActorByID(UID id);
@@ -116,24 +121,35 @@ namespace o2
 		// Saves scene into file
 		void Save(const String& path);
 
-		// Returns actor's index in hierarchy
-		int GetActorHierarchyIdx(Actor* actor) const;
-
-		// Reparent actors to new parent at next of prevActor;
-		void ReparentActors(const ActorsVec& actors, Actor* newParent, Actor* prevActor);
-
 		// Updates root actors
 		void Update(float dt);
 
-#if IS_EDITOR	  
-		// It is called when actor was changed
-		void OnActorChanged(Actor* actor);   
+#if IS_EDITOR
+		// Returns root editable objects
+		Vector<SceneEditableObject*> GetRootEditableObjects();
+
+		// Returns all editable objects
+		Vector<SceneEditableObject*> GetAllEditableObjects();
+
+		// Returns actor by id
+		SceneEditableObject* GetEditableObjectByID(SceneUID id) const;
+
+		// Returns object's index in hierarchy
+		int GetObjectHierarchyIdx(SceneEditableObject* object) const;
+
+		// Reparent scene editableobjects to new parent at next of prevActor;
+		void ReparentEditableObjects(const Vector<SceneEditableObject*>& objects, 
+									 SceneEditableObject* newParent, SceneEditableObject* prevObject);
+
+
+		// It is called when object was changed
+		void OnObjectChanged(SceneEditableObject* object);   
 
 		// Checks is any actors was changed and calls OnChanged() if changed
-		void CheckChangedActors();
+		void CheckChangedObjects();
 
 		// Returns current changed actors
-		const ActorsVec& GetChangedActors() const;
+		const SceneEditableObjectsVec& GetChangedObjects() const;
 
 		// Returns cache of linked to prototypes actors
 		ActorsCacheDict& GetPrototypesLinksCache();
@@ -157,8 +173,12 @@ namespace o2
 		ActorsAssetsVec mCache;               // Cached actors assets
 				  						      
 #if IS_EDITOR	  						      
-		ActorsVec       mChangedActors;       // Changed actors array
 		ActorsCacheDict mPrototypeLinksCache; // Cache of linked to prototypes actors
+
+		SceneEditableObjectsVec mChangedObjects;   // Changed actors array
+		SceneEditableObjectsVec mEditableObjects; // All scene editable objects
+
+		friend class SceneEditableObject;
 #endif
 
 	protected:
@@ -171,28 +191,12 @@ namespace o2
 		// Draws scene drawable objects
 		void Draw();
 
-		// Drwas debug info for actor under cursor
+		// Draws debug info for actor under cursor
 		void DrawCursorDebugInfo();
 
 		friend class Actor;
 		friend class Application;
 		friend class DrawableComponent;
-	};
-
-	// -------------------------
-	// Layer data node converter
-	// -------------------------
-	class LayerDataNodeConverter: public IDataNodeTypeConverter
-	{
-	public:
-		// Converts layer pointer to data 
-		void ToData(void* object, DataNode& data);
-
-		// Gets layer pointer from data
-		void FromData(void* object, const DataNode& data);
-
-		// Checks that type is layer's type
-		bool IsConvertsType(const Type* type) const;
 	};
 
 	template<typename _type>

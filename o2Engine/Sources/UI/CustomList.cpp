@@ -134,7 +134,7 @@ namespace o2
 		return mItemSample;
 	}
 
-	UIVerticalLayout* UICustomList::GetLayout() const
+	UIVerticalLayout* UICustomList::GetItemsLayout() const
 	{
 		return mVerLayout;
 	}

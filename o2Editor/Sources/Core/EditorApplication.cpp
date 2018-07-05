@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EditorApplication.h"
 
-#include "Actions/ActorsPropertyChange.h"
+#include "Actions/PropertyChange.h"
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
 #include "Application/Input.h"
@@ -91,8 +91,8 @@ namespace Editor
 
 	void EditorApplication::DoneActorPropertyChangeAction(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
 	{
-		ActorsPropertyChangeAction* action = mnew ActorsPropertyChangeAction(
-			o2EditorSceneScreen.GetSelectedActors(), path, prevValue, newValue);
+		PropertyChangeAction* action = mnew PropertyChangeAction(
+			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);
 	}

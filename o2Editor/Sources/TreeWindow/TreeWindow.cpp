@@ -2,11 +2,11 @@
 #include "TreeWindow.h"
 
 #include "Animation/AnimatedFloat.h"
-#include "Core/Actions/CreateActors.h"
-#include "Core/Actions/DeleteActors.h"
-#include "Core/Actions/EnableActors.h"
-#include "Core/Actions/LockActors.h"
-#include "Core/Actions/ReparentActors.h"
+#include "Core/Actions/Create.h"
+#include "Core/Actions/Delete.h"
+#include "Core/Actions/Enable.h"
+#include "Core/Actions/Lock.h"
+#include "Core/Actions/Reparent.h"
 #include "Core/EditorApplication.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Actor.h"
@@ -15,7 +15,7 @@
 #include "Scene/Components/ParticlesEmitterComponent.h"
 #include "Scene/Scene.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "TreeWindow/ActorsTree.h"
+#include "TreeWindow/SceneTree.h"
 #include "UI/Button.h"
 #include "UI/ContextMenu.h"
 #include "UI/EditBox.h"
@@ -24,6 +24,7 @@
 #include "UI/UIManager.h"
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
+#include "Utils/Editor/SceneEditableObject.h"
 #include "Utils/System/Clipboard.h"
 
 DECLARE_SINGLETON(Editor::TreeWindow);
@@ -35,7 +36,7 @@ namespace Editor
 		InitializeWindow();
 	}
 
-	TreeWindow::TreeWindow(const TreeWindow& other):
+	TreeWindow::TreeWindow(const TreeWindow& other) :
 		IEditorWindow(other)
 	{
 		InitializeWindow();
@@ -44,14 +45,14 @@ namespace Editor
 	TreeWindow::~TreeWindow()
 	{}
 
-	UIActorsTree* TreeWindow::GetActorsTree() const
+	UISceneTree* TreeWindow::GetSceneTree() const
 	{
-		return mActorsTree;
+		return mSceneTree;
 	}
 
-	void TreeWindow::HightlightActorsTreeNode(Actor* targetActor)
+	void TreeWindow::HightlightObjectTreeNode(SceneEditableObject* targetObject)
 	{
-		mActorsTree->ScrollToAndHightlight(targetActor);
+		mSceneTree->ScrollToAndHightlight(targetObject);
 	}
 
 	void TreeWindow::InitializeWindow()
@@ -63,11 +64,11 @@ namespace Editor
 		mWindow->SetViewLayout(Layout::BothStretch(0, -2, 0, 18));
 
 		InitializeTopPanel();
-		InitializeActorsTree();
+		InitializeSceneTree();
 		InitializeContextMenu();
 		InitializeTestScene();
 
-		mActorsTree->UpdateNodesView();
+		mSceneTree->UpdateNodesView();
 	}
 
 	void TreeWindow::InitializeTestScene()
@@ -102,14 +103,14 @@ namespace Editor
 		}
 	}
 
-	void TreeWindow::InitializeActorsTree()
+	void TreeWindow::InitializeSceneTree()
 	{
-		mActorsTree = o2UI.CreateWidget<UIActorsTree>("standard");
-		*mActorsTree->layout = UIWidgetLayout::BothStretch(2, 0, 0, 18);
+		mSceneTree = o2UI.CreateWidget<UISceneTree>("standard");
+		*mSceneTree->layout = UIWidgetLayout::BothStretch(2, 0, 0, 18);
 
-		mActorsTree->onNodeRightButtonClicked = THIS_FUNC(OnTreeRBPressed);
+		mSceneTree->onNodeRightButtonClicked = THIS_FUNC(OnTreeRBPressed);
 
-		mWindow->AddChild(mActorsTree);
+		mWindow->AddChild(mSceneTree);
 	}
 
 	void TreeWindow::InitializeContextMenu()
@@ -144,15 +145,15 @@ namespace Editor
 			UIContextMenu::Item("Save prototype", [&]() { OnContextCopyPressed(); }),
 			UIContextMenu::Item("Reset to prototype", [&]() { OnContextCopyPressed(); }),
 			UIContextMenu::Item("Break link to prototype", [&]() { OnContextCopyPressed(); }),
-		});
+								   });
 
 		InitializeCreateMenu();
 		CreateUICreateMenu();
 
 		mWindow->AddChild(mTreeContextMenu);
 
-		mActorsTree->onFocused = [&]() { mTreeContextMenu->SetItemsMaxPriority(); };
-		mActorsTree->onUnfocused = [&]() { mTreeContextMenu->SetItemsMinPriority(); };
+		mSceneTree->onFocused = [&]() { mTreeContextMenu->SetItemsMaxPriority(); };
+		mSceneTree->onUnfocused = [&]() { mTreeContextMenu->SetItemsMinPriority(); };
 	}
 
 	void TreeWindow::InitializeCreateMenu()
@@ -184,7 +185,7 @@ namespace Editor
 		for (auto styleWidget : styleWidgets)
 		{
 			mTreeContextMenu->AddItem("Create UI/" + styleWidget->GetType().GetName() + " - " + styleWidget->GetName(),
-									  [=]() 
+									  [=]()
 			{
 				UIWidget* newWidget = styleWidget->CloneAs<UIWidget>();
 				newWidget->SetEnableForcible(true);
@@ -195,7 +196,7 @@ namespace Editor
 
 	void TreeWindow::PostInitializeWindow()
 	{
-		mActorsTree->AttachToSceneEvents();
+		mSceneTree->AttachToSceneEvents();
 	}
 
 	void TreeWindow::OnSearchPressed()
@@ -210,22 +211,22 @@ namespace Editor
 
 		if (mInSearch)
 		{
-			mSearchActors.Clear();
+			mSearchObjects.Clear();
 
 			for (auto actor : o2Scene.GetRootActors())
-				SearchActorsRecursive(actor, (String)searchStr);
+				SearchObjectsRecursive(actor, (String)searchStr);
 		}
 
-		mActorsTree->UpdateNodesView();
+		mSceneTree->UpdateNodesView();
 	}
 
-	void TreeWindow::SearchActorsRecursive(Actor* actor, const String& searchStr)
+	void TreeWindow::SearchObjectsRecursive(SceneEditableObject* object, const String& searchStr)
 	{
-		if (actor->GetName().CountOf(searchStr) > 0)
-			mSearchActors.Add(actor);
+		if (object->GetName().CountOf(searchStr) > 0)
+			mSearchObjects.Add(object);
 
-		for (auto child : actor->GetChildren())
-			SearchActorsRecursive(child, searchStr);
+		for (auto child : object->GetEditablesChildren())
+			SearchObjectsRecursive(child, searchStr);
 	}
 
 	void TreeWindow::OnTreeRBPressed(UITreeNode* node)
@@ -235,35 +236,37 @@ namespace Editor
 
 	void TreeWindow::CreateActor(Actor* newActor)
 	{
-		auto selectedActors = mActorsTree->GetSelectedActors();
+		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
-		if (selectedActors.Count() > 0)
+		if (selectedObjects.Count() > 0)
 		{
-			auto obj = selectedActors.Last();
-			auto node = mActorsTree->GetNode(obj);
+			auto obj = selectedObjects.Last();
+			auto node = mSceneTree->GetNode(obj);
 
-			Actor* parentActor = obj;
-			parentActor->AddChild(newActor);
+			SceneEditableObject* parentObject = obj;
+			parentObject->AddChild(newActor);
 
-			auto parentChilds = parentActor->GetChildren();
-			auto action = mnew CreateActorsAction({ newActor }, parentActor,
-												  parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
+			auto parentChilds = parentObject->GetEditablesChildren();
+			auto action = mnew CreateAction({ newActor }, parentObject,
+											parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
+
 			o2EditorApplication.DoneAction(action);
 		}
 		else
 		{
-			mActorsTree->UpdateNodesView();
+			mSceneTree->UpdateNodesView();
 
-			auto scereActors = o2Scene.GetRootActors();
-			auto action = mnew CreateActorsAction({ newActor }, nullptr,
-												  scereActors.Count() > 1 ? scereActors[scereActors.Count() - 2] : nullptr);
+			auto scereObjects = o2Scene.GetRootEditableObjects();
+			auto action = mnew CreateAction({ newActor }, nullptr,
+											scereObjects.Count() > 1 ? scereObjects[scereObjects.Count() - 2] : nullptr);
+
 			o2EditorApplication.DoneAction(action);
 		}
 	}
 
 	void TreeWindow::OnContextCreateNewPressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
 		Actor* newActor = mnew Actor();
@@ -273,7 +276,7 @@ namespace Editor
 
 	void TreeWindow::OnContextCreateSprite()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
 		Actor* newActor = mnew Actor({ mnew ImageComponent() });
@@ -284,19 +287,21 @@ namespace Editor
 
 	void TreeWindow::OnContextCreateButton()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 	}
 
 	void TreeWindow::OnContextCopyPressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
-		Vector<Actor*> selectedNodes = mActorsTree->GetSelectedObjects().Select<Actor*>([](auto x) { return (Actor*)(void*)x; });
+		Vector<SceneEditableObject*> selectedObjects =
+			mSceneTree->GetSelectedObjects().Select<SceneEditableObject*>(
+				[](auto x) { return dynamic_cast<SceneEditableObject*>(x); });
 
 		DataNode data;
-		data.SetValueRaw(selectedNodes);
+		data.SetValueRaw(selectedObjects);
 
 		WString clipboardData = data.SaveAsWString();
 
@@ -305,7 +310,7 @@ namespace Editor
 
 	void TreeWindow::OnContextCutPressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
 		OnContextCopyPressed();
@@ -314,82 +319,82 @@ namespace Editor
 
 	void TreeWindow::OnContextPastePressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
-		auto selectedActors = mActorsTree->GetSelectedActors();
+		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
-		Actor* parent = selectedActors.Count() > 0 ? selectedActors.Last() : nullptr;
-		auto parentChilds = parent ? parent->GetChildren() : o2Scene.GetRootActors();
-		Actor* prevActor = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
+		SceneEditableObject* parent = selectedObjects.Count() > 0 ? selectedObjects.Last() : nullptr;
+		auto parentChilds = parent ? parent->GetEditablesChildren() : o2Scene.GetRootEditableObjects();
+		SceneEditableObject* prevObject = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
 
 		WString clipboardData = Clipboard::GetText();
 		DataNode data;
 		data.LoadFromData(clipboardData);
 
-		Vector<Actor*> actors;
-		data.GetValueRaw(actors);
+		Vector<SceneEditableObject*> objects;
+		data.GetValueRaw(objects);
 
-		for (auto actor : actors)
-			actor->GenerateNewID();
+		for (auto object : objects)
+			object->GenerateNewID();
 
-		for (auto actor : actors)
-			actor->SetParent(parent);
+		for (auto object : objects)
+			object->SetEditableParent(parent);
 
-		mActorsTree->UpdateNodesView();
+		mSceneTree->UpdateNodesView();
 
-		auto action = mnew CreateActorsAction(actors, parent, prevActor);
+		auto action = mnew CreateAction(objects, parent, prevObject);
 		o2EditorApplication.DoneAction(action);
 
-		mActorsTree->SetSelectedActors(actors);
+		mSceneTree->SetSelectedObjects(objects);
 	}
 
 	void TreeWindow::OnContextDeletePressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
 		o2EditorPropertiesWindow.SetTarget(nullptr);
 
-		auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
+		auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
 		o2EditorSceneScreen.ClearSelectionWithoutAction();
 
-		auto action = mnew DeleteActorsAction(selectedActors);
+		auto action = mnew DeleteAction(selectedObjects);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto actor : selectedActors)
+		for (auto actor : selectedObjects)
 			delete actor;
 
-		mActorsTree->UpdateNodesView();
+		mSceneTree->UpdateNodesView();
 	}
 
 	void TreeWindow::OnContextDuplicatePressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
-		auto selectedActors = o2EditorSceneScreen.GetTopSelectedActors();
+		auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
 
-		for (auto actor : selectedActors)
+		for (auto object : selectedObjects)
 		{
-			Actor* copy = actor->CloneAs<Actor>();
-			copy->SetParent(actor->GetParent());
+			SceneEditableObject* copy = object->CloneAs<SceneEditableObject>();
+			copy->SetEditableParent(object->GetEditableParent());
 		}
 
-		mActorsTree->UpdateNodesView();
-		mActorsTree->SetSelectedActors(selectedActors);
+		mSceneTree->UpdateNodesView();
+		mSceneTree->SetSelectedObjects(selectedObjects);
 	}
 
 	void TreeWindow::OnContextExpandAllPressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
-		auto selectedActors = mActorsTree->GetSelectedActors();
+		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
-		for (auto actor : selectedActors)
+		for (auto object : selectedObjects)
 		{
-			auto node = mActorsTree->GetNode(actor);
+			auto node = mSceneTree->GetNode(object);
 
 			if (node)
 				node->Expand();
@@ -398,14 +403,14 @@ namespace Editor
 
 	void TreeWindow::OnContextCollapseAllPressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
-		auto selectedActors = mActorsTree->GetSelectedActors();
+		auto selectedObject = mSceneTree->GetSelectedObjects();
 
-		for (auto actor : selectedActors)
+		for (auto object : selectedObject)
 		{
-			auto node = mActorsTree->GetNode(actor);
+			auto node = mSceneTree->GetNode(object);
 
 			if (node)
 				node->Collapse();
@@ -414,54 +419,54 @@ namespace Editor
 
 	void TreeWindow::OnContextLockPressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
-		auto selectedActors = mActorsTree->GetSelectedActors();
+		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
-		bool value = selectedActors.Count() > 0 ? !selectedActors.Last()->IsLocked() : true;
-		auto action = mnew LockActorsAction(selectedActors, value);
+		bool value = selectedObjects.Count() > 0 ? !selectedObjects.Last()->IsLocked() : true;
+		auto action = mnew LockAction(selectedObjects, value);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto actor : selectedActors)
+		for (auto object : selectedObjects)
 		{
-			actor->SetLocked(value);
+			object->SetLocked(value);
 
-// 			auto node = mActorsTree->GetNode(actor);
-// 			if (node)
-// 				node->UpdateView();
+			// 			auto node = mActorsTree->GetNode(actor);
+			// 			if (node)
+			// 				node->UpdateView();
 		}
 	}
 
 	void TreeWindow::OnContextEnablePressed()
 	{
-		if (!mActorsTree->IsFocused())
+		if (!mSceneTree->IsFocused())
 			return;
 
-		auto selectedActors = mActorsTree->GetSelectedActors();
+		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
-		bool value = selectedActors.Count() > 0 ? !selectedActors.Last()->IsEnabled() : true;
-		auto action = mnew LockActorsAction(selectedActors, value);
+		bool value = selectedObjects.Count() > 0 ? !selectedObjects.Last()->IsEnabled() : true;
+		auto action = mnew LockAction(selectedObjects, value);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto actor : selectedActors)
+		for (auto object : selectedObjects)
 		{
-			actor->SetEnabled(value);
+			object->SetEnabled(value);
 
-// 			auto node = mActorsTree->GetNode(actor);
-// 			if (node)
-// 				node->UpdateView();
+			// 			auto node = mActorsTree->GetNode(actor);
+			// 			if (node)
+			// 				node->UpdateView();
 		}
 	}
 
-	void TreeWindow::OnActorCreated(Actor* actor)
+	void TreeWindow::OnActorCreated(SceneEditableObject* actor)
 	{
-		mActorsTree->UpdateNodesView();
+		mSceneTree->UpdateNodesView();
 	}
 
-	void TreeWindow::OnActorDestroyed(Actor* actor)
+	void TreeWindow::OnActorDestroyed(SceneEditableObject* actor)
 	{
-		mActorsTree->UpdateNodesView();
+		mSceneTree->UpdateNodesView();
 	}
 
 	void TreeWindow::InitializeTopPanel()
