@@ -9,8 +9,7 @@ namespace Editor
 	TransformAction::TransformAction()
 	{}
 
-	TransformAction::TransformAction(const Vector<SceneEditableObject*>& actors) :
-		beforeTransforms(beforeTransforms)
+	TransformAction::TransformAction(const Vector<SceneEditableObject*>& actors)
 	{
 		objectsIds = actors.Select<UInt64>([](SceneEditableObject* x) { return x->GetID(); });
 		GetTransforms(objectsIds, beforeTransforms);

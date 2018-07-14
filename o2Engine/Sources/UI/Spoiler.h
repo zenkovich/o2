@@ -58,6 +58,8 @@ namespace o2
 		SERIALIZABLE(UISpoiler);
 
 	protected:
+		float          mHeadHeight = 0.0f;     // Spoiler head height @SERIALIZABLE
+
 		UIWidgetState* mExpandState = nullptr; // Expanding state
 		float          mExpandCoef = 0.0f;     // Expanding animation coefficient 0...1 
 		float          mTargetHeight = 0.0f;   // target expanding height
@@ -65,6 +67,9 @@ namespace o2
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
+
+		// Invokes required function for childs arranging
+		void RearrangeChilds() override;
 
 		// Updates expanding
 		void UpdateExpanding(float dt);
@@ -103,6 +108,7 @@ CLASS_FIELDS_META(o2::UISpoiler)
 	PUBLIC_FIELD(headHeight);
 	PUBLIC_FIELD(expanded);
 	PUBLIC_FIELD(onExpand);
+	PROTECTED_FIELD(mHeadHeight).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mExpandState);
 	PROTECTED_FIELD(mExpandCoef);
 	PROTECTED_FIELD(mTargetHeight);
@@ -121,6 +127,7 @@ CLASS_METHODS_META(o2::UISpoiler)
 	PUBLIC_FUNCTION(void, SetHeadHeight, float);
 	PUBLIC_FUNCTION(float, GetHeadHeight);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, RearrangeChilds);
 	PROTECTED_FUNCTION(void, UpdateExpanding, float);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);

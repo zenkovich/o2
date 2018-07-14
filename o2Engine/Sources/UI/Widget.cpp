@@ -4,15 +4,14 @@
 #include "Application/Input.h"
 #include "Render/Render.h"
 #include "Scene/SceneLayer.h"
+#include "UI/UIManager.h"
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
 #include "UI/WidgetState.h"
-#include "UIManager.h"
-#include "Button.h"
 
 namespace o2
 {
-	UIWidget::UIWidget(ActorCreateMode mode /*= ActorCreateMode::Default*/):
+	UIWidget::UIWidget(ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(mnew UIWidgetLayout(), mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
@@ -30,7 +29,7 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
+	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(mnew UIWidgetLayout(), prototype, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
@@ -47,7 +46,7 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	UIWidget::UIWidget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/):
+	UIWidget::UIWidget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(mnew UIWidgetLayout(), components, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
@@ -65,7 +64,7 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	UIWidget::UIWidget(const UIWidget& other):
+	UIWidget::UIWidget(const UIWidget& other) :
 		Actor(mnew UIWidgetLayout(*other.layout), other), layout(dynamic_cast<UIWidgetLayout*>(transform)),
 		mTransparency(other.mTransparency), transparency(this), resTransparency(this), parentWidget(this),
 		childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
@@ -706,8 +705,7 @@ namespace o2
 	}
 
 	void UIWidget::UpdateVisibility(bool updateLayout /*= true*/)
-	{
-	}
+	{}
 
 	void UIWidget::OnChildFocused(UIWidget* child)
 	{
@@ -980,7 +978,7 @@ namespace o2
 		float oldTransparency = mTransparency;
 		auto oldParent = mParent;
 		auto oldParentWidget = mParentWidget;
-		bool oldClipped= mIsClipped;
+		bool oldClipped = mIsClipped;
 		bool oldResEnabledInHierarchy = mResEnabledInHierarchy;
 
 		layout->mData->offsetMin = area.LeftBottom();
@@ -1123,7 +1121,7 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIWidget::SetInternalParent(UIWidget* parent, bool worldPositionStays /*= true*/)
+	void UIWidget::SetInternalParent(UIWidget* parent, bool worldPositionStays /*= false*/)
 	{
 		SetParent(parent, worldPositionStays);
 
@@ -1131,6 +1129,57 @@ namespace o2
 		parent->mChildWidgets.Remove(this);
 		parent->mDrawingChildren.Remove(this);
 		parent->mInternalWidgets.Add(this);
+	}
+
+	void UIWidget::AddInternalWidget(UIWidget* widget, bool worldPositionStays /*= false*/)
+	{
+		widget->SetInternalParent(this, worldPositionStays);
+	}
+
+	UIWidget* UIWidget::GetInternalWidget(const String& path) const
+	{
+		int delPos = path.Find("/");
+		WString pathPart = path.SubStr(0, delPos);
+
+		if (pathPart == "..")
+		{
+			if (mParent)
+			{
+				if (delPos == -1)
+					return mParentWidget;
+				else
+					return mParent->GetChildByType<UIWidget>(path.SubStr(delPos + 1));
+			}
+
+			return nullptr;
+		}
+
+		for (auto child : mInternalWidgets)
+		{
+			if (child->mName == pathPart)
+			{
+				if (delPos == -1)
+					return child;
+				else
+					return child->GetChildByType<UIWidget>(path.SubStr(delPos + 1));
+			}
+		}
+
+		return nullptr;
+	}
+
+	UIWidget* UIWidget::FindInternalWidget(const String& name) const
+	{
+		for (auto widget : mInternalWidgets)
+		{
+			if (widget->GetName() == name)
+				return widget;
+
+			if (UIWidget* res = widget->FindChildByTypeAndName<UIWidget>(name))
+				return res;
+		}
+
+		return nullptr;
 	}
 
 	void UIWidget::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
@@ -1150,6 +1199,119 @@ namespace o2
 			child->MoveAndCheckClipping(delta, clipArea);
 	}
 
+#if IS_EDITOR
+
+	bool UIWidget::isEditorLayersVisible = true;
+	bool UIWidget::isEditorInternalChildrenVisible = true;
+
+	Vector<SceneEditableObject*> UIWidget::GetEditablesChildren() const
+	{
+		Vector<SceneEditableObject*> res = Actor::GetEditablesChildren();
+
+		if (isEditorInternalChildrenVisible)
+			res.Insert(const_cast<SceneEditableObject*>(dynamic_cast<const SceneEditableObject*>(&internalChildrenEditable)), 0);
+
+		if (isEditorLayersVisible)
+			res.Insert(const_cast<SceneEditableObject*>(dynamic_cast<const SceneEditableObject*>(&layerEditable)), 0);
+
+		return res;
+	}
+
+	UIWidget::LayersEditable::LayersEditable()
+	{}
+
+	UIWidget::LayersEditable::LayersEditable(UIWidget* widget) :
+		mWidget(widget)
+	{}
+
+	SceneUID UIWidget::LayersEditable::GetID() const
+	{
+		return mUID;
+	}
+
+	void UIWidget::LayersEditable::GenerateNewID(bool childs /*= true*/)
+	{
+		mUID = Math::Random();
+	}
+
+	String UIWidget::LayersEditable::GetName() const
+	{
+		return "layers";
+	}
+
+	void UIWidget::LayersEditable::SetName(const String& name)
+	{}
+
+	Vector<SceneEditableObject*> UIWidget::LayersEditable::GetEditablesChildren() const
+	{
+		return mWidget->mLayers.Select<SceneEditableObject*>([](UIWidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
+	}
+
+	SceneEditableObject* UIWidget::LayersEditable::GetEditableParent()
+	{
+		return dynamic_cast<SceneEditableObject*>(mWidget);
+	}
+
+	void UIWidget::LayersEditable::SetEditableParent(SceneEditableObject* object)
+	{}
+
+	void UIWidget::LayersEditable::AddChild(SceneEditableObject* object, int idx /*= -1*/)
+	{
+		if (UIWidgetLayer* layer = dynamic_cast<UIWidgetLayer*>(object))
+			mWidget->AddLayer(layer);
+	}
+
+	void UIWidget::LayersEditable::SetIndexInSiblings(int idx)
+	{}
+
+	UIWidget::InternalChildrenEditableEditable::InternalChildrenEditableEditable()
+	{}
+
+	UIWidget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(UIWidget* widget) :
+		mWidget(widget)
+	{}
+
+	SceneUID UIWidget::InternalChildrenEditableEditable::GetID() const
+	{
+		return mUID;
+	}
+
+	void UIWidget::InternalChildrenEditableEditable::GenerateNewID(bool childs /*= true*/)
+	{
+		mUID = Math::Random();
+	}
+
+	String UIWidget::InternalChildrenEditableEditable::GetName() const
+	{
+		return "internal children";
+	}
+
+	void UIWidget::InternalChildrenEditableEditable::SetName(const String& name)
+	{}
+
+	Vector<SceneEditableObject*> UIWidget::InternalChildrenEditableEditable::GetEditablesChildren() const
+	{
+		return mWidget->mInternalWidgets.Select<SceneEditableObject*>([](UIWidget* x) { return dynamic_cast<SceneEditableObject*>(x); });
+	}
+
+	SceneEditableObject* UIWidget::InternalChildrenEditableEditable::GetEditableParent()
+	{
+		return dynamic_cast<SceneEditableObject*>(mWidget);
+	}
+
+	void UIWidget::InternalChildrenEditableEditable::SetEditableParent(SceneEditableObject* object)
+	{}
+
+	void UIWidget::InternalChildrenEditableEditable::AddChild(SceneEditableObject* object, int idx /*= -1*/)
+	{
+		if (UIWidget* widget = dynamic_cast<UIWidget*>(object))
+			widget->SetInternalParent(mWidget);
+	}
+
+	void UIWidget::InternalChildrenEditableEditable::SetIndexInSiblings(int idx)
+	{}
+
+#endif // IS_EDITOR
 }
 
 DECLARE_CLASS(o2::UIWidget);

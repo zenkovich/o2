@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Utils/Types/Containers/Vector.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
 #include "Utils/Reflection/Type.h"
+#include "Utils/Types/Containers/Vector.h"
 
 using namespace o2;
 
@@ -11,16 +11,13 @@ namespace o2
 {
 	class Actor;
 	class Component;
-	class UIButton;
-	class UIImage;
-	class UILabel;
-	class UISpoiler;
-	class UIVerticalLayout;
 	class UIWidget;
 }
 
 namespace Editor
 {
+	class UISpoilerWithHead;
+
 	// ---------------------------------------
 	// Editor actor transform viewer interface
 	// ---------------------------------------
@@ -51,14 +48,7 @@ namespace Editor
 		IOBJECT(IActorTransformViewer);
 
 	protected:
-		UIVerticalLayout* mDataView;         // Data view widget
-		UIVerticalLayout* mPropertiesLayout; // Properties layout
-		UIButton*         mExpandBtn;        // Expand spoiler button
-		UISpoiler*        mSpoiler;          // Spoiler, containing properties layout
-		UILabel*          mNameCaption;      // Component name caption label
-		UIButton*         mOptionsBtn;       // Component option button
-		UIButton*         mSaveBtn;          // Save prototype button
-		UIImage*          mIcon;             // Component icon
+		UISpoilerWithHead* mSpoiler = nullptr;
 	};
 }
 
@@ -69,14 +59,7 @@ CLASS_BASES_META(Editor::IActorTransformViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IActorTransformViewer)
 {
-	PROTECTED_FIELD(mDataView);
-	PROTECTED_FIELD(mPropertiesLayout);
-	PROTECTED_FIELD(mExpandBtn);
 	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mNameCaption);
-	PROTECTED_FIELD(mOptionsBtn);
-	PROTECTED_FIELD(mSaveBtn);
-	PROTECTED_FIELD(mIcon);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorTransformViewer)

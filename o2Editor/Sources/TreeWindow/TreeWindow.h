@@ -36,6 +36,18 @@ namespace Editor
 		// Expands all actor's parents nodes in tree and hightlights actor
 		void HightlightObjectTreeNode(SceneEditableObject* targetObject);
 
+		// Sets widgets layers visibility in hierarchy
+		void SetWidgetsLayersVisible(bool visible);
+
+		// Returns widgets layers visibility in hierarchy
+		bool IsWidgetsLayersVisible() const;
+
+		// Sets widgets internal children visibility in hierarchy
+		void SetWidgetsInternalChildrenVisible(bool visible);
+
+		// Returns widgets internal children visibility in hierarchy
+		bool IsWidgetsInternalChildrenVisible() const;
+
 	protected:
 		UIToggle*      mListTreeToggle;		// TOggle between list and tree views
 		UIEditBox*     mSearchEditBox;		// Search actors edit box
@@ -137,6 +149,12 @@ namespace Editor
 		// It is called when pressed "Enable/disable" in context menu
 		void OnContextEnablePressed();
 
+		// It is called when view layers menu item toggled
+		void OnViewLayersToggled(bool view);
+
+		// It is called when view internal children menu item toggled
+		void OnViewInternalChildrenToggled(bool view);
+
 		// It is called when actor was created
 		void OnActorCreated(SceneEditableObject* object);
 
@@ -168,6 +186,10 @@ CLASS_METHODS_META(Editor::TreeWindow)
 
 	PUBLIC_FUNCTION(UISceneTree*, GetSceneTree);
 	PUBLIC_FUNCTION(void, HightlightObjectTreeNode, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, SetWidgetsLayersVisible, bool);
+	PUBLIC_FUNCTION(bool, IsWidgetsLayersVisible);
+	PUBLIC_FUNCTION(void, SetWidgetsInternalChildrenVisible, bool);
+	PUBLIC_FUNCTION(bool, IsWidgetsInternalChildrenVisible);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeTestScene);
 	PROTECTED_FUNCTION(void, InitializeSceneTree);
@@ -195,6 +217,8 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	PROTECTED_FUNCTION(void, OnContextCollapseAllPressed);
 	PROTECTED_FUNCTION(void, OnContextLockPressed);
 	PROTECTED_FUNCTION(void, OnContextEnablePressed);
+	PROTECTED_FUNCTION(void, OnViewLayersToggled, bool);
+	PROTECTED_FUNCTION(void, OnViewInternalChildrenToggled, bool);
 	PROTECTED_FUNCTION(void, OnActorCreated, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnActorDestroyed, SceneEditableObject*);
 }

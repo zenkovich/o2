@@ -6,6 +6,7 @@
 #include "Core/Properties/Properties.h"
 #include "Core/Properties/Widgets/ObjectProperty.h"
 #include "Core/Properties/Widgets/ObjectPtrProperty.h"
+#include "Core/UI/SpoilerWithHead.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "UI/Label.h"
@@ -24,7 +25,7 @@ namespace Editor
 	void DefaultActorPropertiesViewer::SetTargetActors(const Vector<Actor*>& actors)
 	{
 		if (!actors.IsEmpty())
-			mNameCaption->text = o2EditorProperties.MakeSmartFieldName(mActorType->GetName());
+			mSpoiler->SetCaption(o2EditorProperties.MakeSmartFieldName(mActorType->GetName()));
 
 		mTargetActors = actors;
 		Refresh();
@@ -37,11 +38,8 @@ namespace Editor
 
 	void DefaultActorPropertiesViewer::SpecializeActorType(const Type* type)
 	{
-		mDataView->name = "actor " + type->GetName();
+		mSpoiler->name = "actor " + type->GetName();
 		mActorType = type;
-
-		mSpoiler->name = "spoiler " + type->GetName();
-		mPropertiesLayout->name = "properties " + type->GetName();
 
 		Rebuild();
 	}
@@ -75,13 +73,13 @@ namespace Editor
 			{
 				if (auto fieldInfo = fields.FindMatch([&](FieldInfo* x) { return x->GetName() == fieldName; }))
 				{
-					o2EditorProperties.BuildField((UIVerticalLayout*)mPropertiesLayout,
+					o2EditorProperties.BuildField(mSpoiler,
 												  fieldInfo, mFieldProperties, "");
 				}
 			}
 		}
 
-		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout,
+		o2EditorProperties.BuildObjectProperties(mSpoiler,
 												 fields, mFieldProperties, "");
 
 		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
@@ -89,10 +87,10 @@ namespace Editor
 
 	bool DefaultActorPropertiesViewer::IsEmpty() const
 	{
-		return mPropertiesLayout->GetChildren().Count() == 0;
+		return mSpoiler->GetChildren().Count() == 0;
 	}
 
-	bool DefaultActorPropertiesViewer::IsBuiltWithEmpty() const
+	bool DefaultActorPropertiesViewer::IsBuiltWithHiddenFields() const
 	{
 		return mBuiltWithHidden;
 	}

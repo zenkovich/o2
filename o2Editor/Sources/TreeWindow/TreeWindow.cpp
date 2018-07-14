@@ -55,6 +55,28 @@ namespace Editor
 		mSceneTree->ScrollToAndHightlight(targetObject);
 	}
 
+	void TreeWindow::SetWidgetsLayersVisible(bool visible)
+	{
+		UIWidget::isEditorLayersVisible = visible;
+		mSceneTree->UpdateNodesView();
+	}
+
+	bool TreeWindow::IsWidgetsLayersVisible() const
+	{
+		return UIWidget::isEditorLayersVisible;
+	}
+
+	void TreeWindow::SetWidgetsInternalChildrenVisible(bool visible)
+	{
+		UIWidget::isEditorInternalChildrenVisible = visible;
+		mSceneTree->UpdateNodesView();
+	}
+
+	bool TreeWindow::IsWidgetsInternalChildrenVisible() const
+	{
+		return UIWidget::isEditorInternalChildrenVisible;
+	}
+
 	void TreeWindow::InitializeWindow()
 	{
 		mWindow->caption = "Tree";
@@ -145,7 +167,14 @@ namespace Editor
 			UIContextMenu::Item("Save prototype", [&]() { OnContextCopyPressed(); }),
 			UIContextMenu::Item("Reset to prototype", [&]() { OnContextCopyPressed(); }),
 			UIContextMenu::Item("Break link to prototype", [&]() { OnContextCopyPressed(); }),
-								   });
+
+			UIContextMenu::Item::Separator(),
+
+			UIContextMenu::Item("View widgets layers", true, THIS_FUNC(OnViewLayersToggled)),
+			UIContextMenu::Item("View widgets internal children", true, THIS_FUNC(OnViewInternalChildrenToggled)),
+
+			UIContextMenu::Item::Separator()
+		});
 
 		InitializeCreateMenu();
 		CreateUICreateMenu();
@@ -457,6 +486,16 @@ namespace Editor
 			// 			if (node)
 			// 				node->UpdateView();
 		}
+	}
+
+	void TreeWindow::OnViewLayersToggled(bool view)
+	{
+		SetWidgetsLayersVisible(view);
+	}
+
+	void TreeWindow::OnViewInternalChildrenToggled(bool view)
+	{
+		SetWidgetsInternalChildrenVisible(view);
 	}
 
 	void TreeWindow::OnActorCreated(SceneEditableObject* actor)

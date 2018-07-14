@@ -305,6 +305,158 @@ namespace o2
 		return res;
 	}
 
+#if IS_EDITOR
+
+	SceneUID UIWidgetLayer::GetID() const
+	{
+		return mUID;
+	}
+
+	void UIWidgetLayer::GenerateNewID(bool childs /*= true*/)
+	{
+		mUID = Math::Random();
+
+		if (childs)
+		{
+			for (auto child : mChildren)
+				child->GenerateNewID(true);
+		}
+	}
+
+	String UIWidgetLayer::GetName() const
+	{
+		return name;
+	}
+
+	void UIWidgetLayer::SetName(const String& name)
+	{
+		this->name = name;
+	}
+
+	Vector<SceneEditableObject*> UIWidgetLayer::GetEditablesChildren() const
+	{
+		return mChildren.Select<SceneEditableObject*>([](UIWidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
+	}
+
+	SceneEditableObject* UIWidgetLayer::GetEditableParent()
+	{
+		if (mParent)
+			return dynamic_cast<SceneEditableObject*>(mParent);
+
+		return dynamic_cast<SceneEditableObject*>(mOwnerWidget);
+	}
+
+	void UIWidgetLayer::SetEditableParent(SceneEditableObject* object)
+	{
+		if (UIWidgetLayer* layer = dynamic_cast<UIWidgetLayer*>(object))
+			layer->AddChild(this);
+		else if (UIWidget* widget = dynamic_cast<UIWidget*>(object))
+			widget->AddLayer(this);
+	}
+
+	void UIWidgetLayer::AddChild(SceneEditableObject* object, int idx /*= -1*/)
+	{
+		if (UIWidgetLayer* layer = dynamic_cast<UIWidgetLayer*>(object))
+			AddChild(layer);
+	}
+
+	void UIWidgetLayer::SetIndexInSiblings(int idx)
+	{
+
+	}
+
+	bool UIWidgetLayer::IsSupportsDisabling() const
+	{
+		return true;
+	}
+
+	bool UIWidgetLayer::IsEnabled() const
+	{
+		return true;
+	}
+
+	bool UIWidgetLayer::IsEnabledInHierarchy() const
+	{
+		return true;
+	}
+
+	void UIWidgetLayer::SetEnabled(bool enabled)
+	{
+
+	}
+
+	bool UIWidgetLayer::IsSupportsLocking() const
+	{
+		return false;
+	}
+
+	bool UIWidgetLayer::IsLocked() const
+	{
+		return false;
+	}
+
+	bool UIWidgetLayer::IsLockedInHierarchy() const
+	{
+		return false;
+	}
+
+	void UIWidgetLayer::SetLocked(bool locked)
+	{
+
+	}
+
+	bool UIWidgetLayer::IsSupportsTransforming() const
+	{
+		return true;
+	}
+
+	Basis UIWidgetLayer::GetTransform() const
+	{
+		return Basis(mAbsolutePosition.LeftBottom(), Vec2F::Right()*mAbsolutePosition.Width(), Vec2F::Up()*mAbsolutePosition.Height());
+	}
+
+	void UIWidgetLayer::SetTransform(const Basis& transform)
+	{
+
+	}
+
+	void UIWidgetLayer::UpdateTransform(bool withChildren /*= true*/)
+	{
+
+	}
+
+	bool UIWidgetLayer::IsSupportsPivot() const
+	{
+		return false;
+	}
+
+	void UIWidgetLayer::SetPivot(const Vec2F& pivot)
+	{
+
+	}
+
+	Vec2F UIWidgetLayer::GetPivot() const
+	{
+		return Vec2F();
+	}
+
+	bool UIWidgetLayer::IsSupportsLayout() const
+	{
+		return true;
+	}
+
+	Layout UIWidgetLayer::GetLayout() const
+	{
+		return layout;
+	}
+
+	void UIWidgetLayer::SetLayout(const Layout& layout)
+	{
+		this->layout = layout;
+	}
+
+#endif // IS_EDITOR
+
 }
 
 DECLARE_CLASS(o2::UIWidgetLayer);

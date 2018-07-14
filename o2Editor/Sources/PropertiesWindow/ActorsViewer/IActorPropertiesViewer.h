@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Utils/Types/Containers/Vector.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
 #include "Utils/Reflection/Type.h"
+#include "Utils/Types/Containers/Vector.h"
 
 using namespace o2;
 
@@ -11,16 +11,13 @@ namespace o2
 {
 	class Actor;
 	class Component;
-	class UIButton;
-	class UIImage;
-	class UILabel;
-	class UISpoiler;
-	class UIVerticalLayout;
 	class UIWidget;
 }
 
 namespace Editor
 {
+	class UISpoilerWithHead;
+
 	// ----------------------------------------
 	// Editor actor properties viewer interface
 	// ----------------------------------------
@@ -58,19 +55,12 @@ namespace Editor
 		virtual bool IsEmpty() const;
 
 		// Returns true when properties was built with hidden fields
-		virtual bool IsBuiltWithEmpty() const;
+		virtual bool IsBuiltWithHiddenFields() const;
 
 		IOBJECT(IActorPropertiesViewer);
 
 	protected:
-		UIVerticalLayout* mDataView = nullptr;         // Data view widget
-		UIVerticalLayout* mPropertiesLayout = nullptr; // Properties layout
-		UIButton*         mExpandBtn = nullptr;        // Expand spoiler button
-		UISpoiler*        mSpoiler = nullptr;          // Spoiler, containing properties layout
-		UILabel*          mNameCaption = nullptr;      // Actor type name caption label
-		UIButton*         mOptionsBtn = nullptr;       // Option button
-		UIButton*         mSaveBtn = nullptr;          // Save prototype button
-		UIImage*          mIcon = nullptr;             // Actor icon
+		UISpoilerWithHead* mSpoiler = nullptr;
 	};
 }
 
@@ -81,14 +71,7 @@ CLASS_BASES_META(Editor::IActorPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IActorPropertiesViewer)
 {
-	PROTECTED_FIELD(mDataView);
-	PROTECTED_FIELD(mPropertiesLayout);
-	PROTECTED_FIELD(mExpandBtn);
 	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mNameCaption);
-	PROTECTED_FIELD(mOptionsBtn);
-	PROTECTED_FIELD(mSaveBtn);
-	PROTECTED_FIELD(mIcon);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorPropertiesViewer)
@@ -102,6 +85,6 @@ CLASS_METHODS_META(Editor::IActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(bool, IsEmpty);
-	PUBLIC_FUNCTION(bool, IsBuiltWithEmpty);
+	PUBLIC_FUNCTION(bool, IsBuiltWithHiddenFields);
 }
 END_META;

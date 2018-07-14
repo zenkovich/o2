@@ -29,6 +29,7 @@
 #include "Core/Properties/Widgets/Vector2FloatProperty.h"
 #include "Core/Properties/Widgets/Vector2IntProperty.h"
 #include "Core/Properties/Widgets/WStringProperty.h"
+#include "Core/UI/SpoilerWithHead.h"
 #include "Core/UIStyle/BasicUIStyle.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Render/Sprite.h"
@@ -43,6 +44,7 @@
 #include "UI/HorizontalLayout.h"
 #include "UI/HorizontalProgress.h"
 #include "UI/HorizontalScrollBar.h"
+#include "UI/Image.h"
 #include "UI/Label.h"
 #include "UI/List.h"
 #include "UI/MenuPanel.h"
@@ -2150,6 +2152,54 @@ namespace Editor
 		caretDrawable->color = Color4::Black();
 
 		o2UI.AddWidgetStyle(sample, "green singleline");
+	}
+
+	void EditorUIStyleBuilder::RebuildSpoilerWithHead()
+	{
+		auto sample = mnew UISpoilerWithHead();
+		sample->SetHeadHeight(18);
+		sample->spacing = 5.0f;
+		sample->borderLeft = 10;
+		sample->borderTop = 5.0f;
+		sample->expandHeight = false;
+		sample->expandWidth = true;
+		sample->fitByChildren = true;
+		sample->baseCorner = BaseCorner::RightTop;
+
+		sample->AddLayer("back", mnew Sprite("ui/UI2_component_head.png"),
+								Layout::HorStretch(VerAlign::Top, -2, -2, 22, -2));
+
+		sample->AddLayer("separator", mnew Sprite("ui/UI_Separator.png"), 
+						 Layout::HorStretch(VerAlign::Top, -1, -1, 5, -2));
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "Button";
+		captionText->horAlign = HorAlign::Left;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		captionText->wordWrap = true;
+		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 30, 0, 20, -1));
+
+		auto expandBtn = o2UI.CreateWidget<UIButton>("expand");
+		*expandBtn->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-2, 0));
+		sample->AddInternalWidget(expandBtn);
+
+		auto icon = o2UI.CreateImage("ui/UI2_transform_icon.png");
+		icon->name = "icon";
+		*icon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(12, 0));
+		sample->AddInternalWidget(icon);
+
+		auto saveBtn = o2UI.CreateWidget<UIButton>("component save");
+		saveBtn->name = "save";
+		*saveBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-15, 0));
+		sample->AddInternalWidget(saveBtn);
+
+		auto optionBtn = o2UI.CreateWidget<UIButton>("component options");
+		optionBtn->name = "options";
+		*optionBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 0));
+		sample->AddInternalWidget(optionBtn);
+
+		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
 	void EditorUIStyleBuilder::RebuildFloatProperty()

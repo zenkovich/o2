@@ -11,16 +11,13 @@ namespace o2
 {
 	class Actor;
 	class Component;
-	class UIButton;
-	class UIImage;
-	class UILabel;
-	class UISpoiler;
-	class UIVerticalLayout;
 	class UIWidget;
 }
 
 namespace Editor
 {
+	class UISpoilerWithHead;
+
 	// ---------------------------------------
 	// Editor actor component viewer interface
 	// ---------------------------------------
@@ -60,14 +57,7 @@ namespace Editor
 		IOBJECT(IActorComponentViewer);
 
 	protected:
-		UIVerticalLayout* mDataView = nullptr;         // Data view widget
-		UIVerticalLayout* mPropertiesLayout = nullptr; // Properties layout
-		UIButton*         mExpandBtn = nullptr;        // Expand spoiler button
-		UISpoiler*        mSpoiler = nullptr;          // Spoiler, containing properties layout
-		UILabel*          mNameCaption = nullptr;      // Component name caption label
-		UIButton*         mOptionsBtn = nullptr;       // Component option button
-		UIButton*         mSaveBtn = nullptr;          // Save prototype button
-		UIImage*          mIcon = nullptr;             // Component icon
+		UISpoilerWithHead* mSpoiler = nullptr;
 	};
 }
 
@@ -78,14 +68,7 @@ CLASS_BASES_META(Editor::IActorComponentViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IActorComponentViewer)
 {
-	PROTECTED_FIELD(mDataView);
-	PROTECTED_FIELD(mPropertiesLayout);
-	PROTECTED_FIELD(mExpandBtn);
 	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mNameCaption);
-	PROTECTED_FIELD(mOptionsBtn);
-	PROTECTED_FIELD(mSaveBtn);
-	PROTECTED_FIELD(mIcon);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorComponentViewer)

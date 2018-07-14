@@ -6,6 +6,7 @@
 #include "Core/Properties/Properties.h"
 #include "Core/Properties/Widgets/ObjectProperty.h"
 #include "Core/Properties/Widgets/ObjectPtrProperty.h"
+#include "Core/UI/SpoilerWithHead.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Component.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -30,7 +31,7 @@ namespace Editor
 			if (caption.IsEmpty())
 				caption = o2EditorProperties.MakeSmartFieldName(mComponentType->GetName());
 				
-			mNameCaption->text = caption;
+			mSpoiler->SetCaption(caption);
 		}
 
 		mTargetComponents = components;
@@ -60,16 +61,13 @@ namespace Editor
 
 	void DefaultActorComponentViewer::Rebuild()
 	{
-		mDataView->name = "component " + mComponentType->GetName();
+		mSpoiler->name = "component " + mComponentType->GetName();
 
 		o2EditorProperties.FreeProperties(mFieldProperties);
-		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, mComponentType, mFieldProperties,
+		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mSpoiler, mComponentType, mFieldProperties,
 			(String)"component:" + mComponentType->GetName() + "/");
 
 		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
-
-		mSpoiler->name = "spoiler " + mComponentType->GetName();
-		mPropertiesLayout->name = "properties " + mComponentType->GetName();
 	}
 
 	bool DefaultActorComponentViewer::IsBuiltWithEmpty() const

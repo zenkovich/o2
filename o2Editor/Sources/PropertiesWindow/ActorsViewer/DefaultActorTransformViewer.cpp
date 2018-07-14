@@ -5,6 +5,7 @@
 #include "Core/EditorApplication.h"
 #include "Core/Properties/Widgets/FloatProperty.h"
 #include "Core/Properties/Widgets/Vector2FloatProperty.h"
+#include "Core/UI/SpoilerWithHead.h"
 #include "Scene/Actor.h"
 #include "Scene/DrawableComponent.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -20,18 +21,11 @@ namespace Editor
 {
 	DefaultActorTransformViewer::DefaultActorTransformViewer()
 	{
-		mNameCaption->text = "Transform";
-		mPropertiesLayout->spacing = 5;
-		mPropertiesLayout->border = BorderF(5, 5, 5, 5);
-		mPropertiesLayout->fitByChildren = true;
-		mPropertiesLayout->expandWidth = true;
-		mPropertiesLayout->expandHeight = false;
-
 		// Position
 		auto positionPropertyContainer = mnew UIWidget();
 		positionPropertyContainer->name = "position";
 		positionPropertyContainer->layout->minHeight = 20;
-		mPropertiesLayout->AddChild(positionPropertyContainer);
+		mSpoiler->AddChild(positionPropertyContainer);
 
 		auto positionIcon = o2UI.CreateImage("ui/UI2_position_icon.png");
 		*positionIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
@@ -47,7 +41,7 @@ namespace Editor
 		auto pivotPropertyContainer = mnew UIWidget();
 		pivotPropertyContainer->name = "pivot";
 		pivotPropertyContainer->layout->minHeight = 20;
-		mPropertiesLayout->AddChild(pivotPropertyContainer);
+		mSpoiler->AddChild(pivotPropertyContainer);
 
 		auto pivotIcon = o2UI.CreateImage("ui/UI2_pivot_icon.png");
 		*pivotIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
@@ -63,7 +57,7 @@ namespace Editor
 		auto sizePropertyContainer = mnew UIWidget();
 		sizePropertyContainer->name = "size";
 		sizePropertyContainer->layout->minHeight = 20;
-		mPropertiesLayout->AddChild(sizePropertyContainer);
+		mSpoiler->AddChild(sizePropertyContainer);
 
 		auto sizeIcon = o2UI.CreateImage("ui/UI3_icon_size.png");
 		*sizeIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 0));
@@ -79,7 +73,7 @@ namespace Editor
 		auto scalePropertyContainer = mnew UIWidget();
 		scalePropertyContainer->name = "scale";
 		scalePropertyContainer->layout->minHeight = 20;
-		mPropertiesLayout->AddChild(scalePropertyContainer);
+		mSpoiler->AddChild(scalePropertyContainer);
 
 		auto scaleIcon = o2UI.CreateImage("ui/UI2_scale_icon.png");
 		*scaleIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
@@ -95,7 +89,7 @@ namespace Editor
 		auto rotationAndDepthPropertyContainer = mnew UIWidget();
 		rotationAndDepthPropertyContainer->name = "rotation and depth";
 		rotationAndDepthPropertyContainer->layout->minHeight = 20;
-		mPropertiesLayout->AddChild(rotationAndDepthPropertyContainer);
+		mSpoiler->AddChild(rotationAndDepthPropertyContainer);
 
 		auto rotateIcon = o2UI.CreateImage("ui/UI2_rotate_icon.png");
 		*rotateIcon->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
@@ -126,7 +120,7 @@ namespace Editor
 		mLayoutSpoiler->fitByChildren = true;
 		mLayoutSpoiler->expandWidth = true;
 		mLayoutSpoiler->expandHeight = false;
-		mPropertiesLayout->AddChild(mLayoutSpoiler);
+		mSpoiler->AddChild(mLayoutSpoiler);
 
 		// Anchors
 		// Right top

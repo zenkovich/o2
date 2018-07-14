@@ -26,6 +26,9 @@
     </Filter>
     <Filter Include="Sources\Core\Properties" />
     <Filter Include="Sources\Core\Properties\Widgets" />
+    <Filter Include="Sources\PropertiesWindow\WidgetLayerViewer">
+      <UniqueIdentifier>{fd610836-42b8-4332-8355-fa4e73fc0fdb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h">
@@ -40,7 +43,31 @@
     <ClInclude Include="..\..\Sources\AssetsWindow\UIAssetIcon.h">
       <Filter>Sources\AssetsWindow</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Create.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Delete.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Enable.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Actions\IAction.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Lock.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\PropertyChange.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Reparent.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Select.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\Transform.h">
       <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.h">
@@ -65,6 +92,9 @@
       <Filter>Sources\Core\Properties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Properties\IPropertyField.h">
+      <Filter>Sources\Core\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Properties\Properties.h">
       <Filter>Sources\Core\Properties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Properties\Widgets\ActorProperty.h">
@@ -169,6 +199,9 @@
     <ClInclude Include="..\..\Sources\Core\UI\ScrollView.h">
       <Filter>Sources\Core\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UI\SpoilerWithHead.h">
+      <Filter>Sources\Core\UI</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\UIRoot.h">
       <Filter>Sources\Core</Filter>
     </ClInclude>
@@ -196,7 +229,7 @@
     <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h">
       <Filter>Sources\LogWindow</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.h">
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorViewer.h">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ComponentsViewers\ImageComponentViewer.h">
@@ -244,6 +277,27 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\PropertiesWindow.h">
       <Filter>Sources\PropertiesWindow</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.h">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.h">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.h">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.h">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.h">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.h">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\SceneWindow\SceneDragHandle.h">
       <Filter>Sources\SceneWindow</Filter>
     </ClInclude>
@@ -253,41 +307,14 @@
     <ClInclude Include="..\..\Sources\SceneWindow\SceneWindow.h">
       <Filter>Sources\SceneWindow</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\TreeWindow\SceneTree.h">
+      <Filter>Sources\TreeWindow</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\TreeWindow\TreeWindow.h">
       <Filter>Sources\TreeWindow</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\stdafx.h">
       <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Properties\Properties.h">
-      <Filter>Sources\Core\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\TreeWindow\SceneTree.h">
-      <Filter>Sources\TreeWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\Reparent.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\PropertyChange.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\Transform.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\Create.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\Delete.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\Enable.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\Lock.h">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Actions\Select.h">
-      <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -303,7 +330,31 @@
     <ClCompile Include="..\..\Sources\AssetsWindow\UIAssetIcon.cpp">
       <Filter>Sources\AssetsWindow</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Create.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Delete.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Enable.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Actions\IAction.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Lock.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\PropertyChange.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Reparent.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Select.cpp">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\Transform.cpp">
       <Filter>Sources\Core\Actions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.cpp">
@@ -328,6 +379,9 @@
       <Filter>Sources\Core\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Properties\IPropertyField.cpp">
+      <Filter>Sources\Core\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Properties\Properties.cpp">
       <Filter>Sources\Core\Properties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Properties\Widgets\ActorProperty.cpp">
@@ -429,6 +483,9 @@
     <ClCompile Include="..\..\Sources\Core\UI\ScrollView.cpp">
       <Filter>Sources\Core\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UI\SpoilerWithHead.cpp">
+      <Filter>Sources\Core\UI</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\UIRoot.cpp">
       <Filter>Sources\Core</Filter>
     </ClCompile>
@@ -456,7 +513,7 @@
     <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp">
       <Filter>Sources\LogWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorPropertiesViewer.cpp">
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorViewer.cpp">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp">
@@ -501,6 +558,15 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\PropertiesWindow.cpp">
       <Filter>Sources\PropertiesWindow</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.cpp">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.cpp">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.cpp">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\SceneWindow\SceneDragHandle.cpp">
       <Filter>Sources\SceneWindow</Filter>
     </ClCompile>
@@ -509,6 +575,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\SceneWindow\SceneWindow.cpp">
       <Filter>Sources\SceneWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\TreeWindow\SceneTree.cpp">
+      <Filter>Sources\TreeWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\TreeWindow\TreeWindow.cpp">
       <Filter>Sources\TreeWindow</Filter>
@@ -519,35 +588,8 @@
     <ClCompile Include="..\..\Sources\stdafx.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Properties\Properties.cpp">
-      <Filter>Sources\Core\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\TreeWindow\SceneTree.cpp">
-      <Filter>Sources\TreeWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\Reparent.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\PropertyChange.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\Transform.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\Create.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\Delete.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\Enable.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\Lock.cpp">
-      <Filter>Sources\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Actions\Select.cpp">
-      <Filter>Sources\Core\Actions</Filter>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

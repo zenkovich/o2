@@ -101,6 +101,8 @@ namespace Editor
 		void RebuildHorWideProgressbar();
 		void RebuildVerWideProgressbar();
 
+		void RebuildSpoilerWithHead();
+
 		void RebuildEditorUIManager();
 
 		IOBJECT(EditorUIStyleBuilder);
@@ -285,6 +287,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildVerWideScrollbar);
 	PUBLIC_FUNCTION(void, RebuildHorWideProgressbar);
 	PUBLIC_FUNCTION(void, RebuildVerWideProgressbar);
+	PUBLIC_FUNCTION(void, RebuildSpoilerWithHead);
 	PUBLIC_FUNCTION(void, RebuildEditorUIManager);
 }
 END_META;

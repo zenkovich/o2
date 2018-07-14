@@ -37,7 +37,7 @@ namespace Editor
 		bool IsEmpty() const override;
 
 		// Returns true when properties was built with hidden fields
-		bool IsBuiltWithEmpty() const override;
+		bool IsBuiltWithHiddenFields() const override;
 
 		IOBJECT(DefaultActorPropertiesViewer);
 
@@ -71,6 +71,6 @@ CLASS_METHODS_META(Editor::DefaultActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(bool, IsEmpty);
-	PUBLIC_FUNCTION(bool, IsBuiltWithEmpty);
+	PUBLIC_FUNCTION(bool, IsBuiltWithHiddenFields);
 }
 END_META;

@@ -54,9 +54,11 @@ namespace o2
 		ACCESSOR(Actor*, child, String, GetChild, GetAllChilds);                 // Children accessor
 		ACCESSOR(Component*, component, String, GetComponent, GetAllComponents); // Component accessor by type name
 
+	public:
 		TagGroup              tags;      // Tags group
 		ActorTransform* const transform; // Transformation of actor
 
+	public:
 		Function<void(bool)>  onEnableChanged; // Enable changing event
 
 #if IS_EDITOR
@@ -188,7 +190,7 @@ namespace o2
 
 		// Returns child actor by name
 		template<typename _type>
-		_type* FindChildByType(const String& name) const;
+		_type* FindChildByTypeAndName(const String& name) const;
 
 		// Searches child with specified type
 		template<typename _type>
@@ -630,7 +632,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type* Actor::FindChildByType(const String& name) const
+	_type* Actor::FindChildByTypeAndName(const String& name) const
 	{
 		return dynamic_cast<_type*>(FindChild(name));
 	}

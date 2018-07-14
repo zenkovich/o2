@@ -25,7 +25,7 @@ namespace o2
 	}
 
 	UISpoiler::UISpoiler(const UISpoiler& other):
-		UIVerticalLayout(other), caption(this), headHeight(this), expanded(this)
+		UIVerticalLayout(other), caption(this), headHeight(this), expanded(this), mHeadHeight(other.mHeadHeight)
 	{
 		mExpandState = GetStateObject("expand");
 		if (!mExpandState)
@@ -126,12 +126,12 @@ namespace o2
 
 	void UISpoiler::SetHeadHeight(float height)
 	{
-		SetBorderTop(height);
+		mHeadHeight = height;
 	}
 
 	float UISpoiler::GetHeadHeight() const
 	{
-		return GetBorderTop();
+		return mHeadHeight;
 	}
 
 	void UISpoiler::CopyData(const Actor& otherActor)
@@ -147,8 +147,20 @@ namespace o2
 		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 
+		mHeadHeight = other.mHeadHeight;
+
 		InitializeControls();
 		UpdateExpanding(0);
+	}
+
+	void UISpoiler::RearrangeChilds()
+	{
+		float borderTop = mBorder.top;
+		mBorder.top = borderTop + mHeadHeight;
+
+		UIVerticalLayout::RearrangeChilds();
+
+		mBorder.top = borderTop;
 	}
 
 	void UISpoiler::UpdateExpanding(float dt)
@@ -161,14 +173,14 @@ namespace o2
 		if (!mFitByChildren)
 			return UIWidget::GetMinHeightWithChildren();
 
-		float res = Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
+		float res = Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing + mBorder.top + mBorder.bottom;
 		for (auto child : mChildWidgets)
 		{
 			if (child->mResEnabledInHierarchy)
 				res += child->GetMinHeightWithChildren();
 		}
 
-		res = res*Math::Clamp01(mExpandCoef) + mBorder.top + mBorder.bottom;
+		res = res*Math::Clamp01(mExpandCoef) + mHeadHeight;
 		res = Math::Max(res, layout->mData->minSize.y);
 
 		return res;

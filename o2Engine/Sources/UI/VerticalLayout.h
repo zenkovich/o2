@@ -131,7 +131,7 @@ namespace o2
 		void OnChildRemoved(UIWidget* child) override;
 
 		// Invokes required function for childs arranging
-		void RearrangeChilds();
+		virtual void RearrangeChilds();
 
 		// Arranging child from left to right by bottom, middle and top
 		void ArrangeFromTopToBottom();

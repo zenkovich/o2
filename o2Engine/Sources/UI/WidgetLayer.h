@@ -13,10 +13,16 @@ namespace o2
 	class UIWidgetLayer;
 	typedef Vector<UIWidgetLayer*>  LayersVec;
 
+#if IS_EDITOR
+	typedef SceneEditableObject UIWidgetLayerBase;
+#else
+	typedef ISerializable UIWidgetLayerBase;
+#endif
+
 	// ---------------------
 	// Widget drawable layer
 	// ---------------------
-	class UIWidgetLayer: public ISerializable
+	class UIWidgetLayer: public UIWidgetLayerBase
 	{
 	public:
 		typedef Vector<UIWidgetLayer*> ChildrenVec;
@@ -115,6 +121,97 @@ namespace o2
 
 		SERIALIZABLE(UIWidgetLayer);
 
+#if IS_EDITOR
+		// Returns unique id
+		SceneUID GetID() const override;
+
+		// Generates new random id 
+		void GenerateNewID(bool childs = true) override;
+
+
+		// Returns name of object
+		String GetName() const override;
+
+		// Sets name of object
+		void SetName(const String& name) override;
+
+
+		// Returns list of object's children
+		Vector<SceneEditableObject*> GetEditablesChildren() const override;
+
+		// Returns object's parent object. Return nullptr when it is a root scene object
+		SceneEditableObject* GetEditableParent() override;
+
+		// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
+		void SetEditableParent(SceneEditableObject* object) override;
+
+		// Adds child. idx is place in parent children. idx == -1 means last
+		void AddChild(SceneEditableObject* object, int idx = -1) override;
+
+		// Sets index in siblings - children of parent
+		void SetIndexInSiblings(int idx) override;
+
+
+		// Returns is that type of object can be enabled and disabled
+		bool IsSupportsDisabling() const override;
+
+		// Returns is object enabled, override when it's supports
+		bool IsEnabled() const override;
+
+		// Returns is object enabled and all parent are enabled too
+		bool IsEnabledInHierarchy() const override;
+
+		// Sets enabling of object, override when it's supports
+		void SetEnabled(bool enabled) override;
+
+
+		// Returns is that type of object can be locked
+		bool IsSupportsLocking() const override;
+
+		// Returns is object locked, override when it's supports
+		bool IsLocked() const override;
+
+		// Returns is object locked and all parent are locked too
+		bool IsLockedInHierarchy() const override;
+
+		// Sets locking of object, override when it's supports
+		void SetLocked(bool locked) override;
+
+
+		// Returns is that type of object can be transformed
+		bool IsSupportsTransforming() const override;
+
+		// Returns transform, override when it's supports
+		Basis GetTransform() const override;
+
+		// Sets transform of object, override when it's supports
+		void SetTransform(const Basis& transform) override;
+
+		// Updates transform immediately
+		void UpdateTransform(bool withChildren = true) override;
+
+
+		// Returns is object supports pivot 
+		bool IsSupportsPivot() const override;
+
+		// Sets transform pivot point
+		void SetPivot(const Vec2F& pivot) override;
+
+		// Returns transform pivot
+		Vec2F GetPivot() const override;
+
+
+		// Returns is that type of object can be transformed with layout
+		bool IsSupportsLayout() const override;
+
+		// Returns layout, override when it's supports
+		Layout GetLayout() const override;
+
+		// Sets layout of object, override when it's supports
+		void SetLayout(const Layout& layout) override;
+
+#endif // IS_EDITOR
+
 	protected:
 		float          mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
 		float          mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
@@ -124,6 +221,10 @@ namespace o2
 		UIWidget*      mOwnerWidget = nullptr;  // Owner widget pointer @EXCLUDE_POINTER_SEARCH
 		UIWidgetLayer* mParent = nullptr;       // Pointer to parent layer @EXCLUDE_POINTER_SEARCH
 		ChildrenVec    mChildren;               // Children layers @SERIALIZABLE
+
+#if IS_EDITOR
+		SceneUID       mUID = Math::Random();   // Scene editor uid
+#endif // IS_EDITOR
 
 	protected:
 		// Completion deserialization callback
@@ -167,7 +268,7 @@ namespace o2
 
 CLASS_BASES_META(o2::UIWidgetLayer)
 {
-	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(UIWidgetLayerBase);
 }
 END_META;
 CLASS_FIELDS_META(o2::UIWidgetLayer)

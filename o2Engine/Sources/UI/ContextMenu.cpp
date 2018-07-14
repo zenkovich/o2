@@ -842,6 +842,7 @@ namespace o2
 			checkLayer->enabled = item.checked;
 
 		widget->SetShortcut(item.shortcut);
+		widget->SetChecked(item.checked);
 		widget->SetCheckable(item.checkable);
 		widget->onChecked = item.onChecked;
 

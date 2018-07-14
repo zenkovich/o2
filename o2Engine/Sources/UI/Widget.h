@@ -15,7 +15,7 @@ namespace o2
 	// Basic UI Widget. Its a simple and basic element of UI, 
 	// everything other UI's are based on this
 	// ------------------------------------------------------
-	class UIWidget: public Actor, public SceneDrawable
+	class UIWidget : public Actor, public SceneDrawable
 	{
 	public:
 		typedef Vector<UIWidget*> WidgetsVec;
@@ -38,8 +38,10 @@ namespace o2
 		ACCESSOR(UIWidgetLayer*, layer, String, GetLayer, GetAllLayers);        // Widget layer accessor by path like "layer/sublayer/target"
 		ACCESSOR(UIWidgetState*, state, String, GetStateObject, GetAllStates);  // Widget state accessor by name
 
+	public:
 		UIWidgetLayout* const layout;     // Widget layout
 
+	public:
 		Function<void()> onLayoutUpdated; // Layout change event
 		Function<void()> onFocused;       // Widget focused event
 		Function<void()> onUnfocused;     // Widget unfocused event
@@ -62,8 +64,10 @@ namespace o2
 		// Virtual destructor
 		virtual ~UIWidget();
 
+
 		// Copy-operator
 		UIWidget& operator=(const UIWidget& other);
+
 
 		// Updates layers, states and widget
 		void Update(float dt) override;
@@ -74,14 +78,17 @@ namespace o2
 		// Updates children and internal children transforms
 		void UpdateChildrenTransforms() override;
 
+
 		// Draws widget and child widgets with not overridden depth
 		void Draw() override;
+
+		// Forcible drawing in area with transparency
+		void ForceDraw(const RectF& area, float transparency);
+
 
 		// Sets layout dirty, and update it in update loop
 		void SetLayoutDirty();
 
-		// Forcible drawing in area with transparency
-		void ForceDraw(const RectF& area, float transparency);
 
 		// Returns parent widget
 		UIWidget* GetParentWidget() const;
@@ -100,6 +107,10 @@ namespace o2
 
 		// Returns constant children widgets vector
 		const WidgetsVec& GetChildWidgets() const;
+
+		// Sets index position in parent or scene
+		void SetIndexInSiblings(int index) override;
+
 
 		// Adds layer
 		UIWidgetLayer* AddLayer(UIWidgetLayer* layer);
@@ -134,6 +145,7 @@ namespace o2
 		// Returns all layers
 		const LayersVec& GetLayers() const;
 
+
 		// Adds new state with name
 		UIWidgetState* AddState(const String& name);
 
@@ -167,11 +179,13 @@ namespace o2
 		// Returns all states
 		const StatesVec& GetStates() const;
 
+
 		// Sets depth overriding
 		void SetDepthOverridden(bool overrideDepth);
 
 		// Is sorting depth overridden
 		bool IsDepthOverriden() const;
+
 
 		// Sets widget's transparency
 		void SetTransparency(float transparency);
@@ -182,6 +196,7 @@ namespace o2
 		// Returns widget's result transparency (depends on parent's result transparency)
 		float GetResTransparency() const;
 
+
 		// Sets visibility
 		void SetEnableForcible(bool visible);
 
@@ -190,6 +205,7 @@ namespace o2
 
 		// Sets visibility to false
 		void Hide(bool forcible = false);
+
 
 		// Focus this widget
 		void Focus();
@@ -206,14 +222,34 @@ namespace o2
 		// Sets widget can be focused
 		void SetFocusable(bool focusable);
 
+
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point);
 
-		// Sets index position in parent or scene
-		void SetIndexInSiblings(int index) override;
 
 		// Sets parent,  doesn't adds to parent's children but adds to internal children
-		void SetInternalParent(UIWidget* parent, bool worldPositionStays = true);
+		void SetInternalParent(UIWidget* parent, bool worldPositionStays = false);
+
+		// Adds widget to internal children
+		void AddInternalWidget(UIWidget* widget, bool worldPositionStays = false);
+
+		// Returns internal child widget by path (like "root/some node/other node/target node")
+		UIWidget* GetInternalWidget(const String& path) const;
+
+		// Returns internal child widget by path (like "root/some node/other node/target node")
+		template<typename _type>
+		_type* GetInternalWidgetByType(const String& path) const;
+
+		// Searches widget with name in internal widgets hierarchy
+		UIWidget* FindInternalWidget(const String& name) const;
+
+		// Searches widget with type and name in internal widgets hierarchy
+		template<typename _type>
+		_type* FindInternalWidgetByType(const String& name) const;
+
+		// Searches widget with type in internal widgets hierarchy
+		template<typename _type>
+		_type* FindInternalWidgetByType() const;
 
 		SERIALIZABLE(UIWidget);
 
@@ -244,7 +280,7 @@ namespace o2
 		bool           mIsFocusable = false;    // Is widget can be focused @SERIALIZABLE
 
 		UIWidgetState* mVisibleState = nullptr; // Widget visibility state
-		
+
 		bool           mIsClipped = false;      // Is widget fully clipped by some scissors
 
 		RectF          mBounds;                 // Widget bounds by drawing layers
@@ -399,6 +435,111 @@ namespace o2
 		friend class UIWidgetLayer;
 		friend class UIWidgetLayout;
 		friend class UIWindow;
+
+#if IS_EDITOR
+		class LayersEditable : public SceneEditableObject
+		{
+		public:
+			// Default constructor
+			LayersEditable();
+
+			// Constructor with widget
+			LayersEditable(UIWidget* widget);
+
+			// Returns unique id
+			SceneUID GetID() const override;
+
+			// Generates new random id 
+			void GenerateNewID(bool childs = true) override;
+
+
+			// Returns name of object
+			String GetName() const override;
+
+			// Sets name of object
+			void SetName(const String& name) override;
+
+
+			// Returns list of object's children
+			Vector<SceneEditableObject*> GetEditablesChildren() const override;
+
+			// Returns object's parent object. Return nullptr when it is a root scene object
+			SceneEditableObject* GetEditableParent() override;
+
+			// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
+			void SetEditableParent(SceneEditableObject* object) override;
+
+			// Adds child. idx is place in parent children. idx == -1 means last
+			void AddChild(SceneEditableObject* object, int idx = -1) override;
+
+			// Sets index in siblings - children of parent
+			void SetIndexInSiblings(int idx) override;
+
+		private:
+			UIWidget* mWidget = nullptr;
+			SceneUID  mUID = Math::Random();
+
+			friend class UIWidget;
+		};
+
+		class InternalChildrenEditableEditable : public SceneEditableObject
+		{
+		public:
+			// Default constructor
+			InternalChildrenEditableEditable();
+
+			// Constructor with widget
+			InternalChildrenEditableEditable(UIWidget* widget);
+
+			// Returns unique id
+			SceneUID GetID() const override;
+
+			// Generates new random id 
+			void GenerateNewID(bool childs = true) override;
+
+
+			// Returns name of object
+			String GetName() const override;
+
+			// Sets name of object
+			void SetName(const String& name) override;
+
+
+			// Returns list of object's children
+			Vector<SceneEditableObject*> GetEditablesChildren() const override;
+
+			// Returns object's parent object. Return nullptr when it is a root scene object
+			SceneEditableObject* GetEditableParent() override;
+
+			// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
+			void SetEditableParent(SceneEditableObject* object) override;
+
+			// Adds child. idx is place in parent children. idx == -1 means last
+			void AddChild(SceneEditableObject* object, int idx = -1) override;
+
+			// Sets index in siblings - children of parent
+			void SetIndexInSiblings(int idx) override;
+
+		private:
+			UIWidget* mWidget = nullptr;
+			SceneUID  mUID = Math::Random();
+
+			friend class UIWidget;
+		};
+
+		static bool isEditorLayersVisible;           // Is widgets layers visible in hierarchy
+		static bool isEditorInternalChildrenVisible; // Is widgets internal children visible in hierarchy
+
+		LayersEditable layerEditable = LayersEditable(this);
+		InternalChildrenEditableEditable internalChildrenEditable = InternalChildrenEditableEditable(this);
+
+	public:
+		// Returns list of object's children
+		Vector<SceneEditableObject*> GetEditablesChildren() const override;
+
+		friend class LayersEditable;
+		friend class InternalChildrenEditableEditable;
+#endif // IS_EDITOR
 	};
 
 	template<typename _type>
@@ -429,6 +570,53 @@ namespace o2
 
 		return nullptr;
 	}
+
+	template<typename _type>
+	_type* UIWidget::GetInternalWidgetByType(const String& path) const
+	{
+		return dynamic_cast<_type>GetInternalWidget(path);
+	}
+
+	template<typename _type>
+	_type* UIWidget::FindInternalWidgetByType(const String& name) const
+	{
+		for (auto widget : mInternalWidgets)
+		{
+			if (widget->GetName() == name)
+			{
+				if (_type* res = dynamic_cast<_type*>(widget))
+					return res;
+			}
+
+			if (_type* res = widget->FindChildByTypeAndName<_type>((String)name))
+				return res;
+
+			if (auto internalWidget = widget->FindInternalWidget(name))
+				if (_type* res = dynamic_cast<_type*>(internalWidget))
+					return res;
+		}
+
+		return nullptr;
+	}
+
+	template<typename _type>
+	_type* UIWidget::FindInternalWidgetByType() const
+	{
+		for (auto widget : mInternalWidgets)
+		{
+			if (_type* res = dynamic_cast<_type*>(widget))
+				return res;
+
+			if (_type* res = widget->FindChildByType())
+				return res;
+
+			if (_type* res = widget->FindInternalWidgetByType())
+				return res;
+		}
+
+		return nullptr;
+	}
+
 }
 
 CLASS_BASES_META(o2::UIWidget)
@@ -485,14 +673,15 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetLayoutDirty);
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);
+	PUBLIC_FUNCTION(void, SetLayoutDirty);
 	PUBLIC_FUNCTION(UIWidget*, GetParentWidget);
 	PUBLIC_FUNCTION(RectF, GetChildrenRect);
 	PUBLIC_FUNCTION(UIWidget*, GetChildWidget, const String&);
 	PUBLIC_FUNCTION(UIWidget*, AddChildWidget, UIWidget*);
 	PUBLIC_FUNCTION(UIWidget*, AddChildWidget, UIWidget*, int);
 	PUBLIC_FUNCTION(const WidgetsVec&, GetChildWidgets);
+	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, UIWidgetLayer*);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, const String&, IRectDrawable*, const Layout&, float);
 	PUBLIC_FUNCTION(bool, RemoveLayer, UIWidgetLayer*);
@@ -526,8 +715,10 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(void, SetInternalParent, UIWidget*, bool);
+	PUBLIC_FUNCTION(void, AddInternalWidget, UIWidget*, bool);
+	PUBLIC_FUNCTION(UIWidget*, GetInternalWidget, const String&);
+	PUBLIC_FUNCTION(UIWidget*, FindInternalWidget, const String&);
 	PROTECTED_FUNCTION(void, UpdateResEnabled);
 	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
