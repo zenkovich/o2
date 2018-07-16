@@ -29,11 +29,17 @@ namespace o2
 
 	public:
 		PROPERTIES(UIWidgetLayer);
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property
 		PROPERTY(float, depth, SetDepth, GetDepth);                      // Drawing depth (higher depths will draw later)
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Drawable transparency property
 
 		ACCESSOR(UIWidgetLayer*, child, String, GetChild, GetAllChildLayers); // Child layer accessor
 
+#if IS_EDITOR
+		PROPERTY(bool, locked, SetLocked, IsLocked);  // Is locked property
+#endif 
+
+	public:
 		String          name;               // Name of layer @SERIALIZABLE
 					    
 		Layout          layout;             // Drawable layout @SERIALIZABLE
@@ -41,7 +47,7 @@ namespace o2
 					    
 		IRectDrawable*  drawable;           // Drawable @SERIALIZABLE
 
-
+	public:
 		// Default constructor
 		UIWidgetLayer();
 
@@ -54,11 +60,35 @@ namespace o2
 		// Copy-operator
 		UIWidgetLayer& operator=(const UIWidgetLayer& other);
 
+
+		// Returns pointer to owenr widget
+		UIWidget* GetOwnerWidget() const;
+
+
 		// Draws drawable
 		void Draw();
 
+
+		// Returns is layer enabled
+		bool IsEnabled() const override;
+
+		// Returns is layer enabled and all parent are enabled too
+		bool IsEnabledInHierarchy() const override;
+
+		// Sets enabling of layer
+		void SetEnabled(bool enabled) override;
+
+
 		// Updates drawable and layout
 		void Update(float dt);
+
+
+		// Sets parent layer
+		void SetParent(UIWidgetLayer* parent);
+
+		// Returns parent layer
+		UIWidgetLayer* GetParent() const;
+
 
 		// Adds new child layer and returns him
 		UIWidgetLayer* AddChild(UIWidgetLayer* node);
@@ -68,12 +98,6 @@ namespace o2
 
 		// Removes and releases all children nodes
 		void RemoveAllChilds();
-
-		// Sets parent layer
-		void SetParent(UIWidgetLayer* parent);
-
-		// Returns parent layer
-		UIWidgetLayer* GetParent() const;
 
 		// Return child layers
 		ChildrenVec& GetChilds();
@@ -91,14 +115,20 @@ namespace o2
 		// Returns child layer by name
 		UIWidgetLayer* FindChild(const String& name);
 
+		// Returns child layer with type
+		template<typename _type>
+		_type* FindChild() const;
+
 		// Returns all child layers
 		LayersVec GetAllChilds() const;
+
 
 		// Sets depth
 		void SetDepth(float depth);
 
 		// Returns depth
 		float GetDepth() const;
+
 
 		// Sets transparency and updates this and children result transparencies
 		void SetTransparency(float transparency);
@@ -109,15 +139,13 @@ namespace o2
 		// Returns result transparency
 		float GetResTransparency() const;
 
+
 		// Returns true if layer is under point
 		bool IsUnderPoint(const Vec2F& point);
 
 		// Returns layout rectangle
 		const RectF& GetRect() const;
 
-		// Returns child layer with type
-		template<typename _type>
-		_type* FindLayer() const;
 
 		SERIALIZABLE(UIWidgetLayer);
 
@@ -154,15 +182,6 @@ namespace o2
 
 		// Returns is that type of object can be enabled and disabled
 		bool IsSupportsDisabling() const override;
-
-		// Returns is object enabled, override when it's supports
-		bool IsEnabled() const override;
-
-		// Returns is object enabled and all parent are enabled too
-		bool IsEnabledInHierarchy() const override;
-
-		// Sets enabling of object, override when it's supports
-		void SetEnabled(bool enabled) override;
 
 
 		// Returns is that type of object can be locked
@@ -213,6 +232,7 @@ namespace o2
 #endif // IS_EDITOR
 
 	protected:
+		bool           mEnabled = true;         // Is layer enabled
 		float          mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
 		float          mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
 		float          mDepth = 0.0f;           // Depth of drawable @SERIALIZABLE
@@ -223,6 +243,7 @@ namespace o2
 		ChildrenVec    mChildren;               // Children layers @SERIALIZABLE
 
 #if IS_EDITOR
+		bool           mIsLocked = false;       // Is locked
 		SceneUID       mUID = Math::Random();   // Scene editor uid
 #endif // IS_EDITOR
 
@@ -249,7 +270,7 @@ namespace o2
 	};
 
 	template<typename _type>
-	_type* UIWidgetLayer::FindLayer() const
+	_type* UIWidgetLayer::FindChild() const
 	{
 		for (auto child : mChildren)
 			if (child->drawable && child->drawable->GetType() == TypeOf(_type))
@@ -257,7 +278,7 @@ namespace o2
 
 		for (auto child : mChildren)
 		{
-			auto res = child->FindLayer<_type>();
+			auto res = child->FindChild<_type>();
 			if (res)
 				return res;
 		}
@@ -273,6 +294,7 @@ CLASS_BASES_META(o2::UIWidgetLayer)
 END_META;
 CLASS_FIELDS_META(o2::UIWidgetLayer)
 {
+	PUBLIC_FIELD(enabled);
 	PUBLIC_FIELD(depth);
 	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(child);
@@ -280,6 +302,7 @@ CLASS_FIELDS_META(o2::UIWidgetLayer)
 	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(interactableLayout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(drawable).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);
 	PROTECTED_FIELD(mDepth).SERIALIZABLE_ATTRIBUTE();
@@ -295,13 +318,17 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 
 	typedef Dictionary<String, UIWidgetLayer*> _tmp1;
 
+	PUBLIC_FUNCTION(UIWidget*, GetOwnerWidget);
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(bool, IsEnabled);
+	PUBLIC_FUNCTION(bool, IsEnabledInHierarchy);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, SetParent, UIWidgetLayer*);
+	PUBLIC_FUNCTION(UIWidgetLayer*, GetParent);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddChild, UIWidgetLayer*);
 	PUBLIC_FUNCTION(bool, RemoveChild, UIWidgetLayer*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllChilds);
-	PUBLIC_FUNCTION(void, SetParent, UIWidgetLayer*);
-	PUBLIC_FUNCTION(UIWidgetLayer*, GetParent);
 	PUBLIC_FUNCTION(ChildrenVec&, GetChilds);
 	PUBLIC_FUNCTION(const ChildrenVec&, GetChilds);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddChildLayer, const String&, IRectDrawable*, const Layout&, float);

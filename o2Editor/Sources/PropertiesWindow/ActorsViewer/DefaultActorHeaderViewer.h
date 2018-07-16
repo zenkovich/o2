@@ -2,7 +2,6 @@
 
 #include "Assets/ActorAsset.h"
 #include "PropertiesWindow/ActorsViewer/IActorHeaderViewer.h"
-#include "Events/KeyboardEventsListener.h"
 
 namespace o2
 {
@@ -26,7 +25,7 @@ namespace Editor
 	// ---------------------------
 	// Default actor header viewer
 	// ---------------------------
-	class DefaultActorHeaderViewer: public IActorHeaderViewer, public KeyboardEventsListener
+	class DefaultActorHeaderViewer: public IActorHeaderViewer
 	{
 	public:
 		// Default constructor
@@ -82,7 +81,6 @@ namespace Editor
 CLASS_BASES_META(Editor::DefaultActorHeaderViewer)
 {
 	BASE_CLASS(Editor::IActorHeaderViewer);
-	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)

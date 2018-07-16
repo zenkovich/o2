@@ -11,6 +11,8 @@ namespace Editor
 	{
 		mSpoiler = o2UI.CreateWidget<UISpoilerWithHead>();
 
+		mSpoiler->borderBottom = 5;
+		mSpoiler->borderRight = 5;
 		mSpoiler->SetCaption("Transform");
 		mSpoiler->GetIcon()->SetImageName("ui/UI2_big_file_icon.png");
 

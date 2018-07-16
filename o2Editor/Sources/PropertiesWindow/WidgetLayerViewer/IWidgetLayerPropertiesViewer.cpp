@@ -2,19 +2,26 @@
 #include "IWidgetLayerPropertiesViewer.h"
 
 #include "Core/UI/SpoilerWithHead.h"
+#include "UI/Image.h"
+#include "UI/UIManager.h"
 
 namespace Editor
 {
 
 	IWidgetLayerPropertiesViewer::IWidgetLayerPropertiesViewer()
 	{
+		mSpoiler = o2UI.CreateWidget<UISpoilerWithHead>();
 
+		mSpoiler->borderRight = 5;
+		mSpoiler->borderBottom = 5;
+		mSpoiler->SetCaption("Transform");
+		mSpoiler->GetIcon()->SetImageName("ui/UI2_transform_icon.png");
+
+		mSpoiler->SetExpanded(true);
 	}
 
 	IWidgetLayerPropertiesViewer::~IWidgetLayerPropertiesViewer()
-	{
-
-	}
+	{}
 
 	UIWidget* IWidgetLayerPropertiesViewer::GetWidget() const
 	{
@@ -32,14 +39,10 @@ namespace Editor
 	}
 
 	void IWidgetLayerPropertiesViewer::Refresh()
-	{
-
-	}
+	{}
 
 	void IWidgetLayerPropertiesViewer::Rebuild()
-	{
-
-	}
+	{}
 
 	bool IWidgetLayerPropertiesViewer::IsEmpty() const
 	{

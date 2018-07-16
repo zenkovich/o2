@@ -59,7 +59,7 @@ namespace Editor
 		IOBJECT(IWidgetLayerPropertiesViewer);
 
 	protected:
-		UISpoilerWithHead* mSpoiler;
+		UISpoilerWithHead* mSpoiler = nullptr;
 	};
 }
 

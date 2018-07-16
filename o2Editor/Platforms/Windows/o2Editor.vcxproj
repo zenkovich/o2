@@ -383,6 +383,9 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\PropertiesWindow.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.cpp" />

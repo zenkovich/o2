@@ -29,6 +29,7 @@ namespace Editor
 
 	protected:
 		Vector<Actor*> mTargetActors;
+
 		Vec2FProperty* mPositionProperty = nullptr;
 		Vec2FProperty* mPivotProperty = nullptr;
 		Vec2FProperty* mScaleProperty = nullptr;

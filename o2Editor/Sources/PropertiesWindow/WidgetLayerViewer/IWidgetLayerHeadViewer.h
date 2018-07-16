@@ -24,7 +24,7 @@ namespace Editor
 		virtual ~IWidgetLayerHeaderViewer() {}
 
 		// Sets target actors
-		virtual void SetTargetActors(const Vector<UIWidgetLayer*>& layers) {}
+		virtual void SetTargetLayers(const Vector<UIWidgetLayer*>& layers) {}
 
 		// Returns data widget
 		virtual UIWidget* GetWidget() const { return nullptr; }
@@ -48,7 +48,7 @@ END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerHeaderViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<UIWidgetLayer*>&);
+	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<UIWidgetLayer*>&);
 	PUBLIC_FUNCTION(UIWidget*, GetWidget);
 	PUBLIC_FUNCTION(void, Refresh);
 }

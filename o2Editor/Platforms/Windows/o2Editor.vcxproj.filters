@@ -591,5 +591,14 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.cpp">
       <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.cpp">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.cpp">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.cpp">
+      <Filter>Sources\PropertiesWindow\WidgetLayerViewer</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

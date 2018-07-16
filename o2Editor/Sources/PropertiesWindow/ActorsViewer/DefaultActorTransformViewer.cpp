@@ -239,44 +239,7 @@ namespace Editor
 
 	DefaultActorTransformViewer::~DefaultActorTransformViewer()
 	{
-		if (mPositionProperty)
-			delete mPositionProperty;
-
-		if (mPivotProperty)
-			delete mPivotProperty;
-
-		if (mScaleProperty)
-			delete mScaleProperty;
-
-		if (mSizeProperty)
-			delete mSizeProperty;
-
-		if (mRotationProperty)
-			delete mRotationProperty;
-
-		if (mDepthProperty)
-			delete mDepthProperty;
-
-		if (mAnchorRightTopProperty)
-			delete mAnchorRightTopProperty;
-
-		if (mAnchorLeftBottomProperty)
-			delete mAnchorLeftBottomProperty;
-
-		if (mOffsetRightTopProperty)
-			delete mOffsetRightTopProperty;
-
-		if (mOffsetLeftBottomProperty)
-			delete mOffsetLeftBottomProperty;
-
-		if (mMinSizeProperty)
-			delete mMinSizeProperty;
-
-		if (mMaxSizeProperty)
-			delete mMaxSizeProperty;
-
-		if (mWeightProperty)
-			delete mWeightProperty;
+		delete mSpoiler;
 	}
 
 	void DefaultActorTransformViewer::SetTargetActors(const Vector<Actor*>& actors)

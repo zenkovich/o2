@@ -49,7 +49,7 @@ namespace Editor
 		Vector<UIWidgetLayer*>         mTargetLayers;               // Current target layers
 
 		IWidgetLayerHeaderViewer*      mHeaderViewer = nullptr;     // Layer header viewer
-		IWidgetLayerLayoutViewer*      mTransformViewer = nullptr;  // Layer layout viewer
+		IWidgetLayerLayoutViewer*      mLayoutViewer = nullptr;     // Layer layout viewer
 		IWidgetLayerPropertiesViewer*  mPropertiesViewer = nullptr; // Layer properties viewer
 
 		UIVerticalLayout*              mViewersLayout = nullptr;    // Viewers layout
@@ -85,7 +85,7 @@ CLASS_FIELDS_META(Editor::WidgetLayerViewer)
 {
 	PROTECTED_FIELD(mTargetLayers);
 	PROTECTED_FIELD(mHeaderViewer);
-	PROTECTED_FIELD(mTransformViewer);
+	PROTECTED_FIELD(mLayoutViewer);
 	PROTECTED_FIELD(mPropertiesViewer);
 	PROTECTED_FIELD(mViewersLayout);
 }

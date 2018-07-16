@@ -54,13 +54,38 @@ namespace o2
 		return *this;
 	}
 
+	UIWidget* UIWidgetLayer::GetOwnerWidget() const
+	{
+		if (mOwnerWidget)
+			return mOwnerWidget;
+
+		return mParent->GetOwnerWidget();
+	}
+
 	void UIWidgetLayer::Draw()
 	{
-		drawable->Draw();
+		if (mEnabled)
+			drawable->Draw();
 	}
 
 	void UIWidgetLayer::Update(float dt)
 	{}
+
+	bool UIWidgetLayer::IsEnabled() const
+	{
+		return mEnabled;
+	}
+
+	bool UIWidgetLayer::IsEnabledInHierarchy() const
+	{
+		bool parentEnabled = mOwnerWidget ? mOwnerWidget->IsEnabledInHierarchy() : mParent->IsEnabledInHierarchy();
+		return mEnabled && parentEnabled;
+	}
+
+	void UIWidgetLayer::SetEnabled(bool enabled)
+	{
+		mEnabled = enabled;
+	}
 
 	UIWidgetLayer* UIWidgetLayer::AddChild(UIWidgetLayer* node)
 	{
@@ -370,21 +395,6 @@ namespace o2
 		return true;
 	}
 
-	bool UIWidgetLayer::IsEnabled() const
-	{
-		return true;
-	}
-
-	bool UIWidgetLayer::IsEnabledInHierarchy() const
-	{
-		return true;
-	}
-
-	void UIWidgetLayer::SetEnabled(bool enabled)
-	{
-
-	}
-
 	bool UIWidgetLayer::IsSupportsLocking() const
 	{
 		return false;
@@ -392,17 +402,18 @@ namespace o2
 
 	bool UIWidgetLayer::IsLocked() const
 	{
-		return false;
+		return mIsLocked;
 	}
 
 	bool UIWidgetLayer::IsLockedInHierarchy() const
 	{
-		return false;
+		bool lockedParent = mOwnerWidget ? mOwnerWidget->IsLockedInHierarchy() : mParent->IsLockedInHierarchy();
+		return mIsLocked && lockedParent;
 	}
 
 	void UIWidgetLayer::SetLocked(bool locked)
 	{
-
+		mIsLocked = locked;
 	}
 
 	bool UIWidgetLayer::IsSupportsTransforming() const

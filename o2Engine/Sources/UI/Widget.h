@@ -553,7 +553,7 @@ namespace o2
 
 		for (auto layer : mLayers)
 		{
-			auto res = layer->FindLayer<_type>();
+			auto res = layer->FindChild<_type>();
 			if (res)
 				return res;
 		}
