@@ -5,7 +5,6 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
-#include <Windows.h>
 
 // Input access macros
 #define o2Input Input::Instance()

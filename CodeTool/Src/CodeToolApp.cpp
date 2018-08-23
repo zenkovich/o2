@@ -922,7 +922,13 @@ void CodeToolApplication::AggregateTemplates(SyntaxSection* sec, string& templat
 		if (!cls->GetTemplateParameters().empty())
 		{
 			templates += "META_TEMPLATES(" + cls->GetTemplateParameters() + ")\n";
-			fullName += "<" + cls->GetTemplateParameters() + ">";
+
+			string classTemplates = cls->GetTemplateParameters();
+			auto fnd = classTemplates.find("typename ");
+			if (fnd != string::npos)
+				classTemplates = classTemplates.substr(9);
+
+			fullName += "<" + classTemplates + ">";
 		}
 	}
 }

@@ -29,10 +29,10 @@ namespace o2
 
 
 #define TStringEnableType \
-	typename X = std::enable_if<std::is_same<T2, char>::value || \
-	                            std::is_same<T2, wchar_t>::value || \
-		                        std::is_same<T2, const char>::value || \
-		                        std::is_same<T2, const wchar_t>::value>::type
+	typename X = typename std::enable_if<std::is_same<T2, char>::value || \
+	                                     std::is_same<T2, wchar_t>::value || \
+		                                 std::is_same<T2, const char>::value || \
+		                                 std::is_same<T2, const wchar_t>::value>::type
 
 	// -------------------------
 	// Template character string

@@ -58,7 +58,7 @@ namespace o2
 		void RemoveAllEffects();
 
 		// Returns extensions string
-		const char* GetFileExtensions() const;
+		const char* GetFileExtensions() const override;
 
 		SERIALIZABLE(VectorFontAsset);
 
@@ -73,10 +73,10 @@ namespace o2
 			~MetaInfo();
 
 			// Returns asset type id
-			const Type* GetAssetType() const;
+			const Type* GetAssetType() const override;
 
 			// Returns true if other meta is equal to this
-			bool IsEqual(IMetaInfo* other) const;
+			bool IsEqual(IMetaInfo* other) const override;
 
 			SERIALIZABLE(MetaInfo);
 
@@ -103,7 +103,7 @@ namespace o2
 		VectorFontAsset(const VectorFontAsset& asset);
 
 		// Loads data
-		void LoadData(const String& path);
+		void LoadData(const String& path) override;
 
 		friend class Assets;
 	};
@@ -160,7 +160,7 @@ namespace o2
 		bool operator!=(const VectorFontAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
-		const Type& GetAssetType() const { return TypeOf(VectorFontAsset); }
+		const Type& GetAssetType() const override { return TypeOf(VectorFontAsset); }
 
 		SERIALIZABLE(VectorFontAssetRef);
 

@@ -1,17 +1,9 @@
 #pragma once
 
-#include "Utils/Types/Containers/Dictionary.h"
-#include "Utils/Delegates.h"
 #include "Utils/ValueProxy.h"
 
 namespace o2
 {
-	template<typename T>
-	class TString;
-
-	typedef TString<wchar_t> WString;
-	typedef TString<char> String;
-
 	template<typename _type, typename _property_type>
 	class PropertyValueProxy: public IValueProxy<_type>
 	{
@@ -46,29 +38,29 @@ namespace o2
 		bool operator==(const valueType& value) const { return _this->GETTER() == value; }                	                            \
 		bool operator!=(const valueType& value) const { return _this->GETTER() != value; }                	                            \
 																										                                \
-		template<typename X = std::enable_if<SupportsPlus<valueType>::value>::type>                                                     \
-		valueType operator+(const valueType& value) { return _this->GETTER() + value; }                	                                \
+		template<typename T, typename X = typename std::enable_if<o2::SupportsPlus<T>::value && std::is_same<T, valueType>::value>::type>                        \
+		valueType operator+(const T& value) { return _this->GETTER() + value; }                	                                \
 																										                                \
-		template<typename X = std::enable_if<SupportsMinus<valueType>::value>::type>                                                    \
-		valueType operator-(const valueType& value) { return _this->GETTER() - value; }                	                                \
+		template<typename T, typename X = typename std::enable_if<o2::SupportsMinus<T>::value && std::is_same<T, valueType>::value>::type>                       \
+		valueType operator-(const T& value) { return _this->GETTER() - value; }                	                                \
 																										                                \
-		template<typename X = std::enable_if<SupportsDivide<valueType>::value>::type>                                                   \
-		valueType operator/(const valueType& value) { return _this->GETTER() / value; }                	                                \
+		template<typename T, typename X = typename std::enable_if<o2::SupportsDivide<T>::value && std::is_same<T, valueType>::value>::type>                      \
+		valueType operator/(const T& value) { return _this->GETTER() / value; }                	                                \
 																										                                \
-		template<typename X = std::enable_if<SupportsMultiply<valueType>::value>::type>                                                 \
-		valueType operator*(const valueType& value) { return _this->GETTER() * value; }                	                                \
+		template<typename T, typename X = typename std::enable_if<o2::SupportsMultiply<T>::value && std::is_same<T, valueType>::value>::type>                    \
+		valueType operator*(const T& value) { return _this->GETTER() * value; }                	                                \
 																										                                \
-		template<typename X = std::enable_if<SupportsPlus<valueType>::value>::type>                                                     \
-		NAME##_PROPERTY& operator+=(const valueType& value) { _this->SETTER(_this->GETTER() + value); return *this; }                   \
+		template<typename T, typename X = typename std::enable_if<o2::SupportsPlus<T>::value && std::is_same<T, valueType>::value>::type>                        \
+		NAME##_PROPERTY& operator+=(const T& value) { _this->SETTER(_this->GETTER() + value); return *this; }                   \
 																										                                \
-		template<typename X = std::enable_if<SupportsMinus<valueType>::value>::type>                                                    \
-		NAME##_PROPERTY& operator-=(const valueType& value) { _this->SETTER(_this->GETTER() - value); return *this; }             	    \
+		template<typename T, typename X = typename std::enable_if<o2::SupportsMinus<T>::value && std::is_same<T, valueType>::value>::type>                       \
+		NAME##_PROPERTY& operator-=(const T& value) { _this->SETTER(_this->GETTER() - value); return *this; }             	    \
 																										                                \
-		template<typename X = std::enable_if<SupportsDivide<valueType>::value>::type>                                                   \
-		NAME##_PROPERTY& operator/=(const valueType& value) { _this->SETTER(_this->GETTER() / value); return *this; }                   \
+		template<typename T, typename X = typename std::enable_if<o2::SupportsDivide<T>::value && std::is_same<T, valueType>::value>::type>                      \
+		NAME##_PROPERTY& operator/=(const T& value) { _this->SETTER(_this->GETTER() / value); return *this; }                   \
 																										                                \
-		template<typename X = std::enable_if<SupportsMultiply<valueType>::value>::type>                                                 \
-		NAME##_PROPERTY& operator*=(const valueType& value) { _this->SETTER(_this->GETTER() * value); return *this; }                   \
+		template<typename T, typename X = typename std::enable_if<o2::SupportsMultiply<T>::value && std::is_same<T, valueType>::value>::type>                    \
+		NAME##_PROPERTY& operator*=(const T& value) { _this->SETTER(_this->GETTER() * value); return *this; }                   \
 																										                                \
 	    valueType Get() const { return _this->GETTER(); }                                                                               \
 		void Set(const valueType& value) { _this->SETTER(const_cast<valueType&>(value)); }                                              \

@@ -58,7 +58,7 @@
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>false</BrowseInformation>
       <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;PLATFORM_WINDOWS</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>true</MinimalRebuild>
@@ -95,7 +95,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;WIN32;_LIB;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;WIN32;_LIB;FT2_BUILD_LIBRARY;PLATFORM_WINDOWS</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
@@ -141,6 +141,7 @@
     <ClInclude Include="..\Sources\Animation\AnimationState.h" />
     <ClInclude Include="..\Sources\Animation\IAnimation.h" />
     <ClInclude Include="..\Sources\Animation\TweenValue.h" />
+    <ClInclude Include="..\Sources\Application\Android\ApplicationBase.h" />
     <ClInclude Include="..\Sources\Application\Application.h" />
     <ClInclude Include="..\Sources\Application\Input.h" />
     <ClInclude Include="..\Sources\Application\Windows\ApplicationBase.h" />
@@ -173,6 +174,8 @@
     <ClInclude Include="..\Sources\Events\KeyboardEventsListener.h" />
     <ClInclude Include="..\Sources\Events\ShortcutKeysListener.h" />
     <ClInclude Include="..\Sources\O2.h" />
+    <ClInclude Include="..\Sources\Render\Android\RenderBase.h" />
+    <ClInclude Include="..\Sources\Render\Android\TextureBase.h" />
     <ClInclude Include="..\Sources\Render\BitmapFont.h" />
     <ClInclude Include="..\Sources\Render\Camera.h" />
     <ClInclude Include="..\Sources\Render\DrawPolyLine.h" />
@@ -321,8 +324,10 @@
     <ClCompile Include="..\Sources\Animation\AnimationMask.cpp" />
     <ClCompile Include="..\Sources\Animation\AnimationState.cpp" />
     <ClCompile Include="..\Sources\Animation\IAnimation.cpp" />
+    <ClCompile Include="..\Sources\Application\Android\ApplicationImpl.cpp" />
+    <ClCompile Include="..\Sources\Application\Application.cpp" />
     <ClCompile Include="..\Sources\Application\Input.cpp" />
-    <ClCompile Include="..\Sources\Application\Windows\Application.cpp" />
+    <ClCompile Include="..\Sources\Application\Windows\ApplicationImpl.cpp" />
     <ClCompile Include="..\Sources\Assets\ActorAsset.cpp" />
     <ClCompile Include="..\Sources\Assets\AnimationAsset.cpp" />
     <ClCompile Include="..\Sources\Assets\Asset.cpp" />
@@ -351,6 +356,8 @@
     <ClCompile Include="..\Sources\Events\EventSystem.cpp" />
     <ClCompile Include="..\Sources\Events\KeyboardEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\ShortcutKeysListener.cpp" />
+    <ClCompile Include="..\Sources\Render\Android\RenderImpl.cpp" />
+    <ClCompile Include="..\Sources\Render\Android\TextureImpl.cpp" />
     <ClCompile Include="..\Sources\Render\BitmapFont.cpp" />
     <ClCompile Include="..\Sources\Render\Camera.cpp" />
     <ClCompile Include="..\Sources\Render\Font.cpp" />
@@ -361,6 +368,7 @@
     <ClCompile Include="..\Sources\Render\ParticlesEmitter.cpp" />
     <ClCompile Include="..\Sources\Render\ParticlesEmitterShapes.cpp" />
     <ClCompile Include="..\Sources\Render\RectDrawable.cpp" />
+    <ClCompile Include="..\Sources\Render\Render.cpp" />
     <ClCompile Include="..\Sources\Render\Sprite.cpp" />
     <ClCompile Include="..\Sources\Render\Text.cpp" />
     <ClCompile Include="..\Sources\Render\Texture.cpp" />
@@ -368,7 +376,7 @@
     <ClCompile Include="..\Sources\Render\VectorFont.cpp" />
     <ClCompile Include="..\Sources\Render\VectorFontEffects.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp" />
-    <ClCompile Include="..\Sources\Render\Windows\Render.cpp" />
+    <ClCompile Include="..\Sources\Render\Windows\RenderImpl.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\TextureImpl.cpp" />
     <ClCompile Include="..\Sources\Scene\Actor.cpp" />
     <ClCompile Include="..\Sources\Scene\ActorCreationMode.cpp" />

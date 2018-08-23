@@ -3,6 +3,7 @@
 
 #include "Scene/ActorDataNodeConverter.h"
 #include "Scene/Component.h"
+#include "Scene/Scene.h"
 #include "Scene/SceneLayer.h"
 
 namespace o2

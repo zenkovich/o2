@@ -33,7 +33,7 @@ namespace o2
 		IRectDrawable& operator=(const IRectDrawable& other);
 
 		// Drawing
-		virtual void Draw() {}
+		virtual void Draw() override {}
 
 		// Sets color
 		virtual void SetColor(const Color4& color);
@@ -54,7 +54,7 @@ namespace o2
 		virtual bool IsEnabled() const;
 
 		// Returns true if point is under drawable
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		SERIALIZABLE(IRectDrawable);
 

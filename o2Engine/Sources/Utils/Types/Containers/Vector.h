@@ -216,7 +216,7 @@ namespace o2
 		bool operator!=(const Vector& arr) const;
 
 		// Returns a copy of this
-		IArray* Clone() const;
+		IArray<_type>* Clone() const;
 
 		// Returns data pointer
 		_type* Data() const;
@@ -244,13 +244,13 @@ namespace o2
 		_type& Add(const _type& value);
 
 		// Adds elements from other array
-		void Add(const IArray& arr);
+		void Add(const IArray<_type>& arr);
 
 		// Inserts new value at position
 		_type& Insert(const _type& value, int position);
 
 		// Inserts new values from other array at position
-		void Insert(const IArray& arr, int position);
+		void Insert(const IArray<_type>& arr, int position);
 
 		// Returns index of equal element. Returns -1 when array haven't equal element
 		int Find(const _type& value) const;

@@ -17,7 +17,7 @@ namespace o2
 
 	class SceneLayer;
 	typedef Vector<SceneLayer*> SceneLayersVec;
-	
+
 	class Tag;
 	typedef Vector<Tag*> TagsVec;
 
@@ -29,7 +29,7 @@ namespace o2
 	// -------------------------------------------------------
 	// Actors scene. Contains and manages actors, tags, layers
 	// -------------------------------------------------------
-	class Scene: public Singleton<Scene>
+	class Scene : public Singleton<Scene>
 	{
 	public:
 		typedef Vector<ActorAssetRef> ActorsAssetsVec;
@@ -138,12 +138,12 @@ namespace o2
 		int GetObjectHierarchyIdx(SceneEditableObject* object) const;
 
 		// Reparent scene editableobjects to new parent at next of prevActor;
-		void ReparentEditableObjects(const Vector<SceneEditableObject*>& objects, 
+		void ReparentEditableObjects(const Vector<SceneEditableObject*>& objects,
 									 SceneEditableObject* newParent, SceneEditableObject* prevObject);
 
 
 		// It is called when object was changed
-		void OnObjectChanged(SceneEditableObject* object);   
+		void OnObjectChanged(SceneEditableObject* object);
 
 		// Checks is any actors was changed and calls OnChanged() if changed
 		void CheckChangedObjects();
@@ -171,7 +171,7 @@ namespace o2
 		TagsVec         mTags;                // Scene tags
 		SceneLayer*     mDefaultLayer;        // Default scene layer
 		ActorsAssetsVec mCache;               // Cached actors assets
-				  						      
+
 #if IS_EDITOR	  						      
 		ActorsCacheDict mPrototypeLinksCache; // Cache of linked to prototypes actors
 
@@ -198,13 +198,18 @@ namespace o2
 		friend class Application;
 		friend class DrawableComponent;
 	};
+}
 
+#include "Scene/Actor.h"
+
+namespace o2
+{
 	template<typename _type>
 	Vector<_type>* Scene::FindAllActorsComponents()
 	{
-		Vector<_type>* res;
+		Vector<_type>* res = mnew Vector<_type>();
 		for (auto actor : mRootActors)
-			res.Add(actor->GetComponentsInChildren<_type>());
+			res->Add(actor->GetComponentsInChildren<_type>());
 
 		return res;
 	}
@@ -214,7 +219,7 @@ namespace o2
 	{
 		for (auto actor : mRootActors)
 		{
-			_type> res = actor->GetComponentInChildren<_type*();
+			_type* res = actor->GetComponentInChildren<_type>();
 			if (res)
 				return res;
 		}

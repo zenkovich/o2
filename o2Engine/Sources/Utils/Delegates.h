@@ -27,7 +27,7 @@ namespace o2
 		virtual _res_type Invoke(_args ... args) const = 0;
 
 		// Returns true if other functions is equal
-		virtual bool Equals(IFunction* other) const = 0;
+		virtual bool Equals(IFunction<_res_type(_args ...)>* other) const = 0;
 
 		// Invokes function with arguments as functor
 		_res_type operator()(_args ... args) const
@@ -78,7 +78,7 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const
 		{
 			return mnew FunctionPtr(*this);
 		}
@@ -90,7 +90,7 @@ namespace o2
 		}
 
 		// Returns true if functions is equal
-		bool Equals(IFunction* other) const
+		bool Equals(IFunction<_res_type(_args ...)>* other) const
 		{
 			FunctionPtr* otherFuncPtr = dynamic_cast<FunctionPtr*>(other);
 			if (otherFuncPtr)
@@ -141,7 +141,7 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const
 		{
 			return mnew ObjFunctionPtr(*this);
 		}
@@ -153,7 +153,7 @@ namespace o2
 		}
 
 		// Returns true if functions is equal
-		bool Equals(IFunction* other) const
+		bool Equals(IFunction<_res_type(_args ...)>* other) const
 		{
 			ObjFunctionPtr* otherFuncPtr = dynamic_cast<ObjFunctionPtr*>(other);
 			if (otherFuncPtr)
@@ -204,7 +204,7 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const
 		{
 			return mnew ObjConstFunctionPtr(*this);
 		}
@@ -216,7 +216,7 @@ namespace o2
 		}
 
 		// Returns true if functions is equal
-		bool Equals(IFunction* other) const
+		bool Equals(IFunction<_res_type(_args ...)>* other) const
 		{
 			ObjConstFunctionPtr* otherFuncPtr = dynamic_cast<ObjConstFunctionPtr*>(other);
 			if (otherFuncPtr)
@@ -332,7 +332,7 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const
 		{
 			return mnew SharedLambda(*this);
 		}
@@ -356,7 +356,7 @@ namespace o2
 		}
 
 		// Returns true if functions is equals
-		bool Equals(IFunction* other) const
+		bool Equals(IFunction<_res_type(_args ...)>* other) const
 		{
 			SharedLambda* otherFuncPtr = dynamic_cast<SharedLambda*>(other);
 			if (otherFuncPtr)
@@ -395,7 +395,7 @@ namespace o2
 		}
 
 		// Constructor from IFunction
-		Function(const IFunction& func)
+		Function(const IFunction<_res_type(_args ...)>& func)
 		{
 			mFunctions.push_back(func.Clone());
 		}
@@ -404,7 +404,7 @@ namespace o2
 		template<typename _func_type>
 		Function(const _func_type* func)
 		{
-			mFunctions.push_back(new Function_res_type(_args ...)*(func));
+			mFunctions.push_back(new Function<_res_type(_args ...)>(*func));
 		}
 
 		// Constructor from lambda
@@ -442,7 +442,7 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const
 		{
 			return mnew Function(*this);
 		}
@@ -477,7 +477,7 @@ namespace o2
 		}
 
 		// Add delegate to inside list
-		void Add(const IFunction& func)
+		void Add(const IFunction<_res_type(_args ...)>& func)
 		{
 			mFunctions.push_back(func.Clone());
 		}
@@ -490,7 +490,7 @@ namespace o2
 		}
 
 		// Add delegate to inside list
-		void Remove(IFunction& func)
+		void Remove(IFunction<_res_type(_args ...)>& func)
 		{
 			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); ++funcIt)
 			{
@@ -542,7 +542,7 @@ namespace o2
 		}
 
 		// Returns true, if this contains the delegate
-		bool Contains(const IFunction& func) const
+		bool Contains(const IFunction<_res_type(_args ...)>& func) const
 		{
 			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); ++funcIt)
 			{
@@ -573,7 +573,7 @@ namespace o2
 		}
 
 		// Copy operator
-		Function<_res_type(_args ...)>& operator=(const IFunction& func)
+		Function<_res_type(_args ...)>& operator=(const IFunction<_res_type(_args ...)>& func)
 		{
 			Clear();
 			Add(func);
@@ -617,16 +617,16 @@ namespace o2
 		}
 
 		// Equal operator
-		bool operator==(const IFunction& func) const
+		bool operator==(const IFunction<_res_type(_args ...)>& func) const
 		{
-			if (mInvokers.size() != 1)
+			if (mFunctions.size() != 1)
 				return false;
 
 			return mFunctions[0]->Equals(&func);
 		}
 
 		// Not equal operator
-		bool operator!=(const IFunction& func) const
+		bool operator!=(const IFunction<_res_type(_args ...)>& func) const
 		{
 			return !(*this == func);
 		}
@@ -638,7 +638,7 @@ namespace o2
 		}
 
 		// Returns true when functions is equal
-		bool Equals(IFunction* other) const
+		bool Equals(IFunction<_res_type(_args ...)>* other) const
 		{
 			Function* otherFuncPtr = dynamic_cast<Function*>(other);
 			if (otherFuncPtr)
@@ -648,7 +648,7 @@ namespace o2
 		}
 
 		// Add delegate to inside list
-		Function<_res_type(_args ...)> operator+(const IFunction& func) const
+		Function<_res_type(_args ...)> operator+(const IFunction<_res_type(_args ...)>& func) const
 		{
 			Function<_res_type(_args ...)> res(*this);
 			res.Add(func);
@@ -656,7 +656,7 @@ namespace o2
 		}
 
 		// Add delegate to inside list
-		Function<_res_type(_args ...)>& operator+=(const IFunction& func)
+		Function<_res_type(_args ...)>& operator+=(const IFunction<_res_type(_args ...)>& func)
 		{
 			Add(func);
 			return *this;
@@ -678,7 +678,7 @@ namespace o2
 		}
 
 		// Removes delegate from list
-		Function<_res_type(_args ...)> operator-(const IFunction& func) const
+		Function<_res_type(_args ...)> operator-(const IFunction<_res_type(_args ...)>& func) const
 		{
 			Function<_res_type(_args ...)> res(*this);
 			res.Remove(func);
@@ -686,7 +686,7 @@ namespace o2
 		}
 
 		// Removes delegate from list
-		Function<_res_type(_args ...)>& operator-=(IFunction& func)
+		Function<_res_type(_args ...)>& operator-=(IFunction<_res_type(_args ...)>& func)
 		{
 			Remove(func);
 			return *this;

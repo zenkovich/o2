@@ -12,6 +12,8 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags "-std=c++14 -frtti -fexceptions"
+                cppFlags += "-DPLATFORM_ANDROID"
+                cppFlags += "-Wno-inconsistent-missing-override"
             }
         }
     }

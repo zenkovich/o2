@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#ifdef PLATFORM_ANDROID
 #include "Application/Application.h"
 
 #include "Application/Input.h"
@@ -17,19 +19,12 @@
 #include "Utils/System/Time/Time.h"
 #include "Utils/System/Time/Timer.h"
 #include "Utils/Tasks/TaskManager.h"
-#include <time.h>
 
 namespace o2
 {
 	DECLARE_SINGLETON(Application);
 
-	class WndProcFunc
-	{
-	public:
-		static LRESULT WndProc(HWND wnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-	};
-
-	Application::Application():
+	Application::Application() :
 		mLog(nullptr), mReady(false), mAssets(nullptr), mEventSystem(nullptr), mFileSystem(nullptr), mInput(nullptr),
 		mProjectConfig(nullptr), mRender(nullptr), mScene(nullptr), mTaskManager(nullptr), mTime(nullptr), mTimer(nullptr),
 		mUIManager(nullptr), mCursorInfiniteModeEnabled(false)
@@ -68,9 +63,9 @@ namespace o2
 		}
 
 		if (!(mHWnd = CreateWindowEx(NULL, wndClass.lpszClassName, "o2 application",
-			WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-			mWindowedPos.x, mWindowedPos.y, mWindowedSize.x, mWindowedSize.y,
-			NULL, NULL, NULL, NULL)))
+									 WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+									 mWindowedPos.x, mWindowedPos.y, mWindowedSize.x, mWindowedSize.y,
+									 NULL, NULL, NULL, NULL)))
 		{
 
 			mLog->Error("Can't create window (CreateWindowEx)");
@@ -299,106 +294,106 @@ namespace o2
 
 		switch (uMsg)
 		{
-			case WM_LBUTTONDOWN:
-			SetCapture(app->mHWnd);
-			app->mInput->CursorPressed(cursorPos);
-			break;
+		case WM_LBUTTONDOWN:
+		SetCapture(app->mHWnd);
+		app->mInput->CursorPressed(cursorPos);
+		break;
 
-			case WM_LBUTTONUP:
-			app->mInput->CursorReleased();
-			ReleaseCapture();
-			break;
+		case WM_LBUTTONUP:
+		app->mInput->CursorReleased();
+		ReleaseCapture();
+		break;
 
-			case WM_RBUTTONDOWN:
-			SetCapture(app->mHWnd);
-			app->mInput->AltCursorPressed(cursorPos);
-			break;
+		case WM_RBUTTONDOWN:
+		SetCapture(app->mHWnd);
+		app->mInput->AltCursorPressed(cursorPos);
+		break;
 
-			case WM_RBUTTONUP:
-			app->mInput->AltCursorReleased();
-			ReleaseCapture();
-			break;
+		case WM_RBUTTONUP:
+		app->mInput->AltCursorReleased();
+		ReleaseCapture();
+		break;
 
-			case WM_MBUTTONDOWN:
-			SetCapture(app->mHWnd);
-			app->mInput->Alt2CursorPressed(cursorPos);
-			break;
+		case WM_MBUTTONDOWN:
+		SetCapture(app->mHWnd);
+		app->mInput->Alt2CursorPressed(cursorPos);
+		break;
 
-			case WM_MBUTTONUP:
-			app->mInput->Alt2CursorReleased();
-			ReleaseCapture();
-			break;
+		case WM_MBUTTONUP:
+		app->mInput->Alt2CursorReleased();
+		ReleaseCapture();
+		break;
 
-			case WM_KEYDOWN:
-			key = (int)wParam;
-			app->mInput->KeyPressed(key);
-			break;
+		case WM_KEYDOWN:
+		key = (int)wParam;
+		app->mInput->KeyPressed(key);
+		break;
 
-			case WM_KEYUP:
-			app->mInput->KeyReleased((int)wParam);
-			break;
+		case WM_KEYUP:
+		app->mInput->KeyReleased((int)wParam);
+		break;
 
-			case WM_MOUSEMOVE:
-			app->mInput->SetCursorPos(cursorPos, 0);
-			app->mInput->GetCursor()->delta -= app->mCursorCorrectionDelta;
-			app->mCursorCorrectionDelta = Vec2F();
-			break;
+		case WM_MOUSEMOVE:
+		app->mInput->SetCursorPos(cursorPos, 0);
+		app->mInput->GetCursor()->delta -= app->mCursorCorrectionDelta;
+		app->mCursorCorrectionDelta = Vec2F();
+		break;
 
-			case WM_MOUSEWHEEL:
-			wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
-			app->mInput->SetMouseWheelDelta(wheelDelta);
-			break;
+		case WM_MOUSEWHEEL:
+		wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+		app->mInput->SetMouseWheelDelta(wheelDelta);
+		break;
 
-			case WM_ACTIVATEAPP:
-			case WM_ENABLE:
-			if (wParam == TRUE)
-			{
-				app->mActive = true;
-				app->OnActivated();
-				app->onActivated.Invoke();
-				o2Events.OnApplicationActivated();
-			}
-			else
-			{
-				app->mActive = false;
-				app->OnDeactivated();
-				app->onDeactivated.Invoke();
-				o2Events.OnApplicationDeactivated();
-			}
-			break;
+		case WM_ACTIVATEAPP:
+		case WM_ENABLE:
+		if (wParam == TRUE)
+		{
+			app->mActive = true;
+			app->OnActivated();
+			app->onActivated.Invoke();
+			o2Events.OnApplicationActivated();
+		}
+		else
+		{
+			app->mActive = false;
+			app->OnDeactivated();
+			app->onDeactivated.Invoke();
+			o2Events.OnApplicationDeactivated();
+		}
+		break;
 
-			case WM_SIZE:
-			GetWindowRect(app->mHWnd, &rt);
-			size.x = rt.right - rt.left; size.y = rt.bottom - rt.top;
+		case WM_SIZE:
+		GetWindowRect(app->mHWnd, &rt);
+		size.x = rt.right - rt.left; size.y = rt.bottom - rt.top;
 
-			if (size.x > 0 && size.y > 0 && size != app->mWindowedSize)
-			{
-				app->mWindowedSize = size;
-				app->mRender->OnFrameResized();
-				app->onResizing.Invoke();
-				app->OnResizing();
-				o2Events.OnApplicationSized();
-			}
-			app->ProcessFrame();
+		if (size.x > 0 && size.y > 0 && size != app->mWindowedSize)
+		{
+			app->mWindowedSize = size;
+			app->mRender->OnFrameResized();
+			app->onResizing.Invoke();
+			app->OnResizing();
+			o2Events.OnApplicationSized();
+		}
+		app->ProcessFrame();
 
-			break;
+		break;
 
-			case WM_MOVE:
-			GetWindowRect(app->mHWnd, &rt);
-			pos.x = rt.left; pos.y = rt.top;
+		case WM_MOVE:
+		GetWindowRect(app->mHWnd, &rt);
+		pos.x = rt.left; pos.y = rt.top;
 
-			if (pos.x < 10000 && pos.y < 10000 && pos != app->mWindowedPos)
-			{
-				app->mWindowedPos = pos;
-				app->OnMoved();
-				app->onMoving.Invoke();
-			}
-			break;
+		if (pos.x < 10000 && pos.y < 10000 && pos != app->mWindowedPos)
+		{
+			app->mWindowedPos = pos;
+			app->OnMoved();
+			app->onMoving.Invoke();
+		}
+		break;
 
-			case WM_DESTROY:
-			PostQuitMessage(0);
-			return 0;
-			break;
+		case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+		break;
 		}
 		return DefWindowProc(wnd, uMsg, wParam, lParam);
 	}
@@ -416,7 +411,7 @@ namespace o2
 
 			mWindowed = true;
 
-			RECT rt ={ mWindowedPos.x, mWindowedPos.y, mWindowedPos.x + mWindowedSize.x, mWindowedPos.y + mWindowedSize.y };
+			RECT rt = { mWindowedPos.x, mWindowedPos.y, mWindowedPos.x + mWindowedSize.x, mWindowedPos.y + mWindowedSize.y };
 			AdjustWindowRect(&rt, mWndStyle, false);
 			SetWindowPos(mHWnd, HWND_NOTOPMOST, mWindowedPos.x, mWindowedPos.y,
 						 mWindowedSize.x, mWindowedSize.y, SWP_SHOWWINDOW);
@@ -548,7 +543,7 @@ namespace o2
 
 	void Application::SetCursor(CursorType type)
 	{
-		LPSTR cursorsIds[] ={ IDC_APPSTARTING, IDC_ARROW, IDC_CROSS, IDC_HAND, IDC_HELP, IDC_IBEAM, IDC_ICON, IDC_NO,
+		LPSTR cursorsIds[] = { IDC_APPSTARTING, IDC_ARROW, IDC_CROSS, IDC_HAND, IDC_HELP, IDC_IBEAM, IDC_ICON, IDC_NO,
 			IDC_SIZEALL, IDC_SIZENESW, IDC_SIZENS, IDC_SIZENWSE, IDC_SIZEWE, IDC_UPARROW, IDC_WAIT };
 
 		mCurrentCursor = LoadCursor(NULL, cursorsIds[(int)type]);
@@ -588,3 +583,5 @@ namespace o2
 	template<> Debug* Singleton<Debug>::mInstance = mnew Debug();
 	template<> FileSystem* Singleton<FileSystem>::mInstance = mnew FileSystem();
 }
+
+#endif // PLATFORM_ANDROID

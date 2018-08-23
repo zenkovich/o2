@@ -3,9 +3,14 @@
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
+#if defined PLATFORM_WINDOWS
+#include "Render/Windows/RenderBase.h"
+#elif defined PLATFORM_ANDROID
+#include "Render/Android/RenderBase.h"
+#endif
+
 #include "Render/Camera.h"
 #include "Render/TextureRef.h"
-#include "Render/Windows/RenderBase.h"
 #include "Utils/Math/Vertex2.h"
 #include "Utils/Singleton.h"
 

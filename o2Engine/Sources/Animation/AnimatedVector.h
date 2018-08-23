@@ -42,7 +42,7 @@ namespace o2
 		void SetTarget(Vec2F* value, const Function<void()>& changeEvent);
 
 		// Sets target change event
-		void SetTargetDelegate(const Function<void()>& changeEvent);
+		void SetTargetDelegate(const Function<void()>& changeEvent) override;
 
 		// Sets target property pointer
 		void SetTargetProxy(IValueProxy<Vec2F>* setter);
@@ -181,7 +181,7 @@ namespace o2
 
 	protected:
 		// Evaluates value
-		void Evaluate();
+		void Evaluate() override;
 
 		// Returns value for specified time
 		Vec2F Evaluate(float position);
@@ -193,19 +193,19 @@ namespace o2
 		void UpdateApproximation();
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		// Sets target value pointer
-		void SetTargetVoid(void* target);
+		void SetTargetVoid(void* target) override;
 
 		// Sets target value pointer and change event
-		void SetTargetVoid(void* target, const Function<void()>& changeEvent);
+		void SetTargetVoid(void* target, const Function<void()>& changeEvent) override;
 
 		// Sets target property pointer
-		void SetTargetProxyVoid(void* target);
+		void SetTargetProxyVoid(void* target) override;
 
 		// Registering this in animatable value agent
-		void RegInAnimatable(AnimationState* state, const String& path);
+		void RegInAnimatable(AnimationState* state, const String& path) override;
 	};
 }
 

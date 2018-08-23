@@ -233,7 +233,7 @@ namespace o2
 	template<typename _type>
 	void Animatable::ValueAgent<_type>::AssignField(_type& value)
 	{
-		*(_type*)targetPtr = value;
+		target->SetValue(value);
 	}
 }
 

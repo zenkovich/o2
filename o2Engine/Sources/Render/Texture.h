@@ -1,6 +1,11 @@
 #pragma once
 
+#if defined PLATFORM_WINDOWS
 #include "Render/Windows/TextureBase.h"
+#elif defined PLATFORM_ANDROID
+#include "Render/Android/TextureBase.h"
+#endif
+
 #include "Utils/Math/Vector2.h"
 #include "Utils/Property.h"
 #include "Utils/Types/String.h"

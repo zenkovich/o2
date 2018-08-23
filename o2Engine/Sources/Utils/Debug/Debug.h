@@ -1,8 +1,7 @@
 #pragma once
 
-#include "String.h"
-
 #include "Utils/Singleton.h"
+#include "Utils/Types/String.h"
 
 #undef DrawText
 

@@ -5,7 +5,12 @@
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
 #include "Utils/Types/String.h"
+
+#if defined PLATFORM_WINDOWS
 #include "Application/Windows/ApplicationBase.h"
+#elif defined PLATFORM_ANDROID
+#include "Application/Android/ApplicationBase.h"
+#endif
 
 // Application access macros
 #define o2Application Application::Instance()
@@ -156,6 +161,9 @@ namespace o2
 		Vec2F          mCursorCorrectionDelta;     // Cursor corrections delta - result of infinite cursors offset
 
 	protected:
+		// Platform-specific initializations
+		void InitializePlatform();
+
 		// Calling on updating
 		virtual void OnUpdate(float dt);
 

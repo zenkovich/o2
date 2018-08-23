@@ -62,7 +62,7 @@ namespace o2
 		Sprite& operator=(const Sprite& other);
 
 		// Draws sprite 
-		void Draw();
+		void Draw() override;
 
 		// Sets using texture
 		void SetTexture(TextureRef texture);
@@ -173,10 +173,10 @@ namespace o2
 		void NormalizeAspect();
 
 		// Calling when serializing
-		void OnSerialize(DataNode& node) const;
+		void OnSerialize(DataNode& node) const override;
 
 		// Calling when deserializing
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		SERIALIZABLE(Sprite);
 
@@ -194,10 +194,10 @@ namespace o2
 
 	protected:
 		// It is called when basis was changed
-		void BasisChanged();
+		void BasisChanged() override;
 
 		// It is called when color was changed
-		void ColorChanged();
+		void ColorChanged() override;
 
 		// Updates mesh geometry
 		void UpdateMesh();

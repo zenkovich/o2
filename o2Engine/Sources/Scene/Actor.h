@@ -4,7 +4,6 @@
 #include "Scene/ActorCreationMode.h"
 #include "Scene/ActorRef.h"
 #include "Scene/ActorTransform.h"
-#include "Scene/Scene.h"
 #include "Scene/Tags.h"
 #include "Utils/Editor/SceneEditableObject.h"
 #include "Utils/Singleton.h"
@@ -13,6 +12,8 @@
 namespace o2
 {
 	class Component;
+	class Scene;
+	class SceneLayer;
 
 #if IS_EDITOR
 	typedef SceneEditableObject ActorBase;
@@ -238,11 +239,11 @@ namespace o2
 
 		// Return all components by type
 		template<typename _type>
-		Vector<_type>* GetComponents() const;
+		Vector<_type*> GetComponents() const;
 
 		// Returns all components by type in this and children
 		template<typename _type>
-		Vector<_type>* GetComponentsInChildren() const;
+		Vector<_type*> GetComponentsInChildren() const;
 
 		// Returns all components
 		ComponentsVec GetComponents() const;
@@ -473,10 +474,10 @@ namespace o2
 
 
 		// Beginning serialization callback
-		void OnSerialize(DataNode& node) const;
+		void OnSerialize(DataNode& node) const override;
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		// Regular serializing without prototype
 		void SerializeRaw(DataNode& node) const;
@@ -607,7 +608,12 @@ namespace o2
 		friend class Tag;
 		friend class UIWidget;
 	};
+}
 
+#include "Scene/Component.h"
+
+namespace o2
+{
 	template<typename _type>
 	_type* Actor::FindChildByType(bool searchInChildren /*= true*/)
 	{
@@ -638,9 +644,9 @@ namespace o2
 	}
 
 	template<typename _type>
-	Vector<_type>* Actor::GetComponentsInChildren() const
+	Vector<_type*> Actor::GetComponentsInChildren() const
 	{
-		Vector < _type >> res = GetComponents < _type*();
+		Vector<_type*> res = GetComponents<_type>();
 
 		for (auto child : mChildren)
 			res.Add(child->GetComponentsInChildren<_type>());
@@ -651,7 +657,7 @@ namespace o2
 	template<typename _type>
 	_type* Actor::GetComponentInChildren() const
 	{
-		_type > res = GetComponent < _type*();
+		_type* res = GetComponent<_type*>();
 
 		if (res)
 			return res;
@@ -679,9 +685,9 @@ namespace o2
 	}
 
 	template<typename _type>
-	Vector<_type>* Actor::GetComponents() const
+	Vector<_type*> Actor::GetComponents() const
 	{
-		Vector<_type>* res;
+		Vector<_type*> res;
 		for (auto comp : mComponents)
 		{
 			if (comp->GetType().IsBasedOn(TypeOf(_type)))

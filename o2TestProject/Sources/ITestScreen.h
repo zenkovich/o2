@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils\IObject.h"
-#include "Utils\Reflection\Reflection.h"
+#include "Utils/Basic/IObject.h"
+#include "Utils/Reflection/Reflection.h"
 
 using namespace o2;
 

@@ -6,28 +6,27 @@
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"
-#include "Utils/Property.h"
 #include "Utils/Types/UID.h"
 
 namespace o2
 {
-	template<class T> struct IsVectorHelper: std::false_type {};
-	template<class T> struct IsVectorHelper<Vector<T>>: std::true_type {};
-	template<class T> struct IsVector: IsVectorHelper<typename std::remove_cv<T>::type> {};
+	template<class T> struct IsVectorHelper : std::false_type {};
+	template<class T> struct IsVectorHelper<Vector<T>> : std::true_type {};
+	template<class T> struct IsVector : IsVectorHelper<typename std::remove_cv<T>::type> {};
 	template<class T> struct ExtractVectorElementType { typedef T type; };
 	template<class T> struct ExtractVectorElementType<Vector<T>> { typedef T type; };
 
-	template<class T, class T2> struct IsDictionaryHelper: std::false_type {};
-	template<class T, class T2> struct IsDictionaryHelper<Dictionary<T, T2>, void>: std::true_type {};
-	template<class T> struct IsDictionary: IsDictionaryHelper<typename std::remove_cv<T>::type, void> {};
+	template<class T, class T2> struct IsDictionaryHelper : std::false_type {};
+	template<class T, class T2> struct IsDictionaryHelper<Dictionary<T, T2>, void> : std::true_type {};
+	template<class T> struct IsDictionary : IsDictionaryHelper<typename std::remove_cv<T>::type, void> {};
 
 	template<class T, class T2> struct DictionaryKeyTypeGetterHelper { typedef T type; };
 	template<class T, class T2> struct DictionaryKeyTypeGetterHelper<Dictionary<T, T2>, void> { typedef T type; };
-	template<class T> struct ExtractDictionaryKeyType: DictionaryKeyTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
+	template<class T> struct ExtractDictionaryKeyType : DictionaryKeyTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
 
 	template<class T, class T2> struct DictionaryValueTypeGetterHelper { typedef T2 type; };
 	template<class T, class T2> struct DictionaryValueTypeGetterHelper<Dictionary<T, T2>, void> { typedef T2 type; };
-	template<class T> struct ExtractDictionaryValueType: DictionaryValueTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
+	template<class T> struct ExtractDictionaryValueType : DictionaryValueTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
 
 
 	template <typename T>
@@ -43,7 +42,7 @@ namespace o2
 		enum { value = sizeof(test<T>(0)) == sizeof(char) };
 	};
 
-	template<class T> 
+	template<class T>
 	struct IsStringAccessorHelper
 	{
 		typedef char one;
@@ -56,7 +55,7 @@ namespace o2
 		enum { value = sizeof(test<T>(0)) == sizeof(char) && IsAccessor<T>::value };
 	};
 
-	template<class T> struct IsStringAccessor: IsStringAccessorHelper<typename std::remove_cv<T>::type> {};
+	template<class T> struct IsStringAccessor : IsStringAccessorHelper<typename std::remove_cv<T>::type> {};
 
 	template <typename T>
 	class IsProperty
@@ -71,34 +70,34 @@ namespace o2
 		enum { value = sizeof(test<T>(0)) == sizeof(char) };
 	};
 
-	template<class...> struct voidify { using type = void; };
-	template<class... Ts> using void_t = typename voidify<Ts...>::type;
+	template<typename... Ts> struct make_void { typedef void type; };
+	template<typename... Ts> using void_t = typename make_void<Ts...>::type;
 
-	template<class T, class = void>
-	struct SupportsPlus: std::false_type {};
-
-	template<class T>
-	struct SupportsPlus<T, void_t<decltype(std::declval<T>() + std::declval<T>())>>: std::true_type {};
-
-	template<class T, class = void>
-	struct SupportsMinus: std::false_type {};
+	template<class T, class = void_t<>>
+	struct SupportsPlus : std::false_type {};
 
 	template<class T>
-	struct SupportsMinus<T, void_t<decltype(std::declval<T>() - std::declval<T>())>>: std::true_type {};
+	struct SupportsPlus<T, void_t<decltype(std::declval<T>() + std::declval<T>())>> : std::true_type {};
 
-	template<class T, class = void>
-	struct SupportsDivide: std::false_type {};
-
-	template<class T>
-	struct SupportsDivide<T, void_t<decltype(std::declval<T>() / std::declval<T>())>>: std::true_type {};
-
-	template<class T, class = void>
-	struct SupportsMultiply: std::false_type {};
+	template<class T, class = void_t<>>
+	struct SupportsMinus : std::false_type {};
 
 	template<class T>
-	struct SupportsMultiply<T, void_t<decltype(std::declval<T>() * std::declval<T>())>>: std::true_type {};
+	struct SupportsMinus<T, void_t<decltype(std::declval<T>() - std::declval<T>())>> : std::true_type {};
 
-	namespace EqualsTrait
+	template<class T, class = void_t<>>
+	struct SupportsDivide : std::false_type {};
+
+	template<class T>
+	struct SupportsDivide<T, void_t<decltype(std::declval<T>() / std::declval<T>())>> : std::true_type {};
+
+	template<class T, class = void_t<>>
+	struct SupportsMultiply : std::false_type {};
+
+	template<class T>
+	struct SupportsMultiply<T, void_t<decltype(std::declval<T>() * std::declval<T>())>> : std::true_type {};
+
+	namespace EqualsOperator
 	{
 		struct No {};
 		template<typename T, typename Arg> No operator== (const T&, const Arg&);
@@ -121,7 +120,12 @@ namespace o2
 	{
 		typedef typename T::valueType type;
 	};
+}
 
+#include "Utils/Reflection/Type.h"
+
+namespace o2
+{
 	template<typename T>
 	struct IsFundamental: public std::conditional<
 		std::is_fundamental<T>::value ||
@@ -141,11 +145,11 @@ namespace o2
 
 	// type trait
 	template<typename T, typename X =
-	/* if */   std::conditional<std::is_base_of<IObject, T>::value,
+	/* if */   typename std::conditional<std::is_base_of<IObject, T>::value,
 	/* then */ T,
-	/* else */ std::conditional<IsFundamental<T>::value && !std::is_const<T>::value,
+	/* else */ typename std::conditional<IsFundamental<T>::value && !std::is_const<T>::value,
 		       /* then */ FundamentalTypeContainer<T>,
-		       /* else */ std::conditional<
+		       /* else */ typename std::conditional<
 		                  /* if */   std::is_enum<T>::value,
 		                  /* then */ EnumTypeContainer<T>,
 		                  /* else */ Type::Dummy
@@ -200,19 +204,19 @@ namespace o2
 
 	// Returns type of template parameter
 	template<typename _type, typename _getter = 
-		std::conditional<
+		typename std::conditional<
 		/* if */   std::is_pointer<_type>::value,
 		/* then */ PointerTypeGetter<_type>,
-		/* else */ std::conditional<
+		/* else */ typename std::conditional<
 		           /* if */   IsVector<_type>::value,
 		           /* then */ VectorTypeGetter<_type>,
-		           /* else */ std::conditional<
+		           /* else */ typename std::conditional<
 		                      /* if */   IsStringAccessor<_type>::value,
 		                      /* then */ AccessorTypeGetter<_type>,
-		                      /* else */ std::conditional<
+		                      /* else */ typename std::conditional<
 		                                 /* if */   IsDictionary<_type>::value,
 		                                 /* then */ DictionaryTypeGetter<_type>,
-		                                            std::conditional<
+		                                            typename std::conditional<
 		                                            /* if */   IsProperty<_type>::value,
 		                                            /* then */ PropertyTypeGetter<_type>,
 		                                            /* else */ RegularTypeGetter<_type>

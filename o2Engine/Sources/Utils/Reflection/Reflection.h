@@ -209,7 +209,7 @@ namespace o2
 		Type* res = mnew TObjectType<_type>(name, sizeof(_type), &CastFunc<IObject, _type>,
 											&CastFunc<_type, IObject>);
 
-		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::ProcessType<ReflectionInitializationTypeProcessor>);
+		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::template ProcessType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 
 		Reflection::Instance().mTypes.Add(res);
@@ -224,7 +224,7 @@ namespace o2
 	{
 		Type* res = mnew FundamentalType<_type>(name);
 
-		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::InitializeType<ReflectionInitializationTypeProcessor>);
+		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::template InitializeType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
 

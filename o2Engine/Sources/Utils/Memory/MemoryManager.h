@@ -25,7 +25,7 @@ void* operator new(size_t size, const char* location, int line);
 void  operator delete(void* allocMemory, const char* location, int line);
 
 // Overloaded delete operator
-void  operator delete(void* allocMemory);
+void  operator delete(void* allocMemory) noexcept;
 
 // Managed malloc() with source and line arguments
 void* _mmalloc(size_t size, const char* location, int line);
@@ -84,7 +84,7 @@ namespace o2
 		void OnMemoryRelease(void* memory);
 
 		friend void* ::operator new(size_t size, const char* location, int line);
-		friend void  ::operator delete(void* allocMemory);
+		friend void  ::operator delete(void* allocMemory) noexcept;
 		friend void* ::_mmalloc(size_t size, const char* location, int line);
 		friend void  ::_mfree(void* allocMemory);
 	};

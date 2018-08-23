@@ -45,7 +45,7 @@ namespace o2
 		{
 		public:
 			// Returns asset type id
-			const Type* GetAssetType() const;
+			const Type* GetAssetType() const override;
 
 			SERIALIZABLE(MetaInfo);
 		};
@@ -67,10 +67,10 @@ namespace o2
 		FolderAsset(const FolderAsset& asset);
 
 		// Loads data
-		void LoadData(const String& path);
+		void LoadData(const String& path) override;
 
 		// Saves asset data
-		void SaveData(const String& path);
+		void SaveData(const String& path) override;
 
 		friend class Assets;
 	};
@@ -127,7 +127,7 @@ namespace o2
 		bool operator!=(const FolderAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
-		const Type& GetAssetType() const { return TypeOf(FolderAsset); }
+		const Type& GetAssetType() const override { return TypeOf(FolderAsset); }
 
 		SERIALIZABLE(FolderAssetRef);
 

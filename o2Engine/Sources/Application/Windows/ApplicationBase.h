@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef PLATFORM_WINDOWS
+
 #include <Windows.h>
 #include "Utils/Math/Vector2.h"
 #include "Utils/Types/String.h"
@@ -33,3 +35,5 @@ namespace o2
 		friend class FileSystem;
 	};
 }
+
+#endif // PLATFORM_WINDOWS

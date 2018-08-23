@@ -62,7 +62,7 @@ namespace o2
 private:                                                                                                        \
 	static o2::Type* type;							                                                            \
                                                                                                                 \
-    template<typename _type, typename _getter>                                                                  \
+    template<typename __type, typename _getter>                                                                 \
 	friend const o2::Type& o2::GetTypeOf();                                                                     \
                                                                                                                 \
 	template<typename T>                                                                                        \
@@ -71,10 +71,10 @@ private:                                                                        
 	template<typename T, typename X>                                                                            \
 	friend struct o2::GetTypeHelper;                                                                            \
                                                                                                                 \
-	template<typename _type>                                                                                    \
+	template<typename __type>                                                                                   \
 	friend class o2::TObjectType;                                                                               \
                                                                                                                 \
-    template<typename _type>                                                                                    \
+    template<typename __type>                                                                                   \
 	friend class PointerValueProxy;                                                                             \
                                                                                                                 \
     friend class o2::TypeInitializer;                                                                           \
@@ -83,12 +83,12 @@ private:                                                                        
                                                                                                                 \
 public:                                                                                                         \
 	typedef CLASS thisclass;                                                                                    \
-	IObject* Clone() const { return mnew CLASS(*this); }                                                        \
-	const o2::Type& GetType() const { return *type; };                                                          \
+	IObject* Clone() const override { return mnew CLASS(*this); }                                               \
+	const o2::Type& GetType() const override { return *type; };                                                 \
                                                                                                                 \
     template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \
 	{                                                                                                           \
-		processor.Start<CLASS>(object, type);                                                                   \
+		processor.template Start<CLASS>(object, type);                                                          \
 		ProcessBaseTypes<_type_processor>(object, processor);                                                   \
 		ProcessFields<_type_processor>(object, processor);                                                      \
 		ProcessMethods<_type_processor>(object, processor);                                                     \
