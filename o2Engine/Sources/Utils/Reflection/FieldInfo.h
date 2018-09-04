@@ -25,6 +25,8 @@ namespace o2
 
 		struct IFieldSerializer
 		{
+			virtual ~IFieldSerializer() {}
+
 			virtual void Serialize(void* object, DataNode& data) const {}
 			virtual void Deserialize(void* object, DataNode& data) const {}
 			virtual bool Equals(void* objectA, void* objectB) const { return false; }
@@ -61,7 +63,7 @@ namespace o2
 				  IFieldSerializer* serializer);
 
 		// Destructor
-		~FieldInfo();
+		virtual ~FieldInfo();
 
 		// Equal operator
 		bool operator==(const FieldInfo& other) const;

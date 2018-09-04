@@ -14,7 +14,8 @@ namespace o2
 		TextureRef(Texture* texture);
 
 		// Constructor
-		TextureRef(const Vec2I& size, Texture::Format format = Texture::Format::Default, 
+		TextureRef(const Vec2I& size, 
+				   PixelFormat format = PixelFormat::R8G8B8A8,
 				   Texture::Usage usage = Texture::Usage::Default);
 
 		// Constructor from file

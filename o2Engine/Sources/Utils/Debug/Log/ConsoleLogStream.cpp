@@ -2,9 +2,10 @@
 #include "ConsoleLogStream.h"
 
 #include <iostream>
-#include <io.h>
 
-// TODO: Can't include <wincon.h> - compiler throws many stupid errors from GDI
+#ifdef PLATFORM_WINDOWS
+#include <io.h>
+#endif
 
 namespace o2
 {

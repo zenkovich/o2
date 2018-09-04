@@ -126,3 +126,10 @@ ENUM_META_(o2::PrimitiveType, PrimitiveType)
 	ENUM_ENTRY(PolygonWire);
 }
 END_ENUM_META;
+
+ENUM_META_(o2::PixelFormat, PixelFormat)
+{
+	ENUM_ENTRY(R8G8B8);
+	ENUM_ENTRY(R8G8B8A8);
+}
+END_ENUM_META;

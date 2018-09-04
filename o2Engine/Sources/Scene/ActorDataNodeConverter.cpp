@@ -2,6 +2,7 @@
 #include "ActorDataNodeConverter.h"
 
 #include "Scene/Actor.h"
+#include "Scene/Scene.h"
 
 namespace o2
 {

@@ -3,7 +3,7 @@
 #include "ITestScreen.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
-#include "Utils/DragHandle.h"
+#include "Utils/Editor/DragHandle.h"
 
 class TextTestScreen: public ITestScreen
 {

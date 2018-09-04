@@ -2,7 +2,7 @@
 #include "BitmapFont.h"
 
 #include "Assets/ImageAsset.h"
-#include "Dependencies/PugiXml/pugixml.hpp"
+#include "dependencies/pugixml/pugixml.hpp"
 #include "Render/Render.h"
 #include "Utils/Serialization/DataNode.h"
 #include "Utils/Debug/Log/LogStream.h"
@@ -28,7 +28,7 @@ namespace o2
 
 		if (res.status != pugi::status_ok)
 		{
-			o2Render.mLog->Error("Failed to load Bitmap Font file: %s", fileName);
+			o2Render.mLog->Error("Failed to load Bitmap Font file: " + fileName);
 			return false;
 		}
 
@@ -46,7 +46,7 @@ namespace o2
 		}
 		else
 		{
-			o2Render.mLog->Error("Failed to get common info in font: %s. Bad file format", fileName);
+			o2Render.mLog->Error("Failed to get common info in font: " + fileName + ". Bad file format");
 			return false;
 		}
 
@@ -76,7 +76,7 @@ namespace o2
 		}
 		else
 		{
-			o2Render.mLog->Error("Failed to get characters node in BMFont file: %s. Bad file format", fileName);
+			o2Render.mLog->Error("Failed to get characters node in BMFont file: " + fileName + ". Bad file format");
 			return false;
 		}
 

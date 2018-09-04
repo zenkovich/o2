@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Application/Application.h"
 
+#include <chrono>
+#include <thread>
 #include "Application/Input.h"
 #include "Assets/Assets.h"
 #include "Config/ProjectConfig.h"
@@ -102,7 +104,7 @@ namespace o2
 
 		if (realdDt < maxFPSDeltaTime)
 		{
-			Sleep((int)((maxFPSDeltaTime - realdDt)*1000.0f));
+			std::this_thread::sleep_for(std::chrono::milliseconds((int)((maxFPSDeltaTime - realdDt)*1000.0f)));
 			realdDt = maxFPSDeltaTime;
 		}
 
@@ -194,8 +196,6 @@ namespace o2
 	{
 		return IS_EDITOR;
 	}
-
-	o2StackWalker* o2StackWalker::mInstance = new o2StackWalker();
 	MemoryManager* MemoryManager::mInstance = new MemoryManager();
 	template<> Debug* Singleton<Debug>::mInstance = mnew Debug();
 	template<> FileSystem* Singleton<FileSystem>::mInstance = mnew FileSystem();

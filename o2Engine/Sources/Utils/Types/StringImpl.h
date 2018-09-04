@@ -1149,11 +1149,11 @@ namespace o2
 				}
 				else if (format.mData[i + 1] == 'c')
 				{
-					res.mData[resLen++] = va_arg(vlist, char);
+					res.mData[resLen++] = va_arg(vlist, int);
 				}
 				else if (format.mData[i + 1] == 'b')
 				{
-					appendStr(va_arg(vlist, bool) ? "true" : "false");
+					appendStr(va_arg(vlist, int) ? "true" : "false");
 					i++;
 				}
 				else

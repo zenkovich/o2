@@ -2,7 +2,10 @@
 #include "ShortcutKeys.h"
 
 #include "Application/Input.h"
+
+#if defined PLATFORM_WINDOWS
 #include <Windows.h>
+#endif
 
 namespace o2
 {
@@ -32,15 +35,19 @@ namespace o2
 
 	String ShortcutKeys::AsString() const
 	{
+		String res;
+
+#if defined PLATFORM_WINDOWS
 		char buf[16];
 		LONG lScan = MapVirtualKey(key, 0) << 16;
 		int ress = GetKeyNameText(lScan, buf, 16);
 		int err = GetLastError();
 
-		String res = buf;
+		res = buf;
 		if (shift) res = "Shift+" + res;
 		if (control) res = "Ctrl+" + res;
 		if (alt) res = " Alt+" + res;
+#endif
 
 		return res;
 	}

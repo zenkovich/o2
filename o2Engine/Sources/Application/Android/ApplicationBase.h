@@ -2,6 +2,8 @@
 
 #ifdef PLATFORM_ANDROID
 
+#include "Application/Android/VKCodes.h"
+
 namespace o2
 {
 	// -------------------------------

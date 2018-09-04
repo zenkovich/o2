@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "RectPacker.h"
 
-#include <windows.h>
-
 namespace o2
 {
 	RectsPacker::RectsPacker(const Vec2F& maxSize):

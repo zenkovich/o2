@@ -1,11 +1,12 @@
 #include "stdafx.h"
 
+#ifdef PLATFORM_WINDOWS
+
 #include "Application/Application.h"
 #include "Events/EventSystem.h"
 #include "Utils/Debug/Log/LogStream.h"
+#include "Utils/Debug/StackTrace.h"
 #include "Utils/FileSystem/FileSystem.h"
-
-#ifdef PLATFORM_WINDOWS
 
 namespace o2
 {
@@ -14,6 +15,8 @@ namespace o2
 	public:
 		static LRESULT WndProc(HWND wnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	};
+
+	o2StackWalker* o2StackWalker::mInstance = new o2StackWalker();
 
 	void Application::InitializePlatform()
 	{
@@ -174,7 +177,7 @@ namespace o2
 		else
 			mWndStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_VISIBLE | WS_MINIMIZEBOX;
 
-		mLog->Out("set resizible: %s ", (mWindowResizible ? "true" : "false"));
+		mLog->Out("Set resizible: " + ((mWindowResizible ? (String)"true" : (String)"false")));
 
 		SetWindowLong(mHWnd, GWL_STYLE, mWndStyle);
 	}
@@ -187,7 +190,7 @@ namespace o2
 	void Application::SetWindowSize(const Vec2I& size)
 	{
 		mWindowedSize = size;
-		mLog->Out("setWindowSize: %ix%i", mWindowedSize.x, mWindowedSize.y);
+		mLog->Out("Set sindow size: %ix%i", mWindowedSize.x, mWindowedSize.y);
 		SetFullscreen(!mWindowed);
 	}
 
@@ -199,7 +202,7 @@ namespace o2
 	void Application::SetWindowPosition(const Vec2I& position)
 	{
 		mWindowedPos = position;
-		mLog->Out("set Window Position: %i, %i", mWindowedPos.x, mWindowedPos.y);
+		mLog->Out("Set window position: %i, %i", mWindowedPos.x, mWindowedPos.y);
 		SetFullscreen(!mWindowed);
 	}
 

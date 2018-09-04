@@ -156,14 +156,17 @@ namespace o2
 }
 
 #define DECLARE_FUNDAMENTAL_TYPE(TYPE) \
+    template<>                         \
 	o2::Type* o2::FundamentalTypeContainer<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
 
 #define ENUM_META(NAME)                                                                                  \
+    template<>                                                                                           \
     o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
     typedef NAME EnumName;                                                                               \
     o2::Dictionary<int, o2::String> res;    
 
 #define ENUM_META_(NAME, U)                                                                              \
+    template<>                                                                                           \
     o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
     typedef NAME EnumName;                                                                               \
     o2::Dictionary<int, o2::String> res;                                        

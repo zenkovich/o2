@@ -15,7 +15,7 @@ namespace o2
 		o2Render.mTextures.Add(this);
 	}
 
-	Texture::Texture(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/) :
+	Texture::Texture(const Vec2I& size, PixelFormat format /*= Format::R8G8B8A8*/, Usage usage /*= Usage::Default*/) :
 		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
 	{
 		Create(size, format, usage);
@@ -74,7 +74,7 @@ namespace o2
 
 			mReady = true;
 		}
-		else o2Render.mLog->Error("Failed to load atlas texture with id %i and page %i", atlasAssetId, page);
+		else o2Render.mLog->Error("Failed to load atlas texture with id " + (String)atlasAssetId + " and page " + (String)page);
 	}
 
 	void Texture::Create(const String& atlasAssetName, int page)
@@ -88,7 +88,7 @@ namespace o2
 
 			mReady = true;
 		}
-		else o2Render.mLog->Error("Failed to load atlas texture with %s and page %i", atlasAssetName, page);
+		else o2Render.mLog->Error("Failed to load atlas texture with " + atlasAssetName + " and page " + (String)page);
 	}
 
 	void Texture::Reload()
@@ -102,7 +102,7 @@ namespace o2
 		return mSize;
 	}
 
-	Texture::Format Texture::GetFormat() const
+	PixelFormat Texture::GetFormat() const
 	{
 		return mFormat;
 	}
@@ -137,14 +137,6 @@ namespace o2
 		return mAtlasPage;
 	}
 }
-
-ENUM_META_(o2::Texture::Format, Format)
-{
-	ENUM_ENTRY(Default);
-	ENUM_ENTRY(R8G8B8);
-	ENUM_ENTRY(R8G8B8A8);
-}
-END_ENUM_META;
 
 ENUM_META_(o2::Texture::Usage, Usage)
 {

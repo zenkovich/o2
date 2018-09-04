@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "VectorFont.h"
 
+#if defined PLATFORM_WINDOWS
 #include "Render/Windows/OpenGL.h"
+#elif defined PLATFORM_ANDROID
+#include "Render/Android/OpenGL.h"
+#endif
 
 #include "Application/Application.h"
 #include "Render/Render.h"
@@ -49,7 +53,7 @@ namespace o2
 		FT_Error error = FT_New_Face(o2Render.mFreeTypeLib, fileName.Data(), 0, &mFreeTypeFace);
 		if (error)
 		{
-			o2Render.mLog->Error("Failed to load vector font: %s, error: %i", fileName, error);
+			o2Render.mLog->Error("Failed to load vector font: " + fileName + ", error: " + (String)error);
 			return false;
 		}
 
@@ -172,27 +176,22 @@ namespace o2
 		if (mCharacters.Count() == 0)
 			return;
 
-		Bitmap texBitmap(Bitmap::Format::R8G8B8A8, mTexture->GetSize());
-
-		glBindTexture(GL_TEXTURE_2D, mTexture->mHandle);
-		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, texBitmap.GetData());
-
-		//glBindTexture(GL_TEXTURE_2D, o2Render.mLastDrawTexture->mHandle);
+		Bitmap* texBitmap = mTexture->GetData();
 
 		for (auto& ch : mCharacters)
 		{
 			CharDef charDef;
 
-			Bitmap* charBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, ch.mSize);
+			Bitmap* charBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, ch.mSize);
 
 			RectI srcRect;
-			Vec2F texSize = texBitmap.GetSize();
+			Vec2F texSize = texBitmap->GetSize();
 			srcRect.left = (int)(ch.mTexSrc.left*texSize.x);
 			srcRect.right = (int)(ch.mTexSrc.right*texSize.x);
 			srcRect.bottom = (int)(ch.mTexSrc.top*texSize.y);
 			srcRect.top = (int)(ch.mTexSrc.bottom*texSize.y);
 
-			charBitmap->CopyImage(&texBitmap, Vec2I(), srcRect);
+			charBitmap->CopyImage(texBitmap, Vec2I(), srcRect);
 
 			charDef.mCharacter = ch;
 			charDef.mBitmap = charBitmap;
@@ -200,6 +199,8 @@ namespace o2
 
 			charDefs.Add(charDef);
 		}
+
+		delete texBitmap;
 	}
 
 	void VectorFont::RenderNewCharacters(CharDefsVec& charDefs, Vector<wchar_t>& newCharacters, int height)
@@ -227,7 +228,7 @@ namespace o2
 
 			Vec2I glyphSize(glyph->bitmap.width, glyph->bitmap.rows);
 
-			Bitmap* newBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, glyphSize + border*2);
+			Bitmap* newBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, glyphSize + border*2);
 			newBitmap->Fill(Color4(255, 255, 255, 0));
 			UInt8* newBitmapData = newBitmap->GetData();
 			Vec2I newBitmapSize = newBitmap->GetSize();
@@ -281,11 +282,11 @@ namespace o2
 
 		if (newTexSize != mTexture->GetSize())
 		{
-			mTexture = TextureRef(newTexSize, Texture::Format::R8G8B8A8, Texture::Usage::Default);
+			mTexture = TextureRef(newTexSize, PixelFormat::R8G8B8A8, Texture::Usage::Default);
 			mTextureSrcRect.Set(Vec2I(), newTexSize);
 		}
 
-		Bitmap texBitmap(Bitmap::Format::R8G8B8A8, mTexture->GetSize());
+		Bitmap texBitmap(PixelFormat::R8G8B8A8, mTexture->GetSize());
 		texBitmap.Fill(Color4(255, 255, 255, 0));
 		Vec2F invTexSize(1.0f/mTexture->GetSize().x, 1.0f/mTexture->GetSize().y);
 		for (auto& def : charDefs)
@@ -302,9 +303,7 @@ namespace o2
 			delete def.mBitmap;
 		}
 
-		glBindTexture(GL_TEXTURE_2D, mTexture->mHandle);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texBitmap.GetSize().x, texBitmap.GetSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-					 texBitmap.GetData());
+		mTexture->SetData(&texBitmap);
 
 		GL_CHECK_ERROR(o2Render.mLog);
 		//glBindTexture(GL_TEXTURE_2D, o2Render.mLastDrawTexture->mHandle);

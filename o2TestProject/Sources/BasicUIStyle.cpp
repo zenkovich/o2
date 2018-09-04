@@ -18,6 +18,7 @@
 #include "UI/LongList.h"
 #include "UI/MenuPanel.h"
 #include "UI/ScrollArea.h"
+#include "UI/Spoiler.h"
 #include "UI/Toggle.h"
 #include "UI/Tree.h"
 #include "UI/UIManager.h"
@@ -35,24 +36,24 @@ namespace o2
 		UIButton* sample = mnew UIButton();
 		sample->layout->minSize = Vec2F(20, 20);
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_button_regular.png"), 
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_button_regular.png"),
 											 Layout::BothStretch(-9, -9, -10, -10));
 
-		auto hoverLayer   = sample->AddLayer("hover", mnew Sprite("ui/UI_button_select.png"),
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_button_select.png"),
+										   Layout::BothStretch(-9, -9, -10, -10));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_button_pressed.png"),
 											 Layout::BothStretch(-9, -9, -10, -10));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_button_pressed.png"), 
-											 Layout::BothStretch(-9, -9, -10, -10));
+		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI_button_focus.png"),
+										   Layout::BothStretch(-9, -9, -10, -10));
 
-		auto focusLayer   = sample->AddLayer("focus", mnew Sprite("ui/UI_button_focus.png"), 
-											 Layout::BothStretch(-9, -9, -10, -10));
-
-		Text* captionText        = mnew Text("stdFont.ttf");
-		captionText->text        = "Button";
-		captionText->horAlign    = HorAlign::Middle;
-		captionText->verAlign    = VerAlign::Middle;
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "Button";
+		captionText->horAlign = HorAlign::Middle;
+		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
-		captionText->wordWrap    = true;
+		captionText->wordWrap = true;
 		sample->AddLayer("caption", captionText);
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -286,7 +287,7 @@ namespace o2
 										  Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
 		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
-											Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
+										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
 		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI_Check_bk_pressed.png"),
 											 Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
@@ -298,7 +299,7 @@ namespace o2
 										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
 
 		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI_Check_unknown.png"),
-										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
+											 Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
 
 		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Checkbox";
@@ -336,7 +337,7 @@ namespace o2
 										  Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
 		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
-											Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
+										   Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
 		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI_Check_bk_pressed.png"),
 											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
@@ -396,7 +397,7 @@ namespace o2
 
 		Animation enableHorScrollAnim;
 		enableHorScrollAnim.SetTarget(sample);
-		*enableHorScrollAnim.AddAnimationValue<float>(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
+		*enableHorScrollAnim.AddAnimationValue(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
 			AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
 		*enableHorScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMin") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
@@ -405,7 +406,7 @@ namespace o2
 
 		Animation enableVerScrollAnim;
 		enableVerScrollAnim.SetTarget(sample);
-		*enableVerScrollAnim.AddAnimationValue<float>(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
+		*enableVerScrollAnim.AddAnimationValue(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
 			AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
 		*enableVerScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMax") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
@@ -495,7 +496,7 @@ namespace o2
 
 		Animation enableHorScrollAnim;
 		enableHorScrollAnim.SetTarget(sample);
-		*enableHorScrollAnim.AddAnimationValue<float>(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
+		*enableHorScrollAnim.AddAnimationValue(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
 			AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
 		*enableHorScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMin") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
@@ -504,7 +505,7 @@ namespace o2
 
 		Animation enableVerScrollAnim;
 		enableVerScrollAnim.SetTarget(sample);
-		*enableVerScrollAnim.AddAnimationValue<float>(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
+		*enableVerScrollAnim.AddAnimationValue(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
 			AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
 		*enableVerScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMax") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
@@ -725,13 +726,13 @@ namespace o2
 	{
 		UIDropDown* sample = mnew UIDropDown();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), 
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 										  Layout::BothStretch(-9, -9, -9, -9));
 
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), 
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"),
 										   Layout::BothStretch(-9, -9, -9, -9));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), 
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"),
 											 Layout::BothStretch(-9, -9, -9, -9));
 
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
@@ -766,6 +767,8 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
+
+
 	}
 
 	void BasicUIStyleBuilder::RebuildWindowStyle()
@@ -872,7 +875,7 @@ namespace o2
 		subIconLayer->drawable = mnew Sprite("ui/UI_Right_icn.png");
 		subIconLayer->layout = Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-15, 10), Vec2F(5, -10));
 
-		itemSample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"), 
+		itemSample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"),
 							 Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
@@ -960,7 +963,7 @@ namespace o2
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 		auto hoverLayer = itemSampleExpandBtn->AddLayer("hover", mnew Sprite("ui/UI_Right_icn_select.png"),
-														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+														Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
@@ -1150,6 +1153,73 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "backless");
+	}
+
+	void BasicUIStyleBuilder::RebuildExpandButton()
+	{
+		UIButton* sample = mnew UIButton();
+		sample->layout->minSize = Vec2F(5, 5);
+		sample->name = "expandBtn";
+
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Right_icn_select.png"),
+											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation expandedStateAnim(sample);
+		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+		o2UI.AddWidgetStyle(sample, "expand");
+	}
+
+	void BasicUIStyleBuilder::RebuildSpoiler()
+	{
+		UISpoiler* sample = mnew UISpoiler();
+		sample->spacing = 5.0f;
+		sample->borderLeft = 10;
+		sample->expandHeight = false;
+		sample->expandWidth = true;
+		sample->fitByChildren = true;
+		sample->baseCorner = BaseCorner::RightTop;
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "Button";
+		captionText->horAlign = HorAlign::Left;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		captionText->wordWrap = true;
+		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 10, 0, 20));
+
+		auto expandBtn = o2UI.CreateWidget<UIButton>("expand");
+		*expandBtn->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-7, 0));
+		expandBtn->SetInternalParent(sample, false);
+
+		sample->SetHeadHeight(20);
+
+		o2UI.AddWidgetStyle(sample, "expand with caption");
 	}
 
 	void BasicUIStyleBuilder::RebuildBasicUIManager()

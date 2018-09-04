@@ -44,4 +44,6 @@ namespace o2
 	enum class LineType { Solid, Dash };
 
 	enum class PrimitiveType { Polygon, PolygonWire, Line };
+
+	enum class PixelFormat { R8G8B8A8, R8G8B8 };
 }

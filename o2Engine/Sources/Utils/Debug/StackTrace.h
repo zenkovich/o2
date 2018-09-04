@@ -39,4 +39,4 @@ namespace o2
 	String GetStackTrace();
 }
 
-#endif //PLATFORM_WINDOWS 
+#endif //PLATFORM_WINDOWS

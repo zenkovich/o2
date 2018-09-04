@@ -22,16 +22,13 @@ namespace o2
 	class Texture: public TextureBase
 	{
 	public:
-		// Texture format
-		enum class Format { Default, R8G8B8A8, R8G8B8 };
-
 		// Texture usage
 		enum class Usage { Default, RenderTarget };
 
 	public:
 		PROPERTIES(Texture);
 		GETTER(Vec2I,  size, GetSize);         // Size of texture getter
-		GETTER(Format, format, GetFormat);     // texture format getter
+		GETTER(PixelFormat, format, GetFormat);     // texture format getter
 		GETTER(Usage,  usage, GetUsage);       // Texture usage getter
 		GETTER(String, fileName, GetFileName); // Texture file name getter
 
@@ -39,7 +36,7 @@ namespace o2
 		Texture();
 
 		// Constructor
-		Texture(const Vec2I& size, Format format = Format::Default, Usage usage = Usage::Default);
+		Texture(const Vec2I& size, PixelFormat format = PixelFormat::R8G8B8A8, Usage usage = Usage::Default);
 
 		// Constructor from file
 		Texture(const String& fileName);
@@ -57,7 +54,7 @@ namespace o2
 		~Texture();
 
 		// Creates texture with size, format and usage
-		void Create(const Vec2I& size, Format format = Format::Default, Usage usage = Usage::Default);
+		void Create(const Vec2I& size, PixelFormat format = PixelFormat::R8G8B8A8, Usage usage = Usage::Default);
 
 		// Creates texture from file
 		void Create(const String& fileName);
@@ -74,6 +71,9 @@ namespace o2
 		// Sets texture's data from bitmap
 		void SetData(Bitmap* bitmap);
 
+		// Gets texture's data to bitmap and returns it
+		Bitmap* GetData();
+
 		// Reloads texture
 		void Reload();
 
@@ -81,7 +81,7 @@ namespace o2
 		Vec2I GetSize() const;
 
 		// Returns format
-		Format GetFormat() const;
+		PixelFormat GetFormat() const;
 
 		// returns texture usage
 		Usage GetUsage() const;
@@ -105,7 +105,7 @@ namespace o2
 		typedef Vector<TextureRef*> TextureRefsVec;
 
 		Vec2I          mSize;         // Size of texture
-		Format         mFormat;       // Texture format
+		PixelFormat         mFormat;       // Texture format
 		Usage          mUsage;        // Texture usage
 		String         mFileName;     // Source file name
 		UID            mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture

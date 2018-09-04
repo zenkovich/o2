@@ -5,6 +5,8 @@ namespace o2
 	class IAbstractValueProxy
 	{
 	public:
+		virtual ~IAbstractValueProxy() {}
+
 		virtual void SetValuePtr(void* value) = 0;
 		virtual void GetValuePtr(void* value) const = 0;
 	};

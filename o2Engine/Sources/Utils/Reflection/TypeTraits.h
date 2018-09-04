@@ -173,33 +173,34 @@ namespace o2
 	template<typename T>
 	struct PointerTypeGetter
 	{
-		static const Type& GetType() { return *GetTypeOf<std::remove_pointer<T>::type>().GetPointerType(); }
+		static const Type& GetType();
 	};
 
 	template<typename T>
 	struct PropertyTypeGetter
 	{
-		static const Type& GetType() { return *Reflection::InitializePropertyType<T::valueType, T>(); }
+		static const Type& GetType() { return *Reflection::InitializePropertyType<typename T::valueType, T>(); }
 	};
 
 	template<typename T>
 	struct VectorTypeGetter
 	{
-		static const Type& GetType() { return *Reflection::InitializeVectorType<ExtractVectorElementType<T>::type>(); }
+		static const Type& GetType() { return *Reflection::InitializeVectorType<typename ExtractVectorElementType<T>::type>(); }
 	};
 
 	template<typename T>
 	struct DictionaryTypeGetter
 	{
-		static const Type& GetType() {
-			return *Reflection::InitializeDictionaryType<ExtractDictionaryKeyType<T>::type, ExtractDictionaryValueType<T>::type>();
+		static const Type& GetType() 
+		{
+			return *Reflection::InitializeDictionaryType<typename ExtractDictionaryKeyType<T>::type, typename ExtractDictionaryValueType<T>::type>();
 		}
 	};
 
 	template<typename T>
 	struct AccessorTypeGetter
 	{
-		static const Type& GetType() { return *Reflection::InitializeAccessorType<T::valueType, T>(); }
+		static const Type& GetType() { return *Reflection::InitializeAccessorType<typename T::valueType, T>(); }
 	};
 
 	// Returns type of template parameter
@@ -229,5 +230,11 @@ namespace o2
 	const Type& GetTypeOf()
 	{
 		return _getter::GetType();
+	}
+
+	template<typename T>
+	const Type& PointerTypeGetter<T>::GetType()
+	{
+		return *GetTypeOf<typename std::remove_pointer<T>::type>().GetPointerType();
 	}
 }

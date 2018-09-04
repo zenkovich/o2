@@ -18,8 +18,6 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(Render);
-
 	Render::Render():
 		mReady(false), mStencilDrawing(false), mStencilTest(false), mClippingEverything(false)
 	{
@@ -123,9 +121,9 @@ namespace o2
 
 		GL_CHECK_ERROR(mLog);
 
-		mLog->Out("GL_VENDOR: %s", (String)(char*)glGetString(GL_VENDOR));
-		mLog->Out("GL_RENDERER: %s", (String)(char*)glGetString(GL_RENDERER));
-		mLog->Out("GL_VERSION: %s", (String)(char*)glGetString(GL_VERSION));
+		mLog->Out("GL_VENDOR: " + (String)(char*)glGetString(GL_VENDOR));
+		mLog->Out("GL_RENDERER: " + (String)(char*)glGetString(GL_RENDERER));
+		mLog->Out("GL_VERSION: " + (String)(char*)glGetString(GL_VERSION));
 
 		HDC dc = GetDC(0);
 		mDPI.x = GetDeviceCaps(dc, LOGPIXELSX);
@@ -195,6 +193,33 @@ namespace o2
 		//get max texture size
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &mMaxTextureSize.x);
 		mMaxTextureSize.y = mMaxTextureSize.x;
+	}
+
+	void Render::Begin()
+	{
+		if (!mReady)
+			return;
+
+		mLastDrawTexture = NULL;
+		mLastDrawVertex = 0;
+		mLastDrawIdx = 0;
+		mTrianglesCount = 0;
+		mFrameTrianglesCount = 0;
+		mDIPCount = 0;
+		mCurrentPrimitiveType = PrimitiveType::Polygon;
+
+		mDrawingDepth = 0.0f;
+
+		mScissorInfos.Clear();
+		mStackScissors.Clear();
+
+		mClippingEverything = false;
+
+		SetupViewMatrix(mResolution);
+		UpdateCameraTransforms();
+
+		preRender();
+		preRender.Clear();
 	}
 
 	void Render::DrawPrimitives()

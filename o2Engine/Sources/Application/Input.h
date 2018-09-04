@@ -6,6 +6,10 @@
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
 
+#ifdef PLATFORM_ANDROID
+#include "Application/Android/VKCodes.h"
+#endif
+
 // Input access macros
 #define o2Input Input::Instance()
 

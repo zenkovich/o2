@@ -88,7 +88,7 @@ namespace o2
 
 			if (!parent)
 			{
-				if (mLog) mLog->Out("Failed to add builded asset info: %s", asset->path);
+				if (mLog) mLog->Out("Failed to add builded asset info: " + asset->path);
 			}
 			else
 			{
@@ -183,7 +183,7 @@ namespace o2
 				bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 				if (!isExistMetaForFolder)
 				{
-					mLog->Warning("Can't load asset info for %s - missing meta file", subFolder.mPath);
+					mLog->Warning("Can't load asset info for " + subFolder.mPath + " - missing meta file");
 					continue;
 				}
 

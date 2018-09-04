@@ -170,7 +170,7 @@ namespace o2
 	{
 		if (info.id == 0)
 		{
-			mLog->Error("Can't remove asset by id (%s) - asset isn't exist", info.path);
+			mLog->Error("Can't remove asset by id (" + info.path + ") - asset isn't exist");
 			return false;
 		}
 
@@ -206,14 +206,13 @@ namespace o2
 	{
 		if (info.id == 0)
 		{
-			mLog->Error("Can't copy asset %s - asset isn't exist", info.path);
+			mLog->Error("Can't copy asset " + info.path + " - asset isn't exist");
 			return false;
 		}
 
 		if (IsAssetExist(dest) != 0)
 		{
-			mLog->Error("Can't copy asset %s \nto new path %s\n - another asset exist in target path",
-						info.path, dest);
+			mLog->Error("Can't copy asset " + info.path + "\nto new path " + dest + "\n - another asset exist in target path");
 			return false;
 		}
 
@@ -252,14 +251,14 @@ namespace o2
 	{
 		if (info.id == 0)
 		{
-			mLog->Error("Can't remove asset by path (%s) - asset isn't exist", info.path);
+			mLog->Error("Can't remove asset by path (" + info.path + ") - asset isn't exist");
 			return false;
 		}
 
 		if (GetAssetId(newPath) != 0)
 		{
-			mLog->Error("Can't remove asset by path (%s) \nto new path (%s)\n - another asset exist in target path",
-						info.path, newPath);
+			mLog->Error("Can't remove asset by path (" + info.path + ") \nto new path (" + newPath + 
+						")\n - another asset exist in target path");
 			return false;
 		}
 
@@ -310,7 +309,7 @@ namespace o2
 	{
 		if (info.id == 0)
 		{
-			mLog->Error("Can't rename asset by path (%s) - asset isn't exist", info.path);
+			mLog->Error("Can't rename asset by path (" + info.path + ") - asset isn't exist");
 			return false;
 		}
 
@@ -320,8 +319,7 @@ namespace o2
 
 		if (GetAssetId(newFullName) != 0)
 		{
-			mLog->Error("Can't rename asset by path (%s) \nto (%s)\n - another asset exist in target path",
-						info.path, newName);
+			mLog->Error("Can't rename asset by path (" + info.path + ") \nto (" + newName + ")\n - another asset exist in target path");
 			return false;
 		}
 
@@ -409,8 +407,8 @@ namespace o2
 			{
 				if (mAssetsTypes.ContainsKey(ext))
 				{
-					mLog->Warning("Assets extensions duplicating: %s, at %s and %s", 
-								  ext, mAssetsTypes[ext]->GetName(), type->GetName());
+					mLog->Warning("Assets extensions duplicating: " + ext + ", at " + mAssetsTypes[ext]->GetName() + 
+								  " and " + type->GetName());
 					continue;
 				}
 

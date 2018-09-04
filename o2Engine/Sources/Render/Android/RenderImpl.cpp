@@ -18,119 +18,58 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(Render);
-
 	Render::Render() :
 		mReady(false), mStencilDrawing(false), mStencilTest(false), mClippingEverything(false)
 	{
 		mVertexBufferSize = USHRT_MAX;
 		mIndexBufferSize = USHRT_MAX;
 
-		// Create log stream
 		mLog = mnew LogStream("Render");
 		o2Debug.GetLog()->BindStream(mLog);
 
-		// Initialize OpenGL
-		mLog->Out("Initializing OpenGL render..");
-
 		mResolution = o2Application.GetContentSize();
 
-		GLuint pixelFormat;
-		static	PIXELFORMATDESCRIPTOR pfd = // pfd Tells Windows How We Want Things To Be
-		{
-			sizeof(PIXELFORMATDESCRIPTOR), // Size Of This Pixel Format Descriptor
-			1,							   // Version Number
-			PFD_DRAW_TO_WINDOW |		   // Format Must Support Window
-			PFD_SUPPORT_OPENGL |		   // Format Must Support OpenGL
-			PFD_DOUBLEBUFFER,			   // Must Support Double Buffering
-			PFD_TYPE_RGBA,				   // Request An RGBA Format
-			32,  						   // Select Our Color Depth
-			0, 0, 0, 0, 0, 0,			   // Color Bits Ignored
-			0,							   // No Alpha Buffer
-			0,							   // Shift Bit Ignored
-			0,							   // No Accumulation Buffer
-			0, 0, 0, 0,					   // Accumulation Bits Ignored
-			16,							   // 16Bit Z-Buffer (Depth Buffer)  
-			1,							   // No Stencil Buffer
-			0,							   // No Auxiliary Buffer
-			PFD_MAIN_PLANE,				   // Main Drawing Layer
-			0,							   // Reserved
-			0, 0, 0						   // Layer Masks Ignored
-		};
-
-		mHDC = GetDC(o2Application.mHWnd);
-		if (!mHDC)
-		{
-			mLog->Error("Can't Create A GL Device Context.\n");
-			return;
-		}
-
-		pixelFormat = ChoosePixelFormat(mHDC, &pfd);
-		if (!pixelFormat)
-		{
-			mLog->Error("Can't Find A Suitable PixelFormat.\n");
-			return;
-		}
-
-		if (!SetPixelFormat(mHDC, pixelFormat, &pfd))
-		{
-			mLog->Error("Can't Set The PixelFormat.\n");
-			return;
-		}
-
-		mGLContext = wglCreateContext(mHDC);
-		if (!mGLContext)
-		{
-			mLog->Error("Can't Create A GL Rendering Context.\n");
-			return;
-		}
-
-		if (!wglMakeCurrent(mHDC, mGLContext))
-		{
-			mLog->Error("Can't Activate The GL Rendering Context.\n");
-			return;
-		}
-
-		// Get OpenGL extensions
-		GetGLExtensions(mLog);
-
-		GL_CHECK_ERROR(mLog);
-
-		// Check compatibles
 		CheckCompatibles();
-
-		// Initialize buffers
-		mVertexData = mnew UInt8[mVertexBufferSize*sizeof(Vertex2)];
-
-		mVertexIndexData = mnew UInt16[mIndexBufferSize];
-		mLastDrawVertex = 0;
-		mTrianglesCount = 0;
-		mCurrentPrimitiveType = PrimitiveType::Polygon;
-
-		// Configure OpenGL
-		glEnableClientState(GL_COLOR_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glEnableClientState(GL_VERTEX_ARRAY);
-
-		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex2), mVertexData + sizeof(float) * 3);
-		glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex2), mVertexData + sizeof(float) * 3 + sizeof(unsigned long));
-		glVertexPointer(3, GL_FLOAT, sizeof(Vertex2), mVertexData + 0);
-
+		
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_CULL_FACE);
 
-		glLineWidth(1.0f);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glLineWidth(1.0f);
+
+		glGenBuffers(1, &mVertexBufferObject);
+		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
+		glBufferData(GL_ARRAY_BUFFER, mVertexBufferSize * sizeof(Vertex2), &mVertexData, GL_DYNAMIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex2), &((Vertex2*)0)->x);
+
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex2), &((Vertex2*)0)->color);
+
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2), &((Vertex2*)0)->tu);
+
+		glGenBuffers(1, &mIndexBufferObject);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferObject);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferSize * sizeof(unsigned short), &mVertexIndexData, GL_DYNAMIC_DRAW);
+
+		//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+		InitializeStdShader();
 
 		GL_CHECK_ERROR(mLog);
 
-		mLog->Out("GL_VENDOR: %s", (String)(char*)glGetString(GL_VENDOR));
-		mLog->Out("GL_RENDERER: %s", (String)(char*)glGetString(GL_RENDERER));
-		mLog->Out("GL_VERSION: %s", (String)(char*)glGetString(GL_VERSION));
+		mLog->Out("GL_VENDOR: " + (String)(char*)glGetString(GL_VENDOR));
+		mLog->Out("GL_RENDERER: " + (String)(char*)glGetString(GL_RENDERER));
+		mLog->Out("GL_VERSION: " + (String)(char*)glGetString(GL_VERSION));
 
-		HDC dc = GetDC(0);
-		mDPI.x = GetDeviceCaps(dc, LOGPIXELSX);
-		mDPI.y = GetDeviceCaps(dc, LOGPIXELSY);
-		ReleaseDC(0, dc);
+// 		HDC dc = GetDC(0);
+// 		mDPI.x = GetDeviceCaps(dc, LOGPIXELSX);
+// 		mDPI.y = GetDeviceCaps(dc, LOGPIXELSY);
+// 		ReleaseDC(0, dc);
 
 		InitializeFreeType();
 		InitializeLinesIndexBuffer();
@@ -155,46 +94,135 @@ namespace o2
 		mSolidLineTexture = TextureRef::Null();
 		mDashLineTexture = TextureRef::Null();
 
-		if (mGLContext)
-		{
-			auto fonts = mFonts;
-			for (auto font : fonts)
-				delete font;
-
-			auto textures = mTextures;
-			for (auto texture : textures)
-				delete texture;
-
-			if (!wglMakeCurrent(NULL, NULL))
-				mLog->Error("Release ff DC And RC Failed.\n");
-
-			if (!wglDeleteContext(mGLContext))
-				mLog->Error("Release Rendering Context Failed.\n");
-
-			mGLContext = NULL;
-		}
-
 		DeinitializeFreeType();
 
 		mReady = false;
 	}
 
-	void Render::CheckCompatibles()
+	GLuint RenderBase::BuildShaderProgram(const char* vertexSource, const char* fragmentSource)
 	{
-		//check render targets available
-		char* extensions[] = { "GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
-			"GL_EXT_packed_depth_stencil" };
+		GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+		GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-		mRenderTargetsAvailable = true;
-		for (int i = 0; i < 4; i++)
+		GLint Result = GL_FALSE;
+		int InfoLogLength;
+
+		glShaderSource(VertexShaderID, 1, &vertexSource, NULL);
+		glCompileShader(VertexShaderID);
+
+		glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
+		glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+		if (InfoLogLength > 0)
 		{
-			if (!IsGLExtensionSupported(extensions[i]))
-				mRenderTargetsAvailable = false;
+			std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
+			glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+			fprintf(stdout, "%s \n", &VertexShaderErrorMessage[0]);
 		}
 
+		glShaderSource(FragmentShaderID, 1, &fragmentSource, NULL);
+		glCompileShader(FragmentShaderID);
+
+		glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
+		glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+		if (InfoLogLength > 0)
+		{
+			std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
+			glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
+			fprintf(stdout, "%s \n", &FragmentShaderErrorMessage[0]);
+		}
+
+		GLuint ProgramID = glCreateProgram();
+		glAttachShader(ProgramID, VertexShaderID);
+		glAttachShader(ProgramID, FragmentShaderID);
+		glLinkProgram(ProgramID);
+
+		glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
+		glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+		if (InfoLogLength > 0)
+		{
+			std::vector<char> ProgramErrorMessage(InfoLogLength+1);
+			glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
+			fprintf(stdout, "%s \n", &ProgramErrorMessage[0]);
+		}
+
+		glDeleteShader(VertexShaderID);
+		glDeleteShader(FragmentShaderID);
+
+		return ProgramID;
+	}
+
+	void RenderBase::InitializeStdShader()
+	{
+		const char* fragShader = "#version 330 core                \n \
+        out vec4 color;                                            \n \
+                                                                   \n \
+        in vec4 fragmentColor;                                     \n \
+        in vec2 UV;                                                \n \
+                                                                   \n \
+        uniform sampler2D textureSampler;                          \n \
+                                                                   \n \
+        void main()                                                \n \
+        {                                                          \n \
+            color = fragmentColor*texture( textureSampler, UV );   \n \
+        }";
+
+		const char* vtxShader = "#version 330 core                 \n \
+        uniform mat4 modelViewProjectionMatrix;                    \n \
+                                                                   \n \
+        layout(location = 0) in vec3 vertexPosition_modelspace;    \n \
+        layout(location = 1) in vec4 vertexColor;                  \n \
+        layout(location = 2) in vec2 vertexUV;                     \n \
+                                                                   \n \
+        out vec4 fragmentColor;                                    \n \
+        out vec2 UV;                                               \n \
+                                                                   \n \
+        uniform mat4 MVP;                                          \n \
+                                                                   \n \
+        void main(){                                               \n \
+            gl_Position = MVP * vec4(vertexPosition_modelspace,1); \n \
+            fragmentColor = vertexColor;                           \n \
+            UV = vertexUV;                                         \n \
+        }";
+
+		mStdShader = BuildShaderProgram(vtxShader, fragShader);
+		mStdShaderMvpUniform = glGetUniformLocation(mStdShader, "MVP");
+		mStdShaderTextureSample = glGetUniformLocation(mStdShader, "textureSampler");
+
+		glUseProgram(mStdShader);
+	}
+
+	void Render::CheckCompatibles()
+	{
 		//get max texture size
 		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &mMaxTextureSize.x);
 		mMaxTextureSize.y = mMaxTextureSize.x;
+	}
+
+	void Render::Begin()
+	{
+		if (!mReady)
+			return;
+
+		mLastDrawTexture = NULL;
+		mLastDrawVertex = 0;
+		mLastDrawIdx = 0;
+		mTrianglesCount = 0;
+		mFrameTrianglesCount = 0;
+		mDIPCount = 0;
+		mCurrentPrimitiveType = PrimitiveType::Polygon;
+
+		mDrawingDepth = 0.0f;
+
+		mScissorInfos.Clear();
+		mStackScissors.Clear();
+
+		mClippingEverything = false;
+
+		SetupViewMatrix(mResolution);
+		UpdateCameraTransforms();
+
+		preRender();
+		preRender.Clear();
 	}
 
 	void Render::DrawPrimitives()
@@ -204,7 +232,7 @@ namespace o2
 
 		static const GLenum primitiveType[3]{ GL_TRIANGLES, GL_TRIANGLES, GL_LINES };
 
-		glDrawElements(primitiveType[(int)mCurrentPrimitiveType], mLastDrawIdx, GL_UNSIGNED_SHORT, mVertexIndexData);
+		glDrawElements(primitiveType[(int)mCurrentPrimitiveType], mLastDrawIdx, GL_UNSIGNED_SHORT, (void*)0);
 
 		GL_CHECK_ERROR(mLog);
 
@@ -217,12 +245,6 @@ namespace o2
 	void Render::SetupViewMatrix(const Vec2I& viewSize)
 	{
 		mCurrentResolution = viewSize;
-		float projMat[16];
-		Math::OrthoProjMatrix(projMat, 0.0f, (float)viewSize.x, (float)viewSize.y, 0.0f, 0.0f, 10.0f);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glViewport(0, 0, viewSize.x, viewSize.y);
-		glLoadMatrixf(projMat);
 		UpdateCameraTransforms();
 	}
 
@@ -235,7 +257,6 @@ namespace o2
 		postRender.Clear();
 
 		DrawPrimitives();
-		SwapBuffers(mHDC);
 
 		GL_CHECK_ERROR(mLog);
 
@@ -251,37 +272,68 @@ namespace o2
 		GL_CHECK_ERROR(mLog);
 	}
 
+	void mtxMultiply(float* ret, const float* lhs, const float* rhs)
+	{
+		// [ 0 4  8 12 ]   [ 0 4  8 12 ]
+		// [ 1 5  9 13 ] x [ 1 5  9 13 ]
+		// [ 2 6 10 14 ]   [ 2 6 10 14 ]
+		// [ 3 7 11 15 ]   [ 3 7 11 15 ]
+		ret[0] = lhs[0]*rhs[0] + lhs[4]*rhs[1] + lhs[8]*rhs[2] + lhs[12]*rhs[3];
+		ret[1] = lhs[1]*rhs[0] + lhs[5]*rhs[1] + lhs[9]*rhs[2] + lhs[13]*rhs[3];
+		ret[2] = lhs[2]*rhs[0] + lhs[6]*rhs[1] + lhs[10]*rhs[2] + lhs[14]*rhs[3];
+		ret[3] = lhs[3]*rhs[0] + lhs[7]*rhs[1] + lhs[11]*rhs[2] + lhs[15]*rhs[3];
+
+		ret[4] = lhs[0]*rhs[4] + lhs[4]*rhs[5] + lhs[8]*rhs[6] + lhs[12]*rhs[7];
+		ret[5] = lhs[1]*rhs[4] + lhs[5]*rhs[5] + lhs[9]*rhs[6] + lhs[13]*rhs[7];
+		ret[6] = lhs[2]*rhs[4] + lhs[6]*rhs[5] + lhs[10]*rhs[6] + lhs[14]*rhs[7];
+		ret[7] = lhs[3]*rhs[4] + lhs[7]*rhs[5] + lhs[11]*rhs[6] + lhs[15]*rhs[7];
+
+		ret[8] = lhs[0]*rhs[8] + lhs[4]*rhs[9] + lhs[8]*rhs[10] + lhs[12]*rhs[11];
+		ret[9] = lhs[1]*rhs[8] + lhs[5]*rhs[9] + lhs[9]*rhs[10] + lhs[13]*rhs[11];
+		ret[10] = lhs[2]*rhs[8] + lhs[6]*rhs[9] + lhs[10]*rhs[10] + lhs[14]*rhs[11];
+		ret[11] = lhs[3]*rhs[8] + lhs[7]*rhs[9] + lhs[11]*rhs[10] + lhs[15]*rhs[11];
+
+		ret[12] = lhs[0]*rhs[12] + lhs[4]*rhs[13] + lhs[8]*rhs[14] + lhs[12]*rhs[15];
+		ret[13] = lhs[1]*rhs[12] + lhs[5]*rhs[13] + lhs[9]*rhs[14] + lhs[13]*rhs[15];
+		ret[14] = lhs[2]*rhs[12] + lhs[6]*rhs[13] + lhs[10]*rhs[14] + lhs[14]*rhs[15];
+		ret[15] = lhs[3]*rhs[12] + lhs[7]*rhs[13] + lhs[11]*rhs[14] + lhs[15]*rhs[15];
+	}
+
 	void Render::UpdateCameraTransforms()
 	{
 		DrawPrimitives();
 
-		Vec2F resf = (Vec2F)mCurrentResolution;
+		float projMat[16];
+		Math::OrthoProjMatrix(projMat, 0.0f, (float)mCurrentResolution.x, (float)mCurrentResolution.y, 0.0f, 0.0f, 10.0f);
+		glViewport(0, 0, mCurrentResolution.x, mCurrentResolution.y);
 
-		glMatrixMode(GL_MODELVIEW);
 		float modelMatrix[16] =
 		{
-			1,           0,            0, 0,
-			0,          -1,            0, 0,
-			0,           0,            1, 0,
-			Math::Round(resf.x*0.5f), Math::Round(resf.y*0.5f), -1, 1
+			1,                                      0,                                       0, 0,
+			0,                                     -1,                                       0, 0,
+			0,                                      0,                                       1, 0,
+			Math::Round(mCurrentResolution.x*0.5f), Math::Round(mCurrentResolution.y*0.5f), -1, 1
 		};
 
-		glLoadMatrixf(modelMatrix);
-
-		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F::Right()*resf.x, Vec2F().Up()*resf.y);
+		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F::Right()*mCurrentResolution.x, Vec2F().Up()*mCurrentResolution.y);
 		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
-		mViewScale = Vec2F(camTransf.xv.Length(), camTransf.yv.Length());
-		mInvViewScale = Vec2F(1.0f/mViewScale.x, 1.0f/mViewScale.y);
 
 		float camTransfMatr[16] =
 		{
-			camTransf.xv.x,   camTransf.xv.y,   0, 0,
-			camTransf.yv.x,   camTransf.yv.y,   0, 0,
-			0,                0,                0, 0,
+			camTransf.xv.x,     camTransf.xv.y,     0, 0,
+			camTransf.yv.x,     camTransf.yv.y,     0, 0,
+			0,                  0,                  0, 0,
 			camTransf.origin.x, camTransf.origin.y, 0, 1
 		};
 
-		glMultMatrixf(camTransfMatr);
+		float mvp[16];
+		float finalCamMtx[16];
+		mtxMultiply(finalCamMtx, modelMatrix, camTransfMatr);
+		mtxMultiply(mvp, projMat, finalCamMtx);
+
+		glUniformMatrix4fv(mStdShaderMvpUniform, 1, GL_FALSE, mvp);
+
+		GL_CHECK_ERROR(mLog);
 
 	}
 
@@ -454,25 +506,28 @@ namespace o2
 			mLastDrawTexture = texture.mTexture;
 			mCurrentPrimitiveType = primitiveType;
 
-			if (primitiveType == PrimitiveType::PolygonWire)
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			else
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
 			if (mLastDrawTexture)
 			{
-				glEnable(GL_TEXTURE_2D);
+				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, mLastDrawTexture->mHandle);
+				glUniform1i(mStdShaderTextureSample, 0);
 
 				GL_CHECK_ERROR(mLog);
 			}
-			else glDisable(GL_TEXTURE_2D);
+			else
+			{
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				glUniform1i(mStdShaderTextureSample, 0);
+
+				GL_CHECK_ERROR(mLog);
+			}
 		}
 
-		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], vertices, sizeof(Vertex2)*verticesCount);
+		memcpy(&mVertexData[mLastDrawVertex], vertices, sizeof(Vertex2)*verticesCount);
 
-		for (UInt i = mLastDrawIdx, j = 0; j < indexesCount; i++, j++)
-			mVertexIndexData[i] = mLastDrawVertex + indexes[j];
+		for (UInt i = mLastDrawIdx, j = 0; j < indexesCount * 3; i++, j++)
+            mVertexIndexData[i] = mLastDrawVertex + indexes[j];
 
 		if (primitiveType != PrimitiveType::Line)
 			mTrianglesCount += elementsCount;
@@ -514,7 +569,7 @@ namespace o2
 
 		mStackScissors.Add(ScissorStackItem(RectI(), RectI(), true));
 
-		glBindFramebufferEXT(GL_FRAMEBUFFER, renderTarget->mFrameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->mFrameBuffer);
 		GL_CHECK_ERROR(mLog);
 
 		SetupViewMatrix(renderTarget->GetSize());
@@ -529,7 +584,7 @@ namespace o2
 
 		DrawPrimitives();
 
-		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		GL_CHECK_ERROR(mLog);
 
 		SetupViewMatrix(mResolution);

@@ -16,6 +16,17 @@
 
 #include "ioapi.h"
 
+#ifdef __ANDROID__
+#  define fopen64 fopen
+#  ifdef __USE_FILE_OFFSET64
+#    define ftello64 ftello
+#    define fseeko64 fseeko
+#  else
+#    define ftello64 ftell
+#    define fseeko64 fseek
+#  endif
+#endif
+
 voidpf call_zopen64 (const zlib_filefunc64_32_def* pfilefunc,const void*filename,int mode)
 {
     if (pfilefunc->zfile_func64.zopen64_file != NULL)

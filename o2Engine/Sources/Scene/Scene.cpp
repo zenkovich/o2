@@ -161,7 +161,7 @@ namespace o2
 	{
 		if (GetTag(name))
 		{
-			o2Debug.LogError("Can't create new tag with name %s: already exist", name);
+			o2Debug.LogError("Can't create new tag with name " + name + ": already exist");
 			return nullptr;
 		}
 
@@ -462,7 +462,8 @@ namespace o2
 
 	void Scene::OnActorWithPrototypeCreated(Actor* actor)
 	{
-		OnActorLinkedToPrototype(actor->GetPrototype(), actor);
+		auto proto = actor->GetPrototype();
+		OnActorLinkedToPrototype(proto, actor);
 	}
 
 	void Scene::OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor)

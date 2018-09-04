@@ -37,7 +37,7 @@ namespace o2
 	{
 		mSolidLineTexture = TextureRef::Null();
 
-		Bitmap bitmap(Bitmap::Format::R8G8B8A8, Vec2I(32, 32));
+		Bitmap bitmap(PixelFormat::R8G8B8A8, Vec2I(32, 32));
 		bitmap.Fill(Color4(255, 255, 255, 255));
 		bitmap.FillRect(0, 32, 16, 0, Color4(255, 255, 255, 0));
 		mDashLineTexture = new Texture(&bitmap);
@@ -53,36 +53,6 @@ namespace o2
 	void Render::DeinitializeFreeType()
 	{
 		FT_Done_FreeType(mFreeTypeLib);
-	}
-
-	void Render::Begin()
-	{
-		if (!mReady)
-			return;
-
-		// Reset batching params
-		mLastDrawTexture = NULL;
-		mLastDrawVertex = 0;
-		mLastDrawIdx = 0;
-		mTrianglesCount = 0;
-		mFrameTrianglesCount = 0;
-		mDIPCount = 0;
-		mCurrentPrimitiveType = PrimitiveType::Polygon;
-
-		mDrawingDepth = 0.0f;
-
-		mScissorInfos.Clear();
-		mStackScissors.Clear();
-
-		mClippingEverything = false;
-
-		// Reset view matrices
-		SetupViewMatrix(mResolution);
-
-		UpdateCameraTransforms();
-
-		preRender();
-		preRender.Clear();
 	}
 
 	Vec2I Render::GetResolution() const

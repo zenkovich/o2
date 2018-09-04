@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "Time.h"
 
-#include <Windows.h>
-
 #include "Utils/Reflection/Reflection.h"
+
+#ifdef PLATFORM_WINDOWS
+#include <Windows.h>
+#endif
 
 namespace o2
 {
@@ -78,10 +80,14 @@ namespace o2
 
 	TimeStamp Time::CurrentTime() const
 	{
+#ifdef PLATFORM_WINDOWS
 		SYSTEMTIME tm;
 		GetSystemTime(&tm);
 
 		return TimeStamp(tm.wSecond, tm.wMinute, tm.wHour, tm.wDay, tm.wMonth, tm.wYear);
+#elif defined PLATFORM_ANDROID
+        return TimeStamp();
+#endif
 	}
 
 	bool TimeStamp::operator!=(const TimeStamp& wt) const

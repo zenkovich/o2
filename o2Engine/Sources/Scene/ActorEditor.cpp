@@ -3,6 +3,7 @@
 
 #include "Scene/ActorDataNodeConverter.h"
 #include "Scene/Component.h"
+#include "Scene/Scene.h"
 
 #if IS_EDITOR
 
@@ -1048,6 +1049,7 @@ namespace o2
 
 		dest->SetLayer(source->mLayer);
 	}
+
 	void Actor::CopyChangedFields(Vector<FieldInfo*>& fields, IObject* source, IObject* changed, IObject* dest, Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers, Vector<ISerializable*>& serializableObjects)
 	{
 		for (auto field : fields)
@@ -1113,8 +1115,8 @@ namespace o2
 				if (field->GetType()->IsBasedOn(TypeOf(ISerializable)))
 					serializableObjects.Add((ISerializable*)field->GetValuePtr(dest));
 
-				CopyChangedFields(field->GetType()->GetFieldsWithBaseClasses(),
-					(IObject*)field->GetValuePtr(source),
+				auto fields = field->GetType()->GetFieldsWithBaseClasses();
+				CopyChangedFields(fields, (IObject*)field->GetValuePtr(source),
 								  (IObject*)field->GetValuePtr(changed),
 								  (IObject*)field->GetValuePtr(dest),
 								  actorsPointers, componentsPointers, serializableObjects);

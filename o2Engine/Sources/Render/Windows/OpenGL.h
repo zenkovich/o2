@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef PLATFORM_WINDOWS
+
 #include <windows.h>	
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -37,3 +39,5 @@ extern PFNGLDRAWBUFFERSPROC               glDrawBuffers;
 extern PFNGLDELETEBUFFERSPROC             glDeleteBuffers;
 extern PFNGLDELETEFRAMEBUFFERSPROC        glDeleteFramebuffersEXT;
 extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT;
+
+#endif // PLATFORM_WINDOWS

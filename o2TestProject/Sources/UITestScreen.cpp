@@ -19,7 +19,6 @@
 #include "UI/VerticalProgress.h"
 #include "UI/WidgetLayout.h"
 #include "UI/Window.h"
-#include "Utils/CommonTypes.h"
 
 UITestScreen::UITestScreen(TestApplication* application):
 	ITestScreen(application)
@@ -52,7 +51,7 @@ void UITestScreen::Load()
 	verLayout->expandHeight = false;
 	verLayout->expandWidth = true;
 	verLayout->fitByChildren = true;
-	verLayout->border = RectF(5, 5, 5, 5);
+	verLayout->border = BorderF(5, 5, 5, 5);
 	verLayout->spacing = 10;
 	*verLayout->layout = UIWidgetLayout::BothStretch();
 	window->AddChild(verLayout);
@@ -69,7 +68,7 @@ void UITestScreen::Load()
 	for (int i = 0; i < 15; i++)
 	{
 		WString itemName = WString::Format("Item #%i", i + 1);
-		buttonContext->AddItem(UIContextMenu::Item(itemName, [=]() { o2Debug.Log("Pressed %sw", itemName); }));
+		buttonContext->AddItem(UIContextMenu::Item(itemName, [=]() { o2Debug.Log("Pressed " + itemName); }));
 	}
 
 	buttonContext->AddItem(

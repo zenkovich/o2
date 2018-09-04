@@ -2,6 +2,7 @@
 
 #ifdef PLATFORM_ANDROID
 #include "Render/Texture.h"
+#include "Utils/Debug/Log/LogStream.h"
 
 namespace o2
 {
@@ -21,7 +22,7 @@ namespace o2
 		glDeleteTextures(1, &mHandle);
 	}
 
-	void Texture::Create(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/)
+	void Texture::Create(const Vec2I& size, PixelFormat format /*= Format::Default*/, Usage usage /*= Usage::Default*/)
 	{
 		if (mReady)
 		{
@@ -39,9 +40,9 @@ namespace o2
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
 		GLint texFormat = GL_RGB;
-		if (format == Format::R8G8B8A8)
+		if (format == PixelFormat::R8G8B8A8)
 			texFormat = GL_RGBA;
-		else if (format == Format::R8G8B8)
+		else if (format == PixelFormat::R8G8B8)
 			texFormat = GL_RGB;
 
 		glTexImage2D(GL_TEXTURE_2D, 0, texFormat, (GLsizei)size.x, (GLsizei)size.y, 0, texFormat, GL_UNSIGNED_BYTE, NULL);
@@ -56,10 +57,10 @@ namespace o2
 			glGenFramebuffers(1, &mFrameBuffer);
 			glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer);
 
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mHandle, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mHandle, 0);
 
 			GLenum DrawBuffers[2] = { GL_COLOR_ATTACHMENT0 };
-			glDrawBuffers(1, DrawBuffers);
+			glGenRenderbuffers(1, DrawBuffers);
 
 			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			{
@@ -90,13 +91,7 @@ namespace o2
 			glDeleteTextures(1, &mHandle);
 		}
 
-		Bitmap::Format imageFormat = bitmap->GetFormat();
-
-		if (imageFormat == Bitmap::Format::Default)
-			mFormat = Format::Default;
-		else if (imageFormat == Bitmap::Format::R8G8B8A8)
-			mFormat = Format::R8G8B8A8;
-
+		mFormat = bitmap->GetFormat();
 		mUsage = Usage::Default;
 		mSize = bitmap->GetSize();
 		mFileName = bitmap->GetFilename();
@@ -105,9 +100,9 @@ namespace o2
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
 		GLint texFormat = GL_RGB;
-		if (mFormat == Format::R8G8B8A8)
+		if (mFormat == PixelFormat::R8G8B8A8)
 			texFormat = GL_RGBA;
-		else if (mFormat == Format::R8G8B8)
+		else if (mFormat == PixelFormat::R8G8B8)
 			texFormat = GL_RGB;
 
 		glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
@@ -126,15 +121,21 @@ namespace o2
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
 		GLint texFormat = GL_RGB;
-		if (mFormat == Format::R8G8B8A8)
+		if (mFormat == PixelFormat::R8G8B8A8)
 			texFormat = GL_RGBA;
-		else if (mFormat == Format::R8G8B8)
+		else if (mFormat == PixelFormat::R8G8B8)
 			texFormat = GL_RGB;
 
 		glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
 					 bitmap->GetData());
 
 		GL_CHECK_ERROR(o2Render.mLog);
+	}
+
+	Bitmap* Texture::GetData()
+	{
+		Bitmap* bitmap = mnew Bitmap(mFormat, mSize);
+		return bitmap;
 	}
 }
 

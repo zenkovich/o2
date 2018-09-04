@@ -8,17 +8,17 @@
 namespace o2
 {
 	Bitmap::Bitmap():
-		mFormat(Format::Default), mData(nullptr)
+		mFormat(PixelFormat::R8G8B8A8), mData(nullptr)
 	{}
 
-	Bitmap::Bitmap(Format format, const Vec2I& size) :
+	Bitmap::Bitmap(PixelFormat format, const Vec2I& size) :
 		mFormat(format), mSize(size), mData(nullptr)
 	{
 		Create(format, size);
 	}
 
 	Bitmap::Bitmap(const String& fileName, ImageType type /*= IT_AUTO*/):
-		mFormat(Format::Default), mData(nullptr)
+		mFormat(PixelFormat::R8G8B8A8), mData(nullptr)
 	{
 		Load(fileName, type);
 	}
@@ -26,7 +26,7 @@ namespace o2
 	Bitmap::Bitmap(const Bitmap& other):
 		data(this), size(this), format(this)
 	{
-		short bpp[] ={ 0, 4 };
+		short bpp[] ={ 4, 3 };
 
 		mFormat = other.mFormat;
 		mSize = other.mSize;
@@ -47,7 +47,7 @@ namespace o2
 		if (mData)
 			delete[] mData;
 
-		short bpp[] ={ 0, 4 };
+		short bpp[] ={ 4, 3 };
 
 		mFormat = other.mFormat;
 		mSize = other.mSize;
@@ -64,12 +64,12 @@ namespace o2
 		return mnew Bitmap(*this);
 	}
 
-	void Bitmap::Create(Format format, const Vec2I& size)
+	void Bitmap::Create(PixelFormat format, const Vec2I& size)
 	{
 		if (mData)
 			delete[] mData;
 
-		short bpp[] ={ 0, 4 };
+		short bpp[] ={ 4, 3 };
 
 		mFormat = format;
 		mSize = size;
@@ -88,7 +88,7 @@ namespace o2
 			if (LoadPngImage(fileName, this, false))
 				return true;
 
-			o2Debug.LogError("Can't load image '%s': unknown format", fileName);
+			o2Debug.LogError("Can't load image '" + fileName + "': unknown format");
 		}
 
 		mFilename = "";
@@ -103,7 +103,7 @@ namespace o2
 			return SavePngImage(fileName, this);
 		}
 
-		o2Debug.LogError("Can't save image to '%s': unknown format specified", fileName);
+		o2Debug.LogError("Can't save image to '" + fileName + "': unknown format specified");
 
 		return false;
 	}
@@ -123,7 +123,7 @@ namespace o2
 		return mSize;
 	}
 
-	Bitmap::Format Bitmap::GetFormat() const
+	PixelFormat Bitmap::GetFormat() const
 	{
 		return mFormat;
 	}
@@ -148,7 +148,7 @@ namespace o2
 		if (imgSrcRect.Width() == 0)
 			imgSrcRect.Set(Vec2I(), img->GetSize());
 
-		int bpp[] ={ 0, 4 };
+		int bpp[] ={ 4, 3 };
 		int curbpp = bpp[(int)mFormat];
 		int pixelSize = curbpp;
 
@@ -180,7 +180,7 @@ namespace o2
 		if (imgSrcRect.Width() == 0)
 			imgSrcRect.Set(Vec2I(), img->GetSize());
 
-		int bpp[] ={ 0, 4 };
+		int bpp[] ={ 4, 3 };
 		int curbpp = bpp[(int)mFormat];
 		int pixelSize = curbpp;
 
@@ -211,7 +211,7 @@ namespace o2
 
 	void Bitmap::Colorise(const Color4& color)
 	{
-		int bpp[] ={ 0, 4 };
+		int bpp[] ={ 4, 3 };
 		int curbpp = bpp[(int)mFormat];
 
 		for (int x = 0; x < mSize.x*mSize.y; x++)
@@ -226,7 +226,7 @@ namespace o2
 	void Bitmap::GradientByAlpha(const Color4& color1, const Color4& color4, float angle /*= 0*/, float size /*= 0*/,
 								 Vec2F origin /*= Vec2F()*/)
 	{
-		int bpp[] ={ 0, 4 };
+		int bpp[] ={ 4, 3 };
 		int curbpp = bpp[(int)mFormat];
 
 		Vec2F dir = Vec2F::Rotated(Math::Deg2rad(angle + 90.0f));
@@ -257,7 +257,7 @@ namespace o2
 	void Bitmap::Fill(const Color4& color)
 	{
 		unsigned long colrDw = color.ARGB();
-		int bpp[] ={ 0, 4 };
+		int bpp[] ={ 4, 3 };
 		int curbpp = bpp[(int)mFormat];
 
 		for (int x = 0; x < mSize.x*mSize.y; x++)
@@ -267,7 +267,7 @@ namespace o2
 	void Bitmap::FillRect(int rtLeft, int rtTop, int rtRight, int rtBottom, const Color4& color)
 	{
 		unsigned long colrDw = color.ARGB();
-		int bpp[] ={ 0, 4 };
+		int bpp[] = { 4, 3 };
 		int curbpp = bpp[(int)mFormat];
 
 		for (int x = Math::Max(rtLeft, 0); x < Math::Min(mSize.x, rtRight); x++)
@@ -295,7 +295,7 @@ namespace o2
 			}
 		}
 
-		int bpp[] ={ 0, 4 };
+		int bpp[] = { 4, 3 };
 		int curbpp = bpp[(int)mFormat];
 		UInt8* srcData = mnew UInt8[mSize.x*mSize.y*curbpp];
 		memcpy(srcData, mData, mSize.x*mSize.y*curbpp);
@@ -344,7 +344,7 @@ namespace o2
 		int alphaThreshold = threshold;
 		int radiusSquare = Math::Sqr(Math::FloorToInt(radius));
 
-		int bpp[] ={ 0, 4 };
+		int bpp[] = { 4, 3 };
 		int curbpp = bpp[(int)mFormat];
 
 		UInt8* srcData = mnew UInt8[mSize.x*mSize.y*curbpp];
@@ -411,13 +411,6 @@ namespace o2
 		delete[] srcData;
 	}
 }
-
-ENUM_META_(o2::Bitmap::Format, Format)
-{
-	ENUM_ENTRY(Default);
-	ENUM_ENTRY(R8G8B8A8);
-}
-END_ENUM_META;
 
 ENUM_META_(o2::Bitmap::ImageType, ImageType)
 {

@@ -17,7 +17,7 @@ namespace o2
 		Task(const Task& other);
 
 		// Destructor. Removes from tasks manager
-		~Task();
+		virtual ~Task();
 
 		// Updates task
 		virtual void Update(float dt);

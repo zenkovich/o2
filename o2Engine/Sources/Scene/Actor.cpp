@@ -17,8 +17,8 @@ namespace o2
 	{}
 
 	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, mode == ActorCreateMode::InScene || mode == ActorCreateMode::Default &&
-			  mDefaultCreationMode == ActorCreateMode::InScene)
+		Actor(transform, mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default &&
+			  mDefaultCreationMode == ActorCreateMode::InScene))
 	{
 		mIsOnScene = false;
 
@@ -1027,8 +1027,8 @@ namespace o2
 				if (field->GetType()->IsBasedOn(TypeOf(ISerializable)))
 					serializableObjects.Add((ISerializable*)field->GetValuePtr(dest));
 
-				CopyFields(field->GetType()->GetFieldsWithBaseClasses(),
-					(IObject*)field->GetValuePtr(source),
+                auto fields = field->GetType()->GetFieldsWithBaseClasses();
+				CopyFields(fields, (IObject*)field->GetValuePtr(source),
 						   (IObject*)field->GetValuePtr(dest),
 						   actorsPointers, componentsPointers, serializableObjects);
 			}

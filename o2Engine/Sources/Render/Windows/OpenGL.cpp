@@ -1,6 +1,8 @@
 #include "stdafx.h"
-#include "OpenGL.h"
 
+#ifdef PLATFORM_WINDOWS
+
+#include "OpenGL.h"
 #include "Utils/Debug/Log/LogStream.h"
 
 // Returns address of function
@@ -8,7 +10,7 @@ PROC GetSafeWGLProcAddress(const char* id, o2::LogStream* log)
 {
 	PROC res = wglGetProcAddress(id);
 	if (!res)
-		log->Error("Failed to get function address: '%s'", id);
+		log->Error("Failed to get function address: " + (o2::String)id);
 
 	return res;
 }
@@ -83,8 +85,8 @@ void glCheckError(o2::LogStream* log, const char* filename /*= nullptr*/, unsign
 	GLenum errId = glGetError();
 	if (errId != GL_NO_ERROR)
 	{
-		log->Out("OpenGL ERROR %i: %s at file: %s line: %i", errId, (o2::String)GetGLErrorDesc(errId),
-			(o2::String)(filename ? filename : "unknown"), line);
+		log->Out("OpenGL ERROR " + (o2::String)errId + ": " + (o2::String)GetGLErrorDesc(errId) + 
+				 " at file: " + (o2::String)(filename ? filename : "unknown") + " line: " + (o2::String)line);
 	}
 }
 
@@ -95,3 +97,5 @@ extern PFNGLDRAWBUFFERSPROC               glDrawBuffers               = NULL;
 extern PFNGLDELETEBUFFERSPROC             glDeleteBuffers             = NULL;
 extern PFNGLDELETEFRAMEBUFFERSPROC        glDeleteFramebuffersEXT     = NULL;
 extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT = NULL;
+
+#endif // PLATFORM_WINDOWS
