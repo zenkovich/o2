@@ -237,7 +237,7 @@ namespace o2
 		void DrawAAPolyLine(Vertex2* vertices, int count, float width = 1.0f, LineType lineType = LineType::Solid,
 							bool scaleToScreenSpace = true);
 
-	// Binding render target
+	    // Binding render target
 		void SetRenderTexture(TextureRef renderTarget);
 
 		// Unbinding render target
@@ -315,9 +315,6 @@ namespace o2
 		// Don't copy
 		Render& operator=(const Render& other);
 
-		// It is called when target frame or window was resized
-		void OnFrameResized();
-
 		// Initializes index buffer for drawing lines - pairs of lines beginnings and ends
 		void InitializeLinesIndexBuffer();
 
@@ -329,6 +326,9 @@ namespace o2
 
 		// Deinitializes free type library
 		void DeinitializeFreeType();
+
+		// It is called when target frame or window was resized
+		void OnFrameResized();
 
 		// Send buffers to draw
 		void DrawPrimitives();

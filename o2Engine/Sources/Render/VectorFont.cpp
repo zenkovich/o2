@@ -13,6 +13,7 @@
 #include "Utils/Debug/Debug.h"
 #include "Utils/Debug/Log/LogStream.h"
 #include "Utils/System/Time/Timer.h"
+#include "Assets/Assets.h"
 
 namespace o2
 {
@@ -47,13 +48,37 @@ namespace o2
 		for (auto effect : mEffects)
 			delete effect;
 	}
+	
+	const char* GetFreeTypeErrorMessage(FT_Error err)
+	{
+#undef __FTERRORS_H__
+#define FT_ERRORDEF( e, v, s )  case e: return s;
+#define FT_ERROR_START_LIST     switch (err) {
+#define FT_ERROR_END_LIST       }
+#include FT_ERRORS_H
+		return "(Unknown error)";
+	}
 
 	bool VectorFont::Load(const String& fileName)
 	{
-		FT_Error error = FT_New_Face(o2Render.mFreeTypeLib, fileName.Data(), 0, &mFreeTypeFace);
+		InFile file(fileName);
+
+		if (!file.IsOpened())
+		{
+			o2Render.mLog->Error("Failed to load vector font: " + fileName);
+			return false;
+		}
+
+		UInt8* data = mnew UInt8[file.GetDataSize()];
+		file.ReadFullData(data);
+
+		FT_Error error = FT_New_Memory_Face(o2Render.mFreeTypeLib, data, file.GetDataSize(), 0, &mFreeTypeFace);
+
+		//delete[] data;
+
 		if (error)
 		{
-			o2Render.mLog->Error("Failed to load vector font: " + fileName + ", error: " + (String)error);
+			o2Render.mLog->Error("Failed to load vector font: " + fileName + ", error: " + (String)GetFreeTypeErrorMessage(error));
 			return false;
 		}
 
@@ -206,6 +231,7 @@ namespace o2
 	void VectorFont::RenderNewCharacters(CharDefsVec& charDefs, Vector<wchar_t>& newCharacters, int height)
 	{
 		Vec2I dpi = o2Render.GetDPI();
+		dpi = Vec2I(95, 95);
 		FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
 
 		Vec2I border;
@@ -287,7 +313,7 @@ namespace o2
 		}
 
 		Bitmap texBitmap(PixelFormat::R8G8B8A8, mTexture->GetSize());
-		texBitmap.Fill(Color4(255, 255, 255, 0));
+		texBitmap.Fill(Color4(255, 55, 55, 100));
 		Vec2F invTexSize(1.0f/mTexture->GetSize().x, 1.0f/mTexture->GetSize().y);
 		for (auto& def : charDefs)
 		{
@@ -305,7 +331,7 @@ namespace o2
 
 		mTexture->SetData(&texBitmap);
 
-		GL_CHECK_ERROR(o2Render.mLog);
+		GL_CHECK_ERROR();
 		//glBindTexture(GL_TEXTURE_2D, o2Render.mLastDrawTexture->mHandle);
 	}
 }

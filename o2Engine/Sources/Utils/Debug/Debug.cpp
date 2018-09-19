@@ -11,6 +11,7 @@
 #include "Utils/Debug/Log/ConsoleLogStream.h"
 #include "Utils/Debug/Log/FileLogStream.h"
 #include "Utils/Debug/Log/LogStream.h"
+#include "Assets/Assets.h"
 
 #undef DrawText
 
@@ -32,7 +33,7 @@ namespace o2
 
 	void Debug::InitializeFont()
 	{
-		mFont = mnew VectorFont("C:\\Windows\\Fonts\\arial.ttf");
+		mFont = mnew VectorFont(o2Assets.GetDataPath() + "stdFont.ttf");
 		mText = mnew Text(FontRef(mFont));
 	}
 

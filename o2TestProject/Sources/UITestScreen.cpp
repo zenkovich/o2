@@ -33,7 +33,10 @@ void UITestScreen::Load()
 {
 	Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
 	BasicUIStyleBuilder uiBuilder;
-	uiBuilder.RebuildBasicUIManager();
+	//uiBuilder.RebuildBasicUIManager();
+
+    o2UI.LoadStyle("basic_ui_style.xml");
+
 	Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
 
 	mBackground.LoadFromImage("ui/UI_Background.png");
@@ -41,7 +44,7 @@ void UITestScreen::Load()
 	o2Application.onResizing += [&]() { mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30); };
 
 	auto window = o2UI.CreateWindow("UI elements samples");
-	*window->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(400, 400));
+	*window->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(300, 300));
 	window->name = "UI elements window";
 	//window->SetEnableScrollsHiding(false);
 
@@ -76,11 +79,11 @@ void UITestScreen::Load()
 		ImageAssetRef("ui/UI_search_regular.png")));
 
 	UIContextMenu::Item itm("Sub items", {
-		UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }),
-		UIContextMenu::Item("Sub 2",{ UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }),
-							UIContextMenu::Item("Sub 2", []() { o2Debug.Log("Pressed sub 2"); }),
-							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); }) }),
-							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); })
+		UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }, ImageAssetRef()),
+		UIContextMenu::Item("Sub 2",{ UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }, ImageAssetRef()),
+							UIContextMenu::Item("Sub 2", []() { o2Debug.Log("Pressed sub 2"); }, ImageAssetRef()),
+							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); }, ImageAssetRef()) }),
+							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); }, ImageAssetRef())
 	});
 
 	buttonContext->AddItem(itm);
@@ -234,8 +237,8 @@ void UITestScreen::Load()
 	labelTestWindow->AddChild(testButtonslayout);
 	labelTestWindow->layout->size = Vec2F(300, 300);
 
-	auto treeWnd = o2UI.CreateWindow("Tree");
-	treeWnd->layout->size = Vec2F(300, 300);
+//	auto treeWnd = o2UI.CreateWindow("Tree");
+//	treeWnd->layout->size = Vec2F(300, 300);
 }
 
 void UITestScreen::Unload()

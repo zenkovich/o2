@@ -10,11 +10,38 @@
 
 namespace o2
 {
+	AAssetManager* FileSystem::GetAssetManager() const
+	{
+        return o2Application.GetAssetManager();
+	}
 
 	FolderInfo FileSystem::GetFolderInfo(const String& path) const
 	{
 		FolderInfo res;
 		res.mPath = path;
+
+        if (path.StartsWith(GetAndroidAssetsPath()))
+        {
+            String assetsPath = path.SubStr(((String) GetAndroidAssetsPath()).Length()).TrimedEnd("/\\");
+            AAssetDir *assetDir = AAssetManager_openDir(o2FileSystem.GetAssetManager(),
+                                                        assetsPath.Data());
+
+            if (!assetDir)
+                return res;
+
+            AAssetDir_rewind(assetDir);
+
+            do
+            {
+                const char *fileName = AAssetDir_getNextFileName(assetDir);
+                if (!fileName)
+                    break;
+
+                o2Debug.Log("-- List dir " + path + ": " + (String) fileName);
+            } while (true);
+
+            AAssetDir_close(assetDir);
+        }
 
 		return res;
 	}

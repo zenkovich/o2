@@ -30,6 +30,9 @@ namespace o2
 		mResolution = o2Application.GetContentSize();
 
 		CheckCompatibles();
+
+		mVertexData = mnew UInt8[mVertexBufferSize * sizeof(Vertex2)];
+		mVertexIndexData = mnew UInt16[mIndexBufferSize * sizeof(UInt16)];
 		
 		glEnable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
@@ -41,26 +44,17 @@ namespace o2
 
 		glGenBuffers(1, &mVertexBufferObject);
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
-		glBufferData(GL_ARRAY_BUFFER, mVertexBufferSize * sizeof(Vertex2), &mVertexData, GL_DYNAMIC_DRAW);
-
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex2), &((Vertex2*)0)->x);
-
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex2), &((Vertex2*)0)->color);
-
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2), &((Vertex2*)0)->tu);
+		glBufferData(GL_ARRAY_BUFFER, mVertexBufferSize * sizeof(Vertex2), mVertexData, GL_DYNAMIC_DRAW);
 
 		glGenBuffers(1, &mIndexBufferObject);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferObject);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferSize * sizeof(unsigned short), &mVertexIndexData, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)(mIndexBufferSize * sizeof(UInt16)), mVertexIndexData, GL_DYNAMIC_DRAW);
 
 		//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
 		InitializeStdShader();
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mLog->Out("GL_VENDOR: " + (String)(char*)glGetString(GL_VENDOR));
 		mLog->Out("GL_RENDERER: " + (String)(char*)glGetString(GL_RENDERER));
@@ -70,6 +64,8 @@ namespace o2
 // 		mDPI.x = GetDeviceCaps(dc, LOGPIXELSX);
 // 		mDPI.y = GetDeviceCaps(dc, LOGPIXELSY);
 // 		ReleaseDC(0, dc);
+
+        mDPI = Vec2I(100, 100);
 
 		InitializeFreeType();
 		InitializeLinesIndexBuffer();
@@ -99,96 +95,142 @@ namespace o2
 		mReady = false;
 	}
 
-	GLuint RenderBase::BuildShaderProgram(const char* vertexSource, const char* fragmentSource)
-	{
-		GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-		GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+    GLuint RenderBase::LoadShader(GLenum shaderType, const char *source)
+    {
+        GLuint shader = glCreateShader(shaderType);
 
-		GLint Result = GL_FALSE;
-		int InfoLogLength;
+        if (shader)
+        {
+            glShaderSource(shader, 1, &source, NULL);
+            glCompileShader(shader);
 
-		glShaderSource(VertexShaderID, 1, &vertexSource, NULL);
-		glCompileShader(VertexShaderID);
+            GLint compiled = 0;
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 
-		glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
-		glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-		if (InfoLogLength > 0)
-		{
-			std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
-			glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-			fprintf(stdout, "%s \n", &VertexShaderErrorMessage[0]);
-		}
+            if (!compiled)
+            {
+                GLint infoLen = 0;
+                glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
 
-		glShaderSource(FragmentShaderID, 1, &fragmentSource, NULL);
-		glCompileShader(FragmentShaderID);
+                if (infoLen > 0)
+                {
+                    char *infoLog = (char *) malloc(sizeof(char) * infoLen);
+                    glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
+                    o2Debug.LogError((String)"Error compiling shader:\n" + infoLog);
+                    free(infoLog);
+                }
 
-		glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
-		glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-		if (InfoLogLength > 0)
-		{
-			std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
-			glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-			fprintf(stdout, "%s \n", &FragmentShaderErrorMessage[0]);
-		}
+                glDeleteShader(shader);
+                shader = 0;
+            }
+        }
 
-		GLuint ProgramID = glCreateProgram();
-		glAttachShader(ProgramID, VertexShaderID);
-		glAttachShader(ProgramID, FragmentShaderID);
-		glLinkProgram(ProgramID);
+        return shader;
+    }
 
-		glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
-		glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-		if (InfoLogLength > 0)
-		{
-			std::vector<char> ProgramErrorMessage(InfoLogLength+1);
-			glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-			fprintf(stdout, "%s \n", &ProgramErrorMessage[0]);
-		}
+    GLuint RenderBase::BuildShaderProgram(const char *vertexSource, const char *fragmentSource)
+    {
+        GLuint vertexShader = LoadShader(GL_VERTEX_SHADER, vertexSource);
+        if (!vertexShader)
+            return 0;
 
-		glDeleteShader(VertexShaderID);
-		glDeleteShader(FragmentShaderID);
+        GLuint fragmentShader = LoadShader(GL_FRAGMENT_SHADER, fragmentSource);
+        if (!fragmentShader)
+            return 0;
 
-		return ProgramID;
-	}
+        GLuint program = glCreateProgram();
+        if (program)
+        {
+            glAttachShader(program, vertexShader);
+            glAttachShader(program, fragmentShader);
+
+            GLint linkStatus;
+            glLinkProgram(program);
+            glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+
+            if (!linkStatus)
+            {
+                GLint infoLen = 0;
+                glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLen);
+
+                if (infoLen > 0)
+                {
+                    char *infoLog = (char *) malloc(sizeof(char) * infoLen);
+                    glGetProgramInfoLog(program, infoLen, NULL, infoLog);
+                    o2Debug.LogError((String)"Error linking shader:\n" + infoLog);
+                    free(infoLog);
+                }
+
+                glDeleteProgram(program);
+                program = 0;
+            }
+        }
+
+        return program;
+    }
 
 	void RenderBase::InitializeStdShader()
 	{
-		const char* fragShader = "#version 330 core                \n \
-        out vec4 color;                                            \n \
-                                                                   \n \
-        in vec4 fragmentColor;                                     \n \
-        in vec2 UV;                                                \n \
-                                                                   \n \
-        uniform sampler2D textureSampler;                          \n \
-                                                                   \n \
-        void main()                                                \n \
-        {                                                          \n \
-            color = fragmentColor*texture( textureSampler, UV );   \n \
+		const char* fragShader = " precision mediump float;             \n \
+                                                                        \n \
+        varying lowp vec4 v_color;                                      \n \
+        varying vec2 v_texCoords;                                       \n \
+                                                                        \n \
+        uniform sampler2D u_texture;                                    \n \
+                                                                        \n \
+        void main()                                                     \n \
+        {                                                               \n \
+            gl_FragColor = v_color * texture2D(u_texture, v_texCoords); \n \
         }";
 
-		const char* vtxShader = "#version 330 core                 \n \
-        uniform mat4 modelViewProjectionMatrix;                    \n \
-                                                                   \n \
-        layout(location = 0) in vec3 vertexPosition_modelspace;    \n \
-        layout(location = 1) in vec4 vertexColor;                  \n \
-        layout(location = 2) in vec2 vertexUV;                     \n \
-                                                                   \n \
-        out vec4 fragmentColor;                                    \n \
-        out vec2 UV;                                               \n \
-                                                                   \n \
-        uniform mat4 MVP;                                          \n \
-                                                                   \n \
-        void main(){                                               \n \
-            gl_Position = MVP * vec4(vertexPosition_modelspace,1); \n \
-            fragmentColor = vertexColor;                           \n \
-            UV = vertexUV;                                         \n \
+		const char* vtxShader = " uniform mat4 u_transformMatrix; \n \
+                                                                  \n \
+        attribute vec4 a_position;                                \n \
+        attribute vec4 a_color;                                   \n \
+        attribute vec2 a_texCoords;                               \n \
+                                                                  \n \
+        varying vec4 v_color;                                     \n \
+        varying vec2 v_texCoords;                                 \n \
+                                                                  \n \
+        void main()                                               \n \
+        {                                                         \n \
+            v_color = a_color;                                    \n \
+            v_texCoords = a_texCoords;                            \n \
+            gl_Position = u_transformMatrix * a_position;         \n \
         }";
 
 		mStdShader = BuildShaderProgram(vtxShader, fragShader);
-		mStdShaderMvpUniform = glGetUniformLocation(mStdShader, "MVP");
-		mStdShaderTextureSample = glGetUniformLocation(mStdShader, "textureSampler");
+        GL_CHECK_ERROR();
+
+		mStdShaderMvpUniform = glGetUniformLocation(mStdShader, "u_transformMatrix");
+        GL_CHECK_ERROR();
+
+        mStdShaderTextureSample = glGetUniformLocation(mStdShader, "u_texture");
+        GL_CHECK_ERROR();
+
+        mStdShaderPosAttribute = glGetAttribLocation(mStdShader, "a_position");
+        GL_CHECK_ERROR();
+
+        mStdShaderColorAttribute = glGetAttribLocation(mStdShader, "a_color");
+        GL_CHECK_ERROR();
+
+        mStdShaderUVAttribute = glGetAttribLocation(mStdShader, "a_texCoords");
+        GL_CHECK_ERROR();
 
 		glUseProgram(mStdShader);
+        GL_CHECK_ERROR();
+
+        glVertexAttribPointer((GLuint)mStdShaderPosAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex2), &((Vertex2*)0)->x);
+        glEnableVertexAttribArray((GLuint)mStdShaderPosAttribute);
+        GL_CHECK_ERROR();
+
+        glVertexAttribPointer((GLuint)mStdShaderColorAttribute, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex2), &((Vertex2*)0)->color);
+        glEnableVertexAttribArray((GLuint)mStdShaderColorAttribute);
+        GL_CHECK_ERROR();
+
+        glVertexAttribPointer((GLuint)mStdShaderUVAttribute, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2), &((Vertex2*)0)->tu);
+        glEnableVertexAttribArray((GLuint)mStdShaderUVAttribute);
+        GL_CHECK_ERROR();
 	}
 
 	void Render::CheckCompatibles()
@@ -221,6 +263,8 @@ namespace o2
 		SetupViewMatrix(mResolution);
 		UpdateCameraTransforms();
 
+        glClearColor(1, 0, 0, 1);
+
 		preRender();
 		preRender.Clear();
 	}
@@ -232,9 +276,12 @@ namespace o2
 
 		static const GLenum primitiveType[3]{ GL_TRIANGLES, GL_TRIANGLES, GL_LINES };
 
+        glBufferData(GL_ARRAY_BUFFER, mLastDrawVertex * sizeof(Vertex2), mVertexData, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)(mLastDrawIdx * sizeof(UInt16)), mVertexIndexData, GL_DYNAMIC_DRAW);
+
 		glDrawElements(primitiveType[(int)mCurrentPrimitiveType], mLastDrawIdx, GL_UNSIGNED_SHORT, (void*)0);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mFrameTrianglesCount += mTrianglesCount;
 		mLastDrawVertex = mTrianglesCount = mLastDrawIdx = 0;
@@ -258,7 +305,7 @@ namespace o2
 
 		DrawPrimitives();
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		CheckTexturesUnloading();
 		CheckFontsUnloading();
@@ -269,7 +316,7 @@ namespace o2
 		glClearColor(color.RF(), color.GF(), color.BF(), color.AF());
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 	}
 
 	void mtxMultiply(float* ret, const float* lhs, const float* rhs)
@@ -333,7 +380,7 @@ namespace o2
 
 		glUniformMatrix4fv(mStdShaderMvpUniform, 1, GL_FALSE, mvp);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 	}
 
@@ -349,7 +396,7 @@ namespace o2
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mStencilDrawing = true;
 	}
@@ -364,7 +411,7 @@ namespace o2
 		glDisable(GL_STENCIL_TEST);
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mStencilDrawing = false;
 	}
@@ -379,7 +426,7 @@ namespace o2
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_EQUAL, 0x1, 0xffffffff);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mStencilTest = true;
 	}
@@ -401,7 +448,7 @@ namespace o2
 		glClearStencil(0);
 		glClear(GL_STENCIL_BUFFER_BIT);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 	}
 
 	void Render::EnableScissorTest(const RectI& rect)
@@ -419,7 +466,7 @@ namespace o2
 		else
 		{
 			glEnable(GL_SCISSOR_TEST);
-			GL_CHECK_ERROR(mLog);
+			GL_CHECK_ERROR();
 		}
 
 		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
@@ -444,7 +491,7 @@ namespace o2
 		if (forcible)
 		{
 			glDisable(GL_SCISSOR_TEST);
-			GL_CHECK_ERROR(mLog);
+			GL_CHECK_ERROR();
 
 			while (!mStackScissors.IsEmpty() && !mStackScissors.Last().mRenderTarget)
 				mStackScissors.PopBack();
@@ -456,7 +503,7 @@ namespace o2
 			if (mStackScissors.Count() == 1)
 			{
 				glDisable(GL_SCISSOR_TEST);
-				GL_CHECK_ERROR(mLog);
+				GL_CHECK_ERROR();
 				mStackScissors.PopBack();
 
 				mScissorInfos.Last().mEndDepth = mDrawingDepth;
@@ -512,7 +559,7 @@ namespace o2
 				glBindTexture(GL_TEXTURE_2D, mLastDrawTexture->mHandle);
 				glUniform1i(mStdShaderTextureSample, 0);
 
-				GL_CHECK_ERROR(mLog);
+				GL_CHECK_ERROR();
 			}
 			else
 			{
@@ -520,11 +567,11 @@ namespace o2
 				glBindTexture(GL_TEXTURE_2D, 0);
 				glUniform1i(mStdShaderTextureSample, 0);
 
-				GL_CHECK_ERROR(mLog);
+				GL_CHECK_ERROR();
 			}
 		}
 
-		memcpy(&mVertexData[mLastDrawVertex], vertices, sizeof(Vertex2)*verticesCount);
+		memcpy(&mVertexData[sizeof(Vertex2)*mLastDrawVertex], vertices, sizeof(Vertex2)*verticesCount);
 
 		for (UInt i = mLastDrawIdx, j = 0; j < indexesCount * 3; i++, j++)
             mVertexIndexData[i] = mLastDrawVertex + indexes[j];
@@ -564,13 +611,13 @@ namespace o2
 		{
 			mScissorInfos.Last().mEndDepth = mDrawingDepth;
 			glDisable(GL_SCISSOR_TEST);
-			GL_CHECK_ERROR(mLog);
+			GL_CHECK_ERROR();
 		}
 
 		mStackScissors.Add(ScissorStackItem(RectI(), RectI(), true));
 
 		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->mFrameBuffer);
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		SetupViewMatrix(renderTarget->GetSize());
 
@@ -585,7 +632,7 @@ namespace o2
 		DrawPrimitives();
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		SetupViewMatrix(mResolution);
 
@@ -596,7 +643,7 @@ namespace o2
 		if (!mStackScissors.IsEmpty())
 		{
 			glEnable(GL_SCISSOR_TEST);
-			GL_CHECK_ERROR(mLog);
+			GL_CHECK_ERROR();
 
 			auto clipRect = mStackScissors.Last().mSummaryScissorRect;
 

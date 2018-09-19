@@ -129,7 +129,7 @@ namespace o2
 		glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
 					 bitmap->GetData());
 
-		GL_CHECK_ERROR(o2Render.mLog);
+		GL_CHECK_ERROR();
 	}
 
 	Bitmap* Texture::GetData()

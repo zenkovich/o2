@@ -8,7 +8,11 @@ o2::Platform GetEnginePlatform()
 
 const char* GetProjectPath()
 {
+#if IS_EDITOR
 	return "../../../";
+#else
+    return "AndroidAssets/";
+#endif
 }
 
 const char* GetProjectSettingFileLocalPath()
@@ -42,7 +46,11 @@ bool IsReleaseBuild()
 
 bool IsAssetsPrebuildEnabled()
 {
+#ifdef PLATFORM_WINDOWS
 	return true;
+#else
+    return false;
+#endif
 }
 
 const char* GetAssetsPath()
@@ -52,10 +60,32 @@ const char* GetAssetsPath()
 
 const char* GetDataPath()
 {
+#if defined PLATFORM_WINDOWS
 	return "../Data/";
+#elif defined PLATFORM_ANDROID
+    return "AndroidAssets/Data/";
+#endif
 }
 
 const char* GetBasicAtlasPath()
 {
 	return "BasicAtlas.atlas";
 }
+
+const char* GetDataAssetsTreePath()
+{
+#if defined PLATFORM_WINDOWS
+	return "../DataTree.xml";
+#elif defined PLATFORM_ANDROID
+	return "AndroidAssets/DataTree.xml";
+#endif
+}
+
+#ifdef PLATFORM_ANDROID
+
+const char* GetAndroidAssetsPath()
+{
+    return "AndroidAssets/";
+}
+
+#endif

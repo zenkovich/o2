@@ -337,7 +337,7 @@ namespace o2
 		ClearAssetsCache();
 
 		auto changedAssetsIds = mAssetsBuilder->BuildAssets(GetAssetsPath(), GetDataPath());
-		mAssetsTree.BuildTree(::GetDataPath());
+		LoadAssetsTree();
 
 		onAssetsRebuilded(changedAssetsIds);
 	}
@@ -386,7 +386,10 @@ namespace o2
 
 	void Assets::LoadAssetsTree()
 	{
-		mAssetsTree.BuildTree(::GetDataPath());
+		DataNode data;
+		data.LoadFromFile(GetDataAssetsTreePath());
+
+		mAssetsTree = data;
 	}
 
 	void Assets::LoadAssetTypes()

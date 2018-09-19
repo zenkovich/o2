@@ -80,13 +80,13 @@ const char* GetGLErrorDesc(GLenum errorId)
 	return "UNKNOWN";
 }
 
-void glCheckError(o2::LogStream* log, const char* filename /*= nullptr*/, unsigned int line /*= 0*/)
+void glCheckError(const char* filename /*= nullptr*/, unsigned int line /*= 0*/)
 {
 	GLenum errId = glGetError();
 	if (errId != GL_NO_ERROR)
 	{
-		log->Out("OpenGL ERROR " + (o2::String)errId + ": " + (o2::String)GetGLErrorDesc(errId) + 
-				 " at file: " + (o2::String)(filename ? filename : "unknown") + " line: " + (o2::String)line);
+		Deabug.LogError("OpenGL ERROR " + (o2::String)errId + ": " + (o2::String)GetGLErrorDesc(errId) +
+				        " at file: " + (o2::String)(filename ? filename : "unknown") + " line: " + (o2::String)line);
 	}
 }
 

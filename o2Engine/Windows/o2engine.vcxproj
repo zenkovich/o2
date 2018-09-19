@@ -430,6 +430,7 @@
 		<ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
 		<ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp" />
 		<ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp" />
+		<ClCompile Include="..\Sources\Utils\FileSystem\Windows\FileImpl.cpp" />
 		<ClCompile Include="..\Sources\Utils\FileSystem\Windows\FileSystemImpl.cpp" />
 		<ClCompile Include="..\Sources\Utils\Math\Color.cpp" />
 		<ClCompile Include="..\Sources\Utils\Math\Curve.cpp" />

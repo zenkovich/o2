@@ -1,6 +1,9 @@
 package com.test.testapplication;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.res.AssetManager;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
@@ -28,6 +31,17 @@ class GLView extends GLSurfaceView {
         init(translucent, depth, stencil);
     }
 
+    private Activity getActivity() {
+        Context context = getContext();
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity)context;
+            }
+            context = ((ContextWrapper)context).getBaseContext();
+        }
+        return null;
+    }
+
     private void init(boolean translucent, int depth, int stencil) {
         if (translucent) {
             this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
@@ -39,7 +53,7 @@ class GLView extends GLSurfaceView {
                 new ConfigChooser(8, 8, 8, 8, depth, stencil) :
                 new ConfigChooser(5, 6, 5, 0, depth, stencil) );
 
-        setRenderer(new Renderer());
+        setRenderer(new Renderer(getActivity(), getContext().getResources().getAssets(), getContext().getFilesDir().getPath()));
     }
 
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
@@ -249,12 +263,24 @@ class GLView extends GLSurfaceView {
     }
 
     private static class Renderer implements GLSurfaceView.Renderer {
+
+        Activity mActivity;
+        AssetManager mAssetManager;
+        String mDataPath;
+
+        public Renderer(Activity activity, AssetManager assetManager, String dataPath) {
+            mActivity = activity;
+            mAssetManager = assetManager;
+            mDataPath = dataPath;
+        }
+
         public void onDrawFrame(GL10 gl) {
             NativeBridge.step();
         }
 
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-            NativeBridge.init(width, height);
+
+            NativeBridge.init(mActivity, mAssetManager, mDataPath, width, height);
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {

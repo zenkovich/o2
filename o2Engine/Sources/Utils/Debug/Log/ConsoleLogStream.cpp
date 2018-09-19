@@ -5,6 +5,8 @@
 
 #ifdef PLATFORM_WINDOWS
 #include <io.h>
+#elif defined PLATFORM_ANDROID
+#include <android/log.h>
 #endif
 
 namespace o2
@@ -28,8 +30,11 @@ namespace o2
 
 	void ConsoleLogStream::OutStrEx(const WString& str)
 	{
+#if defined PLATFORM_WINDOWS
 		puts(((String)str).Data());
-		//puts("\n");
+#elif defined PLATFORM_ANDROID
+		__android_log_print(ANDROID_LOG_INFO, "o2: ", "%s", ((String)str).Data());
+#endif
 	}
 
 	void ConsoleLogStream::InitConsole()

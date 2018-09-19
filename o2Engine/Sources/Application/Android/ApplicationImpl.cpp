@@ -9,6 +9,26 @@
 
 namespace o2
 {
+	JavaVM* ApplicationBase::GetJVM() const
+	{
+		return mJVM;
+	}
+
+	const jobject* ApplicationBase::GetActivity() const
+	{
+		return &mActivity;
+	}
+
+	AAssetManager* ApplicationBase::GetAssetManager() const
+	{
+		return mAssetManager;
+	}
+
+	String ApplicationBase::GetDataPath() const
+	{
+		return mDataPath;
+	}
+
 	void Application::InitializePlatform()
 	{}
 
@@ -22,7 +42,31 @@ namespace o2
 	{}
 
 	void Application::Launch()
-	{}
+	{
+		mLog->Out("Application launched!");
+
+		OnStarted();
+		onStarted.Invoke();
+		o2Events.OnApplicationStarted();
+	}
+
+    void Application::Initialize(JNIEnv* env, jobject activity, AAssetManager* assetManager, String dataPath,
+							 const Vec2I& resolution)
+    {
+        mResolution = resolution;
+
+		env->GetJavaVM(&mJVM);
+		mActivity = activity;
+		mAssetManager = assetManager;
+		mDataPath = dataPath;
+
+		BasicInitialize();
+    }
+
+    void Application::Update()
+    {
+        ProcessFrame();
+    }
 
 	bool Application::IsFullScreen() const
 	{
@@ -74,12 +118,12 @@ namespace o2
 
 	Vec2I Application::GetContentSize() const
 	{
-		return Vec2I();
+		return mResolution;
 	}
 
 	Vec2I Application::GetScreenResolution() const
 	{
-		return Vec2I(100, 100);
+		return mResolution;
 	}
 
 	void Application::SetCursor(CursorType type)

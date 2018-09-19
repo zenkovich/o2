@@ -18,6 +18,11 @@ namespace o2
 
 	o2StackWalker* o2StackWalker::mInstance = new o2StackWalker();
 
+	void Application::Initialize()
+	{
+		BasicInitialize();
+	}
+	
 	void Application::InitializePlatform()
 	{
 		mWindowed = true;

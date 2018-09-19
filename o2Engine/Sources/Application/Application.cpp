@@ -28,6 +28,14 @@ namespace o2
 		mLog(nullptr), mReady(false), mAssets(nullptr), mEventSystem(nullptr), mFileSystem(nullptr), mInput(nullptr),
 		mProjectConfig(nullptr), mRender(nullptr), mScene(nullptr), mTaskManager(nullptr), mTime(nullptr), mTimer(nullptr),
 		mUIManager(nullptr), mCursorInfiniteModeEnabled(false)
+	{}
+
+	Application::~Application()
+	{
+		DeinitializeSystems();
+	}
+
+	void Application::BasicInitialize()
 	{
 		DataNode::RegBasicConverters();
 
@@ -40,11 +48,6 @@ namespace o2
 		o2UI.TryLoadStyle();
 
 		mReady = true;
-	}
-
-	Application::~Application()
-	{
-		DeinitializeSystems();
 	}
 
 	void Application::InitalizeSystems()

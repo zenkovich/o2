@@ -929,6 +929,9 @@
 		<ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp">
 			<Filter>Sources\Utils\FileSystem</Filter>
 		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\FileSystem\Windows\FileImpl.cpp">
+			<Filter>Sources\Utils\FileSystem\Windows</Filter>
+		</ClCompile>
 		<ClCompile Include="..\Sources\Utils\FileSystem\Windows\FileSystemImpl.cpp">
 			<Filter>Sources\Utils\FileSystem\Windows</Filter>
 		</ClCompile>

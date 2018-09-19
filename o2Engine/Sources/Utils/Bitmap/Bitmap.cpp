@@ -165,7 +165,7 @@ namespace o2
 				UInt srcIdx = (img->mSize.y - (y + imgSrcRect.bottom) - 1)*img->mSize.x + x + imgSrcRect.left;
 				UInt dstIdx = (mSize.y - 1 - (y + position.y))*mSize.x + x + position.x;
 
-				memcpy(mData + dstIdx*pixelSize, img->mData + srcIdx*pixelSize, pixelSize);
+                *(int*)&mData[dstIdx*pixelSize] = *(int*)&img->mData[srcIdx*pixelSize];
 			}
 		}
 	}

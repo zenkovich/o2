@@ -46,3 +46,18 @@ const char* GetDataPath();
 
 // Basic atlas path (from assets path)
 const char* GetBasicAtlasPath();
+
+// Data assets tree path
+const char* GetDataAssetsTreePath();
+
+
+// ----------------------
+// Platform configuration
+// ----------------------
+
+#ifdef PLATFORM_ANDROID
+
+// Returns android assets path prefix
+const char* GetAndroidAssetsPath();
+
+#endif

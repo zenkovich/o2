@@ -11,7 +11,10 @@ namespace o2
 	protected:
 		GLuint   mStdShader;                      // Standard shader program
 		GLint    mStdShaderMvpUniform;            // Standard shader matrix input parameter
-		GLuint   mStdShaderTextureSample;         // Standard shader texture sample input parameter
+		GLint    mStdShaderTextureSample;         // Standard shader texture sample input parameter
+        GLint    mStdShaderPosAttribute;          // Standard shader vertex position attribute
+        GLint    mStdShaderColorAttribute;        // Standard shader vertex color attribute
+        GLint    mStdShaderUVAttribute;           // Standard shader texture coords attribute
 
 		GLuint   mVertexBufferObject;             // Batch vercities buffer
 		GLuint   mIndexBufferObject;              // Batch polygons indexes buffer
@@ -21,12 +24,15 @@ namespace o2
 		UInt     mVertexBufferSize;               // Maximum size of vertex buffer
 		UInt     mIndexBufferSize;                // Maximum size of index buffer
 
-	protected:
-		// Builds vertex and fragment shaders
-		GLuint BuildShaderProgram(const char* vertexSource, const char* fragmentSource);
+    protected:
+        // Builds vertex and fragment shaders
+        GLuint LoadShader(GLenum shaderType, const char *source);
 
-		// Initializes standard shader
-		void InitializeStdShader();
+        // Builds vertex and fragment shaders
+        GLuint BuildShaderProgram(const char* vertexSource, const char* fragmentSource);
+
+        // Initializes standard shader
+        void InitializeStdShader();
 	};
 };
 

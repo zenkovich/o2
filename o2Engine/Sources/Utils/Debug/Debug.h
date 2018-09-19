@@ -6,7 +6,7 @@
 #undef DrawText
 
 // Debug stuff access macros
-#define o2Debug Debug::Instance()
+#define o2Debug o2::Debug::Instance()
 
 namespace o2
 {

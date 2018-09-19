@@ -4,6 +4,10 @@
 #include "Utils/Types/CommonTypes.h"
 #include "Utils/Types/String.h"
 
+#ifdef PLATFORM_ANDROID
+#include <android/asset_manager.h>
+#endif
+
 namespace o2
 {
 	enum class FileType { File, Image, Config, Atlas };
@@ -16,6 +20,10 @@ namespace o2
 		std::ifstream mIfstream; // Input stream
 		String        mFilename; // File name
 		bool          mOpened;   // True, if file was opened
+
+#ifdef PLATFORM_ANDROID
+        AAsset* mAsset = nullptr;
+#endif
 
 	public:
 		// Default constructor

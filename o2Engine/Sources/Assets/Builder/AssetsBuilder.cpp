@@ -58,6 +58,8 @@ namespace o2
 		res.Add(ProcessNewAssets());
 		res.Add(ConvertersPostProcess());
 
+		SaveAssetsTree();
+
 		mLog->OutStr("===================================");
 		mLog->Out("Completed assets building \n from: " + assetsPath + "\n to: " + dataAssetsPath + 
 				  " for " + (String)timer.GetDeltaTime() + " seconds");
@@ -205,8 +207,8 @@ namespace o2
 
 				bldAssetInfoIt = mBuildedAssetsTree.mAllAssets.Remove(bldAssetInfoIt);
 
-				if ((*bldAssetInfoIt)->GetParent())
-					(*bldAssetInfoIt)->GetParent()->RemoveChild(bldAssetInfo);
+				if ((*bldAssetInfoIt)->parent)
+					(*bldAssetInfoIt)->parent->RemoveChild(bldAssetInfo);
 			}
 		}
 
@@ -358,6 +360,14 @@ namespace o2
 		res.Add(mStdAssetConverter.AssetsPostProcess());
 
 		return res;
+	}
+
+	void AssetsBuilder::SaveAssetsTree()
+	{
+		DataNode data;
+		data = mBuildedAssetsTree;
+
+		data.SaveToFile(GetDataAssetsTreePath());
 	}
 
 	void AssetsBuilder::GenerateMeta(const Type& assetType, const String& metaFullPath)
