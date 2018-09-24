@@ -1,10 +1,12 @@
 #pragma once
 
+#include "Utils/Reflection/Attribute.h"
+#include "Utils/Reflection/SearchPassedObject.h"
+#include "Utils/Reflection/TypeTraits.h"
+#include "Utils/Serialization/DataNode.h"
 #include "Utils/Types/CommonTypes.h"
 #include "Utils/Types/Containers/Dictionary.h"
 #include "Utils/Types/Containers/Vector.h"
-#include "Utils/Reflection/Attribute.h"
-#include "Utils/Reflection/SearchPassedObject.h"
 #include "Utils/Types/String.h"
 #include <string>
 
@@ -23,6 +25,8 @@ namespace o2
 
 		struct IFieldSerializer
 		{
+			virtual ~IFieldSerializer() {}
+
 			virtual void Serialize(void* object, DataNode& data) const {}
 			virtual void Deserialize(void* object, DataNode& data) const {}
 			virtual bool Equals(void* objectA, void* objectB) const { return false; }
@@ -37,8 +41,8 @@ namespace o2
 		template<typename T> struct FakeCopy { static void Copy(T& a, const T& b) {  } };
 
 		template<typename _type, 
-			     typename _checker = std::conditional<EqualsTrait::IsExists<_type>::value, RealEquals<_type>, FakeEquals<_type>>::type,
-			     typename _copier = std::conditional<std::is_assignable<_type&, _type>::value, RealCopy<_type>, FakeCopy<_type>>::type>
+			     typename _checker = typename std::conditional<EqualsOperator::IsExists<_type>::value, RealEquals<_type>, FakeEquals<_type>>::type,
+			     typename _copier = typename std::conditional<std::is_assignable<_type&, _type>::value, RealCopy<_type>, FakeCopy<_type>>::type>
 		struct FieldSerializer: public IFieldSerializer
 		{
 			void Serialize(void* object, DataNode& data) const;
@@ -59,7 +63,7 @@ namespace o2
 				  IFieldSerializer* serializer);
 
 		// Destructor
-		~FieldInfo();
+		virtual ~FieldInfo();
 
 		// Equal operator
 		bool operator==(const FieldInfo& other) const;

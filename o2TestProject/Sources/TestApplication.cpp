@@ -70,7 +70,7 @@ void TestApplication::OnUpdate(float dt)
 void TestApplication::OnDraw()
 {
 	o2Render.Clear();
-	o2Render.camera = Camera::Default();
+	o2Render.SetCamera(Camera::Default());
 
 	if (mCurrentScreen)
 		mCurrentScreen->Draw();

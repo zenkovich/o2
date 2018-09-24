@@ -139,7 +139,7 @@ namespace o2
 	{
 		InFile file(path);
 		if (!file.IsOpened())
-			GetAssetsLogStream()->Error("Failed to load binary asset data: can't open file %s", path);
+			GetAssetsLogStream()->Error("Failed to load binary asset data: can't open file " + path);
 
 		mDataSize = file.GetDataSize();
 		mData = mnew char[mDataSize];

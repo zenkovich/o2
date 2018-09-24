@@ -43,8 +43,8 @@ namespace o2
 		virtual const ChildrenVec& GetChilds() const;
 
 	protected:
-		_type*    _this;    // Template this pointer
-		_type*    mParent; // Pointer to parent node
+		_type*      _this;    // Template this pointer
+		_type*      mParent; // Pointer to parent node
 		ChildrenVec mChildren; // Children nodes @SERIALIZABLE
 
 	protected:
@@ -142,7 +142,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename const ITreeNode<_type>::ChildrenVec& o2::ITreeNode<_type>::GetChilds() const
+	const typename ITreeNode<_type>::ChildrenVec& o2::ITreeNode<_type>::GetChilds() const
 	{
 		return mChildren;
 	}

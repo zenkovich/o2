@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/IObject.h"
+#include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
 
 namespace o2
@@ -34,6 +34,8 @@ namespace o2
 		void RebuildBacklessEditbox();
 		void RebuildSinglelineEditbox();
 		void RebuildBacklessScrollarea();
+		void RebuildExpandButton();
+		void RebuildSpoiler();
 
 		void RebuildBasicUIManager();
 
@@ -79,6 +81,8 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildBacklessEditbox);
 	PUBLIC_FUNCTION(void, RebuildSinglelineEditbox);
 	PUBLIC_FUNCTION(void, RebuildBacklessScrollarea);
+	PUBLIC_FUNCTION(void, RebuildExpandButton);
+	PUBLIC_FUNCTION(void, RebuildSpoiler);
 	PUBLIC_FUNCTION(void, RebuildBasicUIManager);
 }
 END_META;

@@ -3,6 +3,7 @@
 
 #include "Scene/Actor.h"
 #include "Scene/Drawable.h"
+#include "Scene/Scene.h"
 
 namespace o2
 {

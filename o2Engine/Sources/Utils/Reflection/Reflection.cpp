@@ -14,6 +14,43 @@
 
 namespace o2
 {
+	Reflection* Reflection::mInstance;
+
+	template<>
+	Type* FundamentalTypeContainer<void>::type = mnew TType<int>("void", 0);
+
+	Type* IObject::type = mnew TType<IObject>("IObject", 0);
+	Type* Type::Dummy::type = mnew TType<int>("Unknown", 0);
+
+	DECLARE_FUNDAMENTAL_TYPE(int);
+	DECLARE_FUNDAMENTAL_TYPE(bool);
+	DECLARE_FUNDAMENTAL_TYPE(char);
+	DECLARE_FUNDAMENTAL_TYPE(wchar_t);
+	DECLARE_FUNDAMENTAL_TYPE(short int);
+	DECLARE_FUNDAMENTAL_TYPE(long int);
+	DECLARE_FUNDAMENTAL_TYPE(long long int);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned char);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned short int);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned int);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned long int);
+	DECLARE_FUNDAMENTAL_TYPE(unsigned long long int);
+	DECLARE_FUNDAMENTAL_TYPE(float);
+	DECLARE_FUNDAMENTAL_TYPE(double);
+	DECLARE_FUNDAMENTAL_TYPE(long double);
+	DECLARE_FUNDAMENTAL_TYPE(Basis);
+	DECLARE_FUNDAMENTAL_TYPE(Color4);
+	DECLARE_FUNDAMENTAL_TYPE(RectF);
+	DECLARE_FUNDAMENTAL_TYPE(RectI);
+	DECLARE_FUNDAMENTAL_TYPE(BorderF);
+	DECLARE_FUNDAMENTAL_TYPE(BorderI);
+	DECLARE_FUNDAMENTAL_TYPE(Vec2F);
+	DECLARE_FUNDAMENTAL_TYPE(Vec2I);
+	DECLARE_FUNDAMENTAL_TYPE(Vertex2);
+	DECLARE_FUNDAMENTAL_TYPE(String);
+	DECLARE_FUNDAMENTAL_TYPE(WString);
+	DECLARE_FUNDAMENTAL_TYPE(DataNode);
+	DECLARE_FUNDAMENTAL_TYPE(UID);
+
 	Reflection::Reflection():
 		mLastGivenTypeId(1)
 	{
@@ -121,39 +158,4 @@ namespace o2
 
 		return newType;
 	}
-	
-	Reflection* Reflection::mInstance;
-
-	Type* FundamentalTypeContainer<void>::type = mnew TType<int>("void", 0);
-	Type* IObject::type = mnew TType<IObject>("IObject", 0);
-	Type* Type::Dummy::type = mnew TType<int>("Unknown", 0);
-
-	DECLARE_FUNDAMENTAL_TYPE(int);
-	DECLARE_FUNDAMENTAL_TYPE(bool);
-	DECLARE_FUNDAMENTAL_TYPE(char);
-	DECLARE_FUNDAMENTAL_TYPE(wchar_t);
-	DECLARE_FUNDAMENTAL_TYPE(short int);
-	DECLARE_FUNDAMENTAL_TYPE(long int);
-	DECLARE_FUNDAMENTAL_TYPE(long long int);
-	DECLARE_FUNDAMENTAL_TYPE(unsigned char);
-	DECLARE_FUNDAMENTAL_TYPE(unsigned short int);
-	DECLARE_FUNDAMENTAL_TYPE(unsigned int);
-	DECLARE_FUNDAMENTAL_TYPE(unsigned long int);
-	DECLARE_FUNDAMENTAL_TYPE(unsigned long long int);
-	DECLARE_FUNDAMENTAL_TYPE(float);
-	DECLARE_FUNDAMENTAL_TYPE(double);
-	DECLARE_FUNDAMENTAL_TYPE(long double);
-	DECLARE_FUNDAMENTAL_TYPE(Basis);
-	DECLARE_FUNDAMENTAL_TYPE(Color4);
-	DECLARE_FUNDAMENTAL_TYPE(RectF);
-	DECLARE_FUNDAMENTAL_TYPE(RectI);
-	DECLARE_FUNDAMENTAL_TYPE(BorderF);
-	DECLARE_FUNDAMENTAL_TYPE(BorderI);
-	DECLARE_FUNDAMENTAL_TYPE(Vec2F);
-	DECLARE_FUNDAMENTAL_TYPE(Vec2I);
-	DECLARE_FUNDAMENTAL_TYPE(Vertex2);
-	DECLARE_FUNDAMENTAL_TYPE(String);
-	DECLARE_FUNDAMENTAL_TYPE(WString);
-	DECLARE_FUNDAMENTAL_TYPE(DataNode);
-	DECLARE_FUNDAMENTAL_TYPE(UID);
 }

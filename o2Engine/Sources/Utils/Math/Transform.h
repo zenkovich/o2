@@ -226,7 +226,7 @@ namespace o2
 		virtual void BasisChanged() {}
 
 		// It is called when object was deserialized
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		// Updates mTransform 
 		virtual void UpdateTransform();

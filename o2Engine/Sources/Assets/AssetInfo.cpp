@@ -20,7 +20,7 @@ namespace o2
 	void AssetInfo::OnDeserialized(const DataNode& node)
 	{
 		if (auto typeNode = node.GetNode("type"))
-			assetType = o2Reflection.GetType((String)typeNode);
+			assetType = o2Reflection.GetType(typeNode->Data());
 	}
 
 	bool AssetInfo::operator==(const AssetInfo& other) const

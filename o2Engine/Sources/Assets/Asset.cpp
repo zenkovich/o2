@@ -65,7 +65,7 @@ namespace o2
 
 		if (mMeta->mId == 0)
 		{
-			GetAssetsLogStream()->Error("Failed to load asset by path (%s): asset isn't exist", mPath);
+			GetAssetsLogStream()->Error("Failed to load asset by path (" + mPath + "): asset isn't exist");
 			return;
 		}
 
@@ -77,7 +77,7 @@ namespace o2
 	{
 		if (!o2Assets.IsAssetExist(id))
 		{
-			GetAssetsLogStream()->Error("Failed to load asset by id (%ui): asset isn't exist", id);
+			GetAssetsLogStream()->Error("Failed to load asset by id (" + (String)id + "): asset isn't exist");
 			return;
 		}
 
@@ -95,7 +95,7 @@ namespace o2
 
 		if (mMeta->mId == 0 || !o2Assets.IsAssetExist(mMeta->mId))
 		{
-			GetAssetsLogStream()->Error("Failed to load asset (%s - %ui): isn't exist", mPath, mMeta->mId);
+			GetAssetsLogStream()->Error("Failed to load asset (" + mPath + " - " + (String)mMeta->mId + "): isn't exist");
 			return;
 		}
 
@@ -107,8 +107,8 @@ namespace o2
 	{
 		if (info.assetType != &GetType())
 		{
-			GetAssetsLogStream()->Error("Failed to load asset by info (%s - %i): incorrect type (%i)",
-										info.path, info.id, info.assetType);
+			GetAssetsLogStream()->Error("Failed to load asset by info (" + info.path + " - " + (String)info.id + 
+										"): incorrect type (" + (String)info.assetType + ")");
 			return;
 		}
 
@@ -129,8 +129,8 @@ namespace o2
 		UID destPathAssetId = o2Assets.GetAssetId(path);
 		if (destPathAssetId != 0 && destPathAssetId != mMeta->mId)
 		{
-			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui) to %s: another asset exist in target path",
-										mPath, mMeta->mId, path);
+			GetAssetsLogStream()->Error("Failed to save asset (" + mPath + " - " + (String)mMeta->mId + 
+										") to " + path + ": another asset exist in target path");
 			return;
 		}
 
@@ -149,7 +149,8 @@ namespace o2
 		UID destPathAssetId = o2Assets.GetAssetId(mPath);
 		if (destPathAssetId != 0 && destPathAssetId != mMeta->mId)
 		{
-			GetAssetsLogStream()->Error("Failed to save asset (%s - %ui): another asset exist in this path", mPath, mMeta->mId);
+			GetAssetsLogStream()->Error("Failed to save asset (" + mPath + " - " + (String)mMeta->mId + 
+										"): another asset exist in this path");
 			return;
 		}
 
@@ -185,7 +186,7 @@ namespace o2
 
 	String Asset::GetMetaFullPath() const
 	{
-		return GetFullPath() + ".meta";
+		return GetDataFullPath() + ".meta";
 	}
 
 	LogStream* Asset::GetAssetsLogStream() const
@@ -227,7 +228,7 @@ namespace o2
 			mPath = *pathNode;
 
 		if (auto idNode = node.GetNode("id"))
-			IdRef() = (UID)*idNode;
+			idNode->GetValue(IdRef());
 
 		if (IdRef() != 0 || !mPath.IsEmpty())
 			Load();
@@ -298,9 +299,16 @@ namespace o2
 		mRefCounter = nullptr;
 
 		if (auto idNode = node.GetNode("id"))
-			*this = o2Assets.GetAssetRef((UID)(*idNode));
+		{
+			UID id; idNode->GetValue(id);
+			*this = o2Assets.GetAssetRef(id);
+		}
 		else if (auto pathNode = node.GetNode("path"))
-			*this = o2Assets.GetAssetRef((String)(*idNode));
+		{
+			String id;
+			idNode->GetValue(id);
+			*this = o2Assets.GetAssetRef(id);
+		}
 	}
 
 	AssetRef::~AssetRef()

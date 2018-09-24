@@ -260,7 +260,7 @@ namespace Editor
 }
 
 META_TEMPLATES(typename _type)
-CLASS_BASES_META(Editor::AssetProperty<typename _type>)
+CLASS_BASES_META(Editor::AssetProperty<_type>)
 {
 	BASE_CLASS(Editor::TPropertyField<_type>);
 	BASE_CLASS(Editor::IAssetProperty);
@@ -269,14 +269,14 @@ CLASS_BASES_META(Editor::AssetProperty<typename _type>)
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_FIELDS_META(Editor::AssetProperty<typename _type>)
+CLASS_FIELDS_META(Editor::AssetProperty<_type>)
 {
 	PROTECTED_FIELD(mBox);
 	PROTECTED_FIELD(mNameText);
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_METHODS_META(Editor::AssetProperty<typename _type>)
+CLASS_METHODS_META(Editor::AssetProperty<_type>)
 {
 
 	PUBLIC_FUNCTION(void, SetAssetId, UID);

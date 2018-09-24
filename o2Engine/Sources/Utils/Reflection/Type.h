@@ -242,7 +242,7 @@ namespace o2
 		PointerType(const Type* unptrType);
 
 		// Returns type usage
-		Usage GetUsage() const;
+		Usage GetUsage() const override;
 
 		// Returns unpointed type
 		const Type* GetUnpointedType() const;
@@ -537,7 +537,7 @@ namespace o2
 	protected:
 		static Type* type;
 
-		template<typename _type, typename _getter>
+		template<typename _type_, typename _getter>
 		friend const Type& o2::GetTypeOf();
 
 		template<typename T>
@@ -565,7 +565,7 @@ namespace o2
 	protected:
 		static EnumType* type;
 
-		template<typename _type, typename _getter>
+		template<typename _type_, typename _getter>
 		friend const Type& o2::GetTypeOf();
 
 		template<typename T>
@@ -584,7 +584,7 @@ namespace o2
 	{
 	public:
 		// Adds basic type
-		template<typename _this_type, typename _base_type, typename X = std::conditional<std::is_base_of<IObject, _base_type>::value, _base_type, Type::Dummy>::type>
+		template<typename _this_type, typename _base_type, typename X = typename std::conditional<std::is_base_of<IObject, _base_type>::value, _base_type, Type::Dummy>::type>
 		static void AddBaseType(Type*& type);
 
 		// Registers field in type
@@ -638,51 +638,51 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #define DECLARE_CLASS(CLASS)                                                                                            \
     o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)		
 
-#define DECLARE_CLASS_MANUAL(CLASS)                                                                                            \
+#define DECLARE_CLASS_MANUAL(CLASS)                                                                                     \
     o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)											            
 
 #define CLASS_BASES_META(CLASS)                                                                                         \
-    template<typename _type_processor> void CLASS::ProcessBaseTypes(typename CLASS* object, _type_processor& processor) \
+    template<typename _type_processor> void CLASS::ProcessBaseTypes(CLASS* object, _type_processor& processor)          \
 	{                                                                                                                   \
         typedef CLASS thisclass;                                                                                        \
-		processor.StartBases<CLASS>(object, type);															            
+		processor.template StartBases<CLASS>(object, type);															            
 
 #define CLASS_FIELDS_META(CLASS)                                                                                        \
-    template<typename _type_processor> void CLASS::ProcessFields(typename CLASS* object, _type_processor& processor)    \
+    template<typename _type_processor> void CLASS::ProcessFields(CLASS* object, _type_processor& processor)             \
 	{                                                                                                                   \
         typedef CLASS thisclass;                                                                                        \
-		processor.StartFields<CLASS>(object, type);															            
+		processor.template StartFields<CLASS>(object, type);															            
 
 #define CLASS_METHODS_META(CLASS)                                                                                       \
-    template<typename _type_processor> void CLASS::ProcessMethods(typename CLASS* object, _type_processor& processor)   \
+    template<typename _type_processor> void CLASS::ProcessMethods(CLASS* object, _type_processor& processor)            \
 	{                                                                                                                   \
         typedef CLASS thisclass;                                                                                        \
-		processor.StartMethods<CLASS>(object, type);
+		processor.template StartMethods<CLASS>(object, type);
 
 #define META_TEMPLATES(...) \
     template<__VA_ARGS__>
 
 #define FUNDAMENTAL_META(NAME) \
     template<>                                                                                                                                \
-    template<typename _type_processor> void FundamentalTypeContainer<NAME>::InitializeType(typename NAME* object, _type_processor& processor) \
+    template<typename _type_processor> void FundamentalTypeContainer<NAME>::InitializeType(NAME* object, _type_processor& processor) \
 	{                                                                                                                                         \
         typedef NAME thisclass;                                                                                                               \
-		processor.StartFields<NAME>(object, type);
+		processor.template StartFields<NAME>(object, type);
 
 #define BASE_CLASS(CLASS) \
-    processor.BaseType<thisclass, CLASS>(object, type, #CLASS)
+    processor.template BaseType<thisclass, CLASS>(object, type, #CLASS)
 
 #define FIELD(NAME, PROTECT_SECTION) \
-    processor.Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::PROTECT_SECTION)
+    processor.template Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::PROTECT_SECTION)
 
 #define PUBLIC_FIELD(NAME) \
-    processor.Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Public)
+    processor.template Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Public)
 
 #define PRIVATE_FIELD(NAME) \
-    processor.Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Private)
+    processor.template Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Private)
 
 #define PROTECTED_FIELD(NAME) \
-    processor.Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Protected)
+    processor.template Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Protected)
 
 
 #define ATTRIBUTE(NAME) \
@@ -695,16 +695,16 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #define ATTRIBUTE_SHORT_DEFINITION(X)
 
 #define FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
-    processor.Method<thisclass, RETURN_TYPE, __VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
+    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
 
 #define PUBLIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.Method<thisclass, RETURN_TYPE, __VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Public)
+    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Public)
 
 #define PRIVATE_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.Method<thisclass, RETURN_TYPE, __VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Private)
+    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Private)
 
 #define PROTECTED_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.Method<thisclass, RETURN_TYPE, __VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Protected)
+    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Protected)
 
 #define END_META }
 
@@ -714,6 +714,7 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #include "Utils/Reflection/TypeTraits.h"
 #include "Utils/Types/StringImpl.h"
 #include "Utils/Types/UID.h"
+#include "Utils/ValueProxy.h"
 
 namespace o2
 {
@@ -724,7 +725,7 @@ namespace o2
 	template<typename _res_type, typename ... _args>
 	_res_type Type::Invoke(const String& name, void* object, _args ... args)
 	{
-		FunctionInfo* func = GetFunction(name);
+		const FunctionInfo* func = GetFunction(name);
 		if (func)
 			return func->Invoke(object, args ...);
 
@@ -799,7 +800,7 @@ namespace o2
 	template<typename _type>
 	IAbstractValueProxy* TPointerType<_type>::GetValueProxy(void* object) const
 	{
-		return PointerValueProxy<void*>(object);
+		return mnew PointerValueProxy<void*>((void**)object);
 	}
 
 	// ------------------------------
@@ -886,9 +887,9 @@ namespace o2
 	{
 		mElementType = &GetTypeOf<_element_type>();
 
-		typedef std::conditional<DataNode::IsSupport<_element_type>::value,
-			FieldInfo::FieldSerializer<_element_type>,
-			FieldInfo::IFieldSerializer>::type serializerType;
+		typedef typename std::conditional<DataNode::IsSupport<_element_type>::value,
+			                              FieldInfo::FieldSerializer<_element_type>,
+			                              FieldInfo::IFieldSerializer>::type serializerType;
 
 		mElementFieldInfo = mnew FieldInfo("element", 0, mElementType, ProtectSection::Private, mnew serializerType());
 		mCountFieldInfo = mnew FieldInfo("count", 0, &GetTypeOf<int>(), ProtectSection::Public, mnew VectorCountFieldSerializer<_element_type>());
@@ -1099,7 +1100,7 @@ namespace o2
 	{
 		auto valType = &TypeOf(_type);
 
-		typedef std::conditional<DataNode::IsSupport<_type>::value,
+		typedef typename std::conditional<DataNode::IsSupport<_type>::value,
 			FieldInfo::FieldSerializer<_type>,
 			FieldInfo::IFieldSerializer>::type serializerType;
 

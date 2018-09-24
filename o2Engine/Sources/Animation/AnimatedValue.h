@@ -83,7 +83,7 @@ namespace o2
 		void SetTarget(_type* value, const Function<void()>& changeEvent);
 
 		// Sets target change event
-		void SetTargetDelegate(const Function<void()>& changeEvent);
+		void SetTargetDelegate(const Function<void()>& changeEvent) override;
 
 		// Sets target property pointer
 		void SetTargetProxy(IValueProxy<_type>* proxy);
@@ -217,7 +217,7 @@ namespace o2
 
 	protected:
 		// Evaluates value
-		void Evaluate();
+		void Evaluate() override;
 
 		// Returns value for specified time
 		_type Evaluate(float position);
@@ -229,19 +229,19 @@ namespace o2
 		void UpdateApproximation();
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		// Sets target value pointer
-		void SetTargetVoid(void* target);
+		void SetTargetVoid(void* target) override;
 
 		// Sets target value pointer and change event
-		void SetTargetVoid(void* target, const Function<void()>& changeEvent);
+		void SetTargetVoid(void* target, const Function<void()>& changeEvent) override;
 
 		// Sets target property pointer
-		void SetTargetProxyVoid(void* target);
+		void SetTargetProxyVoid(void* target) override;
 
 		// Registering this in animatable value agent
-		void RegInAnimatable(AnimationState* state, const String& path);
+		void RegInAnimatable(AnimationState* state, const String& path) override;
 	};
 
 	template<typename _type>
@@ -438,7 +438,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename const AnimatedValue<_type>::KeysVec& AnimatedValue<_type>::GetKeys() const
+	const typename AnimatedValue<_type>::KeysVec& AnimatedValue<_type>::GetKeys() const
 	{
 		return mKeys;
 	}
@@ -740,13 +740,13 @@ CLASS_METHODS_META(o2::IAnimatedValue)
 END_META;
 
 META_TEMPLATES(typename _type)
-CLASS_BASES_META(o2::AnimatedValue<typename _type>)
+CLASS_BASES_META(o2::AnimatedValue<_type>)
 {
 	BASE_CLASS(o2::IAnimatedValue);
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_FIELDS_META(o2::AnimatedValue<typename _type>)
+CLASS_FIELDS_META(o2::AnimatedValue<_type>)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(target);
@@ -761,7 +761,7 @@ CLASS_FIELDS_META(o2::AnimatedValue<typename _type>)
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_METHODS_META(o2::AnimatedValue<typename _type>)
+CLASS_METHODS_META(o2::AnimatedValue<_type>)
 {
 
 	PUBLIC_FUNCTION(void, SetTarget, _type*);
@@ -796,13 +796,13 @@ CLASS_METHODS_META(o2::AnimatedValue<typename _type>)
 END_META;
 
 META_TEMPLATES(typename _type)
-CLASS_BASES_META(o2::AnimatedValue<typename _type>::Key)
+CLASS_BASES_META(o2::AnimatedValue<_type>::Key)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_FIELDS_META(o2::AnimatedValue<typename _type>::Key)
+CLASS_FIELDS_META(o2::AnimatedValue<_type>::Key)
 {
 	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
@@ -814,7 +814,7 @@ CLASS_FIELDS_META(o2::AnimatedValue<typename _type>::Key)
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_METHODS_META(o2::AnimatedValue<typename _type>::Key)
+CLASS_METHODS_META(o2::AnimatedValue<_type>::Key)
 {
 }
 END_META;

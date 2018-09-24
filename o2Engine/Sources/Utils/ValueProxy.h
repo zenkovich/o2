@@ -5,6 +5,8 @@ namespace o2
 	class IAbstractValueProxy
 	{
 	public:
+		virtual ~IAbstractValueProxy() {}
+
 		virtual void SetValuePtr(void* value) = 0;
 		virtual void GetValuePtr(void* value) const = 0;
 	};
@@ -17,7 +19,7 @@ namespace o2
 		virtual _type GetValue() const = 0;
 
 		void SetValuePtr(void* value) override { SetValue(*(_type*)value); }
-		void GetValuePtr(void* value) const { *(_type*)value = GetValue(); }
+		void GetValuePtr(void* value) const override { *(_type*)value = GetValue(); }
 	};
 
 	class IPointerValueProxy
@@ -56,6 +58,6 @@ namespace o2
 		IObjectPointerValueProxy():PointerValueProxy<_type>() {}
 		IObjectPointerValueProxy(_type* valuePtr):PointerValueProxy<_type>(valuePtr) {}
 
-		IObject* GetObjectPtr() const override { return dynamic_cast<IObject*>(mValuePtr); }
+		IObject* GetObjectPtr() const override { return dynamic_cast<IObject*>(PointerValueProxy<_type>::mValuePtr); }
 	};
 }

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PngFormat.h"
 
-#include "Dependencies/LibPNG/png.h"
+#include "dependencies/libpng/png.h"
 #include "Utils/Debug/Debug.h"
 #include "Utils/FileSystem/File.h"
 #include "Utils/Bitmap/Bitmap.h"
@@ -36,7 +36,8 @@ namespace o2
 		if (!pngImageFile.IsOpened())
 		{
 			if (errors) 
-				o2Debug.LogError("Can't load PNG file '%s'\n", fileName);
+				o2Debug.LogError("Can't load PNG file '" + fileName + "'");
+
 			return false;
 		}
 
@@ -51,7 +52,7 @@ namespace o2
 		if (!is_png)
 		{
 			if (errors) 
-				o2Debug.LogError("Can't load PNG file '%s': not PNG\n", fileName);
+				o2Debug.LogError("Can't load PNG file '" + fileName + "': not PNG");
 			return false;
 		}
 
@@ -60,7 +61,7 @@ namespace o2
 		if (!png_ptr)
 		{
 			if (errors) 
-				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '" + fileName + "': TEXTURE_LOAD_ERROR");
 			return false;
 		}
 
@@ -71,7 +72,7 @@ namespace o2
 			png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
 
 			if (errors) 
-				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '" + fileName + "': TEXTURE_LOAD_ERROR");
 			return false;
 		}
 
@@ -82,7 +83,7 @@ namespace o2
 			png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
 
 			if (errors) 
-				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '" + fileName + "': TEXTURE_LOAD_ERROR");
 			return false;
 		}
 
@@ -92,7 +93,7 @@ namespace o2
 			png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 
 			if (errors) 
-				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '" + fileName + "': TEXTURE_LOAD_ERROR");
 			return false;
 		}
 
@@ -121,7 +122,7 @@ namespace o2
 		int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
 
 		// Allocate the image_data as a big block, to be given to opengl
-		image->Create(Bitmap::Format::R8G8B8A8, Vec2I(twidth, theight));
+		image->Create(PixelFormat::R8G8B8A8, Vec2I(twidth, theight));
 		png_byte *image_data = image->GetData();
 		if (!image_data)
 		{
@@ -129,7 +130,7 @@ namespace o2
 			png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 
 			if (errors) 
-				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '" + fileName + "': TEXTURE_LOAD_ERROR");
 			return false;
 		}
 
@@ -143,7 +144,7 @@ namespace o2
 				delete[] image_data;
 
 			if (errors) 
-				o2Debug.LogError("Can't load PNG file '%s': TEXTURE_LOAD_ERROR\n", fileName);
+				o2Debug.LogError("Can't load PNG file '" + fileName + "': TEXTURE_LOAD_ERROR");
 			return false;
 		}
 
@@ -167,7 +168,7 @@ namespace o2
 		OutFile pngImageFile(fileName);
 		if (!pngImageFile.IsOpened())
 		{
-			o2Debug.LogError("Can't save PNG file '%s'\n", fileName);
+			o2Debug.LogError("Can't save PNG file '" + fileName + "'");
 			return false;
 		}
 
@@ -179,20 +180,20 @@ namespace o2
 
 		if (!png_ptr)
 		{
-			o2Debug.LogError("Can't save PNG file '%s': png_create_write_struct failed\n", fileName);
+			o2Debug.LogError("Can't save PNG file '" + fileName + "': png_create_write_struct failed");
 			return false;
 		}
 
 		info_ptr = png_create_info_struct(png_ptr);
 		if (!info_ptr)
 		{
-			o2Debug.LogError("Can't save PNG file '%s': png_create_info_struct failed\n", fileName);
+			o2Debug.LogError("Can't save PNG file '" + fileName + "': png_create_info_struct failed");
 			return false;
 		}
 
 		if (setjmp(png_jmpbuf(png_ptr)))
 		{
-			o2Debug.LogError("Can't save PNG file '%s': Error during init_io\n", fileName);
+			o2Debug.LogError("Can't save PNG file '" + fileName + "': Error during init_io");
 			return false;
 		}
 
@@ -203,7 +204,7 @@ namespace o2
 		/* write header */
 		if (setjmp(png_jmpbuf(png_ptr)))
 		{
-			o2Debug.LogError("Can't save PNG file '%s': Error during writing header\n", fileName);
+			o2Debug.LogError("Can't save PNG file '" + fileName + "': Error during writing header");
 			return false;
 		}
 
@@ -219,7 +220,7 @@ namespace o2
 		/* write bytes */
 		if (setjmp(png_jmpbuf(png_ptr)))
 		{
-			o2Debug.LogError("Can't save PNG file '%s': Error during writing bytes\n", fileName);
+			o2Debug.LogError("Can't save PNG file '" + fileName + "': Error during writing bytes");
 			return false;
 		}
 
@@ -237,7 +238,7 @@ namespace o2
 		/* end write */
 		if (setjmp(png_jmpbuf(png_ptr)))
 		{
-			o2Debug.LogError("Can't save PNG file '%s': Error during end of write\n", fileName);
+			o2Debug.LogError("Can't save PNG file '" + fileName + "': Error during end of write");
 			return false;
 		}
 

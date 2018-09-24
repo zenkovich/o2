@@ -12,6 +12,7 @@ namespace o2
 {
 	class Sprite;
 	class UIButton;
+	class UIContextMenu;
 	class UIVerticalLayout;
 
 	// -----------------

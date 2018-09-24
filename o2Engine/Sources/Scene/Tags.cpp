@@ -2,6 +2,7 @@
 #include "Tags.h"
 
 #include "Scene/Actor.h"
+#include "Scene/Scene.h"
 
 namespace o2
 {
@@ -27,7 +28,7 @@ namespace o2
 	{
 		if (o2Scene.GetTag(name))
 		{
-			o2Debug.LogWarning("Can't rename tag %s to %s: already exist tag with same name", mName, name);
+			o2Debug.LogWarning("Can't rename tag " + mName + " to " + name + ": already exist tag with same name");
 			return;
 		}
 
@@ -133,7 +134,7 @@ namespace o2
 
 		if (!tag)
 		{
-			o2Debug.LogWarning("Can't remove tag with name %s from group: isn't exist", name);
+			o2Debug.LogWarning("Can't remove tag with name " + name + " from group: isn't exist");
 			return;
 		}
 

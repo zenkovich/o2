@@ -83,38 +83,56 @@ namespace o2
 		void Reset();
 
 	protected:
+		struct PackLine;
+
 		//-------------------------------
 		// Font glyph rendering character
 		// ------------------------------
 		struct CharDef
 		{
-			RectsPacker::Rect* mPackRect;  // Pack rect
-			Character          mCharacter; // Character
-			Bitmap*            mBitmap;    // Bitmap
+			PackLine* packLine;
+			RectI     rect;
+			Character character;
+			Bitmap*   bitmap;
 
 			bool operator==(const CharDef& other) const { return false; }
 		};
 		typedef Vector<CharDef> CharDefsVec;
+
+		// -----------------------
+		// Characters packing line
+		// -----------------------
+		struct PackLine
+		{
+			int         position = 0;
+			int         height = 0;
+			int         length = 0;
+			CharDefsVec characters;
+
+			bool operator==(const PackLine& other) const { return false; }
+		};
+		typedef Vector<PackLine*> PackLinesVec;
+
 		typedef Vector<Effect*> EffectsVec;
 
 	protected:
 		String        mFileName;     // Source file name
-		RectsPacker   mRectsPacker;  // Characters packer
 		FT_Face       mFreeTypeFace; // Free Type font face
-		EffectsVec    mEffects;      // Font effects
+
+		EffectsVec    mEffects; // Font effects
+
+		PackLinesVec  mPackLines;           // Packed symbols lines
+		int           mLastPackLinePos = 0; // Last packed line bottom pos
 
 	protected:
 		// Updates characters set
 		void UpdateCharacters(Vector<wchar_t>& newCharacters, int height);
 
-		// Extracts characters from texture
-		void ExtractCharacterDefsFromTexture(CharDefsVec& charDefs);
-
 		// Renders new characters
-		void RenderNewCharacters(CharDefsVec& charDefs, Vector<wchar_t>& newCharacters, int height);
+		void RenderNewCharacters(Vector<wchar_t>& newCharacters, int height);
 
-		// Pack all characters
-		void PackCharactersDefs(CharDefsVec& charDefs);
+		// Packs character in line 
+		void PackCharacter(CharDef& character, int height);
 	};
 
 	template<typename _eff_type, typename ... _args>

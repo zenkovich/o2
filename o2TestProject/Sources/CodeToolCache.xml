@@ -1,7 +1,30 @@
 <?xml version="1.0"?>
 <files>
+	<file path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\Sources/BasicUIStyle.h">
+		<date year="2018" month="9" day="1" hour="15" minute="55" second="40" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="BasicUIStyleBuilder" fullname="o2::BasicUIStyleBuilder" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IObject" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\Sources/ITestScreen.h">
-		<date year="2017" month="12" day="9" hour="17" minute="13" second="57" />
+		<date year="2018" month="8" day="14" hour="22" minute="28" second="43" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Test" fullname="Test" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
@@ -28,7 +51,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\Sources/MainTestScreen.h">
-		<date year="2017" month="1" day="12" hour="18" minute="46" second="32" />
+		<date year="2018" month="8" day="13" hour="22" minute="53" second="11" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="MainTestScreen" fullname="MainTestScreen" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
@@ -44,65 +67,8 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\Sources/TextTestScreen.h">
-		<date year="2017" month="12" day="9" hour="17" minute="13" second="58" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="TextTestScreen" fullname="TextTestScreen" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-					<sections />
-					<typedefs />
-					<usings />
-					<baseClasses>
-						<class name="ITestScreen" protection="0" />
-					</baseClasses>
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\Sources/UITestScreen.h">
-		<date year="2017" month="12" day="9" hour="17" minute="13" second="58" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="UITestScreen" fullname="UITestScreen" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-					<sections />
-					<typedefs />
-					<usings />
-					<baseClasses>
-						<class name="ITestScreen" protection="0" />
-					</baseClasses>
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\Sources/BasicUIStyle.h">
-		<date year="2017" month="11" day="14" hour="9" minute="23" second="51" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="BasicUIStyleBuilder" fullname="o2::BasicUIStyleBuilder" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\Sources/TestApplication.h">
-		<date year="2017" month="12" day="19" hour="11" minute="3" second="31" />
+		<date year="2018" month="8" day="13" hour="22" minute="53" second="11" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="TestApplication" fullname="TestApplication" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
@@ -120,7 +86,41 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\Sources/TextTestScreen.h">
+		<date year="2018" month="9" day="1" hour="22" minute="45" second="52" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="TextTestScreen" fullname="TextTestScreen" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+					<sections />
+					<typedefs />
+					<usings />
+					<baseClasses>
+						<class name="ITestScreen" protection="0" />
+					</baseClasses>
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\Sources/UITestScreen.h">
+		<date year="2018" month="8" day="13" hour="22" minute="53" second="11" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="UITestScreen" fullname="UITestScreen" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+					<sections />
+					<typedefs />
+					<usings />
+					<baseClasses>
+						<class name="ITestScreen" protection="0" />
+					</baseClasses>
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
 </files>
 <parentProjects>
-	<project path="C:\work\o2\o2Engine\Sources\CodeToolCache.xml" />
+	<project path="C:\work\o2\o2TestProject\Platforms\Windows\..\..\..\o2Engine\Sources\CodeToolCache.xml" />
 </parentProjects>

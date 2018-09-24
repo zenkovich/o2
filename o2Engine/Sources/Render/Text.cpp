@@ -173,7 +173,7 @@ namespace o2
 	{
 		if (!o2Assets.IsAssetExist(assetId))
 		{
-			o2Debug.LogError("Can't load font asset: %i - isn't exist", assetId);
+			o2Debug.LogError("Can't load font asset: " + (String)assetId + " - isn't exist");
 			return;
 		}
 
@@ -205,7 +205,7 @@ namespace o2
 	{
 		if (!o2Assets.IsAssetExist(fileName))
 		{
-			o2Debug.LogError("Can't load font asset: %s - isn't exist", fileName);
+			o2Debug.LogError("Can't load font asset: " + fileName + " - isn't exist");
 			return;
 		}
 
@@ -366,7 +366,7 @@ namespace o2
 		return textSet.mRealSize;
 	}
 
-	char* Text::mBasicSymbolsPreset = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+	const char* Text::mBasicSymbolsPreset = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
 	void Text::UpdateMesh()
 	{

@@ -1141,52 +1141,19 @@ namespace o2
 					appendStr((TString)va_arg(vlist, UInt));
 					i++;
 				}
-				else if (format.mData[i + 1] == 'v' && format.mData[i + 2] == 'i')
-				{
-					appendStr((TString)va_arg(vlist, Vec2I));
-					i++;
-				}
-				else if (format.mData[i + 1] == 'v' && format.mData[i + 2] == 'f')
-				{
-					appendStr((TString)va_arg(vlist, Vec2F));
-					i++;
-				}
-				else if (format.mData[i + 1] == 'r' && format.mData[i + 2] == 'i')
-				{
-					appendStr((TString)va_arg(vlist, RectI));
-					i++;
-				}
-				else if (format.mData[i + 1] == 'r' && format.mData[i + 2] == 'f')
-				{
-					appendStr((TString)va_arg(vlist, RectF));
-					i++;
-				}
-				else if (format.mData[i + 1] == 'c' && format.mData[i + 2] == 'l')
-				{
-					appendStr((TString)va_arg(vlist, Color4));
-					i++;
-				}
+				
 				else if (format.mData[i + 1] == 's' && format.mData[i + 2] == 'c')
 				{
 					appendStr(va_arg(vlist, char*));
 					i++;
 				}
-				else if (format.mData[i + 1] == 's' && format.mData[i + 2] == 'w')
-				{
-					appendStr(va_arg(vlist, WString));
-					i++;
-				}
-				else if (format.mData[i + 1] == 's')
-				{
-					appendStr((TString)va_arg(vlist, String));
-				}
 				else if (format.mData[i + 1] == 'c')
 				{
-					res.mData[resLen++] = va_arg(vlist, char);
+					res.mData[resLen++] = va_arg(vlist, int);
 				}
 				else if (format.mData[i + 1] == 'b')
 				{
-					appendStr(va_arg(vlist, bool) ? "true" : "false");
+					appendStr(va_arg(vlist, int) ? "true" : "false");
 					i++;
 				}
 				else

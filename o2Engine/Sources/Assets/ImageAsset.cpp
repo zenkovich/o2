@@ -113,7 +113,7 @@ namespace o2
 		AssetInfo atlasInfo = o2Assets.GetAssetInfo(id);
 		if (atlasInfo.assetType != &TypeOf(AtlasAsset))
 		{
-			GetAssetsLogStream()->Error("Can' setup image atlas id (%i): wrong id", id);
+			GetAssetsLogStream()->Error("Can' setup image atlas id (" + (String)id + "): wrong id");
 			return;
 		}
 

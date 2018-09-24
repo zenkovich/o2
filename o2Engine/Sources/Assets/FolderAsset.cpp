@@ -79,7 +79,7 @@ namespace o2
 	{
 		auto folderAssetInfo = o2Assets.mAssetsTree.FindAsset(mPath);
 		if (folderAssetInfo)
-			mContainingAssetsInfos = folderAssetInfo->GetChilds().Select<AssetInfo>(
+			mContainingAssetsInfos = folderAssetInfo->children.Select<AssetInfo>(
 				[&](AssetTree::AssetNode* asset) { return (AssetInfo)(*asset); });
 	}
 

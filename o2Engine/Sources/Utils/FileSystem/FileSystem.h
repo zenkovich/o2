@@ -7,6 +7,9 @@
 #include "Utils/Singleton.h"
 #include "Utils/Types/String.h"
 
+#if defined PLATFORM_ANDROID
+#include <android/asset_manager.h>
+#endif
 
 namespace o2
 {
@@ -33,6 +36,11 @@ namespace o2
 
 		// Destructor
 		~FileSystem();
+
+#if defined PLATFORM_ANDROID
+        // Returns android asset manager
+        AAssetManager* GetAssetManager() const;
+#endif
 
 		// Returns resource path
 		const String& GetResourcesPath() const;

@@ -123,7 +123,7 @@ namespace Editor
 			return UnknownPtr();
 
 		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
-		return (UnknownPtr)(void*)(assetTreeNode->GetParent());
+		return (UnknownPtr)(void*)(assetTreeNode->parent);
 	}
 
 	Vector<UnknownPtr> UIAssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownPtr object)
@@ -132,7 +132,7 @@ namespace Editor
 
 		if (assetTreeNode)
 		{
-			return assetTreeNode->GetChilds().
+			return assetTreeNode->children.
 				FindAll([](AssetTree::AssetNode* x) { return x->assetType == &TypeOf(FolderAsset); }).
 				Select<UnknownPtr>([](AssetTree::AssetNode* x) { return UnknownPtr(x); });
 		}

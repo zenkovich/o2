@@ -315,6 +315,9 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 		if (dir.find("OSX") != string::npos)
 			continue;
 
+		if (dir.find("Android") != string::npos)
+			continue;
+
 		while (!dir.empty() && find(filters.begin(), filters.end(), dir) == filters.end())
 		{
 			filters.push_back(dir);
@@ -482,7 +485,21 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 	for (auto& file : files)
 	{
 		if (EndsWith(file, ".cpp"))
-			newProjectSourcesGroup.append_child("ClCompile").append_attribute("Include") = file.c_str();
+		{
+			auto clCompile = newProjectSourcesGroup.append_child("ClCompile");
+			clCompile.append_attribute("Include") = file.c_str();
+
+			if (EndsWith(file, "stdafx.cpp"))
+			{
+				auto headerDebug = clCompile.append_child("PrecompiledHeader");
+				headerDebug.append_attribute("Condition") = "'$(Configuration)|$(Platform)'=='Debug|Win32'";
+				headerDebug.append_child(pugi::node_pcdata).set_value("Create");
+
+				auto headerRelease = clCompile.append_child("PrecompiledHeader");
+				headerRelease.append_attribute("Condition") = "'$(Configuration)|$(Platform)'=='Release|Win32'";
+				headerRelease.append_child(pugi::node_pcdata).set_value("Create");
+			}
+		}
 	}
 
 	newProjectDoc.save_file(mMSVCProjectPath.c_str());
@@ -906,6 +923,13 @@ string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)
 	return res;
 }
 
+void RemoveSubstrs(string& s, string& p)
+{
+	string::size_type n = p.length();
+	for (string::size_type i = s.find(p); i != string::npos; i = s.find(p))
+		s.erase(i, n);
+}
+
 void CodeToolApplication::AggregateTemplates(SyntaxSection* sec, string& templates, string& fullName)
 {
 	if (sec->GetParentSection())
@@ -922,7 +946,11 @@ void CodeToolApplication::AggregateTemplates(SyntaxSection* sec, string& templat
 		if (!cls->GetTemplateParameters().empty())
 		{
 			templates += "META_TEMPLATES(" + cls->GetTemplateParameters() + ")\n";
-			fullName += "<" + cls->GetTemplateParameters() + ">";
+
+			string classTemplates = cls->GetTemplateParameters();
+			RemoveSubstrs(classTemplates, (std::string)"typename ");
+
+			fullName += "<" + classTemplates + ">";
 		}
 	}
 }

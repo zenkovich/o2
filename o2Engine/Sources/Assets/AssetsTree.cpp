@@ -21,7 +21,55 @@ namespace o2
 		delete meta;
 	}
 
-	AssetTree::AssetTree():
+	AssetTree::AssetNode* AssetTree::AssetNode::AddChild(AssetNode* node)
+	{
+		if (node->parent)
+			node->parent->RemoveChild(node, false);
+
+		node->parent = this;
+
+		children.Add(node);
+
+		return node;
+	}
+
+	bool AssetTree::AssetNode::RemoveChild(AssetNode* node, bool release /*= true*/)
+	{
+		node->parent = nullptr;
+
+		if (!children.Remove(node))
+			return false;
+
+		if (release && node)
+			delete node;
+
+		return true;
+	}
+
+	void AssetTree::AssetNode::SetParent(AssetNode* parent)
+	{
+		if (parent)
+		{
+			parent->AddChild(this);
+		}
+		else
+		{
+			if (parent)
+				parent->RemoveChild(this, false);
+
+			parent = nullptr;
+		}
+	}
+
+	void AssetTree::AssetNode::OnDeserialized(const DataNode& node)
+	{
+		AssetInfo::OnDeserialized(node);
+
+		for (auto child : children)
+			child->parent = this;
+	}
+
+	AssetTree::AssetTree() :
 		mLog(nullptr)
 	{}
 
@@ -88,7 +136,7 @@ namespace o2
 
 			if (!parent)
 			{
-				if (mLog) mLog->Out("Failed to add builded asset info: %s", asset->path);
+				if (mLog) mLog->Out("Failed to add builded asset info: " + asset->path);
 			}
 			else
 			{
@@ -106,14 +154,14 @@ namespace o2
 	{
 		mAllAssets.Remove(asset);
 
-		if (asset->GetParent())
-			asset->GetParent()->RemoveChild(asset, false);
+		if (asset->parent)
+			asset->parent->RemoveChild(asset, false);
 		else
 			mRootAssets.Remove(asset);
 
 		if (asset->assetType == &TypeOf(FolderAsset) && release)
 		{
-			auto childs = asset->GetChilds();
+			auto& childs = asset->children;
 			for (auto ch : childs)
 				RemoveAsset(ch, release);
 		}
@@ -134,7 +182,7 @@ namespace o2
 	void AssetTree::LoadFolder(FolderInfo& folder, AssetNode* parentAsset)
 	{
 		Vector<AssetNode*> missingAssetNodes;
-		auto parentChilds = parentAsset ? parentAsset->GetChilds() : mRootAssets;
+		auto& parentChilds = parentAsset ? parentAsset->children : mRootAssets;
 		for (auto assetNode : parentChilds)
 		{
 			bool exist = false;
@@ -183,7 +231,7 @@ namespace o2
 				bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 				if (!isExistMetaForFolder)
 				{
-					mLog->Warning("Can't load asset info for %s - missing meta file", subFolder.mPath);
+					mLog->Warning("Can't load asset info for " + subFolder.mPath + " - missing meta file");
 					continue;
 				}
 
@@ -224,6 +272,25 @@ namespace o2
 
 		return asset;
 	}
+
+	void AssetTree::OnDeserialized(const DataNode& node)
+	{
+		struct helper
+		{
+			static void Do(AssetsVec& assets, AssetsVec& children)
+			{
+				assets.Add(children);
+
+				for (auto child : children)
+					Do(assets, child->children);
+			}
+		};
+
+		helper::Do(mAllAssets, mRootAssets);
+	}
+
 }
+
+DECLARE_CLASS(o2::AssetTree);
 
 DECLARE_CLASS(o2::AssetTree::AssetNode);

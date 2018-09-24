@@ -38,7 +38,7 @@ namespace Editor
 			mEditBox->layout->minHeight = 10;
 
 			Color4 color1(1.0f, 1.0f, 1.0f, 1.0f), color2(0.7f, 0.7f, 0.7f, 1.0f);
-			Bitmap backLayerBitmap(Bitmap::Format::R8G8B8A8, Vec2I(20, 20));
+			Bitmap backLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 			backLayerBitmap.Fill(color1);
 			backLayerBitmap.FillRect(0, 10, 10, 0, color2);
 			backLayerBitmap.FillRect(10, 20, 20, 10, color2);
@@ -49,7 +49,7 @@ namespace Editor
 			*backImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
 			mEditBox->AddChild(backImage);
 
-			Bitmap colorLayerBitmap(Bitmap::Format::R8G8B8A8, Vec2I(20, 20));
+			Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 			colorLayerBitmap.Fill(color1);
 			mColorSprite = mnew UIImage();
 			mColorSprite->image = mnew Sprite(&colorLayerBitmap);

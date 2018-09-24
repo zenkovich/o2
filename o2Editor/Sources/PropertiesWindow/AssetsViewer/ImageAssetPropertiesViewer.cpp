@@ -341,7 +341,7 @@ namespace Editor
 		Color4 c1 = Color4::White();
 		Color4 c2(200, 200, 200, 255);
 
-		Bitmap bmp(Bitmap::Format::R8G8B8A8, size);
+		Bitmap bmp(PixelFormat::R8G8B8A8, size);
 		bmp.Fill(c1);
 		bmp.FillRect(0, 0, 10, 10, c2);
 		bmp.FillRect(10, 10, 20, 20, c2);

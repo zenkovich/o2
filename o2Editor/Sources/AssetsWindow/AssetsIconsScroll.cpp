@@ -572,8 +572,8 @@ namespace Editor
 			if (Actor* actor = dynamic_cast<Actor*>(object))
 			{
 				ActorAssetRef newAsset = actor->MakePrototype();
-				String path = destPath.IsEmpty() ? newAsset->GetActor()->name + ".proto" : destPath + "/" +
-					newAsset->GetActor()->name + ".proto";
+				String path = destPath.IsEmpty() ? newAsset->GetActor()->name + String(".proto") : destPath + "/" +
+					newAsset->GetActor()->name + String(".proto");
 
 				String uniquePath = o2Assets.MakeUniqueAssetName(path);
 				newAsset->Save(uniquePath, false);

@@ -60,7 +60,7 @@ namespace o2
 		Text& operator=(const Text& other);
 
 		// Draw text
-		void Draw();
+		void Draw() override;
 
 		// Sets using font
 		void SetFont(FontRef font);
@@ -232,7 +232,7 @@ namespace o2
 	protected:
 		typedef Vector<Mesh*> MeshesVec;
 
-		static char* mBasicSymbolsPreset;
+		static const char* mBasicSymbolsPreset;
 		const UInt mMeshMaxPolyCount = 4096;
 
 		WString    mText;              // Wide char string, containing rendering text @SERIALIZABLE
@@ -267,13 +267,13 @@ namespace o2
 		Basis CalculateTextBasis() const;
 
 		// It is called when color was changed
-		void ColorChanged();
+		void ColorChanged() override;
 
 		// It is called when basis was changed
-		void BasisChanged();
+		void BasisChanged() override;
 
 		// Calling when deserializing
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 	};
 }
 

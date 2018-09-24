@@ -11,6 +11,7 @@ namespace o2
 	Timer::~Timer()
 	{}
 
+#ifdef PLATFORM_WINDOWS
 	void Timer::Reset()
 	{
 		QueryPerformanceFrequency(&mFrequency);
@@ -39,4 +40,35 @@ namespace o2
 
 		return res;
 	}
+#endif
+
+#ifdef PLATFORM_ANDROID
+	void Timer::Reset()
+	{
+		gettimeofday(&mStartTime, NULL);
+		gettimeofday(&mLastElapsedTime, NULL);
+	}
+
+	float Timer::GetTime()
+	{
+		struct timeval now;
+		gettimeofday(&now, NULL);
+		float deltaTime = (now.tv_sec - mStartTime.tv_sec)*1000 + (now.tv_usec - mStartTime.tv_usec)/1000.0f;
+		deltaTime /= 1000.0f;
+		mLastElapsedTime = now;
+
+		return deltaTime;
+	}
+
+	float Timer::GetDeltaTime()
+	{
+		struct timeval now;
+		gettimeofday(&now, NULL);
+		float deltaTime = (now.tv_sec - mLastElapsedTime.tv_sec)*1000 + (now.tv_usec - mLastElapsedTime.tv_usec)/1000.0f;
+		deltaTime /= 1000.0f;
+		mLastElapsedTime = now;
+
+		return deltaTime;
+	}
+#endif
 }

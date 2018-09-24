@@ -2,19 +2,18 @@
 #include "Component.h"
 
 #include "Scene/Actor.h"
+#include "Scene/Scene.h"
 
 namespace o2
 {
-	Component::Component():
+	Component::Component() :
 		mId(Math::Random())
-	{
-	}
+	{}
 
-	Component::Component(const Component& other):
+	Component::Component(const Component& other) :
 		mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mId(Math::Random()),
 		actor(this), enabled(this), enabledInHierarchy(this)
-	{
-	}
+	{}
 
 	Component::~Component()
 	{

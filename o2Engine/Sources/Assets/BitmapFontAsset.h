@@ -39,7 +39,7 @@ namespace o2
 		FontRef GetFont() const;
 
 		// Returns extensions string
-		const char* GetFileExtensions() const;
+		const char* GetFileExtensions() const override;
 
 		SERIALIZABLE(BitmapFontAsset);
 
@@ -51,7 +51,7 @@ namespace o2
 		{
 		public:
 			// Returns asset type id
-			const Type* GetAssetType() const;
+			const Type* GetAssetType() const override;
 
 			SERIALIZABLE(MetaInfo);
 		};
@@ -73,7 +73,7 @@ namespace o2
 		BitmapFontAsset(const BitmapFontAsset& asset);
 
 		// Loads data
-		void LoadData(const String& path);
+		void LoadData(const String& path) override;
 
 		friend class Assets;
 	};
@@ -130,7 +130,7 @@ namespace o2
 		bool operator!=(const BitmapFontAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
-		const Type& GetAssetType() const { return TypeOf(BitmapFontAsset); }
+		const Type& GetAssetType() const override { return TypeOf(BitmapFontAsset); }
 
 		SERIALIZABLE(BitmapFontAssetRef);
 

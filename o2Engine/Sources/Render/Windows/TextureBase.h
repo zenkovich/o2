@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef PLATFORM_WINDOWS
+
 #include "Render/Windows/OpenGL.h"
 
 namespace o2
@@ -14,3 +16,5 @@ namespace o2
 		GLuint mFrameBuffer; // Frame buffer for rendering into texture
 	};
 }
+
+#endif // PLATFORM_WINDOWS

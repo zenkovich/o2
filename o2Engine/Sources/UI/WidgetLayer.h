@@ -249,7 +249,7 @@ namespace o2
 
 	protected:
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		// Sets owner widget for this and children
 		void SetOwnerWidget(UIWidget* owner);

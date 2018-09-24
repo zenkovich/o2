@@ -69,7 +69,7 @@ namespace Editor
 		*colorPreview->layout = UIWidgetLayout::BothStretch(5, 5, 5, 5);
 
 		Color4 color1(1.0f, 1.0f, 1.0f, 1.0f), color2(0.7f, 0.7f, 0.7f, 1.0f);
-		Bitmap backLayerBitmap(Bitmap::Format::R8G8B8A8, Vec2I(20, 20));
+		Bitmap backLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 		backLayerBitmap.Fill(color1);
 		backLayerBitmap.FillRect(0, 10, 10, 00, color2);
 		backLayerBitmap.FillRect(10, 20, 20, 10, color2);
@@ -81,7 +81,7 @@ namespace Editor
 		*backImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
 		colorPreview->AddChild(backImage);
 
-		Bitmap colorLayerBitmap(Bitmap::Format::R8G8B8A8, Vec2I(20, 20));
+		Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 		colorLayerBitmap.Fill(color1);
 		mColorSampleImage = mnew UIImage();
 		mColorSampleImage->image = mnew Sprite(&colorLayerBitmap);
@@ -103,7 +103,7 @@ namespace Editor
 		pickArea->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 						   Layout::BothStretch(-9, -9, -9, -9));
 
-		mColorPickAreaBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, Vec2I(80, 80));
+		mColorPickAreaBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(80, 80));
 		mColorPickAreaBitmap->Clear(Color4::White());
 		mColorPickAreaTexture = TextureRef(mColorPickAreaBitmap);
 		mColorPickAreaColor = pickArea->AddLayer("color", mnew Sprite(mColorPickAreaTexture, RectI(0, 0, 80, 80)),
@@ -118,7 +118,7 @@ namespace Editor
 		mHUEBar = o2UI.CreateWidget<UIVerticalProgress>("wide");
 		*mHUEBar->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 5, 5, 20, 5);
 
-		mHUEBarBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, Vec2I(20, 256));
+		mHUEBarBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(20, 256));
 		InitHUEBarBitmap();
 		mHUEBarTexture = TextureRef(mHUEBarBitmap);
 		mHUEBar->AddLayer("color", mnew Sprite(mHUEBarTexture, RectI(0, 0, 20, 256)), Layout::BothStretch(1, 1, 1, 1),
@@ -189,7 +189,7 @@ UIWidget* ColorPickerDlg::InitializeColorParameter(UILabel*& name, UIHorizontalP
 	*bar->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 30, 50, 20);
 	bar->onChange = changeCallback;
 
-	bitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, Vec2F(256, 256));
+	bitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2F(256, 256));
 	texture = TextureRef(bitmap);
 	bar->AddLayer("color", mnew Sprite(texture, RectI(0, 0, 256, 256)), Layout::BothStretch(1, 1, 1, 1), 0.5f);
 

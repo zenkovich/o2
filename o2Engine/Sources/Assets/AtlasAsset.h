@@ -63,7 +63,7 @@ namespace o2
 		MetaInfo* GetMeta() const;
 
 		// Returns extensions string
-		const char* GetFileExtensions() const;
+		const char* GetFileExtensions() const override;
 
 		// Returns atlas page's texture file name
 		static String GetPageTextureFileName(UID atlasId, UInt pageIdx);
@@ -109,10 +109,10 @@ namespace o2
 
 		public:
 			// Returns asset type id
-			const Type* GetAssetType() const;
+			const Type* GetAssetType() const override;
 
 			// Returns true if other meta is equal to this
-			bool IsEqual(IMetaInfo* other) const;
+			bool IsEqual(IMetaInfo* other) const override;
 
 			SERIALIZABLE(MetaInfo);
 		};
@@ -170,10 +170,10 @@ namespace o2
 		AtlasAsset(const AtlasAsset& asset);
 
 		// Loads data
-		void LoadData(const String& path);
+		void LoadData(const String& path) override;
 
 		// Saves data
-		void SaveData(const String& path);
+		void SaveData(const String& path) override;
 
 		friend class Assets;
 	};
@@ -230,7 +230,7 @@ namespace o2
 		bool operator!=(const AtlasAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
-		const Type& GetAssetType() const { return TypeOf(AtlasAsset); }
+		const Type& GetAssetType() const override { return TypeOf(AtlasAsset); }
 
 		SERIALIZABLE(AtlasAssetRef);
 

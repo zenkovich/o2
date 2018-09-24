@@ -12,16 +12,21 @@ namespace o2
 	// --------------------------------
 	// Asset tree structure information
 	// --------------------------------
-	class AssetTree
+	class AssetTree: public ISerializable
 	{
 	public:
 		// ----------------------
 		// Asset information node
 		// ----------------------
-		struct AssetNode: public ITreeNode<AssetNode>, public AssetInfo
+		struct AssetNode: public AssetInfo
 		{ 
-			Asset::IMetaInfo* meta; // Asset meta
-			TimeStamp         time; // Asset edited time
+			typedef Vector<AssetNode*> AssetNodesVec;
+
+			Asset::IMetaInfo* meta;     // Asset meta
+			TimeStamp         time;     // Asset edited time
+
+			AssetNode*        parent = nullptr; // Parent node
+			AssetNodesVec     children;         // Children nodes @SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -33,14 +38,27 @@ namespace o2
 			// Destructor
 			~AssetNode();
 
+			// Adds new child node and returns him
+			AssetNode* AddChild(AssetNode* node);
+
+			// Remove child node and releases him if needs
+			bool RemoveChild(AssetNode* node, bool release = true);
+
+			// Sets parent node
+			void SetParent(AssetNode* parent);
+
 			SERIALIZABLE(AssetNode);
+
+		private:
+			// It is called when deserializing node, sets parent for children
+			void OnDeserialized(const DataNode& node) override;
 		};
 		typedef Vector<AssetNode*> AssetsVec;
 
 	public:
-		String     mPath;       // Assets information root path
+		String     mPath;       // Assets information root path @SERIALIZABLE
 		LogStream* mLog;        // Log stream
-		AssetsVec  mRootAssets; // Root path assets
+		AssetsVec  mRootAssets; // Root path assets @SERIALIZABLE
 		AssetsVec  mAllAssets;  // All assets
 
 	public:
@@ -77,18 +95,53 @@ namespace o2
 		// Clears all information
 		void Clear();
 
+		SERIALIZABLE(AssetTree);
+
 	protected:
 		// Loads assets nodes from folder
 		void LoadFolder(FolderInfo& folder, AssetNode* parentAsset);
 
 		// Loads and returns asset by path
 		AssetNode* LoadAsset(const String& path, AssetNode* parent, const TimeStamp& time);
+
+		// It is called when deserializing node, combine all nodes in mAllNodes
+		void OnDeserialized(const DataNode& node) override;
 	};
 }
 
+CLASS_BASES_META(o2::AssetTree)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::AssetTree)
+{
+	PUBLIC_FIELD(mPath).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mLog);
+	PUBLIC_FIELD(mRootAssets).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mAllAssets);
+}
+END_META;
+CLASS_METHODS_META(o2::AssetTree)
+{
+
+	PUBLIC_FUNCTION(void, BuildTree, const String&);
+	PUBLIC_FUNCTION(void, RebuildTree);
+	PUBLIC_FUNCTION(AssetNode*, FindAsset, const String&);
+	PUBLIC_FUNCTION(AssetNode*, FindAsset, UID);
+	PUBLIC_FUNCTION(AssetInfo, FindAssetInfo, const String&);
+	PUBLIC_FUNCTION(AssetInfo, FindAssetInfo, UID);
+	PUBLIC_FUNCTION(AssetNode*, AddAsset, AssetNode*);
+	PUBLIC_FUNCTION(void, RemoveAsset, AssetNode*, bool);
+	PUBLIC_FUNCTION(void, Clear);
+	PROTECTED_FUNCTION(void, LoadFolder, FolderInfo&, AssetNode*);
+	PROTECTED_FUNCTION(AssetNode*, LoadAsset, const String&, AssetNode*, const TimeStamp&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+}
+END_META;
+
 CLASS_BASES_META(o2::AssetTree::AssetNode)
 {
-	BASE_CLASS(o2::ITreeNode<AssetNode>);
 	BASE_CLASS(o2::AssetInfo);
 }
 END_META;
@@ -96,9 +149,16 @@ CLASS_FIELDS_META(o2::AssetTree::AssetNode)
 {
 	PUBLIC_FIELD(meta);
 	PUBLIC_FIELD(time);
+	PUBLIC_FIELD(parent);
+	PUBLIC_FIELD(children).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::AssetTree::AssetNode)
 {
+
+	PUBLIC_FUNCTION(AssetNode*, AddChild, AssetNode*);
+	PUBLIC_FUNCTION(bool, RemoveChild, AssetNode*, bool);
+	PUBLIC_FUNCTION(void, SetParent, AssetNode*);
+	PRIVATE_FUNCTION(void, OnDeserialized, const DataNode&);
 }
 END_META;

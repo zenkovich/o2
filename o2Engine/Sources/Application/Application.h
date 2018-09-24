@@ -5,7 +5,14 @@
 #include "Utils/Property.h"
 #include "Utils/Singleton.h"
 #include "Utils/Types/String.h"
+
+#if defined PLATFORM_WINDOWS
 #include "Application/Windows/ApplicationBase.h"
+#elif defined PLATFORM_ANDROID
+#include "Application/Android/ApplicationBase.h"
+#include <jni.h>
+#include <android/asset_manager.h>
+#endif
 
 // Application access macros
 #define o2Application Application::Instance()
@@ -63,9 +70,6 @@ namespace o2
 
 		// Returns pointer to time utilities object
 		virtual Time* GetTime() const;
-
-		// Launching application cycle
-		virtual void Launch();
 
 		// Shutting down application
 		virtual void Shutdown();
@@ -136,6 +140,28 @@ namespace o2
 		// Returns is application ready to use
 		static bool IsReady();
 
+#if defined PLATFORM_WINDOWS
+
+        // Initializes engine application
+        virtual void Initialize();
+
+		// Launching application cycle
+		virtual void Launch();
+
+#elif defined PLATFORM_ANDROID
+
+		// Launching application
+		virtual void Initialize(JNIEnv* env, jobject activity, AAssetManager* assetManager, String dataPath,
+                                const Vec2I& resolution);
+
+        // Launching application cycle
+        virtual void Launch();
+
+		// Updates frame
+		void Update();
+
+#endif
+
 	protected:
 		Assets*        mAssets;        // Assets
 		EventSystem*   mEventSystem;   // Events processing system
@@ -156,6 +182,12 @@ namespace o2
 		Vec2F          mCursorCorrectionDelta;     // Cursor corrections delta - result of infinite cursors offset
 
 	protected:
+		// Basic initialization for all platforms
+		void BasicInitialize();
+
+		// Platform-specific initializations
+		void InitializePlatform();
+
 		// Calling on updating
 		virtual void OnUpdate(float dt);
 

@@ -18,7 +18,18 @@ o2::MemoryManager::Instance().OnMemoryAllocate(memory, size, location, line);
 	return memory;
 }
 
-void operator delete(void* allocMemory)
+void* operator new[](size_t size, const char* location, int line)
+{
+	void* memory = ::operator new(size);
+
+#if ENALBE_MEMORY_MANAGE == true
+	o2::MemoryManager::Instance().OnMemoryAllocate(memory, size, location, line);
+#endif
+
+	return memory;
+}
+
+void operator delete(void* allocMemory) noexcept
 {
 #if ENALBE_MEMORY_MANAGE == true
 	o2::MemoryManager::Instance().OnMemoryRelease(allocMemory);
@@ -28,6 +39,16 @@ void operator delete(void* allocMemory)
 }
 
 void operator delete(void* allocMemory, const char* location, int line)
+{
+	::operator delete(allocMemory);
+}
+
+void operator delete[](void* allocMemory, const char* location, int line)
+{
+	::operator delete(allocMemory);
+}
+
+void operator delete[](void* allocMemory) noexcept
 {
 	::operator delete(allocMemory);
 }

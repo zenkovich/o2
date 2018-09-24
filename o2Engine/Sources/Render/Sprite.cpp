@@ -313,7 +313,7 @@ namespace o2
 		if (assetRef)
 			LoadFromImage(assetRef);
 		else 
-			o2Debug.LogWarning("Can't load sprite from image by path (%s): image isn't exist", imagePath);
+			o2Debug.LogWarning("Can't load sprite from image by path (" + imagePath + "): image isn't exist");
 	}
 
 	void Sprite::LoadFromImage(UID imageId)
@@ -322,7 +322,7 @@ namespace o2
 		if (assetRef)
 			LoadFromImage(assetRef);
 		else 
-			o2Debug.LogWarning("Can't create sprite from image by id (%s): image isn't exist", imageId.ToString());
+			o2Debug.LogWarning("Can't create sprite from image by id (" + imageId.ToString() + "): image isn't exist");
 	}
 
 	void Sprite::LoadMonoColor(const Color4& color)
@@ -1059,7 +1059,7 @@ namespace o2
 		else
 		{
 			if (auto textureFileNameNode = node.GetNode("textureFileName"))
-				mMesh->SetTexture(TextureRef((String)*textureFileNameNode));
+				mMesh->SetTexture(TextureRef(textureFileNameNode->Data()));
 			else
 				mMesh->SetTexture(NoTexture());
 

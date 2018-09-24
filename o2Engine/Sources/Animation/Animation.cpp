@@ -57,7 +57,7 @@ namespace o2
 					def.mTargetPtr = type->GetFieldPtr(castedTarget, def.mTargetPath, fieldInfo);
 
 					if (!fieldInfo)
-						o2Debug.LogWarning("Can't find object %s for animating", def.mTargetPath);
+						o2Debug.LogWarning("Can't find object " + def.mTargetPath + "for animating");
 					else
 					{
 						if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
@@ -94,7 +94,7 @@ namespace o2
 				if (!fieldInfo)
 				{
 					if (errors)
-						o2Debug.LogWarning("Can't find object %s for animating", val.mTargetPath);
+						o2Debug.LogWarning("Can't find object " + val.mTargetPath + "for animating");
 				}
 				else
 				{

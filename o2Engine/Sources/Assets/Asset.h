@@ -119,10 +119,10 @@ namespace o2
 		Asset(const Asset& asset);
 
 		// Beginning serialization callback
-		void OnSerialize(DataNode& node) const;
+		void OnSerialize(DataNode& node) const override;
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		// Loads asset data
 		virtual void LoadData(const String& path) {};
@@ -211,10 +211,10 @@ namespace o2
 		AssetRef(Asset* assetPtr, int* refCounter);
 
 		// Beginning serialization callback - writes path and id
-		void OnSerialize(DataNode& node) const;
+		void OnSerialize(DataNode& node) const override;
 
 		// Completion deserialization callback -  reads path and id and searchs asset
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		// Check thats asset type is based on _asset_type. If not, resets reference
 		template<typename _asset_type>

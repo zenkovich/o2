@@ -38,8 +38,7 @@ namespace o2
 		mBuildedAssetsPath = dataAssetsPath;
 
 		mLog->OutStr("===================================");
-		mLog->Out("Started assets building \n        from: %s\n        to: %s",
-				  assetsPath, dataAssetsPath);
+		mLog->Out("Started assets building \n from: " + assetsPath + "\n to: " + dataAssetsPath);
 		mLog->OutStr("===================================\n");
 
 		Timer timer;
@@ -59,9 +58,11 @@ namespace o2
 		res.Add(ProcessNewAssets());
 		res.Add(ConvertersPostProcess());
 
+		SaveAssetsTree();
+
 		mLog->OutStr("===================================");
-		mLog->Out("Completed assets building \n        from: %s\n        to: %s\n        for %f seconds",
-				  assetsPath, dataAssetsPath, timer.GetDeltaTime());
+		mLog->Out("Completed assets building \n from: " + assetsPath + "\n to: " + dataAssetsPath + 
+				  " for " + (String)timer.GetDeltaTime() + " seconds");
 		mLog->OutStr("===================================\n");
 
 		return res;
@@ -119,7 +120,7 @@ namespace o2
 					o2FileSystem.IsFolderExist(assetForMeta);
 				if (!isExistAssetForMeta)
 				{
-					mLog->Warning("Missing asset for meta: %s - removing meta", fileInfo.mPath);
+					mLog->Warning("Missing asset for meta: " + fileInfo.mPath + " - removing meta");
 					o2FileSystem.FileDelete(metaFullPath);
 				}
 			}
@@ -206,8 +207,8 @@ namespace o2
 
 				bldAssetInfoIt = mBuildedAssetsTree.mAllAssets.Remove(bldAssetInfoIt);
 
-				if ((*bldAssetInfoIt)->GetParent())
-					(*bldAssetInfoIt)->GetParent()->RemoveChild(bldAssetInfo);
+				if ((*bldAssetInfoIt)->parent)
+					(*bldAssetInfoIt)->parent->RemoveChild(bldAssetInfo);
 			}
 		}
 
@@ -231,9 +232,6 @@ namespace o2
 
 				for (auto buildedAssetInfo : mBuildedAssetsTree.mAllAssets)
 				{
-					if (srcAssetInfo->path.Contains("handle_regular") && buildedAssetInfo->path.Contains("handle_regular"))
-						skip = skip;
-
 					if (srcAssetInfo->meta->ID() == buildedAssetInfo->meta->ID())
 					{
 						if (srcAssetInfo->path == buildedAssetInfo->path)
@@ -249,7 +247,7 @@ namespace o2
 
 								mModifiedAssets.Add(buildedAssetInfo);
 
-								mLog->Out("Modified asset: %s", srcAssetInfo->path);
+								mLog->Out("Modified asset: " + srcAssetInfo->path);
 							}
 						}
 						else
@@ -268,7 +266,7 @@ namespace o2
 								buildedAssetInfo->id = buildedAssetInfo->meta->ID();
 
 								GetAssetConverter(srcAssetInfo->assetType)->ConvertAsset(*srcAssetInfo);
-								mLog->Out("Modified and moved to %s asset: %s", srcAssetInfo->path, buildedAssetInfo->path);
+								mLog->Out("Modified and moved to " + srcAssetInfo->path + " asset: " + buildedAssetInfo->path);
 
 								res.Add(srcAssetInfo->id);
 
@@ -280,7 +278,7 @@ namespace o2
 							{
 								GetAssetConverter(srcAssetInfo->assetType)->MoveAsset(*buildedAssetInfo, *srcAssetInfo);
 								res.Add(srcAssetInfo->id);
-								mLog->Out("Moved asset: %s to %s", buildedAssetInfo->path, srcAssetInfo->path);
+								mLog->Out("Moved asset: " + buildedAssetInfo->path + " to " + srcAssetInfo->path);
 
 								mBuildedAssetsTree.RemoveAsset(buildedAssetInfo, false);
 
@@ -336,7 +334,7 @@ namespace o2
 
 				res.Add((*srcAssetInfoIt)->id);
 
-				mLog->Out("New asset: %s", (*srcAssetInfoIt)->path);
+				mLog->Out("New asset: " + (*srcAssetInfoIt)->path);
 
 				AssetTree::AssetNode* newBuildedAsset = mnew AssetTree::AssetNode();
 				newBuildedAsset->path = (*srcAssetInfoIt)->path;
@@ -362,6 +360,14 @@ namespace o2
 		res.Add(mStdAssetConverter.AssetsPostProcess());
 
 		return res;
+	}
+
+	void AssetsBuilder::SaveAssetsTree()
+	{
+		DataNode data;
+		data = mBuildedAssetsTree;
+
+		data.SaveToFile(GetDataAssetsTreePath());
 	}
 
 	void AssetsBuilder::GenerateMeta(const Type& assetType, const String& metaFullPath)
