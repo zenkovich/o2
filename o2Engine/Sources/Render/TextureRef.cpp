@@ -111,6 +111,11 @@ namespace o2
 		return mTexture;
 	}
 
+	Texture* TextureRef::Get() const
+	{
+		return mTexture;
+	}
+
 	bool TextureRef::IsValid() const
 	{
 		return mTexture != nullptr;

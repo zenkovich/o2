@@ -92,7 +92,7 @@ namespace o2
 		// Get OpenGL extensions
 		GetGLExtensions(mLog);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		// Check compatibles
 		CheckCompatibles();
@@ -119,7 +119,7 @@ namespace o2
 
 		glLineWidth(1.0f);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mLog->Out("GL_VENDOR: " + (String)(char*)glGetString(GL_VENDOR));
 		mLog->Out("GL_RENDERER: " + (String)(char*)glGetString(GL_RENDERER));
@@ -231,7 +231,7 @@ namespace o2
 
 		glDrawElements(primitiveType[(int)mCurrentPrimitiveType], mLastDrawIdx, GL_UNSIGNED_SHORT, mVertexIndexData);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mFrameTrianglesCount += mTrianglesCount;
 		mLastDrawVertex = mTrianglesCount = mLastDrawIdx = 0;
@@ -262,7 +262,7 @@ namespace o2
 		DrawPrimitives();
 		SwapBuffers(mHDC);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		CheckTexturesUnloading();
 		CheckFontsUnloading();
@@ -273,7 +273,7 @@ namespace o2
 		glClearColor(color.RF(), color.GF(), color.BF(), color.AF());
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 	}
 
 	void Render::UpdateCameraTransforms()
@@ -322,7 +322,7 @@ namespace o2
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mStencilDrawing = true;
 	}
@@ -337,7 +337,7 @@ namespace o2
 		glDisable(GL_STENCIL_TEST);
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mStencilDrawing = false;
 	}
@@ -352,7 +352,7 @@ namespace o2
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_EQUAL, 0x1, 0xffffffff);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		mStencilTest = true;
 	}
@@ -374,7 +374,7 @@ namespace o2
 		glClearStencil(0);
 		glClear(GL_STENCIL_BUFFER_BIT);
 
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 	}
 
 	void Render::EnableScissorTest(const RectI& rect)
@@ -392,7 +392,7 @@ namespace o2
 		else
 		{
 			glEnable(GL_SCISSOR_TEST);
-			GL_CHECK_ERROR(mLog);
+			GL_CHECK_ERROR();
 		}
 
 		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
@@ -417,7 +417,7 @@ namespace o2
 		if (forcible)
 		{
 			glDisable(GL_SCISSOR_TEST);
-			GL_CHECK_ERROR(mLog);
+			GL_CHECK_ERROR();
 
 			while (!mStackScissors.IsEmpty() && !mStackScissors.Last().mRenderTarget)
 				mStackScissors.PopBack();
@@ -429,7 +429,7 @@ namespace o2
 			if (mStackScissors.Count() == 1)
 			{
 				glDisable(GL_SCISSOR_TEST);
-				GL_CHECK_ERROR(mLog);
+				GL_CHECK_ERROR();
 				mStackScissors.PopBack();
 
 				mScissorInfos.Last().mEndDepth = mDrawingDepth;
@@ -489,7 +489,7 @@ namespace o2
 				glEnable(GL_TEXTURE_2D);
 				glBindTexture(GL_TEXTURE_2D, mLastDrawTexture->mHandle);
 
-				GL_CHECK_ERROR(mLog);
+				GL_CHECK_ERROR();
 			}
 			else glDisable(GL_TEXTURE_2D);
 		}
@@ -534,13 +534,13 @@ namespace o2
 		{
 			mScissorInfos.Last().mEndDepth = mDrawingDepth;
 			glDisable(GL_SCISSOR_TEST);
-			GL_CHECK_ERROR(mLog);
+			GL_CHECK_ERROR();
 		}
 
 		mStackScissors.Add(ScissorStackItem(RectI(), RectI(), true));
 
 		glBindFramebufferEXT(GL_FRAMEBUFFER, renderTarget->mFrameBuffer);
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		SetupViewMatrix(renderTarget->GetSize());
 
@@ -555,7 +555,7 @@ namespace o2
 		DrawPrimitives();
 
 		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
-		GL_CHECK_ERROR(mLog);
+		GL_CHECK_ERROR();
 
 		SetupViewMatrix(mResolution);
 
@@ -566,7 +566,7 @@ namespace o2
 		if (!mStackScissors.IsEmpty())
 		{
 			glEnable(GL_SCISSOR_TEST);
-			GL_CHECK_ERROR(mLog);
+			GL_CHECK_ERROR();
 
 			auto clipRect = mStackScissors.Last().mSummaryScissorRect;
 

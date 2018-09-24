@@ -18,7 +18,7 @@ namespace o2
 	// -------------------------------------------------------------------------
 	// Input message. Containing pressed, down, released keys, cursors positions
 	// -------------------------------------------------------------------------
-	class Input: public Singleton<Input>
+	class Input : public Singleton<Input>
 	{
 	public:
 		struct Cursor;
@@ -122,8 +122,43 @@ namespace o2
 		// Returns pressed keys
 		KeysVec const& GetReleasedKeys() const;
 
+		// Call it when preparing to update frame
+		void PreUpdate();
+
 		// Call it after frame update
 		void Update(float dt);
+
+		// Platform inputs
+
+		// Call it when key pressed
+		void OnKeyPressed(KeyboardKey key);
+
+		// Call it when key released
+		void OnKeyReleased(KeyboardKey key);
+
+		// Call it when cursor pressed
+		void OnCursorPressed(const Vec2F& pos, CursorId id = 0);
+
+		// Call it when cursor changed position. Id - index of cursor*/
+		void OnCursorMoved(const Vec2F& pos, CursorId id = 0, bool withDelta = true);
+
+		// Call it when cursor released
+		void OnCursorReleased(CursorId id = 0);
+
+		// Call it when alt cursor pressed (right mouse button)
+		void OnAltCursorPressed(const Vec2F& pos);
+
+		// Call it when alt cursor released (right mouse button)
+		void OnAltCursorReleased();
+
+		// Call it when alt 2 cursor pressed (medium mouse button)
+		void OnAlt2CursorPressed(const Vec2F& pos);
+
+		// Call it when alt 2cursor released (medium mouse button)
+		void OnAlt2CursorReleased();
+
+		// Call when changed mouse wheel delta
+		void OnMouseWheel(float delta);
 
 	public:
 		// -----------------
@@ -164,49 +199,78 @@ namespace o2
 			bool operator==(KeyboardKey key) const;
 		};
 
+		// -----------------------
+		// Input message interface
+		// -----------------------
+		struct IInputMsg
+		{
+			// Virtual destructor
+			virtual ~IInputMsg() {}
+
+			// Applies input message
+			virtual void Apply() = 0;
+		};
+		typedef Vector<IInputMsg*> InputMsgsVec;
+
+		struct InputCursorPressedMsg : public IInputMsg
+		{
+			int   id;
+			Vec2F position;
+
+			void Apply() override;
+		};
+
+		struct InputCursorMovedMsg : public IInputMsg
+		{
+			int   id;
+			Vec2F position;
+
+			void Apply() override;
+		};
+
+		struct InputCursorReleasedMsg : public IInputMsg
+		{
+			int id;
+
+			void Apply() override;
+		};
+
+		struct InputKeyPressedMsg : public IInputMsg
+		{
+			KeyboardKey key;
+
+			void Apply() override;
+		};
+
+		struct InputKeyReleasedMsg : public IInputMsg
+		{
+			KeyboardKey key;
+
+			void Apply() override;
+		};
+
+		struct InputMouseWheelMsg : public IInputMsg
+		{
+			float delta;
+
+			void Apply() override;
+		};
+
 	protected:
-		KeysVec    mPressedKeys;         // Pressed keys at current frame
-		KeysVec    mDownKeys;            // Held down at current frame keys
-		KeysVec    mReleasedKeys;        // Released at current frame keys
+		InputMsgsVec mInputQueue;          // Input messages queue
 
-		CursorsVec mCursors;             // Cursors. First - main cursor
-		CursorsVec mReleasedCursors;     // Released cursors. First - main cursor
-		Vec2F      mMainCursorPos;       // Main cursor position
-		Vec2F      mMainCursorDelta;     // Main cursor delta
+		KeysVec      mPressedKeys;         // Pressed keys at current frame
+		KeysVec      mDownKeys;            // Held down at current frame keys
+		KeysVec      mReleasedKeys;        // Released at current frame keys
 
-		float      mMouseWheelDelta = 0; // Mouse wheel delta at current frame
+		CursorsVec   mCursors;             // Cursors. First - main cursor
+		CursorsVec   mReleasedCursors;     // Released cursors. First - main cursor
+		Vec2F        mMainCursorPos;       // Main cursor position
+		Vec2F        mMainCursorDelta;     // Main cursor delta
+
+		float        mMouseWheelDelta = 0; // Mouse wheel delta at current frame
 
 	protected:
-		// Call it when key pressed
-		void KeyPressed(KeyboardKey key);
-
-		// Call it when key released
-		void KeyReleased(KeyboardKey key);
-
-		// Call it when cursor pressed
-		int CursorPressed(const Vec2F& pos);
-
-		// Call it when cursor changed position. Id - index of cursor*/
-		void SetCursorPos(const Vec2F& pos, CursorId id = 0, bool withDelta = true);
-
-		// Call it when cursor released
-		void CursorReleased(CursorId id = 0);
-
-		// Call it when alt cursor pressed (right mouse button)
-		void AltCursorPressed(const Vec2F& pos);
-
-		// Call it when alt cursor released (right mouse button)
-		void AltCursorReleased();
-
-		// Call it when alt 2 cursor pressed (medium mouse button)
-		void Alt2CursorPressed(const Vec2F& pos);
-
-		// Call it when alt 2cursor released (medium mouse button)
-		void Alt2CursorReleased();
-
-		// Call when changed mouse wheel delta
-		void SetMouseWheelDelta(float delta);
-
 		// Returns true, when cursor pressed at current frame
 		bool IsMainCursorPressed();
 
@@ -221,6 +285,24 @@ namespace o2
 
 		// Returns main cursor delta
 		Vec2F GetMainCursorDelta();
+
+		// It is called when key pressed message apply
+		void OnKeyPressedMsgApply(KeyboardKey key);
+
+		// It is called when key released message apply
+		void OnKeyReleasedMsgApply(KeyboardKey key);
+
+		// It is called when cursor pressed message apply
+		void OnCursorPressedMsgApply(const Vec2F& pos, CursorId id = 0);
+
+		// It is called when cursor changed position message apply. Id - index of cursor*/
+		void OnCursorMovedMsgApply(const Vec2F& pos, CursorId id = 0, bool withDelta = true);
+
+		// It is called when cursor released message apply
+		void OnCursorReleasedMsgApply(CursorId id = 0);
+
+		// It is called when changed mouse wheel delta message apply
+		void OnMouseWheelMsgApply(float delta);
 
 		friend class Application;
 		friend class WndProcFunc;

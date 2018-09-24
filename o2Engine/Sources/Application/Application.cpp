@@ -113,6 +113,8 @@ namespace o2
 
 		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
 
+		mInput->PreUpdate();
+
 		mTime->Update(realdDt);
 		o2Debug.Update(dt);
 		mTaskManager->Update(dt);

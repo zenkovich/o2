@@ -60,11 +60,6 @@ namespace o2
 		mLog->Out("GL_RENDERER: " + (String)(char*)glGetString(GL_RENDERER));
 		mLog->Out("GL_VERSION: " + (String)(char*)glGetString(GL_VERSION));
 
-// 		HDC dc = GetDC(0);
-// 		mDPI.x = GetDeviceCaps(dc, LOGPIXELSX);
-// 		mDPI.y = GetDeviceCaps(dc, LOGPIXELSY);
-// 		ReleaseDC(0, dc);
-
         mDPI = Vec2I(100, 100);
 
 		InitializeFreeType();

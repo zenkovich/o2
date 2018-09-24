@@ -496,19 +496,19 @@ CLASS_METHODS_META(Editor::IPropertyField)
 END_META;
 
 META_TEMPLATES(typename _type)
-CLASS_BASES_META(Editor::TPropertyField<typename _type>)
+CLASS_BASES_META(Editor::TPropertyField<_type>)
 {
 	BASE_CLASS(Editor::IPropertyField);
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_FIELDS_META(Editor::TPropertyField<typename _type>)
+CLASS_FIELDS_META(Editor::TPropertyField<_type>)
 {
 	PROTECTED_FIELD(mCommonValue);
 }
 END_META;
 META_TEMPLATES(typename _type)
-CLASS_METHODS_META(Editor::TPropertyField<typename _type>)
+CLASS_METHODS_META(Editor::TPropertyField<_type>)
 {
 
 	PUBLIC_FUNCTION(void, Refresh);

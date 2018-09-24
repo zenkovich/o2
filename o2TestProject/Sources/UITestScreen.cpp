@@ -258,6 +258,11 @@ void UITestScreen::Update(float dt)
 void UITestScreen::Draw()
 {
 	mBackground.Draw();
+
+    o2Render.DrawCross(o2Input.GetCursorPos(), 50);
+    o2Debug.DrawText(o2Application.GetContentSize().InvertedY()/-2, "FPS: " + String(o2Time.GetFPS()) +
+            "\nCursor: " + (o2Input.IsCursorDown() ? (o2Input.IsCursorPressed() ? "pressed" : "down") : "up") +
+            "\nCursors: " + String(o2Input.GetCursors().Count()));
 }
 
 String UITestScreen::GetId() const

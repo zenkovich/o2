@@ -71,6 +71,12 @@ namespace o2
 		// Sets texture's data from bitmap
 		void SetData(Bitmap* bitmap);
 
+		// Sets sub data from bitmap with offset
+		void SetSubData(const Vec2I& offset, Bitmap* bitmap);
+
+		// Copies pixels from texture by rect
+		void Copy(const Texture& from, const RectI& rect);
+
 		// Gets texture's data to bitmap and returns it
 		Bitmap* GetData();
 

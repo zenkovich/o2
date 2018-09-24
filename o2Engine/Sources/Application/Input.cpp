@@ -223,111 +223,52 @@ namespace o2
 	}
 
 
-	void Input::KeyPressed(KeyboardKey key)
+	void Input::PreUpdate()
 	{
-		if (IsKeyDown(key) || IsKeyPressed(key))
-			return;
+		for (auto msg : mInputQueue)
+		{
+			msg->Apply();
+			delete msg;
+		}
 
-		mPressedKeys.Add(key);
+		mInputQueue.Clear();
 	}
 
-	void Input::KeyReleased(KeyboardKey key)
+	void Input::OnKeyPressed(KeyboardKey key)
 	{
-		for (auto ikey : mDownKeys)
-		{
-			if (ikey.keyCode == key)
-			{
-				mDownKeys.Remove(ikey);
-				mReleasedKeys.Add(key);
-				return;
-			}
-		}
-
-		for (auto ikey : mPressedKeys)
-		{
-			if (ikey.keyCode == key)
-			{
-				mPressedKeys.Remove(ikey);
-				return;
-			}
-		}
+		auto msg = mnew InputKeyPressedMsg();
+		msg->key = key;
+		mInputQueue.Add(msg);
 	}
 
-	int Input::CursorPressed(const Vec2F& pos)
+	void Input::OnKeyReleased(KeyboardKey key)
 	{
-		//find free id
-		int id = 0;
-		while (id < 100)
-		{
-			bool success = true;
-			for (auto it : mCursors)
-			{
-				if (it.id == id && it.isPressed)
-				{
-					success = false;
-					break;
-				}
-			}
-
-			if (success)
-				break;
-			else
-				id++;
-		}
-
-		if (id == 0 && o2Config.GetPlatform() == Platform::Windows)
-		{
-			mCursors[0].position = pos;
-			mCursors[0].isPressed = true;
-			mCursors[0].pressedTime = 0.0f;
-		}
-		else mCursors.Add(Cursor(pos, id));
-
-		return id;
+		auto msg = mnew InputKeyReleasedMsg();
+		msg->key = key;
+		mInputQueue.Add(msg);
 	}
 
-	void Input::CursorReleased(CursorId id /*= 0*/)
+	void Input::OnCursorPressed(const Vec2F& pos, CursorId id /*= 0*/)
 	{
-		Cursor releasedCuros(Vec2F(), -100);
-		for (auto& cursor : mCursors)
-		{
-			if (cursor.id == id)
-			{
-				releasedCuros = cursor;
-
-				if (id == 0 && o2Config.GetPlatform() == Platform::Windows)
-					cursor.isPressed = false;
-				else
-					mCursors.Remove(cursor);
-
-				break;
-			}
-		}
-
-		mReleasedCursors.Add(releasedCuros);
+		auto msg = mnew InputCursorPressedMsg();
+		msg->position = pos;
+		msg->id = id;
+		mInputQueue.Add(msg);
 	}
 
-	void Input::SetCursorPos(const Vec2F& pos, CursorId id /*= 0*/, bool withDelta /*= true*/)
+	void Input::OnCursorReleased(CursorId id /*= 0*/)
 	{
-		for (Cursor& cursor : mCursors)
-		{
-			if (cursor.id == id)
-			{
-				if (withDelta)
-					cursor.delta += pos - cursor.position;
+		auto msg = mnew InputCursorReleasedMsg();
+		msg->id = id;
+		mInputQueue.Add(msg);
+	}
 
-				cursor.position = pos;
-				break;
-			}
-		}
-
-		if (id == 0)
-		{
-			if (withDelta)
-				mMainCursorDelta += pos - mMainCursorPos;
-
-			mMainCursorPos = pos;
-		}
+	void Input::OnCursorMoved(const Vec2F& pos, CursorId id /*= 0*/, bool withDelta /*= true*/)
+	{
+		auto msg = mnew InputCursorMovedMsg();
+		msg->position = pos;
+		msg->id = id;
+		mInputQueue.Add(msg);
 	}
 
 	void Input::Update(float dt)
@@ -377,31 +318,123 @@ namespace o2
 		return GetCursorDelta();
 	}
 
-	void Input::AltCursorPressed(const Vec2F& pos)
+	void Input::OnKeyPressedMsgApply(KeyboardKey key)
 	{
-		KeyPressed(-1);
-		SetCursorPos(pos);
+		if (IsKeyDown(key) || IsKeyPressed(key))
+			return;
+
+		mPressedKeys.Add(key);
 	}
 
-	void Input::AltCursorReleased()
+	void Input::OnKeyReleasedMsgApply(KeyboardKey key)
 	{
-		KeyReleased(-1);
+		for (auto ikey : mDownKeys)
+		{
+			if (ikey.keyCode == key)
+			{
+				mDownKeys.Remove(ikey);
+				mReleasedKeys.Add(key);
+				return;
+			}
+		}
+
+		for (auto ikey : mPressedKeys)
+		{
+			if (ikey.keyCode == key)
+			{
+				mPressedKeys.Remove(ikey);
+				return;
+			}
+		}
 	}
 
-	void Input::Alt2CursorPressed(const Vec2F& pos)
+	void Input::OnCursorPressedMsgApply(const Vec2F& pos, CursorId id /*= 0*/)
 	{
-		KeyPressed(-2);
-		SetCursorPos(pos);
+		if (id == 0 && o2Config.GetPlatform() == Platform::Windows)
+		{
+			mCursors[0].position = pos;
+			mCursors[0].isPressed = true;
+			mCursors[0].pressedTime = 0.0f;
+		}
+		else mCursors.Add(Cursor(pos, id));
 	}
 
-	void Input::Alt2CursorReleased()
+	void Input::OnCursorMovedMsgApply(const Vec2F& pos, CursorId id /*= 0*/, bool withDelta /*= true*/)
 	{
-		KeyReleased(-2);
+		for (Cursor& cursor : mCursors)
+		{
+			if (cursor.id == id)
+			{
+				if (withDelta)
+					cursor.delta += pos - cursor.position;
+
+				cursor.position = pos;
+				break;
+			}
+		}
+
+		if (id == 0)
+		{
+			if (withDelta)
+				mMainCursorDelta += pos - mMainCursorPos;
+
+			mMainCursorPos = pos;
+		}
 	}
 
-	void Input::SetMouseWheelDelta(float delta)
+	void Input::OnCursorReleasedMsgApply(CursorId id /*= 0*/)
+	{
+		Cursor releasedCursor(Vec2F(), -100);
+		for (auto& cursor : mCursors)
+		{
+			if (cursor.id == id)
+			{
+				releasedCursor = cursor;
+
+				if (id == 0 && o2Config.GetPlatform() == Platform::Windows)
+					cursor.isPressed = false;
+				else
+					mCursors.Remove(cursor);
+
+				break;
+			}
+		}
+
+		mReleasedCursors.Add(releasedCursor);
+	}
+
+	void Input::OnMouseWheelMsgApply(float delta)
 	{
 		mMouseWheelDelta = delta;
+	}
+
+	void Input::OnAltCursorPressed(const Vec2F& pos)
+	{
+		OnKeyPressed(-1);
+		OnCursorMoved(pos);
+	}
+
+	void Input::OnAltCursorReleased()
+	{
+		OnKeyReleased(-1);
+	}
+
+	void Input::OnAlt2CursorPressed(const Vec2F& pos)
+	{
+		OnKeyPressed(-2);
+		OnCursorMoved(pos);
+	}
+
+	void Input::OnAlt2CursorReleased()
+	{
+		OnKeyReleased(-2);
+	}
+
+	void Input::OnMouseWheel(float delta)
+	{
+		auto msg = mnew InputMouseWheelMsg();
+		msg->delta = delta;
+		mInputQueue.Add(msg);
 	}
 
 
@@ -427,6 +460,36 @@ namespace o2
 	bool Input::Key::operator==(KeyboardKey key) const
 	{
 		return keyCode == key;
+	}
+
+	void Input::InputCursorPressedMsg::Apply()
+	{
+		o2Input.OnCursorPressedMsgApply(position, id);
+	}
+
+	void Input::InputCursorMovedMsg::Apply()
+	{
+		o2Input.OnCursorMovedMsgApply(position, id);
+	}
+
+	void Input::InputCursorReleasedMsg::Apply()
+	{
+		o2Input.OnCursorReleasedMsgApply(id);
+	}
+
+	void Input::InputKeyPressedMsg::Apply()
+	{
+		o2Input.OnKeyPressedMsgApply(key);
+	}
+
+	void Input::InputKeyReleasedMsg::Apply()
+	{
+		o2Input.OnKeyReleasedMsgApply(key);
+	}
+
+	void Input::InputMouseWheelMsg::Apply()
+	{
+		o2Input.OnMouseWheelMsgApply(delta);
 	}
 
 }

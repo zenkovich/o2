@@ -51,6 +51,9 @@ namespace o2
 		// Check not equal operator
 		bool operator!=(const TextureRef& other) const;
 
+		// Returns original texture pointer
+		Texture* Get() const;
+
 		// Returns true if texture isn't null
 		bool IsValid() const;
 

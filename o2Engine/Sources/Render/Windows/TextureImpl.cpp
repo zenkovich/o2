@@ -131,9 +131,38 @@ namespace o2
 		glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
 					 bitmap->GetData());
 
-		GL_CHECK_ERROR(o2Render.mLog);
+		GL_CHECK_ERROR();
 	}
-	
+
+	void Texture::SetSubData(const Vec2I& offset, Bitmap* bitmap)
+	{
+		glBindTexture(GL_TEXTURE_2D, mHandle);
+
+		GLint texFormat = GL_RGB;
+		if (mFormat == PixelFormat::R8G8B8A8)
+			texFormat = GL_RGBA;
+		else if (mFormat == PixelFormat::R8G8B8)
+			texFormat = GL_RGB;
+
+		glTexSubImage2D(GL_TEXTURE_2D, 0, offset.x, offset.y, bitmap->GetSize().x, bitmap->GetSize().y, texFormat, GL_UNSIGNED_BYTE,
+						bitmap->GetData());
+
+		GL_CHECK_ERROR();
+	}
+
+	void Texture::Copy(const Texture& from, const RectI& rect)
+	{
+		glBindTexture(GL_TEXTURE_2D, from.mHandle);
+
+		GLint texFormat = GL_RGB;
+		if (mFormat == PixelFormat::R8G8B8A8)
+			texFormat = GL_RGBA;
+		else if (mFormat == PixelFormat::R8G8B8)
+			texFormat = GL_RGB;
+
+		glCopyTexImage2D(GL_TEXTURE_2D, 0, texFormat, rect.left, rect.top, rect.Width(), rect.Height(), 0);
+	}
+
 	Bitmap* Texture::GetData()
 	{
 		Bitmap* bitmap = mnew Bitmap(mFormat, mSize);

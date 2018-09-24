@@ -33,7 +33,7 @@ namespace o2
 
 	void Debug::InitializeFont()
 	{
-		mFont = mnew VectorFont(o2Assets.GetDataPath() + "stdFont.ttf");
+		mFont = mnew VectorFont(o2Assets.GetDataPath() + "debugFont.ttf");
 		mText = mnew Text(FontRef(mFont));
 	}
 
