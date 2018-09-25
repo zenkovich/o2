@@ -363,8 +363,8 @@ namespace o2
 		return mChildren.Select<SceneEditableObject*>([](UIWidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	SceneEditableObject* UIWidgetLayer::GetEditableParent()
-	{
+	o2::SceneEditableObject* UIWidgetLayer::GetEditableParent() const
+{
 		if (mParent)
 			return dynamic_cast<SceneEditableObject*>(mParent);
 

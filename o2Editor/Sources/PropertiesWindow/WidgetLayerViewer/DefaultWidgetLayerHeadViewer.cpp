@@ -3,8 +3,8 @@
 
 #include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
-#include "Core/Properties/Widgets/BooleanProperty.h"
-#include "Core/Properties/Widgets/StringProperty.h"
+#include "Core/Properties/Basic/BooleanProperty.h"
+#include "Core/Properties/Basic/StringProperty.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "UI/UIManager.h"
 #include "UI/WidgetLayer.h"

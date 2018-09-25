@@ -5,6 +5,7 @@
 #include "Assets/DataAsset.h"
 #include "Assets/ImageAsset.h"
 #include "ImageComponent.h"
+#include "Render/Sprite.h"
 #include "Scene/Component.h"
 #include "Scene/Tags.h"
 #include "Utils/Math/Curve.h"
@@ -37,6 +38,7 @@ namespace o2
 		ImageAssetRef mImageAsset;			       // @SERIALIZABLE
 		ActorAssetRef mActorAsset;			       // @SERIALIZABLE
 		DataAssetRef mDataAsset;                   // @SERIALIZABLE
+		Sprite* mSprite = mnew Sprite();           // @SERIALIZABLE
 		Actor* mActor = nullptr;                   // @SERIALIZABLE
 		TagGroup mTags;                            // @SERIALIZABLE
 		SceneLayer* mLayer;                        // @SERIALIZABLE
@@ -89,6 +91,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(mImageAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mActorAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mDataAsset).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mSprite).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mActor).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTags).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mLayer).SERIALIZABLE_ATTRIBUTE();

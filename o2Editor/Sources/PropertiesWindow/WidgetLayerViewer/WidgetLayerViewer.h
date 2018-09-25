@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PropertiesWindow/IObjectPropertiesViewer.h"
+#include "PropertiesWindow/IPropertiesViewer.h"
 
 using namespace o2;
 
@@ -20,7 +20,7 @@ namespace Editor
 	// ------------------------------
 	// Widget layer properties viewer
 	// ------------------------------
-	class WidgetLayerViewer : public IObjectPropertiesViewer
+	class WidgetLayerViewer : public IPropertiesViewer
 	{
 	public:
 		WidgetLayerViewer();
@@ -78,7 +78,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::WidgetLayerViewer)
 {
-	BASE_CLASS(Editor::IObjectPropertiesViewer);
+	BASE_CLASS(Editor::IPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::WidgetLayerViewer)

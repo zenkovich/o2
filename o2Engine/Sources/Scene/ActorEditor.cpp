@@ -866,7 +866,7 @@ namespace o2
 			SetParent(actor);
 	}
 
-	SceneEditableObject* Actor::GetEditableParent()
+	SceneEditableObject* Actor::GetEditableParent() const
 	{
 		return dynamic_cast<SceneEditableObject*>(mParent);
 	}

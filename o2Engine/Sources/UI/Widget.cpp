@@ -1247,8 +1247,8 @@ namespace o2
 		return mWidget->mLayers.Select<SceneEditableObject*>([](UIWidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	SceneEditableObject* UIWidget::LayersEditable::GetEditableParent()
-	{
+	o2::SceneEditableObject* UIWidget::LayersEditable::GetEditableParent() const
+{
 		return dynamic_cast<SceneEditableObject*>(mWidget);
 	}
 
@@ -1294,8 +1294,8 @@ namespace o2
 		return mWidget->mInternalWidgets.Select<SceneEditableObject*>([](UIWidget* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	SceneEditableObject* UIWidget::InternalChildrenEditableEditable::GetEditableParent()
-	{
+	o2::SceneEditableObject* UIWidget::InternalChildrenEditableEditable::GetEditableParent() const
+{
 		return dynamic_cast<SceneEditableObject*>(mWidget);
 	}
 

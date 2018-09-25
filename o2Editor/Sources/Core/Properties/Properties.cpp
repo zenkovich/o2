@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "Properties.h"
 
+#include "Basic/AssetProperty.h"
+#include "Basic/EnumProperty.h"
+#include "Basic/ObjectProperty.h"
+#include "Basic/ObjectPtrProperty.h"
+#include "Basic/VectorProperty.h"
 #include "Core/EditorApplication.h"
 #include "UI/Label.h"
 #include "UI/Spoiler.h"
@@ -8,16 +13,11 @@
 #include "UI/VerticalLayout.h"
 #include "UI/WidgetLayout.h"
 #include "Utils/System/Time/Timer.h"
-#include "Widgets/AssetProperty.h"
-#include "Widgets/EnumProperty.h"
-#include "Widgets/ObjectProperty.h"
-#include "Widgets/ObjectPtrProperty.h"
-#include "Widgets/VectorProperty.h"
 
 DECLARE_SINGLETON(Editor::Properties);
 
 namespace Editor
-{	
+{
 	Editor::IPropertyField::OnChangeCompletedFunc Properties::mOnPropertyCompletedChangingUndoCreateDelegate;
 
 	Properties::Properties()
@@ -51,22 +51,19 @@ namespace Editor
 		}
 	}
 
-	void Properties::BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo,
-								FieldPropertiesInfo& propertiesInfo, const String& path,
-								const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
-								const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
+	IPropertyField* Properties::BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo,
+										   FieldPropertiesInfo& propertiesInfo, const String& path,
+										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
+										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
 		Timer timer;
 
 		const Type* fieldType = fieldInfo->GetType();
+		String propertyName = MakeSmartFieldName(fieldInfo->GetName());
 
-		String propertyName;
-
-		propertyName = MakeSmartFieldName(fieldInfo->GetName());
-
-		auto fieldWidget = CreateFieldProperty(fieldInfo->GetType(), propertyName, onChangeCompleted, onChanged);
+		auto fieldWidget = CreateFieldProperty(fieldType, propertyName, onChangeCompleted, onChanged);
 		if (!fieldWidget)
-			return;
+			return nullptr;
 
 		fieldWidget->SetValuePath(path + fieldInfo->GetName());
 		fieldWidget->SpecializeType(fieldType);
@@ -76,6 +73,16 @@ namespace Editor
 		propertiesInfo.properties.Add(fieldInfo, fieldWidget);
 
 		o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)timer.GetDeltaTime());
+
+		return fieldWidget;
+	}
+
+	IPropertyField* Properties::BuildField(UIVerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path,
+										   FieldPropertiesInfo& propertiesInfo, 
+										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/, 
+										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
+	{
+		return BuildField(layout, objectType.GetField(fieldName), propertiesInfo, path, onChangeCompleted, onChanged);
 	}
 
 	void Properties::BuildFields(UIVerticalLayout* layout, Vector<FieldInfo*> fields,
@@ -195,7 +202,7 @@ namespace Editor
 			if (!privateFields.IsEmpty())
 			{
 				UISpoiler* privates = propertiesInfo.privatePropertiesSpoiler;
-				
+
 				if (!privates)
 					privates = layout->GetChildByType<UISpoiler>("privates");
 

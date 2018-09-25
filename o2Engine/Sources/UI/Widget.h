@@ -464,7 +464,7 @@ namespace o2
 			Vector<SceneEditableObject*> GetEditablesChildren() const override;
 
 			// Returns object's parent object. Return nullptr when it is a root scene object
-			SceneEditableObject* GetEditableParent() override;
+			SceneEditableObject* GetEditableParent() const override;
 
 			// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
 			void SetEditableParent(SceneEditableObject* object) override;
@@ -509,7 +509,7 @@ namespace o2
 			Vector<SceneEditableObject*> GetEditablesChildren() const override;
 
 			// Returns object's parent object. Return nullptr when it is a root scene object
-			SceneEditableObject* GetEditableParent() override;
+			SceneEditableObject* GetEditableParent() const override;
 
 			// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
 			void SetEditableParent(SceneEditableObject* object) override;

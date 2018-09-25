@@ -3,8 +3,8 @@
 
 #include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
-#include "Core/Properties/Widgets/FloatProperty.h"
-#include "Core/Properties/Widgets/Vector2FloatProperty.h"
+#include "Core/Properties/Basic/FloatProperty.h"
+#include "Core/Properties/Basic/Vector2FloatProperty.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "Scene/Actor.h"
 #include "Scene/DrawableComponent.h"

@@ -113,7 +113,7 @@ namespace o2
 		return res;
 	}
 
-	const FieldInfo* Type::GetField(const String& name) const
+	FieldInfo* Type::GetField(const String& name) const
 	{
 		for (auto field : mFields)
 			if (field->GetName() == name)

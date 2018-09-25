@@ -2,7 +2,7 @@
 
 #include "Assets/AtlasAsset.h"
 #include "Assets/ImageAsset.h"
-#include "Core/Properties/Widgets/AssetProperty.h"
+#include "Core/Properties/Basic/AssetProperty.h"
 #include "Events/CursorEventsArea.h"
 #include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 

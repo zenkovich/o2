@@ -109,7 +109,7 @@ namespace o2
 		FunctionsInfosVec GetFunctionsWithBaseClasses() const;
 
 		// Returns field information by name
-		const FieldInfo* GetField(const String& name) const;
+		FieldInfo* GetField(const String& name) const;
 
 		// Returns function info by name
 		const FunctionInfo* GetFunction(const String& name) const;

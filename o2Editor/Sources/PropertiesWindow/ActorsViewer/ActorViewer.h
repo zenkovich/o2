@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PropertiesWindow/IObjectPropertiesViewer.h"
+#include "PropertiesWindow/IPropertiesViewer.h"
 
 using namespace o2;
 
@@ -22,7 +22,7 @@ namespace Editor
 	// ------------------------
 	// Actors properties viewer
 	// ------------------------
-	class ActorViewer: public IObjectPropertiesViewer
+	class ActorViewer: public IPropertiesViewer
 	{
 	public:
 		ActorViewer();
@@ -101,7 +101,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ActorViewer)
 {
-	BASE_CLASS(Editor::IObjectPropertiesViewer);
+	BASE_CLASS(Editor::IPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ActorViewer)

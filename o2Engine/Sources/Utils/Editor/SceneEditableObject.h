@@ -39,7 +39,7 @@ namespace o2
 		virtual Vector<SceneEditableObject*> GetEditablesChildren() const;
 
 		// Returns object's parent object. Return nullptr when it is a root scene object
-		virtual SceneEditableObject* GetEditableParent();
+		virtual SceneEditableObject* GetEditableParent() const;
 
 		// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
 		virtual void SetEditableParent(SceneEditableObject* object);

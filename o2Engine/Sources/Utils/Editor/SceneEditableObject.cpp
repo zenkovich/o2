@@ -38,7 +38,7 @@ namespace o2
 		return Vector<SceneEditableObject*>();
 	}
 
-	SceneEditableObject* SceneEditableObject::GetEditableParent()
+	SceneEditableObject* SceneEditableObject::GetEditableParent() const
 	{
 		return nullptr;
 	}
@@ -64,7 +64,8 @@ namespace o2
 
 	bool SceneEditableObject::IsEnabledInHierarchy() const
 	{
-		return true;
+		auto parent = GetEditableParent();
+		return IsEnabled() && (parent ? parent->IsEnabledInHierarchy() : true);
 	}
 
 	void SceneEditableObject::SetEnabled(bool enabled)

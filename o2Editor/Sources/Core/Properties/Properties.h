@@ -47,7 +47,7 @@ namespace Editor
 		void FreeProperty(IPropertyField* field);
 
 		// Builds layout viewer by type for objects
-		void BuildObjectProperties(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo, const String& path, 
+		void BuildObjectProperties(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
@@ -57,9 +57,15 @@ namespace Editor
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Build layout viewer for field
-		void BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo, const String& path,
-						const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
-						const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
+		IPropertyField* BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo, const String& path,
+								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
+								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
+
+		// Build layout viewer for field
+		IPropertyField* BuildField(UIVerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path, 
+								   FieldPropertiesInfo& propertiesInfo,
+								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
+								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Checks that property with type can be created
 		bool IsFieldTypeSupported(const Type* type) const;

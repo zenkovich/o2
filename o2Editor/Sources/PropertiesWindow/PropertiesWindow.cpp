@@ -2,7 +2,7 @@
 #include "PropertiesWindow.h"
 
 #include "Core/Properties/Properties.h"
-#include "IObjectPropertiesViewer.h"
+#include "IPropertiesViewer.h"
 #include "UI/ContextMenu.h"
 #include "UI/WidgetLayout.h"
 
@@ -56,10 +56,10 @@ namespace Editor
 
 	void PropertiesWindow::InitializeViewers()
 	{
-		auto viewersTypes = TypeOf(IObjectPropertiesViewer).GetDerivedTypes();
+		auto viewersTypes = TypeOf(IPropertiesViewer).GetDerivedTypes();
 
 		for (auto type : viewersTypes)
-			mViewers.Add((IObjectPropertiesViewer*)type->CreateSample());
+			mViewers.Add((IPropertiesViewer*)type->CreateSample());
 	}
 
 	void PropertiesWindow::OnPrivateFieldsVisibleChanged(bool visible)
@@ -88,7 +88,7 @@ namespace Editor
 		if (mTargetsChanged)
 			mOnTargetsChangedDelegate();
 
-		IObjectPropertiesViewer* objectViewer = nullptr;
+		IPropertiesViewer* objectViewer = nullptr;
 		if (!targets.IsEmpty())
 		{
 			auto type = &targets[0]->GetType();

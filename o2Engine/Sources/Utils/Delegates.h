@@ -78,7 +78,7 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const
 		{
 			return mnew FunctionPtr(*this);
 		}

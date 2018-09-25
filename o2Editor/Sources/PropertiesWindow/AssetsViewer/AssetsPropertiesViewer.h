@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Assets/Asset.h"
-#include "PropertiesWindow/IObjectPropertiesViewer.h"
+#include "PropertiesWindow/IPropertiesViewer.h"
 
 using namespace o2;
 
@@ -18,7 +18,7 @@ namespace Editor
 {
 	class IAssetPropertiesViewer;
 
-	class AssetsPropertiesViewer: public IObjectPropertiesViewer
+	class AssetsPropertiesViewer: public IPropertiesViewer
 	{
 	public:
 		// Default constructor
@@ -70,7 +70,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AssetsPropertiesViewer)
 {
-	BASE_CLASS(Editor::IObjectPropertiesViewer);
+	BASE_CLASS(Editor::IPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AssetsPropertiesViewer)

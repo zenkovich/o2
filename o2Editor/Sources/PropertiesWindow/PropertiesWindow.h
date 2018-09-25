@@ -18,7 +18,7 @@ namespace o2
 
 namespace Editor
 {
-	class IObjectPropertiesViewer;
+	class IPropertiesViewer;
 	struct FieldPropertiesInfo;
 
 	// ------------------------
@@ -57,10 +57,10 @@ namespace Editor
 		IOBJECT(PropertiesWindow);
 
 	protected:
-		typedef Vector<IObjectPropertiesViewer*> PropViewersVec;
+		typedef Vector<IPropertiesViewer*> PropViewersVec;
 
 		Vector<IObject*>         mTargets;                    // Target objects
-		IObjectPropertiesViewer* mCurrentViewer = nullptr;    // Current properties viewer
+		IPropertiesViewer* mCurrentViewer = nullptr;    // Current properties viewer
 		PropViewersVec           mViewers;                    // All available object types viewers
 
 		Function<void()>         mOnTargetsChangedDelegate;   // It is called when targets array changing

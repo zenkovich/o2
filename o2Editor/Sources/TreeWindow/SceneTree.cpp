@@ -12,8 +12,8 @@
 #include "Core/Actions/Lock.h"
 #include "Core/Actions/Reparent.h"
 #include "Core/EditorApplication.h"
-#include "Core/Properties/Widgets/ActorProperty.h"
-#include "Core/Properties/Widgets/ComponentProperty.h"
+#include "Core/Properties/Basic/ActorProperty.h"
+#include "Core/Properties/Basic/ComponentProperty.h"
 #include "Core/UIRoot.h"
 #include "Events/EventSystem.h"
 #include "Scene/Actor.h"
@@ -400,8 +400,14 @@ namespace Editor
 				};
 			}
 		}
+		else mLinkBtn->SetEnabled(false);
 
-		mEnableToggle->SetValue(object->IsEnabled());
+		if (object->IsSupportsDisabling())
+		{
+			mEnableToggle->SetValue(object->IsEnabled());
+			mEnableToggle->SetEnabled(true);
+		}
+		else mEnableToggle->SetEnabled(false);
 
 		mLockToggle->SetValue(object->IsLocked());
 		mLockToggle->SetStateForcible("locked", object->IsLockedInHierarchy());

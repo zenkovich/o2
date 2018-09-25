@@ -482,7 +482,21 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 	for (auto& file : files)
 	{
 		if (EndsWith(file, ".cpp"))
-			newProjectSourcesGroup.append_child("ClCompile").append_attribute("Include") = file.c_str();
+		{
+			auto clCompile = newProjectSourcesGroup.append_child("ClCompile");
+			clCompile.append_attribute("Include") = file.c_str();
+
+			if (EndsWith(file, "stdafx.cpp"))
+			{
+				auto headerDebug = clCompile.append_child("PrecompiledHeader");
+				headerDebug.append_attribute("Condition") = "'$(Configuration)|$(Platform)'=='Debug|Win32'";
+				headerDebug.append_child(pugi::node_pcdata).set_value("Create");
+
+				auto headerRelease = clCompile.append_child("PrecompiledHeader");
+				headerRelease.append_attribute("Condition") = "'$(Configuration)|$(Platform)'=='Release|Win32'";
+				headerRelease.append_child(pugi::node_pcdata).set_value("Create");
+			}
+		}
 	}
 
 	newProjectDoc.save_file(mMSVCProjectPath.c_str());
